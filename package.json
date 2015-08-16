@@ -1,0 +1,5 @@
+{
+  "dependencies": {
+     "fec-style": "git://github.com/18F/fec-style.git"
+  }
+}

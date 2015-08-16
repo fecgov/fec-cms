@@ -1,4 +1,4 @@
-{% load static wagtailuserbar %}
+{% load static compress wagtailuserbar %}
 
 <!DOCTYPE html>
 <!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
@@ -13,7 +13,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
 
     {# Global stylesheets #}
-    <link rel="stylesheet" type="text/css" href="{% static 'css/fec.css' %}">
+    {% compress css %}
+    <link rel="stylesheet" type="text/x-scss" href="{% static 'css/fec.scss' %}">
+    {% endcompress %}
 
     {% block extra_css %}
     {# Override this in templates to add extra stylesheets #}
@@ -28,7 +30,23 @@
       <span>beta</span>
     </h1>
 
-    {% block content %}{% endblock %}
+    <nav class="site-nav">
+      <ul class="site-nav__list">
+        <li class="site-nav__item">
+          <a class="site-nav__link" href="#">Campaign Finance Data</a>
+        </li>
+        <li class="site-nav__item">
+          <a class="site-nav__link" href="#">Registration & Reporting</a>
+        </li>
+        <li class="site-nav__item">
+          <a class="site-nav__link" href="#">Calendar</a>
+        </li>
+      </ul>
+    </nav>
+
+    <div class="container">
+      {% block content %}{% endblock %}
+    </div>
 
     {# Global javascript #}
     <script type="text/javascript" src="{% static 'js/fec.js' %}"></script>
