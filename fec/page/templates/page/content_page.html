@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% load wagtailcore_tags %}
+{% block body_class %}template-{{ self.get_verbose_name | slugify }}{% endblock %}
+
+{% block content %}
+  <h1>{{ self.title }}</h1>
+
+  {% if self.date %}
+  <p class="meta">{{ self.date }}</p>
+  {% endif %}
+
+  {% if self.author %}
+  <p class="meta">{{ self.author }}</p>
+  {% endif %}
+
+  {{ self.body }}
+{% endblock %}
