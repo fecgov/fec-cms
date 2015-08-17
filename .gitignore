@@ -46,3 +46,5 @@ docs/_build
 README.html
 
 _sandbox
+
+fec/static/CACHE/css/*.css
