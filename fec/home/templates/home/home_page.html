@@ -3,5 +3,49 @@
 {% block body_class %}template-{{ self.get_verbose_name | slugify }}{% endblock %}
 
 {% block content %}
-  {{ self.body }}
+  <section class="hero hero--primary" aria-labelledby="hero-heading">
+    <div class="container">
+      <span id="hero-heading" class="t-display">Welcome to beta.fec.gov</span>
+      <h3 class="t-ruled">This site is in beta, which means we’re actively working on it and adding new features.  The official site for the Federal Election Commission is www.FEC.gov</h3>
+    </div>
+  </section>
+  <section class="main">
+    <div class="container">
+      <h1>About this site</h1>
+      <div class="row">
+        <div class="usa-width-one-third">
+          <p>We're working hard to make this a useful addition to the resources available at FEC.gov. Do you have feedback or feature requests? Email to let us know what works and what needs improvement.</p>
+        </div>
+        <div class="usa-width-one-third">
+          <h2>Current features</h2>
+          <ul class="list--checkboxes">
+            <li class="list--checkboxes__item is-completed">Search for candidates and committees</li>
+            <li class="list--checkboxes__item is-completed">Browse and filter candidates and committees</li>
+            <li class="list--checkboxes__item is-completed">View redesigned candidate and committee pages</li>
+            <li class="list--checkboxes__item is-completed">View all of a candidate’s authorized and joint fundraising committees</li>
+            <li class="list--checkboxes__item is-completed">View latest report</li>
+            <li class="list--checkboxes__item is-completed">A public API</li>
+          </ul>
+        </div>
+        <div class="usa-width-one-third">
+          <h2>Coming soon</h2>
+          <ul class="list--checkboxes">
+            <li class="list--checkboxes__item">Customizable calendar</li>
+            <li class="list--checkboxes__item">Filing instructions for more committees</li>
+            <li class="list--checkboxes__item">HTML campaign guides</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+  <section class="billboard">
+    <div class="container">
+      <div class="billboard__image billboard__image--glossary">
+      </div>
+      <div class="billboard__content">
+        <h2>Need help understanding terms?</h2>
+        <p>If you encounter a technical word or a phrase you don’t know, this site’s glossary may be able to help. Click on  words and phrases with the book icon next to them to pull up a definition. Or click the glossary icon at the top of any page to open the full, searchable glossary. For example, click on this term to see its definition: principal campaign committee.</p>
+      </div>
+    </div>
+  </section>
 {% endblock %}
