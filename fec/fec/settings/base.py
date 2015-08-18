@@ -15,6 +15,7 @@ import os
 
 PROJECT_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 BASE_DIR = os.path.dirname(PROJECT_DIR)
+REPO_DIR = os.path.dirname(BASE_DIR)
 
 
 # Quick-start development settings - unsuitable for production
@@ -81,6 +82,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'fec.context.show_settings',
             ],
         },
     },
@@ -125,6 +127,7 @@ STATICFILES_FINDERS = (
 
 STATICFILES_DIRS = (
     os.path.join(PROJECT_DIR, 'static'),
+    os.path.join(REPO_DIR, 'node_modules', 'fec-style'),
 )
 
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
@@ -134,10 +137,15 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
 
 COMPRESS_PRECOMPILERS = (
-    ('text/x-scss', 'django_libsass.SassCompiler'),
+    ('text/x-scss', 'fec.utils.PatchedSCSSCompiler'),
 )
 
 
 # Wagtail settings
 
 WAGTAIL_SITE_NAME = "fec"
+
+
+# Custom settings
+
+FEC_STYLE_URL = None

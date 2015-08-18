@@ -1,6 +1,7 @@
 *.sqlite3
 node_modules
-fec/static/CACHE
+fec/static
+local.py
 
 *.py[cod]
 
@@ -47,6 +48,3 @@ docs/_build
 README.html
 
 _sandbox
-
-fec/static/CACHE/css/*.css
-fec/fec/settings/local.py

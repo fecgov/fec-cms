@@ -13,9 +13,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
 
     {# Global stylesheets #}
+    {% if settings.FEC_STYLE_URL %}
+    <link rel="stylesheet" type="text/x-css" href="{{ settings.FEC_STYLE_URL }}">
+    {% else %}
     {% compress css %}
     <link rel="stylesheet" type="text/x-scss" href="{% static 'scss/fec.scss' %}">
     {% endcompress %}
+    {% endif %}
 
     {% block extra_css %}
     {# Override this in templates to add extra stylesheets #}
@@ -56,10 +60,10 @@
           </li>
           <li class="site-nav__item">
             <a href="#" class="site-nav__link is-disabled">TBD</a>
-          </li>                
+          </li>
         </ul>
         <button id="glossary-toggle" title="View site glossary" data-slide="right" class="site-nav__button site-nav__button--right">Glossary</button>
-      </nav>    
+      </nav>
     </header>
 
     <main id="main">
@@ -67,18 +71,19 @@
     </main>
 
     <footer class="footer">
-    <div class="container">
-      <div class="seal">
-         <img class="seal__img" src="/static/img/seal--reversed@2x.png" alt="Seal of the Federal Election Commission">
+      <div class="container">
+        <div class="seal">
+          <img class="seal__img" src="/static/img/seal--reversed@2x.png" alt="Seal of the Federal Election Commission">
+        </div>
+        <div class="address">
+          <p class="address__title">Federal Election Commission</p>
+          <p>999 E Street, NW, Washington, DC 20463</p>
+          <p>(800) 424-9530</p>
+          <p><a href="mailto:info@FEC.gov">info@FEC.gov</a></p>
+        </div>
       </div>
-      <div class="address">
-        <p class="address__title">Federal Election Commission</p>
-        <p>999 E Street, NW, Washington, DC 20463</p>
-        <p>(800) 424-9530</p>
-        <p><a href="mailto:info@FEC.gov">info@FEC.gov</a></p>
-      </div>
-    </div>
-  </footer>
+    </footer>
+
     {# Global javascript #}
     <script type="text/javascript" src="{% static 'js/fec.js' %}"></script>
 
