@@ -13,9 +13,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
 
     {# Global stylesheets #}
+    {% if settings.FEC_STYLE_URL %}
+    <link rel="stylesheet" type="text/x-css" href="{{ settings.FEC_STYLE_URL }}">
+    {% else %}
     {% compress css %}
     <link rel="stylesheet" type="text/x-scss" href="{% static 'scss/fec.scss' %}">
     {% endcompress %}
+    {% endif %}
 
     {% block extra_css %}
     {# Override this in templates to add extra stylesheets #}
@@ -24,29 +28,61 @@
 
   <body class="{% block body_class %}{% endblock %}">
     {% wagtailuserbar %}
+    <a href="#main-content" class="u-visually-hidden">skip navigation</a>
 
-    <h1>
-      <span>Federal Election Commission</span>
-      <span>beta</span>
-    </h1>
+    <header class="site-header">
+      <div class="disclaimer">
+        <span class="disclaimer__left">Looking for fec.gov? <a href="http://www.fec.gov">Click here.</a></span>
+        <span class="disclaimer__center">An official website of the United States Government <img src="/static/img/us_flag_small.png" alt="US flag signifying that this is a United States Federal Government website"></span>
+        <span class="disclaimer__right">This site is in beta. <a title="Learn about this site's development" tabindex="0" href="https://18f.gsa.gov/dashboard/stages/#beta">Learn more.</a></span>
+      </div>
+      <div class="masthead">
+        <span class="site-title">Federal Election Commission</span>
+        <ul class="utility-nav list--flat">
+          <li class="utility-nav__item">About</li>
+          <li class="utility-nav__item">Contact</li>
+        </ul>
+      </div>
+      <nav class="site-nav">
+        <button class="site-nav__button site-nav__button--left">Glossary</button>
+        <ul class="site-nav__list">
+          <li class="site-nav__item">
+            <a href="/" class="site-nav__link is-current">Campaign Finance Data</a>
+          </li>
+          <li class="site-nav__item">
+            <a href="#" class="site-nav__link is-disabled">Reporting &amp; Registration</a>
+          </li>
+          <li class="site-nav__item">
+            <a href="#" class="site-nav__link is-disabled">Calendar</a>
+          </li>
+          <li class="site-nav__item">
+            <a href="#" class="site-nav__link is-disabled">TBD</a>
+          </li>
+          <li class="site-nav__item">
+            <a href="#" class="site-nav__link is-disabled">TBD</a>
+          </li>
+        </ul>
+        <button id="glossary-toggle" title="View site glossary" data-slide="right" class="site-nav__button site-nav__button--right">Glossary</button>
+      </nav>
+    </header>
 
-    <nav class="site-nav">
-      <ul class="site-nav__list">
-        <li class="site-nav__item">
-          <a class="site-nav__link" href="#">Campaign Finance Data</a>
-        </li>
-        <li class="site-nav__item">
-          <a class="site-nav__link" href="#">Registration & Reporting</a>
-        </li>
-        <li class="site-nav__item">
-          <a class="site-nav__link" href="#">Calendar</a>
-        </li>
-      </ul>
-    </nav>
-
-    <div class="container">
+    <main id="main">
       {% block content %}{% endblock %}
-    </div>
+    </main>
+
+    <footer class="footer">
+      <div class="container">
+        <div class="seal">
+          <img class="seal__img" src="/static/img/seal--reversed@2x.png" alt="Seal of the Federal Election Commission">
+        </div>
+        <div class="address">
+          <p class="address__title">Federal Election Commission</p>
+          <p>999 E Street, NW, Washington, DC 20463</p>
+          <p>(800) 424-9530</p>
+          <p><a href="mailto:info@FEC.gov">info@FEC.gov</a></p>
+        </div>
+      </div>
+    </footer>
 
     {# Global javascript #}
     <script type="text/javascript" src="{% static 'js/fec.js' %}"></script>
