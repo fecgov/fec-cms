@@ -13,12 +13,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
 
     {# Global stylesheets #}
-<!--     {% compress css %}
+    {% compress css %}
     <link rel="stylesheet" type="text/x-scss" href="{% static 'scss/fec.scss' %}">
-    {% endcompress %} -->
-
-     <!-- Uncomment while developing to use css served from fec-style -->
-    <link rel="stylesheet" href="http://localhost:8080/css/styles.css" />
+    {% endcompress %}
 
     {% block extra_css %}
     {# Override this in templates to add extra stylesheets #}
