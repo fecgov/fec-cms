@@ -13,6 +13,8 @@ https://docs.djangoproject.com/en/1.8/ref/settings/
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
 
+from django.utils.crypto import get_random_string
+
 PROJECT_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 BASE_DIR = os.path.dirname(PROJECT_DIR)
 REPO_DIR = os.path.dirname(BASE_DIR)
@@ -89,6 +91,8 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'fec.wsgi.application'
+
+SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', get_random_string(50))
 
 
 # Database
