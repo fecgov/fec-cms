@@ -48,3 +48,5 @@ README.html
 _sandbox
 
 fec/static/CACHE/css/*.css
+
+fec/fec/settings/local.py
