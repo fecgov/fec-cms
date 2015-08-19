@@ -13,7 +13,8 @@ class UniqueModel(models.Model):
         abstract = True
 
     def clean(self):
-        if self.objects.count() > 0 and self.id != self.objects.get().id:
+        model = self.__class__
+        if model.objects.count() > 0 and self.id != model.objects.get().id:
             raise ValidationError('Only one {0} allowed'.format(self.__name__))
 
 class ContentPage(Page):
@@ -37,7 +38,7 @@ class HomePage(ContentPage, UniqueModel):
     """Unique home page."""
     pass
 
-class LandingPage(ContentPage, UniqueModel):
+class LandingPage(ContentPage):
     """Unique landing page."""
     pass
 
