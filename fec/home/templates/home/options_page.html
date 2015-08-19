@@ -1,0 +1,84 @@
+{% extends "base.html" %}
+{% load wagtailcore_tags %}
+{% block body_class %}template-{{ self.get_verbose_name | slugify }}{% endblock %}
+
+{% block content %}
+
+<header class="page-header slab--secondary">
+  <div class="container">
+      <h1 class="t-ruled t-display">Registration Options</h1>
+      <p class="usa-width-one-half">By law, certain people and groups must register with the FEC and file regular reports about their campaign financial activity. Registrants range from individuals to candidates to political action committees (PACs). Every group has different registration and reporting rules. This is why it’s important to understand each and register correctly.</p>
+  </div>
+</header>
+
+<div class="slab slab--neutral">
+  <div class="container">
+    <h2 class="h1">Choose a registrant type</h2>
+  </div>
+</div>
+
+<article class="main">
+  <div class="container">
+    <h2 class="h1">Not sure what to choose? Here’s a quick review:</h2>
+    <div class="row">
+      <div class="content__section main__content">
+        <h2>Candidates and candidate committees</h2>
+        <p>Candidates are people running for elected federal office. Federal office is the House of Representatives, the Senate, or the office of the president.</p>
+        <p>Candidates must designate at least one campaign committee. These authorized groups are called candidate committees.</p>
+      </div>
+      <div class="content__section sidebar">
+        <div class="card card--vertical card--secondary">
+          <img alt="Call center support icon" src="/static/img/i-register--neutral.svg" class="icon--complex card__image">
+          <div class="card__content">
+            <a href="#">Register a Candidate Committee</a>
+          </div>
+        </div>
+      </div>   
+    </div>
+    <div class="row">
+      <div class="content__section content__section--ruled main__content">
+        <h2>Corporations and labor organizations</h2>
+        <p>This is the FEC’s beta site, which means it’s still being developed. Learn more by reading the campaign guide, and check back soon for more information about corporations and labor organizations.</p>
+      </div>
+      <div class="content__section content__section--ruled sidebar">
+        <div class="card card--vertical card--secondary">
+          <img alt="Call center support icon" src="/static/img/i-register--neutral.svg" class="icon--complex card__image">
+          <div class="card__content">
+            <a href="#">Register a Corporate or Labor Committee</a>
+          </div>
+        </div>   
+      </div>
+    </div>
+    <div class="row">
+      <div class="content__section content__section--ruled main__content">
+        <h2>Nonconnected committees</h2>
+        <p>This is the FEC’s beta site, which means it’s still being developed. Learn more by reading the campaign guide, and check back soon for more information about nonconnected committees.</p>
+      </div>
+      <div class="content__section content__section--ruled sidebar">      
+        <div class="card card--vertical card--secondary">
+          <img alt="Call center support icon" src="/static/img/i-register--neutral.svg" class="icon--complex card__image">
+          <div class="card__content">
+            <a href="#">Register a Nonconnected Committee</a>
+          </div>
+        </div>   
+      </div>
+    </div>  
+    <div class="row">
+      <div class="content__section content__section--ruled main__content">
+        <h2>Political party committees</h2>
+        <p>This is the FEC’s beta site, which means it’s still being developed. Learn more by reading the campaign guide, and check back soon for more information about political party committees.</p>
+      </div>
+      <div class="content__section content__section--ruled sidebar">      
+        <div class="card card--vertical card--secondary">
+          <img alt="Call center support icon" src="/static/img/i-register--neutral.svg" class="icon--complex card__image">
+          <div class="card__content">
+            <a href="#">Register a Political Party Committee</a>
+          </div>
+        </div>   
+      </div>
+    </div>            
+  </div>
+</article>
+
+
+{% endblock %}

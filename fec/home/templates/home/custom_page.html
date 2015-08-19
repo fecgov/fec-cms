@@ -1,3 +1,22 @@
 {% extends "base.html" %}
 {% load wagtailcore_tags %}
 {% block body_class %}template-{{ self.get_verbose_name | slugify }}{% endblock %}
+
+{% block content %}
+<header class="page-header slab--secondary">
+  <span class="h1 page-header__title">Registration and Reporting</span>
+</header>
+
+<article class="main">
+  <div class="container">
+    <h1 class="t-ruled t-display"><span class="usa-width-one-half">{{ self.title }}</span></h1>
+    <div class="main__content">
+      {{ self.body }}
+    </div>
+    <aside class="sidebar">
+
+    </aside>
+  </div>
+</article>
+
+{% endblock %}

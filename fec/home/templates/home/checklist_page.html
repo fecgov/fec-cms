@@ -1,0 +1,107 @@
+{% extends "base.html" %}
+{% load wagtailcore_tags %}
+{% block body_class %}template-{{ self.get_verbose_name | slugify }}{% endblock %}
+
+{% block content %}
+
+<header class="page-header slab--secondary">
+  <span class="h1 page-header__title">Registration and Reporting</span>
+</header>
+
+
+<article class="main">
+  <div class="container">
+    <h1 class="t-ruled t-display">{{ self.title }}</h1>
+    <div class="main__content">
+      <div class="content__section">
+        <p>Congressional candidates are people running for elected office in the Senate or House of Representatives.</p>
+        <p>Congressional candidates must designate at least one campaign committee. These authorized candidate committees they take in contributions and make expenditures for the candidate’s campaign.</p>
+      </div>
+      <div class="content__section--ruled">
+        <h2>This page is for Congressional candidates and their designated committees.</h2>
+        <p>The checklist below focuses on the mechanics of registration and filing, introducing readers to a few of the most common topics on those subjects. This is neither legal advice nor a comprehensive guide. The FEC recommends all candidates and committees read the campaign guide.</p>
+      </div>
+
+      <div class="js-accordion accordion--secondary">
+        <div class="accordion__header">
+          <h2 class="accordion__title">Register with the FEC</h2>
+          <button class="js-accordion_button accordion__button button--secondary"></button>
+        </div>
+        <div class="js-accordion_item accordion__item">
+          <p>Candidates: Register within 15 days of becoming a candidate for federal office. With the exception of “testing the waters” activity, you become a candidate when your campaign contributions or expenditures exceed $5,000.</p>
+          <p>Candidate committees: Register within 10 days of being officially designated by a candidate on his or her Statement of Candidacy.</p>
+          <ul class="list--checkboxes">
+            <li class="list--checkboxes__item">Get a tax ID</li>
+            <li class="list--checkboxes__item">Get a bank account</li>
+            <li class="list--checkboxes__item">Get a treasurer</li>
+            <li class="list--checkboxes__item">Register as a candidate</li>
+            <li class="list--checkboxes__item">Register as a candidate committee</li>
+          </ul>
+        </div>
+        <div class="accordion__header">
+          <h2 class="accordion__title">How to File</h2>
+          <button class="js-accordion_button accordion__button button--secondary"></button>
+        </div>
+        <div class="js-accordion_item accordion__item">
+          <ul class="list--checkboxes">
+            <li class="list--checkboxes__item">Get filing software</li>
+            <li class="list--checkboxes__item">File by paper</li>
+            <li class="list--checkboxes__item">File electronically
+              <ul>
+                <li class="list--checkboxes__item">Get an e-filing password</li>
+                <li class="list--checkboxes__item">File electronically</li>
+                <li class="list--checkboxes__item">Mandatory electronic filing</li>
+              </ul>
+            </li>
+          </ul>
+        </div>
+        <div class="accordion__header">
+          <h2 class="accordion__title">Regular Filing</h2>
+          <button class="js-accordion_button accordion__button button--secondary"></button>
+        </div>
+        <div class="js-accordion_item accordion__item">
+          <ul class="list--checkboxes">
+            <li class="list--checkboxes__item">Know your filing requirements</li>
+            <li class="list--checkboxes__item">Quarterly reports</li>
+            <li class="list--checkboxes__item">Pre-election reports</li>
+            <li class="list--checkboxes__item">48-hour notices</li>
+            <li class="list--checkboxes__item">Post-general election reports</li>
+            <li class="list--checkboxes__item">Terminate your committee</li>
+          </ul>
+        </div>  
+        <div class="accordion__header">
+          <h2 class="accordion__title">Troubleshooting</h2>
+          <button class="js-accordion_button accordion__button button--secondary"></button>
+        </div>
+        <div class="js-accordion_item accordion__item">
+          <ul class="list--checkboxes">
+            <li class="list--checkboxes__item">Missed deadlines</li>
+            <li class="list--checkboxes__item">Respond to an RFAI</li>
+            <li class="list--checkboxes__item">Administrative fines</li>
+            <li class="list--checkboxes__item">Contact us</li>
+          </ul>
+        </div>                                
+      </div>
+    </div>
+
+    <aside class="sidebar sidebar--secondary">
+        <h2>Need help?</h2>
+        <div class="card card--mini">
+          <img alt="Call center support icon" src="/static/img/i-contact--neutral.svg" class="icon--complex card__image">
+          <div class="card__content">
+            <span class="t-block">Give us a call</span>
+            <span class="t-block">(800) 424-9530</span>
+          </div>
+        </div>
+        <div class="card card--mini">
+          <img alt="Calendar icon" src="/static/img/i-calendar--neutral.svg" class="icon--complex card__image">
+          <div class="card__content">
+            <a href="#">Reporting calendar &raquo;</a>
+          </div>
+        </div>      
+      </aside>
+  </div>
+</article>
+
+
+{% endblock %}
