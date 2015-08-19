@@ -37,7 +37,7 @@ class HomePage(ContentPage, UniqueModel):
     """Unique home page."""
     pass
 
-class LandingPage(ContentPage, UniqueModel):
+class LandingPage(ContentPage):
     """Unique landing page."""
     pass
 

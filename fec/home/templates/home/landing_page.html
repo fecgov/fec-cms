@@ -1,3 +1,72 @@
 {% extends "base.html" %}
 {% load wagtailcore_tags %}
 {% block body_class %}template-{{ self.get_verbose_name | slugify }}{% endblock %}
+
+{% block content %}
+
+<section class="hero hero--secondary" aria-labelledby="hero-heading">
+  <div class="container">
+    <h1 class="t-display">Registration and Reporting</h1>
+    <h2 class="t-ruled">Register your candidacy or committee and get started reporting</h2>
+    <div class="hero__content">
+      <a class="button--secondary button--lg" href="#">Explore your registration options</a>
+    </div>
+  </div>
+</section>
+
+<article class="main">
+  <div class="container">
+    <div class="row">
+      <section class="main__content">
+        <div class="content__section">
+          <h2>Get started with the FEC</h2>
+          <h3>What does it mean to register and report?</h3>
+          <p>The FEC empowers citizens by making campaign finance data available to the general public. Registration and reporting are key components of that process.</p> 
+          <p>Registering with the FEC announces that you’re either a candidate seeking federal office or an individual, committee or organization raising or spending money in federal elections. See a breakdown of these groups on the registration options page.</p>
+          <p>After registration, FEC filers make regular reports to the FEC or Secretary of Senate. These reports disclose information about their receipts and expenditures. That information is then made available to the public.</p>
+        </div>
+        <div class="content__section content__section--ruled">
+          <h3>Discover registration and reporting essential</h3>
+          <p>A number of factors dictate how individuals and groups register and file. Visit this page to identify what kind of filer you are. When you’re ready, use our checklist to get started filing your reports.</p>
+          <div class="card card--secondary card--horizontal usa-width-one-third">
+            <img alt="Registration icon" src="/static/img/i-register--neutral.svg" class="icon--complex card__image">
+            <div class="card__content">
+              <a href="#">Start your registration process &raquo;</a>
+            </div>
+          </div>
+        </div>
+      </section>
+      <aside class="sidebar sidebar--secondary">
+        <h2>Need help?</h2>
+        <div class="card card--mini">
+          <img alt="Call center support icon" src="/static/img/i-contact--neutral.svg" class="icon--complex card__image">
+          <div class="card__content">
+            <span class="t-block">Give us a call</span>
+            <span class="t-block">(800) 424-9530</span>
+          </div>
+        </div>
+        <div class="card card--mini">
+          <img alt="Calendar icon" src="/static/img/i-calendar--neutral.svg" class="icon--complex card__image">
+          <div class="card__content">
+            <a href="#">Reporting calendar &raquo;</a>
+          </div>
+        </div>      
+      </aside>
+    </div>
+    <div class="row">
+      <section class="main__content--full content__section--ruled">
+        <h2>Learn how to conduct election activity and run a campaign</h2>
+        <p>The best complete source for the rules that govern your federal campaign activity are the campaign guides available on fec.gov. View guides for:</p>
+        <ul class="list--flat">
+          <li class="usa-width-one-fourth"><a class="button--secondary button--lg" href="http://fec.gov/pdf/candgui.pdf">Congressional Candidates and Committees (PDF)</a></li>
+          <li class="usa-width-one-fourth"><a class="button--secondary button--lg" href="http://fec.gov/pdf/candgui.pdf">Corporations and Labor Organizations (PDF)</a></li>
+          <li class="usa-width-one-fourth"><a class="button--secondary button--lg" href="http://fec.gov/pdf/candgui.pdf">Nonconnected Committees (PDF)</a></li>
+          <li class="usa-width-one-fourth usa-end-row"><a class="button--secondary button--lg" href="http://fec.gov/pdf/candgui.pdf">Political Party Committees (PDF)</a></li>
+        </ul>
+      </section>
+    </div>
+  </div>
+</article>
+
+
+{% endblock %}
