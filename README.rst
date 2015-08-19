@@ -14,8 +14,9 @@ Setup
 
 .. code::
 
-    ./fec/manage.py migrate
     ./fec/manage.py createsuperuser
+    ./fec/manage.py makemigrations
+    ./fec/manage.py migrate
 
 Local styles
 ------------
