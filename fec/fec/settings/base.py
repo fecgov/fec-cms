@@ -52,7 +52,6 @@ INSTALLED_APPS = (
 
     'search',
     'home',
-    'page',
 )
 
 MIDDLEWARE_CLASSES = (
