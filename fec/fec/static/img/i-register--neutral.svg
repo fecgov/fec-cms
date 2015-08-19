@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="78px" height="78px" viewBox="0 0 78 78" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:sketch="http://www.bohemiancoding.com/sketch/ns">
+    <!-- Generator: Sketch 3.3.3 (12081) - http://www.bohemiancoding.com/sketch -->
+    <title>i-register--neutral</title>
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <ellipse id="path-1" cx="39.3333333" cy="39.3333333" rx="38.754902" ry="38.754902"></ellipse>
+    </defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" sketch:type="MSPage">
+        <g id="Complex" sketch:type="MSArtboardGroup" transform="translate(-488.000000, -322.000000)">
+            <g id="i-register--neutral" sketch:type="MSLayerGroup" transform="translate(487.000000, 321.763333)">
+                <g id="Group-Copy-2" transform="translate(0.666667, 0.000000)">
+                    <g id="Group">
+                        <mask id="mask-2" sketch:name="Mask" fill="white">
+                            <use xlink:href="#path-1"></use>
+                        </mask>
+                        <use id="Mask" fill="#CEB59C" sketch:type="MSShapeGroup" xlink:href="#path-1"></use>
+                    </g>
+                    <rect id="Rectangle-76-Copy-28" fill="#EFDECD" sketch:type="MSShapeGroup" x="19.4548817" y="13.9380522" width="40.0228562" height="51.2169851" rx="2"></rect>
+                    <rect id="Rectangle-26" fill="#F77B42" sketch:type="MSShapeGroup" x="23.942029" y="20.5217391" width="30.7826087" height="2.28019324" rx="1"></rect>
+                    <rect id="Rectangle-26-Copy" fill="#F77B42" sketch:type="MSShapeGroup" x="23.942029" y="26.2222222" width="30.7826087" height="2.28019324" rx="1"></rect>
+                    <rect id="Rectangle-26-Copy-2" fill="#F77B42" sketch:type="MSShapeGroup" x="23.942029" y="31.9227053" width="30.7826087" height="2.28019324" rx="1"></rect>
+                    <rect id="Rectangle-26-Copy-3" fill="#F77B42" sketch:type="MSShapeGroup" x="23.942029" y="37.6231884" width="30.7826087" height="2.28019324" rx="1"></rect>
+                    <rect id="Rectangle-26-Copy-4" fill="#F77B42" sketch:type="MSShapeGroup" x="23.942029" y="43.3236715" width="18.2415459" height="2.28019324" rx="1"></rect>
+                    <g id="Oval-128-Copy-+-Fill-3-Copy" transform="translate(42.183575, 45.603865)" sketch:type="MSShapeGroup">
+                        <ellipse id="Oval-128-Copy" fill="#F77B42" cx="11.2308025" cy="11.4009662" rx="11.2308025" ry="11.2140651"></ellipse>
+                        <path d="M18.4887554,7.89544943 L18.4887554,7.89544943 L9.87809914,16.4928993 C9.67519598,16.6955001 9.39442591,16.8210976 9.0840814,16.8210976 C8.77411126,16.8210976 8.49334119,16.6955001 8.29006367,16.4928993 L3.42338258,11.6334711 C3.22010505,11.4304966 3.09432007,11.1501449 3.09432007,10.8402629 C3.09432007,10.2208727 3.59708566,9.71885642 4.21740032,9.71885642 C4.52774483,9.71885642 4.80814053,9.84445395 5.01141805,10.0474285 L9.0840814,14.1140223 L16.9003456,6.30940683 C17.1036231,6.10643225 17.3843932,5.98083472 17.6943633,5.98083472 C18.314678,5.98083472 18.8174436,6.48285103 18.8174436,7.10224123 C18.8174436,7.41174943 18.6916586,7.69247486 18.4887554,7.89544943" id="Fill-3" fill="#631010"></path>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

@@ -46,6 +46,14 @@ class LandingPage(ContentPage):
     """Unique landing page."""
     pass
 
+class ChecklistPage(ContentPage):
+    """Unique checklist page."""
+    pass
+
+class OptionsPage(ContentPage):
+    """Unique checklist page."""
+    pass    
+
 class CustomPage(Page):
     """Flexible customizable page."""
     author = models.CharField(max_length=255)
