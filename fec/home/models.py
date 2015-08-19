@@ -24,11 +24,15 @@ class ContentPage(Page):
     class Meta:
         abstract = True
 
-    body = StreamField([
-        ('heading', blocks.CharBlock(classname='full title')),
-        ('paragraph', blocks.RichTextBlock()),
-        ('image', ImageChooserBlock()),
-    ])
+    body = StreamField(
+        [
+            ('heading', blocks.CharBlock(classname='full title')),
+            ('paragraph', blocks.RichTextBlock()),
+            ('image', ImageChooserBlock()),
+        ],
+        null=True,
+        blank=True,
+    )
 
     content_panels = Page.content_panels + [
         StreamFieldPanel('body'),
