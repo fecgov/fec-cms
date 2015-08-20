@@ -6,7 +6,6 @@
   "devDependencies": {
     "browserify": "^11.0.1",
     "gulp": "^3.9.0",
-    "gulp-buffer": "0.0.2",
     "vinyl-source-stream": "^1.1.0"
   }
 }
