@@ -27,6 +27,15 @@ In `settings/local.py`:
 
     FEC_STYLE_URL = 'http://localhost:8080/css/styles.css'
 
+Developing with openFEC
+------------
+
+In `settings/local.py`:
+
+.. code::
+
+    FEC_APP_URL = 'http://localhost:8000'
+
 Run
 ===
 
