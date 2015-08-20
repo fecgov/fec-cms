@@ -15,10 +15,11 @@ Setup
 
 .. code::
 
+    cd fec
     gulp build-js
-    ./fec/manage.py createsuperuser
-    ./fec/manage.py makemigrations
-    ./fec/manage.py migrate
+    ./manage.py createsuperuser
+    ./manage.py makemigrations
+    ./manage.py migrate
 
 Local styles
 ------------
