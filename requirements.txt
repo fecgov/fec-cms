@@ -2,3 +2,4 @@ Django>=1.8,<1.9
 django-libsass==0.3
 gunicorn==19.3.0
 wagtail==1.0
+whitenoise==2.0.3

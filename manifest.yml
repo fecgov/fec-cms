@@ -1,2 +1,4 @@
 stack: cflinuxfs2
 buildpack: "https://github.com/ddollar/heroku-buildpack-multi.git"
+applications:
+- name: cms
