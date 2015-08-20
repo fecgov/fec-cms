@@ -21,20 +21,24 @@ Setup
 Local styles
 ------------
 
-In `settings/local.py`:
+Environment variable: ::
 
-.. code::
+    export FEC_STYLE_URL=http://localhost:8080/css/styles.css
+
+Settings: ::
 
     FEC_STYLE_URL = 'http://localhost:8080/css/styles.css'
 
 Developing with openFEC
-------------
+-----------------------
 
-In `settings/local.py`:
+Environment variable: ::
 
-.. code::
+    export FEC_STYLE_URL=http://localhost:3000
 
-    FEC_APP_URL = 'http://localhost:8000'
+Settings: ::
+
+    FEC_APP_URL = 'http://localhost:3000'
 
 Run
 ===
