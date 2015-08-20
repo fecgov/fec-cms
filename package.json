@@ -1,5 +1,12 @@
 {
   "dependencies": {
-     "fec-style": "git://github.com/18F/fec-style.git"
+    "fec-style": "git://github.com/18F/fec-style.git",
+    "jquery": "2.1.4"
+  },
+  "devDependencies": {
+    "browserify": "^11.0.1",
+    "gulp": "^3.9.0",
+    "gulp-buffer": "0.0.2",
+    "vinyl-source-stream": "^1.1.0"
   }
 }

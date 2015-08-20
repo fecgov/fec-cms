@@ -7,6 +7,7 @@ Install
 .. code::
 
     npm install
+    npm install -g gulp
     pip install -U -r requirements.txt
 
 Setup
@@ -14,6 +15,7 @@ Setup
 
 .. code::
 
+    gulp build-js
     ./fec/manage.py createsuperuser
     ./fec/manage.py makemigrations
     ./fec/manage.py migrate

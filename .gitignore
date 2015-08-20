@@ -1,6 +1,7 @@
 *.sqlite3
 node_modules
 fec/static
+fec/dist
 local.py
 
 *.py[cod]

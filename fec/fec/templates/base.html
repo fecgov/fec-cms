@@ -54,7 +54,7 @@
               </li>
               <li class="site-nav__item">
                 <a class="site-nav__link" href="{{ settings.FEC_APP_URL }}/elections">Search by ZIP code &raquo;</a>
-              </li>     
+              </li>
               <li class="site-nav__item">
                 <a class="site-nav__link" href="{{ settings.FEC_APP_URL }}/candidates">Browse candidates &raquo;</a>
               </li>
@@ -66,10 +66,10 @@
               </li>
               <li class="site-nav__item">
                 <a class="site-nav__link" href="{{ settings.FEC_APP_URL }}/receipts">Browse receipts &raquo;</a>
-              </li>  
+              </li>
               <li class="site-nav__item">
                 <a class="site-nav__link" href="{{ settings.FEC_APP_URL }}/disbursements">Browse disbursements &raquo;</a>
-              </li>         
+              </li>
             </ul>
           </li>
           <li class="site-nav__item">
@@ -77,10 +77,10 @@
             <ul class="site-nav__dropdown">
               <li class="site-nav__item">
                 <a class="site-nav__link" href="/registration-and-reporting">Reporting &amp; Registration Home</a>
-              </li> 
+              </li>
               <li class="site-nav__item">
                 <a class="site-nav__link" href="/registration-options">Registration Options</a>
-              </li> 
+              </li>
             </ul>
           </li>
           <li class="site-nav__item">
@@ -91,10 +91,10 @@
           </li>
           <li class="site-nav__item">
             <a href="#" class="site-nav__link is-disabled">TBD</a>
-          </li>                
+          </li>
         </ul>
         <button id="glossary-toggle" title="View site glossary" class="site-nav__button site-nav__button--right">Glossary</button>
-      </nav>    
+      </nav>
     </header>
 
     <main id="main">
@@ -115,8 +115,12 @@
       </div>
     </footer>
 
+    {% include './partials/glossary.html' %}
+
     {# Global javascript #}
+    {% compress js %}
     <script type="text/javascript" src="{% static 'js/fec.js' %}"></script>
+    {% endcompress %}
 
     {% block extra_js %}
     {# Override this in templates to add extra javascript #}
