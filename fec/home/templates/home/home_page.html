@@ -3,48 +3,74 @@
 {% block body_class %}template-{{ self.get_verbose_name | slugify }}{% endblock %}
 
 {% block content %}
-  <section class="hero hero--primary" aria-labelledby="hero-heading">
+  <section class="hero slab--neutral" aria-labelledby="hero-heading">
     <div class="container">
-      <span id="hero-heading" class="t-display">Welcome to beta.fec.gov</span>
-      <h3 class="t-ruled">This site is in beta, which means we’re actively working on it and adding new features.  The official site for the Federal Election Commission is www.FEC.gov</h3>
+      <h1 id="hero-heading" class="t-display"><span class="t-italic">beta</span>.fec.gov</h1>
+      <h3 class="t-ruled">We’re designing this site in phases: This allows us to launch new features faster than releasing a completely redesigned fec.gov. Explore our new content and data, and <a href="mailto:18F-fec@gsa.gov">send us your feedback</a>.</h3>
     </div>
   </section>
   <section class="main">
     <div class="container">
-      <h1>About this site</h1>
+      <h2 class="h1">A few of our new features</h2>
       <div class="row">
-        <div class="usa-width-one-third">
-          <p>We're working hard to make this a useful addition to the resources available at FEC.gov. Do you have feedback or feature requests? Email to let us know what works and what needs improvement.</p>
+        <div class="feature">
+          <div class="card card--primary">
+            <a class="card__image" href="{{ settings.FEC_APP_URL }}"><img src="/static/img/i-data--neutral.svg" alt="Icon for explore campaign finance data"></a>
+            <div class="card__content">
+              <a href="{{ settings.FEC_APP_URL }}">Explore campaign finance data &raquo;</a>
+            </div>
+          </div>
+          <p>See how money is raised and spent in federal elections. Compare candidates’ financial data. Learn how campaigns have spent their money. Discover who contributed to which candidates.</p>
         </div>
-        <div class="usa-width-one-third">
-          <h2>Current features</h2>
-          <ul class="list--checkboxes">
-            <li class="list--checkboxes__item is-completed">Search for candidates and committees</li>
-            <li class="list--checkboxes__item is-completed">Browse and filter candidates and committees</li>
-            <li class="list--checkboxes__item is-completed">View redesigned candidate and committee pages</li>
-            <li class="list--checkboxes__item is-completed">View all of a candidate’s authorized and joint fundraising committees</li>
-            <li class="list--checkboxes__item is-completed">View latest report</li>
-            <li class="list--checkboxes__item is-completed">A public API</li>
-          </ul>
+        <div class="feature">
+          <div class="card card--primary">
+            <a class="card__image" href="/registration-and-reporting"><img src="/static/img/i-register--neutral.svg" alt="Icon for reporting and registration"></a>
+            <div class="card__content">
+              <a href="/registration-and-reporting">Learn how to register as a congressional candidate or committee &raquo;</a>
+            </div>
+          </div>
+          <p>We’re making it easier for groups to learn the essentials of registration and reporting. We started with House and Senate candidates and committees, but soon we’ll have content for all the individuals and groups that register with the FEC./p>
         </div>
-        <div class="usa-width-one-third">
-          <h2>Coming soon</h2>
-          <ul class="list--checkboxes">
-            <li class="list--checkboxes__item">Customizable calendar</li>
-            <li class="list--checkboxes__item">Filing instructions for more committees</li>
-            <li class="list--checkboxes__item">HTML campaign guides</li>
-          </ul>
+        <div class="feature">
+          <div class="card card--primary">
+            <img class="card__image" src="/static/img/i-glossary--neutral.svg" alt="Icon representing the glossary">
+            <div class="card__content">
+              <span>Use the glossary to learn the meaning of an unfamiliar word or phrase &raquo;</span>
+            </div>
+          </div>
+          <p>Click words or phrases with the book icon next to them to pull up a definition. Or click the glossary icon at the top of any page to open the full, searchable glossary. For example, click on this term to see its definition: principal campaign committee.</p>
         </div>
+        <div class="feature">
+          <div class="card card--primary is-disabled">
+            <img class="card__image" src="/static/img/i-calendar--neutral.svg" alt="Icon for the calendar">
+            <div class="card__content">
+              <a href="">View a calendar of FEC deadlines and events &raquo;</a>
+            </div>
+          </div>
+          <p>Build a custom calendar to suit your needs, and export it to your personal calendar.</p>
+        </div>                        
       </div>
     </div>
   </section>
-  <section class="billboard">
+  <section class="slab slab--neutral">
     <div class="container">
-      <div class="billboard__image billboard__image--glossary">
-      </div>
-      <div class="billboard__content">
-        <h2>Need help understanding terms?</h2>
-        <p>If you encounter a technical word or a phrase you don’t know, this site’s glossary may be able to help. Click on  words and phrases with the book icon next to them to pull up a definition. Or click the glossary icon at the top of any page to open the full, searchable glossary. For example, click on this term to see its definition: principal campaign committee.</p>
+      <h2 class="h1">What's next?</h2>
+      <ul class="list--flat list--bulleted">
+        <li class="feature">
+          <p>Added resources around registration, reporting and compliance</p>
+        </li>
+        <li class="feature">
+          <p>Improvements to campaign data tools, including exportable data and additional visualizations</p>
+        </li>
+        <li class="feature">
+          <p>A revamped tool for searching advisory opinions and enforcement actions</p>
+        </li>
+        <li class="feature">
+          <p>Further improvements to the new look and feel of the website</p>
+        </li>
+      </ul>
+      <div class="slab">
+        <p>And more — reach out and share your ideas. We’re listening on GitHub and email.</p>
       </div>
     </div>
   </section>
