@@ -37,20 +37,51 @@
         <span class="disclaimer__right">This site is in beta. <a title="Learn about this site's development" tabindex="0" href="https://18f.gsa.gov/dashboard/stages/#beta">Learn more.</a></span>
       </div>
       <div class="masthead">
-        <span class="site-title">Federal Election Commission</span>
+        <a href="/" class="site-title">Federal Election Commission</a>
         <ul class="utility-nav list--flat">
           <li class="utility-nav__item is-disabled">About</li>
           <li class="utility-nav__item is-disabled">Contact</li>
         </ul>
       </div>
       <nav class="site-nav">
-        <button class="site-nav__button site-nav__button--left">Glossary</button>
-        <ul class="site-nav__list">
+        <button class="site-nav__button site-nav__button--left">Navigation</button>
+        <ul id="site-menu" class="site-nav__list">
           <li class="site-nav__item">
-            <a href="/" class="site-nav__link">Campaign Finance Data</a>
+            <a href="{{ settings.FEC_APP_URL }}" class="site-nav__link">Campaign Finance Data</a>
+            <ul class="site-nav__dropdown">
+              <li class="site-nav__item">
+                <a class="site-nav__link" href="{{ settings.FEC_APP_URL }}">Search for candidates &raquo;</a>
+              </li>
+              <li class="site-nav__item">
+                <a class="site-nav__link" href="{{ settings.FEC_APP_URL }}/elections">Search by ZIP code &raquo;</a>
+              </li>     
+              <li class="site-nav__item">
+                <a class="site-nav__link" href="{{ settings.FEC_APP_URL }}/candidates">Browse candidates &raquo;</a>
+              </li>
+              <li class="site-nav__item">
+                <a class="site-nav__link" href="{{ settings.FEC_APP_URL }}/committees">Browse committees &raquo;</a>
+              </li>
+              <li class="site-nav__item">
+                <a class="site-nav__link" href="{{ settings.FEC_APP_URL }}/filings">Browse filings &raquo;</a>
+              </li>
+              <li class="site-nav__item">
+                <a class="site-nav__link" href="{{ settings.FEC_APP_URL }}/receipts">Browse receipts &raquo;</a>
+              </li>  
+              <li class="site-nav__item">
+                <a class="site-nav__link" href="{{ settings.FEC_APP_URL }}/disbursements">Browse disbursements &raquo;</a>
+              </li>         
+            </ul>
           </li>
           <li class="site-nav__item">
-            <a href="#" class="site-nav__link is-disabled">Reporting &amp; Registration</a>
+            <a href="/registration-and-reporting" class="site-nav__link">Reporting &amp; Registration</a>
+            <ul class="site-nav__dropdown">
+              <li class="site-nav__item">
+                <a class="site-nav__link" href="/registration-and-reporting">Reporting &amp; Registration Home</a>
+              </li> 
+              <li class="site-nav__item">
+                <a class="site-nav__link" href="/registration-options">Registration Options</a>
+              </li> 
+            </ul>
           </li>
           <li class="site-nav__item">
             <a href="#" class="site-nav__link is-disabled">Calendar</a>
@@ -60,10 +91,11 @@
           </li>
           <li class="site-nav__item">
             <a href="#" class="site-nav__link is-disabled">TBD</a>
-          </li>
+          </li>                
         </ul>
-        <button id="glossary-toggle" title="View site glossary" data-slide="right" class="site-nav__button site-nav__button--right">Glossary</button>
-      </nav>
+        <button id="glossary-toggle" title="View site glossary" class="site-nav__button site-nav__button--right">Glossary</button>
+      </nav>    
+
     </header>
 
     <main id="main">
