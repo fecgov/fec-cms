@@ -8,7 +8,7 @@
   <head>
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <title>{% block title %}{% if self.seo_title %}{{ self.seo_title }}{% else %}{{ self.title }}{% endif %}{% endblock %}{% block title_suffix %}{% endblock %}</title>
+    <title>{% block title %}{% if self.seo_title %}{{ self.seo_title }}{% else %}{{ self.title }} | beta.fec.gov {% endif %}{% endblock %}{% block title_suffix %}{% endblock %}</title>
     <meta name="description" content="" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
 
@@ -39,8 +39,8 @@
       <div class="masthead">
         <a href="/" class="site-title">Federal Election Commission</a>
         <ul class="utility-nav list--flat">
-          <li class="utility-nav__item">About</li>
-          <li class="utility-nav__item">Contact</li>
+          <li class="utility-nav__item is-disabled">About</li>
+          <li class="utility-nav__item is-disabled">Contact</li>
         </ul>
       </div>
       <nav class="site-nav">
@@ -95,7 +95,6 @@
         </ul>
         <button id="glossary-toggle" title="View site glossary" class="site-nav__button site-nav__button--right">Glossary</button>
       </nav>    
-
     </header>
 
     <main id="main">
