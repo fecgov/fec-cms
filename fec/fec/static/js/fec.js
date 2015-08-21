@@ -4,17 +4,18 @@
 
 var $ = require('jquery');
 
+var terms = require('fec-style/js/terms');
 var glossary = require('fec-style/js/glossary');
 var accordion = require('fec-style/js/accordion');
 
-// // Hack: Append jQuery to `window` for use by legacy libraries
-// window.$ = window.jQuery = $;
+// Hack: Append jQuery to `window` for use by legacy libraries
+window.$ = window.jQuery = $;
 
 var SLT_ACCORDION = '.js-accordion';
 
 $(document).ready(function() {
     // Initialize glossary
-    new glossary.Glossary('#glossary', '#glossary-toggle');
+    new glossary.Glossary(terms, {body: '#glossary', toggle: '#glossary-toggle'});
 
     // Initialize accordions
     $(SLT_ACCORDION).each(function() {
