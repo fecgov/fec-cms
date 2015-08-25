@@ -49,3 +49,11 @@ Run
 .. code::
     
     ./fec/manage.py runserver
+
+Deploy
+======
+
+Provision development database: ::
+
+    cf create-service rds shared-psql fec-dev-cms
+    cf bind-service cms fec-dev-cms

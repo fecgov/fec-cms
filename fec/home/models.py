@@ -43,16 +43,16 @@ class HomePage(ContentPage, UniqueModel):
     pass
 
 class LandingPage(ContentPage):
-    """Unique landing page."""
+    """Landing page."""
     pass
 
 class ChecklistPage(ContentPage):
-    """Unique checklist page."""
+    """Checklist page."""
     pass
 
 class OptionsPage(ContentPage):
-    """Unique checklist page."""
-    pass    
+    """Options page."""
+    pass
 
 class CustomPage(Page):
     """Flexible customizable page."""
