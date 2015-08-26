@@ -37,7 +37,7 @@ Developing with openFEC
 
 Environment variable: ::
 
-    export FEC_STYLE_URL=http://localhost:3000
+    export FEC_APP_URL=http://localhost:3000
 
 Settings: ::
 
@@ -48,7 +48,7 @@ Run
 
 .. code::
     
-    ./fec/manage.py runserver
+    ./manage.py runserver
 
 Deploy
 ======
