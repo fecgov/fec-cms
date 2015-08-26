@@ -7,6 +7,7 @@ Install
 .. code::
 
     npm install
+    npm install -g gulp
     pip install -U -r requirements.txt
 
 Setup
@@ -14,9 +15,11 @@ Setup
 
 .. code::
 
-    ./fec/manage.py createsuperuser
-    ./fec/manage.py makemigrations
-    ./fec/manage.py migrate
+    cd fec
+    gulp build-js
+    ./manage.py createsuperuser
+    ./manage.py makemigrations
+    ./manage.py migrate
 
 Local styles
 ------------
@@ -46,3 +49,11 @@ Run
 .. code::
     
     ./fec/manage.py runserver
+
+Deploy
+======
+
+Provision development database: ::
+
+    cf create-service rds shared-psql fec-dev-cms
+    cf bind-service cms fec-dev-cms

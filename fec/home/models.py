@@ -1,3 +1,5 @@
+import functools
+
 from django.db import models
 from django.core.exceptions import ValidationError
 
@@ -6,6 +8,15 @@ from wagtail.wagtailcore.fields import StreamField
 from wagtail.wagtailcore import blocks
 from wagtail.wagtailadmin.edit_handlers import FieldPanel, StreamFieldPanel
 from wagtail.wagtailimages.blocks import ImageChooserBlock
+
+stream_factory = functools.partial(
+    StreamField,
+    [
+        ('heading', blocks.CharBlock(classname='full title')),
+        ('paragraph', blocks.RichTextBlock()),
+        ('image', ImageChooserBlock()),
+    ],
+)
 
 class UniqueModel(models.Model):
     """Abstract base class for unique pages."""
@@ -24,15 +35,7 @@ class ContentPage(Page):
     class Meta:
         abstract = True
 
-    body = StreamField(
-        [
-            ('heading', blocks.CharBlock(classname='full title')),
-            ('paragraph', blocks.RichTextBlock()),
-            ('image', ImageChooserBlock()),
-        ],
-        null=True,
-        blank=True,
-    )
+    body = stream_factory(null=True, blank=True)
 
     content_panels = Page.content_panels + [
         StreamFieldPanel('body'),
@@ -43,29 +46,27 @@ class HomePage(ContentPage, UniqueModel):
     pass
 
 class LandingPage(ContentPage):
-    """Unique landing page."""
+    """Landing page."""
     pass
 
 class ChecklistPage(ContentPage):
-    """Unique checklist page."""
+    """Checklist page."""
     pass
 
 class OptionsPage(ContentPage):
-    """Unique checklist page."""
-    pass    
+    """Options page."""
+    pass
 
 class CustomPage(Page):
     """Flexible customizable page."""
     author = models.CharField(max_length=255)
     date = models.DateField('Post date')
-    body = StreamField([
-        ('heading', blocks.CharBlock(classname='full title')),
-        ('paragraph', blocks.RichTextBlock()),
-        ('image', ImageChooserBlock()),
-    ])
+    body = stream_factory()
+    sidebar = stream_factory(null=True, blank=True)
 
     content_panels = Page.content_panels + [
         FieldPanel('author'),
         FieldPanel('date'),
         StreamFieldPanel('body'),
+        StreamFieldPanel('sidebar'),
     ]
