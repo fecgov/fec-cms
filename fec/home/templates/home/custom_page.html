@@ -13,9 +13,11 @@
     <div class="main__content">
       {{ self.body }}
     </div>
-    <aside class="sidebar">
-
+    {% if self.sidebar %}
+    <aside class="sidebar sidebar--secondary">
+      {{ self.sidebar }}
     </aside>
+    {% endif %}
   </div>
 </article>
 
