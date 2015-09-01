@@ -7,16 +7,16 @@
         <ellipse id="path-1" cx="39.3333333" cy="39.3333333" rx="38.754902" ry="38.754902"></ellipse>
     </defs>
     <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" sketch:type="MSPage">
-        <g id="Complex" sketch:type="MSArtboardGroup" transform="translate(-488.000000, -322.000000)">
-            <g id="i-register--neutral" sketch:type="MSLayerGroup" transform="translate(487.000000, 321.763333)">
+        <g id="Complex" sketch:type="MSArtboardGroup" transform="translate(-489.000000, -323.000000)">
+            <g id="i-register--neutral" sketch:type="MSLayerGroup" transform="translate(488.000000, 322.478333)">
                 <g id="Group-Copy-2" transform="translate(0.666667, 0.000000)">
                     <g id="Group">
                         <mask id="mask-2" sketch:name="Mask" fill="white">
                             <use xlink:href="#path-1"></use>
                         </mask>
-                        <use id="Mask" fill="#CEB59C" sketch:type="MSShapeGroup" xlink:href="#path-1"></use>
+                        <use id="Mask" fill="#EFDECD" sketch:type="MSShapeGroup" xlink:href="#path-1"></use>
                     </g>
-                    <rect id="Rectangle-76-Copy-28" fill="#EFDECD" sketch:type="MSShapeGroup" x="19.4548817" y="13.9380522" width="40.0228562" height="51.2169851" rx="2"></rect>
+                    <rect id="Rectangle-76-Copy-28" fill="#FFFFF9" sketch:type="MSShapeGroup" x="19.4548817" y="13.9380522" width="40.0228562" height="51.2169851" rx="2"></rect>
                     <rect id="Rectangle-26" fill="#F77B42" sketch:type="MSShapeGroup" x="23.942029" y="20.5217391" width="30.7826087" height="2.28019324" rx="1"></rect>
                     <rect id="Rectangle-26-Copy" fill="#F77B42" sketch:type="MSShapeGroup" x="23.942029" y="26.2222222" width="30.7826087" height="2.28019324" rx="1"></rect>
                     <rect id="Rectangle-26-Copy-2" fill="#F77B42" sketch:type="MSShapeGroup" x="23.942029" y="31.9227053" width="30.7826087" height="2.28019324" rx="1"></rect>
