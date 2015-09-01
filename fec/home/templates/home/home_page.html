@@ -3,48 +3,60 @@
 {% block body_class %}template-{{ self.get_verbose_name | slugify }}{% endblock %}
 
 {% block content %}
-  <section class="hero slab--neutral" aria-labelledby="hero-heading">
-    <div class="container">
-      <h1 id="hero-heading" class="t-display"><span class="t-italic">beta</span>.fec.gov</h1>
-      <h3 class="t-ruled">We’re designing this site in phases: This allows us to launch new features faster than releasing a completely redesigned fec.gov. Explore our new content and data, and <a href="mailto:18F-fec@gsa.gov">send us your feedback</a>.</h3>
+  <section class="hero hero--home" aria-labelledby="hero-heading">
+    <div class="hero__banner">
+      <div class="container">
+        <div class="hero__heading">
+          <h1 id="hero-heading" class="hero__title t-display"><span class="t-italic">beta</span>.fec.gov</h1>
+          <h2 class="hero__subtitle">A work in progress.</h2>
+        </div>
+      </div>
+    </div>
+    <div class="hero__bottom">
+      <div class="container">
+        <div class="hero__content">
+          <p class="h3">We're designing this site in phases: This allows us to launch new features faster than releasing a completely redesigned fec.gov. Explore our new content and data, and send your feedback to <a href="mailto:info@FEC">info@fec.gov</a>.</p>
+        </div>
+      </div>
     </div>
   </section>
   <section class="main">
     <div class="container">
-      <h2 class="h1">A few of our new features</h2>
       <div class="row">
         <div class="feature">
+          <h2 class="feature__title">New features</h2>
           <div class="card card--primary">
-            <a class="card__image" href="{{ settings.FEC_APP_URL }}"><img src="/static/img/i-data--neutral.svg" alt="Icon for explore campaign finance data"></a>
+            <a class="card__image-link" href="{{ settings.FEC_APP_URL }}"><img class="card__image" src="/static/img/i-data--neutral.svg" alt="Icon for explore campaign finance data"></a>
             <div class="card__content">
-              <a href="{{ settings.FEC_APP_URL }}">Explore campaign finance data &raquo;</a>
+              <a href="{{ settings.FEC_APP_URL }}">Explore campaign finance data</a>
             </div>
           </div>
           <p>See how money is raised and spent in federal elections. Compare candidates’ financial data. Learn how campaigns have spent their money. Discover who contributed to which candidates.</p>
         </div>
-        <div class="feature">
+        <div class="feature feature--no-title">
           <div class="card card--primary">
-            <a class="card__image" href="/registration-and-reporting"><img src="/static/img/i-register--neutral.svg" alt="Icon for reporting and registration"></a>
+            <a class="card__image-link" href="/registration-and-reporting"><img class="card__image" src="/static/img/i-register--neutral.svg" alt="Icon for reporting and registration"></a>
             <div class="card__content">
-              <a href="/registration-and-reporting">Learn how to register as a congressional candidate or committee &raquo;</a>
+              <a href="/registration-and-reporting">Learn how to register as a congressional candidate or committee</a>
             </div>
           </div>
-          <p>We’re making it easier for groups to learn the essentials of registration and reporting. We started with House and Senate candidates and committees, but soon we’ll have content for all the individuals and groups that register with the FEC./p>
+          <p>We’re making it easier for groups to learn the essentials of registration and reporting. We started with House and Senate candidates and committees, but soon we’ll have content for all the individuals and groups that register with the FEC.</p>
         </div>
-        <div class="feature">
+        <div class="feature feature--no-title">
           <div class="card card--primary">
             <img class="card__image" src="/static/img/i-glossary--neutral.svg" alt="Icon representing the glossary">
             <div class="card__content">
-              <span>Use the glossary to learn the meaning of an unfamiliar word or phrase &raquo;</span>
+              <span>Use the glossary to learn the meaning of an unfamiliar word or phrase</span>
             </div>
           </div>
           <p>Click words or phrases with the book icon next to them to pull up a definition. Or click the glossary icon at the top of any page to open the full, searchable glossary. For example, click on this term to see its definition: principal campaign committee.</p>
         </div>
         <div class="feature">
+          <h2 class="feature__title">Coming Soon</h2>
           <div class="card card--primary is-disabled">
             <img class="card__image" src="/static/img/i-calendar--neutral.svg" alt="Icon for the calendar">
             <div class="card__content">
-              <a href="">View a calendar of FEC deadlines and events &raquo;</a>
+              <a href="">View a calendar of FEC deadlines and events</a>
             </div>
           </div>
           <p>Build a custom calendar to suit your needs, and export it to your personal calendar.</p>
@@ -55,17 +67,17 @@
   <section class="slab slab--neutral">
     <div class="container">
       <h2 class="h1">What's next?</h2>
-      <ul class="list--flat list--bulleted">
-        <li class="feature">
+      <ul class="row">
+        <li class="feature feature--bulleted">
           <p>Added resources around registration, reporting and compliance</p>
         </li>
-        <li class="feature">
+        <li class="feature feature--bulleted">
           <p>Improvements to campaign data tools, including exportable data and additional visualizations</p>
         </li>
-        <li class="feature">
+        <li class="feature feature--bulleted">
           <p>A revamped tool for searching advisory opinions and enforcement actions</p>
         </li>
-        <li class="feature">
+        <li class="feature feature--bulleted">
           <p>Further improvements to the new look and feel of the website</p>
         </li>
       </ul>
