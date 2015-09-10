@@ -26,11 +26,11 @@ Local styles
 
 Environment variable: ::
 
-    export FEC_STYLE_URL=http://localhost:8080/css/styles.css
+    export FEC_WEB_STYLE_URL=http://localhost:8080/css/styles.css
 
 Settings: ::
 
-    FEC_STYLE_URL = 'http://localhost:8080/css/styles.css'
+    FEC_WEB_STYLE_URL = 'http://localhost:8080/css/styles.css'
 
 Developing with openFEC
 -----------------------

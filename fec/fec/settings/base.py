@@ -153,4 +153,4 @@ WAGTAIL_SITE_NAME = "fec"
 # Custom settings
 
 FEC_APP_URL = os.getenv('FEC_APP_URL')
-FEC_STYLE_URL = os.getenv('FEC_STYLE_URL')
+FEC_WEB_STYLE_URL = os.getenv('FEC_WEB_STYLE_URL')
