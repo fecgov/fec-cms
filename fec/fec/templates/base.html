@@ -13,8 +13,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
 
     {# Global stylesheets #}
-    {% if settings.FEC_STYLE_URL %}
-    <link rel="stylesheet" type="text/x-css" href="{{ settings.FEC_STYLE_URL }}">
+    {% if settings.FEC_WEB_STYLE_URL %}
+    <link rel="stylesheet" type="text/x-css" href="{{ settings.FEC_WEB_STYLE_URL }}">
     {% else %}
     {% compress css %}
     <link rel="stylesheet" type="text/x-scss" href="{% static 'scss/fec.scss' %}">
@@ -53,30 +53,33 @@
             <label for="dropdown-toggle-1" class="site-nav__link nav-toggle__label">Campaign finance data</label>
             <ul class="site-nav__dropdown">
               <li class="site-nav__item u-under-lg-only">
-                <a class="site-nav__link" href="{{ settings.FEC_APP_URL }}">Campaign finance data home &raquo;</a>
+                <a class="site-nav__link" href="{{ settings.FEC_APP_URL }}">Campaign finance data home</a>
               </li>
               <li class="site-nav__item">
-                <a class="site-nav__link" href="{{ settings.FEC_APP_URL }}/elections">Search elections by location &raquo;</a>
+                <a class="site-nav__link" href="{{ settings.FEC_APP_URL }}/elections">Search elections by location</a>
               </li>
               <li class="site-nav__item">
-                <a class="site-nav__link" href="{{ settings.FEC_APP_URL }}/candidates">Browse candidates &raquo;</a>
+                <span class="h3 site-nav__subtitle">Browse:</span>
+              </li>              
+              <li class="site-nav__item">
+                <a class="site-nav__link" href="{{ settings.FEC_APP_URL }}/candidates">Candidates</a>
               </li>
               <li class="site-nav__item">
-                <a class="site-nav__link" href="{{ settings.FEC_APP_URL }}/committees">Browse committees &raquo;</a>
+                <a class="site-nav__link" href="{{ settings.FEC_APP_URL }}/committees">Committees</a>
               </li>
               <li class="site-nav__item">
-                <a class="site-nav__link" href="{{ settings.FEC_APP_URL }}/filings">Browse filings &raquo;</a>
+                <a class="site-nav__link" href="{{ settings.FEC_APP_URL }}/filings">Filings</a>
               </li>
               <li class="site-nav__item">
-                <a class="site-nav__link" href="{{ settings.FEC_APP_URL }}/receipts">Browse receipts &raquo;</a>
+                <a class="site-nav__link" href="{{ settings.FEC_APP_URL }}/receipts">Receipts</a>
               </li>
               <li class="site-nav__item">
-                <a class="site-nav__link" href="{{ settings.FEC_APP_URL }}/disbursements">Browse disbursements &raquo;</a>
+                <a class="site-nav__link" href="{{ settings.FEC_APP_URL }}/disbursements">Disbursements</a>
               </li>
             </ul>
           </li>
           <li class="site-nav__item">
-            <a href="/registration-and-reporting" class="site-nav__link">Registration &amp; reporting</a>
+            <a href="/registration-and-reporting" class="site-nav__link">Registration and reporting</a>
           </li>
           <li class="site-nav__item">
             <a href="#" class="site-nav__link is-disabled">Calendar</a>
