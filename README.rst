@@ -56,4 +56,16 @@ Deploy
 Provision development database: ::
 
     cf create-service rds shared-psql fec-dev-cms
-    cf bind-service cms fec-dev-cms
+
+Provision credentials service: ::
+
+    cf cups cms-creds-dev -p '{"DJANGO_SECRET_KEY": "..."}'
+
+Install `autopilot`: ::
+
+    go get github.com/concourse/autopilot
+    cf install-plugin $GOPATH/bin/autopilot
+
+Deploy: ::
+
+    cf zero-downtime-push cms -f manifest.yml

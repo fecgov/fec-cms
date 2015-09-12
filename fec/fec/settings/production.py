@@ -1,11 +1,12 @@
 import dj_database_url
 
 from .base import *  # noqa
+from .credentials import credentials
 
 
 DATABASES = {'default': dj_database_url.config()}
 
-SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY')
+SECRET_KEY = credentials.get('DJANGO_SECRET_KEY')
 
 DEBUG = False
 TEMPLATE_DEBUG = False
