@@ -50,7 +50,7 @@
               <span>Use the glossary to learn the meaning of an unfamiliar word or phrase</span>
             </div>
           </div>
-          <p>Click words or phrases with the book icon next to them to pull up a definition. Or click the glossary icon at the top of any page to open the full, searchable glossary. For example, click on this term to see its definition: principal campaign committee.</p>
+          <p>Click words or phrases with the book icon next to them to pull up a definition. Or click the glossary icon at the top of any page to open the full, searchable glossary. For example, click on this term to see its definition: <span class="term" data-term="principal campaign committee">principal campaign committee</span>.</p>
         </div>
         <div class="feature">
           <h2 class="feature__title">Coming soon</h2>
@@ -65,7 +65,7 @@
       </div>
     </div>
   </section>
-  <section class="slab slab--neutral">
+  <section class="slab">
     <div class="container">
       <h2 class="h1 t-ruled--bold">What's next?</h2>
       <ul class="feature-list">
@@ -83,10 +83,21 @@
         </li>
       </ul>
       <div class="slab">
-        <p>And more — reach out and share your ideas. We’re listening on GitHub and <a href="mailto:info@FEC">email</a>.</p>
+        <p class="h3">And more — reach out and share your ideas. <br> We’re listening on <a href="https://github.com/18f/fec">GitHub</a> and <a href="mailto:info@FEC">email</a>.</p>
       </div>
     </div>
   </section>
+  <section class="slab slab--neutral">
+    <div class="container">
+      <div class="billboard">
+        <div class="billboard__image__container">
+          <img class="billboard__image" src="/static/img/api@2x.png" alt="API documentation screenshot">
+        </div>
+        <div class="billboard__content">
+          <h2 class="feature__title">The FEC API: Use our data in your project</h2>
+          <p>An application programming interface (API)  is an easy way for computers, programs and developers to share and translate large amounts of data in meaningful ways. We recently released the FEC’s first API to help you use the data to tell your own story. This API is the backbone of the campaign finance data on beta.fec.gov.</p>
+          <p>Check out the <a href="https://api.open.fec.gov">API documentation</a>.</p>
+
 {% endblock %}
 
 {% block extra_js %}
