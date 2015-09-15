@@ -48,3 +48,5 @@ docs/_build
 README.html
 
 _sandbox
+
+npm-debug.log
