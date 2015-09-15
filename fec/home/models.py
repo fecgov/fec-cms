@@ -14,6 +14,7 @@ stream_factory = functools.partial(
     [
         ('heading', blocks.CharBlock(classname='full title')),
         ('paragraph', blocks.RichTextBlock()),
+        ('html', blocks.RawHTMLBlock()),
         ('image', ImageChooserBlock()),
     ],
 )
