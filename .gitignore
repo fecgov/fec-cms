@@ -22,6 +22,7 @@ develop-eggs
 .installed.cfg
 lib
 lib64
+bower_components
 
 # Installer logs
 pip-log.txt

@@ -15,7 +15,7 @@ var SLT_ACCORDION = '.js-accordion';
 
 $(document).ready(function() {
     // Initialize glossary
-    new glossary.Glossary(terms, {body: '#glossary', toggle: '#glossary-toggle'});
+    new glossary.Glossary(terms, {body: '#glossary'});
 
     // Initialize accordions
     $(SLT_ACCORDION).each(function() {
