@@ -1,0 +1,13 @@
+{
+  "name": "fec-cms",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "ace-builds": "~1.2.0"
+  }
+}
