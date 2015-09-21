@@ -50,6 +50,7 @@ INSTALLED_APPS = (
     'wagtail.wagtailredirects',
     'wagtail.wagtailforms',
 
+    'fec',
     'search',
     'home',
 )
@@ -131,6 +132,8 @@ STATICFILES_FINDERS = (
 STATICFILES_DIRS = (
     os.path.join(BASE_DIR, 'dist', 'fec', 'static'),
     os.path.join(REPO_DIR, 'node_modules', 'fec-style'),
+    os.path.join(REPO_DIR, 'bower_components'),
+    os.path.join(REPO_DIR, 'node_modules'),
     os.path.join(PROJECT_DIR, 'static'),
 )
 

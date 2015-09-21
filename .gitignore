@@ -1,5 +1,6 @@
 *.sqlite3
 node_modules
+bower_components
 /fec/static
 /fec/dist
 local.py
@@ -49,7 +50,5 @@ docs/_build
 README.html
 
 _sandbox
-
-npm-debug.log
 
 npm-debug.log

@@ -1,7 +1,8 @@
 {
   "dependencies": {
     "fec-style": "git://github.com/18F/fec-style.git",
-    "jquery": "2.1.4"
+    "jquery": "2.1.4",
+    "js-beautify": "1.5.10"
   },
   "devDependencies": {
     "browserify": "^11.0.1",
