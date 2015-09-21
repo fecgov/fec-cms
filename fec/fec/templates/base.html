@@ -28,7 +28,7 @@
 
   <body class="{% block body_class %}{% endblock %}">
     {# {% wagtailuserbar %} #}
-    <a href="#main-content" class="u-visually-hidden">skip navigation</a>
+    <a href="#main" class="skip-nav">skip navigation</a>
 
     <header class="site-header">
       <div class="disclaimer">
@@ -82,13 +82,13 @@
             <a href="/registration-and-reporting" class="site-nav__link">Registration and reporting</a>
           </li>
           <li class="site-nav__item">
-            <a href="#" class="site-nav__link is-disabled">Calendar</a>
+            <a href="#" class="site-nav__link is-disabled" tabindex="-1">Calendar</a>
           </li>
           <li class="site-nav__item">
-            <a href="#" class="site-nav__link is-disabled">TBD</a>
+            <a href="#" class="site-nav__link is-disabled" tabindex="-1">TBD</a>
           </li>
           <li class="site-nav__item">
-            <a href="#" class="site-nav__link is-disabled">TBD</a>
+            <a href="#" class="site-nav__link is-disabled" tabindex="-1">TBD</a>
           </li>
           <li class="site-nav__item utility-nav__item">
             <a href="#" class="site-nav__link is-disabled">About</a>
@@ -102,7 +102,7 @@
       </nav>    
     </header>
 
-    <main id="main">
+    <main id="main" tabindex="-1">
       {% block content %}{% endblock %}
     </main>
 
