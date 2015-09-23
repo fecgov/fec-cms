@@ -1,10 +1,10 @@
 {% load static compress wagtailuserbar %}
 
 <!DOCTYPE html>
-<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
-<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
-<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
-<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+<!--[if lt IE 7]>      <html lang="en"> <![endif]-->
+<!--[if IE 7]>         <html lang="en"> <![endif]-->
+<!--[if IE 8]>         <html lang="en"> <![endif]-->
+<!--[if gt IE 8]><!--> <html lang="en"> <!--<![endif]-->
   <head>
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -28,7 +28,7 @@
 
   <body class="{% block body_class %}{% endblock %}">
     {# {% wagtailuserbar %} #}
-    <a href="#main-content" class="u-visually-hidden">skip navigation</a>
+    <a href="#main" class="skip-nav">skip navigation</a>
 
     <header class="site-header">
       <div class="disclaimer">
@@ -82,13 +82,13 @@
             <a href="/registration-and-reporting" class="site-nav__link">Registration and reporting</a>
           </li>
           <li class="site-nav__item">
-            <a href="#" class="site-nav__link is-disabled">Calendar</a>
+            <a href="#" class="site-nav__link is-disabled" tabindex="-1">Calendar</a>
           </li>
           <li class="site-nav__item">
-            <a href="#" class="site-nav__link is-disabled">TBD</a>
+            <a href="#" class="site-nav__link is-disabled" tabindex="-1">TBD</a>
           </li>
           <li class="site-nav__item">
-            <a href="#" class="site-nav__link is-disabled">TBD</a>
+            <a href="#" class="site-nav__link is-disabled" tabindex="-1">TBD</a>
           </li>
           <li class="site-nav__item utility-nav__item">
             <a href="#" class="site-nav__link is-disabled">About</a>
@@ -102,14 +102,14 @@
       </nav>    
     </header>
 
-    <main id="main">
+    <main id="main" tabindex="-1">
       {% block content %}{% endblock %}
     </main>
 
     <footer class="footer">
       <div class="container">
         <div class="seal">
-          <img class="seal__img" src="/static/img/seal--white.svg" alt="Seal of the Federal Election Commission">
+          <img class="seal__img" width="140" height="140" src="/static/img/seal--white.svg" alt="Seal of the Federal Election Commission | United States of America">
         </div>
         <div class="address">
           <p class="address__title">Federal Election Commission</p>
