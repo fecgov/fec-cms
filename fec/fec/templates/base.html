@@ -28,7 +28,7 @@
 
   <body class="{% block body_class %}{% endblock %}">
     {# {% wagtailuserbar %} #}
-    <a href="#main" class="skip-nav">skip navigation</a>
+    <a class="skip-nav" tabindex="0">skip navigation</a>
 
     <header class="site-header">
       <div class="disclaimer">
@@ -102,7 +102,7 @@
       </nav>    
     </header>
 
-    <main id="main" tabindex="-1">
+    <main id="main">
       {% block content %}{% endblock %}
     </main>
 
