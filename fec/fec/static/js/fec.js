@@ -18,7 +18,7 @@ $(document).ready(function() {
     // Initialize glossary
     new glossary.Glossary(terms, {body: '#glossary'});
 
-    new skipNav.Skipnav('.skip-nav');
+    new skipNav.Skipnav('.skip-nav', 'main');
 
     // Initialize accordions
     $(SLT_ACCORDION).each(function() {
