@@ -44,8 +44,7 @@
         </ul>
       </div>
       <nav class="site-nav">  
-        <input class="nav-toggle__input" id="nav-toggle" type="checkbox">
-        <label for="nav-toggle" class="site-nav__button site-nav__button--left">Menu</label>
+        <button for="nav-toggle" class="js-nav-toggle site-nav__button site-nav__button--left" aria-controls="site-menu">Menu</button>
         <ul id="site-menu" class="site-nav__list">
           <li class="site-nav__item site-nav__item--with-dropdown">
             <a href="{{ settings.FEC_APP_URL }}" class="site-nav__link is-current">Campaign finance data</a>
