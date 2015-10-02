@@ -150,6 +150,7 @@ COMPRESS_PRECOMPILERS = (
 # Proxy settings
 
 USE_X_FORWARDED_HOST = True
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
 
 # Wagtail settings
