@@ -102,5 +102,32 @@
 
 {% block extra_js %}
 <!-- Ethnio Activation Code -->
-<script type="text/javascript" language="javascript" src="//ethn.io/70862.js" async="true" charset="utf-8"></script>
+<script type="text/javascript" language="javascript" src="https://ethn.io/70862.js" async="true" charset="utf-8"></script>
+<script type="text/javascript">
+  // Hack to add a tabindex to the ethnio popup close button
+  var target = document.querySelector('body');
+  var observer = new MutationObserver(function(mutations){
+    mutations.forEach(function(mutation) {
+      if ( mutation.addedNodes[0].id === 'ethnio-screener-70862' ) {
+        var closeButton = $($('#ethnio-screener-70862').find('div')[0]);
+        closeButton.attr('tabindex',0);
+        closeButton.on('keyup', function(e) {
+          if (e.keyCode === 13) {
+            $(this).click();
+            observer.disconnect();
+          }
+        });
+      }
+      if ( mutation.addedNodes[0].id === 'ethnio-screener-id-70862' ) {
+        $('body').on('keyup', function(e){
+          if (e.keyCode === 27) {
+            $('iframe').remove();
+            observer.disconnect();
+          }
+        })
+      }
+    })
+  });
+  observer.observe(target, {childList: true});
+</script>
 {% endblock %}
