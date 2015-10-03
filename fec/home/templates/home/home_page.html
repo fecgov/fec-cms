@@ -108,23 +108,25 @@
   var target = document.querySelector('body');
   var observer = new MutationObserver(function(mutations){
     mutations.forEach(function(mutation) {
-      if ( mutation.addedNodes[0].id === 'ethnio-screener-70862' ) {
-        var closeButton = $($('#ethnio-screener-70862').find('div')[0]);
-        closeButton.attr('tabindex',0);
-        closeButton.on('keyup', function(e) {
-          if (e.keyCode === 13) {
-            $(this).click();
-            observer.disconnect();
-          }
-        });
-      }
-      if ( mutation.addedNodes[0].id === 'ethnio-screener-id-70862' ) {
-        $('body').on('keyup', function(e){
-          if (e.keyCode === 27) {
-            $('iframe').remove();
-            observer.disconnect();
-          }
-        })
+      if ( mutation.addedNodes.length > 0 ) {
+        if ( mutation.addedNodes[0].id === 'ethnio-screener-70862' ) {
+          var closeButton = $($('#ethnio-screener-70862').find('div')[0]);
+          closeButton.attr('tabindex',0);
+          closeButton.on('keyup', function(e) {
+            if (e.keyCode === 13) {
+              $(this).click();
+              observer.disconnect();
+            }
+          });
+        }
+        if ( mutation.addedNodes[0].id === 'ethnio-screener-id-70862' ) {
+          $('body').on('keyup', function(e){
+            if (e.keyCode === 27) {
+              $('iframe').remove();
+              observer.disconnect();
+            }
+          })
+        }
       }
     })
   });
