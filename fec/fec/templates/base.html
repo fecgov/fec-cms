@@ -6,11 +6,9 @@
 <!--[if IE 8]>         <html lang="en"> <![endif]-->
 <!--[if gt IE 8]><!--> <html lang="en"> <!--<![endif]-->
   <head>
-    <meta charset="utf-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    {% include './partials/meta-tags.html' %}
+
     <title>{% block title %}{% if self.seo_title %}{{ self.seo_title }}{% else %}{{ self.title }} | beta.fec.gov {% endif %}{% endblock %}{% block title_suffix %}{% endblock %}</title>
-    <meta name="description" content="" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
 
     {# Global stylesheets #}
     {% if settings.FEC_WEB_STYLE_URL %}
@@ -27,7 +25,7 @@
   </head>
 
   <body class="{% block body_class %}{% endblock %}">
-    {# {% wagtailuserbar %} #}
+    {% wagtailuserbar %}
     <a href="#main" class="skip-nav">skip navigation</a>
 
     <header class="site-header">
@@ -39,59 +37,58 @@
       <div class="masthead">
         <a title="Home" href="/" class="site-title"><span class="u-visually-hidden">Federal Election Commission | United States of America</span></a>
         <ul class="utility-nav list--flat">
-          <li class="utility-nav__item is-disabled">About</li>
+          <li class="utility-nav__item is-disabled">(About)</li>
           <li class="utility-nav__item"><a href="/contact-us/">Contact</a></li>
         </ul>
       </div>
-      <nav class="site-nav">  
-        <input class="nav-toggle__input" id="nav-toggle" type="checkbox">
-        <label for="nav-toggle" class="site-nav__button site-nav__button--left">Menu</label>
+      <nav class="site-nav js-site-nav">  
+        <button for="nav-toggle" class="js-nav-toggle site-nav__button site-nav__button--left" aria-controls="site-menu">Menu</button>
         <ul id="site-menu" class="site-nav__list">
           <li class="site-nav__item site-nav__item--with-dropdown">
             <a href="{{ settings.FEC_APP_URL }}" class="site-nav__link is-current">Campaign finance data</a>
-            <input class="nav-toggle__input" id="dropdown-toggle-1" type="checkbox">
+            <input class="nav-toggle__input js-toggle" id="dropdown-toggle-1" type="checkbox">
             <label for="dropdown-toggle-1" class="site-nav__link nav-toggle__label">Campaign finance data</label>
             <ul class="site-nav__dropdown">
               <li class="site-nav__item u-under-lg-only">
-                <a class="site-nav__link" href="{{ settings.FEC_APP_URL }}">Campaign finance data home</a>
+                <a class="t-bold site-nav__link" href="{{ settings.FEC_APP_URL }}">Campaign finance data home</a>
               </li>
               <li class="site-nav__item">
-                <a class="site-nav__link" href="{{ settings.FEC_APP_URL }}/elections">Find candidates running near you</a>
-              </li>
-              <li class="site-nav__item">
-                <span class="h3 site-nav__subtitle">Browse:</span>
+                <span class="t-bold site-nav__subtitle">Browse:</span>
               </li>              
               <li class="site-nav__item">
-                <a class="site-nav__link" href="{{ settings.FEC_APP_URL }}/candidates">Candidates</a>
+                <a class="site-nav__link site-nav__sublink" href="{{ settings.FEC_APP_URL }}/candidates">Candidates</a>
               </li>
               <li class="site-nav__item">
-                <a class="site-nav__link" href="{{ settings.FEC_APP_URL }}/committees">Committees</a>
+                <a class="site-nav__link site-nav__sublink" href="{{ settings.FEC_APP_URL }}/committees">Committees</a>
               </li>
               <li class="site-nav__item">
-                <a class="site-nav__link" href="{{ settings.FEC_APP_URL }}/filings">Filings</a>
+                <a class="site-nav__link site-nav__sublink" href="{{ settings.FEC_APP_URL }}/filings">Filings</a>
               </li>
               <li class="site-nav__item">
-                <a class="site-nav__link" href="{{ settings.FEC_APP_URL }}/receipts">Receipts</a>
+                <a class="site-nav__link site-nav__sublink" href="{{ settings.FEC_APP_URL }}/receipts">Receipts</a>
               </li>
               <li class="site-nav__item">
-                <a class="site-nav__link" href="{{ settings.FEC_APP_URL }}/disbursements">Disbursements</a>
+                <a class="site-nav__link site-nav__sublink site-nav__sublink--last" href="{{ settings.FEC_APP_URL }}/disbursements">Disbursements</a>
+              </li>
+              <li class="site-nav__item">
+                <a class="t-bold site-nav__link" href="{{ settings.FEC_APP_URL }}/elections">Find candidates by location</a>
               </li>
             </ul>
           </li>
-          <li class="site-nav__item">
-            <a href="/registration-and-reporting" class="site-nav__link">Registration and reporting</a>
+          <li class="site-nav__item is-disabled">
+            <a href="#" class="site-nav__link" tabindex="-1">(Registration and reporting)</a>
           </li>
-          <li class="site-nav__item">
-            <a href="#" class="site-nav__link is-disabled" tabindex="-1">Calendar</a>
+          <li class="site-nav__item is-disabled">
+            <a href="#" class="site-nav__link" tabindex="-1">(Calendar)</a>
           </li>
-          <li class="site-nav__item">
-            <a href="#" class="site-nav__link is-disabled" tabindex="-1">TBD</a>
+          <li class="site-nav__item is-disabled">
+            <a href="#" class="site-nav__link" tabindex="-1">(Page TBD)</a>
           </li>
-          <li class="site-nav__item">
-            <a href="#" class="site-nav__link is-disabled" tabindex="-1">TBD</a>
+          <li class="site-nav__item is-disabled">
+            <a href="#" class="site-nav__link" tabindex="-1">(Page TBD)</a>
           </li>
-          <li class="site-nav__item utility-nav__item">
-            <a href="#" class="site-nav__link is-disabled">About</a>
+          <li class="site-nav__item utility-nav__item is-disabled">
+            <a href="#" class="site-nav__link">(About)</a>
           </li>
           <li class="site-nav__item utility-nav__item">
             <a href="/contact-us/" class="site-nav__link is-disabled">Contact</a>

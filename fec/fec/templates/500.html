@@ -1,17 +1,21 @@
-<!DOCTYPE html>
-<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
-<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
-<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
-<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
-    <head>
-        <meta charset="utf-8" />
-        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-        <title>Internal server error</title>
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-    </head>
-    <body>
-        <h1>Internal server error</h1>
+{% extends "base.html" %}
 
-        <h2>Sorry, there seems to be an error. Please try again soon.</h2>
-    </body>
-</html>
+{% block title %}Server Error | beta.fec.gov{% endblock %}
+
+{% block content %}
+<section class="content--blank">
+  <div class="container">
+    <div class="message message--alert message--big">
+      <div class="content__section">
+        <h1 class="message__title">Oops: We messed up</h1>
+        <p>We just experienced a server issue. Please try reloading the page.</p>
+      </div>
+      <div class="message--alert__bottom">
+        <h2>Still can't find what you're looking for?</h2>
+        <p>Get support by <a href="mailto:{{ settings.CONTACT_EMAIL }}">emailing us</a> or <a href="https://github.com/18F/openFEC/issues">opening a GitHub issue</a>.</p>
+        <a href="/">Return home</a>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}
