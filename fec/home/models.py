@@ -58,6 +58,10 @@ class OptionsPage(ContentPage):
     """Options page."""
     pass
 
+class ContactPage(ContentPage):
+    """Contact page."""
+    pass
+
 class CustomPage(Page):
     """Flexible customizable page."""
     author = models.CharField(max_length=255)
