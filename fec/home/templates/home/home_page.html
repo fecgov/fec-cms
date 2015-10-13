@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% load wagtailcore_tags %}
+{% load staticfiles %}
 {% block body_class %}template-{{ self.get_verbose_name | slugify }}{% endblock %}
 
 {% block content %}
@@ -27,7 +28,9 @@
         <div class="feature">
           <h2 class="feature__title">New features</h2>
           <div class="card card--primary">
-            <a class="card__image-link" href="{{ settings.FEC_APP_URL }}"><img class="card__image" src="/static/img/i-data--neutral.svg" alt="Icon for explore campaign finance data"></a>
+            <a class="card__image-link" href="{{ settings.FEC_APP_URL }}">
+              <img class="card__image" src="{% static "img/i-data--neutral.svg" %}" alt="Icon for explore campaign finance data">
+            </a>
             <div class="card__content">
               Explore <a href="{{ settings.FEC_APP_URL }}">campaign finance data</a>
             </div>
@@ -36,7 +39,9 @@
         </div>
         <div class="feature feature--no-title">
           <div class="card card--primary">
-            <a class="card__image-link js-glossary-toggle"><img class="card__image" src="/static/img/i-glossary--neutral.svg" alt="Icon representing the glossary"></a>
+            <a class="card__image-link js-glossary-toggle">
+              <img class="card__image" src="{% static "img/i-glossary--neutral.svg" %}" alt="Icon representing the glossary">
+            </a>
             <div class="card__content">
               <span>Use the <a href="#" class="js-glossary-toggle">glossary</a> to learn the meaning of an unfamiliar word or phrase</span>
             </div>
@@ -46,7 +51,7 @@
         <div class="feature">
           <h2 class="feature__title">Coming soon</h2>
           <div class="card card--primary is-disabled">
-            <img class="card__image" src="/static/img/i-register--neutral.svg" alt="Icon for reporting and registration">
+            <img class="card__image" src="{% static "img/i-register--neutral.svg" %}" alt="Icon for reporting and registration">
             <div class="card__content">
               <p>Learn how congressional candidates and committees register and report</p>
             </div>
@@ -55,7 +60,7 @@
         </div>        
         <div class="feature feature--no-title">
           <div class="card card--primary is-disabled">
-            <img class="card__image" src="/static/img/i-calendar--neutral.svg" alt="Icon for the calendar">
+            <img class="card__image" src="{% static "img/i-calendar--neutral.svg" %}" alt="Icon for the calendar">
             <div class="card__content">
               View a calendar of FEC deadlines and events
             </div>
@@ -91,7 +96,7 @@
     <div class="container">
       <div class="billboard">
         <div class="billboard__image__container">
-          <img class="billboard__image" src="/static/img/api@2x.png" alt="API documentation screenshot">
+          <img class="billboard__image" src="{% static "img/api@2x.png" %}" alt="API documentation screenshot">
         </div>
         <div class="billboard__content">
           <h2 class="feature__title">The FEC API: Use our data in your project</h2>
@@ -102,5 +107,5 @@
 
 {% block extra_js %}
 <!-- Ethnio Activation Code -->
-<script type="text/javascript" language="javascript" src="//ethn.io/70862.js" async="true" charset="utf-8"></script>
+<script type="text/javascript" language="javascript" src="https://ethn.io/70862.js" async="true" charset="utf-8"></script>
 {% endblock %}

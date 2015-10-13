@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% load wagtailcore_tags %}
+{% load staticfiles %}
 {% block body_class %}template-{{ self.get_verbose_name | slugify }}{% endblock %}
 
 {% block content %}
@@ -13,7 +14,7 @@
       <ul>
         <li class="contact-item">
           <div class="contact-item__icon">
-            <img src="/static/img/i-phone--primary.svg" alt="Icon of a phone">
+            <img src="{% static "img/i-phone--primary.svg" %}" alt="Icon of a phone">
           </div>     
           <div class="contact-item__content">
             <h5 class="contact-item__title">Toll free</h5>
@@ -37,7 +38,7 @@
       <ul>
         <li class="contact-item">
           <div class="contact-item__icon">
-            <img src="/static/img/i-mail--primary.svg" alt="Icon of a stamp">
+            <img src="{% static "img/i-mail--primary.svg" %}" alt="Icon of a stamp">
           </div>     
           <div class="contact-item__content">
             <span class="t-block">Federal Election Commission</span>
@@ -58,7 +59,6 @@
         <li class="contact-item contact-item--half">
           <h5 class="contact-item__title">Press Office</h5>
           <span class="t-block">Including media inquiries and speaker requests</span>
-          <span class="contact-item__phone">XXX-XXX-XXXX</span>
           <span class="t-block"><a href="mailto:press@fec.gov">press@fec.gov</a></span>
         </li>
         <li class="contact-item contact-item--half">

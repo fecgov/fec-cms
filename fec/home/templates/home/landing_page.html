@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% load wagtailcore_tags %}
+{% load staticfiles %}
 {% block body_class %}template-{{ self.get_verbose_name | slugify }}{% endblock %}
 
 {% block content %}
@@ -30,14 +31,14 @@
       <aside class="sidebar sidebar--secondary">
         <h2>Need help?</h2>
         <div class="card card--mini">
-          <img alt="Call center support icon" src="/static/img/i-contact--neutral.svg" class="icon--complex card__image">
+          <img alt="Call center support icon" src="{% static "img/i-contact--neutral.svg" %}" class="icon--complex card__image">
           <div class="card__content">
             <span class="t-block">Give us a call</span>
             <span class="t-block">(800) 424-9530</span>
           </div>
         </div>
         <div class="card card--mini is-disabled">
-          <img alt="Calendar icon" src="/static/img/i-calendar--neutral.svg" class="icon--complex card__image">
+          <img alt="Calendar icon" src="{% static "img/i-calendar--neutral.svg" %}" class="icon--complex card__image">
           <div class="card__content">
             <span>Reporting calendar</span>
           </div>
@@ -51,7 +52,7 @@
           <p>A number of factors dictate how individuals and groups must register and file. Visit this page to identify what kind of filer you are. When you’re ready, use our checklist to get started filing your reports.</p>
           <div class="card card--secondary card--horizontal">
             <a href="/registration-options" class="card__image card__image-link icon--complex">
-              <img alt="Registration icon" src="/static/img/i-register--neutral.svg" class="icon--complex">
+              <img alt="Registration icon" src="{% static "img/i-register--neutral.svg" %}" class="icon--complex">
             </a>
             <div class="card__content">
               <a href="/registration-options">Explore registration and reporting</a>
@@ -68,25 +69,25 @@
             <li class="usa-width-one-fourth">
               <p class="t-sans">Congressional candidates and committees (<a href="http://www.fec.gov/pdf/candgui.pdf">PDF</a>)</p>
               <a class="u-no-border" href="http://www.fec.gov/pdf/candgui.pdf">
-                <img src="/static/img/guide--candidates.jpg" alt="Federal Election Commission Campaign Guide: Congressional Candidates and Committees, June 2014">
+                <img src="{% static "img/guide--candidates.jpg" %}" alt="Federal Election Commission Campaign Guide: Congressional Candidates and Committees, June 2014">
               </a>
             </li>
             <li class="usa-width-one-fourth">
               <p class="t-sans">Corporations and labor organizations (<a href="http://www.fec.gov/pdf/colagui.pdf">PDF</a>)</p>
               <a class="u-no-border" href="http://www.fec.gov/pdf/colagui.pdf">
-                <img src="/static/img/guide--orgs.jpg" alt="Federal Election Commission Campaign Guide: Corporations and Labor Organizations, January 2007">
+                <img src="{% static "img/guide--orgs.jpg" %}" alt="Federal Election Commission Campaign Guide: Corporations and Labor Organizations, January 2007">
               </a>
             </li>
             <li class="usa-width-one-fourth">
               <p class="t-sans">Nonconnected committees <br>(<a href="http://www.fec.gov/pdf/nongui.pdf">PDF</a>)</p>
               <a class="u-no-border" href="http://www.fec.gov/pdf/nongui.pdf">
-                <img src="/static/img/guide--nonconnected.jpg" alt="Federal Election Commission Campaign Guide: Nonconnected Committees, May 2008">
+                <img src="{% static "img/guide--nonconnected.jpg" %}" alt="Federal Election Commission Campaign Guide: Nonconnected Committees, May 2008">
               </a>
             </li>
             <li class="usa-width-one-fourth usa-end-row">
               <p class="t-sans">Political party committees <br>(<a href="http://www.fec.gov/pdf/partygui.pdf">PDF</a>)</p>
               <a class="u-no-border" href="http://www.fec.gov/pdf/partygui.pdf">
-                <img src="/static/img/guide--parties.jpg" alt="Federal Election Commission Campaign Guide: Political Party Committees, August 2013">
+                <img src="{% static "img/guide--parties.jpg" %}" alt="Federal Election Commission Campaign Guide: Political Party Committees, August 2013">
               </a>
             </li>
           </ul>
