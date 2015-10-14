@@ -5,3 +5,5 @@ gunicorn==19.3.0
 psycopg2==2.6.1
 wagtail==1.0
 whitenoise==2.0.3
+
+git+https://github.com/jmcarp/hmac_authentication_py.git@respect-script-name
