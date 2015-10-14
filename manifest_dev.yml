@@ -1,0 +1,7 @@
+---
+inherit: manifest_base.yml
+host: fec-dev-cms
+services:
+  - fec-dev-cms
+  - fec-creds-dev
+  - cms-creds-dev
