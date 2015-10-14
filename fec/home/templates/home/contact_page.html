@@ -1,0 +1,85 @@
+{% extends "base.html" %}
+{% load wagtailcore_tags %}
+{% load staticfiles %}
+{% block body_class %}template-{{ self.get_verbose_name | slugify }}{% endblock %}
+
+{% block content %}
+<div class="hero__banner--office"></div>
+<article class="main">
+  <div class="container">
+    <h1 class="t-ruled--bottom t-ruled--bold t-display">{{ self.title }}</h1>
+    <div class="main__content--full u-padding--top">
+     <div class="usa-width-one-third">
+      <h2>General inquiries</h2>
+      <ul>
+        <li class="contact-item">
+          <div class="contact-item__icon">
+            <img src="{% static "img/i-phone--primary.svg" %}" alt="Icon of a phone">
+          </div>     
+          <div class="contact-item__content">
+            <h5 class="contact-item__title">Toll free</h5>
+            <span class="t-block">1-800-424-9530</span>
+          </div>
+        </li>
+        <li class="contact-item">
+          <div class="contact-item__content--offset">
+            <h5 class="contact-item__title">Local</h5>
+            <span class="t-block">202-694-1000</span>
+          </div>
+        </li>
+        <li class="contact-item">        
+          <div class="contact-item__content--offset">
+            <h5 class="contact-item__title">Teletypwriter (TTY) for the hearing impaired</h5>
+            <span class="t-block">202-219-3336</span>
+          </div>                    
+        </li>
+      </ul>
+      <h2>Mailing address</h2>
+      <ul>
+        <li class="contact-item">
+          <div class="contact-item__icon">
+            <img src="{% static "img/i-mail--primary.svg" %}" alt="Icon of a stamp">
+          </div>     
+          <div class="contact-item__content">
+            <span class="t-block">Federal Election Commission</span>
+            <span class="t-block">999 E St NW</span>
+            <span class="t-block">Washington, DC 20463</span>
+          </div>
+        </li>
+      </ul>      
+    </div>
+    <div class="usa-width-two-thirds">
+      <h2>Specific requests</h2>
+      <ul>
+        <li class="contact-item contact-item--half">
+          <h5 class="contact-item__title">Electronic Filing Office</h5>
+          <span class="t-block">Including password assistance and technical support</span>
+          <span class="contact-item__phone">202-694-1307</span>
+        </li>
+        <li class="contact-item contact-item--half">
+          <h5 class="contact-item__title">Press Office</h5>
+          <span class="t-block">Including media inquiries and speaker requests</span>
+          <span class="t-block"><a href="mailto:press@fec.gov">press@fec.gov</a></span>
+        </li>
+        <li class="contact-item contact-item--half">
+          <h5 class="contact-item__title">Information Division</h5>
+          <span class="t-block">Including help with educational materials, registering a committee, ordering a reporting form or campaign finance law</span>
+          <span class="contact-item__phone">202-694-1100</span>
+        </li>
+        <li class="contact-item contact-item--half">
+          <h5 class="contact-item__title">Public Records Division</h5>
+          <span class="t-block">Including help accessing reports and other public documents</span>
+          <span class="contact-item__phone">1-800-424-9530, menu option 2</span>
+          <span class="t-block"><a href="mailto:pubrec@fec.gov">pubrec@fec.gov</a></span>
+        </li>
+        <li class="contact-item contact-item--half">
+          <h5 class="contact-item__title">Reports Analysis Division</h5>
+          <span class="t-block">Including help with report creation, transactions and amendments </span>
+          <span class="contact-item__phone">202-694-1130</span>
+        </li>             
+      </ul>
+    </div>
+  </div>
+</div>
+</article>
+{% endblock %}

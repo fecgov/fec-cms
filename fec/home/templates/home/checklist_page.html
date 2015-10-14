@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% load wagtailcore_tags %}
+{% load staticfiles %}
 {% block body_class %}template-{{ self.get_verbose_name | slugify }}{% endblock %}
 
 {% block content %}
@@ -96,14 +97,14 @@
     <aside class="sidebar sidebar--secondary">
         <h2>Need help?</h2>
         <div class="card card--mini">
-          <img alt="Call center support icon" src="/static/img/i-contact--neutral.svg" class="icon--complex card__image">
+          <img alt="Call center support icon" src="{% static "img/i-contact--neutral.svg" %}" class="icon--complex card__image">
           <div class="card__content">
             <span class="t-block">Give us a call</span>
             <span class="t-block">(800) 424-9530</span>
           </div>
         </div>
         <div class="card card--mini is-disabled">
-          <img alt="Calendar icon" src="/static/img/i-calendar--neutral.svg" class="icon--complex card__image">
+          <img alt="Calendar icon" src="{% static "img/i-calendar--neutral.svg" %}" class="icon--complex card__image">
           <div class="card__content">
             <span>Reporting calendar &raquo;</span>
           </div>
