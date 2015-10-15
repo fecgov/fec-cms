@@ -25,6 +25,14 @@
   </head>
 
   <body class="{% block body_class %}{% endblock %}">
+    {% if not settings.FEC_CMS_PRODUCTION %}
+    <div class="banner">
+      <div class="container">
+        <span class="t-block t-bold is-centered">{{ settings.FEC_CMS_ENVIRONMENT }}</span>
+        <span class="t-block is-centered">This site is for testing new ideas and code. View the most accurate data on the <a href="https://beta.fec.gov">live site</a>.</span>
+      </div>
+    </div>
+    {% endif %}
     {% wagtailuserbar %}
     <a href="#main" class="skip-nav">skip navigation</a>
 
@@ -56,7 +64,7 @@
                 <span class="t-bold site-nav__subtitle">Browse:</span>
               </li>
               <li class="site-nav__item">
-                <a class="site-nav__link site-nav__sublink" href="{{ settings.FEC_APP_URL }}/candidates/?cycle=2012&cycle=2014&cycle=2016&candidate_status=C&candidate_status=P&candidate_status=F">Candidates</a>
+                <a class="site-nav__link site-nav__sublink" href="{{ settings.FEC_APP_URL }}/candidates">Candidates</a>
               </li>
               <li class="site-nav__item">
                 <a class="site-nav__link site-nav__sublink" href="{{ settings.FEC_APP_URL }}/committees">Committees</a>
