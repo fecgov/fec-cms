@@ -24,7 +24,7 @@
     {% endblock %}
   </head>
 
-  <body class="{% block body_class %}{% endblock %}">
+  <body class="{% if not settings.FEC_CMS_PRODUCTION %}has-banner {% endif %}{% block body_class %}{% endblock %}">
     {% if not settings.FEC_CMS_PRODUCTION %}
     <div class="banner">
       <div class="container">
