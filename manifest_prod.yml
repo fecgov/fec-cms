@@ -5,3 +5,5 @@ services:
   - fec-rds-prod
   - fec-creds-prod
   - cms-creds-prod
+env:
+  FEC_CMS_PRODUCTION: "true"
