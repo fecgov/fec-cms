@@ -24,8 +24,8 @@
     {% endblock %}
   </head>
 
-  <body class="{% if not settings.FEC_CMS_PRODUCTION %}has-banner {% endif %}{% block body_class %}{% endblock %}">
-    {% if not settings.FEC_CMS_PRODUCTION %}
+  <body class="{% if settings.FEC_CMS_ENVIRONMENT != 'PRODUCTION' %}has-banner {% endif %}{% block body_class %}{% endblock %}">
+    {% if settings.FEC_CMS_ENVIRONMENT != 'PRODUCTION' %}
     <div class="banner">
       <div class="container">
         <span class="t-block t-bold is-centered">{{ settings.FEC_CMS_ENVIRONMENT }}</span>

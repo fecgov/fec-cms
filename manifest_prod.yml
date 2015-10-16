@@ -6,4 +6,4 @@ services:
   - fec-creds-prod
   - cms-creds-prod
 env:
-  FEC_CMS_PRODUCTION: "true"
+  FEC_CMS_ENVIRONMENT: "prod"
