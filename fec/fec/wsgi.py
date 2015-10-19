@@ -31,7 +31,7 @@ application = get_wsgi_application()
 
 application = DjangoWhiteNoise(application)
 
-if not settings.DEBUG:
+if settings.FEC_CMS_ENVIRONMENT == 'PRODUCTION':
     auth = hmacauth.HmacAuth(
         digest=hashlib.sha1,
         secret_key=credentials.get('HMAC_SECRET'),
