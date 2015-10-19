@@ -5,3 +5,6 @@ services:
   - fec-rds-prod
   - fec-creds-prod
   - cms-creds-prod
+env:
+  FEC_CMS_ENVIRONMENT: "prod"
+  NEW_RELIC_APP_NAME: beta.fec.gov | cms | prod

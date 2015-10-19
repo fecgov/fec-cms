@@ -5,3 +5,6 @@ services:
   - fec-dev-cms
   - fec-creds-dev
   - cms-creds-dev
+env:
+  FEC_CMS_ENVIRONMENT: "dev"
+  NEW_RELIC_APP_NAME: beta.fec.gov | cms | dev

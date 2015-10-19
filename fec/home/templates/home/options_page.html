@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% load wagtailcore_tags %}
+{% load staticfiles %}
 {% block body_class %}template-{{ self.get_verbose_name | slugify }}{% endblock %}
 
 {% block content %}
@@ -26,7 +27,7 @@
         <div class="sidebar__section--skinny">
           <div class="card card--vertical card--secondary">
             <a class="card__image-link" href="/registration-and-reporting/essentials-house-and-senate-candidates-and-committees/">
-              <img alt="Call center support icon" src="/static/img/i-register--neutral.svg" class="icon--complex card__image">
+              <img alt="Register icon" src="{% static "img/i-register--neutral.svg" %}" class="icon--complex card__image">
             </a>
             <div class="card__content">
               <a href="/registration-and-reporting/essentials-house-and-senate-candidates-and-committees/">Learn more</a>
@@ -43,7 +44,7 @@
       <div class="sidebar">
         <div class="sidebar__section--skinny content__section--ruled">
           <div class="card card--vertical card--secondary">
-            <img alt="Call center support icon" src="/static/img/i-register--neutral.svg" class="icon--complex card__image">
+            <img alt="Register icon" src="{% static "img/i-register--neutral.svg" %}" class="icon--complex card__image">
             <div class="card__content">
               <span>Learn more</span>
             </div>
@@ -59,7 +60,7 @@
       <div class="sidebar">      
         <div class="sidebar__section--skinny content__section--ruled">
           <div class="card card--vertical card--secondary">
-            <img alt="Call center support icon" src="/static/img/i-register--neutral.svg" class="icon--complex card__image">
+            <img alt="Register icon" src="{% static "img/i-register--neutral.svg" %}" class="icon--complex card__image">
             <div class="card__content">
               <span>Learn more<span>
             </div>
@@ -75,7 +76,7 @@
       <div class="sidebar">
         <div class="sidebar__section--skinny content__section--ruled">
           <div class="card card--vertical card--secondary">
-            <img alt="Call center support icon" src="/static/img/i-register--neutral.svg" class="icon--complex card__image">
+            <img alt="Register icon" src="{% static "img/i-register--neutral.svg" %}" class="icon--complex card__image">
             <div class="card__content">
               <span>Learn more</span>
             </div>

@@ -24,7 +24,15 @@
     {% endblock %}
   </head>
 
-  <body class="{% block body_class %}{% endblock %}">
+  <body class="{% if settings.FEC_CMS_ENVIRONMENT != 'PRODUCTION' %}has-banner {% endif %}{% block body_class %}{% endblock %}">
+    {% if settings.FEC_CMS_ENVIRONMENT != 'PRODUCTION' %}
+    <div class="banner">
+      <div class="container">
+        <span class="t-block t-bold is-centered">{{ settings.FEC_CMS_ENVIRONMENT }}</span>
+        <span class="t-block is-centered">This site is for testing new ideas and code. View the most accurate data on the <a href="https://beta.fec.gov">live site</a>.</span>
+      </div>
+    </div>
+    {% endif %}
     {% wagtailuserbar %}
     <a href="#main" class="skip-nav">skip navigation</a>
 
@@ -41,7 +49,7 @@
           <li class="utility-nav__item"><a href="/contact-us/">Contact</a></li>
         </ul>
       </div>
-      <nav class="site-nav js-site-nav">  
+      <nav class="site-nav js-site-nav">
         <button for="nav-toggle" class="js-nav-toggle site-nav__button site-nav__button--left" aria-controls="site-menu">Menu</button>
         <ul id="site-menu" class="site-nav__list">
           <li class="site-nav__item site-nav__item--with-dropdown">
@@ -54,9 +62,9 @@
               </li>
               <li class="site-nav__item">
                 <span class="t-bold site-nav__subtitle">Browse:</span>
-              </li>              
+              </li>
               <li class="site-nav__item">
-                <a class="site-nav__link site-nav__sublink" href="{{ settings.FEC_APP_URL }}/candidates">Candidates</a>
+                <a class="site-nav__link site-nav__sublink" href="{{ settings.FEC_APP_URL }}/candidates/?cycle=2012&cycle=2014&cycle=2016&candidate_status=C&candidate_status=P&candidate_status=F">Candidates</a>
               </li>
               <li class="site-nav__item">
                 <a class="site-nav__link site-nav__sublink" href="{{ settings.FEC_APP_URL }}/committees">Committees</a>
@@ -96,7 +104,7 @@
         </ul>
         <a title="Home" href="{{ cms_url }}" class="site-title"><span class="u-visually-hidden">Federal Election Commission | United States of America</span></a>
         <button title="View site glossary" class="js-glossary-toggle button--neutral site-nav__button site-nav__button--right">Glossary</button>
-      </nav>    
+      </nav>
     </header>
 
     <main id="main">

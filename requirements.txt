@@ -3,6 +3,7 @@ dj-database-url==0.3.0
 django-libsass==0.3
 gunicorn==19.3.0
 hmac-authentication==1.0.0
+newrelic==2.56.0.42
 psycopg2==2.6.1
 wagtail==1.0
 whitenoise==2.0.3

@@ -162,4 +162,10 @@ WAGTAIL_SITE_NAME = "fec"
 
 FEC_APP_URL = os.getenv('FEC_APP_URL')
 FEC_WEB_STYLE_URL = os.getenv('FEC_WEB_STYLE_URL')
+ENVIRONMENTS = {
+    'dev': 'DEVELOPMENT',
+    'stage': 'STAGING',
+    'prod': 'PRODUCTION',
+}
+FEC_CMS_ENVIRONMENT = ENVIRONMENTS.get(os.getenv('FEC_CMS_ENVIRONMENT'), 'DEVELOPMENT')
 CONTACT_EMAIL = 'betafeedback@fec.gov';
