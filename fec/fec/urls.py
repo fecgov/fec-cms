@@ -17,7 +17,9 @@ urlpatterns = [
     url(r'^search/$', 'search.views.search', name='search'),
 
     url(r'', include(wagtail_urls)),
+]
 
+if settings.FEC_CMS_ROBOTS:
     url(
         r'^robots\.txt$',
         TemplateView.as_view(
@@ -25,7 +27,6 @@ urlpatterns = [
             content_type='text/plain'
         ),
     ),
-]
 
 
 if settings.DEBUG:
