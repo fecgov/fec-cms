@@ -67,19 +67,19 @@
                 <a class="site-nav__link site-nav__sublink" href="{{ settings.FEC_APP_URL }}/candidates/?cycle=2012&cycle=2014&cycle=2016">Candidates</a>
               </li>
               <li class="site-nav__item">
-                <a class="site-nav__link site-nav__sublink" href="{{ settings.FEC_APP_URL }}/committees">Committees</a>
+                <a class="site-nav__link site-nav__sublink" href="{{ settings.FEC_APP_URL }}/committees/">Committees</a>
               </li>
               <li class="site-nav__item">
-                <a class="site-nav__link site-nav__sublink" href="{{ settings.FEC_APP_URL }}/filings">Filings</a>
+                <a class="site-nav__link site-nav__sublink" href="{{ settings.FEC_APP_URL }}/filings/">Filings</a>
               </li>
               <li class="site-nav__item">
-                <a class="site-nav__link site-nav__sublink" href="{{ settings.FEC_APP_URL }}/receipts">Receipts</a>
+                <a class="site-nav__link site-nav__sublink" href="{{ settings.FEC_APP_URL }}/receipts/?max_date={% now "m-d-Y" %}">Receipts</a>
               </li>
               <li class="site-nav__item">
-                <a class="site-nav__link site-nav__sublink site-nav__sublink--last" href="{{ settings.FEC_APP_URL }}/disbursements">Disbursements</a>
+                <a class="site-nav__link site-nav__sublink site-nav__sublink--last" href="{{ settings.FEC_APP_URL }}/disbursements/?max_date={% now "m-d-Y" %}">Disbursements</a>
               </li>
               <li class="site-nav__item">
-                <a class="t-bold site-nav__link" href="{{ settings.FEC_APP_URL }}/elections">Find candidates by location</a>
+                <a class="t-bold site-nav__link" href="{{ settings.FEC_APP_URL }}/elections/">Find candidates by location</a>
               </li>
             </ul>
           </li>
