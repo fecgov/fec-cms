@@ -25,7 +25,7 @@
 <meta property="og:title" content="{{ self.title }} - betaFEC" />
 <meta property="og:site_name" content="betaFEC" />
 <meta property="og:description" content="{{ description }}" />
-<meta property="og:image" content="{% static "img/beta-fec-fb.png" %}" />
+<meta property="og:image" content="{{ request.scheme }}://{{ request.get_host }}{% static "img/beta-fec-fb.png" %}" />
 
 <!-- Google
 ================================================== -->
