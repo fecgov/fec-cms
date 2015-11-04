@@ -8,7 +8,7 @@
   <head>
     {% include './partials/meta-tags.html' %}
 
-    <title>{% block title %}{% if self.seo_title %}{{ self.seo_title }}{% else %}{{ self.title }} | beta.fec.gov {% endif %}{% endblock %}{% block title_suffix %}{% endblock %}</title>
+    <title>{% block title %}{% if self.seo_title %}{{ self.seo_title }}{% else %}{{ self.title }} | beta.FEC.gov {% endif %}{% endblock %}{% block title_suffix %}{% endblock %}</title>
 
     {# Global stylesheets #}
     {% if settings.FEC_WEB_STYLE_URL %}
@@ -38,7 +38,7 @@
 
     <header class="site-header">
       <div class="disclaimer">
-        <span class="disclaimer__left">Looking for <a href="http://www.fec.gov">fec.gov?</a></span>
+        <span class="disclaimer__left">Looking for <a href="http://www.fec.gov">FEC.gov?</a></span>
         <span class="disclaimer__center">An official website of the United States Government <img src="/static/img/us_flag_small.png" alt="US flag signifying that this is a United States Federal Government website"></span>
         <span class="disclaimer__right">This site is in <a title="Learn about this site's development" tabindex="0" href="https://18f.gsa.gov/dashboard/stages/#beta">beta.</a></span>
       </div>
