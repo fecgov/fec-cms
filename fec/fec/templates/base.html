@@ -39,7 +39,7 @@
     <header class="site-header">
       <div class="disclaimer">
         <span class="disclaimer__left">Looking for <a href="http://www.fec.gov">FEC.gov?</a></span>
-        <span class="disclaimer__center">An official website of the United States Government <img src="/static/img/us_flag_small.png" alt="US flag signifying that this is a United States Federal Government website"></span>
+        <span class="disclaimer__center">An official website of the United States Government <img src="{% static 'img/us_flag_small.png' %}"  alt="US flag signifying that this is a United States Federal Government website"></span>
         <span class="disclaimer__right">This site is in <a title="Learn about this site's development" tabindex="0" href="https://18f.gsa.gov/dashboard/stages/#beta">beta.</a></span>
       </div>
       <div class="masthead">
@@ -113,13 +113,15 @@
     <footer class="footer">
       <div class="container">
         <div class="seal">
-          <img class="seal__img" width="140" height="140" src="/static/img/seal--white.svg" alt="Seal of the Federal Election Commission | United States of America">
+          <img class="seal__img" width="140" height="140" src="{% static "img/seal--white.svg" %}" alt="Seal of the Federal Election Commission | United States of America">
         </div>
         <div class="address">
           <p class="address__title">Federal Election Commission</p>
           <p>999 E Street, NW, Washington, DC 20463</p>
           <p>(800) 424-9530</p>
-          <p><a href="mailto:{{ settings.CONTACT_EMAIL }}">{{ settings.CONTACT_EMAIL }}</a></p>
+          <p class="address__subtitle">betaFEC feedback</p>
+          <p><a href="mailto:{{ settings.CONTACT_EMAIL }}">{{ settings.CONTACT_EMAIL }}</a><img class="icon--inline--right" src="{% static "img/i-email--inverse.svg" %}" alt="Icon of email being sent"></p>
+          <p><a href="https://github.com/18F/fec">GitHub repository</a><img class="icon--inline--right" src="{% static "img/i-github--inverse.svg" %}" alt="Icon of GitHub logo"></p>
         </div>
       </div>
     </footer>
