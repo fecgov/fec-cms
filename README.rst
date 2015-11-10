@@ -15,7 +15,7 @@ We welcome you to explore our FEC repositories, make suggestions, and contribute
 - `openFEC <https://github.com/18F/openfec>`_: betaFEC’s API
 - `openFEC-web-app <https://github.com/18f/openfec-web-app>`_: the betaFEC web app for exploring campaign finance data
 - `fec-style <https://github.com/18F/fec-style>`_: shared styles and user interface components
-- `fec-cms <https://github.com/18F/fec-cms>`_: the content management system (CMS) for betaFEC
+- `fec-cms <https://github.com/18F/fec-cms>`_: the content management system (CMS) for betaFEC. This project uses `Wagtail <https://github.com/torchbox/wagtail>`_, an open source CMS written in Python and built on the Django framework.
 
 How you can help
 ================
