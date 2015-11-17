@@ -27,7 +27,7 @@ We’re thrilled you want to get involved!
 - Read our contributing `guidelines <https://github.com/18F/openfec/blob/master/CONTRIBUTING.md>`_. Then, file an `issue <https://github.com/18F/fec/issues>`_ or submit a pull request.
 - Send us an email at betafeedback@fec.gov. 
 - If you’re a developer, follow the installation instructions in the README.md page of each repository to run the apps on your computer. 
-- Check out our StoriesonBoard `FEC story map <https://18f.storiesonboard.com/m/fec>`_.
+- Check out our StoriesonBoard `FEC story map <https://18f.storiesonboard.com/m/fec>`_ to get a sense of the user needs we'll be addressing in the future.
 
 
 Set up
