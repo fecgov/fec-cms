@@ -1,6 +1,7 @@
 {
   "dependencies": {
-    "fec-style": "git://github.com/18F/fec-style.git",
+    "ace-builds": "1.2.2",
+    "fec-style": "git+https://github.com/18F/fec-style.git#d3c0fe",
     "jquery": "2.1.4",
     "js-beautify": "1.5.10"
   },

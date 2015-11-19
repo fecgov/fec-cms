@@ -1,7 +1,3 @@
-# Install dependencies
-npm install -g bower
-bower install
-
 # Build static files
 cd fec
 gulp build-js
