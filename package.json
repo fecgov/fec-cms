@@ -1,6 +1,6 @@
 {
   "dependencies": {
-    "fec-style": "git://github.com/18F/fec-style.git",
+    "fec-style": "git+https://github.com/18F/fec-style.git#d3c0fe",
     "jquery": "2.1.4",
     "js-beautify": "1.5.10"
   },
@@ -9,5 +9,9 @@
     "gulp": "^3.9.0",
     "stringify": "^3.1.0",
     "vinyl-source-stream": "^1.1.0"
+  },
+  "engines": {
+    "node": "0.12.7",
+    "npm": "2.11.3"
   }
 }
