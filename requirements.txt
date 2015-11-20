@@ -4,5 +4,6 @@ django-libsass==0.3
 gunicorn==19.3.0
 newrelic==2.56.0.42
 psycopg2==2.6.1
+raven==5.8.1
 wagtail==1.0
 whitenoise==2.0.3
