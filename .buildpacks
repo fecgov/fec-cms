@@ -1,2 +1,2 @@
-https://github.com/cloudfoundry/python-buildpack
-https://github.com/cloudfoundry/nodejs-buildpack
+https://github.com/cloudfoundry/python-buildpack#v1.5.1
+https://github.com/cloudfoundry/nodejs-buildpack.git#v1.5.0
