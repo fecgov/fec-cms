@@ -19,33 +19,37 @@
         <p>Candidates must designate at least one campaign committee. These <span class="term" data-term="authorized committee">authorized committees</span> take in contributions and make expenditures for the candidate’s campaign.</p>
         <p>The checklist below focuses on the mechanics of registration and filing, introducing readers to a few of the most common topics on those subjects. This is neither legal advice nor a comprehensive guide. The FEC recommends all candidates and committees read the campaign guide (<a href="http://www.fec.gov/pdf/candgui.pdf">PDF</a>).</p>
       </div>
-      <aside class="sidebar sidebar--secondary">
-        <h4 class="sidebar__title">Essentials for other registrants</h4>
-        <ul class="sidebar__content side-nav">
-          <li class="side-nav__item"><a class="side-nav__link">Corporations and labor organizations</a></li>
-          <li class="side-nav__item"><a class="side-nav__link">Nonconnected committees</a></li>
-          <li class="side-nav__item"><a class="side-nav__link">Political party committees</a></li>
-        </ul>
-        <h4 class="sidebar__title">Already registered?</h4>
-        <form class="sidebar__content" action="{{ settings.FEC_APP_URL }}" method="GET">
-          <label class="label" for="committee-search">Find your committee</label>
-          <div class="combo--search--mini">
-            <input id="committee-search" name="search" class="combo__input" type="text">
-            <input type="hidden" name="search_type" value="committees" placeholder="Search committees">
-            <button class="combo__button button--search button--neutral" type="submit"><span class="u-visually-hidden">Search</span></button>
-          </div>
-        </form>
-      </aside>
+      <div class="sidebar-container">
+        <aside class="sidebar sidebar--secondary">
+          <h4 class="sidebar__title">Essentials for other registrants</h4>
+          <ul class="sidebar__content side-nav">
+            <li class="side-nav__item"><a class="side-nav__link">Corporations and labor organizations</a></li>
+            <li class="side-nav__item"><a class="side-nav__link">Nonconnected committees</a></li>
+            <li class="side-nav__item"><a class="side-nav__link">Political party committees</a></li>
+          </ul>
+          <h4 class="sidebar__title">Already registered?</h4>
+          <form class="sidebar__content" action="{{ settings.FEC_APP_URL }}" method="GET">
+            <label class="label" for="committee-search">Find your committee</label>
+            <div class="combo--search--mini">
+              <input id="committee-search" name="search" class="combo__input" type="text">
+              <input type="hidden" name="search_type" value="committees" placeholder="Search committees">
+              <button class="combo__button button--search button--neutral" type="submit"><span class="u-visually-hidden">Search</span></button>
+            </div>
+          </form>
+        </aside>
+      </div>
     </div>
     <div class="row">
-      <nav class="sidebar sidebar--left sidebar--neutral side-nav js-sticky" data-sticky-margin="10">
-        <ul class="sidebar__content">
-          <li class="side-nav__item"><a class="side-nav__link" href="#candidate-committees">Candidates and candidate committees</a></li>
-          <li class="side-nav__item"><a class="side-nav__link" href="#corporations-and-labor">Corporations and labor organizations</a></li>
-          <li class="side-nav__item"><a class="side-nav__link" href="#nonconnected">Nonconnected committees</a></li>
-          <li class="side-nav__item"><a class="side-nav__link" href="#parties">Political party committees</a></li>
-        </ul>
-      </nav>
+      <div class="sidebar-container sidebar-container--left js-sticky-container">
+        <nav class="sidebar sidebar--neutral side-nav js-sticky">
+          <ul class="sidebar__content">
+            <li class="side-nav__item"><a class="side-nav__link" href="#candidate-committees">Candidates and candidate committees</a></li>
+            <li class="side-nav__item"><a class="side-nav__link" href="#corporations-and-labor">Corporations and labor organizations</a></li>
+            <li class="side-nav__item"><a class="side-nav__link" href="#nonconnected">Nonconnected committees</a></li>
+            <li class="side-nav__item"><a class="side-nav__link" href="#parties">Political party committees</a></li>
+          </ul>
+        </nav>
+      </div>
       <div class="main__content--right">
         <div class="option">
           <div class="option__content">

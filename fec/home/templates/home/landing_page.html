@@ -25,8 +25,8 @@
           <p>Campaign finance law requires that federal candidates and political committees register with the FEC once they reach certain monetary thresholds or take other actions that indicate they’ll be active in federal elections.</p>
         </div>
       </section>
-      <aside class="sidebar">
-        <div class="card card--secondary">
+      <div class="sidebar-container">
+        <aside class="card card--secondary">
           <h3 class="t-secondary-contrast t-left-aligned">Already regisered?</h3>
           <form action="{{ settings.FEC_APP_URL }}" method="GET">
             <label class="label t-left-aligned" for="committee-search">Find your committee</label>
@@ -36,22 +36,24 @@
               <button class="combo__button button--search button--secondary" type="submit"><span class="u-visually-hidden">Search</span></button>
             </div>
           </form>
-        </div>
-      </aside>
+        </aside>
+      </div>
     </div>
   </div>
   <div id="options" class="container main">
     <div class="content__section">
       <h2>Learn how to register as a candidate or committee and get started reporting</h2>
     </div>
-    <nav class="sidebar sidebar--neutral sidebar--left side-nav">
-      <ul class="sidebar__content">
-        <li class="side-nav__item"><a class="side-nav__link" href="#candidate-committees">Candidates and candidate committees</a></li>
-        <li class="side-nav__item"><a class="side-nav__link" href="#corporations-and-labor">Corporations and labor organizations</a></li>
-        <li class="side-nav__item"><a class="side-nav__link" href="#nonconnected">Nonconnected committees</a></li>
-        <li class="side-nav__item"><a class="side-nav__link" href="#parties">Political party committees</a></li>
-      </ul>
-    </nav>
+    <div class="sidebar-container sidebar-container--left">
+      <nav class="sidebar sidebar--neutral sidebar--left side-nav">
+        <ul class="sidebar__content">
+          <li class="side-nav__item"><a class="side-nav__link" href="#candidate-committees">Candidates and candidate committees</a></li>
+          <li class="side-nav__item"><a class="side-nav__link" href="#corporations-and-labor">Corporations and labor organizations</a></li>
+          <li class="side-nav__item"><a class="side-nav__link" href="#nonconnected">Nonconnected committees</a></li>
+          <li class="side-nav__item"><a class="side-nav__link" href="#parties">Political party committees</a></li>
+        </ul>
+      </nav>
+    </div>
     <section class="main__content--right">
       <div id="candidate-committees" class="option">
         <div class="option__content">
