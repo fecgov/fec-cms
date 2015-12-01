@@ -31,15 +31,15 @@
           <label class="label" for="committee-search">Find your committee</label>
           <div class="combo--search--mini">
             <input id="committee-search" name="search" class="combo__input" type="text">
-            <input type="hidden" name="search_type" value="committees">
+            <input type="hidden" name="search_type" value="committees" placeholder="Search committees">
             <button class="combo__button button--search button--neutral" type="submit"><span class="u-visually-hidden">Search</span></button>
           </div>
         </form>
       </aside>
     </div>
     <div class="row">
-      <nav class="sidebar sidebar--left sidebar--neutral side-nav">
-        <ul>
+      <nav class="sidebar sidebar--left sidebar--neutral side-nav js-sticky" data-sticky-margin="10">
+        <ul class="sidebar__content">
           <li class="side-nav__item"><a class="side-nav__link" href="#candidate-committees">Candidates and candidate committees</a></li>
           <li class="side-nav__item"><a class="side-nav__link" href="#corporations-and-labor">Corporations and labor organizations</a></li>
           <li class="side-nav__item"><a class="side-nav__link" href="#nonconnected">Nonconnected committees</a></li>
@@ -111,10 +111,52 @@
               <li><a href="/registration-and-reporting/administrative-fines/">Administrative fines</a></li>
               <li><a href="/contact-us/">Contact us</a></li>
             </ul>
+          </div>
+        </div>
       </div>
     </div>
   </div>
 </article>
 
+<div class="slab slab--secondary">
+  <div class="container">
+    <h2 class="t-secondary-contrast">Need help?</h2>
+    <div class="card card--horizontal card--secondary-contrast card--full-bleed">
+      <div class="card__image">
+        <a class="u-no-border" href="http://www.fec.gov/pdf/candgui.pdf">
+          <img src="{% static "img/guide--candidates.jpg" %}" alt="Federal Election Commission Campaign Guide: Congressional Candidates and Committees, June 2014">
+        </a>
+      </div>
+      <div class="card__content">
+        <a href="http://www.fec.gov/pdf/candgui.pdf">Read the campaign guide (PDF)</a>
+      </div>
+    </div>
+    <div class="card card--horizontal card--secondary-contrast">
+      <div class="card__image">
+        <img src="{% static "img/i-calendar--neutral.svg" %}" alt="Icon of a calendar">
+      </div>
+      <div class="card__content">
+        Reporting calendar
+      </div>
+    </div>
+    <div class="card card--horizontal card--secondary-contrast">
+      <div class="card__image">
+        <img src="{% static "img/i-resources--neutral.svg" %}" alt="Icon of an open book">
+      </div>
+      <div class="card__content">
+        Attend a training
+      </div>
+    </div>
+    <div class="card card--horizontal card--secondary-contrast">
+      <div class="card__image">
+        <img src="{% static "img/i-contact--neutral.svg" %}" alt="Icon of a customer service represntative">
+      </div>
+      <div class="card__content">
+        Give us a call
+        <br>1-800-424-9530
+      </div>
+    </div>
+  </div>
+</div>
 
 {% endblock %}
