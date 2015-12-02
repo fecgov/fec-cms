@@ -24,8 +24,8 @@
   </section>
   <section class="main">
     <div class="container">
-      <div class="row">
-        <div class="feature">
+      <div class="grid grid--4-wide">
+        <div class="feature grid__item">
           <h2 class="feature__title">New features</h2>
           <div class="card card--primary">
             <a class="card__image-link" href="{{ settings.FEC_APP_URL }}">
@@ -37,7 +37,7 @@
           </div>
           <p>See how money is raised and spent in federal elections. Compare candidates’ financial data. Learn how campaigns have spent their money. Discover who contributed to which candidates.</p>
         </div>
-        <div class="feature feature--no-title">
+        <div class="feature feature--no-title grid__item">
           <div class="card card--primary">
             <a class="card__image-link js-glossary-toggle">
               <img class="card__image" src="{% static "img/i-glossary--neutral.svg" %}" alt="Icon representing the glossary">
@@ -48,7 +48,7 @@
           </div>
           <p>Click words or phrases with the book icon next to them to pull up a definition. Or click the glossary icon at the top of any page to open the full, searchable glossary. For example, click on this term to see its definition: <span class="term" data-term="principal campaign committee">principal campaign committee</span>.</p>
         </div>
-        <div class="feature">
+        <div class="feature grid__item">
           <h2 class="feature__title">Coming soon</h2>
           <div class="card card--primary is-disabled">
             <img class="card__image" src="{% static "img/i-register--neutral.svg" %}" alt="Icon for reporting and registration">
@@ -58,7 +58,7 @@
           </div>
           <p>We’re making it easier for groups to learn the essentials of registration and reporting. We started with House and Senate candidates and committees, but soon we’ll have content for all the individuals and groups that register with the FEC.</p>
         </div>
-        <div class="feature feature--no-title">
+        <div class="feature feature--no-title grid__item">
           <div class="card card--primary is-disabled">
             <img class="card__image" src="{% static "img/i-calendar--neutral.svg" %}" alt="Icon for the calendar">
             <div class="card__content">
@@ -73,17 +73,17 @@
   <section class="slab">
     <div class="container">
       <h2 class="h1 t-ruled--bold">What's next?</h2>
-      <ul class="feature-list">
-        <li class="feature feature--bulleted">
+      <ul class="feature-list grid grid--4-wide">
+        <li class="feature feature--bulleted grid__item">
           <p>Added resources around registration, reporting and compliance</p>
         </li>
-        <li class="feature feature--bulleted">
+        <li class="feature feature--bulleted grid__item">
           <p>Improvements to campaign data tools, including exportable data and additional visualizations</p>
         </li>
-        <li class="feature feature--bulleted">
+        <li class="feature feature--bulleted grid__item">
           <p>A revamped tool for searching advisory opinions and enforcement actions</p>
         </li>
-        <li class="feature feature--bulleted">
+        <li class="feature feature--bulleted grid__item">
           <p>Further improvements to the new look and feel of the website</p>
         </li>
       </ul>

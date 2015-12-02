@@ -28,8 +28,8 @@
     {% if settings.FEC_CMS_ENVIRONMENT != 'PRODUCTION' %}
     <div class="banner">
       <div class="container">
-        <span class="t-block t-bold is-centered">{{ settings.FEC_CMS_ENVIRONMENT }}</span>
-        <span class="t-block is-centered">This site is for testing new ideas and code. View the most accurate data on the <a href="https://beta.fec.gov">live site</a>.</span>
+        <span class="t-block t-bold t-centered">{{ settings.FEC_CMS_ENVIRONMENT }}</span>
+        <span class="t-block t-centered">This site is for testing new ideas and code. View the most accurate data on the <a href="https://beta.fec.gov">live site</a>.</span>
       </div>
     </div>
     {% endif %}
@@ -82,8 +82,8 @@
               </li>
             </ul>
           </li>
-          <li class="site-nav__item is-disabled">
-            <a href="#" class="site-nav__link" tabindex="-1">(Registration and reporting)</a>
+          <li class="site-nav__item">
+            <a href="/registration-and-reporting/" class="site-nav__link">Registration and reporting</a>
           </li>
           <li class="site-nav__item is-disabled">
             <a href="#" class="site-nav__link" tabindex="-1">(Calendar)</a>
