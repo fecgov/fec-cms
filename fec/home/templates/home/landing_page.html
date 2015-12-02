@@ -16,7 +16,7 @@
 </section>
 
 <article>
-  <div class="slab slab--neutral">
+  <div class="slab slab--neutral content__section--extra">
     <div class="container">
       <h2 class="t-ruled--bottom main__content">What does it mean to register and report?</h2>
       <div class="main__content">
@@ -25,7 +25,7 @@
       </div>
       <div class="sidebar-container">
         <aside class="card card--secondary">
-          <h3 class="t-secondary-contrast t-left-aligned">Already regisered?</h3>
+          <h3 class="t-secondary-contrast t-left-aligned">Already registered?</h3>
           <form action="{{ settings.FEC_APP_URL }}" method="GET">
             <label class="label t-left-aligned" for="committee-search">Find your committee</label>
             <div class="combo--search--mini">
@@ -70,7 +70,7 @@
       </div>
       <div id="corporations-and-labor" class="option">
         <div class="option__content">
-          <h3>Corporations and Labor Organizations</h3>
+          <h3>Coming soon: Corporations and Labor Organizations</h3>
           <p>This is the FEC’s beta site, which means it’s still being developed. Learn more by reading the campaign guide, and check back soon for more information about corporations and labor organizations.</p>
         </div>
         <div class="option__aside">
@@ -83,8 +83,8 @@
       </div>
       <div id="nonconnected" class="option">
         <div class="option__content">
-          <h3>Nonconnected committees</h3>
-          <p>This is the FEC’s beta site, which means it’s still being developed. Learn more by reading the campaign guide, and check back soon for more information about corporations and labor organizations.</p>
+          <h3>Coming soon: Nonconnected committees</h3>
+          <p>This is the FEC’s beta site, which means it’s still being developed. Learn more by reading the campaign guide, and check back soon for more information about nonconnected committees.</p>
         </div>
         <div class="option__aside">
           <h5 class="label">Campaign guide</h5>
@@ -96,8 +96,8 @@
       </div>
       <div id="parties" class="option">
         <div class="option__content">
-          <h3>Political party committees</h3>
-          <p>This is the FEC’s beta site, which means it’s still being developed. Learn more by reading the campaign guide, and check back soon for more information about corporations and labor organizations.</p>
+          <h3>Coming soon: Political party committees</h3>
+          <p>This is the FEC’s beta site, which means it’s still being developed. Learn more by reading the campaign guide, and check back soon for more information about political party committees.</p>
         </div>
         <div class="option__aside">
           <h5 class="label">Campaign guide</h5>
@@ -108,29 +108,38 @@
         </div>
       </div>
       <div class="option">
-        <p>The best complete source for the rules that govern your federal campaign activity are the campaign guides.</p>
-        <p><a href="http://fec.gov/info/guidesupdatenotice.pdf">Notice to all campaign guide users &raquo;</a>
+        <div class="option__content">
+          <p>The best complete source for the rules that govern your federal campaign activity are the campaign guides.</p>
+          <p><a href="http://fec.gov/info/guidesupdatenotice.pdf">Notice to all campaign guide users &raquo;</a>
+        </p>
       </div>
     </section>
   </div>
   <div class="slab slab--secondary">
     <div class="container">
       <h2 class="t-secondary-contrast">Need help?</h2>
-      <div class="card card--horizontal card--secondary-contrast">
-        <div class="card__image">
-          <img src="{% static "img/i-calendar--neutral.svg" %}" alt="Icon of a calendar">
+      <div class="grid grid--4-wide">
+        <div class="grid__item">
+          <aside class="card card--horizontal card--secondary-contrast is-disabled card--coming-soon">
+            <div class="card__image">
+              <img src="{% static "img/i-calendar--neutral.svg" %}" alt="Icon of a calendar">
+            </div>
+            <div class="card__content">
+              Reporting calendar
+            </div>
+          </aside>
+          <p>Coming soon</p>
         </div>
-        <div class="card__content">
-          Reporting calendar
-        </div>
-      </div>
-      <div class="card card--horizontal card--secondary-contrast">
-        <div class="card__image">
-          <img src="{% static "img/i-contact--neutral.svg" %}" alt="Icon of a customer service represntative">
-        </div>
-        <div class="card__content">
-          Give us a call
-          <br>1-800-424-9530
+        <div class="grid__item">
+          <aside class="card card--horizontal card--secondary-contrast">
+            <div class="card__image">
+              <img src="{% static "img/i-contact--neutral.svg" %}" alt="Icon of a customer service represntative">
+            </div>
+            <div class="card__content">
+              Give us a call
+              <br>1-800-424-9530
+            </div>
+          </aside>
         </div>
       </div>
     </div>
