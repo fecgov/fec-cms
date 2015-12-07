@@ -1,4 +1,5 @@
 Django>=1.8,<1.9
+cfenv==0.4.0
 dj-database-url==0.3.0
 django-libsass==0.3
 gunicorn==19.3.0
