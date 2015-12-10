@@ -19,9 +19,10 @@ var scrollMonitor = require('scrollmonitor');
 function TOC(selector) {
   this.$menu = $(selector);
   this.sections = this.getSections();
-  this.offset = -1 * scrollMonitor.viewportHeight;
-  this.addWatchers();
+  this.offset = -1 * window.innerHeight;
+  this.watchers = this.addWatchers();
   this.$menu.on('click', 'a', this.scrollTo.bind(this));
+  $(window).on('resize', this.updateWatchers.bind(this));
 }
 
 TOC.prototype.getSections = function() {
@@ -33,14 +34,15 @@ TOC.prototype.getSections = function() {
 TOC.prototype.addWatchers = function() {
   var self = this;
 
-  [].forEach.call(this.sections, function(section) {
+  return this.sections.map(function(idx, section) {
     var elm = document.querySelector(section);
-    var watcher = scrollMonitor.create(elm, {top: this.offset});
-    watcher.$menuItem = this.$menu.find('a[href=' + section + ']');
+    var watcher = scrollMonitor.create(elm, {top: self.offset});
+    watcher.$menuItem = self.$menu.find('a[href=' + section + ']');
     watcher.enterViewport(function() {
       self.highlightActiveItem(this);
     });
-  }, this);
+    return watcher;
+  });
 };
 
 TOC.prototype.highlightActiveItem = function(watcher) {
@@ -58,6 +60,13 @@ TOC.prototype.scrollTo = function(e) {
   var sectionTop = $(section).offset().top;
   $(document.body).animate({
     scrollTop: sectionTop
+  });
+};
+
+TOC.prototype.updateWatchers = function() {
+  var newOffset = -1 * window.innerHeight;
+  this.watchers.map(function(idx, watcher) {
+    watcher.offsets.top = newOffset;
   });
 };
 
