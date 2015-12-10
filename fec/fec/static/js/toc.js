@@ -19,32 +19,28 @@ var scrollMonitor = require('scrollmonitor');
 function TOC(selector) {
   this.$menu = $(selector);
   this.sections = this.getSections();
-  this.offset = (-1 * scrollMonitor.viewportHeight);
+  this.offset = -1 * scrollMonitor.viewportHeight;
   this.addWatchers();
   this.$menu.on('click', 'a', this.scrollTo.bind(this));
 }
 
 TOC.prototype.getSections = function() {
-  var sections = [];
-  this.$menu.find('a').each(function() {
-    var section = $(this).attr('href');
-    sections.push(section);
+  return this.$menu.find('a').map(function(idx, elm) {
+    return $(elm).attr('href');
   });
-
-  return sections;
 };
 
 TOC.prototype.addWatchers = function() {
   var self = this;
 
-  this.sections.forEach(function(section) {
+  [].forEach.call(this.sections, function(section) {
     var elm = document.querySelector(section);
-    var watcher = scrollMonitor.create(elm, {top: self.offset});
-    watcher.$menuItem = self.$menu.find('a[href=' + section + ']');
+    var watcher = scrollMonitor.create(elm, {top: this.offset});
+    watcher.$menuItem = this.$menu.find('a[href=' + section + ']');
     watcher.enterViewport(function() {
       self.highlightActiveItem(this);
     });
-  });
+  }, this);
 };
 
 TOC.prototype.highlightActiveItem = function(watcher) {
