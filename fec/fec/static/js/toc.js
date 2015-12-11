@@ -65,7 +65,7 @@ TOC.prototype.scrollTo = function(e) {
 
 TOC.prototype.updateWatchers = function() {
   var newOffset = -1 * window.innerHeight;
-  this.watchers.map(function(idx, watcher) {
+  [].foreEach.call(this.watchers, function(watcher) {
     watcher.offsets.top = newOffset;
   });
 };
