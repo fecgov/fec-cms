@@ -4,6 +4,7 @@
 
 var $ = require('jquery');
 var scrollMonitor = require('scrollmonitor');
+var _ = require('underscore');
 
 /**
  * Table of Contents widget
@@ -65,8 +66,9 @@ TOC.prototype.scrollTo = function(e) {
 
 TOC.prototype.updateWatchers = function() {
   var newOffset = -1 * window.innerHeight;
-  [].foreEach.call(this.watchers, function(watcher) {
+  _.each(this.watchers, function(watcher) {
     watcher.offsets.top = newOffset;
+    watcher.recalculateLocation();
   });
 };
 
