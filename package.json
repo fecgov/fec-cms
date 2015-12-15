@@ -2,7 +2,7 @@
   "dependencies": {
     "ace-builds": "1.2.2",
     "component-sticky": "1.0.0",
-    "fec-style": "git://github.com/18F/fec-style.git",
+    "fec-style": "1.1.0",
     "jquery": "2.1.4",
     "js-beautify": "1.5.10",
     "scrollmonitor": "1.0.12",
