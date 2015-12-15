@@ -14,6 +14,9 @@ var siteNav = require('fec-style/js/site-nav');
 // Hack: Append jQuery to `window` for use by legacy libraries
 window.$ = window.jQuery = $;
 
+var Sticky = require('component-sticky');
+var toc = require('./toc.js');
+
 var SLT_ACCORDION = '.js-accordion';
 
 $(document).ready(function() {
@@ -25,6 +28,18 @@ $(document).ready(function() {
   // Initialize accordions
   $(SLT_ACCORDION).each(function() {
     Object.create(accordion).init($(this));
+  });
+
+  // Initialize table of contents
+  new toc.TOC('.js-toc');
+
+  // Initialize sticky elements
+  $('.js-sticky').each(function() {
+    var container = $(this).data('sticky-container');
+    var opts = {
+      within: document.getElementById(container)
+    };
+    new Sticky(this, opts);
   });
 
   new feedback.Feedback(window.FEC_APP_URL + '/issue/');
