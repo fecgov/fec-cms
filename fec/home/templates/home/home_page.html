@@ -48,17 +48,19 @@
           </div>
           <p>Click words or phrases with the book icon next to them to pull up a definition. Or click the glossary icon at the top of any page to open the full, searchable glossary. For example, click on this term to see its definition: <span class="term" data-term="principal campaign committee">principal campaign committee</span>.</p>
         </div>
-        <div class="feature grid__item">
-          <h2 class="feature__title">Coming soon</h2>
-          <div class="card card--primary is-disabled">
-            <img class="card__image" src="{% static "img/i-register--neutral.svg" %}" alt="Icon for reporting and registration">
+        <div class="feature feature--no-title grid__item">
+          <div class="card card--primary">
+            <a class="card__image-link" href="/registration-and-reporting">
+              <img class="card__image" src="{% static "img/i-register--neutral.svg" %}" alt="Icon for reporting and registration">
+            </a>
             <div class="card__content">
-              <p>Learn how congressional candidates and committees register and report</p>
+              <p>Learn how congressional candidates and committees <a href="/registration-and-reporting/">register and report</a></p>
             </div>
           </div>
           <p>We’re making it easier for groups to learn the essentials of registration and reporting. We started with House and Senate candidates and committees, but soon we’ll have content for all the individuals and groups that register with the FEC.</p>
         </div>
-        <div class="feature feature--no-title grid__item">
+        <div class="feature grid__item">
+          <h2 class="feature__title">Coming soon</h2>
           <div class="card card--primary is-disabled">
             <img class="card__image" src="{% static "img/i-calendar--neutral.svg" %}" alt="Icon for the calendar">
             <div class="card__content">
