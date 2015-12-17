@@ -97,7 +97,7 @@ Deploy
 
 Provision development database: ::
 
-    cf create-service rds shared-psql fec-dev-cms
+    cf create-service rds micro-psql fec-rds-stage
 
 Provision credentials service: ::
 
