@@ -8,7 +8,7 @@
   <head>
     {% include './partials/meta-tags.html' %}
 
-    <title>{% block title %}{% if self.seo_title %}{{ self.seo_title }}{% else %}{{ self.title }} | beta.fec.gov {% endif %}{% endblock %}{% block title_suffix %}{% endblock %}</title>
+    <title>{% block title %}{% if self.seo_title %}{{ self.seo_title }}{% else %}{{ self.title }} | beta.FEC.gov {% endif %}{% endblock %}{% block title_suffix %}{% endblock %}</title>
 
     {# Global stylesheets #}
     {% if settings.FEC_WEB_STYLE_URL %}
@@ -28,8 +28,8 @@
     {% if settings.FEC_CMS_ENVIRONMENT != 'PRODUCTION' %}
     <div class="banner">
       <div class="container">
-        <span class="t-block t-bold is-centered">{{ settings.FEC_CMS_ENVIRONMENT }}</span>
-        <span class="t-block is-centered">This site is for testing new ideas and code. View the most accurate data on the <a href="https://beta.fec.gov">live site</a>.</span>
+        <span class="t-block t-bold t-centered">{{ settings.FEC_CMS_ENVIRONMENT }}</span>
+        <span class="t-block t-centered">This site is for testing new ideas and code. View the most accurate data on the <a href="https://beta.fec.gov">live site</a>.</span>
       </div>
     </div>
     {% endif %}
@@ -38,8 +38,8 @@
 
     <header class="site-header">
       <div class="disclaimer">
-        <span class="disclaimer__left">Looking for <a href="http://www.fec.gov">fec.gov?</a></span>
-        <span class="disclaimer__center">An official website of the United States Government <img src="/static/img/us_flag_small.png" alt="US flag signifying that this is a United States Federal Government website"></span>
+        <span class="disclaimer__left">Looking for <a href="http://www.fec.gov">FEC.gov?</a></span>
+        <span class="disclaimer__center">An official website of the United States Government <img src="{% static 'img/us_flag_small.png' %}"  alt="US flag signifying that this is a United States Federal Government website"></span>
         <span class="disclaimer__right">This site is in <a title="Learn about this site's development" tabindex="0" href="https://18f.gsa.gov/dashboard/stages/#beta">beta.</a></span>
       </div>
       <div class="masthead">
@@ -52,17 +52,14 @@
       <nav class="site-nav js-site-nav">
         <button for="nav-toggle" class="js-nav-toggle site-nav__button site-nav__button--left" aria-controls="site-menu">Menu</button>
         <ul id="site-menu" class="site-nav__list">
-          <li class="site-nav__item site-nav__item--with-dropdown">
+          <li class="site-nav__item site-nav__item--with-dropdown js-sublist-parent">
             <a href="{{ settings.FEC_APP_URL }}" class="site-nav__link is-current">Campaign finance data</a>
-            <input class="nav-toggle__input js-toggle" id="dropdown-toggle-1" type="checkbox">
-            <label for="dropdown-toggle-1" class="site-nav__link nav-toggle__label">Campaign finance data</label>
+            <button class="site-nav__link site-nav__toggle js-sublist-toggle">Campaign finance data</button>
             <ul class="site-nav__dropdown">
-              <li class="site-nav__item u-under-lg-only">
+              <li class="site-nav__item">
                 <a class="t-bold site-nav__link" href="{{ settings.FEC_APP_URL }}">Campaign finance data home</a>
               </li>
-              <li class="site-nav__item">
-                <span class="t-bold site-nav__subtitle">Browse:</span>
-              </li>
+              <li class="t-bold site-nav__subtitle">Browse:</li>
               <li class="site-nav__item">
                 <a class="site-nav__link site-nav__sublink" href="{{ settings.FEC_APP_URL }}/candidates/?cycle=2012&cycle=2014&cycle=2016">Candidates</a>
               </li>
@@ -83,8 +80,8 @@
               </li>
             </ul>
           </li>
-          <li class="site-nav__item is-disabled">
-            <a href="#" class="site-nav__link" tabindex="-1">(Registration and reporting)</a>
+          <li class="site-nav__item">
+            <a href="/registration-and-reporting/" class="site-nav__link">Registration and reporting</a>
           </li>
           <li class="site-nav__item is-disabled">
             <a href="#" class="site-nav__link" tabindex="-1">(Calendar)</a>
@@ -114,13 +111,15 @@
     <footer class="footer">
       <div class="container">
         <div class="seal">
-          <img class="seal__img" width="140" height="140" src="/static/img/seal--white.svg" alt="Seal of the Federal Election Commission | United States of America">
+          <img class="seal__img" width="140" height="140" src="{% static "img/seal--white.svg" %}" alt="Seal of the Federal Election Commission | United States of America">
         </div>
         <div class="address">
           <p class="address__title">Federal Election Commission</p>
           <p>999 E Street, NW, Washington, DC 20463</p>
           <p>(800) 424-9530</p>
-          <p><a href="mailto:{{ settings.CONTACT_EMAIL }}">{{ settings.CONTACT_EMAIL }}</a></p>
+          <p class="address__subtitle">betaFEC feedback</p>
+          <p><a href="mailto:{{ settings.CONTACT_EMAIL }}">{{ settings.CONTACT_EMAIL }}</a><img class="icon--inline--right" src="{% static "img/i-email--inverse.svg" %}" alt="Icon of email being sent"></p>
+          <p><a href="https://github.com/18F/fec">GitHub repository</a><img class="icon--inline--right" src="{% static "img/i-github--inverse.svg" %}" alt="Icon of GitHub logo"></p>
         </div>
       </div>
     </footer>

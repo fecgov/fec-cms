@@ -10,89 +10,152 @@
     <h1 class="t-display">Registration and reporting</h1>
     <h2 class="t-ruled">Register your candidacy or committee and get started reporting</h2>
     <div class="hero__content">
-      <a class="button--secondary button--lg" href="/registration-options">Explore registration and reporting</a>
+      <a class="hero__action hero__down" href="#options">View registration categories</a>
     </div>
   </div>
 </section>
 
-<article class="main">
-  <div class="container">
-    <div class="row">
-      <section class="main__content">
-        <div class="content__section">
-          <h2>Get started with the FEC</h2>
-          <h3>What does it mean to register and report?</h3>
-          <p>The FEC helps citizens make informed voting decisions based, in part, on knowing the sources of financial support for federal candidates and political committees.</p>
-          <p>Campaign finance law requires that federal candidates and political committees register with the FEC once they reach certain monetary thresholds or take other actions that indicate they’ll be active in federal elections.</p>
-          <p>Explore registration options to see a breakdown of these groups and their registration thresholds.</p>
-          <p>After registration, federal political committees must file regular reports with the FEC. These reports disclose information about their receipts and disbursements. The FEC makes that information available to the public on its website.</p>
-        </div>
-      </section>
-      <aside class="sidebar sidebar--secondary">
-        <h2>Need help?</h2>
-        <div class="card card--mini">
-          <img alt="Call center support icon" src="{% static "img/i-contact--neutral.svg" %}" class="icon--complex card__image">
-          <div class="card__content">
-            <span class="t-block">Give us a call</span>
-            <span class="t-block">(800) 424-9530</span>
-          </div>
-        </div>
-        <div class="card card--mini is-disabled">
-          <img alt="Calendar icon" src="{% static "img/i-calendar--neutral.svg" %}" class="icon--complex card__image">
-          <div class="card__content">
-            <span>Reporting calendar</span>
-          </div>
-        </div>
-      </aside>
-    </div>
-    <div class="row">
-      <section class="main__content--full">
-        <div class="content__section content__section--ruled">
-          <h3>Discover registration and reporting essentials</h3>
-          <p>A number of factors dictate how individuals and groups must register and file. Visit this page to identify what kind of filer you are. When you’re ready, use our checklist to get started filing your reports.</p>
-          <div class="card card--secondary card--horizontal">
-            <a href="/registration-options" class="card__image card__image-link icon--complex">
-              <img alt="Registration icon" src="{% static "img/i-register--neutral.svg" %}" class="icon--complex">
-            </a>
-            <div class="card__content">
-              <a href="/registration-options">Explore registration and reporting</a>
+<article>
+  <div class="slab slab--neutral content__section--extra">
+    <div class="container">
+      <h2 class="t-ruled--bottom main__content">What does it mean to register and report?</h2>
+      <div class="main__content">
+        <p>The FEC helps citizens make informed voting decisions based, in part, on knowing the sources of financial support for 
+        federal candidates and political committees.</p>
+        <p>Campaign finance law generally requires that federal candidates and political committees register once 
+        they reach certain monetary thresholds.</p>
+        <p>After registration, federal political committees must file regular reports with the FEC or the Secretary of the Senate. 
+        These reports disclose information about their receipts and disbursements. The FEC makes that information available to the 
+        public on its website.</p>
+      </div>
+      <div class="sidebar-container">
+        <aside class="card card--secondary">
+          <h3 class="t-secondary-contrast t-left-aligned">Already registered?</h3>
+          <form action="{{ settings.FEC_APP_URL }}" method="GET">
+            <label class="label t-left-aligned" for="committee-search">Find your committee</label>
+            <div class="combo--search--mini">
+              <input id="committee-search" name="search" class="combo__input" type="text">
+              <input type="hidden" name="search_type" value="committees" placeholder="Search committees">
+              <button class="combo__button button--search button--secondary" type="submit"><span class="u-visually-hidden">Search</span></button>
             </div>
-          </div>
+          </form>
+        </aside>
+      </div>
+    </div>
+  </div>
+  <div id="options" class="container main">
+    <div class="content__section">
+      <h2>Who can register and report?</h2>
+    </div>
+    <div class="sidebar-container sidebar-container--left">
+      <nav class="sidebar sidebar--neutral sidebar--left side-nav js-sticky js-toc" data-sticky-container="options">
+        <ul class="sidebar__content">
+          <li class="side-nav__item"><a class="side-nav__link" href="#candidate-committees">Candidates and candidate committees</a></li>
+          <li class="side-nav__item"><a class="side-nav__link" href="#corporations-and-labor">Corporations and labor organizations</a></li>
+          <li class="side-nav__item"><a class="side-nav__link" href="#nonconnected">Nonconnected committees</a></li>
+          <li class="side-nav__item"><a class="side-nav__link" href="#parties">Political party committees</a></li>
+        </ul>
+      </nav>
+    </div>
+    <section class="main__content--right">
+      <div id="candidate-committees" class="option">
+        <div class="option__content">
+          <h3><a href="/registration-and-reporting/essentials-house-and-senate-candidates-and-committees/">Candidates and candidate committees</a></h3>
+         <p>An individual running for a seat in the House or Senate becomes a <span class="term" data-term="candidate">candidate</span>
+        when he or she raises or spends more than $5,000 in contributions or expenditures.</p>
+        <p>House and Senate candidates must designate at least one campaign committee. These <span class="term" data-term="authorized committee">authorized
+        committees</span> take in contributions and make expenditures for the candidate’s campaign. One of the candidate's authorized
+        campaign committees must be designated as the candidate's <span class="term" data-term="principal campaign committee">principal campaign committee</span>.</p>
+          <a class="button button--neutral button--go" href="/registration-and-reporting/essentials-house-and-senate-candidates-and-committees/">Get started</a>
         </div>
-        <div class="content__section--ruled content__section">
-          <h2>Learn how to comply with federal campaign finance laws</h2>
-          <div class="row">
-            <p class="usa-width-two-thirds">The best complete source for the rules that govern your federal campaign activity are the campaign guides available below.</p>
-          </div>
-          <h4 class="t-bold t-upper">Campaign guides:</h4>
-          <ul class="list--flat">
-            <li class="usa-width-one-fourth">
-              <p class="t-sans">Congressional candidates and committees (<a href="http://www.fec.gov/pdf/candgui.pdf">PDF</a>)</p>
-              <a class="u-no-border" href="http://www.fec.gov/pdf/candgui.pdf">
-                <img src="{% static "img/guide--candidates.jpg" %}" alt="Federal Election Commission Campaign Guide: Congressional Candidates and Committees, June 2014">
-              </a>
-            </li>
-            <li class="usa-width-one-fourth">
-              <p class="t-sans">Corporations and labor organizations (<a href="http://www.fec.gov/pdf/colagui.pdf">PDF</a>)</p>
-              <a class="u-no-border" href="http://www.fec.gov/pdf/colagui.pdf">
-                <img src="{% static "img/guide--orgs.jpg" %}" alt="Federal Election Commission Campaign Guide: Corporations and Labor Organizations, January 2007">
-              </a>
-            </li>
-            <li class="usa-width-one-fourth">
-              <p class="t-sans">Nonconnected committees <br>(<a href="http://www.fec.gov/pdf/nongui.pdf">PDF</a>)</p>
-              <a class="u-no-border" href="http://www.fec.gov/pdf/nongui.pdf">
-                <img src="{% static "img/guide--nonconnected.jpg" %}" alt="Federal Election Commission Campaign Guide: Nonconnected Committees, May 2008">
-              </a>
-            </li>
-            <li class="usa-width-one-fourth usa-end-row">
-              <p class="t-sans">Political party committees <br>(<a href="http://www.fec.gov/pdf/partygui.pdf">PDF</a>)</p>
-              <a class="u-no-border" href="http://www.fec.gov/pdf/partygui.pdf">
-                <img src="{% static "img/guide--parties.jpg" %}" alt="Federal Election Commission Campaign Guide: Political Party Committees, August 2013">
-              </a>
-            </li>
-          </ul>
+        <div class="option__aside">
+          <h5 class="label">Campaign guide</h5>
+          <a class="u-no-border" href="http://www.fec.gov/pdf/candgui.pdf">
+            <img src="{% static "img/guide--candidates.jpg" %}" alt="Federal Election Commission Campaign Guide: Congressional Candidates and Committees, June 2014">
+          </a>
+          <a class="t-sans" href="http://www.fec.gov/pdf/candgui.pdf">(PDF)</a>
         </div>
-      </section>
+      </div>
+      <div id="corporations-and-labor" class="option">
+        <div class="option__content">
+          <h3>Coming soon: Corporations and Labor Organizations</h3>
+          <p>This is the FEC’s beta site, which means it’s still being developed. Learn more by reading the campaign guide, and check back soon for more information about corporations and labor organizations.</p>
+        </div>
+        <div class="option__aside">
+          <h5 class="label">Campaign guide</h5>
+          <a class="u-no-border" href="http://www.fec.gov/pdf/colagui.pdf">
+            <img src="{% static "img/guide--orgs.jpg" %}" alt="Federal Election Commission Campaign Guide: Corporations and Labor Organizations, January 2007">
+          </a>
+          <a class="t-sans" href="http://www.fec.gov/pdf/colagui.pdf">(PDF)</a>
+        </div>
+      </div>
+      <div id="nonconnected" class="option">
+        <div class="option__content">
+          <h3>Coming soon: Nonconnected committees</h3>
+          <p>This is the FEC’s beta site, which means it’s still being developed. Learn more by reading the campaign guide, and check back soon for more information about nonconnected committees.</p>
+        </div>
+        <div class="option__aside">
+          <h5 class="label">Campaign guide</h5>
+          <a class="u-no-border" href="http://www.fec.gov/pdf/nongui.pdf">
+            <img src="{% static "img/guide--nonconnected.jpg" %}" alt="Federal Election Commission Campaign Guide: Nonconnected Committees, May 2008">
+          </a>
+          <a class="t-sans" href="http://www.fec.gov/pdf/nongui.pdf">(PDF)</a>
+        </div>
+      </div>
+      <div id="parties" class="option">
+        <div class="option__content">
+          <h3>Coming soon: Political party committees</h3>
+          <p>This is the FEC’s beta site, which means it’s still being developed. Learn more by reading the campaign guide, and check back soon for more information about political party committees.</p>
+        </div>
+        <div class="option__aside">
+          <h5 class="label">Campaign guide</h5>
+          <a class="u-no-border" href="http://www.fec.gov/pdf/partygui.pdf">
+            <img src="{% static "img/guide--parties.jpg" %}" alt="Federal Election Commission Campaign Guide: Political Party Committees, August 2013">
+          </a>
+          <a class="t-sans" href="http://www.fec.gov/pdf/partygui.pdf">(PDF)</a>
+        </div>
+      </div>
+      <div class="option">
+        <div class="option__content">
+          <p>The best complete source for the rules that govern your federal campaign activity are the campaign guides.</p>
+          <p><a href="http://www.fec.gov/info/guidesupdatenotice.pdf">Notice to all campaign guide users &raquo;</a>
+        </p>
+      </div>
+    </section>
+  </div>
+  <div class="slab slab--secondary">
+    <div class="container">
+      <h2 class="t-secondary-contrast">Need help?</h2>
+      <div class="grid grid--4-wide">
+        <div class="grid__item">
+          <aside class="card card--horizontal card--secondary-contrast is-disabled card--coming-soon">
+            <div class="card__image">
+              <img src="{% static "img/i-calendar--neutral.svg" %}" alt="Icon of a calendar">
+            </div>
+            <div class="card__content">
+              Reporting calendar
+            </div>
+          </aside>
+          <p>Coming soon</p>
+        </div>
+        <div class="grid__item">
+          <aside class="card card--horizontal card--secondary-contrast">
+            <div class="card__image">
+              <img src="{% static "img/i-contact--neutral.svg" %}" alt="Icon of a customer service represntative">
+            </div>
+            <div class="card__content">
+              Give us a call
+              <br>1-800-424-9530
+            </div>
+          </aside>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="slab slab--secondary footer-disclaimer">
+    <div class="container">
+      <p class="usa-width-one-half">This site is in beta, which means we're testing content that better adheres to legal plain language requirements. This content is not finalized, is not legal advice and is subject to change.</p>
+      <p class="usa-width-one-half">Everything on this site should be read in conjunction with FEC.gov. Please let us know what you think of our new content; use the feedback tool on this page.</p>
     </div>
   </div>
 </article>

@@ -4,21 +4,42 @@
 
 {% block content %}
 <header class="page-header slab--secondary">
-  <span class="h1 page-header__title">Registration and reporting</span>
+  <span class="page-header__title">
+    <a href="/registration-and-reporting">Registration and reporting</a> //
+    <a href="/registration-and-reporting/essentials-house-and-senate-candidates-and-committees/">Essentials for House and Senate candidates and committees</a> //
+    {{ self.title }}</span>
 </header>
 
 <article class="main">
   <div class="container">
-    <h1 class="t-ruled t-display"><span class="usa-width-one-half">{{ self.title }}</span></h1>
+    <div class="section__heading">
+      <h1 class="heading__title t-display">{{ self.title }}</h1>
+    </div>
     <div class="main__content">
       {{ self.body }}
     </div>
     {% if self.sidebar %}
-    <aside class="sidebar sidebar--secondary">
-      {{ self.sidebar }}
-    </aside>
+    <div class="sidebar-container">
+      <aside class="sidebar sidebar--secondary">
+        {% for block in self.sidebar %}
+          {% if block.block_type == 'heading' %}
+            <h4 class="sidebar__title">{{ block }}</h4>
+          {% else %}
+            <div class="sidebar__content">
+              {{ block }}
+            </div>
+          {% endif %}
+        {% endfor %}
+      </aside>
+    </div>
     {% endif %}
   </div>
 </article>
 
+<div class="slab slab--secondary footer-disclaimer">
+  <div class="container">
+    <p class="usa-width-one-half">This site is in beta, which means we're testing content that better adheres to legal plain language requirements. This content is not finalized, is not legal advice and is subject to change.</p>
+    <p class="usa-width-one-half">Everything on this site should be read in conjunction with FEC.gov. Please let us know what you think of our new content; use the feedback tool on this page.</p>
+  </div>
+</div>
 {% endblock %}

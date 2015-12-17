@@ -6,112 +6,180 @@
 {% block content %}
 
 <header class="page-header slab--secondary">
-  <span class="h1 page-header__title">Registration and reporting</span>
+  <span class="page-header__title"><a href="/registration-and-reporting">Registration and reporting</a> // {{ self.title }}</span>
 </header>
 
 
 <article class="main">
   <div class="container">
-    <h1 class="t-ruled t-display">{{ self.title }}</h1>
-    <div class="main__content">
-      <div class="content__section">
-        <p>Under campaign finance law, a person running for a seat in the House or Senate becomes a <span class="term" data-term="candidate">candidate</span> when he or she raises or spends more than $5,000 in contributions or expenditures.</p>
-        <p>Candidates must designate at least one campaign committee. These <span class="term" data-term="authorized committee">authorized committees</span> take in contributions and make expenditures for the candidate’s campaign.</p>
+    <h1 class="main__title">{{ self.title }}</h1>
+    <div class="content__section">
+      <div class="main__content">
+        <p>An individual running for a seat in the House or Senate becomes a <span class="term" data-term="candidate">candidate</span> 
+        when he or she raises or spends more than $5,000 in contributions or expenditures.</p>
+        <p>House and Senate candidates must designate at least one campaign committee. These 
+        <span class="term" data-term="authorized committee">authorized committees</span> 
+        take in contributions and make expenditures for the candidate’s campaign. One of the candidate's authorized
+        campaign committees must be designated as the candidate's <span class="term" data-term="principal campaign committee">principal campaign committee</span>.</p>
+        <p>This page is about congressional candidates and their authorized committees.</p>
+        <p>The checklist below focuses on the mechanics of registration and filing, introducing readers to a few of the most common topics 
+        on those subjects. This is neither legal advice nor a comprehensive guide and should not be relied upon as such. 
+        The FEC recommends all candidates and committees read the campaign guide (<a href="http://www.fec.gov/pdf/candgui.pdf">PDF</a>)
+        and refer to the relevant laws and regulations as necessary.</p>
       </div>
-      <div class="content__section--ruled">
-        <h2>This page is about congressional candidates and their designated committees.</h2>
-        <p>The checklist below focuses on the mechanics of registration and filing, introducing readers to a few of the most common topics on those subjects. This is neither legal advice nor a comprehensive guide. The FEC recommends all candidates and committees read the campaign guide.</p>
-      </div>
-
-      <div class="js-accordion accordion--secondary">
-        <div class="accordion__header js-accordion_header">
-          <h2 class="accordion__title">Register with the FEC</h2>
-          <button class="js-accordion_button accordion__button button--secondary"><span class="js-accordion_text u-visually-hidden">Expand</span></button>
-        </div>
-        <div class="js-accordion_item accordion__item">
-          <p><span class="term" data-term="candidate">Candidates</span>: Register within 15 days of becoming a candidate for federal office. With the exception of <a href="/registration-and-reporting/test-waters/">“testing the waters”</a> activity, you become a candidate when your campaign contributions or expenditures exceed $5,000.</p>
-          <p><span class="term" data-term="authorized committee">Candidate committees</span>: Register within 10 days of being officially designated by a candidate on his or her Statement of Candidacy.</p>
-          <h3>Learn how to:</h3>
-          <ul class="list--checkboxes">
-            <li class="list--checkboxes__item">Get a <a href="/registration-and-reporting/get-tax-id/">tax ID</a></li>
-            <li class="list--checkboxes__item">Get a <a href="/registration-and-reporting/get-bank-account/">bank account</a></li>
-            <li class="list--checkboxes__item">Get a <a href="/registration-and-reporting/get-treasurer/">treasurer</a></li>
-            <li class="list--checkboxes__item"><a href="/registration-and-reporting/register-now/">Register</a> as a candidate | <a href="/registration-and-reporting/house-and-senate-candidate-registration/">Learn more about how and why</a></li>
-            <li class="list--checkboxes__item"><a href="/registration-and-reporting/register-now/">Register</a> as a candidate committee | <a href="/registration-and-reporting/house-and-senate-candidate-committee-registration/">Learn more about how and why</a></li>
+      <div class="sidebar-container">
+        <aside class="sidebar sidebar--secondary">
+          <h4 class="sidebar__title">Essentials for other registrants</h4>
+          <ul class="sidebar__content">
+            <li class="u-padding--bottom"><a>Corporations and labor organizations</a></li>
+            <li class="u-padding--bottom"><a>Nonconnected committees</a></li>
+            <li class="u-padding--bottom"><a>Political party committees</a></li>
           </ul>
-        </div>
-      </div>
-      <div class="js-accordion accordion--secondary">
-        <div class="accordion__header js-accordion_header">
-          <h2 class="accordion__title">How to file</h2>
-          <button class="js-accordion_button accordion__button button--secondary"><span class="js-accordion_text u-visually-hidden">Expand</span></button>
-        </div>
-        <div class="js-accordion_item accordion__item">
-          <h3>Learn how to:</h3>
-          <ul class="list--checkboxes">
-            <li class="list--checkboxes__item">Get <a href="/registration-and-reporting/get-filing-software/">filing software</a></li>
-            <li class="list--checkboxes__item">File <a href="/registration-and-reporting/file-paper/">by paper</a></li>
-            <li class="list--checkboxes__item">File electronically
-              <ul>
-                <li class="list--checkboxes__item"><a href="/registration-and-reporting/get-e-filing-password/">Get an e-filing password</a></li>
-                <li class="list--checkboxes__item"><a href="/registration-and-reporting/file-electronically/">Electronic filing overview</a></li>
-                <li class="list--checkboxes__item"><a href="/registration-and-reporting/mandatory-electronic-filing/">Mandatory electronic filing</a></li>
-              </ul>
-            </li>
-          </ul>
-        </div>
-      </div>
-      <div class="js-accordion accordion--secondary">
-        <div class="accordion__header js-accordion_header">
-          <h2 class="accordion__title">Regular filing</h2>
-          <button class="js-accordion_button accordion__button button--secondary"><span class="js-accordion_text u-visually-hidden">Expand</span></button>
-        </div>
-        <div class="js-accordion_item accordion__item">
-          <h3>Learn more about:</h3>
-          <ul class="list--checkboxes">
-            <li class="list--checkboxes__item"><a href="/registration-and-reporting/know-your-filing-requirements/">Filing requirements</a></li>
-            <li class="list--checkboxes__item"><a href="/registration-and-reporting/quarterly-reports/">Quarterly reports</a></li>
-            <li class="list--checkboxes__item"><a href="/registration-and-reporting/pre-election-reports/">Pre-election reports</a></li>
-            <li class="list--checkboxes__item"><a href="/registration-and-reporting/48-hour-notices/">48-Hour Notices</a></li>
-            <li class="list--checkboxes__item"><a href="/registration-and-reporting/post-general-election-reports/">Post-general election reports</a></li>
-            <li class="list--checkboxes__item"><a href="/registration-and-reporting/terminate-committee/">Terminate a committee</a></li>
-          </ul>
-        </div>  
-      </div>
-      <div class="js-accordion accordion--secondary">
-        <div class="accordion__header js-accordion_header">
-          <h2 class="accordion__title">Troubleshooting</h2>
-          <button class="js-accordion_button accordion__button button--secondary"><span class="js-accordion_text u-visually-hidden">Expand</span></button>
-        </div>
-        <div class="js-accordion_item accordion__item">
-          <ul class="list--checkboxes">
-            <li class="list--checkboxes__item"><a href="/registration-and-reporting/missed-deadline/">Missed deadlines</a></li>
-            <li class="list--checkboxes__item">Respond to an <a href="/registration-and-reporting/request-additional-information/">RFAI</a></li>
-            <li class="list--checkboxes__item"><a href="/registration-and-reporting/administrative-fines/">Administrative fines</a></li>
-            <li class="list--checkboxes__item"><a href="/contact-us/">Contact us</a></li>
-          </ul>
-        </div>                                
+          <h4 class="sidebar__title">Already registered?</h4>
+          <form class="sidebar__content" action="{{ settings.FEC_APP_URL }}" method="GET">
+            <label class="label" for="committee-search">Find your committee</label>
+            <div class="combo--search--mini">
+              <input id="committee-search" name="search" class="combo__input" type="text">
+              <input type="hidden" name="search_type" value="committees" placeholder="Search committees">
+              <button class="combo__button button--search button--neutral" type="submit"><span class="u-visually-hidden">Search</span></button>
+            </div>
+          </form>
+        </aside>
       </div>
     </div>
-
-    <aside class="sidebar sidebar--secondary">
-        <h2>Need help?</h2>
-        <div class="card card--mini">
-          <img alt="Call center support icon" src="{% static "img/i-contact--neutral.svg" %}" class="icon--complex card__image">
-          <div class="card__content">
-            <span class="t-block">Give us a call</span>
-            <span class="t-block">(800) 424-9530</span>
+    <div class="row" id="registration-steps">
+      <div class="sidebar-container sidebar-container--left">
+        <nav class="sidebar sidebar--neutral side-nav js-sticky js-toc" data-sticky-container="registration-steps">
+          <ul class="sidebar__content">
+            <li class="side-nav__item"><a class="side-nav__link" href="#register">Register</a></li>
+            <li class="side-nav__item"><a class="side-nav__link" href="#how-to-file">How to file</a></li>
+            <li class="side-nav__item"><a class="side-nav__link" href="#regular-filing">Regular filing</a></li>
+            <li class="side-nav__item"><a class="side-nav__link" href="#troubleshooting">Troubleshooting</a></li>
+          </ul>
+        </nav>
+      </div>
+      <div class="main__content--right">
+        <div id="register" class="option">
+          <div class="option__content">
+            <h2>Register with the FEC</h2>
+            <p><span class="term t-bold" data-term="candidate">Candidates</span>: Register within 15 days of becoming a candidate 
+            for federal office. An individual running for a seat in the House or Senate becomes a candidate when he or she raises or 
+            spends more than $5,000 in contributions or expenditures.</p>
+            <p><span class="term t-bold" data-term="authorized committee">Candidate committees</span>: Register within 10 days of being 
+            officially designated by a candidate on his or her Statement of Candidacy.</p>
+            <p>Candidates for the House of Representatives (and their authorized committees) register with the FEC. Candidates for Senate 
+            (and their authorized committees) register with the Secretary of the Senate.</p>
+            <ul class="list--checks list--checks--secondary t-sans">
+              <li>Get a <a href="/registration-and-reporting/get-tax-id-and-bank-account/">tax ID and bank account</a></li>
+              <li>Get a <a href="/registration-and-reporting/get-treasurer/">treasurer</a></li>
+              <li><a href="/registration-and-reporting/register-now/">Register</a> as a candidate | <a href="/registration-and-reporting/house-and-senate-candidate-registration/">Learn more about how and why</a></li>
+              <li><a href="/registration-and-reporting/register-now/">Register</a> as a candidate committee | <a href="/registration-and-reporting/house-and-senate-candidate-committee-registration/">Learn more about how and why</a></li>
+            </ul>
           </div>
         </div>
-        <div class="card card--mini is-disabled">
-          <img alt="Calendar icon" src="{% static "img/i-calendar--neutral.svg" %}" class="icon--complex card__image">
-          <div class="card__content">
-            <span>Reporting calendar &raquo;</span>
+        <div id="how-to-file" class="option">
+          <div class="option__content">
+            <h2>How to file</h2>
+            <ul class="list--checks list--checks--secondary t-sans">
+              <li>File electronically
+                <ul>
+                  <li><a href="/registration-and-reporting/mandatory-electronic-filing/">Mandatory electronic filing</a></li>
+                  <li><a href="/registration-and-reporting/file-electronically/">Electronic filing overview</a></li>
+                  <li><a href="/registration-and-reporting/get-e-filing-password/">Get an e-filing password</a></li>
+                  <li><a href="/registration-and-reporting/file-paper/">File by paper</a></li>
+                  <li><a href="/registration-and-reporting/get-filing-software/">Get filing software</a></li>
+                </ul>
+              </li>
+            </ul>
           </div>
-        </div>      
-      </aside>
+        </div>
+        <div id="regular-filing" class="option">
+          <div class="option__content">
+            <h2>Regular filing</h2>
+            <ul class="list--checks list--checks--secondary t-sans">
+              <li><a href="/registration-and-reporting/know-your-filing-requirements/">Filing requirements</a></li>
+              <li><a href="/registration-and-reporting/quarterly-reports/">Quarterly reports</a></li>
+              <li><a href="/registration-and-reporting/pre-election-reports/">Pre-election reports</a></li>
+              <li><a href="/registration-and-reporting/48-hour-notices/">48-Hour Notices</a></li>
+              <li><a href="/registration-and-reporting/post-general-election-reports/">Post-general election reports</a></li>
+              <li><a href="/registration-and-reporting/terminate-committee/">Terminate a committee</a></li>
+            </ul>
+          </div>
+        </div>
+        <div id="troubleshooting" class="option option--border-bottom">
+          <div class="option__content">
+            <h2>Troubleshooting</h2>
+            <ul class="list--checks list--checks--secondary t-sans">
+              <li><a href="/registration-and-reporting/missed-deadline/">Missed deadlines</a></li>
+              <li>Respond to a <a href="/registration-and-reporting/request-additional-information/">Request for Additional Information (RFAI)</a></li>
+              <li><a href="/registration-and-reporting/administrative-fines/">Administrative fines</a></li>
+              <li><a href="/contact-us/">Contact us</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </article>
 
+<div class="slab slab--secondary">
+  <div class="container">
+    <h2 class="t-secondary-contrast">Need help?</h2>
+    <div class="grid grid--4-wide">
+      <div class="grid__item">
+        <aside class="card card--horizontal card--secondary-contrast card--full-bleed">
+          <div class="card__image">
+            <a class="u-no-border" href="http://www.fec.gov/pdf/candgui.pdf">
+              <img src="{% static "img/guide--candidates.jpg" %}" alt="Federal Election Commission Campaign Guide: Congressional Candidates and Committees, June 2014">
+            </a>
+          </div>
+          <div class="card__content">
+            <a href="http://www.fec.gov/pdf/candgui.pdf">Read the campaign guide (PDF)</a>
+          </div>
+        </aside>
+      </div>
+      <div class="grid__item">
+        <aside class="card card--horizontal card--secondary-contrast is-disabled">
+          <div class="card__image">
+            <img src="{% static "img/i-calendar--neutral.svg" %}" alt="Icon of a calendar">
+          </div>
+          <div class="card__content">
+            Reporting calendar
+          </div>
+        </aside>
+        <p>Coming soon</p>
+      </div>
+      <div class="grid__item">
+        <aside class="card card--horizontal card--secondary-contrast is-disabled">
+          <div class="card__image">
+            <img src="{% static "img/i-resources--neutral.svg" %}" alt="Icon of an open book">
+          </div>
+          <div class="card__content">
+            Attend a training
+          </div>
+        </aside>
+        <p>Coming soon</p>
+      </div>
+      <div class="grid__item">
+        <aside class="card card--horizontal card--secondary-contrast">
+          <div class="card__image">
+            <img src="{% static "img/i-contact--neutral.svg" %}" alt="Icon of a customer service representative">
+          </div>
+          <div class="card__content">
+            Give us a call
+            <br>1-800-424-9530
+          </div>
+        </aside>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="slab slab--secondary footer-disclaimer">
+  <div class="container">
+    <p class="usa-width-one-half">This site is in beta, which means we're testing content that better adheres to legal plain language requirements. This content is not finalized, is not legal advice and is subject to change.</p>
+    <p class="usa-width-one-half">Everything on this site should be read in conjunction with FEC.gov. Please let us know what you think of our new content; use the feedback tool on this page.</p>
+  </div>
+</div>
 
 {% endblock %}
