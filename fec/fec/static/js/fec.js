@@ -1,7 +1,5 @@
 'use strict';
 
-/* global require, window, document */
-
 var $ = require('jquery');
 
 var terms = require('fec-style/js/terms');
@@ -15,7 +13,8 @@ var siteNav = require('fec-style/js/site-nav');
 window.$ = window.jQuery = $;
 
 var Sticky = require('component-sticky');
-var toc = require('./toc.js');
+var calendar = require('./calendar');
+var toc = require('./toc');
 
 var SLT_ACCORDION = '.js-accordion';
 
@@ -42,5 +41,13 @@ $(document).ready(function() {
     new Sticky(this, opts);
   });
 
+  // Initialize feedback widget
   new feedback.Feedback(window.FEC_APP_URL + '/issue/');
+
+  // Initialize calendar
+  new calendar.Calendar({
+    selector: '#calendar',
+    url: 'http://localhost:5000/v1/calendar-dates/',
+    sourceOpts: calendar.fecSources
+  });
 });

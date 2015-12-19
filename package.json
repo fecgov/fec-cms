@@ -3,10 +3,12 @@
     "ace-builds": "1.2.2",
     "component-sticky": "1.0.0",
     "fec-style": "1.1.0",
+    "fullcalendar": "2.5.0",
     "jquery": "2.1.4",
     "js-beautify": "1.5.10",
     "scrollmonitor": "1.0.12",
-    "underscore": "^1.8.3"
+    "underscore": "^1.8.3",
+    "urijs": "1.17.0"
   },
   "devDependencies": {
     "browserify": "^11.0.1",
