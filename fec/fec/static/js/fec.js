@@ -57,8 +57,15 @@ $(document).ready(function() {
     selector: '#calendar',
     url: URI(window.API_LOCATION)
       .path([window.API_VERSION, 'calendar-dates'].join('/'))
-      .query({API_KEY: window.API_KEY})
+      .query({api_key: window.API_KEY})
       .toString(),
+      calendarOpts: {
+        header: {
+          left: 'prev,next today',
+          center: 'title',
+          right: 'month,agendaWeek,agendaDay'
+        }
+      },
     sourceOpts: calendar.fecSources
   });
 
