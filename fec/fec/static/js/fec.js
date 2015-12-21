@@ -1,6 +1,7 @@
 'use strict';
 
 var $ = require('jquery');
+var URI = require('urijs');
 
 var terms = require('fec-style/js/terms');
 var glossary = require('fec-style/js/glossary');
@@ -48,7 +49,10 @@ $(document).ready(function() {
   // Initialize calendar
   var cal = new calendar.Calendar({
     selector: '#calendar',
-    url: 'http://localhost:5000/v1/calendar-dates/',
+    url: URI(window.API_LOCATION)
+      .path([window.API_VERSION, 'calendar-dates'].join('/'))
+      .query({API_KEY: window.API_KEY})
+      .toString(),
     sourceOpts: calendar.fecSources
   });
 

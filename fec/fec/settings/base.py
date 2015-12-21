@@ -163,7 +163,7 @@ from fec import constants
 from .env import env
 
 FEC_APP_URL = os.getenv('FEC_APP_URL')
-FEC_API_URL = os.getenv('FEC_API_URL', 'http://localhost:5000')
+FEC_API_URL = os.getenv('FEC_WEB_API_URL', 'http://localhost:5000')
 FEC_API_VERSION = os.getenv('FEC_WEB_API_VERSION', 'v1')
 FEC_API_KEY_PUBLIC = env.get_credential('FEC_WEB_API_KEY_PUBLIC', '')
 FEC_WEB_STYLE_URL = os.getenv('FEC_WEB_STYLE_URL')
