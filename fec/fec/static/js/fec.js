@@ -9,6 +9,7 @@ var accordion = require('fec-style/js/accordion');
 var feedback = require('fec-style/js/feedback');
 var skipNav = require('fec-style/js/skip-nav');
 var siteNav = require('fec-style/js/site-nav');
+var dropdown = require('fec-style/js/dropdowns');
 var FilterPanel = require('fec-style/js/filter-panel').FilterPanel;
 
 // Hack: Append jQuery to `window` for use by legacy libraries
@@ -41,6 +42,11 @@ $(document).ready(function() {
       within: document.getElementById(container)
     };
     new Sticky(this, opts);
+  });
+
+  // Initialize checkbox dropdowns
+  $('.js-dropdown').each(function() {
+    new dropdown.Dropdown(this);
   });
 
   // Initialize feedback widget

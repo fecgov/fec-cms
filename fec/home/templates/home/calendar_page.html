@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+{% load wagtailcore_tags %}
+{% load staticfiles %}
+{% block body_class %}template-{{ self.get_verbose_name | slugify }}{% endblock %}
+
+{% block content %}
+<div id="filters" class="filters">
+  <button id="filter-toggle" data-slide="left" class="filters__toggle">
+    <span class="filters__toggle__text js-filter-toggle-text">Show filters</span>
+  </button>
+  <div class="filters__hider">
+    <h2 class="filter__header">
+      Filter events
+    </h2>
+    <form id="category-filters">
+      <div class="filter">
+        <fieldset class="js-dropdown">
+          <legend class="label" for="state">State</legend>
+          <div class="dropdown">
+            <ul class="dropdown__selected"></ul>
+            <button type="button" class="dropdown__button button--neutral">Select</button>
+            <div class="dropdown__panel" aria-hidden="true">
+              <ul class="{{ css_class }}">
+              {% for value, label in settings.CONSTANTS.states.items %}
+              <li class="dropdown__item">
+                <input id="state-{{ value }}" name="state" type="checkbox" value="{{ value }}">
+                <label class="dropdown__value" for="state-{{ value }}">{{ label }}</label>
+              </li>
+              {% endfor %}
+              </ul>
+            </div>
+          </div>
+        </fieldset>
+      </div>
+      <div class="filter">
+        <fieldset>
+          <legend>Elections</legend>
+          {% for value, label in settings.CONSTANTS.election_types.items %}
+            <input id="{{ value }}" type="checkbox" name="category" value="{{ value }}" />
+            <label for="{{ value }}" class="tooltip__trigger-text">{{ label }}</label>
+          {% endfor %}
+        </fieldset>
+        <fieldset>
+          <legend>Outreach</legend>
+          {% for value, label in settings.CONSTANTS.outreach_types.items %}
+            <input id="{{ value }}" type="checkbox" name="category" value="{{ value }}" />
+            <label for="{{ value }}" class="tooltip__trigger-text">{{ label }}</label>
+          {% endfor %}
+        </fieldset>
+        <fieldset>
+          <legend>Reporting deadlines</legend>
+          {% for value, label in settings.CONSTANTS.deadline_types.items %}
+            <input id="{{ value }}" type="checkbox" name="category" value="{{ value }}" />
+            <label for="{{ value }}" class="tooltip__trigger-text">{{ label }}</label>
+          {% endfor %}
+        </fieldset>
+      </div>
+    </form>
+  </div>
+</div>
+<div id="calendar"></div>
+{% endblock %}
