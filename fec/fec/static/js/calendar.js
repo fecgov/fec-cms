@@ -21,7 +21,7 @@ Calendar.defaultOpts = {
 };
 
 Calendar.prototype.filter = function(params) {
-  this.calendar.fullCalendar('removeEventSource', this.source);
+  this.calendar.fullCalendar('removeEventSource', this.sources);
   var url = this.url.clone().addQuery(params || {}).toString();
   this.sources = $.extend({}, this.opts.sourceOpts, {url: url});
   this.calendar.fullCalendar('addEventSource', this.sources);

@@ -8,6 +8,7 @@ var accordion = require('fec-style/js/accordion');
 var feedback = require('fec-style/js/feedback');
 var skipNav = require('fec-style/js/skip-nav');
 var siteNav = require('fec-style/js/site-nav');
+var FilterPanel = require('fec-style/js/filter-panel').FilterPanel;
 
 // Hack: Append jQuery to `window` for use by legacy libraries
 window.$ = window.jQuery = $;
@@ -45,9 +46,15 @@ $(document).ready(function() {
   new feedback.Feedback(window.FEC_APP_URL + '/issue/');
 
   // Initialize calendar
-  new calendar.Calendar({
+  var cal = new calendar.Calendar({
     selector: '#calendar',
     url: 'http://localhost:5000/v1/calendar-dates/',
     sourceOpts: calendar.fecSources
+  });
+
+  // Initialize filters
+  var filterPanel = new FilterPanel('#filters');
+  filterPanel.$body.find('form').on('change', function() {
+    cal.filter(filterPanel.filterSet.serialize());
   });
 });
