@@ -7,22 +7,11 @@ election_types = OrderedDict([
 ])
 
 deadline_types = OrderedDict([
-    ('report-12G', 'Pre-election'),
-    ('report-30G', 'Post-election'),
-    ('report-Q1', 'April quarterly'),
-    ('report-Q2', 'July quarterly'),
-    ('report-Q3', 'October quarterly'),
-    ('report-M2', 'February monthly'),
-    ('report-M3', 'March monthly'),
-    ('report-M4', 'April monthly'),
-    ('report-M5', 'May monthly'),
-    ('report-M6', 'June monthly'),
-    ('report-M7', 'July monthly'),
-    ('report-M8', 'August monthly'),
-    ('report-M9', 'September monthly'),
-    ('report-M10', 'October monthly'),
-    ('report-M11', 'November monthly'),
-    ('report-M12', 'December monthly'),
+    ('report-M', 'Monthly'),
+    ('report-Q', 'Quarterly'),
+    ('report-MY', 'Mid-year'),
+    ('report-YE', 'Year-end'),
+    ('report-E', 'Election-sensitive'),
 ])
 
 outreach_types = OrderedDict([
