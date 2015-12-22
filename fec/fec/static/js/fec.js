@@ -55,17 +55,17 @@ $(document).ready(function() {
   // Initialize calendar
   var cal = new calendar.Calendar({
     selector: '#calendar',
-    url: URI(window.API_LOCATION)
-      .path([window.API_VERSION, 'calendar-dates'].join('/'))
-      .query({api_key: window.API_KEY})
-      .toString(),
-      calendarOpts: {
-        header: {
-          left: 'prev,next today',
-          center: 'title',
-          right: 'month,agendaWeek,agendaDay'
-        }
-      },
+    download: '#calendar-download',
+    subscribe: '#calendar-subscribe',
+    url: calendar.getUrl(['calendar-dates']),
+    exportUrl: calendar.getUrl(['calendar-dates', 'export']),
+    calendarOpts: {
+      header: {
+        left: 'prev,next today',
+        center: 'title',
+        right: 'month,agendaWeek,agendaDay'
+      }
+    },
     sourceOpts: calendar.fecSources
   });
 

@@ -5,12 +5,21 @@ var URI = require('urijs');
 
 require('fullcalendar');
 
+var templates = {
+  download: require('../hbs/calendar/download.hbs'),
+  subscribe: require('../hbs/calendar/subscribe.hbs')
+};
+
 function Calendar(opts) {
   this.opts = $.extend({}, Calendar.defaultOpts, opts);
 
-  this.calendar = $(this.opts.selector).fullCalendar(this.opts.calendarOpts);
+  this.$calendar = $(this.opts.selector).fullCalendar(this.opts.calendarOpts);
   this.url = URI(this.opts.url);
+  this.exportUrl = URI(this.opts.exportUrl);
   this.sources = null;
+
+  this.$download = $(opts.download);
+  this.$subscribe = $(opts.subscribe);
 
   this.filter();
 }
@@ -21,10 +30,23 @@ Calendar.defaultOpts = {
 };
 
 Calendar.prototype.filter = function(params) {
-  this.calendar.fullCalendar('removeEventSource', this.sources);
   var url = this.url.clone().addQuery(params || {}).toString();
+  this.$calendar.fullCalendar('removeEventSource', this.sources);
   this.sources = $.extend({}, this.opts.sourceOpts, {url: url});
-  this.calendar.fullCalendar('addEventSource', this.sources);
+  this.$calendar.fullCalendar('addEventSource', this.sources);
+  this.updateLinks(params);
+};
+
+Calendar.prototype.updateLinks = function(params) {
+  var url = this.exportUrl.clone().addQuery(params || {});
+  var urls = {
+    ics: url.toString(),
+    csv: url.query({renderer: 'csv'}).toString(),
+    google: 'https://calendar.google.com/calendar/render?cid=' + url.toString(),
+    calendar: url.protocol('webcal').toString()
+  };
+  this.$download.html(templates.download(urls));
+  this.$subscribe.html(templates.subscribe(urls));
 };
 
 var colorMap = {
@@ -56,7 +78,16 @@ var fecSources = {
   success: success
 };
 
+function getUrl(path, params) {
+  return URI(window.API_LOCATION)
+    .path([window.API_VERSION].concat(path || []).join('/'))
+    .addQuery({api_key: window.API_KEY})
+    .addQuery(params || {})
+    .toString();
+}
+
 module.exports = {
   Calendar: Calendar,
-  fecSources: fecSources
+  fecSources: fecSources,
+  getUrl: getUrl
 };
