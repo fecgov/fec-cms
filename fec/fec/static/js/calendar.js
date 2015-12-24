@@ -51,7 +51,7 @@ Calendar.prototype.updateLinks = function(params) {
   this.$subscribe.html(templates.subscribe(urls));
 
   new dropdown.Dropdown(this.$download, {checkboxes: false});
-  new dropdown.Dropdown(this.$download, {checkboxes: false});
+  new dropdown.Dropdown(this.$subscribe, {checkboxes: false});
 };
 
 Calendar.prototype.styleButtons = function() {
