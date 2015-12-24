@@ -2,6 +2,7 @@
 
 var $ = require('jquery');
 var URI = require('urijs');
+var dropdown = require('fec-style/js/dropdowns');
 
 require('fullcalendar');
 
@@ -22,6 +23,7 @@ function Calendar(opts) {
   this.$subscribe = $(opts.subscribe);
 
   this.filter();
+  this.styleButtons();
 }
 
 Calendar.defaultOpts = {
@@ -47,6 +49,17 @@ Calendar.prototype.updateLinks = function(params) {
   };
   this.$download.html(templates.download(urls));
   this.$subscribe.html(templates.subscribe(urls));
+
+  new dropdown.Dropdown(this.$download, {checkboxes: false});
+  new dropdown.Dropdown(this.$download, {checkboxes: false});
+};
+
+Calendar.prototype.styleButtons = function() {
+  var baseClasses = 'button button--neutral';
+  this.$calendar.find('.fc-button').addClass(baseClasses);
+  this.$calendar.find('.fc-next-button').addClass('button--next');
+  this.$calendar.find('.fc-prev-button').addClass('button--previous');
+  this.$calendar.find('.fc-right .fc-button-group').addClass('toggles--buttons');
 };
 
 var colorMap = {

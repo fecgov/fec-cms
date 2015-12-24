@@ -64,6 +64,12 @@ $(document).ready(function() {
         left: 'prev,next today',
         center: 'title',
         right: 'month,agendaWeek,agendaDay'
+      },
+      buttonIcons: false,
+      buttonText: {
+        today: 'Today',
+        month: 'Month',
+        week: 'Week'
       }
     },
     sourceOpts: calendar.fecSources

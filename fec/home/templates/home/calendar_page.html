@@ -67,10 +67,14 @@
       </form>
     </div>
   </div>
-  <div class="datatable__container">
-    <div id="calendar-download"></div>
-    <div id="calendar-subscribe"></div>
-    <div id="calendar"></div>
+  <div class="data-container">
+    <div class="data-container__widgets data-container__widgets--secondary">
+      <div class="data-container__export">
+        <div id="calendar-download" class="export-widget"></div>
+        <div id="calendar-subscribe" class="export-widget"></div>
+      </div>
+    </div>
+    <div id="calendar" class="data-container__body"></div>
   </div>
 </section>
 {% endblock %}
