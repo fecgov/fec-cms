@@ -69,7 +69,8 @@ $(document).ready(function() {
       buttonText: {
         today: 'Today',
         month: 'Month',
-        week: 'Week'
+        week: 'Week',
+        day: 'Day'
       }
     },
     sourceOpts: calendar.fecSources
