@@ -7,6 +7,7 @@ var dropdown = require('fec-style/js/dropdowns');
 require('fullcalendar');
 
 var templates = {
+  details: require('../hbs/calendar/details.hbs'),
   download: require('../hbs/calendar/download.hbs'),
   subscribe: require('../hbs/calendar/subscribe.hbs')
 };
@@ -18,18 +19,53 @@ function Calendar(opts) {
   this.url = URI(this.opts.url);
   this.exportUrl = URI(this.opts.exportUrl);
   this.sources = null;
+  this.filterPanel = this.opts.filterPanel;
 
   this.$download = $(opts.download);
   this.$subscribe = $(opts.subscribe);
 
+  this.$calendar.on('calendar:rendered', this.filterPanel.setHeight());
+
   this.filter();
   this.styleButtons();
+  this.filterPanel.setHeight();
 }
 
 Calendar.defaultOpts = {
-  calendarOpts: {},
+  calendarOpts: {
+    header: {
+      left: 'prev,next today',
+      center: 'title',
+      right: 'month,agendaWeek,agendaDay'
+    },
+    buttonIcons: false,
+    buttonText: {
+      today: 'Today',
+      month: 'Month',
+      week: 'Week',
+      day: 'Day'
+    },
+    eventAfterAllRender: handleRender,
+    eventClick: handleEventClick,
+    eventLimit: true,
+    views: {
+      month: {
+        eventLimit: 3
+      }
+    }
+  },
   sourceOpts: {}
 };
+
+function handleRender(view) {
+  $(document.body).trigger($.Event('calendar:rendered'));
+}
+
+function handleEventClick(calEvent, jsEvent, view) {
+  var $eventContainer = $(jsEvent.target).closest('.fc-event-container');
+  var tooltip = new CalendarTooltip(calEvent);
+  $eventContainer.append(tooltip.$content);
+}
 
 Calendar.prototype.filter = function(params) {
   var url = this.url.clone().addQuery(params || {}).toString();
@@ -62,25 +98,35 @@ Calendar.prototype.styleButtons = function() {
   this.$calendar.find('.fc-right .fc-button-group').addClass('toggles--buttons');
 };
 
-var colorMap = {
-  election: 'blue',
-  report: 'red'
+var classMap = {
+  election: 'fc--election',
+  report: 'fc--deadline',
+  open: 'fc--meeting',
+  executive: 'fc--executive',
+  roundtables: 'fc--outreach',
+  conferences: 'fc--outreach',
+  litigation: 'fc--other',
+  fea: 'fc--other'
 };
-var colorDefault = 'orange';
 
-function formatColor(event) {
-  var category = event.category ? event.category.split('-')[0] : null;
-  return colorMap[category] || colorDefault;
+function setClass(event) {
+  var className = '';
+  var category = event.category ? event.category.split(/[ -]+/)[0] : null;
+
+  className += event.end_Date !== null ? ' fc--allday' : '';
+  className += category ? ' ' + classMap[category.toLowerCase()] : '';
+  return className;
 }
 
 function success(response) {
   return response.results.map(function(event) {
     return {
-      title: event.summary,
+      title: event.description,
+      summary: event.summary,
       start: event.start_date,
       end: event.end_date,
       allDay: event.end_date !== null,
-      color: formatColor(event)
+      className: setClass(event)
     };
   });
 }
@@ -98,6 +144,16 @@ function getUrl(path, params) {
     .addQuery(params || {})
     .toString();
 }
+
+function CalendarTooltip(calEvent) {
+  this.$content = $(templates.details(calEvent));
+  this.$close = this.$content.find('.js-close');
+  this.$content.on('click', this.$close, this.close.bind(this));
+};
+
+CalendarTooltip.prototype.close = function() {
+  this.$content.remove();
+};
 
 module.exports = {
   Calendar: Calendar,

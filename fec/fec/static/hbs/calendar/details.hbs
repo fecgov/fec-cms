@@ -1,0 +1,13 @@
+<div class="tooltip tooltip--under calendar__details">
+  <button class="button button--close--primary js-close" type="button"><span class="u-visually-hidden">Close</span></button>
+  <span class="t-block t-bold">{{ datetime start pretty=true}}
+    {{#if end }}
+    &ndash;{{ datetime start pretty=true}}
+    {{/if}}
+  </span>
+  <span class="t-block t-bold">{{ title }}</span>
+  <span class="t-block">{{ summary }}</span>
+  {{#if location }}
+  <span class="t-block"><span class="t-bold">Location: </span>{{ location }}</span>
+  {{/if}}
+</div>

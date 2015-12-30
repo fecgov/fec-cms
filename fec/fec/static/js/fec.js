@@ -16,6 +16,7 @@ var FilterPanel = require('fec-style/js/filter-panel').FilterPanel;
 window.$ = window.jQuery = $;
 
 var Sticky = require('component-sticky');
+var helpers = require('./helpers');
 var calendar = require('./calendar');
 var toc = require('./toc');
 
@@ -52,6 +53,12 @@ $(document).ready(function() {
   // Initialize feedback widget
   new feedback.Feedback(window.FEC_APP_URL + '/issue/');
 
+  // Initialize filters
+  var filterPanel = new FilterPanel('#filters');
+  filterPanel.$form.on('change', function() {
+    cal.filter(filterPanel.filterSet.serialize());
+  });
+
   // Initialize calendar
   var cal = new calendar.Calendar({
     selector: '#calendar',
@@ -59,26 +66,8 @@ $(document).ready(function() {
     subscribe: '#calendar-subscribe',
     url: calendar.getUrl(['calendar-dates']),
     exportUrl: calendar.getUrl(['calendar-dates', 'export']),
-    calendarOpts: {
-      header: {
-        left: 'prev,next today',
-        center: 'title',
-        right: 'month,agendaWeek,agendaDay'
-      },
-      buttonIcons: false,
-      buttonText: {
-        today: 'Today',
-        month: 'Month',
-        week: 'Week',
-        day: 'Day'
-      }
-    },
+    filterPanel: filterPanel,
     sourceOpts: calendar.fecSources
   });
 
-  // Initialize filters
-  var filterPanel = new FilterPanel('#filters');
-  filterPanel.$body.find('form').on('change', function() {
-    cal.filter(filterPanel.filterSet.serialize());
-  });
 });
