@@ -20,7 +20,7 @@ outreach_types = OrderedDict([
 ])
 
 meeting_types = OrderedDict([
-    ('Open meetings', 'Open meeting'),
+    ('Open Meetings', 'Open meeting'),
     ('Executive Sessions', 'Executive session'),
 ])
 

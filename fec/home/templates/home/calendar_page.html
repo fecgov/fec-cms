@@ -18,6 +18,10 @@
         Filter events
       </h2>
       <form id="category-filters">
+        <div class="">
+          <button class="button--sm button--primary-contrast" type="button">Apply filters</button>
+          <button class="button--sm button--neutral js-clear-filters" type="button">Clear filters</button>
+        </div>
         <div class="filter">
           <fieldset class="js-dropdown">
             <legend class="label" for="state">State</legend>
@@ -37,31 +41,44 @@
             </div>
           </fieldset>
         </div>
-        <div class="filter">
+        <div class="js-filter">
           <fieldset>
-            <legend class="label">Elections</legend>
-            {% for value, label in settings.CONSTANTS.election_types.items %}
-              <input id="{{ value }}" type="checkbox" name="category" value="{{ value }}" />
-              <label for="{{ value }}" class="tooltip__trigger-text">{{ label }}</label>
-            {% endfor %}
-          </fieldset>
-        </div>
-        <div class="filter">
-          <fieldset>
-            <legend class="label">Outreach</legend>
-            {% for value, label in settings.CONSTANTS.outreach_types.items %}
-              <input id="{{ value }}" type="checkbox" name="category" value="{{ value }}" />
-              <label for="{{ value }}" class="tooltip__trigger-text">{{ label }}</label>
-            {% endfor %}
-          </fieldset>
-        </div>
-        <div class="filter">
-          <fieldset>
-            <legend class="label">Reporting deadlines</legend>
-            {% for value, label in settings.CONSTANTS.deadline_types.items %}
-              <input id="{{ value }}" type="checkbox" name="category" value="{{ value }}" />
-              <label for="{{ value }}" class="tooltip__trigger-text">{{ label }}</label>
-            {% endfor %}
+            <legend class="filters__subheader">Event types</legend>
+            <div class="filter filter--election">
+              <span class="label">Elections <span class="filter__swatch"></span></span>
+              {% for value, label in settings.CONSTANTS.election_types.items %}
+                <input id="{{ value }}" type="checkbox" name="category" value="{{ value }}" />
+                <label for="{{ value }}">{{ label }}</label>
+              {% endfor %}
+            </div>
+            <div class="filter filter--deadline">
+              <span class="label">Reporting deadlines <span class="filter__swatch"></span></span>
+              {% for value, label in settings.CONSTANTS.deadline_types.items %}
+                <input id="{{ value }}" type="checkbox" name="category" value="{{ value }}" />
+                <label for="{{ value }}">{{ label }}</label>
+              {% endfor %}
+            </div>
+            <div class="filter filter--outreach">
+              <span class="label">Outreach <span class="filter__swatch"></span></span>
+              {% for value, label in settings.CONSTANTS.outreach_types.items %}
+                <input id="{{ value }}" type="checkbox" name="category" value="{{ value }}" />
+                <label for="{{ value }}">{{ label }}</label>
+              {% endfor %}
+            </div>
+            <div class="filter filter--meeting">
+              <span class="label">Meetings <span class="filter__swatch"></span></span>
+              {% for value, label in settings.CONSTANTS.meeting_types.items %}
+                <input id="{{ value }}" type="checkbox" name="category" value="{{ value }}" />
+                <label for="{{ value }}">{{ label }}</label>
+              {% endfor %}
+            </div>
+            <div class="filter filter--other">
+              <span class="label">Other events <span class="filter__swatch"></span></span>
+              {% for value, label in settings.CONSTANTS.other_types.items %}
+                <input id="{{ value }}" type="checkbox" name="category" value="{{ value }}" />
+                <label for="{{ value }}">{{ label }}</label>
+              {% endfor %}
+            </div>
           </fieldset>
         </div>
       </form>
