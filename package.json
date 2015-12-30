@@ -6,6 +6,7 @@
     "fullcalendar": "2.5.0",
     "jquery": "2.1.4",
     "js-beautify": "1.5.10",
+    "moment": "2.10.3",
     "scrollmonitor": "1.0.12",
     "underscore": "^1.8.3",
     "urijs": "1.17.0"
