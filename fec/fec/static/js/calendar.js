@@ -86,8 +86,16 @@ Calendar.prototype.updateLinks = function(params) {
   this.$download.html(templates.download(urls));
   this.$subscribe.html(templates.subscribe(urls));
 
-  new dropdown.Dropdown(this.$download, {checkboxes: false});
-  new dropdown.Dropdown(this.$subscribe, {checkboxes: false});
+  if (this.downloadButton) {
+    this.downloadButton.destroy();
+  }
+
+  if (this.subscribeButton) {
+    this.subscribeButton.destroy();
+  }
+
+  this.downloadButton = new dropdown.Dropdown(this.$download, {checkboxes: false});
+  this.subscribeButton =new dropdown.Dropdown(this.$subscribe, {checkboxes: false});
 };
 
 Calendar.prototype.styleButtons = function() {
