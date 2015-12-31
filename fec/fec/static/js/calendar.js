@@ -117,7 +117,7 @@ var classMap = {
   fea: 'fc--other'
 };
 
-function setClass(event) {
+function getEventClass(event) {
   var className = '';
   var category = event.category ? event.category.split(/[ -]+/)[0] : null;
 
@@ -134,7 +134,7 @@ function success(response) {
       start: event.start_date,
       end: event.end_date,
       allDay: event.end_date !== null,
-      className: setClass(event)
+      className: getEventClass(event)
     };
   });
 }
