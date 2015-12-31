@@ -11,12 +11,12 @@ var skipNav = require('fec-style/js/skip-nav');
 var siteNav = require('fec-style/js/site-nav');
 var dropdown = require('fec-style/js/dropdowns');
 var FilterPanel = require('fec-style/js/filter-panel').FilterPanel;
+var helpers = require('fec-style/js/helpers');
 
 // Hack: Append jQuery to `window` for use by legacy libraries
 window.$ = window.jQuery = $;
 
 var Sticky = require('component-sticky');
-var helpers = require('./helpers');
 var calendar = require('./calendar');
 var toc = require('./toc');
 
