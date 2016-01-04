@@ -1,7 +1,6 @@
 'use strict';
 
 var $ = require('jquery');
-var URI = require('urijs');
 
 var terms = require('fec-style/js/terms');
 var glossary = require('fec-style/js/glossary');
@@ -11,7 +10,6 @@ var skipNav = require('fec-style/js/skip-nav');
 var siteNav = require('fec-style/js/site-nav');
 var dropdown = require('fec-style/js/dropdowns');
 var FilterPanel = require('fec-style/js/filter-panel').FilterPanel;
-var helpers = require('fec-style/js/helpers');
 
 // Hack: Append jQuery to `window` for use by legacy libraries
 window.$ = window.jQuery = $;
@@ -55,12 +53,9 @@ $(document).ready(function() {
 
   // Initialize filters
   var filterPanel = new FilterPanel('#filters');
-  filterPanel.$form.on('change', function() {
-    cal.filter(filterPanel.filterSet.serialize());
-  });
 
   // Initialize calendar
-  var cal = new calendar.Calendar({
+  new calendar.Calendar({
     selector: '#calendar',
     download: '#calendar-download',
     subscribe: '#calendar-subscribe',

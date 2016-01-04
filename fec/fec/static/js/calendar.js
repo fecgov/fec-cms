@@ -2,6 +2,9 @@
 
 var $ = require('jquery');
 var URI = require('urijs');
+var _ = require('underscore');
+
+var urls = require('fec-style/js/urls');
 var dropdown = require('fec-style/js/dropdowns');
 
 require('fullcalendar');
@@ -18,13 +21,20 @@ function Calendar(opts) {
   this.$calendar = $(this.opts.selector).fullCalendar(this.opts.calendarOpts);
   this.url = URI(this.opts.url);
   this.exportUrl = URI(this.opts.exportUrl);
-  this.sources = null;
   this.filterPanel = this.opts.filterPanel;
+  this.filterSet = this.filterPanel.filterSet;
+
+  this.sources = null;
+  this.params = null;
 
   this.$download = $(opts.download);
   this.$subscribe = $(opts.subscribe);
 
   this.$calendar.on('calendar:rendered', this.filterPanel.setHeight());
+  this.filterPanel.$form.on('change', this.filter.bind(this));
+  $(window).on('popstate', this.filter.bind(this));
+
+  urls.updateQuery(this.filterSet.serialize(), this.filterSet.fields);
 
   this.filter();
   this.styleButtons();
@@ -67,12 +77,19 @@ function handleEventClick(calEvent, jsEvent, view) {
   $eventContainer.append(tooltip.$content);
 }
 
-Calendar.prototype.filter = function(params) {
+Calendar.prototype.filter = function() {
+  var params = this.filterSet.serialize();
+  if (_.isEqual(params, this.params)) {
+    return;
+  }
+
   var url = this.url.clone().addQuery(params || {}).toString();
+  urls.pushQuery(this.filterSet.serialize(), this.filterSet.fields);
   this.$calendar.fullCalendar('removeEventSource', this.sources);
   this.sources = $.extend({}, this.opts.sourceOpts, {url: url});
   this.$calendar.fullCalendar('addEventSource', this.sources);
   this.updateLinks(params);
+  this.params = params;
 };
 
 Calendar.prototype.updateLinks = function(params) {
@@ -95,7 +112,7 @@ Calendar.prototype.updateLinks = function(params) {
   }
 
   this.downloadButton = new dropdown.Dropdown(this.$download, {checkboxes: false});
-  this.subscribeButton =new dropdown.Dropdown(this.$subscribe, {checkboxes: false});
+  this.subscribeButton = new dropdown.Dropdown(this.$subscribe, {checkboxes: false});
 };
 
 Calendar.prototype.styleButtons = function() {
@@ -148,7 +165,10 @@ var fecSources = {
 function getUrl(path, params) {
   return URI(window.API_LOCATION)
     .path([window.API_VERSION].concat(path || []).join('/'))
-    .addQuery({api_key: window.API_KEY})
+    .addQuery({
+      api_key: window.API_KEY,
+      per_page: 100
+    })
     .addQuery(params || {})
     .toString();
 }
