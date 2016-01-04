@@ -140,8 +140,8 @@ function success(response) {
 }
 
 var fecSources = {
-  startParam: 'min_start_date_time',
-  endParam: 'max_start_date_time',
+  startParam: 'min_start_date',
+  endParam: 'max_start_date',
   success: success
 };
 
@@ -157,7 +157,7 @@ function CalendarTooltip(calEvent) {
   this.$content = $(templates.details(calEvent));
   this.$close = this.$content.find('.js-close');
   this.$content.on('click', this.$close, this.close.bind(this));
-};
+}
 
 CalendarTooltip.prototype.close = function() {
   this.$content.remove();
