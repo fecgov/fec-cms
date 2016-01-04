@@ -6,6 +6,7 @@ var _ = require('underscore');
 
 var urls = require('fec-style/js/urls');
 var dropdown = require('fec-style/js/dropdowns');
+require('fec-style/js/helpers');
 
 require('fullcalendar');
 
