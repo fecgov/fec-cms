@@ -54,7 +54,7 @@ $(document).ready(function() {
   new feedback.Feedback(window.FEC_APP_URL + '/issue/');
 
   // Initialize filters
-  var filterPanel = new FilterPanel('#filters');
+  var filterPanel = new FilterPanel({tagTitle: 'All events'});
   filterPanel.$form.on('change', function() {
     cal.filter(filterPanel.filterSet.serialize());
   });
