@@ -11,6 +11,7 @@ var skipNav = require('fec-style/js/skip-nav');
 var siteNav = require('fec-style/js/site-nav');
 var dropdown = require('fec-style/js/dropdowns');
 var FilterPanel = require('fec-style/js/filter-panel').FilterPanel;
+var filterTags = require('fec-style/js/filter-tags');
 var helpers = require('fec-style/js/helpers');
 
 // Hack: Append jQuery to `window` for use by legacy libraries
@@ -58,6 +59,11 @@ $(document).ready(function() {
   filterPanel.$form.on('change', function() {
     cal.filter(filterPanel.filterSet.serialize());
   });
+
+  // Initialize filter tags
+  var $widgets = $('.js-data-widgets');
+  var $tagList = new filterTags.TagList({title: 'All records'}).$body;
+  $widgets.prepend($tagList);
 
   // Initialize calendar
   var cal = new calendar.Calendar({
