@@ -7,6 +7,7 @@ var dropdown = require('fec-style/js/dropdowns');
 require('fullcalendar');
 
 var templates = {
+  day: require('../hbs/calendar/day.hbs'),
   details: require('../hbs/calendar/details.hbs'),
   download: require('../hbs/calendar/download.hbs'),
   subscribe: require('../hbs/calendar/subscribe.hbs')
@@ -48,6 +49,8 @@ Calendar.defaultOpts = {
     eventAfterAllRender: handleRender,
     eventClick: handleEventClick,
     eventLimit: true,
+    eventLimitClick: handleEventLimitClick,
+    nowIndicator: true,
     views: {
       month: {
         eventLimit: 3
@@ -63,8 +66,13 @@ function handleRender(view) {
 
 function handleEventClick(calEvent, jsEvent, view) {
   var $eventContainer = $(jsEvent.target).closest('.fc-event-container');
-  var tooltip = new CalendarTooltip(calEvent);
+  var tooltip = new CalendarTooltip(templates.details(calEvent));
   $eventContainer.append(tooltip.$content);
+}
+
+function handleEventLimitClick(cellInfo, jsEvent) {
+  var tooltip = new CalendarTooltip(templates.day(cellInfo));
+  $(cellInfo.dayEl).append(tooltip.$content);
 }
 
 Calendar.prototype.filter = function(params) {
@@ -107,10 +115,11 @@ Calendar.prototype.styleButtons = function() {
 };
 
 var classMap = {
+  aos: 'fc--rules',
   election: 'fc--election',
   report: 'fc--deadline',
   open: 'fc--meeting',
-  executive: 'fc--executive',
+  executive: 'fc--meeting',
   roundtables: 'fc--outreach',
   conferences: 'fc--outreach',
   litigation: 'fc--other',
@@ -121,7 +130,7 @@ function getEventClass(event) {
   var className = '';
   var category = event.category ? event.category.split(/[ -]+/)[0] : null;
 
-  className += event.end_Date !== null ? ' fc--allday' : '';
+  className += event.end_Date !== null ? 'fc--allday' : '';
   className += category ? ' ' + classMap[category.toLowerCase()] : '';
   return className;
 }
@@ -129,8 +138,8 @@ function getEventClass(event) {
 function success(response) {
   return response.results.map(function(event) {
     return {
-      title: event.description,
-      summary: event.summary,
+      title: event.description || 'Event title',
+      summary: event.summary || 'Event summary',
       start: event.start_date,
       end: event.end_date,
       allDay: event.end_date !== null,
@@ -153,8 +162,8 @@ function getUrl(path, params) {
     .toString();
 }
 
-function CalendarTooltip(calEvent) {
-  this.$content = $(templates.details(calEvent));
+function CalendarTooltip(content) {
+  this.$content = $(content);
   this.$close = this.$content.find('.js-close');
   this.$content.on('click', this.$close, this.close.bind(this));
 }

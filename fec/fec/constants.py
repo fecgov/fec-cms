@@ -24,6 +24,10 @@ meeting_types = OrderedDict([
     ('Executive Sessions', 'Executive session'),
 ])
 
+rule_types = OrderedDict([
+    ('AOs and Rules', 'AOs and rules')
+])
+
 other_types = OrderedDict([
     ('Litigation', 'Litigation'),
     ('FEA Periods', 'FEA period'),

@@ -1,8 +1,8 @@
 <div class="tooltip tooltip--under calendar__details">
   <button class="button button--close--primary js-close" type="button"><span class="u-visually-hidden">Close</span></button>
-  <span class="t-block t-bold">{{ datetime start pretty=true}}
+  <span class="t-block t-bold">{{ datetime start format="pretty"}}
     {{#if end }}
-    &ndash;{{ datetime start pretty=true}}
+    &ndash;{{ datetime start format="pretty"}}
     {{/if}}
   </span>
   <span class="t-block t-bold">{{ title }}</span>
