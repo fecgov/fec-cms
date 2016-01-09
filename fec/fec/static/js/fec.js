@@ -1,7 +1,6 @@
 'use strict';
 
 var $ = require('jquery');
-var URI = require('urijs');
 
 var terms = require('fec-style/js/terms');
 var glossary = require('fec-style/js/glossary');
@@ -55,10 +54,7 @@ $(document).ready(function() {
   new feedback.Feedback(window.FEC_APP_URL + '/issue/');
 
   // Initialize filters
-  var filterPanel = new FilterPanel({tagTitle: 'All events'});
-  filterPanel.$form.on('change', function() {
-    cal.filter(filterPanel.filterSet.serialize());
-  });
+  var filterPanel = new FilterPanel();
 
   // Initialize filter tags
   var $widgets = $('.js-data-widgets');
@@ -66,7 +62,7 @@ $(document).ready(function() {
   $widgets.prepend($tagList);
 
   // Initialize calendar
-  var cal = new calendar.Calendar({
+  new calendar.Calendar({
     selector: '#calendar',
     download: '#calendar-download',
     subscribe: '#calendar-subscribe',

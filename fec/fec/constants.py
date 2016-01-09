@@ -12,6 +12,8 @@ deadline_types = OrderedDict([
     ('report-MY', 'Mid-year'),
     ('report-YE', 'Year-end'),
     ('report-E', 'Election-sensitive'),
+    ('IE Periods', 'Independent expenditure reporting periods'),
+    ('EC Periods', 'Electioneering communication reporting periods')
 ])
 
 outreach_types = OrderedDict([
