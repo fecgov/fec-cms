@@ -10,6 +10,36 @@ require('fec-style/js/helpers');
 
 require('fullcalendar');
 
+var eventsTemplate = require('../hbs/calendar/events.hbs');
+
+var FC = $.fullCalendar;
+var View = FC.View;
+
+var ListView = View.extend({
+
+  setDate: function(date) {
+    var intervalUnit = this.options.duration.intervalUnit || this.intervalUnit;
+    View.prototype.setDate.call(this, date.startOf(intervalUnit));
+  },
+
+  renderEvents: function(events) {
+    var self = this;
+    events = events.filter(function(event) {
+      return self.start <= event.start && event.start < self.end;
+    }).sort(function(event1, event2) {
+      return event1.start - event2.start;
+    });
+    this.el.html(eventsTemplate({events: events}));
+  },
+
+  unrenderEvents: function() {
+    this.el.html('');
+  }
+
+});
+
+FC.views.list = ListView;
+
 var templates = {
   day: require('../hbs/calendar/day.hbs'),
   details: require('../hbs/calendar/details.hbs'),
@@ -48,12 +78,11 @@ Calendar.defaultOpts = {
     header: {
       left: 'prev,next today',
       center: 'title',
-      right: 'month,agendaWeek,agendaDay'
+      right: 'listQuarter,listMonth,month,agendaWeek,agendaDay'
     },
     buttonIcons: false,
     buttonText: {
       today: 'Today',
-      month: 'Month',
       week: 'Week',
       day: 'Day'
     },
@@ -64,7 +93,18 @@ Calendar.defaultOpts = {
     nowIndicator: true,
     views: {
       month: {
-        eventLimit: 3
+        eventLimit: 3,
+        buttonText: 'Month - Grid'
+      },
+      listMonth: {
+        type: 'list',
+        buttonText: 'Month - List',
+        duration: {months: 1}
+      },
+      listQuarter: {
+        type: 'list',
+        buttonText: 'Quarter',
+        duration: {quarters: 1, intervalUnit: 'quarter'}
       }
     }
   },
@@ -156,6 +196,7 @@ function getEventClass(event) {
 function success(response) {
   return response.results.map(function(event) {
     return {
+      category: event.category,
       title: event.description || 'Event title',
       summary: event.summary || 'Event summary',
       start: event.start_date,
@@ -177,7 +218,7 @@ function getUrl(path, params) {
     .path([window.API_VERSION].concat(path || []).join('/'))
     .addQuery({
       api_key: window.API_KEY,
-      per_page: 100
+      per_page: 500
     })
     .addQuery(params || {})
     .toString();
