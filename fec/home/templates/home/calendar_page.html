@@ -71,6 +71,13 @@
               <label for="{{ value }}">{{ label }}</label>
             {% endfor %}
           </div>
+          <div class="filter filter--rules">
+            <span class="label">Rule making <span class="filter__swatch"></span></span>
+            {% for value, label in settings.CONSTANTS.rule_types.items %}
+              <input id="{{ value }}" type="checkbox" name="category" value="{{ value }}" />
+              <label for="{{ value }}">{{ label }}</label>
+            {% endfor %}
+          </div>
           <div class="filter filter--other">
             <span class="label">Other events <span class="filter__swatch"></span></span>
             {% for value, label in settings.CONSTANTS.other_types.items %}
@@ -83,7 +90,7 @@
     </div>
   </div>
   <div class="data-container">
-    <div class="data-container__widgets data-container__widgets--secondary">
+    <div class="data-container__widgets data-container__widgets--secondary js-data-widgets">
       <div class="data-container__export">
         <div id="calendar-download" class="export-widget"></div>
         <div id="calendar-subscribe" class="export-widget"></div>

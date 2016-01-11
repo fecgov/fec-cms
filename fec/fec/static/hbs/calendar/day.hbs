@@ -1,0 +1,21 @@
+<div class="fc-popup">
+  <div class="fc-popup__header">
+    {{ datetime date format="pretty" }}
+    <button class="button button--close--primary js-close" type="button"><span class="u-visually-hidden">Close</span></button>
+  </div>
+    {{#each segs}}
+      {{#with event}}
+        <div class="fc-event-container">
+          <a class="fc-day-grid-event fc-h-event fc-event fc-start fc-end {{#each className}}{{this}} {{/each}}">
+            <div class="fc-content">
+              {{#unless allday}}
+                <span class="fc-time">{{datetime start format="time"}}</span>
+              {{/unless}}
+                <span class="fc-title">{{ title }}</span>
+            </div>
+          </a>
+        </div>
+      {{/with}}
+    {{/each}}
+  </span>
+</div>
