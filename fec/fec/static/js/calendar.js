@@ -3,6 +3,7 @@
 var $ = require('jquery');
 var URI = require('urijs');
 var _ = require('underscore');
+var moment = require('moment');
 
 var urls = require('fec-style/js/urls');
 var dropdown = require('fec-style/js/dropdowns');
@@ -199,9 +200,9 @@ function success(response) {
       category: event.category,
       title: event.description || 'Event title',
       summary: event.summary || 'Event summary',
-      start: event.start_date,
-      end: event.end_date,
-      allDay: event.end_date !== null,
+      start: event.start_date ? moment.utc(event.start_date) : null,
+      end: event.end_date ? moment.utc(event.end_date) : null,
+      allDay: event.end_date === null,
       className: getEventClass(event)
     };
   });
