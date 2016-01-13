@@ -13,6 +13,25 @@ require('fullcalendar');
 
 var eventsTemplate = require('../hbs/calendar/events.hbs');
 
+function Listeners() {
+  this.listeners = [];
+}
+
+Listeners.prototype.on = function($elm) {
+  var args = _.toArray(arguments).slice(1);
+  this.listeners = this._listeners || [];
+  this.listeners.push({$elm: $elm, args: args});
+  $elm.on.apply($elm, args);
+};
+
+Listeners.prototype.off = function() {
+  this.listeners.forEach(function(listener) {
+    var $elm = listener.$elm;
+    var args = listener.args;
+    $elm.off.apply($elm, args);
+  });
+};
+
 var FC = $.fullCalendar;
 var View = FC.View;
 
@@ -228,11 +247,17 @@ function getUrl(path, params) {
 function CalendarTooltip(content) {
   this.$content = $(content);
   this.$close = this.$content.find('.js-close');
-  this.$content.on('click', this.$close, this.close.bind(this));
+  this.events = new Listeners();
+  this.events.on(this.$close, 'click', this.close.bind(this));
+
+  var $body = $(document.body);
+  $body.trigger($.Event('tooltip:opened'));
+  this.events.on($body, 'tooltip:opened', this.close.bind(this));
 }
 
 CalendarTooltip.prototype.close = function() {
   this.$content.remove();
+  this.events.off();
 };
 
 module.exports = {
