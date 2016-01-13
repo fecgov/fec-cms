@@ -1,6 +1,20 @@
-{{#each events}}
-  <div>
-    <div>{{datetime start format="pretty"}}</div>
-    <div>{{title}}: {{summary}}</div>
-  </div>
+{{#each groups}}
+  <h4>{{title}}</h4>
+  {{#each events}}
+    <div class="row">
+      <div class="usa-width-one-sixth">{{datetime start format="pretty"}}</div>
+      <div class="usa-width-one-sixth">
+        {{#if end}}
+          {{datetime start format="time"}} - {{datetime end format="time"}}
+        {{else}}
+          &nbsp;
+        {{/if}}
+      </div>
+      <div class="usa-width-one-half">
+        <div><h5>{{title}}</h5></div>
+        <div>{{summary}}</div>
+      </div>
+      <div class="usa-width-one-sixth">{{location}}</div>
+    </div>
+  {{/each}}
 {{/each}}

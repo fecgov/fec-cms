@@ -35,6 +35,24 @@ Listeners.prototype.off = function() {
 var FC = $.fullCalendar;
 var View = FC.View;
 
+var categories = {
+  Elections: ['election'],
+  Deadlines: ['report', 'ie', 'ec'],
+  Outreach: ['roundtables', 'conferences'],
+  Meetings: ['open', 'executive'],
+  Rules: ['aos'],
+  Other: ['litigation', 'fea']
+};
+
+var categoriesInverse = _.reduce(_.pairs(categories), function(memo, pair) {
+  var key = pair[0];
+  var values = pair[1];
+  _.each(values, function(value) {
+    memo[value] = key;
+  });
+  return memo;
+}, {});
+
 var ListView = View.extend({
 
   setDate: function(date) {
@@ -44,12 +62,26 @@ var ListView = View.extend({
 
   renderEvents: function(events) {
     var self = this;
-    events = events.filter(function(event) {
-      return self.start <= event.start && event.start < self.end;
-    }).sort(function(event1, event2) {
-      return event1.start - event2.start;
-    });
-    this.el.html(eventsTemplate({events: events}));
+    var groups = _.chain(events)
+      .filter(function(event) {
+        return self.start <= event.start && event.start < self.end;
+      })
+      .sortBy('start')
+      .groupBy(function(event) {
+        var category = event.category ? event.category.split(/[ -]+/)[0].toLowerCase() : null;
+        return categoriesInverse[category];
+      })
+      .map(function(values, key) {
+        return {
+          title: key,
+          events: values
+        };
+      })
+      .sortBy(function(group) {
+        return Object.keys(categories).indexOf(group.title);
+      })
+      .value();
+    this.el.html(eventsTemplate({groups: groups}));
   },
 
   unrenderEvents: function() {
@@ -98,7 +130,7 @@ Calendar.defaultOpts = {
     header: {
       left: 'prev,next today',
       center: 'title',
-      right: 'listQuarter,listMonth,month,agendaWeek'
+      right: 'quarter,month,agendaWeek'
     },
     buttonIcons: false,
     buttonText: {
@@ -113,14 +145,9 @@ Calendar.defaultOpts = {
     views: {
       month: {
         eventLimit: 3,
-        buttonText: 'Month - Grid'
+        buttonText: 'Month'
       },
-      listMonth: {
-        type: 'list',
-        buttonText: 'Month - List',
-        duration: {months: 1}
-      },
-      listQuarter: {
+      quarter: {
         type: 'list',
         buttonText: 'Quarter',
         duration: {quarters: 1, intervalUnit: 'quarter'}
@@ -216,6 +243,7 @@ function success(response) {
   return response.results.map(function(event) {
     return {
       category: event.category,
+      location: event.location,
       title: event.description || 'Event title',
       summary: event.summary || 'Event summary',
       start: event.start_date ? moment.utc(event.start_date) : null,
