@@ -98,13 +98,12 @@ Calendar.defaultOpts = {
     header: {
       left: 'prev,next today',
       center: 'title',
-      right: 'listQuarter,listMonth,month,agendaWeek,agendaDay'
+      right: 'listQuarter,listMonth,month,agendaWeek'
     },
     buttonIcons: false,
     buttonText: {
       today: 'Today',
       week: 'Week',
-      day: 'Day'
     },
     eventAfterAllRender: handleRender,
     eventClick: handleEventClick,
