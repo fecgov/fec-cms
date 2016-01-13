@@ -100,7 +100,7 @@ var templates = {
 };
 
 function Calendar(opts) {
-  this.opts = $.extend({}, Calendar.defaultOpts, opts);
+  this.opts = $.extend({}, this.defaultOpts(), opts);
 
   this.$calendar = $(this.opts.selector).fullCalendar(this.opts.calendarOpts);
   this.url = URI(this.opts.url);
@@ -125,51 +125,39 @@ function Calendar(opts) {
   this.filterPanel.setHeight();
 }
 
-Calendar.defaultOpts = {
-  calendarOpts: {
-    header: {
-      left: 'prev,next today',
-      center: 'title',
-      right: 'quarter,month,agendaWeek'
-    },
-    buttonIcons: false,
-    buttonText: {
-      today: 'Today',
-      week: 'Week',
-    },
-    eventAfterAllRender: handleRender,
-    eventClick: handleEventClick,
-    eventLimit: true,
-    eventLimitClick: handleEventLimitClick,
-    nowIndicator: true,
-    views: {
-      month: {
-        eventLimit: 3,
-        buttonText: 'Month'
+Calendar.prototype.defaultOpts = function() {
+  return {
+    calendarOpts: {
+      header: {
+        left: 'prev,next today',
+        center: 'title',
+        right: 'quarter,month,agendaWeek'
       },
-      quarter: {
-        type: 'list',
-        buttonText: 'Quarter',
-        duration: {quarters: 1, intervalUnit: 'quarter'}
+      buttonIcons: false,
+      buttonText: {
+        today: 'Today',
+        week: 'Week',
+      },
+      eventAfterAllRender: this.handleRender.bind(this),
+      eventClick: this.handleEventClick.bind(this),
+      eventLimit: true,
+      eventLimitClick: this.handleEventLimitClick.bind(this),
+      nowIndicator: true,
+      views: {
+        month: {
+          eventLimit: 3,
+          buttonText: 'Month'
+        },
+        quarter: {
+          type: 'list',
+          buttonText: 'Quarter',
+          duration: {quarters: 1, intervalUnit: 'quarter'}
+        }
       }
-    }
-  },
-  sourceOpts: {}
+    },
+    sourceOpts: {}
+  };
 };
-
-function handleRender(view) {
-  $(document.body).trigger($.Event('calendar:rendered'));
-}
-
-function handleEventClick(calEvent, jsEvent, view) {
-  var $eventContainer = $(jsEvent.target).closest('.fc-event-container');
-  var tooltip = new CalendarTooltip(templates.details(calEvent));
-  $eventContainer.append(tooltip.$content);
-}
-function handleEventLimitClick(cellInfo, jsEvent) {
-  var tooltip = new CalendarTooltip(templates.day(cellInfo));
-  $(cellInfo.dayEl).append(tooltip.$content);
-}
 
 Calendar.prototype.filter = function() {
   var params = this.filterSet.serialize();
@@ -216,6 +204,25 @@ Calendar.prototype.styleButtons = function() {
   this.$calendar.find('.fc-right .fc-button-group').addClass('toggles--buttons');
 };
 
+Calendar.prototype.handleRender = function(view) {
+  $(document.body).trigger($.Event('calendar:rendered'));
+};
+
+Calendar.prototype.handleEventClick = function(calEvent, jsEvent, view) {
+  var data = _.extend({}, calEvent, {
+    google: getGoogleUrl(calEvent),
+    download: this.exportUrl.clone().addQuery({event_id: calEvent.event_id}).toString()
+  });
+  var $eventContainer = $(jsEvent.target).closest('.fc-event-container');
+  var tooltip = new CalendarTooltip(templates.details(data));
+  $eventContainer.append(tooltip.$content);
+};
+
+Calendar.prototype.handleEventLimitClick = function(cellInfo, jsEvent) {
+  var tooltip = new CalendarTooltip(templates.day(cellInfo));
+  $(cellInfo.dayEl).append(tooltip.$content);
+};
+
 var classMap = {
   aos: 'fc--rules',
   election: 'fc--election',
@@ -237,6 +244,21 @@ function getEventClass(event) {
   className += event.end_Date !== null ? 'fc--allday' : '';
   className += category ? ' ' + classMap[category.toLowerCase()] : '';
   return className;
+}
+
+function getGoogleUrl(event) {
+  var dates = event.start.format();
+  if (event.end) {
+    dates += '/' + event.end.format();
+  }
+  return URI('https://calendar.google.com/calendar/render')
+    .addQuery({
+      action: 'TEMPLATE',
+      text: event.description,
+      details: event.summary,
+      dates: dates
+    })
+    .toString();
 }
 
 function success(response) {
@@ -274,6 +296,8 @@ function getUrl(path, params) {
 function CalendarTooltip(content) {
   this.$content = $(content);
   this.$close = this.$content.find('.js-close');
+  this.$dropdown = this.$content.find('.dropdown');
+  this.exportDropdown = new dropdown.Dropdown(this.$dropdown, {checkboxes: false});
   this.events = new Listeners();
   this.events.on(this.$close, 'click', this.close.bind(this));
 
