@@ -247,14 +247,18 @@ function getEventClass(event) {
 }
 
 function getGoogleUrl(event) {
-  var dates = event.start.format();
+  var fmt, dates;
   if (event.end) {
-    dates += '/' + event.end.format();
+    fmt = 'YYYYMMDD[T]HHmmss';
+    dates = event.start.format(fmt) + '/' + event.end.format(fmt);
+  } else {
+    fmt = 'YYYYMMDD';
+    dates = event.start.format(fmt) + '/' + event.start.format(fmt);
   }
   return URI('https://calendar.google.com/calendar/render')
     .addQuery({
       action: 'TEMPLATE',
-      text: event.description,
+      text: event.title,
       details: event.summary,
       dates: dates
     })
@@ -308,6 +312,7 @@ function CalendarTooltip(content) {
 
 CalendarTooltip.prototype.close = function() {
   this.$content.remove();
+  this.exportDropdown.destroy();
   this.events.off();
 };
 

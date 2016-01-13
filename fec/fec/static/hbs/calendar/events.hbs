@@ -1,5 +1,5 @@
 {{#each groups}}
-  <hr>
+  <hr />
   <h4>{{title}}</h4>
   {{#each events}}
     <div class="row">
@@ -8,7 +8,7 @@
         {{#if end}}
           {{datetime start format="time"}} - {{datetime end format="time"}}
         {{else}}
-          &nbsp;
+          All day
         {{/if}}
       </div>
       <div class="usa-width-one-half">
