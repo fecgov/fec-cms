@@ -2,15 +2,20 @@
   "dependencies": {
     "ace-builds": "1.2.2",
     "component-sticky": "1.0.0",
-    "fec-style": "1.1.0",
+    "fec-style": "git://github.com/18f/fec-style#styling-calendar",
+    "fullcalendar": "2.5.0",
     "jquery": "2.1.4",
     "js-beautify": "1.5.10",
+    "moment": "2.10.3",
     "scrollmonitor": "1.0.12",
-    "underscore": "^1.8.3"
+    "underscore": "^1.8.3",
+    "urijs": "1.17.0"
   },
   "devDependencies": {
     "browserify": "^11.0.1",
     "gulp": "^3.9.0",
+    "handlebars": "^4.0.5",
+    "hbsfy": "^2.4.1",
     "stringify": "^3.1.0",
     "vinyl-source-stream": "^1.1.0"
   },
