@@ -169,3 +169,9 @@ ENVIRONMENTS = {
 }
 FEC_CMS_ENVIRONMENT = ENVIRONMENTS.get(os.getenv('FEC_CMS_ENVIRONMENT'), 'DEVELOPMENT')
 CONTACT_EMAIL = 'betafeedback@fec.gov';
+
+if os.getenv('SENTRY_DSN'):
+    INSTALLED_APPS += ('raven.contrib.django.raven_compat', )
+    RAVEN_CONFIG = {
+        'dsn': os.getenv('SENTRY_DSN'),
+    }
