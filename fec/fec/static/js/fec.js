@@ -52,13 +52,13 @@ $(document).ready(function() {
   // Initialize feedback widget
   new feedback.Feedback(window.FEC_APP_URL + '/issue/');
 
-  // Initialize filters
-  var filterPanel = new FilterPanel();
-
   // Initialize filter tags
   var $widgets = $('.js-data-widgets');
   var $tagList = new filterTags.TagList({title: 'All records'}).$body;
   $widgets.prepend($tagList);
+
+  // Initialize filters
+  var filterPanel = new FilterPanel();
 
   // Initialize calendar
   new calendar.Calendar({

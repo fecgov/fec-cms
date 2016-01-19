@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 {% load wagtailcore_tags %}
 {% load staticfiles %}
+{% load filters %}
 {% block body_class %}template-{{ self.get_verbose_name | slugify }}{% endblock %}
 
 {% block content %}
@@ -46,43 +47,43 @@
           <div class="filter filter--election">
             <span class="label">Elections <span class="filter__swatch"></span></span>
             {% for value, label in settings.CONSTANTS.election_types.items %}
-              <input id="{{ value }}" type="checkbox" name="category" value="{{ value }}" />
-              <label for="{{ value }}">{{ label }}</label>
+              <input id="{{ value | clean_whitespace }}" type="checkbox" name="category" value="{{ value }}" />
+              <label for="{{ value | clean_whitespace }}">{{ label }}</label>
             {% endfor %}
           </div>
           <div class="filter filter--deadline">
             <span class="label">Reporting deadlines <span class="filter__swatch"></span></span>
             {% for value, label in settings.CONSTANTS.deadline_types.items %}
-              <input id="{{ value }}" type="checkbox" name="category" value="{{ value }}" />
-              <label for="{{ value }}">{{ label }}</label>
+              <input id="{{ value | clean_whitespace }}" type="checkbox" name="category" value="{{ value }}" />
+              <label for="{{ value | clean_whitespace }}">{{ label }}</label>
             {% endfor %}
           </div>
           <div class="filter filter--outreach">
             <span class="label">Outreach <span class="filter__swatch"></span></span>
             {% for value, label in settings.CONSTANTS.outreach_types.items %}
-              <input id="{{ value }}" type="checkbox" name="category" value="{{ value }}" />
-              <label for="{{ value }}">{{ label }}</label>
+              <input id="{{ value | clean_whitespace }}" type="checkbox" name="category" value="{{ value }}" />
+              <label for="{{ value | clean_whitespace }}">{{ label }}</label>
             {% endfor %}
           </div>
           <div class="filter filter--meeting">
             <span class="label">Meetings <span class="filter__swatch"></span></span>
             {% for value, label in settings.CONSTANTS.meeting_types.items %}
-              <input id="{{ value }}" type="checkbox" name="category" value="{{ value }}" />
-              <label for="{{ value }}">{{ label }}</label>
+              <input id="{{ value | clean_whitespace }}" type="checkbox" name="category" value="{{ value }}" />
+              <label for="{{ value | clean_whitespace }}">{{ label }}</label>
             {% endfor %}
           </div>
           <div class="filter filter--rules">
             <span class="label">Rule making <span class="filter__swatch"></span></span>
             {% for value, label in settings.CONSTANTS.rule_types.items %}
-              <input id="{{ value }}" type="checkbox" name="category" value="{{ value }}" />
-              <label for="{{ value }}">{{ label }}</label>
+              <input id="{{ value | clean_whitespace }}" type="checkbox" name="category" value="{{ value }}" />
+              <label for="{{ value | clean_whitespace }}">{{ label }}</label>
             {% endfor %}
           </div>
           <div class="filter filter--other">
             <span class="label">Other events <span class="filter__swatch"></span></span>
             {% for value, label in settings.CONSTANTS.other_types.items %}
-              <input id="{{ value }}" type="checkbox" name="category" value="{{ value }}" />
-              <label for="{{ value }}">{{ label }}</label>
+              <input id="{{ value | clean_whitespace }}" type="checkbox" name="category" value="{{ value }}" />
+              <label for="{{ value | clean_whitespace }}">{{ label }}</label>
             {% endfor %}
           </div>
         </fieldset>
