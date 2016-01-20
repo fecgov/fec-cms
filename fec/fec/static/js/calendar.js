@@ -11,6 +11,13 @@ require('fec-style/js/helpers');
 
 require('fullcalendar');
 
+var templates = {
+  details: require('../hbs/calendar/details.hbs'),
+  download: require('../hbs/calendar/download.hbs'),
+  subscribe: require('../hbs/calendar/subscribe.hbs'),
+  events: require('../hbs/calendar/events.hbs')
+};
+
 function Listeners() {
   this.listeners = [];
 }
@@ -90,14 +97,6 @@ var ListView = View.extend({
 
 FC.views.list = ListView;
 
-var templates = {
-  day: require('../hbs/calendar/day.hbs'),
-  details: require('../hbs/calendar/details.hbs'),
-  download: require('../hbs/calendar/download.hbs'),
-  subscribe: require('../hbs/calendar/subscribe.hbs'),
-  events: require('../hbs/calendar/events.hbs')
-};
-
 function Calendar(opts) {
   this.opts = $.extend({}, this.defaultOpts(), opts);
 
@@ -140,7 +139,6 @@ Calendar.prototype.defaultOpts = function() {
       eventAfterAllRender: this.handleRender.bind(this),
       eventClick: this.handleEventClick.bind(this),
       eventLimit: true,
-      eventLimitClick: this.handleEventLimitClick.bind(this),
       nowIndicator: true,
       views: {
         month: {
@@ -212,14 +210,9 @@ Calendar.prototype.handleEventClick = function(calEvent, jsEvent, view) {
     google: getGoogleUrl(calEvent),
     download: this.exportUrl.clone().addQuery({event_id: calEvent.event_id}).toString()
   });
-  var $eventContainer = $(jsEvent.target).closest('.fc-event-container');
+  var $eventContainer = $(jsEvent.target).closest('.fc-event');
   var tooltip = new CalendarTooltip(templates.details(data));
   $eventContainer.append(tooltip.$content);
-};
-
-Calendar.prototype.handleEventLimitClick = function(cellInfo, jsEvent) {
-  var tooltip = new CalendarTooltip(templates.day(cellInfo));
-  $(cellInfo.dayEl).append(tooltip.$content);
 };
 
 var classMap = {
