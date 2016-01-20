@@ -15,7 +15,7 @@
     "browserify": "^11.0.1",
     "gulp": "^3.9.0",
     "handlebars": "^4.0.5",
-    "hbsfy": "^2.4.1",
+    "hbsfy": "2.2.1",
     "stringify": "^3.1.0",
     "vinyl-source-stream": "^1.1.0"
   },

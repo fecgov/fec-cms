@@ -11,8 +11,6 @@ require('fec-style/js/helpers');
 
 require('fullcalendar');
 
-var eventsTemplate = require('../hbs/calendar/events.hbs');
-
 function Listeners() {
   this.listeners = [];
 }
@@ -81,7 +79,7 @@ var ListView = View.extend({
         return Object.keys(categories).indexOf(group.title);
       })
       .value();
-    this.el.html(eventsTemplate({groups: groups}));
+    this.el.html(templates.events({groups: groups}));
   },
 
   unrenderEvents: function() {
@@ -96,7 +94,8 @@ var templates = {
   day: require('../hbs/calendar/day.hbs'),
   details: require('../hbs/calendar/details.hbs'),
   download: require('../hbs/calendar/download.hbs'),
-  subscribe: require('../hbs/calendar/subscribe.hbs')
+  subscribe: require('../hbs/calendar/subscribe.hbs'),
+  events: require('../hbs/calendar/events.hbs')
 };
 
 function Calendar(opts) {
