@@ -2,15 +2,15 @@
   <button class="button button--close--primary js-close" type="button"><span class="u-visually-hidden">Close</span></button>
   <span class="t-block t-bold">
     {{#if allDay}}
-    {{datetime start}}
+      {{datetime start}}
     {{else}}
-    {{datetime start format="dateTime"}}&ndash;{{datetime end format="dateTime"}}
+      {{datetime start format="dateTime"}}&ndash;{{datetime end format="dateTime"}}
     {{/if}}
   </span>
   <span class="t-block t-bold">{{ title }}</span>
   <span class="t-block">{{ summary }}</span>
   {{#if location }}
-  <span class="t-block"><span class="t-bold">Location: </span>{{ location }}</span>
+    <span class="t-block"><span class="t-bold">Location: </span>{{ location }}</span>
   {{/if}}
   <div class="dropdown dropdown--secondary">
     <button class="button button--secondary dropdown__button button--calendar">Add to calendar</button>

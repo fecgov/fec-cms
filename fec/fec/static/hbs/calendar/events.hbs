@@ -6,15 +6,15 @@
       <div class="usa-width-one-sixth">{{datetime start format="pretty"}}</div>
       <div class="usa-width-one-sixth">
         {{#if end}}
-          {{datetime start format="time"}} - {{datetime end format="time"}}
+          {{datetime start format="time"}}&ndash;{{datetime end format="time"}}
         {{else}}
           All day
         {{/if}}
       </div>
       <div class="usa-width-one-half">
         <div class="ev-list">
-        <h5>{{title}}</h5>
-        <p>{{summary}}</p>
+          <h5>{{title}}</h5>
+          <p>{{summary}}</p>
         </div>
       </div>
       <div class="usa-width-one-sixth">{{location}}</div>
