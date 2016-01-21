@@ -129,7 +129,7 @@ Calendar.prototype.defaultOpts = function() {
       header: {
         left: 'prev,next today',
         center: 'title',
-        right: 'quarter,month,agendaWeek'
+        right: 'agendaWeek,month,quarter'
       },
       buttonIcons: false,
       buttonText: {
