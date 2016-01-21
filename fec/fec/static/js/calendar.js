@@ -210,7 +210,7 @@ Calendar.prototype.handleEventClick = function(calEvent, jsEvent, view) {
     google: getGoogleUrl(calEvent),
     download: this.exportUrl.clone().addQuery({event_id: calEvent.event_id}).toString()
   });
-  var $eventContainer = $(jsEvent.target).closest('.fc-event');
+  var $eventContainer = $(jsEvent.target).closest('.fc-event-container');
   var tooltip = new CalendarTooltip(templates.details(data));
   $eventContainer.append(tooltip.$content);
 };
@@ -245,7 +245,7 @@ function getGoogleUrl(event) {
     dates = event.start.format(fmt) + '/' + event.end.format(fmt);
   } else {
     fmt = 'YYYYMMDD';
-    dates = event.start.format(fmt) + '/' + event.start.format(fmt);
+    dates = event.start.format(fmt) + '/' + event.start.add(1, 'day').format(fmt);
   }
   return URI('https://calendar.google.com/calendar/render')
     .addQuery({
