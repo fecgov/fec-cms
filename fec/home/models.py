@@ -6,8 +6,9 @@ from django.core.exceptions import ValidationError
 from wagtail.wagtailcore.models import Page
 from wagtail.wagtailcore.fields import StreamField
 from wagtail.wagtailcore import blocks
-from wagtail.wagtailadmin.edit_handlers import FieldPanel, StreamFieldPanel
+from wagtail.wagtailadmin.edit_handlers import FieldPanel, MultiFieldPanel, StreamFieldPanel
 from wagtail.wagtailimages.blocks import ImageChooserBlock
+from wagtail.wagtailsnippets.models import register_snippet
 
 stream_factory = functools.partial(
     StreamField,
@@ -75,3 +76,44 @@ class CustomPage(Page):
         StreamFieldPanel('body'),
         StreamFieldPanel('sidebar'),
     ]
+
+@register_snippet
+class Event(models.Model):
+
+    start_date = models.DateTimeField()
+    end_date = models.DateTimeField(null=True, blank=True)
+    category = models.CharField(
+        max_length=255,
+        choices=[
+            ('election', 'Election'),
+            ('report', 'Reporting deadline'),
+        ]
+    )
+    description = models.TextField()
+    summary = models.TextField()
+    location = models.TextField(null=True, blank=True)
+    states = models.ManyToManyField('State', blank=True)
+
+    panels = [
+        MultiFieldPanel(
+            [
+                FieldPanel('start_date'),
+                FieldPanel('end_date'),
+            ]
+        ),
+        FieldPanel('category'),
+        FieldPanel('description'),
+        FieldPanel('summary'),
+        FieldPanel('location'),
+        FieldPanel('states'),
+    ]
+
+    def __str__(self):
+        return self.description
+
+class State(models.Model):
+    value = models.CharField(primary_key=True, max_length=32)
+    label = models.CharField(max_length=32)
+
+    def __str__(self):
+        return self.label
