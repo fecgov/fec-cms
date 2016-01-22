@@ -68,7 +68,6 @@ $(document).ready(function() {
     url: calendar.getUrl(['calendar-dates']),
     exportUrl: calendar.getUrl(['calendar-dates', 'export']),
     filterPanel: filterPanel,
-    sourceOpts: calendar.fecSources
   });
 
 });

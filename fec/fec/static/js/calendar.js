@@ -87,9 +87,15 @@ var ListView = View.extend({
       })
       .value();
     this.el.html(templates.events({groups: groups}));
+    this.dropdowns = $(this.el.html).find('.dropdown').map(function(idx, elm) {
+      return new dropdown.Dropdown($(elm), {checkboxes: false});
+    });
   },
 
   unrenderEvents: function() {
+    this.dropdowns.each(function(idx, dropdown) {
+      dropdown.destroy();
+    });
     this.el.html('');
   }
 
@@ -152,7 +158,11 @@ Calendar.prototype.defaultOpts = function() {
         }
       }
     },
-    sourceOpts: {}
+    sourceOpts: {
+      startParam: 'min_start_date',
+      endParam: 'max_start_date',
+      success: this.success.bind(this)
+    }
   };
 };
 
@@ -168,6 +178,27 @@ Calendar.prototype.filter = function() {
   this.$calendar.fullCalendar('addEventSource', this.sources);
   this.updateLinks(params);
   this.params = params;
+};
+
+Calendar.prototype.success = function(response) {
+  var self = this;
+  return response.results.map(function(event) {
+    var processed = {
+      category: event.category,
+      location: event.location,
+      title: event.description || 'Event title',
+      summary: event.summary || 'Event summary',
+      start: event.start_date ? moment.utc(event.start_date) : null,
+      end: event.end_date ? moment.utc(event.end_date) : null,
+      allDay: event.end_date === null,
+      className: getEventClass(event)
+    };
+    _.extend(processed, {
+      google: getGoogleUrl(processed),
+      download: self.exportUrl.clone().addQuery({event_id: event.event_id}).toString()
+    });
+    return processed;
+  });
 };
 
 Calendar.prototype.updateLinks = function(params) {
@@ -206,12 +237,8 @@ Calendar.prototype.handleRender = function(view) {
 };
 
 Calendar.prototype.handleEventClick = function(calEvent, jsEvent, view) {
-  var data = _.extend({}, calEvent, {
-    google: getGoogleUrl(calEvent),
-    download: this.exportUrl.clone().addQuery({event_id: calEvent.event_id}).toString()
-  });
   var $eventContainer = $(jsEvent.target).closest('.fc-event-container');
-  var tooltip = new CalendarTooltip(templates.details(data));
+  var tooltip = new CalendarTooltip(templates.details(calEvent));
   $eventContainer.append(tooltip.$content);
 };
 
@@ -257,27 +284,6 @@ function getGoogleUrl(event) {
     .toString();
 }
 
-function success(response) {
-  return response.results.map(function(event) {
-    return {
-      category: event.category,
-      location: event.location,
-      title: event.description || 'Event title',
-      summary: event.summary || 'Event summary',
-      start: event.start_date ? moment.utc(event.start_date) : null,
-      end: event.end_date ? moment.utc(event.end_date) : null,
-      allDay: event.end_date === null,
-      className: getEventClass(event)
-    };
-  });
-}
-
-var fecSources = {
-  startParam: 'min_start_date',
-  endParam: 'max_start_date',
-  success: success
-};
-
 function getUrl(path, params) {
   return URI(window.API_LOCATION)
     .path([window.API_VERSION].concat(path || []).join('/'))
@@ -310,6 +316,5 @@ CalendarTooltip.prototype.close = function() {
 
 module.exports = {
   Calendar: Calendar,
-  fecSources: fecSources,
   getUrl: getUrl
 };

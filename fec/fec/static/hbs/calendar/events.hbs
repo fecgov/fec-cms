@@ -3,8 +3,18 @@
   <h4>{{title}}</h4>
   {{#each events}}
     <div class="row">
-      <div class="usa-width-one-sixth">{{datetime start format="pretty"}}</div>
-      <div class="usa-width-one-sixth">
+      <div class="usa-width-one-twelfth">
+        <div class="dropdown">
+          <button class="button button--neutral dropdown__button button--calendar">&nbsp;</button>
+          <ul class="dropdown__panel" aria-hidden="true">
+            <li class="dropdown__item"><a class="dropdown__value" href="{{download}}">Apple Calendar</a></li>
+            <li class="dropdown__item"><a class="dropdown__value" href="{{google}}" target="_blank">Google Calendar</a></li>
+            <li class="dropdown__item"><a class="dropdown__value" href="{{download}}">Outlook Calendar</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="usa-width-one-twelfth">{{datetime start format="pretty"}}</div>
+      <div class="usa-width-one-twelfth">
         {{#if end}}
           {{datetime start format="time"}}&ndash;{{datetime end format="time"}}
         {{else}}
@@ -17,7 +27,7 @@
           <p>{{summary}}</p>
         </div>
       </div>
-      <div class="usa-width-one-sixth">{{location}}</div>
+      <div class="usa-width-one-fourth">{{location}}</div>
     </div>
   {{/each}}
 {{/each}}
