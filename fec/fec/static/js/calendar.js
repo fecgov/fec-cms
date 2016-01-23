@@ -190,7 +190,7 @@ Calendar.prototype.success = function(response) {
       summary: event.summary || 'Event summary',
       start: event.start_date ? moment.utc(event.start_date) : null,
       end: event.end_date ? moment.utc(event.end_date) : null,
-      allDay: event.end_date === null,
+      allDay: moment.utc(event.start_date).format('HHmmss') === '000000' && event.end_date === null,
       className: getEventClass(event)
     };
     _.extend(processed, {
@@ -272,7 +272,7 @@ function getGoogleUrl(event) {
     dates = event.start.format(fmt) + '/' + event.end.format(fmt);
   } else {
     fmt = 'YYYYMMDD';
-    dates = event.start.format(fmt) + '/' + event.start.add(1, 'day').format(fmt);
+    dates = event.start.format(fmt) + '/' + event.start.clone().add(1, 'day').format(fmt);
   }
   return URI('https://calendar.google.com/calendar/render')
     .addQuery({
