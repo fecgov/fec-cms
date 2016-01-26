@@ -213,7 +213,7 @@ Calendar.prototype.updateLinks = function(params) {
   var url = this.exportUrl.clone().addQuery(params || {});
   var urls = {
     ics: url.toString(),
-    csv: url.query({renderer: 'csv'}).toString(),
+    csv: url.clone().query({renderer: 'csv'}).toString(),
     google: 'https://calendar.google.com/calendar/render?cid=' + url.toString(),
     calendar: url.protocol('webcal').toString()
   };
