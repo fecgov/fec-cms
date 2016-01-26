@@ -58,6 +58,43 @@ var categoriesInverse = _.reduce(_.pairs(categories), function(memo, pair) {
   return memo;
 }, {});
 
+var categoryGroups = function(events) {
+  var self = this;
+  return _.chain(events)
+    .filter(function(event) {
+      return self.start <= event.start && event.start < self.end;
+    })
+    .sortBy('start')
+    .groupBy(function(event) {
+      var category = event.category ? event.category.split(/[ -]+/)[0].toLowerCase() : null;
+      return categoriesInverse[category];
+    })
+    .map(function(values, key) {
+      return {
+        title: key,
+        events: values
+      };
+    })
+    .sortBy(function(group) {
+      return Object.keys(categories).indexOf(group.title);
+    })
+    .value();
+};
+
+var chronologicalGroups = function(events) {
+  var self = this;
+  var events = _.chain(events)
+    .filter(function(event) {
+      return self.start <= event.start && event.start < self.end;
+    })
+    .sortBy('start')
+    .value();
+
+  return [{
+    events: events
+  }];
+}
+
 var ListView = View.extend({
 
   setDate: function(date) {
@@ -66,26 +103,9 @@ var ListView = View.extend({
   },
 
   renderEvents: function(events) {
-    var self = this;
-    var groups = _.chain(events)
-      .filter(function(event) {
-        return self.start <= event.start && event.start < self.end;
-      })
-      .sortBy('start')
-      .groupBy(function(event) {
-        var category = event.category ? event.category.split(/[ -]+/)[0].toLowerCase() : null;
-        return categoriesInverse[category];
-      })
-      .map(function(values, key) {
-        return {
-          title: key,
-          events: values
-        };
-      })
-      .sortBy(function(group) {
-        return Object.keys(categories).indexOf(group.title);
-      })
-      .value();
+    var groups = this.options.categories ?
+      categoryGroups.bind(this, events) :
+      chronologicalGroups.bind(this, events);
     this.el.html(templates.events({groups: groups}));
     this.dropdowns = $(this.el.html).find('.dropdown').map(function(idx, elm) {
       return new dropdown.Dropdown($(elm), {checkboxes: false});
@@ -144,6 +164,7 @@ Calendar.prototype.defaultOpts = function() {
       },
       dayRender: this.handleDayRender.bind(this),
       dayPopoverFormat: 'MMM D, YYYY',
+      defaultView: this.defaultView(),
       eventAfterAllRender: this.handleRender.bind(this),
       eventClick: this.handleEventClick.bind(this),
       eventLimit: true,
@@ -161,7 +182,13 @@ Calendar.prototype.defaultOpts = function() {
         quarter: {
           type: 'list',
           buttonText: 'Quarter',
+          categories: true,
           duration: {quarters: 1, intervalUnit: 'quarter'}
+        },
+        monthList: {
+          type: 'list',
+          buttonText: 'Monthlist',
+          duration: {months: 1, intervalUnit: 'month'}
         }
       }
     },
@@ -239,6 +266,14 @@ Calendar.prototype.styleButtons = function() {
   this.$calendar.find('.fc-prev-button').addClass('button--previous');
   this.$calendar.find('.fc-right .fc-button-group').addClass('toggles--buttons');
 };
+
+Calendar.prototype.defaultView = function() {
+  if ( $(document).width() < helpers.BREAKPOINTS.MEDIUM ) {
+    return 'monthList';
+  } else {
+    return 'month';
+  }
+}
 
 Calendar.prototype.handleRender = function(view) {
   $(document.body).trigger($.Event('calendar:rendered'));

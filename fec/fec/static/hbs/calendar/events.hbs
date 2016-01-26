@@ -1,6 +1,8 @@
 {{#each groups}}
 <div class="cal-list__group">
-  <h3 class="cal-list__title">{{title}}</h3>
+  {{#if title}}
+    <h3 class="cal-list__title">{{title}}</h3>
+  {{/if}}
   {{#each events}}
     <div class="cal-list__event">
       <div class="cal-list__add">
