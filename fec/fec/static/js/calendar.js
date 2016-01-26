@@ -5,9 +5,9 @@ var URI = require('urijs');
 var _ = require('underscore');
 var moment = require('moment');
 
+var helpers = require('fec-style/js/helpers');
 var urls = require('fec-style/js/urls');
 var dropdown = require('fec-style/js/dropdowns');
-require('fec-style/js/helpers');
 
 require('fullcalendar');
 
@@ -142,6 +142,8 @@ Calendar.prototype.defaultOpts = function() {
         today: 'Today',
         week: 'Week',
       },
+      dayRender: this.handleDayRender.bind(this),
+      dayPopoverFormat: 'MMM D, YYYY',
       eventAfterAllRender: this.handleRender.bind(this),
       eventClick: this.handleEventClick.bind(this),
       eventLimit: true,
@@ -188,6 +190,7 @@ Calendar.prototype.success = function(response) {
       location: event.location,
       title: event.description || 'Event title',
       summary: event.summary || 'Event summary',
+      state: event.state ? event.state.join(', ') : null,
       start: event.start_date ? moment.utc(event.start_date) : null,
       end: event.end_date ? moment.utc(event.end_date) : null,
       allDay: event.end_date === null,
@@ -234,13 +237,30 @@ Calendar.prototype.styleButtons = function() {
 
 Calendar.prototype.handleRender = function(view) {
   $(document.body).trigger($.Event('calendar:rendered'));
+  this.highlightToday();
 };
 
+Calendar.prototype.handleDayRender = function(date, cell) {
+  if (date.date() === 1) {
+    var firstIndex = cell.index()
+    cell.append(date.format('MMMM'));
+  }
+}
+
 Calendar.prototype.handleEventClick = function(calEvent, jsEvent, view) {
-  var $eventContainer = $(jsEvent.target).closest('.fc-event-container');
+  var $eventContainer = $(jsEvent.target).closest('.fc-content');
   var tooltip = new CalendarTooltip(templates.details(calEvent));
   $eventContainer.append(tooltip.$content);
 };
+
+Calendar.prototype.highlightToday = function() {
+  var $today = $('thead .fc-today')
+  var todayIndex = $today.index() + 1;
+  $today
+    .closest('table')
+    .find('tbody tr td:nth-child(' + todayIndex + ')')
+    .addClass('fc-today');
+}
 
 var classMap = {
   aos: 'fc--rules',
@@ -260,7 +280,7 @@ function getEventClass(event) {
   var className = '';
   var category = event.category ? event.category.split(/[ -]+/)[0] : null;
 
-  className += event.end_Date !== null ? 'fc--allday' : '';
+  className += event.end_date === null ? 'fc--allday' : '';
   className += category ? ' ' + classMap[category.toLowerCase()] : '';
   return className;
 }
