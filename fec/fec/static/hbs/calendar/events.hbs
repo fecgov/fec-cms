@@ -1,11 +1,11 @@
 {{#each groups}}
-  <hr />
-  <h4>{{title}}</h4>
+<div class="cal-list__group">
+  <h3 class="cal-list__title">{{title}}</h3>
   {{#each events}}
-    <div class="row">
-      <div class="usa-width-one-twelfth">
+    <div class="cal-list__event">
+      <div class="cal-list__add">
         <div class="dropdown">
-          <button class="button button--neutral dropdown__button button--calendar">&nbsp;</button>
+          <button class="button button--neutral dropdown__button dropdown__button--mini button--calendar--mini"><span class="u-visually-hidden">Download calendar</span></button>
           <ul class="dropdown__panel" aria-hidden="true">
             <li class="dropdown__item"><a class="dropdown__value" href="{{download}}">Apple Calendar</a></li>
             <li class="dropdown__item"><a class="dropdown__value" href="{{google}}" target="_blank">Google Calendar</a></li>
@@ -13,21 +13,23 @@
           </ul>
         </div>
       </div>
-      <div class="usa-width-one-twelfth">{{datetime start format="pretty"}}</div>
-      <div class="usa-width-one-twelfth">
+      <div class="cal-list__date">
+        <span class="t-block">{{datetime start format="pretty"}}</span>
+        <span class="t-block">{{datetime start format="dayOfWeek"}}</span>
+      </div>
+      <div class="cal-list__time">
         {{#if end}}
           {{datetime start format="time"}}&ndash;{{datetime end format="time"}}
         {{else}}
           All day
         {{/if}}
       </div>
-      <div class="usa-width-one-half">
-        <div class="ev-list">
-          <h5>{{title}}</h5>
-          <p>{{summary}}</p>
-        </div>
+      <div class="cal-list__description">
+        <h5 class="cal-list__event-title">{{title}}</h5>
+        <p>{{summary}}</p>
       </div>
-      <div class="usa-width-one-fourth">{{location}}</div>
+      <div class="cal-list__location">{{location}}</div>
     </div>
   {{/each}}
+</div>
 {{/each}}

@@ -1,18 +1,21 @@
-<div class="tooltip tooltip--under calendar__details">
+<div class="tooltip tooltip--under cal-details">
   <button class="button button--close--primary js-close" type="button"><span class="u-visually-hidden">Close</span></button>
-  <span class="t-block t-bold">
+  <span class="cal-details__date">
     {{#if allDay}}
-      {{datetime start}}
+      {{datetime start format="pretty"}}
     {{else}}
       {{datetime start format="dateTime"}}&ndash;{{datetime end format="dateTime"}}
     {{/if}}
   </span>
-  <span class="t-block t-bold">{{ title }}</span>
-  <span class="t-block">{{ summary }}</span>
-  {{#if location }}
-    <span class="t-block"><span class="t-bold">Location: </span>{{ location }}</span>
+  <span class="cal-details__title">{{ title }}</span>
+  <span class="cal-details__summary">{{ summary }}</span>
+  {{#if state }}
+  <span class="cal-details__summary"><span class="t-bold">States:</span> {{ state }}</span>
   {{/if}}
-  <div class="dropdown">
+  {{#if location }}
+    <span class="cal-details__location"><span class="t-bold">Location: </span>{{ location }}</span>
+  {{/if}}
+  <div class="cal-details__add dropdown">
     <button class="button button--neutral dropdown__button button--calendar">Add to calendar</button>
     <ul class="dropdown__panel" aria-hidden="true">
       <li class="dropdown__item"><a class="dropdown__value" href="{{download}}">Apple Calendar</a></li>
