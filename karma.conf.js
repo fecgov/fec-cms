@@ -27,7 +27,6 @@ module.exports = function(config) {
 
     files: [
       'fec/fec/tests/js/**/*.js',
-      'fec/fec/static/js/**/*.js'
     ],
 
     exclude: [
@@ -37,7 +36,6 @@ module.exports = function(config) {
 
     preprocessors: {
       'fec/fec/tests/js/**/*.js': ['browserify'],
-      'fec/fec/static/js/**/*.js': ['browserify']
     },
 
     browserify: browserify,
