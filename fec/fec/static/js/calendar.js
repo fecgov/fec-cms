@@ -149,6 +149,11 @@ Calendar.prototype.defaultOpts = function() {
       eventLimit: true,
       nowIndicator: true,
       views: {
+        agenda: {
+          scrollTime: '09:00:00',
+          minTime: '08:00:00',
+          maxTime: '20:00:00',
+        },
         month: {
           eventLimit: 3,
           buttonText: 'Month'
