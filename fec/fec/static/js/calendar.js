@@ -5,9 +5,9 @@ var URI = require('urijs');
 var _ = require('underscore');
 var moment = require('moment');
 
-var helpers = require('fec-style/js/helpers');
 var urls = require('fec-style/js/urls');
 var dropdown = require('fec-style/js/dropdowns');
+require('fec-style/js/helpers');
 
 require('fullcalendar');
 
