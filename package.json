@@ -13,11 +13,24 @@
   },
   "devDependencies": {
     "browserify": "^11.0.1",
+    "browserify-istanbul": "^0.2.1",
+    "chai": "^3.4.1",
     "gulp": "^3.9.0",
     "handlebars": "^4.0.5",
     "hbsfy": "2.2.1",
+    "karma": "^0.13.19",
+    "karma-browserify": "^5.0.0",
+    "karma-chai-sinon": "^0.1.5",
+    "karma-chrome-launcher": "^0.2.2",
+    "karma-coverage": "^0.5.3",
+    "karma-mocha": "^0.2.1",
+    "karma-phantomjs-shim": "^1.2.0",
+    "mocha": "^2.3.4",
+    "sinon": "^1.17.2",
+    "sinon-chai": "^2.8.0",
     "stringify": "^3.1.0",
-    "vinyl-source-stream": "^1.1.0"
+    "vinyl-source-stream": "^1.1.0",
+    "watchify": "^3.7.0"
   },
   "engines": {
     "node": "0.12.7",
