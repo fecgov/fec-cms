@@ -152,7 +152,7 @@ Calendar.prototype.defaultOpts = function() {
         agenda: {
           scrollTime: '09:00:00',
           minTime: '08:00:00',
-          maxTime: '20:00:00',
+          maxTime: '20:00:00'
         },
         month: {
           eventLimit: 3,
@@ -247,10 +247,9 @@ Calendar.prototype.handleRender = function(view) {
 
 Calendar.prototype.handleDayRender = function(date, cell) {
   if (date.date() === 1) {
-    var firstIndex = cell.index()
     cell.append(date.format('MMMM'));
   }
-}
+};
 
 Calendar.prototype.handleEventClick = function(calEvent, jsEvent, view) {
   var $eventContainer = $(jsEvent.target).closest('.fc-content');
@@ -259,13 +258,13 @@ Calendar.prototype.handleEventClick = function(calEvent, jsEvent, view) {
 };
 
 Calendar.prototype.highlightToday = function() {
-  var $today = $('thead .fc-today')
+  var $today = $('thead .fc-today');
   var todayIndex = $today.index() + 1;
   $today
     .closest('table')
     .find('tbody tr td:nth-child(' + todayIndex + ')')
     .addClass('fc-today');
-}
+};
 
 var classMap = {
   aos: 'fc--rules',
