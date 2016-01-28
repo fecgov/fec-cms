@@ -14,7 +14,7 @@ We welcome you to explore, make suggestions, and contribute to our code.
 This repository, `fec-cms <https://github.com/18F/fec-cms>`_: the content management system (CMS) for betaFEC.
 
 All repositories
------------------
+----------------
 - `FEC <https://github.com/18F/fec>`_: a general discussion forum. We compile `feedback <https://github.com/18F/fec/issues>`_ from betaFEC’s feedback widget here, and this is the best place to submit general feedback.
 - `openFEC <https://github.com/18F/openfec>`_: betaFEC’s API
 - `openFEC-web-app <https://github.com/18f/openfec-web-app>`_: the betaFEC web app for exploring campaign finance data
@@ -22,7 +22,7 @@ All repositories
 - `fec-cms <https://github.com/18F/fec-cms>`_: the content management system (CMS) for betaFEC. This project uses `Wagtail <https://github.com/torchbox/wagtail>`_, an open source CMS written in Python and built on the Django framework.
 
 Get involved
-================
+============
 We’re thrilled you want to get involved! 
 - Read our contributing `guidelines <https://github.com/18F/openfec/blob/master/CONTRIBUTING.md>`_. Then, file an `issue <https://github.com/18F/fec/issues>`_ or submit a pull request.
 - Send us an email at betafeedback@fec.gov. 
@@ -31,10 +31,10 @@ We’re thrilled you want to get involved!
 
 
 Set up
-============
+======
 
 Installation
------------------
+------------
 
 Install PostgreSQL.
 
@@ -53,7 +53,7 @@ Install dependencies: ::
     pip install -U -r requirements.txt
 
 Set up
------------------
+------
 
 .. code::
 
@@ -64,7 +64,7 @@ Set up
     ./manage.py migrate
 
 Local styles
-~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~
 
 Environment variable: ::
 
@@ -75,7 +75,7 @@ Settings: ::
     FEC_WEB_STYLE_URL = 'http://localhost:8080/css/styles.css'
 
 Developing with openFEC
-~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~
 
 Environment variable: ::
 
@@ -86,14 +86,14 @@ Settings: ::
     FEC_APP_URL = 'http://localhost:3000'
 
 Run
------------------
+---
 
 .. code::
     
     ./manage.py runserver
 
 Deploy
------------------
+------
 
 Provision development database: ::
 
@@ -112,6 +112,23 @@ Deploy: ::
 
     cf zero-downtime-push cms -f manifest.yml
 
+Backup
+------
+
+To restore data from a remote instance to a local instance, or between local instances, back up data using `dumpdata` and restore using `loaddata`. You'll also need to `install cf-ssh <https://docs.cloud.gov/getting-started/cf-ssh/>`_. The following is an example of restoring remote data to a local instance: ::
+
+    # Local
+    cf create-app-manifest cms -p manifest_ssh.yml
+    cf-ssh -f manifest_ssh.yml
+
+    # Remote
+    cd fec
+    ./manage.py dumpdata --settings fec.settings.production --exclude sessions.session --exclude contenttypes.ContentType --exclude auth.permission --output dump.json
+
+    # Local
+    cd fec
+    cf files cms-ssh app/fec/dump.json | tail -n +4 > dump.json
+    ./manage.py loaddata dump.json
 
 Copyright and licensing
 =======================
