@@ -310,7 +310,7 @@ function getGoogleUrl(event) {
 
 function getUrl(path, params) {
   return URI(window.API_LOCATION)
-    .path([window.API_VERSION].concat(path || []).join('/'))
+    .path(Array.prototype.concat(window.API_VERSION, path || [], '').join('/'))
     .addQuery({
       api_key: window.API_KEY,
       per_page: 500
