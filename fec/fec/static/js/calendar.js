@@ -214,7 +214,10 @@ Calendar.prototype.updateLinks = function(params) {
   var urls = {
     ics: url.toString(),
     csv: url.clone().query({renderer: 'csv'}).toString(),
-    google: 'https://calendar.google.com/calendar/render?cid=' + url.toString(),
+    // Note: The cid parameter silently rejects https links; use http and allow
+    // the backend to redirect to https
+    google: 'https://calendar.google.com/calendar/render?cid=' +
+      encodeURIComponent(url.clone().protocol('http').toString()),
     calendar: url.protocol('webcal').toString()
   };
   this.$download.html(templates.download(urls));
@@ -252,9 +255,12 @@ Calendar.prototype.handleDayRender = function(date, cell) {
 };
 
 Calendar.prototype.handleEventClick = function(calEvent, jsEvent, view) {
-  var $eventContainer = $(jsEvent.target).closest('.fc-content');
-  var tooltip = new CalendarTooltip(templates.details(calEvent));
-  $eventContainer.append(tooltip.$content);
+  var $target = $(jsEvent.target);
+  if (!$target.closest('.tooltip').length) {
+    var $eventContainer = $target.closest('.fc-content');
+    var tooltip = new CalendarTooltip(templates.details(calEvent));
+    $eventContainer.append(tooltip.$content);
+  }
 };
 
 Calendar.prototype.highlightToday = function() {
