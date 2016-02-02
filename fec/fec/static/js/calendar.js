@@ -15,7 +15,8 @@ var templates = {
   details: require('../hbs/calendar/details.hbs'),
   download: require('../hbs/calendar/download.hbs'),
   subscribe: require('../hbs/calendar/subscribe.hbs'),
-  events: require('../hbs/calendar/events.hbs')
+  events: require('../hbs/calendar/events.hbs'),
+  listToggles: require('../hbs/calendar/listToggles.hbs')
 };
 
 function Listeners() {
@@ -106,7 +107,11 @@ var ListView = View.extend({
     var groups = this.options.categories ?
       categoryGroups.bind(this, events) :
       chronologicalGroups.bind(this, events);
-    this.el.html(templates.events({groups: groups}));
+    var settings = {
+      duration: this.options.duration.intervalUnit,
+      sortBy: this.options.sortBy
+    }
+    this.el.html(templates.events({groups: groups, settings: settings}));
     this.dropdowns = $(this.el.html).find('.dropdown').map(function(idx, elm) {
       return new dropdown.Dropdown($(elm), {checkboxes: false});
     });
@@ -139,6 +144,8 @@ function Calendar(opts) {
   this.$subscribe = $(opts.subscribe);
 
   this.$calendar.on('calendar:rendered', this.filterPanel.setHeight());
+  this.$calendar.on('click', '.js-toggle-view', this.toggleListView.bind(this));
+
   this.filterPanel.$form.on('change', this.filter.bind(this));
   $(window).on('popstate', this.filter.bind(this));
 
@@ -149,13 +156,18 @@ function Calendar(opts) {
   this.filterPanel.setHeight();
 }
 
+Calendar.prototype.toggleListView = function(e) {
+  var newView = $(e.target).data('trigger-view');
+  this.$calendar.fullCalendar('changeView', newView);
+}
+
 Calendar.prototype.defaultOpts = function() {
   return {
     calendarOpts: {
       header: {
         left: 'prev,next today',
         center: 'title',
-        right: 'agendaWeek,month,quarter'
+        right: 'agendaWeek,month,quarterCategory'
       },
       buttonIcons: false,
       buttonText: {
@@ -179,17 +191,29 @@ Calendar.prototype.defaultOpts = function() {
           eventLimit: 3,
           buttonText: 'Month'
         },
-        quarter: {
+        quarterCategory: {
           type: 'list',
           buttonText: 'Quarter',
           categories: true,
+          sortBy: 'category',
           duration: {quarters: 1, intervalUnit: 'quarter'}
         },
-        monthList: {
+        quarterTime: {
           type: 'list',
-          buttonText: 'Monthlist',
+          sortBy: 'time',
+          duration: {quarters: 1, intervalUnit: 'quarter'}
+        },
+        monthCategory: {
+          type: 'list',
+          categories: true,
+          sortBy: 'category',
           duration: {months: 1, intervalUnit: 'month'}
-        }
+        },
+        monthTime: {
+          type: 'list',
+          sortBy: 'time',
+          duration: {months: 1, intervalUnit: 'month'}
+        },
       }
     },
     sourceOpts: {
@@ -269,7 +293,7 @@ Calendar.prototype.styleButtons = function() {
 
 Calendar.prototype.defaultView = function() {
   if ( $(document).width() < helpers.BREAKPOINTS.MEDIUM ) {
-    return 'monthList';
+    return 'monthTime';
   } else {
     return 'month';
   }
@@ -278,6 +302,18 @@ Calendar.prototype.defaultView = function() {
 Calendar.prototype.handleRender = function(view) {
   $(document.body).trigger($.Event('calendar:rendered'));
   this.highlightToday();
+  var listViews = ['quarterTime', 'quarterCategory', 'monthTime', 'monthCategory'];
+  if (_.contains(listViews, view.name)) {
+    var html = templates.listToggles(view.options);
+    $('.fc-quarterCategory-button').addClass('fc-state-active');
+    if (this.listToggles === 'undefined') {
+      this.listToggles = $('.fc-view-container').prepend(html);
+    } else {
+      this.listToggles = this.listToggle.html(html);
+    }
+  } else if (!_.contains(listViews, view.name) && this.listToggles) {
+    this.listToggles.remove();
+  }
 };
 
 Calendar.prototype.handleDayRender = function(date, cell) {
