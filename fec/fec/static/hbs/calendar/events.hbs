@@ -1,3 +1,8 @@
+<div class="cal-list__toggles">
+  <button class="button--neutral button--small js-list-view">Chronological</button>
+  <button class="button--neutral button--small js-category-view">Categories</button>
+</div>
+
 {{#each groups}}
 <div class="cal-list__group">
   {{#if title}}
@@ -5,6 +10,26 @@
   {{/if}}
   {{#each events}}
     <div class="cal-list__event">
+      <div class="cal-list__details">
+        <div class="cal-list__date">
+          <span class="t-block">{{datetime start format="pretty"}}</span>
+          <span class="t-block">{{datetime start format="dayOfWeek"}}</span>
+        </div>
+        <div class="cal-list__time">
+          {{#if end}}
+            {{datetime start format="time"}}&ndash;{{datetime end format="time"}}
+          {{else}}
+            All day
+          {{/if}}
+        </div>
+        <div class="cal-list__description">
+          <h5 class="cal-list__event-title">{{title}}</h5>
+          <p>{{summary}}</p>
+          {{#if location}}
+            <span class="cal-list__location">| {{location}}</span>
+          {{/if}}
+        </div>
+      </div>
       <div class="cal-list__add">
         <div class="dropdown">
           <button class="button button--neutral dropdown__button dropdown__button--mini button--calendar--mini"><span class="u-visually-hidden">Download calendar</span></button>
@@ -15,22 +40,6 @@
           </ul>
         </div>
       </div>
-      <div class="cal-list__date">
-        <span class="t-block">{{datetime start format="pretty"}}</span>
-        <span class="t-block">{{datetime start format="dayOfWeek"}}</span>
-      </div>
-      <div class="cal-list__time">
-        {{#if end}}
-          {{datetime start format="time"}}&ndash;{{datetime end format="time"}}
-        {{else}}
-          All day
-        {{/if}}
-      </div>
-      <div class="cal-list__description">
-        <h5 class="cal-list__event-title">{{title}}</h5>
-        <p>{{summary}}</p>
-      </div>
-      <div class="cal-list__location">{{location}}</div>
     </div>
   {{/each}}
 </div>
