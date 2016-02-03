@@ -304,17 +304,23 @@ Calendar.prototype.handleRender = function(view) {
   this.highlightToday();
   var listViews = ['quarterTime', 'quarterCategory', 'monthTime', 'monthCategory'];
   if (_.contains(listViews, view.name)) {
-    var html = templates.listToggles(view.options);
-    $('.fc-quarterCategory-button').addClass('fc-state-active');
-    if (this.listToggles === 'undefined') {
-      this.listToggles = $('.fc-view-container').prepend(html);
-    } else {
-      this.listToggles = this.listToggle.html(html);
-    }
-  } else if (!_.contains(listViews, view.name) && this.listToggles) {
-    this.listToggles.remove();
+    this.manageListToggles(view);
+  } else if (!_.contains(listViews, view.name) && this.$listToggles) {
+    this.$listToggles.remove();
   }
 };
+
+Calendar.prototype.manageListToggles = function(view) {
+  if (!this.$listToggles) {
+    $('.fc-view-container').prepend('<div class="cal-list__toggles"></div>');
+    this.$listToggles = $('.cal-list__toggles');
+  }
+  this.$listToggles.html(templates.listToggles(view.options));
+  // Highlight the quarter button on quarterTime
+  if (view.name === 'quarterTime') {
+    $('.fc-quarterCategory-button').addClass('fc-state-active');
+  }
+}
 
 Calendar.prototype.handleDayRender = function(date, cell) {
   if (date.date() === 1) {

@@ -1,11 +1,9 @@
-<div class="cal-list__toggles">
-  Sort by:
-  <button
-    class="button button--small js-toggle-view
-      {{#if (eq sortBy 'time')}}is-active{{/if}}"
-    data-trigger-view="{{ duration.intervalUnit }}Time">Time</button>
-  <button
-    class="button button--small js-toggle-view
-      {{#if (eq sortBy 'category')}}is-active{{/if}}"
-    data-trigger-view="{{ duration.intervalUnit }}Category">Category</button>
-</div>
+Sort by:
+<button
+  class="button button--sm js-toggle-view
+    {{#if (eq sortBy 'category')}}is-active{{/if}}"
+  data-trigger-view="{{ duration.intervalUnit }}Category">Category</button>
+<button
+  class="button button--sm js-toggle-view
+    {{#if (eq sortBy 'time')}}is-active{{/if}}"
+  data-trigger-view="{{ duration.intervalUnit }}Time">Time</button>
