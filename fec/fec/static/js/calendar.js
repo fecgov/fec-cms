@@ -333,7 +333,7 @@ Calendar.prototype.handleEventClick = function(calEvent, jsEvent, view) {
   var $target = $(jsEvent.target);
   if (!$target.closest('.tooltip').length) {
     var $eventContainer = $target.closest('.fc-content');
-    var tooltip = new CalendarTooltip(templates.details(calEvent));
+    var tooltip = new CalendarTooltip(templates.details(calEvent), $eventContainer.parent());
     $eventContainer.append(tooltip.$content);
   }
 };
@@ -400,18 +400,24 @@ function getUrl(path, params) {
     .toString();
 }
 
-function CalendarTooltip(content) {
+function CalendarTooltip(content, $container) {
   this.$content = $(content);
+  this.$container = $container;
   this.$close = this.$content.find('.js-close');
   this.$dropdown = this.$content.find('.dropdown');
   this.exportDropdown = new dropdown.Dropdown(this.$dropdown, {checkboxes: false});
+
   this.events = new Listeners();
   this.events.on(this.$close, 'click', this.close.bind(this));
-
-  var $body = $(document.body);
-  $body.trigger($.Event('tooltip:opened'));
-  this.events.on($body, 'tooltip:opened', this.close.bind(this));
+  this.events.on($(document.body), 'click', this.handleClickAway.bind(this));
 }
+
+CalendarTooltip.prototype.handleClickAway = function(e) {
+  var $target = $(e.target);
+  if (!this.$content.has($target).length && !this.$container.has($target).length) {
+    this.close();
+  }
+};
 
 CalendarTooltip.prototype.close = function() {
   this.$content.remove();
