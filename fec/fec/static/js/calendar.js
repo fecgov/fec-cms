@@ -7,7 +7,10 @@ var moment = require('moment');
 
 var urls = require('fec-style/js/urls');
 var dropdown = require('fec-style/js/dropdowns');
-require('fec-style/js/helpers');
+var Handlebars = require('hbsfy/runtime');
+var helpers = require('fec-style/js/helpers');
+
+Handlebars.registerHelper(helpers.helpers);
 
 require('fullcalendar');
 
@@ -59,11 +62,10 @@ var categoriesInverse = _.reduce(_.pairs(categories), function(memo, pair) {
   return memo;
 }, {});
 
-var categoryGroups = function(events) {
-  var self = this;
+var categoryGroups = function(events, start, end) {
   return _.chain(events)
     .filter(function(event) {
-      return self.start <= event.start && event.start < self.end;
+      return start <= event.start && event.start < end;
     })
     .sortBy('start')
     .groupBy(function(event) {
@@ -82,22 +84,17 @@ var categoryGroups = function(events) {
     .value();
 };
 
-var chronologicalGroups = function(events) {
-  var self = this;
-  var events = _.chain(events)
+var chronologicalGroups = function(events, start, end) {
+  events = _.chain(events)
     .filter(function(event) {
-      return self.start <= event.start && event.start < self.end;
+      return start <= event.start && event.start < end;
     })
     .sortBy('start')
     .value();
-
-  return [{
-    events: events
-  }];
-}
+  return [{events: events}];
+};
 
 var ListView = View.extend({
-
   setDate: function(date) {
     var intervalUnit = this.options.duration.intervalUnit || this.intervalUnit;
     View.prototype.setDate.call(this, date.startOf(intervalUnit));
@@ -105,12 +102,12 @@ var ListView = View.extend({
 
   renderEvents: function(events) {
     var groups = this.options.categories ?
-      categoryGroups.bind(this, events) :
-      chronologicalGroups.bind(this, events);
+      categoryGroups(events, this.start, this.end) :
+      chronologicalGroups(events, this.start, this.end);
     var settings = {
       duration: this.options.duration.intervalUnit,
       sortBy: this.options.sortBy
-    }
+    };
     this.el.html(templates.events({groups: groups, settings: settings}));
     this.dropdowns = $(this.el.html).find('.dropdown').map(function(idx, elm) {
       return new dropdown.Dropdown($(elm), {checkboxes: false});
@@ -123,15 +120,17 @@ var ListView = View.extend({
     });
     this.el.html('');
   }
-
 });
 
 FC.views.list = ListView;
 
+var LIST_VIEWS = ['quarterTime', 'quarterCategory', 'monthTime', 'monthCategory'];
+
 function Calendar(opts) {
   this.opts = $.extend({}, this.defaultOpts(), opts);
 
-  this.$calendar = $(this.opts.selector).fullCalendar(this.opts.calendarOpts);
+  this.$calendar = $(this.opts.selector);
+  this.$calendar.fullCalendar(this.opts.calendarOpts);
   this.url = URI(this.opts.url);
   this.exportUrl = URI(this.opts.exportUrl);
   this.filterPanel = this.opts.filterPanel;
@@ -159,7 +158,7 @@ function Calendar(opts) {
 Calendar.prototype.toggleListView = function(e) {
   var newView = $(e.target).data('trigger-view');
   this.$calendar.fullCalendar('changeView', newView);
-}
+};
 
 Calendar.prototype.defaultOpts = function() {
   return {
@@ -295,35 +294,34 @@ Calendar.prototype.styleButtons = function() {
 };
 
 Calendar.prototype.defaultView = function() {
-  if ( $(document).width() < helpers.BREAKPOINTS.MEDIUM ) {
+  if ($(document).width() < helpers.BREAKPOINTS.MEDIUM) {
     return 'monthTime';
   } else {
     return 'month';
   }
-}
+};
 
 Calendar.prototype.handleRender = function(view) {
   $(document.body).trigger($.Event('calendar:rendered'));
   this.highlightToday();
-  var listViews = ['quarterTime', 'quarterCategory', 'monthTime', 'monthCategory'];
-  if (_.contains(listViews, view.name)) {
+  if (LIST_VIEWS.indexOf(view.name) !== -1) {
     this.manageListToggles(view);
-  } else if (!_.contains(listViews, view.name) && this.$listToggles) {
+  } else if (this.$listToggles) {
     this.$listToggles.remove();
   }
 };
 
 Calendar.prototype.manageListToggles = function(view) {
   if (!this.$listToggles) {
-    $('.fc-view-container').prepend('<div class="cal-list__toggles"></div>');
-    this.$listToggles = $('.cal-list__toggles');
+    this.$listToggles = $('<div class="cal-list__toggles"></div>');
+    this.$listToggles.prependTo(this.$calendar.find('.fc-view-container'));
   }
   this.$listToggles.html(templates.listToggles(view.options));
   // Highlight the quarter button on quarterTime
   if (view.name === 'quarterTime') {
-    $('.fc-quarterCategory-button').addClass('fc-state-active');
+    this.$calendar.find('.fc-quarterCategory-button').addClass('fc-state-active');
   }
-}
+};
 
 Calendar.prototype.handleDayRender = function(date, cell) {
   if (date.date() === 1) {
@@ -341,7 +339,7 @@ Calendar.prototype.handleEventClick = function(calEvent, jsEvent, view) {
 };
 
 Calendar.prototype.highlightToday = function() {
-  var $today = $('thead .fc-today');
+  var $today = this.$calendar.find('thead .fc-today');
   var todayIndex = $today.index() + 1;
   $today
     .closest('table')
