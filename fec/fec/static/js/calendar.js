@@ -15,7 +15,8 @@ var templates = {
   details: require('../hbs/calendar/details.hbs'),
   download: require('../hbs/calendar/download.hbs'),
   subscribe: require('../hbs/calendar/subscribe.hbs'),
-  events: require('../hbs/calendar/events.hbs')
+  events: require('../hbs/calendar/events.hbs'),
+  listToggles: require('../hbs/calendar/listToggles.hbs')
 };
 
 function Listeners() {
@@ -58,6 +59,43 @@ var categoriesInverse = _.reduce(_.pairs(categories), function(memo, pair) {
   return memo;
 }, {});
 
+var categoryGroups = function(events) {
+  var self = this;
+  return _.chain(events)
+    .filter(function(event) {
+      return self.start <= event.start && event.start < self.end;
+    })
+    .sortBy('start')
+    .groupBy(function(event) {
+      var category = event.category ? event.category.split(/[ -]+/)[0].toLowerCase() : null;
+      return categoriesInverse[category];
+    })
+    .map(function(values, key) {
+      return {
+        title: key,
+        events: values
+      };
+    })
+    .sortBy(function(group) {
+      return Object.keys(categories).indexOf(group.title);
+    })
+    .value();
+};
+
+var chronologicalGroups = function(events) {
+  var self = this;
+  var events = _.chain(events)
+    .filter(function(event) {
+      return self.start <= event.start && event.start < self.end;
+    })
+    .sortBy('start')
+    .value();
+
+  return [{
+    events: events
+  }];
+}
+
 var ListView = View.extend({
 
   setDate: function(date) {
@@ -66,27 +104,14 @@ var ListView = View.extend({
   },
 
   renderEvents: function(events) {
-    var self = this;
-    var groups = _.chain(events)
-      .filter(function(event) {
-        return self.start <= event.start && event.start < self.end;
-      })
-      .sortBy('start')
-      .groupBy(function(event) {
-        var category = event.category ? event.category.split(/[ -]+/)[0].toLowerCase() : null;
-        return categoriesInverse[category];
-      })
-      .map(function(values, key) {
-        return {
-          title: key,
-          events: values
-        };
-      })
-      .sortBy(function(group) {
-        return Object.keys(categories).indexOf(group.title);
-      })
-      .value();
-    this.el.html(templates.events({groups: groups}));
+    var groups = this.options.categories ?
+      categoryGroups.bind(this, events) :
+      chronologicalGroups.bind(this, events);
+    var settings = {
+      duration: this.options.duration.intervalUnit,
+      sortBy: this.options.sortBy
+    }
+    this.el.html(templates.events({groups: groups, settings: settings}));
     this.dropdowns = $(this.el.html).find('.dropdown').map(function(idx, elm) {
       return new dropdown.Dropdown($(elm), {checkboxes: false});
     });
@@ -119,6 +144,8 @@ function Calendar(opts) {
   this.$subscribe = $(opts.subscribe);
 
   this.$calendar.on('calendar:rendered', this.filterPanel.setHeight());
+  this.$calendar.on('click', '.js-toggle-view', this.toggleListView.bind(this));
+
   this.filterPanel.$form.on('change', this.filter.bind(this));
   $(window).on('popstate', this.filter.bind(this));
 
@@ -129,13 +156,18 @@ function Calendar(opts) {
   this.filterPanel.setHeight();
 }
 
+Calendar.prototype.toggleListView = function(e) {
+  var newView = $(e.target).data('trigger-view');
+  this.$calendar.fullCalendar('changeView', newView);
+}
+
 Calendar.prototype.defaultOpts = function() {
   return {
     calendarOpts: {
       header: {
         left: 'prev,next today',
         center: 'title',
-        right: 'agendaWeek,month,quarter'
+        right: 'agendaWeek,month,quarterCategory'
       },
       buttonIcons: false,
       buttonText: {
@@ -144,6 +176,7 @@ Calendar.prototype.defaultOpts = function() {
       },
       dayRender: this.handleDayRender.bind(this),
       dayPopoverFormat: 'MMM D, YYYY',
+      defaultView: this.defaultView(),
       eventAfterAllRender: this.handleRender.bind(this),
       eventClick: this.handleEventClick.bind(this),
       eventLimit: true,
@@ -158,11 +191,29 @@ Calendar.prototype.defaultOpts = function() {
           eventLimit: 3,
           buttonText: 'Month'
         },
-        quarter: {
+        quarterCategory: {
           type: 'list',
           buttonText: 'Quarter',
+          categories: true,
+          sortBy: 'category',
           duration: {quarters: 1, intervalUnit: 'quarter'}
-        }
+        },
+        quarterTime: {
+          type: 'list',
+          sortBy: 'time',
+          duration: {quarters: 1, intervalUnit: 'quarter'}
+        },
+        monthCategory: {
+          type: 'list',
+          categories: true,
+          sortBy: 'category',
+          duration: {months: 1, intervalUnit: 'month'}
+        },
+        monthTime: {
+          type: 'list',
+          sortBy: 'time',
+          duration: {months: 1, intervalUnit: 'month'}
+        },
       }
     },
     sourceOpts: {
@@ -243,10 +294,36 @@ Calendar.prototype.styleButtons = function() {
   this.$calendar.find('.fc-right .fc-button-group').addClass('toggles--buttons');
 };
 
+Calendar.prototype.defaultView = function() {
+  if ( $(document).width() < helpers.BREAKPOINTS.MEDIUM ) {
+    return 'monthTime';
+  } else {
+    return 'month';
+  }
+}
+
 Calendar.prototype.handleRender = function(view) {
   $(document.body).trigger($.Event('calendar:rendered'));
   this.highlightToday();
+  var listViews = ['quarterTime', 'quarterCategory', 'monthTime', 'monthCategory'];
+  if (_.contains(listViews, view.name)) {
+    this.manageListToggles(view);
+  } else if (!_.contains(listViews, view.name) && this.$listToggles) {
+    this.$listToggles.remove();
+  }
 };
+
+Calendar.prototype.manageListToggles = function(view) {
+  if (!this.$listToggles) {
+    $('.fc-view-container').prepend('<div class="cal-list__toggles"></div>');
+    this.$listToggles = $('.cal-list__toggles');
+  }
+  this.$listToggles.html(templates.listToggles(view.options));
+  // Highlight the quarter button on quarterTime
+  if (view.name === 'quarterTime') {
+    $('.fc-quarterCategory-button').addClass('fc-state-active');
+  }
+}
 
 Calendar.prototype.handleDayRender = function(date, cell) {
   if (date.date() === 1) {

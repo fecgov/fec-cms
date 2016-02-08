@@ -7,11 +7,7 @@
       {{datetime start format="dateTime"}}&ndash;{{datetime end format="dateTime"}}
     {{/if}}
   </span>
-  <span class="cal-details__title">{{ title }}</span>
   <span class="cal-details__summary">{{ summary }}</span>
-  {{#if state }}
-  <span class="cal-details__summary"><span class="t-bold">States:</span> {{ state }}</span>
-  {{/if}}
   {{#if location }}
     <span class="cal-details__location"><span class="t-bold">Location: </span>{{ location }}</span>
   {{/if}}
