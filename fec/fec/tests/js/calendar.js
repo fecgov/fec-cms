@@ -95,7 +95,7 @@ describe('calendar', function() {
       this.server.respond();
       expect(this.calendar.filterSet.serialize).to.have.been.called;
       expect(this.calendar.params).to.deep.equal(this.calendar.filterSet.serialize());
-      var events = this.calendar.$calendar.fullCalendar('getView').getEventSegs();
+      var events = this.calendar.$calendar.fullCalendar('getEvents');
       expect(events.length).to.equal(1);
     });
   });
