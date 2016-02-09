@@ -11,6 +11,9 @@
   {{#if location }}
     <span class="cal-details__location"><span class="t-bold">Location: </span>{{ location }}</span>
   {{/if}}
+  {{#if url }}
+    <span class="t-block"><a class="t-bold" href="{{ url }}">Learn more</a></span>
+  {{/if}}
   <div class="cal-details__add dropdown">
     <button class="button button--neutral dropdown__button button--calendar">Add to calendar</button>
     <ul class="dropdown__panel" aria-hidden="true">

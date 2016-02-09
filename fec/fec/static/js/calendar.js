@@ -249,7 +249,8 @@ Calendar.prototype.success = function(response) {
       start: event.start_date ? moment.utc(event.start_date) : null,
       end: event.end_date ? moment.utc(event.end_date) : null,
       allDay: moment.utc(event.start_date).format('HHmmss') === '000000' && event.end_date === null,
-      className: getEventClass(event)
+      className: getEventClass(event),
+      url: event.url || null
     };
     _.extend(processed, {
       google: getGoogleUrl(processed),

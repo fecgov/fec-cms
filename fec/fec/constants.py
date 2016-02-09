@@ -1,7 +1,7 @@
 from collections import OrderedDict
 
 election_types = OrderedDict([
-    ('election', 'Elections'),
+    ('election', 'All elections'),
 ])
 
 deadline_types = OrderedDict([
