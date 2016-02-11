@@ -7,21 +7,20 @@ election_types = OrderedDict([
 deadline_types = OrderedDict([
     ('report-M', 'Monthly'),
     ('report-Q', 'Quarterly'),
-    ('report-MY', 'Mid-year'),
-    ('report-YE', 'Year-end'),
-    ('report-E', 'Election-sensitive'),
-    ('IE Periods', 'Independent expenditure reporting periods'),
-    ('EC Periods', 'Electioneering communication reporting periods')
+    ('report-E', 'Pre- and Post-election'),
+    ('IE Periods', 'Independent expenditures'),
+    ('EC Periods', 'Electioneering communications')
 ])
 
 outreach_types = OrderedDict([
     ('Conferences', 'Conferences'),
-    ('Roundtables', 'Round tables'),
+    ('Roundtables', 'Roundtables'),
 ])
 
 meeting_types = OrderedDict([
     ('Open Meetings', 'Open meeting'),
     ('Executive Sessions', 'Executive session'),
+    ('Public Hearings', 'Public hearing'),
 ])
 
 rule_types = OrderedDict([
