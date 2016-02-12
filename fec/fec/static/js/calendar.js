@@ -145,6 +145,8 @@ function Calendar(opts) {
   this.$calendar.on('calendar:rendered', this.filterPanel.setHeight());
   this.$calendar.on('click', '.js-toggle-view', this.toggleListView.bind(this));
 
+  this.$calendar.on('keypress', '.fc-content', this.handleEventKeypress.bind(this));
+
   this.filterPanel.$form.on('change', this.filter.bind(this));
   $(window).on('popstate', this.filter.bind(this));
 
@@ -310,6 +312,9 @@ Calendar.prototype.handleRender = function(view) {
   } else if (this.$listToggles) {
     this.$listToggles.remove();
   }
+  this.$calendar.find('.fc-content, .fc-more').each(function(){
+    $(this).attr('tabindex', '0');
+  })
 };
 
 Calendar.prototype.manageListToggles = function(view) {
@@ -336,6 +341,12 @@ Calendar.prototype.handleEventClick = function(calEvent, jsEvent, view) {
     var $eventContainer = $target.closest('.fc-content');
     var tooltip = new CalendarTooltip(templates.details(calEvent), $eventContainer.parent());
     $eventContainer.append(tooltip.$content);
+  }
+};
+
+Calendar.prototype.handleEventKeypress = function(e) {
+  if (e.keyCode === 13) {
+    $(e.target).click();
   }
 };
 
@@ -423,6 +434,7 @@ CalendarTooltip.prototype.handleClickAway = function(e) {
 CalendarTooltip.prototype.close = function() {
   this.$content.remove();
   this.exportDropdown.destroy();
+  this.$container.find('.fc-content').focus();
   this.events.off();
 };
 
