@@ -4,7 +4,10 @@
     {{#if allDay}}
       {{datetime start format="pretty"}}
     {{else}}
-      {{datetime start format="dateTime"}}&ndash;{{datetime end format="dateTime"}}
+      {{datetime start format="dateTime"}}
+      {{#if end}}
+        &ndash;{{datetime end format="dateTime"}}
+      {{/if}}
     {{/if}}
   </span>
   <span class="cal-details__summary">{{ summary }}</span>
