@@ -136,6 +136,9 @@ function Calendar(opts) {
   this.filterPanel = this.opts.filterPanel;
   this.filterSet = this.filterPanel.filterSet;
 
+  this.popoverId = 'calendar-popover';
+  this.detailsId = 'calendar-details';
+
   this.sources = null;
   this.params = null;
 
@@ -313,12 +316,8 @@ Calendar.prototype.handleRender = function(view) {
   } else if (this.$listToggles) {
     this.$listToggles.remove();
   }
-  this.$calendar.find('.fc-content').each(function(){
-    $(this).attr('tabindex', '0').attr('aria-describedby', 'calendar-details');
-  });
-  this.$calendar.find('.fc-more').each(function(){
-    $(this).attr('tabindex', '0').attr('aria-describedby', 'calendar-popover');
-  });
+  this.$calendar.find('.fc-content').attr({'tabindex': '0', 'aria-describedby': this.detailsId});
+  this.$calendar.find('.fc-more').attr({'tabindex': '0', 'aria-describedby': this.popoverId});
 };
 
 Calendar.prototype.manageListToggles = function(view) {
@@ -357,7 +356,7 @@ Calendar.prototype.handleKeypress = function(e) {
 Calendar.prototype.controlPopoverFocus = function(e) {
   var $target = $(e.target);
   var $popover = $('.fc-popover');
-  $popover.attr('id', 'calendar-popover').attr('role', 'tooltip');
+  $popover.attr('id', this.popoverId).attr('role', 'tooltip');
   $popover.find('.fc-close')
     .attr('tabindex', '0')
     .focus()
