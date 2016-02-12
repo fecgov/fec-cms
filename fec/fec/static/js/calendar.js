@@ -341,9 +341,11 @@ Calendar.prototype.handleDayRender = function(date, cell) {
 Calendar.prototype.handleEventClick = function(calEvent, jsEvent, view) {
   var $target = $(jsEvent.target);
   if (!$target.closest('.tooltip').length) {
-    var calEvent = _.extend({}, calEvent, {detailsId: this.detailsId});
     var $eventContainer = $target.closest('.fc-content');
-    var tooltip = new CalendarTooltip(templates.details(calEvent), $eventContainer.parent());
+    var tooltip = new CalendarTooltip(
+      templates.details(_.extend({}, calEvent, {detailsId: this.detailsId})),
+      $eventContainer.parent()
+    );
     $eventContainer.append(tooltip.$content);
   }
 };
