@@ -148,8 +148,8 @@ function Calendar(opts) {
   this.$calendar.on('calendar:rendered', this.filterPanel.setHeight());
   this.$calendar.on('click', '.js-toggle-view', this.toggleListView.bind(this));
 
-  this.$calendar.on('keypress', '.fc-content, .fc-more, .fc-close', this.handleKeypress.bind(this));
-  this.$calendar.on('click', '.fc-more', this.controlPopoverFocus.bind(this));
+  this.$calendar.on('keypress', '.fc-content, .fc-more, .fc-close', this.simulateClick.bind(this));
+  this.$calendar.on('click', '.fc-more', this.managePopoverControl.bind(this));
 
   this.filterPanel.$form.on('change', this.filter.bind(this));
   $(window).on('popstate', this.filter.bind(this));
@@ -347,13 +347,14 @@ Calendar.prototype.handleEventClick = function(calEvent, jsEvent, view) {
   }
 };
 
-Calendar.prototype.handleKeypress = function(e) {
+// Simulate clicks when hitting enter on certain full-calendar elements
+Calendar.prototype.simulateClick = function(e) {
   if (e.keyCode === 13) {
     $(e.target).click();
   }
 };
 
-Calendar.prototype.controlPopoverFocus = function(e) {
+Calendar.prototype.managePopoverControl = function(e) {
   var $target = $(e.target);
   var $popover = this.$calendar.find('.fc-popover');
   $popover.attr('id', this.popoverId).attr('role', 'tooltip');
