@@ -355,7 +355,7 @@ Calendar.prototype.handleKeypress = function(e) {
 
 Calendar.prototype.controlPopoverFocus = function(e) {
   var $target = $(e.target);
-  var $popover = $('.fc-popover');
+  var $popover = this.$calendar.find('.fc-popover');
   $popover.attr('id', this.popoverId).attr('role', 'tooltip');
   $popover.find('.fc-close')
     .attr('tabindex', '0')
@@ -363,9 +363,7 @@ Calendar.prototype.controlPopoverFocus = function(e) {
     .on('click', function() {
       $target.focus();
     });
-  $popover.find('.fc-content').each(function(){
-    $(this).attr('tabindex', '0');
-  });
+  $popover.find('.fc-content').attr('tabindex', '0');
 };
 
 Calendar.prototype.highlightToday = function() {
