@@ -145,7 +145,8 @@ function Calendar(opts) {
   this.$calendar.on('calendar:rendered', this.filterPanel.setHeight());
   this.$calendar.on('click', '.js-toggle-view', this.toggleListView.bind(this));
 
-  this.$calendar.on('keypress', '.fc-content', this.handleEventKeypress.bind(this));
+  this.$calendar.on('keypress', '.fc-content, .fc-more, .fc-close', this.handleKeypress.bind(this));
+  this.$calendar.on('click', '.fc-more', this.controlPopoverFocus.bind(this));
 
   this.filterPanel.$form.on('change', this.filter.bind(this));
   $(window).on('popstate', this.filter.bind(this));
@@ -312,9 +313,12 @@ Calendar.prototype.handleRender = function(view) {
   } else if (this.$listToggles) {
     this.$listToggles.remove();
   }
-  this.$calendar.find('.fc-content, .fc-more').each(function(){
-    $(this).attr('tabindex', '0');
-  })
+  this.$calendar.find('.fc-content').each(function(){
+    $(this).attr('tabindex', '0').attr('aria-describedby', 'calendar-details');
+  });
+  this.$calendar.find('.fc-more').each(function(){
+    $(this).attr('tabindex', '0').attr('aria-describedby', 'calendar-popover');
+  });
 };
 
 Calendar.prototype.manageListToggles = function(view) {
@@ -344,10 +348,25 @@ Calendar.prototype.handleEventClick = function(calEvent, jsEvent, view) {
   }
 };
 
-Calendar.prototype.handleEventKeypress = function(e) {
+Calendar.prototype.handleKeypress = function(e) {
   if (e.keyCode === 13) {
     $(e.target).click();
   }
+};
+
+Calendar.prototype.controlPopoverFocus = function(e) {
+  var $target = $(e.target);
+  var $popover = $('.fc-popover');
+  $popover.attr('id', 'calendar-popover').attr('role', 'tooltip');
+  $popover.find('.fc-close')
+    .attr('tabindex', '0')
+    .focus()
+    .on('click', function() {
+      $target.focus();
+    });
+  $popover.find('.fc-content').each(function(){
+    $(this).attr('tabindex', '0');
+  });
 };
 
 Calendar.prototype.highlightToday = function() {
