@@ -17,6 +17,7 @@ window.$ = window.jQuery = $;
 
 var Sticky = require('component-sticky');
 var calendar = require('./calendar');
+var calendarHelpers = require('./calendar-helpers');
 var toc = require('./toc');
 
 var SLT_ACCORDION = '.js-accordion';
@@ -65,8 +66,8 @@ $(document).ready(function() {
     selector: '#calendar',
     download: '#calendar-download',
     subscribe: '#calendar-subscribe',
-    url: calendar.getUrl(['calendar-dates']),
-    exportUrl: calendar.getUrl(['calendar-dates', 'export']),
+    url: calendarHelpers.getUrl(['calendar-dates']),
+    exportUrl: calendarHelpers.getUrl(['calendar-dates', 'export']),
     filterPanel: filterPanel,
   });
 
