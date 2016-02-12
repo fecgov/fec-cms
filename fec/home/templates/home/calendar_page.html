@@ -73,7 +73,7 @@
             {% endfor %}
           </div>
           <div class="filter filter--rules">
-            <span class="label">Rulemaking <span class="filter__swatch"></span></span>
+            <span class="label">Advisory Opinions and rulemakings <span class="filter__swatch"></span></span>
             {% for value, label in settings.CONSTANTS.rule_types.items %}
               <input id="{{ value | clean_whitespace }}" type="checkbox" name="category" value="{{ value }}" />
               <label for="{{ value | clean_whitespace }}">{{ label }}</label>

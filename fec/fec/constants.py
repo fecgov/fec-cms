@@ -24,7 +24,7 @@ meeting_types = OrderedDict([
 ])
 
 rule_types = OrderedDict([
-    ('AOs and Rules', 'AOs and rules')
+    ('AOs and Rules', 'AOs and rulemakings')
 ])
 
 other_types = OrderedDict([
