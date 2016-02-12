@@ -394,8 +394,7 @@ var classMap = {
 function getEventClass(event) {
   var className = '';
   var category = event.category ? event.category.split(/[ -]+/)[0] : null;
-
-  className += event.end_date === null ? 'fc--allday' : '';
+  className += moment.utc(event.start_date).format('HHmmss') === '000000' ? 'fc--allday' : '';
   className += category ? ' ' + classMap[category.toLowerCase()] : '';
   return className;
 }
