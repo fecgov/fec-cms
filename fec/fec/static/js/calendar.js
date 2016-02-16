@@ -26,6 +26,18 @@ var templates = {
 
 var LIST_VIEWS = ['quarterTime', 'quarterCategory', 'monthTime', 'monthCategory'];
 
+var FC = $.fullCalendar;
+var Grid = FC.Grid;
+
+// Globally override event sorting to order all-day events last
+// TODO: Convince fullcalendar.io support this behavior without monkey-patching
+Grid.prototype.compareEventSegs = function(seg1, seg2) {
+  return seg1.event.allDay - seg2.event.allDay || // put all-day events last (booleans cast to 0/1)
+    seg1.eventStartMS - seg2.eventStartMS || // tie? earlier events go first
+    seg2.eventDurationMS - seg1.eventDurationMS || // tie? longer events go first
+    FC.compareByFieldSpecs(seg1.event, seg2.event, this.view.eventOrderSpecs);
+};
+
 function Calendar(opts) {
   this.opts = $.extend({}, this.defaultOpts(), opts);
 
