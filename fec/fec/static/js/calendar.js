@@ -91,6 +91,7 @@ Calendar.prototype.defaultOpts = function() {
         today: 'Today',
         week: 'Week',
       },
+      contentHeight: 'auto',
       dayRender: this.handleDayRender.bind(this),
       dayPopoverFormat: 'MMM D, YYYY',
       defaultView: this.defaultView(),
