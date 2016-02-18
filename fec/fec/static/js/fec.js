@@ -1,7 +1,5 @@
 'use strict';
 
-/* global require, window, document */
-
 var $ = require('jquery');
 
 var terms = require('fec-style/js/terms');
@@ -10,12 +8,17 @@ var accordion = require('fec-style/js/accordion');
 var feedback = require('fec-style/js/feedback');
 var skipNav = require('fec-style/js/skip-nav');
 var siteNav = require('fec-style/js/site-nav');
+var dropdown = require('fec-style/js/dropdowns');
+var FilterPanel = require('fec-style/js/filter-panel').FilterPanel;
+var filterTags = require('fec-style/js/filter-tags');
 
 // Hack: Append jQuery to `window` for use by legacy libraries
 window.$ = window.jQuery = $;
 
 var Sticky = require('component-sticky');
-var toc = require('./toc.js');
+var calendar = require('./calendar');
+var calendarHelpers = require('./calendar-helpers');
+var toc = require('./toc');
 
 var SLT_ACCORDION = '.js-accordion';
 
@@ -42,5 +45,30 @@ $(document).ready(function() {
     new Sticky(this, opts);
   });
 
+  // Initialize checkbox dropdowns
+  $('.js-dropdown').each(function() {
+    new dropdown.Dropdown(this);
+  });
+
+  // Initialize feedback widget
   new feedback.Feedback(window.FEC_APP_URL + '/issue/');
+
+  // Initialize filter tags
+  var $widgets = $('.js-data-widgets');
+  var $tagList = new filterTags.TagList({title: 'All records'}).$body;
+  $widgets.prepend($tagList);
+
+  // Initialize filters
+  var filterPanel = new FilterPanel();
+
+  // Initialize calendar
+  new calendar.Calendar({
+    selector: '#calendar',
+    download: '#calendar-download',
+    subscribe: '#calendar-subscribe',
+    url: calendarHelpers.getUrl(['calendar-dates']),
+    exportUrl: calendarHelpers.getUrl(['calendar-dates', 'export']),
+    filterPanel: filterPanel,
+  });
+
 });

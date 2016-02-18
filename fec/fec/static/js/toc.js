@@ -1,7 +1,5 @@
 'use strict';
 
-/* global require, module */
-
 var $ = require('jquery');
 var scrollMonitor = require('scrollmonitor');
 var _ = require('underscore');
