@@ -28,7 +28,7 @@ CalendarTooltip.prototype.close = function() {
   this.$content.remove();
   this.exportDropdown.destroy();
   this.$container.find('.fc-content').focus();
-  this.events.off();
+  this.events.clear();
 };
 
 module.exports = {CalendarTooltip: CalendarTooltip};
