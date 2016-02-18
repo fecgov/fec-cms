@@ -34,12 +34,12 @@
     "phantomjs": "^2.1.2",
     "sinon": "^1.17.2",
     "sinon-chai": "^2.8.0",
-    "stringify": "^3.1.0",
+    "stringify": "^4.0.1",
     "vinyl-source-stream": "^1.1.0",
     "watchify": "^3.7.0"
   },
   "engines": {
-    "node": "0.12.7",
-    "npm": "2.11.3"
+    "node": "5.5.0",
+    "npm": "3.3.12"
   }
 }
