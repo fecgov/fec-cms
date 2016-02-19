@@ -183,7 +183,7 @@ Calendar.prototype.updateLinks = function(params) {
   var url = this.exportUrl.clone().addQuery(params || {});
   var urls = {
     ics: url.toString(),
-    csv: url.clone().query({renderer: 'csv'}).toString(),
+    csv: url.clone().addQuery({renderer: 'csv'}).toString(),
     // Note: The cid parameter silently rejects https links; use http and allow
     // the backend to redirect to https
     google: 'https://calendar.google.com/calendar/render?cid=' +
