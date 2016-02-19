@@ -1,0 +1,12 @@
+<div class="toggles--simple">
+  Sort by:
+  <button
+    class="toggle js-toggle-view
+      {{#if (eq sortBy 'category')}}is-active{{/if}}"
+    data-trigger-view="{{ duration.intervalUnit }}Category">Category</button>
+  |
+  <button
+    class="toggle js-toggle-view
+      {{#if (eq sortBy 'time')}}is-active{{/if}}"
+    data-trigger-view="{{ duration.intervalUnit }}Time">Time</button>
+</div>
