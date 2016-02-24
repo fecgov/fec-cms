@@ -252,7 +252,8 @@ Calendar.prototype.handleEventRender = function(event, element) {
   element.attr({
     'tabindex': '0',
     'aria-describedby': this.detailsId,
-    'aria-label': eventLabel});
+    'aria-label': eventLabel
+  });
 };
 
 Calendar.prototype.handleDayRender = function(date, cell) {
@@ -264,8 +265,8 @@ Calendar.prototype.handleDayRender = function(date, cell) {
 Calendar.prototype.handleEventClick = function(calEvent, jsEvent, view) {
   var $target = $(jsEvent.target);
   if (!$target.closest('.tooltip').length) {
-    var $eventContainer = $target.closest('.fc-content').length > 0 ?
-      $target.closest('.fc-content') : $target.find('.fc-content');
+    var $closest = $target.closest('.fc-content');
+    var $eventContainer = $closest.length ? $closest : $target.find('.fc-content');
     var tooltip = new calendarTooltip.CalendarTooltip(
       templates.details(_.extend({}, calEvent, {detailsId: this.detailsId})),
       $eventContainer.parent()
