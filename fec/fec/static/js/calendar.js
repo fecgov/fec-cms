@@ -60,7 +60,7 @@ function Calendar(opts) {
   this.$calendar.on('calendar:rendered', this.filterPanel.setHeight());
   this.$calendar.on('click', '.js-toggle-view', this.toggleListView.bind(this));
 
-  this.$calendar.on('keypress', '.fc-content, .fc-more, .fc-close', this.simulateClick.bind(this));
+  this.$calendar.on('keypress', '.fc-event, .fc-more, .fc-close', this.simulateClick.bind(this));
   this.$calendar.on('click', '.fc-more', this.managePopoverControl.bind(this));
 
   this.filterPanel.$form.on('change', this.filter.bind(this));
@@ -84,7 +84,7 @@ Calendar.prototype.defaultOpts = function() {
       header: {
         left: 'prev,next today',
         center: 'title',
-        right: 'agendaWeek,month,quarterCategory'
+        right: 'month,quarterCategory'
       },
       buttonIcons: false,
       buttonText: {
@@ -95,6 +95,7 @@ Calendar.prototype.defaultOpts = function() {
       dayRender: this.handleDayRender.bind(this),
       dayPopoverFormat: 'MMM D, YYYY',
       defaultView: this.defaultView(),
+      eventRender: this.handleEventRender.bind(this),
       eventAfterAllRender: this.handleRender.bind(this),
       eventClick: this.handleEventClick.bind(this),
       eventLimit: true,
@@ -229,7 +230,6 @@ Calendar.prototype.handleRender = function(view) {
   } else if (this.$listToggles) {
     this.$listToggles.remove();
   }
-  this.$calendar.find('.fc-content').attr({'tabindex': '0', 'aria-describedby': this.detailsId});
   this.$calendar.find('.fc-more').attr({'tabindex': '0', 'aria-describedby': this.popoverId});
 };
 
@@ -245,6 +245,17 @@ Calendar.prototype.manageListToggles = function(view) {
   }
 };
 
+Calendar.prototype.handleEventRender = function(event, element) {
+  var eventLabel = event.title + ' ' +
+    event.start.format('dddd MMMM D, YYYY') +
+    '. Category: ' + event.category;
+  element.attr({
+    'tabindex': '0',
+    'aria-describedby': this.detailsId,
+    'aria-label': eventLabel
+  });
+};
+
 Calendar.prototype.handleDayRender = function(date, cell) {
   if (date.date() === 1) {
     cell.append(date.format('MMMM'));
@@ -254,7 +265,8 @@ Calendar.prototype.handleDayRender = function(date, cell) {
 Calendar.prototype.handleEventClick = function(calEvent, jsEvent, view) {
   var $target = $(jsEvent.target);
   if (!$target.closest('.tooltip').length) {
-    var $eventContainer = $target.closest('.fc-content');
+    var $closest = $target.closest('.fc-content');
+    var $eventContainer = $closest.length ? $closest : $target.find('.fc-content');
     var tooltip = new calendarTooltip.CalendarTooltip(
       templates.details(_.extend({}, calEvent, {detailsId: this.detailsId})),
       $eventContainer.parent()
@@ -280,7 +292,6 @@ Calendar.prototype.managePopoverControl = function(e) {
     .on('click', function() {
       $target.focus();
     });
-  $popover.find('.fc-content').attr('tabindex', '0');
 };
 
 Calendar.prototype.highlightToday = function() {
