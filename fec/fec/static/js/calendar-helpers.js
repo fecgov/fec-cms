@@ -1,7 +1,6 @@
 'use strict';
 
 var URI = require('urijs');
-var moment = require('moment');
 
 var classMap = {
   aos: 'fc--rules',
@@ -20,7 +19,7 @@ var classMap = {
 function getEventClass(event) {
   var className = '';
   var category = event.category ? event.category.split(/[ -]+/)[0] : null;
-  className += moment.utc(event.start_date).format('HHmmss') === '000000' ? 'fc--allday' : '';
+  className += event.all_day ? 'fc--allday' : '';
   className += category ? ' ' + classMap[category.toLowerCase()] : '';
   return className;
 }

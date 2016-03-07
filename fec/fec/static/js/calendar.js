@@ -166,9 +166,9 @@ Calendar.prototype.success = function(response) {
       title: event.description || 'Event title',
       summary: event.summary || 'Event summary',
       state: event.state ? event.state.join(', ') : null,
-      start: event.start_date ? moment.utc(event.start_date) : null,
-      end: event.end_date ? moment.utc(event.end_date) : null,
-      allDay: moment.utc(event.start_date).format('HHmmss') === '000000' && event.end_date === null,
+      start: event.start_date ? moment(event.start_date) : null,
+      end: event.end_date ? moment(event.end_date) : null,
+      allDay: event.all_day,
       className: calendarHelpers.getEventClass(event),
       detailUrl: event.url
     };
