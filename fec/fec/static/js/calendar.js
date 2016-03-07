@@ -21,10 +21,12 @@ var templates = {
   details: require('../hbs/calendar/details.hbs'),
   download: require('../hbs/calendar/download.hbs'),
   subscribe: require('../hbs/calendar/subscribe.hbs'),
-  listToggles: require('../hbs/calendar/listToggles.hbs')
+  listToggles: require('../hbs/calendar/listToggles.hbs'),
+  viewToggles: require('../hbs/calendar/viewToggles.hbs')
 };
 
 var LIST_VIEWS = ['quarterTime', 'quarterCategory', 'monthTime', 'monthCategory'];
+var MONTH_VIEWS = ['month', 'monthTime', 'monthCategory'];
 
 var FC = $.fullCalendar;
 var Grid = FC.Grid;
@@ -82,7 +84,7 @@ Calendar.prototype.defaultOpts = function() {
   return {
     calendarOpts: {
       header: {
-        left: 'prev,next today',
+        left: 'prev,next',
         center: 'title',
         right: 'month,quarterCategory'
       },
@@ -225,10 +227,19 @@ Calendar.prototype.defaultView = function() {
 Calendar.prototype.handleRender = function(view) {
   $(document.body).trigger($.Event('calendar:rendered'));
   this.highlightToday();
-  if (LIST_VIEWS.indexOf(view.name) !== -1) {
+  this.manageViewToggles(view);
+  if (MONTH_VIEWS.indexOf(view.name) !== -1) {
+    this.$viewToggles.removeClass('is-disabled');
+    this.$calendar.find('.fc-month-button').addClass('fc-state-active');
+  } else if (this.$viewToggles) {
+    this.$viewToggles.addClass('is-disabled');
+  }
+
+   if (LIST_VIEWS.indexOf(view.name) !== -1) {
     this.manageListToggles(view);
   } else if (this.$listToggles) {
     this.$listToggles.remove();
+    this.$listToggles = null;
   }
   this.$calendar.find('.fc-more').attr({'tabindex': '0', 'aria-describedby': this.popoverId});
 };
@@ -242,7 +253,16 @@ Calendar.prototype.manageListToggles = function(view) {
   // Highlight the quarter button on quarterTime
   if (view.name === 'quarterTime') {
     this.$calendar.find('.fc-quarterCategory-button').addClass('fc-state-active');
+    this.$calendar.find('.fc-month-button').removeClass('fc-state-active');
   }
+};
+
+Calendar.prototype.manageViewToggles = function(view) {
+  if (!this.$viewToggles) {
+    this.$viewToggles = $('<div class="cal-view__toggles"></div>');
+    this.$viewToggles.prependTo(this.$calendar.find('.fc-toolbar .fc-right'));
+  }
+  this.$viewToggles.html(templates.viewToggles(view))
 };
 
 Calendar.prototype.handleEventRender = function(event, element) {
