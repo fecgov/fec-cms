@@ -4,8 +4,8 @@
     "test-single": "karma start --single-run --browsers PhantomJS"
   },
   "dependencies": {
-    "@18f/accordion": "git://github.com/18f/accordion#content-prefix",
-    "@18f/glossary-panel": "git://github.com/18f/glossary.git#removing-classes",
+    "aria-accordion": "git://github.com/18f/accordion",
+    "glossary-panel": "git://github.com/18f/glossary.git",
     "ace-builds": "1.2.2",
     "component-sticky": "1.0.0",
     "fec-style": "git://github.com/18f/fec-style.git#new-accordions",

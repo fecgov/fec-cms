@@ -2,8 +2,8 @@
 
 var $ = require('jquery');
 
-var Glossary = require('@18f/glossary-panel');
-var Accordion = require('@18f/accordion').Accordion;
+var Accordion = require('aria-accordion').Accordion;
+var Glossary = require('glossary-panel');
 
 var terms = require('fec-style/js/terms');
 var feedback = require('fec-style/js/feedback');
