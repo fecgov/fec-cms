@@ -82,7 +82,7 @@ Calendar.prototype.defaultOpts = function() {
   return {
     calendarOpts: {
       header: {
-        left: 'prev,next today',
+        left: 'prev,next',
         center: 'title',
         right: 'month,quarterCategory'
       },
@@ -112,7 +112,7 @@ Calendar.prototype.defaultOpts = function() {
         },
         quarterCategory: {
           type: 'list',
-          buttonText: 'Quarter',
+          buttonText: 'List',
           categories: true,
           sortBy: 'category',
           duration: {quarters: 1, intervalUnit: 'quarter'}
@@ -212,6 +212,8 @@ Calendar.prototype.styleButtons = function() {
   this.$calendar.find('.fc-next-button').addClass('button--next');
   this.$calendar.find('.fc-prev-button').addClass('button--previous');
   this.$calendar.find('.fc-right .fc-button-group').addClass('toggles--buttons');
+  this.$calendar.find('.fc-quarterCategory-button').addClass('button--list');
+  this.$calendar.find('.fc-month-button').addClass('button--cal');
 };
 
 Calendar.prototype.defaultView = function() {
@@ -229,6 +231,7 @@ Calendar.prototype.handleRender = function(view) {
     this.manageListToggles(view);
   } else if (this.$listToggles) {
     this.$listToggles.remove();
+    this.$listToggles = null;
   }
   this.$calendar.find('.fc-more').attr({'tabindex': '0', 'aria-describedby': this.popoverId});
 };
