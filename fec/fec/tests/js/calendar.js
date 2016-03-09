@@ -12,6 +12,7 @@ var moment = require('moment');
 require('./setup')();
 
 var Calendar = require('../../static/js/calendar').Calendar;
+var calendarTooltip = require('../../static/js/calendar-tooltip');
 
 describe('calendar', function() {
   before(function() {
@@ -160,9 +161,21 @@ describe('calendar', function() {
   });
 
   describe('handleEventClick()', function() {
-    it('makes a new tooltip if there is none', function(){
-      // TODO
-    })
+    it('makes a new tooltip if there is none', function() {
+      var target = '<a><span class="fc-content"></span></a>';
+      sinon.stub(calendarTooltip, 'CalendarTooltip');
+      this.calendar.handleEventClick({}, {target: target});
+      expect(calendarTooltip.CalendarTooltip).to.have.been.called;
+      calendarTooltip.CalendarTooltip.restore();
+    });
+
+    it('does not make a tooltip if there is one', function() {
+      var target = '<a><span class="fc-content"></span></a><div class="tooltip"></div>';
+      sinon.stub(calendarTooltip, 'CalendarTooltip');
+      this.calendar.handleEventClick({}, {target: target});
+      expect(calendarTooltip.CalendarTooltip).to.not.have.been.called;
+      calendarTooltip.CalendarTooltip.restore();
+    });
   });
 
   describe('simulateClick()', function() {
@@ -188,7 +201,7 @@ describe('calendar', function() {
       expect($popover.attr('id')).to.equal(this.calendar.popoverId);
       expect($popover.find('.fc-close').attr('tabindex')).to.equal('0');
       expect(document.activeElement.classList[0]).to.equal('fc-close');
-    })
+    });
   });
 
   describe('filter()', function() {
