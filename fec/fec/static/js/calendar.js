@@ -229,6 +229,7 @@ Calendar.prototype.handleRender = function(view) {
     this.manageListToggles(view);
   } else if (this.$listToggles) {
     this.$listToggles.remove();
+    this.$listToggles = null;
   }
   this.$calendar.find('.fc-more').attr({'tabindex': '0', 'aria-describedby': this.popoverId});
 };
