@@ -1,0 +1,11 @@
+<div class="toggles--buttons">
+  <button
+    type="button"
+    class="button button--neutral button--list js-toggle-view
+    {{#if (eq name 'monthTime')}}is-active{{/if}}"
+    data-trigger-view="monthTime"><span class="u-visually-hidden">List view</span></button>
+    <button
+    class="button button--neutral button--cal js-toggle-view
+      {{#if (eq name 'month')}}is-active{{/if}}"
+    data-trigger-view="month"><span class="u-visually-hidden">Calendar view</span></button>
+</div>
