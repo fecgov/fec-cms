@@ -13,6 +13,11 @@ require('./setup')();
 
 var Calendar = require('../../static/js/calendar').Calendar;
 var calendarTooltip = require('../../static/js/calendar-tooltip');
+var calendarHelpers = require('../../static/js/calendar-helpers');
+var calendarListView = require('../../static/js/calendar-list-view');
+
+var dropdown = require('fec-style/js/dropdowns');
+var tooltipContent = require('../../static/hbs/calendar/details.hbs');
 
 describe('calendar', function() {
   before(function() {
@@ -178,20 +183,6 @@ describe('calendar', function() {
     });
   });
 
-  describe('simulateClick()', function() {
-    it('fakes a click on enter', function() {
-      var target = '<span>link</span>';
-      var clicked = false;
-      $(target).on('click', function() {
-        clicked = true;
-      })
-      this.calendar.simulateClick({keyCode: 13, target: target});
-      setTimeout(function() {
-        expect(clicked).to.be.true;
-      }, 1000);
-    });
-  });
-
   describe('managePopoverControl()', function() {
     it('adds the correct attributes to the popover', function() {
       var $popover = $('<div class="fc-popover"><span class="fc-close"></span></div>');
@@ -204,6 +195,72 @@ describe('calendar', function() {
     });
   });
 
+  // Tooltip tests
+  describe('CalendarTooltip()', function() {
+    beforeEach(function() {
+      var $container = $('<a class="cal-event" tabindex="0"></a>');
+      var content = tooltipContent({});
+      $(document.body).append($container);
+      this.calendarTooltip = new calendarTooltip.CalendarTooltip(content, $container);
+      $container.append(this.calendarTooltip.$content);
+    });
+
+    afterEach(function() {
+      this.calendarTooltip.close();
+      $('.cal-event').remove();
+    });
+
+    it('closes on click away', function() {
+      var $content = this.calendarTooltip.$content;
+      $(document.body).click();
+      expect($('.cal-details').length).to.equal(0);
+    });
+
+    it('stays open if you click inside it', function() {
+      this.calendarTooltip.$content.find('a').click();
+      expect($('.cal-details').length).to.equal(1);
+    });
+
+    it('closes on clicking the close button', function() {
+      this.calendarTooltip.$content.find('.js-close').click();
+      expect($('.cal-details').length).to.equal(0);
+    });
+
+    it('focuses on the container on close', function() {
+      this.calendarTooltip.close();
+      expect($(document.activeElement).hasClass('cal-event')).to.be.true;
+    });
+  });
+
+  // Helper tests
+  describe('calendarHelpers.getEventClass()', function() {
+    it('builds the correct classnames', function() {
+      var className = calendarHelpers.getEventClass({category: 'open', all_day: true});
+      expect(className).to.equal('fc--allday fc--meeting');
+    });
+  });
+
+  describe('calendarHelpers.getGoogleurl()', function() {
+    it('builds the correct Google url', function() {
+      var googleUrl = calendarHelpers.getGoogleUrl({
+        title: 'the big one',
+        summary: 'vote today',
+        end: moment('2016-11-01'),
+        start: moment('2016-11-02')
+      });
+      expect(googleUrl).to.equal('https://calendar.google.com/calendar/render?action=TEMPLATE&text=the+big+one&details=vote+today&dates=20161102T000000%2F20161101T000000');
+    });
+  });
+
+  describe('calendarHelpers.getUrl()', function() {
+    it('builds the correct url', function() {
+      var url = calendarHelpers.getUrl('calendar', {category: 'election'});
+      expect(url).to.equal('/v1/calendar/?api_key=12345&per_page=500&category=election');
+    });
+  });
+
+  // Putting this last because it crashes if it's before the new tests
+  // But we should figure out why
   describe('filter()', function() {
     before(function() {
       this.response = {
