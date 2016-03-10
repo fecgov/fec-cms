@@ -215,7 +215,7 @@ Calendar.prototype.styleButtons = function() {
 };
 
 Calendar.prototype.defaultView = function() {
-  if ($(document).width() < helpers.BREAKPOINTS.MEDIUM) {
+  if ($(document.body).width() < helpers.BREAKPOINTS.MEDIUM) {
     return 'monthTime';
   } else {
     return 'month';

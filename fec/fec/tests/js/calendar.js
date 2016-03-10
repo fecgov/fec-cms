@@ -11,12 +11,11 @@ var moment = require('moment');
 
 require('./setup')();
 
+var helpers = require('fec-style/js/helpers');
 var Calendar = require('../../static/js/calendar').Calendar;
 var calendarTooltip = require('../../static/js/calendar-tooltip');
 var calendarHelpers = require('../../static/js/calendar-helpers');
-var calendarListView = require('../../static/js/calendar-list-view');
 
-var dropdown = require('fec-style/js/dropdowns');
 var tooltipContent = require('../../static/hbs/calendar/details.hbs');
 
 describe('calendar', function() {
@@ -48,10 +47,17 @@ describe('calendar', function() {
       filterPanel: {
         setHeight: function() {},
         $form: {on: function() {}},
-        filterSet: {serialize: function() {}}
+        filterSet: {
+          serialize: function() {},
+          fields: {}
+        }
       }
     });
     this.server.respond();
+  });
+
+  beforeEach(function() {
+    $(document.body).width(helpers.BREAKPOINTS.MEDIUM);
   });
 
   describe('constructor()', function() {
@@ -77,18 +83,56 @@ describe('calendar', function() {
       var defaultView = this.calendar.defaultView();
       expect(defaultView).to.equal('month');
     });
+
+    it('uses the correct default view on small screens', function() {
+      $(document.body).width(helpers.BREAKPOINTS.MEDIUM - 1);
+      var defaultView = this.calendar.defaultView();
+      expect(defaultView).to.equal('monthTime');
+    });
+  });
+
+  describe('filter()', function() {
+    before(function() {
+      this.response = {
+        results: [
+          {
+            category: 'election',
+            title: 'the big one',
+            start_date: moment().format()
+          }
+        ]
+      };
+      this.server.respondWith(
+        [200, {'Content-Type': 'application/json'}, JSON.stringify(this.response)]
+      );
+    });
+
+    beforeEach(function() {
+      sinon.stub(this.calendar.filterSet, 'serialize');
+      this.calendar.filterSet.serialize.returns({category: ['election-P']});
+    });
+
+    afterEach(function() {
+      this.calendar.filterSet.serialize.restore();
+    });
+
+    it('fetches events', function() {
+      this.calendar.params = null;
+      this.calendar.filter();
+      this.server.respond();
+      expect(this.calendar.filterSet.serialize).to.have.been.called;
+      expect(this.calendar.params).to.deep.equal(this.calendar.filterSet.serialize());
+      var events = this.calendar.$calendar.fullCalendar('getEvents');
+      expect(events.length).to.equal(1);
+    });
   });
 
   describe('handleRender()', function() {
-    it('triggers a render event', function(){
-      var eventCalled = false;
-      this.calendar.$calendar.on('calendar:rendered', function(){
-        eventCalled = true;
-      })
+    it('triggers a render event', function() {
+      var callback = sinon.stub();
+      $(document.body).on('calendar:rendered', callback);
       this.calendar.handleRender({name: 'month'});
-      setTimeout(function() {
-        expect(eventCalled).to.be.true;
-      }, 1000);
+      expect(callback).to.have.been.called;
     });
 
     it('highlights today', function() {
@@ -115,7 +159,7 @@ describe('calendar', function() {
       this.calendar.handleRender({name: 'month'});
       expect($('.cal-list__toggles').length).to.equal(0);
       expect(this.calendar.$listToggles).to.not.exist;
-    })
+    });
   });
 
   describe('manageListToggles()', function() {
@@ -166,20 +210,24 @@ describe('calendar', function() {
   });
 
   describe('handleEventClick()', function() {
+    beforeEach(function() {
+      sinon.stub(calendarTooltip, 'CalendarTooltip');
+    });
+
+    afterEach(function() {
+      calendarTooltip.CalendarTooltip.restore();
+    });
+
     it('makes a new tooltip if there is none', function() {
       var target = '<a><span class="fc-content"></span></a>';
-      sinon.stub(calendarTooltip, 'CalendarTooltip');
       this.calendar.handleEventClick({}, {target: target});
       expect(calendarTooltip.CalendarTooltip).to.have.been.called;
-      calendarTooltip.CalendarTooltip.restore();
     });
 
     it('does not make a tooltip if there is one', function() {
       var target = '<a><span class="fc-content"></span></a><div class="tooltip"></div>';
-      sinon.stub(calendarTooltip, 'CalendarTooltip');
       this.calendar.handleEventClick({}, {target: target});
       expect(calendarTooltip.CalendarTooltip).to.not.have.been.called;
-      calendarTooltip.CalendarTooltip.restore();
     });
   });
 
@@ -194,45 +242,44 @@ describe('calendar', function() {
       expect(document.activeElement.classList[0]).to.equal('fc-close');
     });
   });
+});
 
-  // Tooltip tests
-  describe('CalendarTooltip()', function() {
-    beforeEach(function() {
-      var $container = $('<a class="cal-event" tabindex="0"></a>');
-      var content = tooltipContent({});
-      $(document.body).append($container);
-      this.calendarTooltip = new calendarTooltip.CalendarTooltip(content, $container);
-      $container.append(this.calendarTooltip.$content);
-    });
-
-    afterEach(function() {
-      this.calendarTooltip.close();
-      $('.cal-event').remove();
-    });
-
-    it('closes on click away', function() {
-      var $content = this.calendarTooltip.$content;
-      $(document.body).click();
-      expect($('.cal-details').length).to.equal(0);
-    });
-
-    it('stays open if you click inside it', function() {
-      this.calendarTooltip.$content.find('a').click();
-      expect($('.cal-details').length).to.equal(1);
-    });
-
-    it('closes on clicking the close button', function() {
-      this.calendarTooltip.$content.find('.js-close').click();
-      expect($('.cal-details').length).to.equal(0);
-    });
-
-    it('focuses on the container on close', function() {
-      this.calendarTooltip.close();
-      expect($(document.activeElement).hasClass('cal-event')).to.be.true;
-    });
+describe('calendar tooltip', function() {
+  beforeEach(function() {
+    var $container = $('<a class="cal-event" tabindex="0"></a>');
+    var content = tooltipContent({});
+    $(document.body).append($container);
+    this.calendarTooltip = new calendarTooltip.CalendarTooltip(content, $container);
+    $container.append(this.calendarTooltip.$content);
   });
 
-  // Helper tests
+  afterEach(function() {
+    this.calendarTooltip.close();
+    $('.cal-event').remove();
+  });
+
+  it('closes on click away', function() {
+    $(document.body).click();
+    expect($('.cal-details').length).to.equal(0);
+  });
+
+  it('stays open if you click inside it', function() {
+    this.calendarTooltip.$content.find('a').click();
+    expect($('.cal-details').length).to.equal(1);
+  });
+
+  it('closes on clicking the close button', function() {
+    this.calendarTooltip.$content.find('.js-close').click();
+    expect($('.cal-details').length).to.equal(0);
+  });
+
+  it('focuses on the container on close', function() {
+    this.calendarTooltip.close();
+    expect($(document.activeElement).hasClass('cal-event')).to.be.true;
+  });
+});
+
+describe('helpers', function() {
   describe('calendarHelpers.getEventClass()', function() {
     it('builds the correct classnames', function() {
       var className = calendarHelpers.getEventClass({category: 'open', all_day: true});
@@ -256,44 +303,6 @@ describe('calendar', function() {
     it('builds the correct url', function() {
       var url = calendarHelpers.getUrl('calendar', {category: 'election'});
       expect(url).to.equal('/v1/calendar/?api_key=12345&per_page=500&category=election');
-    });
-  });
-
-  // Putting this last because it crashes if it's before the new tests
-  // But we should figure out why
-  describe('filter()', function() {
-    before(function() {
-      this.response = {
-        results: [
-          {
-            category: 'election',
-            title: 'the big one',
-            start_date: moment().format()
-          }
-        ]
-      };
-      this.server.respondWith(
-        [200, {'Content-Type': 'application/json'}, JSON.stringify(this.response)]
-      );
-    });
-
-    beforeEach(function() {
-      sinon.stub(this.calendar.filterSet, 'serialize');
-      this.calendar.filterSet.serialize.returns({category: ['election-P']});
-    });
-
-    afterEach(function() {
-      this.calendar.filterSet.serialize.restore();
-    });
-
-    it('fetches events', function() {
-      this.calendar.params = null;
-      this.calendar.filter();
-      this.server.respond();
-      expect(this.calendar.filterSet.serialize).to.have.been.called;
-      expect(this.calendar.params).to.deep.equal(this.calendar.filterSet.serialize());
-      var events = this.calendar.$calendar.fullCalendar('getEvents');
-      expect(events.length).to.equal(1);
     });
   });
 });
