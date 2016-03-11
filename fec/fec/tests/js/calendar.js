@@ -178,10 +178,10 @@ describe('calendar', function() {
       expect($monthToggle.hasClass('is-active')).to.exist;
     });
 
-    it('highlights the quarter toggle', function() {
-      this.calendar.manageListToggles({name: 'quarterTime'});
-      var $quarterToggle = this.calendar.$calendar.find('.fc-quarterCategory-button');
-      expect($quarterToggle.hasClass('fc-state-active')).to.be.true;
+    it('highlights the list toggle', function() {
+      this.calendar.manageListToggles({name: 'monthCategory'});
+      var $listToggle = this.calendar.$calendar.find('.fc-monthTime-button');
+      expect($listToggle.hasClass('fc-state-active')).to.be.true;
     });
   });
 

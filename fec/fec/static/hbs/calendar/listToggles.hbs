@@ -2,11 +2,11 @@
   Sort by:
   <button
     class="toggle js-toggle-view
-      {{#if (eq sortBy 'category')}}is-active{{/if}}"
-    data-trigger-view="{{ duration.intervalUnit }}Category">Category</button>
+      {{#if (eq sortBy 'time')}}is-active{{/if}}"
+    data-trigger-view="{{ duration.intervalUnit }}Time">Time</button>
   |
   <button
     class="toggle js-toggle-view
-      {{#if (eq sortBy 'time')}}is-active{{/if}}"
-    data-trigger-view="{{ duration.intervalUnit }}Time">Time</button>
+      {{#if (eq sortBy 'category')}}is-active{{/if}}"
+    data-trigger-view="{{ duration.intervalUnit }}Category">Category</button>
 </div>

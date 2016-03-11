@@ -24,7 +24,7 @@ var templates = {
   listToggles: require('../hbs/calendar/listToggles.hbs')
 };
 
-var LIST_VIEWS = ['quarterTime', 'quarterCategory', 'monthTime', 'monthCategory'];
+var LIST_VIEWS = ['monthTime', 'monthCategory'];
 
 var FC = $.fullCalendar;
 var Grid = FC.Grid;
@@ -109,18 +109,6 @@ Calendar.prototype.defaultOpts = function() {
         month: {
           eventLimit: 3,
           buttonText: 'Grid'
-        },
-        quarterCategory: {
-          type: 'list',
-          buttonText: 'List',
-          categories: true,
-          sortBy: 'category',
-          duration: {quarters: 1, intervalUnit: 'quarter'}
-        },
-        quarterTime: {
-          type: 'list',
-          sortBy: 'time',
-          duration: {quarters: 1, intervalUnit: 'quarter'}
         },
         monthCategory: {
           type: 'list',
@@ -243,9 +231,9 @@ Calendar.prototype.manageListToggles = function(view) {
     this.$listToggles.prependTo(this.$calendar.find('.fc-view-container'));
   }
   this.$listToggles.html(templates.listToggles(view.options));
-  // Highlight the quarter button on quarterTime
-  if (view.name === 'quarterTime') {
-    this.$calendar.find('.fc-quarterCategory-button').addClass('fc-state-active');
+  // Highlight the "List" button on monthTime
+  if (view.name === 'monthCategory') {
+    this.$calendar.find('.fc-monthTime-button').addClass('fc-state-active');
   }
 };
 
