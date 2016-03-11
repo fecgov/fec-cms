@@ -82,9 +82,9 @@ Calendar.prototype.defaultOpts = function() {
   return {
     calendarOpts: {
       header: {
-        left: 'prev,next today',
+        left: 'prev,next',
         center: 'title',
-        right: 'month,quarterCategory'
+        right: 'month,monthTime'
       },
       buttonIcons: false,
       buttonText: {
@@ -108,11 +108,11 @@ Calendar.prototype.defaultOpts = function() {
         },
         month: {
           eventLimit: 3,
-          buttonText: 'Month'
+          buttonText: 'Grid'
         },
         quarterCategory: {
           type: 'list',
-          buttonText: 'Quarter',
+          buttonText: 'List',
           categories: true,
           sortBy: 'category',
           duration: {quarters: 1, intervalUnit: 'quarter'}
@@ -130,6 +130,7 @@ Calendar.prototype.defaultOpts = function() {
         },
         monthTime: {
           type: 'list',
+          buttonText: 'List',
           sortBy: 'time',
           duration: {months: 1, intervalUnit: 'month'}
         },
@@ -212,6 +213,8 @@ Calendar.prototype.styleButtons = function() {
   this.$calendar.find('.fc-next-button').addClass('button--next');
   this.$calendar.find('.fc-prev-button').addClass('button--previous');
   this.$calendar.find('.fc-right .fc-button-group').addClass('toggles--buttons');
+  this.$calendar.find('.fc-monthTime-button').addClass('button--list');
+  this.$calendar.find('.fc-month-button').addClass('button--cal');
 };
 
 Calendar.prototype.defaultView = function() {
