@@ -34,12 +34,14 @@ $(document).ready(function() {
   // Initialize new accordions
   $('.js-accordion').each(function(){
     var contentPrefix = $(this).data('content-prefix') || 'accordion';
+    var openFirst = $(this).data('open-first') || false;
     var selectors = {
       body: '.js-accordion',
       trigger: '.js-accordion-trigger'
     };
     var opts = {
       contentPrefix: contentPrefix,
+      openFirst: openFirst
     };
     new Accordion(selectors, opts);
   });
