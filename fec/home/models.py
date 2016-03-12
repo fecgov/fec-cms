@@ -52,6 +52,9 @@ class LandingPage(ContentPage):
 class ChecklistPage(ContentPage):
     pass
 
+class SSFChecklistPage(ContentPage):
+    pass
+
 class OptionsPage(ContentPage):
     pass
 
