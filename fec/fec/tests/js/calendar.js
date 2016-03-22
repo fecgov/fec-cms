@@ -280,13 +280,6 @@ describe('calendar tooltip', function() {
 });
 
 describe('helpers', function() {
-  describe('calendarHelpers.getEventClass()', function() {
-    it('builds the correct classnames', function() {
-      var className = calendarHelpers.getEventClass({category: 'open', all_day: true});
-      expect(className).to.equal('fc--allday fc--meeting');
-    });
-  });
-
   describe('calendarHelpers.getGoogleurl()', function() {
     it('builds the correct Google url', function() {
       var googleUrl = calendarHelpers.getGoogleUrl({

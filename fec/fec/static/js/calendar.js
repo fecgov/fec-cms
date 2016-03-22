@@ -158,7 +158,6 @@ Calendar.prototype.success = function(response) {
       start: event.start_date ? moment(event.start_date) : null,
       end: event.end_date ? moment(event.end_date) : null,
       allDay: event.all_day,
-      className: calendarHelpers.getEventClass(event),
       detailUrl: event.url
     };
     _.extend(processed, {
