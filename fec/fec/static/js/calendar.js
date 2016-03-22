@@ -82,13 +82,13 @@ Calendar.prototype.defaultOpts = function() {
   return {
     calendarOpts: {
       header: {
-        left: 'prev,next',
+        left: 'prev,next,today',
         center: 'title',
         right: 'month,monthTime'
       },
       buttonIcons: false,
       buttonText: {
-        today: 'Today',
+        today: 'This Month',
         week: 'Week',
       },
       contentHeight: 'auto',

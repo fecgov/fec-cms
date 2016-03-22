@@ -5,11 +5,18 @@
 {% block body_class %}template-{{ self.get_verbose_name | slugify }}{% endblock %}
 
 {% block content %}
-<header class="page-header slab slab--secondary">
+<header class="page-header slab slab--primary">
   <h1 class="page-header__title">Calendar</h1>
 </header>
 
 <section class="main__content--full">
+  <div class="data-container__widgets js-data-widgets">
+    <div class="data-container__export">
+      <div id="calendar-subscribe" class="export-widget"></div>
+      <div id="calendar-download" class="export-widget"></div>
+    </div>
+  </div>
+
   <div id="filters" class="filters">
     <div class="filters__inner">
       <button id="filter-toggle" data-slide="left" class="filters__toggle">
@@ -105,12 +112,6 @@
     </div>
   </div>
   <div class="data-container">
-    <div class="data-container__widgets data-container__widgets--secondary js-data-widgets">
-      <div class="data-container__export">
-        <div id="calendar-subscribe" class="export-widget"></div>
-        <div id="calendar-download" class="export-widget"></div>
-      </div>
-    </div>
     <div id="calendar" class="data-container__body"></div>
   </div>
 </section>
