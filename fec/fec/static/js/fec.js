@@ -21,8 +21,6 @@ var calendar = require('./calendar');
 var calendarHelpers = require('./calendar-helpers');
 var toc = require('./toc');
 
-var SLT_ACCORDION = '.js-accordion';
-
 $(document).ready(function() {
   // Initialize glossary
   // Initialize glossary
@@ -34,12 +32,14 @@ $(document).ready(function() {
   // Initialize new accordions
   $('.js-accordion').each(function(){
     var contentPrefix = $(this).data('content-prefix') || 'accordion';
+    var openFirst = $(this).data('open-first') || false;
     var selectors = {
       body: '.js-accordion',
       trigger: '.js-accordion-trigger'
     };
     var opts = {
       contentPrefix: contentPrefix,
+      openFirst: openFirst
     };
     new Accordion(selectors, opts);
   });
