@@ -50,7 +50,7 @@
             </fieldset>
           </div>
           <div class="filter filter--election">
-            <fieldset>
+            <fieldset class="js-filter js-multi-filter" data-filter-group="#category-filters">
               <legend class="label">Elections </legend>
               {% for value, label in settings.CONSTANTS.election_types.items %}
                 <input id="{{ value | clean_whitespace }}" type="checkbox" name="category" value="{{ value }}" />
@@ -59,7 +59,7 @@
             </fieldset>
           </div>
           <div class="filter filter--deadline">
-            <fieldset>
+            <fieldset class="js-filter js-multi-filter" data-filter-group="#category-filters">
               <legend class="label">Reporting deadlines </legend>
               {% for value, label in settings.CONSTANTS.deadline_types.items %}
                 <input id="{{ value | clean_whitespace }}" type="checkbox" name="category" value="{{ value }}" />
@@ -71,7 +71,7 @@
         <button type="button" class="js-accordion-trigger accordion__button">Reporting and compliance periods</button>
         <div class="accordion__content">
           <div class="filter filter--meeting">
-            <fieldset>
+            <fieldset class="js-filter js-multi-filter" data-filter-group="#category-filters">
               <legend class="label">Reporting periods </legend>
               {% for value, label in settings.CONSTANTS.reporting_periods.items %}
                 <input id="{{ value | clean_whitespace }}" type="checkbox" name="category" value="{{ value }}" />
@@ -83,7 +83,7 @@
         <button type="button" class="js-accordion-trigger accordion__button">Meetings and outreach</button>
         <div class="accordion__content">
           <div class="filter filter--meeting">
-            <fieldset>
+            <fieldset class="js-filter js-multi-filter" data-filter-group="#category-filters">
               <legend class="label">Commission meetings </legend>
               {% for value, label in settings.CONSTANTS.meeting_types.items %}
                 <input id="{{ value | clean_whitespace }}" type="checkbox" name="category" value="{{ value }}" />
@@ -92,7 +92,7 @@
             </fieldset>
           </div>
           <div class="filter filter--outreach">
-            <fieldset>
+            <fieldset class="js-filter js-multi-filter" data-filter-group="#category-filters">
               <legend class="label">Outreach </legend>
               {% for value, label in settings.CONSTANTS.outreach_types.items %}
                 <input id="{{ value | clean_whitespace }}" type="checkbox" name="category" value="{{ value }}" />
@@ -104,7 +104,7 @@
         <button type="button" class="js-accordion-trigger accordion__button">Legal</button>
         <div class="accordion__content">
           <div class="filter filter--rules">
-            <fieldset>
+            <fieldset class="js-filter js-multi-filter" data-filter-group="#category-filters">
               <legend class="label">Advisory Opinions and rulemakings </legend>
               {% for value, label in settings.CONSTANTS.rule_types.items %}
                 <input id="{{ value | clean_whitespace }}" type="checkbox" name="category" value="{{ value }}" />
