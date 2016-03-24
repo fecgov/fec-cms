@@ -241,7 +241,11 @@ describe('calendar', function() {
 
 describe('calendar tooltip', function() {
   beforeEach(function() {
-    var $container = $('<a class="cal-event" tabindex="0"></a>');
+    var dom =
+    '<div class="fc-event-container">' +
+      '<a class="cal-event" tabindex="0"></a>' +
+    '</div>';
+    var $container = $(dom);
     var content = tooltipContent({});
     $(document.body).append($container);
     this.calendarTooltip = new calendarTooltip.CalendarTooltip(content, $container);
@@ -268,7 +272,7 @@ describe('calendar tooltip', function() {
     expect($('.cal-details').length).to.equal(0);
   });
 
-  it('focuses on the container on close', function() {
+  it('focuses on the trigger on close', function() {
     this.calendarTooltip.close();
     expect($(document.activeElement).hasClass('cal-event')).to.be.true;
   });

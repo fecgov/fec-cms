@@ -258,7 +258,6 @@ Calendar.prototype.handleEventClick = function(calEvent, jsEvent, view) {
     var $eventContainer = $target.closest('.fc-event-container');
     var tooltip = new calendarTooltip.CalendarTooltip(
       templates.details(_.extend({}, calEvent, {detailsId: this.detailsId})),
-      $target,
       $eventContainer
     );
     $eventContainer.append(tooltip.$content);
