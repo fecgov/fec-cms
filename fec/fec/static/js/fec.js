@@ -68,9 +68,8 @@ $(document).ready(function() {
   new feedback.Feedback(window.FEC_APP_URL + '/issue/');
 
   // Initialize filter tags
-  var $widgets = $('.js-data-widgets');
   var $tagList = new filterTags.TagList({title: 'All records'}).$body;
-  $widgets.prepend($tagList);
+  $('.js-filter-tags').prepend($tagList);
 
   // Initialize filters
   var filterPanel = new FilterPanel();
@@ -84,5 +83,4 @@ $(document).ready(function() {
     exportUrl: calendarHelpers.getUrl(['calendar-dates', 'export']),
     filterPanel: filterPanel,
   });
-
 });
