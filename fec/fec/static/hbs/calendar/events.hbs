@@ -1,44 +1,48 @@
-{{#each groups}}
-<div class="cal-list__group">
-  {{#if title}}
-    <h3 class="cal-list__title">{{title}}</h3>
-  {{/if}}
-  {{#each events}}
-    <div class="cal-list__event">
-      <div class="cal-list__details">
-        <div class="cal-list__date">
-          <span class="t-block">{{datetime start format="pretty"}}</span>
-          <span class="t-block">{{datetime start format="dayOfWeek"}}</span>
+<div class="cal-list cal-list--{{ settings.sortBy }}">
+  {{#each groups}}
+  <div class="cal-list__group">
+    {{#if title}}
+      <h3 class="cal-list__title">{{title}}</h3>
+    {{/if}}
+    {{#each events}}
+      <div class="cal-list__event">
+        <div class="cal-list__details">
+          <div class="cal-list__date">
+            <span class="t-block">{{datetime start format="pretty"}}</span>
+            <span class="t-block">{{datetime start format="fullDayOfWeek"}}</span>
+          </div>
+          <div class="cal-list__time">
+            {{#if end}}
+              {{datetime start format="time"}}&ndash;{{datetime end format="time"}}
+            {{else}}
+              All day
+            {{/if}}
+          </div>
+          <div class="cal-list__description">
+            <p>{{summary}}</p>
+            {{#if location}}
+              <span class="cal-list__location">&ndash; {{location}}</span>
+            {{/if}}
+            {{#if detailUrl}}
+              <span class="cal-list__details"><a class="t-bold" href="{{detailUrl}}">Learn more</a></span>
+            {{/if}}
+          </div>
+          <div class="cal-list__category">
+            <span class="cal-list__category-title">{{ toUpperCase category }}</span>
+          </div>
         </div>
-        <div class="cal-list__time">
-          {{#if end}}
-            {{datetime start format="time"}}&ndash;{{datetime end format="time"}}
-          {{else}}
-            All day
-          {{/if}}
-        </div>
-        <div class="cal-list__description">
-          <span class="t-bold">{{ toUpperCase category }}</span>
-          <p>{{summary}}</p>
-          {{#if location}}
-            <span class="cal-list__location">&ndash; {{location}}</span>
-          {{/if}}
-          {{#if detailUrl}}
-            <span class="t-block"><a class="t-bold" href="{{detailUrl}}">Learn more</a></span>
-          {{/if}}
+        <div class="cal-list__add">
+          <div class="dropdown">
+            <button class="button button--neutral dropdown__button dropdown__button--mini button--calendar--mini"><span class="u-visually-hidden">Download calendar</span></button>
+            <ul class="dropdown__panel dropdown__panel--right" aria-hidden="true">
+              <li class="dropdown__item"><a class="dropdown__value" href="{{download}}">Apple Calendar</a></li>
+              <li class="dropdown__item"><a class="dropdown__value" href="{{google}}" target="_blank">Google Calendar</a></li>
+              <li class="dropdown__item"><a class="dropdown__value" href="{{download}}">Outlook Calendar</a></li>
+            </ul>
+          </div>
         </div>
       </div>
-      <div class="cal-list__add">
-        <div class="dropdown">
-          <button class="button button--neutral dropdown__button dropdown__button--mini button--calendar--mini"><span class="u-visually-hidden">Download calendar</span></button>
-          <ul class="dropdown__panel" aria-hidden="true">
-            <li class="dropdown__item"><a class="dropdown__value" href="{{download}}">Apple Calendar</a></li>
-            <li class="dropdown__item"><a class="dropdown__value" href="{{google}}" target="_blank">Google Calendar</a></li>
-            <li class="dropdown__item"><a class="dropdown__value" href="{{download}}">Outlook Calendar</a></li>
-          </ul>
-        </div>
-      </div>
-    </div>
+    {{/each}}
+  </div>
   {{/each}}
 </div>
-{{/each}}
