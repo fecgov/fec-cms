@@ -14,11 +14,11 @@ var View = FC.View;
 
 var categories = {
   Elections: ['election'],
-  Deadlines: ['report', 'ie', 'ec'],
+  'Reporting Deadlines': ['report'],
+  'Reporting and compliance periods': ['ie', 'ec', 'fea'],
   Outreach: ['roundtables', 'conferences'],
   Meetings: ['open', 'executive'],
   Rules: ['aos'],
-  Other: ['litigation', 'fea']
 };
 
 var categoriesInverse = _.reduce(_.pairs(categories), function(memo, pair) {
@@ -61,7 +61,7 @@ var chronologicalGroups = function(events, start, end) {
     .groupBy('start')
     .map(function(values, key) {
       return {
-        title: moment(key).format('MMMM Do, YYYY'),
+        title: moment.utc(new Date(key)).format('MMMM Do, YYYY'),
         events: values
       };
     })
