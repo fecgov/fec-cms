@@ -5,9 +5,10 @@ var $ = require('jquery');
 var dropdown = require('fec-style/js/dropdowns');
 var listeners = require('fec-style/js/listeners');
 
-function CalendarTooltip(content, $container) {
+function CalendarTooltip(content, $trigger, $container) {
   this.$content = $(content);
   this.$container = $container;
+  this.$trigger = $container.find('a');
   this.$close = this.$content.find('.js-close');
   this.$dropdown = this.$content.find('.dropdown');
   this.exportDropdown = new dropdown.Dropdown(this.$dropdown, {checkboxes: false});
@@ -30,7 +31,7 @@ CalendarTooltip.prototype.close = function() {
   this.$content.remove();
   this.exportDropdown.destroy();
   this.$container.removeClass('is-active');
-  this.$container.focus();
+  this.$trigger.focus();
   this.events.clear();
 };
 
