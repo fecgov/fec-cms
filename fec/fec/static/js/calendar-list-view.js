@@ -2,6 +2,7 @@
 
 var $ = require('jquery');
 var _ = require('underscore');
+var moment = require('moment');
 require('fullcalendar');
 
 var dropdown = require('fec-style/js/dropdowns');
@@ -57,8 +58,15 @@ var chronologicalGroups = function(events, start, end) {
       return start <= event.start && event.start < end;
     })
     .sortBy('start')
+    .groupBy('start')
+    .map(function(values, key) {
+      return {
+        title: moment(key).format('MMMM Do, YYYY'),
+        events: values
+      };
+    })
     .value();
-  return [{events: events}];
+  return events;
 };
 
 var ListView = View.extend({
