@@ -214,7 +214,6 @@ Calendar.prototype.defaultView = function() {
 
 Calendar.prototype.handleRender = function(view) {
   $(document.body).trigger($.Event('calendar:rendered'));
-  this.highlightToday();
   if (LIST_VIEWS.indexOf(view.name) !== -1) {
     this.manageListToggles(view);
   } else if (this.$listToggles) {
@@ -283,15 +282,6 @@ Calendar.prototype.managePopoverControl = function(e) {
     .on('click', function() {
       $target.focus();
     });
-};
-
-Calendar.prototype.highlightToday = function() {
-  var $today = this.$calendar.find('thead .fc-today');
-  var todayIndex = $today.index() + 1;
-  $today
-    .closest('table')
-    .find('tbody tr td:nth-child(' + todayIndex + ')')
-    .addClass('fc-today');
 };
 
 module.exports = {Calendar: Calendar};

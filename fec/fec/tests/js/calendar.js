@@ -135,11 +135,6 @@ describe('calendar', function() {
       expect(callback).to.have.been.called;
     });
 
-    it('highlights today', function() {
-      this.calendar.handleRender({name: 'month'});
-      expect(this.calendar.$calendar.find('.fc-today').length).to.be.above(1);
-    });
-
     it('calls manageListToggles() on list views', function() {
       sinon.stub(this.calendar, 'manageListToggles');
       this.calendar.handleRender({name: 'monthTime'});
