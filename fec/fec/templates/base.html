@@ -89,9 +89,15 @@
           <li class="site-nav__item">
             <a href="/calendar" class="site-nav__link">Calendar</a>
           </li>
+          {% if features.legal %}
+          <li class="site-nav__item">
+            <a href="/legal-resources" class="site-nav__link">Legal Resources</a>
+          </li>
+          {% else %}
           <li class="site-nav__item is-disabled">
             <a href="#" class="site-nav__link" tabindex="-1">(Page TBD)</a>
           </li>
+          {% endif %}
           <li class="site-nav__item is-disabled">
             <a href="#" class="site-nav__link" tabindex="-1">(Page TBD)</a>
           </li>

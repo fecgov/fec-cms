@@ -85,6 +85,14 @@ Settings: ::
 
     FEC_APP_URL = 'http://localhost:3000'
 
+Features
+~~~~~~~~~~~~~~~~~~~~~~
+
+[settings.py](https://github.com/18F/fec-cms/blob/develop/fec/fec/settings/base.py) includes a set of `FEATURES` which can be enabled using environment flags or via `settings.local`.
+
+    $ FEC_CMS_FEATURE_LEGAL=1 python fec/manage.py runserver
+
+
 Run
 -----------------
 
