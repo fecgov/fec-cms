@@ -8,7 +8,7 @@ cache:
   directories:
     - node_modules
 
-install:
+before_script:
   - travis_retry npm install -g gulp
 
 script:

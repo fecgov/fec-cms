@@ -11,83 +11,97 @@
 
 <section class="main__content--full">
   <div id="filters" class="filters">
-    <button id="filter-toggle" data-slide="left" class="filters__toggle">
-      <span class="filters__toggle__text js-filter-toggle-text">Show filters</span>
-    </button>
-    <div class="filters__hider">
-      <h2 class="filter__header">
-        Filter events
-      </h2>
-      <form id="category-filters">
-        <div class="">
-          <button class="button--sm button--primary-contrast" type="button">Apply filters</button>
-          <button class="button--sm button--neutral js-clear-filters" type="button">Clear filters</button>
-        </div>
-        <div class="filter">
-          <fieldset class="js-filter js-dropdown">
-            <legend class="label" for="state">State</legend>
-            <ul class="dropdown__selected"></ul>
-            <div class="dropdown">
-              <button type="button" class="dropdown__button button--neutral">Select</button>
-              <div class="dropdown__panel" aria-hidden="true">
-                <ul class="{{ css_class }}">
-                {% for value, label in settings.CONSTANTS.states.items %}
-                <li class="dropdown__item">
-                  <input id="state-{{ value }}" name="state" type="checkbox" value="{{ value }}">
-                  <label class="dropdown__value" for="state-{{ value }}">{{ label }}</label>
-                </li>
-                {% endfor %}
-                </ul>
+    <div class="filters__inner">
+      <button id="filter-toggle" data-slide="left" class="filters__toggle">
+        <span class="filters__toggle__text js-filter-toggle-text">Show filters</span>
+      </button>
+      <div class="filters__hider">
+        <h2 class="filter__header">
+          Filter events
+        </h2>
+        <form id="category-filters">
+          <div>
+            <button class="button--sm button--primary-contrast" type="button">Apply filters</button>
+            <button class="button--sm button--neutral js-clear-filters" type="button">Clear filters</button>
+          </div>
+          <div class="filter">
+            <fieldset class="js-filter js-dropdown">
+              <legend class="label" for="state">State</legend>
+              <ul class="dropdown__selected"></ul>
+              <div class="dropdown">
+                <button type="button" class="dropdown__button button--primary-contrast">Select</button>
+                <div class="dropdown__panel" aria-hidden="true">
+                  <ul class="{{ css_class }}">
+                  {% for value, label in settings.CONSTANTS.states.items %}
+                  <li class="dropdown__item">
+                    <input id="state-{{ value }}" name="state" type="checkbox" value="{{ value }}">
+                    <label class="dropdown__value" for="state-{{ value }}">{{ label }}</label>
+                  </li>
+                  {% endfor %}
+                  </ul>
+                </div>
               </div>
+            </fieldset>
+          </div>
+          <h3 class="filters__subheader">Event types</h3>
+          <div class="js-filter">
+            <div class="filter filter--meeting">
+              <fieldset>
+                <legend class="label">Commission meetings <span class="filter__swatch"></span></legend>
+                {% for value, label in settings.CONSTANTS.meeting_types.items %}
+                  <input id="{{ value | clean_whitespace }}" type="checkbox" name="category" value="{{ value }}" />
+                  <label for="{{ value | clean_whitespace }}">{{ label }}</label>
+                {% endfor %}
+              </fieldset>
             </div>
-          </fieldset>
-        </div>
-        <fieldset class="js-filter">
-          <legend class="filters__subheader">Event types</legend>
-          <div class="filter filter--meeting">
-            <span class="label">Commission meetings <span class="filter__swatch"></span></span>
-            {% for value, label in settings.CONSTANTS.meeting_types.items %}
-              <input id="{{ value | clean_whitespace }}" type="checkbox" name="category" value="{{ value }}" />
-              <label for="{{ value | clean_whitespace }}">{{ label }}</label>
-            {% endfor %}
+            <div class="filter filter--election">
+              <fieldset>
+                <legend class="label">Elections <span class="filter__swatch"></span></legend>
+                {% for value, label in settings.CONSTANTS.election_types.items %}
+                  <input id="{{ value | clean_whitespace }}" type="checkbox" name="category" value="{{ value }}" />
+                  <label for="{{ value | clean_whitespace }}">{{ label }}</label>
+                {% endfor %}
+              </fieldset>
+            </div>
+            <div class="filter filter--deadline">
+              <fieldset>
+                <legend class="label">Reporting deadlines <span class="filter__swatch"></span></legend>
+                {% for value, label in settings.CONSTANTS.deadline_types.items %}
+                  <input id="{{ value | clean_whitespace }}" type="checkbox" name="category" value="{{ value }}" />
+                  <label for="{{ value | clean_whitespace }}">{{ label }}</label>
+                {% endfor %}
+              </fieldset>
+            </div>
+            <div class="filter filter--outreach">
+              <fieldset>
+                <legend class="label">Outreach <span class="filter__swatch"></span></legend>
+                {% for value, label in settings.CONSTANTS.outreach_types.items %}
+                  <input id="{{ value | clean_whitespace }}" type="checkbox" name="category" value="{{ value }}" />
+                  <label for="{{ value | clean_whitespace }}">{{ label }}</label>
+                {% endfor %}
+              </fieldset>
+            </div>
+            <div class="filter filter--rules">
+              <fieldset>
+                <legend class="label">Advisory Opinions and rulemakings <span class="filter__swatch"></span></legend>
+                {% for value, label in settings.CONSTANTS.rule_types.items %}
+                  <input id="{{ value | clean_whitespace }}" type="checkbox" name="category" value="{{ value }}" />
+                  <label for="{{ value | clean_whitespace }}">{{ label }}</label>
+                {% endfor %}
+              </fieldset>
+            </div>
+            <div class="filter filter--other">
+              <fieldset>
+                <legend class="label">Other events <span class="filter__swatch"></span></legend>
+                {% for value, label in settings.CONSTANTS.other_types.items %}
+                  <input id="{{ value | clean_whitespace }}" type="checkbox" name="category" value="{{ value }}" />
+                  <label for="{{ value | clean_whitespace }}">{{ label }}</label>
+                {% endfor %}
+              </fieldset>
+            </div>
           </div>
-          <div class="filter filter--election">
-            <span class="label">Elections <span class="filter__swatch"></span></span>
-            {% for value, label in settings.CONSTANTS.election_types.items %}
-              <input id="{{ value | clean_whitespace }}" type="checkbox" name="category" value="{{ value }}" />
-              <label for="{{ value | clean_whitespace }}">{{ label }}</label>
-            {% endfor %}
-          </div>
-          <div class="filter filter--deadline">
-            <span class="label">Reporting deadlines <span class="filter__swatch"></span></span>
-            {% for value, label in settings.CONSTANTS.deadline_types.items %}
-              <input id="{{ value | clean_whitespace }}" type="checkbox" name="category" value="{{ value }}" />
-              <label for="{{ value | clean_whitespace }}">{{ label }}</label>
-            {% endfor %}
-          </div>
-          <div class="filter filter--outreach">
-            <span class="label">Outreach <span class="filter__swatch"></span></span>
-            {% for value, label in settings.CONSTANTS.outreach_types.items %}
-              <input id="{{ value | clean_whitespace }}" type="checkbox" name="category" value="{{ value }}" />
-              <label for="{{ value | clean_whitespace }}">{{ label }}</label>
-            {% endfor %}
-          </div>
-          <div class="filter filter--rules">
-            <span class="label">Advisory Opinions and rulemakings <span class="filter__swatch"></span></span>
-            {% for value, label in settings.CONSTANTS.rule_types.items %}
-              <input id="{{ value | clean_whitespace }}" type="checkbox" name="category" value="{{ value }}" />
-              <label for="{{ value | clean_whitespace }}">{{ label }}</label>
-            {% endfor %}
-          </div>
-          <div class="filter filter--other">
-            <span class="label">Other events <span class="filter__swatch"></span></span>
-            {% for value, label in settings.CONSTANTS.other_types.items %}
-              <input id="{{ value | clean_whitespace }}" type="checkbox" name="category" value="{{ value }}" />
-              <label for="{{ value | clean_whitespace }}">{{ label }}</label>
-            {% endfor %}
-          </div>
-        </fieldset>
-      </form>
+        </form>
+      </div>
     </div>
   </div>
   <div class="data-container">

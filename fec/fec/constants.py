@@ -14,7 +14,7 @@ deadline_types = OrderedDict([
 
 outreach_types = OrderedDict([
     ('Conferences', 'Conferences'),
-    ('Roundtables', 'Roundtables'),
+    ('Roundtables', 'Webinars'),
 ])
 
 meeting_types = OrderedDict([

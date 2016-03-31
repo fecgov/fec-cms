@@ -4,9 +4,11 @@
     "test-single": "karma start --single-run --browsers PhantomJS"
   },
   "dependencies": {
+    "aria-accordion": "0.1.0",
+    "glossary-panel": "0.1.2",
     "ace-builds": "1.2.2",
     "component-sticky": "1.0.0",
-    "fec-style": "1.5.0",
+    "fec-style": "~1.7",
     "fullcalendar": "2.5.0",
     "jquery": "2.1.4",
     "js-beautify": "1.5.10",

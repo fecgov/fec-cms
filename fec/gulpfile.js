@@ -12,7 +12,7 @@ var debug = !!process.env.FEC_CMS_DEBUG;
 gulp.task('build-js', function () {
   return browserify(entry, {debug: debug})
     .transform({global: true}, stringify(['.html']))
-    .transform(hbsfy)
+    .transform({global: true}, hbsfy)
     .bundle()
     .pipe(source(entry))
     .pipe(gulp.dest('dist'));

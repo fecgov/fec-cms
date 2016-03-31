@@ -24,7 +24,7 @@ var templates = {
   listToggles: require('../hbs/calendar/listToggles.hbs')
 };
 
-var LIST_VIEWS = ['quarterTime', 'quarterCategory', 'monthTime', 'monthCategory'];
+var LIST_VIEWS = ['monthTime', 'monthCategory'];
 
 var FC = $.fullCalendar;
 var Grid = FC.Grid;
@@ -60,7 +60,7 @@ function Calendar(opts) {
   this.$calendar.on('calendar:rendered', this.filterPanel.setHeight());
   this.$calendar.on('click', '.js-toggle-view', this.toggleListView.bind(this));
 
-  this.$calendar.on('keypress', '.fc-content, .fc-more, .fc-close', this.simulateClick.bind(this));
+  this.$calendar.on('keypress', '.fc-event, .fc-more, .fc-close', this.simulateClick.bind(this));
   this.$calendar.on('click', '.fc-more', this.managePopoverControl.bind(this));
 
   this.filterPanel.$form.on('change', this.filter.bind(this));
@@ -82,9 +82,9 @@ Calendar.prototype.defaultOpts = function() {
   return {
     calendarOpts: {
       header: {
-        left: 'prev,next today',
+        left: 'prev,next',
         center: 'title',
-        right: 'agendaWeek,month,quarterCategory'
+        right: 'month,monthTime'
       },
       buttonIcons: false,
       buttonText: {
@@ -95,6 +95,7 @@ Calendar.prototype.defaultOpts = function() {
       dayRender: this.handleDayRender.bind(this),
       dayPopoverFormat: 'MMM D, YYYY',
       defaultView: this.defaultView(),
+      eventRender: this.handleEventRender.bind(this),
       eventAfterAllRender: this.handleRender.bind(this),
       eventClick: this.handleEventClick.bind(this),
       eventLimit: true,
@@ -107,19 +108,7 @@ Calendar.prototype.defaultOpts = function() {
         },
         month: {
           eventLimit: 3,
-          buttonText: 'Month'
-        },
-        quarterCategory: {
-          type: 'list',
-          buttonText: 'Quarter',
-          categories: true,
-          sortBy: 'category',
-          duration: {quarters: 1, intervalUnit: 'quarter'}
-        },
-        quarterTime: {
-          type: 'list',
-          sortBy: 'time',
-          duration: {quarters: 1, intervalUnit: 'quarter'}
+          buttonText: 'Grid'
         },
         monthCategory: {
           type: 'list',
@@ -129,6 +118,7 @@ Calendar.prototype.defaultOpts = function() {
         },
         monthTime: {
           type: 'list',
+          buttonText: 'List',
           sortBy: 'time',
           duration: {months: 1, intervalUnit: 'month'}
         },
@@ -165,9 +155,9 @@ Calendar.prototype.success = function(response) {
       title: event.description || 'Event title',
       summary: event.summary || 'Event summary',
       state: event.state ? event.state.join(', ') : null,
-      start: event.start_date ? moment.utc(event.start_date) : null,
-      end: event.end_date ? moment.utc(event.end_date) : null,
-      allDay: moment.utc(event.start_date).format('HHmmss') === '000000' && event.end_date === null,
+      start: event.start_date ? moment(event.start_date) : null,
+      end: event.end_date ? moment(event.end_date) : null,
+      allDay: event.all_day,
       className: calendarHelpers.getEventClass(event),
       detailUrl: event.url
     };
@@ -183,7 +173,7 @@ Calendar.prototype.updateLinks = function(params) {
   var url = this.exportUrl.clone().addQuery(params || {});
   var urls = {
     ics: url.toString(),
-    csv: url.clone().query({renderer: 'csv'}).toString(),
+    csv: url.clone().addQuery({renderer: 'csv'}).toString(),
     // Note: The cid parameter silently rejects https links; use http and allow
     // the backend to redirect to https
     google: 'https://calendar.google.com/calendar/render?cid=' +
@@ -211,10 +201,12 @@ Calendar.prototype.styleButtons = function() {
   this.$calendar.find('.fc-next-button').addClass('button--next');
   this.$calendar.find('.fc-prev-button').addClass('button--previous');
   this.$calendar.find('.fc-right .fc-button-group').addClass('toggles--buttons');
+  this.$calendar.find('.fc-monthTime-button').addClass('button--list');
+  this.$calendar.find('.fc-month-button').addClass('button--cal');
 };
 
 Calendar.prototype.defaultView = function() {
-  if ($(document).width() < helpers.BREAKPOINTS.MEDIUM) {
+  if ($(document.body).width() < helpers.BREAKPOINTS.MEDIUM) {
     return 'monthTime';
   } else {
     return 'month';
@@ -228,8 +220,8 @@ Calendar.prototype.handleRender = function(view) {
     this.manageListToggles(view);
   } else if (this.$listToggles) {
     this.$listToggles.remove();
+    this.$listToggles = null;
   }
-  this.$calendar.find('.fc-content').attr({'tabindex': '0', 'aria-describedby': this.detailsId});
   this.$calendar.find('.fc-more').attr({'tabindex': '0', 'aria-describedby': this.popoverId});
 };
 
@@ -239,10 +231,21 @@ Calendar.prototype.manageListToggles = function(view) {
     this.$listToggles.prependTo(this.$calendar.find('.fc-view-container'));
   }
   this.$listToggles.html(templates.listToggles(view.options));
-  // Highlight the quarter button on quarterTime
-  if (view.name === 'quarterTime') {
-    this.$calendar.find('.fc-quarterCategory-button').addClass('fc-state-active');
+  // Highlight the "List" button on monthTime
+  if (view.name === 'monthCategory') {
+    this.$calendar.find('.fc-monthTime-button').addClass('fc-state-active');
   }
+};
+
+Calendar.prototype.handleEventRender = function(event, element) {
+  var eventLabel = event.title + ' ' +
+    event.start.format('dddd MMMM D, YYYY') +
+    '. Category: ' + event.category;
+  element.attr({
+    'tabindex': '0',
+    'aria-describedby': this.detailsId,
+    'aria-label': eventLabel
+  });
 };
 
 Calendar.prototype.handleDayRender = function(date, cell) {
@@ -254,7 +257,8 @@ Calendar.prototype.handleDayRender = function(date, cell) {
 Calendar.prototype.handleEventClick = function(calEvent, jsEvent, view) {
   var $target = $(jsEvent.target);
   if (!$target.closest('.tooltip').length) {
-    var $eventContainer = $target.closest('.fc-content');
+    var $closest = $target.closest('.fc-content');
+    var $eventContainer = $closest.length ? $closest : $target.find('.fc-content');
     var tooltip = new calendarTooltip.CalendarTooltip(
       templates.details(_.extend({}, calEvent, {detailsId: this.detailsId})),
       $eventContainer.parent()
@@ -280,7 +284,6 @@ Calendar.prototype.managePopoverControl = function(e) {
     .on('click', function() {
       $target.focus();
     });
-  $popover.find('.fc-content').attr('tabindex', '0');
 };
 
 Calendar.prototype.highlightToday = function() {

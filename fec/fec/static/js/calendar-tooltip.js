@@ -27,7 +27,7 @@ CalendarTooltip.prototype.handleClickAway = function(e) {
 CalendarTooltip.prototype.close = function() {
   this.$content.remove();
   this.exportDropdown.destroy();
-  this.$container.find('.fc-content').focus();
+  this.$container.focus();
   this.events.clear();
 };
 
