@@ -179,11 +179,8 @@ FEC_CMS_ENVIRONMENT = ENVIRONMENTS.get(os.getenv('FEC_CMS_ENVIRONMENT'), 'DEVELO
 CONTACT_EMAIL = 'betafeedback@fec.gov';
 CONSTANTS = constants
 
-def feature_enabled(feature):
-    return os.getenv(feature, False) == '1'
-
 FEATURES = {
-    'legal': feature_enabled('FEC_CMS_FEATURE_LEGAL')
+    'legal': bool(os.getenv('FEC_FEATURE_LEGAL', ''))
 }
 
 if os.getenv('SENTRY_DSN'):

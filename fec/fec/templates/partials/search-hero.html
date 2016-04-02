@@ -7,14 +7,14 @@
       </div>
       <form id="large-search" autocomplete="off" class="search__container js-search">
         <div class="combo combo--search--large">
-          <select class="search__select js-search-type" name="search_type">
+          <select class="search__select js-search-type" name="search_type" aria-label="Select a search type">
             <option value="all">All sources</option>
             <option value="candidates">Candidates</option>
             <option value="committees">Committees</option>
             <option value="aos">AOs</option>
             <option value="murs">MURs</option>
           </select>
-          <input type="text" name="query" class="combo__input js-search-input" placeholder="e.g. candidate, committee, advisory opinion, topic"{% if search_query %} value="{{ search_query }}"{% endif %}>
+          <input type="text" name="query" class="combo__input js-search-input" aria-label="e.g. candidate, committee, advisory opinion, topic" placeholder="e.g. candidate, committee, advisory opinion, topic"{% if search_query %} value="{{ search_query }}"{% endif %}>
           <button type="submit" class="button--primary button--search combo__button">
            <span class="u-visually-hidden">Search</span>
           </button>
