@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% load wagtailcore_tags %}
+{% load staticfiles %}
+{% block title %}Legal Resources{% endblock %}
+{% block body_class %}template-{{ self.get_verbose_name | slugify }}{% endblock %}
+
+{% block content %}
+  {% include "partials/search-hero.html" %}
+{% endblock %}
+
+{% block extra_js %}
+<!-- Ethnio Activation Code -->
+<script type="text/javascript" language="javascript" src="https://ethn.io/70862.js" async="true" charset="utf-8"></script>
+{% endblock %}
