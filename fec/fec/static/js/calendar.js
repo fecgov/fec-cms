@@ -82,13 +82,13 @@ Calendar.prototype.defaultOpts = function() {
   return {
     calendarOpts: {
       header: {
-        left: 'prev,next',
+        left: 'prev,next,today',
         center: 'title',
         right: 'month,monthTime'
       },
       buttonIcons: false,
       buttonText: {
-        today: 'Today',
+        today: 'This Month',
         week: 'Week',
       },
       contentHeight: 'auto',
@@ -158,7 +158,6 @@ Calendar.prototype.success = function(response) {
       start: event.start_date ? moment(event.start_date) : null,
       end: event.end_date ? moment(event.end_date) : null,
       allDay: event.all_day,
-      className: calendarHelpers.getEventClass(event),
       detailUrl: event.url
     };
     _.extend(processed, {
@@ -215,7 +214,6 @@ Calendar.prototype.defaultView = function() {
 
 Calendar.prototype.handleRender = function(view) {
   $(document.body).trigger($.Event('calendar:rendered'));
-  this.highlightToday();
   if (LIST_VIEWS.indexOf(view.name) !== -1) {
     this.manageListToggles(view);
   } else if (this.$listToggles) {
@@ -257,11 +255,10 @@ Calendar.prototype.handleDayRender = function(date, cell) {
 Calendar.prototype.handleEventClick = function(calEvent, jsEvent, view) {
   var $target = $(jsEvent.target);
   if (!$target.closest('.tooltip').length) {
-    var $closest = $target.closest('.fc-content');
-    var $eventContainer = $closest.length ? $closest : $target.find('.fc-content');
+    var $eventContainer = $target.closest('.fc-event-container');
     var tooltip = new calendarTooltip.CalendarTooltip(
       templates.details(_.extend({}, calEvent, {detailsId: this.detailsId})),
-      $eventContainer.parent()
+      $eventContainer
     );
     $eventContainer.append(tooltip.$content);
   }
@@ -284,15 +281,6 @@ Calendar.prototype.managePopoverControl = function(e) {
     .on('click', function() {
       $target.focus();
     });
-};
-
-Calendar.prototype.highlightToday = function() {
-  var $today = this.$calendar.find('thead .fc-today');
-  var todayIndex = $today.index() + 1;
-  $today
-    .closest('table')
-    .find('tbody tr td:nth-child(' + todayIndex + ')')
-    .addClass('fc-today');
 };
 
 module.exports = {Calendar: Calendar};

@@ -5,25 +5,37 @@
 {% block body_class %}template-{{ self.get_verbose_name | slugify }}{% endblock %}
 
 {% block content %}
-<header class="page-header slab slab--secondary">
+<header class="page-header slab slab--primary">
   <h1 class="page-header__title">Calendar</h1>
 </header>
 
 <section class="main__content--full">
+  <div class="data-container__widgets js-data-widgets">
+    <div class="js-filter-tags data-container__tags">
+      <div class="js-panel-controls panel__controls">
+        <button type="button" class="js-filter-toggle filters__toggle" aria-hidden="true">Add filters +</button>
+        <button type="button" class="js-filter-clear filters__toggle filters__clear" aria-hidden="true">Clear all filters</button>
+      </div>
+    </div>
+    <div class="data-container__export">
+      <div id="calendar-subscribe" class="export-widget"></div>
+      <div id="calendar-download" class="export-widget"></div>
+    </div>
+  </div>
+
   <div id="filters" class="filters">
-    <div class="filters__inner">
-      <button id="filter-toggle" data-slide="left" class="filters__toggle">
-        <span class="filters__toggle__text js-filter-toggle-text">Show filters</span>
-      </button>
-      <div class="filters__hider">
+    <button class="js-filter-close filters__close button--close--primary">
+      <span class="u-visually-hidden">Close</span>
+    </button>
+    <div class="filters__hider">
+      <div class="filters__inner">
         <h2 class="filter__header">
           Filter events
         </h2>
-        <form id="category-filters">
-          <div>
-            <button class="button--sm button--primary-contrast" type="button">Apply filters</button>
-            <button class="button--sm button--neutral js-clear-filters" type="button">Clear filters</button>
-          </div>
+      </div>
+      <form id="category-filters" class="js-accordion accordion--neutral" data-content-prefix="filter" data-open-first="true">
+        <button type="button" class="js-accordion-trigger accordion__button">Elections and reporting deadlines</button>
+        <div class="accordion__content">
           <div class="filter">
             <fieldset class="js-filter js-dropdown">
               <legend class="label" for="state">State</legend>
@@ -43,74 +55,74 @@
               </div>
             </fieldset>
           </div>
-          <h3 class="filters__subheader">Event types</h3>
-          <div class="js-filter">
-            <div class="filter filter--meeting">
-              <fieldset>
-                <legend class="label">Commission meetings <span class="filter__swatch"></span></legend>
-                {% for value, label in settings.CONSTANTS.meeting_types.items %}
-                  <input id="{{ value | clean_whitespace }}" type="checkbox" name="category" value="{{ value }}" />
-                  <label for="{{ value | clean_whitespace }}">{{ label }}</label>
-                {% endfor %}
-              </fieldset>
-            </div>
-            <div class="filter filter--election">
-              <fieldset>
-                <legend class="label">Elections <span class="filter__swatch"></span></legend>
-                {% for value, label in settings.CONSTANTS.election_types.items %}
-                  <input id="{{ value | clean_whitespace }}" type="checkbox" name="category" value="{{ value }}" />
-                  <label for="{{ value | clean_whitespace }}">{{ label }}</label>
-                {% endfor %}
-              </fieldset>
-            </div>
-            <div class="filter filter--deadline">
-              <fieldset>
-                <legend class="label">Reporting deadlines <span class="filter__swatch"></span></legend>
-                {% for value, label in settings.CONSTANTS.deadline_types.items %}
-                  <input id="{{ value | clean_whitespace }}" type="checkbox" name="category" value="{{ value }}" />
-                  <label for="{{ value | clean_whitespace }}">{{ label }}</label>
-                {% endfor %}
-              </fieldset>
-            </div>
-            <div class="filter filter--outreach">
-              <fieldset>
-                <legend class="label">Outreach <span class="filter__swatch"></span></legend>
-                {% for value, label in settings.CONSTANTS.outreach_types.items %}
-                  <input id="{{ value | clean_whitespace }}" type="checkbox" name="category" value="{{ value }}" />
-                  <label for="{{ value | clean_whitespace }}">{{ label }}</label>
-                {% endfor %}
-              </fieldset>
-            </div>
-            <div class="filter filter--rules">
-              <fieldset>
-                <legend class="label">Advisory Opinions and rulemakings <span class="filter__swatch"></span></legend>
-                {% for value, label in settings.CONSTANTS.rule_types.items %}
-                  <input id="{{ value | clean_whitespace }}" type="checkbox" name="category" value="{{ value }}" />
-                  <label for="{{ value | clean_whitespace }}">{{ label }}</label>
-                {% endfor %}
-              </fieldset>
-            </div>
-            <div class="filter filter--other">
-              <fieldset>
-                <legend class="label">Other events <span class="filter__swatch"></span></legend>
-                {% for value, label in settings.CONSTANTS.other_types.items %}
-                  <input id="{{ value | clean_whitespace }}" type="checkbox" name="category" value="{{ value }}" />
-                  <label for="{{ value | clean_whitespace }}">{{ label }}</label>
-                {% endfor %}
-              </fieldset>
-            </div>
+          <div class="filter filter--election">
+            <fieldset class="js-filter js-multi-filter" data-filter-group="#category-filters">
+              <legend class="label">Elections </legend>
+              {% for value, label in settings.CONSTANTS.election_types.items %}
+                <input id="{{ value | clean_whitespace }}" type="checkbox" name="category" value="{{ value }}" />
+                <label for="{{ value | clean_whitespace }}">{{ label }}</label>
+              {% endfor %}
+            </fieldset>
           </div>
-        </form>
-      </div>
+          <div class="filter filter--deadline">
+            <fieldset class="js-filter js-multi-filter" data-filter-group="#category-filters">
+              <legend class="label">Reporting deadlines </legend>
+              {% for value, label in settings.CONSTANTS.deadline_types.items %}
+                <input id="{{ value | clean_whitespace }}" type="checkbox" name="category" value="{{ value }}" />
+                <label for="{{ value | clean_whitespace }}">{{ label }}</label>
+              {% endfor %}
+            </fieldset>
+          </div>
+        </div>
+        <button type="button" class="js-accordion-trigger accordion__button">Reporting and compliance periods</button>
+        <div class="accordion__content">
+          <div class="filter filter--meeting">
+            <fieldset class="js-filter js-multi-filter" data-filter-group="#category-filters">
+              <legend class="label">Reporting periods </legend>
+              {% for value, label in settings.CONSTANTS.reporting_periods.items %}
+                <input id="{{ value | clean_whitespace }}" type="checkbox" name="category" value="{{ value }}" />
+                <label for="{{ value | clean_whitespace }}">{{ label }}</label>
+              {% endfor %}
+            </fieldset>
+          </div>
+        </div>
+        <button type="button" class="js-accordion-trigger accordion__button">Meetings and outreach</button>
+        <div class="accordion__content">
+          <div class="filter filter--meeting">
+            <fieldset class="js-filter js-multi-filter" data-filter-group="#category-filters">
+              <legend class="label">Commission meetings </legend>
+              {% for value, label in settings.CONSTANTS.meeting_types.items %}
+                <input id="{{ value | clean_whitespace }}" type="checkbox" name="category" value="{{ value }}" />
+                <label for="{{ value | clean_whitespace }}">{{ label }}</label>
+              {% endfor %}
+            </fieldset>
+          </div>
+          <div class="filter filter--outreach">
+            <fieldset class="js-filter js-multi-filter" data-filter-group="#category-filters">
+              <legend class="label">Outreach </legend>
+              {% for value, label in settings.CONSTANTS.outreach_types.items %}
+                <input id="{{ value | clean_whitespace }}" type="checkbox" name="category" value="{{ value }}" />
+                <label for="{{ value | clean_whitespace }}">{{ label }}</label>
+              {% endfor %}
+            </fieldset>
+          </div>
+        </div>
+        <button type="button" class="js-accordion-trigger accordion__button">Legal</button>
+        <div class="accordion__content">
+          <div class="filter filter--rules">
+            <fieldset class="js-filter js-multi-filter" data-filter-group="#category-filters">
+              <legend class="label">Advisory Opinions and rulemakings </legend>
+              {% for value, label in settings.CONSTANTS.rule_types.items %}
+                <input id="{{ value | clean_whitespace }}" type="checkbox" name="category" value="{{ value }}" />
+                <label for="{{ value | clean_whitespace }}">{{ label }}</label>
+              {% endfor %}
+            </fieldset>
+          </div>
+        </div>
+      </form>
     </div>
   </div>
   <div class="data-container">
-    <div class="data-container__widgets data-container__widgets--secondary js-data-widgets">
-      <div class="data-container__export">
-        <div id="calendar-subscribe" class="export-widget"></div>
-        <div id="calendar-download" class="export-widget"></div>
-      </div>
-    </div>
     <div id="calendar" class="data-container__body"></div>
   </div>
 </section>

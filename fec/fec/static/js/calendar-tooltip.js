@@ -8,6 +8,7 @@ var listeners = require('fec-style/js/listeners');
 function CalendarTooltip(content, $container) {
   this.$content = $(content);
   this.$container = $container;
+  this.$trigger = $container.find('a');
   this.$close = this.$content.find('.js-close');
   this.$dropdown = this.$content.find('.dropdown');
   this.exportDropdown = new dropdown.Dropdown(this.$dropdown, {checkboxes: false});
@@ -15,6 +16,8 @@ function CalendarTooltip(content, $container) {
   this.events = new listeners.Listeners();
   this.events.on(this.$close, 'click', this.close.bind(this));
   this.events.on($(document.body), 'click', this.handleClickAway.bind(this));
+
+  this.$container.addClass('is-active');
 }
 
 CalendarTooltip.prototype.handleClickAway = function(e) {
@@ -27,7 +30,8 @@ CalendarTooltip.prototype.handleClickAway = function(e) {
 CalendarTooltip.prototype.close = function() {
   this.$content.remove();
   this.exportDropdown.destroy();
-  this.$container.focus();
+  this.$container.removeClass('is-active');
+  this.$trigger.focus();
   this.events.clear();
 };
 

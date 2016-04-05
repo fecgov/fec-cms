@@ -21,8 +21,6 @@ var calendar = require('./calendar');
 var calendarHelpers = require('./calendar-helpers');
 var toc = require('./toc');
 
-var SLT_ACCORDION = '.js-accordion';
-
 $(document).ready(function() {
   // Initialize glossary
   // Initialize glossary
@@ -34,12 +32,14 @@ $(document).ready(function() {
   // Initialize new accordions
   $('.js-accordion').each(function(){
     var contentPrefix = $(this).data('content-prefix') || 'accordion';
+    var openFirst = $(this).data('open-first') || false;
     var selectors = {
       body: '.js-accordion',
       trigger: '.js-accordion-trigger'
     };
     var opts = {
       contentPrefix: contentPrefix,
+      openFirst: openFirst
     };
     new Accordion(selectors, opts);
   });
@@ -68,9 +68,8 @@ $(document).ready(function() {
   new feedback.Feedback(window.FEC_APP_URL + '/issue/');
 
   // Initialize filter tags
-  var $widgets = $('.js-data-widgets');
   var $tagList = new filterTags.TagList({title: 'All records'}).$body;
-  $widgets.prepend($tagList);
+  $('.js-filter-tags').prepend($tagList);
 
   // Initialize filters
   var filterPanel = new FilterPanel();
@@ -84,5 +83,4 @@ $(document).ready(function() {
     exportUrl: calendarHelpers.getUrl(['calendar-dates', 'export']),
     filterPanel: filterPanel,
   });
-
 });

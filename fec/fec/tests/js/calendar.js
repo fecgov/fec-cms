@@ -135,11 +135,6 @@ describe('calendar', function() {
       expect(callback).to.have.been.called;
     });
 
-    it('highlights today', function() {
-      this.calendar.handleRender({name: 'month'});
-      expect(this.calendar.$calendar.find('.fc-today').length).to.be.above(1);
-    });
-
     it('calls manageListToggles() on list views', function() {
       sinon.stub(this.calendar, 'manageListToggles');
       this.calendar.handleRender({name: 'monthTime'});
@@ -246,7 +241,11 @@ describe('calendar', function() {
 
 describe('calendar tooltip', function() {
   beforeEach(function() {
-    var $container = $('<a class="cal-event" tabindex="0"></a>');
+    var dom =
+    '<div class="fc-event-container">' +
+      '<a class="cal-event" tabindex="0"></a>' +
+    '</div>';
+    var $container = $(dom);
     var content = tooltipContent({});
     $(document.body).append($container);
     this.calendarTooltip = new calendarTooltip.CalendarTooltip(content, $container);
@@ -273,20 +272,13 @@ describe('calendar tooltip', function() {
     expect($('.cal-details').length).to.equal(0);
   });
 
-  it('focuses on the container on close', function() {
+  it('focuses on the trigger on close', function() {
     this.calendarTooltip.close();
     expect($(document.activeElement).hasClass('cal-event')).to.be.true;
   });
 });
 
 describe('helpers', function() {
-  describe('calendarHelpers.getEventClass()', function() {
-    it('builds the correct classnames', function() {
-      var className = calendarHelpers.getEventClass({category: 'open', all_day: true});
-      expect(className).to.equal('fc--allday fc--meeting');
-    });
-  });
-
   describe('calendarHelpers.getGoogleurl()', function() {
     it('builds the correct Google url', function() {
       var googleUrl = calendarHelpers.getGoogleUrl({
