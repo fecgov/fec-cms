@@ -76,7 +76,7 @@ describe('calendar', function() {
     });
 
     it('styles the buttons', function() {
-      expect(this.calendar.$calendar.find('.button button--neutral')).to.exist;
+      expect(this.calendar.$calendar.find('.button button--alt')).to.exist;
     });
 
     it('uses the correct default view on desktop', function() {
