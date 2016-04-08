@@ -195,13 +195,14 @@ Calendar.prototype.updateLinks = function(params) {
 };
 
 Calendar.prototype.styleButtons = function() {
-  var baseClasses = 'button button--neutral';
+  var baseClasses = 'button';
   this.$calendar.find('.fc-button').addClass(baseClasses);
-  this.$calendar.find('.fc-next-button').addClass('button--next');
-  this.$calendar.find('.fc-prev-button').addClass('button--previous');
+  this.$calendar.find('.fc-today-button').addClass('button--alt');
+  this.$calendar.find('.fc-next-button').addClass('button--next button--standard');
+  this.$calendar.find('.fc-prev-button').addClass('button--previous button--standard');
   this.$calendar.find('.fc-right .fc-button-group').addClass('toggles--buttons');
-  this.$calendar.find('.fc-monthTime-button').addClass('button--list');
-  this.$calendar.find('.fc-month-button').addClass('button--cal');
+  this.$calendar.find('.fc-monthTime-button').addClass('button--list button--alt');
+  this.$calendar.find('.fc-month-button').addClass('button--cal button--alt');
 };
 
 Calendar.prototype.defaultView = function() {
