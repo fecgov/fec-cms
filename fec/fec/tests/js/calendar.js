@@ -245,9 +245,9 @@ describe('calendar tooltip', function() {
     '<div class="fc-event-container">' +
       '<a class="cal-event" tabindex="0"></a>' +
     '</div>';
-    var $container = $(dom);
+    $(document.body).append($(dom));
+    var $container = $('.cal-event');
     var content = tooltipContent({});
-    $(document.body).append($container);
     this.calendarTooltip = new calendarTooltip.CalendarTooltip(content, $container);
     $container.append(this.calendarTooltip.$content);
   });

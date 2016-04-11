@@ -257,9 +257,10 @@ Calendar.prototype.handleDayRender = function(date, cell) {
 Calendar.prototype.handleEventClick = function(calEvent, jsEvent, view) {
   var $target = $(jsEvent.target);
   if (!$target.closest('.tooltip').length) {
-    var $eventContainer = $target.closest('.fc-event-container');
+    var $eventContainer = $target.closest('.fc-event');
     var tooltip = new calendarTooltip.CalendarTooltip(
       templates.details(_.extend({}, calEvent, {detailsId: this.detailsId})),
+
       $eventContainer
     );
     $eventContainer.append(tooltip.$content);
