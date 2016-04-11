@@ -38,6 +38,8 @@ function className(event) {
   var end = event.end_date ? moment(event.end_date).format('M D') : null;
   if (end && start !== end) {
     return 'fc-multi-day';
+  } else {
+    return '';
   }
 }
 
