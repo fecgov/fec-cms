@@ -1,15 +1,15 @@
 
 Campaign finance for everyone
 =============================
-The Federal Election Commission (FEC) releases information to the public about money that’s raised and spent in federal elections — that’s elections for US president, Senate, and House of Representatives. 
+The Federal Election Commission (FEC) releases information to the public about money that’s raised and spent in federal elections — that’s elections for US president, Senate, and House of Representatives.
 
 Are you interested in seeing how much money a candidate raised? Or spent? How much debt they took on? Who contributed to their campaign? The FEC is the authoritative source for that information.
 
-betaFEC is a collaboration between `18F <http://18f.gsa.gov>`_ and the FEC. It aims to make campaign finance information more accessible (and understandable) to all users. 
+betaFEC is a collaboration between `18F <http://18f.gsa.gov>`_ and the FEC. It aims to make campaign finance information more accessible (and understandable) to all users.
 
-FEC repositories 
+FEC repositories
 ================
-We welcome you to explore, make suggestions, and contribute to our code. 
+We welcome you to explore, make suggestions, and contribute to our code.
 
 This repository, `fec-cms <https://github.com/18F/fec-cms>`_: the content management system (CMS) for betaFEC.
 
@@ -23,10 +23,10 @@ All repositories
 
 Get involved
 ================
-We’re thrilled you want to get involved! 
+We’re thrilled you want to get involved!
 - Read our contributing `guidelines <https://github.com/18F/openfec/blob/master/CONTRIBUTING.md>`_. Then, file an `issue <https://github.com/18F/fec/issues>`_ or submit a pull request.
-- Send us an email at betafeedback@fec.gov. 
-- If you’re a developer, follow the installation instructions in the README.md page of each repository to run the apps on your computer. 
+- Send us an email at betafeedback@fec.gov.
+- If you’re a developer, follow the installation instructions in the README.md page of each repository to run the apps on your computer.
 - Check out our StoriesonBoard `FEC story map <https://18f.storiesonboard.com/m/fec>`_ to get a sense of the user needs we'll be addressing in the future.
 
 
@@ -57,8 +57,7 @@ Set up
 
 .. code::
 
-    cd fec
-    gulp build-js
+    npm run build
     ./manage.py createsuperuser
     ./manage.py makemigrations
     ./manage.py migrate
@@ -97,11 +96,17 @@ Run
 -----------------
 
 .. code::
-    
+
     ./manage.py runserver
 
 Deploy
 -----------------
+
+*Likely only useful for 18F team members*
+
+Before deploying, install the [Cloud Foundry CLI](https://docs.cloudfoundry.org/devguide/cf-cli/install-go-cli.html) and the [autopilot plugin](https://github.com/concourse/autopilot): ::
+
+    cf install-plugin autopilot -r CF-Community
 
 Provision development database: ::
 
@@ -111,15 +116,19 @@ Provision credentials service: ::
 
     cf cups cms-creds-dev -p '{"DJANGO_SECRET_KEY": "..."}'
 
-Install `autopilot`: ::
+To deploy to Cloud Foundry, run ``invoke deploy``. The ``deploy`` task will attempt to detect the appropriate
+Cloud Foundry space based the current branch; to override, pass the optional `--space` flag: ::
 
-    go get github.com/concourse/autopilot
-    cf install-plugin $GOPATH/bin/autopilot
+    invoke deploy --space dev
 
-Deploy: ::
+The ``deploy`` task will use the ``FEC_CF_USERNAME`` and ``FEC_CF_PASSWORD`` environment variables to log in.
+If these variables are not provided, you will be prompted for your Cloud Foundry credentials.
 
-    cf zero-downtime-push cms -f manifest.yml
+Deploys of a single app can be performed manually by targeting the env/space, and specifying the corresponding manifest, as well as the app you want, like so: ::
 
+    cf target -o [dev|stage|prod] && cf push -f manifest_<[dev|stage|prod]>.yml [api|web]
+
+**NOTE:**  Performing a deploy in this manner will result in a brief period of downtime.
 
 Copyright and licensing
 =======================
