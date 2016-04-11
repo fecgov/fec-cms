@@ -16,7 +16,7 @@ before_script:
   - travis_retry pip install -U pip wheel
   - travis_retry pip install -r requirements.txt
 
-  . $HOME/.nvm/nvm.sh
+  - . $HOME/.nvm/nvm.sh
   - nvm install v5.5.0
   - nvm use v5.5.0
 
