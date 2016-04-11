@@ -6,7 +6,9 @@ from invoke import run
 from invoke import task
 from slacker import Slacker
 
-from fec.settings.env import env
+import cfenv
+
+env = cfenv.AppEnv()
 
 
 @task
