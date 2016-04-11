@@ -4,9 +4,9 @@
     "test-single": "karma start --single-run --browsers PhantomJS"
   },
   "dependencies": {
+    "ace-builds": "1.2.2",
     "aria-accordion": "0.1.0",
     "glossary-panel": "0.1.2",
-    "ace-builds": "1.2.2",
     "component-sticky": "1.0.0",
     "fec-style": "~1.8",
     "fullcalendar": "2.5.0",
@@ -39,6 +39,12 @@
     "stringify": "^4.0.1",
     "vinyl-source-stream": "^1.1.0",
     "watchify": "^3.7.0"
+  },
+  "scripts": {
+    "build": "cd fec && gulp build-js",
+    "build-js": "cd fec && gulp build-js",
+    "test": "karma start",
+    "test-single": "karma start --single-run --browsers PhantomJS"
   },
   "engines": {
     "node": "5.5.0",
