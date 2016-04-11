@@ -297,4 +297,21 @@ describe('helpers', function() {
       expect(url).to.equal('/v1/calendar/?api_key=12345&per_page=500&category=election');
     });
   });
+
+  describe('calendarHelpers.className()', function() {
+    it('adds a multi-day class for multi-day events', function() {
+      var multiEvent = {
+        start_date: moment('2012-11-02'),
+        end_date: moment('2012-11-03')
+      };
+      var singleEvent = {
+        start_date: moment('2012-11-02'),
+        end_date: moment('2012-11-02')
+      };
+      var multiDayClass = calendarHelpers.className(multiEvent);
+      var singleDayClass = calendarHelpers.className(singleEvent);
+      expect(multiDayClass).to.equal('fc-multi-day');
+      expect(singleDayClass).to.not.equal('fc-multi-day');
+    });
+  });
 });

@@ -157,6 +157,7 @@ Calendar.prototype.success = function(response) {
       state: event.state ? event.state.join(', ') : null,
       start: event.start_date ? moment(event.start_date) : null,
       end: event.end_date ? moment(event.end_date) : null,
+      className: calendarHelpers.className(event),
       allDay: event.all_day,
       detailUrl: event.url
     };
