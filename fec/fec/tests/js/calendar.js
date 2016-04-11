@@ -245,9 +245,9 @@ describe('calendar tooltip', function() {
     '<div class="fc-event-container">' +
       '<a class="cal-event" tabindex="0"></a>' +
     '</div>';
-    var $container = $(dom);
+    $(document.body).append($(dom));
+    var $container = $('.cal-event');
     var content = tooltipContent({});
-    $(document.body).append($container);
     this.calendarTooltip = new calendarTooltip.CalendarTooltip(content, $container);
     $container.append(this.calendarTooltip.$content);
   });
@@ -295,6 +295,23 @@ describe('helpers', function() {
     it('builds the correct url', function() {
       var url = calendarHelpers.getUrl('calendar', {category: 'election'});
       expect(url).to.equal('/v1/calendar/?api_key=12345&per_page=500&category=election');
+    });
+  });
+
+  describe('calendarHelpers.className()', function() {
+    it('adds a multi-day class for multi-day events', function() {
+      var multiEvent = {
+        start_date: moment('2012-11-02'),
+        end_date: moment('2012-11-03')
+      };
+      var singleEvent = {
+        start_date: moment('2012-11-02'),
+        end_date: moment('2012-11-02')
+      };
+      var multiDayClass = calendarHelpers.className(multiEvent);
+      var singleDayClass = calendarHelpers.className(singleEvent);
+      expect(multiDayClass).to.equal('fc-multi-day');
+      expect(singleDayClass).to.not.equal('fc-multi-day');
     });
   });
 });

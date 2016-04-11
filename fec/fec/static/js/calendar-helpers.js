@@ -1,6 +1,7 @@
 'use strict';
 
 var URI = require('urijs');
+var moment = require('moment');
 
 function getGoogleUrl(event) {
   var fmt, dates;
@@ -32,7 +33,18 @@ function getUrl(path, params) {
     .toString();
 }
 
+function className(event) {
+  var start = event.start_date ? moment(event.start_date).format('M D') : null;
+  var end = event.end_date ? moment(event.end_date).format('M D') : null;
+  if (end && start !== end) {
+    return 'fc-multi-day';
+  } else {
+    return '';
+  }
+}
+
 module.exports = {
   getGoogleUrl: getGoogleUrl,
-  getUrl: getUrl
+  getUrl: getUrl,
+  className: className
 }
