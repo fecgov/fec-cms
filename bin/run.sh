@@ -1,3 +1,5 @@
+invoke notify
+
 # Build static files
 cd fec
 gulp build-js
