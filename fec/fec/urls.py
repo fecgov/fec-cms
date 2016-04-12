@@ -15,6 +15,7 @@ urlpatterns = [
     url(r'^documents/', include(wagtaildocs_urls)),
 
     url(r'^search/$', 'search.views.search', name='search'),
+    url(r'^legal-resources/$', 'legal.views.home', name='legal'),
 
     url(r'', include(wagtail_urls)),
 ]

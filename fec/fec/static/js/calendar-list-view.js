@@ -2,6 +2,7 @@
 
 var $ = require('jquery');
 var _ = require('underscore');
+var moment = require('moment');
 require('fullcalendar');
 
 var dropdown = require('fec-style/js/dropdowns');
@@ -13,11 +14,11 @@ var View = FC.View;
 
 var categories = {
   Elections: ['election'],
-  Deadlines: ['report', 'ie', 'ec'],
+  'Reporting Deadlines': ['report'],
+  'Reporting and compliance periods': ['ie', 'ec', 'fea'],
   Outreach: ['roundtables', 'conferences'],
   Meetings: ['open', 'executive'],
   Rules: ['aos'],
-  Other: ['litigation', 'fea']
 };
 
 var categoriesInverse = _.reduce(_.pairs(categories), function(memo, pair) {
@@ -57,8 +58,15 @@ var chronologicalGroups = function(events, start, end) {
       return start <= event.start && event.start < end;
     })
     .sortBy('start')
+    .groupBy('start')
+    .map(function(values, key) {
+      return {
+        title: moment.utc(new Date(key)).format('MMMM Do, YYYY'),
+        events: values
+      };
+    })
     .value();
-  return [{events: events}];
+  return events;
 };
 
 var ListView = View.extend({
