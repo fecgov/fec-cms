@@ -1,0 +1,28 @@
+<div class="tooltip tooltip--under cal-details" id="{{detailsId}}" role="tooltip">
+  <button class="button button--close--primary js-close" type="button"><span class="u-visually-hidden">Close</span></button>
+  <span class="cal-details__date">
+    {{#if allDay}}
+      {{datetime start format="pretty"}}
+    {{else}}
+      {{datetime start format="dateTime"}}
+      {{#if end}}
+        &ndash;{{datetime end format="dateTime"}}
+      {{/if}}
+    {{/if}}
+  </span>
+  <span class="cal-details__summary">{{ summary }}</span>
+  {{#if location }}
+    <span class="cal-details__location"><span class="t-bold">Location: </span>{{ location }}</span>
+  {{/if}}
+  {{#if detailUrl}}
+    <span class="t-block"><a class="t-bold" href="{{detailUrl}}">Learn more</a></span>
+  {{/if}}
+  <div class="cal-details__add dropdown">
+    <button class="button button--neutral dropdown__button button--calendar">Add to calendar</button>
+    <ul class="dropdown__panel" aria-hidden="true">
+      <li class="dropdown__item"><a class="dropdown__value" href="{{download}}">Apple Calendar</a></li>
+      <li class="dropdown__item"><a class="dropdown__value" href="{{google}}" target="_blank">Google Calendar</a></li>
+      <li class="dropdown__item"><a class="dropdown__value" href="{{download}}">Outlook Calendar</a></li>
+    </ul>
+  </div>
+</div>

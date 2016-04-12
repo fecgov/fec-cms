@@ -20,12 +20,12 @@
     <div class="container">
       <h2 class="t-ruled--bottom main__content">What does it mean to register and report?</h2>
       <div class="main__content">
-        <p>The FEC helps citizens make informed voting decisions based, in part, on knowing the sources of financial support for 
+        <p>The FEC helps citizens make informed voting decisions based, in part, on knowing the sources of financial support for
         federal candidates and political committees.</p>
-        <p>Campaign finance law generally requires that federal candidates and political committees register once 
+        <p>Campaign finance law generally requires that federal candidates and political committees register once
         they reach certain monetary thresholds.</p>
-        <p>After registration, federal political committees must file regular reports with the FEC or the Secretary of the Senate. 
-        These reports disclose information about their receipts and disbursements. The FEC makes that information available to the 
+        <p>After registration, federal political committees must file regular reports with the FEC or the Secretary of the Senate.
+        These reports disclose information about their receipts and disbursements. The FEC makes that information available to the
         public on its website.</p>
       </div>
       <div class="sidebar-container">
@@ -78,8 +78,21 @@
       </div>
       <div id="corporations-and-labor" class="option">
         <div class="option__content">
-          <h3>Coming soon: Corporations and Labor Organizations</h3>
-          <p>This is the FEC’s beta site, which means it’s still being developed. Learn more by reading the campaign guide, and check back soon for more information about corporations and labor organizations.</p>
+          <h3><a href="/registration-and-reporting/essentials-corporations-and-labor-organizations/">Corporations and labor organizations</a></h3>
+          <p>Corporations and labor organizations <span class="t-bold">can't</span> contribute to federal candidates, but they <span class="t-bold">can</span> establish and administer a special kind of political committee: the separate segregated fund (SSF).</p>
+          <p>An SSF can raise funds to make contributions to candidates — including expenditures that are coordinated with candidates — within the applicable contribution limits.</p>
+          <p>
+            <span class="t-bold">Who can set up an SSF?</span>
+            <ul class="list--bulleted">
+              <li>Corporations (including those without capital stock)</li>
+              <li>Labor organizations</li>
+              <li>Incorporated membership organizations (including trade associations)</li>
+              <li>National banks</li>
+              <li>Incorporated cooperatives</li>
+            </ul>
+          </p>
+          <p>The sponsoring corporation or labor organization is called the SSF’s “connected organization.”  The connected organization can use its own money to solicit contributions to the SSF and to pay the costs of establishing and operating the SSF, for example staff salaries and office space.</p>
+          <p>SSFs may solicit contributions only from a limited group of people, including the connected organization’s executive or administrative personnel, its stockholders (if the connected organization is a corporation), or its members (if the connected organization is a labor organization or a membership organization).</p>
         </div>
         <div class="option__aside">
           <h5 class="label">Campaign guide</h5>
@@ -128,15 +141,16 @@
       <h2 class="t-secondary-contrast">Need help?</h2>
       <div class="grid grid--4-wide">
         <div class="grid__item">
-          <aside class="card card--horizontal card--secondary-contrast is-disabled card--coming-soon">
+          <aside class="card card--horizontal card--secondary-contrast">
             <div class="card__image">
-              <img src="{% static "img/i-calendar--neutral.svg" %}" alt="Icon of a calendar">
+              <a class="u-no-border" href="/calendar?category=report-E&category=report-M&category=report-Q">
+                <img src="{% static "img/i-calendar--neutral.svg" %}" alt="Icon of a calendar">
+              </a>
             </div>
             <div class="card__content">
-              Reporting calendar
+              <a href="/calendar?category=report-E&category=report-M&category=report-Q">Reporting calendar</a>
             </div>
           </aside>
-          <p>Coming soon</p>
         </div>
         <div class="grid__item">
           <aside class="card card--horizontal card--secondary-contrast">
@@ -159,6 +173,5 @@
     </div>
   </div>
 </article>
-
 
 {% endblock %}

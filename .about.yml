@@ -1,0 +1,61 @@
+---
+# .about.yml project metadata
+#
+# Short name that acts as the project identifier (required)
+name: fec-cms
+
+# Full proper name of the project (required)
+full_name: fec-cms
+
+# The type of content in the repo
+# values: app, docs, policy
+type: app
+
+# Describes whether a project team, working group/guild, etc. owns the repo (required)
+# values: guild, working-group, project
+owner_type: project
+
+# Name of the main project repo if this is a sub-repo; name of the working group/guild repo if this is a working group/guild subproject
+parent: openFEC
+
+# Maturity stage of the project (required)
+# values: discovery, alpha, beta, live
+stage: beta
+
+# Should this repo have automated tests? If so, set to `true`. (required)
+# values: true, false
+testable: true
+
+# Team members contributing to the project (required)
+# Items:
+# - github: GitHub user name
+#   id: Internal team identifier/user name
+#   role: Team member's role; leads should be designated as 'lead'
+team:
+- github: arowla
+- github: emileighoutlaw
+- github: jenniferthibault
+- github: jmcarp
+- github: LeahBannon
+  role: product manager
+- github: LindsayYoung
+- github: noahmanger
+- github: onezerojeremy
+
+# Licenses that apply to the project and/or its components (required)
+# Items by property name pattern:
+#   .*:
+#     name: Name of the license from the Software Package Data Exchange (SPDX): https://spdx.org/licenses/
+#     url: URL for the text of the license
+licenses:
+  fec-cms:
+    name: CC0-1.0
+    url: https://github.com/18F/fec-cms/blob/master/LICENSE.md
+
+# URIs for points-of-contact
+# Items:
+# - url: URL for the link
+#   text: Anchor text for the link
+contact:
+- text: Leah Bannon
+  url: mailto:leah.bannon@gsa.gov

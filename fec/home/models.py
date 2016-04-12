@@ -47,19 +47,21 @@ class HomePage(ContentPage, UniqueModel):
     pass
 
 class LandingPage(ContentPage):
-    """Landing page."""
     pass
 
 class ChecklistPage(ContentPage):
-    """Checklist page."""
+    pass
+
+class SSFChecklistPage(ContentPage):
     pass
 
 class OptionsPage(ContentPage):
-    """Options page."""
     pass
 
 class ContactPage(ContentPage):
-    """Contact page."""
+    pass
+
+class CalendarPage(ContentPage):
     pass
 
 class CustomPage(Page):

@@ -73,7 +73,10 @@
                 <a class="site-nav__link site-nav__sublink" href="{{ settings.FEC_APP_URL }}/receipts/?max_date={% now "m-d-Y" %}">Receipts</a>
               </li>
               <li class="site-nav__item">
-                <a class="site-nav__link site-nav__sublink site-nav__sublink--last" href="{{ settings.FEC_APP_URL }}/disbursements/?max_date={% now "m-d-Y" %}">Disbursements</a>
+                <a class="site-nav__link site-nav__sublink" href="{{ settings.FEC_APP_URL }}/disbursements/?max_date={% now "m-d-Y" %}">Disbursements</a>
+              </li>
+              <li class="site-nav__item">
+                <a class="site-nav__link site-nav__sublink site-nav__sublink--last" href="{{ settings.FEC_APP_URL }}/independent-expenditures/?max_date={% now "m-d-Y" %}">Independent expenditures</a>
               </li>
               <li class="site-nav__item">
                 <a class="t-bold site-nav__link" href="{{ settings.FEC_APP_URL }}/elections/">Find candidates by location</a>
@@ -83,8 +86,8 @@
           <li class="site-nav__item">
             <a href="/registration-and-reporting/" class="site-nav__link">Registration and reporting</a>
           </li>
-          <li class="site-nav__item is-disabled">
-            <a href="#" class="site-nav__link" tabindex="-1">(Calendar)</a>
+          <li class="site-nav__item">
+            <a href="/calendar" class="site-nav__link">Calendar</a>
           </li>
           <li class="site-nav__item is-disabled">
             <a href="#" class="site-nav__link" tabindex="-1">(Page TBD)</a>
@@ -126,6 +129,13 @@
 
     {% include './partials/glossary.html' %}
 
+    <script>
+      window.FEC_APP_URL = '{{ settings.FEC_APP_URL }}';
+      window.API_LOCATION = '{{ settings.FEC_API_URL }}';
+      window.API_VERSION = '{{ settings.FEC_API_VERSION }}';
+      window.API_KEY = '{{ settings.FEC_API_KEY_PUBLIC }}';
+    </script>
+
     {# Global javascript #}
     {% compress js %}
     <script type="text/javascript" src="{% static 'js/fec.js' %}"></script>
@@ -149,9 +159,5 @@
     </script>
     <script id="_fed_an_ua_tag" src="https://dap.digitalgov.gov/Universal-Federated-Analytics-Min.js?agency=FEC"></script>
     {% endif %}
-
-    <script>
-      window.FEC_APP_URL = '{{ settings.FEC_APP_URL }}';
-    </script>
   </body>
 </html>
