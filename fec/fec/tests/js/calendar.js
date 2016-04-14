@@ -76,7 +76,7 @@ describe('calendar', function() {
     });
 
     it('styles the buttons', function() {
-      expect(this.calendar.$calendar.find('.button button--neutral')).to.exist;
+      expect(this.calendar.$calendar.find('.button button--alt')).to.exist;
     });
 
     it('uses the correct default view on desktop', function() {
@@ -133,11 +133,6 @@ describe('calendar', function() {
       $(document.body).on('calendar:rendered', callback);
       this.calendar.handleRender({name: 'month'});
       expect(callback).to.have.been.called;
-    });
-
-    it('highlights today', function() {
-      this.calendar.handleRender({name: 'month'});
-      expect(this.calendar.$calendar.find('.fc-today').length).to.be.above(1);
     });
 
     it('calls manageListToggles() on list views', function() {
@@ -246,9 +241,13 @@ describe('calendar', function() {
 
 describe('calendar tooltip', function() {
   beforeEach(function() {
-    var $container = $('<a class="cal-event" tabindex="0"></a>');
+    var dom =
+    '<div class="fc-event-container">' +
+      '<a class="cal-event" tabindex="0"></a>' +
+    '</div>';
+    $(document.body).append($(dom));
+    var $container = $('.cal-event');
     var content = tooltipContent({});
-    $(document.body).append($container);
     this.calendarTooltip = new calendarTooltip.CalendarTooltip(content, $container);
     $container.append(this.calendarTooltip.$content);
   });
@@ -273,20 +272,13 @@ describe('calendar tooltip', function() {
     expect($('.cal-details').length).to.equal(0);
   });
 
-  it('focuses on the container on close', function() {
+  it('focuses on the trigger on close', function() {
     this.calendarTooltip.close();
     expect($(document.activeElement).hasClass('cal-event')).to.be.true;
   });
 });
 
 describe('helpers', function() {
-  describe('calendarHelpers.getEventClass()', function() {
-    it('builds the correct classnames', function() {
-      var className = calendarHelpers.getEventClass({category: 'open', all_day: true});
-      expect(className).to.equal('fc--allday fc--meeting');
-    });
-  });
-
   describe('calendarHelpers.getGoogleurl()', function() {
     it('builds the correct Google url', function() {
       var googleUrl = calendarHelpers.getGoogleUrl({
@@ -303,6 +295,23 @@ describe('helpers', function() {
     it('builds the correct url', function() {
       var url = calendarHelpers.getUrl('calendar', {category: 'election'});
       expect(url).to.equal('/v1/calendar/?api_key=12345&per_page=500&category=election');
+    });
+  });
+
+  describe('calendarHelpers.className()', function() {
+    it('adds a multi-day class for multi-day events', function() {
+      var multiEvent = {
+        start_date: moment('2012-11-02'),
+        end_date: moment('2012-11-03')
+      };
+      var singleEvent = {
+        start_date: moment('2012-11-02'),
+        end_date: moment('2012-11-02')
+      };
+      var multiDayClass = calendarHelpers.className(multiEvent);
+      var singleDayClass = calendarHelpers.className(singleEvent);
+      expect(multiDayClass).to.equal('fc-multi-day');
+      expect(singleDayClass).to.not.equal('fc-multi-day');
     });
   });
 });

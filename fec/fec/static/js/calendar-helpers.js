@@ -1,28 +1,7 @@
 'use strict';
 
 var URI = require('urijs');
-
-var classMap = {
-  aos: 'fc--rules',
-  election: 'fc--election',
-  report: 'fc--deadline',
-  open: 'fc--meeting',
-  executive: 'fc--meeting',
-  roundtables: 'fc--outreach',
-  conferences: 'fc--outreach',
-  litigation: 'fc--other',
-  fea: 'fc--other',
-  ie: 'fc--deadline',
-  ec: 'fc--deadline'
-};
-
-function getEventClass(event) {
-  var className = '';
-  var category = event.category ? event.category.split(/[ -]+/)[0] : null;
-  className += event.all_day ? 'fc--allday' : '';
-  className += category ? ' ' + classMap[category.toLowerCase()] : '';
-  return className;
-}
+var moment = require('moment');
 
 function getGoogleUrl(event) {
   var fmt, dates;
@@ -54,8 +33,18 @@ function getUrl(path, params) {
     .toString();
 }
 
+function className(event) {
+  var start = event.start_date ? moment(event.start_date).format('M D') : null;
+  var end = event.end_date ? moment(event.end_date).format('M D') : null;
+  if (end && start !== end) {
+    return 'fc-multi-day';
+  } else {
+    return '';
+  }
+}
+
 module.exports = {
-  getEventClass: getEventClass,
   getGoogleUrl: getGoogleUrl,
-  getUrl: getUrl
+  getUrl: getUrl,
+  className: className
 }

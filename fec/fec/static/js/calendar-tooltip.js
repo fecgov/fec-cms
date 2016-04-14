@@ -15,6 +15,8 @@ function CalendarTooltip(content, $container) {
   this.events = new listeners.Listeners();
   this.events.on(this.$close, 'click', this.close.bind(this));
   this.events.on($(document.body), 'click', this.handleClickAway.bind(this));
+
+  this.$container.addClass('is-active');
 }
 
 CalendarTooltip.prototype.handleClickAway = function(e) {
@@ -27,6 +29,7 @@ CalendarTooltip.prototype.handleClickAway = function(e) {
 CalendarTooltip.prototype.close = function() {
   this.$content.remove();
   this.exportDropdown.destroy();
+  this.$container.removeClass('is-active');
   this.$container.focus();
   this.events.clear();
 };
