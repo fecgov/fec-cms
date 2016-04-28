@@ -11,7 +11,7 @@ class Migration(migrations.Migration):
         ('wagtailredirects', '0002_add_verbose_names'),
         ('wagtailsearch', '0002_add_verbose_names'),
         ('wagtailcore', '0001_squashed_0016_change_page_url_path_to_text_field'),
-        ('home', '0011_ssfchecklistpage'),
+        ('home', '0012_partychecklistpage'),
     ]
 
     operations = [
