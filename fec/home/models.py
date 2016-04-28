@@ -55,7 +55,7 @@ class ChecklistPage(ContentPage):
 class SSFChecklistPage(ContentPage):
     pass
 
-class OptionsPage(ContentPage):
+class PartyChecklistPage(ContentPage):
     pass
 
 class ContactPage(ContentPage):

@@ -5,10 +5,19 @@
 
 {% block content %}
 
-<header class="page-header slab--secondary">
-  <span class="page-header__title"><a href="/registration-and-reporting">Registration and reporting</a> // {{ self.title }}</span>
+<header class="page-header page-header--secondary">
+  <ul class="breadcrumbs">
+    <li class="breadcrumbs__item"><a href="/" class="breadcrumbs__link" rel="Home">Home</a></li>
+    <li class="breadcrumbs__item">
+      <span class="breadcrumbs__separator">›</span>
+      <a href="/registration-and-reporting" class="breadcrumbs__link">Registration and reporting</a>
+    </li>
+    <li class="breadcrumbs__item breadcrumbs__item--current">
+      <span class="breadcrumbs__separator">›</span>
+      <span>{{ self.title }}</span>
+    </li>
+  </ul>
 </header>
-
 
 <article class="main">
   <div class="container">
@@ -32,8 +41,8 @@
           <h4 class="sidebar__title">Essentials for other registrants</h4>
           <ul class="sidebar__content">
             <li class="u-padding--bottom"><a href="/registration-and-reporting/essentials-corporations-and-labor-organizations/">Corporations and labor organizations</a></li>
+            <li class="u-padding--bottom"><a href="/registration-and-reporting/essentials-political-party-committees">Political party committees</a></li>
             <li class="u-padding--bottom is-disabled">Nonconnected committees</li>
-            <li class="u-padding--bottom is-disabled">Political party committees</li>
           </ul>
           <h4 class="sidebar__title">Already registered?</h4>
           <form class="sidebar__content" action="{{ settings.FEC_APP_URL }}" method="GET">
