@@ -2,11 +2,11 @@
 inherit: manifest_base.yml
 host: fec-dev-cms
 services:
-  - fec-dev-cms
-  - fec-creds-dev
   - cms-creds-dev
+  - fec-creds-dev
+  - fec-dev-cms
 env:
-  FEC_CMS_DEBUG: "true"
-  FEC_CMS_ENVIRONMENT: "dev"
+  FEC_API_URL: https://fec-dev-api.18f.gov
+  FEC_CMS_DEBUG: true
+  FEC_CMS_ENVIRONMENT: dev
   NEW_RELIC_APP_NAME: beta.fec.gov | cms | dev
-  FEC_API_URL: "https://fec-dev-api.18f.gov"
