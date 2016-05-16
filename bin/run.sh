@@ -16,7 +16,7 @@ gulp build-js
 
 # Run migrations
 ./manage.py makemigrations --settings fec.settings.production
-./manage.py migrate --settings fec.settings.production
+./manage.py migrate --settings fec.settings.production --noinput
 
 # Run application
 gunicorn fec.wsgi:application
