@@ -45,7 +45,10 @@ $(document).ready(function() {
   });
 
   new skipNav.Skipnav('.skip-nav', 'main');
-  new siteNav.SiteNav('.js-site-nav');
+  new siteNav.SiteNav('.js-site-nav', {
+    cmsUrl: '',
+    webAppUrl: window.FEC_APP_URL
+  });
 
   // Initialize table of contents
   new toc.TOC('.js-toc');
