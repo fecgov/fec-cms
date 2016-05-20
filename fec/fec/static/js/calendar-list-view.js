@@ -19,6 +19,7 @@ var categories = {
   Outreach: ['roundtables', 'conferences'],
   Meetings: ['open', 'executive'],
   Rules: ['aos'],
+  Other: ['other']
 };
 
 var categoriesInverse = _.reduce(_.pairs(categories), function(memo, pair) {

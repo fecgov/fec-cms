@@ -64,19 +64,27 @@
           <div class="filter filter--election">
             <fieldset class="js-filter js-multi-filter" data-filter-group="#category-filters">
               <legend class="label">Elections </legend>
-              {% for value, label in settings.CONSTANTS.election_types.items %}
-                <input id="{{ value | clean_whitespace }}" type="checkbox" name="category" value="{{ value }}" />
-                <label for="{{ value | clean_whitespace }}">{{ label }}</label>
-              {% endfor %}
+              <ul>
+                {% for value, label in settings.CONSTANTS.election_types.items %}
+                  <li>
+                    <input id="{{ value | clean_whitespace }}" type="checkbox" name="category" value="{{ value }}" />
+                    <label for="{{ value | clean_whitespace }}">{{ label }}</label>
+                  </li>
+                {% endfor %}
+              </ul>
             </fieldset>
           </div>
           <div class="filter filter--deadline">
             <fieldset class="js-filter js-multi-filter" data-filter-group="#category-filters">
               <legend class="label">Reporting deadlines </legend>
-              {% for value, label in settings.CONSTANTS.deadline_types.items %}
-                <input id="{{ value | clean_whitespace }}" type="checkbox" name="category" value="{{ value }}" />
-                <label for="{{ value | clean_whitespace }}">{{ label }}</label>
-              {% endfor %}
+              <ul>
+                {% for value, label in settings.CONSTANTS.deadline_types.items %}
+                  <li>
+                    <input id="{{ value | clean_whitespace }}" type="checkbox" name="category" value="{{ value }}" />
+                    <label for="{{ value | clean_whitespace }}">{{ label }}</label>
+                  </li>
+                {% endfor %}
+              </ul>
             </fieldset>
           </div>
         </div>
@@ -85,10 +93,14 @@
           <div class="filter filter--meeting">
             <fieldset class="js-filter js-multi-filter" data-filter-group="#category-filters">
               <legend class="label">Reporting periods </legend>
-              {% for value, label in settings.CONSTANTS.reporting_periods.items %}
-                <input id="{{ value | clean_whitespace }}" type="checkbox" name="category" value="{{ value }}" />
-                <label for="{{ value | clean_whitespace }}">{{ label }}</label>
-              {% endfor %}
+              <ul>
+                {% for value, label in settings.CONSTANTS.reporting_periods.items %}
+                  <li>
+                    <input id="{{ value | clean_whitespace }}" type="checkbox" name="category" value="{{ value }}" />
+                    <label for="{{ value | clean_whitespace }}">{{ label }}</label>
+                  </li>
+                {% endfor %}
+              </ul>
             </fieldset>
           </div>
         </div>
@@ -97,19 +109,27 @@
           <div class="filter filter--meeting">
             <fieldset class="js-filter js-multi-filter" data-filter-group="#category-filters">
               <legend class="label">Commission meetings </legend>
-              {% for value, label in settings.CONSTANTS.meeting_types.items %}
-                <input id="{{ value | clean_whitespace }}" type="checkbox" name="category" value="{{ value }}" />
-                <label for="{{ value | clean_whitespace }}">{{ label }}</label>
-              {% endfor %}
+              <ul>
+                {% for value, label in settings.CONSTANTS.meeting_types.items %}
+                  <li>
+                    <input id="{{ value | clean_whitespace }}" type="checkbox" name="category" value="{{ value }}" />
+                    <label for="{{ value | clean_whitespace }}">{{ label }}</label>
+                  </li>
+                {% endfor %}
+              </ul>
             </fieldset>
           </div>
           <div class="filter filter--outreach">
             <fieldset class="js-filter js-multi-filter" data-filter-group="#category-filters">
               <legend class="label">Outreach </legend>
-              {% for value, label in settings.CONSTANTS.outreach_types.items %}
-                <input id="{{ value | clean_whitespace }}" type="checkbox" name="category" value="{{ value }}" />
-                <label for="{{ value | clean_whitespace }}">{{ label }}</label>
-              {% endfor %}
+              <ul>
+                {% for value, label in settings.CONSTANTS.outreach_types.items %}
+                  <li>
+                    <input id="{{ value | clean_whitespace }}" type="checkbox" name="category" value="{{ value }}" />
+                    <label for="{{ value | clean_whitespace }}">{{ label }}</label>
+                  </li>
+                {% endfor %}
+              </ul>
             </fieldset>
           </div>
         </div>
@@ -118,10 +138,14 @@
           <div class="filter filter--rules">
             <fieldset class="js-filter js-multi-filter" data-filter-group="#category-filters">
               <legend class="label">Advisory Opinions and rulemakings </legend>
-              {% for value, label in settings.CONSTANTS.rule_types.items %}
-                <input id="{{ value | clean_whitespace }}" type="checkbox" name="category" value="{{ value }}" />
-                <label for="{{ value | clean_whitespace }}">{{ label }}</label>
-              {% endfor %}
+              <ul>
+                {% for value, label in settings.CONSTANTS.rule_types.items %}
+                  <li>
+                    <input id="{{ value | clean_whitespace }}" type="checkbox" name="category" value="{{ value }}" />
+                    <label for="{{ value | clean_whitespace }}">{{ label }}</label>
+                  </li>
+                {% endfor %}
+              </ul>
             </fieldset>
           </div>
         </div>

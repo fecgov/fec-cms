@@ -84,7 +84,7 @@ Calendar.prototype.defaultOpts = function() {
       header: {
         left: 'prev,next,today',
         center: 'title',
-        right: 'month,monthTime'
+        right: 'monthTime,month'
       },
       buttonIcons: false,
       buttonText: {
@@ -94,7 +94,7 @@ Calendar.prototype.defaultOpts = function() {
       contentHeight: 'auto',
       dayRender: this.handleDayRender.bind(this),
       dayPopoverFormat: 'MMM D, YYYY',
-      defaultView: this.defaultView(),
+      defaultView: 'monthTime',
       eventRender: this.handleEventRender.bind(this),
       eventAfterAllRender: this.handleRender.bind(this),
       eventClick: this.handleEventClick.bind(this),
@@ -204,14 +204,6 @@ Calendar.prototype.styleButtons = function() {
   this.$calendar.find('.fc-right .fc-button-group').addClass('toggles--buttons');
   this.$calendar.find('.fc-monthTime-button').addClass('button--list button--alt');
   this.$calendar.find('.fc-month-button').addClass('button--cal button--alt');
-};
-
-Calendar.prototype.defaultView = function() {
-  if ($(document.body).width() < helpers.BREAKPOINTS.MEDIUM) {
-    return 'monthTime';
-  } else {
-    return 'month';
-  }
 };
 
 Calendar.prototype.handleRender = function(view) {
