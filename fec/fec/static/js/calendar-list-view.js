@@ -62,7 +62,7 @@ var chronologicalGroups = function(events, start, end) {
     .groupBy('start')
     .map(function(values, key) {
       return {
-        title: moment.utc(new Date(key)).format('MMMM Do, YYYY'),
+        title: moment.utc(new Date(key)).format('MMMM D, YYYY'),
         events: values
       };
     })
