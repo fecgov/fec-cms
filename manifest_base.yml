@@ -6,6 +6,6 @@ applications:
 - name: cms
 env:
   FEC_APP_URL: /data
-  NPM_CONFIG_PRODUCTION: "false"
+  DJANGO_SETTINGS_MODULE: "fec.settings.production"
   NEW_RELIC_CONFIG_FILE: "$HOME/newrelic.ini"
   NEW_RELIC_LOG: stdout
