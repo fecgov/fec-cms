@@ -12,6 +12,7 @@ var siteNav = require('fec-style/js/site-nav');
 var dropdown = require('fec-style/js/dropdowns');
 var FilterPanel = require('fec-style/js/filter-panel').FilterPanel;
 var filterTags = require('fec-style/js/filter-tags');
+var stickyBar = require('fec-style/js/sticky-bar');
 
 // Hack: Append jQuery to `window` for use by legacy libraries
 window.$ = window.jQuery = $;
@@ -54,12 +55,17 @@ $(document).ready(function() {
   new toc.TOC('.js-toc');
 
   // Initialize sticky elements
-  $('.js-sticky').each(function() {
+  $('.js-sticky-side').each(function() {
     var container = $(this).data('sticky-container');
     var opts = {
       within: document.getElementById(container)
     };
     new Sticky(this, opts);
+  });
+
+  // Initialize sticky bar elements
+  $('.js-sticky-bar').each(function() {
+    new stickyBar.StickyBar(this);
   });
 
   // Initialize checkbox dropdowns
