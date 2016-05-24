@@ -78,13 +78,6 @@ DEPLOY_RULES = (
 )
 
 
-SPACE_URLS = {
-    'dev': [('18f.gov', 'fec-dev-cms')],
-    'stage': [('18f.gov', 'fec-stage-cms')],
-    'prod': [('18f.gov', 'fec-prod-cms')],
-}
-
-
 @task
 def deploy(space=None, branch=None, yes=False):
     """Deploy app to Cloud Foundry. Log in using credentials stored in

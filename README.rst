@@ -119,14 +119,14 @@ Provision credentials service: ::
 To deploy to Cloud Foundry, run ``invoke deploy``. The ``deploy`` task will attempt to detect the appropriate
 Cloud Foundry space based the current branch; to override, pass the optional `--space` flag: ::
 
-    invoke deploy --space dev
+    invoke deploy --space feature
 
 The ``deploy`` task will use the ``FEC_CF_USERNAME`` and ``FEC_CF_PASSWORD`` environment variables to log in.
 If these variables are not provided, you will be prompted for your Cloud Foundry credentials.
 
 Deploys of a single app can be performed manually by targeting the env/space, and specifying the corresponding manifest, as well as the app you want, like so: ::
 
-    cf target -o [dev|stage|prod] && cf push -f manifest_<[dev|stage|prod]>.yml [api|web]
+    cf target -s [feature|dev|stage|prod] && cf push -f manifest_<[feature|dev|stage|prod]>.yml [api|web]
 
 **NOTE:**  Performing a deploy in this manner will result in a brief period of downtime.
 

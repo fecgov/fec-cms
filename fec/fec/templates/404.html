@@ -5,17 +5,19 @@
 <section class="content--blank">
   <div class="container">
     <div class="message message--alert message--big">
-      <div class="content__section">
-        <h1 class="message__title">Oops!</h1>
-        <p>We couldn't find what you're looking for. Please double-check the URL and try again.</p>
-      </div>
+      <h1 class="message__title">Oops!</h1>
+      <p>We couldn't find what you're looking for. Please double-check the URL and try again.</p>
       <div class="message--alert__bottom">
-        <h2>Still can't find what you're looking for?</h2>
-        <p><a href="mailto:{{ settings.CONTACT_EMAIL }}">Email us</a> or <a href="https://github.com/18F/openFEC/issues">open a GitHub issue</a>.</p>
-        <a href="/">Return home</a>
+        <p>Still can't find what you're looking for?</p>
+        <ul class="list--buttons">
+          <li><a class="button button--cta" href="/">Return home</a></li>
+          <li><a class="button button--alt" href="https://github.com/18f/fec/issues">File an issue</a></li>
+          <li><a class="button button--alt" href="mailto:{{ settings.CONTACT_EMAIL }}">Email our team</a></li>
+        </ul>
       </div>
     </div>
   </div>
 </section>
+
 {% endblock %}
 
