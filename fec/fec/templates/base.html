@@ -52,8 +52,10 @@
       <nav class="site-nav js-site-nav">
         <div id="site-menu" class="site-nav__container">
           <ul class="site-nav__panel site-nav__panel--main">
+            <li><h3 class="site-nav__title u-under-lg-only">Menu</h3></li>
             <li class="site-nav__item" data-submenu="data">
-              <button class="site-nav__link button--nav-panel js-panel-trigger" aria-controls="nav-data">Campaign finance data</button>
+              <a class="site-nav__link u-lg-only" href="{{ settings.FEC_APP_URL }}">Campaign finance data</a>
+              <button class="site-nav__link button--nav-panel js-panel-trigger u-under-lg-only" aria-controls="nav-data">Campaign finance data</button>
             </li>
             <li class="site-nav__item">
               <a href="/registration-and-reporting/" class="site-nav__link">Registration and reporting</a>
