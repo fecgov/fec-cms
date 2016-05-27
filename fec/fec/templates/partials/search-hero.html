@@ -8,8 +8,6 @@
       <form id="large-search" method="get" action="{{ settings.FEC_APP_URL }}/legal/search/" autocomplete="off" class="search__container js-search">
         <div class="combo combo--search--large">
           <select class="search__select select--alt-primary js-search-type" name="search_type" aria-label="Select a search type">
-            <option value="all">All sources</option>
-            <option value="advisory_opinions">AOs</option>
             <option value="regulations">Regulations</option>
           </select>
           <input type="text" name="search" class="combo__input js-search-input" aria-label="e.g. candidate, committee, advisory opinion, topic" placeholder="e.g. candidate, committee, advisory opinion, topic"{% if search_query %} value="{{ search_query }}"{% endif %}>
