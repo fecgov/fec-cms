@@ -68,7 +68,7 @@ $(document).ready(function() {
   });
 
   // Initialize feedback widget
-  new feedback.Feedback(window.FEC_APP_URL + '/issue/');
+  window.feedbackWidget = new feedback.Feedback(window.FEC_APP_URL + '/issue/');
 
   // Initialize filter tags
   var $tagList = new filterTags.TagList({title: 'All records'}).$body;
