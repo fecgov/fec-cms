@@ -12,6 +12,7 @@ var siteNav = require('fec-style/js/site-nav');
 var dropdown = require('fec-style/js/dropdowns');
 var FilterPanel = require('fec-style/js/filter-panel').FilterPanel;
 var filterTags = require('fec-style/js/filter-tags');
+var toc = require('fec-style/js/toc');
 
 // Hack: Append jQuery to `window` for use by legacy libraries
 window.$ = window.jQuery = $;
@@ -19,7 +20,6 @@ window.$ = window.jQuery = $;
 var Sticky = require('component-sticky');
 var calendar = require('./calendar');
 var calendarHelpers = require('./calendar-helpers');
-var toc = require('./toc');
 
 $(document).ready(function() {
   // Initialize glossary
