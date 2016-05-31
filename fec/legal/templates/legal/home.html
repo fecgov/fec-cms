@@ -6,8 +6,7 @@
 
 {% block content %}
   {% include "partials/search-hero.html" %}
-  <div class="main">
-    <div class="container">
+  <div class="container">
       <div class="message message--no-icon">We're designing a new way to get legal resources.
         We could use your help! If you're interested in <a href="javascript:void(0);"
         onclick="feedbackWidget.show(); return false;">sharing feedback</a> or
@@ -38,27 +37,27 @@
             </ul>
           </nav>
         </div>
-        <section class="main__content">
-          <div class="u-padding--bottom">
+        <section class="main__content--right">
+          <div class="option">
                 <h2 class="results-info__title" id="regulations"><a href="/regulations">Regulations</a></h2>
                 <p class="u-padding--top">As part of its role administering campaign finance law,
                   the Commission issues regulations,
                   which are published every year in Title 11 of the Code of Federal Regulations (CFR).
                   This archive contains a full-text version of 11 CFR, as published January 1, 2016.
               </p>
-              <button class="is-active button--cta-primary">Get started
+              <a class="is-active button--cta-primary" href="/regulations">Get started
                   <img class="u-padding-left" src="{% static "img/i-right--inverse.svg" %}"
                 alt="Icon for Get started">
-              </button>
+              </a>
             </div>
-            <div class="content__section--ruled u-padding--top u-padding--bottom">
+            <div class="option">
               <h2 class="results-info__title" id="advisory-opinions">Advisory Opinions</h2>
               <p class="u-padding--top">Coming soon.
                 Advisory opinions are available on
                 <a href="http://saos.fec.gov/saos/searchao">FEC.gov</a>
               </p>
           </div>
-            <div class="content__section--ruled u-padding--top">
+            <div class="option">
             <h2 class="results-info__title" id="enforcement-matters">Enforcement Matters</h2>
             <p class="u-padding--top">Coming soon.
               Enforcement matters are available on
@@ -67,7 +66,6 @@
         </div>
         </section>
       </div>
-    </div>
   </div>
 {% endblock %}
 
