@@ -6,6 +6,67 @@
 
 {% block content %}
   {% include "partials/search-hero.html" %}
+  <div class="container">
+      <div class="message message--no-icon">We&rsquo;re designing a new way to get legal resources.
+        We could use your help! If you&rsquo;re interested in <a id="share-feedback-link" href="#">
+          sharing feedback</a> or
+        <a id="ethnio-link" href="#">
+          testing features
+        </a> as we build them, let us know.</div>
+      <div class="row">
+        <div class="sidebar-container sidebar-container--left">
+          <nav class="sidebar sidebar--neutral side-nav js-sticky" data-sticky-container="main">
+            <ul class="sidebar__content">
+              <li class="side-nav__item">
+                <a class="side-nav__link" href="#regulations">
+                Regulations
+                </a>
+              </li>
+              <li class="side-nav__item">
+                <a class="side-nav__link" href="#advisory-opinions">
+                Advisory Opinions
+                </a>
+              </li>
+              <li class="side-nav__item">
+                <a class="side-nav__link" href="#enforcement-matters">
+                Enforcement Matters
+                </a>
+              </li>
+              <li class="is-disabled side-nav__item"><span class="side-nav__link">(Resource TBD)</span></li>
+              <li class="is-disabled side-nav__item"><span class="side-nav__link">(Resource TBD)</span></li>
+            </ul>
+          </nav>
+        </div>
+        <section class="main__content--right">
+          <div class="option">
+                <h2 class="results-info__title" id="regulations"><a href="/regulations">Regulations</a></h2>
+                <p class="u-padding--top">As part of its role administering campaign finance law,
+                  the Commission issues regulations,
+                  which are published every year in Title 11 of the Code of Federal Regulations (CFR).
+                  This archive contains a full-text version of 11 CFR, as published January 1, 2016.
+              </p>
+              <a class="is-active button--cta-primary" href="/regulations">Get started
+                  <img class="u-padding-left" src="{% static "img/i-right--inverse.svg" %}"
+                alt="Icon for Get started">
+              </a>
+            </div>
+            <div class="option">
+              <h2 class="results-info__title" id="advisory-opinions">Advisory Opinions</h2>
+              <p class="u-padding--top">Coming soon.
+                Advisory opinions are available on
+                <a href="http://saos.fec.gov/saos/searchao">FEC.gov</a>
+              </p>
+          </div>
+            <div class="option">
+            <h2 class="results-info__title" id="enforcement-matters">Enforcement Matters</h2>
+            <p class="u-padding--top">Coming soon.
+              Enforcement matters are available on
+              <a href="http://www.fec.gov/em/em.shtml">FEC.gov</a>
+            </p>
+        </div>
+        </section>
+      </div>
+  </div>
 {% endblock %}
 
 {% block extra_js %}
