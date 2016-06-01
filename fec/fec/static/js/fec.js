@@ -21,6 +21,8 @@ var calendar = require('./calendar');
 var calendarHelpers = require('./calendar-helpers');
 var toc = require('./toc');
 
+var legal = require('./legal');
+
 $(document).ready(function() {
   // Initialize glossary
   // Initialize glossary
@@ -68,7 +70,10 @@ $(document).ready(function() {
   });
 
   // Initialize feedback widget
-  window.feedbackWidget = new feedback.Feedback(window.FEC_APP_URL + '/issue/');
+  var feedbackWidget = new feedback.Feedback(window.FEC_APP_URL + '/issue/');
+
+  // Initialize legal page
+  new legal.Legal(feedbackWidget, '#share-feedback-link', '#ethnio-link');
 
   // Initialize filter tags
   var $tagList = new filterTags.TagList({title: 'All records'}).$body;
