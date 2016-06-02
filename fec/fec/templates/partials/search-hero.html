@@ -10,7 +10,10 @@
           <select class="search__select select--alt-primary js-search-type" name="search_type" aria-label="Select a search type">
             <option value="regulations">Regulations</option>
           </select>
-          <input type="text" name="search" class="combo__input js-search-input" aria-label="e.g. candidate, committee, advisory opinion, topic" placeholder="e.g. candidate, committee, advisory opinion, topic"{% if search_query %} value="{{ search_query }}"{% endif %}>
+          <input type="text" name="search" class="combo__input js-search-input"
+          aria-label="For example, &quot;102.2&quot; or &quot;electioneering&quot;"
+          placeholder="For example, &quot;102.2&quot; or &quot;electioneering&quot;"
+          {% if search_query %} value="{{ search_query }}"{% endif %}>
           <button type="submit" class="button--standard button--search combo__button">
            <span class="u-visually-hidden">Search</span>
           </button>
