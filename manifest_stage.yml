@@ -7,6 +7,7 @@ services:
   - fec-rds-stage
 env:
   FEC_API_URL: https://fec-stage-api.18f.gov
+  FEC_APP_URL: https://fec-stage-proxy.18f.gov/data
   FEC_CMS_ENVIRONMENT: stage
   FEC_FEATURE_LEGAL: true
   NEW_RELIC_APP_NAME: beta.fec.gov | cms | stage

@@ -7,6 +7,7 @@ services:
   - fec-dev-cms
 env:
   FEC_API_URL: https://fec-dev-api.18f.gov
+  FEC_APP_URL: https://fec-dev-proxy.18f.gov/data
   FEC_CMS_DEBUG: true
   FEC_CMS_ENVIRONMENT: dev
   FEC_FEATURE_LEGAL: true
