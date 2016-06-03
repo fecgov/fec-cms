@@ -13,6 +13,7 @@ var dropdown = require('fec-style/js/dropdowns');
 var FilterPanel = require('fec-style/js/filter-panel').FilterPanel;
 var filterTags = require('fec-style/js/filter-tags');
 var stickyBar = require('fec-style/js/sticky-bar');
+var toc = require('fec-style/js/toc');
 
 // Hack: Append jQuery to `window` for use by legacy libraries
 window.$ = window.jQuery = $;
@@ -20,7 +21,8 @@ window.$ = window.jQuery = $;
 var Sticky = require('component-sticky');
 var calendar = require('./calendar');
 var calendarHelpers = require('./calendar-helpers');
-var toc = require('./toc');
+
+var legal = require('./legal');
 
 $(document).ready(function() {
   // Initialize glossary
@@ -74,7 +76,10 @@ $(document).ready(function() {
   });
 
   // Initialize feedback widget
-  new feedback.Feedback(window.FEC_APP_URL + '/issue/');
+  var feedbackWidget = new feedback.Feedback(window.FEC_APP_URL + '/issue/');
+
+  // Initialize legal page
+  new legal.Legal(feedbackWidget, '#share-feedback-link', '#ethnio-link');
 
   // Initialize filter tags
   var $tagList = new filterTags.TagList({title: 'All records'}).$body;
