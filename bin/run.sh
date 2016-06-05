@@ -5,7 +5,7 @@
 set -o errexit
 set -o pipefail
 
-# Send out Slack notification(s) (off for now)
+# Send out Slack notifications (off for now)
 # invoke notify
 
 # Build static files
