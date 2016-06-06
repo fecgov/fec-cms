@@ -7,13 +7,13 @@ election_types = OrderedDict([
 deadline_types = OrderedDict([
     ('report-M', 'Monthly'),
     ('report-Q', 'Quarterly'),
-    ('report-E', 'Pre- and Post-election')
+    ('report-E', 'Pre- and post-election')
 ])
 
 reporting_periods = OrderedDict([
     ('IE Periods', 'Independent expenditures'),
     ('EC Periods', 'Electioneering communications'),
-    ('FEA Periods', 'Federal election activity period')
+    ('FEA Periods', 'Federal election activity periods')
 ])
 
 outreach_types = OrderedDict([
