@@ -12,8 +12,6 @@ var siteNav = require('fec-style/js/site-nav');
 var dropdown = require('fec-style/js/dropdowns');
 var FilterPanel = require('fec-style/js/filter-panel').FilterPanel;
 var filterTags = require('fec-style/js/filter-tags');
-var stickyBar = require('fec-style/js/sticky-bar');
-var toc = require('fec-style/js/toc');
 
 // Hack: Append jQuery to `window` for use by legacy libraries
 window.$ = window.jQuery = $;
@@ -21,8 +19,7 @@ window.$ = window.jQuery = $;
 var Sticky = require('component-sticky');
 var calendar = require('./calendar');
 var calendarHelpers = require('./calendar-helpers');
-
-var legal = require('./legal');
+var toc = require('./toc');
 
 $(document).ready(function() {
   // Initialize glossary
@@ -57,17 +54,12 @@ $(document).ready(function() {
   new toc.TOC('.js-toc');
 
   // Initialize sticky elements
-  $('.js-sticky-side').each(function() {
+  $('.js-sticky').each(function() {
     var container = $(this).data('sticky-container');
     var opts = {
       within: document.getElementById(container)
     };
     new Sticky(this, opts);
-  });
-
-  // Initialize sticky bar elements
-  $('.js-sticky-bar').each(function() {
-    new stickyBar.StickyBar(this);
   });
 
   // Initialize checkbox dropdowns
@@ -76,10 +68,7 @@ $(document).ready(function() {
   });
 
   // Initialize feedback widget
-  var feedbackWidget = new feedback.Feedback(window.FEC_APP_URL + '/issue/');
-
-  // Initialize legal page
-  new legal.Legal(feedbackWidget, '#share-feedback-link', '#ethnio-link');
+  new feedback.Feedback(window.FEC_APP_URL + '/issue/');
 
   // Initialize filter tags
   var $tagList = new filterTags.TagList({title: 'All records'}).$body;
