@@ -146,21 +146,21 @@
         </aside>
       </div>
       <div class="grid__item">
-        <aside class="card card--horizontal card--secondary">
-          <div class="card__image">
-            <a class="u-no-border" href="/calendar?category=report-E&category=report-M&category=report-Q">
-              <img src="{% static "img/i-calendar--neutral.svg" %}" alt="Icon of a calendar">
-            </a>
-          </div>
-          <div class="card__content">
-            <a href="/calendar?category=report-E&category=report-M&category=report-Q">Reporting calendar</a>
-          </div>
-        </aside>
+        <a href="/calendar?category=report-E&category=report-M&category=report-Q">
+          <aside class="card card--horizontal card--secondary">
+            <div class="card__image__container">
+              <span class="card__icon i-calendar"><span class="u-visually-hidden">Icon of a calendar</span></span>
+            </div>
+            <div class="card__content">
+              Reporting deadlines
+            </div>
+          </aside>
+        </a>
       </div>
       <div class="grid__item">
         <aside class="card card--horizontal card--secondary is-disabled">
-          <div class="card__image">
-            <img src="{% static "img/i-resources--neutral.svg" %}" alt="Icon of an open book">
+          <div class="card__image__container">
+            <span class="card__icon i-training"><span class="u-visually-hidden">Icon of a training screen</span></span>
           </div>
           <div class="card__content">
             Attend a training
@@ -170,8 +170,8 @@
       </div>
       <div class="grid__item">
         <aside class="card card--horizontal card--secondary">
-          <div class="card__image">
-            <img src="{% static "img/i-contact--neutral.svg" %}" alt="Icon of a customer service representative">
+          <div class="card__image__container">
+            <span class="card__icon i-info-person"><span class="u-visually-hidden">Icon of a customer service representative</span></span>
           </div>
           <div class="card__content">
             Give us a call
