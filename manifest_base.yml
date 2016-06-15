@@ -6,6 +6,7 @@ applications:
 - name: cms
 env:
   FEC_APP_URL: /data
+  DISABLE_COLLECTSTATIC: 1 # Temporarily disable buildpack collectstatic (it still happens in run.sh)
   DJANGO_SETTINGS_MODULE: fec.settings.production
   NEW_RELIC_CONFIG_FILE: $HOME/newrelic.ini
   NEW_RELIC_LOG: stdout
