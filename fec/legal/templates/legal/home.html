@@ -6,6 +6,25 @@
 
 {% block content %}
   {% include "partials/search-hero.html" %}
+  <div class="slab slab--neutral slab--spacious">
+    <div class="container">
+      <form id="large-search" method="get" action="{{ settings.FEC_APP_URL }}/legal/search/" autocomplete="off" class="search__container js-search">
+        <div class="combo combo--search combo--search--large">
+          <select class="search__select select--alt js-search-type" name="search_type" aria-label="Select a search type">
+            <option value="regulations">Regulations</option>
+          </select>
+          <input type="text" name="search" class="combo__input js-search-input"
+          aria-label="Search"
+          placeholder="Search"
+          {% if search_query %} value="{{ search_query }}"{% endif %}>
+          <button type="submit" class="button--standard button--search combo__button">
+           <span class="u-visually-hidden">Search</span>
+          </button>
+        </div>
+      </form>
+      <span class="t-note t-sans search__example">Examples: 102.2; electioneering</span>
+    </div>
+  </div>
   <div class="container">
       <div class="message message--no-icon">We&rsquo;re designing a new way to get legal resources.
         We could use your help! Let us know if you&rsquo;re interested in <a id="share-feedback-link" href="#">
@@ -45,10 +64,7 @@
                   which are published every year in Title 11 of the Code of Federal Regulations (CFR).
                   This archive contains a full-text version of 11 CFR, as published January 1, 2016.
               </p>
-              <a class="is-active button--cta-primary" href="/regulations">Get started
-                  <img class="u-padding-left" src="{% static "img/i-right--inverse.svg" %}"
-                alt="Icon for Get started">
-              </a>
+              <a class="is-active button--cta-primary button--go" href="/regulations">Get started</a>
             </div>
             <div class="option">
               <h2 class="results-info__title" id="advisory-opinions">Advisory opinions</h2>
