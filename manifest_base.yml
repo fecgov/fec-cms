@@ -1,11 +1,11 @@
 ---
 domain: 18f.gov
 stack: cflinuxfs2
-buildpack: "https://github.com/ddollar/heroku-buildpack-multi.git"
+buildpack: python_buildpack
 applications:
 - name: cms
 env:
   FEC_APP_URL: /data
+  DJANGO_SETTINGS_MODULE: fec.settings.production
   NEW_RELIC_CONFIG_FILE: $HOME/newrelic.ini
   NEW_RELIC_LOG: stdout
-  NPM_CONFIG_PRODUCTION: false
