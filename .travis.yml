@@ -9,6 +9,7 @@ python:
 
 env:
   global:
+    - DJANGO_SETTINGS_MODULE: fec.settings.production
     - secure: "CnuWnD2WQAlxlgJGY4IdDlq3ka7qn5kQjCahAlsYHazjv0RIzcIlzoHK0F7VOxp14Vx2ZNbEZkhglsPx748ZcB4P1DYlQxcTRqAQFi7XRqpnez3yKIeObti6asjMdLT/6R8MdeiTgaAcLRnZ5IB/QHxhBC6DbnNM1xYsPC9YPNpLXZOq0yJVxdGhBfMKPQaRMzOpry1g4en35BKKDZzy1CQuQV24MgAvBuEAWvrM/G7RT9pEYFnCnPQRJaU2Gj0NxcJ2yZgw+8mZvqdgk3SGlxBSlUp6GryV2RYqcR2vosfwaUtHDIOPVXY4jYhqqHIwq9r/uSmz5hva21jfs2xLS4Ib+4z4kV1OliENjF1pN58lKcy8erItxdAPi7KFZsLfqOLFydwUH7CcLiAaYR0tN8AqnIoAG+l47Em8rTm+AQymYqXeXcRvHoPtBA/Tt7CNMFaXlTmHWpvMruwC4mAMQD1TNYaZFkMFh/MbLLQnpw94Fu3SCyiUVOXHBV0f0qW0sRUTo7fGeX4w1lsErvwYSM9/l7ys73zFXSCVsadbzWcvCtb+jh9xAmOIasYV5M3SETSKQ8+js/eGMsdONajmLGSDILSK1J+pkTrcrmh/DXbsK1RNoxlVFfINLX4nl1mA5qp5ct4ry1oTsii+6iBY0heQvr9QdwZkzXB+hw6VIYo=" # FEC_CF_USERNAME
     - secure: "UYdDAAF93m3vvsfYKWyVhiEf0RKTtZriY4OM6fmRCDGCwVNJMnqu2eoHjzjaSc81UtFdHbFjwsBifr1CeMjTswJZGqIKnItkO5vd5/b8molIOUzJkieWA/A1mLb5mbF4XDr/s9hI2l3ChjRoXwD5S/SOnfQulmmOoSwq+Gl3O5g5D3j2HQjvMf9HIbRVBY1Ex/jSNy+unxRIUtIsqwhgzPjbEC7oQQG4lTZMwvYMnwLedig/69LAfD4RMfpCb5t+4lbaI/SJsgI1hTvrCfqjdNxrbm/ssT0pPFDInkxkoNTsi/CCaOkk+xawUKjxuG1DYsK1F2NgScxFOhVpFthKRW4lWxcqVNP8kGavDyUD9KgdqTprNr15okSnlV6ziq/jFn06/X8Zue/WK172hxjBtkZpHdH46oCEBtNcpTUKNliqRmnLUeM+dXcyZCMVmMEqrPdIZ5M8b0coce5nimLKWZjzr5DGcjS0QtpYfgBGenwXLojVFmlFbREf2VqU+4E6G1OI2YBv3a0F6KoHDtdbDz/l6DLwyHrUDF+1gWqyyZD4tqGAKFjQ7G90jofaXF05mx1L/74B5NmaeC2c30vgDR5q6bMHlhB5BpUoqlzVRNj1SYi3TPerSgtTGTimFjwk+j1JsqydrDijUu8+NiFVxAc+JAT5IH4Ooy6+JD0Yzvg=" # FEC_CF_PASSWORD
 
@@ -36,6 +37,8 @@ before_deploy:
   - tar xzvf $HOME/cf.tgz -C $HOME
   - travis_retry cf install-plugin autopilot -f -r CF-Community
   - npm run build
+  - python fec/manage.py collectstatic
+  - python fec/manage.py compress
 
 deploy:
   provider: script

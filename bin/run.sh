@@ -8,10 +8,7 @@ set -o pipefail
 # Send out Slack notifications (off for now)
 # invoke notify
 
-# Build static files
 cd fec
-./manage.py compress
-
 # Run migrations
 ./manage.py makemigrations
 ./manage.py migrate --noinput
