@@ -28,7 +28,19 @@
             {{/if}}
           </div>
           <div class="cal-list__category">
+            {{#if tooltipContent }}
+            <div class="tooltip__container">
+              <span class="cal-list__category-title" aria-describedby="category-tooltip-{{@index}}">{{ toUpperCase category }}</span>
+              <button class="tooltip__trigger"><span class="u-visually-hidden">Show tooltip</span></button>
+              <div class="tooltip tooltip--under" role="tooltip" id="category-tooltip-{{@index}}">
+                <div class="tooltip__content">
+                  {{ tooltipContent }}
+                </div>
+              </div>
+            </div>
+            {{else}}
             <span class="cal-list__category-title">{{ toUpperCase category }}</span>
+            {{/if}}
           </div>
         </div>
         <div class="cal-list__add">
