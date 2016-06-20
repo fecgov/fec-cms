@@ -29,20 +29,10 @@
           <h2 class="feature__title">New features</h2>
           <div class="card card--primary">
             <a class="card__image-link" href="#">
-              <img class="card__image" src="{% static "img/i-complex--legal.svg" %}" alt="Icon for legal resources">
-            </a>
-            <div class="card__content">
-              <p>A <a href="#">legal resources section</a> with a searchable, full-text version of Title 11 of the Code of Federal Regulations (CFR).</p>
-            </div>
-          </div>
-        </div>
-        <div class="feature feature--no-title grid__item">
-          <div class="card card--primary">
-            <a class="card__image-link" href="#">
               <img class="card__image" src="{% static "img/i-complex--regreport.svg" %}" alt="Icon for registration and reporting">
             </a>
             <div class="card__content">
-              <p>Tailored registration and reporting content for <a href="#">candidates</a>, <a href="#">political party committees</a>, <a href="#">corporations and labor organizations.</a></p>
+              <p>Tailored registration and reporting content for <a href="/registration-and-reporting/essentials-house-and-senate-candidates-and-committees/">candidates</a>, <a href="/registration-and-reporting/essentials-political-party-committees/">political party committees</a>, <a href="/registration-and-reporting/essentials-corporations-and-labor-organizations/">corporations and labor organizations.</a></p>
             </div>
           </div>
         </div>
@@ -63,7 +53,18 @@
               <img class="card__image" src="{% static "img/i-complex--data.svg" %}" alt="Icon representing explore campaign finance data">
             </a>
             <div class="card__content">
-              <p>Unique data pages with financial totals for <a href="#">presidential</a>, <a href="#">Senate</a> and <a href="#">House candidates</a>.</p>
+              <p>Unique data pages with financial totals for <a href="{{ settings.FEC_APP_URL }}/candidates/president">presidential</a>, <a href="{{ settings.FEC_APP_URL }}/candidates/senate">Senate</a> and <a href="{{ settings.FEC_APP_URL }}/candidates/house">House candidates</a>.</p>
+            </div>
+          </div>
+        </div>
+        <div class="feature grid__item">
+          <h2 class="feature__title">Coming soon</h2>
+          <div class="card card--primary is-disabled">
+            <a class="card__image-link" href="#">
+              <img class="card__image" src="{% static "img/i-complex--legal.svg" %}" alt="Icon for legal resources">
+            </a>
+            <div class="card__content">
+              <p>A legal resources section with a searchable, full-text version of Title 11 of the Code of Federal Regulations (CFR).</p>
             </div>
           </div>
         </div>
