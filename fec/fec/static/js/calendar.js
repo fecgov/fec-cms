@@ -57,7 +57,6 @@ function Calendar(opts) {
   this.$download = $(opts.download);
   this.$subscribe = $(opts.subscribe);
 
-  this.$calendar.on('calendar:rendered', this.filterPanel.setHeight());
   this.$calendar.on('click', '.js-toggle-view', this.toggleListView.bind(this));
 
   this.$calendar.on('keypress', '.fc-event, .fc-more, .fc-close', this.simulateClick.bind(this));
@@ -70,7 +69,6 @@ function Calendar(opts) {
 
   this.filter();
   this.styleButtons();
-  this.filterPanel.setHeight();
 }
 
 Calendar.prototype.toggleListView = function(e) {
