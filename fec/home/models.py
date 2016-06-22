@@ -42,9 +42,18 @@ class ContentPage(Page):
         StreamFieldPanel('body'),
     ]
 
+    # Default content section for determining the active nav
+    content_section = 'registration-and-reporting'
+
+    def get_context(self, request):
+        context = super(ContentPage, self).get_context(request)
+        context['content_section'] = self.content_section
+        return context
+
+
 class HomePage(ContentPage, UniqueModel):
     """Unique home page."""
-    pass
+    content_section = ''
 
 class LandingPage(ContentPage):
     pass
@@ -59,10 +68,12 @@ class PartyChecklistPage(ContentPage):
     pass
 
 class ContactPage(ContentPage):
-    pass
+    content_section = 'contact'
+
 
 class CalendarPage(ContentPage):
-    pass
+    content_section = 'calendar'
+
 
 class CustomPage(Page):
     """Flexible customizable page."""
