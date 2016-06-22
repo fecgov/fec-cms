@@ -201,7 +201,7 @@ Calendar.prototype.styleButtons = function() {
   this.$calendar.find('.fc-prev-button').addClass('button--previous button--standard');
   this.$calendar.find('.fc-right .fc-button-group').addClass('toggles--buttons');
   this.$calendar.find('.fc-monthTime-button').addClass('button--list button--alt');
-  this.$calendar.find('.fc-month-button').addClass('button--cal button--alt');
+  this.$calendar.find('.fc-month-button').addClass('button--grid button--alt');
 };
 
 Calendar.prototype.handleRender = function(view) {
