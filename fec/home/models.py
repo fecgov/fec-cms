@@ -43,17 +43,16 @@ class ContentPage(Page):
     ]
 
     # Default content section for determining the active nav
-    content_section = 'registration-and-reporting'
-
-    def get_context(self, request):
-        context = super(ContentPage, self).get_context(request)
-        context['content_section'] = self.content_section
-        return context
+    @property
+    def content_section(self):
+        return 'registration-and-reporting'
 
 
 class HomePage(ContentPage, UniqueModel):
     """Unique home page."""
-    content_section = ''
+    @property
+    def content_section(self):
+        return ''
 
 class LandingPage(ContentPage):
     pass
@@ -68,11 +67,15 @@ class PartyChecklistPage(ContentPage):
     pass
 
 class ContactPage(ContentPage):
-    content_section = 'contact'
+    @property
+    def content_section(self):
+        return 'contact'
 
 
 class CalendarPage(ContentPage):
-    content_section = 'calendar'
+    @property
+    def content_section(self):
+        return 'calendar'
 
 
 class CustomPage(Page):
