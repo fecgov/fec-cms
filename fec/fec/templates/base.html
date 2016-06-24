@@ -24,9 +24,8 @@
     {% endblock %}
   </head>
 
-  <body class="{% block body_class %}{% endblock %} {{ self.content_section }}">
+  <body class="{% block body_class %}{% endblock %}">
     {% if settings.FEC_CMS_ENVIRONMENT != 'PRODUCTION' %}
-    {{ page }}
     <div class="banner">
       <div class="container">
         <span class="t-block t-bold t-centered">{{ settings.FEC_CMS_ENVIRONMENT }}</span>
