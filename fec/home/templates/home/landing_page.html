@@ -4,50 +4,33 @@
 {% block body_class %}template-{{ self.get_verbose_name | slugify }}{% endblock %}
 
 {% block content %}
-<section class="hero hero--secondary" aria-labelledby="hero-heading">
+<section class="hero hero--secondary hero--registration" aria-labelledby="hero-heading">
+  <div class="hero__image"></div>
   <div class="container">
-    <h1 class="t-display">Registration and reporting</h1>
-    <h2 class="t-ruled">Requirements for federal candidates and committees</h2>
+    <h1 id="hero-heading" class="hero__title">Registration and reporting</h1>
+    <p class="hero__content">Federal candidates and political committees must register with the FEC when they reach certain thresholds. Once registered, they file regular reports about their financial activity. Learn more about these groups and the requirements that apply to them.</p>
   </div>
 </section>
 
 <article>
-  <div class="slab slab--neutral content__section--extra">
-    <div class="container">
-      <h2 class="t-ruled--bottom main__content">What does it mean to register and report?</h2>
-      <div class="main__content">
-        <p>Federal candidates and political committees must register with the FEC when they reach certain thresholds.
-        Once registered, they make regular reports about their financial activity.</p>
-        <p>Learn more about those groups and the requirements that apply to them.</p>
-      </div>
-      <div class="sidebar-container">
-        <aside class="card card--secondary">
-          <h3 class="t-secondary-contrast t-left-aligned">Already registered?</h3>
-          <form action="{{ settings.FEC_APP_URL }}" method="GET">
-            <label class="label t-left-aligned" for="committee-search">Find your committee</label>
-            <div class="combo--search--mini">
-              <input id="committee-search" name="search" class="combo__input" type="text">
-              <input type="hidden" name="search_type" value="committees" placeholder="Search committees">
-              <button class="combo__button button--search button--standard" type="submit"><span class="u-visually-hidden">Search</span></button>
-            </div>
-          </form>
-        </aside>
-      </div>
-    </div>
-  </div>
   <div id="options" class="container main">
     <div class="content__section">
       <h2>Who can register and report?</h2>
     </div>
     <div class="sidebar-container sidebar-container--left">
-      <nav class="sidebar sidebar--neutral sidebar--left side-nav js-sticky-side js-toc" data-sticky-container="options">
-        <ul class="sidebar__content">
-          <li class="side-nav__item"><a class="side-nav__link" href="#candidate-committees">Candidates and candidate committees</a></li>
-          <li class="side-nav__item"><a class="side-nav__link" href="#corporations-and-labor">Corporations and labor organizations</a></li>
-          <li class="side-nav__item"><a class="side-nav__link" href="#parties">Political party committees</a></li>
-          <li class="side-nav__item"><a class="side-nav__link" href="#nonconnected">Nonconnected committees</a></li>
-        </ul>
-      </nav>
+      <div class="js-sticky-side" data-sticky-container="options">
+        <nav class="sidebar sidebar--neutral sidebar--left side-nav js-toc">
+          <ul class="sidebar__content">
+            <li class="side-nav__item"><a class="side-nav__link" href="#candidate-committees">Candidates and candidate committees</a></li>
+            <li class="side-nav__item"><a class="side-nav__link" href="#corporations-and-labor">Corporations and labor organizations</a></li>
+            <li class="side-nav__item"><a class="side-nav__link" href="#parties">Political party committees</a></li>
+            <li class="side-nav__item"><a class="side-nav__link" href="#nonconnected">Nonconnected committees</a></li>
+          </ul>
+        </nav>
+        <aside style="margin-top: 2rem">
+          <p>Already registered?<br><a href="{{ settings.FEC_APP_URL }}">Find your committee</a></p>
+        </aside>
+      </div>
     </div>
     <section class="main__content--right">
       <div id="candidate-committees" class="option">
@@ -135,37 +118,37 @@
       </div>
     </section>
   </div>
-  <div class="slab slab--secondary">
+  <div class="slab slab--neutral">
     <div class="container">
-      <h2 class="t-secondary-contrast">Need help?</h2>
+      <h2>Need help?</h2>
       <div class="grid grid--4-wide">
         <div class="grid__item">
-          <aside class="card card--horizontal card--secondary-contrast">
-            <div class="card__image">
-              <a class="u-no-border" href="/calendar?category=report-E&category=report-M&category=report-Q">
-                <img src="{% static "img/i-calendar--neutral.svg" %}" alt="Icon of a calendar">
-              </a>
-            </div>
-            <div class="card__content">
-              <a href="/calendar?category=report-E&category=report-M&category=report-Q">Reporting calendar</a>
-            </div>
-          </aside>
+          <a href="/calendar?category=report-E&category=report-M&category=report-Q">
+            <aside class="card card--horizontal card--secondary">
+              <div class="card__image__container">
+                  <span class="card__icon i-calendar"><span class="u-visually-hidden">Icon of a calendar</span></span>
+              </div>
+              <div class="card__content">
+                Reporting deadlines
+              </div>
+            </aside>
+          </a>
         </div>
         <div class="grid__item">
-          <aside class="card card--horizontal card--secondary-contrast">
-            <div class="card__image">
-              <img src="{% static "img/i-contact--neutral.svg" %}" alt="Icon of a customer service represntative">
-            </div>
-            <div class="card__content">
-              Give us a call
-              <br>1-800-424-9530
-            </div>
+            <aside class="card card--horizontal card--secondary">
+              <div class="card__image__container">
+                  <span class="card__icon i-info-person"><span class="u-visually-hidden">Icon of a customer service representative</span></span>
+              </div>
+              <div class="card__content">
+                Give us a call
+                <br>1-800-424-9530
+              </div>
           </aside>
         </div>
       </div>
     </div>
   </div>
-  <div class="slab slab--secondary footer-disclaimer">
+  <div class="slab slab--neutral footer-disclaimer">
     <div class="container">
       <p class="usa-width-one-half">This site is in beta, which means we're testing content that better adheres to legal plain language requirements. This content is not finalized, is not legal advice and is subject to change.</p>
       <p class="usa-width-one-half">Everything on this site should be read in conjunction with FEC.gov. Please let us know what you think of our new content; use the feedback tool on this page.</p>
