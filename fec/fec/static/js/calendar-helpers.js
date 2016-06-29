@@ -51,11 +51,21 @@ var tooltipContent = {
   'Open Meetings': 'Open meetings are regular, public meetings during which the Commission adopts new regulations, issues advisory opinions, approves audit reports of political committees and takes other actions to administer the campaign finance law.',
   'Roundtables': 'Roundtables are training opportunities offered to FEC filers and those interested in learning about campaign finance law. These voluntary, online workshops focus on specific compliance topics. Register to access online materials and technical information.',
   'AOs and Rules': 'The Commission follows these deadlines when issuing new guidance and rules. Advisory opinions are official Commission responses about how to apply campaign finance regulations to specific, factual situations. The Commission writes rules and regulations and publishes them in the Federal Register.',
+  'Filing deadline': 'Test'
 };
+
+function mapCategory(category) {
+  if (category.match(/^report-/) !== null) {
+    return 'Filing deadline';
+  } else {
+    return category;
+  }
+}
 
 module.exports = {
   getGoogleUrl: getGoogleUrl,
   getUrl: getUrl,
   className: className,
+  mapCategory: mapCategory,
   tooltipContent: tooltipContent
 };
