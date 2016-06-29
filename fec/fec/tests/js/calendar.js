@@ -45,7 +45,6 @@ describe('calendar', function() {
       url: 'http://test.calendar',
       exportUrl: 'http://test.calendar/export',
       filterPanel: {
-        setHeight: function() {},
         $form: {on: function() {}},
         filterSet: {
           serialize: function() {},

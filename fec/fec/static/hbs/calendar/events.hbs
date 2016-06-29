@@ -18,13 +18,13 @@
               All day
             {{/if}}
           </div>
-          <div class="cal-list__description">
+          <div class="cal-list__description" id="cal-description-{{@index}}">
             <p>{{summary}}</p>
             {{#if location}}
               <span class="cal-list__location">&ndash; {{location}}</span>
             {{/if}}
             {{#if detailUrl}}
-              <span class="cal-list__details"><a class="t-bold" href="{{detailUrl}}">Learn more</a></span>
+              <span class="cal-list__details"><a class="t-bold" href="{{detailUrl}}" aria-describedby="cal-description-{{@index}}">Learn more</a></span>
             {{/if}}
           </div>
           <div class="cal-list__category">
@@ -47,7 +47,7 @@
         </div>
         <div class="cal-list__add">
           <div class="dropdown">
-            <button class="button button--alt dropdown__button dropdown__button--mini button--calendar--mini"><span class="u-visually-hidden">Download calendar</span></button>
+            <button class="button button--alt dropdown__button dropdown__button--mini button--calendar--mini" aria-describedby="cal-description-{{@index}}"><span class="u-visually-hidden">Download calendar</span></button>
             <ul class="dropdown__panel dropdown__panel--right" aria-hidden="true">
               <li class="dropdown__item"><a class="dropdown__value" href="{{download}}">Apple Calendar</a></li>
               <li class="dropdown__item"><a class="dropdown__value" href="{{google}}" target="_blank">Google Calendar</a></li>
