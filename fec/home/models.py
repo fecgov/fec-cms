@@ -66,6 +66,9 @@ class SSFChecklistPage(ContentPage):
 class PartyChecklistPage(ContentPage):
     pass
 
+class NonconnectedChecklistPage(ContentPage):
+    pass
+
 class ContactPage(ContentPage):
     @property
     def content_section(self):
