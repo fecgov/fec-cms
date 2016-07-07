@@ -8,8 +8,10 @@ function Legal(feedbackWidget, feedbackSelector, ethnioSelector) {
 
   $(ethnioSelector).click(function(e) {
     e.preventDefault();
+    Ethnio.force_display = true;
     Ethnio.close();
     Ethnio.show();
+    Ethnio.force_display = false;
   })
 }
 
