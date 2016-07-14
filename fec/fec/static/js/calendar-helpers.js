@@ -45,8 +45,8 @@ function className(event) {
 
 var tooltipContent = {
   'election': 'Federal elections. These include primary, general and special elections as well as caucuses and conventions.',
-  'Electioneering communication period': 'Electioneering communications are any broadcast, cable or satellite communication that: refer to a clearly identified candidate for federal office, are publicly distributed within certain time periods before an election, and are targeted to the relevant electorate. 11 CFR 100.29.',
-  'Independent expenditure period': 'Independent expenditures are expenditures for a communication that expressly advocate the election or defeat of a clearly identified candidate and that are not made in cooperation, consultation or concert with, or at the request or suggestion of, any candidate, or his or her authorized committees or agents, or a political party committee or its agents. 11 CFR 100.16.',
+  'EC Periods': 'Electioneering communications are any broadcast, cable or satellite communication that:<ul class="list--bulleted"><li>Refer to a clearly identified candidate for federal office,</li><li>Are publicly distributed within certain time periods before an election, and</li><li>Are targeted to the relevant electorate. 11 CFR 100.29.</li></ul>',
+  'IE Periods': 'Independent expenditures are expenditures for a communication: <ul class="list--bulleted"><li>That expressly advocate the election or defeat of a clearly identified candidate and</li><li>That are not made in cooperation, consultation or concert with, or at the request or suggestion of, any candidate, or his or her authorized committees or agents, or a political party committee or its agents. 11 CFR 100.16.</li></ul>',
   'Executive Sessions': 'Executive sessions are regular, closed meetings during which the Commission discusses pending enforcement actions, litigation and other matters that — by law — must be kept confidential.',
   'Open Meetings': 'Open meetings are regular, public meetings during which the Commission adopts new regulations, issues advisory opinions, approves audit reports of political committees and takes other actions to administer the campaign finance law.',
   'Roundtables': 'Roundtables are training opportunities offered to FEC filers and those interested in learning about campaign finance law. These voluntary, online workshops focus on specific compliance topics. Register to access online materials and technical information.',
@@ -63,10 +63,6 @@ function mapCategory(category) {
     return 'Quarterly deadline';
   } else if (category.match(/^report-/) !== null) {
     return 'Pre- and post-election deadline';
-  } else if (category === 'EC Periods') {
-    return 'Electioneering communication period';
-  } else if (category === 'IE Periods') {
-    return 'Independent expenditure period';
   } else {
     return category;
   }
