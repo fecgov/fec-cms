@@ -48,16 +48,16 @@
         </div>
         <div class="feature feature--no-title grid__item">
           <div class="card card--primary">
-            <a class="card__image-link" href="#">
+            <a class="card__image-link" href="{{ settings.FEC_APP_URL }}">
               <img class="card__image" src="{% static "img/i-complex--data.svg" %}" alt="Icon representing explore campaign finance data">
             </a>
             <div class="card__content">
-              <p>Download itemized <a href="/data/receipts/?two_year_transaction_period=2016&min_date=01-01-2015&max_date=07-05-2016&is_individual=true">receipts</a> and <a href="/data/disbursements/?two_year_transaction_period=2016&min_date=01-01-2015&max_date=07-05-2016">disbursements</a>.</p>
+              <p>Download itemized <a href="{{ settings.FEC_APP_URL }}/receipts/?two_year_transaction_period=2016&is_individual=true">receipts</a> and <a href="{{ settings.FEC_APP_URL }}/disbursements/?two_year_transaction_period=2016">disbursements</a>.</p>
             </div>
           </div>
         </div>
         <div class="feature grid__item">
-        <a href="https://github.com/18F/FEC/blob/master/release_notes/release_notes_2016-07-07.md" class="feature__release-notes">Full release notes from July 7</a>
+        <a href="https://github.com/18F/FEC/blob/master/release_notes/release_notes_2016-07-20.md" class="feature__release-notes">Full release notes from July 20</a>
           <div class="card card--primary">
             <a class="card__image-link" href="/legal-resources/">
               <img class="card__image" src="{% static "img/i-complex--legal.svg" %}" alt="Icon for legal resources">
