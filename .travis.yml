@@ -2,7 +2,7 @@ language: python
 
 sudo: false
 
-cache: pip
+cache: false
 
 python:
   - "3.4"
