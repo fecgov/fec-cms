@@ -1,5 +1,4 @@
 Django>=1.9,<1.10
-wagtail>=1.5,<1.6
 cfenv==0.4.0
 dj-database-url==0.3.0
 django-libsass==0.3
@@ -9,6 +8,7 @@ psycopg2==2.6.1
 raven==5.8.1
 slacker==0.8.6
 whitenoise==2.0.3
+wagtail>=1.5,<1.6
 
 # Development
 invoke==0.10.1
