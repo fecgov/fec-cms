@@ -61,15 +61,9 @@
             <li class="site-nav__item">
               <a href="/registration-and-reporting/" class="site-nav__link{% if self.content_section == 'registration-and-reporting' %} is-parent{% endif %}">Registration and reporting</a>
             </li>
-            {% if features.legal %}
             <li class="site-nav__item">
               <a href="/legal-resources" class="site-nav__link">Legal resources</a>
             </li>
-            {% else %}
-            <li class="site-nav__item is-disabled">
-              <a href="#" class="site-nav__link">Legal resources</a>
-            </li>
-            {% endif %}
             <li class="site-nav__item utility-nav__item is-disabled">
               <a href="#" class="site-nav__link">(About)</a>
             </li>
