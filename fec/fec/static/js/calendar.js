@@ -149,11 +149,11 @@ Calendar.prototype.success = function(response) {
 
   setTimeout(function() {
     $('.is-loading').removeClass('is-loading').addClass('is-successful');
-  }, 500);
+  }, helpers.LOADING_DELAY);
 
   setTimeout(function() {
     $('.is-successful').removeClass('is-successful');
-  }, 2000);
+  }, helpers.SUCCESS_DELAY);
 
   return response.results.map(function(event) {
     var processed = {
