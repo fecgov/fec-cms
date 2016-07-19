@@ -146,6 +146,15 @@ Calendar.prototype.filter = function() {
 
 Calendar.prototype.success = function(response) {
   var self = this;
+
+  setTimeout(function() {
+    $('.is-loading').removeClass('is-loading').addClass('is-successful');
+  }, 500);
+
+  setTimeout(function() {
+    $('.is-successful').removeClass('is-successful');
+  }, 2000);
+
   return response.results.map(function(event) {
     var processed = {
       category: event.category,
