@@ -50,10 +50,10 @@ var tooltipContent = {
   'Executive Sessions': 'Executive sessions are regular, closed meetings during which the Commission discusses pending enforcement actions, litigation and other matters that — by law — must be kept confidential.',
   'Open Meetings': 'Open meetings are regular, public meetings during which the Commission adopts new regulations, issues advisory opinions, approves audit reports of political committees and takes other actions to administer the campaign finance law.',
   'Roundtables': 'Roundtables are training opportunities offered to FEC filers and those interested in learning about campaign finance law. These voluntary, online workshops focus on specific compliance topics. Register to access online materials and technical information.',
-  'AOs and Rules': 'The Commission follows these deadlines when issuing new guidance and rules. Advisory opinions are official Commission responses about how to apply campaign finance regulations to specific, factual situations. The Commission writes rules and regulations and publishes them in the Federal Register.',
-  'Monthly deadline': 'Test',
-  'Quarterly deadline': 'Test',
-  'Pre- and post-election deadline': 'Test'
+  'AOs and Rules': 'The Commission follows these deadlines when issuing new guidance and rules. Advisory Opinions are official Commission responses about how to apply campaign finance regulations to specific, factual situations. The Commission writes rules and regulations and publishes them in the Federal Register.',
+  'Monthly deadline': 'Throughout the year, filers submit regularly scheduled reports about their campaign finance activity. These reporting requirements are outlined in Title 11 of the Code of Federal Regulations (CFR) and vary, depending on the type of filer.',
+  'Quarterly deadline': 'Throughout the year, filers submit regularly scheduled reports about their campaign finance activity. These reporting requirements are outlined in Title 11 of the Code of Federal Regulations (CFR) and vary, depending on the type of filer.',
+  'Pre- and post-election deadline': 'Throughout the year, filers submit regularly scheduled reports about their campaign finance activity. These reporting requirements are outlined in Title 11 of the Code of Federal Regulations (CFR) and vary, depending on the type of filer.'
 };
 
 function mapCategory(category) {
