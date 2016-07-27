@@ -148,7 +148,7 @@ Calendar.prototype.success = function(response) {
   var self = this;
   return response.results.map(function(event) {
     var processed = {
-      category: calendarHelpers.mapCategory(event.category),
+      category: calendarHelpers.mapCategoryTitle(event.category),
       location: event.location,
       title: event.description || 'Event title',
       summary: event.summary || 'Event summary',
@@ -156,7 +156,7 @@ Calendar.prototype.success = function(response) {
       start: event.start_date ? moment(event.start_date) : null,
       end: event.end_date ? moment(event.end_date) : null,
       className: calendarHelpers.className(event),
-      tooltipContent: calendarHelpers.tooltipContent[calendarHelpers.mapCategory(event.category)] || null,
+      tooltipContent: calendarHelpers.mapCategoryDescription(event.category),
       allDay: event.all_day,
       detailUrl: event.url
     };
