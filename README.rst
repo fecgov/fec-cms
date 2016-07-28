@@ -65,13 +65,9 @@ Set up
 Local styles
 ~~~~~~~~~~~~~~~~~~~~~~
 
-Environment variable: ::
+Set Symbolic Link ::
 
-    export FEC_WEB_STYLE_URL=http://localhost:8080/css/styles.css
-
-Settings: ::
-
-    FEC_WEB_STYLE_URL = 'http://localhost:8080/css/styles.css'
+    npm link fec-style > ~/[path to fec-style]/fec-style
 
 Developing with openFEC
 ~~~~~~~~~~~~~~~~~~~~~~

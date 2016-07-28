@@ -11,13 +11,9 @@
     <title>{% block title %}{% if self.seo_title %}{{ self.seo_title }}{% else %}{{ self.title }} | FEC {% endif %}{% endblock %}{% block title_suffix %}{% endblock %}</title>
 
     {# Global stylesheets #}
-    {% if settings.FEC_WEB_STYLE_URL %}
-    <link rel="stylesheet" type="text/x-css" href="{{ settings.FEC_WEB_STYLE_URL }}">
-    {% else %}
     {% compress css %}
     <link rel="stylesheet" type="text/x-scss" href="{% static 'scss/fec.scss' %}">
     {% endcompress %}
-    {% endif %}
 
     {% block extra_css %}
     {# Override this in templates to add extra stylesheets #}
