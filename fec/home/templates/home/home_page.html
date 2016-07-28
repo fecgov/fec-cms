@@ -28,68 +28,45 @@
         <div class="feature grid__item">
           <h2 class="feature__title">New features</h2>
           <div class="card card--primary">
-            <a class="card__image-link" href="{{ settings.FEC_APP_URL }}">
-              <img class="card__image" src="{% static "img/i-data--neutral.svg" %}" alt="Icon for explore campaign finance data">
+            <a class="card__image-link" href="/registration-and-reporting/essentials-nonconnected-committees/">
+              <img class="card__image" src="{% static "img/i-complex--regreport.svg" %}" alt="Icon for registration and reporting">
             </a>
             <div class="card__content">
-              Explore <a href="{{ settings.FEC_APP_URL }}">campaign finance data</a>
+              <p>Tailored registration and reporting content for <a href="/registration-and-reporting/essentials-nonconnected-committees/">nonconnected committees</a>.</p>
             </div>
           </div>
-          <p>See how money is raised and spent in federal elections. Compare candidates’ financial data. Learn how campaigns have spent their money. Discover who contributed to which candidates.</p>
-        </div>
-        <div class="feature feature--no-title grid__item">
-          <div class="card card--primary">
-            <a class="card__image-link" href="/registration-and-reporting">
-              <img class="card__image" src="{% static "img/i-register--neutral.svg" %}" alt="Icon for reporting and registration">
-            </a>
-            <div class="card__content">
-              <p>Learn how candidates and political committees <a href="/registration-and-reporting/">register and report</a></p>
-            </div>
-          </div>
-          <p>We’re making it easier to learn the essentials of registration and reporting. So far we’ve published information about candidates, authorized committees, corporations and labor organizations.</p>
-        </div>
-        <div class="feature feature--no-title grid__item">
-          <div class="card card--primary">
-            <img class="card__image" src="{% static "img/i-glossary--neutral.svg" %}" alt="Icon representing the glossary">
-            <div class="card__content">
-              <span>Use the glossary to learn the meaning of an unfamiliar word or phrase</span>
-            </div>
-          </div>
-          <p>Click words with the book icon next to them to pull up a definition. For example: <span class="term" data-term="principal campaign committee">principal campaign committee</span>. Or click the glossary icon at the top of any page to open the full, searchable glossary.</p>
         </div>
         <div class="feature feature--no-title grid__item">
           <div class="card card--primary">
             <a class="card__image-link" href="/calendar">
-              <img class="card__image" src="{% static "img/i-calendar--neutral.svg" %}" alt="Icon for the calendar">
+              <img class="card__image" src="{% static "img/i-complex--calendar.svg" %}" alt="Icon representing the calendar">
             </a>
             <div class="card__content">
-              View <a href="/calendar">a calendar</a> of FEC deadlines and events
+              <p>A <a href="/calendar">calendar of events</a> that you can personalize and export.</p>
             </div>
           </div>
-          <p>Build a custom calendar to suit your needs, and export it to your personal calendar.</p>
         </div>
-      </div>
-    </div>
-  </section>
-  <section class="slab">
-    <div class="container">
-      <h2 class="h1 t-ruled--bold">What's next?</h2>
-      <ul class="feature-list grid grid--4-wide">
-        <li class="feature feature--bulleted grid__item">
-          <p>Added resources around registration, reporting and compliance</p>
-        </li>
-        <li class="feature feature--bulleted grid__item">
-          <p>Improvements to campaign data tools, including additional visualizations</p>
-        </li>
-        <li class="feature feature--bulleted grid__item">
-          <p>A revamped tool for searching advisory opinions and enforcement actions</p>
-        </li>
-        <li class="feature feature--bulleted grid__item">
-          <p>Further improvements to the new look and feel of the website</p>
-        </li>
-      </ul>
-      <div class="slab">
-        <p class="h3">And more — reach out and share your ideas.</p>
+        <div class="feature grid__item">
+          <a href="https://github.com/18F/FEC/blob/master/release_notes/release_notes_2016-07-07.md" class="feature__release-notes">Full release notes from July 7</a>
+          <div class="card card--primary">
+            <a class="card__image-link" href="#">
+              <img class="card__image" src="{% static "img/i-complex--data.svg" %}" alt="Icon representing explore campaign finance data">
+            </a>
+            <div class="card__content">
+              <p>Download itemized <a href="/data/receipts/?two_year_transaction_period=2016&min_date=01-01-2015&max_date=07-05-2016&is_individual=true">receipts</a> and <a href="/data/disbursements/?two_year_transaction_period=2016&min_date=01-01-2015&max_date=07-05-2016">disbursements</a>.</p>
+            </div>
+          </div>
+        </div>
+        <div class="feature feature--no-title grid__item">
+          <div class="card card--primary">
+            <a class="card__image-link" href="/legal-resources/">
+              <img class="card__image" src="{% static "img/i-complex--legal.svg" %}" alt="Icon for legal resources">
+            </a>
+            <div class="card__content">
+              <p>A <a href="/legal-resources/">legal resources</a> section with a searchable, full-text version of Title 11 of the Code of Federal Regulations (CFR).</p>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </section>

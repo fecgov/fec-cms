@@ -45,7 +45,7 @@
           <ul class="sidebar__content">
             <li class="u-padding--bottom"><a href="/registration-and-reporting/essentials-house-and-senate-candidates-and-committees/">Congressional candidates and committees</a></li>
             <li class="u-padding--bottom"><a href="/registration-and-reporting/essentials-political-party-committees">Political party committees</a></li>
-            <li class="u-padding--bottom is-disabled">Nonconnected committees</li>
+            <li class="u-padding--bottom"><a href="/registration-and-reporting/essentials-nonconnected-committees">Nonconnected committees</a></li>
           </ul>
           <h4 class="sidebar__title">Already registered?</h4>
           <form class="sidebar__content" action="{{ settings.FEC_APP_URL }}" method="GET">
@@ -115,7 +115,7 @@
                   <li><a href="/registration-and-reporting/non-election-monthly-filers">Monthly filers</a></li>
                 </ul>
               </li>
-              <li><a href="/registration-and-reporting/terminating-a-party-committee/">Terminating an SSF</a></li>
+              <li><a href="/registration-and-reporting/terminating-a-committee">Terminating an SSF</a></li>
             </ul>
           </div>
         </div>
@@ -135,12 +135,12 @@
   </div>
 </article>
 
-<div class="slab slab--secondary">
+<div class="slab slab--neutral">
   <div class="container">
-    <h2 class="t-secondary-contrast">Need help?</h2>
+    <h2>Need help?</h2>
     <div class="grid grid--4-wide">
       <div class="grid__item">
-        <aside class="card card--horizontal card--secondary-contrast card--full-bleed">
+        <aside class="card card--horizontal card--secondary card--full-bleed">
           <div class="card__image">
             <a class="u-no-border" href="http://www.fec.gov/pdf/colagui.pdf">
               <img src="{% static "img/guide--orgs.jpg" %}" alt="Federal Election Commission Campaign Guide: Corporations and Labor Organizations, January 2007">
@@ -152,21 +152,21 @@
         </aside>
       </div>
       <div class="grid__item">
-        <aside class="card card--horizontal card--secondary-contrast">
-          <div class="card__image">
-            <a class="u-no-border" href="/calendar?category=report-E&category=report-M&category=report-Q">
-              <img src="{% static "img/i-calendar--neutral.svg" %}" alt="Icon of a calendar">
-            </a>
-          </div>
-          <div class="card__content">
-            <a href="/calendar?category=report-E&category=report-M&category=report-Q">Reporting calendar</a>
-          </div>
-        </aside>
+        <a href="/calendar?category=report-E&category=report-M&category=report-Q">
+          <aside class="card card--horizontal card--secondary">
+            <div class="card__image__container">
+              <span class="card__icon i-calendar"><span class="u-visually-hidden">Icon of a calendar</span></span>
+            </div>
+            <div class="card__content">
+              Reporting deadlines
+            </div>
+          </aside>
+        </a>
       </div>
       <div class="grid__item">
-        <aside class="card card--horizontal card--secondary-contrast is-disabled">
-          <div class="card__image">
-            <img src="{% static "img/i-resources--neutral.svg" %}" alt="Icon of an open book">
+        <aside class="card card--horizontal card--secondary is-disabled">
+          <div class="card__image__container">
+            <span class="card__icon i-training"><span class="u-visually-hidden">Icon of a training screen</span></span>
           </div>
           <div class="card__content">
             Attend a training
@@ -175,9 +175,9 @@
         <p>Coming soon</p>
       </div>
       <div class="grid__item">
-        <aside class="card card--horizontal card--secondary-contrast">
-          <div class="card__image">
-            <img src="{% static "img/i-contact--neutral.svg" %}" alt="Icon of a customer service representative">
+        <aside class="card card--horizontal card--secondary">
+          <div class="card__image__container">
+            <span class="card__icon i-info-person"><span class="u-visually-hidden">Icon of a customer service representative</span></span>
           </div>
           <div class="card__content">
             Give us a call
@@ -189,7 +189,7 @@
   </div>
 </div>
 
-<div class="slab slab--secondary footer-disclaimer">
+<div class="slab slab--neutral footer-disclaimer">
   <div class="container">
     <p class="usa-width-one-half">This site is in beta, which means we're testing content that better adheres to legal plain language requirements. This content is not finalized, is not legal advice and is subject to change.</p>
     <p class="usa-width-one-half">Everything on this site should be read in conjunction with FEC.gov. Please let us know what you think of our new content; use the feedback tool on this page.</p>

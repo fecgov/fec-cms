@@ -42,9 +42,17 @@ class ContentPage(Page):
         StreamFieldPanel('body'),
     ]
 
+    # Default content section for determining the active nav
+    @property
+    def content_section(self):
+        return 'registration-and-reporting'
+
+
 class HomePage(ContentPage, UniqueModel):
     """Unique home page."""
-    pass
+    @property
+    def content_section(self):
+        return ''
 
 class LandingPage(ContentPage):
     pass
@@ -58,11 +66,20 @@ class SSFChecklistPage(ContentPage):
 class PartyChecklistPage(ContentPage):
     pass
 
-class ContactPage(ContentPage):
+class NonconnectedChecklistPage(ContentPage):
     pass
 
+class ContactPage(ContentPage):
+    @property
+    def content_section(self):
+        return 'contact'
+
+
 class CalendarPage(ContentPage):
-    pass
+    @property
+    def content_section(self):
+        return 'calendar'
+
 
 class CustomPage(Page):
     """Flexible customizable page."""

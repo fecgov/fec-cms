@@ -7,5 +7,7 @@ services:
   - fec-rds-prod
 env:
   FEC_API_URL: https://api.open.fec.gov
+  FEC_APP_URL: https://beta.fec.gov/data
   FEC_CMS_ENVIRONMENT: prod
+  FEC_FEATURE_LEGAL: true
   NEW_RELIC_APP_NAME: beta.fec.gov | cms | prod
