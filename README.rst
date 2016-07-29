@@ -62,14 +62,14 @@ Set up
     ./manage.py makemigrations
     ./manage.py migrate
 
-Local styles
+Developing with fec-style (optional)
 ~~~~~~~~~~~~~~~~~~~~~~
 
-Set Symbolic Link ::
+If you're developing with a local instance of `FEC-Style <https://github.com/18F/fec-style>`_ and want to pull in styles and script changes as you go, use `npm link` to create a symbolic link to your local fec-style repo: ::
 
     npm link fec-style > ~/[path to fec-style]/fec-style
 
-Developing with openFEC
+Developing with openFEC (optional)
 ~~~~~~~~~~~~~~~~~~~~~~
 
 Environment variable: ::
