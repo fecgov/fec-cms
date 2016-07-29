@@ -179,7 +179,7 @@ CONTACT_EMAIL = 'betafeedback@fec.gov';
 CONSTANTS = constants
 
 FEATURES = {
-    'legal': bool(os.getenv('FEC_FEATURE_LEGAL', ''))
+    'legal': bool(env.get_credential('FEC_FEATURE_LEGAL', ''))
 }
 
 if os.getenv('SENTRY_DSN'):
