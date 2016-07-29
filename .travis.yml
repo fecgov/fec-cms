@@ -37,7 +37,7 @@ before_deploy:
   - tar xzvf $HOME/cf.tgz -C $HOME
   - travis_retry cf install-plugin autopilot -f -r CF-Community
   - npm run build
-  - DJANGO_SETTINGS_MODULE='fec.settings.production' python fec/manage.py collectstatic
+  - DJANGO_SETTINGS_MODULE='fec.settings.production' python fec/manage.py collectstatic --noinput
   - DJANGO_SETTINGS_MODULE='fec.settings.production' python fec/manage.py compress
 
 deploy:
