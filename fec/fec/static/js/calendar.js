@@ -69,6 +69,13 @@ function Calendar(opts) {
 
   this.filter();
   this.styleButtons();
+
+  this.$calendar.find('.fc-toolbar').after($('.js-data-widgets'));
+  this.$calendar.find('.fc-toolbar').append($('.js-calendar-action'));
+
+  if (!helpers.isLargeScreen()) {
+    this.$calendar.find('.fc-toolbar').after($('#filters'));
+  }
 }
 
 Calendar.prototype.toggleListView = function(e) {
@@ -214,6 +221,19 @@ Calendar.prototype.handleRender = function(view) {
     this.$listToggles = null;
   }
   this.$calendar.find('.fc-more').attr({'tabindex': '0', 'aria-describedby': this.popoverId});
+
+  // Replace the h2 with an h1
+  this.$calendar.find('.fc-center h2').replaceWith(function(){
+    return $('<h1>', {html: $(this).html(), class: 'data-container__title'});
+  });
+
+  // Create a new div for controls elements
+  if (this.$calendar.find('.fc-view-controls').length === 0) {
+    this.$calendar.find('.fc-view-container').before('<div class="fc-view-controls"></div>');
+  }
+
+  // Move the .fc-left and .fc-right controls into .fc-view-controls
+  this.$calendar.find('.cal-list__toggles, .fc-left, .fc-right').prependTo('.fc-view-controls');
 };
 
 Calendar.prototype.manageListToggles = function(view) {

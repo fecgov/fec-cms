@@ -16,30 +16,10 @@
 </header>
 
 <section class="main__content--full">
-  <div class="data-container__widgets js-data-widgets">
-    <div class="js-filter-tags data-container__tags">
-      <div class="js-panel-controls panel__controls">
-        <button type="button" class="js-filter-toggle filters__toggle" aria-hidden="true">Add filters +</button>
-        <button type="button" class="js-filter-clear filters__toggle filters__clear" aria-hidden="true">Clear all filters</button>
-      </div>
-    </div>
-    <div class="data-container__export">
-      <div id="calendar-subscribe" class="export-widget"></div>
-      <div id="calendar-download" class="export-widget"></div>
-    </div>
-  </div>
-
   <div class="data-container__wrapper">
     <div id="filters" class="filters">
-      <button class="js-filter-close filters__close button--close--primary">
-        <span class="u-visually-hidden">Close</span>
-      </button>
-      <div class="filters__hider">
-        <div class="filters__inner">
-          <h2 class="filter__header">
-            Filter events
-          </h2>
-        </div>
+      <button type="button" class="filters__header js-filter-toggle">Edit filters</button>
+      <div class="filters__content">
         <div id="category-filters" class="js-accordion accordion--neutral" data-content-prefix="filter" data-open-first="true">
           <button type="button" class="js-accordion-trigger accordion__button">Elections, deadlines and compliance</button>
           <div class="accordion__content">
@@ -151,7 +131,19 @@
       </div>
     </div>
     <div class="data-container">
-      <div id="calendar" class="data-container__body"></div>
+      <div class="data-container__widgets js-data-widgets">
+        <div class="js-filter-tags data-container__tags">
+          <div class="js-panel-controls panel__controls">
+            <button type="button" class="js-filter-toggle filters__toggle" aria-hidden="true">Add filters +</button>
+            <button type="button" class="js-filter-clear filters__toggle filters__clear" aria-hidden="true">Clear all filters</button>
+          </div>
+        </div>
+      </div>
+      <div class="data-container__action js-calendar-action">
+        <div id="calendar-subscribe" class="export-widget"></div>
+        <div id="calendar-download" class="export-widget"></div>
+      </div>
+      <div id="calendar"></div>
     </div>
   </div>
 </section>
