@@ -11,7 +11,13 @@
       <form id="large-search" method="get" action="{{ settings.FEC_APP_URL }}/legal/search/" autocomplete="off" class="search__container js-search">
         <div class="combo combo--search combo--search--large">
           <select class="search__select select--alt js-search-type" name="search_type" aria-label="Select a search type">
+          {% if features.legal %}
+            <option value="all">All</option>
             <option value="regulations">Regulations</option>
+            <option value="advisory_opinions">Advisory Opinions</option>
+          {% else %}
+            <option value="regulations">Regulations</option>
+          {% endif %}  
           </select>
           <input type="text" name="search" class="combo__input js-search-input"
           aria-label="Search"

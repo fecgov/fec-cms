@@ -62,18 +62,14 @@ Set up
     ./manage.py makemigrations
     ./manage.py migrate
 
-Local styles
+Developing with fec-style (optional)
 ~~~~~~~~~~~~~~~~~~~~~~
 
-Environment variable: ::
+If you're developing with a local instance of `FEC-Style <https://github.com/18F/fec-style>`_ and want to pull in styles and script changes as you go, use `npm link` to create a symbolic link to your local fec-style repo: ::
 
-    export FEC_WEB_STYLE_URL=http://localhost:8080/css/styles.css
+    npm link fec-style > ~/[path to fec-style]/fec-style
 
-Settings: ::
-
-    FEC_WEB_STYLE_URL = 'http://localhost:8080/css/styles.css'
-
-Developing with openFEC
+Developing with openFEC (optional)
 ~~~~~~~~~~~~~~~~~~~~~~
 
 Environment variable: ::
