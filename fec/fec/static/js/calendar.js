@@ -42,6 +42,7 @@ function Calendar(opts) {
   this.opts = $.extend({}, this.defaultOpts(), opts);
 
   this.$calendar = $(this.opts.selector);
+  this.$head = $('.data-container__head');
   this.$calendar.fullCalendar(this.opts.calendarOpts);
   this.url = URI(this.opts.url);
   this.exportUrl = URI(this.opts.exportUrl);
@@ -69,6 +70,10 @@ function Calendar(opts) {
 
   this.filter();
   this.styleButtons();
+
+  if (!helpers.isLargeScreen()) {
+    this.$head.after($('#filters'));
+  }
 }
 
 Calendar.prototype.toggleListView = function(e) {
@@ -81,7 +86,7 @@ Calendar.prototype.defaultOpts = function() {
     calendarOpts: {
       header: {
         left: 'prev,next,today',
-        center: 'title',
+        center: '',
         right: 'monthTime,month'
       },
       buttonIcons: false,
@@ -149,11 +154,11 @@ Calendar.prototype.success = function(response) {
 
   setTimeout(function() {
     $('.is-loading').removeClass('is-loading').addClass('is-successful');
-  }, 500);
+  }, helpers.LOADING_DELAY);
 
   setTimeout(function() {
     $('.is-successful').removeClass('is-successful');
-  }, 2000);
+  }, helpers.SUCCESS_DELAY);
 
   return response.results.map(function(event) {
     var processed = {
@@ -223,12 +228,13 @@ Calendar.prototype.handleRender = function(view) {
     this.$listToggles = null;
   }
   this.$calendar.find('.fc-more').attr({'tabindex': '0', 'aria-describedby': this.popoverId});
+  this.$head.find('.js-calendar-title').html(view.title);
 };
 
 Calendar.prototype.manageListToggles = function(view) {
   if (!this.$listToggles) {
     this.$listToggles = $('<div class="cal-list__toggles"></div>');
-    this.$listToggles.prependTo(this.$calendar.find('.fc-view-container'));
+    this.$listToggles.appendTo(this.$calendar.find('.fc-right'));
   }
   this.$listToggles.html(templates.listToggles(view.options));
   // Highlight the "List" button on monthTime
