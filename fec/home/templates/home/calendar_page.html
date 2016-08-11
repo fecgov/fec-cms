@@ -131,17 +131,19 @@
       </div>
     </div>
     <div class="data-container">
+      <div class="data-container__head calendar__head">
+        <h1 class="data-container__title js-calendar-title"></h1>
+        <div class="data-container__action js-calendar-action">
+          <div id="calendar-subscribe" class="export-widget"></div>
+          <div id="calendar-download" class="export-widget"></div>
+        </div>
+      </div>
       <div class="data-container__widgets js-data-widgets">
         <div class="js-filter-tags data-container__tags">
           <div class="js-panel-controls panel__controls">
-            <button type="button" class="js-filter-toggle filters__toggle" aria-hidden="true">Add filters +</button>
             <button type="button" class="js-filter-clear filters__toggle filters__clear" aria-hidden="true">Clear all filters</button>
           </div>
         </div>
-      </div>
-      <div class="data-container__action js-calendar-action">
-        <div id="calendar-subscribe" class="export-widget"></div>
-        <div id="calendar-download" class="export-widget"></div>
       </div>
       <div id="calendar"></div>
     </div>

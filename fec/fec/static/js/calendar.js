@@ -42,6 +42,7 @@ function Calendar(opts) {
   this.opts = $.extend({}, this.defaultOpts(), opts);
 
   this.$calendar = $(this.opts.selector);
+  this.$head = $('.data-container__head');
   this.$calendar.fullCalendar(this.opts.calendarOpts);
   this.url = URI(this.opts.url);
   this.exportUrl = URI(this.opts.exportUrl);
@@ -56,7 +57,6 @@ function Calendar(opts) {
 
   this.$download = $(opts.download);
   this.$subscribe = $(opts.subscribe);
-  this.$toolbar = this.$calendar.find('.fc-toolbar');
 
   this.$calendar.on('click', '.js-toggle-view', this.toggleListView.bind(this));
 
@@ -71,11 +71,8 @@ function Calendar(opts) {
   this.filter();
   this.styleButtons();
 
-  this.$toolbar.after($('.js-data-widgets'));
-  this.$toolbar.append($('.js-calendar-action'));
-
   if (!helpers.isLargeScreen()) {
-    this.$toolbar.after($('#filters'));
+    this.$head.after($('#filters'));
   }
 }
 
@@ -89,7 +86,7 @@ Calendar.prototype.defaultOpts = function() {
     calendarOpts: {
       header: {
         left: 'prev,next,today',
-        center: 'title',
+        center: '',
         right: 'monthTime,month'
       },
       buttonIcons: false,
@@ -231,25 +228,13 @@ Calendar.prototype.handleRender = function(view) {
     this.$listToggles = null;
   }
   this.$calendar.find('.fc-more').attr({'tabindex': '0', 'aria-describedby': this.popoverId});
-
-  // Replace the h2 with an h1
-  this.$calendar.find('.fc-center h2').replaceWith(function(){
-    return $('<h1>', {html: $(this).html(), class: 'data-container__title'});
-  });
-
-  // Create a new div for controls elements
-  if (this.$calendar.find('.fc-view-controls').length === 0) {
-    this.$calendar.find('.fc-view-container').before('<div class="fc-view-controls"></div>');
-  }
-
-  // Move the .fc-left and .fc-right controls into .fc-view-controls
-  this.$calendar.find('.cal-list__toggles, .fc-left, .fc-right').prependTo('.fc-view-controls');
+  this.$head.find('.js-calendar-title').html(view.title);
 };
 
 Calendar.prototype.manageListToggles = function(view) {
   if (!this.$listToggles) {
     this.$listToggles = $('<div class="cal-list__toggles"></div>');
-    this.$listToggles.prependTo(this.$calendar.find('.fc-view-container'));
+    this.$listToggles.appendTo(this.$calendar.find('.fc-right'));
   }
   this.$listToggles.html(templates.listToggles(view.options));
   // Highlight the "List" button on monthTime
