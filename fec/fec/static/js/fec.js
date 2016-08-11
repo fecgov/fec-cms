@@ -82,7 +82,10 @@ $(document).ready(function() {
   new legal.Legal(feedbackWidget, '#share-feedback-link', '#ethnio-link');
 
   // Initialize filter tags
-  var $tagList = new filterTags.TagList({resultType: 'events'}).$body;
+  var $tagList = new filterTags.TagList({
+    resultType: 'events',
+    emptyText: 'all events',
+  }).$body;
   $('.js-filter-tags').prepend($tagList);
 
   // Initialize filters
