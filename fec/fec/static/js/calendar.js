@@ -56,6 +56,7 @@ function Calendar(opts) {
 
   this.$download = $(opts.download);
   this.$subscribe = $(opts.subscribe);
+  this.$toolbar = this.$calendar.find('.fc-toolbar');
 
   this.$calendar.on('click', '.js-toggle-view', this.toggleListView.bind(this));
 
@@ -70,11 +71,11 @@ function Calendar(opts) {
   this.filter();
   this.styleButtons();
 
-  this.$calendar.find('.fc-toolbar').after($('.js-data-widgets'));
-  this.$calendar.find('.fc-toolbar').append($('.js-calendar-action'));
+  this.$toolbar.after($('.js-data-widgets'));
+  this.$toolbar.append($('.js-calendar-action'));
 
   if (!helpers.isLargeScreen()) {
-    this.$calendar.find('.fc-toolbar').after($('#filters'));
+    this.$toolbar.after($('#filters'));
   }
 }
 
