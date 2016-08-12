@@ -73,17 +73,22 @@
               <a class="button--cta button--go" href="/regulations">Explore regulations</a>
             </div>
             <div class="option">
+	      {% if features.legal %}
               <h2 id="advisory-opinions"><a href="/legal/advisory-opinions/">Advisory opinions</a></h2>
               <p>Advisory opinions are official Commission responses to questions about how federal campaign finance law applies to specific, factual situations.</p>
               <p>This archive contains advisory opinions from 1975 to the present. It also contains documents related to advisory opinions — such as requests, drafts and public comments — from 1990 to the present.</p>
               <p>Learn how to <a href="http://www.fec.gov/pages/brochures/ao.shtml">request an advisory opinion or submit a public comment</a> on an advisory opinion.</p>
               <a class="button--cta button--go" href="/legal/advisory-opinions/">Explore advisory opinions</a>
+	      {% else %}
+              <h2 id="advisory-opinions">Advisory opinions</h2>
+              <p>Coming soon. Advisory opinions are available on <a href="http://saos.fec.gov/saos/searchao">FEC.gov</a>.</p>
+	      {% endif %}
           </div>
             <div class="option">
             <h2 id="enforcement-matters">Enforcement matters</h2>
             <p>Coming soon.
               Enforcement matters are available on
-              <a href="http://www.fec.gov/em/em.shtml">FEC.gov</a>
+              <a href="http://www.fec.gov/em/em.shtml">FEC.gov</a>.
             </p>
         </div>
         </section>
