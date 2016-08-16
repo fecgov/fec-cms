@@ -3,7 +3,6 @@ coverage
 *.sqlite3
 node_modules
 bower_components
-/fec/static
 local.py
 
 *.py[cod]
