@@ -12,6 +12,9 @@
         <div class="combo combo--search combo--search--large">
           <select class="search__select select--alt js-search-type" name="search_type" aria-label="Select a search type">
             <option value="all">All</option>
+            {% if features.legal_statutes %}
+            <option value="statutes">Statutes</option>
+            {% endif %}
             <option value="regulations">Regulations</option>
             <option value="advisory_opinions">Advisory opinions</option>
           </select>
