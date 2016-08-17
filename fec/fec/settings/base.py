@@ -50,6 +50,8 @@ INSTALLED_APPS = (
     'wagtail.wagtailredirects',
     'wagtail.wagtailforms',
 
+    'wagtailmodeladmin',
+
     'fec',
     'search',
     'home',
@@ -68,6 +70,8 @@ MIDDLEWARE_CLASSES = (
 
     'wagtail.wagtailcore.middleware.SiteMiddleware',
     'wagtail.wagtailredirects.middleware.RedirectMiddleware',
+
+    'wagtailmodeladmin.middleware.ModelAdminMiddleware',
 )
 
 ROOT_URLCONF = 'fec.urls'

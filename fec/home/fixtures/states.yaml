@@ -1,0 +1,20 @@
+- model: home.state
+  fields:
+    label: Alabama
+    value: AL
+- model: home.state
+  fields:
+    label: Alaska
+    value: AK
+- model: home.state
+  fields:
+    label: New Jersey
+    value: NJ
+- model: home.state
+  fields:
+    label: New York
+    value: NY
+- model: home.state
+  fields:
+    label: Virginia
+    value: VA
