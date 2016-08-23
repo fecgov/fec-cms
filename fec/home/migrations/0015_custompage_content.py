@@ -10,7 +10,7 @@ import wagtail.wagtailcore.fields
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('home', '0013_auto_20160427_2133'),
+        ('home', '0014_nonconnectedchecklistpage'),
     ]
 
     operations = [
