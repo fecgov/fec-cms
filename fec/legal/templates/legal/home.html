@@ -42,6 +42,11 @@
           <nav class="sidebar sidebar--neutral side-nav js-sticky" data-sticky-container="main">
             <ul class="sidebar__content">
               <li class="side-nav__item">
+                <a class="side-nav__link" href="#statutes">
+                Statutes
+                </a>
+              </li>
+              <li class="side-nav__item">
                 <a class="side-nav__link" href="#regulations">
                 Regulations
                 </a>
@@ -57,33 +62,49 @@
                 </a>
               </li>
               <li class="is-disabled side-nav__item"><span class="side-nav__link">(Resource TBD)</span></li>
-              <li class="is-disabled side-nav__item"><span class="side-nav__link">(Resource TBD)</span></li>
             </ul>
           </nav>
         </div>
         <section class="main__content--right">
-          <div class="option">
-                <h2 id="regulations"><a href="/regulations">Regulations</a></h2>
-                <p>As part of its role administering campaign finance law,
-                  the Commission issues regulations,
-                  which are published every year in Title 11 of the Code of Federal Regulations (CFR).
-                  This archive contains a full-text version of 11 CFR, as published January 1, 2016.
+          {% if features.legal_statutes %}
+            <div class="option">
+              <h2 id="statutes"><a href="{{ settings.FEC_APP_URL }}/legal/statutes/">Statutes</a></h2>
+              <p>
+                The acts of Congress that shape campaign finance law are the Federal Election
+                Campaign Act, the Presidential Election Campaign Fund Act and the Presidential
+                Primary Matching Payment Account Act. Those acts are collected and restated as
+                law in Title 26 and Title 52 of the U.S. Code (USC).
               </p>
-              <a class="button--cta button--go" href="/regulations">Explore regulations</a>
+              <p>
+                This archive contains the portions of 26 USC and 52 USC that are administered by FEC.
+              </p>
+              <a class="button--cta button--go" href="{{ settings.FEC_APP_URL }}/legal/statutes/">Explore statutes</a>
             </div>
+          {% else %}
             <div class="option">
-              <h2 id="advisory-opinions"><a href="{{ settings.FEC_APP_URL }}/legal/advisory-opinions/">Advisory opinions</a></h2>
-              <p>Advisory opinions are official Commission responses to questions about how federal campaign finance law applies to specific, factual situations.</p>
-              <p>This archive contains advisory opinions from 1975 to the present. It also contains documents related to advisory opinions — such as requests, drafts and public comments — from 1990 to the present.</p>
-              <a class="button--cta button--go" href="{{ settings.FEC_APP_URL }}/legal/advisory-opinions/">Explore advisory opinions</a>
-          </div>
-            <div class="option">
-            <h2 id="enforcement-matters">Enforcement matters</h2>
-            <p>Coming soon.
-              Enforcement matters are available on
-              <a href="http://www.fec.gov/em/em.shtml">FEC.gov</a>.
+              <h2 id="statutes">Statutes</h2>
+              <p>Coming soon. Statutes are available on <a href="http://www.fec.gov/law/feca/feca.shtml#statutes">FEC.gov</a>.</p>
+            </div>
+          {% endif %}
+          <div class="option">
+            <h2 id="regulations"><a href="/regulations">Regulations</a></h2>
+            <p>As part of its role administering campaign finance law,
+              the Commission issues regulations,
+              which are published every year in Title 11 of the Code of Federal Regulations (CFR).
+              This archive contains a full-text version of 11 CFR, as published January 1, 2016.
             </p>
-        </div>
+            <a class="button--cta button--go" href="/regulations">Explore regulations</a>
+          </div>
+          <div class="option">
+            <h2 id="advisory-opinions"><a href="{{ settings.FEC_APP_URL }}/legal/advisory-opinions/">Advisory opinions</a></h2>
+            <p>Advisory opinions are official Commission responses to questions about how federal campaign finance law applies to specific, factual situations.</p>
+            <p>This archive contains advisory opinions from 1975 to the present. It also contains documents related to advisory opinions — such as requests, drafts and public comments — from 1990 to the present.</p>
+            <a class="button--cta button--go" href="{{ settings.FEC_APP_URL }}/legal/advisory-opinions/">Explore advisory opinions</a>
+          </div>
+          <div class="option">
+            <h2 id="enforcement-matters">Enforcement matters</h2>
+            <p>Coming soon. Enforcement matters are available on <a href="http://www.fec.gov/em/em.shtml">FEC.gov</a>.</p>
+          </div>
         </section>
       </div>
   </div>
