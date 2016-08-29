@@ -52,7 +52,7 @@
               <img class="card__image" src="{% static "img/i-complex--data.svg" %}" alt="Icon representing explore campaign finance data">
             </a>
             <div class="card__content">
-              <p>Searchable <a href="{{ settings.FEC_APP_URL }}/data/filings?data_type=efiling">eFiling data</a>, which contains the most recent, raw information from committee electronic filings.</p>
+              <p>Searchable <a href="{{ settings.FEC_APP_URL }}/filings?data_type=efiling">eFiling data</a>, which contains the most recent, raw information from committee electronic filings.</p>
             </div>
           </div>
         </div>
@@ -63,7 +63,7 @@
               <img class="card__image" src="{% static "img/i-complex--legal.svg" %}" alt="Icon for legal resources">
             </a>
             <div class="card__content">
-              <p>Updated legal resources, including searchable <a href="/legal-resources/advisory-opinions/">advisory opinions</a> and searchable, full-text <a href="/legal-resources/statutes/">statutes</a>.</p>
+              <p>Updated legal resources, including searchable <a href="{{ settings.FEC_APP_URL }}/legal/advisory-opinions/">advisory opinions</a> and searchable, full-text <a href="{{ settings.FEC_APP_URL }}/legal/statutes/">statutes</a>.</p>
             </div>
           </div>
         </div>
