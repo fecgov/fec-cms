@@ -12,9 +12,7 @@
         <div class="combo combo--search combo--search--large">
           <select class="search__select select--alt js-search-type" name="search_type" aria-label="Select a search type">
             <option value="all">All</option>
-            {% if features.legal_statutes %}
             <option value="statutes">Statutes</option>
-            {% endif %}
             <option value="regulations">Regulations</option>
             <option value="advisory_opinions">Advisory opinions</option>
           </select>
@@ -66,7 +64,6 @@
           </nav>
         </div>
         <section class="main__content--right">
-          {% if features.legal_statutes %}
             <div class="option">
               <h2 id="statutes"><a href="{{ settings.FEC_APP_URL }}/legal/statutes/">Statutes</a></h2>
               <p>
@@ -80,12 +77,6 @@
               </p>
               <a class="button--cta button--go" href="{{ settings.FEC_APP_URL }}/legal/statutes/">Explore statutes</a>
             </div>
-          {% else %}
-            <div class="option">
-              <h2 id="statutes">Statutes</h2>
-              <p>Coming soon. Statutes are available on <a href="http://www.fec.gov/law/feca/feca.shtml#statutes">FEC.gov</a>.</p>
-            </div>
-          {% endif %}
           <div class="option">
             <h2 id="regulations"><a href="/regulations">Regulations</a></h2>
             <p>As part of its role administering campaign finance law,
