@@ -14,7 +14,7 @@ We welcome you to explore, make suggestions, and contribute to our code.
 This repository, `fec-cms <https://github.com/18F/fec-cms>`_: the content management system (CMS) for betaFEC.
 
 All repositories
------------------
+----------------
 - `FEC <https://github.com/18F/fec>`_: a general discussion forum. We compile `feedback <https://github.com/18F/fec/issues>`_ from betaFEC’s feedback widget here, and this is the best place to submit general feedback.
 - `openFEC <https://github.com/18F/openfec>`_: betaFEC’s API
 - `openFEC-web-app <https://github.com/18f/openfec-web-app>`_: the betaFEC web app for exploring campaign finance data
@@ -22,7 +22,7 @@ All repositories
 - `fec-cms <https://github.com/18F/fec-cms>`_: the content management system (CMS) for betaFEC. This project uses `Wagtail <https://github.com/torchbox/wagtail>`_, an open source CMS written in Python and built on the Django framework.
 
 Get involved
-================
+
 We’re thrilled you want to get involved!
 - Read our contributing `guidelines <https://github.com/18F/openfec/blob/master/CONTRIBUTING.md>`_. Then, file an `issue <https://github.com/18F/fec/issues>`_ or submit a pull request.
 - Send us an email at betafeedback@fec.gov.
@@ -31,10 +31,10 @@ We’re thrilled you want to get involved!
 
 
 Set up
-============
+======
 
 Installation
------------------
+------------
 
 Install PostgreSQL.
 
@@ -53,7 +53,7 @@ Install dependencies: ::
     pip install -U -r requirements.txt
 
 Set up
------------------
+------
 
 .. code::
 
@@ -62,12 +62,14 @@ Set up
     ./manage.py makemigrations
     ./manage.py migrate
 
+
 Developing with fec-style (optional)
 ~~~~~~~~~~~~~~~~~~~~~~
 
 If you're developing with a local instance of `FEC-Style <https://github.com/18F/fec-style>`_ and want to pull in styles and script changes as you go, use `npm link` to create a symbolic link to your local fec-style repo: ::
 
     npm link fec-style > ~/[path to fec-style]/fec-style
+
 
 Developing with openFEC (optional)
 ~~~~~~~~~~~~~~~~~~~~~~
@@ -89,14 +91,14 @@ Features
 
 
 Run
------------------
+---
 
 .. code::
 
     ./manage.py runserver
 
 Deploy
------------------
+------
 
 *Likely only useful for 18F team members*
 
@@ -125,6 +127,27 @@ Deploys of a single app can be performed manually by targeting the env/space, an
     cf target -s [feature|dev|stage|prod] && cf push -f manifest_<[feature|dev|stage|prod]>.yml [api|web]
 
 **NOTE:**  Performing a deploy in this manner will result in a brief period of downtime.
+
+
+Backup
+------
+
+To restore data from a remote instance to a local instance, or between local instances, back up data using `dumpdata` and restore using `loaddata`. You'll also need to `install cf-ssh <https://docs.cloud.gov/getting-started/cf-ssh/>`_. The following is an example of restoring remote data to a local instance: ::
+
+    # Local
+    cf create-app-manifest cms -p manifest_ssh.yml
+    cf-ssh -f manifest_ssh.yml
+
+    # Remote
+    cd fec
+    ./manage.py dumpdata --settings fec.settings.production --exclude sessions.session --exclude contenttypes.ContentType --exclude auth.permission --exclude auth.user --output dump.json
+
+    # Local
+    cd fec
+    cf files cms-ssh app/fec/dump.json | tail -n +4 > dump.json
+    ./manage.py loaddata dump.json
+=======
+
 
 Copyright and licensing
 =======================
