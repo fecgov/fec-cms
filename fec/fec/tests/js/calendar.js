@@ -45,7 +45,6 @@ describe('calendar', function() {
       url: 'http://test.calendar',
       exportUrl: 'http://test.calendar/export',
       filterPanel: {
-        setHeight: function() {},
         $form: {on: function() {}},
         filterSet: {
           serialize: function() {},
@@ -77,17 +76,6 @@ describe('calendar', function() {
 
     it('styles the buttons', function() {
       expect(this.calendar.$calendar.find('.button button--alt')).to.exist;
-    });
-
-    it('uses the correct default view on desktop', function() {
-      var defaultView = this.calendar.defaultView();
-      expect(defaultView).to.equal('month');
-    });
-
-    it('uses the correct default view on small screens', function() {
-      $(document.body).width(helpers.BREAKPOINTS.MEDIUM - 1);
-      var defaultView = this.calendar.defaultView();
-      expect(defaultView).to.equal('monthTime');
     });
   });
 

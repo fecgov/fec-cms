@@ -1,28 +1,9 @@
 {% block content %}
-  <section class="hero hero--primary" aria-labelledby="hero-search">
-    <div class="container">
-      <div class="hero__heading">
-        <h1 id="hero-heading" class="hero__title t-display">{{ search_hero_heading | default:'Search betaFEC' }}</h1>
-        <h2 class="hero__subtitle t-ruled">Find the information you need</h2>
-      </div>
-      <form id="large-search" method="get" action="{{ settings.FEC_APP_URL }}/legal/search" autocomplete="off" class="search__container js-search">
-        <div class="combo combo--search--large">
-          <select class="search__select select--alt-primary js-search-type" name="search_type" aria-label="Select a search type">
-            <option value="all">All sources</option>
-            <option value="candidates">Candidates</option>
-            <option value="committees">Committees</option>
-            <option value="aos">AOs</option>
-            <option value="murs">MURs</option>
-          </select>
-          <input type="text" name="search" class="combo__input js-search-input" aria-label="e.g. candidate, committee, advisory opinion, topic" placeholder="e.g. candidate, committee, advisory opinion, topic"{% if search_query %} value="{{ search_query }}"{% endif %}>
-          <button type="submit" class="button--standard button--search combo__button">
-           <span class="u-visually-hidden">Search</span>
-          </button>
-        </div>
-        <div class="search__minor t-right-aligned">
-          <a href="#">Advanced search</a>
-        </div>
-      </form>
-    </div>
-  </section>
+<section class="hero hero--primary hero--legal" aria-labelledby="hero-heading">
+  <div class="hero__image"></div>
+  <div class="container">
+    <h1 id="hero-heading" class="hero__title">Legal resources</h1>
+    <p class="hero__content">Explore relevant statutes, regulations, Commission actions and court cases. Making these resources public clarifies campaign finance legal requirements.</p>
+  </div>
+</section>
 {% endblock %}

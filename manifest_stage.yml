@@ -2,10 +2,11 @@
 inherit: manifest_base.yml
 host: fec-stage-cms
 services:
-  - fec-rds-stage
-  - fec-creds-stage
   - cms-creds-stage
+  - fec-creds-stage
+  - fec-rds-stage
 env:
-  FEC_CMS_ENVIRONMENT: "stage"
+  FEC_API_URL: https://fec-stage-api.18f.gov
+  FEC_APP_URL: https://fec-stage-proxy.18f.gov/data
+  FEC_CMS_ENVIRONMENT: stage
   NEW_RELIC_APP_NAME: beta.fec.gov | cms | stage
-  FEC_API_URL: "https://fec-stage-api.18f.gov"

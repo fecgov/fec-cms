@@ -24,25 +24,22 @@
     <h1 class="main__title">{{ self.title }}</h1>
     <div class="content__section">
       <div class="main__content">
-        <p>An individual running for a seat in the House or Senate becomes a <span class="term" data-term="candidate">candidate</span>
-        when he or she raises or spends more than $5,000 in <span class="term" data-term="contribution">contributions</span> or <span class="term" data-term="expenditure">expenditures</span>.</p>
-        <p>House and Senate candidates must designate at least one campaign committee. These
-        <span class="term" data-term="authorized committee">authorized committees</span>
-        take in contributions and make expenditures for the candidate’s campaign. One of the candidate's authorized
-        campaign committees must be designated as the candidate's <span class="term" data-term="principal campaign committee">principal campaign committee</span>.</p>
-        <p>This page is about congressional candidates and their authorized committees.</p>
-        <p>The checklist below focuses on the mechanics of registration and filing, introducing readers to a few of the most common topics
-        on those subjects. This is neither legal advice nor a comprehensive guide and should not be relied upon as such.
-        The FEC recommends all candidates and committees read the campaign guide (<a href="http://www.fec.gov/pdf/candgui.pdf">PDF</a>)
-        and refer to the relevant laws and regulations as necessary.</p>
+        <p>If you want to set up a political action committee (PAC) — and your PAC is not a political party committee,
+        a candidate’s authorized committee or a separate segregated fund (SSF) established by a corporation or labor organization —
+        you can set up a “nonconnected” committee.</p>
+        <p>Members of congress and other political leaders often establish nonconnected committees, usually called
+        <span class="term" data-term="Leadership PAC">Leadership PACs</span>. Leadership PACs usually support candidates for various federal or nonfederal offices.</p>
+        <p><span class="term" data-term="Super PAC">Super PACs</span> and <span class="term" data-term="Hybrid PAC">Hybrid PACs</span> are
+        another type of nonconnected committee. These committees must register and report all of their receipts and disbursements. If you are
+        setting up a Super PAC or a Hybrid PAC, find more information on <a href="http://www.fec.gov/ans/answers_pac.shtml#super_hybrid">FEC.gov quick answers</a>.</p>
       </div>
       <div class="sidebar-container">
         <aside class="sidebar sidebar--secondary">
           <h4 class="sidebar__title">Essentials for other registrants</h4>
           <ul class="sidebar__content">
+            <li class="u-padding--bottom"><a href="/registration-and-reporting/essentials-house-and-senate-candidates-and-committees/">Congressional candidates and committees</a></li>
             <li class="u-padding--bottom"><a href="/registration-and-reporting/essentials-corporations-and-labor-organizations/">Corporations and labor organizations</a></li>
             <li class="u-padding--bottom"><a href="/registration-and-reporting/essentials-political-party-committees">Political party committees</a></li>
-            <li class="u-padding--bottom"><a href="/registration-and-reporting/essentials-nonconnected-committees">Nonconnected committees</a></li>
           </ul>
           <h4 class="sidebar__title">Already registered?</h4>
           <form class="sidebar__content" action="{{ settings.FEC_APP_URL }}" method="GET">
@@ -74,15 +71,14 @@
             <ul class="list--checks list--checks--secondary t-sans">
               <li>Getting a <a href="/registration-and-reporting/get-tax-id-and-bank-account/">tax ID and bank account</a></li>
               <li>Getting a <a href="/registration-and-reporting/get-treasurer/">treasurer</a></li>
-              <li>Registering <a href="/registration-and-reporting/house-and-senate-candidate-registration/">as a candidate</a></li>
-              <li>Registering <a href="/registration-and-reporting/house-and-senate-candidate-committee-registration/">as a candidate committee</a></li>
+              <li>Registering a <a href="/registration-and-reporting/nonconnected-committee-registration/">nonconnected committee</a></li>
             </ul>
           </div>
         </div>
         <div id="how-to-file" class="option">
           <div class="option__content">
             <h2>How to file</h2>
-            <p>Some committees are required to <a href="/registration-and-reporting/electronic-filing/">file electronically</a>. Senate candidates and committees are required to file by paper. All other committees can choose whether to file electronically or by paper.</p>
+            <p>Some committees are required to <a href="/registration-and-reporting/electronic-filing/">file electronically</a>. All other committees can choose whether to file electronically or by paper.</p>
             <ul class="list--checks list--checks--secondary t-sans">
               <li>
                 <a href="/registration-and-reporting/electronic-filing/">Electronic filing</a>
@@ -98,16 +94,23 @@
           <div class="option__content">
             <h2>Regular filing</h2>
             <ul class="list--checks list--checks--secondary t-sans">
-              <li>
-                <a href="/registration-and-reporting/know-your-filing-requirements/">Overview of filing requirements</a>
+              <li><a href="/registration-and-reporting/nonconnected-committee-filing-requirements">Overview of filing requirements</a></li>
+              <ul>
+                <li><a href="/registration-and-reporting/nonconnected-committee-election-year-filing">Election years</a>
                 <ul>
-                  <li><a href="/registration-and-reporting/quarterly-reports/">Quarterly reports</a></li>
-                  <li><a href="/registration-and-reporting/pre-election-reports/">Pre-election reports</a></li>
-                  <li><a href="/registration-and-reporting/48-hour-notices/">48-Hour Notices</a></li>
-                  <li><a href="/registration-and-reporting/post-general-election-reports/">Post-general election reports</a></li>
+                  <li><a href="/registration-and-reporting/nonconnected-committee-quarterly-filers">Quarterly filers</a></li>
+                  <li><a href="/registration-and-reporting/nonconnected-committee-monthly-filers">Monthly filers</a></li>
+                  <li><a href="/registration-and-reporting/nonconnected-committee-independent-expenditures">Independent expenditures</a></li>
                 </ul>
               </li>
-              <li><a href="/registration-and-reporting/terminating-a-committee">Terminating a candidate committee</a></li>
+              <li><a href="/registration-and-reporting/nonconnected-committee-non-election-year-filing">Non-election years</a>
+                <ul>
+                  <li><a href="/registration-and-reporting/nonconnected-committee-non-election-monthly-filers">Monthly filers</a></li>
+                  <li><a href="/registration-and-reporting/nonconnected-committee-semi-annual-filers">Semi-annual filers</a></li>
+                </ul>
+              </li>
+              <li><a href="/registration-and-reporting/terminating-a-committee">Terminating a nonconnected committee</a></li>
+              </ul>
             </ul>
           </div>
         </div>
@@ -134,12 +137,12 @@
       <div class="grid__item">
         <aside class="card card--horizontal card--secondary card--full-bleed">
           <div class="card__image">
-            <a class="u-no-border" href="http://www.fec.gov/pdf/candgui.pdf">
-              <img src="{% static "img/guide--candidates.jpg" %}" alt="Federal Election Commission Campaign Guide: Congressional Candidates and Committees, June 2014">
+            <a class="u-no-border" href="http://www.fec.gov/pdf/nongui.pdf">
+              <img src="{% static "img/guide--nonconnected.jpg" %}" alt="Federal Election Commission Campaign Guide: Nonconnected Committees, May 2008">
             </a>
           </div>
           <div class="card__content">
-            <a href="http://www.fec.gov/pdf/candgui.pdf">Read the campaign guide (PDF)</a>
+            <a class="t-sans" href="http://www.fec.gov/pdf/nongui.pdf">Read the campaign guide (PDF)</a>
           </div>
         </aside>
       </div>

@@ -19,6 +19,7 @@ var categories = {
   Outreach: ['roundtables', 'conferences'],
   Meetings: ['open', 'executive'],
   Rules: ['aos'],
+  Other: ['other']
 };
 
 var categoriesInverse = _.reduce(_.pairs(categories), function(memo, pair) {
@@ -61,7 +62,7 @@ var chronologicalGroups = function(events, start, end) {
     .groupBy('start')
     .map(function(values, key) {
       return {
-        title: moment.utc(new Date(key)).format('MMMM Do, YYYY'),
+        title: moment.utc(new Date(key)).format('MMMM D, YYYY'),
         events: values
       };
     })

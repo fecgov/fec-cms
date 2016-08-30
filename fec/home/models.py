@@ -9,6 +9,8 @@ from wagtail.wagtailcore import blocks
 from wagtail.wagtailadmin.edit_handlers import FieldPanel, StreamFieldPanel
 from wagtail.wagtailimages.blocks import ImageChooserBlock
 
+from wagtail.contrib.table_block.blocks import TableBlock
+
 stream_factory = functools.partial(
     StreamField,
     [
@@ -16,6 +18,7 @@ stream_factory = functools.partial(
         ('paragraph', blocks.RichTextBlock()),
         ('html', blocks.RawHTMLBlock()),
         ('image', ImageChooserBlock()),
+        ('table', TableBlock()),
     ],
 )
 
@@ -31,7 +34,7 @@ class UniqueModel(models.Model):
 
 class ContentPage(Page):
     """Abstract base class for simple content pages."""
-    is_abstract = True
+    is_creatable = True
 
     class Meta:
         abstract = True
@@ -42,9 +45,17 @@ class ContentPage(Page):
         StreamFieldPanel('body'),
     ]
 
+    # Default content section for determining the active nav
+    @property
+    def content_section(self):
+        return 'registration-and-reporting'
+
+
 class HomePage(ContentPage, UniqueModel):
     """Unique home page."""
-    pass
+    @property
+    def content_section(self):
+        return ''
 
 class LandingPage(ContentPage):
     pass
@@ -55,14 +66,23 @@ class ChecklistPage(ContentPage):
 class SSFChecklistPage(ContentPage):
     pass
 
-class OptionsPage(ContentPage):
+class PartyChecklistPage(ContentPage):
+    pass
+
+class NonconnectedChecklistPage(ContentPage):
     pass
 
 class ContactPage(ContentPage):
-    pass
+    @property
+    def content_section(self):
+        return 'contact'
+
 
 class CalendarPage(ContentPage):
-    pass
+    @property
+    def content_section(self):
+        return 'calendar'
+
 
 class CustomPage(Page):
     """Flexible customizable page."""

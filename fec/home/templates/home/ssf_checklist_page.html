@@ -44,8 +44,8 @@
           <h4 class="sidebar__title">Essentials for other registrants</h4>
           <ul class="sidebar__content">
             <li class="u-padding--bottom"><a href="/registration-and-reporting/essentials-house-and-senate-candidates-and-committees/">Congressional candidates and committees</a></li>
-            <li class="u-padding--bottom is-disabled">Nonconnected committees</li>
-            <li class="u-padding--bottom is-disabled">Political party committees</li>
+            <li class="u-padding--bottom"><a href="/registration-and-reporting/essentials-political-party-committees">Political party committees</a></li>
+            <li class="u-padding--bottom"><a href="/registration-and-reporting/essentials-nonconnected-committees">Nonconnected committees</a></li>
           </ul>
           <h4 class="sidebar__title">Already registered?</h4>
           <form class="sidebar__content" action="{{ settings.FEC_APP_URL }}" method="GET">
@@ -61,7 +61,7 @@
     </div>
     <div class="row" id="registration-steps">
       <div class="sidebar-container sidebar-container--left">
-        <nav class="sidebar sidebar--neutral side-nav js-sticky js-toc" data-sticky-container="registration-steps">
+        <nav class="sidebar sidebar--neutral side-nav js-sticky-side js-toc" data-sticky-container="registration-steps">
           <ul class="sidebar__content">
             <li class="side-nav__item"><a class="side-nav__link" href="#register">Registration</a></li>
             <li class="side-nav__item"><a class="side-nav__link" href="#how-to-file">How to file</a></li>
@@ -84,16 +84,15 @@
         <div id="how-to-file" class="option">
           <div class="option__content">
             <h2>How to file</h2>
+            <p>Some committees are required to <a href="/registration-and-reporting/electronic-filing/">file electronically</a>. All other committees can choose whether to file electronically or by paper.</p>
             <ul class="list--checks list--checks--secondary t-sans">
-              <li>Electronic filing
+              <li>
+                <a href="/registration-and-reporting/electronic-filing/">Electronic filing</a>
                 <ul>
-                  <li><a href="/registration-and-reporting/get-e-filing-password/">Getting an e-filing password</a></li>
-                  <li><a href="/registration-and-reporting/file-electronically/">Electronic filing overview</a></li>
-                  <li><a href="/registration-and-reporting/mandatory-electronic-filing/">Mandatory electronic filing</a></li>
-                 </ul>
+                  <li><a href="/registration-and-reporting/get-filing-software/">Filing software</a></li>
+                </ul>
               </li>
-              <li><a href="/registration-and-reporting/ssf-file-paper/">Paper filing</a></li>
-              <li><a href="/registration-and-reporting/get-filing-software/">Filing software</a></li>
+              <li><a href="/registration-and-reporting/paper-filing/">Paper filing</a></li>
             </ul>
           </div>
         </div>
@@ -101,21 +100,25 @@
           <div class="option__content">
             <h2>Regular filing</h2>
             <ul class="list--checks list--checks--secondary t-sans">
-              <li><a href="/registration-and-reporting/ssf-filing-requirements/">Filing requirements</a></li>
-              <li><a href="/registration-and-reporting/ssf-election-year-filing">Election years</a>
+              <li>
+                <a href="/registration-and-reporting/ssf-filing-requirements/">Overview of filing requirements</a>
                 <ul>
-                  <li><a href="/registration-and-reporting/quarterly-filers">Quarterly filers</a></li>
-                  <li><a href="/registration-and-reporting/monthly-filers">Monthly filers</a></li>
-                  <li><a href="/registration-and-reporting/independent-expenditures">Independent expenditures</a></li>
+                  <li><a href="/registration-and-reporting/ssf-election-year-filing">Election years</a>
+                    <ul>
+                      <li><a href="/registration-and-reporting/quarterly-filers">Quarterly filers</a></li>
+                      <li><a href="/registration-and-reporting/monthly-filers">Monthly filers</a></li>
+                      <li><a href="/registration-and-reporting/independent-expenditures">Independent expenditures</a></li>
+                    </ul>
+                  </li>
+                  <li><a href="/registration-and-reporting/non-election-year-filing">Non-election years</a>
+                    <ul>
+                      <li><a href="/registration-and-reporting/semi-annual-filers">Semi-annual filers</a></li>
+                      <li><a href="/registration-and-reporting/non-election-monthly-filers">Monthly filers</a></li>
+                    </ul>
+                  </li>
                 </ul>
               </li>
-              <li><a href="/registration-and-reporting/non-election-year-filing">Non-election years</a>
-                <ul>
-                  <li><a href="/registration-and-reporting/semi-annual-filers">Semi-annual filers</a></li>
-                  <li><a href="/registration-and-reporting/non-election-monthly-filers">Monthly filers</a></li>
-                </ul>
-              </li>
-              <li><a href="/registration-and-reporting/terminating-an-ssf/">Terminating an SSF</a></li>
+              <li><a href="/registration-and-reporting/terminating-a-committee">Terminating an SSF</a></li>
             </ul>
           </div>
         </div>
@@ -135,12 +138,12 @@
   </div>
 </article>
 
-<div class="slab slab--secondary">
+<div class="slab slab--neutral">
   <div class="container">
-    <h2 class="t-secondary-contrast">Need help?</h2>
+    <h2>Need help?</h2>
     <div class="grid grid--4-wide">
       <div class="grid__item">
-        <aside class="card card--horizontal card--secondary-contrast card--full-bleed">
+        <aside class="card card--horizontal card--secondary card--full-bleed">
           <div class="card__image">
             <a class="u-no-border" href="http://www.fec.gov/pdf/colagui.pdf">
               <img src="{% static "img/guide--orgs.jpg" %}" alt="Federal Election Commission Campaign Guide: Corporations and Labor Organizations, January 2007">
@@ -152,21 +155,21 @@
         </aside>
       </div>
       <div class="grid__item">
-        <aside class="card card--horizontal card--secondary-contrast">
-          <div class="card__image">
-            <a class="u-no-border" href="/calendar?category=report-E&category=report-M&category=report-Q">
-              <img src="{% static "img/i-calendar--neutral.svg" %}" alt="Icon of a calendar">
-            </a>
-          </div>
-          <div class="card__content">
-            <a href="/calendar?category=report-E&category=report-M&category=report-Q">Reporting calendar</a>
-          </div>
-        </aside>
+        <a href="/calendar?category=report-E&category=report-M&category=report-Q">
+          <aside class="card card--horizontal card--secondary">
+            <div class="card__image__container">
+              <span class="card__icon i-calendar"><span class="u-visually-hidden">Icon of a calendar</span></span>
+            </div>
+            <div class="card__content">
+              Reporting deadlines
+            </div>
+          </aside>
+        </a>
       </div>
       <div class="grid__item">
-        <aside class="card card--horizontal card--secondary-contrast is-disabled">
-          <div class="card__image">
-            <img src="{% static "img/i-resources--neutral.svg" %}" alt="Icon of an open book">
+        <aside class="card card--horizontal card--secondary is-disabled">
+          <div class="card__image__container">
+            <span class="card__icon i-training"><span class="u-visually-hidden">Icon of a training screen</span></span>
           </div>
           <div class="card__content">
             Attend a training
@@ -175,9 +178,9 @@
         <p>Coming soon</p>
       </div>
       <div class="grid__item">
-        <aside class="card card--horizontal card--secondary-contrast">
-          <div class="card__image">
-            <img src="{% static "img/i-contact--neutral.svg" %}" alt="Icon of a customer service representative">
+        <aside class="card card--horizontal card--secondary">
+          <div class="card__image__container">
+            <span class="card__icon i-info-person"><span class="u-visually-hidden">Icon of a customer service representative</span></span>
           </div>
           <div class="card__content">
             Give us a call
@@ -189,7 +192,7 @@
   </div>
 </div>
 
-<div class="slab slab--secondary footer-disclaimer">
+<div class="slab slab--neutral footer-disclaimer">
   <div class="container">
     <p class="usa-width-one-half">This site is in beta, which means we're testing content that better adheres to legal plain language requirements. This content is not finalized, is not legal advice and is subject to change.</p>
     <p class="usa-width-one-half">Everything on this site should be read in conjunction with FEC.gov. Please let us know what you think of our new content; use the feedback tool on this page.</p>

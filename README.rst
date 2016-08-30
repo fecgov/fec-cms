@@ -62,19 +62,17 @@ Set up
     ./manage.py makemigrations
     ./manage.py migrate
 
-Local styles
-~~~~~~~~~~~~
 
-Environment variable: ::
+Developing with fec-style (optional)
+~~~~~~~~~~~~~~~~~~~~~~
 
-    export FEC_WEB_STYLE_URL=http://localhost:8080/css/styles.css
+If you're developing with a local instance of `FEC-Style <https://github.com/18F/fec-style>`_ and want to pull in styles and script changes as you go, use `npm link` to create a symbolic link to your local fec-style repo: ::
 
-Settings: ::
+    npm link fec-style > ~/[path to fec-style]/fec-style
 
-    FEC_WEB_STYLE_URL = 'http://localhost:8080/css/styles.css'
 
-Developing with openFEC
-~~~~~~~~~~~~~~~~~~~~~~~
+Developing with openFEC (optional)
+~~~~~~~~~~~~~~~~~~~~~~
 
 Environment variable: ::
 
@@ -119,14 +117,14 @@ Provision credentials service: ::
 To deploy to Cloud Foundry, run ``invoke deploy``. The ``deploy`` task will attempt to detect the appropriate
 Cloud Foundry space based the current branch; to override, pass the optional `--space` flag: ::
 
-    invoke deploy --space dev
+    invoke deploy --space feature
 
 The ``deploy`` task will use the ``FEC_CF_USERNAME`` and ``FEC_CF_PASSWORD`` environment variables to log in.
 If these variables are not provided, you will be prompted for your Cloud Foundry credentials.
 
 Deploys of a single app can be performed manually by targeting the env/space, and specifying the corresponding manifest, as well as the app you want, like so: ::
 
-    cf target -o [dev|stage|prod] && cf push -f manifest_<[dev|stage|prod]>.yml [api|web]
+    cf target -s [feature|dev|stage|prod] && cf push -f manifest_<[feature|dev|stage|prod]>.yml [api|web]
 
 **NOTE:**  Performing a deploy in this manner will result in a brief period of downtime.
 
@@ -142,7 +140,7 @@ To restore data from a remote instance to a local instance, or between local ins
 
     # Remote
     cd fec
-    ./manage.py dumpdata --settings fec.settings.production --exclude sessions.session --exclude contenttypes.ContentType --exclude auth.permission --output dump.json
+    ./manage.py dumpdata --settings fec.settings.production --exclude sessions.session --exclude contenttypes.ContentType --exclude auth.permission --exclude auth.user --output dump.json
 
     # Local
     cd fec

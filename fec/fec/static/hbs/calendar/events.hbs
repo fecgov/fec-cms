@@ -1,6 +1,6 @@
 <div class="cal-list cal-list--{{ settings.sortBy }}">
   {{#each groups}}
-  <div class="cal-list__group">
+  <div>
     {{#if title}}
       <h3 class="cal-list__title">{{title}}</h3>
     {{/if}}
@@ -18,22 +18,36 @@
               All day
             {{/if}}
           </div>
-          <div class="cal-list__description">
+          <div class="cal-list__description" id="cal-description-{{@index}}">
             <p>{{summary}}</p>
             {{#if location}}
               <span class="cal-list__location">&ndash; {{location}}</span>
             {{/if}}
             {{#if detailUrl}}
-              <span class="cal-list__details"><a class="t-bold" href="{{detailUrl}}">Learn more</a></span>
+              <span class="cal-list__details"><a class="t-bold" href="{{detailUrl}}" aria-describedby="cal-description-{{@index}}">Learn more</a></span>
             {{/if}}
           </div>
           <div class="cal-list__category">
+            {{#if tooltipContent }}
+            <div class="cal-list__category-title">
+              <span class="tooltip__trigger-text" aria-describedby="category-tooltip-{{@index}}">{{ toUpperCase category }}</span>
+              <div class="tooltip__container">
+                <button class="tooltip__trigger"><span class="u-visually-hidden">Show tooltip</span></button>
+                <div class="tooltip tooltip--under" role="tooltip" id="category-tooltip-{{@index}}">
+                  <div class="tooltip__content">
+                    {{{ tooltipContent }}}
+                  </div>
+                </div>
+              </div>
+            </div>
+            {{else}}
             <span class="cal-list__category-title">{{ toUpperCase category }}</span>
+            {{/if}}
           </div>
         </div>
         <div class="cal-list__add">
           <div class="dropdown">
-            <button class="button button--alt dropdown__button dropdown__button--mini button--calendar--mini"><span class="u-visually-hidden">Download calendar</span></button>
+            <button class="button button--alt dropdown__button dropdown__button--mini button--calendar--mini" aria-describedby="cal-description-{{@index}}"><span class="u-visually-hidden">Download calendar</span></button>
             <ul class="dropdown__panel dropdown__panel--right" aria-hidden="true">
               <li class="dropdown__item"><a class="dropdown__value" href="{{download}}">Apple Calendar</a></li>
               <li class="dropdown__item"><a class="dropdown__value" href="{{google}}" target="_blank">Google Calendar</a></li>

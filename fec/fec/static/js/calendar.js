@@ -42,6 +42,7 @@ function Calendar(opts) {
   this.opts = $.extend({}, this.defaultOpts(), opts);
 
   this.$calendar = $(this.opts.selector);
+  this.$head = $('.data-container__head');
   this.$calendar.fullCalendar(this.opts.calendarOpts);
   this.url = URI(this.opts.url);
   this.exportUrl = URI(this.opts.exportUrl);
@@ -57,7 +58,6 @@ function Calendar(opts) {
   this.$download = $(opts.download);
   this.$subscribe = $(opts.subscribe);
 
-  this.$calendar.on('calendar:rendered', this.filterPanel.setHeight());
   this.$calendar.on('click', '.js-toggle-view', this.toggleListView.bind(this));
 
   this.$calendar.on('keypress', '.fc-event, .fc-more, .fc-close', this.simulateClick.bind(this));
@@ -70,7 +70,10 @@ function Calendar(opts) {
 
   this.filter();
   this.styleButtons();
-  this.filterPanel.setHeight();
+
+  if (!helpers.isLargeScreen()) {
+    this.$head.after($('#filters'));
+  }
 }
 
 Calendar.prototype.toggleListView = function(e) {
@@ -83,8 +86,8 @@ Calendar.prototype.defaultOpts = function() {
     calendarOpts: {
       header: {
         left: 'prev,next,today',
-        center: 'title',
-        right: 'month,monthTime'
+        center: '',
+        right: 'monthTime,month'
       },
       buttonIcons: false,
       buttonText: {
@@ -94,7 +97,7 @@ Calendar.prototype.defaultOpts = function() {
       contentHeight: 'auto',
       dayRender: this.handleDayRender.bind(this),
       dayPopoverFormat: 'MMM D, YYYY',
-      defaultView: this.defaultView(),
+      defaultView: 'monthTime',
       eventRender: this.handleEventRender.bind(this),
       eventAfterAllRender: this.handleRender.bind(this),
       eventClick: this.handleEventClick.bind(this),
@@ -148,9 +151,18 @@ Calendar.prototype.filter = function() {
 
 Calendar.prototype.success = function(response) {
   var self = this;
+
+  setTimeout(function() {
+    $('.is-loading').removeClass('is-loading').addClass('is-successful');
+  }, helpers.LOADING_DELAY);
+
+  setTimeout(function() {
+    $('.is-successful').removeClass('is-successful');
+  }, helpers.SUCCESS_DELAY);
+
   return response.results.map(function(event) {
     var processed = {
-      category: event.category,
+      category: calendarHelpers.mapCategoryTitle(event.category),
       location: event.location,
       title: event.description || 'Event title',
       summary: event.summary || 'Event summary',
@@ -158,6 +170,7 @@ Calendar.prototype.success = function(response) {
       start: event.start_date ? moment(event.start_date) : null,
       end: event.end_date ? moment(event.end_date) : null,
       className: calendarHelpers.className(event),
+      tooltipContent: calendarHelpers.mapCategoryDescription(event.category),
       allDay: event.all_day,
       detailUrl: event.url
     };
@@ -203,15 +216,7 @@ Calendar.prototype.styleButtons = function() {
   this.$calendar.find('.fc-prev-button').addClass('button--previous button--standard');
   this.$calendar.find('.fc-right .fc-button-group').addClass('toggles--buttons');
   this.$calendar.find('.fc-monthTime-button').addClass('button--list button--alt');
-  this.$calendar.find('.fc-month-button').addClass('button--cal button--alt');
-};
-
-Calendar.prototype.defaultView = function() {
-  if ($(document.body).width() < helpers.BREAKPOINTS.MEDIUM) {
-    return 'monthTime';
-  } else {
-    return 'month';
-  }
+  this.$calendar.find('.fc-month-button').addClass('button--grid button--alt');
 };
 
 Calendar.prototype.handleRender = function(view) {
@@ -223,12 +228,13 @@ Calendar.prototype.handleRender = function(view) {
     this.$listToggles = null;
   }
   this.$calendar.find('.fc-more').attr({'tabindex': '0', 'aria-describedby': this.popoverId});
+  this.$head.find('.js-calendar-title').html(view.title);
 };
 
 Calendar.prototype.manageListToggles = function(view) {
   if (!this.$listToggles) {
     this.$listToggles = $('<div class="cal-list__toggles"></div>');
-    this.$listToggles.prependTo(this.$calendar.find('.fc-view-container'));
+    this.$listToggles.appendTo(this.$calendar.find('.fc-right'));
   }
   this.$listToggles.html(templates.listToggles(view.options));
   // Highlight the "List" button on monthTime

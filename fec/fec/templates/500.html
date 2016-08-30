@@ -1,19 +1,20 @@
 {% extends "base.html" %}
 
-{% block title %}Server Error | beta.FEC.gov{% endblock %}
+{% block title %}Server error | FEC {% endblock %}
 
 {% block content %}
 <section class="content--blank">
   <div class="container">
     <div class="message message--alert message--big">
-      <div class="content__section">
-        <h1 class="message__title">Oops: We messed up</h1>
-        <p>We just experienced a server issue. Please try reloading the page.</p>
-      </div>
+      <h1 class="message__title">Oops: We messed up</h1>
+      <p>We had trouble processing your request. Please try reloading the page.</p>
       <div class="message--alert__bottom">
-        <h2>Still can't find what you're looking for?</h2>
-        <p>Get support by <a href="mailto:{{ settings.CONTACT_EMAIL }}">emailing us</a> or <a href="https://github.com/18F/openFEC/issues">opening a GitHub issue</a>.</p>
-        <a href="/">Return home</a>
+        <p>Still not working?</p>
+        <ul class="list--buttons">
+          <li><a class="button button--cta" href="/">Return home</a></li>
+          <li><a class="button button--alt" href="https://github.com/18f/fec/issues">File an issue</a></li>
+          <li><a class="button button--alt" href="mailto:{{ settings.CONTACT_EMAIL }}">Email our team</a></li>
+        </ul>
       </div>
     </div>
   </div>

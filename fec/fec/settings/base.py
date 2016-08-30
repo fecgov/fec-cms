@@ -50,6 +50,9 @@ INSTALLED_APPS = (
     'wagtail.wagtailredirects',
     'wagtail.wagtailforms',
 
+    'wagtail.contrib.wagtailsearchpromotions',
+    'wagtail.contrib.table_block',
+
     'fec',
     'search',
     'home',
@@ -168,7 +171,6 @@ FEC_APP_URL = os.getenv('FEC_APP_URL')
 FEC_API_URL = os.getenv('FEC_API_URL', 'http://localhost:5000')
 FEC_API_VERSION = os.getenv('FEC_API_VERSION', 'v1')
 FEC_API_KEY_PUBLIC = env.get_credential('FEC_WEB_API_KEY_PUBLIC', '')
-FEC_WEB_STYLE_URL = os.getenv('FEC_WEB_STYLE_URL')
 FEC_CMS_ROBOTS = os.getenv('FEC_CMS_ROBOTS')
 ENVIRONMENTS = {
     'dev': 'DEVELOPMENT',
@@ -180,7 +182,7 @@ CONTACT_EMAIL = 'betafeedback@fec.gov';
 CONSTANTS = constants
 
 FEATURES = {
-    'legal': bool(os.getenv('FEC_FEATURE_LEGAL', ''))
+    'legal_statutes': bool(env.get_credential('FEC_FEATURE_LEGAL_STATUTES', '')),
 }
 
 if os.getenv('SENTRY_DSN'):
