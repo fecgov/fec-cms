@@ -1,7 +1,7 @@
 import unittest
 from django.test import Client
 from wagtail.tests.utils import WagtailPageTests
-from ..models import Author, HomePage, RecordPage, DigestPage, NewsReleasePage
+from ..models import Author, HomePage, RecordPage, DigestPage, PressReleasePage
 
 
 class SubPageTestMixin(object):
@@ -84,8 +84,8 @@ class DigestPageTest(SubPageTestMixin, WagtailPageTests):
     ]
 
 
-class NewsReleasePageTest(SubPageTestMixin, WagtailPageTests):
-    sub_page_model = NewsReleasePage
+class PressReleasePageTest(SubPageTestMixin, WagtailPageTests):
+    sub_page_model = PressReleasePage
     create_datas = [
         {
             'title': "Title",

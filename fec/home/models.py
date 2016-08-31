@@ -198,20 +198,20 @@ class DigestPage(ContentPage):
         return ''
 
 
-class NewsReleasePageAuthors(Orderable, PageAuthors):
-    page = ParentalKey('NewsReleasePage', related_name='authors')
+class PressReleasePageAuthors(Orderable, PageAuthors):
+    page = ParentalKey('PressReleasePage', related_name='authors')
 
 
-def get_previous_news_release_page():
-    return NewsReleasePage.objects.order_by('-date', '-pk').first()
+def get_previous_press_release_page():
+    return PressReleasePage.objects.order_by('-date', '-pk').first()
 
 
-class NewsReleasePage(ContentPage):
+class PressReleasePage(ContentPage):
     date = models.DateField(default=datetime.date.today)
     category = models.CharField(max_length=255,
-                                choices=constants.news_release_page_categories.items())
-    read_next = models.ForeignKey('NewsReleasePage', blank=True, null=True,
-                                  default=get_previous_news_release_page,
+                                choices=constants.press_release_page_categories.items())
+    read_next = models.ForeignKey('PressReleasePage', blank=True, null=True,
+                                  default=get_previous_press_release_page,
                                   on_delete=models.SET_NULL)
 
     content_panels = ContentPage.content_panels + [

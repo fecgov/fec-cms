@@ -63,14 +63,14 @@ class Migration(migrations.Migration):
             },
         ),
         migrations.CreateModel(
-            name='NewsReleasePage',
+            name='PressReleasePage',
             fields=[
                 ('page_ptr', models.OneToOneField(auto_created=True, on_delete=django.db.models.deletion.CASCADE, parent_link=True, primary_key=True, serialize=False, to='wagtailcore.Page')),
                 ('body', wagtail.wagtailcore.fields.StreamField([(b'heading', wagtail.wagtailcore.blocks.CharBlock(classname=b'full title')), (b'paragraph', wagtail.wagtailcore.blocks.RichTextBlock()), (b'html', wagtail.wagtailcore.blocks.RawHTMLBlock()), (b'image', wagtail.wagtailimages.blocks.ImageChooserBlock()), (b'table', wagtail.contrib.table_block.blocks.TableBlock())], blank=True, null=True)),
                 ('date', models.DateField(default=datetime.date.today)),
                 ('category', models.CharField(choices=[(b'audit reports', b'Audit reports'), (b'campaign finance data summaries', b'Campaign finance data summaries'), (b'commission appointments', b'Commission appointments'), (b'disclosure initiatives', b'Disclosure initiatives'), (b'enforcement matters', b'Enforcement matters'), (b'hearings', b'Hearings'), (b'litigation', b'Litigation'), (b'non-filer publications', b'Non-filer publications'), (b'open meetings and related matters', b'Open meetings and related matters'), (b'presidential public funds', b'Presidential public funds'), (b'rulemakings', b'Rulemakings'), (b'other agency actions', b'Other agency actions')], max_length=255)),
                 ('feed_image', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='+', to='wagtailimages.Image')),
-                ('read_next', models.ForeignKey(blank=True, default=home.models.get_previous_news_release_page, null=True, on_delete=django.db.models.deletion.SET_NULL, to='home.NewsReleasePage')),
+                ('read_next', models.ForeignKey(blank=True, default=home.models.get_previous_press_release_page, null=True, on_delete=django.db.models.deletion.SET_NULL, to='home.PressReleasePage')),
             ],
             options={
                 'abstract': False,
@@ -78,13 +78,13 @@ class Migration(migrations.Migration):
             bases=('wagtailcore.page',),
         ),
         migrations.CreateModel(
-            name='NewsReleasePageAuthors',
+            name='PressReleasePageAuthors',
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('sort_order', models.IntegerField(blank=True, editable=False, null=True)),
                 ('role', models.CharField(choices=[(b'author', b'Author'), (b'writer', b'Written by'), (b'graphics', b'Graphics by'), (b'contact', b'Contact')], default=b'author', max_length=255)),
                 ('author', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='+', to='home.Author')),
-                ('page', modelcluster.fields.ParentalKey(on_delete=django.db.models.deletion.CASCADE, related_name='authors', to='home.NewsReleasePage')),
+                ('page', modelcluster.fields.ParentalKey(on_delete=django.db.models.deletion.CASCADE, related_name='authors', to='home.PressReleasePage')),
             ],
             options={
                 'ordering': ['sort_order'],
