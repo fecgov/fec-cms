@@ -11,13 +11,15 @@
     @extend .content__section;
   }
 
+  // If the very first block is a paragraph--before any heading--then assume it
+  // should be the lead paragraph. This enlarges the font slightly.
+  .block-paragraph:first-child > .rich-text:first-child > p:first-child {
+    @extend .t-lead;
+  }
+
   .block-heading {
     @extend h2;
     @extend .heading__title;
-  }
-
-  .block-paragraph:first-child > .rich-text:first-child > p:first-child {
-    @extend .t-lead;
   }
 
   .block-image {
