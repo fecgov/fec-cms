@@ -19,6 +19,7 @@ before_install:
 before_script:
   - travis_retry pip install -U pip wheel
   - travis_retry pip install -r requirements.txt
+  - travis_retry pip install coverage django_coverage_plugin
 
   - . $HOME/.nvm/nvm.sh
   - nvm install v5.5.0
@@ -28,11 +29,18 @@ before_script:
   - npm run build
 
 script:
+  - (cd fec && coverage run ./manage.py test)
   - npm run test-single
 
 after_success:
-  - travis_retry npm install codecov.io
-  - cat ./coverage/coverage.json | ./node_modules/codecov.io/bin/codecov.io.js
+  - travis_retry pip install codecov
+  # Collect the Python coverage as XML in advance since it needs to run inside
+  # the fec dir.
+  - (cd fec && coverage xml)
+  # Run codecov outside fec dir to include coverage/coverage.json from JS
+  # testing, and disable it from running `coverage xml` since that's already
+  # done.
+  - codecov -X pycov
 
 before_deploy:
   - export PATH=$HOME:$PATH
