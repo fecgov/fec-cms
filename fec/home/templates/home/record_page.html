@@ -35,7 +35,7 @@
             <h1 class="heading__title heading__title--with-date">{{ self.title }}</h1>
           </div>
           <div class="section__heading__date">
-            <span class="t-sans">{{ self.date|date:'F d, Y' }}</span>
+            <span class="t-sans">{{ self.date|date:'F j, Y' }}</span>
           </div>
           {% endspaceless %}
         </div>
@@ -68,7 +68,7 @@
             {% if self.read_next.search_description %}
               <p>
                 {{ self.read_next.search_description }}
-                <span class="t-sans t-block">{{ self.read_next.date|date:'F d, Y' }}</span>
+                <span class="t-sans t-block">{{ self.read_next.date|date:'F j, Y' }}</span>
               </p>
             {% endif %}
           </div>
