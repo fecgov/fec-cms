@@ -22,7 +22,10 @@
 
   .block-image {
     @include media($med) {
-      margin-left: $column / 2;
+      @include span-columns(8);
+      float: none;  // override span-columns
+      margin-right: 0;  // override span-columns
+      margin-left: flex-gutter();
     }
 
     img {
