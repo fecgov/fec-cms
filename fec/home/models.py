@@ -101,7 +101,6 @@ class Author(models.Model):
     name = models.CharField(max_length=255)
     title = models.CharField(max_length=255)
     email = models.EmailField()
-    photo = models.ImageField()
     photo = models.ForeignKey('wagtailimages.Image', blank=True, null=True,
                               on_delete=models.SET_NULL, related_name='+')
     phone = models.CharField(max_length=255, blank=True)
