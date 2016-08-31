@@ -98,12 +98,12 @@ author_roles = OrderedDict([
 ])
 
 record_page_categories = OrderedDict((x.lower(), x) for x in [
-    "Advisory Opinions",
+    "Advisory opinions",
     "Commission",
     "Compliance",
     "Litigation",
     "Outreach",
-    "Public Funding",
+    "Public funding",
     "Regulations",
     "Reporting",
     "Statistics",
