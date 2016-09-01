@@ -239,3 +239,24 @@ class CustomPage(Page):
         StreamFieldPanel('body'),
         StreamFieldPanel('sidebar'),
     ]
+
+class UpdatePage(ContentPage):
+    @property
+    def press_releases(self):
+        press_releases = PressReleasePage.objects.live()
+        return press_releases
+
+    def digests(self):
+        digests = DigestPage.objects.live()
+        return digests
+
+    def records(self):
+        records = RecordPage.objects.live()
+        return records
+
+    def get_context(self, request):
+        context = super(UpdatePage, self).get_context(request)
+        pages = ContentPage.objects.type(DigestPage)
+        context['pages'] = pages
+        return context
+
