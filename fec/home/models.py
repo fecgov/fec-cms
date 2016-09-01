@@ -9,6 +9,8 @@ from wagtail.wagtailcore import blocks
 from wagtail.wagtailadmin.edit_handlers import FieldPanel, StreamFieldPanel
 from wagtail.wagtailimages.blocks import ImageChooserBlock
 
+from wagtail.contrib.table_block.blocks import TableBlock
+
 stream_factory = functools.partial(
     StreamField,
     [
@@ -16,6 +18,7 @@ stream_factory = functools.partial(
         ('paragraph', blocks.RichTextBlock()),
         ('html', blocks.RawHTMLBlock()),
         ('image', ImageChooserBlock()),
+        ('table', TableBlock()),
     ],
 )
 
@@ -31,7 +34,7 @@ class UniqueModel(models.Model):
 
 class ContentPage(Page):
     """Abstract base class for simple content pages."""
-    is_abstract = True
+    is_creatable = True
 
     class Meta:
         abstract = True
