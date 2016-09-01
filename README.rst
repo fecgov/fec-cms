@@ -58,10 +58,9 @@ Set up
 .. code::
 
     npm run build
-    ./manage.py createsuperuser
     ./manage.py makemigrations
     ./manage.py migrate
-
+    ./manage.py createsuperuser
 
 Developing with fec-style (optional)
 ~~~~~~~~~~~~~~~~~~~~~~
