@@ -50,6 +50,7 @@ INSTALLED_APPS = (
     'wagtail.wagtailredirects',
     'wagtail.wagtailforms',
 
+    'wagtail.contrib.modeladmin',
     'wagtail.contrib.wagtailsearchpromotions',
     'wagtail.contrib.table_block',
 

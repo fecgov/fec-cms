@@ -1,0 +1,115 @@
+{% extends "base.html" %}
+{% load wagtailcore_tags wagtailimages_tags %}
+{% load staticfiles %}
+{% block body_class %}template-{{ self.get_verbose_name | slugify }}{% endblock %}
+
+{% block content %}
+
+<header class="page-header page-header--secondary">
+  <ul class="breadcrumbs">
+    <li class="breadcrumbs__item"><a href="/" class="breadcrumbs__link" rel="Home">Home</a></li>
+    <li class="breadcrumbs__item">
+      <span class="breadcrumbs__separator">›</span>
+      FEC Record: {{ self.get_category_display }}
+    </li>
+    <li class="breadcrumbs__item breadcrumbs__item--current">
+      <span class="breadcrumbs__separator">›</span>
+      <span>{{ self.title }}</span>
+    </li>
+  </ul>
+</header>
+
+<article class="main">
+  <div class="container">
+    <div class="main__content--full">
+
+      <div class="section__heading">
+        <ul class="tags" aria-hidden="false">
+          <li class="tag t-upper">
+            FEC Record: {{ self.get_category_display }}
+          </li>
+        </ul>
+        <div class="row">
+          {% spaceless %}{# for inline blocks #}
+          <div class="section__heading__title">
+            <h1 class="heading__title heading__title--with-date">{{ self.title }}</h1>
+          </div>
+          <div class="section__heading__date">
+            <span class="t-sans">{{ self.date|date:'F j, Y' }}</span>
+          </div>
+          {% endspaceless %}
+        </div>
+      </div>
+      <div class="row">
+        <div class="heading__action">
+          <ul class="list--buttons">
+            <li><button class="button button--standard button--subscribe is-disabled">Subscribe</button></li>
+            <li><button class="button button--standard button--share is-disabled">Share</button></li>
+          </ul>
+        </div>
+      </div>
+
+      {% include 'partials/body-blocks.html' with blocks=self.body %}
+
+      {% include 'partials/author-list.html' %}
+
+    </div>
+  </div>
+</article>
+
+{% if self.read_next or self.related_section_title %}
+<div class="slab slab--neutral">
+  <div class="container">
+    {% if self.read_next %}
+      <div class="content__section">
+          <h3>Read next:</h3>
+          <div class="read_next__content">
+            <h4 class="read_next__title"><a href="{{ self.read_next.url }}">{{ self.read_next.title }}</a></h4>
+            {% if self.read_next.search_description %}
+              <p>
+                {{ self.read_next.search_description }}
+                <span class="t-sans t-block">{{ self.read_next.date|date:'F j, Y' }}</span>
+              </p>
+            {% endif %}
+          </div>
+          <div class="read_next__image__container">
+            {% if self.read_next.search_description and self.read_next.feed_image %}
+              {% image self.read_next.feed_image max-221x130 class="read_next__image" %}
+            {% endif %}
+          </div>
+      </div>
+    {% endif %}
+    {% if self.related_section_title %}
+      <div class="content__section">
+        <h3>Related:</h3>
+        <h5><a href="{{ self.related_section_url }}">{{ self.related_section_title }}</a> &raquo;</h5>
+        {% comment %}
+        <div class="grid grid--4-wide">
+          <div class="grid__item">
+            <a href="{{ self.related_section_url }}">
+              <aside class="card card--horizontal card--primary">
+                <div class="card__image__container">
+                  <span class="card__icon i-overview"><span class="u-visually-hidden">Icon representing data</span></span>
+                </div>
+                <div class="card__content">
+                  {{ self.related_section_title }}
+                </div>
+              </aside>
+            </a>
+          </div>
+        </div>
+        {% endcomment %}
+      </div>
+    {% endif %}
+  </div>
+</div>
+{% endif %}
+
+<div class="slab slab--neutral footer-disclaimer">
+  <div class="container">
+    <p class="usa-width-one-half">This site is in beta, which means we're testing content that better adheres to legal plain language requirements. This content is not finalized, is not legal advice and is subject to change.</p>
+    <p class="usa-width-one-half">Everything on this site should be read in conjunction with FEC.gov. Please let us know what you think of our new content; use the feedback tool on this page.</p>
+  </div>
+</div>
+
+{% endblock %}

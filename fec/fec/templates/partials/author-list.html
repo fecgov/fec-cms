@@ -1,0 +1,24 @@
+{% load wagtailimages_tags %}
+
+<ul class="author-list">
+  {% for page_author in self.authors.all %}
+  {% with author=page_author.author role=page_author.get_role_display %}
+  <li class="author-item">
+    <legend class="label t-upper">{% ifchanged %}{{ role }}{% endifchanged %}&nbsp;</legend>
+    <div class="author-item__info">
+      {% spaceless %}
+      {% image author.photo fill-40x40 class="author-item__image" %}
+      <ul class="author-item__details t-sans">
+        <li>
+          <a href="mailto:{{ author.email }}">{{ author.name }}</a>
+          <img class="icon--email--author" src="/static/img/i-email--primary.svg" alt="Icon of email being sent">
+        </li>
+        <li>{{ author.title }}</li>
+        <li>{{ author.phone }}</li>
+      </ul>
+      {% endspaceless %}
+    </div>
+  </li>
+  {% endwith %}
+  {% endfor %}
+</ul>
