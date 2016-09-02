@@ -1,0 +1,82 @@
+{% extends "base.html" %}
+{% load wagtailcore_tags %}
+{% load staticfiles %}
+{% block body_class %}template-{{ self.get_verbose_name | slugify }}{% endblock %}
+
+{% block content %}
+
+<header class="page-header page-header--secondary">
+  <ul class="breadcrumbs">
+    <li class="breadcrumbs__item"><a href="/" class="breadcrumbs__link" rel="Home">Home</a></li>
+    <li class="breadcrumbs__item">
+      <span class="breadcrumbs__separator">›</span>
+      <a href="/registration-and-reporting" class="breadcrumbs__link">Registration and reporting</a>
+    </li>
+    <li class="breadcrumbs__item breadcrumbs__item--current">
+      <span class="breadcrumbs__separator">›</span>
+      <span>{{ self.title }}</span>
+    </li>
+  </ul>
+</header>
+
+<article class="main">
+  <div class="container">
+    <h1 class="main__title">{{ self.title }}</h1>
+    <div class="content__section">
+      <div class="main__content">
+        {{ self.body }}
+      </div>
+      {% if self.sidebar %}
+      <div class="sidebar-container">
+        <aside class="sidebar sidebar--secondary">
+          {% for block in self.sidebar %}
+            {% if block.block_type == 'heading' %}
+              <h4 class="sidebar__title">{{ block }}</h4>
+            {% else %}
+              <div class="sidebar__content">
+                {{ block }}
+              </div>
+            {% endif %}
+          {% endfor %}
+        </aside>
+      </div>
+      {% endif %}
+    </div>
+    <div class="row" id="section-container">
+      <div class="sidebar-container sidebar-container--left">
+        <nav class="sidebar sidebar--neutral side-nav js-sticky-side js-toc" data-sticky-container="section-container">
+          <ul class="sidebar__content">
+            <li class="side-nav__item"><a class="side-nav__link" href="#register">Section 1</a></li>
+            <li class="side-nav__item"><a class="side-nav__link" href="#how-to-file">Section 2</a></li>
+            <li class="side-nav__item"><a class="side-nav__link" href="#regular-filing">Section 3</a></li>
+            <li class="side-nav__item"><a class="side-nav__link" href="#troubleshooting">Section 4</a></li>
+          </ul>
+        </nav>
+      </div>
+      <div class="main__content--right">
+        {% for section in self.sections %}
+        <section id="{{ section.id }}" class="option">
+          <div class="option__content">
+            <h2>{{ section.title }}</h2>
+            {% if section.intro %}
+              <p>{{ section.intro }}
+            {% endif %}
+            <ul class="list--checks list--checks--secondary t-sans">
+              <li>Item</li>
+            </ul>
+          </div>
+        </section>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+</article>
+
+<div class="slab slab--neutral footer-disclaimer">
+  <div class="container">
+    <p class="usa-width-one-half">This site is in beta, which means we're testing content that better adheres to legal plain language requirements. This content is not finalized, is not legal advice and is subject to change.</p>
+    <p class="usa-width-one-half">Everything on this site should be read in conjunction with FEC.gov. Please let us know what you think of our new content; use the feedback tool on this page.</p>
+  </div>
+</div>
+
+{% endblock %}

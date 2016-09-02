@@ -239,3 +239,38 @@ class CustomPage(Page):
         StreamFieldPanel('body'),
         StreamFieldPanel('sidebar'),
     ]
+
+class CollectionList(blocks.StructBlock):
+    title = blocks.CharBlock(required=True)
+    section_id = blocks.CharBlock(required=True)
+    style = blocks.ChoiceBlock(default='bulleted',
+        choices=[
+            ('checklist', 'Checklist'),
+            ('bulleted', 'Bulleted list')
+        ])
+    content = blocks.RichTextBlock()
+
+    # class Meta:
+    #     template = 'blocks/collection_list.html'
+
+class RelatedPagesSidebar(blocks.StructBlock):
+    title = blocks.CharBlock(required=True)
+    related_pages = blocks.PageChooserBlock(required=True)
+
+class CollectionPage(Page):
+    # related_page = models.ForeignKey(
+    #     'Page',
+    #     null=True,
+    #     blank=True,
+    #     on_delete=models.SET_NULL
+    # )
+    related_pages_sidebar = StreamField([
+        ('related_pages', RelatedPagesSidebar())
+    ])
+    sections = StreamField([
+        ('section', CollectionList())
+    ])
+    content_panels =  Page.content_panels + [
+        StreamFieldPanel('related_pages_sidebar'),
+        StreamFieldPanel('sections')
+    ]
