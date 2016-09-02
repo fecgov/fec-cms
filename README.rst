@@ -133,6 +133,8 @@ Backup
 
 To restore data from a remote instance to a local instance, or between local instances, back up data using `dumpdata` and restore using `loaddata`. You'll also need to `install cf-ssh <https://docs.cloud.gov/getting-started/cf-ssh/>`_. The following is an example of restoring remote data to a local instance: ::
 
+Use `cf target` to slect the space you want to create a manifest for, then:
+
     # Local
     cf create-app-manifest cms -p manifest_ssh.yml
     cf-ssh -f manifest_ssh.yml
