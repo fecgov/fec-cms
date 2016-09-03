@@ -242,35 +242,27 @@ class CustomPage(Page):
 
 class CollectionList(blocks.StructBlock):
     title = blocks.CharBlock(required=True)
-    section_id = blocks.CharBlock(required=True)
-    style = blocks.ChoiceBlock(default='bulleted',
+    style = blocks.ChoiceBlock(default='list--bulleted',
         choices=[
-            ('checklist', 'Checklist'),
-            ('bulleted', 'Bulleted list')
+            ('list--checks list--checks--secondary', 'Checklist'),
+            ('list--bulleted', 'Bulleted list')
         ])
-    content = blocks.RichTextBlock()
+    intro = blocks.RichTextBlock(blank=False, null=False, required=False)
+    items = blocks.ListBlock(blocks.RichTextBlock(classname="nothing"))
 
-    # class Meta:
-    #     template = 'blocks/collection_list.html'
-
-class RelatedPagesSidebar(blocks.StructBlock):
-    title = blocks.CharBlock(required=True)
-    related_pages = blocks.PageChooserBlock(required=True)
 
 class CollectionPage(Page):
-    # related_page = models.ForeignKey(
-    #     'Page',
-    #     null=True,
-    #     blank=True,
-    #     on_delete=models.SET_NULL
-    # )
-    related_pages_sidebar = StreamField([
-        ('related_pages', RelatedPagesSidebar())
-    ])
+    body = stream_factory(null=True, blank=True)
+    sidebar_title = models.CharField(max_length=255, null=True, blank=True)
     sections = StreamField([
         ('section', CollectionList())
     ])
+    related_pages = StreamField([
+        ('related_pages', blocks.ListBlock(blocks.PageChooserBlock()))
+    ], null=True, blank=True)
     content_panels =  Page.content_panels + [
-        StreamFieldPanel('related_pages_sidebar'),
-        StreamFieldPanel('sections')
+        StreamFieldPanel('body'),
+        FieldPanel('sidebar_title'),
+        StreamFieldPanel('related_pages'),
+        StreamFieldPanel('sections'),
     ]

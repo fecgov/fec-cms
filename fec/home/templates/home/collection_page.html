@@ -26,17 +26,17 @@
       <div class="main__content">
         {{ self.body }}
       </div>
-      {% if self.related_pages_sidebar %}
+      {% if self.sidebar_title %}
       <div class="sidebar-container">
         <aside class="sidebar sidebar--secondary">
-          <h4 class="sidebar__title">{{ self.related_pages_sidebar.title }}</h4>
-          {% for block in self.related_pages_sidebar.related_pages %}
-              <ul class="sidebar__content">
-              {% for page in block.value.related_pages %}
-                <li class="u-padding--bottom"><a href="page.url">page.title</a></li>
+          <h4 class="sidebar__title">{{ self.sidebar_title }}</h4>
+          <ul class="sidebar__content">
+            {% for related_pages in self.related_pages %}
+              {% for related_page in related_pages.value %}
+              <li class="u-padding--bottom"><a href="{{ related_page.url }}">{{ related_page.title }}</a></li>
               {% endfor %}
-              </ul>
-          {% endfor %}
+            {% endfor %}
+          </ul>
         </aside>
       </div>
       {% endif %}
@@ -46,18 +46,23 @@
         <nav class="sidebar sidebar--neutral side-nav js-sticky-side js-toc" data-sticky-container="section-container">
           <ul class="sidebar__content">
             {% for block in self.sections %}
-            <li class="side-nav__item"><a class="side-nav__link" href="#{{block.value.section_id}}">{{block.value.title}}</a></li>
+            <li class="side-nav__item"><a class="side-nav__link" href="#{{block.value.title | slugify}}">{{block.value.title}}</a></li>
             {% endfor %}
           </ul>
         </nav>
       </div>
       <div class="main__content--right">
         {% for block in self.sections %}
-          <section id="{{ block.value.section_id }}"
+          <section id="{{ block.value.title | slugify }}"
                   class="option {{ block.value.style }}">
             <div class="option__content">
               <h2>{{ block.value.title }}</h2>
-              {{ block.value.content }}
+              {{ block.value.intro }}
+              <ul class="{{ block.value.style }} t-sans">
+              {% for item in block.value.items %}
+                 <li>{{ item }}</li>
+              {% endfor %}
+              </ul>
             </div>
           </section>
         {% endfor %}
