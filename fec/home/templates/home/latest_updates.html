@@ -3,7 +3,7 @@
 {% load staticfiles %}
 {% load filters %}
 
-{% block title %}Latest Updates | FEC{% endblock %}
+{% block title %}Latest updates | FEC{% endblock %}
 
 {% block content %}
 <header class="page-header page-header--primary">
@@ -11,15 +11,15 @@
     <li class="breadcrumbs__item"><a href="/" class="breadcrumbs__link" rel="Home">Home</a></li>
     <li class="breadcrumbs__item breadcrumbs__item--current">
       <span class="breadcrumbs__separator">›</span>
-      <span>Latest Updates</span>
+      <span>Latest updates</span>
     </li>
   </ul>
 </header>
 
 <section class="main__content--full">
-  <h2>Latest Updates</h2>
+  <h2>Latest updates</h2>
 
-  <h3>Records</h3>
+  <h3>Record articles</h3>
   {% for pr in press_releases %}
     <h4>{{ pr.title }}</h4>
     <em>{{ pr.date|date:'F j, Y' }}</em>
@@ -27,7 +27,7 @@
     {% include 'partials/body-blocks.html' with blocks=pr.body %}
   {% endfor %}
 
-  <h3>News Digests</h3>
+  <h3>Weekly Digests</h3>
   {% for digest in digests %}
     <h4>{{ digest.title }}</h4>
     <em>{{ digest.date|date:'F j, Y' }}</em>
@@ -35,7 +35,7 @@
     {% include 'partials/body-blocks.html' with blocks=digest.body %}
   {% endfor %}
 
-  <h3>Press Releases</h3>
+  <h3>Press releases</h3>
   {% for record in records %}
     <h4>{{ record.title }}</h4>
     <em>{{ record.date|date:'F j, Y' }}</em>
