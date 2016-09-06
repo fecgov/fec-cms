@@ -172,6 +172,10 @@ class RecordPage(ContentPage):
     def content_section(self):
         return ''
 
+    @property
+    def get_update_type(self):
+        return 'FEC Record'
+
 
 class DigestPageAuthors(Orderable, PageAuthors):
     page = ParentalKey('DigestPage', related_name='authors')
@@ -196,6 +200,10 @@ class DigestPage(ContentPage):
     @property
     def content_section(self):
         return ''
+
+    @property
+    def get_update_type(self):
+        return 'Weekly digest'
 
 
 class PressReleasePageAuthors(Orderable, PageAuthors):
@@ -224,6 +232,10 @@ class PressReleasePage(ContentPage):
     @property
     def content_section(self):
         return ''
+
+    @property
+    def get_update_type(self):
+        return 'Press release'
 
 
 class CustomPage(Page):
