@@ -16,31 +16,72 @@
   </ul>
 </header>
 
-<section class="main__content--full">
-  <h2>Latest updates</h2>
-
-  <h3>Record articles</h3>
-  {% for pr in press_releases %}
-    <h4>{{ pr.title }}</h4>
-    <em>{{ pr.date|date:'F j, Y' }}</em>
-    <br>
-    {% include 'partials/body-blocks.html' with blocks=pr.body %}
-  {% endfor %}
-
-  <h3>Weekly Digests</h3>
-  {% for digest in digests %}
-    <h4>{{ digest.title }}</h4>
-    <em>{{ digest.date|date:'F j, Y' }}</em>
-    <br>
-    {% include 'partials/body-blocks.html' with blocks=digest.body %}
-  {% endfor %}
-
-  <h3>Press releases</h3>
-  {% for record in records %}
-    <h4>{{ record.title }}</h4>
-    <em>{{ record.date|date:'F j, Y' }}</em>
-    <br>
-    {% include 'partials/body-blocks.html' with blocks=record.body %}
-  {% endfor %}
+<section class="main__content--full data-container__wrapper">
+  <nav class="filters filters__inner">
+    <a href="/updates">All</a>
+    <h3 class="u-no-margin">For press</h3>
+    <ul>
+      <li><a href="?update_type=press_release&update_type=digest">All press releases and digests</a></li>
+      <li>
+        <a href="?update_type=press_release">Press releases</a>
+        <ul>
+          {% for cat in settings.CONSTANTS.press_release_page_categories.items %}
+            <li><a href="?update_type=press_release&category={{ cat.0 | slugify }}">{{ cat.1 }}</a></li>
+          {% endfor %}
+        </ul>
+      </li>
+      <li><a href="?update_type=digest">Weekly digest</a></li>
+    </ul>
+    <h3 class="u-no-margin">For filers</h3>
+    <ul>
+      <li>
+        <a href="?update_type=record">FEC Record</a>
+        <ul>
+          {% for cat in settings.CONSTANTS.record_page_categories.items %}
+            <li><a href="?update_type=record&category={{ cat.0 | slugify }}">{{ cat.1 }}</a></li>
+          {% endfor %}
+        </ul>
+      </li>
+    </ul>
+  </nav>
+  <div class="data-container data-container__body main">
+    <h2>Latest updates
+      {% if update_types %}
+      :
+        {% for update_type in update_types %}
+          {{ update_type }}
+        {% endfor %}
+      {% endif %}
+      {% if categories %}
+        >
+        {% for category in categories %}
+          {{ category }}
+        {% endfor %}
+      {% endif %}
+    </h2>
+    {% for update in updates %}
+      <div class="content__section">
+        <h3 class="u-no-margin"><a href="{{ update.url }}">{{ update.title }}</a> | {{ update.get_update_type }} </h3>
+        <div><em>{{ update.date|date:'F j, Y' }}</em></div>
+        <span class="tag">{{ update.category }}</span>
+        {{ update.body | truncatewords_html:30 }}
+      </div>
+    {% endfor %}
+    <div class="row">
+        <div>
+            {% if updates.has_previous %}
+                <a href="?page={{ updates.previous_page_number }}{% for key,value in request.GET.items %}{% ifnotequal key 'page' %}&amp;{{ key }}={{ value }}{% endifnotequal %}{% endfor %}">Previous</a>
+            {% endif %}
+        </div>
+        <div>
+            Page {{ updates.number }} of {{ updates.paginator.num_pages }}
+        </div>
+        <div>
+            {% if updates.has_next %}
+                <a href="?page={{ updates.next_page_number }}{% for key,value in request.GET.items %}{% ifnotequal key 'page' %}&amp;{{ key }}={{ value }}{% endifnotequal %}{% endfor %}">Next</a>
+            {% endif %}
+        </div>
+    </div>
+  </div>
 </section>
 {% endblock %}
