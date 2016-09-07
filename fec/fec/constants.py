@@ -123,3 +123,9 @@ press_release_page_categories = OrderedDict((x.lower(), x) for x in [
     "Rulemakings",
     "Other agency actions",
 ])
+
+update_types = OrderedDict([
+    ("press_release", "Press releases"),
+    ("record", "FEC Record"),
+    ("digest", "Weekly digest")
+])

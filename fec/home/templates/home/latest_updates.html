@@ -48,8 +48,8 @@
     <h2>Latest updates
       {% if update_types %}
       :
-        {% for update_type in update_types %}
-          {{ update_type }}
+        {% for type in update_types %}
+          {{ settings.CONSTANTS.update_types | lookup:type }}
         {% endfor %}
       {% endif %}
       {% if categories %}
