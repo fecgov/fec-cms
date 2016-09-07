@@ -10,39 +10,43 @@ def updates(request):
     digests = ''
     records = ''
     press_releases = ''
-    update_types = []
     categories = ''
 
     # Get values from query
-    update_types = update_types + request.GET.getlist('update_type', None)
-    record_category = request.GET.get('record-category', '')
-    release_category = request.GET.get('release-category', '')
+    update_types = request.GET.getlist('update_type', None)
+    category = request.GET.get('category', '')
+    year = request.GET.get('year', '')
 
-    # Determine update_type from the kind of category
-    if record_category:
-      update_types = update_types + ['fec-record']
-    if release_category:
-      update_types = update_types + ['press-release']
-
+    category = category.replace('-', ' ')
     # If there's a query, only get the types in the query
     if update_types:
       if 'fec-record' in update_types:
-        if record_category:
-          records = RecordPage.objects.filter(category=record_category.replace('-', ' '))
-        else:
-          records = RecordPage.objects.live()
+        records = RecordPage.objects.all()
+        if category:
+          records = records.filter(category=category)
+        if year:
+          records = records.filter(date__year=year)
       if 'press-release' in update_types:
-        if release_category:
-          press_releases = PressReleasePage.objects.filter(category=release_category.replace('-', ' '))
-        else:
-          press_releases = PressReleasePage.objects.live()
+        press_releases = PressReleasePage.objects.all()
+        if category:
+          press_releases = press_releases.filter(category=category)
+        if year:
+          press_releases = press_releases.filter(date__year=year)
       if 'weekly-digest' in update_types:
-        digests = DigestPage.objects.live()
+        digests = DigestPage.objects.all()
+        if year:
+          digests = digests.filter(date__year=year)
 
     else:
+      # Get everything and filter by year if necessary
       records = RecordPage.objects.live()
       digests = DigestPage.objects.live()
       press_releases = PressReleasePage.objects.live()
+
+      if year:
+        records = records.filter(date__year=year)
+        press_releases = press_releases.filter(date__year=year)
+        digests = digests.filter(date__year=year)
 
     # Chain all the QuerySets together
     # via http://stackoverflow.com/a/434755/1864981
@@ -66,10 +70,12 @@ def updates(request):
       'title': 'Latest updates',
     }
 
+    category = category.replace(' ', '-')
+
     return render(request, 'home/latest_updates.html', {
         'page_context': page_context,
-        'record_category': record_category,
-        'release_category': release_category,
+        'category': category,
         'update_types': update_types,
         'updates': updates,
+        'year': year
     })

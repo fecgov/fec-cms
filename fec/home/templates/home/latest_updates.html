@@ -8,67 +8,60 @@
 {% block content %}
 
 {% include 'partials/breadcrumbs.html' with page=page_context style='secondary' %}
-
+<section class="content__section--extra">
+  <div class="container">
+    <h1>{{ page_context.title }}</h1>
+    <p class="p--lead">Vestibulum id ligula porta felis euismod semper. Duis mollis, est non commodo luctus, nisi erat porttitor ligula, eget lacinia odio sem nec elit.</p>
+  </div>
+</section>
 <section class="main__content--full data-container__wrapper">
-  <nav class="filters filters__inner">
-    <a href="/updates">All</a>
-    <form action="/updates" class="js-form-nav">
-      <div class="filter">
-        <h3 class="u-no-margin">For press</h3>
-        <ul>
-          <li><a href="?update_type=press-release&update_type=weekly-digest">All press releases and digests</a></li>
-          <li>
-            <a href="?update_type=press-release">All press releases</a>
-            <label for="release-categories">Press release categories</label>
-            <select id="release-categories" name="release-category">
-                <option value="">View all</option>
-              {% for cat in settings.CONSTANTS.press_release_page_categories.items %}
-                <option value="{{ cat.0 | slugify }}"
-                  {% if cat.0|slugify == release_category %}selected{% endif %}>
-                  {{ cat.1 }}</option>
-              {% endfor %}
-            </select>
-          </li>
-          <li><a href="?update_type=weekly-digest">Weekly digest</a></li>
-        </ul>
-      </div>
-      <div class="filter">
-        <h3 class="u-no-margin">For filers</h3>
-        <ul>
-          <li>
-            <a href="?update_type=fec-record">All FEC Record articles</a>
-            <label for="record-categories">FEC Record categories</label>
-            <select id="record-categories" name="record-category">
-              <option value="">View all</option>
-              {% for cat in settings.CONSTANTS.record_page_categories.items %}
-                <option value="{{ cat.0 | slugify }}"
-                  {% if cat.0|slugify == record_category %}selected{% endif %}>
-                  {{ cat.1 }}</option>
-              {% endfor %}
-            </select>
-          </li>
-        </ul>
-      </div>
-      <div class="filter">
-        <button type="submit" class="button button--cta">Filter</button>
-      </div>
-    </form>
-  </nav>
-  <div class="data-container data-container__body">
-    <div class="main">
-      <h1>{{ page_context.title }}
-        {% if update_types %}
-        :
-          {% for type in update_types %}
-            {{ settings.CONSTANTS.update_types | lookup:type }}
-            {% if type == 'press-release' and release_category %}
-              > {{ release_category }}
-            {% elif type == 'fec-record' and record_category %}
-             > {{ record_category }}
-            {% endif %}
-          {% endfor %}
+  <div class="filters--horizontal">
+    <form action="/updates" class="js-form-nav container">
+        <div class="filter">
+          <label class="label" for="publication-type">Publication type</label>
+          <select id="publication-type" name="update_type" class="js-type">
+            <option value="">All</option>
+            <optgroup label="For media professionals">
+              <option value="press-release" {% if 'press-release' in update_types %}selected{% endif %}>Press releases</option>
+              <option value="weekly-digest" {% if 'weekly-digest' in update_types %}selected{% endif %}>Weekly digest</option>
+            </optgroup>
+            <optgroup label="For filers">
+              <option value="fec-record" {% if 'fec-record' in update_types %}selected{% endif %}>FEC Record</option>
+            </optgroup>
+          </select>
+        </div>
+        {% if 'fec-record' in update_types or 'press-release' in update_types %}
+          <div class="filter">
+            <label class="label" for="categoryes">Subject</label>
+            <select id="record-categories" name="category">
+              <option value="">All</option>
+              {% if 'fec-record' in update_types %}
+                {% for cat in settings.CONSTANTS.record_page_categories.items %}
+                  <option value="{{ cat.0 | slugify }}"
+                    {% if cat.0|slugify == category %}selected{% endif %}>
+                    {{ cat.1 }}</option>
+                {% endfor %}
+              {% elif 'press-release' in update_types %}
+                {% for cat in settings.CONSTANTS.press_release_page_categories.items %}
+                  <option value="{{ cat.0 | slugify }}"
+                    {% if cat.0|slugify == category %}selected{% endif %}>
+                    {{ cat.1 }}</option>
+                {% endfor %}
+              {% endif %}
+          </select>
+        </div>
         {% endif %}
-      </h1>
+        <div class="filter">
+          <div class="combo combo--filter--mini">
+            <label for="year" class="label">Year</label>
+            <input id="year" class="combo__input" name="year" type="text" value="{{ year }}" placeholder="YYYY">
+            <button type="submit" class="combo__button button button--standard button--go"><span class="u-visually-hidden">Filter</span></button>
+          </div>
+        </div>
+    </form>
+  </div>
+  <div class="main">
+    <div class="container">
       {% for update in updates %}
         {% include 'partials/update.html' with update=update %}
       {% endfor %}
