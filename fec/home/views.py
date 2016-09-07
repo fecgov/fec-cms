@@ -14,11 +14,11 @@ def updates(request):
 
     # If there's a query, only get the types in the query
     if update_types:
-      if 'record' in update_types:
+      if 'fec-record' in update_types:
         records = RecordPage.objects.all()
-      if 'digests' in update_types:
+      if 'weekly-digest' in update_types:
         digests = DigestPage.objects.all()
-      if 'press_release' in update_types:
+      if 'press-release' in update_types:
         press_releases = PressReleasePage.objects.all()
     else:
       records = RecordPage.objects.all()

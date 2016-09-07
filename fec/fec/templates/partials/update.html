@@ -1,0 +1,18 @@
+{% load wagtailimages_tags %}
+
+<div class="post">
+  <div class="post__pre">
+    <span class="u-float-left">{{ update.date|date:'F j, Y' }}</span>
+    <span class="u-float-right">From: press office</span>
+  </div>
+  <h3><a href="{{ update.url }}">{{ update.title }}</a></h3>
+  {% if update.get_update_type != 'Weekly digest' %}
+    {{ update.body | truncatewords_html:30 }}
+  {% endif %}
+  <div class="post__meta">
+    <a class="tag tag--secondary" href="/updates?update_type={{update.get_update_type|slugify}}">{{update.get_update_type}}</a>
+    {% if update.category %}
+      in: <a href="/updates?update_type={{update.get_update_type|slugify}}&category={{update.category|slugify}}">{{ update.category }}</a>
+    {% endif %}
+  </div>
+</div>
