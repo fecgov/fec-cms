@@ -4,6 +4,8 @@ import functools
 from django.db import models
 from django.core.exceptions import ValidationError
 
+from itertools import chain
+
 from modelcluster.fields import ParentalKey
 from wagtail.wagtailcore.models import Page, Orderable
 from wagtail.wagtailcore.fields import StreamField
@@ -142,7 +144,6 @@ class PageAuthors(models.Model):
 class RecordPageAuthors(Orderable, PageAuthors):
     page = ParentalKey('RecordPage', related_name='authors')
 
-
 def get_previous_record_page():
     return RecordPage.objects.order_by('-date', '-pk').first()
 
@@ -251,3 +252,32 @@ class CustomPage(Page):
         StreamFieldPanel('body'),
         StreamFieldPanel('sidebar'),
     ]
+
+class OptionBlock(blocks.StructBlock):
+    title = blocks.CharBlock(required=True)
+    intro = blocks.RichTextBlock(blank=False, null=False, required=False)
+    button_text = blocks.CharBlock(required=True, null=False, blank=False)
+    related_page = blocks.PageChooserBlock()
+
+class PressLandingPage(Page):
+    hero = stream_factory(null=True, blank=True)
+    option_blocks = StreamField([
+        ('option_blocks', OptionBlock())
+    ])
+
+    press_releases = PressReleasePage.objects.all()
+    digests = DigestPage.objects.all()
+
+    feed_intro = stream_factory(null=True, blank=True)
+    contact_intro = stream_factory(null=True, blank=True)
+
+    authors = Author.objects.all()
+
+    content_panels = Page.content_panels + [
+        StreamFieldPanel('hero'),
+        StreamFieldPanel('feed_intro'),
+        StreamFieldPanel('contact_intro'),
+        StreamFieldPanel('option_blocks'),
+    ]
+
+
