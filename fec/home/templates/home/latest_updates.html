@@ -19,44 +19,60 @@
 <section class="main__content--full data-container__wrapper">
   <nav class="filters filters__inner">
     <a href="/updates">All</a>
-    <h3 class="u-no-margin">For press</h3>
-    <ul>
-      <li><a href="?update_type=press-release&update_type=weekly-digest">All press releases and digests</a></li>
-      <li>
-        <a href="?update_type=press-release">Press releases</a>
+    <form action="/updates" class="js-form-nav">
+      <div class="filter">
+        <h3 class="u-no-margin">For press</h3>
         <ul>
-          {% for cat in settings.CONSTANTS.press_release_page_categories.items %}
-            <li><a href="?update_type=press-release&category={{ cat.0 | slugify }}">{{ cat.1 }}</a></li>
-          {% endfor %}
+          <li><a href="?update_type=press-release&update_type=weekly-digest">All press releases and digests</a></li>
+          <li>
+            <a href="?update_type=press-release">All press releases</a>
+            <label for="release-categories">Press release categories</label>
+            <select id="release-categories" name="release-category">
+                <option value="">View all</option>
+              {% for cat in settings.CONSTANTS.press_release_page_categories.items %}
+                <option value="{{ cat.0 | slugify }}"
+                  {% if cat.0|slugify == release_category %}selected{% endif %}>
+                  {{ cat.1 }}</option>
+              {% endfor %}
+            </select>
+          </li>
+          <li><a href="?update_type=weekly-digest">Weekly digest</a></li>
         </ul>
-      </li>
-      <li><a href="?update_type=weekly-digest">Weekly digest</a></li>
-    </ul>
-    <h3 class="u-no-margin">For filers</h3>
-    <ul>
-      <li>
-        <a href="?update_type=fec-record">FEC Record</a>
+      </div>
+      <div class="filter">
+        <h3 class="u-no-margin">For filers</h3>
         <ul>
-          {% for cat in settings.CONSTANTS.record_page_categories.items %}
-            <li><a href="?update_type=fec-record&category={{ cat.0 | slugify }}">{{ cat.1 }}</a></li>
-          {% endfor %}
+          <li>
+            <a href="?update_type=fec-record">All FEC Record articles</a>
+            <label for="record-categories">FEC Record categories</label>
+            <select id="record-categories" name="record-category">
+              <option value="">View all</option>
+              {% for cat in settings.CONSTANTS.record_page_categories.items %}
+                <option value="{{ cat.0 | slugify }}"
+                  {% if cat.0|slugify == record_category %}selected{% endif %}>
+                  {{ cat.1 }}</option>
+              {% endfor %}
+            </select>
+          </li>
         </ul>
-      </li>
-    </ul>
+      </div>
+      <div class="filter">
+        <button type="submit" class="button button--cta">Filter</button>
+      </div>
+    </form>
   </nav>
   <div class="data-container data-container__body">
     <div class="main">
-      <h1>Latest updates
+      <h1>{{ page_context.title }}
         {% if update_types %}
         :
           {% for type in update_types %}
             {{ settings.CONSTANTS.update_types | lookup:type }}
-          {% endfor %}
-        {% endif %}
-        {% if categories %}
-          >
-          {% for category in categories %}
-            {{ category }}
+            {% if type == 'press-release' and release_category %}
+              > {{ release_category }}
+            {% elif type == 'fec-record' and record_category %}
+             > {{ record_category }}
+            {% endif %}
           {% endfor %}
         {% endif %}
       </h1>
