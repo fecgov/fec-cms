@@ -4,8 +4,6 @@ import functools
 from django.db import models
 from django.core.exceptions import ValidationError
 
-from itertools import chain
-
 from modelcluster.fields import ParentalKey
 from wagtail.wagtailcore.models import Page, Orderable
 from wagtail.wagtailcore.fields import StreamField
@@ -265,13 +263,8 @@ class PressLandingPage(Page):
         ('option_blocks', OptionBlock())
     ])
 
-    press_releases = PressReleasePage.objects.all()
-    digests = DigestPage.objects.all()
-
     feed_intro = stream_factory(null=True, blank=True)
     contact_intro = stream_factory(null=True, blank=True)
-
-    authors = Author.objects.all()
 
     content_panels = Page.content_panels + [
         StreamFieldPanel('hero'),
@@ -279,5 +272,4 @@ class PressLandingPage(Page):
         StreamFieldPanel('contact_intro'),
         StreamFieldPanel('option_blocks'),
     ]
-
 

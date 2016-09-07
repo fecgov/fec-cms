@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 {% load wagtailcore_tags %}
 {% load staticfiles %}
+{% load updates %}
 {% block body_class %}template-{{ self.get_verbose_name | slugify }}{% endblock %}
 
 {% block content %}
@@ -44,11 +45,7 @@
           <div class="row">
             <a class="button button--cta button--go u-float-right" href="/updates">More updates</a>
           </div>
-          <div class="post-feed">
-            {% for update in self.press_releases %}
-              {% include 'partials/update.html' with update=update %}
-            {% endfor %}
-          </div>
+          {% press_updates %}
         </div>
       </div>
       <div id="contact" class="option">

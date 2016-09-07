@@ -1,0 +1,9 @@
+{% comment %}
+  This partial is used by the press_updates inclusion tag in updates.py
+{% endcomment %}
+
+<div class="post-feed">
+  {% for update in updates %}
+    {% include 'partials/update.html' with update=update %}
+  {% endfor %}
+</div>
