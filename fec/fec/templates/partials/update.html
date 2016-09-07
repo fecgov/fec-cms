@@ -12,7 +12,12 @@
   <div class="post__meta">
     <a class="tag tag--secondary" href="/updates?update_type={{update.get_update_type|slugify}}">{{update.get_update_type}}</a>
     {% if update.category %}
-      in: <a href="/updates?update_type={{update.get_update_type|slugify}}&category={{update.category|slugify}}">{{ update.category }}</a>
+      in:
+      {% if update.get_update_type == 'FEC Record' %}
+        <a href="/updates?record-category={{update.category|slugify}}">{{ update.category }}</a>
+      {% elif update.get_update_type == 'Press release' %}
+        <a href="/updates?release-category={{update.category|slugify}}">{{ update.category }}</a>
+      {% endif %}
     {% endif %}
   </div>
 </article>
