@@ -17,7 +17,6 @@ from wagtail.contrib.table_block.blocks import TableBlock
 
 from fec import constants
 
-
 stream_factory = functools.partial(
     StreamField,
     [

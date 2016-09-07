@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from itertools import chain
+from operator import attrgetter
 from home.models import DigestPage
 from home.models import RecordPage
 from home.models import PressReleasePage
@@ -27,7 +28,11 @@ def updates(request):
 
     # Chain all the QuerySets together
     # via http://stackoverflow.com/a/434755/1864981
-    updates = list(chain(digests, records, press_releases))
+    updates = sorted(
+      chain(press_releases, digests, records),
+      key=attrgetter('date'),
+      reverse=True
+    )
 
     # Filter out any that don't match the category
     if categories:
