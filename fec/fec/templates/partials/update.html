@@ -3,7 +3,7 @@
 <article class="post">
   <div class="post__pre">
     <span class="u-float-left">{{ update.date|date:'F j, Y' }}</span>
-    <span class="u-float-right">From: press office</span>
+    <span class="u-float-right">From: {% if update.get_update_type == 'FEC Record' %}Information division{% else %}Press office{% endif %}</span>
   </div>
   <h3><a href="{{ update.url }}">{{ update.title }}</a></h3>
   {% if update.get_update_type != 'Weekly digest' %}
