@@ -6,6 +6,12 @@ from home.models import DigestPage
 from home.models import RecordPage
 from home.models import PressReleasePage
 
+def replace_dash(string):
+  return string.replace('-', ' ')
+
+def replace_space(string):
+  return string.replace(' ', '-')
+
 def updates(request):
     digests = ''
     records = ''
@@ -14,22 +20,25 @@ def updates(request):
 
     # Get values from query
     update_types = request.GET.getlist('update_type', None)
-    category = request.GET.get('category', '')
+    category_list = request.GET.getlist('category', '')
     year = request.GET.get('year', '')
 
-    category = category.replace('-', ' ')
+    category_list = list(map(replace_dash, category_list))
+
     # If there's a query, only get the types in the query
     if update_types:
       if 'fec-record' in update_types:
         records = RecordPage.objects.all()
-        if category:
-          records = records.filter(category=category)
+        if category_list:
+          for category in category_list:
+            records = records.filter(category=category)
         if year:
           records = records.filter(date__year=year)
       if 'press-release' in update_types:
         press_releases = PressReleasePage.objects.all()
-        if category:
-          press_releases = press_releases.filter(category=category)
+        if category_list:
+          for category in category_list:
+            press_releases = press_releases.filter(category=category)
         if year:
           press_releases = press_releases.filter(date__year=year)
       if 'weekly-digest' in update_types:
@@ -70,11 +79,11 @@ def updates(request):
       'title': 'Latest updates',
     }
 
-    category = category.replace(' ', '-')
+    category_list = list(map(replace_space, category_list))
 
     return render(request, 'home/latest_updates.html', {
         'page_context': page_context,
-        'category': category,
+        'category_list': category_list,
         'update_types': update_types,
         'updates': updates,
         'year': year

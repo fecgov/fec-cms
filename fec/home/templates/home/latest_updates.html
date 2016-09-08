@@ -18,37 +18,43 @@
   <div class="filters--horizontal">
     <form action="/updates" class="js-form-nav container">
         <div class="filter">
-          <label class="label" for="publication-type">Publication type</label>
-          <select id="publication-type" name="update_type" class="js-type">
-            <option value="">All</option>
-            <optgroup label="For media professionals">
-              <option value="press-release" {% if 'press-release' in update_types %}selected{% endif %}>Press releases</option>
-              <option value="weekly-digest" {% if 'weekly-digest' in update_types %}selected{% endif %}>Weekly digest</option>
-            </optgroup>
-            <optgroup label="For filers">
-              <option value="fec-record" {% if 'fec-record' in update_types %}selected{% endif %}>FEC Record</option>
-            </optgroup>
-          </select>
+          <fieldset>
+            <legend class="label">For media professionals</legend>
+              <input id="press-release-checkbox" type="checkbox" name="update_type" value="press-release" {% if 'press-release' in update_types %}checked{% endif %}>
+              <label for="press-release-checkbox">Press release</label>
+              <input id="digest-checkbox" type="checkbox" name="update_type" value="weekly-digest" {% if 'weekly-digest' in update_types %}checked{% endif %}>
+              <label for="digest-checkbox">Weekly digest</label>
+            </fieldset>
+            <fieldset>
+              <legend class="label">For committees</legend>
+              <input id="record-checkbox" type="checkbox" name="update_type" value="fec-record" {% if 'fec-record' in update_types %}checked{% endif %}>
+              <label for="record-checkbox">FEC Record</label>
+          </fieldset>
         </div>
         {% if 'fec-record' in update_types or 'press-release' in update_types %}
           <div class="filter">
-            <label class="label" for="categoryes">Subject</label>
-            <select id="record-categories" name="category">
-              <option value="">All</option>
-              {% if 'fec-record' in update_types %}
+            {% if 'press-release' in update_types %}
+              <label class="label" for="record-categories">Press release subjects</label>
+              <select id="record-categories" name="category">
+                <option value="">All</option>
+                {% for cat in settings.CONSTANTS.press_release_page_categories.items %}
+                  <option value="{{ cat.0 | slugify }}"
+                    {% if cat.0|slugify in category_list %}selected{% endif %}>
+                    {{ cat.1 }}</option>
+                {% endfor %}
+              </select>
+            {% endif %}
+            {% if 'fec-record' in update_types %}
+              <label class="label" for="release-categories">FEC Record subjects</label>
+              <select id="release-categories" name="category">
+                <option value="">All</option>
                 {% for cat in settings.CONSTANTS.record_page_categories.items %}
                   <option value="{{ cat.0 | slugify }}"
                     {% if cat.0|slugify == category %}selected{% endif %}>
                     {{ cat.1 }}</option>
                 {% endfor %}
-              {% elif 'press-release' in update_types %}
-                {% for cat in settings.CONSTANTS.press_release_page_categories.items %}
-                  <option value="{{ cat.0 | slugify }}"
-                    {% if cat.0|slugify == category %}selected{% endif %}>
-                    {{ cat.1 }}</option>
-                {% endfor %}
-              {% endif %}
-          </select>
+              </select>
+            {% endif %}
         </div>
         {% endif %}
         <div class="filter">
@@ -65,11 +71,11 @@
       {% for update in updates %}
         {% include 'partials/update.html' with update=update %}
       {% endfor %}
-      <div class="row">
+      <div class="results-info">
+        <span>Page {{ updates.number }} of {{ updates.paginator.num_pages }}</span>
         {% if updates.has_previous %}
             <a class="button button--standard button--previous" href="?page={{ updates.previous_page_number }}{% for key,value in request.GET.items %}{% ifnotequal key 'page' %}&amp;{{ key }}={{ value }}{% endifnotequal %}{% endfor %}"><span class="u-visually-hidden">Previous</span></a>
         {% endif %}
-      <span>Page {{ updates.number }} of {{ updates.paginator.num_pages }}</span>
         {% if updates.has_next %}
             <a class="button button--standard button--next" href="?page={{ updates.next_page_number }}{% for key,value in request.GET.items %}{% ifnotequal key 'page' %}&amp;{{ key }}={{ value }}{% endifnotequal %}{% endfor %}"><span class="u-visually-hidden">Next</span></a>
         {% endif %}
