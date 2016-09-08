@@ -201,7 +201,7 @@ class DigestPage(ContentPage):
 
     @property
     def get_update_type(self):
-        return 'Weekly digest'
+        return 'Weekly Digest'
 
 
 class PressReleasePageAuthors(Orderable, PageAuthors):
