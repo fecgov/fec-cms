@@ -31,8 +31,8 @@
               <label for="record-checkbox">FEC Record</label>
           </fieldset>
         </div>
-        {% if 'fec-record' in update_types or 'press-release' in update_types %}
           <div class="filter">
+          {% if 'fec-record' in update_types or 'press-release' in update_types %}
             {% if 'press-release' in update_types %}
               <label class="label" for="record-categories">Press release subjects</label>
               <select id="record-categories" name="category">
@@ -55,8 +55,13 @@
                 {% endfor %}
               </select>
             {% endif %}
+           {% else %}
+            <label class="label" for="empty-select">Subjects</label>
+            <select id="empty-select" name="category" disabled>
+              <option value="">All</option>
+            </select>
+          {% endif %}
         </div>
-        {% endif %}
         <div class="filter">
           <div class="combo combo--filter--mini">
             <label for="year" class="label">Year</label>
