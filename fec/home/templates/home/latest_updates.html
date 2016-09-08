@@ -18,7 +18,16 @@
   <div class="filters--horizontal">
     <form action="/updates" class="js-form-nav container">
         <div class="filter">
-          <fieldset>
+          <label class="label">Publication type</label>
+          <select name="update_type">
+            <option value="">All</option>
+            <option value="for-media" {% if 'for-media' in update_types %}selected{% endif %}>For media professionals:</option>
+            <option value="press-release" {% if 'press-release' in update_types %}selected{% endif %}>- Press releases</option>
+            <option value="weekly-digest" {% if 'weekly-digest' in update_types %}selected{% endif %}>- Weekly Digest</option>
+            <option value="for-committees" {% if 'for-committees' in update_types %}selected{% endif %}>For committees:</option>
+            <option value="fec-record" {% if 'fec-record' in update_types %}selected{% endif %}>- FEC Record</option>
+          </select>
+<!--           <fieldset>
             <legend class="label">For media professionals</legend>
               <input id="press-release-checkbox" type="checkbox" name="update_type" value="press-release" {% if 'press-release' in update_types %}checked{% endif %}>
               <label for="press-release-checkbox">Press release</label>
@@ -29,11 +38,10 @@
               <legend class="label">For committees</legend>
               <input id="record-checkbox" type="checkbox" name="update_type" value="fec-record" {% if 'fec-record' in update_types %}checked{% endif %}>
               <label for="record-checkbox">FEC Record</label>
-          </fieldset>
+          </fieldset> -->
         </div>
           <div class="filter">
-          {% if 'fec-record' in update_types or 'press-release' in update_types %}
-            {% if 'press-release' in update_types %}
+            {% if 'press-release' in update_types or 'for-media' in update_types %}
               <label class="label" for="record-categories">Press release subjects</label>
               <select id="record-categories" name="category">
                 <option value="">All</option>
@@ -43,8 +51,7 @@
                     {{ cat.1 }}</option>
                 {% endfor %}
               </select>
-            {% endif %}
-            {% if 'fec-record' in update_types %}
+            {% elif 'fec-record' in update_types or 'for-committees' in update_types %}
               <label class="label" for="release-categories">FEC Record subjects</label>
               <select id="release-categories" name="category">
                 <option value="">All</option>
@@ -54,13 +61,12 @@
                     {{ cat.1 }}</option>
                 {% endfor %}
               </select>
-            {% endif %}
-           {% else %}
+            {% else %}
             <label class="label" for="empty-select">Subjects</label>
             <select id="empty-select" name="category" disabled>
               <option value="">All</option>
             </select>
-          {% endif %}
+            {% endif %}
         </div>
         <div class="filter">
           <div class="combo combo--filter--mini">

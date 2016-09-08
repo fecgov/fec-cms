@@ -12,6 +12,30 @@ def replace_dash(string):
 def replace_space(string):
   return string.replace(' ', '-')
 
+def get_records(category_list=False, year=False):
+  records = RecordPage.objects.all()
+  if category_list != '':
+    for category in category_list:
+      records = records.filter(category=category)
+  if year != '':
+    records = records.filter(date__year=year)
+  return records
+
+def get_digests(year=False):
+  digests = DigestPage.objects.all()
+  if year != '':
+    digests = digests.filter(date__year=year)
+  return digests
+
+def get_press_releases(category_list=False, year=False):
+  press_releases = PressReleasePage.objects.all()
+  if category_list:
+    for category in category_list:
+      press_releases = press_releases.filter(category=category)
+  if year:
+    press_releases = press_releases.filter(date__year=year)
+  return press_releases
+
 def updates(request):
     digests = ''
     records = ''
@@ -27,24 +51,17 @@ def updates(request):
 
     # If there's a query, only get the types in the query
     if update_types:
+      if 'for-media' in update_types:
+        press_releases = get_press_releases(category_list=category_list, year=year)
+        records = get_records(category_list=category_list, year=year)
+      if 'for-committees' in update_types:
+        records = get_records(category_list=category_list, year=year)
       if 'fec-record' in update_types:
-        records = RecordPage.objects.all()
-        if category_list:
-          for category in category_list:
-            records = records.filter(category=category)
-        if year:
-          records = records.filter(date__year=year)
+        records = get_records(category_list=category_list, year=year)
       if 'press-release' in update_types:
-        press_releases = PressReleasePage.objects.all()
-        if category_list:
-          for category in category_list:
-            press_releases = press_releases.filter(category=category)
-        if year:
-          press_releases = press_releases.filter(date__year=year)
+        press_releases = get_press_releases(category_list=category_list, year=year)
       if 'weekly-digest' in update_types:
-        digests = DigestPage.objects.all()
-        if year:
-          digests = digests.filter(date__year=year)
+        digests = get_digests(year=year)
 
     else:
       # Get everything and filter by year if necessary
