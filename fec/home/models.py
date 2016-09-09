@@ -172,7 +172,7 @@ class RecordPage(ContentPage):
 
     @property
     def get_update_type(self):
-        return 'FEC Record'
+        return constants.update_types['fec-record']
 
 
 class DigestPageAuthors(Orderable, PageAuthors):
@@ -201,7 +201,7 @@ class DigestPage(ContentPage):
 
     @property
     def get_update_type(self):
-        return 'Weekly Digest'
+        return constants.update_types['weekly-digest']
 
 
 class PressReleasePageAuthors(Orderable, PageAuthors):
@@ -233,7 +233,7 @@ class PressReleasePage(ContentPage):
 
     @property
     def get_update_type(self):
-        return 'Press release'
+        return constants.update_types['press-release']
 
 
 class CustomPage(Page):
