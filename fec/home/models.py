@@ -272,3 +272,39 @@ class PressLandingPage(Page):
         StreamFieldPanel('option_blocks'),
     ]
 
+class CollectionList(blocks.StructBlock):
+    CHECKLIST = 'check'
+    BULLET = 'bullet'
+    STYLE_CHOICES =([
+        (CHECKLIST, 'Checklist'),
+        (BULLET, 'Bulleted list')
+    ])
+    title = blocks.CharBlock(required=True)
+    style = blocks.ChoiceBlock(default=BULLET, choices=STYLE_CHOICES)
+    intro = blocks.RichTextBlock(blank=False, null=False, required=False)
+    items = blocks.ListBlock(blocks.RichTextBlock(classname="nothing"))
+
+
+class CollectionPage(Page):
+    body = stream_factory(null=True, blank=True)
+    sidebar_title = models.CharField(max_length=255, null=True, blank=True)
+
+    related_pages = StreamField([
+        ('related_pages', blocks.ListBlock(blocks.PageChooserBlock()))
+    ], null=True, blank=True)
+    sections = StreamField([
+        ('section', CollectionList())
+    ])
+    show_search = models.BooleanField(max_length=255, default=False,
+                                    null=False, blank=False,
+                                    choices=[
+                                        (True, 'Show committee search box'),
+                                        (False, 'Do not show committee search box')
+                                    ])
+    content_panels =  Page.content_panels + [
+        StreamFieldPanel('body'),
+        FieldPanel('sidebar_title'),
+        FieldPanel('show_search'),
+        StreamFieldPanel('related_pages'),
+        StreamFieldPanel('sections'),
+    ]
