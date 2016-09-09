@@ -65,11 +65,11 @@
       <div class="main__content--right">
         {% for block in self.sections %}
           <section id="{{ block.value.title | slugify }}"
-                  class="option {{ block.value.style }}">
+                  class="option">
             <div class="option__content">
               <h2>{{ block.value.title }}</h2>
               {{ block.value.intro }}
-              <ul class="{{ block.value.style }} t-sans">
+              <ul class="{% if block.value.style == 'check' %}list--checks list--checks--secondary{% else %}list--bulleted{% endif %} t-sans">
               {% for item in block.value.items %}
                  <li>{{ item }}</li>
               {% endfor %}
