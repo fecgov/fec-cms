@@ -10,4 +10,4 @@ def clean_whitespace(value):
 
 @register.filter
 def lookup(dict, arg):
-  return dict[arg]
+  return dict.get(arg, '')
