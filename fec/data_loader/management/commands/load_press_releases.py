@@ -35,16 +35,16 @@ def add_page(item, p):
     title = item['title'][:255]
     # validate
     category = escape(item['category'])
-    # x for debugging
-    slug = slugify(str(item_year) + 'x' + category + 'x' + title)[:225]
+    slug = slugify(str(item_year) + '-' + category + '-' + title)[:225]
     url_path = "/home/media/" + slug + "/"
     body_string = escape(item['html'])
-    formatted_body = json.dumps([{"value": escape(item['html']), "type": "html"}])
+    body_list = [{"value": escape(item['html']), "type": "html"}]
+    formatted_body = json.dumps(body_list)
 
     press_page = prp(
         depth=4,
         numchild=0,
-        title=item['title'],
+        title=title,
         slug=slug,
         live=1,
         has_unpublished_changes='0',
@@ -62,9 +62,11 @@ def add_page(item, p):
         path=wag_path,
     )
     press_page.save()
-    press_page.body = formatted_body
-    press_page.save()
     print(press_page.id)
+    saved_page = prp.objects.get(slug=slug)
+    saved_page.body = formatted_body
+    saved_page.save()
+
     print(url_path)
 
     return p + 1
@@ -73,9 +75,10 @@ def add_page(item, p):
 def load_press_releases_from_json():
     """Loops through json files and adds them to wagtail"""
     # every 4 numbers are the identifiers for the parent page, the last 4 need to be unique
-    p = int('00010001000627000')
+    p = int('0001000100063709')
 
     paths = sorted(glob.glob('data_loader/data/pr_json/' + '*.json'))
+
     for path in paths:
         with open(path, 'r') as json_contents:
             contents = json.load(json_contents)
