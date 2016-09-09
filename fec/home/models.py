@@ -241,12 +241,14 @@ class CustomPage(Page):
     ]
 
 class CollectionList(blocks.StructBlock):
+    CHECKLIST = 'check'
+    BULLET = 'bullet'
+    STYLE_CHOICES =([
+        (CHECKLIST, 'Checklist'),
+        (BULLET, 'Bulleted list')
+    ])
     title = blocks.CharBlock(required=True)
-    style = blocks.ChoiceBlock(default='bullet',
-        choices=[
-            ('check', 'Checklist'),
-            ('bullet', 'Bulleted list')
-        ])
+    style = blocks.ChoiceBlock(default=BULLET, choices=STYLE_CHOICES)
     intro = blocks.RichTextBlock(blank=False, null=False, required=False)
     items = blocks.ListBlock(blocks.RichTextBlock(classname="nothing"))
 
