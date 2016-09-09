@@ -13,3 +13,7 @@ wagtail>=1.5,<1.6
 # Development
 invoke==0.10.1
 GitPython==1.0.1
+
+# Data import
+unicode-slugify==0.1.3
+python-dateutil==2.5.3
