@@ -78,25 +78,23 @@ def add_page(item, p):
         locked=0,
         latest_revision_created_at=latest_revision_created_at,
         first_published_at=publish_date,
-        # would like to change later
-        category=category,
         path=wag_path,
     )
-    try:
-        press_page.save()
-        print(press_page.id)
-        # it needs to be saved and re-opened
-        saved_page = prp.objects.get(slug=slug)
-        saved_page.body = formatted_body
-        saved_page.save()
-
-        logger.info(url_path)
-        print(url_path)
-
-        return p + 1
-    except:
-        logger.error('Error importing {0} {1}'.format(item_year, item['title']))
-        print('Error importing {0} {1}'.format(item_year, item['title']))
+    # try:
+    press_page.save()
+    logger(press_page.id)
+    # it needs to be saved and re-opened
+    saved_page = prp.objects.get(slug=slug)
+    saved_page.category = category
+    saved_page.body = formatted_body
+    saved_page.save()
+    logger.info(url_path)
+    logger(url_path)
+    return p + 1
+    # except:
+    #     logger.error('Error importing {0} {1}'.format(item_year, item['title']))
+    #     logger.error(press_page)
+    #     print('Error importing {0} {1}'.format(item_year, item['title']))
 
 
 def load_press_releases_from_json():
@@ -106,7 +104,7 @@ def load_press_releases_from_json():
     p = int('0001000300410000')
 
     paths = sorted(glob.glob('data_loader/data/pr_json/' + '*.json'))
-
+    logger("starting")
     for path in paths:
         with open(path, 'r') as json_contents:
             contents = json.load(json_contents)
