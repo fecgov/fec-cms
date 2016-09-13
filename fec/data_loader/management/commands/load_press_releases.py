@@ -54,7 +54,7 @@ def add_page(item, base_page):
     item_year = parser.parse(item['date']).year
     title = item['title'][:255]
     category = validate_category(item['category'])
-    slug = slugify(str(item_year) + '-' + category + '-' + title + '-1')[:225]
+    slug = slugify(str(item_year) + '-' + category + '-' + title)[:225]
     url_path = "/home/media/" + slug + "/"
     body_list = [{"value": escape(item['html']), "type": "html"}]
     formatted_body = json.dumps(body_list)
@@ -65,7 +65,6 @@ def add_page(item, base_page):
         depth=4,
         numchild=0,
         title=title,
-        slug=slug,
         live=1,
         has_unpublished_changes='0',
         url_path=url_path,
@@ -78,32 +77,31 @@ def add_page(item, base_page):
         locked=0,
         latest_revision_created_at=latest_revision_created_at,
         first_published_at=publish_date,
-        # path=wag_path,
     )
 
-    # press_page.save()
-    # saved_page = prp.objects.get(slug=slug)
-    logger.info("About to save...")
     base_page.add_child(instance=press_page)
     logger.info(press_page.id)
     saved_page = prp.objects.get(id=press_page.id)
     saved_page.body = formatted_body
     saved_page.save()
-    logger.info("Saved!")
     logger.info(saved_page.id)
     logger.info(url_path)
 
 
 def load_press_releases_from_json():
     """Loops through json files and adds them to wagtail"""
-    # Base Page that the pages are children of
+    # Base Page that the pages you are adding belong to
     base_page = Page.objects.get(url_path='/home/media/')
 
     paths = sorted(glob.glob('data_loader/data/pr_json/' + '*.json'))
     logger.info("starting")
     for path in paths:
         with open(path, 'r') as json_contents:
+            logger.info(path)
             contents = json.load(json_contents)
+            if contents['title'] is None or contents['title'].isspace():
+                # this seems to be the case for the PR docs
+                contents['title'] = contents['category']
             add_page(contents, base_page)
 
 
@@ -118,5 +116,6 @@ Clean up notes:
 
 remove <img src="../../../jpg/topfec.jpg" border="0" alt="FEC Home Page" width="81" height="81"/>
 
+Remove fonts
 
 """
