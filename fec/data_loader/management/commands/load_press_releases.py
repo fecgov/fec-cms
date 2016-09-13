@@ -8,6 +8,7 @@ from dateutil import parser
 from slugify import slugify
 
 from home.models import PressReleasePage as prp
+from home.models import Page
 
 from django.core.management import BaseCommand
 
@@ -26,7 +27,6 @@ def get_full_path(*path):
 
 def escape(text):
     escape_single = text.replace("'", "''")
-    # escape_double = escape_single.replace('"', '\"')
     return escape_single
 
 def validate_category(name):
@@ -44,23 +44,22 @@ def validate_category(name):
         "rulemakings",
         "other agency actions",
     ]:
-        return name
+        return name.lower()
     else:
         print(name)
-        return ""
+        return "other agency actions"
 
 
-def add_page(item, p):
-    latest_revision_created_at = datetime.now().strftime('%Y-%m-%d 00:00:00.000000')
-    publish_date = parser.parse(item['date']).strftime('%Y-%m-%d 00:00:00.000000')
+def add_page(item, base_page):
     item_year = parser.parse(item['date']).year
-    wag_path = "000" + str(p)
     title = item['title'][:255]
     category = validate_category(item['category'])
-    slug = slugify(str(item_year) + '-' + category + '-' + title)[:225]
+    slug = slugify(str(item_year) + '-' + category + '-' + title + '-1')[:225]
     url_path = "/home/media/" + slug + "/"
     body_list = [{"value": escape(item['html']), "type": "html"}]
     formatted_body = json.dumps(body_list)
+    latest_revision_created_at = datetime.now().strftime('%Y-%m-%d 00:00:00.000000')
+    publish_date = parser.parse(item['date']).strftime('%Y-%m-%d 00:00:00.000000')
 
     press_page = prp(
         depth=4,
@@ -73,42 +72,39 @@ def add_page(item, p):
         seo_title=title,
         show_in_menus=0,
         search_description=title,
+        category=category,
         expired=0,
         owner_id=1,
         locked=0,
         latest_revision_created_at=latest_revision_created_at,
         first_published_at=publish_date,
-        path=wag_path,
+        # path=wag_path,
     )
-    # try:
-    press_page.save()
-    logger(press_page.id)
-    # it needs to be saved and re-opened
-    saved_page = prp.objects.get(slug=slug)
-    saved_page.category = category
+
+    # press_page.save()
+    # saved_page = prp.objects.get(slug=slug)
+    logger.info("About to save...")
+    base_page.add_child(instance=press_page)
+    logger.info(press_page.id)
+    saved_page = prp.objects.get(id=press_page.id)
     saved_page.body = formatted_body
     saved_page.save()
+    logger.info("Saved!")
+    logger.info(saved_page.id)
     logger.info(url_path)
-    logger(url_path)
-    return p + 1
-    # except:
-    #     logger.error('Error importing {0} {1}'.format(item_year, item['title']))
-    #     logger.error(press_page)
-    #     print('Error importing {0} {1}'.format(item_year, item['title']))
 
 
 def load_press_releases_from_json():
     """Loops through json files and adds them to wagtail"""
-    # every 4 numbers are the identifiers for the parent page, the last 4 need to be unique
-    # staging  home is page 3 media page is  41
-    p = int('0001000300410000')
+    # Base Page that the pages are children of
+    base_page = Page.objects.get(url_path='/home/media/')
 
     paths = sorted(glob.glob('data_loader/data/pr_json/' + '*.json'))
-    logger("starting")
+    logger.info("starting")
     for path in paths:
         with open(path, 'r') as json_contents:
             contents = json.load(json_contents)
-            p = add_page(contents, p)
+            add_page(contents, base_page)
 
 
 class Command(BaseCommand):
