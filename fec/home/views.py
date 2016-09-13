@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.conf import settings
 from itertools import chain
 from operator import attrgetter
 from home.models import DigestPage
@@ -37,6 +38,8 @@ def get_press_releases(category_list=False, year=False):
   return press_releases
 
 def updates(request):
+  # Only render view if the user is authenticated or there's a feature flag
+  if request.user.is_authenticated() or settings.FEATURES['latest_updates']:
     digests = ''
     records = ''
     press_releases = ''
@@ -105,3 +108,7 @@ def updates(request):
         'updates': updates,
         'year': year
     })
+
+  # If not authenticated or no feature flag, show 404
+  else:
+    return render(request, '404.html')
