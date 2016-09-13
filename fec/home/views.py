@@ -53,7 +53,7 @@ def updates(request):
     if update_types:
       if 'for-media' in update_types:
         press_releases = get_press_releases(category_list=category_list, year=year)
-        records = get_records(category_list=category_list, year=year)
+        digests = get_digests(year=year)
       if 'for-committees' in update_types:
         records = get_records(category_list=category_list, year=year)
       if 'fec-record' in update_types:
