@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.conf import settings
 from itertools import chain
 from operator import attrgetter
 from home.models import DigestPage
@@ -37,6 +38,11 @@ def get_press_releases(category_list=False, year=False):
   return press_releases
 
 def updates(request):
+  # Only render view if the user is authenticated or there's a feature flag
+  if not (request.user.is_authenticated() or settings.FEATURES['latest_updates']):
+    return render(request, '404.html')
+
+  else:
     digests = ''
     records = ''
     press_releases = ''
@@ -53,7 +59,7 @@ def updates(request):
     if update_types:
       if 'for-media' in update_types:
         press_releases = get_press_releases(category_list=category_list, year=year)
-        records = get_records(category_list=category_list, year=year)
+        digests = get_digests(year=year)
       if 'for-committees' in update_types:
         records = get_records(category_list=category_list, year=year)
       if 'fec-record' in update_types:

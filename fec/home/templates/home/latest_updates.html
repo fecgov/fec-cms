@@ -26,8 +26,6 @@
             <option value="for-media" {% if 'for-media' in update_types %}selected{% endif %}>For media professionals:</option>
             <option value="press-release" {% if 'press-release' in update_types %}selected{% endif %}>- Press releases</option>
             <option value="weekly-digest" {% if 'weekly-digest' in update_types %}selected{% endif %}>- Weekly Digest</option>
-            <option value="for-committees" {% if 'for-committees' in update_types %}selected{% endif %}>For committees:</option>
-            <option value="fec-record" {% if 'fec-record' in update_types %}selected{% endif %}>- FEC Record</option>
           </select>
         </div>
           <div class="filter">
@@ -38,16 +36,6 @@
                 {% for cat in settings.CONSTANTS.press_release_page_categories.items %}
                   <option value="{{ cat.0 | slugify }}"
                     {% if cat.0|slugify in category_list %}selected{% endif %}>
-                    {{ cat.1 }}</option>
-                {% endfor %}
-              </select>
-            {% elif 'fec-record' in update_types or 'for-committees' in update_types %}
-              <label class="label" for="release-categories">FEC Record subjects</label>
-              <select id="release-categories" name="category">
-                <option value="">All</option>
-                {% for cat in settings.CONSTANTS.record_page_categories.items %}
-                  <option value="{{ cat.0 | slugify }}"
-                    {% if cat.0|slugify == category %}selected{% endif %}>
                     {{ cat.1 }}</option>
                 {% endfor %}
               </select>
