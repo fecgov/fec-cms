@@ -89,3 +89,43 @@ states = OrderedDict([
     ('WV', 'West Virginia'),
     ('WY', 'Wyoming'),
 ])
+
+author_roles = OrderedDict([
+    ('author', 'Author'),
+    ('writer', 'Written by'),
+    ('graphics', 'Graphics by'),
+    ('contact', 'Contact'),
+])
+
+record_page_categories = OrderedDict((x.lower(), x) for x in [
+    "Advisory opinions",
+    "Commission",
+    "Compliance",
+    "Litigation",
+    "Outreach",
+    "Public funding",
+    "Regulations",
+    "Reporting",
+    "Statistics",
+])
+
+press_release_page_categories = OrderedDict((x.lower(), x) for x in [
+    "Audit reports",
+    "Campaign finance data summaries",
+    "Commission appointments",
+    "Disclosure initiatives",
+    "Enforcement matters",
+    "Hearings",
+    "Litigation",
+    "Non-filer publications",
+    "Open meetings and related matters",
+    "Presidential public funds",
+    "Rulemakings",
+    "Other agency actions",
+])
+
+update_types = OrderedDict([
+    ("press-release", "Press release"),
+    ("fec-record", "FEC Record"),
+    ("weekly-digest", "Weekly Digest")
+])
