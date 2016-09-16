@@ -6,26 +6,28 @@ import logging
 from dateutil import parser
 from slugify import slugify
 
-from django.utils import timezone
 from django.core.management import BaseCommand
 
-from home.models import PressReleasePage as prp
+from home.models import DigestPage as dp
 from home.models import Page
 
 
 #### move to a another file
 def strip_cruft(body):
+
     replacements = [
         # deletions - these are from the header and we don't need them as part of the content
         ('<body bgcolor="#FFFFFF">', ''),
-        ('News Releases, Media Advisories<br/>', ''),
         ('<a href="http://www.fec.gov"><img src="../jpg/topfec.jpg" border="0" width="81" height="81" alt="FEC Home Page"/></a> </p>', ''),
         ("""width="100%""""", ''),
+        ('width="57"', ''),
         ("""width="187""""", ''),
-        ("""<h1>News Releases</h1>""", ''),
+        ('<h1><a name="content"/> Weekly Digest </h1>', ''),
+        ("<h1 class=\"style1\">Weekly Digest </h1>", ''),
+        ('<h1>FEC Digest </h1>', ''),
         # replacements
-        ("""<p align="right"><b>Contact:</b></p>""",  """<p><b>Contact:</b></p>"""),
-        ('Contact:', 'Contact: '),
+        ("""<p align="right"><b>Contact:</b></p>""", """<p><b>Contact:</b></p>"""),
+        ('Contact:', 'Contact:  '),
         # neutering font for now will replace later
         ('face="Book Antiqua"', ''),
         (' size="1"', ''),
@@ -38,6 +40,8 @@ def strip_cruft(body):
         ('<p><a href="/">HOME</a> / <a href="/press/press.shtml">PRESS OFFICE</a><br/>', ''),
         ('News Releases, Media Advisories<br/>', ''),
         ('<a href="http://www.fec.gov"><img src="../jpg/topfec.jpg" border="0" width="81" height="81"/></a>', ''),
+        ('<td width="3%" valign="top"><div align="center"><img width="16" vspace="0" hspace="0" height="16" align="default" alt="PDF" src="../../../images/filetype-pdf.gif"/> </div></td>', ''),
+        ('<img width="16" vspace="0" hspace="0" height="16" align="default" alt="PDF" src="../../../images/filetype-pdf.gif"/>', ''),
         ('<img src="../../../images/filetype-pdf.gif" alt="PDF" width="16" height="16" hspace="0" vspace="0" align="default"/>', ''),
         ('<a href="http://www.fec.gov"><img src="../jpg/topfec.jpg" border="0" width="81" height="81" alt="FEC Seal Linking to FEC.GOV"/></a>', ''),
         ('<img src="../../jpg/topfec.jpg" border="0" alt="FEC Home Page" width="81" height="81"/></a>', ''),
@@ -46,7 +50,7 @@ def strip_cruft(body):
         ('<img src="../jpg/topfec.jpg" border="0" width="81" height="81"/>', ''),
         ('<img src="/jpg/topfec.jpg" ismap="ismap" border="0"/>', ''),
         # we got an ok to not have redundant content
-        ('.pdf version of this news release', ''),
+        ('.pdf version of this Weekly Digest', ''),
         ('bgcolor="#FFFFFF"', ''),
         ('color="#000000"', ''),
         ('text="#000000"', ''),
@@ -56,6 +60,8 @@ def strip_cruft(body):
         # In the 80s, they used pre to get spacing, but that kills the font in a bad way, I am adding some inline styling to perserve the spaces. It isn't perfect, but it is better.
         ('<pre>', '<div style="white-space: pre-wrap;">'),
         ('</pre>', '</div>'),
+        ('<p><u/></p>', ''),
+        ('<td height="25">', '<td>'),
     ]
     for old, new in replacements:
         body = str.replace(body, old, new)
@@ -83,31 +89,10 @@ def escape(text):
     return escape_single
 
 
-def validate_category(name):
-    if name.lower() in [
-        "audit reports",
-        "campaign finance data summaries",
-        "commission appointments",
-        "disclosure initiatives",
-        "enforcement matters",
-        "hearings",
-        "litigation",
-        "non-filer publications",
-        "open meetings and related matters",
-        "presidential public funds",
-        "rulemakings",
-        "other agency actions",
-    ]:
-        return name.lower()
-    else:
-        return "other agency actions"
-
-
 def add_page(item, base_page):
     item_year = parser.parse(item['date']).year
     title = item['title'][:255]
-    category = validate_category(item['category'])
-    slug = slugify(str(item_year) + '-' + category + '-' + title)[:225]
+    slug = slugify(str(item_year) + '-' + title)[:225]
     url_path = "/home/media/" + slug + "/"
 
     # we need to load multiple times get rid of previous loads
@@ -119,7 +104,7 @@ def add_page(item, base_page):
     formatted_body = json.dumps(body_list)
     publish_date = parser.parse(item['date'])
 
-    press_page = prp(
+    press_page = dp(
         depth=4,
         numchild=0,
         title=title,
@@ -129,48 +114,42 @@ def add_page(item, base_page):
         seo_title=title,
         show_in_menus=0,
         search_description=title,
-        category=category,
         expired=0,
         owner_id=1,
         locked=0,
         first_published_at=publish_date,
     )
 
-    if prp.objects.filter(path=url_path).count() > 0:
-        for p in prp.objects.filter(upath=url_path):
+    if dp.objects.filter(path=url_path).count() > 0:
+        for p in dp.objects.filter(upath=url_path):
             p.delete()
 
     base_page.add_child(instance=press_page)
-    saved_page = prp.objects.get(id=press_page.id)
+    saved_page = dp.objects.get(id=press_page.id)
     saved_page.body = formatted_body
     saved_page.first_published_at = publish_date
-    latest_revision_created_at= publish_date
     saved_page.created_at = publish_date
     saved_page.date = publish_date
     saved_page.save()
 
 
-def load_press_releases_from_json():
+def load_digest_from_json():
     """Loops through json files and adds them to wagtail"""
     # Base Page that the pages you are adding belong to
     base_page = Page.objects.get(url_path='/home/media/')
 
-    paths = sorted(glob.glob('data_loader/data/pr_json/' + '*.json'))
+    paths = sorted(glob.glob('data_loader/data/digest_json/' + '*.json'))
     logger.info("starting...")
+
     for path in paths:
-        print(path)
         with open(path, 'r') as json_contents:
             logger.info(path)
             contents = json.load(json_contents)
-            if contents['title'] is None or contents['title'].isspace():
-                # this seems to be the case for the PR docs
-                contents['title'] = contents['category']
-
             add_page(contents, base_page)
 
 
 class Command(BaseCommand):
-    help = "loads press releases from json"
+    help = "loads weekly digests from json"
 
     def handle(self, *args, **options):
-        load_press_releases_from_json()
+        load_digest_from_json()
