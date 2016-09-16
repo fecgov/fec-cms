@@ -11,11 +11,12 @@ register = template.Library()
 
 @register.inclusion_tag('partials/press-feed.html')
 def press_updates():
-    press_releases = PressReleasePage.objects.all()
-    digests = DigestPage.objects.all()
+    press_releases = PressReleasePage.objects.all().order_by('-date')[:5]
+    digests = DigestPage.objects.all().order_by('-date')[:2]
     updates = sorted(
       chain(press_releases, digests),
       key=attrgetter('date'),
       reverse=True
     )
+
     return {'updates': updates}
