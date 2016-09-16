@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+{% load wagtailcore_tags %}
+{% load staticfiles %}
+{% load filters %}
+
+{% block title %}Latest updates | FEC{% endblock %}
+
+{% block content %}
+
+{% include 'partials/breadcrumbs.html' with page=page_context style='secondary' %}
+<section class="content__section--extra">
+  <div class="container">
+    <h1>{{ page_context.title }}</h1>
+    <p class="p--lead">Search or browse the latest information on the Commission and federal campaign finance law.</p>
+    <p class="p--lead">Weekly Digests are published every Friday and summarize the week's publicly disclosed activity, including enforcement matters, litigation, meetings information and advisory opinion actions.</p>
+    <p class="p--lead">Press releases and FEC Record articles are published as news happens. Press releases are written for media professionals. Record articles are a written for political committees</p>
+  </div>
+</section>
+<section class="main__content--full data-container__wrapper">
+  <div class="filters--horizontal">
+    <form action="/updates" class="js-form-nav container">
+        <div class="filter">
+          <label class="label">Publication type</label>
+          <select name="update_type">
+            <option value="">All</option>
+            <option value="for-media" {% if 'for-media' in update_types %}selected{% endif %}>For media professionals:</option>
+            <option value="press-release" {% if 'press-release' in update_types %}selected{% endif %}>- Press releases</option>
+            <option value="weekly-digest" {% if 'weekly-digest' in update_types %}selected{% endif %}>- Weekly Digest</option>
+          </select>
+        </div>
+          <div class="filter">
+            {% if 'press-release' in update_types or 'for-media' in update_types %}
+              <label class="label" for="record-categories">Press release subjects</label>
+              <select id="record-categories" name="category">
+                <option value="">All</option>
+                {% for cat in settings.CONSTANTS.press_release_page_categories.items %}
+                  <option value="{{ cat.0 | slugify }}"
+                    {% if cat.0|slugify in category_list %}selected{% endif %}>
+                    {{ cat.1 }}</option>
+                {% endfor %}
+              </select>
+            {% else %}
+            <label class="label" for="empty-select">Subjects</label>
+            <select id="empty-select" name="category" disabled>
+              <option value="">All</option>
+            </select>
+            {% endif %}
+        </div>
+        <div class="filter">
+          <div class="combo combo--filter--mini">
+            <label for="year" class="label">Year</label>
+            <input id="year" class="combo__input" name="year" type="text" value="{{ year }}" placeholder="YYYY">
+            <button type="submit" class="combo__button button button--standard button--go"><span class="u-visually-hidden">Filter</span></button>
+          </div>
+        </div>
+    </form>
+  </div>
+  <div class="main">
+    <div class="container">
+      {% for update in updates %}
+        {% include 'partials/update.html' with update=update %}
+      {% endfor %}
+      <div class="results-info">
+        <span>Page {{ updates.number }} of {{ updates.paginator.num_pages }}</span>
+        {% if updates.has_previous %}
+            <a class="button button--standard button--previous" href="?page={{ updates.previous_page_number }}{% for key,value in request.GET.items %}{% ifnotequal key 'page' %}&amp;{{ key }}={{ value }}{% endifnotequal %}{% endfor %}"><span class="u-visually-hidden">Previous</span></a>
+        {% endif %}
+        {% if updates.has_next %}
+            <a class="button button--standard button--next" href="?page={{ updates.next_page_number }}{% for key,value in request.GET.items %}{% ifnotequal key 'page' %}&amp;{{ key }}={{ value }}{% endifnotequal %}{% endfor %}"><span class="u-visually-hidden">Next</span></a>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}
