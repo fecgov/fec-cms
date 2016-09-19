@@ -1,0 +1,11 @@
+.object .richtext.expanded {
+  padding: 0.9em 1.2em;
+}
+
+li.sequence-member .struct-block .sequence-container {
+  width: 83%;
+}
+
+li.sequence-member .sequence-member-inner .sequence-type-list .sequence-container-inner {
+  width: 100%;
+}

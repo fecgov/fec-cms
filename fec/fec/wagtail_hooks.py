@@ -11,11 +11,16 @@ def whitelister_element_rules():
 @hooks.register('insert_editor_js')
 def editor_js():
     return format_html('''
+        <script src="/static/js/vendor/jquery.htmlClean.min.js"></script>
+        <script src="/static/js/vendor/rangy-core.js"></script>
+        <script src="/static/js/vendor/rangy-selectionsaverestore.js"></script>
         <script src="/static/js/hallo-edit-html.js"></script>
+        <script src="/static/js/customize-editor.js"></script>
         <script src="/static/js-beautify/js/lib/beautify-html.js"></script>
         <script src="/static/ace-builds/src-noconflict/ace.js"></script>
         <script src="/static/ace-builds/src-noconflict/mode-html.js"></script>
         <script>
             registerHalloPlugin('editHtmlButton');
+            registerHalloPlugin('hallocleanhtml');
         </script>
     ''')
