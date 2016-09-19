@@ -8,4 +8,4 @@
         $toolbar.find('.halloreundo.ui-buttonset').remove();
       });
     })(jQuery);
-}).call(this);
+})(this);
