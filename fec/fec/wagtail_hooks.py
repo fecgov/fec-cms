@@ -24,3 +24,9 @@ def editor_js():
             registerHalloPlugin('hallocleanhtml');
         </script>
     ''')
+
+@hooks.register('insert_editor_css')
+def editor_css():
+    return format_html(
+        '<link rel="stylesheet" href="/static/css/customize-editor.css">'
+    )
