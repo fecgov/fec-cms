@@ -25,10 +25,12 @@ def strip_cruft(body):
         ('<h1><a name="content"/> Weekly Digest </h1>', ''),
         ("<h1 class=\"style1\">Weekly Digest </h1>", ''),
         ('<h1>FEC Digest </h1>', ''),
-        # replacements
+        ('<p><a href="/">HOME</a> / <a href="/press/press.shtml">PRESS OFFICE</a><br/>', ''),
+        ('News Releases, Media Advisories<br/>', ''),
+        # replacements to make things render better in the new context
         ("""<p align="right"><b>Contact:</b></p>""", """<p><b>Contact:</b></p>"""),
         ('Contact:', 'Contact:  '),
-        # neutering font for now will replace later
+        # neutering font for now
         ('face="Book Antiqua"', ''),
         (' size="1"', ''),
         (' size="2"', ''),
@@ -37,8 +39,7 @@ def strip_cruft(body):
         (' size="-1"', ''),
         (' size="-2"', ''),
         (' size="-3"', ''),
-        ('<p><a href="/">HOME</a> / <a href="/press/press.shtml">PRESS OFFICE</a><br/>', ''),
-        ('News Releases, Media Advisories<br/>', ''),
+        # old heading photo
         ('<a href="http://www.fec.gov"><img src="../jpg/topfec.jpg" border="0" width="81" height="81"/></a>', ''),
         ('<td width="3%" valign="top"><div align="center"><img width="16" vspace="0" hspace="0" height="16" align="default" alt="PDF" src="../../../images/filetype-pdf.gif"/> </div></td>', ''),
         ('<img width="16" vspace="0" hspace="0" height="16" align="default" alt="PDF" src="../../../images/filetype-pdf.gif"/>', ''),
@@ -50,6 +51,7 @@ def strip_cruft(body):
         ('<img src="../jpg/topfec.jpg" border="0" width="81" height="81"/>', ''),
         ('<img src="/jpg/topfec.jpg" ismap="ismap" border="0"/>', ''),
         # we got an ok to not have redundant content
+        (('<a href="\.\./pdf/[0-9]+digest.pdf">.pdf version of this Weekly Digest...a>'), ''),
         ('.pdf version of this Weekly Digest', ''),
         ('bgcolor="#FFFFFF"', ''),
         ('color="#000000"', ''),

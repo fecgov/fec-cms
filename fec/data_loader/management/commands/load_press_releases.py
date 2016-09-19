@@ -15,15 +15,17 @@ from home.models import Page
 
 #### move to a another file
 def strip_cruft(body):
+
     replacements = [
         # deletions - these are from the header and we don't need them as part of the content
         ('<body bgcolor="#FFFFFF">', ''),
-        ('News Releases, Media Advisories<br/>', ''),
         ('<a href="http://www.fec.gov"><img src="../jpg/topfec.jpg" border="0" width="81" height="81" alt="FEC Home Page"/></a> </p>', ''),
         ("""width="100%""""", ''),
         ("""width="187""""", ''),
-        ("""<h1>News Releases</h1>""", ''),
-        # replacements
+        ("border=\"0\"", ''),
+        # looked weird on the media landing page, still looks okay on the individual pages without it
+        ('<td height="82"', '<td'),
+        ('<td height="25">', '<td>'),
         ("""<p align="right"><b>Contact:</b></p>""",  """<p><b>Contact:</b></p>"""),
         ('Contact:', 'Contact: '),
         # neutering font for now will replace later
@@ -35,8 +37,10 @@ def strip_cruft(body):
         (' size="-1"', ''),
         (' size="-2"', ''),
         (' size="-3"', ''),
+        #photos from the old header
         ('<p><a href="/">HOME</a> / <a href="/press/press.shtml">PRESS OFFICE</a><br/>', ''),
         ('News Releases, Media Advisories<br/>', ''),
+        ('<h1>News Releases</h1>', ''),
         ('<a href="http://www.fec.gov"><img src="../jpg/topfec.jpg" border="0" width="81" height="81"/></a>', ''),
         ('<img src="../../../images/filetype-pdf.gif" alt="PDF" width="16" height="16" hspace="0" vspace="0" align="default"/>', ''),
         ('<a href="http://www.fec.gov"><img src="../jpg/topfec.jpg" border="0" width="81" height="81" alt="FEC Seal Linking to FEC.GOV"/></a>', ''),
@@ -46,7 +50,9 @@ def strip_cruft(body):
         ('<img src="../jpg/topfec.jpg" border="0" width="81" height="81"/>', ''),
         ('<img src="/jpg/topfec.jpg" ismap="ismap" border="0"/>', ''),
         # we got an ok to not have redundant content
+        ('(<a href="\.\./pdf/[0-9]+release.pdf">.pdf version of this news release...a>)', ''),
         ('.pdf version of this news release', ''),
+        # remove colors
         ('bgcolor="#FFFFFF"', ''),
         ('color="#000000"', ''),
         ('text="#000000"', ''),
