@@ -51,7 +51,7 @@ def strip_cruft(body):
         ('<img src="../jpg/topfec.jpg" border="0" width="81" height="81"/>', ''),
         ('<img src="/jpg/topfec.jpg" ismap="ismap" border="0"/>', ''),
         # we got an ok to not have redundant content
-        (('<a href="\.\./pdf/[0-9]+digest.pdf">.pdf version of this Weekly Digest...a>'), ''),
+        ('<a href="\.\./pdf/[0-9]+digest.pdf">.pdf version of this Weekly Digest...a>', ''),
         ('.pdf version of this Weekly Digest', ''),
         ('bgcolor="#FFFFFF"', ''),
         ('color="#000000"', ''),
@@ -59,11 +59,12 @@ def strip_cruft(body):
         ('link="#000099"', ''),
         ('vlink="#ff0000"', ''),
         ('alink="#FF0000">', ''),
-        # In the 80s, they used pre to get spacing, but that kills the font in a bad way, I am adding some inline styling to perserve the spaces. It isn't perfect, but it is better.
+        # In the 80s, they used pre to get spacing, but that kills the font in a bad way, I am adding some inline styling to preserve the spaces. It isn't perfect, but it is better.
         ('<pre>', '<div style="white-space: pre-wrap;">'),
         ('</pre>', '</div>'),
         ('<p><u/></p>', ''),
-        ('<td height="25">', '<td>'),
+        ('<p><strong><u/></strong></p>', ''),
+        ('height="[0-9]+"', ''),
     ]
     for old, new in replacements:
         body = str.replace(body, old, new)
@@ -119,12 +120,9 @@ def add_page(item, base_page):
         expired=0,
         owner_id=1,
         locked=0,
+        latest_revision_created_at=publish_date,
         first_published_at=publish_date,
     )
-
-    if dp.objects.filter(path=url_path).count() > 0:
-        for p in dp.objects.filter(upath=url_path):
-            p.delete()
 
     base_page.add_child(instance=press_page)
     saved_page = dp.objects.get(id=press_page.id)
