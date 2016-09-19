@@ -48,9 +48,12 @@ def strip_cruft(body):
         ('<a href="http://www.fec.gov"><font><img src="../jpg/topfec.jpg" border="0"/></font></a>', ''),
         ('<a href="http://www.fec.gov"><img src="../jpg/topfec.jpg" border="0"/>', ''),
         ('<img src="../jpg/topfec.jpg" border="0" width="81" height="81"/>', ''),
+        ('<img src="../jpg/topfec.jpg"  width="81" height="81"/>', ''),
         ('<img src="/jpg/topfec.jpg" ismap="ismap" border="0"/>', ''),
         # we got an ok to not have redundant content
         ('(<a href="\.\./pdf/[0-9]+release.pdf">.pdf version of this news release...a>)', ''),
+        ('(<a href="\.\./pdf/[0-9]+release.pdf">.pdf version...a>)', ''),
+        ('<a href="\.\./pdf/[0-9]+release.pdf">.pdf version</a>', ''),
         ('.pdf version of this news release', ''),
         # remove colors
         ('bgcolor="#FFFFFF"', ''),
