@@ -7,6 +7,7 @@ from wagtail.wagtailadmin import urls as wagtailadmin_urls
 from wagtail.wagtaildocs import urls as wagtaildocs_urls
 from wagtail.wagtailcore import urls as wagtail_urls
 
+from home import views as home_views
 from legal import views as legal_views
 from search import views as search_views
 
@@ -16,6 +17,8 @@ urlpatterns = [
 
     url(r'^admin/', include(wagtailadmin_urls)),
     url(r'^documents/', include(wagtaildocs_urls)),
+
+    url(r'^updates/$', home_views.updates),
 
     url(r'^search/$', search_views.search, name='search'),
     url(r'^legal-resources/$', legal_views.home, name='legal'),

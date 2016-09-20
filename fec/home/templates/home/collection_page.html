@@ -5,20 +5,7 @@
 
 {% block content %}
 
-<header class="page-header page-header--secondary">
-  <ul class="breadcrumbs">
-    <li class="breadcrumbs__item"><a href="/" class="breadcrumbs__link" rel="Home">Home</a></li>
-    <li class="breadcrumbs__item">
-      <span class="breadcrumbs__separator">›</span>
-      <a href="/registration-and-reporting" class="breadcrumbs__link">Registration and reporting</a>
-    </li>
-    <li class="breadcrumbs__item breadcrumbs__item--current">
-      <span class="breadcrumbs__separator">›</span>
-      <span>{{ self.title }}</span>
-    </li>
-  </ul>
-</header>
-
+{% include 'partials/breadcrumbs.html' with page=self links=self.get_ancestors style='secondary' %}
 <article class="main">
   <div class="container">
     <h1 class="main__title">{{ self.title }}</h1>
@@ -69,7 +56,7 @@
             <div class="option__content">
               <h2>{{ block.value.title }}</h2>
               {{ block.value.intro }}
-              <ul class="{% if block.value.style == 'check' %}list--checks list--checks--secondary{% else %}list--bulleted{% endif %} t-sans">
+              <ul class="{% if block.value.style == 'check' %}list--checks list--checks--secondary{% else %}list--bulleted--alt{% endif %} t-sans">
               {% for item in block.value.items %}
                  <li>{{ item }}</li>
               {% endfor %}
