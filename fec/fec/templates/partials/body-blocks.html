@@ -1,0 +1,27 @@
+{% comment %}
+
+  This partial can be included into content templates with:
+
+    {% include "body-blocks.html" with blocks=self.body %}
+
+  where self.body is a StreamField. The effect is very similar to simply putting
+  in the content template:
+
+    {{ self.body }}
+
+  except that this partial allows us to customize the structure, for example
+  adding classes or even branching depending on block.block_type.
+
+{% endcomment %}
+
+{% with blocks_name=blocks_name|default:"body" %}
+
+  <div class="{{ blocks_name }}-blocks content__section content__section--narrow">
+    {% for block in blocks %}
+      <div class="{{ blocks_name }}-block block-{{ block.block_type }}">
+        {{ block }}
+      </div>
+    {% endfor %}
+  </div>
+
+{% endwith %}

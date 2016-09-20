@@ -50,6 +50,7 @@ INSTALLED_APPS = (
     'wagtail.wagtailredirects',
     'wagtail.wagtailforms',
 
+    'wagtail.contrib.modeladmin',
     'wagtail.contrib.wagtailsearchpromotions',
     'wagtail.contrib.table_block',
 
@@ -182,7 +183,7 @@ CONTACT_EMAIL = 'betafeedback@fec.gov';
 CONSTANTS = constants
 
 FEATURES = {
-    'legal_statutes': bool(env.get_credential('FEC_FEATURE_LEGAL_STATUTES', '')),
+    'latest_updates': bool(env.get_credential('FEC_FEATURE_LATEST_UPDATES', ''))
 }
 
 if os.getenv('SENTRY_DSN'):

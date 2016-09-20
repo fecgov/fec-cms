@@ -3,7 +3,9 @@ from .base import *  # noqa
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
-TEMPLATE_DEBUG = True
+for t in TEMPLATES:
+    t.setdefault('OPTIONS', {})
+    t['OPTIONS']['debug'] = True
 
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
