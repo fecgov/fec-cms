@@ -24,8 +24,7 @@ def strip_cruft(body):
         ("""width="187""""", ''),
         ("border=\"0\"", ''),
         # looked weird on the media landing page, still looks okay on the individual pages without it
-        ('<td height="82"', '<td'),
-        ('<td height="25">', '<td>'),
+        ('<td height="524" colspan="4">', '<td colspan="4">'),
         ("""<p align="right"><b>Contact:</b></p>""",  """<p><b>Contact:</b></p>"""),
         ('Contact:', 'Contact: '),
         # neutering font for now will replace later
@@ -41,9 +40,10 @@ def strip_cruft(body):
         ('<p><a href="/">HOME</a> / <a href="/press/press.shtml">PRESS OFFICE</a><br/>', ''),
         ('News Releases, Media Advisories<br/>', ''),
         ('<h1>News Releases</h1>', ''),
-        ('<a href="http://www.fec.gov"><img src="../jpg/topfec.jpg" border="0" width="81" height="81"/></a>', ''),
         ('<img src="../../../images/filetype-pdf.gif" alt="PDF" width="16" height="16" hspace="0" vspace="0" align="default"/>', ''),
         ('<a href="http://www.fec.gov"><img src="../jpg/topfec.jpg" border="0" width="81" height="81" alt="FEC Seal Linking to FEC.GOV"/></a>', ''),
+        ('<a href="http://www.fec.gov"><img src="../jpg/topfec.jpg"  alt="FEC Home Page" width="81" height="81"/></a>', ''),
+        ('<a href="http://www.fec.gov"><img src="../jpg/topfec.jpg" border="0" width="81" height="81"/></a>', ''),
         ('<img src="../../jpg/topfec.jpg" border="0" alt="FEC Home Page" width="81" height="81"/></a>', ''),
         ('<a href="http://www.fec.gov"><font><img src="../jpg/topfec.jpg" border="0"/></font></a>', ''),
         ('<a href="http://www.fec.gov"><img src="../jpg/topfec.jpg" border="0"/>', ''),
