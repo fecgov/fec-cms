@@ -1,5 +1,3 @@
-from html5lib.sanitizer import HTMLSanitizerMixin
-
 from wagtail.wagtailcore.whitelist import attribute_rule, check_url, allow_without_attributes
 from wagtail.wagtailcore import hooks
 from django.utils.html import format_html
