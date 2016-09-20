@@ -12,6 +12,16 @@ from home.models import DigestPage as dp
 from home.models import Page
 
 
+def delete_all_digests():
+    errors = []
+    for x in dp.objects.all():
+    try :
+        x.delete()
+    except:
+        errors.append(x.id)
+    print(errors)
+
+
 #### move to a another file
 def strip_cruft(body):
 
@@ -152,4 +162,5 @@ class Command(BaseCommand):
     help = "loads weekly digests from json"
 
     def handle(self, *args, **options):
+        delete_all_digests()
         load_digest_from_json()

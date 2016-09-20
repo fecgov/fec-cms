@@ -13,6 +13,17 @@ from home.models import PressReleasePage as prp
 from home.models import Page
 
 
+def delete_all_press_releases():
+    errors = []
+    from home.models import PressReleasePage as prp
+    for x in prp.objects.all():
+        try:
+            x.delete()
+        except:
+            errors.append(x.id)
+    print(errors)
+
+
 #### move to a another file
 def strip_cruft(body):
 
@@ -46,6 +57,7 @@ def strip_cruft(body):
         ('<a href="http://www.fec.gov"><img src="../jpg/topfec.jpg" border="0" width="81" height="81"/></a>', ''),
         ('<img src="../../jpg/topfec.jpg" border="0" alt="FEC Home Page" width="81" height="81"/></a>', ''),
         ('<a href="http://www.fec.gov"><font><img src="../jpg/topfec.jpg" border="0"/></font></a>', ''),
+        ('<img src="../../jpg/topfec.jpg"  alt="FEC Home Page" width="81" height="81"/>', ''),
         ('<a href="http://www.fec.gov"><img src="../jpg/topfec.jpg" border="0"/>', ''),
         ('<img src="../jpg/topfec.jpg" border="0" width="81" height="81"/>', ''),
         ('<img src="../jpg/topfec.jpg"  width="81" height="81"/>', ''),
@@ -116,7 +128,10 @@ def validate_category(name):
 def add_page(item, base_page):
     item_year = parser.parse(item['date']).year
     title = item['title'][:255]
-    category = validate_category(item['category'])
+    if 'category' in item:
+        category = validate_category(item['category'])
+    else:
+        category = "other agency actions"
     slug = slugify(str(item_year) + '-' + category + '-' + title)[:225]
     url_path = "/home/media/" + slug + "/"
 
@@ -151,7 +166,6 @@ def add_page(item, base_page):
     saved_page = prp.objects.get(id=press_page.id)
     saved_page.body = formatted_body
     saved_page.first_published_at = publish_date
-    latest_revision_created_at= publish_date
     saved_page.created_at = publish_date
     saved_page.date = publish_date
     saved_page.save()
@@ -165,14 +179,12 @@ def load_press_releases_from_json():
     paths = sorted(glob.glob('data_loader/data/pr_json/' + '*.json'))
     logger.info("starting...")
     for path in paths:
-        print(path)
         with open(path, 'r') as json_contents:
             logger.info(path)
             contents = json.load(json_contents)
             if contents['title'] is None or contents['title'].isspace():
                 # this seems to be the case for the PR docs
                 contents['title'] = contents['category']
-
             add_page(contents, base_page)
 
 
@@ -180,4 +192,5 @@ class Command(BaseCommand):
     help = "loads press releases from json"
 
     def handle(self, *args, **options):
+        delete_all_press_releases()
         load_press_releases_from_json()
