@@ -12,6 +12,8 @@ from django.core.management import BaseCommand
 from home.models import PressReleasePage as prp
 from home.models import Page
 
+from home.utils.link_reroute import remake_links as relink
+
 
 def delete_all_press_releases():
     errors = []
@@ -64,8 +66,7 @@ def strip_cruft(body):
         ('<img src="/jpg/topfec.jpg" ismap="ismap" border="0"/>', ''),
         # we got an ok to not have redundant content
         ('(<a href="\.\./pdf/[0-9]+release.pdf">.pdf version of this news release...a>)', ''),
-        ('(<a href="\.\./pdf/[0-9]+release.pdf">.pdf version...a>)', ''),
-        ('<a href="\.\./pdf/[0-9]+release.pdf">.pdf version</a>', ''),
+        ('(<a href="\.\./pdf/[0-9]+release.pdf">.pdf version</a>)', ''),
         ('.pdf version of this news release', ''),
         # remove colors
         ('bgcolor="#FFFFFF"', ''),
