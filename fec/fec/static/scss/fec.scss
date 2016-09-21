@@ -53,30 +53,6 @@
   }
 }
 
-//
-// Additions to Section headings
-// fec-style/scss/modules/_section-headings.scss
-//
-
-// Section heading with date lined up on baseline.
-
-.section__heading__title {
-  @extend .usa-width-three-fourths;
-  display: inline-block;
-  float: none;
-}
-
-.section__heading__date {
-  @extend .usa-width-one-fourth;
-  @extend .t-right-aligned;
-  display: inline-block;
-  float: none;
-}
-
-.heading__title--with-date {
-  margin: 0;
-}
-
 // Author-list component
 // could be moved to fec-style/scss/components/_author-list.scss
 //
