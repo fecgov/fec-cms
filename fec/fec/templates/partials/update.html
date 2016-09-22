@@ -9,10 +9,12 @@
   {% if update.get_update_type != 'Weekly Digest' %}
     {{ update.body | truncatewords_html:30 }}
   {% endif %}
-  <div class="post__meta">
-    <a class="tag tag--secondary" href="/updates?update_type={{update.get_update_type|slugify}}">{{update.get_update_type}}</a>
-    {% if update.category %}
-      in: <a href="/updates?update_type={{update.get_update_type|slugify}}&category={{update.category|slugify}}">{{ update.category }}</a>
-   {% endif %}
-  </div>
+  {% if show_tag %}
+    <div class="post__meta">
+      <a class="tag tag--secondary" href="/updates?update_type={{update.get_update_type|slugify}}">{{update.get_update_type}}</a>
+      {% if update.category %}
+        in: <a href="/updates?update_type={{update.get_update_type|slugify}}&category={{update.category|slugify}}">{{ update.category }}</a>
+     {% endif %}
+    </div>
+  {% endif %}
 </article>

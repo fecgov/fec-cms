@@ -19,16 +19,39 @@
       <div class="js-sticky-side" data-sticky-container="options">
         <nav class="sidebar sidebar--neutral sidebar--left side-nav js-toc">
           <ul class="sidebar__content">
-            {% for option in self.option_blocks %}
-              <li class="side-nav__item"><a class="side-nav__link" href="#{{option.value.title | slugify }}">{{ option.value.title }}</a></li>
-            {% endfor %}
-              <li class="side-nav__item"><a class="side-nav__link" href="#latest-updates">Latest updates</a></li>
+              <li class="side-nav__item"><a class="side-nav__link" href="#press-releases">Press releases</a></li>
+              <li class="side-nav__item"><a class="side-nav__link" href="#weekly-digest">Weekly Digest</a></li>
+              {% for option in self.option_blocks %}
+                <li class="side-nav__item"><a class="side-nav__link" href="#{{option.value.title | slugify }}">{{ option.value.title }}</a></li>
+              {% endfor %}
               <li class="side-nav__item"><a class="side-nav__link" href="#contact">Contact</a></li>
           </ul>
         </nav>
       </div>
     </div>
     <section class="main__content--right">
+      <div id="press-releases" class="option">
+        <h2><a href="">Press releases</a></h2>
+        <div class="content__section">
+          {{ self.release_intro }}
+        </div>
+        <div class="post-feed">
+          {% press_releases %}
+          <a class="button button--standard button--go" href="/updates?update_type=press-release">All press releases</a>
+        </div>
+      </div>
+
+      <div id="weekly-digest" class="option">
+        <h2><a href="">Weekly Digest</a></h2>
+        <div class="content__section">
+          {{ self.digest_intro }}
+        </div>
+        <div class="post-feed">
+          {% weekly_digests %}
+          <a class="button button--standard button--go" href="/updates?update_type=weekly-digest">All Weekly Digests</a>
+        </div>
+      </div>
+
       {% for option in self.option_blocks %}
       <div id="{{ option.value.title | slugify }}" class="option">
         <h2><a href="{{ option.value.related_page.url }}">{{ option.value.title }}</a></h2>
@@ -36,23 +59,7 @@
         <a href="{{ option.value.related_page.url }}" class="button button--cta">{{ option.value.button_text }}</a>
       </div>
       {% endfor %}
-      <div id="press-releases" class="option">
-        <h2><a href="">Latest updates: for media professionals</a></h2>
-        <div class="content__section">
-          {{ self.feed_intro }}
-        </div>
-        <div class="content__section">
-          <div class="row">
-            <div class="section__heading">
-              <h4 class="heading__title heading__title--with-action t-upper h4">Updates preview</h4>
-              <div class="heading__action">
-                <a class="button button--cta button--go" href="/updates?update_type=for-media">More updates</a>
-              </div>
-            </div>
-          </div>
-          {% press_updates %}
-        </div>
-      </div>
+
       <div id="contact" class="option">
         <h2>Contact</h2>
         {{ self.contact_intro }}
@@ -62,15 +69,8 @@
               <img src="{% static "img/i-phone--primary.svg" %}" alt="Icon of a phone">
             </div>
             <div class="contact-item__content">
-              <h5 class="contact-item__title">Toll free</h5>
-              <span class="t-block">1-800-424-9530</span>
-              <span class="t-block">7:00 a.m. to 6:00 p.m., M-F, Eastern Time</span>
-            </div>
-          </li>
-          <li class="grid__item contact-item">
-            <div class="contact-item__content--offset">
               <h5 class="contact-item__title">Local</h5>
-              <span class="t-block">202-694-1000</span>
+              <span class="t-block">(202) 694-1220</span>
               <span class="t-block">7:00 a.m. to 6:00 p.m., M-F, Eastern Time</span>
             </div>
           </li>
