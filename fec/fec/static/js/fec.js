@@ -21,6 +21,7 @@ window.$ = window.jQuery = $;
 var Sticky = require('component-sticky');
 var calendar = require('./calendar');
 var calendarHelpers = require('./calendar-helpers');
+var FormNav = require('./form-nav').FormNav;
 
 var legal = require('./legal');
 
@@ -90,6 +91,11 @@ $(document).ready(function() {
 
   // Initialize filters
   var filterPanel = new FilterPanel();
+
+  if (document.querySelector('.js-form-nav')) {
+    var formNav = document.querySelector('.js-form-nav');
+    new FormNav(formNav);
+  }
 
   // Initialize calendar
   new calendar.Calendar({

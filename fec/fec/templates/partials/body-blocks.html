@@ -16,7 +16,7 @@
 
 {% with blocks_name=blocks_name|default:"body" %}
 
-  <div class="{{ blocks_name }}-blocks">
+  <div class="{{ blocks_name }}-blocks content__section content__section--narrow">
     {% for block in blocks %}
       <div class="{{ blocks_name }}-block block-{{ block.block_type }}">
         {{ block }}

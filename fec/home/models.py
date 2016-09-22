@@ -17,7 +17,6 @@ from wagtail.contrib.table_block.blocks import TableBlock
 
 from fec import constants
 
-
 stream_factory = functools.partial(
     StreamField,
     [
@@ -142,7 +141,6 @@ class PageAuthors(models.Model):
 class RecordPageAuthors(Orderable, PageAuthors):
     page = ParentalKey('RecordPage', related_name='authors')
 
-
 def get_previous_record_page():
     return RecordPage.objects.order_by('-date', '-pk').first()
 
@@ -172,6 +170,10 @@ class RecordPage(ContentPage):
     def content_section(self):
         return ''
 
+    @property
+    def get_update_type(self):
+        return constants.update_types['fec-record']
+
 
 class DigestPageAuthors(Orderable, PageAuthors):
     page = ParentalKey('DigestPage', related_name='authors')
@@ -196,6 +198,10 @@ class DigestPage(ContentPage):
     @property
     def content_section(self):
         return ''
+
+    @property
+    def get_update_type(self):
+        return constants.update_types['weekly-digest']
 
 
 class PressReleasePageAuthors(Orderable, PageAuthors):
@@ -225,6 +231,10 @@ class PressReleasePage(ContentPage):
     def content_section(self):
         return ''
 
+    @property
+    def get_update_type(self):
+        return constants.update_types['press-release']
+
 
 class CustomPage(Page):
     """Flexible customizable page."""
@@ -238,6 +248,28 @@ class CustomPage(Page):
         FieldPanel('date'),
         StreamFieldPanel('body'),
         StreamFieldPanel('sidebar'),
+    ]
+
+class OptionBlock(blocks.StructBlock):
+    title = blocks.CharBlock(required=True)
+    intro = blocks.RichTextBlock(blank=False, null=False, required=False)
+    button_text = blocks.CharBlock(required=True, null=False, blank=False)
+    related_page = blocks.PageChooserBlock()
+
+class PressLandingPage(Page):
+    hero = stream_factory(null=True, blank=True)
+    option_blocks = StreamField([
+        ('option_blocks', OptionBlock())
+    ])
+
+    feed_intro = stream_factory(null=True, blank=True)
+    contact_intro = stream_factory(null=True, blank=True)
+
+    content_panels = Page.content_panels + [
+        StreamFieldPanel('hero'),
+        StreamFieldPanel('feed_intro'),
+        StreamFieldPanel('contact_intro'),
+        StreamFieldPanel('option_blocks'),
     ]
 
 class CollectionList(blocks.StructBlock):
