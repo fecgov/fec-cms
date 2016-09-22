@@ -2,19 +2,33 @@ import glob
 import json
 import os
 import logging
+import re
 
 from dateutil import parser
 from slugify import slugify
+from urllib.parse import urljoin
 
 from django.core.management import BaseCommand
 
 from home.models import DigestPage as dp
 from home.models import Page
+from home.utils.link_reroute import make_absolute_links as relink
+
+
+base_url = 'http://www.fec.gov/press/'
+
+def delete_all_digests():
+    errors = []
+    for x in dp.objects.all():
+        try :
+            x.delete()
+        except:
+            errors.append(x.id)
+        print(errors)
 
 
 #### move to a another file
 def strip_cruft(body):
-
     replacements = [
         # deletions - these are from the header and we don't need them as part of the content
         ('<body bgcolor="#FFFFFF">', ''),
@@ -32,13 +46,6 @@ def strip_cruft(body):
         ('Contact:', 'Contact:  '),
         # neutering font for now
         ('face="Book Antiqua"', ''),
-        (' size="1"', ''),
-        (' size="2"', ''),
-        (' size="3"', ''),
-        (' size="0"', ''),
-        (' size="-1"', ''),
-        (' size="-2"', ''),
-        (' size="-3"', ''),
         # old heading photo
         ('<a href="http://www.fec.gov"><img src="../jpg/topfec.jpg" border="0" width="81" height="81"/></a>', ''),
         ('<td width="3%" valign="top"><div align="center"><img width="16" vspace="0" hspace="0" height="16" align="default" alt="PDF" src="../../../images/filetype-pdf.gif"/> </div></td>', ''),
@@ -51,22 +58,39 @@ def strip_cruft(body):
         ('<img src="../jpg/topfec.jpg" border="0" width="81" height="81"/>', ''),
         ('<img src="/jpg/topfec.jpg" ismap="ismap" border="0"/>', ''),
         # we got an ok to not have redundant content
-        (('<a href="\.\./pdf/[0-9]+digest.pdf">.pdf version of this Weekly Digest...a>'), ''),
+        ('<a href="\.\./pdf/[0-9]+digest.pdf">.pdf version of this Weekly Digest...a>', ''),
         ('.pdf version of this Weekly Digest', ''),
-        ('bgcolor="#FFFFFF"', ''),
-        ('color="#000000"', ''),
-        ('text="#000000"', ''),
-        ('link="#000099"', ''),
-        ('vlink="#ff0000"', ''),
-        ('alink="#FF0000">', ''),
-        # In the 80s, they used pre to get spacing, but that kills the font in a bad way, I am adding some inline styling to perserve the spaces. It isn't perfect, but it is better.
+        # In the 80s, they used pre to get spacing, but that kills the font in a bad way, I am adding some inline styling to preserve the spaces. It isn't perfect, but it is better.
         ('<pre>', '<div style="white-space: pre-wrap;">'),
         ('</pre>', '</div>'),
         ('<p><u/></p>', ''),
-        ('<td height="25">', '<td>'),
+        ('<p><strong><u/></strong></p>', ''),
     ]
+    regex_replacements = [
+        ('height="[0-9]+"', ''),
+        ('border="[0-9]+"', ''),
+        # remove colors
+        ('bgcolor="#[A-Z0-9]+"', ''),
+        ('color="#[A-Z0-9]+"', ''),
+        ('text="#[A-Z0-9]+"', ''),
+        ('link="#[A-Z0-9]+"', ''),
+        ('vlink="#[A-Z0-9]+"', ''),
+        ('alink="#[A-Z0-9]+"', ''),
+        ('bordercolor="#[A-Z0-9]+"', ''),
+        ('size="[0-9]+"', ''),
+        ('size="-[0-9]+"', ''),
+        # we got an ok to not have redundant content
+        ('<a href="\.\.\/pdf\/[0-9]+release.pdf">\.pdf version of this Weekly Digest...a>', ''),
+        ('<a href="\.\.\/pdf\/[0-9]+release.pdf">\.pdf version...a>', ''),
+        ('\.pdf version of this Weekly Digest', ''),
+    ]
+
     for old, new in replacements:
         body = str.replace(body, old, new)
+
+    for old, new in regex_replacements:
+        body = re.sub(old, new, body)
+
     # Flag
     if """You have performed a blocked operation""" in body:
         print('-----BLOCKED PAGE------')
@@ -101,7 +125,8 @@ def add_page(item, base_page):
     if Page.objects.filter(url_path=url_path).count() > 0:
         for p in Page.objects.filter(url_path=url_path):
             p.delete()
-    body = escape(strip_cruft(item['html']))
+    linked_body = relink(urljoin(base_url, item['href']), item['html'])
+    body = escape(strip_cruft(linked_body))
     body_list = [{"value": body, "type": "html"}]
     formatted_body = json.dumps(body_list)
     publish_date = parser.parse(item['date'])
@@ -119,12 +144,9 @@ def add_page(item, base_page):
         expired=0,
         owner_id=1,
         locked=0,
+        latest_revision_created_at=publish_date,
         first_published_at=publish_date,
     )
-
-    if dp.objects.filter(path=url_path).count() > 0:
-        for p in dp.objects.filter(upath=url_path):
-            p.delete()
 
     base_page.add_child(instance=press_page)
     saved_page = dp.objects.get(id=press_page.id)
@@ -154,4 +176,5 @@ class Command(BaseCommand):
     help = "loads weekly digests from json"
 
     def handle(self, *args, **options):
+        delete_all_digests()
         load_digest_from_json()
