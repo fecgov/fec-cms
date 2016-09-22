@@ -118,7 +118,9 @@ Deploys of a single app can be performed manually by targeting the env/space, an
 
 
 ## Backup
-To restore data from a remote instance to a local instance, or between local instances, back up data using `dumpdata` and restore using `loaddata`. You'll also need to [install cf-ssh](https://docs.cloud.gov/getting-started/cf-ssh/). The following is an example of restoring remote data to a local instance:
+To restore data from a remote instance to a local instance, or between local instances, back up data using `dumpdata` and restore using `loaddata`. You'll also need to [install cf-ssh](https://docs.cloud.gov/getting-started/cf-ssh/). The following is an example of restoring remote data to a local instance.
+
+Use `cf target -s` to select the space you want to create a manifest for, then:
 
     # Local
     cf create-app-manifest cms -p manifest_ssh.yml
