@@ -111,3 +111,22 @@ def updates(request):
         'updates': updates,
         'year': year
     })
+
+def calendar(request):
+  page_context = {
+    'content_section': 'Calendar',
+    'title': 'Calendar'
+  }
+  return render(request, 'home/calendar.html', {
+    'self': page_context,
+  })
+
+def contact(request):
+  page_context = {
+    'content_section': 'contact',
+    'title': 'Contact'
+  }
+
+  return render(request, 'home/contact.html', {
+    'self': page_context,
+  })

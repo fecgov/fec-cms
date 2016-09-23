@@ -84,18 +84,6 @@ class PartyChecklistPage(ContentPage):
 class NonconnectedChecklistPage(ContentPage):
     pass
 
-class ContactPage(ContentPage):
-    @property
-    def content_section(self):
-        return 'contact'
-
-
-class CalendarPage(ContentPage):
-    @property
-    def content_section(self):
-        return 'calendar'
-
-
 class Author(models.Model):
     name = models.CharField(max_length=255)
     title = models.CharField(max_length=255)
