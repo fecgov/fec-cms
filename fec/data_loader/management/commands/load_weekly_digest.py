@@ -38,7 +38,7 @@ def delete_all_digests():
 
 
 #### move to a another file
-def strip_cruft(body):
+def strip_cruft(body, title):
     replacements = [
         # deletions - these are from the header and we don't need them as part of the content
         ('<body bgcolor="#FFFFFF">', ''),
@@ -102,9 +102,10 @@ def strip_cruft(body):
         body = re.sub(old, new, body)
 
     if title:
+        body = str.replace(body, """<p align="center"><strong>Weekly Digest</strong></p><p align="center"><strong>{0} </strong></p>""".format(title), '')
+        body = str.replace(body, """<h3 align="center"><strong>Weekly Digest </strong></h3><p align="center"><strong><br/></strong><strong>{0} </strong></p>""".format(title), '')
         body = str.replace(body, """<p align="center"><strong>Weekly Digest</strong></p><p align="center"><strong>{0}</strong></p>""".format(title), '')
         body = str.replace(body, """<h3 align="center"><strong>Weekly Digest </strong></h3><p align="center"><strong><br/></strong><strong>{0}</strong></p>""".format(title), '')
-
 
     # Flag
     if """You have performed a blocked operation""" in body:
@@ -133,7 +134,7 @@ def add_page(item, base_page):
     if Page.objects.filter(url_path=url_path).count() > 0:
         for p in Page.objects.filter(url_path=url_path):
             p.delete()
-    clean_body = strip_cruft(item['html'])
+    clean_body = strip_cruft(item['html'], item['title'])
     linked_body = relink(urljoin(base_url, item['href']), clean_body)
     body = escape(linked_body)
     body_list = [{"value": body, "type": "html"}]
