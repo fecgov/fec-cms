@@ -44,7 +44,9 @@
   },
   "watch": {
     "./fec/fec/static/js/*.js": ["build-js"],
-    "./node_modules/fec-style/js/*.js": ["build-js"]
+    "./fec/fec/static/hbs/*/*.hbs": ["build-js"],
+    "./node_modules/fec-style/js/*.js": ["build-js"],
+    "./node_modules/fec-style/js/templates/*.hbs": ["build-js"]
   },
   "engines": {
     "node": "5.5.0",
