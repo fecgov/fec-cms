@@ -105,7 +105,7 @@ def updates(request):
     category_list = list(map(replace_space, category_list))
 
     return render(request, 'home/latest_updates.html', {
-        'page_context': page_context,
+        'self': page_context,
         'category_list': category_list,
         'update_types': update_types,
         'updates': updates,
