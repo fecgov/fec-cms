@@ -5,15 +5,8 @@
 {% block body_class %}template-{{ self.get_verbose_name | slugify }}{% endblock %}
 
 {% block content %}
-<header class="page-header page-header--primary">
-  <ul class="breadcrumbs">
-    <li class="breadcrumbs__item"><a href="/" class="breadcrumbs__link" rel="Home">Home</a></li>
-    <li class="breadcrumbs__item breadcrumbs__item--current">
-      <span class="breadcrumbs__separator">›</span>
-      <span>Calendar</span>
-    </li>
-  </ul>
-</header>
+
+{% include 'partials/breadcrumbs.html' with page=self style='secondary' %}
 
 <section class="main__content--full">
   <div class="data-container__wrapper">
