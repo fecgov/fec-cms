@@ -14,6 +14,11 @@ from home.models import PressReleasePage as prp
 from home.models import Page
 from home.utils.link_reroute import make_absolute_links as relink
 
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
+
+dirname = os.path.dirname
+MAIN_DIRECTORY = dirname(dirname(dirname(__file__)))
 
 base_url = 'http://www.fec.gov/press/'
 
@@ -27,11 +32,14 @@ def delete_all_press_releases():
             x.delete()
         except:
             errors.append(x.id)
-    print(errors)
+    if len(errors) > 0:
+        logger.info("look at : {0}".format(errors))
+    logger.info('Completed deleting old press releases')
+
 
 
 #### move to a another file
-def strip_cruft(body):
+def strip_cruft(body, title):
 
     replacements = [
         # deletions - these are from the header and we don't need them as part of the content
@@ -54,7 +62,6 @@ def strip_cruft(body):
         ('<a href="http://www.fec.gov"><img src="../jpg/topfec.jpg"  alt="FEC Home Page" width="81" height="81"/></a>', ''),
         ('<a href="http://www.fec.gov"><img src="../jpg/topfec.jpg" border="0" width="81" height="81"/></a>', ''),
         ('<img src="../../jpg/topfec.jpg" border="0" alt="FEC Home Page" width="81" height="81"/></a>', ''),
-        ('<a href="http://www.fec.gov"><font><img src="../jpg/topfec.jpg" border="0"/></font></a>', ''),
         ('<img src="../../jpg/topfec.jpg"  alt="FEC Home Page" width="81" height="81"/>', ''),
         ('<a href="http://www.fec.gov"><img src="../jpg/topfec.jpg" border="0"/>', ''),
         ('<img src="../jpg/topfec.jpg" border="0" width="81" height="81"/>', ''),
@@ -89,18 +96,16 @@ def strip_cruft(body):
     for old, new in regex_replacements:
         body = re.sub(old, new, body)
 
+    # already have title
+    if title:
+        body = str.replace(body, """<td colspan="4"><p style="text-align:center;"><strong>{0}</strong></p>""".format(title.upper()), '')
+        body = str.replace(body, """<p align="center">{0}</p>""".format(title.upper()), '')
+
     # Flag
     if """You have performed a blocked operation""" in body:
         print('-----BLOCKED PAGE------')
     return body
 ###
-
-
-logging.basicConfig(level=logging.INFO)
-logger = logging.getLogger(__name__)
-
-dirname = os.path.dirname
-MAIN_DIRECTORY = dirname(dirname(dirname(__file__)))
 
 
 def get_full_path(*path):
@@ -142,10 +147,10 @@ def add_page(item, base_page):
         category = "other agency actions"
     slug = slugify(str(item_year) + '-' + category + '-' + title)[:225]
     url_path = "/home/media/" + slug + "/"
-
-    linked_body = relink(urljoin(base_url, item['href']), item['html'])
-    body = escape(strip_cruft(linked_body))
-    body_list = [{"value": str(body), "type": "html"}]
+    clean_body = strip_cruft(item['html'], item['title'])
+    linked_body = relink(urljoin(base_url, item['href']), clean_body)
+    body = escape(linked_body)
+    body_list = [{"value": body, "type": "html"}]
     formatted_body = json.dumps(body_list)
     publish_date = parser.parse(item['date'])
 
@@ -199,3 +204,4 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         delete_all_press_releases()
         load_press_releases_from_json()
+        logger.info('Press releases loaded')
