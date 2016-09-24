@@ -3,7 +3,8 @@
     "build": "cd fec && gulp build-js",
     "build-js": "cd fec && gulp build-js",
     "test": "karma start",
-    "test-single": "karma start --single-run --browsers PhantomJS"
+    "test-single": "karma start --single-run --browsers PhantomJS",
+    "watch": "nswatch"
   },
   "dependencies": {
     "ace-builds": "1.2.2",
@@ -34,12 +35,18 @@
     "karma-phantomjs-launcher": "^0.2.3",
     "karma-phantomjs-shim": "^1.2.0",
     "mocha": "^2.3.4",
+    "nswatch": "0.2.0",
     "phantomjs": "^2.1.2",
     "sinon": "^1.17.2",
     "sinon-chai": "^2.8.0",
     "stringify": "^4.0.1",
-    "vinyl-source-stream": "^1.1.0",
-    "watchify": "^3.7.0"
+    "vinyl-source-stream": "^1.1.0"
+  },
+  "watch": {
+    "./fec/fec/static/js/*.js": ["build-js"],
+    "./fec/fec/static/hbs/*/*.hbs": ["build-js"],
+    "./node_modules/fec-style/js/*.js": ["build-js"],
+    "./node_modules/fec-style/js/templates/*.hbs": ["build-js"]
   },
   "engines": {
     "node": "5.5.0",
