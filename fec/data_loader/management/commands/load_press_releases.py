@@ -65,6 +65,7 @@ def strip_cruft(body, title):
         ('<img src="../../jpg/topfec.jpg"  alt="FEC Home Page" width="81" height="81"/>', ''),
         ('<a href="http://www.fec.gov"><img src="../jpg/topfec.jpg" border="0"/>', ''),
         ('<img src="../jpg/topfec.jpg" border="0" width="81" height="81"/>', ''),
+        ('<img align="default" alt="PDF"  hspace="0" src="../../../images/filetype-pdf.gif" vspace="0" width="16"/>', ''),
         ('<img src="../jpg/topfec.jpg"  width="81" height="81"/>', ''),
         ('<img src="/jpg/topfec.jpg" ismap="ismap" border="0"/>', ''),
         # In the 80s, they used pre to get spacing, but that kills the font in a bad way, I am adding some inline styling to perserve the spaces. It isn't perfect, but it is better.
@@ -85,8 +86,10 @@ def strip_cruft(body, title):
         ('size="[0-9]+"', ''),
         ('size="-[0-9]+"', ''),
         # we got an ok to not have redundant content
-        ('<a href="\.\.\/pdf\/[0-9]+release.pdf">\.pdf version of this news release...a>', ''),
+        ('<a href="\.\.\/pdf\/[0-9]+release.pdf">\.pdf version of this news release.</a>', ''),
+        ('<a href="\.\.\/pdf\/[0-9]+release.pdf">\.pdf version of this news release</a>', ''),
         ('<a href="\.\.\/pdf\/[0-9]+release.pdf">\.pdf version...a>', ''),
+        ('<a href="\.\.\/pdf\/[0-9]+release.pdf">\.pdf version..a>', ''),
         ('\.pdf version of this news release', ''),
     ]
 
@@ -98,8 +101,15 @@ def strip_cruft(body, title):
 
     # already have title
     if title:
-        body = str.replace(body, """<td colspan="4"><p style="text-align:center;"><strong>{0}</strong></p>""".format(title.upper()), '')
-        body = str.replace(body, """<p align="center">{0}</p>""".format(title.upper()), '')
+        title_layouts = [
+            """<p><strong>{0}<br/></strong></p>""".format(title),
+            """<td colspan="4"><p style="text-align:center;"><strong>{0}</strong></p>""".format(title.upper()),
+            """<p align="center">{0}</p>""".format(title.upper()),
+            """<p><strong>{0}</strong></p>""".format(title),
+        ]
+
+        for layout in title_layouts:
+            body = str.replace(body, layout, '')
 
     # Flag
     if """You have performed a blocked operation""" in body:

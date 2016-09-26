@@ -90,7 +90,10 @@ def strip_cruft(body, title):
         ('size="[0-9]+"', ''),
         ('size="-[0-9]+"', ''),
         # we got an ok to not have redundant content
+        ('<a href="http://www.fec.gov/press/press2016/pdf/20160909digest.pdf">pdf version of this Weekly Digest</a>')
         ('<a href="\.\.\/pdf\/[0-9]+release.pdf">\.pdf version of this Weekly Digest...a>', ''),
+        ('<a href="\.\.\/pdf\/[0-9]+release.pdf">\.pdf version of this Weekly Digest..a>', ''),
+        ('<a href="\.\.\/pdf\/[0-9]+release.pdf">\.pdf version of this Weekly Digest<a>', ''),
         ('<a href="\.\.\/pdf\/[0-9]+release.pdf">\.pdf version...a>', ''),
         ('\.pdf version of this Weekly Digest', ''),
     ]
