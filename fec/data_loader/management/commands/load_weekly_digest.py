@@ -15,6 +15,13 @@ from home.models import Page
 from home.utils.link_reroute import make_absolute_links as relink
 
 
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
+
+dirname = os.path.dirname
+MAIN_DIRECTORY = dirname(dirname(dirname(__file__)))
+
+
 base_url = 'http://www.fec.gov/press/'
 
 def delete_all_digests():
@@ -24,11 +31,14 @@ def delete_all_digests():
             x.delete()
         except:
             errors.append(x.id)
-        print(errors)
+    if len(errors) > 0:
+        logger.info("look at : {0}".format(errors))
+    logger.info('Completed deleting old Weekly digests')
+
 
 
 #### move to a another file
-def strip_cruft(body):
+def strip_cruft(body, title):
     replacements = [
         # deletions - these are from the header and we don't need them as part of the content
         ('<body bgcolor="#FFFFFF">', ''),
@@ -91,18 +101,17 @@ def strip_cruft(body):
     for old, new in regex_replacements:
         body = re.sub(old, new, body)
 
+    if title:
+        body = str.replace(body, """<p align="center"><strong>Weekly Digest</strong></p><p align="center"><strong>{0} </strong></p>""".format(title), '')
+        body = str.replace(body, """<h3 align="center"><strong>Weekly Digest </strong></h3><p align="center"><strong><br/></strong><strong>{0} </strong></p>""".format(title), '')
+        body = str.replace(body, """<p align="center"><strong>Weekly Digest</strong></p><p align="center"><strong>{0}</strong></p>""".format(title), '')
+        body = str.replace(body, """<h3 align="center"><strong>Weekly Digest </strong></h3><p align="center"><strong><br/></strong><strong>{0}</strong></p>""".format(title), '')
+
     # Flag
     if """You have performed a blocked operation""" in body:
         print('-----BLOCKED PAGE------')
     return body
 ###
-
-
-logging.basicConfig(level=logging.INFO)
-logger = logging.getLogger(__name__)
-
-dirname = os.path.dirname
-MAIN_DIRECTORY = dirname(dirname(dirname(__file__)))
 
 
 def get_full_path(*path):
@@ -125,8 +134,9 @@ def add_page(item, base_page):
     if Page.objects.filter(url_path=url_path).count() > 0:
         for p in Page.objects.filter(url_path=url_path):
             p.delete()
-    linked_body = relink(urljoin(base_url, item['href']), item['html'])
-    body = escape(strip_cruft(linked_body))
+    clean_body = strip_cruft(item['html'], item['title'])
+    linked_body = relink(urljoin(base_url, item['href']), clean_body)
+    body = escape(linked_body)
     body_list = [{"value": body, "type": "html"}]
     formatted_body = json.dumps(body_list)
     publish_date = parser.parse(item['date'])
@@ -178,3 +188,4 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         delete_all_digests()
         load_digest_from_json()
+        logger.info('Weekly digests loaded')
