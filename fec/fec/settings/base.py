@@ -183,7 +183,8 @@ CONTACT_EMAIL = 'betafeedback@fec.gov';
 CONSTANTS = constants
 
 FEATURES = {
-    'latest_updates': bool(env.get_credential('FEC_FEATURE_LATEST_UPDATES', ''))
+    'latest_updates': bool(env.get_credential('FEC_FEATURE_LATEST_UPDATES', '')),
+    'legal_murs': bool(env.get_credential('FEC_FEATURE_LEGAL_MURS', ''))
 }
 
 if os.getenv('SENTRY_DSN'):

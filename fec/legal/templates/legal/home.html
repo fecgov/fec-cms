@@ -15,6 +15,9 @@
             <option value="statutes">Statutes</option>
             <option value="regulations">Regulations</option>
             <option value="advisory_opinions">Advisory opinions</option>
+            {% if features.legal_murs %}
+            <option value="murs">Enforcement matters</option>
+            {% endif %}
           </select>
           <input type="text" name="search" class="combo__input js-search-input"
           aria-label="Search"
@@ -91,7 +94,14 @@
           </div>
           <div class="option">
             <h2 id="enforcement-matters">Enforcement matters</h2>
-            <p>Coming soon. Enforcement matters are available on <a href="http://www.fec.gov/em/em.shtml">FEC.gov</a>.</p>
+          {% if features.legal_murs %}
+            <p>The FEC exclusively enforces civil federal campaign finance law. Enforcements programs include the Administrative Fine Program, the Alternative Dispute Program and Matters Under Review (MURs). </p>
+            <p> Learn more about enforcement programs, the complaint process and Commission audits of committees. Search a database of public enforcement documents.</p>
+            <a class="button--cta button--go" href="{{ settings.FEC_APP_URL }}/legal/enforcement-matters/">Explore enforcement</a>
+          {% else %}
+          <p>Coming soon. Enforcement matters are available on <a href="http://www.fec.gov/em/em.shtml">FEC.gov</a>.</p>
+          {% endif %}
+            
           </div>
         </section>
       </div>
