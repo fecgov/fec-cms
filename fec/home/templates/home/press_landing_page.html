@@ -63,7 +63,7 @@
       <div id="contact" class="option">
         <h2>Contact</h2>
         {{ self.contact_intro }}
-        <ul class="grid--3-wide row content__section">
+        <ul class="grid--3-wide row">
           <li class="grid__item contact-item">
             <div class="contact-item__icon">
               <img src="{% static "img/i-phone--primary.svg" %}" alt="Icon of a phone">
@@ -86,6 +86,49 @@
         <p>If you need to reach the Press Office during non-business hours, please call the FEC's Press Officer, Judith Ingram, at (202) 531-2882.</p>
       </div>
     </section>
+  </div>
+  <div class="slab slab--neutral">
+    <div class="container">
+      <h2>Additional resources</h2>
+      <div class="grid grid--4-wide">
+        <div class="grid__item">
+          <a href="/calendar">
+            <aside class="card card--horizontal card--secondary">
+              <div class="card__image__container">
+                  <span class="card__icon i-info-person"><span class="u-visually-hidden">Icon of a customer service representative</span></span>
+              </div>
+              <div class="card__content">
+                Latest Updates
+              </div>
+            </aside>
+          </a>
+        </div>
+        <div class="grid__item">
+          <a href="/calendar">
+            <aside class="card card--horizontal card--secondary">
+              <div class="card__image__container">
+                  <span class="card__icon i-calendar"><span class="u-visually-hidden">Icon of a calendar</span></span>
+              </div>
+              <div class="card__content">
+                Calendar
+              </div>
+            </aside>
+          </a>
+        </div>
+        <div class="grid__item">
+          <a href="{{ settings.FEC_APP_URL }}">
+            <aside class="card card--horizontal card--secondary">
+              <div class="card__image__container">
+                  <span class="card__icon i-table"><span class="u-visually-hidden">Icon of a table of dat</span></span>
+              </div>
+              <div class="card__content">
+                Campaign finance data
+              </div>
+            </aside>
+          </a>
+        </div>
+      </div>
+    </div>
   </div>
   {% include 'partials/disclaimer.html' %}
 </div>
