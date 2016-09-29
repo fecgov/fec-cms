@@ -21,8 +21,8 @@ logger = logging.getLogger(__name__)
 dirname = os.path.dirname
 MAIN_DIRECTORY = dirname(dirname(dirname(__file__)))
 
-
 base_url = 'http://www.fec.gov/press/'
+
 
 def delete_all_digests():
     errors = []
