@@ -19,7 +19,8 @@ urlpatterns = [
     url(r'^documents/', include(wagtaildocs_urls)),
 
     url(r'^updates/$', home_views.updates),
-
+    url(r'^calendar/$', home_views.calendar),
+    url(r'^contact-us/$', home_views.contact),
     url(r'^search/$', search_views.search, name='search'),
     url(r'^legal-resources/$', legal_views.home, name='legal'),
 
