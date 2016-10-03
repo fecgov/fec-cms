@@ -59,7 +59,7 @@
               </li>
               <li class="side-nav__item">
                 <a class="side-nav__link" href="#enforcement-matters">
-                Enforcement matters
+                Enforcement
                 </a>
               </li>
               <li class="is-disabled side-nav__item"><span class="side-nav__link">(Resource TBD)</span></li>
@@ -93,10 +93,12 @@
             <a class="button--cta button--go" href="{{ settings.FEC_APP_URL }}/legal/advisory-opinions/">Explore advisory opinions</a>
           </div>
           <div class="option">
-            <h2 id="enforcement-matters">Enforcement matters</h2>
+            <h2 id="enforcement-matters">Enforcement</h2>
           {% if features.legal_murs %}
-            <p>The FEC exclusively enforces civil federal campaign finance law. Enforcements programs include the Administrative Fine Program, the Alternative Dispute Program and Matters Under Review (MURs). </p>
-            <p> Learn more about enforcement programs, the complaint process and Commission audits of committees. Search a database of public enforcement documents.</p>
+            <p>The FEC has exclusive jurisdiction over the civil enforcement of the federal campaign finance law. Enforcement cases are primarily handled by the Office of General Counsel and are known as Matters Under Review (MURs).</p>
+            <p>Other programs designed to augment the Office of General Counsel ‘s enforcement role include the Alternative Dispute Resolution Program and the Administrative Fine Program.</p>
+            <p>Cases in each of these enforcement programs must be kept confidential until the cases are closed.</p>
+            <p>Learn more about each type of enforcement action. Search a database of MUR, Alternative Dispute Resolution and Administrative Fine documents from closed cases dating back to 1975.</p>
             <a class="button--cta button--go" href="{{ settings.FEC_APP_URL }}/legal/enforcement-matters/">Explore enforcement</a>
           {% else %}
           <p>Coming soon. Enforcement matters are available on <a href="http://www.fec.gov/em/em.shtml">FEC.gov</a>.</p>
