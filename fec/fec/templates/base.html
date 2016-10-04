@@ -59,7 +59,7 @@
               <a href="/registration-and-reporting/" class="site-nav__link{% if self.content_section == 'registration-and-reporting' %} is-parent{% endif %}">Registration and reporting</a>
             </li>
             <li class="site-nav__item">
-              <a href="/legal-resources" class="site-nav__link">Legal resources</a>
+              <a href="/legal-resources" class="site-nav__link{% if self.content_section == 'legal-resources' %} is-parent{% endif %}">Legal resources</a>
             </li>
             <li class="site-nav__item utility-nav__item is-disabled">
               <a href="#" class="site-nav__link">(About)</a>
@@ -81,18 +81,50 @@
       {% block content %}{% endblock %}
     </main>
 
+    <nav class="footer-links">
+      <div class="container">
+        <div class="footer-links__column">
+          <ul>
+            <li>
+              <a href="https://github.com/18F/fec">GitHub repository</a>
+            </li>
+          </ul>
+          <ul>
+            <li>
+              <a href="{{ cms_url }}/contact-us/">Contact us</a>
+            </li>
+            <li>
+              <a href="{{ cms_url }}/press/">Press</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
     <footer class="footer">
       <div class="container">
         <div class="seal">
           <img class="seal__img" width="140" height="140" src="{% static "img/seal--white.svg" %}" alt="Seal of the Federal Election Commission | United States of America">
-        </div>
-        <div class="address">
           <p class="address__title">Federal Election Commission</p>
-          <p>999 E Street, NW, Washington, DC 20463</p>
+        </div>
+
+        <div class="address">
+          <ul class="social-media">
+            <li>
+              <div class="i icon--twitter">
+                <a href="https://twitter.com/fec"><span class="u-visually-hidden">The FEC's Twitter page</span></a>
+              </div>
+            </li>
+            <li>
+              <div class="i icon--youtube">
+                <a href="https://www.youtube.com/user/FECTube"><span class="u-visually-hidden">The FEC's YouTube page</span></a>
+              </div>
+            </li>
+          </ul>
+
+          <p>999 E Street, NW<br>
+          Washington, DC 20463</p>
           <p>(800) 424-9530</p>
-          <p class="address__subtitle">betaFEC feedback</p>
-          <p><a href="mailto:{{ settings.CONTACT_EMAIL }}">{{ settings.CONTACT_EMAIL }}</a><img class="icon--inline--right" src="{% static "img/i-email--inverse.svg" %}" alt="Icon of email being sent"></p>
-          <p><a href="https://github.com/18F/fec">GitHub repository</a><img class="icon--inline--right" src="{% static "img/i-github--inverse.svg" %}" alt="Icon of GitHub logo"></p>
         </div>
       </div>
     </footer>

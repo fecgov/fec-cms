@@ -4,6 +4,8 @@
 {% block body_class %}template-{{ self.get_verbose_name | slugify }}{% endblock %}
 
 {% block content %}
+{% include 'partials/breadcrumbs.html' with page=self style='secondary' %}
+
 <div class="hero__banner--office"></div>
 <article class="main">
   <div class="container">
@@ -76,7 +78,7 @@
           <h5 class="contact-item__title">Congressional Affairs Office</h5>
           <span class="t-block">FEC's primary liaison with Congress and executive branch agencies</span>
           <span class="contact-item__phone">202-694-1006</span>
-        </li> 
+        </li>
         <li class="contact-item contact-item--half">
           <h5 class="contact-item__title">Electronic Filing Office</h5>
           <span class="t-block">Including password assistance and technical support</span>
