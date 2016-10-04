@@ -10,6 +10,7 @@
     "ace-builds": "1.2.2",
     "aria-accordion": "0.1.1",
     "component-sticky": "1.0.0",
+    "es6-weak-map": "2.0.1",
     "fec-style": "5.2.1",
     "fullcalendar": "2.5.0",
     "glossary-panel": "0.2.0",
