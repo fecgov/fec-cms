@@ -58,7 +58,7 @@
   <div class="main">
     <div class="container">
       {% for update in updates %}
-        {% include 'partials/update.html' with update=update %}
+        {% include 'partials/update.html' with update=update show_tag=True %}
       {% endfor %}
       <div class="results-info">
         <span>Page {{ updates.number }} of {{ updates.paginator.num_pages }}</span>

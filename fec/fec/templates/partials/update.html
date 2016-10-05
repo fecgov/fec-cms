@@ -7,7 +7,9 @@
   </div>
   <h3><a href="{{ update.url }}">{{ update.title }}</a></h3>
   {% if update.get_update_type != 'Weekly Digest' %}
-    {{ update.body | truncatewords_html:30 }}
+    <div class="t-sans">
+      {{ update.body | truncatewords_html:30 }}
+    </div>
   {% endif %}
   {% if show_tag %}
     <div class="post__meta">

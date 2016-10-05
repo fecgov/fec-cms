@@ -31,7 +31,7 @@
     </div>
     <section class="main__content--right">
       <div id="press-releases" class="option">
-        <h2><a href="">Press releases</a></h2>
+        <h2><a href="/updates?update_type=press-release">Press releases</a></h2>
         <div class="content__section">
           {{ self.release_intro }}
         </div>
@@ -42,7 +42,7 @@
       </div>
 
       <div id="weekly-digest" class="option">
-        <h2><a href="">Weekly Digest</a></h2>
+        <h2><a href="/updates?update_type=weekly-digest">Weekly Digest</a></h2>
         <div class="content__section">
           {{ self.digest_intro }}
         </div>
@@ -71,7 +71,8 @@
             <div class="contact-item__content">
               <h5 class="contact-item__title">Local</h5>
               <span class="t-block">(202) 694-1220</span>
-              <span class="t-block">7:00 a.m. to 6:00 p.m., M-F, Eastern Time</span>
+              <span class="t-block">7:00 a.m. to 6:00 p.m.</span>
+              <span class="t-block">M-F, Eastern Time</span>
             </div>
           </li>
           <li class="grid__item contact-item">
@@ -92,7 +93,7 @@
       <h2>Additional resources</h2>
       <div class="grid grid--4-wide">
         <div class="grid__item">
-          <a href="/calendar">
+          <a href="/updates">
             <aside class="card card--horizontal card--secondary">
               <div class="card__image__container">
                   <span class="card__icon i-info-person"><span class="u-visually-hidden">Icon of a customer service representative</span></span>
@@ -119,7 +120,7 @@
           <a href="{{ settings.FEC_APP_URL }}">
             <aside class="card card--horizontal card--secondary">
               <div class="card__image__container">
-                  <span class="card__icon i-table"><span class="u-visually-hidden">Icon of a table of dat</span></span>
+                  <span class="card__icon i-table"><span class="u-visually-hidden">Icon of a table of data</span></span>
               </div>
               <div class="card__content">
                 Campaign finance data
