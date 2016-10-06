@@ -10,13 +10,11 @@ from home.models import PressReleasePage
 register = template.Library()
 
 @register.inclusion_tag('partials/press-feed.html')
-def press_updates():
-    press_releases = PressReleasePage.objects.all().order_by('-date')[:5]
-    digests = DigestPage.objects.all().order_by('-date')[:2]
-    updates = sorted(
-      chain(press_releases, digests),
-      key=attrgetter('date'),
-      reverse=True
-    )
+def press_releases():
+    press_releases = PressReleasePage.objects.all().order_by('-date')[:3]
+    return {'updates': press_releases}
 
-    return {'updates': updates}
+@register.inclusion_tag('partials/press-feed.html')
+def weekly_digests():
+    digests = DigestPage.objects.all().order_by('-date')[:3]
+    return {'updates': digests}
