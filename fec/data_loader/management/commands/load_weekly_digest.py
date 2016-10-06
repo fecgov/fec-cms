@@ -96,6 +96,8 @@ def strip_cruft(body, title):
         ('<a href="\.\.\/pdf\/[0-9]+release.pdf">\.pdf version of this Weekly Digest<a>', ''),
         ('<a href="\.\.\/pdf\/[0-9]+release.pdf">\.pdf version...a>', ''),
         ('\.pdf version of this Weekly Digest', ''),
+        ('(<\/blockquote>)+', '<\blockquote>'),
+        ('(<blockquote>)+', 'blockquote'),
     ]
 
     for old, new in replacements:
@@ -103,12 +105,6 @@ def strip_cruft(body, title):
 
     for old, new in regex_replacements:
         body = re.sub(old, new, body)
-
-    if title:
-        body = str.replace(body, """<p align="center"><strong>Weekly Digest</strong></p><p align="center"><strong>{0} </strong></p>""".format(title), '')
-        body = str.replace(body, """<h3 align="center"><strong>Weekly Digest </strong></h3><p align="center"><strong><br/></strong><strong>{0} </strong></p>""".format(title), '')
-        body = str.replace(body, """<p align="center"><strong>Weekly Digest</strong></p><p align="center"><strong>{0}</strong></p>""".format(title), '')
-        body = str.replace(body, """<h3 align="center"><strong>Weekly Digest </strong></h3><p align="center"><strong><br/></strong><strong>{0}</strong></p>""".format(title), '')
 
     # Flag
     if """You have performed a blocked operation""" in body:
@@ -131,7 +127,7 @@ def add_page(item, base_page):
     item_year = parser.parse(item['date']).year
     title = item['title'][:255]
     slug = slugify(str(item_year) + '-' + title)[:225]
-    url_path = "/home/media/" + slug + "/"
+    url_path = "/home/updates/" + slug + "/"
 
     # we need to load multiple times get rid of previous loads
     if Page.objects.filter(url_path=url_path).count() > 0:
@@ -173,7 +169,7 @@ def add_page(item, base_page):
 def load_digest_from_json():
     """Loops through json files and adds them to wagtail"""
     # Base Page that the pages you are adding belong to
-    base_page = Page.objects.get(url_path='/home/media/')
+    base_page = Page.objects.get(url_path='/home/updates/')
 
     paths = sorted(glob.glob('data_loader/data/digest_json/' + '*.json'))
     logger.info("starting...")

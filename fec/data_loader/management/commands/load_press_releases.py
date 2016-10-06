@@ -91,6 +91,8 @@ def strip_cruft(body, title):
         ('<a href="\.\.\/pdf\/[0-9]+release.pdf">\.pdf version...a>', ''),
         ('<a href="\.\.\/pdf\/[0-9]+release.pdf">\.pdf version..a>', ''),
         ('\.pdf version of this news release', ''),
+        ('(<\/blockquote>)+', '<\blockquote>'),
+        ('(<blockquote>)+', 'blockquote'),
     ]
 
     for old, new in replacements:
@@ -98,18 +100,6 @@ def strip_cruft(body, title):
 
     for old, new in regex_replacements:
         body = re.sub(old, new, body)
-
-    # already have title
-    if title:
-        title_layouts = [
-            """<p><strong>{0}<br/></strong></p>""".format(title),
-            """<td colspan="4"><p style="text-align:center;"><strong>{0}</strong></p>""".format(title.upper()),
-            """<p align="center">{0}</p>""".format(title.upper()),
-            """<p><strong>{0}</strong></p>""".format(title),
-        ]
-
-        for layout in title_layouts:
-            body = str.replace(body, layout, '')
 
     # Flag
     if """You have performed a blocked operation""" in body:
@@ -156,7 +146,7 @@ def add_page(item, base_page):
     else:
         category = "other agency actions"
     slug = slugify(str(item_year) + '-' + category + '-' + title)[:225]
-    url_path = "/home/media/" + slug + "/"
+    url_path = "/home/updates/" + slug + "/"
     clean_body = strip_cruft(item['html'], item['title'])
     linked_body = relink(urljoin(base_url, item['href']), clean_body)
     body = escape(linked_body)
@@ -194,7 +184,7 @@ def add_page(item, base_page):
 def load_press_releases_from_json():
     """Loops through json files and adds them to wagtail"""
     # Base Page that the pages you are adding belong to
-    base_page = Page.objects.get(url_path='/home/media/')
+    base_page = Page.objects.get(url_path='/home/updates/')
 
     paths = sorted(glob.glob('data_loader/data/pr_json/' + '*.json'))
     logger.info("starting...")
