@@ -10,7 +10,7 @@
 {% include 'partials/breadcrumbs.html' with page=self style='secondary' %}
 <section class="content__section--extra">
   <div class="container">
-    <h1>{{ page_context.title }}</h1>
+    <h1>Latest updates</h1>
     <p class="p--lead">Search or browse the latest information on the Commission and federal campaign finance law.</p>
     <p class="p--lead">Weekly Digests are published every Friday and summarize the week's publicly disclosed activity, including enforcement matters, litigation, meetings information and advisory opinion actions.</p>
     <p class="p--lead">Press releases and FEC Record articles are published as news happens. Press releases are written for media professionals. Record articles are a written for political committees</p>
@@ -58,7 +58,7 @@
   <div class="main">
     <div class="container">
       {% for update in updates %}
-        {% include 'partials/update.html' with update=update %}
+        {% include 'partials/update.html' with update=update show_tag=True %}
       {% endfor %}
       <div class="results-info">
         <span>Page {{ updates.number }} of {{ updates.paginator.num_pages }}</span>
