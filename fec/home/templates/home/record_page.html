@@ -5,7 +5,7 @@
 
 {% block content %}
 
-<header class="page-header page-header--secondary">
+<nav class="page-header page-header--secondary">
   <ul class="breadcrumbs">
     <li class="breadcrumbs__item"><a href="/" class="breadcrumbs__link" rel="Home">Home</a></li>
     <li class="breadcrumbs__item">
@@ -17,44 +17,35 @@
       <span>{{ self.title }}</span>
     </li>
   </ul>
-</header>
+</nav>
 
 <article class="main">
   <div class="container">
-    <div class="main__content--full">
-
-      <div class="section__heading">
-        <ul class="tags" aria-hidden="false">
-          <li class="tag t-upper">
-            FEC Record: {{ self.get_category_display }}
-          </li>
-        </ul>
-        <div class="row">
-          {% spaceless %}{# for inline blocks #}
-          <div class="section__heading__title">
-            <h1 class="heading__title heading__title--with-date">{{ self.title }}</h1>
-          </div>
-          <div class="section__heading__date">
-            <span class="t-sans">{{ self.date|date:'F j, Y' }}</span>
-          </div>
-          {% endspaceless %}
-        </div>
-      </div>
+    <header class="heading--main heading--with-date">
+      <ul class="tags" aria-hidden="false">
+        <li class="tag tag--secondary t-upper">
+          FEC Record: {{ self.get_category_display }}
+        </li>
+      </ul>
       <div class="row">
-        <div class="heading__action">
-          <ul class="list--buttons">
-            <li><button class="button button--standard button--subscribe is-disabled">Subscribe</button></li>
-            <li><button class="button button--standard button--share is-disabled">Share</button></li>
-          </ul>
+        {% spaceless %}{# for inline blocks #}
+        <h1 class="heading__left">{{ self.title }}</h1>
+        <div class="heading__right">
+          <span class="t-sans">{{ self.date|date:'F j, Y' }}</span>
         </div>
+        {% endspaceless %}
       </div>
-
-      {% include 'partials/body-blocks.html' with blocks=self.body %}
-
-      {% include 'partials/author-list.html' %}
-
+    </header>
+    <div>
+      <div class="main__content">
+        {% include 'partials/body-blocks.html' with blocks=self.body %}
+      </div>
+      <aside class="sidebar-container">
+        <button class="button button--standard button--share is-disabled u-float-right">Share</button>
+      </aside>
     </div>
-  </div>
+    {% include 'partials/author-list.html' %}
+    </div>
 </article>
 
 {% if self.read_next or self.related_section_title %}

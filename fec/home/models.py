@@ -246,18 +246,21 @@ class OptionBlock(blocks.StructBlock):
 
 class PressLandingPage(Page):
     hero = stream_factory(null=True, blank=True)
+    release_intro = stream_factory(null=True, blank=True)
+    digest_intro = stream_factory(null=True, blank=True)
+
     option_blocks = StreamField([
         ('option_blocks', OptionBlock())
     ])
 
-    feed_intro = stream_factory(null=True, blank=True)
     contact_intro = stream_factory(null=True, blank=True)
 
     content_panels = Page.content_panels + [
         StreamFieldPanel('hero'),
-        StreamFieldPanel('feed_intro'),
-        StreamFieldPanel('contact_intro'),
+        StreamFieldPanel('release_intro'),
+        StreamFieldPanel('digest_intro'),
         StreamFieldPanel('option_blocks'),
+        StreamFieldPanel('contact_intro'),
     ]
 
 class CollectionList(blocks.StructBlock):
