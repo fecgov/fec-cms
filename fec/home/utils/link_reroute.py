@@ -4,7 +4,7 @@ from bs4 import BeautifulSoup as bs
 from urllib.parse import urljoin
 
 
-bucket_url = 'https://amazon-ugly-bucketname'
+bucket_url = 'https://cg-26646295-a781-431c-ab40-895616b7ea28'
 
 
 def new_press_link(l):
@@ -43,7 +43,10 @@ def remake_links(href, body):
 
         # we can add more links to check here
         path_replacements = [
+            # Press path replacements
+            ('http://fec.gov/press/press[0-9]+/news_releases/', new_press_link(link['href'])),
             ('http://fec.gov/press/press[0-9]+/', new_press_link(link['href'])),
+            ('http://fec.gov/press/archive/[0-9]+/', new_press_link(link['href']))
         ]
 
         for old, new in path_replacements:
@@ -54,6 +57,6 @@ def remake_links(href, body):
     return soup
 
 # # using this to test
-# test = 'lsdkjfkj <a href="/test.com">x</a> sijdflkj<a href="http://www.example/test.com">y</a> asd <a href="http://fec.gov/press/press1999/testy.pdf">z</a>'
+#test = 'lsdkjfkj <a href="/test.com">x</a> sijdflkj<a href="http://www.example/test.com">y</a> asd <a href="/press/archive/1975/archive.pdf">archive releases</a> <a href="/press/press2016/news_releases/current.pdf">current releases</a><a href="/press/press2010/2010_18M-Candidate_Files/1cansum201018.pdf">current releases type 2</a>'
 
 # print(remake_links('http://fec.gov/', test))
