@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+{% block extra_css %}
+{% endblock %}
+{% load wagtailcore_tags %}
+{% block body_class %}template-{{ self.get_verbose_name | slugify }}{% endblock %}
+
+{% block content %}
+{% include 'partials/breadcrumbs.html' with page=self links=self.get_ancestors style='secondary' %}
+
+<article class="main">
+  <div class="container">
+    <div class="section__heading">
+      <h1 class="heading__title t-display">{{ self.title }}</h1>
+    </div>
+   {% for block in self.agenda %}
+    <div class="main__content">
+    <p>{{ full_video_url.value }}</p>
+    <p>{{ full_audio.value }}</p>
+    <p>{{ mtg_transcript.value }}</p>
+    <ol class="list--numbered">
+      {% if block.block_type == "agenda_item" %}
+      <li>
+        {% for subblock in block.value %}
+             {% if subblock.block_type == "item_title" %}
+                    <h2>{{subblock.value}}</h2>
+             {% elif subblock.block_type == "item_audio" %}
+               <p>
+                 <audio controls>
+                   <source src="{{subblock.value.url}}" type="audio/mpeg">
+                   Your browser does not support the audio element Download below.
+                 </audio>
+                 <a href="{{subblock.value.url}}" target="_blank">Download Audio</a>
+               <p>
+             {% elif subblock.block_type == "item_text" %}
+                     <p>{{subblock.value}}</p>
+             {% elif subblock.block_type == "mtg_doc" %}
+                    <p><a href="{{subblock.value.doc_link}}">{{subblock.value.doc_description}}</a><br />
+                {% ifequal subblock.value.submitted_late True %}
+                  (Submitted Late)
+                {% endifequal %}
+                {% ifequal subblock.value.heldover True %}
+                  (Heldover from {{subblock.value.heldover_from}} meeting)
+                {% endifequal %}
+                    </p>
+            {% endif %}
+        {% endfor %}
+    </li>
+      {% endif %}
+   {% endfor %}
+  </ol>
+    </div>
+    {% if self.sidebar %}
+    <div class="sidebar-container">
+      <aside class="sidebar sidebar--secondary">
+        {% for block in self.sidebar %}
+          {% if block.block_type == 'heading' %}
+            <h4 class="sidebar__title">{{ block }}</h4>
+          {% else %}
+            <div class="sidebar__content">
+              {{ block }}
+            </div>
+          {% endif %}
+        {% endfor %}
+      </aside>
+    </div>
+    {% endif %}
+  </div>
+</article>
+
+{% include 'partials/disclaimer.html' %}
+{% endblock %}
