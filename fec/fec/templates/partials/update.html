@@ -2,17 +2,21 @@
 
 <article class="post">
   <div class="post__pre">
-    <span class="u-float-left">{{ update.date|date:'F j, Y' }}</span>
-    <span class="u-float-right">From: {% if update.get_update_type == 'FEC Record' %}Information Division{% else %}Press Office{% endif %}</span>
+    <div class="post__date">{{ update.date|date:'F j, Y' }}</div>
+    <div class="post__byline">From: {% if update.get_update_type == 'FEC Record' %}Information Division{% else %}Press Office{% endif %}</div>
   </div>
   <h3><a href="{{ update.url }}">{{ update.title }}</a></h3>
   {% if update.get_update_type != 'Weekly Digest' %}
-    {{ update.body | truncatewords_html:30 }}
+    <div class="t-sans">
+      {{ update.body | truncatewords_html:30 }}
+    </div>
   {% endif %}
-  <div class="post__meta">
-    <a class="tag tag--secondary" href="/updates?update_type={{update.get_update_type|slugify}}">{{update.get_update_type}}</a>
-    {% if update.category %}
-      in: <a href="/updates?update_type={{update.get_update_type|slugify}}&category={{update.category|slugify}}">{{ update.category }}</a>
-   {% endif %}
-  </div>
+  {% if show_tag %}
+    <div class="post__meta">
+      <a class="tag tag--secondary" href="/updates?update_type={{update.get_update_type|slugify}}">{{update.get_update_type}}</a>
+      {% if update.category %}
+        in: <a href="/updates?update_type={{update.get_update_type|slugify}}&category={{update.category|slugify}}">{{ update.category }}</a>
+     {% endif %}
+    </div>
+  {% endif %}
 </article>
