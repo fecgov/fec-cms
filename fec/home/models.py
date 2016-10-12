@@ -307,34 +307,6 @@ class CollectionPage(Page):
 class AgendaPage(Page):
     author= models.CharField(max_length=255)
     date = models.DateField('Post date')
-    agenda = StreamField([
-        ('agenda_item', blocks.StreamBlock([
-            ('item_title', blocks.TextBlock()),
-            ('item_text', blocks.TextBlock()),
-            ('mtg_doc', blocks.StructBlock([
-                ('doc_description', blocks.TextBlock()),
-                ('doc_link', blocks.TextBlock()),
-                ('submitted_late', blocks.BooleanBlock(required=False, help_text='Submitted Late')),
-                ('heldover', blocks.BooleanBlock(required=False, help_text='Held Over')),
-                ('heldover_from', blocks.DateBlock(required=False, help_text="Held Over From")),
-            ('item_audio', DocumentChooserBlock(required=False)),
-            ]))
-        ]))
-    ])
-       
-    
-
-
-    content_panels = Page.content_panels + [
-        FieldPanel('author'),
-        FieldPanel('date'),
-        StreamFieldPanel('agenda'),
-        
-    ]
-
-class AgendaPage(Page):
-    author= models.CharField(max_length=255)
-    date = models.DateField('Post date')
     mtg_date = models.DateField(default=datetime.date.today)
     mtg_time = models.CharField(max_length=255, default ='10:00 AM')
     agenda = StreamField([
