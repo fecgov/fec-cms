@@ -5,7 +5,7 @@
 
 {% block content %}
 
-<header class="page-header page-header--secondary">
+<nav class="page-header page-header--secondary">
   <ul class="breadcrumbs">
     <li class="breadcrumbs__item"><a href="/" class="breadcrumbs__link" rel="Home">Home</a></li>
     <li class="breadcrumbs__item">
@@ -17,11 +17,13 @@
       <span>{{ self.title }}</span>
     </li>
   </ul>
-</header>
+</nav>
 
 <article class="main">
   <div class="container">
-    <h1 class="main__title">{{ self.title }}</h1>
+    <header class="heading--main">
+      <h1>{{ self.title }}</h1>
+    </header>
     <div class="content__section">
       <div class="main__content">
         <p>An individual running for a seat in the House or Senate becomes a <span class="term" data-term="candidate">candidate</span>
