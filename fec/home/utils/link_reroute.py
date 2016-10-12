@@ -46,6 +46,7 @@ def remake_links(href, body):
             # Press path replacements
             ('http://fec.gov/press/press[0-9]+/news_releases/', new_press_link(link['href'])),
             ('http://fec.gov/press/press[0-9]+/', new_press_link(link['href'])),
+            ('http://fec.gov/press/archive/[0-9]+/archive/[0-9]+/', new_press_link(link['href'])),
             ('http://fec.gov/press/archive/[0-9]+/', new_press_link(link['href']))
         ]
 
@@ -57,6 +58,6 @@ def remake_links(href, body):
     return soup
 
 # # using this to test
-#test = 'lsdkjfkj <a href="/test.com">x</a> sijdflkj<a href="http://www.example/test.com">y</a> asd <a href="/press/archive/1975/archive.pdf">archive releases</a> <a href="/press/press2016/news_releases/current.pdf">current releases</a><a href="/press/press2010/2010_18M-Candidate_Files/1cansum201018.pdf">current releases type 2</a>'
+#test = 'lsdkjfkj <a href="/test.com">x</a> sijdflkj<a href="http://www.example/test.com">y</a> asd <a href="http://fec.gov/press/archive/1975/archive/1975/archive.pdf">archive releases 1</a> <a href="http://fec.gov/press/archive/1975/archive.pdf">archive releases 2</a> <a href="http://fec.gov/press/press2016/news_releases/current.pdf">current releases</a><a href="http://fec.gov/press/press2010/2010_18M-Candidate_Files/1cansum201018.pdf">current releases type 2</a>'
 
-# print(remake_links('http://fec.gov/', test))
+#print(remake_links('http://fec.gov/', test))
