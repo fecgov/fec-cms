@@ -2,6 +2,10 @@
 
 var $ = require('jquery');
 
+// Implementing a polyfill for js native WeakMap
+// in order to patch functionality in an included library
+require('es6-weak-map/implement');
+
 var Accordion = require('aria-accordion').Accordion;
 var Glossary = require('glossary-panel');
 
