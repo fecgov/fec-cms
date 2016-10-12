@@ -20,7 +20,7 @@
         <nav class="sidebar sidebar--neutral sidebar--left side-nav js-toc">
           <ul class="sidebar__content">
               <li class="side-nav__item"><a class="side-nav__link" href="#press-releases">Press releases</a></li>
-              <li class="side-nav__item"><a class="side-nav__link" href="#weekly-digest">Weekly Digest</a></li>
+              <li class="side-nav__item"><a class="side-nav__link" href="#weekly-digest">Weekly Digests</a></li>
               {% for option in self.option_blocks %}
                 <li class="side-nav__item"><a class="side-nav__link" href="#{{option.value.title | slugify }}">{{ option.value.title }}</a></li>
               {% endfor %}
@@ -42,7 +42,7 @@
       </div>
 
       <div id="weekly-digest" class="option">
-        <h2><a href="/updates?update_type=weekly-digest">Weekly Digest</a></h2>
+        <h2><a href="/updates?update_type=weekly-digest">Weekly Digests</a></h2>
         <div class="content__section">
           {{ self.digest_intro }}
         </div>
