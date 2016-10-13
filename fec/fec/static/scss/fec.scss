@@ -58,7 +58,8 @@
 // Author attributions following an article.
 
 .author-list {
-  display: inline;
+  display: block;
+  clear: both;
 }
 
 .author-item {
