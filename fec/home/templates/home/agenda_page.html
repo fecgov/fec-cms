@@ -1,6 +1,4 @@
 {% extends "base.html" %}
-{% block extra_css %}
-{% endblock %}
 {% load wagtailcore_tags %}
 {% block body_class %}template-{{ self.get_verbose_name | slugify }}{% endblock %}
 
@@ -9,19 +7,49 @@
 
 <article class="main">
   <div class="container">
-    <div class="section__heading">
-      <h1 class="heading__title t-display">{{ self.title }}</h1>
-    </div>
-   {% for block in self.agenda %}
+     <div class="section__heading">
+        <ul class="tags">
+          <li class="tag tag--secondary t-upper">
+            Commission Meetngs</li>
+        </ul>
+        <div class="row">
+          {% spaceless %}{# for inline blocks #}
+          <div class="section__heading__title">
+            <h1 class="heading__title heading__title--with-date">{{ self.title }}</h1>
+          </div>
+          <div class="section__heading__date">
+            <span class="t-sans">{{ self.mtg_date|date:'F j, Y' }}</span><br />
+            <span class="t-sans">{{ self.mtg_time }}</span>
+          </div>
+          {% endspaceless %}
+        </div>
+      </div>
+ 
+
     <div class="main__content">
-    <p>{{ full_video_url.value }}</p>
-    <p>{{ full_audio.value }}</p>
-    <p>{{ mtg_transcript.value }}</p>
-    <ol class="list--numbered">
-      {% if block.block_type == "agenda_item" %}
-      <li>
-        {% for subblock in block.value %}
-             {% if subblock.block_type == "item_title" %}
+    {% for block in self.agenda %}
+        {% if block.block_type == "mtg_media" %}
+          {% for subblock in block.value %}
+             {% if subblock.block_type == "full_video_url" %}
+               <p>Video of Entire Meeting: <a href="{{ subblock.value }}">{{ subblock.value }}</a></p>
+             {% elif subblock.block_type == "full_audio" %}
+               <p>Audio of Entire Meeting:
+                  <audio controls>
+                   <source src="{{subblock.value.url}}" type="audio/mpeg">
+                   Your browser does not support the audio element Download below.
+                 </audio>
+                 <a href="{{subblock.value.url}}" target="_blank">Download Audio</a>
+               </p>
+             {% elif subblock.block_type == "mtg_transcript" %}  
+               <p>Meeting Transcript: <a href="{{ subblock.value }}">{{ subblock.value }}</a></p>
+             {% endif %} 
+          {% endfor %}
+        {% endif %}
+        <ol class="list--numbered">
+        {% if block.block_type == "agenda_item" %}
+          {% for subblock in block.value %}
+          <li>
+            {% if subblock.block_type == "item_title" %}
                     <h2>{{subblock.value}}</h2>
              {% elif subblock.block_type == "item_audio" %}
                <p>
@@ -34,7 +62,7 @@
              {% elif subblock.block_type == "item_text" %}
                      <p>{{subblock.value}}</p>
              {% elif subblock.block_type == "mtg_doc" %}
-                    <p><a href="{{subblock.value.doc_link}}">{{subblock.value.doc_description}}</a><br />
+                    <p><a href="{{subblock.value.mtg_doc_upload.url}}">{{subblock.value.mtg_doc_upload.title}}</a><br />
                 {% ifequal subblock.value.submitted_late True %}
                   (Submitted Late)
                 {% endifequal %}
