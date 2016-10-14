@@ -4,7 +4,7 @@ from bs4 import BeautifulSoup as bs
 from urllib.parse import urljoin
 
 
-bucket_url = 'https://cg-26646295-a781-431c-ab40-895616b7ea28'
+bucket_url = 'https://cg-26646295-a781-431c-ab40-895616b7ea28.s3.amazonaws.com'
 
 
 def new_press_link(l):
@@ -53,6 +53,26 @@ def remake_links(body):
 
     return str(soup)
 
+def fix_pdf_imports_old(body):
+    # find relative links
+    soup = bs(body, "html5lib")
+    links = soup.find_all('a', href=True)
+    for link in links:
+        # we can add more links to check here
+        path_replacements = [
+            # Press path replacements
+            'http://fec.gov/press/archive/[0-9]+/archive/[0-9]+/',
+            'http://www.fec.gov/press/archive/[0-9]+/archive/[0-9]+/',
+        ]
+
+        for old in path_replacements:
+            re_string = '^' + old + '*'
+            if re.match(re_string, link['href']):
+                link['href'] = re.sub('\/archive\/[0-9]+', '', link['href'], count=1)
+
+    return str(soup)
+
+
 # # using this to test
 # test = """<html><head></head><body>
 #     lsdkjfkj <a href="/test.com">x</a> sijdflkj
@@ -64,4 +84,4 @@ def remake_links(body):
 #     <a href="http://www.fec.gov/press/archive/1977/archive/1977/19770210_MatchingFunds.pdf">test</a>
 #     </body>
 # """
-# print(remake_links(test))
+# print(fix_pdf_imports_old(test))
