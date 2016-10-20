@@ -9,7 +9,7 @@ from wagtail.wagtailcore.models import Page, Orderable
 from wagtail.wagtailcore.fields import StreamField
 from wagtail.wagtailcore import blocks
 from wagtail.wagtailadmin.edit_handlers import (FieldPanel, StreamFieldPanel,
-                                                PageChooserPanel, InlinePanel)
+                                                PageChooserPanel, InlinePanel, MultiFieldPanel)
 from wagtail.wagtailimages.blocks import ImageChooserBlock
 from wagtail.wagtailimages.edit_handlers import ImageChooserPanel
 
@@ -309,12 +309,12 @@ class AgendaPage(Page):
     date = models.DateField('Post date')
     mtg_date = models.DateField(default=datetime.date.today)
     mtg_time = models.CharField(max_length=255, default ='10:00 AM')
+    mtg_media = StreamField([
+        ('full_video_url', blocks.TextBlock()),
+        ('full_audio', DocumentChooserBlock(required=False)),
+        ('mtg_transcript', DocumentChooserBlock(required=False))
+        ])
     agenda = StreamField([
-        ('mtg_media', blocks.StreamBlock([
-            ('full_video_url',blocks.CharBlock(required =False)),
-            ('full_audio', DocumentChooserBlock(required=False)),
-            ('mtg_transcript',DocumentChooserBlock(required=False))
-            ])),
         ('agenda_item', blocks.StreamBlock([
             ('item_title', blocks.TextBlock()),
             ('item_text', blocks.TextBlock()),
@@ -337,6 +337,13 @@ class AgendaPage(Page):
         FieldPanel('mtg_date'),
         FieldPanel('mtg_time'),
         StreamFieldPanel('agenda'),
+        MultiFieldPanel(
+        [
+            StreamFieldPanel('mtg_media'),
+        ],
+        heading="Entire Meeeting Media",
+        classname="collapsible collapsed"
+        ),
         
     ]
 

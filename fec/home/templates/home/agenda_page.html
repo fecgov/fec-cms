@@ -27,24 +27,26 @@
  
 
     <div class="main__content">
-    {% for block in self.agenda %}
-        {% if block.block_type == "mtg_media" %}
-          {% for subblock in block.value %}
-             {% if subblock.block_type == "full_video_url" %}
-               <p>Video of Entire Meeting: <a href="{{ subblock.value }}">{{ subblock.value }}</a></p>
-             {% elif subblock.block_type == "full_audio" %}
+    {% for block in self.mtg_media %}
+    
+          
+             {% if block.block_type == "full_video_url" %}
+               <p>Video of Entire Meeting: <a href="{{ block.value }}">{{ block.value }}</a></p>
+             {% elif block.block_type == "full_audio" %}
                <p>Audio of Entire Meeting:
                   <audio controls>
-                   <source src="{{subblock.value.url}}" type="audio/mpeg">
+                   <source src="{{block.value.url}}" type="audio/mpeg">
                    Your browser does not support the audio element Download below.
                  </audio>
-                 <a href="{{subblock.value.url}}" target="_blank">Download Audio</a>
+                 <a href="{{block.value.url}}" target="_blank">Download Audio</a>
                </p>
-             {% elif subblock.block_type == "mtg_transcript" %}  
-               <p>Meeting Transcript: <a href="{{ subblock.value }}">{{ subblock.value }}</a></p>
+             {% elif block.block_type == "mtg_transcript" %}  
+               <p><a href="{{ block.value.url }}">{{ block.value.title }}</a></p>
              {% endif %} 
           {% endfor %}
-        {% endif %}
+      
+        
+      {% for block in self.agenda %}
         <ol class="list--numbered">
         {% if block.block_type == "agenda_item" %}
           {% for subblock in block.value %}
