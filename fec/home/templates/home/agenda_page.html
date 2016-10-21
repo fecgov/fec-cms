@@ -45,12 +45,13 @@
              {% endif %} 
           {% endfor %}
       
-        
-      {% for block in self.agenda %}
         <ol class="list--numbered">
+      {% for block in self.agenda %}
+        
         {% if block.block_type == "agenda_item" %}
+        <li>
           {% for subblock in block.value %}
-          <li>
+          
             {% if subblock.block_type == "item_title" %}
                     <h2>{{subblock.value}}</h2>
              {% elif subblock.block_type == "item_audio" %}
