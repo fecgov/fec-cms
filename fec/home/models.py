@@ -229,9 +229,7 @@ class PressReleasePage(ContentPage):
     """
     @property
     def no_boilerplate(self):
-        if self.date.year >= 2016:
-            return True
-        return False
+        return self.date.year >= 2016
 
 class CustomPage(Page):
     """Flexible customizable page."""
