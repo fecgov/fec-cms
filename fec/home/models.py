@@ -223,6 +223,15 @@ class PressReleasePage(ContentPage):
     def get_update_type(self):
         return constants.update_types['press-release']
 
+    """
+    Because we removed the boilerplate from all 2016 releases
+    this flag is used to show it in the templates as a print-only element
+    """
+    @property
+    def no_boilerplate(self):
+        if self.date.year == 2016:
+            return True
+        return False
 
 class CustomPage(Page):
     """Flexible customizable page."""
