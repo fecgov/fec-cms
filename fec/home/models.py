@@ -229,7 +229,7 @@ class PressReleasePage(ContentPage):
     """
     @property
     def no_boilerplate(self):
-        if self.date.year == 2016:
+        if self.date.year >= 2016:
             return True
         return False
 
