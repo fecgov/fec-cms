@@ -14,7 +14,7 @@ def replace_space(string):
   return string.replace(' ', '-')
 
 def get_records(category_list=False, year=False):
-  records = RecordPage.objects.all()
+  records = RecordPage.objects.live()
   if category_list != '':
     for category in category_list:
       records = records.filter(category=category)
@@ -23,13 +23,13 @@ def get_records(category_list=False, year=False):
   return records
 
 def get_digests(year=False):
-  digests = DigestPage.objects.all()
+  digests = DigestPage.objects.live()
   if year != '':
     digests = digests.filter(date__year=year)
   return digests
 
 def get_press_releases(category_list=False, year=False):
-  press_releases = PressReleasePage.objects.all()
+  press_releases = PressReleasePage.objects.live()
   if category_list:
     for category in category_list:
       press_releases = press_releases.filter(category=category)
