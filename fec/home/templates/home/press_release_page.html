@@ -39,6 +39,12 @@
     <div>
       <div class="main__content">
         {% include 'partials/body-blocks.html' with blocks=self.body %}
+        {% if self.no_boilerplate %}
+        <div class="post__boilerplate u-print-only">
+          <p>The Federal Election Commission (FEC) is an independent regulatory agency that administers and enforces federal campaign finance laws. The FEC has jurisdiction over the financing of campaigns for the U.S. House of Representatives, the U.S. Senate, the Presidency and the Vice Presidency. Established in 1975, the FEC is composed of six Commissioners who are nominated by the President and confirmed by the U.S. Senate.</p>
+          <span class="t-block t-centered">###</span>
+        </div>
+        {% endif %}
       </div>
       <aside class="sidebar-container">
         <button class="button button--standard button--share is-disabled u-float-right">Share</button>
@@ -48,7 +54,7 @@
   </div>
 </article>
 
-<div class="slab slab--neutral">
+<div class="slab slab--neutral u-no-print">
   <div class="container">
     <div class="content__section">
       <h3>Read next:</h3>
