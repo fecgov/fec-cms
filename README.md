@@ -1,3 +1,5 @@
+**Master**
+[![Dependency Status](https://gemnasium.com/badges/github.com/18F/fec-cms.svg)](https://gemnasium.com/github.com/18F/fec-cms)
 
 ## Campaign finance for everyone
 
