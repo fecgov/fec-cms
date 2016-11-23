@@ -52,12 +52,12 @@
               <img class="card__image" src="{% static "img/i-complex--data.svg" %}" alt="Icon representing explore campaign finance data">
             </a>
             <div class="card__content">
-              <p>Searchable <a href="{{ settings.FEC_APP_URL }}/filings?data_type=efiling">eFiling data</a>, which contains the most recent, raw information from committee electronic filings.</p>
+              <p>Searchable <a href="{{ settings.FEC_APP_URL }}/filings?data_type=efiling">electronic filing data</a>, which contains the most recent, raw information from committee electronic filings.</p>
             </div>
           </div>
         </div>
         <div class="feature grid__item">
-        <a href="https://github.com/18F/FEC/blob/master/release_notes/release_notes.md" class="feature__release-notes">Full release notes from Oct. 26</a>
+        <a href="https://github.com/18F/FEC/blob/master/release_notes/release_notes.md" class="feature__release-notes">Full release notes from Nov. 9</a>
           <div class="card card--primary">
             <a class="card__image-link" href="/legal-resources/">
               <img class="card__image" src="{% static "img/i-complex--legal.svg" %}" alt="Icon for legal resources">
@@ -88,8 +88,4 @@
 {% endblock %}
 
 {% block extra_js %}
-{% if FEC_WEB_ENVIRONMENT == 'prod' %}
-<!-- Ethnio Activation Code -->
-<script type="text/javascript" language="javascript" src="https://ethn.io/70862.js" async="true" charset="utf-8"></script>
-{% endif %}
 {% endblock %}
