@@ -84,7 +84,7 @@ $(document).ready(function() {
   var feedbackWidget = new feedback.Feedback(window.FEC_APP_URL + '/issue/');
 
   // Initialize legal page
-  new legal.Legal(feedbackWidget, '#share-feedback-link', '#ethnio-link');
+  new legal.Legal(feedbackWidget, '#share-feedback-link');
 
   // Initialize filter tags
   var $tagList = new filterTags.TagList({
