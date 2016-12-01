@@ -15,9 +15,9 @@ def lookup(dict, arg):
 
 @register.simple_tag()
 def formatted_title(page):
-  if hasattr(page, 'rich_title'):
-    if page.rich_title:
-      return format_html(page.rich_title)
+  if hasattr(page, 'formatted_title'):
+    if page.formatted_title:
+      return format_html(page.formatted_title)
     else:
       return format_html(page.title)
   else:
