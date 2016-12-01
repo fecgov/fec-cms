@@ -202,6 +202,8 @@ def get_previous_press_release_page():
 
 class PressReleasePage(ContentPage):
     date = models.DateField(default=datetime.date.today)
+    formatted_title = models.CharField(max_length=255, null=True, blank=True, default='',
+                                        help_text="Use if you need italics in the title. e.g. <em>Italicized words</em>")
     category = models.CharField(max_length=255,
                                 choices=constants.press_release_page_categories.items())
     read_next = models.ForeignKey('PressReleasePage', blank=True, null=True,
@@ -209,6 +211,7 @@ class PressReleasePage(ContentPage):
                                   on_delete=models.SET_NULL)
 
     content_panels = ContentPage.content_panels + [
+        FieldPanel('formatted_title'),
         FieldPanel('date'),
         InlinePanel('authors', label="Authors"),
         FieldPanel('category'),
