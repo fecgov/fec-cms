@@ -188,6 +188,24 @@ FEATURES = {
     'press': bool(env.get_credential('FEC_FEATURE_PRESS', ''))
 }
 
+AUTH_PASSWORD_VALIDATORS = [
+    {
+        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
+    },
+    {
+        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
+        'OPTIONS': {
+            'min_length': 9,
+        }
+    },
+    {
+        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
+    },
+    {
+        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
+    },
+]
+
 if os.getenv('SENTRY_DSN'):
     INSTALLED_APPS += ('raven.contrib.django.raven_compat', )
     RAVEN_CONFIG = {
