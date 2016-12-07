@@ -18,9 +18,10 @@ env:
 
 before_install:
   - travis_retry pip install -U pip setuptools wheel
+  - export DATABASE_URL=postgresql://:@/cfdm_cms_unit_test
 
 before_script:
-  - psql -c 'create database "cfdm_cms_unit_test";' -U postgres
+  - psql -c 'create database cfdm_cms_unit_test;' -U postgres
   - travis_retry pip install -r requirements.txt
   - travis_retry pip install coverage django_coverage_plugin
 
@@ -32,7 +33,7 @@ before_script:
   - npm run build
 
 script:
-  - DATABASE_URL='postgresql://:@/cfdm_cms_unit_test' (cd fec && coverage run ./manage.py test)
+  - (cd fec && coverage run ./manage.py test)
   - npm run test-single
 
 after_success:
