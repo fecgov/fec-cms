@@ -5,7 +5,7 @@
       {% if link.title != 'Home' and link.title != 'Root' %}
       <li class="breadcrumbs__item breadcrumbs__item--current">
         <span class="breadcrumbs__separator">›</span>
-        <a class="breadcrumbs__link" href="{{ link.url }}">{{ link }}</a>
+        <a class="breadcrumbs__link" href="{{ link.url }}">{{ link.title }}</a>
       </li>
       {% endif %}
       {% if link.title == 'Registration and reporting' %}
