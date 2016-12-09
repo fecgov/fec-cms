@@ -52,7 +52,7 @@
     <p>If the request does not qualify as an advisory opinion request, the Office of General Counsel notifies the requestor of the specific deficiencies in the request.</p>
     <p>If the request qualifies as an advisory opinion request, it is assigned an AOR number and made public. <a href="{{ FEC_APP_URL }}/legal/search/advisory-opinions/">Search advisory opinion requests</a>.</p>
   </div>
-  <div class="option_aside">
+  <div class="option__aside">
     <p class="label">Mail requests for advisory opinions to:</p>
     <img src="{% static "img/i-mail--primary.svg" %}" alt="Icon of a stamp">
     <p>
@@ -69,7 +69,7 @@
     <p>Submit comments on the request in writing to the Office of General Counsel within ten days after the advisory opinion request is made public.</p>
     <p>Comments should refer to the AOR number of the request being commented on. Comments on advisory opinion requests are made public. <a href="{{ FEC_APP_URL }}/legal/search/advisory-opinions/">Search advisory opinion comments</a>.</p>
   </div>
-  <div class="option_aside">
+  <div class="option__aside">
     <p class="label">Mail comments to:</p>
     <img src="{% static "img/i-mail--primary.svg" %}" alt="Icon of a stamp">
     <p>
@@ -93,25 +93,30 @@
           <a href="mailto:ao@fec.gov">ao@fec.gov</a>
         </div>
         <div class="contact-item contact-item--fax">
-          <p class="t-bold">Fax</p>
-          <p>Commission Secretary: (202) 208-3333</p>
-          <p>Office of General Counsel: (202) 219-392</p>
+          <div class="contact-item__content">
+            <p class="t-bold">Fax</p>
+            <p>Commission Secretary: (202) 208-3333</p>
+            <p>Office of General Counsel: (202) 219-392</p>
+          </div>
         </div>
       </div>
       <div class="usa-width-one-half">
         <div class="contact-item contact-item--hand">
-          <p class="t-bold">Hand delivery</p>
-          <p>Shawn Woodhead Werth</p>
-          <p>Office of the Commission Secretary</p>
-          <p>Federal Election Commission</p>
-          <p>999 E Street, NW</p>
-          <p>Washington, DC 20463</p>
+          <div class="contact-item__content">
+            <p class="t-bold">Hand delivery</p>
+            <p>Shawn Woodhead Werth</p>
+            <p>Office of the Commission Secretary</p>
+            <p>Federal Election Commission</p>
+            <p>999 E Street, NW</p>
+            <p>Washington, DC 20463</p>
+          </div>
         </div>
       </div>
     </div>
   </div>
-  <div class="option_aside">
+  <div class="option__aside">
     <p class="label">Related topic:</p>
+    <i class="icon-circle--search"><span class="u-visually-hidden">Icon of a magnifying glass</span></i>
     <a href="{{ FEC_APP_URL }}/legal/search/advisory-opinions/">Search draft answers to advisory opinion requests</a>
   </div>
 </section>
@@ -123,10 +128,11 @@
     <p>A requestor has the option to appear before the Commission at the open session where the Commission considers his or her advisory opinion request. A requestor can withdraw an advisory opinion request by submitting a written statement of withdrawal before the Commission votes to approve the advisory opinion.</p>
     <p>If at least four Commissioners don’t vote to approve a draft advisory opinion in response to a request, the Commission’s Office of General Counsel will send the requestor a letter stating that the Commission was unable to approve an advisory opinion. This letter is also included in the public record.</p>
   </div>
-  <div class="option_aside">
-    <p class="label">Related topics:</p>
+  <div class="option__aside">
+      <p class="label">Related topics:</p>
+      <i class="icon-circle--calendar"><span class="u-visually-hidden">Icon of a calendar</span></i>
     <a href="calendar/?category=Open+Meetings">Open meetings calendar</a>
-    <div>
+    <div class="content__section--ruled">
       <p><a class="u-no-border" href="http://www.fec.gov/law/policy/enforcement/2009/ao05-09.pdf"><img src="{% static "img/thumbnail--ao-statistics.png" %}" alt="Image of advisory opinion statistics report"></a></p>
       <a href="http://www.fec.gov/law/policy/enforcement/2009/ao05-09.pdf">Advisory opinion statistics FY 2005 to 2008 (PDF)</a>
     </div>
