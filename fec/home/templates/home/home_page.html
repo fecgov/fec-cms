@@ -5,16 +5,39 @@
 
 {% block content %}
   <section class="hero hero--home" aria-labelledby="hero-heading">
-    <div class="hero__banner">
-      <div class="container">
-      The FEC administers and enforces federal campaign finance law and discloses the sources and amounts of funds used to finance our elections
+    <div class="hero__banner"></div>
+
+      <div class="hero__content">
+        <h2>The FEC administers and enforces federal campaign finance law and discloses the sources and amounts of funds used to finance our elections</h2>
       </div>
+
+      <div class="grid grid--3-wide">
+        <div class="grid__item">
+          <img src="{% static "img/feature--data.png" %}" alt="Campaign finance data">
+          <h3><a href="/data">Campaign finance data</a></h3>
+          <p>Helping citizens make informed voting decisions by showing how money is raised and spent in federal elections.</p>
+        </div>
+
+        <div class="grid__item">
+          <img src="{% static "img/feature--reporting.png" %}" alt="Registration and reporting">
+          <h3><a href="/registration-and-reporting">Registration and reporting</a></h3>
+          <p>Providing guidance for individuals and  groups that are active in federal elections.</p>
+        </div>
+
+        <div class="grid__item">
+          <img src="{% static "img/feature--legal.png" %}" alt="Legal resources">
+          <h3><a href="/legal-resources">Legal resources</a></h3>
+          <p>Administering and enforcing federal campaign finance law. Search or browse statutes, regulations, advisory opinions or enforcement matters.</p>
+        </div>
+      </div>
+
     </div>
   </section>
+
   <section>
     <div class="slab slab--primary">
         <div class="container">
-            <h1><a href="{{ settings.FEC_APP_URL }}">Campaign finance data</a></h1>
+            <h1><a href="">Campaign finance data</a></h1>
             <div class="slab slab--primary">
                 <div class="grid grid--2-wide">
                     <div class="grid__item">
@@ -52,7 +75,6 @@
         </div>
     </div>
   </section>
-
 
 {% endblock %}
 
