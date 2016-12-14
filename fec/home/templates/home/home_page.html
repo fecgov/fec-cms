@@ -5,85 +5,34 @@
 
 {% block content %}
   <section class="hero hero--home" aria-labelledby="hero-heading">
-    <div class="hero__banner hero__banner--monument">
-      <div class="container">
-        <div class="hero__heading">
-          <h1 id="hero-heading" class="hero__title t-display"><span class="t-italic">beta</span>.FEC.gov</h1>
-          <h2 class="hero__subtitle">A work in progress</h2>
+    <div class="hero__banner"></div>
+
+      <div class="hero__content">
+        <h2>The FEC administers and enforces federal campaign finance law and discloses the sources and amounts of funds used to finance our elections</h2>
+      </div>
+
+      <div class="grid grid--3-wide">
+        <div class="grid__item">
+          <img src="{% static "img/feature--data.png" %}" alt="Line chart graph showing campaign finance data">
+          <h3><a href="{{ FEC_APP_URL }}/data">Campaign finance data</a></h3>
+          <p>Helping citizens make informed voting decisions by showing how money is raised and spent in federal elections.</p>
+        </div>
+
+        <div class="grid__item">
+          <img src="{% static "img/feature--reporting.png" %}" alt="Icons representing a webpage for federal election guidance">
+          <h3><a href="/registration-and-reporting">Registration and reporting</a></h3>
+          <p>Providing guidance for individuals and  groups that are active in federal elections.</p>
+        </div>
+
+        <div class="grid__item">
+          <img src="{% static "img/feature--legal.png" %}" alt="Icons representing a webpage search of legal resources">
+          <h3><a href="/legal-resources">Legal resources</a></h3>
+          <p>Administering and enforcing federal campaign finance law. Search or browse statutes, regulations, advisory opinions or enforcement matters.</p>
         </div>
       </div>
-      <span class="photo-credit">Photo: <a href="https://www.flickr.com/photos/22711505@N05/8629115043/in/photolist-e9wtgz-dmwmBS-dBjVT5-dBjVV9-7cdheH-8okfqS-dmwnNZ-7cdhec-dmwo3e-nnE7gW-nnEisL-7cdhdV-nnE7cC-bwJ1Sm-bswUey-bswUeC-7chgyh-fQyrNS-dmF8G7-tMLQH9-sjaBdQ-eMJh6X-eMJhfc-7cdhf4-5yMcC6-bGx47B-8o7H7o-gZLgjm-gZMd4a-7RNuMA-8o7H7J-djqs9Q-7cdheM-bFTEni-t9HYHm-7chgyb-dy62vC-dxZy42-qKb6o1-f6Esko-xPjf7Y-7SdGt5-xPjg7J-qn7qLc-tdhLb4-bFTEmp-6wxnbb-drvaJU-dBjVQG-bFdFDB" title='image credit'> Ron Cogswell, CC BY 2.0</a></span>
-    </div>
-    <div class="hero__bottom">
-      <div class="container">
-        <div class="hero__content">
-          <p class="t-lead">We're designing this site in phases. This allows us to launch new features faster than releasing a completely redesigned FEC.gov. The official site for FEC data is still the <a href="http://www.fec.gov/pindex.shtml" target="_blank">Campaign Finance Disclosure Portal</a>.</p>
-        </div>
-      </div>
-    </div>
+
   </section>
-  <section class="main">
-    <div class="container">
-      <div class="grid grid--4-wide">
-        <div class="feature grid__item">
-          <h2 class="feature__title">New features</h2>
-          <div class="card card--primary">
-            <a class="card__image-link" href="/registration-and-reporting/essentials-nonconnected-committees/">
-              <img class="card__image" src="{% static "img/i-complex--regreport.svg" %}" alt="Icon for registration and reporting">
-            </a>
-            <div class="card__content">
-              <p>Tailored registration and reporting content for <a href="/registration-and-reporting/essentials-nonconnected-committees/">nonconnected committees</a>.</p>
-            </div>
-          </div>
-        </div>
-        <div class="feature feature--no-title grid__item">
-          <div class="card card--primary">
-            <a class="card__image-link" href="/calendar">
-              <img class="card__image" src="{% static "img/i-complex--calendar.svg" %}" alt="Icon representing the calendar">
-            </a>
-            <div class="card__content">
-              <p>A <a href="/calendar">calendar of events</a> that you can personalize and export.</p>
-            </div>
-          </div>
-        </div>
-        <div class="feature feature--no-title grid__item">
-          <div class="card card--primary">
-            <a class="card__image-link" href="{{ settings.FEC_APP_URL }}">
-              <img class="card__image" src="{% static "img/i-complex--data.svg" %}" alt="Icon representing explore campaign finance data">
-            </a>
-            <div class="card__content">
-              <p>Searchable <a href="{{ settings.FEC_APP_URL }}/filings?data_type=efiling">electronic filing data</a>, which contains the most recent, raw information from committee electronic filings.</p>
-            </div>
-          </div>
-        </div>
-        <div class="feature grid__item">
-        <a href="https://github.com/18F/FEC/blob/master/release_notes/release_notes.md" class="feature__release-notes">Full release notes from Dec. 7</a>
-          <div class="card card--primary">
-            <a class="card__image-link" href="/legal-resources/">
-              <img class="card__image" src="{% static "img/i-complex--legal.svg" %}" alt="Icon for legal resources">
-            </a>
-            <div class="card__content">
-              <p>Updated legal resources, including searchable <a href="{{ settings.FEC_APP_URL }}/legal/advisory-opinions/">advisory opinions</a> and searchable, full-text <a href="{{ settings.FEC_APP_URL }}/legal/statutes/">statutes</a>.</p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-  <section class="slab slab--neutral">
-    <div class="container">
-      <div class="billboard">
-        <div class="billboard__image__container">
-          <img class="billboard__image" src="{% static "img/api@2x.png" %}" alt="API documentation screenshot">
-        </div>
-        <div class="billboard__content">
-          <h2 class="feature__title">The FEC API: Use our data in your project</h2>
-          <p>An application programming interface (API)  is an easy way for computers, programs and developers to share and translate large amounts of data in meaningful ways. We recently released the FEC’s first API to help you use the data to tell your own story. This API is the backbone of the campaign finance data on beta.FEC.gov.</p>
-          <p>Check out the <a href="https://api.open.fec.gov">API documentation</a>.</p>
-        </div>
-      </div>
-    </div>
-  </section>
+
 
 {% endblock %}
 
