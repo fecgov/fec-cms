@@ -37,13 +37,13 @@
   <section>
     <div class="slab slab--primary">
         <div class="container">
-            <h1><a href="">Campaign finance data</a></h1>
+            <h1><a href="{{ settings.FEC_APP_URL }}">Campaign finance data</a></h1>
             <div class="slab slab--primary">
                 <div class="grid grid--2-wide">
                     <div class="grid__item">
                         <h3>Find out how a specific candidate or committee raises and spends money</h3>
                       <div class="container">
-                        <form action="{{ settings.FEC_APP_URL }}" autocomplete="off" class="search__container js-search">
+                        <form action="{{ settings.FEC_APP_URL }}" autocomplete="off" class="search__container js-search home-data-search">
                           <div class="combo combo--search">
                             <select class="search__select js-search-type" name="search_type" aria-label="Select a search type">
                               <option value="candidates">Candidate Profiles</option>
