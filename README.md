@@ -57,7 +57,7 @@ run into problems please
 ### Project prerequisites
 1. Ensure you have the following requirements installed:
 
-    * Python 3.4 (which includes `pip` and and a built-in version of
+    * Python 3.5 (which includes `pip` and and a built-in version of
       `virtualenv` called `pyvenv`)
     * The latest long term support (LTS) or stable release of Node.js (which
       includes `npm`)
@@ -89,14 +89,10 @@ npm install
 ```
 
 ### Create local databases
-Before you can run this project locally, you'll need a development database
-and a test database.
-
-To create these databases, run:
+Before you can run this project locally, you'll need a development database:
 
 ```bash
 createdb cfdm_cms_test
-createdb cfdm_cms_unit_test
 ```
 
 You will also need to set a connection string for the local database as an
