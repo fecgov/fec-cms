@@ -23,6 +23,7 @@ urlpatterns = [
     url(r'^contact-us/$', home_views.contact),
     url(r'^search/$', search_views.search, name='search'),
     url(r'^legal-resources/$', legal_views.home, name='legal'),
+    url(r'^legal/advisory-opinions/process/$', legal_views.ao_process),
 
     url(r'', include(wagtail_urls)),
 ]
