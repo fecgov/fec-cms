@@ -96,7 +96,7 @@ Calendar.prototype.defaultOpts = function() {
       },
       contentHeight: 'auto',
       dayRender: this.handleDayRender.bind(this),
-      dayPopoverFormat: 'MMM D, YYYY',
+      dayPopoverFormat: 'MMMM D, YYYY',
       defaultView: 'monthTime',
       eventRender: this.handleEventRender.bind(this),
       eventAfterAllRender: this.handleRender.bind(this),
