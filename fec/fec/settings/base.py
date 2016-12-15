@@ -13,6 +13,8 @@ https://docs.djangoproject.com/en/1.8/ref/settings/
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
 
+import dj_database_url
+
 from django.utils.crypto import get_random_string
 
 PROJECT_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -105,10 +107,9 @@ SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', get_random_string(50))
 # https://docs.djangoproject.com/en/1.8/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-    }
+    # Be sure to set the DATABASE_URL environment variable on your local
+    # development machine so that the local database can be connected to.
+    'default': dj_database_url.config()
 }
 
 
