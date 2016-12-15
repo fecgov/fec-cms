@@ -1,0 +1,241 @@
+{% extends "long_page.html" %}
+{% load wagtailcore_tags %}
+{% load staticfiles %}
+{% block title %}The advisory opinion process{% endblock %}
+{% block body_class %}template-{{ self.get_verbose_name | slugify }}{% endblock %}
+
+{% block breadcrumbs %}
+  {% include 'partials/breadcrumbs.html' with page=self links=self.ancestors style='primary' %}
+{% endblock %}
+{% block intro %}
+<p class="t-lead">Advisory opinions are official Commission responses to questions about how federal campaign finance law applies to specific, factual situations.</p>
+{% endblock %}
+
+{% block toc %}
+  <li class="side-nav__item"><a class="side-nav__link" href="#overview">Overview</a></li>
+  <li class="side-nav__item"><a class="side-nav__link" href="#requesting">Requesting an advisory opinion</a></li>
+  <li class="side-nav__item"><a class="side-nav__link" href="#commenting">Commenting on advisory opinion requests</a></li>
+  <li class="side-nav__item"><a class="side-nav__link" href="#draft-answers">Draft answers to advisory opinion requests</a></li>
+  <li class="side-nav__item"><a class="side-nav__link" href="#issuing">Issuing an advisory opinion</a></li>
+  <li class="side-nav__item"><a class="side-nav__link" href="#legal-citations">Legal citations</a></li>
+{% endblock %}
+
+{% block sections %}
+<section id="overview" class="row">
+  <div class="option__content">
+    <p>Advisory opinions can answer questions about:</p>
+    <ul class="list--bulleted">
+      <li>The Federal Election Campaign Act, which is codified in Title 52 of the U.S. Code, Sections 30101-30146.</li>
+      <li>The laws about public financing of presidential campaigns and conventions, which are codified in Title 26 of the U.S. Code, Chapters 95 and 96.</li>
+      <li>The Commission’s regulations, which are codified at Title 11 of the Code of Federal Regulations. </li>
+    </ul>
+  </div>
+  <div class="option__aside">
+    <a class="u-no-border" href="http://www.fec.gov/pages/brochures/ao.shtml"><img src="{% static "img/thumbnail--ao-brochure.png" %}" alt="Image of advisory opinion brochure cover"></a>
+    <a href="http://www.fec.gov/pages/brochures/ao.shtml">Advisory opinion brochure</a>
+  </div>
+</section>
+<section id="requesting" class="option">
+  <h2>Requesting an advisory opinion</h2>
+  <div class="option__content">
+    <div class="content__section">
+      <p>Anyone may request an advisory opinion, as long as the requestor is affected by the question he or she presents. A requestor cannot ask for an advisory opinion about someone else’s activities, hypothetical situations, or general questions of law.</p>
+      <p>Advisory opinion requests must be in writing. The request must include a complete description of all facts relevant to the specific transaction or activity.</p>
+      <p>Within ten days of receiving the request, the Commission’s Office of General Counsel must determine whether it qualifies as a complete advisory opinion request.</p>
+      <p>A request does not qualify as a complete advisory opinion request if it:</p>
+      <ul class="list--bulleted">
+        <li>Asks a general question of interpretation.</li>
+        <li>Asks about a hypothetical situation.</li>
+        <li>Asks about the activities of someone other than the requestor.</li>
+        <li>Asks about past activities that the requestor does not plan to continue in the future.</li>
+        <li>Does not contain all of the factual information relevant to the activity that is the subject of the request.</li>
+      </ul>
+      <p>If the request does not qualify as an advisory opinion request, the Office of General Counsel notifies the requestor of the specific deficiencies in the request.</p>
+      <p>If the request qualifies as an advisory opinion request, it is assigned an AOR number and made public.</p>
+    </div>
+    <p class="label">Mail requests for advisory opinions to:</p>
+    <div class="contact-item contact-item--mail">
+      <div class="contact-item__content">
+        <p>
+          Federal Election Commission<br>
+          Office of General Counsel<br>
+          999 E Street NW<br>
+          Washington, DC 20463
+        </p>
+      </div>
+    </div>
+  </div>
+  <div class="option__aside is-disabled">
+    <i class="icon-circle--search"><span class="u-visually-hidden">Icon of a magnifying glass</span></i>
+    <span>Search advisory opinion requests</span>
+  </div>
+</section>
+<section id="commenting" class="option">
+  <h2>Commenting on advisory opinion requests</h2>
+  <div class="option__content">
+    <div class="content__section">
+      <p>Submit comments on a request in writing to the Office of General Counsel within ten days after the advisory opinion request is made public.</p>
+      <p>Comments should refer to the AOR number of the request being commented on. Comments on advisory opinion requests are made public.</p>
+    </div>
+    <p class="label">Mail comments to:</p>
+    <div class="contact-item contact-item--mail">
+      <div class="contact-item__content">
+        <p class="address">
+          <span>Federal Election Commission</span>
+          <span>Office of General Counsel</span>
+          <span>999 E Street NW</span>
+          <span>Washington, DC 20463</span>
+        </p>
+      </div>
+    </div>
+  </div>
+  <div class="option__aside is-disabled">
+    <i class="icon-circle--search"><span class="u-visually-hidden">Icon of a magnifying glass</span></i>
+    <span>Search advisory opinion comments (coming soon)</span>
+  </div>
+</section>
+<section id="draft-answers" class="option">
+  <h2>Draft answers to advisory opinion requests</h2>
+  <div class="option__content">
+    <div class="content__section">
+      <p>Before the meeting where the Commission is scheduled to consider an advisory opinion, the Commission will make public any draft answers to the advisory opinion request.</p>
+      <p>Copies of these drafts are emailed to the requestor and made public. Submit comments on draft answers by email, fax or hand delivery.  Generally, the deadline for comments on a draft advisory opinion is the noon on the day before the meeting at which the Commission is scheduled to consider the draft advisory opinion.</p>
+    </div>
+    <p class="label">Submit comments on drafts by:</p>
+    <div class="row">
+      <div class="usa-width-one-half">
+        <div class="contact-item contact-item--email">
+          <div class="contact-item__content">
+            <h5 class="contact-item__title">Email</h5>
+            <a href="mailto:ao@fec.gov">ao@fec.gov</a>
+          </div>
+        </div>
+        <div class="contact-item contact-item--fax">
+          <div class="contact-item__content">
+            <h5 class="contact-item__title">Fax</h5>
+            <p>Commission Secretary: (202) 208-3333</p>
+            <p>Office of General Counsel: (202) 219-392</p>
+          </div>
+        </div>
+      </div>
+      <div class="usa-width-one-half">
+        <div class="contact-item contact-item--hand">
+          <div class="contact-item__content">
+            <h5 class="contact-item__title">Hand delivery</h5>
+            <p class="address">
+              <span>Shawn Woodhead Werth</span>
+              <span>Office of the Commission Secretary</span>
+              <span>Federal Election Commission</span>
+              <span>999 E Street, NW</span>
+              <span>Washington, DC 20463</span>
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="option__aside is-disabled">
+    <i class="icon-circle--search"><span class="u-visually-hidden">Icon of a magnifying glass</span></i>
+    <span>Search draft answers to advisory opinion requests (coming soon)</span>
+  </div>
+</section>
+<section id="issuing" class="option">
+  <h2>Issuing an advisory opinion</h2>
+  <div class="option__content">
+    <p>The law generally requires the Commission to issue an advisory opinion within 60 days of receiving a complete advisory opinion request. But if the request is submitted by a federal candidate within 60 days before an election, and the request asks about a specific transaction or activity related to that election, then the Commission must respond within 20 days. In addition, the Commission has an informal practice through which it tries to respond to certain significant, time-sensitive requests within 30 days.</p>
+    <p>The Commission issues an advisory opinion when four or more Commissioners vote to approve the draft advisory opinion before it. These votes almost always occur during an <a href="/calendar/?category=Open+Meetings">open meeting of the Commission</a>.</p>
+    <p>A requestor has the option to appear before the Commission at the open session where the Commission considers his or her advisory opinion request. A requestor can withdraw an advisory opinion request by submitting a written statement of withdrawal before the Commission votes to approve the advisory opinion.</p>
+    <p>If at least four Commissioners don’t vote to approve a draft advisory opinion in response to a request, the Commission’s Office of General Counsel will send the requestor a letter stating that the Commission was unable to approve an advisory opinion. This letter is also included in the public record.</p>
+  </div>
+  <div class="option__aside">
+    <p class="label">Related topics:</p>
+    <i class="icon-circle--calendar"><span class="u-visually-hidden">Icon of a calendar</span></i>
+    <a href="calendar/?category=Open+Meetings">Open meetings calendar</a>
+    <div class="content__section--ruled">
+      <p><a class="u-no-border" href="http://www.fec.gov/law/policy/enforcement/2009/ao05-09.pdf"><img src="{% static "img/thumbnail--ao-statistics.png" %}" alt="Image of advisory opinion statistics report"></a></p>
+      <a href="http://www.fec.gov/law/policy/enforcement/2009/ao05-09.pdf">Advisory opinion statistics FY 2005 to 2008 (PDF)</a>
+    </div>
+  </div>
+</section>
+{% endblock %}
+
+{% block citations %}
+<div class="usa-width-one-half">
+  <p><strong>Regulations</strong></p>
+  <ul>
+    <li>
+      <p>
+        <span class="t-block">11 CFR <a href="http://edocket.access.gpo.gov/cfr_2014/janqtr/11cfr112.1.htm">112.1(a)–(f)</a></span>
+        <em>Requests for advisory opinions</em>
+      </p>
+    </li>
+    <li>
+      <p>
+        <span class="t-block">11 CFR <a href="https://www.gpo.gov/fdsys/pkg/CFR-2014-title11-vol1/xml/CFR-2014-title11-vol1-sec112-2.xml">112.2</a></span>
+        <em>Public availability of requests</em>
+      </p>
+    </li>
+    <li>
+      <p>
+        <span class="t-block">11 CFR <a href="http://edocket.access.gpo.gov/cfr_2014/janqtr/11cfr112.3.htm">112.3</a></span>
+        <em>Written comments on requests</em>
+      </p>
+    </li>
+    <li>
+      <p>
+        <span class="t-block">11 CFR <a href="https://www.gpo.gov/fdsys/pkg/CFR-2014-title11-vol1/xml/CFR-2014-title11-vol1-sec112-3.xml">112.3(b), (c)</a></span>
+        <em>Written comments on requests</em>
+      </p>
+    </li>
+    <li>
+      <p>
+        <span class="t-block">11 CFR <a href="http://edocket.access.gpo.gov/cfr_2014/janqtr/11cfr112.4.htm">112.4(b), (c), (g)</a></span>
+        <em>Issuance of advisory opinions</em>
+      </p>
+    </li>
+    <li>
+      <p>
+        <span class="t-block">11 CFR <a href="https://www.gpo.gov/fdsys/pkg/CFR-2014-title11-vol1/xml/CFR-2014-title11-vol1-sec112-6.xml">112.6 (a), (b) and (d)</a></span>
+        <em>Reconsideration of advisory opinions</em>
+      </p>
+    </li>
+  </ul>
+</div>
+<div class="usa-width-one-half">
+  <p><strong>Statutes</strong></p>
+  <ul>
+    <li>
+      <p>
+        <span class="t-block">52 U.S.C. &sect;30101-30146</span>
+        <em>Disclosure of federal campaign funds</em>
+      </p>
+    </li>
+    <li>
+      <p>
+        <span class="t-block">52 U.S.C. <a href="http://uscode.house.gov/view.xhtml?req=granuleid:USC-prelim-title52-section30108&num=0&edition=prelim">&sect;30108(a)(1), (a)(2)</a></span>
+        <em>Requests by persons, candidates, or authorized committees; subject matter; time for response</em>
+      </p>
+    </li>
+    <li>
+      <p>
+        <span class="t-block">52 U.S.C. <a href="http://uscode.house.gov/view.xhtml?req=granuleid:USC-prelim-title52-section30108&num=0&edition=prelim">&sect;30108(c)</a></span>
+        <em>Persons entitled to rely upon opinions; scope of protection for good faith reliance</em>
+      </p>
+    </li>
+    <li>
+      <p>
+        <span class="t-block">52 U.S.C. <a href="http://uscode.house.gov/view.xhtml?req=granuleid:USC-prelim-title52-section30108&num=0&edition=prelim">&sect;30108(d)</a></span>
+        <em>Requests made public; submission of written comments by interested public</em>
+      </p>
+    </li>
+  </ul>
+  <p><strong>Federal Register Notice</strong></p>
+  <ul>
+    <li>
+      <span class="t-block"><a href="http://www.fec.gov/law/cfr/ej_compilation/2009/notice_2009-11.pdf">74 Fed. Reg. 32160 (July 7, 2009)</a></span>
+      <em>Advisory opinion procedure</em>
+    </li>
+  </ul>
+</div>
+</div
+{% endblock %}
