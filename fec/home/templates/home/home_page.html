@@ -7,29 +7,31 @@
   <section class="hero hero--home" aria-labelledby="hero-heading">
     <div class="hero__banner"></div>
 
+    <div class="container">
       <div class="hero__content">
         <h2>The FEC administers and enforces federal campaign finance law and discloses the sources and amounts of funds used to finance our elections</h2>
       </div>
 
       <div class="grid grid--3-wide">
         <div class="grid__item">
-          <img src="{% static "img/feature--data.png" %}" alt="Campaign finance data">
-          <h3><a href="/data">Campaign finance data</a></h3>
+          <img src="{% static "img/feature--data.png" %}" alt="Line chart graph showing campaign finance data">
+          <h3><a href="{{ FEC_APP_URL }}/data">Campaign finance data</a></h3>
           <p>Helping citizens make informed voting decisions by showing how money is raised and spent in federal elections.</p>
         </div>
 
         <div class="grid__item">
-          <img src="{% static "img/feature--reporting.png" %}" alt="Registration and reporting">
+          <img src="{% static "img/feature--reporting.png" %}" alt="Icons representing a webpage for federal election guidance">
           <h3><a href="/registration-and-reporting">Registration and reporting</a></h3>
           <p>Providing guidance for individuals and  groups that are active in federal elections.</p>
         </div>
 
         <div class="grid__item">
-          <img src="{% static "img/feature--legal.png" %}" alt="Legal resources">
+          <img src="{% static "img/feature--legal.png" %}" alt="Icons representing a webpage search of legal resources">
           <h3><a href="/legal-resources">Legal resources</a></h3>
           <p>Administering and enforcing federal campaign finance law. Search or browse statutes, regulations, advisory opinions or enforcement matters.</p>
         </div>
       </div>
+<<<<<<< HEAD
 
     </div>
   </section>
@@ -129,6 +131,10 @@ advisory opinions</h3>
   </div>
   </section>
 
+=======
+    </div>
+  </section>
+>>>>>>> 2e35ab459c8494bea57009172a5d2af49322f968
 {% endblock %}
 
 {% block extra_js %}
