@@ -1,0 +1,10 @@
+{% load wagtailimages_tags %}
+{% load filters %}
+
+{% for update in updates %}
+  <p>
+  <a href="{{ update.url }}">{% formatted_title update %}</a> - {{ update.get_update_type }}<br>
+  {{ update.date|date:'F j, Y' }}
+  {{ update.homepage_pin }}
+  </p>
+{% endfor %}
