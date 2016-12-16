@@ -26,11 +26,11 @@ betaFEC.
 - [FEC](https://github.com/18F/fec): a general discussion forum. We compile
   [feedback](https://github.com/18F/fec/issues) from betaFEC’s feedback widget
   here, and this is the best place to submit general feedback.
-- [openFEC](https://github.com/18F/openfec): betaFEC’s API
+- [openFEC](https://github.com/18F/openfec): betaFEC’s API.
 - [openFEC-web-app](https://github.com/18f/openfec-web-app): the betaFEC web
-  app for exploring campaign finance data
+  app for exploring campaign finance data.
 - [fec-style](https://github.com/18F/fec-style): shared styles and user
-  interface components
+  interface components.
 - [fec-cms](https://github.com/18F/fec-cms): the content management system
   (CMS) for betaFEC. This project uses
   [Wagtail](https://github.com/torchbox/wagtail), an open source CMS written
@@ -58,14 +58,14 @@ run into problems please
 1. Ensure you have the following requirements installed:
 
     * Python 3.5 (which includes `pip` and and a built-in version of
-      `virtualenv` called `pyvenv`)
+      `virtualenv` called `pyvenv`).
     * The latest long term support (LTS) or stable release of Node.js (which
-      includes `npm`)
+      includes `npm`).
     * PostgreSQL (the latest 9.5 release).
-         * Read a [Mac OSX tutorial](https://www.moncefbelyamani.com/how-to-install-postgresql-on-a-mac-with-homebrew-and-lunchy/)
-         * Read a [Windows tutorial](http://www.postgresqltutorial.com/install-postgresql/)
+         * Read a [Mac OSX tutorial](https://www.moncefbelyamani.com/how-to-install-postgresql-on-a-mac-with-homebrew-and-lunchy/).
+         * Read a [Windows tutorial](http://www.postgresqltutorial.com/install-postgresql/).
          * Read a [Linux tutorial](http://www.postgresql.org/docs/9.5/static/installation.html)
-           (or follow your OS package manager)
+           (or follow your OS package manager).
 
 2. Set up your Node environment — learn how to do this with our
    [Javascript Ecosystem Guide](https://pages.18f.gov/dev-environment-standardization/languages/javascript/).
