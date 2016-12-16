@@ -5,7 +5,10 @@ sudo: false
 cache: false
 
 python:
-  - "3.4"
+  - "3.5"
+
+addons:
+  postgresql: "9.4"
 
 env:
   global:
@@ -14,10 +17,11 @@ env:
     - secure: "rLuzE+/3WVxra5ssD9MdVqTsuVcRc0PpOrc4FayueQ9y/CcjXuxFtU9NpS88DDwAyGc/7wCPLmRKAzsNTMgDjfHkKXa8VfhI9zZ7HOEI1suVJakkJFXTwajH1X+ACDICoQocrmuOesIMrlAm1qhrSnxHLZuIZ5y3qEGPaSvCMa9JPX9U8huJuhwukxiunpeoApeJclRK7HjLhrAIZVuBNZnyNjiqmNFXPFdGbpcdUGsqNrZQGZa9vlED2dXmqqsIhL7/ghR1sSvIzjVBEi2Ig9wu1QWO5LuAzgO6wIfuOh1gbQ1Z24bYLTeugApwI2eNRe5Rn7F+RXVCYbjetj/0twIXKr6NkSgaLt1c+2b7yIOLRpRl0kpahZc+TsQ3ja03UelpXhH8c0De+6sUvmofs39RgdMSjYBcaY5hDl1b5oZOcZDhQYYAiFUJ3CKIM82WgvTD/phcarf9e0lbrVFIK17P/QixUPAKUS+IfS53r10QO1DTN+0vpLcUh659u8gLxHlbTVkGPfuWRXVhPCmSlHZXqM22gVois5ch97FEm7sgLlJP5hHg1q+utvXV4YDM0m+5SicjGeTyh7ZNszBiMuCu9Na5NaUyhb3XS8niLPwXUzNKcUs0NXckakpqBxstAE4Zyqf3HmmzFQCNvdrFnk6fuRXo1nxtRi1K3N/zf4k=" # DJANGO_SECRET_KEY this is a random key unrelated to prod but needed for django to run build commands with production settings
 
 before_install:
-  - "pip install --upgrade pip setuptools"
+  - travis_retry pip install -U pip setuptools wheel
+  - export DATABASE_URL=postgresql://:@/cfdm_cms_unit_test
 
 before_script:
-  - travis_retry pip install -U pip wheel
+  - psql -c 'create database cfdm_cms_unit_test;' -U postgres
   - travis_retry pip install -r requirements.txt
   - travis_retry pip install coverage django_coverage_plugin
 
@@ -48,8 +52,8 @@ before_deploy:
   - tar xzvf $HOME/cf.tgz -C $HOME
   - travis_retry cf install-plugin autopilot -f -r CF-Community
   - npm run build
-  - DJANGO_SETTINGS_MODULE='fec.settings.production' python fec/manage.py collectstatic --noinput
-  - DJANGO_SETTINGS_MODULE='fec.settings.production' python fec/manage.py compress
+  - DJANGO_SETTINGS_MODULE='fec.settings.production' python fec/manage.py collectstatic --noinput -v 0
+  - DJANGO_SETTINGS_MODULE='fec.settings.production' python fec/manage.py compress -v 0
 
 deploy:
   provider: script
