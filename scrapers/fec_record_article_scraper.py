@@ -1,12 +1,17 @@
+#!/usr/bin/env python
+
+import json
+
 from collections import namedtuple
 from datetime import datetime
 from itertools import dropwhile
-from lxml.etree import Comment
-from lxml.html import fromstring, tostring, Element
 from operator import attrgetter
 from urllib.parse import urljoin, urlparse
-import json
+
 import requests
+
+from lxml.etree import Comment
+from lxml.html import fromstring, tostring, Element
 
 
 Article = namedtuple(
