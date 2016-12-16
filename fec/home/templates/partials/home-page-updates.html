@@ -2,9 +2,9 @@
 {% load filters %}
 
 {% for update in updates %}
-  <p>
-  <a href="{{ update.url }}">{% formatted_title update %}</a> - {{ update.get_update_type }}<br>
-  {{ update.date|date:'F j, Y' }}
-  {{ update.homepage_pin }}
-  </p>
+  <div class="grid__item">
+    {% if update.homepage_pin == True %}<div class="u-gray-background">{% endif %}
+    <a href="{{ update.url }}">{% formatted_title update %}</a> — <span class="t-sans">{{ update.get_update_type }}</span>
+    {% if update.homepage_pin %}</div>{% endif %}
+  </div>
 {% endfor %}
