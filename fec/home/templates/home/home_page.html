@@ -33,44 +33,81 @@
       </div>
     </div>
   </section>
+  <section class="slab slab--secondary">
+    <div class="container">
+      <h1><a href="/registration-and-reporting">Registration and reporting</a></h1>
+
+      <div class="grid grid--2-wide">
+        <div class="grid__item">
+          <div class="icon-heading icon-heading--checklist-circle">
+            <div class="icon-heading__content">
+              <h3>Different groups have different registration and reporting requirements</h3>
+              <a href="/registration-and-reporting">Learn about requirements »</a>
+            </div>
+          </div>
+        </div>
+        <div class="grid__item">
+          <div class="icon-heading icon-heading--question-bubble-circle">
+            <div class="icon-heading__content">
+              <h3>Committees have 35 days to respond to Requests for Additional Information (RFAIs)</h3>
+              <a href="/registration-and-reporting/request-additional-information">Learn how to respond »</a>
+            </div>
+          </div>
+        </div>
+        <div class="grid__item">
+          <div class="icon-heading icon-heading--calendar-circle">
+            <div class="icon-heading__content">
+              <h3>Candidates and committees must file regular reports about their financial activity</h3>
+              <a href="/calendar/?category=EC+Periods&category=FEA+Periods&category=IE+Periods&category=report-E&category=report-M&category=report-Q">Find upcoming reporting deadlines »</a>
+            </div>
+          </div>
+        </div>
+        <div class="grid__item">
+          <div class="icon-heading icon-heading--training-circle">
+            <div class="icon-heading__content">
+              <h3>The FEC regularly hosts training events for candidates and committees</h3>
+              <a href="/calendar/?category=Conferences&category=Roundtables">Find upcoming webinars, conferences and trainings »</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
 
   <section>
     <div class="slab slab--primary">
         <div class="container">
             <h1><a href="{{ settings.FEC_APP_URL }}">Campaign finance data</a></h1>
-            <div class="slab slab--primary">
-                <div class="grid grid--2-wide">
-                    <div class="grid__item">
-                        <h3>Find out how a specific candidate or committee raises and spends money</h3>
-                      <div class="container">
-                        <form action="{{ settings.FEC_APP_URL }}" autocomplete="off" class="search__container js-search home-data-search">
-                          <div class="combo combo--search">
-                            <select class="search__select js-search-type" name="search_type" aria-label="Select a search type">
-                              <option value="candidates">Candidate Profiles</option>
-                              <option value="committees">Committee Profiles</option>
-                            </select>
-                            <input name="search" class="js-search-input combo__input" type="text"
-                            autocorrect="off"
-                            autocapitalize="off"
-                            spellcheck="false"
-                            placeholder="Search candidates">
-                            <button type="submit" class="combo__button button--search button--standard">
-                              <span class="u-visually-hidden">Search</span>
-                            </button>
-                          </div>
-                        </form>
-                      </div>
-                    </div>
-                    <div class="grid__item">
-                        <h3>Track recently reported financial activity, like total cash on hand</h3> <a class="blue" href="{{ settings.FEC_APP_URL }}/filings">Look up recent filings >></a>
-                    </div>
-                    <div class="grid__item horizontal-bar">
-                        <h3>Disclover which groups are supporting or opposing a candidate</h3> <a class="blue" href="{{ settings.FEC_APP_URL }}/independent-expenditures">Look up independent expenditures >></a>
-                    </div>
-                    <div class="grid__item horizontal-bar">
-                        <h3>Learn who's donating to candidates and committees</h3> <a class="blue" href="{{ settings.FEC_APP_URL }}/receipts/individual-contributions">Look up an individual contributor >></a>
-                    </div>
-                </div>
+              <div class="grid grid--2-wide">
+                  <div class="grid__item">
+                      <h3>Find out how a specific candidate or committee raises and spends money</h3>
+                      <form action="{{ settings.FEC_APP_URL }}" autocomplete="off" class="search__container js-search home-data-search">
+                        <div class="combo combo--search">
+                          <select class="search__select js-search-type" name="search_type" aria-label="Select a search type">
+                            <option value="candidates">Candidate Profiles</option>
+                            <option value="committees">Committee Profiles</option>
+                          </select>
+                          <input name="search" class="js-search-input combo__input" type="text"
+                          autocorrect="off"
+                          autocapitalize="off"
+                          spellcheck="false"
+                          placeholder="Search candidates">
+                          <button type="submit" class="combo__button button--search button--standard">
+                            <span class="u-visually-hidden">Search</span>
+                          </button>
+                        </div>
+                      </form>
+                  </div>
+                  <div class="grid__item">
+                      <h3>Track recently reported financial activity, like total cash on hand</h3> <a href="{{ settings.FEC_APP_URL }}/filings">Look up recent filings >></a>
+                  </div>
+                  <div class="grid__item horizontal-bar">
+                      <h3>Disclover which groups are supporting or opposing a candidate</h3> <a href="{{ settings.FEC_APP_URL }}/independent-expenditures">Look up independent expenditures >></a>
+                  </div>
+                  <div class="grid__item horizontal-bar">
+                      <h3>Learn who's donating to candidates and committees</h3> <a href="{{ settings.FEC_APP_URL }}/receipts/individual-contributions">Look up an individual contributor >></a>
+                  </div>
+              </div>
             </div>
         </div>
     </div>
