@@ -123,12 +123,14 @@ cd fec/
 
 ## Enabling/toggling features
 [settings.py](https://github.com/18F/fec-cms/blob/develop/fec/fec/settings/base.py)
-includes a set of `FEATURES` which can be enabled using environment flags or
-via `settings.local`, e.g.:
+includes a set of `FEATURES` which can be enabled using environment flags:
 
 ```bash
 FEC_FEATURE_LEGAL=1 python fec/manage.py runserver
 ```
+
+Alternatively, these can also be toggled via the `FEATURES` setting in the
+`fec/fec/settings/base.py` settings file.
 
 ## Additional local development instructions
 
