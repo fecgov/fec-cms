@@ -12,7 +12,7 @@ class SubPageTestMixin(object):
     def setUp(self):
         super(SubPageTestMixin, self).setUp()
         self.parent_page = self.parent_page_model.objects.get()
-        Author.objects.create(
+        self.author = Author.objects.create(
             name="Aron Griffis",
             title="Scamp",
             email="aron@scampersand.com",
@@ -25,6 +25,12 @@ class SubPageTestMixin(object):
         """
         if data is None:
             data = self.create_datas[0]
+
+        # We need to make sure we reference the correct author to account for
+        # foreign key relationships.
+        if 'authors-0-author' in data:
+            data['authors-0-author'] = str(self.author.pk)
+
         pks_before = list(self.sub_page_model.objects
                           .values_list('pk', flat=True))
         self.assertCanCreate(self.parent_page, self.sub_page_model, data,
