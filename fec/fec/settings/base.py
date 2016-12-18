@@ -109,7 +109,13 @@ SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', get_random_string(50))
 DATABASES = {
     # Be sure to set the DATABASE_URL environment variable on your local
     # development machine so that the local database can be connected to.
-    'default': dj_database_url.config()
+    #'default': dj_database_url.config()
+    'default': {
+        'NAME': 'cfdm_cms_test',
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'USER': '',
+        'PASSWORD': '',
+    }
 }
 
 
