@@ -34,48 +34,47 @@
     </div>
   </section>
 
-  <section>
-    <div class="slab slab--primary">
-        <div class="container">
-            <h1><a href="{{ settings.FEC_APP_URL }}">Campaign finance data</a></h1>
-            <div class="slab slab--primary">
-                <div class="grid grid--2-wide">
-                    <div class="grid__item">
-                        <h3>Find out how a specific candidate or committee raises and spends money</h3>
-                      <div class="container">
-                        <form action="{{ settings.FEC_APP_URL }}" autocomplete="off" class="search__container js-search home-data-search">
-                          <div class="combo combo--search">
-                            <select class="search__select js-search-type" name="search_type" aria-label="Select a search type">
-                              <option value="candidates">Candidate Profiles</option>
-                              <option value="committees">Committee Profiles</option>
-                            </select>
-                            <input name="search" class="js-search-input combo__input" type="text"
-                            autocorrect="off"
-                            autocapitalize="off"
-                            spellcheck="false"
-                            placeholder="Search candidates">
-                            <button type="submit" class="combo__button button--search button--standard">
-                              <span class="u-visually-hidden">Search</span>
-                            </button>
-                          </div>
-                        </form>
-                      </div>
-                    </div>
-                    <div class="grid__item">
-                        <h3>Track recently reported financial activity, like total cash on hand</h3> <a class="blue" href="{{ settings.FEC_APP_URL }}/filings">Look up recent filings >></a>
-                    </div>
-                    <div class="grid__item horizontal-bar">
-                        <h3>Disclover which groups are supporting or opposing a candidate</h3> <a class="blue" href="{{ settings.FEC_APP_URL }}/independent-expenditures">Look up independent expenditures >></a>
-                    </div>
-                    <div class="grid__item horizontal-bar">
-                        <h3>Learn who's donating to candidates and committees</h3> <a class="blue" href="{{ settings.FEC_APP_URL }}/receipts/individual-contributions">Look up an individual contributor >></a>
-                    </div>
-                </div>
+
+ <section class="slab slab--secondary">
+    <div class="container">
+      <h1><a href="/registration-and-reporting">Registration and reporting</a></h1>
+
+      <div class="grid grid--2-wide">
+        <div class="grid__item">
+          <div class="icon-heading icon-heading--checklist-circle">
+            <div class="icon-heading__content">
+              <h3>Different groups have different registration and reporting requirements</h3>
+              <a href="/registration-and-reporting">Learn about requirements »</a>
             </div>
+          </div>
         </div>
+        <div class="grid__item">
+          <div class="icon-heading icon-heading--question-bubble-circle">
+            <div class="icon-heading__content">
+              <h3>Committees have 35 days to respond to Requests for Additional Information (RFAIs)</h3>
+              <a href="/registration-and-reporting/request-additional-information">Learn how to respond »</a>
+            </div>
+          </div>
+        </div>
+        <div class="grid__item">
+          <div class="icon-heading icon-heading--calendar-circle">
+            <div class="icon-heading__content">
+              <h3>Candidates and committees must file regular reports about their financial activity</h3>
+              <a href="/calendar/?category=EC+Periods&category=FEA+Periods&category=IE+Periods&category=report-E&category=report-M&category=report-Q">Find upcoming reporting deadlines »</a>
+            </div>
+          </div>
+        </div>
+        <div class="grid__item">
+          <div class="icon-heading icon-heading--training-circle">
+            <div class="icon-heading__content">
+              <h3>The FEC regularly hosts training events for candidates and committees</h3>
+              <a href="/calendar/?category=Conferences&category=Roundtables">Find upcoming webinars, conferences and trainings »</a>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   </section>
-  
 
 <section class="slab slab--primary">
     <div class="container">
@@ -86,7 +85,7 @@
           <div class="icon-heading icon-heading--subsection-doc-circle">
             <div class="icon-heading__content">
               <h3>Campaign finance laws and rules are found in the U.S. Code and the Code of Federal Regulations</h3>
-              Search or browse <a class="blue" href="https://beta.fec.gov/data/legal/statutes">statutes</a> and <a class="blue"  href="https://beta.fec.gov/regulations">regulations</a>
+              Search or browse <a href="https://beta.fec.gov/data/legal/statutes">statutes</a> and <a  href="https://beta.fec.gov/regulations">regulations</a>
             </div>
           </div>
         </div>
@@ -94,7 +93,7 @@
           <div class="icon-heading icon-heading--mallet-circle">
             <div class="icon-heading__content">
               <h3>The FEC publishes information about ongoing and closed court cases</h3>
-             <a class="blue" href="http://www.fec.gov/law/litigation.shtml">Browse campaign finance litigation</a> »
+             <a href="http://www.fec.gov/law/litigation.shtml">Browse campaign finance litigation</a> »
             </div>
           </div>
         </div>
@@ -104,7 +103,7 @@
               <h3>The Commission issues guidance 
 about specific situations through 
 advisory opinions</h3>
-<a class="blue" href="https://beta.fec.gov/data/legal/advisory-opinions/">Search advisory opinions</a> »
+<a href="https://beta.fec.gov/data/legal/advisory-opinions/">Search advisory opinions</a> »
             </div>
           </div>
         </div>
@@ -114,15 +113,83 @@ advisory opinions</h3>
               <h3>The Commission issues guidance 
 about specific situations through 
 advisory opinions</h3>
-<a class="blue" href="https://beta.fec.gov/data/legal/advisory-opinions/">Search advisory opinions</a> »
+<a href="https://beta.fec.gov/data/legal/advisory-opinions/">Search advisory opinions</a> »
             </div>
           </div>
         </div>
       </div>
     </div>
   </section>
+
+  <section class="slab">
+    <div class="container">
+      <h1>Commissioners</h1>
+      <div class="content__section content__section--narrow u-padding--top">
+        <p>Established in 1975, the FEC is composed of six Commissioners who are appointed by the President and confirmed by the Senate. By law, no more than three can represent the same political party.</p>
+        <a href="http://www.fec.gov/about.shtml">Learn more about the FEC's history and mission »</a>
+      </div>
+
+      <div class="grid grid--3-wide grid--no-border">
+        <div class="grid__item">
+          <div class="icon-heading">
+            <img class="icon-heading__image" src="{% static "img/headshot--peterson.png" %}" alt="Headshot of Matthew S. Peterson">
+            <div class="icon-heading__content">
+              <div class="t-lead"><a href="http://www.fec.gov/members/petersen/petersen.shtml">Matthew S. Peterson</a></div>
+              <div class="t-note">Chairman</div>
+              <div class="t-sans">Republican</div>
+            </div>
+          </div>
+        </div>
+        <div class="grid__item">
+          <div class="icon-heading">
+            <img class="icon-heading__image" src="{% static "img/headshot--walther.png" %}" alt="Headshot of Steven T. Walther">
+            <div class="icon-heading__content">
+              <div class="t-lead"><a href="http://www.fec.gov/members/walther/walther.shtml">Steven T. Walther</a></div>
+              <div class="t-note">Vice Chairman</div>
+              <div class="t-sans">Independent</div>
+            </div>
+          </div>
+        </div>
+        <div class="grid__item">
+          <div class="icon-heading">
+            <img class="icon-heading__image" src="{% static "img/headshot--goodman.png" %}" alt="Headshot of Lee E. Goodman">
+            <div class="icon-heading__content">
+              <div class="t-lead"><a href="http://www.fec.gov/members/goodman/goodman.shtml">Lee E. Goodman</a></div>
+              <div class="t-sans">Republican</div>
+            </div>
+          </div>
+        </div>
+        <div class="grid__item">
+          <div class="icon-heading">
+            <img class="icon-heading__image" src="{% static "img/headshot--hunter.png" %}" alt="Headshot of Caroline C. Hunter">
+            <div class="icon-heading__content">
+              <div class="t-lead"><a href="http://www.fec.gov/members/hunter/hunter.shtml">Caroline C. Hunter</a></div>
+              <div class="t-sans">Republican</div>
+            </div>
+          </div>
+        </div>
+        <div class="grid__item">
+          <div class="icon-heading">
+            <img class="icon-heading__image" src="{% static "img/headshot--ravel.png" %}" alt="Headshot of Ann M. Ravel">
+            <div class="icon-heading__content">
+              <div class="t-lead"><a href="http://www.fec.gov/members/ravel/ravel.shtml">Ann M. Ravel</a></div>
+              <div class="t-sans">Democrat</div>
+            </div>
+          </div>
+        </div>
+        <div class="grid__item">
+          <div class="icon-heading">
+            <img class="icon-heading__image" src="{% static "img/headshot--weintraub.png" %}" alt="Headshot of Ellen L. Weintraub">
+            <div class="icon-heading__content">
+              <div class="t-lead"><a href="http://www.fec.gov/members/weintraub/weintraub.shtml">Ellen L. Weintraub</a></div>
+              <div class="t-sans">Democrat</div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   </section>
+
 {% endblock %}
 
 {% block extra_js %}
