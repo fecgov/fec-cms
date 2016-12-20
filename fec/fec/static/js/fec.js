@@ -18,6 +18,7 @@ var FilterPanel = require('fec-style/js/filter-panel').FilterPanel;
 var filterTags = require('fec-style/js/filter-tags');
 var stickyBar = require('fec-style/js/sticky-bar');
 var toc = require('fec-style/js/toc');
+var helpers = require('fec-style/js/helpers');
 
 // Hack: Append jQuery to `window` for use by legacy libraries
 window.$ = window.jQuery = $;
@@ -28,9 +29,10 @@ var calendarHelpers = require('./calendar-helpers');
 var FormNav = require('./form-nav').FormNav;
 
 var legal = require('./legal');
+var homepage = require('./homepage');
 
 $(document).ready(function() {
-  // Initialize glossary
+
   // Initialize glossary
   new Glossary(terms, {}, {
     termClass: 'glossary__term accordion__button',
@@ -78,6 +80,20 @@ $(document).ready(function() {
   // Initialize checkbox dropdowns
   $('.js-dropdown').each(function() {
     new dropdown.Dropdown(this);
+  });
+
+  // set variable to today's date for homepage upcoming event filtering
+  var today = new Date();
+  var day = today.getDate();
+  var month = today.getMonth() + 1;
+  var year = today.getFullYear();
+  var date = year + '-' + month + '-' + day;
+
+  // Homepage
+  new homepage.Homepage({
+    url: calendarHelpers.getUrl('calendar-dates',
+      { 'min_start_date': date,
+        'category': ['report-M', 'report-Q', 'Open+Meetings', 'Executive+Sessions', 'Public+Hearings', 'Conferences', 'Roundtables']})
   });
 
   // Initialize feedback widget
