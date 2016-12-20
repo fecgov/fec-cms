@@ -18,7 +18,6 @@ var FilterPanel = require('fec-style/js/filter-panel').FilterPanel;
 var filterTags = require('fec-style/js/filter-tags');
 var stickyBar = require('fec-style/js/sticky-bar');
 var toc = require('fec-style/js/toc');
-var helpers = require('fec-style/js/helpers');
 
 // Hack: Append jQuery to `window` for use by legacy libraries
 window.$ = window.jQuery = $;
