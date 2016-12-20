@@ -114,7 +114,7 @@ $(document).ready(function() {
   });
 
   // Initialize typeahead
-  new typeahead.Typeahead($('.js-search-input'));
+  new typeahead.Typeahead($('.js-search-input'), 'candidates', window.FEC_APP_URL + '/');
 
   // Initialize search toggle
   new Search($('.js-search'));
