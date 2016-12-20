@@ -91,7 +91,8 @@ $(document).ready(function() {
   // Homepage
   new homepage.Homepage({
     url: calendarHelpers.getUrl('calendar-dates',
-      { 'min_start_date': date,
+      { 'sort': 'start_date',
+        'min_start_date': date,
         'category': ['report-M', 'report-Q', 'Open+Meetings', 'Executive+Sessions', 'Public+Hearings', 'Conferences', 'Roundtables']})
   });
 
