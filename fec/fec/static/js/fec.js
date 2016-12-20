@@ -28,7 +28,7 @@ var calendarHelpers = require('./calendar-helpers');
 var FormNav = require('./form-nav').FormNav;
 
 var legal = require('./legal');
-var homepage = require('./homepage');
+var upcomingEvents = require('./upcoming-events');
 
 $(document).ready(function() {
 
@@ -81,20 +81,8 @@ $(document).ready(function() {
     new dropdown.Dropdown(this);
   });
 
-  // set variable to today's date for homepage upcoming event filtering
-  var today = new Date();
-  var day = today.getDate();
-  var month = today.getMonth() + 1;
-  var year = today.getFullYear();
-  var date = year + '-' + month + '-' + day;
-
-  // Homepage
-  new homepage.Homepage({
-    url: calendarHelpers.getUrl('calendar-dates',
-      { 'sort': 'start_date',
-        'min_start_date': date,
-        'category': ['report-M', 'report-Q', 'Open+Meetings', 'Executive+Sessions', 'Public+Hearings', 'Conferences', 'Roundtables']})
-  });
+  // Homepage - What's Happening section
+  new upcomingEvents.upcomingEvents();
 
   // Initialize feedback widget
   var feedbackWidget = new feedback.Feedback(window.FEC_APP_URL + '/issue/');
