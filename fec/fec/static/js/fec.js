@@ -82,7 +82,7 @@ $(document).ready(function() {
   });
 
   // Homepage - What's Happening section
-  new upcomingEvents.upcomingEvents();
+  new upcomingEvents.UpcomingEvents();
 
   // Initialize feedback widget
   var feedbackWidget = new feedback.Feedback(window.FEC_APP_URL + '/issue/');

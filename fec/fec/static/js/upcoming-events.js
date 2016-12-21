@@ -3,7 +3,7 @@
 var $ = require('jquery');
 var calendarHelpers = require('./calendar-helpers');
 
-function upcomingEvents() {
+function UpcomingEvents() {
 
   // set variable to today's date for homepage upcoming event filtering
   var today = new Date();
@@ -40,4 +40,4 @@ function upcomingEvents() {
   });
 }
 
-module.exports = {upcomingEvents: upcomingEvents};
+module.exports = {upcomingEvents: UpcomingEvents};
