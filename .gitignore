@@ -58,3 +58,6 @@ _sandbox
 npm-debug.log
 
 .DS_Store
+
+# Data import files
+fec/data_loader/data/**/*.json
