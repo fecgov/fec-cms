@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 {% load wagtailcore_tags %}
 {% load staticfiles %}
+{% load updates %}
 {% block body_class %}template-{{ self.get_verbose_name | slugify }}{% endblock %}
 
 {% block content %}
@@ -29,6 +30,31 @@
           <img src="{% static "img/feature--legal.png" %}" alt="Icons representing a webpage search of legal resources">
           <h3><a href="/legal-resources">Legal resources</a></h3>
           <p>Administering and enforcing federal campaign finance law. Search or browse statutes, regulations, advisory opinions or enforcement matters.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="slab slab--neutral">
+    <div class="container">
+      <h6>What's happening</h6>
+      <div class="grid grid--3-wide grid--no-margin grid--no-border">
+        {% home_page_updates %}
+        <div class="grid__item">
+          <h6 class="t-no-rules">Upcoming Events</h6>
+          <ul class="list--border homepage-upcoming-events">
+          </ul>
+        </div>
+      </div>
+      <div class="grid grid--3-wide grid--no-margin grid--no-border">
+        <div class="grid__item"></div>
+        <div class="grid__item">
+          <div class="icon icon-circle--updates--inline--left"></div>
+          <a class="t-lead" href="/updates">All latest updates »</a>
+        </div>
+        <div class="grid__item">
+          <div class="icon icon-circle--calendar--inline--left"></div>
+          <a class="t-lead" href="/calendar">Full calendar »</a>
         </div>
       </div>
     </div>
@@ -68,6 +94,47 @@
             <div class="icon-heading__content">
               <h3>The FEC regularly hosts training events for candidates and committees</h3>
               <a href="/calendar/?category=Conferences&category=Roundtables">Find upcoming webinars, conferences and trainings »</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="slab slab--primary">
+    <div class="container">
+      <h1><a href="/legal-resources">Legal resources</a></h1>
+
+      <div class="grid grid--2-wide">
+        <div class="grid__item">
+          <div class="icon-heading icon-heading--subsection-doc-circle">
+            <div class="icon-heading__content">
+              <h3>Campaign finance laws and rules are found in the U.S. Code and the Code of Federal Regulations</h3>
+              Search or browse <a href="{{ settings.FEC_APP_URL }}/legal/statutes">statutes</a> and <a  href="https://beta.fec.gov/regulations">regulations</a>
+            </div>
+          </div>
+        </div>
+        <div class="grid__item">
+          <div class="icon-heading icon-heading--mallet-circle">
+            <div class="icon-heading__content">
+              <h3>The FEC publishes information about ongoing and closed court cases</h3>
+              <a href="http://www.fec.gov/law/litigation.shtml">Browse campaign finance litigation</a> »
+            </div>
+          </div>
+        </div>
+        <div class="grid__item">
+          <div class="icon-heading icon-heading--direction-sign-circle">
+            <div class="icon-heading__content">
+              <h3>The Commission issues guidance about specific situations through advisory opinions</h3>
+              <a href="{{ settings.FEC_APP_URL }}/legal/advisory-opinions/">Search advisory opinions</a> »
+            </div>
+          </div>
+        </div>
+        <div class="grid__item">
+          <div class="icon-heading icon-heading--shield-circle">
+            <div class="icon-heading__content">
+              <h3>The Commission issues guidance about specific situations through advisory opinions</h3>
+              <a href="{{ settings.FEC_APP_URL }}/legal/advisory-opinions/">Search advisory opinions</a> »
             </div>
           </div>
         </div>
@@ -143,7 +210,5 @@
       </div>
     </div>
   </section>
-{% endblock %}
 
-{% block extra_js %}
 {% endblock %}

@@ -3,6 +3,7 @@ import re
 from django import template
 from operator import attrgetter
 from itertools import chain
+from datetime import date
 from home.models import DigestPage
 from home.models import RecordPage
 from home.models import PressReleasePage
@@ -18,3 +19,25 @@ def press_releases():
 def weekly_digests():
     digests = DigestPage.objects.all().order_by('-date')[:3]
     return {'updates': digests}
+
+@register.inclusion_tag('partials/home-page-updates.html')
+def home_page_updates():
+    press_releases = PressReleasePage.objects.filter(homepage_hide=False).order_by('-date')[:4]
+    records = RecordPage.objects.filter(homepage_hide=False).order_by('-date')[:4]
+
+    # combine press release and records queryset
+    updates = chain(press_releases, records)
+
+    updates_unpin_expired = []
+    # remove homepage pin if expiration date has passed
+    for update in updates:
+        if update.homepage_pin_expiration:
+            if update.homepage_pin_expiration < date.today():
+                update.homepage_pin = False
+                update.homepage_pin_expiration = None
+        updates_unpin_expired.append(update)
+
+    updates_sorted_by_date = sorted(updates_unpin_expired, key=lambda x: x.date, reverse=True)
+    updates_sorted_by_homepage_pin = sorted(updates_sorted_by_date, key=lambda x: x.homepage_pin, reverse=True)
+
+    return {'updates': updates_sorted_by_homepage_pin[:4]}

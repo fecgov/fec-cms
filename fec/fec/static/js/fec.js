@@ -28,9 +28,10 @@ var calendarHelpers = require('./calendar-helpers');
 var FormNav = require('./form-nav').FormNav;
 
 var legal = require('./legal');
+var upcomingEvents = require('./upcoming-events');
 
 $(document).ready(function() {
-  // Initialize glossary
+
   // Initialize glossary
   new Glossary(terms, {}, {
     termClass: 'glossary__term accordion__button',
@@ -79,6 +80,9 @@ $(document).ready(function() {
   $('.js-dropdown').each(function() {
     new dropdown.Dropdown(this);
   });
+
+  // Homepage - What's Happening section
+  new upcomingEvents.UpcomingEvents();
 
   // Initialize feedback widget
   var feedbackWidget = new feedback.Feedback(window.FEC_APP_URL + '/issue/');
