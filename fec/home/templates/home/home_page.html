@@ -13,25 +13,32 @@
         <h2>The FEC administers and enforces federal campaign finance law and discloses the sources and amounts of funds used to finance our elections</h2>
       </div>
 
-      {# TODO: add card links #}
-
       <div class="grid grid--3-wide">
         <div class="grid__item">
           <img src="{% static "img/feature--data.png" %}" alt="Line chart graph showing campaign finance data">
           <h3><a href="{{ FEC_APP_URL }}/data">Campaign finance data</a></h3>
           <p>Helping citizens make informed voting decisions by showing how money is raised and spent in federal elections.</p>
+
+          <a class="t-sans" href="#homepage-campaign-finance-data">Get started below</a>
+          <i class="icon icon--small i-arrow-down"></i>
         </div>
 
         <div class="grid__item">
           <img src="{% static "img/feature--reporting.png" %}" alt="Icons representing a webpage for federal election guidance">
           <h3><a href="/registration-and-reporting">Registration and reporting</a></h3>
-          <p>Providing guidance for individuals and  groups that are active in federal elections.</p>
+          <p>Providing guidance for individuals and groups that are active in federal elections.</p>
+
+          <a class="t-sans" href="#homepage-registration-and-reporting">Get started below</a>
+          <i class="icon icon--small i-arrow-down"></i>
         </div>
 
         <div class="grid__item">
           <img src="{% static "img/feature--legal.png" %}" alt="Icons representing a webpage search of legal resources">
           <h3><a href="/legal-resources">Legal resources</a></h3>
           <p>Administering and enforcing federal campaign finance law. Search or browse statutes, regulations, advisory opinions or enforcement matters.</p>
+
+          <a class="t-sans" href="#homepage-legal-resources">Get started below</a>
+          <i class="icon icon--small i-arrow-down"></i>
         </div>
       </div>
     </div>
@@ -62,7 +69,7 @@
     </div>
   </section>
 
-  <section class="slab slab--primary slab--home">
+  <section id="homepage-campaign-finance-data" class="slab slab--primary slab--home">
     <div class="container">
       <h1><a href="{{ settings.FEC_APP_URL }}">Campaign finance data</a></h1>
         <div class="grid grid--2-wide">
@@ -101,7 +108,7 @@
     </div>
   </section>
 
-  <section class="slab slab--secondary slab--home u-border-top-inverse">
+  <section id="homepage-registration-and-reporting" class="slab slab--secondary slab--home u-border-top-inverse">
     <div class="container">
       <h1><a href="/registration-and-reporting">Registration and reporting</a></h1>
       <div class="grid grid--2-wide">
@@ -141,7 +148,7 @@
     </div>
   </section>
 
-  <section class="slab slab--home slab--primary u-border-top-inverse">
+  <section id="homepage-legal-resources" class="slab slab--home slab--primary u-border-top-inverse">
     <div class="container">
       <h1><a href="/legal-resources">Legal resources</a></h1>
 
