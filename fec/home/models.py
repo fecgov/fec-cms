@@ -145,6 +145,10 @@ class RecordPage(ContentPage):
     related_section_url = models.CharField(max_length=255, blank=True,
                                            default="/data/")
 
+    homepage_pin = models.BooleanField(default=False)
+    homepage_pin_expiration = models.DateField(blank=True, null=True)
+    homepage_hide = models.BooleanField(default=False)
+
     content_panels = ContentPage.content_panels + [
         FieldPanel('date'),
         FieldPanel('category'),
@@ -152,6 +156,9 @@ class RecordPage(ContentPage):
         PageChooserPanel('read_next'),
         FieldPanel('related_section_title'),
         FieldPanel('related_section_url'),
+        FieldPanel('homepage_pin'),
+        FieldPanel('homepage_pin_expiration'),
+        FieldPanel('homepage_hide')
     ]
 
     @property
@@ -210,12 +217,19 @@ class PressReleasePage(ContentPage):
                                   default=get_previous_press_release_page,
                                   on_delete=models.SET_NULL)
 
+    homepage_pin = models.BooleanField(default=False)
+    homepage_pin_expiration = models.DateField(blank=True, null=True)
+    homepage_hide = models.BooleanField(default=False)
+
     content_panels = ContentPage.content_panels + [
         FieldPanel('formatted_title'),
         FieldPanel('date'),
         InlinePanel('authors', label="Authors"),
         FieldPanel('category'),
         PageChooserPanel('read_next'),
+        FieldPanel('homepage_pin'),
+        FieldPanel('homepage_pin_expiration'),
+        FieldPanel('homepage_hide'),
     ]
 
     @property

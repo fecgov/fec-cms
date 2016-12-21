@@ -18,6 +18,8 @@ var FilterPanel = require('fec-style/js/filter-panel').FilterPanel;
 var filterTags = require('fec-style/js/filter-tags');
 var stickyBar = require('fec-style/js/sticky-bar');
 var toc = require('fec-style/js/toc');
+var typeahead = require('fec-style/js/typeahead');
+var Search = require('fec-style/js/search');
 
 // Hack: Append jQuery to `window` for use by legacy libraries
 window.$ = window.jQuery = $;
@@ -28,9 +30,10 @@ var calendarHelpers = require('./calendar-helpers');
 var FormNav = require('./form-nav').FormNav;
 
 var legal = require('./legal');
+var upcomingEvents = require('./upcoming-events');
 
 $(document).ready(function() {
-  // Initialize glossary
+
   // Initialize glossary
   new Glossary(terms, {}, {
     termClass: 'glossary__term accordion__button',
@@ -80,6 +83,9 @@ $(document).ready(function() {
     new dropdown.Dropdown(this);
   });
 
+  // Homepage - What's Happening section
+  new upcomingEvents.UpcomingEvents();
+
   // Initialize feedback widget
   var feedbackWidget = new feedback.Feedback(window.FEC_APP_URL + '/issue/');
 
@@ -110,4 +116,10 @@ $(document).ready(function() {
     exportUrl: calendarHelpers.getUrl(['calendar-dates', 'export']),
     filterPanel: filterPanel,
   });
+
+  // Initialize typeahead
+  new typeahead.Typeahead($('.js-search-input'), 'candidates', window.FEC_APP_URL + '/');
+
+  // Initialize search toggle
+  new Search($('.js-search'));
 });

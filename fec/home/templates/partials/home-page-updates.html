@@ -1,0 +1,17 @@
+{% load filters %}
+
+{% for update in updates %}
+  {% if forloop.counter == 1 or forloop.counter == 3 %}
+  <div class="grid__item">
+    <ul class="list--border">
+  {% endif %}
+      <li class="{% if forloop.counter == 1 %}list__item--no-border{% endif %}{% if update.homepage_pin == True %} u-no-padding-left u-no-padding-right{% endif %}">
+      {% if update.homepage_pin == True %}<div class="u-gray-background">{% endif %}
+        <a href="{{ update.url }}">{% formatted_title update %}</a> — <span class="t-sans">{{ update.get_update_type }}</span>
+      {% if update.homepage_pin %}</div>{% endif %}
+      </li>
+  {% if forloop.counter == 2 or forloop.counter == 4 %}
+    </ul>
+  </div>
+  {% endif %}
+{% endfor %}
