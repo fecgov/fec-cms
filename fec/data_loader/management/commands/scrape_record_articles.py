@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 
 import json
+import os
 
 from collections import namedtuple
 from datetime import datetime
@@ -269,7 +270,8 @@ def write_articles(articles: list) -> None:
     by_date = sorted(articles, key=attrgetter("posted_date"))
     out_lines = ",\n".join([json.dumps(a._asdict()) for a in by_date])
     out_string = "[\n%s\n]" % out_lines
-    fname = datetime.now().strftime("%Y-%m-%d-%H%M%S.json")
+    fname = os.path.join('..', '..', 'data', 'record_json',
+                         datetime.now().strftime('%Y-%m-%d-%H%M%S.json'))
     with open(fname, "w+") as f:
         f.write(out_string)
 

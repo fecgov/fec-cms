@@ -181,8 +181,8 @@ def add_page(item, base_page):
     saved_page.save()
 
 
-def load_press_releases_from_json():
-    """Loops through json files and adds them to wagtail"""
+def import_press_releases_from_json():
+    """Loops through JSON files and imports them to wagtail"""
     # Base Page that the pages you are adding belong to
     base_page = Page.objects.get(url_path='/home/updates/')
 
@@ -199,9 +199,9 @@ def load_press_releases_from_json():
 
 
 class Command(BaseCommand):
-    help = "loads press releases from json"
+    help = 'Imports press releases from JSON'
 
     def handle(self, *args, **options):
         delete_all_press_releases()
-        load_press_releases_from_json()
-        logger.info('Press releases loaded')
+        import_press_releases_from_json()
+        logger.info('Press releases imported.')
