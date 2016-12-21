@@ -60,6 +60,7 @@ INSTALLED_APPS = (
     'search',
     'home',
     'legal',
+    'data_loader',
 )
 
 MIDDLEWARE_CLASSES = (
