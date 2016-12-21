@@ -2,6 +2,7 @@
 
 var $ = require('jquery');
 var calendarHelpers = require('./calendar-helpers');
+var moment = require('moment');
 
 function UpcomingEvents() {
 
@@ -15,15 +16,14 @@ function UpcomingEvents() {
   var url = calendarHelpers.getUrl('calendar-dates',
     { 'sort': 'start_date',
       'min_start_date': date,
-      'category': ['report-M', 'report-Q', 'Open+Meetings', 'Executive+Sessions', 'Public+Hearings', 'Conferences', 'Roundtables']})
+      'category': ['report-M', 'report-Q', 'Open+Meetings', 'Executive+Sessions', 'Public+Hearings', 'Conferences', 'Roundtables']});
 
   $.getJSON(url).done(function(events) {
 
     $.each(events.results, function(i, event) {
-      var locale = 'en-us';
-      var startDate = new Date(event.start_date);
-      var startDateMonth = startDate.toLocaleString(locale, { month: 'long'});
-      var startDateDay = startDate.getDate();
+      var startDate = moment(event.start_date);
+      var startDateMonth = startDate.format('MMMM');
+      var startDateDay = startDate.format('D');
       var eventSummary = '';
 
       if (event.url) {
