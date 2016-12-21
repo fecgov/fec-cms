@@ -37,7 +37,7 @@
     </div>
   </section>
 
-  <section class="slab slab--neutral">
+  <section class="slab slab--neutral slab--home">
     <div class="container">
       <h6>What's happening</h6>
       <div class="grid grid--3-wide grid--no-margin grid--no-border">
@@ -61,47 +61,47 @@
       </div>
     </div>
   </section>
-  <section class="slab slab--primary slab--home">
-        <div class="container">
-            <h1><a href="{{ settings.FEC_APP_URL }}">Campaign finance data</a></h1>
-              <div class="grid grid--2-wide">
-                  <div class="grid__item">
-                      <h3>Find out how a specific candidate or committee raises and spends money</h3>
-                      <form action="{{ settings.FEC_APP_URL }}" autocomplete="off" class="search__container js-search">
-                        <div class="combo combo--search">
-                          <select class="search__select js-search-type" name="search_type" aria-label="Select a search type">
-                            <option value="candidates">Candidates</option>
-                            <option value="committees">Committees</option>
-                          </select>
-                          <input name="search" class="js-search-input combo__input" type="text"
-                          autocorrect="off"
-                          autocapitalize="off"
 
-                          <button type="submit" class="combo__button button--search button--standard">
-                            <span class="u-visually-hidden">Search</span>
-                          </button>
-                        </div>
-                      </form>
-                  </div>
-                  <div class="grid__item">
-                    <h3>Track recently reported financial activity, like total cash on hand</h3>
-                    <a class="t-sans" href="{{ settings.FEC_APP_URL }}/filings">Look up recent filings »</a>
-                  </div>
-                  <div class="grid__item">
-                    <h3>Disclover which groups are supporting or opposing a candidate</h3>
-                    <a class="t-sans" href="{{ settings.FEC_APP_URL }}/independent-expenditures">Look up independent expenditures »</a>
-                  </div>
-                  <div class="grid__item">
-                    <h3>Learn who's donating to candidates and committees</h3>
-                    <a class="t-sans" href="{{ settings.FEC_APP_URL }}/receipts/individual-contributions">Look up an individual contributor »</a>
-                  </div>
+  <section class="slab slab--primary slab--home">
+    <div class="container">
+      <h1><a href="{{ settings.FEC_APP_URL }}">Campaign finance data</a></h1>
+        <div class="grid grid--2-wide">
+          <div class="grid__item">
+            <h3>Find out how a specific candidate or committee raises and spends money</h3>
+            <form action="{{ settings.FEC_APP_URL }}" autocomplete="off" class="search__container js-search">
+              <div class="combo combo--search">
+                <select class="search__select js-search-type" name="search_type" aria-label="Select a search type">
+                  <option value="candidates">Candidates</option>
+                  <option value="committees">Committees</option>
+                </select>
+                <input name="search" class="js-search-input combo__input" type="text"
+                autocorrect="off"
+                autocapitalize="off"
+                spellcheck="false">
+                <button type="submit" class="combo__button button--search button--standard">
+                  <span class="u-visually-hidden">Search</span>
+                </button>
               </div>
-            </div>
+            </form>
+          </div>
+          <div class="grid__item">
+            <h3>Track recently reported financial activity, like total cash on hand</h3>
+            <a class="t-sans" href="{{ settings.FEC_APP_URL }}/filings">Look up recent filings »</a>
+          </div>
+          <div class="grid__item">
+            <h3>Discover which groups are supporting or opposing a candidate</h3>
+            <a class="t-sans" href="{{ settings.FEC_APP_URL }}/independent-expenditures">Look up independent expenditures »</a>
+          </div>
+          <div class="grid__item">
+            <h3>Learn who's donating to candidates and committees</h3>
+            <a class="t-sans" href="{{ settings.FEC_APP_URL }}/receipts/individual-contributions">Look up an individual contributor »</a>
+          </div>
         </div>
+      </div>
+    </div>
   </section>
 
-
-  <section class="slab slab--secondary slab--home">
+  <section class="slab slab--secondary slab--home u-border-top-inverse">
     <div class="container">
       <h1><a href="/registration-and-reporting">Registration and reporting</a></h1>
       <div class="grid grid--2-wide">
@@ -140,7 +140,8 @@
       </div>
     </div>
   </section>
-  <section class="slab slab--home slab--primary">
+
+  <section class="slab slab--home slab--primary u-border-top-inverse">
     <div class="container">
       <h1><a href="/legal-resources">Legal resources</a></h1>
 
@@ -149,7 +150,7 @@
           <div class="icon-heading icon-heading--subsection-doc-circle">
             <div class="icon-heading__content">
               <h3>Campaign finance laws and rules are found in the U.S. Code and the Code of Federal Regulations</h3>
-              Search or browse <a href="{{ settings.FEC_APP_URL }}/legal/statutes">statutes</a> and <a  href="https://beta.fec.gov/regulations">regulations</a>
+              <span class="t-sans">Search or browse <a href="{{ settings.FEC_APP_URL }}/legal/statutes">statutes</a> and <a href="https://beta.fec.gov/regulations">regulations</a></span>
             </div>
           </div>
         </div>
@@ -157,7 +158,7 @@
           <div class="icon-heading icon-heading--mallet-circle">
             <div class="icon-heading__content">
               <h3>The FEC publishes information about ongoing and closed court cases</h3>
-              <a href="http://www.fec.gov/law/litigation.shtml">Browse campaign finance litigation</a> »
+              <a class="t-sans" href="http://www.fec.gov/law/litigation.shtml">Browse campaign finance litigation »</a>
             </div>
           </div>
         </div>
@@ -165,15 +166,17 @@
           <div class="icon-heading icon-heading--direction-sign-circle">
             <div class="icon-heading__content">
               <h3>The Commission issues guidance about specific situations through advisory opinions</h3>
-              <a href="{{ settings.FEC_APP_URL }}/legal/advisory-opinions/">Search advisory opinions</a> »
+              <a class="t-sans" href="{{ settings.FEC_APP_URL }}/legal/advisory-opinions/">Search advisory opinions »</a>
             </div>
           </div>
         </div>
         <div class="grid__item">
           <div class="icon-heading icon-heading--shield-circle">
             <div class="icon-heading__content">
-              <h3>The Commission issues guidance about specific situations through advisory opinions</h3>
-              <a href="{{ settings.FEC_APP_URL }}/legal/advisory-opinions/">Search advisory opinions</a> »
+              <h3>The Commission has a variety of methods for responding to possible election law violations</h3>
+              <a class="t-sans" href="{{ settings.FEC_APP_URL }}/legal/enforcement/">Learn more about enforcement »</a><br>
+              <br>
+              <a class="t-sans" href="http://www.fec.gov/pages/brochures/complain.shtml#search=complaint">Read about the process for filing a complaint »</a>
             </div>
           </div>
         </div>
