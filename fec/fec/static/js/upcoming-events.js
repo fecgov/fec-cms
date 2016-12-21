@@ -40,4 +40,4 @@ function UpcomingEvents() {
   });
 }
 
-module.exports = {upcomingEvents: UpcomingEvents};
+module.exports = {UpcomingEvents: UpcomingEvents};

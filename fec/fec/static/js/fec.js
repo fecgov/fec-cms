@@ -18,6 +18,8 @@ var FilterPanel = require('fec-style/js/filter-panel').FilterPanel;
 var filterTags = require('fec-style/js/filter-tags');
 var stickyBar = require('fec-style/js/sticky-bar');
 var toc = require('fec-style/js/toc');
+var typeahead = require('fec-style/js/typeahead');
+var Search = require('fec-style/js/search');
 
 // Hack: Append jQuery to `window` for use by legacy libraries
 window.$ = window.jQuery = $;
@@ -114,4 +116,10 @@ $(document).ready(function() {
     exportUrl: calendarHelpers.getUrl(['calendar-dates', 'export']),
     filterPanel: filterPanel,
   });
+
+  // Initialize typeahead
+  new typeahead.Typeahead($('.js-search-input'), 'candidates', window.FEC_APP_URL + '/');
+
+  // Initialize search toggle
+  new Search($('.js-search'));
 });
