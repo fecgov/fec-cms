@@ -34,10 +34,10 @@
         <h2><a href="/updates?update_type=press-release">Press releases</a></h2>
         <div class="content__section">
           {{ self.release_intro }}
+          <a class="button button--standard button--go" href="/updates?update_type=press-release">All press releases</a>
         </div>
         <div class="post-feed">
           {% press_releases %}
-          <a class="button button--standard button--go" href="/updates?update_type=press-release">All press releases</a>
         </div>
       </div>
 
@@ -45,10 +45,10 @@
         <h2><a href="/updates?update_type=weekly-digest">Weekly Digests</a></h2>
         <div class="content__section">
           {{ self.digest_intro }}
+          <a class="button button--standard button--go" href="/updates?update_type=weekly-digest">All Weekly Digests</a>
         </div>
         <div class="post-feed">
           {% weekly_digests %}
-          <a class="button button--standard button--go" href="/updates?update_type=weekly-digest">All Weekly Digests</a>
         </div>
       </div>
 
