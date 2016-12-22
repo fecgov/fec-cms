@@ -12,6 +12,7 @@ from fec.constants import press_release_page_categories, record_page_categories
 from home.models import Page, PressReleasePage
 from home.utils.link_reroute import make_absolute_links
 
+
 BASE_FEC_PRESS_URL = 'http://www.fec.gov/press/'
 DEFAULT_CATEGORY = 'other agency actions'
 
