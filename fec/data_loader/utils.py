@@ -1,6 +1,8 @@
 import re
 
-SPECIFIC_REPLACEMENTS = [
+from home.models import Author
+
+CONTENT_SPECIFIC_REPLACEMENTS = [
     # deletions - these are from the header and we don't need them as part of the content
     ('<body bgcolor="#FFFFFF">', ''),
     ('<a href="http://www.fec.gov"><img src="../jpg/topfec.jpg" border="0" width="81" height="81" alt="FEC Home Page"/></a> </p>', ''),
@@ -36,9 +38,12 @@ SPECIFIC_REPLACEMENTS = [
     ('</pre>', '</div>'),
     ('<p><u/></p>', ''),
     ('<p><strong><u/></strong></p>', ''),
+    ('\r\n', ''),
+    ('<h2 align="left">', '<h2>'),
+    ('<p align="left">', '<p>'),
 ]
 
-REGEX_REPLACEMENTS = [
+CONTENT_REGEX_REPLACEMENTS = [
     ('height="[0-9]+"', ''),
     ('border="[0-9]+"', ''),
     # remove colors
@@ -61,6 +66,10 @@ REGEX_REPLACEMENTS = [
     ('(<\/blockquote>)+', '<\blockquote>'),
     ('(<blockquote>)+', 'blockquote'),
 ]
+
+KEYWORD_REGEX_CLEANER = '\s?\r\n\s+'
+KEYWORD_SPLIT_CHARACTER = '|'
+KEYWORD_REPLACE_CHARACTER = ' '
 
 
 class ImporterMixin(object):
@@ -101,17 +110,17 @@ class ImporterMixin(object):
         block of content.
         """
 
-        for old, new in SPECIFIC_REPLACEMENTS:
-            body = str.replace(content_block, old, new)
+        for old, new in CONTENT_SPECIFIC_REPLACEMENTS:
+            content_block = str.replace(content_block, old, new)
 
-        for old, new in REGEX_REPLACEMENTS:
-            body = re.sub(old, new, content_block)
+        for old, new in CONTENT_REGEX_REPLACEMENTS:
+            content_block = re.sub(old, new, content_block)
 
         # Flag
-        if """You have performed a blocked operation""" in body:
+        if """You have performed a blocked operation""" in content_block:
             self.stdout.write(self.style.NOTICE('-----BLOCKED PAGE------'))
 
-        return body
+        return content_block
 
     def escape_quotes(self, content_block, **options):
         """
@@ -119,6 +128,23 @@ class ImporterMixin(object):
         """
 
         return content_block.replace("'", "''")
+
+    def clean_category(self, category, invalid_categories, **options):
+        """
+        Makes sure that a category is in the proper format before validating
+        it.
+        """
+
+        # Check to see if we are dealing with more than one category - Wagtail
+        # only supports one, so grab the first one in the case of multiple.
+        if type(category) == list:
+            category = category[0]
+
+        # Look to see if the category is incorrect and retrieve the correct
+        # value in its place, otherwise just use it as it.
+        category = invalid_categories.get(category, category)
+
+        return category
 
     def validate_category(self, category, default, valid_categories, **options):
         """
@@ -129,4 +155,86 @@ class ImporterMixin(object):
         if category.lower() in list(valid_categories.keys()):
             return category.lower()
 
+        if options['verbosity'] > 1:
+            self.stdout.write(self.style.WARNING(
+                'Unknown category found: {0}'.format(category)
+            ))
+
         return default
+
+    def clean_keywords(self, keywords, **options):
+        """
+        Cleans keywords so that they are always handled as a list of values.
+        """
+
+        # If the keywords aren't already a list, strip out unnecessary
+        # characters and convert it to a list.
+        if type(keywords) != list:
+            keywords = re.sub(
+                KEYWORD_REGEX_CLEANER,
+                KEYWORD_SPLIT_CHARACTER,
+                keywords
+            ).split(KEYWORD_SPLIT_CHARACTER)
+
+        # Check each keyword in the list to strip out any unwanted characters.
+        keywords = [
+            re.sub(KEYWORD_REGEX_CLEANER, KEYWORD_REPLACE_CHARACTER, keyword)
+            for keyword in keywords
+        ]
+
+        return keywords
+
+    def clean_authors(self, authors, default_email, default_title, **options):
+        """
+        Cleans author information and returns a list of author objects.
+
+        Assumes that authors is a list of one or more strings representing
+        author names only.
+        """
+
+        author_objects = []
+
+        for author in authors:
+            # If the author is just 'n/a' or an empty list, skip it.
+            if author in ['n/a', '']:
+                continue
+
+            # The Author object requires the following fields:
+            #   name
+            #   email
+            #   title
+            # However, these values do not have to be unique, so we must
+            # account for the possibility of more than one author object
+            # sharing some of the same information.  The best we can do is
+            # assume that we should just match on the first author returned if
+            # any matches are found.
+            existing_authors = Author.objects.filter(name=author)
+            existing_authors_count = existing_authors.count()
+
+            if existing_authors_count > 0:
+                author_objects.append(existing_authors[0])
+
+                if existing_authors_count > 1:
+                    self.stdout.write(self.style.WARNING(
+                        'Multiple authors found for name "{0}" ({1} total)'.format(
+                            author,
+                            existing_authors_count
+                        )
+                    ))
+            else:
+                author_objects.append(
+                    Author.objects.create(
+                        name=author,
+                        email=default_email,
+                        title=default_title
+                    )
+                )
+
+                if options['verbosity'] > 1:
+                    self.stdout.write(self.style.SUCCESS(
+                        'Successfully created author object for {0}'.format(
+                            author
+                        )
+                    ))
+
+        return author_objects

@@ -8,7 +8,7 @@ from urllib.parse import urljoin
 from django.core.management import BaseCommand
 
 from data_loader.utils import ImporterMixin
-from fec.constants import press_release_page_categories, record_page_categories
+from fec.constants import press_release_page_categories
 from home.models import Page, PressReleasePage
 from home.utils.link_reroute import make_absolute_links
 
