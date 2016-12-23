@@ -166,7 +166,16 @@ class RecordPage(ContentPage):
         blank=True,
         default='/data/'
     )
-    monthly_issue = models.CharField(max_length=255, blank=True, default='')
+    monthly_issue = models.CharField(
+        max_length=255,
+        blank=True,
+        default=''
+    )
+    monthly_issue_url = models.CharField(
+        max_length=255,
+        blank=True,
+        default=''
+    )
 
     keywords = ClusterTaggableManager(through=RecordPageTag, blank=True)
 
