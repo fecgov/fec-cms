@@ -21,8 +21,8 @@
           <ul class="sidebar__content">
               <li class="side-nav__item"><a class="side-nav__link" href="#mission-and-history">Mission and history</a></li>
               <li class="side-nav__item"><a class="side-nav__link" href="#leadership">Leadership and structure</a></li>
+              <li class="side-nav__item"><a class="side-nav__link" href="#reports">Reports about the FEC</a></li>
               <li class="side-nav__item"><a class="side-nav__link" href="#careers">Careers</a></li>
-              <li class="side-nav__item"><a class="side-nav__link" href="#reports">Organization reports</a></li>
               <li class="side-nav__item"><a class="side-nav__link" href="#doing-business">Doing business with the FEC</a></li>
               {% for option in self.option_blocks %}
                 <li class="side-nav__item"><a class="side-nav__link" href="#{{option.value.title | slugify }}">{{ option.value.title }}</a></li>
