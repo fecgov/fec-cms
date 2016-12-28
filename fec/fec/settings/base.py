@@ -60,7 +60,6 @@ INSTALLED_APPS = (
     'fec',
     'search',
     'home',
-    'legal',
 )
 
 MIDDLEWARE_CLASSES = (

@@ -413,3 +413,9 @@ class ResourcePage(Page):
         StreamFieldPanel('citations'),
         StreamFieldPanel('related_topics')
     ]
+
+class LegalResourcesLanding(ContentPage, UniqueModel):
+    subpage_types = ['ResourcePage']
+    @property
+    def content_section(self):
+        return ''
