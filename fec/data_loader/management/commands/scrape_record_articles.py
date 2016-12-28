@@ -247,8 +247,15 @@ def extract_article_body(url: str, title: str, encoding: str) -> str:
     # innerHTML, where we move the subelements to a known new element and then
     # delete the known opening and closing tags from the resulting string:
     new_td = fromstring("<td></td>")
-    for child in main_el.iterchildren():
+
+    for index, child in enumerate(main_el.iterchildren()):
+        # If the very first element is an H2 element, it is probably the title,
+        # so skip adding it to our new article body.
+        if index == 0 and child.tag == 'h2':
+            continue
+
         new_td.append(child)
+
     raw_html = tostring(new_td).decode(encoding)
     html = raw_html[4:][:-5].strip()
     return html
