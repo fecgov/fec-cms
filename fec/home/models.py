@@ -70,19 +70,19 @@ class HomePage(ContentPage, UniqueModel):
         return ''
 
 class LandingPage(ContentPage):
-    pass
+    template = 'home/registration-and-reporting/landing_page.html'
 
 class ChecklistPage(ContentPage):
-    pass
+    template = 'home/registration-and-reporting/checklist_page.html'
 
 class SSFChecklistPage(ContentPage):
-    pass
+    template = 'home/registration-and-reporting/ssf_checklist_page.html'
 
 class PartyChecklistPage(ContentPage):
-    pass
+    template = 'home/registration-and-reporting/party_checklist_page.html'
 
 class NonconnectedChecklistPage(ContentPage):
-    pass
+    template = 'home/registration-and-reporting/nonconnected_checklist_page.html'
 
 class Author(models.Model):
     name = models.CharField(max_length=255)
@@ -416,6 +416,7 @@ class ResourcePage(Page):
 
 class LegalResourcesLanding(ContentPage, UniqueModel):
     subpage_types = ['ResourcePage']
+    template = 'home/legal/legal_resources_landing.html'
     @property
     def content_section(self):
-        return ''
+        return 'legal-resources'
