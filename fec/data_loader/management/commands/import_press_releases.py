@@ -31,6 +31,14 @@ class Command(ImporterMixin, BaseCommand):
             help='Delete existing records prior to importing',
         )
 
+        parser.add_argument(
+            '--import-raw',
+            action='store_true',
+            dest='import_raw',
+            default=False,
+            help='Import the records as raw HTML',
+        )
+
     def handle(self, *args, **options):
         if options['delete_existing']:
             self.stdout.write(
@@ -64,6 +72,15 @@ class Command(ImporterMixin, BaseCommand):
         Cleans the contents of a record and imports it as a page into Wagtail.
         """
 
+        # Determine if the body content should go into a RichTextBlock or a
+        # RawHTMLBlock as defined in our underlying ContentPage model.  Please
+        # see Wagtail's documentation for more information on block types:
+        # http://docs.wagtail.io/en/v1.8/topics/streamfield.html
+        block_type = "paragraph"
+
+        if options['import_raw']:
+            block_type = "html"
+
         item_year = parser.parse(item['date']).year
         title = item['title'][:255]
 
@@ -82,7 +99,7 @@ class Command(ImporterMixin, BaseCommand):
             clean_body
         )
         body = self.escape_quotes(linked_body, **options)
-        body_list = [{"value": body, "type": "html"}]
+        body_list = [{"value": body, "type": block_type}]
         formatted_body = json.dumps(body_list)
         publish_date = parser.parse(item['date'])
 

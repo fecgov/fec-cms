@@ -51,6 +51,14 @@ class Command(ImporterMixin, BaseCommand):
             help='Delete existing records prior to importing',
         )
 
+        parser.add_argument(
+            '--import-raw',
+            action='store_true',
+            dest='import_raw',
+            default=False,
+            help='Import the records as raw HTML',
+        )
+
     def handle(self, *args, **options):
         if options['delete_existing']:
             self.stdout.write(
@@ -69,11 +77,6 @@ class Command(ImporterMixin, BaseCommand):
                 self.stdout.write((options['json_file_path']))
 
             contents = json.load(json_contents)
-
-            #if contents['title_text'] is None or contents['title_text'].isspace():
-                # This seems to be the case for the record pages.
-                #contents['title_text'] = contents['research_categories']
-
             self.add_page(contents, base_page, **options)
 
         self.stdout.write(self.style.SUCCESS('Record pages imported.'))
@@ -82,6 +85,15 @@ class Command(ImporterMixin, BaseCommand):
         """
         Cleans the contents of a record and imports it as a page into Wagtail.
         """
+
+        # Determine if the body content should go into a RichTextBlock or a
+        # RawHTMLBlock as defined in our underlying ContentPage model.  Please
+        # see Wagtail's documentation for more information on block types:
+        # http://docs.wagtail.io/en/v1.8/topics/streamfield.html
+        block_type = "paragraph"
+
+        if options['import_raw']:
+            block_type = "html"
 
         for item in contents:
             item_year = parser.parse(item['posted_date']).year
@@ -105,7 +117,7 @@ class Command(ImporterMixin, BaseCommand):
             url_path = '/home/updates/' + slug + '/'
             clean_body = self.clean_content(item['body'], **options)
             body = self.escape_quotes(clean_body, **options)
-            body_list = [{"value": body, "type": "html"}]
+            body_list = [{"value": body, "type": block_type}]
             formatted_body = json.dumps(body_list)
             publish_date = parser.parse(item['posted_date'])
             monthly_issue_text = item.get('monthly_issue_text', '')
