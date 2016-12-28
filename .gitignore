@@ -56,3 +56,6 @@ _sandbox
 
 .cfmeta
 npm-debug.log
+
+# Image uploads
+fec/media/

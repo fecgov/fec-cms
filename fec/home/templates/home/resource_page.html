@@ -1,0 +1,73 @@
+{% extends "long_page.html" %}
+{% load wagtailcore_tags %}
+{% load staticfiles %}
+{% block title %}{{ self.title }}{% endblock %}
+{% block body_class %}template-{{ self.get_verbose_name | slugify }}{% endblock %}
+
+{% block breadcrumbs %}
+  {% include 'partials/breadcrumbs.html' with page=self links=self.ancestors style='primary' %}
+{% endblock %}
+
+{% block intro %}
+<p class="t-lead">{{ self.intro }}</p>
+{% endblock %}
+
+{% block toc %}
+  {% for section in self.sections %}
+    <li class="side-nav__item"><a class="side-nav__link" href="#{{section.value.title | slugify }}">{{ section.value.title }}</a></li>
+  {% endfor %}
+  {% if self.citations %}
+    <li class="side-nav__item"><a class="side-nav__link" href="#legal-citations">Legal citations</a></li>
+  {% endif %}
+{% endblock %}
+
+{% block sections %}
+
+{% for section in self.sections %}
+<div id="{{ section.value.title | slugify }}" class="option">
+  {% if not section.value.hide_title %}<h2>{{ section.value.title }}</h2>{% endif %}
+  {% if section.value.content %}
+  <div class="option__content">
+    <div class="row">
+      {% include_block section.value.content with blocks=section.value.content %}
+    </div>
+  </div>
+  {% endif %}
+  {% include_block section.value.aside with aside=section.value.aside %}
+</div>
+
+{% endfor %}
+{% endblock %}
+
+{% if self.citations %}
+{% block citations %}
+  <div class="grid grid--2-wide">
+  {% for citation in self.citations %}
+    {% for block in citation.value %}
+      <div class="grid__item">
+        <p class="t-bold">{{ block.label }}</p>
+        {{ block.content }}
+      </div>
+    {% endfor %}
+  {% endfor %}
+  </div>
+{% endblock %}
+{% endif %}
+
+{% block related_topics %}
+{% for block in self.related_topics %}
+  {% with topics=block.value %}
+    {% for topic in topics %}
+    <div class="grid__item">
+      <a href="{{ topic.url }}">
+        <aside class="card card--horizontal card--primary">
+          <div class="card__content">
+          {{ topic }}
+          </div>
+        </aside>
+      </a>
+    </div>
+    {% endfor %}
+  {% endwith %}
+{% endfor %}
+{% endblock %}
