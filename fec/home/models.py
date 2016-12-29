@@ -354,7 +354,8 @@ class ContactItemBlock(blocks.StructBlock):
         ('email', 'Email'),
         ('fax', 'Fax'),
         ('hand', 'Hand delivery'),
-        ('phone', 'Phone')
+        ('phone', 'Phone'),
+        ('mail', 'Mail')
     ], required=True)
     item_info = blocks.RichTextBlock(required=True)
 
@@ -415,8 +416,16 @@ class ResourcePage(Page):
     ]
 
 class LegalResourcesLanding(ContentPage, UniqueModel):
-    subpage_types = ['ResourcePage']
+    subpage_types = ['ResourcePage', 'EnforcementPage']
     template = 'home/legal/legal_resources_landing.html'
+    @property
+    def content_section(self):
+        return 'legal-resources'
+
+class EnforcementPage(ContentPage, UniqueModel):
+    parent_page_types = ['LegalResourcesLanding']
+    subpage_types = ['ResourcePage']
+    template = 'home/legal/enforcement.html'
     @property
     def content_section(self):
         return 'legal-resources'
