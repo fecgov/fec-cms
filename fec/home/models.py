@@ -16,6 +16,9 @@ from wagtail.wagtailimages.edit_handlers import ImageChooserPanel
 from wagtail.contrib.table_block.blocks import TableBlock
 
 from fec import constants
+from home.blocks import (DocumentBlock, AsideLinkBlock, ContactInfoBlock,
+                        ContactInfoBlock, CitationsBlock, ResourceBlock,
+                        OptionBlock, CollectionBlock)
 
 stream_factory = functools.partial(
     StreamField,
@@ -265,12 +268,6 @@ class CustomPage(Page):
         StreamFieldPanel('sidebar'),
     ]
 
-class OptionBlock(blocks.StructBlock):
-    title = blocks.CharBlock(required=True)
-    intro = blocks.RichTextBlock(blank=False, null=False, required=False)
-    button_text = blocks.CharBlock(required=True, null=False, blank=False)
-    related_page = blocks.PageChooserBlock()
-
 class PressLandingPage(Page):
     hero = stream_factory(null=True, blank=True)
     release_intro = stream_factory(null=True, blank=True)
@@ -290,19 +287,6 @@ class PressLandingPage(Page):
         StreamFieldPanel('contact_intro'),
     ]
 
-class CollectionList(blocks.StructBlock):
-    CHECKLIST = 'check'
-    BULLET = 'bullet'
-    STYLE_CHOICES =([
-        (CHECKLIST, 'Checklist'),
-        (BULLET, 'Bulleted list')
-    ])
-    title = blocks.CharBlock(required=True)
-    style = blocks.ChoiceBlock(default=BULLET, choices=STYLE_CHOICES)
-    intro = blocks.RichTextBlock(blank=False, null=False, required=False)
-    items = blocks.ListBlock(blocks.RichTextBlock(classname="nothing"))
-
-
 class CollectionPage(Page):
     body = stream_factory(null=True, blank=True)
     sidebar_title = models.CharField(max_length=255, null=True, blank=True)
@@ -311,7 +295,7 @@ class CollectionPage(Page):
         ('related_pages', blocks.ListBlock(blocks.PageChooserBlock()))
     ], null=True, blank=True)
     sections = StreamField([
-        ('section', CollectionList())
+        ('section', CollectionBlock())
     ])
     show_search = models.BooleanField(max_length=255, default=False,
                                     null=False, blank=False,
@@ -327,81 +311,11 @@ class CollectionPage(Page):
         StreamFieldPanel('sections'),
     ]
 
-class DocumentBlock(blocks.StructBlock):
-    """A document thumbnail in an aside or the main section"""
-    image = ImageChooserBlock()
-    url = blocks.URLBlock()
-    text = blocks.CharBlock()
-
-    class Meta:
-        icon = 'doc-empty'
-
-class AsideLinkBlock(blocks.StructBlock):
-    """Either a search or calendar link in a section aside"""
-    link_type = blocks.ChoiceBlock(choices=[
-        ('search', 'Search'),
-        ('calendar', 'Calendar')
-    ], icon='link', required=False, help_text='Set an icon')
-
-    url = blocks.URLBlock()
-    text = blocks.CharBlock(required=True)
-    coming_soon = blocks.BooleanBlock(required=False)
-
-    class Meta:
-        icon = 'link'
-
-class ContactItemBlock(blocks.StructBlock):
-    """A lockup of an icon and blurb of contact info"""
-    item_label = blocks.CharBlock(required=True)
-    item_icon = blocks.ChoiceBlock(choices=[
-        ('email', 'Email'),
-        ('fax', 'Fax'),
-        ('hand', 'Hand delivery'),
-        ('phone', 'Phone'),
-        ('mail', 'Mail')
-    ], required=True)
-    item_info = blocks.RichTextBlock(required=True)
-
-    class Meta:
-        icon = 'cog'
-
-class ContactInfoBlock(blocks.StructBlock):
-    """ A StructBlock that can contain multiple contact items """
-    label = blocks.CharBlock(required=False, icon='title')
-    contact_items = blocks.ListBlock(ContactItemBlock())
-
-    class Meta:
-        template='blocks/contact-info.html'
-        icon='placeholder'
-
-class ResourceSection(blocks.StructBlock):
-    """A section of a ResourcePage"""
-    title = blocks.CharBlock(required=True)
-    hide_title = blocks.BooleanBlock(required=False, help_text='Should the section title be displayed?')
-    content = blocks.StreamBlock([
-        ('text', blocks.RichTextBlock(blank=False, null=False, required=False, icon='pilcrow')),
-        ('documents', blocks.ListBlock(DocumentBlock(), template='blocks/section-documents.html', icon='doc-empty')),
-        ('contact_info', ContactInfoBlock())
-    ])
-
-    aside = blocks.StreamBlock([
-        ('title', blocks.CharBlock(required=False, icon='title')),
-        ('document', DocumentBlock()),
-        ('link', AsideLinkBlock())
-    ],
-    template='blocks/section-aside.html',
-    icon='placeholder')
-
-class CitationsBlock(blocks.StructBlock):
-    """Block for a chunk of citations that includes a label and the citation (in content)"""
-    label = blocks.CharBlock()
-    content = blocks.RichTextBlock()
-
 class ResourcePage(Page):
     """Class for pages that include a side nav, multiple sections and citations"""
     intro = stream_factory(null=True, blank=True)
     sections = StreamField([
-        ('sections', ResourceSection())
+        ('sections', ResourceBlock())
     ], null=True)
     citations = StreamField([
         ('citations', blocks.ListBlock(CitationsBlock()))
@@ -418,7 +332,7 @@ class ResourcePage(Page):
         StreamFieldPanel('related_topics')
     ]
 
-class LegalResourcesLanding(ContentPage, UniqueModel):
+class LegalResourcesLandingPage(ContentPage, UniqueModel):
     subpage_types = ['ResourcePage', 'EnforcementPage']
     template = 'home/legal/legal_resources_landing.html'
     @property
@@ -426,7 +340,7 @@ class LegalResourcesLanding(ContentPage, UniqueModel):
         return 'legal-resources'
 
 class EnforcementPage(ContentPage, UniqueModel):
-    parent_page_types = ['LegalResourcesLanding']
+    parent_page_types = ['LegalResourcesLandingPage']
     subpage_types = ['ResourcePage']
     template = 'home/legal/enforcement.html'
     @property
