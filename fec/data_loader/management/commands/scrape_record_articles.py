@@ -2,6 +2,7 @@
 
 import json
 import os
+import re
 
 from collections import namedtuple
 from datetime import datetime
@@ -84,6 +85,7 @@ def create_article(row: Element, encoding: str, list_url: str) -> Article:
     Impure
         Pulls article content from a URL via extract_article_body().
     """
+
     cells = row.xpath("td")
     br_expr = "br//preceding-sibling::text()|br//following-sibling::text()"
 
@@ -127,7 +129,11 @@ def create_article(row: Element, encoding: str, list_url: str) -> Article:
         keywords = cells[5].text_content().strip()
 
     if title_url:
-        body = extract_article_body(title_url, title_text, encoding)
+        body, body_author = extract_article_body(title_url, title_text,
+                                                 encoding)
+
+        if body_author not in authors:
+            authors.append(body_author)
     else:
         body = ""
 
@@ -136,7 +142,7 @@ def create_article(row: Element, encoding: str, list_url: str) -> Article:
                    body)
 
 
-def extract_article_body(url: str, title: str, encoding: str) -> str:
+def extract_article_body(url: str, title: str, encoding: str) -> (str, str):
     """
     Given a URL, returns relevant stripped HTML content from that URL.
     Very specific to FEC Record article pages.
@@ -148,8 +154,8 @@ def extract_article_body(url: str, title: str, encoding: str) -> str:
     :arg str title: The title for the article.
     :arg str encoding: The encoding for the list page.
 
-    :rtype: str (HTML).
-    :returns: The HTML content of the article.
+    :rtype: str (HTML), str.
+    :returns: The HTML content of the article and any found author names.
 
     Quite hacky, partly because the article HTML isn't entirely consistent.
 
@@ -159,10 +165,7 @@ def extract_article_body(url: str, title: str, encoding: str) -> str:
     # Handle PDFs:
     parsed_url = urlparse(url)
     if parsed_url.path.endswith("pdf"):
-        return """
-            <h2>%s</h2>
-            <p><a href="%s">PDF</a></p>
-            """ % (title, url)
+        return '<h2>%s</h2><p><a href="%s">PDF</a></p>' % (title, url), ''
 
     # Get the HTML:
     article_response = requests.get(url)
@@ -247,6 +250,7 @@ def extract_article_body(url: str, title: str, encoding: str) -> str:
     # innerHTML, where we move the subelements to a known new element and then
     # delete the known opening and closing tags from the resulting string:
     new_td = fromstring("<td></td>")
+    author = ''
 
     for index, child in enumerate(main_el.iterchildren()):
         # If the very first element is an H2 element, it is probably the title,
@@ -254,11 +258,27 @@ def extract_article_body(url: str, title: str, encoding: str) -> str:
         if index == 0 and child.tag == 'h2':
             continue
 
+        # Check to see if there is a byline; we don't want to include it, but
+        # we could use the author information since they're not always listed
+        # on the main report list.
+        # We also need to check that we're not on an HTML comment?
+        if child.tag is not Comment:
+            author_match = re.match(r'\(?Posted\:? \d+/\d+/\d+; By:? ([\w\s]*)\)?',
+                                    child.text_content().strip(),
+                                    flags=re.IGNORECASE)
+
+            if author_match:
+                # Extract the part with just the author's name itself and skip
+                # this element.
+                byline_authors = author_match.groups()
+                author = byline_authors[0].strip()
+                continue
+
         new_td.append(child)
 
     raw_html = tostring(new_td).decode(encoding)
     html = raw_html[4:][:-5].strip()
-    return html
+    return html, author
 
 
 def write_articles(articles: list) -> None:
