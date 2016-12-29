@@ -5,6 +5,8 @@ from django.db import models
 from django.core.exceptions import ValidationError
 
 from modelcluster.fields import ParentalKey
+from modelcluster.contrib.taggit import ClusterTaggableManager
+from taggit.models import TaggedItemBase
 from wagtail.wagtailcore.models import Page, Orderable
 from wagtail.wagtailcore.fields import StreamField
 from wagtail.wagtailcore import blocks
@@ -129,24 +131,56 @@ class PageAuthors(models.Model):
         abstract = True
 
 
-class RecordPageAuthors(Orderable, PageAuthors):
-    page = ParentalKey('RecordPage', related_name='authors')
-
 def get_previous_record_page():
     return RecordPage.objects.order_by('-date', '-pk').first()
 
 
+class RecordPageAuthors(Orderable, PageAuthors):
+    page = ParentalKey('RecordPage', related_name='authors')
+
+
+class RecordPageTag(TaggedItemBase):
+    content_object = ParentalKey(
+        'home.RecordPage',
+        related_name='tagged_items'
+    )
+
+
 class RecordPage(ContentPage):
     date = models.DateField(default=datetime.date.today)
-    category = models.CharField(max_length=255,
-                                choices=constants.record_page_categories.items())
-    read_next = models.ForeignKey('RecordPage', blank=True, null=True,
-                                  default=get_previous_record_page,
-                                  on_delete=models.SET_NULL)
-    related_section_title = models.CharField(max_length=255, blank=True,
-                                             default="Explore campaign finance data")
-    related_section_url = models.CharField(max_length=255, blank=True,
-                                           default="/data/")
+    category = models.CharField(
+        max_length=255,
+        choices=constants.record_page_categories.items()
+    )
+    read_next = models.ForeignKey(
+        'RecordPage',
+        blank=True,
+        null=True,
+        default=get_previous_record_page,
+        on_delete=models.SET_NULL
+    )
+    related_section_title = models.CharField(
+        max_length=255,
+        blank=True,
+        default='Explore campaign finance data'
+    )
+    related_section_url = models.CharField(
+        max_length=255,
+        blank=True,
+        default='/data/'
+    )
+    monthly_issue = models.CharField(
+        max_length=255,
+        blank=True,
+        default=''
+    )
+    monthly_issue_url = models.CharField(
+        max_length=255,
+        blank=True,
+        default=''
+    )
+
+    keywords = ClusterTaggableManager(through=RecordPageTag, blank=True)
 
     homepage_pin = models.BooleanField(default=False)
     homepage_pin_expiration = models.DateField(blank=True, null=True)
@@ -154,8 +188,10 @@ class RecordPage(ContentPage):
     template = 'home/updates/record_page.html'
     content_panels = ContentPage.content_panels + [
         FieldPanel('date'),
+        FieldPanel('monthly_issue'),
         FieldPanel('category'),
-        InlinePanel('authors', label="Authors"),
+        FieldPanel('keywords'),
+        InlinePanel('authors', label='Authors'),
         PageChooserPanel('read_next'),
         FieldPanel('related_section_title'),
         FieldPanel('related_section_url'),

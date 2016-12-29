@@ -60,6 +60,7 @@ INSTALLED_APPS = (
     'fec',
     'search',
     'home',
+    'data_loader',
 )
 
 MIDDLEWARE_CLASSES = (

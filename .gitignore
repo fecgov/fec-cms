@@ -57,5 +57,10 @@ _sandbox
 .cfmeta
 npm-debug.log
 
+.DS_Store
+
 # Image uploads
 fec/media/
+
+# Data import files
+fec/data_loader/data/**/*.json
