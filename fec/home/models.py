@@ -148,7 +148,7 @@ class RecordPage(ContentPage):
     homepage_pin = models.BooleanField(default=False)
     homepage_pin_expiration = models.DateField(blank=True, null=True)
     homepage_hide = models.BooleanField(default=False)
-
+    template = 'home/updates/record_page.html'
     content_panels = ContentPage.content_panels + [
         FieldPanel('date'),
         FieldPanel('category'),
@@ -190,6 +190,8 @@ class DigestPage(ContentPage):
         PageChooserPanel('read_next'),
     ]
 
+    template = 'home/updates/digest_page.html'
+
     @property
     def content_section(self):
         return ''
@@ -220,6 +222,7 @@ class PressReleasePage(ContentPage):
     homepage_pin = models.BooleanField(default=False)
     homepage_pin_expiration = models.DateField(blank=True, null=True)
     homepage_hide = models.BooleanField(default=False)
+    template = 'home/updates/press_release_page.html'
 
     content_panels = ContentPage.content_panels + [
         FieldPanel('formatted_title'),
