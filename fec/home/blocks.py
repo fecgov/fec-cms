@@ -51,7 +51,7 @@ class ContactInfoBlock(blocks.StructBlock):
 class CitationsBlock(blocks.StructBlock):
     """Block for a chunk of citations that includes a label and the citation (in content)"""
     label = blocks.CharBlock()
-    content = blocks.RichTextBlock()
+    content = blocks.RichTextBlock(help_text='Use Shift + Enter to add line breaks between citation and description')
 
 class ResourceBlock(blocks.StructBlock):
     """A section of a ResourcePage"""
