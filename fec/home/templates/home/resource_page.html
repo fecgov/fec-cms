@@ -24,18 +24,19 @@
 {% block sections %}
 
 {% for section in self.sections %}
-<div id="{{ section.value.title | slugify }}" class="option">
+<div id="{{ section.value.title | slugify }}" class="option {% if section.value.hide_title %}option--no-top-border{% endif %}">
   {% if not section.value.hide_title %}<h2>{{ section.value.title }}</h2>{% endif %}
-  {% if section.value.content %}
-  <div class="option__content">
+  {% if section.value.aside %}
+    <div class="option__content">
+      {% include_block section.value.content with blocks=section.value.content %}
+    </div>
+    {% include_block section.value.aside with aside=section.value.aside %}
+  {% else %}
     <div class="row">
       {% include_block section.value.content with blocks=section.value.content %}
     </div>
-  </div>
   {% endif %}
-  {% include_block section.value.aside with aside=section.value.aside %}
 </div>
-
 {% endfor %}
 {% endblock %}
 
