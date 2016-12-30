@@ -38,11 +38,6 @@ def get_press_releases(category_list=False, year=False):
   return press_releases
 
 def updates(request):
-  # Only render view if the user is authenticated or there's a feature flag
-  if not (request.user.is_authenticated() or settings.FEATURES['latest_updates']):
-    return render(request, '404.html')
-
-  else:
     digests = ''
     records = ''
     press_releases = ''
