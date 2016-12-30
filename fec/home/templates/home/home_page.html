@@ -147,33 +147,30 @@
       </div>
     </div>
   </section>
-  <div class="container">
-      <h2>Citizen information</h2>
+  <section class="slab slab--home">
+    <div class="container">
+      <h2 class="heading--section">Citizen information</h2>
          <div class="grid usa-width-one-third document-thumbnail">
            
                   <a class="document-thumbnail__img" href="#" target="_blank">
-                  <img src="static/img/thumbnail--citizens-guide-brochure.png" alt="Title 52, Voting and Elections, GPO">
+                  <img src={% static 'img/thumbnail--citizens-guide-brochure.png' %} alt="Citizens Guide Brochure">
                   </a>
                   <br>
                  <span class="document-thumbnail__description"><a href="http://www.fec.gov/pages/brochures/citizens.shtml" target="_blank">Citizens' guide brochure</a></span>
              
          </div>
     <div class="grid usa-width-two-thirds ">
-        <h5>The FEC maintains financial data for past and current elections and the candidates in those races</h5>
+        <h3>The FEC maintains financial data for past and current elections and the candidates in those races</h3>
       <form action="{{ settings.FEC_APP_URL }}">
-        <div class="search-controls__row">
-        
-        </div>
         <div class="search-controls__row">
           <div class="search-controls__either">
             <div class="row">
               <label for="zip" class="label">Find by ZIP code</label>
               <div class="combo combo--filter--mini">
                 <input type="text" class="form-element--inline" inputmode="numeric" id="zip" name="zip" >
-                <span class="form-element--inline t-note t-sans search__example">Example: 90210</span>
               </div>
               <div class="search-controls__submit">
-                <button type="submit" class="form-element--inline button--search--text button--standard">Search</button>
+                <button type="submit" class="button--search--text form-element--inline button--standard">Search</button>
               </div>
             </div>
           </div>
@@ -192,24 +189,23 @@
               <div class="search-controls__district combo combo--filter--mini">
                 <select id="district" name="district" aria-label="Select a district" class="select--alt form-element--inline">
                   <option value="">Select district</option>
-                  
-                  <option value="{{ formatted }}">
-                 
+                  <option value="{{ formatted }}"></option>
                 </select>
               </div>
               <div class="search-controls__submit">
-                <button type="submit" class="button--search--text button--standard">Search</button>
+                <button type="submit" class="button--search--text button--standard form-element--inline">Search</button>
               </div>
             </fieldset>
           </div>
         </div>
       </form>
-      <h5>There are different limits to how much contributors can give to <span class="term" data-term="Candidate">candidates </span>, 
-<span class="term" data-term="Party committee">parties</span> and <span class="term" data-term="Political Action Committee (PAC)">political action committees (PACs)</span></h5>
-      <a href="#">Find 2015–2016 contribution limits »</a>
-      <h5>Every state has its own procedures for voting day activities and voter registration</h5>
-      <a href="#">Find voting guidance by state » </a></div>
+      <h3>There are different limits to how much contributors can give to <span class="term" data-term="Candidate">candidates </span>, 
+<span class="term" data-term="Party committee">parties</span> and <span class="term" data-term="Political Action Committee (PAC)">political action committees (PACs)</span></h3>
+      <a href="http://www.fec.gov/info/contriblimitschart1516.pdf" target="_blank">Find 2015–2016 contribution limits »</a>
+      <h3>Every state has its own procedures for voting day activities and voter registration</h3>
+      <a href="https://www.vote.gov">Find voting guidance by state » </a></div>
     </div>
+  </section>
   <section id="homepage-legal-resources" class="slab slab--home slab--primary u-border-top-inverse">
   
     <div class="container">
