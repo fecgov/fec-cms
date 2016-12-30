@@ -38,11 +38,6 @@ def get_press_releases(category_list=False, year=False):
   return press_releases
 
 def updates(request):
-  # Only render view if the user is authenticated or there's a feature flag
-  if not (request.user.is_authenticated() or settings.FEATURES['latest_updates']):
-    return render(request, '404.html')
-
-  else:
     digests = ''
     records = ''
     press_releases = ''
@@ -130,3 +125,24 @@ def contact(request):
   return render(request, 'home/contact.html', {
     'self': page_context,
   })
+
+def ao_process(request):
+  ancestors = [
+    {
+      'title': 'Legal resources',
+      'url': '/legal-resources/',
+    }, {
+      'title': 'Advisory opinions',
+      'url': settings.FEC_APP_URL + '/legal/advisory-opinions',
+    }
+  ]
+  page_context = {
+    'content_section': 'legal',
+    'title': 'The advisory opinion process',
+    'ancestors': ancestors
+  }
+
+  return render(request, 'legal/ao_process.html', {
+    'self': page_context
+  })
+
