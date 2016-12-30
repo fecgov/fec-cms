@@ -168,29 +168,29 @@
           <div class="search-controls__either">
             <div class="row">
               <label for="zip" class="label">Find by ZIP code</label>
-              <div class="search-controls__zip">
+              <div class="combo combo--filter--mini">
                 <input type="text" class="form-element--inline" inputmode="numeric" id="zip" name="zip" >
-                <span class="t-note t-sans search__example">Example: 90210</span>
+                <span class="form-element--inline t-note t-sans search__example">Example: 90210</span>
               </div>
               <div class="search-controls__submit">
-                <button type="submit" class="button--search--text button--standard">Search</button>
+                <button type="submit" class="form-element--inline button--search--text button--standard">Search</button>
               </div>
             </div>
           </div>
           <div class="search-controls__or search-controls__or--vertical">or</div>
           <div class="search-controls__either">
             <fieldset>
-              <legend class="label">Find by state and <span class="term" data-term="District">district</span></span></legend>
-              <div class="search-controls__state">
-                <select id="state" name="state" aria-label="Select a state">
-                  <option value="">Select state</option>
+              <legend class="label">Find by state and <span class="term" data-term="District">district</span></legend>
+              <div class="search-controls__state combo combo--filter--mini">
+                <select id="state" class="form-element--inline" name="state" aria-label="Select a state">
+                  <option value="" class="form-element--inline">Select state</option>
                   
-                  <option value="{{ value }}">{{ label }}</option>
+                  <option value="{{ value }}" class="form-element--inline">{{ label }}</option>
                   
                 </select>
               </div>
-              <div class="search-controls__district">
-                <select id="district" name="district" aria-label="Select a district" class="select--alt">
+              <div class="search-controls__district combo combo--filter--mini">
+                <select id="district" name="district" aria-label="Select a district" class="select--alt form-element--inline">
                   <option value="">Select district</option>
                   
                   <option value="{{ formatted }}">
@@ -204,8 +204,8 @@
           </div>
         </div>
       </form>
-      <h5>There are different limits to how much contributors can give to <a href="#">candidates </a>, 
-<a href="#">parties</a> and <a href="#">political action committees (PACs)</a></h5>
+      <h5>There are different limits to how much contributors can give to <span class="term" data-term="Candidate">candidates </span>, 
+<span class="term" data-term="Party committee">parties</span> and <span class="term" data-term="Political Action Committee (PAC)">political action committees (PACs)</span></h5>
       <a href="#">Find 2015–2016 contribution limits »</a>
       <h5>Every state has its own procedures for voting day activities and voter registration</h5>
       <a href="#">Find voting guidance by state » </a></div>
