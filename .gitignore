@@ -61,3 +61,5 @@ npm-debug.log
 
 # Data import files
 fec/data_loader/data/**/*.json
+
+fec/media
