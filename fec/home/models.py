@@ -11,9 +11,15 @@ from wagtail.wagtailcore.models import Page, Orderable
 from wagtail.wagtailcore.fields import StreamField
 from wagtail.wagtailcore import blocks
 from wagtail.wagtailadmin.edit_handlers import (FieldPanel, StreamFieldPanel,
-                                                PageChooserPanel, InlinePanel)
+                                                PageChooserPanel, InlinePanel, MultiFieldPanel)
 from wagtail.wagtailimages.blocks import ImageChooserBlock
 from wagtail.wagtailimages.edit_handlers import ImageChooserPanel
+
+from wagtail.wagtaildocs.blocks import DocumentChooserBlock
+from wagtail.wagtaildocs.edit_handlers import DocumentChooserPanel
+from wagtail.wagtaildocs.models import Document
+
+
 
 from wagtail.contrib.table_block.blocks import TableBlock
 
@@ -306,21 +312,18 @@ class OptionBlock(blocks.StructBlock):
 
 class PressLandingPage(Page):
     hero = stream_factory(null=True, blank=True)
-    release_intro = stream_factory(null=True, blank=True)
-    digest_intro = stream_factory(null=True, blank=True)
-
     option_blocks = StreamField([
         ('option_blocks', OptionBlock())
     ])
 
+    feed_intro = stream_factory(null=True, blank=True)
     contact_intro = stream_factory(null=True, blank=True)
 
     content_panels = Page.content_panels + [
         StreamFieldPanel('hero'),
-        StreamFieldPanel('release_intro'),
-        StreamFieldPanel('digest_intro'),
-        StreamFieldPanel('option_blocks'),
+        StreamFieldPanel('feed_intro'),
         StreamFieldPanel('contact_intro'),
+        StreamFieldPanel('option_blocks'),
     ]
 
 class CollectionList(blocks.StructBlock):
@@ -359,3 +362,48 @@ class CollectionPage(Page):
         StreamFieldPanel('related_pages'),
         StreamFieldPanel('sections'),
     ]
+
+
+class AgendaPage(Page):
+    author= models.CharField(max_length=255)
+    date = models.DateField('Post date')
+    mtg_date = models.DateField(default=datetime.date.today)
+    mtg_time = models.CharField(max_length=255, default ='10:00 AM')
+    mtg_media = StreamField([
+        ('full_video_url', blocks.TextBlock()),
+        ('full_audio', DocumentChooserBlock(required=False)),
+        ('mtg_transcript', DocumentChooserBlock(required=False))
+        ])
+    agenda = StreamField([
+        ('agenda_item', blocks.StreamBlock([
+            ('item_title', blocks.TextBlock()),
+            ('item_text', blocks.TextBlock()),
+            ('mtg_doc', blocks.StructBlock([
+                ('mtg_doc_upload', DocumentChooserBlock(required=True)),
+                ('submitted_late', blocks.BooleanBlock(required=False, help_text='Submitted Late')),
+                ('heldover', blocks.BooleanBlock(required=False, help_text='Held Over')),
+                ('heldover_from', blocks.DateBlock(required=False, help_text="Held Over From")),
+            ])),
+            ('item_audio', DocumentChooserBlock(required=False)),
+        ]))
+    ])
+       
+    
+
+
+    content_panels = Page.content_panels + [
+        FieldPanel('author'),
+        FieldPanel('date'),
+        FieldPanel('mtg_date'),
+        FieldPanel('mtg_time'),
+        StreamFieldPanel('agenda'),
+        MultiFieldPanel(
+        [
+            StreamFieldPanel('mtg_media'),
+        ],
+        heading="Entire Meeeting Media",
+        classname="collapsible collapsed"
+        ),
+        
+    ]
+
