@@ -150,15 +150,13 @@
   </section>
   <section class="slab slab--home slab--neutral">
     <div class="container">
-      <h2 class="heading--section">Citizen information</h2>
       <div class="grid">
-        <div class="usa-width-one-fourth document-thumbnail">
-          <a class="document-thumbnail__img" href="http://www.fec.gov/pages/brochures/citizens.shtml" target="_blank">
-            <img src={% static 'img/thumbnail--citizens-guide-brochure.png' %} alt="Citizens Guide Brochure">
-          </a>
-          <span class="document-thumbnail__description"><a href="http://www.fec.gov/pages/brochures/citizens.shtml" target="_blank">Citizens' guide brochure</a></span>
+       <h2 class="heading--section">Citizen information</h2>
+       <div class="billboard">
+        <div class="billboard__image__container">
+            <a class="document-thumbnail__img" href="http://www.fec.gov/pages/brochures/citizens.shtml" target="_blank"><img class="billboard__image" src={% static 'img/thumbnail--citizens-guide-brochure.png' %} alt="Citizens Guide Brochure"></a><br><span class="document-thumbnail__description"><a href="http://www.fec.gov/pages/brochures/citizens.shtml" target="_blank">Citizens' guide brochure</a></span>
         </div>
-        <div class="usa-width-three-fourths">
+        <div class="billboard__content">
           <h3>The FEC maintains financial data for past and current elections and the candidates in those races</h3>
           <form action="{{ settings.FEC_APP_URL }}/elections" method="GET">
             <div class="search-controls__row">
@@ -209,11 +207,16 @@
             <h3>Every state has its own procedures for voting day activities and voter registration</h3>
             <a href="https://www.vote.gov">Find voting guidance by state » </a>
           </div>
-        </div>
-      </div>
+       </div>
     </div>
-  </section>
-  <section id="homepage-legal-resources" class="slab slab--home slab--primary u-border-top-inverse">
+  </div>
+</div>
+</section>
+
+<!--end new -->
+  
+  
+<section id="homepage-legal-resources" class="slab slab--home slab--primary u-border-top-inverse">
     <div class="container">
       <h1><a href="/legal-resources">Legal resources</a></h1>
       <div class="grid grid--2-wide">
