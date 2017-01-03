@@ -8,7 +8,6 @@ from wagtail.wagtaildocs import urls as wagtaildocs_urls
 from wagtail.wagtailcore import urls as wagtail_urls
 
 from home import views as home_views
-from legal import views as legal_views
 from search import views as search_views
 
 
@@ -22,8 +21,7 @@ urlpatterns = [
     url(r'^calendar/$', home_views.calendar),
     url(r'^contact-us/$', home_views.contact),
     url(r'^search/$', search_views.search, name='search'),
-    url(r'^legal-resources/$', legal_views.home, name='legal'),
-    url(r'^legal/advisory-opinions/process/$', legal_views.ao_process),
+    url(r'^legal/advisory-opinions/process/$', home_views.ao_process),
 
     url(r'', include(wagtail_urls)),
 ]

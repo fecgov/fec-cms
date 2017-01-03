@@ -55,11 +55,12 @@ INSTALLED_APPS = (
     'wagtail.contrib.modeladmin',
     'wagtail.contrib.wagtailsearchpromotions',
     'wagtail.contrib.table_block',
+    'wagtail.contrib.wagtailstyleguide',
 
     'fec',
     'search',
     'home',
-    'legal',
+    'data_loader',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -184,9 +185,6 @@ CONTACT_EMAIL = 'betafeedback@fec.gov';
 CONSTANTS = constants
 
 FEATURES = {
-    'latest_updates': bool(env.get_credential('FEC_FEATURE_LATEST_UPDATES', '')),
-    'legal_murs': bool(env.get_credential('FEC_FEATURE_LEGAL_MURS', '')),
-    'press': bool(env.get_credential('FEC_FEATURE_PRESS', ''))
 }
 
 AUTH_PASSWORD_VALIDATORS = [
