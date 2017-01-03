@@ -122,4 +122,15 @@ $(document).ready(function() {
 
   // Initialize search toggle
   new Search($('.js-search'));
+
+  // For any link that should scroll to a section on the page apply .js-scroll to <a>
+  $('.js-scroll').on('click', function(e) {
+    e.preventDefault();
+    var $link = $(e.target);
+    var section = $link.attr('href');
+    var sectionTop = $(section).offset().top;
+    $(document.body).animate({
+      scrollTop: sectionTop
+    });
+  });
 });
