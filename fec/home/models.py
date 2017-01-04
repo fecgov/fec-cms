@@ -5,6 +5,8 @@ from django.db import models
 from django.core.exceptions import ValidationError
 
 from modelcluster.fields import ParentalKey
+from modelcluster.contrib.taggit import ClusterTaggableManager
+from taggit.models import TaggedItemBase
 from wagtail.wagtailcore.models import Page, Orderable
 from wagtail.wagtailcore.fields import StreamField
 from wagtail.wagtailcore import blocks
@@ -16,6 +18,9 @@ from wagtail.wagtailimages.edit_handlers import ImageChooserPanel
 from wagtail.contrib.table_block.blocks import TableBlock
 
 from fec import constants
+from home.blocks import (DocumentBlock, AsideLinkBlock, ContactInfoBlock,
+                        ContactInfoBlock, CitationsBlock, ResourceBlock,
+                        OptionBlock, CollectionBlock)
 
 stream_factory = functools.partial(
     StreamField,
@@ -70,19 +75,19 @@ class HomePage(ContentPage, UniqueModel):
         return ''
 
 class LandingPage(ContentPage):
-    pass
+    template = 'home/registration-and-reporting/landing_page.html'
 
 class ChecklistPage(ContentPage):
-    pass
+    template = 'home/registration-and-reporting/checklist_page.html'
 
 class SSFChecklistPage(ContentPage):
-    pass
+    template = 'home/registration-and-reporting/ssf_checklist_page.html'
 
 class PartyChecklistPage(ContentPage):
-    pass
+    template = 'home/registration-and-reporting/party_checklist_page.html'
 
 class NonconnectedChecklistPage(ContentPage):
-    pass
+    template = 'home/registration-and-reporting/nonconnected_checklist_page.html'
 
 class Author(models.Model):
     name = models.CharField(max_length=255)
@@ -126,33 +131,67 @@ class PageAuthors(models.Model):
         abstract = True
 
 
-class RecordPageAuthors(Orderable, PageAuthors):
-    page = ParentalKey('RecordPage', related_name='authors')
-
 def get_previous_record_page():
     return RecordPage.objects.order_by('-date', '-pk').first()
 
 
+class RecordPageAuthors(Orderable, PageAuthors):
+    page = ParentalKey('RecordPage', related_name='authors')
+
+
+class RecordPageTag(TaggedItemBase):
+    content_object = ParentalKey(
+        'home.RecordPage',
+        related_name='tagged_items'
+    )
+
+
 class RecordPage(ContentPage):
     date = models.DateField(default=datetime.date.today)
-    category = models.CharField(max_length=255,
-                                choices=constants.record_page_categories.items())
-    read_next = models.ForeignKey('RecordPage', blank=True, null=True,
-                                  default=get_previous_record_page,
-                                  on_delete=models.SET_NULL)
-    related_section_title = models.CharField(max_length=255, blank=True,
-                                             default="Explore campaign finance data")
-    related_section_url = models.CharField(max_length=255, blank=True,
-                                           default="/data/")
+    category = models.CharField(
+        max_length=255,
+        choices=constants.record_page_categories.items()
+    )
+    read_next = models.ForeignKey(
+        'RecordPage',
+        blank=True,
+        null=True,
+        default=get_previous_record_page,
+        on_delete=models.SET_NULL
+    )
+    related_section_title = models.CharField(
+        max_length=255,
+        blank=True,
+        default='Explore campaign finance data'
+    )
+    related_section_url = models.CharField(
+        max_length=255,
+        blank=True,
+        default='/data/'
+    )
+    monthly_issue = models.CharField(
+        max_length=255,
+        blank=True,
+        default=''
+    )
+    monthly_issue_url = models.CharField(
+        max_length=255,
+        blank=True,
+        default=''
+    )
+
+    keywords = ClusterTaggableManager(through=RecordPageTag, blank=True)
 
     homepage_pin = models.BooleanField(default=False)
     homepage_pin_expiration = models.DateField(blank=True, null=True)
     homepage_hide = models.BooleanField(default=False)
-
+    template = 'home/updates/record_page.html'
     content_panels = ContentPage.content_panels + [
         FieldPanel('date'),
+        FieldPanel('monthly_issue'),
         FieldPanel('category'),
-        InlinePanel('authors', label="Authors"),
+        FieldPanel('keywords'),
+        InlinePanel('authors', label='Authors'),
         PageChooserPanel('read_next'),
         FieldPanel('related_section_title'),
         FieldPanel('related_section_url'),
@@ -190,6 +229,8 @@ class DigestPage(ContentPage):
         PageChooserPanel('read_next'),
     ]
 
+    template = 'home/updates/digest_page.html'
+
     @property
     def content_section(self):
         return ''
@@ -220,6 +261,7 @@ class PressReleasePage(ContentPage):
     homepage_pin = models.BooleanField(default=False)
     homepage_pin_expiration = models.DateField(blank=True, null=True)
     homepage_hide = models.BooleanField(default=False)
+    template = 'home/updates/press_release_page.html'
 
     content_panels = ContentPage.content_panels + [
         FieldPanel('formatted_title'),
@@ -262,12 +304,6 @@ class CustomPage(Page):
         StreamFieldPanel('sidebar'),
     ]
 
-class OptionBlock(blocks.StructBlock):
-    title = blocks.CharBlock(required=True)
-    intro = blocks.RichTextBlock(blank=False, null=False, required=False)
-    button_text = blocks.CharBlock(required=True, null=False, blank=False)
-    related_page = blocks.PageChooserBlock()
-
 class PressLandingPage(Page):
     hero = stream_factory(null=True, blank=True)
     release_intro = stream_factory(null=True, blank=True)
@@ -287,18 +323,27 @@ class PressLandingPage(Page):
         StreamFieldPanel('contact_intro'),
     ]
 
-class CollectionList(blocks.StructBlock):
-    CHECKLIST = 'check'
-    BULLET = 'bullet'
-    STYLE_CHOICES =([
-        (CHECKLIST, 'Checklist'),
-        (BULLET, 'Bulleted list')
-    ])
-    title = blocks.CharBlock(required=True)
-    style = blocks.ChoiceBlock(default=BULLET, choices=STYLE_CHOICES)
-    intro = blocks.RichTextBlock(blank=False, null=False, required=False)
-    items = blocks.ListBlock(blocks.RichTextBlock(classname="nothing"))
+class AboutLandingPage(Page):
+    hero = stream_factory(null=True, blank=True)
+    mission_intro = stream_factory(null=True, blank=True)
+    leadership_intro = stream_factory(null=True, blank=True)
+    reports_intro = stream_factory(null=True, blank=True)
+    careers_intro = stream_factory(null=True, blank=True)
+    business_intro = stream_factory(null=True, blank=True)
 
+    option_blocks = StreamField([
+        ('option_blocks', OptionBlock())
+    ])
+
+    content_panels = Page.content_panels + [
+        StreamFieldPanel('hero'),
+        StreamFieldPanel('mission_intro'),
+        StreamFieldPanel('leadership_intro'),
+        StreamFieldPanel('reports_intro'),
+        StreamFieldPanel('careers_intro'),
+        StreamFieldPanel('business_intro'),
+        StreamFieldPanel('option_blocks')
+    ]
 
 class CollectionPage(Page):
     body = stream_factory(null=True, blank=True)
@@ -308,7 +353,7 @@ class CollectionPage(Page):
         ('related_pages', blocks.ListBlock(blocks.PageChooserBlock()))
     ], null=True, blank=True)
     sections = StreamField([
-        ('section', CollectionList())
+        ('section', CollectionBlock())
     ])
     show_search = models.BooleanField(max_length=255, default=False,
                                     null=False, blank=False,
@@ -323,3 +368,39 @@ class CollectionPage(Page):
         StreamFieldPanel('related_pages'),
         StreamFieldPanel('sections'),
     ]
+
+class ResourcePage(Page):
+    """Class for pages that include a side nav, multiple sections and citations"""
+    intro = stream_factory(null=True, blank=True)
+    sections = StreamField([
+        ('sections', ResourceBlock())
+    ], null=True)
+    citations = StreamField([
+        ('citations', blocks.ListBlock(CitationsBlock()))
+    ], null=True)
+    related_topics = StreamField([
+        ('related_topics', blocks.ListBlock(
+            blocks.PageChooserBlock(label="Related topic")
+        ))
+    ], null=True)
+    content_panels = Page.content_panels + [
+        StreamFieldPanel('intro'),
+        StreamFieldPanel('sections'),
+        StreamFieldPanel('citations'),
+        StreamFieldPanel('related_topics')
+    ]
+
+class LegalResourcesLandingPage(ContentPage, UniqueModel):
+    subpage_types = ['ResourcePage', 'EnforcementPage']
+    template = 'home/legal/legal_resources_landing.html'
+    @property
+    def content_section(self):
+        return 'legal-resources'
+
+class EnforcementPage(ContentPage, UniqueModel):
+    parent_page_types = ['LegalResourcesLandingPage']
+    subpage_types = ['ResourcePage']
+    template = 'home/legal/enforcement.html'
+    @property
+    def content_section(self):
+        return 'legal-resources'

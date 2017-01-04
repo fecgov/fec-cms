@@ -1,0 +1,15 @@
+{% load wagtailcore_tags %}
+{% load wagtailimages_tags %}
+
+<div class="grid grid--2-wide">
+  {% for block in self %}
+  <div class="grid__item document-thumbnail">
+    <a class="document-thumbnail__img" href="{{ block.url }}">
+      {% image block.image width-400 %}
+    </a>
+    <span class="document-thumbnail__description">
+      <a href="{{ block.url }}">{{ block.text }}</a>
+    </span>
+  </div>
+  {% endfor %}
+</div>

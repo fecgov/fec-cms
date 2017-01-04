@@ -30,6 +30,7 @@
       <div class="main__content--right">
         {% block sections %}
         {% endblock %}
+        {% if self.citations %}
         <aside id="legal-citations" class="sidebar sidebar--primary">
           <h4 class="sidebar__title">Legal citations</h4>
           <div class="sidebar__content">
@@ -37,11 +38,23 @@
             {% endblock %}
           </div>
         </aside>
+        {% endif %}
       </div>
     </div>
   </div>
-
 </article>
+
+{% if self.related_topics %}
+<div class="slab slab--neutral">
+  <div class="container">
+    <h2>Related topics</h2>
+    <div class="grid grid--4-wide">
+    {% block related_topics %}
+    {% endblock %}
+    </div>
+  </div>
+</div>
+{% endif %}
 
 <div class="slab slab--neutral footer-disclaimer">
   <div class="container">

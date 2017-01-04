@@ -38,11 +38,6 @@ def get_press_releases(category_list=False, year=False):
   return press_releases
 
 def updates(request):
-  # Only render view if the user is authenticated or there's a feature flag
-  if not (request.user.is_authenticated() or settings.FEATURES['latest_updates']):
-    return render(request, '404.html')
-
-  else:
     digests = ''
     records = ''
     press_releases = ''
@@ -71,9 +66,13 @@ def updates(request):
 
     else:
       # Get everything and filter by year if necessary
-      records = RecordPage.objects.live()
       digests = DigestPage.objects.live()
       press_releases = PressReleasePage.objects.live()
+
+      # Hide behind feature flag unless explicitly requested
+      # Only authenticated users will be able to explicitly request them for now
+      if settings.FEATURES['record']:
+        records = RecordPage.objects.live()
 
       if year:
         records = records.filter(date__year=year)
@@ -130,3 +129,24 @@ def contact(request):
   return render(request, 'home/contact.html', {
     'self': page_context,
   })
+
+def ao_process(request):
+  ancestors = [
+    {
+      'title': 'Legal resources',
+      'url': '/legal-resources/',
+    }, {
+      'title': 'Advisory opinions',
+      'url': settings.FEC_APP_URL + '/legal/advisory-opinions',
+    }
+  ]
+  page_context = {
+    'content_section': 'legal',
+    'title': 'The advisory opinion process',
+    'ancestors': ancestors
+  }
+
+  return render(request, 'legal/ao_process.html', {
+    'self': page_context
+  })
+

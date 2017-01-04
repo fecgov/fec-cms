@@ -22,3 +22,9 @@ def formatted_title(page):
       return format_html(page.title)
   else:
     return page.title
+
+@register.filter()
+def districts(max):
+  """Returns a list of numbers 1-100 for district filter"""
+  districts = range(max)
+  return districts
