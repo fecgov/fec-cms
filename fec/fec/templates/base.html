@@ -61,7 +61,6 @@
         <img src="{% static 'img/print-logo.png' %}" class="u-print-only" alt="FEC logo">
         <a title="Home" href="/" class="site-title"><span class="u-visually-hidden">Federal Election Commission | United States of America</span></a>
         <ul class="utility-nav list--flat">
-          <li class="utility-nav__item is-disabled">About</li>
           <li class="utility-nav__item{% if self.content_section == 'contact' %} is-active{% endif %}"><a href="/contact-us/">Contact</a></li>
           <li class="utility-nav__item{% if self.content_section == 'calendar' %} is-active{% endif %}"><a href="/calendar/">Calendar</a></li>
           <li class="utility-nav__item"><button class="js-glossary-toggle glossary__toggle">Glossary</button></li>
@@ -90,6 +89,11 @@
             <li>
               <a href="{{ cms_url }}/contact-us/">Contact us</a>
             </li>
+            {% if features.about %}
+            <li>
+              <a href="{{ cms_url }}/about/">About</a>
+            </li>
+            {% endif %}
             <li>
               <a href="{{ cms_url }}/press/">Press</a>
             </li>
