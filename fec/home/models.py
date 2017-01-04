@@ -323,6 +323,28 @@ class PressLandingPage(Page):
         StreamFieldPanel('contact_intro'),
     ]
 
+class AboutLandingPage(Page):
+    hero = stream_factory(null=True, blank=True)
+    mission_intro = stream_factory(null=True, blank=True)
+    leadership_intro = stream_factory(null=True, blank=True)
+    reports_intro = stream_factory(null=True, blank=True)
+    careers_intro = stream_factory(null=True, blank=True)
+    business_intro = stream_factory(null=True, blank=True)
+
+    option_blocks = StreamField([
+        ('option_blocks', OptionBlock())
+    ])
+
+    content_panels = Page.content_panels + [
+        StreamFieldPanel('hero'),
+        StreamFieldPanel('mission_intro'),
+        StreamFieldPanel('leadership_intro'),
+        StreamFieldPanel('reports_intro'),
+        StreamFieldPanel('careers_intro'),
+        StreamFieldPanel('business_intro'),
+        StreamFieldPanel('option_blocks')
+    ]
+
 class CollectionPage(Page):
     body = stream_factory(null=True, blank=True)
     sidebar_title = models.CharField(max_length=255, null=True, blank=True)

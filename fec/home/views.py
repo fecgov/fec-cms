@@ -66,9 +66,13 @@ def updates(request):
 
     else:
       # Get everything and filter by year if necessary
-      records = RecordPage.objects.live()
       digests = DigestPage.objects.live()
       press_releases = PressReleasePage.objects.live()
+
+      # Hide behind feature flag unless explicitly requested
+      # Only authenticated users will be able to explicitly request them for now
+      if settings.FEATURES['record']:
+        records = RecordPage.objects.live()
 
       if year:
         records = records.filter(date__year=year)
