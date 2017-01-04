@@ -25,7 +25,7 @@
           <label class="label">Publication type</label>
           <select name="update_type">
             <option value="">All</option>
-            {% if request.user.is_authenticated %}
+            {% if request.user.is_authenticated or settings.FEATURES.record %}
               <option value="fec-record" {% if 'fec-record' in update_types %}selected{% endif %}>FEC Record</option>
             {% endif %}
             <option value="for-media" {% if 'for-media' in update_types %}selected{% endif %}>For media professionals:</option>
