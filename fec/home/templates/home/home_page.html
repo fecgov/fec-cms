@@ -153,7 +153,11 @@
       <h2 class="heading--section">Citizen information</h2>
       <div class="billboard">
         <div class="billboard__image__container">
-            <a href="http://www.fec.gov/pages/brochures/citizens.shtml" target="_blank"><img class="billboard__image" src={% static 'img/thumbnail--citizens-guide-brochure.png' %} alt="Citizens Guide Brochure"></a><br><span class="document-thumbnail__description"><a href="http://www.fec.gov/pages/brochures/citizens.shtml" target="_blank">Citizens' guide brochure</a></span>
+          <a class="u-no-border" href="http://www.fec.gov/pages/brochures/citizens.shtml" target="_blank">
+          <img class="billboard__image" src={% static 'img/thumbnail--citizens-guide-brochure.png' %} alt="Citizens Guide Brochure"></a>
+          <div class="document-thumbnail__description">
+            <a href="http://www.fec.gov/pages/brochures/citizens.shtml" target="_blank">Citizens' guide brochure</a>
+          </div>
         </div>
         <div class="billboard__content">
           <h3>The FEC maintains financial data for past and current elections and the candidates in those races</h3>
@@ -197,7 +201,7 @@
                  </div>
                </div>
              </form>
-             <ul class="list--border">
+             <ul class="list--border list--extra-spacious">
                <li>
                  <h3>There are different limits to how much contributors can give to <span class="term" data-term="Candidate">candidates </span>, <span class="term" data-term="Party committee">parties</span> and <span class="term" data-term="Political Action Committee (PAC)">political action committees (PACs)</span></h3>
                   <a href="http://www.fec.gov/info/contriblimitschart1516.pdf" target="_blank">Find 2015–2016 contribution limits »</a>
@@ -206,16 +210,13 @@
                  <h3>Every state has its own procedures for voting day activities and voter registration</h3>
                  <a href="https://www.vote.gov">Find voting guidance by state » </a>
                </li>
-             </ul> 
+             </ul>
           </div>
         </div>
       </div>
     </div>
   </section>
 
-<!--end new -->
-  
-  
   <section id="homepage-legal-resources" class="slab slab--home slab--primary u-border-top-inverse">
     <div class="container">
       <h1><a href="/legal-resources">Legal resources</a></h1>
