@@ -4,7 +4,7 @@ dj-database-url==0.4.1
 django-libsass==0.7
 gunicorn==19.3.0
 lxml==3.7.0
-newrelic==2.56.0.42
+newrelic==2.78.0.57
 psycopg2==2.6.1
 raven==5.8.1
 requests==2.12.4
