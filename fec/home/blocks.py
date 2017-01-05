@@ -106,8 +106,8 @@ class ResourceBlock(blocks.StructBlock):
 class OptionBlock(blocks.StructBlock):
     title = blocks.CharBlock(required=True)
     intro = blocks.RichTextBlock(blank=False, null=False, required=False)
-    button_text = blocks.CharBlock(required=True, null=False, blank=False)
-    related_page = blocks.PageChooserBlock()
+    button_text = blocks.CharBlock(required=False, null=False, blank=False)
+    related_page = blocks.PageChooserBlock(required=False)
 
 class CollectionBlock(blocks.StructBlock):
     CHECKLIST = 'check'

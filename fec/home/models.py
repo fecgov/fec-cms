@@ -325,24 +325,15 @@ class PressLandingPage(Page):
 
 class AboutLandingPage(Page):
     hero = stream_factory(null=True, blank=True)
-    mission_intro = stream_factory(null=True, blank=True)
-    leadership_intro = stream_factory(null=True, blank=True)
-    reports_intro = stream_factory(null=True, blank=True)
-    careers_intro = stream_factory(null=True, blank=True)
-    business_intro = stream_factory(null=True, blank=True)
+    sections = StreamField([
+        ('sections', OptionBlock())
+    ], null=True)
 
-    option_blocks = StreamField([
-        ('option_blocks', OptionBlock())
-    ])
+    subpage_types = ['ResourcePage']
 
     content_panels = Page.content_panels + [
         StreamFieldPanel('hero'),
-        StreamFieldPanel('mission_intro'),
-        StreamFieldPanel('leadership_intro'),
-        StreamFieldPanel('reports_intro'),
-        StreamFieldPanel('careers_intro'),
-        StreamFieldPanel('business_intro'),
-        StreamFieldPanel('option_blocks')
+        StreamFieldPanel('sections')
     ]
 
 class CollectionPage(Page):
@@ -371,7 +362,9 @@ class CollectionPage(Page):
 
 class ResourcePage(Page):
     """Class for pages that include a side nav, multiple sections and citations"""
-    intro = stream_factory(null=True, blank=True)
+    intro = StreamField([
+        ('paragraph', blocks.RichTextBlock())
+    ], null=True)
     sections = StreamField([
         ('sections', ResourceBlock())
     ], null=True)
