@@ -30,12 +30,18 @@
 
       {% for section in self.sections %}
       <div id="{{ section.value.title | slugify }}" class="option">
-        <h2><a href="{{ option.value.related_page.url }}">{{ section.value.title }}</a></h2>
+        {% if section.value.related_page %}
+          <h2><a href="{{ section.value.related_page.url }}">{{ section.value.title }}</a></h2>
+        {% else %}
+          <h2>{{ section.value.title }}</h2>
+        {% endif %}
+
         {{ section.value.intro }}
+
         {% if section.value.related_page %}
           <a href="{{ section.value.related_page.url }}" class="button button--cta button--go">{{ section.value.button_text }}</a>
         {% else %}
-          <span class="button button--cta button--go is-disabled">(Coming soon)</a>
+          <span class="button button--cta button--go is-disabled">Coming soon</a>
         {% endif %}
       </div>
       {% endfor %}
