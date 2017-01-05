@@ -1,6 +1,7 @@
 import re
 
 from django import template
+from django.conf import settings
 from operator import attrgetter
 from itertools import chain
 from datetime import date
@@ -23,7 +24,10 @@ def weekly_digests():
 @register.inclusion_tag('partials/home-page-updates.html')
 def home_page_updates():
     press_releases = PressReleasePage.objects.filter(homepage_hide=False).order_by('-date')[:4]
-    records = RecordPage.objects.filter(homepage_hide=False).order_by('-date')[:4]
+    if settings.FEATURES['record']:
+        records = RecordPage.objects.filter(homepage_hide=False).order_by('-date')[:4]
+    else:
+        records = []
 
     # combine press release and records queryset
     updates = chain(press_releases, records)
