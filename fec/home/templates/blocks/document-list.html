@@ -1,0 +1,10 @@
+{% load wagtailcore_tags %}
+
+<div class="post-feed">
+{% for block in self %}
+  <div class="post">
+    <h3>{{ block.title }}</h3>
+    <p class="t-sans post__doc"><a href="{{ block.document.url }}">{{ block.document.title }}</a> | PDF</p>
+  </div>
+{% endfor %}
+</div>
