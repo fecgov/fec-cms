@@ -1,0 +1,7 @@
+{% load wagtailcore_tags %}
+
+{% if self.internal_page %}
+<a class="button button--primary button--cta button--go" href="{{ self.internal_page.url }}">{{ self.text }}</a>
+{% else %}
+<a class="button button--primary button--cta button--go" href="{{ self.url }}">{{ self.text }}</a>
+{% endif %}

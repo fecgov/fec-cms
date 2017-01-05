@@ -18,7 +18,7 @@ from wagtail.wagtailimages.edit_handlers import ImageChooserPanel
 from wagtail.contrib.table_block.blocks import TableBlock
 
 from fec import constants
-from home.blocks import (DocumentBlock, AsideLinkBlock, ContactInfoBlock,
+from home.blocks import (ThumbnailBlock, AsideLinkBlock, ContactInfoBlock,
                         ContactInfoBlock, CitationsBlock, ResourceBlock,
                         OptionBlock, CollectionBlock)
 
@@ -361,11 +361,20 @@ class ResourcePage(Page):
             blocks.PageChooserBlock(label="Related topic")
         ))
     ], null=True)
+
+    breadcrumb_style = models.CharField(max_length=255,
+        choices=[('primary', 'Blue'), ('secondary', 'Red')],
+        default='primary')
+
     content_panels = Page.content_panels + [
         StreamFieldPanel('intro'),
         StreamFieldPanel('sections'),
         StreamFieldPanel('citations'),
         StreamFieldPanel('related_topics')
+    ]
+
+    promote_panels = Page.promote_panels + [
+        FieldPanel('breadcrumb_style'),
     ]
 
 class LegalResourcesLandingPage(ContentPage, UniqueModel):
