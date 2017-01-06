@@ -1,11 +1,12 @@
-from collections import namedtuple
-from datetime import datetime
-from lxml.html import fromstring, tostring, Element  # type: ignore
-from operator import attrgetter
-from urllib.parse import urljoin, urlparse
 import json
-import requests
+from datetime import datetime
+from operator import attrgetter
+from typing import List, NamedTuple, Tuple
+from urllib.parse import urljoin, urlparse
 
+import requests
+from django.core.management import BaseCommand
+from lxml.html import fromstring, tostring, Element  # type: ignore
 
 """
 This script scrapes <www.fec.gov>'s Tips for Treasurers content and outputs a
@@ -29,14 +30,15 @@ Steps:
     Optionally also seriliazes the list of broken URLs to JSON.
 """
 
-Tip = namedtuple(
+Tip = NamedTuple(
     "Tip",
     [
-        "body",  # str (HTML),
-        "previous_url",  # str (URL)
-        "posted_date",  # str (ISO 8601 date, such as "2016-12-13")
-        "title_text"  # str (HTML)
+        ("body", str),  # HTML
+        ("previous_url", str),  # URL
+        ("posted_date", str),  # ISO 8601 date, such as "2016-12-13"
+        ("title_text", str),  # HTML
     ])
+Tips = List[Tip]
 
 """
 The following are URLs I identified as broken in the first pass and found
@@ -78,7 +80,7 @@ def cli_main(args: list=None) -> None:
 
 
 def extract_archive_urls(base_url: str, archive_urls: list=[],
-                         visited: list=[]):
+                         visited: list=[]) -> Tuple(List[str], List[str]):
     """
     Identifies the list on the base_url page, then follows the links from that,
     looking for more links.
@@ -140,7 +142,8 @@ def extract_archive_urls(base_url: str, archive_urls: list=[],
     return (archive_urls, visited)
 
 
-def extract_tips(tip_urls: list, urls_to_change: dict):
+def extract_tips(tip_urls: list, urls_to_change: dict) -> Tuple(Tips,
+                                                                List[str]):
     """
     Pass each URL to ``parse_tips_from_page()``, accumulating lists of parsed
     tips and of URLs from the pages that don't appear to work.
@@ -161,7 +164,7 @@ def extract_tips(tip_urls: list, urls_to_change: dict):
 
 
 def parse_tips_from_page(tip_url: str, tips: list, broken_urls: list,
-                         urls_to_change: dict):
+                         urls_to_change: dict) -> Tuple(Tips, List[str]):
     """
     Parse the list of tips from the page. Note that some URLs (such as
     <http://www.fec.gov/info/TimelyTipsArchive.shtml>) don't have any actual
@@ -213,7 +216,7 @@ def parse_tips_from_page(tip_url: str, tips: list, broken_urls: list,
     return (tips, broken_urls)
 
 
-def parse_tip(url: str, datestamp: str, cell: Element, encoding: str):
+def parse_tip(url: str, datestamp: str, cell: Element, encoding: str) -> Tip:
     """
     Create a ``Tip`` object out of the information we have and the HTML element
     for the table cell.
@@ -268,7 +271,7 @@ def parse_tip(url: str, datestamp: str, cell: Element, encoding: str):
                title_text=title.strip())
 
 
-def innerhtml(el: Element, encoding: str="utf-8"):
+def innerhtml(el: Element, encoding: str="utf-8") -> str:
     """
     Returns the HTML of an element as a ``str``, with the opening and closing
     tags removed.
@@ -288,7 +291,7 @@ def innerhtml(el: Element, encoding: str="utf-8"):
 
 
 def fix_urls(el: Element, base_url: str, broken_urls: list,
-             urls_to_change: dict):
+             urls_to_change: dict) -> Tuple(Element, List[str]):
     """
     Given an HTML element, turns all ``href`` parameters of ``a`` elements
     inside it into fully-qualified absolute URLs instead of the relative paths
@@ -316,7 +319,7 @@ def fix_urls(el: Element, base_url: str, broken_urls: list,
 
 
 def fix_url(base_url: str, url: str, tested_urls: list, broken_urls: list,
-            urls_to_change: dict):
+            urls_to_change: dict) -> Tuple(str, List[str], List[str]):
     """
     Given an HTML element, turns all ``href`` parameters of ``a`` elements
     inside it into fully-qualified absolute URLs instead of the relative paths
@@ -358,7 +361,8 @@ def fix_url(base_url: str, url: str, tested_urls: list, broken_urls: list,
     return (fixed_url, tested_urls, broken_urls)
 
 
-def check_url(base_url: str, url: str, tested_urls: list, broken_urls: list):
+def check_url(base_url: str, url: str, tested_urls: list,
+              broken_urls: list) -> Tuple(List[str], List[str]):
     """
     Add the URL to ``tested_urls``, attempts to GET it, and if unsuccessful
     adds it to ``broken_urls``.
