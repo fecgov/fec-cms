@@ -1,11 +1,11 @@
 import json
 from datetime import datetime
 from operator import attrgetter
-from typing import List, NamedTuple, Tuple
+from typing import Callable, List, NamedTuple, Tuple
 from urllib.parse import urljoin, urlparse
 
 import requests
-from django.core.management import BaseCommand
+from django.core.management import BaseCommand  # type: ignore
 from lxml.html import fromstring, tostring, Element  # type: ignore
 
 """
@@ -72,15 +72,23 @@ urls_to_change = {
 }
 
 
-def cli_main(args: list=None) -> None:
+class Command(BaseCommand):
+    help = "Scrapes Tips for Treasusers pages from fec.gov into JSON"
+    requires_system_checks = True
+
+    def handle(self, *args: list, **options: dict) -> None:
+        cli_main()
+
+
+def cli_main() -> None:
     base_url = "http://www.fec.gov/info/TipsforTreasurers.shtml"
     _, archive_urls = extract_archive_urls(base_url)
     tips, broken_links = extract_tips(archive_urls, urls_to_change)
     write_tips(tips, broken_links)
 
 
-def extract_archive_urls(base_url: str, archive_urls: list=[],
-                         visited: list=[]) -> Tuple(List[str], List[str]):
+def extract_archive_urls(base_url: str, archive_urls: List[str]=[],
+                         visited: List[str]=[]) -> Tuple[List[str], List[str]]:
     """
     Identifies the list on the base_url page, then follows the links from that,
     looking for more links.
@@ -142,8 +150,8 @@ def extract_archive_urls(base_url: str, archive_urls: list=[],
     return (archive_urls, visited)
 
 
-def extract_tips(tip_urls: list, urls_to_change: dict) -> Tuple(Tips,
-                                                                List[str]):
+def extract_tips(tip_urls: list, urls_to_change: dict) -> Tuple[Tips,
+                                                                List[str]]:
     """
     Pass each URL to ``parse_tips_from_page()``, accumulating lists of parsed
     tips and of URLs from the pages that don't appear to work.
@@ -164,7 +172,7 @@ def extract_tips(tip_urls: list, urls_to_change: dict) -> Tuple(Tips,
 
 
 def parse_tips_from_page(tip_url: str, tips: list, broken_urls: list,
-                         urls_to_change: dict) -> Tuple(Tips, List[str]):
+                         urls_to_change: dict) -> Tuple[Tips, List[str]]:
     """
     Parse the list of tips from the page. Note that some URLs (such as
     <http://www.fec.gov/info/TimelyTipsArchive.shtml>) don't have any actual
@@ -290,8 +298,8 @@ def innerhtml(el: Element, encoding: str="utf-8") -> str:
                                     c in el.iterchildren()]))
 
 
-def fix_urls(el: Element, base_url: str, broken_urls: list,
-             urls_to_change: dict) -> Tuple(Element, List[str]):
+def fix_urls(el: Element, base_url: str, broken_urls: List[str],
+             urls_to_change: dict) -> Tuple[Callable, List[str]]:
     """
     Given an HTML element, turns all ``href`` parameters of ``a`` elements
     inside it into fully-qualified absolute URLs instead of the relative paths
@@ -319,7 +327,7 @@ def fix_urls(el: Element, base_url: str, broken_urls: list,
 
 
 def fix_url(base_url: str, url: str, tested_urls: list, broken_urls: list,
-            urls_to_change: dict) -> Tuple(str, List[str], List[str]):
+            urls_to_change: dict) -> Tuple[str, List[str], List[str]]:
     """
     Given an HTML element, turns all ``href`` parameters of ``a`` elements
     inside it into fully-qualified absolute URLs instead of the relative paths
@@ -362,7 +370,7 @@ def fix_url(base_url: str, url: str, tested_urls: list, broken_urls: list,
 
 
 def check_url(base_url: str, url: str, tested_urls: list,
-              broken_urls: list) -> Tuple(List[str], List[str]):
+              broken_urls: list) -> Tuple[List[str], List[str]]:
     """
     Add the URL to ``tested_urls``, attempts to GET it, and if unsuccessful
     adds it to ``broken_urls``.
