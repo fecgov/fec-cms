@@ -91,6 +91,12 @@ npm install
 ### Create local databases
 Before you can run this project locally, you'll need a development database:
 
+Initialize postgres database into local folder where you want to run the database
+
+```pg_ctl init -D [local_pg_folder]```
+
+```/usr/local/Cellar/postgresql/9.5.0/bin/pg_ctl -D /data/postgres -l logfile start```
+
 ```bash
 createdb cfdm_cms_test
 ```
@@ -110,6 +116,7 @@ project setup by running these commands:
 npm run build
 cd fec/
 ./manage.py createsuperuser
+,/manage.py migrate auth
 ./manage.py migrate
 ```
 
