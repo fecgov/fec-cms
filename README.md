@@ -87,6 +87,15 @@ Use `npm` to install JavaScript dependencies:
 ```bash
 npm install
 ```
+### Give default user privileges to create database
+If you would like your default user to create the database, alter their user role:
+```bash
+sudo su - postgres
+psql
+alter user [default_username] createdb;
+\q
+exit
+```
 
 ### Create local databases
 Before you can run this project locally, you'll need a development database:
@@ -109,8 +118,8 @@ project setup by running these commands:
 ```bash
 npm run build
 cd fec/
-./manage.py createsuperuser
 ./manage.py migrate
+./manage.py createsuperuser
 ```
 
 ## Running the application
