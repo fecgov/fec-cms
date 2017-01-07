@@ -146,7 +146,7 @@ def ao_process(request):
     'ancestors': ancestors
   }
 
-  return render(request, 'legal/ao_process.html', {
+  return render(request, 'home/legal/ao_process.html', {
     'self': page_context
   })
 
