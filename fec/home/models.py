@@ -336,6 +336,52 @@ class AboutLandingPage(Page):
         StreamFieldPanel('sections')
     ]
 
+class CommissionerPage(Page):
+    first_name = models.CharField(max_length=255, default='', blank=False)
+    middle_initial = models.CharField(max_length=255, blank=True)
+    last_name = models.CharField(max_length=255, default='', blank=False)
+    picture = models.ForeignKey(
+        'wagtailimages.Image',
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name='+'
+    )
+    sworn_in = models.DateField(null=True, blank=True)
+    term_expiration = models.DateField(null=True, blank=True)
+    party_affiliation = models.CharField(
+        max_length=2,
+        choices=(
+            ('D', 'Democrat'),
+            ('R', 'Republican'),
+            ('I', 'Independent'),
+        )
+    )
+    commissioner_title = models.CharField(max_length=255, blank=True)
+
+    commissioner_bio = StreamField([
+        ('paragraph', blocks.RichTextBlock())
+    ], null=True, blank=True)
+
+    commissioner_email = models.CharField(max_length=255, blank=True)
+    commissioner_phone = models.CharField(max_length=255, null=True, blank=True)
+    commissioner_twitter = models.CharField(max_length=255, null=True, blank=True)
+
+    content_panels = Page.content_panels + [
+        FieldPanel('first_name'),
+        FieldPanel('middle_initial'),
+        FieldPanel('last_name'),
+        ImageChooserPanel('picture'),
+        FieldPanel('sworn_in'),
+        FieldPanel('term_expiration'),
+        FieldPanel('party_affiliation'),
+        FieldPanel('commissioner_title'),
+        StreamFieldPanel('commissioner_bio'),
+        FieldPanel('commissioner_email'),
+        FieldPanel('commissioner_phone'),
+        FieldPanel('commissioner_twitter'),
+    ]
+
 class CollectionPage(Page):
     body = stream_factory(null=True, blank=True)
     sidebar_title = models.CharField(max_length=255, null=True, blank=True)

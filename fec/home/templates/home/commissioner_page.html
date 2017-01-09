@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+{% load wagtailcore_tags %}
+{% load staticfiles %}
+
+{% block content %}
+{% include 'partials/breadcrumbs.html' with page=self style='secondary' %}
+
+<article class="main">
+  <div class="container">
+    <header class="heading--main">
+      <h1>{{ self.title }}</h1>
+    </header>
+    <div class="sidebar-container sidebar-container--left">
+      {% if self.commissioner_title %}
+        {{ self.commissioner_title }}
+      {% endif %}
+
+      <div class="t-sans">{{ self.get_party_affiliation_display }}</div>
+
+      <div class="t-sans t-bold t-upper">Contact</div>
+
+      <ul class="list--spacious">
+
+      {% if self.commissioner_email %}
+        <li>
+          <div class="contact-item__icon">
+            <img src="{% static "img/i-email--primary.svg" %}" alt="Icon of an email envelope">
+          </div>
+          <div class="contact-item__content">
+            <div class="t-bold">Email</div>
+            <span class="t-block"><a href="mailto:press@fec.gov">press@fec.gov</a></span>
+          </div>
+        </li>
+      {% endif %}
+
+      {% if self.commissioner_phone %}
+        <li>
+          <div class="contact-item__icon">
+            <img src="{% static "img/i-phone--primary.svg" %}" alt="Icon of a phone">
+          </div>
+          <div class="contact-item__content">
+            <div class="t-bold">Phone</div>
+            <span class="t-block">{{ self.commissioner_phone }}</span>
+          </div>
+        </li>
+      {% endif %}
+
+      </ul>
+
+    </div>
+    <div class="main__content">
+      {{ self.commissioner_bio }}
+    </div>
+  </div>
+</article>
+
+
+{% endblock %}
