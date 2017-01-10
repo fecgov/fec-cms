@@ -3,6 +3,7 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.conf import settings
 from itertools import chain
 from operator import attrgetter
+from home.models import CommissionerPage
 from home.models import DigestPage
 from home.models import RecordPage
 from home.models import PressReleasePage
@@ -150,3 +151,19 @@ def ao_process(request):
     'self': page_context
   })
 
+def commissioners(request):
+  chair_commissioner = CommissionerPage.objects.filter(commissioner_title__contains='Chair') \
+    .exclude(commissioner_title__contains='Vice').first()
+  vice_commissioner = CommissionerPage.objects.filter(commissioner_title__startswith='Vice').first()
+  commissioners = CommissionerPage.objects.filter(commissioner_title__exact='').order_by('last_name')
+
+  page_context = {
+    'title': 'All Commissioners',
+    'chair_commissioner': chair_commissioner,
+    'vice_commissioner': vice_commissioner,
+    'commissioners': commissioners
+  }
+
+  return render(request, 'home/commissioners.html', {
+    'self': page_context,
+  })
