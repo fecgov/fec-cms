@@ -7,7 +7,7 @@
     <img class="icon-heading__image" src="{{ commissioner_picture.url }}" alt="Headshot of {{ commissioner.title }}">
     {% endif %}
     <div class="icon-heading__content">
-      <div class="t-lead"><a href="/{{ commissioner.slug }}">{{ commissioner.title }}</a></div>
+      <div class="t-lead"><a href="{{ commissioner.url }}">{{ commissioner.title }}</a></div>
       {% if commissioner.commissioner_title  %}
       <div class="t-lead t-note">{{ commissioner.commissioner_title }}</div>
       {% endif %}
