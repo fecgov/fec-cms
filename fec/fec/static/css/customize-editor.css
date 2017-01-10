@@ -6,6 +6,14 @@ li.sequence-member .struct-block .sequence-container {
   width: 83%;
 }
 
+li.sequence-member .struct-block .sequence-container .field-content {
+  width: 100%;
+}
+
 li.sequence-member .sequence-member-inner .sequence-type-list .sequence-container-inner {
   width: 100%;
+}
+
+.t-sans {
+  font-family: sans-serif;
 }
