@@ -24,6 +24,7 @@ def whitelister_element_rules():
         'li': allow_without_attributes,
         'ol': allow_without_attributes,
         'p': allow_without_attributes,
+        'span': attribute_rule({'class': True}),
         'strong': allow_without_attributes,
         'sub': allow_without_attributes,
         'sup': allow_without_attributes,
@@ -37,6 +38,7 @@ def editor_js():
         <script src="/static/js/vendor/rangy-core.js"></script>
         <script src="/static/js/vendor/rangy-selectionsaverestore.js"></script>
         <script src="/static/js/hallo-edit-html.js"></script>
+        <script src="/static/js/hallo-sans-serif.js"></script>
         <script src="/static/js/customize-editor.js"></script>
         <script src="/static/js-beautify/js/lib/beautify-html.js"></script>
         <script src="/static/ace-builds/src-noconflict/ace.js"></script>
@@ -44,6 +46,7 @@ def editor_js():
         <script>
             registerHalloPlugin('editHtmlButton');
             registerHalloPlugin('hallocleanhtml');
+            registerHalloPlugin('sansSerifButton');
         </script>
     ''')
 
