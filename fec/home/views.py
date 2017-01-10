@@ -155,13 +155,19 @@ def commissioners(request):
   chair_commissioner = CommissionerPage.objects.filter(commissioner_title__contains='Chair') \
     .exclude(commissioner_title__contains='Vice').first()
   vice_commissioner = CommissionerPage.objects.filter(commissioner_title__startswith='Vice').first()
-  commissioners = CommissionerPage.objects.filter(commissioner_title__exact='').order_by('last_name')
+
+  current_commissioners = CommissionerPage.objects.filter(commissioner_title__exact='', \
+    term_expiration__isnull=True).order_by('last_name')
+  past_commissioners = CommissionerPage.objects.filter(commissioner_title__exact='', \
+    term_expiration__isnull=False).order_by('-term_expiration')
+
 
   page_context = {
     'title': 'All Commissioners',
     'chair_commissioner': chair_commissioner,
     'vice_commissioner': vice_commissioner,
-    'commissioners': commissioners
+    'current_commissioners': current_commissioners,
+    'past_commissioners': past_commissioners
   }
 
   return render(request, 'home/commissioners.html', {

@@ -18,7 +18,10 @@
       {% if self.vice_commissioner %}
         {% include "partials/commissioner.html" with commissioner=self.vice_commissioner %}
       {% endif %}
-      {% for commissioner in self.commissioners %}
+      {% for commissioner in self.current_commissioners %}
+        {% include "partials/commissioner.html" %}
+      {% endfor %}
+      {% for commissioner in self.past_commissioners %}
         {% include "partials/commissioner.html" %}
       {% endfor %}
       </div>
