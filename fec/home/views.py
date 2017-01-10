@@ -161,13 +161,19 @@ def commissioners(request):
   past_commissioners = CommissionerPage.objects.filter(commissioner_title__exact='', \
     term_expiration__isnull=False).order_by('-term_expiration')
 
-
+  ancestors = [
+    {
+      'title': 'About',
+      'url': '/about/',
+    }
+  ]
   page_context = {
     'title': 'All Commissioners',
     'chair_commissioner': chair_commissioner,
     'vice_commissioner': vice_commissioner,
     'current_commissioners': current_commissioners,
-    'past_commissioners': past_commissioners
+    'past_commissioners': past_commissioners,
+    'ancestors': ancestors
   }
 
   return render(request, 'home/commissioners.html', {

@@ -3,7 +3,8 @@
 {% load staticfiles %}
 
 {% block content %}
-{% include 'partials/breadcrumbs.html' with page=self style='secondary' %}
+
+{% include 'partials/breadcrumbs.html' with page=self links=self.ancestors style='secondary' %}
 
 <article class="main">
   <div class="container">

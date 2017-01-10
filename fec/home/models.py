@@ -382,6 +382,23 @@ class CommissionerPage(Page):
         FieldPanel('commissioner_twitter'),
     ]
 
+    def get_context(self, request):
+        context = super(CommissionerPage, self).get_context(request)
+
+        # Breadcrumbs for Commissioner pages
+        context['ancestors'] = [
+            {
+                'title': 'About',
+                'url': '/about/',
+            },
+            {
+                'title': 'All Commissioners',
+                'url': '/commissioners',
+            }
+        ]
+
+        return context
+
 class CollectionPage(Page):
     body = stream_factory(null=True, blank=True)
     sidebar_title = models.CharField(max_length=255, null=True, blank=True)

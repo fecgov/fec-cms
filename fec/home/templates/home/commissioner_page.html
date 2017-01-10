@@ -4,7 +4,7 @@
 {% load staticfiles %}
 
 {% block content %}
-{% include 'partials/breadcrumbs.html' with page=self style='secondary' %}
+{% include 'partials/breadcrumbs.html' with page=self links=ancestors style='secondary' %}
 
 <article class="main">
   <div class="container">
@@ -13,20 +13,30 @@
     </header>
     <div class="sidebar-container sidebar-container--left">
 
+    {% if self.picture %}
       {% image self.picture original as commissioner_picture %}
       <img src="{{ commissioner_picture.url }}" alt="Headshot of {{ commissioner.title }}">
+    {% endif %}
 
       <div class="u-padding--top u-padding--bottom">
         {% if self.commissioner_title %}
           <div class="contact-item__title t-italic">{{ self.commissioner_title }}</div>
         {% endif %}
+          <div class="contact-item__title t-sans">
+        {% if self.term_expiration %}
+          {{ self.sworn_in|date:'F Y' }} to {{ self.term_expiration|date:'F Y' }}
+          {% else %}
+          Currently Serving
+        {% endif %}
+          </div>
         <div class="t-sans">{{ self.get_party_affiliation_display }}</div>
       </div>
 
+      {% if self.commissioner_email or self.commissioner_phone or self.commissioner_twitter %}
       <div class="t-sans t-bold t-upper">Contact</div>
+      {% endif %}
 
       <ul class="list--spacious">
-
       {% if self.commissioner_email %}
         <li>
           <div class="contact-item__icon">
@@ -34,11 +44,10 @@
           </div>
           <div class="contact-item__content">
             <div class="t-bold">Email</div>
-            <span class="t-block"><a href="mailto:press@fec.gov">press@fec.gov</a></span>
+            <span class="t-block"><a href="mailto:{{ self.commissioner_email }}">{{ self.commissioner_email }}</a></span>
           </div>
         </li>
       {% endif %}
-
       {% if self.commissioner_phone %}
         <li>
           <div class="contact-item__icon">
@@ -50,7 +59,17 @@
           </div>
         </li>
       {% endif %}
-
+      {% if self.commissioner_twitter %}
+        <li>
+          <div class="contact-item__icon">
+            <div class="icon i-twitter-circle"></div>
+          </div>
+          <div class="contact-item__content">
+            <div class="t-bold">Twitter</div>
+            <span class="t-block"><a href="http://www.twitter.com/{{ self.commissioner_twitter }}">@{{ self.commissioner_twitter }}</a></span>
+          </div>
+        </li>
+      {% endif %}
       </ul>
 
     </div>
