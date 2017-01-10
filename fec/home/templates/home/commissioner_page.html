@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% load wagtailcore_tags %}
+{% load wagtailimages_tags %}
 {% load staticfiles %}
 
 {% block content %}
@@ -11,11 +12,16 @@
       <h1>{{ self.title }}</h1>
     </header>
     <div class="sidebar-container sidebar-container--left">
-      {% if self.commissioner_title %}
-        {{ self.commissioner_title }}
-      {% endif %}
 
-      <div class="t-sans">{{ self.get_party_affiliation_display }}</div>
+      {% image self.picture original as commissioner_picture %}
+      <img src="{{ commissioner_picture.url }}" alt="Headshot of {{ commissioner.title }}">
+
+      <div class="u-padding--top u-padding--bottom">
+        {% if self.commissioner_title %}
+          {{ self.commissioner_title }}
+        {% endif %}
+        <div class="t-sans">{{ self.get_party_affiliation_display }}</div>
+      </div>
 
       <div class="t-sans t-bold t-upper">Contact</div>
 
