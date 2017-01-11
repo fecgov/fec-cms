@@ -1,5 +1,6 @@
 from typing import Callable, List, NamedTuple, Tuple
 from datetime import datetime
+from dateutil import parser as dparser
 from lxml.html import fromstring, tostring, Element  # type: ignore
 from operator import attrgetter
 from urllib.parse import urljoin, urlparse
@@ -51,9 +52,10 @@ Steps:
 Date = NamedTuple(
     "Date",
     [
-        ("original", str),  # The original form of the date string
+        ("datetime", datetime),  # Python datetime.datetime object
         ("iso8601", str),  # ISO 8601 date, e.g.  ("2016-12-13")
-        ("datetime", datetime)  # Python datetime.datetime object
+        ("original", str),  # The original form of the date string
+        ("source", str)  # Where we actually got the date info from
     ])
 
 Link = NamedTuple(
@@ -75,6 +77,7 @@ Meeting = NamedTuple(
         ("body", str),  # HTML,
         ("closed_captioning_url", str),  # URL
         ("draft_minutes_links", Links),  # list (Links)
+        ("link_title_text", str),  # Plain text
         ("pdf_disclaimer", str),  # HTML ?? Not sure about this one.
         ("posted_date", str),  # ISO 8601 date, such as ("2016-12-13")
         ("previous_url", str),  # URL
@@ -90,29 +93,97 @@ working equivalents of, so during the "write fully-qualified URLs" stage the
 script replaces the broken ones with the working equivalents.
 """
 urls_to_change = {
-    "http://www.fec.gov/aos/2006/ao2006-24final.pdf":
-    "http://saos.fec.gov/saos/aonum.jsp?AONUM=2006-24",
 
-    "https://webforms.fec.gov/form6/":
-    "https://webforms.fec.gov/onlinefiling/form6/login.htm",
+    "http://www.fec.gov/agenda/2014/approved_14-2-a.pdf":
+    None,
 
-    "https://webforms.fec.gov/form24/":
-    "https://webforms.fec.gov/onlinefiling/form24/login.htm",
+    "http://www.fec.gov/agenda/2014/approved_14-1-a.pdf":
+    None,
 
-    "http://www.fec.gov/aos/2006/ao2006-26final.pdf":
-    "http://saos.fec.gov/saos/aonum.jsp?AONUM=2006-26",
+    "http://www.fec.gov/sunshine/2013/notice20131205.pdf":
+    None,
 
-    "".join([
-        "http://a257.g.akamaitech.net/7/257/2422/01jan20061800/",
-        "edocket.access.gpo.gov/2006/pdf/06-7297.pdf"]):
-    "https://www.gpo.gov/fdsys/pkg/FR-2006-08-31/pdf/06-7297.pdf",
+    "http://www.fec.gov/sunshine/2012/notice20120711.pdf":
+    None,
 
-    "".join(["http://a257.g.akamaitech.net/7/257/2422/01jan20061800/",
-             "edocket.access.gpo.gov/2006/pdf/E6-14183.pdf"]):
-    "https://www.gpo.gov/fdsys/pkg/FR-2006-08-28/pdf/E6-14183.pdf",
+    "http://www.fec.gov/sunshine/2012/notice20120315.pdf":
+    None,
 
-    "https://webforms.fec.gov/wfja/form6":
-    "https://webforms.fec.gov/onlinefiling/form6/login.htm"
+    "http://www.fec.gov/agenda/2010/2011/mtgdoc1101.pdf":
+    "http://www.fec.gov/agenda/2011/mtgdoc1101.pdf",
+
+    "http://www.fec.gov/agenda/sunshine/2009/notice20091210.pdf":
+    "http://www.fec.gov/sunshine/2009/notice20091210.pdf",
+
+    "http://www.fec.gov/agenda/sunshine/2009/notice20091202.pdf":
+    "http://www.fec.gov/sunshine/2009/notice20091202.pdf",
+
+    "http://www.fec.gov/agenda/sunshine/2009/notice20091117.pdf":
+    "http://www.fec.gov/sunshine/2009/notice20091117.pdf",
+
+    "http://www.fec.gov/agenda/sunshine/2009/notice20091103.pdf":
+    "http://www.fec.gov/sunshine/2009/notice20091103.pdf",
+
+    "http://www.fec.gov/agenda/sunshine/2009/notice20091027.pdf":
+    "http://www.fec.gov/sunshine/2009/notice20091027.pdf",
+
+    "http://www.fec.gov/agenda/sunshine/2009/notice20091001.pdf":
+    "http://www.fec.gov/sunshine/2009/notice20091001.pdf",
+
+    "http://www.fec.gov/agenda/sunshine/2009/notice20090917.pdf":
+    "http://www.fec.gov/sunshine/2009/notice20090917.pdf",
+
+    "http://www.fec.gov/agenda/sunshine/2009/notice20090820.pdf":
+    "http://www.fec.gov/sunshine/2009/notice20090820.pdf",
+
+    "http://www.fec.gov/agenda/sunshine/2009/notice20090722.pdf":
+    "http://www.fec.gov/sunshine/2009/notice20090722.pdf",
+
+    "http://www.fec.gov/agenda/sunshine/2009/notice20090709.pdf":
+    "http://www.fec.gov/sunshine/2009/notice20090709.pdf",
+
+    "http://www.fec.gov/agenda/sunshine/2009/notice20090617.pdf":
+    "http://www.fec.gov/sunshine/2009/notice20090617.pdf",
+
+    "http://www.fec.gov/agenda/sunshine/2009/notice20090610.pdf":
+    "http://www.fec.gov/sunshine/2009/notice20090610.pdf",
+
+    "http://www.fec.gov/agenda/sunshine/2009/notice20090512.pdf":
+    "http://www.fec.gov/sunshine/2009/notice20090512.pdf",
+
+    "http://www.fec.gov/agenda/sunshine/2009/notice20090501.pdf":
+    "http://www.fec.gov/sunshine/2009/notice20090501.pdf",
+
+    "http://www.fec.gov/agenda/sunshine/2009/notice20090428.pdf":
+    "http://www.fec.gov/sunshine/2009/notice20090428.pdf",
+
+    "http://www.fec.gov/agenda/sunshine/2009/notice20090417.pdf":
+    "http://www.fec.gov/sunshine/2009/notice20090417.pdf",
+
+    "http://www.fec.gov/agenda/sunshine/2009/notice20090409.pdf":
+    "http://www.fec.gov/sunshine/2009/notice20090409.pdf",
+
+    "http://www.fec.gov/agenda/sunshine/2009/notice20090313.pdf":
+    "http://www.fec.gov/sunshine/2009/notice20090313.pdf",
+
+    "http://www.fec.gov/agenda/sunshine/2009/notice20090306.pdf":
+    "http://www.fec.gov/sunshine/2009/notice20090306.pdf",
+
+    "http://www.fec.gov/agenda/sunshine/2009/notice20090227.pdf":
+    "http://www.fec.gov/sunshine/2009/notice20090227.pdf",
+
+    "http://www.fec.gov/agenda/sunshine/2009/notice20090205.pdf":
+    "http://www.fec.gov/sunshine/2009/notice20090205.pdf",
+
+    "http://www.fec.gov/agenda/sunshine/2009/notice20090122.pdf":
+    "http://www.fec.gov/sunshine/2009/notice20090122.pdf",
+
+    "http://www.fec.gov/agenda/sunshine/2009/notice20090107.pdf":
+    "http://www.fec.gov/sunshine/2009/notice20090107.pdf",
+
+    "http://www.fec.gov/agenda/sunshine/2008/notice20081231.pdf":
+    "http://www.fec.gov/sunshine/2008/notice20081231.pdf"
+
 }
 
 
@@ -120,10 +191,83 @@ def cli_main(args: list=None) -> None:
     base_url = "http://www.fec.gov/agenda/agendas.shtml"
     annual_urls = [base_url] + extract_annual_urls(base_url)
     meetings = []
+    broken_links = []
     for url in annual_urls:
-        meetings.extend(extract_meeting_metadata(url))
-    import ipdb
-    ipdb.set_trace()
+        url_meetings, url_broken_links = extract_meeting_metadata(url,
+                                                                  broken_links)
+        meetings.extend(url_meetings)
+        broken_links.extend(broken_links)
+        # meetings.extend(extract_meeting_metadata(url))
+    fulldates = []
+    strdates = []
+    badmeetings = []
+    goodmeetings = []
+    agendameetings = []
+    noticemeetings = []
+
+    for meeting in meetings:
+        if type(meeting) == Meeting:
+            date = meeting.posted_date
+            if type(date) == Date:
+                fulldates.append((date.original, date.source, date.iso8601))
+                goodmeetings.append(meeting)
+            else:
+                strdates.append(date)
+                badmeetings.append(meeting)
+        else:
+            badmeetings.append(meeting)
+
+    def is_notice_meeting(m):
+        no_url = m.previous_url in (None, "")
+        no_minutes = m.approved_minutes_url in (None, "")
+        sunshine_links = len(m.sunshine_act_links) > 0
+        return no_url and no_minutes and sunshine_links
+
+    for meeting in goodmeetings:
+        if is_notice_meeting(meeting):
+            noticemeetings.append(meeting)
+        else:
+            agendameetings.append(meeting)
+
+    # all_links, tried_links, broken_links = [], [], []
+
+    # print("Link testing")
+
+    """
+    for meeting in goodmeetings:
+        if meeting.approved_minutes_url is not None:
+            url = meeting.approved_minutes_url
+            all_links.append(meeting.approved_minutes_url)
+            if meeting.approved_minutes_url not in tried_links:
+                tried_links.append(meeting.approved_minutes_url)
+                try:
+                    response = requests.head(url)
+                    if response.status_code != 200:
+                        broken_links.append(url)
+                except:
+                    broken_links.append(url)
+
+        for link in meeting.draft_minutes_links:
+            url = link.url
+            if url not in tried_links:
+                try:
+                    response = requests.head(url)
+                    if response.status_code != 200:
+                        broken_links.append(url)
+                except:
+                    broken_links.append(url)
+        for link in meeting.sunshine_act_links:
+            url = link.url
+            if url not in tried_links:
+                try:
+                    response = requests.head(url)
+                    if response.status_code != 200:
+                        broken_links.append(url)
+                except:
+                    broken_links.append(url)
+    """
+
+    st()
 
 
 def extract_annual_urls(url: str) -> List[str]:
@@ -145,23 +289,28 @@ def parse_a_element(a_el: Callable) -> Link:
     return Link(text=text, title=title, url=url)
 
 
-def d_to_iso(d: str) -> Date:
+def d_to_iso(d: str, original: str=None) -> Date:
     """
     ISO 8601 date format from FEC date string.
     """
+    if original is None:
+        original = d
     d = d.strip()
     d = d.replace("Ocober", "October")
-    if "." in d:
-        dt = datetime.strptime(d, "%B %d. %Y")
-    else:
-        try:
-            dt = datetime.strptime(d, "%B %d, %Y")
-        except:
-            print(d)
-            st()
-            return Date(original=d, iso8601=None, datetime=None)
 
-    return Date(original=d, iso8601=dt.strftime("%Y-%m-%d"), datetime=dt)
+    try:
+        dt = datetime.strptime(d, "%B %d, %Y")
+    except:
+        try:
+            dt = dparser.parse(d)
+        except:
+            st()
+            print(d)
+            return Date(datetime=None, iso8601=None, original=original,
+                        source=original)
+
+    return Date(datetime=dt, iso8601=dt.strftime("%Y-%m-%d"),
+                original=original, source=original)
 
 
 def extract_date(a_el) -> str:
@@ -170,32 +319,45 @@ def extract_date(a_el) -> str:
     other content, which we want to ignore.
     """
     url = a_el.attrib["href"]
-    text = a_el.text_content()
-    datematch = re.match(r"[a-zA-Z]+ [0-9]{1,2}, [0-9]{4}", text)
+    text = ("%s%s" % (a_el.text_content(),
+                      a_el.tail if a_el.tail else "")).strip()
+    # TODO: Should we also grab a_el.tail?
+    datematch = re.match(r"[a-zA-Z]+[ ]+[0-9]{1,2},? ?[0-9]{4}", text)
     if datematch:
         datestring = datematch.group(0)
-        return d_to_iso(datestring)
+        return d_to_iso(datestring, original=text)
     else:
         # It has non-standard content.
+        # st()
         path = urlparse(url).path
         name = path.split("/")[-1]
         name_base = name.split(".")[0]
         if "agenda" in name_base:
             date = name_base[6:]
-            dt = datetime.strptime(date, "%Y%m%d")
-            return Date(original=name_base, iso8601=dt.strftime("%Y-%m-%d"),
-                        datetime=dt)
+            if "2000" in date:
+                if date.startswith("2000"):
+                    dt = datetime.strptime(date, "%Y%m%d")
+                    print(date, dt.strftime("%Y-%m-%d"))
+                elif date.endswith("2000"):
+                    dt = datetime.strptime(date, "%m%d%Y")
+                    print(date, dt.strftime("%Y-%m-%d"))
+                    st()
+            elif len(date) < 8:
+                st()
+            else:
+                dt = datetime.strptime(date, "%Y%m%d")
+            return Date(datetime=dt, iso8601=dt.strftime("%Y-%m-%d"),
+                        original=text, source=name)
         elif "oral_hearing" in name_base:
             date = name_base[12:]
             dt = datetime.strptime(date, "%Y%m%d")
-            return Date(original=name_base, iso8601=dt.strftime("%Y-%m-%d"),
-                        datetime=dt)
+            return Date(datetime=dt, iso8601=dt.strftime("%Y-%m-%d"),
+                        original=text, source=name)
         elif "notice" in name_base:
             date = name_base[6:]
             dt = datetime.strptime(date, "%Y-%m-%d")
-            return Date(original=name_base, iso8601=dt.strftime("%Y-%m-%d"),
-                        datetime=dt)
-
+            return Date(datetime=dt, iso8601=dt.strftime("%Y-%m-%d"),
+                        original=text, source=name)
         else:
             st()
 
@@ -214,49 +376,122 @@ def parse_meeting_row(row: Callable) -> Meeting:
     #.  Link to approved minutes.
     #.  Link(s) to Sunshine Act notices.
     """
+    # TODO: Have to redo this to accommodated the fact that some Sunshine
+    # Notice links show up in the first cell (in addition to docs links).
+    draft_minutes_links = []
+    approved_minutes_date, approved_minutes_url = None, None
+    sunshine_act_links = []
     cells = row.xpath("./td")
     if len(cells) == 4:
         docs, draft, approved, sunshine = cells
-    elif len(cells) ==3:
+    elif len(cells) == 3:
         docs, approved, sunshine = cells
         draft = None
     elif len(cells) == 1 and "adobe reader" in row.text_content().lower():
-        return None
+        return "Adobe Reader"
+    elif len(cells) == 2 and "approved minutes" in row.text_content().lower():
+        return "Header Row"
+    elif len(cells) == 2:
+        docs, approved = cells
+        draft = None
+        sunshine = None
     else:
         st()
 
-
     docs_links = docs.xpath("./a")
+    posted_date = None
     if len(docs_links) > 0:
         """
         TODO:
             +   Handle 2010's cancellations
+            +   Handle 2005's notices ending up in this cell
         """
-        if len(docs_links) > 1:
-            pass
-            # st()
-        docs_link = docs_links[0]
-        title_text = "%s%s" % (docs_link.text_content(),
-                               docs_link.tail if docs_link.tail else "")
-        posted_date = extract_date(docs_link).iso8601
-        previous_url = docs_link.attrib["href"]
+        agenda_links = []
+        for a_el in docs_links:
+            href = a_el.attrib["href"]
+            # TODO: there's at least one case where a link is repeated; if
+            # we have two links with the same href, we should detect that
+            # and combine all the text and pass that to extract_date()
+            if "notice" in href:
+                text = ("%s%s" % (a_el.text_content(),
+                                  a_el.tail if a_el.tail else "")).strip()
+                url = a_el.attrib["href"]
+                # print(url)
+                # All the 2009 links are broken:
+                url = url.replace("fec.gov/agenda/", "fec.gov/")
+                # print(url)
+                sunshine_title = ""
+                if "title" in a_el.attrib:
+                    sunshine_title = a_el.attrib["title"]
+                sunshine_act_links.append(Link(text=text, title=sunshine_title,
+                                               url=url))
+            elif "agenda" in href:
+                title = ""
+                if "title" in a_el.attrib:
+                    title = a_el.attrib["title"]
+                agenda_links.append((
+                    "%s%s" % (a_el.text_content(),
+                              a_el.tail if a_el.tail else ""),
+                    extract_date(a_el), a_el.attrib["href"], title))
+                """
+                title_text = "%s%s" % (a_el.text_content(),
+                                       a_el.tail if a_el.tail else "")
+                posted_date = extract_date(a_el)
+                previous_url = a_el.attrib["href"]
+                """
+            else:
+                st()
+
+        if len(agenda_links) == 1:
+            title_text, posted_date, previous_url, title = agenda_links[0]
+        elif len(agenda_links) > 1:
+            links = [_[2] for _ in agenda_links]
+            unique_links = set(links)
+            if len(unique_links) != 1:
+                st()
+            else:
+                best = max(agenda_links, key=lambda _: len(_[0].strip()))
+                title_text, posted_date, previous_url, title = best
+
+        if posted_date is None:
+            # This means we've gone through the a elements in the cell and
+            # they're all notices.
+            previous_url = None
+            title = ""
+            title_text = docs.text_content().strip().replace(" ,", ",")
+            datematch = re.match(r"[a-zA-Z]+ [0-9]{1,2}, [0-9]{4}",
+                                 title_text)
+            if datematch:
+                datestring = datematch.group(0)
+                posted_date = d_to_iso(datestring)
+            else:
+                st()
+
+        """
+        else:
+            docs_link = docs_links[0]
+            title_text = "%s%s" % (docs_link.text_content(),
+                                   docs_link.tail if docs_link.tail else "")
+            # posted_date = extract_date(docs_link).iso8601
+            posted_date = extract_date(docs_link)
+            previous_url = docs_link.attrib["href"]
+            if "agenda" not in previous_url:
+                st()
+            assert "agenda" in previous_url
+        """
     else:
-        docs_link, previous_url = None, None
-        title_text = docs.text_content().strip()
+        previous_url = None
+        title = ""
+        title_text = docs.text_content().strip().replace(" ,", ",")
         datematch = re.match(r"[a-zA-Z]+ [0-9]{1,2}, [0-9]{4}", title_text)
         if datematch:
             datestring = datematch.group(0)
             posted_date = d_to_iso(datestring)
         else:
             st()
-            
 
     if draft is not None:
         draft_minutes_links = [parse_a_element(e) for e in draft.xpath("./a")]
-    else:
-        draft_minutes_links = []
-
-    approved_minutes_date, approved_minutes_url = None, None
 
     if len(approved.xpath("./a")) > 1:
         st()
@@ -268,20 +503,32 @@ def parse_meeting_row(row: Callable) -> Meeting:
         datematch = re.match(r"[a-zA-Z]+ [0-9]{1,2}, [0-9]{4}", title_text)
         if datematch:
             datestring = datematch.group(0)
-            posted_date = d_to_iso(datestring)
+            approved_minutes_date = d_to_iso(datestring)
+        else:
+            approved_minutes_date = d_to_iso(
+                approved_link.text_content()).iso8601
 
-        approved_minutes_date = d_to_iso(approved_link.text_content()).iso8601
         approved_minutes_url = approved_link.attrib["href"]
 
-    sunshine_act_links = []
-    if len(sunshine.xpath("./a")) > 0:
+    if sunshine is not None and len(sunshine.xpath("./a")) > 0:
         for sunshine_link in sunshine.xpath("./a"):
             text = sunshine_link.text_content()
             url = sunshine_link.attrib["href"]
-            title = ""
+            # print(url)
+            # All the 2009 links are broken:
+            url = url.replace("fec.gov/agenda/", "fec.gov/")
+            # print(url)
+            sunshine_title = ""
             if "title" in sunshine_link.attrib:
-                title = sunshine_link.attrib["title"]
-            sunshine_act_links.append(Link(text=text, title=title, url=url))
+                sunshine_title = sunshine_link.attrib["title"]
+            sunshine_act_links.append(Link(text=text, title=sunshine_title,
+                                           url=url))
+
+    if len(sunshine_act_links) > len(set([_.url for _ in sunshine_act_links])):
+        # We have more than one link to the same thing for the Sunshine Act
+        # Notices.
+        sunshine_act_links = [max(sunshine_act_links,
+                                  key=lambda _: len(_.text.strip()))]
 
     return Meeting(
         agenda_documents_linked=[],
@@ -291,6 +538,7 @@ def parse_meeting_row(row: Callable) -> Meeting:
         body=None,
         closed_captioning_url=None,
         draft_minutes_links=draft_minutes_links,
+        link_title_text=title,
         pdf_disclaimer=None,
         posted_date=posted_date,
         previous_url=previous_url,
@@ -299,7 +547,8 @@ def parse_meeting_row(row: Callable) -> Meeting:
         video_url=None)
 
 
-def extract_meeting_metadata(url: str) -> Meetings:
+def extract_meeting_metadata(url: str,
+                             broken_links: List) -> Tuple[Meetings, List]:
     """
     This will get all the metadata possible about meetings from the annual
     pages.
@@ -315,10 +564,15 @@ def extract_meeting_metadata(url: str) -> Meetings:
     while len(tables) != 1 and count < len(exprs):
         tables = html.xpath(exprs[count])
         count = count + 1
+    if not len(tables):     # Work around this URL going down randomly
+                            # http://www.fec.gov/agenda/2010/agendas2010.shtml
+        print("%s not working" % url)
+        return []
     if not len(tables) == 1:
         import ipdb
         ipdb.set_trace()
-    table, _ = fix_urls(tables[0], url, [], {})
+    table, broken_links = fix_urls(tables[0], url, broken_links,
+                                   urls_to_change)
 
     all_rows = table.xpath(".//tr")
     # We don't want header rows:
@@ -328,7 +582,7 @@ def extract_meeting_metadata(url: str) -> Meetings:
     for row in rows:
         if row is not None and row.text_content().strip():
             meetings.append(parse_meeting_row(row))
-    return meetings
+    return (meetings, broken_links)
 
 
 """
@@ -567,8 +821,10 @@ def fix_urls(el: Element, base_url: str, broken_urls: list,
     tested_urls = []  # type: List[str]
     for desc in el.iterdescendants():
         if desc.tag == "a" and "href" in desc.attrib:
+            # Some of the links had line breaks in them:
+            url = desc.attrib["href"].strip()
             fixed_url, tested_urls, broken_urls = fix_url(
-                base_url, desc.attrib["href"], tested_urls, broken_urls,
+                base_url, url, tested_urls, broken_urls,
                 urls_to_change)
             desc.attrib["href"] = fixed_url
     return (el, broken_urls)
@@ -609,11 +865,17 @@ def fix_url(base_url: str, url: str, tested_urls: list, broken_urls: list,
         Via ``verify_url()``, makes HTTP requests.
     """
     fixed_url = urljoin(base_url, url)
-    if fixed_url in urls_to_change:
+    if fixed_url in urls_to_change and urls_to_change[fixed_url] is not None:
         fixed_url = urls_to_change[fixed_url]
+        tested_urls.append(fixed_url)
+        return (fixed_url, tested_urls, broken_urls)
+    if fixed_url in urls_to_change and urls_to_change[fixed_url] is None:
+        tested_urls.append(fixed_url)
+        broken_urls.append((base_url, fixed_url))
+        return (fixed_url, tested_urls, broken_urls)
     # Uncomment the following two lines to re-enable checking for broken URLs:
-    # tested_urls, broken_urls = check_url(base_url, fixed_url,
-    #                                      tested_urls, broken_urls)
+    tested_urls, broken_urls = check_url(base_url, fixed_url,
+                                         tested_urls, broken_urls)
     return (fixed_url, tested_urls, broken_urls)
 
 
@@ -640,10 +902,12 @@ def check_url(base_url: str, url: str, tested_urls: list, broken_urls: list):
         parsed_url = urlparse(url)
         if parsed_url.scheme in ("http", "https"):
             try:
-                response = requests.get(url)
+                response = requests.head(url)
                 if response.status_code != 200:
+                    print(url)
                     broken_urls.append((base_url, url))
             except requests.exceptions.ConnectionError:
+                print(url)
                 broken_urls.append((base_url, url))
 
     return (tested_urls, broken_urls)
