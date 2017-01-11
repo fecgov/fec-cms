@@ -25,7 +25,12 @@
           <div class="contact-item__title t-sans">
         {% if self.term_expiration %}
           {{ self.sworn_in|date:'F Y' }} to {{ self.term_expiration|date:'F Y' }}
-          {% else %}
+          {% if self.reappointed_dates %}
+          </div>
+          <div class="contact-item__title t-sans">
+            ({{ self.reappointed_dates }})
+          {% endif %}
+        {% else %}
           Currently serving
         {% endif %}
           </div>
