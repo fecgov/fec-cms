@@ -169,9 +169,13 @@ def commissioners(request):
     'past_commissioners': past_commissioners,
     'ancestors': [
       {
-        'title': 'About',
+        'title': 'About the FEC',
         'url': '/about/',
-      }
+      },
+      {
+        'title': 'Leadership and Organization',
+        'url': '/about/leadership-and-organization',
+      },
     ]
   }
 

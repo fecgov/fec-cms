@@ -388,12 +388,16 @@ class CommissionerPage(Page):
         # Breadcrumbs for Commissioner pages
         context['ancestors'] = [
             {
-                'title': 'About',
+                'title': 'About the FEC',
                 'url': '/about/',
             },
             {
+                'title': 'Leadership and Organization',
+                'url': '/about/leadership-and-organization',
+            },
+            {
                 'title': 'All Commissioners',
-                'url': '/commissioners',
+                'url': '/about/leadership-and-structure/commissioners',
             }
         ]
 
