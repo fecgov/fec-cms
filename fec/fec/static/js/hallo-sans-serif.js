@@ -39,6 +39,7 @@
             var node = widget.options.editable.getSelection().commonAncestorContainer;
             var parent = $(node).parents('a').get(0);
             $(parent).wrap('<span class="t-sans"></span>');
+            widget.options.editable.setModified();
         });
       }
     });
