@@ -130,6 +130,24 @@ cd fec/
 ./manage.py runserver
 ```
 
+## Running tests
+There are two kinds of tests that you can run with the project, Python tests and JavaScript tests.
+
+To run the JavaScript tests, run this command in the root project directory:
+
+```bash
+npm run test-single
+```
+
+*Note: You may be prompted to allow `node` to accept connections; this is okay and required for the tests to run.*
+
+To run the Python tests, run these commands in the root project directory:
+
+```bash
+cd fec/
+./manage.py test
+```
+
 ## Enabling/toggling features
 [settings/base.py](https://github.com/18F/fec-cms/blob/develop/fec/fec/settings/base.py)
 includes a set of `FEATURES` which can also be enabled using environment flags:
