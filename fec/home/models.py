@@ -406,3 +406,19 @@ class EnforcementPage(ContentPage, UniqueModel):
     @property
     def content_section(self):
         return 'legal-resources'
+
+
+class TipsForTreasurersPage(ContentPage):
+    date = models.DateField(default=datetime.date.today)
+    template = 'home/updates/tips_for_treasurers.html'
+    content_panels = ContentPage.content_panels + [
+        FieldPanel('date')
+    ]
+
+    @property
+    def content_section(self):
+        return ''
+
+    @property
+    def get_update_type(self):
+        return constants.update_types['tips-for-treasurers']
