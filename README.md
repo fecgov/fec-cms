@@ -87,6 +87,15 @@ Use `npm` to install JavaScript dependencies:
 ```bash
 npm install
 ```
+### Give default user privileges to create database
+If you would like your default user to create the database, alter their user role:
+```bash
+sudo su - postgres
+psql
+alter user [default_username] createdb;
+\q
+exit
+```
 
 ### Create local databases
 Before you can run this project locally, you'll need a development database:
@@ -109,8 +118,8 @@ project setup by running these commands:
 ```bash
 npm run build
 cd fec/
-./manage.py createsuperuser
 ./manage.py migrate
+./manage.py createsuperuser
 ```
 
 ## Running the application
@@ -119,6 +128,24 @@ In the root project folder, run:
 ```bash
 cd fec/
 ./manage.py runserver
+```
+
+## Running tests
+There are two kinds of tests that you can run with the project, Python tests and JavaScript tests.
+
+To run the JavaScript tests, run this command in the root project directory:
+
+```bash
+npm run test-single
+```
+
+*Note: You may be prompted to allow `node` to accept connections; this is okay and required for the tests to run.*
+
+To run the Python tests, run these commands in the root project directory:
+
+```bash
+cd fec/
+./manage.py test
 ```
 
 ## Enabling/toggling features

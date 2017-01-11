@@ -1,0 +1,24 @@
+{% load wagtailimages_tags %}
+
+<div class="grid__item">
+  <div class="icon-heading">
+    {% if commissioner.picture %}
+    {% image commissioner.picture original as commissioner_picture %}
+    <img class="icon-heading__image" src="{{ commissioner_picture.url }}" alt="Headshot of {{ commissioner.title }}">
+    {% endif %}
+    <div class="icon-heading__content">
+      <div class="t-lead"><a href="{{ commissioner.url }}">{{ commissioner.title }}</a></div>
+      {% if commissioner.commissioner_title  %}
+      <div class="t-lead t-note">{{ commissioner.commissioner_title }}</div>
+      {% endif %}
+      <div class="u-padding--top t-sans">{{ commissioner.get_party_affiliation_display }}</div>
+      <div class="t-italic">
+      {% if commissioner.term_expiration %}
+        {{ commissioner.sworn_in|date:'F Y' }} to {{ commissioner.term_expiration|date:'F Y' }}
+      {% else %}
+        Currently Serving
+      {% endif %}
+      </div>
+    </div>
+  </div>
+</div>

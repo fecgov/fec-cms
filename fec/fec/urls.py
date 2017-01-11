@@ -15,13 +15,14 @@ urlpatterns = [
     url(r'^django-admin/', include(admin.site.urls)),
 
     url(r'^admin/', include(wagtailadmin_urls)),
-    url(r'^documents/', include(wagtaildocs_urls)),
-
-    url(r'^updates/$', home_views.updates),
     url(r'^calendar/$', home_views.calendar),
+    url(r'^commissioners/$', home_views.commissioners),
+    url(r'^about/leadership-and-structure/commissioners/$', home_views.commissioners),
     url(r'^contact-us/$', home_views.contact),
-    url(r'^search/$', search_views.search, name='search'),
+    url(r'^documents/', include(wagtaildocs_urls)),
     url(r'^legal/advisory-opinions/process/$', home_views.ao_process),
+    url(r'^search/$', search_views.search, name='search'),
+    url(r'^updates/$', home_views.updates),
 
     url(r'', include(wagtail_urls)),
 ]
