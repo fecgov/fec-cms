@@ -54,6 +54,7 @@ def updates(request):
     digests = ''
     records = ''
     press_releases = ''
+    tips = ''
 
     # Get values from query
     update_types = request.GET.getlist('update_type', None)
@@ -78,7 +79,7 @@ def updates(request):
         if 'weekly-digest' in update_types:
             digests = get_digests(year=year)
         if 'tips-for-treasurers' in update_types:
-            digests = get_tips(year=year)
+            tips = get_tips(year=year)
 
     else:
       # Get everything and filter by year if necessary
@@ -87,8 +88,10 @@ def updates(request):
 
       # Hide behind feature flag unless explicitly requested
       # Only authenticated users will be able to explicitly request them for now
+      # Piggy-backing tips on the record flag for now
       if settings.FEATURES['record']:
         records = RecordPage.objects.live()
+        tips = TipsForTreasurersPage.objects.live()
 
       if year:
         records = records.filter(date__year=year)
@@ -98,7 +101,7 @@ def updates(request):
     # Chain all the QuerySets together
     # via http://stackoverflow.com/a/434755/1864981
     updates = sorted(
-      chain(press_releases, digests, records),
+      chain(press_releases, digests, records, tips),
       key=attrgetter('date'),
       reverse=True
     )
