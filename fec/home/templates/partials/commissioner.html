@@ -12,7 +12,7 @@
       <div class="t-lead t-note">{{ commissioner.commissioner_title }}</div>
       {% endif %}
       <div class="u-padding--top t-sans">{{ commissioner.get_party_affiliation_display }}</div>
-      {% if show_dates == True %}
+      {% if show_dates %}
         <div class="t-italic">
         {% if commissioner.term_expiration %}
           {{ commissioner.sworn_in|date:'F Y' }} to {{ commissioner.term_expiration|date:'F Y' }}
