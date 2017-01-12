@@ -1,14 +1,19 @@
-from typing import Callable, List, NamedTuple, Tuple
+from collections import defaultdict
 from datetime import datetime
 from dateutil import parser as dparser
-from lxml.html import fromstring, tostring, Element  # type: ignore
+from typing import (
+    Callable,
+    List,
+    NamedTuple,
+    Tuple
+)
 from operator import attrgetter
 from urllib.parse import urljoin, urlparse
 import json
 import re
+
+from lxml.html import fromstring, tostring, Element  # type: ignore
 import requests
-
-
 from ipdb import set_trace as st
 
 
@@ -72,7 +77,7 @@ Meeting = NamedTuple(
     [
         ("agenda_documents_linked", Links),  # list (Links)
         ("approved_minutes_date", str),  # ISO 8601 date, e.g.  ("2016-12-13")
-        ("approved_minutes_url", str),  # URL
+        ("approved_minutes_link", Link),  # Link
         ("audio_url", str),  # URL
         ("body", str),  # HTML,
         ("closed_captioning_url", str),  # URL
@@ -82,9 +87,23 @@ Meeting = NamedTuple(
         ("posted_date", str),  # ISO 8601 date, such as ("2016-12-13")
         ("previous_url", str),  # URL
         ("sunshine_act_links", Links),  # list (Links)
-        ("title_text", str),  # HTML
+        ("title_text", str),  # str (TODO: do we need the HTML?)
         ("video_url", str)  # URL
     ])
+"""
+Possible sources of truth for the “title” of the meeting:
+
++   The entire text of the cell.
++   The text of the link itself only (if there's a link).
++   The text of the cell once it's been stripped of other links.
++   The title property of the link (if there's a link and it has a title
+    property).
++   The URL for the meeting page (that is, extracting the date from it) (if
+    there's a page for the meeting).
++   The title tag of the meeting's page (if there's a page for the meeting).
++   A title-like element on the meeting's page (if there's a page for the
+    meeting).
+"""
 Meetings = List[Meeting]
 
 """
@@ -204,6 +223,8 @@ def cli_main(args: list=None) -> None:
     goodmeetings = []
     agendameetings = []
     noticemeetings = []
+    sunshines = []
+
 
     for meeting in meetings:
         if type(meeting) == Meeting:
@@ -219,7 +240,7 @@ def cli_main(args: list=None) -> None:
 
     def is_notice_meeting(m):
         no_url = m.previous_url in (None, "")
-        no_minutes = m.approved_minutes_url in (None, "")
+        no_minutes = m.approved_minutes_link in (None, "")
         sunshine_links = len(m.sunshine_act_links) > 0
         return no_url and no_minutes and sunshine_links
 
@@ -229,17 +250,22 @@ def cli_main(args: list=None) -> None:
         else:
             agendameetings.append(meeting)
 
+    for meeting in goodmeetings:
+        for slink in meeting.sunshine_act_links:
+            sunshines.append(slink.url)
+    usunshines = set(sunshines)
+
     # all_links, tried_links, broken_links = [], [], []
 
     # print("Link testing")
 
     """
     for meeting in goodmeetings:
-        if meeting.approved_minutes_url is not None:
-            url = meeting.approved_minutes_url
-            all_links.append(meeting.approved_minutes_url)
-            if meeting.approved_minutes_url not in tried_links:
-                tried_links.append(meeting.approved_minutes_url)
+        if meeting.approved_minutes_link is not None:
+            url = meeting.approved_minutes_link
+            all_links.append(meeting.approved_minutes_link)
+            if meeting.approved_minutes_link not in tried_links:
+                tried_links.append(meeting.approved_minutes_link)
                 try:
                     response = requests.head(url)
                     if response.status_code != 200:
@@ -266,6 +292,7 @@ def cli_main(args: list=None) -> None:
                 except:
                     broken_links.append(url)
     """
+    broken = set([l[1] for l in broken_links])
 
     st()
 
@@ -304,7 +331,7 @@ def d_to_iso(d: str, original: str=None) -> Date:
         try:
             dt = dparser.parse(d)
         except:
-            st()
+            # st()
             print(d)
             return Date(datetime=None, iso8601=None, original=original,
                         source=original)
@@ -379,7 +406,7 @@ def parse_meeting_row(row: Callable) -> Meeting:
     # TODO: Have to redo this to accommodated the fact that some Sunshine
     # Notice links show up in the first cell (in addition to docs links).
     draft_minutes_links = []
-    approved_minutes_date, approved_minutes_url = None, None
+    approved_minutes_date, approved_minutes_link = None, None
     sunshine_act_links = []
     cells = row.xpath("./td")
     if len(cells) == 4:
@@ -398,50 +425,203 @@ def parse_meeting_row(row: Callable) -> Meeting:
     else:
         st()
 
-    docs_links = docs.xpath("./a")
+    docs_links = docs.xpath(".//a")
     posted_date = None
-    if len(docs_links) > 0:
+
+    if len(docs_links) > 1:
         """
-        TODO:
-            +   Handle 2010's cancellations
-            +   Handle 2005's notices ending up in this cell
+        There are four cases where there's more than one ``a`` element in the
+        cell.
+
+        The first involves as Sunshine Act notice link that's somehow strayed
+        into the cell and needs to be counted as a Sunshine Act notice link.
+
+        The second involves a second link that has the same URL as the first
+        but has no content.
+
+        The third has two empty ``a`` elements with URLs pointing to Sunshine
+        Act notices that have to be extracted as in the second case.
+
+        The fourth is almost the same as the second.
+
+        In each case, we can determine how the second ``a`` element should be
+        dealt with and then remove it from the parent ``td`` element.
+
+        Formatted-for-space versions of the four cases::
+
+            <td>
+            <a href="http://www.fec.gov/agenda/2010/agenda20100304b.shtml">
+                March 4, 2010<br>\r\n
+            </a>
+            (2:00 PM)
+            <a href="http://www.fec.gov/sunshine/2010/notice20100302pdf.pdf">
+                Canceled
+            </a>
+            </td>\r\n
+
+            <td>
+            <a href="http://www.fec.gov/agenda/2006/agenda20060309.shtml">
+                March 9, 2006
+            </a>
+            <a href="http://www.fec.gov/agenda/2006/agenda20060309.shtml">
+                <br>\r\n
+            </a>
+            </td>\r\n
+
+            <td>
+            October 20, 2005
+            <a href="http://www.fec.gov/sunshine/2005/notice2005-10-13.pdf">
+                <br>\r\n
+            </a>
+            (Hearing)
+            <a href="http://www.fec.gov/sunshine/2005/notice2005-10-13.pdf">
+                <br>\r\n
+            </a>
+            </td>\r\n
+
+            <td>
+            <a href="http://www.fec.gov/agenda/2004/agenda20041104.shtml">
+                November 4, 2004<br>
+                \r\n
+            </a>
+            (Cancelled)
+            <a href="http://www.fec.gov/agenda/2004/agenda20041104.shtml">
+                <br>\r\n
+            </a>
+            </td>\r\n
         """
+        a_el = docs_links[1]
+        if "sunshine" in a_el.attrib["href"]:
+            text = ("%s%s" % (a_el.text_content(),
+                              a_el.tail if a_el.tail else "")).strip()
+            url = a_el.attrib["href"]
+            title = a_el.attrib.get("title", "")
+            sunshine_act_links.append(Link(text=text, title=title, url=url))
+            docs.remove(a_el)
+        else:
+            assert docs_links[0].attrib["href"] == a_el.attrib["href"]
+            docs.remove(a_el)
+        docs_links = docs.xpath(".//a")
+
+    if len(docs_links) == 1:
         agenda_links = []
-        for a_el in docs_links:
-            href = a_el.attrib["href"]
-            # TODO: there's at least one case where a link is repeated; if
-            # we have two links with the same href, we should detect that
-            # and combine all the text and pass that to extract_date()
-            if "notice" in href:
-                text = ("%s%s" % (a_el.text_content(),
-                                  a_el.tail if a_el.tail else "")).strip()
-                url = a_el.attrib["href"]
-                # print(url)
-                # All the 2009 links are broken:
-                url = url.replace("fec.gov/agenda/", "fec.gov/")
-                # print(url)
-                sunshine_title = ""
-                if "title" in a_el.attrib:
-                    sunshine_title = a_el.attrib["title"]
-                sunshine_act_links.append(Link(text=text, title=sunshine_title,
-                                               url=url))
-            elif "agenda" in href:
-                title = ""
-                if "title" in a_el.attrib:
-                    title = a_el.attrib["title"]
-                agenda_links.append((
-                    "%s%s" % (a_el.text_content(),
-                              a_el.tail if a_el.tail else ""),
-                    extract_date(a_el), a_el.attrib["href"], title))
-                """
-                title_text = "%s%s" % (a_el.text_content(),
-                                       a_el.tail if a_el.tail else "")
-                posted_date = extract_date(a_el)
-                previous_url = a_el.attrib["href"]
-                """
+        a_el = docs_links[0]
+        href = a_el.attrib["href"]
+        # TODO: there's at least one case where a link is repeated; if
+        # we have two links with the same href, we should detect that
+        # and combine all the text and pass that to extract_date()
+        if "notice" in href:
+            """
+            These are rows with Sunshine Act notices in the first cell.
+
+            I'm not sure whether or not these should be added to the list of
+            Sunshine Act links, or whether the first cell should be treated as
+            the title of the meeting overall.
+
+            I think in this case the best thing to do is to treat the cell as
+            containing the title, and to add the link to the list of notices.
+
+            Formatted-for-space versions of the four cases::
+
+            <tr>\r\n
+            <td>
+            <a href="http://www.fec.gov/sunshine/2010/notice20100408pdf.pdf">
+                April 14, 2010 Canceled
+            /a>
+            </td>\r\n
+            <td align="center">&#160;</td>\r\n
+            <td>&#160;</td>\r\n
+            <td align="center">
+            <a href="http://www.fec.gov/sunshine/2010/notice20100406pdf.pdf">
+                Notice</a>
+            </td>\r\n
+            </tr>\r\n
+
+            <tr>\r\n
+            <td>
+            <a href="http://www.fec.gov/sunshine/2009/notice20090428.pdf">
+                April 30, 2009 (Cancelation)</a>
+            </td>\r\n
+            <td align="center">&#160;</td>\r\n
+            <td>&#160;</td>\r\n
+            <td align="center">
+            <a href="http://www.fec.gov/sunshine/2009/notice20090428.pdf">
+                Notice</a>
+            </td>\r\n
+            </tr>\r\n
+
+            <tr>\r\n
+            <td>
+            October 20, 2005
+            <a href="http://www.fec.gov/sunshine/2005/notice2005-10-13.pdf">
+                <br>\r\n
+            </a>
+            (Hearing)</td>\r\n
+            <td>NA</td>\r\n
+            <td align="center">
+            <a href="http://www.fec.gov/sunshine/2005/notice2005-10-13.pdf">
+                Notice
+            </a></td>\r\n
+            </tr>\r\n
+
+            <tr>\r\n
+            <td>
+            October 6, 2005
+            <a href="http://www.fec.gov/sunshine/2005/notice2005-10-06.pdf">
+                <br>\r\n
+            </a>
+            (Cancelled)<br>
+            </td>\r\n
+            <td>NA</td>\r\n
+            <td align="center">
+            <p>
+            <a href="http://www.fec.gov/sunshine/2005/notice2005-10-06.pdf">
+                Notice
+            </a>
+            <br>\r\n
+            <a href="http://www.fec.gov/sunshine/2005/notice2005-09-30.pdf">
+                Notice</a>
+            </p>\r\n
+            </td>\r\n
+            </tr>\r\n
+            """
+            title_text = docs.text_content().strip()
+            title = ""
+            previous_url = None
+            datematch = re.match(r"[a-zA-Z]+ [0-9]{1,2}, [0-9]{4}",
+                                 title_text)
+            if datematch:
+                datestring = datematch.group(0)
+                posted_date = d_to_iso(datestring)
             else:
                 st()
 
+            url = a_el.attrib["href"]
+            sunshine_title = ""
+            if "title" in a_el.attrib:
+                sunshine_title = a_el.attrib["title"]
+            sunshine_act_links.append(Link(text=title_text,
+                                           title=sunshine_title, url=url))
+        elif "agenda" in href:
+            title = ""
+            if "title" in a_el.attrib:
+                title = a_el.attrib["title"]
+            title_text = docs.text_content().strip()
+            posted_date = extract_date(a_el)
+            previous_url = a_el.attrib["href"]
+
+            """
+            title_text = "%s%s" % (a_el.text_content(),
+                                   a_el.tail if a_el.tail else "")
+            posted_date = extract_date(a_el)
+            previous_url = a_el.attrib["href"]
+            """
+        else:
+            st()
+
+        if len(agenda_links) > 0:
+            st()
+        """
         if len(agenda_links) == 1:
             title_text, posted_date, previous_url, title = agenda_links[0]
         elif len(agenda_links) > 1:
@@ -452,7 +632,9 @@ def parse_meeting_row(row: Callable) -> Meeting:
             else:
                 best = max(agenda_links, key=lambda _: len(_[0].strip()))
                 title_text, posted_date, previous_url, title = best
+        """
 
+        """
         if posted_date is None:
             # This means we've gone through the a elements in the cell and
             # they're all notices.
@@ -468,6 +650,7 @@ def parse_meeting_row(row: Callable) -> Meeting:
                 st()
 
         """
+        """
         else:
             docs_link = docs_links[0]
             title_text = "%s%s" % (docs_link.text_content(),
@@ -479,7 +662,7 @@ def parse_meeting_row(row: Callable) -> Meeting:
                 st()
             assert "agenda" in previous_url
         """
-    else:
+    elif len(docs_links) == 0:
         previous_url = None
         title = ""
         title_text = docs.text_content().strip().replace(" ,", ",")
@@ -489,35 +672,36 @@ def parse_meeting_row(row: Callable) -> Meeting:
             posted_date = d_to_iso(datestring)
         else:
             st()
+    else:
+        st()
 
     if draft is not None:
         draft_minutes_links = [parse_a_element(e) for e in draft.xpath("./a")]
 
-    if len(approved.xpath("./a")) > 1:
+    if len(approved.xpath(".//a")) > 1:
         st()
 
-    if len(approved.xpath("./a")) == 1:
+    if len(approved.xpath(".//a")) == 1:
         # TODO: Deal with 'Transcript Available'
-        approved_link = approved.xpath("./a")[0]
+        approved_link = approved.xpath(".//a")[0]
         title_text = approved.text_content()
         datematch = re.match(r"[a-zA-Z]+ [0-9]{1,2}, [0-9]{4}", title_text)
         if datematch:
             datestring = datematch.group(0)
             approved_minutes_date = d_to_iso(datestring)
         else:
+            if "Transcript" in title_text:
+                # In these edge cases we can use the posted date.
+                approved_minutes_date = posted_date.iso8601
             approved_minutes_date = d_to_iso(
                 approved_link.text_content()).iso8601
 
-        approved_minutes_url = approved_link.attrib["href"]
+        approved_minutes_link = approved_link.attrib["href"]
 
-    if sunshine is not None and len(sunshine.xpath("./a")) > 0:
-        for sunshine_link in sunshine.xpath("./a"):
+    if sunshine is not None and len(sunshine.xpath(".//a")) > 0:
+        for sunshine_link in sunshine.xpath(".//a"):
             text = sunshine_link.text_content()
             url = sunshine_link.attrib["href"]
-            # print(url)
-            # All the 2009 links are broken:
-            url = url.replace("fec.gov/agenda/", "fec.gov/")
-            # print(url)
             sunshine_title = ""
             if "title" in sunshine_link.attrib:
                 sunshine_title = sunshine_link.attrib["title"]
@@ -527,13 +711,23 @@ def parse_meeting_row(row: Callable) -> Meeting:
     if len(sunshine_act_links) > len(set([_.url for _ in sunshine_act_links])):
         # We have more than one link to the same thing for the Sunshine Act
         # Notices.
-        sunshine_act_links = [max(sunshine_act_links,
-                                  key=lambda _: len(_.text.strip()))]
+        # We group the links by URL and then from each group select the one
+        # with the most text associated with it, as our best guess.
+        by_links = defaultdict(list)
+        for link in sunshine_act_links:
+            by_links[link.url].append(link)
+        unique_links = []
+        for url in by_links:
+            links = by_links[url]
+            # Assume the longest text is the best:
+            best = max(links, key=lambda _: len(_.text.strip()))
+            unique_links.append(best)
+        sunshine_act_links = unique_links
 
     return Meeting(
         agenda_documents_linked=[],
         approved_minutes_date=approved_minutes_date,
-        approved_minutes_url=approved_minutes_url,
+        approved_minutes_link=approved_minutes_link,
         audio_url=None,
         body=None,
         closed_captioning_url=None,
@@ -651,134 +845,6 @@ def extract_archive_urls(base_url: str, archive_urls: list=[],
                                                          archive_urls, visited)
 
     return (archive_urls, visited)
-
-
-def extract_tips(tip_urls: list, urls_to_change: dict):
-    """
-    Pass each URL to ``parse_tips_from_page()``, accumulating lists of parsed
-    tips and of URLs from the pages that don't appear to work.
-
-    :arg list[str] tip_urls: The URLs for pages containing the tips.
-    :arg dict[str, str] urls_to_change: Known broken URLs and their
-        replacements.
-
-    :rtype: tuple[list, list]
-    :returns: A tuple containing a list of ``tip`` objects and a list of URLs
-        that are apparently broken.
-    """
-    tips, broken_urls = [], []  # type: List[Tip], List[str]
-    for tip_url in tip_urls:
-        tips, broken_urls = parse_tips_from_page(tip_url, tips, broken_urls,
-                                                 urls_to_change)
-    return (tips, broken_urls)
-
-
-def parse_tips_from_page(tip_url: str, tips: list, broken_urls: list,
-                         urls_to_change: dict):
-    """
-    Parse the list of tips from the page. Note that some URLs (such as
-    <http://www.fec.gov/info/TimelyTipsArchive.shtml>) don't have any actual
-    tips on them.
-
-    :arg str tip_url: The URL for the page supposedly containing tips.
-    :arg list[Tip] tips: The list of ``Tip`` objects, which this adds to.
-    :arg list[str] broken_urls: The list of broken URLs, which this adds to.
-    :arg dict[str, str] urls_to_change: The list of known broken URLs and
-        replacements.
-
-    :rtype: tuple[list, list]
-    :returns: A tuple containing a list of ``tip`` objects and a list of URLs
-        that are apparently broken.
-
-    Impure
-        Reads content from the page.
-    Side effects
-        Makes HTTP requests.
-    """
-    response = requests.get(tip_url)
-    encoding = response.encoding if response.encoding else "utf-8"
-    html = fromstring(response.content)
-    rows = html.xpath("//div[@id='fec_mainContent']/table//tr")
-
-    for row in rows:
-        if len(row.xpath("./td")) == 2:
-            # All the rows we want have exactly two cells.
-            date_cell, body_cell = row.xpath("./td")
-            datestamp = None
-            try:
-                date_text = date_cell.text_content().strip()
-                # At least one date has a period instead of a comma...
-                if "." in date_text:
-                    datestamp = datetime.strptime(date_text, "%B %d. %Y")
-                else:
-                    datestamp = datetime.strptime(date_text, "%B %d, %Y")
-                # ISO 8601:
-                datestr = datestamp.strftime("%Y-%m-%d")
-            except ValueError as err:
-                print(err)
-            # If cell one has a date we can parse, cell two is the tip content.
-            if datestamp:
-                # Fix the URLs before parsing the HTML:
-                tip_cell, broken_urls = fix_urls(body_cell, tip_url,
-                                                 broken_urls, urls_to_change)
-                tips.append(parse_tip(tip_url, datestr, tip_cell, encoding))
-
-    return (tips, broken_urls)
-
-
-def parse_tip(url: str, datestamp: str, cell: Element, encoding: str):
-    """
-    Create a ``Tip`` object out of the information we have and the HTML element
-    for the table cell.
-
-    The majority of the cells open with a ``strong`` element whose content is
-    the title, but the HTML isn't completely consistent.
-
-    If that element is there, we want its contents (as HTML) and then the
-    remaining contents of the cell (also as HTML), but we want the contents as
-    a string, stripped of the opening and closing tags.
-
-    :arg str url: The URL for the page.
-    :arg str datestamp: ISO 8601 date for the tip.
-    :arg Element cell: ``lxml.html.Element`` object, HTML for the table cell.
-    :arg str encoding: The encoding for the page.
-
-    :rtype: Tip
-    :returns: The parsed tip as a ``Tip`` object.
-    """
-    children = [_ for _ in cell.iterchildren()]
-    first = children[0]
-    # The ``strong`` element is often the first child:
-    if first.tag == "strong":
-        tail = "%s " % first.tail.strip() if first.tail else ""
-        title = innerhtml(first)
-        new_children = children[1:]
-    # But sometimes there's an enclosing ``p`` element:
-    elif first.tag == "p":
-        strong = first.xpath("./strong")[0]
-        title = innerhtml(strong)
-        tail = "%s " % strong.tail.strip() if strong.tail else ""
-        # Note: none of the ``p`` elements have trailing content, so we don't
-        # have to worry about first.tail.
-        new_children = [_ for _ in first.iterchildren()][1:]
-    # And sometimes there's no ``strong`` element at all:
-    elif "strong" not in [_.tag for _ in children]:
-        # Some of the early tips don't have titles.
-        title_date = datetime.strptime(datestamp,
-                                       "%Y-%m-%d").strftime("%B %d, %Y")
-        title = "Timely Tip for %s" % title_date
-        tail = ""
-        new_children = children
-    # We don't know what to do if none of those conditions are met.
-    else:
-        raise
-
-    # Now we want the rest of the HTML (not quite the same as ``innerhtml()``)
-    body = "%s%s" % (tail, "".join([tostring(c).decode(encoding) for
-                                    c in new_children]))
-
-    return Tip(body=body.strip(), posted_date=datestamp, previous_url=url,
-               title_text=title.strip())
 
 
 def innerhtml(el: Element, encoding: str="utf-8"):
