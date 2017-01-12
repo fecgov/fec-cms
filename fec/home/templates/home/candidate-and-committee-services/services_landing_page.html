@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% load wagtailcore_tags %}
+{% load staticfiles %}
+{% load updates %}
+{% block body_class %}template-{{ self.get_verbose_name | slugify }}{% endblock %}
+
+{% block content %}
+<section class="hero hero--secondary hero--services" aria-labelledby="hero-heading">
+  <div class="hero__image"></div>
+  <div class="container">
+    <h1 id="hero-heading">{{ self.title }}</h1>
+    <div class="hero__content">{{ self.hero }}</div>
+  </div>
+</section>
+
+<div>
+  <div id="options" class="container main">
+    <div class="option">
+      <div class="option__content">
+        {{self.intro}}
+      </div>
+      <aside class="option__aside">
+        <i class="icon-circle--search ">
+          <span class="u-visually-hidden">Icon of a magnifying glass</span>
+        </i>
+        <a href="{{ settings.FEC_APP_URL }}">Find an existing candidate or committee</a>
+      </aside>
+    </div>
+
+    <div class="sidebar-container sidebar-container--left">
+      <div class="js-sticky-side" data-sticky-container="options">
+        <nav class="sidebar sidebar--neutral sidebar--left side-nav js-toc">
+          <ul class="sidebar__content">
+              {% for section in self.sections %}
+                <li class="side-nav__item"><a class="side-nav__link" href="#{{section.value.title | slugify }}">{{ section.value.title }}</a></li>
+              {% endfor %}
+          </ul>
+        </nav>
+      </div>
+    </div>
+    <div class="row" id="section-container">
+      <div class="main__content--right">
+      </div>
+    </div>
+  </div>
+  {% include 'partials/disclaimer.html' %}
+</div>
+
+{% endblock %}

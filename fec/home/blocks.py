@@ -104,6 +104,9 @@ class ResourceBlock(blocks.StructBlock):
     template='blocks/section-aside.html',
     icon='placeholder')
 
+    class Meta:
+        template = 'blocks/section.html'
+
 class OptionBlock(blocks.StructBlock):
     title = blocks.CharBlock(required=True)
     intro = blocks.RichTextBlock(blank=False, null=False, required=False)
