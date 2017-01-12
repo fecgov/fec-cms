@@ -14,16 +14,16 @@
     <div class="main__content--full u-padding--top">
       <div class="grid grid--3-wide u-padding--bottom">
       {% if self.chair_commissioner %}
-        {% include "partials/commissioner.html" with commissioner=self.chair_commissioner %}
+        {% include "partials/commissioner.html" with commissioner=self.chair_commissioner show_dates=True %}
       {% endif %}
       {% if self.vice_commissioner %}
-        {% include "partials/commissioner.html" with commissioner=self.vice_commissioner %}
+        {% include "partials/commissioner.html" with commissioner=self.vice_commissioner show_dates=True  %}
       {% endif %}
       {% for commissioner in self.current_commissioners %}
-        {% include "partials/commissioner.html" %}
+        {% include "partials/commissioner.html" with show_dates=True  %}
       {% endfor %}
       {% for commissioner in self.past_commissioners %}
-        {% include "partials/commissioner.html" %}
+        {% include "partials/commissioner.html" with show_dates=True %}
       {% endfor %}
       </div>
     </div>

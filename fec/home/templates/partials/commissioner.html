@@ -12,18 +12,20 @@
       <div class="t-lead t-note">{{ commissioner.commissioner_title }}</div>
       {% endif %}
       <div class="u-padding--top t-sans">{{ commissioner.get_party_affiliation_display }}</div>
-      <div class="t-italic">
-      {% if commissioner.term_expiration %}
-        {{ commissioner.sworn_in|date:'F Y' }} to {{ commissioner.term_expiration|date:'F Y' }}
-        {% if commissioner.reappointed_dates %}
-      </div>
-      <div class="t-italic">
-        ({{ commissioner.reappointed_dates }})
+      {% if show_dates == True %}
+        <div class="t-italic">
+        {% if commissioner.term_expiration %}
+          {{ commissioner.sworn_in|date:'F Y' }} to {{ commissioner.term_expiration|date:'F Y' }}
+          {% if commissioner.reappointed_dates %}
+        </div>
+        <div class="t-italic">
+          ({{ commissioner.reappointed_dates }})
+          {% endif %}
+        {% else %}
+          Currently Serving
         {% endif %}
-      {% else %}
-        Currently Serving
+        </div>
       {% endif %}
-      </div>
     </div>
   </div>
 </div>
