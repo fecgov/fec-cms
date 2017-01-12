@@ -82,6 +82,13 @@ class FeedDocumentBlock(blocks.StructBlock):
     class Meta:
         icon = 'doc-empty'
 
+class CurrentCommissionersBlock(blocks.StaticBlock):
+    """A block that displays the current 6 commissioners"""
+    class Meta:
+        icon = 'group'
+        admin_text = 'Show current commissioners in a grid. No configuration needed.'
+        template = 'blocks/commissioners.html'
+
 class ResourceBlock(blocks.StructBlock):
     """A section of a ResourcePage"""
     title = blocks.CharBlock(required=True)
@@ -93,7 +100,8 @@ class ResourceBlock(blocks.StructBlock):
         ('internal_button', InternalButtonBlock()),
         ('external_button', ExternalButtonBlock()),
         ('page', blocks.PageChooserBlock(template='blocks/page-links.html')),
-        ('document_list', blocks.ListBlock(FeedDocumentBlock(), template='blocks/document-list.html', icon='doc-empty'))
+        ('document_list', blocks.ListBlock(FeedDocumentBlock(), template='blocks/document-list.html', icon='doc-empty')),
+        ('current_commissioners', CurrentCommissionersBlock())
     ])
 
     aside = blocks.StreamBlock([
