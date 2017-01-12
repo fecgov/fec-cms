@@ -15,11 +15,11 @@
 
 <div>
   <div id="options" class="container main">
-    <div class="option">
-      <div class="option__content">
+    <div class="row">
+      <div class="main__content">
         {{self.intro}}
       </div>
-      <aside class="option__aside">
+      <aside class="sidebar-container">
         <i class="icon-circle--search ">
           <span class="u-visually-hidden">Icon of a magnifying glass</span>
         </i>
@@ -27,17 +27,8 @@
       </aside>
     </div>
 
-    <div class="sidebar-container sidebar-container--left">
-      <div class="js-sticky-side" data-sticky-container="options">
-        <nav class="sidebar sidebar--neutral sidebar--left side-nav js-toc">
-          <ul class="sidebar__content">
-              {% for section in self.sections %}
-                <li class="side-nav__item"><a class="side-nav__link" href="#{{section.value.title | slugify }}">{{ section.value.title }}</a></li>
-              {% endfor %}
-          </ul>
-        </nav>
-      </div>
-    </div>
+    {% include 'partials/section-nav.html' with sections=self.sections container='options' %}
+
     <div class="row" id="section-container">
       <div class="main__content--right">
         {{ self.sections }}

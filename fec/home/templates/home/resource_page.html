@@ -9,16 +9,9 @@
 {% endblock %}
 
 {% block intro %}
-<div class="t-lead">{{ self.intro }}</div>
-{% endblock %}
-
-{% block toc %}
-  {% for section in self.sections %}
-    <li class="side-nav__item"><a class="side-nav__link" href="#{{section.value.title | slugify }}">{{ section.value.title }}</a></li>
-  {% endfor %}
-  {% if self.citations %}
-    <li class="side-nav__item"><a class="side-nav__link" href="#legal-citations">Legal citations</a></li>
-  {% endif %}
+<div class="main__content">
+  <div class="t-lead">{{ self.intro }}</div>
+</div>
 {% endblock %}
 
 {% block sections %}
