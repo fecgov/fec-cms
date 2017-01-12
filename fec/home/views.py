@@ -173,8 +173,8 @@ def commissioners(request):
         'url': '/about/',
       },
       {
-        'title': 'Leadership and Organization',
-        'url': '/about/leadership-and-organization',
+        'title': 'Leadership and Structure',
+        'url': '/about/leadership-and-structure',
       },
     ]
   }
