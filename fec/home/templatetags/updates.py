@@ -13,12 +13,12 @@ register = template.Library()
 
 @register.inclusion_tag('partials/press-feed.html')
 def press_releases():
-    press_releases = PressReleasePage.objects.all().order_by('-date')[:3]
+    press_releases = PressReleasePage.objects.live().order_by('-date')[:3]
     return {'updates': press_releases}
 
 @register.inclusion_tag('partials/press-feed.html')
 def weekly_digests():
-    digests = DigestPage.objects.all().order_by('-date')[:3]
+    digests = DigestPage.objects.live().order_by('-date')[:3]
     return {'updates': digests}
 
 @register.inclusion_tag('partials/home-page-updates.html')
