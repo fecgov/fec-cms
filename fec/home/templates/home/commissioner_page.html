@@ -19,22 +19,22 @@
     {% endif %}
 
       <div class="u-padding--top u-padding--bottom">
-        {% if self.commissioner_title %}
-          <div class="contact-item__title t-italic">{{ self.commissioner_title }}</div>
+        {% if self.commissioner_title  %}
+        <div class="t-lead t-note">{{ self.commissioner_title }}</div>
         {% endif %}
-          <div class="contact-item__title t-sans">
+        <div class="t-sans">{{ self.get_party_affiliation_display }}</div>
+        <div class="t-italic">
         {% if self.term_expiration %}
           {{ self.sworn_in|date:'F Y' }} to {{ self.term_expiration|date:'F Y' }}
           {% if self.reappointed_dates %}
-          </div>
-          <div class="contact-item__title t-sans">
-            ({{ self.reappointed_dates }})
+        </div>
+        <div class="t-italic">
+          ({{ self.reappointed_dates }})
           {% endif %}
         {% else %}
-          Currently serving
+          Currently Serving
         {% endif %}
-          </div>
-        <div class="t-sans">{{ self.get_party_affiliation_display }}</div>
+        </div>
       </div>
 
       {% if self.commissioner_email or self.commissioner_phone or self.commissioner_twitter %}
