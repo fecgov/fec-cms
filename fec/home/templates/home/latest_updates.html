@@ -23,7 +23,7 @@
           <p>Weekly Digests are published every Friday and summarize the week's publicly disclosed activity. Press releases are published as news happens.</p>
           {% if request.user.is_authenticated or settings.FEATURES.record %}
           <h3>For candidates and committees</h3>
-          <p>FEC Record articles inform candidates and committees about FEC developments and are published as news happens. Tips for Treasurers are published once a week.</p>
+          <p>FEC Record articles inform candidates and committees about FEC developments and are published as news happens. {% if settings.FEATURES.tips %}Tips for Treasurers are published once a week.{% endif %}</p>
           {% endif %}
           {% if request.user.is_authenticated or settings.FEATURES.agendas %}
           <h3>For members of the public</h3>
