@@ -2,7 +2,7 @@ from collections import defaultdict
 from datetime import datetime
 from dateutil import parser as dparser
 from typing import (
-    Callable,
+    Any,
     List,
     NamedTuple,
     Tuple
@@ -12,9 +12,14 @@ from urllib.parse import urljoin, urlparse
 import json
 import re
 
-from lxml.html import fromstring, tostring, Element  # type: ignore
+from lxml.html import (  # type: ignore
+    fromstring,
+    tostring,
+    Element,
+    HtmlElement
+)
 import requests
-from ipdb import set_trace as st
+from ipdb import set_trace as st  # type: ignore
 
 
 """
@@ -76,16 +81,17 @@ Meeting = NamedTuple(
     "Meeting",
     [
         ("agenda_documents_linked", Links),  # list (Links)
-        ("approved_minutes_date", str),  # ISO 8601 date, e.g.  ("2016-12-13")
+        ("approved_minutes_date", Date),  # Date
         ("approved_minutes_link", Link),  # Link
         ("audio_url", str),  # URL
         ("body", str),  # HTML,
         ("closed_captioning_url", str),  # URL
         ("draft_minutes_links", Links),  # list (Links)
         ("link_title_text", str),  # Plain text
+        ("meeting_type", str),  # "open" or "executive"
         ("pdf_disclaimer", str),  # HTML ?? Not sure about this one.
-        ("posted_date", str),  # ISO 8601 date, such as ("2016-12-13")
-        ("previous_url", str),  # URL
+        ("posted_date", Date),  # Date
+        ("old_meeting_url", str),  # URL
         ("sunshine_act_links", Links),  # list (Links)
         ("title_text", str),  # str (TODO: do we need the HTML?)
         ("video_url", str)  # URL
@@ -207,10 +213,11 @@ urls_to_change = {
 
 
 def cli_main(args: list=None) -> None:
+    st()
     base_url = "http://www.fec.gov/agenda/agendas.shtml"
     annual_urls = [base_url] + extract_annual_urls(base_url)
     meetings = []
-    broken_links = []
+    broken_links = []  # type: List[str]
     for url in annual_urls:
         url_meetings, url_broken_links = extract_meeting_metadata(url,
                                                                   broken_links)
@@ -225,7 +232,6 @@ def cli_main(args: list=None) -> None:
     noticemeetings = []
     sunshines = []
 
-
     for meeting in meetings:
         if type(meeting) == Meeting:
             date = meeting.posted_date
@@ -239,7 +245,7 @@ def cli_main(args: list=None) -> None:
             badmeetings.append(meeting)
 
     def is_notice_meeting(m):
-        no_url = m.previous_url in (None, "")
+        no_url = m.old_meeting_url in (None, "")
         no_minutes = m.approved_minutes_link in (None, "")
         sunshine_links = len(m.sunshine_act_links) > 0
         return no_url and no_minutes and sunshine_links
@@ -254,6 +260,8 @@ def cli_main(args: list=None) -> None:
         for slink in meeting.sunshine_act_links:
             sunshines.append(slink.url)
     usunshines = set(sunshines)
+    dupes = [x for x in sunshines if sunshines.count(x) > 1]
+    dates = [x.posted_date.iso8601 for x in goodmeetings]
 
     # all_links, tried_links, broken_links = [], [], []
 
@@ -307,7 +315,7 @@ def extract_annual_urls(url: str) -> List[str]:
     return urls
 
 
-def parse_a_element(a_el: Callable) -> Link:
+def parse_a_element(a_el: HtmlElement) -> Link:
     text = a_el.text_content()
     url = a_el.attrib["href"]
     title = ""
@@ -340,7 +348,7 @@ def d_to_iso(d: str, original: str=None) -> Date:
                 original=original, source=original)
 
 
-def extract_date(a_el) -> str:
+def extract_date(a_el) -> Date:
     """
     While most of the links are just "<month> <day>, <year>", some of them have
     other content, which we want to ignore.
@@ -389,7 +397,7 @@ def extract_date(a_el) -> str:
             st()
 
 
-def parse_meeting_row(row: Callable) -> Meeting:
+def parse_meeting_row(row: HtmlElement) -> Meeting:
     """
     Given an ``lxml.html.Element`` object for the table row for a meeting,
     returns a ``Meeting`` object.
@@ -405,7 +413,7 @@ def parse_meeting_row(row: Callable) -> Meeting:
     """
     # TODO: Have to redo this to accommodated the fact that some Sunshine
     # Notice links show up in the first cell (in addition to docs links).
-    draft_minutes_links = []
+    draft_minutes_links = []  # type: Links
     approved_minutes_date, approved_minutes_link = None, None
     sunshine_act_links = []
     cells = row.xpath("./td")
@@ -415,9 +423,9 @@ def parse_meeting_row(row: Callable) -> Meeting:
         docs, approved, sunshine = cells
         draft = None
     elif len(cells) == 1 and "adobe reader" in row.text_content().lower():
-        return "Adobe Reader"
+        return make_meeting(title_text="Adobe Reader")
     elif len(cells) == 2 and "approved minutes" in row.text_content().lower():
-        return "Header Row"
+        return make_meeting(title_text="Header Row")
     elif len(cells) == 2:
         docs, approved = cells
         draft = None
@@ -504,7 +512,6 @@ def parse_meeting_row(row: Callable) -> Meeting:
         docs_links = docs.xpath(".//a")
 
     if len(docs_links) == 1:
-        agenda_links = []
         a_el = docs_links[0]
         href = a_el.attrib["href"]
         # TODO: there's at least one case where a link is repeated; if
@@ -587,7 +594,7 @@ def parse_meeting_row(row: Callable) -> Meeting:
             """
             title_text = docs.text_content().strip()
             title = ""
-            previous_url = None
+            old_meeting_url = None
             datematch = re.match(r"[a-zA-Z]+ [0-9]{1,2}, [0-9]{4}",
                                  title_text)
             if datematch:
@@ -608,22 +615,20 @@ def parse_meeting_row(row: Callable) -> Meeting:
                 title = a_el.attrib["title"]
             title_text = docs.text_content().strip()
             posted_date = extract_date(a_el)
-            previous_url = a_el.attrib["href"]
+            old_meeting_url = a_el.attrib["href"]
 
             """
             title_text = "%s%s" % (a_el.text_content(),
                                    a_el.tail if a_el.tail else "")
             posted_date = extract_date(a_el)
-            previous_url = a_el.attrib["href"]
+            old_meeting_url = a_el.attrib["href"]
             """
         else:
             st()
 
-        if len(agenda_links) > 0:
-            st()
         """
         if len(agenda_links) == 1:
-            title_text, posted_date, previous_url, title = agenda_links[0]
+            title_text, posted_date, old_meeting_url, title = agenda_links[0]
         elif len(agenda_links) > 1:
             links = [_[2] for _ in agenda_links]
             unique_links = set(links)
@@ -631,14 +636,14 @@ def parse_meeting_row(row: Callable) -> Meeting:
                 st()
             else:
                 best = max(agenda_links, key=lambda _: len(_[0].strip()))
-                title_text, posted_date, previous_url, title = best
+                title_text, posted_date, old_meeting_url, title = best
         """
 
         """
         if posted_date is None:
             # This means we've gone through the a elements in the cell and
             # they're all notices.
-            previous_url = None
+            old_meeting_url = None
             title = ""
             title_text = docs.text_content().strip().replace(" ,", ",")
             datematch = re.match(r"[a-zA-Z]+ [0-9]{1,2}, [0-9]{4}",
@@ -657,13 +662,13 @@ def parse_meeting_row(row: Callable) -> Meeting:
                                    docs_link.tail if docs_link.tail else "")
             # posted_date = extract_date(docs_link).iso8601
             posted_date = extract_date(docs_link)
-            previous_url = docs_link.attrib["href"]
-            if "agenda" not in previous_url:
+            old_meeting_url = docs_link.attrib["href"]
+            if "agenda" not in old_meeting_url:
                 st()
-            assert "agenda" in previous_url
+            assert "agenda" in old_meeting_url
         """
     elif len(docs_links) == 0:
-        previous_url = None
+        old_meeting_url = None
         title = ""
         title_text = docs.text_content().strip().replace(" ,", ",")
         datematch = re.match(r"[a-zA-Z]+ [0-9]{1,2}, [0-9]{4}", title_text)
@@ -682,19 +687,18 @@ def parse_meeting_row(row: Callable) -> Meeting:
         st()
 
     if len(approved.xpath(".//a")) == 1:
-        # TODO: Deal with 'Transcript Available'
         approved_link = approved.xpath(".//a")[0]
-        title_text = approved.text_content()
-        datematch = re.match(r"[a-zA-Z]+ [0-9]{1,2}, [0-9]{4}", title_text)
+        atitle_text = approved.text_content()
+        datematch = re.match(r"[a-zA-Z]+ [0-9]{1,2}, [0-9]{4}", atitle_text)
         if datematch:
             datestring = datematch.group(0)
             approved_minutes_date = d_to_iso(datestring)
         else:
-            if "Transcript" in title_text:
+            if "Transcript" in atitle_text:
                 # In these edge cases we can use the posted date.
-                approved_minutes_date = posted_date.iso8601
+                approved_minutes_date = posted_date
             approved_minutes_date = d_to_iso(
-                approved_link.text_content()).iso8601
+                approved_link.text_content())
 
         approved_minutes_link = approved_link.attrib["href"]
 
@@ -710,10 +714,10 @@ def parse_meeting_row(row: Callable) -> Meeting:
 
     if len(sunshine_act_links) > len(set([_.url for _ in sunshine_act_links])):
         # We have more than one link to the same thing for the Sunshine Act
-        # Notices.
+        # notices.
         # We group the links by URL and then from each group select the one
         # with the most text associated with it, as our best guess.
-        by_links = defaultdict(list)
+        by_links = defaultdict(list)  # type: Dict[str, list]
         for link in sunshine_act_links:
             by_links[link.url].append(link)
         unique_links = []
@@ -733,9 +737,10 @@ def parse_meeting_row(row: Callable) -> Meeting:
         closed_captioning_url=None,
         draft_minutes_links=draft_minutes_links,
         link_title_text=title,
+        meeting_type="open",
         pdf_disclaimer=None,
         posted_date=posted_date,
-        previous_url=previous_url,
+        old_meeting_url=old_meeting_url,
         sunshine_act_links=sunshine_act_links,
         title_text=title_text,
         video_url=None)
@@ -754,14 +759,14 @@ def extract_meeting_metadata(url: str,
     ]
 
     html = fromstring(requests.get(url).content)
-    tables, count = [], 0
+    tables, count = [], 0  # type: List[Any], int
     while len(tables) != 1 and count < len(exprs):
         tables = html.xpath(exprs[count])
         count = count + 1
     if not len(tables):     # Work around this URL going down randomly
                             # http://www.fec.gov/agenda/2010/agendas2010.shtml
         print("%s not working" % url)
-        return []
+        return ([], broken_links)
     if not len(tables) == 1:
         import ipdb
         ipdb.set_trace()
@@ -848,6 +853,7 @@ def extract_archive_urls(base_url: str, archive_urls: list=[],
 
 
 def innerhtml(el: Element, encoding: str="utf-8"):
+    st()
     """
     Returns the HTML of an element as a ``str``, with the opening and closing
     tags removed.
@@ -866,14 +872,14 @@ def innerhtml(el: Element, encoding: str="utf-8"):
                                     c in el.iterchildren()]))
 
 
-def fix_urls(el: Element, base_url: str, broken_urls: list,
-             urls_to_change: dict) -> Tuple[Callable, List]:
+def fix_urls(el: HtmlElement, base_url: str, broken_urls: list,
+             urls_to_change: dict) -> Tuple[HtmlElement, List]:
     """
     Given an HTML element, turns all ``href`` parameters of ``a`` elements
     inside it into fully-qualified absolute URLs instead of the relative paths
     that are common in the tips content.
 
-    :arg Element el: ``lxml.html.Element`` object, the content to change.
+    :arg Element el: ``lxml.html.HtmlElement`` object, the content to change.
     :arg str base_url: The URL for the page, which serves as the absolute
         point with which to calculate the absolute paths.
     :arg list broken_urls: The list of broken URLs to add to as we find them.
@@ -884,6 +890,7 @@ def fix_urls(el: Element, base_url: str, broken_urls: list,
     :returns: The Element with its ``a`` elements altered, and the list of
         broken URLs.
     """
+    st()
     tested_urls = []  # type: List[str]
     for desc in el.iterdescendants():
         if desc.tag == "a" and "href" in desc.attrib:
@@ -977,6 +984,30 @@ def check_url(base_url: str, url: str, tested_urls: list, broken_urls: list):
                 broken_urls.append((base_url, url))
 
     return (tested_urls, broken_urls)
+
+
+def make_meeting(**kwds: Any) -> Meeting:
+    defaults = {
+        "agenda_documents_linked": [],
+        "approved_minutes_date": "",
+        "approved_minutes_link": None,
+        "audio_url": "",
+        "body": "",
+        "closed_captioning_url": "",
+        "draft_minutes_links": [],
+        "link_title_text": "",
+        "meeting_type": "",
+        "pdf_disclaimer": "",
+        "posted_date": None,
+        "old_meeting_url": "",
+        "sunshine_act_links": [],
+        "title_text": "",
+        "video_url": ""
+    }
+    for k in defaults:
+        if k in kwds:
+            defaults[k] = kwds[k]
+        return Meeting(**defaults)  # type: ignore
 
 
 def write_tips(tips: list, broken_links: list) -> None:
