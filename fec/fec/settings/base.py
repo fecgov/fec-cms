@@ -186,7 +186,8 @@ CONSTANTS = constants
 
 FEATURES = {
     'record': bool(env.get_credential('FEC_FEATURE_RECORD', '')),
-    'about': bool(env.get_credential('FEC_FEATURE_ABOUT', ''))
+    'about': bool(env.get_credential('FEC_FEATURE_ABOUT', '')),
+    'agendas': bool(env.get_credential('FEC_FEATURE_AGENDAS', ''))
 }
 
 AUTH_PASSWORD_VALIDATORS = [
