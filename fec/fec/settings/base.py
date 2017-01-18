@@ -176,6 +176,7 @@ FEC_API_VERSION = os.getenv('FEC_API_VERSION', 'v1')
 FEC_API_KEY_PUBLIC = env.get_credential('FEC_WEB_API_KEY_PUBLIC', '')
 FEC_CMS_ROBOTS = os.getenv('FEC_CMS_ROBOTS')
 ENVIRONMENTS = {
+    'local': 'LOCAL',
     'dev': 'DEVELOPMENT',
     'stage': 'STAGING',
     'prod': 'PRODUCTION',
@@ -211,10 +212,12 @@ if os.getenv('SENTRY_DSN'):
         'dsn': os.getenv('SENTRY_DSN'),
     }
 
-AWS_QUERYSTRING_AUTH = False
-AWS_ACCESS_KEY_ID = os.environ['AWS_ACCESS_KEY']
-AWS_SECRET_ACCESS_KEY = os.environ['AWS_SECRET_ACCESS_KEY']
-AWS_STORAGE_BUCKET_NAME = os.environ['S3_BUCKET_NAME']
-MEDIA_URL = 'http://%s.s3-us-gov-west-1.amazonaws.com/' % AWS_STORAGE_BUCKET_NAME
-DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
-AWS_LOCATION = 'cms-content'
+if FEC_CMS_ENVIRONMENT != 'LOCAL':
+    AWS_QUERYSTRING_AUTH = False
+    AWS_ACCESS_KEY_ID = os.environ['CMS_AWS_ACCESS_KEY']
+    AWS_SECRET_ACCESS_KEY = os.environ['CMS_AWS_SECRET_ACCESS_KEY']
+    AWS_STORAGE_BUCKET_NAME = os.environ['CMS_S3_BUCKET_NAME']
+    MEDIA_URL = 'https://%s.s3-us-gov-west-1.amazonaws.com/' % AWS_STORAGE_BUCKET_NAME
+    DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+    AWS_LOCATION = 'cms-content'
+
