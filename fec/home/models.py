@@ -349,6 +349,7 @@ class CommissionerPage(Page):
     )
     sworn_in = models.DateField(null=True, blank=True)
     term_expiration = models.DateField(null=True, blank=True)
+    reappointed_dates = models.CharField(max_length=255, blank=True)
     party_affiliation = models.CharField(
         max_length=2,
         choices=(
@@ -374,6 +375,7 @@ class CommissionerPage(Page):
         ImageChooserPanel('picture'),
         FieldPanel('sworn_in'),
         FieldPanel('term_expiration'),
+        FieldPanel('reappointed_dates'),
         FieldPanel('party_affiliation'),
         FieldPanel('commissioner_title'),
         StreamFieldPanel('commissioner_bio'),

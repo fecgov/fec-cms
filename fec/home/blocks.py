@@ -92,6 +92,7 @@ class ResourceBlock(blocks.StructBlock):
         ('contact_info', ContactInfoBlock()),
         ('internal_button', InternalButtonBlock()),
         ('external_button', ExternalButtonBlock()),
+        ('page', blocks.PageChooserBlock(template='blocks/page-links.html')),
         ('document_list', blocks.ListBlock(FeedDocumentBlock(), template='blocks/document-list.html', icon='doc-empty'))
     ])
 
