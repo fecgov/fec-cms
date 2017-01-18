@@ -1,0 +1,15 @@
+{% load wagtailcore_tags %}
+
+<section id="{{ value.title | slugify }}" class="option {% if value.hide_title %}option--no-top-border{% endif %}">
+  {% if not value.hide_title %}<h2>{{ value.title }}</h2>{% endif %}
+  {% if value.aside %}
+    <div class="option__content">
+      {% include_block value.content with blocks=value.content %}
+    </div>
+    {% include_block value.aside with aside=value.aside %}
+  {% else %}
+    <div class="row">
+      {% include_block value.content with blocks=value.content %}
+    </div>
+  {% endif %}
+</section>
