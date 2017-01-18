@@ -6,7 +6,7 @@ from wagtail.wagtaildocs.blocks import DocumentChooserBlock
 class ThumbnailBlock(blocks.StructBlock):
     """A block that combines a thumbnail and a caption,
         both of which link to a URL"""
-    image = ImageChooserBlock()
+    image = ImageChooserBlock(required=False)
     url = blocks.URLBlock()
     text = blocks.CharBlock()
 
@@ -29,7 +29,7 @@ class AsideLinkBlock(blocks.StructBlock):
 
 class ContactItemBlock(blocks.StructBlock):
     """A lockup of an icon and blurb of contact info"""
-    item_label = blocks.CharBlock(required=True)
+    item_label = blocks.CharBlock(required=False)
     item_icon = blocks.ChoiceBlock(choices=[
         ('email', 'Email'),
         ('fax', 'Fax'),
