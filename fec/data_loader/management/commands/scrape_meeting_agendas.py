@@ -11,10 +11,9 @@ from urllib.parse import urljoin, urlparse
 import json
 import re
 
-from lxml.html import (  # type: ignore (no lxml library stub)
+from lxml.html import (
     fromstring,
     tostring,
-    Element,
     HtmlElement
 )
 import requests
@@ -258,6 +257,11 @@ def cli_main(args: list=None) -> None:
 
     broken = set([l[1] for l in broken_links])
 
+    for meeting in meetings:
+        meeting = parse_meeting_page(meeting)
+
+
+
     st()
     print(
         usunshines,
@@ -268,9 +272,10 @@ def cli_main(args: list=None) -> None:
 
 
 def extract_annual_urls(url: str) -> List[str]:
-    html = fromstring(requests.get(url).content)
-    links = html.xpath("//ul/li/a[text()[contains(.,'Open Meetings')]]")
-    urls = [urljoin(url, link.attrib["href"]) for link in links]
+    html = fromstr(requests.get(url).content)
+    # links = html.xpath("//ul/li/a[text()[contains(.,'Open Meetings')]]")
+    links = xpath(html, "//ul/li/a[text()[contains(.,'Open Meetings')]]")
+    urls = [urljoin(url, hattr(link, "href")) for link in links]
     return urls
 
 
@@ -296,12 +301,12 @@ def parse_meeting_row(row: HtmlElement) -> Meeting:
         Via ``parse_meeting_docs_cell``, alters the row HTML (which is a kind
         of singleton).
     """
-    cells = row.xpath("./td")
+    cells = xpath(row, "./td")
 
     # We know that these are not meeting metadata:
-    if len(cells) == 1 and "adobe reader" in row.text_content().lower():
+    if len(cells) == 1 and "adobe reader" in htext(row).lower():
         return None
-    elif len(cells) == 2 and "approved minutes" in row.text_content().lower():
+    elif len(cells) == 2 and "approved minutes" in htext(row).lower():
         return None
 
     if len(cells) == 4:
@@ -326,12 +331,14 @@ def parse_meeting_row(row: HtmlElement) -> Meeting:
     meeting = parse_meeting_docs_cell(row, docs, meeting)
 
     if draft is not None:
-        d_links = [parse_a_element(e) for e in draft.xpath(".//a")]
+        d_links = [parse_a_element(e) for e in xpath(draft, ".//a")]
         meeting = meeting._replace(draft_minutes_links=d_links)
 
     meeting = parse_meeting_approved_cell(row, approved, meeting)
 
     meeting = parse_meeting_sunshine_cell(row, sunshine, meeting)
+
+    meeting = parse_meeting_page(meeting)
 
     return meeting
 
@@ -341,7 +348,7 @@ def parse_meeting_docs_cell(row: HtmlElement, cell: HtmlElement,
     """
 
     """
-    docs_links = cell.xpath(".//a")
+    docs_links = xpath(cell, ".//a")
     if len(docs_links) > 1:
         """
         There are four cases where there are two ``a`` elements in the cell.
@@ -353,23 +360,23 @@ def parse_meeting_docs_cell(row: HtmlElement, cell: HtmlElement,
         more information.
         """
         a_el = docs_links[1]
-        if "sunshine" in a_el.attrib["href"]:
+        if "sunshine" in hattr(a_el, "href"):
             text = ("%s%s" % (a_el.text_content(),
                               a_el.tail if a_el.tail else "")).strip()
-            url = a_el.attrib["href"]
-            title = a_el.attrib.get("title", "")
+            url = hattr(a_el, "href")
+            title = hattr(a_el, "title", "")
             s_link = Link(text=text, title=title, url=url)
             s_links = mtg.sunshine_act_links + [s_link]
             mtg = mtg._replace(sunshine_act_links=s_links)
             cell.remove(a_el)
         else:
-            assert docs_links[0].attrib["href"] == a_el.attrib["href"]
+            assert hattr(docs_links[0], "href") == hattr(a_el, "href")
             cell.remove(a_el)
-        docs_links = cell.xpath(".//a")
+        docs_links = xpath(cell, ".//a")
 
     if len(docs_links) == 1:
         a_el = docs_links[0]
-        href = a_el.attrib["href"]
+        href = hattr(a_el, "href")
         if "notice" in href:
             """
             These are rows with Sunshine Act notices in the first cell.
@@ -380,7 +387,7 @@ def parse_meeting_docs_cell(row: HtmlElement, cell: HtmlElement,
             See "Sunshine Notice links in docs cell" at the bottom of the file
             for more information on these cases.
             """
-            n_text = cell.text_content().strip()
+            n_text = htext(cell).strip()
             mtg = mtg._replace(title_text=n_text)
             datematch = re.match(r"[a-zA-Z]+ [0-9]{1,2}, [0-9]{4}",
                                  mtg.title_text)
@@ -391,16 +398,16 @@ def parse_meeting_docs_cell(row: HtmlElement, cell: HtmlElement,
                 # We don't know what's going on.
                 raise
 
-            url = a_el.attrib["href"]
-            sunshine_title = a_el.attrib.get("title", "")
+            url = hattr(a_el, "href")
+            sunshine_title = hattr(a_el, "title", "")
             s_link = Link(text=mtg.title_text, title=sunshine_title, url=url)
             s_links = mtg.sunshine_act_links + [s_link]
             mtg = mtg._replace(sunshine_act_links=s_links)
         elif "agenda" in href:
-            l_title = a_el.attrib.get("title", "")
+            l_title = hattr(a_el, "title", "")
             mtg = mtg._replace(
                 link_title_text=l_title,
-                old_meeting_url=a_el.attrib["href"],
+                old_meeting_url=hattr(a_el, "href"),
                 posted_date=extract_date(a_el),
                 title_text=cell.text_content().strip()
             )
@@ -408,7 +415,7 @@ def parse_meeting_docs_cell(row: HtmlElement, cell: HtmlElement,
             # We don't know what's going on.
             raise
     elif len(docs_links) == 0:
-        title_text = cell.text_content().strip().replace(" ,", ",")
+        title_text = htext(cell).strip().replace(" ,", ",")
         mtg = mtg._replace(title_text=title_text)
         datematch = re.match(r"[a-zA-Z]+ [0-9]{1,2}, [0-9]{4}",
                              mtg.title_text)
@@ -428,17 +435,17 @@ def parse_meeting_docs_cell(row: HtmlElement, cell: HtmlElement,
 def parse_meeting_approved_cell(row: HtmlElement, cell: HtmlElement,
                                 mtg: Meeting) -> Meeting:
 
-    approved_links = cell.xpath(".//a")
-    approved_text = cell.text_content().strip().lower()
+    approved_links = xpath(cell, ".//a")
+    approved_text = htext(cell).strip().lower()
     na_text = ("", "n/a", "na", "meeting was cancelled", "-")
     if len(approved_links) != 1 and approved_text not in na_text:
         # We're not expecting this.
         raise
 
-    if len(cell.xpath(".//a")) == 1:
+    if len(xpath(cell, ".//a")) == 1:
         # In all other cases there is no approved link.
-        approved_link = cell.xpath(".//a")[0]
-        atitle_text = cell.text_content()
+        approved_link = xpath(cell, ".//a")[0]
+        atitle_text = htext(cell)
         if cell.tail and cell.tail.strip() != "":
             st()
         datematch = re.match(r"[a-zA-Z]+ [0-9]{1,2}, [0-9]{4}", atitle_text)
@@ -450,7 +457,7 @@ def parse_meeting_approved_cell(row: HtmlElement, cell: HtmlElement,
                 # In these edge cases we can use the posted date.
                 mtg = mtg._replace(approved_minutes_date=mtg.posted_date)
             else:
-                l_text = approved_link.text_content()
+                l_text = htext(approved_link)
                 if approved_link.tail and approved_link.tail.strip() != "":
                     st()
                 mtg = mtg._replace(approved_minutes_date=s_to_date(l_text))
@@ -463,11 +470,11 @@ def parse_meeting_approved_cell(row: HtmlElement, cell: HtmlElement,
 
 def parse_meeting_sunshine_cell(row: HtmlElement, cell: HtmlElement,
                                 mtg: Meeting) -> Meeting:
-    if cell is not None and len(cell.xpath(".//a")) > 0:
-        for sunshine_link in cell.xpath(".//a"):
-            text = sunshine_link.text_content()
-            url = sunshine_link.attrib["href"]
-            title = sunshine_link.attrib.get("title", "")
+    if cell is not None and len(xpath(cell, ".//a")) > 0:
+        for sunshine_link in xpath(cell, ".//a"):
+            text = htext(sunshine_link)
+            url = hattr(sunshine_link, "href")
+            title = hattr(sunshine_link, "title", "")
             s_link = Link(text=text, title=title, url=url)
             s_links = mtg.sunshine_act_links + [s_link]
             mtg = mtg._replace(sunshine_act_links=s_links)
@@ -505,10 +512,10 @@ def extract_meeting_metadata(url: str,
         "//table[@border='0'][@width='60%']"
     ]
 
-    html = fromstring(requests.get(url).content)
+    html = fromstr(requests.get(url).content)
     tables, count = [], 0  # type: List[HtmlElement], int
     while len(tables) != 1 and count < len(exprs):
-        tables = html.xpath(exprs[count])
+        tables = xpath(html, exprs[count])
         count = count + 1
     if not len(tables):     # Work around this URL going down randomly
                             # http://www.fec.gov/agenda/2010/agendas2010.shtml
@@ -520,13 +527,13 @@ def extract_meeting_metadata(url: str,
     table, broken_links = fix_urls(tables[0], url, broken_links,
                                    urls_to_change)
 
-    all_rows = table.xpath(".//tr")
+    all_rows = xpath(table, ".//tr")
     # We don't want header rows:
     rows = [r for r in all_rows if "th" not in
             [e.tag for e in r.iterchildren()]]
     meetings = []
     for row in rows:
-        if row is not None and row.text_content().strip():
+        if row is not None and htext(row).strip():
             meetings.append(parse_meeting_row(row))
     return (meetings, broken_links)
 
@@ -571,14 +578,14 @@ def extract_archive_urls(base_url: str, archive_urls: list=[],
     """
     base_response = requests.get(base_url)
     base_content = base_response.content
-    base_html = fromstring(base_content)
+    base_html = fromstr(base_content)
 
     # Check for ``li`` elements containing ``a`` elements whose ``href``
     # properties, lower-cased, contain "tipsarchive":
-    links = base_html.xpath("//li/a")
+    links = xpath(base_html, "//li/a")
     tip_links = [link for link in links if "tipsarchive" in
-                 link.attrib["href"].lower()]
-    tip_urls = [urljoin(base_url, link.attrib["href"]) for link in tip_links]
+                 hattr(link, "href").lower()]
+    tip_urls = [urljoin(base_url, hattr(link, "href")) for link in tip_links]
 
     # Add the URLs from the first page:
     for tip_url in tip_urls:
@@ -599,14 +606,41 @@ def extract_archive_urls(base_url: str, archive_urls: list=[],
     return (archive_urls, visited)
 
 
+def parse_meeting_page(mtg: Meeting) -> Meeting:
+    if mtg.old_meeting_url in ("", None):
+        return mtg
+    html = fromstr(requests.get(mtg.old_meeting_url).content)
+    html, broken_urls = fix_urls(html, mtg.old_meeting_url, [], {})
+    div = xpath(html, "//div[@id='fec_mainContent']")
+    vidtxt = "video of entire meeting"
+    """
+    Find the links to the video, audio, and captioning.
+
+
+    """
+    if len(div) == 1:
+        # Handle modern page
+        main = div[0]
+        a_els = xpath(main, ".//a")
+        vidlink = [a for a in a_els if vidtxt in htext(a).lower()][0]
+        print("has fec_mainContent")
+        st()
+    else:
+        # Handle older page types
+        print("lacks fec_mainContent")
+        st()
+
+
+    return mtg
+
 def parse_a_element(a_el: HtmlElement) -> Link:
     """
     Take an ``a`` HTML element and turn it into a ``Link`` object.
     Note: does not capture the tail of the element.
     """
-    text = a_el.text_content()
-    url = a_el.attrib["href"]
-    title = a_el.attrib.get("title", "")
+    text = htext(a_el)
+    url = hattr(a_el, "href")
+    title = hattr(a_el, "title", "")
     return Link(text=text, title=title, url=url)
 
 
@@ -655,35 +689,13 @@ def extract_date(a_el: HtmlElement) -> Date:
         return s_to_date(datestring, original=text)
     else:
         # It has non-standard content, so we'll instead look at the URL.
-        url = a_el.attrib["href"]
+        url = hattr(a_el, "href")
         path = urlparse(url).path
         name = path.split("/")[-1]
         name_base = name.split(".")[0]
         if "agenda" in name_base:
             date = name_base[6:]
-            # TODO: are there still %m%d%Y dates showing up here? We might have
-            # taken care of them with upstream checks.
-            if "2000" in date:
-                assert date.startswith("2000")
-                if date.startswith("2000"):
-                    dt = datetime.strptime(date, "%Y%m%d")
-                    print(date, dt.strftime("%Y-%m-%d"))
-                else:
-                    print(tostring(a_el))
-                    raise
-                    """
-                    elif date.endswith("2000"):
-                        dt = datetime.strptime(date, "%m%d%Y")
-                        print(date, dt.strftime("%Y-%m-%d"))
-                        st()
-                    """
-            elif len(date) < 8:
-                # We don't know what's going on.
-                print(tostring(a_el))
-                raise
-            else:
-                dt = datetime.strptime(date, "%Y%m%d")
-
+            dt = datetime.strptime(date, "%Y%m%d")
             return Date(datetime=dt, iso8601=dt.strftime("%Y-%m-%d"),
                         original=text, source=name)
         elif "oral_hearing" in name_base:
@@ -698,17 +710,17 @@ def extract_date(a_el: HtmlElement) -> Date:
                         original=text, source=name)
         else:
             # We don't know what's going on.
-            print(tostring(a_el))
+            print(tostr(a_el))
             raise
 
 
-def innerhtml(el: Element, encoding: str="utf-8"):
+def innerhtml(el: HtmlElement, encoding: str="utf-8"):
     st()
     """
     Returns the HTML of an element as a ``str``, with the opening and closing
     tags removed.
 
-    :arg Element el: ``lxml.html.Element`` object.
+    :arg HtmlElement el: ``lxml`` ``HtmlElement`` object.
     :arg str encoding: The character encoding for the HTML.
 
     :rtype: str
@@ -716,9 +728,9 @@ def innerhtml(el: Element, encoding: str="utf-8"):
     """
     children = [_ for _ in el.iterchildren()]
     if not len(children):
-        return el.text_content()
+        return htext(el)
     text = "%s" % el.text if el.text else ""
-    return "%s%s" % (text, "".join([tostring(c).decode(encoding) for
+    return "%s%s" % (text, "".join([tostr(c).decode(encoding) for
                                     c in el.iterchildren()]))
 
 
@@ -729,26 +741,33 @@ def fix_urls(el: HtmlElement, base_url: str, broken_urls: list,
     inside it into fully-qualified absolute URLs instead of the relative paths
     that are common in the tips content.
 
-    :arg Element el: ``lxml.html.HtmlElement`` object, the content to change.
+    :arg HtmlElement el: The content to change.
     :arg str base_url: The URL for the page, which serves as the absolute
         point with which to calculate the absolute paths.
     :arg list broken_urls: The list of broken URLs to add to as we find them.
     :arg dict[str, str] urls_to_change: Known broken URLs and their
         replacements.
 
-    :rtype: tuple[Element, list]
-    :returns: The Element with its ``a`` elements altered, and the list of
+    :rtype: tuple[HtmlElement, list]
+    :returns: The HtmlElement with its ``a`` elements altered, and the list of
         broken URLs.
     """
     tested_urls = []  # type: List[str]
     for desc in el.iterdescendants():
         if desc.tag == "a" and "href" in desc.attrib:
             # Some of the links had line breaks in them:
-            url = desc.attrib["href"].strip()
+            url = hattr(desc, "href").strip()
             fixed_url, tested_urls, broken_urls = fix_url(
                 base_url, url, tested_urls, broken_urls,
                 urls_to_change)
             desc.attrib["href"] = fixed_url
+        elif desc.tag == "img" and "src" in desc.attrib:
+            # Some of the links had line breaks in them:
+            url = hattr(desc, "src").strip()
+            fixed_url, tested_urls, broken_urls = fix_url(
+                base_url, url, tested_urls, broken_urls,
+                urls_to_change)
+            desc.attrib["src"] = fixed_url
     return (el, broken_urls)
 
 
@@ -826,8 +845,9 @@ def check_url(base_url: str, url: str, tested_urls: list, broken_urls: list):
             try:
                 response = requests.head(url)
                 if response.status_code != 200:
-                    print(url)
-                    broken_urls.append((base_url, url))
+                    if url not in ("http://www.usa.gov/"):
+                        print(url, response.status_code)
+                        broken_urls.append((base_url, url))
             except requests.exceptions.ConnectionError:
                 print(url)
                 broken_urls.append((base_url, url))
@@ -884,6 +904,45 @@ def write_tips(tips: list, broken_links: list) -> None:
         fname = datetime.now().strftime("tips--bad-urls--%Y-%m-%d-%H%M%S.json")
         with open(fname, "w+") as f:
             f.write(json.dumps(broken_links))
+
+
+def xpath(el: HtmlElement, expr: str) -> List[HtmlElement]:
+    """
+    Convenience function that lets us assert the type for this for mypy.
+    """
+    return el.xpath(expr)
+
+
+def fromstr(raw: bytes) -> HtmlElement:
+    """
+    Convenience function that lets us assert the type for this for mypy.
+    """
+    return fromstring(raw)
+
+
+def tostr(el: HtmlElement) -> bytes:
+    """
+    Convenience function that lets us assert the type for this for mypy.
+    """
+    return tostring(el)
+
+
+def hattr(el: HtmlElement, attr: str, default: str=None) -> str:
+    """
+    Convenience function that lets us assert the type for this for mypy.
+    """
+    if default is not None:
+        return el.attrib.get(attr, default)
+    else:
+        return el.attrib[attr]
+
+
+def htext(el: HtmlElement) -> str:
+    """
+    Convenience function that lets us assert the type for this for mypy.
+    """
+    return el.text_content()
+
 
 if __name__ == '__main__':
     cli_main()
