@@ -11,7 +11,7 @@
     <a class="u-no-border" href="{{ block.value.url }}">
      {% image block.value.image width-400 %}
     </a>
-    <a href="{{ block.value.url }}">{{ block.value.text }} (PDF)</a>
+    <a href="{{ block.value.url }}">{{ block.value.text }}</a>
 
     {% elif block.block_type == 'link' %}
       {% if block.value.link_type == 'search' %}
