@@ -39,6 +39,7 @@ INSTALLED_APPS = (
     'taggit',
     'compressor',
     'modelcluster',
+    'storages',
 
     'wagtail.wagtailcore',
     'wagtail.wagtailadmin',
@@ -220,4 +221,4 @@ if FEC_CMS_ENVIRONMENT != 'LOCAL':
     MEDIA_URL = 'https://%s.s3-us-gov-west-1.amazonaws.com/' % AWS_STORAGE_BUCKET_NAME
     DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
     AWS_LOCATION = 'cms-content'
-
+    AWS_S3_REGION_NAME = 'us-gov-west-1'
