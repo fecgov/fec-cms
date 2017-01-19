@@ -485,9 +485,38 @@ class TipsForTreasurersPage(ContentPage):
     ]
 
     @property
+    def get_update_type(self):
+        return constants.update_types['tips-for-treasurers']
+
+    @property
     def content_section(self):
         return ''
 
+
+class ServicesLandingPage(ContentPage, UniqueModel):
+    subpage_types = ['CollectionPage']
+    template = 'home/candidate-and-committee-services/services_landing_page.html'
+
+    hero = stream_factory(null=True, blank=True)
+
+    intro = StreamField([
+        ('paragraph', blocks.RichTextBlock())
+    ], null=True)
+
+    sections = StreamField([
+        ('sections', ResourceBlock())
+    ], null=True)
+
+    content_panels = Page.content_panels + [
+        StreamFieldPanel('hero'),
+        StreamFieldPanel('intro'),
+        StreamFieldPanel('sections'),
+    ]
+
     @property
-    def get_update_type(self):
-        return constants.update_types['tips-for-treasurers']
+    def content_section(self):
+        return 'candidate-and-committee-services'
+
+    @property
+    def hero_class(self):
+        return 'services'
