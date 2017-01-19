@@ -76,9 +76,10 @@ def updates(request):
         records = RecordPage.objects.live()
 
       if year:
-        records = records.filter(date__year=year)
         press_releases = press_releases.filter(date__year=year)
         digests = digests.filter(date__year=year)
+        if settings.FEATURES['record']:
+          records = records.filter(date__year=year)
 
     # Chain all the QuerySets together
     # via http://stackoverflow.com/a/434755/1864981
@@ -173,8 +174,8 @@ def commissioners(request):
         'url': '/about/',
       },
       {
-        'title': 'Leadership and Organization',
-        'url': '/about/leadership-and-organization',
+        'title': 'Leadership and structure',
+        'url': '/about/leadership-and-structure',
       },
     ]
   }
