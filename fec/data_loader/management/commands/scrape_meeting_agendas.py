@@ -81,9 +81,9 @@ Meeting = NamedTuple(
         ("agenda_documents_linked", Links),  # list (Links)
         ("approved_minutes_date", Date),  # Date
         ("approved_minutes_link", Link),  # Link
-        ("audio_url", str),  # URL
+        ("audio_url", Link),  # URL
         ("body", str),  # HTML,
-        ("closed_captioning_url", str),  # URL
+        ("closed_captioning_url", Link),  # URL
         ("draft_minutes_links", Links),  # list (Links)
         ("link_title_text", str),  # Plain text
         ("meeting_type", str),  # "open" or "executive"
@@ -92,7 +92,7 @@ Meeting = NamedTuple(
         ("old_meeting_url", str),  # URL
         ("sunshine_act_links", Links),  # list (Links)
         ("title_text", str),  # str (TODO: do we need the HTML?)
-        ("video_url", str)  # URL
+        ("video_url", Link)  # URL
     ])
 """
 Possible sources of truth for the “title” of the meeting:
@@ -259,8 +259,6 @@ def cli_main(args: list=None) -> None:
 
     for meeting in meetings:
         meeting = parse_meeting_page(meeting)
-
-
 
     st()
     print(
@@ -609,10 +607,12 @@ def extract_archive_urls(base_url: str, archive_urls: list=[],
 def parse_meeting_page(mtg: Meeting) -> Meeting:
     if mtg.old_meeting_url in ("", None):
         return mtg
+    print(mtg.old_meeting_url)
     html = fromstr(requests.get(mtg.old_meeting_url).content)
-    html, broken_urls = fix_urls(html, mtg.old_meeting_url, [], {})
     div = xpath(html, "//div[@id='fec_mainContent']")
     vidtxt = "video of entire meeting"
+    audiotxt = "audio file of entire meeting"
+    captxt = "archived captions of entire meeting"
     """
     Find the links to the video, audio, and captioning.
 
@@ -620,18 +620,47 @@ def parse_meeting_page(mtg: Meeting) -> Meeting:
     """
     if len(div) == 1:
         # Handle modern page
-        main = div[0]
+        main, _ = fix_urls(div[0], mtg.old_meeting_url, [], {})
         a_els = xpath(main, ".//a")
-        vidlink = [a for a in a_els if vidtxt in htext(a).lower()][0]
-        print("has fec_mainContent")
-        st()
+        vid_els = [a for a in a_els if vidtxt in htext(a).lower()]
+        if len(vid_els) == 1:
+            vid_link = parse_a_element(vid_els[0])
+        elif len(vid_els) == 0:
+            vid_link = None
+        else:
+            vid_link = None
+            st()
+
+        mtg = mtg._replace(video_url=vid_link)
+
+        audio_els = [a for a in a_els if audiotxt in htext(a).lower()]
+        if len(audio_els) == 1:
+            audio_link = parse_a_element(audio_els[0])
+        elif len(audio_els) == 0:
+            audio_link = None
+        else:
+            audio_link = None
+            st()
+
+        mtg = mtg._replace(audio_url=audio_link)
+
+        cap_els = [a for a in a_els if captxt in htext(a).lower()]
+        if len(cap_els) == 1:
+            cap_link = parse_a_element(cap_els[0])
+        elif len(cap_els) == 0:
+            cap_link = None
+        else:
+            cap_link = None
+            st()
+
+        mtg = mtg._replace(closed_captioning_url=cap_link)
     else:
         # Handle older page types
         print("lacks fec_mainContent")
         st()
 
-
     return mtg
+
 
 def parse_a_element(a_el: HtmlElement) -> Link:
     """
@@ -863,9 +892,9 @@ def make_meeting() -> Meeting:
         agenda_documents_linked=[],
         approved_minutes_date=None,
         approved_minutes_link=None,
-        audio_url="",
+        audio_url=None,
         body="",
-        closed_captioning_url="",
+        closed_captioning_url=None,
         draft_minutes_links=[],
         link_title_text="",
         meeting_type="",
@@ -874,7 +903,7 @@ def make_meeting() -> Meeting:
         old_meeting_url="",
         sunshine_act_links=[],
         title_text="",
-        video_url=""
+        video_url=None
     )
 
 
