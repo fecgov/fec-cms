@@ -2,7 +2,9 @@
 {% load wagtailimages_tags %}
 
 <div class="row">
-  <p class="label">{{ self.label }}</p>
+  {% if self.label %}
+    <p class="label">{{ self.label }}</p>
+  {% endif %}
   <div class="grid grid--2-wide">
       {% for item in self.contact_items %}
       <div class="grid__item">

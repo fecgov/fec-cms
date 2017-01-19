@@ -19,63 +19,30 @@
       <div class="js-sticky-side" data-sticky-container="options">
         <nav class="sidebar sidebar--neutral sidebar--left side-nav js-toc">
           <ul class="sidebar__content">
-              <li class="side-nav__item"><a class="side-nav__link" href="#mission-and-history">Mission and history</a></li>
-              <li class="side-nav__item"><a class="side-nav__link" href="#leadership">Leadership and structure</a></li>
-              <li class="side-nav__item"><a class="side-nav__link" href="#reports">Reports about the FEC</a></li>
-              <li class="side-nav__item"><a class="side-nav__link" href="#careers">Careers</a></li>
-              <li class="side-nav__item"><a class="side-nav__link" href="#doing-business">Doing business with the FEC</a></li>
-              {% for option in self.option_blocks %}
-                <li class="side-nav__item"><a class="side-nav__link" href="#{{option.value.title | slugify }}">{{ option.value.title }}</a></li>
+              {% for section in self.sections %}
+                <li class="side-nav__item"><a class="side-nav__link" href="#{{section.value.title | slugify }}">{{ section.value.title }}</a></li>
               {% endfor %}
           </ul>
         </nav>
       </div>
     </div>
     <section class="main__content--right">
-      <div id="mission-and-history" class="option">
-        <h2>Mission and history</h2>
-        <div class="content__section">
-          {{ self.mission_intro }}
-          <button class="is-disabled button--standard button--go" href="#">Learn More</button>
-        </div>
-      </div>
 
-      <div id="leadership" class="option">
-        <h2>Leadership and structure</h2>
-        <div class="content__section">
-          {{ self.leadership_intro }}
-          <button class="is-disabled button--standard button--go" href="#">Learn More</button>
-        </div>
-      </div>
+      {% for section in self.sections %}
+      <div id="{{ section.value.title | slugify }}" class="option">
+        {% if section.value.related_page %}
+          <h2><a href="{{ section.value.related_page.url }}">{{ section.value.title }}</a></h2>
+        {% else %}
+          <h2>{{ section.value.title }}</h2>
+        {% endif %}
 
-      <div id="organization-reports" class="option">
-        <h2>Reports about the FEC</h2>
-        <div class="content__section">
-          {{ self.reports_intro }}
-          <button class="is-disabled button--standard button--go" href="#">Learn More</button>
-        </div>
-      </div>
+        {{ section.value.intro }}
 
-      <div id="careers" class="option">
-        <h2>Careers</h2>
-        <div class="content__section">
-          {{ self.careers_intro }}
-          <button class="is-disabled button--standard button--go">Learn More</button>
-        </div>
-      </div>
-
-      <div id="doing-business" class="option">
-        <h2>Doing business with the FEC</h2>
-        <div class="content__section">
-          {{ self.business_intro }}
-        </div>
-      </div>
-
-      {% for option in self.option_blocks %}
-      <div id="{{ option.value.title | slugify }}" class="option">
-        <h2><a href="{{ option.value.related_page.url }}">{{ option.value.title }}</a></h2>
-        {{ option.value.intro }}
-        <a href="{{ option.value.related_page.url }}" class="button button--cta button--go">{{ option.value.button_text }}</a>
+        {% if section.value.related_page %}
+          <a href="{{ section.value.related_page.url }}" class="button button--cta button--go">{{ section.value.button_text }}</a>
+        {% else %}
+          <span class="button button--cta button--go is-disabled">Coming soon</a>
+        {% endif %}
       </div>
       {% endfor %}
 

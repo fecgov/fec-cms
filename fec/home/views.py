@@ -3,6 +3,7 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.conf import settings
 from itertools import chain
 from operator import attrgetter
+from home.models import CommissionerPage
 from home.models import DigestPage
 from home.models import RecordPage
 from home.models import PressReleasePage
@@ -75,9 +76,10 @@ def updates(request):
         records = RecordPage.objects.live()
 
       if year:
-        records = records.filter(date__year=year)
         press_releases = press_releases.filter(date__year=year)
         digests = digests.filter(date__year=year)
+        if settings.FEATURES['record']:
+          records = records.filter(date__year=year)
 
     # Chain all the QuerySets together
     # via http://stackoverflow.com/a/434755/1864981
@@ -150,3 +152,34 @@ def ao_process(request):
     'self': page_context
   })
 
+def commissioners(request):
+  chair_commissioner = CommissionerPage.objects.filter(commissioner_title__contains='Chair') \
+    .exclude(commissioner_title__contains='Vice').first()
+  vice_commissioner = CommissionerPage.objects.filter(commissioner_title__startswith='Vice').first()
+
+  current_commissioners = CommissionerPage.objects.filter(commissioner_title__exact='', \
+    term_expiration__isnull=True).order_by('last_name')
+  past_commissioners = CommissionerPage.objects.filter(commissioner_title__exact='', \
+    term_expiration__isnull=False).order_by('-term_expiration')
+
+  page_context = {
+    'title': 'All Commissioners',
+    'chair_commissioner': chair_commissioner,
+    'vice_commissioner': vice_commissioner,
+    'current_commissioners': current_commissioners,
+    'past_commissioners': past_commissioners,
+    'ancestors': [
+      {
+        'title': 'About the FEC',
+        'url': '/about/',
+      },
+      {
+        'title': 'Leadership and structure',
+        'url': '/about/leadership-and-structure',
+      },
+    ]
+  }
+
+  return render(request, 'home/commissioners.html', {
+    'self': page_context,
+  })

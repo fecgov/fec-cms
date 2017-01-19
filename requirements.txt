@@ -4,7 +4,7 @@ dj-database-url==0.4.1
 django-libsass==0.7
 gunicorn==19.3.0
 lxml==3.7.0
-newrelic==2.56.0.42
+newrelic==2.78.0.57
 psycopg2==2.6.1
 raven==5.8.1
 requests==2.12.4
@@ -13,7 +13,7 @@ whitenoise==2.0.3
 wagtail>=1.6,<1.7
 
 # Development
-invoke==0.10.1
+invoke==0.13.0
 GitPython==1.0.1
 
 # Data import

@@ -87,6 +87,15 @@ Use `npm` to install JavaScript dependencies:
 ```bash
 npm install
 ```
+### Give default user privileges to create database
+If you would like your default user to create the database, alter their user role:
+```bash
+sudo su - postgres
+psql
+alter user [default_username] createdb;
+\q
+exit
+```
 
 ### Create local databases
 Before you can run this project locally, you'll need a development database:
@@ -109,8 +118,8 @@ project setup by running these commands:
 ```bash
 npm run build
 cd fec/
-./manage.py createsuperuser
 ./manage.py migrate
+./manage.py createsuperuser
 ```
 
 ## Running the application
@@ -187,7 +196,11 @@ FEC_APP_URL = 'http://localhost:3000'
 ```
 
 ## Deploy
-*Likely only useful for 18F team members*
+*Likely only useful for 18F FEC team members*
+
+We use Travis for automated deploys after tests pass. If you want to deploy something it is much better to push an empty commit with a tag than doing a manual deploy.
+
+If there is a problem with Travis and something needs to be deployed, you can do so with the following commands. Though, you will need to pull the environment variables from the space you are deploying to and remake your static assets. That will ensure things like the links are correct. You will also want to clear your dist/ directory. That way, you will not exceed the alloted space. 
 
 Before deploying, install the
 [Cloud Foundry CLI](https://docs.cloudfoundry.org/devguide/cf-cli/install-go-cli.html)

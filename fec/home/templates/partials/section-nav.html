@@ -1,0 +1,16 @@
+{% load wagtailcore_tags %}
+
+<div class="sidebar-container sidebar-container--left">
+  <div class="js-sticky-side" data-sticky-container="{{ container }}">
+    <nav class="sidebar sidebar--neutral sidebar--left side-nav js-toc">
+      <ul class="sidebar__content">
+          {% for section in sections %}
+            <li class="side-nav__item"><a class="side-nav__link" href="#{{section.value.title | slugify }}">{{ section.value.title }}</a></li>
+          {% endfor %}
+          {% if citations %}
+            <li class="side-nav__item"><a class="side-nav__link" href="#legal-citations">Legal citations</a></li>
+          {% endif %}
+      </ul>
+    </nav>
+  </div>
+</div>
