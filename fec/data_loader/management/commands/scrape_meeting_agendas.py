@@ -607,58 +607,93 @@ def extract_archive_urls(base_url: str, archive_urls: list=[],
 def parse_meeting_page(mtg: Meeting) -> Meeting:
     if mtg.old_meeting_url in ("", None):
         return mtg
-    print(mtg.old_meeting_url)
+    print("Meeting:", mtg.old_meeting_url)
     html = fromstr(requests.get(mtg.old_meeting_url).content)
     div = xpath(html, "//div[@id='fec_mainContent']")
-    vidtxt = "video of entire meeting"
-    audiotxt = "audio file of entire meeting"
-    captxt = "archived captions of entire meeting"
     """
     Find the links to the video, audio, and captioning.
+    We'll need to distinguish between the easily-identified links to these and
+    the links that are denoted by text that precedes them.
 
+    Find links to the agenda documents.
+    Can we assume that all links to PDFs are “agenda documents”? I think so.
+    This means watching out for other types of link that aren't covered here.
 
     """
     if len(div) == 1:
         # Handle modern page
         main, _ = fix_urls(div[0], mtg.old_meeting_url, [], {})
-        a_els = xpath(main, ".//a")
-        vid_els = [a for a in a_els if vidtxt in htext(a).lower()]
-        if len(vid_els) == 1:
-            vid_link = parse_a_element(vid_els[0])
-        elif len(vid_els) == 0:
-            vid_link = None
-        else:
-            vid_link = None
-            st()
-
-        mtg = mtg._replace(video_url=vid_link)
-
-        audio_els = [a for a in a_els if audiotxt in htext(a).lower()]
-        if len(audio_els) == 1:
-            audio_link = parse_a_element(audio_els[0])
-        elif len(audio_els) == 0:
-            audio_link = None
-        else:
-            audio_link = None
-            st()
-
-        mtg = mtg._replace(audio_url=audio_link)
-
-        cap_els = [a for a in a_els if captxt in htext(a).lower()]
-        if len(cap_els) == 1:
-            cap_link = parse_a_element(cap_els[0])
-        elif len(cap_els) == 0:
-            cap_link = None
-        else:
-            cap_link = None
-            st()
-
-        mtg = mtg._replace(closed_captioning_url=cap_link)
     else:
         # Handle older page types
         print("lacks fec_mainContent")
         st()
 
+    a_els = xpath(main, ".//a")
+    links = [parse_a_element(a_el) for a_el in a_els]
+
+    asset_pairs = (
+        ("audio_url", "audio file of entire meeting"),
+        ("closed_captioning_url", "archived captions of entire meeting"),
+        ("video_url", "video of entire meeting")
+    )
+
+    for key, text in asset_pairs:
+        candidates = [l for l in links if text in l.text.lower()]
+        if len(candidates) == 1:
+            # Is there really no mypy-compatible way to pass these keys in as
+            # variables instead of using the multiple if statements?
+            if key == "audio_url":
+                mtg = mtg._replace(audio_url=candidates[0])
+            if key == "closed_captioning_url":
+                mtg = mtg._replace(closed_captioning_url=candidates[0])
+            if key == "video_url":
+                mtg = mtg._replace(video_url=candidates[0])
+
+    '''
+    vidtxt = "video of entire meeting"
+    vid_els = [a for a in a_els if vidtxt in htext(a).lower()]
+    if len(vid_els) == 1:
+        vid_link = parse_a_element(vid_els[0])
+    elif len(vid_els) == 0:
+        vid_link = None
+    else:
+        vid_link = None
+        st()
+
+    """
+    One problem here is distinguishing between pages that just don't have
+    audio (like really recent meetings) and those whose audio we're not
+    finding.
+    """
+
+    mtg = mtg._replace(video_url=vid_link)
+
+    audiotxt = "audio file of entire meeting"
+    audio_els = [a for a in a_els if audiotxt in htext(a).lower()]
+    if len(audio_els) == 1:
+        audio_link = parse_a_element(audio_els[0])
+    elif len(audio_els) == 0:
+        audio_link = None
+    else:
+        audio_link = None
+        st()
+
+    mtg = mtg._replace(audio_url=audio_link)
+
+    captxt = "archived captions of entire meeting"
+    cap_els = [a for a in a_els if captxt in htext(a).lower()]
+    if len(cap_els) == 1:
+        cap_link = parse_a_element(cap_els[0])
+    elif len(cap_els) == 0:
+        cap_link = None
+    else:
+        cap_link = None
+        st()
+
+    mtg = mtg._replace(closed_captioning_url=cap_link)
+    '''
+
+    st()
     return mtg
 
 
@@ -872,6 +907,7 @@ def check_url(base_url: str, url: str, tested_urls: list, broken_urls: list):
         parsed_url = urlparse(url)
         if parsed_url.scheme in ("http", "https"):
             try:
+                print("checking", base_url, url)
                 response = requests.head(url)
                 if response.status_code != 200:
                     if url not in ("http://www.usa.gov/"):
