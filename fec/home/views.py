@@ -1,3 +1,5 @@
+import requests
+
 from django.shortcuts import render
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.conf import settings
@@ -7,6 +9,7 @@ from home.models import CommissionerPage
 from home.models import DigestPage
 from home.models import RecordPage
 from home.models import PressReleasePage
+from fec.forms import ContactRAD
 
 def replace_dash(string):
   return string.replace('-', ' ')
@@ -182,4 +185,30 @@ def commissioners(request):
 
   return render(request, 'home/commissioners.html', {
     'self': page_context,
+  })
+
+def contact_rad(request):
+  page_context = {
+    'title': 'Contact RAD',
+    'ancestors': [],
+  }
+  # If it's a POST, post to the ServiceNow API
+  if request.method == 'POST':
+    form = ContactRAD(request.POST)
+    if form.is_valid():
+      url = settings.FEC_SERVICE_NOW_API + 'u_imp_rad_response'
+      username = settings.FEC_SERVICE_NOW_USERNAME
+      password = settings.FEC_SERVICE_NOW_PASSWORD
+      post = requests.post(url, data=form.cleaned_data, auth=(username, password))
+      print(post.status_code)
+      return render(request, 'home/contact-form.html', {
+        'self': page_context,
+        'success': True
+      })
+  else:
+    form = ContactRAD()
+
+  return render(request, 'home/contact-form.html', {
+    'self': page_context,
+    'form': form
   })
