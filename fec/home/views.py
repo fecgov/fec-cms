@@ -199,11 +199,16 @@ def contact_rad(request):
       url = settings.FEC_SERVICE_NOW_API + 'u_imp_rad_response'
       username = settings.FEC_SERVICE_NOW_USERNAME
       password = settings.FEC_SERVICE_NOW_PASSWORD
-      post = requests.post(url, data=form.cleaned_data, auth=(username, password))
+
+      # Remove the committee name from the data
+      data = form.cleaned_data.pop('committee_name', None)
+
+      post = requests.post(url, data=data, auth=(username, password))
       print(post.status_code)
       return render(request, 'home/contact-form.html', {
         'self': page_context,
         'success': True
+        'success': True,
       })
   else:
     form = ContactRAD()

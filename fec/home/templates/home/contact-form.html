@@ -18,19 +18,41 @@
       </div>
 
       {% if form %}
-      <form class="content__section--narrow" action="" method="post">{% csrf_token %}
+      <form class="content__section--narrow slab slab--neutral slab--inline js-contact-form contact-form" action="" method="post">
+        {% csrf_token %}
+        <div class="container">
+        <h2>Contact RAD</h2>
+        <p class="t-sans">All fields are required unless otherwise noted.</p>
         {% for field in form %}
-          <label class="label" for="{{ field.id_for_label }}">{{ field.label }}</label>
-          {{ field }}
+          {% if field.is_hidden %}
+            {{ field }}
+          {% else %}
+          <div class="content__section">
+            {% if field.id_for_label == 'id_u_committee_member_certification' %}
+              <p>"By submitting this inquiry, I certify that I am an authorized representative of the indicated committee or filing entity."</p>
+              <p>Please be advised that knowingly and willfully making any materially false, fictitious, or fraudulent statement or representation to a federal government agency, including the Federal Election Commission, is punishable under the provisions of 18 U.S.C. § 1001. The Commission may report apparent violations to the appropriate law enforcement authorities. 52 U.S.C. § 30107(a)(9).</p>
+              {{ field }}
+              <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+            {% else %}
+              <label class="label" for="{{ field.id_for_label }}">{{ field.label }}</label>
+              {{ field }}
+            {% endif %}
+          </div>
+          {% endif %}
         {% endfor %}
-
-        <p class="t-note">Please note, submission of a question through this portal does not constitute a response to a Request for Additional Information (RFAI), a Notice of Failure to File, or any other written communication from the FEC and therefore, will not be accepted.  To respond to a written communication from the FEC, please follow the instructions provided in the communication.  If your inquiry is better suited for resolution over the phone, please contact us at (800) 424-9530 for assistance (press 5 for the Reports Analysis Division).</p>
-        <button class="js-submit button button--cta">Submit</button>
+        <div class="content__section">
+          <button class="js-submit button button--cta">Submit</button>
+        </div>
+        </div>
       </form>
+      <p>Please note, submission of a question through this portal does not constitute a response to a Request for Additional Information (RFAI), a Notice of Failure to File, or any other written communication from the FEC and therefore, will not be accepted.  To respond to a written communication from the FEC, please follow the instructions provided in the communication.  If your inquiry is better suited for resolution over the phone, please contact us at (800) 424-9530 for assistance (press 5 for the Reports Analysis Division).</p>
       {% elif success %}
       <div class="message message--succes">
         <h2 class="message__title">Success</h2>
         <p>Thanks for submitting your question to RAD.</p>
+        <pre>
+          {{ data }}
+        </pre>
       </div>
       {% endif %}
     </div>
