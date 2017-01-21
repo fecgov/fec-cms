@@ -210,7 +210,6 @@ def contact_rad(request):
       return render(request, 'home/contact-form.html', {
         'self': page_context,
         'success': True
-        'success': True,
       })
   else:
     form = ContactRAD()
