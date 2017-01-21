@@ -196,15 +196,17 @@ def contact_rad(request):
   if request.method == 'POST':
     form = ContactRAD(request.POST)
     if form.is_valid():
-      url = settings.FEC_SERVICE_NOW_API + 'u_imp_rad_response'
-      username = settings.FEC_SERVICE_NOW_USERNAME
-      password = settings.FEC_SERVICE_NOW_PASSWORD
-
       # Remove the committee name from the data
       data = form.cleaned_data.pop('committee_name', None)
 
+      # Post to ServiceNow
+      url = settings.FEC_SERVICE_NOW_API + 'u_imp_rad_response'
+      username = settings.FEC_SERVICE_NOW_USERNAME
+      password = settings.FEC_SERVICE_NOW_PASSWORD
       post = requests.post(url, data=data, auth=(username, password))
       print(post.status_code)
+
+      # Render the page with success==True
       return render(request, 'home/contact-form.html', {
         'self': page_context,
         'success': True
