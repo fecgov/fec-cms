@@ -23,6 +23,16 @@
         <div class="container">
         <h2>Contact RAD</h2>
         <p class="t-sans">All fields are required unless otherwise noted.</p>
+          {% if form.errors %}
+          <div class="message message--error">
+            <h2 class="message__title">Error</h2>
+            <p>Something went wrong. Please try again.</p>
+            <pre>
+              {{ data }}
+            </pre>
+          </div>
+          {% endif %}
+
         {% for field in form %}
           {% if field.is_hidden %}
             {{ field }}
