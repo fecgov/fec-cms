@@ -11,22 +11,11 @@
   <div class="container" id="sections">
     <h1 class="heading--main">{{ self.title }}</h1>
     <div class="content__section">
-      <div class="main__content">
         {% block intro %}
         {% endblock %}
-      </div>
-    </div>
-    <div class="sidebar-container sidebar-container--left">
-      <div class="js-sticky-side" data-sticky-container="sections">
-        <nav class="sidebar sidebar--neutral sidebar--left side-nav js-toc">
-          <ul class="sidebar__content">
-              {% block toc %}
-              {% endblock %}
-          </ul>
-        </nav>
-      </div>
     </div>
     <div class="row" id="section-container">
+      {% include 'partials/section-nav.html' with sections=self.sections citations=self.citations container='section-container' %}
       <div class="main__content--right">
         {% block sections %}
         {% endblock %}
@@ -56,11 +45,6 @@
 </div>
 {% endif %}
 
-<div class="slab slab--neutral footer-disclaimer">
-  <div class="container">
-    <p class="usa-width-one-half">This site is in beta, which means we're testing content that better adheres to legal plain language requirements. This content is not finalized, is not legal advice and is subject to change.</p>
-    <p class="usa-width-one-half">Everything on this site should be read in conjunction with FEC.gov. Please let us know what you think of our new content; use the feedback tool on this page.</p>
-  </div>
-</div>
+{% include 'partials/disclaimer.html' %}
 
 {% endblock %}

@@ -1,79 +1,56 @@
-{% extends "base.html" %}
+{% extends "long_page.html" %}
 {% load wagtailcore_tags %}
 {% load staticfiles %}
 {% block body_class %}template-{{ self.get_verbose_name | slugify }}{% endblock %}
 
-{% block content %}
+{% block breadcrumbs %}
+  {% include 'partials/breadcrumbs.html' with page=self links=self.get_ancestors style='secondary' %}
+{% endblock %}
 
-{% include 'partials/breadcrumbs.html' with page=self links=self.get_ancestors style='secondary' %}
-<article class="main">
-  <div class="container">
-    <h1 class="main__title">{{ self.title }}</h1>
-    <div class="content__section">
-      <div class="main__content">
-        {{ self.body }}
-      </div>
-      {% if self.sidebar_title %}
-      <div class="sidebar-container">
-        <aside class="sidebar sidebar--secondary">
-          <h4 class="sidebar__title">{{ self.sidebar_title }}</h4>
-          <ul class="sidebar__content">
-            {% for related_pages in self.related_pages %}
-              {% for related_page in related_pages.value %}
-              <li class="u-padding--bottom"><a href="{{ related_page.url }}">{{ related_page.title }}</a></li>
-              {% endfor %}
-            {% endfor %}
-          </ul>
-          {% if self.show_search %}
-          <h4 class="sidebar__title">Already registered?</h4>
-          <form class="sidebar__content" action="{{ settings.FEC_APP_URL }}" method="GET">
-            <label class="label" for="committee-search">Find your committee</label>
-            <div class="combo--search--mini">
-              <input id="committee-search" name="search" class="combo__input" type="text">
-              <input type="hidden" name="search_type" value="committees" placeholder="Search committees">
-              <button class="combo__button button--search button--standard" type="submit"><span class="u-visually-hidden">Search</span></button>
-            </div>
-          </form>
-          {% endif %}
-        </aside>
-      </div>
-      {% endif %}
-    </div>
-    <div class="row" id="section-container">
-      <div class="sidebar-container sidebar-container--left">
-        <nav class="sidebar sidebar--neutral side-nav js-sticky-side js-toc" data-sticky-container="section-container">
-          <ul class="sidebar__content">
-            {% for block in self.sections %}
-            <li class="side-nav__item"><a class="side-nav__link" href="#{{block.value.title | slugify}}">{{block.value.title}}</a></li>
-            {% endfor %}
-          </ul>
-        </nav>
-      </div>
-      <div class="main__content--right">
-        {% for block in self.sections %}
-          <section id="{{ block.value.title | slugify }}"
-                  class="option">
-            <div class="option__content">
-              <h2>{{ block.value.title }}</h2>
-              {{ block.value.intro }}
-              <ul class="{% if block.value.style == 'check' %}list--checks list--checks--secondary{% else %}list--bulleted--alt{% endif %} t-sans">
-              {% for item in block.value.items %}
-                 <li>{{ item }}</li>
-              {% endfor %}
-              </ul>
-            </div>
-          </section>
+{% block intro %}
+  <div class="main__content">
+    {{ self.intro }}
+  </div>
+  {% if self.sidebar_title %}
+  <div class="sidebar-container">
+    <aside class="sidebar sidebar--secondary">
+      <h4 class="sidebar__title">{{ self.sidebar_title }}</h4>
+      <ul class="sidebar__content">
+        {% for related_pages in self.related_pages %}
+          {% for related_page in related_pages.value %}
+          <li class="u-padding--bottom"><a href="{{ related_page.url }}">{{ related_page.title }}</a></li>
+          {% endfor %}
         {% endfor %}
+      </ul>
+      {% if self.show_search %}
+      <h4 class="sidebar__title">Already registered?</h4>
+      <form class="sidebar__content" action="{{ settings.FEC_APP_URL }}" method="GET">
+        <label class="label" for="committee-search">Find your committee</label>
+        <div class="combo--search--mini">
+          <input id="committee-search" name="search" class="combo__input" type="text">
+          <input type="hidden" name="search_type" value="committees" placeholder="Search committees">
+          <button class="combo__button button--search button--standard" type="submit"><span class="u-visually-hidden">Search</span></button>
+        </div>
+      </form>
+      {% endif %}
+    </aside>
+  </div>
+  {% endif %}
+{% endblock %}
+
+{% block sections %}
+  {% for block in self.sections %}
+    <section id="{{ block.value.title | slugify }}"
+            class="option">
+      <div class="option__content">
+        <h2>{{ block.value.title }}</h2>
+        {{ block.value.intro }}
+        <ul class="{% if block.value.style == 'check' %}list--checks list--checks--secondary{% else %}list--bulleted--alt{% endif %} t-sans">
+        {% for item in block.value.items %}
+           <li>{{ item }}</li>
+        {% endfor %}
+        </ul>
       </div>
-    </div>
-  </div>
-</article>
-
-<div class="slab slab--neutral footer-disclaimer">
-  <div class="container">
-    <p class="usa-width-one-half">This site is in beta, which means we're testing content that better adheres to legal plain language requirements. This content is not finalized, is not legal advice and is subject to change.</p>
-    <p class="usa-width-one-half">Everything on this site should be read in conjunction with FEC.gov. Please let us know what you think of our new content; use the feedback tool on this page.</p>
-  </div>
-</div>
-
+    </section>
+  {% endfor %}
 {% endblock %}
