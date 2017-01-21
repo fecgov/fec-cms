@@ -17,7 +17,7 @@ class ContactRAD(forms.Form):
     if 'value' in cat:
       categories.append((cat['value'], cat['label']))
 
-  committee_name = forms.CharField(label='Committee ID', max_length=20, required=True,
+  committee_name = forms.CharField(label='Committee', max_length=20, required=True,
                                 widget=forms.TextInput(attrs={'class': 'js-contact-typeahead'}))
   u_committee = forms.CharField(widget=forms.HiddenInput())
   u_contact_first_name = forms.CharField(label='First name', max_length=100, required=True)
