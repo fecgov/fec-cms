@@ -87,7 +87,7 @@ Meeting = NamedTuple(
         ("draft_minutes_links", Links),  # list (Links)
         ("link_title_text", str),  # Plain text
         ("meeting_type", str),  # "open" or "executive"
-        ("pdf_disclaimer", str),  # HTML ?? Not sure about this one.
+        ("pdf_disclaimer", str),  # HTML (outer HTML)
         ("posted_date", Date),  # Date
         ("old_meeting_url", str),  # URL
         ("sunshine_act_links", Links),  # list (Links)
@@ -118,10 +118,10 @@ script replaces the broken ones with the working equivalents.
 urls_to_change = {
 
     "http://www.fec.gov/agenda/2014/approved_14-2-a.pdf":
-    None,
+    "http://www.fec.gov/agenda/2014/documents/approved_14-2-a.pdf",
 
     "http://www.fec.gov/agenda/2014/approved_14-1-a.pdf":
-    None,
+    "http://www.fec.gov/agenda/2014/documents/approved_14-1-a.pdf",
 
     "http://www.fec.gov/agenda/2010/2011/mtgdoc1101.pdf":
     "http://www.fec.gov/agenda/2011/mtgdoc1101.pdf",
@@ -608,7 +608,9 @@ def parse_meeting_page(mtg: Meeting) -> Meeting:
     if mtg.old_meeting_url in ("", None):
         return mtg
     print("Meeting:", mtg.old_meeting_url)
-    html = fromstr(requests.get(mtg.old_meeting_url).content)
+    response = requests.get(mtg.old_meeting_url)
+    enc = response.encoding
+    html = fromstr(response.content)
     div = xpath(html, "//div[@id='fec_mainContent']")
     """
     Find the links to the video, audio, and captioning.
@@ -638,62 +640,51 @@ def parse_meeting_page(mtg: Meeting) -> Meeting:
     )
 
     for key, text in asset_pairs:
-        candidates = [l for l in links if text in l.text.lower()]
+        candidates = [l for l in links if l is not
+                      None and text in l.text.lower()]
         if len(candidates) == 1:
-            # Is there really no mypy-compatible way to pass these keys in as
-            # variables instead of using the multiple if statements?
             if key == "audio_url":
                 mtg = mtg._replace(audio_url=candidates[0])
             if key == "closed_captioning_url":
                 mtg = mtg._replace(closed_captioning_url=candidates[0])
             if key == "video_url":
                 mtg = mtg._replace(video_url=candidates[0])
+        elif len(candidates) == 0:
+            # Not sure what to do here
+            # Try to guess it:
+            if key == "audio_url":
+                st()
+            elif key == "closed_captioning_url":
+                testurl = "/".join([
+                    "http://www.fec.gov/agenda",
+                    str(mtg.posted_date.datetime.year),
+                    "documents/transcripts",
+                    mtg.posted_date.datetime.strftime(
+                        "Open_Meeting_Captions_%Y_%m_%d.txt")
+                ])
+                tested, broken = check_url(mtg.old_meeting_url,
+                                           testurl, [], [])
+                if testurl not in broken:
+                    caption_link = Link(text="", title="", url=testurl)
+                    mtg = mtg._replace(closed_captioning_url=caption_link)
+        elif len(candidates) > 1:
+            st()
 
-    '''
-    vidtxt = "video of entire meeting"
-    vid_els = [a for a in a_els if vidtxt in htext(a).lower()]
-    if len(vid_els) == 1:
-        vid_link = parse_a_element(vid_els[0])
-    elif len(vid_els) == 0:
-        vid_link = None
-    else:
-        vid_link = None
+    # Extract/remove PDF disclaimer.
+    pdf_disclaimer = None
+    pdf_candidates = xpath(main, "//div[@id='pdf_disclaimer']")
+    if len(pdf_candidates) == 1:
+        pdf_disclaimer_el = pdf_candidates[0]
+        pdf_disclaimer = tostr(pdf_disclaimer_el).decode(enc)
+        mtg = mtg._replace(pdf_disclaimer=pdf_disclaimer.strip())
+    elif len(pdf_candidates) > 1:
         st()
 
-    """
-    One problem here is distinguishing between pages that just don't have
-    audio (like really recent meetings) and those whose audio we're not
-    finding.
-    """
+    if pdf_disclaimer is not None:
+        main.remove(pdf_disclaimer_el)
 
-    mtg = mtg._replace(video_url=vid_link)
-
-    audiotxt = "audio file of entire meeting"
-    audio_els = [a for a in a_els if audiotxt in htext(a).lower()]
-    if len(audio_els) == 1:
-        audio_link = parse_a_element(audio_els[0])
-    elif len(audio_els) == 0:
-        audio_link = None
-    else:
-        audio_link = None
-        st()
-
-    mtg = mtg._replace(audio_url=audio_link)
-
-    captxt = "archived captions of entire meeting"
-    cap_els = [a for a in a_els if captxt in htext(a).lower()]
-    if len(cap_els) == 1:
-        cap_link = parse_a_element(cap_els[0])
-    elif len(cap_els) == 0:
-        cap_link = None
-    else:
-        cap_link = None
-        st()
-
-    mtg = mtg._replace(closed_captioning_url=cap_link)
-    '''
-
-    st()
+    content = innerhtml(main, encoding=enc).strip()
+    mtg = mtg._replace(body=content)
     return mtg
 
 
@@ -702,9 +693,12 @@ def parse_a_element(a_el: HtmlElement) -> Link:
     Take an ``a`` HTML element and turn it into a ``Link`` object.
     Note: does not capture the tail of the element.
     """
-    text = htext(a_el)
-    url = hattr(a_el, "href")
-    title = hattr(a_el, "title", "")
+    text = htext(a_el).strip()
+    try:
+        url = hattr(a_el, "href")
+    except:
+        return None
+    title = hattr(a_el, "title", "").strip()
     return Link(text=text, title=title, url=url)
 
 
@@ -779,7 +773,6 @@ def extract_date(a_el: HtmlElement) -> Date:
 
 
 def innerhtml(el: HtmlElement, encoding: str="utf-8"):
-    st()
     """
     Returns the HTML of an element as a ``str``, with the opening and closing
     tags removed.
@@ -794,8 +787,9 @@ def innerhtml(el: HtmlElement, encoding: str="utf-8"):
     if not len(children):
         return htext(el)
     text = "%s" % el.text if el.text else ""
-    return "%s%s" % (text, "".join([tostr(c).decode(encoding) for
-                                    c in el.iterchildren()]))
+    inner = "%s%s" % (text, "".join([tostr(c).decode(encoding) for
+                                     c in el.iterchildren()]))
+    return inner.strip()
 
 
 def fix_urls(el: HtmlElement, base_url: str, broken_urls: list,
@@ -989,7 +983,10 @@ def tostr(el: HtmlElement) -> bytes:
     """
     Convenience function that lets us assert the type for this for mypy.
     """
-    return tostring(el)
+    try:
+        return tostring(el)
+    except:
+        st()
 
 
 def hattr(el: HtmlElement, attr: str, default: str=None) -> str:
