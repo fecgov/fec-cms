@@ -12,13 +12,6 @@
             populateToolbar: function(toolbar) {
                 var button, widget;
 
-                var getEnclosing = function(tag) {
-                    var node;
-
-                    node = widget.options.editable.getSelection().commonAncestorContainer;
-                    return $(node).parents(tag).get(0);
-                };
-
                 widget = this;
 
                 button = $('<span></span>');

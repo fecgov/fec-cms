@@ -5,19 +5,23 @@ sudo: false
 cache: false
 
 python:
-  - "3.4"
+  - "3.5"
+
+addons:
+  postgresql: "9.4"
 
 env:
   global:
-    - secure: "yFhH0tX9KqwPKu8qf6CiJvCTO/4uWNanDdbnKlwPR8LWp5TUNRxaF4X9qYVZBKADCR9ScHqUz93Vv8eBa4X3LY6o3JEm4iVjkIZUs0tUrCdANAn3teVepftHjySLskTijXBIMWm/SLMDL7aWfwJqMhXMA1LacacT2kOKTzlP6zVj/aAB2WUletWauL5rD6CXqVxIoobKfR69liEfwHQco7uxQIkTqvTDnhmDHSk/KqUJNwTl6ZypfG3ZedCQleTs1gh2tGqVkMRtKSnpqK5JHCCOgj0VCpJ1IrGERx9CUQbVBifhAA7mywKUMLcuL66Q7aNEJ+MMVonnYlNZI1TX5JblXp+7Ro0QGKiPz9YE7i2gkvVUh8c9tmIQY+WKKTYweQpGvmw7N6QuAzhQkjKKbMFHYJGX+whJ7llpQ/dW4bBpDoHsbYjt4duoptzaxnu/2Vh2ZqrRDvC5lxbul4gUydDpn+jX9ujlS9lb0eduwyTSCnMfcaxO6GwcerbPX5wPSGXOw6dWfnEmMVsXypoG+bj74y8H3rTcQWtwvYM2qpq/oO1jdDYkEcqDP3lkXFSTQ3rPb+rB8AAlLV6D0/eip3LDfXE6kBvkWJysby/coOZ9IUruSK1F1K/cqq9ZHr3tIsrlJddYCYOhicDKUmojIlr5dHOOterUGMZ+D08P1QM=" # FEC_CF_USERNAME
-    - secure: "au64J6rsla3I8I+eEmkiZLEVY7hA2qAPDoTvTlNUx2w0lIj0jJnQ+SF/yDTSohpDCTJA/eO4Vaiw4DgyNI4txuSNC7fa4e91I1IHcxGkhQ1+76Z5czM00pTa7MEF6Nz5rimRbhLcKHVcAQ3acbGvUf6xa8XTpoz1gBXTHZOM/MbtDrFwtFIAHX6WJHkTL88sSS+3Zxu3gtkZJj/t07wj+soQDveHhp1IHRKDm3C3mRrMAVT8b8uvYma3sGcMxaCe0aIWD5ijqsBnEMr+GM+vANiv7qzK0nYd2nEraZVCmF4HN7n1PXxUWnHSS5lB1ko9NQpH+Y3A7KVefZaAgPt2SSFjZ4/WMVpKj160Hx33eqECG0fWUA251D9lglF/UO/U9iXb49K4+J9Z+l46ktMfydXQM+OKiR4z/zVldZI/LQrG7taMaFp7TE76e7Ppf9bpd4sH+iOyLC7T3TG2O0LMS78Y3bLNQNH5aqx8qp42la/EkNJUnRwvtxw+m9KPayzlmF5Sac/Fk4vrLXRIkBoul2wLns1EkCIRsUnk3jJGa8dqsaWqzxacYyazPS9e3SWIOfgxH3LyTOysEyZwnj+lR68+o0TtgIAtOD2Ss5AZqTvQEj+jMw6S+oPaiD1GCsSU2ujRZW5RKEWWA4rQjYflFhF/9uiPQslLrygNqWyy+oc=" # FEC_CF_PASSWORD
+    - secure: "V9KId87Z9Rwj4vojTlEjrsnItu95Qwrh3EqA5puQEIrxF6U5LdzGRX4Q5M6OD84s9e9sM5PW1k5maFaQIIP4NmyBiP4K5LYOruYoTIxYO+ZR5PfCB2Q2i8WQUJH3UF50ZPfjOJBrFnaB6RYyY1sKmimCISNfmA/7gMuSUZWppQwIb5xtOoZe7PPSfqkblFfcAwBcurHDEQtJJN3vb0e7NK2MfA/7HALkEoiIgeo52vMYpSkCdgumN+baSK47H3eLXLcUjMlDpUO1HF4fMZYFbG4etYp0pTZ4d/sd9JqxLoEsIzq2hFEXGSL9Y8Ooy+s3gu4NoU9DPVRRD/e3lJmtu3FImg22pRUAZk2yOQcZsWKrk2fgNHXwCuNPzSYpSzwEXck//uWd/nF0I/rzolqP9xsw+eSw47NHOL4cRgqY+lUNXxPfpxrMgXahrBeWYzrbr3GGI8v2f9rlc4ActckwpTEifzGjYLYOcFuJON23kNRkALQ16ZR/91knL3C2En4yM+Iphb4iB6vwFeyqrlt5MBipMxD9diGw34dkIwcdD5LihAy++ovpT96MP/LpWZLJ15ccFJ5/VMeI0FT0kkhAEnS1r0bG6HhWSyD02/nuA8Xg2TmBcI4HH+c+6EGfRIJwoA4G9sMKVwyVUeIz6uBSXlv3/utR9Wk/HsDLP/e0nlw=" # FEC_CF_USERNAME
+    - secure: "mnxGMega91FDiwqpzcHaMmh6V31NKn3a58ba7zM5eB7XYVF/Z0vQKRi5C6r33pYi/NCgFO8buOvP0aQsLaQf4YulNWD/kRBljWVcVcqUUWkV+uM21RL9nNXquYhZ9TBXsIFe9gbWelSzdGEdx/5e7LkLadfmBEXe9caoEMinKLn1rhDiRODQnJXohcVt3y6oNYBd9+/MWeJoj2W8pygrQ4oRyFNZA2nAz6xpSmdLRWejMAnl249fR4tI2bI39sAK5wf9pyDspYBYLuWjRBGeqpaGLm0mQsaTfrp3ddXKNrIwHbnsMuWEhYJ49iqd4x5arC0SvmuH0GyJnzLhuwHiBH0xS18uWnWoT2l67pwP01uJMJF6fe2BFxVp6W6gGJQYu8X/54J8786KDdtEN7nygN3lqMBdxRZ7grbsUUZ9RB4ptAHcR8+WDRI4+lYZ1NRUJanu0SpS8dJ+5EESPS2jgqNDXyv+3qRSWhbRRGArJbJ2L45xn+ti2ds0bFVLrLB0i/G7N4ZWSxTfL3dTNFXgZtfm5erRMv2wbeFwNjthIqY9Nd8KvF21GimLouU7jHhB1yAJw58rN8zAqCNWHI2aY2ae6prMOcJLFmOUFdVePd3+ZfdYoZWPMIkzmcf9RMzT+hYZ9Q+BElC73tYATKpp8z7Y17U1zO4pXVZ4ItARd6A=" # FEC_CF_PASSWORD
     - secure: "rLuzE+/3WVxra5ssD9MdVqTsuVcRc0PpOrc4FayueQ9y/CcjXuxFtU9NpS88DDwAyGc/7wCPLmRKAzsNTMgDjfHkKXa8VfhI9zZ7HOEI1suVJakkJFXTwajH1X+ACDICoQocrmuOesIMrlAm1qhrSnxHLZuIZ5y3qEGPaSvCMa9JPX9U8huJuhwukxiunpeoApeJclRK7HjLhrAIZVuBNZnyNjiqmNFXPFdGbpcdUGsqNrZQGZa9vlED2dXmqqsIhL7/ghR1sSvIzjVBEi2Ig9wu1QWO5LuAzgO6wIfuOh1gbQ1Z24bYLTeugApwI2eNRe5Rn7F+RXVCYbjetj/0twIXKr6NkSgaLt1c+2b7yIOLRpRl0kpahZc+TsQ3ja03UelpXhH8c0De+6sUvmofs39RgdMSjYBcaY5hDl1b5oZOcZDhQYYAiFUJ3CKIM82WgvTD/phcarf9e0lbrVFIK17P/QixUPAKUS+IfS53r10QO1DTN+0vpLcUh659u8gLxHlbTVkGPfuWRXVhPCmSlHZXqM22gVois5ch97FEm7sgLlJP5hHg1q+utvXV4YDM0m+5SicjGeTyh7ZNszBiMuCu9Na5NaUyhb3XS8niLPwXUzNKcUs0NXckakpqBxstAE4Zyqf3HmmzFQCNvdrFnk6fuRXo1nxtRi1K3N/zf4k=" # DJANGO_SECRET_KEY this is a random key unrelated to prod but needed for django to run build commands with production settings
 
 before_install:
-  - "pip install --upgrade pip setuptools"
+  - travis_retry pip install -U pip setuptools wheel
+  - export DATABASE_URL=postgresql://:@/cfdm_cms_unit_test
 
 before_script:
-  - travis_retry pip install -U pip wheel
+  - psql -c 'create database cfdm_cms_unit_test;' -U postgres
   - travis_retry pip install -r requirements.txt
   - travis_retry pip install coverage django_coverage_plugin
 
@@ -44,12 +48,12 @@ after_success:
 
 before_deploy:
   - export PATH=$HOME:$PATH
-  - travis_retry curl -L -o $HOME/cf.tgz "https://cli.run.pivotal.io/stable?release=linux64-binary&version=6.15.0"
+  - travis_retry curl -L -o $HOME/cf.tgz "https://cli.run.pivotal.io/stable?release=linux64-binary&version=6.22.2"
   - tar xzvf $HOME/cf.tgz -C $HOME
   - travis_retry cf install-plugin autopilot -f -r CF-Community
   - npm run build
-  - DJANGO_SETTINGS_MODULE='fec.settings.production' python fec/manage.py collectstatic --noinput
-  - DJANGO_SETTINGS_MODULE='fec.settings.production' python fec/manage.py compress
+  - DJANGO_SETTINGS_MODULE='fec.settings.production' python fec/manage.py collectstatic --noinput -v 0
+  - DJANGO_SETTINGS_MODULE='fec.settings.production' python fec/manage.py compress -v 0
 
 deploy:
   provider: script

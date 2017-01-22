@@ -122,6 +122,7 @@ press_release_page_categories = OrderedDict((x.lower(), x) for x in [
     "Presidential public funds",
     "Rulemakings",
     "Other agency actions",
+    "",
 ])
 
 update_types = OrderedDict([

@@ -26,28 +26,22 @@
     </header>
     <div class="content__section">
       <div class="main__content">
-          <p>Corporations and labor organizations <span class="t-bold">can't</span> contribute to federal candidates, but they <span class="t-bold">can</span> establish and administer a special kind of political committee: the separate segregated fund (SSF).</p>
-          <p>An SSF can raise funds to make contributions to candidates — including expenditures that are coordinated with candidates — within the applicable contribution limits.</p>
-          <p>
-            <span class="t-bold">Who can set up an SSF?</span>
-            <ul class="list--bulleted">
-              <li>Corporations (including those without capital stock)</li>
-              <li>Labor organizations</li>
-              <li>Incorporated membership organizations (including trade associations)</li>
-              <li>National banks</li>
-              <li>Incorporated cooperatives</li>
-            </ul>
-          </p>
-          <p>The sponsoring corporation or labor organization is called the SSF’s “connected organization.”  The connected organization can use its own money to solicit contributions to the SSF and to pay the costs of establishing and operating the SSF, for example staff salaries and office space.</p>
-          <p>SSFs may solicit contributions only from a limited group of people, including the connected organization’s executive or administrative personnel, its stockholders (if the connected organization is a corporation), or its members (if the connected organization is a labor organization or a membership organization).</p>
+        <p>If you want to set up a Political Action Committee (PAC) — and your PAC is not a political party committee,
+        a candidate’s authorized committee or a separate segregated fund (SSF) established by a corporation or labor organization —
+        you can set up a “nonconnected” committee.</p>
+        <p>Members of congress and other political leaders often establish nonconnected committees, usually called
+        <span class="term" data-term="Leadership PAC">Leadership PACs</span>. Leadership PACs usually support candidates for various federal or nonfederal offices.</p>
+        <p><span class="term" data-term="Super PAC">Super PACs</span> and <span class="term" data-term="Hybrid PAC">Hybrid PACs</span> are
+        another type of nonconnected committee. These committees must register and report all of their receipts and disbursements. If you are
+        setting up a Super PAC or a Hybrid PAC, find more information on <a href="http://www.fec.gov/ans/answers_pac.shtml#super_hybrid">FEC.gov quick answers</a>.</p>
       </div>
       <div class="sidebar-container">
         <aside class="sidebar sidebar--secondary">
           <h4 class="sidebar__title">Essentials for other registrants</h4>
           <ul class="sidebar__content">
             <li class="u-padding--bottom"><a href="/registration-and-reporting/essentials-house-and-senate-candidates-and-committees/">Congressional candidates and committees</a></li>
+            <li class="u-padding--bottom"><a href="/registration-and-reporting/essentials-corporations-and-labor-organizations/">Corporations and labor organizations</a></li>
             <li class="u-padding--bottom"><a href="/registration-and-reporting/essentials-political-party-committees">Political party committees</a></li>
-            <li class="u-padding--bottom"><a href="/registration-and-reporting/essentials-nonconnected-committees">Nonconnected committees</a></li>
           </ul>
           <h4 class="sidebar__title">Already registered?</h4>
           <form class="sidebar__content" action="{{ settings.FEC_APP_URL }}" method="GET">
@@ -79,7 +73,7 @@
             <ul class="list--checks list--checks--secondary t-sans">
               <li>Getting a <a href="/registration-and-reporting/get-tax-id-and-bank-account/">tax ID and bank account</a></li>
               <li>Getting a <a href="/registration-and-reporting/get-treasurer/">treasurer</a></li>
-              <li>Registering <a href="/registration-and-reporting/ssf-registration/">an SSF</a></li>
+              <li>Registering a <a href="/registration-and-reporting/nonconnected-committee-registration/">nonconnected committee</a></li>
             </ul>
           </div>
         </div>
@@ -102,25 +96,23 @@
           <div class="option__content">
             <h2>Regular filing</h2>
             <ul class="list--checks list--checks--secondary t-sans">
-              <li>
-                <a href="/registration-and-reporting/ssf-filing-requirements/">Overview of filing requirements</a>
+              <li><a href="/registration-and-reporting/nonconnected-committee-filing-requirements">Overview of filing requirements</a></li>
+              <ul>
+                <li><a href="/registration-and-reporting/nonconnected-committee-election-year-filing">Election years</a>
                 <ul>
-                  <li><a href="/registration-and-reporting/ssf-election-year-filing">Election years</a>
-                    <ul>
-                      <li><a href="/registration-and-reporting/quarterly-filers">Quarterly filers</a></li>
-                      <li><a href="/registration-and-reporting/monthly-filers">Monthly filers</a></li>
-                      <li><a href="/registration-and-reporting/independent-expenditures">Independent expenditures</a></li>
-                    </ul>
-                  </li>
-                  <li><a href="/registration-and-reporting/non-election-year-filing">Non-election years</a>
-                    <ul>
-                      <li><a href="/registration-and-reporting/semi-annual-filers">Semi-annual filers</a></li>
-                      <li><a href="/registration-and-reporting/non-election-monthly-filers">Monthly filers</a></li>
-                    </ul>
-                  </li>
+                  <li><a href="/registration-and-reporting/nonconnected-committee-quarterly-filers">Quarterly filers</a></li>
+                  <li><a href="/registration-and-reporting/nonconnected-committee-monthly-filers">Monthly filers</a></li>
+                  <li><a href="/registration-and-reporting/nonconnected-committee-independent-expenditures">Independent expenditures</a></li>
                 </ul>
               </li>
-              <li><a href="/registration-and-reporting/terminating-a-committee">Terminating an SSF</a></li>
+              <li><a href="/registration-and-reporting/nonconnected-committee-non-election-year-filing">Non-election years</a>
+                <ul>
+                  <li><a href="/registration-and-reporting/nonconnected-committee-non-election-monthly-filers">Monthly filers</a></li>
+                  <li><a href="/registration-and-reporting/nonconnected-committee-semi-annual-filers">Semi-annual filers</a></li>
+                </ul>
+              </li>
+              <li><a href="/registration-and-reporting/terminating-a-committee">Terminating a nonconnected committee</a></li>
+              </ul>
             </ul>
           </div>
         </div>
@@ -147,12 +139,12 @@
       <div class="grid__item">
         <aside class="card card--horizontal card--secondary card--full-bleed">
           <div class="card__image">
-            <a class="u-no-border" href="http://www.fec.gov/pdf/colagui.pdf">
-              <img src="{% static "img/guide--orgs.jpg" %}" alt="Federal Election Commission Campaign Guide: Corporations and Labor Organizations, January 2007">
+            <a class="u-no-border" href="http://www.fec.gov/pdf/nongui.pdf">
+              <img src="{% static "img/guide--nonconnected.jpg" %}" alt="Federal Election Commission Campaign Guide: Nonconnected Committees, May 2008">
             </a>
           </div>
           <div class="card__content">
-            <a href="http://www.fec.gov/pdf/colagui.pdf">Read the campaign guide (PDF)</a>
+            <a class="t-sans" href="http://www.fec.gov/pdf/nongui.pdf">Read the campaign guide (PDF)</a>
           </div>
         </aside>
       </div>
@@ -194,11 +186,6 @@
   </div>
 </div>
 
-<div class="slab slab--neutral footer-disclaimer">
-  <div class="container">
-    <p class="usa-width-one-half">This site is in beta, which means we're testing content that better adheres to legal plain language requirements. This content is not finalized, is not legal advice and is subject to change.</p>
-    <p class="usa-width-one-half">Everything on this site should be read in conjunction with FEC.gov. Please let us know what you think of our new content; use the feedback tool on this page.</p>
-  </div>
-</div>
+{% include 'partials/disclaimer.html' %}
 
 {% endblock %}

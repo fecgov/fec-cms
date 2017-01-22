@@ -2,6 +2,10 @@
 
 var $ = require('jquery');
 
+// Implementing a polyfill for js native WeakMap
+// in order to patch functionality in an included library
+require('es6-weak-map/implement');
+
 var Accordion = require('aria-accordion').Accordion;
 var Glossary = require('glossary-panel');
 
@@ -14,6 +18,8 @@ var FilterPanel = require('fec-style/js/filter-panel').FilterPanel;
 var filterTags = require('fec-style/js/filter-tags');
 var stickyBar = require('fec-style/js/sticky-bar');
 var toc = require('fec-style/js/toc');
+var typeahead = require('fec-style/js/typeahead');
+var Search = require('fec-style/js/search');
 
 // Hack: Append jQuery to `window` for use by legacy libraries
 window.$ = window.jQuery = $;
@@ -24,9 +30,10 @@ var calendarHelpers = require('./calendar-helpers');
 var FormNav = require('./form-nav').FormNav;
 
 var legal = require('./legal');
+var upcomingEvents = require('./upcoming-events');
 
 $(document).ready(function() {
-  // Initialize glossary
+
   // Initialize glossary
   new Glossary(terms, {}, {
     termClass: 'glossary__term accordion__button',
@@ -76,11 +83,14 @@ $(document).ready(function() {
     new dropdown.Dropdown(this);
   });
 
+  // Homepage - What's Happening section
+  new upcomingEvents.UpcomingEvents();
+
   // Initialize feedback widget
   var feedbackWidget = new feedback.Feedback(window.FEC_APP_URL + '/issue/');
 
   // Initialize legal page
-  new legal.Legal(feedbackWidget, '#share-feedback-link', '#ethnio-link');
+  new legal.Legal(feedbackWidget, '#share-feedback-link');
 
   // Initialize filter tags
   var $tagList = new filterTags.TagList({
@@ -105,5 +115,22 @@ $(document).ready(function() {
     url: calendarHelpers.getUrl(['calendar-dates']),
     exportUrl: calendarHelpers.getUrl(['calendar-dates', 'export']),
     filterPanel: filterPanel,
+  });
+
+  // Initialize typeahead
+  new typeahead.Typeahead($('.js-typeahead'), 'candidates', window.FEC_APP_URL + '/');
+
+  // Initialize search toggle
+  new Search($('.js-search'));
+
+  // For any link that should scroll to a section on the page apply .js-scroll to <a>
+  $('.js-scroll').on('click', function(e) {
+    e.preventDefault();
+    var $link = $(e.target);
+    var section = $link.attr('href');
+    var sectionTop = $(section).offset().top;
+    $(document.body).animate({
+      scrollTop: sectionTop
+    });
   });
 });

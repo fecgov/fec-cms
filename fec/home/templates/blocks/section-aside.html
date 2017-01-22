@@ -1,0 +1,35 @@
+{% load wagtailcore_tags %}
+{% load wagtailimages_tags %}
+
+<aside class="option__aside">
+  {% for block in aside %}
+  <div class="option__aside__block">
+    {% if block.block_type == 'title' %}
+    <h6 class="label">{{ block }}</h6>
+
+    {% elif block.block_type == 'document' %}
+    <a class="u-no-border" href="{{ block.value.url }}">
+     {% image block.value.image width-400 %}
+    </a>
+    <a href="{{ block.value.url }}">{{ block.value.text }}</a>
+
+    {% elif block.block_type == 'link' %}
+      {% if block.value.link_type == 'search' %}
+      <i class="icon-circle--search {% if block.value.coming_soon %}is-disabled{% endif %}">
+        <span class="u-visually-hidden">Icon of a magnifying glass</span>
+      </i>
+      {% elif block.value.link_type == 'calendar' %}
+      <i class="icon-circle--calendar {% if block.value.coming_soon %}is-disabled{% endif %}">
+        <span class="u-visually-hidden">Icon of a calendar</span>
+      </i>
+      {% endif %}
+      {% if block.value.coming_soon %}
+        <span class="is-disabled">{{ block.value.text }} (coming soon)</span>
+      {% else %}
+        <a href="{{ block.value.url }}">{{ block.value.text }}</a>
+      {% endif %}
+
+    {% endif %}
+  </div>
+  {% endfor %}
+</aside>

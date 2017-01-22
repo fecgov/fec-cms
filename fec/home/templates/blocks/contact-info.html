@@ -1,0 +1,20 @@
+{% load wagtailcore_tags %}
+{% load wagtailimages_tags %}
+
+<div class="row">
+  {% if self.label %}
+    <p class="label">{{ self.label }}</p>
+  {% endif %}
+  <div class="grid grid--2-wide">
+      {% for item in self.contact_items %}
+      <div class="grid__item">
+        <div class="contact-item contact-item--{{ item.item_icon }}">
+          <div class="contact-item__content">
+            <h5 class="contact-item__title">{{ item.item_label }}</h5>
+            {{ item.item_info }}
+          </div>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+</div>

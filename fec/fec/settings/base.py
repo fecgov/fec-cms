@@ -13,6 +13,8 @@ https://docs.djangoproject.com/en/1.8/ref/settings/
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
 
+import dj_database_url
+
 from django.utils.crypto import get_random_string
 
 PROJECT_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -53,11 +55,12 @@ INSTALLED_APPS = (
     'wagtail.contrib.modeladmin',
     'wagtail.contrib.wagtailsearchpromotions',
     'wagtail.contrib.table_block',
+    'wagtail.contrib.wagtailstyleguide',
 
     'fec',
     'search',
     'home',
-    'legal',
+    'data_loader',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -105,10 +108,9 @@ SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', get_random_string(50))
 # https://docs.djangoproject.com/en/1.8/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-    }
+    # Be sure to set the DATABASE_URL environment variable on your local
+    # development machine so that the local database can be connected to.
+    'default': dj_database_url.config()
 }
 
 
@@ -183,10 +185,29 @@ CONTACT_EMAIL = 'betafeedback@fec.gov';
 CONSTANTS = constants
 
 FEATURES = {
-    'latest_updates': bool(env.get_credential('FEC_FEATURE_LATEST_UPDATES', '')),
-    'legal_murs': bool(env.get_credential('FEC_FEATURE_LEGAL_MURS', '')),
-    'press': bool(env.get_credential('FEC_FEATURE_PRESS', ''))
+    'record': bool(env.get_credential('FEC_FEATURE_RECORD', '')),
+    'about': bool(env.get_credential('FEC_FEATURE_ABOUT', '')),
+    'agendas': bool(env.get_credential('FEC_FEATURE_AGENDAS', '')),
+    'tips': bool(env.get_credential('FEC_FEATURE_TIPS', ''))
 }
+
+AUTH_PASSWORD_VALIDATORS = [
+    {
+        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
+    },
+    {
+        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
+        'OPTIONS': {
+            'min_length': 9,
+        }
+    },
+    {
+        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
+    },
+    {
+        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
+    },
+]
 
 if os.getenv('SENTRY_DSN'):
     INSTALLED_APPS += ('raven.contrib.django.raven_compat', )

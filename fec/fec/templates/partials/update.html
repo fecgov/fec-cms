@@ -1,13 +1,14 @@
 {% load wagtailimages_tags %}
+{% load filters %}
 
 <article class="post">
   <div class="post__pre">
     <div class="post__date">{{ update.date|date:'F j, Y' }}</div>
     <div class="post__byline">From: {% if update.get_update_type == 'FEC Record' %}Information Division{% else %}Press Office{% endif %}</div>
   </div>
-  <h3><a href="{{ update.url }}">{{ update.title }}</a></h3>
+  <h3><a href="{{ update.url }}">{% formatted_title update %}</a></h3>
   {% if update.get_update_type != 'Weekly Digest' %}
-    <div class="t-sans">
+    <div class="t-sans row">
       {{ update.body | truncatewords_html:30 }}
     </div>
   {% endif %}
