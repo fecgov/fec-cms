@@ -7,6 +7,7 @@ from typing import (
     Tuple
 )
 from operator import attrgetter
+from pathlib import Path
 from urllib.parse import urljoin, urlparse
 import json
 import re
@@ -18,7 +19,11 @@ from lxml.html import (
 )
 import requests
 from ipdb import set_trace as st  # type: ignore
+from os import _exit  # type: ignore
 
+
+def stq():
+    _exit(0)
 
 """
 This script scrapes <www.fec.gov>'s Commission Meetings content and outputs a
@@ -81,9 +86,9 @@ Meeting = NamedTuple(
         ("agenda_documents_linked", Links),  # list (Links)
         ("approved_minutes_date", Date),  # Date
         ("approved_minutes_link", Link),  # Link
-        ("audio_url", Link),  # URL
+        ("audio_link", Link),  # Link
         ("body", str),  # HTML,
-        ("closed_captioning_url", Link),  # URL
+        ("closed_captioning_link", Link),  # Link
         ("draft_minutes_links", Links),  # list (Links)
         ("link_title_text", str),  # Plain text
         ("meeting_type", str),  # "open" or "executive"
@@ -92,7 +97,7 @@ Meeting = NamedTuple(
         ("old_meeting_url", str),  # URL
         ("sunshine_act_links", Links),  # list (Links)
         ("title_text", str),  # str (TODO: do we need the HTML?)
-        ("video_url", Link)  # URL
+        ("video_link", Link)  # Link
     ])
 """
 Possible sources of truth for the “title” of the meeting:
@@ -115,6 +120,7 @@ The following are URLs I identified as broken in the first pass and found
 working equivalents of, so during the "write fully-qualified URLs" stage the
 script replaces the broken ones with the working equivalents.
 """
+fec_base = "http://www.fec.gov"
 urls_to_change = {
 
     "http://www.fec.gov/agenda/2014/approved_14-2-a.pdf":
@@ -196,7 +202,16 @@ urls_to_change = {
     "http://www.fec.gov/sunshine/2009/notice20090107.pdf",
 
     "http://www.fec.gov/agenda/sunshine/2008/notice20081231.pdf":
-    "http://www.fec.gov/sunshine/2008/notice20081231.pdf"
+    "http://www.fec.gov/sunshine/2008/notice20081231.pdf",
+
+    "http://www.fec.gov/audio/2015/2015100000.mp3":
+    "http://www.fec.gov/audio/2015/2015100100.mp3",
+
+    "http://www.fec.gov/audio/2014/2014042304.mp3": None,
+
+    "http://www.fec.gov/audio/2013/2013042505.mp3": None,
+
+    "http://www.fec.gov/audio/2012/2012041203.mp3": None,
 
 }
 
@@ -206,9 +221,25 @@ def cli_main(args: list=None) -> None:
     annual_urls = [base_url] + extract_annual_urls(base_url)
     meetings = []
     broken_links = []  # type: List[str]
+    annual_urls = [url for url in annual_urls if "2011" in url or
+                   url.endswith("agendas.shtmlxx")]
     for url in annual_urls:
-        _meetings, _broken_links = extract_meeting_metadata(url, broken_links)
-        meetings.extend([_ for _ in _meetings if _ is not None])
+        _meetings, _broken_links = extract_meeting_metadata(url, broken_links,
+                                                            urls_to_change)
+        for mtg in [_ for _ in _meetings if _ is not None]:
+            urls = [m.old_meeting_url for m in meetings]
+            if mtg.old_meeting_url not in urls:
+                meetings.append(mtg)
+            elif mtg.old_meeting_url == "":
+                meetings.append(mtg)
+            else:
+                priors = [m for m in meetings if
+                          m.old_meeting_url == mtg.old_meeting_url]
+                for p in priors:
+                    if any([p.title_text != mtg.title_text,
+                            p.posted_date.iso8601 != mtg.posted_date.iso8601]):
+                        st()
+        # meetings.extend([_ for _ in _meetings if _ is not None])
         broken_links.extend(_broken_links)
 
     fulldates = []
@@ -257,8 +288,28 @@ def cli_main(args: list=None) -> None:
 
     broken = set([l[1] for l in broken_links])
 
+    """
     for meeting in meetings:
         meeting = parse_meeting_page(meeting)
+    """
+    no_audio = [m for m in meetings if m.audio_link
+                is None and "cancel" not in m.title_text.lower()]
+    no_cc = [m for m in meetings if m.closed_captioning_link
+             is None and "cancel" not in m.title_text.lower()]
+    no_video = [m for m in meetings if m.video_link
+                is None and "cancel" not in m.title_text.lower()]
+    cutoff = datetime(2015, 2, 14)
+    now = datetime.now()
+    no_cc = [m for m in no_cc if m.posted_date.datetime > cutoff and
+             m.posted_date.datetime <= now]
+    no_video = [m for m in no_video if m.posted_date.datetime > cutoff and
+                m.posted_date.datetime <= now]
+    no_audio = [m for m in no_audio if m.posted_date.datetime <= now]
+    no_au = [m.old_meeting_url for m in no_audio]
+    no_cu = [m.old_meeting_url for m in no_cc]
+    no_vu = [m.old_meeting_url for m in no_video]
+
+    print(len(no_au + no_cu + no_vu))
 
     st()
     print(
@@ -277,7 +328,7 @@ def extract_annual_urls(url: str) -> List[str]:
     return urls
 
 
-def parse_meeting_row(row: HtmlElement) -> Meeting:
+def parse_meeting_row(row: HtmlElement, urls_to_change: dict) -> Meeting:
     """
     Given an ``lxml.html.Element`` object for the table row for a meeting,
     returns a ``Meeting`` object.
@@ -336,7 +387,8 @@ def parse_meeting_row(row: HtmlElement) -> Meeting:
 
     meeting = parse_meeting_sunshine_cell(row, sunshine, meeting)
 
-    meeting = parse_meeting_page(meeting)
+    # if "20160211" in meeting.old_meeting_url:
+    meeting = parse_meeting_page(meeting, urls_to_change)
 
     return meeting
 
@@ -498,8 +550,8 @@ def parse_meeting_sunshine_cell(row: HtmlElement, cell: HtmlElement,
     return mtg
 
 
-def extract_meeting_metadata(url: str,
-                             broken_links: List) -> Tuple[Meetings, List]:
+def extract_meeting_metadata(url: str, broken_links: List,
+                             urls_to_change: dict) -> Tuple[Meetings, List]:
     """
     This will get as much of the metadata as possible about meetings from the
     annual pages.
@@ -532,7 +584,7 @@ def extract_meeting_metadata(url: str,
     meetings = []
     for row in rows:
         if row is not None and htext(row).strip():
-            meetings.append(parse_meeting_row(row))
+            meetings.append(parse_meeting_row(row, urls_to_change))
     return (meetings, broken_links)
 
 
@@ -604,7 +656,7 @@ def extract_archive_urls(base_url: str, archive_urls: list=[],
     return (archive_urls, visited)
 
 
-def parse_meeting_page(mtg: Meeting) -> Meeting:
+def parse_meeting_page(mtg: Meeting, urls_to_change: dict) -> Meeting:
     if mtg.old_meeting_url in ("", None):
         return mtg
     print("Meeting:", mtg.old_meeting_url)
@@ -624,37 +676,223 @@ def parse_meeting_page(mtg: Meeting) -> Meeting:
     """
     if len(div) == 1:
         # Handle modern page
-        main, _ = fix_urls(div[0], mtg.old_meeting_url, [], {})
+        main, _ = fix_urls(div[0], mtg.old_meeting_url, [], urls_to_change)
     else:
         # Handle older page types
         print("lacks fec_mainContent")
         st()
 
     a_els = xpath(main, ".//a")
+    # We only want elements with populated hrefs:
+    a_els = [el for el in a_els if hattr(el, "href", "") != ""]
+    """
     links = [parse_a_element(a_el) for a_el in a_els]
 
     asset_pairs = (
-        ("audio_url", "audio file of entire meeting"),
-        ("closed_captioning_url", "archived captions of entire meeting"),
-        ("video_url", "video of entire meeting")
+        ("audio_link", "audio file of entire meeting"),
+        ("closed_captioning_link", "archived captions of entire meeting"),
+        ("video_link", "video of entire meeting")
     )
+    """
 
+    """
+    Actually we should process every link and try to extract an asset link from
+    each one, rather then going by the assets. I think.
+
+    copies = [el for el in a_els]
+    while len(a_els) > 0:
+        el = a_els.pop()
+        # audio first
+        if "audio file of entire meeting" in el.text_content().lower():
+            mtg = mtg._replace(audio_link=parse_a_element(el))
+        else:
+            st()
+    """
+
+    unused = []
+    asset_info = {
+        "audio_link": {
+            "text": ("audio file of entire meeting",),
+            "img_src": "audio.png",
+        },
+        "closed_captioning_link": {
+            "text": ("archived captions of entire meeting",),
+            "img_src": "transcript_icon.png"
+        },
+        "video_link": {
+            "text": (
+                "video of entire meeting",
+                "video file of entire meeting"
+            ),
+            "img_src": "play_icon.png"
+        },
+        "agenda_documents_linked": {
+            "text": (
+                "agenda document",
+                "minutes for"
+            ),
+            "img_src": "N/A"
+        },
+        "adobe": {
+            "text": ("www.adobe.com",),
+            "img_src": "N/A"
+        }
+
+    }
+
+    def test_el(elem, key):
+        # The easy tests:
+        for text in asset_info[key]["text"]:
+            if text in htext(elem).lower():
+                return True
+            if text in hattr(elem, "title", "").lower():
+                return True
+        # Harder; look for the source filename of an image inside a element:
+        imgs = xpath(elem, "./img")
+        if len(imgs) > 1:
+            st()
+        if len(imgs) > 0:
+            img = imgs[0]
+            src = hattr(img, "src", False)
+            if src:
+                parsed_src = urlparse(src)
+                path = parsed_src.path
+                if Path(path).name == asset_info[key]["img_src"]:
+                    return True
+
+    pre_video = mtg.posted_date.datetime < datetime(2015, 2, 14)
+    base = mtg.old_meeting_url
+
+    while len(a_els) > 0:
+        el = a_els.pop()
+        if test_el(el, "audio_link"):
+            audio_link = parse_a_element(el)
+            # assert audio_link.url.endswith("mp3")
+            if not audio_link.url.endswith("mp3"):
+                st()
+            valid, _, _ = check_url(base, audio_link.url, [], [])
+            if valid:
+                mtg = mtg._replace(audio_link=audio_link)
+        elif test_el(el, "closed_captioning_link"):
+            if pre_video:
+                pass
+            closed_captioning_link = parse_a_element(el)
+            # assert closed_captioning_link.url.endswith("txt")
+            if not closed_captioning_link.url.endswith("txt"):
+                st()
+            valid, _, _ = check_url(base, closed_captioning_link.url, [], [])
+            if valid:
+                mtg = mtg._replace(
+                    closed_captioning_link=closed_captioning_link)
+        elif test_el(el, "video_link"):
+            if pre_video:
+                pass
+            video_link = parse_a_element(el)
+            valid, _, _ = check_url(base, video_link.url, [], [])
+            if valid:
+                mtg = mtg._replace(video_link=video_link)
+        elif test_el(el, "agenda_documents_linked"):
+            doc_link = parse_a_element(el)
+            if not doc_link.url.endswith("pdf"):
+                st()
+            valid, _, _ = check_url(base, doc_link.url, [], [])
+            if valid:
+                docs = mtg.agenda_documents_linked
+                docs.append(doc_link)
+                mtg = mtg._replace(agenda_documents_linked=docs)
+        elif test_el(el, "adobe"):
+            pass
+        else:
+            unused.append(el)
+
+    # Special case:
+    if mtg.closed_captioning_link is None and not pre_video:
+        testurl = "/".join([
+            "http://www.fec.gov/agenda",
+            str(mtg.posted_date.datetime.year),
+            "documents/transcripts",
+            mtg.posted_date.datetime.strftime(
+                "Open_Meeting_Captions_%Y_%m_%d.txt")
+        ])
+        valid, tested, broken = check_url(mtg.old_meeting_url,
+                                          testurl, [], [])
+        if valid:
+            caption_link = Link(text="", title="", url=testurl)
+            mtg = mtg._replace(closed_captioning_link=caption_link)
+
+    """
+    URLs that seem like they should have assets that are missing and that I
+    can't work out the values for myself:
+
+    http://www.fec.gov/agenda/2016/agenda20160714.shtml (video)
+    """
+    known_missing = {
+        "http://www.fec.gov/agenda/2016/agenda20160616.shtml": "video",
+        "http://www.fec.gov/agenda/2016/agenda20160519.shtml": "video",
+        "http://www.fec.gov/agenda/2016/agenda20160428.shtml": "video",
+        "http://www.fec.gov/agenda/2016/agenda20160225.shtml": "video",
+
+        "".join(["http://www.fec.gov/agenda/2015/",
+                 "agenda_administrative_review_hearing20151102.shtml"]):
+        "video",
+
+        "http://www.fec.gov/agenda/2015/agenda20150618.shtml": "video",
+        "http://www.fec.gov/agenda/2015/agenda20150521.shtml": "video",
+
+        "http://www.fec.gov/agenda/2015/agendaaudithearing20150506.shtml":
+        "video",
+
+        "http://www.fec.gov/agenda/2014/agenda20140306.shtml": "audio",
+        "http://www.fec.gov/agenda/2014/agenda20140227.shtml": "audio",
+
+    }
+
+    cancellations = [
+        "http://www.fec.gov/agenda/2014/agenda20140710.shtml",
+        "http://www.fec.gov/agenda/2012/agenda20121101.shtml",
+
+    ]
+
+    if mtg.old_meeting_url in known_missing.keys():
+        pass
+    elif "cancel" in mtg.title_text.lower():
+        pass
+    elif mtg.old_meeting_url in cancellations:
+        pass
+    elif not pre_video and any([mtg.audio_link is None,
+                                mtg.closed_captioning_link is None,
+                                mtg.video_link is None,
+                                len(mtg.agenda_documents_linked) == 0]):
+        while len(unused) > 0:
+            el = unused.pop()
+            print(tostr(el))
+            st()
+    elif pre_video and mtg.audio_link is None:
+        while len(unused) > 0:
+            el = unused.pop()
+            print(tostr(el))
+            st()
+
+    """
     for key, text in asset_pairs:
         candidates = [l for l in links if l is not
                       None and text in l.text.lower()]
         if len(candidates) == 1:
-            if key == "audio_url":
-                mtg = mtg._replace(audio_url=candidates[0])
-            if key == "closed_captioning_url":
-                mtg = mtg._replace(closed_captioning_url=candidates[0])
-            if key == "video_url":
-                mtg = mtg._replace(video_url=candidates[0])
+            if key == "audio_link":
+                mtg = mtg._replace(audio_link=candidates[0])
+            if key == "closed_captioning_link":
+                mtg = mtg._replace(closed_captioning_link=candidates[0])
+            if key == "video_link":
+                mtg = mtg._replace(video_link=candidates[0])
         elif len(candidates) == 0:
             # Not sure what to do here
             # Try to guess it:
-            if key == "audio_url":
-                st()
-            elif key == "closed_captioning_url":
+            if key == "audio_link":
+                if "cancel" in mtg.title_text.lower():
+                    pass
+                else:
+                    st()
+            elif key == "closed_captioning_link":
                 testurl = "/".join([
                     "http://www.fec.gov/agenda",
                     str(mtg.posted_date.datetime.year),
@@ -666,9 +904,10 @@ def parse_meeting_page(mtg: Meeting) -> Meeting:
                                            testurl, [], [])
                 if testurl not in broken:
                     caption_link = Link(text="", title="", url=testurl)
-                    mtg = mtg._replace(closed_captioning_url=caption_link)
+                    mtg = mtg._replace(closed_captioning_link=caption_link)
         elif len(candidates) > 1:
             st()
+    """
 
     # Extract/remove PDF disclaimer.
     pdf_disclaimer = None
@@ -873,8 +1112,8 @@ def fix_url(base_url: str, url: str, tested_urls: list, broken_urls: list,
         broken_urls.append((base_url, fixed_url))
         return (fixed_url, tested_urls, broken_urls)
     # Uncomment the following two lines to re-enable checking for broken URLs:
-    tested_urls, broken_urls = check_url(base_url, fixed_url,
-                                         tested_urls, broken_urls)
+    _, tested_urls, broken_urls = check_url(base_url, fixed_url,
+                                            tested_urls, broken_urls)
     return (fixed_url, tested_urls, broken_urls)
 
 
@@ -896,22 +1135,25 @@ def check_url(base_url: str, url: str, tested_urls: list, broken_urls: list):
     Side effects
         Makes HTTP requests.
     """
+    valid = True
     if url not in tested_urls:
         tested_urls.append(url)
         parsed_url = urlparse(url)
         if parsed_url.scheme in ("http", "https"):
             try:
-                print("checking", base_url, url)
+                # print("checking", base_url, url)
                 response = requests.head(url)
                 if response.status_code != 200:
                     if url not in ("http://www.usa.gov/"):
-                        print(url, response.status_code)
+                        print(base_url, url, response.status_code)
                         broken_urls.append((base_url, url))
+                        valid = False
             except requests.exceptions.ConnectionError:
                 print(url)
+                valid = False
                 broken_urls.append((base_url, url))
 
-    return (tested_urls, broken_urls)
+    return (valid, tested_urls, broken_urls)
 
 
 def make_meeting() -> Meeting:
@@ -922,9 +1164,9 @@ def make_meeting() -> Meeting:
         agenda_documents_linked=[],
         approved_minutes_date=None,
         approved_minutes_link=None,
-        audio_url=None,
+        audio_link=None,
         body="",
-        closed_captioning_url=None,
+        closed_captioning_link=None,
         draft_minutes_links=[],
         link_title_text="",
         meeting_type="",
@@ -933,7 +1175,7 @@ def make_meeting() -> Meeting:
         old_meeting_url="",
         sunshine_act_links=[],
         title_text="",
-        video_url=None
+        video_link=None
     )
 
 
