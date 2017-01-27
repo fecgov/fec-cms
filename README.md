@@ -95,7 +95,7 @@ Before you can run this project locally, you'll need a development database:
 createdb cfdm_cms_test
 ```
 
-You will also need to set 2 environmental variables: 
+You will also need to set environmental variables: 
 
 Connection string for the local database as an
 environment variable:
@@ -103,10 +103,6 @@ environment variable:
 ```bash
 export DATABASE_URL=postgresql://:@/cfdm_cms_test
 ```
-
-Local environmental variable setting:
-
-```export FEC_CMS_ENVIRONMENT=local```
 
 ### Finish project setup
 Once all prerequisites and dependencies are installed, you can finish the

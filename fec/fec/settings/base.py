@@ -182,7 +182,7 @@ ENVIRONMENTS = {
     'stage': 'STAGING',
     'prod': 'PRODUCTION',
 }
-FEC_CMS_ENVIRONMENT = ENVIRONMENTS.get(os.getenv('FEC_CMS_ENVIRONMENT'), 'DEVELOPMENT')
+FEC_CMS_ENVIRONMENT = ENVIRONMENTS.get(os.getenv('FEC_CMS_ENVIRONMENT'), 'LOCAL')
 CONTACT_EMAIL = 'betafeedback@fec.gov';
 CONSTANTS = constants
 
@@ -215,10 +215,9 @@ if os.getenv('SENTRY_DSN'):
 
 if FEC_CMS_ENVIRONMENT != 'LOCAL':
     AWS_QUERYSTRING_AUTH = False
-    AWS_ACCESS_KEY_ID = os.environ['CMS_AWS_ACCESS_KEY']
-    AWS_SECRET_ACCESS_KEY = os.environ['CMS_AWS_SECRET_ACCESS_KEY']
-    AWS_STORAGE_BUCKET_NAME = os.environ['CMS_S3_BUCKET_NAME']
-    MEDIA_URL = 'https://%s.s3-us-gov-west-1.amazonaws.com/' % AWS_STORAGE_BUCKET_NAME
+    AWS_ACCESS_KEY_ID = env.get_credential('CMS_AWS_ACCESS_KEY')
+    AWS_SECRET_ACCESS_KEY = env.get_credential('CMS_AWS_SECRET_ACCESS_KEY')
+    AWS_STORAGE_BUCKET_NAME = env.get_credential('CMS_AWS_STORAGE_BUCKET_NAME')
     DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
     AWS_LOCATION = 'cms-content'
-    AWS_S3_REGION_NAME = 'us-gov-west-1'
+    AWS_S3_REGION_NAME = env.get_credential('CMS_AWS_DEFAULT_REGION_NAME')
