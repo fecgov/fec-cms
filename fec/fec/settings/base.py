@@ -187,6 +187,10 @@ CONTACT_EMAIL = 'betafeedback@fec.gov';
 CONSTANTS = constants
 
 FEATURES = {
+    'record': bool(env.get_credential('FEC_FEATURE_RECORD', '')),
+    'about': bool(env.get_credential('FEC_FEATURE_ABOUT', '')),
+    'agendas': bool(env.get_credential('FEC_FEATURE_AGENDAS', '')),
+    'tips': bool(env.get_credential('FEC_FEATURE_TIPS', ''))
 }
 
 AUTH_PASSWORD_VALIDATORS = [

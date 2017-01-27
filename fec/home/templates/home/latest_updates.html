@@ -13,9 +13,26 @@
     <header class="heading--main">
       <h1>Latest updates</h1>
     </header>
-    <p class="p--lead">Search or browse the latest information on the Commission and federal campaign finance law.</p>
-    <p class="p--lead">Weekly Digests are published every Friday and summarize the week's publicly disclosed activity, including enforcement matters, litigation, meetings information and advisory opinion actions.</p>
-    <p class="p--lead">Press releases and FEC Record articles are published as news happens. Press releases are written for media professionals. Record articles are a written for political committees</p>
+    <div class="content__section--narrow">
+      <p class="t-lead">Search or browse the latest information about the Commission and federal campaign finance law.</p>
+      <div class="js-accordion accordion--neutral" data-content-prefix="updates">
+        <button type="button" class="js-accordion-trigger accordion__button">About latest updates</button>
+        <div class="accordion__content">
+          <p>The FEC regularly publishes information for media professionals, members of the public and candidates and committees.</p>
+          <h3>For media professionals</h3>
+          <p>Weekly Digests are published every Friday and summarize the week's publicly disclosed activity. Press releases are published as news happens.</p>
+          {% if request.user.is_authenticated or settings.FEATURES.record %}
+          <h3>For candidates and committees</h3>
+          <p>FEC Record articles inform candidates and committees about FEC developments and are published as news happens. {% if settings.FEATURES.tips %}Tips for Treasurers are published once a week.{% endif %}</p>
+          {% endif %}
+          {% if request.user.is_authenticated or settings.FEATURES.agendas %}
+          <h3>For members of the public</h3>
+          <p>Meeting agendas are usually published a week before a scheduled meeting.</p>
+          <p>Sunshine Act Notices are announcements of open meetings and executive sessions. Notices for open meetings are published at least a week before a scheduled meeting and announce the date, time and a general list of items for discussion.</p>
+          {% endif %}
+        </div>
+      </div>
+    </div>
   </div>
 </section>
 <section class="main__content--full data-container__wrapper">
@@ -25,6 +42,10 @@
           <label class="label">Publication type</label>
           <select name="update_type">
             <option value="">All</option>
+            {% if request.user.is_authenticated or settings.FEATURES.record %}
+              <option value="for-committees" {% if 'for-committees' in update_types %}selected{% endif %}>For candidates and committees:</option>
+              <option value="fec-record" {% if 'fec-record' in update_types %}selected{% endif %}>- FEC Record</option>
+            {% endif %}
             <option value="for-media" {% if 'for-media' in update_types %}selected{% endif %}>For media professionals:</option>
             <option value="press-release" {% if 'press-release' in update_types %}selected{% endif %}>- Press releases</option>
             <option value="weekly-digest" {% if 'weekly-digest' in update_types %}selected{% endif %}>- Weekly Digests</option>
@@ -32,10 +53,20 @@
         </div>
           <div class="filter">
             {% if 'press-release' in update_types or 'for-media' in update_types %}
-              <label class="label" for="record-categories">Press release subjects</label>
-              <select id="record-categories" name="category">
+              <label class="label" for="release-categories">Press release subjects</label>
+              <select id="release-categories" name="category">
                 <option value="">All</option>
                 {% for cat in settings.CONSTANTS.press_release_page_categories.items %}
+                  <option value="{{ cat.0 | slugify }}"
+                    {% if cat.0|slugify in category_list %}selected{% endif %}>
+                    {{ cat.1 }}</option>
+                {% endfor %}
+              </select>
+            {% elif 'fec-record' in update_types or 'for-committees' in update_types %}
+              <label class="label" for="record-categories">FEC Record subjects</label>
+              <select id="record-categories" name="category">
+                <option value="">All</option>
+                {% for cat in settings.CONSTANTS.record_page_categories.items %}
                   <option value="{{ cat.0 | slugify }}"
                     {% if cat.0|slugify in category_list %}selected{% endif %}>
                     {{ cat.1 }}</option>

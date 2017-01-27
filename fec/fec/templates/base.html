@@ -21,14 +21,6 @@
   </head>
 
   <body class="{% block body_class %}{% endblock %}">
-    {% if settings.FEC_CMS_ENVIRONMENT != 'PRODUCTION' %}
-    <div class="banner">
-      <div class="container">
-        <span class="t-block t-bold t-centered">{{ settings.FEC_CMS_ENVIRONMENT }}</span>
-        <span class="t-block t-centered">This site is for testing new ideas and code. Access the most accurate data on the <a href="https://beta.fec.gov">live site</a>.</span>
-      </div>
-    </div>
-    {% endif %}
     {% wagtailuserbar %}
     <a href="#main" class="skip-nav">skip navigation</a>
 
@@ -44,35 +36,11 @@
         <img src="{% static 'img/print-logo.png' %}" class="u-print-only" alt="FEC logo">
         <a title="Home" href="/" class="site-title"><span class="u-visually-hidden">Federal Election Commission | United States of America</span></a>
         <ul class="utility-nav list--flat">
-          <li class="utility-nav__item{% if self.content_section == 'calendar' %} is-active{% endif %}"><a href="/calendar/">Calendar</a></li>
+          <li class="utility-nav__item"><a href="/calendar/">Calendar</a></li>
           <li class="utility-nav__item"><button class="js-glossary-toggle glossary__toggle">Glossary</button></li>
         </ul>
       </div>
-      <nav class="site-nav js-site-nav">
-        <div id="site-menu" class="site-nav__container">
-          <ul class="site-nav__panel site-nav__panel--main">
-            <li><h3 class="site-nav__title u-under-lg-only">Menu</h3></li>
-            <li class="site-nav__item" data-submenu="data">
-              <a class="site-nav__link u-lg-only" href="{{ settings.FEC_APP_URL }}">Campaign finance data</a>
-              <button class="site-nav__link button--nav-panel js-panel-trigger u-under-lg-only" aria-controls="nav-data">Campaign finance data</button>
-            </li>
-            <li class="site-nav__item">
-              <a href="/registration-and-reporting/" class="site-nav__link{% if self.content_section == 'registration-and-reporting' %} is-parent{% endif %}">Registration and reporting</a>
-            </li>
-            <li class="site-nav__item">
-              <a href="/legal-resources" class="site-nav__link{% if self.content_section == 'legal-resources' %} is-parent{% endif %}">Legal resources</a>
-            </li>
-            <li class="site-nav__item utility-nav__item is-disabled">
-              <a href="#" class="site-nav__link">About</a>
-            </li>
-            <li class="site-nav__item utility-nav__item">
-              <a href="/calendar" class="site-nav__link">Calendar</a>
-            </li>
-          </ul>
-        </div>
-        <button for="nav-toggle" class="js-nav-toggle site-nav__button" aria-controls="nav-main">Menu</button>
-        <a title="Home" href="{{ cms_url }}" class="site-title"><span class="u-visually-hidden">Federal Election Commission | United States of America</span></a>
-      </nav>
+      {% include 'partials/mobile-nav.html' %}
     </header>
     {% else %}
     <header class="site-header">
@@ -84,37 +52,11 @@
         <img src="{% static 'img/print-logo.png' %}" class="u-print-only" alt="FEC logo">
         <a title="Home" href="/" class="site-title"><span class="u-visually-hidden">Federal Election Commission | United States of America</span></a>
         <ul class="utility-nav list--flat">
-          <li class="utility-nav__item is-disabled">About</li>
-          <li class="utility-nav__item{% if self.content_section == 'contact' %} is-active{% endif %}"><a href="/contact-us/">Contact</a></li>
           <li class="utility-nav__item{% if self.content_section == 'calendar' %} is-active{% endif %}"><a href="/calendar/">Calendar</a></li>
           <li class="utility-nav__item"><button class="js-glossary-toggle glossary__toggle">Glossary</button></li>
         </ul>
       </div>
-      <nav class="site-nav js-site-nav">
-        <div id="site-menu" class="site-nav__container">
-          <ul class="site-nav__panel site-nav__panel--main">
-            <li><h3 class="site-nav__title u-under-lg-only">Menu</h3></li>
-            <li class="site-nav__item" data-submenu="data">
-              <a class="site-nav__link u-lg-only" href="{{ settings.FEC_APP_URL }}">Campaign finance data</a>
-              <button class="site-nav__link button--nav-panel js-panel-trigger u-under-lg-only" aria-controls="nav-data">Campaign finance data</button>
-            </li>
-            <li class="site-nav__item">
-              <a href="/registration-and-reporting/" class="site-nav__link{% if self.content_section == 'registration-and-reporting' %} is-parent{% endif %}">Registration and reporting</a>
-            </li>
-            <li class="site-nav__item">
-              <a href="/legal-resources" class="site-nav__link{% if self.content_section == 'legal-resources' %} is-parent{% endif %}">Legal resources</a>
-            </li>
-            <li class="site-nav__item utility-nav__item is-disabled">
-              <a href="#" class="site-nav__link">About</a>
-            </li>
-            <li class="site-nav__item utility-nav__item">
-              <a href="/calendar" class="site-nav__link">Calendar</a>
-            </li>
-          </ul>
-        </div>
-        <button for="nav-toggle" class="js-nav-toggle site-nav__button" aria-controls="nav-main">Menu</button>
-        <a title="Home" href="{{ cms_url }}" class="site-title"><span class="u-visually-hidden">Federal Election Commission | United States of America</span></a>
-      </nav>
+      {% include 'partials/mobile-nav.html' %}
     </header>
     {% endif %}
 
@@ -136,6 +78,9 @@
           <ul>
             <li>
               <a href="{{ cms_url }}/contact-us/">Contact us</a>
+            </li>
+            <li>
+              <a href="{{ cms_url }}/about/">About</a>
             </li>
             <li>
               <a href="{{ cms_url }}/press/">Press</a>

@@ -18,7 +18,7 @@ from wagtail.wagtailimages.edit_handlers import ImageChooserPanel
 from wagtail.contrib.table_block.blocks import TableBlock
 
 from fec import constants
-from home.blocks import (DocumentBlock, AsideLinkBlock, ContactInfoBlock,
+from home.blocks import (ThumbnailBlock, AsideLinkBlock, ContactInfoBlock,
                         ContactInfoBlock, CitationsBlock, ResourceBlock,
                         OptionBlock, CollectionBlock)
 
@@ -323,6 +323,88 @@ class PressLandingPage(Page):
         StreamFieldPanel('contact_intro'),
     ]
 
+class AboutLandingPage(Page):
+    hero = stream_factory(null=True, blank=True)
+    sections = StreamField([
+        ('sections', OptionBlock())
+    ], null=True)
+
+    subpage_types = ['ResourcePage']
+
+    content_panels = Page.content_panels + [
+        StreamFieldPanel('hero'),
+        StreamFieldPanel('sections')
+    ]
+
+class CommissionerPage(Page):
+    first_name = models.CharField(max_length=255, default='', blank=False)
+    middle_initial = models.CharField(max_length=255, blank=True)
+    last_name = models.CharField(max_length=255, default='', blank=False)
+    picture = models.ForeignKey(
+        'wagtailimages.Image',
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name='+'
+    )
+    sworn_in = models.DateField(null=True, blank=True)
+    term_expiration = models.DateField(null=True, blank=True)
+    reappointed_dates = models.CharField(max_length=255, blank=True)
+    party_affiliation = models.CharField(
+        max_length=2,
+        choices=(
+            ('D', 'Democrat'),
+            ('R', 'Republican'),
+            ('I', 'Independent'),
+        )
+    )
+    commissioner_title = models.CharField(max_length=255, blank=True)
+
+    commissioner_bio = StreamField([
+        ('paragraph', blocks.RichTextBlock())
+    ], null=True, blank=True)
+
+    commissioner_email = models.CharField(max_length=255, blank=True)
+    commissioner_phone = models.CharField(max_length=255, null=True, blank=True)
+    commissioner_twitter = models.CharField(max_length=255, null=True, blank=True)
+
+    content_panels = Page.content_panels + [
+        FieldPanel('first_name'),
+        FieldPanel('middle_initial'),
+        FieldPanel('last_name'),
+        ImageChooserPanel('picture'),
+        FieldPanel('sworn_in'),
+        FieldPanel('term_expiration'),
+        FieldPanel('reappointed_dates'),
+        FieldPanel('party_affiliation'),
+        FieldPanel('commissioner_title'),
+        StreamFieldPanel('commissioner_bio'),
+        FieldPanel('commissioner_email'),
+        FieldPanel('commissioner_phone'),
+        FieldPanel('commissioner_twitter'),
+    ]
+
+    def get_context(self, request):
+        context = super(CommissionerPage, self).get_context(request)
+
+        # Breadcrumbs for Commissioner pages
+        context['ancestors'] = [
+            {
+                'title': 'About the FEC',
+                'url': '/about/',
+            },
+            {
+                'title': 'Leadership and Structure',
+                'url': '/about/leadership-and-structure',
+            },
+            {
+                'title': 'All Commissioners',
+                'url': '/about/leadership-and-structure/commissioners',
+            }
+        ]
+
+        return context
+
 class CollectionPage(Page):
     body = stream_factory(null=True, blank=True)
     sidebar_title = models.CharField(max_length=255, null=True, blank=True)
@@ -349,7 +431,9 @@ class CollectionPage(Page):
 
 class ResourcePage(Page):
     """Class for pages that include a side nav, multiple sections and citations"""
-    intro = stream_factory(null=True, blank=True)
+    intro = StreamField([
+        ('paragraph', blocks.RichTextBlock())
+    ], null=True)
     sections = StreamField([
         ('sections', ResourceBlock())
     ], null=True)
@@ -361,11 +445,20 @@ class ResourcePage(Page):
             blocks.PageChooserBlock(label="Related topic")
         ))
     ], null=True)
+
+    breadcrumb_style = models.CharField(max_length=255,
+        choices=[('primary', 'Blue'), ('secondary', 'Red')],
+        default='primary')
+
     content_panels = Page.content_panels + [
         StreamFieldPanel('intro'),
         StreamFieldPanel('sections'),
         StreamFieldPanel('citations'),
         StreamFieldPanel('related_topics')
+    ]
+
+    promote_panels = Page.promote_panels + [
+        FieldPanel('breadcrumb_style'),
     ]
 
 class LegalResourcesLandingPage(ContentPage, UniqueModel):
@@ -382,3 +475,48 @@ class EnforcementPage(ContentPage, UniqueModel):
     @property
     def content_section(self):
         return 'legal-resources'
+
+
+class TipsForTreasurersPage(ContentPage):
+    date = models.DateField(default=datetime.date.today)
+    template = 'home/updates/tips_for_treasurers.html'
+    content_panels = ContentPage.content_panels + [
+        FieldPanel('date')
+    ]
+
+    @property
+    def get_update_type(self):
+        return constants.update_types['tips-for-treasurers']
+
+    @property
+    def content_section(self):
+        return ''
+
+
+class ServicesLandingPage(ContentPage, UniqueModel):
+    subpage_types = ['CollectionPage']
+    template = 'home/candidate-and-committee-services/services_landing_page.html'
+
+    hero = stream_factory(null=True, blank=True)
+
+    intro = StreamField([
+        ('paragraph', blocks.RichTextBlock())
+    ], null=True)
+
+    sections = StreamField([
+        ('sections', ResourceBlock())
+    ], null=True)
+
+    content_panels = Page.content_panels + [
+        StreamFieldPanel('hero'),
+        StreamFieldPanel('intro'),
+        StreamFieldPanel('sections'),
+    ]
+
+    @property
+    def content_section(self):
+        return 'candidate-and-committee-services'
+
+    @property
+    def hero_class(self):
+        return 'services'

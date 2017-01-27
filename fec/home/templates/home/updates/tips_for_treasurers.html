@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+{% load wagtailcore_tags %}
+{% load staticfiles %}
+{% block body_class %}template-{{ self.get_verbose_name | slugify }}{% endblock %}
+
+{% block content %}
+
+<nav class="page-header page-header--secondary">
+  <ul class="breadcrumbs">
+    <li class="breadcrumbs__item"><a href="/" class="breadcrumbs__link" rel="Home">Home</a></li>
+    <li class="breadcrumbs__item">
+      <span class="breadcrumbs__separator">›</span>
+      <a class="breadcrumbs__link" href="/updates?update_type=tips-for-treasurers">Tips for Treasurers</a>
+    </li>
+    <li class="breadcrumbs__item breadcrumbs__item--current">
+      <span class="breadcrumbs__separator">›</span>
+      <span>{{ self.title }}</span>
+    </li>
+  </ul>
+</nav>
+
+<article class="main">
+  <div class="container">
+    <header class="heading--main heading--with-date">
+      <ul class="tags">
+        <li class="tag tag--secondary t-upper">
+          Weekly Digests
+        </li>
+      </ul>
+      <div class="row">
+        {% spaceless %}{# for inline blocks #}
+        <h1 class="heading__left">{{ self.title }}</h1>
+        <div class="heading__right">
+          <span class="t-sans">{{ self.date|date:'F j, Y' }}</span>
+        </div>
+        {% endspaceless %}
+      </div>
+    </header>
+    <div>
+      <div class="main__content">
+        {% include 'partials/body-blocks.html' with blocks=self.body %}
+      </div>
+      <aside class="sidebar-container">
+        <button class="button button--standard button--share is-disabled u-float-right">Share</button>
+      </aside>
+    </div>
+  </div>
+</article>
+
+<div class="slab slab--neutral">
+  <div class="container">
+    <div class="content__section">
+      <h3>Read next:</h3>
+      {% if self.read_next %}
+        <h4><a href="{{ self.read_next.url }}">{{ self.read_next.title }}</a></h4>
+      {% endif %}
+      <h4><a href="/updates?update_type=tips-for-treasurers">Tips for Treasurers</a> &raquo;</h4>
+    </div>
+  </div>
+</div>
+
+<div class="slab slab--neutral footer-disclaimer">
+  <div class="container">
+    <p class="usa-width-one-half">This site is in beta, which means we're testing content that better adheres to legal plain language requirements. This content is not finalized, is not legal advice and is subject to change.</p>
+    <p class="usa-width-one-half">Everything on this site should be read in conjunction with FEC.gov. Please let us know what you think of our new content; use the feedback tool on this page.</p>
+  </div>
+</div>
+
+{% endblock %}
