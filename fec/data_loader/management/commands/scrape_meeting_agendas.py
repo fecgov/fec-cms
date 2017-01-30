@@ -1,4 +1,4 @@
-from collections import defaultdict, Counter
+from collections import defaultdict
 from datetime import datetime
 from dateutil import parser as dparser
 from typing import (
@@ -12,7 +12,7 @@ from urllib.parse import urljoin, urlparse
 import json
 import re
 
-from lxml.html import (
+from lxml.html import (  # type: ignore
     fromstring,
     tostring,
     HtmlElement
@@ -22,7 +22,7 @@ from ipdb import set_trace as st  # type: ignore
 from os import _exit  # type: ignore
 
 
-def stq():
+def qq():
     _exit(0)
 
 """
@@ -83,10 +83,10 @@ Links = List[Link]
 Meeting = NamedTuple(
     "Meeting",
     [
-        ("agenda_documents_linked", Links),  # list (Links)
+        ("agenda_document_links", Links),  # list (Links)
         ("approved_minutes_date", Date),  # Date
         ("approved_minutes_link", Link),  # Link
-        ("audio_link", Link),  # Link
+        # TODO: what about capturing the other audio snippets?
         ("body", str),  # HTML,
         ("closed_captioning_link", Link),  # Link
         ("draft_minutes_links", Links),  # list (Links)
@@ -94,7 +94,9 @@ Meeting = NamedTuple(
         ("meeting_type", str),  # "open" or "executive"
         ("pdf_disclaimer", str),  # HTML (outer HTML)
         ("posted_date", Date),  # Date
+        ("primary_audio_link", Link),  # Link
         ("old_meeting_url", str),  # URL
+        ("secondary_audio_links", Links),  # list (Links)
         ("sunshine_act_links", Links),  # list (Links)
         ("title_text", str),  # str (TODO: do we need the HTML?)
         ("video_link", Link)  # Link
@@ -208,10 +210,34 @@ urls_to_change = {
     "http://www.fec.gov/audio/2015/2015100100.mp3",
 
     "http://www.fec.gov/audio/2014/2014042304.mp3": None,
-
     "http://www.fec.gov/audio/2013/2013042505.mp3": None,
-
     "http://www.fec.gov/audio/2012/2012041203.mp3": None,
+    "http://www.fec.gov/agenda/audio/audio.shtml": None,
+    "http://www.fec.gov/aos/aodraft.shtml": None,
+
+    "".join(["http://www.fec.gov",
+             "/agenda/2016/documents/transcripts/",
+             "Open_Meeting_Captions_2016_08_16.txt"]):
+    None,
+
+    "http://www.fec.gov/agenda/2009/mtgdoc0942B.pdf":
+    "http://www.fec.gov/agenda/2009/mtgdoc0942b.pdf",
+
+    "http://www.fec.gov/aos/aoreq.shtml":
+    "http://saos.fec.gov/saos/searchao?SUBMIT=pending",
+
+    "http://www.fec.gov/aos/2005/aor2005-10comments.pdf": None,
+
+    "http://www.fec.gov/aos/2004/aor2004-08.pdf": None,
+    # "http://saos.fec.gov/saos/aonum.jsp?AONUM=2004-08",
+
+    "http://www.fec.gov/aos/2004/aor2004-10.pdf": None,
+    # "http://saos.fec.gov/saos/aonum.jsp?AONUM=2004-10",
+
+    "http://www.fec.gov/aos/2003/aor2003-15com-5.pdf": None,
+
+    "http://www.fec.gov/law/advisoryopinions.shtml":
+    "http://saos.fec.gov/saos/searchao",
 
 }
 
@@ -219,10 +245,10 @@ urls_to_change = {
 def cli_main(args: list=None) -> None:
     base_url = "http://www.fec.gov/agenda/agendas.shtml"
     annual_urls = [base_url] + extract_annual_urls(base_url)
-    meetings = []
+    meetings = []  # type: Meetings
     broken_links = []  # type: List[str]
-    annual_urls = [url for url in annual_urls if "2011" in url or
-                   url.endswith("agendas.shtmlxx")]
+    # annual_urls = [url for url in annual_urls if "2000" in url or
+    #                url.endswith("agendas.shtmlxx")]
     for url in annual_urls:
         _meetings, _broken_links = extract_meeting_metadata(url, broken_links,
                                                             urls_to_change)
@@ -238,86 +264,18 @@ def cli_main(args: list=None) -> None:
                 for p in priors:
                     if any([p.title_text != mtg.title_text,
                             p.posted_date.iso8601 != mtg.posted_date.iso8601]):
-                        st()
+                        # just append mtg here, since the details are
+                        # different?
+                        meetings.append(mtg)
         # meetings.extend([_ for _ in _meetings if _ is not None])
         broken_links.extend(_broken_links)
 
-    fulldates = []
-    strdates = []
-    badmeetings = []
-    goodmeetings = []
-    agendameetings = []
-    noticemeetings = []
-    sunshines = []
-
     for meeting in meetings:
-        if type(meeting) == Meeting:
-            date = meeting.posted_date
-            if type(date) == Date:
-                fulldates.append((date.original, date.source, date.iso8601))
-                goodmeetings.append(meeting)
-                print(len(goodmeetings))
-            else:
-                st()
-                strdates.append(date)
-                badmeetings.append(meeting)
-        else:
-            st()
-            badmeetings.append(meeting)
+        fname = "out/%s.html" % meeting.posted_date.iso8601
+        with open(fname, "w") as f:
+            f.write(meeting.body)
 
-    def is_notice_meeting(m):
-        no_url = m.old_meeting_url in (None, "")
-        no_minutes = m.approved_minutes_link in (None, "")
-        sunshine_links = len(m.sunshine_act_links) > 0
-        return no_url and no_minutes and sunshine_links
-
-    for meeting in goodmeetings:
-        if is_notice_meeting(meeting):
-            noticemeetings.append(meeting)
-        else:
-            agendameetings.append(meeting)
-
-    for meeting in goodmeetings:
-        for slink in meeting.sunshine_act_links:
-            sunshines.append(slink.url)
-    usunshines = set(sunshines)
-    dupes = [x for x in sunshines if sunshines.count(x) > 1]
-    dates = [x.posted_date.iso8601 for x in goodmeetings]
-
-    dcount = Counter(dates)
-
-    broken = set([l[1] for l in broken_links])
-
-    """
-    for meeting in meetings:
-        meeting = parse_meeting_page(meeting)
-    """
-    no_audio = [m for m in meetings if m.audio_link
-                is None and "cancel" not in m.title_text.lower()]
-    no_cc = [m for m in meetings if m.closed_captioning_link
-             is None and "cancel" not in m.title_text.lower()]
-    no_video = [m for m in meetings if m.video_link
-                is None and "cancel" not in m.title_text.lower()]
-    cutoff = datetime(2015, 2, 14)
-    now = datetime.now()
-    no_cc = [m for m in no_cc if m.posted_date.datetime > cutoff and
-             m.posted_date.datetime <= now]
-    no_video = [m for m in no_video if m.posted_date.datetime > cutoff and
-                m.posted_date.datetime <= now]
-    no_audio = [m for m in no_audio if m.posted_date.datetime <= now]
-    no_au = [m.old_meeting_url for m in no_audio]
-    no_cu = [m.old_meeting_url for m in no_cc]
-    no_vu = [m.old_meeting_url for m in no_video]
-
-    print(len(no_au + no_cu + no_vu))
-
-    st()
-    print(
-        usunshines,
-        dupes,
-        dcount,
-        broken
-    )
+    write_meetings(meetings, [])
 
 
 def extract_annual_urls(url: str) -> List[str]:
@@ -349,6 +307,15 @@ def parse_meeting_row(row: HtmlElement, urls_to_change: dict) -> Meeting:
     Impure
         Via ``parse_meeting_docs_cell``, alters the row HTML (which is a kind
         of singleton).
+
+    http://www.fec.gov/agenda/2010/agendas2010.shtml notes that
+    http://www.fec.gov/agenda/2010/agenda20100304b.shtml was cancelled, but it
+    looks like it'll be tricky to get that info into the meeting.
+
+    2010 page also states that
+    http://www.fec.gov/agenda/2010/oral_hearing20100120.shtml was postponed.
+
+
     """
     cells = xpath(row, "./td")
 
@@ -411,8 +378,8 @@ def parse_meeting_docs_cell(row: HtmlElement, cell: HtmlElement,
         """
         a_el = docs_links[1]
         if "sunshine" in hattr(a_el, "href"):
-            text = ("%s%s" % (a_el.text_content(),
-                              a_el.tail if a_el.tail else "")).strip()
+            text = ("%s%s" % (a_el.text_content().strip(),
+                              a_el.tail.strip() if a_el.tail else "")).strip()
             url = hattr(a_el, "href")
             title = hattr(a_el, "title", "")
             s_link = Link(text=text, title=title, url=url)
@@ -659,28 +626,24 @@ def extract_archive_urls(base_url: str, archive_urls: list=[],
 def parse_meeting_page(mtg: Meeting, urls_to_change: dict) -> Meeting:
     if mtg.old_meeting_url in ("", None):
         return mtg
-    print("Meeting:", mtg.old_meeting_url)
+    # print("Meeting:", mtg.old_meeting_url)
     response = requests.get(mtg.old_meeting_url)
     enc = response.encoding
     html = fromstr(response.content)
-    div = xpath(html, "//div[@id='fec_mainContent']")
-    """
-    Find the links to the video, audio, and captioning.
-    We'll need to distinguish between the easily-identified links to these and
-    the links that are denoted by text that precedes them.
+    main = find_main_section(html, enc, mtg)
 
-    Find links to the agenda documents.
-    Can we assume that all links to PDFs are “agenda documents”? I think so.
-    This means watching out for other types of link that aren't covered here.
-
-    """
-    if len(div) == 1:
-        # Handle modern page
-        main, _ = fix_urls(div[0], mtg.old_meeting_url, [], urls_to_change)
-    else:
-        # Handle older page types
-        print("lacks fec_mainContent")
+    # Extract/remove PDF disclaimer.
+    pdf_disclaimer = None
+    pdf_candidates = xpath(main, "//div[@id='pdf_disclaimer']")
+    if len(pdf_candidates) == 1:
+        pdf_disclaimer_el = pdf_candidates[0]
+        pdf_disclaimer = tostr(pdf_disclaimer_el).decode(enc)
+        mtg = mtg._replace(pdf_disclaimer=pdf_disclaimer.strip())
+    elif len(pdf_candidates) > 1:
         st()
+
+    if pdf_disclaimer is not None:
+        main.remove(pdf_disclaimer_el)
 
     a_els = xpath(main, ".//a")
     # We only want elements with populated hrefs:
@@ -689,7 +652,7 @@ def parse_meeting_page(mtg: Meeting, urls_to_change: dict) -> Meeting:
     links = [parse_a_element(a_el) for a_el in a_els]
 
     asset_pairs = (
-        ("audio_link", "audio file of entire meeting"),
+        ("primary_audio_link", "audio file of entire meeting"),
         ("closed_captioning_link", "archived captions of entire meeting"),
         ("video_link", "video of entire meeting")
     )
@@ -704,7 +667,7 @@ def parse_meeting_page(mtg: Meeting, urls_to_change: dict) -> Meeting:
         el = a_els.pop()
         # audio first
         if "audio file of entire meeting" in el.text_content().lower():
-            mtg = mtg._replace(audio_link=parse_a_element(el))
+            mtg = mtg._replace(primary_audio_link=parse_a_element(el))
         else:
             st()
     """
@@ -714,6 +677,7 @@ def parse_meeting_page(mtg: Meeting, urls_to_change: dict) -> Meeting:
         "audio_link": {
             "text": ("audio file of entire meeting",),
             "img_src": "audio.png",
+            "extensions": (".mp3",)
         },
         "closed_captioning_link": {
             "text": ("archived captions of entire meeting",),
@@ -726,17 +690,45 @@ def parse_meeting_page(mtg: Meeting, urls_to_change: dict) -> Meeting:
             ),
             "img_src": "play_icon.png"
         },
-        "agenda_documents_linked": {
+        "agenda_document_links": {
             "text": (
                 "agenda document",
-                "minutes for"
+                "minutes for",
+                "document no.",
+                "no. 10-04-a",
+                "statement",
+                "ao 2013-02"
             ),
-            "img_src": "N/A"
+            "img_src": "N/A",
+            "extensions": (".pdf",)
         },
-        "adobe": {
-            "text": ("www.adobe.com",),
-            "img_src": "N/A"
-        }
+        "other": {
+            "text": (
+                "FEC Beta",
+                "audio recordings",
+                "live caption feed",
+                "live video feed",
+                "advisory opinion request",
+                "advisory opinion\n    requests",
+                "advisory opinion\r\n    requests",
+                "advisory opinions",
+                "federal election commission",
+                "https://beta.fec.gov/",
+                "rulemakings",
+                "see note below",
+                "www.adobe.com",
+            ),
+            "img_src": "N/A",
+            "href": (
+                "https://beta.fec.gov/",
+                "http://www.adobe.com/",
+                "http://www.fec.gov/",
+                "http://www.fec.gov",
+                "".join(["http://www.fec.gov/",
+                         "agenda/2006/agenda20060209.shtml#footnote1"]),
+            ),
+        },
+
 
     }
 
@@ -747,6 +739,22 @@ def parse_meeting_page(mtg: Meeting, urls_to_change: dict) -> Meeting:
                 return True
             if text in hattr(elem, "title", "").lower():
                 return True
+        # Specific URLs
+        if asset_info[key].get("href", False):
+            for href in asset_info[key]["href"]:
+                if hattr(elem, "href", "") == href:
+                    return True
+        # Can we assume every pdf is an agenda document?
+        # We can assume every mp3 is an audio file:
+        if asset_info[key].get("extensions", False):
+            for ext in asset_info[key]["extensions"]:
+                href = hattr(elem, "href", False)
+                if href:
+                    parsed_href = urlparse(href)
+                    path = parsed_href.path
+                    suffix = Path(path).suffix
+                    if ext == suffix.lower():
+                        return True
         # Harder; look for the source filename of an image inside a element:
         imgs = xpath(elem, "./img")
         if len(imgs) > 1:
@@ -766,13 +774,21 @@ def parse_meeting_page(mtg: Meeting, urls_to_change: dict) -> Meeting:
     while len(a_els) > 0:
         el = a_els.pop()
         if test_el(el, "audio_link"):
+            # Have to make sure we only get the first one on the page?
+            # TODO: come back to this and consider grabbing all of them.
             audio_link = parse_a_element(el)
-            # assert audio_link.url.endswith("mp3")
-            if not audio_link.url.endswith("mp3"):
-                st()
-            valid, _, _ = check_url(base, audio_link.url, [], [])
-            if valid:
-                mtg = mtg._replace(audio_link=audio_link)
+            if mtg.primary_audio_link is None:
+                # assert primary_audio_link.url.endswith("mp3")
+                if not audio_link.url.endswith("mp3"):
+                    st()
+                valid, _, _ = check_url(base, audio_link.url, [], [])
+                if valid:
+                    mtg = mtg._replace(primary_audio_link=audio_link)
+            else:
+                audio_links = mtg.secondary_audio_links
+                if audio_link.url not in audio_links:
+                    audio_links.append(audio_link)
+                    mtg._replace(secondary_audio_links=audio_links)
         elif test_el(el, "closed_captioning_link"):
             if pre_video:
                 pass
@@ -791,16 +807,24 @@ def parse_meeting_page(mtg: Meeting, urls_to_change: dict) -> Meeting:
             valid, _, _ = check_url(base, video_link.url, [], [])
             if valid:
                 mtg = mtg._replace(video_link=video_link)
-        elif test_el(el, "agenda_documents_linked"):
+        elif test_el(el, "agenda_document_links"):
             doc_link = parse_a_element(el)
-            if not doc_link.url.endswith("pdf"):
-                st()
+            tail = el.tail.strip() if el.tail is not None else ""
+            if tail != "":
+                doc_link = doc_link._replace(text=" ".join([doc_link.text,
+                                                            tail]))
+            # if not doc_link.url.endswith("pdf"):
+            #     st()
+            # if doc_link.text == "" and doc_link.title == "":
+            #     st()
             valid, _, _ = check_url(base, doc_link.url, [], [])
             if valid:
-                docs = mtg.agenda_documents_linked
+                docs = mtg.agenda_document_links
+                # TODO: dedupe?
+                # TODO: we're losing data from the tail of some of these
                 docs.append(doc_link)
-                mtg = mtg._replace(agenda_documents_linked=docs)
-        elif test_el(el, "adobe"):
+                mtg = mtg._replace(agenda_document_links=docs)
+        elif test_el(el, "other"):
             pass
         else:
             unused.append(el)
@@ -844,12 +868,17 @@ def parse_meeting_page(mtg: Meeting, urls_to_change: dict) -> Meeting:
 
         "http://www.fec.gov/agenda/2014/agenda20140306.shtml": "audio",
         "http://www.fec.gov/agenda/2014/agenda20140227.shtml": "audio",
+        "http://www.fec.gov/agenda/2010/agenda20100129.shtml": "audio",
+        "http://www.fec.gov/agenda/2009/agenda20091203.shtml": "audio",
 
     }
 
     cancellations = [
         "http://www.fec.gov/agenda/2014/agenda20140710.shtml",
         "http://www.fec.gov/agenda/2012/agenda20121101.shtml",
+        "http://www.fec.gov/agenda/2010/agenda20100304b.shtml",
+        "http://www.fec.gov/agenda/2010/oral_hearing20100120.shtml"
+
 
     ]
 
@@ -859,27 +888,30 @@ def parse_meeting_page(mtg: Meeting, urls_to_change: dict) -> Meeting:
         pass
     elif mtg.old_meeting_url in cancellations:
         pass
-    elif not pre_video and any([mtg.audio_link is None,
+    elif not pre_video and any([mtg.primary_audio_link is None,
                                 mtg.closed_captioning_link is None,
                                 mtg.video_link is None,
-                                len(mtg.agenda_documents_linked) == 0]):
+                                len(mtg.agenda_document_links) == 0]):
         while len(unused) > 0:
             el = unused.pop()
             print(tostr(el))
             st()
-    elif pre_video and mtg.audio_link is None:
+    elif pre_video and mtg.primary_audio_link is None:
         while len(unused) > 0:
             el = unused.pop()
             print(tostr(el))
             st()
+
+    if len(unused) > 0:
+        st()
 
     """
     for key, text in asset_pairs:
         candidates = [l for l in links if l is not
                       None and text in l.text.lower()]
         if len(candidates) == 1:
-            if key == "audio_link":
-                mtg = mtg._replace(audio_link=candidates[0])
+            if key == "primary_audio_link":
+                mtg = mtg._replace(primary_audio_link=candidates[0])
             if key == "closed_captioning_link":
                 mtg = mtg._replace(closed_captioning_link=candidates[0])
             if key == "video_link":
@@ -887,7 +919,7 @@ def parse_meeting_page(mtg: Meeting, urls_to_change: dict) -> Meeting:
         elif len(candidates) == 0:
             # Not sure what to do here
             # Try to guess it:
-            if key == "audio_link":
+            if key == "primary_audio_link":
                 if "cancel" in mtg.title_text.lower():
                     pass
                 else:
@@ -909,28 +941,80 @@ def parse_meeting_page(mtg: Meeting, urls_to_change: dict) -> Meeting:
             st()
     """
 
-    # Extract/remove PDF disclaimer.
-    pdf_disclaimer = None
-    pdf_candidates = xpath(main, "//div[@id='pdf_disclaimer']")
-    if len(pdf_candidates) == 1:
-        pdf_disclaimer_el = pdf_candidates[0]
-        pdf_disclaimer = tostr(pdf_disclaimer_el).decode(enc)
-        mtg = mtg._replace(pdf_disclaimer=pdf_disclaimer.strip())
-    elif len(pdf_candidates) > 1:
-        st()
-
-    if pdf_disclaimer is not None:
-        main.remove(pdf_disclaimer_el)
-
     content = innerhtml(main, encoding=enc).strip()
     mtg = mtg._replace(body=content)
+    fname = "out/%s.html" % mtg.posted_date.iso8601
+    with open(fname, "w") as f:
+        outstring = "\n".join([
+            "<html>",
+            "<body>",
+            "<h1>%s</h1>" % mtg.title_text,
+            mtg.body,
+            "</body>",
+            "</html>"
+        ])
+        f.write(outstring)
     return mtg
+
+
+def find_main_section(html: HtmlElement, enc: str,
+                      mtg: Meeting) -> HtmlElement:
+    """
+    Find the main section from the meeting page HTML.
+    """
+    """
+    Find the links to the video, audio, and captioning.
+    We'll need to distinguish between the easily-identified links to these and
+    the links that are denoted by text that precedes them.
+
+    Find links to the agenda documents.
+    Can we assume that all links to PDFs are “agenda documents”? I think so.
+    This means watching out for other types of link that aren't covered here.
+
+    """
+    div = xpath(html, "//div[@id='fec_mainContent']")
+    if len(div) == 1:
+        # Handle modern page
+        main, _ = fix_urls(div[0], mtg.old_meeting_url, [], urls_to_change)
+    else:
+        # Handle older page types
+        tables = xpath(html, "//table")
+        if len(tables) > 0 and mtg.posted_date.datetime > datetime(2002,
+                                                                   8, 15):
+            rows = xpath(tables[0], "./tr")
+            top = htext(rows[0])
+            if "HOME" in top:
+                rows = rows[1:]
+            # We want to synthesize a div that contains the inner HTML of
+            # the rows after the first.
+            relevant = []
+            while len(rows) > 0:
+                row = rows.pop(0)
+                cells = xpath(row, "./td")
+                markup = " ".join([innerhtml(c, encoding=enc).strip() for
+                                   c in cells])
+                if markup != "":
+                    relevant.append(markup)
+
+            main_raw = fromstring("<div>%s</div>" % " ".join(relevant))
+            main, _ = fix_urls(main_raw, mtg.old_meeting_url, [],
+                               urls_to_change)
+        else:
+            # We just want the entire body of the page.
+            body = xpath(html, "//body")[0]
+            markup = innerhtml(body, encoding=enc).strip()
+            main_raw = fromstring("<div>%s</div>" % markup)
+            main, _ = fix_urls(main_raw, mtg.old_meeting_url, [],
+                               urls_to_change)
+
+    return main
 
 
 def parse_a_element(a_el: HtmlElement) -> Link:
     """
     Take an ``a`` HTML element and turn it into a ``Link`` object.
     Note: does not capture the tail of the element.
+    TODO: do we need the tail?
     """
     text = htext(a_el).strip()
     try:
@@ -948,7 +1032,6 @@ def s_to_date(d: str, original: str=None) -> Date:
     if original is None:
         original = d
     d = d.strip()
-    d = d.replace("Ocober", "October")
 
     try:
         dt = datetime.strptime(d, "%B %d, %Y")
@@ -976,6 +1059,7 @@ def extract_date(a_el: HtmlElement) -> Date:
     :rtype: Date
     :returns: A ``Date`` object.
     """
+    url = hattr(a_el, "href")
     # Get the content and the tail:
     text = ("%s%s" % (a_el.text_content(),
                       a_el.tail if a_el.tail else "")).strip()
@@ -983,9 +1067,14 @@ def extract_date(a_el: HtmlElement) -> Date:
     datematch = re.match(r"[a-zA-Z]+[ ]+[0-9]{1,2},? ?[0-9]{4}", text)
     if datematch:
         datestring = datematch.group(0)
+        # Handle some edge cases:
+        datestring = datestring.replace("Ocober", "October")
+        datestring = datestring.replace("16,2000", "16, 2000")
         return s_to_date(datestring, original=text)
     else:
         # It has non-standard content, so we'll instead look at the URL.
+        # Note that there are URLs that don't conform to these patterns, but
+        # the string-matching above catches all of them.
         url = hattr(a_el, "href")
         path = urlparse(url).path
         name = path.split("/")[-1]
@@ -1161,10 +1250,9 @@ def make_meeting() -> Meeting:
     Return a meeting with default values.
     """
     return Meeting(
-        agenda_documents_linked=[],
+        agenda_document_links=[],
         approved_minutes_date=None,
         approved_minutes_link=None,
-        audio_link=None,
         body="",
         closed_captioning_link=None,
         draft_minutes_links=[],
@@ -1172,32 +1260,54 @@ def make_meeting() -> Meeting:
         meeting_type="",
         pdf_disclaimer="",
         posted_date=None,
+        primary_audio_link=None,
         old_meeting_url="",
+        secondary_audio_links=[],
         sunshine_act_links=[],
         title_text="",
         video_link=None
     )
 
 
-def write_tips(tips: list, broken_links: list) -> None:
+def write_meetings(meetings: Meetings, broken_links: list) -> None:
     """
-    Given a list of Tip objects, sorts them by date, converts them to JSON,
-    and writes them to a file.
-
-    If there are broken links, writes them to a file as well.
-
-    :arg list articles: The list of Article objects.
-
-    :rtype: None
-    :returns: None
-
-    Side effects
-        Writes to the filesystem.
+    Convert the meetings to JSON and write them to a file.
     """
-    by_date = sorted(tips, key=attrgetter("posted_date"))
-    out_lines = ",\n".join([json.dumps(t._asdict()) for t in by_date])
+    by_date = sorted([m for m in meetings if m], key=attrgetter("posted_date"))
+    dicts = [m._asdict() for m in by_date]
+    array_keys = (
+        "agenda_document_links",
+        "draft_minutes_links",
+        "secondary_audio_links",
+        "sunshine_act_links"
+    )
+    single_item_keys = (
+        "approved_minutes_date",
+        "approved_minutes_link",
+        "closed_captioning_link",
+        "posted_date",
+        "primary_audio_link",
+        "video_link"
+    )
+    date_keys = (
+        "approved_minutes_date",
+        "posted_date"
+    )
+
+    for m in dicts:
+        for key in array_keys:
+            if m[key] is not None:
+                m[key] = [x._asdict() for x in m[key]]
+        for key in single_item_keys:
+            if m[key] is not None:
+                m[key] = m[key]._asdict()
+                if key in date_keys:
+                    del m[key]["datetime"]  # Can't serialize this
+
+
+    out_lines = ",\n".join([json.dumps(m) for m in dicts])
     out_string = "[\n%s\n]" % out_lines
-    fname = datetime.now().strftime("tips--%Y-%m-%d-%H%M%S.json")
+    fname = datetime.now().strftime("meetings--%Y-%m-%d-%H%M%S.json")
     with open(fname, "w+") as f:
         f.write(out_string)
 
