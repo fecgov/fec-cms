@@ -46,6 +46,9 @@
               <option value="for-committees" {% if 'for-committees' in update_types %}selected{% endif %}>For candidates and committees:</option>
               <option value="fec-record" {% if 'fec-record' in update_types %}selected{% endif %}>- FEC Record</option>
             {% endif %}
+            {% if request.user.is_authenticated or settings.FEATURES.tips %}
+              <option value="tips-for-treasurers" {% if 'tips-for-treasurers' in update_types %}selected{% endif %}>- Tips for Treasurers</option>
+            {% endif %}
             <option value="for-media" {% if 'for-media' in update_types %}selected{% endif %}>For media professionals:</option>
             <option value="press-release" {% if 'press-release' in update_types %}selected{% endif %}>- Press releases</option>
             <option value="weekly-digest" {% if 'weekly-digest' in update_types %}selected{% endif %}>- Weekly Digests</option>
