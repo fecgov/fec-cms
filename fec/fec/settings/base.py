@@ -39,7 +39,10 @@ INSTALLED_APPS = (
     'taggit',
     'compressor',
     'modelcluster',
+    'rest_framework',
     'storages',
+
+    'wagtail.api.v2',
 
     'wagtail.wagtailcore',
     'wagtail.wagtailadmin',

@@ -9,12 +9,13 @@ from wagtail.wagtailcore import urls as wagtail_urls
 
 from home import views as home_views
 from search import views as search_views
-
+from home import api
 
 urlpatterns = [
     url(r'^django-admin/', include(admin.site.urls)),
 
     url(r'^admin/', include(wagtailadmin_urls)),
+    url(r'^api/v2/', api.api_router.urls),
     url(r'^calendar/$', home_views.calendar),
     url(r'^commissioners/$', home_views.commissioners),
     url(r'^about/leadership-and-structure/commissioners/$', home_views.commissioners),
