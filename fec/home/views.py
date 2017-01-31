@@ -1,4 +1,5 @@
 import requests
+import json
 
 from django.shortcuts import render
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
@@ -197,20 +198,29 @@ def contact_rad(request):
     form = ContactRAD(request.POST)
     if form.is_valid():
       # Remove the committee name from the data
-      data = form.cleaned_data.pop('committee_name', None)
+      data = form.cleaned_data
+      del data['committee_name']
 
       # Post to ServiceNow
       url = settings.FEC_SERVICE_NOW_API + 'u_imp_rad_response'
       username = settings.FEC_SERVICE_NOW_USERNAME
       password = settings.FEC_SERVICE_NOW_PASSWORD
-      post = requests.post(url, data=data, auth=(username, password))
-      print(post.status_code)
 
-      # Render the page with success==True
-      return render(request, 'home/contact-form.html', {
-        'self': page_context,
-        'success': True
-      })
+      post = requests.post(url, data=json.dumps(data), auth=(username, password))
+      print(post.status_code)
+      print(post.__dict__)
+
+      if post.status_code == 201:
+        return render(request, 'home/contact-form.html', {
+          'self': page_context,
+          'success': True
+        })
+      else:
+        return render(request, 'home/contact-form.html', {
+          'self': page_context,
+          'form': form,
+          'server_error': True
+        })
   else:
     form = ContactRAD()
 

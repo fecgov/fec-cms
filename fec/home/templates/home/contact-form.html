@@ -27,12 +27,14 @@
           <div class="message message--error">
             <h2 class="message__title">Error</h2>
             <p>Something went wrong. Please try again.</p>
-            <pre>
-              {{ data }}
-            </pre>
           </div>
           {% endif %}
-
+          {% if server_error %}
+          <div class="message message--error">
+            <h2 class="message__title">Error</h2>
+            <p>Something went wrong with the server. Please try again later.</p>
+          </div>
+          {% endif %}
         {% for field in form %}
           {% if field.is_hidden %}
             {{ field }}
@@ -57,12 +59,9 @@
       </form>
       <p>Please note, submission of a question through this portal does not constitute a response to a Request for Additional Information (RFAI), a Notice of Failure to File, or any other written communication from the FEC and therefore, will not be accepted.  To respond to a written communication from the FEC, please follow the instructions provided in the communication.  If your inquiry is better suited for resolution over the phone, please contact us at (800) 424-9530 for assistance (press 5 for the Reports Analysis Division).</p>
       {% elif success %}
-      <div class="message message--succes">
+      <div class="message message--success">
         <h2 class="message__title">Success</h2>
         <p>Thanks for submitting your question to RAD.</p>
-        <pre>
-          {{ data }}
-        </pre>
       </div>
       {% endif %}
     </div>
