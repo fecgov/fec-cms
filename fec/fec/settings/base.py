@@ -61,9 +61,7 @@ INSTALLED_APPS = (
     'search',
     'home',
     'data_loader',
-    'usajobs',
-    
-    
+     
 )
 
 MIDDLEWARE_CLASSES = (
