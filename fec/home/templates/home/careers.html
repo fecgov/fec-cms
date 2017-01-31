@@ -1,0 +1,57 @@
+{% extends "long_page.html" %}
+{% load wagtailcore_tags %}
+{% load staticfiles %}
+{% load open_jobs %}
+{% load wagtailcore_tags %}
+{% block title %}{{ self.title }}{% endblock %}
+{% block body_class %}template-{{ self.get_verbose_name | slugify }}{% endblock %}
+
+{% block breadcrumbs %}
+  {% include 'partials/breadcrumbs.html' with page=self links=self.get_ancestors style=self.breadcrumb_style %}
+{% endblock %}
+
+{% block intro %}
+<div class="main__content">
+  <div class="t-lead">{{ self.intro }}</div>
+</div>
+{% endblock %}
+
+{% block sections %}
+
+  {{ self.sections }}
+ {% get_jobs %} 
+{% endblock %}
+
+{% if self.citations %}
+{% block citations %}
+  <div class="grid grid--2-wide">
+  {% for citation in self.citations %}
+    {% for block in citation.value %}
+      <div class="grid__item">
+        <p class="t-bold">{{ block.label }}</p>
+        {{ block.content }}
+       
+      </div>
+    {% endfor %}
+  {% endfor %}
+  </div>
+{% endblock %}
+{% endif %}
+
+{% block related_topics %}
+{% for block in self.related_topics %}
+  {% with topics=block.value %}
+    {% for topic in topics %}
+    <div class="grid__item">
+      <a href="{{ topic.url }}">
+        <aside class="card card--horizontal card--primary">
+          <div class="card__content">
+          {{ topic }}
+          </div>
+        </aside>
+      </a>
+    </div>
+    {% endfor %}
+  {% endwith %}
+{% endfor %}
+{% endblock %}
