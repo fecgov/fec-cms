@@ -189,6 +189,9 @@ def commissioners(request):
   })
 
 def contact_rad(request):
+  if not settings.FEATURES['radform']:
+    return render(request, '404.html')
+
   page_context = {
     'title': 'Contact RAD',
     'ancestors': [],

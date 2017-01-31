@@ -193,7 +193,8 @@ FEATURES = {
     'record': bool(env.get_credential('FEC_FEATURE_RECORD', '')),
     'about': bool(env.get_credential('FEC_FEATURE_ABOUT', '')),
     'agendas': bool(env.get_credential('FEC_FEATURE_AGENDAS', '')),
-    'tips': bool(env.get_credential('FEC_FEATURE_TIPS', ''))
+    'tips': bool(env.get_credential('FEC_FEATURE_TIPS', '')),
+    'radform': bool(env.get_credential('FEC_FEATURE_RADFORM', ''))
 }
 
 AUTH_PASSWORD_VALIDATORS = [
