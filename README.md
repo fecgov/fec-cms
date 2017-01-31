@@ -104,7 +104,9 @@ Before you can run this project locally, you'll need a development database:
 createdb cfdm_cms_test
 ```
 
-You will also need to set a connection string for the local database as an
+You will also need to set environmental variables: 
+
+Connection string for the local database as an
 environment variable:
 
 ```bash
