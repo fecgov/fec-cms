@@ -207,8 +207,6 @@ def contact_rad(request):
       password = settings.FEC_SERVICE_NOW_PASSWORD
 
       post = requests.post(url, data=json.dumps(data), auth=(username, password))
-      print(post.status_code)
-      print(post.__dict__)
 
       if post.status_code == 201:
         return render(request, 'home/contact-form.html', {
