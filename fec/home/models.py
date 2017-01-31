@@ -179,6 +179,11 @@ class RecordPage(ContentPage):
         blank=True,
         default=''
     )
+    advisory_opinion = models.CharField(
+        max_length=255,
+        blank=True,
+        default='',
+        help_text="If this is an article about an AO, specify the AO number, e.g. '2016-20'")
 
     keywords = ClusterTaggableManager(through=RecordPageTag, blank=True)
 
@@ -191,6 +196,7 @@ class RecordPage(ContentPage):
         FieldPanel('monthly_issue'),
         FieldPanel('category'),
         FieldPanel('keywords'),
+        FieldPanel('advisory_opinion'),
         InlinePanel('authors', label='Authors'),
         PageChooserPanel('read_next'),
         FieldPanel('related_section_title'),
@@ -198,6 +204,12 @@ class RecordPage(ContentPage):
         FieldPanel('homepage_pin'),
         FieldPanel('homepage_pin_expiration'),
         FieldPanel('homepage_hide')
+    ]
+
+    api_fields = [
+        'title',
+        'body',
+        'advisory_opinion'
     ]
 
     @property
