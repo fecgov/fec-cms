@@ -9,7 +9,6 @@ from wagtail.wagtailcore import urls as wagtail_urls
 
 from home import views as home_views
 from search import views as search_views
-from usajobs import views as usajobs_views
 
 
 urlpatterns = [
@@ -23,7 +22,6 @@ urlpatterns = [
     url(r'^documents/', include(wagtaildocs_urls)),
     url(r'^search/$', search_views.search, name='search'),
     url(r'^updates/$', home_views.updates),
-    url(r'^jobs/$', usajobs_views.get_jobs),
     url(r'^careers/$', TemplateView.as_view(template_name='home/careers.html')),
    
 
