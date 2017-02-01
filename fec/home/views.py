@@ -88,9 +88,10 @@ def updates(request):
 
       # Hide behind feature flag unless explicitly requested
       # Only authenticated users will be able to explicitly request them for now
-      # Piggy-backing tips on the record flag for now
       if settings.FEATURES['record']:
         records = RecordPage.objects.live()
+
+      if settings.FEATURES['tips']:
         tips = TipsForTreasurersPage.objects.live()
 
       if year:
@@ -98,6 +99,8 @@ def updates(request):
         digests = digests.filter(date__year=year)
         if settings.FEATURES['record']:
           records = records.filter(date__year=year)
+        if settings.FEATURES['tips']:
+          tips = tips.filter(date__year=year)
 
     # Chain all the QuerySets together
     # via http://stackoverflow.com/a/434755/1864981
