@@ -18,13 +18,11 @@
       <div class="t-italic">
       {% if commissioner.term_expiration %}
         {{ commissioner.sworn_in|date:'F Y' }} to {{ commissioner.term_expiration|date:'F Y' }}
-        {% if commissioner.reappointed_dates %}
+      {% endif %}
+      {% if commissioner.reappointed_dates %}
       </div>
       <div class="t-italic">
         ({{ commissioner.reappointed_dates }})
-        {% endif %}
-      {% else %}
-        Currently Serving
       {% endif %}
       </div>
     </div>
