@@ -219,9 +219,9 @@ if os.getenv('SENTRY_DSN'):
 
 if FEC_CMS_ENVIRONMENT != 'LOCAL':
     AWS_QUERYSTRING_AUTH = False
-    AWS_ACCESS_KEY_ID = env.get_credential('CMS_AWS_ACCESS_KEY')
+    AWS_ACCESS_KEY_ID = env.get_credential('CMS_AWS_ACCESS_KEY_ID')
     AWS_SECRET_ACCESS_KEY = env.get_credential('CMS_AWS_SECRET_ACCESS_KEY')
     AWS_STORAGE_BUCKET_NAME = env.get_credential('CMS_AWS_STORAGE_BUCKET_NAME')
     DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
     AWS_LOCATION = 'cms-content'
-    AWS_S3_REGION_NAME = env.get_credential('CMS_AWS_DEFAULT_REGION_NAME')
+    AWS_S3_REGION_NAME = env.get_credential('CMS_AWS_DEFAULT_REGION')
