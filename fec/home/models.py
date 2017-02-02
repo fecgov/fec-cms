@@ -91,8 +91,8 @@ class NonconnectedChecklistPage(ContentPage):
 
 class Author(models.Model):
     name = models.CharField(max_length=255)
-    title = models.CharField(max_length=255)
-    email = models.EmailField()
+    title = models.CharField(max_length=255, blank=True)
+    email = models.EmailField(blank=True)
     photo = models.ForeignKey('wagtailimages.Image', blank=True, null=True,
                               on_delete=models.SET_NULL, related_name='+')
     phone = models.CharField(max_length=255, blank=True)
