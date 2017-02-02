@@ -91,8 +91,8 @@ class NonconnectedChecklistPage(ContentPage):
 
 class Author(models.Model):
     name = models.CharField(max_length=255)
-    title = models.CharField(max_length=255)
-    email = models.EmailField()
+    title = models.CharField(max_length=255, blank=True)
+    email = models.EmailField(blank=True)
     photo = models.ForeignKey('wagtailimages.Image', blank=True, null=True,
                               on_delete=models.SET_NULL, related_name='+')
     phone = models.CharField(max_length=255, blank=True)
@@ -394,8 +394,8 @@ class CommissionerPage(Page):
                 'url': '/about/',
             },
             {
-                'title': 'Leadership and Organization',
-                'url': '/about/leadership-and-organization',
+                'title': 'Leadership and Structure',
+                'url': '/about/leadership-and-structure',
             },
             {
                 'title': 'All Commissioners',
@@ -476,6 +476,23 @@ class EnforcementPage(ContentPage, UniqueModel):
     def content_section(self):
         return 'legal-resources'
 
+
+class TipsForTreasurersPage(ContentPage):
+    date = models.DateField(default=datetime.date.today)
+    template = 'home/updates/tips_for_treasurers.html'
+    content_panels = ContentPage.content_panels + [
+        FieldPanel('date')
+    ]
+
+    @property
+    def get_update_type(self):
+        return constants.update_types['tips-for-treasurers']
+
+    @property
+    def content_section(self):
+        return ''
+
+
 class ServicesLandingPage(ContentPage, UniqueModel):
     subpage_types = ['CollectionPage']
     template = 'home/candidate-and-committee-services/services_landing_page.html'
@@ -503,5 +520,3 @@ class ServicesLandingPage(ContentPage, UniqueModel):
     @property
     def hero_class(self):
         return 'services'
-
-

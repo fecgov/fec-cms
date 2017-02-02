@@ -1,0 +1,11 @@
+{% comment %}
+  This partial is used by the commissioners inclusion tag in commissioners.py
+  Show the chair, then the vice chair, then everyone else
+{% endcomment %}
+<div class="grid grid--2-wide">
+  {% include 'partials/commissioner.html' with commissioner=chair_commissioner %}
+  {% include 'partials/commissioner.html' with commissioner=vice_commissioner %}
+{% for commissioner in commissioners %}
+  {% include 'partials/commissioner.html' with commissioner=commissioner %}
+{% endfor %}
+</div>
