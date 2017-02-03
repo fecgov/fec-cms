@@ -89,6 +89,13 @@ class CurrentCommissionersBlock(blocks.StaticBlock):
         admin_text = 'Show current commissioners in a grid. No configuration needed.'
         template = 'blocks/commissioners.html'
 
+class CareersBlock(blocks.StaticBlock):
+    """A block that displays the open FEC jobs"""
+    class Meta:
+        icon = 'group'
+        admin_text = 'Show open fec jobs from USAJobs.gov. No configuration needed.'
+        template = 'blocks/careers.html'
+
 class ResourceBlock(blocks.StructBlock):
     """A section of a ResourcePage"""
     title = blocks.CharBlock(required=True)
@@ -101,7 +108,8 @@ class ResourceBlock(blocks.StructBlock):
         ('external_button', ExternalButtonBlock()),
         ('page', blocks.PageChooserBlock(template='blocks/page-links.html')),
         ('document_list', blocks.ListBlock(FeedDocumentBlock(), template='blocks/document-list.html', icon='doc-empty')),
-        ('current_commissioners', CurrentCommissionersBlock())
+        ('current_commissioners', CurrentCommissionersBlock()),
+        ('fec_jobs', CareersBlock())
     ])
 
     aside = blocks.StreamBlock([
