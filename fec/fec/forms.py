@@ -12,19 +12,19 @@ class ContactRAD(forms.Form):
   raw_categories = r.json()['result']
 
   # Turn it into a list of tuples to be used as choices
-  categories = []
+  categories = [('', 'Select an option')]
   for cat in raw_categories:
     if 'value' in cat:
       categories.append((cat['value'], cat['label']))
 
+  u_contact_first_name = forms.CharField(label='First name', max_length=100, required=True)
+  u_contact_last_name = forms.CharField(label='Last name', max_length=100, required=True)
+  u_contact_email = forms.EmailField(label='Email', max_length=100, required=True)
   committee_name = forms.CharField(label='Committee', max_length=20, required=True,
                                 widget=forms.TextInput(attrs={'class': 'js-contact-typeahead'}))
   u_committee = forms.CharField(widget=forms.HiddenInput())
-  u_contact_first_name = forms.CharField(label='First name', max_length=100, required=True)
-  u_contact_last_name = forms.CharField(label='Last name', max_length=100, required=True)
   u_contact_title = forms.CharField(label='Title (optional)', max_length=100, required=False)
-  u_contact_email = forms.EmailField(label='Email', max_length=100, required=True)
   u_category = forms.ChoiceField(label='Category', choices=categories, required=True)
-  u_other_reason = forms.CharField(label='Other reason', max_length=100, widget=forms.Textarea, required=False)
+  u_other_reason = forms.CharField(label='Other reason', max_length=100, required=False)
   u_description = forms.CharField(label='Question', max_length=100, widget=forms.Textarea, required=True)
   u_committee_member_certification = forms.BooleanField(label='I agree', required=True)
