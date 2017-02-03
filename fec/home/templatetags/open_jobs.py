@@ -30,7 +30,7 @@ def get_jobs():
     for i in responses['SearchResult']['SearchResultItems']:
         x= {}
         x = { "PositionTitle": i["MatchedObjectDescriptor"]["PositionTitle"] , 
-        "PositionID": i["MatchedObjectDescriptor"]["PositionID"], 
+        "PositionID": i["MatchedObjectDescriptor"]["PositionID"], "PositionURI": i ["MatchedObjectDescriptor"]["PositionURI"],
         "PositionStartDate" : dateutil.parser.parse(i['MatchedObjectDescriptor']['PositionStartDate']),
         "PositionEndDate" : dateutil.parser.parse(i['MatchedObjectDescriptor']['PositionEndDate']),
         "WhoMayApply" : i['MatchedObjectDescriptor']['UserArea']['Details']['WhoMayApply']['Name'],
