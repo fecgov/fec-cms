@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 from collections import defaultdict
 from datetime import datetime
 from dateutil import parser as dparser
@@ -18,7 +20,7 @@ from lxml.html import (  # type: ignore
     HtmlElement
 )
 import requests
-from ipdb import set_trace as st  # type: ignore
+# from ipdb import set_trace as st  # type: ignore
 from os import _exit  # type: ignore
 
 
@@ -895,15 +897,17 @@ def parse_meeting_page(mtg: Meeting, urls_to_change: dict) -> Meeting:
         while len(unused) > 0:
             el = unused.pop()
             print(tostr(el))
-            st()
+            # st()
     elif pre_video and mtg.primary_audio_link is None:
         while len(unused) > 0:
             el = unused.pop()
             print(tostr(el))
-            st()
+            # st()
 
     if len(unused) > 0:
-        st()
+        # st()
+        pass
+
 
     """
     for key, text in asset_pairs:
@@ -1303,7 +1307,6 @@ def write_meetings(meetings: Meetings, broken_links: list) -> None:
                 m[key] = m[key]._asdict()
                 if key in date_keys:
                     del m[key]["datetime"]  # Can't serialize this
-
 
     out_lines = ",\n".join([json.dumps(m) for m in dicts])
     out_string = "[\n%s\n]" % out_lines
