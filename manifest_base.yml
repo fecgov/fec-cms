@@ -7,5 +7,5 @@ applications:
 env:
   DISABLE_COLLECTSTATIC: 1
   DJANGO_SETTINGS_MODULE: fec.settings.production
-  NEW_RELIC_CONFIG_FILE: $HOME/newrelic.ini
+  NEW_RELIC_CONFIG_FILE: newrelic.ini
   NEW_RELIC_LOG: stdout
