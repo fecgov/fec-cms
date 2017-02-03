@@ -1,5 +1,5 @@
 ---
-domain: 18f.gov
+#domain: 18f.gov
 stack: cflinuxfs2
 buildpack: python_buildpack
 applications:
