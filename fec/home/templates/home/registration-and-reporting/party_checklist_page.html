@@ -140,7 +140,7 @@
         <aside class="card card--horizontal card--secondary card--full-bleed">
           <div class="card__image">
             <a class="u-no-border" href="http://www.fec.gov/pdf/partygui.pdf">
-              <img src="{% static "img/guide--parties.jpg" %}" alt="Federal Election Commission Campaign Guide: Political Party Committees, August 2013">
+              <img src="{% static "img/thumbnail--parties.jpg" %}" alt="Federal Election Commission Campaign Guide: Political Party Committees, August 2013">
             </a>
           </div>
           <div class="card__content">
@@ -186,11 +186,6 @@
   </div>
 </div>
 
-<div class="slab slab--neutral footer-disclaimer">
-  <div class="container">
-    <p class="usa-width-one-half">This site is in beta, which means we're testing content that better adheres to legal plain language requirements. This content is not finalized, is not legal advice and is subject to change.</p>
-    <p class="usa-width-one-half">Everything on this site should be read in conjunction with FEC.gov. Please let us know what you think of our new content; use the feedback tool on this page.</p>
-  </div>
-</div>
+{% include 'partials/disclaimer.html' %}
 
 {% endblock %}

@@ -6,7 +6,7 @@ from wagtail.wagtaildocs.blocks import DocumentChooserBlock
 class ThumbnailBlock(blocks.StructBlock):
     """A block that combines a thumbnail and a caption,
         both of which link to a URL"""
-    image = ImageChooserBlock()
+    image = ImageChooserBlock(required=False)
     url = blocks.URLBlock()
     text = blocks.CharBlock()
 
@@ -29,7 +29,7 @@ class AsideLinkBlock(blocks.StructBlock):
 
 class ContactItemBlock(blocks.StructBlock):
     """A lockup of an icon and blurb of contact info"""
-    item_label = blocks.CharBlock(required=True)
+    item_label = blocks.CharBlock(required=False)
     item_icon = blocks.ChoiceBlock(choices=[
         ('email', 'Email'),
         ('fax', 'Fax'),
@@ -82,6 +82,13 @@ class FeedDocumentBlock(blocks.StructBlock):
     class Meta:
         icon = 'doc-empty'
 
+class CurrentCommissionersBlock(blocks.StaticBlock):
+    """A block that displays the current 6 commissioners"""
+    class Meta:
+        icon = 'group'
+        admin_text = 'Show current commissioners in a grid. No configuration needed.'
+        template = 'blocks/commissioners.html'
+
 class ResourceBlock(blocks.StructBlock):
     """A section of a ResourcePage"""
     title = blocks.CharBlock(required=True)
@@ -92,7 +99,9 @@ class ResourceBlock(blocks.StructBlock):
         ('contact_info', ContactInfoBlock()),
         ('internal_button', InternalButtonBlock()),
         ('external_button', ExternalButtonBlock()),
-        ('document_list', blocks.ListBlock(FeedDocumentBlock(), template='blocks/document-list.html', icon='doc-empty'))
+        ('page', blocks.PageChooserBlock(template='blocks/page-links.html')),
+        ('document_list', blocks.ListBlock(FeedDocumentBlock(), template='blocks/document-list.html', icon='doc-empty')),
+        ('current_commissioners', CurrentCommissionersBlock())
     ])
 
     aside = blocks.StreamBlock([
@@ -102,6 +111,9 @@ class ResourceBlock(blocks.StructBlock):
     ],
     template='blocks/section-aside.html',
     icon='placeholder')
+
+    class Meta:
+        template = 'blocks/section.html'
 
 class OptionBlock(blocks.StructBlock):
     title = blocks.CharBlock(required=True)

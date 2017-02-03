@@ -12,15 +12,15 @@ env = cfenv.AppEnv()
 
 
 @task
-def add_hooks():
-    run('ln -s ../../bin/post-merge .git/hooks/post-merge')
-    run('ln -s ../../bin/post-checkout .git/hooks/post-checkout')
+def add_hooks(ctx):
+    ctx.run('ln -s ../../bin/post-merge .git/hooks/post-merge')
+    ctx.run('ln -s ../../bin/post-checkout .git/hooks/post-checkout')
 
 
 @task
-def remove_hooks():
-    run('rm .git/hooks/post-merge')
-    run('rm .git/hooks/post-checkout')
+def remove_hooks(ctx):
+    ctx.run('rm .git/hooks/post-merge')
+    ctx.run('rm .git/hooks/post-checkout')
 
 
 def _detect_prod(repo, branch):
@@ -79,7 +79,7 @@ DEPLOY_RULES = (
 
 
 @task
-def deploy(space=None, branch=None, yes=False):
+def deploy(ctx, space=None, branch=None, yes=False):
     """Deploy app to Cloud Foundry. Log in using credentials stored in
     `FEC_CF_USERNAME` and `FEC_CF_PASSWORD`; push to either `space` or the space
     detected from the name and tags of the current branch. Note: Must pass `space`
@@ -94,14 +94,14 @@ def deploy(space=None, branch=None, yes=False):
 
     # Set api
     api = 'https://api.cloud.gov'
-    run('cf api {0}'.format(api), echo=True)
+    ctx.run('cf api {0}'.format(api), echo=True)
 
     # Log in if necessary
     if os.getenv('FEC_CF_USERNAME') and os.getenv('FEC_CF_PASSWORD'):
-        run('cf auth "$FEC_CF_USERNAME" "$FEC_CF_PASSWORD"', echo=True)
+        ctx.run('cf auth "$FEC_CF_USERNAME" "$FEC_CF_PASSWORD"', echo=True)
 
     # Target space
-    run('cf target -o fec -s {0}'.format(space), echo=True)
+    ctx.run('cf target -o fec -s {0}'.format(space), echo=True)
 
     # Set deploy variables
     with open('.cfmeta', 'w') as fp:
@@ -110,11 +110,11 @@ def deploy(space=None, branch=None, yes=False):
     # Deploy cms
     deployed = run('cf app cms', echo=True, warn=True)
     cmd = 'zero-downtime-push' if deployed.ok else 'push'
-    run('cf {0} cms -f manifest_{1}.yml'.format(cmd, space), echo=True)
+    ctx.run('cf {0} cms -f manifest_{1}.yml'.format(cmd, space), echo=True)
 
 
 @task
-def notify():
+def notify(ctx):
     try:
         meta = json.load(open('.cfmeta'))
     except OSError:

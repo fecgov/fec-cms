@@ -3,9 +3,14 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.conf import settings
 from itertools import chain
 from operator import attrgetter
-from home.models import DigestPage
-from home.models import RecordPage
-from home.models import PressReleasePage
+from home.models import (
+    CommissionerPage,
+    DigestPage,
+    PressReleasePage,
+    RecordPage,
+    TipsForTreasurersPage
+)
+
 
 def replace_dash(string):
   return string.replace('-', ' ')
@@ -37,11 +42,19 @@ def get_press_releases(category_list=False, year=False):
     press_releases = press_releases.filter(date__year=year)
   return press_releases
 
+
+def get_tips(category_list=False, year=False):
+    tips = TipsForTreasurersPage.objects.live()
+    if year != '':
+        tips = tips.filter(date__year=year)
+    return tips
+
+
 def updates(request):
     digests = ''
     records = ''
     press_releases = ''
-    categories = ''
+    tips = ''
 
     # Get values from query
     update_types = request.GET.getlist('update_type', None)
@@ -52,17 +65,21 @@ def updates(request):
 
     # If there's a query, only get the types in the query
     if update_types:
-      if 'for-media' in update_types:
-        press_releases = get_press_releases(category_list=category_list, year=year)
-        digests = get_digests(year=year)
-      if 'for-committees' in update_types:
-        records = get_records(category_list=category_list, year=year)
-      if 'fec-record' in update_types:
-        records = get_records(category_list=category_list, year=year)
-      if 'press-release' in update_types:
-        press_releases = get_press_releases(category_list=category_list, year=year)
-      if 'weekly-digest' in update_types:
-        digests = get_digests(year=year)
+        if 'for-media' in update_types:
+            press_releases = get_press_releases(category_list=category_list,
+                                                year=year)
+            digests = get_digests(year=year)
+        if 'for-committees' in update_types:
+            records = get_records(category_list=category_list, year=year)
+        if 'fec-record' in update_types:
+            records = get_records(category_list=category_list, year=year)
+        if 'press-release' in update_types:
+            press_releases = get_press_releases(category_list=category_list,
+                                                year=year)
+        if 'weekly-digest' in update_types:
+            digests = get_digests(year=year)
+        if 'tips-for-treasurers' in update_types:
+            tips = get_tips(year=year)
 
     else:
       # Get everything and filter by year if necessary
@@ -74,15 +91,21 @@ def updates(request):
       if settings.FEATURES['record']:
         records = RecordPage.objects.live()
 
+      if settings.FEATURES['tips']:
+        tips = TipsForTreasurersPage.objects.live()
+
       if year:
-        records = records.filter(date__year=year)
         press_releases = press_releases.filter(date__year=year)
         digests = digests.filter(date__year=year)
+        if settings.FEATURES['record']:
+          records = records.filter(date__year=year)
+        if settings.FEATURES['tips']:
+          tips = tips.filter(date__year=year)
 
     # Chain all the QuerySets together
     # via http://stackoverflow.com/a/434755/1864981
     updates = sorted(
-      chain(press_releases, digests, records),
+      chain(press_releases, digests, records, tips),
       key=attrgetter('date'),
       reverse=True
     )
@@ -146,7 +169,38 @@ def ao_process(request):
     'ancestors': ancestors
   }
 
-  return render(request, 'legal/ao_process.html', {
+  return render(request, 'home/legal/ao_process.html', {
     'self': page_context
   })
 
+def commissioners(request):
+  chair_commissioner = CommissionerPage.objects.filter(commissioner_title__contains='Chair') \
+    .exclude(commissioner_title__contains='Vice').first()
+  vice_commissioner = CommissionerPage.objects.filter(commissioner_title__startswith='Vice').first()
+
+  current_commissioners = CommissionerPage.objects.filter(commissioner_title__exact='', \
+    term_expiration__isnull=True).order_by('last_name')
+  past_commissioners = CommissionerPage.objects.filter(commissioner_title__exact='', \
+    term_expiration__isnull=False).order_by('-term_expiration')
+
+  page_context = {
+    'title': 'All Commissioners',
+    'chair_commissioner': chair_commissioner,
+    'vice_commissioner': vice_commissioner,
+    'current_commissioners': current_commissioners,
+    'past_commissioners': past_commissioners,
+    'ancestors': [
+      {
+        'title': 'About the FEC',
+        'url': '/about/',
+      },
+      {
+        'title': 'Leadership and structure',
+        'url': '/about/leadership-and-structure',
+      },
+    ]
+  }
+
+  return render(request, 'home/commissioners.html', {
+    'self': page_context,
+  })
