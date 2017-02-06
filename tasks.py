@@ -92,6 +92,19 @@ def deploy(ctx, space=None, branch=None, yes=False):
     if space is None:
         return
 
+    # Build static assets
+    # These must be built prior to deploying due to the collectstatic
+    # functionality of the Python buildpack conflicting with our setup.
+    ctx.run('npm run build', echo=True)
+    ctx.run(
+        'DJANGO_SETTINGS_MODULE=fec.settings.production python fec/manage.py collectstatic --noinput -v 0',
+        echo=True
+    )
+    ctx.run(
+        'DJANGO_SETTINGS_MODULE=fec.settings.production python fec/manage.py compress -v 0',
+        echo=True
+    )
+
     # Set api
     api = 'https://api.fr.cloud.gov'
     ctx.run('cf api {0}'.format(api), echo=True)
