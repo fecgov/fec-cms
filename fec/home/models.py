@@ -208,6 +208,10 @@ class RecordPage(ContentPage):
     def get_update_type(self):
         return constants.update_types['fec-record']
 
+    @property
+    def get_author_office(self):
+        return 'Information Division'
+
 
 class DigestPageAuthors(Orderable, PageAuthors):
     page = ParentalKey('DigestPage', related_name='authors')
@@ -238,6 +242,10 @@ class DigestPage(ContentPage):
     @property
     def get_update_type(self):
         return constants.update_types['weekly-digest']
+
+    @property
+    def get_author_office(self):
+        return 'Press Office'
 
 
 class PressReleasePageAuthors(Orderable, PageAuthors):
@@ -281,6 +289,10 @@ class PressReleasePage(ContentPage):
     @property
     def get_update_type(self):
         return constants.update_types['press-release']
+
+    @property
+    def get_author_office(self):
+        return 'Press Office'
 
     """
     Because we removed the boilerplate from all 2016 releases
@@ -492,6 +504,9 @@ class TipsForTreasurersPage(ContentPage):
     def content_section(self):
         return ''
 
+    @property
+    def get_author_office(self):
+        return 'Information Division'
 
 class ServicesLandingPage(ContentPage, UniqueModel):
     subpage_types = ['CollectionPage']
