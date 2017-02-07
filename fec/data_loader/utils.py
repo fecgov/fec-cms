@@ -129,6 +129,13 @@ class ImporterMixin(object):
 
         return content_block.replace("'", "''")
 
+    def wrap_with_paragraph(self, content_block, **options):
+        """
+        Wraps a content block in <p></p>
+        """
+
+        return '{}{}{}'.format('<p>', content_block, '</p>')
+
     def clean_category(self, category, invalid_categories, **options):
         """
         Makes sure that a category is in the proper format before validating
