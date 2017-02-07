@@ -248,6 +248,8 @@ cf target -s [feature|dev|stage|prod] && cf push -f manifest_<[feature|dev|stage
 downtime.
 
 ## Backup
+*Likely only useful for 18F FEC team members*
+
 To restore data from a remote instance to a local instance, or between local
 instances, back up data using `dumpdata` and restore using `loaddata`.  You'll
 also need to [install cf-ssh](https://docs.cloud.gov/getting-started/cf-ssh/).
@@ -269,6 +271,23 @@ cd fec/
 cf files cms-ssh app/fec/dump.json | tail -n +4 > dump.json
 ./manage.py loaddata dump.json
 ```
+
+## SSH
+*Likely only useful for 18F FEC team members*
+
+You can SSH directly into the running app container to help troubleshoot or inspect things with the instance(s).  Run the following command:
+
+```bash
+cf ssh <app name>
+```
+
+Where *<app name>* is the name of the application instance you want to connect to.  Once you are logged into the remote secure shell, you'll also want to run this command to setup the shell environment correctly:
+
+```bash
+. /home/vcap/app/bin/cf_env_setup.sh
+```
+
+More information about using SSH with cloud.dov can be found in the [cloud.gov SSH documentation](https://cloud.gov/docs/apps/using-ssh/#cf-ssh).
 
 ## Copyright and licensing
 This project is in the public domain within the United States, and we waive
