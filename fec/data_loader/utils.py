@@ -127,7 +127,7 @@ class ImporterMixin(object):
         Escapes single quotes to ensure content goes into a database correctly.
         """
 
-        return content_block.replace("'", "''")
+        return content_block.replace("'", "&#39;")
 
     def wrap_with_paragraph(self, content_block, **options):
         """
