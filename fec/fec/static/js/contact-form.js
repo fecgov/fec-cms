@@ -9,9 +9,11 @@ function ContactForm($elm) {
   this.category = $elm.find('#id_u_category');
   this.otherReason = $elm.find('#id_u_other_reason').closest('div');
   this.typeahead = new Typeahead($elm.find('.js-contact-typeahead'), 'committees', '');
+  this.$cancel = $elm.find('.js-cancel');
   this.initTypeahead();
   this.initOtherReason();
   this.category.on('change', this.toggleOtherReason.bind(this));
+  this.$cancel.on('click', this.clearForm.bind(this));
 }
 
 ContactForm.prototype.initTypeahead = function() {
@@ -35,6 +37,13 @@ ContactForm.prototype.toggleOtherReason = function(e) {
   } else {
     this.otherReason.hide();
   }
+};
+
+ContactForm.prototype.clearForm = function(e) {
+  e.preventDefault();
+  this.$elm.find('input, textarea, select').each(function() {
+    $(this).val('');
+  });
 };
 
 new ContactForm($('.js-contact-form'));

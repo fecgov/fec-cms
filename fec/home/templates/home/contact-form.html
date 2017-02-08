@@ -9,20 +9,19 @@
 <article class="main">
   <div class="container">
     <header class="heading--main">
-      <h1>Submit a question to the Report and Analysis Division</h1>
+      <h1>Submit a question to the Reports Analysis Division (RAD)</h1>
     </header>
     <div class="main__content--full">
       <div>
-        <p>Reports Analysis Division staff can help answer your filing and reporting questions.  If you are an authorized representative of a committee or another entity registered with the FEC, please complete the fields below to submit a question to the Reports Analysis Division.</p>
-        <p>For immediate answers to commonly asked questions, please consult our FAQs [link].</p>
+      <p>If you represent a committee or another entity registered with the FEC, RAD staff can help answer your reporting questions. Submit this form, and a RAD analyst will email you, usually within 3 business days.</p>
+      <p>You can also call RAD from 8:30 a.m. to 5:30 p.m. Eastern Time at 1-800-425-9530, extension 5.</p>
       </div>
 
       {% if form %}
       <form class="content__section--narrow slab slab--neutral slab--inline js-contact-form contact-form" action="" method="post">
         {% csrf_token %}
         <div class="container">
-        <h2>Contact RAD</h2>
-        <p class="t-sans">All fields are required unless otherwise noted.</p>
+        <h2>Your contact information</h2>
           {% if form.errors %}
           <div class="message message--error">
             <h2 class="message__title">Error</h2>
@@ -41,8 +40,10 @@
           {% else %}
           <div class="content__section">
             {% if field.id_for_label == 'id_u_committee_member_certification' %}
-              <p>"By submitting this inquiry, I certify that I am an authorized representative of the indicated committee or filing entity."</p>
-              <p>Please be advised that knowingly and willfully making any materially false, fictitious, or fraudulent statement or representation to a federal government agency, including the Federal Election Commission, is punishable under the provisions of 18 U.S.C. § 1001. The Commission may report apparent violations to the appropriate law enforcement authorities. 52 U.S.C. § 30107(a)(9).</p>
+            <p><a href="#" class="t-sans">How FEC.gov keeps personal information private</a></p>
+            <p class="t-italic">Submitting a question on this page is not a response to a Request for Additional Information (RFAI), a Notice of Failure to File or a response to any other written communication from the FEC.</p>
+            <p class="t-italic">To respond to an official FEC communication, follow the instructions provided in that letter or email.</p>
+            <p class="t-bold t-italic">By submitting this inquiry, I certify that I’m an authorized  representative of the indicated committee or filing entity.</p>
               {{ field }}
               <label for="{{ field.id_for_label }}">{{ field.label }}</label>
             {% else %}
@@ -54,6 +55,7 @@
         {% endfor %}
         <div class="content__section">
           <button class="js-submit button button--cta">Submit</button>
+          <span class="t-block t-sans">Or <button type="button" class="js-cancel button--unstyled">cancel submission and clear form</button></span>
         </div>
         </div>
       </form>
