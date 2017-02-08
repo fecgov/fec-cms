@@ -25,6 +25,6 @@ class ContactRAD(forms.Form):
   u_committee = forms.CharField(widget=forms.HiddenInput())
   u_contact_title = forms.CharField(label='Your position or title', max_length=100, required=False)
   u_category = forms.ChoiceField(label='Subject', choices=categories, required=True)
-  u_other_reason = forms.CharField(label='Other reason', max_length=100, required=False)
+  u_other_reason = forms.CharField(label='Subject', max_length=100, required=False)
   u_description = forms.CharField(label='Question', max_length=100, widget=forms.Textarea, required=True)
   u_committee_member_certification = forms.BooleanField(label='I agree', required=True)
