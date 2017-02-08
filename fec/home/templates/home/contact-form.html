@@ -12,52 +12,55 @@
       <h1>{{ self.title }}</h1>
     </header>
     <div class="main__content--full">
-      <div>
       <p>If you represent a committee or another entity registered with the FEC, RAD staff can help answer your reporting questions. Submit this form, and a RAD analyst will email you, usually within 3 business days.</p>
       <p>You can also call RAD from 8:30 a.m. to 5:30 p.m. Eastern Time at 1-800-425-9530, extension 5.</p>
-      </div>
 
       {% if form %}
       <form class="slab slab--neutral slab--inline js-contact-form contact-form" action="" method="post">
         {% csrf_token %}
+
+        {% if form.errors %}
+        <div class="message message--error">
+          <h2 class="message__title">Error</h2>
+          <p>Something went wrong. Please try again.</p>
+        </div>
+        {% endif %}
+        {% if server_error %}
+        <div class="message message--error">
+          <h2 class="message__title">Error</h2>
+          <p>Something went wrong with the server. Please try again later.</p>
+        </div>
+        {% endif %}
+
         <div class="contact-form__element">
           <h2>Your contact information</h2>
         </div>
-          {% if form.errors %}
-          <div class="message message--error">
-            <h2 class="message__title">Error</h2>
-            <p>Something went wrong. Please try again.</p>
-          </div>
-          {% endif %}
-          {% if server_error %}
-          <div class="message message--error">
-            <h2 class="message__title">Error</h2>
-            <p>Something went wrong with the server. Please try again later.</p>
-          </div>
-          {% endif %}
+
         {% for field in form %}
           {% if field.is_hidden %}
             {{ field }}
           {% else %}
           <div class="contact-form__element">
+            {% if field.id_for_label == 'id_committee_name' %}
+              <hr class="hr--soft">
+            {% endif %}
+
             {% if field.id_for_label == 'id_u_category' %}
               <hr class="hr--hard">
               <h2>Your question</h2>
             {% endif %}
-            {% if field.id_for_label == 'id_committee_name' %}
-              <hr class="hr--soft">
-            {% endif %}
-            {% if field.id_for_label == 'id_u_committee_member_certification' %}
+
+            {% if field.id_for_label == 'id_u_contact_title' %}
+              <label class="label" for="{{ field.id_for_label }}">{{ field.label }}<span class="label__optional"> (optional)</span></label>
+              {{ field }}
+              <span class="t-note t-sans">Examples: Treasurer; Counsel</span>
+            {% elif field.id_for_label == 'id_u_committee_member_certification' %}
               <p><a href="#" class="t-sans">How FEC.gov keeps personal information private</a></p>
               <p class="t-italic">Submitting a question on this page is not a response to a Request for Additional Information (RFAI), a Notice of Failure to File or a response to any other written communication from the FEC.</p>
               <p class="t-italic">To respond to an official FEC communication, follow the instructions provided in that letter or email.</p>
               <p class="t-bold t-italic">By submitting this inquiry, I certify that I’m an authorized  representative of the indicated committee or filing entity.</p>
               {{ field }}
               <label for="{{ field.id_for_label }}">{{ field.label }}</label>
-            {% elif field.id_for_label == 'id_u_contact_title' %}
-              <label class="label" for="{{ field.id_for_label }}">{{ field.label }}<span class="label__optional"> (optional)</span></label>
-              {{ field }}
-              <span class="t-note t-sans">Examples: Treasurer; Counsel</span>
             {% else %}
               <label class="label" for="{{ field.id_for_label }}">{{ field.label }}</label>
               {{ field }}
@@ -65,13 +68,15 @@
           </div>
           {% endif %}
         {% endfor %}
+
         <div class="contact-form__element">
           <button class="js-submit button button--cta">Submit</button>
           <span class="contact-form__reset t-sans">Or <button type="button" class="js-cancel button--unstyled">cancel submission and clear form</button></span>
         </div>
-        </div>
       </form>
-      {% elif success %}
+      {% endif %}
+
+      {% if success %}
       <div class="message message--success">
         <h2 class="message__title">Success</h2>
         <p>Thanks for reaching out to the FEC. RAD responds to questions in the order they’re received. A RAD analyst will contact you by email, usually within 3 business days.</p>
