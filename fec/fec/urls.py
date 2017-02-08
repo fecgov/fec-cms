@@ -17,10 +17,10 @@ urlpatterns = [
     url(r'^admin/', include(wagtailadmin_urls)),
     url(r'^calendar/$', home_views.calendar),
     url(r'^commissioners/$', home_views.commissioners),
-    url(r'^contact-rad/$', home_views.contact_rad),
     url(r'^about/leadership-and-structure/commissioners/$', home_views.commissioners),
     url(r'^contact-us/$', home_views.contact),
     url(r'^documents/', include(wagtaildocs_urls)),
+    url(r'^registration-and-reporting/question-RAD/$', home_views.contact_rad),
     url(r'^search/$', search_views.search, name='search'),
     url(r'^updates/$', home_views.updates),
 
