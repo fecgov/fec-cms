@@ -12,6 +12,18 @@
       <h1>{{ self.title }}</h1>
     </header>
     <div class="main__content--full">
+      {% if success %}
+      <div class="message message--success">
+        <h2 class="message__title">Success</h2>
+        <p>Thanks for reaching out to the FEC. A RAD analyst will contact you by email, usually within 3 business days.</p>
+        <ul class="list--buttons">
+          <li><a href="/candidate-and-committee-services" class="button button--cta">Return to candidate and committee support</a></li>
+          <li><a href="" class="button button--alt">Submit another question</a></li>
+        </ul>
+      </div>
+
+      {% else %}
+
       <p>If you represent a committee or another entity registered with the FEC, RAD staff can help answer your reporting questions. Submit this form, and a RAD analyst will email you, usually within 3 business days.</p>
       <p>You can also call RAD from 8:30 a.m. to 5:30 p.m. Eastern Time at 1-800-425-9530, extension 5.</p>
 
@@ -75,17 +87,7 @@
         </div>
       </form>
       {% endif %}
-
-      {% if success %}
-      <div class="message message--success">
-        <h2 class="message__title">Success</h2>
-        <p>Thanks for reaching out to the FEC. RAD responds to questions in the order they’re received. A RAD analyst will contact you by email, usually within 3 business days.</p>
-        <ul class="list--buttons">
-          <li><a href="/candidate-and-committee-services" class="button button--cta">Return to candidate and committee support</a></li>
-          <li><a href="" class="button button--alt">Submit another question</a></li>
-        </ul>
-      </div>
-      {% endif %}
+    {% endif %}
   </div>
 </article>
 {% endblock %}
