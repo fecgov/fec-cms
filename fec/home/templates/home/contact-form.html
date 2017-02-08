@@ -66,6 +66,10 @@
               <label class="label" for="{{ field.id_for_label }}">{{ field.label }}<span class="label__optional"> (optional)</span></label>
               {{ field }}
               <span class="t-note t-sans">Examples: Treasurer; Counsel</span>
+            {% elif field.id_for_label == 'id_u_description' %}
+              <label class="label" for="{{ field.id_for_label }}">{{ field.label }}</label>
+              <span class="t-note t-sans">Please be as detailed as possible</span>
+              {{ field }}
             {% elif field.id_for_label == 'id_u_committee_member_certification' %}
               <p><a href="#" class="t-sans">How FEC.gov keeps personal information private</a></p>
               <p class="t-italic">Submitting a question on this page is not a response to a Request for Additional Information (RFAI), a Notice of Failure to File or a response to any other written communication from the FEC.</p>
