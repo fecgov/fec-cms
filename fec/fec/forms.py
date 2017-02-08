@@ -12,7 +12,7 @@ class ContactRAD(forms.Form):
   raw_categories = r.json()['result']
 
   # Turn it into a list of tuples to be used as choices
-  categories = [('', 'Select an option')]
+  categories = [('', 'Choose a subject')]
   for cat in raw_categories:
     if 'value' in cat:
       categories.append((cat['value'], cat['label']))
@@ -23,7 +23,7 @@ class ContactRAD(forms.Form):
   committee_name = forms.CharField(label='Committee name or ID', max_length=20, required=True,
                                 widget=forms.TextInput(attrs={'class': 'js-contact-typeahead'}))
   u_committee = forms.CharField(widget=forms.HiddenInput())
-  u_contact_title = forms.CharField(label='Your position or title (optional)', max_length=100, required=False)
+  u_contact_title = forms.CharField(label='Your position or title', max_length=100, required=False)
   u_category = forms.ChoiceField(label='Subject', choices=categories, required=True)
   u_other_reason = forms.CharField(label='Other reason', max_length=100, required=False)
   u_description = forms.CharField(label='Question', max_length=100, widget=forms.Textarea, required=True)
