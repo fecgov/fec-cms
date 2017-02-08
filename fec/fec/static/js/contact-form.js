@@ -28,6 +28,7 @@ ContactForm.prototype.initTypeahead = function() {
 };
 
 ContactForm.prototype.initOtherReason = function() {
+  this.otherReason.addClass('conditional-field');
   this.otherReason.hide();
 };
 
