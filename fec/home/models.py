@@ -302,6 +302,33 @@ class PressReleasePage(ContentPage):
     def no_boilerplate(self):
         return self.date.year >= 2016
 
+def get_previous_tips_page():
+    return TipsForTreasurersPage.objects.order_by('-date', '-pk').first()
+
+class TipsForTreasurersPage(ContentPage):
+    date = models.DateField(default=datetime.date.today)
+    read_next = models.ForeignKey('TipsForTreasurersPage', blank=True, null=True,
+                                  default=get_previous_tips_page,
+                                  on_delete=models.SET_NULL)
+
+    template = 'home/updates/tips_for_treasurers.html'
+    content_panels = ContentPage.content_panels + [
+        FieldPanel('date'),
+        PageChooserPanel('read_next')
+    ]
+
+    @property
+    def get_update_type(self):
+        return constants.update_types['tips-for-treasurers']
+
+    @property
+    def content_section(self):
+        return ''
+
+    @property
+    def get_author_office(self):
+        return 'Information Division'
+
 class CustomPage(Page):
     """Flexible customizable page."""
     author = models.CharField(max_length=255)
@@ -487,26 +514,6 @@ class EnforcementPage(ContentPage, UniqueModel):
     @property
     def content_section(self):
         return 'legal-resources'
-
-
-class TipsForTreasurersPage(ContentPage):
-    date = models.DateField(default=datetime.date.today)
-    template = 'home/updates/tips_for_treasurers.html'
-    content_panels = ContentPage.content_panels + [
-        FieldPanel('date')
-    ]
-
-    @property
-    def get_update_type(self):
-        return constants.update_types['tips-for-treasurers']
-
-    @property
-    def content_section(self):
-        return ''
-
-    @property
-    def get_author_office(self):
-        return 'Information Division'
 
 class ServicesLandingPage(ContentPage, UniqueModel):
     subpage_types = ['CollectionPage']
