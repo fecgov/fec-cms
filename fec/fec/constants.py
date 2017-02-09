@@ -132,17 +132,69 @@ update_types = OrderedDict([
     ("tips-for-treasurers", "Tips for Treasurers")
 ])
 
-document_categories = OrderedDict((x.lower(), x) for x in [
-    "Agency operations"
-    "Anniversary report",
-    "Annual report",
-    "Budget",
-    "Contracting",
-    "FOIA Report",
-    "OIG Report",
-    "Performance report",
-    "Privacy information",
-    "Procurement",
-    "Strategic plan",
-    "",
+# These are each a group of categories relevant to a particular type of report
+# They're broken up by parent category so that only these ones will be shown
+# on that type of report page
+oig_reports = OrderedDict((x.lower(), x) for x in [
+    "Audit report",
+    "Inspection report",
+    "Special review report",
+    "Semiannual report"
 ])
+
+strategy_budget_performance_reports = OrderedDict((x.lower(), x) for x in [
+    "Strategic plan",
+    "IT strategic plan",
+    "Congressional budget justification",
+    "Annual performance report",
+    "Performance and accountability report"
+])
+
+foia_reports = OrderedDict((x.lower(), x) for x in [
+    "Annual FOIA report"
+])
+
+privacy_reports = OrderedDict((x.lower(), x) for x in [
+    "Privacy Act notices",
+    "Privacy policy"
+])
+
+procurement_contracting_reports = OrderedDict((x.lower(), x) for x in [
+    "Purchase inventory",
+    "Annual report",
+    "FAIR Act inventory report",
+    "Request for proposal (RFP)"
+])
+
+annual_anniversary_reports = OrderedDict((x.lower(), x) for x in [
+    "Anniversary report",
+    "Annual report"
+])
+
+agency_operations_reports = OrderedDict((x.lower(), x) for x in [
+    "Shutdown plan",
+    "Operation plan",
+    "Annual report"
+])
+
+# This maps each group to a key for reference later on
+report_category_groups = {
+    'oig': oig_reports,
+    'strategy_budget_performance': strategy_budget_performance_reports,
+    'foia': foia_reports,
+    'privacy': privacy_reports,
+    'procurement_contracting_reports': procurement_contracting_reports,
+    'annual_anniversary': annual_anniversary_reports,
+    'agency_operations': agency_operations_reports
+}
+
+# Create a dict of all of the category group names to populate the choices
+# on the DocumentFeedPage
+report_parent_categories = OrderedDict((x, x.replace('_', ' ')) for x in report_category_groups.keys())
+
+# Combine all of the dicts into a single one to be shared by all DocumentPages
+# This allows us to have a single DocumentPage class that works regardless of
+# the parent page
+report_child_categories = {}
+for category in report_category_groups.keys():
+    report_child_categories.update(report_category_groups[category])
