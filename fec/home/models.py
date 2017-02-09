@@ -329,7 +329,7 @@ class DocumentPage(ContentPage):
     file_name = models.CharField(max_length=255, blank=True)
     size = models.CharField(max_length=255, blank=True, null=True)
     category = models.CharField(max_length=255,
-                                choices=constants.document_categories.items(), null=True)
+                                choices=constants.report_child_categories.items(), null=True)
     content_panels = Page.content_panels + [
         FieldPanel('date'),
         FieldPanel('file_url'),
@@ -344,10 +344,16 @@ class DocumentFeedPage(ContentPage):
     intro = StreamField([
         ('paragraph', blocks.RichTextBlock())
     ], null=True)
-
+    category = models.CharField(max_length=255,
+                                choices=constants.report_parent_categories.items(), null=True)
     content_panels = Page.content_panels + [
-        StreamFieldPanel('intro')
+        StreamFieldPanel('intro'),
+        FieldPanel('category')
     ]
+
+    @property
+    def category_filters(self):
+        return constants.report_category_groups[self.category]
 
 class AboutLandingPage(Page):
     hero = stream_factory(null=True, blank=True)

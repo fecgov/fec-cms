@@ -9,7 +9,16 @@
 {% endblock %}
 
 {% block filters %}
-<form action="" class="container">
+<form action="" class="container js-form-nav">
+    <div class="filter">
+      <label class="label" for="category">Category</label>
+      <select id="category" name="category">
+          <option value="">All</option>
+          {% for value, label in self.category_filters.items %}
+            <option value="{{ value }}" {% if request.GET.category == value %}selected{% endif %}>{{ label }}</option>
+          {% endfor %}
+      </select>
+    </div>
     <div class="filter">
       <div class="combo combo--filter--mini">
         <label for="year" class="label">Year</label>
