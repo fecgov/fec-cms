@@ -131,3 +131,18 @@ update_types = OrderedDict([
     ("weekly-digest", "Weekly Digest"),
     ("tips-for-treasurers", "Tips for Treasurers")
 ])
+
+document_categories = OrderedDict((x.lower(), x) for x in [
+    "Agency operations"
+    "Anniversary report",
+    "Annual report",
+    "Budget",
+    "Contracting",
+    "FOIA Report",
+    "OIG Report",
+    "Performance report",
+    "Privacy information",
+    "Procurement",
+    "Strategic plan",
+    "",
+])
