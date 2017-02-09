@@ -1,0 +1,25 @@
+{% extends "home/feed_base.html" %}
+{% load wagtailcore_tags %}
+{% load staticfiles %}
+{% load filters %}
+{% load document_feed %}
+
+{% block intro %}
+  <p class="t-lead">{{ self.intro }}</p>
+{% endblock %}
+
+{% block filters %}
+<form action="" class="container">
+    <div class="filter">
+      <div class="combo combo--filter--mini">
+        <label for="year" class="label">Year</label>
+        <input id="year" class="combo__input" name="year" type="text" value="{{ request.GET.year }}" placeholder="YYYY">
+        <button type="submit" class="combo__button button button--standard button--go"><span class="u-visually-hidden">Filter</span></button>
+      </div>
+    </div>
+</form>
+{% endblock %}
+
+{% block feed %}
+  {% document_feed page=self request=request %}
+{% endblock %}

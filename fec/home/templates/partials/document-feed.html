@@ -1,0 +1,7 @@
+{% comment %}
+  This partial is used by the document_feed inclusion tag in document_feed.py
+{% endcomment %}
+
+{% for document in documents %}
+  {% include 'partials/document.html' with document=document category=category%}
+{% endfor %}
