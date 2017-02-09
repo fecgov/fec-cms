@@ -11,7 +11,7 @@
         {{ document.body | truncatewords_html:30 }}
         <a class="js-read-more post__read-more" href="{{ document.url }}">Read more</a>
       {% else %}
-        <p class="t-sans post__doc"><a href="{{ document.file_url }}">{{ document.file_name }}</a> | ({{ document.size }})</p>
+        <p class="t-sans post__doc"><a href="{{ document.file_url }}">{{ document.file_name }}</a> {% if document.size %}| ({{ document.size }}){% endif %}</p>
       {% endif %}
     </div>
     <div class="post__meta">
