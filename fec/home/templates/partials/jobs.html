@@ -1,17 +1,19 @@
 {% load wagtailcore_tags %}
-<section class="slab  slab--neutral" style="padding:1rem">
-<ul>
-{% for j in jobData %}
-  <li>
-    <h3><a href="{{ j.PositionURI }}">{{ j.PositionID }} , {{ j.PositionTitle}}</a></h3>
+<section class="slab slab--neutral slab--inline" >
+  <div class="container">
+  {% for j in jobData %}
     <ul>
-      <li class='t-sans'><strong>Open Period:</strong> {{ j.PositionStartDate }} - {{ j.PositionEndDate }}</li>
-      <li class='t-sans'><strong>Who May Apply:</strong> {{ j.WhoMayApply }}</li>
-      <li class='t-sans'><strong>Grade:</strong> {{ j.JobGrade }} - {{ j.LowGrade }} - {{ j.HighGrade }}</li>
+      <li>
+      <h3><a href="{{ j.PositionURI }}">{{ j.PositionID }} , {{ j.PositionTitle}}</a></h3>
+        <ul>
+          <li class='t-sans'><strong>Open Period:</strong> {{ j.PositionStartDate }} - {{ j.PositionEndDate }}</li>
+          <li class='t-sans'><strong>Who May Apply:</strong> {{ j.WhoMayApply }}</li>
+          <li class='t-sans'><strong>Grade:</strong> {{ j.JobGrade }} - {{ j.LowGrade }} - {{ j.HighGrade }}</li>
+        </ul>
+      </li>
     </ul>
-  </li><br>
   {% empty %}
-  <p>There are currently no open positions available. Please check back on this page or Job Announcements on <a href='https://www.usajobs.gov/' title='USAJobs website'>USAJOBs</a> for the latest FEC Vacancy Announcements.")</p>
-{% endfor %}
-</ul>
+    <p>There are currently no open positions available. Please check back on this page or Job Announcements on <a href='https://www.usajobs.gov/' title='USAJobs website'>USAJOBs</a> for the latest FEC Vacancy Announcements.")</p>
+  {% endfor %}
+  </div>
 </section>

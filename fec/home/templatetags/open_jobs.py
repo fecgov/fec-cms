@@ -1,22 +1,22 @@
 
-from django.shortcuts import render_to_response, redirect
 from django import template
+#from django.http import HttpResponse
+import requests
+#import json
+#from datetime import datetime
+import dateutil.parser
 
 register = template.Library()
 
 @register.inclusion_tag('partials/jobs.html')
 def get_jobs():
-    from django.http import HttpResponse
-    import requests
-    import json
-    from datetime import datetime
-    import dateutil.parser
+    
     url = "https://data.usajobs.gov/api/Search"
 
     querystring = {"Organization":"PU00","WhoMayApply":"All"}
 
     headers = {
-        'authorization-key': "ZQbNd1iLrQ+rPN3Rj2Q9gDy2Qpi/3haXSXGuHbP1SRk=",
+        'authorization-key': "#",
         'user-agent': "jcarroll@fec.gov",
         'host': "data.usajobs.gov",
         'cache-control': "no-cache",
