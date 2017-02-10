@@ -1,6 +1,7 @@
 from wagtail.wagtailcore import blocks
 from wagtail.wagtailimages.blocks import ImageChooserBlock
 from wagtail.wagtaildocs.blocks import DocumentChooserBlock
+from wagtail.contrib.table_block.blocks import TableBlock
 
 
 class ThumbnailBlock(blocks.StructBlock):
@@ -101,7 +102,8 @@ class ResourceBlock(blocks.StructBlock):
         ('external_button', ExternalButtonBlock()),
         ('page', blocks.PageChooserBlock(template='blocks/page-links.html')),
         ('document_list', blocks.ListBlock(FeedDocumentBlock(), template='blocks/document-list.html', icon='doc-empty')),
-        ('current_commissioners', CurrentCommissionersBlock())
+        ('current_commissioners', CurrentCommissionersBlock()),
+        ('table', TableBlock()),
     ])
 
     aside = blocks.StreamBlock([
