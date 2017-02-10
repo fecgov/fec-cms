@@ -16,13 +16,6 @@
   }
 
   .block-image {
-    @include media($med) {
-      @include span-columns(8);
-      float: none;  // override span-columns
-      margin-right: 0;  // override span-columns
-      margin-left: flex-gutter();
-    }
-
     img {
       height: auto;  // preserve ratio
       border: 2px solid $gray-lightest;
