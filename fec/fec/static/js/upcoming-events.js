@@ -33,7 +33,7 @@ function UpcomingEvents() {
         eventSummary = event.summary;
       }
 
-      $('.homepage-upcoming-events').append('<li>' + startDateMonth + ' ' + startDateDay + ': ' + eventSummary + '</li>');
+      $('.js-homepage-upcoming-events').append('<li>' + startDateMonth + ' ' + startDateDay + ': ' + eventSummary + '</li>');
 
       return i < 2;
     });
