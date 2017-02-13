@@ -35,7 +35,7 @@ function UpcomingEvents() {
 
       $('.js-homepage-upcoming-events').append('<li>' + startDateMonth + ' ' + startDateDay + ': ' + eventSummary + '</li>');
 
-      return i < 2;
+      return i < 3;
     });
   });
 }
