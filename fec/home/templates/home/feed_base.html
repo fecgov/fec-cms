@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% load wagtailcore_tags %}
+{% load staticfiles %}
+{% load filters %}
+
+{% block title %}{{ self.title }} | FEC{% endblock %}
+
+{% block content %}
+
+{% include 'partials/breadcrumbs.html' with page=self style='secondary' %}
+
+<section class="content__section--extra">
+  <div class="container">
+    <header class="heading--main">
+      <h1>{{ self.title }}</h1>
+    </header>
+    <div class="content__section--narrow">
+      {% block intro %}
+      {% endblock %}
+    </div>
+  </div>
+</section>
+<section class="main__content--full data-container__wrapper" id="feed">
+  <div class="filters--horizontal">
+  {% block filters %}{%endblock %}
+  </div>
+  <div class="main">
+    <div class="container">
+      {% block feed %}{% endblock %}
+    </div>
+  </div>
+</section>
+{% endblock %}

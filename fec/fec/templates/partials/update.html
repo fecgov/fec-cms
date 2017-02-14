@@ -10,7 +10,7 @@
   {% if update.get_update_type != 'Weekly Digest' %}
     <div class="t-sans row js-post-content">
       {{ update.body | truncatewords_html:30 }}
-      <a class="js-read-more post__read-more" href="{{ update.url }}">Read more</a
+      <a class="js-read-more post__read-more" href="{{ update.url }}">Read more</a>
     </div>
   {% endif %}
   {% if show_tag %}
