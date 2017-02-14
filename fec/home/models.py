@@ -303,7 +303,8 @@ class PressReleasePage(ContentPage):
         return self.date.year >= 2016
 
 def get_previous_tips_page():
-    return TipsForTreasurersPage.objects.order_by('-date', '-pk').first().pk
+    next_tip = TipsForTreasurersPage.objects.order_by('-date', '-pk').first()
+    return next_tip.pk if next_tip else None
 
 class TipsForTreasurersPage(ContentPage):
     date = models.DateField(default=datetime.date.today)
