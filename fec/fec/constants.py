@@ -178,15 +178,15 @@ agency_operations_reports = OrderedDict((x.lower(), x) for x in [
 ])
 
 # This maps each group to a key for reference later on
-report_category_groups = {
-    'oig': oig_reports,
-    'strategy_budget_performance': strategy_budget_performance_reports,
-    'foia': foia_reports,
-    'privacy': privacy_reports,
-    'procurement_contracting_reports': procurement_contracting_reports,
-    'annual_anniversary': annual_anniversary_reports,
-    'agency_operations': agency_operations_reports
-}
+report_category_groups = OrderedDict([
+    ('oig', oig_reports),
+    ('strategy_budget_performance', strategy_budget_performance_reports),
+    ('foia', foia_reports),
+    ('privacy', privacy_reports),
+    ('procurement_contracting_reports', procurement_contracting_reports),
+    ('annual_anniversary', annual_anniversary_reports),
+    ('agency_operations', agency_operations_reports)
+])
 
 # Create a dict of all of the category group names to populate the choices
 # on the DocumentFeedPage
@@ -195,6 +195,6 @@ report_parent_categories = OrderedDict((x, x.replace('_', ' ')) for x in report_
 # Combine all of the dicts into a single one to be shared by all DocumentPages
 # This allows us to have a single DocumentPage class that works regardless of
 # the parent page
-report_child_categories = {}
+report_child_categories = OrderedDict()
 for category in report_category_groups.keys():
     report_child_categories.update(report_category_groups[category])
