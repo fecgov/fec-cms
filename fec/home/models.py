@@ -323,13 +323,45 @@ class PressLandingPage(Page):
         StreamFieldPanel('contact_intro'),
     ]
 
+class DocumentPage(ContentPage):
+    date = models.DateField(default=datetime.date.today)
+    file_url = models.URLField(blank=True)
+    file_name = models.CharField(max_length=255, blank=True)
+    size = models.CharField(max_length=255, blank=True, null=True)
+    category = models.CharField(max_length=255,
+                                choices=constants.report_child_categories.items(), null=True)
+    content_panels = Page.content_panels + [
+        FieldPanel('date'),
+        FieldPanel('file_url'),
+        FieldPanel('file_name'),
+        FieldPanel('size'),
+        FieldPanel('category'),
+        StreamFieldPanel('body')
+    ]
+
+class DocumentFeedPage(ContentPage):
+    subpage_types = ['DocumentPage']
+    intro = StreamField([
+        ('paragraph', blocks.RichTextBlock())
+    ], null=True)
+    category = models.CharField(max_length=255,
+                                choices=constants.report_parent_categories.items(), null=True)
+    content_panels = Page.content_panels + [
+        StreamFieldPanel('intro'),
+        FieldPanel('category')
+    ]
+
+    @property
+    def category_filters(self):
+        return constants.report_category_groups[self.category]
+
 class AboutLandingPage(Page):
     hero = stream_factory(null=True, blank=True)
     sections = StreamField([
         ('sections', OptionBlock())
     ], null=True)
 
-    subpage_types = ['ResourcePage']
+    subpage_types = ['ResourcePage', 'DocumentFeedPage']
 
     content_panels = Page.content_panels + [
         StreamFieldPanel('hero'),
