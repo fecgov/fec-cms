@@ -1,22 +1,19 @@
 
 from django import template
-#from django.http import HttpResponse
 import requests
-#import json
-#from datetime import datetime
+from django.conf import settings
+from django.conf import os
 import dateutil.parser
 
 register = template.Library()
 
 @register.inclusion_tag('partials/jobs.html')
 def get_jobs():
-    
     url = "https://data.usajobs.gov/api/Search"
 
-    querystring = {"Organization":"PU00","WhoMayApply":"All"}
-
+    querystring = {"Organization":"LF00","WhoMayApply":"All"}
     headers = {
-        'authorization-key': "#",
+        'authorization-key': settings.USAJOBS_API_KEY,  
         'user-agent': "jcarroll@fec.gov",
         'host': "data.usajobs.gov",
         'cache-control': "no-cache",
