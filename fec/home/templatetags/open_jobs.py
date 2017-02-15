@@ -32,7 +32,7 @@ def get_jobs():
         "position_uri": i ["MatchedObjectDescriptor"]["PositionURI"],
         "position_start_date" : dateutil.parser.parse(i['MatchedObjectDescriptor']['PositionStartDate']),
         "position_end_date" : dateutil.parser.parse(i['MatchedObjectDescriptor']['PositionEndDate']),
-        "Who_may_apply" : i['MatchedObjectDescriptor']['UserArea']['Details']['WhoMayApply']['Name'],
+        "who_may_apply" : i['MatchedObjectDescriptor']['UserArea']['Details']['WhoMayApply']['Name'],
         "job_grade" : i['MatchedObjectDescriptor']['JobGrade'][0]['Code'],
         "low_grade" : i['MatchedObjectDescriptor']['UserArea']['Details']['LowGrade'],
         "high_grade" : i['MatchedObjectDescriptor']['UserArea']['Details']['HighGrade'] }
