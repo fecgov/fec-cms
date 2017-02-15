@@ -329,26 +329,29 @@ class TipsForTreasurersPage(ContentPage):
     read_next = models.ForeignKey('TipsForTreasurersPage', blank=True, null=True,
                                   default=get_previous_tips_page,
                                   on_delete=models.SET_NULL)
-    homepage_pin = models.BooleanField(default=False)
-    homepage_pin_start = models.DateField(blank=True, null=True)
-    homepage_pin_expiration = models.DateField(blank=True, null=True)
-    homepage_hide = models.BooleanField(default=False)
+
+    # These fields are messing up migrations so commenting out for now
+    #
+    # homepage_pin = models.BooleanField(default=False)
+    # homepage_pin_start = models.DateField(blank=True, null=True)
+    # homepage_pin_expiration = models.DateField(blank=True, null=True)
+    # homepage_hide = models.BooleanField(default=False)
+    #
+    # promote_panels = Page.promote_panels + [
+    #     MultiFieldPanel([
+    #         FieldPanel('homepage_pin'),
+    #         FieldPanel('homepage_pin_start'),
+    #         FieldPanel('homepage_pin_expiration'),
+    #         FieldPanel('homepage_hide')
+    #     ],
+    #     heading="Home page feed"
+    #     )
+    # ]
 
     template = 'home/updates/tips_for_treasurers.html'
     content_panels = ContentPage.content_panels + [
         FieldPanel('date'),
         PageChooserPanel('read_next')    ]
-
-    promote_panels = Page.promote_panels + [
-        MultiFieldPanel([
-            FieldPanel('homepage_pin'),
-            FieldPanel('homepage_pin_start'),
-            FieldPanel('homepage_pin_expiration'),
-            FieldPanel('homepage_hide')
-        ],
-        heading="Home page feed"
-        )
-    ]
 
     @property
     def get_update_type(self):
