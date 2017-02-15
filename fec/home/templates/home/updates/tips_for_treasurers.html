@@ -49,9 +49,9 @@
 
 <div class="slab slab--neutral">
   <div class="container">
-    <h3>Read next:</h3>
     {% if self.read_next %}
       <div class="content__section">
+        <h3>Read next:</h3>
         <h4><a href="{{ self.read_next.url }}">{{ self.read_next.title }}</a></h4>
       </div>
     {% endif %}
