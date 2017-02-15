@@ -24,7 +24,7 @@ def weekly_digests():
 
 @register.inclusion_tag('partials/home-page-updates.html')
 def home_page_updates():
-    press_releases = PressReleasePage.objects.live().filter(homepage_hide=False, has_unpublished_changes=False).order_by('-date')[:4]
+    press_releases = PressReleasePage.objects.live().filter(homepage_hide=False).order_by('-date')[:4]
     if settings.FEATURES['record']:
         records = RecordPage.objects.live().filter(homepage_hide=False).order_by('-date')[:4]
     if settings.FEATURES['tips']:
