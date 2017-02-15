@@ -1,6 +1,7 @@
 from wagtail.wagtailcore import blocks
 from wagtail.wagtailimages.blocks import ImageChooserBlock
 from wagtail.wagtaildocs.blocks import DocumentChooserBlock
+from wagtail.contrib.table_block.blocks import TableBlock
 
 
 class ThumbnailBlock(blocks.StructBlock):
@@ -109,7 +110,8 @@ class ResourceBlock(blocks.StructBlock):
         ('page', blocks.PageChooserBlock(template='blocks/page-links.html')),
         ('document_list', blocks.ListBlock(FeedDocumentBlock(), template='blocks/document-list.html', icon='doc-empty')),
         ('current_commissioners', CurrentCommissionersBlock()),
-        ('fec_jobs', CareersBlock())
+        ('fec_jobs', CareersBlock()),
+        ('table', TableBlock())
     ])
 
     aside = blocks.StreamBlock([
