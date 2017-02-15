@@ -4,11 +4,11 @@
   <ul>
   {% for j in jobData %}
       <li>
-      <h3><a href="{{ j.PositionURI }}">{{ j.PositionID }} , {{ j.PositionTitle}}</a></h3>
+      <h3><a href="{{ j.position_uri }}">{{ j.position_id }} , {{ j.position_title}}</a></h3>
         <ul class="u-padding--bottom">
-          <li class='t-sans'><strong>Open Period:</strong> {{ j.PositionStartDate }} - {{ j.PositionEndDate }}</li>
-          <li class='t-sans'><strong>Who May Apply:</strong> {{ j.WhoMayApply }}</li>
-          <li class='t-sans'><strong>Grade:</strong> {{ j.JobGrade }} - {{ j.LowGrade }} - {{ j.HighGrade }}</li>
+          <li class='t-sans'><strong>Open Period:</strong> {{ j.position_start_date }} - {{ j.position_end_date }}</li>
+          <li class='t-sans'><strong>Who May Apply:</strong> {{ j.who_may_apply }}</li>
+          <li class='t-sans'><strong>Grade:</strong> {{ j.job_grade }} - {{ j.low_grade }} - {{ j.high_grade }}</li>
         </ul>
       </li>
   {% empty %}

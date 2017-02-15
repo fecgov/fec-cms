@@ -26,14 +26,16 @@ def get_jobs():
     jobData = []
     for i in responses['SearchResult']['SearchResultItems']:
         x= {}
-        x = { "PositionTitle": i["MatchedObjectDescriptor"]["PositionTitle"] , 
-        "PositionID": i["MatchedObjectDescriptor"]["PositionID"], "PositionURI": i ["MatchedObjectDescriptor"]["PositionURI"],
-        "PositionStartDate" : dateutil.parser.parse(i['MatchedObjectDescriptor']['PositionStartDate']),
-        "PositionEndDate" : dateutil.parser.parse(i['MatchedObjectDescriptor']['PositionEndDate']),
-        "WhoMayApply" : i['MatchedObjectDescriptor']['UserArea']['Details']['WhoMayApply']['Name'],
-        "JobGrade" : i['MatchedObjectDescriptor']['JobGrade'][0]['Code'],
-        "LowGrade" : i['MatchedObjectDescriptor']['UserArea']['Details']['LowGrade'],
-        "HighGrade" : i['MatchedObjectDescriptor']['UserArea']['Details']['HighGrade'] }
+        x = { 
+        "position_title": i["MatchedObjectDescriptor"]["PositionTitle"] , 
+        "position_id": i["MatchedObjectDescriptor"]["PositionID"], 
+        "position_uri": i ["MatchedObjectDescriptor"]["PositionURI"],
+        "position_start_date" : dateutil.parser.parse(i['MatchedObjectDescriptor']['PositionStartDate']),
+        "position_end_date" : dateutil.parser.parse(i['MatchedObjectDescriptor']['PositionEndDate']),
+        "Who_may_apply" : i['MatchedObjectDescriptor']['UserArea']['Details']['WhoMayApply']['Name'],
+        "job_grade" : i['MatchedObjectDescriptor']['JobGrade'][0]['Code'],
+        "low_grade" : i['MatchedObjectDescriptor']['UserArea']['Details']['LowGrade'],
+        "high_grade" : i['MatchedObjectDescriptor']['UserArea']['Details']['HighGrade'] }
         jobData.append(x)
 
     return ({'jobData':jobData})
