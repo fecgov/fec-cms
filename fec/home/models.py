@@ -11,7 +11,7 @@ from wagtail.wagtailcore.models import Page, Orderable
 from wagtail.wagtailcore.fields import StreamField
 from wagtail.wagtailcore import blocks
 from wagtail.wagtailadmin.edit_handlers import (FieldPanel, StreamFieldPanel,
-                                                PageChooserPanel, InlinePanel)
+                                                PageChooserPanel, InlinePanel, MultiFieldPanel)
 from wagtail.wagtailimages.blocks import ImageChooserBlock
 from wagtail.wagtailimages.edit_handlers import ImageChooserPanel
 
@@ -184,6 +184,7 @@ class RecordPage(ContentPage):
 
     homepage_pin = models.BooleanField(default=False)
     homepage_pin_expiration = models.DateField(blank=True, null=True)
+    homepage_pin_start = models.DateField(blank=True, null=True)
     homepage_hide = models.BooleanField(default=False)
     template = 'home/updates/record_page.html'
     content_panels = ContentPage.content_panels + [
@@ -194,10 +195,18 @@ class RecordPage(ContentPage):
         InlinePanel('authors', label='Authors'),
         PageChooserPanel('read_next'),
         FieldPanel('related_section_title'),
-        FieldPanel('related_section_url'),
-        FieldPanel('homepage_pin'),
-        FieldPanel('homepage_pin_expiration'),
-        FieldPanel('homepage_hide')
+        FieldPanel('related_section_url')
+    ]
+
+    promote_panels = Page.promote_panels + [
+        MultiFieldPanel([
+            FieldPanel('homepage_pin'),
+            FieldPanel('homepage_pin_start'),
+            FieldPanel('homepage_pin_expiration'),
+            FieldPanel('homepage_hide')
+        ],
+        heading="Home page feed"
+        )
     ]
 
     @property
@@ -268,6 +277,7 @@ class PressReleasePage(ContentPage):
 
     homepage_pin = models.BooleanField(default=False)
     homepage_pin_expiration = models.DateField(blank=True, null=True)
+    homepage_pin_start = models.DateField(blank=True, null=True)
     homepage_hide = models.BooleanField(default=False)
     template = 'home/updates/press_release_page.html'
 
@@ -277,9 +287,17 @@ class PressReleasePage(ContentPage):
         InlinePanel('authors', label="Authors"),
         FieldPanel('category'),
         PageChooserPanel('read_next'),
-        FieldPanel('homepage_pin'),
-        FieldPanel('homepage_pin_expiration'),
-        FieldPanel('homepage_hide'),
+    ]
+
+    promote_panels = Page.promote_panels + [
+        MultiFieldPanel([
+            FieldPanel('homepage_pin'),
+            FieldPanel('homepage_pin_start'),
+            FieldPanel('homepage_pin_expiration'),
+            FieldPanel('homepage_hide')
+        ],
+        heading="Home page feed"
+        )
     ]
 
     @property
@@ -311,11 +329,25 @@ class TipsForTreasurersPage(ContentPage):
     read_next = models.ForeignKey('TipsForTreasurersPage', blank=True, null=True,
                                   default=get_previous_tips_page,
                                   on_delete=models.SET_NULL)
+    homepage_pin = models.BooleanField(default=False)
+    homepage_pin_start = models.DateField(blank=True, null=True)
+    homepage_pin_expiration = models.DateField(blank=True, null=True)
+    homepage_hide = models.BooleanField(default=False)
 
     template = 'home/updates/tips_for_treasurers.html'
     content_panels = ContentPage.content_panels + [
         FieldPanel('date'),
-        PageChooserPanel('read_next')
+        PageChooserPanel('read_next')    ]
+
+    promote_panels = Page.promote_panels + [
+        MultiFieldPanel([
+            FieldPanel('homepage_pin'),
+            FieldPanel('homepage_pin_start'),
+            FieldPanel('homepage_pin_expiration'),
+            FieldPanel('homepage_hide')
+        ],
+        heading="Home page feed"
+        )
     ]
 
     @property
