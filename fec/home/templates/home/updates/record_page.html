@@ -56,12 +56,6 @@
           <h3>Read next:</h3>
           <div class="read_next__content">
             <h4 class="read_next__title"><a href="{{ self.read_next.url }}">{{ self.read_next.title }}</a></h4>
-            {% if self.read_next.search_description %}
-              <p>
-                {{ self.read_next.search_description }}
-                <span class="t-sans t-block">{{ self.read_next.date|date:'F j, Y' }}</span>
-              </p>
-            {% endif %}
           </div>
           <div class="read_next__image__container">
             {% if self.read_next.search_description and self.read_next.feed_image %}

@@ -81,7 +81,8 @@ class Command(ImporterMixin, BaseCommand):
             url_path = '/home/updates/' + slug + '/'
             clean_body = self.clean_content(item['body'], **options)
             body = self.escape_quotes(clean_body, **options)
-            body_list = [{"value": body, "type": block_type}]
+            paragraph = self.wrap_with_paragraph(body, **options)
+            body_list = [{"value": paragraph, "type": block_type}]
             formatted_body = json.dumps(body_list)
             publish_date = parser.parse(item['posted_date'])
 

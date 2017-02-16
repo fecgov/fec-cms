@@ -6,7 +6,7 @@ services:
   - fec-creds-stage
   - fec-stage-cms
 env:
-  FEC_API_URL: https://fec-stage-api.18f.gov
+  FEC_API_URL: https://api-stage.open.fec.gov
   FEC_APP_URL: https://fec-stage-proxy.app.cloud.gov/data
   FEC_CMS_ENVIRONMENT: stage
   NEW_RELIC_APP_NAME: govcloud | cms | stage
