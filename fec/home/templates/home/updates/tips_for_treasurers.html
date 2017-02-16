@@ -24,7 +24,7 @@
     <header class="heading--main heading--with-date">
       <ul class="tags">
         <li class="tag tag--secondary t-upper">
-          Weekly Digests
+          Tips for Treasurers
         </li>
       </ul>
       <div class="row">
@@ -49,12 +49,14 @@
 
 <div class="slab slab--neutral">
   <div class="container">
-    <div class="content__section">
-      <h3>Read next:</h3>
-      {% if self.read_next %}
+    {% if self.read_next %}
+      <div class="content__section">
+        <h3>Read next:</h3>
         <h4><a href="{{ self.read_next.url }}">{{ self.read_next.title }}</a></h4>
-      {% endif %}
-      <h4><a href="/updates?update_type=tips-for-treasurers">Tips for Treasurers</a> &raquo;</h4>
+      </div>
+    {% endif %}
+    <div class="content__section">
+      <h4><a href="/updates?update_type=tips-for-treasurers">More Tips for Treasurers</a> &raquo;</h4>
     </div>
   </div>
 </div>

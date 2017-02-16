@@ -1,0 +1,19 @@
+{% load wagtailcore_tags %}
+<section class="slab slab--neutral slab--inline" >
+  <div class="container">
+  <ul>
+  {% for j in jobData %}
+      <li>
+      <h3><a href="{{ j.position_uri }}">{{ j.position_id }} , {{ j.position_title}}</a></h3>
+        <ul class="u-padding--bottom">
+          <li class='t-sans'><strong>Open Period:</strong> {{ j.position_start_date }} - {{ j.position_end_date }}</li>
+          <li class='t-sans'><strong>Who May Apply:</strong> {{ j.who_may_apply }}</li>
+          <li class='t-sans'><strong>Grade:</strong> {{ j.job_grade }} - {{ j.low_grade }} - {{ j.high_grade }}</li>
+        </ul>
+      </li>
+  {% empty %}
+    <li class='t-sans'>There are currently no open positions available. Please check back on this page or Job Announcements on <a href='https://www.usajobs.gov/' title='USAJobs website'>USAJOBs</a> for the latest FEC Vacancy Announcements.")</li>
+  {% endfor %}
+ </ul>
+  </div>
+</section>
