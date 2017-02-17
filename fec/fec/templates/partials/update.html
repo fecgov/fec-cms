@@ -11,12 +11,17 @@
       <h3><a href="{{ update.url }}">{% formatted_title update %}</a></h3>
       {% if update.get_update_type != 'Weekly Digest' %}
       <div class="t-sans row js-post-content">
-          {% for block in update.body %}
-            {% if block.block_type == 'paragraph' %}
-              {{ block | truncatewords_html:30 }}
-              <a class="js-read-more post__read-more" href="{{ update.url }}">Read more</a>
-            {% endif %}
-          {% endfor %}
+        {% comment %}
+          This looks for either the first or second block to be a paragraph and then show that text.
+          If it's an image or something else we ignore it.
+        {% endcomment %}
+          {% if update.body.0.block_type == 'paragraph' %}
+            {{ update.body.0 | truncatewords_html:30 }}
+            <a class="js-read-more post__read-more" href="{{ update.url }}">Read more</a>
+          {% elif update.body.2.block_type == 'paragraph' %}
+            {{ update.body.2 | truncatewords_html:30 }}
+            <a class="js-read-more post__read-more" href="{{ update.url }}">Read more</a>
+          {% endif %}
         </div>
       {% endif %}
       {% if show_tag %}
