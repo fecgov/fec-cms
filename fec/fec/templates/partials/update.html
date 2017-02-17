@@ -18,8 +18,8 @@
           {% if update.body.0.block_type == 'paragraph' %}
             {{ update.body.0 | truncatewords_html:30 }}
             <a class="js-read-more post__read-more" href="{{ update.url }}">Read more</a>
-          {% elif update.body.2.block_type == 'paragraph' %}
-            {{ update.body.2 | truncatewords_html:30 }}
+          {% elif update.body.1.block_type == 'paragraph' %}
+            {{ update.body.1 | truncatewords_html:30 }}
             <a class="js-read-more post__read-more" href="{{ update.url }}">Read more</a>
           {% endif %}
         </div>
