@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% load wagtailcore_tags %}
+{% load staticfiles %}
+
+{% block content %}
+
+{% include 'partials/breadcrumbs.html' with page=self links=self.get_ancestors style='secondary' %}
+
+<article class="main">
+  <div class="container" id="sections">
+    <h1 class="heading--main">{{ self.title }}</h1>
+    <div class="content__section">
+      {{ self.intro }}
+    </div>
+    <div class="grid grid--3-wide">
+      {% for blurb in self.document_feeds %}
+      <a class="grid__item tile" href="{{ blurb.value.page.url }}">
+        <h2>{{ blurb.value.page.title }}</h2>
+        <p>{{ blurb.value.description }}</p>
+      </a>
+      {% endfor %}
+    </div>
+  </div>
+</article>
+
+{% endblock %}

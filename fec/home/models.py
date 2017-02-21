@@ -20,7 +20,7 @@ from wagtail.contrib.table_block.blocks import TableBlock
 from fec import constants
 from home.blocks import (ThumbnailBlock, AsideLinkBlock, ContactInfoBlock,
                         ContactInfoBlock, CitationsBlock, ResourceBlock,
-                        OptionBlock, CollectionBlock)
+                        OptionBlock, CollectionBlock, DocumentFeedBlurb)
 
 stream_factory = functools.partial(
     StreamField,
@@ -430,13 +430,32 @@ class DocumentFeedPage(ContentPage):
     def category_filters(self):
         return constants.report_category_groups[self.category]
 
+class ReportsLandingPage(ContentPage, UniqueModel):
+    subpage_types = ['DocumentFeedPage']
+    intro = StreamField([
+        ('paragraph', blocks.RichTextBlock())
+    ], null=True)
+
+    document_feeds = StreamField([
+        ('document_feed_blurb', DocumentFeedBlurb())
+    ], null=True, blank=True)
+
+    content_panels = Page.content_panels + [
+        StreamFieldPanel('intro'),
+        StreamFieldPanel('document_feeds')
+    ]
+
+    @property
+    def content_section(self):
+        return ''
+
 class AboutLandingPage(Page):
     hero = stream_factory(null=True, blank=True)
     sections = StreamField([
         ('sections', OptionBlock())
     ], null=True)
 
-    subpage_types = ['ResourcePage', 'DocumentFeedPage']
+    subpage_types = ['ResourcePage', 'DocumentFeedPage', 'ReportsLandingPage']
 
     content_panels = Page.content_panels + [
         StreamFieldPanel('hero'),
