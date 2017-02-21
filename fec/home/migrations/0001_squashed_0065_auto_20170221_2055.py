@@ -21,6 +21,37 @@ import wagtail.wagtailimages.blocks
 # RunPython operations to refer to the local versions:
 # home.migrations.0002_create_homepage
 
+# Per the manage.py squashmigrations instructions above, this function has been
+# copied from the original migration it came from.
+def create_homepage(apps, schema_editor):
+    # Get models
+    ContentType = apps.get_model('contenttypes.ContentType')
+    Page = apps.get_model('wagtailcore.Page')
+    Site = apps.get_model('wagtailcore.Site')
+    HomePage = apps.get_model('home.HomePage')
+
+    # Delete the default homepage
+    Page.objects.get(id=2).delete()
+
+    # Create content type for homepage model
+    homepage_content_type, created = ContentType.objects.get_or_create(
+        model='homepage', app_label='home')
+
+    # Create a new homepage
+    homepage = HomePage.objects.create(
+        title="Homepage",
+        slug='home',
+        content_type=homepage_content_type,
+        path='00010001',
+        depth=2,
+        numchild=0,
+        url_path='/home/',
+    )
+
+    # Create a site with the new homepage set as the root
+    Site.objects.create(
+        hostname='localhost', root_page=homepage, is_default_site=True)
+
 class Migration(migrations.Migration):
 
     replaces = [('home', '0001_initial'), ('home', '0002_create_homepage'), ('home', '0003_auto_20150819_0342'), ('home', '0004_checklistpage'), ('home', '0005_auto_20150819_0517'), ('home', '0006_auto_20150819_0546'), ('home', '0007_auto_20150901_0442'), ('home', '0008_auto_20150917_1906'), ('home', '0009_contactpage'), ('home', '0010_calendarpage'), ('home', '0011_ssfchecklistpage'), ('home', '0012_partychecklistpage'), ('home', '0013_auto_20160427_2133'), ('home', '0014_nonconnectedchecklistpage'), ('home', '0015_custompage_content'), ('home', '0016_auto_20160714_2359'), ('home', '0017_auto_20160823_1504'), ('home', '0018_record_digest_press_release'), ('home', '0019_auto_20160908_2113'), ('home', '0020_auto_20160909_0139'), ('home', '0019_auto_20160907_2152'), ('home', '0021_merge'), ('home', '0022_auto_20160923_0004'), ('home', '0023_remove_presslandingpage_feed_intro'), ('home', '0024_presslandingpage_feed_intro'), ('home', '0022_auto_20160921_2230'), ('home', '0025_merge'), ('home', '0026_auto_20161004_1620'), ('home', '0027_auto_20161004_1620'), ('home', '0025_auto_20161006_1415'), ('home', '0028_merge'), ('home', '0029_auto_20161107_0304'), ('home', '0030_pressreleasepage_formatted_title'), ('home', '0031_auto_20161201_2123'), ('home', '0032_auto_20161201_2124'), ('home', '0033_auto_20161201_2126'), ('home', '0034_pressreleasepage_homepage_pin'), ('home', '0035_pressreleasepage_homepage_hide'), ('home', '0036_auto_20161216_0202'), ('home', '0037_auto_20161216_0222'), ('home', '0038_resourcepage'), ('home', '0039_legalresourceslanding'), ('home', '0040_auto_20161228_2356'), ('home', '0041_enforcementpage'), ('home', '0042_auto_20161229_2001'), ('home', '0034_auto_20161221_1920'), ('home', '0035_recordpage_monthly_issue'), ('home', '0036_auto_20161221_2007'), ('home', '0037_recordpage_monthly_issue_url'), ('home', '0038_merge_20161223_1820'), ('home', '0043_merge_20161230_0122'), ('home', '0044_auto_20170105_0006'), ('home', '0038_aboutlandingpage'), ('home', '0039_aboutlandingpage_hero'), ('home', '0040_aboutlandingpage_mission_intro'), ('home', '0041_auto_20161227_1524'), ('home', '0042_auto_20161227_1526'), ('home', '0043_auto_20161227_1538'), ('home', '0044_aboutlandingpage_option_blocks'), ('home', '0045_merge_20170105_0036'), ('home', '0046_auto_20170105_0038'), ('home', '0047_auto_20170105_0044'), ('home', '0048_auto_20170105_0049'), ('home', '0049_auto_20170105_0052'), ('home', '0050_auto_20170105_0055'), ('home', '0051_commissionerpage'), ('home', '0052_auto_20170111_2205'), ('home', '0053_serviceslandingpage'), ('home', '0054_auto_20170118_2104'), ('home', '0055_tipsfortreasurerspage'), ('home', '0055_auto_20170123_2232'), ('home', '0056_merge_20170127_1735'), ('home', '0057_auto_20170202_0237'), ('home', '0058_documentfeedpage_documentpage'), ('home', '0059_auto_20170209_0151'), ('home', '0060_auto_20170209_2030'), ('home', '0058_auto_20170210_2136'), ('home', '0061_merge_20170210_2230'), ('home', '0062_auto_20170214_2207'), ('home', '0063_auto_20170214_2207'), ('home', '0064_auto_20170215_2153'), ('home', '0065_auto_20170221_2055')]
@@ -55,7 +86,7 @@ class Migration(migrations.Migration):
             bases=('wagtailcore.page',),
         ),
         migrations.RunPython(
-            code=home.migrations.0002_create_homepage.create_homepage,
+            code=create_homepage,
         ),
         migrations.CreateModel(
             name='CustomPage',
