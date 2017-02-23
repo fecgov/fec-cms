@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 {% load wagtailcore_tags %}
 {% load staticfiles %}
+{% load filters %}
 
 {% block content %}
 
@@ -15,8 +16,11 @@
     <div class="grid grid--3-wide">
       {% for blurb in self.document_feeds %}
       <a class="grid__item tile" href="{{ blurb.value.page.url }}">
-        <h2>{{ blurb.value.page.title }}</h2>
+        <div class="tile__title">
+          <h2>{{ blurb.value.page.title }}</h2>
+        </div>
         <p>{{ blurb.value.description }}</p>
+        <span class="t-sans tile__count">{{ blurb.value.page | document_count }}</span>
       </a>
       {% endfor %}
     </div>
