@@ -66,7 +66,6 @@ class Command(ImporterMixin, BaseCommand):
         [
           {
             "title": "February 2015 OIG Report",
-            "name": "Review of outstanding recommendations",
             "url": "http://www.fec.gov/fecig/documents/ReviewofOutstandingRecommendationsasofFebruary2015-FinalReport.pdf",
             "date": "02/01/2015",
             "category": "oig report"
@@ -93,7 +92,6 @@ class Command(ImporterMixin, BaseCommand):
                 numchild=0,
                 title=title,
                 file_url=item['url'],
-                file_name=item['name'],
                 size=size,
                 category=category,
                 live=1,

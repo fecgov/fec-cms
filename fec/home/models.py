@@ -401,14 +401,12 @@ class PressLandingPage(Page):
 class DocumentPage(ContentPage):
     date = models.DateField(default=datetime.date.today)
     file_url = models.URLField(blank=True)
-    file_name = models.CharField(max_length=255, blank=True)
     size = models.CharField(max_length=255, blank=True, null=True)
     category = models.CharField(max_length=255,
                                 choices=constants.report_child_categories.items(), null=True)
     content_panels = Page.content_panels + [
         FieldPanel('date'),
         FieldPanel('file_url'),
-        FieldPanel('file_name'),
         FieldPanel('size'),
         FieldPanel('category'),
         StreamFieldPanel('body')
