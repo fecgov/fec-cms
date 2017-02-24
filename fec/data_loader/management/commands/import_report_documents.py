@@ -7,7 +7,7 @@ from django.utils import timezone
 from django.core.management import BaseCommand
 
 from data_loader.utils import ImporterMixin
-from fec.constants import document_categories
+from fec.constants import report_child_categories
 from home.models import Page, DocumentPage
 
 DEFAULT_CATEGORY = ''
@@ -27,7 +27,7 @@ class Command(ImporterMixin, BaseCommand):
         parser.add_argument(
             'parent_path',
             type=str,
-            help='Path to the parent page to import these under (e.g. /home/reports/oig-reports/)'
+            help='Path to the parent page to import these under (e.g. /home/about/reports-about-fec/oig-reports/)'
         )
 
         parser.add_argument(
@@ -84,7 +84,7 @@ class Command(ImporterMixin, BaseCommand):
             category = self.validate_category(
                 item.get('category', DEFAULT_CATEGORY),
                 DEFAULT_CATEGORY,
-                document_categories,
+                report_child_categories,
                 **options
             )
             document_page = DocumentPage(
