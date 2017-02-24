@@ -425,6 +425,10 @@ class DocumentFeedPage(ContentPage):
     ]
 
     @property
+    def content_section(self):
+        return ''
+
+    @property
     def category_filters(self):
         return constants.report_category_groups[self.category]
 
