@@ -14,10 +14,10 @@ def editor_js():
         <script src="/static/js/vendor/jquery.htmlClean.min.js"></script>
         <script src="/static/js/vendor/rangy-core.js"></script>
         <script src="/static/js/vendor/rangy-selectionsaverestore.js"></script>
+        <script src="/static/js/vendor/beautify-html.js"></script>
         <script src="/static/js/hallo-edit-html.js"></script>
         <script src="/static/js/hallo-sans-serif.js"></script>
         <script src="/static/js/customize-editor.js"></script>
-        <script src="/static/js-beautify/js/lib/beautify-html.js"></script>
         <script src="/static/ace-builds/src-noconflict/ace.js"></script>
         <script src="/static/ace-builds/src-noconflict/mode-html.js"></script>
         <script>
