@@ -4,21 +4,39 @@
 <article class="post">
   <div class="post__pre">
     <div class="post__date">{{ update.date|date:'F j, Y' }}</div>
-    <div class="post__byline">From: {% if update.get_update_type == 'FEC Record' %}Information Division{% else %}Press Office{% endif %}</div>
+    <div class="post__byline">From: {{ update.get_author_office }}</div>
   </div>
-  <h3><a href="{{ update.url }}">{% formatted_title update %}</a></h3>
-  {% if update.get_update_type != 'Weekly Digest' %}
-    <div class="t-sans row js-post-content">
-      {{ update.body | truncatewords_html:30 }}
-      <a class="js-read-more post__read-more" href="{{ update.url }}">Read more</a
+  <div class="row">
+    <div class="usa-width-three-fourths">
+      <h3><a href="{{ update.url }}">{% formatted_title update %}</a></h3>
+      {% if update.get_update_type != 'Weekly Digest' %}
+      <div class="t-sans row js-post-content">
+        {% comment %}
+          This looks for either the first or second block to be a paragraph and then show that text.
+          If it's an image or something else we ignore it.
+        {% endcomment %}
+          {% if update.body.0.block_type == 'paragraph' %}
+            {{ update.body.0 | truncatewords_html:30 }}
+            <a class="js-read-more post__read-more" href="{{ update.url }}">Read more</a>
+          {% elif update.body.1.block_type == 'paragraph' %}
+            {{ update.body.1 | truncatewords_html:30 }}
+            <a class="js-read-more post__read-more" href="{{ update.url }}">Read more</a>
+          {% endif %}
+        </div>
+      {% endif %}
+      {% if show_tag %}
+        <div class="post__meta">
+          <a class="tag tag--secondary" href="/updates?update_type={{update.get_update_type|slugify}}#feed">{{update.get_update_type}}</a>
+          {% if update.category %}
+            in: <a href="/updates?update_type={{update.get_update_type|slugify}}&category={{update.category|slugify}}">{{ update.category|capfirst }}</a>
+         {% endif %}
+        </div>
+      {% endif %}
     </div>
-  {% endif %}
-  {% if show_tag %}
-    <div class="post__meta">
-      <a class="tag tag--secondary" href="/updates?update_type={{update.get_update_type|slugify}}#feed">{{update.get_update_type}}</a>
-      {% if update.category %}
-        in: <a href="/updates?update_type={{update.get_update_type|slugify}}&category={{update.category|slugify}}">{{ update.category|capfirst }}</a>
-     {% endif %}
+    <div class="usa-width-one-fourth">
+      {% if update.feed_image %}
+        {% image update.feed_image original %}
+      {% endif %}
     </div>
-  {% endif %}
+  </div>
 </article>

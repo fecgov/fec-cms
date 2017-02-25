@@ -11,7 +11,7 @@ from wagtail.wagtailcore.models import Page, Orderable
 from wagtail.wagtailcore.fields import StreamField
 from wagtail.wagtailcore import blocks
 from wagtail.wagtailadmin.edit_handlers import (FieldPanel, StreamFieldPanel,
-                                                PageChooserPanel, InlinePanel)
+                                                PageChooserPanel, InlinePanel, MultiFieldPanel)
 from wagtail.wagtailimages.blocks import ImageChooserBlock
 from wagtail.wagtailimages.edit_handlers import ImageChooserPanel
 
@@ -184,6 +184,7 @@ class RecordPage(ContentPage):
 
     homepage_pin = models.BooleanField(default=False)
     homepage_pin_expiration = models.DateField(blank=True, null=True)
+    homepage_pin_start = models.DateField(blank=True, null=True)
     homepage_hide = models.BooleanField(default=False)
     template = 'home/updates/record_page.html'
     content_panels = ContentPage.content_panels + [
@@ -194,10 +195,18 @@ class RecordPage(ContentPage):
         InlinePanel('authors', label='Authors'),
         PageChooserPanel('read_next'),
         FieldPanel('related_section_title'),
-        FieldPanel('related_section_url'),
-        FieldPanel('homepage_pin'),
-        FieldPanel('homepage_pin_expiration'),
-        FieldPanel('homepage_hide')
+        FieldPanel('related_section_url')
+    ]
+
+    promote_panels = Page.promote_panels + [
+        MultiFieldPanel([
+            FieldPanel('homepage_pin'),
+            FieldPanel('homepage_pin_start'),
+            FieldPanel('homepage_pin_expiration'),
+            FieldPanel('homepage_hide')
+        ],
+        heading="Home page feed"
+        )
     ]
 
     @property
@@ -207,6 +216,10 @@ class RecordPage(ContentPage):
     @property
     def get_update_type(self):
         return constants.update_types['fec-record']
+
+    @property
+    def get_author_office(self):
+        return 'Information Division'
 
 
 class DigestPageAuthors(Orderable, PageAuthors):
@@ -239,6 +252,10 @@ class DigestPage(ContentPage):
     def get_update_type(self):
         return constants.update_types['weekly-digest']
 
+    @property
+    def get_author_office(self):
+        return 'Press Office'
+
 
 class PressReleasePageAuthors(Orderable, PageAuthors):
     page = ParentalKey('PressReleasePage', related_name='authors')
@@ -260,6 +277,7 @@ class PressReleasePage(ContentPage):
 
     homepage_pin = models.BooleanField(default=False)
     homepage_pin_expiration = models.DateField(blank=True, null=True)
+    homepage_pin_start = models.DateField(blank=True, null=True)
     homepage_hide = models.BooleanField(default=False)
     template = 'home/updates/press_release_page.html'
 
@@ -269,9 +287,17 @@ class PressReleasePage(ContentPage):
         InlinePanel('authors', label="Authors"),
         FieldPanel('category'),
         PageChooserPanel('read_next'),
-        FieldPanel('homepage_pin'),
-        FieldPanel('homepage_pin_expiration'),
-        FieldPanel('homepage_hide'),
+    ]
+
+    promote_panels = Page.promote_panels + [
+        MultiFieldPanel([
+            FieldPanel('homepage_pin'),
+            FieldPanel('homepage_pin_start'),
+            FieldPanel('homepage_pin_expiration'),
+            FieldPanel('homepage_hide')
+        ],
+        heading="Home page feed"
+        )
     ]
 
     @property
@@ -282,6 +308,10 @@ class PressReleasePage(ContentPage):
     def get_update_type(self):
         return constants.update_types['press-release']
 
+    @property
+    def get_author_office(self):
+        return 'Press Office'
+
     """
     Because we removed the boilerplate from all 2016 releases
     this flag is used to show it in the templates as a print-only element
@@ -289,6 +319,51 @@ class PressReleasePage(ContentPage):
     @property
     def no_boilerplate(self):
         return self.date.year >= 2016
+
+def get_previous_tips_page():
+    next_tip = TipsForTreasurersPage.objects.order_by('-date', '-pk').first()
+    return next_tip.pk if next_tip else None
+
+class TipsForTreasurersPage(ContentPage):
+    date = models.DateField(default=datetime.date.today)
+    read_next = models.ForeignKey('TipsForTreasurersPage', blank=True, null=True,
+                                  default=get_previous_tips_page,
+                                  on_delete=models.SET_NULL)
+
+    # These fields are messing up migrations so commenting out for now
+    #
+    # homepage_pin = models.BooleanField(default=False)
+    # homepage_pin_start = models.DateField(blank=True, null=True)
+    # homepage_pin_expiration = models.DateField(blank=True, null=True)
+    # homepage_hide = models.BooleanField(default=False)
+    #
+    # promote_panels = Page.promote_panels + [
+    #     MultiFieldPanel([
+    #         FieldPanel('homepage_pin'),
+    #         FieldPanel('homepage_pin_start'),
+    #         FieldPanel('homepage_pin_expiration'),
+    #         FieldPanel('homepage_hide')
+    #     ],
+    #     heading="Home page feed"
+    #     )
+    # ]
+
+    template = 'home/updates/tips_for_treasurers.html'
+    content_panels = ContentPage.content_panels + [
+        FieldPanel('date'),
+        PageChooserPanel('read_next')    ]
+
+    @property
+    def get_update_type(self):
+        return constants.update_types['tips-for-treasurers']
+
+    @property
+    def content_section(self):
+        return ''
+
+    @property
+    def get_author_office(self):
+        return 'Information Division'
 
 class CustomPage(Page):
     """Flexible customizable page."""
@@ -323,13 +398,45 @@ class PressLandingPage(Page):
         StreamFieldPanel('contact_intro'),
     ]
 
+class DocumentPage(ContentPage):
+    date = models.DateField(default=datetime.date.today)
+    file_url = models.URLField(blank=True)
+    file_name = models.CharField(max_length=255, blank=True)
+    size = models.CharField(max_length=255, blank=True, null=True)
+    category = models.CharField(max_length=255,
+                                choices=constants.report_child_categories.items(), null=True)
+    content_panels = Page.content_panels + [
+        FieldPanel('date'),
+        FieldPanel('file_url'),
+        FieldPanel('file_name'),
+        FieldPanel('size'),
+        FieldPanel('category'),
+        StreamFieldPanel('body')
+    ]
+
+class DocumentFeedPage(ContentPage):
+    subpage_types = ['DocumentPage']
+    intro = StreamField([
+        ('paragraph', blocks.RichTextBlock())
+    ], null=True)
+    category = models.CharField(max_length=255,
+                                choices=constants.report_parent_categories.items(), null=True)
+    content_panels = Page.content_panels + [
+        StreamFieldPanel('intro'),
+        FieldPanel('category')
+    ]
+
+    @property
+    def category_filters(self):
+        return constants.report_category_groups[self.category]
+
 class AboutLandingPage(Page):
     hero = stream_factory(null=True, blank=True)
     sections = StreamField([
         ('sections', OptionBlock())
     ], null=True)
 
-    subpage_types = ['ResourcePage']
+    subpage_types = ['ResourcePage', 'DocumentFeedPage']
 
     content_panels = Page.content_panels + [
         StreamFieldPanel('hero'),
@@ -475,23 +582,6 @@ class EnforcementPage(ContentPage, UniqueModel):
     @property
     def content_section(self):
         return 'legal-resources'
-
-
-class TipsForTreasurersPage(ContentPage):
-    date = models.DateField(default=datetime.date.today)
-    template = 'home/updates/tips_for_treasurers.html'
-    content_panels = ContentPage.content_panels + [
-        FieldPanel('date')
-    ]
-
-    @property
-    def get_update_type(self):
-        return constants.update_types['tips-for-treasurers']
-
-    @property
-    def content_section(self):
-        return ''
-
 
 class ServicesLandingPage(ContentPage, UniqueModel):
     subpage_types = ['CollectionPage']

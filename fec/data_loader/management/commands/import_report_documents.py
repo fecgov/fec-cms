@@ -3,11 +3,14 @@ import json
 from dateutil import parser
 from slugify import slugify
 
+from django.utils import timezone
 from django.core.management import BaseCommand
 
 from data_loader.utils import ImporterMixin
-from home.models import Page, TipsForTreasurersPage
+from fec.constants import document_categories
+from home.models import Page, DocumentPage
 
+DEFAULT_CATEGORY = ''
 
 class Command(ImporterMixin, BaseCommand):
     help = 'Imports record pages from JSON'
@@ -22,6 +25,12 @@ class Command(ImporterMixin, BaseCommand):
         )
 
         parser.add_argument(
+            'parent_path',
+            type=str,
+            help='Path to the parent page to import these under (e.g. /home/reports/oig-reports/)'
+        )
+
+        parser.add_argument(
             '--delete-existing',
             action='store_true',
             dest='delete_existing',
@@ -29,25 +38,17 @@ class Command(ImporterMixin, BaseCommand):
             help='Delete existing records prior to importing',
         )
 
-        parser.add_argument(
-            '--import-raw',
-            action='store_true',
-            dest='import_raw',
-            default=False,
-            help='Import the records as raw HTML',
-        )
-
     def handle(self, *args, **options):
         if options['delete_existing']:
             self.stdout.write(
                 self.style.WARNING('Deleting previous records...')
             )
-            self.delete_existing_records(TipsForTreasurersPage, **options)
+            self.delete_existing_records(DocumentPage, **options)
 
         self.stdout.write(self.style.WARNING('Starting import...'))
 
         # Base Page that the pages you are adding belong to.
-        base_page = Page.objects.get(url_path='/home/updates/')
+        base_page = Page.objects.get(url_path=options['parent_path'])
 
         with open(options['json_file_path'], 'r') as json_contents:
             if options['verbosity'] > 1:
@@ -56,40 +57,45 @@ class Command(ImporterMixin, BaseCommand):
             contents = json.load(json_contents)
             self.add_page(contents, base_page, **options)
 
-        self.stdout.write(self.style.SUCCESS('Tips pages imported.'))
+        self.stdout.write(self.style.SUCCESS('Document pages imported.'))
 
     def add_page(self, contents, base_page, **options):
         """
-        Cleans the contents of a tip and imports it as a page into Wagtail.
+        Adds the report info to a new DocumentPage
+        Excpect json in the format:
+        [
+          {
+            "title": "February 2015 OIG Report",
+            "name": "Review of outstanding recommendations",
+            "url": "http://www.fec.gov/fecig/documents/ReviewofOutstandingRecommendationsasofFebruary2015-FinalReport.pdf",
+            "date": "02/01/2015",
+            "category": "oig report"
+          },
+        ]
         """
-
-        # Determine if the body content should go into a RichTextBlock or a
-        # RawHTMLBlock as defined in our underlying ContentPage model.  Please
-        # see Wagtail's documentation for more information on block types:
-        # http://docs.wagtail.io/en/v1.8/topics/streamfield.html
-        block_type = "paragraph"
-
-        if options['import_raw']:
-            block_type = "html"
-
         for item in contents:
-            item_year = parser.parse(item['posted_date']).year
-            title = item['title_text'][:255]
-
+            item_year = parser.parse(item['date']).year
+            title = item['title']
             slug = slugify(str(item_year) + '-' + title)[:225]
-            # TODO:  Is this path correct?
-            url_path = '/home/updates/' + slug + '/'
-            clean_body = self.clean_content(item['body'], **options)
-            body = self.escape_quotes(clean_body, **options)
-            paragraph = self.wrap_with_paragraph(body, **options)
-            body_list = [{"value": paragraph, "type": block_type}]
-            formatted_body = json.dumps(body_list)
-            publish_date = parser.parse(item['posted_date'])
-
-            tip_page = TipsForTreasurersPage(
+            url_path = options['parent_path'] + slug + '/'
+            dt_unaware = parser.parse(item['date'])
+            # Make datetime timezone aware to get rid of warnings
+            publish_date = timezone.make_aware(dt_unaware, timezone.get_current_timezone())
+            size = item['size'] if 'size' in item else None
+            category = self.validate_category(
+                item.get('category', DEFAULT_CATEGORY),
+                DEFAULT_CATEGORY,
+                document_categories,
+                **options
+            )
+            document_page = DocumentPage(
                 depth=4,
                 numchild=0,
                 title=title,
+                file_url=item['url'],
+                file_name=item['name'],
+                size=size,
+                category=category,
                 live=1,
                 has_unpublished_changes='0',
                 url_path=url_path,
@@ -104,9 +110,8 @@ class Command(ImporterMixin, BaseCommand):
             )
 
             try:
-                base_page.add_child(instance=tip_page)
-                saved_page = TipsForTreasurersPage.objects.get(id=tip_page.id)
-                saved_page.body = formatted_body
+                base_page.add_child(instance=document_page)
+                saved_page = DocumentPage.objects.get(id=document_page.id)
                 saved_page.first_published_at = publish_date
                 saved_page.created_at = publish_date
                 saved_page.date = publish_date
@@ -119,5 +124,5 @@ class Command(ImporterMixin, BaseCommand):
                     ))
             except:
                 self.stdout.write(self.style.WARNING(
-                    'Could not save page {0}'.format(tip_page.title)
+                    'Could not save page {0}'.format(document_page.title)
                 ))
