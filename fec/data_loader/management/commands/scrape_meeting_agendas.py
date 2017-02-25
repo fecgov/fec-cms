@@ -20,7 +20,7 @@ from lxml.html import (  # type: ignore
     HtmlElement
 )
 import requests
-# from ipdb import set_trace as st  # type: ignore
+from ipdb import set_trace as st  # type: ignore
 from os import _exit  # type: ignore
 
 
@@ -245,12 +245,13 @@ urls_to_change = {
 
 
 def cli_main(args: list=None) -> None:
-    base_url = "http://www.fec.gov/agenda/agendas.shtml"
-    annual_urls = [base_url] + extract_annual_urls(base_url)
-    meetings = []  # type: Meetings
+    base_url     = "http://www.fec.gov/agenda/agendas.shtml"
+    annual_urls  = [base_url] + extract_annual_urls(base_url)
+    meetings     = []  # type: Meetings
     broken_links = []  # type: List[str]
     # annual_urls = [url for url in annual_urls if "2000" in url or
     #                url.endswith("agendas.shtmlxx")]
+
     for url in annual_urls:
         _meetings, _broken_links = extract_meeting_metadata(url, broken_links,
                                                             urls_to_change)
@@ -897,17 +898,15 @@ def parse_meeting_page(mtg: Meeting, urls_to_change: dict) -> Meeting:
         while len(unused) > 0:
             el = unused.pop()
             print(tostr(el))
-            # st()
+            st()
     elif pre_video and mtg.primary_audio_link is None:
         while len(unused) > 0:
             el = unused.pop()
             print(tostr(el))
-            # st()
+            st()
 
     if len(unused) > 0:
-        # st()
-        pass
-
+        st()
 
     """
     for key, text in asset_pairs:
