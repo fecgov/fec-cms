@@ -1,15 +1,10 @@
 {% load filters %}
-<ul class="grid grid--2-wide grid--no-margin grid--no-border list--border">
+<ul class="grid grid--4-wide grid--no-margin grid--no-border list--border">
   {% for update in updates %}
   <li class="grid__item {% if update.homepage_pin == True %}u-no-padding-left u-no-padding-right"{% endif %}">
     {% if update.homepage_pin == True %}<div class="u-gray-background">{% endif %}
-      <a href="{{ update.url }}">{% formatted_title update %}</a> — <span class="t-sans">{{ update.get_update_type }}</span>
+      <span class="t-sans"><span class="t-bold">{{ update.category|title }}</span>: <a href="{{ update.url }}">{% formatted_title update %}</a></span>
     {% if update.homepage_pin %}</div>{% endif %}
   </li>
   {% endfor %}
-  <li class="grid__item"></li>
-  <li class="grid__item">
-    <div class="icon icon-circle--updates--inline--left"></div>
-    <a class="t-sans" href="/updates">All latest updates »</a>
-  </li>
 </ul>

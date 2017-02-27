@@ -48,17 +48,17 @@
 
   <section class="slab slab--neutral slab--home">
     <div class="container">
-      <h6>What's happening</h6>
-      {% home_page_updates %}
-      <h6>Upcoming Events</h6>
-      <ul class="grid grid--2-wide grid--no-margin grid--no-border list--border js-homepage-upcoming-events"></ul>
-      <div class="grid grid--2-wide grid--no-margin grid--no-border">
-        <div class="grid__item"></div>
-        <div class="grid__item">
-          <div class="icon icon-circle--calendar--inline--left"></div>
-          <a class="t-sans" href="/calendar">Full calendar »</a>
-        </div>
+      <div class="heading--section heading--with-action">
+        <h3 class="heading__left">What's happening</h3>
+        <a class="button button--alt heading__right button--updates" href="/updates">All latest updates</a>
       </div>
+      {% home_page_updates %}
+
+      <div class="heading--section heading--with-action">
+        <h3 class="heading__left">Upcoming Events</h3>
+        <a class="button button--alt heading__right button--calendar" href="/calendar">All events</a>
+      </div>
+      <ul class="grid grid--4-wide grid--no-margin grid--no-border list--border js-homepage-upcoming-events"></ul>
     </div>
   </section>
 
