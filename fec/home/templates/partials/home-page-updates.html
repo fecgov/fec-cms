@@ -3,7 +3,7 @@
   {% for update in updates %}
   <li class="grid__item {% if update.homepage_pin == True %}u-no-padding-left u-no-padding-right"{% endif %}">
     {% if update.homepage_pin == True %}<div class="u-gray-background">{% endif %}
-      <span class="t-sans"><span class="t-bold">{{ update.category|title }}</span>: <a href="{{ update.url }}">{% formatted_title update %}</a></span>
+      <span class="t-sans"><span class="t-bold">{{ update.category|capfirst }}</span>: <a href="{{ update.url }}">{% formatted_title update %}</a></span>
     {% if update.homepage_pin %}</div>{% endif %}
   </li>
   {% endfor %}
