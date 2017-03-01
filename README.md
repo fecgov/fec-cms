@@ -104,7 +104,9 @@ Before you can run this project locally, you'll need a development database:
 createdb cfdm_cms_test
 ```
 
-You will also need to set a connection string for the local database as an
+You will also need to set environmental variables: 
+
+Connection string for the local database as an
 environment variable:
 
 ```bash
@@ -194,6 +196,12 @@ Or, to set it in the settings file directly, include this line:
 ```python
 FEC_APP_URL = 'http://localhost:3000'
 ```
+
+## Restoring your local database from a backup
+*Likely only useful for 18F FEC team members*
+To restore your local database from a backup from production, download the database dump and run this command:
+
+`pg_restore --dbname cfdm_cms_test --no-acl --no-owner <path/to/backup_file>`
 
 ## Deploy
 *Likely only useful for 18F FEC team members*

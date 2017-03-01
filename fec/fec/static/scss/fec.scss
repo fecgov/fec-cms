@@ -11,24 +11,11 @@
     @extend .content__section;
   }
 
-  // If the very first block is a paragraph--before any heading--then assume it
-  // should be the lead paragraph. This enlarges the font slightly.
-  .block-paragraph:first-child > .rich-text:first-child > p:first-child {
-    @extend .t-lead;
-  }
-
   .block-heading {
     @extend h2;
   }
 
   .block-image {
-    @include media($med) {
-      @include span-columns(8);
-      float: none;  // override span-columns
-      margin-right: 0;  // override span-columns
-      margin-left: flex-gutter();
-    }
-
     img {
       height: auto;  // preserve ratio
       border: 2px solid $gray-lightest;

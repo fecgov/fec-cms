@@ -10,7 +10,7 @@ raven==5.8.1
 requests==2.12.4
 slacker==0.8.6
 whitenoise==2.0.3
-wagtail>=1.6,<1.7
+wagtail>=1.8,<1.9
 
 # Development
 invoke==0.13.0
@@ -22,3 +22,5 @@ python-dateutil==2.6.0
 
 # Content import
 beautifulsoup4==4.5.1
+django-storages==1.5.2
+boto3==1.4.4

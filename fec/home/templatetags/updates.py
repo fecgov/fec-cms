@@ -8,6 +8,7 @@ from datetime import date
 from home.models import DigestPage
 from home.models import RecordPage
 from home.models import PressReleasePage
+from home.models import TipsForTreasurersPage
 
 register = template.Library()
 
@@ -23,22 +24,35 @@ def weekly_digests():
 
 @register.inclusion_tag('partials/home-page-updates.html')
 def home_page_updates():
-    press_releases = PressReleasePage.objects.filter(homepage_hide=False).order_by('-date')[:4]
+    press_releases = PressReleasePage.objects.live().filter(homepage_hide=False).order_by('-date')[:4]
     if settings.FEATURES['record']:
-        records = RecordPage.objects.filter(homepage_hide=False).order_by('-date')[:4]
+        records = RecordPage.objects.live().filter(homepage_hide=False).order_by('-date')[:4]
     else:
         records = []
+    if settings.FEATURES['tips']:
+        tips = TipsForTreasurersPage.objects.live().filter().order_by('-date')[:4]
+    else:
+        tips = []
 
-    # combine press release and records queryset
-    updates = chain(press_releases, records)
+    # combine press release, records and tips queryset
+    updates = chain(press_releases, records, tips)
 
-    updates_unpin_expired = []
     # remove homepage pin if expiration date has passed
+    updates_unpin_expired = []
     for update in updates:
-        if update.homepage_pin_expiration:
-            if update.homepage_pin_expiration < date.today():
-                update.homepage_pin = False
-                update.homepage_pin_expiration = None
+        if hasattr(update, 'homepage_pin'):
+            if update.homepage_pin_expiration:
+                if update.homepage_pin_expiration < date.today():
+                    update.homepage_pin = False
+                    update.homepage_pin_expiration = None
+            # remove the pin if it's before the date when it should be pinned
+            if update.homepage_pin_start:
+                if update.homepage_pin_start > date.today():
+                    update.homepage_pin = False
+        else:
+            # If it doesn't have homepage_pin property, just set it to false
+            # Necessary for sorting
+            update.homepage_pin = False
         updates_unpin_expired.append(update)
 
     updates_sorted_by_date = sorted(updates_unpin_expired, key=lambda x: x.date, reverse=True)
