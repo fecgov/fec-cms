@@ -23,7 +23,6 @@
   <body class="{% block body_class %}{% endblock %}">
     {% wagtailuserbar %}
     <a href="#main" class="skip-nav">skip navigation</a>
-
     {% if self.title == "Homepage" or self.title == "Home" %}
     <header class="site-header site-header--homepage">
       <div class="masthead">
@@ -41,6 +40,13 @@
         </ul>
       </div>
       {% include 'partials/mobile-nav.html' %}
+      <form accept-charset="UTF-8" action="https://search.usa.gov/search" id="search_form" method="get"><div style="margin:0;padding:0;display:inline;width:200px;float:right;"><input name="utf8" type="hidden" value="&#x2713;" /></div>
+
+        <input id="affiliate" name="affiliate" type="hidden" value="betafec2" />
+        <label for="query">Enter Search Term(s):</label>
+        <input autocomplete="off" class="usagov-search-autocomplete" id="query" name="query" type="text" />
+        <input name="commit" type="submit" value="Search" />
+      </form>
     </header>
     {% else %}
     <header class="site-header">
@@ -153,5 +159,14 @@
     </script>
     <script id="_fed_an_ua_tag" src="https://dap.digitalgov.gov/Universal-Federated-Analytics-Min.js?agency=FEC"></script>
     {% endif %}
+      <script type="text/javascript">
+        //<![CDATA[
+          var usasearch_config = { siteHandle:"betafec2" };
+          var script = document.createElement("script");
+          script.type = "text/javascript";
+          script.src = "//search.usa.gov/javascripts/remote.loader.js";
+          document.getElementsByTagName("head")[0].appendChild(script);
+      //]]>
+    </script>
   </body>
 </html>
