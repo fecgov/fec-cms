@@ -193,7 +193,7 @@ FEATURES = {
     'about': bool(env.get_credential('FEC_FEATURE_ABOUT', '')),
     'agendas': bool(env.get_credential('FEC_FEATURE_AGENDAS', '')),
     'tips': bool(env.get_credential('FEC_FEATURE_TIPS', '')),
-    'ethnio': bool(env.get_credential('FEC_ETHNIO', ''))
+    'ethnio': bool(env.get_credential('FEC_FEATURE_ETHNIO', ''))
 }
 
 AUTH_PASSWORD_VALIDATORS = [
