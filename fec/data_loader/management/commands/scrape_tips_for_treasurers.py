@@ -276,7 +276,7 @@ def parse_tip(url: str, datestamp: str, cell: Element, encoding: str) -> Tip:
                                     c in new_children]))
 
     return Tip(body=body.strip(), posted_date=datestamp, previous_url=url,
-               title_text=title.strip())
+               title_text=title.strip().rstrip('.'))
 
 
 def innerhtml(el: Element, encoding: str="utf-8") -> str:

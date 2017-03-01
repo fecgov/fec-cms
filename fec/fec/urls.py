@@ -23,7 +23,7 @@ urlpatterns = [
     url(r'^registration-and-reporting/question-RAD/$', home_views.contact_rad),
     url(r'^search/$', search_views.search, name='search'),
     url(r'^updates/$', home_views.updates),
-
+   
     url(r'', include(wagtail_urls)),
 ]
 

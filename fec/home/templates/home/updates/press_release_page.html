@@ -57,11 +57,13 @@
 
 <div class="slab slab--neutral u-no-print">
   <div class="container">
+    {% if self.read_next %}
     <div class="content__section">
-      <h3>Read next:</h3>
-      {% if self.read_next %}
+        <h3>Read next:</h3>
         <h4><a href="{{ self.read_next.url }}">{{ self.read_next.title }}</a></h4>
-      {% endif %}
+    </div>
+    {% endif %}
+    <div class="content__section">
       <h4><a href="/updates?release-category=press-release">More press releases</a> &raquo;</h4>
     </div>
   </div>

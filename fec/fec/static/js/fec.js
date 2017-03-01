@@ -133,4 +133,16 @@ $(document).ready(function() {
       scrollTop: sectionTop
     });
   });
+
+  // Post feed
+  // Move the read more links to be inline with the snippet from the post
+  $('.js-post-content').each(function() {
+    var $p = $(this).find('p:first-of-type');
+    var $link = $(this).find('.js-read-more');
+    if ($p.text() !== 'PDF') {
+      $p.append($link);
+    } else {
+      $link.remove();
+    }
+  });
 });

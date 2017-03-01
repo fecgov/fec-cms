@@ -62,6 +62,7 @@ INSTALLED_APPS = (
     'search',
     'home',
     'data_loader',
+     
 )
 
 MIDDLEWARE_CLASSES = (
@@ -171,6 +172,7 @@ WAGTAIL_SITE_NAME = "fec"
 from fec import constants
 from .env import env
 
+USAJOBS_API_KEY = env.get_credential('USAJOBS_API_KEY')
 FEC_APP_URL = os.getenv('FEC_APP_URL')
 FEC_API_URL = os.getenv('FEC_API_URL', 'http://localhost:5000')
 FEC_API_VERSION = os.getenv('FEC_API_VERSION', 'v1')
@@ -196,7 +198,8 @@ FEATURES = {
     'about': bool(env.get_credential('FEC_FEATURE_ABOUT', '')),
     'agendas': bool(env.get_credential('FEC_FEATURE_AGENDAS', '')),
     'tips': bool(env.get_credential('FEC_FEATURE_TIPS', '')),
-    'radform': bool(env.get_credential('FEC_FEATURE_RADFORM', ''))
+    'radform': bool(env.get_credential('FEC_FEATURE_RADFORM', '')),
+    'ethnio': bool(env.get_credential('FEC_FEATURE_ETHNIO', ''))
 }
 
 AUTH_PASSWORD_VALIDATORS = [
@@ -223,11 +226,12 @@ if os.getenv('SENTRY_DSN'):
         'dsn': os.getenv('SENTRY_DSN'),
     }
 
+
 if FEC_CMS_ENVIRONMENT != 'LOCAL':
     AWS_QUERYSTRING_AUTH = False
-    AWS_ACCESS_KEY_ID = env.get_credential('CMS_AWS_ACCESS_KEY')
+    AWS_ACCESS_KEY_ID = env.get_credential('CMS_AWS_ACCESS_KEY_ID')
     AWS_SECRET_ACCESS_KEY = env.get_credential('CMS_AWS_SECRET_ACCESS_KEY')
     AWS_STORAGE_BUCKET_NAME = env.get_credential('CMS_AWS_STORAGE_BUCKET_NAME')
     DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
     AWS_LOCATION = 'cms-content'
-    AWS_S3_REGION_NAME = env.get_credential('CMS_AWS_DEFAULT_REGION_NAME')
+    AWS_S3_REGION_NAME = env.get_credential('CMS_AWS_DEFAULT_REGION')
