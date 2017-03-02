@@ -142,3 +142,12 @@ class CollectionBlock(blocks.StructBlock):
     style = blocks.ChoiceBlock(default=BULLET, choices=STYLE_CHOICES)
     intro = blocks.RichTextBlock(blank=False, null=False, required=False)
     items = blocks.ListBlock(blocks.RichTextBlock(classname="nothing"))
+
+class CustomTableBlock(blocks.StructBlock):
+    """A custom table"""
+    custom_table = TableBlock()
+    title = blocks.CharBlock()
+
+    class Meta:
+        template = 'blocks/table.html'
+    
