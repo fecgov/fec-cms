@@ -204,6 +204,12 @@ Or, to set it in the settings file directly, include this line:
 FEC_APP_URL = 'http://localhost:3000'
 ```
 
+## Restoring your local database from a backup
+*Likely only useful for 18F FEC team members*
+To restore your local database from a backup from production, download the database dump and run this command:
+
+`pg_restore --dbname cfdm_cms_test --no-acl --no-owner <path/to/backup_file>`
+
 ## Deploy
 *Likely only useful for 18F FEC team members*
 
