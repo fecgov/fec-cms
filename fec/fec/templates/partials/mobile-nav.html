@@ -6,10 +6,10 @@
         <a class="site-nav__link u-lg-only" href="{{ settings.FEC_APP_URL }}">Campaign finance data</a>
         <button class="site-nav__link button--nav-panel js-panel-trigger u-under-lg-only" aria-controls="nav-data">Campaign finance data</button>
       </li>
-      <li class="site-nav__item">
+      <li class="site-nav__item site-nav__item--secondary" data-submenu="services">
         <a href="/registration-and-reporting/" class="site-nav__link{% if self.content_section == 'registration-and-reporting' %} is-parent{% endif %}">Registration and reporting</a>
       </li>
-      <li class="site-nav__item">
+      <li class="site-nav__item" data-submenu="legal">
         <a href="/legal-resources" class="site-nav__link{% if self.content_section == 'legal-resources' %} is-parent{% endif %}">Legal resources</a>
       </li>
       <li class="site-nav__item utility-nav__item">
