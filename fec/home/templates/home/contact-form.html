@@ -28,15 +28,14 @@
       <p>You can also call RAD from 8:30 a.m. to 5:30 p.m. Eastern Time at 1-800-425-9530, extension 5.</p>
 
       {% if form %}
-      <form class="slab slab--neutral slab--inline js-contact-form contact-form" action="" method="post">
-        {% csrf_token %}
-
         {% if form.errors %}
         <div class="message message--error">
           <h2 class="message__title">Error</h2>
           <p>Something went wrong. Please try again.</p>
         </div>
         {% endif %}
+      <form class="slab slab--neutral slab--inline js-contact-form contact-form" action="" method="post">
+        {% csrf_token %}
         {% if server_error %}
         <div class="message message--error">
           <h2 class="message__title">Error</h2>
@@ -52,7 +51,7 @@
           {% if field.is_hidden %}
             {{ field }}
           {% else %}
-          <div class="contact-form__element">
+          <div class="contact-form__element {% if field.errors %}is-erroring{% endif %}">
             {% if field.id_for_label == 'id_committee_name' %}
               <hr class="hr--light">
             {% endif %}
@@ -63,13 +62,19 @@
             {% endif %}
 
             {% if field.id_for_label == 'id_u_contact_title' %}
-              <label class="label" for="{{ field.id_for_label }}">{{ field.label }}<span class="label__optional"> (optional)</span></label>
-              {{ field }}
-              <span class="t-note t-sans">Examples: Treasurer; Counsel</span>
+              <div class="row">
+                <label class="label" for="{{ field.id_for_label }}">{{ field.label }}<span class="label__optional"> (optional)</span></label>
+                {{ field }}
+                <span class="t-note t-sans">Examples: Treasurer; Counsel</span>
+              </div>
+                {{ field.errors }}
             {% elif field.id_for_label == 'id_u_description' %}
-              <label class="label" for="{{ field.id_for_label }}">{{ field.label }}</label>
-              <span class="t-note t-sans">Please be as detailed as possible</span>
-              {{ field }}
+              <div class="row">
+                <label class="label" for="{{ field.id_for_label }}">{{ field.label }}</label>
+                <span class="t-note t-sans">Please be as detailed as possible</span>
+                {{ field }}
+              </div>
+              {{ field.errors }}
             {% elif field.id_for_label == 'id_u_committee_member_certification' %}
               <p><a href="#" class="t-sans">How FEC.gov keeps personal information private</a></p>
               <p class="t-italic">Submitting a question on this page is not a response to a Request for Additional Information (RFAI), a Notice of Failure to File or a response to any other written communication from the FEC.</p>
@@ -77,9 +82,13 @@
               <p class="t-bold t-italic">By submitting this inquiry, I certify that I’m an authorized  representative of the indicated committee or filing entity.</p>
               {{ field }}
               <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+              {{ field.errors }}
             {% else %}
-              <label class="label" for="{{ field.id_for_label }}">{{ field.label }}</label>
-              {{ field }}
+              <div class="row">
+                <label class="label" for="{{ field.id_for_label }}">{{ field.label }}</label>
+                {{ field }}
+              </div>
+              {{ field.errors }}
             {% endif %}
           </div>
           {% endif %}
