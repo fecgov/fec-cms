@@ -3,17 +3,17 @@
 
 <article class="post">
   <div class="post__pre">
-    <div class="post__date">{{ document.date|date:'F j, Y' }}</div>
+    <div class="post__date">{{ document.date|date:'F Y' }}</div>
   </div>
-  <h3>{{ document.title }}</h3>
+  {% if document.body %}
+    <h3>{{ document.title }}</h3>
     <div class="t-sans row js-post-content">
-      {% if document.body %}
         {{ document.body | truncatewords_html:30 }}
         <a class="js-read-more post__read-more" href="{{ document.url }}">Read more</a>
-      {% else %}
-        <p class="t-sans post__doc"><a href="{{ document.file_url }}">{{ document.file_name }}</a> {% if document.size %}| ({{ document.size }}){% endif %}</p>
-      {% endif %}
     </div>
+  {% else %}
+    <h3><a href="{{ document.file_url }}">{{ document.title }}</a> <i class="icon icon--inline--right icon--inline--left i-document"></i><span class="t-sans t-normal">(PDF){% if document.size %} | ({{ document.size }}){% endif %}</span></h3>
+  {% endif %}
     <div class="post__meta">
       <a class="tag tag--secondary" href="">{{ document.category }}</a>
     </div>
