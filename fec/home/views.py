@@ -140,7 +140,7 @@ def updates(request):
 
 def calendar(request):
   page_context = {
-    'content_section': 'Calendar',
+    'content_section': 'calendar',
     'title': 'Calendar'
   }
   return render(request, 'home/calendar.html', {
@@ -155,26 +155,6 @@ def contact(request):
 
   return render(request, 'home/contact.html', {
     'self': page_context,
-  })
-
-def ao_process(request):
-  ancestors = [
-    {
-      'title': 'Legal resources',
-      'url': '/legal-resources/',
-    }, {
-      'title': 'Advisory opinions',
-      'url': settings.FEC_APP_URL + '/legal/advisory-opinions',
-    }
-  ]
-  page_context = {
-    'content_section': 'legal',
-    'title': 'The advisory opinion process',
-    'ancestors': ancestors
-  }
-
-  return render(request, 'home/legal/ao_process.html', {
-    'self': page_context
   })
 
 def commissioners(request):
@@ -193,6 +173,7 @@ def commissioners(request):
     'vice_commissioner': vice_commissioner,
     'current_commissioners': current_commissioners,
     'past_commissioners': past_commissioners,
+    'content_section': 'about',
     'ancestors': [
       {
         'title': 'About the FEC',
