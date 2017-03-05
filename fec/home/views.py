@@ -1,5 +1,4 @@
 import requests
-import json
 
 from django.shortcuts import render
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
@@ -7,7 +6,7 @@ from django.conf import settings
 from itertools import chain
 from operator import attrgetter
 
-from fec.forms import ContactRAD
+from fec.forms import ContactRAD, form_categories
 from home.models import (
     CommissionerPage,
     DigestPage,
@@ -194,6 +193,8 @@ def contact_rad(request):
   if not settings.FEATURES['radform']:
     return render(request, '404.html')
 
+  categories = form_categories()
+
   page_context = {
     'title': 'Submit a question to the Reports Analysis Division (RAD)',
     'ancestors': [{
@@ -202,34 +203,24 @@ def contact_rad(request):
     }],
     'content_section': 'registration-and-reporting'
   }
+
   # If it's a POST, post to the ServiceNow API
   if request.method == 'POST':
-    form = ContactRAD(request.POST)
-    if form.is_valid():
-      # Remove the committee name from the data
-      data = form.cleaned_data
-      del data['committee_name']
-
-      # Post to ServiceNow
-      url = settings.FEC_SERVICE_NOW_API + 'u_imp_rad_response'
-      username = settings.FEC_SERVICE_NOW_USERNAME
-      password = settings.FEC_SERVICE_NOW_PASSWORD
-
-      post = requests.post(url, data=json.dumps(data), auth=(username, password))
-
-      if post.status_code == 201:
-        return render(request, 'home/contact-form.html', {
-          'self': page_context,
-          'success': True
-        })
-      else:
-        return render(request, 'home/contact-form.html', {
-          'self': page_context,
-          'form': form,
-          'server_error': True
-        })
+    form = ContactRAD(request.POST, categories=categories)
+    response = form.post_to_service_now()
+    if response == 201:
+      return render(request, 'home/contact-form.html', {
+        'self': page_context,
+        'success': True
+      })
+    else:
+      return render(request, 'home/contact-form.html', {
+        'self': page_context,
+        'form': form,
+        'server_error': True
+      })
   else:
-    form = ContactRAD()
+    form = ContactRAD(categories=categories)
 
   return render(request, 'home/contact-form.html', {
     'self': page_context,

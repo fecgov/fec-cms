@@ -10,30 +10,39 @@ def mock_get():
   requests.patch()
 
 class TestContactForm(TestCase):
+  form_data = {
+    'u_contact_first_name': 'Noah',
+    'u_contact_last_name': 'Manger',
+    'u_contact_email': 'noah@example.com',
+    'committee_name': 'NoahPAC',
+    'u_committee': '12345',
+    'u_contact_title': 'Mr.',
+    'u_category': 'fake',
+    'u_description': 'Lorem ipsum',
+    'u_committee_member_certification': True
+  }
+
+  categories = [('fake', 'Fake category')]
+
   def test_valid_submission(self):
-    categories = fec.forms.form_categories()
-    form = ContactRAD({
-          'u_contact_first_name': 'Noah',
-          'u_contact_last_name': 'Manger',
-          'u_contact_email': 'noah@example.com',
-          'committee_name': 'NoahPAC',
-          'u_committee': '12345',
-          'u_contact_title': 'Mr.',
-          'u_category': categories[1][0],
-          'u_description': 'Lorem ipsum',
-          'u_committee_member_certification': True
-      })
+    form = ContactRAD(self.form_data, categories=self.categories)
     self.assertTrue(form.is_valid())
 
   def test_empty_submission(self):
     form = ContactRAD({})
     self.assertFalse(form.is_valid())
 
+  @mock.patch.object(fec.forms.requests, 'post')
+  def test_post_to_service_now(self, mock_post):
+    # Test to make sure this method removes the `committee_name` field
+    form = ContactRAD(self.form_data, categories=self.categories)
+    form.post_to_service_now()
+    call_data = mock_post.call_args[1]['data']
+    self.assertFalse('committee_name' in call_data)
+
   @mock.patch.object(fec.forms, 'fetch_categories')
   def test_get_categories(self, fetch):
     fetch.return_value = [{'value': 'fake', 'label': 'Fake category'}]
     categories = fec.forms.form_categories()
     # It should return a list of tuples
-    self.assertEqual(categories[1], ('fake', 'Fake category'))
-    # It should add the empty option for "Select a category"
-    self.assertEqual(categories[0][1], 'Choose a subject')
+    self.assertEqual(categories[0], ('fake', 'Fake category'))
