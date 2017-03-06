@@ -26,7 +26,7 @@
           {% endspaceless %}
         </div>
       </header>
-<div class="main__content">      
+   <div class="main__content">      
       <ol class="list--numbered--alt">
       {% for block in self.agenda %}
         
@@ -58,28 +58,12 @@
                </li>
             {% endif %}
           {% endfor %}
-         </ul>
+           </ul>
         {% endif %}
        </li>
       {% endfor %}
-   
-  </ol>
+      </ol>
     </div>
-    {% if self.sidebar %}
-    <div class="sidebar-container">
-      <aside class="sidebar sidebar--secondary">
-        {% for block in self.sidebar %}
-          {% if block.block_type == 'heading' %}
-            <h4 class="sidebar__title">{{ block }}</h4>
-          {% else %}
-            <div class="sidebar__content">
-              {{ block }}
-            </div>
-          {% endif %}
-        {% endfor %}
-      </aside>
-    </div>
-    {% endif %}
   </div>
   <div class="slab slab--neutral u-no-print">
   <div class="container">

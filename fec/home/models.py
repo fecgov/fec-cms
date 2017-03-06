@@ -542,10 +542,8 @@ class CollectionPage(Page):
 
 
 class AgendaPage(Page):
-    author= models.CharField(max_length=255)
-    date = models.DateField('Post date')
-    mtg_date = models.DateField(default=datetime.date.today)
-    mtg_time = models.CharField(max_length=255, default ='10:00 AM')
+    mtg_date = models.DateTimeField(default=datetime.date.today)
+    mtg_time  = models.TimeField(default=datetime.time(10, 00))
     mtg_media = StreamField([
         ('full_video_url', blocks.TextBlock()),
         ('full_audio', DocumentChooserBlock(required=False)),
@@ -569,8 +567,6 @@ class AgendaPage(Page):
 
 
     content_panels = Page.content_panels + [
-        FieldPanel('author'),
-        FieldPanel('date'),
         FieldPanel('mtg_date'),
         FieldPanel('mtg_time'),
         StreamFieldPanel('agenda'),
