@@ -8,8 +8,8 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('home', '0066_remove_documentpage_file_name'),
-        ('home', '0066_auto_20170302_0507'),
+        ('home', '0066_remove_documentpage_file_name')
+        
     ]
 
     operations = [
