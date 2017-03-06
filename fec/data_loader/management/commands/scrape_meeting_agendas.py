@@ -84,26 +84,26 @@ Link = NamedTuple(
     ])
 Links = List[Link]
 
+# The top-level JSON structure is a list of Meetings:
 Meeting = NamedTuple(
     "Meeting",
     [
-        ("agenda_document_links", Links),  # list (Links)
-        ("approved_minutes_date", Date),  # Date
-        ("approved_minutes_link", Link),  # Link
-        # TODO: what about capturing the other audio snippets?
-        ("body", str),  # HTML,
-        ("closed_captioning_link", Link),  # Link
-        ("draft_minutes_links", Links),  # list (Links)
-        ("link_title_text", str),  # Plain text
-        ("meeting_type", str),  # "open" or "executive"
-        ("pdf_disclaimer", str),  # HTML (outer HTML)
-        ("posted_date", Date),  # Date
-        ("primary_audio_link", Link),  # Link
-        ("old_meeting_url", str),  # URL
-        ("secondary_audio_links", Links),  # list (Links)
-        ("sunshine_act_links", Links),  # list (Links)
-        ("title_text", str),  # str (TODO: do we need the HTML?)
-        ("video_link", Link)  # Link
+        ("agenda_document_links", Links), # list (Links)
+        ("approved_minutes_date", Date),
+        ("approved_minutes_link", Link),
+        ("body", str),                    # HTML
+        ("closed_captioning_link", Link),
+        ("draft_minutes_links", Links),   # list (Links)
+        ("link_title_text", str),         # Plain text
+        ("meeting_type", str),            # "open" or "executive"
+        ("pdf_disclaimer", str),          # HTML (outer HTML)
+        ("posted_date", Date),
+        ("primary_audio_link", Link),
+        ("old_meeting_url", str),         # URL
+        ("secondary_audio_links", Links), # list (Links)
+        ("sunshine_act_links", Links),    # list (Links)
+        ("title_text", str),
+        ("video_link", Link)
     ])
 """
 Possible sources of truth for the “title” of the meeting:
