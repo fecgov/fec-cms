@@ -142,3 +142,8 @@ class CollectionBlock(blocks.StructBlock):
     style = blocks.ChoiceBlock(default=BULLET, choices=STYLE_CHOICES)
     intro = blocks.RichTextBlock(blank=False, null=False, required=False)
     items = blocks.ListBlock(blocks.RichTextBlock(classname="nothing"))
+
+class DocumentFeedBlurb(blocks.StructBlock):
+    """For generating a box with a description that links to a document feed page"""
+    page = blocks.PageChooserBlock()
+    description = blocks.CharBlock()
