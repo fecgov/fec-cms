@@ -4,8 +4,10 @@ from collections import defaultdict
 from datetime import datetime
 from dateutil import parser as dparser
 from typing import (
+    Dict,
     List,
     NamedTuple,
+    Optional,
     Tuple
 )
 from operator import attrgetter
@@ -289,7 +291,7 @@ def extract_annual_urls(url: str) -> List[str]:
     return urls
 
 
-def parse_meeting_row(row: HtmlElement, urls_to_change: dict) -> Meeting:
+def parse_meeting_row(row: HtmlElement, urls_to_change: dict) -> Optional [Meeting]:
     """
     Given an ``lxml.html.Element`` object for the table row for a meeting,
     returns a ``Meeting`` object.
@@ -554,7 +556,9 @@ def extract_meeting_metadata(url: str, broken_links: List,
     meetings = []
     for row in rows:
         if row is not None and htext(row).strip():
-            meetings.append(parse_meeting_row(row, urls_to_change))
+            optional_meeting = parse_meeting_row(row, urls_to_change)
+            if optional_meeting is not None:
+                meetings.append(optional_meeting)
     return (meetings, broken_links)
 
 
@@ -1013,7 +1017,7 @@ def find_main_section(html: HtmlElement, enc: str,
     return main
 
 
-def parse_a_element(a_el: HtmlElement) -> Link:
+def parse_a_element(a_el: HtmlElement) -> Optional [Link]:
     """
     Take an ``a`` HTML element and turn it into a ``Link`` object.
     Note: does not capture the tail of the element.
@@ -1219,8 +1223,8 @@ def check_url(base_url: str, url: str, tested_urls: list, broken_urls: list):
     :arg list tested_urls: The list of URLs we've already tested.
     :arg list broken_urls: The list of broken URLs to add to as we find them.
 
-    :rtype: tuple[list, list]
-    :returns: The the list of tested URLs and the list of broken URLs.
+    :rtype: tuple[boolean, list, list]
+    :returns: Whether the URL is valid, the list of tested URLs and the list of broken URLs.
 
     Impure
         Reads from URLs to check whether or not they're working.
@@ -1233,7 +1237,6 @@ def check_url(base_url: str, url: str, tested_urls: list, broken_urls: list):
         parsed_url = urlparse(url)
         if parsed_url.scheme in ("http", "https"):
             try:
-                # print("checking", base_url, url)
                 response = requests.head(url)
                 if response.status_code != 200:
                     if url not in ("http://www.usa.gov/"):
