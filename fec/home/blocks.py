@@ -150,7 +150,7 @@ class CustomTableBlock(blocks.StructBlock):
     title = blocks.CharBlock()
 
     class Meta:
-        template = 'blocks/table.html'
+        template = 'blocks/custom_table.html'
     
 
 class DocumentFeedBlurb(blocks.StructBlock):
