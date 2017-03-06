@@ -20,7 +20,7 @@ from wagtail.contrib.table_block.blocks import TableBlock
 from fec import constants
 from home.blocks import (ThumbnailBlock, AsideLinkBlock, ContactInfoBlock,
                         ContactInfoBlock, CitationsBlock, ResourceBlock,
-                        OptionBlock, CollectionBlock, CustomTableBlock)
+                        OptionBlock, CollectionBlock, DocumentFeedBlurb, CustomTableBlock)
 
 stream_factory = functools.partial(
     StreamField,
@@ -402,14 +402,12 @@ class PressLandingPage(Page):
 class DocumentPage(ContentPage):
     date = models.DateField(default=datetime.date.today)
     file_url = models.URLField(blank=True)
-    file_name = models.CharField(max_length=255, blank=True)
     size = models.CharField(max_length=255, blank=True, null=True)
     category = models.CharField(max_length=255,
                                 choices=constants.report_child_categories.items(), null=True)
     content_panels = Page.content_panels + [
         FieldPanel('date'),
         FieldPanel('file_url'),
-        FieldPanel('file_name'),
         FieldPanel('size'),
         FieldPanel('category'),
         StreamFieldPanel('body')
@@ -428,8 +426,31 @@ class DocumentFeedPage(ContentPage):
     ]
 
     @property
+    def content_section(self):
+        return ''
+
+    @property
     def category_filters(self):
         return constants.report_category_groups[self.category]
+
+class ReportsLandingPage(ContentPage, UniqueModel):
+    subpage_types = ['DocumentFeedPage']
+    intro = StreamField([
+        ('paragraph', blocks.RichTextBlock())
+    ], null=True)
+
+    document_feeds = StreamField([
+        ('document_feed_blurb', DocumentFeedBlurb())
+    ], null=True, blank=True)
+
+    content_panels = Page.content_panels + [
+        StreamFieldPanel('intro'),
+        StreamFieldPanel('document_feeds')
+    ]
+
+    @property
+    def content_section(self):
+        return ''
 
 class AboutLandingPage(Page):
     hero = stream_factory(null=True, blank=True)
@@ -437,7 +458,7 @@ class AboutLandingPage(Page):
         ('sections', OptionBlock())
     ], null=True)
 
-    subpage_types = ['ResourcePage', 'DocumentFeedPage']
+    subpage_types = ['ResourcePage', 'DocumentFeedPage', 'ReportsLandingPage']
 
     content_panels = Page.content_panels + [
         StreamFieldPanel('hero'),

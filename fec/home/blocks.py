@@ -143,6 +143,7 @@ class CollectionBlock(blocks.StructBlock):
     intro = blocks.RichTextBlock(blank=False, null=False, required=False)
     items = blocks.ListBlock(blocks.RichTextBlock(classname="nothing"))
 
+
 class CustomTableBlock(blocks.StructBlock):
     """A custom table"""
     custom_table = TableBlock()
@@ -151,3 +152,9 @@ class CustomTableBlock(blocks.StructBlock):
     class Meta:
         template = 'blocks/table.html'
     
+
+class DocumentFeedBlurb(blocks.StructBlock):
+    """For generating a box with a description that links to a document feed page"""
+    page = blocks.PageChooserBlock()
+    description = blocks.CharBlock()
+
