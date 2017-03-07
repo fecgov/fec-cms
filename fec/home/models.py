@@ -15,6 +15,10 @@ from wagtail.wagtailadmin.edit_handlers import (FieldPanel, StreamFieldPanel,
 from wagtail.wagtailimages.blocks import ImageChooserBlock
 from wagtail.wagtailimages.edit_handlers import ImageChooserPanel
 
+from wagtail.wagtaildocs.blocks import DocumentChooserBlock
+from wagtail.wagtaildocs.edit_handlers import DocumentChooserPanel
+from wagtail.wagtaildocs.models import Document
+
 from wagtail.contrib.table_block.blocks import TableBlock
 
 from fec import constants
@@ -632,3 +636,39 @@ class ServicesLandingPage(ContentPage, UniqueModel):
     @property
     def hero_class(self):
         return 'services'
+
+class AgendaPage(Page):
+    mtg_date = models.DateTimeField(default=datetime.date.today)
+    mtg_time  = models.TimeField(default=datetime.time(10, 00))
+    mtg_media = StreamField([
+        ('full_video_url', blocks.TextBlock()),
+        ('full_audio', DocumentChooserBlock(required=False)),
+        ('mtg_transcript', DocumentChooserBlock(required=False))
+    ])
+    agenda = StreamField([
+        ('agenda_item', blocks.StreamBlock([
+            ('item_title', blocks.TextBlock()),
+            ('item_text', blocks.TextBlock()),
+            ('mtg_doc', blocks.StructBlock([
+                ('mtg_doc_upload', DocumentChooserBlock(required=True)),
+                ('submitted_late', blocks.BooleanBlock(required=False, help_text='Submitted Late')),
+                ('heldover', blocks.BooleanBlock(required=False, help_text='Held Over')),
+                ('heldover_from', blocks.DateBlock(required=False, help_text="Held Over From")),
+            ])),
+            ('item_audio', DocumentChooserBlock(required=False)),
+        ]))
+    ])
+
+    content_panels = Page.content_panels + [
+        FieldPanel('mtg_date'),
+        FieldPanel('mtg_time'),
+        StreamFieldPanel('agenda'),
+        MultiFieldPanel(
+        [
+            StreamFieldPanel('mtg_media'),
+        ],
+        heading="Entire Meeeting Media",
+        classname="collapsible collapsed"
+        ),
+
+    ]
