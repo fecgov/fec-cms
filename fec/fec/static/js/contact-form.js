@@ -48,3 +48,6 @@ ContactForm.prototype.clearForm = function(e) {
 };
 
 new ContactForm($('.js-contact-form'));
+
+// Even though we initialize above, export so it can be tested
+module.exports = {ContactForm: ContactForm};
