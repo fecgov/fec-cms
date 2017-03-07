@@ -193,8 +193,6 @@ def contact_rad(request):
   if not settings.FEATURES['radform']:
     return render(request, '404.html')
 
-  categories = form_categories()
-
   page_context = {
     'title': 'Submit a question to the Reports Analysis Division (RAD)',
     'ancestors': [{
@@ -206,7 +204,7 @@ def contact_rad(request):
 
   # If it's a POST, post to the ServiceNow API
   if request.method == 'POST':
-    form = ContactRAD(request.POST, categories=categories)
+    form = ContactRAD(request.POST)
     response = form.post_to_service_now()
     if response == 201:
       return render(request, 'home/contact-form.html', {
@@ -220,7 +218,7 @@ def contact_rad(request):
         'server_error': True
       })
   else:
-    form = ContactRAD(categories=categories)
+    form = ContactRAD()
 
   return render(request, 'home/contact-form.html', {
     'self': page_context,

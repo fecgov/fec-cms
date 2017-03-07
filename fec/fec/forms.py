@@ -5,8 +5,6 @@ from django import forms
 from django.conf import settings
 
 # ServiceNow credentials
-post_url = settings.FEC_SERVICE_NOW_API + 'u_imp_rad_response'
-category_url = settings.FEC_SERVICE_NOW_API + 'sys_choice?table=u_rad_response&element=u_category'
 username = settings.FEC_SERVICE_NOW_USERNAME
 password = settings.FEC_SERVICE_NOW_PASSWORD
 
@@ -15,12 +13,7 @@ class ContactRAD(forms.Form):
     Generates a contact form for submitting questions to RAD
     """
     def __init__(self, *args, **kwargs):
-        # Overriding init method so that a named arg 'categories' can be passed in
-
-        # Remove the categories arg from kwargs
-        # and add an empty option as the first one in the <select>
-        categories = kwargs.pop('categories') if 'categories' in kwargs else []
-        category_options = [('', 'Choose a subject')] + categories
+        category_options = [('', 'Choose a subject')] + form_categories()
         super().__init__(*args, **kwargs)
 
         self.fields['u_contact_first_name'] = forms.CharField(label='First name', max_length=100, required=True)
@@ -41,11 +34,12 @@ class ContactRAD(forms.Form):
         """
 
         # Remove the committee name from the data
-        if self.is_valid():
+        if self.is_valid() and settings.FEC_SERVICE_NOW_API:
             data = self.cleaned_data
             del data['committee_name']
 
             # Post to ServiceNow
+            post_url = settings.FEC_SERVICE_NOW_API + 'u_imp_rad_response'
             post = requests.post(post_url, data=json.dumps(data), auth=(username, password))
             return post.status_code
 
@@ -56,8 +50,12 @@ def fetch_categories():
     that the form ultimately submits to.
     Returns the result of the response as JSON
     """
-    r = requests.get(post_url, auth=(username, password))
-    return r.json()['result']
+    if settings.FEC_SERVICE_NOW_API:
+        category_url = settings.FEC_SERVICE_NOW_API + 'sys_choice?table=u_rad_response&element=u_category'
+        r = requests.get(category_url, auth=(username, password))
+        return r.json()['result']
+    else:
+        return []
 
 
 def form_categories():
