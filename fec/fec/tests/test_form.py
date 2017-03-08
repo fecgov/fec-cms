@@ -39,9 +39,8 @@ class TestContactForm(TestCase):
     # Test to make sure this method removes the `committee_name` field
     form = ContactRAD(self.form_data)
     form.post_to_service_now()
-
-    # call_data = mock_post.call_args[1]['data']
-    # self.assertFalse('committee_name' in call_data)
+    call_data = mock_post.call_args[1]['data']
+    self.assertFalse('committee_name' in call_data)
 
   @mock.patch.object(fec.forms, 'fetch_categories')
   def test_get_categories(self, fetch):
