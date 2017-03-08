@@ -400,6 +400,7 @@ class PressLandingPage(Page):
 
 class DocumentPage(ContentPage):
     date = models.DateField(default=datetime.date.today)
+    year_only = models.BooleanField(default=False)
     file_url = models.URLField(blank=True)
     size = models.CharField(max_length=255, blank=True, null=True)
     category = models.CharField(max_length=255,
@@ -411,6 +412,19 @@ class DocumentPage(ContentPage):
         FieldPanel('category'),
         StreamFieldPanel('body')
     ]
+
+    @property
+    def display_date(self):
+    # Some documents should only show the year, other show the month and year
+        if self.year_only:
+            return self.date.year
+        else:
+            return self.date.strftime('%B %Y')
+
+    @property
+    def extension(self):
+    # Return the file extension of file_url
+        return self.file_url.rsplit('.', 1)[1].upper()
 
 class DocumentFeedPage(ContentPage):
     subpage_types = ['DocumentPage']
