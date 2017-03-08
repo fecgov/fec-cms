@@ -57,7 +57,7 @@ run into problems please
 ### Project prerequisites
 1. Ensure you have the following requirements installed:
 
-    * Python 3.5 (which includes `pip` and and a built-in version of
+    * Python 3.4.5 (which includes `pip` and and a built-in version of
       `virtualenv` called `pyvenv`).
     * The latest long term support (LTS) or stable release of Node.js (which
       includes `npm`).
@@ -104,7 +104,7 @@ Before you can run this project locally, you'll need a development database:
 createdb cfdm_cms_test
 ```
 
-You will also need to set environmental variables: 
+You will also need to set environmental variables:
 
 Connection string for the local database as an
 environment variable:
@@ -148,6 +148,13 @@ To run the Python tests, run these commands in the root project directory:
 ```bash
 cd fec/
 ./manage.py test
+```
+
+It's necessary to specify the Postgresql URL, which can be done on the
+command line, e.g.:
+
+```bash
+env DATABASE_URL=postgresql://:@/cfdm_cms_test ./manage.py test
 ```
 
 ## Enabling/toggling features
@@ -197,12 +204,18 @@ Or, to set it in the settings file directly, include this line:
 FEC_APP_URL = 'http://localhost:3000'
 ```
 
+## Restoring your local database from a backup
+*Likely only useful for 18F FEC team members*
+To restore your local database from a backup from production, download the database dump and run this command:
+
+`pg_restore --dbname cfdm_cms_test --no-acl --no-owner <path/to/backup_file>`
+
 ## Deploy
 *Likely only useful for 18F FEC team members*
 
 We use Travis for automated deploys after tests pass. If you want to deploy something it is much better to push an empty commit with a tag than doing a manual deploy.
 
-If there is a problem with Travis and something needs to be deployed, you can do so with the following commands. Though, you will need to pull the environment variables from the space you are deploying to and remake your static assets. That will ensure things like the links are correct. You will also want to clear your dist/ directory. That way, you will not exceed the alloted space. 
+If there is a problem with Travis and something needs to be deployed, you can do so with the following commands. Though, you will need to pull the environment variables from the space you are deploying to and remake your static assets. That will ensure things like the links are correct. You will also want to clear your dist/ directory. That way, you will not exceed the alloted space.
 
 Before deploying, install the
 [Cloud Foundry CLI](https://docs.cloudfoundry.org/devguide/cf-cli/install-go-cli.html)

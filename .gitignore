@@ -8,6 +8,8 @@ bower_components
 local.py
 
 *.py[cod]
+.cache
+.env
 
 # C extensions
 *.so
@@ -66,3 +68,10 @@ fec/media/
 fec/data_loader/data/**/*.json
 
 fec/media
+
+# PyCharm
+.idea
+
+# Parsing output
+fec/data_loader/management/commands/meetings--*.json
+fec/data_loader/management/commands/out/*.html

@@ -7,7 +7,7 @@
 
 {% block content %}
 
-{% include 'partials/breadcrumbs.html' with page=self style='secondary' %}
+{% include 'partials/breadcrumbs.html' with page=self links=self.get_ancestors style='secondary' %}
 
 <section class="content__section--extra">
   <div class="container">
