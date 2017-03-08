@@ -2,6 +2,7 @@ import re
 
 from django import template
 from django.utils.html import format_html
+from home.models import DocumentPage
 
 register = template.Library()
 
@@ -28,3 +29,9 @@ def districts(max):
   """Returns a list of numbers 1-100 for district filter"""
   districts = range(max)
   return districts
+
+@register.filter()
+def document_count(page):
+  """Returns the number of DocumentPages for a particular category"""
+  count = DocumentPage.objects.child_of(page).live().count()
+  return "{} {}".format(count, 'result' if count == 1 else 'results')
