@@ -15,9 +15,7 @@
             <option value="statutes">Statutes</option>
             <option value="regulations">Regulations</option>
             <option value="advisory_opinions">Advisory opinions</option>
-            {% if features.legal_murs %}
             <option value="murs">Matters under review</option>
-            {% endif %}
           </select>
           <input type="text" name="search" class="combo__input js-search-input"
           aria-label="Search">
@@ -29,21 +27,11 @@
       <span class="t-note t-sans search__example search__example--with-select">Examples: 102.2; electioneering</span>
     </div>
   </div>
-  <div class="container">
+  <div class="container main">
       <div class="row">
         <div class="sidebar-container sidebar-container--left">
           <nav class="sidebar sidebar--neutral side-nav js-sticky" data-sticky-container="main">
             <ul class="sidebar__content">
-              <li class="side-nav__item">
-                <a class="side-nav__link" href="#statutes">
-                Statutes
-                </a>
-              </li>
-              <li class="side-nav__item">
-                <a class="side-nav__link" href="#regulations">
-                Regulations
-                </a>
-              </li>
               <li class="side-nav__item">
                 <a class="side-nav__link" href="#advisory-opinions">
                 Advisory opinions
@@ -54,30 +42,25 @@
                 Enforcement
                 </a>
               </li>
-              <li class="is-disabled side-nav__item"><span class="side-nav__link">(Resource TBD)</span></li>
+              <li class="side-nav__item">
+                <a class="side-nav__link" href="#regulations">
+                Regulations
+                </a>
+              </li>
+              <li class="side-nav__item">
+                <a class="side-nav__link" href="#statutes">
+                Statutes and legislation
+                </a>
+              </li>
+              <li class="side-nav__item">
+                <a class="side-nav__link" href="#court-and-policy">
+                Court cases and policy statements
+                </a>
+              </li>
             </ul>
           </nav>
         </div>
         <section class="main__content--right">
-            <div class="option">
-              <h2 id="statutes"><a href="{{ settings.FEC_APP_URL }}/legal/statutes/">Statutes</a></h2>
-              <p>
-                The FEC administers and enforces the Federal Election Campaign Act, the Presidential Election Campaign Fund Act and the Presidential Primary Matching Payment Account Act. Those acts and amendments, which are passed by Congress and signed by the President, are collected and restated as law in Title 52 and Title 26 of the U.S. Code.
-              </p>
-              <p>
-                This archive contains the portions of Title 52 and Title 26 that are administered by FEC.
-              </p>
-              <a class="button--cta button--go" href="{{ settings.FEC_APP_URL }}/legal/statutes/">Explore statutes</a>
-            </div>
-          <div class="option">
-            <h2 id="regulations"><a href="/regulations">Regulations</a></h2>
-            <p>As part of its role administering campaign finance law,
-              the Commission issues regulations,
-              which are published every year in Title 11 of the Code of Federal Regulations (CFR).
-              This archive contains a full-text version of 11 CFR, as published January 1, 2016.
-            </p>
-            <a class="button--cta button--go" href="/regulations">Explore regulations</a>
-          </div>
           <div class="option">
             <h2 id="advisory-opinions"><a href="{{ settings.FEC_APP_URL }}/legal/advisory-opinions/">Advisory opinions</a></h2>
             <p>Advisory opinions are official Commission responses to questions about how federal campaign finance law applies to specific, factual situations.</p>
@@ -91,6 +74,42 @@
             <p>Cases in each of these enforcement programs must be kept confidential until the cases are closed.</p>
             <p>Learn more about each type of enforcement action. Search a database of MUR, Alternative Dispute Resolution and Administrative Fine documents from closed cases dating back to 1975.</p>
             <a class="button--cta button--go" href="/legal-resources/enforcement/">Explore enforcement</a>
+          </div>
+          <div class="option">
+            <h2 id="regulations"><a href="/regulations">Regulations</a></h2>
+            <p>As part of its role administering campaign finance law,
+              the Commission issues regulations,
+              which are published every year in Title 11 of the Code of Federal Regulations (CFR).
+              This archive contains a full-text version of 11 CFR, as published January 1, 2016.
+            </p>
+            <a class="button--cta button--go" href="/regulations">Explore regulations</a>
+          </div>
+          <div class="option">
+            <h2 id="statutes">Statutes and legislation</h2>
+            <div class="content__section">
+              <h3><a href="{{ settings.FEC_APP_URL }}/legal/statutes/">Statutes</a></h3>
+              <p>
+                The FEC administers and enforces the Federal Election Campaign Act, the Presidential Election Campaign Fund Act and the Presidential Primary Matching Payment Account Act. Those acts and amendments, which are passed by Congress and signed by the President, are collected and restated as law in Title 52 and Title 26 of the U.S. Code.
+              </p>
+              <p>
+                This archive contains the portions of Title 52 and Title 26 that are administered by FEC.
+              </p>
+              <a class="button--cta button--go" href="{{ settings.FEC_APP_URL }}/legal/statutes/">Explore statutes</a>
+            </div>
+            <h3><a href="/legal-resources/legislation/">Legislation</a></h3>
+            <p>Browse selected amendments to the <em>Federal Election Campaign Act</em> and Commission recommendations to Congress.</p>
+            <a class="button--cta button--go" href="/legal-resources/legislation/">Explore legislation</a>
+          </div>
+          <div class="option">
+            <h2 id="court-and-policy">Court cases and policy statements</h2>
+            <div class="content__section">
+              <h3><a href="/legal-resources/court-cases">Court cases</a></h3>
+              <p>Learn more about active and past cases involving the FEC.</p>
+              <a class="button--cta button--go" href="/legal-resources/court-cases">Explore court cases</a>
+            </div>
+            <h3><a href="http://www.fec.gov/law/policy.shtml">Policy statements</a></h3>
+            <p>Access statements, interpretive rules and other guidance issued by the FEC.</p>
+            <a class="button--cta button--go" href="http://www.fec.gov/law/policy.shtml">Explore policy statements</a>
           </div>
         </section>
       </div>
