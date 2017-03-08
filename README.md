@@ -57,7 +57,7 @@ run into problems please
 ### Project prerequisites
 1. Ensure you have the following requirements installed:
 
-    * Python 3.5 (which includes `pip` and and a built-in version of
+    * Python 3.4.5 (which includes `pip` and and a built-in version of
       `virtualenv` called `pyvenv`).
     * The latest long term support (LTS) or stable release of Node.js (which
       includes `npm`).
