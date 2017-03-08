@@ -33,9 +33,11 @@ function UpcomingEvents() {
         eventSummary = event.summary;
       }
 
-      $('.homepage-upcoming-events').append('<li>' + startDateMonth + ' ' + startDateDay + ': ' + eventSummary + '</li>');
-
-      return i < 2;
+      $('.js-homepage-upcoming-events').append(
+          '<li class="grid__item t-sans"><span class="t-bold">' +
+            startDateMonth + ' ' + startDateDay +
+          '</span>: ' + eventSummary + '</li>');
+      return i < 3;
     });
   });
 }

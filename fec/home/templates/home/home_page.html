@@ -48,26 +48,17 @@
 
   <section class="slab slab--neutral slab--home">
     <div class="container">
-      <h6>What's happening</h6>
-      <div class="grid grid--3-wide grid--no-margin grid--no-border">
-        {% home_page_updates %}
-        <div class="grid__item">
-          <h6 class="t-no-rules">Upcoming Events</h6>
-          <ul class="list--border homepage-upcoming-events u-border-top-gray">
-          </ul>
-        </div>
+      <div class="heading--section heading--with-action">
+        <h3 class="heading__left">What's happening</h3>
+        <a class="button button--alt heading__right button--updates" href="/updates">All latest updates</a>
       </div>
-      <div class="grid grid--3-wide grid--no-margin grid--no-border">
-        <div class="grid__item"></div>
-        <div class="grid__item">
-          <div class="icon icon-circle--updates--inline--left"></div>
-          <a class="t-lead" href="/updates">All latest updates »</a>
-        </div>
-        <div class="grid__item">
-          <div class="icon icon-circle--calendar--inline--left"></div>
-          <a class="t-lead" href="/calendar">Full calendar »</a>
-        </div>
+      {% home_page_updates %}
+
+      <div class="heading--section heading--with-action">
+        <h3 class="heading__left">Upcoming events</h3>
+        <a class="button button--alt heading__right button--calendar" href="/calendar">All events</a>
       </div>
+      <ul class="grid grid--4-wide grid--no-margin grid--no-border list--border js-homepage-upcoming-events"></ul>
     </div>
   </section>
 
@@ -250,7 +241,7 @@
           <div class="icon-heading icon-heading--shield-circle">
             <div class="icon-heading__content">
               <h3>The Commission has a variety of methods for responding to possible election law violations</h3>
-              <a class="t-sans" href="{{ settings.FEC_APP_URL }}/legal/enforcement/">Learn more about enforcement »</a><br>
+              <a class="t-sans" href="/legal-resources/enforcement/">Learn more about enforcement »</a><br>
               <br>
               <a class="t-sans" href="http://www.fec.gov/pages/brochures/complain.shtml#search=complaint">Read about the process for filing a complaint »</a>
             </div>
