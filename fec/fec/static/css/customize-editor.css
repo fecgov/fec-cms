@@ -17,3 +17,7 @@ li.sequence-member .sequence-member-inner .sequence-type-list .sequence-containe
 .t-sans {
   font-family: sans-serif;
 }
+
+.icon-blockquote:before {
+  content: open-quote;
+}
