@@ -137,21 +137,24 @@ update_types = OrderedDict([
 # on that type of report page
 oig_reports = OrderedDict((x.lower(), x) for x in [
     "Audit report",
-    "Inspection report",
-    "Special review report",
+    "Work plan",
+    "Inspection or special review report",
+    "Strategic plan",
     "Semiannual report"
 ])
 
 strategy_budget_performance_reports = OrderedDict((x.lower(), x) for x in [
     "Strategic plan",
     "IT strategic plan",
-    "Congressional budget justification",
+    "Congressional submission",
     "Annual performance report",
-    "Performance and accountability report"
+    "Annual financial report",
+    "Performance and accountability report",
 ])
 
 foia_reports = OrderedDict((x.lower(), x) for x in [
-    "Annual FOIA report"
+    "Annual report",
+    "Summary report"
 ])
 
 privacy_reports = OrderedDict((x.lower(), x) for x in [
@@ -160,10 +163,10 @@ privacy_reports = OrderedDict((x.lower(), x) for x in [
 ])
 
 procurement_contracting_reports = OrderedDict((x.lower(), x) for x in [
-    "Purchase inventory",
+    "Inventory",
     "Annual report",
-    "FAIR Act inventory report",
-    "Request for proposal (RFP)"
+    "Memo",
+    "Request for proposal"
 ])
 
 annual_anniversary_reports = OrderedDict((x.lower(), x) for x in [
