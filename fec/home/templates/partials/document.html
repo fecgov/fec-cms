@@ -3,7 +3,7 @@
 
 <article class="post">
   <div class="post__pre">
-    <div class="post__date">{{ document.date|date:'F Y' }}</div>
+    <div class="post__date">{{ document.display_date }}</div>
   </div>
   {% if document.body %}
     <h3>{{ document.title }}</h3>
@@ -12,7 +12,7 @@
         <a class="js-read-more post__read-more" href="{{ document.url }}">Read more</a>
     </div>
   {% else %}
-    <h3><a href="{{ document.file_url }}">{{ document.title }}</a> <i class="icon icon--inline--right icon--inline--left i-document"></i><span class="t-sans t-normal">(PDF){% if document.size %} | ({{ document.size }}){% endif %}</span></h3>
+    <h3><a href="{{ document.file_url }}">{{ document.title }}</a> <i class="icon icon--inline--right icon--inline--left i-document"></i><span class="t-sans t-normal">({{ document.extension }}){% if document.size %} | ({{ document.size }}){% endif %}</span></h3>
   {% endif %}
     <div class="post__meta">
       <a class="tag tag--secondary" href="">{{ document.category }}</a>
