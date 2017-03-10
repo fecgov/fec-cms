@@ -18,24 +18,16 @@
           uuid: this.options.uuid,
           editable: this.options.editable,
           label: 'Blockquote',
-          icon: 'icon-blockquote',
+          icon: 'icon-openquote',
           command: null
         });
         toolbar.append(button);
-        return button.on("click", function(event) {
-          var insertionPoint, lastSelection;
- 
-          lastSelection = widget.options.editable.getSelection();
-          insertionPoint = $(lastSelection.endContainer).parentsUntil('.richtext').last();
-                    var elem;
-                    elem = "<blockquote>" + lastSelection + "</blockquote>";
- 
-                    var node = lastSelection.createContextualFragment(elem);
- 
-                    lastSelection.deleteContents();
-                    lastSelection.insertNode(node);
- 
-                    return widget.options.editable.element.trigger('change');
+
+        button.on('click', function() {
+            var node = widget.options.editable.getSelection();
+            var parent = $(node.endContainer).parentsUntil('.richtext').last();
+            $(parent).wrap('<blockquote></blockquote>');
+            widget.options.editable.setModified();
         });
       }
     });

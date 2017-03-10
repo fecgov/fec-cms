@@ -18,6 +18,9 @@ li.sequence-member .sequence-member-inner .sequence-type-list .sequence-containe
   font-family: sans-serif;
 }
 
-.icon-blockquote:before {
-  content: open-quote;
+blockquote {
+	 border-left: 10px solid #f1f1f1;
+	 padding-left: 30px;
+	 margin-left: 0;
+	 font-style: italic;
 }
