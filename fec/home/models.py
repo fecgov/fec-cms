@@ -636,8 +636,9 @@ class ServicesLandingPage(ContentPage, UniqueModel):
     def hero_class(self):
         return 'services'
 
+
 class AgendaPage(Page):
-    mtg_date = models.DateTimeField(default=datetime.date.today)
+    mtg_date  = models.DateTimeField(default=datetime.date.today)
     mtg_time  = models.TimeField(default=datetime.time(10, 00))
     mtg_media = StreamField([
         ('full_video_url', blocks.TextBlock()),
@@ -666,8 +667,7 @@ class AgendaPage(Page):
         [
             StreamFieldPanel('mtg_media'),
         ],
-        heading="Entire Meeeting Media",
+        heading="Entire Meeting Media",
         classname="collapsible collapsed"
         ),
-
     ]
