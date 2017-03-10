@@ -6,6 +6,7 @@ from django.utils.html import format_html
 def whitelister_element_rules():
     return {
         'span': attribute_rule({'class': True}),
+        'blockquote': attribute_rule({'class': True}),
     }
 
 @hooks.register('insert_editor_js')
@@ -16,6 +17,7 @@ def editor_js():
         <script src="/static/js/vendor/rangy-selectionsaverestore.js"></script>
         <script src="/static/js/hallo-edit-html.js"></script>
         <script src="/static/js/hallo-sans-serif.js"></script>
+        <script src="/static/js/hallo-blockquote.js"></script>
         <script src="/static/js/customize-editor.js"></script>
         <script src="/static/js-beautify/js/lib/beautify-html.js"></script>
         <script src="/static/ace-builds/src-noconflict/ace.js"></script>
@@ -24,6 +26,7 @@ def editor_js():
             registerHalloPlugin('editHtmlButton');
             registerHalloPlugin('hallocleanhtml');
             registerHalloPlugin('sansSerifButton');
+            registerHalloPlugin('blockquotebutton');
         </script>
     ''')
 
