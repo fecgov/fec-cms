@@ -1,6 +1,7 @@
 from django.core.management import BaseCommand
 
 from data_loader.utils import ImporterMixin
+from home.models import AgendaPage
 
 
 class Command(ImporterMixin, BaseCommand):
@@ -29,8 +30,17 @@ class Command(ImporterMixin, BaseCommand):
             help='Delete existing records prior to importing',
         )
 
-    def handle(self, *args, **options):
+    def handle(self, *args, **options) -> None:
+        self._delete_existing_records(options)
+        # Create pages for each JSON structure
+
+    def create_pages(self, page_structs, base_page) -> None:
         pass
 
-    def create_pages(self, page_structs, base_page):
-        pass
+    def _delete_existing_records(self, options) -> None:
+        if options['delete_existing']:
+            self._log_warning('Deleting existing records...')
+            self.delete_existing_records(AgendaPage, **options)
+
+    def _log_warning(self, message: str) -> None:
+        self.stdout.write(self.style.WARNING(message))
