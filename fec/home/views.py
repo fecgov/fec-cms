@@ -1,8 +1,12 @@
+import requests
+
 from django.shortcuts import render
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.conf import settings
 from itertools import chain
 from operator import attrgetter
+
+from fec.forms import ContactRAD, form_categories
 from home.models import (
     CommissionerPage,
     DigestPage,
@@ -10,7 +14,6 @@ from home.models import (
     RecordPage,
     TipsForTreasurersPage
 )
-
 
 def replace_dash(string):
   return string.replace('-', ' ')
@@ -136,7 +139,7 @@ def updates(request):
 
 def calendar(request):
   page_context = {
-    'content_section': 'Calendar',
+    'content_section': 'calendar',
     'title': 'Calendar'
   }
   return render(request, 'home/calendar.html', {
@@ -151,26 +154,6 @@ def contact(request):
 
   return render(request, 'home/contact.html', {
     'self': page_context,
-  })
-
-def ao_process(request):
-  ancestors = [
-    {
-      'title': 'Legal resources',
-      'url': '/legal-resources/',
-    }, {
-      'title': 'Advisory opinions',
-      'url': settings.FEC_APP_URL + '/legal/advisory-opinions',
-    }
-  ]
-  page_context = {
-    'content_section': 'legal',
-    'title': 'The advisory opinion process',
-    'ancestors': ancestors
-  }
-
-  return render(request, 'home/legal/ao_process.html', {
-    'self': page_context
   })
 
 def commissioners(request):
@@ -189,6 +172,7 @@ def commissioners(request):
     'vice_commissioner': vice_commissioner,
     'current_commissioners': current_commissioners,
     'past_commissioners': past_commissioners,
+    'content_section': 'about',
     'ancestors': [
       {
         'title': 'About the FEC',
@@ -203,4 +187,40 @@ def commissioners(request):
 
   return render(request, 'home/commissioners.html', {
     'self': page_context,
+  })
+
+def contact_rad(request):
+  if not settings.FEATURES['radform']:
+    return render(request, '404.html')
+
+  page_context = {
+    'title': 'Submit a question to the Reports Analysis Division (RAD)',
+    'ancestors': [{
+      'title': 'Registration and reporting',
+      'url': '/registration-and-reporting/',
+    }],
+    'content_section': 'registration-and-reporting'
+  }
+
+  # If it's a POST, post to the ServiceNow API
+  if request.method == 'POST':
+    form = ContactRAD(request.POST)
+    response = form.post_to_service_now()
+    if response == 201:
+      return render(request, 'home/contact-form.html', {
+        'self': page_context,
+        'success': True
+      })
+    else:
+      return render(request, 'home/contact-form.html', {
+        'self': page_context,
+        'form': form,
+        'server_error': True
+      })
+  else:
+    form = ContactRAD()
+
+  return render(request, 'home/contact-form.html', {
+    'self': page_context,
+    'form': form
   })
