@@ -1,4 +1,5 @@
 from django.core.management import BaseCommand
+from io import TextIOWrapper
 from typing import Any, Dict
 
 from data_loader.utils import ImporterMixin
@@ -10,7 +11,7 @@ class Command(ImporterMixin, BaseCommand):
     requires_migrations_checks = True
     requires_system_checks = True
 
-    def add_arguments(self, parser):
+    def add_arguments(self, parser) -> None:
         parser.add_argument(
             'json_file_path',
             type=str,
@@ -42,7 +43,7 @@ class Command(ImporterMixin, BaseCommand):
             self.delete_existing_records(AgendaPage, **options)
 
     @staticmethod
-    def _open_json_file(options: Dict[str, Any]):
+    def _open_json_file(options: Dict[str, Any]) -> TextIOWrapper:
         return open(options['json_file_path'], 'r')
 
     def _create_pages(self, json, parent_page, options: Dict[str, Any]) -> None:
@@ -52,5 +53,5 @@ class Command(ImporterMixin, BaseCommand):
         self.stdout.write(self.style.WARNING(str(message)))
 
     @staticmethod
-    def _parent_page(options: Dict[str, Any]):
+    def _parent_page(options: Dict[str, Any]) -> Page:
         return Page.objects.get(url_path=options['parent_path'])
