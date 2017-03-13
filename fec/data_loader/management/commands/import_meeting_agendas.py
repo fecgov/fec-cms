@@ -1,7 +1,8 @@
+from io import TextIOWrapper
 from django.core.management import BaseCommand
 
 from data_loader.utils import ImporterMixin
-from home.models import AgendaPage
+from home.models import AgendaPage, Page
 
 
 class Command(ImporterMixin, BaseCommand):
@@ -32,15 +33,24 @@ class Command(ImporterMixin, BaseCommand):
 
     def handle(self, *args, **options) -> None:
         self._delete_existing_records(options)
-        # Create pages for each JSON structure
-
-    def create_pages(self, page_structs, base_page) -> None:
-        pass
+        with self._open_json_data(options) as json:
+            self._create_pages(json, self._parent_page(options), options)
 
     def _delete_existing_records(self, options) -> None:
         if options['delete_existing']:
             self._log_warning('Deleting existing records...')
             self.delete_existing_records(AgendaPage, **options)
 
+    @staticmethod
+    def _open_json_data(options):
+        return open(options['json_file_path'], 'r')
+
+    def _create_pages(self, json: TextIOWrapper, parent_page, options) -> None:
+        pass
+
     def _log_warning(self, message: str) -> None:
         self.stdout.write(self.style.WARNING(message))
+
+    @staticmethod
+    def _parent_page(options) -> TextIOWrapper:
+        return Page.objects.get(url_path=options['parent_path'])
