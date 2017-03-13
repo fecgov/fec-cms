@@ -63,7 +63,7 @@ class Command(ImporterMixin, BaseCommand):
         return Page.objects.get(url_path=options['parent_path'])
 
     def _create_pages(self, json_text: TextIOWrapper, parent_page: Page, options: Dict[str, Any]) -> None:
-        for meeting_struct in json.load(json_text)[0:1]:
+        for meeting_struct in json.load(json_text):
             self._create_agenda_page(meeting_struct, parent_page)
 
     def _create_agenda_page(self, meeting: Dict[str, Any], parent_page: Page) -> None:
@@ -91,10 +91,13 @@ class Command(ImporterMixin, BaseCommand):
             numchild=0,
             title=meeting['title_text'],
             live=1,
-            mtg_date=self._with_tz(meeting['posted_date']['iso8601'])
+            mtg_date=self._with_tz(meeting['posted_date']['iso8601']),
+            # mtg_time doesn't appear to be in the json.
         )
         parent_page.add_child(instance=new_page)
+        # TODO: set date attribute here like import_report_documents.py?
         new_page.save()
 
-    def _with_tz(self, a_date):
+    @staticmethod
+    def _with_tz(a_date):
         return timezone.make_aware(parser.parse(a_date), timezone.get_current_timezone())
