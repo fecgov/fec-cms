@@ -68,23 +68,23 @@ class Command(ImporterMixin, BaseCommand):
 
     def _create_agenda_page(self, meeting: Dict[str, Any], parent_page: Page) -> None:
         """
-        Available keys are: [
-            'agenda_document_links',
-            'approved_minutes_date',
-            'approved_minutes_link',
-            'body',
-            'closed_captioning_link',
-            'draft_minutes_links',
-            'sunshine_act_links',
-            'link_title_text', 
-            'meeting_type',
-            'old_meeting_url',
-            'pdf_disclaimer',
-            'posted_date',
-            'primary_audio_link',
-            'secondary_audio_links',
-            'title_text',
-            'video_link']
+        Available keys are:
+            ("agenda_document_links", Links), # list (Links)
+            ("approved_minutes_date", Date),
+            ("approved_minutes_link", Link),
+            ("body", str),                    # HTML
+            ("closed_captioning_link", Link),
+            ("draft_minutes_links", Links),   # list (Links)
+            ("link_title_text", str),         # Plain text
+            ("meeting_type", str),            # "open" or "executive"
+            ("pdf_disclaimer", str),          # HTML (outer HTML)
+            ("posted_date", Date),
+            ("primary_audio_link", Link),
+            ("old_meeting_url", str),         # URL
+            ("secondary_audio_links", Links), # list (Links)
+            ("sunshine_act_links", Links),    # list (Links)
+            ("title_text", str),
+            ("video_link", Link)
         """
         new_page = AgendaPage(
             depth=2,
