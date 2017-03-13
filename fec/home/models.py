@@ -15,12 +15,16 @@ from wagtail.wagtailadmin.edit_handlers import (FieldPanel, StreamFieldPanel,
 from wagtail.wagtailimages.blocks import ImageChooserBlock
 from wagtail.wagtailimages.edit_handlers import ImageChooserPanel
 
+from wagtail.wagtaildocs.blocks import DocumentChooserBlock
+from wagtail.wagtaildocs.edit_handlers import DocumentChooserPanel
+from wagtail.wagtaildocs.models import Document
+
 from wagtail.contrib.table_block.blocks import TableBlock
 
 from fec import constants
 from home.blocks import (ThumbnailBlock, AsideLinkBlock, ContactInfoBlock,
                         ContactInfoBlock, CitationsBlock, ResourceBlock,
-                        OptionBlock, CollectionBlock)
+                        OptionBlock, CollectionBlock, DocumentFeedBlurb)
 
 stream_factory = functools.partial(
     StreamField,
@@ -400,19 +404,31 @@ class PressLandingPage(Page):
 
 class DocumentPage(ContentPage):
     date = models.DateField(default=datetime.date.today)
+    year_only = models.BooleanField(default=False)
     file_url = models.URLField(blank=True)
-    file_name = models.CharField(max_length=255, blank=True)
     size = models.CharField(max_length=255, blank=True, null=True)
     category = models.CharField(max_length=255,
                                 choices=constants.report_child_categories.items(), null=True)
     content_panels = Page.content_panels + [
         FieldPanel('date'),
         FieldPanel('file_url'),
-        FieldPanel('file_name'),
         FieldPanel('size'),
         FieldPanel('category'),
         StreamFieldPanel('body')
     ]
+
+    @property
+    def display_date(self):
+    # Some documents should only show the year, other show the month and year
+        if self.year_only:
+            return self.date.year
+        else:
+            return self.date.strftime('%B %Y')
+
+    @property
+    def extension(self):
+    # Return the file extension of file_url
+        return self.file_url.rsplit('.', 1)[1].upper()
 
 class DocumentFeedPage(ContentPage):
     subpage_types = ['DocumentPage']
@@ -427,8 +443,31 @@ class DocumentFeedPage(ContentPage):
     ]
 
     @property
+    def content_section(self):
+        return ''
+
+    @property
     def category_filters(self):
         return constants.report_category_groups[self.category]
+
+class ReportsLandingPage(ContentPage, UniqueModel):
+    subpage_types = ['DocumentFeedPage']
+    intro = StreamField([
+        ('paragraph', blocks.RichTextBlock())
+    ], null=True)
+
+    document_feeds = StreamField([
+        ('document_feed_blurb', DocumentFeedBlurb())
+    ], null=True, blank=True)
+
+    content_panels = Page.content_panels + [
+        StreamFieldPanel('intro'),
+        StreamFieldPanel('document_feeds')
+    ]
+
+    @property
+    def content_section(self):
+        return ''
 
 class AboutLandingPage(Page):
     hero = stream_factory(null=True, blank=True)
@@ -436,7 +475,7 @@ class AboutLandingPage(Page):
         ('sections', OptionBlock())
     ], null=True)
 
-    subpage_types = ['ResourcePage', 'DocumentFeedPage']
+    subpage_types = ['ResourcePage', 'DocumentFeedPage', 'ReportsLandingPage']
 
     content_panels = Page.content_panels + [
         StreamFieldPanel('hero'),
@@ -610,3 +649,39 @@ class ServicesLandingPage(ContentPage, UniqueModel):
     @property
     def hero_class(self):
         return 'services'
+
+class AgendaPage(Page):
+    mtg_date = models.DateTimeField(default=datetime.date.today)
+    mtg_time  = models.TimeField(default=datetime.time(10, 00))
+    mtg_media = StreamField([
+        ('full_video_url', blocks.TextBlock()),
+        ('full_audio', DocumentChooserBlock(required=False)),
+        ('mtg_transcript', DocumentChooserBlock(required=False))
+    ])
+    agenda = StreamField([
+        ('agenda_item', blocks.StreamBlock([
+            ('item_title', blocks.TextBlock()),
+            ('item_text', blocks.TextBlock()),
+            ('mtg_doc', blocks.StructBlock([
+                ('mtg_doc_upload', DocumentChooserBlock(required=True)),
+                ('submitted_late', blocks.BooleanBlock(required=False, help_text='Submitted Late')),
+                ('heldover', blocks.BooleanBlock(required=False, help_text='Held Over')),
+                ('heldover_from', blocks.DateBlock(required=False, help_text="Held Over From")),
+            ])),
+            ('item_audio', DocumentChooserBlock(required=False)),
+        ]))
+    ])
+
+    content_panels = Page.content_panels + [
+        FieldPanel('mtg_date'),
+        FieldPanel('mtg_time'),
+        StreamFieldPanel('agenda'),
+        MultiFieldPanel(
+        [
+            StreamFieldPanel('mtg_media'),
+        ],
+        heading="Entire Meeeting Media",
+        classname="collapsible collapsed"
+        ),
+
+    ]
