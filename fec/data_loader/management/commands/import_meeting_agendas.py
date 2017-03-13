@@ -55,10 +55,35 @@ class Command(ImporterMixin, BaseCommand):
     def _parent_page(options: Dict[str, Any]) -> Page:
         return Page.objects.get(url_path=options['parent_path'])
 
-    def _create_pages(self, json_text, parent_page: Page, options: Dict[str, Any]) -> None:
-        structs = json.load(json_text)
-        for meeting_struct in structs:
+    def _create_pages(self, json_text: TextIOWrapper, parent_page: Page, options: Dict[str, Any]) -> None:
+        for meeting_struct in json.load(json_text):
             self._create_agenda_page(meeting_struct, parent_page)
 
-    def _create_agenda_page(self, meeting_struct: Dict, parent_page: Page) -> None:
-        pass
+    def _create_agenda_page(self, meeting_struct: Dict[str, Any], parent_page: Page) -> None:
+        """
+        Available keys are: [
+            'agenda_document_links', 
+            'approved_minutes_date', 
+            'approved_minutes_link', 
+            'body', 
+            'closed_captioning_link', 
+            'draft_minutes_links', 
+            'sunshine_act_links', 
+            'link_title_text', 
+            'meeting_type', 
+            'old_meeting_url', 
+            'pdf_disclaimer', 
+            'posted_date', 
+            'primary_audio_link', 
+            'secondary_audio_links', 
+            'title_text', 
+            'video_link']
+        """
+        new_page = AgendaPage(
+            depth=2,
+            numchild=0,
+            title=meeting_struct['title_text'],
+            live=1
+        )
+        parent_page.add_child(instance=new_page)
+        new_page.save()
