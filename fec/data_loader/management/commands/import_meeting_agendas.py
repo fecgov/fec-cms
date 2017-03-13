@@ -33,7 +33,7 @@ class Command(ImporterMixin, BaseCommand):
 
     def handle(self, *args, **options) -> None:
         self._delete_existing_records(options)
-        with self._open_json_data(options) as json:
+        with self._open_json_file(options) as json:
             self._create_pages(json, self._parent_page(options), options)
 
     def _delete_existing_records(self, options) -> None:
@@ -42,7 +42,7 @@ class Command(ImporterMixin, BaseCommand):
             self.delete_existing_records(AgendaPage, **options)
 
     @staticmethod
-    def _open_json_data(options):
+    def _open_json_file(options):
         return open(options['json_file_path'], 'r')
 
     def _create_pages(self, json: TextIOWrapper, parent_page, options) -> None:
