@@ -119,3 +119,25 @@
     display: block;
   }
 }
+
+
+.new-site-banner {
+  background-color: #f1f1f1;
+  border-bottom: 10px solid #36bdbb;
+  color: #112e51;
+  padding: 10px 40px;
+
+  p {
+    margin-bottom: 10px;
+  }
+
+  button {
+    font-size: 14px;
+    border-bottom: 1px dotted #112e51;
+  }
+
+  .button {
+    border-bottom: none;
+    color: #fff;
+  }
+}
