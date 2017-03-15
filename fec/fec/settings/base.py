@@ -189,9 +189,9 @@ CONTACT_EMAIL = 'betafeedback@fec.gov';
 CONSTANTS = constants
 
 # Config for the ServiceNow API for contacting RAD
-FEC_SERVICE_NOW_API = os.get_credential('FEC_SERVICE_NOW_API')
-FEC_SERVICE_NOW_USERNAME = os.get_credential('FEC_SERVICE_NOW_USERNAME')
-FEC_SERVICE_NOW_PASSWORD = os.get_credential('FEC_SERVICE_NOW_PASSWORD')
+FEC_SERVICE_NOW_API = env.get_credential('FEC_SERVICE_NOW_API')
+FEC_SERVICE_NOW_USERNAME = env.get_credential('FEC_SERVICE_NOW_USERNAME')
+FEC_SERVICE_NOW_PASSWORD = env.get_credential('FEC_SERVICE_NOW_PASSWORD')
 
 FEATURES = {
     'record': bool(env.get_credential('FEC_FEATURE_RECORD', '')),
