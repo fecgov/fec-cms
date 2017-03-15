@@ -4,10 +4,6 @@ import json
 from django import forms
 from django.conf import settings
 
-# ServiceNow credentials
-username = settings.FEC_SERVICE_NOW_USERNAME
-password = settings.FEC_SERVICE_NOW_PASSWORD
-
 class ContactRAD(forms.Form):
     """
     Generates a contact form for submitting questions to RAD
@@ -32,6 +28,9 @@ class ContactRAD(forms.Form):
         Process the data and post it to the ServiceNow endpoint
         Returns a status code from the request
         """
+        # ServiceNow credentials
+        username = settings.FEC_SERVICE_NOW_USERNAME
+        password = settings.FEC_SERVICE_NOW_PASSWORD
 
         # Remove the committee name from the data
         if self.is_valid() and settings.FEC_SERVICE_NOW_API:
@@ -50,6 +49,10 @@ def fetch_categories():
     that the form ultimately submits to.
     Returns the result of the response as JSON
     """
+    # ServiceNow credentials
+    username = settings.FEC_SERVICE_NOW_USERNAME
+    password = settings.FEC_SERVICE_NOW_PASSWORD
+
     if settings.FEC_SERVICE_NOW_API:
         category_url = settings.FEC_SERVICE_NOW_API + 'sys_choice?table=u_rad_response&element=u_category'
         r = requests.get(category_url, auth=(username, password))
