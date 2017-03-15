@@ -11,7 +11,7 @@ class ContactRAD(forms.Form):
     def __init__(self, *args, **kwargs):
         category_options = [('', 'Choose a subject')] + form_categories()
         super().__init__(*args, **kwargs)
-
+        print("Initializing form")
         self.fields['u_contact_first_name'] = forms.CharField(label='First name', max_length=100, required=True)
         self.fields['u_contact_last_name'] = forms.CharField(label='Last name', max_length=100, required=True)
         self.fields['u_contact_email'] = forms.EmailField(label='Email', max_length=100, required=True)
@@ -53,6 +53,11 @@ def fetch_categories():
     # ServiceNow credentials
     username = settings.FEC_SERVICE_NOW_USERNAME
     password = settings.FEC_SERVICE_NOW_PASSWORD
+
+    print('Ready to fetch categories')
+    print(settings.FEC_SERVICE_NOW_API)
+    print(username)
+    print(password)
 
     if settings.FEC_SERVICE_NOW_API:
         print('Fetching categories')
