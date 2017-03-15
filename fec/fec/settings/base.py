@@ -235,3 +235,9 @@ if FEC_CMS_ENVIRONMENT != 'LOCAL':
     DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
     AWS_LOCATION = 'cms-content'
     AWS_S3_REGION_NAME = env.get_credential('CMS_AWS_DEFAULT_REGION')
+
+UAA_AUTH_URL = 'http://localhost:8080/oauth/authorize'
+UAA_TOKEN_URL = 'http://localhost:8080/oauth/token'
+
+AUTHENTICATION_BACKENDS = \
+    ['uaa_client.authentication.UaaBackend']
