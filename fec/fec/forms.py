@@ -4,6 +4,13 @@ import json
 from django import forms
 from django.conf import settings
 
+# ServiceNow credentials
+username = settings.FEC_SERVICE_NOW_USERNAME
+password = settings.FEC_SERVICE_NOW_PASSWORD
+base_url = settings.FEC_SERVICE_NOW_API
+
+print(base_url)
+
 class ContactRAD(forms.Form):
     """
     Generates a contact form for submitting questions to RAD
@@ -28,18 +35,15 @@ class ContactRAD(forms.Form):
         Process the data and post it to the ServiceNow endpoint
         Returns a status code from the request
         """
-        # ServiceNow credentials
-        username = settings.FEC_SERVICE_NOW_USERNAME
-        password = settings.FEC_SERVICE_NOW_PASSWORD
 
         # Remove the committee name from the data
-        if self.is_valid() and settings.FEC_SERVICE_NOW_API:
+        if self.is_valid() and base_url:
             print('Submitting to ServiceNow')
             data = self.cleaned_data
             del data['committee_name']
 
             # Post to ServiceNow
-            post_url = settings.FEC_SERVICE_NOW_API + 'u_imp_rad_response'
+            post_url = base_url + 'u_imp_rad_response'
             post = requests.post(post_url, data=json.dumps(data), auth=(username, password))
             return post.status_code
 
@@ -50,18 +54,15 @@ def fetch_categories():
     that the form ultimately submits to.
     Returns the result of the response as JSON
     """
-    # ServiceNow credentials
-    username = settings.FEC_SERVICE_NOW_USERNAME
-    password = settings.FEC_SERVICE_NOW_PASSWORD
 
     print('Ready to fetch categories')
-    print(settings.FEC_SERVICE_NOW_API)
+    print(base_url)
     print(username)
     print(password)
 
-    if settings.FEC_SERVICE_NOW_API:
+    if base_url:
         print('Fetching categories')
-        category_url = settings.FEC_SERVICE_NOW_API + 'sys_choice?table=u_rad_response&element=u_category'
+        category_url = base_url + 'sys_choice?table=u_rad_response&element=u_category'
         r = requests.get(category_url, auth=(username, password))
         print(r)
         return r.json()['result']
