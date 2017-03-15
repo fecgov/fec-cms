@@ -595,6 +595,7 @@ class ResourcePage(Page):
     category = models.CharField(max_length=255,
                                 choices=constants.report_child_categories.items(),
                                 help_text='If this is a report, add a category',
+                                blank=True,
                                 null=True)
     breadcrumb_style = models.CharField(max_length=255,
         choices=[('primary', 'Blue'), ('secondary', 'Red')],
