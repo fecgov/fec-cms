@@ -9,8 +9,6 @@ username = settings.FEC_SERVICE_NOW_USERNAME
 password = settings.FEC_SERVICE_NOW_PASSWORD
 base_url = settings.FEC_SERVICE_NOW_API
 
-print(base_url)
-
 class ContactRAD(forms.Form):
     """
     Generates a contact form for submitting questions to RAD
@@ -18,7 +16,7 @@ class ContactRAD(forms.Form):
     def __init__(self, *args, **kwargs):
         category_options = [('', 'Choose a subject')] + form_categories()
         super().__init__(*args, **kwargs)
-        print("Initializing form")
+
         self.fields['u_contact_first_name'] = forms.CharField(label='First name', max_length=100, required=True)
         self.fields['u_contact_last_name'] = forms.CharField(label='Last name', max_length=100, required=True)
         self.fields['u_contact_email'] = forms.EmailField(label='Email', max_length=100, required=True)
@@ -38,7 +36,6 @@ class ContactRAD(forms.Form):
 
         # Remove the committee name from the data
         if self.is_valid() and base_url:
-            print('Submitting to ServiceNow')
             data = self.cleaned_data
             del data['committee_name']
 
@@ -55,16 +52,9 @@ def fetch_categories():
     Returns the result of the response as JSON
     """
 
-    print('Ready to fetch categories')
-    print(base_url)
-    print(username)
-    print(password)
-
     if base_url:
-        print('Fetching categories')
         category_url = base_url + 'sys_choice?table=u_rad_response&element=u_category'
         r = requests.get(category_url, auth=(username, password))
-        print(r)
         return r.json()['result']
     else:
         return []
