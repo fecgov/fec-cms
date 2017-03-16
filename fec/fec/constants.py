@@ -201,3 +201,7 @@ report_parent_categories = OrderedDict((x, x.replace('_', ' ')) for x in report_
 report_child_categories = OrderedDict()
 for category in report_category_groups.keys():
     report_child_categories.update(report_category_groups[category])
+
+
+# Transition URL
+TRANSITION_URL = "http://cg-751bbad3-1e08-407e-b2ba-31fc7c48e33b.s3-website-us-gov-west-1.amazonaws.com"
