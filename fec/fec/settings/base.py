@@ -245,4 +245,5 @@ UAA_TOKEN_URL = 'http://localhost:8080/oauth/token'
 WAGTAIL_FRONTEND_LOGIN_URL = 'uaa_client:login'
 
 AUTHENTICATION_BACKENDS = \
-    ['uaa_client.authentication.UaaBackend']
+    ['django.contrib.auth.backends.ModelBackend',
+     'uaa_client.authentication.UaaBackend']
