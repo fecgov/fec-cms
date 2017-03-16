@@ -242,7 +242,6 @@ UAA_CLIENT_ID = env.get_credential('CLIENT_ID', 'my-client-id')
 UAA_CLIENT_SECRET = env.get_credential('CLIENT_SECRET', 'my-client-secret')
 UAA_AUTH_URL = 'http://localhost:8080/oauth/authorize'
 UAA_TOKEN_URL = 'http://localhost:8080/oauth/token'
-#LOGIN_URL = 'uaa_client:login'
 WAGTAIL_FRONTEND_LOGIN_URL = 'uaa_client:login'
 
 AUTHENTICATION_BACKENDS = \
