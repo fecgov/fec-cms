@@ -38,28 +38,14 @@
       </div>
     </div>
 
-    <div class="sidebar-container sidebar-container--left">
-      <div class="js-sticky-side" data-sticky-container="options">
-        <nav class="sidebar sidebar--neutral sidebar--left side-nav js-toc">
-          <ul class="sidebar__content">
-              {% for section in self.sections %}
-                <li class="side-nav__item"><a class="side-nav__link" href="#{{section.value.title | slugify }}">{{ section.value.title }}</a></li>
-              {% endfor %}
-              {% if citations %}
-                <li class="side-nav__item"><a class="side-nav__link" href="#legal-citations">Legal citations</a></li>
-              {% endif %}
-          </ul>
-        </nav>
-        <aside class="sidebar sidebar--secondary content__section--extra">
-          <div class="sidebar__title">
-            <span>This page is still in progress</span>
-          </div>
-          <div class="sidebar__content">
-            <p class="t-note">We're activey reorganizing our content about candidates and committees. If you can't find what you're looking for, you can try browsing this content in <a href="">its previous form</a>.</p>
-          </div>
-        </aside>
+    <div class="message message--info">
+      <h2 class="message__title">This page is still in progress</h2>
+      <div class="message__content">
+        <p class="u-no-margin">We're activey reorganizing our content about candidates and committees. If you can't find what you're looking for, you can try browsing this content in <a href="">its previous form</a>.</p>
       </div>
     </div>
+
+    {% include 'partials/section-nav.html' with sections=self.sections container='options' %}
 
     <div class="row" id="section-container">
       <div class="main__content--right">
