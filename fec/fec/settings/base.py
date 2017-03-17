@@ -240,8 +240,8 @@ if FEC_CMS_ENVIRONMENT != 'LOCAL':
 
 UAA_CLIENT_ID = env.get_credential('CLIENT_ID', 'my-client-id')
 UAA_CLIENT_SECRET = env.get_credential('CLIENT_SECRET', 'my-client-secret')
-UAA_AUTH_URL = 'http://localhost:8080/oauth/authorize'
-UAA_TOKEN_URL = 'http://localhost:8080/oauth/token'
+UAA_AUTH_URL = 'https://login.fr.cloud.gov/oauth/authorize'
+UAA_TOKEN_URL = 'https://login.fr.cloud.gov/oauth/token'
 WAGTAIL_FRONTEND_LOGIN_URL = 'uaa_client:login'
 
 AUTHENTICATION_BACKENDS = \
