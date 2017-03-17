@@ -62,6 +62,8 @@ INSTALLED_APPS = (
     'search',
     'home',
     'data_loader',
+
+    'uaa_client',
      
 )
 
@@ -188,11 +190,17 @@ FEC_CMS_ENVIRONMENT = ENVIRONMENTS.get(os.getenv('FEC_CMS_ENVIRONMENT'), 'LOCAL'
 CONTACT_EMAIL = 'betafeedback@fec.gov';
 CONSTANTS = constants
 
+# Config for the ServiceNow API for contacting RAD
+FEC_SERVICE_NOW_API = os.getenv('FEC_SERVICE_NOW_API')
+FEC_SERVICE_NOW_USERNAME = os.getenv('FEC_SERVICE_NOW_USERNAME')
+FEC_SERVICE_NOW_PASSWORD = os.getenv('FEC_SERVICE_NOW_PASSWORD')
+
 FEATURES = {
     'record': bool(env.get_credential('FEC_FEATURE_RECORD', '')),
     'about': bool(env.get_credential('FEC_FEATURE_ABOUT', '')),
     'agendas': bool(env.get_credential('FEC_FEATURE_AGENDAS', '')),
     'tips': bool(env.get_credential('FEC_FEATURE_TIPS', '')),
+    'radform': bool(env.get_credential('FEC_FEATURE_RADFORM', '')),
     'ethnio': bool(env.get_credential('FEC_FEATURE_ETHNIO', ''))
 }
 
@@ -229,3 +237,13 @@ if FEC_CMS_ENVIRONMENT != 'LOCAL':
     DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
     AWS_LOCATION = 'cms-content'
     AWS_S3_REGION_NAME = env.get_credential('CMS_AWS_DEFAULT_REGION')
+
+UAA_CLIENT_ID = env.get_credential('CLIENT_ID', 'my-client-id')
+UAA_CLIENT_SECRET = env.get_credential('CLIENT_SECRET', 'my-client-secret')
+UAA_AUTH_URL = 'http://localhost:8080/oauth/authorize'
+UAA_TOKEN_URL = 'http://localhost:8080/oauth/token'
+WAGTAIL_FRONTEND_LOGIN_URL = 'uaa_client:login'
+
+AUTHENTICATION_BACKENDS = \
+    ['django.contrib.auth.backends.ModelBackend',
+     'uaa_client.authentication.UaaBackend']

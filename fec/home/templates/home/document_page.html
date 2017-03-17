@@ -20,7 +20,7 @@
         {% spaceless %}{# for inline blocks #}
         <h1 class="heading__left">{% formatted_title self %}</h1>
         <div class="heading__right">
-          <span class="t-sans">{{ self.date|date:'F j, Y' }}</span>
+          <span class="t-sans">{{ self.display_date }}</span>
         </div>
         {% endspaceless %}
       </div>
