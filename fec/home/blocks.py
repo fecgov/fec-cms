@@ -18,7 +18,7 @@ class AsideLinkBlock(blocks.StructBlock):
     """Either a search or calendar link in a section aside"""
     link_type = blocks.ChoiceBlock(choices=[
         ('search', 'Search'),
-        ('calendar', 'Calendar')
+        ('calendar', 'Calendar'),
     ], icon='link', required=False, help_text='Set an icon')
 
     url = blocks.URLBlock()
@@ -49,8 +49,8 @@ class ContactInfoBlock(blocks.StructBlock):
     contact_items = blocks.ListBlock(ContactItemBlock())
 
     class Meta:
-        template='blocks/contact-info.html'
-        icon='placeholder'
+        template = 'blocks/contact-info.html'
+        icon = 'placeholder'
 
 class CitationsBlock(blocks.StructBlock):
     """Block for a chunk of citations that includes a label and the citation (in content)"""
@@ -147,3 +147,17 @@ class DocumentFeedBlurb(blocks.StructBlock):
     """For generating a box with a description that links to a document feed page"""
     page = blocks.PageChooserBlock()
     description = blocks.CharBlock()
+
+class ExampleParagraph(blocks.RichTextBlock):
+    class Meta:
+        template = 'blocks/example-paragraph.html'
+        icon = 'pilcrow'
+
+class ExampleForms(blocks.StructBlock):
+    """For showing one or two example documents"""
+    title = blocks.CharBlock(required=True);
+    forms = blocks.ListBlock(ThumbnailBlock())
+
+    class Meta:
+        template = 'blocks/example-forms.html'
+        icon = 'doc-empty'

@@ -24,7 +24,8 @@ from wagtail.contrib.table_block.blocks import TableBlock
 from fec import constants
 from home.blocks import (ThumbnailBlock, AsideLinkBlock, ContactInfoBlock,
                         ContactInfoBlock, CitationsBlock, ResourceBlock,
-                        OptionBlock, CollectionBlock, DocumentFeedBlurb)
+                        OptionBlock, CollectionBlock, DocumentFeedBlurb,
+                        ExampleParagraph, ExampleForms)
 
 stream_factory = functools.partial(
     StreamField,
@@ -34,6 +35,8 @@ stream_factory = functools.partial(
         ('html', blocks.RawHTMLBlock()),
         ('image', ImageChooserBlock()),
         ('table', TableBlock()),
+        ('example_paragraph', ExampleParagraph()),
+        ('example_forms', ExampleForms())
     ],
 )
 
@@ -375,12 +378,25 @@ class CustomPage(Page):
     date = models.DateField('Post date')
     body = stream_factory()
     sidebar = stream_factory(null=True, blank=True)
+    citations = StreamField([('citations', blocks.ListBlock(CitationsBlock()))],
+                    null=True)
+    record_articles = StreamField([
+        ('record_articles', blocks.ListBlock(
+            blocks.PageChooserBlock(target_model=RecordPage)
+        ))
+    ], null=True)
+    continue_learning = StreamField([
+        ('continue_learning', blocks.ListBlock(ThumbnailBlock(), icon='doc-empty')),
+    ], null=True)
 
     content_panels = Page.content_panels + [
         FieldPanel('author'),
         FieldPanel('date'),
         StreamFieldPanel('body'),
         StreamFieldPanel('sidebar'),
+        StreamFieldPanel('citations'),
+        StreamFieldPanel('record_articles'),
+        StreamFieldPanel('continue_learning')
     ]
 
 class PressLandingPage(Page):
