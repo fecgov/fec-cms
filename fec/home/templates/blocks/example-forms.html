@@ -2,15 +2,13 @@
 {% load wagtailimages_tags %}
 
 <p class="t-sans t-upper">{{ self.title }}</p>
-<div class="grid grid--2-wide t-example-paragraph ">
+<div class="row example">
   {% for block in self.forms %}
-  <div class="grid__item document-thumbnail">
-    <a class="document-thumbnail__img" href="{{ block.url }}">
+  <div class="usa-width-one-half">
+    <a class="example__thumbnail" href="{{ block.url }}">
       {% image block.image width-200 %}
     </a>
-    <span class="document-thumbnail__description">
-      <a href="{{ block.url }}">{{ block.text }}</a>
-    </span>
+    <span class="t-block"><a href="{{ block.url }}">{{ block.text }}</a></span>
   </div>
   {% endfor %}
 </div>

@@ -35,8 +35,6 @@ stream_factory = functools.partial(
         ('html', blocks.RawHTMLBlock()),
         ('image', ImageChooserBlock()),
         ('table', TableBlock()),
-        ('example_paragraph', ExampleParagraph()),
-        ('example_forms', ExampleForms())
     ],
 )
 
@@ -376,7 +374,15 @@ class CustomPage(Page):
     """Flexible customizable page."""
     author = models.CharField(max_length=255)
     date = models.DateField('Post date')
-    body = stream_factory()
+    body = StreamField([
+        ('heading', blocks.CharBlock(classname='full title')),
+        ('paragraph', blocks.RichTextBlock()),
+        ('html', blocks.RawHTMLBlock()),
+        ('image', ImageChooserBlock()),
+        ('table', TableBlock()),
+        ('example_paragraph', ExampleParagraph()),
+        ('example_forms', ExampleForms())
+    ])
     sidebar = stream_factory(null=True, blank=True)
     citations = StreamField([('citations', blocks.ListBlock(CitationsBlock()))],
                     null=True)
@@ -393,10 +399,15 @@ class CustomPage(Page):
         FieldPanel('author'),
         FieldPanel('date'),
         StreamFieldPanel('body'),
-        StreamFieldPanel('sidebar'),
         StreamFieldPanel('citations'),
-        StreamFieldPanel('record_articles'),
         StreamFieldPanel('continue_learning')
+        MultiFieldPanel([
+                StreamFieldPanel('sidebar'),
+                StreamFieldPanel('record_articles'),
+            ],
+            heading = "Sidebar",
+            classname = "collapsible"
+        ),
     ]
 
 class PressLandingPage(Page):

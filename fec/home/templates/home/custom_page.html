@@ -33,8 +33,8 @@
         {% endif %}
 
         {% if self.record_articles %}
-          <div class="option__aside__block">
-            <h4 class="label"><i class="icon-circle--updates--inline--left"></i>From the FEC Record</h4>
+          <div class="sidebar__related-links">
+            <h4 class="label sidebar__record-title">From the FEC Record</h4>
             {{ self.record_articles }}
           </div>
         {% endif %}
@@ -56,7 +56,7 @@
       </div>
     </div>
     {% if self.citations %}
-      <aside id="legal-citations" class="sidebar sidebar--primary">
+      <aside id="legal-citations" class="sidebar sidebar--secondary">
         <h4 class="sidebar__title">Legal citations</h4>
         <div class="sidebar__content">
           <div class="grid grid--2-wide">
