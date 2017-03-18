@@ -400,14 +400,14 @@ class CustomPage(Page):
         FieldPanel('date'),
         StreamFieldPanel('body'),
         StreamFieldPanel('citations'),
-        StreamFieldPanel('continue_learning')
+        StreamFieldPanel('continue_learning'),
         MultiFieldPanel([
                 StreamFieldPanel('sidebar'),
                 StreamFieldPanel('record_articles'),
             ],
             heading = "Sidebar",
             classname = "collapsible"
-        ),
+        )
     ]
 
 class PressLandingPage(Page):
