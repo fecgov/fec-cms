@@ -22,7 +22,7 @@ class ContactRAD(forms.Form):
         self.fields['u_contact_email'] = forms.EmailField(label='Email', required=True)
         self.fields['committee_name'] = forms.CharField(label='Committee name or ID', required=True, widget=forms.TextInput(attrs={'class': 'js-contact-typeahead'}))
         self.fields['u_committee'] = forms.CharField(widget=forms.HiddenInput())
-        self.fields['u_contact_title'] = forms.CharField(label='Your position or title', max_length=100, required=False)
+        self.fields['u_contact_title'] = forms.CharField(label='Your position or title', required=False)
         self.fields['u_category'] = forms.ChoiceField(label='Subject', choices=category_options, required=True)
         self.fields['u_other_reason'] = forms.CharField(label='Subject', required=False)
         self.fields['u_description'] = forms.CharField(label='Question', widget=forms.Textarea, required=True)
