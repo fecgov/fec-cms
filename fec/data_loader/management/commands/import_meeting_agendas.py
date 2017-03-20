@@ -48,15 +48,15 @@ class Command(ImporterMixin, BaseCommand):
 
     def _delete_existing_records(self, options: Dict[str, Any]) -> None:
         if options['delete_existing']:
-            self._log_warning('Deleting existing records...')
+            self._log('Deleting existing records...')
             self.delete_existing_records(AgendaPage, **options)
 
     @staticmethod
     def _open_json_file(options: Dict[str, Any]) -> TextIOWrapper:
         return open(options['json_file_path'], 'r')
 
-    def _log_warning(self, message: Any) -> None:
-        self.stdout.write(self.style.WARNING(repr(message)))
+    def _log(self, message: Any) -> None:
+        self.stdout.write(repr(message))
 
     @staticmethod
     def _parent_page(options: Dict[str, Any]) -> Page:
@@ -95,7 +95,8 @@ class Command(ImporterMixin, BaseCommand):
             # mtg_time doesn't appear to be in the json.
         )
         parent_page.add_child(instance=new_page)
-        # TODO: set date attribute here like import_report_documents.py?
+        # TODO: Do I need to set the date attribute here like import_report_documents.py?
+        self._log(new_page)
         new_page.save()
 
     @staticmethod
