@@ -147,16 +147,13 @@ class CustomTableBlock(blocks.StructBlock):
     """A custom table"""
     custom_table_options = {
     'minSpareRows': 0,
-    'startRows': 4,
+    'startRows': 6,
     'startCols': 6,
     'colHeaders': True,
     'rowHeaders': True,
-    'contextMenu': True,
-    'editor': 'text',
-    'stretchH': 'all',
     'height': 108,
     'language': 'en',
-    'renderer': 'text',
+    'manualColumnResize': True
     }
     
     custom_table = blocks.StreamBlock([
