@@ -238,8 +238,8 @@ if FEC_CMS_ENVIRONMENT != 'LOCAL':
     AWS_LOCATION = 'cms-content'
     AWS_S3_REGION_NAME = env.get_credential('CMS_AWS_DEFAULT_REGION')
 
-UAA_CLIENT_ID = env.get_credential('CLIENT_ID', 'my-client-id')
-UAA_CLIENT_SECRET = env.get_credential('CLIENT_SECRET', 'my-client-secret')
+UAA_CLIENT_ID = env.get_credential('CMS_LOGIN_CLIENT_ID', 'my-client-id')
+UAA_CLIENT_SECRET = env.get_credential('CMS_LOGIN_CLIENT_SECRET', 'my-client-secret')
 UAA_AUTH_URL = 'https://login.fr.cloud.gov/oauth/authorize'
 UAA_TOKEN_URL = 'https://login.fr.cloud.gov/oauth/token'
 WAGTAIL_FRONTEND_LOGIN_URL = 'uaa_client:login'
