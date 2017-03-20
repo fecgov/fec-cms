@@ -32,6 +32,9 @@ var FormNav = require('./form-nav').FormNav;
 var legal = require('./legal');
 var upcomingEvents = require('./upcoming-events');
 
+// accessible tabs for alt sidebar
+require('./vendor/tablist').init();
+
 $(document).ready(function() {
 
   // Initialize glossary

@@ -140,6 +140,104 @@
       </div>
     </div>
   </section>
+
+  <section id="homepage-candidate-and-committee" class="slab u-visually-hidden">
+    <div class="container">
+      <h1 class="u-padding--bottom"><a>Candidate and committee support</a></h1>
+
+      <nav class="sidebar side-nav-alt">
+        <ul class="tablist" role="tablist" data-name="tab">
+          <li class="side-nav__item" role="presentation">
+            <a class="side-nav__link"
+                role="tab"
+                data-name="candidate-and-authorized-committees"
+                tabindex="0"
+                aria-controls="panel1"
+                href="#homepage-candidate-committee-section-1"
+                aria-selected="true">Candidates and their authorized committees</a>
+          </li>
+          <li class="side-nav__item" role="presentation">
+            <a class="side-nav__link"
+                role="tab"
+                data-name="corporations-and-labor-organizations"
+                tabindex="1"
+                aria-controls="panel2"
+                href="#homepage-candidate-committee-section-2">Corporations and labor organizations</a>
+          </li>
+          <li class="side-nav__item" role="presentation">
+            <a class="side-nav__link"
+                role="tab"
+                data-name="political-action-committees"
+                tabindex="2"
+                aria-controls="panel3"
+                href="#homepage-candidate-committee-section-3">Political action committees (PACs)</a>
+          </li>
+          <li class="side-nav__item" role="presentation">
+            <a class="side-nav__link"
+                role="tab"
+                data-name="political-party-committees"
+                tabindex="3"
+                aria-controls="panel4"
+                href="#homepage-candidate-committee-section-4">Political party committees</a>
+          </li>
+        </ul>
+      </nav>
+
+      <div class="main__content--right-full">
+
+        <section id="homepage-candidate-committee-section-1" role="tabpanel" aria-hidden="true" aria-labelledby="homepage-candidate-committee-1-heading">
+          <h2 id="homepage-candidate-committee-1-heading">Candidates and their authorized committees</h2>
+
+          <div class="grid grid--2-wide u-no-padding list--spacious">
+            <div class="grid__item">
+              <ul>
+                <li>
+                  <a>Registering as a candidate or authorized commitee »</a>
+                </li>
+                <li>
+                  <a>Taking in receipts »</a>
+                </li>
+                <li>
+                  <a>Making disbursements »</a>
+                </li>
+              </ul>
+            </div>
+            <div class="grid__item">
+              <ul>
+                <li>
+                  <a>Handling loans, debts and advances »</a>
+                </li>
+                <li>
+                  <a>Keeping records »</a>
+                </li>
+                <li>
+                  <a>Filing reports »</a>
+                </li>
+                <li>
+                  <a>Winding down a campaign »</a>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </section>
+
+        <section id="homepage-candidate-committee-section-2" role="tabpanel" aria-hidden="true" aria-labelledby="homepage-candidate-committee-2-heading">
+          <h2 id="homepage-candidate-committee-2-heading">Corporations and labor organizations</h2>
+        </section>
+
+        <section id="homepage-candidate-committee-section-3" role="tabpanel" aria-hidden="true" aria-labelledby="homepage-candidate-committee-3-heading">
+          <h2 id="homepage-candidate-committee-2-heading">Political action committees (PACs)</h2>
+        </section>
+
+        <section id="homepage-candidate-committee-section-4" role="tabpanel" aria-hidden="true" aria-labelledby="homepage-candidate-committee-4-heading">
+          <h2 id="homepage-candidate-committee-2-heading">Political party committees</h2>
+        </section>
+
+      </div>
+
+    </div>
+  </section>
+
   <section class="slab slab--home slab--neutral">
     <div class="container">
       <h2 class="heading--section">Citizen information</h2>
@@ -321,3 +419,14 @@
   </section>
 
 {% endblock %}
+
+{% block extra_js %}
+  <script>
+    var urlParams = new URLSearchParams(window.location.search);
+    // ?show_panel=candidate_committee to replace Registration and Reporting panel with Candidate and Committee
+    if (urlParams.get('show_panel') === 'candidate_committee') {
+      $('#homepage-registration-and-reporting').hide();
+      $('#homepage-candidate-and-committee').removeClass('u-visually-hidden');
+    }
+  </script>
+{% endblock extra_js %}
