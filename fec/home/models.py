@@ -431,7 +431,7 @@ class DocumentPage(ContentPage):
         return self.file_url.rsplit('.', 1)[1].upper()
 
 class DocumentFeedPage(ContentPage):
-    subpage_types = ['DocumentPage']
+    subpage_types = ['DocumentPage', 'ResourcePage']
     intro = StreamField([
         ('paragraph', blocks.RichTextBlock())
     ], null=True)
@@ -577,6 +577,7 @@ class CollectionPage(Page):
 
 class ResourcePage(Page):
     """Class for pages that include a side nav, multiple sections and citations"""
+    date = models.DateField(default=datetime.date.today)
     intro = StreamField([
         ('paragraph', blocks.RichTextBlock())
     ], null=True)
@@ -591,7 +592,11 @@ class ResourcePage(Page):
             blocks.PageChooserBlock(label="Related topic")
         ))
     ], null=True)
-
+    category = models.CharField(max_length=255,
+                                choices=constants.report_child_categories.items(),
+                                help_text='If this is a report, add a category',
+                                blank=True,
+                                null=True)
     breadcrumb_style = models.CharField(max_length=255,
         choices=[('primary', 'Blue'), ('secondary', 'Red')],
         default='primary')
@@ -605,7 +610,13 @@ class ResourcePage(Page):
 
     promote_panels = Page.promote_panels + [
         FieldPanel('breadcrumb_style'),
+        FieldPanel('category'),
+        FieldPanel('date')
     ]
+
+    @property
+    def display_date(self):
+        return self.date.strftime('%B %Y')
 
 class LegalResourcesLandingPage(ContentPage, UniqueModel):
     subpage_types = ['ResourcePage', 'EnforcementPage']
