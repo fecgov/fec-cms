@@ -15,23 +15,99 @@
 
 <div>
   <div id="options" class="container main">
-    <div class="row">
-      <div class="main__content">
-        {{self.intro}}
+    <div class="grid grid--2-wide">
+      <div class="grid__item grid__item--no-margin card card--wide">
+        <div class="card__image__container card__image__container--secondary">
+          <img class="card__image icon--complex" src="{% static 'img/i-calendar-circle.svg' %}" alt="Icon of a calendar">
+          <h2 class="card__title"><a href="{{ self.url }}dates-and-deadlines">Dates and deadlines</a></h2>
+        </div>
+        <div class="card__content">
+          <h2 class="card__title"><a href="{{ self.url }}dates-and-deadlines">Dates and deadlines</a></h2>
+          <span>Nullam quis risus eget urna mollis ornare vel eu leo.</span>
+        </div>
       </div>
-      <aside class="sidebar-container">
-        <i class="icon-circle--search ">
-          <span class="u-visually-hidden">Icon of a magnifying glass</span>
-        </i>
-        <a href="{{ settings.FEC_APP_URL }}">Find an existing candidate or committee</a>
-      </aside>
+      <div class="grid__item grid__item--no-margin card card--wide">
+        <div class="card__image__container card__image__container--secondary">
+          <img class="card__image icon--complex" src="{% static 'img/i-document-circle.svg' %}" alt="Icon of a document">
+          <h2 class="card__title"><a href="{{ self.url }}forms">Forms</a></h2>
+        </div>
+        <div class="card__content">
+          <h2 class="card__title"><a href="{{ self.url }}forms">Forms</a></h2>
+          <span>Nullam quis risus eget urna mollis ornare vel eu leo.</span>
+        </div>
+      </div>
     </div>
 
-    {% include 'partials/section-nav.html' with sections=self.sections container='options' %}
+    <div class="sidebar-container sidebar-container--left">
+      <div class="js-sticky-side" data-sticky-container="options">
+        <nav class="sidebar sidebar--neutral sidebar--left side-nav js-toc">
+          <ul class="sidebar__content">
+              {% for section in self.sections %}
+                <li class="side-nav__item"><a class="side-nav__link" href="#{{section.value.title | slugify }}">{{ section.value.title }}</a></li>
+              {% endfor %}
+              {% if citations %}
+                <li class="side-nav__item"><a class="side-nav__link" href="#legal-citations">Legal citations</a></li>
+              {% endif %}
+          </ul>
+        </nav>
+        <aside class="sidebar sidebar--secondary content__section--extra">
+          <div class="sidebar__title">
+            <span>This page is still in progress</span>
+          </div>
+          <div class="sidebar__content">
+            <p class="t-note">We're activey reorganizing our content about candidates and committees. If you can't find what you're looking for, you can try browsing this content in
+              <a href="{{ settings.CONSTANTS.TRANSITION_URL }}/info/compliance.shtml">its previous form</a>.
+            </p>
+          </div>
+        </aside>
+      </div>
+    </div>
 
     <div class="row" id="section-container">
       <div class="main__content--right">
         {{ self.sections }}
+      </div>
+    </div>
+  </div>
+  <div class="slab slab--neutral">
+    <div class="container">
+      <div class="grid grid--4-wide">
+        <div class="grid__item">
+          <a href="{{ self.url }}question-rad">
+            <aside class="card card--horizontal card--secondary">
+              <div class="card__image__container">
+                  <span class="card__icon i-question-bubble"><span class="u-visually-hidden">Icon representing a question</span></span>
+              </div>
+              <div class="card__content">
+                Submit a question to the Reports Analysis Division
+              </div>
+            </aside>
+          </a>
+        </div>
+        <div class="grid__item">
+          <a href="">
+            <aside class="card card--horizontal card--secondary">
+              <div class="card__image__container">
+                <span class="card__icon i-training"><span class="u-visually-hidden">Icon of a training screen</span></span>
+              </div>
+              <div class="card__content">
+                  Sign up for a training
+              </div>
+            </aside>
+          </a>
+        </div>
+        <div class="grid__item">
+          <a href="{{ settings.FEC_APP_URL }}">
+            <aside class="card card--horizontal card--primary">
+              <div class="card__image__container">
+                <span class="card__icon i-folder-with-person"><span class="u-visually-hidden">Icon of a candidate</span></span>
+              </div>
+              <div class="card__content">
+                  Find a candidate or committee
+              </div>
+            </aside>
+          </a>
+        </div>
       </div>
     </div>
   </div>

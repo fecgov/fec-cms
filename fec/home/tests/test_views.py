@@ -7,7 +7,7 @@ class TestViews(TestCase):
     self.client = Client()
 
   def test_rad_form(self):
-    resp = self.client.get('/registration-and-reporting/question-RAD/')
+    resp = self.client.get('/candidate-and-committee-services/question-rad/')
     self.assertEqual(resp.status_code, 200)
     self.assertTemplateUsed(resp, 'home/contact-form.html')
     self.assertEqual(resp.context['self']['content_section'], 'registration-and-reporting')
