@@ -1,0 +1,23 @@
+{% load wagtailcore_tags %}
+<div class="content__section--extra custom_table">
+{% for block in self.custom_table %}
+
+  {% if block.block_type == "title" %}
+    <h4>{{ block }}</h4>
+  
+  {% elif block.block_type == "table" %}
+    {{ block }}
+    
+  {% elif block.block_type == "table_intro" %}
+     {{ block.value }}
+     
+  
+  {% elif block.block_type == "footnote" %}
+    <div class="t-sans custom_footnote">{{ block }}</div>
+  
+ {% endif %}
+ 
+{% endfor %}  
+ 
+</div>
+
