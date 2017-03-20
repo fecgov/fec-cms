@@ -9,7 +9,7 @@ class Migration(migrations.Migration):
 
     dependencies = [
         ('home', '0067_documentpage_year_only'),
-        ('home', '0067_agendapage'),
+     
     ]
 
     operations = [
