@@ -12,7 +12,7 @@ def get_documents(page, year='', category=''):
     documents = DocumentPage.objects.child_of(page).live().order_by('-date')
 
     if year:
-      documents = documents.filter(date__year=year)
+        documents = documents.filter(date__year=year)
 
     if category:
         documents = documents.filter(category=category)
