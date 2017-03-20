@@ -17,15 +17,15 @@ class ContactRAD(forms.Form):
         category_options = [('', 'Choose a subject')] + form_categories()
         super().__init__(*args, **kwargs)
 
-        self.fields['u_contact_first_name'] = forms.CharField(label='First name', max_length=100, required=True)
-        self.fields['u_contact_last_name'] = forms.CharField(label='Last name', max_length=100, required=True)
-        self.fields['u_contact_email'] = forms.EmailField(label='Email', max_length=100, required=True)
+        self.fields['u_contact_first_name'] = forms.CharField(label='First name', required=True)
+        self.fields['u_contact_last_name'] = forms.CharField(label='Last name', required=True)
+        self.fields['u_contact_email'] = forms.EmailField(label='Email', required=True)
         self.fields['committee_name'] = forms.CharField(label='Committee name or ID', required=True, widget=forms.TextInput(attrs={'class': 'js-contact-typeahead'}))
         self.fields['u_committee'] = forms.CharField(widget=forms.HiddenInput())
         self.fields['u_contact_title'] = forms.CharField(label='Your position or title', max_length=100, required=False)
         self.fields['u_category'] = forms.ChoiceField(label='Subject', choices=category_options, required=True)
-        self.fields['u_other_reason'] = forms.CharField(label='Subject', max_length=100, required=False)
-        self.fields['u_description'] = forms.CharField(label='Question', max_length=100, widget=forms.Textarea, required=True)
+        self.fields['u_other_reason'] = forms.CharField(label='Subject', required=False)
+        self.fields['u_description'] = forms.CharField(label='Question', widget=forms.Textarea, required=True)
         self.fields['u_committee_member_certification'] = forms.BooleanField(label='I agree', required=True)
 
     def post_to_service_now(self):
