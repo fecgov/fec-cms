@@ -7,6 +7,7 @@ from django.conf import settings
 # ServiceNow credentials
 username = settings.FEC_SERVICE_NOW_USERNAME
 password = settings.FEC_SERVICE_NOW_PASSWORD
+base_url = settings.FEC_SERVICE_NOW_API
 
 class ContactRAD(forms.Form):
     """
@@ -34,12 +35,12 @@ class ContactRAD(forms.Form):
         """
 
         # Remove the committee name from the data
-        if self.is_valid() and settings.FEC_SERVICE_NOW_API:
+        if self.is_valid() and base_url:
             data = self.cleaned_data
             del data['committee_name']
 
             # Post to ServiceNow
-            post_url = settings.FEC_SERVICE_NOW_API + 'u_imp_rad_response'
+            post_url = base_url + 'u_imp_rad_response'
             post = requests.post(post_url, data=json.dumps(data), auth=(username, password))
             return post.status_code
 
@@ -50,8 +51,9 @@ def fetch_categories():
     that the form ultimately submits to.
     Returns the result of the response as JSON
     """
-    if settings.FEC_SERVICE_NOW_API:
-        category_url = settings.FEC_SERVICE_NOW_API + 'sys_choice?table=u_rad_response&element=u_category'
+
+    if base_url:
+        category_url = base_url + 'sys_choice?table=u_rad_response&element=u_category'
         r = requests.get(category_url, auth=(username, password))
         return r.json()['result']
     else:
