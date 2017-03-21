@@ -97,7 +97,6 @@ class Command(ImporterMixin, BaseCommand):
         parent_page.add_child(instance=new_page)
         # TODO: Do I need to set the date attribute here like import_report_documents.py?
         self._log(new_page)
-        new_page.save()
 
     @staticmethod
     def _with_tz(a_date):
