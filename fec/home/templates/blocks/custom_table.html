@@ -6,14 +6,11 @@
   {% if block.block_type == "title" %}
     <h4>{{ block }}</h4>
   
-  {% elif block.block_type == "table" %}
-    {{ block }}
-    
-  {% elif block.block_type == "table_intro" %}
+  {% elif block.block_type == "table" or block.block_type == "table_intro" %}
      {{ block }}
      
   {% elif block.block_type == "footnote" %}
-    <div class="t-sans custom_footnote">{{ block }}</div>
+    <div class="t-note custom_footnote">{{ block }}</div>
   
  {% endif %}
  
