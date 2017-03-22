@@ -65,7 +65,7 @@ function UpcomingDeadlines() {
       eventSummary = upcomingDeadline.summary;
     }
 
-    $('.js-homepage-upcoming-deadlines').append(
+    $('.js-homepage-upcoming-deadlines p').html(
         startDateMonth + ' ' + startDateDay + ':' +
         '<br>' + eventSummary
     );
