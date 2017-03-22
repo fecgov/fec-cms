@@ -640,11 +640,13 @@ class ServicesLandingPage(ContentPage, UniqueModel):
 class AgendaPage(Page):
     mtg_date  = models.DateTimeField(default=datetime.date.today)
     mtg_time  = models.TimeField(default=datetime.time(10, 00))
+
     mtg_media = StreamField([
         ('full_video_url', blocks.TextBlock()),
         ('full_audio', DocumentChooserBlock(required=False)),
         ('mtg_transcript', DocumentChooserBlock(required=False))
     ])
+
     agenda = StreamField([
         ('agenda_item', blocks.StreamBlock([
             ('item_title', blocks.TextBlock()),
