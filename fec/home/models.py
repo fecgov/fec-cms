@@ -24,7 +24,8 @@ from wagtail.contrib.table_block.blocks import TableBlock
 from fec import constants
 from home.blocks import (ThumbnailBlock, AsideLinkBlock, ContactInfoBlock,
                         ContactInfoBlock, CitationsBlock, ResourceBlock,
-                        OptionBlock, CollectionBlock, DocumentFeedBlurb)
+                        OptionBlock, CollectionBlock, DocumentFeedBlurb,
+                        ExampleParagraph, ExampleForms)
 
 stream_factory = functools.partial(
     StreamField,
@@ -373,14 +374,40 @@ class CustomPage(Page):
     """Flexible customizable page."""
     author = models.CharField(max_length=255)
     date = models.DateField('Post date')
-    body = stream_factory()
+    body = StreamField([
+        ('heading', blocks.CharBlock(classname='full title')),
+        ('paragraph', blocks.RichTextBlock()),
+        ('html', blocks.RawHTMLBlock()),
+        ('image', ImageChooserBlock()),
+        ('table', TableBlock()),
+        ('example_paragraph', ExampleParagraph()),
+        ('example_forms', ExampleForms())
+    ])
     sidebar = stream_factory(null=True, blank=True)
+    citations = StreamField([('citations', blocks.ListBlock(CitationsBlock()))],
+                    null=True)
+    record_articles = StreamField([
+        ('record_articles', blocks.ListBlock(
+            blocks.PageChooserBlock(target_model=RecordPage)
+        ))
+    ], null=True)
+    continue_learning = StreamField([
+        ('continue_learning', blocks.ListBlock(ThumbnailBlock(), icon='doc-empty')),
+    ], null=True)
 
     content_panels = Page.content_panels + [
         FieldPanel('author'),
         FieldPanel('date'),
         StreamFieldPanel('body'),
-        StreamFieldPanel('sidebar'),
+        StreamFieldPanel('citations'),
+        StreamFieldPanel('continue_learning'),
+        MultiFieldPanel([
+                StreamFieldPanel('sidebar'),
+                StreamFieldPanel('record_articles'),
+            ],
+            heading = "Sidebar",
+            classname = "collapsible"
+        )
     ]
 
 class PressLandingPage(Page):
@@ -404,6 +431,7 @@ class PressLandingPage(Page):
 
 class DocumentPage(ContentPage):
     date = models.DateField(default=datetime.date.today)
+    year_only = models.BooleanField(default=False)
     file_url = models.URLField(blank=True)
     size = models.CharField(max_length=255, blank=True, null=True)
     category = models.CharField(max_length=255,
@@ -416,8 +444,21 @@ class DocumentPage(ContentPage):
         StreamFieldPanel('body')
     ]
 
+    @property
+    def display_date(self):
+    # Some documents should only show the year, other show the month and year
+        if self.year_only:
+            return self.date.year
+        else:
+            return self.date.strftime('%B %Y')
+
+    @property
+    def extension(self):
+    # Return the file extension of file_url
+        return self.file_url.rsplit('.', 1)[1].upper()
+
 class DocumentFeedPage(ContentPage):
-    subpage_types = ['DocumentPage']
+    subpage_types = ['DocumentPage', 'ResourcePage']
     intro = StreamField([
         ('paragraph', blocks.RichTextBlock())
     ], null=True)
@@ -563,6 +604,7 @@ class CollectionPage(Page):
 
 class ResourcePage(Page):
     """Class for pages that include a side nav, multiple sections and citations"""
+    date = models.DateField(default=datetime.date.today)
     intro = StreamField([
         ('paragraph', blocks.RichTextBlock())
     ], null=True)
@@ -577,7 +619,11 @@ class ResourcePage(Page):
             blocks.PageChooserBlock(label="Related topic")
         ))
     ], null=True)
-
+    category = models.CharField(max_length=255,
+                                choices=constants.report_child_categories.items(),
+                                help_text='If this is a report, add a category',
+                                blank=True,
+                                null=True)
     breadcrumb_style = models.CharField(max_length=255,
         choices=[('primary', 'Blue'), ('secondary', 'Red')],
         default='primary')
@@ -591,7 +637,13 @@ class ResourcePage(Page):
 
     promote_panels = Page.promote_panels + [
         FieldPanel('breadcrumb_style'),
+        FieldPanel('category'),
+        FieldPanel('date')
     ]
+
+    @property
+    def display_date(self):
+        return self.date.strftime('%B %Y')
 
 class LegalResourcesLandingPage(ContentPage, UniqueModel):
     subpage_types = ['ResourcePage', 'EnforcementPage']

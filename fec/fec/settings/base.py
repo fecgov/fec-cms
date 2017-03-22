@@ -62,7 +62,7 @@ INSTALLED_APPS = (
     'search',
     'home',
     'data_loader',
-     
+
 )
 
 MIDDLEWARE_CLASSES = (
@@ -188,11 +188,17 @@ FEC_CMS_ENVIRONMENT = ENVIRONMENTS.get(os.getenv('FEC_CMS_ENVIRONMENT'), 'LOCAL'
 CONTACT_EMAIL = 'betafeedback@fec.gov';
 CONSTANTS = constants
 
+# Config for the ServiceNow API for contacting RAD
+FEC_SERVICE_NOW_API = env.get_credential('FEC_SERVICE_NOW_API')
+FEC_SERVICE_NOW_USERNAME = env.get_credential('FEC_SERVICE_NOW_USERNAME')
+FEC_SERVICE_NOW_PASSWORD = env.get_credential('FEC_SERVICE_NOW_PASSWORD')
+
 FEATURES = {
     'record': bool(env.get_credential('FEC_FEATURE_RECORD', '')),
     'about': bool(env.get_credential('FEC_FEATURE_ABOUT', '')),
     'agendas': bool(env.get_credential('FEC_FEATURE_AGENDAS', '')),
     'tips': bool(env.get_credential('FEC_FEATURE_TIPS', '')),
+    'radform': bool(env.get_credential('FEC_FEATURE_RADFORM', '')),
     'ethnio': bool(env.get_credential('FEC_FEATURE_ETHNIO', ''))
 }
 

@@ -81,6 +81,7 @@ class Command(ImporterMixin, BaseCommand):
             # Make datetime timezone aware to get rid of warnings
             publish_date = timezone.make_aware(dt_unaware, timezone.get_current_timezone())
             size = item['size'] if 'size' in item else None
+            year_only = item['year_only'] if 'year_only' in item else False
             category = self.validate_category(
                 item.get('category', DEFAULT_CATEGORY),
                 DEFAULT_CATEGORY,
@@ -94,6 +95,7 @@ class Command(ImporterMixin, BaseCommand):
                 file_url=item['url'],
                 size=size,
                 category=category,
+                year_only=year_only,
                 live=1,
                 has_unpublished_changes='0',
                 url_path=url_path,
