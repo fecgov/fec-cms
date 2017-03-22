@@ -86,8 +86,13 @@ $(document).ready(function() {
     new dropdown.Dropdown(this);
   });
 
-  // Homepage - What's Happening section
+  /* Homepage Upcoming Events */
+
+  // - What's Happening section
   new upcomingEvents.UpcomingEvents();
+
+  // - Candidate and committee support
+  new upcomingEvents.UpcomingDeadlines();
 
   // Initialize feedback widget
   var feedbackWidget = new feedback.Feedback(window.FEC_APP_URL + '/issue/');

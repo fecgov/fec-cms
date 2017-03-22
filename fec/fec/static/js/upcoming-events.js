@@ -4,19 +4,18 @@ var $ = require('jquery');
 var calendarHelpers = require('./calendar-helpers');
 var moment = require('moment');
 
+var today = new Date();
+var day = today.getDate();
+var month = today.getMonth() + 1;
+var year = today.getFullYear();
+var todaysDate = year + '-' + month + '-' + day;
+
 function UpcomingEvents() {
-
-  // set variable to today's date for homepage upcoming event filtering
-  var today = new Date();
-  var day = today.getDate();
-  var month = today.getMonth() + 1;
-  var year = today.getFullYear();
-  var date = year + '-' + month + '-' + day;
-
   var url = calendarHelpers.getUrl('calendar-dates',
     { 'sort': 'start_date',
-      'min_start_date': date,
-      'category': ['report-M', 'report-Q', 'Open+Meetings', 'Executive+Sessions', 'Public+Hearings', 'Conferences', 'Roundtables']});
+      'min_start_date': todaysDate,
+      'category': ['report-M', 'report-Q', 'Open+Meetings', 'Executive+Sessions', 'Public+Hearings', 'Conferences', 'Roundtables']
+    });
 
   $.getJSON(url).done(function(events) {
 
@@ -36,10 +35,44 @@ function UpcomingEvents() {
       $('.js-homepage-upcoming-events').append(
           '<li class="grid__item t-sans"><span class="t-bold">' +
             startDateMonth + ' ' + startDateDay +
-          '</span>: ' + eventSummary + '</li>');
+          '</span>: ' + eventSummary + '</li>'
+      );
+
       return i < 3;
     });
   });
 }
 
-module.exports = {UpcomingEvents: UpcomingEvents};
+function UpcomingDeadlines() {
+  var url = calendarHelpers.getUrl('calendar-dates',
+    { 'sort': 'start_date',
+      'min_start_date': todaysDate,
+      'category': ['report-M', 'report-Q', 'report-E']
+    });
+
+  $.getJSON(url).done(function(events) {
+    var upcomingDeadline = events.results[0];
+
+    var startDate = moment(upcomingDeadline.start_date);
+    var startDateMonth = startDate.format('MMMM');
+    var startDateDay = startDate.format('D');
+    var eventSummary = '';
+
+    if (upcomingDeadline.url) {
+      eventSummary = '<a href="' + upcomingDeadline.url + '">' + upcomingDeadline.summary + '</a>';
+    }
+    else {
+      eventSummary = upcomingDeadline.summary;
+    }
+
+    $('.js-homepage-upcoming-deadlines').append(
+        startDateMonth + ' ' + startDateDay + ':' +
+        '<br>' + eventSummary
+    );
+  });
+}
+
+module.exports = {
+  UpcomingEvents: UpcomingEvents,
+  UpcomingDeadlines: UpcomingDeadlines
+};

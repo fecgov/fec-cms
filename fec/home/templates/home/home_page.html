@@ -141,51 +141,53 @@
     </div>
   </section>
 
-  <section id="homepage-candidate-and-committee" class="slab u-visually-hidden">
+  <section id="homepage-candidate-and-committee" class="slab tab-interface u-visually-hidden">
     <div class="container">
       <h1 class="u-padding--bottom"><a>Candidate and committee support</a></h1>
 
-      <nav class="sidebar side-nav-alt">
-        <ul class="tablist" role="tablist" data-name="tab">
-          <li class="side-nav__item" role="presentation">
-            <a class="side-nav__link"
-                role="tab"
-                data-name="candidate-and-authorized-committees"
-                tabindex="0"
-                aria-controls="panel1"
-                href="#homepage-candidate-committee-section-1"
-                aria-selected="true">Candidates and their authorized committees</a>
-          </li>
-          <li class="side-nav__item" role="presentation">
-            <a class="side-nav__link"
-                role="tab"
-                data-name="corporations-and-labor-organizations"
-                tabindex="1"
-                aria-controls="panel2"
-                href="#homepage-candidate-committee-section-2">Corporations and labor organizations</a>
-          </li>
-          <li class="side-nav__item" role="presentation">
-            <a class="side-nav__link"
-                role="tab"
-                data-name="political-action-committees"
-                tabindex="2"
-                aria-controls="panel3"
-                href="#homepage-candidate-committee-section-3">Political action committees (PACs)</a>
-          </li>
-          <li class="side-nav__item" role="presentation">
-            <a class="side-nav__link"
-                role="tab"
-                data-name="political-party-committees"
-                tabindex="3"
-                aria-controls="panel4"
-                href="#homepage-candidate-committee-section-4">Political party committees</a>
-          </li>
-        </ul>
-      </nav>
+      <div class="sidebar-container sidebar-container--left">
+        <nav class="sidebar side-nav-alt">
+          <ul class="tablist" role="tablist" data-name="tab">
+            <li class="side-nav__item" role="presentation">
+              <a class="side-nav__link"
+                  role="tab"
+                  data-name="candidate-and-authorized-committees"
+                  tabindex="0"
+                  aria-controls="panel1"
+                  href="#homepage-candidate-committee-section-1"
+                  aria-selected="true">Candidates and their authorized committees</a>
+            </li>
+            <li class="side-nav__item" role="presentation">
+              <a class="side-nav__link"
+                  role="tab"
+                  data-name="corporations-and-labor-organizations"
+                  tabindex="1"
+                  aria-controls="panel2"
+                  href="#homepage-candidate-committee-section-2">Corporations and labor organizations</a>
+            </li>
+            <li class="side-nav__item" role="presentation">
+              <a class="side-nav__link"
+                  role="tab"
+                  data-name="political-action-committees"
+                  tabindex="2"
+                  aria-controls="panel3"
+                  href="#homepage-candidate-committee-section-3">Political action committees (PACs)</a>
+            </li>
+            <li class="side-nav__item" role="presentation">
+              <a class="side-nav__link"
+                  role="tab"
+                  data-name="political-party-committees"
+                  tabindex="3"
+                  aria-controls="panel4"
+                  href="#homepage-candidate-committee-section-4">Political party committees</a>
+            </li>
+          </ul>
+        </nav>
+      </div>
 
       <div class="main__content--right-full">
 
-        <section id="homepage-candidate-committee-section-1" role="tabpanel" aria-hidden="true" aria-labelledby="homepage-candidate-committee-1-heading">
+        <section id="homepage-candidate-committee-section-1" class="option" role="tabpanel" aria-hidden="true" aria-labelledby="homepage-candidate-committee-1-heading">
           <h2 id="homepage-candidate-committee-1-heading">Candidates and their authorized committees</h2>
 
           <div class="grid grid--2-wide u-no-padding list--spacious">
@@ -219,22 +221,228 @@
               </ul>
             </div>
           </div>
+
+          <div class="grid grid--3-wide grid--flex u-no-padding">
+            <div class="grid__item">
+              <aside class="card card--horizontal card--secondary">
+                <div class="card__image__container">
+                  <span class="card__icon i-calendar"><span class="u-visually-hidden">Icon representing upcoming deadlines</span></span>
+                </div>
+                <div class="card__content js-homepage-upcoming-deadlines">
+                  <h5 class="u-no-margin">Upcoming deadlines</h5>
+                  <br>
+                </div>
+              </aside>
+            </div>
+            <div class="grid__item">
+              <aside class="card card--horizontal card--secondary">
+                <div class="card__image__container">
+                  <span class="card__icon i-training"><span class="u-visually-hidden">Icon representing featured training</span></span>
+                </div>
+                <div class="card__content">
+                  <h5 class="u-no-margin">Featured training</h5>
+                  <br>
+                  <p class="t-sans">Watch a <a href="https://www.youtube.com/watch?v=xWY7MyUFVSs">free video</a> about candidate registration.</p>
+                </div>
+              </aside>
+            </div>
+            <div class="grid__item">
+              <aside class="card card--horizontal card--secondary">
+                <div class="card__image__container">
+                  <span class="card__icon i-document"><span class="u-visually-hidden">Icon representing fec forms</span></span>
+                </div>
+                <div class="card__content">
+                  <h5 class="u-no-margin">FEC forms</h5>
+                  <br>
+                  <p class="t-sans">A collection of <a href="http://www.fec.gov/info/forms.shtml">web and PDF forms</a> for candidates and authorized committees.</p>
+                </div>
+              </aside>
+            </div>
+          </div>
         </section>
 
         <section id="homepage-candidate-committee-section-2" role="tabpanel" aria-hidden="true" aria-labelledby="homepage-candidate-committee-2-heading">
           <h2 id="homepage-candidate-committee-2-heading">Corporations and labor organizations</h2>
+          <p class="u-no-margin">Corporations and labor organizations can’t make contributions to federal candidates, but they can establish and administer a special kind of political committee, called a separate segregated fund (SSF):</p>
+
+          <div class="grid grid--2-wide u-no-padding list--spacious">
+            <div class="grid__item">
+              <ul>
+                <li>
+                  <a>Registering as an SSF »</a>
+                </li>
+                <li>
+                  <a>Filing reports »</a>
+                </li>
+                <li>
+                  <a>Winding down a campaign »</a>
+                </li>
+              </ul>
+            </div>
+            <div class="grid__item">
+            </div>
+          </div>
+
+          <div class="grid grid--3-wide grid--flex u-no-padding">
+            <div class="grid__item">
+              <aside class="card card--horizontal card--secondary">
+                <div class="card__image__container">
+                  <span class="card__icon i-calendar"><span class="u-visually-hidden">Icon representing upcoming deadlines</span></span>
+                </div>
+                <div class="card__content js-homepage-upcoming-deadlines">
+                  <h5 class="u-no-margin">Upcoming deadlines</h5>
+                  <br>
+                </div>
+              </aside>
+            </div>
+            <div class="grid__item">
+              <aside class="card card--horizontal card--secondary">
+                <div class="card__image__container">
+                  <span class="card__icon i-training"><span class="u-visually-hidden">Icon representing featured training</span></span>
+                </div>
+                <div class="card__content">
+                  <h5 class="u-no-margin">Featured training</h5>
+                  <br>
+                </div>
+              </aside>
+            </div>
+            <div class="grid__item">
+              <aside class="card card--horizontal card--secondary">
+                <div class="card__image__container">
+                  <span class="card__icon i-document"><span class="u-visually-hidden">Icon representing fec forms</span></span>
+                </div>
+                <div class="card__content">
+                  <h5 class="u-no-margin">FEC forms</h5>
+                  <br>
+                  <p class="t-sans">A collection of <a href="http://www.fec.gov/info/forms.shtml">web and PDF forms</a> for SSFs.</p>
+                </div>
+              </aside>
+            </div>
+          </div>
         </section>
 
         <section id="homepage-candidate-committee-section-3" role="tabpanel" aria-hidden="true" aria-labelledby="homepage-candidate-committee-3-heading">
           <h2 id="homepage-candidate-committee-2-heading">Political action committees (PACs)</h2>
+
+          <div class="grid grid--2-wide u-no-padding list--spacious">
+            <div class="grid__item">
+              <ul>
+                <li>
+                  <a>Registering as a PAC »</a>
+                </li>
+                <li>
+                  <a>Filing reports »</a>
+                </li>
+                <li>
+                  <a>Winding down a campaign »</a>
+                </li>
+              </ul>
+            </div>
+            <div class="grid__item">
+            </div>
+          </div>
+
+          <div class="grid grid--3-wide grid--flex u-no-padding">
+            <div class="grid__item">
+              <aside class="card card--horizontal card--secondary">
+                <div class="card__image__container">
+                  <span class="card__icon i-calendar"><span class="u-visually-hidden">Icon representing upcoming deadlines</span></span>
+                </div>
+                <div class="card__content js-homepage-upcoming-deadlines">
+                  <h5 class="u-no-margin">Upcoming deadlines</h5>
+                  <br>
+                </div>
+              </aside>
+            </div>
+            <div class="grid__item">
+              <aside class="card card--horizontal card--secondary">
+                <div class="card__image__container">
+                  <span class="card__icon i-training"><span class="u-visually-hidden">Icon representing featured training</span></span>
+                </div>
+                <div class="card__content">
+                  <h5 class="u-no-margin">Featured training</h5>
+                  <br>
+                  <p class="t-sans">Watch <a href="https://www.youtube.com/watch?v=pEDbBXRr5BY&feature=youtu.be">a free video</a> about PAC registration.</p>
+                </div>
+              </aside>
+            </div>
+            <div class="grid__item">
+              <aside class="card card--horizontal card--secondary">
+                <div class="card__image__container">
+                  <span class="card__icon i-document"><span class="u-visually-hidden">Icon representing fec forms</span></span>
+                </div>
+                <div class="card__content">
+                  <h5 class="u-no-margin">FEC forms</h5>
+                  <br>
+                  <p class="t-sans">A collection of <a href="http://www.fec.gov/info/forms.shtml">web and PDF forms</a> for PACs.</p>
+                </div>
+              </aside>
+            </div>
+          </div>
         </section>
 
         <section id="homepage-candidate-committee-section-4" role="tabpanel" aria-hidden="true" aria-labelledby="homepage-candidate-committee-4-heading">
           <h2 id="homepage-candidate-committee-2-heading">Political party committees</h2>
+          <p class="u-no-margin">Political party committees represent a political party at a local, state or national level.</p>
+
+          <div class="grid grid--2-wide u-no-padding list--spacious">
+            <div class="grid__item">
+              <ul>
+                <li>
+                  <a>Registering as a political party »</a>
+                </li>
+                <li>
+                  <a>Filing reports »</a>
+                </li>
+                <li>
+                  <a>Winding down a campaign »</a>
+                </li>
+              </ul>
+            </div>
+            <div class="grid__item">
+            </div>
+          </div>
+
+          <div class="grid grid--3-wide grid--flex u-no-padding">
+            <div class="grid__item">
+              <aside class="card card--horizontal card--secondary">
+                <div class="card__image__container">
+                  <span class="card__icon i-calendar"><span class="u-visually-hidden">Icon representing upcoming deadlines</span></span>
+                </div>
+                <div class="card__content js-homepage-upcoming-deadlines">
+                  <h5 class="u-no-margin">Upcoming deadlines</h5>
+                  <br>
+                </div>
+              </aside>
+            </div>
+            <div class="grid__item">
+              <aside class="card card--horizontal card--secondary">
+                <div class="card__image__container">
+                  <span class="card__icon i-training"><span class="u-visually-hidden">Icon representing featured training</span></span>
+                </div>
+                <div class="card__content">
+                  <h5 class="u-no-margin">Featured training</h5>
+                  <br>
+                  <p class="t-sans">Watch <a href="https://www.youtube.com/watch?v=yRPRsREca_E&feature=youtu.be">a free video</a> about political party registration.</p>
+                </div>
+              </aside>
+            </div>
+            <div class="grid__item">
+              <aside class="card card--horizontal card--secondary">
+                <div class="card__image__container">
+                  <span class="card__icon i-document"><span class="u-visually-hidden">Icon representing fec forms</span></span>
+                </div>
+                <div class="card__content">
+                  <h5 class="u-no-margin">FEC forms</h5>
+                  <br>
+                  <p class="t-sans">A collection of <a href="http://www.fec.gov/info/forms.shtml">web and PDF forms</a> for PACs.</p>
+                </div>
+              </aside>
+            </div>
+          </div>
         </section>
 
       </div>
-
     </div>
   </section>
 
