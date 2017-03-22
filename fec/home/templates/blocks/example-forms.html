@@ -1,0 +1,14 @@
+{% load wagtailcore_tags %}
+{% load wagtailimages_tags %}
+
+<p class="t-sans t-upper">{{ self.title }}</p>
+<div class="row example">
+  {% for block in self.forms %}
+  <div class="usa-width-one-half">
+    <a class="example__thumbnail" href="{{ block.url }}">
+      {% image block.image width-200 %}
+    </a>
+    <span class="t-block"><a href="{{ block.url }}">{{ block.text }}</a></span>
+  </div>
+  {% endfor %}
+</div>
