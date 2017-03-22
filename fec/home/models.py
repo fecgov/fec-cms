@@ -25,6 +25,9 @@ from fec import constants
 from home.blocks import (ThumbnailBlock, AsideLinkBlock, ContactInfoBlock,
                         ContactInfoBlock, CitationsBlock, ResourceBlock,
                         OptionBlock, CollectionBlock, DocumentFeedBlurb, CustomTableBlock)
+                        OptionBlock, CollectionBlock, DocumentFeedBlurb,
+                        ExampleParagraph, ExampleForms)
+
 
 stream_factory = functools.partial(
     StreamField,
@@ -374,14 +377,40 @@ class CustomPage(Page):
     """Flexible customizable page."""
     author = models.CharField(max_length=255)
     date = models.DateField('Post date')
-    body = stream_factory()
+    body = StreamField([
+        ('heading', blocks.CharBlock(classname='full title')),
+        ('paragraph', blocks.RichTextBlock()),
+        ('html', blocks.RawHTMLBlock()),
+        ('image', ImageChooserBlock()),
+        ('table', TableBlock()),
+        ('example_paragraph', ExampleParagraph()),
+        ('example_forms', ExampleForms())
+    ])
     sidebar = stream_factory(null=True, blank=True)
+    citations = StreamField([('citations', blocks.ListBlock(CitationsBlock()))],
+                    null=True)
+    record_articles = StreamField([
+        ('record_articles', blocks.ListBlock(
+            blocks.PageChooserBlock(target_model=RecordPage)
+        ))
+    ], null=True)
+    continue_learning = StreamField([
+        ('continue_learning', blocks.ListBlock(ThumbnailBlock(), icon='doc-empty')),
+    ], null=True)
 
     content_panels = Page.content_panels + [
         FieldPanel('author'),
         FieldPanel('date'),
         StreamFieldPanel('body'),
-        StreamFieldPanel('sidebar'),
+        StreamFieldPanel('citations'),
+        StreamFieldPanel('continue_learning'),
+        MultiFieldPanel([
+                StreamFieldPanel('sidebar'),
+                StreamFieldPanel('record_articles'),
+            ],
+            heading = "Sidebar",
+            classname = "collapsible"
+        )
     ]
 
 class PressLandingPage(Page):
