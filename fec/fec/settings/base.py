@@ -175,6 +175,7 @@ from .env import env
 USAJOBS_API_KEY = env.get_credential('USAJOBS_API_KEY')
 FEC_APP_URL = os.getenv('FEC_APP_URL')
 FEC_API_URL = os.getenv('FEC_API_URL', 'http://localhost:5000')
+FEC_API_KEY = os.getenv('FEC_WEB_API_KEY')
 FEC_API_VERSION = os.getenv('FEC_API_VERSION', 'v1')
 FEC_API_KEY_PUBLIC = env.get_credential('FEC_WEB_API_KEY_PUBLIC', '')
 FEC_CMS_ROBOTS = os.getenv('FEC_CMS_ROBOTS')
@@ -187,6 +188,18 @@ ENVIRONMENTS = {
 FEC_CMS_ENVIRONMENT = ENVIRONMENTS.get(os.getenv('FEC_CMS_ENVIRONMENT'), 'LOCAL')
 CONTACT_EMAIL = 'betafeedback@fec.gov';
 CONSTANTS = constants
+
+# Config search
+WAGTAILSEARCH_BACKENDS = {
+    'default': {
+        'BACKEND': 'wagtail.wagtailsearch.backends.elasticsearch5',
+        'URLS': ['http://localhost:9200'],
+        'INDEX': 'wagtail',
+        'TIMEOUT': 5,
+        'OPTIONS': {},
+        'INDEX_SETTINGS': {},
+    }
+}
 
 # Config for the ServiceNow API for contacting RAD
 FEC_SERVICE_NOW_API = env.get_credential('FEC_SERVICE_NOW_API')
