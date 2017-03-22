@@ -62,9 +62,7 @@ INSTALLED_APPS = (
     'search',
     'home',
     'data_loader',
-
     'uaa_client',
-     
 )
 
 MIDDLEWARE_CLASSES = (
@@ -191,9 +189,9 @@ CONTACT_EMAIL = 'betafeedback@fec.gov';
 CONSTANTS = constants
 
 # Config for the ServiceNow API for contacting RAD
-FEC_SERVICE_NOW_API = os.getenv('FEC_SERVICE_NOW_API')
-FEC_SERVICE_NOW_USERNAME = os.getenv('FEC_SERVICE_NOW_USERNAME')
-FEC_SERVICE_NOW_PASSWORD = os.getenv('FEC_SERVICE_NOW_PASSWORD')
+FEC_SERVICE_NOW_API = env.get_credential('FEC_SERVICE_NOW_API')
+FEC_SERVICE_NOW_USERNAME = env.get_credential('FEC_SERVICE_NOW_USERNAME')
+FEC_SERVICE_NOW_PASSWORD = env.get_credential('FEC_SERVICE_NOW_PASSWORD')
 
 FEATURES = {
     'record': bool(env.get_credential('FEC_FEATURE_RECORD', '')),

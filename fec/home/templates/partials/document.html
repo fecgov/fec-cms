@@ -5,14 +5,22 @@
   <div class="post__pre">
     <div class="post__date">{{ document.display_date }}</div>
   </div>
-  {% if document.body %}
+  {% if document.body or document.intro %}
     <h3>{{ document.title }}</h3>
     <div class="t-sans row js-post-content">
-        {{ document.body | truncatewords_html:30 }}
+        {% if document.body %}
+          {{ document.body | truncatewords_html:30 }}
+        {% else %}
+          {{ document.intro | truncatewords_html:30 }}
+        {% endif %}
         <a class="js-read-more post__read-more" href="{{ document.url }}">Read more</a>
     </div>
   {% else %}
-    <h3><a href="{{ document.file_url }}">{{ document.title }}</a> <i class="icon icon--inline--right icon--inline--left i-document"></i><span class="t-sans t-normal">({{ document.extension }}){% if document.size %} | ({{ document.size }}){% endif %}</span></h3>
+    <h3>
+      <a href="{{ document.file_url }}">{{ document.title }}</a>
+      <i class="icon icon--inline--right icon--inline--left i-document"></i>
+      <span class="t-sans t-normal">({{ document.extension }}){% if document.size %} | ({{ document.size }}){% endif %}</span>
+    </h3>
   {% endif %}
     <div class="post__meta">
       <a class="tag tag--secondary" href="">{{ document.category }}</a>
