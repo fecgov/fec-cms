@@ -92,6 +92,7 @@ class Command(ImporterMixin, BaseCommand):
             title=meeting['title_text'],
             live=1,
             mtg_date=self._with_tz(meeting['posted_date']['iso8601']),
+            imported_html=self._raw_html_block(meeting['body'])
             # mtg_time doesn't appear to be in the json.
         )
         parent_page.add_child(instance=new_page)
@@ -101,3 +102,16 @@ class Command(ImporterMixin, BaseCommand):
     @staticmethod
     def _with_tz(a_date):
         return timezone.make_aware(parser.parse(a_date), timezone.get_current_timezone())
+
+    def _raw_html_block(self, legacy_cms_html: str) -> str:
+        """
+        Clean up a legacy HTML page and wrap it in JSON
+        conforming to a Wagtail Stream with a RawHTMLBlock.
+        """
+        return json.dumps([
+            {
+                'value': self.escape_quotes(self.clean_content(legacy_cms_html)),
+                'type': 'html_block'  # Defined in AgendaPage in models.py
+            }
+        ])
+
