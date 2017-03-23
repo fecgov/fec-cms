@@ -2,7 +2,7 @@ import re
 
 from django import template
 from django.utils.html import format_html
-from home.models import DocumentPage
+from wagtail.wagtailcore.models import Page
 
 register = template.Library()
 
@@ -31,7 +31,7 @@ def districts(max):
   return districts
 
 @register.filter()
-def document_count(page):
-  """Returns the number of DocumentPages for a particular category"""
-  count = DocumentPage.objects.child_of(page).live().count()
+def child_page_count(page):
+  """Returns the number of pages that are children of a particular page"""
+  count = Page.objects.child_of(page).live().count()
   return "{} {}".format(count, 'result' if count == 1 else 'results')
