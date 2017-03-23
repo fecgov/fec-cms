@@ -164,9 +164,10 @@
               </div>
           </aside>
         </div>
+        {% if settings.FEATURES.radform %}
         <div class="grid__item">
           <aside class="card card--horizontal card--secondary">
-            <a href="/registration-and-reporting/question-RAD">
+            <a href="/candidate-and-committee-services/question-rad">
               <div class="card__image__container">
                 <span class="card__icon i-question-bubble"><span class="u-visually-hidden">Icon of a question bubble</span></span>
               </div>
@@ -177,6 +178,7 @@
           </aside>
           <p class="t-note">For authorized representatives of a committee or another entity registered with the FEC only</p>
         </div>
+        {% endif %}
       </div>
     </div>
   </div>
