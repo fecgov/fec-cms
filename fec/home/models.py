@@ -690,8 +690,14 @@ class ServicesLandingPage(ContentPage, UniqueModel):
 
 
 class AgendaPage(Page):
-    mtg_date  = models.DateTimeField(default=datetime.date.today)
-    mtg_time  = models.TimeField(default=datetime.time(10, 00))
+    mtg_date = models.DateTimeField(default=datetime.date.today)
+    mtg_time = models.TimeField(default=datetime.time(10, 00))
+
+    imported_html = StreamField(
+        [('html_block', blocks.RawHTMLBlock())],
+        null=True,
+        blank=True
+    )
 
     mtg_media = StreamField([
         ('full_video_url', blocks.TextBlock()),
