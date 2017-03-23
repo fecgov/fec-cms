@@ -87,16 +87,16 @@ class Command(ImporterMixin, BaseCommand):
             ("video_link", Link)
         """
         new_page = AgendaPage(
+            imported_html=self._raw_html_block(meeting['body']),
+            mtg_date=self._with_tz(meeting['posted_date']['iso8601']),
+            # mtg_time doesn't appear to be in the json.
+
             depth=2,
             numchild=0,
-            title=meeting['title_text'],
             live=1,
-            mtg_date=self._with_tz(meeting['posted_date']['iso8601']),
-            imported_html=self._raw_html_block(meeting['body'])
-            # mtg_time doesn't appear to be in the json.
+            title=meeting['title_text'],
         )
         parent_page.add_child(instance=new_page)
-        # TODO: Do I need to set the date attribute here like import_report_documents.py?
         self._log(new_page)
 
     @staticmethod
