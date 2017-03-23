@@ -63,8 +63,6 @@ CONTENT_REGEX_REPLACEMENTS = [
     ('<a href="\.\.\/pdf\/[0-9]+release.pdf">\.pdf version of this Weekly Digest<a>', ''),
     ('<a href="\.\.\/pdf\/[0-9]+release.pdf">\.pdf version...a>', ''),
     ('\.pdf version of this Weekly Digest', ''),
-    ('(<\/blockquote>)+', '<\blockquote>'),
-    ('(<blockquote>)+', 'blockquote'),
 ]
 
 KEYWORD_REGEX_CLEANER = '\s?\r\n\s+'
