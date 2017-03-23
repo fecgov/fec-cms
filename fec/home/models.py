@@ -723,6 +723,7 @@ class AgendaPage(Page):
         FieldPanel('mtg_date'),
         FieldPanel('mtg_time'),
         StreamFieldPanel('agenda'),
+        StreamFieldPanel('imported_html'),
         MultiFieldPanel(
         [
             StreamFieldPanel('mtg_media'),
