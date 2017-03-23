@@ -64,7 +64,7 @@ INSTALLED_APPS = (
     'data_loader',
 
     'uaa_client',
-     
+
 )
 
 MIDDLEWARE_CLASSES = (
@@ -221,12 +221,6 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
-
-if os.getenv('SENTRY_DSN'):
-    INSTALLED_APPS += ('raven.contrib.django.raven_compat', )
-    RAVEN_CONFIG = {
-        'dsn': os.getenv('SENTRY_DSN'),
-    }
 
 
 if FEC_CMS_ENVIRONMENT != 'LOCAL':
