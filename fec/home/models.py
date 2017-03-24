@@ -700,9 +700,9 @@ class AgendaPage(Page):
     )
 
     mtg_media = StreamField([
-        ('full_video_url', blocks.TextBlock()),
-        ('full_audio', DocumentChooserBlock(required=False)),
-        ('mtg_transcript', DocumentChooserBlock(required=False))
+        ('full_video_url', blocks.TextBlock(required=False)),    # 'video_link'
+        ('full_audio_url', blocks.TextBlock(required=False)),    # 'primary_audio_link'
+        ('mtg_transcript_url', blocks.TextBlock(required=False)) # 'closed_captioning_link'
     ])
 
     agenda = StreamField([
