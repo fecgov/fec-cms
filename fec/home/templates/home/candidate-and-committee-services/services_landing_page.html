@@ -56,18 +56,20 @@
   <div class="slab slab--neutral">
     <div class="container">
       <div class="grid grid--4-wide">
-        <div class="grid__item">
-          <a href="{{ self.url }}question-rad">
-            <aside class="card card--horizontal card--secondary">
-              <div class="card__image__container">
-                  <span class="card__icon i-question-bubble"><span class="u-visually-hidden">Icon representing a question</span></span>
-              </div>
-              <div class="card__content">
-                Submit a question to the Reports Analysis Division
-              </div>
-            </aside>
-          </a>
-        </div>
+        {% if settings.FEATURES.radform %}
+          <div class="grid__item">
+            <a href="{{ self.url }}question-rad">
+              <aside class="card card--horizontal card--secondary">
+                <div class="card__image__container">
+                    <span class="card__icon i-question-bubble"><span class="u-visually-hidden">Icon representing a question</span></span>
+                </div>
+                <div class="card__content">
+                  Submit a question to the Reports Analysis Division
+                </div>
+              </aside>
+            </a>
+          </div>
+        {% endif %}
         <div class="grid__item">
           <a href="">
             <aside class="card card--horizontal card--secondary">
