@@ -87,6 +87,7 @@ Use `npm` to install JavaScript dependencies:
 ```bash
 npm install
 ```
+
 ### Give default user privileges to create database
 If you would like your default user to create the database, alter their user role:
 ```bash
@@ -260,28 +261,22 @@ cf target -s [feature|dev|stage|prod] && cf push -f manifest_<[feature|dev|stage
 **NOTE:**  Performing a deploy in this manner will result in a brief period of
 downtime.
 
-## Backup
-To restore data from a remote instance to a local instance, or between local
-instances, back up data using `dumpdata` and restore using `loaddata`.  You'll
-also need to [install cf-ssh](https://docs.cloud.gov/getting-started/cf-ssh/).
-The following is an example of restoring remote data to a local instance.
+## SSH
+*Likely only useful for 18F FEC team members*
 
-Use `cf target -s` to select the space you want to create a manifest for, then:
+You can SSH directly into the running app container to help troubleshoot or inspect things with the instance(s).  Run the following command:
 
 ```bash
-# Local
-cf create-app-manifest cms -p manifest_ssh.yml
-cf-ssh -f manifest_ssh.yml
-
-# Remote
-cd fec
-./manage.py dumpdata --settings fec.settings.production --exclude sessions.session --exclude contenttypes.ContentType --exclude auth.permission --exclude auth.user --output dump.json
-
-# Local
-cd fec/
-cf files cms-ssh app/fec/dump.json | tail -n +4 > dump.json
-./manage.py loaddata dump.json
+cf ssh <app name>
 ```
+
+Where *<app name>* is the name of the application instance you want to connect to.  Once you are logged into the remote secure shell, you'll also want to run this command to setup the shell environment correctly:
+
+```bash
+. /home/vcap/app/bin/cf_env_setup.sh
+```
+
+More information about using SSH with cloud.dov can be found in the [cloud.gov SSH documentation](https://cloud.gov/docs/apps/using-ssh/#cf-ssh).
 
 ## Copyright and licensing
 This project is in the public domain within the United States, and we waive
