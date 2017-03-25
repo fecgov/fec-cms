@@ -119,7 +119,7 @@ class Command(ImporterMixin, BaseCommand):
     def _media_blocks(self, meeting) -> str:
         return json.dumps([
             {
-                'type': 'full_video_url',
+                'type': 'full_video_url',  # Defined in AgendaPage in models.py
                 'value': self._url_in_link(meeting['video_link'])
             },
             {
