@@ -1,7 +1,7 @@
 from dateutil import parser
 from io import TextIOWrapper
 import json
-from typing import Any, Dict
+from typing import Any, Dict, Optional
 
 from django.core.management import BaseCommand
 from django.utils import timezone
@@ -63,6 +63,7 @@ class Command(ImporterMixin, BaseCommand):
         return Page.objects.get(url_path=options['parent_path'])
 
     def _create_pages(self, json_text: TextIOWrapper, parent_page: Page, options: Dict[str, Any]) -> None:
+        self._log('Creating new pages...')
         for meeting_struct in json.load(json_text):
             self._create_agenda_page(meeting_struct, parent_page)
 
@@ -89,6 +90,7 @@ class Command(ImporterMixin, BaseCommand):
         new_page = AgendaPage(
             imported_html=self._raw_html_block(meeting['body']),
             mtg_date=self._with_tz(meeting['posted_date']['iso8601']),
+            mtg_media=self._media_blocks(meeting),
             # mtg_time doesn't appear to be in the json.
 
             depth=2,
@@ -97,7 +99,6 @@ class Command(ImporterMixin, BaseCommand):
             title=meeting['title_text'],
         )
         parent_page.add_child(instance=new_page)
-        self._log(new_page)
 
     @staticmethod
     def _with_tz(a_date):
@@ -110,8 +111,34 @@ class Command(ImporterMixin, BaseCommand):
         """
         return json.dumps([
             {
+                'type': 'html_block',  # Defined in AgendaPage in models.py
                 'value': self.escape_quotes(self.clean_content(legacy_cms_html)),
-                'type': 'html_block'  # Defined in AgendaPage in models.py
             }
         ])
 
+    def _media_blocks(self, meeting) -> str:
+        return json.dumps([
+            {
+                'type': 'full_video_url',
+                'value': self._url_in_link(meeting['video_link'])
+            },
+            {
+                'type': 'full_audio_url',
+                'value': self._url_in_link(meeting['primary_audio_link'])
+            },
+            {
+                'type': 'mtg_transcript_url',
+                'value': self._url_in_link(meeting['closed_captioning_link'])
+            },
+        ])
+
+    @staticmethod
+    def _url_in_link(link_attribute: Optional [dict]) -> str:
+        """
+        The scraper returns *link attributes as either a dict with a `url` attribute,
+        or a None.
+        """
+        if link_attribute is not None:
+            return link_attribute['url']
+        else:
+            return ''
