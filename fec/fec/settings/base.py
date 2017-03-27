@@ -62,7 +62,6 @@ INSTALLED_APPS = (
     'search',
     'home',
     'data_loader',
-
     'uaa_client',
 
 )
@@ -191,9 +190,9 @@ CONTACT_EMAIL = 'betafeedback@fec.gov';
 CONSTANTS = constants
 
 # Config for the ServiceNow API for contacting RAD
-FEC_SERVICE_NOW_API = os.getenv('FEC_SERVICE_NOW_API')
-FEC_SERVICE_NOW_USERNAME = os.getenv('FEC_SERVICE_NOW_USERNAME')
-FEC_SERVICE_NOW_PASSWORD = os.getenv('FEC_SERVICE_NOW_PASSWORD')
+FEC_SERVICE_NOW_API = env.get_credential('FEC_SERVICE_NOW_API')
+FEC_SERVICE_NOW_USERNAME = env.get_credential('FEC_SERVICE_NOW_USERNAME')
+FEC_SERVICE_NOW_PASSWORD = env.get_credential('FEC_SERVICE_NOW_PASSWORD')
 
 FEATURES = {
     'record': bool(env.get_credential('FEC_FEATURE_RECORD', '')),
@@ -234,6 +233,11 @@ if FEC_CMS_ENVIRONMENT != 'LOCAL':
 
 UAA_CLIENT_ID = env.get_credential('CMS_LOGIN_CLIENT_ID', 'my-client-id')
 UAA_CLIENT_SECRET = env.get_credential('CMS_LOGIN_CLIENT_SECRET', 'my-client-secret')
+#fake uaa server deploys locally on port 8080.  Will be needed to login for local use
+#TODO: These will have to have a explicit reference until we can figure out how
+#to silence django warnings about the url being http (it expects https).
+#UAA_AUTH_URL = env.get_credential('CMS_LOGIN_AUTH_URL', 'http://localhost:8080/oauth/authorize')
+#UAA_TOKEN_URL = env.get_credential('CMS_LOGIN_TOKEN_URL','http://localhost:8080/oauth/token')
 UAA_AUTH_URL = 'https://login.fr.cloud.gov/oauth/authorize'
 UAA_TOKEN_URL = 'https://login.fr.cloud.gov/oauth/token'
 WAGTAIL_FRONTEND_LOGIN_URL = 'uaa_client:login'
