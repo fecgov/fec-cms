@@ -1,7 +1,6 @@
 from dateutil import parser
 from io import TextIOWrapper
 import json
-from typing import Any, Dict, Optional
 
 from django.core.management import BaseCommand
 from django.utils import timezone
@@ -46,28 +45,28 @@ class Command(ImporterMixin, BaseCommand):
             self._create_pages(json_text, self._parent_page(options), options)
 
 
-    def _delete_existing_records(self, options: Dict[str, Any]) -> None:
+    def _delete_existing_records(self, options: dict) -> None:
         if options['delete_existing']:
             self._log('Deleting existing records...')
             self.delete_existing_records(AgendaPage, **options)
 
     @staticmethod
-    def _open_json_file(options: Dict[str, Any]) -> TextIOWrapper:
+    def _open_json_file(options: dict) -> TextIOWrapper:
         return open(options['json_file_path'], 'r')
 
-    def _log(self, message: Any) -> None:
+    def _log(self, message) -> None:
         self.stdout.write(repr(message))
 
     @staticmethod
-    def _parent_page(options: Dict[str, Any]) -> Page:
+    def _parent_page(options: dict) -> Page:
         return Page.objects.get(url_path=options['parent_path'])
 
-    def _create_pages(self, json_text: TextIOWrapper, parent_page: Page, options: Dict[str, Any]) -> None:
+    def _create_pages(self, json_text: TextIOWrapper, parent_page: Page, options: dict) -> None:
         self._log('Creating new pages...')
         for meeting_struct in json.load(json_text):
             self._create_agenda_page(meeting_struct, parent_page)
 
-    def _create_agenda_page(self, meeting: Dict[str, Any], parent_page: Page) -> None:
+    def _create_agenda_page(self, meeting: dict, parent_page: Page) -> None:
         """
         Available keys are:
             ("agenda_document_links", Links), # list (Links)
@@ -116,7 +115,7 @@ class Command(ImporterMixin, BaseCommand):
             }
         ])
 
-    def _media_blocks(self, meeting) -> str:
+    def _media_blocks(self, meeting: dict) -> str:
         return json.dumps([
             {
                 'type': 'full_video_url',  # Defined in AgendaPage in models.py
@@ -133,7 +132,7 @@ class Command(ImporterMixin, BaseCommand):
         ])
 
     @staticmethod
-    def _url_in_link(link_attribute: Optional [dict]) -> str:
+    def _url_in_link(link_attribute) -> str:
         """
         The scraper returns *link attributes as either a dict with a `url` attribute,
         or a None.
