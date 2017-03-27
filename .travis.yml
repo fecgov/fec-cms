@@ -28,6 +28,10 @@ script:
 - "(cd fec && coverage run ./manage.py test)"
 - npm run test-single
 after_success:
+- travis_retry pip install bandit
+- cd ..
+- bandit -r fec-cms
+- cd fec-cms
 - travis_retry pip install codecov
 - "(cd fec && coverage xml)"
 - codecov -X pycov
