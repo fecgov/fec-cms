@@ -28,6 +28,9 @@ urlpatterns = [
     url(r'', include(wagtail_urls)),
 ]
 
+if settings.FEC_CMS_ENVIRONMENT != 'LOCAL':
+    urlpatterns.insert(2,url(r'^admin/login', uaa_views.login, name='login'))
+
 if settings.FEC_CMS_ROBOTS:
     url(
         r'^robots\.txt$',
