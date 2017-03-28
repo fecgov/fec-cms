@@ -160,7 +160,7 @@ class CustomTableBlock(blocks.StructBlock):
     'height': 108,
     'language': 'en',
     }
-    
+
     custom_table = blocks.StreamBlock([
         ('title', blocks.CharBlock(required=False)),
         ('table_intro', blocks.RichTextBlock(required=False)),
@@ -170,7 +170,7 @@ class CustomTableBlock(blocks.StructBlock):
 
     class Meta:
         template = 'blocks/custom_table.html'
-        
+
 class ExampleParagraph(blocks.StructBlock):
     title = blocks.CharBlock(required=True)
     paragraph = blocks.RichTextBlock(required=True)
@@ -188,3 +188,23 @@ class ExampleForms(blocks.StructBlock):
         template = 'blocks/example-forms.html'
         icon = 'doc-empty'
 
+class CustomTableBlock(blocks.StructBlock):
+    """A custom table"""
+    custom_table_options = {
+    'startRows': 7,
+    'startCols': 6,
+    'colHeaders': True,
+    'rowHeaders': True,
+    'height': 108,
+    'language': 'en',
+    }
+
+    custom_table = blocks.StreamBlock([
+        ('title', blocks.CharBlock(required=False)),
+        ('table_intro', blocks.RichTextBlock(required=False)),
+        ('table', TableBlock(table_options=custom_table_options)),
+        ('footnote', blocks.CharBlock(required=False))
+    ])
+
+    class Meta:
+        template = 'blocks/custom_table.html'

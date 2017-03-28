@@ -22,11 +22,18 @@ from wagtail.wagtaildocs.models import Document
 from wagtail.contrib.table_block.blocks import TableBlock
 
 from fec import constants
+<<<<<<< HEAD
 from home.blocks import (ThumbnailBlock, AsideLinkBlock,
                          ContactInfoBlock, CitationsBlock, ResourceBlock,
                          OptionBlock, CollectionBlock, DocumentFeedBlurb,
                          ExampleParagraph, ExampleForms, CustomTableBlock)
 
+=======
+from home.blocks import (ThumbnailBlock, AsideLinkBlock, ContactInfoBlock,
+                        ContactInfoBlock, CitationsBlock, ResourceBlock,
+                        OptionBlock, CollectionBlock, DocumentFeedBlurb,
+                        ExampleParagraph, ExampleForms, CustomTableBlock)
+>>>>>>> develop
 
 stream_factory = functools.partial(
     StreamField,
