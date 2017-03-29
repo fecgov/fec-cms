@@ -1,51 +1,36 @@
 language: python
-
 sudo: false
-
 cache: false
-
 python:
   - "3.4.5"
-
 addons:
   postgresql: "9.4"
-
 env:
   global:
-    - secure: "V9KId87Z9Rwj4vojTlEjrsnItu95Qwrh3EqA5puQEIrxF6U5LdzGRX4Q5M6OD84s9e9sM5PW1k5maFaQIIP4NmyBiP4K5LYOruYoTIxYO+ZR5PfCB2Q2i8WQUJH3UF50ZPfjOJBrFnaB6RYyY1sKmimCISNfmA/7gMuSUZWppQwIb5xtOoZe7PPSfqkblFfcAwBcurHDEQtJJN3vb0e7NK2MfA/7HALkEoiIgeo52vMYpSkCdgumN+baSK47H3eLXLcUjMlDpUO1HF4fMZYFbG4etYp0pTZ4d/sd9JqxLoEsIzq2hFEXGSL9Y8Ooy+s3gu4NoU9DPVRRD/e3lJmtu3FImg22pRUAZk2yOQcZsWKrk2fgNHXwCuNPzSYpSzwEXck//uWd/nF0I/rzolqP9xsw+eSw47NHOL4cRgqY+lUNXxPfpxrMgXahrBeWYzrbr3GGI8v2f9rlc4ActckwpTEifzGjYLYOcFuJON23kNRkALQ16ZR/91knL3C2En4yM+Iphb4iB6vwFeyqrlt5MBipMxD9diGw34dkIwcdD5LihAy++ovpT96MP/LpWZLJ15ccFJ5/VMeI0FT0kkhAEnS1r0bG6HhWSyD02/nuA8Xg2TmBcI4HH+c+6EGfRIJwoA4G9sMKVwyVUeIz6uBSXlv3/utR9Wk/HsDLP/e0nlw=" # FEC_CF_USERNAME
-    - secure: "mnxGMega91FDiwqpzcHaMmh6V31NKn3a58ba7zM5eB7XYVF/Z0vQKRi5C6r33pYi/NCgFO8buOvP0aQsLaQf4YulNWD/kRBljWVcVcqUUWkV+uM21RL9nNXquYhZ9TBXsIFe9gbWelSzdGEdx/5e7LkLadfmBEXe9caoEMinKLn1rhDiRODQnJXohcVt3y6oNYBd9+/MWeJoj2W8pygrQ4oRyFNZA2nAz6xpSmdLRWejMAnl249fR4tI2bI39sAK5wf9pyDspYBYLuWjRBGeqpaGLm0mQsaTfrp3ddXKNrIwHbnsMuWEhYJ49iqd4x5arC0SvmuH0GyJnzLhuwHiBH0xS18uWnWoT2l67pwP01uJMJF6fe2BFxVp6W6gGJQYu8X/54J8786KDdtEN7nygN3lqMBdxRZ7grbsUUZ9RB4ptAHcR8+WDRI4+lYZ1NRUJanu0SpS8dJ+5EESPS2jgqNDXyv+3qRSWhbRRGArJbJ2L45xn+ti2ds0bFVLrLB0i/G7N4ZWSxTfL3dTNFXgZtfm5erRMv2wbeFwNjthIqY9Nd8KvF21GimLouU7jHhB1yAJw58rN8zAqCNWHI2aY2ae6prMOcJLFmOUFdVePd3+ZfdYoZWPMIkzmcf9RMzT+hYZ9Q+BElC73tYATKpp8z7Y17U1zO4pXVZ4ItARd6A=" # FEC_CF_PASSWORD
     - secure: "rLuzE+/3WVxra5ssD9MdVqTsuVcRc0PpOrc4FayueQ9y/CcjXuxFtU9NpS88DDwAyGc/7wCPLmRKAzsNTMgDjfHkKXa8VfhI9zZ7HOEI1suVJakkJFXTwajH1X+ACDICoQocrmuOesIMrlAm1qhrSnxHLZuIZ5y3qEGPaSvCMa9JPX9U8huJuhwukxiunpeoApeJclRK7HjLhrAIZVuBNZnyNjiqmNFXPFdGbpcdUGsqNrZQGZa9vlED2dXmqqsIhL7/ghR1sSvIzjVBEi2Ig9wu1QWO5LuAzgO6wIfuOh1gbQ1Z24bYLTeugApwI2eNRe5Rn7F+RXVCYbjetj/0twIXKr6NkSgaLt1c+2b7yIOLRpRl0kpahZc+TsQ3ja03UelpXhH8c0De+6sUvmofs39RgdMSjYBcaY5hDl1b5oZOcZDhQYYAiFUJ3CKIM82WgvTD/phcarf9e0lbrVFIK17P/QixUPAKUS+IfS53r10QO1DTN+0vpLcUh659u8gLxHlbTVkGPfuWRXVhPCmSlHZXqM22gVois5ch97FEm7sgLlJP5hHg1q+utvXV4YDM0m+5SicjGeTyh7ZNszBiMuCu9Na5NaUyhb3XS8niLPwXUzNKcUs0NXckakpqBxstAE4Zyqf3HmmzFQCNvdrFnk6fuRXo1nxtRi1K3N/zf4k=" # DJANGO_SECRET_KEY this is a random key unrelated to prod but needed for django to run build commands with production settings
-
+    - secure: "bTqpprktBEy8iSKgHwclCf82JW+6RDtqev8SHLr22SLW+2fmZSKJ+O2X6yBrOlYP5zofoMyCHhKwN8HSZA65mKSaIYHM1q4wS7n4x8SSG8EC4AlRAs5hhAhw4uBrbZgV0Vo5ki8InXN46GZ3lMDhpNt26DAdJD1R3biDkJOBQDtK9pyikFvZUZchttKTdnDeWGlgs63Geoj4pZbszsaLMgHbzg9EFlDoapAGWMkSp7pRvV8/CXlVRPdmim8z0WuLTwuXJIutHXPG04XRs1PNnikcSc8daS4RlYPSVYcB9YhVpbfxoymM5+d9gL09pL4OdpXbaG0ol3WJBMPPiSUmE3QNY0nJUe9NUh3grZhWl8VldjqlXNeBg/Ei8vwjzSvUyLWnkBpi6PoZe6PjsBvNeUxL4Zfph6mYVJbusVF1Bsob2V84ZljG7IGlR47lmphFpMm89Pd2X37MWsY2jVSRhCxlfRv3FbbR2Ans5M1UXz8me4P5DVa+npppgIdt2xMdaetNT5KuPd2bgw4JDvOjs2nGVLzhsk9jZIpIzSftReze9UyE1h0LGko6d6z8Nu2D2rl2qBVcDn+waCI4RhtcE8IhhLn1cnIP1+epJWnYxdCYAWkNfu4hIB8hYXp9gplX/pFdhLjL/ouxqrYXIsJzK2m//h1AuHAE9kyuB7BcpmE=" # dev user name
+    - secure: "CPiwQwD5G7NBcD3vDLL/Uu09mLFlQitS6JBIhI4gSE9xH+8x2X2ApMkteOJC7htLH8aFeAGCukYBmzfJn09C/C4lnUcHtOEm1iNCNfmNaKccvNViT5y1o5+L6+u+USmRDoTxqZoTmohSj2ZZS7Als79ziQUbULSv+ZbEyn5/90vidIY+L8GNSemK8F04i0wlhOGQ0Fg/3ByPhM0kRypI4Dfb4uhW2NzIN3fZg/lOYJI2DnS60wqH7h3DlXS9r5npb32mjRjC61ggMrLxNIO9tcgOIBBPuer/sUiSvTQcJraoDeBZ6fYDh6z6fomzEXMZhmLT2xHQjmZnS7SlKTwX2fs5U1Ofn1LcVWQ6JlD1fF7u0jtajXU3x+024GHOb9av9mGedNLeWTIqCURFZ1VJItaraU8sj27Z1fZsYgYsxC9sVhMNWs83h3lkfX8hO1wU5jvnt/5euOE4oz+Fm996Df95RPgy7YHLxzNGw6FzITXN3M5YlS9hTHWNrimzDApEPYB/MjktvJgMuCCqGXNNyxuBZ9IcvnxJX4DfaNbJIXe2JRMCcPeirFBExh38SDrFXdOVA5V0OYqlzvWaceqtWvBGBIjlvCVMJbdU/W9UPvUJAGwlXIQJG68UIUJ64/eRjiF73fuh2lj5zzTtlDldn6xSCLP7oX0Q6mXr9oKElA0=" # dev password
+    - secure: "tlu6ZhmTEmBX9S38pWjHGZWi4w5OucpOo5qihr3glF1c/IUOa3KOiCwk5k5p6XNmyQZMPylkdphJikmOn5R8nYYhX5S0IX/JcQNethStDu69hP8jd8agZSW0ynuCui3ro6lLXA2fzSuQSgT997ifr8i5Uy5/ZMTzbmXKg3ZCn9Lcm1ztJlHCAjuuhuv6wdk1Pb5swuu7N0yYqvYzNlUYfozl+JdlmV4jz0A6jl66aQB/+Y6BzlBp30o3b4I7CJgXXT9J56m55uSTutfpH2LWKbUm9KtznlurrETJQAxfHMJuSsvbVUoV/C626YiSVvH0xtUBLfzLmZi7RC3y0k5reUx/QrsI5B+o0AhglIdpy+qiJI4oMXn7atY61nZYl1s20dg2asxqVkM22iauGvTue9R+KtctslsTgbHfKhKe/7miphoGrr2b3fEAJn5rl05tWUrUF0O+G/ZyJu+PyM8FSvj7HXUcEgkTG9RD9UH+Vconm270twPAppvhvcIWVscdFw+FDZ9wkDpgPsKcxX2sTTjz+VTL5IAd6vU38wKhy5i8CNL8lDGJVhwezXovovoiz0OsNGzVt/9VrhW5Sm3gqxIseNNtfcOVMoMLP5COUmIOsoxGMiWbGEO0Rl4F4rbiN0FTLbmUeK6sXBNoivHDhwdj1SnSwlB9uXlsYUuBrJw=" # stage user name
+    - secure: "lwflhOkla3YEBe9gcpeqwj3ipNWepx8ojNASoFtSj+C5yPiR2l/CFmai0kABbZRLnegNri9Y+wFyYeoEtlXZhsrSRLuPkFrxNjleG+RnWORBjhzlSg9JOcSETnxvThemsyGHhrbPmaExo+aF0W93S07qSt9Md2scd/hZhvg2hyDBBXRpDBeYIYgDe6/TCxkULpDi/lCQiy9dJcfkqOFKuZce50NUoWREWwQ4Gwqgpiot1/xSyQxZBHMQlW4gOQTdBweWyWlvBRLQ9fmK86CaJGaU5D74tbURCRaa0mbVlvSZmkA9GM3Z2Q9KHxKnCZdM+6y3NEutudoY7L4OvH0oF3Bt1w0VEI9DXBR8xOrVZsf8KR1fcKp8BQUBOoF5I5oUEhXuQttsQ+ocdoFriT+ASGe5SFOke16+BEjjsOpHwvSM2qJHZ4W+Yh0bKwwGssF1DsvpGA3AV3g0rHJFTHVZDPqK3x5j5VxszTEib6f3VXG1W6WEPztp7/EOsKM36XHMWVLIh8lSo9MjO01cPubMNbwebmgpV1rQb35CscInm3klpu7jz7UJJByFBB0TMIitWt7VHyLblDc/X4yFOeDGaonzq/tZ3dKNJUgl84WPNcs7trclWkksQTPCyFPhG/5DZoFt8gvvVUu8UeU+IMK82qoorN4G20z6M/kMqq8vjfg=" # stage password
 before_install:
   - travis_retry pip install -U pip setuptools wheel
   - export DATABASE_URL=postgresql://:@/cfdm_cms_unit_test
-
 before_script:
   - psql -c 'create database cfdm_cms_unit_test;' -U postgres
   - travis_retry pip install -r requirements.txt
   - travis_retry pip install coverage django_coverage_plugin
-
-  - . $HOME/.nvm/nvm.sh
+  - ". $HOME/.nvm/nvm.sh"
   - nvm install v5.5.0
   - nvm use v5.5.0
-
   - travis_retry npm install
   - npm run build
-
 script:
-  - (cd fec && coverage run ./manage.py test)
+  - "(cd fec && coverage run ./manage.py test)"
   - npm run test-single
-
 after_success:
   - travis_retry pip install codecov
-  # Collect the Python coverage as XML in advance since it needs to run inside
-  # the fec dir.
-  - (cd fec && coverage xml)
-  # Run codecov outside fec dir to include coverage/coverage.json from JS
-  # testing, and disable it from running `coverage xml` since that's already
-  # done.
+  - "(cd fec && coverage xml)"
   - codecov -X pycov
-
 before_deploy:
   - export PATH=$HOME:$PATH
   - travis_retry curl -L -o $HOME/cf.tgz "https://cli.run.pivotal.io/stable?release=linux64-binary&version=6.22.2"
@@ -54,10 +39,11 @@ before_deploy:
   - npm run build
   - DJANGO_SETTINGS_MODULE='fec.settings.production' python fec/manage.py collectstatic --noinput -v 0
   - DJANGO_SETTINGS_MODULE='fec.settings.production' python fec/manage.py compress -v 0
-
 deploy:
   provider: script
   skip_cleanup: true
-  script: invoke deploy --branch $TRAVIS_BRANCH --yes
+  script: invoke deploy --branch $TRAVIS_BRANCH --login True --yes
   on:
     all_branches: true
+dd:
+  secure: aTfGVUc5LQwWD8syiDZL9jnXlXiz696VJZtjVkDMTRfsLQ0LscmuIN2MFhbwtviLNR1axpuNEHlE2HkXqLvA+G8xREqikyhJ5POX4rmTppOeOb8HnidhJQ7FQieMhGFL01bB+PGgugXQMTTJhWv6HgKoIsIr1Z1Ls/XSbeS14/DNXKnD4RAyUUgddb6K/RO7ZCBD5szh78Hh/0xP6iRJR7gZzqis8hE427vUX08w5GnIKRvqPRYcDq/i8KgRrm4dGISKqVofRkXoiGyfyr5G/A6rFq0TeQshjEVJlQQHdDbZRA+fbeLZFmejrlzoR+PyTkrTOBityLngWnr8Zzn1tcC2Q9IhPVFHOmghUlC4N8lm3S3WrW61OrZr/rc1mtHYisPHZFx4TqXA7e5A1T5L7/hmt46vDwyZXEzO7IMy6eQY2E/+eMZXELJfhR4bPudHmEYfhb3v6AqLD+0BTdG67VMw3sSysUEQ1upW8rnzvWkcnhP+Z2OKHNCZtenBzMbWggHf79IaIAzCJhVb9Az+b0Qs1pps/sTu24q9jmug8A61t/Yi+SGZkhjsKO2qM3cUhQe1/zn0eRe3sJg+H8MwsAzSlpN9zyIUhJWVSbxWTMV+NuKBpcOWZ3LW1W+DfY+iEOdhpzmLq7Ewc/fKPacKOX3QIg0xDd7q+PDETZHICWo=
