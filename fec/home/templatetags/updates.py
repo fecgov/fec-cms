@@ -9,6 +9,7 @@ from home.models import DigestPage
 from home.models import RecordPage
 from home.models import PressReleasePage
 from home.models import TipsForTreasurersPage
+from home.models import ServicesLandingPage
 
 register = template.Library()
 
@@ -59,3 +60,11 @@ def home_page_updates():
     updates_sorted_by_homepage_pin = sorted(updates_sorted_by_date, key=lambda x: x.homepage_pin, reverse=True)
 
     return {'updates': updates_sorted_by_homepage_pin[:4]}
+
+@register.inclusion_tag('partials/candidate_committee_services.html')
+def candidate_committee_services():
+    service_page = ServicesLandingPage.objects.first()
+
+    return {'service_page': service_page}
+
+
