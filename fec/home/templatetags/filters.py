@@ -35,3 +35,12 @@ def child_page_count(page):
   """Returns the number of pages that are children of a particular page"""
   count = Page.objects.child_of(page).live().count()
   return "{} {}".format(count, 'result' if count == 1 else 'results')
+
+@register.filter()
+def remove_digits(string):
+  """
+  Strips digits from a string
+  Useful in combination with built-in slugify in order to create strings
+  that can be used as HTML IDs, which cannot begin with digits
+  """
+  return re.sub('\d+', '', string)

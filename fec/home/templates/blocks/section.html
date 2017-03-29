@@ -1,6 +1,7 @@
 {% load wagtailcore_tags %}
+{% load filters %}
 
-<section id="{{ value.title | slugify }}" class="option {% if value.hide_title %}option--no-top-border{% endif %}">
+<section id="{% filter remove_digits|slugify %}{{ value.title }}{% endfilter %}" class="option {% if value.hide_title %}option--no-top-border{% endif %}">
   {% if not value.hide_title %}<h2>{{ value.title }}</h2>{% endif %}
   {% if value.aside %}
     <div class="option__content">
