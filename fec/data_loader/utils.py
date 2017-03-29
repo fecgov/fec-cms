@@ -6,7 +6,7 @@ CONTENT_SPECIFIC_REPLACEMENTS = [
     # deletions - these are from the header and we don't need them as part of the content
     ('<body bgcolor="#FFFFFF">', ''),
     ('<a href="http://www.fec.gov"><img src="../jpg/topfec.jpg" border="0" width="81" height="81" alt="FEC Home Page"/></a> </p>', ''),
-    ("""width="100%""""", ''),
+    ('width="100%"', ''),
     ('width="57"', ''),
     ("""width="187""""", ''),
     ('<h1><a name="content"/> Weekly Digest </h1>', ''),
@@ -63,8 +63,6 @@ CONTENT_REGEX_REPLACEMENTS = [
     ('<a href="\.\.\/pdf\/[0-9]+release.pdf">\.pdf version of this Weekly Digest<a>', ''),
     ('<a href="\.\.\/pdf\/[0-9]+release.pdf">\.pdf version...a>', ''),
     ('\.pdf version of this Weekly Digest', ''),
-    ('(<\/blockquote>)+', '<\blockquote>'),
-    ('(<blockquote>)+', 'blockquote'),
 ]
 
 KEYWORD_REGEX_CLEANER = '\s?\r\n\s+'
