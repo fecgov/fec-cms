@@ -688,14 +688,23 @@ class ServicesLandingPage(ContentPage, UniqueModel):
     def hero_class(self):
         return 'services'
 
+
 class AgendaPage(Page):
     mtg_date = models.DateTimeField(default=datetime.date.today)
-    mtg_time  = models.TimeField(default=datetime.time(10, 00))
+    mtg_time = models.TimeField(default=datetime.time(10, 00))
+
+    imported_html = StreamField(
+        [('html_block', blocks.RawHTMLBlock())],
+        null=True,
+        blank=True
+    )
+
     mtg_media = StreamField([
-        ('full_video_url', blocks.TextBlock()),
-        ('full_audio', DocumentChooserBlock(required=False)),
-        ('mtg_transcript', DocumentChooserBlock(required=False))
+        ('full_video_url', blocks.TextBlock(required=False)),    # 'video_link'
+        ('full_audio_url', blocks.TextBlock(required=False)),    # 'primary_audio_link'
+        ('mtg_transcript_url', blocks.TextBlock(required=False)) # 'closed_captioning_link'
     ])
+
     agenda = StreamField([
         ('agenda_item', blocks.StreamBlock([
             ('item_title', blocks.TextBlock()),
@@ -714,12 +723,12 @@ class AgendaPage(Page):
         FieldPanel('mtg_date'),
         FieldPanel('mtg_time'),
         StreamFieldPanel('agenda'),
+        StreamFieldPanel('imported_html'),
         MultiFieldPanel(
         [
             StreamFieldPanel('mtg_media'),
         ],
-        heading="Entire Meeeting Media",
+        heading="Entire Meeting Media",
         classname="collapsible collapsed"
         ),
-
     ]

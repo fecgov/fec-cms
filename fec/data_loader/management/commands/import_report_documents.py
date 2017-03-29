@@ -62,7 +62,7 @@ class Command(ImporterMixin, BaseCommand):
     def add_page(self, contents, base_page, **options):
         """
         Adds the report info to a new DocumentPage
-        Excpect json in the format:
+        Expects json in the format:
         [
           {
             "title": "February 2015 OIG Report",

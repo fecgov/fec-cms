@@ -6,7 +6,7 @@ services:
   - fec-creds-dev
   - fec-dev-cms
 env:
-  FEC_API_URL: https://api-stage.open.fec.gov
+  FEC_API_URL: https://fec-dev-api.app.cloud.gov
   FEC_APP_URL: https://fec-dev-proxy.app.cloud.gov/data
   FEC_CMS_DEBUG: true
   FEC_CMS_ENVIRONMENT: dev
