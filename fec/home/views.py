@@ -12,7 +12,7 @@ from home.models import (
     DigestPage,
     PressReleasePage,
     RecordPage,
-    TipsForTreasurersPage,
+    TipsForTreasurersPage
 )
 
 def replace_dash(string):
@@ -100,13 +100,12 @@ def updates(request):
       if year:
         press_releases = press_releases.filter(date__year=year)
         digests = digests.filter(date__year=year)
-
         if settings.FEATURES['record']:
           records = records.filter(date__year=year)
         if settings.FEATURES['tips']:
           tips = tips.filter(date__year=year)
 
-    # Chain all the QuerySets togethers
+    # Chain all the QuerySets together
     # via http://stackoverflow.com/a/434755/1864981
     updates = sorted(
       chain(press_releases, digests, records, tips),
