@@ -11,8 +11,9 @@ from home.models import (
     CommissionerPage,
     DigestPage,
     PressReleasePage,
+    AgendaPage,
     RecordPage,
-    TipsForTreasurersPage
+    TipsForTreasurersPage,
 )
 
 def replace_dash(string):
@@ -88,6 +89,7 @@ def updates(request):
       # Get everything and filter by year if necessary
       digests = DigestPage.objects.live()
       press_releases = PressReleasePage.objects.live()
+      agendas = AgendaPage.objects.live()
 
       # Hide behind feature flag unless explicitly requested
       # Only authenticated users will be able to explicitly request them for now
@@ -100,12 +102,14 @@ def updates(request):
       if year:
         press_releases = press_releases.filter(date__year=year)
         digests = digests.filter(date__year=year)
+        agendas = agendas.filter(mtg_date__year=year)
+
         if settings.FEATURES['record']:
           records = records.filter(date__year=year)
         if settings.FEATURES['tips']:
           tips = tips.filter(date__year=year)
 
-    # Chain all the QuerySets together
+    # Chain all the QuerySets togethers
     # via http://stackoverflow.com/a/434755/1864981
     updates = sorted(
       chain(press_releases, digests, records, tips),
