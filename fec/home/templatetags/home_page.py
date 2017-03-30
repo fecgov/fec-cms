@@ -13,16 +13,6 @@ from home.models import ServicesLandingPage
 
 register = template.Library()
 
-@register.inclusion_tag('partials/press-feed.html')
-def press_releases():
-    press_releases = PressReleasePage.objects.live().order_by('-date')[:3]
-    return {'updates': press_releases}
-
-@register.inclusion_tag('partials/press-feed.html')
-def weekly_digests():
-    digests = DigestPage.objects.live().order_by('-date')[:3]
-    return {'updates': digests}
-
 @register.inclusion_tag('partials/home-page-updates.html')
 def home_page_updates():
     press_releases = PressReleasePage.objects.live().filter(homepage_hide=False).order_by('-date')[:4]
@@ -66,5 +56,3 @@ def candidate_committee_services():
     service_page = ServicesLandingPage.objects.first()
 
     return {'service_page': service_page}
-
-
