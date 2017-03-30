@@ -690,8 +690,8 @@ class ServicesLandingPage(ContentPage, UniqueModel):
 
 
 class AgendaPage(Page):
-    mtg_date = models.DateTimeField(default=datetime.date.today)
-    mtg_time = models.TimeField(default=datetime.time(10, 00))
+    date = models.DateField(default=datetime.date.today)
+    time = models.TimeField(default=datetime.time(10, 00))
 
     imported_html = StreamField(
         [('html_block', blocks.RawHTMLBlock())],
@@ -720,8 +720,8 @@ class AgendaPage(Page):
     ])
 
     content_panels = Page.content_panels + [
-        FieldPanel('mtg_date'),
-        FieldPanel('mtg_time'),
+        FieldPanel('date'),
+        FieldPanel('time'),
         StreamFieldPanel('agenda'),
         StreamFieldPanel('imported_html'),
         MultiFieldPanel(
