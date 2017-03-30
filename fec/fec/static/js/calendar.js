@@ -10,6 +10,8 @@ var urls = require('fec-style/js/urls');
 var dropdown = require('fec-style/js/dropdowns');
 var Handlebars = require('hbsfy/runtime');
 var helpers = require('fec-style/js/helpers');
+var FilterPanel = require('fec-style/js/filter-panel').FilterPanel;
+var filterTags = require('fec-style/js/filter-tags');
 
 var calendarTooltip = require('./calendar-tooltip');
 var calendarHelpers = require('./calendar-helpers');
@@ -292,4 +294,22 @@ Calendar.prototype.managePopoverControl = function(e) {
     });
 };
 
-module.exports = {Calendar: Calendar};
+// Initialize filters
+var filterPanel = new FilterPanel();
+
+// Initialize filter tags
+var $tagList = new filterTags.TagList({
+  resultType: 'events',
+  emptyText: 'all events',
+}).$body;
+$('.js-filter-tags').prepend($tagList);
+
+// Initialize calendar
+new Calendar({
+  selector: '#calendar',
+  download: '#calendar-download',
+  subscribe: '#calendar-subscribe',
+  url: calendarHelpers.getUrl(['calendar-dates']),
+  exportUrl: calendarHelpers.getUrl(['calendar-dates', 'export']),
+  filterPanel: filterPanel,
+});

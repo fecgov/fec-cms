@@ -6,7 +6,13 @@ var source = require('vinyl-source-stream');
 var stringify = require('stringify');
 var hbsfy = require('hbsfy');
 
-var entries = ['./fec/static/js/fec.js', './fec/static/js/contact-form.js'];
+var entries = [
+  './fec/static/js/fec.js',
+  './fec/static/js/contact-form.js',
+  './fec/static/js/calendar.js',
+  './fec/static/js/home.js'
+];
+
 var debug = !!process.env.FEC_CMS_DEBUG;
 
 gulp.task('build-js', function () {
