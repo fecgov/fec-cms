@@ -1,0 +1,23 @@
+<div class="u-no-print">
+  <div class="slab slab--neutral slab--inline u-padding--left u-padding--right">
+    <div class="row">
+      <div class="usa-width-one-whole">
+        <form action="{{ settings.FEC_APP_URL }}/legal/search/enforcement" autocomplete="off" class="search__container">
+          <label for="search-input" class="label">Search closed MURs</label>
+          <div class="combo combo--search--medium combo--search--inline">
+            <input id="search-input" type="text" name="search" class="combo__input">
+            <input id="search-type" type="hidden" name="search_type" value="murs">
+            <button class="combo__button button--search button--standard" type="submit">
+              <span class="u-visually-hidden">Search</span>
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+    <span class="t-note t-sans search__example">Examples: filings; 2405</span>
+    <div class="message message--info">
+      <h3>This feature is still in progress</h3>
+      <p>We're actively building the <strong>MUR search</strong> feature. Results don't include most of the cases closed between 1975 and 1998. Search cases closed between 1975 and 1998 on the old FEC.gov through the <a href="http://www.fec.gov/MUR/">MUR archive</a> and cases from 1999 to present on the <a href="http://eqs.fec.gov">Enforcement Query System</a>.</p>
+    </div>
+  </div>
+</div>
