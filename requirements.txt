@@ -1,19 +1,19 @@
 Django>=1.10,<1.11
 cfenv==0.5.2
-dj-database-url==0.4.1
+dj-database-url==0.4.2
 django-libsass==0.7
-gunicorn==19.3.0
+gunicorn==19.7.1
 lxml==3.7.0
 newrelic==2.78.0.57
-psycopg2==2.6.1
-raven==5.8.1
-requests==2.12.4
+psycopg2==2.7.1
+requests==2.13.0
 slacker==0.8.6
 whitenoise==2.0.3
 wagtail>=1.8,<1.9
+bandit==1.4.0
 
 # Development
-invoke==0.13.0
+invoke==0.15.0
 GitPython==1.0.1
 
 # Data import

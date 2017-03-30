@@ -220,12 +220,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-if os.getenv('SENTRY_DSN'):
-    INSTALLED_APPS += ('raven.contrib.django.raven_compat', )
-    RAVEN_CONFIG = {
-        'dsn': os.getenv('SENTRY_DSN'),
-    }
-
 
 if FEC_CMS_ENVIRONMENT != 'LOCAL':
     AWS_QUERYSTRING_AUTH = False
