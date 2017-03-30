@@ -648,16 +648,8 @@ class ResourcePage(Page):
         return self.date.strftime('%B %Y')
 
 class LegalResourcesLandingPage(ContentPage, UniqueModel):
-    subpage_types = ['ResourcePage', 'EnforcementPage']
-    template = 'home/legal/legal_resources_landing.html'
-    @property
-    def content_section(self):
-        return 'legal-resources'
-
-class EnforcementPage(ContentPage, UniqueModel):
-    parent_page_types = ['LegalResourcesLandingPage']
     subpage_types = ['ResourcePage']
-    template = 'home/legal/enforcement.html'
+    template = 'home/legal/legal_resources_landing.html'
     @property
     def content_section(self):
         return 'legal-resources'

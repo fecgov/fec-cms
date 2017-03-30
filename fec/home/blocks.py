@@ -97,6 +97,13 @@ class CareersBlock(blocks.StaticBlock):
         admin_text = 'Show open fec jobs from USAJobs.gov. No configuration needed.'
         template = 'blocks/careers.html'
 
+class MURSearchBlock(blocks.StaticBlock):
+    """A block that displays the MUR search box"""
+    class Meta:
+        icon = 'search'
+        admin_text = 'Show the MUR search field. No configuration needed.'
+        template = 'blocks/mur_search.html'
+
 class ResourceBlock(blocks.StructBlock):
     """A section of a ResourcePage"""
     title = blocks.CharBlock(required=True)
@@ -112,6 +119,7 @@ class ResourceBlock(blocks.StructBlock):
         ('document_list', blocks.ListBlock(FeedDocumentBlock(), template='blocks/document-list.html', icon='doc-empty')),
         ('current_commissioners', CurrentCommissionersBlock()),
         ('fec_jobs', CareersBlock()),
+        ('mur_search', MURSearchBlock()),
         ('table', TableBlock())
     ])
 
