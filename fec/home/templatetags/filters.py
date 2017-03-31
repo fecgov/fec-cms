@@ -46,8 +46,8 @@ def web_app_url(path):
     return "{}{}".format(settings.FEC_APP_URL, path)
 
 @register.filter()
-def transition_url(path):
+def classic_url(path):
     """
-    Appends a path to the transition url as defined in the settings
+    Appends a path to the classic FEC.gov url as defined in the settings
     """
-    return "{}{}".format(settings.FEC_TRANSITION_URL, path)
+    return "{}{}".format(settings.FEC_CLASSIC_URL, path)
