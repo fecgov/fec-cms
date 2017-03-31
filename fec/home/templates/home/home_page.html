@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% load wagtailcore_tags %}
 {% load staticfiles %}
-{% load updates %}
+{% load home_page %}
 {% load filters %}
 {% block body_class %}template-{{ self.get_verbose_name | slugify }}{% endblock %}
 
@@ -27,7 +27,7 @@
 
         <div class="grid__item">
           <img src="{% static "img/feature--reporting.png" %}" alt="Icons representing a webpage for federal election guidance">
-          <h3><a href="/registration-and-reporting">Registration and reporting</a></h3>
+          <h3><a href="/help-candidates-and-committees">Help for candidates and committees</a></h3>
           <p>Providing guidance for individuals and groups that are active in federal elections.</p>
 
           <a class="t-sans js-scroll" href="#homepage-registration-and-reporting">Learn more</a>
@@ -101,45 +101,8 @@
     </div>
   </section>
 
-  <section id="homepage-registration-and-reporting" class="slab slab--secondary slab--home u-border-top-inverse">
-    <div class="container">
-      <h1><a href="/registration-and-reporting">Registration and reporting</a></h1>
-      <div class="grid grid--2-wide">
-        <div class="grid__item">
-          <div class="icon-heading icon-heading--checklist-circle">
-            <div class="icon-heading__content">
-              <h3>Different groups have different registration and reporting requirements</h3>
-              <a class="t-sans" href="/registration-and-reporting">Learn about requirements »</a>
-            </div>
-          </div>
-        </div>
-        <div class="grid__item">
-          <div class="icon-heading icon-heading--question-bubble-circle">
-            <div class="icon-heading__content">
-              <h3>Committees have 35 days to respond to Requests for Additional Information (RFAIs)</h3>
-              <a class="t-sans" href="/registration-and-reporting/request-additional-information">Learn how to respond »</a>
-            </div>
-          </div>
-        </div>
-        <div class="grid__item">
-          <div class="icon-heading icon-heading--calendar-circle">
-            <div class="icon-heading__content">
-              <h3>Committees must file regular reports about their financial activity</h3>
-              <a class="t-sans" href="/calendar/?category=EC+Periods&category=FEA+Periods&category=IE+Periods&category=report-E&category=report-M&category=report-Q">Find upcoming reporting deadlines »</a>
-            </div>
-          </div>
-        </div>
-        <div class="grid__item">
-          <div class="icon-heading icon-heading--training-circle">
-            <div class="icon-heading__content">
-              <h3>The FEC regularly hosts training events for candidates and committees</h3>
-              <a class="t-sans" href="/calendar/?category=Conferences&category=Roundtables">Find upcoming webinars, conferences and trainings »</a>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
+  {% candidate_committee_services %}
+
   <section class="slab slab--home slab--neutral">
     <div class="container">
       <h2 class="heading--section">Citizen information</h2>
