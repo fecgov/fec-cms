@@ -32,7 +32,7 @@ $(document).ready(function() {
   });
 
   // Initialize new accordions
-  $('.js-accordion').each(function(){
+  $('.js-accordion').each(function() {
     var contentPrefix = $(this).data('content-prefix') || 'accordion';
     var openFirst = $(this).data('open-first') || false;
     var selectors = {

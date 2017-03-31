@@ -22,10 +22,11 @@ from wagtail.wagtaildocs.models import Document
 from wagtail.contrib.table_block.blocks import TableBlock
 
 from fec import constants
-from home.blocks import (ThumbnailBlock, AsideLinkBlock, ContactInfoBlock,
-                        ContactInfoBlock, CitationsBlock, ResourceBlock,
-                        OptionBlock, CollectionBlock, DocumentFeedBlurb,
-                        ExampleParagraph, ExampleForms)
+
+from home.blocks import (ThumbnailBlock, AsideLinkBlock,
+                         ContactInfoBlock, CitationsBlock, ResourceBlock,
+                         OptionBlock, CollectionBlock, DocumentFeedBlurb,
+                         ExampleParagraph, ExampleForms, CustomTableBlock)
 
 stream_factory = functools.partial(
     StreamField,
@@ -35,6 +36,7 @@ stream_factory = functools.partial(
         ('html', blocks.RawHTMLBlock()),
         ('image', ImageChooserBlock()),
         ('table', TableBlock()),
+        ('custom_table', CustomTableBlock())
     ],
 )
 
@@ -646,16 +648,8 @@ class ResourcePage(Page):
         return self.date.strftime('%B %Y')
 
 class LegalResourcesLandingPage(ContentPage, UniqueModel):
-    subpage_types = ['ResourcePage', 'EnforcementPage']
-    template = 'home/legal/legal_resources_landing.html'
-    @property
-    def content_section(self):
-        return 'legal-resources'
-
-class EnforcementPage(ContentPage, UniqueModel):
-    parent_page_types = ['LegalResourcesLandingPage']
     subpage_types = ['ResourcePage']
-    template = 'home/legal/enforcement.html'
+    template = 'home/legal/legal_resources_landing.html'
     @property
     def content_section(self):
         return 'legal-resources'
