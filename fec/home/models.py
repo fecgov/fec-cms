@@ -610,6 +610,10 @@ class ResourcePage(Page):
     intro = StreamField([
         ('paragraph', blocks.RichTextBlock())
     ], null=True)
+    sidebar_title = models.CharField(max_length=255, null=True, blank=True)
+    related_pages = StreamField([
+        ('related_pages', blocks.ListBlock(blocks.PageChooserBlock()))
+    ], null=True, blank=True)
     sections = StreamField([
         ('sections', ResourceBlock())
     ], null=True)
@@ -632,6 +636,8 @@ class ResourcePage(Page):
 
     content_panels = Page.content_panels + [
         StreamFieldPanel('intro'),
+        FieldPanel('sidebar_title'),
+        StreamFieldPanel('related_pages'),
         StreamFieldPanel('sections'),
         StreamFieldPanel('citations'),
         StreamFieldPanel('related_topics')
@@ -655,7 +661,11 @@ class LegalResourcesLandingPage(ContentPage, UniqueModel):
         return 'legal-resources'
 
 class ServicesLandingPage(ContentPage, UniqueModel):
-    subpage_types = ['CollectionPage']
+    """
+    Page model for the Help for Candidates and Committees landing page
+    """
+
+    subpage_types = ['CollectionPage', 'ResourcePage', 'CustomPage']
     template = 'home/candidate-and-committee-services/services_landing_page.html'
 
     hero = stream_factory(null=True, blank=True)

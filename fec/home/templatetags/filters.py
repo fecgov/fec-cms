@@ -38,6 +38,15 @@ def child_page_count(page):
   return "{} {}".format(count, 'result' if count == 1 else 'results')
 
 @register.filter()
+def remove_digits(string):
+  """
+  Strips digits from a string
+  Useful in combination with built-in slugify in order to create strings
+  that can be used as HTML IDs, which cannot begin with digits
+  """
+  return re.sub('\d+', '', string)
+
+@register.filter()
 def web_app_url(path):
     """
     Appends a path to the web app URL as defined in the settings
