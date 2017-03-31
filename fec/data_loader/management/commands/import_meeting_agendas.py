@@ -88,7 +88,7 @@ class Command(ImporterMixin, BaseCommand):
         """
         new_page = AgendaPage(
             imported_html=self._raw_html_block(meeting['body']),
-            mtg_date=self._with_tz(meeting['posted_date']['iso8601']),
+            date=datetime.datetime.strptime(meeting['posted_date']['iso8601'], '%Y-%m-%d').date(),
             mtg_media=self._media_blocks(meeting),
             # mtg_time doesn't appear to be in the json.
 
@@ -98,10 +98,6 @@ class Command(ImporterMixin, BaseCommand):
             title=meeting['title_text'],
         )
         parent_page.add_child(instance=new_page)
-
-    @staticmethod
-    def _with_tz(a_date):
-        return timezone.make_aware(parser.parse(a_date), timezone.get_current_timezone())
 
     def _raw_html_block(self, legacy_cms_html: str) -> str:
         """
