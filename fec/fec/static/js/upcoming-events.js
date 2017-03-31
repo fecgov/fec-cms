@@ -10,6 +10,7 @@ var month = today.getMonth() + 1;
 var year = today.getFullYear();
 var todaysDate = year + '-' + month + '-' + day;
 
+// Homepage - Upcoming events list
 function UpcomingEvents() {
   var url = calendarHelpers.getUrl('calendar-dates',
     { 'sort': 'start_date',
@@ -43,6 +44,8 @@ function UpcomingEvents() {
   });
 }
 
+// Homepage - Help for candidates and committees
+// * Populates Upcoming deadlines card
 function UpcomingDeadlines() {
   var url = calendarHelpers.getUrl('calendar-dates',
     { 'sort': 'start_date',
