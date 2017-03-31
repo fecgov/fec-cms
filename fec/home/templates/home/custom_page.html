@@ -41,21 +41,21 @@
       </div>
     </div>
     {% if self.continue_learning %}
-    <div class="content__section--ruled content__section">
-      <h3>Continue learning about this topic</h3>
-      <div class="grid grid--3-wide">
-      {% for blocks in self.continue_learning %}
-        {% with blocks.value as blocks %}
-          {% for block in blocks %}
-            <div class="grid__item">
-              {% image block.image width-200 %}
-              <p><a href="{{ block.url }}">{{ block.text }}</a></p>
-            </div>
-          {% endfor %}
-        {% endwith %}
-      {% endfor %}
+      <div class="content__section--ruled content__section">
+        <h3>Continue learning about this topic</h3>
+        <div class="grid grid--3-wide">
+        {% for blocks in self.continue_learning %}
+          {% with blocks.value as blocks %}
+            {% for block in blocks %}
+              <div class="grid__item">
+                {% image block.image width-200 %}
+                <p><a href="{{ block.url }}">{{ block.text }}</a></p>
+              </div>
+            {% endfor %}
+          {% endwith %}
+        {% endfor %}
+        </div>
       </div>
-    </div>
     {% endif %}
     {% if self.citations %}
       <aside id="legal-citations" class="sidebar sidebar--secondary">
