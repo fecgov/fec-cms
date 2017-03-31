@@ -1,13 +1,14 @@
 <nav class="site-nav js-site-nav">
   <div id="site-menu" class="site-nav__container">
     <ul class="site-nav__panel site-nav__panel--main">
-      <li><h3 class="site-nav__title u-under-lg-only">Menu</h3></li>
+      <li><h2 class="site-nav__title u-under-lg-only">Menu</h2></li>
       <li class="site-nav__item" data-submenu="data">
-        <a class="site-nav__link u-lg-only" href="{{ settings.FEC_APP_URL }}">Campaign finance data</a>
-        <button class="site-nav__link button--nav-panel js-panel-trigger u-under-lg-only" aria-controls="nav-data">Campaign finance data</button>
+        <a class="site-nav__link" href="{{ settings.FEC_APP_URL }}">
+          <span class="site-nav__link__title">Campaign finance data</span>
+        </a>
       </li>
       <li class="site-nav__item site-nav__item--secondary" data-submenu="help">
-        <a href="{{ cms_url }}/help-candidates-committees/" class="site-nav__link">
+        <a href="{{ cms_url }}/help-candidates-committees/" class="site-nav__link {% if parent == 'help' %}is-parent{% endif %}">
           <span class="site-nav__link__title">Help for candidates and committees</span>
         </a>
       </li>
