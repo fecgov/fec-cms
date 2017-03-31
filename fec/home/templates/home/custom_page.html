@@ -40,6 +40,7 @@
         {% endif %}
       </div>
     </div>
+    {% if self.continue_learning %}
     <div class="content__section--ruled content__section">
       <h3>Continue learning about this topic</h3>
       <div class="grid grid--3-wide">
@@ -55,6 +56,7 @@
       {% endfor %}
       </div>
     </div>
+    {% endif %}
     {% if self.citations %}
       <aside id="legal-citations" class="sidebar sidebar--secondary">
         <h4 class="sidebar__title">Legal citations</h4>
