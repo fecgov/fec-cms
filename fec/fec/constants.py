@@ -138,7 +138,7 @@ update_types = OrderedDict([
 oig_reports = OrderedDict((x.lower(), x) for x in [
     "Audit report",
     "Inspection or special review report",
-    "Semiannual report"
+    "Semiannual report",
     "Strategic plan",
     "Work plan",
 ])
@@ -159,13 +159,13 @@ foia_reports = OrderedDict((x.lower(), x) for x in [
 ])
 
 privacy_reports = OrderedDict((x.lower(), x) for x in [
-    "Privacy Act notices",
+    "Privacy Act notice",
     "Privacy policy"
 ])
 
 procurement_contracting_reports = OrderedDict((x.lower(), x) for x in [
     "Buy America report",
-    "Fair Act",
+    "FAIR Act",
     "Inventory",
     "Memo",
     "Public procurement report",
