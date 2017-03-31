@@ -695,7 +695,7 @@ class ServicesLandingPage(ContentPage, UniqueModel):
 
 class AgendaPage(Page):
     date = models.DateField(default=datetime.date.today)
-    time = models.TimeField(null=True, blank=True)
+    time = models.TimeField(default=datetime.time(10, 00))
 
     imported_html = StreamField(
         [('html_block', blocks.RawHTMLBlock())],
