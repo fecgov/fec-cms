@@ -46,6 +46,7 @@ def remove_digits(string):
   """
   return re.sub('\d+', '', string)
 
+@register.filter()
 def web_app_url(path):
     """
     Appends a path to the web app URL as defined in the settings
