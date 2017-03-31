@@ -44,3 +44,10 @@ def web_app_url(path):
     This is useful for StaticBlocks, which don't have access to the entire context
     """
     return "{}{}".format(settings.FEC_APP_URL, path)
+
+@register.filter()
+def transition_url(path):
+    """
+    Appends a path to the transition url as defined in the settings
+    """
+    return "{}{}".format(settings.FEC_TRANSITION_URL, path)
