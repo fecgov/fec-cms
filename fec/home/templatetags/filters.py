@@ -1,5 +1,6 @@
 import re
 
+from django.conf import settings
 from django import template
 from django.utils.html import format_html
 from wagtail.wagtailcore.models import Page
@@ -44,3 +45,10 @@ def remove_digits(string):
   that can be used as HTML IDs, which cannot begin with digits
   """
   return re.sub('\d+', '', string)
+
+def web_app_url(path):
+    """
+    Appends a path to the web app URL as defined in the settings
+    This is useful for StaticBlocks, which don't have access to the entire context
+    """
+    return "{}{}".format(settings.FEC_APP_URL, path)
