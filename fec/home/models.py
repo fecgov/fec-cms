@@ -72,7 +72,7 @@ class ContentPage(Page):
     # Default content section for determining the active nav
     @property
     def content_section(self):
-        return 'registration-and-reporting'
+        return 'help'
 
 
 class HomePage(ContentPage, UniqueModel):
