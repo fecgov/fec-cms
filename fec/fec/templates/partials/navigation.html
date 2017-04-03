@@ -2,6 +2,11 @@
   <div id="site-menu" class="site-nav__container">
     <ul class="site-nav__panel site-nav__panel--main">
       <li><h2 class="site-nav__title u-under-lg-only">Menu</h2></li>
+      <li class="site-nav__item u-under-lg-only">
+        <a class="site-nav__link" href="/" rel="home">
+          <span class="site-nav__link__title">Home</span>
+        </a>
+      </li>
       <li class="site-nav__item" data-submenu="data">
         <a class="site-nav__link" href="{{ settings.FEC_APP_URL }}">
           <span class="site-nav__link__title">Campaign finance data</span>
@@ -16,6 +21,9 @@
         <a href="{{ cms_url }}/legal-resources" class="site-nav__link {% if parent == 'legal' %}is-parent{% endif %}">
           <span class="site-nav__link__title">Legal resources</span>
         </a>
+      </li>
+      <li class="site-nav__item utility-nav__item u-under-lg-only">
+        <a class="site-nav__link" href="/calendar">Calendar</a>
       </li>
     </ul>
   </div>
