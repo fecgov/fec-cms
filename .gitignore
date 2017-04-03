@@ -10,6 +10,7 @@ local.py
 *.py[cod]
 .cache
 .env
+/env
 
 # C extensions
 *.so
