@@ -23,7 +23,20 @@
   <body class="{% block body_class %}{% endblock %}">
     {% wagtailuserbar %}
     <a href="#main" class="skip-nav">skip navigation</a>
-
+    <div class="js-banner new-site-banner slab--neutral">
+      <div class="js-banner-min container" aria-hidden="false">
+        <p class="t-sans">Welcome to the new FEC.gov! You can still view the <a href="">archive site</a> until September 30, 2017.</p>
+      </div>
+      <div class="js-banner-max container" aria-hidden="true">
+        <p class="h2">Welcome to the new FEC.gov! All the most up-to-date content can be found here.</p>
+        <p class="t-sans">The old site will also be available for reference until September 30, 2017.</p>
+        <ul class="list--buttons">
+          <li><a class="button button--cta button--primary">Visit the archived site</a></li>
+          <li><button class="js-close-banner button--empty">Minimize this message</button></li>
+          <li><button class="js-close-banner button--empty" data-remember-closed="true">Minimize this message and don't show again</button></li>
+        </ul>
+      </div>
+    </div>
     {% if self.title == "Homepage" or self.title == "Home" %}
     <header class="site-header site-header--homepage">
       <div class="masthead">

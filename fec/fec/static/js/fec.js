@@ -28,6 +28,7 @@ var Sticky = require('component-sticky');
 var calendar = require('./calendar');
 var calendarHelpers = require('./calendar-helpers');
 var FormNav = require('./form-nav').FormNav;
+var Banner = require('./banner').Banner;
 
 var legal = require('./legal');
 var upcomingEvents = require('./upcoming-events');
@@ -36,6 +37,8 @@ var upcomingEvents = require('./upcoming-events');
 require('./vendor/tablist').init();
 
 $(document).ready(function() {
+  // Initialize new site banner
+  new Banner($('.js-banner'));
 
   // Initialize glossary
   new Glossary(terms, {}, {
