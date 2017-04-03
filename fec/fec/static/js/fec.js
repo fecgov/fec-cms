@@ -44,7 +44,7 @@ $(document).ready(function() {
   });
 
   // Initialize new accordions
-  $('.js-accordion').each(function(){
+  $('.js-accordion').each(function() {
     var contentPrefix = $(this).data('content-prefix') || 'accordion';
     var openFirst = $(this).data('open-first') || false;
     var selectors = {
@@ -61,7 +61,8 @@ $(document).ready(function() {
   new skipNav.Skipnav('.skip-nav', 'main');
   new siteNav.SiteNav('.js-site-nav', {
     cmsUrl: '',
-    webAppUrl: window.FEC_APP_URL
+    webAppUrl: window.FEC_APP_URL,
+    transitionUrl: window.TRANSITION_URL
   });
 
   // Initialize table of contents
