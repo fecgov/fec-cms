@@ -101,28 +101,19 @@ def updates(request):
             agendas = get_meeting_agendas(year=year)
 
     else:
-        # Get everything and filter by year if necessary
-        digests = DigestPage.objects.live()
-        press_releases = PressReleasePage.objects.live()
-        agendas = AgendaPage.objects.live()
+        digests = get_digests(year=year)
+        press_releases = get_press_releases(category_list=category_list,
+                                            year=year)
+
+        agendas = get_meeting_agendas(year=year)
 
         # Hide behind feature flag unless explicitly requested
-        # Only authenticated users will be able to explicitly request them for now
+        # Only authenticated users will be able to explicitly request them
         if settings.FEATURES['record']:
-            records = RecordPage.objects.live()
+            get_records(category_list=category_list, year=year)
 
         if settings.FEATURES['tips']:
-            tips = TipsForTreasurersPage.objects.live()
-
-        if year:
-            press_releases = press_releases.filter(date__year=year)
-            digests = digests.filter(date__year=year)
-            agendas = agendas.filter(date__year=year)
-
-            if settings.FEATURES['record']:
-                records = records.filter(date__year=year)
-            if settings.FEATURES['tips']:
-                tips = tips.filter(date__year=year)
+            tips = get_tips(year=year)
 
     # Chain all the QuerySets together
     # via http://stackoverflow.com/a/434755/1864981
