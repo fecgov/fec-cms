@@ -104,7 +104,6 @@ def updates(request):
         digests = get_digests(year=year)
         press_releases = get_press_releases(category_list=category_list,
                                             year=year)
-
         agendas = get_meeting_agendas(year=year)
 
         # Hide behind feature flag unless explicitly requested
