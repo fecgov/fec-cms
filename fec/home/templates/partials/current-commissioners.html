@@ -1,11 +1,48 @@
+{% load wagtailimages_tags %}
+{% load staticfiles %}
 {% comment %}
   This partial is used by the commissioners inclusion tag in commissioners.py
-  Show the chair, then the vice chair, then everyone else
+  Show the chair, then the vice chair, everyone else and vacant seats
 {% endcomment %}
 <div class="grid grid--2-wide">
+{% if chair_commissioner %}
   {% include 'partials/commissioner.html' with commissioner=chair_commissioner %}
+{% else %}
+  <div class="grid__item commissioner-height">
+  <div class="icon-heading">
+    <img class="icon-heading__image" src="{% static "img/headshot--no-photo.png" %}" alt="Headshot of vacant seat">
+    <div class="icon-heading__content">
+      <div class="t-lead">Vacant Chair Seat</div>
+    </div>
+  </div>
+</div>
+{% endif %}
+
+{% if vice_commissioner %}
   {% include 'partials/commissioner.html' with commissioner=vice_commissioner %}
+{% else %}
+  <div class="grid__item commissioner-height">
+  <div class="icon-heading">
+    <img class="icon-heading__image" src="{% static "img/headshot--no-photo.png" %}" alt="Headshot of vacant seat">
+    <div class="icon-heading__content">
+      <div class="t-lead">Vacant Vice-Chair Seat</div>
+    </div>
+  </div>
+</div>
+{% endif %}
+
 {% for commissioner in commissioners %}
   {% include 'partials/commissioner.html' with commissioner=commissioner %}
+{% endfor %}
+
+{% for vacant in vacant_seats %}
+  <div class="grid__item commissioner-height">
+  <div class="icon-heading">
+    <img class="icon-heading__image" src="{% static "img/headshot--no-photo.png" %}" alt="Headshot of vacant seat">
+    <div class="icon-heading__content">
+      <div class="t-lead">Vacant Seat</div>
+    </div>
+  </div>
+</div>
 {% endfor %}
 </div>
