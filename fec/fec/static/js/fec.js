@@ -32,6 +32,9 @@ var FormNav = require('./form-nav').FormNav;
 var legal = require('./legal');
 var upcomingEvents = require('./upcoming-events');
 
+// accessible tabs for alt sidebar
+require('./vendor/tablist').init();
+
 $(document).ready(function() {
 
   // Initialize glossary
@@ -41,7 +44,7 @@ $(document).ready(function() {
   });
 
   // Initialize new accordions
-  $('.js-accordion').each(function(){
+  $('.js-accordion').each(function() {
     var contentPrefix = $(this).data('content-prefix') || 'accordion';
     var openFirst = $(this).data('open-first') || false;
     var selectors = {
@@ -58,7 +61,8 @@ $(document).ready(function() {
   new skipNav.Skipnav('.skip-nav', 'main');
   new siteNav.SiteNav('.js-site-nav', {
     cmsUrl: '',
-    webAppUrl: window.FEC_APP_URL
+    webAppUrl: window.FEC_APP_URL,
+    transitionUrl: window.TRANSITION_URL
   });
 
   // Initialize table of contents
@@ -83,8 +87,13 @@ $(document).ready(function() {
     new dropdown.Dropdown(this);
   });
 
-  // Homepage - What's Happening section
+  /* Homepage Upcoming Events */
+
+  // - What's Happening section
   new upcomingEvents.UpcomingEvents();
+
+  // - Candidate and committee support
+  new upcomingEvents.UpcomingDeadlines();
 
   // Initialize feedback widget
   var feedbackWidget = new feedback.Feedback(window.FEC_APP_URL + '/issue/');

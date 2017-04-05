@@ -22,9 +22,11 @@ from wagtail.wagtaildocs.models import Document
 from wagtail.contrib.table_block.blocks import TableBlock
 
 from fec import constants
-from home.blocks import (ThumbnailBlock, AsideLinkBlock, ContactInfoBlock,
-                        ContactInfoBlock, CitationsBlock, ResourceBlock,
-                        OptionBlock, CollectionBlock, DocumentFeedBlurb)
+
+from home.blocks import (ThumbnailBlock, AsideLinkBlock,
+                         ContactInfoBlock, CitationsBlock, ResourceBlock,
+                         OptionBlock, CollectionBlock, DocumentFeedBlurb,
+                         ExampleParagraph, ExampleForms, CustomTableBlock)
 
 stream_factory = functools.partial(
     StreamField,
@@ -34,6 +36,7 @@ stream_factory = functools.partial(
         ('html', blocks.RawHTMLBlock()),
         ('image', ImageChooserBlock()),
         ('table', TableBlock()),
+        ('custom_table', CustomTableBlock())
     ],
 )
 
@@ -69,7 +72,7 @@ class ContentPage(Page):
     # Default content section for determining the active nav
     @property
     def content_section(self):
-        return 'registration-and-reporting'
+        return 'help'
 
 
 class HomePage(ContentPage, UniqueModel):
@@ -374,14 +377,40 @@ class CustomPage(Page):
     """Flexible customizable page."""
     author = models.CharField(max_length=255)
     date = models.DateField('Post date')
-    body = stream_factory()
+    body = StreamField([
+        ('heading', blocks.CharBlock(classname='full title')),
+        ('paragraph', blocks.RichTextBlock()),
+        ('html', blocks.RawHTMLBlock()),
+        ('image', ImageChooserBlock()),
+        ('table', TableBlock()),
+        ('example_paragraph', ExampleParagraph()),
+        ('example_forms', ExampleForms())
+    ])
     sidebar = stream_factory(null=True, blank=True)
+    citations = StreamField([('citations', blocks.ListBlock(CitationsBlock()))],
+                    null=True)
+    record_articles = StreamField([
+        ('record_articles', blocks.ListBlock(
+            blocks.PageChooserBlock(target_model=RecordPage)
+        ))
+    ], null=True)
+    continue_learning = StreamField([
+        ('continue_learning', blocks.ListBlock(ThumbnailBlock(), icon='doc-empty')),
+    ], null=True)
 
     content_panels = Page.content_panels + [
         FieldPanel('author'),
         FieldPanel('date'),
         StreamFieldPanel('body'),
-        StreamFieldPanel('sidebar'),
+        StreamFieldPanel('citations'),
+        StreamFieldPanel('continue_learning'),
+        MultiFieldPanel([
+                StreamFieldPanel('sidebar'),
+                StreamFieldPanel('record_articles'),
+            ],
+            heading = "Sidebar",
+            classname = "collapsible"
+        )
     ]
 
 
@@ -583,6 +612,10 @@ class ResourcePage(Page):
     intro = StreamField([
         ('paragraph', blocks.RichTextBlock())
     ], null=True)
+    sidebar_title = models.CharField(max_length=255, null=True, blank=True)
+    related_pages = StreamField([
+        ('related_pages', blocks.ListBlock(blocks.PageChooserBlock()))
+    ], null=True, blank=True)
     sections = StreamField([
         ('sections', ResourceBlock())
     ], null=True)
@@ -605,6 +638,8 @@ class ResourcePage(Page):
 
     content_panels = Page.content_panels + [
         StreamFieldPanel('intro'),
+        FieldPanel('sidebar_title'),
+        StreamFieldPanel('related_pages'),
         StreamFieldPanel('sections'),
         StreamFieldPanel('citations'),
         StreamFieldPanel('related_topics')
@@ -621,22 +656,18 @@ class ResourcePage(Page):
         return self.date.strftime('%B %Y')
 
 class LegalResourcesLandingPage(ContentPage, UniqueModel):
-    subpage_types = ['ResourcePage', 'EnforcementPage']
+    subpage_types = ['ResourcePage']
     template = 'home/legal/legal_resources_landing.html'
     @property
     def content_section(self):
         return 'legal-resources'
 
-class EnforcementPage(ContentPage, UniqueModel):
-    parent_page_types = ['LegalResourcesLandingPage']
-    subpage_types = ['ResourcePage']
-    template = 'home/legal/enforcement.html'
-    @property
-    def content_section(self):
-        return 'legal-resources'
-
 class ServicesLandingPage(ContentPage, UniqueModel):
-    subpage_types = ['CollectionPage']
+    """
+    Page model for the Help for Candidates and Committees landing page
+    """
+
+    subpage_types = ['CollectionPage', 'ResourcePage', 'CustomPage']
     template = 'home/candidate-and-committee-services/services_landing_page.html'
 
     hero = stream_factory(null=True, blank=True)
@@ -663,14 +694,23 @@ class ServicesLandingPage(ContentPage, UniqueModel):
     def hero_class(self):
         return 'services'
 
+
 class AgendaPage(Page):
-    mtg_date = models.DateTimeField(default=datetime.date.today)
-    mtg_time  = models.TimeField(default=datetime.time(10, 00))
+    date = models.DateField(default=datetime.date.today)
+    time = models.TimeField(null=True, blank=True)
+
+    imported_html = StreamField(
+        [('html_block', blocks.RawHTMLBlock())],
+        null=True,
+        blank=True
+    )
+
     mtg_media = StreamField([
-        ('full_video_url', blocks.TextBlock()),
-        ('full_audio', DocumentChooserBlock(required=False)),
-        ('mtg_transcript', DocumentChooserBlock(required=False))
+        ('full_video_url', blocks.TextBlock(required=False)),    # 'video_link'
+        ('full_audio_url', blocks.TextBlock(required=False)),    # 'primary_audio_link'
+        ('mtg_transcript_url', blocks.TextBlock(required=False)) # 'closed_captioning_link'
     ])
+
     agenda = StreamField([
         ('agenda_item', blocks.StreamBlock([
             ('item_title', blocks.TextBlock()),
@@ -686,15 +726,15 @@ class AgendaPage(Page):
     ])
 
     content_panels = Page.content_panels + [
-        FieldPanel('mtg_date'),
-        FieldPanel('mtg_time'),
+        FieldPanel('date'),
+        FieldPanel('time'),
         StreamFieldPanel('agenda'),
+        StreamFieldPanel('imported_html'),
         MultiFieldPanel(
         [
             StreamFieldPanel('mtg_media'),
         ],
-        heading="Entire Meeeting Media",
+        heading="Entire Meeting Media",
         classname="collapsible collapsed"
         ),
-
     ]

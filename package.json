@@ -11,11 +11,10 @@
     "aria-accordion": "0.1.1",
     "component-sticky": "1.0.0",
     "es6-weak-map": "2.0.1",
-    "fec-style": "7.6.0",
+    "fec-style": "8.0.0",
     "fullcalendar": "2.5.0",
     "glossary-panel": "0.2.1",
-    "jquery": "2.1.4",
-    "js-beautify": "1.5.10",
+    "jquery": "2.2.4",
     "moment": "2.10.3",
     "underscore": "^1.8.3",
     "urijs": "1.17.0"

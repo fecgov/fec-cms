@@ -1,5 +1,7 @@
 {% extends "base.html" %}
 {% load wagtailcore_tags %}
+{% load wagtailimages_tags %}
+
 {% block body_class %}template-{{ self.get_verbose_name | slugify }}{% endblock %}
 
 {% block content %}
@@ -11,23 +13,66 @@
     <header class="heading--main">
       <h1>{{ self.title }}</h1>
     </header>
-    <div class="main__content">
-      {{ self.body }}
+    <div class="row">
+      <div class="main__content">
+        {{ self.body }}
+      </div>
+      <div class="sidebar-container">
+        {% if self.sidebar %}
+        <aside class="sidebar sidebar--secondary">
+          {% for block in self.sidebar %}
+            {% if block.block_type == 'heading' %}
+              <h4 class="sidebar__title">{{ block }}</h4>
+            {% else %}
+              <div class="sidebar__content">
+                {{ block }}
+              </div>
+            {% endif %}
+          {% endfor %}
+        </aside>
+        {% endif %}
+
+        {% if self.record_articles %}
+          <div class="sidebar__related-links">
+            <h4 class="label sidebar__record-title">From the FEC Record</h4>
+            {{ self.record_articles }}
+          </div>
+        {% endif %}
+      </div>
     </div>
-    {% if self.sidebar %}
-    <div class="sidebar-container">
-      <aside class="sidebar sidebar--secondary">
-        {% for block in self.sidebar %}
-          {% if block.block_type == 'heading' %}
-            <h4 class="sidebar__title">{{ block }}</h4>
-          {% else %}
-            <div class="sidebar__content">
-              {{ block }}
-            </div>
-          {% endif %}
+    {% if self.continue_learning %}
+      <div class="content__section--ruled content__section">
+        <h3>Continue learning about this topic</h3>
+        <div class="grid grid--3-wide">
+        {% for blocks in self.continue_learning %}
+          {% with blocks.value as blocks %}
+            {% for block in blocks %}
+              <div class="grid__item">
+                {% image block.image width-200 %}
+                <p><a href="{{ block.url }}">{{ block.text }}</a></p>
+              </div>
+            {% endfor %}
+          {% endwith %}
         {% endfor %}
+        </div>
+      </div>
+    {% endif %}
+    {% if self.citations %}
+      <aside id="legal-citations" class="sidebar sidebar--secondary">
+        <h4 class="sidebar__title">Legal citations</h4>
+        <div class="sidebar__content">
+          <div class="grid grid--2-wide">
+          {% for citation in self.citations %}
+            {% for block in citation.value %}
+              <div class="grid__item">
+                <p class="t-bold">{{ block.label }}</p>
+                {{ block.content }}
+              </div>
+            {% endfor %}
+          {% endfor %}
+          </div>
+        </div>
       </aside>
-    </div>
     {% endif %}
   </div>
 </article>

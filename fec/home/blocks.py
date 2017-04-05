@@ -3,7 +3,6 @@ from wagtail.wagtailimages.blocks import ImageChooserBlock
 from wagtail.wagtaildocs.blocks import DocumentChooserBlock
 from wagtail.contrib.table_block.blocks import TableBlock
 
-
 class ThumbnailBlock(blocks.StructBlock):
     """A block that combines a thumbnail and a caption,
         both of which link to a URL"""
@@ -18,7 +17,8 @@ class AsideLinkBlock(blocks.StructBlock):
     """Either a search or calendar link in a section aside"""
     link_type = blocks.ChoiceBlock(choices=[
         ('search', 'Search'),
-        ('calendar', 'Calendar')
+        ('calendar', 'Calendar'),
+        ('record', 'Record')
     ], icon='link', required=False, help_text='Set an icon')
 
     url = blocks.URLBlock()
@@ -49,8 +49,8 @@ class ContactInfoBlock(blocks.StructBlock):
     contact_items = blocks.ListBlock(ContactItemBlock())
 
     class Meta:
-        template='blocks/contact-info.html'
-        icon='placeholder'
+        template = 'blocks/contact-info.html'
+        icon = 'placeholder'
 
 class CitationsBlock(blocks.StructBlock):
     """Block for a chunk of citations that includes a label and the citation (in content)"""
@@ -97,6 +97,13 @@ class CareersBlock(blocks.StaticBlock):
         admin_text = 'Show open fec jobs from USAJobs.gov. No configuration needed.'
         template = 'blocks/careers.html'
 
+class MURSearchBlock(blocks.StaticBlock):
+    """A block that displays the MUR search box"""
+    class Meta:
+        icon = 'search'
+        admin_text = 'Show the MUR search field. No configuration needed.'
+        template = 'blocks/mur_search.html'
+
 class ResourceBlock(blocks.StructBlock):
     """A section of a ResourcePage"""
     title = blocks.CharBlock(required=True)
@@ -108,17 +115,20 @@ class ResourceBlock(blocks.StructBlock):
         ('internal_button', InternalButtonBlock()),
         ('external_button', ExternalButtonBlock()),
         ('page', blocks.PageChooserBlock(template='blocks/page-links.html')),
+        ('disabled_page', blocks.CharBlock(blank=False, null=False, required=False, template='blocks/disabled-page-links.html', icon='placeholder', help_text='Name of a disabled link')),
         ('document_list', blocks.ListBlock(FeedDocumentBlock(), template='blocks/document-list.html', icon='doc-empty')),
         ('current_commissioners', CurrentCommissionersBlock()),
         ('fec_jobs', CareersBlock()),
+        ('mur_search', MURSearchBlock()),
         ('table', TableBlock())
     ])
 
     aside = blocks.StreamBlock([
         ('title', blocks.CharBlock(required=False, icon='title')),
         ('document', ThumbnailBlock()),
-        ('link', AsideLinkBlock())
+        ('link', AsideLinkBlock()),
     ],
+
     template='blocks/section-aside.html',
     icon='placeholder')
 
@@ -147,3 +157,41 @@ class DocumentFeedBlurb(blocks.StructBlock):
     """For generating a box with a description that links to a document feed page"""
     page = blocks.PageChooserBlock()
     description = blocks.CharBlock()
+
+class ExampleParagraph(blocks.StructBlock):
+    title = blocks.CharBlock(required=True)
+    paragraph = blocks.RichTextBlock(required=True)
+
+    class Meta:
+        template = 'blocks/example-paragraph.html'
+        icon = 'pilcrow'
+
+class ExampleForms(blocks.StructBlock):
+    """For showing one or two example documents"""
+    title = blocks.CharBlock(required=True);
+    forms = blocks.ListBlock(ThumbnailBlock())
+
+    class Meta:
+        template = 'blocks/example-forms.html'
+        icon = 'doc-empty'
+
+class CustomTableBlock(blocks.StructBlock):
+    """A custom table"""
+    custom_table_options = {
+    'startRows': 7,
+    'startCols': 6,
+    'colHeaders': True,
+    'rowHeaders': True,
+    'height': 108,
+    'language': 'en',
+    }
+
+    custom_table = blocks.StreamBlock([
+        ('title', blocks.CharBlock(required=False)),
+        ('table_intro', blocks.RichTextBlock(required=False)),
+        ('table', TableBlock(table_options=custom_table_options)),
+        ('footnote', blocks.CharBlock(required=False))
+    ])
+
+    class Meta:
+        template = 'blocks/custom_table.html'
