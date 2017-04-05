@@ -23,7 +23,6 @@
   <body class="{% block body_class %}{% endblock %}">
     {% wagtailuserbar %}
     <a href="#main" class="skip-nav">skip navigation</a>
-
     {% if self.title == "Homepage" or self.title == "Home" %}
     <header class="site-header site-header--homepage">
       <div class="masthead">
@@ -36,6 +35,23 @@
         <img src="{% static 'img/print-logo.png' %}" class="u-print-only" alt="FEC logo">
         <a title="Home" href="/" class="site-title"><span class="u-visually-hidden">Federal Election Commission | United States of America</span></a>
         <ul class="utility-nav list--flat">
+          <li class="utility-nav__search">
+            <form accept-charset="UTF-8" action="https://search.usa.gov/search" class="combo" method="get" role="search">
+              <input name="utf8" type="hidden" value="&#x2713;" />
+              <input id="affiliate" name="affiliate" type="hidden" value="betafec">
+              <label class="u-visually-hidden" for="query">Search</label>
+              <input
+                class="js-header-typeahead combo__input"
+                autocomplete="off"
+                id="query"
+                name="query"
+                type="text"
+                aria-label="Search betaFEC">
+              <button name="commit" type="submit" class="button--cta combo__button button--search">
+                <span class="u-visually-hidden">Search</span>
+              </button>
+            </form>
+          </li>
           <li class="utility-nav__item"><a href="/calendar/">Calendar</a></li>
           <li class="utility-nav__item"><button class="js-glossary-toggle glossary__toggle">Glossary</button></li>
         </ul>
@@ -52,6 +68,23 @@
         <img src="{% static 'img/print-logo.png' %}" class="u-print-only" alt="FEC logo">
         <a title="Home" href="/" class="site-title"><span class="u-visually-hidden">Federal Election Commission | United States of America</span></a>
         <ul class="utility-nav list--flat">
+          <li class="utility-nav__search">
+            <form accept-charset="UTF-8" action="https://search.usa.gov/search" id="search_form" class="combo" method="get" role="search">
+              <div style="margin:0;padding:0;display:inline"><input name="utf8" type="hidden" value="&#x2713;" /></div>
+              <input id="affiliate" name="affiliate" type="hidden" value="betafec">
+              <label class="u-visually-hidden" for="query">Search</label>
+              <input
+                class="js-header-typeahead combo__input"
+                autocomplete="off"
+                id="query"
+                name="query"
+                type="text"
+                aria-label="Search betaFEC">
+              <button name="commit" type="submit" class="button--cta combo__button button--search">
+                <span class="u-visually-hidden">Search</span>
+              </button>
+            </form>
+          </li>
           <li class="utility-nav__item{% if self.content_section == 'calendar' %} is-active{% endif %}"><a href="/calendar/">Calendar</a></li>
           <li class="utility-nav__item"><button class="js-glossary-toggle glossary__toggle">Glossary</button></li>
         </ul>
@@ -156,5 +189,14 @@
       <script type="text/javascript" language="javascript" src="//ethn.io/90208.js" async="true" charset="utf-8"></script>
       {% endif %}
     {% endif %}
+      <script type="text/javascript">
+        //<![CDATA[
+          var usasearch_config = { siteHandle:"betafec2" };
+          var script = document.createElement("script");
+          script.type = "text/javascript";
+          script.src = "//search.usa.gov/javascripts/remote.loader.js";
+          document.getElementsByTagName("head")[0].appendChild(script);
+      //]]>
+    </script>
   </body>
 </html>

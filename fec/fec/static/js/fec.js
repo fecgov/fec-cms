@@ -117,7 +117,10 @@ $(document).ready(function() {
     filterPanel: filterPanel,
   });
 
-  // Initialize typeahead
+  // Initialize header typeahead
+  new typeahead.Typeahead($('.js-header-typeahead'), null, window.FEC_APP_URL + '/');
+
+  // Initialize CFD home typeahead
   new typeahead.Typeahead($('.js-typeahead'), 'candidates', window.FEC_APP_URL + '/');
 
   // Initialize search toggle
