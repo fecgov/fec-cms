@@ -24,10 +24,12 @@
     {% wagtailuserbar %}
     <a href="#main" class="skip-nav">skip navigation</a>
 
-    {% if settings.FEATURES.preflipbanner %}
+    {% if settings.FEATURES.pre_flip_banner %}
     <div class="js-new-site-orientation banner">
-      <div class="t-bold">
-        <div class="highlight"><span class="t-underline">X</span> DAYS</div> until this site becomes the new FEC.gov
+      <div class="countdown t-bold">
+        {% if settings.FEATURES.pre_flip_countdown %}
+        <div class="highlight"><span class="days t-underline" data-date="{{ settings.FEATURES.pre_flip_countdown }}"></span> DAYS</div> until this site becomes the new FEC.gov
+        {% endif %}
       </div>
       <div class="toggle">
         <div class="note">
@@ -36,10 +38,12 @@
         </div>
         <h2><a>Start a tour</a> of the new features</h2>
       </div>
+      {% if settings.FEATURES.pre_flip_countdown %}
       <div class="toggle-text">
         <div class="less">Show less <i class="icon-small--arrow-up-border"></i></div>
         <div class="more">Show more <i class="icon-small--arrow-down-border"></i></div>
       </div>
+      {% endif %}
     </div>
     {% endif %}
 

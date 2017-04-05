@@ -200,7 +200,8 @@ FEATURES = {
     'tips': bool(env.get_credential('FEC_FEATURE_TIPS', '')),
     'radform': bool(env.get_credential('FEC_FEATURE_RADFORM', '')),
     'ethnio': bool(env.get_credential('FEC_FEATURE_ETHNIO', '')),
-    'preflipbanner': bool(env.get_credential('PRE_FLIP_BANNER'))
+    'pre_flip_banner': bool(env.get_credential('FEC_PRE_FLIP_BANNER')),
+    'pre_flip_countdown': env.get_credential('FEC_PRE_FLIP_COUNTDOWN')
 }
 
 AUTH_PASSWORD_VALIDATORS = [
