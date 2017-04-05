@@ -97,7 +97,7 @@ def updates(request):
             digests = get_digests(year=year)
         if 'tips-for-treasurers' in update_types:
             tips = get_tips(year=year)
-        if 'agenda' in update_types:
+        if 'agendas' in update_types:
             agendas = get_meeting_agendas(year=year)
 
     else:
