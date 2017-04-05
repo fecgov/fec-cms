@@ -8,48 +8,64 @@
 {% block content %}
   {% include 'partials/breadcrumbs.html' with page=self style='secondary' %}
   <main class="main container">
-    <h1>Search</h1>
-
-    <form class="slab slab--inline slab--neutral" action="{% url 'search' %}" method="get">
+    <h1 class="heading--main">{{ self.title }}</h1>
+    <div class="row" id="sections">
+      <div class="sidebar-container sidebar-container--left">
+        <div class="js-sticky-side" data-sticky-container="sections">
+          <nav class="sidebar sidebar--neutral sidebar--left side-nav js-toc">
+            <ul class="sidebar__content">
+              <li class="side-nav__item"><a class="side-nav__link" href="#data">Candidates and committees</a></li>
+              <li class="side-nav__item"><a class="side-nav__link" href="#other">Other results</a></li>
+            </ul>
+          </nav>
+        </div>
+      </div>
+    <div class="main__content--right">
+      <form class="slab slab--inline slab--neutral" action="{% url 'search' %}" method="get">
         <div class="container">
           <div class="combo">
-            <input type="text" class="combo__input" name="query"{% if search_query %} value="{{ search_query }}"{% endif %}>
+            <label for="search" class="label">Search</label>
+            <input id="search" type="text" class="combo__input" name="query"{% if search_query %} value="{{ search_query }}"{% endif %}>
             <button type="submit" value="Search" class="combo__button button button--cta">Search</button>
           </div>
         </div>
-    </form>
+      </form>
+      {% if candidate_results %}
+        <section id="data">
+          <h2>Candidates</h2>
+          <ul class="post-feed">
+          {% for result in candidate_results %}
+            <li class="post">
+              <h3><a href="{{settings.FEC_APP_URL}}/candidate/{{result.candidate_id}}">{{ result.name }}</a></h3>
+            </li>
+          {% endfor %}
+          </ul>
+        </section>
+      {% endif %}
+      {% if search_results %}
+        <section id="other">
+          <ul class="post-feed">
+            {% for result in search_results %}
+              <li class="post">
+                <h3><a href="{{ result.url }}">{{ result.title }}</a></h3>
+                <span class="t-small t-sans t-block">{{ result.url }}</span>
+                <p>...{{ result.snippet }}...</p>
+              </li>
+            {% endfor %}
+          </ul>
+        {% if search_results.has_previous %}
+          <a href="{% url 'search' %}?query={{ search_query|urlencode }}&amp;page={{ search_results.previous_page_number }}">Previous</a>
+        {% endif %}
 
-    {% if candidate_results %}
-    <h2>Candidates</h2>
-    <ul class="post-feed">
-    {% for result in candidate_results %}
-      <li class="post">
-        <h3><a href="{{settings.FEC_APP_URL}}/candidate/{{result.candidate_id}}">{{ result.name }}</a></h3>
-      </li>
-    {% endfor %}
-    </ul>
-    {% endif %}
-
-    {% if search_results %}
-      <ul class="post-feed">
-        {% for result in search_results %}
-          <li class="post">
-            <h3><a href="{{ result.url }}">{{ result.title }}</a></h3>
-            <span class="t-small t-sans t-block">{{ result.url }}</span>
-            <p>...{{ result.snippet }}...</p>
-          </li>
-        {% endfor %}
-      </ul>
-
-      {% if search_results.has_previous %}
-        <a href="{% url 'search' %}?query={{ search_query|urlencode }}&amp;page={{ search_results.previous_page_number }}">Previous</a>
+        {% if search_results.has_next %}
+          <a href="{% url 'search' %}?query={{ search_query|urlencode }}&amp;page={{ search_results.next_page_number }}">Next</a>
+        {% endif %}
+        </section>
       {% endif %}
 
-      {% if search_results.has_next %}
-        <a href="{% url 'search' %}?query={{ search_query|urlencode }}&amp;page={{ search_results.next_page_number }}">Next</a>
+      {% if search_query and not search_results and not candidate_results %}
+        No results found
       {% endif %}
-    {% elif search_query %}
-      No results found
-    {% endif %}
-  </main>
+      </div>
+    </main>
 {% endblock %}
