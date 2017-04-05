@@ -24,15 +24,21 @@
     {% wagtailuserbar %}
     <a href="#main" class="skip-nav">skip navigation</a>
 
+    {% if settings.FEATURES.preflipbanner %}
     <div class="banner t-centered">
-      <div class="t-bold"><div class="highlight"><span class="t-underline">X</span> DAYS</div> until this site becomes the new FEC.gov</div>
-      <div class="note">
-        On April 31, 2017 the old <a href="http://www.fec.gov">FEC.gov</a> will be accessible from an archive link.<br/>
-        Questions or comments? Use the <a class="js-feedback">anonymous feedback tool</a> or email us at <a href="mailto:betafeedback@fec.gov">betafeedback@fec.gov</a>
+      <div class="t-bold">
+        <div class="highlight"><span class="t-underline">X</span> DAYS</div> until this site becomes the new FEC.gov
       </div>
-      <h2><a>Start a tour</a> of the new features</h2>
-      <div class="toggle">Show less</div>
+      <div class="toggle">
+        <div class="note">
+          On April 31, 2017 the old <a href="http://www.fec.gov">FEC.gov</a> will be accessible from an archive link.<br/>
+          Questions or comments? Use the <a class="js-feedback">anonymous feedback tool</a> or email us at <a href="mailto:betafeedback@fec.gov">betafeedback@fec.gov</a>
+        </div>
+        <h2><a>Start a tour</a> of the new features</h2>
+      </div>
+      <div class="toggle-text">Show less</div>
     </div>
+    {% endif %}
 
     {% if self.title == "Homepage" or self.title == "Home" %}
     <header class="site-header site-header--homepage">
