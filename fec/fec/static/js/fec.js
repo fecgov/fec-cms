@@ -20,6 +20,7 @@ var stickyBar = require('fec-style/js/sticky-bar');
 var toc = require('fec-style/js/toc');
 var typeahead = require('fec-style/js/typeahead');
 var Search = require('fec-style/js/search');
+var SiteOrientation = require('fec-style/js/site-orientation');
 
 // Hack: Append jQuery to `window` for use by legacy libraries
 window.$ = window.jQuery = $;
@@ -36,6 +37,9 @@ var upcomingEvents = require('./upcoming-events');
 require('./vendor/tablist').init();
 
 $(document).ready(function() {
+
+  // new site orientation
+  new SiteOrientation.SiteOrientation('.js-new-site-orientation');
 
   // Initialize glossary
   new Glossary(terms, {}, {
