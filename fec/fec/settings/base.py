@@ -189,22 +189,12 @@ FEC_CMS_ENVIRONMENT = ENVIRONMENTS.get(os.getenv('FEC_CMS_ENVIRONMENT'), 'LOCAL'
 CONTACT_EMAIL = 'betafeedback@fec.gov';
 CONSTANTS = constants
 
-# Config search
-WAGTAILSEARCH_BACKENDS = {
-    'default': {
-        'BACKEND': 'wagtail.wagtailsearch.backends.elasticsearch5',
-        'URLS': ['http://localhost:9200'],
-        'INDEX': 'wagtail',
-        'TIMEOUT': 5,
-        'OPTIONS': {},
-        'INDEX_SETTINGS': {},
-    }
-}
 
 # Config for the ServiceNow API for contacting RAD
 FEC_SERVICE_NOW_API = env.get_credential('FEC_SERVICE_NOW_API')
 FEC_SERVICE_NOW_USERNAME = env.get_credential('FEC_SERVICE_NOW_USERNAME')
 FEC_SERVICE_NOW_PASSWORD = env.get_credential('FEC_SERVICE_NOW_PASSWORD')
+FEC_DIGITALGOV_KEY = env.get_credential('FEC_DIGITALGOV_KEY')
 
 FEATURES = {
     'record': bool(env.get_credential('FEC_FEATURE_RECORD', '')),

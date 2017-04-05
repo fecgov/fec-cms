@@ -21,15 +21,24 @@ def search_candidates(query):
 def search(request):
     search_query = request.GET.get('query', None)
     page = request.GET.get('page', 1)
-
+    search_results = []
+    candidate_results = []
     # Search
     if search_query:
-        search_results = Page.objects.live().search(search_query)
+        params = {
+            'affiliate': 'betafec_api',
+            'access_key': settings.FEC_DIGITALGOV_KEY,
+            'query': search_query,
+            'enable_highlighting': 'false'
+        }
+        r = requests.get('https://search.usa.gov/api/v2/search/i14y', params=params)
         query = Query.get(search_query)
 
         # Record hit
         query.add_hit()
         candidate_results = search_candidates(search_query)
+
+        search_results = r.json()['web']['results']
 
     # Pagination
     # paginator = Paginator(search_results, 5)

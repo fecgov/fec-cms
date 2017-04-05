@@ -34,10 +34,9 @@
       <ul class="post-feed">
         {% for result in search_results %}
           <li class="post">
-            <h3><a href="{% pageurl result %}">{{ result }}</a></h3>
-            {% if result.search_description %}
-              {{ result.search_description|safe }}
-            {% endif %}
+            <h3><a href="{{ result.url }}">{{ result.title }}</a></h3>
+            <span class="t-small t-sans t-block">{{ result.url }}</span>
+            <p>...{{ result.snippet }}...</p>
           </li>
         {% endfor %}
       </ul>

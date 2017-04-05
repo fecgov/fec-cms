@@ -9,7 +9,6 @@ from modelcluster.contrib.taggit import ClusterTaggableManager
 from taggit.models import TaggedItemBase
 from wagtail.wagtailcore.models import Page, Orderable
 from wagtail.wagtailcore.fields import StreamField
-from wagtail.wagtailsearch import index
 from wagtail.wagtailcore import blocks
 from wagtail.wagtailadmin.edit_handlers import (FieldPanel, StreamFieldPanel,
                                                 PageChooserPanel, InlinePanel, MultiFieldPanel)
@@ -294,9 +293,6 @@ class PressReleasePage(ContentPage):
         PageChooserPanel('read_next'),
     ]
 
-    search_fields = Page.search_fields + [
-        index.SearchField('body')
-    ]
 
     promote_panels = Page.promote_panels + [
         MultiFieldPanel([
@@ -388,9 +384,6 @@ class CustomPage(Page):
         StreamFieldPanel('sidebar'),
     ]
 
-    search_fields = Page.search_fields + [
-        index.SearchField('body')
-    ]
 
 class PressLandingPage(Page):
     hero = stream_factory(null=True, blank=True)
