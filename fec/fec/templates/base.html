@@ -25,25 +25,38 @@
     <a href="#main" class="skip-nav">skip navigation</a>
 
     {% if settings.FEATURES.pre_flip_banner %}
-    <div class="js-new-site-orientation banner">
-      <div class="countdown t-bold">
+    <div class="js-new-site-orientation site-orientation">
+      <div class="banner">
+        <div class="countdown t-bold">
+          {% if settings.FEATURES.pre_flip_countdown %}
+          <div class="highlight"><span class="days t-underline" data-date="{{ settings.FEATURES.pre_flip_countdown }}"></span> DAYS</div> until this site becomes the new FEC.gov
+          {% endif %}
+        </div>
+        <div class="toggle">
+          <div class="note">
+            On April 31, 2017 the old <a href="http://www.fec.gov">FEC.gov</a> will be accessible from an archive link.<br/>
+            Questions or comments? Use the <a class="js-feedback">anonymous feedback tool</a> or email us at <a href="mailto:betafeedback@fec.gov">betafeedback@fec.gov</a>
+          </div>
+          <h2><a class="start-tour">Start a tour</a> of the new features</h2>
+        </div>
         {% if settings.FEATURES.pre_flip_countdown %}
-        <div class="highlight"><span class="days t-underline" data-date="{{ settings.FEATURES.pre_flip_countdown }}"></span> DAYS</div> until this site becomes the new FEC.gov
+        <div class="toggle-text">
+          <div class="less">Show less <i class="icon-small--arrow-up-border"></i></div>
+          <div class="more">Show more <i class="icon-small--arrow-down-border"></i></div>
+        </div>
         {% endif %}
       </div>
-      <div class="toggle">
-        <div class="note">
-          On April 31, 2017 the old <a href="http://www.fec.gov">FEC.gov</a> will be accessible from an archive link.<br/>
-          Questions or comments? Use the <a class="js-feedback">anonymous feedback tool</a> or email us at <a href="mailto:betafeedback@fec.gov">betafeedback@fec.gov</a>
-        </div>
-        <h2><a>Start a tour</a> of the new features</h2>
+
+      <div class="tour-header">
+        <ol>
+          <li><span class="t-bold">1</span> Introduction</li>
+          <li><span class="t-bold">2</span> Campaign finance data</li>
+          <li><span class="t-bold">3</span> Candidate and committee services</li>
+          <li><span class="t-bold">4</span> Legal resources</li>
+        </ol>
+
+        <button class="button exit-tour">Exit tour</button>
       </div>
-      {% if settings.FEATURES.pre_flip_countdown %}
-      <div class="toggle-text">
-        <div class="less">Show less <i class="icon-small--arrow-up-border"></i></div>
-        <div class="more">Show more <i class="icon-small--arrow-down-border"></i></div>
-      </div>
-      {% endif %}
     </div>
     {% endif %}
 
