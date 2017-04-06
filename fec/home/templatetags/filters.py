@@ -60,3 +60,9 @@ def classic_url(path):
     Appends a path to the classic FEC.gov url as defined in the settings
     """
     return "{}{}".format(settings.FEC_CLASSIC_URL, path)
+
+@register.filter()
+def highlight_matches(result):
+    result.replace("&#57344;", ">>")
+    result.replace("&#57345;", "<<")
+    return result

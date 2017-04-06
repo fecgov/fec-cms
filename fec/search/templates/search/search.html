@@ -1,26 +1,16 @@
 {% extends "base.html" %}
 {% load static wagtailcore_tags %}
+{% load filters %}
 
 {% block body_class %}template-searchresults{% endblock %}
 
 {% block title %}Search{% endblock %}
 
 {% block content %}
-  {% include 'partials/breadcrumbs.html' with page=self style='secondary' %}
+  {% include 'partials/breadcrumbs.html' with page=self style='primary' %}
   <main class="main container">
     <h1 class="heading--main">{{ self.title }}</h1>
-    <div class="row" id="sections">
-      <div class="sidebar-container sidebar-container--left">
-        <div class="js-sticky-side" data-sticky-container="sections">
-          <nav class="sidebar sidebar--neutral sidebar--left side-nav js-toc">
-            <ul class="sidebar__content">
-              <li class="side-nav__item"><a class="side-nav__link" href="#data">Candidates and committees</a></li>
-              <li class="side-nav__item"><a class="side-nav__link" href="#other">Other results</a></li>
-            </ul>
-          </nav>
-        </div>
-      </div>
-    <div class="main__content--right">
+    <div class="row">
       <form class="slab slab--inline slab--neutral" action="{% url 'search' %}" method="get">
         <div class="container">
           <div class="combo">
@@ -30,42 +20,77 @@
           </div>
         </div>
       </form>
-      {% if candidate_results %}
-        <section id="data">
-          <h2>Candidates</h2>
-          <ul class="post-feed">
-          {% for result in candidate_results %}
-            <li class="post">
-              <h3><a href="{{settings.FEC_APP_URL}}/candidate/{{result.candidate_id}}">{{ result.name }}</a></h3>
-            </li>
-          {% endfor %}
-          </ul>
-        </section>
-      {% endif %}
-      {% if search_results %}
-        <section id="other">
-          <ul class="post-feed">
-            {% for result in search_results %}
-              <li class="post">
-                <h3><a href="{{ result.url }}">{{ result.title }}</a></h3>
-                <span class="t-small t-sans t-block">{{ result.url }}</span>
-                <p>...{{ result.snippet }}...</p>
-              </li>
-            {% endfor %}
-          </ul>
-        {% if search_results.has_previous %}
-          <a href="{% url 'search' %}?query={{ search_query|urlencode }}&amp;page={{ search_results.previous_page_number }}">Previous</a>
+    </div>
+    <div class="row">
+      <div class="main__content">
+        {% if search_results %}
+          <section id="other">
+            <ul class="post-feed">
+              {% if best_bets %}
+                {% for result in best_bets %}
+                  <li class="post">
+                    <h3><i class="icon icon--inline--left i-star"></i><a href="{{ result.url }}">{{ result.title }}</a></h3>
+                    <span class="t-small t-sans t-block">{{ result.url }}</span>
+                    <p class="t-note">{{ result.description }}</p>
+                  </li>
+                {% endfor %}
+              {% endif %}
+              {% if candidate_results %}
+                {% for result in candidate_results %}
+                  <li class="post">
+                    <h3><i class="icon icon--inline--left i-candidate"></i><a href="{{settings.FEC_APP_URL}}/candidate/{{result.candidate_id}}">{{ result.name }}</a></h3>
+                    <span class="t-small t-sans t-block">{{settings.FEC_APP_URL}}/candidate/{{result.candidate_id}}</span>
+                    <p>Candidate for {{ result.office_full }} in {% for y in result.election_years %}{{ y }}{% if forloop.last %}{% else %}, {% endif %}{% endfor %}</p>
+                  </li>
+                {% endfor %}
+              {% endif %}
+              {% if committee_results %}
+                {% for result in committee_results %}
+                  <li class="post">
+                    <h3><i class="icon icon--inline--left i-committee"></i><a href="{{settings.FEC_APP_URL}}/committee/{{result.committee_id}}">{{ result.name }}</a></h3>
+                    <span class="t-small t-sans t-block">{{settings.FEC_APP_URL}}/committee/{{result.committee_id}}</span>
+                    <p>Committee</p>
+                  </li>
+                {% endfor %}
+              {% endif %}
+              {% for result in search_results %}
+                <li class="post">
+                  <h3><i class="icon icon--inline--left i-document"></i><a href="{{ result.url }}">{{ result.title }}</a></h3>
+                  <span class="t-small t-sans t-block">{{ result.url }}</span>
+                  <p class="t-note">{{ result.snippet | highlight_matches }}</p>
+                </li>
+              {% endfor %}
+            </ul>
+            <div class="results-info">
+              <span class="t-sans">{{ meta.count }} results</span>
+              <div class="u-float-right">
+                {% if meta.prev_offset %}
+                  <a class="button button--standard button--previous" href="{% url 'search' %}?query={{ search_query|urlencode }}&amp;offset={{ meta.prev_offset }}"><span class="u-visually-hidden">Previous</span></a>
+                {% endif %}
+                {% if meta.next_offset %}
+                  <a class="button button--standard button--next" href="{% url 'search' %}?query={{ search_query|urlencode }}&amp;offset={{ meta.next_offset }}"><span class="u-visually-hidden">Next</span></a>
+                {% endif %}
+              </div>
+            </div>
+          </section>
         {% endif %}
 
-        {% if search_results.has_next %}
-          <a href="{% url 'search' %}?query={{ search_query|urlencode }}&amp;page={{ search_results.next_page_number }}">Next</a>
+        {% if search_query and not search_results and not candidate_results %}
+          No results found
         {% endif %}
-        </section>
-      {% endif %}
-
-      {% if search_query and not search_results and not candidate_results %}
-        No results found
-      {% endif %}
+        </div>
+      <div class="sidebar-container">
+        <aside class="sidebar sidebar--primary">
+          <h4 class="sidebar__title">Other search options</h4>
+            <div class="sidebar__content">
+              <p class="t-sans">Search for "{{ search_query}}" in:</p>
+              <ul class="sidebar__related-links">
+                <li><a href="{{ settings.FEC_APP_URL }}/receipts/individual-contributions?contributor_name={{search_query}}">Individual contributions</a></li>
+                <li><a href="{{ settings.FEC_APP_URL }}/legal/search?search_type=all&amp;search={{ search_query}}">Legal resources</a></li>
+              </ul>
+            </div>
+        </aside>
       </div>
-    </main>
+    </div>
+  </main>
 {% endblock %}
