@@ -49,13 +49,13 @@
 
       <div class="tour-header">
         <ol>
-          <li><span class="t-bold">1</span> Introduction</li>
-          <li><span class="t-bold">2</span> Campaign finance data</li>
-          <li><span class="t-bold">3</span> Candidate and committee services</li>
-          <li><span class="t-bold">4</span> Legal resources</li>
+          <li><a><span class="t-bold">1</span> Introduction</a></li>
+          <li><a><span class="t-bold">2</span> Campaign finance data</a></li>
+          <li><a><span class="t-bold">3</span> Candidate and committee services</a></li>
+          <li><a><span class="t-bold">4</span> Legal resources</a></li>
         </ol>
 
-        <button class="button exit-tour">Exit tour</button>
+        <button class="button exit-tour">Exit tour <i class="icon icon--inline--right i-x"></i></button>
       </div>
     </div>
     {% endif %}
@@ -72,8 +72,14 @@
         <img src="{% static 'img/print-logo.png' %}" class="u-print-only" alt="FEC logo">
         <a title="Home" href="/" class="site-title"><span class="u-visually-hidden">Federal Election Commission | United States of America</span></a>
         <ul class="utility-nav list--flat">
-          <li class="utility-nav__item"><a href="/calendar/">Calendar</a></li>
-          <li class="utility-nav__item"><button class="js-glossary-toggle glossary__toggle">Glossary</button></li>
+          <li class="utility-nav__item">
+            <a href="/calendar/" data-intro="<h5>Stay up to date</h5>Find elections, filing deadlines, reporting periods (and more!). Sync the calendar with Apple, Google or Outlook accounts, or download it to your device.">Calendar</a>
+            <div class="tour-dot tour-dot--middle"></div>
+          </li>
+          <li class="utility-nav__item">
+            <button class="js-glossary-toggle glossary__toggle" data-intro="<h5>Look up unfamiliar words</h5>Use the glossary to find definitions for campaign finance terms. Click or tap any word with a :book_icon: to read the definition.">Glossary</button>
+            <div class="tour-dot tour-dot--middle"></div>
+          </li>
         </ul>
       </div>
       {% include 'partials/mobile-nav.html' %}
@@ -119,7 +125,8 @@
                 <a href="{{ cms_url }}/contact-us/">Contact</a>
               </li>
               <li>
-                <a href="{{ cms_url }}/press/">Press</a>
+                <div class="tour-dot tour-dot--left"></div>
+                <a href="{{ cms_url }}/press/" data-intro="<h5>Streamlined press resources</h5>A new page for press includes information for reporters and an archive of all press releases and Weekly Digests.">Press</a>
               </li>
             </ul>
           </div>
