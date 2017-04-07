@@ -41,7 +41,7 @@
     <div class="message message--info">
       <h2 class="message__title">This page is still in progress</h2>
       <div class="message__content">
-        <p class="u-no-margin">We're actively reorganizing our content about candidates and committees. If you can't find what you're looking for, you can try browsing this content in <a href="">its previous form</a>.</p>
+        <p class="u-no-margin">We're actively reorganizing our content about candidates and committees. If you can't find what you're looking for, you can try browsing this content in <a href="{{ settings.FEC_TRANSITION_URL }}/info/compliance.shtml">its previous form</a>.</p>
       </div>
     </div>
 
@@ -71,7 +71,7 @@
           </div>
         {% endif %}
         <div class="grid__item">
-          <a href="">
+          <a href="{{ settings.FEC_TRANSITION_URL }}/info/outreach.shtml">
             <aside class="card card--horizontal card--secondary">
               <div class="card__image__container">
                 <span class="card__icon i-training"><span class="u-visually-hidden">Icon of a training screen</span></span>
