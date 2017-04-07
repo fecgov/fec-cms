@@ -1,12 +1,16 @@
 {% load wagtailcore_tags %}
 {% load filters %}
-
 <div class="sidebar-container sidebar-container--left">
   <div class="js-sticky-side" data-sticky-container="{{ container }}">
     <nav class="sidebar sidebar--neutral sidebar--left side-nav js-toc">
       <ul class="sidebar__content">
           {% for section in sections %}
-            <li class="side-nav__item"><a class="side-nav__link" href="#{% filter remove_digits|slugify %}{{ section.value.title }}{% endfilter %}">{{ section.value.title }}</a></li>
+            <li class="side-nav__item">
+            {% if self.title == 'Help for candidates and committees' and forloop.counter == 1 %}
+            <div class="tour-dot tour-dot--left" data-intro="<h5>Help for your group</h5>New categories make it easy to find information based on the type of committee you’re researching and what you need to know."></div>
+            {% endif %}
+              <a class="side-nav__link" href="#{% filter remove_digits|slugify %}{{ section.value.title }}{% endfilter %}">{{ section.value.title }}</a>
+            </li>
           {% endfor %}
           {% if citations %}
             <li class="side-nav__item"><a class="side-nav__link" href="#legal-citations">Legal citations</a></li>

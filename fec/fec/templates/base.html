@@ -93,7 +93,9 @@
                 <a href="{{ cms_url }}/contact-us/">Contact</a>
               </li>
               <li>
+                {% if self.title == "Homepage" or self.title == "Home" %}
                 <div class="tour-dot tour-dot--left" data-intro="<h5>Streamlined press resources</h5>A new page for press includes information for reporters and an archive of all press releases and Weekly Digests."></div>
+                {% endif %}
                 <a href="{{ cms_url }}/press/">Press</a>
               </li>
             </ul>
