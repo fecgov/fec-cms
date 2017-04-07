@@ -1,0 +1,33 @@
+    <div class="js-new-site-orientation site-orientation">
+      <div class="banner">
+        <div class="countdown t-bold">
+          {% if settings.FEATURES.pre_flip_countdown %}
+          <div class="highlight"><span class="days t-underline" data-date="{{ settings.FEATURES.pre_flip_countdown }}"></span> DAYS</div> until this site becomes the new FEC.gov
+          {% endif %}
+        </div>
+        <div class="toggle">
+          <div class="note">
+            On April 31, 2017 the old <a href="http://www.fec.gov">FEC.gov</a> will be accessible from an archive link.<br/>
+            Questions or comments? Use the <a class="js-feedback">anonymous feedback tool</a> or email us at <a href="mailto:betafeedback@fec.gov">betafeedback@fec.gov</a>
+          </div>
+          <h2><a class="start-tour">Start a tour</a> of the new features</h2>
+        </div>
+        {% if settings.FEATURES.pre_flip_countdown %}
+        <div class="toggle-text">
+          <div class="less">Show less <i class="icon-small--arrow-up-border"></i></div>
+          <div class="more">Show more <i class="icon-small--arrow-down-border"></i></div>
+        </div>
+        {% endif %}
+      </div>
+
+      <div class="tour-header">
+        <ol>
+          <li class="tour-introduction"><a href="/"><span class="t-bold">1</span> Introduction</a></li>
+          <li class="tour-campaign-finance-data"><a href="{{ settings.FEC_APP_URL }}?tour=true"><span class="t-bold">2</span> Campaign finance data</a></li>
+          <li class="tour-candidate-committee-services"><a href="/help-candidates-and-committees?tour=true"><span class="t-bold">3</span> Candidate and committee services</a></li>
+          <li class="tour-legal-resources"><a href="/legal-resources?tour=true"><span class="t-bold">4</span> Legal resources</a></li>
+        </ol>
+
+        <button class="button exit-tour">Exit tour <i class="icon icon--inline--right i-x"></i></button>
+      </div>
+    </div>

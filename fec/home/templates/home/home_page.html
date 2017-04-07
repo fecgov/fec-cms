@@ -5,6 +5,12 @@
 {% load filters %}
 {% block body_class %}template-{{ self.get_verbose_name | slugify }}{% endblock %}
 
+{% block extra_js %}
+  <script>
+    TOUR_PAGE = 'introduction';
+  </script>
+{% endblock extra_js %}
+
 {% block content %}
   <section class="hero hero--home" aria-labelledby="hero-heading">
     <div class="hero__banner"></div>

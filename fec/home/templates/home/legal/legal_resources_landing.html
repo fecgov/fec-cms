@@ -4,6 +4,12 @@
 {% block title %}Legal resources{% endblock %}
 {% block body_class %}template-{{ self.get_verbose_name | slugify }}{% endblock %}
 
+{% block extra_js %}
+  <script>
+    TOUR_PAGE = 'legal-resources';
+  </script>
+{% endblock extra_js %}
+
 {% block content %}
   {% include "partials/search-hero.html" %}
   <div class="slab slab--neutral slab--spacious">
@@ -135,7 +141,4 @@
 
 {% include 'partials/disclaimer.html' %}
 
-{% endblock %}
-
-{% block extra_js %}
 {% endblock %}
