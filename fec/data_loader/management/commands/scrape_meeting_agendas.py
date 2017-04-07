@@ -22,7 +22,7 @@ from lxml.html import (  # type: ignore
     HtmlElement
 )
 import requests
-from ipdb import set_trace as st  # type: ignore
+#from ipdb import set_trace as st  # type: ignore
 from os import _exit  # type: ignore
 
 

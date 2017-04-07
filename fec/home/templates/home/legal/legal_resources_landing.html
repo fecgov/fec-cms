@@ -53,8 +53,13 @@
                 </a>
               </li>
               <li class="side-nav__item">
-                <a class="side-nav__link" href="#court-and-policy">
-                Court cases and policy statements
+                <a class="side-nav__link" href="#court-cases">
+                Court cases
+                </a>
+              </li>
+              <li class="side-nav__item">
+                <a class="side-nav__link" href="#policy">
+                Policy statements and other guidance
                 </a>
               </li>
             </ul>
@@ -98,21 +103,34 @@
             </div>
             <h3><a href="/legal-resources/legislation/">Legislation</a></h3>
             <p>Browse selected amendments to the <em>Federal Election Campaign Act</em> and Commission recommendations to Congress.</p>
-            <a class="button--cta button--go" href="/legal-resources/legislation/">Explore legislation</a>
           </div>
           <div class="option">
-            <h2 id="court-and-policy">Court cases and policy statements</h2>
-            <div class="content__section">
-              <h3><a href="/legal-resources/court-cases">Court cases</a></h3>
-              <p>Learn more about active and past cases involving the FEC.</p>
-              <a class="button--cta button--go" href="/legal-resources/court-cases">Explore court cases</a>
-            </div>
-            <h3><a href="http://www.fec.gov/law/policy.shtml">Policy statements</a></h3>
+            <h2 id="court-cases"><a href="/legal-resources/court-cases">Court cases</a></h2>
+            <p>Learn more about active and past cases involving the FEC.</p>
+          </div>
+          <div class="option">
+            <h2 id="policy"><a href="{{ settings.FEC_TRANSITION_URL }}/law/policy.shtml">Policy statements and other guidance</a></h2>
             <p>Access statements, interpretive rules and other guidance issued by the FEC.</p>
-            <a class="button--cta button--go" href="http://www.fec.gov/law/policy.shtml">Explore policy statements</a>
           </div>
         </section>
       </div>
+  </div>
+  <div class="slab slab--neutral">
+    <div class="container">
+      <div class="grid grid--4-wide">
+        <div class="grid__item">
+          <a href="{{ settings.FEC_TRANSITION_URL }}/pages/brochures/fecfeca.shtml">
+            <aside class="card card--horizontal card--secondary">
+              <div class="card__image__container">
+                <span class="card__icon i-notebook"><span class="u-visually-hidden">Icon of a notebook</span></span>
+              </div>
+              <div class="card__content">
+                  The FEC and the Federal Campaign Finance Law brochure
+              </div>
+            </aside>
+          </a>
+        </div>
+    </div>
   </div>
 
 {% include 'partials/disclaimer.html' %}

@@ -9,8 +9,35 @@
 {% endblock %}
 
 {% block intro %}
-<div class="main__content">
-  <div class="t-lead">{{ self.intro }}</div>
+<div class="row">
+  <div class="main__content">
+    <div class="t-lead">{{ self.intro }}</div>
+  </div>
+  {% if self.sidebar_title %}
+  <div class="sidebar-container">
+    <aside class="sidebar sidebar--secondary">
+      <h4 class="sidebar__title">{{ self.sidebar_title }}</h4>
+      <ul class="sidebar__content">
+        {% for related_pages in self.related_pages %}
+          {% for related_page in related_pages.value %}
+          <li class="u-padding--bottom"><a href="{{ related_page.url }}">{{ related_page.title }}</a></li>
+          {% endfor %}
+        {% endfor %}
+      </ul>
+      {% if self.show_search %}
+      <h4 class="sidebar__title">Already registered?</h4>
+      <form class="sidebar__content" action="{{ settings.FEC_APP_URL }}" method="GET">
+        <label class="label" for="committee-search">Find your committee</label>
+        <div class="combo--search--mini">
+          <input id="committee-search" name="search" class="combo__input" type="text">
+          <input type="hidden" name="search_type" value="committees" placeholder="Search committees">
+          <button class="combo__button button--search button--standard" type="submit"><span class="u-visually-hidden">Search</span></button>
+        </div>
+      </form>
+      {% endif %}
+    </aside>
+  </div>
+  {% endif %}
 </div>
 {% endblock %}
 

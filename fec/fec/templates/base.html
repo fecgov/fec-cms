@@ -34,13 +34,13 @@
           <span class="disclaimer__right">An official website of the U.S. government <img src="{% static 'img/us_flag_small.png' %}" class="flag" alt="US flag signifying that this is a United States Federal Government website"></span>
         </div>
         <img src="{% static 'img/print-logo.png' %}" class="u-print-only" alt="FEC logo">
-        <a title="Home" href="/" class="site-title"><span class="u-visually-hidden">Federal Election Commission | United States of America</span></a>
+        <a title="Home" href="/" class="site-title" rel="home"><span class="u-visually-hidden">Federal Election Commission | United States of America</span></a>
         <ul class="utility-nav list--flat">
           <li class="utility-nav__item"><a href="/calendar/">Calendar</a></li>
           <li class="utility-nav__item"><button class="js-glossary-toggle glossary__toggle">Glossary</button></li>
         </ul>
       </div>
-      {% include 'partials/mobile-nav.html' %}
+      {% include 'partials/navigation.html' %}
     </header>
     {% else %}
     <header class="site-header">
@@ -50,13 +50,13 @@
           <span class="disclaimer__right">An official website of the United States Government <img src="{% static 'img/us_flag_small.png' %}"  alt="US flag signifying that this is a United States Federal Government website"></span>
         </div>
         <img src="{% static 'img/print-logo.png' %}" class="u-print-only" alt="FEC logo">
-        <a title="Home" href="/" class="site-title"><span class="u-visually-hidden">Federal Election Commission | United States of America</span></a>
+        <a title="Home" href="/" class="site-title" rel="home"><span class="u-visually-hidden">Federal Election Commission | United States of America</span></a>
         <ul class="utility-nav list--flat">
           <li class="utility-nav__item{% if self.content_section == 'calendar' %} is-active{% endif %}"><a href="/calendar/">Calendar</a></li>
           <li class="utility-nav__item"><button class="js-glossary-toggle glossary__toggle">Glossary</button></li>
         </ul>
       </div>
-      {% include 'partials/mobile-nav.html' %}
+      {% include 'partials/navigation.html' %}
     </header>
     {% endif %}
 
@@ -66,30 +66,82 @@
 
     <nav class="footer-links">
       <div class="container">
-        <div class="footer-links__column">
-          <ul>
-            <li>
-              <a href="https://github.com/18F/fec">GitHub repository</a>
-            </li>
-            <li>
-              <a href="https://github.com/18F/FEC/blob/master/release_notes/release_notes.md">Release notes</a>
-            </li>
-          </ul>
-          <ul>
-            <li>
-              <a href="{{ cms_url }}/contact-us/">Contact us</a>
-            </li>
-            <li>
-              <a href="{{ cms_url }}/about/">About</a>
-            </li>
-            <li>
-              <a href="{{ cms_url }}/press/">Press</a>
-            </li>
-            <li>
-              <a href="{{ cms_url }}/updates/">Latest updates</a>
-            </li>
-          </ul>
+
+        <div class="grid grid--6-wide">
+
+          <div class="grid__item"></div>
+
+          <div class="grid__item">
+            <ul>
+              <li>
+                <a href="{{ cms_url }}/about/">About the FEC</a>
+              </li>
+              <li>
+                <a href="{{ cms_url }}/about/careers/">Careers</a>
+              </li>
+              <li>
+                <a href="{{ cms_url }}/contact-us/">Contact</a>
+              </li>
+              <li>
+                <a href="{{ cms_url }}/press/">Press</a>
+              </li>
+            </ul>
+          </div>
+
+          <div class="grid__item">
+            <ul>
+              {% comment %}
+              <li>
+                <a href="">Privacy policy</a>
+              </li>
+              {% endcomment %}
+              <li>
+                <a href="{{ cms_url }}/about/plain-language/">Plain language</a>
+              </li>
+              <li>
+                <a href="{{ cms_url }}/about/no-fear-act/">No FEAR Act</a>
+              </li>
+            </ul>
+          </div>
+
+          <div class="grid__item">
+            <ul>
+              <li>
+                <a href="https://api.open.fec.gov/">OpenFEC API</a>
+              </li>
+              <li>
+                <a href="https://github.com/18F/fec">GitHub repository</a>
+              </li>
+              <li>
+                <a href="https://github.com/18F/FEC/blob/master/release_notes/release_notes.md">Release notes</a>
+              </li>
+            </ul>
+          </div>
+
+          <div class="grid__item">
+            <ul>
+              <li>
+                <a href="https://www.data.gov/open-gov/">Open government</a>
+              </li>
+              <li>
+                <a href="https://www.foia.gov/">FOIA</a>
+              </li>
+              <li>
+                <a href="https://www.usa.gov/">USA.gov</a>
+              </li>
+            </ul>
+          </div>
+
+          <div class="grid__item">
+            <ul>
+              <li>
+                <a href="{{ cms_url }}/updates/">Latest updates</a>
+              </li>
+            </ul>
+          </div>
+
         </div>
+
       </div>
     </nav>
 
@@ -116,7 +168,6 @@
 
           <p>999 E Street, NW<br>
           Washington, DC 20463</p>
-          <p>(800) 424-9530</p>
         </div>
       </div>
     </footer>
@@ -128,6 +179,7 @@
       window.API_LOCATION = '{{ settings.FEC_API_URL }}';
       window.API_VERSION = '{{ settings.FEC_API_VERSION }}';
       window.API_KEY = '{{ settings.FEC_API_KEY_PUBLIC }}';
+      window.TRANSITION_URL = '{{ settings.FEC_TRANSITION_URL }}';
     </script>
 
     {# Global javascript #}

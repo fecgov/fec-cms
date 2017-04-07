@@ -6,6 +6,8 @@ from django.views.generic.base import TemplateView
 from wagtail.wagtailadmin import urls as wagtailadmin_urls
 from wagtail.wagtaildocs import urls as wagtaildocs_urls
 from wagtail.wagtailcore import urls as wagtail_urls
+from uaa_client import urls as uaa_urls
+from uaa_client import views as uaa_views
 
 from home import views as home_views
 from search import views as search_views
@@ -13,7 +15,7 @@ from search import views as search_views
 
 urlpatterns = [
     url(r'^django-admin/', include(admin.site.urls)),
-
+    url(r'^auth/', include(uaa_urls)),
     url(r'^admin/', include(wagtailadmin_urls)),
     url(r'^calendar/$', home_views.calendar),
     url(r'^about/leadership-and-structure/commissioners/$', home_views.commissioners),
@@ -22,9 +24,12 @@ urlpatterns = [
     url(r'^candidate-and-committee-services/question-rad/$', home_views.contact_rad),
     url(r'^search/$', search_views.search, name='search'),
     url(r'^updates/$', home_views.updates),
-
     url(r'', include(wagtail_urls)),
 ]
+
+if settings.FEC_CMS_ENVIRONMENT != 'LOCAL':
+    #admin/login always must come before admin/, so place at beginning of list
+    urlpatterns.insert(0,url(r'^admin/login', uaa_views.login, name='login'))
 
 if settings.FEC_CMS_ROBOTS:
     url(

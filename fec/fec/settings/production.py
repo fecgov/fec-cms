@@ -1,3 +1,5 @@
+import os
+
 from .base import *  # noqa
 from .env import env
 
@@ -11,6 +13,22 @@ ALLOWED_HOSTS = ['*']
 
 COMPRESS_ENABLED = True
 COMPRESS_OFFLINE = True
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',
+        },
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['console'],
+            'level': os.getenv('DJANGO_LOG_LEVEL', 'INFO'),
+        },
+    },
+}
 
 
 try:
