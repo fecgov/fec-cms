@@ -11,10 +11,8 @@
       <p>The FEC regularly publishes information for media professionals, members of the public and candidates and committees.</p>
       <h3>For media professionals</h3>
       <p>Weekly Digests are published every Friday and summarize the week's publicly disclosed activity. Press releases are published as news happens.</p>
-      {% if request.user.is_authenticated or settings.FEATURES.record %}
       <h3>For candidates and committees</h3>
-      <p>FEC Record articles inform candidates and committees about FEC developments and are published as news happens. {% if settings.FEATURES.tips %}Tips for Treasurers are published once a week.{% endif %}</p>
-      {% endif %}
+      <p>FEC Record articles inform candidates and committees about FEC developments and are published as news happens. Tips for Treasurers are published once a week.</p>
       {% if request.user.is_authenticated or settings.FEATURES.agendas %}
       <h3>For members of the public</h3>
       <p>Meeting agendas are usually published a week before a scheduled meeting.</p>
@@ -30,13 +28,9 @@
       <label class="label">Publication type</label>
       <select name="update_type">
         <option value="">All</option>
-        {% if request.user.is_authenticated or settings.FEATURES.record %}
-          <option value="for-committees" {% if 'for-committees' in update_types %}selected{% endif %}>For candidates and committees:</option>
-          <option value="fec-record" {% if 'fec-record' in update_types %}selected{% endif %}>- FEC Record</option>
-        {% endif %}
-        {% if request.user.is_authenticated or settings.FEATURES.tips %}
-          <option value="tips-for-treasurers" {% if 'tips-for-treasurers' in update_types %}selected{% endif %}>- Tips for Treasurers</option>
-        {% endif %}
+        <option value="for-committees" {% if 'for-committees' in update_types %}selected{% endif %}>For candidates and committees:</option>
+        <option value="fec-record" {% if 'fec-record' in update_types %}selected{% endif %}>- FEC Record</option>
+        <option value="tips-for-treasurers" {% if 'tips-for-treasurers' in update_types %}selected{% endif %}>- Tips for Treasurers</option>
         <option value="for-media" {% if 'for-media' in update_types %}selected{% endif %}>For media professionals:</option>
         <option value="press-release" {% if 'press-release' in update_types %}selected{% endif %}>- Press releases</option>
         <option value="weekly-digest" {% if 'weekly-digest' in update_types %}selected{% endif %}>- Weekly Digests</option>
@@ -75,6 +69,13 @@
         <label for="year" class="label">Year</label>
         <input id="year" class="combo__input" name="year" type="text" value="{{ year }}" placeholder="YYYY">
         <button type="submit" class="combo__button button button--standard button--go"><span class="u-visually-hidden">Filter</span></button>
+      </div>
+    </div>
+    <div class="filter">
+      <div class="combo combo--filter--mini">
+        <label for="query" class="label">Search</label>
+        <input id="query" class="combo__input" name="query" type="text" value="{{ query }}" placeholder="YYYY">
+        <button type="submit" class="combo__button button button--standard button--search"><span class="u-visually-hidden">Search</span></button>
       </div>
     </div>
 </form>
