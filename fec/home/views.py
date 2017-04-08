@@ -21,7 +21,7 @@ def replace_dash(string):
 def replace_space(string):
   return string.replace(' ', '-')
 
-def get_records(category_list=None, year=None, query=None):
+def get_records(category_list=None, year=None, search=None):
     records = RecordPage.objects.live()
 
     if category_list:
@@ -31,22 +31,22 @@ def get_records(category_list=None, year=None, query=None):
     if year:
         records = records.filter(date__year=year)
 
-    if query:
-        records = records.search(query)
+    if search:
+        records = records.search(search)
 
     return records
 
-def get_digests(year=None, query=None):
+def get_digests(year=None, search=None):
     digests = DigestPage.objects.live()
     if year:
         digests = digests.filter(date__year=year)
 
-    if query:
-        digests = digests.search()
+    if search:
+        digests = digests.search(search)
 
     return digests
 
-def get_press_releases(category_list=None, year=None, query=None):
+def get_press_releases(category_list=None, year=None, search=None):
     press_releases = PressReleasePage.objects.live()
 
     if category_list:
@@ -56,20 +56,20 @@ def get_press_releases(category_list=None, year=None, query=None):
     if year:
         press_releases = press_releases.filter(date__year=year)
 
-    if query:
-        press_releases = press_releases.search(query)
+    if search:
+        press_releases = press_releases.search(search)
 
     return press_releases
 
 
-def get_tips(year=None, query=None):
+def get_tips(year=None, search=None):
     tips = TipsForTreasurersPage.objects.live()
 
     if year:
         tips = tips.filter(date__year=year)
 
-    if query:
-        tips = tips.search(query)
+    if search:
+        tips = tips.search(search)
 
     return tips
 
@@ -84,7 +84,7 @@ def updates(request):
     update_types = request.GET.getlist('update_type', None)
     category_list = request.GET.getlist('category', '')
     year = request.GET.get('year', '')
-    query = request.GET.get('query', '')
+    search = request.GET.get('search', '')
 
     category_list = list(map(replace_dash, category_list))
 
@@ -92,19 +92,19 @@ def updates(request):
     if update_types:
         if 'for-media' in update_types:
             press_releases = get_press_releases(category_list=category_list,
-                                                year=year, query=query)
-            digests = get_digests(year=year, query=query)
+                                                year=year, search=search)
+            digests = get_digests(year=year, search=search)
         if 'for-committees' in update_types:
-            records = get_records(category_list=category_list, year=year, query=query)
+            records = get_records(category_list=category_list, year=year, search=search)
         if 'fec-record' in update_types:
-            records = get_records(category_list=category_list, year=year, query=query)
+            records = get_records(category_list=category_list, year=year, search=search)
         if 'press-release' in update_types:
             press_releases = get_press_releases(category_list=category_list,
-                                                year=year, query=query)
+                                                year=year, search=search)
         if 'weekly-digest' in update_types:
-            digests = get_digests(year=year, query=query)
+            digests = get_digests(year=year, search=search)
         if 'tips-for-treasurers' in update_types:
-            tips = get_tips(year=year, query=query)
+            tips = get_tips(year=year, search=search)
 
     else:
       # Get everything and filter by year if necessary
@@ -119,11 +119,11 @@ def updates(request):
         records = records.filter(date__year=year)
         tips = tips.filter(date__year=year)
 
-      if query:
-        press_releases = press_releases.search(query)
-        digests = digests.search(query)
-        records = records.search(query)
-        tips = tips.search(query)
+      if search:
+        press_releases = press_releases.search(search)
+        digests = digests.search(search)
+        records = records.search(search)
+        tips = tips.search(search)
 
     # Chain all the QuerySets together
     # via http://stackoverflow.com/a/434755/1864981
@@ -155,7 +155,7 @@ def updates(request):
         'update_types': update_types,
         'updates': updates,
         'year': year,
-        'query': query
+        'search': search
     })
 
 def calendar(request):
