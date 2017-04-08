@@ -53,7 +53,7 @@ class Command(BaseCommand):
             self.stdout.write('Created {}'.format(page['document_id']))
         else:
             self.stdout.write('Could not create {}'.format(page['document_id']))
-            self.stdout.write(r.__dict__)
+            print(r.__dict__)
 
     def update(self, page):
         self.stdout.write('Updating {}'.format(page['document_id']))

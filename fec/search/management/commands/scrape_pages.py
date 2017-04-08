@@ -21,7 +21,7 @@ class Command(BaseCommand):
 
     def add_arguments(self, parser):
         parser.add_argument(
-            '--descendents_of',
+            '--descendants_of',
             type=str,
             help='Path of the parent page whose descendents to get, ex. /home/legal-resources/'
         )
@@ -58,8 +58,8 @@ class Command(BaseCommand):
             page = Page.objects.get(url_path=options['page'])
             # Hack so the loop below works
             pages = [page]
-        elif options['descendents_of']:
-            parent = Page.objects.get(url_path=options['descendant_of'])
+        elif options['descendants_of']:
+            parent = Page.objects.get(url_path=options['descendants_of'])
             pages = Page.objects.descendant_of(parent).live()
         elif options['child_of']:
             parent = Page.objects.get(url_path=options['child_of'])
