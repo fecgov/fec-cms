@@ -42,11 +42,11 @@
         <ul class="utility-nav list--flat">
           <li class="utility-nav__item">
             <a href="/calendar/">Calendar</a>
-            <div class="tour-dot tour-dot--middle" data-intro="<h5>Stay up to date</h5>Find elections, filing deadlines, reporting periods (and more!). Sync the calendar with Apple, Google or Outlook accounts, or download it to your device."></div>
+            <div class="tour__point tour__point--middle" data-intro="<h5>Stay up to date</h5>Find elections, filing deadlines, reporting periods (and more!). Sync the calendar with Apple, Google or Outlook accounts, or download it to your device."></div>
           </li>
           <li class="utility-nav__item">
             <button class="js-glossary-toggle glossary__toggle">Glossary</button>
-            <div class="tour-dot tour-dot--middle" data-tooltipClass="tour-tooltip tour-tooltip--right" data-intro="<h5>Look up unfamiliar words</h5>Use the glossary to find definitions for campaign finance terms. Click or tap any word with a &nbsp;<i class='icon icon--small i-book'></i>&nbsp; to read the definition."></div>
+            <div class="tour__point tour__point--middle" data-tooltipClass="tour__tooltip tour__tooltip--right" data-intro="<h5>Look up unfamiliar words</h5>Use the glossary to find definitions for campaign finance terms. Click or tap any word with a &nbsp;<i class='icon icon--small i-book'></i>&nbsp; to read the definition."></div>
           </li>
         </ul>
       </div>
@@ -94,7 +94,7 @@
               </li>
               <li>
                 {% if self.title == "Homepage" or self.title == "Home" %}
-                <div class="tour-dot tour-dot--left" data-intro="<h5>Streamlined press resources</h5>A new page for press includes information for reporters and an archive of all press releases and Weekly Digests."></div>
+                <div class="tour__point tour__point--left" data-intro="<h5>Streamlined press resources</h5>A new page for press includes information for reporters and an archive of all press releases and Weekly Digests."></div>
                 {% endif %}
                 <a href="{{ cms_url }}/press/">Press</a>
               </li>

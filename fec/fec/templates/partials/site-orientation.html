@@ -16,41 +16,41 @@
                 Questions or comments? Use the <a class="js-feedback">anonymous feedback tool</a> or email us at <a href="mailto:betafeedback@fec.gov">betafeedback@fec.gov</a>
               </span>
             </div>
-            <h2><a class="start-tour">Start a tour</a> of the new features</h2>
+            <h2><button class="start-tour">Start a tour</button> of the new features</h2>
           </div>
           {% if settings.FEATURES.pre_flip_countdown %}
           <div class="toggle-text">
-            <div class="less">Show less <i class="icon-small--arrow-up-border"></i></div>
-            <div class="more">Show more <i class="icon-small--arrow-down-border"></i></div>
+            <button class="less" tabindex="0">Show less <i class="icon-small--arrow-up-border"></i></button>
+            <button class="more" tabindex="0">Show more <i class="icon-small--arrow-down-border"></i></button>
           </div>
           {% endif %}
         </div>
       </div>
 
-      <div class="tour-header">
+      <div class="tour__header">
         <ol>
           <li class="tour-introduction">
             <a href="/?tour=true">
-              <span class="tour-page-number t-bold">1</span>
-              <span class="tour-page">Introduction</span>
+              <span class="tour__header__page--number t-bold">1</span>
+              <span class="tour__header__page">Introduction</span>
             </a>
           </li>
           <li class="tour-campaign-finance-data">
             <a href="{{ settings.FEC_APP_URL }}?tour=true">
-              <span class="tour-page-number t-bold">2</span>
-              <span class="tour-page">Campaign finance data</span>
+              <span class="tour__header__page--number t-bold">2</span>
+              <span class="tour__header__page">Campaign finance data</span>
             </a>
           </li>
           <li class="tour-candidate-committee-services">
             <a href="/help-candidates-and-committees?tour=true">
-              <span class="tour-page-number t-bold">3</span>
-              <span class="tour-page">Candidate and committee services</span>
+              <span class="tour__header__page--number t-bold">3</span>
+              <span class="tour__header__page">Candidate and committee services</span>
             </a>
           </li>
           <li class="tour-legal-resources">
             <a href="/legal-resources?tour=true">
-             <span class="tour-page-number t-bold">4</span>
-             <span class="tour-page">Legal resources</span>
+             <span class="tour__header__page--number t-bold">4</span>
+             <span class="tour__header__page">Legal resources</span>
             </a>
           </li>
         </ol>
