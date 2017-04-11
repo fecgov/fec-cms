@@ -279,7 +279,7 @@ Where *<app name>* is the name of the application instance you want to connect t
 More information about using SSH with cloud.dov can be found in the [cloud.gov SSH documentation](https://cloud.gov/docs/apps/using-ssh/#cf-ssh).
 
 ## Accounts
-Accounts are handled in the cms admin. All accounts will be reviewd annualy.
+Accounts are handled in the cms admin. All accounts will be reviewed annually.
 
 
 ## Copyright and licensing
