@@ -3,8 +3,9 @@ cfenv==0.5.2
 dj-database-url==0.4.2
 django-libsass==0.7
 gunicorn==19.7.1
+gevent==1.2.1
 lxml==3.7.0
-newrelic==2.78.0.57
+newrelic==2.82.0.62
 psycopg2==2.7.1
 requests==2.13.0
 slacker==0.8.6
