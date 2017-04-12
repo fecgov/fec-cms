@@ -1,8 +1,13 @@
 import datetime
 import functools
+import logging
 
 from django.db import models
 from django.core.exceptions import ValidationError
+
+from django.dispatch import receiver
+from django.db.models.signals import post_save
+from django.contrib.auth.models import User
 
 from modelcluster.fields import ParentalKey
 from modelcluster.contrib.taggit import ClusterTaggableManager
@@ -22,6 +27,8 @@ from wagtail.wagtaildocs.models import Document
 from wagtail.contrib.table_block.blocks import TableBlock
 
 from fec import constants
+
+logger = logging.getLogger(__name__)
 
 from home.blocks import (ThumbnailBlock, AsideLinkBlock,
                          ContactInfoBlock, CitationsBlock, ResourceBlock,
@@ -74,6 +81,19 @@ class ContentPage(Page):
     def content_section(self):
         return 'help'
 
+
+
+
+@receiver(post_save, sender=User)
+#I'm not sure if these page senders are working (maybe wasn't hooking into correct sender for the page?
+@receiver(post_save, sender=Page)
+@receiver(post_save, sender=ContentPage)
+def log_user(sender, **kwargs):
+    #remove once logging configuration figured out
+    print("save called on user")
+    #need to change info and add message for this (like what model was changed and what was it changed to)
+    #these things should all be inferrable from kwargs
+    logger.warning("A user/page was modified")
 
 class HomePage(ContentPage, UniqueModel):
     """Unique home page."""
