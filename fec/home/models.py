@@ -83,10 +83,12 @@ class ContentPage(Page):
 
 
 @receiver(post_save, sender=User)
+@receiver(pre_delete, sender=User)
 def log_user_save(sender, **kwargs):
     #remove once logging configuration figured out
-    message = "save called on user {0} by ".format(kwargs.get('instance').first_name )
+    message = "delete called on user {0} by ".format(kwargs.get('instance').first_name )
     print(kwargs.get('user'))
+    print(kwargs.get('instance'))
     print(kwargs.get('instance'))
     print(kwargs.get('update_fields'))
     print(kwargs.get('signal'))
@@ -94,20 +96,12 @@ def log_user_save(sender, **kwargs):
     #these things should all be inferrable from kwargs
     logger.warning("user action")
 
+@receiver(pre_delete, sender=PageRevision)
 @receiver(post_save, sender=PageRevision)
 def log_revisions(sender, **kwargs):
+    print(kwargs)
     logger.warning("page was modified: {0} by user id {1}".format(kwargs.get('instance'), kwargs.get('instance').user_id))
 
-@receiver(pre_delete, sender=PageRevision)
-def log_revisions(sender, **kwargs):
-    logger.warning("page was deleted: {0} by user id {1}".format(kwargs.get('instance'), kwargs.get('instance').user_id))
-
-# @receiver(post_delete, sender=User)
-# #I'm not sure if these page senders are working (maybe wasn't hooking into correct sender for the page?
-# @receiver(post_delete, sender=Page)
-# @receiver(post_delete, sender=ContentPage)
-# def log_user_delete(sender, **kwargs):
-#     print(kwargs)
 
 class HomePage(ContentPage, UniqueModel):
     """Unique home page."""
