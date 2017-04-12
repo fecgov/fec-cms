@@ -1,29 +1,16 @@
     <div class="js-new-site-orientation site-orientation">
       <div class="banner">
         <div class="container">
-          <div class="countdown t-bold">
-            {% if settings.FEATURES.pre_flip_countdown %}
-            <div class="highlight">
-              <span class="days t-underline" data-date="{{ settings.FEATURES.pre_flip_countdown }}"></span> DAYS
-            </div>
-            until this site becomes the new FEC.gov
-            {% endif %}
-          </div>
+          <span class="t-bold">In May, this site will become the new FEC.gov</span>
           <div class="toggle">
-            <div class="note">
-              On April 31, 2017 the old <a href="http://www.fec.gov">FEC.gov</a> will be accessible from an archive link.
-              <span class="note-comments">
-                Questions or comments? Use the <a class="js-feedback">anonymous feedback tool</a> or email us at <a href="mailto:betafeedback@fec.gov">betafeedback@fec.gov</a>
-              </span>
-            </div>
+            <span class="t-block">After that, the <a href="http://www.fec.gov">current FEC.gov</a> will be archived and made available at classic.fec.gov</span>
+            <span class="t-block">Questions or comments? Use our <a class="js-feedback">anonymous feedback tool</a> or email <a href="mailto:webmanager@fec.gov">webmanager@fec.gov</a></span>
             <h2><button class="start-tour">Start a tour</button> of the new features</h2>
           </div>
-          {% if settings.FEATURES.pre_flip_countdown %}
           <div class="toggle-text">
             <button class="less" tabindex="0">Show less <i class="icon-small--arrow-up-border"></i></button>
             <button class="more" tabindex="0">Show more <i class="icon-small--arrow-down-border"></i></button>
           </div>
-          {% endif %}
         </div>
       </div>
 
