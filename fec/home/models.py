@@ -6,13 +6,13 @@ from django.db import models
 from django.core.exceptions import ValidationError
 
 from django.dispatch import receiver
-from django.db.models.signals import post_save
+from django.db.models.signals import post_save, pre_delete
 from django.contrib.auth.models import User
 
 from modelcluster.fields import ParentalKey
 from modelcluster.contrib.taggit import ClusterTaggableManager
 from taggit.models import TaggedItemBase
-from wagtail.wagtailcore.models import Page, Orderable
+from wagtail.wagtailcore.models import Page, Orderable, PageRevision
 from wagtail.wagtailcore.fields import StreamField
 from wagtail.wagtailcore import blocks
 from wagtail.wagtailadmin.edit_handlers import (FieldPanel, StreamFieldPanel,
@@ -82,18 +82,32 @@ class ContentPage(Page):
         return 'help'
 
 
-
-
 @receiver(post_save, sender=User)
-#I'm not sure if these page senders are working (maybe wasn't hooking into correct sender for the page?
-@receiver(post_save, sender=Page)
-@receiver(post_save, sender=ContentPage)
-def log_user(sender, **kwargs):
+def log_user_save(sender, **kwargs):
     #remove once logging configuration figured out
-    print("save called on user")
+    message = "save called on user {0} by ".format(kwargs.get('instance').first_name )
+    print(kwargs.get('user'))
+    print(kwargs.get('instance'))
+    print(kwargs.get('update_fields'))
+    print(kwargs.get('signal'))
     #need to change info and add message for this (like what model was changed and what was it changed to)
     #these things should all be inferrable from kwargs
-    logger.warning("A user/page was modified")
+    logger.warning("user action")
+
+@receiver(post_save, sender=PageRevision)
+def log_revisions(sender, **kwargs):
+    logger.warning("page was modified: {0} by user id {1}".format(kwargs.get('instance'), kwargs.get('instance').user_id))
+
+@receiver(pre_delete, sender=PageRevision)
+def log_revisions(sender, **kwargs):
+    logger.warning("page was deleted: {0} by user id {1}".format(kwargs.get('instance'), kwargs.get('instance').user_id))
+
+# @receiver(post_delete, sender=User)
+# #I'm not sure if these page senders are working (maybe wasn't hooking into correct sender for the page?
+# @receiver(post_delete, sender=Page)
+# @receiver(post_delete, sender=ContentPage)
+# def log_user_delete(sender, **kwargs):
+#     print(kwargs)
 
 class HomePage(ContentPage, UniqueModel):
     """Unique home page."""
