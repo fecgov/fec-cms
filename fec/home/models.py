@@ -10,6 +10,9 @@ from django.db.models.signals import post_save, pre_delete
 from django.contrib.auth.models import User
 from django.contrib.auth import get_user_model
 
+from audit_log.models.fields import LastUserField
+from audit_log.models.managers import AuditLog
+
 from modelcluster.fields import ParentalKey
 from modelcluster.contrib.taggit import ClusterTaggableManager
 from taggit.models import TaggedItemBase
@@ -35,6 +38,8 @@ from home.blocks import (ThumbnailBlock, AsideLinkBlock,
                          ContactInfoBlock, CitationsBlock, ResourceBlock,
                          OptionBlock, CollectionBlock, DocumentFeedBlurb,
                          ExampleParagraph, ExampleForms, CustomTableBlock)
+
+
 
 stream_factory = functools.partial(
     StreamField,
@@ -82,6 +87,17 @@ class ContentPage(Page):
     def content_section(self):
         return 'help'
 
+class Person(User):
+    objects = User()
+
+    def __init__(self):
+        audit_log = AuditLog()
+        print(audit_log)
+
+@receiver(post_save, sender=Person)
+@receiver(pre_delete, sender=Person)
+def log_person(sender, **kwargs):
+    print('TEST')
 
 @receiver(post_save, sender=User)
 @receiver(pre_delete, sender=User)
@@ -95,25 +111,30 @@ def log_user_save(sender, **kwargs):
     print(kwargs.get('update_fields'), '5')
     print(kwargs.get('signal'), '6')
     print(kwargs.get('instance').get_username(), '8')
+    print(kwargs.get('instance').groups, '9')
     # print(kwargs.get('instance').get_all_permissions())
-    print(kwargs.get('instance').groups)
-    print(kwargs.get('instance').pagerevision_set)
-    print(kwargs.get('instance').user_permissions)
+    print(kwargs.get('instance').groups, '10')
+    print(kwargs.get('instance').pagerevision_set, '11')
+    print(kwargs.get('instance').user_permissions, '12')
+    print(kwargs.get('instance').logentry_set, '12.5')
+    print(sender.logentry_set, '13')
+    # print(sender.__base__.id, '13')
+
+    # print(sender.get('id'), '14')
+    print(sender.id, '15')
     #need to change info and add message for this (like what model was changed and what was it changed to)
     #these things should all be inferrable from kwargs
-    logger.info("Change called on user {0} by {1}".format(kwargs.get('instance').get_username(), kwargs.get('instance')))
+    logger.info("test info")
+    logger.info("User change: username {0} by instance {1}".format(kwargs.get('instance').get_username(), kwargs.get('instance')))
+
+    audit_log = AuditLog()
 
 @receiver(pre_delete, sender=PageRevision)
 @receiver(post_save, sender=PageRevision)
 def log_revisions(sender, **kwargs):
     print(kwargs)
+    logger.info("test info")
     logger.info("page was modified: {0} by user id {1}".format(kwargs.get('instance'), kwargs.get('instance').user_id))
-
-# need to find model for auth_group_permissions_table
-# @receiver(pre_delete, sender=AuthGroupPermissions)
-# @receiver(post_save, sender=AuthGroupPermissions)
-# def log_permission_level(sender, **kwargs):
-#     pass
 
 class HomePage(ContentPage, UniqueModel):
     """Unique home page."""
