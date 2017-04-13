@@ -4,12 +4,19 @@
 {% block title %}Legal resources{% endblock %}
 {% block body_class %}template-{{ self.get_verbose_name | slugify }}{% endblock %}
 
+{% block extra_js %}
+  <script>
+    TOUR_PAGE = 'legal-resources';
+  </script>
+{% endblock extra_js %}
+
 {% block content %}
   {% include "partials/search-hero.html" %}
   <div class="slab slab--neutral slab--spacious">
     <div class="container">
       <form id="large-search" method="get" action="{{ settings.FEC_APP_URL }}/legal/search/" autocomplete="off" class="search__container js-search">
         <div class="combo combo--search combo--search--large">
+          <div class="tour__point tour__point--left" data-intro="<h5>Streamlined legal search</h5>Search across advisory opinions, Matters Under Review (MURs), statutes and regulations all at once. This feature is still growing to include even more categories."></div>
           <select class="search__select select--alt js-search-type" name="search_type" aria-label="Select a search type">
             <option value="all">All</option>
             <option value="statutes">Statutes</option>
@@ -67,13 +74,19 @@
         </div>
         <section class="main__content--right">
           <div class="option">
-            <h2 id="advisory-opinions"><a href="{{ settings.FEC_APP_URL }}/legal/advisory-opinions/">Advisory opinions</a></h2>
+            <h2 id="advisory-opinions">
+              <div class="tour__point tour__point--left" data-intro="<h5>Search or browse advisory opinions</h5>Search results emphasize keywords and other important information, making it easier to tell if an advisory opinion is what you’re looking for— before you open it. Every URL is unique, so you can you can bookmark any opinion page or list of search results."></div>
+              <a href="{{ settings.FEC_APP_URL }}/legal/advisory-opinions/">Advisory opinions</a>
+            </h2>
             <p>Advisory opinions are official Commission responses to questions about how federal campaign finance law applies to specific, factual situations.</p>
             <p>This archive contains advisory opinions from 1975 to the present. It also contains documents related to advisory opinions — such as requests, drafts and public comments — from 1990 to the present.</p>
             <a class="button--cta button--go" href="{{ settings.FEC_APP_URL }}/legal/advisory-opinions/">Explore advisory opinions</a>
           </div>
           <div class="option">
-            <h2 id="enforcement-matters"><a href="/legal-resources/enforcement/">Enforcement</a></h2>
+            <h2 id="enforcement-matters">
+              <div class="tour__point tour__point--left" data-intro="<h5>Understand enforcement programs</h5>Learn about the FEC’s enforcement process and programs with better-organized content. Search for closed Matters Under Review (MURs) by keyword, and bookmark or share unique links to closed cases."></div>
+              <a href="/legal-resources/enforcement/">Enforcement</a>
+            </h2>
             <p>The FEC has exclusive jurisdiction over the civil enforcement of the federal campaign finance law.</p>
             <p>FEC enforcement matters, called Matters Under Review (MURs), are primarily handled by the Office of General Counsel. Enforcement cases must be kept confidential until the cases are closed.</p>
             <p>Other programs designed to augment the Office of General Counsel’s enforcement role include the Alternative Dispute Resolution Program, Administrative Fine Program and Audit Program.</p>
@@ -81,7 +94,10 @@
             <a class="button--cta button--go" href="/legal-resources/enforcement/">Explore enforcement</a>
           </div>
           <div class="option">
-            <h2 id="regulations"><a href="/legal-resources/regulations">Regulations</a></h2>
+            <h2 id="regulations">
+              <div class="tour__point tour__point--left" data-intro="<h5>Searchable regulations</h5>Search, share and move between regulations with the new interface. Learn more about past changes to regulations and find upcoming hearings where you can weigh in on proposed amendments."></div>
+              <a href="/legal-resources/regulations">Regulations</a>
+            </h2>
             <p>As part of its role administering campaign finance law,
               the Commission issues regulations,
               which are published every year in Title 11 of the Code of Federal Regulations (CFR).
@@ -135,7 +151,4 @@
 
 {% include 'partials/disclaimer.html' %}
 
-{% endblock %}
-
-{% block extra_js %}
 {% endblock %}

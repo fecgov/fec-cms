@@ -202,7 +202,8 @@ FEATURES = {
     'agendas': bool(env.get_credential('FEC_FEATURE_AGENDAS', '')),
     'tips': bool(env.get_credential('FEC_FEATURE_TIPS', '')),
     'radform': bool(env.get_credential('FEC_FEATURE_RADFORM', '')),
-    'ethnio': bool(env.get_credential('FEC_FEATURE_ETHNIO', ''))
+    'ethnio': bool(env.get_credential('FEC_FEATURE_ETHNIO', '')),
+    'site_orientation_banner': bool(env.get_credential('FEC_SITE_ORIENTATION_BANNER'))
 }
 
 AUTH_PASSWORD_VALIDATORS = [
