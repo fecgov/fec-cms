@@ -251,20 +251,17 @@ AUTHENTICATION_BACKENDS = \
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
-    'filters': {
-        'require_debug_false': {
-            '()': 'django.utils.log.RequireDebugFalse'
-        }
-    },
     'handlers': {
         'console': {
             'class': 'logging.StreamHandler',
+            'level': 'INFO',
         },
     },
     'loggers': {
-        'django': {
+        '': {
             'handlers': ['console'],
             'level': 'INFO',
+            'propogate': False,
         },
     },
 }

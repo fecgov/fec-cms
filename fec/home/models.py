@@ -101,13 +101,13 @@ def log_user_save(sender, **kwargs):
     print(kwargs.get('instance').user_permissions)
     #need to change info and add message for this (like what model was changed and what was it changed to)
     #these things should all be inferrable from kwargs
-    logger.warning("Change called on user {0} by {1}".format(kwargs.get('instance').get_username(), kwargs.get('instance')))
+    logger.info("Change called on user {0} by {1}".format(kwargs.get('instance').get_username(), kwargs.get('instance')))
 
 @receiver(pre_delete, sender=PageRevision)
 @receiver(post_save, sender=PageRevision)
 def log_revisions(sender, **kwargs):
     print(kwargs)
-    logger.warning("page was modified: {0} by user id {1}".format(kwargs.get('instance'), kwargs.get('instance').user_id))
+    logger.info("page was modified: {0} by user id {1}".format(kwargs.get('instance'), kwargs.get('instance').user_id))
 
 # need to find model for auth_group_permissions_table
 # @receiver(pre_delete, sender=AuthGroupPermissions)
