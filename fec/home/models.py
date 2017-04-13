@@ -10,6 +10,9 @@ from django.db.models.signals import post_save, pre_delete
 from django.contrib.auth.models import User
 from django.contrib.auth import get_user_model
 
+from audit_log.models.fields import LastUserField
+from audit_log.models.managers import AuditLog
+
 from modelcluster.fields import ParentalKey
 from modelcluster.contrib.taggit import ClusterTaggableManager
 from taggit.models import TaggedItemBase
@@ -35,6 +38,8 @@ from home.blocks import (ThumbnailBlock, AsideLinkBlock,
                          ContactInfoBlock, CitationsBlock, ResourceBlock,
                          OptionBlock, CollectionBlock, DocumentFeedBlurb,
                          ExampleParagraph, ExampleForms, CustomTableBlock)
+
+
 
 stream_factory = functools.partial(
     StreamField,
