@@ -8,6 +8,7 @@ from django.core.exceptions import ValidationError
 from django.dispatch import receiver
 from django.db.models.signals import post_save, pre_delete
 from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
 
 from modelcluster.fields import ParentalKey
 from modelcluster.contrib.taggit import ClusterTaggableManager
@@ -86,15 +87,21 @@ class ContentPage(Page):
 @receiver(pre_delete, sender=User)
 def log_user_save(sender, **kwargs):
     #remove once logging configuration figured out
-    message = "delete called on user {0} by ".format(kwargs.get('instance').first_name )
-    print(kwargs.get('user'))
-    print(kwargs.get('instance'))
-    print(kwargs.get('instance'))
-    print(kwargs.get('update_fields'))
-    print(kwargs.get('signal'))
+    message = "Change called on user {0} by {1}".format(kwargs.get('user'), kwargs.get('instance').get_username())
+    print(kwargs.get('user'), '1')
+    print(kwargs.get('user_id'), '2')
+    print(kwargs.get('instance'), '3')
+    print(kwargs.get('instance'), '4')
+    print(kwargs.get('update_fields'), '5')
+    print(kwargs.get('signal'), '6')
+    print(kwargs.get('instance').get_username(), '8')
+    # print(kwargs.get('instance').get_all_permissions())
+    print(kwargs.get('instance').groups)
+    print(kwargs.get('instance').pagerevision_set)
+    print(kwargs.get('instance').user_permissions)
     #need to change info and add message for this (like what model was changed and what was it changed to)
     #these things should all be inferrable from kwargs
-    logger.warning("user action")
+    logger.warning("Change called on user {0} by {1}".format(kwargs.get('instance').get_username(), kwargs.get('instance')))
 
 @receiver(pre_delete, sender=PageRevision)
 @receiver(post_save, sender=PageRevision)
@@ -102,6 +109,11 @@ def log_revisions(sender, **kwargs):
     print(kwargs)
     logger.warning("page was modified: {0} by user id {1}".format(kwargs.get('instance'), kwargs.get('instance').user_id))
 
+# need to find model for auth_group_permissions_table
+# @receiver(pre_delete, sender=AuthGroupPermissions)
+# @receiver(post_save, sender=AuthGroupPermissions)
+# def log_permission_level(sender, **kwargs):
+#     pass
 
 class HomePage(ContentPage, UniqueModel):
     """Unique home page."""
