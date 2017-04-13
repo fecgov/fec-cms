@@ -247,3 +247,24 @@ WAGTAIL_FRONTEND_LOGIN_URL = 'uaa_client:login'
 AUTHENTICATION_BACKENDS = \
     ['django.contrib.auth.backends.ModelBackend',
      'uaa_client.authentication.UaaBackend']
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'filters': {
+        'require_debug_false': {
+            '()': 'django.utils.log.RequireDebugFalse'
+        }
+    },
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',
+        },
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['console'],
+            'level': os.getenv('DJANGO_LOG_LEVEL', 'INFO'),
+        },
+    },
+}
