@@ -1,9 +1,9 @@
-{% with "Explore federal campaign finance data with betaFEC, a new site where users can see how much money is raised and spent in federal elections. An official U.S. Government site, betaFEC is a Federal Election Commission project, designed in partnership with 18F." as description %}
+{% with "Explore federal campaign finance data with betaFEC, a new site where users can see how much money is raised and spent in federal elections. An official U.S. Government site, betaFEC is a Federal Election Commission project, designed in partnership with 18F." as generic_description %}
 {% load static %}
 
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="description" content="{{ description }}">
+<meta name="description" content="{% if self.search_description %}{{ self.search_description }}{% else %}{{ generic_description }}{% endif %}">
 
 <!-- Mobile Specific Metas
 ================================================== -->
@@ -15,7 +15,7 @@
 ================================================== -->
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="{{ self.title }} - betaFEC">
-<meta name="twitter:description" content="{{ description }}">
+<meta name="twitter:description" content="{% if self.search_description %}{{ self.search_description }}{% else %}}{{ generic_description }}{% endif %}">
 <meta name="twitter:image" content="{% static "img/beta-fec-tw.png" %}">
 
 <!-- Facebook
@@ -24,7 +24,7 @@
 <meta property="og:url" content="https://beta.fec.gov" />
 <meta property="og:title" content="{{ self.title }} - betaFEC" />
 <meta property="og:site_name" content="betaFEC" />
-<meta property="og:description" content="{{ description }}" />
+<meta property="og:description" content="{% if self.search_description %}{{ self.search_description }}{% else %}}{{ generic_description }}{% endif %}" />
 <meta property="og:image" content="{{ request.scheme }}://{{ request.get_host }}{% static "img/beta-fec-fb.png" %}" />
 
 <!-- Google
