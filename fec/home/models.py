@@ -28,6 +28,8 @@ from wagtail.wagtaildocs.blocks import DocumentChooserBlock
 from wagtail.wagtaildocs.edit_handlers import DocumentChooserPanel
 from wagtail.wagtaildocs.models import Document
 
+from django.db.models.signals import m2m_changed
+
 from wagtail.contrib.table_block.blocks import TableBlock
 
 from fec import constants
@@ -38,7 +40,6 @@ from home.blocks import (ThumbnailBlock, AsideLinkBlock,
                          ContactInfoBlock, CitationsBlock, ResourceBlock,
                          OptionBlock, CollectionBlock, DocumentFeedBlurb,
                          ExampleParagraph, ExampleForms, CustomTableBlock)
-
 
 
 stream_factory = functools.partial(
@@ -135,6 +136,20 @@ def log_revisions(sender, **kwargs):
     print(kwargs)
     logger.info("test info")
     logger.info("page was modified: {0} by user id {1}".format(kwargs.get('instance'), kwargs.get('instance').user_id))
+
+def user_groups_changed(sender, **kwargs):
+    #print(kwargs)
+    group_map = {1: 'Moderators', 2: 'Editors'}
+    action_map = {'post_add': 'added', 'post_remove': 'removed'}
+    if kwargs.get('action').split('_')[0] == 'post':
+        for index in kwargs.get('pk_set'):
+            action = 'to' if kwargs.get('action').split('_')[1] == 'add' else 'from'
+            logger.info("User change: User {0} was {1} {2} group {3}".format(kwargs.get('instance').get_username(),
+                                                                    action_map[kwargs.get('action')],
+                                                                    action,
+                                                                    group_map[index]))
+
+m2m_changed.connect(user_groups_changed, sender=User.groups.through)
 
 class HomePage(ContentPage, UniqueModel):
     """Unique home page."""
