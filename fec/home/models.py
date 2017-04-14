@@ -125,9 +125,6 @@ def log_user_save(sender, **kwargs):
 
     # print(sender.get('id'), '14')
     print(sender.id, '15')
-    #need to change info and add message for this (like what model was changed and what was it changed to)
-    #these things should all be inferrable from kwargs
-    logger.info("test info")
     logger.info("User change: username {0} by instance {1}".format(kwargs.get('instance').get_username(), kwargs.get('instance')))
 
     audit_log = AuditLog()
