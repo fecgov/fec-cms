@@ -87,13 +87,14 @@ class ContentPage(Page):
     @property
     def content_section(self):
         return 'help'
-
+'''
 class Person(User):
     objects = User()
 
     def __init__(self):
         audit_log = AuditLog()
         print(audit_log)
+'''
 
 @receiver(post_save, sender=Person)
 @receiver(pre_delete, sender=Person)
