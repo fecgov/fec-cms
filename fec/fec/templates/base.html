@@ -23,6 +23,10 @@
   <body class="{% block body_class %}{% endblock %}">
     {% wagtailuserbar %}
     <a href="#main" class="skip-nav">skip navigation</a>
+    {% if settings.FEATURES.site_orientation_banner %}
+      {% include "partials/site-orientation.html" %}
+    {% endif %}
+
     {% if self.title == "Homepage" or self.title == "Home" %}
     <header class="site-header site-header--homepage">
       <div class="masthead">
@@ -36,7 +40,10 @@
         <a title="Home" href="/" class="site-title" rel="home"><span class="u-visually-hidden">Federal Election Commission | United States of America</span></a>
         <ul class="utility-nav list--flat">
           <li class="utility-nav__item"><a href="/calendar/">Calendar</a></li>
-          <li class="utility-nav__item"><button class="js-glossary-toggle glossary__toggle">Glossary</button></li>
+          <li class="utility-nav__item">
+            <button class="js-glossary-toggle glossary__toggle">Glossary</button>
+            <div class="tour__point tour__point--middle" data-tooltipClass="tour__tooltip tour__tooltip--right" data-intro="<h5>Look up unfamiliar words</h5>Use the glossary to find definitions for campaign finance terms. Click or tap any word with a &nbsp;<i class='icon icon--small i-book'></i>&nbsp; to read the definition."></div>
+          </li>
           <li class="utility-nav__search">
             <form accept-charset="UTF-8" action="/search" class="combo" method="get" role="search">
               <input type="hidden" name="type" value="candidates">
@@ -118,6 +125,9 @@
                 <a href="{{ cms_url }}/contact-us/">Contact</a>
               </li>
               <li>
+                {% if self.title == "Homepage" or self.title == "Home" %}
+                <div class="tour__point tour__point--left" data-intro="<h5>Streamlined press resources</h5>A new page for press includes information for reporters and an archive of all press releases and Weekly Digests."></div>
+                {% endif %}
                 <a href="{{ cms_url }}/press/">Press</a>
               </li>
             </ul>
@@ -210,6 +220,7 @@
     {% include './partials/glossary.html' %}
 
     <script>
+      window.CMS_URL = '{{ cms_url }}'
       window.FEC_APP_URL = '{{ settings.FEC_APP_URL }}';
       window.API_LOCATION = '{{ settings.FEC_API_URL }}';
       window.API_VERSION = '{{ settings.FEC_API_VERSION }}';
