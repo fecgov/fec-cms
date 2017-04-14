@@ -84,18 +84,6 @@ class HomePage(ContentPage, UniqueModel):
 class LandingPage(ContentPage):
     template = 'home/registration-and-reporting/landing_page.html'
 
-class ChecklistPage(ContentPage):
-    template = 'home/registration-and-reporting/checklist_page.html'
-
-class SSFChecklistPage(ContentPage):
-    template = 'home/registration-and-reporting/ssf_checklist_page.html'
-
-class PartyChecklistPage(ContentPage):
-    template = 'home/registration-and-reporting/party_checklist_page.html'
-
-class NonconnectedChecklistPage(ContentPage):
-    template = 'home/registration-and-reporting/nonconnected_checklist_page.html'
-
 class Author(models.Model):
     name = models.CharField(max_length=255)
     title = models.CharField(max_length=255, blank=True)
