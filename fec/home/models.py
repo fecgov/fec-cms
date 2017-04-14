@@ -94,12 +94,13 @@ class Person(User):
     def __init__(self):
         audit_log = AuditLog()
         print(audit_log)
-'''
+
 
 @receiver(post_save, sender=Person)
 @receiver(pre_delete, sender=Person)
 def log_person(sender, **kwargs):
     print('TEST')
+'''
 
 @receiver(post_save, sender=User)
 @receiver(pre_delete, sender=User)
