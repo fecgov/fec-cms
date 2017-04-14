@@ -55,7 +55,7 @@
               {% endif %}
               {% for result in search_results %}
                 <li class="post">
-                  <h3><i class="icon icon--inline--left i-document"></i><a href="{{ result.url }}">{{ result.title }}</a></h3>
+                  <h3><i class="icon icon--inline--left i-document"></i><a href="{{ result.url }}">{{ result.title | highlight_matches }}</a></h3>
                   <span class="t-small t-sans t-block">{{ result.url }}</span>
                   <p class="t-note">{{ result.snippet | highlight_matches }}</p>
                 </li>

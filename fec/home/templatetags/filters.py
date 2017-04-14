@@ -2,6 +2,8 @@ import re
 
 from django.conf import settings
 from django import template
+from django.utils.html import conditional_escape
+from django.utils.safestring import mark_safe
 from django.utils.html import format_html
 from wagtail.wagtailcore.models import Page
 
@@ -62,7 +64,7 @@ def classic_url(path):
     return "{}{}".format(settings.FEC_CLASSIC_URL, path)
 
 @register.filter()
-def highlight_matches(result):
-    result.replace("&#57344;", ">>")
-    result.replace("&#57345;", "<<")
-    return result
+def highlight_matches(text):
+    """Replaces the highlight markers with span tags for digitalgov search results"""
+    highlighted_text = text.replace('\ue000', '<span class="t-highlight">').replace('\ue001', '</span>')
+    return mark_safe(highlighted_text)

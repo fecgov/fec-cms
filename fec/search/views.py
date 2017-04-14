@@ -46,7 +46,6 @@ def search(request):
             'affiliate': 'betafec_api',
             'access_key': settings.FEC_DIGITALGOV_KEY,
             'query': search_query,
-            'enable_highlighting': 'false',
             'limit': limit,
             'offset': offset
         }
