@@ -13,20 +13,22 @@
     <div class="row">
       <form class="slab slab--inline slab--neutral" action="{% url 'search' %}" method="get">
         <div class="container">
-          <div class="combo">
+          <div class="combo content__section">
             <label for="search" class="label">Search</label>
-            <input id="search" type="text" class="combo__input" name="query"{% if search_query %} value="{{ search_query }}"{% endif %}>
-            <button type="submit" value="Search" class="combo__button button button--cta">Search</button>
-            <fieldset>
-              <legend class="label">Refine your search</legend>
-              <input type="checkbox" id="search-candidates" value="candidates" name="type" {% if 'candidates' in type %}checked{% endif %}>
-              <label for="search-candidates">Candidates</label>
-              <input type="checkbox"  id="search-committees" value="committees" name="type" {% if 'committees' in type %}checked{% endif %}>
-              <label for="search-committees">Committees</label>
-              <input type="checkbox" id="search-site" value="site" name="type" {% if 'site' in type %}checked{% endif %}>
-              <label for="search-site">Site</label>
-            </fieldset>
+            <input id="search" type="text" class="combo__input js-header-typeahead" name="query"{% if search_query %} value="{{ search_query }}"{% endif %}>
+            <button name="commit" type="submit" class="button--cta combo__button button--search">
+              <span class="u-visually-hidden">Search</span>
+            </button>
           </div>
+          <fieldset>
+            <legend class="label">Refine your search</legend>
+            <input type="checkbox" id="search-candidates" value="candidates" name="type" {% if 'candidates' in type %}checked{% endif %}>
+            <label for="search-candidates">Candidates</label>
+            <input type="checkbox"  id="search-committees" value="committees" name="type" {% if 'committees' in type %}checked{% endif %}>
+            <label for="search-committees">Committees</label>
+            <input type="checkbox" id="search-site" value="site" name="type" {% if 'site' in type %}checked{% endif %}>
+            <label for="search-site">Site</label>
+          </fieldset>
         </div>
       </form>
     </div>
@@ -35,8 +37,8 @@
         <div class="js-sticky-side" data-sticky-container="results-container">
           <nav class="sidebar sidebar--neutral sidebar--left side-nav js-toc" style="margin-bottom: 2rem">
             <ul class="sidebar__content">
-              {% if results.site.best_bets %}
-                <li class="side-nav__item"><a class="side-nav__link" href="#suggestions">Suggestions</a></li>
+              {% if results.site.best_bets.results %}
+                <li class="side-nav__item"><a class="side-nav__link" href="#suggestions">Suggestions ({{ results.site.best_bets.count }})</a></li>
               {% endif %}
               {% if results.candidates.pagination.count > 0 %}
                 <li class="side-nav__item"><a class="side-nav__link" href="#candidates">Candidates ({{ results.candidates.pagination.count }})</a></li>
@@ -47,28 +49,49 @@
               {% if results.site.meta.count > 0 %}
                 <li class="side-nav__item"><a class="side-nav__link" href="#site">Site ({{ results.site.meta.count }})</a></li>
               {% endif %}
+              {% if 'candidates' in type and results.candidates.pagination.count == 0 %}
+                <li class="side-nav__item side-nav__link"><span class="side-nav__link">Candidates (0)</span></li>
+              {% endif %}
+              {% if 'committees' in type and results.committees.pagination.count == 0 %}
+                <li class="side-nav__item"><span class="side-nav__link">Committees (0)</span></li>
+              {% endif %}
+              {% if 'site' in type and results.site.meta.count == 0 %}
+                <li class="side-nav__item"><span class="side-nav__link">Site (0)</span></li>
+              {% endif %}
             </ul>
           </nav>
           <aside class="sidebar sidebar--primary">
-            <h4 class="sidebar__title">Other search options</h4>
+            <h4 class="sidebar__title">Other search tools</h4>
               <div class="sidebar__content">
-                <p class="t-sans">Search for "{{ search_query}}" in:</p>
                 <ul class="sidebar__related-links">
-                  <li><a href="{{ settings.FEC_APP_URL }}/receipts/individual-contributions?contributor_name={{search_query}}">Individual contributions</a></li>
-                  <li><a href="{{ settings.FEC_APP_URL }}/legal/search?search_type=all&amp;search={{ search_query}}">Legal resources</a></li>
-                  <li><a href="/updates?search={{ search_query}}">Latest updates</a></li>
+                  <li>
+                    <a class="t-bold" href="{{ settings.FEC_APP_URL }}/receipts/individual-contributions?contributor_name={{search_query}}">Individual contributions</a>
+                    <span class="t-note t-block t-sans">Find donors and donations</span>
+                  </li>
+                  <li>
+                    <a class="t-bold" href="{{ settings.FEC_APP_URL }}/disbursements?recipient_name={{search_query}}">Disbursements</a>
+                    <span class="t-note t-block t-sans">Find what money gets spent</span>
+                  </li>
+                  <li>
+                    <a class="t-bold" href="{{ settings.FEC_APP_URL }}/legal/search?search_type=all&amp;search={{ search_query}}">Legal resources</a>
+                    <span class="t-note t-block t-sans">AOs, MURs and more</span>
+                  </li>
+                  <li>
+                    <a class="t-bold" href="/updates?search={{ search_query}}">Latest updates</a>
+                    <span class="t-note t-block t-sans">Press releases and more</span>
+                  </li>
                 </ul>
               </div>
           </aside>
         </div>
       </div>
       <div class="main__content--right">
-        {% if results %}
-          {% if results.site.best_bets %}
+        {% if results.count > 0 %}
+          {% if results.site.best_bets.results %}
             <section class="option" id="suggestions">
               <h2>Suggestions</h2>
               <ul>
-              {% for result in results.site.best_bets %}
+              {% for result in results.site.best_bets.results %}
                 <li class="post">
                   <h3><i class="icon icon--inline--left i-star"></i><a href="{{ result.url }}">{{ result.title }}</a></h3>
                   <span class="t-small t-sans t-block">{{ result.url }}</span>
@@ -81,7 +104,7 @@
           {% if results.candidates.pagination.count > 0 %}
             <section class="option" id="candidates">
               <div class="row">
-                <h2 class="u-float-left">Candidates</h2>
+                <h2 class="u-float-left u-no-margin">Candidates</h2>
                 <div class="u-float-right">
                   <span class="t-sans">{{ results.candidates.pagination.count }} total results
                     {% if results.candidates.pagination.count > 3 %}| <a href="{{settings.FEC_APP_URL}}/candidates?q={{search_query}}">View more</a>{% endif %}
@@ -93,7 +116,12 @@
                   <li class="post">
                     <h3><i class="icon icon--inline--left i-candidate"></i><a href="{{settings.FEC_APP_URL}}/candidate/{{result.candidate_id}}">{{ result.name }}</a></h3>
                     <span class="t-small t-sans t-block">{{settings.FEC_APP_URL}}/candidate/{{result.candidate_id}}</span>
-                    <p>Candidate for {{ result.office_full }} in {% for y in result.election_years %}{{ y }}{% if forloop.last %}{% else %}, {% endif %}{% endfor %}</p>
+                    <div class="post__preview t-sans">
+                      <span class="entity__type">Candidate for {{ result.office_full }}</span>
+                      <span class="entity__type">{% if result.office != 'P' %} {{ result.state }} {% if result.office == 'H' %} - District {{ result.district }} {% endif %} {% endif %}</span>
+                      <span class="entity__type">{{ result.party_full }}</span>
+                      ID: {{ result.candidate_id }}
+                    </div>
                   </li>
                 {% endfor %}
               </ul>
@@ -102,7 +130,7 @@
           {% if results.committees.pagination.count > 0 %}
             <section class="option" id="committees">
               <div class="row">
-                <h2 class="u-float-left">Committees</h2>
+                <h2 class="u-float-left u-no-margin">Committees</h2>
                 <div class="u-float-right">
                   <span class="t-sans">{{ results.committees.pagination.count }} total results
                     {% if results.committees.pagination.count > 3 %}| <a href="{{settings.FEC_APP_URL}}/committees?q={{search_query}}">View more</a>{% endif %}
@@ -114,7 +142,11 @@
                   <li class="post">
                     <h3><i class="icon icon--inline--left i-committee"></i><a href="{{settings.FEC_APP_URL}}/committee/{{result.committee_id}}">{{ result.name }}</a></h3>
                     <span class="t-small t-sans t-block">{{settings.FEC_APP_URL}}/committee/{{result.committee_id}}</span>
-                    <p>Committee</p>
+                    <div class="post__preview t-sans">
+                      <span class="entity__type">{{ result.committee_type_full }}</span>
+                      <span class="entity__type">{{ result.designation_full }}</span>
+                      ID: {{ result.committee_id }}
+                    </div>
                   </li>
                 {% endfor %}
               </ul>
@@ -123,7 +155,7 @@
           {% if results.site.results %}
             <section class="option" id="site">
               <div class="row">
-                <h2 class="u-float-left">Site</h2>
+                <h2 class="u-float-left u-no-margin">Site</h2>
                 <div class="u-float-right">
                   <span class="t-sans">{{ results.site.meta.count }} total results</span>
                 </div>
@@ -131,9 +163,11 @@
               <ul>
                 {% for result in results.site.results %}
                   <li class="post">
-                    <h3><i class="icon icon--inline--left i-document"></i><a href="{{ result.url }}">{{ result.title | highlight_matches }}</a></h3>
+                    <h3>
+                      <i class="icon icon--inline--left {% if result.icon == 'page' %}i-document{% else %}i-table{% endif %}"></i>
+                      <a href="{{ result.url }}">{{ result.title | highlight_matches }}</a></h3>
                     <span class="t-small t-sans t-block">{{ result.url }}</span>
-                    <p class="t-note">{{ result.snippet | highlight_matches }}</p>
+                    <p class="post__preview t-note">{{ result.snippet | highlight_matches }}</p>
                   </li>
                 {% endfor %}
               </ul>
@@ -150,6 +184,11 @@
               </div>
             </section>
           {% endif %}
+        {% else %}
+          <div class="message message--info">
+            <h2>No results</h2>
+            <p>Try searching something else.</p>
+          </div>
         {% endif %}
       </div>
     </div>
