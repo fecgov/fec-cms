@@ -6,11 +6,11 @@
       <span class="t-sans">
         <span class="t-bold">
           {% if update.get_update_type == 'Tips for Treasurers' %}
-            Tips
+            Tips:
           {% else %}
-            {{ update.category|capfirst }}
+            {{ update.category|capfirst }}:
           {% endif %}
-        </span>:
+        </span>
         <a href="{{ update.url }}">{% formatted_title update %}</a>
       </span>
     {% if update.homepage_pin %}</div>{% endif %}
