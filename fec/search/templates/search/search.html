@@ -38,13 +38,13 @@
               {% if results.site.best_bets %}
                 <li class="side-nav__item"><a class="side-nav__link" href="#suggestions">Suggestions</a></li>
               {% endif %}
-              {% if 'candidates' in type %}
+              {% if results.candidates.pagination.count > 0 %}
                 <li class="side-nav__item"><a class="side-nav__link" href="#candidates">Candidates ({{ results.candidates.pagination.count }})</a></li>
               {% endif %}
-              {% if 'committees' in type %}
+              {% if results.committees.pagination.count > 0  %}
                 <li class="side-nav__item"><a class="side-nav__link" href="#committees">Committees ({{ results.committees.pagination.count }})</a></li>
               {% endif %}
-              {% if 'site' in type %}
+              {% if results.site.meta.count > 0 %}
                 <li class="side-nav__item"><a class="side-nav__link" href="#site">Site ({{ results.site.meta.count }})</a></li>
               {% endif %}
             </ul>
@@ -78,7 +78,7 @@
               </ul>
             </section>
           {% endif %}
-          {% if results.candidates %}
+          {% if results.candidates.pagination.count > 0 %}
             <section class="option" id="candidates">
               <div class="row">
                 <h2 class="u-float-left">Candidates</h2>
@@ -99,7 +99,7 @@
               </ul>
               </section>
             {% endif %}
-          {% if results.committees %}
+          {% if results.committees.pagination.count > 0 %}
             <section class="option" id="committees">
               <div class="row">
                 <h2 class="u-float-left">Committees</h2>

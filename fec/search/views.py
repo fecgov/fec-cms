@@ -31,7 +31,7 @@ def prev_offset(limit, next_offset):
         return 0
 
 def search(request):
-    limit = 10
+    limit = 5
     search_query = request.GET.get('query', None)
     offset = request.GET.get('offset', 0)
     search_type = request.GET.getlist('type', ['site'])
@@ -48,7 +48,7 @@ def search(request):
             'affiliate': 'betafec_api',
             'access_key': settings.FEC_DIGITALGOV_KEY,
             'query': search_query,
-            'limit': limit,
+            'limit': 10,
             'offset': offset
         }
         r = requests.get('https://search.usa.gov/api/v2/search/i14y', params=params)
@@ -62,8 +62,6 @@ def search(request):
                 'prev_offset': prev_offset(limit, int(offset))
             }
         }
-
-        print(results)
 
     return render(request, 'search/search.html', {
         'search_query': search_query,
