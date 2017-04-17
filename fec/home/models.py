@@ -105,8 +105,8 @@ def log_person(sender, **kwargs):
 @receiver(post_save, sender=User)
 @receiver(pre_delete, sender=User)
 def log_user_save(sender, **kwargs):
-    #remove once logging configuration figured out
-    message = "Change called on user {0} by {1}".format(kwargs.get('user'), kwargs.get('instance').get_username())
+    '''
+    Keeping these print statements here for reference for potential later use.
     print(kwargs.get('user'), '1')
     print(kwargs.get('user_id'), '2')
     print(kwargs.get('instance'), '3')
@@ -122,19 +122,25 @@ def log_user_save(sender, **kwargs):
     print(kwargs.get('instance').logentry_set, '12.5')
     print(sender.logentry_set, '13')
     # print(sender.__base__.id, '13')
-
     # print(sender.get('id'), '14')
     print(sender.id, '15')
-    logger.info("User change: username {0} by instance {1}".format(kwargs.get('instance').get_username(), kwargs.get('instance')))
-
-    audit_log = AuditLog()
+    '''
+    if kwargs.get('update_fields'):
+        logger.info("User {0} logged in".format(kwargs.get('instance').get_username()))
+    else:
+        logger.info("User change: username {0} by instance {1}".format(kwargs.get('instance').get_username(),
+                                                                       kwargs.get('instance')))
+    audit_log = AuditLog() #currently not used, will attempt to use for future PR adding admin logging
 
 @receiver(pre_delete, sender=PageRevision)
 @receiver(post_save, sender=PageRevision)
 def log_revisions(sender, **kwargs):
-    print(kwargs)
-    logger.info("test info")
-    logger.info("page was modified: {0} by user id {1}".format(kwargs.get('instance'), kwargs.get('instance').user_id))
+    try:
+        user_id = int(kwargs.get('instance').user_id)
+        user = User.objects.get(id=user_id)
+    except User.DoesNotExist:
+        logger.info("User not found")
+    logger.info("page was modified: {0} by user {1}".format(kwargs.get('instance'), user.get_username()))
 
 def user_groups_changed(sender, **kwargs):
     #print(kwargs)
