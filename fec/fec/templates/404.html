@@ -5,16 +5,13 @@
 <section class="content--blank">
   <div class="container">
     <div class="message message--alert message--big">
-      <h1 class="message__title">Oops!</h1>
-      <p>We couldn't find what you're looking for. Please double-check the URL and try again.</p>
-      <div class="message--alert__bottom">
-        <p>Still can't find what you're looking for?</p>
-        <ul class="list--buttons">
-          <li><a class="button button--cta" href="/">Return home</a></li>
-          <li><a class="button button--alt" href="https://github.com/18f/fec/issues">File an issue</a></li>
-          <li><a class="button button--alt" href="mailto:{{ settings.CONTACT_EMAIL }}">Email our team</a></li>
-        </ul>
-      </div>
+      <h1 class="message__title">Page not found</h1>
+      <p>Sorry, we couldn't find the page you're looking for.</p>
+      <p>FEC.gov is in the middle of a redesign. We've worked hard to keep our URLs up to date, but please let us know if you think something is missing or broken. We're available by <a href="mailto:{{ settings.WEBMANAGER_EMAIL }}">email</a> or <a href="https://github.com/18f/fec">GitHub</a>.</p>
+      
+        <p><a class="button button--cta" href="/">Return home</a></p>
+        <p>or try searching an archive of the <a href="{{settings.CLASSIC_URL}}">old FEC.gov design.</a></p>
+     
     </div>
   </div>
 </section>

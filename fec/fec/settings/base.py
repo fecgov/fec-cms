@@ -172,6 +172,8 @@ WAGTAIL_SITE_NAME = "fec"
 from fec import constants
 from .env import env
 
+WEBMANAGER_EMAIL = "webmanager@fec.gov"
+CLASSIC_URL = "http://www.fec.gov"
 USAJOBS_API_KEY = env.get_credential('USAJOBS_API_KEY')
 FEC_APP_URL = os.getenv('FEC_APP_URL')
 FEC_API_URL = os.getenv('FEC_API_URL', 'http://localhost:5000')
