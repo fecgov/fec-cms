@@ -27,7 +27,7 @@
             <input type="checkbox"  id="search-committees" value="committees" name="type" {% if 'committees' in type %}checked{% endif %}>
             <label for="search-committees">Committees</label>
             <input type="checkbox" id="search-site" value="site" name="type" {% if 'site' in type %}checked{% endif %}>
-            <label for="search-site">Site</label>
+            <label for="search-site">Other pages</label>
           </fieldset>
         </div>
       </form>
@@ -47,7 +47,7 @@
                 <li class="side-nav__item"><a class="side-nav__link" href="#committees">Committees ({{ results.committees.pagination.count }})</a></li>
               {% endif %}
               {% if results.site.meta.count > 0 %}
-                <li class="side-nav__item"><a class="side-nav__link" href="#site">Site ({{ results.site.meta.count }})</a></li>
+                <li class="side-nav__item"><a class="side-nav__link" href="#site">Other pages ({{ results.site.meta.count }})</a></li>
               {% endif %}
               {% if 'candidates' in type and results.candidates.pagination.count == 0 %}
                 <li class="side-nav__item side-nav__link"><span class="side-nav__link">Candidates (0)</span></li>
@@ -56,7 +56,7 @@
                 <li class="side-nav__item"><span class="side-nav__link">Committees (0)</span></li>
               {% endif %}
               {% if 'site' in type and results.site.meta.count == 0 %}
-                <li class="side-nav__item"><span class="side-nav__link">Site (0)</span></li>
+                <li class="side-nav__item"><span class="side-nav__link">Other pages (0)</span></li>
               {% endif %}
             </ul>
           </nav>
@@ -118,7 +118,7 @@
                     <span class="t-small t-sans t-block">{{settings.FEC_APP_URL}}/candidate/{{result.candidate_id}}</span>
                     <div class="post__preview t-sans">
                       <span class="entity__type">Candidate for {{ result.office_full }}</span>
-                      <span class="entity__type">{% if result.office != 'P' %} {{ result.state }} {% if result.office == 'H' %} - District {{ result.district }} {% endif %} {% endif %}</span>
+                      {% if result.office != 'P' %}<span class="entity__type"> {{ result.state }} {% if result.office == 'H' %} - District {{ result.district }} {% endif %} </span>{% endif %}
                       <span class="entity__type">{{ result.party_full }}</span>
                       ID: {{ result.candidate_id }}
                     </div>
@@ -155,7 +155,7 @@
           {% if results.site.results %}
             <section class="option" id="site">
               <div class="row">
-                <h2 class="u-float-left u-no-margin">Site</h2>
+                <h2 class="u-float-left u-no-margin">Other pages</h2>
                 <div class="u-float-right">
                   <span class="t-sans">{{ results.site.meta.count }} total results</span>
                 </div>
