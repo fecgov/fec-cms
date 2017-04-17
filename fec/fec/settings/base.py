@@ -77,6 +77,10 @@ MIDDLEWARE_CLASSES = (
 
     'wagtail.wagtailcore.middleware.SiteMiddleware',
     'wagtail.wagtailredirects.middleware.RedirectMiddleware',
+
+    # logs
+    'audit_log.middleware.UserLoggingMiddleware',
+
 )
 
 ROOT_URLCONF = 'fec.urls'
@@ -248,3 +252,23 @@ WAGTAIL_FRONTEND_LOGIN_URL = 'uaa_client:login'
 AUTHENTICATION_BACKENDS = \
     ['django.contrib.auth.backends.ModelBackend',
      'uaa_client.authentication.UaaBackend']
+
+DEFAULT_AUTHENTICATION_CLASSES = ['rest_framework_jwt.authentication.JSONWebTokenAuthentication',]
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',
+            'level': 'INFO',
+        },
+    },
+    'loggers': {
+        '': {
+            'handlers': ['console'],
+            'level': 'INFO',
+            'propogate': False,
+        },
+    },
+}
