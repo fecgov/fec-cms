@@ -63,6 +63,7 @@ INSTALLED_APPS = (
     'home',
     'data_loader',
     'uaa_client',
+    'extend_admin',
 )
 
 MIDDLEWARE_CLASSES = (
