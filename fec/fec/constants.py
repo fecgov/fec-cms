@@ -204,3 +204,9 @@ report_parent_categories = OrderedDict((x, x.replace('_', ' ')) for x in report_
 report_child_categories = OrderedDict()
 for category in report_category_groups.keys():
     report_child_categories.update(report_category_groups[category])
+
+ext_whitelist = [
+    '.csv', '.doc', '.docx', '.fec', '.gif', '.jpeg', '.jpg', '.mp3', '.mp4',
+    '.mpeg', '.mpg', '.odp', '.ods', '.odt', '.pdf', '.pptx', '.tif', '.tiff',
+    '.tsv', '.txt', '.wav', '.xlsx'
+]
