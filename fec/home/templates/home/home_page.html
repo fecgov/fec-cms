@@ -74,12 +74,9 @@
           <div class="grid__item">
             <h3>Find out how a specific candidate or committee raises and spends money</h3>
             <form action="{{ settings.FEC_APP_URL }}" autocomplete="off" class="search__container js-search">
-              <div class="combo combo--search">
-                <select class="search__select js-search-type" name="search_type" aria-label="Select a search type">
-                  <option value="candidates">Candidates</option>
-                  <option value="committees">Committees</option>
-                </select>
-                <input name="search" class="js-typeahead combo__input" type="text"
+              <div class="combo combo--search--mini">
+                <label class="label" for="data-search">Search for candidates and committees</label>
+                <input id="data-search" name="search" class="js-typeahead combo__input" type="text"
                 autocorrect="off"
                 autocapitalize="off"
                 spellcheck="false">

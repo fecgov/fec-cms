@@ -131,10 +131,10 @@ $(document).ready(function() {
   });
 
   // Initialize header typeahead
-  new typeahead.Typeahead($('.js-header-typeahead'), null, window.FEC_APP_URL + '/');
+  new typeahead.Typeahead($('.js-header-search'), 'all', window.FEC_APP_URL + '/');
 
   // Initialize CFD home typeahead
-  new typeahead.Typeahead($('.js-typeahead'), 'candidates', window.FEC_APP_URL + '/');
+  new typeahead.Typeahead($('.js-typeahead'), 'allData', window.FEC_APP_URL + '/');
 
   // Initialize search toggle
   new Search($('.js-search'));
