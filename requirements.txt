@@ -12,6 +12,8 @@ slacker==0.8.6
 whitenoise==2.0.3
 wagtail>=1.8,<1.9
 bandit==1.4.0
+# TODO: pin version
+django-audit-log
 
 # Development
 invoke==0.15.0
