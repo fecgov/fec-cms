@@ -172,8 +172,6 @@ WAGTAIL_SITE_NAME = "fec"
 from fec import constants
 from .env import env
 
-WEBMANAGER_EMAIL = "webmanager@fec.gov"
-CLASSIC_URL = "http://www.fec.gov"
 USAJOBS_API_KEY = env.get_credential('USAJOBS_API_KEY')
 FEC_APP_URL = os.getenv('FEC_APP_URL')
 FEC_API_URL = os.getenv('FEC_API_URL', 'http://localhost:5000')
@@ -187,7 +185,8 @@ ENVIRONMENTS = {
     'prod': 'PRODUCTION',
 }
 FEC_CMS_ENVIRONMENT = ENVIRONMENTS.get(os.getenv('FEC_CMS_ENVIRONMENT'), 'LOCAL')
-CONTACT_EMAIL = 'betafeedback@fec.gov';
+CONTACT_EMAIL = 'betafeedback@fec.gov'
+WEBMANAGER_EMAIL = "webmanager@fec.gov"
 CONSTANTS = constants
 
 # Config for the ServiceNow API for contacting RAD
