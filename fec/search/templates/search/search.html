@@ -94,8 +94,8 @@
               {% for result in results.site.best_bets.results %}
                 <li class="post">
                   <h3><i class="icon icon--inline--left i-star"></i><a href="{{ result.url }}">{{ result.title }}</a></h3>
-                  <span class="t-small t-sans t-block">{{ result.url }}</span>
-                  <p class="t-note">{{ result.description }}</p>
+                  <div class="post__path t-small t-sans">{{ result.url }}</div>
+                  <div class="t-sans post__preview">{{ result.description | highlight_matches }}</div>
                 </li>
               {% endfor %}
               </ul>
@@ -115,7 +115,7 @@
                 {% for result in results.candidates.results %}
                   <li class="post">
                     <h3><i class="icon icon--inline--left i-candidate"></i><a href="{{settings.FEC_APP_URL}}/candidate/{{result.candidate_id}}">{{ result.name }}</a></h3>
-                    <span class="t-small t-sans t-block">{{settings.FEC_APP_URL}}/candidate/{{result.candidate_id}}</span>
+                    <div class="post__path t-small t-sans">{{settings.FEC_APP_URL}}/candidate/{{result.candidate_id}}</div>
                     <div class="post__preview t-sans">
                       <span class="entity__type">Candidate for {{ result.office_full }}</span>
                       {% if result.office != 'P' %}<span class="entity__type"> {{ result.state }} {% if result.office == 'H' %} - District {{ result.district }} {% endif %} </span>{% endif %}
@@ -141,10 +141,10 @@
                 {% for result in results.committees.results %}
                   <li class="post">
                     <h3><i class="icon icon--inline--left i-committee"></i><a href="{{settings.FEC_APP_URL}}/committee/{{result.committee_id}}">{{ result.name }}</a></h3>
-                    <span class="t-small t-sans t-block">{{settings.FEC_APP_URL}}/committee/{{result.committee_id}}</span>
+                    <div class="post__path t-small t-sans">{{settings.FEC_APP_URL}}/committee/{{result.committee_id}}</div>
                     <div class="post__preview t-sans">
-                      <span class="entity__type">{{ result.committee_type_full }}</span>
                       <span class="entity__type">{{ result.designation_full }}</span>
+                      <span class="entity__type">{{ result.committee_type_full }}</span>
                       ID: {{ result.committee_id }}
                     </div>
                   </li>
@@ -166,7 +166,7 @@
                     <h3>
                       <i class="icon icon--inline--left {% if result.icon == 'page' %}i-document{% else %}i-table{% endif %}"></i>
                       <a href="{{ result.url }}">{{ result.title | highlight_matches }}</a></h3>
-                    <span class="t-small t-sans t-block">{{ result.url }}</span>
+                    <div class="post__path t-small t-sans">{{ result.url }}</div>
                     <p class="post__preview t-note">{{ result.snippet | highlight_matches }}</p>
                   </li>
                 {% endfor %}
