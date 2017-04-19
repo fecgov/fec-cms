@@ -5,12 +5,7 @@ import json
 from urllib import parse
 
 from django.shortcuts import render
-from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.conf import settings
-
-from wagtail.wagtailcore.models import Page
-from wagtail.wagtailsearch.models import Query
-from wagtail.contrib.wagtailsearchpromotions.models import SearchPromotion
 
 def search_candidates(query):
     path = os.path.join(settings.FEC_API_VERSION, 'candidates', 'search')
@@ -46,8 +41,44 @@ def parse_icon(path):
         return 'page'
 
 
+def process_site_results(results, limit=0, offset=0):
+    web_results = results['web']
+    grouped = {
+        'results': web_results['results'],
+        'best_bets': {
+            'results': results['text_best_bets'],
+            'count': len(results['text_best_bets'])
+        },
+        'meta': {
+            'count': web_results['total'],
+            'next_offset': web_results['next_offset'],
+            'prev_offset': prev_offset(limit, int(offset))
+        }
+    }
+
+    # Parse the icons
+    for result in grouped['results']:
+        result['icon'] = parse_icon(result['url'])
+
+    return grouped
+
+
+def search_site(query, limit=0, offset=0):
+    params = {
+        'affiliate': 'betafec_api',
+        'access_key': settings.FEC_DIGITALGOV_KEY,
+        'query': query,
+        'limit': limit,
+        'offset': offset
+    }
+    r = requests.get('https://search.usa.gov/api/v2/search/i14y', params=params)
+
+    if r.status_code == 200:
+        return process_site_results(r.json(), limit=limit, offset=offset)
+
+
 def search(request):
-    limit = 5
+    limit = 10
     search_query = request.GET.get('query', None)
     offset = request.GET.get('offset', 0)
     search_type = request.GET.getlist('type', ['site'])
@@ -60,31 +91,7 @@ def search(request):
         results['committees'] = search_committees(search_query)
 
     if 'site' in search_type and search_query:
-        params = {
-            'affiliate': 'betafec_api',
-            'access_key': settings.FEC_DIGITALGOV_KEY,
-            'query': search_query,
-            'limit': 10,
-            'offset': offset
-        }
-        r = requests.get('https://search.usa.gov/api/v2/search/i14y', params=params)
-        if r.status_code == 200:
-            web_results = r.json()['web']
-            results['site'] = {
-                'results': web_results['results'],
-                'best_bets': {
-                    'results': r.json()['text_best_bets'],
-                    'count': len(r.json()['text_best_bets'])
-                },
-                'meta': {
-                    'count': web_results['total'],
-                    'next_offset': web_results['next_offset'],
-                    'prev_offset': prev_offset(limit, int(offset))
-                }
-            }
-
-            for result in results['site']['results']:
-                result['icon'] = parse_icon(result['url'])
+        results['site'] = search_site(search_query, limit=limit, offset=offset)
 
     results['count'] = len(results)
 
