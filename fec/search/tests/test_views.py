@@ -118,6 +118,9 @@ class TestViews(TestCase):
         search_candidates.assert_called_with('abe')
         self.assertEqual(response.status_code, 200)
 
+
+    @mock.patch.object(views, 'search_candidates')
+    def test_site_search_candidates_not_called(self, m, search_candidates):
         # Test that it's not called if type=site
         m.register_uri('GET', search_url, status_code=500)
         request = self.factory.get('/search?query=abe&type=site')
@@ -133,6 +136,9 @@ class TestViews(TestCase):
         search_committees.assert_called_with('abe')
         self.assertEqual(response.status_code, 200)
 
+
+    @mock.patch.object(views, 'search_committees')
+    def test_site_search_committees_not_called(self, m, search_committees):
         # Test that it's not called if type=site
         m.register_uri('GET', search_url, status_code=500)
         request = self.factory.get('/search?query=abe&type=site')
@@ -148,7 +154,10 @@ class TestViews(TestCase):
         search_site.assert_called_with('help', limit=10, offset=0)
         self.assertEqual(response.status_code, 200)
 
-        # Test that it's not called if type=site
+
+    @mock.patch.object(views, 'search_site')
+    def test_site_search_site_not_called(self, m, search_site):
+        # Test that it's not called if type=candidates
         m.register_uri('GET', candidate_url, json={})
         request = self.factory.get('/search?query=abe&type=candidates')
         response = search(request)
