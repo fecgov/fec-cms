@@ -35,7 +35,7 @@ def prev_offset(limit, next_offset):
 
 def parse_icon(path):
     """
-    Parse which icon to show by checking if the URL is at /data/ 
+    Parse which icon to show by checking if the URL is at /data/
     But because some /data/ pages aren't data tables, screen those out with
     the pages list
     """
@@ -44,6 +44,7 @@ def parse_icon(path):
         return 'data'
     else:
         return 'page'
+
 
 def search(request):
     limit = 5
@@ -67,22 +68,23 @@ def search(request):
             'offset': offset
         }
         r = requests.get('https://search.usa.gov/api/v2/search/i14y', params=params)
-        web_results = r.json()['web']
-        results['site'] = {
-            'results': web_results['results'],
-            'best_bets': {
-                'results': r.json()['text_best_bets'],
-                'count': len(r.json()['text_best_bets'])
-            },
-            'meta': {
-                'count': web_results['total'],
-                'next_offset': web_results['next_offset'],
-                'prev_offset': prev_offset(limit, int(offset))
+        if r.status_code == 200:
+            web_results = r.json()['web']
+            results['site'] = {
+                'results': web_results['results'],
+                'best_bets': {
+                    'results': r.json()['text_best_bets'],
+                    'count': len(r.json()['text_best_bets'])
+                },
+                'meta': {
+                    'count': web_results['total'],
+                    'next_offset': web_results['next_offset'],
+                    'prev_offset': prev_offset(limit, int(offset))
+                }
             }
-        }
 
-        for result in results['site']['results']:
-            result['icon'] = parse_icon(result['url'])
+            for result in results['site']['results']:
+                result['icon'] = parse_icon(result['url'])
 
     results['count'] = len(results)
 
