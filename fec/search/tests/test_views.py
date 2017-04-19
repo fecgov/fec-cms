@@ -94,7 +94,7 @@ class TestViews(TestCase):
 
     @mock.patch.object(views, 'process_site_results')
     def test_site_search(self, m, process_site_results):
-        m.register_uri('GET', search_url, json={})
+        m.register_uri('GET', search_url, status_code=200, json={})
         r = search_site('help', limit=10, offset=0)
         history = m.request_history[0]
         self.assertEqual(history.qs['query'], ['help'])
