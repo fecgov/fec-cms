@@ -100,7 +100,7 @@ class TestViews(TestCase):
         self.assertEqual(history.qs['query'], ['help'])
         self.assertEqual(history.qs['limit'], ['10'])
         self.assertEqual(history.qs['offset'], ['0'])
-        process_site_results.assert_called_once()
+        process_site_results.assert_called()
 
 
     @mock.patch.object(views, 'process_site_results')
