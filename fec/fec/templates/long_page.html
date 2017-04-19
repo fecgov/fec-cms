@@ -20,13 +20,13 @@
         {% block sections %}
         {% endblock %}
         {% if self.citations %}
-        <aside id="legal-citations" class="sidebar sidebar--primary">
+        <div id="legal-citations" class="sidebar--primary t-sans">
           <h4 class="sidebar__title">Legal citations</h4>
           <div class="sidebar__content">
             {% block citations %}
             {% endblock %}
           </div>
-        </aside>
+        </div>
         {% endif %}
       </div>
     </div>
