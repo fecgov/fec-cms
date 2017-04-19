@@ -8,6 +8,7 @@ from django.shortcuts import render
 from django.conf import settings
 
 def search_candidates(query):
+    """Searches the data API for candidates matching the query"""
     path = os.path.join(settings.FEC_API_VERSION, 'candidates', 'search')
     url = parse.urljoin(settings.FEC_API_URL, path)
     r = requests.get(url, params={'q': query, 'sort': '-receipts', 'per_page': 3, 'api_key': settings.FEC_API_KEY})
@@ -15,6 +16,7 @@ def search_candidates(query):
 
 
 def search_committees(query):
+    """Searches the data API for committees matching the query"""
     path = os.path.join(settings.FEC_API_VERSION, 'committees')
     url = parse.urljoin(settings.FEC_API_URL, path)
     r = requests.get(url, params={'q': query, 'per_page': 3, 'sort': '-receipts', 'api_key': settings.FEC_API_KEY})
@@ -22,6 +24,10 @@ def search_committees(query):
 
 
 def prev_offset(limit, next_offset):
+    """
+    Helper function for determining the previous offset, which is used
+    for paging to previous pages
+    """
     if (next_offset - limit) >= 0:
         return next_offset - limit
     else:
@@ -42,6 +48,7 @@ def parse_icon(path):
 
 
 def process_site_results(results, limit=0, offset=0):
+    """Organizes the results from DigitalGov search into a better format"""
     web_results = results['web']
     grouped = {
         'results': web_results['results'],
@@ -64,6 +71,7 @@ def process_site_results(results, limit=0, offset=0):
 
 
 def search_site(query, limit=0, offset=0):
+    """Calls the DigitalGov search and then processes the results if successful"""
     params = {
         'affiliate': 'betafec_api',
         'access_key': settings.FEC_DIGITALGOV_KEY,
@@ -78,6 +86,11 @@ def search_site(query, limit=0, offset=0):
 
 
 def search(request):
+    """
+    Takes a page request and calls the appropriate searches
+    depending on the type requested
+    """
+
     limit = 10
     search_query = request.GET.get('query', None)
     offset = request.GET.get('offset', 0)
