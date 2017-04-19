@@ -21,12 +21,6 @@ class Command(BaseCommand):
             help='Path to JSON file to load'
         )
 
-        parser.add_argument(
-            '--delete-existing',
-            default=False,
-            help='Delete indexes',
-        )
-
     def handle(self, *args, **options):
         self.stdout.write(self.style.WARNING('Indexing pages'))
 
@@ -37,9 +31,6 @@ class Command(BaseCommand):
             pages = json.load(json_contents)
             for page in pages:
                 self.add(page)
-                # if 'delete-existing' in options:
-                #     self.delete(page)
-                # else:
 
         self.stdout.write(self.style.SUCCESS('All done'))
 
