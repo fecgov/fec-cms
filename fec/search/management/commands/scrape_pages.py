@@ -4,6 +4,7 @@ import requests
 from bs4 import BeautifulSoup
 
 from django.core.management import BaseCommand
+from django.conf import settings
 
 from home.models import Page
 from home.models import (
@@ -109,7 +110,7 @@ class Command(BaseCommand):
 
     def write_articles(self, pages, **options):
         self.stdout.write('Writing to file')
-        fname = os.path.join('fec/search/management/dump.json')
+        fname = os.path.join(settings.REPO_DIR, 'fec/search/management/dump.json')
         with open(fname, "w+") as f:
             json.dump(pages, f, indent=4)
 
