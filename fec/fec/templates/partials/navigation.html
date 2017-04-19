@@ -25,6 +25,24 @@
       <li class="site-nav__item utility-nav__item u-under-lg-only">
         <a class="site-nav__link" href="/calendar">Calendar</a>
       </li>
+      <li class="site-nav__item site-nav__link utility-nav__item u-under-lg-only">
+        <form accept-charset="UTF-8" action="{{ cms_url }}/search" class="combo combo--search--mini" method="get" role="search">
+          <input type="hidden" name="type" value="candidates">
+          <input type="hidden" name="type" value="committees">
+          <input type="hidden" name="type" value="site">
+          <label class="u-visually-hidden" for="mobile-search">Search</label>
+          <input
+            class="js-site-search combo__input"
+            autocomplete="off"
+            id="mobile-search"
+            name="query"
+            type="text"
+            aria-label="Search betaFEC">
+          <button type="submit" class="button--standard combo__button button--search">
+            <span class="u-visually-hidden">Search</span>
+          </button>
+        </form>
+      </li>
     </ul>
   </div>
   <button for="nav-toggle" class="js-nav-toggle site-nav__button" aria-controls="nav-main">Menu</button>

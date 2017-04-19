@@ -377,6 +377,7 @@ class PressReleasePage(ContentPage):
         PageChooserPanel('read_next'),
     ]
 
+
     promote_panels = Page.promote_panels + [
         MultiFieldPanel([
             FieldPanel('homepage_pin'),
@@ -492,6 +493,7 @@ class CustomPage(Page):
             classname = "collapsible"
         )
     ]
+
 
 class PressLandingPage(Page):
     hero = stream_factory(null=True, blank=True)

@@ -21,6 +21,7 @@ var toc = require('fec-style/js/toc');
 var typeahead = require('fec-style/js/typeahead');
 var Search = require('fec-style/js/search');
 var SiteOrientation = require('fec-style/js/site-orientation');
+var helpers = require('fec-style/js/helpers');
 
 // Hack: Append jQuery to `window` for use by legacy libraries
 window.$ = window.jQuery = $;
@@ -73,13 +74,15 @@ $(document).ready(function() {
   new toc.TOC('.js-toc');
 
   // Initialize sticky elements
-  $('.js-sticky-side').each(function() {
-    var container = $(this).data('sticky-container');
-    var opts = {
-      within: document.getElementById(container)
-    };
-    new Sticky(this, opts);
-  });
+    $('.js-sticky-side').each(function() {
+      var container = $(this).data('sticky-container');
+      var opts = {
+        within: document.getElementById(container)
+      };
+      if (helpers.isLargeScreen()) {
+        new Sticky(this, opts);
+      }
+    });
 
   // Initialize sticky bar elements
   $('.js-sticky-bar').each(function() {
@@ -113,25 +116,32 @@ $(document).ready(function() {
   $('.js-filter-tags').prepend($tagList);
 
   // Initialize filters
-  var filterPanel = new FilterPanel();
+  if ($('.filters').length > 0) {
+    var filterPanel = new FilterPanel();
+
+    // Initialize calendar
+    new calendar.Calendar({
+      selector: '#calendar',
+      download: '#calendar-download',
+      subscribe: '#calendar-subscribe',
+      url: calendarHelpers.getUrl(['calendar-dates']),
+      exportUrl: calendarHelpers.getUrl(['calendar-dates', 'export']),
+      filterPanel: filterPanel,
+    });
+  }
 
   if (document.querySelector('.js-form-nav')) {
     var formNav = document.querySelector('.js-form-nav');
     new FormNav(formNav);
   }
 
-  // Initialize calendar
-  new calendar.Calendar({
-    selector: '#calendar',
-    download: '#calendar-download',
-    subscribe: '#calendar-subscribe',
-    url: calendarHelpers.getUrl(['calendar-dates']),
-    exportUrl: calendarHelpers.getUrl(['calendar-dates', 'export']),
-    filterPanel: filterPanel,
+  // Initialize header typeaheads (mobile and desktop)
+  $('.js-site-search').each(function() {
+    new typeahead.Typeahead($(this), 'all', window.FEC_APP_URL + '/');
   });
 
-  // Initialize typeahead
-  new typeahead.Typeahead($('.js-typeahead'), 'candidates', window.FEC_APP_URL + '/');
+  // Initialize CFD home typeahead
+  new typeahead.Typeahead($('.js-typeahead'), 'allData', window.FEC_APP_URL + '/');
 
   // Initialize search toggle
   new Search($('.js-search'));
