@@ -523,6 +523,7 @@ class DocumentPage(ContentPage):
                                 choices=constants.report_child_categories.items(), null=True)
     content_panels = Page.content_panels + [
         FieldPanel('date'),
+        FieldPanel('year_only'),
         FieldPanel('file_url'),
         FieldPanel('size'),
         FieldPanel('category'),
