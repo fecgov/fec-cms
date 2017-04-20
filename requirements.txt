@@ -28,4 +28,4 @@ beautifulsoup4==4.5.1
 django-storages==1.5.2
 boto3==1.4.4
 
-cg-django-uaa==0.0.1
+cg-django-uaa==1.0.1
