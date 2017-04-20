@@ -121,7 +121,8 @@ class ResourceBlock(blocks.StructBlock):
         ('current_commissioners', CurrentCommissionersBlock()),
         ('fec_jobs', CareersBlock()),
         ('mur_search', MURSearchBlock()),
-        ('table', TableBlock())
+        ('table', TableBlock()),
+        ('html', blocks.RawHTMLBlock())
     ])
 
     aside = blocks.StreamBlock([
