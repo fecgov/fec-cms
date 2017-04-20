@@ -190,7 +190,8 @@ ENVIRONMENTS = {
     'prod': 'PRODUCTION',
 }
 FEC_CMS_ENVIRONMENT = ENVIRONMENTS.get(os.getenv('FEC_CMS_ENVIRONMENT'), 'LOCAL')
-CONTACT_EMAIL = 'betafeedback@fec.gov';
+CONTACT_EMAIL = 'betafeedback@fec.gov'
+WEBMANAGER_EMAIL = "webmanager@fec.gov"
 CONSTANTS = constants
 
 
