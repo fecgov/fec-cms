@@ -152,7 +152,7 @@ $(document).ready(function() {
     var $link = $(e.target);
     var section = $link.attr('href');
     var sectionTop = $(section).offset().top;
-    $(document.body).animate({
+    $('body, html').animate({
       scrollTop: sectionTop
     });
   });
