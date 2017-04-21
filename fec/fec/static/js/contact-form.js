@@ -5,7 +5,7 @@ var Typeahead = require('fec-style/js/typeahead').Typeahead;
 
 function ContactForm($elm) {
   this.$elm = $elm;
-  this.committee_id = $elm.find('#id_u_committee');
+  this.committeeId = $elm.find('#id_u_committee');
   this.category = $elm.find('#id_u_category');
   this.otherReason = $elm.find('#id_u_other_reason').closest('div');
   this.typeahead = new Typeahead($elm.find('.js-contact-typeahead'), 'committees', '');
@@ -23,7 +23,7 @@ ContactForm.prototype.initTypeahead = function() {
   this.typeahead.$element.css({'height': 'auto'});
   this.typeahead.$input.off('typeahead:select');
   this.typeahead.$input.on('typeahead:select', function(e, opts) {
-    self.committee_id.val(opts.id);
+    self.committeeId.val(opts.id);
   });
 };
 
