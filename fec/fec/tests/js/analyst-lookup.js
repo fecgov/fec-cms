@@ -25,6 +25,7 @@ describe('AnalystLookup', function() {
         '<p class="js-analyst-prompt" aria-hidden="false">Message.</p>' +
         '<div class="js-analyst-container">' +
           '<h5 class="js-analyst-name"></h5>' +
+          '<span class="js-analyst-ext"></span>' +
         '</div>' +
       '</div>'
     );
@@ -43,6 +44,7 @@ describe('AnalystLookup', function() {
       expect(this.lookup.$elm.is('.js-analyst-lookup')).to.be.true;
       expect(this.lookup.$input.is('#fixtures input')).to.be.true;
       expect(this.lookup.$name.is('.js-analyst-name')).to.be.true;
+      expect(this.lookup.$ext.is('.js-analyst-ext')).to.be.true;
       expect(this.lookup.$analystContainer.is('.js-analyst-container')).to.be.true;
       expect(this.lookup.$prompt.is('.js-analyst-prompt')).to.be.true;
     });
@@ -62,8 +64,9 @@ describe('AnalystLookup', function() {
   });
 
   it('shows the analyst', function() {
-    this.lookup.showAnalyst({'results': [{'first_name': 'Kim', 'last_name': 'Radical'}]});
+    this.lookup.showAnalyst({'results': [{'first_name': 'Kim', 'last_name': 'Radical', 'telephone_ext': '1234'}]});
     expect(this.lookup.$name.html()).to.equal('Kim Radical');
+    expect(this.lookup.$ext.html()).to.equal('1234');
     expect(this.lookup.$analystContainer.attr('aria-hidden')).to.equal('false');
     expect(this.lookup.$prompt.attr('aria-hidden')).to.equal('true');
   });
@@ -71,6 +74,7 @@ describe('AnalystLookup', function() {
   it('hides the analyst', function() {
     this.lookup.hideAnalyst();
     expect(this.lookup.$name.html()).to.equal('');
+    expect(this.lookup.$ext.html()).to.equal('');
     expect(this.lookup.$analystContainer.attr('aria-hidden')).to.equal('true');
     expect(this.lookup.$prompt.attr('aria-hidden')).to.equal('false');
   });

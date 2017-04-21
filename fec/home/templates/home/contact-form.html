@@ -16,7 +16,7 @@
         <div class="main__content">
           <h2>Authorized representatives</h2>
           <p>If you represent a committee or another entity registered with the FEC, RAD staff can help answer your reporting questions.</p>
-          <p>Submit the form below and your committee's RAD analyst will email you, usually within 3 business days. Or, for immediate assistance, use their provided contact information to call them by phone during business hours.</p>
+          {% if settings.FEATURES.radform %}<p>Submit this form and your committee's RAD analyst will email you, usually within 3 business days. Or, for immediate assistance, use their provided contact information to call them by phone during business hours.</p>{% endif %}
         </div>
         <div class="sidebar-container">
           <div class="contact-item contact-item--phone">
@@ -30,7 +30,7 @@
         </div>
       </div>
       <div class="main__content">
-        <div class="js-accordion accordion--neutral" data-content-prefix="lookup">
+        <div class="js-accordion accordion--neutral" data-content-prefix="lookup" {% if not settings.FEATURES.radform %}data-open-first="true"{% endif %}>
           <button class="accordion__button js-accordion-trigger">Find your committee's analyst</button>
           <div class="accordion__content row js-analyst-lookup">
             <div class="contact-form">
@@ -45,7 +45,7 @@
                   <div class="contact-item contact-item--phone">
                     <div class="contact-item__content">
                       <h5 class="contact-item__title js-analyst-name"></h5>
-                      <span class="t-block">Local: 202-694-1170</span>
+                      <span class="t-block">Local: 202-694-<span class="js-analyst-ext"></span></span>
                     </div>
                   </div>
                 </div>

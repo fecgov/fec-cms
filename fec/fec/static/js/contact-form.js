@@ -58,6 +58,7 @@ function AnalystLookup($elm) {
   this.$name = this.$elm.find('.js-analyst-name');
   this.$analystContainer = this.$elm.find('.js-analyst-container');
   this.$prompt = this.$elm.find('.js-analyst-prompt');
+  this.$ext = this.$elm.find('.js-analyst-ext');
 
   this.typeahead = new Typeahead(this.$input, 'committees', '');
   this.initTypeahead();
@@ -87,13 +88,16 @@ AnalystLookup.prototype.fetchAnalyst = function(e, opts) {
 
 AnalystLookup.prototype.showAnalyst = function(response) {
   var name = response.results[0].first_name + ' ' + response.results[0].last_name;
+  var ext = response.results[0].telephone_ext;
   this.$name.html(name);
+  this.$ext.html(ext);
   this.$analystContainer.attr('aria-hidden', 'false');
   this.$prompt.attr('aria-hidden', 'true');
 };
 
 AnalystLookup.prototype.hideAnalyst = function() {
   this.$name.empty();
+  this.$ext.empty();
   this.$analystContainer.attr('aria-hidden', 'true');
   this.$prompt.attr('aria-hidden', 'false');
 };
