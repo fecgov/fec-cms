@@ -26,6 +26,10 @@
       <i class="icon-circle--updates">
         <span class="u-visually-hidden">Icon of a page</span>
       </i>
+      {% elif block.value.link_type == 'calculator' %}
+      <i class="icon-circle--calculator">
+        <span class="u-visually-hidden">Icon of a calculator</span>
+      </i>
       {% endif %}
       {% if block.value.coming_soon %}
         <span class="is-disabled">{{ block.value.text }} (coming soon)</span>
