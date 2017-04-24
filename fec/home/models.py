@@ -794,10 +794,10 @@ class AgendaPage(Page):
     draft_minutes_links = models.TextField(
         blank=True, help_text='URLs separated by a newline')
     approved_minutes_date = models.DateField(null=True, blank=True)
-    approved_minutes_link = models.UrlField(blank=True)
+    approved_minutes_link = models.URLField(blank=True)
     sunshine_act_links = models.TextField(
         blank=True, help_text='URLs separated by a newline')
-    live_video_url = models.UrlField(blank=True)
+    live_video_url = models.URLField(blank=True)
 
     imported_html = StreamField(
         [('html_block', blocks.RawHTMLBlock())],
