@@ -100,15 +100,18 @@ def search(request):
 
     if 'candidates' in search_type and search_query:
         results['candidates'] = search_candidates(search_query)
-        results['count'] += len(results['candidates']['results'])
+        if results['candidates']:
+            results['count'] += len(results['candidates']['results'])
 
     if 'committees' in search_type and search_query:
         results['committees'] = search_committees(search_query)
-        results['count'] += len(results['committees']['results'])
+        if results['committees']:
+            results['count'] += len(results['committees']['results'])
 
     if 'site' in search_type and search_query:
         results['site'] = search_site(search_query, limit=limit, offset=offset)
-        results['count'] += len(results['site']['results'])
+        if results['site']:
+            results['count'] += len(results['site']['results'])
 
     return render(request, 'search/search.html', {
         'search_query': search_query,
