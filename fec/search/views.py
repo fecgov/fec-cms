@@ -96,17 +96,19 @@ def search(request):
     offset = request.GET.get('offset', 0)
     search_type = request.GET.getlist('type', ['site'])
     results = {}
+    results['count'] = 0
 
     if 'candidates' in search_type and search_query:
         results['candidates'] = search_candidates(search_query)
+        results['count'] += len(results['candidates']['results'])
 
     if 'committees' in search_type and search_query:
         results['committees'] = search_committees(search_query)
+        results['count'] += len(results['committees']['results'])
 
     if 'site' in search_type and search_query:
         results['site'] = search_site(search_query, limit=limit, offset=offset)
-
-    results['count'] = len(results)
+        results['count'] += len(results['site']['results'])
 
     return render(request, 'search/search.html', {
         'search_query': search_query,
