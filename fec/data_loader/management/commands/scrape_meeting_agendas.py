@@ -98,6 +98,7 @@ Meeting = NamedTuple(
         ("meeting_type", str),            # "open" or "executive"
         ("pdf_disclaimer", str),          # HTML (outer HTML)
         ("posted_date", Date),
+        ("end_meeting_date", Date),
         ("primary_audio_link", Link),
         ("old_meeting_url", str),         # URL
         ("secondary_audio_links", Links), # list (Links)
@@ -287,8 +288,51 @@ def extract_annual_urls(url: str) -> List[str]:
     html = fromstr(requests.get(url).content)
     # links = html.xpath("//ul/li/a[text()[contains(.,'Open Meetings')]]")
     links = xpath(html, "//ul/li/a[text()[contains(.,'Open Meetings')]]")
+
+    # Add remaining Sunshine Act Notice Archive URLs
+    #links.append(
+    #    xpath(html, "//ul/li/a[text()[contains(.,'Sunshine Act Notices of')]]")
+    #)
+
     urls = [urljoin(url, hattr(link, "href")) for link in links]
     return urls
+
+def parse_sunshine_meeting_row(row: HtmlElement, urls_to_change: dict) -> Optional [Meeting]:
+    cells = xpath(row, "./td")
+
+    # We know that these are not meeting metadata:
+    if len(cells) == 1 and "adobe reader" in htext(row).lower():
+        return None
+    elif len(cells) == 2 and "approved minutes" in htext(row).lower():
+        return None
+
+    if len(cells) == 2:
+        notice, amended_notices = cells
+    elif len(cells) == 1:
+        notice = cells
+        amended_notices = None
+    else:
+        # We're not expecting this
+        raise
+
+    # Create a default meeting:
+    meeting = make_meeting()
+
+    # Currently we can assume it's an open meeting:
+    meeting = meeting._replace(meeting_type="executive")
+
+    # TODO:  Create parsing for sunshine meeting content.
+    #meeting = parse_meeting_docs_cell(row, docs, meeting)
+    #meeting = parse_meeting_approved_cell(row, approved, meeting)
+    #meeting = parse_meeting_sunshine_cell(row, sunshine, meeting)
+    meeting = parse_meeting_notice_cell(row, notice, meeting)
+    meeting = prase_meeting_amended_notice_cell(row, amended_notices, meeting)
+
+    # if "20160211" in meeting.old_meeting_url:
+    #meeting = parse_meeting_page(meeting, urls_to_change)
+    # TODO: Check if there are any sunshine meetings to change.
+
+    return meeting
 
 
 def parse_meeting_row(row: HtmlElement, urls_to_change: dict) -> Optional [Meeting]:
@@ -534,6 +578,8 @@ def extract_meeting_metadata(url: str, broken_links: List,
         "//table[@border='0'][@width='60%']"
     ]
 
+    # TODO:  create separate expressions for sunshine notice executive meetings.
+
     html = fromstr(requests.get(url).content)
     tables, count = [], 0  # type: List[HtmlElement], int
     while len(tables) != 1 and count < len(exprs):
@@ -556,6 +602,8 @@ def extract_meeting_metadata(url: str, broken_links: List,
     meetings = []
     for row in rows:
         if row is not None and htext(row).strip():
+            # TODO:  Add support for parsing sunshine meeting rows.
+            # TODO:  Figure out if optional meeting applies to sunshine meetings.
             optional_meeting = parse_meeting_row(row, urls_to_change)
             if optional_meeting is not None:
                 meetings.append(optional_meeting)
@@ -1266,6 +1314,7 @@ def make_meeting() -> Meeting:
         meeting_type="",
         pdf_disclaimer="",
         posted_date=None,
+        end_meeting_date=None,
         primary_audio_link=None,
         old_meeting_url="",
         secondary_audio_links=[],
