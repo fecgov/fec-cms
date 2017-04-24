@@ -777,7 +777,7 @@ class ServicesLandingPage(ContentPage, UniqueModel):
 
 
 class AgendaPage(Page):
-    OPEN = 'O',
+    OPEN = 'O'
     EXECUTIVE = 'E'
     MEETING_TYPE_CHOICES = (
         (OPEN, 'Open'),
@@ -785,6 +785,7 @@ class AgendaPage(Page):
     )
 
     date = models.DateField(default=datetime.date.today)
+    end_date = models.DateField(null=True, blank=True)
     time = models.TimeField(null=True, blank=True)
     meeting_type = models.CharField(
         max_length=2,
@@ -821,6 +822,7 @@ class AgendaPage(Page):
 
     content_panels = Page.content_panels + [
         FieldPanel('date'),
+        FieldPanel('end_date'),
         FieldPanel('time'),
         FieldPanel('meeting_type'),
         FieldPanel('draft_minutes_links'),
