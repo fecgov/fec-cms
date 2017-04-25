@@ -112,7 +112,7 @@ class TestViews(TestCase):
 
     @mock.patch.object(views, 'search_candidates')
     def test_site_search_candidates(self, m, search_candidates):
-        search_candidates.return_value = [{'name': 'Abe Lincoln'}]
+        search_candidates.return_value = {'results': [{'name': 'Abe Lincoln'}]}
         request = self.factory.get('/search?query=abe&type=candidates')
         response = search(request)
         search_candidates.assert_called_with('abe')
@@ -130,7 +130,7 @@ class TestViews(TestCase):
 
     @mock.patch.object(views, 'search_committees')
     def test_site_search_committees(self, m, search_committees):
-        search_committees.return_value = [{'name': 'Abe for USA'}]
+        search_committees.return_value = {'results': [{'name': 'Abe for USA'}]}
         request = self.factory.get('/search?query=abe&type=committees')
         response = search(request)
         search_committees.assert_called_with('abe')
