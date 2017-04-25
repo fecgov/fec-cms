@@ -16,14 +16,8 @@ register = template.Library()
 @register.inclusion_tag('partials/home-page-updates.html')
 def home_page_updates():
     press_releases = PressReleasePage.objects.live().filter(homepage_hide=False).order_by('-date')[:4]
-    if settings.FEATURES['record']:
-        records = RecordPage.objects.live().filter(homepage_hide=False).order_by('-date')[:4]
-    else:
-        records = []
-    if settings.FEATURES['tips']:
-        tips = TipsForTreasurersPage.objects.live().filter().order_by('-date')[:4]
-    else:
-        tips = []
+    records = RecordPage.objects.live().filter(homepage_hide=False).order_by('-date')[:4]
+    tips = TipsForTreasurersPage.objects.live().filter().order_by('-date')[:4]
 
     # combine press release, records and tips queryset
     updates = chain(press_releases, records, tips)
