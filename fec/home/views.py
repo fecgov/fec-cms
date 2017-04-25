@@ -211,37 +211,37 @@ def commissioners(request):
   })
 
 def contact_rad(request):
-  if not settings.FEATURES['radform']:
-    return render(request, '404.html')
-
-  page_context = {
-    'title': 'Submit a question to the Reports Analysis Division (RAD)',
-    'ancestors': [{
-      'title': 'Registration and reporting',
-      'url': '/registration-and-reporting/',
+    page_context = {
+        'title': 'Submit a question to the Reports Analysis Division (RAD)',
+        'ancestors': [{
+          'title': 'Help for candidates and committees',
+          'url': '/help-candidates-committees/',
     }],
-    'content_section': 'registration-and-reporting'
-  }
+        'content_section': 'help'
+    }
 
-  # If it's a POST, post to the ServiceNow API
-  if request.method == 'POST':
-    form = ContactRAD(request.POST)
-    response = form.post_to_service_now()
-    if response == 201:
-      return render(request, 'home/contact-form.html', {
-        'self': page_context,
-        'success': True
-      })
+    if settings.FEATURES['radform']:
+        # If it's a POST, post to the ServiceNow API
+        if request.method == 'POST':
+            form = ContactRAD(request.POST)
+            response = form.post_to_service_now()
+            if response == 201:
+              return render(request, 'home/contact-form.html', {
+                'self': page_context,
+                'success': True
+              })
+            else:
+              return render(request, 'home/contact-form.html', {
+                'self': page_context,
+                'form': form,
+                'server_error': True
+              })
+        else:
+            form = ContactRAD()
     else:
-      return render(request, 'home/contact-form.html', {
-        'self': page_context,
-        'form': form,
-        'server_error': True
-      })
-  else:
-    form = ContactRAD()
+        form = False
 
-  return render(request, 'home/contact-form.html', {
-    'self': page_context,
-    'form': form
-  })
+    return render(request, 'home/contact-form.html', {
+        'self': page_context,
+        'form': form
+    })

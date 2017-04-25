@@ -44,7 +44,7 @@ describe('Contact form', function() {
   describe('constructor()', function() {
     it('finds all DOM elements', function() {
       expect(this.form.$elm.is('#form')).to.be.true;
-      expect(this.form.committee_id.is('#id_u_committee')).to.be.true;
+      expect(this.form.committeeId.is('#id_u_committee')).to.be.true;
       expect(this.form.category.is('#id_u_category')).to.be.true;
       expect(this.form.otherReason.is('#other-reason')).to.be.true;
       expect(this.form.$cancel.is('.js-cancel')).to.be.true;
@@ -65,11 +65,11 @@ describe('Contact form', function() {
     });
   });
 
-  it('sets the committee_id field to the value of the typeahead selection', function() {
+  it('sets the committeeId field to the value of the typeahead selection', function() {
     this.form.typeahead.$input.trigger('typeahead:select', {
       id: '12345'
     });
-    expect(this.form.committee_id.val()).to.equal('12345');
+    expect(this.form.committeeId.val()).to.equal('12345');
   });
 
   it('shows the other reason box when other is selected', function() {
@@ -87,10 +87,8 @@ describe('Contact form', function() {
     $('#id_u_other_reason').val('Some other reason');
     $('select').val('other');
     this.form.$cancel.click();
-    expect(this.form.committee_id.val()).to.equal('');
+    expect(this.form.committeeId.val()).to.equal('');
     expect($('select').val()).to.equal(null);
     expect($('#id_u_other_reason').val()).to.equal('');
   });
 });
-
-
