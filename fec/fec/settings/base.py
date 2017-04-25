@@ -205,6 +205,7 @@ FEC_DIGITALGOV_KEY = env.get_credential('FEC_DIGITALGOV_KEY')
 
 FEC_TRANSITION_URL = env.get_credential('FEC_TRANSITION_URL', 'http://www.fec.gov')
 FEC_CLASSIC_URL = env.get_credential('FEC_CLASSIC_URL', 'http://www.fec.gov')
+CANONICAL_BASE = 'https://beta.fec.gov'
 
 FEATURES = {
     'record': bool(env.get_credential('FEC_FEATURE_RECORD', '')),
