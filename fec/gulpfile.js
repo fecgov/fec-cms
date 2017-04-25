@@ -9,7 +9,7 @@ var hbsfy = require('hbsfy');
 var entries = [
   './fec/static/js/fec.js',
   './fec/static/js/contact-form.js',
-  './fec/static/js/calendar.js',
+  './fec/static/js/calendar-page.js',
   './fec/static/js/home.js'
 ];
 
