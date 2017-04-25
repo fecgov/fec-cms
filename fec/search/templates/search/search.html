@@ -164,8 +164,8 @@
                 {% for result in results.site.results %}
                   <li class="post post--icon">
                     <h3>
-                      <i class="icon icon--inline--left {% if result.icon == 'page' %}i-document{% else %}i-table{% endif %}"></i>
-                      <a href="{{ result.url }}">{{ result.title | highlight_matches }}</a></h3>
+                      <i class="icon icon--inline--left {% if result.icon == 'page' %}i-document{% else %}i-table{% endif %}"></i><a href="{{ result.url }}">{{ result.title | highlight_matches }}</a>
+                    </h3>
                     <div class="post__path t-small t-sans">{{ result.url }}</div>
                     <p class="post__preview t-note">{{ result.snippet | highlight_matches }}</p>
                   </li>
