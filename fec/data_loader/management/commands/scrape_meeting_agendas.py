@@ -321,12 +321,8 @@ def parse_sunshine_meeting_row(row: HtmlElement, urls_to_change: dict) -> Option
     # Currently we can assume it's an open meeting:
     meeting = meeting._replace(meeting_type="executive")
 
-    # TODO:  Create parsing for sunshine meeting content.
-    #meeting = parse_meeting_docs_cell(row, docs, meeting)
-    #meeting = parse_meeting_approved_cell(row, approved, meeting)
-    #meeting = parse_meeting_sunshine_cell(row, sunshine, meeting)
-    meeting = parse_meeting_notice_cell(row, notice, meeting)
-    meeting = prase_meeting_amended_notice_cell(row, amended_notices, meeting)
+    meeting = parse_sunshine_meeting_cell(row, notice, meeting)
+    meeting = parse_sunshine_meeting_cell(row, amended_notices, meeting)
 
     # if "20160211" in meeting.old_meeting_url:
     #meeting = parse_meeting_page(meeting, urls_to_change)
@@ -566,6 +562,43 @@ def parse_meeting_sunshine_cell(row: HtmlElement, cell: HtmlElement,
     return mtg
 
 
+def parse_sunshine_meeting_cell(row: HtmlElement, cell: HtmlElement,
+                                mtg: Meeting) -> Meeting:
+    if cell is not None and len(xpath(cell, ".//a")) > 0:
+        for sunshine_link in xpath(cell, ".//a"):
+            text = htext(sunshine_link)
+            url = hattr(sunshine_link, "href")
+            title = hattr(sunshine_link, "title", "")
+            s_link = Link(text=text, title=title, url=url)
+            s_links = mtg.sunshine_act_links + [s_link]
+
+            # TODO:  Account for end dates.
+            mtg = mtg._replace(
+                posted_date=extract_date(sunshine_link),
+                sunshine_act_links=s_links
+            )
+
+    # deduped = set([_.url for _ in mtg.sunshine_act_links])
+
+    # if len(mtg.sunshine_act_links) > len(deduped):
+    #     # We have more than one link to the same thing for the Sunshine Act
+    #     # notices.
+    #     # We group the links by URL and then from each group select the one
+    #     # with the most text associated with it, as our best guess.
+    #     by_links = defaultdict(list)  # type: Dict[str, list]
+    #     for link in mtg.sunshine_act_links:
+    #         by_links[link.url].append(link)
+    #     unique_links = []
+    #     for url in by_links:
+    #         links = by_links[url]
+    #         # Assume the longest text is the best:
+    #         best = max(links, key=lambda _: len(_.text.strip()))
+    #         unique_links.append(best)
+    #     mtg = mtg._replace(sunshine_act_links=unique_links)
+
+    return mtg
+
+
 def extract_meeting_metadata(url: str, broken_links: List,
                              urls_to_change: dict) -> Tuple[Meetings, List]:
     """
@@ -575,38 +608,42 @@ def extract_meeting_metadata(url: str, broken_links: List,
     exprs = [
         "//table[@class='agenda_table'][@summary='Data table']",
         "//table[@summary='Data table']",
-        "//table[@border='0'][@width='60%']"
+        "//table[@class='agenda_table'][@summary='Single Column Data Table of Executive Section Sunshine Act Notices by Meeting Date']",
+        "//table[@summary='Single Column Data Table of Executive Section Sunshine Act Notices by Meeting Date']",
+        "//table[@border='0'][@width='60%']",
     ]
-
-    # TODO:  create separate expressions for sunshine notice executive meetings.
 
     html = fromstr(requests.get(url).content)
     tables, count = [], 0  # type: List[HtmlElement], int
-    while len(tables) != 1 and count < len(exprs):
+    while len(tables) != 2 and count < len(exprs):
         tables = xpath(html, exprs[count])
         count = count + 1
     if not len(tables):     # Work around this URL going down randomly
                             # http://www.fec.gov/agenda/2010/agendas2010.shtml
         print("%s not working" % url)
         return ([], broken_links)
-    if not len(tables) == 1:
+    if not len(tables) == 2:
         import ipdb
         ipdb.set_trace()
-    table, broken_links = fix_urls(tables[0], url, broken_links,
-                                   urls_to_change)
 
-    all_rows = xpath(table, ".//tr")
-    # We don't want header rows:
-    rows = [r for r in all_rows if "th" not in
-            [e.tag for e in r.iterchildren()]]
-    meetings = []
-    for row in rows:
-        if row is not None and htext(row).strip():
-            # TODO:  Add support for parsing sunshine meeting rows.
-            # TODO:  Figure out if optional meeting applies to sunshine meetings.
-            optional_meeting = parse_meeting_row(row, urls_to_change)
-            if optional_meeting is not None:
-                meetings.append(optional_meeting)
+    for i, table in enumerate(tables):
+        table, broken_links = fix_urls(tables, url, broken_links,
+                                       urls_to_change)
+
+        all_rows = xpath(table, ".//tr")
+        # We don't want header rows:
+        rows = [r for r in all_rows if "th" not in
+                [e.tag for e in r.iterchildren()]]
+        meetings = []
+        for row in rows:
+            if row is not None and htext(row).strip():
+                if i == 0:
+                    optional_meeting = parse_meeting_row(row, urls_to_change)
+                else:
+                    optional_meeting = parse_sunshine_meeting_row(row, urls_to_change)
+
+                if optional_meeting is not None:
+                    meetings.append(optional_meeting)
     return (meetings, broken_links)
 
 
