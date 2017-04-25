@@ -38,10 +38,12 @@
 
         {{ section.value.intro }}
 
-        {% if section.value.related_page %}
-          <a href="{{ section.value.related_page.url }}" class="button button--cta button--go">{{ section.value.button_text }}</a>
-        {% else %}
-          <span class="button button--cta button--go is-disabled">Coming soon</a>
+        {% if section.value.button_text %}
+          {% if section.value.related_page %}
+            <a href="{{ section.value.related_page.url }}" class="button button--cta button--go">{{ section.value.button_text }}</a>
+          {% else %}
+            <span class="button button--cta button--go is-disabled">{{ section.value.button_text }}</a>
+          {% endif %}
         {% endif %}
       </div>
       {% endfor %}

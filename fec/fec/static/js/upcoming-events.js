@@ -70,7 +70,7 @@ function UpcomingDeadlines() {
 
     $('.js-homepage-upcoming-deadlines p').html(
         startDateMonth + ' ' + startDateDay + ':' +
-        '<br>' + eventSummary
+        '<br>' + eventSummary + '.'
     );
   });
 }

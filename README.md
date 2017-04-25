@@ -278,6 +278,10 @@ Where *<app name>* is the name of the application instance you want to connect t
 
 More information about using SSH with cloud.dov can be found in the [cloud.gov SSH documentation](https://cloud.gov/docs/apps/using-ssh/#cf-ssh).
 
+## Accounts
+Accounts are handled in the cms admin. All accounts will be reviewed annually.
+
+
 ## Copyright and licensing
 This project is in the public domain within the United States, and we waive
 worldwide copyright and related rights through [CC0 universal public domain

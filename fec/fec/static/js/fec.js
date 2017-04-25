@@ -16,6 +16,8 @@ var siteNav = require('fec-style/js/site-nav');
 var dropdown = require('fec-style/js/dropdowns');
 var toc = require('fec-style/js/toc');
 var typeahead = require('fec-style/js/typeahead');
+var SiteOrientation = require('fec-style/js/site-orientation');
+var helpers = require('fec-style/js/helpers');
 
 // Hack: Append jQuery to `window` for use by legacy libraries
 window.$ = window.jQuery = $;
@@ -24,6 +26,9 @@ var Sticky = require('component-sticky');
 var FormNav = require('./form-nav').FormNav;
 
 $(document).ready(function() {
+
+  // new site orientation
+  new SiteOrientation.SiteOrientation('.js-new-site-orientation');
 
   // Initialize glossary
   new Glossary(terms, {}, {
@@ -49,20 +54,23 @@ $(document).ready(function() {
   new skipNav.Skipnav('.skip-nav', 'main');
   new siteNav.SiteNav('.js-site-nav', {
     cmsUrl: '',
-    webAppUrl: window.FEC_APP_URL
+    webAppUrl: window.FEC_APP_URL,
+    transitionUrl: window.TRANSITION_URL
   });
 
   // Initialize table of contents
   new toc.TOC('.js-toc');
 
   // Initialize sticky elements
-  $('.js-sticky-side').each(function() {
-    var container = $(this).data('sticky-container');
-    var opts = {
-      within: document.getElementById(container)
-    };
-    new Sticky(this, opts);
-  });
+    $('.js-sticky-side').each(function() {
+      var container = $(this).data('sticky-container');
+      var opts = {
+        within: document.getElementById(container)
+      };
+      if (helpers.isLargeScreen()) {
+        new Sticky(this, opts);
+      }
+    });
 
   // Initialize checkbox dropdowns
   $('.js-dropdown').each(function() {
@@ -77,8 +85,13 @@ $(document).ready(function() {
     new FormNav(formNav);
   }
 
-  // Initialize typeahead
-  new typeahead.Typeahead($('.js-typeahead'), 'candidates', window.FEC_APP_URL + '/');
+  // Initialize header typeaheads (mobile and desktop)
+  $('.js-site-search').each(function() {
+    new typeahead.Typeahead($(this), 'all', window.FEC_APP_URL + '/');
+  });
+
+  // Initialize CFD home typeahead
+  new typeahead.Typeahead($('.js-typeahead'), 'allData', window.FEC_APP_URL + '/');
 
   // For any link that should scroll to a section on the page apply .js-scroll to <a>
   $('.js-scroll').on('click', function(e) {
@@ -86,7 +99,7 @@ $(document).ready(function() {
     var $link = $(e.target);
     var section = $link.attr('href');
     var sectionTop = $(section).offset().top;
-    $(document.body).animate({
+    $('body, html').animate({
       scrollTop: sectionTop
     });
   });
