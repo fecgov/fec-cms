@@ -8,7 +8,6 @@ register = template.Library()
 
 @register.inclusion_tag('partials/current-commissioners.html')
 def current_commissioners():
-    #vacant_chair = ""
     chair_commissioner = CommissionerPage.objects.filter(commissioner_title__startswith='Chair') \
         .exclude(commissioner_title__contains='Vice').first()
     vice_commissioner = CommissionerPage.objects.filter(commissioner_title__startswith='Vice').first()
