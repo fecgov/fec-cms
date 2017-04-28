@@ -17,10 +17,7 @@ from whitenoise.django import DjangoWhiteNoise
 from fec.settings.env import env
 
 settings = newrelic.agent.global_settings()
-settings.license_key = (
-    os.getenv('NEW_RELIC_LICENSE_KEY') or
-    env.get_credential('NEW_RELIC_LICENSE_KEY')
-)
+settings.license_key = env.get_credential('NEW_RELIC_LICENSE_KEY')
 newrelic.agent.initialize()
 
 application = get_wsgi_application()
