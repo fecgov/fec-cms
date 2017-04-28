@@ -571,7 +571,9 @@ def parse_sunshine_meeting_cell(row: HtmlElement, cell: HtmlElement,
         # because there are indeed empty links in the HTML like this:
         # <a href></a>
 
-        # TODO:  Get current document URL somehow to check against in here.
+        # TODO:  Figure out how to account for this and ignore empty anchor
+        # elements.  xpath(cell, ".//a[@href!='']") should work, but didn't
+        # seem to in preliminary tests.
         for sunshine_link in xpath(cell, ".//a"):
             text = htext(sunshine_link)
             url = hattr(sunshine_link, "href")
