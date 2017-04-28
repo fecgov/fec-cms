@@ -179,28 +179,34 @@ from fec import constants
 from .env import env
 
 USAJOBS_API_KEY = env.get_credential('USAJOBS_API_KEY')
-FEC_APP_URL = os.getenv('FEC_APP_URL')
-FEC_API_URL = os.getenv('FEC_API_URL', 'http://localhost:5000')
-FEC_API_VERSION = os.getenv('FEC_API_VERSION', 'v1')
+FEC_APP_URL = env.get_credential('FEC_APP_URL')
+FEC_API_URL = env.get_credential('FEC_API_URL', 'http://localhost:5000')
+FEC_API_KEY = env.get_credential('FEC_WEB_API_KEY')
+FEC_API_VERSION = env.get_credential('FEC_API_VERSION', 'v1')
 FEC_API_KEY_PUBLIC = env.get_credential('FEC_WEB_API_KEY_PUBLIC', '')
-FEC_CMS_ROBOTS = os.getenv('FEC_CMS_ROBOTS')
+FEC_CMS_ROBOTS = env.get_credential('FEC_CMS_ROBOTS')
 ENVIRONMENTS = {
     'local': 'LOCAL',
     'dev': 'DEVELOPMENT',
     'stage': 'STAGING',
     'prod': 'PRODUCTION',
 }
-FEC_CMS_ENVIRONMENT = ENVIRONMENTS.get(os.getenv('FEC_CMS_ENVIRONMENT'), 'LOCAL')
-CONTACT_EMAIL = 'betafeedback@fec.gov';
+FEC_CMS_ENVIRONMENT = ENVIRONMENTS.get(env.get_credential('FEC_CMS_ENVIRONMENT'), 'LOCAL')
+CONTACT_EMAIL = 'betafeedback@fec.gov'
+WEBMANAGER_EMAIL = "webmanager@fec.gov"
 CONSTANTS = constants
+
 
 # Config for the ServiceNow API for contacting RAD
 FEC_SERVICE_NOW_API = env.get_credential('FEC_SERVICE_NOW_API')
 FEC_SERVICE_NOW_USERNAME = env.get_credential('FEC_SERVICE_NOW_USERNAME')
 FEC_SERVICE_NOW_PASSWORD = env.get_credential('FEC_SERVICE_NOW_PASSWORD')
+FEC_DIGITALGOV_KEY = env.get_credential('FEC_DIGITALGOV_KEY')
+FEC_DIGITALGOV_DRAWER_KEY = env.get_credential('DIGITALGOV_DRAWER_KEY', '')
 
 FEC_TRANSITION_URL = env.get_credential('FEC_TRANSITION_URL', 'http://www.fec.gov')
 FEC_CLASSIC_URL = env.get_credential('FEC_CLASSIC_URL', 'http://www.fec.gov')
+CANONICAL_BASE = 'https://beta.fec.gov'
 
 FEATURES = {
     'record': bool(env.get_credential('FEC_FEATURE_RECORD', '')),

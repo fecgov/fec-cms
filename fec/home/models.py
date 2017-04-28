@@ -377,6 +377,7 @@ class PressReleasePage(ContentPage):
         PageChooserPanel('read_next'),
     ]
 
+
     promote_panels = Page.promote_panels + [
         MultiFieldPanel([
             FieldPanel('homepage_pin'),
@@ -493,6 +494,7 @@ class CustomPage(Page):
         )
     ]
 
+
 class PressLandingPage(Page):
     hero = stream_factory(null=True, blank=True)
     release_intro = stream_factory(null=True, blank=True)
@@ -521,6 +523,7 @@ class DocumentPage(ContentPage):
                                 choices=constants.report_child_categories.items(), null=True)
     content_panels = Page.content_panels + [
         FieldPanel('date'),
+        FieldPanel('year_only'),
         FieldPanel('file_url'),
         FieldPanel('size'),
         FieldPanel('category'),

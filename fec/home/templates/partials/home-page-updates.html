@@ -1,9 +1,18 @@
 {% load filters %}
 <ul class="grid grid--4-wide grid--no-margin grid--no-border list--border">
   {% for update in updates %}
-  <li class="grid__item {% if update.homepage_pin == True %}u-no-padding-left u-no-padding-right"{% endif %}">
+  <li class="grid__item {% if update.homepage_pin == True %}u-no-padding-left u-no-padding-right{% endif %}">
     {% if update.homepage_pin == True %}<div class="u-gray-background">{% endif %}
-      <span class="t-sans"><span class="t-bold">{{ update.category|capfirst }}</span>: <a href="{{ update.url }}">{% formatted_title update %}</a></span>
+      <span class="t-sans">
+        <span class="t-bold">
+          {% if update.get_update_type == 'Tips for Treasurers' %}
+            Tips for treasurers:
+          {% else %}
+            {{ update.category|capfirst }}:
+          {% endif %}
+        </span>
+        <a href="{{ update.url }}">{% formatted_title update %}</a>
+      </span>
     {% if update.homepage_pin %}</div>{% endif %}
   </li>
   {% endfor %}
