@@ -1,7 +1,7 @@
 ---
 inherit: manifest_base.yml
 host: fec-prod-cms
-instances: 2
+instances: 4
 services:
   - cms-creds-prod
   - fec-creds-prod
