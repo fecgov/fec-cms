@@ -15,18 +15,21 @@ from home.models import (
     TipsForTreasurersPage
 )
 
+
 def replace_dash(string):
-  return string.replace('-', ' ')
+    return string.replace('-', ' ')
+
 
 def replace_space(string):
-  return string.replace(' ', '-')
+    return string.replace(' ', '-')
+
 
 def get_records(category_list=None, year=None, search=None):
     records = RecordPage.objects.live()
 
     if category_list:
         for category in category_list:
-          records = records.filter(category=category)
+            records = records.filter(category=category)
 
     if year:
         records = records.filter(date__year=year)
@@ -35,6 +38,7 @@ def get_records(category_list=None, year=None, search=None):
         records = records.search(search)
 
     return records
+
 
 def get_digests(year=None, search=None):
     digests = DigestPage.objects.live()
@@ -45,6 +49,7 @@ def get_digests(year=None, search=None):
         digests = digests.search(search)
 
     return digests
+
 
 def get_press_releases(category_list=None, year=None, search=None):
     press_releases = PressReleasePage.objects.live()
@@ -107,23 +112,23 @@ def updates(request):
             tips = get_tips(year=year, search=search)
 
     else:
-      # Get everything and filter by year if necessary
-      digests = DigestPage.objects.live()
-      press_releases = PressReleasePage.objects.live()
-      records = RecordPage.objects.live()
-      tips = TipsForTreasurersPage.objects.live()
+        # Get everything and filter by year if necessary
+        digests = DigestPage.objects.live()
+        press_releases = PressReleasePage.objects.live()
+        records = RecordPage.objects.live()
+        tips = TipsForTreasurersPage.objects.live()
 
-      if year:
-        press_releases = press_releases.filter(date__year=year)
-        digests = digests.filter(date__year=year)
-        records = records.filter(date__year=year)
-        tips = tips.filter(date__year=year)
+        if year:
+            press_releases = press_releases.filter(date__year=year)
+            digests = digests.filter(date__year=year)
+            records = records.filter(date__year=year)
+            tips = tips.filter(date__year=year)
 
-      if search:
-        press_releases = press_releases.search(search)
-        digests = digests.search(search)
-        records = records.search(search)
-        tips = tips.search(search)
+        if search:
+            press_releases = press_releases.search(search)
+            digests = digests.search(search)
+            records = records.search(search)
+            tips = tips.search(search)
 
     # Chain all the QuerySets together
     # via http://stackoverflow.com/a/434755/1864981
@@ -158,57 +163,61 @@ def updates(request):
         'search': search
     })
 
+
 def calendar(request):
-  page_context = {
-    'content_section': 'calendar',
-    'title': 'Calendar'
-  }
-  return render(request, 'home/calendar.html', {
-    'self': page_context,
-  })
+    page_context = {
+      'content_section': 'calendar',
+      'title': 'Calendar'
+    }
+    return render(request, 'home/calendar.html', {
+      'self': page_context,
+    })
+
 
 def contact(request):
-  page_context = {
-    'content_section': 'contact',
-    'title': 'Contact'
-  }
+    page_context = {
+      'content_section': 'contact',
+      'title': 'Contact'
+    }
 
-  return render(request, 'home/contact.html', {
-    'self': page_context,
-  })
+    return render(request, 'home/contact.html', {
+      'self': page_context,
+    })
+
 
 def commissioners(request):
-  chair_commissioner = CommissionerPage.objects.filter(commissioner_title__contains='Chair') \
-    .exclude(commissioner_title__contains='Vice').first()
-  vice_commissioner = CommissionerPage.objects.filter(commissioner_title__startswith='Vice').first()
+    chair_commissioner = CommissionerPage.objects.filter(commissioner_title__contains='Chair') \
+      .exclude(commissioner_title__contains='Vice').first()
+    vice_commissioner = CommissionerPage.objects.filter(commissioner_title__startswith='Vice').first()
 
-  current_commissioners = CommissionerPage.objects.filter(commissioner_title__exact='', \
-    term_expiration__isnull=True).order_by('last_name')
-  past_commissioners = CommissionerPage.objects.filter(commissioner_title__exact='', \
-    term_expiration__isnull=False).order_by('-term_expiration')
+    current_commissioners = CommissionerPage.objects.filter(commissioner_title__exact='', \
+      term_expiration__isnull=True).order_by('last_name')
+    past_commissioners = CommissionerPage.objects.filter(commissioner_title__exact='', \
+      term_expiration__isnull=False).order_by('-term_expiration')
 
-  page_context = {
-    'title': 'All Commissioners',
-    'chair_commissioner': chair_commissioner,
-    'vice_commissioner': vice_commissioner,
-    'current_commissioners': current_commissioners,
-    'past_commissioners': past_commissioners,
-    'content_section': 'about',
-    'ancestors': [
-      {
-        'title': 'About the FEC',
-        'url': '/about/',
-      },
-      {
-        'title': 'Leadership and structure',
-        'url': '/about/leadership-and-structure',
-      },
-    ]
-  }
+    page_context = {
+      'title': 'All Commissioners',
+      'chair_commissioner': chair_commissioner,
+      'vice_commissioner': vice_commissioner,
+      'current_commissioners': current_commissioners,
+      'past_commissioners': past_commissioners,
+      'content_section': 'about',
+      'ancestors': [
+        {
+          'title': 'About the FEC',
+          'url': '/about/',
+        },
+        {
+          'title': 'Leadership and structure',
+          'url': '/about/leadership-and-structure',
+        },
+      ]
+    }
 
-  return render(request, 'home/commissioners.html', {
-    'self': page_context,
-  })
+    return render(request, 'home/commissioners.html', {
+      'self': page_context,
+    })
+
 
 def contact_rad(request):
     page_context = {
@@ -216,7 +225,7 @@ def contact_rad(request):
         'ancestors': [{
           'title': 'Help for candidates and committees',
           'url': '/help-candidates-committees/',
-    }],
+        }],
         'content_section': 'help'
     }
 
@@ -226,16 +235,16 @@ def contact_rad(request):
             form = ContactRAD(request.POST)
             response = form.post_to_service_now()
             if response == 201:
-              return render(request, 'home/contact-form.html', {
-                'self': page_context,
-                'success': True
-              })
+                return render(request, 'home/contact-form.html', {
+                  'self': page_context,
+                  'success': True
+                })
             else:
-              return render(request, 'home/contact-form.html', {
-                'self': page_context,
-                'form': form,
-                'server_error': True
-              })
+                return render(request, 'home/contact-form.html', {
+                  'self': page_context,
+                  'form': form,
+                  'server_error': True
+                })
         else:
             form = ContactRAD()
     else:
