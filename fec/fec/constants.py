@@ -130,7 +130,7 @@ update_types = OrderedDict([
     ("fec-record", "FEC Record"),
     ("weekly-digest", "Weekly Digest"),
     ("tips-for-treasurers", "Tips for Treasurers"),
-    ("agenda", "Meeting Agenda"),
+    ("agenda", "Commission Meetings"),
 ])
 
 # These are each a group of categories relevant to a particular type of report

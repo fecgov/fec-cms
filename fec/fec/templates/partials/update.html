@@ -4,7 +4,9 @@
 <article class="post">
   <div class="post__pre">
     <div class="post__date">{{ update.date|date:'F j, Y' }}</div>
+    {% if update.get_update_type != 'Commission Meetings' %}
     <div class="post__byline">From: {{ update.get_author_office }}</div>
+    {% endif %}
   </div>
   <div class="row">
     <div class="usa-width-three-fourths">
