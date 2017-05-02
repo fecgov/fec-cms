@@ -5,22 +5,27 @@
 {% load filters %}
 {% block body_class %}template-{{ self.get_verbose_name | slugify }}{% endblock %}
 
+{% block extra_js %}
+  <script>
+    TOUR_PAGE = 'introduction';
+  </script>
+{% endblock extra_js %}
+
 {% block content %}
   <section class="hero hero--home" aria-labelledby="hero-heading">
     <div class="hero__banner"></div>
 
     <div class="container">
       <div class="hero__content">
-        <h2>Protecting the integrity of the federal campaign finance process</h2>
+        <h2 id="hero-heading">Protecting the integrity of the federal campaign finance process</h2>
         <a class="t-sans" href="/about">More about the FEC</a>
       </div>
 
       <div class="grid grid--3-wide">
         <div class="grid__item">
           <img src="{% static "img/feature--data.png" %}" alt="Line chart graph showing campaign finance data">
-          <h3><a href="{{ FEC_APP_URL }}/data">Campaign finance data</a></h3>
+          <h3><a href="{{ FEC_APP_URL }}/data">Campaign finance data</a> <div class="tour__point" data-intro="<h5>A new way to navigate</h5>Less looking, more finding. The main sections of our website have been reorganized and simplified to help you find what you need faster."></div></h3>
           <p>Showing how money is raised and spent in federal elections.</p>
-
           <a class="t-sans js-scroll" href="#homepage-campaign-finance-data">Learn more</a>
           <i class="icon icon--small i-arrow-down"></i>
         </div>
@@ -30,7 +35,7 @@
           <h3><a href="/help-candidates-and-committees">Help for candidates and committees</a></h3>
           <p>Providing guidance for individuals and groups that are active in federal elections.</p>
 
-          <a class="t-sans js-scroll" href="#homepage-registration-and-reporting">Learn more</a>
+          <a class="t-sans js-scroll" href="#homepage-help-candidate-and-committees">Learn more</a>
           <i class="icon icon--small i-arrow-down"></i>
         </div>
 
@@ -49,7 +54,7 @@
   <section class="slab slab--neutral slab--home">
     <div class="container">
       <div class="heading--section heading--with-action">
-        <h3 class="heading__left">What's happening</h3>
+        <h3 class="heading__left">What's happening <div class="tour__point" data-intro="<h5>Stay informed</h5>Check in on the most recent communications from the FEC all in one place, including press releases, meeting agendas and Tips for Treasurers."></div></h3>
         <a class="button button--alt heading__right button--updates" href="/updates">All latest updates</a>
       </div>
       {% home_page_updates %}
@@ -69,12 +74,9 @@
           <div class="grid__item">
             <h3>Find out how a specific candidate or committee raises and spends money</h3>
             <form action="{{ settings.FEC_APP_URL }}" autocomplete="off" class="search__container js-search">
-              <div class="combo combo--search">
-                <select class="search__select js-search-type" name="search_type" aria-label="Select a search type">
-                  <option value="candidates">Candidates</option>
-                  <option value="committees">Committees</option>
-                </select>
-                <input name="search" class="js-typeahead combo__input" type="text"
+              <div class="combo combo--search--mini">
+                <label class="label" for="search">Search for candidates and committees</label>
+                <input id="search" name="search" class="js-typeahead combo__input" type="text"
                 autocorrect="off"
                 autocapitalize="off"
                 spellcheck="false">
@@ -105,13 +107,18 @@
 
   <section class="slab slab--home slab--neutral">
     <div class="container">
-      <h2 class="heading--section">Citizen information</h2>
+      <h2 class="heading--section">Introduction to campaign finance and elections</h2>
       <div class="billboard">
         <div class="billboard__image__container">
-          <a class="u-no-border" href="http://www.fec.gov/pages/brochures/citizens.shtml" target="_blank">
+          {% comment %}
+            <span class="t-block u-padding--bottom">
+              <a class="t-sans" href="/introduction-campaign-finance/getting-involved-federal-campaigns/">Learn about getting involved<br>in the election process »</a>
+            </span>
+          {% endcomment %}
+          <a class="u-no-border" href="{{ settings.FEC_TRANSITION_URL }}/pages/brochures/citizens.shtml" target="_blank">
           <img class="billboard__image" src={% static 'img/thumbnail--citizens-guide-brochure.png' %} alt="Citizens Guide Brochure"></a>
           <div class="document-thumbnail__description">
-            <a href="http://www.fec.gov/pages/brochures/citizens.shtml" target="_blank">Citizens' guide brochure</a>
+            <a href="{{ settings.FEC_TRANSITION_URL }}/pages/brochures/citizens.shtml" target="_blank">Citizens' guide brochure</a>
           </div>
         </div>
         <div class="billboard__content">
@@ -154,16 +161,25 @@
                      </div>
                    </fieldset>
                  </div>
+
+                 {% comment %}
+                   <div class="u-float-left u-padding--top">
+                     <a class="t-sans" href="/introduction-campaign-finance/campaign-finance-and-fec-research/">Learn how to start researching financial data »</a>
+                   </div>
+                 {% endcomment %}
                </div>
              </form>
              <ul class="list--border list--extra-spacious">
                <li>
                  <h3>There are different limits to how much contributors can give to <span class="term" data-term="Candidate">candidates </span>, <span class="term" data-term="Party committee">parties</span> and <span class="term" data-term="Political Action Committee (PAC)">political action committees (PACs)</span></h3>
-                  <a class="t-sans" href="http://www.fec.gov/info/contriblimitschart1718.pdf" target="_blank">Find 2017–2018 contribution limits »</a>
+                  <a class="t-sans" href="{{ settings.FEC_TRANSITION_URL }}/info/contriblimitschart1718.pdf" target="_blank">Find 2017–2018 contribution limits »</a>
                </li>
                <li>
                  <h3>Every state has its own procedures for voting day activities and voter registration</h3>
                  <a class="t-sans" href="https://www.vote.gov">Find voting guidance by state » </a>
+                 {% comment %}
+                   <a class="t-sans" href="/introduction-campaign-finance/election-and-voting-information/">Information about voting and elections »</a>
+                 {% endcomment %}
                </li>
              </ul>
           </div>
@@ -188,7 +204,7 @@
           <div class="icon-heading icon-heading--mallet-circle">
             <div class="icon-heading__content">
               <h3>The FEC publishes information about ongoing and closed court cases</h3>
-              <a class="t-sans" href="http://www.fec.gov/law/litigation.shtml">Browse campaign finance litigation »</a>
+              <a class="t-sans" href="/legal-resources/court-cases">Browse campaign finance litigation »</a>
             </div>
           </div>
         </div>
@@ -206,7 +222,7 @@
               <h3>The Commission has a variety of methods for responding to possible election law violations</h3>
               <a class="t-sans" href="/legal-resources/enforcement/">Learn more about enforcement »</a><br>
               <br>
-              <a class="t-sans" href="http://www.fec.gov/pages/brochures/complain.shtml#search=complaint">Read about the process for filing a complaint »</a>
+              <a class="t-sans" href="/legal-resources/enforcement/complaints-process/">Read about the process for filing a complaint »</a>
             </div>
           </div>
         </div>

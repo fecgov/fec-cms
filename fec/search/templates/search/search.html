@@ -1,49 +1,201 @@
 {% extends "base.html" %}
 {% load static wagtailcore_tags %}
+{% load filters %}
 
 {% block body_class %}template-searchresults{% endblock %}
 
 {% block title %}Search{% endblock %}
 
 {% block content %}
-    <h1>Search</h1>
-
-    <form action="{% url 'search' %}" method="get">
-        <input type="text" name="query"{% if search_query %} value="{{ search_query }}"{% endif %}>
-        <input type="submit" value="Search">
-    </form>
-
-    {% if search_picks %}
-         <ul>
-            {% for pick in search_picks %}
-                <li>
-                    <h2><a href="{{ pick.page.url }}">{{ pick.page }}</a></h2>
-                    <p>{{ pick.description }}</p>
+  {% include 'partials/breadcrumbs.html' with page=self style='primary' %}
+  <main class="main container">
+    <h1 class="heading--main">{{ self.title }}</h1>
+    <div class="row">
+      <form class="slab slab--inline slab--neutral" action="{% url 'search' %}" method="get">
+        <div class="container">
+          <div class="combo combo--search content__section">
+            <label for="search" class="label">Search fec.gov</label>
+            <input id="search" type="text" class="combo__input js-site-search" name="query"{% if search_query %} value="{{ search_query }}"{% endif %}>
+            <button type="submit" class="button--cta combo__button button--search">
+              <span class="u-visually-hidden">Search</span>
+            </button>
+          </div>
+          <fieldset>
+            <legend class="label">Refine your search</legend>
+            <input type="checkbox" id="search-candidates" value="candidates" name="type" {% if 'candidates' in type %}checked{% endif %}>
+            <label for="search-candidates">Candidates</label>
+            <input type="checkbox"  id="search-committees" value="committees" name="type" {% if 'committees' in type %}checked{% endif %}>
+            <label for="search-committees">Committees</label>
+            <input type="checkbox" id="search-site" value="site" name="type" {% if 'site' in type %}checked{% endif %}>
+            <label for="search-site">Other pages</label>
+          </fieldset>
+        </div>
+      </form>
+    </div>
+    <div class="row" id="results-container">
+      <div class="sidebar-container sidebar-container--left">
+        <div class="js-sticky-side" data-sticky-container="results-container">
+          <nav class="sidebar sidebar--neutral sidebar--left side-nav js-toc" style="margin-bottom: 2rem">
+            <ul class="sidebar__content">
+              {% if results.site.best_bets.results %}
+                <li class="side-nav__item"><a class="side-nav__link" href="#suggestions">Suggestions ({{ results.site.best_bets.count }})</a></li>
+              {% endif %}
+              {% if results.candidates.pagination.count > 0 %}
+                <li class="side-nav__item"><a class="side-nav__link" href="#candidates">Candidates ({{ results.candidates.pagination.count }})</a></li>
+              {% endif %}
+              {% if results.committees.pagination.count > 0  %}
+                <li class="side-nav__item"><a class="side-nav__link" href="#committees">Committees ({{ results.committees.pagination.count }})</a></li>
+              {% endif %}
+              {% if results.site.meta.count > 0 %}
+                <li class="side-nav__item"><a class="side-nav__link" href="#site">Other pages ({{ results.site.meta.count }})</a></li>
+              {% endif %}
+              {% if 'candidates' in type and results.candidates.pagination.count == 0 %}
+                <li class="side-nav__item side-nav__link"><span class="side-nav__link">Candidates (0)</span></li>
+              {% endif %}
+              {% if 'committees' in type and results.committees.pagination.count == 0 %}
+                <li class="side-nav__item"><span class="side-nav__link">Committees (0)</span></li>
+              {% endif %}
+              {% if 'site' in type and results.site.meta.count == 0 %}
+                <li class="side-nav__item"><span class="side-nav__link">Other pages (0)</span></li>
+              {% endif %}
+            </ul>
+          </nav>
+          <aside class="sidebar sidebar--primary">
+            <h4 class="sidebar__title">Other search tools</h4>
+              <div class="sidebar__content">
+                <ul class="sidebar__related-links">
+                  <li>
+                    <a class="t-bold" href="{{ settings.FEC_APP_URL }}/receipts/individual-contributions?contributor_name={{search_query}}">Individual contributions</a>
+                    <span class="t-note t-block t-sans">Who's contributing to committees</span>
+                  </li>
+                  <li>
+                    <a class="t-bold" href="{{ settings.FEC_APP_URL }}/disbursements?recipient_name={{search_query}}">Disbursements</a>
+                    <span class="t-note t-block t-sans">Purhcases and payments made by committees</span>
+                  </li>
+                  <li>
+                    <a class="t-bold" href="{{ settings.FEC_APP_URL }}/legal/search?search_type=all&amp;search={{ search_query}}">Legal resources</a>
+                    <span class="t-note t-block t-sans">Guidance, rulings, laws and more</span>
+                  </li>
+                  <li>
+                    <a class="t-bold" href="/updates?search={{ search_query}}">Latest updates</a>
+                    <span class="t-note t-block t-sans">Press releases and other postings</span>
+                  </li>
+                </ul>
+              </div>
+          </aside>
+        </div>
+      </div>
+      <div class="main__content--right">
+        {% if results.count > 0 %}
+          {% if results.site.best_bets.results %}
+            <section class="option" id="suggestions">
+              <h2>Suggestions</h2>
+              <ul>
+              {% for result in results.site.best_bets.results %}
+                <li class="post post--icon">
+                  <h3><i class="icon icon--inline--left i-star"></i><a href="{{ result.url }}">{{ result.title }}</a></h3>
+                  <div class="post__path t-small t-sans">{{ result.url }}</div>
+                  <div class="t-sans post__preview">{{ result.description | highlight_matches }}</div>
                 </li>
-             {% endfor %}
-         </ul>
-    {% endif %}
-
-    {% if search_results %}
-        <ul>
-            {% for result in search_results %}
-                <li>
-                    <h4><a href="{% pageurl result %}">{{ result }}</a></h4>
-                    {% if result.search_description %}
-                        {{ result.search_description|safe }}
-                    {% endif %}
-                </li>
-            {% endfor %}
-        </ul>
-
-        {% if search_results.has_previous %}
-            <a href="{% url 'search' %}?query={{ search_query|urlencode }}&amp;page={{ search_results.previous_page_number }}">Previous</a>
+              {% endfor %}
+              </ul>
+            </section>
+          {% endif %}
+          {% if results.candidates.pagination.count > 0 %}
+            <section class="option" id="candidates">
+              <div class="row">
+                <h2 class="u-float-left u-no-margin">Candidates</h2>
+                <div class="u-float-right">
+                  <span class="t-sans">{{ results.candidates.pagination.count }} total results
+                    {% if results.candidates.pagination.count > 3 %}| <a href="{{settings.FEC_APP_URL}}/candidates?q={{search_query}}">View more</a>{% endif %}
+                  </span>
+                </div>
+              </div>
+              <ul>
+                {% for result in results.candidates.results %}
+                  <li class="post post--icon">
+                    <h3><i class="icon icon--inline--left i-candidate"></i><a href="{{settings.FEC_APP_URL}}/candidate/{{result.candidate_id}}">{{ result.name }}</a></h3>
+                    <div class="post__path t-small t-sans">{{settings.FEC_APP_URL}}/candidate/{{result.candidate_id}}</div>
+                    <div class="post__preview t-sans">
+                      <span class="entity__type">Candidate for {{ result.office_full }}</span>
+                      {% if result.office != 'P' %}<span class="entity__type"> {{ result.state }} {% if result.office == 'H' %} - District {{ result.district }} {% endif %} </span>{% endif %}
+                      <span class="entity__type">{{ result.party_full }}</span>
+                      ID: {{ result.candidate_id }}
+                    </div>
+                  </li>
+                {% endfor %}
+              </ul>
+              </section>
+            {% endif %}
+          {% if results.committees.pagination.count > 0 %}
+            <section class="option" id="committees">
+              <div class="row">
+                <h2 class="u-float-left u-no-margin">Committees</h2>
+                <div class="u-float-right">
+                  <span class="t-sans">{{ results.committees.pagination.count }} total results
+                    {% if results.committees.pagination.count > 3 %}| <a href="{{settings.FEC_APP_URL}}/committees?q={{search_query}}">View more</a>{% endif %}
+                  </span>
+                </div>
+              </div>
+              <ul>
+                {% for result in results.committees.results %}
+                  <li class="post post--icon">
+                    <h3><i class="icon icon--inline--left i-committee"></i><a href="{{settings.FEC_APP_URL}}/committee/{{result.committee_id}}">{{ result.name }}</a></h3>
+                    <div class="post__path t-small t-sans">{{settings.FEC_APP_URL}}/committee/{{result.committee_id}}</div>
+                    <div class="post__preview t-sans">
+                      <span class="entity__type">{{ result.designation_full }}</span>
+                      <span class="entity__type">{{ result.committee_type_full }}</span>
+                      ID: {{ result.committee_id }}
+                    </div>
+                  </li>
+                {% endfor %}
+              </ul>
+            </section>
+          {% endif %}
+          {% if results.site.results %}
+            <section class="option" id="site">
+              <div class="row">
+                <h2 class="u-float-left u-no-margin">Other pages</h2>
+                <div class="u-float-right">
+                  <span class="t-sans">{{ results.site.meta.count }} total results</span>
+                </div>
+              </div>
+              <ul>
+                {% for result in results.site.results %}
+                  <li class="post post--icon">
+                    <h3>
+                      <i class="icon icon--inline--left {% if result.icon == 'page' %}i-document{% else %}i-table{% endif %}"></i><a href="{{ result.url }}">{{ result.title | highlight_matches }}</a>
+                    </h3>
+                    <div class="post__path t-small t-sans">{{ result.url }}</div>
+                    <p class="post__preview t-note">{{ result.snippet | highlight_matches }}</p>
+                  </li>
+                {% endfor %}
+              </ul>
+              <div class="results-info">
+                <span class="t-sans">{{ results.site.meta.count }} results</span>
+                <div class="u-float-right">
+                  {% if results.site.meta.prev_offset %}
+                    <a class="button button--standard button--previous" href="{% url 'search' %}?query={{ search_query|urlencode }}&amp;offset={{ results.site.meta.prev_offset }}"><span class="u-visually-hidden">Previous</span></a>
+                  {% endif %}
+                  {% if results.site.meta.next_offset %}
+                    <a class="button button--standard button--next" href="{% url 'search' %}?query={{ search_query|urlencode }}&amp;offset={{ results.site.meta.next_offset }}"><span class="u-visually-hidden">Next</span></a>
+                  {% endif %}
+                </div>
+              </div>
+            </section>
+          {% endif %}
+        {% else %}
+          <div class="message message--info">
+            <h2>No results</h2>
+            <p>We didn’t find any pages matching <strong>&ldquo;{{search_query}}&rdquo;</strong>.</p>
+            <p>Try changing your search term or using one of our other specialized search tools.</p>
+            <div class="message--alert__bottom">
+              <p>FEC.gov is in the middle of a redesign, and some pages aren’t included in search results yet. Please try another search. Or, <a href="{{ settings.FEC_CLASSIC_URL }}">search an archive</a> of the old FEC.gov design.</p>
+              <p>If you'd like to contact our team, we're available by <a href="mailto:{{ settings.WEBMANAGER_EMAIL }}">email</a> or <a href="https://github.com/18f/fec">GitHub</a>.</p>
+            </div>
+          </div>
         {% endif %}
-
-        {% if search_results.has_next %}
-            <a href="{% url 'search' %}?query={{ search_query|urlencode }}&amp;page={{ search_results.next_page_number }}">Next</a>
-        {% endif %}
-    {% elif search_query %}
-        No results found
-    {% endif %}
+      </div>
+    </div>
+  </main>
 {% endblock %}

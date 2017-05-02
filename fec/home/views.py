@@ -12,58 +12,66 @@ from home.models import (
     DigestPage,
     PressReleasePage,
     RecordPage,
-    TipsForTreasurersPage,
-    AgendaPage
+    TipsForTreasurersPage
 )
 
-
 def replace_dash(string):
-    return string.replace('-', ' ')
-
+  return string.replace('-', ' ')
 
 def replace_space(string):
-    return string.replace(' ', '-')
+  return string.replace(' ', '-')
 
-
-def get_records(category_list=False, year=False):
+def get_records(category_list=None, year=None, search=None):
     records = RecordPage.objects.live()
-    if category_list != '':
+
+    if category_list:
         for category in category_list:
-            records = records.filter(category=category)
-    if year != '':
+          records = records.filter(category=category)
+
+    if year:
         records = records.filter(date__year=year)
+
+    if search:
+        records = records.search(search)
+
     return records
 
-
-def get_digests(year=False):
+def get_digests(year=None, search=None):
     digests = DigestPage.objects.live()
-    if year != '':
+    if year:
         digests = digests.filter(date__year=year)
+
+    if search:
+        digests = digests.search(search)
+
     return digests
 
-
-def get_press_releases(category_list=False, year=False):
+def get_press_releases(category_list=None, year=None, search=None):
     press_releases = PressReleasePage.objects.live()
+
     if category_list:
         for category in category_list:
             press_releases = press_releases.filter(category=category)
+
     if year:
         press_releases = press_releases.filter(date__year=year)
+
+    if search:
+        press_releases = press_releases.search(search)
+
     return press_releases
 
 
-def get_tips(category_list=False, year=False):
+def get_tips(year=None, search=None):
     tips = TipsForTreasurersPage.objects.live()
-    if year != '':
+
+    if year:
         tips = tips.filter(date__year=year)
+
+    if search:
+        tips = tips.search(search)
+
     return tips
-
-
-def get_meeting_agendas(year=False):
-    agendas = AgendaPage.objects.live()
-    if year != '':
-        agendas = agendas.filter(date__year=year)
-    return agendas
 
 
 def updates(request):
@@ -71,12 +79,12 @@ def updates(request):
     records = ''
     press_releases = ''
     tips = ''
-    agendas = ''
 
     # Get values from query
     update_types = request.GET.getlist('update_type', None)
     category_list = request.GET.getlist('category', '')
     year = request.GET.get('year', '')
+    search = request.GET.get('search', '')
 
     category_list = list(map(replace_dash, category_list))
 
@@ -84,40 +92,43 @@ def updates(request):
     if update_types:
         if 'for-media' in update_types:
             press_releases = get_press_releases(category_list=category_list,
-                                                year=year)
-            digests = get_digests(year=year)
+                                                year=year, search=search)
+            digests = get_digests(year=year, search=search)
         if 'for-committees' in update_types:
-            records = get_records(category_list=category_list, year=year)
+            records = get_records(category_list=category_list, year=year, search=search)
         if 'fec-record' in update_types:
-            records = get_records(category_list=category_list, year=year)
+            records = get_records(category_list=category_list, year=year, search=search)
         if 'press-release' in update_types:
             press_releases = get_press_releases(category_list=category_list,
-                                                year=year)
+                                                year=year, search=search)
         if 'weekly-digest' in update_types:
-            digests = get_digests(year=year)
+            digests = get_digests(year=year, search=search)
         if 'tips-for-treasurers' in update_types:
-            tips = get_tips(year=year)
-        if 'agendas' in update_types:
-            agendas = get_meeting_agendas(year=year)
+            tips = get_tips(year=year, search=search)
 
     else:
-        digests = get_digests(year=year)
-        press_releases = get_press_releases(category_list=category_list,
-                                            year=year)
-        agendas = get_meeting_agendas(year=year)
+      # Get everything and filter by year if necessary
+      digests = DigestPage.objects.live()
+      press_releases = PressReleasePage.objects.live()
+      records = RecordPage.objects.live()
+      tips = TipsForTreasurersPage.objects.live()
 
-        # Hide behind feature flag unless explicitly requested
-        # Only authenticated users will be able to explicitly request them
-        if settings.FEATURES['record']:
-            get_records(category_list=category_list, year=year)
+      if year:
+        press_releases = press_releases.filter(date__year=year)
+        digests = digests.filter(date__year=year)
+        records = records.filter(date__year=year)
+        tips = tips.filter(date__year=year)
 
-        if settings.FEATURES['tips']:
-            tips = get_tips(year=year)
+      if search:
+        press_releases = press_releases.search(search)
+        digests = digests.search(search)
+        records = records.search(search)
+        tips = tips.search(search)
 
     # Chain all the QuerySets together
     # via http://stackoverflow.com/a/434755/1864981
     updates = sorted(
-      chain(press_releases, digests, records, tips, agendas),
+      chain(press_releases, digests, records, tips),
       key=attrgetter('date'),
       reverse=True
     )
@@ -125,7 +136,6 @@ def updates(request):
     # Handle pagination
     page = request.GET.get('page', 1)
     paginator = Paginator(updates, 20)
-
     try:
         updates = paginator.page(page)
     except PageNotAnInteger:
@@ -144,96 +154,92 @@ def updates(request):
         'category_list': category_list,
         'update_types': update_types,
         'updates': updates,
-        'year': year
+        'year': year,
+        'search': search
     })
-
 
 def calendar(request):
-    page_context = {
-        'content_section': 'calendar',
-        'title': 'Calendar'
-    }
-    return render(request, 'home/calendar.html', {
-        'self': page_context,
-    })
-
+  page_context = {
+    'content_section': 'calendar',
+    'title': 'Calendar'
+  }
+  return render(request, 'home/calendar.html', {
+    'self': page_context,
+  })
 
 def contact(request):
-    page_context = {
-        'content_section': 'contact',
-        'title': 'Contact'
-    }
+  page_context = {
+    'content_section': 'contact',
+    'title': 'Contact'
+  }
 
-    return render(request, 'home/contact.html', {
-        'self': page_context,
-    })
-
+  return render(request, 'home/contact.html', {
+    'self': page_context,
+  })
 
 def commissioners(request):
-    chair_commissioner = CommissionerPage.objects.filter(commissioner_title__contains='Chair') \
-      .exclude(commissioner_title__contains='Vice').first()
-    vice_commissioner = CommissionerPage.objects.filter(commissioner_title__startswith='Vice').first()
+  chair_commissioner = CommissionerPage.objects.filter(commissioner_title__contains='Chair') \
+    .exclude(commissioner_title__contains='Vice').first()
+  vice_commissioner = CommissionerPage.objects.filter(commissioner_title__startswith='Vice').first()
 
-    current_commissioners = CommissionerPage.objects.filter(commissioner_title__exact='', \
-      term_expiration__isnull=True).order_by('last_name')
-    past_commissioners = CommissionerPage.objects.filter(commissioner_title__exact='', \
-      term_expiration__isnull=False).order_by('-term_expiration')
+  current_commissioners = CommissionerPage.objects.filter(commissioner_title__exact='', \
+    term_expiration__isnull=True).order_by('last_name')
+  past_commissioners = CommissionerPage.objects.filter(commissioner_title__exact='', \
+    term_expiration__isnull=False).order_by('-term_expiration')
 
-    page_context = {
-        'title': 'All Commissioners',
-        'chair_commissioner': chair_commissioner,
-        'vice_commissioner': vice_commissioner,
-        'current_commissioners': current_commissioners,
-        'past_commissioners': past_commissioners,
-        'content_section': 'about',
-        'ancestors': [
-        {
-            'title': 'About the FEC',
-            'url': '/about/',
-        },
-        {
-            'title': 'Leadership and structure',
-            'url': '/about/leadership-and-structure',
-        },
-        ]
-    }
+  page_context = {
+    'title': 'All Commissioners',
+    'chair_commissioner': chair_commissioner,
+    'vice_commissioner': vice_commissioner,
+    'current_commissioners': current_commissioners,
+    'past_commissioners': past_commissioners,
+    'content_section': 'about',
+    'ancestors': [
+      {
+        'title': 'About the FEC',
+        'url': '/about/',
+      },
+      {
+        'title': 'Leadership and structure',
+        'url': '/about/leadership-and-structure',
+      },
+    ]
+  }
 
-    return render(request, 'home/commissioners.html', {
-        'self': page_context,
-    })
-
+  return render(request, 'home/commissioners.html', {
+    'self': page_context,
+  })
 
 def contact_rad(request):
-    if not settings.FEATURES['radform']:
-        return render(request, '404.html')
-
     page_context = {
         'title': 'Submit a question to the Reports Analysis Division (RAD)',
         'ancestors': [{
-            'title': 'Registration and reporting',
-            'url': '/registration-and-reporting/',
-        }],
-        'content_section': 'registration-and-reporting'
+          'title': 'Help for candidates and committees',
+          'url': '/help-candidates-committees/',
+    }],
+        'content_section': 'help'
     }
 
-    # If it's a POST, post to the ServiceNow API
-    if request.method == 'POST':
-        form = ContactRAD(request.POST)
-        response = form.post_to_service_now()
-
-        if response == 201:
-            return render(request, 'home/contact-form.html', {
+    if settings.FEATURES['radform']:
+        # If it's a POST, post to the ServiceNow API
+        if request.method == 'POST':
+            form = ContactRAD(request.POST)
+            response = form.post_to_service_now()
+            if response == 201:
+              return render(request, 'home/contact-form.html', {
                 'self': page_context,
                 'success': True
-            })
-        else:
-            return render(request, 'home/contact-form.html', {
+              })
+            else:
+              return render(request, 'home/contact-form.html', {
                 'self': page_context,
                 'form': form,
                 'server_error': True
-            })
+              })
+        else:
+            form = ContactRAD()
     else:
-        form = ContactRAD()
+        form = False
 
     return render(request, 'home/contact-form.html', {
         'self': page_context,

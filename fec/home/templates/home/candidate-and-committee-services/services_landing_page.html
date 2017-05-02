@@ -4,11 +4,19 @@
 {% load updates %}
 {% block body_class %}template-{{ self.get_verbose_name | slugify }}{% endblock %}
 
+{% block extra_js %}
+  <script>
+    TOUR_PAGE = 'candidate-committee-services';
+  </script>
+{% endblock extra_js %}
+
 {% block content %}
 <section class="hero hero--secondary hero--services" aria-labelledby="hero-heading">
   <div class="hero__image"></div>
   <div class="container">
-    <h1 id="hero-heading">{{ self.title }}</h1>
+    <h1 id="hero-heading">{{ self.title }}
+      <div class="tour__point tour__point--left tour__point--top-padding-med" data-intro="<h5>Everything in one place</h5>From first steps in starting a committee all the way to shutting down operations, learn how groups can be active in federal elections while staying in compliance with legal requirements."></div>
+    </h1>
     <div class="hero__content">{{ self.hero }}</div>
   </div>
 </section>
@@ -17,6 +25,7 @@
   <div id="options" class="container main">
     <div class="grid grid--2-wide">
       <div class="grid__item grid__item--no-margin card card--wide">
+        <div class="tour__point tour__point--left" data-intro="<h5>Fast access to what's important</h5>Looking for a specific form? Need to double-check a compliance period? Common filer tasks are pulled out for easy access."></div>
         <div class="card__image__container card__image__container--secondary">
           <img class="card__image icon--complex" src="{% static 'img/i-calendar-circle.svg' %}" alt="Icon of a calendar">
           <h2 class="card__title"><a href="{{ self.url }}dates-and-deadlines">Dates and deadlines</a></h2>
@@ -41,7 +50,7 @@
     <div class="message message--info">
       <h2 class="message__title">This page is still in progress</h2>
       <div class="message__content">
-        <p class="u-no-margin">We're actively reorganizing our content about candidates and committees. If you can't find what you're looking for, you can try browsing this content in <a href="">its previous form</a>.</p>
+        <p class="u-no-margin">We're actively reorganizing our content about candidates and committees. If you can't find what you're looking for, you can try browsing this content in <a href="{{ settings.FEC_TRANSITION_URL }}/info/compliance.shtml">its previous form</a>.</p>
       </div>
     </div>
 
@@ -56,22 +65,21 @@
   <div class="slab slab--neutral">
     <div class="container">
       <div class="grid grid--4-wide">
-        {% if settings.FEATURES.radform %}
-          <div class="grid__item">
-            <a href="{{ self.url }}question-rad">
-              <aside class="card card--horizontal card--secondary">
-                <div class="card__image__container">
-                    <span class="card__icon i-question-bubble"><span class="u-visually-hidden">Icon representing a question</span></span>
-                </div>
-                <div class="card__content">
-                  Submit a question to the Reports Analysis Division
-                </div>
-              </aside>
-            </a>
-          </div>
-        {% endif %}
+        <div class="tour__point tour__point--left" data-intro="<h5>More options for support</h5>The Reports Analysis Division helps committees’ authorized representatives with reporting. Use a new form to get in touch by email, or if your question is urgent, look up your analyst and call."></div>
         <div class="grid__item">
-          <a href="">
+          <a href="{{ self.url }}question-rad">
+            <aside class="card card--horizontal card--secondary">
+              <div class="card__image__container">
+                  <span class="card__icon i-question-bubble"><span class="u-visually-hidden">Icon representing a question</span></span>
+              </div>
+              <div class="card__content">
+                Submit a question to the Reports Analysis Division
+              </div>
+            </aside>
+          </a>
+        </div>
+        <div class="grid__item">
+          <a href="{{ settings.FEC_TRANSITION_URL }}/info/outreach.shtml">
             <aside class="card card--horizontal card--secondary">
               <div class="card__image__container">
                 <span class="card__icon i-training"><span class="u-visually-hidden">Icon of a training screen</span></span>

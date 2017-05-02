@@ -179,6 +179,7 @@ annual_anniversary_reports = OrderedDict((x.lower(), x) for x in [
 ])
 
 agency_operations_reports = OrderedDict((x.lower(), x) for x in [
+    "Gift report",
     "Shutdown plan",
     "Study"
 ])

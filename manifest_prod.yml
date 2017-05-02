@@ -1,13 +1,13 @@
 ---
 inherit: manifest_base.yml
 host: fec-prod-cms
-instances: 2
+instances: 4
 services:
   - cms-creds-prod
   - fec-creds-prod
   - fec-cms-prod
 env:
   FEC_API_URL: https://api.open.fec.gov
-  FEC_APP_URL: https://fec-prod-proxy.app.cloud.gov/data
+  FEC_APP_URL: https://beta.fec.gov/data
   FEC_CMS_ENVIRONMENT: prod
   NEW_RELIC_APP_NAME: govcloud | cms | prod
