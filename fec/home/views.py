@@ -12,7 +12,8 @@ from home.models import (
     DigestPage,
     PressReleasePage,
     RecordPage,
-    TipsForTreasurersPage
+    TipsForTreasurersPage,
+    AgendaPage
 )
 
 
@@ -79,11 +80,19 @@ def get_tips(year=None, search=None):
     return tips
 
 
+def get_meeting_agendas(year=False):
+    agendas = AgendaPage.objects.live()
+    if year != '':
+        agendas = agendas.filter(date__year=year)
+    return agendas
+
+
 def updates(request):
     digests = ''
     records = ''
     press_releases = ''
     tips = ''
+    agendas = ''
 
     # Get values from query
     update_types = request.GET.getlist('update_type', None)
@@ -110,6 +119,8 @@ def updates(request):
             digests = get_digests(year=year, search=search)
         if 'tips-for-treasurers' in update_types:
             tips = get_tips(year=year, search=search)
+        if 'agendas' in update_types:
+            agendas = get_meeting_agendas(year=year)
 
     else:
         # Get everything and filter by year if necessary
@@ -123,6 +134,7 @@ def updates(request):
             digests = digests.filter(date__year=year)
             records = records.filter(date__year=year)
             tips = tips.filter(date__year=year)
+            agendas = get_meeting_agendas(year=year)
 
         if search:
             press_releases = press_releases.search(search)
@@ -133,7 +145,7 @@ def updates(request):
     # Chain all the QuerySets together
     # via http://stackoverflow.com/a/434755/1864981
     updates = sorted(
-      chain(press_releases, digests, records, tips),
+      chain(press_releases, digests, records, tips, agendas),
       key=attrgetter('date'),
       reverse=True
     )
