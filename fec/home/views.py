@@ -128,6 +128,7 @@ def updates(request):
         press_releases = PressReleasePage.objects.live()
         records = RecordPage.objects.live()
         tips = TipsForTreasurersPage.objects.live()
+        agendas = AgendaPage.objects.live()
 
         if year:
             press_releases = press_releases.filter(date__year=year)
