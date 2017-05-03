@@ -468,6 +468,17 @@ class TipsForTreasurersPage(ContentPage):
         return 'Information Division'
 
 
+class GenericUpdate(Page):
+    # Generic update (pin) for Home Page - What's Happening section
+    link = models.URLField(blank=True)
+    homepage_expiration = models.DateField(blank=True, null=True)
+
+    content_panels = Page.content_panels + [
+        FieldPanel('link'),
+        FieldPanel('homepage_expiration'),
+    ]
+
+
 class CustomPage(Page):
     """Flexible customizable page."""
     author = models.CharField(max_length=255)
@@ -766,6 +777,7 @@ class LegalResourcesLandingPage(ContentPage, UniqueModel):
     @property
     def content_section(self):
         return 'legal-resources'
+
 
 class ServicesLandingPage(ContentPage, UniqueModel):
     """

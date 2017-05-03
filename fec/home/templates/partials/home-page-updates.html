@@ -1,5 +1,16 @@
 {% load filters %}
 <ul class="grid grid--4-wide grid--no-margin grid--no-border list--border">
+  {% for generic_update in generic_updates %}
+    <li class="grid__item u-no-padding-left u-no-padding-right">
+      <div class="u-gray-background t-sans">
+        {% if generic_update.link %}
+        <a href="{{ generic_update.link }}">{{ generic_update.title }}</a>
+        {% else %}
+        {{ generic_update.title }}
+        {% endif %}
+      </div>
+    </li>
+  {% endfor %}
   {% for update in updates %}
   <li class="grid__item {% if update.homepage_pin == True %}u-no-padding-left u-no-padding-right{% endif %}">
     {% if update.homepage_pin == True %}<div class="u-gray-background">{% endif %}
