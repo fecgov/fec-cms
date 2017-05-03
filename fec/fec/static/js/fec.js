@@ -32,6 +32,7 @@ var calendarHelpers = require('./calendar-helpers');
 var FormNav = require('./form-nav').FormNav;
 
 var legal = require('./legal');
+var upcomingEvents = require('./upcoming-events');
 
 // accessible tabs for alt sidebar
 require('./vendor/tablist').init();
@@ -96,6 +97,9 @@ $(document).ready(function() {
 
   // - What's Happening section
   new upcomingEvents.UpcomingEvents();
+
+  // - Candidate and committee support
+  new upcomingEvents.UpcomingDeadlines();
 
   // Initialize feedback widget
   var feedbackWidget = new feedback.Feedback(window.FEC_APP_URL + '/issue/');
