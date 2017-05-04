@@ -167,10 +167,7 @@ privacy_reports = OrderedDict((x.lower(), x) for x in [
 procurement_contracting_reports = OrderedDict((x.lower(), x) for x in [
     "Buy America report",
     "FAIR Act",
-    "Inventory",
-    "Memo",
-    "Public procurement report",
-    "Request for proposal"
+    "Public procurement report"
 ])
 
 annual_anniversary_reports = OrderedDict((x.lower(), x) for x in [

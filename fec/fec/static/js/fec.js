@@ -98,9 +98,6 @@ $(document).ready(function() {
   // - What's Happening section
   new upcomingEvents.UpcomingEvents();
 
-  // - Candidate and committee support
-  new upcomingEvents.UpcomingDeadlines();
-
   // Initialize feedback widget
   var feedbackWidget = new feedback.Feedback(window.FEC_APP_URL + '/issue/');
 

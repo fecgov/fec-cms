@@ -44,38 +44,6 @@ function UpcomingEvents() {
   });
 }
 
-// Homepage - Help for candidates and committees
-// * Populates Upcoming deadlines card
-function UpcomingDeadlines() {
-  var url = calendarHelpers.getUrl('calendar-dates',
-    { 'sort': 'start_date',
-      'min_start_date': todaysDate,
-      'category': ['report-M', 'report-Q', 'report-E']
-    });
-
-  $.getJSON(url).done(function(events) {
-    var upcomingDeadline = events.results[0];
-
-    var startDate = moment(upcomingDeadline.start_date);
-    var startDateMonth = startDate.format('MMMM');
-    var startDateDay = startDate.format('D');
-    var eventSummary = '';
-
-    if (upcomingDeadline.url) {
-      eventSummary = '<a href="' + upcomingDeadline.url + '">' + upcomingDeadline.summary + '</a>';
-    }
-    else {
-      eventSummary = upcomingDeadline.summary;
-    }
-
-    $('.js-homepage-upcoming-deadlines p').html(
-        startDateMonth + ' ' + startDateDay + ':' +
-        '<br>' + eventSummary + '.'
-    );
-  });
-}
-
 module.exports = {
-  UpcomingEvents: UpcomingEvents,
-  UpcomingDeadlines: UpcomingDeadlines
+  UpcomingEvents: UpcomingEvents
 };
