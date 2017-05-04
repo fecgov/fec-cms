@@ -91,9 +91,13 @@ class Command(ImporterMixin, BaseCommand):
         new_page = AgendaPage(
             imported_html=self._raw_html_block(meeting['body']),
             date=datetime.datetime.strptime(meeting['posted_date']['iso8601'], '%Y-%m-%d').date(),
+            meeting_type='O',
+            draft_minutes_links='\n'.join(meeting['draft_minutes_links']),
+            approved_minutes_date=datetime.datetime.strptime(meeting['approved_minutes_date']['iso8601'], '%Y-%m-%d').date(),
+            approved_minutes_link=meeting['approved_minutes_links'],
+            sunshine_act_links='\n'.join(meeting['sunshine_act_links'])
             mtg_media=self._media_blocks(meeting),
             # mtg_time doesn't appear to be in the json.
-
             depth=2,
             numchild=0,
             live=1,
