@@ -21,35 +21,56 @@ def replace_dash(string):
 def replace_space(string):
   return string.replace(' ', '-')
 
-def get_records(category_list=False, year=False):
-  records = RecordPage.objects.live()
-  if category_list != '':
-    for category in category_list:
-      records = records.filter(category=category)
-  if year != '':
-    records = records.filter(date__year=year)
-  return records
+def get_records(category_list=None, year=None, search=None):
+    records = RecordPage.objects.live()
 
-def get_digests(year=False):
-  digests = DigestPage.objects.live()
-  if year != '':
-    digests = digests.filter(date__year=year)
-  return digests
+    if category_list:
+        for category in category_list:
+          records = records.filter(category=category)
 
-def get_press_releases(category_list=False, year=False):
-  press_releases = PressReleasePage.objects.live()
-  if category_list:
-    for category in category_list:
-      press_releases = press_releases.filter(category=category)
-  if year:
-    press_releases = press_releases.filter(date__year=year)
-  return press_releases
+    if year:
+        records = records.filter(date__year=year)
+
+    if search:
+        records = records.search(search)
+
+    return records
+
+def get_digests(year=None, search=None):
+    digests = DigestPage.objects.live()
+    if year:
+        digests = digests.filter(date__year=year)
+
+    if search:
+        digests = digests.search(search)
+
+    return digests
+
+def get_press_releases(category_list=None, year=None, search=None):
+    press_releases = PressReleasePage.objects.live()
+
+    if category_list:
+        for category in category_list:
+            press_releases = press_releases.filter(category=category)
+
+    if year:
+        press_releases = press_releases.filter(date__year=year)
+
+    if search:
+        press_releases = press_releases.search(search)
+
+    return press_releases
 
 
-def get_tips(category_list=False, year=False):
+def get_tips(year=None, search=None):
     tips = TipsForTreasurersPage.objects.live()
-    if year != '':
+
+    if year:
         tips = tips.filter(date__year=year)
+
+    if search:
+        tips = tips.search(search)
+
     return tips
 
 
@@ -63,6 +84,7 @@ def updates(request):
     update_types = request.GET.getlist('update_type', None)
     category_list = request.GET.getlist('category', '')
     year = request.GET.get('year', '')
+    search = request.GET.get('search', '')
 
     category_list = list(map(replace_dash, category_list))
 
@@ -70,40 +92,38 @@ def updates(request):
     if update_types:
         if 'for-media' in update_types:
             press_releases = get_press_releases(category_list=category_list,
-                                                year=year)
-            digests = get_digests(year=year)
+                                                year=year, search=search)
+            digests = get_digests(year=year, search=search)
         if 'for-committees' in update_types:
-            records = get_records(category_list=category_list, year=year)
+            records = get_records(category_list=category_list, year=year, search=search)
         if 'fec-record' in update_types:
-            records = get_records(category_list=category_list, year=year)
+            records = get_records(category_list=category_list, year=year, search=search)
         if 'press-release' in update_types:
             press_releases = get_press_releases(category_list=category_list,
-                                                year=year)
+                                                year=year, search=search)
         if 'weekly-digest' in update_types:
-            digests = get_digests(year=year)
+            digests = get_digests(year=year, search=search)
         if 'tips-for-treasurers' in update_types:
-            tips = get_tips(year=year)
+            tips = get_tips(year=year, search=search)
 
     else:
       # Get everything and filter by year if necessary
       digests = DigestPage.objects.live()
       press_releases = PressReleasePage.objects.live()
-
-      # Hide behind feature flag unless explicitly requested
-      # Only authenticated users will be able to explicitly request them for now
-      if settings.FEATURES['record']:
-        records = RecordPage.objects.live()
-
-      if settings.FEATURES['tips']:
-        tips = TipsForTreasurersPage.objects.live()
+      records = RecordPage.objects.live()
+      tips = TipsForTreasurersPage.objects.live()
 
       if year:
         press_releases = press_releases.filter(date__year=year)
         digests = digests.filter(date__year=year)
-        if settings.FEATURES['record']:
-          records = records.filter(date__year=year)
-        if settings.FEATURES['tips']:
-          tips = tips.filter(date__year=year)
+        records = records.filter(date__year=year)
+        tips = tips.filter(date__year=year)
+
+      if search:
+        press_releases = press_releases.search(search)
+        digests = digests.search(search)
+        records = records.search(search)
+        tips = tips.search(search)
 
     # Chain all the QuerySets together
     # via http://stackoverflow.com/a/434755/1864981
@@ -134,7 +154,8 @@ def updates(request):
         'category_list': category_list,
         'update_types': update_types,
         'updates': updates,
-        'year': year
+        'year': year,
+        'search': search
     })
 
 def calendar(request):
@@ -190,37 +211,37 @@ def commissioners(request):
   })
 
 def contact_rad(request):
-  if not settings.FEATURES['radform']:
-    return render(request, '404.html')
-
-  page_context = {
-    'title': 'Submit a question to the Reports Analysis Division (RAD)',
-    'ancestors': [{
-      'title': 'Registration and reporting',
-      'url': '/registration-and-reporting/',
+    page_context = {
+        'title': 'Submit a question to the Reports Analysis Division (RAD)',
+        'ancestors': [{
+          'title': 'Help for candidates and committees',
+          'url': '/help-candidates-committees/',
     }],
-    'content_section': 'registration-and-reporting'
-  }
+        'content_section': 'help'
+    }
 
-  # If it's a POST, post to the ServiceNow API
-  if request.method == 'POST':
-    form = ContactRAD(request.POST)
-    response = form.post_to_service_now()
-    if response == 201:
-      return render(request, 'home/contact-form.html', {
-        'self': page_context,
-        'success': True
-      })
+    if settings.FEATURES['radform']:
+        # If it's a POST, post to the ServiceNow API
+        if request.method == 'POST':
+            form = ContactRAD(request.POST)
+            response = form.post_to_service_now()
+            if response == 201:
+              return render(request, 'home/contact-form.html', {
+                'self': page_context,
+                'success': True
+              })
+            else:
+              return render(request, 'home/contact-form.html', {
+                'self': page_context,
+                'form': form,
+                'server_error': True
+              })
+        else:
+            form = ContactRAD()
     else:
-      return render(request, 'home/contact-form.html', {
-        'self': page_context,
-        'form': form,
-        'server_error': True
-      })
-  else:
-    form = ContactRAD()
+        form = False
 
-  return render(request, 'home/contact-form.html', {
-    'self': page_context,
-    'form': form
-  })
+    return render(request, 'home/contact-form.html', {
+        'self': page_context,
+        'form': form
+    })

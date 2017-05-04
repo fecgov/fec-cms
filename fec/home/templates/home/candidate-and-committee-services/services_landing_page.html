@@ -65,21 +65,19 @@
   <div class="slab slab--neutral">
     <div class="container">
       <div class="grid grid--4-wide">
-        {% if settings.FEATURES.radform %}
-          <div class="tour__point tour__point--left" data-intro="<h5>More options for support</h5>The Reports Analysis Division helps committees’ authorized representatives with reporting. Use a new form to get in touch by email, or if your question is urgent, look up your analyst and call."></div>
-          <div class="grid__item">
-            <a href="{{ self.url }}question-rad">
-              <aside class="card card--horizontal card--secondary">
-                <div class="card__image__container">
-                    <span class="card__icon i-question-bubble"><span class="u-visually-hidden">Icon representing a question</span></span>
-                </div>
-                <div class="card__content">
-                  Submit a question to the Reports Analysis Division
-                </div>
-              </aside>
-            </a>
-          </div>
-        {% endif %}
+        <div class="tour__point tour__point--left" data-intro="<h5>More options for support</h5>The Reports Analysis Division helps committees’ authorized representatives with reporting. Use a new form to get in touch by email, or if your question is urgent, look up your analyst and call."></div>
+        <div class="grid__item">
+          <a href="{{ self.url }}question-rad">
+            <aside class="card card--horizontal card--secondary">
+              <div class="card__image__container">
+                  <span class="card__icon i-question-bubble"><span class="u-visually-hidden">Icon representing a question</span></span>
+              </div>
+              <div class="card__content">
+                Submit a question to the Reports Analysis Division
+              </div>
+            </aside>
+          </a>
+        </div>
         <div class="grid__item">
           <a href="{{ settings.FEC_TRANSITION_URL }}/info/outreach.shtml">
             <aside class="card card--horizontal card--secondary">

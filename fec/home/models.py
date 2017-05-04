@@ -1,13 +1,22 @@
 import datetime
 import functools
+import logging
 
 from django.db import models
 from django.core.exceptions import ValidationError
 
+from django.dispatch import receiver
+from django.db.models.signals import post_save, pre_delete
+from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
+
+from audit_log.models.fields import LastUserField
+from audit_log.models.managers import AuditLog
+
 from modelcluster.fields import ParentalKey
 from modelcluster.contrib.taggit import ClusterTaggableManager
 from taggit.models import TaggedItemBase
-from wagtail.wagtailcore.models import Page, Orderable
+from wagtail.wagtailcore.models import Page, Orderable, PageRevision
 from wagtail.wagtailcore.fields import StreamField
 from wagtail.wagtailcore import blocks
 from wagtail.wagtailadmin.edit_handlers import (FieldPanel, StreamFieldPanel,
@@ -19,14 +28,19 @@ from wagtail.wagtaildocs.blocks import DocumentChooserBlock
 from wagtail.wagtaildocs.edit_handlers import DocumentChooserPanel
 from wagtail.wagtaildocs.models import Document
 
+from django.db.models.signals import m2m_changed
+
 from wagtail.contrib.table_block.blocks import TableBlock
 
 from fec import constants
+
+logger = logging.getLogger(__name__)
 
 from home.blocks import (ThumbnailBlock, AsideLinkBlock,
                          ContactInfoBlock, CitationsBlock, ResourceBlock,
                          OptionBlock, CollectionBlock, DocumentFeedBlurb,
                          ExampleParagraph, ExampleForms, CustomTableBlock)
+
 
 stream_factory = functools.partial(
     StreamField,
@@ -40,6 +54,7 @@ stream_factory = functools.partial(
     ],
 )
 
+
 class UniqueModel(models.Model):
     """Abstract base class for unique pages."""
     class Meta:
@@ -49,6 +64,7 @@ class UniqueModel(models.Model):
         model = self.__class__
         if model.objects.count() > 0 and self.id != model.objects.get().id:
             raise ValidationError('Only one {0} allowed'.format(self.__name__))
+
 
 class ContentPage(Page):
     """Abstract base class for simple content pages."""
@@ -73,6 +89,76 @@ class ContentPage(Page):
     @property
     def content_section(self):
         return 'help'
+'''
+class Person(User):
+    objects = User()
+
+    def __init__(self):
+        audit_log = AuditLog()
+        print(audit_log)
+
+
+@receiver(post_save, sender=Person)
+@receiver(pre_delete, sender=Person)
+def log_person(sender, **kwargs):
+    print('TEST')
+'''
+
+
+@receiver(post_save, sender=User)
+@receiver(pre_delete, sender=User)
+def log_user_save(sender, **kwargs):
+    '''
+    Keeping these print statements here for reference for potential later use.
+    print(kwargs.get('user'), '1')
+    print(kwargs.get('user_id'), '2')
+    print(kwargs.get('instance'), '3')
+    print(kwargs.get('instance'), '4')
+    print(kwargs.get('update_fields'), '5')
+    print(kwargs.get('signal'), '6')
+    print(kwargs.get('instance').get_username(), '8')
+    print(kwargs.get('instance').groups, '9')
+    # print(kwargs.get('instance').get_all_permissions())
+    print(kwargs.get('instance').groups, '10')
+    print(kwargs.get('instance').pagerevision_set, '11')
+    print(kwargs.get('instance').user_permissions, '12')
+    print(kwargs.get('instance').logentry_set, '12.5')
+    print(sender.logentry_set, '13')
+    # print(sender.__base__.id, '13')
+    # print(sender.get('id'), '14')
+    print(sender.id, '15')
+    '''
+    if kwargs.get('update_fields'):
+        logger.info("User {0} logged in".format(kwargs.get('instance').get_username()))
+    else:
+        logger.info("User change: username {0} by instance {1}".format(kwargs.get('instance').get_username(),
+                                                                       kwargs.get('instance')))
+    audit_log = AuditLog() #currently not used, will attempt to use for future PR adding admin logging
+
+
+@receiver(pre_delete, sender=PageRevision)
+@receiver(post_save, sender=PageRevision)
+def log_revisions(sender, **kwargs):
+    try:
+        user_id = int(kwargs.get('instance').user_id)
+        user = User.objects.get(id=user_id)
+    except User.DoesNotExist:
+        logger.info("User not found")
+    logger.info("page was modified: {0} by user {1}".format(kwargs.get('instance'), user.get_username()))
+
+
+def user_groups_changed(sender, **kwargs):
+    group_map = {1: 'Moderators', 2: 'Editors'}
+    action_map = {'post_add': 'added', 'post_remove': 'removed'}
+    if kwargs.get('action').split('_')[0] == 'post':
+        for index in kwargs.get('pk_set'):
+            action = 'to' if kwargs.get('action').split('_')[1] == 'add' else 'from'
+            logger.info("User change: User {0} was {1} {2} group {3}".format(kwargs.get('instance').get_username(),
+                                                                    action_map[kwargs.get('action')],
+                                                                    action,
+                                                                    group_map[index]))
+
+m2m_changed.connect(user_groups_changed, sender=User.groups.through)
 
 
 class HomePage(ContentPage, UniqueModel):
@@ -81,8 +167,10 @@ class HomePage(ContentPage, UniqueModel):
     def content_section(self):
         return ''
 
+
 class LandingPage(ContentPage):
     template = 'home/registration-and-reporting/landing_page.html'
+
 
 class Author(models.Model):
     name = models.CharField(max_length=255)
@@ -200,7 +288,7 @@ class RecordPage(ContentPage):
             FieldPanel('homepage_pin_expiration'),
             FieldPanel('homepage_hide')
         ],
-        heading="Home page feed"
+            heading="Home page feed"
         )
     ]
 
@@ -291,7 +379,7 @@ class PressReleasePage(ContentPage):
             FieldPanel('homepage_pin_expiration'),
             FieldPanel('homepage_hide')
         ],
-        heading="Home page feed"
+            heading="Home page feed"
         )
     ]
 
@@ -315,9 +403,11 @@ class PressReleasePage(ContentPage):
     def no_boilerplate(self):
         return self.date.year >= 2016
 
+
 def get_previous_tips_page():
     next_tip = TipsForTreasurersPage.objects.order_by('-date', '-pk').first()
     return next_tip.pk if next_tip else None
+
 
 class TipsForTreasurersPage(ContentPage):
     date = models.DateField(default=datetime.date.today)
@@ -346,7 +436,8 @@ class TipsForTreasurersPage(ContentPage):
     template = 'home/updates/tips_for_treasurers.html'
     content_panels = ContentPage.content_panels + [
         FieldPanel('date'),
-        PageChooserPanel('read_next')    ]
+        PageChooserPanel('read_next')
+        ]
 
     @property
     def get_update_type(self):
@@ -359,6 +450,18 @@ class TipsForTreasurersPage(ContentPage):
     @property
     def get_author_office(self):
         return 'Information Division'
+
+
+class GenericUpdate(Page):
+    # Generic update (pin) for Home Page - What's Happening section
+    link = models.URLField(blank=True)
+    homepage_expiration = models.DateField(blank=True, null=True)
+
+    content_panels = Page.content_panels + [
+        FieldPanel('link'),
+        FieldPanel('homepage_expiration'),
+    ]
+
 
 class CustomPage(Page):
     """Flexible customizable page."""
@@ -395,10 +498,11 @@ class CustomPage(Page):
                 StreamFieldPanel('sidebar'),
                 StreamFieldPanel('record_articles'),
             ],
-            heading = "Sidebar",
-            classname = "collapsible"
+            heading="Sidebar",
+            classname="collapsible"
         )
     ]
+
 
 class PressLandingPage(Page):
     hero = stream_factory(null=True, blank=True)
@@ -419,6 +523,7 @@ class PressLandingPage(Page):
         StreamFieldPanel('contact_intro'),
     ]
 
+
 class DocumentPage(ContentPage):
     date = models.DateField(default=datetime.date.today)
     year_only = models.BooleanField(default=False)
@@ -428,6 +533,7 @@ class DocumentPage(ContentPage):
                                 choices=constants.report_child_categories.items(), null=True)
     content_panels = Page.content_panels + [
         FieldPanel('date'),
+        FieldPanel('year_only'),
         FieldPanel('file_url'),
         FieldPanel('size'),
         FieldPanel('category'),
@@ -436,7 +542,7 @@ class DocumentPage(ContentPage):
 
     @property
     def display_date(self):
-    # Some documents should only show the year, other show the month and year
+        # Some documents should only show the year, other show the month and year
         if self.year_only:
             return self.date.year
         else:
@@ -444,8 +550,9 @@ class DocumentPage(ContentPage):
 
     @property
     def extension(self):
-    # Return the file extension of file_url
+        # Return the file extension of file_url
         return self.file_url.rsplit('.', 1)[1].upper()
+
 
 class DocumentFeedPage(ContentPage):
     subpage_types = ['DocumentPage', 'ResourcePage']
@@ -467,6 +574,7 @@ class DocumentFeedPage(ContentPage):
     def category_filters(self):
         return constants.report_category_groups[self.category]
 
+
 class ReportsLandingPage(ContentPage, UniqueModel):
     subpage_types = ['DocumentFeedPage']
     intro = StreamField([
@@ -486,6 +594,7 @@ class ReportsLandingPage(ContentPage, UniqueModel):
     def content_section(self):
         return ''
 
+
 class AboutLandingPage(Page):
     hero = stream_factory(null=True, blank=True)
     sections = StreamField([
@@ -498,6 +607,7 @@ class AboutLandingPage(Page):
         StreamFieldPanel('hero'),
         StreamFieldPanel('sections')
     ]
+
 
 class CommissionerPage(Page):
     first_name = models.CharField(max_length=255, default='', blank=False)
@@ -568,6 +678,7 @@ class CommissionerPage(Page):
 
         return context
 
+
 class CollectionPage(Page):
     body = stream_factory(null=True, blank=True)
     sidebar_title = models.CharField(max_length=255, null=True, blank=True)
@@ -584,7 +695,7 @@ class CollectionPage(Page):
                                         (True, 'Show committee search box'),
                                         (False, 'Do not show committee search box')
                                     ])
-    content_panels =  Page.content_panels + [
+    content_panels = Page.content_panels + [
         StreamFieldPanel('body'),
         FieldPanel('sidebar_title'),
         FieldPanel('show_search'),
@@ -592,8 +703,9 @@ class CollectionPage(Page):
         StreamFieldPanel('sections'),
     ]
 
+
 class ResourcePage(Page):
-    """Class for pages that include a side nav, multiple sections and citations"""
+    # Class for pages that include a side nav, multiple sections and citations
     date = models.DateField(default=datetime.date.today)
     intro = StreamField([
         ('paragraph', blocks.RichTextBlock())
@@ -641,12 +753,15 @@ class ResourcePage(Page):
     def display_date(self):
         return self.date.strftime('%B %Y')
 
+
 class LegalResourcesLandingPage(ContentPage, UniqueModel):
     subpage_types = ['ResourcePage']
     template = 'home/legal/legal_resources_landing.html'
+
     @property
     def content_section(self):
         return 'legal-resources'
+
 
 class ServicesLandingPage(ContentPage, UniqueModel):
     """

@@ -16,9 +16,10 @@ class ThumbnailBlock(blocks.StructBlock):
 class AsideLinkBlock(blocks.StructBlock):
     """Either a search or calendar link in a section aside"""
     link_type = blocks.ChoiceBlock(choices=[
-        ('search', 'Search'),
+        ('calculator', 'Calculator'),
         ('calendar', 'Calendar'),
-        ('record', 'Record')
+        ('record', 'Record'),
+        ('search', 'Search')
     ], icon='link', required=False, help_text='Set an icon')
 
     url = blocks.URLBlock()
@@ -120,7 +121,8 @@ class ResourceBlock(blocks.StructBlock):
         ('current_commissioners', CurrentCommissionersBlock()),
         ('fec_jobs', CareersBlock()),
         ('mur_search', MURSearchBlock()),
-        ('table', TableBlock())
+        ('table', TableBlock()),
+        ('html', blocks.RawHTMLBlock())
     ])
 
     aside = blocks.StreamBlock([

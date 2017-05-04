@@ -17,7 +17,7 @@
 
     <div class="container">
       <div class="hero__content">
-        <h2>Protecting the integrity of the federal campaign finance process</h2>
+        <h2 id="hero-heading">Protecting the integrity of the federal campaign finance process</h2>
         <a class="t-sans" href="/about">More about the FEC</a>
       </div>
 
@@ -74,12 +74,9 @@
           <div class="grid__item">
             <h3>Find out how a specific candidate or committee raises and spends money</h3>
             <form action="{{ settings.FEC_APP_URL }}" autocomplete="off" class="search__container js-search">
-              <div class="combo combo--search">
-                <select class="search__select js-search-type" name="search_type" aria-label="Select a search type">
-                  <option value="candidates">Candidates</option>
-                  <option value="committees">Committees</option>
-                </select>
-                <input name="search" class="js-typeahead combo__input" type="text"
+              <div class="combo combo--search--mini">
+                <label class="label" for="search">Search for candidates and committees</label>
+                <input id="search" name="search" class="js-typeahead combo__input" type="text"
                 autocorrect="off"
                 autocapitalize="off"
                 spellcheck="false">
@@ -110,9 +107,14 @@
 
   <section class="slab slab--home slab--neutral">
     <div class="container">
-      <h2 class="heading--section">Citizen information</h2>
+      <h2 class="heading--section">Introduction to campaign finance and elections</h2>
       <div class="billboard">
         <div class="billboard__image__container">
+          {% comment %}
+            <span class="t-block u-padding--bottom">
+              <a class="t-sans" href="/introduction-campaign-finance/getting-involved-federal-campaigns/">Learn about getting involved<br>in the election process »</a>
+            </span>
+          {% endcomment %}
           <a class="u-no-border" href="{{ settings.FEC_TRANSITION_URL }}/pages/brochures/citizens.shtml" target="_blank">
           <img class="billboard__image" src={% static 'img/thumbnail--citizens-guide-brochure.png' %} alt="Citizens Guide Brochure"></a>
           <div class="document-thumbnail__description">
@@ -159,6 +161,12 @@
                      </div>
                    </fieldset>
                  </div>
+
+                 {% comment %}
+                   <div class="u-float-left u-padding--top">
+                     <a class="t-sans" href="/introduction-campaign-finance/campaign-finance-and-fec-research/">Learn how to start researching financial data »</a>
+                   </div>
+                 {% endcomment %}
                </div>
              </form>
              <ul class="list--border list--extra-spacious">
@@ -169,6 +177,9 @@
                <li>
                  <h3>Every state has its own procedures for voting day activities and voter registration</h3>
                  <a class="t-sans" href="https://www.vote.gov">Find voting guidance by state » </a>
+                 {% comment %}
+                   <a class="t-sans" href="/introduction-campaign-finance/election-and-voting-information/">Information about voting and elections »</a>
+                 {% endcomment %}
                </li>
              </ul>
           </div>
