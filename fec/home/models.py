@@ -876,3 +876,8 @@ class AgendaPage(Page):
             classname='collapsible collapsed'
         ),
     ]
+
+    @property
+    def get_update_type(self):
+        return constants.update_types['commission-meeting']
+

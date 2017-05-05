@@ -26,12 +26,32 @@
           {% endif %}
         </div>
       {% endif %}
+      {% if update.get_update_type == 'Commission Meetings' %}
+        <ul class="list--flat-bordered">
+        {% if update.approved_minutes_link %}
+          <li><a href="{{ update.approved_minutes_link }}">Approved minutes</a></li>
+        {% endif %}
+        {% if update.draft_minutes_links %}
+        {% for link in update.draft_minutes_links|splitlines %}
+          <li><a href="{{ link }}">Draft minutes</a></li>
+        {% endfor %}
+        {% endif %}
+        {% if update.sunshine_act_links %}
+        {% for link in update.sunshine_act_links|splitlines %}
+          <li><a href="{{ link }}">Sunshine Act notice</a></li>
+        {% endfor %}
+        {% endif %}
+        </ul>
+      {% endif %}
       {% if show_tag %}
         <div class="post__meta">
           <a class="tag tag--secondary" href="/updates?update_type={{update.get_update_type|slugify}}#feed">{{update.get_update_type}}</a>
           {% if update.category %}
             in: <a href="/updates?update_type={{update.get_update_type|slugify}}&category={{update.category|slugify}}">{{ update.category|capfirst }}</a>
-         {% endif %}
+          {% endif %}
+          {% if update.get_update_type == 'Commission Meetings' %}
+            in: <a href="">Open meetings</a>
+          {% endif %}
         </div>
       {% endif %}
     </div>
