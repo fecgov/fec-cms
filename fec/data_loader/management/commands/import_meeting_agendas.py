@@ -112,7 +112,7 @@ class Command(ImporterMixin, BaseCommand):
             depth=2,
             numchild=0,
             live=1,
-            title=meeting['title_text'],
+            title=meeting['title_text'] + ' open meeting',
         )
         parent_page.add_child(instance=new_page)
 
