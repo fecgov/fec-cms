@@ -60,6 +60,11 @@
                 {{ cat.1 }}</option>
             {% endfor %}
           </select>
+        {% elif 'agendas' in update_types %}
+          <label class="label" for="record-categories">Meeting type</label>
+          <select id="record-categories" name="category">
+            <option value="">Open</option>
+          </select>        
         {% else %}
         <label class="label" for="empty-select">Subjects</label>
         <select id="empty-select" name="category" disabled>
