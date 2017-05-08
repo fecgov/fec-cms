@@ -80,9 +80,14 @@ def get_tips(year=None, search=None):
     return tips
 
 
-def get_meeting_agendas(year=False, search=None):
+def get_meeting_agendas(category_list=None, year=False, search=None):
     agendas = AgendaPage.objects.live()
-    if year != '':
+
+    if category_list:
+        for category in category_list:
+            agendas = agendas.filter(meeting_type=category)
+
+    if year:
         agendas = agendas.filter(date__year=year)
     return agendas
 
@@ -120,7 +125,7 @@ def updates(request):
         if 'tips-for-treasurers' in update_types:
             tips = get_tips(year=year, search=search)
         if 'agendas' in update_types:
-            agendas = get_meeting_agendas(year=year, search=search)
+            agendas = get_meeting_agendas(category_list=category_list, year=year, search=search)
 
     else:
         # Get everything and filter by year if necessary

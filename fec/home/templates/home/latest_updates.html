@@ -63,7 +63,8 @@
         {% elif 'agendas' in update_types %}
           <label class="label" for="record-categories">Meeting type</label>
           <select id="record-categories" name="category">
-            <option value="">Open</option>
+            <option value="">All</option>
+            <option value="O">Open</option>
           </select>        
         {% else %}
         <label class="label" for="empty-select">Subjects</label>
