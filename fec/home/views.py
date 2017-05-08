@@ -80,7 +80,7 @@ def get_tips(year=None, search=None):
     return tips
 
 
-def get_meeting_agendas(year=False):
+def get_meeting_agendas(year=False, search=None):
     agendas = AgendaPage.objects.live()
     if year != '':
         agendas = agendas.filter(date__year=year)
