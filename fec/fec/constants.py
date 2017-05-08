@@ -144,10 +144,8 @@ oig_reports = OrderedDict((x.lower(), x) for x in [
 ])
 
 strategy_budget_performance_reports = OrderedDict((x.lower(), x) for x in [
-    "Annual performance report",
     "Agency Financial Report",
     "Congressional submission",
-    "IT strategic plan",
     "Performance and accountability report",
     "Strategic plan",
     "Summary of performance and financial information"
