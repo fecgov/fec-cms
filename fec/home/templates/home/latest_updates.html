@@ -34,7 +34,9 @@
         <option value="for-media" {% if 'for-media' in update_types %}selected{% endif %}>For media professionals:</option>
         <option value="press-release" {% if 'press-release' in update_types %}selected{% endif %}>- Press releases</option>
         <option value="weekly-digest" {% if 'weekly-digest' in update_types %}selected{% endif %}>- Weekly Digests</option>
+        {% if request.user.is_authenticated or settings.FEATURES.agendas %}
         <option value="agendas" {% if 'agendas' in update_types %}selected{% endif %}>Meeting agendas</option>
+        {% endif %}
       </select>
     </div>
       <div class="filter">

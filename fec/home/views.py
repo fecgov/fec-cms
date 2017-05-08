@@ -143,6 +143,10 @@ def updates(request):
             records = records.search(search)
             tips = tips.search(search)
 
+    # temporary: agendas are only for logged in admin users
+    if not request.user.is_authenticated():
+        agendas = ''
+
     # Chain all the QuerySets together
     # via http://stackoverflow.com/a/434755/1864981
     updates = sorted(
