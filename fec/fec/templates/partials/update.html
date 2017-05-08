@@ -27,7 +27,7 @@
         </div>
       {% endif %}
       {% if update.get_update_type == 'Commission Meetings' %}
-        <ul class="list--flat-bordered">
+        <ul class="list--flat-bordered t-sans">
         {% if update.approved_minutes_link %}
           <li><a href="{{ update.approved_minutes_link }}">Approved minutes</a></li>
         {% endif %}
@@ -44,13 +44,13 @@
         </ul>
       {% endif %}
       {% if show_tag %}
-        <div class="post__meta">
+        <div class="post__meta t-sans">
           <a class="tag tag--secondary" href="/updates?update_type={{update.get_update_type|slugify}}#feed">{{update.get_update_type}}</a>
           {% if update.category %}
             in: <a href="/updates?update_type={{update.get_update_type|slugify}}&category={{update.category|slugify}}">{{ update.category|capfirst }}</a>
           {% endif %}
           {% if update.get_update_type == 'Commission Meetings' %}
-            in: <a href="">Open meetings</a>
+            in: <a href="/updates?update_type=agendas">Open meetings</a>
           {% endif %}
         </div>
       {% endif %}
