@@ -120,7 +120,7 @@ def updates(request):
         if 'tips-for-treasurers' in update_types:
             tips = get_tips(year=year, search=search)
         if 'agendas' in update_types:
-            agendas = get_meeting_agendas(year=year)
+            agendas = get_meeting_agendas(year=year, search=search)
 
     else:
         # Get everything and filter by year if necessary
@@ -142,6 +142,7 @@ def updates(request):
             digests = digests.search(search)
             records = records.search(search)
             tips = tips.search(search)
+            agendas = agendas.search(search)
 
     # temporary: agendas are only for logged in admin users
     if not request.user.is_authenticated():
