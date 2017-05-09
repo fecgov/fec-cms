@@ -18,12 +18,17 @@ register = template.Library()
 def home_page_updates():
     generic_updates = GenericUpdate.objects.live().filter(homepage_expiration__gte=date.today())
 
-    press_releases = PressReleasePage.objects.live().filter(homepage_hide=False).order_by('-date')[:4]
-    records = RecordPage.objects.live().filter(homepage_hide=False).order_by('-date')[:4]
+    # get latest press releases, records, tips  that are not pinned
+    press_releases = PressReleasePage.objects.live().filter(homepage_hide=False, homepage_pin=False).order_by('-date')[:4]
+    records = RecordPage.objects.live().filter(homepage_hide=False, homepage_pin=False).order_by('-date')[:4]
     tips = TipsForTreasurersPage.objects.live().filter().order_by('-date')[:4]
 
-    # combine press release, records and tips queryset
-    updates = chain(press_releases, records, tips)
+    # get ALL press releases and records that are pinned
+    press_releases_pinned = PressReleasePage.objects.live().filter(homepage_hide=False, homepage_pin=True).order_by('-date')
+    records_pinned = RecordPage.objects.live().filter(homepage_hide=False, homepage_pin=True).order_by('-date')
+
+    # combine all the querysets
+    updates = chain(press_releases, records, tips, press_releases_pinned, records_pinned)
 
     # remove homepage pin if expiration date has passed
     updates_unpin_expired = []
@@ -43,6 +48,7 @@ def home_page_updates():
             update.homepage_pin = False
         updates_unpin_expired.append(update)
 
+    # sort the pruned queryset by date first, then sort pinned posts up top
     updates_sorted_by_date = sorted(updates_unpin_expired, key=lambda x: x.date, reverse=True)
     updates_sorted_by_homepage_pin = sorted(updates_sorted_by_date, key=lambda x: x.homepage_pin, reverse=True)
 
