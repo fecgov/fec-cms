@@ -64,8 +64,8 @@
           <label class="label" for="record-categories">Meeting type</label>
           <select id="record-categories" name="category">
             <option value="">All</option>
-            <option value="O">Open</option>
-            <option value="E">Executive</option>
+            <option value="O"{% if "O" in category_list %} selected{% endif %}>Open</option>
+            <option value="E"{% if "E" in category_list %} selected{% endif %}>Executive</option>
           </select>        
         {% else %}
         <label class="label" for="empty-select">Subjects</label>
