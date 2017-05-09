@@ -6,8 +6,19 @@
 {% block body_class %}template-{{ self.get_verbose_name | slugify }}{% endblock %}
 
 {% block content %}
-{% include 'partials/breadcrumbs.html' with page=self links=self.get_ancestors style='secondary' %}
-
+<nav class="page-header page-header--secondary">
+  <ul class="breadcrumbs">
+    <li class="breadcrumbs__item"><a href="/" class="breadcrumbs__link" rel="Home">Home</a></li>
+    <li class="breadcrumbs__item">
+      <span class="breadcrumbs__separator">›</span>
+      <a class="breadcrumbs__link" href="/updates?update_type=agendas">Meeting agendas</a>
+    </li>
+    <li class="breadcrumbs__item breadcrumbs__item--current">
+      <span class="breadcrumbs__separator">›</span>
+      <span>{{ self.title }}</span>
+    </li>
+  </ul>
+</nav>
 
 <article class="main">
   <div class="container">
@@ -28,7 +39,7 @@
       </header>
    <div class="main__content">
        <div>
-           {% include_block self.imported_html  %}
+         {% include_block self.imported_html  %}
        </div>
 
       <ol class="list--numbered--alt">
@@ -69,14 +80,15 @@
       </ol>
     </div>
   </div>
-  <div class="slab slab--neutral u-no-print">
+</article>
+<div class="slab slab--neutral u-no-print">
   <div class="container">
     <div class="content__section">
       <h3>Meeting Media</h3>
         <ul class="list--border list--extra-spacious">
           {% for block in self.mtg_media %}
             {% if block.block_type == "full_video_url" %}
-              <li>Video of Entire Meeting: <a href="{{ block.value }}">{{ block.value }}</a></li>
+              <li><a href="{{ block.value }}">Video of entire meeting</a></li>
             {% elif block.block_type == "full_audio" %}
               <li>Audio of Entire Meeting:
                   <audio controls>
@@ -92,7 +104,5 @@
     </div>
   </div>
 </div>
-</article>
-
 {% include 'partials/disclaimer.html' %}
 {% endblock %}

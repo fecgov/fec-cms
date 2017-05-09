@@ -797,8 +797,28 @@ class ServicesLandingPage(ContentPage, UniqueModel):
 
 
 class AgendaPage(Page):
+    OPEN = 'O'
+    EXECUTIVE = 'E'
+    MEETING_TYPE_CHOICES = (
+        (OPEN, 'Open'),
+        (EXECUTIVE, 'Executive'),
+    )
+
     date = models.DateField(default=datetime.date.today)
+    end_date = models.DateField(null=True, blank=True)
     time = models.TimeField(null=True, blank=True)
+    meeting_type = models.CharField(
+        max_length=2,
+        choices=MEETING_TYPE_CHOICES,
+        default=OPEN
+    )
+    draft_minutes_links = models.TextField(
+        blank=True, help_text='URLs separated by a newline')
+    approved_minutes_date = models.DateField(null=True, blank=True)
+    approved_minutes_link = models.URLField(blank=True)
+    sunshine_act_links = models.TextField(
+        blank=True, help_text='URLs separated by a newline')
+    live_video_url = models.URLField(blank=True)
 
     imported_html = StreamField(
         [('html_block', blocks.RawHTMLBlock())],
@@ -809,33 +829,39 @@ class AgendaPage(Page):
     mtg_media = StreamField([
         ('full_video_url', blocks.TextBlock(required=False)),    # 'video_link'
         ('full_audio_url', blocks.TextBlock(required=False)),    # 'primary_audio_link'
-        ('mtg_transcript_url', blocks.TextBlock(required=False)) # 'closed_captioning_link'
+        ('mtg_transcript_url', blocks.TextBlock(required=False))  # 'closed_captioning_link'
     ])
 
     agenda = StreamField([
         ('agenda_item', blocks.StreamBlock([
             ('item_title', blocks.TextBlock()),
-            ('item_text', blocks.TextBlock()),
-            ('mtg_doc', blocks.StructBlock([
-                ('mtg_doc_upload', DocumentChooserBlock(required=True)),
-                ('submitted_late', blocks.BooleanBlock(required=False, help_text='Submitted Late')),
-                ('heldover', blocks.BooleanBlock(required=False, help_text='Held Over')),
-                ('heldover_from', blocks.DateBlock(required=False, help_text="Held Over From")),
-            ])),
+            ('item_text', blocks.RichTextBlock()),
             ('item_audio', DocumentChooserBlock(required=False)),
         ]))
     ])
 
     content_panels = Page.content_panels + [
         FieldPanel('date'),
+        FieldPanel('end_date'),
         FieldPanel('time'),
+        FieldPanel('meeting_type'),
+        FieldPanel('draft_minutes_links'),
+        FieldPanel('approved_minutes_date'),
+        FieldPanel('approved_minutes_link'),
+        FieldPanel('sunshine_act_links'),
+        FieldPanel('live_video_url'),
         StreamFieldPanel('agenda'),
         StreamFieldPanel('imported_html'),
         MultiFieldPanel(
-        [
-            StreamFieldPanel('mtg_media'),
-        ],
-        heading="Entire Meeting Media",
-        classname="collapsible collapsed"
+            [
+                StreamFieldPanel('mtg_media'),
+            ],
+            heading='Entire Meeting Media',
+            classname='collapsible collapsed'
         ),
     ]
+
+    @property
+    def get_update_type(self):
+        return constants.update_types['commission-meeting']
+

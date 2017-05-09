@@ -34,6 +34,9 @@
         <option value="for-media" {% if 'for-media' in update_types %}selected{% endif %}>For media professionals:</option>
         <option value="press-release" {% if 'press-release' in update_types %}selected{% endif %}>- Press releases</option>
         <option value="weekly-digest" {% if 'weekly-digest' in update_types %}selected{% endif %}>- Weekly Digests</option>
+        {% if request.user.is_authenticated or settings.FEATURES.agendas %}
+        <option value="agendas" {% if 'agendas' in update_types %}selected{% endif %}>Meeting agendas</option>
+        {% endif %}
       </select>
     </div>
       <div class="filter">
@@ -57,6 +60,13 @@
                 {{ cat.1 }}</option>
             {% endfor %}
           </select>
+        {% elif 'agendas' in update_types %}
+          <label class="label" for="record-categories">Meeting type</label>
+          <select id="record-categories" name="category">
+            <option value="">All</option>
+            <option value="O"{% if "O" in category_list %} selected{% endif %}>Open</option>
+            <option value="E"{% if "E" in category_list %} selected{% endif %}>Executive</option>
+          </select>        
         {% else %}
         <label class="label" for="empty-select">Subjects</label>
         <select id="empty-select" name="category" disabled>
@@ -74,7 +84,7 @@
     <div class="filter">
       <div class="combo combo--filter--mini">
         <label for="search" class="label">Search</label>
-        <input id="search" class="combo__input" name="search" type="text" value="{{ search }}" placeholder="YYYY">
+        <input id="search" class="combo__input" name="search" type="text" value="{{ search }}">
         <button type="submit" class="combo__button button button--standard button--search"><span class="u-visually-hidden">Search</span></button>
       </div>
     </div>
