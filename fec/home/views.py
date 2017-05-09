@@ -140,7 +140,7 @@ def updates(request):
             digests = digests.filter(date__year=year)
             records = records.filter(date__year=year)
             tips = tips.filter(date__year=year)
-            agendas = get_meeting_agendas(year=year)
+            agendas = get_meeting_agendas(date__year=year)
 
         if search:
             press_releases = press_releases.search(search)
