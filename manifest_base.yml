@@ -9,3 +9,4 @@ env:
   DJANGO_SETTINGS_MODULE: fec.settings.production
   NEW_RELIC_CONFIG_FILE: /home/vcap/app/newrelic.ini
   NEW_RELIC_LOG: stdout
+  FEC_TRANSITION_URL: https://transition.fec.gov

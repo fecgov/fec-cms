@@ -3,13 +3,14 @@ import os
 import requests
 from bs4 import BeautifulSoup
 
+from django.conf import settings
 from django.core.management import BaseCommand
 
 from home.models import Page
 
 
 DIGITALGOV_DRAWER = 'main'
-DIGITALGOV_DRAWER_KEY = os.getenv('DIGITALGOV_DRAWER_KEY')
+DIGITALGOV_DRAWER_KEY = settings.FEC_DIGITALGOV_DRAWER_KEY
 
 class Command(BaseCommand):
     help = 'Scrapes pages'

@@ -7,10 +7,10 @@ class TestViews(TestCase):
     self.client = Client()
 
   def test_rad_form(self):
-    resp = self.client.get('/candidate-and-committee-services/question-rad/')
+    resp = self.client.get('/help-candidates-and-committees/question-rad/')
     self.assertEqual(resp.status_code, 200)
     self.assertTemplateUsed(resp, 'home/contact-form.html')
-    self.assertEqual(resp.context['self']['content_section'], 'registration-and-reporting')
+    self.assertEqual(resp.context['self']['content_section'], 'help')
 
   def test_contact_page(self):
     resp = self.client.get('/contact-us/')
@@ -34,4 +34,3 @@ class TestViews(TestCase):
     self.assertEqual(resp.status_code, 200)
     self.assertTemplateUsed(resp, 'home/commissioners.html')
     self.assertEqual(resp.context['self']['content_section'], 'about')
-
