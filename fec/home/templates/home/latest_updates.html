@@ -65,6 +65,7 @@
           <select id="record-categories" name="category">
             <option value="">All</option>
             <option value="O">Open</option>
+            <option value="E">Executive</option>
           </select>        
         {% else %}
         <label class="label" for="empty-select">Subjects</label>
@@ -83,7 +84,7 @@
     <div class="filter">
       <div class="combo combo--filter--mini">
         <label for="search" class="label">Search</label>
-        <input id="search" class="combo__input" name="search" type="text" value="{{ search }}" placeholder="YYYY">
+        <input id="search" class="combo__input" name="search" type="text" value="{{ search }}">
         <button type="submit" class="combo__button button button--standard button--search"><span class="u-visually-hidden">Search</span></button>
       </div>
     </div>
