@@ -13,7 +13,7 @@ from home.models import (
     PressReleasePage,
     RecordPage,
     TipsForTreasurersPage,
-    AgendaPage
+    MeetingPage
 )
 
 
@@ -80,16 +80,16 @@ def get_tips(year=None, search=None):
     return tips
 
 
-def get_meeting_agendas(category_list=None, year=False, search=None):
-    agendas = AgendaPage.objects.live()
+def get_meetings(category_list=None, year=False, search=None):
+    meetings = MeetingPage.objects.live()
 
     if category_list:
         for category in category_list:
-            agendas = agendas.filter(meeting_type=category)
+            meetings = meetings.filter(meeting_type=category)
 
     if year:
-        agendas = agendas.filter(date__year=year)
-    return agendas
+        meetings = meetings.filter(date__year=year)
+    return meetings
 
 
 def updates(request):
@@ -97,7 +97,7 @@ def updates(request):
     records = ''
     press_releases = ''
     tips = ''
-    agendas = ''
+    meetings = ''
 
     # Get values from query
     update_types = request.GET.getlist('update_type', None)
@@ -124,8 +124,8 @@ def updates(request):
             digests = get_digests(year=year, search=search)
         if 'tips-for-treasurers' in update_types:
             tips = get_tips(year=year, search=search)
-        if 'agendas' in update_types:
-            agendas = get_meeting_agendas(category_list=category_list, year=year, search=search)
+        if 'meetings' in update_types:
+            meetings = get_meetings(category_list=category_list, year=year, search=search)
 
     else:
         # Get everything and filter by year if necessary
@@ -133,30 +133,30 @@ def updates(request):
         press_releases = PressReleasePage.objects.live()
         records = RecordPage.objects.live()
         tips = TipsForTreasurersPage.objects.live()
-        agendas = AgendaPage.objects.live()
+        meetings = MeetingPage.objects.live()
 
         if year:
             press_releases = press_releases.filter(date__year=year)
             digests = digests.filter(date__year=year)
             records = records.filter(date__year=year)
             tips = tips.filter(date__year=year)
-            agendas = agendas.filter(date__year=year)
+            meetings = meetings.filter(date__year=year)
 
         if search:
             press_releases = press_releases.search(search)
             digests = digests.search(search)
             records = records.search(search)
             tips = tips.search(search)
-            agendas = agendas.search(search)
+            meetings = meetings.search(search)
 
-    # temporary: agendas are only for logged in admin users
+    # temporary: agenda meetings are only for logged in admin users
     if not request.user.is_authenticated():
-        agendas = ''
+        meetings = ''
 
     # Chain all the QuerySets together
     # via http://stackoverflow.com/a/434755/1864981
     updates = sorted(
-      chain(press_releases, digests, records, tips, agendas),
+      chain(press_releases, digests, records, tips, meetings),
       key=attrgetter('date'),
       reverse=True
     )

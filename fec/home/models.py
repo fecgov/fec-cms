@@ -796,7 +796,7 @@ class ServicesLandingPage(ContentPage, UniqueModel):
         return 'services'
 
 
-class AgendaPage(Page):
+class MeetingPage(Page):
     OPEN = 'O'
     EXECUTIVE = 'E'
     MEETING_TYPE_CHOICES = (
