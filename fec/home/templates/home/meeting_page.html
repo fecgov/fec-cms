@@ -82,6 +82,7 @@
   </div>
 </article>
 
+{% if self.mtg_media %}
 <div class="container">
   <div class="content__section">
     <h3>Recordings</h3>
@@ -98,6 +99,7 @@
      </ul>
   </div>
 </div>
+{% endif %}
 
 {% include 'partials/disclaimer.html' %}
 {% endblock %}
