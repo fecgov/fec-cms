@@ -35,7 +35,7 @@
         <option value="press-release" {% if 'press-release' in update_types %}selected{% endif %}>- Press releases</option>
         <option value="weekly-digest" {% if 'weekly-digest' in update_types %}selected{% endif %}>- Weekly Digests</option>
         {% if request.user.is_authenticated or settings.FEATURES.agendas %}
-        <option value="agendas" {% if 'agendas' in update_types %}selected{% endif %}>Commission meetings</option>
+        <option value="meetings" {% if 'meetings' in update_types %}selected{% endif %}>Commission meetings</option>
         {% endif %}
       </select>
     </div>
@@ -60,7 +60,7 @@
                 {{ cat.1 }}</option>
             {% endfor %}
           </select>
-        {% elif 'agendas' in update_types %}
+        {% elif 'meetings' in update_types %}
           <label class="label" for="record-categories">Meeting type</label>
           <select id="record-categories" name="category">
             <option value="">All meetings</option>
