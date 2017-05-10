@@ -53,7 +53,12 @@
             in: <a href="/updates?update_type={{update.get_update_type|slugify}}&category={{update.category|slugify}}">{{ update.category|capfirst }}</a>
           {% endif %}
           {% if update.get_update_type == 'Commission Meetings' %}
-            in: <a href="/updates?update_type=agendas&category=O">Open meetings</a>
+            in:
+            {% if update.meeting_type == 'O' %}
+            <a href="/updates?update_type=agendas&category=O">Open meetings</a>  
+            {% elif update.meeting_type == 'E' %}
+            <a href="/updates?update_type=agendas&category=E">Executive meetings</a>  
+            {% endif %}
           {% endif %}
         </div>
       {% endif %}
