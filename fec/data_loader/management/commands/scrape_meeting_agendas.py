@@ -98,6 +98,7 @@ Meeting = NamedTuple(
         ("meeting_type", str),            # "open" or "executive"
         ("pdf_disclaimer", str),          # HTML (outer HTML)
         ("posted_date", Date),
+        ("end_meeting_date", Date),
         ("primary_audio_link", Link),
         ("old_meeting_url", str),         # URL
         ("secondary_audio_links", Links), # list (Links)
@@ -287,8 +288,47 @@ def extract_annual_urls(url: str) -> List[str]:
     html = fromstr(requests.get(url).content)
     # links = html.xpath("//ul/li/a[text()[contains(.,'Open Meetings')]]")
     links = xpath(html, "//ul/li/a[text()[contains(.,'Open Meetings')]]")
+
+    # Add remaining Sunshine Act Notice Archive URLs
+    #links.append(
+    #    xpath(html, "//ul/li/a[text()[contains(.,'Sunshine Act Notices of')]]")
+    #)
+
     urls = [urljoin(url, hattr(link, "href")) for link in links]
     return urls
+
+def parse_sunshine_meeting_row(row: HtmlElement, urls_to_change: dict) -> Optional [Meeting]:
+    cells = xpath(row, "./td")
+
+    # We know that these are not meeting metadata:
+    if len(cells) == 1 and "adobe reader" in htext(row).lower():
+        return None
+    elif len(cells) == 2 and "approved minutes" in htext(row).lower():
+        return None
+
+    if len(cells) == 2:
+        notice, amended_notices = cells
+    elif len(cells) == 1:
+        notice = cells
+        amended_notices = None
+    else:
+        # We're not expecting this
+        raise
+
+    # Create a default meeting:
+    meeting = make_meeting()
+
+    # Currently we can assume it's an open meeting:
+    meeting = meeting._replace(meeting_type="executive")
+
+    meeting = parse_sunshine_meeting_cell(row, notice, meeting)
+    meeting = parse_sunshine_meeting_cell(row, amended_notices, meeting)
+
+    # if "20160211" in meeting.old_meeting_url:
+    #meeting = parse_meeting_page(meeting, urls_to_change)
+    # TODO: Check if there are any sunshine meetings to change.
+
+    return meeting
 
 
 def parse_meeting_row(row: HtmlElement, urls_to_change: dict) -> Optional [Meeting]:
@@ -522,43 +562,117 @@ def parse_meeting_sunshine_cell(row: HtmlElement, cell: HtmlElement,
     return mtg
 
 
+def parse_sunshine_meeting_cell(row: HtmlElement, cell: HtmlElement,
+                                mtg: Meeting) -> Meeting:
+    if cell is not None and len(xpath(cell, ".//a")) > 0:
+        # This is messed up... an anchor element with an empty HREF attribute
+        # will apparently return the URL of the current document as its HREF
+        # while being processed by lxml here.  So, we must account for that
+        # because there are indeed empty links in the HTML like this:
+        # <a href></a>
+
+        # TODO:  Figure out how to account for this and ignore empty anchor
+        # elements.  xpath(cell, ".//a[@href!='']") should work, but didn't
+        # seem to in preliminary tests.
+        for sunshine_link in xpath(cell, ".//a"):
+            text = htext(sunshine_link)
+            url = hattr(sunshine_link, "href")
+            title = hattr(sunshine_link, "title", "")
+            s_link = Link(text=text, title=title, url=url)
+            s_links = mtg.sunshine_act_links + [s_link]
+
+            # TODO:  Account for end dates?
+            #import pdb
+            #pdb.set_trace()
+            mtg = mtg._replace(
+                posted_date=extract_date(sunshine_link),
+                sunshine_act_links=s_links
+            )
+
+    # deduped = set([_.url for _ in mtg.sunshine_act_links])
+
+    # if len(mtg.sunshine_act_links) > len(deduped):
+    #     # We have more than one link to the same thing for the Sunshine Act
+    #     # notices.
+    #     # We group the links by URL and then from each group select the one
+    #     # with the most text associated with it, as our best guess.
+    #     by_links = defaultdict(list)  # type: Dict[str, list]
+    #     for link in mtg.sunshine_act_links:
+    #         by_links[link.url].append(link)
+    #     unique_links = []
+    #     for url in by_links:
+    #         links = by_links[url]
+    #         # Assume the longest text is the best:
+    #         best = max(links, key=lambda _: len(_.text.strip()))
+    #         unique_links.append(best)
+    #     mtg = mtg._replace(sunshine_act_links=unique_links)
+
+    return mtg
+
+
 def extract_meeting_metadata(url: str, broken_links: List,
                              urls_to_change: dict) -> Tuple[Meetings, List]:
     """
     This will get as much of the metadata as possible about meetings from the
     annual pages.
     """
-    exprs = [
+    open_meeting_exprs = [
         "//table[@class='agenda_table'][@summary='Data table']",
         "//table[@summary='Data table']",
-        "//table[@border='0'][@width='60%']"
+    ]
+
+    executive_meeting_exprs = [
+        "//table[@class='agenda_table'][@summary='Single Column Data Table of Executive Section Sunshine Act Notices by Meeting Date']",
+        "//table[@summary='Single Column Data Table of Executive Section Sunshine Act Notices by Meeting Date']",
+        "//table[@border='0'][@width='60%']",
     ]
 
     html = fromstr(requests.get(url).content)
     tables, count = [], 0  # type: List[HtmlElement], int
-    while len(tables) != 1 and count < len(exprs):
-        tables = xpath(html, exprs[count])
+
+    while len(tables) != 1 and count < len(open_meeting_exprs):
+        tables += xpath(html, open_meeting_exprs[count])
         count = count + 1
+
+    count = 0  # Reset the count for the next table we're looking for.
+
+    while len(tables) != 2 and count < len(executive_meeting_exprs):
+        tables += xpath(html, executive_meeting_exprs[count])
+        count = count + 1
+
     if not len(tables):     # Work around this URL going down randomly
                             # http://www.fec.gov/agenda/2010/agendas2010.shtml
-        print("%s not working" % url)
+        print("No tables found; %s not working" % url)
         return ([], broken_links)
-    if not len(tables) == 1:
-        import ipdb
-        ipdb.set_trace()
-    table, broken_links = fix_urls(tables[0], url, broken_links,
-                                   urls_to_change)
+    if not len(tables) == 2:
+        print("%s tables found; %s not working" % (len(tables), url))
+        return ([], broken_links)
 
-    all_rows = xpath(table, ".//tr")
-    # We don't want header rows:
-    rows = [r for r in all_rows if "th" not in
-            [e.tag for e in r.iterchildren()]]
-    meetings = []
-    for row in rows:
-        if row is not None and htext(row).strip():
-            optional_meeting = parse_meeting_row(row, urls_to_change)
-            if optional_meeting is not None:
-                meetings.append(optional_meeting)
+    for i, table in enumerate(tables):
+        table, broken_links = fix_urls(
+            table,
+            url,
+            broken_links,
+            urls_to_change
+        )
+
+        all_rows = xpath(table, ".//tr")
+        # We don't want header rows:
+        rows = [r for r in all_rows if "th" not in
+                [e.tag for e in r.iterchildren()]]
+        meetings = []
+        for row in rows:
+            if row is not None and htext(row).strip():
+                if i == 0:
+                    optional_meeting = parse_meeting_row(row, urls_to_change)
+                else:
+                    optional_meeting = parse_sunshine_meeting_row(
+                        row,
+                        urls_to_change
+                    )
+
+                if optional_meeting is not None:
+                    meetings.append(optional_meeting)
     return (meetings, broken_links)
 
 
@@ -1098,7 +1212,21 @@ def extract_date(a_el: HtmlElement) -> Date:
                         original=text, source=name)
         elif "notice" in name_base:
             date = name_base[6:]
-            dt = datetime.strptime(date, "%Y-%m-%d")
+
+            try:
+                dt = datetime.strptime(date, "%Y-%m-%d")
+            except ValueError:
+                # This is accounting for the sunshine notice files.
+                try:
+                    dt = datetime.strptime(date, "%Y%m%d")
+                except ValueError:
+                    # This accounts for files with an "a", "b", etc., at the
+                    # end of their dates.
+                    dt = datetime.strptime(date[:-1], "%Y%m%d")
+            except:
+                import pdb
+                pdb.set_trace()
+
             return Date(datetime=dt, iso8601=dt.strftime("%Y-%m-%d"),
                         original=text, source=name)
         else:
@@ -1266,6 +1394,7 @@ def make_meeting() -> Meeting:
         meeting_type="",
         pdf_disclaimer="",
         posted_date=None,
+        end_meeting_date=None,
         primary_audio_link=None,
         old_meeting_url="",
         secondary_audio_links=[],
