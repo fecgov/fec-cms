@@ -24,15 +24,13 @@
   <div class="container">
      <header class="heading--main heading--with-date">
         <ul class="tags">
-          <li class="tag tag--secondary t-upper">
-            Commission Meetings</li>
+          <li class="tag tag--secondary t-upper">Commission Meetings</li>
         </ul>
         <div class="row">
           {% spaceless %}{# for inline blocks #}
           <h1 class="heading__left">{% formatted_title self %}</h1>
           <div class="heading__right">
-            <span class="t-sans">{{ self.mtg_date|date:'F j, Y' }}</span><br />
-            <span class="t-sans">{{ self.mtg_time }}</span>
+            <span class="t-sans">{{ self.date|date:'F j, Y' }}</span><br />
           </div>
           {% endspaceless %}
         </div>
@@ -81,28 +79,36 @@
     </div>
   </div>
 </article>
-<div class="slab slab--neutral u-no-print">
-  <div class="container">
-    <div class="content__section">
-      <h3>Meeting Media</h3>
-        <ul class="list--border list--extra-spacious">
-          {% for block in self.mtg_media %}
-            {% if block.block_type == "full_video_url" %}
-              <li><a href="{{ block.value }}">Video of entire meeting</a></li>
-            {% elif block.block_type == "full_audio" %}
-              <li>Audio of Entire Meeting:
-                  <audio controls>
-                   <source src="{{block.value.url}}" type="audio/mpeg">
-                   Your browser does not support the audio element Download below.
-                  </audio>
-               </li>
-             {% elif block.block_type == "mtg_transcript" %}
-               <li><a href="{{ block.value.url }}">{{ block.value.title }}</a></li>
-             {% endif %}
-          {% endfor %}
-         </ul>
-    </div>
+
+<div class="container">
+  <div class="content__section">
+    <h3>Recordings from this meeting</h3>
+    <ul class="list--border list--extra-spacious">
+      {% for block in self.mtg_media %}
+        {% if block.block_type == "full_video_url" %}
+          <li><a href="{{ block.value }}">Video of entire meeting</a></li>
+        {% elif block.block_type == "full_audio" %}
+          <li>Audio of Entire Meeting:
+              <audio controls>
+               <source src="{{block.value.url}}" type="audio/mpeg">
+               Your browser does not support the audio element Download below.
+              </audio>
+           </li>
+         {% elif block.block_type == "mtg_transcript" %}
+           <li><a href="{{ block.value.url }}">{{ block.value.title }}</a></li>
+         {% endif %}
+      {% endfor %}
+     </ul>
   </div>
 </div>
+
+{% comment %}
+<div class="slab slab--neutral u-no-print">
+  <div class="container">
+    Open meetings happening soon
+  </div>
+</div>
+{% endcomment %}
+
 {% include 'partials/disclaimer.html' %}
 {% endblock %}
