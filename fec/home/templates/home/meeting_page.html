@@ -40,10 +40,11 @@
     <p>Members of the public can attend any open meeting or hearing in person. Open meetings are also streamed live online. To attend in person, please bring a photo ID and be prepared to go through a security check. After security, attendees are escorted to the Commission's hearing room.</p>
 
     <div class="main__content">
-      <div>
+      {% if self.imported_html %}
+      <div class="u-padding--bottom">
         {% include_block self.imported_html  %}
       </div>
-
+      {% else %}
       <ol class="list--numbered--alt">
       {% for block in self.agenda %}
         {% if block.block_type == "agenda_item" %}
@@ -78,20 +79,45 @@
          </li>
         {% endfor %}
       </ol>
+      {% endif %}
+
+      {% if self.approved_minutes_link %}
+      <h2>Minutes for this meeting</h2>
+      <p>
+      Approved on {{ self.approved_minutes_date|date:'F j, Y' }}
+      <span class="u-padding--left icon-document--inline--left"></span>
+      <a href="self.approved_minutes_link">Agenda document</a>
+      <br>
+      {% if self.draft_minutes_links %}
+      Draft minutes
+      <span class="u-padding--left icon-document--inline--left"></span>
+      <a href="self.draft_minutes_links">Agenda document</a>
+      {% endif %}
+      </p>
+      {% endif %}
 
       {% if self.mtg_media %}
       <h3>Recordings</h3>
-      <ul class="list--border list--extra-spacious">
+      <div class="grid grid--4-wide u-padding--bottom">
         {% for block in self.mtg_media %}
           {% if block.block_type == "full_video_url" %}
-            <li><a href="{{ block.value }}">Full meeting video</a></li>
-          {% elif block.block_type == "full_audio" %}
-            <li><a href="{{ block.value.url }}">Full meeting audio</a></li>
-           {% elif block.block_type == "mtg_transcript" %}
-             <li><a href="{{ block.value.url }}">{{ block.value.title }}</a></li>
-           {% endif %}
+            <div class="grid__item">
+              <img src={% static 'img/thumbnail--video.png' %} alt="Video"><br>
+              <a href="{{ block.value }}">Full meeting video</a>
+            </div>
+          {% elif block.block_type == "full_audio_url" %}
+            <div class="grid__item">
+              <img src={% static 'img/thumbnail--audio.png' %} alt="Audio"><br>
+              <a href="{{ block.value }}">Full meeting audio</a>
+            </div>
+          {% elif block.block_type == "mtg_transcript_url" %}
+            <div class="grid__item">
+              <img src={% static 'img/thumbnail--captions.png' %} alt="Captions"><br>
+              <a href="{{ block.value }}">Full meeting captions</a>
+            </div>
+          {% endif %}
         {% endfor %}
-      </ul>
+      </div>
       {% endif %}
 
       {% if self.sunshine_act_links %}
