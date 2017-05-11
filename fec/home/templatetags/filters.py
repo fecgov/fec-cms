@@ -5,6 +5,7 @@ from django import template
 from django.utils.html import conditional_escape
 from django.utils.safestring import mark_safe
 from django.utils.html import format_html
+from django.contrib.staticfiles.templatetags.staticfiles import static
 from wagtail.wagtailcore.models import Page
 
 register = template.Library()
@@ -87,3 +88,25 @@ def splitlines(value):
     return value.splitlines()
 
 
+@register.filter(name='get_social_image')
+def get_social_image(content_section):
+    """
+    Returns a path to a social iamge for the given content section
+    """
+    if content_section in ['legal', 'help']:
+        return static('img/social/{}.png'.format(content_section))
+    else:
+        return static('img/social/general.png')
+
+
+@register.filter(name='get_touch_icon')
+def get_touch_icon(content_section, dimension):
+    """
+    Returns a path to a touch icon for the given dimension and content_section
+    """
+    print('====')
+    print(content_section)
+    if content_section in ['legal', 'help']:
+        return static('img/favicon/{}/apple-touch-icon-{}.png'.format(content_section, dimension))
+    else:
+        return static('img/favicon/general/apple-touch-icon-{}.png'.format(dimension))
