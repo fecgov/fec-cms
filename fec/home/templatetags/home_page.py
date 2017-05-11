@@ -5,6 +5,7 @@ from django.conf import settings
 from operator import attrgetter
 from itertools import chain
 from datetime import date
+from home.models import GenericUpdate
 from home.models import DigestPage
 from home.models import RecordPage
 from home.models import PressReleasePage
@@ -15,12 +16,19 @@ register = template.Library()
 
 @register.inclusion_tag('partials/home-page-updates.html')
 def home_page_updates():
-    press_releases = PressReleasePage.objects.live().filter(homepage_hide=False).order_by('-date')[:4]
-    records = RecordPage.objects.live().filter(homepage_hide=False).order_by('-date')[:4]
+    generic_updates = GenericUpdate.objects.live().filter(homepage_expiration__gte=date.today())
+
+    # get latest press releases, records, tips  that are not pinned
+    press_releases = PressReleasePage.objects.live().filter(homepage_hide=False, homepage_pin=False).order_by('-date')[:4]
+    records = RecordPage.objects.live().filter(homepage_hide=False, homepage_pin=False).order_by('-date')[:4]
     tips = TipsForTreasurersPage.objects.live().filter().order_by('-date')[:4]
 
-    # combine press release, records and tips queryset
-    updates = chain(press_releases, records, tips)
+    # get ALL press releases and records that are pinned
+    press_releases_pinned = PressReleasePage.objects.live().filter(homepage_hide=False, homepage_pin=True).order_by('-date')
+    records_pinned = RecordPage.objects.live().filter(homepage_hide=False, homepage_pin=True).order_by('-date')
+
+    # combine all the querysets
+    updates = chain(press_releases, records, tips, press_releases_pinned, records_pinned)
 
     # remove homepage pin if expiration date has passed
     updates_unpin_expired = []
@@ -40,10 +48,14 @@ def home_page_updates():
             update.homepage_pin = False
         updates_unpin_expired.append(update)
 
+    # sort the pruned queryset by date first, then sort pinned posts up top
     updates_sorted_by_date = sorted(updates_unpin_expired, key=lambda x: x.date, reverse=True)
     updates_sorted_by_homepage_pin = sorted(updates_sorted_by_date, key=lambda x: x.homepage_pin, reverse=True)
 
-    return {'updates': updates_sorted_by_homepage_pin[:4]}
+    return {
+        'generic_updates': generic_updates,
+        'updates': updates_sorted_by_homepage_pin[:4]
+    }
 
 @register.inclusion_tag('partials/candidate_committee_services.html')
 def candidate_committee_services():

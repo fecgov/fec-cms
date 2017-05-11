@@ -14,12 +14,8 @@ var feedback = require('fec-style/js/feedback');
 var skipNav = require('fec-style/js/skip-nav');
 var siteNav = require('fec-style/js/site-nav');
 var dropdown = require('fec-style/js/dropdowns');
-var FilterPanel = require('fec-style/js/filter-panel').FilterPanel;
-var filterTags = require('fec-style/js/filter-tags');
-var stickyBar = require('fec-style/js/sticky-bar');
 var toc = require('fec-style/js/toc');
 var typeahead = require('fec-style/js/typeahead');
-var Search = require('fec-style/js/search');
 var SiteOrientation = require('fec-style/js/site-orientation');
 var helpers = require('fec-style/js/helpers');
 
@@ -27,15 +23,7 @@ var helpers = require('fec-style/js/helpers');
 window.$ = window.jQuery = $;
 
 var Sticky = require('component-sticky');
-var calendar = require('./calendar');
-var calendarHelpers = require('./calendar-helpers');
 var FormNav = require('./form-nav').FormNav;
-
-var legal = require('./legal');
-var upcomingEvents = require('./upcoming-events');
-
-// accessible tabs for alt sidebar
-require('./vendor/tablist').init();
 
 $(document).ready(function() {
 
@@ -83,51 +71,13 @@ $(document).ready(function() {
       }
     });
 
-  // Initialize sticky bar elements
-  $('.js-sticky-bar').each(function() {
-    new stickyBar.StickyBar(this);
-  });
-
   // Initialize checkbox dropdowns
   $('.js-dropdown').each(function() {
     new dropdown.Dropdown(this);
   });
 
-  /* Homepage Upcoming Events */
-
-  // - What's Happening section
-  new upcomingEvents.UpcomingEvents();
-
-  // - Candidate and committee support
-  new upcomingEvents.UpcomingDeadlines();
-
   // Initialize feedback widget
-  var feedbackWidget = new feedback.Feedback(window.FEC_APP_URL + '/issue/');
-
-  // Initialize legal page
-  new legal.Legal(feedbackWidget, '#share-feedback-link');
-
-  // Initialize filter tags
-  var $tagList = new filterTags.TagList({
-    resultType: 'events',
-    emptyText: 'all events',
-  }).$body;
-  $('.js-filter-tags').prepend($tagList);
-
-  // Initialize filters
-  if ($('.filters').length > 0) {
-    var filterPanel = new FilterPanel();
-
-    // Initialize calendar
-    new calendar.Calendar({
-      selector: '#calendar',
-      download: '#calendar-download',
-      subscribe: '#calendar-subscribe',
-      url: calendarHelpers.getUrl(['calendar-dates']),
-      exportUrl: calendarHelpers.getUrl(['calendar-dates', 'export']),
-      filterPanel: filterPanel,
-    });
-  }
+  new feedback.Feedback(window.FEC_APP_URL + '/issue/');
 
   if (document.querySelector('.js-form-nav')) {
     var formNav = document.querySelector('.js-form-nav');
@@ -141,9 +91,6 @@ $(document).ready(function() {
 
   // Initialize CFD home typeahead
   new typeahead.Typeahead($('.js-typeahead'), 'allData', window.FEC_APP_URL + '/');
-
-  // Initialize search toggle
-  new Search($('.js-search'));
 
   // For any link that should scroll to a section on the page apply .js-scroll to <a>
   $('.js-scroll').on('click', function(e) {

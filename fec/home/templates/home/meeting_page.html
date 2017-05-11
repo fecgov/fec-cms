@@ -1,0 +1,105 @@
+{% extends "base.html" %}
+{% load wagtailcore_tags %}
+{% load staticfiles %}
+{% load filters %}
+{% load updates %}
+{% block body_class %}template-{{ self.get_verbose_name | slugify }}{% endblock %}
+
+{% block content %}
+<nav class="page-header page-header--secondary">
+  <ul class="breadcrumbs">
+    <li class="breadcrumbs__item"><a href="/" class="breadcrumbs__link" rel="Home">Home</a></li>
+    <li class="breadcrumbs__item">
+      <span class="breadcrumbs__separator">›</span>
+      <a class="breadcrumbs__link" href="/updates?update_type=agendas">Meeting agendas</a>
+    </li>
+    <li class="breadcrumbs__item breadcrumbs__item--current">
+      <span class="breadcrumbs__separator">›</span>
+      <span>{{ self.title }}</span>
+    </li>
+  </ul>
+</nav>
+
+<article class="main">
+  <div class="container">
+    <header class="heading--main heading--with-date">
+      <ul class="tags">
+        <li class="tag tag--secondary t-upper">Commission Meetings</li>
+      </ul>
+      <div class="row">
+        {% spaceless %}{# for inline blocks #}
+        <h1 class="heading__left">{% formatted_title self %}</h1>
+        <div class="heading__right">
+          <span class="t-sans">{{ self.date|date:'F j, Y' }}</span><br />
+        </div>
+        {% endspaceless %}
+      </div>
+    </header>
+
+    <p>The Commission considers new regulations, advisory opinions and other public matters at open meetings, which are typically held at FEC headquarters on Thursdays at 10:00am.</p>
+    <p>Members of the public can attend any open meeting or hearing in person. Open meetings are also streamed live online. To attend in person, please bring a photo ID and be prepared to go through a security check. After security, attendees are escorted to the Commission's hearing room.</p>
+
+    <div class="main__content">
+      <div>
+        {% include_block self.imported_html  %}
+      </div>
+
+      <ol class="list--numbered--alt">
+      {% for block in self.agenda %}
+        {% if block.block_type == "agenda_item" %}
+        <li>
+          {% for subblock in block.value %}
+            {% if subblock.block_type == "item_title" %}
+              <h2>{{subblock.value}}</h2>
+              <ul class="list--extra-spacious u-padding--bottom">
+              {% elif subblock.block_type == "item_audio" %}
+                <li>
+                   <audio controls>
+                     <source src="{{subblock.value.url}}" type="audio/mpeg">
+                     Your browser does not support the audio element Download below.
+                   </audio>
+                   <a href="{{subblock.value.url}}" target="_blank"> Download Audio</a>
+                 </li>
+              {% elif subblock.block_type == "item_text" %}
+                 <li>{{subblock.value}}</li>
+              {% elif subblock.block_type == "mtg_doc" %}
+                 <li><a href="{{subblock.value.mtg_doc_upload.url}}">{{subblock.value.mtg_doc_upload.title}}</a><br />
+                  {% ifequal subblock.value.submitted_late True %}
+                    <br>(Submitted Late)
+                  {% endifequal %}
+                  {% ifequal subblock.value.heldover True %}
+                    <br>(Heldover from {{subblock.value.heldover_from}} meeting)
+                  {% endifequal %}
+                 </li>
+              {% endif %}
+            {% endfor %}
+            </ul>
+          {% endif %}
+         </li>
+        {% endfor %}
+      </ol>
+    </div>
+  </div>
+</article>
+
+{% if self.mtg_media %}
+<div class="container">
+  <div class="content__section">
+    <h3>Recordings</h3>
+    <ul class="list--border list--extra-spacious">
+      {% for block in self.mtg_media %}
+        {% if block.block_type == "full_video_url" %}
+          <li><a href="{{ block.value }}">Full meeting video</a></li>
+        {% elif block.block_type == "full_audio" %}
+          <li><a href="{{ block.value.url }}">Full meeting audio</a></li>
+         {% elif block.block_type == "mtg_transcript" %}
+           <li><a href="{{ block.value.url }}">{{ block.value.title }}</a></li>
+         {% endif %}
+      {% endfor %}
+     </ul>
+  </div>
+</div>
+{% endif %}
+
+{% include 'partials/disclaimer.html' %}
+{% endblock %}

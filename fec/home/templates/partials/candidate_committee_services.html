@@ -1,3 +1,4 @@
+{% with '/calendar/?category=report-E&category=report-M&category=report-Q&category=report-MY&category=report-YE' as calendar_url %}
   <section id="homepage-help-candidate-and-committees" class="slab tab-interface">
     <div class="container">
       <h1 class="u-padding--bottom"><a href="/help-candidates-and-committees/">Help for candidates and committees</a></h1>
@@ -65,8 +66,8 @@
               <div class="grid__item">
                 <aside class="card card--horizontal card--secondary">
                   <h5 class="icon-heading--calendar-circle u-no-margin">Upcoming deadlines</h5>
-                  <div class="card__content--full-width js-homepage-upcoming-deadlines">
-                    <p></p>
+                  <div class="card__content--full-width">
+                    <p>View upcoming <a href="{{ calendar_url }}">dates and deadlines</a>.</p>
                   </div>
                 </aside>
               </div>
@@ -109,8 +110,8 @@
               <div class="grid__item">
                 <aside class="card card--horizontal card--secondary">
                   <h5 class="icon-heading--calendar-circle u-no-margin">Upcoming deadlines</h5>
-                  <div class="card__content--full-width js-homepage-upcoming-deadlines">
-                    <p></p>
+                  <div class="card__content--full-width">
+                    <p>View upcoming <a href="{{ calendar_url }}">dates and deadlines</a>.</p>
                   </div>
                 </aside>
               </div>
@@ -118,7 +119,7 @@
                 <aside class="card card--horizontal card--secondary">
                   <h5 class="icon-heading--training-circle u-no-margin">Featured training</h5>
                   <div class="card__content--full-width">
-                    <p>Watch a <a href="https://www.youtube.com/watch?v=AcJ52LuEhEw">video about SSF registration</a>.</p>
+                    <p>Watch a <a href="https://youtu.be/ZCHSFPUxat8">video about SSF registration</a>.</p>
                   </div>
                 </aside>
               </div>
@@ -152,8 +153,8 @@
               <div class="grid__item">
                 <aside class="card card--horizontal card--secondary">
                   <h5 class="icon-heading--calendar-circle u-no-margin">Upcoming deadlines</h5>
-                  <div class="card__content--full-width js-homepage-upcoming-deadlines">
-                    <p></p>
+                  <div class="card__content--full-width">
+                    <p>View upcoming <a href="{{ calendar_url }}">dates and deadlines</a>.</p>
                   </div>
                 </aside>
               </div>
@@ -161,7 +162,7 @@
                 <aside class="card card--horizontal card--secondary">
                   <h5 class="icon-heading--training-circle u-no-margin">Featured training</h5>
                   <div class="card__content--full-width">
-                    <p>Watch a <a href="https://www.youtube.com/watch?v=AcJ52LuEhEw">video about PAC registration</a>.</p>
+                    <p>Watch a <a href="https://youtu.be/pEDbBXRr5BY">video about PAC registration</a>.</p>
                   </div>
                 </aside>
               </div>
@@ -196,8 +197,8 @@
               <div class="grid__item">
                 <aside class="card card--horizontal card--secondary">
                   <h5 class="icon-heading--calendar-circle u-no-margin">Upcoming deadlines</h5>
-                  <div class="card__content--full-width js-homepage-upcoming-deadlines">
-                    <p></p>
+                  <div class="card__content--full-width">
+                    <p>View upcoming <a href="{{ calendar_url }}">dates and deadlines</a>.</p>
                   </div>
                 </aside>
               </div>
@@ -205,7 +206,7 @@
                 <aside class="card card--horizontal card--secondary">
                   <h5 class="icon-heading--training-circle u-no-margin">Featured training</h5>
                   <div class="card__content--full-width">
-                    <p>Watch a <a href="https://www.youtube.com/watch?v=AcJ52LuEhEw">video about political party registration</a>.</p>
+                    <p>Watch a <a href="https://youtu.be/yRPRsREca_E">video about political party registration</a>.</p>
                   </div>
                 </aside>
               </div>
@@ -224,3 +225,4 @@
       </div>
     </div>
   </section>
+{% endwith %}

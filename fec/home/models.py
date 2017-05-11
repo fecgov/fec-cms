@@ -54,6 +54,7 @@ stream_factory = functools.partial(
     ],
 )
 
+
 class UniqueModel(models.Model):
     """Abstract base class for unique pages."""
     class Meta:
@@ -63,6 +64,7 @@ class UniqueModel(models.Model):
         model = self.__class__
         if model.objects.count() > 0 and self.id != model.objects.get().id:
             raise ValidationError('Only one {0} allowed'.format(self.__name__))
+
 
 class ContentPage(Page):
     """Abstract base class for simple content pages."""
@@ -102,6 +104,7 @@ def log_person(sender, **kwargs):
     print('TEST')
 '''
 
+
 @receiver(post_save, sender=User)
 @receiver(pre_delete, sender=User)
 def log_user_save(sender, **kwargs):
@@ -132,6 +135,7 @@ def log_user_save(sender, **kwargs):
                                                                        kwargs.get('instance')))
     audit_log = AuditLog() #currently not used, will attempt to use for future PR adding admin logging
 
+
 @receiver(pre_delete, sender=PageRevision)
 @receiver(post_save, sender=PageRevision)
 def log_revisions(sender, **kwargs):
@@ -142,8 +146,8 @@ def log_revisions(sender, **kwargs):
         logger.info("User not found")
     logger.info("page was modified: {0} by user {1}".format(kwargs.get('instance'), user.get_username()))
 
+
 def user_groups_changed(sender, **kwargs):
-    #print(kwargs)
     group_map = {1: 'Moderators', 2: 'Editors'}
     action_map = {'post_add': 'added', 'post_remove': 'removed'}
     if kwargs.get('action').split('_')[0] == 'post':
@@ -156,26 +160,17 @@ def user_groups_changed(sender, **kwargs):
 
 m2m_changed.connect(user_groups_changed, sender=User.groups.through)
 
+
 class HomePage(ContentPage, UniqueModel):
     """Unique home page."""
     @property
     def content_section(self):
         return ''
 
+
 class LandingPage(ContentPage):
     template = 'home/registration-and-reporting/landing_page.html'
 
-class ChecklistPage(ContentPage):
-    template = 'home/registration-and-reporting/checklist_page.html'
-
-class SSFChecklistPage(ContentPage):
-    template = 'home/registration-and-reporting/ssf_checklist_page.html'
-
-class PartyChecklistPage(ContentPage):
-    template = 'home/registration-and-reporting/party_checklist_page.html'
-
-class NonconnectedChecklistPage(ContentPage):
-    template = 'home/registration-and-reporting/nonconnected_checklist_page.html'
 
 class Author(models.Model):
     name = models.CharField(max_length=255)
@@ -293,7 +288,7 @@ class RecordPage(ContentPage):
             FieldPanel('homepage_pin_expiration'),
             FieldPanel('homepage_hide')
         ],
-        heading="Home page feed"
+            heading="Home page feed"
         )
     ]
 
@@ -377,7 +372,6 @@ class PressReleasePage(ContentPage):
         PageChooserPanel('read_next'),
     ]
 
-
     promote_panels = Page.promote_panels + [
         MultiFieldPanel([
             FieldPanel('homepage_pin'),
@@ -385,7 +379,7 @@ class PressReleasePage(ContentPage):
             FieldPanel('homepage_pin_expiration'),
             FieldPanel('homepage_hide')
         ],
-        heading="Home page feed"
+            heading="Home page feed"
         )
     ]
 
@@ -409,9 +403,11 @@ class PressReleasePage(ContentPage):
     def no_boilerplate(self):
         return self.date.year >= 2016
 
+
 def get_previous_tips_page():
     next_tip = TipsForTreasurersPage.objects.order_by('-date', '-pk').first()
     return next_tip.pk if next_tip else None
+
 
 class TipsForTreasurersPage(ContentPage):
     date = models.DateField(default=datetime.date.today)
@@ -440,7 +436,8 @@ class TipsForTreasurersPage(ContentPage):
     template = 'home/updates/tips_for_treasurers.html'
     content_panels = ContentPage.content_panels + [
         FieldPanel('date'),
-        PageChooserPanel('read_next')    ]
+        PageChooserPanel('read_next')
+        ]
 
     @property
     def get_update_type(self):
@@ -453,6 +450,18 @@ class TipsForTreasurersPage(ContentPage):
     @property
     def get_author_office(self):
         return 'Information Division'
+
+
+class GenericUpdate(Page):
+    # Generic update (pin) for Home Page - What's Happening section
+    link = models.URLField(blank=True)
+    homepage_expiration = models.DateField(blank=True, null=True)
+
+    content_panels = Page.content_panels + [
+        FieldPanel('link'),
+        FieldPanel('homepage_expiration'),
+    ]
+
 
 class CustomPage(Page):
     """Flexible customizable page."""
@@ -489,8 +498,8 @@ class CustomPage(Page):
                 StreamFieldPanel('sidebar'),
                 StreamFieldPanel('record_articles'),
             ],
-            heading = "Sidebar",
-            classname = "collapsible"
+            heading="Sidebar",
+            classname="collapsible"
         )
     ]
 
@@ -514,6 +523,7 @@ class PressLandingPage(Page):
         StreamFieldPanel('contact_intro'),
     ]
 
+
 class DocumentPage(ContentPage):
     date = models.DateField(default=datetime.date.today)
     year_only = models.BooleanField(default=False)
@@ -532,7 +542,7 @@ class DocumentPage(ContentPage):
 
     @property
     def display_date(self):
-    # Some documents should only show the year, other show the month and year
+        # Some documents should only show the year, other show the month and year
         if self.year_only:
             return self.date.year
         else:
@@ -540,8 +550,9 @@ class DocumentPage(ContentPage):
 
     @property
     def extension(self):
-    # Return the file extension of file_url
+        # Return the file extension of file_url
         return self.file_url.rsplit('.', 1)[1].upper()
+
 
 class DocumentFeedPage(ContentPage):
     subpage_types = ['DocumentPage', 'ResourcePage']
@@ -563,6 +574,7 @@ class DocumentFeedPage(ContentPage):
     def category_filters(self):
         return constants.report_category_groups[self.category]
 
+
 class ReportsLandingPage(ContentPage, UniqueModel):
     subpage_types = ['DocumentFeedPage']
     intro = StreamField([
@@ -582,6 +594,7 @@ class ReportsLandingPage(ContentPage, UniqueModel):
     def content_section(self):
         return ''
 
+
 class AboutLandingPage(Page):
     hero = stream_factory(null=True, blank=True)
     sections = StreamField([
@@ -594,6 +607,7 @@ class AboutLandingPage(Page):
         StreamFieldPanel('hero'),
         StreamFieldPanel('sections')
     ]
+
 
 class CommissionerPage(Page):
     first_name = models.CharField(max_length=255, default='', blank=False)
@@ -664,6 +678,7 @@ class CommissionerPage(Page):
 
         return context
 
+
 class CollectionPage(Page):
     body = stream_factory(null=True, blank=True)
     sidebar_title = models.CharField(max_length=255, null=True, blank=True)
@@ -680,7 +695,7 @@ class CollectionPage(Page):
                                         (True, 'Show committee search box'),
                                         (False, 'Do not show committee search box')
                                     ])
-    content_panels =  Page.content_panels + [
+    content_panels = Page.content_panels + [
         StreamFieldPanel('body'),
         FieldPanel('sidebar_title'),
         FieldPanel('show_search'),
@@ -688,8 +703,9 @@ class CollectionPage(Page):
         StreamFieldPanel('sections'),
     ]
 
+
 class ResourcePage(Page):
-    """Class for pages that include a side nav, multiple sections and citations"""
+    # Class for pages that include a side nav, multiple sections and citations
     date = models.DateField(default=datetime.date.today)
     intro = StreamField([
         ('paragraph', blocks.RichTextBlock())
@@ -737,12 +753,15 @@ class ResourcePage(Page):
     def display_date(self):
         return self.date.strftime('%B %Y')
 
+
 class LegalResourcesLandingPage(ContentPage, UniqueModel):
     subpage_types = ['ResourcePage']
     template = 'home/legal/legal_resources_landing.html'
+
     @property
     def content_section(self):
         return 'legal-resources'
+
 
 class ServicesLandingPage(ContentPage, UniqueModel):
     """
@@ -777,9 +796,29 @@ class ServicesLandingPage(ContentPage, UniqueModel):
         return 'services'
 
 
-class AgendaPage(Page):
+class MeetingPage(Page):
+    OPEN = 'O'
+    EXECUTIVE = 'E'
+    MEETING_TYPE_CHOICES = (
+        (OPEN, 'Open'),
+        (EXECUTIVE, 'Executive'),
+    )
+
     date = models.DateField(default=datetime.date.today)
+    end_date = models.DateField(null=True, blank=True)
     time = models.TimeField(null=True, blank=True)
+    meeting_type = models.CharField(
+        max_length=2,
+        choices=MEETING_TYPE_CHOICES,
+        default=OPEN
+    )
+    draft_minutes_links = models.TextField(
+        blank=True, help_text='URLs separated by a newline')
+    approved_minutes_date = models.DateField(null=True, blank=True)
+    approved_minutes_link = models.URLField(blank=True)
+    sunshine_act_links = models.TextField(
+        blank=True, help_text='URLs separated by a newline')
+    live_video_url = models.URLField(blank=True)
 
     imported_html = StreamField(
         [('html_block', blocks.RawHTMLBlock())],
@@ -790,33 +829,39 @@ class AgendaPage(Page):
     mtg_media = StreamField([
         ('full_video_url', blocks.TextBlock(required=False)),    # 'video_link'
         ('full_audio_url', blocks.TextBlock(required=False)),    # 'primary_audio_link'
-        ('mtg_transcript_url', blocks.TextBlock(required=False)) # 'closed_captioning_link'
+        ('mtg_transcript_url', blocks.TextBlock(required=False))  # 'closed_captioning_link'
     ])
 
     agenda = StreamField([
         ('agenda_item', blocks.StreamBlock([
             ('item_title', blocks.TextBlock()),
-            ('item_text', blocks.TextBlock()),
-            ('mtg_doc', blocks.StructBlock([
-                ('mtg_doc_upload', DocumentChooserBlock(required=True)),
-                ('submitted_late', blocks.BooleanBlock(required=False, help_text='Submitted Late')),
-                ('heldover', blocks.BooleanBlock(required=False, help_text='Held Over')),
-                ('heldover_from', blocks.DateBlock(required=False, help_text="Held Over From")),
-            ])),
+            ('item_text', blocks.RichTextBlock()),
             ('item_audio', DocumentChooserBlock(required=False)),
         ]))
     ])
 
     content_panels = Page.content_panels + [
         FieldPanel('date'),
+        FieldPanel('end_date'),
         FieldPanel('time'),
+        FieldPanel('meeting_type'),
+        FieldPanel('draft_minutes_links'),
+        FieldPanel('approved_minutes_date'),
+        FieldPanel('approved_minutes_link'),
+        FieldPanel('sunshine_act_links'),
+        FieldPanel('live_video_url'),
         StreamFieldPanel('agenda'),
         StreamFieldPanel('imported_html'),
         MultiFieldPanel(
-        [
-            StreamFieldPanel('mtg_media'),
-        ],
-        heading="Entire Meeting Media",
-        classname="collapsible collapsed"
+            [
+                StreamFieldPanel('mtg_media'),
+            ],
+            heading='Entire Meeting Media',
+            classname='collapsible collapsed'
         ),
     ]
+
+    @property
+    def get_update_type(self):
+        return constants.update_types['commission-meeting']
+

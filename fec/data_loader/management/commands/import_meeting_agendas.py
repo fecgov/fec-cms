@@ -88,16 +88,31 @@ class Command(ImporterMixin, BaseCommand):
             ("title_text", str),
             ("video_link", Link)
         """
+
+        if meeting['approved_minutes_date'] is not None:
+            approved_minutes_date_import = datetime.datetime.strptime(meeting['approved_minutes_date']['iso8601'], '%Y-%m-%d').date()
+        else:
+            approved_minutes_date_import = None
+
+        if meeting['approved_minutes_link'] is not None:
+            approved_minutes_link_import = meeting['approved_minutes_link']['url']
+        else:
+            approved_minutes_link_import = ''
+
         new_page = AgendaPage(
             imported_html=self._raw_html_block(meeting['body']),
             date=datetime.datetime.strptime(meeting['posted_date']['iso8601'], '%Y-%m-%d').date(),
+            meeting_type='O',
+            draft_minutes_links='\n'.join([str(link['url']) for link in meeting['draft_minutes_links']]),
+            approved_minutes_date=approved_minutes_date_import,
+            approved_minutes_link=approved_minutes_link_import,
+            sunshine_act_links='\n'.join([str(link['url']) for link in meeting['sunshine_act_links']]),
             mtg_media=self._media_blocks(meeting),
             # mtg_time doesn't appear to be in the json.
-
             depth=2,
             numchild=0,
             live=1,
-            title=meeting['title_text'],
+            title=meeting['title_text'] + ' open meeting',
         )
         parent_page.add_child(instance=new_page)
 

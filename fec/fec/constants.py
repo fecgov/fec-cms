@@ -7,7 +7,9 @@ election_types = OrderedDict([
 deadline_types = OrderedDict([
     ('report-M', 'Monthly'),
     ('report-Q', 'Quarterly'),
-    ('report-E', 'Pre- and post-election')
+    ('report-E', 'Pre- and post-election'),
+    ('report-MY', 'Mid-Year'),
+    ('report-YE', 'Year-End')
 ])
 
 reporting_periods = OrderedDict([
@@ -129,7 +131,8 @@ update_types = OrderedDict([
     ("press-release", "Press release"),
     ("fec-record", "FEC Record"),
     ("weekly-digest", "Weekly Digest"),
-    ("tips-for-treasurers", "Tips for Treasurers")
+    ("tips-for-treasurers", "Tips for Treasurers"),
+    ("commission-meeting", "Commission Meetings"),
 ])
 
 # These are each a group of categories relevant to a particular type of report
@@ -144,10 +147,8 @@ oig_reports = OrderedDict((x.lower(), x) for x in [
 ])
 
 strategy_budget_performance_reports = OrderedDict((x.lower(), x) for x in [
-    "Annual performance report",
     "Agency Financial Report",
     "Congressional submission",
-    "IT strategic plan",
     "Performance and accountability report",
     "Strategic plan",
     "Summary of performance and financial information"
@@ -166,10 +167,7 @@ privacy_reports = OrderedDict((x.lower(), x) for x in [
 procurement_contracting_reports = OrderedDict((x.lower(), x) for x in [
     "Buy America report",
     "FAIR Act",
-    "Inventory",
-    "Memo",
-    "Public procurement report",
-    "Request for proposal"
+    "Public procurement report"
 ])
 
 annual_anniversary_reports = OrderedDict((x.lower(), x) for x in [
