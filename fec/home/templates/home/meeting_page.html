@@ -83,17 +83,16 @@
 
       {% if self.approved_minutes_link %}
       <h2>Minutes for this meeting</h2>
-      <p>
-      Approved on {{ self.approved_minutes_date|date:'F j, Y' }}
+      <p>Approved on {{ self.approved_minutes_date|date:'F j, Y' }}
       <span class="u-padding--left icon-document--inline--left"></span>
       <a href="self.approved_minutes_link">Agenda document</a>
-      <br>
       {% if self.draft_minutes_links %}
+      <br>
       Draft minutes
       <span class="u-padding--left icon-document--inline--left"></span>
       <a href="self.draft_minutes_links">Agenda document</a>
-      {% endif %}
       </p>
+      {% endif %}
       {% endif %}
 
       {% if self.mtg_media %}
