@@ -88,7 +88,7 @@ class ContentPage(Page):
     # Default content section for determining the active nav
     @property
     def content_section(self):
-        return 'help'
+        return ''
 '''
 class Person(User):
     objects = User()
@@ -760,7 +760,7 @@ class LegalResourcesLandingPage(ContentPage, UniqueModel):
 
     @property
     def content_section(self):
-        return 'legal-resources'
+        return 'legal'
 
 
 class ServicesLandingPage(ContentPage, UniqueModel):
@@ -789,7 +789,7 @@ class ServicesLandingPage(ContentPage, UniqueModel):
 
     @property
     def content_section(self):
-        return 'candidate-and-committee-services'
+        return 'help'
 
     @property
     def hero_class(self):
