@@ -54,6 +54,25 @@ stream_factory = functools.partial(
     ],
 )
 
+def get_content_section(page):
+    """
+    Find the top-level parent in order to highlight
+    the main nav item and set social images.
+    Takes a Page object and returns a string of either 'legal', 'help', or ''
+    """
+    slugs = {
+        'help-candidates-and-committees': 'help',
+        'legal-resources': 'legal'
+    }
+    ancestors = page.get_ancestors()
+    content_sections = [
+        slugs.get(ancestor.slug) for ancestor in ancestors
+        if slugs.get(ancestor.slug) != None
+    ]
+    if len(content_sections):
+        return content_sections[0]
+    else:
+        return ''
 
 class UniqueModel(models.Model):
     """Abstract base class for unique pages."""
@@ -166,10 +185,6 @@ class HomePage(ContentPage, UniqueModel):
     @property
     def content_section(self):
         return ''
-
-
-class LandingPage(ContentPage):
-    template = 'home/registration-and-reporting/landing_page.html'
 
 
 class Author(models.Model):
@@ -503,6 +518,10 @@ class CustomPage(Page):
         )
     ]
 
+    @property
+    def content_section(self):
+        return get_content_section(self)
+
 
 class PressLandingPage(Page):
     hero = stream_factory(null=True, blank=True)
@@ -703,6 +722,9 @@ class CollectionPage(Page):
         StreamFieldPanel('sections'),
     ]
 
+    @property
+    def content_section(self):
+        return get_content_section(self)
 
 class ResourcePage(Page):
     # Class for pages that include a side nav, multiple sections and citations
@@ -752,6 +774,10 @@ class ResourcePage(Page):
     @property
     def display_date(self):
         return self.date.strftime('%B %Y')
+
+    @property
+    def content_section(self):
+        return get_content_section(self)
 
 
 class LegalResourcesLandingPage(ContentPage, UniqueModel):
@@ -864,4 +890,3 @@ class MeetingPage(Page):
     @property
     def get_update_type(self):
         return constants.update_types['commission-meeting']
-
