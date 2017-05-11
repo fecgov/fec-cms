@@ -78,28 +78,42 @@
          </li>
         {% endfor %}
       </ol>
+
+      {% if self.mtg_media %}
+      <h3>Recordings</h3>
+      <ul class="list--border list--extra-spacious">
+        {% for block in self.mtg_media %}
+          {% if block.block_type == "full_video_url" %}
+            <li><a href="{{ block.value }}">Full meeting video</a></li>
+          {% elif block.block_type == "full_audio" %}
+            <li><a href="{{ block.value.url }}">Full meeting audio</a></li>
+           {% elif block.block_type == "mtg_transcript" %}
+             <li><a href="{{ block.value.url }}">{{ block.value.title }}</a></li>
+           {% endif %}
+        {% endfor %}
+      </ul>
+      {% endif %}
+
+      {% if self.sunshine_act_links %}
+      <h2 class="u-no-margin">Notices about this meeting</h2>      
+      <div class="list--spacious">
+      <ul class=" t-sans">
+      {% for link in self.sunshine_act_links|splitlines reversed %}
+        <li>
+          <div class="icon-document--inline--left"></div>
+          <a href="{{ link }}">
+            {% if self.sunshine_act_links|splitlines|length > 1 and forloop.counter == 1%}Amended{% endif %}
+            Sunshine Act notice
+          </a>
+        </li>
+      {% endfor %}
+      </ul>
+      </div>
+      {% endif %}
+
     </div>
   </div>
 </article>
-
-{% if self.mtg_media %}
-<div class="container">
-  <div class="content__section">
-    <h3>Recordings</h3>
-    <ul class="list--border list--extra-spacious">
-      {% for block in self.mtg_media %}
-        {% if block.block_type == "full_video_url" %}
-          <li><a href="{{ block.value }}">Full meeting video</a></li>
-        {% elif block.block_type == "full_audio" %}
-          <li><a href="{{ block.value.url }}">Full meeting audio</a></li>
-         {% elif block.block_type == "mtg_transcript" %}
-           <li><a href="{{ block.value.url }}">{{ block.value.title }}</a></li>
-         {% endif %}
-      {% endfor %}
-     </ul>
-  </div>
-</div>
-{% endif %}
 
 {% include 'partials/disclaimer.html' %}
 {% endblock %}
