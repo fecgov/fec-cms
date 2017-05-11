@@ -16,7 +16,7 @@
 ================================================== -->
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="{{ self.title }} - betaFEC">
-<meta name="twitter:description" content="{% if self.search_description %}{{ self.search_description }}{% else %}}{{ generic_description }}{% endif %}">
+<meta name="twitter:description" content="{% if self.search_description %}{{ self.search_description }}{% else %}{{ generic_description }}{% endif %}">
 <meta name="twitter:image" content="{{ self.content_section | get_social_image }}">
 
 <!-- Facebook
@@ -25,7 +25,7 @@
 <meta property="og:url" content="https://beta.fec.gov" />
 <meta property="og:title" content="{{ self.title }} - betaFEC" />
 <meta property="og:site_name" content="betaFEC" />
-<meta property="og:description" content="{% if self.search_description %}{{ self.search_description }}{% else %}}{{ generic_description }}{% endif %}" />
+<meta property="og:description" content="{% if self.search_description %}{{ self.search_description }}{% else %}{{ generic_description }}{% endif %}" />
 <meta property="og:image" content="{{ request.scheme }}://{{ request.get_host }}{{ self.content_section | get_social_image }}" />
 
 <!-- Google
