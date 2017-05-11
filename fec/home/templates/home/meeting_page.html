@@ -30,7 +30,7 @@
         {% spaceless %}{# for inline blocks #}
         <h1 class="heading__left">{% formatted_title self %}</h1>
         <div class="heading__right">
-          <span class="t-sans">{{ self.date|date:'F j, Y' }}</span><br />
+          <span class="t-sans">{{ self.date|date:'F j, Y' }}</span><br>
         </div>
         {% endspaceless %}
       </div>
@@ -39,46 +39,30 @@
     <p>The Commission considers new regulations, advisory opinions and other public matters at open meetings, which are typically held at FEC headquarters on Thursdays at 10:00am.</p>
     <p>Members of the public can attend any open meeting or hearing in person. Open meetings are also streamed live online. To attend in person, please bring a photo ID and be prepared to go through a security check. After security, attendees are escorted to the Commission's hearing room.</p>
 
-    <div class="main__content">
-      {% if self.imported_html %}
-      <div class="u-padding--bottom">
-        {% include_block self.imported_html  %}
-      </div>
-      {% else %}
-      <ol class="list--numbered--alt">
+    <div class="main__content u-padding--top">
+
+      {% if self.agenda %}
+      <h2>Agenda</h2>
+      <p>{{ self.date|date:'l, F j, Y' }} | {% if self.time %}{{ self.time|date:'h:i A' }}{% else %}10:00 AM{% endif %}</p>
+
+
+      <ol class="list--numbered u-padding--bottom">
       {% for block in self.agenda %}
-        {% if block.block_type == "agenda_item" %}
         <li>
-          {% for subblock in block.value %}
-            {% if subblock.block_type == "item_title" %}
-              <h2>{{subblock.value}}</h2>
-              <ul class="list--extra-spacious u-padding--bottom">
-              {% elif subblock.block_type == "item_audio" %}
-                <li>
-                   <audio controls>
-                     <source src="{{subblock.value.url}}" type="audio/mpeg">
-                     Your browser does not support the audio element Download below.
-                   </audio>
-                   <a href="{{subblock.value.url}}" target="_blank"> Download Audio</a>
-                 </li>
-              {% elif subblock.block_type == "item_text" %}
-                 <li>{{subblock.value}}</li>
-              {% elif subblock.block_type == "mtg_doc" %}
-                 <li><a href="{{subblock.value.mtg_doc_upload.url}}">{{subblock.value.mtg_doc_upload.title}}</a><br />
-                  {% ifequal subblock.value.submitted_late True %}
-                    <br>(Submitted Late)
-                  {% endifequal %}
-                  {% ifequal subblock.value.heldover True %}
-                    <br>(Heldover from {{subblock.value.heldover_from}} meeting)
-                  {% endifequal %}
-                 </li>
-              {% endif %}
-            {% endfor %}
-            </ul>
+        {% for subblock in block.value %}
+          {% if subblock.block_type == "item_title" %}
+            <h3 class="u-no-margin">{{ subblock.value }}</h3>
+          {% elif subblock.block_type == "item_text" %}
+            {{subblock.value}}
           {% endif %}
+        {% endfor %}
          </li>
         {% endfor %}
       </ol>
+      {% else %}
+      <div class="u-padding--bottom">
+        {% include_block self.imported_html  %}
+      </div>
       {% endif %}
 
       {% if self.approved_minutes_link %}
@@ -101,17 +85,20 @@
         {% for block in self.mtg_media %}
           {% if block.block_type == "full_video_url" %}
             <div class="grid__item">
-              <img src={% static 'img/thumbnail--video.png' %} alt="Video"><br>
+              <a href="{{ block.value }}" class="u-no-border"><img src={% static 'img/thumbnail--video.png' %} alt="Video"></a>
+              <br>
               <a href="{{ block.value }}">Full meeting video</a>
             </div>
           {% elif block.block_type == "full_audio_url" %}
             <div class="grid__item">
-              <img src={% static 'img/thumbnail--audio.png' %} alt="Audio"><br>
+              <a href="{{ block.value }}" class="u-no-border"><img src={% static 'img/thumbnail--audio.png' %} alt="Audio"></a>
+              <br>
               <a href="{{ block.value }}">Full meeting audio</a>
             </div>
           {% elif block.block_type == "mtg_transcript_url" %}
             <div class="grid__item">
-              <img src={% static 'img/thumbnail--captions.png' %} alt="Captions"><br>
+              <a href="{{ block.value }}" class="u-no-border"><img src={% static 'img/thumbnail--captions.png' %} alt="Captions"></a>
+              <br>
               <a href="{{ block.value }}">Full meeting captions</a>
             </div>
           {% endif %}
