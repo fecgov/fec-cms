@@ -87,6 +87,6 @@ class Command(BaseCommand):
     def write_articles(self, pages, **options):
         """Write the extracted data to a file"""
         self.stdout.write('Writing to file')
-        fname = os.path.join(settings.REPO_DIR, 'fec/search/management/dump.json')
+        fname = os.path.join(settings.REPO_DIR, 'fec/search/management/data/output.json')
         with open(fname, 'w+') as f:
             json.dump(pages, f, indent=4)
