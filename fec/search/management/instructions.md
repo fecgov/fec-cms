@@ -56,7 +56,7 @@ The search indexes are not automatically updated when content changes on the sit
         "created": "2017-01-19-214642",
         "document_id": 6059,
         "language": "en",
-        "content": "scraped site content"
+        "content": "scraped site content",
         "promote": "false"
     }
 ```
