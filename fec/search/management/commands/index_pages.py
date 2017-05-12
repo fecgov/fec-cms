@@ -20,7 +20,7 @@ class Command(BaseCommand):
 
     def add_arguments(self, parser):
         parser.add_argument(
-            'json_file_path',
+            '--json_file_path',
             type=str,
             help='Path to JSON file to load'
         )
@@ -40,7 +40,12 @@ class Command(BaseCommand):
             drawer = 'transition'
             key = DIGITALGOV_DRAWER_KEY_TRANSITION
 
-        with open(options['json_file_path'], 'r') as json_contents:
+        if options['json_file_path']:
+            file_name = options['json_file_path']
+        else:
+            file_name = os.path.join(settings.REPO_DIR, 'fec/search/management/data/output.json')
+
+        with open(file_name, 'r') as json_contents:
             if options['verbosity'] > 1:
                 self.stdout.write((options['json_file_path']))
 
