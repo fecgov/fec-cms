@@ -27,9 +27,8 @@ class Command(BaseCommand):
 
         parser.add_argument(
             '-transition',
-            type=bool,
-            default=False,
-            help="Whether to use the transition drawer or not"
+            action='store_true',
+            help="Add this flag to add to the transition drawer"
         )
 
     def handle(self, *args, **options):
