@@ -20,7 +20,7 @@ i14y accepts HTTP requests (POST / PUT / DELETE) with data structured like:
 
 ```json
 {
-	"document_id":"1",
+  "document_id":"1",
   "title":"this is a fairly short title",
   "path": "http://www.gov.gov/cms/doc1.html", 
   "created": "2015-05-12T22:35:09Z",
@@ -56,7 +56,7 @@ The search indexes are not automatically updated when content changes on the sit
         "created": "2017-01-19-214642",
         "document_id": 6059,
         "language": "en",
-        "content": [scraped site content]
+        "content": "scraped site content"
         "promote": "false"
     }
 ```
