@@ -247,7 +247,7 @@ def contact_rad(request):
         'title': 'Submit a question to the Reports Analysis Division (RAD)',
         'ancestors': [{
           'title': 'Help for candidates and committees',
-          'url': '/help-candidates-committees/',
+          'url': '/help-candidates-and-committees/',
         }],
         'content_section': 'help'
     }
