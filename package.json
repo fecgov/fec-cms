@@ -24,6 +24,7 @@
     "browserify-istanbul": "^0.2.1",
     "chai": "^3.4.1",
     "gulp": "^3.9.0",
+    "gulp-uglify": "2.1.2",
     "handlebars": "^4.0.5",
     "hbsfy": "2.2.1",
     "karma": "^0.13.19",
@@ -40,6 +41,7 @@
     "sinon": "^1.17.2",
     "sinon-chai": "^2.8.0",
     "stringify": "^4.0.1",
+    "vinyl-buffer": "1.0.0",
     "vinyl-source-stream": "^1.1.0"
   },
   "watch": {
