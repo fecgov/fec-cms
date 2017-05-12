@@ -5,6 +5,8 @@ var browserify = require('browserify');
 var source = require('vinyl-source-stream');
 var stringify = require('stringify');
 var hbsfy = require('hbsfy');
+var buffer = require('vinyl-buffer')
+var uglify = require('gulp-uglify')
 
 var entries = [
   './fec/static/js/fec.js',
@@ -22,6 +24,8 @@ gulp.task('build-js', function () {
       .transform({global: true}, hbsfy)
       .bundle()
       .pipe(source(entry))
+      .pipe(buffer())
+      .pipe(uglify())
       .pipe(gulp.dest('dist'));
   });
 });
