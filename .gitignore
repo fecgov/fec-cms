@@ -77,3 +77,5 @@ fec/data_loader/management/commands/meetings--*.json
 fec/data_loader/management/commands/out/*.html
 
 fec/search/management/dump.json
+
+fec/search/management/data/dump.json
