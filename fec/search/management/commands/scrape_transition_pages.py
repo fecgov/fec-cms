@@ -53,12 +53,12 @@ class Command(BaseCommand):
                   'language': 'en'
                 }
 
-            # Scrape the content of the live page
-            content = self.get_content(p['path'])
-            if content:
-              p['content'] = content
+                # Scrape the content of the live page
+                content = self.get_content(p['path'])
+                if content:
+                  p['content'] = content
 
-            extracted.append(p)
+                extracted.append(p)
 
         self.write_articles(extracted)
 

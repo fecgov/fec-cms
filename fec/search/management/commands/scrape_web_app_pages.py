@@ -60,9 +60,9 @@ class Command(BaseCommand):
                 if page.get('scrape_content'):
                     content = self.get_content(p['path'])
                     if content:
-                      p['content'] = content's
+                      p['content'] = content
 
-            extracted.append(p)
+                extracted.append(p)
 
         self.write_articles(extracted)
 
@@ -77,7 +77,7 @@ class Command(BaseCommand):
         soup = BeautifulSoup(data, 'lxml')
         text = ''
 
-        main = soup.find_all('div', id='main')
+        main = soup.find_all('main', id='main')
 
         for tag in main:
             text = text + tag.get_text().replace('\n', ' ')
