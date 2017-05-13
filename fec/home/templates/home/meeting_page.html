@@ -11,7 +11,7 @@
     <li class="breadcrumbs__item"><a href="/" class="breadcrumbs__link" rel="Home">Home</a></li>
     <li class="breadcrumbs__item">
       <span class="breadcrumbs__separator">›</span>
-      <a class="breadcrumbs__link" href="/updates?update_type=agendas">Meeting agendas</a>
+      <a class="breadcrumbs__link" href="/updates?update_type=meetings">Meeting agendas</a>
     </li>
     <li class="breadcrumbs__item breadcrumbs__item--current">
       <span class="breadcrumbs__separator">›</span>
@@ -39,12 +39,24 @@
     <p>The Commission considers new regulations, advisory opinions and other public matters at open meetings, which are typically held at FEC headquarters on Thursdays at 10:00am.</p>
     <p>Members of the public can attend any open meeting or hearing in person. Open meetings are also streamed live online. To attend in person, please bring a photo ID and be prepared to go through a security check. After security, attendees are escorted to the Commission's hearing room.</p>
 
+    {% if self.live_video_url %}
+    <div class="usa-width-five-sixths">
+      <div class="slab slab--neutral u-padding--left">
+        <div class="usa-width-one-fourth u-padding--left">
+          <a class="u-no-border" href="{{ self.live_video_url }}"><img src={% static 'img/thumbnail--video.png' %} alt="Video"></a>
+          </div>
+        <div class="usa-width-two-thirds">
+          <h3 class="u-no-margin"><a href="{{ self.live_video_url }}">Watch the live meeting now</a></h3>
+          <p class="u-no-margin">This meeting is currently being streamed with live captions. The recorded video, audio and captions will be posted on this page after the meeting ends.</p>
+        </div>
+      </div>
+    </div>
+    {% endif %}
+
     <div class="main__content u-padding--top">
-
       {% if self.agenda %}
-      <h2>Agenda</h2>
+      <h2 class="u-padding--top">Agenda</h2>
       <p>{{ self.date|date:'l, F j, Y' }} | {% if self.time %}{{ self.time|date:'h:i A' }}{% else %}10:00 AM{% endif %}</p>
-
 
       <ol class="list--numbered u-padding--bottom">
       {% for block in self.agenda %}
