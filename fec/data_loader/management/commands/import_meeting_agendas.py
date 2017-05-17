@@ -8,7 +8,7 @@ from django.core.management import BaseCommand
 from django.utils import timezone
 
 from data_loader.utils import ImporterMixin
-from home.models import AgendaPage, Page
+from home.models import MeetingPage, Page
 
 
 class Command(ImporterMixin, BaseCommand):
@@ -50,7 +50,7 @@ class Command(ImporterMixin, BaseCommand):
     def _delete_existing_records(self, options: dict) -> None:
         if options['delete_existing']:
             self._log('Deleting existing records...')
-            self.delete_existing_records(AgendaPage, **options)
+            self.delete_existing_records(MeetingPage, **options)
 
     @staticmethod
     def _open_json_file(options: dict) -> TextIOWrapper:
@@ -99,7 +99,7 @@ class Command(ImporterMixin, BaseCommand):
         else:
             approved_minutes_link_import = ''
 
-        new_page = AgendaPage(
+        new_page = MeetingPage(
             imported_html=self._raw_html_block(meeting['body']),
             date=datetime.datetime.strptime(meeting['posted_date']['iso8601'], '%Y-%m-%d').date(),
             meeting_type='O',
@@ -123,7 +123,7 @@ class Command(ImporterMixin, BaseCommand):
         """
         return json.dumps([
             {
-                'type': 'html_block',  # Defined in AgendaPage in models.py
+                'type': 'html_block',  # Defined in MeetingPage in models.py
                 'value': self.escape_quotes(self.clean_content(legacy_cms_html)),
             }
         ])
@@ -131,7 +131,7 @@ class Command(ImporterMixin, BaseCommand):
     def _media_blocks(self, meeting: dict) -> str:
         return json.dumps([
             {
-                'type': 'full_video_url',  # Defined in AgendaPage in models.py
+                'type': 'full_video_url',  # Defined in MeetingPage in models.py
                 'value': self._url_in_link(meeting['video_link'])
             },
             {
