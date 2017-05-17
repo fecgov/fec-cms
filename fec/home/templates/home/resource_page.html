@@ -63,19 +63,36 @@
 {% endif %}
 
 {% block related_topics %}
-{% for block in self.related_topics %}
-  {% with topics=block.value %}
-    {% for topic in topics %}
+<h2>Related topics</h2>
+<div class="grid grid--4-wide">
+  {% if self.show_contact_card %}
     <div class="grid__item">
-      <a href="{{ topic.url }}">
-        <aside class="card card--horizontal card--primary">
+      <a href="/contact-us">
+        <aside class="card card--horizontal card--secondary">
+          <div class="card__image__container">
+              <span class="card__icon i-question-bubble"><span class="u-visually-hidden">Icon representing a question</span></span>
+          </div>
           <div class="card__content">
-          {{ topic }}
+            Get help from the FEC by  phone or email
           </div>
         </aside>
       </a>
     </div>
-    {% endfor %}
-  {% endwith %}
-{% endfor %}
+  {% endif %}
+  {% for block in self.related_topics %}
+    {% with topics=block.value %}
+      {% for topic in topics %}
+      <div class="grid__item">
+        <a href="{{ topic.url }}">
+          <aside class="card card--horizontal card--primary">
+            <div class="card__content">
+            {{ topic }}
+            </div>
+          </aside>
+        </a>
+      </div>
+      {% endfor %}
+    {% endwith %}
+  {% endfor %}
+</div>
 {% endblock %}

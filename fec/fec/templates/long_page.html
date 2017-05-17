@@ -33,14 +33,11 @@
   </div>
 </article>
 
-{% if self.related_topics %}
+{% if self.related_topics or self.show_contact_card %}
 <div class="slab slab--neutral">
   <div class="container">
-    <h2>Related topics</h2>
-    <div class="grid grid--4-wide">
     {% block related_topics %}
     {% endblock %}
-    </div>
   </div>
 </div>
 {% endif %}
