@@ -834,7 +834,7 @@ class MeetingPage(Page):
     agenda = StreamField([
         ('agenda_item', blocks.StructBlock([
             ('item_title', blocks.TextBlock()),
-            ('item_text', blocks.RichTextBlock()),
+            ('item_text', blocks.RichTextBlock(required=False)),
             ('item_audio', DocumentChooserBlock(required=False)),
         ]))
     ])
