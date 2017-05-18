@@ -143,10 +143,6 @@ def updates(request):
             tips = tips.search(search)
             meetings = meetings.search(search)
 
-    # temporary: agenda meetings are only for logged in admin users
-    if not request.user.is_authenticated():
-        meetings = ''
-
     # Chain all the QuerySets together
     # via http://stackoverflow.com/a/434755/1864981
     updates = sorted(
