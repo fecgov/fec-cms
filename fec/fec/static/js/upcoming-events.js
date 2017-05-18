@@ -15,7 +15,7 @@ function UpcomingEvents() {
   var url = calendarHelpers.getUrl('calendar-dates',
     { 'sort': 'start_date',
       'min_start_date': todaysDate,
-      'category': ['report-M', 'report-Q', 'Open+Meetings', 'Executive+Sessions', 'Public+Hearings', 'Conferences', 'Roundtables']
+      'category': ['report-M', 'report-Q', 'report-MY', 'report-YE', 'Open+Meetings', 'Executive+Sessions', 'Public+Hearings', 'Conferences', 'Roundtables']
     });
 
   $.getJSON(url).done(function(events) {
