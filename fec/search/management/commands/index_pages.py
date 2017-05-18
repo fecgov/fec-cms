@@ -9,23 +9,42 @@ from django.core.management import BaseCommand
 from home.models import Page
 
 
-DIGITALGOV_DRAWER = 'main'
-DIGITALGOV_DRAWER_KEY = settings.FEC_DIGITALGOV_DRAWER_KEY
+DIGITALGOV_DRAWER_KEY_MAIN = settings.FEC_DIGITALGOV_DRAWER_KEY_MAIN
+DIGITALGOV_DRAWER_KEY_TRANSITION = settings.FEC_DIGITALGOV_DRAWER_KEY_TRANSITION
+
+drawer = 'main'
+key = DIGITALGOV_DRAWER_KEY_MAIN
 
 class Command(BaseCommand):
-    help = 'Scrapes pages'
+    help = 'Indexes pages'
 
     def add_arguments(self, parser):
         parser.add_argument(
-            'json_file_path',
+            '--json_file_path',
             type=str,
             help='Path to JSON file to load'
+        )
+
+        parser.add_argument(
+            '-transition',
+            action='store_true',
+            help="Add this flag to add to the transition drawer"
         )
 
     def handle(self, *args, **options):
         self.stdout.write(self.style.WARNING('Indexing pages'))
 
-        with open(options['json_file_path'], 'r') as json_contents:
+        # If we're putting in the transition drawer, use those creds
+        if options['transition']:
+            drawer = 'transition'
+            key = DIGITALGOV_DRAWER_KEY_TRANSITION
+
+        if options['json_file_path']:
+            file_name = options['json_file_path']
+        else:
+            file_name = os.path.join(settings.REPO_DIR, 'fec/search/management/data/output.json')
+
+        with open(file_name, 'r') as json_contents:
             if options['verbosity'] > 1:
                 self.stdout.write((options['json_file_path']))
 
@@ -36,7 +55,7 @@ class Command(BaseCommand):
         self.stdout.write(self.style.SUCCESS('All done'))
 
     def add(self, page):
-        r = requests.post("https://i14y.usa.gov/api/v1/documents", auth=(DIGITALGOV_DRAWER, DIGITALGOV_DRAWER_KEY), data=page)
+        r = requests.post("https://i14y.usa.gov/api/v1/documents", auth=(drawer, key), data=page)
         # A 422 means the page already exists,
         if r.status_code == 422:
             self.stdout.write('{} already exists'.format(page['document_id']))
@@ -49,8 +68,8 @@ class Command(BaseCommand):
 
     def update(self, page):
         self.stdout.write('Updating {}'.format(page['document_id']))
-        requests.put("https://i14y.usa.gov/api/v1/documents", auth=(DIGITALGOV_DRAWER, DIGITALGOV_DRAWER_KEY), data=page)
+        requests.put("https://i14y.usa.gov/api/v1/documents", auth=(drawer, key), data=page)
 
     def delete(self, page):
         self.stdout.write('Deleting {}'.format(page['document_id']))
-        requests.delete("https://i14y.usa.gov/api/v1/documents", auth=(DIGITALGOV_DRAWER, DIGITALGOV_DRAWER_KEY), data=page)
+        requests.delete("https://i14y.usa.gov/api/v1/documents", auth=(drawer, key), data=page)
