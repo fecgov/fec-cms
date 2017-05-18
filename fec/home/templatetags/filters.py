@@ -104,8 +104,6 @@ def get_touch_icon(content_section, dimension):
     """
     Returns a path to a touch icon for the given dimension and content_section
     """
-    print('====')
-    print(content_section)
     if content_section in ['legal', 'help']:
         return static('img/favicon/{}/apple-touch-icon-{}.png'.format(content_section, dimension))
     else:
