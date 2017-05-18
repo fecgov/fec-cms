@@ -826,13 +826,13 @@ class MeetingPage(Page):
     OPEN = 'O'
     EXECUTIVE = 'E'
     MEETING_TYPE_CHOICES = (
-        (OPEN, 'Open'),
-        (EXECUTIVE, 'Executive'),
+        (OPEN, 'Open meeting'),
+        (EXECUTIVE, 'Executive session'),
     )
 
     date = models.DateField(default=datetime.date.today)
     end_date = models.DateField(null=True, blank=True)
-    time = models.TimeField(null=True, blank=True)
+    time = models.TimeField(null=True, blank=True, help_text='If no time is entered the time will be set to 10 a.m.')
     meeting_type = models.CharField(
         max_length=2,
         choices=MEETING_TYPE_CHOICES,
@@ -845,6 +845,7 @@ class MeetingPage(Page):
     sunshine_act_links = models.TextField(
         blank=True, help_text='URLs separated by a newline')
     live_video_url = models.URLField(blank=True)
+    live_video_captions = models.URLField(blank=True)
 
     imported_html = StreamField(
         [('html_block', blocks.RawHTMLBlock())],
@@ -852,39 +853,58 @@ class MeetingPage(Page):
         blank=True
     )
 
-    mtg_media = StreamField([
-        ('full_video_url', blocks.TextBlock(required=False)),    # 'video_link'
-        ('full_audio_url', blocks.TextBlock(required=False)),    # 'primary_audio_link'
-        ('mtg_transcript_url', blocks.TextBlock(required=False))  # 'closed_captioning_link'
-    ])
+    full_video_url = models.URLField(blank=True)
+    full_audio_url = models.URLField(blank=True)
+    mtg_transcript_url = models.URLField(blank=True)
 
     agenda = StreamField([
-        ('agenda_item', blocks.StreamBlock([
+        ('agenda_item', blocks.StructBlock([
             ('item_title', blocks.TextBlock()),
-            ('item_text', blocks.RichTextBlock()),
+            ('item_text', blocks.RichTextBlock(required=False)),
             ('item_audio', DocumentChooserBlock(required=False)),
         ]))
     ])
 
     content_panels = Page.content_panels + [
-        FieldPanel('date'),
-        FieldPanel('end_date'),
-        FieldPanel('time'),
-        FieldPanel('meeting_type'),
-        FieldPanel('draft_minutes_links'),
-        FieldPanel('approved_minutes_date'),
-        FieldPanel('approved_minutes_link'),
-        FieldPanel('sunshine_act_links'),
-        FieldPanel('live_video_url'),
         StreamFieldPanel('agenda'),
-        StreamFieldPanel('imported_html'),
         MultiFieldPanel(
             [
-                StreamFieldPanel('mtg_media'),
+                FieldPanel('date'),
+                FieldPanel('end_date'),
+                FieldPanel('time'),
+                FieldPanel('meeting_type'),
             ],
-            heading='Entire Meeting Media',
+            heading='Meeting details',
             classname='collapsible collapsed'
         ),
+        MultiFieldPanel(
+            [
+                FieldPanel('sunshine_act_links'),
+                FieldPanel('draft_minutes_links'),
+                FieldPanel('approved_minutes_link'),
+                FieldPanel('approved_minutes_date'),
+            ],
+            heading='Minutes and Sunshine notices',
+            classname='collapsible collapsed'
+        ),
+        MultiFieldPanel(
+            [
+                FieldPanel('full_video_url'),
+                FieldPanel('full_audio_url'),
+                FieldPanel('mtg_transcript_url'),
+                FieldPanel('live_video_url'),
+                FieldPanel('live_video_captions')
+            ],
+            heading='Meeting media',
+            classname='collapsible collapsed'
+        ),
+        MultiFieldPanel(
+            [
+                FieldPanel('imported_html'),
+            ],
+            heading='Imported meeting content',
+            classname='collapsible collapsed'
+        )
     ]
 
     @property

@@ -11,7 +11,7 @@
     <li class="breadcrumbs__item"><a href="/" class="breadcrumbs__link" rel="Home">Home</a></li>
     <li class="breadcrumbs__item">
       <span class="breadcrumbs__separator">›</span>
-      <a class="breadcrumbs__link" href="/updates?update_type=agendas">Meeting agendas</a>
+      <a class="breadcrumbs__link" href="/updates?update_type=meetings">Commission meetings</a>
     </li>
     <li class="breadcrumbs__item breadcrumbs__item--current">
       <span class="breadcrumbs__separator">›</span>
@@ -30,76 +30,142 @@
         {% spaceless %}{# for inline blocks #}
         <h1 class="heading__left">{% formatted_title self %}</h1>
         <div class="heading__right">
-          <span class="t-sans">{{ self.date|date:'F j, Y' }}</span><br />
+          <span class="t-sans">{{ self.date|date:'F j, Y' }}</span><br>
         </div>
         {% endspaceless %}
       </div>
     </header>
+    {% if self.meeting_type == 'O' %}
+      <p>The Commission considers new regulations, advisory opinions and other public matters at open meetings, which are typically held at FEC headquarters on Thursdays at 10:00am.</p>
+      <p>Members of the public can attend any open meeting or hearing in person. Open meetings are also streamed live online. To attend in person, please bring a photo ID and be prepared to go through a security check. After security, attendees are escorted to the Commission's hearing room.</p>
+    {% elif self.meeting_type == 'E' %}
+      <p>The Commission meets regularly in executive sessions to discuss pending enforcement actions, litigation and other matters that, by law, must be kept confidential.</p>
+    {% endif %}
 
-    <p>The Commission considers new regulations, advisory opinions and other public matters at open meetings, which are typically held at FEC headquarters on Thursdays at 10:00am.</p>
-    <p>Members of the public can attend any open meeting or hearing in person. Open meetings are also streamed live online. To attend in person, please bring a photo ID and be prepared to go through a security check. After security, attendees are escorted to the Commission's hearing room.</p>
+    {% if self.live_video_url %}
+    <div class="row">
+      <div class="slab slab--neutral u-padding--left usa-width-five-sixths">
+        <div class="usa-width-one-fourth u-padding--left">
+          <a class="u-no-border" href="{{ self.live_video_url }}"><img src={% static 'img/thumbnail--video.png' %} alt="Video"></a>
+          </div>
+        <div class="usa-width-two-thirds">
+          <h3 class="u-no-margin"><a href="{{ self.live_video_url }}">Watch the live meeting now</a></h3>
+          <p class="u-no-margin">This meeting is currently being streamed{% if self.live_video_captions %} with <a href="{{ self.live_video_captions }}">live captions</a>{% endif %}. The recorded video, audio and captions will be posted on this page after the meeting ends.</p>
+        </div>
+      </div>
+    </div>
+    {% endif %}
 
-    <div class="main__content">
-      <div>
+    <div class="u-padding--top">
+      {% if self.agenda %}
+      <div class="agenda__heading">
+        <h2 class="u-padding--top u-no-margin">Agenda</h2>
+        <p>{{ self.date|date:'l, F j, Y' }} &nbsp;|&nbsp; {% if self.time %}{{ self.time|date:'h:i A' }}{% else %}10:00 AM{% endif %}</p>
+      </div>
+      <ol class="agenda">
+      {% for block in self.agenda %}
+        <li>
+            <h3 class="u-no-margin">{{ block.value.item_title }}</h3>
+            {% if block.value.item_audio %}<p class="t-sans u-no-margin"><span class="icon icon--inline--left i-speaker"></span><a href="{{ block.value.item_audio }}">Listen to discussion of this item</a></p>{% endif %}
+            <div class="agenda__text">
+              {{ block.value.item_text }}
+            </div>
+         </li>
+      {% endfor %}
+      </ol>
+      {% else %}
+      <div class="u-padding--bottom">
         {% include_block self.imported_html  %}
       </div>
+      {% endif %}
 
-      <ol class="list--numbered--alt">
-      {% for block in self.agenda %}
-        {% if block.block_type == "agenda_item" %}
+      {% if self.approved_minutes_link or self.draft_minutes_links %}
+      <h2>Minutes for this meeting</h2>
+      <p>
+        <a class="pdf-link" href="{{ self.approved_minutes_link }}">Approved minutes</a>
+        (Approved on {{ self.approved_minutes_date|date:'F j, Y' }})
+      </p>
+      {% if self.draft_minutes_links %}
+      <p>
+        <a class="pdf-link" href="self.draft_minutes_links">Draft minutes</a>
+      </p>
+      {% endif %}
+      {% endif %}
+
+      {% if self.full_video_url or self.full_audio_url or self.mtg_transcript_url %}
+      <h3>Recordings</h3>
+      <div class="grid grid--4-wide u-padding--bottom">
+        {% if self.full_video_url %}
+          <div class="grid__item">
+            <a href="{{ self.full_video_url }}" class="u-no-border"><img src={% static 'img/thumbnail--video.png' %} alt="Video"></a>
+            <br>
+            <a href="{{ self.full_video_url }}">Full meeting video</a>
+          </div>
+        {% endif %}
+        {% if self.full_audio_url %}
+          <div class="grid__item">
+            <a href="{{ self.full_audio_url }}" class="u-no-border"><img src={% static 'img/thumbnail--audio.png' %} alt="Audio"></a>
+            <br>
+            <a href="{{ self.full_audio_url }}">Full meeting audio</a>
+          </div>
+        {% endif %}
+        {% if self.mtg_transcript_url %}
+          <div class="grid__item">
+            <a href="{{ block.value }}" class="u-no-border"><img src={% static 'img/thumbnail--captions.png' %} alt="Captions"></a>
+            <br>
+            <a href="{{ block.value }}">Full meeting captions</a>
+          </div>
+        {% endif %}
+      </div>
+      {% endif %}
+
+      {% if self.sunshine_act_links %}
+      <h2 class="u-no-margin">Notices about this meeting</h2>
+      <div class="list--spacious">
+      <ul>
+      {% for link in self.sunshine_act_links|splitlines reversed %}
         <li>
-          {% for subblock in block.value %}
-            {% if subblock.block_type == "item_title" %}
-              <h2>{{subblock.value}}</h2>
-              <ul class="list--extra-spacious u-padding--bottom">
-              {% elif subblock.block_type == "item_audio" %}
-                <li>
-                   <audio controls>
-                     <source src="{{subblock.value.url}}" type="audio/mpeg">
-                     Your browser does not support the audio element Download below.
-                   </audio>
-                   <a href="{{subblock.value.url}}" target="_blank"> Download Audio</a>
-                 </li>
-              {% elif subblock.block_type == "item_text" %}
-                 <li>{{subblock.value}}</li>
-              {% elif subblock.block_type == "mtg_doc" %}
-                 <li><a href="{{subblock.value.mtg_doc_upload.url}}">{{subblock.value.mtg_doc_upload.title}}</a><br />
-                  {% ifequal subblock.value.submitted_late True %}
-                    <br>(Submitted Late)
-                  {% endifequal %}
-                  {% ifequal subblock.value.heldover True %}
-                    <br>(Heldover from {{subblock.value.heldover_from}} meeting)
-                  {% endifequal %}
-                 </li>
-              {% endif %}
-            {% endfor %}
-            </ul>
-          {% endif %}
-         </li>
-        {% endfor %}
-      </ol>
+          <p>
+            <a class="pdf-link" href="{{ link }}">
+              {% if self.sunshine_act_links|splitlines|length > 1 and forloop.counter == 1%}Amended{% endif %}
+              Sunshine Act notice
+            </a>
+          </p>
+        </li>
+      {% endfor %}
+      </ul>
+      </div>
+      {% endif %}
+
+      {% if not self.agenda and self.meeting_type == 'O' and not self.imported_html %}
+      {% comment %}
+      If this is an open meeting and there's no agenda (or imported HTML), then display this "coming soon" language
+      {% endcomment %}
+      <h3>More information about this meeting will be published as it becomes available.</h3>
+      {% endif %}
+
     </div>
   </div>
 </article>
 
-{% if self.mtg_media %}
-<div class="container">
-  <div class="content__section">
-    <h3>Recordings</h3>
-    <ul class="list--border list--extra-spacious">
-      {% for block in self.mtg_media %}
-        {% if block.block_type == "full_video_url" %}
-          <li><a href="{{ block.value }}">Full meeting video</a></li>
-        {% elif block.block_type == "full_audio" %}
-          <li><a href="{{ block.value.url }}">Full meeting audio</a></li>
-         {% elif block.block_type == "mtg_transcript" %}
-           <li><a href="{{ block.value.url }}">{{ block.value.title }}</a></li>
-         {% endif %}
-      {% endfor %}
-     </ul>
+  <div class="slab slab--neutral">
+    <div class="container">
+      <div class="grid grid--4-wide u-padding--top">
+        <div class="grid__item">
+          <a href="/calendar/?category=Executive+Sessions&category=Open+Meetings&category=Public+Hearings">
+            <aside class="card card--horizontal card--secondary">
+              <div class="card__image__container">
+                <span class="card__icon i-calendar"><span class="u-visually-hidden">Icon of a calendar</span></span>
+              </div>
+              <div class="card__content">
+                Find upcoming Commission meetings
+              </div>
+            </aside>
+          </a>
+        </div>
+      </div>
+    </div>
   </div>
-</div>
-{% endif %}
 
 {% include 'partials/disclaimer.html' %}
 {% endblock %}
