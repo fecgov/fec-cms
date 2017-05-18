@@ -18,7 +18,7 @@ def home_page_updates():
     press_releases = PressReleasePage.objects.live().filter(homepage_hide=False, homepage_pin=False).order_by('-date')[:4]
     records = RecordPage.objects.live().filter(homepage_hide=False, homepage_pin=False).order_by('-date')[:4]
     tips = TipsForTreasurersPage.objects.live().filter().order_by('-date')[:4]
-    meetings = MeetingPage.objects.live().filter().order_by('-date')[:4]
+    meetings = MeetingPage.objects.live().filter(meeting_type='O').order_by('-date')[:4]
 
     # get ALL press releases and records that are pinned
     press_releases_pinned = PressReleasePage.objects.live().filter(homepage_hide=False, homepage_pin=True).order_by('-date')
