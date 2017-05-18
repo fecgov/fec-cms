@@ -109,12 +109,6 @@ def updates(request):
 
     # If there's a query, only get the types in the query
     if update_types:
-        if 'for-media' in update_types:
-            press_releases = get_press_releases(category_list=category_list,
-                                                year=year, search=search)
-            digests = get_digests(year=year, search=search)
-        if 'for-committees' in update_types:
-            records = get_records(category_list=category_list, year=year, search=search)
         if 'fec-record' in update_types:
             records = get_records(category_list=category_list, year=year, search=search)
         if 'press-release' in update_types:
