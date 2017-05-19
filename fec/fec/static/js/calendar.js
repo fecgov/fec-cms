@@ -168,6 +168,7 @@ Calendar.prototype.success = function(response) {
       summary: event.summary || 'Event summary',
       state: event.state ? event.state.join(', ') : null,
       start: event.start_date ? moment(event.start_date) : null,
+      hasStartTime: calendarHelpers.checkStartTime(event),
       end: event.end_date ? moment(event.end_date) : null,
       className: calendarHelpers.className(event),
       tooltipContent: calendarHelpers.mapCategoryDescription(event.category),
