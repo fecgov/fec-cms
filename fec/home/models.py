@@ -502,6 +502,13 @@ class CustomPage(Page):
     continue_learning = StreamField([
         ('continue_learning', blocks.ListBlock(ThumbnailBlock(), icon='doc-empty')),
     ], null=True)
+    show_contact_link = models.BooleanField(
+                                    max_length=255, default=True,
+                                    null=False, blank=False,
+                                    choices=[
+                                        (True, 'Show contact link'),
+                                        (False, 'Do not show contact link')
+                                    ])
 
     content_panels = Page.content_panels + [
         FieldPanel('author'),
@@ -512,6 +519,7 @@ class CustomPage(Page):
         MultiFieldPanel([
                 StreamFieldPanel('sidebar'),
                 StreamFieldPanel('record_articles'),
+                FieldPanel('show_contact_link'),
             ],
             heading="Sidebar",
             classname="collapsible"
@@ -708,16 +716,25 @@ class CollectionPage(Page):
     sections = StreamField([
         ('section', CollectionBlock())
     ])
-    show_search = models.BooleanField(max_length=255, default=False,
+    show_search = models.BooleanField(
+                                    max_length=255, default=False,
                                     null=False, blank=False,
                                     choices=[
                                         (True, 'Show committee search box'),
                                         (False, 'Do not show committee search box')
                                     ])
+    show_contact_card = models.BooleanField(
+                                    max_length=255, default=True,
+                                    null=False, blank=False,
+                                    choices=[
+                                        (True, 'Show contact card'),
+                                        (False, 'Do not show contact card')
+                                    ])
     content_panels = Page.content_panels + [
         StreamFieldPanel('body'),
         FieldPanel('sidebar_title'),
         FieldPanel('show_search'),
+        FieldPanel('show_contact_card'),
         StreamFieldPanel('related_pages'),
         StreamFieldPanel('sections'),
     ]
@@ -755,6 +772,13 @@ class ResourcePage(Page):
     breadcrumb_style = models.CharField(max_length=255,
         choices=[('primary', 'Blue'), ('secondary', 'Red')],
         default='primary')
+    show_contact_card = models.BooleanField(
+                                    max_length=255, default=False,
+                                    null=False, blank=False,
+                                    choices=[
+                                        (True, 'Show contact card'),
+                                        (False, 'Do not show contact card')
+                                    ])
 
     content_panels = Page.content_panels + [
         StreamFieldPanel('intro'),
@@ -762,7 +786,8 @@ class ResourcePage(Page):
         StreamFieldPanel('related_pages'),
         StreamFieldPanel('sections'),
         StreamFieldPanel('citations'),
-        StreamFieldPanel('related_topics')
+        StreamFieldPanel('related_topics'),
+        FieldPanel('show_contact_card')
     ]
 
     promote_panels = Page.promote_panels + [
