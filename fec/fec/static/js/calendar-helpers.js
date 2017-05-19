@@ -23,7 +23,7 @@ function getGoogleUrl(event) {
 }
 
 function getUrl(path, params) {
-  return URI(window.API_LOCATION)
+  var url = URI(window.API_LOCATION)
     .path(Array.prototype.concat(window.API_VERSION, path || [], '').join('/'))
     .addQuery({
       api_key: window.API_KEY,
@@ -31,6 +31,9 @@ function getUrl(path, params) {
     })
     .addQuery(params || {})
     .toString();
+
+  // Decode in order to preserve + signs
+  return URI.decode(url);
 }
 
 function className(event) {

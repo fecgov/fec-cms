@@ -24,6 +24,7 @@
     "browserify-istanbul": "^0.2.1",
     "chai": "^3.4.1",
     "gulp": "^3.9.0",
+    "gulp-if": "^2.0.2",
     "gulp-uglify": "2.1.2",
     "handlebars": "^4.0.5",
     "hbsfy": "2.2.1",

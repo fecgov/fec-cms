@@ -8,16 +8,9 @@
   <div class="js-accordion accordion--neutral" data-content-prefix="updates">
     <button type="button" class="js-accordion-trigger accordion__button">About latest updates</button>
     <div class="accordion__content">
-      <p>The FEC regularly publishes information for media professionals, members of the public and candidates and committees.</p>
-      <h3>For media professionals</h3>
+      <p>Commission meeting agendas are usually published a week before a scheduled meeting. Sunshine Act Notices are announcements of open meetings and executive sessions. Notices for open meetings are published at least a week before a scheduled meeting and announce the date, time and a general list of items for discussion.</p>
       <p>Weekly Digests are published every Friday and summarize the week's publicly disclosed activity. Press releases are published as news happens.</p>
-      <h3>For candidates and committees</h3>
       <p>FEC Record articles inform candidates and committees about FEC developments and are published as news happens. Tips for Treasurers are published once a week.</p>
-      {% if request.user.is_authenticated or settings.FEATURES.agendas %}
-      <h3>For members of the public</h3>
-      <p>Meeting agendas are usually published a week before a scheduled meeting.</p>
-      <p>Sunshine Act Notices are announcements of open meetings and executive sessions. Notices for open meetings are published at least a week before a scheduled meeting and announce the date, time and a general list of items for discussion.</p>
-      {% endif %}
     </div>
   </div>
 {% endblock %}
@@ -28,15 +21,11 @@
       <label class="label">Publication type</label>
       <select name="update_type">
         <option value="">All</option>
-        <option value="for-committees" {% if 'for-committees' in update_types %}selected{% endif %}>For candidates and committees:</option>
-        <option value="fec-record" {% if 'fec-record' in update_types %}selected{% endif %}>- FEC Record</option>
-        <option value="tips-for-treasurers" {% if 'tips-for-treasurers' in update_types %}selected{% endif %}>- Tips for Treasurers</option>
-        <option value="for-media" {% if 'for-media' in update_types %}selected{% endif %}>For media professionals:</option>
-        <option value="press-release" {% if 'press-release' in update_types %}selected{% endif %}>- Press releases</option>
-        <option value="weekly-digest" {% if 'weekly-digest' in update_types %}selected{% endif %}>- Weekly Digests</option>
-        {% if request.user.is_authenticated or settings.FEATURES.agendas %}
         <option value="meetings" {% if 'meetings' in update_types %}selected{% endif %}>Commission meetings</option>
-        {% endif %}
+        <option value="fec-record" {% if 'fec-record' in update_types %}selected{% endif %}>FEC Record</option>
+        <option value="press-release" {% if 'press-release' in update_types %}selected{% endif %}>Press releases</option>
+        <option value="tips-for-treasurers" {% if 'tips-for-treasurers' in update_types %}selected{% endif %}>Tips for Treasurers</option>
+        <option value="weekly-digest" {% if 'weekly-digest' in update_types %}selected{% endif %}>Weekly Digests</option>
       </select>
     </div>
       <div class="filter">
@@ -66,7 +55,7 @@
             <option value="">All meetings</option>
             <option value="O"{% if "O" in category_list %} selected{% endif %}>Open meetings</option>
             <option value="E"{% if "E" in category_list %} selected{% endif %}>Executive sessions</option>
-          </select>        
+          </select>
         {% else %}
         <label class="label" for="empty-select">Subjects</label>
         <select id="empty-select" name="category" disabled>
@@ -81,13 +70,15 @@
         <button type="submit" class="combo__button button button--standard button--go"><span class="u-visually-hidden">Filter</span></button>
       </div>
     </div>
-    <div class="filter">
-      <div class="combo combo--filter--mini">
-        <label for="search" class="label">Search</label>
-        <input id="search" class="combo__input" name="search" type="text" value="{{ search }}">
-        <button type="submit" class="combo__button button button--standard button--search"><span class="u-visually-hidden">Search</span></button>
+    {% if not 'meetings' in update_types %}
+      <div class="filter">
+        <div class="combo combo--filter--mini">
+          <label for="search" class="label">Search</label>
+          <input id="search" class="combo__input" name="search" type="text" value="{{ search }}">
+          <button type="submit" class="combo__button button button--standard button--search"><span class="u-visually-hidden">Search</span></button>
+        </div>
       </div>
-    </div>
+    {% endif %}
 </form>
 {% endblock %}
 

@@ -18,6 +18,9 @@
         <span class="t-bold">
           {% if update.get_update_type == 'Tips for Treasurers' %}
             Tips for treasurers:
+
+          {% elif update.get_update_type == 'Commission Meetings' %}
+            Commission meeting:
           {% else %}
             {{ update.category|capfirst }}:
           {% endif %}
