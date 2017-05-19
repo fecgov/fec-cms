@@ -12,8 +12,9 @@
             <span class="t-block">{{datetime start format="fullDayOfWeek"}}</span>
           </div>
           <div class="cal-list__time">
-            {{#if end}}
-              {{datetime start format="time"}}&ndash;{{datetime end format="time"}}
+            {{#if hasStartTime}}
+              {{datetime start format="time"}}
+              {{#if end}}&ndash;{{datetime end format="time"}}{{/if}}
             {{else}}
               All day
             {{/if}}

@@ -43,6 +43,14 @@ function className(event) {
   }
 }
 
+function checkStartTime(event) {
+  if (event.start_date) {
+    return moment(event.start_date).hour() ? true : false;
+  } else {
+    return false;
+  }
+}
+
 function mapCategoryTitle(category) {
   if (category.match(/^report-M/) !== null) {
     return 'Monthly deadline';
@@ -76,6 +84,7 @@ function mapCategoryDescription(category) {
 
 module.exports = {
   getGoogleUrl: getGoogleUrl,
+  checkStartTime: checkStartTime,
   getUrl: getUrl,
   className: className,
   mapCategoryTitle: mapCategoryTitle,
