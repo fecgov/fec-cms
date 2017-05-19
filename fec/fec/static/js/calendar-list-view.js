@@ -58,8 +58,15 @@ var chronologicalGroups = function(events, start, end) {
     .filter(function(event) {
       return start <= event.start && event.start < end;
     })
+    .map(function(value) {
+      // Group the events by the formatted value of their start dates,
+      // otherwise events with a time on their date will be grouped separately
+      // from those that just have a date
+      value.groupByValue = value.start.format('MMMM D, YYYY');
+      return value;
+    })
     .sortBy('start')
-    .groupBy('start')
+    .groupBy('groupByValue')
     .map(function(values, key) {
       return {
         title: moment.utc(new Date(key)).format('MMMM D, YYYY'),

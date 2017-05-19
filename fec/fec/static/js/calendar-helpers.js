@@ -23,7 +23,7 @@ function getGoogleUrl(event) {
 }
 
 function getUrl(path, params) {
-  return URI(window.API_LOCATION)
+  var url = URI(window.API_LOCATION)
     .path(Array.prototype.concat(window.API_VERSION, path || [], '').join('/'))
     .addQuery({
       api_key: window.API_KEY,
@@ -31,6 +31,9 @@ function getUrl(path, params) {
     })
     .addQuery(params || {})
     .toString();
+
+  // Decode in order to preserve + signs
+  return URI.decode(url);
 }
 
 function className(event) {
@@ -40,6 +43,14 @@ function className(event) {
     return 'fc-multi-day';
   } else {
     return '';
+  }
+}
+
+function checkStartTime(event) {
+  if (event.start_date) {
+    return moment(event.start_date).hour() ? true : false;
+  } else {
+    return false;
   }
 }
 
@@ -76,6 +87,7 @@ function mapCategoryDescription(category) {
 
 module.exports = {
   getGoogleUrl: getGoogleUrl,
+  checkStartTime: checkStartTime,
   getUrl: getUrl,
   className: className,
   mapCategoryTitle: mapCategoryTitle,
