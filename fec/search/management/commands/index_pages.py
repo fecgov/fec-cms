@@ -67,8 +67,13 @@ class Command(BaseCommand):
             print(r.__dict__)
 
     def update(self, page):
-        self.stdout.write('Updating {}'.format(page['document_id']))
-        requests.put("https://i14y.usa.gov/api/v1/documents", auth=(drawer, key), data=page)
+        url = "https://i14y.usa.gov/api/v1/documents/{}".format(page.get('document_id'))
+        r = requests.put(url, auth=(drawer, key), data=page)
+        if r.status_code == 200:
+            self.stdout.write('Updated {}'.format(page['document_id']))
+        else:
+            self.stdout.write('Could not update {}'.format(page['document_id']))
+            print(r.__dict__)
 
     def delete(self, page):
         self.stdout.write('Deleting {}'.format(page['document_id']))

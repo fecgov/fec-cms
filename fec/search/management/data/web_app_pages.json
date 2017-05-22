@@ -1,277 +1,222 @@
 [
   {
+    "document_id": "app-1",
     "title": "Campaign finance data home",
     "path": "https://beta.fec.gov/data/",
     "created": "2017-04-01",
     "language": "en",
-    "promote": "true",
+    "promote": true,
     "description": "See how candidates and committees raise and spend money in federal elections. This financial data helps voters make informed decisions.",
-    "tags": "data, finance data, contributions, candidates, committees, pacs, super pacs, disclosure",
-    "content": "",
-    "scrape_content": ""
+    "tags": "data, finance data, contributions, candidates, committees, pacs, super pacs, disclosure"
   },
   {
+    "document_id": "app-2",
     "title": "Advanced data",
     "path": "https://beta.fec.gov/data/advanced/",
     "created": "2017-04-01",
     "language": "en",
-    "promote": "true",
+    "promote": true,
     "description": "Search, filter and download data",
-    "tags": "raising, spending, candidates, committees, contributions, advanced data, campaign finance data, disclosure",
-    "content": "",
-    "scrape_content": ""
+    "tags": "raising, spending, candidates, committees, contributions, advanced data, campaign finance data, disclosure"
   },
   {
+    "document_id": "app-3",
     "title": "Browse receipts",
     "path": "https://beta.fec.gov/data/receipts/",
     "created": "2017-04-01",
     "language": "en",
-    "promote": "true",
+    "promote": true,
     "description": "Browse itemized receipts",
-    "tags": "raising, contributors, contributions, donors, receipts, schedule a, donations",
-    "content": "",
-    "scrape_content": ""
+    "tags": "raising, contributors, contributions, donors, receipts, schedule a, donations"
   },
   {
+    "document_id": "app-4",
     "title": "Browse individual contributions",
     "path": "https://beta.fec.gov/data/receipts/individual-contributions",
     "created": "2017-04-01",
     "language": "en",
-    "promote": "true",
+    "promote": true,
     "description": "Browse individual contributions",
-    "tags": "raising, contributors, contributions, donors, receipts, schedule a, donations",
-    "content": "",
-    "scrape_content": ""
+    "tags": "raising, contributors, contributions, donors, receipts, schedule a, donations"
   },
   {
+    "document_id": "app-5",
     "title": "Browse disbursements",
     "path": "https://beta.fec.gov/data/disbursements",
     "created": "2017-04-01",
     "language": "en",
-    "promote": "true",
+    "promote": true,
     "description": "Browse itemized disbursements",
-    "tags": "spending, disbursements, schedule b, operating expenditures",
-    "content": "",
-    "scrape_content": ""
+    "tags": "spending, disbursements, schedule b, operating expenditures"
   },
   {
+    "document_id": "app-6",
     "title": "Browse independent expenditures",
     "path": "https://beta.fec.gov/data/independent-expenditures/",
     "created": "2017-04-01",
     "language": "en",
-    "promote": "true",
+    "promote": true,
     "description": "Browse independent expenditures",
-    "tags": "independent expenditures, outside spending, schedule e",
-    "content": "",
-    "scrape_content": ""
+    "tags": "independent expenditures, outside spending, schedule e"
   },
   {
+    "document_id": "app-7",
     "title": "Browse party coordinated expenditures",
     "path": "https://beta.fec.gov/data/party-coordinated-expenditures/",
     "created": "2017-04-01",
     "language": "en",
-    "promote": "true",
+    "promote": true,
     "description": "Browse party coordinated expenditures",
-    "tags": "party coordinated expenditures, schedule f",
-    "content": "",
-    "scrape_content": ""
+    "tags": "party coordinated expenditures, schedule f"
   },
   {
+    "document_id": "app-8",
     "title": "Browse electioneering communications",
     "path": "https://beta.fec.gov/data/electioneering-communications/",
     "created": "2017-04-01",
     "language": "en",
-    "promote": "true",
+    "promote": true,
     "description": "Browse electioneering communications",
-    "tags": "",
-    "content": "",
-    "scrape_content": ""
+    "tags": ""
   },
   {
+    "document_id": "app-9",
     "title": "Browse communication costs",
     "path": "https://beta.fec.gov/data/communication-costs/",
     "created": "2017-04-01",
     "language": "en",
-    "promote": "true",
+    "promote": true,
     "description": "Browse communication costs",
-    "tags": "",
-    "content": "",
-    "scrape_content": ""
+    "tags": ""
   },
   {
+    "document_id": "app-10",
     "title": "Browse loans",
-    "path": "https://beta.fec.gov/data/loans/?is_individual=True",
+    "path": "https://beta.fec.gov/data/loans/",
     "created": "2017-04-01",
     "language": "en",
-    "promote": "true",
+    "promote": true,
     "description": "Browse loans",
-    "tags": "",
-    "content": "",
-    "scrape_content": ""
+    "tags": ""
   },
   {
-    "title": "Browse debts",
-    "path": "",
-    "created": "2017-04-01",
-    "language": "en",
-    "promote": "true",
-    "description": "Browse debts",
-    "tags": "",
-    "content": "",
-    "scrape_content": ""
-  },
-  {
+    "document_id": "app-12",
     "title": "Browse all candidates",
     "path": "https://beta.fec.gov/data/candidates/",
     "created": "2017-04-01",
     "language": "en",
-    "promote": "true",
+    "promote": true,
     "description": "Browse all candidates",
-    "tags": "",
-    "content": "",
-    "scrape_content": ""
+    "tags": ""
   },
   {
+    "document_id": "app-13",
     "title": "Browse candidates for president",
     "path": "https://beta.fec.gov/data/candidates/president/",
     "created": "2017-04-01",
     "language": "en",
-    "promote": "true",
+    "promote": true,
     "description": "Browse candidates for president",
-    "tags": "",
-    "content": "",
-    "scrape_content": ""
+    "tags": ""
   },
   {
+    "document_id": "app-14",
     "title": "Browse candidates for Senate",
     "path": "https://beta.fec.gov/data/candidates/senate/",
     "created": "2017-04-01",
     "language": "en",
-    "promote": "true",
+    "promote": true,
     "description": "Browse candidates for Senate",
-    "tags": "",
-    "content": "",
-    "scrape_content": ""
+    "tags": ""
   },
   {
+    "document_id": "app-15",
     "title": "Browse candidates for House of Representatives",
     "path": "https://beta.fec.gov/data/candidates/house/",
     "created": "2017-04-01",
     "language": "en",
-    "promote": "true",
+    "promote": true,
     "description": "Browse candidates for House of Representatives",
-    "tags": "",
-    "content": "",
-    "scrape_content": ""
+    "tags": ""
   },
   {
+    "document_id": "app-16",
     "title": "Browse all committees",
     "path": "https://beta.fec.gov/data/committees/",
     "created": "2017-04-01",
     "language": "en",
-    "promote": "true",
+    "promote": true,
     "description": "Browse all committees",
-    "tags": "pacs, super pacs, committees, find committees",
-    "content": "",
-    "scrape_content": ""
+    "tags": "pacs, super pacs, committees, find committees"
   },
   {
+    "document_id": "app-17",
     "title": "Browse all filings",
     "path": "https://beta.fec.gov/data/filings/",
     "created": "2017-04-01",
     "language": "en",
-    "promote": "true",
+    "promote": true,
     "description": "Browse all filings",
-    "tags": "filings, reports, form 1, form 2, efiling, electronic filings",
-    "content": "",
-    "scrape_content": ""
+    "tags": "filings, reports, form 1, form 2, efiling, electronic filings"
   },
   {
+    "document_id": "app-18",
     "title": "Browse presidential committee reports",
     "path": "https://beta.fec.gov/data/reports/presidential/",
     "created": "2017-04-01",
     "language": "en",
-    "promote": "true",
+    "promote": true,
     "description": "Browse presidential committee reports",
-    "tags": "filings, reports, form 3P, efiling, electronic filings",
-    "content": "",
-    "scrape_content": ""
+    "tags": "filings, reports, form 3P, efiling, electronic filings"
   },
   {
+    "document_id": "app-19",
     "title": "Browse House and Senate committee reports",
     "path": "https://beta.fec.gov/data/reports/house-senate/",
     "created": "2017-04-01",
     "language": "en",
-    "promote": "true",
+    "promote": true,
     "description": "Browse House and Senate committee reports",
-    "tags": "filings, reports, form 3, efiling, electronic filings",
-    "content": "",
-    "scrape_content": ""
+    "tags": "filings, reports, form 3, efiling, electronic filings"
   },
   {
+    "document_id": "app-20",
     "title": "Browse PAC and Party committee reports",
     "path": "https://beta.fec.gov/data/reports/pac-party/",
     "created": "2017-04-01",
     "language": "en",
-    "promote": "true",
+    "promote": true,
     "description": "Browse PAC and Party committee reports",
-    "tags": "filings, reports, form 3X, efiling, electronic filings",
-    "content": "",
-    "scrape_content": ""
+    "tags": "filings, reports, form 3X, efiling, electronic filings"
   },
   {
+    "document_id": "app-21",
     "title": "Raising breakdown",
     "path": "https://beta.fec.gov/data/raising/",
     "created": "2017-04-01",
     "language": "en",
-    "promote": "true",
+    "promote": true,
     "description": "Raising breakdown",
-    "tags": "top fundraisers",
-    "content": "",
-    "scrape_content": ""
+    "tags": "top fundraisers"
   },
   {
+    "document_id": "app-22",
     "title": "Spending breakdown",
     "path": "https://beta.fec.gov/data/spending/",
     "created": "2017-04-01",
     "language": "en",
-    "promote": "true",
+    "promote": true,
     "description": "Spending breakdown",
-    "tags": "top spenders",
-    "content": "",
-    "scrape_content": ""
+    "tags": "top spenders"
   },
   {
+    "document_id": "app-23",
     "title": "Find candidates and elections by location",
     "path": "https://beta.fec.gov/data/elections/",
     "created": "2017-04-01",
     "language": "en",
-    "promote": "true",
+    "promote": true,
     "description": "Find candidates and elections by location",
-    "tags": "lookup candidate, zip code, my representative, my senator",
-    "content": "",
-    "scrape_content": ""
-  },
-  {
-    "title": "Advisory Opinions",
-    "path": "https://beta.fec.gov/data/legal/advisory-opinions/",
-    "created": "2017-04-01",
-    "language": "en",
-    "promote": "true",
-    "description": "",
-    "tags": "",
-    "content": "",
-    "scrape_content": "TRUE"
-  },
-  {
-    "title": "Statutes",
-    "path": "https://beta.fec.gov/data/legal/statutes/",
-    "created": "2017-04-01",
-    "language": "en",
-    "promote": "true",
-    "description": "",
-    "tags": "",
-    "content": "",
-    "scrape_content": "TRUE"
+    "tags": "lookup candidate, zip code, my representative, my senator"
   }
 ]
