@@ -54,7 +54,7 @@ def replace_url(url):
     parsed = parse.urlparse(url)
     if parsed.netloc == 'beta.fec.gov':
         # Only return a new url if the base is beta.fec.gov
-        return parse.urljoin(settings.FEC_CANONICAL_BASE, parsed.path)
+        return parse.urljoin(settings.CANONICAL_BASE, parsed.path)
     else:
         return url
 
