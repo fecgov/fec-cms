@@ -15,7 +15,7 @@ from home.models import (
     TipsForTreasurersPage
 )
 
-BASE_URL = 'https://beta.fec.gov'
+BASE_URL = settings.CANONICAL_BASE
 
 # These are the parent pages for which we want *all* descendants of, not just direct children
 descendents_of = [

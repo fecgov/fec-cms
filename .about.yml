@@ -20,7 +20,7 @@ parent: openFEC
 
 # Maturity stage of the project (required)
 # values: discovery, alpha, beta, live
-stage: beta
+stage: live
 
 # Should this repo have automated tests? If so, set to `true`. (required)
 # values: true, false
