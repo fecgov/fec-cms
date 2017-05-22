@@ -192,7 +192,7 @@ ENVIRONMENTS = {
     'prod': 'PRODUCTION',
 }
 FEC_CMS_ENVIRONMENT = ENVIRONMENTS.get(env.get_credential('FEC_CMS_ENVIRONMENT'), 'LOCAL')
-CONTACT_EMAIL = 'betafeedback@fec.gov'
+CONTACT_EMAIL = 'webmanager@fec.gov'
 WEBMANAGER_EMAIL = "webmanager@fec.gov"
 CONSTANTS = constants
 
