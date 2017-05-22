@@ -67,7 +67,7 @@ class Command(BaseCommand):
             print(r.__dict__)
 
     def update(self, page):
-        url = "https://i14y.usa.gov/api/v1/documents/" + page.get('document_id')
+        url = "https://i14y.usa.gov/api/v1/documents/{}".format(page.get('document_id'))
         r = requests.put(url, auth=(drawer, key), data=page)
         if r.status_code == 200:
             self.stdout.write('Updated {}'.format(page['document_id']))
