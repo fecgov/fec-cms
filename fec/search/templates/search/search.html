@@ -93,7 +93,7 @@
               <ul>
               {% for result in results.site.best_bets.results %}
                 <li class="post post--icon">
-                  <h3><i class="icon icon--inline--left i-star"></i><a href="{{ result.url }}">{{ result.title }}</a></h3>
+                  <h3><i class="icon icon--inline--left i-star"></i><a href="{{ result.url }}">{{ result.title | highlight_matches }}</a></h3>
                   <div class="post__path t-small t-sans">{{ result.url }}</div>
                   <div class="t-sans post__preview">{{ result.description | highlight_matches }}</div>
                 </li>
