@@ -1,10 +1,9 @@
-{% with "Explore federal campaign finance data with betaFEC, a new site where users can see how much money is raised and spent in federal elections. An official U.S. Government site, betaFEC is a Federal Election Commission project, designed in partnership with 18F." as generic_description %}
 {% load static %}
 {% load filters %}
 
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="description" content="{% if self.search_description %}{{ self.search_description }}{% else %}{{ generic_description }}{% endif %}">
+<meta name="description" content="{% if self.search_description %}{{ self.search_description }}{% else %}{{ self.content_section | get_meta_description }}{% endif %}">
 
 <!-- Mobile Specific Metas
 ================================================== -->
@@ -15,17 +14,17 @@
 <!-- Twitter
 ================================================== -->
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="{{ self.title }} - betaFEC">
-<meta name="twitter:description" content="{% if self.search_description %}{{ self.search_description }}{% else %}{{ generic_description }}{% endif %}">
+<meta name="twitter:title" content="{{ self.title }} - FEC.gov">
+<meta name="twitter:description" content="{% if self.search_description %}{{ self.search_description }}{% else %}{{ self.content_section | get_meta_description }}{% endif %}">
 <meta name="twitter:image" content="{{ self.content_section | get_social_image }}">
 
 <!-- Facebook
 ================================================== -->
 <meta property="og:type" content="website" />
-<meta property="og:url" content="https://beta.fec.gov" />
-<meta property="og:title" content="{{ self.title }} - betaFEC" />
-<meta property="og:site_name" content="betaFEC" />
-<meta property="og:description" content="{% if self.search_description %}{{ self.search_description }}{% else %}{{ generic_description }}{% endif %}" />
+<meta property="og:url" content="{{ settings.CANONICAL_BASE }}{{ request.path }}" />
+<meta property="og:title" content="{{ self.title }} - FEC.gov" />
+<meta property="og:site_name" content="FEC.gov" />
+<meta property="og:description" content="{% if self.search_description %}{{ self.search_description }}{% else %}{{ self.content_section | get_meta_description }}{% endif %}" />
 <meta property="og:image" content="{{ request.scheme }}://{{ request.get_host }}{{ self.content_section | get_social_image }}" />
 
 <!-- Google
@@ -50,4 +49,3 @@
 <meta name="application-name" content="&nbsp;"/>
 <meta name="msapplication-TileColor" content="#FFFFFF" />
 <meta name="msapplication-TileImage" content="{% static "img/favicon/general/mstile-144x144.png" %}" />
-{% endwith %}

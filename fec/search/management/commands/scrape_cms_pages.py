@@ -15,7 +15,7 @@ from home.models import (
     TipsForTreasurersPage
 )
 
-BASE_URL = 'https://beta.fec.gov'
+BASE_URL = settings.CANONICAL_BASE
 
 # These are the parent pages for which we want *all* descendants of, not just direct children
 descendents_of = [
@@ -64,26 +64,26 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         self.stdout.write(self.style.WARNING('Getting pages...'))
         if options['page']:
-            page = Page.objects.get(url_path=options['page'])
+            page = Page.objects.live().public().get(url_path=options['page'])
             # Hack so the loop below works
             pages = [page]
         elif options['descendants_of']:
-            parent = Page.objects.get(url_path=options['descendants_of'])
-            pages = Page.objects.descendant_of(parent).live()
+            parent = Page.objects.live().public().get(url_path=options['descendants_of'])
+            pages = Page.objects.descendant_of(parent).live().public()
         elif options['child_of']:
-            parent = Page.objects.get(url_path=options['child_of'])
-            pages = Page.objects.child_of(parent).live()
+            parent = Page.objects.live().public().get(url_path=options['child_of'])
+            pages = Page.objects.child_of(parent).live().public()
         else:
             # If no specific pages were requested, just get them all
             pages = []
             # Get all the pages that are descendants of pages
             for p in descendents_of:
-                parent = Page.objects.get(url_path=p)
-                pages += Page.objects.descendant_of(parent).live()
+                parent = Page.objects.live().public().get(url_path=p)
+                pages += Page.objects.descendant_of(parent).live().public()
             # Get all the pages that are direct children of pages
             for p in children_of:
-                parent = Page.objects.get(url_path=p)
-                pages += Page.objects.child_of(parent).live()
+                parent = Page.objects.live().public().get(url_path=p)
+                pages += Page.objects.child_of(parent).live().public()
 
         extracted = []
 

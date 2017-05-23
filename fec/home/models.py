@@ -882,6 +882,8 @@ class MeetingPage(Page):
     full_audio_url = models.URLField(blank=True)
     mtg_transcript_url = models.URLField(blank=True)
 
+    homepage_hide = models.BooleanField(default=False)
+
     agenda = StreamField([
         ('agenda_item', blocks.StructBlock([
             ('item_title', blocks.TextBlock()),
@@ -930,6 +932,10 @@ class MeetingPage(Page):
             heading='Imported meeting content',
             classname='collapsible collapsed'
         )
+    ]
+
+    promote_panels = Page.promote_panels + [
+        FieldPanel('homepage_hide')
     ]
 
     @property
