@@ -76,4 +76,5 @@ fec/media
 fec/data_loader/management/commands/meetings--*.json
 fec/data_loader/management/commands/out/*.html
 
-fec/search/management/dump.json
+# The output file from the search scraper
+fec/search/management/data/output.json

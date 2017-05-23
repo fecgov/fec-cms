@@ -192,7 +192,7 @@ ENVIRONMENTS = {
     'prod': 'PRODUCTION',
 }
 FEC_CMS_ENVIRONMENT = ENVIRONMENTS.get(env.get_credential('FEC_CMS_ENVIRONMENT'), 'LOCAL')
-CONTACT_EMAIL = 'betafeedback@fec.gov'
+CONTACT_EMAIL = 'webmanager@fec.gov'
 WEBMANAGER_EMAIL = "webmanager@fec.gov"
 CONSTANTS = constants
 
@@ -202,11 +202,12 @@ FEC_SERVICE_NOW_API = env.get_credential('FEC_SERVICE_NOW_API')
 FEC_SERVICE_NOW_USERNAME = env.get_credential('FEC_SERVICE_NOW_USERNAME')
 FEC_SERVICE_NOW_PASSWORD = env.get_credential('FEC_SERVICE_NOW_PASSWORD')
 FEC_DIGITALGOV_KEY = env.get_credential('FEC_DIGITALGOV_KEY')
-FEC_DIGITALGOV_DRAWER_KEY = env.get_credential('DIGITALGOV_DRAWER_KEY', '')
+FEC_DIGITALGOV_DRAWER_KEY_MAIN = env.get_credential('DIGITALGOV_DRAWER_KEY_MAIN', '')
+FEC_DIGITALGOV_DRAWER_KEY_TRANSITION = env.get_credential('DIGITALGOV_DRAWER_KEY_TRANSITION', '')
 
 FEC_TRANSITION_URL = env.get_credential('FEC_TRANSITION_URL', 'http://www.fec.gov')
 FEC_CLASSIC_URL = env.get_credential('FEC_CLASSIC_URL', 'http://www.fec.gov')
-CANONICAL_BASE = 'https://beta.fec.gov'
+CANONICAL_BASE = env.get_credential('CANONICAL_BASE', 'https://www.fec.gov')
 
 FEATURES = {
     'record': bool(env.get_credential('FEC_FEATURE_RECORD', '')),

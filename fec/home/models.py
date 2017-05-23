@@ -54,6 +54,25 @@ stream_factory = functools.partial(
     ],
 )
 
+def get_content_section(page):
+    """
+    Find the top-level parent in order to highlight
+    the main nav item and set social images.
+    Takes a Page object and returns a string of either 'legal', 'help', or ''
+    """
+    slugs = {
+        'help-candidates-and-committees': 'help',
+        'legal-resources': 'legal'
+    }
+    ancestors = page.get_ancestors()
+    content_sections = [
+        slugs.get(ancestor.slug) for ancestor in ancestors
+        if slugs.get(ancestor.slug) != None
+    ]
+    if len(content_sections):
+        return content_sections[0]
+    else:
+        return ''
 
 class UniqueModel(models.Model):
     """Abstract base class for unique pages."""
@@ -88,7 +107,7 @@ class ContentPage(Page):
     # Default content section for determining the active nav
     @property
     def content_section(self):
-        return 'help'
+        return ''
 '''
 class Person(User):
     objects = User()
@@ -166,10 +185,6 @@ class HomePage(ContentPage, UniqueModel):
     @property
     def content_section(self):
         return ''
-
-
-class LandingPage(ContentPage):
-    template = 'home/registration-and-reporting/landing_page.html'
 
 
 class Author(models.Model):
@@ -487,6 +502,13 @@ class CustomPage(Page):
     continue_learning = StreamField([
         ('continue_learning', blocks.ListBlock(ThumbnailBlock(), icon='doc-empty')),
     ], null=True)
+    show_contact_link = models.BooleanField(
+                                    max_length=255, default=True,
+                                    null=False, blank=False,
+                                    choices=[
+                                        (True, 'Show contact link'),
+                                        (False, 'Do not show contact link')
+                                    ])
 
     content_panels = Page.content_panels + [
         FieldPanel('author'),
@@ -497,11 +519,16 @@ class CustomPage(Page):
         MultiFieldPanel([
                 StreamFieldPanel('sidebar'),
                 StreamFieldPanel('record_articles'),
+                FieldPanel('show_contact_link'),
             ],
             heading="Sidebar",
             classname="collapsible"
         )
     ]
+
+    @property
+    def content_section(self):
+        return get_content_section(self)
 
 
 class PressLandingPage(Page):
@@ -689,20 +716,32 @@ class CollectionPage(Page):
     sections = StreamField([
         ('section', CollectionBlock())
     ])
-    show_search = models.BooleanField(max_length=255, default=False,
+    show_search = models.BooleanField(
+                                    max_length=255, default=False,
                                     null=False, blank=False,
                                     choices=[
                                         (True, 'Show committee search box'),
                                         (False, 'Do not show committee search box')
                                     ])
+    show_contact_card = models.BooleanField(
+                                    max_length=255, default=True,
+                                    null=False, blank=False,
+                                    choices=[
+                                        (True, 'Show contact card'),
+                                        (False, 'Do not show contact card')
+                                    ])
     content_panels = Page.content_panels + [
         StreamFieldPanel('body'),
         FieldPanel('sidebar_title'),
         FieldPanel('show_search'),
+        FieldPanel('show_contact_card'),
         StreamFieldPanel('related_pages'),
         StreamFieldPanel('sections'),
     ]
 
+    @property
+    def content_section(self):
+        return get_content_section(self)
 
 class ResourcePage(Page):
     # Class for pages that include a side nav, multiple sections and citations
@@ -733,6 +772,13 @@ class ResourcePage(Page):
     breadcrumb_style = models.CharField(max_length=255,
         choices=[('primary', 'Blue'), ('secondary', 'Red')],
         default='primary')
+    show_contact_card = models.BooleanField(
+                                    max_length=255, default=False,
+                                    null=False, blank=False,
+                                    choices=[
+                                        (True, 'Show contact card'),
+                                        (False, 'Do not show contact card')
+                                    ])
 
     content_panels = Page.content_panels + [
         StreamFieldPanel('intro'),
@@ -740,7 +786,8 @@ class ResourcePage(Page):
         StreamFieldPanel('related_pages'),
         StreamFieldPanel('sections'),
         StreamFieldPanel('citations'),
-        StreamFieldPanel('related_topics')
+        StreamFieldPanel('related_topics'),
+        FieldPanel('show_contact_card')
     ]
 
     promote_panels = Page.promote_panels + [
@@ -753,6 +800,10 @@ class ResourcePage(Page):
     def display_date(self):
         return self.date.strftime('%B %Y')
 
+    @property
+    def content_section(self):
+        return get_content_section(self)
+
 
 class LegalResourcesLandingPage(ContentPage, UniqueModel):
     subpage_types = ['ResourcePage']
@@ -760,7 +811,7 @@ class LegalResourcesLandingPage(ContentPage, UniqueModel):
 
     @property
     def content_section(self):
-        return 'legal-resources'
+        return 'legal'
 
 
 class ServicesLandingPage(ContentPage, UniqueModel):
@@ -789,7 +840,7 @@ class ServicesLandingPage(ContentPage, UniqueModel):
 
     @property
     def content_section(self):
-        return 'candidate-and-committee-services'
+        return 'help'
 
     @property
     def hero_class(self):
@@ -800,13 +851,13 @@ class MeetingPage(Page):
     OPEN = 'O'
     EXECUTIVE = 'E'
     MEETING_TYPE_CHOICES = (
-        (OPEN, 'Open'),
-        (EXECUTIVE, 'Executive'),
+        (OPEN, 'Open meeting'),
+        (EXECUTIVE, 'Executive session'),
     )
 
     date = models.DateField(default=datetime.date.today)
     end_date = models.DateField(null=True, blank=True)
-    time = models.TimeField(null=True, blank=True)
+    time = models.TimeField(null=True, blank=True, help_text='If no time is entered the time will be set to 10 a.m.')
     meeting_type = models.CharField(
         max_length=2,
         choices=MEETING_TYPE_CHOICES,
@@ -819,6 +870,7 @@ class MeetingPage(Page):
     sunshine_act_links = models.TextField(
         blank=True, help_text='URLs separated by a newline')
     live_video_url = models.URLField(blank=True)
+    live_video_captions = models.URLField(blank=True)
 
     imported_html = StreamField(
         [('html_block', blocks.RawHTMLBlock())],
@@ -826,42 +878,66 @@ class MeetingPage(Page):
         blank=True
     )
 
-    mtg_media = StreamField([
-        ('full_video_url', blocks.TextBlock(required=False)),    # 'video_link'
-        ('full_audio_url', blocks.TextBlock(required=False)),    # 'primary_audio_link'
-        ('mtg_transcript_url', blocks.TextBlock(required=False))  # 'closed_captioning_link'
-    ])
+    full_video_url = models.URLField(blank=True)
+    full_audio_url = models.URLField(blank=True)
+    mtg_transcript_url = models.URLField(blank=True)
+
+    homepage_hide = models.BooleanField(default=False)
 
     agenda = StreamField([
-        ('agenda_item', blocks.StreamBlock([
+        ('agenda_item', blocks.StructBlock([
             ('item_title', blocks.TextBlock()),
-            ('item_text', blocks.RichTextBlock()),
+            ('item_text', blocks.RichTextBlock(required=False)),
             ('item_audio', DocumentChooserBlock(required=False)),
         ]))
     ])
 
     content_panels = Page.content_panels + [
-        FieldPanel('date'),
-        FieldPanel('end_date'),
-        FieldPanel('time'),
-        FieldPanel('meeting_type'),
-        FieldPanel('draft_minutes_links'),
-        FieldPanel('approved_minutes_date'),
-        FieldPanel('approved_minutes_link'),
-        FieldPanel('sunshine_act_links'),
-        FieldPanel('live_video_url'),
         StreamFieldPanel('agenda'),
-        StreamFieldPanel('imported_html'),
         MultiFieldPanel(
             [
-                StreamFieldPanel('mtg_media'),
+                FieldPanel('date'),
+                FieldPanel('end_date'),
+                FieldPanel('time'),
+                FieldPanel('meeting_type'),
             ],
-            heading='Entire Meeting Media',
+            heading='Meeting details',
             classname='collapsible collapsed'
         ),
+        MultiFieldPanel(
+            [
+                FieldPanel('sunshine_act_links'),
+                FieldPanel('draft_minutes_links'),
+                FieldPanel('approved_minutes_link'),
+                FieldPanel('approved_minutes_date'),
+            ],
+            heading='Minutes and Sunshine notices',
+            classname='collapsible collapsed'
+        ),
+        MultiFieldPanel(
+            [
+                FieldPanel('full_video_url'),
+                FieldPanel('full_audio_url'),
+                FieldPanel('mtg_transcript_url'),
+                FieldPanel('live_video_url'),
+                FieldPanel('live_video_captions')
+            ],
+            heading='Meeting media',
+            classname='collapsible collapsed'
+        ),
+        MultiFieldPanel(
+            [
+                FieldPanel('imported_html'),
+            ],
+            heading='Imported meeting content',
+            classname='collapsible collapsed'
+        )
+    ]
+
+    promote_panels = Page.promote_panels + [
+        FieldPanel('homepage_hide')
     ]
 
     @property
     def get_update_type(self):
         return constants.update_types['commission-meeting']
-

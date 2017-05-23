@@ -38,6 +38,12 @@
             {{ self.record_articles }}
           </div>
         {% endif %}
+        {% if self.show_contact_link %}
+          <div class="sidebar__related-links">
+            <h4 class="label sidebar__question">Need help?</h4>
+            <a href="/contact-us">Get help from the FEC by phone or email</a>
+          </div>
+        {% endif %}
       </div>
     </div>
     {% if self.continue_learning %}

@@ -13,12 +13,12 @@
         </a>
       </li>
       <li class="site-nav__item site-nav__item--secondary" data-submenu="help">
-        <a href="{{ cms_url }}/help-candidates-committees/" tabindex="0" class="site-nav__link {% if parent == 'help' %}is-parent{% endif %}">
+        <a href="{{ cms_url }}/help-candidates-and-committees/" tabindex="0" class="site-nav__link {% if self.content_section == 'help' %}is-parent{% endif %}">
           <span class="site-nav__link__title">Help for candidates and committees</span>
         </a>
       </li>
       <li class="site-nav__item" data-submenu="legal">
-        <a href="{{ cms_url }}/legal-resources" tabindex="0" class="site-nav__link {% if parent == 'legal' %}is-parent{% endif %}">
+        <a href="{{ cms_url }}/legal-resources" tabindex="0" class="site-nav__link {% if self.content_section == 'legal' %}is-parent{% endif %}">
           <span class="site-nav__link__title">Legal resources</span>
         </a>
       </li>
@@ -37,7 +37,7 @@
             id="mobile-search"
             name="query"
             type="text"
-            aria-label="Search betaFEC">
+            aria-label="Search FEC.gov">
           <button type="submit" class="button--standard combo__button button--search">
             <span class="u-visually-hidden">Search</span>
           </button>

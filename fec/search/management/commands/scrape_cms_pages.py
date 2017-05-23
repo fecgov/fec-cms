@@ -15,10 +15,24 @@ from home.models import (
     TipsForTreasurersPage
 )
 
-BASE_URL = 'https://beta.fec.gov'
+BASE_URL = settings.CANONICAL_BASE
+
+# These are the parent pages for which we want *all* descendants of, not just direct children
+descendents_of = [
+    '/home/legal-resources/',
+    '/home/help-candidates-and-committees/',
+    '/home/press/'
+]
+
+# These are the parent pages for which we want *only* direct children
+children_of = [
+    '/home/',
+    '/home/about/',
+    '/home/about/leadership-and-structure/'
+]
 
 class Command(BaseCommand):
-    help = 'Scrapes pages'
+    help = 'Scrapes pages from the CMS into JSON for indexing on DigitalGov Search'
 
     def add_arguments(self, parser):
         parser.add_argument(
@@ -46,34 +60,38 @@ class Command(BaseCommand):
             help='Don\'t scrape the content of the page'
         )
 
-        parser.add_argument(
-            '-tips',
-            type=bool,
-            default=False,
-            help='Get Tips for Treasurers only'
-        )
 
     def handle(self, *args, **options):
         self.stdout.write(self.style.WARNING('Getting pages...'))
         if options['page']:
-            page = Page.objects.get(url_path=options['page'])
+            page = Page.objects.live().public().get(url_path=options['page'])
             # Hack so the loop below works
             pages = [page]
         elif options['descendants_of']:
-            parent = Page.objects.get(url_path=options['descendants_of'])
-            pages = Page.objects.descendant_of(parent).live()
+            parent = Page.objects.live().public().get(url_path=options['descendants_of'])
+            pages = Page.objects.descendant_of(parent).live().public()
         elif options['child_of']:
-            parent = Page.objects.get(url_path=options['child_of'])
-            pages = Page.objects.child_of(parent).live()
-        elif options['tips']:
-            pages = TipsForTreasurersPage.objects.live()
+            parent = Page.objects.live().public().get(url_path=options['child_of'])
+            pages = Page.objects.child_of(parent).live().public()
+        else:
+            # If no specific pages were requested, just get them all
+            pages = []
+            # Get all the pages that are descendants of pages
+            for p in descendents_of:
+                parent = Page.objects.live().public().get(url_path=p)
+                pages += Page.objects.descendant_of(parent).live().public()
+            # Get all the pages that are direct children of pages
+            for p in children_of:
+                parent = Page.objects.live().public().get(url_path=p)
+                pages += Page.objects.child_of(parent).live().public()
+
         extracted = []
 
         for page in pages:
             p = {
               "document_id": page.id,
               "title": page.title,
-              "path": "https://beta.fec.gov" + page.url,
+              "path": BASE_URL + page.url,
               "created": page.first_published_at.strftime("%Y-%m-%d-%H%M%S"),
               "promote": "false",
               "language": "en",
@@ -89,7 +107,7 @@ class Command(BaseCommand):
         self.write_articles(extracted)
 
     def get_content(self, url):
-        url = "https://beta.fec.gov" + url
+        url = BASE_URL + url
         r  = requests.get(url)
         self.stdout.write('Getting content for ' + url)
         data = r.text
@@ -110,9 +128,6 @@ class Command(BaseCommand):
 
     def write_articles(self, pages, **options):
         self.stdout.write('Writing to file')
-        fname = os.path.join(settings.REPO_DIR, 'fec/search/management/dump.json')
+        fname = os.path.join(settings.REPO_DIR, 'fec/search/management/data/output.json')
         with open(fname, "w+") as f:
             json.dump(pages, f, indent=4)
-
-    def post(page):
-        requests.post("https://i14y.usa.gov/api/v1/documents", auth=(DIGITALGOV_DRAWER, DIGITALGOV_DRAWER_KEY), data=page)
