@@ -18,8 +18,8 @@
 {% block filters %}
 <form action="/updates" class="js-form-nav container">
     <div class="filter">
-      <label class="label">Publication type</label>
-      <select name="update_type">
+      <label class="label" for="publication-type">Publication type</label>
+      <select id="publication-type" name="update_type">
         <option value="">All</option>
         <option value="meetings" {% if 'meetings' in update_types %}selected{% endif %}>Commission meetings</option>
         <option value="fec-record" {% if 'fec-record' in update_types %}selected{% endif %}>FEC Record</option>
