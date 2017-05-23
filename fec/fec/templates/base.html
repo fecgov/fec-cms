@@ -21,6 +21,14 @@
   </head>
 
   <body class="{% block body_class %}{% endblock %}">
+    <!--[if lt IE 10]>
+    <div style="background-color: #212121; padding: 10px">
+      <h2 style="color: #ffffff">Your browser is outdated</h2>
+      <p style="color: #ffffff; font-size: 16px;">You're using an older version of Internet Explorer. Please update or switch to another browser like Chrome, Firefox, or Safari for a better experience.</p>
+      <p style="color: #ffffff; font-size: 16px;"><a style="color: #ffffff; text-decoration: underline" target="_blank" href="http://browsehappy.com/">Learn how to update your browser.</a></p>
+      <p style="color: #ffffff; font-size: 16px;">You can still access an archive of the old FEC.gov at <a style="color: #ffffff; text-decoration: underline" href="http://classic.fec.gov">classic.fec.gov</a></p>
+    </div>
+    <![endif]-->
     {% wagtailuserbar %}
     <a href="#main" class="skip-nav">skip navigation</a>
     {% if settings.FEATURES.site_orientation_banner %}
