@@ -21,6 +21,14 @@
   </head>
 
   <body class="{% block body_class %}{% endblock %}">
+    <!--[if lt IE 10]>
+    <div style="background-color: #212121; padding: 10px">
+      <h2 style="color: #ffffff">Your browser is outdated</h2>
+      <p style="color: #ffffff; font-size: 16px;">You're using an older version of Internet Explorer. Please update or switch to another browser like Chrome, Firefox, or Safari for a better experience.</p>
+      <p style="color: #ffffff; font-size: 16px;"><a style="color: #ffffff; text-decoration: underline" target="_blank" href="http://browsehappy.com/">Learn how to update your browser.</a></p>
+      <p style="color: #ffffff; font-size: 16px;">You can still access an archive of the old FEC.gov at <a style="color: #ffffff; text-decoration: underline" href="http://classic.fec.gov">classic.fec.gov</a></p>
+    </div>
+    <![endif]-->
     {% wagtailuserbar %}
     <a href="#main" class="skip-nav">skip navigation</a>
     {% if settings.FEATURES.site_orientation_banner %}
@@ -56,7 +64,7 @@
                 id="query"
                 name="query"
                 type="text"
-                aria-label="Search betaFEC">
+                aria-label="Search FEC.gov">
               <button type="submit" class="button--standard combo__button button--search">
                 <span class="u-visually-hidden">Search</span>
               </button>
@@ -70,7 +78,6 @@
     <header class="site-header">
       <div class="masthead">
         <div class="disclaimer">
-          <span class="disclaimer__left">This site is in beta, visit <a href="http://www.fec.gov">FEC.gov</a></span>
           <span class="disclaimer__right">An official website of the United States Government <img src="{% static 'img/us_flag_small.png' %}"  alt="US flag signifying that this is a United States Federal Government website"></span>
         </div>
         <img src="{% static 'img/print-logo.png' %}" class="u-print-only" alt="FEC logo">
@@ -90,7 +97,7 @@
                 id="query"
                 name="query"
                 type="text"
-                aria-label="Search betaFEC">
+                aria-label="Search FEC.gov">
               <button type="submit" class="button--standard combo__button button--search">
                 <span class="u-visually-hidden">Search</span>
               </button>
@@ -230,6 +237,7 @@
       window.API_VERSION = '{{ settings.FEC_API_VERSION }}';
       window.API_KEY = '{{ settings.FEC_API_KEY_PUBLIC }}';
       window.TRANSITION_URL = '{{ settings.FEC_TRANSITION_URL }}';
+      window.CANONICAL_BASE = '{{ settings.CANONICAL_BASE }}'
     </script>
 
     {# Global javascript #}

@@ -6,7 +6,7 @@ from bs4 import BeautifulSoup
 from django.core.management import BaseCommand
 from django.conf import settings
 
-BASE_URL = 'https://transition.fec.gov'
+BASE_URL = settings.CANONICAL_BASE
 
 
 class Command(BaseCommand):
