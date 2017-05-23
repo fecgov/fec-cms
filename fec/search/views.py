@@ -46,6 +46,17 @@ def parse_icon(path):
     else:
         return 'page'
 
+def replace_url(url):
+    """
+    Replace the base part of the URL with the canonical URL from settings
+    Useful for the initial switch over from beta.fec.gov to fec.gov
+    """
+    parsed = parse.urlparse(url)
+    if parsed.netloc == 'beta.fec.gov':
+        # Only return a new url if the base is beta.fec.gov
+        return parse.urljoin(settings.CANONICAL_BASE, parsed.path)
+    else:
+        return url
 
 def process_site_results(results, limit=0, offset=0):
     """Organizes the results from DigitalGov search into a better format"""
@@ -63,9 +74,10 @@ def process_site_results(results, limit=0, offset=0):
         }
     }
 
-    # Parse the icons
+    # Parse the icons and replace the URLs
     for result in grouped['results']:
         result['icon'] = parse_icon(result['url'])
+        result['url'] = replace_url(result['url'])
 
     return grouped
 

@@ -136,7 +136,7 @@
                      <legend class="label">Find by state and <span class="term" data-term="District">district</span></legend>
                     <div class="search-controls__state combo combo--filter--mini">
                      <select id="state" class="form-element--inline" name="state" aria-label="Select a state">
-                      <option value="" class="form-element--inline">State</option>
+                      <option value="" class="form-element--inline" selected>State</option>
                       {% for value, label in settings.CONSTANTS.states.items %}
                         <option value="{{ value }}" class="form-element--inline">{{ label }}</option>
                       {% endfor %}
@@ -144,7 +144,7 @@
                      </div>
                      <div class="search-controls__district combo combo--filter--mini">
                        <select id="district" name="district" aria-label="Select a district" class="select--alt form-element--inline">
-                         <option value="">District</option>
+                         <option value="" selected>District</option>
                           {% for district in 100|districts %}
                          <option value="{{ district }}">{{ district }}</option>
                           {% endfor %}
