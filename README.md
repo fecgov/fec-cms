@@ -32,7 +32,7 @@ the new FEC.gov.
 - [fec-style](https://github.com/18F/fec-style): shared styles and user
   interface components.
 - [fec-cms](https://github.com/18F/fec-cms): the content management system
-  (CMS) for the new FEC>gov. This project uses
+  (CMS) for the new FEC.gov. This project uses
   [Wagtail](https://github.com/torchbox/wagtail), an open source CMS written
   in Python and built on the Django framework.
 
