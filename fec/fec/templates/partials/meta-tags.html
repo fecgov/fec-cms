@@ -16,7 +16,7 @@
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="{{ self.title }} - FEC.gov">
 <meta name="twitter:description" content="{% if self.search_description %}{{ self.search_description }}{% else %}{{ self.content_section | get_meta_description }}{% endif %}">
-<meta name="twitter:image" content="{{ self.content_section | get_social_image }}">
+<meta name="twitter:image" content="{{ request.scheme }}://{{ request.get_host }}{{ self.content_section | get_social_image }}">
 
 <!-- Facebook
 ================================================== -->
