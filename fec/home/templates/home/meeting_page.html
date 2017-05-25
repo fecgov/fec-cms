@@ -49,7 +49,7 @@
           <a class="u-no-border" href="{{ self.live_video_url }}"><img src={% static 'img/thumbnail--video.png' %} alt="Video"></a>
           </div>
         <div class="usa-width-two-thirds">
-          <h3 class="u-no-margin"><a href="{{ self.live_video_url }}">Watch the live meeting now</a></h3>
+          <h3 class="u-no-margin"><a href="{{ self.live_video_url }}">Watch the meeting live at 10:00 a.m. (EDT)</a></h3>
           <p class="u-no-margin">This meeting is currently being streamed{% if self.live_video_captions %} with <a href="{{ self.live_video_captions }}">live captions</a>{% endif %}. The recorded video, audio and captions will be posted on this page after the meeting ends.</p>
         </div>
       </div>
@@ -66,7 +66,7 @@
       {% for block in self.agenda %}
         <li>
             <h3 class="u-no-margin">{{ block.value.item_title }}</h3>
-            {% if block.value.item_audio %}<p class="t-sans u-no-margin"><span class="icon icon--inline--left i-speaker"></span><a href="{{ block.value.item_audio }}">Listen to discussion of this item</a></p>{% endif %}
+            {% if block.value.item_audio %}<p class="t-sans u-no-margin"><span class="icon icon--inline--left i-speaker"></span><a href="{{ block.value.item_audio.file.url }}">Listen to discussion of this item</a></p>{% endif %}
             <div class="agenda__text">
               {{ block.value.item_text }}
             </div>
@@ -111,9 +111,9 @@
         {% endif %}
         {% if self.mtg_transcript_url %}
           <div class="grid__item">
-            <a href="{{ block.value }}" class="u-no-border"><img src={% static 'img/thumbnail--captions.png' %} alt="Captions"></a>
+            <a href="{{ self.mtg_transcript_url }}" class="u-no-border"><img src={% static 'img/thumbnail--captions.png' %} alt="Captions"></a>
             <br>
-            <a href="{{ block.value }}">Full meeting captions</a>
+            <a href="{{ self.mtg_transcript_url }}">Full meeting captions</a>
           </div>
         {% endif %}
       </div>
