@@ -4,6 +4,7 @@ from bs4 import BeautifulSoup
 from django.conf import settings
 
 from wagtail.wagtailcore.models import Page
+from fec import constants
 
 # Only use the real search engine if we're on production
 if settings.FEC_CMS_ENVIRONMENT == 'PRODUCTION':
