@@ -19,17 +19,14 @@ modeladmin_register(AuthorAdmin)
 
 @hooks.register('after_create_page')
 def search_add(request, page):
-    print('====Page created====')
     handle_page_edit_or_create(page, 'add')
 
 
 @hooks.register('after_edit_page')
 def search_update(request, page):
-    print('====Page edited====')
     handle_page_edit_or_create(page, 'update')
 
 
 @hooks.register('after_delete_page')
 def remove_page(request, page):
-    print('===Page deleted===')
     handle_page_delete(page.id)
