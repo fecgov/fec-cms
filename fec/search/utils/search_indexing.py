@@ -90,7 +90,6 @@ def add_document(page):
         print('{} already exists'.format(document['document_id']))
         update_document(page)
     elif r.status_code == 201:
-        print('Created {}'.format(document['document_id']))
     else:
         print('Could not create {}'.format(document['document_id']))
         print(r.__dict__)
@@ -145,7 +144,7 @@ def handle_page_delete(page_id):
     if settings.FEC_CMS_ENVIRONMENT == 'PRODUCTION':
         url = '{}/documents/{}'.format(DIGITALGOV_BASE_URL, page_id)
         r = requests.delete(url, auth=(DIGITALGOV_DRAWER_HANDLE, DIGITALGOV_DRAWER_KEY))
-        if r.status_code == '200':
-            print('Deleted {}'.format(page_id))
+        if r.status_code == 200:
+            print('Search index: deleted {}'.format(page_id))
         else:
-            print('Could not delete {}'.format(page_id))
+            print('Search index: could not delete {}'.format(page_id))
