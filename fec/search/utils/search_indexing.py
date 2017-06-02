@@ -90,8 +90,9 @@ def add_document(page):
         print('{} already exists'.format(document['document_id']))
         update_document(page)
     elif r.status_code == 201:
+        print('Search index: created {}'.format(document['document_id']))
     else:
-        print('Could not create {}'.format(document['document_id']))
+        print('Search index: could not create {}'.format(document['document_id']))
         print(r.__dict__)
 
 
