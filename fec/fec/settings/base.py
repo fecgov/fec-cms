@@ -204,6 +204,8 @@ FEC_SERVICE_NOW_PASSWORD = env.get_credential('FEC_SERVICE_NOW_PASSWORD')
 FEC_DIGITALGOV_KEY = env.get_credential('FEC_DIGITALGOV_KEY')
 FEC_DIGITALGOV_DRAWER_KEY_MAIN = env.get_credential('DIGITALGOV_DRAWER_KEY_MAIN', '')
 FEC_DIGITALGOV_DRAWER_KEY_TRANSITION = env.get_credential('DIGITALGOV_DRAWER_KEY_TRANSITION', '')
+DIGITALGOV_BASE_API_URL = 'https://i14y.usa.gov/api/v1'
+DIGITALGOV_DRAWER_HANDLE = 'main'
 
 FEC_TRANSITION_URL = env.get_credential('FEC_TRANSITION_URL', 'http://www.fec.gov')
 FEC_CLASSIC_URL = env.get_credential('FEC_CLASSIC_URL', 'http://www.fec.gov')
