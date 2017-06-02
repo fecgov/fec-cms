@@ -7,12 +7,10 @@ from wagtail.wagtailcore.models import Page
 
 # Only use the real search engine if we're on production
 if settings.FEC_CMS_ENVIRONMENT == 'PRODUCTION':
-    URL_BASE = settings.CANONICAL_BASE
-    DIGITALGOV_BASE_URL = 'https://i14y.usa.gov/api/v1'
+    DIGITALGOV_BASE_URL = settings.DIGITALGOV_BASE_API_URL
     DIGITALGOV_DRAWER_KEY = settings.FEC_DIGITALGOV_DRAWER_KEY_MAIN
-    DIGITALGOV_DRAWER_HANDLE = 'main'
+    DIGITALGOV_DRAWER_HANDLE = settings.DIGITALGOV_DRAWER_HANDLE
 else:
-    URL_BASE = 'http://localhost:8000'
     DIGITALGOV_BASE_URL = 'http://localhost:3000'
     DIGITALGOV_DRAWER_KEY = ''
     DIGITALGOV_DRAWER_HANDLE = ''
@@ -50,7 +48,11 @@ def create_search_index_doc(page):
     :returns a dictionary
     """
     # Build the live URL of this page in production
-    live_url = page.url_path.replace('/home', URL_BASE)
+    if settings.FEC_CMS_ENVIRONMENT == 'PRODUCTION':
+        url_base = settings.CANONICAL_BASE
+    else:
+        url_base = 'http://localhost:8000'
+    live_url = page.url_path.replace('/home', url_base)
     doc = {
       "document_id": page.id,
       "title": page.title,
@@ -69,8 +71,7 @@ def create_search_index_doc(page):
 
     # If the page has been edited, add the date changed
     if page.latest_revision_created_at:
-        doc['changed'] = page.latest_revision_created_at.strftime("%Y-%m-%d-%H%M%S"),
-
+        doc['changed'] = page.latest_revision_created_at.strftime("%Y-%m-%d-%H%M%S")
     return doc
 
 
@@ -81,14 +82,13 @@ def add_document(page):
 
     :arg obj page: A page object returned from a database query
     """
-    print('====Adding to index====')
     document = create_search_index_doc(page)
     url = '{}/documents'.format(DIGITALGOV_BASE_URL)
     r = requests.post(url, auth=(DIGITALGOV_DRAWER_HANDLE, DIGITALGOV_DRAWER_KEY), data=document)
     # A 422 means the page already exists,
     if r.status_code == 422:
         print('{} already exists'.format(document['document_id']))
-        update_document(document_id)
+        update_document(page)
     elif r.status_code == 201:
         print('Created {}'.format(document['document_id']))
     else:
@@ -102,7 +102,6 @@ def update_document(page):
 
     :arg obj page: A page object returned from a database query
     """
-    print('====Updating in index====')
     document = create_search_index_doc(page)
     url = '{}/documents/{}'.format(DIGITALGOV_BASE_URL, document.get('document_id'))
     r = requests.put(url, auth=(DIGITALGOV_DRAWER_HANDLE, DIGITALGOV_DRAWER_KEY), data=document)
@@ -127,15 +126,14 @@ def handle_page_edit_or_create(page, method):
     else:
         # Make sure the page is live and public
         try:
-            p = Page.objects.live().public().get(id=page.id)
+            queried_page = Page.objects.live().public().get(id=page.id)
         except:
-            p = None
-        if p:
-            print('===Page is public and live===')
+            queried_page = None
+        if queried_page:
             if method == 'add':
-                add_document(p)
+                add_document(queried_page)
             elif method == 'update':
-                update_document(p)
+                update_document(queried_page)
 
 
 def handle_page_delete(page_id):
