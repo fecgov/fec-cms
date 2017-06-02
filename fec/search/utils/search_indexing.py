@@ -132,11 +132,41 @@ def handle_page_edit_or_create(page, method):
             queried_page = Page.objects.live().public().get(id=page.id)
         except:
             queried_page = None
+
+        # Make sure the page is nested in a section we index
+        if queried_page:
+            queried_page = check_ancestors(queried_page)
+
         if queried_page:
             if method == 'add':
                 add_document(queried_page)
             elif method == 'update':
                 update_document(queried_page)
+
+
+def check_ancestors(page):
+    """
+    First, check if the page's parent is one for which we want to index
+    the direct children of (constants.SEARCH_CHILDREN_OF)
+
+    If that's not the case, check all ancestors for any page we want all
+    descendants of (constants.SEARCH_DESCENDANTS_OF)
+
+    If there's a match in there, return the page objects
+
+    :arg obj page: A page returned from a database query
+    :returns obj page: The same page that was passed in
+    """
+    ancestors = page.get_ancestors()
+    parent = page.get_parent()
+    if parent.url_path in constants.SEARCH_CHILDREN_OF:
+        return page
+    else:
+        valid_ancestors = [a for a in ancestors if a.url_path in constants.SEARCH_DESCENDANTS_OF]
+        if valid_ancestors:
+            return page
+        else:
+            return None
 
 
 def handle_page_delete(page_id):

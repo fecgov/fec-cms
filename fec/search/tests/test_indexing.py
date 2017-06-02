@@ -28,11 +28,24 @@ class MockPage(object):
     search_description = None
     latest_revision_created_at = None
 
-    def __init__(self, add_description=False, add_latest_revision=False):
+    def __init__(self, add_description=False, add_latest_revision=False, parent_path='/home/about/', ancestor_path='/home/'):
+        self.parent_path = parent_path
+        self.ancestor_path = ancestor_path
         if add_description:
             self.search_description = 'Fake description'
         if add_latest_revision:
             self.latest_revision_created_at = datetime(2017, 6, 2, 0, 0)
+
+    def get_parent(self):
+        return MockParent(self.parent_path)
+
+    def get_ancestors(self):
+        return [MockParent(self.parent_path), MockParent(self.ancestor_path)]
+
+class MockParent(object):
+    def __init__(self, path):
+        self.url_path = path
+
 
 # Override settings so the env will be treated as prod but we'll send to a nonexistent API url
 @override_settings(
@@ -128,27 +141,53 @@ class TestSearchIndexing(TestCase):
 
 
     @mock.patch.object(search, 'add_document')
+    @mock.patch.object(search, 'check_ancestors')
     @mock.patch.object(Page, 'objects')
-    def test_handle_page_create_on_prod(self, objects, add, scrape):
+    def test_handle_page_create_on_prod(self, objects, check, add, scrape):
         # It calls add_document if the method is 'add'
         objects.live.return_value.public.return_value.get.return_value = self.page
+        check.return_value = self.page
         search.handle_page_edit_or_create(self.page, 'add')
         add.assert_called_with(self.page)
 
 
     @mock.patch.object(search, 'update_document')
+    @mock.patch.object(search, 'check_ancestors')
     @mock.patch.object(Page, 'objects')
-    def test_handle_page_edit_on_prod(self, objects, update, scrape):
+    def test_handle_page_edit_on_prod(self, objects, check, update, scrape):
         # It calls update_document if the method is 'update'
         objects.live.return_value.public.return_value.get.return_value = self.page
+        check.return_value = self.page
         search.handle_page_edit_or_create(self.page, 'update')
         update.assert_called_with(self.page)
 
 
     @mock.patch.object(search, 'add_document')
+    @mock.patch.object(search, 'check_ancestors')
     @mock.patch.object(Page, 'objects')
-    def test_handle_page_not_published(self, objects, add, scrape):
+    def test_handle_page_not_published(self, objects, check, add, scrape):
         # It does nothing if the page isn't live and public
         objects.live.return_value.public.return_value.get.return_value = None
+        check.return_value = self.page
         search.handle_page_edit_or_create(self.page, 'add')
         self.assertFalse(add.called)
+
+
+    def test_check_ancestors_valid_parent(self, scrape):
+        # check_ancestors returns the page when it has a valid direct parent
+        p = search.check_ancestors(self.page)
+        self.assertEqual(p, self.page)
+
+
+    def test_check_ancestors_valid_ancestors(self, scrape):
+        # check_ancestors returns the page when it has valid ancestors
+        page = MockPage(parent_path='/home/legal-resources/something/', ancestor_path='/home/legal-resources/')
+        p = search.check_ancestors(page)
+        self.assertEqual(p, page)
+
+
+    def test_check_ancestors_invalid_ancestors(self, scrape):
+        # check_ancestors returns None when it has an invalid parent and ancestors
+        page = MockPage(parent_path='/fake/', ancestor_path='/fake/fake/')
+        p = search.check_ancestors(page)
+        self.assertEqual(p, None)
