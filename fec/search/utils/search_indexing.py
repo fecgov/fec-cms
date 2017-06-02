@@ -98,16 +98,19 @@ def add_document(page):
 def update_document(page):
     """
     Makes a PUT request to i14y to update the information of the edited page
+    If the request results in a 400, then the page needs to be added
 
     :arg obj page: A page object returned from a database query
     """
     document = create_search_index_doc(page)
     url = '{}/documents/{}'.format(DIGITALGOV_BASE_URL, document.get('document_id'))
     r = requests.put(url, auth=(DIGITALGOV_DRAWER_HANDLE, DIGITALGOV_DRAWER_KEY), data=document)
-    if r.status_code == 200:
-        print('Updated {}'.format(document['document_id']))
+    if r.status_code == 400:
+        add_document(page)
+    elif r.status_code == 200:
+        print('Search index: updated {}'.format(document['document_id']))
     else:
-        print('Could not update {}'.format(document['document_id']))
+        print('Search index: could not update {}'.format(document['document_id']))
         print(r.__dict__)
 
 
