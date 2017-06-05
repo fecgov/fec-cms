@@ -9,11 +9,9 @@ from django.core.management import BaseCommand
 from home.models import Page
 
 
-DIGITALGOV_DRAWER_KEY_MAIN = settings.FEC_DIGITALGOV_DRAWER_KEY_MAIN
 DIGITALGOV_DRAWER_KEY_TRANSITION = settings.FEC_DIGITALGOV_DRAWER_KEY_TRANSITION
-
-drawer = 'main'
-key = DIGITALGOV_DRAWER_KEY_MAIN
+drawer = settings.DIGITALGOV_DRAWER_HANDLE
+key = settings.FEC_DIGITALGOV_DRAWER_KEY_MAIN
 
 class Command(BaseCommand):
     help = 'Indexes pages'
