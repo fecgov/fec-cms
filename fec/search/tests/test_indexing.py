@@ -115,7 +115,7 @@ class TestSearchIndexing(TestCase):
 
     @requests_mock.Mocker()
     def test_delete_document_in_prod(self, scrape, m):
-        # It makes a PUT to the update endpoint in production
+        # It makes a DELETE to the update endpoint in production
         m.register_uri('DELETE', 'http://localhost:3000/documents/123', status_code=200)
         search.handle_page_delete(123)
         self.assertTrue(m.called)
