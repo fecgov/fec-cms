@@ -202,3 +202,19 @@ report_parent_categories = OrderedDict((x, x.replace('_', ' ')) for x in report_
 report_child_categories = OrderedDict()
 for category in report_category_groups.keys():
     report_child_categories.update(report_category_groups[category])
+
+
+# Search index constants
+# These are the parent pages for which we want *all* descendants of, not just direct children
+SEARCH_DESCENDANTS_OF = [
+    '/home/legal-resources/',
+    '/home/help-candidates-and-committees/',
+    '/home/press/'
+]
+
+# These are the parent pages for which we want *only* direct children
+SEARCH_CHILDREN_OF = [
+    '/home/',
+    '/home/about/',
+    '/home/about/leadership-and-structure/'
+]

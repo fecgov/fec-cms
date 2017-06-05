@@ -1,6 +1,8 @@
 from wagtail.contrib.modeladmin.options import ModelAdmin, modeladmin_register
-from .models import Author
+from wagtail.wagtailcore import hooks
 
+from .models import Author
+from search.utils.search_indexing import handle_page_edit_or_create, handle_page_delete
 
 class AuthorAdmin(ModelAdmin):
     model = Author
@@ -13,3 +15,18 @@ class AuthorAdmin(ModelAdmin):
 
 
 modeladmin_register(AuthorAdmin)
+
+
+@hooks.register('after_create_page')
+def search_add(request, page):
+    handle_page_edit_or_create(page, 'add')
+
+
+@hooks.register('after_edit_page')
+def search_update(request, page):
+    handle_page_edit_or_create(page, 'update')
+
+
+@hooks.register('after_delete_page')
+def remove_page(request, page):
+    handle_page_delete(page.id)

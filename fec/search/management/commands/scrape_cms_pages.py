@@ -15,21 +15,9 @@ from home.models import (
     TipsForTreasurersPage
 )
 
+from fec import constants
+
 BASE_URL = settings.CANONICAL_BASE
-
-# These are the parent pages for which we want *all* descendants of, not just direct children
-descendents_of = [
-    '/home/legal-resources/',
-    '/home/help-candidates-and-committees/',
-    '/home/press/'
-]
-
-# These are the parent pages for which we want *only* direct children
-children_of = [
-    '/home/',
-    '/home/about/',
-    '/home/about/leadership-and-structure/'
-]
 
 class Command(BaseCommand):
     help = 'Scrapes pages from the CMS into JSON for indexing on DigitalGov Search'
@@ -77,11 +65,11 @@ class Command(BaseCommand):
             # If no specific pages were requested, just get them all
             pages = []
             # Get all the pages that are descendants of pages
-            for p in descendents_of:
+            for p in constants.SEARCH_DESCENDANTS_OF:
                 parent = Page.objects.live().public().get(url_path=p)
                 pages += Page.objects.descendant_of(parent).live().public()
             # Get all the pages that are direct children of pages
-            for p in children_of:
+            for p in constants.SEARCH_CHILDREN_OF:
                 parent = Page.objects.live().public().get(url_path=p)
                 pages += Page.objects.child_of(parent).live().public()
 
