@@ -6,7 +6,7 @@ from operator import attrgetter
 from itertools import chain
 from datetime import date
 from home.models import (GenericUpdate, DigestPage, RecordPage, PressReleasePage,
-                        TipsForTreasurersPage, ServicesLandingPage, MeetingPage)
+                        TipsForTreasurersPage, ServicesLandingPage)
 
 register = template.Library()
 
@@ -14,18 +14,17 @@ register = template.Library()
 def home_page_updates():
     generic_updates = GenericUpdate.objects.live().filter(homepage_expiration__gte=date.today())
 
-    # get latest press releases, records, tips, meetings that are not pinned
+    # get latest press releases, records, tips, that are not pinned
     press_releases = PressReleasePage.objects.live().filter(homepage_hide=False, homepage_pin=False).order_by('-date')[:4]
     records = RecordPage.objects.live().filter(homepage_hide=False, homepage_pin=False).order_by('-date')[:4]
     tips = TipsForTreasurersPage.objects.live().filter().order_by('-date')[:4]
-    meetings = MeetingPage.objects.live().filter(meeting_type='O', homepage_hide=False).order_by('-date')[:4]
 
     # get ALL press releases and records that are pinned
     press_releases_pinned = PressReleasePage.objects.live().filter(homepage_hide=False, homepage_pin=True).order_by('-date')
     records_pinned = RecordPage.objects.live().filter(homepage_hide=False, homepage_pin=True).order_by('-date')
 
     # combine all the querysets
-    updates = chain(press_releases, records, tips, press_releases_pinned, records_pinned, meetings)
+    updates = chain(press_releases, records, tips, press_releases_pinned, records_pinned)
 
     # remove homepage pin if expiration date has passed
     updates_unpin_expired = []
