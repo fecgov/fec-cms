@@ -48,9 +48,12 @@ def home_page_updates():
     updates_sorted_by_date = sorted(updates_unpin_expired, key=lambda x: x.date, reverse=True)
     updates_sorted_by_homepage_pin = sorted(updates_sorted_by_date, key=lambda x: x.homepage_pin, reverse=True)
 
+    # Figure out how many non-generic updates to show
+    update_limit = 4 - len(generic_updates)
+    
     return {
         'generic_updates': generic_updates,
-        'updates': updates_sorted_by_homepage_pin[:4]
+        'updates': updates_sorted_by_homepage_pin[:update_limit]
     }
 
 @register.inclusion_tag('partials/candidate_committee_services.html')
