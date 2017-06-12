@@ -19,6 +19,8 @@ def editor_js():
         <script src="/static/js/hallo-edit-html.js"></script>
         <script src="/static/js/hallo-sans-serif.js"></script>
         <script src="/static/js/hallo-blockquote.js"></script>
+        <script src="/static/js/hallo-indent.js"></script>
+        <script src="/static/js/hallo-outdent.js"></script>
         <script src="/static/js/customize-editor.js"></script>
         <script src="/static/ace-builds/src-noconflict/ace.js"></script>
         <script src="/static/ace-builds/src-noconflict/mode-html.js"></script>
@@ -27,6 +29,8 @@ def editor_js():
             registerHalloPlugin('hallocleanhtml');
             registerHalloPlugin('sansSerifButton');
             registerHalloPlugin('blockquotebutton');
+            registerHalloPlugin('outdentButton');
+            registerHalloPlugin('indentButton');
         </script>
     ''')
 
