@@ -5,7 +5,7 @@ from django.utils.html import format_html
 @hooks.register('construct_whitelister_element_rules')
 def whitelister_element_rules():
     return {
-        'span': attribute_rule({'class': True}),
+        'span': attribute_rule({'class': True, 'data-term': True}),
         'blockquote': attribute_rule({'class': True}),
     }
 
