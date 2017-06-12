@@ -33,7 +33,12 @@
               var $sibling = $(parent).prev('li');
               if ($sibling.length) {
                 // Create a new UL with this as the first item
-                $sibling.append('<ul>' + parent.outerHTML + '</ul>');
+                if ($sibling.closest('ol').length) {
+                  // If it's in an OL, create as a OL
+                  $sibling.append('<ol>' + parent.outerHTML + '</ol>');
+                } else {
+                  $sibling.append('<ul>' + parent.outerHTML + '</ul>');
+                }
                 $(parent).remove();
                 widget.options.editable.setModified();
               }
