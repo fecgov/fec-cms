@@ -26,7 +26,7 @@
         button.on('click', function() {
             var node = widget.options.editable.getSelection();
             var $li = $(node.endContainer.parentElement);
-            if ($li.parent('ul ul').length) {
+            if ($li.parent('ul ul').length || $li.parent('ol ol').length) {
               // Remove the wrapping UL and move the LI after the current LI
               $li.unwrap();
               $li.parent('li').after($li);
