@@ -24,3 +24,46 @@ blockquote {
 	 margin-left: 0;
 	 font-style: italic;
 }
+
+.richtext ul ul,
+.richtext ul ol,
+.richtext ol ol,
+.richtext ol ul {
+  margin-left: 15px;
+}
+
+.richtext ul ul li:last-of-type {
+  margin-bottom: 0;
+  padding-bottom: 0;
+}
+
+.richtext ol li:last-of-type {
+  margin-bottom: 0;
+  padding-bottom: 0;
+}
+
+.richtext ul ul li {
+  list-style-type: circle;
+}
+
+.richtext ul ul ul li {
+  list-style-type: square;
+}
+
+.richtext ul ul {
+  margin-bottom: 0;
+  margin-left: 15px;
+}
+
+.richtext ol ul li,
+.richtext ol ol ul li {
+  list-style-type: circle;
+}
+
+.richtext ol ol li {
+  list-style-type: lower-alpha;
+}
+
+.richtext ol ol ol li {
+  list-style-type: lower-roman;
+}
