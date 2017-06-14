@@ -313,6 +313,11 @@ class RecordPage(ContentPage):
         )
     ]
 
+    search_fields =  ContentPage.search_fields + [
+        index.FilterField('category'),
+        index.FilterField('date')
+    ]
+
     @property
     def content_section(self):
         return ''
@@ -347,6 +352,10 @@ class DigestPage(ContentPage):
     ]
 
     template = 'home/updates/digest_page.html'
+
+    search_fields =  ContentPage.search_fields + [
+        index.FilterField('date')
+    ]
 
     @property
     def content_section(self):
@@ -404,6 +413,11 @@ class PressReleasePage(ContentPage):
         )
     ]
 
+    search_fields =  ContentPage.search_fields + [
+        index.FilterField('category'),
+        index.FilterField('date')
+    ]
+
     @property
     def content_section(self):
         return ''
@@ -459,6 +473,10 @@ class TipsForTreasurersPage(ContentPage):
         FieldPanel('date'),
         PageChooserPanel('read_next')
         ]
+
+    search_fields =  ContentPage.search_fields + [
+        index.FilterField('date')
+    ]
 
     @property
     def get_update_type(self):
@@ -945,6 +963,8 @@ class MeetingPage(Page):
     ]
 
     search_fields =  Page.search_fields + [
+        index.FilterField('meeting_type'),
+        index.FilterField('date'),
         index.SearchField('imported_html'),
         index.SearchField('agenda')
     ]
