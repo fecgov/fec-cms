@@ -28,6 +28,8 @@ from wagtail.wagtaildocs.blocks import DocumentChooserBlock
 from wagtail.wagtaildocs.edit_handlers import DocumentChooserPanel
 from wagtail.wagtaildocs.models import Document
 
+from wagtail.wagtailsearch import index
+
 from django.db.models.signals import m2m_changed
 
 from wagtail.contrib.table_block.blocks import TableBlock
@@ -102,6 +104,10 @@ class ContentPage(Page):
 
     promote_panels = Page.promote_panels + [
         ImageChooserPanel('feed_image'),
+    ]
+
+    search_fields =  Page.search_fields + [
+        index.SearchField('body', partial_match=True)
     ]
 
     # Default content section for determining the active nav
@@ -936,6 +942,11 @@ class MeetingPage(Page):
 
     promote_panels = Page.promote_panels + [
         FieldPanel('homepage_hide')
+    ]
+
+    search_fields =  Page.search_fields + [
+        index.SearchField('imported_html'),
+        index.SearchField('agenda')
     ]
 
     @property

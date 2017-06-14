@@ -89,6 +89,10 @@ def get_meetings(category_list=None, year=False, search=None):
 
     if year:
         meetings = meetings.filter(date__year=year)
+
+    if search:
+        meetings = meetings.search(search)
+
     return meetings
 
 
