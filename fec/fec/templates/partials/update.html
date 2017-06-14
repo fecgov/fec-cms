@@ -40,7 +40,7 @@
         {% for link in update.sunshine_act_links|splitlines reversed %}
           <li><a href="{{ link }}">
             {% if update.sunshine_act_links|splitlines|length > 1 and forloop.counter == 1%}Amended{% endif %}
-            Sunshine Act notice
+            Sunshine Act Notice
           </a></li>
         {% endfor %}
         {% endif %}
@@ -55,9 +55,9 @@
           {% if update.get_update_type == 'Commission Meetings' %}
             in:
             {% if update.meeting_type == 'O' %}
-            <a href="/updates?update_type=agendas&category=O">Open meetings</a>  
+            <a href="/updates?update_type=agendas&category=O">Open meetings</a>
             {% elif update.meeting_type == 'E' %}
-            <a href="/updates?update_type=agendas&category=E">Executive sessions</a>  
+            <a href="/updates?update_type=agendas&category=E">Executive sessions</a>
             {% endif %}
           {% endif %}
         </div>
