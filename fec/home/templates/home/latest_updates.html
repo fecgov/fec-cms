@@ -97,7 +97,9 @@
   {% else %}
   <div class="message message--info">
     <h2>No results</h2>
-    <p>We didn’t find any pages matching <strong>&ldquo;{{search}}&rdquo;</strong>.</p>
+    {% if search %}
+      <p>We didn’t find any pages matching <strong>&ldquo;{{search}}&rdquo;</strong>.</p>
+    {% endif %}
     <p>Please note that FEC Record articles published before 2011 only exist in PDF format and are not included in these search results.</p>
     <p>
     <div class="message--alert__bottom">
