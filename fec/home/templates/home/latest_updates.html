@@ -81,16 +81,29 @@
 {% endblock %}
 
 {% block feed %}
-  {% for update in updates %}
-    {% include 'partials/update.html' with update=update show_tag=True %}
-  {% endfor %}
-  <div class="results-info">
-    <span>Page {{ updates.number }} of {{ updates.paginator.num_pages }}</span>
-    {% if updates.has_previous %}
-        <a class="button button--standard button--previous" href="?page={{ updates.previous_page_number }}{% for key,value in request.GET.items %}{% ifnotequal key 'page' %}&amp;{{ key }}={{ value }}{% endifnotequal %}{% endfor %}"><span class="u-visually-hidden">Previous</span></a>
-    {% endif %}
-    {% if updates.has_next %}
-        <a class="button button--standard button--next" href="?page={{ updates.next_page_number }}{% for key,value in request.GET.items %}{% ifnotequal key 'page' %}&amp;{{ key }}={{ value }}{% endifnotequal %}{% endfor %}"><span class="u-visually-hidden">Next</span></a>
-    {% endif %}
+  {% if updates %}
+    {% for update in updates %}
+      {% include 'partials/update.html' with update=update show_tag=True %}
+    {% endfor %}
+    <div class="results-info">
+      <span>Page {{ updates.number }} of {{ updates.paginator.num_pages }}</span>
+      {% if updates.has_previous %}
+          <a class="button button--standard button--previous" href="?page={{ updates.previous_page_number }}{% for key,value in request.GET.items %}{% ifnotequal key 'page' %}&amp;{{ key }}={{ value }}{% endifnotequal %}{% endfor %}"><span class="u-visually-hidden">Previous</span></a>
+      {% endif %}
+      {% if updates.has_next %}
+          <a class="button button--standard button--next" href="?page={{ updates.next_page_number }}{% for key,value in request.GET.items %}{% ifnotequal key 'page' %}&amp;{{ key }}={{ value }}{% endifnotequal %}{% endfor %}"><span class="u-visually-hidden">Next</span></a>
+      {% endif %}
+    </div>
+  {% else %}
+  <div class="message message--info">
+    <h2>No results</h2>
+    <p>We didn’t find any pages matching <strong>&ldquo;{{search}}&rdquo;</strong>.</p>
+    <p>Please note that FEC Record articles published before 2011 only exist in PDF format and are not included in these search results.</p>
+    <p>
+    <div class="message--alert__bottom">
+      <p>FEC.gov is in the middle of a redesign, and some pages aren’t included in search results yet. Please try another search. Or, <a href="{{ settings.FEC_CLASSIC_URL }}">search an archive</a> of the old FEC.gov design.</p>
+      <p>If you'd like to contact our team, we're available by <a href="mailto:{{ settings.WEBMANAGER_EMAIL }}">email</a> or <a href="https://github.com/18f/fec">GitHub</a>.</p>
+    </div>
   </div>
+  {% endif %}
 {% endblock %}

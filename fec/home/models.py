@@ -107,7 +107,7 @@ class ContentPage(Page):
     ]
 
     search_fields =  Page.search_fields + [
-        index.SearchField('body', partial_match=True)
+        index.SearchField('body')
     ]
 
     # Default content section for determining the active nav
