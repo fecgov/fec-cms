@@ -6,6 +6,10 @@ from django.conf import settings
 from itertools import chain
 from operator import attrgetter
 
+from django.http import HttpResponseRedirect
+from django.shortcuts import get_object_or_404
+from wagtail.wagtaildocs.models import Document
+
 from fec.forms import ContactRAD, form_categories
 from home.models import (
     CommissionerPage,
@@ -267,10 +271,6 @@ def contact_rad(request):
         'self': page_context,
         'form': form
     })
-
-from django.http import HttpResponseRedirect
-from django.shortcuts import get_object_or_404
-from wagtail.wagtaildocs.models import Document
 
 def serve_wagtail_doc(request, document_id, document_filename):
     """
