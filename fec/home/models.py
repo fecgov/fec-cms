@@ -28,6 +28,8 @@ from wagtail.wagtaildocs.blocks import DocumentChooserBlock
 from wagtail.wagtaildocs.edit_handlers import DocumentChooserPanel
 from wagtail.wagtaildocs.models import Document
 
+from wagtail.wagtailsearch import index
+
 from django.db.models.signals import m2m_changed
 
 from wagtail.contrib.table_block.blocks import TableBlock
@@ -102,6 +104,10 @@ class ContentPage(Page):
 
     promote_panels = Page.promote_panels + [
         ImageChooserPanel('feed_image'),
+    ]
+
+    search_fields =  Page.search_fields + [
+        index.SearchField('body')
     ]
 
     # Default content section for determining the active nav
@@ -307,6 +313,11 @@ class RecordPage(ContentPage):
         )
     ]
 
+    search_fields =  ContentPage.search_fields + [
+        index.FilterField('category'),
+        index.FilterField('date')
+    ]
+
     @property
     def content_section(self):
         return ''
@@ -341,6 +352,10 @@ class DigestPage(ContentPage):
     ]
 
     template = 'home/updates/digest_page.html'
+
+    search_fields =  ContentPage.search_fields + [
+        index.FilterField('date')
+    ]
 
     @property
     def content_section(self):
@@ -398,6 +413,11 @@ class PressReleasePage(ContentPage):
         )
     ]
 
+    search_fields =  ContentPage.search_fields + [
+        index.FilterField('category'),
+        index.FilterField('date')
+    ]
+
     @property
     def content_section(self):
         return ''
@@ -453,6 +473,10 @@ class TipsForTreasurersPage(ContentPage):
         FieldPanel('date'),
         PageChooserPanel('read_next')
         ]
+
+    search_fields =  ContentPage.search_fields + [
+        index.FilterField('date')
+    ]
 
     @property
     def get_update_type(self):
@@ -936,6 +960,13 @@ class MeetingPage(Page):
 
     promote_panels = Page.promote_panels + [
         FieldPanel('homepage_hide')
+    ]
+
+    search_fields =  Page.search_fields + [
+        index.FilterField('meeting_type'),
+        index.FilterField('date'),
+        index.SearchField('imported_html'),
+        index.SearchField('agenda')
     ]
 
     @property
