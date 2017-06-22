@@ -140,6 +140,8 @@ def updates(request):
         meetings = MeetingPage.objects.live()
 
         if year:
+            # Trying to filter using the built-in date__year parameter doesn't
+            # work when chaining filter() and search(), so this uses date_gte and date_lte
             year = int(year)
             press_releases = press_releases.filter(date__gte=datetime(year, 1, 1)).filter(date__lte=datetime(year, 12, 31))
             digests = digests.filter(date__gte=datetime(year, 1, 1)).filter(date__lte=datetime(year, 12, 31))
