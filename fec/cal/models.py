@@ -3,11 +3,11 @@ from collections import OrderedDict
 from django.db import models
 from modelcluster.fields import ParentalKey
 from wagtail.wagtailadmin.edit_handlers import FieldPanel, MultiFieldPanel
-from cal import constants
+from fec import constants
 
 EVENT_CATEGORIES = OrderedDict()
-for category in constants.EVENT_CATEGORY_GROUPS.keys():
-    EVENT_CATEGORIES.update(constants.EVENT_CATEGORY_GROUPS[category])
+for category in constants.event_category_groups.keys():
+    EVENT_CATEGORIES.update(constants.event_category_groups[category])
 
 class State(models.Model):
     value = models.CharField(primary_key=True, max_length=32)

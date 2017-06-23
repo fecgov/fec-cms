@@ -1,5 +1,47 @@
 from collections import OrderedDict
 
+election_types = OrderedDict([
+    ('election', 'All elections'),
+])
+
+deadline_type = OrderedDict([
+    ('report-M', 'Monthly'),
+    ('report-Q', 'Quarterly'),
+    ('report-E', 'Pre- and post-election'),
+    ('report-MY', 'Mid-Year'),
+    ('report-YE', 'Year-End')
+])
+
+reporting_periods = OrderedDict([
+    ('IE Periods', 'Independent expenditures'),
+    ('EC Periods', 'Electioneering communications'),
+    ('FEA Periods', 'Federal election activity periods')
+])
+
+outreach_types = OrderedDict([
+    ('Conferences', 'Conferences'),
+    ('Roundtables', 'Webinars'),
+])
+
+meeting_types = OrderedDict([
+    ('Open Meetings', 'Open meeting'),
+    ('Executive Sessions', 'Executive session'),
+    ('Public Hearings', 'Public hearing'),
+])
+
+rule_types = OrderedDict([
+    ('AOs and Rules', 'Advisory opinions and rulemakings'),
+])
+
+event_category_groups = OrderedDict([
+    ('elections', election_types),
+    ('deadliens', deadline_type),
+    ('reporting_periods', reporting_periods),
+    ('outreach', outreach_types),
+    ('meeting_types', meeting_types),
+    ('rules', rule_types)
+])
+
 states = OrderedDict([
     ('AK', 'Alaska'),
     ('AL', 'Alabama'),
