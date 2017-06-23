@@ -10,11 +10,12 @@ from uaa_client import urls as uaa_urls
 from uaa_client import views as uaa_views
 
 from home import views as home_views
+from home import api
 from search import views as search_views
-
 from cal import views as calendar_views
 
 urlpatterns = [
+    url(r'^api/v2/', api.api_router.urls),
     url(r'^documents/(\d+)/(.*)$', home_views.serve_wagtail_doc, name='wagtaildocs_serve'),
     url(r'^django-admin/', include(admin.site.urls)),
     url(r'^auth/', include(uaa_urls)),
