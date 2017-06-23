@@ -2,6 +2,8 @@ from wagtail.contrib.modeladmin.options import ModelAdmin, modeladmin_register
 from wagtail.wagtailcore import hooks
 
 from .models import Author
+from cal.models import Event
+
 from search.utils.search_indexing import handle_page_edit_or_create, handle_page_delete
 
 class AuthorAdmin(ModelAdmin):
@@ -16,6 +18,14 @@ class AuthorAdmin(ModelAdmin):
 
 modeladmin_register(AuthorAdmin)
 
+
+class EventAdmin(ModelAdmin):
+    model = Event
+    list_display = ('start_date', 'end_date', 'description')
+    search_fields = ('description', 'summary')
+    list_filter = ('category', )
+
+modeladmin_register(EventAdmin)
 
 @hooks.register('after_create_page')
 def search_add(request, page):

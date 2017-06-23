@@ -1,0 +1,16 @@
+[
+  {
+    "model": "home.state",
+    "fields": {
+      "label": "Alabama",
+      "value": "AL"
+    },
+  },
+  {
+    "model": "home.state",
+    "fields": {
+      "label": "Alaska",
+      "value": "AK"
+    }
+  }
+]
