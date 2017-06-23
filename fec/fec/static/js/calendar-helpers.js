@@ -23,10 +23,8 @@ function getGoogleUrl(event) {
 }
 
 function getUrl(path, params) {
-  var url = URI(window.API_LOCATION)
-    .path(Array.prototype.concat(window.API_VERSION, path || [], '').join('/'))
+  var url = URI('/api/v2/events/')
     .addQuery({
-      api_key: window.API_KEY,
       per_page: 500
     })
     .addQuery(params || {})

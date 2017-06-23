@@ -160,7 +160,7 @@ Calendar.prototype.success = function(response) {
     $('.is-successful').removeClass('is-successful');
   }, helpers.SUCCESS_DELAY);
 
-  return response.results.map(function(event) {
+  return response.items.map(function(event) {
     var processed = {
       category: calendarHelpers.mapCategoryTitle(event.category),
       location: event.location,
