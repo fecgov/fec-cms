@@ -12,13 +12,14 @@ from uaa_client import views as uaa_views
 from home import views as home_views
 from search import views as search_views
 
+from cal import views as calendar_views
 
 urlpatterns = [
     url(r'^documents/(\d+)/(.*)$', home_views.serve_wagtail_doc, name='wagtaildocs_serve'),
     url(r'^django-admin/', include(admin.site.urls)),
     url(r'^auth/', include(uaa_urls)),
     url(r'^admin/', include(wagtailadmin_urls)),
-    url(r'^calendar/$', home_views.calendar),
+    url(r'^calendar/$', calendar_views.calendar),
     url(r'^about/leadership-and-structure/commissioners/$', home_views.commissioners),
     url(r'^contact-us/$', home_views.contact),
     url(r'^documents/', include(wagtaildocs_urls)),

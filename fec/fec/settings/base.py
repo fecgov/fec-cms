@@ -59,6 +59,7 @@ INSTALLED_APPS = (
     'wagtail.contrib.wagtailstyleguide',
 
     'fec',
+    'cal',
     'search',
     'home',
     'data_loader',

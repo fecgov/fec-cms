@@ -194,16 +194,6 @@ def updates(request):
     })
 
 
-def calendar(request):
-    page_context = {
-      'content_section': 'calendar',
-      'title': 'Calendar'
-    }
-    return render(request, 'home/calendar.html', {
-      'self': page_context,
-    })
-
-
 def contact(request):
     page_context = {
       'content_section': 'contact',
