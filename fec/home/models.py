@@ -28,6 +28,9 @@ from wagtail.wagtaildocs.blocks import DocumentChooserBlock
 from wagtail.wagtaildocs.edit_handlers import DocumentChooserPanel
 from wagtail.wagtaildocs.models import Document
 
+from django.utils.encoding import python_2_unicode_compatible
+from wagtail.wagtailsnippets.models import register_snippet
+
 from wagtail.wagtailsearch import index
 
 from django.db.models.signals import m2m_changed
@@ -972,3 +975,17 @@ class MeetingPage(Page):
     @property
     def get_update_type(self):
         return constants.update_types['commission-meeting']
+
+@register_snippet
+@python_2_unicode_compatible  # provide equivalent __unicode__ and __str__ methods on Python 2
+class ContributionLimitsChart(models.Model):
+    title = models.TextField()
+    text = models.TextField()
+
+    panels = [
+        FieldPanel('title'),
+        FieldPanel('text'),
+    ]
+
+    def __str__(self):
+        return self.text

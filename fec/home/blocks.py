@@ -105,6 +105,13 @@ class MURSearchBlock(blocks.StaticBlock):
         admin_text = 'Show the MUR search field. No configuration needed.'
         template = 'blocks/mur_search.html'
 
+class ContributionLimitsBlock(blocks.StaticBlock):
+    """A block that displays the contribution limits table"""
+    class Meta:
+        icon = 'list-ul'
+        admin_text = 'Embed contibution limits chart. No configuration needed.'
+        template = 'blocks/contribution_limits.html'
+
 class ResourceBlock(blocks.StructBlock):
     """A section of a ResourcePage"""
     title = blocks.CharBlock(required=True)
@@ -122,7 +129,8 @@ class ResourceBlock(blocks.StructBlock):
         ('fec_jobs', CareersBlock()),
         ('mur_search', MURSearchBlock()),
         ('table', TableBlock()),
-        ('html', blocks.RawHTMLBlock())
+        ('html', blocks.RawHTMLBlock()),
+        ('contribution_limits_chart', ContributionLimitsBlock()),
     ])
 
     aside = blocks.StreamBlock([

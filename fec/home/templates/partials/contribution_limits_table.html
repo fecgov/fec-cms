@@ -1,0 +1,8 @@
+{% load wagtailcore_tags %}
+{% for Contribution_limit  in Contribution_limits  %}
+
+<div>
+{{ Contribution_limit.text | richtext }}
+</div>
+{% endfor %}
+
