@@ -1,10 +1,15 @@
 import requests
+from datetime import datetime
 
 from django.shortcuts import render
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.conf import settings
 from itertools import chain
 from operator import attrgetter
+
+from django.http import HttpResponseRedirect
+from django.shortcuts import get_object_or_404
+from wagtail.wagtaildocs.models import Document
 
 from fec.forms import ContactRAD, form_categories
 from home.models import (
@@ -33,7 +38,8 @@ def get_records(category_list=None, year=None, search=None):
             records = records.filter(category=category)
 
     if year:
-        records = records.filter(date__year=year)
+        year = int(year)
+        records = records.filter(date__gte=datetime(year, 1, 1)).filter(date__lte=datetime(year, 12, 31))
 
     if search:
         records = records.search(search)
@@ -44,7 +50,8 @@ def get_records(category_list=None, year=None, search=None):
 def get_digests(year=None, search=None):
     digests = DigestPage.objects.live()
     if year:
-        digests = digests.filter(date__year=year)
+        year = int(year)
+        digests = digests.filter(date__gte=datetime(year, 1, 1)).filter(date__lte=datetime(year, 12, 31))
 
     if search:
         digests = digests.search(search)
@@ -60,7 +67,8 @@ def get_press_releases(category_list=None, year=None, search=None):
             press_releases = press_releases.filter(category=category)
 
     if year:
-        press_releases = press_releases.filter(date__year=year)
+        year = int(year)
+        press_releases = press_releases.filter(date__gte=datetime(year, 1, 1)).filter(date__lte=datetime(year, 12, 31))
 
     if search:
         press_releases = press_releases.search(search)
@@ -72,7 +80,8 @@ def get_tips(year=None, search=None):
     tips = TipsForTreasurersPage.objects.live()
 
     if year:
-        tips = tips.filter(date__year=year)
+        year = int(year)
+        tips = tips.filter(date__gte=datetime(year, 1, 1)).filter(date__lte=datetime(year, 12, 31))
 
     if search:
         tips = tips.search(search)
@@ -88,7 +97,12 @@ def get_meetings(category_list=None, year=False, search=None):
             meetings = meetings.filter(meeting_type=category)
 
     if year:
-        meetings = meetings.filter(date__year=year)
+        year = int(year)
+        meetings = meetings.filter(date__gte=datetime(year, 1, 1)).filter(date__lte=datetime(year, 12, 31))
+
+    if search:
+        meetings = meetings.search(search)
+
     return meetings
 
 
@@ -130,11 +144,14 @@ def updates(request):
         meetings = MeetingPage.objects.live()
 
         if year:
-            press_releases = press_releases.filter(date__year=year)
-            digests = digests.filter(date__year=year)
-            records = records.filter(date__year=year)
-            tips = tips.filter(date__year=year)
-            meetings = meetings.filter(date__year=year)
+            # Trying to filter using the built-in date__year parameter doesn't
+            # work when chaining filter() and search(), so this uses date_gte and date_lte
+            year = int(year)
+            press_releases = press_releases.filter(date__gte=datetime(year, 1, 1)).filter(date__lte=datetime(year, 12, 31))
+            digests = digests.filter(date__gte=datetime(year, 1, 1)).filter(date__lte=datetime(year, 12, 31))
+            records = records.filter(date__gte=datetime(year, 1, 1)).filter(date__lte=datetime(year, 12, 31))
+            tips = tips.filter(date__gte=datetime(year, 1, 1)).filter(date__lte=datetime(year, 12, 31))
+            meetings = meetings.filter(date__gte=datetime(year, 1, 1)).filter(date__lte=datetime(year, 12, 31))
 
         if search:
             press_releases = press_releases.search(search)
@@ -267,3 +284,12 @@ def contact_rad(request):
         'self': page_context,
         'form': form
     })
+
+def serve_wagtail_doc(request, document_id, document_filename):
+    """
+    Replacement for ``wagtail.wagtaildocs.views.serve.serve``
+    Wagtail's default document view serves everything as an attachment.
+    We'll bounce back to the URL and let the media server serve it.
+    """
+    doc = get_object_or_404(Document, id=document_id)
+    return HttpResponseRedirect(doc.file.url)

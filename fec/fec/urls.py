@@ -14,6 +14,7 @@ from search import views as search_views
 
 
 urlpatterns = [
+    url(r'^documents/(\d+)/(.*)$', home_views.serve_wagtail_doc, name='wagtaildocs_serve'),
     url(r'^django-admin/', include(admin.site.urls)),
     url(r'^auth/', include(uaa_urls)),
     url(r'^admin/', include(wagtailadmin_urls)),
