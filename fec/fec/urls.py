@@ -15,7 +15,6 @@ from search import views as search_views
 
 urlpatterns = [
     url(r'^documents/(\d+)/(.*)$', home_views.serve_wagtail_doc, name='wagtaildocs_serve'),
-    url(r'^django-admin/', include(admin.site.urls)),
     url(r'^auth/', include(uaa_urls)),
     url(r'^admin/', include(wagtailadmin_urls)),
     url(r'^calendar/$', home_views.calendar),
@@ -49,3 +48,6 @@ if settings.DEBUG:
     # Serve static and media files from development server
     urlpatterns += staticfiles_urlpatterns()
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
+    #hide django-admin unless DEBUG=True
+    urlpatterns.insert(0,url(r'^django-admin/', include(admin.site.urls)))
