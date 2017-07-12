@@ -36,7 +36,7 @@ from wagtail.contrib.table_block.blocks import TableBlock
 
 from fec import constants
 
-logger = logging.getLogger(__name__)
+logger = logging.getLogger('fec')
 
 from home.blocks import (ThumbnailBlock, AsideLinkBlock,
                          ContactInfoBlock, CitationsBlock, ResourceBlock,
