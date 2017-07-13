@@ -101,67 +101,58 @@
 
   <section class="slab slab--home slab--neutral">
     <div class="container">
-      <h2 class="heading--section">Introduction to campaign finance and elections</h2>
-      <div class="billboard">
-        <div class="billboard__image__container">
-          {% comment %}
-            <span class="t-block u-padding--bottom">
-              <a class="t-sans" href="/introduction-campaign-finance/getting-involved-federal-campaigns/">Learn about getting involved<br>in the election process »</a>
-            </span>
-          {% endcomment %}
-          <a class="u-no-border" href="https://youtu.be/yIH_kBQdmdQ" target="_blank">
-          <img class="billboard__image" src={% static 'img/thumbnail--video.png' %} alt="Video icon"></a>
-          <div class="document-thumbnail__description">
-            <a href="https://youtu.be/yIH_kBQdmdQ" target="_blank">A Citizen's Guide to Supporting Candidates</a>
-          </div>
-        </div>
-        <div class="billboard__content">
-          <h3>The FEC maintains financial data for past and current elections and the candidates in those races</h3>
-            <form action="{{ settings.FEC_APP_URL }}/elections" method="GET">
-               <div class="search-controls__row">
-                <div class="search-controls__either">
-                   <div class="row">
-                      <label for="zip" class="label">Find by ZIP code</label>
-                     <div class="search-controls__zip">
-                       <input type="text" class="form-element--inline" inputmode="numeric" id="zip" name="zip" >
-                     </div>
-                     <div class="search-controls__submit">
-                       <button type="submit" class="button--search--text form-element--inline button--standard">Search</button>
-                     </div>
-                   </div>
-                 </div>
-                 <div class="search-controls__or search-controls__or--vertical">or</div>
-                 <div class="search-controls__either">
-                   <fieldset>
-                     <legend class="label">Find by state and <span class="term" data-term="District">district</span></legend>
-                    <div class="search-controls__state combo combo--filter--mini">
-                     <select id="state" class="form-element--inline" name="state" aria-label="Select a state">
-                      <option value="" class="form-element--inline" selected>State</option>
-                      {% for value, label in settings.CONSTANTS.states.items %}
-                        <option value="{{ value }}" class="form-element--inline">{{ label }}</option>
-                      {% endfor %}
-                       </select>
-                     </div>
-                     <div class="search-controls__district combo combo--filter--mini">
-                       <select id="district" name="district" aria-label="Select a district" class="select--alt form-element--inline">
-                         <option value="" selected>District</option>
-                          {% for district in 100|districts %}
-                         <option value="{{ district }}">{{ district }}</option>
-                          {% endfor %}
-                       </select>
-                     </div>
-                     <div class="search-controls__submit">
-                       <button type="submit" class="button--search--text button--standard form-element--inline">Search</button>
-                     </div>
-                   </fieldset>
-                 </div>
+      <h2 class="heading--section u-margin--bottom">Introduction to campaign finance and elections</h2>
 
-                 {% comment %}
-                   <div class="u-float-left u-padding--top">
-                     <a class="t-sans" href="/introduction-campaign-finance/campaign-finance-and-fec-research/">Learn how to start researching financial data »</a>
+      <div class="sidebar-container sidebar-container--left u-padding--top">
+        <a class="u-no-border" href="https://youtu.be/yIH_kBQdmdQ" target="_blank">
+        <img class="billboard__image" src={% static 'img/thumbnail--video.png' %} alt="Video icon"></a>
+        <div class="document-thumbnail__description">
+          <a href="https://youtu.be/yIH_kBQdmdQ" target="_blank">A Citizen's Guide to Supporting Candidates</a>
+        </div>
+      </div>
+
+      <div class="main__content--right-full u-padding--top  u-padding--bottom">
+        <h3>The FEC maintains financial data for past and current elections and the candidates in those races</h3>
+          <form action="{{ settings.FEC_APP_URL }}/elections" method="GET">
+             <div class="search-controls__row">
+              <div class="search-controls__either">
+                 <div class="row">
+                    <label for="zip" class="label">Find by ZIP code</label>
+                   <div class="search-controls__zip">
+                     <input type="text" class="form-element--inline" inputmode="numeric" id="zip" name="zip" >
                    </div>
-                 {% endcomment %}
+                   <div class="search-controls__submit">
+                     <button type="submit" class="button--search--text form-element--inline button--standard">Search</button>
+                   </div>
+                 </div>
                </div>
+               <div class="search-controls__or search-controls__or--vertical">or</div>
+               <div class="search-controls__either">
+                 <fieldset>
+                   <legend class="label">Find by state and <span class="term" data-term="District">district</span></legend>
+                  <div class="search-controls__state combo combo--filter--mini">
+                   <select id="state" class="form-element--inline" name="state" aria-label="Select a state">
+                    <option value="" class="form-element--inline" selected>State</option>
+                    {% for value, label in settings.CONSTANTS.states.items %}
+                      <option value="{{ value }}" class="form-element--inline">{{ label }}</option>
+                    {% endfor %}
+                     </select>
+                   </div>
+                   <div class="search-controls__district combo combo--filter--mini">
+                     <select id="district" name="district" aria-label="Select a district" class="select--alt form-element--inline">
+                       <option value="" selected>District</option>
+                        {% for district in 100|districts %}
+                       <option value="{{ district }}">{{ district }}</option>
+                        {% endfor %}
+                     </select>
+                   </div>
+                   <div class="search-controls__submit">
+                     <button type="submit" class="button--search--text button--standard form-element--inline">Search</button>
+                   </div>
+                 </fieldset>
+               </div>
+             </div>
+
              </form>
              <ul class="list--border list--extra-spacious">
                <li>
