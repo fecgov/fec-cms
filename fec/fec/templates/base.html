@@ -10,14 +10,13 @@
 
     <title>{% block title %}{% if self.seo_title %}{{ self.seo_title }}{% else %}{{ self.title }} | FEC {% endif %}{% endblock %}{% block title_suffix %}{% endblock %}</title>
 
-    {# Global stylesheets #}
-    {% compress css %}
-    <link rel="stylesheet" type="text/x-scss" href="{% static 'scss/global.scss' %}">
-    {% endcompress %}
-
     {% block extra_css %}
-    {# Override this in templates to add extra stylesheets #}
+    {% compress css %}
+    <link rel="stylesheet" type="text/x-scss" href="{% static 'scss/base.scss' %}">
+    {% endcompress %}
     {% endblock %}
+
+
   </head>
 
   <body class="{% block body_class %}{% endblock %}">
