@@ -1,7 +1,7 @@
 {% load wagtailcore_tags %}
 {% for Contribution_limit  in Contribution_limits  %}
 
-<div>
+ <div class="dense-table-container">
 {{ Contribution_limit.text | richtext }}
 </div>
 {% endfor %}
