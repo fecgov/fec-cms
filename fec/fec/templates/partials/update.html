@@ -40,13 +40,9 @@
         {% for link in update.sunshine_act_links|splitlines %}
           <li>
             <a class="pdf-link" href="{{ link }}">
-              {% if forloop.counter == 1 %}
-              Sunshine Act Notice
-              {% else %}
-              Amended Sunshine Act Notice
-              - 
-              {{ forloop.counter0 }}
-              {% endif %}
+            {% if forloop.counter >= 2 %}Amended{% endif %}
+            Sunshine Act Notice
+            {% if update.sunshine_act_links|splitlines|length > 2 and forloop.counter >= 2 %}- {{ forloop.counter0 }}{% endif %}
             </a>
           </li>
         {% endfor %}
