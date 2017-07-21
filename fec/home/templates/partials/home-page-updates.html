@@ -1,5 +1,5 @@
 {% load filters %}
-<ul class="grid grid--4-wide grid--no-margin grid--no-border list--border">
+<ul class="grid grid--4-wide grid--no-margin grid--no-border">
   {% for generic_update in generic_updates %}
     <li class="grid__item u-no-padding-left u-no-padding-right">
       <div class="u-gray-background t-sans">
@@ -13,21 +13,24 @@
   {% endfor %}
   {% for update in updates %}
   <li class="grid__item {% if update.homepage_pin == True %}u-no-padding-left u-no-padding-right{% endif %}">
-    {% if update.homepage_pin == True %}<div class="u-gray-background">{% endif %}
+    {% if update.homepage_pin == True %}
+    <div class="u-gray-background">
+    {% endif %}
       <span class="t-sans">
-        <span class="t-bold">
+        <div class="t-bold t-upper">
           {% if update.get_update_type == 'Tips for Treasurers' %}
-            Tips for treasurers:
-
+            Tips for treasurers
           {% elif update.get_update_type == 'Commission Meetings' %}
-            Commission meeting:
+            Commission meeting
           {% else %}
-            {{ update.category|capfirst }}:
+            {{ update.category|capfirst }}
           {% endif %}
-        </span>
+        </div>
         <a href="{{ update.url }}">{% formatted_title update %}</a>
       </span>
-    {% if update.homepage_pin %}</div>{% endif %}
+    {% if update.homepage_pin %}
+    </div>
+    {% endif %}
   </li>
   {% endfor %}
 </ul>

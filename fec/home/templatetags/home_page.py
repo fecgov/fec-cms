@@ -50,14 +50,8 @@ def home_page_updates():
 
     # Figure out how many non-generic updates to show
     update_limit = 4 - len(generic_updates)
-    
+
     return {
         'generic_updates': generic_updates,
         'updates': updates_sorted_by_homepage_pin[:update_limit]
     }
-
-@register.inclusion_tag('partials/candidate_committee_services.html')
-def candidate_committee_services():
-    service_page = ServicesLandingPage.objects.first()
-
-    return {'service_page': service_page}
