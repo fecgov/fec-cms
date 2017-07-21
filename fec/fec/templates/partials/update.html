@@ -37,11 +37,18 @@
         {% endfor %}
         {% endif %}
         {% if update.sunshine_act_links %}
-        {% for link in update.sunshine_act_links|splitlines reversed %}
-          <li><a href="{{ link }}">
-            {% if update.sunshine_act_links|splitlines|length > 1 and forloop.counter == 1%}Amended{% endif %}
-            Sunshine Act Notice
-          </a></li>
+        {% for link in update.sunshine_act_links|splitlines %}
+          <li>
+            <a class="pdf-link" href="{{ link }}">
+              {% if forloop.counter == 1 %}
+              Sunshine Act Notice
+              {% else %}
+              Amended Sunshine Act Notice
+              - 
+              {{ forloop.counter0 }}
+              {% endif %}
+            </a>
+          </li>
         {% endfor %}
         {% endif %}
         </ul>

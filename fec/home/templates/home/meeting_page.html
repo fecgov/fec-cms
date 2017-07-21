@@ -123,12 +123,17 @@
       <h2 class="u-no-margin">Notices about this meeting</h2>
       <div class="list--spacious">
       <ul>
-      {% for link in self.sunshine_act_links|splitlines reversed %}
+      {% for link in self.sunshine_act_links|splitlines %}
         <li>
           <p>
             <a class="pdf-link" href="{{ link }}">
-              {% if self.sunshine_act_links|splitlines|length > 1 and forloop.counter == 1%}Amended{% endif %}
+              {% if forloop.counter == 1 %}
               Sunshine Act Notice
+              {% else %}
+              Amended Sunshine Act Notice
+              - 
+              {{ forloop.counter0 }}
+              {% endif %}
             </a>
           </p>
         </li>
