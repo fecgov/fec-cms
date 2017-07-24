@@ -36,7 +36,7 @@ function UpcomingEvents() {
       $('.js-homepage-upcoming-events').append(
           '<li class="grid__item t-sans"><span class="t-bold">' +
             startDateMonth + ' ' + startDateDay +
-          '</span>: ' + eventSummary + '</li>'
+          '</span> | ' + eventSummary + '</li>'
       );
 
       return i < 3;
