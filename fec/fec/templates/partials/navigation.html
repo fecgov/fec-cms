@@ -22,6 +22,11 @@
           <span class="site-nav__link__title">Legal resources</span>
         </a>
       </li>
+      <li class="site-nav__item--secondary" data-submenu="about">
+        <a href="{{ cms_url }}/about" tabindex="0" class="site-nav__link {% if self.content_section == 'about' %}is-parent{% endif %}">
+          <span class="site-nav__link__title">About</span>
+        </a>
+      </li>
       <li class="site-nav__item utility-nav__item u-under-lg-only">
         <a class="site-nav__link" href="/calendar">Calendar</a>
       </li>
