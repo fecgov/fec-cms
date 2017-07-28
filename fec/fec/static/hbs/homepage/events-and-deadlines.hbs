@@ -1,0 +1,9 @@
+{{#if startDate}}
+  <span class="t-bold">{{ startDate }}</span> |
+  {{#if url}}<a href="{{ url }}">{{ summary }}</a>
+  {{else}}
+  {{ summary }}
+  {{/if}}
+{{else}}
+  <span class="t-italic">None scheduled.</span>
+{{/if}}

@@ -27,20 +27,26 @@
         <h2 class="heading__left">Events and deadlines</h2>
         <a class="button--cta heading__right button--calendar" href="/calendar">Full calendar</a>
       </div>
-      <ul class="grid grid--4-wide grid--no-margin grid--no-border js-homepage-upcoming-events"></ul>
-      <div class="grid grid--4-wide">
-        <div class="grid__item">
-          <a class="button--alt button--updates" href="/calendar/?category=">All meetings</a>
-        </div>
-        <div class="grid__item">
-          <a class="button--alt button--calendar" href="/calendar/?category=">All filing deadlines</a>
-        </div>
-        <div class="grid__item">
-          <a class="button--alt button--calendar" href="/calendar/?category=">All outreach</a>
-        </div>
-        <div class="grid__item">
-          <a class="button--alt button--calendar" href="/calendar/?category=">All legal events</a>
-        </div>
+      <ul class="grid grid--4-wide grid--flex t-sans">
+        <li class="grid__item grid__item--event">
+          <div class="t-bold">Next commission meeting:</div>
+          <div class="js-next-commission-meeting"></div>
+          <a class="button button--alt button--updates" href="/calendar/?category=Executive+Sessions&category=Open+Meetings&category=Public+Hearings">All meetings</a>
+        <li class="grid__item grid__item--event">
+          <div class="t-sans t-bold">Next filing deadline:</div>
+          <div class="js-next-filing-deadline"></div>
+          <a class="button button--alt button--calendar" href="/calendar/?category=report-E&category=report-M&category=report-MY&category=report-Q&category=report-YE">All filing deadlines</a>
+        </li>
+        <li class="grid__item grid__item--event">
+          <div class="t-sans t-bold">Next training or conference:</div>
+          <div class="js-next-training-or-conference"></div>
+          <a class="button button--alt button--calendar" href="/calendar/?category=Conferences&category=Roundtables">All outreach</a>
+        </li>
+        <li class="grid__item grid__item--event">
+          <div class="t-sans t-bold">Next public comment deadline:</div>
+          <div class="js-next-public-comment-deadline"></div>
+          <a class="button button--alt button--calendar" href="/calendar/?category=AOs+and+Rules">All legal events</a>
+        </li>
       </div>
     </div>
   </section>
