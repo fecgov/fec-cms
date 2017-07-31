@@ -4,13 +4,11 @@
 {% load filters %}
 
 {% block intro %}
-  <p class="t-lead">Search or browse the latest information about the Commission and federal campaign finance law.</p>
+
   <div class="js-accordion accordion--neutral" data-content-prefix="updates">
-    <button type="button" class="js-accordion-trigger accordion__button">About latest updates</button>
+    <button type="button" class="js-accordion-trigger accordion__button">Commission meetings</button>
     <div class="accordion__content">
       <p>Commission meeting agendas are usually published a week before a scheduled meeting. Sunshine Act Notices are announcements of open meetings and executive sessions. Notices for open meetings are published at least a week before a scheduled meeting and announce the date, time and a general list of items for discussion.</p>
-      <p>Weekly Digests are published every Friday and summarize the week's publicly disclosed activity. Press releases are published as news happens.</p>
-      <p>FEC Record articles inform candidates and committees about FEC developments and are published as news happens. Tips for Treasurers are published once a week.</p>
     </div>
   </div>
 {% endblock %}
@@ -76,6 +74,7 @@
 
           <section id="meetings-meetings-section-1" class="option" role="tabpanel" aria-hidden="true" aria-labelledby="open-meetings">
             <h2 id="meetings-meetings-section-1-heading">Open Meetings</h2>
+             <p>Open to the public. The Commission considers new regulations, advisory opinions and other public matters at open meetings, which are typically held at FEC headquarters on Thursdays at 10:00am. Commission meeting agendas are usually published a week before a scheduled meeting.</p>
             {% if open_meetings %}
                <table class="simple-table simple-table">
                 <thead class="simple-table__header">
