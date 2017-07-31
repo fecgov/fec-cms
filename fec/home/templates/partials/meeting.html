@@ -1,0 +1,28 @@
+
+{% load wagtailimages_tags %}
+{% load filters %}
+
+<article class="post">
+        <h3 class="t-sans">{{ meeting.date|date:'F j, Y' }}</h3>
+        {% if meeting.approved_minutes_link %}
+          <li><a href="{{ meeting.approved_minutes_link }}">Approved minutes</a></li>
+        {% endif %}
+        {% if meeting.draft_minutes_links %}
+        {% for link in meeting.draft_minutes_links|splitlines %}
+          <li><a href="{{ link }}">Draft minutes</a></li>
+        {% endfor %}
+        {% endif %}
+        {% if meeting.sunshine_act_links %}
+        {% for link in meeting.sunshine_act_links|splitlines %}
+          <li>
+            <a class="pdf-link" href="{{ link }}">
+            {% if forloop.counter >= 2 %}Amended{% endif %}
+            Sunshine Act Notice
+            {% if meeting.sunshine_act_links|splitlines|length > 2 and forloop.counter >= 2 %}- {{ forloop.counter0 }}{% endif %}
+            </a>
+          </li>
+        {% endfor %}
+        {% endif %}
+
+     </ul>
+</article>

@@ -293,3 +293,82 @@ def serve_wagtail_doc(request, document_id, document_filename):
     """
     doc = get_object_or_404(Document, id=document_id)
     return HttpResponseRedirect(doc.file.url)
+
+def index_meetings(request,  year=None, search=None):
+    meetings = MeetingPage.objects.live()
+    open_meetings = meetings.filter(meeting_type ='O')
+    executive_sessions = meetings.filter(meeting_type ='E') or meetings.filter(title__contains='executive')
+    hearings= meetings.filter(title__contains='Hearing')
+
+    year = request.GET.get('year', '')
+    search = request.GET.get('search', '')
+
+    if year:
+        # Trying to filter using the built-in date__year parameter doesn't
+        # work when chaining filter() and search(), so this uses date_gte and date_lte
+        year = int(year)
+        meetings = meetings.filter(date__gte=datetime(year, 1, 1)).filter(date__lte=datetime(year, 12, 31))
+        executive_sessions = executive_sessions.filter(date__gte=datetime(year, 1, 1)).filter(date__lte=datetime(year, 12, 31))
+        open_meetings = open_meetings.filter(date__gte=datetime(year, 1, 1)).filter(date__lte=datetime(year, 12, 31))
+        hearings = hearings.filter(date__gte=datetime(year, 1, 1)).filter(date__lte=datetime(year, 12, 31))
+
+    if search:
+        meetings = meetings.search(search)
+        executive_sessions = executive_sessions.search(search)
+        open_meetings = open_meetings.search(search)
+        hearings = hearings.search(search)
+
+
+    # Handle pagination
+    if open_meetings:
+        page = request.GET.get('page', 1)
+        paginator = Paginator(open_meetings, 20)
+        try:
+            open_meetings = paginator.page(page)
+
+        except PageNotAnInteger:
+            open_meetings = paginator.page(1)
+
+        except EmptyPage:
+            open_meetings = paginator.page(paginator.num_pages)
+
+    elif executive_sessions:
+        page= request.GET.get('page', 1)
+        paginator_e = Paginator(executive_sessions, 20)
+
+        try:
+            executive_sessions = paginator_e.page(page)
+
+        except PageNotAnInteger:
+            executive_sessions = paginator_e.page(1)
+
+        except EmptyPage:
+            executive_sessions = paginator_e.page(1)
+
+    elif hearings:
+        page= request.GET.get('page', 1)
+        paginator_h = Paginator(executive_sessions, 20)
+
+        try:
+            hearings = paginator_h.page(page)
+
+        except PageNotAnInteger:
+            hearings = paginator_h.page(1)
+
+        except EmptyPage:
+            hearings = paginator_h.page(1)
+
+
+    page_context = {
+      'title': 'Commission Meetings',
+    }
+
+    return render(request, 'home/commission_meetings.html', {
+        'self': page_context,
+        'year': year,
+        'search': search,
+        'meetings': meetings,
+        'open_meetings': open_meetings,
+        'executive_sessions': executive_sessions,
+        'hearings': hearings,
+    })
