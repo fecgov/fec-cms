@@ -299,6 +299,7 @@ def index_meetings(request,  year=None, search=None):
     open_meetings = meetings.filter(meeting_type ='O')
     executive_sessions = meetings.filter(meeting_type ='E') or meetings.filter(title__contains='executive')
     hearings= meetings.filter(title__contains='Hearing')
+    years = MeetingPage.objects.dates('date', 'year', order='DESC')
 
     year = request.GET.get('year', '')
     search = request.GET.get('search', '')
@@ -371,4 +372,5 @@ def index_meetings(request,  year=None, search=None):
         'open_meetings': open_meetings,
         'executive_sessions': executive_sessions,
         'hearings': hearings,
+        'years': years
     })

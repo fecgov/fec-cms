@@ -1,14 +1,18 @@
-
-{% load wagtailimages_tags %}
 {% load filters %}
         <tr class="simple-table__row">
         <td class="simple-table__cell">{{ meeting.date|date:'F j, Y' }}</td>
-        {% if meeting.sunshine_act_links %}
+
+         <td class="simple-table__cell">
+         {% if meeting.sunshine_act_links %}
+          <ul>
           {% for link in meeting.sunshine_act_links|splitlines %}
-          <td class="simple-table__cell"> <a class="pdf-link" href="{{ link }}">{% if forloop.counter >= 2 %}Amended{% endif %}
-            Sunshine Act Notice
-            {% if meeting.sunshine_act_links|splitlines|length > 2 and forloop.counter >= 2 %}- {{ forloop.counter0 }}{% endif %}</a></td>
+          <li><a href="{{ link }}">{% if forloop.counter >= 2 %}Amended{% endif %}
+ Sunshine Act Notice
+               {% if meeting.sunshine_act_links|splitlines|length > 2 and forloop.counter >= 2 %}- {{ forloop.counter0 }}{% endif %}
+              </a>
+             </li>
           {% endfor %}
          {% endif %}
+         </td>
         </tr>
 
