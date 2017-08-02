@@ -117,18 +117,13 @@
 
         <div class="grid grid--6-wide">
 
-          <div class="grid__item"></div>
-
           <div class="grid__item">
             <ul>
               <li>
-                <a href="/about/">About the FEC</a>
+                <a href="/about/">About</a>
               </li>
               <li>
                 <a href="/about/careers/">Careers</a>
-              </li>
-              <li>
-                <a href="/contact-us/">Contact</a>
               </li>
               <li>
                 {% if self.title == "Homepage" or self.title == "Home" %}
@@ -136,9 +131,13 @@
                 {% endif %}
                 <a href="/press/">Press</a>
               </li>
+              <li>
+                <a href="/contact-us/">Contact</a>
+              </li>
             </ul>
           </div>
-
+          <div class="grid__item"></div>
+          <div class="grid__item"></div>
           <div class="grid__item">
             <ul>
               <li>
@@ -152,20 +151,6 @@
               </li>
               <li>
                 <a href="/about/reports-about-fec/strategy-budget-and-performance/">Strategy, budget and performance</a>
-              </li>
-            </ul>
-          </div>
-
-          <div class="grid__item">
-            <ul>
-              <li>
-                <a href="https://api.open.fec.gov/">OpenFEC API</a>
-              </li>
-              <li>
-                <a href="https://github.com/18F/fec">GitHub repository</a>
-              </li>
-              <li>
-                <a href="https://github.com/18F/FEC/blob/master/release_notes/release_notes.md">Release notes</a>
               </li>
             </ul>
           </div>
@@ -190,7 +175,13 @@
           <div class="grid__item">
             <ul>
               <li>
-                <a href="{{ cms_url }}/updates/">Latest updates</a>
+                <a href="https://api.open.fec.gov/">OpenFEC API</a>
+              </li>
+              <li>
+                <a href="https://github.com/18F/fec">GitHub repository</a>
+              </li>
+              <li>
+                <a href="https://github.com/18F/FEC/blob/master/release_notes/release_notes.md">Release notes</a>
               </li>
             </ul>
           </div>
