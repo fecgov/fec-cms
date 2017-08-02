@@ -11,8 +11,8 @@ from home.models import (GenericUpdate, DigestPage, RecordPage, PressReleasePage
 register = template.Library()
 
 
-@register.inclusion_tag('partials/home-page-updates.html')
-def home_page_updates():
+@register.inclusion_tag('partials/home-page-news.html')
+def home_page_news():
     # get one of each update type (not featured)
     record = RecordPage.objects.live().filter(homepage_hide=False, homepage_pin=False).order_by('-date')[:1]
     tips_for_treasurer = TipsForTreasurersPage.objects.live().order_by('-date')[:1]
