@@ -5,10 +5,19 @@ from django.conf import settings
 from operator import attrgetter
 from itertools import chain, islice
 from datetime import date
-from home.models import (GenericUpdate, DigestPage, RecordPage, PressReleasePage,
+from home.models import (HomePageBannerAnnouncement, DigestPage, RecordPage, PressReleasePage,
                         TipsForTreasurersPage, ServicesLandingPage)
 
 register = template.Library()
+
+
+@register.inclusion_tag('partials/home-page-banner-announcement.html')
+def home_page_banner_announcement():
+    banners = HomePageBannerAnnouncement.objects.live().filter(active=True).order_by('-date_active')[:2]
+
+    return {
+        'banners': banners
+    }
 
 
 @register.inclusion_tag('partials/home-page-news.html')
