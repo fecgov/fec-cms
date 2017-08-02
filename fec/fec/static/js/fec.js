@@ -1,6 +1,7 @@
 'use strict';
 
 var $ = require('jquery');
+require('./vendor/tablist').init();
 
 // Implementing a polyfill for js native WeakMap
 // in order to patch functionality in an included library
