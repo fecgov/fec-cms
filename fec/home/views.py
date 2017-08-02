@@ -303,6 +303,7 @@ def index_meetings(request,  year=None, search=None):
 
     year = request.GET.get('year', '')
     search = request.GET.get('search', '')
+    active = request.GET.get('tab', '')
 
     if year:
         # Trying to filter using the built-in date__year parameter doesn't
@@ -372,5 +373,6 @@ def index_meetings(request,  year=None, search=None):
         'open_meetings': open_meetings,
         'executive_sessions': executive_sessions,
         'hearings': hearings,
-        'years': years
+        'years': years,
+        'active':active
     })

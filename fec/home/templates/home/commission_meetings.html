@@ -1,182 +1,244 @@
-{% extends "home/feed_base.html" %}
+{% extends "base.html" %}
 {% load wagtailcore_tags %}
 {% load staticfiles %}
 {% load filters %}
 
-{% block filters %}
-<form action="/meetings" class="js-form-nav container">
-    <div class="filter">
+{% block content %}
 
-        <label for="year" class="label">Year</label>
-        <select id="year" name="year">
-          <option value="{{ year }}" selected>{% if year %} {{ year }}{% else %} All{% endif %} </option>
-          {% for year in years %}
-            <option value="{{ year|date:"Y" }}">{{ year|date:"Y" }}</option>
-          {% endfor %}
-        </select>
-    </div>
-    <div class="filter">
-      <div class="combo combo--filter--mini">
-        <label for="search" class="label">Search</label>
-        <input id="search" class="combo__input" name="search" type="text" value="{{ search }}">
-        <button type="submit" class="combo__button button button--standard button--search"><span class="u-visually-hidden">Search</span></button>
-      </div>
-    </div>
-</form>
-{% endblock %}
-
-{% block feed %}
-<section id="meetings-page-meetings" class="slab tab-interface">
+{% include 'partials/breadcrumbs.html' with page=self links=self.get_ancestors style='secondary' %}
+<section class="content__section--extra">
   <div class="container">
-    <div class="sidebar-container sidebar-container--left">
-      <nav class="sidebar side-nav-alt">
-        <ul class="tablist" role="tablist" data-name="tab">
-          <li class="side-nav__item" role="presentation">
-            <a class="side-nav__link"
-                role="tab"
-                data-name="open-meetings"
-                tabindex="0"
-                aria-controls="meetings-page-meetings-open-meetings"
-                href="#meetings-page-meetings-open-meetings"
-                aria-selected="true">Open Meetings</a>
-          </li>
-          <li class="side-nav__item" role="presentation">
-            <a class="side-nav__link"
-                role="tab"
-                data-name="executive-sessions"
-                tabindex="0"
-                aria-controls="meetings-page-meetings-executive-sessions"
-                href="#meetings-page-meetings-executive-sessions">Executive Sessions</a>
-          </li>
-          <li class="side-nav__item" role="presentation">
-            <a class="side-nav__link"
-                role="tab"
-                data-name="hearings"
-                tabindex="0"
-                aria-controls="meetings-page-meetings-hearings"
-                href="#meetings-page-meetings-hearings">Hearings</a>
-          </li>
-        </ul>
-      </nav>
-    </div>
-    <div class="main__content--right-full">
-      <section id="meetings-page-meetings-open-meetings" class="option" role="tabpanel" aria-hidden="true" aria-labelledby="open-meetings">
-        <h2 id="meetings-page-meetings-open-meetings">Open Meetings</h2>
-         <p>Open to the public. The Commission considers new regulations, advisory opinions and other public matters at open meetings, which are typically held at FEC headquarters on Thursdays at 10:00am. Commission meeting agendas are usually published a week before a scheduled meeting.</p>
-        {% if open_meetings %}
-           <table class="simple-table">
-              <tbody>
-                {% for open_meeting in open_meetings reversed %}
-                  {% include 'partials/meeting.html' with meeting=open_meeting %}
-                 {% endfor %}
-              </tbody>
-           </table>
-          <div class="results-info">
-            <span>Page {{ open_meetings.number }} of {{ open_meetings.paginator.num_pages }}</span>
-              {% if open_meetings.has_previous %}
-                <a class="button button--standard button--previous" href="?page={{ open_meetings.previous_page_number }}{% for key,value in request.GET.items %}{% ifnotequal key 'page' %}&amp;{{ key }}={{ value }}{% endifnotequal %}{% endfor %}"><span class="u-visually-hidden">Previous</span></a>
-          {% endif %}
-          {% if open_meetings.has_next %}
-            <a class="button button--standard button--next" href="?page={{ open_meetings.next_page_number }}{% for key,value in request.GET.items %}{% ifnotequal key 'page' %}&amp;{{ key }}={{ value }}{% endifnotequal %}{% endfor %}"><span class="u-visually-hidden">Next</span></a>
-          {% endif %}
-         </div>
-          {% else %}
-        <div class="message message--info">
-          <h2>No results</h2>
-           {% if search %}
-            <p>We didn’t find any pages matching <strong>&ldquo;{{search}}&rdquo;</strong>.</p>
-            {% endif %}
-          <p>Please note that FEC Record articles published before 2011 exist only in PDF format and are not included in these search results.</p>
-          <p>
-            <div class="message--alert__bottom">
-             <p>FEC.gov is in the middle of a redesign, and some pages aren’t included in search results yet. Please try another search. Or, <a href="{{ settings.FEC_CLASSIC_URL }}">search the archive</a> of FEC.gov’s previous design.</p>
-             <p>If you’d like to contact our team, we’re available by <a href="mailto:{{ settings.WEBMANAGER_EMAIL }}">email</a> or <a href="https://github.com/18f/fec">GitHub</a>.</p>
-           </div>
-        </div>
-          {% endif %}
-      </section>
-
-      <section id="meetings-page-meetings-executive-sessions" class="option" role="tabpanel" aria-hidden="true" aria-labelledby="executive-sessions">
-        <h2 id="meetings-page-meetings-executive-sessions">Executive Sessions</h2>
-        <p>Confidential and closed to the public. The Commission meets regularly in executive sessions to discuss pending enforcement actions, litigation and other matters that, by law, must be kept confidential.</p>
-        {% if executive_sessions %}
-           <table class="simple-table">
-              <tbody>
-                {% for executive_session in executive_sessions reversed %}
-                  {% include 'partials/meeting.html' with meeting=executive_session  %}
-                {% endfor %}
-              </tbody>
-           </table>
-
-          <div class="results-info">
-            <span>Page {{ executive_sessions.number }} of {{ executive_sessions.paginator_e.num_pages }}</span>
-              {% if executive_sessions.has_previous %}
-                <a class="button button--standard button--previous" href="?page={{ executive_sessions.previous_page_number }}{% for key,value in request.GET.items %}{% ifnotequal key 'page' %}&amp;{{ key }}={{ value }}{% endifnotequal %}{% endfor %}"><span class="u-visually-hidden">Previous</span></a>
-          {% endif %}
-          {% if executive_sessions.has_next %}
-            <a class="button button--standard button--next" href="?page={{ executive_sessions.next_page_number }}{% for key,value in request.GET.items %}{% ifnotequal key 'page' %}&amp;{{ key }}={{ value }}{% endifnotequal %}{% endfor %}"><span class="u-visually-hidden">Next</span></a>
-          {% endif %}
-         </div>
-          {% else %}
-        <div class="message message--info">
-          <h2>No results</h2>
-           {% if search %}
-            <p>We didn’t find any pages matching <strong>&ldquo;{{search}}&rdquo;</strong>.</p>
-           {% endif %}
-          <p>Please note that FEC Record articles published before 2011 exist only in PDF format and are not included in these search results.</p>
-          <p>
-            <div class="message--alert__bottom">
-             <p>FEC.gov is in the middle of a redesign, and some pages aren’t included in search results yet. Please try another search. Or, <a href="{{ settings.FEC_CLASSIC_URL }}">search the archive</a> of FEC.gov’s previous design.</p>
-             <p>If you’d like to contact our team, we’re available by <a href="mailto:{{ settings.WEBMANAGER_EMAIL }}">email</a> or <a href="https://github.com/18f/fec">GitHub</a>.</p>
-           </div>
-        </div>
-          {% endif %}
-      </section>
-
-      <section id="meetings-page-meetings-hearings" class="option" role="tabpanel" aria-hidden="true" aria-labelledby="hearings">
-        <h2 id="meetings-page-meetings-hearings">Hearings</h2>
-        {% if executive_sessions %}
-           <table class="simple-table">
-              <tbody>
-                {% for hearing in hearings reversed %}
-                  {% include 'partials/meeting.html' with meeting=hearing  %}
-                 {% endfor %}
-              </tbody>
-           </table>
-
-          <div class="results-info">
-            <span>Page {{ hearings.number }} of {{ hearings.paginator_h.num_pages }}</span>
-              {% if hearings.has_previous %}
-                <a class="button button--standard button--previous" href="?page={{ executive_sessions.previous_page_number }}{% for key,value in request.GET.items %}{% ifnotequal key 'page' %}&amp;{{ key }}={{ value }}{% endifnotequal %}{% endfor %}"><span class="u-visually-hidden">Previous</span></a>
-          {% endif %}
-          {% if hearings.has_next %}
-            <a class="button button--standard button--next" href="?page={{ executive_sessions.next_page_number }}{% for key,value in request.GET.items %}{% ifnotequal key 'page' %}&amp;{{ key }}={{ value }}{% endifnotequal %}{% endfor %}"><span class="u-visually-hidden">Next</span></a>
-          {% endif %}
-         </div>
-          {% else %}
-        <div class="message message--info">
-          <h2>No results</h2>
-           {% if search %}
-            <p>We didn’t find any pages matching <strong>&ldquo;{{search}}&rdquo;</strong>.</p>
-           {% endif %}
-          <p>Please note that FEC Record articles published before 2011 exist only in PDF format and are not included in these search results.</p>
-          <p>
-            <div class="message--alert__bottom">
-             <p>FEC.gov is in the middle of a redesign, and some pages aren’t included in search results yet. Please try another search. Or, <a href="{{ settings.FEC_CLASSIC_URL }}">search the archive</a> of FEC.gov’s previous design.</p>
-             <p>If you’d like to contact our team, we’re available by <a href="mailto:{{ settings.WEBMANAGER_EMAIL }}">email</a> or <a href="https://github.com/18f/fec">GitHub</a>.</p>
-           </div>
-        </div>
-          {% endif %}
-      </section>
+    <header class="heading--main">
+      <h1>{{ self.title }}</h1>
+    </header>
   </div>
 </section>
+<section class="main__content--full data-container__wrapper" id="feed">
+ <div class="main">
+  <div class="container">
+  {% block feed %}
+    <section id="meetings-page-meetings" class="slab tab-interface">
+      <div class="container">
+        <div class="sidebar-container sidebar-container--left">
+          <nav class="sidebar side-nav-alt">
+            <ul class="tablist" role="tablist" data-name="tab">
+              <li class="side-nav__item" role="presentation">
+                <a class="side-nav__link"
+                    role="tab"
+                    data-name="open-meetings"
+                    tabindex="0"
+                    aria-controls="meetings-page-meetings-open-meetings"
+                    href="#meetings-page-meetings-open-meetings"
+                    {# the below expressions return the right values but do not work on page submit for some reason (?) #}
+                    {% for key,value in request.GET.items %}{% ifequal value 'open-meetings' %} aria-selected="true" {% endifequal %}{% endfor %}
+                    {% for key,value in request.GET.items %}{% ifnotequal value 'open-meetings' %} aria-selected="false" {% endifnotequal %}{% endfor %}
+                    >Open Meetings</a>
+              </li>
+              <li class="side-nav__item" role="presentation">
+                <a class="side-nav__link"
+                    role="tab"
+                    data-name="hearings"
+                    tabindex="0"
+                    aria-controls="meetings-page-meetings-hearings"
+                    {% for key,value in request.GET.items %}{% ifequal value 'hearings' %} aria-selected="true" {% endifequal %}{% endfor %}
+                    {% for key,value in request.GET.items %}{% ifnotequal value 'hearings' %} aria-selected="false" {% endifnotequal %}{% endfor %}
+                    href="#meetings-page-meetings-hearings">Hearings</a>
+              </li>
+              <li class="side-nav__item" role="presentation">
+                <a class="side-nav__link"
+                    role="tab"
+                    data-name="executive-sessions"
+                    tabindex="0"
+                    aria-controls="meetings-page-meetings-executive-sessions"
+                    href="#meetings-page-meetings-executive-sessions"
+                    {# test using active variable instead in key,value loop above #}
+                    {% ifequal active 'executive-sessions' %} aria-selected="true" data="test"{% else %} aria-selected="false" {% endifequal %}
+                    >Executive Sessions</a>
+              </li>
+            </ul>
+          </nav>
+        </div>
+        <div class="main__content--right-full">
+          <section id="meetings-page-meetings-open-meetings" class="option" role="tabpanel" aria-hidden="true" aria-labelledby="open-meetings">
+            <h2 id="meetings-page-meetings-open-meetings">Open Meetings</h2>
+             <p>Open to the public. The Commission considers new regulations, advisory opinions and other public matters at open meetings, which are typically held at FEC headquarters on Thursdays at 10:00am. Commission meeting agendas are usually published a week before a scheduled meeting.</p>
+            <div class="filters--horizontal">
+             {% block filters1 %}
+               <form action="/meetings" class="js-form-nav container">
+                  <div class="filter">
+                      <label for="year" class="label">Year</label>
+                      <select id="year" name="year">
+                        <option {% if year %} value="{{ year }}" {% else %} value ="" {% endif %}> {% if year %}{{ year }}{% else %}All{% endif %}</option>
+                        <option value="">All</option>
+                        {% for item in years %}
+                        <option value="{{ item | date:"Y" }}" {% ifequal year 'item'  %}{% endifequal %}>{{ item|date:"Y" }}</option>
+                        {% endfor %}
+                      </select>
+                  </div>
+                  <div class="filter">
+                    <div class="combo combo--filter--mini">
+                      <label for="search" class="label">Search</label>
+                      <input id="search" class="combo__input" name="search" type="text" value="{{ search }}">
+                      <button type="submit" class="combo__button button button--standard button--search"><span class="u-visually-hidden">Search</span></button>
+                    </div>
+                  </div>
+              </form>
+           {% endblock %}
+          </div>
+            {% if open_meetings %}
+               <table class="simple-table">
+                  <tbody>
+                    {% for open_meeting in open_meetings reversed %}
+                      {% include 'partials/meeting.html' with meeting=open_meeting %}
+                     {% endfor %}
+                  </tbody>
+               </table>
+              <div class="results-info">
+                <span>Page {{ open_meetings.number }} of {{ open_meetings.paginator.num_pages }}</span>
+                  {% if open_meetings.has_previous %}
+                    <a class="button button--standard button--previous" href="?page={{ open_meetings.previous_page_number }}{% for key,value in request.GET.items %}{% ifnotequal key 'page' %}&amp;{{ key }}={{ value }}{% endifnotequal %}{% endfor %}"><span class="u-visually-hidden">Previous</span></a>
+              {% endif %}
+              {% if open_meetings.has_next %}
+                <a class="button button--standard button--next" href="?page={{ open_meetings.next_page_number }}{% for key,value in request.GET.items %}{% ifnotequal key 'page' %}&amp;{{ key }}={{ value }}{% endifnotequal %}{% endfor %}"><span class="u-visually-hidden">Next</span></a>
+              {% endif %}
+             </div>
+              {% else %}
+            <div class="message message--info">
+              <h2>No results</h2>
+               {% if search %}
+                <p>We didn’t find any pages matching <strong>&ldquo;{{search}}&rdquo;</strong>.</p>
+                {% endif %}
+              <p>
+                <div class="message--alert__bottom">
+                 <p>FEC.gov is in the middle of a redesign, and some pages aren’t included in search results yet. Please try another search. Or, <a href="{{ settings.FEC_CLASSIC_URL }}">search the archive</a> of FEC.gov’s previous design.</p>
+                 <p>If you’d like to contact our team, we’re available by <a href="mailto:{{ settings.WEBMANAGER_EMAIL }}">email</a> or <a href="https://github.com/18f/fec">GitHub</a>.</p>
+               </div>
+            </div>
+              {% endif %}
+          </section>
+          <section id="meetings-page-meetings-hearings" class="option" role="tabpanel" aria-hidden="true" aria-labelledby="hearings">
+            <h2 id="meetings-page-meetings-hearings">Hearings</h2>
+            <div class="filters--horizontal">
+             {% block filters3 %}
+               <form action="/meetings" class="js-form-nav container">
+                  <div class="filter">
 
+                      <label for="year" class="label">Year</label>
+                      <select id="year" name="year">
+                        <option {% if year %} value="{{ year }}" {% else %} value ="" {% endif %}> {% if year %} {{ year }}{% else %} All{% endif %}</option>
+                        <option value="">All</option>
+                        {% for item in years %}
+                        <option value="{{ item | date:"Y" }}" {% ifequal year 'item'  %}{% endifequal %}>{{ item|date:"Y" }}</option>
+                        {% endfor %}
+                      </select>
+                  </div>
+                  <div class="filter">
+                    <div class="combo combo--filter--mini">
+                      <label for="search" class="label">Search</label>
+                      <input id="search" class="combo__input" name="search" type="text" value="{{ search }}">
+                      <button type="submit" class="combo__button button button--standard button--search"><span class="u-visually-hidden">Search</span></button>
+                    </div>
+                  </div>
+              </form>
+            {% endblock %}
+           </div>
+            {% if hearings %}
+               <table class="simple-table">
+                  <tbody>
+                    {% for hearing in hearings reversed %}
+                      {% include 'partials/meeting.html' with meeting=hearing %}
+                     {% endfor %}
+                  </tbody>
+               </table>
 
+              <div class="results-info">
+                <span>Page {{ hearings.number }} of {{ hearings.paginator_h.num_pages }}</span>
+                  {% if hearings.has_previous %}
+                    <a class="button button--standard button--previous" href="?page={{ executive_sessions.previous_page_number }}{% for key,value in request.GET.items %}{% ifnotequal key 'page' %}&amp;{{ key }}={{ value }}{% endifnotequal %}{% endfor %}"><span class="u-visually-hidden">Previous</span></a>
+              {% endif %}
+              {% if hearings.has_next %}
+                <a class="button button--standard button--next" href="?page={{ executive_sessions.next_page_number }}{% for key,value in request.GET.items %}{% ifnotequal key 'page' %}&amp;{{ key }}={{ value }}{% endifnotequal %}{% endfor %}"><span class="u-visually-hidden">Next</span></a>
+              {% endif %}
+             </div>
+              {% else %}
+            <div class="message message--info">
+              <h2>No results</h2>
+               {% if search %}
+                <p>We didn’t find any pages matching <strong>&ldquo;{{search}}&rdquo;</strong>.</p>
+               {% endif %}
+              <p>
+                <div class="message--alert__bottom">
+                 <p>FEC.gov is in the middle of a redesign, and some pages aren’t included in search results yet. Please try another search. Or, <a href="{{ settings.FEC_CLASSIC_URL }}">search the archive</a> of FEC.gov’s previous design.</p>
+                 <p>If you’d like to contact our team, we’re available by <a href="mailto:{{ settings.WEBMANAGER_EMAIL }}">email</a> or <a href="https://github.com/18f/fec">GitHub</a>.</p>
+               </div>
+            </div>
+              {% endif %}
+          </section>
+          <section id="meetings-page-meetings-executive-sessions" class="option" role="tabpanel" aria-hidden="true" aria-labelledby="executive-sessions">
+            <h2 id="meetings-page-meetings-executive-sessions">Executive Sessions</h2>
+            <p>Confidential and closed to the public. The Commission meets regularly in executive sessions to discuss pending enforcement actions, litigation and other matters that, by law, must be kept confidential.</p>
+            <div class="filters--horizontal">
+             {% block filters2 %}
+               <form action="/meetings" class="js-form-nav container">
+                  <div class="filter">
 
-
+                      <label for="year" class="label">Year</label>
+                      <select id="year" name="year">
+                        <option {% if year %} value="{{ year }}" {% else %} value ="" {% endif %}> {% if year %} {{ year }}{% else %} All{% endif %}</option>
+                        <option value="">All</option>
+                        {% for item in years %}
+                        <option value="{{ item | date:"Y" }}" {% ifequal year 'item'  %}{% endifequal %}>{{ item|date:"Y" }}</option>
+                        {% endfor %}
+                      </select>
+                  </div>
+                  <div class="filter">
+                    <div class="combo combo--filter--mini">
+                      <label for="search" class="label">Search</label>
+                      <input id="search" class="combo__input" name="search" type="text" value="{{ search }}">
+                      <button type="submit" class="combo__button button button--standard button--search"><span class="u-visually-hidden">Search</span></button>
+                    </div>
+                  </div>
+              </form>
+           {% endblock %}
+          </div>
+            {% if executive_sessions %}
+               <table class="simple-table">
+                  <tbody>
+                    {% for executive_session in executive_sessions reversed %}
+                      {% include 'partials/meeting.html' with meeting=executive_session  %}
+                    {% endfor %}
+                  </tbody>
+               </table>
+              <div class="results-info">
+                <span>Page {{ executive_sessions.number }} of {{ executive_sessions.paginator_e.num_pages }}</span>
+                  {% if executive_sessions.has_previous %}
+                    <a class="button button--standard button--previous" href="?page={{ executive_sessions.previous_page_number }}{% for key,value in request.GET.items %}{% ifnotequal key 'page' %}&amp;{{ key }}={{ value }}{% endifnotequal %}{% endfor %}"><span class="u-visually-hidden">Previous</span></a>
+              {% endif %}
+              {% if executive_sessions.has_next %}
+                <a class="button button--standard button--next" href="?page={{ executive_sessions.next_page_number }}{% for key,value in request.GET.items %}{% ifnotequal key 'page' %}&amp;{{ key }}={{ value }}{% endifnotequal %}{% endfor %}"><span class="u-visually-hidden">Next</span></a>
+              {% endif %}
+             </div>
+              {% else %}
+            <div class="message message--info">
+              <h2>No results</h2>
+               {% if search %}
+                <p>We didn’t find any pages matching <strong>&ldquo;{{search}}&rdquo;</strong>.</p>
+               {% endif %}
+              <p>
+                <div class="message--alert__bottom">
+                 <p>FEC.gov is in the middle of a redesign, and some pages aren’t included in search results yet. Please try another search. Or, <a href="{{ settings.FEC_CLASSIC_URL }}">search the archive</a> of FEC.gov’s previous design.</p>
+                 <p>If you’d like to contact our team, we’re available by <a href="mailto:{{ settings.WEBMANAGER_EMAIL }}">email</a> or <a href="https://github.com/18f/fec">GitHub</a>.</p>
+               </div>
+            </div>
+              {% endif %}
+          </section>
+      </div>
+    </section>
+  {% endblock %}
+ </div>
+</div>
+</section>
 {% endblock %}
-
-
 
 {% block extra_js %}
   <script type="text/javascript" src="{% static 'js/fec.js' %}"></script>
