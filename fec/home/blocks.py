@@ -2,6 +2,7 @@ from wagtail.wagtailcore import blocks
 from wagtail.wagtailimages.blocks import ImageChooserBlock
 from wagtail.wagtaildocs.blocks import DocumentChooserBlock
 from wagtail.contrib.table_block.blocks import TableBlock
+from wagtail.wagtailsnippets.blocks import SnippetChooserBlock
 
 class ThumbnailBlock(blocks.StructBlock):
     """A block that combines a thumbnail and a caption,
@@ -122,7 +123,8 @@ class ResourceBlock(blocks.StructBlock):
         ('fec_jobs', CareersBlock()),
         ('mur_search', MURSearchBlock()),
         ('table', TableBlock()),
-        ('html', blocks.RawHTMLBlock())
+        ('html', blocks.RawHTMLBlock()),
+        ('choose_snippet', SnippetChooserBlock('home.DenseTableSnippet', template = 'blocks/dense-table.html'))
     ])
 
     aside = blocks.StreamBlock([
