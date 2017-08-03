@@ -9,7 +9,12 @@
       </li>
       <li class="site-nav__item" data-submenu="data">
         <a class="site-nav__link" href="{{ settings.FEC_APP_URL }}" tabindex="0">
-          <span class="site-nav__link__title">Campaign finance data</span>
+          <span class="site-nav__link__title">
+          {% if self.get_verbose_name == "Home page" %}
+          <div class="tour__point" data-intro="<h5>A new way to navigate
+</h5>Less looking, more finding. The main sections of our website have been reorganized and simplified to help you find what you need faster."></div>
+          {% endif %}
+          Campaign finance data</span>
         </a>
       </li>
       <li class="site-nav__item site-nav__item--secondary" data-submenu="help">

@@ -491,16 +491,25 @@ class TipsForTreasurersPage(ContentPage):
         return 'Information Division'
 
 
-class GenericUpdate(Page):
-    # Generic update (pin) for Home Page - What's Happening section
-    link = models.URLField(blank=True)
-    homepage_expiration = models.DateField(blank=True, null=True)
+class HomePageBannerAnnouncement(Page):
+    # Home page banner alert
+    description = models.CharField(max_length=255, blank=False)
+    link_title = models.CharField(max_length=255, blank=False)
+    link_url = models.URLField(max_length=255, blank=False)
+    link_title_2 = models.CharField(max_length=255, blank=True)
+    link_url_2 = models.URLField(max_length=255, blank=True)
+    date_active = models.DateTimeField(blank=False)
+    active = models.BooleanField(default=True)
 
     content_panels = Page.content_panels + [
-        FieldPanel('link'),
-        FieldPanel('homepage_expiration'),
+        FieldPanel('description'),
+        FieldPanel('link_title'),
+        FieldPanel('link_url'),
+        FieldPanel('link_title_2'),
+        FieldPanel('link_url_2'),
+        FieldPanel('date_active'),
+        FieldPanel('active'),
     ]
-
 
 class CustomPage(Page):
     """Flexible customizable page."""

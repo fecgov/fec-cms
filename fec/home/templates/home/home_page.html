@@ -7,97 +7,52 @@
 
 {% block content %}
   <section class="hero hero--home" aria-labelledby="hero-heading">
-    <div class="hero__banner"></div>
-
     <div class="container">
       <div class="hero__content">
-        <h2 id="hero-heading">Protecting the integrity of the federal campaign finance process</h2>
-        <a class="t-sans" href="/about">More about the FEC</a>
-      </div>
-
-      <div class="grid grid--3-wide">
-        <div class="grid__item">
-          <img src="{% static "img/feature--data.png" %}" alt="Line chart graph showing campaign finance data">
-          <h3><a href="{{ FEC_APP_URL }}/data">Campaign finance data</a> <div class="tour__point" data-intro="<h5>A new way to navigate</h5>Less looking, more finding. The main sections of our website have been reorganized and simplified to help you find what you need faster."></div></h3>
-          <p>Showing how money is raised and spent in federal elections.</p>
-          <a class="t-sans js-scroll" href="#homepage-campaign-finance-data">Learn more</a>
-          <i class="icon icon--small i-arrow-down"></i>
-        </div>
-
-        <div class="grid__item">
-          <img src="{% static "img/feature--reporting.png" %}" alt="Icons representing a webpage for federal election guidance">
-          <h3><a href="/help-candidates-and-committees">Help for candidates and committees</a></h3>
-          <p>Providing guidance for individuals and groups that are active in federal elections.</p>
-
-          <a class="t-sans js-scroll" href="#homepage-help-candidate-and-committees">Learn more</a>
-          <i class="icon icon--small i-arrow-down"></i>
-        </div>
-
-        <div class="grid__item">
-          <img src="{% static "img/feature--legal.png" %}" alt="Icons representing a webpage search of legal resources">
-          <h3><a href="/legal-resources">Legal resources</a></h3>
-          <p>Administering and enforcing federal campaign finance law.</p>
-
-          <a class="t-sans js-scroll" href="#homepage-legal-resources">Learn more</a>
-          <i class="icon icon--small i-arrow-down"></i>
-        </div>
+        <h2 id="hero-heading">Protecting the integrity of the campaign finance process</h2>
+        <a class="button button--thin-border" href="/about">More about the FEC</a>
       </div>
     </div>
   </section>
 
-  <section class="slab slab--neutral slab--home">
+  {% home_page_banner_announcement %}
+
+  <section class="slab">
     <div class="container">
       <div class="heading--section heading--with-action">
-        <h3 class="heading__left">What's happening <div class="tour__point" data-intro="<h5>Stay informed</h5>Check in on the most recent communications from the FEC all in one place, including press releases, meeting agendas and Tips for Treasurers."></div></h3>
-        <a class="button button--alt heading__right button--updates" href="/updates">All latest updates</a>
+        <h2 class="heading__left">News and announcements <div class="tour__point" data-intro="<h5>Stay informed</h5>Check in on the most recent communications from the FEC all in one place, including press releases, meeting agendas and Tips for Treasurers."></div></h2>
+        <a class="button--cta button--updates heading__right" href="/updates">All news</a>
       </div>
-      {% home_page_updates %}
+
+      {% home_page_news %}
 
       <div class="heading--section heading--with-action">
-        <h3 class="heading__left">Upcoming events</h3>
-        <a class="button button--alt heading__right button--calendar" href="/calendar">All events</a>
+        <h2 class="heading__left">Events and deadlines</h2>
+        <a class="button--cta heading__right button--calendar" href="/calendar">Full calendar</a>
       </div>
-      <ul class="grid grid--4-wide grid--no-margin grid--no-border list--border js-homepage-upcoming-events"></ul>
-    </div>
-  </section>
-
-  <section id="homepage-campaign-finance-data" class="slab slab--primary slab--home">
-    <div class="container">
-      <h1><a href="{{ settings.FEC_APP_URL }}">Campaign finance data</a></h1>
-        <div class="grid grid--2-wide">
-          <div class="grid__item">
-            <h3>Find out how a specific candidate or committee raises and spends money</h3>
-            <form action="{{ settings.FEC_APP_URL }}" autocomplete="off" class="search__container js-search">
-              <div class="combo combo--search--mini">
-                <label class="label" for="search">Search for candidates and committees</label>
-                <input id="search" name="search" class="js-typeahead combo__input" type="text"
-                autocorrect="off"
-                autocapitalize="off"
-                spellcheck="false">
-                <button type="submit" class="combo__button button--search button--standard">
-                  <span class="u-visually-hidden">Search</span>
-                </button>
-              </div>
-            </form>
-          </div>
-          <div class="grid__item">
-            <h3>Track recently reported financial activity, like total cash on hand</h3>
-            <a class="t-sans" href="{{ settings.FEC_APP_URL }}/filings">Look up recent filings »</a>
-          </div>
-          <div class="grid__item">
-            <h3>Discover which groups are supporting or opposing a candidate</h3>
-            <a class="t-sans" href="{{ settings.FEC_APP_URL }}/independent-expenditures">Look up independent expenditures »</a>
-          </div>
-          <div class="grid__item">
-            <h3>Learn who's giving to candidates and committees</h3>
-            <a class="t-sans" href="{{ settings.FEC_APP_URL }}/receipts/individual-contributions">Look up an individual contributor »</a>
-          </div>
-        </div>
+      <ul class="grid grid--4-wide grid--flex t-sans">
+        <li class="grid__item grid__item--event">
+          <div class="t-bold">Next commission meeting:</div>
+          <div class="js-next-commission-meeting"></div>
+          <a class="button button--alt button--updates" href="/updates/?update_type=meetings">All meetings</a>
+        <li class="grid__item grid__item--event">
+          <div class="t-sans t-bold">Next filing deadline:</div>
+          <div class="js-next-filing-deadline"></div>
+          <a class="button button--alt button--calendar" href="/calendar/?category=report-E&category=report-M&category=report-MY&category=report-Q&category=report-YE">All filing deadlines</a>
+        </li>
+        <li class="grid__item grid__item--event">
+          <div class="t-sans t-bold">Next training or conference:</div>
+          <div class="js-next-training-or-conference"></div>
+          <a class="button button--alt button--calendar" href="/calendar/?category=Conferences&category=Roundtables">All outreach</a>
+        </li>
+        <li class="grid__item grid__item--event">
+          <div class="t-sans t-bold">Next public comment deadline:</div>
+          <div class="js-next-public-comment-deadline"></div>
+          <a class="button button--alt button--calendar" href="/calendar/?category=AOs+and+Rules">All legal events</a>
+        </li>
       </div>
     </div>
   </section>
-
-  {% candidate_committee_services %}
 
   <section class="slab slab--home slab--neutral">
     <div class="container">
@@ -107,7 +62,8 @@
         <a class="u-no-border" href="https://youtu.be/yIH_kBQdmdQ" target="_blank">
         <img class="billboard__image" src={% static 'img/thumbnail--video.png' %} alt="Video icon"></a>
         <div class="document-thumbnail__description">
-          <a href="https://youtu.be/yIH_kBQdmdQ" target="_blank">A Citizen's Guide to Supporting Candidates</a>
+          <a href="https://youtu.be/yIH_kBQdmdQ" target="_blank">A citizen's guide to<br>
+          supporting candidates</a>
         </div>
       </div>
 
@@ -157,58 +113,9 @@
              <ul class="list--border list--extra-spacious">
                <li>
                  <h3>There are different limits to how much contributors can give to <span class="term" data-term="Candidate">candidates </span>, <span class="term" data-term="Party committee">parties</span> and <span class="term" data-term="Political Action Committee (PAC)">political action committees (PACs)</span></h3>
-                  <a class="t-sans" href="{{ settings.FEC_TRANSITION_URL }}/info/contriblimitschart1718.pdf" target="_blank">Find 2017–2018 contribution limits »</a>
-               </li>
-               <li>
-                 <h3>Every state has its own procedures for voting day activities and voter registration</h3>
-                 <a class="t-sans" href="https://www.vote.gov">Find voting guidance by state » </a>
-                 {% comment %}
-                   <a class="t-sans" href="/introduction-campaign-finance/election-and-voting-information/">Information about voting and elections »</a>
-                 {% endcomment %}
+                  <a class="t-sans" href="/help-candidates-and-committees/candidate-taking-receipts/contribution-limits-candidates/" target="_blank">Find 2017–2018 contribution limits »</a>
                </li>
              </ul>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section id="homepage-legal-resources" class="slab slab--home slab--primary u-border-top-inverse">
-    <div class="container">
-      <h1><a href="/legal-resources">Legal resources</a></h1>
-      <div class="grid grid--2-wide">
-        <div class="grid__item">
-          <div class="icon-heading icon-heading--subsection-doc-circle">
-            <div class="icon-heading__content">
-              <h3>Campaign finance laws and rules are found in the U.S. Code and the Code of Federal Regulations</h3>
-              <span class="t-sans">Search or browse <a href="{{ settings.FEC_APP_URL }}/legal/statutes">statutes</a> and <a href="/regulations">regulations</a></span>
-            </div>
-          </div>
-        </div>
-        <div class="grid__item">
-          <div class="icon-heading icon-heading--mallet-circle">
-            <div class="icon-heading__content">
-              <h3>The FEC publishes information about ongoing and closed court cases</h3>
-              <a class="t-sans" href="/legal-resources/court-cases">Browse campaign finance litigation »</a>
-            </div>
-          </div>
-        </div>
-        <div class="grid__item">
-          <div class="icon-heading icon-heading--direction-sign-circle">
-            <div class="icon-heading__content">
-              <h3>The Commission issues guidance about specific situations through advisory opinions</h3>
-              <a class="t-sans" href="{{ settings.FEC_APP_URL }}/legal/advisory-opinions/">Search advisory opinions »</a>
-            </div>
-          </div>
-        </div>
-        <div class="grid__item">
-          <div class="icon-heading icon-heading--shield-circle">
-            <div class="icon-heading__content">
-              <h3>The Commission has a variety of methods for responding to possible election law violations</h3>
-              <a class="t-sans" href="/legal-resources/enforcement/">Learn more about enforcement »</a><br>
-              <br>
-              <a class="t-sans" href="/legal-resources/enforcement/complaints-process/">Read about the process for filing a complaint »</a>
-            </div>
           </div>
         </div>
       </div>

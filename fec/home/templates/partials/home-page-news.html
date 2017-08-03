@@ -1,0 +1,14 @@
+{% load filters %}
+<ul class="grid grid--4-wide t-sans">
+  {% for update in updates %}
+  <li class="grid__item {% if update.homepage_pin == True %}grid__item--featured{% else %}grid__item--home{% endif %}">
+    {% if update.homepage_pin == True %}
+      <h3>Featured</h3>
+    {% endif %}
+    <div class="t-bold t-upper">
+      {{ update.get_update_type }}
+    </div>
+    <a href="{{ update.url }}">{% formatted_title update %}</a>
+  </li>
+  {% endfor %}
+</ul>
