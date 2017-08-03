@@ -6,17 +6,17 @@
 {% block content %}
 
 {% include 'partials/breadcrumbs.html' with page=self links=self.get_ancestors style='secondary' %}
-<section class="content__section--extra">
-  <div class="container">
-    <header class="heading--main">
-      <h1>{{ self.title }}</h1>
-    </header>
-  </div>
-</section>
+  <section class="content__section--extra">
+    <div class="container">
+      <header class="heading--main">
+        <h1>{{ self.title }}</h1>
+      </header>
+    </div>
+  </section>
 <section class="main__content--full data-container__wrapper" id="feed">
  <div class="main">
   <div class="container">
-  {% block feed %}
+
     <section id="meetings-page-meetings" class="slab tab-interface">
       <div class="container">
         <div class="sidebar-container sidebar-container--left">
@@ -29,9 +29,10 @@
                     tabindex="0"
                     aria-controls="meetings-page-meetings-open-meetings"
                     href="#meetings-page-meetings-open-meetings"
-                    {# the below expressions return the right values but do not work on page submit for some reason (?) #}
-                    {% for key,value in request.GET.items %}{% ifequal value 'open-meetings' %} aria-selected="true" {% endifequal %}{% endfor %}
-                    {% for key,value in request.GET.items %}{% ifnotequal value 'open-meetings' %} aria-selected="false" {% endifnotequal %}{% endfor %}
+                    {# the below expressions return the right values but do not set active tab on page submit or page load (?) #}
+                    aria-selected="
+                    {% for key,value in request.GET.items %}{% ifequal value 'open-meetings' %}true{% endifequal %}{% endfor %}
+                    {% for key,value in request.GET.items %}{% ifnotequal value 'open-meetings' %}false{% endifnotequal %}{% endfor %}"
                     >Open Meetings</a>
               </li>
               <li class="side-nav__item" role="presentation">
@@ -40,19 +41,21 @@
                     data-name="hearings"
                     tabindex="0"
                     aria-controls="meetings-page-meetings-hearings"
-                    {% for key,value in request.GET.items %}{% ifequal value 'hearings' %} aria-selected="true" {% endifequal %}{% endfor %}
-                    {% for key,value in request.GET.items %}{% ifnotequal value 'hearings' %} aria-selected="false" {% endifnotequal %}{% endfor %}
-                    href="#meetings-page-meetings-hearings">Hearings</a>
+                    href="#meetings-page-meetings-hearings"
+                    {# test using active variable instead in key,value loop above #}
+                    {% ifequal active 'hearings' %} aria-selected="true" data="test"{% else %} aria-selected="false" {% endifequal %}
+                    >Hearings</a>
               </li>
               <li class="side-nav__item" role="presentation">
                 <a class="side-nav__link"
                     role="tab"
                     data-name="executive-sessions"
-                    tabindex="0"
+                    tabindex="013"
                     aria-controls="meetings-page-meetings-executive-sessions"
                     href="#meetings-page-meetings-executive-sessions"
-                    {# test using active variable instead in key,value loop above #}
-                    {% ifequal active 'executive-sessions' %} aria-selected="true" data="test"{% else %} aria-selected="false" {% endifequal %}
+                    aria-selected="
+                    {% for key,value in request.GET.items %}{% ifequal value 'executive-sessions' %}true{% endifequal %}{% endfor %}
+                    {% for key,value in request.GET.items %}{% ifnotequal value 'executive-sessions' %}false{% endifnotequal %}{% endfor %}"
                     >Executive Sessions</a>
               </li>
             </ul>
@@ -83,8 +86,9 @@
                     </div>
                   </div>
               </form>
-           {% endblock %}
-          </div>
+             {% endblock %}
+            </div>
+           {% block feed1 %}
             {% if open_meetings %}
                <table class="simple-table">
                   <tbody>
@@ -115,11 +119,12 @@
                </div>
             </div>
               {% endif %}
+           {% endblock %}
           </section>
           <section id="meetings-page-meetings-hearings" class="option" role="tabpanel" aria-hidden="true" aria-labelledby="hearings">
             <h2 id="meetings-page-meetings-hearings">Hearings</h2>
             <div class="filters--horizontal">
-             {% block filters3 %}
+             {% block filters2 %}
                <form action="/meetings" class="js-form-nav container">
                   <div class="filter">
 
@@ -140,8 +145,9 @@
                     </div>
                   </div>
               </form>
-            {% endblock %}
-           </div>
+              {% endblock %}
+             </div>
+           {% block feed2 %}
             {% if hearings %}
                <table class="simple-table">
                   <tbody>
@@ -172,13 +178,14 @@
                  <p>If you’d like to contact our team, we’re available by <a href="mailto:{{ settings.WEBMANAGER_EMAIL }}">email</a> or <a href="https://github.com/18f/fec">GitHub</a>.</p>
                </div>
             </div>
-              {% endif %}
+            {% endif %}
+            {% endblock %}
           </section>
           <section id="meetings-page-meetings-executive-sessions" class="option" role="tabpanel" aria-hidden="true" aria-labelledby="executive-sessions">
             <h2 id="meetings-page-meetings-executive-sessions">Executive Sessions</h2>
             <p>Confidential and closed to the public. The Commission meets regularly in executive sessions to discuss pending enforcement actions, litigation and other matters that, by law, must be kept confidential.</p>
             <div class="filters--horizontal">
-             {% block filters2 %}
+             {% block filters3 %}
                <form action="/meetings" class="js-form-nav container">
                   <div class="filter">
 
@@ -199,8 +206,9 @@
                     </div>
                   </div>
               </form>
-           {% endblock %}
-          </div>
+             {% endblock %}
+             </div>
+            {% block feed3 %}
             {% if executive_sessions %}
                <table class="simple-table">
                   <tbody>
@@ -229,12 +237,13 @@
                  <p>FEC.gov is in the middle of a redesign, and some pages aren’t included in search results yet. Please try another search. Or, <a href="{{ settings.FEC_CLASSIC_URL }}">search the archive</a> of FEC.gov’s previous design.</p>
                  <p>If you’d like to contact our team, we’re available by <a href="mailto:{{ settings.WEBMANAGER_EMAIL }}">email</a> or <a href="https://github.com/18f/fec">GitHub</a>.</p>
                </div>
-            </div>
-              {% endif %}
+             </div>
+            {% endif %}
+            {% endblock %}
           </section>
       </div>
     </section>
-  {% endblock %}
+
  </div>
 </div>
 </section>
