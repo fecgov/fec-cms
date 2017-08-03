@@ -1,5 +1,6 @@
 {% load wagtailcore_tags %}
 
+{% if banners %}
 <section class="slab slab--secondary">
   <div class="container">
   {% for banner in banners %}
@@ -16,3 +17,4 @@
   {% endfor %}
 </div>
 </section>
+{% endif %}
