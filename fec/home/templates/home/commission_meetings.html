@@ -6,6 +6,7 @@
 {% block content %}
 
 {% include 'partials/breadcrumbs.html' with page=self links=self.get_ancestors style='secondary' %}
+
   <section class="content__section--extra">
     <div class="container">
       <header class="heading--main">
@@ -13,10 +14,9 @@
       </header>
     </div>
   </section>
-<section class="main__content--full data-container__wrapper" id="feed">
- <div class="main">
-  <div class="container">
 
+<section class="main__content--full data-container__wrapper" id="feed">
+  <div class="container">
     <section id="meetings-page-meetings" class="slab tab-interface">
       <div class="container">
         <div class="sidebar-container sidebar-container--left">
@@ -29,7 +29,7 @@
                     tabindex="0"
                     aria-controls="meetings-page-meetings-open-meetings"
                     href="#meetings-page-meetings-open-meetings"
-                    {# the below expressions return the right values but do not set active tab on page submit or page load (?) #}
+                    {# the below expressions return the right values but do not set active tab on submit(?) #}
                     aria-selected="
                     {% for key,value in request.GET.items %}{% ifequal value 'open-meetings' %}true{% endifequal %}{% endfor %}
                     {% for key,value in request.GET.items %}{% ifnotequal value 'open-meetings' %}false{% endifnotequal %}{% endfor %}"
@@ -61,8 +61,8 @@
             </ul>
           </nav>
         </div>
-        <div class="main__content--right-full">
-          <section id="meetings-page-meetings-open-meetings" class="option" role="tabpanel" aria-hidden="true" aria-labelledby="open-meetings">
+        <div class="main__content--right">
+          <section id="meetings-page-meetings-open-meetings" role="tabpanel" aria-hidden="true" aria-labelledby="open-meetings">
             <h2 id="meetings-page-meetings-open-meetings">Open Meetings</h2>
              <p>Open to the public. The Commission considers new regulations, advisory opinions and other public matters at open meetings, which are typically held at FEC headquarters on Thursdays at 10:00am. Commission meeting agendas are usually published a week before a scheduled meeting.</p>
             <div class="filters--horizontal">
@@ -121,7 +121,7 @@
               {% endif %}
            {% endblock %}
           </section>
-          <section id="meetings-page-meetings-hearings" class="option" role="tabpanel" aria-hidden="true" aria-labelledby="hearings">
+          <section id="meetings-page-meetings-hearings" role="tabpanel" aria-hidden="true" aria-labelledby="hearings">
             <h2 id="meetings-page-meetings-hearings">Hearings</h2>
             <div class="filters--horizontal">
              {% block filters2 %}
@@ -181,7 +181,7 @@
             {% endif %}
             {% endblock %}
           </section>
-          <section id="meetings-page-meetings-executive-sessions" class="option" role="tabpanel" aria-hidden="true" aria-labelledby="executive-sessions">
+          <section id="meetings-page-meetings-executive-sessions" role="tabpanel" aria-hidden="true" aria-labelledby="executive-sessions">
             <h2 id="meetings-page-meetings-executive-sessions">Executive Sessions</h2>
             <p>Confidential and closed to the public. The Commission meets regularly in executive sessions to discuss pending enforcement actions, litigation and other matters that, by law, must be kept confidential.</p>
             <div class="filters--horizontal">
@@ -245,10 +245,6 @@
     </section>
 
  </div>
-</div>
-</section>
-{% endblock %}
 
-{% block extra_js %}
-  <script type="text/javascript" src="{% static 'js/fec.js' %}"></script>
+</section>
 {% endblock %}
