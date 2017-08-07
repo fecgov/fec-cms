@@ -6,18 +6,14 @@
 {% block content %}
 
 {% include 'partials/breadcrumbs.html' with page=self links=self.get_ancestors style='secondary' %}
-
-  <section class="content__section--extra">
-    <div class="container">
-      <header class="heading--main">
-        <h1>{{ self.title }}</h1>
-      </header>
-    </div>
-  </section>
-
+<div class="container">
+ <header class="heading--main u-padding--top">
+    <h1>{{ self.title }}</h1>
+  </header>
+</div>
 <section class="main__content--full data-container__wrapper" id="feed">
   <div class="container">
-    <section id="meetings-page-meetings" class="slab tab-interface">
+    <section id="meetings-page-meetings" class="tab-interface u-padding--bottom">
       <div class="container">
         <div class="sidebar-container sidebar-container--left">
           <nav class="sidebar side-nav-alt">
@@ -29,10 +25,7 @@
                     tabindex="0"
                     aria-controls="meetings-page-meetings-open-meetings"
                     href="#meetings-page-meetings-open-meetings"
-                    {# the below expressions return the right values but do not set active tab on submit(?) #}
-                    aria-selected="
-                    {% for key,value in request.GET.items %}{% ifequal value 'open-meetings' %}true{% endifequal %}{% endfor %}
-                    {% for key,value in request.GET.items %}{% ifnotequal value 'open-meetings' %}false{% endifnotequal %}{% endfor %}"
+                    aria-selected="true"
                     >Open Meetings</a>
               </li>
               <li class="side-nav__item" role="presentation">
@@ -42,8 +35,6 @@
                     tabindex="0"
                     aria-controls="meetings-page-meetings-hearings"
                     href="#meetings-page-meetings-hearings"
-                    {# test using active variable instead in key,value loop above #}
-                    {% ifequal active 'hearings' %} aria-selected="true" data="test"{% else %} aria-selected="false" {% endifequal %}
                     >Hearings</a>
               </li>
               <li class="side-nav__item" role="presentation">
@@ -53,9 +44,6 @@
                     tabindex="013"
                     aria-controls="meetings-page-meetings-executive-sessions"
                     href="#meetings-page-meetings-executive-sessions"
-                    aria-selected="
-                    {% for key,value in request.GET.items %}{% ifequal value 'executive-sessions' %}true{% endifequal %}{% endfor %}
-                    {% for key,value in request.GET.items %}{% ifnotequal value 'executive-sessions' %}false{% endifnotequal %}{% endfor %}"
                     >Executive Sessions</a>
               </li>
             </ul>
@@ -67,14 +55,14 @@
              <p>Open to the public. The Commission considers new regulations, advisory opinions and other public matters at open meetings, which are typically held at FEC headquarters on Thursdays at 10:00am. Commission meeting agendas are usually published a week before a scheduled meeting.</p>
             <div class="filters--horizontal">
              {% block filters1 %}
-               <form action="/meetings" class="js-form-nav container">
+               <form action="/meetings" method="get" class="js-form-nav container">
                   <div class="filter">
                       <label for="year" class="label">Year</label>
                       <select id="year" name="year">
                         <option {% if year %} value="{{ year }}" {% else %} value ="" {% endif %}> {% if year %}{{ year }}{% else %}All{% endif %}</option>
                         <option value="">All</option>
                         {% for item in years %}
-                        <option value="{{ item | date:"Y" }}" {% ifequal year 'item'  %}{% endifequal %}>{{ item|date:"Y" }}</option>
+                        <option value="{{ item | date:"Y" }}" >{{ item|date:"Y" }}</option>
                         {% endfor %}
                       </select>
                   </div>
@@ -125,15 +113,15 @@
             <h2 id="meetings-page-meetings-hearings">Hearings</h2>
             <div class="filters--horizontal">
              {% block filters2 %}
-               <form action="/meetings" class="js-form-nav container">
+               <form action="/meetings/hearings" method="get" class="js-form-nav container">
                   <div class="filter">
 
-                      <label for="year" class="label">Year</label>
-                      <select id="year" name="year">
-                        <option {% if year %} value="{{ year }}" {% else %} value ="" {% endif %}> {% if year %} {{ year }}{% else %} All{% endif %}</option>
+                      <label for="year_h" class="label">Year</label>
+                      <select id="year_h" name="year_h">
+                        <option {% if year_h %} value="{{ year_h }}" {% else %} value ="" {% endif %}> {% if year_h %} {{ year_h }}{% else %} All{% endif %}</option>
                         <option value="">All</option>
                         {% for item in years %}
-                        <option value="{{ item | date:"Y" }}" {% ifequal year 'item'  %}{% endifequal %}>{{ item|date:"Y" }}</option>
+                        <option value="{{ item | date:"Y" }}" {% ifequal year_h 'item'  %}{% endifequal %}>{{ item|date:"Y" }}</option>
                         {% endfor %}
                       </select>
                   </div>
@@ -152,7 +140,7 @@
                <table class="simple-table">
                   <tbody>
                     {% for hearing in hearings reversed %}
-                      {% include 'partials/meeting.html' with meeting=hearing %}
+                      {% include 'partials/hearing.html' with meeting=hearing %}
                      {% endfor %}
                   </tbody>
                </table>
@@ -186,7 +174,7 @@
             <p>Confidential and closed to the public. The Commission meets regularly in executive sessions to discuss pending enforcement actions, litigation and other matters that, by law, must be kept confidential.</p>
             <div class="filters--horizontal">
              {% block filters3 %}
-               <form action="/meetings" class="js-form-nav container">
+               <form action="/meetings" method="get" class="js-form-nav container">
                   <div class="filter">
 
                       <label for="year" class="label">Year</label>
@@ -243,8 +231,6 @@
           </section>
       </div>
     </section>
-
  </div>
-
 </section>
 {% endblock %}
