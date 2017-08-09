@@ -19,17 +19,17 @@
           <nav class="sidebar side-nav-alt">
             <ul class="tablist" role="tablist" data-name="tab">
               <li class="side-nav__item" role="presentation">
-                <a class="side-nav__link"
+                <a class="side-nav__link" id="openmeetings_tab"
                     role="tab"
                     data-name="open-meetings"
                     tabindex="0"
                     aria-controls="meetings-page-meetings-open-meetings"
                     href="#meetings-page-meetings-open-meetings"
-                    aria-selected="true"
+                    aria-selected=""
                     >Open Meetings</a>
               </li>
               <li class="side-nav__item" role="presentation">
-                <a class="side-nav__link"
+                <a class="side-nav__link" id="hearings_tab"
                     role="tab"
                     data-name="hearings"
                     tabindex="0"
@@ -38,7 +38,7 @@
                     >Hearings</a>
               </li>
               <li class="side-nav__item" role="presentation">
-                <a class="side-nav__link"
+                <a class="side-nav__link" id="executive_tab"
                     role="tab"
                     data-name="executive-sessions"
                     tabindex="013"
@@ -55,7 +55,7 @@
              <p>Open to the public. The Commission considers new regulations, advisory opinions and other public matters at open meetings, which are typically held at FEC headquarters on Thursdays at 10:00am. Commission meeting agendas are usually published a week before a scheduled meeting.</p>
             <div class="filters--horizontal">
              {% block filters1 %}
-               <form action="/meetings" method="get" class="js-form-nav container">
+               <form action="/meetings" id="openmeetings_form" method="get" class="js-form-nav container">
                   <div class="filter">
                       <label for="year" class="label">Year</label>
                       <select id="year" name="year">
@@ -70,7 +70,7 @@
                     <div class="combo combo--filter--mini">
                       <label for="search" class="label">Search</label>
                       <input id="search" class="combo__input" name="search" type="text" value="{{ search }}">
-                      <button type="submit" class="combo__button button button--standard button--search"><span class="u-visually-hidden">Search</span></button>
+                      <button type="submit" id="open_sub" class="combo__button button button--standard button--search"><span class="u-visually-hidden">Search</span></button>
                     </div>
                   </div>
               </form>
@@ -113,23 +113,23 @@
             <h2 id="meetings-page-meetings-hearings">Hearings</h2>
             <div class="filters--horizontal">
              {% block filters2 %}
-               <form action="/meetings/hearings" method="get" class="js-form-nav container">
+               <form action="/meetings" id="hearings_form" method="get" class="js-form-nav container">
                   <div class="filter">
 
                       <label for="year_h" class="label">Year</label>
                       <select id="year_h" name="year_h">
                         <option {% if year_h %} value="{{ year_h }}" {% else %} value ="" {% endif %}> {% if year_h %} {{ year_h }}{% else %} All{% endif %}</option>
                         <option value="">All</option>
-                        {% for item in years %}
-                        <option value="{{ item | date:"Y" }}" {% ifequal year_h 'item'  %}{% endifequal %}>{{ item|date:"Y" }}</option>
+                        {% for item in years_h %}
+                        <option value="{{ item | date:"Y" }}">{{ item|date:"Y" }}</option>
                         {% endfor %}
                       </select>
                   </div>
                   <div class="filter">
                     <div class="combo combo--filter--mini">
-                      <label for="search" class="label">Search</label>
-                      <input id="search" class="combo__input" name="search" type="text" value="{{ search }}">
-                      <button type="submit" class="combo__button button button--standard button--search"><span class="u-visually-hidden">Search</span></button>
+                      <label for="search_h" class="label">Search</label>
+                      <input id="search_h" class="combo__input" name="search_h" type="text" value="{{ search }}">
+                      <button type="submit" id="hearings_sub" class="combo__button button button--standard button--search"><span class="u-visually-hidden">Search</span></button>
                     </div>
                   </div>
               </form>
@@ -143,6 +143,7 @@
                       {% include 'partials/hearing.html' with meeting=hearing %}
                      {% endfor %}
                   </tbody>
+
                </table>
 
               <div class="results-info">
@@ -174,15 +175,14 @@
             <p>Confidential and closed to the public. The Commission meets regularly in executive sessions to discuss pending enforcement actions, litigation and other matters that, by law, must be kept confidential.</p>
             <div class="filters--horizontal">
              {% block filters3 %}
-               <form action="/meetings" method="get" class="js-form-nav container">
+               <form action="/meetings" id="executive_form" method="get" class="js-form-nav container">
                   <div class="filter">
-
-                      <label for="year" class="label">Year</label>
-                      <select id="year" name="year">
-                        <option {% if year %} value="{{ year }}" {% else %} value ="" {% endif %}> {% if year %} {{ year }}{% else %} All{% endif %}</option>
+                      <label for="year_e" class="label">Year</label>
+                      <select id="year_e" name="year_e">
+                        <option {% if year_e %} value="{{ year_e }}" {% else %} value ="" {% endif %}> {% if year_e %} {{ year_e }}{% else %} All{% endif %}</option>
                         <option value="">All</option>
-                        {% for item in years %}
-                        <option value="{{ item | date:"Y" }}" {% ifequal year 'item'  %}{% endifequal %}>{{ item|date:"Y" }}</option>
+                        {% for item in years_e %}
+                        <option value="{{ item | date:"Y" }}">{{ item|date:"Y" }}</option>
                         {% endfor %}
                       </select>
                   </div>
@@ -190,7 +190,7 @@
                     <div class="combo combo--filter--mini">
                       <label for="search" class="label">Search</label>
                       <input id="search" class="combo__input" name="search" type="text" value="{{ search }}">
-                      <button type="submit" class="combo__button button button--standard button--search"><span class="u-visually-hidden">Search</span></button>
+                      <button type="submit" id="executive_sub"class="combo__button button button--standard button--search"><span class="u-visually-hidden">Search</span></button>
                     </div>
                   </div>
               </form>
@@ -233,4 +233,7 @@
     </section>
  </div>
 </section>
+{% endblock %}
+{% block extra_js %}
+  <script type="text/javascript" src="{% static 'js/mtgB.js' %}"></script>
 {% endblock %}

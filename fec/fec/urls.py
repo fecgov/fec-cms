@@ -25,8 +25,8 @@ urlpatterns = [
     url(r'^search/$', search_views.search, name='search'),
     url(r'^updates/$', home_views.updates),
     url(r'^meetings/$', home_views.index_meetings, name="meetings_page"),
-    url(r'^meetings/hearings/$', home_views.hearings),
-    url(r'^meetings/executive_sessions/$', home_views.executive_sessions),
+    #url(r'^hearings/$', home_views.hearings, name="hearings_page"),
+    #url(r'^meetings/executive_sessions/$', home_views.executive_sessions),
     url(r'', include(wagtail_urls)),
 
     #url(r'^meetings/(?P<active>\w+)/$', home_views.index_meetings),
