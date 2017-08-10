@@ -992,6 +992,8 @@ class MeetingPage(Page):
 
 
 class ReportingExamplePage(Page):
+    """Page tempalte for "how to report" and "example scenario" pages
+    Always within the Help section"""
     featured_image = models.ForeignKey('wagtailimages.Image', blank=True, null=True,
                                    on_delete=models.SET_NULL, related_name='+')
 

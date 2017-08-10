@@ -108,6 +108,11 @@ class MURSearchBlock(blocks.StaticBlock):
         template = 'blocks/mur_search.html'
 
 class ReportingExampleCards(blocks.StructBlock):
+    """Create links to reporting example pages that display as cards
+    card_width is used in the template to set the grid class. On reporting example pages,
+    the container is full width, so the cards should be a third of the full grid.
+    On custom pages, the container is partial, and there should only be two cards per row.
+    """
     card_width = blocks.ChoiceBlock(required=True, default=2,
         help_text='Control the width of the cards',
         choices=[
@@ -194,6 +199,9 @@ class ExampleForms(blocks.StructBlock):
         icon = 'doc-empty'
 
 class ExampleImage(blocks.StructBlock):
+    """Creates an example module with an image and a caption, side-by-side
+    Typically used for showing reporting Examples
+    """
     title = blocks.CharBlock(required=False)
     caption = blocks.RichTextBlock(required=True)
     image = ImageChooserBlock(required=True)
