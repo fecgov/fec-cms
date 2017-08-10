@@ -106,6 +106,13 @@ class MURSearchBlock(blocks.StaticBlock):
         admin_text = 'Show the MUR search field. No configuration needed.'
         template = 'blocks/mur_search.html'
 
+class ReportingExampleCards(blocks.StructBlock):
+    cards = blocks.ListBlock(blocks.PageChooserBlock(), icon='doc-empty')
+
+    class Meta:
+        template = 'blocks/reporting-example-cards.html'
+        icon = 'doc-empty'
+        
 class ResourceBlock(blocks.StructBlock):
     """A section of a ResourcePage"""
     title = blocks.CharBlock(required=True)
@@ -123,7 +130,8 @@ class ResourceBlock(blocks.StructBlock):
         ('fec_jobs', CareersBlock()),
         ('mur_search', MURSearchBlock()),
         ('table', TableBlock()),
-        ('html', blocks.RawHTMLBlock())
+        ('html', blocks.RawHTMLBlock()),
+        ('reporting_example_cards', ReportingExampleCards())
     ])
 
     aside = blocks.StreamBlock([
@@ -207,10 +215,3 @@ class CustomTableBlock(blocks.StructBlock):
 
     class Meta:
         template = 'blocks/custom_table.html'
-
-class ReportingExampleCards(blocks.StructBlock):
-    cards = blocks.ListBlock(blocks.PageChooserBlock(), icon='doc-empty')
-
-    class Meta:
-        template = 'blocks/reporting-example-cards.html'
-        icon = 'doc-empty'
