@@ -8,6 +8,7 @@ class ThumbnailBlock(blocks.StructBlock):
         both of which link to a URL"""
     image = ImageChooserBlock(required=False)
     url = blocks.URLBlock()
+    media_type = blocks.CharBlock()
     text = blocks.CharBlock()
 
     class Meta:
@@ -177,6 +178,15 @@ class ExampleForms(blocks.StructBlock):
         template = 'blocks/example-forms.html'
         icon = 'doc-empty'
 
+class ExampleImage(blocks.StructBlock):
+    title = blocks.CharBlock(required=False)
+    caption = blocks.RichTextBlock(required=True)
+    image = ImageChooserBlock(required=True)
+
+    class Meta:
+        template = 'blocks/example-image.html'
+        icon = 'doc-empty'
+
 class CustomTableBlock(blocks.StructBlock):
     """A custom table"""
     custom_table_options = {
@@ -197,3 +207,10 @@ class CustomTableBlock(blocks.StructBlock):
 
     class Meta:
         template = 'blocks/custom_table.html'
+
+class ReportingExampleCards(blocks.StructBlock):
+    cards = blocks.ListBlock(blocks.PageChooserBlock(), icon='doc-empty')
+
+    class Meta:
+        template = 'blocks/reporting-example-cards.html'
+        icon = 'doc-empty'
