@@ -55,6 +55,7 @@
             {% for block in blocks %}
               <div class="grid__item">
                 {% image block.image width-200 %}
+                <span class="label">{{ block.media_type }}</span>
                 <p><a href="{{ block.url }}">{{ block.text }}</a></p>
               </div>
             {% endfor %}

@@ -751,6 +751,11 @@ class CollectionPage(Page):
     sections = StreamField([
         ('section', CollectionBlock())
     ])
+
+    reporting_examples = StreamField([
+        ('reporting_examples', blocks.ListBlock(CitationsBlock()))
+    ], null=True)
+
     show_search = models.BooleanField(
                                     max_length=255, default=False,
                                     null=False, blank=False,
@@ -772,6 +777,7 @@ class CollectionPage(Page):
         FieldPanel('show_contact_card'),
         StreamFieldPanel('related_pages'),
         StreamFieldPanel('sections'),
+        StreamFieldPanel('reporting_examples')
     ]
 
     @property
@@ -1000,15 +1006,17 @@ class ReportingExamplePage(Page):
         ('reporting_example_cards', ReportingExampleCards())
     ], null=True)
 
-    continue_learning = StreamField([
-        ('continue_learning', blocks.ListBlock(ThumbnailBlock(), icon='doc-empty')),
+    related_media_title = models.CharField(blank=True, null=True, max_length=255)
+    related_media = StreamField([
+        ('continue_learning', blocks.ListBlock(ThumbnailBlock(), icon='doc-empty', template='blocks/related-media.html')),
     ], null=True)
 
     content_panels = Page.content_panels + [
         FieldPanel('pre_title'),
         ImageChooserPanel('featured_image'),
         StreamFieldPanel('body'),
-        StreamFieldPanel('continue_learning')
+        FieldPanel('related_media_title'),
+        StreamFieldPanel('related_media')
     ]
 
     @property

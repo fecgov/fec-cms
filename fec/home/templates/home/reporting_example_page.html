@@ -26,6 +26,24 @@
     <div class="content__section">
       {{ self.body }}
     </div>
+    {% if self.related_media %}
+    <div class="content__section--ruled content__section">
+      <h3>{{ self.related_media_title }}</h3>
+      <div class="grid grid--4-wide">
+      {% for blocks in self.related_media %}
+        {% with blocks.value as blocks %}
+          {% for block in blocks %}
+            <div class="grid__item">
+              {% image block.image width-200 %}
+              <span class="label">{{ block.media_type }}</span>
+              <p><a href="{{ block.url }}">{{ block.text }}</a></p>
+            </div>
+          {% endfor %}
+        {% endwith %}
+      {% endfor %}
+      </div>
+    </div>
+    {% endif %}
   </div>
 </article>
 
