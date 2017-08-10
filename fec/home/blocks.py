@@ -1,3 +1,4 @@
+from django.db import models
 from wagtail.wagtailcore import blocks
 from wagtail.wagtailimages.blocks import ImageChooserBlock
 from wagtail.wagtaildocs.blocks import DocumentChooserBlock
@@ -107,12 +108,18 @@ class MURSearchBlock(blocks.StaticBlock):
         template = 'blocks/mur_search.html'
 
 class ReportingExampleCards(blocks.StructBlock):
+    card_width = blocks.ChoiceBlock(required=True, default=2,
+        help_text='Control the width of the cards',
+        choices=[
+            (2, '1/2'),
+            (3, '1/3')
+        ])
     cards = blocks.ListBlock(blocks.PageChooserBlock(), icon='doc-empty')
 
     class Meta:
         template = 'blocks/reporting-example-cards.html'
         icon = 'doc-empty'
-        
+
 class ResourceBlock(blocks.StructBlock):
     """A section of a ResourcePage"""
     title = blocks.CharBlock(required=True)

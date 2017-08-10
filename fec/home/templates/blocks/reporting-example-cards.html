@@ -2,7 +2,7 @@
 {% load wagtailimages_tags %}
 {% load staticfiles %}
 
-<div class="row grid--3-wide">
+<div class="row grid--{{ self.card_width }}-wide">
 {% for card in self.cards %}
 <div class="grid__item">
   <a href="{{ card.url }}">
