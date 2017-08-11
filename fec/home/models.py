@@ -4,6 +4,7 @@ import logging
 
 from django.db import models
 from django.core.exceptions import ValidationError
+from django.http import HttpResponseRedirect
 
 from django.dispatch import receiver
 from django.db.models.signals import post_save, pre_delete
@@ -86,6 +87,25 @@ class UniqueModel(models.Model):
         model = self.__class__
         if model.objects.count() > 0 and self.id != model.objects.get().id:
             raise ValidationError('Only one {0} allowed'.format(self.__name__))
+
+
+class Folder(Page):
+    is_creatable = True
+    subpage_types = ['PressReleasePage', 'RecordPage', 'TipsForTreasurersPage', 'DigestPage']
+    
+    external_link = models.URLField(blank=False, null=True, default='')
+
+    @property
+    def redirect_link(self):
+        return self.external_link
+
+    def serve(self, request):
+        return HttpResponseRedirect(self.redirect_link)
+
+    content_panels = [
+        FieldPanel('title'),
+        FieldPanel('external_link')
+    ]
 
 
 class ContentPage(Page):
