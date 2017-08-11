@@ -113,7 +113,7 @@
             <h2 id="meetings-page-meetings-hearings">Hearings</h2>
             <div class="filters--horizontal">
              {% block filters2 %}
-               <form action="/meetings" id="hearings_form" method="get" class="js-form-nav container">
+               <form action="/hearings" id="hearings_form" method="get" class="js-form-nav container">
                   <div class="filter">
 
                       <label for="year_h" class="label">Year</label>
@@ -137,7 +137,7 @@
              </div>
            {% block feed2 %}
             {% if hearings %}
-               <table class="simple-table">
+               <table class="simple-table" id="hearings_table">
                   <tbody>
                     {% for hearing in hearings reversed %}
                       {% include 'partials/hearing.html' with meeting=hearing %}
@@ -235,5 +235,5 @@
 </section>
 {% endblock %}
 {% block extra_js %}
-  <script type="text/javascript" src="{% static 'js/mtgB.js' %}"></script>
+  <script type="text/javascript" src="{% static 'js/mtgBX.js' %}"></script>
 {% endblock %}
