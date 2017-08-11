@@ -15,7 +15,7 @@
         {% endblock %}
     </div>
     <div class="row" id="section-container">
-      {% include 'partials/section-nav.html' with sections=self.sections citations=self.citations container='section-container' %}
+      {% include 'partials/section-nav.html' with sections=self.sections citations=self.citations reporting_examples=self.reporting_examples container='section-container' %}
       <div class="main__content--right">
         {% block sections %}
         {% endblock %}

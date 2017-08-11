@@ -1,3 +1,4 @@
+from django.db import models
 from wagtail.wagtailcore import blocks
 from wagtail.wagtailimages.blocks import ImageChooserBlock
 from wagtail.wagtaildocs.blocks import DocumentChooserBlock
@@ -8,6 +9,7 @@ class ThumbnailBlock(blocks.StructBlock):
         both of which link to a URL"""
     image = ImageChooserBlock(required=False)
     url = blocks.URLBlock()
+    media_type = blocks.CharBlock()
     text = blocks.CharBlock()
 
     class Meta:
@@ -105,6 +107,24 @@ class MURSearchBlock(blocks.StaticBlock):
         admin_text = 'Show the MUR search field. No configuration needed.'
         template = 'blocks/mur_search.html'
 
+class ReportingExampleCards(blocks.StructBlock):
+    """Create links to reporting example pages that display as cards
+    card_width is used in the template to set the grid class. On reporting example pages,
+    the container is full width, so the cards should be a third of the full grid.
+    On custom pages, the container is partial, and there should only be two cards per row.
+    """
+    card_width = blocks.ChoiceBlock(required=True, default=2,
+        help_text='Control the width of the cards',
+        choices=[
+            (2, '1/2'),
+            (3, '1/3')
+        ])
+    cards = blocks.ListBlock(blocks.PageChooserBlock(), icon='doc-empty')
+
+    class Meta:
+        template = 'blocks/reporting-example-cards.html'
+        icon = 'doc-empty'
+
 class ResourceBlock(blocks.StructBlock):
     """A section of a ResourcePage"""
     title = blocks.CharBlock(required=True)
@@ -122,7 +142,8 @@ class ResourceBlock(blocks.StructBlock):
         ('fec_jobs', CareersBlock()),
         ('mur_search', MURSearchBlock()),
         ('table', TableBlock()),
-        ('html', blocks.RawHTMLBlock())
+        ('html', blocks.RawHTMLBlock()),
+        ('reporting_example_cards', ReportingExampleCards())
     ])
 
     aside = blocks.StreamBlock([
@@ -175,6 +196,18 @@ class ExampleForms(blocks.StructBlock):
 
     class Meta:
         template = 'blocks/example-forms.html'
+        icon = 'doc-empty'
+
+class ExampleImage(blocks.StructBlock):
+    """Creates an example module with an image and a caption, side-by-side
+    Typically used for showing reporting Examples
+    """
+    title = blocks.CharBlock(required=False)
+    caption = blocks.RichTextBlock(required=True)
+    image = ImageChooserBlock(required=True)
+
+    class Meta:
+        template = 'blocks/example-image.html'
         icon = 'doc-empty'
 
 class CustomTableBlock(blocks.StructBlock):

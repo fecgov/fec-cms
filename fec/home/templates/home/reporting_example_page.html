@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% load wagtailcore_tags %}
+{% load wagtailimages_tags %}
+{% load staticfiles %}
+{% block title %}{{ self.title }}{% endblock %}
+
+
+{% block content %}
+{% include 'partials/breadcrumbs.html' with page=self links=self.get_ancestors style='secondary' %}
+
+<article class="main">
+  <div class="container" id="sections">
+    <header class="heading--main heading--with-image">
+      {% if self.featured_image %}
+      {% image self.featured_image fill-200x200 class="heading__image" %}
+      {% endif %}
+      <div class="heading__text">
+        {% if self.pre_title == 'how' %}
+          <span class="label heading__pre-title">How to report</span>
+        {% elif self.pre_title == 'scenario' %}
+          <span class="label heading__pre-title">Example scenario</span>
+        {% endif %}
+        <h1>{{ self.title }}</h1>
+      </div>
+    </header>
+    <div class="content__section">
+      {{ self.body }}
+    </div>
+    {% if self.related_media %}
+    <div class="content__section--ruled content__section">
+      <h3>{{ self.related_media_title }}</h3>
+      <div class="grid grid--4-wide">
+      {% for blocks in self.related_media %}
+        {% with blocks.value as blocks %}
+          {% for block in blocks %}
+            <div class="grid__item">
+              {% image block.image width-200 %}
+              <span class="label">{{ block.media_type }}</span>
+              <p><a href="{{ block.url }}">{{ block.text }}</a></p>
+            </div>
+          {% endfor %}
+        {% endwith %}
+      {% endfor %}
+      </div>
+    </div>
+    {% endif %}
+  </div>
+</article>
+
+{% endblock %}

@@ -1,0 +1,31 @@
+{% load wagtailcore_tags %}
+{% load wagtailimages_tags %}
+{% load staticfiles %}
+
+<div class="row grid--{{ self.card_width }}-wide">
+{% for card in self.cards %}
+<div class="grid__item">
+  <a href="{{ card.url }}">
+    <div class="card card--horizontal card--alternating-bg">
+      <div class="card__image__container card__image__container--secondary">
+        {% if card.specific.featured_image %}
+          {% image card.specific.featured_image fill-80x80 class="card__image" %}
+        {% else %}
+          <img src="{% static 'img/financial-document-circle.svg' %}" alt="Icon of a document" class="card__image">
+        {% endif %}
+      </div>
+      <div class="card__content">
+        <span class="label">
+          {% if card.specific.pre_title == 'how' %}
+            <span class="label heading__pre-title">How to report</span>
+          {% elif card.specific.pre_title == 'scenario' %}
+            <span class="label heading__pre-title">Example scenario</span>
+          {% endif %}
+        </span>
+        {{ card.specific.title }}
+      </div>
+    </div>
+  </a>
+</div>
+{% endfor %}
+</div>

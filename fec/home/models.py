@@ -41,7 +41,8 @@ logger = logging.getLogger(__name__)
 from home.blocks import (ThumbnailBlock, AsideLinkBlock,
                          ContactInfoBlock, CitationsBlock, ResourceBlock,
                          OptionBlock, CollectionBlock, DocumentFeedBlurb,
-                         ExampleParagraph, ExampleForms, CustomTableBlock)
+                         ExampleParagraph, ExampleForms, ExampleImage,
+                         CustomTableBlock, ReportingExampleCards)
 
 
 stream_factory = functools.partial(
@@ -522,7 +523,8 @@ class CustomPage(Page):
         ('image', ImageChooserBlock()),
         ('table', TableBlock()),
         ('example_paragraph', ExampleParagraph()),
-        ('example_forms', ExampleForms())
+        ('example_forms', ExampleForms()),
+        ('reporting_example_cards', ReportingExampleCards())
     ])
     sidebar = stream_factory(null=True, blank=True)
     citations = StreamField([('citations', blocks.ListBlock(CitationsBlock()))],
@@ -749,6 +751,11 @@ class CollectionPage(Page):
     sections = StreamField([
         ('section', CollectionBlock())
     ])
+
+    reporting_examples = StreamField([
+        ('reporting_examples', blocks.ListBlock(CitationsBlock()))
+    ], null=True)
+
     show_search = models.BooleanField(
                                     max_length=255, default=False,
                                     null=False, blank=False,
@@ -770,6 +777,7 @@ class CollectionPage(Page):
         FieldPanel('show_contact_card'),
         StreamFieldPanel('related_pages'),
         StreamFieldPanel('sections'),
+        StreamFieldPanel('reporting_examples')
     ]
 
     @property
@@ -981,3 +989,38 @@ class MeetingPage(Page):
     @property
     def get_update_type(self):
         return constants.update_types['commission-meeting']
+
+
+class ReportingExamplePage(Page):
+    """Page tempalte for "how to report" and "example scenario" pages
+    Always within the Help section"""
+    featured_image = models.ForeignKey('wagtailimages.Image', blank=True, null=True,
+                                   on_delete=models.SET_NULL, related_name='+')
+
+    pre_title = models.CharField(blank=True, null=True, max_length=255, choices=[
+            ('how', 'How to report'),
+            ('scenario', 'Example scenario')
+    ])
+
+    body = StreamField([
+        ('paragraph', blocks.RichTextBlock()),
+        ('example_image', ExampleImage()),
+        ('reporting_example_cards', ReportingExampleCards())
+    ], null=True)
+
+    related_media_title = models.CharField(blank=True, null=True, max_length=255)
+    related_media = StreamField([
+        ('continue_learning', blocks.ListBlock(ThumbnailBlock(), icon='doc-empty', template='blocks/related-media.html')),
+    ], null=True)
+
+    content_panels = Page.content_panels + [
+        FieldPanel('pre_title'),
+        ImageChooserPanel('featured_image'),
+        StreamFieldPanel('body'),
+        FieldPanel('related_media_title'),
+        StreamFieldPanel('related_media')
+    ]
+
+    @property
+    def content_section(self):
+        return 'help'

@@ -1,0 +1,11 @@
+{% load wagtailcore_tags %}
+{% load wagtailimages_tags %}
+
+{% if self.title %}
+<p class="t-sans t-upper">{{ self.title }}</p>
+{% endif %}
+
+<div class="row example">
+  {% image self.image original class="example__image"%}
+  <div class="example__caption">{{ self.caption }}</div>
+</div>
