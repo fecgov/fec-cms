@@ -272,6 +272,8 @@ class RecordPageTag(TaggedItemBase):
 
 
 class RecordPage(ContentPage):
+    formatted_title = models.CharField(max_length=255, null=True, blank=True, default='',
+                                        help_text="Use if you need italics in the title. e.g. <em>Italicized words</em>")
     date = models.DateField(default=datetime.date.today)
     category = models.CharField(
         max_length=255,
@@ -313,6 +315,7 @@ class RecordPage(ContentPage):
     homepage_hide = models.BooleanField(default=False)
     template = 'home/updates/record_page.html'
     content_panels = ContentPage.content_panels + [
+        FieldPanel('formatted_title'),
         FieldPanel('date'),
         FieldPanel('monthly_issue'),
         FieldPanel('category'),

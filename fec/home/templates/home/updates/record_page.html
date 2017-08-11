@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% load wagtailcore_tags wagtailimages_tags %}
+{% load filters %}
 {% load staticfiles %}
 {% block body_class %}template-{{ self.get_verbose_name | slugify }}{% endblock %}
 
@@ -29,7 +30,7 @@
       </ul>
       <div class="row">
         {% spaceless %}{# for inline blocks #}
-        <h1 class="heading__left">{{ self.title }}</h1>
+        <h1 class="heading__left">{% formatted_title self %}</h1>
         <div class="heading__right">
           <span class="t-sans">{{ self.date|date:'F j, Y' }}</span>
         </div>
