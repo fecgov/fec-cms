@@ -1052,20 +1052,16 @@ class ReportingExamplePage(Page):
         return 'help'
 
 @register_snippet
-@python_2_unicode_compatible  # provide equivalent __unicode__ and __str__ methods on Python 2
 class EmbedTableSnippet(models.Model):
     title = models.TextField()
-    description=models.TextField()
+    description = models.TextField()
     text = models.TextField()
-
 
     panels = [
         FieldPanel('title'),
         FieldPanel('description'),
         FieldPanel('text'),
-
     ]
 
-    def __str__(self):
+    def __str_(self):
         return '{} ({})'.format(self.title, self.description)
-
