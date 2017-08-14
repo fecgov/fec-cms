@@ -302,22 +302,24 @@ def serve_wagtail_doc(request, document_id, document_filename):
 def index_meetings(request):#,#  year=None, search=None, active=None):
     meetings = MeetingPage.objects.live()
     open_meetings = meetings.filter(meeting_type ='O')
-    years = MeetingPage.objects.dates('date', 'year', order='DESC')
+    executive_sessions = meetings.filter(meeting_type ='E')
+    hearings= meetings.filter(title__contains='Hearing')
     year = request.GET.get('year', '')
     search = request.GET.get('search', '')
     active = request.GET.get('tab', '')
 
 
-    hearings= meetings.filter(title__contains='Hearing')
+    years = MeetingPage.objects.dates('date', 'year', order='DESC')
     years_h = hearings.dates('date', 'year', order='DESC')
-    year_h = request.GET.get('year_h', '')
-    search_h = request.GET.get('search_h', '')
-
-
-    executive_sessions = meetings.filter(meeting_type ='E')
     years_e = executive_sessions.dates('date', 'year', order='DESC')
-    year_e = request.GET.get('year_e', '')
-    search_e = request.GET.get('search_e', '')
+    # year_h = request.GET.get('year_h', '')
+    # search_h = request.GET.get('search_h', '')
+
+
+    # executive_sessions = meetings.filter(meeting_type ='E')
+    # years_e = executive_sessions.dates('date', 'year', order='DESC')
+    # year_e = request.GET.get('year_e', '')
+    # search_e = request.GET.get('search_e', '')
 
 
 
@@ -327,33 +329,33 @@ def index_meetings(request):#,#  year=None, search=None, active=None):
         year = int(year)
         meetings = meetings.filter(date__gte=datetime(year, 1, 1)).filter(date__lte=datetime(year, 12, 31))
         open_meetings = open_meetings.filter(date__gte=datetime(year, 1, 1)).filter(date__lte=datetime(year, 12, 31))
-        #executive_sessions = executive_sessions.filter(date__gte=datetime(year, 1, 1)).filter(date__lte=datetime(year, 12, 31))
-        #hearings = hearings.filter(date__gte=datetime(year, 1, 1)).filter(date__lte=datetime(year, 12, 31))
+        hearings = hearings.filter(date__gte=datetime(year, 1, 1)).filter(date__lte=datetime(year, 12, 31))
+        executive_sessions = executive_sessions.filter(date__gte=datetime(year, 1, 1)).filter(date__lte=datetime(year, 12, 31))
+
 
     if search:
         meetings = meetings.search(search)
         open_meetings = open_meetings.search(search)
-        #hearings = hearings.search(search)
-        #executive_sessions = executive_sessions.search(search)
-
-
-    if year_h:
-        # Trying to filter using the built-in date__year parameter doesn't
-        # work when chaining filter() and search(), so this uses date_gte and date_lte
-        year_h = int(year_h)
-        hearings = hearings.filter(date__gte=datetime(year_h, 1, 1)).filter(date__lte=datetime(year_h, 12, 31))
-
-    if search_h:
-        hearings = hearings.search(search)
-
-    if year_e:
-        # Trying to filter using the built-in date__year parameter doesn't
-        # work when chaining filter() and search(), so this uses date_gte and date_lte
-        year_e = int(year_e)
-        executive_sessions = executive_sessions.filter(date__gte=datetime(year_e, 1, 1)).filter(date__lte=datetime(year_e, 12, 31))
-
-    if search_e:
         executive_sessions = executive_sessions.search(search)
+
+
+    # if year_h:
+    #     # Trying to filter using the built-in date__year parameter doesn't
+    #     # work when chaining filter() and search(), so this uses date_gte and date_lte
+    #     year_h = int(year_h)
+    #     hearings = hearings.filter(date__gte=datetime(year_h, 1, 1)).filter(date__lte=datetime(year_h, 12, 31))
+
+    # if search_h:
+    #     hearings = hearings.search(search)
+
+    # if year_e:
+    #     # Trying to filter using the built-in date__year parameter doesn't
+    #     # work when chaining filter() and search(), so this uses date_gte and date_lte
+    #     year_e = int(year_e)
+    #     executive_sessions = executive_sessions.filter(date__gte=datetime(year_e, 1, 1)).filter(date__lte=datetime(year_e, 12, 31))
+
+    # if search_e:
+    #     executive_sessions = executive_sessions.search(search)
 
 
     # Handle pagination
@@ -411,30 +413,30 @@ def index_meetings(request):#,#  year=None, search=None, active=None):
         'active':request.GET.get('tab', ''),
 
 
-        'year_h': year_h,
+        # 'year_h': year_h,
         'years_h': years_h,
-        'search': search,
+        # 'search': search,
         'hearings': hearings,
 
-        'year_e': year_e,
+        # 'year_e': year_e,
         'years_e': years_e,
-        'search_e': search_e,
+        # 'search_e': search_e,
         'executive_sessions': executive_sessions,
 
         })
 
 def hearings(request):
-    meetings_h = MeetingPage.objects.live()
-    hearings= meetings_h.filter(title__contains='Hearing')
-    years_h = MeetingPage.objects.dates('date', 'year', order='DESC')
-    year_h = request.GET.get('year_h', '')
+    meetings = MeetingPage.objects.live()
+    hearings= meetings.filter(title__contains='Hearing')
+    years_h = hearings.dates('date', 'year', order='DESC')
+    year = request.GET.get('year', '')
     search = request.GET.get('search', '')
 
-    if year_h:
+    if year:
         # Trying to filter using the built-in date__year parameter doesn't
         # work when chaining filter() and search(), so this uses date_gte and date_lte
-        year_h = int(year_h)
-        hearings = hearings.filter(date__gte=datetime(year_h, 1, 1)).filter(date__lte=datetime(year_h, 12, 31))
+        year = int(year)
+        hearings = hearings.filter(date__gte=datetime(year, 1, 1)).filter(date__lte=datetime(year, 12, 31))
 
     if search:
         hearings = hearings.search(search)
@@ -443,18 +445,48 @@ def hearings(request):
       'title': 'Hearings',
     }
 
-    return HttpResponseRedirect(reverse('meetings_page') + "?year_h="+str(year_h)+"&search="+search+"&tab=hearings"
+    return HttpResponseRedirect(reverse('meetings_page') + "?year="+str(year)+"&search="+search+"&tab=hearings"
     #return HttpResponseRedirect(reverse('meetings_page') + "?tab=hearings"
         ,{
         'self': page_context,
         'years_h': years_h,
-        'year_h': year_h,
+        'year': year,
         'search': search,
         'hearings': hearings,
+        'meetings':meetings,
         })
 
 def executive_sessions(request):
-    return HttpResponseRedirect(reverse('meetings_page') + "?tab=executive-sessions")
+    meetings = MeetingPage.objects.live()
+    executive_sessions = meetings.filter(meeting_type ='E')
+    years_e = executive_sessions.dates('date', 'year', order='DESC')
+    year = request.GET.get('year', '')
+    search = request.GET.get('search', '')
+
+    if year:
+        # Trying to filter using the built-in date__year parameter doesn't
+        # work when chaining filter() and search(), so this uses date_gte and date_lte
+        year = int(year)
+        executive_sessions = executive_sessions.filter(date__gte=datetime(year, 1, 1)).filter(date__lte=datetime(year, 12, 31))
+
+    if search:
+        executive_sessions = executive_sessions.search(search)
+
+    page_context = {
+      'title': 'Executive Sessions',
+    }
+
+    return HttpResponseRedirect(reverse('meetings_page') + "?year="+str(year)+"&search="+search+"&tab=executive-sessions"
+    #return HttpResponseRedirect(reverse('meetings_page') + "?tab=hearings"
+        ,{
+        'self': page_context,
+        'years_e': years_e,
+        'year': year,
+        'search': search,
+        'executive_sessions': executive_sessions,
+        'meetings':meetings,
+        })
+
 
 def query_transform(request, **kwargs):
     updated = request.GET.copy()
