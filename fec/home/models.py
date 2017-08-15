@@ -29,6 +29,9 @@ from wagtail.wagtaildocs.blocks import DocumentChooserBlock
 from wagtail.wagtaildocs.edit_handlers import DocumentChooserPanel
 from wagtail.wagtaildocs.models import Document
 
+from django.utils.encoding import python_2_unicode_compatible
+from wagtail.wagtailsnippets.models import register_snippet
+
 from wagtail.wagtailsearch import index
 
 from django.db.models.signals import m2m_changed
@@ -92,7 +95,7 @@ class UniqueModel(models.Model):
 class Folder(Page):
     is_creatable = True
     subpage_types = ['PressReleasePage', 'RecordPage', 'TipsForTreasurersPage', 'DigestPage']
-    
+
     external_link = models.URLField(blank=False, null=True, default='')
 
     @property
@@ -1047,3 +1050,18 @@ class ReportingExamplePage(Page):
     @property
     def content_section(self):
         return 'help'
+
+@register_snippet
+class EmbedTableSnippet(models.Model):
+    title = models.TextField()
+    description = models.TextField()
+    text = models.TextField()
+
+    panels = [
+        FieldPanel('title'),
+        FieldPanel('description'),
+        FieldPanel('text'),
+    ]
+
+    def __str__(self):
+        return '{} ({})'.format(self.title, self.description)
