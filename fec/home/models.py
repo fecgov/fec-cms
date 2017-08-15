@@ -1063,5 +1063,5 @@ class EmbedTableSnippet(models.Model):
         FieldPanel('text'),
     ]
 
-    def __str_(self):
+    def __str__(self):
         return '{} ({})'.format(self.title, self.description)
