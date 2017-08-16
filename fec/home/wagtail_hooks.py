@@ -64,8 +64,4 @@ class NewsAndUpdatesAdmin(ModelAdminGroup):
     items = (PressReleaseModelAdmin, DigestPageModelAdmin, TipsForTreasurersPageModelAdmin, RecordPageModelAdmin)
 
 modeladmin_register(AuthorAdmin)
-modeladmin_register(PressReleaseModelAdmin)
-modeladmin_register(DigestPageModelAdmin)
-modeladmin_register(TipsForTreasurersPageModelAdmin)
-modeladmin_register(RecordPageModelAdmin)
 modeladmin_register(NewsAndUpdatesAdmin)
