@@ -1,0 +1,99 @@
+// Date Range Calendar Grid Date Picker
+//
+// Datatables: Filter interaction for filter date fields
+//
+// <div class="date-range__grid js-date-grid">
+//   <div class="date-range__row">
+//     <div class="date-range__year">2016</div>
+//     <ul data-year="2016" class="date-range__months">
+//       <li data-month="01"><div>Jan</div></li>
+//       ...
+//       <li data-month="12"><div>Dec</div></li>
+//     </ul>
+//   </div>
+//   <div class="date-range__row">
+//     <div class="date-range__year">2017</div>
+//     <ul data-year="2017" class="date-range__months">
+//       <li data-month="01"><div>Jan</div></li>
+//       ...
+//       <li data-month="12"><div>Dec</div></li>
+//     </ul>
+//   </div>
+// </div>
+//
+
+.date-range__grid {
+  @include clearfix();
+  font-family: $sans-serif;
+  padding: u(2rem 0);
+  display: none;
+
+  &:not(.is-invalid) {
+
+    &.pick-min li:hover div {
+      border-top-left-radius: u(1.5rem);
+      border-bottom-left-radius: u(1.5rem);
+      background-color: $aqua;
+      color: $base;
+    }
+
+    &.pick-max li:hover div {
+      border-top-right-radius: u(1.5rem);
+      border-bottom-right-radius: u(1.5rem);
+      background-color: $aqua;
+      color: $base;
+    }
+
+    &.pick-min,
+    &.pick-max {
+      li {
+        cursor: pointer;
+      }
+    }
+  }
+}
+
+.date-range__year {
+  line-height: u(3rem);
+  padding-right: u(1rem);
+  float: left;
+  clear: both;
+}
+
+.date-range__months {
+  width: 215px;
+  float: left;
+
+  li {
+    width: 35px;
+    font-size: u(1.2rem);
+    text-align: center;
+    padding: u(0 0 .2rem .1rem);
+    float: left;
+
+    div {
+      background-color: $gray;
+      padding: u(.75rem .5rem);
+    }
+
+    &.month--begin div {
+      border-top-left-radius: u(1.5rem);
+      border-bottom-left-radius: u(1.5rem);
+    }
+
+    &.month--end div {
+      border-top-right-radius: u(1.5rem);
+      border-bottom-right-radius: u(1.5rem);
+    }
+
+    &.selected div {
+      background-color: $gray-dark;
+      color: $inverse;
+    }
+
+    &.is-active div {
+      background-color: $aqua;
+      color: $base;
+    }
+  }
+}

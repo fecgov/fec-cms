@@ -1,0 +1,27 @@
+{% macro header(title, links) %}
+<div class="page-header page-header--primary">
+  <ul class="breadcrumbs">
+    <li class="breadcrumbs__item"><a href="/" class="breadcrumbs__link" rel="Home">Home</a></li>
+    {% if title != 'Campaign finance data' %}
+      <li class="breadcrumbs__item">
+        <span class="breadcrumbs__separator">&rsaquo;</span>
+        <a href="/data" class="breadcrumbs__link">Campaign finance data</a>
+      </li>
+    {% endif %}
+    {% for link in links %}
+    <li class="breadcrumbs__item">
+      <span class="breadcrumbs__separator">&rsaquo;</span>
+      {% if link[0] != '' %}
+        <a class="breadcrumbs__link" href="{{ link[0] }}">{{ link[1] }}</a>
+      {% else %}
+        <span>{{ link[1] }}</span>
+      {% endif %}
+    </li>
+    {% endfor %}
+    <li class="breadcrumbs__item breadcrumbs__item--current">
+      <span class="breadcrumbs__separator">&rsaquo;</span>
+      {{ title }}
+    </li>
+  </ul>
+</div>
+{% endmacro %}

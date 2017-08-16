@@ -1,0 +1,122 @@
+{% import 'macros/cycle-select.jinja' as select %}
+
+<section id="section-5" role="tabpanel" aria-hidden="true" aria-labelledby="section-5-heading">
+  <h2 id="section-5-heading">Spending by others to support or oppose</h2>
+  <div class="row">
+    <p class="usa-width-two-thirds">This tab shows spending that opposes or supports this candidate. None of the funds are directly given to or spent by the candidate.</p>
+  </div>
+
+  <div class="slab slab--inline slab--neutral u-padding--left u-padding--right">
+    <div class="content__section">
+      {{ select.cycle_select(election_years, cycle, duration=duration, id="cycle-3") }}
+    </div>
+
+    <div class="entity__figure row" id="independent-expenditures">
+      <div class="heading--section heading--with-action">
+        <h3 class="heading__left">Independent expenditures</h3>
+        <a class="heading__right button--alt button--browse"
+          href="/data/independent-expenditures">Filter this data</a>
+      </div>
+      <div class="results-info results-info--simple js-other-spending-totals" data-spending-type="independentExpenditures">
+        <div class="usa-width-one-half">
+          <span class="label">Support</span>
+          <span class="t-big-data js-support"><img src="{{ static('img/loading-ellipsis.gif') }}" alt="Loading indicator"></span>
+          <span class="t-block t-sans">Spent by others to <strong>support</strong> from <strong>CYCLE STARTto CYCLE END.</strong></span>
+        </div>
+        <div class="usa-width-one-half">
+          <span class="label">Oppose</span>
+          <span class="t-big-data js-oppose"><img src="{{ static('img/loading-ellipsis.gif') }}" alt="Loading indicator"></span>
+          <span class="t-block t-sans">Spent by others to <strong>oppose</strong> from <strong>CYCLE STARTto CYCLE END.</strong></span>
+        </div>
+      </div>
+      <table
+          class="data-table data-table--heading-borders"
+          data-type="independent-expenditures"
+          data-candidate="{{ candidate_id }}"
+          data-cycle="{{ max_cycle }}"
+          data-election-full="{{ show_full_election }}"
+          data-duration="{% if election_full %}{{ duration }}{% else %}2{% endif %}"
+        >
+        <thead>
+          <tr>
+            <th scope="col">Aggregate amount</th>
+            <th scope="col">Spent by</th>
+            <th scope="col">Support/Oppose</th>
+          </tr>
+        </thead>
+      </table>
+      <div class="datatable__note">
+        <p class="t-note">These totals are drawn from quarterly, monthly and semi-annual reports. 24- and 48-Hour Reports of independent expenditures aren't included.</p>
+      </div>
+    </div>
+
+    <div class="entity__figure row" id="communication-costs">
+      <div class="heading--section heading--with-action u-no-margin">
+        <h3 class="heading__left">Communication costs</h3>
+        <a class="heading__right button--alt button--browse"
+          href="/data/communication-costs">Filter this data</a>
+      </div>
+      <div class="results-info results-info--simple js-other-spending-totals" data-spending-type="communicationCosts">
+        <div class="usa-width-one-half">
+          <span class="label">Support</span>
+          <span class="t-big-data js-support"><img src="{{ static('img/loading-ellipsis.gif') }}" alt="Loading indicator"></span>
+          <span class="t-block t-sans">Spent by others to <strong>support</strong> from <strong>CYCLE STARTto CYCLE END.</strong></span>
+        </div>
+        <div class="usa-width-one-half">
+          <span class="label">Oppose</span>
+          <span class="t-big-data js-oppose"><img src="{{ static('img/loading-ellipsis.gif') }}" alt="Loading indicator"></span>
+          <span class="t-block t-sans">Spent by others to <strong>oppose</strong> from <strong>CYCLE STARTto CYCLE END.</strong></span>
+        </div>
+      </div>
+      <table
+          class="data-table data-table--heading-borders"
+          data-type="communication-costs"
+          data-candidate="{{ candidate_id }}"
+          data-cycle="{{ max_cycle }}"
+          data-election-full="{{ show_full_election }}"
+          data-duration="{% if election_full %}{{ duration }}{% else %}2{% endif %}"
+        >
+        <thead>
+          <tr>
+            <th scope="col">Aggregate amount</th>
+            <th scope="col">Spent by</th>
+            <th scope="col">Support/Oppose</th>
+          </tr>
+        </thead>
+      </table>
+    </div>
+
+    <div class="entity__figure row" id="electioneering-communication">
+      <div class="heading--section heading--with-action u-no-margin">
+        <h3 class="heading__left">Electioneering communication</h3>
+        <a class="heading__right button--alt button--browse"
+          href="/data/electioneering-communication">Filter this data</a>
+      </div>
+      <div class="results-info results-info--simple js-other-spending-totals" data-spending-type="electioneering">
+        <div class="usa-width-one-half">
+          <span class="t-big-data js-total-electioneering u-margin--top"><img src="{{ static('img/loading-ellipsis.gif') }}" alt="Loading indicator"></span>
+          <span class="t-block t-sans">Spent by others that mentioned this candidate <strong>CYCLE START to CYCLE_END.</strong></span>
+        </div>
+      </div>
+
+      <table
+          class="data-table data-table--heading-borders"
+          data-type="electioneering"
+          data-candidate="{{ candidate_id }}"
+          data-cycle="{{ max_cycle }}"
+          data-election-full="{{ show_full_election }}"
+          data-duration="{% if election_full %}{{ duration }}{% else %}2{% endif %}"
+        >
+        <thead>
+          <tr>
+            <th scope="col">Aggregate amount</th>
+            <th scope="col">Spent by</th>
+          </tr>
+        </thead>
+      </table>
+      <div class="datatable__note">
+        <p class="t-note">To help users work with this data, we divide each itemized disbursement amount by the number of federal candidates named in connection with that disbursement. The resulting amount is listed here.</p>
+      </div>
+    </div>
+  </div>
+</section>

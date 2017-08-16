@@ -24,6 +24,7 @@ urlpatterns = [
     url(r'^help-candidates-and-committees/question-rad/$', home_views.contact_rad),
     url(r'^search/$', search_views.search, name='search'),
     url(r'^updates/$', home_views.updates),
+    url(r'', include('data.urls')),
     url(r'', include(wagtail_urls)),
 ]
 

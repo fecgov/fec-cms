@@ -1,0 +1,23 @@
+{% macro candidates(data) %}
+  {% for datum in data %}
+  <tr>
+    <td><a href="{{ url_for('candidate_page', c_id=datum.candidate_id) }}">{{ datum.name}}</a></td>
+    <td>{{ datum.office }}</td>
+    <td>{{ datum.election_years|join(', ') }}</td>
+    <td>{{ datum.party_full }}</td>
+    <td>{{ datum.state }}</td>
+    <td>{{ datum.district }}</td>
+  </tr>
+  {% endfor %}
+{% endmacro %}
+
+{% macro committees(data) %}
+  {% for datum in data %}
+  <tr>
+    <td><a href="{{ url_for('committee_page', c_id=datum.committee_id) }}">{{ datum.name }}</a></td>
+    <td>{{ datum.treasurer_name }}</td>
+    <td>{{ datum.committee_type_full }}</td>
+    <td>{{ datum.designation_full }}</td>
+  </tr>
+  {% endfor %}
+{% endmacro %}

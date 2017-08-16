@@ -1,0 +1,146 @@
+{% import 'macros/cycle-select.jinja' as select %}
+
+<section id="section-2" role="tabpanel" aria-hidden="true" aria-labelledby="section-2-heading">
+  <div class="heading--section">
+    <h2 id="section-2-heading">About this candidate</h2>
+  </div>
+
+  <div class="slab slab--inline slab--neutral u-padding--left u-padding--right">
+
+    <div class="content__section">
+      {{ select.cycle_select(election_years, cycle, duration=duration, id="cycle-2") }}
+    </div>
+
+    <div class="entity__figure entity__figure--narrow row" id="information">
+
+      <h3 class="heading--section">Candidate information</h3>
+
+      <table class="t-sans usa-width-three-fourths">
+        <tr>
+          <td class="figure__label">Seat:</td>
+          <td class="figure__value">{{ constants.states[state] }} {{ office_full }}{% if office_full == 'House' %} district {{ district }}{% endif %}</td>
+        </tr>
+        <tr>
+          <td class="figure__label">Type of candidacy:</td>
+          <td class="figure__value">{{ incumbent_challenge_full }}</td>
+        </tr>
+        <tr>
+          <td class="figure__label">Political party:</td>
+          <td class="figure__value">{{ party_full|lower|title }}</td>
+        </tr>
+        {% if statement_of_candidacy %}
+        <tr>
+          <td class="figure__label">Statement of candidacy:</td>
+          <td class="figure__value">
+            <ul>
+            {% for statement in statement_of_candidacy %}
+              <li>
+                {% if loop.index == 1 %}
+                <div class="t-block">
+                  <i class="icon-circle--check-outline--inline--left"></i>
+                  <a href="{{ statement.pdf_url }}">Current version (PDF)</a>
+                </div>
+                {% else %}
+                <div class="t-block">
+                  <i class="icon-circle--clock-reverse--inline--left"></i>
+                  <a href="{{ statement.pdf_url }}">Previous version (PDF)</a>
+                </div>
+                {% endif %}
+                {% if statement.fec_file_id %}
+                  <div class="t-small u-small-icon-padding--left"> {{ statement.fec_file_id }}</div>
+                {% endif %}
+                <div class="u-small-icon-padding--left"> Filed {{ statement.receipt_date }}</div>
+              </li>
+            {% endfor %}
+            </ul>
+          </td>
+        </tr>
+        {% endif %}
+      </table>
+
+      {#
+      TODO: translate this
+      <div class="usa-width-one-fourth">
+        <div class="card">
+          {% if election_url(context(), cycle) %}
+          <a href="{{ election_url(context(), election_year) }}">
+            <div class="card__image__container">
+              <img class="icon--complex" src="/static/img/i-elections--primary.svg" alt="Icon representing elections">
+            </div>
+            <div class="card__content">
+              View all candidates in the {{ election_year }} {{ constants.states[state] }} {% if office == 'P' %}Presidential{% else %}{{ office_full }}{% endif %}{% if office_full == 'House' %} district {{ district }}{% endif %} election
+            </div>
+          </a>
+          {% endif %}
+        </div>
+      </div>
+      #}
+
+    </div>
+
+    <div class="entity__figure entity__figure--narrow row" id="other">
+      <h3 class="heading--section u-no-margin">Other documents filed</h3>
+
+      <table
+          class="data-table data-table--heading-borders"
+          data-type="other-documents"
+          data-candidate="{{ candidate_id }}"
+          data-name="{{ name }}"
+          data-cycle="{{ cycle }}"
+        >
+        <thead>
+          <tr>
+            <th scope="col">Document</th>
+            <th scope="col">Version</th>
+            <th scope="col">Date filed</th>
+          </tr>
+        </thead>
+      </table>
+
+    </div>
+
+    <div class="entity__figure entity__figure--narrow row" id="committees">
+
+      <h3 class="heading--section">Committees</h3>
+
+      {% if committee_groups['P'] or committee_groups['A'] %}
+      <h4>Authorized campaign committees:</h4>
+
+      <div class="usa-width-one-half">
+      {% for committee in committee_groups['P'] | reverse %}
+        <div class="callout callout--primary{% if loop.last %} u-no-margin{% endif %}">
+          <h4 class="callout__title">
+            <a href="{{ url_for('committee_page', c_id=committee.committee_id, cycle=committee.related_cycle) }}">{{ committee.name }}</a>
+          </h4>
+          <span class="callout__subtitle term" data-term="principal campaign committee">Principal campaign committee</span>
+        </div>
+      {% endfor %}
+      </div>
+
+      <ul class="list--bulleted row">
+      {% for committee in committee_groups['A'] | reverse %}
+        <li>
+          <a class="t-sans" href="{{ url_for('committee_page', c_id=committee.committee_id, cycle=committee.related_cycle) }}">{{ committee.name }}</a>
+        </li>
+      {% endfor %}
+      </ul>
+      {% endif %}
+
+      {% if committee_groups['J'] %}
+      <hr class="hr--lighter">
+
+      <h4>Joint fundraising committees:</h4>
+
+      <ul class="list--bulleted">
+      {% for committee in committee_groups['J'] | reverse %}
+        <li>
+          <a class="t-sans" href="{{ url_for('committee_page', c_id=committee.committee_id, cycle=committee.related_cycle) }}">{{ committee.name }}</a>
+        </li>
+      {% endfor %}
+      </ul>
+      {% endif %}
+    </div>
+
+  </div>
+
+</section>

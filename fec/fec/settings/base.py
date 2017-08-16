@@ -58,9 +58,12 @@ INSTALLED_APPS = (
     'wagtail.contrib.table_block',
     'wagtail.contrib.wagtailstyleguide',
 
+    'django_jinja',
+
     'fec',
     'search',
     'home',
+    'data',
     'data_loader',
     'uaa_client',
     'extend_admin',
@@ -89,10 +92,15 @@ ROOT_URLCONF = 'fec.urls'
 
 TEMPLATES = [
     {
+        'BACKEND': 'django_jinja.backend.Jinja2',
+        'APP_DIRS': True,
+        'OPTIONS': {
+            'match_extension': '.jinja',
+        }
+    },
+    {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [
-            os.path.join(PROJECT_DIR, 'templates'),
-        ],
+        'DIRS': [],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -147,8 +155,6 @@ STATICFILES_FINDERS = (
 
 STATICFILES_DIRS = (
     os.path.join(BASE_DIR, 'dist', 'fec', 'static'),
-    os.path.join(REPO_DIR, 'node_modules', 'fec-style'),
-    os.path.join(REPO_DIR, 'node_modules'),
     os.path.join(PROJECT_DIR, 'static'),
 )
 

@@ -1,0 +1,191 @@
+// Type Styles
+//
+// For classes that define type styles
+// Prefix these styles with t-
+//
+
+.t-display {
+  @include heading(display);
+
+  &.t-ruled {
+    border-width: 2px;
+  }
+}
+
+// Used for showing large numbers. Sans-serif and no border
+.t-display--sans {
+  @include heading(display);
+  border: none;
+  font-family: $sans-serif;
+  margin-bottom: 0;
+}
+
+.t-ruled {
+  @include clearfix();
+  border-bottom: 1px solid $base;
+  border-top: 1px solid $base;
+  padding: u(1rem 0);
+}
+
+.t-ruled--bottom {
+  border-bottom: 1px solid $base;
+  padding-bottom: u(1rem);
+}
+
+.t-ruled--bold {
+  border-width: 2px;
+
+  &.h1 {
+    border-width: 2px;
+  }
+}
+
+.t-no-rules {
+  border-bottom: none;
+  border-top: none;
+
+  &.h1 {
+    border-bottom: none;
+    border-top: none;
+  }
+}
+
+.t-note {
+  display: inline-block;
+  font-family: $serif;
+  font-weight: normal;
+  font-style: italic;
+  font-size: u(1.4rem);
+}
+
+.t-block {
+  display: block;
+}
+
+.t-inline-block {
+  display: inline-block;
+}
+
+.t-sans {
+  font-family: $sans-serif;
+  letter-spacing: -.3px;
+}
+
+.t-serif {
+  font-family: $serif;
+}
+
+.t-italic {
+  font-style: italic;
+}
+
+.t-bold {
+  font-weight: bold;
+}
+
+.t-underline {
+  text-decoration: underline;
+}
+
+.t-normal {
+  font-weight: normal;
+}
+
+.t-highlight {
+  @include t-highlight;
+}
+
+.t-upper {
+  text-transform: uppercase;
+}
+
+// Small header above a big data number
+.t-data-header {
+  display: inline-block;
+  font-family: $sans-serif;
+  font-weight: bold;
+  letter-spacing: -.3px;
+  margin-bottom: 0;
+}
+
+.t-data {
+  font-family: $sans-serif;
+  text-transform: uppercase;
+  color: $base;
+}
+
+.t-big-data {
+  display: block;
+  color: $base;
+  font-family: $sans-serif;
+  font-size: u(3.6rem);
+  line-height: u(3.6rem);
+  margin-bottom: u(1rem);
+}
+
+.t-secondary-contrast.t-secondary-contrast {
+  color: $secondary-contrast;
+}
+
+// Set a bigger size to lead paragraphs
+.t-lead,
+.t-lead p {
+  font-weight: regular;
+  font-size: u(1.8rem);
+  line-height: u(2.8rem);
+}
+
+// Used when we want a heading to break onto two lines
+.t-short {
+  @include media($lg) {
+    display: block;
+    width: 70%;
+  }
+}
+
+.t-small {
+  font-size: u(1.4rem);
+  line-height: u(1.5rem);
+  color: $gray-dark;
+}
+
+.h1 {
+  @include heading(h1);
+}
+
+.h2 {
+  @include heading(h2);
+}
+
+.h3 {
+  @include heading(h3);
+}
+
+.h4 {
+  @include heading(h4);
+}
+
+.h5 {
+  @include heading(h5);
+}
+
+.t-centered {
+  text-align: center;
+}
+
+.t-right-aligned {
+  text-align: right;
+}
+
+.t-left-aligned {
+  text-align: left;
+}
+
+// Adds an icon to signify a master table
+.t-all-data {
+  @include u-icon-bg($all-files, $base);
+  display: inline-block;
+  background-size: 1em;
+  background-position: 0 30%;
+  padding-left: u(2rem);
+}

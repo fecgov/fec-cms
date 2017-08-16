@@ -1,0 +1,235 @@
+// Icon headings (complex)
+//
+// Lockups that combine an icon, title and some additional text
+//
+// <div class="icon-heading">
+//   <img class="icon-heading__image" src="../img/i-overviews--primary.svg" alt="Icon representing interactive overviews">
+//   <div class="icon-heading__content">
+//     <h2 class="icon-heading__title">Interactive overviews</h2>
+//     <p>You don’t have to be an expert to learn more about campaign finance. These overviews are a visual introduction to how money is raised and spent in federal elections.</p>
+//   </div>
+// </div>
+//
+
+.icon-heading {
+  @include clearfix();
+}
+
+.icon-heading__image {
+  @include span-columns(1);
+}
+
+.icon-heading__content {
+  @include span-columns(11);
+  max-width: 75%;
+
+  p {
+    margin: 0;
+  }
+
+  @include media($lg) {
+    max-width: 80%;
+  }
+}
+
+.grid--2-wide,
+.grid--3-wide {
+  .icon-heading__image {
+    @include span-columns(3);
+  }
+
+  .icon-heading__content {
+    @include span-columns(8);
+    padding-left: u(.5rem);
+  }
+}
+
+.icon-heading__title {
+  margin-bottom: 0;
+}
+
+// Icon headings (simple)
+//
+// Used when you just want a single icon next to a single heading
+// Styled for use against dark backgrounds
+//
+// <h2 class="icon-heading--raising-circle">Icon heading</h2>
+//
+
+@mixin u-icon-heading() {
+  padding-left: u(3rem);
+}
+
+.icon-heading--raising-circle {
+  &::before {
+    $size: u(4rem);
+    @include u-icon-circle($piggy-bank, $primary, $inverse, $size);
+    content: '';
+    float: left;
+    margin-right: u(1rem);
+  }
+}
+
+.icon-heading--spending-circle {
+  &::before {
+    $size: u(4rem);
+    @include u-icon-circle($disbursement, $primary, $inverse, $size);
+    content: '';
+    float: left;
+    margin-right: u(1rem);
+  }
+}
+
+// homepage - registration and reporting (on secondary [red] slab)
+.icon-heading--checklist-circle {
+  &::before {
+    @include u-icon-circle($checklist, $inverse, $secondary-contrast, 4.5rem);
+    background-size: u(4rem);
+    content: '';
+    float: left;
+    margin-right: u(1.5rem);
+  }
+}
+
+.icon-heading--question-bubble-circle {
+  &::before {
+    @include u-icon-circle($question-bubble, $inverse, $secondary-contrast, 4.5rem);
+    background-size: u(4rem);
+    content: '';
+    float: left;
+    margin-right: u(1.5rem);
+  }
+}
+
+.icon-heading--calendar-circle {
+  &::before {
+    @include u-icon-circle($calendar, $inverse, $secondary-contrast, 4.5rem);
+    content: '';
+    float: left;
+    margin-right: u(1.5rem);
+  }
+}
+
+.icon-heading--training-circle {
+  &::before {
+    @include u-icon-circle($training, $inverse, $secondary-contrast, 4.5rem);
+    content: '';
+    float: left;
+    margin-right: u(1.5rem);
+  }
+}
+
+.icon-heading--document-circle {
+  &::before {
+    @include u-icon-circle($document, $inverse, $secondary-contrast, 4.5rem);
+    background-size: u(2.5rem);
+    content: '';
+    float: left;
+    margin-right: u(1.5rem);
+  }
+}
+
+// icons for homepage - legal resources (on primary [blue] slab)
+.icon-heading--mallet-circle {
+  &::before {
+    @include u-icon-circle($mallet, $inverse, $primary-contrast, 4.5rem);
+    background-size: u(4rem);
+    content: '';
+    float: left;
+    margin-right: u(1.5rem);
+  }
+}
+
+.icon-heading--subsection-doc-circle {
+  &::before {
+    @include u-icon-circle($subsection-doc, $inverse, $primary-contrast, 4.5rem);
+    background-size: u(4rem);
+    content: '';
+    float: left;
+    margin-right: u(1.5rem);
+  }
+}
+
+.icon-heading--direction-sign-circle {
+  &::before {
+    @include u-icon-circle($direction-sign, $inverse, $primary-contrast, 4.5rem);
+    background-size: u(4rem);
+    content: '';
+    float: left;
+    margin-right: u(1.5rem);
+  }
+}
+
+.icon-heading--shield-circle {
+  &::before {
+    @include u-icon-circle($shield, $inverse, $primary-contrast, 4.5rem);
+    background-size: u(4rem);
+    content: '';
+    float: left;
+    margin-right: u(1.5rem);
+  }
+}
+
+// Data landing page links to breakdowns
+.icon-heading--graph-circle {
+  &::before {
+    $size: u(4rem);
+    @include u-icon-circle($graph-horizontal-ordered, $primary, $inverse, $size);
+    background-size: u(1.8rem);
+  }
+}
+
+.icon-heading--graph-unordered-circle {
+  &::before {
+    $size: u(4rem);
+    @include u-icon-circle($graph-horizontal-unordered, $primary, $inverse, $size);
+    background-size: u(1.8rem);
+  }
+}
+
+.icon-heading--map-circle {
+  &::before {
+    $size: u(4rem);
+    @include u-icon-circle($map-us-states, $primary, $inverse, $size);
+  }
+}
+
+.icon-heading--financial-document {
+  &::before {
+    $size: u(4rem);
+    @include u-icon-circle($financial-document, $inverse, $secondary-contrast, $size);
+    background-size: 50%;
+    content: '';
+    float: left;
+    margin-right: u(1.5rem);
+  }
+}
+
+.icon-heading--graph-circle,
+.icon-heading--graph-unordered-circle,
+.icon-heading--map-circle {
+  border-bottom: none;
+  display: table;
+
+  .icon-heading__text {
+    line-height: 1.2;
+    display: table-cell;
+    vertical-align: middle;
+  }
+
+  &::before {
+    content: '';
+    display: inline-block;
+    margin-right: u(2rem);
+  }
+}
+
+// scss-lint:disable QualifyingElement
+// Only want the hover effect if the element is a link
+a.icon-heading--graph-circle,
+a.icon-heading--graph-unordered-circle,
+a.icon-heading--map-circle {
+  &:hover .icon-heading__text span {
+    border-bottom: 1px dotted $primary;
+  }
+}

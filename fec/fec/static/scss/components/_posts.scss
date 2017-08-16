@@ -1,0 +1,179 @@
+// Posts
+//
+// Used on advanced data, search results, press page, etc
+//
+// <div class="post-feed">
+//   <div class="post">
+//   ...
+//   </div>
+// </div>
+//
+
+.post-feed {
+  border-top: 1px solid $gray;
+  border-bottom: 1px solid $gray;
+  padding: u(1rem 0 1rem 2rem);
+}
+
+.post {
+  border-bottom: 1px solid $gray-light;
+  padding: u(2rem 0);
+
+  &:last-of-type {
+    margin-bottom: 0;
+    border-bottom: none;
+  }
+
+  h3 {
+    margin-bottom: u(.4rem);
+  }
+
+  p {
+    font-family: $sans-serif;
+    letter-spacing: -.3px;
+    margin: u(0 0 1rem 0);
+  }
+
+  // Thumbnails
+  img {
+    border: 2px solid $gray-lightest;
+    height: auto;
+  }
+
+  .richtext-image {
+    // Hides images that have been inserted in the richtext editor
+    display: none;
+  }
+
+  .rich-text {
+    // This floats images that are included in the body by virtue of being scraped and imported
+    img {
+      float: right;
+      margin-left: u(2rem);
+      height: 150px;
+      width: auto;
+    }
+
+    // Hide elements included in the beginning of a post other than the first paragraph
+    table,
+    ul,
+    h1,
+    h2,
+    h3,
+    h4,
+    br,
+    p:not(:first-of-type) {
+      display: none;
+    }
+  }
+}
+
+.post--child {
+  padding: u(1rem 0);
+  margin-left: u(3rem);
+}
+
+// If there's an icon in the title, use this class to align everything to the right of the icon
+.post--icon {
+  padding-left: u(3rem);
+
+  .icon {
+    margin-left: u(-3rem);
+  }
+}
+
+.post__pre {
+  @include clearfix();
+  color: $gray-dark;
+  font-family: $sans-serif;
+  padding-bottom: 5px;
+}
+
+.post__doc {
+  &::before {
+    @include u-icon-bg($document, $base);
+    content: '';
+    display: inline-block;
+    width: 2rem;
+    height: 2rem;
+    vertical-align: middle;
+    margin-right: 1rem;
+  }
+}
+
+.post__read-more {
+  display: inline;
+  font-weight: bold;
+  margin-left: u(1rem);
+}
+
+@include media($med) {
+  .post__date {
+    float: left;
+  }
+
+  .post__byline {
+    float: right;
+  }
+}
+
+.post__meta {
+  .tag {
+    margin-right: 5px;
+    text-transform: uppercase;
+
+    &:hover {
+      border-color: $secondary;
+    }
+  }
+}
+
+.post__preview {
+  .entity__type {
+    line-height: 1;
+  }
+
+  &:first-of-type {
+    margin-top: u(.5rem);
+  }
+}
+
+// Special press release styling
+// .press_release_content is an inheritied class from the scraped content
+// A lot of the scraped content contains tables or other weird things
+// So this allows us to target just that
+
+.body-blocks .press_release_content {
+  table {
+    border-width: 0;
+    font-family: $serif;
+    color: $base;
+  }
+
+  tr {
+    border: none;
+  }
+
+  td {
+    padding: 0;
+  }
+
+  ul {
+    @extend .list--bulleted;
+  }
+
+}
+
+// Post boilerplate
+// The .post__boilerplate div is the blurb about the FEC
+// on press releases. This is hidden on 2016 and newer releases on screen, but is visible when printed.
+// For earlier press releases, this isn't a separate div
+
+.post__boilerplate {
+  padding-top: u(1rem);
+  font-style: italic;
+
+  p {
+    font-size: u(1.4rem);
+  }
+}

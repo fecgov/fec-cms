@@ -1,0 +1,418 @@
+// Utility Mixins
+//
+
+// u-visually-hidden()
+//
+// Used to visually hide components but keep them visible to screenreaders. Also includes a utility class .u-visually-hidden.
+//
+
+@mixin u-visually_hidden {
+  position: absolute !important;
+  top: auto;
+  left: -9999px !important;
+}
+
+.u-visually-hidden {
+  @include u-visually-hidden();
+}
+
+.u-float-left {
+  float: left;
+}
+
+.u-float-right {
+  float: right;
+}
+
+.is-disabled,
+[disabled] {
+  opacity: .5;
+  cursor: default;
+}
+
+.u-no-padding {
+  padding: 0 !important;
+}
+
+.u-no-padding-left {
+  padding-left: 0 !important;
+}
+
+.u-no-padding-right {
+  padding-right: 0 !important;
+}
+
+.u-no-border {
+  border-bottom: none !important;
+}
+
+.u-border-top-inverse {
+  border-top: 2px solid $inverse;
+}
+
+.u-border-top-gray {
+  border-top: 1px solid $gray;
+}
+
+.u-no-margin {
+  margin: 0 !important;
+}
+
+.u-no-margin-top {
+  margin-top: 0 !important;
+}
+
+.u-no-margin-bottom {
+  margin-bottom: 0 !important;
+}
+
+.u-blank-space {
+  display: inline-block;
+  border-bottom: 1px solid $inverse;
+  width: u(5rem);
+}
+
+.u-gray-background {
+  background-color: $gray-medium;
+  padding: u(1rem);
+}
+
+.u-full-width {
+  width: 100%;
+}
+
+// u-icon-bg()
+//
+// Most basic mixin for using a variable svg as a background image
+//
+
+@mixin u-icon-bg($icon, $color) {
+  background-image: url('#{svg-fill($icon, $color)}');
+  background-repeat: no-repeat;
+}
+
+// u-icon-circle()
+//
+// Generates a circle with a background color and an icon within that circle
+// Can be used in pseudo-elements to create a quasi-background image
+//
+
+@mixin u-icon-circle($icon, $circlecolor, $iconcolor, $size) {
+  @include u-icon-bg($icon, $iconcolor);
+  background-position: 50% 50%;
+  background-size: 60%;
+  background-color: $circlecolor;
+  border-radius: $size;
+  display: block;
+  height: $size;
+  width: $size;
+}
+
+// u-font-color()
+//
+// Used to set the color of all child elements
+//
+// $color     - The color of the font and (if applicable) border-color
+//
+
+@mixin u-font-color($color) {
+  color: $color;
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6,
+  a,
+  p,
+  span,
+  li,
+  dt,
+  dd,
+  label,
+  blockquote,
+  .label {
+    color: $color;
+  }
+
+  h1,
+  .h1,
+  h6,
+  .h6
+  a {
+    border-color: $color;
+  }
+
+  .t-ruled {
+    border-color: $color;
+  }
+}
+
+// u-form--inverse()
+//
+// Set form elements to inverse color scheme
+
+@mixin u-form--inverse() {
+  input,
+  textarea {
+    border-color: $inverse;
+  }
+
+  [type="checkbox"] + label,
+  [type="radio"] + label,
+  [type="checkbox"] + label::before,
+  [type="radio"] + label::before {
+    color: $base;
+  }
+
+  [type="checkbox"]:checked + label,
+  [type="radio"]:checked + label {
+    color: $inverse;
+  }
+
+  [type="checkbox"]:checked + label::before {
+    @include u-icon-bg($check, $base);
+    background-color: $inverse;
+  }
+
+  select {
+    @include u-icon-bg($arrow-down, $inverse);
+    border: 2px solid $inverse;
+    color: $inverse;
+
+    &:hover:not(.is-disabled):not([disabled]) {
+      border-color: $gray-medium;
+      background-color: transparent;
+    }
+
+    &:active:not(.is-disabled):not([disabled]),
+    &:focus,
+    &.is-active {
+      background-color: rgba($inverse, .3);
+      color: $inverse;
+    }
+  }
+
+  option {
+    background-color: $neutral;
+    color: $base;
+    padding: u(.5rem);
+  }
+}
+
+// u-bg--primary()
+//
+// Used to set generate all of the styles for a bg--primary element
+//
+
+@mixin u-bg--primary() {
+  @include u-form--inverse();
+  @include u-font-color($gray-lightest);
+  background-color: $primary;
+
+  a {
+    border-bottom-color: $gray-lightest;
+
+    &:hover {
+      border-bottom-color: $primary-contrast;
+    }
+  }
+
+  .term {
+    @include u-icon-bg($book, $inverse);
+  }
+
+  .tooltip__trigger {
+    @include u-icon-bg($info-circle-outline, $inverse);
+  }
+}
+
+// u-bg--primary()
+//
+// Used to set generate all of the styles for a bg--secondary element
+//
+
+@mixin u-bg--secondary() {
+  @include u-form--inverse();
+  @include u-font-color($gray-lightest);
+  background-color: $secondary;
+
+  a {
+    border-bottom-color: $gray-lightest;
+
+    &:hover {
+      border-bottom-color: $secondary-contrast;
+    }
+  }
+
+  input,
+  textarea {
+    border-color: $inverse;
+  }
+
+  .term {
+    @include u-icon-bg($book, $inverse);
+  }
+
+  .tooltip__trigger {
+    @include u-icon-bg($info-circle-outline, $inverse);
+  }
+}
+
+@mixin u-bg--neutral() {
+  @include u-font-color($base);
+  @include u-form-color($inverse, $primary, $primary-contrast, 'neutral', $primary);
+  background-color: $gray-lightest;
+
+  a {
+    &:hover {
+      border-bottom-color: $primary-contrast;
+    }
+  }
+}
+
+// u-bg--primary()
+//
+// Used to set generate all of the styles for a bg--dark element
+//
+
+@mixin u-bg--dark() {
+  @include u-form--inverse();
+  @include u-font-color($gray-lightest);
+  background-color: $gray-dark;
+
+  a {
+    border-bottom-color: $gray-lightest;
+
+    &:hover {
+      border-bottom-color: $primary;
+    }
+  }
+}
+
+@mixin u-bg--neutral() {
+  @include u-font-color($base);
+  background-color: $gray-lightest;
+
+  a {
+    &:hover {
+      border-bottom-color: $primary-contrast;
+    }
+  }
+}
+
+// u-truncate()
+//
+// Truncate text to a single line with an ellipsis
+// Thanks to http://css-tricks.com/snippets/css/truncate-string-with-ellipsis/
+//
+@mixin u-truncate() {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+// u-bg-background-image()
+//
+// Generates everything you need for a background image
+//
+// $image     - Name of the image file. It will create two calls, one to a png and one to an svg
+// $position: - Will set the background-position property, defaults to 50% 50%
+//
+
+@mixin u-background-image($image, $position: 50% 50%) {
+  background-image: url('../img/' + $image + '.png');
+  background-image: url('../img/' + $image + '.svg');
+  background-repeat: no-repeat;
+  background-position: $position;
+}
+
+// u-icon()
+//
+// Used for creating a button or single icon with a background image with no text
+//
+// $icon:         - Name of the icon to use
+// $color:        - Color variable the icon should be
+//
+
+@mixin u-icon($icon, $color: $base, $width: 4rem, $height: 4rem, $background-size: 50%) {
+  background-image: url('#{svg-fill($icon, $color)}');
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: $background-size;
+  height: $height;
+  width: $width;
+}
+
+// u-icon-button()
+//
+// $icon          - Name of the icon variable. Will be inlined as a data uri
+// $color         -  Color variable the icon should be
+// $side          - Icon on the left or right? Defaults to left
+// $width         - Width of the icon, defaults to 1.5rem
+//
+
+@mixin u-icon-button($icon, $side: left, $width: 1.5rem) {
+  background-image: url('#{svg-fill($icon, $base)}');
+  background-repeat: no-repeat;
+  background-size: $width;
+
+  @if $side == left {
+    background-position: u(1rem 50%);
+    padding-left: $width + 2rem;
+  } @else {
+    background-position: right u(1rem) top 50%;
+    padding-right: $width + 2rem;
+  }
+
+  &.button--alt {
+    background-image: url('#{svg-fill($icon, $base)}');
+  }
+
+  &.button--cta,
+  &.button--alt-primary,
+  &.button--alt-secondary {
+    background-image: url('#{svg-fill($icon, $inverse)}');
+  }
+
+  &.button--cta-primary {
+    background-image: url('#{svg-fill($icon, $primary)}');
+  }
+
+  &.button--cta-secondary {
+    background-image: url('#{svg-fill($icon, $secondary)}');
+  }
+}
+
+// Animation
+// fadeIn: Animation to fade in an element
+// Useful for when transition doesn't work because you're setting display:none
+@include keyframes(fadeIn) {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+.u-fade-in {
+  @include animation(fadeIn .8s ease-out);
+}
+
+// Printer style utitlity
+.u-print-only {
+  display: none;
+
+  @media print {
+    display: block;
+  }
+}
+
+.u-no-print {
+  @media print {
+    display: none;
+  }
+}

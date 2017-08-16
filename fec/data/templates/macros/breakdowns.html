@@ -1,0 +1,82 @@
+{% macro top_entities(
+  data,
+  coverage_start_date,
+  coverage_end_date,
+  cycle,
+  action,
+  category,
+  page_info
+) %}
+
+{% if category in ['P', 'S', 'H'] %}
+  {% set name_field='name' %}
+  {% set id_field='candidate_id' %}
+  {% set route='candidate_page' %}
+{% else %}
+  {% set name_field='committee_name' %}
+  {% set id_field='committee_id' %}
+  {% set route='committee_page' %}
+{% endif %}
+
+{% if action == 'raised' %}
+  {% set value_field='receipts' %}
+{% else %}
+  {% set value_field='disbursements' %}
+{% endif %}
+<div class="js-top-entities content__section" data-category="{{ category }}" data-cycle="{{ cycle }}">
+  <form action="" method="GET">
+    <h3 class="u-no-margin">
+      <label for="top-category" class="breakdown__title label t-inline-block">How much has been {{ action }} by </label>
+      <select id="top-category" name="top_category" class="js-category form-element--inline" aria-controls="top-table">
+        <optgroup label="Candidates">
+          <option value="P" {% if category == 'P' %}selected{% endif %}>Presidential candidates</option>
+          <option value="S" {% if category == 'S' %}selected{% endif %}>Senate candidates</option>
+          <option value="H" {% if category == 'H' %}selected{% endif %}>House candidates</option>
+        </optgroup>
+        <option value="pac" {% if category == 'pac' %}selected{% endif %}>PACs</option>
+        <option value="party" {% if category == 'party' %}selected{% endif %}>Political party committees</option>
+      </select>
+      <noscript>
+        <button type="submit" class="button button--cta">Submit</button>
+      </noscript>
+    </h3>
+  </form>
+  <span class="t-sans js-dates">{{ coverage_start_date|date }} to {{ coverage_end_date|date }}</span>
+  <div class="chart-table simple-table--responsive js-top-table" id="top-table" aria-live="polite" role="grid">
+    <div role="row" class="simple-table__header">
+      <div role="columnheader" class="simple-table__header-cell cell--40">Name</div>
+      <div role="columnheader" class="simple-table__header-cell cell--20 t-right-aligned">Total {{ action }}</div>
+      <div role="columnheader" class="simple-table__header-cell cell--40"></div>
+    </div>
+  {% for datum in data %}
+    <div role="row" class="js-top-row simple-table__row">
+      <div role="gridcell" class="simple-table__cell">{{ loop.index}}.
+        <a href="{{ url_for(route, c_id=datum[id_field], cycle=cycle, election_full='false') }}" title="{{ datum[name_field] }}">{{ datum[name_field] }}</a>
+        {% if datum.party %}
+          [{{ datum.party | truncate(1, end='') | upper }}]
+        {% endif %}
+      </div>
+      <div class="simple-table__cell t-right-aligned">{{ datum[value_field] | currency }}</div>
+      <div class="simple-table__cell">
+        <div class="bar-container">
+          <div class="value-bar" data-value="{{ datum[value_field] }}" data-party="{{ datum.party }}"></div>
+        </div>
+      </div>
+    </div>
+  {% endfor %}
+  </div>
+  <div class="results-info">
+    <button class="js-previous button button--standard button--previous"><span class="u-visually-hidden">Previous page</span></button>
+    <button class="js-next button button--standard button--next"><span class="u-visually-hidden">Next page</span></button>
+    <div class="u-float-right t-sans">
+      Showing <span class="js-page-info">{{ page_info }}</span> entries
+    </div>
+  </div>
+</div>
+<div class="content__section row">
+  <ul class="list--buttons u-float-right">
+    <li><a class="button button--standard button--table" href="{{ url_for(value_field) }}">Browse {{value_field}}</a></li>
+    <li><button class="button button--alt js-ga-event"  data-a11y-dialog-show="{{ action }}-modal" data-ga-event="{{ action }} methodology modal clicked" aria-controls="{{ action }}-modal">Methodology</button></li>
+  </ul>
+</div>
+{% endmacro %}

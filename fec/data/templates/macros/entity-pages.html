@@ -1,0 +1,55 @@
+{% macro filings_table(title, dataType, cycle, committee_id, showTrigger=False) %}
+    <div class="entity__figure row" id="{{dataType}}">
+      <div class="heading--section heading--with-action">
+        <h3 class="heading__left">{{ title }}</h3>
+        <a class="heading__right button button--alt button--browse"
+           href="{{url_for('filings', committee_id=committee_id, cycle=cycle)}}">
+          Filter this data
+        </a>
+      </div>
+      <div class="tag__category">
+        <div class="tag__item">Report year: {{cycle|fmt_year_range}}</div>
+      </div>
+      <table class="data-table data-table--heading-borders data-table--entity u-margin--top" data-type="filings-{{ dataType }}" data-cycle="{{ cycle }}" data-committee="{{ committee_id }}">
+        <thead>
+          <th scope="col">Document</th>
+          <th scope="col">Version</th>
+          {% if dataType == 'reports' %}
+          <th scope="col">Coverage start date</th>
+          <th scope="col">Coverage end date</th>
+          {% endif %}
+          <th scope="col">Date filed</th>
+          <th scope="col">Pages</th>
+          {% if showTrigger %}
+            <th></th>
+          {% endif %}
+        </thead>
+      </table>
+    </div>
+{% endmacro %}
+
+{% macro raw_filings_table(cycle, committee_id) %}
+    <div class="entity__figure row" id="raw-filings">
+      <div class="heading--section heading--with-action">
+        <h3 class="heading__left">Raw electronic filings</h3>
+        <a class="heading__right button button--alt button--browse"
+           href="{{url_for('filings', data_type='efiling', committee_id=committee_id, cycle=cycle)}}">
+          Filter this data
+        </a>
+      </div>
+      <div class="tag__category">
+        <div class="tag__item">Filed on or after: {{two_days_ago}}</div>
+      </div>
+      <table class="data-table data-table--heading-borders data-table--entity u-margin--top" data-type="raw-filings" data-min-date="{{ two_days_ago }}" data-cycle="{{ cycle }}" data-committee="{{ committee_id }}">
+        <thead>
+          <th scope="col">Document</th>
+          <th scope="col">Coverage start date</th>
+          <th scope="col">Coverage end date</th>
+          <th scope="col">Date filed</th>
+        </thead>
+      </table>
+      <div class="datatable__note">
+        <p class="t-note">This data has not yet been categorized and coded by the FEC. It's pulled directly from a committee's raw, electronic reports. It doesn't include paper filings.</p>
+      </div>
+    </div>
+{% endmacro %}

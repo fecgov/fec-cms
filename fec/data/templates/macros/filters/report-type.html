@@ -1,0 +1,56 @@
+{% import 'macros/filters/checkbox.html' as checkbox %}
+
+{% macro year_end() %}
+  <div class="filter">
+    <input id="report_type-YE" name="report_type" type="checkbox" value="YE">
+    <label for="report_type-YE">Year end</label>
+  </div>
+{% endmacro %}
+
+{% macro monthly() %}
+  {{ checkbox.checkbox_dropdown_multiple(
+    'report_type',
+    'Monthly Reports',
+    options=constants.monthly_reports,
+  ) }}
+{% endmacro %}
+
+{% macro quarterly() %}
+  {{ checkbox.checkbox_dropdown_multiple(
+    'report_type',
+    'Quarterly Reports',
+    options=constants.quarterly_reports,
+  ) }}
+{% endmacro %}
+
+{% macro semiannual() %}
+  {{ checkbox.checkbox_dropdown_multiple(
+    'report_type',
+    'Semiannual Reports',
+    options=constants.semiannual_reports,
+  ) }}
+{% endmacro %}
+
+{% macro election_sensitive() %}
+  {{ checkbox.checkbox_dropdown_multiple(
+    'report_type',
+    'Election Sensitive Reports',
+    options=constants.election_sensitive_reports,
+  ) }}
+{% endmacro %}
+
+{% macro bundling() %}
+  {{ checkbox.checkbox_dropdown_multiple(
+    'report_type',
+    'Bundling Reports',
+    options=constants.bundling_reports,
+  ) }}
+{% endmacro %}
+
+{% macro other() %}
+  {{ checkbox.checkbox_dropdown_multiple(
+    'report_type',
+    'Other Reports',
+    options=constants.other_reports,
+  ) }}
+{% endmacro %}

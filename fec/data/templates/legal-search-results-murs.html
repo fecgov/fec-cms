@@ -1,0 +1,45 @@
+{% extends "layouts/legal-doc-search-results.html" %}
+{% import 'macros/legal.html' as legal %}
+{% set document_type_display_name = 'Matters Under Review' %}
+
+{% block header %}
+<header class="page-header slab slab--primary">
+  {{ breadcrumb.breadcrumbs('Search results', [(cms_url + '/legal-resources', 'Legal resources'), (cms_url + '/legal-resources/enforcement', 'Enforcement')]) }}
+</header>
+{% endblock %}
+
+{% block filters %}
+  {{ legal.keyword_search(result_type, query) }}
+  <div class="filter">
+    <label class="label" for="mur_no">MUR number</label>
+    <input id="mur_no" name="mur_no" type="text" value="{{request.args.mur_no}}">
+  </div>
+  <div class="filter">
+    <label class="label" for="mur_respondents">MUR respondents</label>
+    <input id="mur_respondents" name="mur_respondents" type="text" value="{{request.args.mur_respondents}}">
+  </div>
+  <div class="filter">
+    <button type="submit" class="button button--cta">Apply filters</button>
+  </div>
+{% endblock %}
+
+{% block message %}
+<div class="message message--info">
+  <h3>This feature is still in progress.</h3>
+  <p>We&#39;re actively building the <strong>MUR search</strong>, and it doesn&#39;t yet include some
+  advanced search functions. If you can&#39;t find what you&#39;re looking for,
+  you can still <a href="http://eqs.fec.gov/eqs/searcheqs">search MURS on the old fec.gov</a>.</p>
+</div>
+{% endblock %}
+
+{% block results %}
+{% with murs = results.murs %}
+
+{% include 'partials/legal-search-results-mur.html' %}
+{% endwith %}
+
+{% with results=results %}
+{% include 'partials/legal-pagination.html' %}
+{% endwith %}
+
+{% endblock %}

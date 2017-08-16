@@ -1,0 +1,88 @@
+<div class="panel__row">
+  <h4 class="panel__title">Expenditure information</h4>
+  <table>
+    {{#panelRow "Amount"}}
+      {{currency expenditure_amount}}
+    {{/panelRow}}
+    {{#panelRow "Expenditure date"}}
+      {{datetime expenditure_date format="pretty"}}
+    {{/panelRow}}
+    {{#panelRow "Dissemination date"}}
+      {{datetime dissemination_date format="pretty"}}
+    {{/panelRow}}
+    {{#panelRow "Candidate"}}
+      {{#if candidate_id}}
+        <a href="{{basePath}}/candidate/{{candidate_id}}/">{{candidate_name}}</a>
+      {{else}}
+        {{candidate_name}}
+      {{/if}}
+      ({{decodeSupportOppose support_oppose_indicator}})</td>
+    {{/panelRow}}
+    {{#panelRow "Description"}}
+      {{expenditure_description}}
+    {{/panelRow}}
+    {{#panelRow "Payee"}}
+      {{payee_name}}<br>
+      {{payee_city}}, {{payee_state}}
+    {{/panelRow}}
+  </table>
+</div>
+
+<div class="panel__row">
+  <h4 class="panel__title">Filing information</h4>
+  <table>
+    {{#panelRow "Report type"}}
+      {{decodeReport report_type}}
+    {{/panelRow}}
+    {{#panelRow "Form type"}}
+      {{decodeForm filing_form}} ({{filing_form}})
+    {{/panelRow}}
+  </table>
+</div>
+
+<div class="panel__row">
+  <h4 class="panel__title">Committee information</h4>
+  <table>
+    {{#panelRow "Committee name"}}
+      <a href="{{basePath}}/committee/{{committee_id}}">{{committee.name}}</a>
+    {{/panelRow}}
+    {{#panelRow "Committee type"}}
+      {{committee.committee_type_full}}
+    {{/panelRow}}
+    {{#panelRow "Treasurer"}}
+      {{committee.treasurer_name}}
+    {{/panelRow}}
+    {{#panelRow "City and state"}}
+      {{committee.city}}, {{committee.state}}
+    {{/panelRow}}
+    {{#panelRow "Total spent on office (year to date)"}}
+      {{currency office_total_ytd}}
+    {{/panelRow}}
+  </table>
+</div>
+
+<div class="panel__row">
+  <h4 class="panel__title">Candidate information</h4>
+  <table>
+    {{#panelRow "Candidate"}}
+      {{#if candidate_id}}
+        <a href="{{basePath}}/candidate/{{candidate_id}}/">{{candidate_name}}</a>
+      {{else}}
+        {{candidate_name}}
+      {{/if}}
+    {{/panelRow}}
+    {{#panelRow "Office"}}
+      {{decodeOffice candidate_office}}
+    {{/panelRow}}
+    {{#if candidate_state }}
+      {{#panelRow "State"}}
+        {{cand_office_state}}
+      {{/panelRow}}
+    {{/if}}
+    {{#if candidate_district}}
+      {{#panelRow "District"}}
+        {{cand_office_district}}
+      {{/panelRow}}
+    {{/if}}
+  </table>
+</div>

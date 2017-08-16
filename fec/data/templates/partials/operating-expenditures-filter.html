@@ -1,0 +1,43 @@
+{% extends 'partials/filters.html' %}
+
+{% import 'macros/filters/text.html' as text %}
+{% import 'macros/filters/typeahead-filter.html' as typeahead %}
+{% import 'macros/filters/states.html' as states %}
+{% import 'macros/filters/date.html' as date %}
+{% block heading %}
+Filter operating expenditures
+{% endblock %}
+
+{% block message %}
+<div class="filters__message-container">
+  <div class="message message--info message--small">
+    <span class="t-block">Due to the large number of transactions, records begin in 2011.</span>
+  </div>
+</div>
+{% endblock %}
+
+{% block filters %}
+<div class="js-accordion accordion--neutral" data-content-prefix="filter" data-open-first="true">
+  <button type="button" class="js-accordion-trigger accordion__button">Spender information</button>
+  <div class="accordion__content">
+    {{ typeahead.field('committee_id', 'Committee name or ID') }}
+  </div>
+  <button type="button" class="js-accordion-trigger accordion__button">Recipient information</button>
+  <div class="accordion__content">
+    {{ typeahead.field('recipient_name', 'Recipient name or ID', allow_text=True) }}
+    {{ text.field('recipient_city', 'City') }}
+    {{ states.field('recipient_state')}}
+  </div>
+
+  <button type="button" class="js-accordion-trigger accordion__button">Transaction information</button>
+  <div class="accordion__content">
+    {{ text.field('disbursement_description', 'Description') }}
+    {{ text.field('min_amount', 'Minimum expenditure', {'data-suffix': 'or more', 'data-inputmask': '"alias": "currency", "rightAlign": false, "clearMaskOnLostFocus": true' }) }}
+    {{ text.field('max_amount', 'Maximum expenditure', {'data-suffix': 'or less', 'data-inputmask': '"alias": "currency", "rightAlign": false, "clearMaskOnLostFocus": true' }) }}
+    {{ date.field('date', 'Disbursement date', dates ) }}
+    <div class="message message--info message--small">
+      <span class="t-block">Disbursements are reported periodically, according to the filer's reporting schedule. Disbursements are updated as they’re processed— that time can vary.</span>
+    </div>
+  </div>
+</div>
+{% endblock %}

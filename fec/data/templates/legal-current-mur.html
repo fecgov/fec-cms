@@ -1,0 +1,175 @@
+{% extends "layouts/main.html" %}
+{% import 'macros/breadcrumbs.html' as breadcrumb %}
+{% import 'macros/legal.html' as legal %}
+
+{% block title %}MUR #{{ mur.no }}{% endblock %}
+
+{% block body %}
+<header class="page-header slab slab--primary">
+  {{ breadcrumb.breadcrumbs('MUR #%s' % (mur.no,), breadcrumb_links) }}
+</header>
+
+<div class="container main legal-mur">
+  <div class="content__section">
+    <header class="heading--main">
+      <h1>MUR #{{ mur.no }}</h1>
+      <span class="heading__subtitle">{{ mur.name }}</span>
+    </header>
+  </div>
+  <div class="sidebar-container sidebar-container--left js-sticky-side" data-sticky-container="main">
+      <nav class="sidebar sidebar--neutral sidebar--left side-nav js-toc">
+        <ul class="sidebar__content">
+          <li class="side-nav__item"><a class="side-nav__link" href="#summary">Summary</a></li>
+          <li class="side-nav__item"><a class="side-nav__link" href="#disposition">Disposition</a></li>
+          <li class="side-nav__item"><a class="side-nav__link" href="#documents">Documents</a></li>
+          <li class="side-nav__item"><a class="side-nav__link" href="#participants">Participants</a></li>
+        </ul>
+      </nav>
+  </div>
+  <div class="main__content--right">
+    <section id="summary" class="content__section">
+    <div>
+      <h2 class="t-ruled--bold t-ruled--bottom">Summary</h2>
+      <div class="legal-mur__property">
+        <p>
+          <strong>
+              {% if mur['respondents']|length > 1 %}
+                RESPONDENTS:
+              {% else %}
+                RESPONDENT:
+              {% endif %}
+          </strong>
+          {{ '; '.join(mur['respondents']) }}
+        </p>
+      </div>
+      <div class="legal-mur__property">
+        <p>
+          <strong>
+              {% if mur['complainants']|length > 1 %}
+                COMPLAINANTS:
+              {% else %}
+                COMPLAINANT:
+              {% endif %}
+          </strong>
+          {{ '; '.join(mur['complainants']) }}
+        </p>
+      </div>
+      <div class="legal-mur__property">
+        <p>
+          <strong>SUBJECT:</strong> {{ '; '.join(mur['subjects']) }}
+        </p>
+      </div>
+      <div class="legal-mur__property">
+        <p>
+          <strong>DISPOSITION:</strong> {{ '<br>'.join(mur['disposition_text']) | safe }}
+        </p>
+      </div>
+    </div>
+  </section>
+  <section id="disposition" class="content__section">
+    <h2 class="t-ruled--bold t-ruled--bottom u-no-margin">Disposition</h2>
+    <table class="data-table data-table--text data-table--heading-borders">
+      <thead>
+        <tr>
+          <th>Disposition</th>
+          <th>Penalty</th>
+          <th>Respondent</th>
+          <th>Citation</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for disposition in mur.collated_dispositions %}
+          {% set dispositionloop = loop %}
+          {% for penalty in mur.collated_dispositions[disposition] %}
+            {% for entry in mur.collated_dispositions[disposition][penalty] %}
+              <tr class="{{ dispositionloop.cycle('row-color-normal', 'row-color-contrast') }}">
+                {% if loop.first %}
+                <td rowspan="{{ mur.collated_dispositions[disposition][penalty] | length }}">{{ disposition }}</td>
+                <td rowspan="{{ mur.collated_dispositions[disposition][penalty] | length }}"> {{ penalty | currency or '' }} </td>
+                {% endif %}
+                <td> {{ entry.respondent }}</td>
+                <td>
+                {% for citation in entry.citations %}
+                    {{ citation.title }}
+                    {% if citation.type == 'statute' %}
+                        U.S.C.
+                    {% else %}
+                        CFR
+                    {% endif %}
+                    <a href="{{ citation.url }}">
+                    {% if citation.type == 'statute' %}
+                        &sect;{{ citation.text -}}
+                    {% else %}
+                        {{ citation.text }}
+                    {% endif %}
+                    {% if not loop.last %}<br>{% endif %}
+                    </a>
+                {% endfor %}
+                </td>
+              </tr>
+            {% endfor %}
+          {% endfor %}
+        {% endfor %}
+      </tbody>
+    </table>
+  </section>
+  <section id="documents" class="content__section">
+    <h2 class="t-ruled--bold t-ruled--bottom u-no-margin">Documents</h2>
+    <table class="data-table data-table--text data-table--heading-borders">
+      <thead>
+        <tr>
+          <th>Type</th>
+          <th>Date</th>
+          <th>Document</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% if 'documents' in mur and mur.documents_by_type %}
+          {% for category in mur.documents_by_type %}
+            {% set categoryloop = loop %}
+            {% for document in mur.documents_by_type[category] %}
+              <tr class="{{ categoryloop.cycle('row-color-normal', 'row-color-contrast') }}">
+                {% if loop.first %}
+                <td rowspan="{{ mur.documents_by_type[category] | length }}">{{ category }}</td>
+                {% endif %}
+                <td>{{ document.document_date | date('%m/%d/%Y')}}</td>
+                <td><a href="{{ document.url }}">{{ document.description }}</a>  {{ document.length | filesize }}</td>
+              </tr>
+            {% endfor %}
+          {% endfor %}
+        {% endif %}
+      </tbody>
+    </table>
+  </section>
+  <section id="participants" class="content__section">
+    <h2 class="t-ruled--bold t-ruled--bottom u-no-margin">Participants</h2>
+    <table class="data-table data-table--text data-table--heading-borders">
+      <thead>
+        <tr>
+          <th>Relationship</th>
+          <th>Name</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% if 'participants' in mur and mur.participants_by_type %}
+          {% for role in mur.participants_by_type %}
+            {% set roleloop = loop %}
+            {% for participant in mur.participants_by_type[role] %}
+              <tr class="{{ roleloop.cycle('row-color-normal', 'row-color-contrast') }}">
+                {% if loop.first %}
+                <td rowspan="{{ mur.participants_by_type[role] | length }}">{{ role | capitalize }}</td>
+                {% endif %}
+                <td>{{ participant }}</td>
+              </tr>
+            {% endfor %}
+          {% endfor %}
+        {% endif %}
+      </tbody>
+    </table>
+    <div class="results-info results-info--bottom">
+         <a class="legal-top" href="#">Top of page</a>
+   </div>
+  </section>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,111 @@
+// Contact items
+//
+// Used on contact page, contact info block, commissioner page, RAD form
+//
+// <li class="contact-item">
+//   <div class="contact-item__icon">
+//     <img src="/img/i-phone--primary.svg" alt="Icon of a phone">
+//   </div>
+//   <div class="contact-item__content">
+//     <h5 class="contact-item__title">Toll free</h5>
+//     <span class="t-block">1-800-424-9530</span>
+//     <span class="t-block">8:30 a.m. to 5:30 p.m. Eastern Time</span>
+//   </div>
+// </li>
+//
+
+.contact-item {
+  @include clearfix();
+  display: table;
+  margin-bottom: u(4rem);
+
+  &:not(.contact-item--half) {
+    &::before {
+      content: '';
+      display: block;
+      background-size: 100%;
+      margin-right: 2rem;
+      width: u(3.4rem);
+      height: u(3.4rem);
+    }
+  }
+}
+
+.contact-item--half {
+  @include media($med) {
+    @include span-columns(6);
+
+    &:nth-child(even) {
+      @include omega();
+    }
+  }
+}
+
+.contact-item__title {
+  margin-bottom: u(.5rem);
+  margin-top: 0;
+}
+
+.contact-item__content {
+  display: table-cell;
+  vertical-align: top;
+}
+
+.contact-item__content--offset {
+  margin-left: u(5.4rem);
+}
+
+.contact-item__phone {
+  display: block;
+  padding-top: u(1rem);
+}
+
+.contact-item--phone {
+  &::before {
+    @include u-icon-bg($telephone-circle, $primary);
+  }
+}
+
+.contact-item--mail {
+  &::before {
+    @include u-icon-bg($stamp-circle, $primary);
+  }
+}
+
+.contact-item--github {
+  &::before {
+    @include u-icon-bg($github-circle, $primary);
+  }
+}
+
+.contact-item--email {
+  &::before {
+    @include u-icon-bg($moving-envelope-circle, $primary);
+  }
+}
+
+.contact-item--fax {
+  &::before {
+    @include u-icon-circle($fax, $primary, $inverse, 3.4rem);
+  }
+}
+
+.contact-item--hand {
+  &.contact-item::before {
+    @include u-icon-circle($hand-envelope, $primary, $inverse, 3.4rem);
+    background-position: 100% 50%;
+    background-size: 100%;
+  }
+}
+
+.address span {
+  display: block;
+  margin-bottom: u(.8rem);
+}
+
+.grid__item {
+  // If it's inside a grid__item we don't want the margin
+  .contact-item {
+    margin-bottom: 0;
+  }
+}

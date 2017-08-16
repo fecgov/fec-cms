@@ -1,0 +1,25 @@
+<div class="results-info">
+<div class="dataTables_info">{{ results.offset + 1 }}&ndash;{{ results.offset + results[result_type + '_returned'] }} of about {{ results.total_all }}</div>
+<div class="dataTables_paginate">
+{% if results.offset > 0 %}
+<a class="paginate_button previous" href="{{ url_for(result_type, search=query,
+ao_no=ao_no, ao_name=ao_name,
+ao_min_date=ao_min_date, ao_max_date=ao_max_date, ao_is_pending=ao_is_pending,
+ao_requestor=ao_requestor, ao_requestor_type=ao_requestor_type,
+ao_category=ao_category,
+offset=(results.offset - results.limit)) }}#results-{{ result_type }}">Previous</a>
+{% else %}
+<span class="paginate_button previous is-disabled">Previous</span>
+{% endif %}
+{% if results.offset + results.limit < results.total_all %}
+<a class="paginate_button next" href="{{ url_for(result_type, search=query,
+  ao_no=ao_no, ao_name=ao_name,
+  ao_min_date=ao_min_date, ao_max_date=ao_max_date, ao_is_pending=ao_is_pending,
+  ao_requestor=ao_requestor, ao_requestor_type=ao_requestor_type,
+  ao_category=ao_category,
+  offset=(results.offset + results.limit)) }}#results-{{ result_type }}">Next</a>
+{% else %}
+<span class="paginate_button next is-disabled">Next</span>
+{% endif %}
+</div>
+</div>

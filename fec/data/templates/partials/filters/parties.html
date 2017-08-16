@@ -1,0 +1,8 @@
+{% import 'macros/filters/checkbox.html' as checkbox %}
+
+{{ checkbox.checkbox_dropdown(
+  'party',
+  'Political party',
+  selected=constants.parties,
+  options=constants.parties_extended,
+) }}

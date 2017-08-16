@@ -1,0 +1,55 @@
+// Submit a question to RAD form
+//
+// For /help-candidates-and-committees/question-rad/
+//
+
+.contact-form {
+  padding: u(2rem);
+
+  .contact-form__element {
+    padding: u(1rem 0);
+
+    &.is-erroring {
+      textarea,
+      select,
+      input {
+        border-color: $error;
+      }
+    }
+  }
+
+  textarea {
+    height: u(15rem);
+  }
+
+  .tt-input {
+    @include u-icon-bg($magnifying-glass-arrow, $gray-dark);
+    background-position: right 10px top 50%;
+  }
+
+  .contact-form__reset {
+    display: block;
+    padding-top: u(2rem);
+  }
+
+  .errorlist {
+    font-family: $sans-serif;
+    margin-top: u(.5rem);
+
+    li {
+      color: $error;
+    }
+  }
+
+  @include media($med) {
+
+    input,
+    select {
+      @include span-columns(6 of 7);
+    }
+
+    .tt-input {
+      width: 100%;
+    }
+  }
+}

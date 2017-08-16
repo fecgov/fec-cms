@@ -1,0 +1,20 @@
+{% import 'macros/cycle-select.html' as select %}
+{% import 'macros/entity-pages.html' as entity %}
+
+<section id="section-5" role="tabpanel" aria-hidden="true" aria-labelledby="section-5-heading">
+  <h2 id="section-5-heading">
+    Committee filings
+  </h2>
+  <div class="slab slab--inline slab--neutral u-padding--left u-padding--right">
+    {{ select.committee_cycle_select(cycles, cycle, 'filings')}}
+    {% if has_raw_filings %}
+      {{ entity.raw_filings_table(cycle, committee_id) }}
+    {% endif %}
+    {{ entity.filings_table('Regularly filed reports', 'reports', cycle, committee_id, showTrigger=True) }}
+    {{ entity.filings_table('24- and 48-hour reports', 'notices', cycle, committee_id) }}
+    {{ entity.filings_table('Statements of organization', 'statements', cycle, committee_id) }}
+    {{ entity.filings_table('Other documents', 'other', cycle, committee_id) }}
+  </div>
+</section>
+
+{% include 'partials/datatable-modal.html' %}

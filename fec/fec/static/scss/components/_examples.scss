@@ -1,0 +1,59 @@
+// Examples
+//
+// Used to style example blurbs or thumbnails that are used in explanatory content in CMS pages
+//
+// Use .example--primary for the style used on the data landing page
+//
+// <div class="row example">
+//   <div class="usa-width-one-half">
+//     <a class="example__thumbnail" href="">
+//       <img />
+//     </a>
+//     <span class="t-block"><a href="">example text</a></span>
+//   </div>
+// </div>
+//
+
+.example {
+  border-left: 10px solid $gray-lightest;
+  font-family: $sans-serif;
+  letter-spacing: -.3px;
+  padding: u(1rem 0 1rem 2rem);
+  margin: u(0 0 2.6rem 2rem);
+
+  p:last-of-type {
+    margin-bottom: 0;
+  }
+}
+
+.example__thumbnail {
+  border-bottom: none;
+  display: inline-block;
+  margin-bottom: u(.5rem);
+
+  img {
+    box-shadow: 0 0 8px rgba(0, 0, 0, .2);
+  }
+}
+
+.example--primary {
+  border-left: 2px solid $primary;
+  padding: u(1rem 1.5rem);
+}
+
+.example__title {
+  margin-top: 0;
+  margin-bottom: 2rem;
+}
+
+.example__image {
+  @include span-columns(8);
+  border: 2px solid $gray-lightest;
+  height: auto;
+}
+
+.example__caption {
+  @include span-columns(4);
+  font-family: $serif;
+  font-style: italic;
+}

@@ -1,0 +1,14 @@
+<option value="">Select district</option>
+{{#if senate }}
+  <option value="S">Senate</option>
+{{/if}}
+{{#if atLargeHouse }}
+  <option value="0">At-large House district</option>
+{{/if}}
+{{#if districts }}
+<optgroup label="House">
+  {{#each this.districts }}
+  <option value="{{this}}">{{this}}</option>
+  {{/each}}
+</optgroup>
+{{/if}}

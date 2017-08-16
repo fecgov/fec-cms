@@ -1,0 +1,28 @@
+// Sticky bar
+//
+// Styles for the sticky-bar JavaScript component
+// Use this class along with .js-sticky-bar to have a full-width bar stick to the top of the screen when you scroll past it.
+//
+
+@include media($lg) {
+  .sticky-bar {
+    z-index: $z-sticky;
+    width: 100%;
+
+    // To stick to the top of the page
+    &.is-stuck {
+      position: fixed;
+      top: 0;
+      left: 0;
+    }
+
+    &.with-transition {
+      @include transition(top .4s ease-out);
+      top: -200px; // Setting this property so we can animate it when .is-stuck is applied
+
+      &.is-stuck {
+        top: 0;
+      }
+    }
+  }
+}

@@ -1,0 +1,6 @@
+{% macro disclaimer(type, id, cycle) %}
+  <div class="datatable__note">
+    <p class="t-note">These totals are calculated, in part, using free-text input as reported by this committee. Variations in spelling or abbreviation can produce multiple totals for the same category. For the most complete information,
+    <a href="{{ url_for(type, committee_id=id, cycle=cycle) }}">access the list of itemized transactions.</a></p>
+  </div>
+{% endmacro %}

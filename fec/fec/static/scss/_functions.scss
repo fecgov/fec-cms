@@ -1,0 +1,73 @@
+// Utility Functions
+//
+// Various useful functions.
+//
+
+// Unit conversion
+//
+// When using the FEC styleguide with other frameworks, it might be useful to
+// scale and convert the FEC component sizes. Use these variables to adjust how
+// the styleguide is built.
+//
+// $px-only - (bool) convert `rem` units to `px`
+// $base-size-px - (integer) sets the base size for a `rem` unit (only take effect when `$px-only` is true)
+//
+$base-size-px: 10 !default;
+$px-only: false !default;
+
+// u-parse-int($n)
+//
+// Parses the integer part from a value with unit.
+//
+// $n - the value to parse e.g. 2em
+//
+@function u-parse-int($n) {
+  @return $n / ($n * 0 + 1);
+}
+
+// u-scale-to-px($n)
+//
+// Scales the value according to `$base-size-px` and appends the `px` unit.
+//
+// $n - value to scale to `px`
+//
+@function u-scale-to-px($n) {
+  @return $n * $base-size-px + px;
+}
+
+// u($values)
+//
+// Convert and/or scale `rem` units. This should be used on all
+// properties related to component size. This allows FEC styleguide
+// to scale component sizes properly.
+//
+// Inspired by https://github.com/saxinte/rem-to-px-revisited
+//
+// $values - single unit or list of units e.g. `1rem 1.2rem`
+//
+@function u($values) {
+  $converted: ();
+
+  @if not variable-exists('px-only') or not $px-only {
+    // No conversion needed
+    @return $values;
+  }
+
+  @each $value in $values {
+    @if type-of($value) == 'number' and $value != 0 {
+      $unit: unit($value);
+      $scalar: u-parse-int($value);
+
+      @if $unit == 'rem' {
+        $converted: append($converted, u-scale-to-px($scalar));
+      } @else {
+        $converted: append($converted, $value);
+      }
+
+    } @else {
+      $converted: append($converted, $value);
+    }
+  }
+
+  @return $converted;
+}

@@ -1,0 +1,22 @@
+<div class="simple-table simple-table--responsive simple-table--display legal-search-results">
+  <div class="simple-table__header">
+    <div class="simple-table__header-cell cell--15">Section</div>
+    <div class="simple-table__header-cell">Description</div>
+  </div>
+  <div class="simple-table__row-group">
+  {% for statute in statutes %}
+    <div class="simple-table__row legal-search-result">
+        <div class="simple-table__cell"><a title="{{ statute.title }}.{{statute.no}}" href="{{ statute.url }}">{{ statute.title }} U.S.C. §{{ statute.no }}</a></div>
+      <div class="simple-table__cell">
+        <div class="legal-search-result__name">{{ statute.name }}</div>
+        <div class="t-serif legal-search-result__hit">
+          &hellip;
+          {% for highlight in statute.highlights %}
+            {{ highlight|safe }} &hellip;
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+  {% endfor %}
+  </div>
+</div>

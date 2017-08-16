@@ -1,0 +1,228 @@
+// Forms
+//
+// <div class="slab slab--neutral">
+//   <div class="container">
+//     <label class="label" for="input">Input</label>
+//     <input type="text" id="input">
+//     <label class="label" for="select">Select</label>
+//     <select>
+//      <option>Option 1</option>
+//     </select>
+//   </div>
+// </div>
+//
+
+fieldset {
+  border: none;
+  margin: 0;
+  padding: 0;
+}
+
+input,
+label,
+select {
+  display: block;
+}
+
+label {
+  margin: 0;
+  font-family: $sans-serif;
+
+  abbr {
+    display: none;
+  }
+}
+
+input,
+select[multiple=multiple],
+textarea,
+select {
+  background-color: $inverse;
+  border-color: $gray;
+  border-width: 2px;
+  border-style: solid;
+  border-radius: 4px;
+  font-family: $sans-serif;
+  font-size: u(1.4rem);
+  height: u(3.6rem);
+  line-height: u(1.4rem);
+  margin: 0;
+  padding: u(1rem);
+  transition: border-color;
+  width: 100%;
+
+  &:focus {
+    border-color: $primary;
+    color: $primary;
+  }
+}
+
+select {
+  @include appearance(none);
+  @include u-icon-bg($arrow-down, $primary);
+  width: auto;
+  background-color: transparent;
+  background-repeat: no-repeat;
+  background-position: right u(2rem) top 50%;
+  background-size: 12px;
+  color: $base;
+  border: 2px solid $gray;
+  padding: u(.6rem 3rem .6rem 1rem);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+
+  &::-ms-expand {
+    display: none;
+  }
+
+  &:hover:not([disabled]) {
+    background-color: $gray-medium;
+  }
+}
+
+textarea {
+  resize: vertical;
+}
+
+input[type="search"] {
+  @include appearance(none);
+}
+
+input[type="file"] {
+  padding-bottom: u(1rem);
+  width: 100%;
+}
+
+// Checkboxes and Radio Buttons
+//
+// Custom checkboxes and radio buttons
+//
+// <div class="slab slab--primary">
+//  <div class="container">
+//   <fieldset>
+//     <legend class="label">Select any</legend>
+//     <ul>
+//       <li>
+//         <input type="checkbox" id="checkbox-A" checked>
+//         <label for="checkbox-A">Option 1</label>
+//       </li>
+//       <li>
+//         <input type="checkbox" id="checkbox-B">
+//         <label for="checkbox-B">Option 2</label>
+//       </li>
+//     </ul>
+//   </fieldset>
+//   <fieldset>
+//     <legend class="label">Select one</legend>
+//     <ul>
+//       <li>
+//         <input type="radio" id="radio-A" name="radio" tab-index="0" checked>
+//         <label for="radio-A">Option 1</label>
+//       </li>
+//       <li>
+//         <input type="radio" id="radio-B" name="radio" tab-index="0">
+//         <label for="radio-B" >Option 2</label>
+//       </li>
+//     </ul>
+//   </fieldset>
+//  </div>
+// </div>
+//
+
+[type="checkbox"],
+[type="radio"] {
+  @include u-visually-hidden();
+}
+
+[type="checkbox"] + label,
+[type="radio"] + label {
+  border: 1px solid $gray;
+  background-color: $gray;
+  display: inline-block;
+  cursor: pointer;
+  line-height: u(2rem);
+  margin: u(0 0 1rem .25rem);
+  padding: u(.4rem .8rem .4rem 3rem);
+
+  &:hover {
+    background-color: $gray-medium;
+    border-color: $gray-medium
+  }
+
+  &::before {
+    background: $inverse;
+    border: 2px solid $gray-dark;
+    border-radius: 2px;
+    content: '';
+    display: inline-block;
+    height: u(1.6rem);
+    margin-right: .6em;
+    margin-left: u(-2.4rem);
+    text-indent: .15em;
+    width: u(1.6rem);
+    vertical-align: -4px;
+  }
+}
+
+[type="radio"] + label::before {
+  height: u(1.6rem);
+  width: u(1.6rem);
+  border-radius: u(1.6rem);
+}
+
+[type="checkbox"]:checked + label,
+[type="radio"]:checked + label {
+  background-color: transparent;
+
+  &::before {
+    background-color: $gray-dark;
+  }
+}
+
+[type="checkbox"]:checked + label::before {
+  @include u-icon-bg($check, $inverse);
+  background-position: 50%;
+  background-size: 12px;
+  background-repeat: no-repeat;
+  border: 1px solid $gray-dark;
+}
+
+[type="checkbox"]:focus + label,
+[type="radio"]:focus + label {
+  box-shadow: 0 0 2px 2px $focus;
+}
+
+[type="checkbox"]:disabled + label::before,
+[type="radio"]:disabled + label::before {
+  cursor: not-allowed;
+}
+
+// Basic button reset
+//
+// <button>Unstyled button</button>
+//
+
+[type="submit"],
+[type="reset"],
+[type="button"],
+button {
+  @include appearance(none);
+  background: none;
+  border: none;
+  cursor: pointer;
+  display: inline-block;
+  font-family: $sans-serif;
+  line-height: 1;
+  text-decoration: none;
+  user-select: none;
+
+  &:hover,
+  &:focus {
+  }
+
+  &:disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+  }
+}

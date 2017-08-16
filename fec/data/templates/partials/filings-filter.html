@@ -1,0 +1,49 @@
+{% extends 'partials/filters.html' %}
+
+{% import 'macros/filters/text.html' as text %}
+{% import 'macros/filters/typeahead-filter.html' as typeahead %}
+{% import 'macros/filters/states.html' as states %}
+{% import 'macros/filters/years.html' as years %}
+{% import 'macros/filters/date.html' as date %}
+{% import 'macros/filters/checkbox.html' as checkbox %}
+
+{% block heading %}
+Filter reports
+{% endblock %}
+
+{% block data_type_toggle %}
+  {% include 'partials/filters/efiling.html' %}
+{% endblock %}
+
+{% block efiling_filters %}
+  <div class="filters__inner">
+    {{ typeahead.field('committee_id', 'Committee name or ID', '', id_suffix='_raw') }}
+    {{ date.field('receipt_date', 'Receipt date', id_suffix='_raw') }}
+  </div>
+{% endblock %}
+
+{% block filters %}
+<div class="js-accordion accordion--neutral" data-content-prefix="filter" data-open-first="true">
+  <button type="button" class="js-accordion-trigger accordion__button">Filer</button>
+  <div class="accordion__content">
+    {{ typeahead.field('committee_id', 'Committee name or ID', '') }}
+    {{ typeahead.field('candidate_id', 'Candidate name or ID', '', dataset='candidates') }}
+    {{ states.field('state') }}
+    {% include 'partials/filters/office-sought.html' %}
+    {% include 'partials/filters/parties.html' %}
+  </div>
+
+  <button type="button" class="js-accordion-trigger accordion__button">Filing date</button>
+  <div class="accordion__content">
+    {{ years.cycles('cycle', 'Years')  }}
+    {{ date.field('receipt_date', 'Receipt date' ) }}
+  </div>
+
+  <button type="button" class="js-accordion-trigger accordion__button">Filing information</button>
+  <div class="accordion__content">
+    {% include 'partials/filters/version-status.html' %}
+    {% include 'partials/filters/form-type.html' %}
+    {{ text.field('beginning_image_number', 'Beginning image number')}}
+  </div>
+</div>
+{% endblock %}

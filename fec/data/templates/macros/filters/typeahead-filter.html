@@ -1,0 +1,20 @@
+{% macro field(name, title, instructions=False, dataset='committees', allow_text=False, id_suffix='') %}
+<div
+  class="filter js-filter typeahead-filter"
+  data-filter="typeahead"
+  data-name="{{ name }}"
+  id="{{ name }}-field{{id_suffix}}"
+  data-dataset="{{ dataset }}" {% if allow_text %}data-allow-text{% endif %}>
+  <label class="label" for="{{ name }}{{id_suffix}}">{{ title }}</label>
+  <div class="combo combo--search--mini filter__typeahead">
+    <ul class="dropdown__selected"></ul>
+    <input id="{{ name }}{{id_suffix}}" type="text" class="combo__input">
+    <button class="combo__button button--search button--standard" type="button">
+      <span class="u-visually-hidden">Search</span>
+    </button>
+  </div>
+  {% if instructions %}
+    <span class="filter__instructions">{{ instructions }}</span>
+  {% endif %}
+</div>
+{% endmacro %}

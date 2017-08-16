@@ -1,0 +1,107 @@
+{% import 'macros/missing.jinja' as missing %}
+{% import 'macros/null.jinja' as null %}
+{% import 'macros/cycle-select.jinja' as select %}
+
+<section id="section-4" role="tabpanel" aria-hidden="true" aria-labelledby="section-4-heading">
+  <h2 id="section-4-heading">Spending</h2>
+
+  <div class="slab slab--inline slab--neutral u-padding--left u-padding--right">
+
+    {{ select.candidate_cycle_select(cycles, max_cycle, id="cycle-4") }}
+
+    {% if committee_groups['P'] or committee_groups['A']%}
+    <span class="t-sans t-bold">Data is included from these committees:</span>
+
+    <ul class="list--bulleted">
+      {% for committee in committee_groups['P'] | reverse %}
+      {% if committee.cycle == max_cycle %}
+      <li>
+        <a class="t-sans" href="{{ url_for('committee_page', c_id=committee.committee_id, cycle=committee.related_cycle) }}">{{ committee.name }}</a>
+      </li>
+      {% endif %}
+      {% endfor %}
+      {% for committee in committee_groups['A'] | reverse %}
+      {% if committee.cycle == max_cycle %}
+      <li>
+        <a class="t-sans" href="{{ url_for('committee_page', c_id=committee.committee_id, cycle=committee.related_cycle) }}">{{ committee.name }}</a>
+      </li>
+      {% endif %}
+      {% endfor %}
+    </ul>
+    {% endif %}
+
+    {% if two_year_totals %}
+    <div id="total-disbursements" class="entity__figure row">
+      <div class="content__section">
+        <div class="heading--section heading--with-action">
+          <h3 class="heading__left">Total disbursements</h3>
+            <a class="heading__right button--alt button--browse"
+              href="{{ url_for(
+                'disbursements',
+                two_year_transaction_period=max_cycle
+              ) }}{% for id in committee_ids %}&committee_id={{ id }}{% endfor %}">Filter all disbursements</a>
+        </div>
+
+        <div class="content__section--narrow">
+          <div class="row u-margin-bottom">
+            <div class="usa-width-one-half">
+              <span class="t-big-data">{{ two_year_totals['disbursements']|currency }}</span>
+            </div>
+          </div>
+          <div class="row">
+            <span class="usa-width-one-half t-block t-sans">spent in total disbursements by this candidate's authorized committees from <strong>{{two_year_totals.coverage_start_date|date_full}} to {{two_year_totals.coverage_end_date|date_full}}.</strong></span>
+            <div class="usa-width-one-half">
+              <span class="t-block t-sans">See the <a href="?tab=summary">financial summary</a> for a breakdown of each type of disbursement.</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    {% endif %}
+
+    <div id="disbursement-transactions" class="entity__figure row">
+      <div class="content__section">
+        <div class="heading--section heading--with-action u-no-margin">
+          <h3 class="heading__left">Disbursement transactions</h3>
+          <a class="heading__right button--alt button--browse"
+              href="{{ url_for(
+                'disbursements',
+                two_year_transaction_period=max_cycle
+              ) }}{% for id in committee_ids %}&committee_id={{ id }}{% endfor %}">Filter this data</a>
+        </div>
+
+        <div class="results-info results-info--simple">
+          <div class="u-float-left tag__category">
+            <div class="tag__item">Coverage dates: {{two_year_totals.coverage_start_date|date}} to {{two_year_totals.coverage_end_date|date}}</div>
+          </div>
+          <div class="u-float-right">
+            <div class="message message--info message--mini t-left-aligned data-container__message" data-export-message-for="itemized-disbursements" aria-hidden="true">
+            </div>
+            <button type="button" class="js-export button button--cta button--export" data-export-for="itemized-disbursements">Export</button>
+          </div>
+        </div>
+        <table
+            class="data-table data-table--heading-borders"
+            data-type="itemized-disbursements"
+            data-committee-id="{% for id in committee_ids %}{{ id }}{% if not loop.last %},{% endif %}{% endfor %}"
+            data-name="{{ name }}"
+            data-cycle="{{ max_cycle }}"
+            data-duration="2"
+          >
+          <thead>
+            <tr>
+              <th scope="col">Spender</th>
+              <th scope="col">Recipient</th>
+              <th scope="col">State</th>
+              <th scope="col">Purpose</th>
+              <th scope="col">Disbursement date</th>
+              <th scope="col">Amount</th>
+            </tr>
+          </thead>
+        </table>
+      </div>
+    </div>
+
+  </div>
+
+</section>

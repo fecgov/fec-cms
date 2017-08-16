@@ -1,10 +1,10 @@
-@import '../../../node_modules/fec-style/scss/base';
+@import "global";
 
-@import '../../../node_modules/fec-style/scss/components/filters';
-@import '../../../node_modules/fec-style/scss/components/data-container';
-@import '../../../node_modules/fec-style/scss/components/calendar';
-@import '../../../node_modules/fec-style/scss/components/dropdowns';
-@import '../../../node_modules/fec-style/scss/components/tags';
-@import '../../../node_modules/fec-style/scss/components/toggles';
-@import '../../../node_modules/fec-style/scss/components/tooltips';
-@import '../../../node_modules/fec-style/scss/components/type-styles';
+@import "components/filters";
+@import "components/data-container";
+@import "components/calendar";
+@import "components/dropdowns";
+@import "components/tags";
+@import "components/toggles";
+@import "components/tooltips";
+@import "components/type-styles";

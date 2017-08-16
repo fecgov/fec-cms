@@ -1,0 +1,76 @@
+{% import 'macros/cycle-select.html' as select %}
+
+<section id="section-2" role="tabpanel" aria-hidden="true" aria-labelledby="section-2-heading">
+  <div class="container">
+    <h2 id="section-2-heading">Compare individual contributions to candidates</h2>
+    <div class="slab slab--inline slab--neutral u-padding--left u-padding--right">
+      {{ select.election_cycle_select(cycles, cycle, 'details')}}
+      <div id="comparison"></div>
+      <div class="entity__figure row">
+        <div class="heading--section heading--with-action">
+          <h3 class="heading__left">Individual contributions</h3>
+      </div>
+        <div class="row">
+          <fieldset class="toggles js-toggles">
+            <legend class="label">Group by:</legend>
+            <label for="toggle-size">
+              <input id="toggle-size" type="radio" class="js-panel-toggle-control" name="election-aggregate" value="by-size" checked>
+              <span class="button--alt">Contribution size</span>
+            </label>
+            <label for="toggle-state">
+              <input id="toggle-state" type="radio" class="js-panel-toggle-control" name="election-aggregate" value="by-state">
+              <span class="button--alt">Contributor state</span>
+            </label>
+          </fieldset>
+        </div>
+
+        <div class="row">
+          <div id="by-size" class="panel-toggle-element" aria-hidden="false">
+            <div class="results-info results-info--simple"></div>
+            <table class="data-table data-table--heading-borders scrollX" data-type="by-size">
+              <thead>
+                <th scope="col">Candidate</th>
+                <th scope="col">$200 and under</th>
+                <th scope="col">$200.01—$499.99</th>
+                <th scope="col">$500—$999.99</th>
+                <th scope="col">$1,000—$1,999.99</th>
+                <th scope="col">$2,000 and over</th>
+              </thead>
+            </table>
+          </div>
+        </div>
+
+        <div class="row">
+          <div id="by-state" class="panel-toggle-element" aria-hidden="true">
+            <div class="results-info results-info--simple">
+              <div class="js-toggles toggles toggles--small map-toggles" aria-label="Toggle view">
+                <label for="toggle-table">
+                  <input id="toggle-table" type="radio" class="js-panel-toggle-control" name="state-view" value="state-table" checked>
+                  <span class="button--alt button--small button--table">Table</span>
+                </label>
+                <label for="toggle-map">
+                  <input id="toggle-map" type="radio" class="js-panel-toggle-control" name="state-view" value="state-maps">
+                  <span class="button--alt button--small button--map">Map</span>
+                </label>
+              </div>
+            </div>
+            <div id="state-table">
+              <table class="data-table data-table--heading-borders scrollX panel-toggle-element" data-type="by-state" aria-hidden="false">
+                <thead><tr></tr></thead>
+              </table>
+            </div>
+            <div id="state-maps" class="panel-toggle-element" aria-hidden="true">
+              <div class="choropleths row"></div>
+              <div class="row">
+                <div class="legend-container">
+                  <span class="t-block">By state: total amount received</span>
+                  <svg></svg>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

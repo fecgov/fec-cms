@@ -1,0 +1,512 @@
+// Buttons
+//
+// .button--standard    - Standard button
+// .button--cta         - Call to action button
+// .button--alt         - Alternate button
+//
+// <button class="button--standard">Basic button</button>
+// <button class="is-active button--standard">Active button</button>
+// <button class="is-disabled button--standard">Inactive button</button>
+//
+
+.button {
+  @include transition(background-color, .1s, color, .1s, border-color, .1s);
+  border: 2px solid;
+  border-radius: 2px;
+  color: $primary;
+  display: inline-block;
+  font-family: $sans-serif;
+  font-size: u(1.4rem);
+  line-height: 1;
+  padding: u(8px 2rem);
+  text-align: center;
+  vertical-align: middle;
+
+  &.is-disabled {
+    opacity: .5;
+    cursor: default;
+  }
+
+  &.form-element--inline {
+    min-height: u(3.6rem);
+  }
+}
+
+.button--standard {
+  @extend .button;
+  background-color: $gray;
+  border-color: $gray;
+  color: $base;
+
+  &:hover:not(.is-disabled):not(.is-active) {
+    background-color: $gray-medium;
+    border-color: $gray-medium;
+  }
+
+  &:active:not(.is-disabled),
+  &.is-active {
+    background-color: $gray-dark;
+    border-color: $gray-dark;
+    color: $inverse;
+  }
+}
+
+.button--cta {
+  @extend .button;
+  background-color: $primary;
+  border-color: $primary;
+  color: $inverse;
+
+  &:hover:not(.is-disabled):not(.is-active) {
+    background-color: $navy;
+    border-color: $navy;
+  }
+
+  &:active:not(.is-disabled),
+  &.is-active {
+    background-color: $bright-blue;
+    border-color: $bright-blue;
+    color: $primary;
+  }
+}
+
+.button--alt {
+  @extend .button;
+  background-color: none;
+  border-color: $gray;
+  color: $base;
+
+  &:hover:not(.is-disabled):not(.is-active) {
+    border-color: $gray-medium;
+  }
+
+  &:active:not(.is-disabled),
+  &.is-active {
+    background-color: $gray-medium;
+    border-color: $gray-dark;
+    color: $base;
+  }
+}
+
+.button--cta-primary {
+  @extend .button;
+  background-color: $primary-contrast;
+  border-color: $primary-contrast;
+  color: $primary;
+
+  &:hover:not(.is-disabled):not(.is-active) {
+    background-color: lighten($primary-contrast, 5%);
+    border-color: lighten($primary-contrast, 5%);
+  }
+
+  &:active:not(.is-disabled),
+  &.is-active {
+    background-color: $navy;
+    border-color: $navy;
+    color: $inverse;
+  }
+}
+
+.button--alt-primary {
+  @extend .button;
+  border-color: $inverse;
+  color: $inverse;
+
+  &:hover:not(.is-disabled):not(.is-active) {
+    border-color: $gray-medium;
+  }
+
+  &:active:not(.is-disabled),
+  &.is-active {
+    background-color: rgba($inverse, .3);
+    border-color: $primary-contrast;
+    color: $inverse;
+  }
+
+  &:focus {
+    color: $inverse;
+  }
+}
+
+.button--cta-secondary {
+  @extend .button;
+  background-color: $secondary-contrast;
+  border-color: $secondary-contrast;
+  color: $secondary;
+
+  &:hover:not(.is-disabled):not(.is-active) {
+    background-color: lighten($secondary-contrast, 5%);
+    border-color: lighten($secondary-contrast, 5%);
+  }
+
+  &:active:not(.is-disabled),
+  &.is-active {
+    background-color: $deep-orange;
+    border-color: $deep-orange;
+    color: $inverse;
+  }
+}
+
+.button--alt-secondary {
+  @extend .button;
+  border-color: $inverse;
+  color: $inverse;
+
+  &:hover:not(.is-disabled):not(.is-active) {
+    border-color: $gray-medium;
+  }
+
+  &:active:not(.is-disabled),
+  &.is-active {
+    background-color: rgba($inverse, .3);
+    border-color: $secondary-contrast;
+    color: $inverse;
+  }
+
+  &:focus {
+    color: $inverse;
+  }
+}
+
+.button--thin-border {
+  border: 1px solid;
+}
+
+// Buttons: Size variations
+//
+// .button--lg    - Large button
+// .button--sm    - Small button
+//
+// <button class="button--standard button--sm">Button</button>
+//
+
+.button--lg {
+  border: 2px solid transparent;
+  border-radius: 4px;
+  font-family: $sans-serif;
+  font-size: u(1.6rem);
+  padding: u(1.4rem 3rem);
+}
+
+.button--sm {
+  border: 1px solid transparent;
+  border-radius: 2px;
+  font-family: $sans-serif;
+  font-size: u(1.2rem);
+  line-height: 1;
+  padding: u(5px 1rem);
+
+  &:active {
+    border: 1px solid;
+  }
+}
+
+// Buttons: Remove button
+//
+// For clearing form inputs
+//
+// <div class="input--removable is-active">
+//  <input type="text" value="Input">
+//  <button type="button" class="button--remove button" data-removes="{{ name }}"><span class="u-visually-hidden">Remove</span></button>
+// </div>
+//
+
+.button--remove {
+  @include u-icon-bg($x, $primary);
+  background-size: 50%;
+  background-position: center center;
+  border: none;
+  display: none;
+  height: u(4rem);
+  padding: u(.6rem);
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: u(4rem);
+
+  &:hover {
+    padding: u(.6rem);
+    text-decoration: none;
+  }
+
+  &:focus {
+    border: none;
+  }
+}
+
+.input--removable {
+  position: relative;
+
+  input[type="text"] {
+    padding-right: u(5rem);
+  }
+
+  &.is-active {
+    .button--remove {
+      display: block;
+    }
+  }
+}
+
+.button--search {
+  @include u-icon-button($magnifying-glass);
+  background-size: u(2.2rem);
+  background-position: 50%;
+  padding: 0;
+}
+
+// Buttons: Calendar dropdown buttons
+
+.button--add-calendar {
+  @include u-icon-bg($cal-add, $base);
+  background-position: u(1rem .7rem);
+  background-size: u(2rem);
+  padding-left: u(4rem);
+  padding-right: u(6rem);
+}
+
+.button--add-calendar--mini {
+  @include u-icon-bg($cal-add, $base);
+  background-position: u(1rem .7rem);
+  background-size: u(2rem);
+  max-width: u(7.4rem);
+  padding-left: u(5rem);
+}
+
+// Buttons: Download dropdown buttons
+
+.button--download--mini {
+  @include u-icon-bg($download, $base);
+  background-position: u(.75rem .5rem);
+  background-size: u(1.75rem);
+  background-color: $gray-light;
+  border-color: $gray;
+  max-width: u(5rem);
+  padding-left: u(3.6rem);
+  min-height: u(3rem) !important;
+
+  &::after {
+    padding: u(.5rem .3rem 1rem 1.5rem) !important;
+    background-size: 10px !important;
+  }
+
+  &:hover:not(.is-disabled):not(.is-active) {
+    background-color: $gray;
+    border-color: $gray-dark;
+    color: $base;
+  }
+}
+
+// Button classes
+//
+// <button class="button--go button--standard" type="button">
+//
+
+.button--go {
+  @include u-icon-button($arrow-right, right, 1rem);
+}
+
+// for links to the datatable view
+.button--browse {
+  @include u-icon-button($table, left);
+}
+
+.button--map {
+  @include u-icon-button($map-pin, left)
+}
+
+.button--table {
+  @include u-icon-button($table, right)
+}
+
+// toggle two-candidate view on map comparison
+.button--two-candidates {
+  @include u-icon-button($two-candidates, left);
+  background-size: u(3rem);
+  padding-left: u(5rem);
+}
+
+.button--election {
+  @include u-icon-button($person-location, left);
+}
+
+.button--export {
+  @include u-icon-button($download, right);
+}
+
+.button--document {
+  @include u-icon-button($document, left);
+}
+
+.button--download {
+  @include u-icon-button($download, left);
+}
+
+.button--download--dropdown {
+  @include u-icon-button($download, left);
+  padding-right: u(6rem);
+}
+
+.button--subscribe {
+  @include u-icon-button($signal, left);
+  padding-right: u(6rem);
+}
+
+.button--grid {
+  @include u-icon-button($grid, left);
+  height: u(3.4rem);
+  width: u(9rem);
+}
+
+.button--list {
+  @include u-icon-button($list, left);
+  height: u(3.4rem);
+  width: u(9rem);
+}
+
+.button--search--text {
+  @include u-icon-button($magnifying-glass);
+}
+
+.button--back {
+  @include u-icon-button($arrow-left-border, left);
+}
+
+.button--share {
+  @include u-icon-button($share, right);
+}
+
+.button--check {
+  @include u-icon-button($check);
+}
+
+.button--updates {
+  @include u-icon-button($updates);
+}
+
+.button--calendar {
+  @include u-icon-button($calendar);
+}
+
+.button--previous {
+  @include u-icon-button($arrow-left, left, 1rem);
+  background-position: 50% 50%;
+}
+
+.button--next {
+  @include u-icon-button($arrow-right, right, 1rem);
+  background-position: 50% 50%;
+}
+
+.button--close--base {
+  @include u-icon($x, $base);
+  border: none;
+}
+
+.button--close--inverse {
+  @include u-icon($x, $inverse);
+  border: none;
+}
+
+.button--close--primary {
+  @include u-icon($x, $primary);
+  background-size: u(2rem);
+  border: none;
+}
+
+.button--down {
+  @include u-icon($arrow-down-border, $primary-contrast);
+}
+
+.button--cancel {
+  @include u-icon($x-circle, $primary, 2rem, 2rem, contain);
+}
+
+.button--unstyled {
+  border-bottom: 1px dotted $primary;
+  font-size: u(1.4rem);
+  padding: 0;
+}
+
+.button--panel {
+  @include u-icon($arrow-right-circle, $gray, 2rem, 2rem, contain);
+  background-size: 90%;
+}
+
+.button--nav-panel {
+  @include u-icon-bg($arrow-right-circle, $inverse);
+  background-position: 100% 50%;
+  padding-right: u(4rem);
+
+  &.button--candidates,
+  &.button--committees,
+  &.button--receipts,
+  &.button--disbursements,
+  &.button--filings {
+    &::before {
+      content: '';
+      background-size: contain;
+      float: left;
+      display: block;
+      margin-right: .5em;
+      width: 1em;
+      height: 1em;
+    }
+  }
+
+  &.button--candidates {
+    &::before {
+      @include u-icon-bg($candidate, $inverse);
+    }
+  }
+
+  &.button--committees {
+    &::before {
+      @include u-icon-bg($committee, $inverse);
+    }
+  }
+
+  &.button--receipts {
+    &::before {
+      @include u-icon-bg($piggy-bank, $inverse);
+    }
+  }
+
+  &.button--disbursements {
+    &::before {
+      @include u-icon-bg($disbursement, $inverse);
+    }
+  }
+
+  &.button--filings {
+    &::before {
+      @include u-icon-bg($papers, $inverse);
+    }
+  }
+}
+
+.button--informative {
+  background-image: url('../img/reaction-informative.svg');
+  background-repeat: no-repeat;
+  background-position: u(1rem) 50%;
+  padding-left: u(4rem);
+}
+
+.button--confusing {
+  background-image: url('../img/reaction-confusing.svg');
+  background-repeat: no-repeat;
+  background-position: u(1rem) 50%;
+  padding-left: u(4rem);
+}
+
+.button--not-interested {
+  background-image: url('../img/reaction-not-interested.svg');
+  background-repeat: no-repeat;
+  background-position: u(1rem) 50%;
+  padding-left: u(4rem);
+}
+
+.button--loading {
+  background-image: url('../img/loading-ellipsis-gray.gif');
+  background-size: 75%;
+}

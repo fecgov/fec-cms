@@ -1,0 +1,91 @@
+{% macro overview(verb, location) %}
+  <div class="overview js-{{verb}}-overview">
+    <div class="overview__chart js-chart">
+    </div>
+    <div class="snapshot js-snapshot">
+      <div class="snapshot__controls">
+        <button class="button button--standard button--previous js-snapshot-prev"><span class="u-visually-hidden">Previous month</span></button>
+        <h5><span class="js-min-date"></span>&ndash;<span class="js-max-date"></span></h5>
+        <button class="button button--standard button--next js-snapshot-next"><span class="u-visually-hidden">next month</span></button>
+      </div>
+      <div class="snapshot__item">
+        <div class="snapshot__item-title">
+          All committees
+        </div>
+        <div class="snapshot__item-number">
+          <span class="snapshot__item-number">
+            <span class="figure__decimals" aria-hidden="true"></span>
+            <span data-total-for="all"></span>
+          </span>
+        </div>
+      </div>
+      <div class="snapshot__item">
+        <div class="snapshot__item-title">
+          <span class="swatch candidates"></span>Candidates
+        </div>
+        <span class="snapshot__item-number">
+          <span class="figure__decimals" aria-hidden="true"></span>
+          <span data-total-for="candidate"></span>
+        </span>
+      </div>
+      <div class="snapshot__item">
+        <div class="snapshot__item-title">
+          <span class="swatch pacs"></span>PACs
+        </div>
+        <span class="snapshot__item-number">
+          <span class="figure__decimals" aria-hidden="true"></span>
+          <span data-total-for="pac"></span>
+        </span>
+      </div>
+      <div class="snapshot__item">
+        <div class="snapshot__item-title">
+          <span class="swatch parties"></span>Party committees
+        </div>
+        <span class="snapshot__item-number">
+          <span class="figure__decimals" aria-hidden="true"></span>
+          <span data-total-for="party"></span>
+        </span>
+      </div>
+    </div>
+  </div>
+{% endmacro %}
+
+{% macro top(type, title, lower_title, raising_data, spending_data, name_field='committee_name', id_field='committee_id', route='committee_page') %}
+  {% if type == 'candidates' %}
+    {% set name_field='name' %}
+    {% set id_field='candidate_id' %}
+    {% set route='candidate_page' %}
+  {% endif %}
+  <div class="top-list js-top-list" data-type="{{type}}">
+    <h2 class="top-list__title">{{ title }} overview</h2>
+    <h3 class="top-list__subtitle">Top <span class="js-top-type">raising</span> ({{ constants.DEFAULT_TIME_PERIOD|fmt_year_range }})</h3>
+    <div class="toggles--simple">
+      <button class="toggle is-active" aria-controls="{{type}}-top-raising">Top raising</button> |
+      <button class="toggle" aria-controls="{{type}}-top-spending">Top spending</button>
+    </div>
+    {% if raising_data %}
+    <ol class="figure--zero-pad js-top-raising" id="{{type}}-top-raising">
+      {% for data in raising_data %}
+      <li class="figure__item">
+        <span class="figure__label">
+          <a href="{{ url_for(route, c_id=data[id_field]) }}" title="{{ data[name_field] }}">{{ loop.index }}. {{ data[name_field] }}</a>
+        </span>
+        <span class="figure__number"><span class="figure__decimals" aria-hidden="true"></span>{{ data['receipts'] | currency }}</span>
+      </li>
+      {% endfor %}
+    </ol>
+    {% endif %}
+    {% if spending_data %}
+    <ol class="figure--zero-pad js-top-spending" id="{{type}}-top-spending">
+      {% for data in spending_data %}
+      <li class="figure__item">
+        <span class="figure__label">
+          <a href="{{ url_for(route, c_id=data[id_field]) }}" title="{{ data[name_field] }}">{{ loop.index }}. {{ data[name_field] }}</a>
+        </span>
+        <span class="figure__number"><span class="figure__decimals" aria-hidden="true"></span>{{ data['disbursements'] | currency }}</span>
+      </li>
+      {% endfor %}
+    </ol>
+    {% endif %}
+  </div>
+{% endmacro %}

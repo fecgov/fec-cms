@@ -1,0 +1,255 @@
+// Navigation
+//
+// Primary site navigation
+//
+
+// The outer nav element
+.site-nav {
+  @include clearfix();
+
+  &.is-open {
+    .site-nav__container {
+      @include transform(translateX(0));
+      @include transition(transform, .2s, ease-out);
+    }
+  }
+}
+
+// div that contains the ul and all panels
+.site-nav__container {
+  $top: u(6.3rem);
+  @include transform(translateX(-100%));
+  @include transition(left, .2s, ease-out);
+  height: calc(100vh - #{$top});
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: $top;
+  overflow-x: hidden;
+  z-index: $z-navigation;
+
+  // scss-lint:disable ImportantRule
+  &[aria-hidden='true'] {
+    display: block !important; // It's hidden by the transform, so this keeps it visible when it slides in
+  }
+}
+
+// Styles for each panel on mobile
+.site-nav__panel {
+  @include transition(transform, .2s, ease-out);
+  background-color: $primary;
+  color: $inverse;
+  font-size: u(1.6rem);
+  overflow-y: scroll;
+  padding: u(1rem 0);
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 100%;
+
+  &.is-open {
+    @include transform(translateX(0));
+  }
+
+  // scss-lint:disable ImportantRule
+  &[aria-hidden='true'] {
+    display: block !important; // It's hidden by the transform, so this keeps it visible when it slides in
+  }
+}
+
+.site-nav__panel--sub {
+  @include transform(translateX(200%));
+}
+
+// Note: Buttons that trigger panels are styled with .button--nav-panel
+
+// Hamburger button that triggers menu on mobile
+.site-nav__button {
+  @include u-icon-bg($menu, $primary);
+  background-color: $gray-lightest;
+  background-position: 50% 50%;
+  background-size: u(2rem);
+  border: none;
+  border-radius: 0;
+  float: left;
+  height: u(4rem);
+  margin: 0;
+  padding: u(1.8rem 2rem);
+  text-indent: -99999px;
+
+  &:hover {
+    background-color: $inverse;
+  }
+
+  &.active {
+    @include u-icon-bg($menu, $inverse);
+    background-color: $primary;
+    color: $neutral;
+  }
+}
+
+// li element
+.site-nav__item {
+  @include clearfix();
+  border-bottom: 1px solid $inverse;
+
+  &:last-child .site-nav__link {
+    border-bottom: 0;
+  }
+}
+
+// link or button inside each li
+.site-nav__link {
+  @include transition(background-color, .1s);
+  background-position: right u(1rem) top 50%;
+  color: $inverse;
+  display: block;
+  font-size: inherit;
+  font-family: $serif;
+  line-height: u(2rem);
+  padding: u(1rem);
+  border-bottom: none;
+  width: 100%;
+  text-align: left;
+
+  &[aria-expanded="true"] {
+    @include u-icon-bg($minus-circle, $inverse);
+  }
+}
+
+[data-submenu] {
+  @include u-icon-bg($plus-circle, $inverse);
+  background-position: right u(1rem) top 50%;
+}
+
+// Panel titles on mobile
+.site-nav__title {
+  border-bottom: 1px solid $inverse;
+  padding: u(1rem 1rem);
+  margin: 0;
+}
+
+.utility-nav__item {
+  border-bottom: none;
+
+  .site-nav__link {
+    font-family: $sans-serif;
+  }
+}
+
+// Mostly stays the same except the menu button now has the word menu in it
+@include media($med) {
+  .site-nav__container {
+    $top: u(11.6rem);
+    height: calc(100vh - #{$top});
+    top: $top;
+  }
+
+  .site-nav__button {
+    background-position: 90% 1rem;
+    font-size: u(1.4rem);
+    text-indent: 0;
+    padding: u(1rem 4rem 1rem 1rem);
+
+    &.active {
+      background-position: u(90% 1rem);
+    }
+  }
+}
+
+// Switches to traditional dropdown menu
+@include media($lg) {
+  .site-nav__container {
+    @include clearfix();
+    @include transform(translateX(0));
+    height: auto;
+    float: left;
+    overflow: visible;
+    position: relative;
+    top: 0;
+    width: 100%;
+  }
+
+  .site-nav__panel {
+    @include transform(translateX(0));
+    background: none;
+    border: none;
+    min-height: 0;
+    height: auto;
+    overflow: visible;
+    position: relative;
+    display: block;
+    padding: u(0 0 0 2rem);
+    top: 0;
+
+    .utility-nav__item {
+      display: none;
+    }
+  }
+
+  .site-nav__item {
+    float: left;
+    border-bottom: none;
+    color: $primary;
+  }
+
+  .site-nav__item--secondary {
+    .site-nav__link {
+
+      &.is-parent .site-nav__link__title {
+        border-bottom-color: $deep-red;
+      }
+
+      &.is-open,
+      &:hover,
+      &:focus,
+      &:active {
+        .site-nav__link__title {
+          border-bottom-color: $secondary-contrast;
+        }
+      }
+
+      &.is-open {
+        background-color: $secondary;
+        color: $inverse;
+      }
+    }
+  }
+
+  .site-nav__link__title {
+    display: inline-block;
+    border-bottom: u(.5rem) solid transparent;
+    padding-bottom: u(.5rem);
+  }
+
+  .site-nav__link {
+    @include u-icon-bg($arrow-down, $gray-dark);
+    background-position: right u(1rem) top 50%;
+    color: $base;
+    cursor: default;
+    text-align: center;
+    padding: u(1rem 3rem 0 2rem);
+
+    &.is-parent .site-nav__link__title {
+      border-bottom-color: $navy;
+    }
+
+    &:hover,
+    &:focus,
+    &:active {
+      .site-nav__link__title {
+        border-bottom-color: $primary-contrast;
+      }
+    }
+
+    &.is-open {
+      @include u-icon-bg($arrow-down, $inverse);
+      background-color: $primary;
+      color: $inverse;
+    }
+  }
+
+  .site-nav__button {
+    display: none;
+  }
+}

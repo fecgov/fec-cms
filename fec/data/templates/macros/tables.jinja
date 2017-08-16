@@ -1,0 +1,39 @@
+{% macro summary(data, committee_id, cycle, office_or_committee) %}
+
+{% if office_or_committee not in ['P', 'H', 'S'] %}
+  {#
+  Form 3 line numbers are currently coded as type=O, but since more committees
+  use this form, we need to force those all to look for the O value.
+  #}
+  {% set office_or_committee = 'O' %}
+{% endif %}
+
+<figure>
+<table class="simple-table">
+  {% for item in data %}
+    <tr class="simple-table__row level--{{ item[1]['level']}}">
+      <td class="simple-table__cell">
+        {% if item[1]['term'] %}
+          <span class="term" data-term="{{ item[1]['term'] }}">{{ item[1]['label'] }}</span>
+        {% else %}
+          {{ item[1]['label'] }}
+        {% endif %}
+      </td>
+      <td class="simple-table__cell">
+        {% if item[1]['link'] %}
+          <a href="{{ url_for(item[1]['link'], committee_id=committee_id, two_year_transaction_period=cycle, cycle=cycle) }}">
+            {{ item[0]|currency }}
+          </a>
+        {% elif item[1]['type'] and cycle > 2006 %}
+          <a href="{{ url_for(item[1]['type']['link'], committee_id=committee_id, two_year_transaction_period=cycle, cycle=cycle, line_number=item[1]['type'][office_or_committee]) }}">
+            {{ item[0]|currency }}
+          </a>
+        {% else %}
+          {{ item[0]|currency }}
+        {% endif %}
+      </td>
+    </tr>
+  {% endfor %}
+</table>
+</figure>
+{% endmacro %}

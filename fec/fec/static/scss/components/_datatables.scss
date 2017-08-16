@@ -1,0 +1,367 @@
+// Datatables
+//
+// Standard design for tabular data. If the table is
+// preceded/followed by buttons (or nav arrows), always enclose with
+// a rule line using `.results-info`.
+//
+// <table id="data-table" class="data-table data-table--text">
+//   <thead>
+//     <tr>
+//       <th>No.</th>
+//       <th>Name</th>
+//       <th>Score</th>
+//       <th>Description</th>
+//     </tr>
+//   </thead>
+//   <tbody>
+//     <tr>
+//       <td>1</td>
+//       <td>Red</td>
+//       <td>0.1234</td>
+//       <td>Minim in magna ex incididunt sit laborum exercitation aute</td>
+//     </tr>
+//     <tr>
+//       <td>2</td>
+//       <td>Blue</td>
+//       <td>0.1234</td>
+//       <td>in dolore amet irure dolore commodo est aliquip</td>
+//     </tr>
+//     <tr>
+//       <td>3</td>
+//       <td>Green</td>
+//       <td>0.1234</td>
+//       <td>nostrud laborum in ullamco cillum laborum</td>
+//     </tr>
+//   </tbody>
+// </table>
+// <div class="results-info">
+//   <a class="paginate_button previous" href="#data-table">Previous</a>
+//   <a class="paginate_button next" href="#data-table">Next</a>
+// </div>
+//
+// .is-showing-filters    - Class applied to body when the filters are open, causing the datatable to shrink slightly
+// .data-table--text      - Textual tables for text-heavy search results.
+// .data-table--heading-borders      - Include cell borders in the header row when your table follows `.results-info`.
+//
+
+// Wraps the datatable on browse pages
+
+.dataTables_wrapper {
+  overflow-x: scroll;
+  position: relative;
+}
+
+.dataTables_wrapper--panel {
+  overflow-x: hidden;
+}
+
+// Sortable headers
+
+.data-table {
+  @include transform(translateX(0%));
+  @include transition-property(transform);
+  @include transition-duration(.5s);
+  height: 100%;
+  font-family: $sans-serif;
+  position: relative;
+  table-layout: auto;
+
+  th {
+    line-height: u(1.4rem);
+    letter-spacing: -.3px;
+    padding: u(.5rem 1rem);
+    border-bottom: 1px solid $primary;
+
+    &.sorting,
+    &.sorting_asc,
+    &.sorting_desc {
+      background-position: calc(100% - 1rem) 50%;
+      background-repeat: no-repeat;
+      cursor: pointer;
+      padding-right: u(3rem);
+    }
+
+    &.sorting {
+      @include u-icon-bg($dash, $gray);
+      background-size: u(1rem);
+    }
+
+    &.sorting_asc {
+      @include u-icon-bg($arrow-up-border, $primary);
+      background-size: u(1rem);
+      background-color: $gray-lightest;
+    }
+
+    &.sorting_desc {
+      @include u-icon-bg($arrow-down-border, $primary);
+      background-size: u(1rem);
+      background-color: $gray-lightest;
+    }
+
+    &:first-child {
+      border-left: none;
+    }
+
+    &.column--trigger {
+      width: 40px;
+      text-align: center;
+      border-left: none;
+    }
+  }
+
+  tr {
+    border-left-width: 0;
+    background-color: $inverse;
+    border-bottom: 1px solid $neutral;
+
+    &.row-color-contrast,
+    &:nth-child(even) {
+      background-color: rgba($gray-lightest, .5);
+    }
+
+    &.row-color-normal {
+      background-color: $inverse;
+    }
+
+    &.row-active {
+      border-left: .5rem solid $primary;
+    }
+  }
+
+  td {
+    @include transition(padding-left, .2s);
+    padding: u(1rem);
+    border-left: 1px solid $neutral;
+
+    &.column--number {
+      text-align: right;
+    }
+
+    &.column--trigger {
+      width: 40px;
+      padding: 0 u(1rem);
+      text-align: center;
+    }
+
+    &.no-wrap {
+      white-space: nowrap;
+    }
+
+    &:first-child {
+      border-left: none;
+    }
+  }
+
+  .sorting_disabled {
+    cursor: default;
+  }
+
+  .value-bar {
+    margin-top: u(.5rem);
+    height: u(.5rem);
+  }
+
+  @include media($lg) {
+    th,
+    td {
+      padding: u(1rem);
+    }
+  }
+
+  // Special styles for tables that use `offsetX: true`
+  &.scrollX {
+    table-layout: auto;
+  }
+}
+
+.data-table--heading-borders {
+  th {
+    border-left: 1px solid $neutral;
+  }
+}
+
+.data-table--text {
+  td {
+    white-space: normal;
+    vertical-align: top;
+  }
+}
+
+.data-table--entity {
+  border-top: 2px solid $primary;
+
+  td {
+    padding: u(.5rem);
+    vertical-align: middle;
+  }
+
+  .document-description {
+    vertical-align: middle;
+  }
+}
+
+// Special styles for rows that trigger panels
+.row--has-panel {
+    @include transition(border-left-width, .2s);
+    cursor: pointer;
+}
+
+.row-active {
+
+  td {
+    background-color: rgba($gray-lightest, .3);
+    border-top: 1px solid $gray-lightest;
+    border-bottom: 1px solid $gray-lightest;
+  }
+
+  td:first-child {
+    padding-left: u(1rem);
+    border-left: 1px solid $gray-lightest;
+  }
+}
+
+// Special styles for the document description column with the dropdown button
+.column--doc-download {
+  .document-description {
+    display: table-cell;
+    padding-right: u(1rem);
+    width: 100%;
+  }
+
+  .dropdown {
+    display: table-cell;
+    vertical-align: middle;
+  }
+
+  .dropdown__panel {
+    right: 0;
+    top: u(3rem);
+    min-width: 70px;
+  }
+
+  .dropdown__value {
+    padding: u(0 .75rem);
+  }
+}
+
+// Miscellaneous classes
+//
+// .is-incumbent      - If used, applied to candidate that currently holds the office in election tables
+
+.is-incumbent {
+  margin-left: u(1.5rem);
+  position: relative;
+
+  &::before {
+    background-color: $primary;
+    border-radius: u(1rem);
+    content: '';
+    display: block;
+    height: u(1rem);
+    left: u(-1.5rem);
+    margin-top: u(-.5rem);
+    position: absolute;
+    top: 50%;
+    width: u(1rem);
+  }
+}
+
+.data-table {
+  .is-incumbent::before {
+    top: u(.8rem);
+  }
+}
+
+// Scrolling tables
+.dataTables_scroll {
+  position: relative;
+}
+
+.dataTables_scrollBody {
+
+  .data-table {
+    position: static;
+  }
+}
+
+// Notes
+.datatable__note {
+  padding: u(1rem 0);
+
+  @include media($med) {
+    @include span-columns(9);
+  }
+}
+
+// Datatable cell widths
+//
+// Adjust cell widths by percentage.
+//
+// .cell--5  - 5% width
+// .cell--10 - 10% width
+// .cell--15 - 15% width
+// .cell--20 - 20% width
+// .cell--25 - 25% width
+// .cell--30 - 30% width
+// .cell--35 - 35% width
+// .cell--40 - 40% width
+// .cell--45 - 45% width
+// .cell--50 - 50% width
+// .cell--55 - 55% width
+// .cell--60 - 60% width
+// .cell--65 - 65% width
+// .cell--70 - 70% width
+// .cell--75 - 75% width
+// .cell--80 - 80% width
+// .cell--85 - 85% width
+// .cell--90 - 90% width
+// .cell--95 - 95% width
+//
+@mixin cell-width($width) {
+  width: $width * 1%;
+}
+
+@for $i from 1 to 20 {
+  $width: $i * 5;
+
+  .cell--#{$width} {
+    @include cell-width($width);
+  }
+}
+
+@include media($med) {
+  .column--state {
+    width: 50px;
+  }
+
+  .column--xs {
+    width: 40px;
+  }
+
+  .column--small {
+    width: 90px;
+  }
+
+  .column--med {
+    min-width: 180px;
+  }
+
+  .column--large {
+    width: 20%;
+  }
+
+  .column--xl {
+    width: 30%;
+  }
+
+  .panel-active {
+    .column--xl,
+    .column--large {
+      width: 50%;
+    }
+
+    .column--med {
+      width: 25%;
+    }
+  }
+}

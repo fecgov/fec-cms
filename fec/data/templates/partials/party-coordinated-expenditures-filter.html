@@ -1,0 +1,24 @@
+{% extends 'partials/filters.html' %}
+
+{% import 'macros/filters/text.html' as text %}
+{% import 'macros/filters/typeahead-filter.html' as typeahead %}
+{% import 'macros/filters/date.html' as date %}
+{% import 'macros/filters/range.html' as range %}
+{% block heading %}
+Filter party coordinated expenditures
+{% endblock %}
+
+{% block filters %}
+<div class="js-accordion accordion--neutral" data-content-prefix="filter" data-open-first="false">
+  <div class="accordion__content">
+    {{ typeahead.field('committee_id', 'Spender name or ID') }}
+    {{ typeahead.field('candidate_id', 'Candidate', dataset='candidates') }}
+  </div>
+  <button type="button" class="js-accordion-trigger accordion__button">Transaction details</button>
+  <div class="accordion__content">
+    {{ text.field('payee_name', 'Payee') }}
+    {{ date.field('date', 'Expenditure date', dates ) }}
+    {{ range.amount('amount', 'Expenditure amount') }}
+  </div>
+</div>
+{% endblock %}

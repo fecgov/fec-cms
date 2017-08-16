@@ -1,0 +1,39 @@
+{{#if doc_description }}
+  <div class="document-description">
+    {{#if html_url}}
+    <a href="{{ html_url }}" target="_blank">{{ doc_description }}</a>
+    {{else if pdf_url }}
+    <a href="{{ pdf_url }}" target="_blank">{{ doc_description }}</a>
+    {{ else }}
+    {{ doc_description }}
+    {{/if}}
+    {{#if amendment_version }}
+    | {{ amendment_version }}
+    {{/if}}
+  </div>
+
+  {{#if pdf_url}}
+  <div class="dropdown">
+    <button class="button dropdown__button dropdown__button--mini button--download--mini">
+      <span class="u-visually-hidden">Download report</span>
+    </button>
+    <ul class="dropdown__panel dropdown__panel--right" aria-hidden="true">
+      {{#if csv_url}}
+      <li class="dropdown__item">
+        <a class="dropdown__value" target="_blank" href="{{ csv_url }}">.csv</a>
+      </li>
+      {{/if}}
+      {{#if fec_url}}
+      <li class="dropdown__item">
+        <a class="dropdown__value" target="_blank" href="{{ fec_url }}">.fec</a>
+      </li>
+      {{/if}}
+      {{#if pdf_url}}
+      <li class="dropdown__item">
+        <a class="dropdown__value" target="_blank" href="{{ pdf_url }}">.pdf</a>
+      </li>
+      {{/if}}
+    </ul>
+  </div>
+  {{/if}}
+{{/if}}

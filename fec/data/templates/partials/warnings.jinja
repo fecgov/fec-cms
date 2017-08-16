@@ -1,0 +1,26 @@
+<noscript>
+  <div style="background-color: #212121; padding: 10px; font-family: sans-serif">
+    <p style="color: #ffffff"><strong>Javascript recommended:</strong> FEC.gov uses Javascript to provide the best possible user experience. <a style="color: #ffffff; text-decoration: underline" target="_blank"
+          href="http://enable-javascript.com/">
+        Learn how to enable Javascript in your browser
+      </a></p>
+  </div>
+</noscript>
+
+<!--[if lt IE 10]>
+<div style="background-color: #212121; padding: 10px; font-size: 100%">
+  <h2 style="color: #ffffff">Your browser is outdated</h2>
+  <p style="color: #ffffff">You're using an older version of Internet Explorer. Please update or switch to another browser like Chrome, Firefox, or Safari for a better experience.</p>
+  <p style="color: #ffffff"><a style="color: #ffffff; text-decoration: underline" target="_blank" href="http://browsehappy.com/">Learn how to update your browser.</a></p>
+  <p style="color: #ffffff; font-size: 16px;">You can still access an archive of the old FEC.gov at <a style="color: #ffffff; text-decoration: underline" href="http://classic.fec.gov">classic.fec.gov</a></p>
+</div>
+<![endif]-->
+
+{% if environment != 'prod' %}
+ <div class="banner">
+   <div class="container">
+     <span class="t-block t-bold t-centered">{{ 'STAGING' if environment == 'stage' else 'DEVELOPMENT' }}</span>
+     <span class="t-block t-centered">This site is for testing new ideas and code. Access the most accurate data on the <a href="https://beta.fec.gov">live site</a>.</span>
+   </div>
+ </div>
+{% endif %}

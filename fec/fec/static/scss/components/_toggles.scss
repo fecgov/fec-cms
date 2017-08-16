@@ -1,0 +1,232 @@
+// Toggles
+//
+// We use radio buttons for toggles, wrapped in a fieldset with a legend to label them.
+//
+// "View by: State/Size/All transactions"
+//
+// <fieldset class="toggles js-toggles">
+//   <legend class="label">View by:</legend>
+//   <a class="u-float-right button--alt button--browse"
+//       href="">Filter this data</a>
+//   <label for="toggle-state">
+//     <input id="toggle-state" type="radio" class="js-panel-toggle-control" name="individual-contributions" value="contributor-state" checked />
+//     <span class="button--alt">State</span>
+//   </label>
+//   <label for="toggle-size">
+//     <input id="toggle-size" type="radio" class="js-panel-toggle-control" name="individual-contributions" value="contribution-size" />
+//     <span class="button--alt">Size</span>
+//   </label>
+//   <label for="toggle-all">
+//     <input id="toggle-all" type="radio" class="js-panel-toggle-control" name="individual-contributions" value="all-transactions" />
+//     <span class="button--alt">All transactions</span>
+//   </label>
+// </fieldset>
+//
+
+.toggles {
+  @include clearfix();
+
+  input[type="radio"] {
+    @include u-visually-hidden();
+  }
+
+  input:checked {
+    & + .button--alt {
+      background-color: $gray-medium;
+      border-color: $gray-dark;
+      color: $base;
+      font-weight: bold;
+      margin-bottom: 0;
+
+      &:hover {
+        border-color: $gray-dark;
+      }
+    }
+
+    & + .button--alt--primary {
+      background-color: rgba($inverse, .3);
+      border-color: $primary-contrast;
+      color: $inverse;
+      font-weight: bold;
+      margin-bottom: 0;
+
+      &:hover {
+        border-color: $primary-contrast;
+      }
+    }
+
+    & + .button--alt--secondary {
+      background-color: rgba($inverse, .3);
+      border-color: $secondary-contrast;
+      color: $inverse;
+      font-weight: bold;
+      margin-bottom: 0;
+
+      &:hover {
+        border-color: $secondary-contrast;
+      }
+    }
+  }
+
+  label {
+    cursor: pointer;
+  }
+
+  label:first-of-type {
+    .button--alt,
+    .button--alt-primary,
+    .button--alt-secondary  {
+      border-radius: 4px 4px 0 0;
+    }
+  }
+
+  label:last-of-type {
+    margin-bottom: 0;
+
+    .button--alt,
+    .button--alt-primary,
+    .button--alt-secondary {
+      border-radius: 0 0 4px 4px;
+    }
+  }
+
+  .button--alt,
+  .button--alt-primary,
+  .button--alt-secondary {
+    border-radius: 0;
+    display: block;
+    font-weight: normal;
+    margin-bottom: -2px;
+  }
+}
+
+.toggles--small {
+  margin-bottom: 0;
+
+  label {
+    float: left;
+  }
+
+  label:first-of-type {
+    .button {
+      border-radius: 4px 0 0 4px;
+    }
+  }
+
+  label:last-of-type {
+    .button {
+      border-radius: 0 4px 4px 0;
+    }
+  }
+
+  .label {
+    float: left;
+    margin: u(.5rem 1rem 0 0);
+  }
+
+  .button--alt,
+  .button--alt-primary,
+  .button--alt-secondary {
+    margin-right: -1px;
+  }
+}
+
+// If the toggle group is actually buttons and not radios
+.toggles--buttons {
+  .button--alt,
+  .button--alt-primary,
+  .button--alt-secondary {
+    border-radius: 0;
+    display: block;
+    font-weight: normal;
+
+    &:first-of-type {
+      border-radius: 4px 4px 0 0;
+    }
+
+    &:last-of-type {
+      border-radius: 0 0 4px 4px;
+    }
+  }
+}
+
+.toggles--simple {
+  .toggle {
+    border-bottom: 1px dotted $primary;
+    color: $primary;
+    font-size: u(1.4rem);
+    padding: 0;
+    margin: u(0 1rem);
+
+    &:first-of-type {
+      margin-left: 0;
+    }
+  }
+
+  .is-active {
+    border-bottom: none;
+    font-weight: bold;
+  }
+}
+
+@include media($med) {
+  // Display toggles in a row
+  .toggles:not(.toggles--vertical) {
+    label {
+      float: left;
+      margin-top: 0;
+    }
+
+    label:first-of-type {
+      .button--alt,
+      .button--alt-primary,
+      .button--alt-secondary {
+        border-radius: 4px 0 0 4px;
+      }
+    }
+
+    label:last-of-type {
+      .button--alt,
+      .button--alt-primary,
+      .button--alt-secondary {
+        border-radius: 0 4px 4px 0;
+        margin-right: 0;
+      }
+    }
+
+    input:checked {
+      & + .button--alt,
+      & + .button--alt-primary,
+      & + .button--alt-secondary {
+        margin-right: 0;
+      }
+    }
+
+    .button--alt,
+    .button--alt-primary,
+    .button--alt-secondary {
+      margin-right: -2px;
+
+      &.is-active {
+        margin-right: 0;
+        margin-left: 2px;
+      }
+    }
+  }
+
+  .toggles--buttons {
+    .button {
+      border-radius: 0;
+      float: left;
+      margin-top: 0;
+
+      &:first-of-type {
+        border-radius: 4px 0 0 4px;
+      }
+
+      &:last-of-type {
+        border-radius: 0 4px 4px 0;
+      }
+    }
+  }
+}

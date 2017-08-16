@@ -1,0 +1,188 @@
+{% import 'macros/null.html' as null %}
+{% import 'macros/disclaimer.html' as disclaimer %}
+{% import 'macros/cycle-select.html' as select %}
+
+<section id="section-3" role="tabpanel" aria-hidden="true" aria-labelledby="section-3-heading">
+  <h2 id="section-3-heading">Raising</h2>
+  <div class="slab slab--inline slab--neutral u-padding--left u-padding--right">
+    {{ select.committee_cycle_select(cycles, cycle, 'receipts')}}
+    {% if totals and committee_type not in ['C', 'E', 'I'] %}
+      <div id="total-receipts" class="entity__figure row">
+        <div class="heading--section heading--with-action">
+          <h3 class="heading__left">Total receipts</h3>
+          <a class="heading__right button--alt button--browse"
+            href="{{ url_for('receipts', two_year_transaction_period=cycle, committee_id=committee_id) }}">Filter all receipts</a>
+        </div>
+        <div class="content__section--narrow">
+          <div class="row u-margin-bottom">
+            <div class="usa-width-one-half">
+              <span class="t-big-data">{{ totals.0.receipts|currency }}</span>
+            </div>
+          </div>
+          <div class="row">
+            <span class="usa-width-one-half t-block t-sans">raised in total receipts by this committee from <strong>{{totals.0.coverage_start_date|date_full}} to {{totals.0.coverage_end_date|date_full}}.</strong></span>
+            <div class="usa-width-one-half">
+              <span class="t-block t-sans">See the <a href="?tab=summary">financial summary</a> for a breakdown of each type of receipt.</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    {% endif %}
+    <div class="entity__figure" id="individual-contribution-transactions">
+      <div class="heading--section heading--with-action">
+        <h3 class="heading__left">Individual contributions</h3>
+        <a class="heading__right button--alt button--browse"
+            href="{{ url_for('individual_contributions', committee_id=committee_id, two_year_transaction_period=cycle) }}">Filter this data</a>
+      </div>
+      <fieldset class="row toggles js-toggles">
+        <legend class="label">Group by:</legend>
+        <label for="toggle-itemized">
+          <input id="toggle-itemized" type="radio" class="js-panel-toggle-control" name="receipt-aggregate" value="itemized-contributions" checked>
+          <span class="button--alt">All transactions</span>
+        </label>
+        <label for="toggle-state">
+          <input id="toggle-state" type="radio" class="js-panel-toggle-control" name="receipt-aggregate" value="by-state">
+          <span class="button--alt">State</span>
+        </label>
+        <label for="toggle-contribution-size">
+          <input id="toggle-contribution-size" type="radio" class="js-panel-toggle-control" name="receipt-aggregate" value="by-contribution-size">
+          <span class="button--alt">Size</span>
+        </label>
+        <label for="toggle-employer">
+          <input id="toggle-employer" type="radio" class="js-panel-toggle-control" name="receipt-aggregate" value="by-employer">
+          <span class="button--alt">Employer</span>
+        </label>
+        <label for="toggle-occupation">
+          <input id="toggle-occupation" type="radio" class="js-panel-toggle-control" name="receipt-aggregate" value="by-occupation">
+          <span class="button--alt">Occupation</span>
+        </label>
+      </fieldset>
+      <div class="row">
+        <div id="by-state" class="panel-toggle-element" aria-hidden="true">
+          <div class="results-info results-info--simple">
+            {% if totals %}
+            <div class="u-float-left tag__category">
+              <div class="tag__item">Coverage dates: {{totals.0.coverage_start_date|date}} to {{totals.0.coverage_end_date|date}}</div>
+            </div>
+            {% endif %}
+            <button type="button" class="u-float-right js-export button button--cta button--export" data-export-for="receipts-by-state">Export</button>
+          </div>
+          <div class="map-table">
+            <table
+                class="data-table data-table--heading-borders"
+                data-type="receipts-by-state"
+                data-committee="{{ committee.committee_id }}"
+                data-cycle="{{ cycle }}"
+              >
+              <thead>
+                <th scope="col">State</th>
+                <th scope="col">Total contributed</th>
+              </thead>
+            </table>
+          </div>
+          <div class="map-panel">
+            <div class="state-map" data-committee-id="{{ committee.committee_id }}" data-cycle="{{ cycle }}">
+              <div class="legend-container">
+                <span class="t-sans t-block">By state: total amount received</span>
+                <svg></svg>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div id="by-contribution-size" class="panel-toggle-element" aria-hidden="true">
+          <div class="results-info results-info--simple">
+            {% if totals %}
+            <div class="u-float-left tag__category">
+              <div class="tag__item">Coverage dates: {{totals.0.coverage_start_date|date}} to {{totals.0.coverage_end_date|date}}</div>
+            </div>
+            {% endif %}
+            <button type="button" class="u-float-right js-export button button--cta button--export" data-export-for="contribution-size">Export</button>
+          </div>
+          <table
+             class="data-table data-table--heading-borders"
+             data-type="contribution-size"
+             data-committee="{{ committee.committee_id }}"
+             data-cycle="{{ cycle }}">
+            <thead>
+              <th scope="col">Contribution size</th>
+              <th scope="col">Total contributed</th>
+            </thead>
+          </table>
+        </div>
+        <div id="by-employer" class="panel-toggle-element" aria-hidden="true">
+          <div class="results-info results-info--simple">
+            {% if totals %}
+            <div class="u-float-left tag__category">
+              <div class="tag__item">Coverage dates: {{totals.0.coverage_start_date|date}} to {{totals.0.coverage_end_date|date}}</div>
+            </div>
+            {% endif %}
+            <button type="button" class="u-float-right js-export button button--cta button--export" data-export-for="receipts-by-employer">Export</button>
+          </div>
+          <table
+              class="data-table data-table--heading-borders"
+              data-type="receipts-by-employer"
+              data-committee="{{ committee.committee_id }}"
+              data-cycle="{{ cycle }}"
+            >
+            <thead>
+              <th scope="col">Employer</th>
+              <th scope="col">Total contributed</th>
+            </thead>
+          </table>
+          {{ disclaimer.disclaimer('receipts', committee.committee_id, cycle) }}
+        </div>
+
+        <div id="by-occupation" class="panel-toggle-element" aria-hidden="true">
+          <div class="results-info results-info--simple">
+            {% if totals %}
+            <div class="u-float-left tag__category">
+              <div class="tag__item">Coverage dates: {{totals.0.coverage_start_date|date}} to {{totals.0.coverage_end_date|date}}</div>
+            </div>
+            {% endif %}
+            <button type="button" class="u-float-right js-export button button--cta button--export" data-export-for="receipts-by-occupation">Export</button>
+          </div>
+          <table
+              class="data-table data-table--heading-borders"
+              data-type="receipts-by-occupation"
+              data-committee="{{ committee.committee_id }}"
+              data-cycle="{{ cycle }}"
+            >
+            <thead>
+              <th scope="col">Occupation</th>
+              <th scope="col">Total contributed</th>
+            </thead>
+          </table>
+          {{ disclaimer.disclaimer('receipts', committee.committee_id, cycle) }}
+        </div>
+
+        <div id="itemized-contributions" class="panel-toggle-element">
+          <div class="results-info results-info--simple">
+            {% if totals %}
+            <div class="u-float-left tag__category">
+              <div class="tag__item">Coverage dates: {{totals.0.coverage_start_date|date}} to {{totals.0.coverage_end_date|date}}</div>
+            </div>
+            {% endif %}
+            <div class="u-float-right">
+              <button type="button" class="js-export button button--cta button--export" data-export-for="itemized-receipts">Export</button>
+              <div class="message message--info message--mini t-left-aligned data-container__message" data-export-message-for="itemized-receipts" aria-hidden="true"></div>
+            </div>
+          </div>
+          <table
+              class="data-table data-table--heading-borders"
+              data-type="itemized-receipts"
+              data-committee="{{ committee.committee_id }}"
+              data-cycle="{{ cycle }}"
+            >
+            <thead>
+              <th scope="col">Contributor name</th>
+              <th scope="col">Contributor state</th>
+              <th scope="col">Receipt date</th>
+              <th scope="col">Amount</th>
+            </thead>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

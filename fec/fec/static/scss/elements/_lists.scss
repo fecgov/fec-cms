@@ -1,0 +1,52 @@
+// Lists
+//
+// Blank list markup. No bullets, no numbers.
+//
+// <ul>
+//  <li>Unordered list item 1</li>
+//  <li>Unordered list item 2</li>
+//  <li>Unordered list item 2</li>
+// </ul>
+// <ol>
+//  <li>Ordered list item 1</li>
+//  <li>Ordered list item 2</li>
+//  <li>Ordered list item 2</li>
+// </ol>
+//
+
+ul,
+ol {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+
+  ul,
+  ol {
+    margin-left: u(2rem);
+  }
+}
+
+dl {
+  margin-bottom: u(1rem);
+
+  dt {
+    font-weight: bold;
+    margin-top: u(1rem);
+  }
+
+  dd {
+    margin: 0;
+  }
+}
+
+// When <p>s are inside <li>s, they shouldn't have bottom margin.
+// Only targetting the last-child in case there's a situation with multiple <p>
+// in which case every one but the last should have margin-bottom.
+li p:last-child {
+  margin-bottom: 0;
+}
+
+p + ul,
+p + ol {
+  margin-top: u(-2rem);
+}

@@ -1,0 +1,12 @@
+<li class="download {{#if downloadUrl}}is-complete{{else}}is-pending{{/if}}">
+  <div class="download__item">
+    <span id="download-file-name" class="download__name">{{filename}}</span>
+      <a class="button button--cta download__button {{#unless downloadUrl}}is-disabled{{/unless}}"
+              href="{{downloadUrl}}"
+              aria-describedby="download-file-name">Download</a>
+    <button class="js-close button--cancel download__cancel"><span class="u-visually-hidden">Remove</span></button>
+  </div>
+  {{#unless downloadUrl}}
+    <p class="download__message">We're preparing your download. Your wait will vary depending on how many records you requested and how many downloads we're processing.</p>
+  {{/unless}}
+</li>
