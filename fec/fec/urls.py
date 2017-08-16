@@ -27,11 +27,7 @@ urlpatterns = [
     url(r'^meetings/$', home_views.index_meetings, name="meetings_page"),
     url(r'^hearings/$', home_views.hearings),
     url(r'^executive_sessions/$', home_views.executive_sessions),
-    #url(r'^meetings/executive_sessions/$', home_views.executive_sessions),
     url(r'', include(wagtail_urls)),
-
-    #url(r'^meetings/(?P<active>\w+)/$', home_views.index_meetings),
-
 ]
 
 if settings.FEC_CMS_ENVIRONMENT != 'LOCAL':

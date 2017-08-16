@@ -209,7 +209,7 @@
               <div class="results-info">
                 <span>Page {{ executive_sessions.number }} of {{ executive_sessions.paginator.num_pages }}</span>
                   {% if executive_sessions.has_previous %}
-                    <a class="button button--standard button--previous" href="?page_e={{ executive_sessions.previous_page_number }}{% for key,value in request.GET.items %}{% ifnotequal key 'page' %}&amp;{{ key }}={{ value }}{% endifnotequal %}{% endfor %}"><span class="u-visually-hidden">Previous</span></a>
+                    <a class="button button--standard button--previous" href="?tab=executive-session&page_e={{ executive_sessions.previous_page_number }}{% for key,value in request.GET.items %}{% ifnotequal key 'page' %}&amp;{{ key }}={{ value }}{% endifnotequal %}{% endfor %}"><span class="u-visually-hidden">Previous</span></a>
               {% endif %}
               {% if executive_sessions.has_next %}
                 <a class="button button--standard button--next" href="?page_e={{ executive_sessions.next_page_number }}{% for key,value in request.GET.items %}{% ifnotequal key 'page' %}&amp;{{ key }}={{ value }}{% endifnotequal %}{% endfor %}"><span class="u-visually-hidden">Next</span></a>
@@ -234,7 +234,4 @@
     </section>
  </div>
 </section>
-{% endblock %}
-{% block extra_js %}
-  <script type="text/javascript" src="{% static 'js/mtgBX.js' %}"></script>
 {% endblock %}
