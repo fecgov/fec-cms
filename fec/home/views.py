@@ -312,16 +312,6 @@ def index_meetings(request):#,#  year=None, search=None, active=None):
     years = MeetingPage.objects.dates('date', 'year', order='DESC')
     years_h = hearings.dates('date', 'year', order='DESC')
     years_e = executive_sessions.dates('date', 'year', order='DESC')
-    # year_h = request.GET.get('year_h', '')
-    # search_h = request.GET.get('search_h', '')
-
-
-    # executive_sessions = meetings.filter(meeting_type ='E')
-    # years_e = executive_sessions.dates('date', 'year', order='DESC')
-    # year_e = request.GET.get('year_e', '')
-    # search_e = request.GET.get('search_e', '')
-
-
 
     if year:
         # Trying to filter using the built-in date__year parameter doesn't
@@ -337,41 +327,6 @@ def index_meetings(request):#,#  year=None, search=None, active=None):
         meetings = meetings.search(search)
         open_meetings = open_meetings.search(search)
         executive_sessions = executive_sessions.search(search)
-
-
-    # if year_h:
-    #     # Trying to filter using the built-in date__year parameter doesn't
-    #     # work when chaining filter() and search(), so this uses date_gte and date_lte
-    #     year_h = int(year_h)
-    #     hearings = hearings.filter(date__gte=datetime(year_h, 1, 1)).filter(date__lte=datetime(year_h, 12, 31))
-
-    # if search_h:
-    #     hearings = hearings.search(search)
-
-    # if year_e:
-    #     # Trying to filter using the built-in date__year parameter doesn't
-    #     # work when chaining filter() and search(), so this uses date_gte and date_lte
-    #     year_e = int(year_e)
-    #     executive_sessions = executive_sessions.filter(date__gte=datetime(year_e, 1, 1)).filter(date__lte=datetime(year_e, 12, 31))
-
-    # if search_e:
-    #     executive_sessions = executive_sessions.search(search)
-
-
-    # Handle pagination
-    # page = request.GET.get('page', 1)
-    # paginator = Paginator(open_meetings, 20)
-    # try:
-    #     open_meetings= paginator.page(page)
-    #     executive_sessions = paginator.page(page)
-    # except PageNotAnInteger:
-    #     open_meetings = paginator.page(1)
-    #     executive_sessions = paginator.page(1)
-    # except EmptyPage:
-    #     open_meetings = paginator.page(paginator.num_pages)
-    #     executive_sessions = paginator.page(paginator.num_pages)
-
-
 
 
     page = request.GET.get('page', 1)
@@ -425,21 +380,12 @@ def index_meetings(request):#,#  year=None, search=None, active=None):
         'meetings': meetings,
         'open_meetings': open_meetings,
         'years': years,
-        'active':request.GET.get('tab', ''),
 
-
-        # 'year_h': year_h,
         'years_h': years_h,
-        # 'search': search,
         'hearings': hearings,
 
-        # 'year_e': year_e,
         'years_e': years_e,
-        # 'search_e': search_e,
         'executive_sessions': executive_sessions,
-        #'page_e': page_e,
-        #'paginator_e': paginator_e
-
         })
 
 def hearings(request):
@@ -490,7 +436,6 @@ def executive_sessions(request):
     if search:
         executive_sessions = executive_sessions.search(search)
 
-
     page_context = {
       'title': 'Executive Sessions',
     }
@@ -505,11 +450,3 @@ def executive_sessions(request):
         'executive_sessions': executive_sessions,
         'meetings':meetings,
         })
-
-
-def query_transform(request, **kwargs):
-    updated = request.GET.copy()
-    for k, v in kwargs.items():
-        updated[k] = v
-
-    return updated.urlencode()
