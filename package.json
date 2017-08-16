@@ -8,6 +8,7 @@
   },
   "dependencies": {
     "ace-builds": "1.2.2",
+    "a11y-dialog": "2.3.1",    
     "aria-accordion": "1.0.0",
     "component-sticky": "1.0.0",
     "es6-weak-map": "2.0.1",
