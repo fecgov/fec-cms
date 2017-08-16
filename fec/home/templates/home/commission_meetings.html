@@ -41,7 +41,7 @@
                 <a class="side-nav__link" id="executive_tab"
                     role="tab"
                     data-name="executive-sessions"
-                    tabindex="013"
+                    tabindex="0"
                     aria-controls="meetings-page-meetings-executive-sessions"
                     href="#meetings-page-meetings-executive-sessions"
                     >Executive Sessions</a>
@@ -80,7 +80,7 @@
             {% if open_meetings %}
                <table class="simple-table">
                   <tbody>
-                    {% for open_meeting in open_meetings reversed %}
+                    {% for open_meeting in open_meetings %}
                       {% include 'partials/meeting.html' with meeting=open_meeting %}
                      {% endfor %}
                   </tbody>
@@ -128,8 +128,8 @@
                   </div>
                   <div class="filter">
                     <div class="combo combo--filter--mini">
-                      <label for="search_h" class="label">Search</label>
-                      <input id="search_h" class="combo__input" name="search_h" type="text" value="{{ search }}">
+                      <label for="search" class="label">Search</label>
+                      <input id="search" class="combo__input" name="search" type="text" value="{{ search }}">
                       <button type="submit" id="hearings_sub" class="combo__button button button--standard button--search"><span class="u-visually-hidden">Search</span></button>
                     </div>
                   </div>
@@ -140,7 +140,7 @@
             {% if hearings %}
                <table class="simple-table" id="hearings_table">
                   <tbody>
-                    {% for hearing in hearings reversed %}
+                    {% for hearing in hearings %}
                       {% include 'partials/meeting.html' with meeting=hearing %}
                      {% endfor %}
                   </tbody>
@@ -148,12 +148,12 @@
                </table>
 
               <div class="results-info">
-                <span>Page {{ hearings.number }} of {{ hearings.paginator_h.num_pages }}</span>
+                <span>Page {{ hearings.number }} of {{ hearings.paginator.num_pages }}</span>
                   {% if hearings.has_previous %}
-                    <a class="button button--standard button--previous" href="?page={{ executive_sessions.previous_page_number }}{% for key,value in request.GET.items %}{% ifnotequal key 'page' %}&amp;{{ key }}={{ value }}{% endifnotequal %}{% endfor %}"><span class="u-visually-hidden">Previous</span></a>
+                    <a class="button button--standard button--previous" href="?page_h={{ hearings.previous_page_number }}{% for key,value in request.GET.items %}{% ifnotequal key 'page' %}&amp;{{ key }}={{ value }}{% endifnotequal %}{% endfor %}"><span class="u-visually-hidden">Previous</span></a>
               {% endif %}
               {% if hearings.has_next %}
-                <a class="button button--standard button--next" href="?page={{ executive_sessions.next_page_number }}{% for key,value in request.GET.items %}{% ifnotequal key 'page' %}&amp;{{ key }}={{ value }}{% endifnotequal %}{% endfor %}"><span class="u-visually-hidden">Next</span></a>
+                <a class="button button--standard button--next" href="?page_h={{ hearings.next_page_number }}{% for key,value in request.GET.items %}{% ifnotequal key 'page' %}&amp;{{ key }}={{ value }}{% endifnotequal %}{% endfor %}"><span class="u-visually-hidden">Next</span></a>
               {% endif %}
              </div>
               {% else %}
@@ -201,18 +201,18 @@
             {% if executive_sessions %}
                <table class="simple-table">
                   <tbody>
-                    {% for executive_session in executive_sessions reversed %}
+                    {% for executive_session in executive_sessions  %}
                       {% include 'partials/meeting.html' with meeting=executive_session  %}
                     {% endfor %}
                   </tbody>
                </table>
               <div class="results-info">
-                <span>Page {{ executive_sessions.number }} of {{ executive_sessions.paginator_e.num_pages }}</span>
+                <span>Page {{ executive_sessions.number }} of {{ executive_sessions.paginator.num_pages }}</span>
                   {% if executive_sessions.has_previous %}
-                    <a class="button button--standard button--previous" href="?page={{ executive_sessions.previous_page_number }}{% for key,value in request.GET.items %}{% ifnotequal key 'page' %}&amp;{{ key }}={{ value }}{% endifnotequal %}{% endfor %}"><span class="u-visually-hidden">Previous</span></a>
+                    <a class="button button--standard button--previous" href="?tab=executive-session&page_e={{ executive_sessions.previous_page_number }}{% for key,value in request.GET.items %}{% ifnotequal key 'page' %}&amp;{{ key }}={{ value }}{% endifnotequal %}{% endfor %}"><span class="u-visually-hidden">Previous</span></a>
               {% endif %}
               {% if executive_sessions.has_next %}
-                <a class="button button--standard button--next" href="?page={{ executive_sessions.next_page_number }}{% for key,value in request.GET.items %}{% ifnotequal key 'page' %}&amp;{{ key }}={{ value }}{% endifnotequal %}{% endfor %}"><span class="u-visually-hidden">Next</span></a>
+                <a class="button button--standard button--next" href="?page_e={{ executive_sessions.next_page_number }}{% for key,value in request.GET.items %}{% ifnotequal key 'page' %}&amp;{{ key }}={{ value }}{% endifnotequal %}{% endfor %}"><span class="u-visually-hidden">Next</span></a>
               {% endif %}
              </div>
               {% else %}
