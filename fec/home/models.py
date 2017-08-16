@@ -188,15 +188,17 @@ def log_user_save(sender, **kwargs):
 @receiver(pre_delete, sender=PageRevision)
 @receiver(post_save, sender=PageRevision)
 def log_revisions(sender, **kwargs):
-    user_id = kwargs.get('instance').user_id
-    if user_id:
-        try:
-            user = User.objects.get(id=user_id)
-            logger.info("page was modified: {0} by user {1}".format(kwargs.get('instance'), user.get_username()))
-        except User.DoesNotExist:
-            logger.info("User not found")
-    else:
-        logger.info("User not found")
+    username = '(user not found)'
+    user = kwargs.get('instance').user
+
+    if user:
+        username = user.get_username()
+
+    logger.info('Page modified: {0} by user {1}'.format(
+        kwargs.get('instance'),
+        username
+    ))
+
 
 
 def user_groups_changed(sender, **kwargs):
