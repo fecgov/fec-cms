@@ -11,6 +11,8 @@ from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
 
 from django.shortcuts import get_object_or_404
+from django.shortcuts import redirect
+import urllib
 from wagtail.wagtaildocs.models import Document
 
 from fec.forms import ContactRAD, form_categories
@@ -22,10 +24,6 @@ from home.models import (
     TipsForTreasurersPage,
     MeetingPage
 )
-#for meetings, delet if NOT USED
-import urllib
-from django.shortcuts import redirect
-
 
 def replace_dash(string):
     return string.replace('-', ' ')
@@ -306,12 +304,18 @@ def index_meetings(request):#,#  year=None, search=None, active=None):
     hearings= meetings.filter(title__contains='Hearing')
     year = request.GET.get('year', '')
     search = request.GET.get('search', '')
-    active = request.GET.get('tab', '')
+    active = request.GET.get('tab', 'open-meetings')
+    page = request.GET.get('page', 1)
 
+    # Get the range of all years for each meeting type
+    # Used to populate the selects with only values that make sense
+    meetings_years = MeetingPage.objects.dates('date', 'year', order='DESC')
+    hearings_years = hearings.dates('date', 'year', order='DESC')
+    executive_years = executive_sessions.dates('date', 'year', order='DESC')
 
-    years = MeetingPage.objects.dates('date', 'year', order='DESC')
-    years_h = hearings.dates('date', 'year', order='DESC')
-    years_e = executive_sessions.dates('date', 'year', order='DESC')
+    meetings_query = ''
+    hearings_query = ''
+    executive_query = ''
 
     if year:
         # Trying to filter using the built-in date__year parameter doesn't
@@ -322,52 +326,45 @@ def index_meetings(request):#,#  year=None, search=None, active=None):
         hearings = hearings.filter(date__gte=datetime(year, 1, 1)).filter(date__lte=datetime(year, 12, 31))
         executive_sessions = executive_sessions.filter(date__gte=datetime(year, 1, 1)).filter(date__lte=datetime(year, 12, 31))
 
-
     if search:
-        meetings = meetings.search(search)
-        open_meetings = open_meetings.search(search)
-        executive_sessions = executive_sessions.search(search)
+        if active == 'open-meetings':
+            meetings_query = search
+            meetings = meetings.search(meetings_query)
+        if active == 'hearings':
+            hearings_query = search
+            hearings = hearings.search(hearings_query)
+        if active == 'executive-sessions':
+            executive_query = search
+            executive_sessions = executive_sessions.search(executive_query)
 
-
-    page = request.GET.get('page', 1)
-    paginator = Paginator(open_meetings, 20)
+    meetings_paginator = Paginator(open_meetings, 20)
+    meetings_page =  page if active == 'open-meetings' else 1
     try:
-        open_meetings = paginator.page(page)
-
+        open_meetings = meetings_paginator.page(meetings_page)
     except PageNotAnInteger:
-        open_meetings = paginator.page(1)
-
+        open_meetings = meetings_paginator.page(1)
     except EmptyPage:
-        open_meetings = paginator.page(paginator.num_pages)
+        open_meetings = meetings_paginator.page(paginator.num_pages)
 
 
-
-    page = request.GET.get('page_h', 1)
-    paginator = Paginator(hearings, 20)
-
+    hearings_paginator = Paginator(hearings, 20)
+    hearings_page = page if active == 'hearings' else 1
     try:
-        hearings = paginator.page(page)
-
+        hearings = hearings_paginator.page(hearings_page)
     except PageNotAnInteger:
-        hearings = paginator.page(1)
-
+        hearings = hearings_paginator.page(1)
     except EmptyPage:
-        hearings = paginator.page(paginator.num_pages)
+        hearings = hearings_paginator.page(paginator.num_pages)
 
 
-
-    page = request.GET.get('page_e', 1)
-    paginator= Paginator(executive_sessions, 20)
-
+    executive_paginator = Paginator(executive_sessions, 20)
+    executive_page = page if active == 'executive-sessions' else 1
     try:
-        executive_sessions = paginator.page(page)
-
+        executive_sessions = executive_paginator.page(executive_page)
     except PageNotAnInteger:
-        executive_sessions = paginator.page(1)
-
+        executive_sessions = executive_paginator.page(1)
     except EmptyPage:
-        executive_sessions = paginator.page(paginator.num_pages)
-
+        executive_sessions = executive_paginator.page(paginator.num_pages)
 
     page_context = {
       'title': 'Commission meetings',
@@ -376,77 +373,16 @@ def index_meetings(request):#,#  year=None, search=None, active=None):
     return render(request, 'home/commission_meetings.html',{
         'self': page_context,
         'year': year,
-        'search': search,
+        'meetings_query': meetings_query,
+        'hearings_query': hearings_query,
+        'executive_query': executive_query,
         'meetings': meetings,
         'open_meetings': open_meetings,
-        'years': years,
+        'meetings_years': meetings_years,
 
-        'years_h': years_h,
+        'hearings_years': hearings_years,
         'hearings': hearings,
 
-        'years_e': years_e,
+        'executive_years': executive_years,
         'executive_sessions': executive_sessions,
-        })
-
-def hearings(request):
-    meetings = MeetingPage.objects.live().order_by("-date")
-    hearings= meetings.filter(title__contains='Hearing')
-    years_h = hearings.dates('date', 'year', order='DESC')
-    year = request.GET.get('year', '')
-    search = request.GET.get('search', '')
-
-    if year:
-        # Trying to filter using the built-in date__year parameter doesn't
-        # work when chaining filter() and search(), so this uses date_gte and date_lte
-        year = int(year)
-        hearings = hearings.filter(date__gte=datetime(year, 1, 1)).filter(date__lte=datetime(year, 12, 31))
-
-    if search:
-        hearings = hearings.search(search)
-
-    page_context = {
-      'title': 'Hearings',
-    }
-
-    return HttpResponseRedirect(reverse('meetings_page') + "?year="+str(year)+"&search="+search+"&tab=hearings"
-    #return HttpResponseRedirect(reverse('meetings_page') + "?tab=hearings"
-        ,{
-        'self': page_context,
-        'years_h': years_h,
-        'year': year,
-        'search': search,
-        'hearings': hearings,
-        'meetings':meetings,
-
-        })
-
-def executive_sessions(request):
-    meetings = MeetingPage.objects.live().order_by("-date")
-    executive_sessions = meetings.filter(meeting_type ='E')
-    years_e = executive_sessions.dates('date', 'year', order='DESC')
-    year = request.GET.get('year', '')
-    search = request.GET.get('search', '')
-
-    if year:
-        # Trying to filter using the built-in date__year parameter doesn't
-        # work when chaining filter() and search(), so this uses date_gte and date_lte
-        year = int(year)
-        executive_sessions = executive_sessions.filter(date__gte=datetime(year, 1, 1)).filter(date__lte=datetime(year, 12, 31))
-
-    if search:
-        executive_sessions = executive_sessions.search(search)
-
-    page_context = {
-      'title': 'Executive Sessions',
-    }
-
-    return HttpResponseRedirect(reverse('meetings_page') + "?year="+str(year)+"&search="+search+"&tab=executive-sessions"
-    #return HttpResponseRedirect(reverse('meetings_page') + "?tab=hearings"
-        ,{
-        'self': page_context,
-        'years_e': years_e,
-        'year': year,
-        'search': search,
-        'executive_sessions': executive_sessions,
-        'meetings':meetings,
         })
