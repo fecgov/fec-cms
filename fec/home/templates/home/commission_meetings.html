@@ -19,42 +19,41 @@
           <nav class="sidebar side-nav-alt">
             <ul class="tablist" role="tablist" data-name="tab">
               <li class="side-nav__item" role="presentation">
-                <a class="side-nav__link" id="openmeetings_tab"
+                <a class="side-nav__link"
                     role="tab"
                     data-name="open-meetings"
                     tabindex="0"
-                    aria-controls="meetings-page-meetings-open-meetings"
-                    href="#meetings-page-meetings-open-meetings"
+                    aria-controls="meetings-open-meetings"
+                    href="#meetings-open-meetings"
                     aria-selected=""
                     >Open Meetings</a>
               </li>
               <li class="side-nav__item" role="presentation">
-                <a class="side-nav__link" id="hearings_tab"
+                <a class="side-nav__link"
                     role="tab"
                     data-name="hearings"
                     tabindex="0"
-                    aria-controls="meetings-page-meetings-hearings"
-                    href="#meetings-page-meetings-hearings"
+                    aria-controls="meetings-hearings"
+                    href="#meetings-hearings"
                     >Hearings</a>
               </li>
               <li class="side-nav__item" role="presentation">
-                <a class="side-nav__link" id="executive_tab"
+                <a class="side-nav__link"
                     role="tab"
                     data-name="executive-sessions"
                     tabindex="0"
-                    aria-controls="meetings-page-meetings-executive-sessions"
-                    href="#meetings-page-meetings-executive-sessions"
+                    aria-controls="meetings-executive-sessions"
+                    href="#meetings-executive-sessions"
                     >Executive Sessions</a>
               </li>
             </ul>
           </nav>
         </div>
         <div class="main__content--right">
-          <section id="meetings-page-meetings-open-meetings" role="tabpanel" aria-hidden="true" aria-labelledby="open-meetings">
-            <h2 id="meetings-page-meetings-open-meetings">Open Meetings</h2>
+          <section id="meetings-open-meetings" role="tabpanel" aria-hidden="true" aria-labelledby="open-meetings">
+            <h2>Open Meetings</h2>
              <p>Open to the public. The Commission considers new regulations, advisory opinions and other public matters at open meetings, which are typically held at FEC headquarters on Thursdays at 10:00am. Commission meeting agendas are usually published a week before a scheduled meeting.</p>
             <div class="filters--horizontal">
-             {% block filters1 %}
                <form action="/meetings" id="openmeetings_form" method="get" class="js-form-nav container">
                   <div class="filter">
                       <label for="year" class="label">Year</label>
@@ -74,9 +73,7 @@
                     </div>
                   </div>
               </form>
-             {% endblock %}
             </div>
-           {% block feed1 %}
             {% if open_meetings %}
                <table class="simple-table">
                   <tbody>
@@ -107,16 +104,13 @@
                </div>
             </div>
               {% endif %}
-           {% endblock %}
           </section>
-          <section id="meetings-page-meetings-hearings" role="tabpanel" aria-hidden="true" aria-labelledby="hearings">
-            <h2 id="meetings-page-meetings-hearings">Hearings</h2>
+          <section id="meetings-hearings" role="tabpanel" aria-hidden="true" aria-labelledby="hearings">
+            <h2>Hearings</h2>
             <p>The Commission periodically holds public hearings at its headquarters in Washington, DC. These hearings offer interested persons an opportunity to testify concerning proposed regulations and other matters that come before the Commission.</p>
             <div class="filters--horizontal">
-             {% block filters2 %}
                <form action="/hearings" id="hearings_form" method="get" class="js-form-nav container">
                   <div class="filter">
-
                       <label for="year" class="label">Year</label>
                       <select id="year" name="year">
                         <option {% if year %} value="{{ year }}" {% else %} value ="" {% endif %}> {% if year %} {{ year }}{% else %} All{% endif %}</option>
@@ -134,9 +128,7 @@
                     </div>
                   </div>
               </form>
-              {% endblock %}
              </div>
-           {% block feed2 %}
             {% if hearings %}
                <table class="simple-table" id="hearings_table">
                   <tbody>
@@ -144,9 +136,7 @@
                       {% include 'partials/meeting.html' with meeting=hearing %}
                      {% endfor %}
                   </tbody>
-
                </table>
-
               <div class="results-info">
                 <span>Page {{ hearings.number }} of {{ hearings.paginator.num_pages }}</span>
                   {% if hearings.has_previous %}
@@ -169,13 +159,11 @@
                </div>
             </div>
             {% endif %}
-            {% endblock %}
           </section>
-          <section id="meetings-page-meetings-executive-sessions" role="tabpanel" aria-hidden="true" aria-labelledby="executive-sessions">
-            <h2 id="meetings-page-meetings-executive-sessions">Executive Sessions</h2>
+          <section id="meetings-executive-sessions" role="tabpanel" aria-hidden="true" aria-labelledby="executive-sessions">
+            <h2>Executive Sessions</h2>
             <p>Confidential and closed to the public. The Commission meets regularly in executive sessions to discuss pending enforcement actions, litigation and other matters that, by law, must be kept confidential.</p>
             <div class="filters--horizontal">
-             {% block filters3 %}
                <form action="/executive_sessions" id="executive_form" method="get" class="js-form-nav container">
                   <div class="filter">
                       <label for="year" class="label">Year</label>
@@ -195,9 +183,7 @@
                     </div>
                   </div>
               </form>
-             {% endblock %}
              </div>
-            {% block feed3 %}
             {% if executive_sessions %}
                <table class="simple-table">
                   <tbody>
@@ -228,7 +214,6 @@
                </div>
              </div>
             {% endif %}
-            {% endblock %}
           </section>
       </div>
     </section>

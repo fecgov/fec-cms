@@ -11,6 +11,8 @@ from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
 
 from django.shortcuts import get_object_or_404
+from django.shortcuts import redirect
+import urllib
 from wagtail.wagtaildocs.models import Document
 
 from fec.forms import ContactRAD, form_categories
@@ -22,10 +24,6 @@ from home.models import (
     TipsForTreasurersPage,
     MeetingPage
 )
-#for meetings, delet if NOT USED
-import urllib
-from django.shortcuts import redirect
-
 
 def replace_dash(string):
     return string.replace('-', ' ')
@@ -308,10 +306,10 @@ def index_meetings(request):#,#  year=None, search=None, active=None):
     search = request.GET.get('search', '')
     active = request.GET.get('tab', '')
 
-
     years = MeetingPage.objects.dates('date', 'year', order='DESC')
     years_h = hearings.dates('date', 'year', order='DESC')
     years_e = executive_sessions.dates('date', 'year', order='DESC')
+
 
     if year:
         # Trying to filter using the built-in date__year parameter doesn't
@@ -321,7 +319,6 @@ def index_meetings(request):#,#  year=None, search=None, active=None):
         open_meetings = open_meetings.filter(date__gte=datetime(year, 1, 1)).filter(date__lte=datetime(year, 12, 31))
         hearings = hearings.filter(date__gte=datetime(year, 1, 1)).filter(date__lte=datetime(year, 12, 31))
         executive_sessions = executive_sessions.filter(date__gte=datetime(year, 1, 1)).filter(date__lte=datetime(year, 12, 31))
-
 
     if search:
         meetings = meetings.search(search)
@@ -339,7 +336,6 @@ def index_meetings(request):#,#  year=None, search=None, active=None):
 
     except EmptyPage:
         open_meetings = paginator.page(paginator.num_pages)
-
 
 
     page = request.GET.get('page_h', 1)
@@ -409,7 +405,6 @@ def hearings(request):
     }
 
     return HttpResponseRedirect(reverse('meetings_page') + "?year="+str(year)+"&search="+search+"&tab=hearings"
-    #return HttpResponseRedirect(reverse('meetings_page') + "?tab=hearings"
         ,{
         'self': page_context,
         'years_h': years_h,
@@ -441,7 +436,6 @@ def executive_sessions(request):
     }
 
     return HttpResponseRedirect(reverse('meetings_page') + "?year="+str(year)+"&search="+search+"&tab=executive-sessions"
-    #return HttpResponseRedirect(reverse('meetings_page') + "?tab=hearings"
         ,{
         'self': page_context,
         'years_e': years_e,
