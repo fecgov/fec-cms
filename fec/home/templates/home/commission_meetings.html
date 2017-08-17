@@ -58,9 +58,10 @@
                   <div class="filter">
                       <label for="year" class="label">Year</label>
                       <select id="year" name="year">
+                        {% if year %}<option value="{{ year }}" selected >{{year}}</option>{% endif %}
                         <option value="">All</option>
                         {% for item in meetings_years %}
-                        <option value="{{ item | date:"Y" }}" {% if year == item %}selected{% endif %}>{{ item|date:"Y" }}</option>
+                        <option value="{{ item | date:'Y' }}">{{ item|date:'Y' }}</option>
                         {% endfor %}
                       </select>
                   </div>
@@ -113,9 +114,10 @@
                   <div class="filter">
                       <label for="year" class="label">Year</label>
                       <select id="year" name="year">
+                        {% if year %}<option value="{{ year }}" selected >{{year}}</option>{% endif %}
                         <option value="">All</option>
                         {% for item in hearings_years %}
-                        <option value="{{ item | date:"Y" }}" {% if year == item %}selected{% endif %}>{{ item|date:"Y" }}</option>
+                        <option value="{{ item | date:"Y" }}">{{ item|date:"Y" }}</option>
                         {% endfor %}
                       </select>
                   </div>
@@ -168,9 +170,10 @@
                   <div class="filter">
                       <label for="year" class="label">Year</label>
                       <select id="year" name="year">
+                        {% if year %}<option value="{{ year }}" selected >{{year}}</option>{% endif %}
                         <option value="">All</option>
                         {% for item in executive_years %}
-                        <option value="{{ item | date:"Y" }}" {% if year == item %}selected{% endif %}>{{ item|date:"Y" }}</option>
+                        <option value="{{ item | date:"Y" }}">{{ item|date:"Y" }}</option>
                         {% endfor %}
                       </select>
                   </div>
