@@ -42,9 +42,40 @@ def date_full(value, fmt='%B %d, %Y'):
 #     date = date_filter(value)
 #     return 'Not dated' if date == '01/01/1900' else date
 
+
 @library.filter
 def to_json(value):
     return json.dumps(value)
+
+
+@library.global_function
+def cycle_start(value):
+    return datetime.datetime(value - 1, 1, 1)
+
+
+@library.global_function
+def cycle_end(value):
+    return datetime.datetime(value, 12, 31)
+
+
+def nullify(value, *nulls):
+    return value if value not in nulls else None
+
+
+@library.global_function
+def get_election_url(candidate, cycle, district=None):
+
+    if cycle:
+        if candidate['office'] == 'H':
+            district_url = '/' + str(candidate['state']) + '/' + nullify(candidate['district'], '00')
+        elif candidate['office'] == 'S':
+            district_url = '/' + str(candidate['state'])
+        else:
+            district_url = ''
+
+        return '/data/elections/' + candidate['office_full'].lower() + district_url + '/' + str(cycle)
+    else:
+        return None
 
 # @app.template_filter('filesize')
 # def filesize_filter(value):

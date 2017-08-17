@@ -57,23 +57,20 @@
         {% endif %}
       </table>
 
-      {#
-      TODO: translate this
       <div class="usa-width-one-fourth">
         <div class="card">
-          {% if election_url(context(), cycle) %}
-          <a href="{{ election_url(context(), election_year) }}">
+          {% if get_election_url(candidate, cycle, district) %}
+          <a href="{{ get_election_url(candidate, cycle, district) }}">
             <div class="card__image__container">
               <img class="icon--complex" src="/static/img/i-elections--primary.svg" alt="Icon representing elections">
             </div>
             <div class="card__content">
-              View all candidates in the {{ election_year }} {{ constants.states[state] }} {% if office == 'P' %}Presidential{% else %}{{ office_full }}{% endif %}{% if office_full == 'House' %} district {{ district }}{% endif %} election
+              View all candidates in the {{ election_year }} {% if constants.states[state] %}{{ constants.states[state] }}{% endif %} {% if office == 'P' %}Presidential{% else %}{{ office_full }}{% endif %}{% if office_full == 'House' %} district {{ district }}{% endif %} election
             </div>
           </a>
           {% endif %}
         </div>
       </div>
-      #}
 
     </div>
 

@@ -202,6 +202,7 @@ def candidate(request, candidate_id):
         'two_year_totals': two_year_totals,
         'statement_of_candidacy': statement_of_candidacy,
         'elections': elections,
+        'candidate': candidate,
         'constants': constants,
         'context_vars': context_vars
     })

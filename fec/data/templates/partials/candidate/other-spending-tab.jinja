@@ -21,12 +21,12 @@
         <div class="usa-width-one-half">
           <span class="label">Support</span>
           <span class="t-big-data js-support"><img src="{{ static('img/loading-ellipsis.gif') }}" alt="Loading indicator"></span>
-          <span class="t-block t-sans">Spent by others to <strong>support</strong> from <strong>CYCLE STARTto CYCLE END.</strong></span>
+          <span class="t-block t-sans">Spent by others to <strong>support</strong> from <strong>{{cycle_start(min_cycle)|date_full}} to {{cycle_end(max_cycle)|date_full}}.</strong></span>
         </div>
         <div class="usa-width-one-half">
           <span class="label">Oppose</span>
           <span class="t-big-data js-oppose"><img src="{{ static('img/loading-ellipsis.gif') }}" alt="Loading indicator"></span>
-          <span class="t-block t-sans">Spent by others to <strong>oppose</strong> from <strong>CYCLE STARTto CYCLE END.</strong></span>
+          <span class="t-block t-sans">Spent by others to <strong>oppose</strong> from <strong>{{cycle_start(min_cycle)|date_full}} to {{cycle_end(max_cycle)|date_full}}.</strong></span>
         </div>
       </div>
       <table
@@ -60,12 +60,12 @@
         <div class="usa-width-one-half">
           <span class="label">Support</span>
           <span class="t-big-data js-support"><img src="{{ static('img/loading-ellipsis.gif') }}" alt="Loading indicator"></span>
-          <span class="t-block t-sans">Spent by others to <strong>support</strong> from <strong>CYCLE STARTto CYCLE END.</strong></span>
+          <span class="t-block t-sans">Spent by others to <strong>support</strong> from <strong>{{cycle_start(min_cycle)|date_full}} to {{cycle_end(max_cycle)|date_full}}.</strong></span>
         </div>
         <div class="usa-width-one-half">
           <span class="label">Oppose</span>
           <span class="t-big-data js-oppose"><img src="{{ static('img/loading-ellipsis.gif') }}" alt="Loading indicator"></span>
-          <span class="t-block t-sans">Spent by others to <strong>oppose</strong> from <strong>CYCLE STARTto CYCLE END.</strong></span>
+          <span class="t-block t-sans">Spent by others to <strong>support</strong> from <strong>{{cycle_start(min_cycle)|date_full}} to {{cycle_end(max_cycle)|date_full}}.</strong></span>
         </div>
       </div>
       <table
@@ -95,7 +95,7 @@
       <div class="results-info results-info--simple js-other-spending-totals" data-spending-type="electioneering">
         <div class="usa-width-one-half">
           <span class="t-big-data js-total-electioneering u-margin--top"><img src="{{ static('img/loading-ellipsis.gif') }}" alt="Loading indicator"></span>
-          <span class="t-block t-sans">Spent by others that mentioned this candidate <strong>CYCLE START to CYCLE_END.</strong></span>
+          <span class="t-block t-sans">Spent by others that mentioned this candidate <strong>{{cycle_start(min_cycle)|date_full}} to {{cycle_end(max_cycle)|date_full}}.</strong></span>
         </div>
       </div>
 
