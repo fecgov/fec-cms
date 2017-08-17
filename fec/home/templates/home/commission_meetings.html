@@ -6,56 +6,44 @@
 {% block content %}
 
 {% include 'partials/breadcrumbs.html' with page=self links=self.get_ancestors style='secondary' %}
-
-  <section class="content__section--extra">
-    <div class="container">
-      <header class="heading--main">
-        <h1>{{ self.title }}</h1>
-      </header>
-    </div>
-  </section>
-
+<div class="container">
+ <header class="heading--main u-padding--top">
+    <h1>{{ self.title }}</h1>
+  </header>
+</div>
 <section class="main__content--full data-container__wrapper" id="feed">
   <div class="container">
-    <section id="meetings-page-meetings" class="slab tab-interface">
+    <section id="meetings-page-meetings" class="tab-interface u-padding--bottom">
       <div class="container">
         <div class="sidebar-container sidebar-container--left">
           <nav class="sidebar side-nav-alt">
             <ul class="tablist" role="tablist" data-name="tab">
               <li class="side-nav__item" role="presentation">
-                <a class="side-nav__link"
+                <a class="side-nav__link" id="openmeetings_tab"
                     role="tab"
                     data-name="open-meetings"
                     tabindex="0"
                     aria-controls="meetings-page-meetings-open-meetings"
                     href="#meetings-page-meetings-open-meetings"
-                    {# the below expressions return the right values but do not set active tab on submit(?) #}
-                    aria-selected="
-                    {% for key,value in request.GET.items %}{% ifequal value 'open-meetings' %}true{% endifequal %}{% endfor %}
-                    {% for key,value in request.GET.items %}{% ifnotequal value 'open-meetings' %}false{% endifnotequal %}{% endfor %}"
+                    aria-selected=""
                     >Open Meetings</a>
               </li>
               <li class="side-nav__item" role="presentation">
-                <a class="side-nav__link"
+                <a class="side-nav__link" id="hearings_tab"
                     role="tab"
                     data-name="hearings"
                     tabindex="0"
                     aria-controls="meetings-page-meetings-hearings"
                     href="#meetings-page-meetings-hearings"
-                    {# test using active variable instead in key,value loop above #}
-                    {% ifequal active 'hearings' %} aria-selected="true" data="test"{% else %} aria-selected="false" {% endifequal %}
                     >Hearings</a>
               </li>
               <li class="side-nav__item" role="presentation">
-                <a class="side-nav__link"
+                <a class="side-nav__link" id="executive_tab"
                     role="tab"
                     data-name="executive-sessions"
-                    tabindex="013"
+                    tabindex="0"
                     aria-controls="meetings-page-meetings-executive-sessions"
                     href="#meetings-page-meetings-executive-sessions"
-                    aria-selected="
-                    {% for key,value in request.GET.items %}{% ifequal value 'executive-sessions' %}true{% endifequal %}{% endfor %}
-                    {% for key,value in request.GET.items %}{% ifnotequal value 'executive-sessions' %}false{% endifnotequal %}{% endfor %}"
                     >Executive Sessions</a>
               </li>
             </ul>
@@ -67,14 +55,14 @@
              <p>Open to the public. The Commission considers new regulations, advisory opinions and other public matters at open meetings, which are typically held at FEC headquarters on Thursdays at 10:00am. Commission meeting agendas are usually published a week before a scheduled meeting.</p>
             <div class="filters--horizontal">
              {% block filters1 %}
-               <form action="/meetings" class="js-form-nav container">
+               <form action="/meetings" id="openmeetings_form" method="get" class="js-form-nav container">
                   <div class="filter">
                       <label for="year" class="label">Year</label>
                       <select id="year" name="year">
                         <option {% if year %} value="{{ year }}" {% else %} value ="" {% endif %}> {% if year %}{{ year }}{% else %}All{% endif %}</option>
                         <option value="">All</option>
                         {% for item in years %}
-                        <option value="{{ item | date:"Y" }}" {% ifequal year 'item'  %}{% endifequal %}>{{ item|date:"Y" }}</option>
+                        <option value="{{ item | date:"Y" }}" >{{ item|date:"Y" }}</option>
                         {% endfor %}
                       </select>
                   </div>
@@ -82,7 +70,7 @@
                     <div class="combo combo--filter--mini">
                       <label for="search" class="label">Search</label>
                       <input id="search" class="combo__input" name="search" type="text" value="{{ search }}">
-                      <button type="submit" class="combo__button button button--standard button--search"><span class="u-visually-hidden">Search</span></button>
+                      <button type="submit" id="open_sub" class="combo__button button button--standard button--search"><span class="u-visually-hidden">Search</span></button>
                     </div>
                   </div>
               </form>
@@ -92,7 +80,7 @@
             {% if open_meetings %}
                <table class="simple-table">
                   <tbody>
-                    {% for open_meeting in open_meetings reversed %}
+                    {% for open_meeting in open_meetings %}
                       {% include 'partials/meeting.html' with meeting=open_meeting %}
                      {% endfor %}
                   </tbody>
@@ -126,15 +114,15 @@
             <p>The Commission periodically holds public hearings at its headquarters in Washington, DC. These hearings offer interested persons an opportunity to testify concerning proposed regulations and other matters that come before the Commission.</p>
             <div class="filters--horizontal">
              {% block filters2 %}
-               <form action="/meetings" class="js-form-nav container">
+               <form action="/hearings" id="hearings_form" method="get" class="js-form-nav container">
                   <div class="filter">
 
                       <label for="year" class="label">Year</label>
                       <select id="year" name="year">
                         <option {% if year %} value="{{ year }}" {% else %} value ="" {% endif %}> {% if year %} {{ year }}{% else %} All{% endif %}</option>
                         <option value="">All</option>
-                        {% for item in years %}
-                        <option value="{{ item | date:"Y" }}" {% ifequal year 'item'  %}{% endifequal %}>{{ item|date:"Y" }}</option>
+                        {% for item in years_h %}
+                        <option value="{{ item | date:"Y" }}">{{ item|date:"Y" }}</option>
                         {% endfor %}
                       </select>
                   </div>
@@ -142,7 +130,7 @@
                     <div class="combo combo--filter--mini">
                       <label for="search" class="label">Search</label>
                       <input id="search" class="combo__input" name="search" type="text" value="{{ search }}">
-                      <button type="submit" class="combo__button button button--standard button--search"><span class="u-visually-hidden">Search</span></button>
+                      <button type="submit" id="hearings_sub" class="combo__button button button--standard button--search"><span class="u-visually-hidden">Search</span></button>
                     </div>
                   </div>
               </form>
@@ -150,21 +138,22 @@
              </div>
            {% block feed2 %}
             {% if hearings %}
-               <table class="simple-table">
+               <table class="simple-table" id="hearings_table">
                   <tbody>
-                    {% for hearing in hearings reversed %}
+                    {% for hearing in hearings %}
                       {% include 'partials/meeting.html' with meeting=hearing %}
                      {% endfor %}
                   </tbody>
+
                </table>
 
               <div class="results-info">
-                <span>Page {{ hearings.number }} of {{ hearings.paginator_h.num_pages }}</span>
+                <span>Page {{ hearings.number }} of {{ hearings.paginator.num_pages }}</span>
                   {% if hearings.has_previous %}
-                    <a class="button button--standard button--previous" href="?page={{ executive_sessions.previous_page_number }}{% for key,value in request.GET.items %}{% ifnotequal key 'page' %}&amp;{{ key }}={{ value }}{% endifnotequal %}{% endfor %}"><span class="u-visually-hidden">Previous</span></a>
+                    <a class="button button--standard button--previous" href="?page_h={{ hearings.previous_page_number }}{% for key,value in request.GET.items %}{% ifnotequal key 'page' %}&amp;{{ key }}={{ value }}{% endifnotequal %}{% endfor %}"><span class="u-visually-hidden">Previous</span></a>
               {% endif %}
               {% if hearings.has_next %}
-                <a class="button button--standard button--next" href="?page={{ executive_sessions.next_page_number }}{% for key,value in request.GET.items %}{% ifnotequal key 'page' %}&amp;{{ key }}={{ value }}{% endifnotequal %}{% endfor %}"><span class="u-visually-hidden">Next</span></a>
+                <a class="button button--standard button--next" href="?page_h={{ hearings.next_page_number }}{% for key,value in request.GET.items %}{% ifnotequal key 'page' %}&amp;{{ key }}={{ value }}{% endifnotequal %}{% endfor %}"><span class="u-visually-hidden">Next</span></a>
               {% endif %}
              </div>
               {% else %}
@@ -187,15 +176,14 @@
             <p>Confidential and closed to the public. The Commission meets regularly in executive sessions to discuss pending enforcement actions, litigation and other matters that, by law, must be kept confidential.</p>
             <div class="filters--horizontal">
              {% block filters3 %}
-               <form action="/meetings" class="js-form-nav container">
+               <form action="/executive_sessions" id="executive_form" method="get" class="js-form-nav container">
                   <div class="filter">
-
                       <label for="year" class="label">Year</label>
                       <select id="year" name="year">
                         <option {% if year %} value="{{ year }}" {% else %} value ="" {% endif %}> {% if year %} {{ year }}{% else %} All{% endif %}</option>
                         <option value="">All</option>
-                        {% for item in years %}
-                        <option value="{{ item | date:"Y" }}" {% ifequal year 'item'  %}{% endifequal %}>{{ item|date:"Y" }}</option>
+                        {% for item in years_e %}
+                        <option value="{{ item | date:"Y" }}">{{ item|date:"Y" }}</option>
                         {% endfor %}
                       </select>
                   </div>
@@ -203,7 +191,7 @@
                     <div class="combo combo--filter--mini">
                       <label for="search" class="label">Search</label>
                       <input id="search" class="combo__input" name="search" type="text" value="{{ search }}">
-                      <button type="submit" class="combo__button button button--standard button--search"><span class="u-visually-hidden">Search</span></button>
+                      <button type="submit" id="executive_sub" class="combo__button button button--standard button--search"><span class="u-visually-hidden">Search</span></button>
                     </div>
                   </div>
               </form>
@@ -213,18 +201,18 @@
             {% if executive_sessions %}
                <table class="simple-table">
                   <tbody>
-                    {% for executive_session in executive_sessions reversed %}
+                    {% for executive_session in executive_sessions  %}
                       {% include 'partials/meeting.html' with meeting=executive_session  %}
                     {% endfor %}
                   </tbody>
                </table>
               <div class="results-info">
-                <span>Page {{ executive_sessions.number }} of {{ executive_sessions.paginator_e.num_pages }}</span>
+                <span>Page {{ executive_sessions.number }} of {{ executive_sessions.paginator.num_pages }}</span>
                   {% if executive_sessions.has_previous %}
-                    <a class="button button--standard button--previous" href="?page={{ executive_sessions.previous_page_number }}{% for key,value in request.GET.items %}{% ifnotequal key 'page' %}&amp;{{ key }}={{ value }}{% endifnotequal %}{% endfor %}"><span class="u-visually-hidden">Previous</span></a>
+                    <a class="button button--standard button--previous" href="?page_e={{ executive_sessions.previous_page_number }}{% for key,value in request.GET.items %}{% ifnotequal key 'page' %}&amp;{{ key }}={{ value }}{% endifnotequal %}{% endfor %}"><span class="u-visually-hidden">Previous</span></a>
               {% endif %}
               {% if executive_sessions.has_next %}
-                <a class="button button--standard button--next" href="?page={{ executive_sessions.next_page_number }}{% for key,value in request.GET.items %}{% ifnotequal key 'page' %}&amp;{{ key }}={{ value }}{% endifnotequal %}{% endfor %}"><span class="u-visually-hidden">Next</span></a>
+                <a class="button button--standard button--next" href="?page_e={{ executive_sessions.next_page_number }}{% for key,value in request.GET.items %}{% ifnotequal key 'page' %}&amp;{{ key }}={{ value }}{% endifnotequal %}{% endfor %}"><span class="u-visually-hidden">Next</span></a>
               {% endif %}
              </div>
               {% else %}
@@ -244,8 +232,6 @@
           </section>
       </div>
     </section>
-
  </div>
-
 </section>
 {% endblock %}
