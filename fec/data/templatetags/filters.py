@@ -2,11 +2,14 @@ from django_jinja import library
 import jinja2
 
 import json
-
 import locale
 import datetime
 
 from dateutil.parser import parse as parse_date
+
+# set locale for currency filter
+locale.setlocale(locale.LC_ALL, '')
+
 
 @library.filter
 def currency(num, grouping=True):
@@ -14,16 +17,19 @@ def currency(num, grouping=True):
         return locale.currency(num, grouping=grouping)
     return None
 
-# def ensure_date(value):
-#     if isinstance(value, (datetime.date, datetime.datetime)):
-#         return value
-#     return parse_date(value)
 
-# @app.template_filter('date')
-# def date_filter(value, fmt='%m/%d/%Y'):
-#     if value is None:
-#         return None
-#     return ensure_date(value).strftime(fmt)
+def ensure_date(value):
+    if isinstance(value, (datetime.date, datetime.datetime)):
+        return value
+    return parse_date(value)
+
+
+@library.filter
+def date(value, fmt='%m/%d/%Y'):
+    if value is None:
+        return None
+    return ensure_date(value).strftime(fmt)
+
 
 @library.filter
 def date_full(value, fmt='%B %d, %Y'):

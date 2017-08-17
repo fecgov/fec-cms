@@ -1,4 +1,5 @@
 from django.conf import settings
+from django.http import Http404
 
 from operator import itemgetter
 import os
@@ -83,7 +84,7 @@ def load_legal_advisory_opinion(ao_no):
     results = _call_api(url, parse.quote(ao_no))
 
     if not (results and 'docs' in results and results['docs']):
-        abort(404)
+        raise Http404()
 
     ao = results['docs'][0]
     ao['sorted_documents'] = _get_sorted_documents(ao)
@@ -97,7 +98,7 @@ def load_legal_mur(mur_no):
     mur = _call_api(url, parse.quote(mur_no))
 
     if not mur:
-        abort(404)
+        raise Http404
 
     mur = mur['docs'][0]
 
@@ -184,6 +185,7 @@ def load_with_nested(primary_type, primary_id, secondary_type, cycle=None,
         Example: committee data for /candidate/P80003338/committees
     """
     nested_data = load_nested_type(primary_type, primary_id, secondary_type, *path, **query)
+
     return data, nested_data['results'], cycle
 
 
@@ -231,7 +233,7 @@ def load_candidate_statement_of_candidacy(candidate_id, cycle):
 
 def result_or_404(data):
     if not data.get('results'):
-        abort(404)
+        raise Http404()
     return data['results'][0]
 
 

@@ -2,9 +2,7 @@
 {% import 'macros/cycle-select.jinja' as select %}
 {% import 'macros/page-header.jinja' as header %}
 
-{% block title %}
-    {{ name }} - Candidate overview
-{% endblock %}
+{% block title %}{{ name }} - Candidate overview{% endblock %}
 
 {% block css %}
 <link rel="stylesheet" href="{{ static('/styles/entity.css') }}" />

@@ -6,7 +6,6 @@
   </div>
 
   <div class="slab slab--inline slab--neutral u-padding--left u-padding--right">
-
     <div class="content__section">
       {{ select.cycle_select(election_years, cycle, duration=duration, id="cycle-2") }}
     </div>
@@ -18,7 +17,7 @@
       <table class="t-sans usa-width-three-fourths">
         <tr>
           <td class="figure__label">Seat:</td>
-          <td class="figure__value">{{ constants.states[state] }} {{ office_full }}{% if office_full == 'House' %} district {{ district }}{% endif %}</td>
+          <td class="figure__value">{% if constants.states[state] %}{{ constants.states[state] }} {% endif %}{{ office_full }}{% if office_full == 'House' %} district {{ district }}{% endif %}</td>
         </tr>
         <tr>
           <td class="figure__label">Type of candidacy:</td>
@@ -110,7 +109,7 @@
       {% for committee in committee_groups['P'] | reverse %}
         <div class="callout callout--primary{% if loop.last %} u-no-margin{% endif %}">
           <h4 class="callout__title">
-            <a href="{{ url_for('committee_page', c_id=committee.committee_id, cycle=committee.related_cycle) }}">{{ committee.name }}</a>
+            <a href="/data/committee/{{ committee.committee_id }}/?cycle={{ committee.related_cycle }}">{{ committee.name }}</a>
           </h4>
           <span class="callout__subtitle term" data-term="principal campaign committee">Principal campaign committee</span>
         </div>
@@ -120,7 +119,7 @@
       <ul class="list--bulleted row">
       {% for committee in committee_groups['A'] | reverse %}
         <li>
-          <a class="t-sans" href="{{ url_for('committee_page', c_id=committee.committee_id, cycle=committee.related_cycle) }}">{{ committee.name }}</a>
+          <a class="t-sans" href="/data/committee/{{ committee.committee_id }}/?cycle={{ committee.related_cycle }}">{{ committee.name }}</a>
         </li>
       {% endfor %}
       </ul>
@@ -134,7 +133,7 @@
       <ul class="list--bulleted">
       {% for committee in committee_groups['J'] | reverse %}
         <li>
-          <a class="t-sans" href="{{ url_for('committee_page', c_id=committee.committee_id, cycle=committee.related_cycle) }}">{{ committee.name }}</a>
+          <a class="t-sans" href="/data/committee/{{ committee.committee_id }}/?cycle={{ committee.related_cycle }}">{{ committee.name }}</a>
         </li>
       {% endfor %}
       </ul>

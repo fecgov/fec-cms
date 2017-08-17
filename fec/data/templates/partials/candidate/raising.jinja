@@ -14,14 +14,14 @@
         {% for committee in committee_groups['P'] | reverse %}
         {% if committee.cycle == max_cycle %}
         <li>
-          <a class="t-sans" href="{{ url_for('committee_page', c_id=committee.committee_id, cycle=committee.related_cycle) }}">{{ committee.name }}</a>
+          <a class="t-sans" href="/data/committee/{{ committee.committee_id }}/?cycle={{ committee.related_cycle }}">{{ committee.name }}</a>
         </li>
         {% endif %}
         {% endfor %}
         {% for committee in committee_groups['A'] | reverse %}
         {% if committee.cycle == max_cycle %}
         <li>
-          <a class="t-sans" href="{{ url_for('committee_page', c_id=committee.committee_id, cycle=committee.related_cycle) }}">{{ committee.name }}</a>
+          <a class="t-sans" href="/data/committee/{{ committee.committee_id }}/?cycle={{ committee.related_cycle }}">{{ committee.name }}</a>
         </li>
         {% endif %}
         {% endfor %}
@@ -34,9 +34,7 @@
         <div class="heading--section heading--with-action">
           <h3 class="heading__left">Total receipts</h3>
           <a class="heading__right button--alt button--browse"
-              href="{{ url_for(
-                'receipts',
-                two_year_transaction_period=max_cycle
+              href="/data/receipts/?two_year_transaction_period={{ max_cycle }}&
               ) }}{% for id in committee_ids %}&committee_id={{ id }}{% endfor %}">Filter all receipts</a>
         </div>
         <div class="content__section--narrow">
@@ -61,10 +59,7 @@
         <div class="heading--section heading--with-action">
           <h3 class="heading__left">Individual contributions</h3>
           <a class="heading__right button--alt button--browse"
-              href="{{ url_for(
-                'individual_contributions',
-                two_year_transaction_period=max_cycle,
-              ) }}{% for id in committee_ids %}&committee_id={{ id }}{% endfor %}">Filter this data</a>
+              href="/data/individual_contributions/?two_year_transaction_period={{ max_cycle }}&{% for id in committee_ids %}&committee_id={{ id }}{% endfor %}">Filter this data</a>
           </div>
         <div class="row">
           <fieldset class="toggles js-toggles">
@@ -164,7 +159,5 @@
         </div>
       </div>
     </div>
-
   </div>
-
 </section>
