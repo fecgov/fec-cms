@@ -138,18 +138,16 @@
       </ul>
     </nav>
 
-    {# {% with committee=context %} #}
-       {% include 'partials/loading-tab.jinja' %}
-       {% include 'partials/committee/about-committee.jinja' %}
-      {% if committee_type not in ['C', 'E'] %}
-        {% include 'partials/committee/financial-summary.jinja' %}
-      {% endif %}
-      {% if committee_type not in ['C'] %}
-        {% include 'partials/committee/raising.jinja' %}
-      {% endif %}
-      {% include 'partials/committee/spending.jinja' %}
-      {% include 'partials/committee/filings.jinja' %}
-    {# {% endwith %} #}
+    {% include 'partials/loading-tab.jinja' %}
+    {% include 'partials/committee/about-committee.jinja' %}
+    {% if committee_type not in ['C', 'E'] %}
+      {% include 'partials/committee/financial-summary.jinja' %}
+    {% endif %}
+    {% if committee_type not in ['C'] %}
+      {% include 'partials/committee/raising.jinja' %}
+    {% endif %}
+    {% include 'partials/committee/spending.jinja' %}
+    {% include 'partials/committee/filings.jinja' %}
   </div>
 
 {% endblock %}

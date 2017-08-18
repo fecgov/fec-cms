@@ -224,7 +224,7 @@ def committee(request, committee_id):
     committee, candidates, cycle = api_caller.load_with_nested('committee', committee_id, 'candidates', cycle)
 
     parent = 'data'
-    cycle = cycle
+    cycle = int(cycle)
     year = to_date(committee, cycle)
     result_type = 'committees'
 
@@ -251,49 +251,12 @@ def committee(request, committee_id):
         'name': committee['name'],
     }
 
-    ie_summary = None
-
-    if financials['reports'] and financials['totals']:
-        # Format the current two-year-period's totals using the process utilities
-        if committee['committee_type'] == 'I':
-            # IE-only committees have very little data, so they just get this one
-            ie_summary = utils.process_ie_data(financials['totals'][0])
-        else:
-            # All other committees have three tables
-            raising_summary = utils.process_raising_data(financials['totals'][0])
-            spending_summary = utils.process_spending_data(financials['totals'][0])
-            cash_summary = utils.process_cash_data(financials['totals'][0])
-
-    if redirect_to_previous and not financials['reports']:
-        # If there's no reports, find the first year with reports and redirect there
-        for c in sorted(committee['cycles'], reverse=True):
-            financials = api_caller.load_cmte_financials(committee['committee_id'], cycle=c)
-            if financials['reports']:
-                return redirect(
-                    url_for('committee_page', c_id=committee['committee_id'], cycle=c)
-                )
-
-    has_raw_filings = None
-
-    # If it's not a senate committee and we're in the current cycle
-    # check if there's any raw filings in the last two days
-    if committee['committee_type'] != 'S' and cycle == utils.current_cycle():
-        raw_filings = api_caller._call_api(
-            'efile', 'filings',
-            cycle=cycle,
-            committee_id=committee['committee_id'],
-            min_receipt_date=utils.two_days_ago()
-        )
-        if len(raw_filings.get('results')) > 0:
-            has_raw_filings = True
-    else:
-        has_raw_filings = False
-
-    return render(request, 'committees-single.jinja', {
+    template_variables = {
         'name': committee['name'],
         'committee': committee,
         'committee_id': committee_id,
         'committee_type_full': committee['committee_type_full'],
+        'committee_type': committee['committee_type'],
         'designation_full': committee['designation_full'],
         'street_1': committee['street_1'],
         'city': committee['city'],
@@ -309,12 +272,44 @@ def committee(request, committee_id):
         'reports': reports,
         'totals': totals,
         'context_vars': context_vars,
-        'ie_summary': ie_summary,
-        'raising_summary': raising_summary,
-        'spending_summary': spending_summary,
-        'cash_summary': cash_summary,
-        'has_raw_filings': has_raw_filings
-    })
+    }
+
+
+    if financials['reports'] and financials['totals']:
+        # Format the current two-year-period's totals using the process utilities
+        if committee['committee_type'] == 'I':
+            # IE-only committees have very little data, so they just get this one
+            template_variables['ie_summary'] = utils.process_ie_data(financials['totals'][0])
+        else:
+            # All other committees have three tables
+            template_variables['raising_summary'] = utils.process_raising_data(financials['totals'][0])
+            template_variables['spending_summary'] = utils.process_spending_data(financials['totals'][0])
+            template_variables['cash_summary'] = utils.process_cash_data(financials['totals'][0])
+
+    if redirect_to_previous and not financials['reports']:
+        # If there's no reports, find the first year with reports and redirect there
+        for c in sorted(committee['cycles'], reverse=True):
+            financials = api_caller.load_cmte_financials(committee['committee_id'], cycle=c)
+            if financials['reports']:
+                return redirect(
+                    url_for('committee_page', c_id=committee['committee_id'], cycle=c)
+                )
+
+    # If it's not a senate committee and we're in the current cycle
+    # check if there's any raw filings in the last two days
+    if committee['committee_type'] != 'S' and cycle == utils.current_cycle():
+        raw_filings = api_caller._call_api(
+            'efile', 'filings',
+            cycle=cycle,
+            committee_id=committee['committee_id'],
+            min_receipt_date=utils.two_days_ago()
+        )
+        if len(raw_filings.get('results')) > 0:
+            template_variables['has_raw_filings'] = True
+    else:
+        template_variables['has_raw_filings'] = False
+
+    return render(request, 'committees-single.jinja', template_variables)
 
 
 def elections_lookup(request):
