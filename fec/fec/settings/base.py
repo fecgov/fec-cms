@@ -130,6 +130,7 @@ TEMPLATES = [
                 'FEC_API_KEY': FEC_API_KEY,
                 'WEBMANAGER_EMAIL': WEBMANAGER_EMAIL,
                 'CMS_URL': CMS_URL,
+                'TRANSITION_URL': FEC_TRANSITION_URL,
                 'site_orientation_banner': FEATURES['site_orientation_banner']
             },
         }
