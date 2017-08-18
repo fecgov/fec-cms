@@ -297,7 +297,7 @@ def serve_wagtail_doc(request, document_id, document_filename):
     doc = get_object_or_404(Document, id=document_id)
     return HttpResponseRedirect(doc.file.url)
 
-def index_meetings(request):#,#  year=None, search=None, active=None):
+def index_meetings(request):
     meetings = MeetingPage.objects.live().order_by("-date")
     open_meetings = meetings.filter(meeting_type ='O')
     executive_sessions = meetings.filter(meeting_type ='E')

@@ -24,9 +24,7 @@
                     data-name="open-meetings"
                     tabindex="0"
                     aria-controls="meetings-open-meetings"
-                    href="#meetings-open-meetings"
-                    aria-selected=""
-                    >Open Meetings</a>
+                    href="#meetings-open-meetings">Open Meetings</a>
               </li>
               <li class="side-nav__item" role="presentation">
                 <a class="side-nav__link"
@@ -34,8 +32,7 @@
                     data-name="hearings"
                     tabindex="0"
                     aria-controls="meetings-hearings"
-                    href="#meetings-hearings"
-                    >Hearings</a>
+                    href="#meetings-hearings">Hearings</a>
               </li>
               <li class="side-nav__item" role="presentation">
                 <a class="side-nav__link"
@@ -43,8 +40,7 @@
                     data-name="executive-sessions"
                     tabindex="0"
                     aria-controls="meetings-executive-sessions"
-                    href="#meetings-executive-sessions"
-                    >Executive Sessions</a>
+                    href="#meetings-executive-sessions">Executive Sessions</a>
               </li>
             </ul>
           </nav>
@@ -75,21 +71,27 @@
               </form>
             </div>
             {% if open_meetings %}
-               <table class="simple-table">
+               <table class="simple-table u-no-margin">
                   <tbody>
                     {% for open_meeting in open_meetings %}
                       {% include 'partials/meeting.html' with meeting=open_meeting %}
                      {% endfor %}
                   </tbody>
                </table>
-              <div class="results-info">
-                <span>Page {{ open_meetings.number }} of {{ open_meetings.paginator.num_pages }}</span>
+              <div class="results-info results-info--simple">
+                <div class="t-sans">
                   {% if open_meetings.has_previous %}
                     <a class="button button--standard button--previous" href="?page={{ open_meetings.previous_page_number }}&tab=open-meetings&year={{ year }}&search={{ meetings_query }}"><span class="u-visually-hidden">Previous</span></a>
-              {% endif %}
-              {% if open_meetings.has_next %}
-                <a class="button button--standard button--next" href="?page={{ open_meetings.next_page_number }}&tab=open-meetings&year={{ year }}&search={{ meetings_query }}"><span class="u-visually-hidden">Next</span></a>
-              {% endif %}
+                  {% else %}
+                    <a class="button button--standard button--previous is-disabled" disabled></a>
+                  {% endif %}
+                  {% if open_meetings.has_next %}
+                    <a class="button button--standard button--next" href="?page={{ open_meetings.next_page_number }}&tab=open-meetings&year={{ year }}&search={{ meetings_query }}"><span class="u-visually-hidden">Next</span></a>
+                  {% else %}
+                    <a class="button button--standard button--next is-disabled" disabled></a>
+                  {% endif %}
+                  <span>Page {{ open_meetings.number }} of {{ open_meetings.paginator.num_pages }}</span>
+                </div>
              </div>
               {% else %}
             <div class="message message--info">
@@ -130,21 +132,27 @@
               </form>
              </div>
             {% if hearings %}
-               <table class="simple-table" id="hearings_table">
+               <table class="simple-table u-no-margin" id="hearings_table">
                   <tbody>
                     {% for hearing in hearings %}
                       {% include 'partials/meeting.html' with meeting=hearing %}
                      {% endfor %}
                   </tbody>
                </table>
-              <div class="results-info">
-                <span>Page {{ hearings.number }} of {{ hearings.paginator.num_pages }}</span>
+              <div class="results-info results-info--simple">
+                <div class="t-sans">
                   {% if hearings.has_previous %}
                     <a class="button button--standard button--previous" href="?page={{ hearings.previous_page_number }}&tab=hearings&search={{ hearings_query }}&year={{ year }}"><span class="u-visually-hidden">Previous</span></a>
+                  {% else %}
+                    <a class="button button--standard button--previous is-disabled" disabled></a>
                   {% endif %}
                   {% if hearings.has_next %}
                     <a class="button button--standard button--next" href="?page={{ hearings.next_page_number }}&tab=hearings&search={{ hearings_query }}&year={{ year }}"><span class="u-visually-hidden">Next</span></a>
+                  {% else %}
+                    <a class="button button--standard button--next is-disabled" disabled></a>
                   {% endif %}
+                  <span>Page {{ hearings.number }} of {{ hearings.paginator.num_pages }}</span>
+                </div>
              </div>
               {% else %}
             <div class="message message--info">
@@ -185,7 +193,7 @@
               </form>
              </div>
             {% if executive_sessions %}
-               <table class="simple-table">
+               <table class="simple-table u-no-margin">
                   <tbody>
                     {% for executive_session in executive_sessions  %}
                       {% include 'partials/meeting.html' with meeting=executive_session  %}
@@ -193,13 +201,19 @@
                   </tbody>
                </table>
               <div class="results-info">
-                <span>Page {{ executive_sessions.number }} of {{ executive_sessions.paginator.num_pages }}</span>
+                <div class="t-sans">
                   {% if executive_sessions.has_previous %}
                     <a class="button button--standard button--previous" href="?page={{ executive_sessions.previous_page_number }}&tab=executive-sessions&year={{ year }}&search={{ executive_query }}"><span class="u-visually-hidden">Previous</span></a>
-              {% endif %}
-              {% if executive_sessions.has_next %}
-                <a class="button button--standard button--next" href="?page={{ executive_sessions.next_page_number }}&tab=executive-sessions&year={{ year }}&search={{ executive_query }}"><span class="u-visually-hidden">Next</span></a>
-              {% endif %}
+                  {% else %}
+                    <a class="button button--standard button--previous is-disabled" disabled></a>
+                  {% endif %}
+                  {% if executive_sessions.has_next %}
+                    <a class="button button--standard button--next" href="?page={{ executive_sessions.next_page_number }}&tab=executive-sessions&year={{ year }}&search={{ executive_query }}"><span class="u-visually-hidden">Next</span></a>
+                  {% else %}
+                    <a class="button button--standard button--next is-disabled" disabled></a>
+                  {% endif %}
+                  <span>Page {{ executive_sessions.number }} of {{ executive_sessions.paginator.num_pages }}</span>
+                </div>
              </div>
               {% else %}
             <div class="message message--info">
