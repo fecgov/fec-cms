@@ -14,38 +14,39 @@
   <script>
     ANALYTICS = 'false';
     BASE_PATH = '/data/';
-    CMS_URL = '/',
+    CMS_URL = '{{ CMS_URL }}',
     API_LOCATION = 'https://api.open.fec.gov/';
     API_VERSION = 'v1';
-    API_KEY = '5yyI90SU3Xb73TVlv4wrEhQxYcCwMWCywQiGdYbJ';
+    API_KEY = '{{ FEC_API_KEY }}';
     DEFAULT_TIME_PERIOD = '2018';
     START_YEAR = '1979';
     END_YEAR = '2018';
     DISTRICT_MAP_CUTOFF = '2018';
-    TRANSITION_URL = '';
-    WEBMANAGER_EMAIL = 'webmanager@fec.gov';
-    CANONICAL_BASE = 'https://www.fec.gov';
+    WEBMANAGER_EMAIL = '{{ WEBMANAGER_EMAIL }}';
+    CANONICAL_BASE = '{{ CANONICAL_BASE }}';
 
-    // function trackMetric(name, imagesSelector) {
-    //   if (imagesSelector) {
-    //     var images = document.querySelectorAll(imagesSelector);
-    //     if (images && images.length) {
-    //       for (var i = 0, ilen = images.length; i < ilen; i++) {
-    //         images[i].addEventListener('load', function() {
-    //           window.performance.mark(name);
-    //         });
-    //       }
-    //     }
-    //   }
-    //   window.performance.mark(name);
-    // }
+    function trackMetric(name, imagesSelector) {
+      if (imagesSelector) {
+        var images = document.querySelectorAll(imagesSelector);
+        if (images && images.length) {
+          for (var i = 0, ilen = images.length; i < ilen; i++) {
+            images[i].addEventListener('load', function() {
+              window.performance.mark(name);
+            });
+          }
+        }
+      }
+      window.performance.mark(name);
+    }
   </script>
 </head>
 <body>
 {% import 'macros/search.jinja' as search %}
 {% include 'partials/warnings.jinja' %}
 
-{% include "partials/site-orientation.jinja" %}
+{% if site_orientation_banner %}
+  {% include "partials/site-orientation.jinja" %}
+{% endif %}
 
 <a href="#main" class="skip-nav" tabindex="0">skip navigation</a>
 
@@ -197,7 +198,7 @@
   </div>
 </footer>
 
-{% include './partials/glossary.html' %}
+{% include './partials/glossary.jinja' %}
 {% block modals %}{% endblock %}
 
 <script src="{{ static('js/data-init.js') }}"></script>

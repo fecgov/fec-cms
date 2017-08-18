@@ -1,0 +1,58 @@
+{% import 'macros/missing.jinja' as missing %}
+{% import 'macros/cycle-select.jinja' as select %}
+{% import 'macros/tables.jinja' as tables %}
+
+<section id="section-1" role="tabpanel" aria-hidden="true" aria-labelledby="section-1-heading">
+  <h2 id="section-1-heading">Financial summary</h2>
+  <div class="slab slab--inline slab--neutral u-padding--left u-padding--right">
+    {{ select.committee_cycle_select(cycles, cycle, 'summary')}}
+    {% if reports and totals %}
+      {% if committee_type == 'I' %}
+        <div class="entity__figure">
+          <div class="row">
+            <div class="tag__category">
+              <div class="tag__item">Coverage dates: {{totals.0.coverage_start_date|date}} to {{totals.0.coverage_end_date|date}}</div>
+            </div>
+          </div>
+          {{ tables.summary(ie_summary) }}
+        </div>
+      {% else %}
+        <div class="entity__figure entity__figure--narrow" id="total-raised">
+          <div class="heading--section heading--with-action">
+            <h3 class="heading__left">Total raised</h3>
+            <a class="heading__right button--alt button--browse"
+                href="/data/receipts/?committee_id={{ committee_id}}& two_year_transaction_period={{ cycle }}">Browse receipts
+            </a>
+          </div>
+          <div class="tag__category">
+            <div class="tag__item">Coverage dates: {{totals.0.coverage_start_date|date}} to {{totals.0.coverage_end_date|date}}</div>
+          </div>
+          {{ tables.summary(raising_summary, committee_id, cycle, committee_type) }}
+        </div>
+        <div class="entity__figure entity__figure--narrow" id="total-spent">
+          <div class="heading--section heading--with-action">
+            <h3 class="heading__left">Total spent</h3>
+            <a class="heading__right button--alt button--browse"
+                href="/data/disbursements/?committee_id={{ committee_id }}&two_year_transaction_period={{ cycle }}">Browse disbursements
+            </a>
+          </div>
+          <div class="tag__category u-no-margin">
+            <div class="tag__item">Coverage dates: {{totals.0.coverage_start_date|date}} to {{totals.0.coverage_end_date|date}}</div>
+          </div>
+          {{ tables.summary(spending_summary, committee_id, cycle, committee_type) }}
+        </div>
+        <div class="entity__figure entity__figure--narrow" id="cash-summary">
+          <div class="heading--section heading--with-action">
+            <h3 class="heading__left">Cash summary</h3>
+          </div>
+          <div class="tag__category u-no-margin">
+            <div class="tag__item">Coverage dates: {{totals.0.coverage_start_date|date}} to {{totals.0.coverage_end_date|date}}</div>
+          </div>
+          {{ tables.summary(cash_summary, committee_id) }}
+        </div>
+      {% endif %}
+    {% else %}
+      {{ missing.missing_financials(name, cycle) }}
+    {% endif %}
+  </div>
+</section>

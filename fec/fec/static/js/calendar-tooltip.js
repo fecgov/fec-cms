@@ -2,8 +2,8 @@
 
 var $ = require('jquery');
 
-var dropdown = require('fec-style/js/dropdowns');
-var listeners = require('fec-style/js/listeners');
+var dropdown = require('./dropdowns');
+var listeners = require('./listeners');
 
 function CalendarTooltip(content, $container) {
   this.$content = $(content);

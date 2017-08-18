@@ -1,0 +1,32 @@
+{% extends 'partials/filters.jinja' %}
+
+{% import 'macros/filters/text.jinja' as text %}
+{% import 'macros/filters/typeahead-filter.jinja' as typeahead %}
+{% import 'macros/filters/states.jinja' as states %}
+{% import 'macros/filters/date.jinja' as date %}
+{% import 'macros/filters/years.jinja' as years %}
+{% import 'macros/filters/range.jinja' as range %}
+{% import 'macros/filters/misc.jinja' as misc %}
+
+{% block heading %}
+Filter communication costs
+{% endblock %}
+
+{% block filters %}
+
+<div class="js-accordion accordion--neutral" data-content-prefix="filter" data-open-first="false">
+  <div class="filters__inner">
+    {{ typeahead.field('committee_id', 'Spender name or ID') }}
+  </div>
+  <button type="button" class="js-accordion-trigger accordion__button">Candidate mentioned</button>
+  <div class="accordion__content">
+    {{ typeahead.field('candidate_id', 'Candidate name or ID', dataset='candidates') }}
+    {{ misc.support_oppose('_processed') }}
+  </div>
+  <button type="button" class="js-accordion-trigger accordion__button">Transaction information</button>
+  <div class="accordion__content">
+    {{ range.amount('amount', 'Transaction amount') }}
+    {{ date.field('date', 'Transaction date', dates ) }}
+  </div>
+</div>
+{% endblock %}

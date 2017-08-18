@@ -1,18 +1,20 @@
 from django_jinja import library
+
 import jinja2
 
+import re
 import json
 import locale
 import datetime
 
 from dateutil.parser import parse as parse_date
 
-# set locale for currency filter
-locale.setlocale(locale.LC_ALL, '')
-
 
 @library.filter
 def currency(num, grouping=True):
+    # set locale for currency filter
+    locale.setlocale(locale.LC_ALL, '')
+
     if isinstance(num, (int, float)):
         return locale.currency(num, grouping=grouping)
     return None
@@ -37,11 +39,6 @@ def date_full(value, fmt='%B %d, %Y'):
         return None
     return ensure_date(value).strftime(fmt)
 
-# @app.template_filter('ao_document_date')
-# def ao_document_date(value):
-#     date = date_filter(value)
-#     return 'Not dated' if date == '01/01/1900' else date
-
 
 @library.filter
 def to_json(value):
@@ -64,7 +61,6 @@ def nullify(value, *nulls):
 
 @library.global_function
 def get_election_url(candidate, cycle, district=None):
-
     if cycle:
         if candidate['office'] == 'H':
             district_url = '/' + str(candidate['state']) + '/' + nullify(candidate['district'], '00')
@@ -76,6 +72,23 @@ def get_election_url(candidate, cycle, district=None):
         return '/data/elections/' + candidate['office_full'].lower() + district_url + '/' + str(cycle)
     else:
         return None
+
+
+@library.global_function
+def clean_id(value):
+    return re.compile(r'[^\w-]').sub('', value)
+
+
+@library.filter
+def fmt_year_range(year):
+    if type(year) == int:
+        return "{}–{}".format(year - 1, year)
+    return None
+
+@library.filter
+def fmt_state_full(value):
+    return constants.states[value.upper()]
+
 
 # @app.template_filter('filesize')
 # def filesize_filter(value):
@@ -94,15 +107,10 @@ def get_election_url(candidate, cycle, district=None):
 #             ret.append(value)
 #     return ret
 
-@library.filter
-def fmt_year_range(year):
-    if type(year) == int:
-        return "{}–{}".format(year - 1, year)
-    return None
-
-# @app.template_filter()
-# def fmt_state_full(value):
-#     return constants.states[value.upper()]
+# @app.template_filter('ao_document_date')
+# def ao_document_date(value):
+#     date = date_filter(value)
+#     return 'Not dated' if date == '01/01/1900' else date
 
 # @app.template_filter()
 # def fmt_cycle_min_max(cycles):

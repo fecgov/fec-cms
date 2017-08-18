@@ -1,6 +1,6 @@
 'use strict';
 
 /* global require */
-var FilterPanel = require('fec-style/js/filter-panel').FilterPanel;
+var FilterPanel = require('../filter-panel').FilterPanel;
 
 new FilterPanel();

@@ -1,0 +1,31 @@
+{% extends 'partials/filters.jinja' %}
+
+{% import 'macros/filters/states.jinja' as states %}
+{% import 'macros/filters/typeahead-filter.jinja' as typeahead %}
+{% import 'macros/filters/years.jinja' as years %}
+{% import 'macros/filters/date.jinja' as date %}
+
+{% block filters %}
+<div class="filters__inner">
+  {{ typeahead.field('q', 'Candidate name or ID', '', dataset='candidates', allow_text=True) }}
+
+  {{ years.years('election_year', 'Election year') }}
+  {% include 'partials/filters/office-sought.jinja' %}
+  {% include 'partials/filters/parties.jinja' %}
+  {{ states.field('state') }}
+  {% include 'partials/filters/districts.jinja' %}
+
+  {{ date.field('first_filing_date', 'Date first filed statement of candidacy', '') }}
+  <div class="filter">
+    <fieldset class="js-filter" data-filter="checkbox">
+      <legend class="label">Candidate fundraising</legend>
+      <ul>
+        <li>
+          <input id="cycle-checkbox-has-raised-funds" name="has_raised_funds" type="checkbox" value="true">
+          <label for="cycle-checkbox-has-raised-funds">Has raised more than $0</label>
+        </li>
+      </ul>
+    </fieldset>
+  </div>
+</div>
+{% endblock %}

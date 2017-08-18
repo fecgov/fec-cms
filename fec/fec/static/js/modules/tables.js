@@ -5,8 +5,8 @@ var _ = require('underscore');
 
 var tabs = require('../vendor/tablist');
 
-var urls = require('fec-style/js/urls');
-var accessibility = require('fec-style/js/accessibility');
+var urls = require('../urls');
+var accessibility = require('../accessibility');
 
 require('datatables.net')(window, $);
 require('datatables.net-responsive')(window, $);
@@ -15,8 +15,8 @@ var helpers = require('./helpers');
 var download = require('./download');
 
 // Widgets
-var filterTags = require('fec-style/js/filter-tags');
-var FilterPanel = require('fec-style/js/filter-panel').FilterPanel;
+var filterTags = require('../filter-tags');
+var FilterPanel = require('../filter-panel').FilterPanel;
 
 var exportWidgetTemplate = require('../templates/tables/exportWidget.hbs');
 var missingTemplate = require('../templates/tables/noData.hbs');

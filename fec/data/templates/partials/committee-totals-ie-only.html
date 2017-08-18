@@ -1,7 +1,0 @@
-{% with committee=context() %}
-{% import 'macros/tables.html' as tables %}
-
-{{ tables.totals('Contributions received', totals.0.total_independent_contributions) }}
-{{ tables.totals('Independent expenditures', totals.0.total_independent_expenditures) }}
-
-{% endwith %}

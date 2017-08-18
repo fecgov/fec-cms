@@ -4,7 +4,7 @@
 
 var $ = require('jquery');
 var helpers = require('./helpers');
-var analytics = require('fec-style/js/analytics');
+var analytics = require('../analytics');
 
 function ReactionBox(selector) {
   this.$element = $(selector);

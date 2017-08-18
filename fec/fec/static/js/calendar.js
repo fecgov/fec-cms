@@ -6,10 +6,10 @@ var _ = require('underscore');
 var moment = require('moment');
 require('fullcalendar');
 
-var urls = require('fec-style/js/urls');
-var dropdown = require('fec-style/js/dropdowns');
+var urls = require('./urls');
+var dropdown = require('./dropdowns');
 var Handlebars = require('hbsfy/runtime');
-var helpers = require('fec-style/js/helpers');
+var helpers = require('./helpers');
 
 var calendarTooltip = require('./calendar-tooltip');
 var calendarHelpers = require('./calendar-helpers');

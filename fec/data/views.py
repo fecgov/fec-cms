@@ -29,13 +29,16 @@ report_types = {
 }
 
 
+def to_date(committee, cycle):
+    if committee['committee_type'] in ['H', 'S', 'P']:
+        return None
+    return min(datetime.datetime.now().year, cycle)
+
+
 # TODO: load query string
 def landing(request):
-    canonical_base = os.environ.get('CANONICAL_BASE', 'https://www.fec.gov')
-
     return render(request, 'landing.jinja', {
-      'canonical_base': canonical_base,
-      'title': 'Campaign finance data'
+      'title': 'Campaign finance data',
     })
 
 
@@ -203,6 +206,149 @@ def candidate(request, candidate_id):
         'statement_of_candidacy': statement_of_candidacy,
         'elections': elections,
         'candidate': candidate,
-        'constants': constants,
         'context_vars': context_vars
+    })
+
+
+def committee(request, committee_id):
+    # grab url query string parameters
+    cycle = request.GET.get('cycle', None)
+
+    redirect_to_previous = False if cycle else True
+    committee, candidates, cycle = api_caller.load_with_nested('committee', committee_id, 'candidates', cycle)
+
+    parent = 'data'
+    cycle = cycle
+    year = to_date(committee, cycle)
+    result_type = 'committees'
+
+    # Link to current cycle if candidate has a corresponding page, else link
+    # without cycle query parameter
+    # See https://github.com/18F/openFEC/issues/1536
+    for candidate in candidates:
+        election_years = [
+            election_year for election_year in candidate['election_years']
+            if election_year - election_durations[candidate['office']] < cycle <= election_year
+        ]
+        candidate['related_cycle'] = max(election_years) if election_years else None
+
+    # add related candidates a level below
+    financials = api_caller.load_cmte_financials(committee_id, cycle=cycle)
+
+    report_type = report_types.get(committee['committee_type'], 'pac-party')
+    reports = financials['reports']
+    totals = financials['totals']
+
+    context_vars = {
+        'cycle': cycle,
+        'timePeriod': str(cycle - 1) + '–' + str(cycle),
+        'name': committee['name'],
+    }
+
+    ie_summary = None
+
+    if financials['reports'] and financials['totals']:
+        # Format the current two-year-period's totals using the process utilities
+        if committee['committee_type'] == 'I':
+            # IE-only committees have very little data, so they just get this one
+            ie_summary = utils.process_ie_data(financials['totals'][0])
+        else:
+            # All other committees have three tables
+            raising_summary = utils.process_raising_data(financials['totals'][0])
+            spending_summary = utils.process_spending_data(financials['totals'][0])
+            cash_summary = utils.process_cash_data(financials['totals'][0])
+
+    if redirect_to_previous and not financials['reports']:
+        # If there's no reports, find the first year with reports and redirect there
+        for c in sorted(committee['cycles'], reverse=True):
+            financials = api_caller.load_cmte_financials(committee['committee_id'], cycle=c)
+            if financials['reports']:
+                return redirect(
+                    url_for('committee_page', c_id=committee['committee_id'], cycle=c)
+                )
+
+    has_raw_filings = None
+
+    # If it's not a senate committee and we're in the current cycle
+    # check if there's any raw filings in the last two days
+    if committee['committee_type'] != 'S' and cycle == utils.current_cycle():
+        raw_filings = api_caller._call_api(
+            'efile', 'filings',
+            cycle=cycle,
+            committee_id=committee['committee_id'],
+            min_receipt_date=utils.two_days_ago()
+        )
+        if len(raw_filings.get('results')) > 0:
+            has_raw_filings = True
+    else:
+        has_raw_filings = False
+
+    return render(request, 'committees-single.jinja', {
+        'name': committee['name'],
+        'committee': committee,
+        'committee_id': committee_id,
+        'committee_type_full': committee['committee_type_full'],
+        'designation_full': committee['designation_full'],
+        'street_1': committee['street_1'],
+        'city': committee['city'],
+        'state': committee['state'],
+        'zip': committee['zip'],
+        'treasurer_name': committee['treasurer_name'],
+        'parent': parent,
+        'cycle': cycle,
+        'cycles': committee['cycles'],
+        'year': year,
+        'result_type': result_type,
+        'report_type': report_type,
+        'reports': reports,
+        'totals': totals,
+        'context_vars': context_vars,
+        'ie_summary': ie_summary,
+        'raising_summary': raising_summary,
+        'spending_summary': spending_summary,
+        'cash_summary': cash_summary,
+        'has_raw_filings': has_raw_filings
+    })
+
+
+def candidates(request):
+    candidates = api_caller._call_api('candidates')
+    return render(request, 'datatable.jinja', {
+        'parent': 'data',
+        'result_type': 'candidates',
+        'slug': 'candidates',
+        'title': 'Candidates',
+        'data': candidates['results'],
+        # 'query': kwargs,
+        'columns': constants.table_columns['candidates']
+    })
+
+
+def committees(request):
+    committees = api_caller._call_api('committees')
+    return render(request, 'datatable.jinja', {
+        'parent': 'data',
+        'result_type': 'committees',
+        'slug': 'committees',
+        'title': 'Committees',
+        'data': committees['results'],
+        # 'query': kwargs,
+        'columns': constants.table_columns['committees']
+    })
+
+
+def receipts(request):
+    return render(request, 'datatable.jinja', {
+        'parent': 'data',
+        'slug': 'receipts',
+        'title': 'Receipts',
+        'dates': utils.date_ranges(),
+        'columns': constants.table_columns['receipts'],
+        'has_data_type_toggle': True
+    })
+
+
+def elections(request):
+    return render(request, 'election-lookup.jinja', {
+        'parent': 'data'
     })

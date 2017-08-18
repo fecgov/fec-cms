@@ -7,9 +7,9 @@ var $ = require('jquery');
 var URI = require('urijs');
 var _ = require('underscore');
 
-var events = require('fec-style/js/events');
+var events = require('../events');
 
-var analytics = require('fec-style/js/analytics');
+var analytics = require('../analytics');
 
 // The class for the container div
 

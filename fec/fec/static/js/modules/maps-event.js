@@ -3,7 +3,7 @@
 var $ = require('jquery');
 
 var maps = require('../modules/maps');
-var events = require('fec-style/js/events');
+var events = require('../events');
 
 function highlightRowAndState($map, $table, state, scroll) {
   var $scrollBody = $table.closest('.dataTables_scrollBody');

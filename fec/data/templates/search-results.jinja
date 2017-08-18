@@ -1,0 +1,138 @@
+{% extends "layouts/main.jinja" %}
+{% import 'macros/page-header.jinja' as header %}
+
+{% block title %}
+    Search results
+{% endblock %}
+
+{% block body %}
+{{ header.header(title) }}
+
+<div class="main">
+  <div class="container">
+    <header>
+      <h1 class="heading--main">Candidate and committee profiles</h1>
+    </header>
+    <form action="" method="GET" class="slab slab--inline slab--neutral">
+      <div class="container combo combo--search">
+        <label for="search" class="label">Search candidate and committee profiles</label>
+        <input id="search"
+              name="search"
+              value="{{ query }}"
+              class="combo__input js-search-input"
+              autocorrect="off"
+              autocapitalize="off"
+              spellcheck="false">
+        <button type="submit" class="button--cta combo__button button--search"><span class="u-visually-hidden">Search</span></button>
+      </div>
+    </form>
+    <div class="row">
+      <div class="sidebar-container sidebar-container--left">
+        <nav class="sidebar sidebar--neutral side-nav js-sticky-side" data-sticky-container="main">
+          <ul class="sidebar__content">
+            {% if results.candidates.pagination.count > 0 %}
+              <li class="side-nav__item">
+                  <a class="side-nav__link" href="#candidates">Candidates ({{results.candidates.pagination.count}})</a>
+              </li>
+            {% endif %}
+            {% if results.committees.pagination.count > 0 %}
+              <li class="side-nav__item">
+                  <a class="side-nav__link" href="#committees">Committees ({{results.committees.pagination.count}})</a>
+              </li>
+            {% endif %}
+            {% if results.candidates.pagination.count == 0 %}
+              <li class="side-nav__item">
+                  <span class="side-nav__link">Candidates (0)</span>
+              </li>
+            {% endif %}
+            {% if results.committees.pagination.count == 0 %}
+              <li class="side-nav__item">
+                  <span class="side-nav__link">Committees (0)</span>
+              </li>
+            {% endif %}
+          </ul>
+        </nav>
+      </div>
+      <div class="main__content--right">
+        {% if results.candidates.pagination.count > 0 or results.committees.pagination.count > 0 %}
+          {% if results.candidates.pagination.count > 0 %}
+          <section class="option" id="candidates">
+            <div class="row">
+              <h2 class="u-no-margin u-float-left">Candidate results</h2>
+              <div class="u-float-right">
+                <span class="t-sans">{{ results.candidates.pagination.count }} total results
+                  {% if results.candidates.pagination.count > 5 %}| <a href="{{ url_for('candidates', q=query)}}">View more</a>{% endif %}
+                </span>
+              </div>
+            </div>
+            <ul>
+            {% with candidates=results['candidates']['results'] %}
+              {% for result in candidates %}
+              <li class="post">
+                <h3><i class="icon icon--inline--left i-candidate"></i><a href="{{ url_for('candidate_page', c_id=result.candidate_id) }}">{{ result.name }}</a></h3>
+                <div class="post__preview t-sans">
+                  <span class="entity__type">Candidate for {{ result.office_full }}</span>
+                  {% if result.office != 'P' %}<span class="entity__type"> {{ result.state }} {% if result.office == 'H' %} - District {{ result.district }} {% endif %} </span>{% endif %}
+                  <span class="entity__type">{{ result.party_full }}</span>
+                  ID: {{ result.candidate_id }}
+                </div>
+                <div class="post__preview t-sans">
+                  {% if result.principal_committees %}
+                      <span class="entity__type"><strong>Principal committee:</strong> <a href="{{ url_for('committee_page', c_id=result.principal_committees[0].committee_id )}}">{{ result.principal_committees[0].name }}</a></span>
+                  {% endif %}
+                    <strong>Most recent election:</strong> {{ result.election_years[-1]}}
+                </div>
+              </li>
+              {% endfor %}
+            {% endwith %}
+            </ul>
+          </section>
+          {% endif %}
+          {% if results.committees.pagination.count > 0 %}
+          <section class="option" id="committees">
+            <div class="row">
+              <h2 class="u-no-margin u-float-left">Committee results</h2>
+              <div class="u-float-right">
+                <span class="t-sans">{{ results.committees.pagination.count }} total results
+                  {% if results.committees.pagination.count > 5 %}| <a href="{{ url_for('committees', q=query)}}">View more</a>{% endif %}
+                </span>
+              </div>
+            </div>
+            <ul>
+            {% with committees=results.committees.results %}
+              {% for result in committees %}
+              <li class="post">
+                <h3><i class="icon icon--inline--left i-committee"></i><a href="{{ url_for('committee_page', c_id=result.committee_id) }}">{{ result.name }}</a></h3>
+                <div class="post__preview t-sans">
+                  <span class="entity__type">{{ result.designation_full }}</span>
+
+                  <span class="entity__type">{{ result.committee_type_full }}</span>
+                  ID: {{ result.committee_id }}
+                </div>
+                <div class="post__preview t-sans">
+                  <strong>Active:</strong> {{ result.cycles | get_min}}&ndash;{{ result.cycles | get_max }}
+                </div>
+              </li>
+              {% endfor %}
+            {% endwith %}
+            </ul>
+          </section>
+          {% endif %}
+        {% else %}
+        <div class="message message--info">
+          <h2>No results</h2>
+          <p>Sorry, no candidates or committees have names that contain your search, <strong>&ldquo;{{ query }}&rdquo;</strong>.</p>
+          <div class="message--alert__bottom">
+            <p>Other ways to search:</p>
+            <ul class="list--buttons">
+              <li><a href="{{ url_for("advanced") }}" class="button button--standard button--browse">Browse advanced data</a></li>
+              <li><a href="{{ url_for("election_lookup") }}"class="button button--standard button--election">Search for candidates and elections by location</a></li>
+            </ul>
+          </div>
+        </div>
+        {% endif %}
+      </div>
+    </div>
+</div>
+
+{% endblock %}

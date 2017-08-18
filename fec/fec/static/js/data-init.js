@@ -47,7 +47,6 @@ $(document).ready(function() {
     new siteNav.SiteNav(this, {
       cmsUrl: CMS_URL,
       webAppUrl: BASE_PATH,
-      transitionUrl: TRANSITION_URL
     });
   });
 

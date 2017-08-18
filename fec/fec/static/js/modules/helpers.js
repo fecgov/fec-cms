@@ -8,7 +8,7 @@ var _ = require('underscore');
 var decoders = require('./decoders');
 var Handlebars = require('hbsfy/runtime');
 
-var helpers = require('fec-style/js/helpers');
+var helpers = require('../helpers');
 
 var intl = require('intl');
 var locale = require('intl/locale-data/json/en-US.json');

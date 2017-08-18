@@ -1,8 +1,8 @@
 'use strict';
 
 var $ = require('jquery')
-var FilterPanel = require('fec-style/js/filter-panel').FilterPanel;
-var filterTags = require('fec-style/js/filter-tags');
+var FilterPanel = require('./filter-panel').FilterPanel;
+var filterTags = require('./filter-tags');
 var Calendar = require('./calendar').Calendar;
 var calendarHelpers = require('./calendar-helpers');
 

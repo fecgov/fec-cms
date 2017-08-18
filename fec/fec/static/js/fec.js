@@ -9,15 +9,15 @@ require('es6-weak-map/implement');
 var Accordion = require('aria-accordion').Accordion;
 var Glossary = require('glossary-panel');
 
-var terms = require('fec-style/js/terms');
-var feedback = require('fec-style/js/feedback');
-var skipNav = require('fec-style/js/skip-nav');
-var siteNav = require('fec-style/js/site-nav');
-var dropdown = require('fec-style/js/dropdowns');
-var toc = require('fec-style/js/toc');
-var typeahead = require('fec-style/js/typeahead');
-var SiteOrientation = require('fec-style/js/site-orientation');
-var helpers = require('fec-style/js/helpers');
+var terms = require('./terms');
+var feedback = require('./feedback');
+var skipNav = require('./skip-nav');
+var siteNav = require('./site-nav');
+var dropdown = require('./dropdowns');
+var toc = require('./toc');
+var typeahead = require('./typeahead');
+var SiteOrientation = require('./site-orientation');
+var helpers = require('./helpers');
 
 // Hack: Append jQuery to `window` for use by legacy libraries
 window.$ = window.jQuery = $;

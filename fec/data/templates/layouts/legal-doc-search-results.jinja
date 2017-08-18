@@ -1,0 +1,79 @@
+{% extends "layouts/main.jinja" %}
+{% import 'macros/legal.jinja' as legal %}
+{% import 'macros/breadcrumbs.jinja' as breadcrumb %}
+
+{% set breadcrumb_links=[(cms_url + '/legal-resources', 'Legal resources')] %}
+{% set result_entities = results.get(result_type, []) %}
+
+{% block title %}
+  {% if query %}
+  Searching {{ document_type_display_name }} for &ldquo;{{ query }}&rdquo;
+  {% else %}
+  Search {{ document_type_display_name }}
+  {% endif %}
+{% endblock %}
+
+{% block css %}
+<link rel="stylesheet" href="{{ asset_for('dist/styles/legal.css') }}" />
+{% endblock %}
+
+{% block header %}
+{% endblock %}
+
+{% block body %}
+
+{% block search %}
+<section class="main__content--full data-container__wrapper">
+  <div id="filters" class="filters is-open">
+    <button class="filters__header filters__toggle js-filter-toggle" type="button">
+      <span class="filters__title">Edit filters</span>
+    </button>
+    <div class="filters__content">
+      <form id="category-filters" action="{{ url_for(result_type) }}">
+        <div class="filters__inner">
+          <input id="search-type" type="hidden" name="search_type" value="{{ result_type }}">
+          {% block filters %}
+          {% endblock %}
+        </div>
+      </form>
+    </div>
+  </div>
+  <div id="results-{{ result_type }}" class="content__section">
+    <div class="data-container__widgets">
+      <div class="data-container__head">
+        <h1 class="data-container__title">{{ document_type_display_name|capitalize }}</h1>
+      </div>
+      <div class="u-padding--left u-padding--right">
+        {% block message %}{% endblock %}
+      </div>
+    </div>
+    {% if results.total_all %}
+      {% block results %}{% endblock %}
+    {% else %}
+    <div class="u-padding--left u-padding--right">
+      <div class="message message--no-icon">
+        <h2 class="message__title">No results</h2>
+        <p>Sorry, we didn&rsquo;t find any documents matching {% if query %}<span class="t-bold">{{ query }}</span>{% else %}your search{% endif %}.</p>
+        <div class="message--alert__bottom">
+          <p>Think this was a mistake?</p>
+          <ul class="list--buttons">
+            {% if query %}
+            <li><a class="button button--standard" href="http://search04.fec.gov/vivisimo/cgi-bin/query-meta?v%3Asources=Administrative_Fine%2CAdvisory_Opinion%2CAlternative_Dispute_Resolution%2CAudit_Reports%2CMatters_Under_Review%2CMatters_Under_Review_Archived%2CRulemaster%2CCandidate_Summary%2CCommittee_Summary%2Cfec.gov&query={{ query }}&x=0&y=0&v%3aproject=fec_search_02_prj&v%3aframe=form&form=advanced-fec&">Try FEC.gov</a></li>
+            {% endif %}
+            <li><a class="button button--standard" href="mailto:{{ contact_email }}">Email our team</a></li>
+            <li><a class="button button--standard" href="https://github.com/18f/fec/issues">File an issue</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    {% endif %}
+  </div>
+</section>
+{% endblock %}
+
+{% include 'partials/legal-disclaimer.jinja' %}
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ asset_for_page('legal') }}"></script>
+{% endblock %}

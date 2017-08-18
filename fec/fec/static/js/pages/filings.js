@@ -9,7 +9,7 @@ var columnHelpers = require('../modules/column-helpers');
 var columns = require('../modules/columns');
 var tables = require('../modules/tables');
 var TableSwitcher = require('../modules/table-switcher').TableSwitcher;
-var dropdown = require('fec-style/js/dropdowns');
+var dropdown = require('../dropdowns');
 
 var columns = columnHelpers.getColumns(
   columns.filings,

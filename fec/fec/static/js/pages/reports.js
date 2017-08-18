@@ -9,7 +9,7 @@ var columns = require('../modules/columns');
 var filings = require('../modules/filings');
 var columnHelpers = require('../modules/column-helpers');
 var TableSwitcher = require('../modules/table-switcher').TableSwitcher;
-var dropdown = require('fec-style/js/dropdowns');
+var dropdown = require('../dropdowns');
 
 var candidateTemplate = require('../templates/reports/candidate.hbs');
 var pacPartyTemplate = require('../templates/reports/pac.hbs');

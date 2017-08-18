@@ -2,9 +2,7 @@
 {% import 'macros/cycle-select.jinja' as select %}
 {% import 'macros/overviews.jinja' as overviews %}
 
-{% block title %}
-  {{ title }}
-{% endblock %}
+{% block title %}{{ title }}{% endblock %}
 
 {% block css %}
 <link rel="stylesheet" href="{{ static('styles/data-landing.css') }}" />
@@ -29,10 +27,10 @@
           <span class="t-note t-sans search__example">Examples: Obama for America; C00431445; Bush, George W.; P00003335; or enter an image number for a filing.</span>
         </div>
         <div class="example--primary">
-          <h4 class="example__title">Top raising candidates in {# {{ constants.DEFAULT_TIME_PERIOD | fmt_year_range }} #}:</h4>
+          <h4 class="example__title">Top raising candidates in {{ constants.DEFAULT_TIME_PERIOD | fmt_year_range }}:</h4>
           <ul class="t-sans">
             {% for candidate in top_candidates_raising %}
-{#               <li><a href="{{ url_for('candidate_page', c_id=candidate.candidate_id) }}">{{ candidate.name }}</a></li> #}
+              <li><a href="/data/{{ candidate.candidate_id }}">{{ candidate.name }}</a></li>
             {% endfor %}
           </ul>
         </div>
@@ -76,9 +74,9 @@
             <label for="state" class="label">State</label>
             <select id="state" name="state" aria-label="Select a state">
               <option value="">Select state</option>
-{#               {% for value, label in constants.election_states.items() %}
+              {% for value, label in constants.election_states.items() %}
               <option value="{{ value }}">{{ label }}</option>
-              {% endfor %} #}
+              {% endfor %}
             </select>
           </div>
           <div class="search-controls__district">
