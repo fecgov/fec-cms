@@ -9,6 +9,8 @@ import datetime
 
 from dateutil.parser import parse as parse_date
 
+from data import constants
+
 
 @library.filter
 def currency(num, grouping=True):
@@ -85,9 +87,15 @@ def fmt_year_range(year):
         return "{}–{}".format(year - 1, year)
     return None
 
+
 @library.filter
 def fmt_state_full(value):
     return constants.states[value.upper()]
+
+
+@library.filter
+def strip_zero_pad(number):
+    return number.strip("0")
 
 
 # @app.template_filter('filesize')
@@ -126,7 +134,4 @@ def fmt_state_full(value):
 # def get_min(list):
 #     return min(list)
 
-# @app.template_filter()
-# def strip_zero_pad(number):
-#     return number.strip("0")
 

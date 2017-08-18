@@ -1,10 +1,7 @@
 from django.shortcuts import render
 from django.http import Http404
 
-import os
 import datetime
-
-from collections import OrderedDict
 
 from data import api_caller
 from data import constants
@@ -314,9 +311,106 @@ def committee(request, committee_id):
     })
 
 
-def elections(request):
+def elections_lookup(request):
+    cycles = utils.get_cycles(utils.current_cycle())
+
     return render(request, 'election-lookup.jinja', {
-        'parent': 'data'
+        'parent': 'data',
+        'cycles': cycles
+    })
+
+
+# @app.route('/elections/<office>/<int:cycle>/')
+# @app.route('/elections/<office>/<state>/<int:cycle>/')
+# @app.route('/elections/<office>/<state>/<district>/<int:cycle>/')
+# def elections(office, cycle, state=None, district=None):
+def elections(request, office, cycle, state=None, district=None):
+    cycle = int(cycle)
+
+    # Get all cycles up until the cycle from the URL if it's beyond the current cycle
+    # this fixes the issue of an election page not showing user-provided cycle
+    # in the cycle select
+    max_cycle = cycle if cycle > utils.current_cycle() else utils.current_cycle()
+    cycles = utils.get_cycles(max_cycle)
+
+    if office.lower() == 'president':
+        cycles = [each for each in cycles if each % 4 == 0]
+    elif office.lower() == 'senate':
+        cycles = utils.get_state_senate_cycles(state)
+
+    if office.lower() not in ['president', 'senate', 'house']:
+        abort(404)
+    if state and state.upper() not in constants.states:
+        abort(404)
+
+    return render(request, 'elections.jinja', {
+        'office': office,
+        'office_code': office[0],
+        'parent': 'data',
+        'cycle': cycle,
+        'cycles': cycles,
+        'state': state,
+        'state_full': constants.states[state.upper()] if state else None,
+        'district': district,
+        'title': utils.election_title(cycle, office, state, district),
+    })
+
+
+def raising(request):
+    top_category = request.GET.get('top_category', 'P')
+    cycle = request.GET.get('cycle', 2016)
+
+    if top_category in ['pac']:
+        top_raisers = api_caller.load_top_pacs('-receipts', cycle=cycle, per_page=10)
+    elif top_category in ['party']:
+        top_raisers = api_caller.load_top_parties('-receipts', cycle=cycle, per_page=10)
+    else:
+        top_raisers = api_caller.load_top_candidates('-receipts', office=top_category, cycle=cycle, per_page=10)
+
+    if cycle == datetime.datetime.today().year:
+        coverage_end_date = datetime.datetime.today()
+    else:
+        coverage_end_date = datetime.date(cycle, 12, 31)
+
+    page_info = top_raisers['pagination']
+
+    return render(request, 'raising-breakdown.jinja', {
+        'parent': 'data',
+        'title': 'Raising breakdown',
+        'top_category': top_category,
+        'coverage_start_date': datetime.date(cycle - 1, 1, 1),
+        'coverage_end_date': coverage_end_date,
+        'cycle': cycle,
+        'top_raisers': top_raisers['results'],
+        'page_info': utils.page_info(top_raisers['pagination'])
+    })
+
+
+def spending(request):
+    top_category = request.GET.get('top_category', 'P')
+    cycle = request.GET.get('cycle', 2016)
+
+    if top_category in ['pac']:
+        top_spenders = api_caller.load_top_pacs('-disbursements', cycle=cycle, per_page=10)
+    elif top_category in ['party']:
+        top_spenders = api_caller.load_top_parties('-disbursements', cycle=cycle, per_page=10)
+    else:
+        top_spenders = api_caller.load_top_candidates('-disbursements', office=top_category, cycle=cycle, per_page=10)
+
+    if cycle == datetime.datetime.today().year:
+        coverage_end_date = datetime.datetime.today()
+    else:
+        coverage_end_date = datetime.date(cycle, 12, 31)
+
+    return render(request, 'spending-breakdown.jinja', {
+        'parent': 'data',
+        'title': 'Spending breakdown',
+        'top_category': top_category,
+        'coverage_start_date': datetime.date(cycle - 1, 1, 1),
+        'coverage_end_date': coverage_end_date,
+        'cycle': cycle,
+        'top_spenders': top_spenders['results'],
+        'page_info': utils.page_info(top_spenders['pagination'])
     })
 
 
@@ -324,182 +418,5 @@ def elections(request):
 #
 # elections pages
 # election page
-# raising breakdown
-# spending breakdown
 # Legal pages
 #
-
-'''
-Views for datatables
-'''
-
-# TODO: kwargs for candidates and committees
-def candidates(request):
-    candidates = api_caller._call_api('candidates')
-    return render(request, 'datatable.jinja', {
-        'parent': 'data',
-        'result_type': 'candidates',
-        'slug': 'candidates',
-        'title': 'Candidates',
-        'data': candidates['results'],
-        # 'query': kwargs,
-        'columns': constants.table_columns['candidates']
-    })
-
-
-def candidates_office(request, office):
-    if office.lower() not in ['president', 'senate', 'house']:
-        raise Http404()
-    return render(request, 'datatable.jinja', {
-        'parent': 'data',
-        'result_type': 'candidates',
-        'title': 'candidates for ' + office,
-        'slug': 'candidates-office',
-        'table_context': OrderedDict([('office', office)]),
-        'columns': constants.table_columns['candidates-office-' + office.lower()]
-    })
-
-
-def committees(request):
-    committees = api_caller._call_api('committees')
-    return render(request, 'datatable.jinja', {
-        'parent': 'data',
-        'result_type': 'committees',
-        'slug': 'committees',
-        'title': 'Committees',
-        'data': committees['results'],
-        # 'query': kwargs,
-        'columns': constants.table_columns['committees']
-    })
-
-
-def communication_costs(request):
-    return render(request, 'datatable.jinja', {
-        'parent': 'data',
-        'slug': 'communication-costs',
-        'title': 'Communication costs',
-        'dates': utils.date_ranges(),
-        'columns': constants.table_columns['communication-costs']
-    })
-
-
-def disbursements(request):
-    return render(request, 'datatable.jinja', {
-        'parent': 'data',
-        'slug': 'disbursements',
-        'title': 'Disbursements',
-        'dates': utils.date_ranges(),
-        'columns': constants.table_columns['disbursements'],
-        'has_data_type_toggle': True
-    })
-
-
-def filings(request):
-    return render(request, 'datatable.jinja', {
-        'parent': 'data',
-        'slug': 'filings',
-        'title': 'Filings',
-        'dates': utils.date_ranges(),
-        'result_type': 'committees',
-        'has_data_type_toggle': True,
-        'columns': constants.table_columns['filings']
-    })
-
-
-def electioneering_communications(request):
-    return render(request, 'datatable.jinja', {
-        'parent': 'data',
-        'slug': 'electioneering-communications',
-        'title': 'Electioneering communications',
-        'dates': utils.date_ranges(),
-        'columns': constants.table_columns['electioneering-communications']
-    })
-
-
-def independent_expenditures(request):
-    return render(request, 'datatable.jinja', {
-        'parent': 'data',
-        'slug': 'independent-expenditures',
-        'title': 'Independent expenditures',
-        'dates': utils.date_ranges(),
-        'columns': constants.table_columns['independent-expenditures'],
-        'has_data_type_toggle': True
-    })
-
-
-def individual_contributions(request):
-    return render(request, 'datatable.jinja', {
-        'parent': 'data',
-        'result_type': 'receipts',
-        'title': 'Individual contributions',
-        'slug': 'individual-contributions',
-        'dates': utils.date_ranges(),
-        'columns': constants.table_columns['individual-contributions']
-    })
-
-
-def loans(request):
-    return render(request, 'datatable.jinja', {
-        'parent': 'data',
-        'result_type': 'loans',
-        'slug': 'loans',
-        'title': 'loans',
-        'columns': constants.table_columns['loans']
-    })
-
-
-def party_coordinated_expenditures(request):
-    return render(request, 'datatable.jinja', {
-        'parent': 'data',
-        'slug': 'party-coordinated-expenditures',
-        'title': 'Party coordinated expenditures',
-        'dates': utils.date_ranges(),
-        'columns': constants.table_columns['party-coordinated-expenditures']
-    })
-
-
-def receipts(request):
-    return render(request, 'datatable.jinja', {
-        'parent': 'data',
-        'slug': 'receipts',
-        'title': 'Receipts',
-        'dates': utils.date_ranges(),
-        'columns': constants.table_columns['receipts'],
-        'has_data_type_toggle': True
-    })
-
-
-def reports(request, form_type):
-    if form_type.lower() not in ['presidential', 'house-senate', 'pac-party', 'ie-only']:
-        raise Http404()
-    if form_type.lower() == 'presidential':
-        title = 'Presidential committee reports'
-    if form_type.lower() == 'house-senate':
-        title = 'House and Senate committee reports'
-    if form_type.lower() == 'pac-party':
-        title = 'PAC and party committee reports'
-    if form_type.lower() == 'ie-only':
-        title = 'Independent expenditure only committee reports'
-
-    context = OrderedDict([('form_type', form_type.lower())])
-
-    return render(request, 'datatable.jinja', {
-        'parent': 'data',
-        'slug': 'reports',
-        'title': title,
-        'table_context': context,
-        'dates': utils.date_ranges(),
-        'has_data_type_toggle': True,
-        'columns': constants.table_columns['reports-' + form_type.lower()]
-    })
-
-
-def individual_contributions(request):
-    return render(request, 'datatable.jinja', {
-        'parent': 'data',
-        'result_type': 'receipts',
-        'title': 'Individual contributions',
-        'slug': 'individual-contributions',
-        'dates': utils.date_ranges(),
-        'columns': constants.table_columns['individual-contributions']
-    })

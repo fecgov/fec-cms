@@ -3,12 +3,10 @@
 
 {{ cycle }} Election - US {{ office|title }} {% if state %} - {{ state|fmt_state_full }} {% if district %} - District {{ district }} {% endif %} {% endif %}
 
-{% block title %}
-  {{ title }}
-{% endblock %}
+{% block title %}{{ title }}{% endblock %}
 
 {% block css %}
-<link rel="stylesheet" href="{{ asset_for('dist/styles/elections.css') }}" />
+<link rel="stylesheet" href="{{ static('styles/elections.css') }}" />
 {% endblock %}
 
 {% block body %}
@@ -75,7 +73,7 @@
           <div class="accordion--neutral js-accordion" data-accordion-prefix="election-lookup">
             <button class="js-accordion-trigger accordion__button">Find another election</button>
             <div class="accordion__content" aria-hidden="true">
-              <form action="{{ url_for('election_lookup')}}">
+              <form action="/data/election-page">
                 <div class="filter">
                   <label for="state" class="label">State</label>
                   <select id="state" name="state" class="u-full-width">
@@ -127,5 +125,5 @@ var context = {
   }
 };
 </script>
-<script src="{{ asset_for('dist/js/pages/elections.js') }}"></script>
+<script src="{{ static('js/pages/elections.js') }}"></script>
 {% endblock %}

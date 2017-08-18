@@ -11,11 +11,11 @@
 {% if category in ['P', 'S', 'H'] %}
   {% set name_field='name' %}
   {% set id_field='candidate_id' %}
-  {% set route='candidate_page' %}
+  {% set route='candidate' %}
 {% else %}
   {% set name_field='committee_name' %}
   {% set id_field='committee_id' %}
-  {% set route='committee_page' %}
+  {% set route='committee' %}
 {% endif %}
 
 {% if action == 'raised' %}
@@ -50,8 +50,8 @@
     </div>
   {% for datum in data %}
     <div role="row" class="js-top-row simple-table__row">
-      <div role="gridcell" class="simple-table__cell">{{ loop.index}}.
-        <a href="{{ url_for(route, c_id=datum[id_field], cycle=cycle, election_full='false') }}" title="{{ datum[name_field] }}">{{ datum[name_field] }}</a>
+      <div role="gridcell" class="simple-table__cell">{{ loop.index }}.
+        <a href="/data/{{ route }}/{{ datum[id_field] }}/?cycle={{ cycle }}&election_full=false" title="{{ datum[name_field] }}">{{ datum[name_field] }}</a>
         {% if datum.party %}
           [{{ datum.party | truncate(1, end='') | upper }}]
         {% endif %}
@@ -75,7 +75,7 @@
 </div>
 <div class="content__section row">
   <ul class="list--buttons u-float-right">
-    <li><a class="button button--standard button--table" href="{{ url_for(value_field) }}">Browse {{value_field}}</a></li>
+    <li><a class="button button--standard button--table" href="/data/{{ value_field }}">Browse {{value_field}}</a></li>
     <li><button class="button button--alt js-ga-event"  data-a11y-dialog-show="{{ action }}-modal" data-ga-event="{{ action }} methodology modal clicked" aria-controls="{{ action }}-modal">Methodology</button></li>
   </ul>
 </div>

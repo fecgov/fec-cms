@@ -2,7 +2,7 @@
 {% import "macros/breakdowns.jinja" as breakdowns %}
 
 {% block css %}
-<link rel="stylesheet" href="{{ asset_for('dist/styles/data-landing.css') }}" />
+<link rel="stylesheet" href="{{ static('styles/data-landing.css') }}" />
 {% endblock %}
 
 {% block page_title %}
@@ -21,7 +21,7 @@
   </noscript>
 </form>
 <nav class="sidebar sidebar--breakdown sidebar--left side-nav js-sticky-side" data-sticky-container="options">
-  <a class="sidebar__title" href="{{ url_for('search', _anchor='spending') }}">&lsaquo; Spending overview</a>
+  <a class="sidebar__title" href="/data/#spending">&lsaquo; Spending overview</a>
   <ul class="sidebar__content js-toc">
     <li class="side-nav__item"><a class="side-nav__link" href="#top-spenders">Who's spending the most</a></li>
     <li class="side-nav__item"><span class="side-nav__link is-disabled">Where contributions come from</span></li>
@@ -65,5 +65,5 @@
     type: 'disbursements'
   }
   </script>
-  <script src="{{ asset_for('dist/js/pages/breakdowns.js') }}"></script>
+  <script src="{{ static('js/pages/breakdowns.js') }}"></script>
 {% endblock %}

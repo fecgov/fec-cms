@@ -3,7 +3,7 @@
 <section id="section-1" role="tabpanel" aria-hidden="true" aria-labelledby="section-1-heading">
   <div class="container">
     <h2 id="section-1-heading">Compare candidate financial totals</h2>
-    <p>This table only shows candidates who have registered <em>and</em> filed a financial report. Looking for <a href="{{ url_for('candidates', office=office_code|upper, cycle=cycle, district=district, state=state|upper) }}">all candidates who registered</a>?</p>
+    <p>This table only shows candidates who have registered <em>and</em> filed a financial report. Looking for <a href="/data/candidates/?office={{ office_code|upper }}&cycle={{ cycle }}&district={{ district }}&state={{ state|upper }}">all candidates who registered</a>?</p>
     <div class="slab slab--inline slab--neutral u-padding--left u-padding--right">
       {{ select.election_cycle_select(cycles, cycle, 'summary')}}
       <div class="entity__figure row">
