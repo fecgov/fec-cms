@@ -98,6 +98,15 @@ def strip_zero_pad(number):
     return number.strip("0")
 
 
+@library.filter
+def get_max(list):
+    return max(list)
+
+
+@library.filter
+def get_min(list):
+    return min(list)
+
 # @app.template_filter('filesize')
 # def filesize_filter(value):
 #     units = ['B', 'KB', 'MB', 'GB']
@@ -125,13 +134,3 @@ def strip_zero_pad(number):
 #     if len(cycles) > 1:
 #         return '{}–{}'.format(min(cycles), max(cycles))
 #     return cycles[0]
-
-# @app.template_filter()
-# def get_max(list):
-#     return max(list)
-
-# @app.template_filter()
-# def get_min(list):
-#     return min(list)
-
-

@@ -2,6 +2,7 @@ from django.shortcuts import render
 from django.http import Http404
 
 import datetime
+import re
 
 from data import api_caller
 from data import constants
@@ -35,7 +36,6 @@ def to_date(committee, cycle):
     return min(datetime.datetime.now().year, int(cycle))
 
 
-# TODO: load query string
 def landing(request):
     top_candidates_raising = api_caller.load_top_candidates('-receipts', per_page=3)
 
@@ -46,6 +46,29 @@ def landing(request):
         'first_of_year': datetime.date(datetime.date.today().year, 1, 1).strftime('%m/%d/%Y'),
         'last_of_year': datetime.date(datetime.date.today().year, 12, 31).strftime('%m/%d/%Y'),
     })
+
+
+def search(request):
+    """Renders the data search results page
+
+    If the string is a 16 or 11 digit number then it will redirect to
+    the page-by-page viewer.
+
+    If there's no query, then we'll load the main landing page with all the
+    necessary data.
+    """
+    query = request.GET.get('search', '')
+
+    if re.match('\d{16}', query) or re.match('\d{11}', query):
+        url = 'http://docquery.fec.gov/cgi-bin/fecimg/?' + query
+        return redirect(url)
+    else:
+        results = api_caller.load_search_results(query)
+        return render(request, 'search-results.jinja', {
+            'query': query,
+            'title': 'Search results',
+            'results': results
+        })
 
 
 def advanced(request):
