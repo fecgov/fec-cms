@@ -37,8 +37,14 @@ def to_date(committee, cycle):
 
 # TODO: load query string
 def landing(request):
+    top_candidates_raising = api_caller.load_top_candidates('-receipts', per_page=3)
+
     return render(request, 'landing.jinja', {
-      'title': 'Campaign finance data',
+        'title': 'Campaign finance data',
+        'dates': utils.date_ranges(),
+        'top_candidates_raising': top_candidates_raising['results'] if top_candidates_raising else None,
+        'first_of_year': datetime.date(datetime.date.today().year, 1, 1).strftime('%m/%d/%Y'),
+        'last_of_year': datetime.date(datetime.date.today().year, 12, 31).strftime('%m/%d/%Y'),
     })
 
 
