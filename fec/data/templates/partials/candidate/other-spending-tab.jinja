@@ -14,8 +14,13 @@
     <div class="entity__figure row" id="independent-expenditures">
       <div class="heading--section heading--with-action">
         <h3 class="heading__left">Independent expenditures</h3>
-        <a class="heading__right button--alt button--browse"
-          href="/data/independent-expenditures">Filter this data</a>
+{#         <a class="heading__right button--alt button--browse"
+          href="{{ url_for(
+            'independent_expenditures',
+            min_date=cycle_start(min_cycle) | date(fmt='%m-%d-%Y'),
+            max_date=cycle_end(max_cycle) | date(fmt='%m-%d-%Y'),
+            candidate_id=candidate_id,
+            candidate_name=name) }}">Filter this data</a> #}
       </div>
       <div class="results-info results-info--simple js-other-spending-totals" data-spending-type="independentExpenditures">
         <div class="usa-width-one-half">
@@ -53,8 +58,12 @@
     <div class="entity__figure row" id="communication-costs">
       <div class="heading--section heading--with-action u-no-margin">
         <h3 class="heading__left">Communication costs</h3>
-        <a class="heading__right button--alt button--browse"
-          href="/data/communication-costs">Filter this data</a>
+{#         <a class="heading__right button--alt button--browse"
+          href="{{ url_for(
+            'communication_costs',
+            min_date=cycle_start(min_cycle) | date(fmt='%m-%d-%Y'),
+            max_date=cycle_end(max_cycle) | date(fmt='%m-%d-%Y')
+          ) }}&candidate_id={{ candidate_id }}">Filter this data</a> #}
       </div>
       <div class="results-info results-info--simple js-other-spending-totals" data-spending-type="communicationCosts">
         <div class="usa-width-one-half">
@@ -89,8 +98,12 @@
     <div class="entity__figure row" id="electioneering-communication">
       <div class="heading--section heading--with-action u-no-margin">
         <h3 class="heading__left">Electioneering communication</h3>
-        <a class="heading__right button--alt button--browse"
-          href="/data/electioneering-communication">Filter this data</a>
+{#         <a class="heading__right button--alt button--browse"
+          href="{{ url_for(
+            'electioneering_communications',
+            min_date=cycle_start(min_cycle) | date(fmt='%m-%d-%Y'),
+            max_date=cycle_end(max_cycle) | date(fmt='%m-%d-%Y')
+          ) }}&candidate_id={{ candidate_id }}">Filter this data</a> #}
       </div>
       <div class="results-info results-info--simple js-other-spending-totals" data-spending-type="electioneering">
         <div class="usa-width-one-half">

@@ -37,7 +37,7 @@
       </div>
       <div class="grid__item card t-left-aligned">
         <h2>Find contributions from <br> specific individuals</h2>
-        <form action="/receipts/individual-contributions/" autocomplete="off" class="search__container content__section">
+        <form action="/data/receipts/individual-contributions/" autocomplete="off" class="search__container content__section">
           <div class="combo combo--search combo--search--medium">
             <div class="tour__point tour__point--left" data-intro="<h5>Find individual contributions</h5>See who's contributing to candidates and committees. Filter results, download and share the results."></div>
             <label for="contributor-search" class="label">Individual contributor name</label>
@@ -52,9 +52,9 @@
         <div class="example--primary">
           <h4 class="example__title">Possible uses of this data:</h4>
           <ul class="t-sans">
-            <li><a href="/receipts/individual-contributions/?min_amount=2000">All contributions over $2,000</a></li>
-            <li><a href="/receipts/individual-contributions/">All contributions in the last month</a></li>
-            <li><a href="/receipts/individual-contributions/">Browse all and apply custom filters</a></li>
+            <li><a href="/data/receipts/individual-contributions/?min_amount=2000">All contributions over $2,000</a></li>
+            <li><a href="/data/receipts/individual-contributions/">All contributions in the last month</a></li>
+            <li><a href="/data/receipts/individual-contributions/">Browse all and apply custom filters</a></li>
           </ul>
         </div>
       </div>
@@ -69,7 +69,7 @@
         <div class="election-map election-map--small"></div>
       </div>
       <div class="grid__item">
-        <form action="/election-page" class="content__section">
+        <form action="/data/election-page" class="content__section">
           <div class="search-controls__state">
             <label for="state" class="label">State</label>
             <select id="state" name="state" aria-label="Select a state">
@@ -196,17 +196,17 @@
           <h4 class="heading__left t-upper">Cumulative amount raised by committees</h4>
           <div class="heading__right">
             <ul class="list--buttons">
-              <li><a class="button button--standard button--table" href="/receipts">Explore data</a></li>
+              <li><a class="button button--standard button--table" href="/data/receipts">Explore data</a></li>
               <li><button class="button button--standard js-ga-event"  data-a11y-dialog-show="raised-modal" data-ga-event="Raised methodology modal clicked" aria-controls="raised-modal">
               Methodology</button></li>
             </ul>
           </div>
         </div>
         {{ overviews.overview('raised', 'landing')}}
-         <a class="breakdown-link" href="/raising">Raising breakdown &raquo;</a>
+         <a class="breakdown-link" href="/data/raising">Raising breakdown &raquo;</a>
          <ul class="grid grid--4-wide t-sans">
            <li class="grid__item">
-             <a href="/raising#top-raisers" class="icon-heading--graph-circle">
+             <a href="/data/raising#top-raisers" class="icon-heading--graph-circle">
                <div class="icon-heading__text"><span>Who's raising the most</span></div>
              </a>
            </li>
@@ -231,7 +231,7 @@
           <h4 class="heading__left t-upper">Cumulative amount spent by committees</h4>
           <div class="heading__right">
             <ul class="list--buttons">
-              <li><a class="button button--standard button--table" href="/disbursements">Explore data</a></li>
+              <li><a class="button button--standard button--table" href="/data/disbursements">Explore data</a></li>
               <li><button class="button button--standard js-ga-event"  data-a11y-dialog-show="spending-modal" data-ga-event="Spending methodology modal clicked" aria-controls="spending-modal">Methodology</button></li>
             </ul>
           </div>
@@ -240,7 +240,7 @@
         <a class="breakdown-link" href="spending">Spending breakdown &raquo;</a>
         <ul class="grid grid--4-wide t-sans">
           <li class="grid__item">
-            <a href="/spending#top-spenders" class="icon-heading--graph-circle">
+            <a href="/data/spending#top-spenders" class="icon-heading--graph-circle">
               <div class="icon-heading__text"><span>Who's spending the most</span></div>
             </a>
           </li>
