@@ -1,11 +1,11 @@
-{% macro checkbox(name, value, label, prefix) %}
+{% macro checkbox(name, value, label, prefix='') %}
 <li class="dropdown__item">
   <input id="{{ name }}-{{ clean_id(value) }}" data-prefix="{{ prefix }}" name="{{ name }}" type="checkbox" value="{{ value }}">
   <label class="dropdown__value" for="{{ name }}-{{ value }}">{{ label }}</label>
 </li>
 {% endmacro %}
 
-{% macro checkbox_list(name, options, prefix, css_class='dropdown__list') %}
+{% macro checkbox_list(name, options, prefix='', css_class='dropdown__list') %}
 <ul class="{{ css_class }}">
 {% for value, label in options.items() %}
   {{ checkbox(name, value, label, prefix) }}
@@ -13,7 +13,7 @@
 </ul>
 {% endmacro %}
 
-{% macro checkbox_options(name, options, prefix) %}
+{% macro checkbox_options(name, options, prefix='') %}
 <div class="dropdown">
   <button type="button" class="dropdown__button button--alt" data-name="{{ name }}">More</button>
   <div class="dropdown__panel" aria-hidden="true">
@@ -28,7 +28,7 @@
     <label for="{{ name }}" class="label">{{ label }}</label>
     {{ checkbox_list(name, selected, css_class='dropdown__selected') }}
     {% if options %}
-    {{ checkbox_options(name, options) }}
+    {{ checkbox_options(name, options,) }}
     {% endif %}
   </fieldset>
 </div>
