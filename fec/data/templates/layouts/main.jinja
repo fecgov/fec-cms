@@ -46,7 +46,7 @@
 {% include 'partials/warnings.jinja' %}
 
 {% if site_orientation_banner %}
-  {% include "partials/site-orientation.jinja" %}
+  {% include "partials/site-orientation.html" %}
 {% endif %}
 
 <a href="#main" class="skip-nav" tabindex="0">skip navigation</a>
@@ -85,7 +85,7 @@
       </ul>
     </div>
 
-    {% include 'partials/navigation.jinja' %}
+    {% include 'partials/navigation/navigation.html' %}
 
   </header>
 
@@ -93,113 +93,36 @@
   <main id="main" {% if section %} data-section="{{section}}"{% endif %}>
     {% block body %}{% endblock %}
   </main>
-
-  <nav class="footer-links">
+  {% include 'partials/footer-navigation.html' %}
+  <footer class="footer">
     <div class="container">
+      <div class="seal">
+        <img class="seal__img" width="140" height="140" src="{{ static('img/seal--inverse.svg') }}" alt="Seal of the Federal Election Commission | United States of America">
+        <p class="address__title">Federal Election Commission</p>
+      </div>
 
-      <div class="grid grid--6-wide">
+      <div class="address">
+        <ul class="social-media">
+          <li>
+            <div class="i icon--twitter">
+              <a href="https://twitter.com/fec"><span class="u-visually-hidden">The FEC's Twitter page</span></a>
+            </div>
+          </li>
+          <li>
+            <div class="i icon--youtube">
+              <a href="https://www.youtube.com/user/FECTube"><span class="u-visually-hidden">The FEC's YouTube page</span></a>
+            </div>
+          </li>
+        </ul>
 
-        <div class="grid__item">
-          <ul>
-            <li>
-              <a href="/about/">About</a>
-            </li>
-            <li>
-              <a href="/about/careers/">Careers</a>
-            </li>
-            <li>
-              <a href="/press/">Press</a>
-            </li>
-            <li>
-              <a href="/contact-us/">Contact</a>
-            </li>
-          </ul>
-        </div>
-
-        <div class="grid__item"></div>
-
-        <div class="grid__item"></div>
-
-        <div class="grid__item">
-          <ul>
-            <li>
-              <a href="/about/privacy-and-security-policy">Privacy and security policy</a>
-            </li>
-            <li>
-              <a href="/about/plain-language/">Plain language</a>
-            </li>
-            <li>
-              <a href="/about/no-fear-act/">No FEAR Act</a>
-            </li>
-            <li>
-              <a href="/about/reports-about-fec/strategy-budget-and-performance/">Strategy, budget and performance</a>
-            </li>
-          </ul>
-        </div>
-
-        <div class="grid__item">
-          <ul>
-            <li>
-              <a href="https://www.data.gov/open-gov/">Open government</a>
-            </li>
-            <li>
-              <a href="https://www.usa.gov/">USA.gov</a>
-            </li>
-            <li>
-              <a href="{{ transition_url }}/fecig/fecig.shtml">Inspector General</a>
-            </li>
-            <li>
-              <a href="/freedom-information-act/">FOIA</a>
-            </li>
-          </ul>
-        </div>
-
-        <div class="grid__item">
-          <ul>
-            <li>
-              <a href="https://api.open.fec.gov/">OpenFEC API</a>
-            </li>
-            <li>
-              <a href="https://github.com/18F/fec">GitHub repository</a>
-            </li>
-            <li>
-              <a href="https://github.com/18F/FEC/blob/master/release_notes/release_notes.md">Release notes</a>
-            </li>
-          </ul>
-        </div>
-
+        <p>999 E Street, NW<br>
+        Washington, DC 20463</p>
       </div>
     </div>
-  </nav>
+  </footer>
 
-<footer class="footer">
-  <div class="container">
-    <div class="seal">
-      <img class="seal__img" width="140" height="140" src="{{ static('img/seal--inverse.svg') }}" alt="Seal of the Federal Election Commission | United States of America">
-      <p class="address__title">Federal Election Commission</p>
-    </div>
+{% include './partials/glossary.html' %}
 
-    <div class="address">
-      <ul class="social-media">
-        <li>
-          <div class="i icon--twitter">
-            <a href="https://twitter.com/fec"><span class="u-visually-hidden">The FEC's Twitter page</span></a>
-          </div>
-        </li>
-        <li>
-          <div class="i icon--youtube">
-            <a href="https://www.youtube.com/user/FECTube"><span class="u-visually-hidden">The FEC's YouTube page</span></a>
-          </div>
-        </li>
-      </ul>
-
-      <p>999 E Street, NW<br>
-      Washington, DC 20463</p>
-    </div>
-  </div>
-</footer>
-
-{% include './partials/glossary.jinja' %}
 {% block modals %}{% endblock %}
 
 <script src="{{ static('js/data-init.js') }}"></script>

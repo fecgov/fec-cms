@@ -4,18 +4,10 @@ var $ = require('jquery');
 var _ = require('underscore');
 var helpers = require('./helpers');
 var moment = require('moment');
-var typeahead = require('./typeahead');
 
 window.$ = window.jQuery = $;
 
 require('accessible-mega-menu');
-
-var TEMPLATES = {
-  data: require('./templates/nav-data.hbs'),
-  legal: require('./templates/nav-legal.hbs'),
-  help: require('./templates/nav-help.hbs'),
-  about: require('./templates/nav-about.hbs'),
-};
 
 /** SiteNav module
  * On mobile: Controls the visibility of the the hamburger menu and sublists
@@ -56,12 +48,7 @@ SiteNav.prototype.initMenu = function() {
 };
 
 SiteNav.prototype.initMegaMenu = function() {
-  var self = this;
   this.$element.find('[data-submenu]').each(function() {
-    var id = $(this).data('submenu');
-    var submenu = TEMPLATES[id](self.opts);
-    $(this).append(submenu);
-
     // Remove hrefs and default click behavior for links that have submenus
     $(this).find('.site-nav__link').attr('href', '#0').on('click', function(e) {
       e.preventDefault();

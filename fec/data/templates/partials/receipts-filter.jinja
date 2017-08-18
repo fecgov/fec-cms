@@ -21,7 +21,7 @@ Filter receipts
   {{ typeahead.field('committee_id', 'Recipient name or ID', id_suffix='_raw') }}
   {{ text.field('contributor_name', 'Contributor name', id_suffix='_raw') }}
   {{ text.field('contributor_city', 'Contributor city', id_suffix='_raw') }}
-  {# {{ states.field('contributor_state', id_suffix='_raw') }} #}
+  {{ states.field('contributor_state', id_suffix='_raw') }}
 </div>
 {% endblock %}
 
@@ -29,13 +29,13 @@ Filter receipts
 <div class="filters__inner">
   {{ typeahead.field('committee_id', 'Recipient name or ID') }}
   {{ typeahead.field('contributor_name', 'Contributor name or ID', dataset='committees', allow_text=True) }}
-  {# {{ date.partition_field('date', 'Receipt date', dates ) }} #}
+  {{ date.partition_field('date', 'Receipt date', dates ) }}
 </div>
 <div class="js-accordion accordion--neutral" data-content-prefix="filter" data-open-first="false">
   <button type="button" class="js-accordion-trigger accordion__button">Contributor details</button>
   <div class="accordion__content">
     {{ text.field('contributor_city', 'City') }}
-    {# {{ states.field('contributor_state') }} #}
+    {{ states.field('contributor_state') }}
     {{ text.field('contributor_zip', 'ZIP code')}}
     {{ text.field('contributor_employer', 'Employer') }}
     {{ text.field('contributor_occupation', 'Occupation') }}
@@ -46,9 +46,9 @@ Filter receipts
     {{ range.amount('amount', 'Receipt amount') }}
     <legend class="label  u-margin--top">Receipt type</legend>
     <fieldset class="js-filter js-line-number-filters" data-filter="checkbox">
-{#       {{ checkbox.checkbox_dropdown_multiple('line_number', 'Received by House or Senate committees', options=constants.line_numbers.receipts.house_senate, legend=False, prefix='House or Senate committees:') }}
+      {{ checkbox.checkbox_dropdown_multiple('line_number', 'Received by House or Senate committees', options=constants.line_numbers.receipts.house_senate, legend=False, prefix='House or Senate committees:') }}
       {{ checkbox.checkbox_dropdown_multiple('line_number', 'Received by Presidential committees', options=constants.line_numbers.receipts.presidential, legend=False, prefix='Presidential committees:') }}
-      {{ checkbox.checkbox_dropdown_multiple('line_number', 'Received by PACs or party committees', options=constants.line_numbers.receipts.pac_party, legend=False, prefix='PACs or party committees:') }} #}
+      {{ checkbox.checkbox_dropdown_multiple('line_number', 'Received by PACs or party committees', options=constants.line_numbers.receipts.pac_party, legend=False, prefix='PACs or party committees:') }}
     </fieldset>
     <div class="js-line-number-message message message--info message--small">
       <span class="t-block">Filters for receipt types are available only for filings from 2007 or later.</span>

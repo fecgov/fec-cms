@@ -110,6 +110,16 @@ def ao_document_date(value):
     return 'Not dated' if date == '01/01/1900' else date
 
 
+@library.filter
+def get_max(list):
+    return max(list)
+
+
+@library.filter
+def get_min(list):
+    return min(list)
+
+
 # @app.template_filter('filesize')
 # def filesize_filter(value):
 #     units = ['B', 'KB', 'MB', 'GB']
@@ -133,13 +143,3 @@ def ao_document_date(value):
 #     if len(cycles) > 1:
 #         return '{}–{}'.format(min(cycles), max(cycles))
 #     return cycles[0]
-
-# @app.template_filter()
-# def get_max(list):
-#     return max(list)
-
-# @app.template_filter()
-# def get_min(list):
-#     return min(list)
-
-

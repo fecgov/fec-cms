@@ -5,6 +5,7 @@ from data import views_datatables
 
 urlpatterns = [
     url(r'^data/$', views.landing),
+    url(r'^data/search/$', views.search),
     url(r'^data/advanced/$', views.advanced),
     url(r'^data/candidate/(?P<candidate_id>\w+)/$', views.candidate),
     url(r'^data/committee/(?P<committee_id>\w+)/$', views.committee),

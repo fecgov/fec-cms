@@ -8,35 +8,38 @@
         </a>
       </li>
       <li class="site-nav__item" data-submenu="data">
-        <a class="site-nav__link" href="{{ settings.FEC_APP_URL }}" tabindex="0">
+        <a class="site-nav__link" href="/data" tabindex="0">
           <span class="site-nav__link__title">
           {% if self.get_verbose_name == "Home page" %}
-          <div class="tour__point" data-intro="<h5>A new way to navigate
-</h5>Less looking, more finding. The main sections of our website have been reorganized and simplified to help you find what you need faster."></div>
+          <div class="tour__point" data-intro="<h5>A new way to navigate</h5>Less looking, more finding. The main sections of our website have been reorganized and simplified to help you find what you need faster."></div>
           {% endif %}
           Campaign finance data</span>
         </a>
+        {% include 'partials/navigation/nav-data.html' %}
       </li>
       <li class="site-nav__item site-nav__item--secondary" data-submenu="help">
-        <a href="{{ cms_url }}/help-candidates-and-committees/" tabindex="0" class="site-nav__link {% if self.content_section == 'help' %}is-parent{% endif %}">
+        <a href="/help-candidates-and-committees/" tabindex="0" class="site-nav__link {% if self.content_section == 'help' %}is-parent{% endif %}">
           <span class="site-nav__link__title">Help for candidates and committees</span>
         </a>
+        {% include 'partials/navigation/nav-help.html' %}
       </li>
       <li class="site-nav__item" data-submenu="legal">
-        <a href="{{ cms_url }}/legal-resources" tabindex="0" class="site-nav__link {% if self.content_section == 'legal' %}is-parent{% endif %}">
+        <a href="/legal-resources" tabindex="0" class="site-nav__link {% if self.content_section == 'legal' %}is-parent{% endif %}">
           <span class="site-nav__link__title">Legal resources</span>
         </a>
+        {% include 'partials/navigation/nav-legal.html' %}
       </li>
-      <li class="site-nav__item--secondary" data-submenu="about">
-        <a href="{{ cms_url }}/about" tabindex="0" class="site-nav__link {% if self.content_section == 'about' %}is-parent{% endif %}">
+      <li class="site-nav__item site-nav__item--secondary" data-submenu="about">
+        <a href="/about" tabindex="0" class="site-nav__link {% if self.content_section == 'about' %}is-parent{% endif %}">
           <span class="site-nav__link__title">About</span>
         </a>
+        {% include 'partials/navigation/nav-about.html' %}
       </li>
       <li class="site-nav__item utility-nav__item u-under-lg-only">
         <a class="site-nav__link" href="/calendar">Calendar</a>
       </li>
       <li class="site-nav__item site-nav__link utility-nav__item u-under-lg-only">
-        <form accept-charset="UTF-8" action="{{ cms_url }}/search" class="combo combo--search--mini" method="get" role="search">
+        <form accept-charset="UTF-8" action="/search" class="combo combo--search--mini" method="get" role="search">
           <input type="hidden" name="type" value="candidates">
           <input type="hidden" name="type" value="committees">
           <input type="hidden" name="type" value="site">
@@ -56,5 +59,5 @@
     </ul>
   </div>
   <button class="js-nav-toggle site-nav__button" aria-controls="site-menu">Menu</button>
-  <a title="Home" href="{{ cms_url }}" class="site-title"><span class="u-visually-hidden">Federal Election Commission | United States of America</span></a>
+  <a title="Home" href="/" class="site-title"><span class="u-visually-hidden">Federal Election Commission | United States of America</span></a>
 </nav>

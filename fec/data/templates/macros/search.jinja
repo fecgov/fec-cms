@@ -2,7 +2,7 @@
 {% if location == 'hero' %}
   {% set size = 'combo--search--medium' %}
 {% endif %}
-<form id="{{ location }}-search" action="/data" autocomplete="off" class="search__container">
+<form id="{{ location }}-search" action="/data/search" autocomplete="off" class="search__container">
   <div class="combo combo--search {{ size }}">
     <label for="search" class="label">
       {% if location == 'hero' %}

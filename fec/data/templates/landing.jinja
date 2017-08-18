@@ -30,7 +30,7 @@
           <h4 class="example__title">Top raising candidates in {{ constants.DEFAULT_TIME_PERIOD | fmt_year_range }}:</h4>
           <ul class="t-sans">
             {% for candidate in top_candidates_raising %}
-              <li><a href="/data/{{ candidate.candidate_id }}">{{ candidate.name }}</a></li>
+              <li><a href="/data/candidate/{{ candidate.candidate_id }}">{{ candidate.name }}</a></li>
             {% endfor %}
           </ul>
         </div>

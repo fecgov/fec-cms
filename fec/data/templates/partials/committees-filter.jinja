@@ -10,18 +10,18 @@
 <div class="js-accordion accordion--neutral" data-content-prefix="filter" data-open-first="false">
   <div class="filters__inner">
     {{ typeahead.field('q', 'Committee name or ID', False, dataset='committees', allow_text=True) }}
-    {# {{ years.cycles('cycle', 'Years active') }} #}
+    {{ years.cycles('cycle', 'Years active') }}
   </div>
   <button type="button" class="js-accordion-trigger accordion__button">Committee details</button>
   <div class="accordion__content">
     {{ text.field('treasurer_name', 'Most recent treasurer') }}
-    {# {% include 'partials/filters/parties.jinja' %} #}
-    {# {{ states.field('state') }} #}
+    {% include 'partials/filters/parties.jinja' %}
+    {{ states.field('state') }}
     {{ date.field('first_filing_date', 'Date first filed statement of candidacy', '') }}
   </div>
   <button type="button" class="js-accordion-trigger accordion__button">Committee type</button>
   <div class="accordion__content">
-    {# {% include 'partials/filters/committee-types.jinja' %} #}
+    {% include 'partials/filters/committee-types.jinja' %}
   </div>
 </div>
 {% endblock %}
