@@ -21,7 +21,7 @@ Filter receipts
   {{ typeahead.field('committee_id', 'Recipient name or ID', id_suffix='_raw') }}
   {{ text.field('contributor_name', 'Contributor name', id_suffix='_raw') }}
   {{ text.field('contributor_city', 'Contributor city', id_suffix='_raw') }}
-  {# {{ states.field('contributor_state', id_suffix='_raw') }} #}
+  {{ states.field('contributor_state', id_suffix='_raw') }}
 </div>
 {% endblock %}
 
@@ -35,7 +35,7 @@ Filter receipts
   <button type="button" class="js-accordion-trigger accordion__button">Contributor details</button>
   <div class="accordion__content">
     {{ text.field('contributor_city', 'City') }}
-    {# {{ states.field('contributor_state') }} #}
+    {{ states.field('contributor_state') }}
     {{ text.field('contributor_zip', 'ZIP code')}}
     {{ text.field('contributor_employer', 'Employer') }}
     {{ text.field('contributor_occupation', 'Occupation') }}
