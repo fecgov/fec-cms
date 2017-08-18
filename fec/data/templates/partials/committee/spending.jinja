@@ -36,12 +36,9 @@
     <div class="entity__figure" id="communication-costs">
       <div class="heading--section heading--with-action">
         <h3 class="heading__left">Communication costs</h3>
-{#         <a class="heading__right button--alt button--browse"
-            href="/data/communication_costs/?committee_id=committee_id,
-              min_date=cycle_start(cycle) | date(fmt='%m-%d-%Y'),
-              max_date=cycle_end(cycle) | date(fmt='%m-%d-%Y'),
-            ) }}">Filter this data
-        </a> #}
+        <a class="heading__right button--alt button--browse"
+            href="/data/communication_costs/?committee_id={{ committee_id }}&min_date={{ cycle_start(cycle) | date(fmt='%m-%d-%Y') }}&max_date={{ cycle_end(cycle) | date(fmt='%m-%d-%Y') }}">Filter this data
+        </a>
       </div>
       <table class="data-table data-table--heading-borders data-table--entity u-margin--top" data-type="communication-cost-committee" data-committee="{{ committee_id }}" data-cycle="{{ cycle }}">
         <thead>
@@ -59,14 +56,9 @@
     <div class="entity__figure row" id="electioneering-communicaiton">
       <div class="heading--section heading--with-action">
         <h3 class="heading__left">Electioneering communication</h3>
-{#         <a class="heading__right button--alt button--browse"
-            href="{{ url_for(
-              'electioneering_communications',
-              committee_id=committee_id,
-              min_date=cycle_start(cycle) | date(fmt='%m-%d-%Y'),
-              max_date=cycle_end(cycle) | date(fmt='%m-%d-%Y'),
-            ) }}">Filter this data
-        </a> #}
+        <a class="heading__right button--alt button--browse"
+            href="/data/electioneering-communications/?committee_id={{ committee_id }}&min_date={{ cycle_start(cycle) | date(fmt='%m-%d-%Y') }}&max_date={{ cycle_end(cycle) | date(fmt='%m-%d-%Y') }}">Filter this data
+        </a>
       </div>
       <p>Any broadcast, cable or satellite communication that (1) refers to a clearly identified candidate for federal office; (2) is publicly distributed within certain time periods before an election and (3) is targeted to the relevant electorate.</p>
       <table class="data-table data-table--heading-borders data-table--entity u-margin--top" data-type="electioneering-committee" data-committee="{{ committee_id }}" data-cycle="{{ cycle }}">
@@ -85,13 +77,8 @@
     <div class="entity__figure row" id="independent-expenditures">
       <div class="heading--section heading--with-action">
         <h3 class="heading__left">Independent expenditures</h3>
-{#         <a class="heading__right button--alt button--browse"
-            href="{{ url_for(
-              'independent_expenditures',
-              committee_id=committee_id,
-              min_date=cycle_start(cycle) | date(fmt='%m-%d-%Y'),
-              max_date=cycle_end(cycle) | date(fmt='%m-%d-%Y')
-            ) }}">Filter this data</a> #}
+        <a class="heading__right button--alt button--browse"
+            href="/data/independent-expenditures/?committee_id={{ committee_id }}&min_date={{ cycle_start(cycle) | date(fmt='%m-%d-%Y') }}&max_date={{ cycle_end(cycle) | date(fmt='%m-%d-%Y') }}">Filter this data</a>
       </div>
       <p>This tab shows spending that this committee has made in support of or opposition to a candidate. None of the funds are directly given to or spent by the candidate.</p>
       {% if totals %}
