@@ -6,4 +6,6 @@ print('legal urls')
 
 urlpatterns = [
     url(r'^data/legal/advisory-opinions/$', views.advisory_opinions_landing),
+    url(r'^data/legal/advisory-opinions/(?P<ao_no>[\w-]+)/$', views.advisory_opinion_page),
+    url(r'^data/legal/statutes/$', views.statutes_landing),
 ]

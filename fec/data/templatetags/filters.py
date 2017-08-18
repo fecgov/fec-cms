@@ -98,6 +98,18 @@ def strip_zero_pad(number):
     return number.strip("0")
 
 
+def date_filter(value, fmt='%m/%d/%Y'):
+    if value is None:
+        return None
+    return ensure_date(value).strftime(fmt)
+
+
+@library.filter
+def ao_document_date(value):
+    date = date_filter(value)
+    return 'Not dated' if date == '01/01/1900' else date
+
+
 # @app.template_filter('filesize')
 # def filesize_filter(value):
 #     units = ['B', 'KB', 'MB', 'GB']
@@ -115,10 +127,6 @@ def strip_zero_pad(number):
 #             ret.append(value)
 #     return ret
 
-# @app.template_filter('ao_document_date')
-# def ao_document_date(value):
-#     date = date_filter(value)
-#     return 'Not dated' if date == '01/01/1900' else date
 
 # @app.template_filter()
 # def fmt_cycle_min_max(cycles):

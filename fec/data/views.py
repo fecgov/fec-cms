@@ -339,9 +339,9 @@ def elections(request, office, cycle, state=None, district=None):
         cycles = utils.get_state_senate_cycles(state)
 
     if office.lower() not in ['president', 'senate', 'house']:
-        abort(404)
+        raise Http404()
     if state and state.upper() not in constants.states:
-        abort(404)
+        raise Http404()
 
     return render(request, 'elections.jinja', {
         'office': office,

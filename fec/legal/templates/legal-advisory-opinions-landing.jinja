@@ -69,7 +69,7 @@
   <div class="post-feed">
     {% for ao in pending_aos %}
       <article class="post">
-        <h3 class="pending-ao__title"><a href="/data/legal/advisory-opinions/?ao_no={{ ao.no }}">AO {{ ao.no }} {{ ao.name }}</a></h3>
+        <h3 class="pending-ao__title"><a href="/data/legal/advisory-opinions/{{ ao.no }}/">AO {{ ao.no }} {{ ao.name }}</a></h3>
         <p class="t-sans">{{ ao.summary }}</p>
         <!-- <p>Deadline for comments: {{ ao.deadline }}</p> -->
       </article>
@@ -92,7 +92,7 @@
   <div class="post-feed">
     {% for ao in recent_aos %}
     <article class="post">
-      <h3><a href="/data/legal/advisory-opinions/?ao_no={{ ao.no }}">AO {{ ao.no }} {{ ao.name }}</a></h3>
+      <h3><a href="/data/legal/advisory-opinions/{{ ao.no }}/">AO {{ ao.no }} {{ ao.name }}</a></h3>
       <p class="t-sans">{{ ao.summary }}</p>
       {% for doc in ao.documents %}
         {% if doc.category in ['Final Opinion', 'Withdrawal of Request'] %}

@@ -1,4 +1,5 @@
 from django.shortcuts import render
+from django.http import Http404
 
 import datetime
 
@@ -26,4 +27,28 @@ def advisory_opinions_landing(request):
         'display_name': 'advisory opinions',
         'recent_aos': recent_aos['advisory_opinions'],
         'pending_aos': pending_aos['advisory_opinions']
+    })
+
+
+def advisory_opinion_page(request, ao_no):
+    advisory_opinion = api_caller.load_legal_advisory_opinion(ao_no)
+
+    if not advisory_opinion:
+        raise Http404()
+
+    final_opinion = [doc for doc in advisory_opinion['documents'] if doc['category'] == 'Final Opinion']
+    final_opinion = final_opinion[0] if len(final_opinion) > 0 else None
+
+    return render(request, 'legal-advisory-opinion.jinja', {
+        'advisory_opinion': advisory_opinion,
+        'final_opinion': final_opinion,
+        'parent': 'legal'
+    })
+
+
+def statutes_landing(request):
+    return render(request, 'legal-statutes-landing.jinja', {
+        'parent': 'legal',
+        'result_type': 'statutes',
+        'display_name': 'statutes'
     })

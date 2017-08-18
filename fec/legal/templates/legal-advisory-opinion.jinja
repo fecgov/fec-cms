@@ -1,7 +1,7 @@
 {% extends "layouts/main.jinja" %}
 {% import 'macros/breadcrumbs.jinja' as breadcrumb %}
 
-{% set breadcrumb_links=[(cms_url + '/legal-resources', 'Legal resources'), (url_for('advisory_opinions_landing'), 'Advisory opinions')] %}
+{% set breadcrumb_links=[('/legal-resources', 'Legal resources'), ('/data/legal/advisory-opinions/', 'Advisory opinions')] %}
 
 {% block title %}AO {{ advisory_opinion.no }}{% endblock %}
 
@@ -11,7 +11,7 @@
 </header>
 
 {% block css %}
-<link rel="stylesheet" href="{{ asset_for('dist/styles/legal-common.css') }}" />
+<link rel="stylesheet" href="{{ static('styles/legal-common.css') }}" />
 {% endblock %}
 
 <div class="main">
@@ -121,7 +121,7 @@
                     <div class="rich-text">
                       {% if advisory_opinion.ao_citations %}
                       {% for citation in advisory_opinion.ao_citations %}
-                        <div><a href="{{ url_for('advisory_opinion_page', ao_no=citation.no) }}">AO {{ citation.no }}</a></div>
+                        <div><a href="/data/legal/advisory-opinions/{{ citation.no }}/">AO {{ citation.no }}</a></div>
                         <div><i>{{ citation.name }}</i></div><br>
                       {% endfor %}
                       {% else %}
@@ -133,7 +133,7 @@
                     <div class="t-bold">This opinion is cited by these later opinions</div>
                     {% if advisory_opinion.aos_cited_by %}
                     {% for citation in advisory_opinion.aos_cited_by %}
-                      <div><a href="{{ url_for('advisory_opinion_page', ao_no=citation.no) }}">AO {{ citation.no }}</a></div>
+                      <div><a href="/data/legal/advisory-opinions/{{ citation.no }}/">AO {{ citation.no }}</a></div>
                       <div><i>{{ citation.name }}</i></div><br>
                     {% endfor %}
                     {% else %}
