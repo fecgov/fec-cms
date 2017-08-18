@@ -73,7 +73,7 @@
           </li>
         </ul>
       </div>
-      {% include 'partials/navigation.html' %}
+      {% include 'partials/navigation/navigation.html' %}
     </header>
     {% else %}
     <header class="site-header">
@@ -106,7 +106,7 @@
           </li>
         </ul>
       </div>
-      {% include 'partials/navigation.html' %}
+      {% include 'partials/navigation/navigation.html' %}
     </header>
     {% endif %}
 
@@ -114,85 +114,7 @@
       {% block content %}{% endblock %}
     </main>
 
-    <nav class="footer-links">
-      <div class="container">
-
-        <div class="grid grid--6-wide">
-
-          <div class="grid__item">
-            <ul>
-              <li>
-                <a href="/about/">About</a>
-              </li>
-              <li>
-                <a href="/about/careers/">Careers</a>
-              </li>
-              <li>
-                {% if self.title == "Homepage" or self.title == "Home" %}
-                <div class="tour__point tour__point--left" data-intro="<h5>Streamlined press resources</h5>A new page for press includes information for reporters and an archive of all press releases and Weekly Digests."></div>
-                {% endif %}
-                <a href="/press/">Press</a>
-              </li>
-              <li>
-                <a href="/contact-us/">Contact</a>
-              </li>
-            </ul>
-          </div>
-          <div class="grid__item"></div>
-          <div class="grid__item"></div>
-          <div class="grid__item">
-            <ul>
-              <li>
-                <a href="/about/privacy-and-security-policy">Privacy and security policy</a>
-              </li>
-              <li>
-                <a href="/about/plain-language/">Plain language</a>
-              </li>
-              <li>
-                <a href="/about/no-fear-act/">No FEAR Act</a>
-              </li>
-              <li>
-                <a href="/about/reports-about-fec/strategy-budget-and-performance/">Strategy, budget and performance</a>
-              </li>
-            </ul>
-          </div>
-
-          <div class="grid__item">
-            <ul>
-              <li>
-                <a href="https://www.data.gov/open-gov/">Open government</a>
-              </li>
-              <li>
-                <a href="https://www.usa.gov/">USA.gov</a>
-              </li>
-              <li>
-                <a href="{{ settings.FEC_TRANSITION_URL }}/fecig/fecig.shtml">Inspector General</a>
-              </li>
-              <li>
-                <a href="/freedom-information-act/">FOIA</a>
-              </li>
-            </ul>
-          </div>
-
-          <div class="grid__item">
-            <ul>
-              <li>
-                <a href="https://api.open.fec.gov/">OpenFEC API</a>
-              </li>
-              <li>
-                <a href="https://github.com/18F/fec">GitHub repository</a>
-              </li>
-              <li>
-                <a href="https://github.com/18F/FEC/blob/master/release_notes/release_notes.md">Release notes</a>
-              </li>
-            </ul>
-          </div>
-
-        </div>
-
-      </div>
-    </nav>
-
+    {% include 'partials/footer-navigation.html' %}
     <footer class="footer">
       <div class="container">
         <div class="seal">
