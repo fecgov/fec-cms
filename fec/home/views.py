@@ -307,28 +307,11 @@ def index_meetings(request):#,#  year=None, search=None, active=None):
     active = request.GET.get('tab', 'open-meetings')
     page = request.GET.get('page', 1)
 
-
     # Get the range of all years for each meeting type
     # Used to populate the selects with only values that make sense
-    meeting_years = MeetingPage.objects.dates('date', 'year', order='DESC')
-    hearing_years = hearings.dates('date', 'year', order='DESC')
-    executive_years = executive_sessions.dates('date', 'year', order='DESC')
-
-    meetings_years = []
-    for yr in meeting_years:
-        item = yr.year
-        meetings_years.append(item)
-
-    hearings_years =[]
-    for yr in hearing_years:
-        item = yr.year
-        hearings_years.append(item)
-
-    executives_years =[]
-    for yr in executive_years:
-        item = yr.year
-        executives_years.append(item)
-
+    meeting_years =  list(map(lambda x: x.year, MeetingPage.objects.dates('date', 'year', order='DESC')))
+    hearing_years = list(map(lambda x: x.year, hearings.dates('date', 'year', order='DESC')))
+    executive_years = list(map(lambda x: x.year, executive_sessions.dates('date', 'year', order='DESC')))
 
     meetings_query = ''
     hearings_query = ''
@@ -393,13 +376,12 @@ def index_meetings(request):#,#  year=None, search=None, active=None):
         'meetings_query': meetings_query,
         'hearings_query': hearings_query,
         'executive_query': executive_query,
-        'meetings': meetings,
         'open_meetings': open_meetings,
-        'meetings_years': meetings_years,
+        'meeting_years': meeting_years,
 
-        'hearings_years': hearings_years,
+        'hearing_years': hearing_years,
         'hearings': hearings,
 
-        'executives_years': executives_years,
+        'executive_years': executive_years,
         'executive_sessions': executive_sessions,
         })

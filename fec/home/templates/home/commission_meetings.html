@@ -59,7 +59,7 @@
                       <label for="year" class="label">Year</label>
                       <select id="year" name="year">
                         <option value="">All</option>
-                        {% for item in meetings_years %}
+                        {% for item in meeting_years %}
                         <option value="{{ item }}" {% if year == item %}selected {% endif %}>{{ item }}</option>
                         {% endfor %}
                       </select>
@@ -114,7 +114,7 @@
                       <label for="year" class="label">Year</label>
                       <select id="year" name="year">
                         <option value="">All</option>
-                        {% for item in hearings_years %}
+                        {% for item in hearing_years %}
                         <option value="{{ item }}" {% if year == item %}selected {% endif %}>{{ item }}</option>
                         {% endfor %}
                       </select>
@@ -169,7 +169,7 @@
                       <label for="year" class="label">Year</label>
                       <select id="year" name="year">
                         <option value="">All</option>
-                        {% for item in executives_years %}
+                        {% for item in executive_years %}
                         <option value="{{ item }}" {% if year == item %}selected {% endif %}>{{ item }}</option>
                         {% endfor %}
                       </select>
