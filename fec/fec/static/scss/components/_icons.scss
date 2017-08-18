@@ -31,6 +31,14 @@
   &.i-folder {
     @include u-icon-bg($folder, $base);
   }
+
+  &.i-candidate {
+    @include u-icon-bg($candidate, $base);
+  }
+
+  &.i-committee {
+    @include u-icon-bg($committee, $base);
+  }
 }
 
 .icon--small {
