@@ -2,12 +2,12 @@
 {% import 'macros/legal.jinja' as legal %}
 {% import 'macros/breadcrumbs.jinja' as breadcrumb %}
 
-{% set breadcrumb_links=[(cms_url + '/legal-resources', 'Legal resources')] %}
+{% set breadcrumb_links=[('/legal-resources', 'Legal resources')] %}
 
 {% block title %}{{ display_name | capitalize }}{% endblock %}
 
 {% block css %}
-<link rel="stylesheet" href="{{ asset_for('dist/styles/legal.css') }}" />
+<link rel="stylesheet" href="{{ static('styles/legal.css') }}" />
 {% endblock %}
 
 {% block body %}
@@ -23,5 +23,5 @@
 {% endblock %}
 
 {% block scripts %}
-<script src="{{ asset_for_page('legal') }}"></script>
+<script src="{{ static('js/pages/legal.js') }}"></script>
 {% endblock %}

@@ -92,6 +92,7 @@ INSTALLED_APPS = (
     'home',
     'data',
     'data_loader',
+    'legal',
     'uaa_client',
     'extend_admin',
 )
