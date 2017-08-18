@@ -1,4 +1,5 @@
 {% macro cycle_select(cycles, cycle=none, duration=2, location='query', id='cycle-select', class='', range=False) %}
+{% set cycle = cycle | int %}
 {% if cycles %}
   <div class="cycle-select js-cycle-select">
     <label for="{{ id }}" class="label cycle-select__label">Election</label>
@@ -27,6 +28,7 @@
 {% endmacro %}
 
 {% macro candidate_cycle_select(cycles, cycle=none, id='') %}
+{% set cycle = cycle | int %}
   <div class="content__section">
     <label for="{{id}}-cycle" class="label cycle-select__label">Election cycle</label>
     <select id="{{id}}-cycle" class="js-cycle" name="cycle" data-cycle-location="query" data-election-full="False">
@@ -41,6 +43,7 @@
 {% endmacro %}
 
 {% macro committee_cycle_select(cycles, cycle=none, id='') %}
+{% set cycle = cycle | int %}
   <div class="row content__section">
     <div class="cycle-select">
       <label for="{{id}}-cycle" class="label cycle-select__label">Election cycle</label>
@@ -57,6 +60,7 @@
 {% endmacro %}
 
 {% macro election_cycle_select(cycles, cycle=none, id='') %}
+{% set cycle = cycle | int %}
   <div class="row content__section">
     <div class="cycle-select">
       <label for="{{id}}-cycle" class="label cycle-select__label">Election cycle</label>

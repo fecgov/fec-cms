@@ -35,7 +35,7 @@ report_types = {
 def to_date(committee, cycle):
     if committee['committee_type'] in ['H', 'S', 'P']:
         return None
-    return min(datetime.datetime.now().year, cycle)
+    return min(datetime.datetime.now().year, int(cycle))
 
 
 # TODO: load query string
@@ -181,7 +181,7 @@ def candidate(request, candidate_id):
 
     return render(request, 'candidates-single.jinja', {
         'name': candidate['name'],
-        'cycle': cycle,
+        'cycle': int(cycle),
         'office': candidate['office'],
         'office_full': candidate['office_full'],
         'state': candidate['state'],
@@ -244,7 +244,7 @@ def committee(request, committee_id):
 
     context_vars = {
         'cycle': cycle,
-        'timePeriod': str(cycle - 1) + '–' + str(cycle),
+        'timePeriod': str(int(cycle) - 1) + '–' + str(cycle),
         'name': committee['name'],
     }
 
@@ -319,6 +319,15 @@ def elections(request):
         'parent': 'data'
     })
 
+
+# TODO:
+#
+# elections pages
+# election page
+# raising breakdown
+# spending breakdown
+# Legal pages
+#
 
 '''
 Views for datatables
