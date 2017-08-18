@@ -131,6 +131,7 @@ TEMPLATES = [
                 'WEBMANAGER_EMAIL': WEBMANAGER_EMAIL,
                 'CMS_URL': CMS_URL,
                 'TRANSITION_URL': FEC_TRANSITION_URL,
+                'CLASSIC_URL': FEC_CLASSIC_URL,
                 'site_orientation_banner': FEATURES['site_orientation_banner']
             },
         }

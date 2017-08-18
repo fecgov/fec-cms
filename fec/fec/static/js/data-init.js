@@ -73,10 +73,10 @@ $(document).ready(function() {
   });
 
   // Initialize main search typeahead
-  new typeahead.Typeahead('.js-search-input', 'allData', BASE_PATH);
+  new typeahead.Typeahead('.js-search-input', 'allData', BASE_PATH + '/');
 
   // Initialize header typeahead
-  new typeahead.Typeahead($('.js-site-search'), 'all', BASE_PATH);
+  new typeahead.Typeahead($('.js-site-search'), 'all', BASE_PATH + '/');
 
 
   // Initialize feedback
