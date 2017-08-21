@@ -17,7 +17,7 @@ var dropdown = require('./modules/dropdowns');
 var toc = require('./modules/toc');
 var typeahead = require('./modules/typeahead');
 var SiteOrientation = require('./modules/site-orientation');
-var helpers = require('./helpers');
+var helpers = require('./modules/helpers');
 
 // Hack: Append jQuery to `window` for use by legacy libraries
 window.$ = window.jQuery = $;

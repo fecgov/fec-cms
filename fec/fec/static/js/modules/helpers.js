@@ -5,18 +5,15 @@
 var URI = require('urijs');
 var $ = require('jquery');
 var _ = require('underscore');
+var moment = require('moment');
 var decoders = require('./decoders');
 var Handlebars = require('hbsfy/runtime');
-
-var helpers = require('../helpers');
+var bleach = require('bleach');
 
 var intl = require('intl');
 var locale = require('intl/locale-data/json/en-US.json');
 intl.__addLocaleData(locale);
 
-var datetime = helpers.datetime;
-var isLargeScreen = helpers.isLargeScreen;
-var isMediumScreen = helpers.isMediumScreen;
 
 // set parameters from the API
 var API = {
@@ -24,6 +21,52 @@ var API = {
   amendment_indicator_terminated: 'T',
   means_filed_e_file: 'e-file'
 };
+
+var BREAKPOINTS = {
+  MEDIUM: 640,
+  LARGE: 860
+};
+
+var LOADING_DELAY = 1500;
+var SUCCESS_DELAY = 5000;
+
+var formatMap = {
+  default: 'MM/DD/YYYY',
+  pretty: 'MMMM D, YYYY',
+  time: 'h:mma',
+  dateTime: 'MMMM D, h:mma',
+  dayOfWeek: 'ddd',
+  fullDayOfWeek: 'dddd'
+};
+
+function getWindowWidth() {
+  // window.innerWidth accounts for scrollbars and should match the width used
+  // for media queries.
+  return window.innerWidth;
+}
+
+function isLargeScreen() {
+  if (window.innerWidth >= BREAKPOINTS.LARGE) {
+    return true;
+  } else {
+    return false;
+  }
+}
+
+function isMediumScreen() {
+  if (window.innerWidth >= BREAKPOINTS.MEDIUM) {
+    return true;
+  } else {
+    return false;
+  }
+}
+
+function datetime(value, options) {
+  var hash = options.hash || {};
+  var format = formatMap[hash.format || 'default'];
+  var parsed = moment(value, 'YYYY-MM-DDTHH:mm:ss');
+  return parsed.isValid() ? parsed.format(format) : null;
+}
 
 Handlebars.registerHelper('datetime', datetime);
 
@@ -43,6 +86,9 @@ Handlebars.registerHelper('formatNumber', numberFormatter.format);
 Handlebars.registerHelper({
   eq: function (v1, v2) {
     return v1 === v2;
+  },
+  toUpperCase: function(value) {
+    return value.substr(0,1).toUpperCase() + value.substr(1);
   }
 });
 
@@ -332,6 +378,42 @@ function isInViewport($elm) {
   }
 }
 
+// Sanitizes a single value by removing HTML tags and whitelisting valid
+// characters.
+function sanitizeValue(value) {
+  var validCharactersRegEx = /[^a-z0-9-',.()\s]/ig;
+
+  if (value !== null && value !== undefined) {
+    if (_.isArray(value)) {
+      for (var i = 0; i < value.length; i++) {
+        if (value[i] !== null && value[i] !== undefined) {
+          value[i] = bleach.sanitize(value[i]).replace(
+            validCharactersRegEx,
+            ''
+          );
+        }
+      }
+    } else {
+      value = bleach.sanitize(value).replace(validCharactersRegEx, '');
+    }
+  }
+
+  return value;
+}
+
+// Sanitizes all parameters retrieved from the query string in the URL.
+function sanitizeQueryParams(query) {
+  var param;
+
+  for (param in query) {
+    if (query.hasOwnProperty(param)) {
+      query[param] = sanitizeValue(query[param]);
+    }
+  }
+
+  return query;
+}
+
 module.exports = {
   buildAppUrl: buildAppUrl,
   buildUrl: buildUrl,
@@ -347,11 +429,15 @@ module.exports = {
   isLargeScreen: isLargeScreen,
   isMediumScreen: isMediumScreen,
   isInViewport: isInViewport,
-  LOADING_DELAY: helpers.LOADING_DELAY,
-  SUCCESS_DELAY: helpers.SUCCESS_DELAY,
+  LOADING_DELAY: LOADING_DELAY,
+  SUCCESS_DELAY: SUCCESS_DELAY,
   zeroPad: zeroPad,
   amendmentVersion: amendmentVersion,
   amendmentVersionDescription: amendmentVersionDescription,
   utcDate: utcDate,
-  missingDataReason: missingDataReason
+  missingDataReason: missingDataReason,
+  BREAKPOINTS: BREAKPOINTS,
+  getWindowWidth: getWindowWidth,
+  sanitizeValue: sanitizeValue,
+  sanitizeQueryParams: sanitizeQueryParams
 };

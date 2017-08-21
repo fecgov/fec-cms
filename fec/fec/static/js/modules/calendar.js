@@ -9,7 +9,7 @@ require('fullcalendar');
 var urls = require('./urls');
 var dropdown = require('./dropdowns');
 var Handlebars = require('hbsfy/runtime');
-var helpers = require('../helpers');
+var helpers = require('./helpers');
 
 var calendarTooltip = require('./calendar-tooltip');
 var calendarHelpers = require('./calendar-helpers');
