@@ -1,0 +1,26 @@
+{% load filters %}
+  <tr class="simple-table__row">
+    <td class="simple-table__cell">
+      <a href="{{ meeting.url }}" class="t-bold">
+        {% if hearing is meeting %} {{ meeting.title }}{% else %}{{ meeting.date|date:'F j, Y' }}{% endif %}
+      </a>
+    </td>
+     <td class="simple-table__cell">
+      {% if meeting.sunshine_act_links %}
+        <ul>
+          {% for link in meeting.sunshine_act_links|splitlines %}
+          {% if forloop.counter >= 2 %}
+            &nbsp;| <a href="{{ link }}">Amended
+          {% else %}
+            <a href="{{ link }}">
+          {% endif %}
+
+            Sunshine Act Notice
+            {% if meeting.sunshine_act_links|splitlines|length > 2 and forloop.counter >= 2 %}- {{ forloop.counter0 }}{% endif %}
+          </a>
+          </li>
+         {% endfor %}
+        </ul>
+      {% endif %}
+    </td>
+  </tr>

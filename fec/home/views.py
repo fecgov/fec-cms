@@ -8,7 +8,11 @@ from itertools import chain
 from operator import attrgetter
 
 from django.http import HttpResponseRedirect
+from django.core.urlresolvers import reverse
+
 from django.shortcuts import get_object_or_404
+from django.shortcuts import redirect
+import urllib
 from wagtail.wagtaildocs.models import Document
 
 from fec.forms import ContactRAD, form_categories
@@ -20,7 +24,6 @@ from home.models import (
     TipsForTreasurersPage,
     MeetingPage
 )
-
 
 def replace_dash(string):
     return string.replace('-', ' ')
@@ -293,3 +296,92 @@ def serve_wagtail_doc(request, document_id, document_filename):
     """
     doc = get_object_or_404(Document, id=document_id)
     return HttpResponseRedirect(doc.file.url)
+
+def index_meetings(request):
+    meetings = MeetingPage.objects.live().order_by("-date")
+    open_meetings = meetings.filter(meeting_type ='O')
+    executive_sessions = meetings.filter(meeting_type ='E')
+    hearings= meetings.filter(title__contains='Hearing')
+    year = request.GET.get('year', '')
+    search = request.GET.get('search', '')
+    active = request.GET.get('tab', 'open-meetings')
+    page = request.GET.get('page', 1)
+
+    # Get the range of all years for each meeting type
+    # Used to populate the selects with only values that make sense
+    meeting_years =  list(map(lambda x: x.year, MeetingPage.objects.dates('date', 'year', order='DESC')))
+    hearing_years = list(map(lambda x: x.year, hearings.dates('date', 'year', order='DESC')))
+    executive_years = list(map(lambda x: x.year, executive_sessions.dates('date', 'year', order='DESC')))
+
+    meetings_query = ''
+    hearings_query = ''
+    executive_query = ''
+
+    if year:
+        # Trying to filter using the built-in date__year parameter doesn't
+        # work when chaining filter() and search(), so this uses date_gte and date_lte
+        year = int(year)
+        meetings = meetings.filter(date__gte=datetime(year, 1, 1)).filter(date__lte=datetime(year, 12, 31))
+        open_meetings = open_meetings.filter(date__gte=datetime(year, 1, 1)).filter(date__lte=datetime(year, 12, 31))
+        hearings = hearings.filter(date__gte=datetime(year, 1, 1)).filter(date__lte=datetime(year, 12, 31))
+        executive_sessions = executive_sessions.filter(date__gte=datetime(year, 1, 1)).filter(date__lte=datetime(year, 12, 31))
+
+    if search:
+        if active == 'open-meetings':
+            meetings_query = search
+            meetings = meetings.search(meetings_query)
+        if active == 'hearings':
+            hearings_query = search
+            hearings = hearings.search(hearings_query)
+        if active == 'executive-sessions':
+            executive_query = search
+            executive_sessions = executive_sessions.search(executive_query)
+
+    meetings_paginator = Paginator(open_meetings, 20)
+    meetings_page =  page if active == 'open-meetings' else 1
+    try:
+        open_meetings = meetings_paginator.page(meetings_page)
+    except PageNotAnInteger:
+        open_meetings = meetings_paginator.page(1)
+    except EmptyPage:
+        open_meetings = meetings_paginator.page(paginator.num_pages)
+
+
+    hearings_paginator = Paginator(hearings, 20)
+    hearings_page = page if active == 'hearings' else 1
+    try:
+        hearings = hearings_paginator.page(hearings_page)
+    except PageNotAnInteger:
+        hearings = hearings_paginator.page(1)
+    except EmptyPage:
+        hearings = hearings_paginator.page(paginator.num_pages)
+
+
+    executive_paginator = Paginator(executive_sessions, 20)
+    executive_page = page if active == 'executive-sessions' else 1
+    try:
+        executive_sessions = executive_paginator.page(executive_page)
+    except PageNotAnInteger:
+        executive_sessions = executive_paginator.page(1)
+    except EmptyPage:
+        executive_sessions = executive_paginator.page(paginator.num_pages)
+
+    page_context = {
+      'title': 'Commission meetings',
+    }
+
+    return render(request, 'home/commission_meetings.html',{
+        'self': page_context,
+        'year': year,
+        'meetings_query': meetings_query,
+        'hearings_query': hearings_query,
+        'executive_query': executive_query,
+        'open_meetings': open_meetings,
+        'meeting_years': meeting_years,
+
+        'hearing_years': hearing_years,
+        'hearings': hearings,
+
+        'executive_years': executive_years,
+        'executive_sessions': executive_sessions,
+        })
