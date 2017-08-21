@@ -18,10 +18,10 @@ require('./calendar-list-view');
 Handlebars.registerHelper(helpers.helpers);
 
 var templates = {
-  details: require('../../hbs/calendar/details.hbs'),
-  download: require('../../hbs/calendar/download.hbs'),
-  subscribe: require('../../hbs/calendar/subscribe.hbs'),
-  listToggles: require('../../hbs/calendar/listToggles.hbs')
+  details: require('../templates/calendar/details.hbs'),
+  download: require('../templates/calendar/download.hbs'),
+  subscribe: require('../templates/calendar/subscribe.hbs'),
+  listToggles: require('../templates/calendar/listToggles.hbs')
 };
 
 var LIST_VIEWS = ['monthTime', 'monthCategory'];

@@ -78,7 +78,7 @@
     "./fec/fec/static/js/*.js": [
       "build-js"
     ],
-    "./fec/fec/static/hbs/**/*.hbs": [
+    "./fec/fec/static/js/templates/*.hbs": [
       "build-js"
     ],
     "./fec/fec/static/scss/**/*.scss": [

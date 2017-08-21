@@ -7,7 +7,7 @@ require('fullcalendar');
 
 var dropdown = require('../dropdowns');
 
-var eventTemplate = require('../../hbs/calendar/events.hbs');
+var eventTemplate = require('../templates/calendar/events.hbs');
 
 var FC = $.fullCalendar;
 var View = FC.View;

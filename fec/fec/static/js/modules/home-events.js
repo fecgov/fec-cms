@@ -10,7 +10,7 @@ var month = today.getMonth() + 1;
 var year = today.getFullYear();
 var todaysDate = year + '-' + month + '-' + day;
 
-var eventsTemplate = require('../../hbs/homepage/events-and-deadlines.hbs');
+var eventsTemplate = require('../templates/homepage/events-and-deadlines.hbs');
 
 var updates = {
   '.js-next-commission-meeting': ['Executive+Sessions', 'Open+Meetings', 'Public+Hearings'],
