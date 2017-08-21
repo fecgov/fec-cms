@@ -5,7 +5,7 @@ var _ = require('underscore');
 
 var accessibility = require('./accessibility');
 
-var feedback = require('./templates/feedback.hbs');
+var feedback = require('../templates/feedback.hbs');
 
 var statusClasses = {
   success: 'message--success',

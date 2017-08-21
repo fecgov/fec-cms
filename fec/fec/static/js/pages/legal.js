@@ -1,6 +1,6 @@
 'use strict';
 
 /* global require */
-var FilterPanel = require('../filter-panel').FilterPanel;
+var FilterPanel = require('../modules/filters/filter-panel').FilterPanel;
 
 new FilterPanel();

@@ -4,7 +4,7 @@ var $ = require('jquery');
 var URI = require('urijs');
 var _ = require('underscore');
 var Handlebars = require('handlebars');
-var helpers = require('./helpers');
+var helpers = require('../helpers');
 
 // Hack: Append jQuery to `window` for use by typeahead.js
 window.$ = window.jQuery = $;

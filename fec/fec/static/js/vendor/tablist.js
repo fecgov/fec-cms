@@ -7,9 +7,9 @@ var $ = require('jquery');
 var URI = require('urijs');
 var _ = require('underscore');
 
-var events = require('../events');
+var events = require('../modules/events');
 
-var analytics = require('../analytics');
+var analytics = require('../modules//analytics');
 
 // The class for the container div
 

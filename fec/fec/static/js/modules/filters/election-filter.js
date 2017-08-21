@@ -6,7 +6,7 @@ var _ = require('underscore');
 window.$ = window.jQuery = $;
 
 var Filter = require('./filter-base.js').Filter;
-var cyclesTemplate = require('./templates/election-cycles.hbs');
+var cyclesTemplate = require('../../templates/election-cycles.hbs');
 
 function ElectionFilter(elm) {
   Filter.call(this, elm);

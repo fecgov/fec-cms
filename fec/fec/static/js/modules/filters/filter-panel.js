@@ -4,8 +4,8 @@ var $ = require('jquery');
 var _ = require('underscore');
 
 var FilterSet = require('./filter-set').FilterSet;
-var accessibility = require('./accessibility');
-var helpers = require('./helpers');
+var accessibility = require('../accessibility');
+var helpers = require('../helpers');
 
 var defaultOptions = {
   body: '.filters',

@@ -5,8 +5,8 @@
 var $ = require('jquery');
 var URI = require('urijs');
 var _ = require('underscore');
-var typeahead = require('./typeahead');
-var helpers = require('./helpers');
+var typeahead = require('../typeahead');
+var helpers = require('../helpers');
 
 var ID_PATTERN = /^\w{9}$/;
 

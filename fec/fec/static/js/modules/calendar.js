@@ -6,8 +6,8 @@ var _ = require('underscore');
 var moment = require('moment');
 require('fullcalendar');
 
-var urls = require('../urls');
-var dropdown = require('../dropdowns');
+var urls = require('./urls');
+var dropdown = require('./dropdowns');
 var Handlebars = require('hbsfy/runtime');
 var helpers = require('../helpers');
 

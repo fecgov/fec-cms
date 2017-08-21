@@ -1,8 +1,8 @@
 'use strict';
 
 var $ = require('jquery');
-var FilterPanel = require('../filter-panel').FilterPanel;
-var filterTags = require('../filter-tags');
+var FilterPanel = require('../modules/filters/filter-panel').FilterPanel;
+var filterTags = require('../modules/filters/filter-tags');
 var Calendar = require('../modules/calendar').Calendar;
 var calendarHelpers = require('../modules/calendar-helpers');
 

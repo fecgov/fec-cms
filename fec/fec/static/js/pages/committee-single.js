@@ -13,8 +13,8 @@ var filings = require('../modules/filings');
 var helpers = require('../modules/helpers');
 var columnHelpers = require('../modules/column-helpers');
 var columns = require('../modules/columns');
-var dropdown = require('../dropdowns');
-var events = require('../events');
+var dropdown = require('../modules/dropdowns');
+var events = require('../modules/events');
 
 var tableOpts = {
   dom: tables.simpleDOM,

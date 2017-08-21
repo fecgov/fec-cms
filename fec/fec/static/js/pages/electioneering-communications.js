@@ -3,12 +3,7 @@
 var $ = require('jquery');
 
 var tables = require('../modules/tables');
-var helpers = require('../modules/helpers');
-var columnHelpers = require('../modules/column-helpers');
 var columns = require('../modules/columns');
-
-var FilterPanel = require('../filter-panel').FilterPanel;
-var filterTags = require('../filter-tags');
 
 var electioneeringTemplate = require('../templates/electioneering-communications.hbs');
 

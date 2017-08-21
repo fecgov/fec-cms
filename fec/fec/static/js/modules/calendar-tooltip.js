@@ -2,8 +2,8 @@
 
 var $ = require('jquery');
 
-var dropdown = require('../dropdowns');
-var listeners = require('../listeners');
+var dropdown = require('./dropdowns');
+var listeners = require('./listeners');
 
 function CalendarTooltip(content, $container) {
   this.$content = $(content);

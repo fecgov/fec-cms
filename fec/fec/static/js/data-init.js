@@ -16,15 +16,15 @@ var A11yDialog = require('a11y-dialog');
 window.$ = window.jQuery = $;
 
 var terms = require('./data/terms');
-var dropdown = require('./dropdowns');
-var siteNav = require('./site-nav');
-var skipNav = require('./skip-nav');
-var feedback = require('./feedback');
-var typeahead = require('./typeahead');
-var analytics = require('./analytics');
-var stickyBar = require('./sticky-bar');
-var toc = require('./toc');
-var Search = require('./search');
+var dropdown = require('./modules/dropdowns');
+var siteNav = require('./modules/site-nav');
+var skipNav = require('./modules/skip-nav');
+var feedback = require('./modules/feedback');
+var typeahead = require('./modules/typeahead');
+var analytics = require('./modules/analytics');
+var stickyBar = require('./modules/sticky-bar');
+var toc = require('./modules/toc');
+var Search = require('./modules/search');
 
 // Include vendor scripts
 require('./vendor/tablist').init();
@@ -33,7 +33,7 @@ var toggle = require('./modules/toggle');
 var helpers = require('./modules/helpers');
 var download = require('./modules/download');
 var CycleSelect = require('./modules/cycle-select').CycleSelect;
-var SiteOrientation = require('./site-orientation');
+var SiteOrientation = require('./modules/site-orientation');
 
 $(document).ready(function() {
   // new site orientation

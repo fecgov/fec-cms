@@ -3,7 +3,7 @@
 var $ = require('jquery');
 
 var Filter = require('./filter-base.js');
-var typeahead = require('./typeahead');
+var typeahead = require('../typeahead');
 var FilterTypeahead = require('./filter-typeahead').FilterTypeahead;
 
 function TypeaheadFilter(elm) {

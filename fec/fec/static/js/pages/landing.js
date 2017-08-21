@@ -7,7 +7,7 @@ var lookup = require('../modules/election-lookup');
 
 var LineChart = require('../modules/line-chart').LineChart;
 var helpers = require('../modules/helpers');
-var analytics = require('../analytics');
+var analytics = require('../modules/analytics');
 
 function Overview(selector, type, index) {
   this.selector = selector;

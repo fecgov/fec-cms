@@ -11,7 +11,7 @@ var tables = require('../modules/tables');
 var helpers = require('../modules/helpers');
 var columnHelpers = require('../modules/column-helpers');
 var columns = require('../modules/columns');
-var events = require('../events');
+var events = require('../modules/events');
 var OtherSpendingTotals = require('../modules/other-spending-totals');
 
 var aggregateCallbacks = {

@@ -10,20 +10,20 @@ var Accordion = require('aria-accordion').Accordion;
 var Glossary = require('glossary-panel');
 
 var terms = require('./data/terms');
-var feedback = require('./feedback');
-var skipNav = require('./skip-nav');
-var siteNav = require('./site-nav');
-var dropdown = require('./dropdowns');
-var toc = require('./toc');
-var typeahead = require('./typeahead');
-var SiteOrientation = require('./site-orientation');
+var feedback = require('./modules/feedback');
+var skipNav = require('./modules/skip-nav');
+var siteNav = require('./modules/site-nav');
+var dropdown = require('./modules/dropdowns');
+var toc = require('./modules/toc');
+var typeahead = require('./modules/typeahead');
+var SiteOrientation = require('./modules/site-orientation');
 var helpers = require('./helpers');
 
 // Hack: Append jQuery to `window` for use by legacy libraries
 window.$ = window.jQuery = $;
 
 var Sticky = require('component-sticky');
-var FormNav = require('./form-nav').FormNav;
+var FormNav = require('./modules/form-nav').FormNav;
 
 $(document).ready(function() {
 

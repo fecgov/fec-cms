@@ -5,7 +5,7 @@ var _ = require('underscore');
 var moment = require('moment');
 require('fullcalendar');
 
-var dropdown = require('../dropdowns');
+var dropdown = require('./dropdowns');
 
 var eventTemplate = require('../templates/calendar/events.hbs');
 

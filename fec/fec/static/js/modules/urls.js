@@ -4,7 +4,7 @@ var _ = require('underscore');
 var URI = require('urijs');
 
 var analytics = require('./analytics');
-var helpers = require('./helpers');
+var helpers = require('../helpers');
 
 function updateQuery(params, fields) {
   var queryString = nextUrl(params, fields);

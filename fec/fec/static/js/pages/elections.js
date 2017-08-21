@@ -7,7 +7,7 @@ var $ = require('jquery');
 var _ = require('underscore');
 var chroma = require('chroma-js');
 
-var dropdown = require('../dropdowns');
+var dropdown = require('../modules/dropdowns');
 
 var fips = require('../modules/fips');
 var maps = require('../modules/maps');
