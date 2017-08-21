@@ -1,9 +1,9 @@
 'use strict';
 
-var homepageEvents = require('./home-events');
+var homepageEvents = require('../modules/home-events');
 
 // accessible tabs for alt sidebar
-require('./vendor/tablist').init();
+require('../vendor/tablist').init();
 
 // Home Page: Events and deadlines
 new homepageEvents.HomepageEvents();

@@ -1,7 +1,7 @@
 'use strict';
 
 var $ = require('jquery');
-var calendarHelpers = require('./modules/calendar-helpers');
+var calendarHelpers = require('./calendar-helpers');
 var moment = require('moment');
 
 var today = new Date();
@@ -10,7 +10,7 @@ var month = today.getMonth() + 1;
 var year = today.getFullYear();
 var todaysDate = year + '-' + month + '-' + day;
 
-var eventsTemplate = require('../hbs/homepage/events-and-deadlines.hbs');
+var eventsTemplate = require('../../hbs/homepage/events-and-deadlines.hbs');
 
 var updates = {
   '.js-next-commission-meeting': ['Executive+Sessions', 'Open+Meetings', 'Public+Hearings'],
