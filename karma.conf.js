@@ -31,7 +31,7 @@ module.exports = function(config) {
 
     exclude: [
       '**/hallo-edit-html.js',
-      'fec/fec/static/js/fec.js'
+      'fec/fec/static/js/init.js'
     ],
 
     preprocessors: {

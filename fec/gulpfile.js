@@ -44,8 +44,7 @@ var entries = _(fs.readdirSync('./fec/static/js/pages'))
     return path.join('./fec/static/js/pages', each);
   })
   .value();
-entries.unshift('./fec/static/js/fec.js');
-entries.unshift('./fec/static/js/contact-form.js');
+entries.unshift('./fec/static/js/init.js');
 entries.unshift('./fec/static/js/data-init.js');
 
 gulp.task('build-js', function () {
