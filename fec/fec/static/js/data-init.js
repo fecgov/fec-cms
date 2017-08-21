@@ -15,7 +15,7 @@ var A11yDialog = require('a11y-dialog');
 // Hack: Append jQuery to `window` for use by legacy libraries
 window.$ = window.jQuery = $;
 
-var terms = require('./terms');
+var terms = require('./data/terms');
 var dropdown = require('./dropdowns');
 var siteNav = require('./site-nav');
 var skipNav = require('./skip-nav');

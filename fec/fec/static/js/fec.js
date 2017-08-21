@@ -9,7 +9,7 @@ require('es6-weak-map/implement');
 var Accordion = require('aria-accordion').Accordion;
 var Glossary = require('glossary-panel');
 
-var terms = require('./terms');
+var terms = require('./data/terms');
 var feedback = require('./feedback');
 var skipNav = require('./skip-nav');
 var siteNav = require('./site-nav');
