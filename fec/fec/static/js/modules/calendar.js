@@ -6,10 +6,10 @@ var _ = require('underscore');
 var moment = require('moment');
 require('fullcalendar');
 
-var urls = require('./urls');
-var dropdown = require('./dropdowns');
+var urls = require('../urls');
+var dropdown = require('../dropdowns');
 var Handlebars = require('hbsfy/runtime');
-var helpers = require('./helpers');
+var helpers = require('../helpers');
 
 var calendarTooltip = require('./calendar-tooltip');
 var calendarHelpers = require('./calendar-helpers');
@@ -18,10 +18,10 @@ require('./calendar-list-view');
 Handlebars.registerHelper(helpers.helpers);
 
 var templates = {
-  details: require('../hbs/calendar/details.hbs'),
-  download: require('../hbs/calendar/download.hbs'),
-  subscribe: require('../hbs/calendar/subscribe.hbs'),
-  listToggles: require('../hbs/calendar/listToggles.hbs')
+  details: require('../../hbs/calendar/details.hbs'),
+  download: require('../../hbs/calendar/download.hbs'),
+  subscribe: require('../../hbs/calendar/subscribe.hbs'),
+  listToggles: require('../../hbs/calendar/listToggles.hbs')
 };
 
 var LIST_VIEWS = ['monthTime', 'monthCategory'];

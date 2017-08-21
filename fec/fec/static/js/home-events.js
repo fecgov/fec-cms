@@ -1,7 +1,7 @@
 'use strict';
 
 var $ = require('jquery');
-var calendarHelpers = require('./calendar-helpers');
+var calendarHelpers = require('./modules/calendar-helpers');
 var moment = require('moment');
 
 var today = new Date();

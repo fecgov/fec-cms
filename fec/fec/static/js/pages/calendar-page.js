@@ -1,10 +1,10 @@
 'use strict';
 
-var $ = require('jquery')
-var FilterPanel = require('./filter-panel').FilterPanel;
-var filterTags = require('./filter-tags');
-var Calendar = require('./calendar').Calendar;
-var calendarHelpers = require('./calendar-helpers');
+var $ = require('jquery');
+var FilterPanel = require('../filter-panel').FilterPanel;
+var filterTags = require('../filter-tags');
+var Calendar = require('../modules/calendar').Calendar;
+var calendarHelpers = require('../modules/calendar-helpers');
 
 // Initialize filters
 var filterPanel = new FilterPanel();
