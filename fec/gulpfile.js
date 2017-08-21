@@ -1,3 +1,5 @@
+/* global require, process */
+
 var _ = require('underscore');
 
 var gulp = require('gulp');
@@ -12,6 +14,7 @@ var sass = require('gulp-sass');
 var cleanCSS = require('gulp-clean-css');
 var fs = require('fs');
 var path = require('path');
+
 // var rename = require('gulp-rename');
 // var rev = require('gulp-rev');
 
@@ -55,7 +58,28 @@ gulp.task('build-js', function () {
       .bundle()
       .pipe(source(entry))
       .pipe(buffer())
-      .pipe(gulpif(production, uglify()))
+      .pipe(gulpif(production, uglify({
+        mangle: {
+          reserved: []
+        },
+        output: {
+          beautify: false,
+          comments: false,
+          max_line_len: 320000000
+        }
+      })))
       .pipe(gulp.dest('dist'));
   });
+});
+
+gulp.task('build-legal', function() {
+  browserify('./static/js/legal/LegalApp.js',
+    {
+      debug: debug
+    })
+    .transform('babelify', {
+      presets: ['latest', 'react']
+    })
+    .bundle()
+    .pipe(fs.createWriteStream('./static/js/legalApp.js'));
 });
