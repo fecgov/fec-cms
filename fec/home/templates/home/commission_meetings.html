@@ -60,7 +60,7 @@
                         {% endfor %}
                       </select>
                   </div>
-                  <div class="filter">
+                  <div class="filter filter--wide">
                     <div class="combo combo--filter--mini">
                       <label for="search" class="label">Search</label>
                       <input id="search" class="combo__input" name="search" type="text" value="{{ meetings_query }}">
@@ -121,7 +121,7 @@
                         {% endfor %}
                       </select>
                   </div>
-                  <div class="filter">
+                  <div class="filter filter--wide">
                     <div class="combo combo--filter--mini">
                       <label for="search" class="label">Search</label>
                       <input id="search" class="combo__input" name="search" type="text" value="{{ hearings_query }}">
@@ -174,21 +174,13 @@
             <div class="filters--horizontal">
                <form action="" id="executive_form" method="get" class="js-form-nav container">
                   <div class="filter">
-                      <label for="year" class="label">Year</label>
-                      <select id="year" name="year">
-                        <option value="">All</option>
-                        {% for item in executive_years %}
-                        <option value="{{ item }}" {% if year == item %}selected {% endif %}>{{ item }}</option>
-                        {% endfor %}
-                      </select>
-                  </div>
-                  <div class="filter">
-                    <div class="combo combo--filter--mini">
-                      <label for="search" class="label">Search</label>
-                      <input id="search" class="combo__input" name="search" type="text" value="{{ executive_query }}">
-                      <button type="submit" id="executive_sub" class="combo__button button button--standard button--search"><span class="u-visually-hidden">Search</span></button>
-                      <input type="hidden" name="tab" value="executive-sessions">
-                    </div>
+                    <label for="year" class="label">Year</label>
+                    <select id="year" name="year">
+                      <option value="">All</option>
+                      {% for item in executive_years %}
+                      <option value="{{ item }}" {% if year == item %}selected {% endif %}>{{ item }}</option>
+                      {% endfor %}
+                    </select>
                   </div>
               </form>
              </div>

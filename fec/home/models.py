@@ -1011,6 +1011,7 @@ class MeetingPage(Page):
     ]
 
     search_fields =  Page.search_fields + [
+        index.FilterField('title'),
         index.FilterField('meeting_type'),
         index.FilterField('date'),
         index.SearchField('imported_html'),
