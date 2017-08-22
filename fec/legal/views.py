@@ -54,6 +54,18 @@ def statutes_landing(request):
     })
 
 
+def mur_page(request, mur_no):
+    mur = api_caller.load_legal_mur(mur_no)
+
+    if not mur:
+        raise Http404()
+
+    return render(request, 'legal-' + mur['mur_type'] + '-mur.jinja', {
+        'mur': mur,
+        'parent': 'legal'
+    })
+
+
 def legal_doc_search_ao(request):
     results = {}
     query = request.GET.get('search', '')
@@ -64,6 +76,26 @@ def legal_doc_search_ao(request):
         'parent': 'legal',
         'results': results,
         'result_type': 'advisory_opinions',
+        'query': query
+    })
+
+
+def legal_doc_search_mur(request):
+    results = {}
+    query = request.GET.get('search', '')
+    mur_no = request.GET.get('mur_no', '')
+    mur_respondents = request.GET.get('mur_respondents', '')
+    mur_election_cycles = request.GET.get('mur_election_cycles', '')
+
+    if query:
+        results = api_caller.load_legal_search_results(query, 'murs', mur_no=mur_no, mur_respondents=mur_respondents)
+
+    return render(request, 'legal-search-results-murs.jinja', {
+        'parent': 'legal',
+        'results': results,
+        'result_type': 'murs',
+        'mur_no': mur_no,
+        'mur_respondents': mur_respondents,
         'query': query
     })
 

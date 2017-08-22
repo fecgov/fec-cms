@@ -8,7 +8,7 @@
     <div class="simple-table__row legal-search-result">
       <div class="simple-table__cell">
         <div class="t-sans">
-          <a title="{{ mur.name }}" href="{{ url_for('mur_page', mur_no=mur.no) }}">
+          <a title="{{ mur.name }}" href="/data/legal/matter-under-review/{{ mur.no }}">
             <span class="t-bold">MUR #{{ mur.no }}</span><br>
             {{ mur.name }}
           </a>

@@ -436,11 +436,3 @@ def spending(request):
         'top_spenders': top_spenders['results'],
         'page_info': utils.page_info(top_spenders['pagination'])
     })
-
-
-# TODO:
-#
-# elections pages
-# election page
-# Legal pages
-#

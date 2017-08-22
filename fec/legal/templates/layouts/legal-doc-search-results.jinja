@@ -29,7 +29,7 @@
       <span class="filters__title">Edit filters</span>
     </button>
     <div class="filters__content">
-      <form id="category-filters" action="/data/legal/{{ result_type }}">
+      <form id="category-filters" action="/data/legal/search/{{ result_type }}">
         <div class="filters__inner">
           <input id="search-type" type="hidden" name="search_type" value="{{ result_type }}">
           {% block filters %}

@@ -4,7 +4,7 @@
 
 {% block header %}
 <header class="page-header slab slab--primary">
-  {{ breadcrumb.breadcrumbs('Search results', [(cms_url + '/legal-resources', 'Legal resources'), (cms_url + '/legal-resources/enforcement', 'Enforcement')]) }}
+  {{ breadcrumb.breadcrumbs('Search results', [('/legal-resources', 'Legal resources'), ('/legal-resources/enforcement', 'Enforcement')]) }}
 </header>
 {% endblock %}
 
@@ -12,11 +12,11 @@
   {{ legal.keyword_search(result_type, query) }}
   <div class="filter">
     <label class="label" for="mur_no">MUR number</label>
-    <input id="mur_no" name="mur_no" type="text" value="{{request.args.mur_no}}">
+    <input id="mur_no" name="mur_no" type="text" value="{{ mur_no }}">
   </div>
   <div class="filter">
     <label class="label" for="mur_respondents">MUR respondents</label>
-    <input id="mur_respondents" name="mur_respondents" type="text" value="{{request.args.mur_respondents}}">
+    <input id="mur_respondents" name="mur_respondents" type="text" value="{{ mur_respondents }}">
   </div>
   <div class="filter">
     <button type="submit" class="button button--cta">Apply filters</button>

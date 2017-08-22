@@ -120,15 +120,16 @@ def get_min(list):
     return min(list)
 
 
-# @app.template_filter('filesize')
-# def filesize_filter(value):
-#     units = ['B', 'KB', 'MB', 'GB']
-#     unit = 0
-#     while value > 1024 and unit < len(units):
-#         value = value / 1024
-#         unit += 1
+# for mur pages
+@library.filter
+def filesize(value):
+    units = ['B', 'KB', 'MB', 'GB']
+    unit = 0
+    while value > 1024 and unit < len(units):
+        value = value / 1024
+        unit += 1
 
-#     return '%d %s' % (value, units[unit])
+    return '%d %s' % (value, units[unit])
 
 # def _unique(values):
 #     ret = []
