@@ -20,25 +20,27 @@ var rename = require('gulp-rename');
 var svgmin = require('gulp-svgmin');
 var urlencode = require('gulp-css-urlencode-inline-svgs');
 
-// var rev = require('gulp-rev');
+var RevAll = require('gulp-rev-all');
 
 var production = ['stage', 'prod'].indexOf(process.env.FEC_WEB_ENVIRONMENT) !== -1;
 var debug = !!process.env.FEC_CMS_DEBUG;
 
-
 gulp.task('build-sass', function() {
   return gulp.src('./fec/static/scss/*.scss')
+    .pipe(rename(function(path) {
+      path.dirname = './dist/fec/static/styles';
+    }))
     .pipe(sass({
       includePaths: Array.prototype.concat(
         './fec/static/scss',
         '../node_modules'
       )
     }).on('error', sass.logError))
-    // .pipe(rev())
+    .pipe(RevAll.revision())
     .pipe(cleanCSS())
-    .pipe(gulp.dest('./dist/fec/static/styles/'));
-    // .pipe(rev.manifest({merge: true}))
-    // .pipe(gulp.dest('./dist/fec/static/styles/'));
+    .pipe(gulp.dest('.'))
+    .pipe(RevAll.manifestFile())
+    .pipe(gulp.dest('.'));
 });
 
 
@@ -69,10 +71,13 @@ gulp.task('build-js', function () {
         output: {
           beautify: false,
           comments: false,
-          max_line_len: 320000000
+          // max_line_len: 320000000
         }
       })))
-      .pipe(gulp.dest('dist'));
+      .pipe(RevAll.revision())
+      .pipe(gulp.dest('dist'))
+      .pipe(RevAll.manifestFile())
+      .pipe(gulp.dest('.'));
   });
 });
 
