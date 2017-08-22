@@ -2,7 +2,11 @@
   <tr class="simple-table__row">
     <td class="simple-table__cell">
       <a href="{{ meeting.url }}" class="t-bold">
-        {{ meeting.title | strip:'open meeting' }}
+        {% if executive_session is meeting %}
+        {{ meeting.title | remove_word:'executive session' }}
+        {% else %}
+        {{ meeting.title | remove_word:'open meeting' }}
+        {% endif %}
       </a>
     </td>
      <td class="simple-table__cell">

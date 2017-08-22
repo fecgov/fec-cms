@@ -123,6 +123,10 @@ def get_meta_description(content_section):
         return 'The new fec.gov makes it easier than ever to find what you need to know about the federal campaign finance process. Explore legal resources, campaign finance data, help for candidates and committees, and more.'
 
 
-@register.filter(name='strip')
-def strip(str, characters):
-    return str.strip(characters)
+@register.filter(name='remove_word')
+def remove_word(str, words):
+    """
+    Removes a word or words from a string
+    Returns a new string
+    """
+    return str.replace(words, '')
