@@ -4,14 +4,14 @@
 
 {% block header %}
 <header class="page-header slab slab--primary">
-  {{ breadcrumb.breadcrumbs('Search results', [(cms_url + '/legal-resources', 'Legal resources'), (url_for('advisory_opinions_landing'), 'Advisory opinions')]) }}
+  {{ breadcrumb.breadcrumbs('Search results', [('/legal-resources', 'Legal resources'), ('/data/legal/advisory-opinions/', 'Advisory opinions')]) }}
 </header>
 {% endblock %}
 
 {% block search %}
 <input id="query" type="hidden" value="{{ query }}" />
 <input id="contact-email" type="hidden" value="{{ contact_email }}" />
-<input id="advisory_opinion_page" type="hidden" value="{{ url_for('advisory_opinion_page', ao_no='ao_no') }}" />
+<input id="advisory_opinion_page" type="hidden" value="/data/legal/advisory-opinions/ao_no" />
 <div id="root"></div>
-<script src="{{ url_for('static', filename='js/legalApp.js') }}"></script>
+<script src="{{ static('js/legalApp.js') }}"></script>
 {% endblock %}

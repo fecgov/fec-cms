@@ -2,7 +2,7 @@
 {% import 'macros/legal.jinja' as legal %}
 {% import 'macros/breadcrumbs.jinja' as breadcrumb %}
 
-{% set breadcrumb_links=[(cms_url + '/legal-resources', 'Legal resources')] %}
+{% set breadcrumb_links=[('/legal-resources', 'Legal resources')] %}
 {% set result_entities = results.get(result_type, []) %}
 
 {% block title %}
@@ -14,7 +14,7 @@
 {% endblock %}
 
 {% block css %}
-<link rel="stylesheet" href="{{ asset_for('dist/styles/legal.css') }}" />
+<link rel="stylesheet" href="{{ static('styles/legal.css') }}" />
 {% endblock %}
 
 {% block header %}
@@ -29,7 +29,7 @@
       <span class="filters__title">Edit filters</span>
     </button>
     <div class="filters__content">
-      <form id="category-filters" action="{{ url_for(result_type) }}">
+      <form id="category-filters" action="/data/legal/{{ result_type }}">
         <div class="filters__inner">
           <input id="search-type" type="hidden" name="search_type" value="{{ result_type }}">
           {% block filters %}
@@ -75,5 +75,5 @@
 {% endblock %}
 
 {% block scripts %}
-<script src="{{ asset_for_page('legal') }}"></script>
+<script src="{{ static('js/pages/legal.js') }}"></script>
 {% endblock %}

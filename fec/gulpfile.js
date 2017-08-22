@@ -77,7 +77,7 @@ gulp.task('build-js', function () {
 });
 
 gulp.task('build-legal', function() {
-  browserify('./static/js/legal/LegalApp.js',
+  browserify('./fec/static/js/legal/LegalApp.js',
     {
       debug: debug
     })
@@ -85,7 +85,7 @@ gulp.task('build-legal', function() {
       presets: ['latest', 'react']
     })
     .bundle()
-    .pipe(fs.createWriteStream('./static/js/legalApp.js'));
+    .pipe(fs.createWriteStream('./fec/static/js/legalApp.js'));
 });
 
 gulp.task('minify-icons', function() {

@@ -3,6 +3,7 @@
     "build": "cd fec && gulp build-sass && gulp build-js",
     "build-icons": "cd fec && gulp minify-icons && gulp consolidate-icons",
     "build-sass": "cd fec && gulp build-sass",
+    "build-legal": "browserify fec/fec/static/js/legal/LegalApp.js -o ./fec/dist/fec/static/js/legalApp.js -t [ babelify --presets [ latest react ] ]",
     "build-js": "cd fec && gulp build-js",
     "test": "karma start",
     "test-single": "karma start --single-run --browsers PhantomJS",
@@ -13,6 +14,9 @@
     "ace-builds": "1.2.2",
     "a11y-dialog": "^3.0.2",
     "aria-accordion": "1.0.0",
+    "babel-eslint": "^7.1.1",
+    "babel-preset-latest": "^6.24.0",
+    "babelify": "^7.3.0",
     "bleach": "0.3.0",
     "chroma-js": "1.0.1",
     "colorbrewer": "0.0.2",
@@ -43,6 +47,8 @@
     "urijs": "1.17.0"
   },
   "devDependencies": {
+    "babel-jest": "^19.0.0",
+    "babel-preset-react": "^6.23.0",
     "browserify": "^11.0.1",
     "browserify-istanbul": "^0.2.1",
     "chai": "^3.4.1",
