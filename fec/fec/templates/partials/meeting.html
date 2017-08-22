@@ -2,7 +2,7 @@
   <tr class="simple-table__row">
     <td class="simple-table__cell">
       <a href="{{ meeting.url }}" class="t-bold">
-        {% if hearing is meeting %} {{ meeting.title }}{% else %}{{ meeting.date|date:'F j, Y' }}{% endif %}
+        {{ meeting.title | strip:'open meeting' }}
       </a>
     </td>
      <td class="simple-table__cell">
@@ -10,7 +10,7 @@
         <ul>
           {% for link in meeting.sunshine_act_links|splitlines %}
           {% if forloop.counter >= 2 %}
-            &nbsp;| <a href="{{ link }}">Amended
+            <br><a href="{{ link }}">Amended
           {% else %}
             <a href="{{ link }}">
           {% endif %}

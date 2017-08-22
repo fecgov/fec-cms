@@ -121,3 +121,8 @@ def get_meta_description(content_section):
         return 'Clarify campaign finance legal requirements on the new fec.gov. Search across advisory opinions, Matters Under Review, statutes, and regulations all at once, with search results designed to help you find what you need quickly.'
     else:
         return 'The new fec.gov makes it easier than ever to find what you need to know about the federal campaign finance process. Explore legal resources, campaign finance data, help for candidates and committees, and more.'
+
+
+@register.filter(name='strip')
+def strip(str, characters):
+    return str.strip(characters)
