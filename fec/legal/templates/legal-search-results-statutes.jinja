@@ -4,7 +4,7 @@
 
 {% block header %}
 <header class="page-header slab slab--primary">
-  {{ breadcrumb.breadcrumbs('Search results', [(cms_url + '/legal-resources', 'Legal resources'), (url_for('statutes_landing'), 'Statutes')]) }}
+  {{ breadcrumb.breadcrumbs('Search results', [('/legal-resources', 'Legal resources'), ('/data/legal/statutes/', 'Statutes')]) }}
 </header>
 {% endblock %}
 

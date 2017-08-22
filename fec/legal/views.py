@@ -54,7 +54,7 @@ def statutes_landing(request):
     })
 
 
-def legal_doc_search(request):
+def legal_doc_search_ao(request):
     results = {}
     query = request.GET.get('search', '')
 
@@ -64,5 +64,20 @@ def legal_doc_search(request):
         'parent': 'legal',
         'results': results,
         'result_type': 'advisory_opinions',
+        'query': query
+    })
+
+
+def legal_doc_search_statutes(request):
+    results = {}
+    query = request.GET.get('search', '')
+
+    if query:
+        results = api_caller.load_legal_search_results(query, 'statutes')
+
+    return render(request, 'legal-search-results-statutes.jinja', {
+        'parent': 'legal',
+        'results': results,
+        'result_type': 'statutes',
         'query': query
     })
