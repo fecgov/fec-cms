@@ -100,6 +100,21 @@ def legal_doc_search_mur(request):
     })
 
 
+def legal_doc_search_regulations(request):
+    results = {}
+    query = request.GET.get('search', '')
+
+    if query:
+        results = api_caller.load_legal_search_results(query, 'regulations')
+
+    return render(request, 'legal-search-results-regulations.jinja', {
+        'parent': 'legal',
+        'results': results,
+        'result_type': 'regulations',
+        'query': query
+    })
+
+
 def legal_doc_search_statutes(request):
     results = {}
     query = request.GET.get('search', '')

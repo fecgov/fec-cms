@@ -12,6 +12,7 @@ urlpatterns = [
     url(r'^data/legal/search/advisory_opinions/$', views.legal_doc_search_ao),
     url(r'^data/legal/search/enforcement/$', views.legal_doc_search_mur),
     url(r'^data/legal/search/murs/$', views.legal_doc_search_mur),
+    url(r'^data/legal/search/regulations/$', views.legal_doc_search_regulations),
     url(r'^data/legal/search/statutes/$', views.legal_doc_search_statutes),
     url(r'^data/legal/statutes/$', views.statutes_landing),
 ]
