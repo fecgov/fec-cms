@@ -69,6 +69,7 @@ def mur_page(request, mur_no):
 def legal_doc_search_ao(request):
     results = {}
     query = request.GET.get('search', '')
+    offset = request.GET.get('offset', 0)
 
     results = api_caller.load_legal_search_results(query, 'advisory_opinions')
 
@@ -83,6 +84,7 @@ def legal_doc_search_ao(request):
 def legal_doc_search_mur(request):
     results = {}
     query = request.GET.get('search', '')
+    offset = request.GET.get('offset', 0)
     mur_no = request.GET.get('mur_no', '')
     mur_respondents = request.GET.get('mur_respondents', '')
     mur_election_cycles = request.GET.get('mur_election_cycles', '')
@@ -103,9 +105,10 @@ def legal_doc_search_mur(request):
 def legal_doc_search_regulations(request):
     results = {}
     query = request.GET.get('search', '')
+    offset = request.GET.get('offset', 0)
 
     if query:
-        results = api_caller.load_legal_search_results(query, 'regulations')
+        results = api_caller.load_legal_search_results(query, 'regulations', offset=offset)
 
     return render(request, 'legal-search-results-regulations.jinja', {
         'parent': 'legal',
@@ -118,6 +121,7 @@ def legal_doc_search_regulations(request):
 def legal_doc_search_statutes(request):
     results = {}
     query = request.GET.get('search', '')
+    offset = request.GET.get('offset', 0)
 
     if query:
         results = api_caller.load_legal_search_results(query, 'statutes')

@@ -1,0 +1,15 @@
+<div class="results-info">
+<div class="dataTables_info">{{ results.offset | int + 1 }}&ndash;{{ results.offset | int + results[result_type + '_returned'] | int }} of about {{ results.total_all }}</div>
+<div class="dataTables_paginate">
+{% if results.offset | int > 0 %}
+<a class="paginate_button previous" href="/data/legal/search/{{ result_type }}/?search={{ query }}&offset={{ results.offset | int - results.limit | int }}#results-{{ result_type }}">Previous</a>
+{% else %}
+<span class="paginate_button previous is-disabled">Previous</span>
+{% endif %}
+{% if results.offset | int + results.limit | int  < results.total_all | int %}
+<a class="paginate_button next" href="/data/legal/search/{{ result_type }}/?search={{ query }}&offset={{ results.offset | int + results.limit | int }}#results-{{ result_type }}">Next</a>
+{% else %}
+<span class="paginate_button next is-disabled">Next</span>
+{% endif %}
+</div>
+</div>
