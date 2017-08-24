@@ -258,6 +258,7 @@ FilterTypeahead.prototype.getFilters = function(values) {
   }
 };
 
+// When loading a preset checkbox filter, this will change the label of the checkbox from just ID (example: C00431445) to the full title for readability (example: OBAMA FOR AMERICA (C00431445))
 FilterTypeahead.prototype.updateFilters = function(response) {
   var self = this;
 
