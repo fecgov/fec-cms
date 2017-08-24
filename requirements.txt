@@ -19,6 +19,7 @@ django-audit-log
 invoke==0.15.0
 GitPython==1.0.1
 requests-mock==1.3.0
+pdbpp==0.9.1
 
 # Data import
 unicode-slugify==0.1.3

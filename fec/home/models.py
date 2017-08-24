@@ -29,6 +29,9 @@ from wagtail.wagtaildocs.blocks import DocumentChooserBlock
 from wagtail.wagtaildocs.edit_handlers import DocumentChooserPanel
 from wagtail.wagtaildocs.models import Document
 
+from django.utils.encoding import python_2_unicode_compatible
+from wagtail.wagtailsnippets.models import register_snippet
+
 from wagtail.wagtailsearch import index
 
 from django.db.models.signals import m2m_changed
@@ -92,7 +95,7 @@ class UniqueModel(models.Model):
 class Folder(Page):
     is_creatable = True
     subpage_types = ['PressReleasePage', 'RecordPage', 'TipsForTreasurersPage', 'DigestPage']
-    
+
     external_link = models.URLField(blank=False, null=True, default='')
 
     @property
@@ -185,12 +188,17 @@ def log_user_save(sender, **kwargs):
 @receiver(pre_delete, sender=PageRevision)
 @receiver(post_save, sender=PageRevision)
 def log_revisions(sender, **kwargs):
-    try:
-        user_id = int(kwargs.get('instance').user_id)
-        user = User.objects.get(id=user_id)
-    except User.DoesNotExist:
-        logger.info("User not found")
-    logger.info("page was modified: {0} by user {1}".format(kwargs.get('instance'), user.get_username()))
+    username = '(user not found)'
+    user = kwargs.get('instance').user
+
+    if user:
+        username = user.get_username()
+
+    logger.info('Page modified: {0} by user {1}'.format(
+        kwargs.get('instance'),
+        username
+    ))
+
 
 
 def user_groups_changed(sender, **kwargs):
@@ -1003,6 +1011,7 @@ class MeetingPage(Page):
     ]
 
     search_fields =  Page.search_fields + [
+        index.FilterField('title'),
         index.FilterField('meeting_type'),
         index.FilterField('date'),
         index.SearchField('imported_html'),
@@ -1047,3 +1056,18 @@ class ReportingExamplePage(Page):
     @property
     def content_section(self):
         return 'help'
+
+@register_snippet
+class EmbedTableSnippet(models.Model):
+    title = models.TextField()
+    description = models.TextField()
+    text = models.TextField()
+
+    panels = [
+        FieldPanel('title'),
+        FieldPanel('description'),
+        FieldPanel('text'),
+    ]
+
+    def __str__(self):
+        return '{} ({})'.format(self.title, self.description)
