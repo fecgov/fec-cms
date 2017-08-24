@@ -64,17 +64,10 @@ npm-debug.log
 # Image uploads
 fec/media/
 
-# Data import files
-fec/data_loader/data/**/*.json
-
 fec/media
 
 # PyCharm
 .idea
-
-# Parsing output
-fec/data_loader/management/commands/meetings--*.json
-fec/data_loader/management/commands/out/*.html
 
 # The output file from the search scraper
 fec/search/management/data/output.json
