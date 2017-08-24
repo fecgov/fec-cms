@@ -4,6 +4,7 @@ import logging
 
 from django.db import models
 from django.core.exceptions import ValidationError
+from django.http import HttpResponseRedirect
 
 from django.dispatch import receiver
 from django.db.models.signals import post_save, pre_delete
@@ -28,6 +29,9 @@ from wagtail.wagtaildocs.blocks import DocumentChooserBlock
 from wagtail.wagtaildocs.edit_handlers import DocumentChooserPanel
 from wagtail.wagtaildocs.models import Document
 
+from django.utils.encoding import python_2_unicode_compatible
+from wagtail.wagtailsnippets.models import register_snippet
+
 from wagtail.wagtailsearch import index
 
 from django.db.models.signals import m2m_changed
@@ -41,7 +45,8 @@ logger = logging.getLogger(__name__)
 from home.blocks import (ThumbnailBlock, AsideLinkBlock,
                          ContactInfoBlock, CitationsBlock, ResourceBlock,
                          OptionBlock, CollectionBlock, DocumentFeedBlurb,
-                         ExampleParagraph, ExampleForms, CustomTableBlock)
+                         ExampleParagraph, ExampleForms, ExampleImage,
+                         CustomTableBlock, ReportingExampleCards)
 
 
 stream_factory = functools.partial(
@@ -85,6 +90,25 @@ class UniqueModel(models.Model):
         model = self.__class__
         if model.objects.count() > 0 and self.id != model.objects.get().id:
             raise ValidationError('Only one {0} allowed'.format(self.__name__))
+
+
+class Folder(Page):
+    is_creatable = True
+    subpage_types = ['PressReleasePage', 'RecordPage', 'TipsForTreasurersPage', 'DigestPage']
+
+    external_link = models.URLField(blank=False, null=True, default='')
+
+    @property
+    def redirect_link(self):
+        return self.external_link
+
+    def serve(self, request):
+        return HttpResponseRedirect(self.redirect_link)
+
+    content_panels = [
+        FieldPanel('title'),
+        FieldPanel('external_link')
+    ]
 
 
 class ContentPage(Page):
@@ -164,12 +188,17 @@ def log_user_save(sender, **kwargs):
 @receiver(pre_delete, sender=PageRevision)
 @receiver(post_save, sender=PageRevision)
 def log_revisions(sender, **kwargs):
-    try:
-        user_id = int(kwargs.get('instance').user_id)
-        user = User.objects.get(id=user_id)
-    except User.DoesNotExist:
-        logger.info("User not found")
-    logger.info("page was modified: {0} by user {1}".format(kwargs.get('instance'), user.get_username()))
+    username = '(user not found)'
+    user = kwargs.get('instance').user
+
+    if user:
+        username = user.get_username()
+
+    logger.info('Page modified: {0} by user {1}'.format(
+        kwargs.get('instance'),
+        username
+    ))
+
 
 
 def user_groups_changed(sender, **kwargs):
@@ -251,6 +280,8 @@ class RecordPageTag(TaggedItemBase):
 
 
 class RecordPage(ContentPage):
+    formatted_title = models.CharField(max_length=255, null=True, blank=True, default='',
+                                        help_text="Use if you need italics in the title. e.g. <em>Italicized words</em>")
     date = models.DateField(default=datetime.date.today)
     category = models.CharField(
         max_length=255,
@@ -292,6 +323,7 @@ class RecordPage(ContentPage):
     homepage_hide = models.BooleanField(default=False)
     template = 'home/updates/record_page.html'
     content_panels = ContentPage.content_panels + [
+        FieldPanel('formatted_title'),
         FieldPanel('date'),
         FieldPanel('monthly_issue'),
         FieldPanel('category'),
@@ -491,16 +523,25 @@ class TipsForTreasurersPage(ContentPage):
         return 'Information Division'
 
 
-class GenericUpdate(Page):
-    # Generic update (pin) for Home Page - What's Happening section
-    link = models.URLField(blank=True)
-    homepage_expiration = models.DateField(blank=True, null=True)
+class HomePageBannerAnnouncement(Page):
+    # Home page banner alert
+    description = models.CharField(max_length=255, blank=False)
+    link_title = models.CharField(max_length=255, blank=False)
+    link_url = models.URLField(max_length=255, blank=False)
+    link_title_2 = models.CharField(max_length=255, blank=True)
+    link_url_2 = models.URLField(max_length=255, blank=True)
+    date_active = models.DateTimeField(blank=False)
+    active = models.BooleanField(default=True)
 
     content_panels = Page.content_panels + [
-        FieldPanel('link'),
-        FieldPanel('homepage_expiration'),
+        FieldPanel('description'),
+        FieldPanel('link_title'),
+        FieldPanel('link_url'),
+        FieldPanel('link_title_2'),
+        FieldPanel('link_url_2'),
+        FieldPanel('date_active'),
+        FieldPanel('active'),
     ]
-
 
 class CustomPage(Page):
     """Flexible customizable page."""
@@ -513,7 +554,8 @@ class CustomPage(Page):
         ('image', ImageChooserBlock()),
         ('table', TableBlock()),
         ('example_paragraph', ExampleParagraph()),
-        ('example_forms', ExampleForms())
+        ('example_forms', ExampleForms()),
+        ('reporting_example_cards', ReportingExampleCards())
     ])
     sidebar = stream_factory(null=True, blank=True)
     citations = StreamField([('citations', blocks.ListBlock(CitationsBlock()))],
@@ -740,6 +782,11 @@ class CollectionPage(Page):
     sections = StreamField([
         ('section', CollectionBlock())
     ])
+
+    reporting_examples = StreamField([
+        ('reporting_examples', blocks.ListBlock(CitationsBlock()))
+    ], null=True)
+
     show_search = models.BooleanField(
                                     max_length=255, default=False,
                                     null=False, blank=False,
@@ -761,6 +808,7 @@ class CollectionPage(Page):
         FieldPanel('show_contact_card'),
         StreamFieldPanel('related_pages'),
         StreamFieldPanel('sections'),
+        StreamFieldPanel('reporting_examples')
     ]
 
     @property
@@ -963,6 +1011,7 @@ class MeetingPage(Page):
     ]
 
     search_fields =  Page.search_fields + [
+        index.FilterField('title'),
         index.FilterField('meeting_type'),
         index.FilterField('date'),
         index.SearchField('imported_html'),
@@ -972,3 +1021,53 @@ class MeetingPage(Page):
     @property
     def get_update_type(self):
         return constants.update_types['commission-meeting']
+
+
+class ReportingExamplePage(Page):
+    """Page tempalte for "how to report" and "example scenario" pages
+    Always within the Help section"""
+    featured_image = models.ForeignKey('wagtailimages.Image', blank=True, null=True,
+                                   on_delete=models.SET_NULL, related_name='+')
+
+    pre_title = models.CharField(blank=True, null=True, max_length=255, choices=[
+            ('how', 'How to report'),
+            ('scenario', 'Example scenario')
+    ])
+
+    body = StreamField([
+        ('paragraph', blocks.RichTextBlock()),
+        ('example_image', ExampleImage()),
+        ('reporting_example_cards', ReportingExampleCards())
+    ], null=True)
+
+    related_media_title = models.CharField(blank=True, null=True, max_length=255)
+    related_media = StreamField([
+        ('continue_learning', blocks.ListBlock(ThumbnailBlock(), icon='doc-empty', template='blocks/related-media.html')),
+    ], null=True)
+
+    content_panels = Page.content_panels + [
+        FieldPanel('pre_title'),
+        ImageChooserPanel('featured_image'),
+        StreamFieldPanel('body'),
+        FieldPanel('related_media_title'),
+        StreamFieldPanel('related_media')
+    ]
+
+    @property
+    def content_section(self):
+        return 'help'
+
+@register_snippet
+class EmbedTableSnippet(models.Model):
+    title = models.TextField()
+    description = models.TextField()
+    text = models.TextField()
+
+    panels = [
+        FieldPanel('title'),
+        FieldPanel('description'),
+        FieldPanel('text'),
+    ]
+
+    def __str__(self):
+        return '{} ({})'.format(self.title, self.description)

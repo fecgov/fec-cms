@@ -1,0 +1,19 @@
+{% load wagtailcore_tags %}
+{% load wagtailimages_tags %}
+{% load staticfiles %}
+
+<div class="content__section--ruled content__section">
+  <div class="grid grid--3-wide">
+  {% for blocks in self.media %}
+    {% with blocks.value as blocks %}
+      {% for block in blocks %}
+        <div class="grid__item">
+          {% image block.image original %}
+          <span class="label">{{ block.media_type }}</span>
+          <p><a href="{{ block.url }}">{{ block.text }}</a></p>
+        </div>
+      {% endfor %}
+    {% endwith %}
+  {% endfor %}
+  </div>
+</div>

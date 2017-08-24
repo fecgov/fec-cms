@@ -10,14 +10,13 @@
 
     <title>{% block title %}{% if self.seo_title %}{{ self.seo_title }}{% else %}{{ self.title }} | FEC {% endif %}{% endblock %}{% block title_suffix %}{% endblock %}</title>
 
-    {# Global stylesheets #}
-    {% compress css %}
-    <link rel="stylesheet" type="text/x-scss" href="{% static 'scss/fec.scss' %}">
-    {% endcompress %}
-
     {% block extra_css %}
-    {# Override this in templates to add extra stylesheets #}
+    {% compress css %}
+    <link rel="stylesheet" type="text/x-scss" href="{% static 'scss/base.scss' %}">
+    {% endcompress %}
     {% endblock %}
+
+
   </head>
 
   <body class="{% block body_class %}{% endblock %}">
@@ -44,13 +43,15 @@
         <div class="disclaimer">
           <span class="disclaimer__right">An official website of the U.S. government <img src="{% static 'img/us_flag_small.png' %}" class="flag" alt="US flag signifying that this is a United States Federal Government website"></span>
         </div>
-        <img src="{% static 'img/print-logo.png' %}" class="u-print-only" alt="FEC logo">
+        <div class="site-title--print"></div>
         <a title="Home" href="/" class="site-title" rel="home"><span class="u-visually-hidden">Federal Election Commission | United States of America</span></a>
         <ul class="utility-nav list--flat">
           <li class="utility-nav__item"><a href="/calendar/">Calendar</a></li>
           <li class="utility-nav__item">
-            <button class="js-glossary-toggle glossary__toggle">Glossary</button>
-            <div class="tour__point tour__point--middle" data-tooltipClass="tour__tooltip tour__tooltip--right" data-intro="<h5>Look up unfamiliar words</h5>Use the glossary to find definitions for campaign finance terms. Click or tap any word with a &nbsp;<i class='icon icon--small i-book'></i>&nbsp; to read the definition."></div>
+            <button class="js-glossary-toggle glossary__toggle">
+            Glossary
+            </button>
+            <div class="tour__point" data-intro="<h5>Look up unfamiliar words</h5>Use the glossary to find definitions for campaign finance terms. Click or tap any word with a &nbsp;<i class='icon icon--small i-book'></i>&nbsp; to read the definition."></div>
           </li>
           <li class="utility-nav__search">
             <form accept-charset="UTF-8" action="/search" class="combo" method="get" role="search">
@@ -80,7 +81,7 @@
         <div class="disclaimer">
           <span class="disclaimer__right">An official website of the United States Government <img src="{% static 'img/us_flag_small.png' %}"  alt="US flag signifying that this is a United States Federal Government website"></span>
         </div>
-        <img src="{% static 'img/print-logo.png' %}" class="u-print-only" alt="FEC logo">
+        <div class="site-title--print"></div>
         <a title="Home" href="/" class="site-title" rel="home"><span class="u-visually-hidden">Federal Election Commission | United States of America</span></a>
         <ul class="utility-nav list--flat">
           <li class="utility-nav__item{% if self.content_section == 'calendar' %} is-active{% endif %}"><a href="/calendar/">Calendar</a></li>
@@ -118,18 +119,13 @@
 
         <div class="grid grid--6-wide">
 
-          <div class="grid__item"></div>
-
           <div class="grid__item">
             <ul>
               <li>
-                <a href="/about/">About the FEC</a>
+                <a href="/about/">About</a>
               </li>
               <li>
                 <a href="/about/careers/">Careers</a>
-              </li>
-              <li>
-                <a href="/contact-us/">Contact</a>
               </li>
               <li>
                 {% if self.title == "Homepage" or self.title == "Home" %}
@@ -137,9 +133,13 @@
                 {% endif %}
                 <a href="/press/">Press</a>
               </li>
+              <li>
+                <a href="/contact-us/">Contact</a>
+              </li>
             </ul>
           </div>
-
+          <div class="grid__item"></div>
+          <div class="grid__item"></div>
           <div class="grid__item">
             <ul>
               <li>
@@ -153,20 +153,6 @@
               </li>
               <li>
                 <a href="/about/reports-about-fec/strategy-budget-and-performance/">Strategy, budget and performance</a>
-              </li>
-            </ul>
-          </div>
-
-          <div class="grid__item">
-            <ul>
-              <li>
-                <a href="https://api.open.fec.gov/">OpenFEC API</a>
-              </li>
-              <li>
-                <a href="https://github.com/18F/fec">GitHub repository</a>
-              </li>
-              <li>
-                <a href="https://github.com/18F/FEC/blob/master/release_notes/release_notes.md">Release notes</a>
               </li>
             </ul>
           </div>
@@ -191,7 +177,13 @@
           <div class="grid__item">
             <ul>
               <li>
-                <a href="{{ cms_url }}/updates/">Latest updates</a>
+                <a href="https://api.open.fec.gov/">OpenFEC API</a>
+              </li>
+              <li>
+                <a href="https://github.com/18F/fec">GitHub repository</a>
+              </li>
+              <li>
+                <a href="https://github.com/18F/FEC/blob/master/release_notes/release_notes.md">Release notes</a>
               </li>
             </ul>
           </div>

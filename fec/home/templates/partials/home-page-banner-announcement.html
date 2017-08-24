@@ -1,0 +1,20 @@
+{% load wagtailcore_tags %}
+
+{% if banners %}
+<section class="slab slab--secondary">
+  <div class="container">
+  {% for banner in banners %}
+    <div{% if forloop.counter == 2 %} class="u-margin--top"{% endif %}>
+      <div class="message message--red message--mini message--info message--inline u-no-margin-top u-no-margin-bottom">
+        <span class="t-bold">{{ banner.title }}:</span> {{ banner.description }}
+      </div>
+
+      <a href="{{ banner.link_url }}" class="t-sans">{{ banner.link_title }}</a> »
+      {% if banner.link_url_2 %}
+      &nbsp; | &nbsp; <a href="{{ banner.link_url_2 }}" class="t-sans">{{ banner.link_title_2 }}</a> »
+      {% endif %}
+    </div>
+  {% endfor %}
+</div>
+</section>
+{% endif %}

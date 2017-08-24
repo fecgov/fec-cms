@@ -53,6 +53,23 @@
       </div>
     </section>
   {% endfor %}
+  {% if self.reporting_examples %}
+    <section id="reporting-examples" class="sidebar--secondary t-sans">
+      <h2 class="sidebar__title sidebar__title--large icon-heading--financial-document">Reporting examples</h2>
+      <div class="sidebar__content">
+        <div class="grid grid--2-wide">
+        {% for example in self.reporting_examples %}
+          {% for block in example.value %}
+            <div class="grid__item">
+              <p class="t-bold">{{ block.label }}</p>
+              {{ block.content }}
+            </div>
+          {% endfor %}
+        {% endfor %}
+        </div>
+      </div>
+    </section>
+  {% endif %}
 {% endblock %}
 
 {% block related_topics %}
