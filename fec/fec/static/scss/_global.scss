@@ -2,8 +2,8 @@
 // depend on. It sets the global styles for components that exist on all pages.
 
 // Libraries
-@import "lib/bourbon/bourbon";
-@import "lib/neat/neat";
+@import "vendor/bourbon/bourbon";
+@import "vendor/neat/neat";
 
 // Variables and mixins
 @import "variables";

@@ -129,6 +129,8 @@ TEMPLATES = [
                 'constants': constants,
                 'CANONICAL_BASE': CANONICAL_BASE,
                 'FEC_API_KEY': FEC_API_KEY,
+                'FEC_API_KEY_PUBLIC': FEC_API_KEY_PUBLIC,
+                'FEC_API_URL': FEC_API_URL,
                 'WEBMANAGER_EMAIL': WEBMANAGER_EMAIL,
                 'CMS_URL': CMS_URL,
                 'TRANSITION_URL': FEC_TRANSITION_URL,

@@ -225,7 +225,7 @@ FilterTypeahead.prototype.formatCheckboxData = function(input) {
     name: input.name,
     label: input.datum ? formatLabel(input.datum) : stripQuotes(input.value),
     value: stripQuotes(input.value),
-    id: formatId(input.value)
+    id: this.fieldName + '-' + formatId(input.value)
   };
 
   return output;
@@ -258,16 +258,18 @@ FilterTypeahead.prototype.getFilters = function(values) {
   }
 };
 
+// When loading a preset checkbox filter, this will change the label of the checkbox from just ID (example: C00431445) to the full title for readability (example: OBAMA FOR AMERICA (C00431445))
 FilterTypeahead.prototype.updateFilters = function(response) {
   var self = this;
+
   if (this.dataset) {
     var idKey = this.dataset.name + '_id';
     response.results.forEach(function(result) {
       var label = result.name + ' (' + result[idKey] + ')';
-      self.$elm.find('label[for="' + result[idKey] + '-checkbox"]').text(label);
-      self.$elm.find('#' + result[idKey] + '-checkbox').trigger('filter:renamed', [
+      self.$elm.find('label[for="' + self.fieldName + '-' + result[idKey] + '-checkbox"]').text(label);
+      self.$elm.find('#' + self.fieldName + '-' + result[idKey] + '-checkbox').trigger('filter:renamed', [
         {
-          key: result[idKey] + '-checkbox',
+          key: self.fieldName + '-' + result[idKey] + '-checkbox',
           value: label
         }
       ]);
