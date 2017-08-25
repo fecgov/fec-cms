@@ -159,5 +159,5 @@ var context = {{ context_vars | to_json | safe }};
   context.showIndependentExpenditures = true;
 {% endif %}
 </script>
-<script src="{{ static('js/pages/committee-single.js') }}"></script>
+<script src="{{ asset_for('js/committee-single.js') }}"></script>
 {% endblock %}

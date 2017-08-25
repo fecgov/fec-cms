@@ -72,5 +72,5 @@ var context = {{ table_context|to_json|safe }};
 </script>
 {% endif %}
 
-<script src="{{ static('js/pages/' + slug + '.js') }}"></script>
+<script src="{{ asset_for(slug + '.js') }}"></script>
 {% endblock %}

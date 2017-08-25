@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% load wagtailcore_tags %}
 {% load staticfiles %}
-
+{% load filters %}
 {% block content %}
 
 {% include 'partials/breadcrumbs.html' with page=self links=self.ancestors style='secondary' %}
@@ -150,5 +150,5 @@
 {% endblock %}
 
 {% block extra_js %}
-  <script type="text/javascript" src="{% static 'js/contact-form.js' %}"></script>
+  <script type="text/javascript" src="{% asset_for 'contact-form.js' %}"></script>
 {% endblock %}

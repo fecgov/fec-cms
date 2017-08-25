@@ -1,4 +1,5 @@
 import re
+import json
 
 from django.conf import settings
 from django import template
@@ -121,3 +122,11 @@ def get_meta_description(content_section):
         return 'Clarify campaign finance legal requirements on the new fec.gov. Search across advisory opinions, Matters Under Review, statutes, and regulations all at once, with search results designed to help you find what you need quickly.'
     else:
         return 'The new fec.gov makes it easier than ever to find what you need to know about the federal campaign finance process. Explore legal resources, campaign finance data, help for candidates and committees, and more.'
+
+
+@register.simple_tag
+def asset_for(path):
+    key = '/static/js/{}'.format(path)
+    assets = json.load(open('./fec/dist/fec/static/js/rev-manifest.json'))
+
+    return assets[key]

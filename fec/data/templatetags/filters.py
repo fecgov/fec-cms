@@ -144,3 +144,10 @@ def filesize(value):
 #     if len(cycles) > 1:
 #         return '{}–{}'.format(min(cycles), max(cycles))
 #     return cycles[0]
+
+@library.global_function
+def asset_for(path):
+    key = '/static/js/{}'.format(path)
+    assets = json.load(open('./fec/dist/fec/static/js/rev-manifest.json'))
+
+    return assets[key]
