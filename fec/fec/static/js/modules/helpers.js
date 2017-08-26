@@ -9,11 +9,7 @@ var moment = require('moment');
 var decoders = require('./decoders');
 var Handlebars = require('hbsfy/runtime');
 var bleach = require('bleach');
-
-var intl = require('intl');
-var locale = require('intl/locale-data/json/en-US.json');
-intl.__addLocaleData(locale);
-
+var numeral = require('numeral');
 
 // set parameters from the API
 var API = {
@@ -70,18 +66,24 @@ function datetime(value, options) {
 
 Handlebars.registerHelper('datetime', datetime);
 
-var currencyFormatter = Intl.NumberFormat('en-US', {style: 'currency', currency: 'USD'});
+var currencyFormatter = function(number) {
+  return numeral(number).format('$0,0.00');
+};
+
 function currency(value) {
   if (!isNaN(parseInt(value))) {
-    return currencyFormatter.format(value);
+    return currencyFormatter(value);
   } else {
     return '--';
   }
 }
-Handlebars.registerHelper('currency', currency);
+Handlebars.registerHelper('currency', currencyFormatter);
 
-var numberFormatter = Intl.NumberFormat('en-US');
-Handlebars.registerHelper('formatNumber', numberFormatter.format);
+var numberFormatter = function(number) {
+  return numeral(number).format('0,0');
+};
+
+Handlebars.registerHelper('formatNumber', numberFormatter);
 
 Handlebars.registerHelper({
   eq: function (v1, v2) {
@@ -422,7 +424,7 @@ module.exports = {
   datetime: datetime,
   ensureArray: ensureArray,
   filterNull: filterNull,
-  formatNumber: numberFormatter.format,
+  formatNumber: numberFormatter,
   formatCycleRange: formatCycleRange,
   getTimePeriod: getTimePeriod,
   globals: globals,
