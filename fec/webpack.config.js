@@ -11,7 +11,6 @@ var entries = {
   'data-init': './fec/static/js/data-init.js'
 };
 
-
 fs.readdirSync('./fec/static/js/pages').forEach(function(f) {
   if (f.search('.js') < 0 ) { return; } // Skip non-js files
   var name = f.split('.js')[0];
@@ -42,6 +41,8 @@ module.exports = {
   },
   resolve: {
     alias: {
+      // There's a known issue with jquery.inputmask and webpack.
+      // These aliases resolve the issues
       'jquery': path.join(__dirname, '../node_modules/jquery/dist/jquery.js'),
       'inputmask.dependencyLib': path.join(__dirname, '../node_modules/jquery.inputmask/dist/inputmask/inputmask.dependencyLib.js'),
       'inputmask/inputmask.date.extensions': path.join(__dirname, '../node_modules/jquery.inputmask/dist/inputmask/inputmask.date.extensions.js'),
