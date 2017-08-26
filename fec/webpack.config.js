@@ -22,11 +22,11 @@ fs.readdirSync('./fec/static/js/pages').forEach(function(f) {
 module.exports = {
   entry: entries,
   plugins: [
-    new UglifyJSPlugin(),
+    new webpack.SourceMapDevToolPlugin(),
     new ManifestPlugin({
       fileName: 'rev-manifest.json',
       basePath: '/static/js/'
-    })
+    }),
   ],
   output: {
     filename: '[name]-[hash].js',
