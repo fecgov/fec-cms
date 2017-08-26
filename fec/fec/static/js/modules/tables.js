@@ -8,8 +8,8 @@ var tabs = require('../vendor/tablist');
 var urls = require('./urls');
 var accessibility = require('./accessibility');
 
-require('datatables.net')(window, $);
-require('datatables.net-responsive')(window, $);
+require('datatables.net');
+require('datatables.net-responsive');
 
 var helpers = require('./helpers');
 var download = require('./download');

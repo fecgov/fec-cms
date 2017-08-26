@@ -2,5 +2,6 @@
 
 /* global require, module, window */
 
-var EventEmitter2 = require('eventemitter2').EventEmitter2;
+var eventemitter = require('eventemitter2');
+var EventEmitter2 = eventemitter.EventEmitter2 || eventemitter;
 module.exports = window.events = window.events || new EventEmitter2();

@@ -6,8 +6,7 @@ var moment = require('moment');
 var Filter = require('./filter-base.js');
 
 require('jquery.inputmask');
-require('jquery.inputmask/dist/inputmask/inputmask.date.extensions.js');
-require('jquery.inputmask/dist/inputmask/inputmask.numeric.extensions.js');
+require('inputmask/inputmask.date.extensions');
 
 function DateFilter(elm) {
   Filter.Filter.call(this, elm);
