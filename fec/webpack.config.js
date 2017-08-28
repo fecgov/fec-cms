@@ -41,7 +41,7 @@ module.exports = [
         loaders: [
             {
               test: /\.hbs/,
-              loader: 'handlebars-template-loader'
+              use: ['handlebars-template-loader', 'cache-loader']
             }
         ]
     },
@@ -60,19 +60,28 @@ module.exports = [
       fs: 'empty'
     },
     watchOptions: {
-      ignored: '/node_mdoules/'
+      ignored: /node_modules/
     },
     stats: {
+      assetSort: 'field',
+      modules: false,
       warnings: false
     }
   },
   {
     name: 'legal',
-    entry: './fec/static/js/legal/LegalApp.js',
+    entry: {'legalApp': './fec/static/js/legal/LegalApp.js'},
     output: {
-      filename: 'legalApp.js',
+      filename: 'legalApp-[hash].js',
       path: path.resolve(__dirname, './dist/fec/static/js')
     },
+    plugins: [
+      new webpack.SourceMapDevToolPlugin(),
+      new ManifestPlugin({
+        fileName: 'rev-legal-manifest.json',
+        basePath: '/static/js/'
+      }),
+    ],
     module: {
       loaders: [
         {
@@ -84,6 +93,11 @@ module.exports = [
           }
         }
       ]
+    },
+    stats: {
+      assetSort: 'field',
+      modules: false,
+      warnings: false
     }
   }
 ];
