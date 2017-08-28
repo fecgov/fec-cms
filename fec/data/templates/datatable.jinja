@@ -74,5 +74,6 @@ var context = {{ table_context|to_json|safe }};
 </script>
 {% endif %}
 
-<script src="{{ asset_for(slug + '.js') }}"></script>
+<script src="{{ asset_for('datatable-common.js') }}"></script>
+<script src="{{ asset_for('datatable-' + slug + '.js') }}"></script>
 {% endblock %}

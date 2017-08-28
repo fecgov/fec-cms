@@ -12,17 +12,34 @@ var entries = {
   'data-init': './fec/static/js/data-init.js'
 };
 
+var datatablePages = [];
+
 fs.readdirSync('./fec/static/js/pages').forEach(function(f) {
   if (f.search('.js') < 0 ) { return; } // Skip non-js files
   var name = f.split('.js')[0];
   var p = path.join('./fec/static/js/pages', f);
   entries[name] = './' + p;
+
+  // Note all datatable pages for getting the common chunk
+  if (name.search('datatable-') > -1) {
+    datatablePages.push(name);
+  }
 });
 
 module.exports = [
   {
     entry: entries,
     plugins: [
+      new webpack.optimize.CommonsChunkPlugin({
+        name: 'entity-common',
+        filename: 'entity-common-[hash].js',
+        chunks: ['candidate-single', 'committee-single', 'elections']
+      }),
+      new webpack.optimize.CommonsChunkPlugin({
+        name: 'datatable-common',
+        filename: 'datatable-common-[hash].js',
+        chunks: datatablePages
+      }),
       new webpack.SourceMapDevToolPlugin(),
       new ManifestPlugin({
         fileName: 'rev-manifest.json',

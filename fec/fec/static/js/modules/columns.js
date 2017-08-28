@@ -141,7 +141,7 @@ var candidates = [
   {data: 'party_full', className: 'min-tablet hide-panel'},
   {data: 'state', className: 'min-desktop hide-panel column--state'},
   {data: 'district', className: 'min-desktop hide-panel column--small'},
-  {data: 'first_filing_date', orderable: true, className: 'min-desktop hide-panel column--small'},
+  {data: 'first_file_date', orderable: true, className: 'min-desktop hide-panel column--small'},
   modalTriggerColumn
 ];
 
@@ -173,7 +173,7 @@ var committees = [
   {data: 'treasurer_name', className: 'min-desktop hide-panel'},
   {data: 'committee_type_full', className: 'min-tablet hide-panel'},
   {data: 'designation_full', className: 'min-tablet hide-panel'},
-  {data: 'first_filing_date', orderable: true, className: 'min-desktop hide-panel column--small'},
+  {data: 'first_file_date', orderable: true, className: 'min-desktop hide-panel column--small'},
   modalTriggerColumn
 ];
 
