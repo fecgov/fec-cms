@@ -28,11 +28,6 @@ module.exports = [
         fileName: 'rev-manifest.json',
         basePath: '/static/js/'
       }),
-      // new webpack.optimize.CommonsChunkPlugin({
-      //   name: 'common',
-      //   filename: 'common.js'
-      // })
-      // new webpack.optimize.UglifyJsPlugin()
     ],
     output: {
       filename: '[name]-[hash].js',
@@ -44,7 +39,7 @@ module.exports = [
               test: /\.hbs/,
               use: ['handlebars-template-loader', 'cache-loader']
             }
-        ]
+        ],
     },
     resolve: {
       alias: {
