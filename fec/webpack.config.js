@@ -1,4 +1,5 @@
 /* global __dirname */
+/* jslint maxlen: false */
 
 var path = require('path');
 var webpack = require('webpack');
