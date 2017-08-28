@@ -118,11 +118,13 @@ ROOT_URLCONF = 'fec.urls'
 
 from data import constants
 
+
 TEMPLATES = [
     {
         'BACKEND': 'django_jinja.backend.Jinja2',
         'APP_DIRS': True,
         'OPTIONS': {
+            'environment': 'data.jinja2.environment',
             'match_extension': '.jinja',
             'constants': {
                 'constants': constants,

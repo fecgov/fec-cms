@@ -71,4 +71,6 @@ fec/media
 
 # The output file from the search scraper
 fec/search/management/data/output.json
+
 fec/rev-manifest.json
+fec/.cache-loader

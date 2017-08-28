@@ -11,7 +11,9 @@
 </header>
 
 {% block css %}
-<link rel="stylesheet" href="{{ static('styles/legal-common.css') }}" />
+{% compress css %}
+<link rel="stylesheet" type="text/x-scss" href="{{ static('scss/legal-common.scss') }}" />
+{% endcompress %}
 {% endblock %}
 
 <div class="main">

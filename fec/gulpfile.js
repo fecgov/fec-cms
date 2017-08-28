@@ -1,37 +1,12 @@
-/* global require, process */
-
 var _ = require('underscore');
 
 var gulp = require('gulp');
-var sass = require('gulp-sass');
-var cleanCSS = require('gulp-clean-css');
 var fs = require('fs');
 
 var consolidate = require('gulp-consolidate');
 var rename = require('gulp-rename');
 var svgmin = require('gulp-svgmin');
 var urlencode = require('gulp-css-urlencode-inline-svgs');
-
-gulp.task('build-sass', function() {
-  return gulp.src('./fec/static/scss/*.scss')
-    // .pipe(rename(function(path) {
-    //   path.dirname = './dist/fec/static/styles';
-    // }))
-    .pipe(sass({
-      includePaths: Array.prototype.concat(
-        './fec/static/scss',
-        '../node_modules'
-      )
-    }).on('error', sass.logError))
-    // .pipe(RevAll.revision({
-    //   fineNameManifest: 'css-manifest.json'
-    // }))
-    .pipe(cleanCSS())
-    .pipe(gulp.dest('./dist/fec/static/styles/'));
-    // .pipe(gulp.dest('.'))
-    // .pipe(RevAll.manifestFile())
-    // .pipe(gulp.dest('.'));
-});
 
 gulp.task('minify-icons', function() {
   return gulp.src('./fec/static/icons/input/*.svg')

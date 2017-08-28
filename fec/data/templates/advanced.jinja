@@ -6,7 +6,9 @@
 {% endblock %}
 
 {% block css %}
-<link rel="stylesheet" href="{{ static('styles/common.css') }}" />
+{% compress css %}
+<link rel="stylesheet" type="text/x-scss" href="{{ static('scss/common.scss') }}" />
+{% endcompress %}
 {% endblock %}
 
 {% block body %}

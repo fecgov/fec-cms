@@ -2,7 +2,9 @@
 {% import "macros/breakdowns.jinja" as breakdowns %}
 
 {% block css %}
-<link rel="stylesheet" href="{{ static('styles/data-landing.css') }}" />
+{% compress css %}
+<link rel="stylesheet" type="text/x-scss" href="{{ static('scss/data-landing.scss') }}" />
+{% endcompress %}
 {% endblock %}
 
 {% block page_title %}
