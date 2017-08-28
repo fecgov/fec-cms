@@ -47,6 +47,7 @@
   },
   "devDependencies": {
     "babel-jest": "^19.0.0",
+    "babel-loader": "^7.1.2",
     "babel-preset-react": "^6.23.0",
     "browserify": "^11.0.1",
     "browserify-istanbul": "^0.2.1",
@@ -58,8 +59,6 @@
     "gulp-css-urlencode-inline-svgs": "0.0.7",
     "gulp-if": "^2.0.2",
     "gulp-rename": "^1.2.2",
-    "gulp-rev": "^8.0.0",
-    "gulp-rev-all": "^0.9.7",
     "gulp-sass": "^3.1.0",
     "gulp-sourcemaps": "^2.6.0",
     "gulp-svgmin": "^1.2.2",

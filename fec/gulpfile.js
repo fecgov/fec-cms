@@ -3,94 +3,34 @@
 var _ = require('underscore');
 
 var gulp = require('gulp');
-var browserify = require('browserify');
-var source = require('vinyl-source-stream');
-var stringify = require('stringify');
-var hbsfy = require('hbsfy');
-var buffer = require('vinyl-buffer');
-var uglify = require('gulp-uglify');
-var gulpif = require('gulp-if');
 var sass = require('gulp-sass');
 var cleanCSS = require('gulp-clean-css');
 var fs = require('fs');
-var path = require('path');
 
 var consolidate = require('gulp-consolidate');
 var rename = require('gulp-rename');
 var svgmin = require('gulp-svgmin');
 var urlencode = require('gulp-css-urlencode-inline-svgs');
 
-var RevAll = require('gulp-rev-all');
-
-var production = ['stage', 'prod'].indexOf(process.env.FEC_WEB_ENVIRONMENT) !== -1;
-var debug = !!process.env.FEC_CMS_DEBUG;
-
 gulp.task('build-sass', function() {
   return gulp.src('./fec/static/scss/*.scss')
-    .pipe(rename(function(path) {
-      path.dirname = './dist/fec/static/styles';
-    }))
+    // .pipe(rename(function(path) {
+    //   path.dirname = './dist/fec/static/styles';
+    // }))
     .pipe(sass({
       includePaths: Array.prototype.concat(
         './fec/static/scss',
         '../node_modules'
       )
     }).on('error', sass.logError))
-    .pipe(RevAll.revision())
+    // .pipe(RevAll.revision({
+    //   fineNameManifest: 'css-manifest.json'
+    // }))
     .pipe(cleanCSS())
-    .pipe(gulp.dest('.'))
-    .pipe(RevAll.manifestFile())
-    .pipe(gulp.dest('.'));
-});
-
-
-var entries = _(fs.readdirSync('./fec/static/js/pages'))
-  .chain()
-  .filter(function(filename) {
-    return /.js$/.test(filename);
-  })
-  .map(function(each) {
-    return path.join('./fec/static/js/pages', each);
-  })
-  .value();
-entries.unshift('./fec/static/js/init.js');
-entries.unshift('./fec/static/js/data-init.js');
-
-gulp.task('build-js', function () {
-  return entries.forEach(function(entry) {
-    return browserify(entry, {debug: debug})
-      .transform({global: true}, stringify(['.html']))
-      .transform({global: true}, hbsfy)
-      .bundle()
-      .pipe(source(entry))
-      .pipe(buffer())
-      .pipe(gulpif(production, uglify({
-        mangle: {
-          reserved: []
-        },
-        output: {
-          beautify: false,
-          comments: false,
-          // max_line_len: 320000000
-        }
-      })))
-      .pipe(RevAll.revision())
-      .pipe(gulp.dest('dist'))
-      .pipe(RevAll.manifestFile())
-      .pipe(gulp.dest('.'));
-  });
-});
-
-gulp.task('build-legal', function() {
-  browserify('./fec/static/js/legal/LegalApp.js',
-    {
-      debug: debug
-    })
-    .transform('babelify', {
-      presets: ['latest', 'react']
-    })
-    .bundle()
-    .pipe(fs.createWriteStream('./fec/static/js/legalApp.js'));
+    .pipe(gulp.dest('./dist/fec/static/styles/'));
+    // .pipe(gulp.dest('.'))
+    // .pipe(RevAll.manifestFile())
+    // .pipe(gulp.dest('.'));
 });
 
 gulp.task('minify-icons', function() {
