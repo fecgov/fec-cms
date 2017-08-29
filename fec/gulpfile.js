@@ -15,7 +15,8 @@ var entries = [
   './fec/static/js/fec.js',
   './fec/static/js/contact-form.js',
   './fec/static/js/calendar-page.js',
-  './fec/static/js/home.js'
+  './fec/static/js/home.js',
+  './fec/static/js/legal.js'
 ];
 
 var debug = !!process.env.FEC_CMS_DEBUG;
