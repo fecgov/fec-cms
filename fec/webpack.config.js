@@ -4,12 +4,14 @@
 var path = require('path');
 var webpack = require('webpack');
 var ManifestPlugin = require('webpack-manifest-plugin');
+var BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 
 var fs = require('fs');
 
 var entries = {
   'init': './fec/static/js/init.js',
-  'data-init': './fec/static/js/data-init.js'
+  'data-init': './fec/static/js/data-init.js',
+  'vendor': ['jquery', 'handlebars']
 };
 
 var datatablePages = [];
@@ -28,23 +30,38 @@ fs.readdirSync('./fec/static/js/pages').forEach(function(f) {
 
 module.exports = [
   {
+    name: 'all',
     entry: entries,
     plugins: [
       new webpack.optimize.CommonsChunkPlugin({
-        name: 'entity-common',
-        filename: 'entity-common-[hash].js',
-        chunks: ['candidate-single', 'committee-single', 'elections']
+        // Contains d3, leaflet, and other shared code for maps and charts
+        // Included on data landing, candidate single, committee single and election pages
+        name: 'dataviz-common',
+        filename: 'dataviz-common-[hash].js',
+        minChunks: 3,
+        chunks: ['landing', 'candidate-single', 'committee-single', 'elections']
       }),
       new webpack.optimize.CommonsChunkPlugin({
+        // Contains shared datatable and filter code
+        // Included on all datatable pages
         name: 'datatable-common',
         filename: 'datatable-common-[hash].js',
         chunks: datatablePages
+      }),
+      new webpack.optimize.CommonsChunkPlugin({
+        // Contains jquery and handlebars
+        // Included on every page
+        name: 'vendor',
+        filename: 'vendor.js',
       }),
       new webpack.SourceMapDevToolPlugin(),
       new ManifestPlugin({
         fileName: 'rev-manifest.json',
         basePath: '/static/js/'
       }),
+      // Uncomment to compress and analyze the size of bundles
+      // new webpack.optimize.UglifyJsPlugin(),
+      // new BundleAnalyzerPlugin()
     ],
     output: {
       filename: '[name]-[hash].js',

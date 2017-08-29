@@ -158,6 +158,7 @@
 
     {# Global javascript #}
     {% compress js %}
+    <script type="text/javascript" src="{% asset_for 'vendor.js' %}"></script>
     <script type="text/javascript" src="{% asset_for 'init.js' %}"></script>
     {% endcompress %}
 
