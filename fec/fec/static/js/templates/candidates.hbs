@@ -77,6 +77,9 @@
 <div class="panel__row">
   <h4 class="panel__title">Financial totals for {{time_period}}</h4>
   <table>
+    {{#panelRow "Coverage dates"}}
+      {{datetime coverage_start_date format="pretty"}} to {{datetime coverage_end_date format="pretty"}}
+    {{/panelRow}}
     {{#panelRow "Receipts"}}
       {{{currency receipts}}}
     {{/panelRow}}
