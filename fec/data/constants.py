@@ -293,6 +293,8 @@ table_columns = OrderedDict([
     ('candidates-office-senate', ['Name', 'Party', 'State', 'Receipts', 'Disbursements']),
     ('candidates-office-house', ['Name', 'Party', 'State', 'District', 'Receipts', 'Disbursements']),
     ('committees', ['Name', 'Treasurer', 'Type', 'Designation', 'First filing date']),
+    ('committee-totals-pacs', ['Name', 'Receipts', 'Disbursements', 'Ending cash on hand', 'Ending coverage date']),
+    ('committee-totals-party', ['Name', 'Party', 'Receipts', 'Disbursements', 'Ending cash on hand', 'Ending coverage date']),
     ('communication-costs', ['Committee', 'Support/Oppose', 'Candidate', 'Amount', 'Date']),
     ('disbursements', ['Spender', 'Recipient', 'State', 'Description', 'Disbursement date', 'Amount']),
     ('electioneering-communications', ['Spender', 'Candidate mentioned','Number of candidates', 'Amount per candidate', 'Date', 'Disbursement amount' ]),

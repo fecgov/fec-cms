@@ -1,0 +1,37 @@
+<div class="panel__row">
+  <div class="panel__heading">
+    <h4 class="panel__title"><a href="{{basePath}}/committee/{{committee_id}}">{{name}}</a></h4>
+  </div>
+  <table>
+    {{#panelRow "Committee"}}
+      <a href="{{basePath}}/committee/{{committee_id}}">{{ committee_id }}</a>
+    {{/panelRow}}
+    {{#panelRow "Political party"}}
+      {{party_full}}
+    {{/panelRow}}
+    {{#panelRow "Designation"}}
+      {{designation_full}}
+    {{/panelRow}}
+    {{#panelRow "Type"}}
+      {{committee_type_full}}
+    {{/panelRow}}
+    {{#panelRow "Total receipts"}}
+      {{currency receipts}}
+    {{/panelRow}}
+    {{#panelRow "Total disbursements"}}
+      {{currency disbursements}}
+    {{/panelRow}}
+    {{#panelRow "Beginning cash on hand"}}
+      {{currency cash_on_hand_beginning_period}}
+    {{/panelRow}}
+    {{#panelRow "Ending cash on hand"}}
+      {{currency last_cash_on_hand_end_period}}
+    {{/panelRow}}
+    {{#panelRow "Coverage dates"}}
+      {{datetime coverage_start_date format="pretty"}} to {{datetime coverage_end_date format="pretty"}}
+    {{/panelRow}}
+    {{#panelRow "Last report filed"}}
+      {{last_report_type_full}}
+    {{/panelRow}}
+  </table>
+</div>

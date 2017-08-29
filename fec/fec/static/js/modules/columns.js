@@ -619,6 +619,9 @@ var loans = [
 ];
 
 module.exports = {
+  currencyColumn: currencyColumn,
+  dateColumn: dateColumn,
+  modalTriggerColumn: modalTriggerColumn,
   candidateColumn: candidateColumn,
   committeeColumn: committeeColumn,
   dateColumn: dateColumn,

@@ -21,6 +21,7 @@ urlpatterns = [
         views_datatables.candidates_office),
     url(r'^data/candidates/$', views_datatables.candidates),
     url(r'^data/committees/$', views_datatables.committees),
+    url(r'^data/committees/(?P<committee_type>\w+)/$', views_datatables.committee_totals),
     url(r'^data/communication-costs/$',
         views_datatables.communication_costs),
     url(r'^data/disbursements/$', views_datatables.disbursements),
