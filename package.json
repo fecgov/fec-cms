@@ -53,7 +53,7 @@
     "browserify-istanbul": "^0.2.1",
     "cache-loader": "^1.0.3",
     "chai": "^3.4.1",
-    "fs": "0.01-security",
+    "fs": "0.0.1-security",
     "gulp": "^3.9.0",
     "gulp-consolidate": "^0.2.0",
     "gulp-css-urlencode-inline-svgs": "0.0.7",
