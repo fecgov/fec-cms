@@ -81,7 +81,7 @@ module.exports = [
         // These aliases resolve the issues
         'jquery': path.join(__dirname, '../node_modules/jquery/dist/jquery.js'),
         'inputmask.dependencyLib': path.join(__dirname, '../node_modules/jquery.inputmask/dist/inputmask/inputmask.dependencyLib.js'),
-        'inputmask/inputmask.date.extensions': path.join(__dirname, '../node_modules/jquery.inputmask/dist/inputmask/inputmask.date.extensions.js'),
+        'jquery.inputmask/dist/inputmask/inputmask.date.extensions': path.join(__dirname, '../node_modules/jquery.inputmask/dist/inputmask/inputmask.date.extensions.js'),
         'inputmask': path.join(__dirname, '../node_modules/jquery.inputmask/dist/inputmask/inputmask.js'),
         'jquery.inputmask': path.join(__dirname, '../node_modules/jquery.inputmask/dist/inputmask/jquery.inputmask.js')
       }
