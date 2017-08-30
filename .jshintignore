@@ -1,0 +1,4 @@
+tests/react/**
+static/js/legal/**
+node_modules/**
+dist/**
