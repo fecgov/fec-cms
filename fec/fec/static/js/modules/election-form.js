@@ -13,7 +13,14 @@ var districtTemplate = require('../templates/districts.hbs');
  * Both the ElectionSearch and ElectionLookup inherit from this class
  * It handles all logic around showing districts for the district select
  */
-function ElectionForm() { }
+function ElectionForm(elm) {
+  this.$elm = $(elm);
+  this.$state = this.$elm.find('[name="state"]');
+  this.$district = this.$elm.find('[name="district"]').prop('disabled', true);
+  this.$submit = this.$elm.find('[type="submit"]');
+  this.showSenateOption = true;
+  this.$state.on('change', this.handleStateChange.bind(this));
+}
 
 /**
  * Identify if a select has an option matching a particular value
@@ -80,7 +87,8 @@ ElectionForm.prototype.updateDistricts = function(state) {
  * @param {object} query - the query to pass to the URL
  */
 ElectionForm.prototype.getUrl = function(query) {
-  return helpers.buildUrl(['elections', 'search'], query);
+  var params = _.extend({}, {per_page: 100}, query);
+  return helpers.buildUrl(['elections', 'search'], params);
 };
 
 /**
