@@ -950,6 +950,12 @@ class MeetingPage(Page):
         blank=True
     )
 
+    sunshine_act_doc_upld = StreamField(
+        [('sunshine_act_upld', DocumentChooserBlock(required=False))],
+        null=True,
+        blank=True,
+    )
+
     full_video_url = models.URLField(blank=True)
     full_audio_url = models.URLField(blank=True)
     mtg_transcript_url = models.URLField(blank=True)
@@ -978,12 +984,19 @@ class MeetingPage(Page):
         ),
         MultiFieldPanel(
             [
-                FieldPanel('sunshine_act_links'),
+                #FieldPanel('sunshine_act_links'),
+                StreamFieldPanel('sunshine_act_doc_upld'),
+            ],
+            heading='Sunshine notices',
+            classname='collapsible collapsed'
+        ),
+        MultiFieldPanel(
+            [
                 FieldPanel('draft_minutes_links'),
                 FieldPanel('approved_minutes_link'),
                 FieldPanel('approved_minutes_date'),
             ],
-            heading='Minutes and Sunshine notices',
+            heading='Minutes',
             classname='collapsible collapsed'
         ),
         MultiFieldPanel(
