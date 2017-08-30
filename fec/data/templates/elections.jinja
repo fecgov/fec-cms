@@ -75,12 +75,12 @@
           <div class="accordion--neutral js-accordion" data-accordion-prefix="election-lookup">
             <button class="js-accordion-trigger accordion__button">Find another election</button>
             <div class="accordion__content" aria-hidden="true">
-              <form action="/data/elections">
+              <form action="/data/elections" id="election-nav">
                 <div class="filter">
                   <label for="state" class="label">State</label>
                   <select id="state" name="state" class="u-full-width">
                     <option value="">Select state</option>
-                    {% for value, label in constants.states.items() %}
+                    {% for value, label in constants.election_states.items() %}
                     <option value="{{ value }}">{{ label }}</option>
                     {% endfor %}
                   </select>
@@ -89,11 +89,14 @@
                   <label for="district" class="label">District <span class="label__optional">(optional)</span></label>
                   <select id="district" name="district" aria-label="Select a district" class="select--alt u-full-width">
                     <option value="">Select district</option>
-                    {% for value in range(1, 100) %}
-                    {% with formatted = '{0:02d}'.format(value) %}
-                    <option value="{{ formatted }}">{{ formatted }}</option>
-                    {% endwith %}
-                    {% endfor %}
+                    <option value="S">Senate</option>
+                    <optgroup label="House">
+                      {% for value in range(1, 100) %}
+                      {% with formatted = '{0:02d}'.format(value) %}
+                      <option value="{{ formatted }}">{{ formatted }}</option>
+                        {% endwith %}
+                        {% endfor %}
+                    </optgroup>
                   </select>
                 </div>
                 <div class="filter">

@@ -15,6 +15,7 @@ var tables = require('../modules/tables');
 var columnHelpers = require('../modules/column-helpers');
 var columns = require('../modules/columns');
 var helpers = require('../modules/helpers');
+var ElectionForm = require('../modules/election-form').ElectionForm;
 
 var comparisonTemplate = require('../templates/comparison.hbs');
 var candidateStateMapTemplate = require('../templates/candidateStateMap.hbs');
@@ -536,4 +537,6 @@ $(document).ready(function() {
   }
 
   initSpendingTables();
+
+  new ElectionForm('#election-nav');
 });
