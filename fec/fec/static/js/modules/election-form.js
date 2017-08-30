@@ -88,7 +88,8 @@ ElectionForm.prototype.updateDistricts = function(state) {
  * @param {object} query - the query to pass to the URL
  */
 ElectionForm.prototype.getUrl = function(query) {
-  return helpers.buildUrl(['elections', 'search'], query);
+  var params = _.extend({}, {per_page: 100}, query);
+  return helpers.buildUrl(['elections', 'search'], params);
 };
 
 /**
