@@ -11,12 +11,12 @@ var moment = require('moment');
 
 require('./setup')();
 
-var helpers = require('fec-style/js/helpers');
-var Calendar = require('../../static/js/calendar').Calendar;
-var calendarTooltip = require('../../static/js/calendar-tooltip');
-var calendarHelpers = require('../../static/js/calendar-helpers');
+var helpers = require('../../static/js/modules/helpers');
+var Calendar = require('../../static/js/modules/calendar').Calendar;
+var calendarTooltip = require('../../static/js/modules/calendar-tooltip');
+var calendarHelpers = require('../../static/js/modules/calendar-helpers');
 
-var tooltipContent = require('../templates/calendar/details.hbs');
+var tooltipContent = require('../../static/js/templates/calendar/details.hbs');
 
 describe('calendar', function() {
   before(function() {

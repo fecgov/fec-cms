@@ -75,6 +75,7 @@
     "karma-phantomjs-shim": "^1.2.0",
     "leaflet": "^1.2.0",
     "mocha": "^2.3.4",
+    "mockdate": "^2.0.2",
     "nswatch": "0.2.0",
     "phantomjs": "^2.1.2",
     "scrollmonitor": "^1.2.3",

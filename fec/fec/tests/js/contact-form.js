@@ -10,7 +10,7 @@ var $ = require('jquery');
 
 require('./setup')();
 
-var ContactForm = require('../../static/js/contact-form').ContactForm;
+var ContactForm = require('../../static/js/pages/contact-form').ContactForm;
 
 describe('Contact form', function() {
     before(function() {
