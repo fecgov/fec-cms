@@ -22,6 +22,7 @@ urlpatterns = [
     url(r'^contact-us/$', home_views.contact),
     url(r'^documents/', include(wagtaildocs_urls)),
     url(r'^help-candidates-and-committees/question-rad/$', home_views.contact_rad),
+    url(r'^meetings/$', home_views.index_meetings, name="meetings_page"),
     url(r'^search/$', search_views.search, name='search'),
     url(r'^updates/$', home_views.updates),
     url(r'', include('data.urls')),  # URLs for /data

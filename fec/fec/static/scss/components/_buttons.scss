@@ -510,3 +510,22 @@
   background-image: url('../img/loading-ellipsis-gray.gif');
   background-size: 75%;
 }
+
+.button--keywords {
+  border-bottom: 1px dotted $base;
+  font-size: u(1.4rem);
+  margin-left: u(1.5rem);
+  padding: 0;
+  position: relative;
+
+  &::before {
+    @include u-icon-bg($pop-up, $base);
+    content: '';
+    background-size: 100%;
+    display: block;
+    position: absolute;
+    width: 1em;
+    height: 1em;
+    left: -1.5em;
+  }
+}

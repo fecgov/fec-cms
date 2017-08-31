@@ -1,7 +1,11 @@
 'use strict';
 
+/* global ga */
+
 var $ = require('jquery');
+var URI = require('urijs');
 var A11yDialog = require('a11y-dialog');
+var analytics = require('fec-style/js/analytics');
 
 /**
  * KeywordModal
@@ -9,10 +13,8 @@ var A11yDialog = require('a11y-dialog');
  * Creates a pop-up modal for advanced keyword searches
  * and processes the values of the various inputs to form a single search string
  * with all the proper boolean operators
- *
- * NOTE: This is a slightly adapted version of the one in the web app for use
- * on the legal resources landing page. Rather than updating the window.location.search param
- * It actually submits the form to whichever URL its directed to
+ * In the web app, it loads results by simply adding the new search query
+ * to the window.location.search which forces a page refresh.
  */
 function KeywordModal() {
   this.elm = document.querySelector('.js-keyword-modal');
@@ -22,33 +24,34 @@ function KeywordModal() {
   this.$excludeField = this.$elm.find('#keywords-none');
   this.$submit = this.$elm.find('button[type="submit"]');
   this.$submit.on('click', this.handleSubmit.bind(this));
+
   this.dialog = new A11yDialog(this.elm);
 
   this.$elm.on('dialog:show', function() {
     $('body').css('overflow', 'hidden');
-  });
+    this.fireEvent('Keyword modal: opened');
+  }.bind(this));
 
   this.$elm.on('dialog:hide', function() {
     $('body').css('overflow', 'scroll');
   });
-
-  /** Unique to CMS **/
-  this.$hiddenField = this.$elm.find('input[type=hidden]');
 }
 
 /**
  * Handle a click event on the submit button
  * prevents the form from being submitted at first in order to create the search string
- * and then submits the form.
- * NOTE: This is unique to the CMS implementation
+ * and then replaces the existing search param in the window.
+ * Hides the modal after executed.
  */
 KeywordModal.prototype.handleSubmit = function(e) {
   e.preventDefault();
   var combinedValue = this.combineFields();
-  this.$hiddenField.val(combinedValue);
-  this.$fields.each(function() { $(this).val(); });
-  this.$excludeField.val();
-  this.$form.submit();
+  var query = URI(window.location.search)
+    .removeSearch('search')
+    .addSearch('search', combinedValue);
+  window.location.search = query.toString();
+  this.dialog.hide();
+  this.fireEvent('Keyword modal query: ' + combinedValue);
 };
 
 /**
@@ -99,6 +102,20 @@ KeywordModal.prototype.parseValue = function($input) {
   }
 };
 
-if ($('.js-keyword-modal').length > 0) {
-  new KeywordModal();
-}
+/**
+ * Fire an event to Google analytics
+ * If the non-DAP GA tracker exists, it fires an event to that account
+ * @param {string} action - Name of the action to register with GA
+ */
+KeywordModal.prototype.fireEvent = function(action) {
+  if (analytics.trackerExists()) {
+    var gaEventData = {
+      eventCategory: 'Legal interactions',
+      eventAction: action,
+      eventValue: 1
+    };
+    ga('notDAP.send', 'event', gaEventData);
+  }
+};
+
+module.exports = { KeywordModal: KeywordModal };

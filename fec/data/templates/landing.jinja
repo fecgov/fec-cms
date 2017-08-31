@@ -55,7 +55,7 @@
           <h4 class="example__title">Possible uses of this data:</h4>
           <ul class="t-sans">
             <li><a href="/data/receipts/individual-contributions/?min_amount=2000">All contributions over $2,000</a></li>
-            <li><a href="/data/receipts/individual-contributions/">All contributions in the last month</a></li>
+            <li><a href="/data/receipts/individual-contributions/?min_date={{ first_of_year }}&max_date={{ last_of_year }}">All contributions in this year</a></li>
             <li><a href="/data/receipts/individual-contributions/">Browse all and apply custom filters</a></li>
           </ul>
         </div>
@@ -102,9 +102,9 @@
         <div class="example--primary">
           <h4 class="example__title">Trending elections</h4>
           <ul class="t-sans">
-            <li><a href="">Georgia, congressional district 6 special election</a></li>
-            <li><a href="">Alabama senate special election</a></li>
-            <li><a href="">2016 US presidential election</a></li>
+            <li><a href="/data/elections/house/GA/6/2018">Georgia, congressional district 6 special election</a></li>
+            <li><a href="/data/elections/senate/AL/2018">Alabama senate special election</a></li>
+            <li><a href="/data/elections/president/2016">2016 US presidential election</a></li>
           </ul>
         </div>
       </div>

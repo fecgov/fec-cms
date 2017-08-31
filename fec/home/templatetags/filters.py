@@ -134,3 +134,13 @@ def asset_for(path):
     assets = json.load(open('./fec/dist/fec/static/js/rev-manifest.json'))
 
     return assets[key] if key in assets else key
+
+
+@register.filter(name='remove_word')
+def remove_word(str, words):
+    """
+    Removes a word or words from a string
+    Returns a new string
+    """
+    return str.replace(words, '')
+

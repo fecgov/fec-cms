@@ -76,6 +76,10 @@
 {% include 'partials/legal-disclaimer.jinja' %}
 {% endblock %}
 
+{% block modals %}
+{% include 'partials/legal-keyword-modal.jinja' %}
+{% endblock %}
+
 {% block scripts %}
 <script src="{{ asset_for('legal.js') }}"></script>
 {% endblock %}

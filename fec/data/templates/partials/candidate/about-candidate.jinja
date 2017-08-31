@@ -17,7 +17,7 @@
       <table class="t-sans usa-width-three-fourths">
         <tr>
           <td class="figure__label">Seat:</td>
-          <td class="figure__value">{% if constants.states[state] %}{{ constants.states[state] }} {% endif %}{{ office_full }}{% if office_full == 'House' %} district {{ district }}{% endif %}</td>
+          <td class="figure__value">{% if constants.states[state] %}{{ constants.states[state] }} {% endif %}{{ office_full }}{% if office_full == 'House' %} District {{ district|strip_zero_pad }}{% endif %}</td>
         </tr>
         <tr>
           <td class="figure__label">Type of candidacy:</td>
@@ -65,7 +65,7 @@
               <img class="icon--complex" src="/static/img/i-elections--primary.svg" alt="Icon representing elections">
             </div>
             <div class="card__content">
-              View all candidates in the {{ election_year }} {% if constants.states[state] %}{{ constants.states[state] }}{% endif %} {% if office == 'P' %}Presidential{% else %}{{ office_full }}{% endif %}{% if office_full == 'House' %} district {{ district }}{% endif %} election
+              View all candidates in the {{ election_year }} {% if constants.states[state] %}{{ constants.states[state] }}{% endif %} {% if office == 'P' %}Presidential{% else %}{{ office_full }}{% endif %}{% if office_full == 'House' %} District {{ district|strip_zero_pad }}{% endif %} election
             </div>
           </a>
           {% endif %}

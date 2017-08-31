@@ -6,6 +6,12 @@
 
 {% block title %}MUR #{{ mur.no }}{% endblock %}
 
+{% block css %}
+{% compress css %}
+<link rel="stylesheet" type="text/x-scss" href="{{ static('scss/legal-common.scss') }}" />
+{% endcompress %}
+{% endblock %}
+
 {% block body %}
 <header class="page-header slab slab--primary">
   {{ breadcrumb.breadcrumbs('MUR #%s' % (mur.no,), breadcrumb_links) }}

@@ -17,7 +17,7 @@
     {{ text.field('treasurer_name', 'Most recent treasurer') }}
     {% include 'partials/filters/parties.jinja' %}
     {{ states.field('state') }}
-    {{ date.field('first_filing_date', 'Date first filed statement of candidacy', '') }}
+    {{ date.field('first_file_date', 'Date first filed statement of organization', '') }}
   </div>
   <button type="button" class="js-accordion-trigger accordion__button">Committee type</button>
   <div class="accordion__content">

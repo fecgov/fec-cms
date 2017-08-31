@@ -1,6 +1,8 @@
 {% extends "base.html" %}
 {% load wagtailcore_tags %}
 {% load staticfiles %}
+{% load filters %}
+
 {% block title %}Legal resources{% endblock %}
 {% block body_class %}template-{{ self.get_verbose_name | slugify }}{% endblock %}
 
@@ -8,6 +10,7 @@
   <script>
     TOUR_PAGE = 'legal-resources';
   </script>
+  <script type="text/javascript" src="{% asset_for 'legal.js' %}"></script>
 {% endblock extra_js %}
 
 {% block content %}
@@ -30,6 +33,7 @@
            <span class="u-visually-hidden">Search</span>
           </button>
         </div>
+        <button type="button" class="button--keywords u-float-right u-margin--top" aria-controls="keyword-modal" data-a11y-dialog-show="keyword-modal">More keyword options</button>
       </form>
       <span class="t-note t-sans search__example search__example--with-select">Examples: 102.2; electioneering</span>
     </div>
@@ -76,7 +80,7 @@
           <div class="option">
             <h2 id="advisory-opinions">
               <div class="tour__point tour__point--left" data-intro="<h5>Search or browse advisory opinions</h5>Search results emphasize keywords and other important information, making it easier to tell if an advisory opinion is what you’re looking for— before you open it. Every URL is unique, so you can you can bookmark any opinion page or list of search results."></div>
-              <a href="/data/legal/advisory-opinions/">Advisory opinions</a>
+              <a href="{{ settings.FEC_APP_URL }}/legal/advisory-opinions/">Advisory opinions</a>
             </h2>
             <p>Advisory opinions are official Commission responses to questions about how federal campaign finance law applies to specific, factual situations.</p>
             <p>This archive contains advisory opinions from 1975 to the present. It also contains documents related to advisory opinions — such as requests, drafts and public comments — from 1990 to the present.</p>
@@ -108,14 +112,14 @@
           <div class="option">
             <h2 id="statutes">Statutes and legislation</h2>
             <div class="content__section">
-              <h3><a href="/data/legal/statutes/">Statutes</a></h3>
+              <h3><a href="{{ settings.FEC_APP_URL }}/legal/statutes/">Statutes</a></h3>
               <p>
                 The FEC administers and enforces the Federal Election Campaign Act, the Presidential Election Campaign Fund Act and the Presidential Primary Matching Payment Account Act. Those acts and amendments, which are passed by Congress and signed by the President, are collected and restated as law in Title 52 and Title 26 of the U.S. Code.
               </p>
               <p>
                 This archive contains the portions of Title 52 and Title 26 that are administered by FEC.
               </p>
-              <a class="button--cta button--go" href="/data/legal/statutes/">Explore statutes</a>
+              <a class="button--cta button--go" href="{{ settings.FEC_APP_URL }}/legal/statutes/">Explore statutes</a>
             </div>
             <h3><a href="/legal-resources/legislation/">Legislation</a></h3>
             <p>Browse selected amendments to the <em>Federal Election Campaign Act</em> and Commission recommendations to Congress.</p>
@@ -150,5 +154,6 @@
   </div>
 
 {% include 'partials/disclaimer.html' %}
+{% include 'partials/legal-keyword-modal.html' %}
 
 {% endblock %}

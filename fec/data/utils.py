@@ -213,7 +213,7 @@ def get_senate_cycles(senate_class):
 
 def get_state_senate_cycles(state):
     senate_cycles = []
-    for senate_class in [1, 2, 3]:
+    for senate_class in ['1', '2', '3', 'special']:
         if state.upper() in constants.SENATE_CLASSES[str(senate_class)]:
             senate_cycles += get_senate_cycles(senate_class)
     return senate_cycles
