@@ -14,6 +14,7 @@ var DateFilter = require('./date-filter').DateFilter;
 var ElectionFilter = require('./election-filter').ElectionFilter;
 var ToggleFilter = require('./toggle-filter').ToggleFilter;
 var RangeFilter = require('./range-filter').RangeFilter;
+var ValidateDateFilter = require('./validate-date-filter').ValidateDateFilter;
 
 function FilterSet(elm) {
   this.$body = $(elm);
@@ -39,6 +40,7 @@ var filterMap = {
   'select': SelectFilter,
   'toggle': ToggleFilter,
   'range': RangeFilter,
+  'validate-date': ValidateDateFilter
 };
 
 FilterSet.prototype.buildFilter = function($elm) {
