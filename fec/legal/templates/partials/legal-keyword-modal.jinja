@@ -4,8 +4,8 @@
     <div role="document">
       <button type="button" class="modal__close button--close--primary" data-a11y-dialog-hide title="Close this dialog window"></button>
       <h2 id="spending-modal-title" class="heading--section">Find documents with...</h2>
-      <div class="grid grid--2-wide u-padding--top">
-        <form class="grid__item" action="">
+      <div class="row u-padding--top">
+        <form class="modal__form" action="">
           <div class="filter">
             <label class="label" for="keywords-any">Any of these words</label>
             <input type="text" id="keywords-any" data-operator="or">
@@ -28,7 +28,7 @@
             <button class="u-margin--top button button--cta button--search--text" type="submit">Search</button>
           </div>
         </form>
-        <div class="grid__item u-padding--top">
+        <div class="modal__tips">
           <h3>Search tips</h3>
           <p>Complex keyword searches can be created without using these special fields.</p>
           <p>Use these symbols in the main search box:</p>
