@@ -573,6 +573,15 @@ class CustomPage(Page):
         )
     ]
 
+    # Adds a settings field for making a custom title that displays in the Wagtail page explorer
+    menu_title = models.CharField(max_length=255, null=True)
+    settings_panels = Page.settings_panels + [
+        FieldPanel('menu_title')
+    ]
+
+    def get_admin_display_title(self):
+        return self.menu_title if self.menu_title else self.title
+
     @property
     def content_section(self):
         return get_content_section(self)
@@ -792,6 +801,15 @@ class CollectionPage(Page):
         StreamFieldPanel('reporting_examples')
     ]
 
+    # Adds a settings field for making a custom title that displays in the Wagtail page explorer
+    menu_title = models.CharField(max_length=255, null=True)
+    settings_panels = Page.settings_panels + [
+        FieldPanel('menu_title')
+    ]
+
+    def get_admin_display_title(self):
+        return self.menu_title if self.menu_title else self.title
+
     @property
     def content_section(self):
         return get_content_section(self)
@@ -848,6 +866,15 @@ class ResourcePage(Page):
         FieldPanel('category'),
         FieldPanel('date')
     ]
+
+    # Adds a settings field for making a custom title that displays in the Wagtail page explorer
+    menu_title = models.CharField(max_length=255, null=True)
+    settings_panels = Page.settings_panels + [
+        FieldPanel('menu_title')
+    ]
+
+    def get_admin_display_title(self):
+        return self.menu_title if self.menu_title else self.title
 
     @property
     def display_date(self):
