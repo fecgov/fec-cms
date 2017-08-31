@@ -92,25 +92,6 @@ class UniqueModel(models.Model):
             raise ValidationError('Only one {0} allowed'.format(self.__name__))
 
 
-class Folder(Page):
-    is_creatable = True
-    subpage_types = ['PressReleasePage', 'RecordPage', 'TipsForTreasurersPage', 'DigestPage']
-
-    external_link = models.URLField(blank=False, null=True, default='')
-
-    @property
-    def redirect_link(self):
-        return self.external_link
-
-    def serve(self, request):
-        return HttpResponseRedirect(self.redirect_link)
-
-    content_panels = [
-        FieldPanel('title'),
-        FieldPanel('external_link')
-    ]
-
-
 class ContentPage(Page):
     """Abstract base class for simple content pages."""
     is_creatable = True
