@@ -1,5 +1,6 @@
 const React = require('react');
 const Dropdown = require('./filters/Dropdown');
+const BooleanTextFilter = require('./filters/BooleanTextFilter');
 const TextFilter = require('./filters/TextFilter');
 const CheckboxFilter = require('./filters/CheckboxFilter');
 const CheckboxList = require('./filters/CheckboxList');
@@ -24,8 +25,8 @@ function Filters(props) {
             </div>
             <ul className="accordion--neutral" data-content-prefix="first">
               <FilterPanel id="first-content-0" header="Documents" startOpen={true}>
-                <TextFilter key="q" name="q" label="Keywords" value={props.query.q}
-                  handleChange={props.setQuery} getResults={props.getResults} />
+                <BooleanTextFilter key="q" name="q" label="Keywords" value={props.query.q}
+                 instantQuery={props.instantQuery} getResults={props.getResults} />
                 <CheckboxFilter key="ao_is_pending" name="ao_is_pending" label="Show only pending requests"
                   checked={props.query.ao_is_pending} handleChange={props.instantQuery} />
                 <CheckboxList key="ao_category" name="ao_category" label="Document Type" value={props.query.ao_category}
