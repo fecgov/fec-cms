@@ -395,6 +395,10 @@ $filter-button-width: u(4.6rem);
         padding-right: 0;
       }
     }
+
+    .filter--wide {
+       max-width: 50%;
+    }
   }
 }
 
