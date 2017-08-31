@@ -1,8 +1,11 @@
 'use strict';
 
+/* global ga */
+
 var $ = require('jquery');
 var URI = require('urijs');
 var A11yDialog = require('a11y-dialog');
+var analytics = require('fec-style/js/analytics');
 
 /**
  * KeywordModal
@@ -26,7 +29,8 @@ function KeywordModal() {
 
   this.$elm.on('dialog:show', function() {
     $('body').css('overflow', 'hidden');
-  });
+    this.fireEvent('Keyword modal: opened');
+  }.bind(this));
 
   this.$elm.on('dialog:hide', function() {
     $('body').css('overflow', 'scroll');
@@ -47,6 +51,7 @@ KeywordModal.prototype.handleSubmit = function(e) {
     .addSearch('search', combinedValue);
   window.location.search = query.toString();
   this.dialog.hide();
+  this.fireEvent('Keyword modal query: ' + combinedValue);
 };
 
 /**
@@ -94,6 +99,22 @@ KeywordModal.prototype.parseValue = function($input) {
     return '"' + $input.val() + '"';
   } else if (operator === 'exclude') {
     return '-' + words.join(' -');
+  }
+};
+
+/**
+ * Fire an event to Google analytics
+ * If the non-DAP GA tracker exists, it fires an event to that account
+ * @param {string} action - Name of the action to register with GA
+ */
+KeywordModal.prototype.fireEvent = function(action) {
+  if (analytics.trackerExists()) {
+    var gaEventData = {
+      eventCategory: 'Legal interactions',
+      eventAction: action,
+      eventValue: 1
+    };
+    ga('notDAP.send', 'event', gaEventData);
   }
 };
 
