@@ -519,7 +519,7 @@
   position: relative;
 
   &::before {
-    @include u-icon-bg($magnifying-glass, $base);
+    @include u-icon-bg($pop-up, $base);
     content: '';
     background-size: 100%;
     display: block;
