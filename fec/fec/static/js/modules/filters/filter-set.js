@@ -4,7 +4,7 @@ var $ = require('jquery');
 var _ = require('underscore');
 var URI = require('urijs');
 
-var helpers = require('../helpers');
+var helpers = require('./helpers');
 var TextFilter = require('./text-filter').TextFilter;
 var CheckboxFilter = require('./checkbox-filter').CheckboxFilter;
 var MultiFilter = require('./multi-filter').MultiFilter;
@@ -14,7 +14,6 @@ var DateFilter = require('./date-filter').DateFilter;
 var ElectionFilter = require('./election-filter').ElectionFilter;
 var ToggleFilter = require('./toggle-filter').ToggleFilter;
 var RangeFilter = require('./range-filter').RangeFilter;
-var ValidateDateFilter = require('./validate-date-filter').ValidateDateFilter;
 
 function FilterSet(elm) {
   this.$body = $(elm);
@@ -40,7 +39,6 @@ var filterMap = {
   'select': SelectFilter,
   'toggle': ToggleFilter,
   'range': RangeFilter,
-  'validate-date': ValidateDateFilter
 };
 
 FilterSet.prototype.buildFilter = function($elm) {
@@ -78,6 +76,8 @@ FilterSet.prototype.activateProcessed = function() {
   if (_.isEmpty(this.processedFilters)) {
     var $filters = this.$body.find('.js-processed-filters .js-filter');
     this.processedFilters = this.activate($filters);
+    // Store the processed filters in this.filters for later reference
+    this.filters = this.processedFilters;
   }
 };
 
@@ -85,6 +85,8 @@ FilterSet.prototype.activateEfiling = function() {
   if (_.isEmpty(this.efilingFilters)) {
     var $filters = this.$body.find('.js-efiling-filters .js-filter');
     this.efilingFilters = this.activate($filters);
+    // Store the efiling filters in this.filters for later reference
+    this.filters = this.efilingFilters;
   }
 };
 
