@@ -63,14 +63,14 @@ KeywordModal.prototype.combineFields = function() {
   this.$fields.each(function() {
     var $input = $(this);
     if ($input.val() && query) {
-      query = query + '+' + '(' + self.parseValue($input) + ')';
+      query = query + ' OR ' + '(' + self.parseValue($input) + ')';
     } else if ($input.val()) {
       query = '(' + self.parseValue($input) + ')';
     }
   });
 
   if (this.$excludeField.val() && query) {
-    query = '(' + query + ')&(' + self.parseValue(this.$excludeField) + ')';
+    query = '(' + query + ') & (' + self.parseValue(this.$excludeField) + ')';
   } else if (this.$excludeField.val()) {
     query = self.parseValue(this.$excludeField);
   }
