@@ -4,7 +4,7 @@ var $ = require('jquery');
 var _ = require('underscore');
 var URI = require('urijs');
 
-var helpers = require('./helpers');
+var helpers = require('../helpers');
 var TextFilter = require('./text-filter').TextFilter;
 var CheckboxFilter = require('./checkbox-filter').CheckboxFilter;
 var MultiFilter = require('./multi-filter').MultiFilter;
