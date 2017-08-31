@@ -544,10 +544,10 @@ SPENDING_FORMATTER = OrderedDict([
         }}),
     ('independent_expenditures',  # F3X
         {'label': 'Independent expenditures', 'level': '2',
-            'link': 'independent-expenditures'}),
+            'link': 'independent_expenditures'}),
     ('coordinated_expenditures_by_party_committee',  # F3X
         {'label': 'Coordinated party expenditures', 'level': '2', 'type': {
-            'link': 'party-coordinated-expenditures',
+            'link': 'party_coordinated_expenditures',
         }}),
     ('loans_made',  # F3X
         {'label': 'Loans made', 'level': '2', 'type': {
@@ -630,13 +630,15 @@ IE_FORMATTER = OrderedDict([
 ])
 
 SENATE_CLASSES = {
-    '1': ['AL', 'AZ', 'CA', 'CT', 'DE', 'FL', 'HI', 'IN', 'ME', 'MD', 'MA', 'MI', 'MN', 'MS', 'MO', 'MT', 'NE', 'NV', 'NJ', 'NM', 'NY', 'ND', 'OH', 'PA', 'RI', 'TN', 'TX', 'UT', 'VT', 'VA', 'WA', 'WV', 'WI', 'WY'],
+    '1': ['AZ', 'CA', 'CT', 'DE', 'FL', 'HI', 'IN', 'ME', 'MD', 'MA', 'MI', 'MN', 'MS', 'MO', 'MT', 'NE', 'NV', 'NJ', 'NM', 'NY', 'ND', 'OH', 'PA', 'RI', 'TN', 'TX', 'UT', 'VT', 'VA', 'WA', 'WV', 'WI', 'WY'],
     '2': ['AL', 'AK', 'AZ', 'AR', 'CA', 'CO', 'CT', 'FL', 'GA', 'HI', 'ID', 'IL', 'IN', 'IA', 'KS', 'KY', 'LA', 'MD', 'MO', 'NV', 'NH', 'NY', 'NC', 'ND', 'OH', 'OK', 'OR', 'PA', 'SC', 'SD', 'UT', 'VT', 'WA', 'WI'],
-    '3': ['AL', 'AK', 'AR', 'CO', 'DE', 'GA', 'ID', 'IL', 'IA', 'KS', 'KY', 'LA', 'ME', 'MA', 'MI', 'MN', 'MS', 'MT', 'NE', 'NH', 'NJ', 'NM', 'NC', 'OK', 'OR', 'RI', 'SC', 'SD', 'TN', 'TX', 'VA', 'WV', 'WY']
+    '3': ['AL', 'AK', 'AR', 'CO', 'DE', 'GA', 'ID', 'IL', 'IA', 'KS', 'KY', 'LA', 'ME', 'MA', 'MI', 'MN', 'MS', 'MT', 'NE', 'NH', 'NJ', 'NM', 'NC', 'OK', 'OR', 'RI', 'SC', 'SD', 'TN', 'TX', 'VA', 'WV', 'WY'],
+    'special': ['AL']
 }
 
 NEXT_SENATE_ELECTIONS = {
     '1': 2018,
     '2': 2022,
-    '3': 2020
+    '3': 2020,
+    'special': 2018
 }
