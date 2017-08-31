@@ -11,6 +11,8 @@ var URI = require('urijs');
 var _ = require('underscore');
 
 require('./setup')();
+require('datatables.net')();
+require('datatables.net-responsive')();
 
 var helpers = require('../../static/js/modules/helpers');
 var tables = require('../../static/js/modules/tables');
