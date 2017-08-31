@@ -1,5 +1,7 @@
 'use strict';
 
+/* jshint camelcase: false */
+
 var $ = require('jquery');
 var _ = require('underscore');
 

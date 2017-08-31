@@ -21,7 +21,7 @@ function ElectionForm(elm) {
   this.$submit = this.$elm.find('[type="submit"]');
   this.showSenateOption = true;
   this.$state.on('change', this.handleStateChange.bind(this));
- }
+}
 
 /**
  * Identify if a select has an option matching a particular value
