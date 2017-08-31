@@ -20,7 +20,8 @@ function TextFilter(props) {
       </div>
       {props.keywordModal &&
         <button
-          aria-controls="spending-modal"
+          className="button--keywords"
+          aria-controls="keyword-modal"
           data-a11y-dialog-show="keyword-modal">More keyword options</button>
       }
       {props.helpText && <span className="t-note t-sans search__example">
