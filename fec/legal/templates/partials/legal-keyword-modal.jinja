@@ -1,4 +1,4 @@
-<div class="js-modal js-keyword-modal modal" id="keyword-modal" aria-hidden="false">
+<div class="js-keyword-modal modal" id="keyword-modal" aria-hidden="true">
   <div tabindex="-1" class="modal__overlay" data-a11y-dialog-hide></div>
   <div role="dialog" class="modal__content" aria-labelledby="spending-modal-title">
     <div role="document">
@@ -18,16 +18,15 @@
           </div>
           <div class="filter">
             <label class="label" for="keywords-exact">This exact phrase</label>
-            <input type="text" id="keywords-any" data-operator="exact">
+            <input type="text" id="keywords-exact" data-operator="exact">
             <span class="t-note t-sans">Entering <span class="t-underline">text message</span> will search <span class="t-underline">"text message"</span></span>
           </div>
           <div class="filter">
-            <label class="label" for="keywords-any">None of these words</label>
-            <input type="text" id="keywords-any" data-operator="exclude">
+            <label class="label" for="keywords-none">None of these words</label>
+            <input type="text" id="keywords-none" data-operator="exclude">
             <span class="t-note t-sans">Entering <span class="t-underline">text message</span> will exclude <span class="t-underline">text</span> and <span class="t-underline">message</span></span>
             <button class="u-margin--top button button--cta button--search--text" type="submit">Search</button>
           </div>
-          <input type="hidden" name="q" value="">
         </form>
         <div class="grid__item u-padding--top">
           <h3>Search tips</h3>
