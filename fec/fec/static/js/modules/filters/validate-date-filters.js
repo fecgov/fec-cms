@@ -82,12 +82,10 @@ ValidateDateFilter.prototype.handleInputChange = function(e) {
 };
 
 ValidateDateFilter.prototype.validate = function() {
-  var minDateYear = this.$minDate.val() ?
-    parseInt(this.$minDate.val().split('/')[2]) : this.minYear;
-  var maxDateYear = this.$maxDate.val() ?
-    parseInt(this.$maxDate.val().split('/')[2]) : this.maxYear;
-  var span = maxDateYear - minDateYear;
-  if ( span <= 5 ) {
+  var minDate = moment(this.$minDate.val(), 'MM/DD/YYYY');
+  var maxDate = moment(this.$maxDate.val(), 'MM/DD/YYYY');
+  var span = maxDate.diff(minDate, 'years', true);
+  if ( span <= this.duration ) {
     this.hideWarning();
     this.$elm.trigger('filters:validation', [
       {
