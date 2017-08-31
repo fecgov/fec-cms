@@ -105,9 +105,9 @@ ValidateDateFilter.prototype.validate = function() {
 };
 
 ValidateDateFilter.prototype.fromQuery = function(query) {
-  // If no values are passed in the query, then default to today - Jan 1 from 5 years ago.
+  // If no values are passed in the query, then default to today - Jan 1 from 5 last year.
   var now = moment().format('MM/DD/YYYY');
-  var startYear = moment().format('YYYY') - this.duration + 1;
+  var startYear = moment().format('YYYY') - 1;
   var defaultStart = moment('01/01/' + startYear, 'MM-DD-YYYY').format('MM/DD/YYYY');
 
   var minDate = query['min_' + this.name] ? query['min_' + this.name] : defaultStart;
