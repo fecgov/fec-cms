@@ -10,7 +10,7 @@ import wagtail.wagtaildocs.blocks
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('home', '0094_merge_20170825_1052'),
+        ('home', '0094_auto_20170829_1640'),
     ]
 
     operations = [
