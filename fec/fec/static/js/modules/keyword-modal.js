@@ -87,13 +87,13 @@ KeywordModal.prototype.parseValue = function($input) {
   var words = $input.val().split(' ');
   var operator = $input.data('operator');
   if (operator === 'and') {
-    return words.join('&');
+    return words.join(' & ');
   } else if (operator === 'or') {
-    return words.join('OR');
+    return words.join(' OR ');
   } else if (operator === 'exact') {
     return '"' + $input.val() + '"';
   } else if (operator === 'exclude') {
-    return '-' + words.join('-');
+    return '-' + words.join(' -');
   }
 };
 
