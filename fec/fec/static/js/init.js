@@ -1,6 +1,7 @@
 'use strict';
 
 var $ = require('jquery');
+require('./vendor/tablist').init();
 
 // Implementing a polyfill for js native WeakMap
 // in order to patch functionality in an included library
@@ -79,10 +80,9 @@ $(document).ready(function() {
   // Initialize feedback widget
   new feedback.Feedback(window.FEC_APP_URL + '/issue/');
 
-  if (document.querySelector('.js-form-nav')) {
-    var formNav = document.querySelector('.js-form-nav');
-    new FormNav(formNav);
-  }
+  $('.js-form-nav').each(function() {
+    new FormNav(this);
+  });  
 
   // Initialize header typeaheads (mobile and desktop)
   $('.js-site-search').each(function() {
