@@ -18,6 +18,11 @@ function TextFilter(props) {
           <span className="u-visually-hidden">Search</span>
         </button>
       </div>
+      {props.keywordModal &&
+        <button
+          aria-controls="spending-modal"
+          data-a11y-dialog-show="keyword-modal">More keyword options</button>
+      }
       {props.helpText && <span className="t-note t-sans search__example">
         {props.helpText}</span>}
     </div>
