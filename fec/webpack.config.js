@@ -4,6 +4,7 @@
 var path = require('path');
 var webpack = require('webpack');
 var ManifestPlugin = require('webpack-manifest-plugin');
+var CleanWebpackPlugin = require('clean-webpack-plugin');
 var BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 
 var fs = require('fs');
@@ -33,6 +34,11 @@ module.exports = [
     name: 'all',
     entry: entries,
     plugins: [
+      // deletes old build files
+      new CleanWebpackPlugin(['./dist/fec/static/js'], {
+        verbose: true,
+        dry: false
+      }),
       new webpack.optimize.CommonsChunkPlugin({
         // Contains d3, leaflet, and other shared code for maps and charts
         // Included on data landing, candidate single, committee single and election pages
