@@ -1,10 +1,8 @@
 {
   "scripts": {
-    "build": "cd fec && gulp build-sass && gulp build-js",
+    "build": "cd fec && webpack",
     "build-icons": "cd fec && gulp minify-icons && gulp consolidate-icons",
-    "build-sass": "cd fec && gulp build-sass",
-    "build-legal": "browserify fec/fec/static/js/legal/LegalApp.js -o ./fec/dist/fec/static/js/legalApp.js -t [ babelify --presets [ latest react ] ]",
-    "build-js": "cd fec && gulp build-js",
+    "build-js": "cd fec && webpack",
     "test": "karma start",
     "test-single": "karma start --single-run --browsers PhantomJS",
     "watch": "nswatch"
@@ -94,9 +92,6 @@
     ],
     "./fec/fec/static/js/templates/*.hbs": [
       "build-js"
-    ],
-    "./fec/fec/static/scss/**/*.scss": [
-      "build-sass"
     ]
   },
   "engines": {

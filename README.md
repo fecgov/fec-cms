@@ -27,13 +27,8 @@ the new FEC.gov.
   [feedback](https://github.com/18F/fec/issues) from the FEC.gov feedback widget
   here, and this is the best place to submit general feedback.
 - [openFEC](https://github.com/18F/openfec): the first RESTful API for the Federal Election Commission
-- [openFEC-web-app](https://github.com/18f/openfec-web-app): the FEC’s web
-  app for exploring campaign finance data.
-- [fec-style](https://github.com/18F/fec-style): shared styles and user
-  interface components.
 - [fec-cms](https://github.com/18F/fec-cms): the content management system
-  (CMS) for the new FEC.gov. This project uses
-  [Wagtail](https://github.com/torchbox/wagtail), an open source CMS written
+  (CMS) for the new FEC.gov. This project uses [Wagtail](https://github.com/torchbox/wagtail), an open source CMS written
   in Python and built on the Django framework.
 
 ## Get involved
@@ -133,6 +128,10 @@ cd fec/
 ./manage.py runserver
 ```
 
+## Front End Development
+Front end assets are all located in `/fec/fec/static/*`. SCSS files are automatically compiled on the backend by `django-compressor`, but JS files need to be compiled by Webpack via the `npm run build` command.
+
+
 ## Running tests
 There are two kinds of tests that you can run with the project, Python tests and JavaScript tests.
 
@@ -175,22 +174,6 @@ directory:
 ```bash
 npm run watch
 ```
-
-### Developing with fec-style (optional)
-If you're developing with a local instance of
-[FEC-Style](https://github.com/18F/fec-style) and want to pull in styles and
-script changes as you go, use `npm link` to create a symbolic link to your
-local fec-style repo:
-
-```bash
-cd ~/fec-style
-npm link
-cd ~/openFEC-web-app
-npm link fec-style
-```
-
-After linking fec-style, `npm run watch` will rebuild on changes to your local
-copy of fec-style's .scss and .js files.
 
 ### Developing with openFEC (optional)
 To set the URL for the web app as an environment variable, run:
