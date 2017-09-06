@@ -131,7 +131,7 @@ def asset_for(path):
     without a hash"""
 
     key = '/static/js/{}'.format(path)
-    assets = json.load(open('./fec/dist/fec/static/js/rev-manifest.json'))
+    assets = json.load(open('./dist/fec/static/js/rev-manifest.json'))
 
     return assets[key] if key in assets else key
 
