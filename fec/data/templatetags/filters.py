@@ -151,6 +151,6 @@ def asset_for(path):
     If the path doesn't exist there, then just return the path to the static file
     without a hash"""
     key = '/static/js/{}'.format(path)
-    assets = json.load(open('./fec/dist/fec/static/js/rev-manifest.json'))
-    assets.update(json.load(open('./fec/dist/fec/static/js/rev-legal-manifest.json')))
+    assets = json.load(open('./dist/fec/static/js/rev-manifest.json'))
+    assets.update(json.load(open('./dist/fec/static/js/rev-legal-manifest.json')))
     return assets[key] if key in assets else key
