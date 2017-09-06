@@ -28,6 +28,7 @@ before_script:
   - travis_retry npm install
   - npm i -g webpack
   - npm run build
+  - cd fec
   - webpack --optimize-minimize --define process.env.NODE_ENV="'production'"
 script:
   - "(cd fec && coverage run ./manage.py test)"
