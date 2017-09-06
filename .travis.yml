@@ -31,7 +31,7 @@ before_script:
   - cd fec
   - webpack --optimize-minimize --define process.env.NODE_ENV="'production'"
 script:
-  - "(cd fec && coverage run ./manage.py test)"
+  - coverage run ./manage.py test
   - npm run test-single
 after_success:
   - travis_retry pip install bandit
