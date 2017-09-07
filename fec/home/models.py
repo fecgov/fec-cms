@@ -573,6 +573,15 @@ class CustomPage(Page):
         )
     ]
 
+    # Adds a settings field for making a custom title that displays in the Wagtail page explorer
+    menu_title = models.CharField(max_length=255, null=True)
+    settings_panels = Page.settings_panels + [
+        FieldPanel('menu_title')
+    ]
+
+    def get_admin_display_title(self):
+        return self.menu_title if self.menu_title else self.title
+
     @property
     def content_section(self):
         return get_content_section(self)
@@ -792,6 +801,15 @@ class CollectionPage(Page):
         StreamFieldPanel('reporting_examples')
     ]
 
+    # Adds a settings field for making a custom title that displays in the Wagtail page explorer
+    menu_title = models.CharField(max_length=255, null=True)
+    settings_panels = Page.settings_panels + [
+        FieldPanel('menu_title')
+    ]
+
+    def get_admin_display_title(self):
+        return self.menu_title if self.menu_title else self.title
+
     @property
     def content_section(self):
         return get_content_section(self)
@@ -848,6 +866,15 @@ class ResourcePage(Page):
         FieldPanel('category'),
         FieldPanel('date')
     ]
+
+    # Adds a settings field for making a custom title that displays in the Wagtail page explorer
+    menu_title = models.CharField(max_length=255, null=True)
+    settings_panels = Page.settings_panels + [
+        FieldPanel('menu_title')
+    ]
+
+    def get_admin_display_title(self):
+        return self.menu_title if self.menu_title else self.title
 
     @property
     def display_date(self):
@@ -931,6 +958,12 @@ class MeetingPage(Page):
         blank=True
     )
 
+    sunshine_act_doc_upld = StreamField(
+        [('sunshine_act_upld', DocumentChooserBlock(required=False))],
+        null=True,
+        blank=True,
+    )
+
     full_video_url = models.URLField(blank=True)
     full_audio_url = models.URLField(blank=True)
     mtg_transcript_url = models.URLField(blank=True)
@@ -959,12 +992,19 @@ class MeetingPage(Page):
         ),
         MultiFieldPanel(
             [
-                FieldPanel('sunshine_act_links'),
+                #FieldPanel('sunshine_act_links'),
+                StreamFieldPanel('sunshine_act_doc_upld'),
+            ],
+            heading='Sunshine notices',
+            classname='collapsible collapsed'
+        ),
+        MultiFieldPanel(
+            [
                 FieldPanel('draft_minutes_links'),
                 FieldPanel('approved_minutes_link'),
                 FieldPanel('approved_minutes_date'),
             ],
-            heading='Minutes and Sunshine notices',
+            heading='Minutes',
             classname='collapsible collapsed'
         ),
         MultiFieldPanel(

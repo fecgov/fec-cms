@@ -11,7 +11,7 @@
     <li class="breadcrumbs__item"><a href="/" class="breadcrumbs__link" rel="Home">Home</a></li>
     <li class="breadcrumbs__item">
       <span class="breadcrumbs__separator">›</span>
-      <a class="breadcrumbs__link" href="/updates?update_type=meetings">Commission meetings</a>
+      <a class="breadcrumbs__link" href="/meetings">Commission meetings</a>
     </li>
     <li class="breadcrumbs__item breadcrumbs__item--current">
       <span class="breadcrumbs__separator">›</span>
@@ -119,24 +119,35 @@
       </div>
       {% endif %}
 
-      {% if self.sunshine_act_links %}
-      <h2 class="u-no-margin">Notices about this meeting</h2>
-      <div class="list--spacious">
-      <ul>
-      {% for link in self.sunshine_act_links|splitlines %}
-        <li>
-          <p>
-           <a class="pdf-link" href="{{ link }}">
-            {% if forloop.counter >= 2 %}Amended{% endif %}
-            Sunshine Act Notice
-            {% if self.sunshine_act_links|splitlines|length > 2 and forloop.counter >= 2%}- {{ forloop.counter0 }}{% endif %}
-           </a>
-          </p>
-        </li>
-      {% endfor %}
-      </ul>
-      </div>
-      {% endif %}
+        {% if self.sunshine_act_links or self.sunshine_act_doc_upld %}
+         <h2 class="u-no-margin">Notices about this meeting</h2>
+         <div class="list--spacious">
+          <ul>
+          {% endif %}
+          {% if self.sunshine_act_doc_upld %}
+            {% for block in self.sunshine_act_doc_upld %}
+             <li>
+              <p>
+                <a class="pdf-link" href="{{ block.value.file.url }}">{% if forloop.counter >= 2 %}Amended {% endif %}Sunshine Act Notice</a>
+                 {% if self.sunshine_act_doc_upld|length > 2 and forloop.counter >= 2%}- {{ forloop.counter0 }}{% endif %}
+              </p>
+             </li>
+             {% endfor %}
+          {% elif self.sunshine_act_links %}
+             {% for link in self.sunshine_act_links|splitlines %}
+               <li>
+                <p>
+                  <a class="pdf-link" href="{{ link }}">
+                  {% if forloop.counter >= 2 %}Amended{% endif %}
+                   Sunshine Act Notice
+                  {% if self.sunshine_act_links|splitlines|length > 2 and forloop.counter >= 2%}- {{ forloop.counter0 }}{% endif %}
+                  </a>
+                 </p>
+                </li>
+             {% endfor %}
+            </ul>
+           </div>
+          {% endif %}
 
       {% if not self.agenda and self.meeting_type == 'O' and not self.imported_html %}
       {% comment %}
