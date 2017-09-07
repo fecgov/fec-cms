@@ -50,6 +50,7 @@ before_deploy:
   - cd fec
   - DJANGO_SETTINGS_MODULE='fec.settings.production' python manage.py collectstatic --noinput -v 0
   - DJANGO_SETTINGS_MODULE='fec.settings.production' python manage.py compress -v 0
+  - cd ..
 deploy:
   provider: script
   skip_cleanup: true
