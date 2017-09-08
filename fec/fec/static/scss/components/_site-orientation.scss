@@ -271,9 +271,13 @@
   margin-top: u(5rem);
   border: 4px solid $gray;
   box-shadow: none;
+  left: 0;
+  right: 0;
 
   @include media($med) {
     margin-top: u(.5rem);
+    left: -153px;
+    top: 27px;
   }
 
   &::after,

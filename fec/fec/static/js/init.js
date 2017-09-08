@@ -82,7 +82,7 @@ $(document).ready(function() {
 
   $('.js-form-nav').each(function() {
     new FormNav(this);
-  });  
+  });
 
   // Initialize header typeaheads (mobile and desktop)
   $('.js-site-search').each(function() {

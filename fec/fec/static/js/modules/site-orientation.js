@@ -1,7 +1,7 @@
 'use strict';
 
 var $ = require('jquery');
-var introJs = require('intro.js');
+var introJs = require('../vendor/intro');
 var URI = require('urijs');
 
 var helpers = require('./helpers');
@@ -152,7 +152,6 @@ SiteOrientation.prototype.startTour = function () {
   tour.setOptions({
     showStepNumbers: false,
     tooltipClass: 'tour__tooltip',
-    tooltipPosition: 'bottom-middle-aligned',
     prevLabel: tourPrevLabel,
     nextLabel: tourNextLabel,
     doneLabel: tourLastLabel,
