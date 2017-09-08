@@ -301,7 +301,7 @@ def index_meetings(request):
     meetings = MeetingPage.objects.live().order_by("-date")
     open_meetings = meetings.filter(meeting_type ='O')
     executive_sessions = meetings.filter(meeting_type ='E')
-    hearings= meetings.filter(title__contains='Hearing')
+    hearings= meetings.filter(title__icontains='Hearing')
     year = request.GET.get('year', '')
     search = request.GET.get('search', '')
     active = request.GET.get('tab', 'open-meetings')
