@@ -11,7 +11,6 @@ from data import utils
 
 
 def candidates(request):
-    # TODO: kwargs
     candidates = api_caller._call_api('candidates')
     return render(request, 'datatable.jinja', {
         'parent': 'data',
@@ -19,13 +18,11 @@ def candidates(request):
         'slug': 'candidates',
         'title': 'Candidates',
         'data': candidates['results'],
-        # 'query': kwargs,
         'columns': constants.table_columns['candidates']
     })
 
 
 def candidates_office(request, office):
-    # TODO: kwargs
     if office.lower() not in ['president', 'senate', 'house']:
         raise Http404()
     return render(request, 'datatable.jinja', {
@@ -46,7 +43,6 @@ def committees(request):
         'slug': 'committees',
         'title': 'Committees',
         'data': committees['results'],
-        # 'query': kwargs,
         'columns': constants.table_columns['committees']
     })
 

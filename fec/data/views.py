@@ -344,10 +344,6 @@ def elections_lookup(request):
     })
 
 
-# @app.route('/elections/<office>/<int:cycle>/')
-# @app.route('/elections/<office>/<state>/<int:cycle>/')
-# @app.route('/elections/<office>/<state>/<district>/<int:cycle>/')
-# def elections(office, cycle, state=None, district=None):
 def elections(request, office, cycle, state=None, district=None):
     cycle = int(cycle)
 
