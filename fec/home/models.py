@@ -11,9 +11,6 @@ from django.db.models.signals import post_save, pre_delete
 from django.contrib.auth.models import User
 from django.contrib.auth import get_user_model
 
-from audit_log.models.fields import LastUserField
-from audit_log.models.managers import AuditLog
-
 from modelcluster.fields import ParentalKey
 from modelcluster.contrib.taggit import ClusterTaggableManager
 from taggit.models import TaggedItemBase
@@ -40,7 +37,7 @@ from wagtail.contrib.table_block.blocks import TableBlock
 
 from fec import constants
 
-logger = logging.getLogger(__name__)
+logger = logging.getLogger('fec')
 
 from home.blocks import (ThumbnailBlock, AsideLinkBlock,
                          ContactInfoBlock, CitationsBlock, ResourceBlock,
@@ -119,52 +116,17 @@ class ContentPage(Page):
     @property
     def content_section(self):
         return ''
-'''
-class Person(User):
-    objects = User()
-
-    def __init__(self):
-        audit_log = AuditLog()
-        print(audit_log)
-
-
-@receiver(post_save, sender=Person)
-@receiver(pre_delete, sender=Person)
-def log_person(sender, **kwargs):
-    print('TEST')
-'''
 
 
 @receiver(post_save, sender=User)
 @receiver(pre_delete, sender=User)
 def log_user_save(sender, **kwargs):
-    '''
-    Keeping these print statements here for reference for potential later use.
-    print(kwargs.get('user'), '1')
-    print(kwargs.get('user_id'), '2')
-    print(kwargs.get('instance'), '3')
-    print(kwargs.get('instance'), '4')
-    print(kwargs.get('update_fields'), '5')
-    print(kwargs.get('signal'), '6')
-    print(kwargs.get('instance').get_username(), '8')
-    print(kwargs.get('instance').groups, '9')
-    # print(kwargs.get('instance').get_all_permissions())
-    print(kwargs.get('instance').groups, '10')
-    print(kwargs.get('instance').pagerevision_set, '11')
-    print(kwargs.get('instance').user_permissions, '12')
-    print(kwargs.get('instance').logentry_set, '12.5')
-    print(sender.logentry_set, '13')
-    # print(sender.__base__.id, '13')
-    # print(sender.get('id'), '14')
-    print(sender.id, '15')
-    '''
+
     if kwargs.get('update_fields'):
         logger.info("User {0} logged in".format(kwargs.get('instance').get_username()))
     else:
         logger.info("User change: username {0} by instance {1}".format(kwargs.get('instance').get_username(),
                                                                        kwargs.get('instance')))
-    audit_log = AuditLog() #currently not used, will attempt to use for future PR adding admin logging
-
 
 @receiver(pre_delete, sender=PageRevision)
 @receiver(post_save, sender=PageRevision)

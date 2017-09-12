@@ -64,6 +64,7 @@ INSTALLED_APPS = (
     'data_loader',
     'uaa_client',
     'extend_admin',
+    'logging_hooks',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -81,7 +82,8 @@ MIDDLEWARE_CLASSES = (
     'wagtail.wagtailredirects.middleware.RedirectMiddleware',
 
     # logs
-    'audit_log.middleware.UserLoggingMiddleware',
+    #'request_logging.middleware.LoggingMiddleware',
+    #'audit_log.middleware.UserLoggingMiddleware',
 
 )
 
@@ -265,7 +267,7 @@ AUTHENTICATION_BACKENDS = \
      'uaa_client.authentication.UaaBackend']
 
 DEFAULT_AUTHENTICATION_CLASSES = ['rest_framework_jwt.authentication.JSONWebTokenAuthentication',]
-
+'''
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
@@ -276,10 +278,27 @@ LOGGING = {
         },
     },
     'loggers': {
-        '': {
+        'fec': {
             'handlers': ['console'],
             'level': 'INFO',
             'propogate': False,
+        },
+    },
+}
+'''
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',
+        },
+    },
+    'loggers': {
+        'fec': {
+            'handlers': ['console'],
+            'level': 'INFO',  # change debug level as appropiate
+            'propagate': False,
         },
     },
 }
