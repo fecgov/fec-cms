@@ -16,7 +16,17 @@ def home_page_banner_announcement():
     banners = HomePageBannerAnnouncement.objects.live().filter(active=True).order_by('-date_active')[:2]
 
     return {
-        'banners': banners
+        'banners': banners,
+    }
+
+
+# This is for the Wagtail preview for Home Page Banner Announcement
+@register.inclusion_tag('partials/draft-home-page-banner-announcement.html')
+def draft_home_page_banner_announcement():
+    draft_banners = HomePageBannerAnnouncement.objects.all().order_by('-date_active')
+
+    return {
+        'draft_banners': draft_banners
     }
 
 
