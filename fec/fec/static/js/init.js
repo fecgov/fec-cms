@@ -78,7 +78,7 @@ $(document).ready(function() {
   });
 
   // Initialize feedback widget
-  new feedback.Feedback(window.FEC_APP_URL + '/issue/');
+  new feedback.Feedback('/data/issue/');
 
   $('.js-form-nav').each(function() {
     new FormNav(this);

@@ -16,6 +16,9 @@ urlpatterns = [
     url(r'^data/raising/$', views.raising),
     url(r'^data/spending/$', views.spending),
 
+    # Feedback Tool
+    url(r'^data/issue/$', views.feedback),
+
     # Datatables
     url(r'^data/candidates/(?P<office>\w+)/$',
         views_datatables.candidates_office),

@@ -1,7 +1,11 @@
 from django.shortcuts import render
 from django.http import Http404
+from django.http import JsonResponse
+from django.conf import settings
 
 import datetime
+import github3
+import json
 import re
 
 from data import api_caller
@@ -432,3 +436,32 @@ def spending(request):
         'top_spenders': top_spenders['results'],
         'page_info': utils.page_info(top_spenders['pagination'])
     })
+
+
+def feedback(request):
+    if request.method == 'POST':
+        data = json.loads(request.body)
+
+        if not any([data['action'], data['feedback'], data['about']]):
+            return JsonResponse({'status': False}, status=500)
+        else:
+            title = 'User feedback on ' + request.META.get('HTTP_REFERER')
+
+            body = ("## What were you trying to do and how can we improve it?\n %s \n\n"
+                    "## General feedback?\n %s \n\n"
+                    "## Tell us about yourself\n %s \n\n"
+                    "## Details\n"
+                    "* URL: %s \n"
+                    "* User Agent: %s") % (
+                        data['action'],
+                        data['feedback'],
+                        data['about'],
+                        request.META.get('HTTP_REFERER'),
+                        request.META['HTTP_USER_AGENT'])
+
+            client = github3.login(token=settings.FEC_GITHUB_TOKEN)
+            issue = client.repository('18F', 'fec').create_issue(title, body=body)
+
+            return JsonResponse(issue.to_json(), status=201)
+    else:
+        raise Http404()

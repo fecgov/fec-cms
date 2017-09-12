@@ -22,6 +22,8 @@ FEC_CMS_ROBOTS = env.get_credential('FEC_CMS_ROBOTS')
 
 CMS_URL = env.get_credential('CMS_URL', 'https://www.fec.gov')
 
+FEC_GITHUB_TOKEN = env.get_credential('FEC_GITHUB_TOKEN')
+
 # Config for the ServiceNow API for contacting RAD
 FEC_SERVICE_NOW_API = env.get_credential('FEC_SERVICE_NOW_API')
 FEC_SERVICE_NOW_USERNAME = env.get_credential('FEC_SERVICE_NOW_USERNAME')
