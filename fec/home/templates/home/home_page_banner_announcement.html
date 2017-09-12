@@ -1,13 +1,13 @@
-{% comment %}
-This template is for previewing the home page banner announcement on Wagtail, so it is simply the home page template.
-{% endcomment %}
-
 {% extends "base.html" %}
 {% load wagtailcore_tags %}
 {% load staticfiles %}
 {% load home_page %}
 {% load filters %}
 {% block body_class %}template-{{ self.get_verbose_name | slugify }}{% endblock %}
+
+{% comment %}
+This template is for previewing the home page banner announcement on Wagtail
+{% endcomment %}
 
 {% block content %}
   <section class="hero hero--home" aria-labelledby="hero-heading">
@@ -19,7 +19,7 @@ This template is for previewing the home page banner announcement on Wagtail, so
     </div>
   </section>
 
-  {% home_page_banner_announcement %}
+  {% draft_home_page_banner_announcement %}
 
   <section class="slab">
     <div class="container">
