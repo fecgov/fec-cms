@@ -152,6 +152,7 @@ var candidateOffice = {
   district: {data: 'district', className: 'min-desktop column--small hide-panel'},
   receipts: currencyColumn({data: 'receipts', className: 'min-tablet hide-panel column--number'}),
   disbursements: currencyColumn({data: 'disbursements', className: 'min-tablet hide-panel column--number'}),
+  cash: currencyColumn({data: 'cash_on_hand_end_period', className: 'min-tablet hide-panel column--number'}),
   trigger: modalTriggerColumn
 };
 
@@ -619,6 +620,9 @@ var loans = [
 ];
 
 module.exports = {
+  currencyColumn: currencyColumn,
+  dateColumn: dateColumn,
+  modalTriggerColumn: modalTriggerColumn,
   candidateColumn: candidateColumn,
   committeeColumn: committeeColumn,
   dateColumn: dateColumn,

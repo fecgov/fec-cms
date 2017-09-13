@@ -47,6 +47,20 @@ def committees(request):
     })
 
 
+def committee_totals(request, committee_type):
+    if committee_type.lower() not in ['pacs', 'party']:
+        raise Http404()
+    title = 'Political action committees' if committee_type == 'pacs' else 'Political party committees'
+    return render(request, 'datatable.jinja', {
+        'parent': 'data',
+        'result_type': 'committees',
+        'slug': 'committee-totals',
+        'table_context': OrderedDict([('committee_type', committee_type)]),
+        'title': title,
+        'columns': constants.table_columns['committee-totals-' + committee_type.lower()]
+    })
+
+
 def communication_costs(request):
     return render(request, 'datatable.jinja', {
         'parent': 'data',

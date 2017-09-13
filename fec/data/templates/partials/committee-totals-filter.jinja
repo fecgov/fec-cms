@@ -1,0 +1,13 @@
+{% extends 'partials/filters.jinja' %}
+
+{% import 'macros/filters/typeahead-filter.jinja' as typeahead %}
+{% import 'macros/filters/election-filter.jinja' as election_filter %}
+
+{% block filters %}
+<div class="js-accordion accordion--neutral" data-content-prefix="filter" data-open-first="false">
+  <div class="filters__inner">
+    {{ typeahead.field('q', 'Committee name or ID', False, dataset='committees', allow_text=False) }}
+    {{ election_filter.single_cycle('cycle', 'Election cycle') }}
+  </div>
+</div>
+{% endblock %}
