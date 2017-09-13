@@ -179,6 +179,10 @@ def candidate(request, candidate_id):
         raising_summary = utils.process_raising_data(aggregate)
         spending_summary = utils.process_spending_data(aggregate)
         cash_summary = utils.process_cash_data(aggregate)
+    else:
+        raising_summary = None
+        spending_summary = None
+        cash_summary = None
 
     aggregate = aggregate
 
