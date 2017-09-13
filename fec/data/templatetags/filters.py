@@ -65,7 +65,7 @@ def nullify(value, *nulls):
 def get_election_url(candidate, cycle, district=None):
     if cycle:
         if candidate['office'] == 'H':
-            district_url = '/' + str(candidate['state']) + '/' + nullify(candidate['district'], '00')
+            district_url = '/' + str(candidate['state']) + '/' + candidate['district']
         elif candidate['office'] == 'S':
             district_url = '/' + str(candidate['state'])
         else:
