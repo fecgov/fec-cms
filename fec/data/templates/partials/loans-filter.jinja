@@ -1,0 +1,17 @@
+{% extends 'partials/filters.jinja' %}
+
+{% import 'macros/filters/text.jinja' as text %}
+{% import 'macros/filters/typeahead-filter.jinja' as typeahead %}
+{% import 'macros/filters/date.jinja' as date %}
+{% import 'macros/filters/range.jinja' as range %}
+
+
+{% block filters %}
+  <div class="filters__inner">
+    {{ typeahead.field('committee_id', 'Committee Name or ID') }}
+    {{ text.field('loaner_name', 'Loaner name') }}
+    {{ date.field('incurred_date', 'Incurred date', id_suffix='_raw') }}
+    {{ range.amount('payment_to_date', 'Payment to date') }}
+    {{ range.amount('amount', 'Original loan amount') }}
+ </div>
+{% endblock %}

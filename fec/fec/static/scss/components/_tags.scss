@@ -1,0 +1,159 @@
+// Tags
+//
+// Applied filter tags on Datatables
+//
+// <ul class="tags" aria-hidden="false">
+//   <li data-tag-category="has_raised_funds" class="tag__category">
+//     <div data-id="cycle-checkbox-has-raised-funds" data-removable="true" class="tag__item">
+//       Has raised more than $0
+//       <button class="button js-close tag__remove">
+//         <span class="u-visually-hidden">Remove</span>
+//       </button>
+//     </div>
+//   </li>
+//   <li data-tag-category="office" class="tag__category">
+//     <div data-id="cycle-checkbox-s" data-removable="true" class="tag__item">
+//       Senate
+//       <button class="button js-close tag__remove">
+//         <span class="u-visually-hidden">Remove</span>
+//       </button>
+//     </div>
+//   </li>
+// </ul>
+//
+
+.tags__title {
+  font-family: $sans-serif;
+  font-size: 1em;
+  float: left;
+  margin: 0;
+  padding: u(.5rem 1rem .5rem 0);
+}
+
+.tags__title__text {
+  color: $primary;
+  display: inline-block;
+  margin: u(4px .5rem);
+}
+
+.tags {
+  width: 100%;
+}
+
+.tag {
+  background-color: $inverse;
+  border: 1px solid $gray;
+  border-radius: 4px;
+  color: $primary;
+  display: inline-block;
+  font-family: $sans-serif;
+  letter-spacing: -.3px;
+  padding: u(0 .5rem 0 .75rem);
+  margin: u(.5rem 3rem 0 0);
+}
+
+.tag--secondary {
+  border-color: $secondary;
+  color: $base;
+  font-weight: bold;
+}
+
+.tag__category {
+  background-color: $gray-light;
+  border-radius: 2px;
+  display: inline-block;
+  padding: u(0 .75rem .5rem .7rem);
+  margin: u(.5rem .5rem 0 0);
+
+  .tag__item {
+    @extend .tag;
+    position: relative;
+
+    &::after {
+      content: 'or';
+      font-weight: bold;
+      position: absolute;
+      right: u(-2.25rem);
+    }
+
+    &:last-child {
+      margin-right: 0;
+
+      &::after {
+        content: '';
+      }
+    }
+
+    &.is-disabled {
+      button {
+        display: none;
+      }
+    }
+  }
+}
+
+.tag__category--and {
+  .tag__item {
+    margin-right: u(4rem);
+
+    &::after {
+      content: 'and';
+      right: u(-3.25rem);
+    }
+  }
+}
+
+.tag__category__range--amount,
+.tag__category__range--date {
+  .tag__item {
+    margin-right: u(2rem);
+
+    .tag__remove {
+      padding-left: u(1rem);
+    }
+
+    &::after {
+      content: '-';
+      padding: 0;
+      right: u(-1.5rem);
+    }
+  }
+}
+
+.tag__category__range--amount {
+  .suffix {
+    display: none;
+  }
+}
+
+.tag__category__range--date {
+  .prefix {
+    display: none;
+  }
+}
+
+.tag__remove {
+  @include u-icon-bg($x, $primary);
+  background-size: u(1.4rem);
+  background-position: 100% 45%;
+  border: none;
+  padding: u(1rem);
+}
+
+.tags__clear {
+  @include u-icon-bg($x, $primary);
+  background-size: u(1.4rem);
+  background-position: 95% 50%;
+  padding-right: u(2.3rem);
+
+  @include media($med) {
+    float: right;
+  }
+}
+
+.tags__count {
+  display: inline-block;
+  background: $primary;
+  color: $primary-contrast;
+  padding: 2px 6px;
+}

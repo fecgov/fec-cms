@@ -1,0 +1,280 @@
+// Icons
+//
+// Simple classes to set the size and spacing of <img> icons
+//
+// .icon                  - Sets size of an icon img
+// .icon--complex         - Sets size of complex icons
+// .icon--inline--right   - Vertically centering and adding slight margin to inline icons
+// .icon--inline--left    - Vertically centering and adding slight margin to inline icons
+//
+
+.icon {
+  background-size: contain;
+  background-position: center center;
+  background-repeat: no-repeat;
+  display: block;
+  height: u(2rem);
+  width: u(2rem);
+
+  &.i-all-files {
+    @include u-icon-bg($all-files, $base);
+  }
+
+  &.i-share {
+    @include u-icon-bg($share, $base);
+  }
+
+  &.i-magnifying-glass {
+    @include u-icon-bg($magnifying-glass, $base);
+  }
+
+  &.i-folder {
+    @include u-icon-bg($folder, $base);
+  }
+
+  &.i-candidate {
+    @include u-icon-bg($candidate, $base);
+  }
+
+  &.i-committee {
+    @include u-icon-bg($committee, $base);
+  }
+}
+
+.icon--small {
+  display: inline-block;
+  max-height: u(1rem);
+  max-width: u(1rem);
+
+  &.i-arrow-down {
+    @include u-icon-bg($arrow-down, $base);
+  }
+
+  &.i-arrow-right {
+    @include u-icon-bg($arrow-right, $base);
+  }
+
+  &.i-arrow-left {
+    @include u-icon-bg($arrow-left, $base);
+  }
+
+  &.i-book {
+    @include u-icon-bg($book, $base);
+  }
+}
+
+.icon--complex {
+  max-height: u(6rem);
+  max-width: u(6rem);
+}
+
+.icon--inline--right {
+  display: inline-block;
+  margin-left: u(1rem);
+  vertical-align: text-bottom;
+}
+
+.icon--inline--left {
+  display: inline-block;
+  margin-right: u(1rem);
+  vertical-align: text-bottom;
+
+  &.i-share {
+    background-size: 80%;
+  }
+}
+
+.icon-circle--calendar {
+  display: block;
+
+  &::before {
+    @include u-icon-circle($calendar, $secondary, $inverse, 3.4rem);
+    content: '';
+  }
+}
+
+.icon-circle--updates {
+  display: block;
+
+  &::before {
+    @include u-icon-circle($updates, $secondary, $inverse, 3.4rem);
+    content: '';
+  }
+}
+
+.icon-circle--calculator {
+  display: block;
+
+  &::before {
+    @include u-icon-circle($calculator, $primary, $inverse, 3.4rem);
+    background-size: 70%;
+    background-position: 50% 45%;
+    content: '';
+  }
+}
+
+.icon-circle--updates--inline--left {
+  display: inline-block;
+  margin-right: u(1.5rem);
+
+  &::before {
+    @include u-icon-circle($updates, $secondary, $inverse, 3rem);
+    content: '';
+  }
+}
+
+.icon-circle--calendar--inline--left {
+  display: inline-block;
+  margin-right: u(1.5rem);
+
+  &::before {
+    @include u-icon-circle($calendar, $secondary, $inverse, 3rem);
+    content: '';
+  }
+}
+
+.icon-circle--check-outline--inline--left {
+  margin-right: u(.5rem);
+  display: inline-block;
+  vertical-align: middle;
+
+  &::before {
+    @include u-icon-circle($check-circle-outline, $inverse, $aqua, 1.5rem);
+    content: '';
+    background-size: 100%;
+  }
+}
+
+.icon-circle--clock-reverse--inline--left {
+  margin-right: u(.5rem);
+  display: inline-block;
+  vertical-align: middle;
+
+  &::before {
+    @include u-icon-circle($clock-reverse, $inverse, $primary, 1.7rem);
+    content: '';
+    background-size: 100%;
+  }
+}
+
+.icon-circle--search {
+  display: block;
+
+  &::before {
+    @include u-icon-circle($magnifying-glass, $primary, $inverse, 3.4rem);
+    content: '';
+  }
+}
+
+.icon-circle--checklist {
+  display: block;
+
+  &::before {
+    @include u-icon-circle($checklist, $secondary, $inverse, 3.4rem);
+    content: '';
+    background-size: 80%;
+  }
+}
+
+.icon-circle--candidate {
+  display: block;
+
+  &::before {
+    @include u-icon-circle($candidate, $primary, $inverse, 3.4rem);
+    content: '';
+    background-position: 60% 50%;
+    background-size: 50%;
+  }
+}
+
+.icon-circle--committee {
+  display: block;
+
+  &::before {
+    @include u-icon-circle($committee, $primary, $inverse, 3.4rem);
+    content: '';
+  }
+}
+
+.icon-circle--raising {
+  display: block;
+
+  &::before {
+    @include u-icon-circle($piggy-bank, $primary, $inverse, 3.4rem);
+    content: '';
+  }
+}
+
+.icon-circle--spending {
+  display: block;
+
+  &::before {
+    @include u-icon-circle($disbursement, $primary, $inverse, 3.4rem);
+    content: '';
+  }
+}
+
+.icon-small--arrow-up-border {
+  display: inline-block;
+  margin-left: u(1rem);
+  vertical-align: middle;
+
+  &::before {
+    @include u-icon-bg($arrow-up-border, $inverse);
+    content: '';
+    background-size: 75%;
+    display: block;
+    width: u(1.5rem);
+    height: u(1.5rem);
+  }
+}
+
+.icon-small--arrow-down-border {
+  display: inline-block;
+  margin-left: u(1rem);
+  vertical-align: middle;
+
+  &::before {
+    @include u-icon-bg($arrow-down-border, $inverse);
+    content: '';
+    background-size: 75%;
+    display: block;
+    width: u(1.5rem);
+    height: u(1.5rem);
+  }
+}
+
+.icon-document--inline--left {
+  display: inline-block;
+  vertical-align: middle;
+
+  &::before {
+    @include u-icon-bg($document, $primary);
+    content: '';
+    background-size: 75%;
+    display: block;
+    width: u(1.5rem);
+    height: u(1.5rem);
+  }
+}
+
+.icon-star {
+  @include u-icon-bg($star, $orange);
+  width: u(1.5rem);
+  height: u(1.5rem);
+  margin-bottom: 2px;
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.icon-x {
+  @include u-icon-bg($x, $primary);
+}
+
+// Used to create a spacer in the version column the same width as the
+// version icons
+.icon-blank {
+  display: inline-block;
+  content: '';
+  width: 20px;
+}

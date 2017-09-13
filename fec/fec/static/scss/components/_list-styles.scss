@@ -1,0 +1,251 @@
+// List Styles
+//
+// These are classes to be applied to lists to give them particular styles
+//
+// .list--bulleted      - Bulleted list (for ul)
+// .list--bulleted--alt - Bulleted list where child lists don't have bullets
+// .list--numbered--alt - Numbered list where child lists have bullets
+// .list--numbered      - Numbered list (for ol)
+// .list--flat          - Lay out items horizontally
+// .list--spacious      - Adds padding above and below list items
+//
+// <ul class="list--bulleted">
+//  <li>Unordered list item 1</li>
+//  <li>Unordered list item 2</li>
+//  <li>Unordered list item 2</li>
+// </ul>
+//
+
+.list--numbered,
+.list--bulleted,
+.list--bulleted--alt {
+  li {
+    margin-left: u(2rem);
+    padding: u(.5rem 0);
+    font-size: u(1.6rem);
+
+    &:last-child {
+      margin-bottom: u(1.5rem);
+    }
+  }
+
+  ul, ol {
+    margin-left: u(1.5rem);
+
+    li:last-of-type {
+      margin-bottom: 0;
+      padding-bottom: 0;
+    }
+  }
+
+  ul li {
+    list-style-type: circle;
+  }
+
+  ul ul li {
+    list-style-type: square;
+  }
+}
+
+.list--numbered {
+  ul {
+    margin-bottom: 0;
+    margin-left: u(1.5rem);
+
+    li {
+      list-style-type: circle;
+    }
+  }
+
+  ol li {
+    list-style-type: lower-alpha;
+
+    ol li {
+      list-style-type: lower-roman;
+    }
+  }
+}
+
+.list--bulleted {
+  li {
+    list-style-type: disc;
+  }
+}
+
+.list--bulleted--alt {
+  & > li {
+    list-style-type: disc;
+  }
+
+  ul li {
+    list-style-type: none;
+  }
+}
+
+.list--numbered {
+  li {
+    list-style-type: decimal;
+  }
+}
+
+.list--numbered--alt {
+  & > li {
+    list-style-type: decimal;
+  }
+
+  ul li {
+    list-style-type: disc;
+  }
+}
+
+.list--flat {
+  @include clearfix();
+  padding: 0;
+
+  li {
+    float: left;
+    margin-right: u(1rem);
+
+    &:last-child {
+      margin-right: 0;
+    }
+  }
+}
+
+.list--flat-bordered {
+  @extend .list--flat;
+  padding-bottom: u(.5rem);
+
+  li {
+    &::after {
+      content: '|';
+      padding-left: u(1rem);
+    }
+
+    &:last-child::after {
+      content: '';
+      padding-left: 0;
+    }
+  }
+}
+
+.list--columns {
+  @include media($med) {
+    @include columns(2)
+  }
+
+  @include media($lg) {
+    @include columns(3)
+  }
+}
+
+.list--spacious {
+  ul {
+    padding-top: u(1rem);
+  }
+
+  li {
+    padding: u(.75rem 0);
+  }
+}
+
+.list--extra-spacious {
+  li {
+    padding: u(2rem 0) !important;
+  }
+}
+
+.list--border {
+  li {
+    border-top: 1px solid $gray;
+    padding: u(.75rem 1rem);
+
+    &:first-child {
+      border-top: none;
+    }
+
+    &.list__item--no-border {
+      border-top: none;
+      padding-top: 0;
+    }
+  }
+}
+
+
+// Checkbox Lists
+//
+// For check marks as list bullets
+//
+// <ul class="list--checks">
+//  <li>Unordered list item 1</li>
+//  <li>Unordered list item 2</li>
+//  <li>Unordered list item 3</li>
+// </ul>
+//
+
+.list--checks {
+  li {
+    @include u-icon-bg($check, $primary);
+    background-size: u(2rem);
+    background-position: u(0 1.4rem);
+    padding: u(1rem 0 1rem 2.5rem);
+    position: relative;
+  }
+
+  &.list--checks--secondary {
+    li {
+      @include u-icon-bg($check, $secondary);
+    }
+  }
+}
+
+// Button lists
+//
+// List of buttons, such as a list of browse buttons
+// On mobile, we want these to be stacked, with margin, and with full-width buttons
+//
+// <ul class="list--buttons">
+// <li><button class="button--standard">Button</button></li>
+// <li><button class="button--cta">Button</button></li>
+// <li><button class="button--alt">Button</button></li>
+// </ul>
+//
+
+.list--buttons {
+  @include clearfix();
+  padding: 0;
+
+  li {
+    display: inline-block;
+    margin-right: u(1rem);
+    width: 100%;
+
+    &:last-child {
+      margin-right: 0;
+    }
+  }
+
+  .button--standard,
+  .button--cta,
+  .button--alt {
+    display: block;
+    margin-bottom: u(.5rem);
+    text-align: left;
+    width: 100%;
+  }
+
+  @include media($med) {
+    li {
+      width: auto;
+    }
+
+    .button--standard,
+    .button--cta,
+    .button--alt {
+      display: inline-block;
+      margin-bottom: 0;
+      text-align: center;
+      width: auto;
+    }
+  }
+}

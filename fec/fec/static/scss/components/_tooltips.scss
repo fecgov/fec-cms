@@ -1,0 +1,222 @@
+// Tooltips
+//
+// <div class="sg-absolute-container">
+//   <div class="tooltip tooltip--above">
+//    <div class="tooltip__title">Michigan</div>
+//    <div class="tooltip__value">$100,000</div>
+//   </div>
+// </div>
+//
+
+.tooltip {
+  border-radius: 4px;
+  border: 2px solid $primary;
+  background-color: $inverse;
+  color: $primary;
+  font-family: $sans-serif;
+  padding: u(1.5rem);
+  position: absolute;
+  text-align: center;
+  z-index: $z-tooltip;
+}
+
+.tooltip__title {
+  border-bottom: 1px solid $primary;
+  text-transform: uppercase;
+  font-weight: bold;
+}
+
+// Use to left align a paragraph of text in a tooltip
+.tooltip__content.tooltip__content {
+  // Hack to override any font color styles on the parent element
+  color: $primary;
+  text-align: left;
+  text-transform: initial;
+  font-size: u(1.4rem);
+  font-weight: normal;
+  line-height: 1.4;
+
+  a {
+    border-bottom-color: $primary;
+    color: $primary;
+  }
+
+  li {
+    font-size: u(1.4rem);
+  }
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+
+// When the tooltip is above the content. Puts the arrow at the bottom center of the tooltip
+.tooltip--above {
+  width: u(12rem);
+
+  &::before {
+    @include triangle(2rem, $primary, down);
+    bottom: u(-1rem);
+    content: '';
+    display: block;
+    left: u(5rem);
+    position: absolute;
+  }
+
+  &::after {
+    @include triangle(1.6rem, $inverse, down);
+    content: '';
+    display: block;
+    position: absolute;
+    left: u(5.2rem);
+    bottom: u(-.7rem);
+  }
+}
+
+// Tooltips under an element
+//
+// By default, this class centers a tooltip below the element it's referencing and centers the point.
+//
+// .tooltip--left      - Aligns the tooltip along the left side of an element; useful when the element is near the left side of the page.
+// .tooltip--right     - Aligns the tooltip along the right side of the element; useful when the element is near the right side of the page.
+//
+// <button class="button button--cta button--export">Export</button>
+// <div class="tooltip tooltip--under tooltip--under">
+//   <p class="tooltip__content">Explanatory content about this element</p>
+// </div>
+//
+
+.tooltip--under {
+  $top: u(1rem);
+  width: u(30rem);
+  left: u(-14rem);
+  top: calc(100% + #{$top});
+
+  &::before {
+    background-image: url('../img/tooltip-point.svg');
+    background-repeat: no-repeat;
+    background-size: contain;
+    content: '';
+    display: block;
+    height: u(2rem);
+    left: 50%;
+    margin-left: u(-1rem);
+    position: absolute;
+    top: u(-1rem);
+    width: u(2rem);
+  }
+
+  &.tooltip--left {
+    left: u(-2rem);
+
+    &::before {
+      left: u(2.8rem);
+    }
+  }
+
+  &.tooltip--right {
+    left: auto;
+    right: u(2rem);
+
+    &::before {
+      left: auto;
+      right: u(2.8rem);
+    }
+  }
+}
+
+// Tooltips: Learn more
+//
+// For tooltips on regular DOM elements (rather than on maps) that contain additional info
+//
+// <label class="label tooltip__trigger-text">Select something</label>
+// <div class="tooltip__container">
+//   <button class="tooltip__trigger"><span class="u-visually-hidden">Learn more</span></button>
+//   <div class="tooltip tooltip--under">
+//     <p class="tooltip__content">Learn more about this thing!</p>
+//   </div>
+//   <select><option>Select one</option></select>
+// </div>
+//
+
+.tooltip__container {
+  width: u(2rem);
+  height: u(2rem);
+  display: inline-block;
+  position: relative;
+  text-align: center;
+
+  .tooltip__trigger-text {
+    display: inline-block;
+  }
+
+  .tooltip {
+    display: none;
+  }
+}
+
+.tooltip__trigger {
+  @include u-icon-bg($info-circle-outline, $primary);
+  background-position: 50% 50%;
+  background-size: contain;
+  cursor: pointer;
+  display: inline-block;
+  height: 1.5em;
+  vertical-align: middle;
+  width: 1.5em;
+
+  &:hover + .tooltip,
+  &:focus + .tooltip {
+    display: block;
+  }
+}
+
+// Calendar tooltips
+.cal-details {
+  &::after {
+    display: none;
+  }
+
+  .tooltip__heading {
+    @include clearfix();
+    background: $primary;
+    color: $inverse;
+
+    .button {
+      float: right;
+    }
+  }
+
+  .tooltip__title {
+    line-height: u(4rem);
+    padding-left: u(1rem);
+    float: left;
+  }
+
+  .tooltip__content {
+    padding: u(1rem);
+  }
+}
+
+// Chart tooltips
+.tooltip--chart {
+  display: none;
+  position: absolute;
+
+  .tooltip__title {
+    margin-bottom: u(1rem);
+  }
+
+  .tooltip__point {
+    background-image: url('../img/tooltip-point.svg');
+    background-repeat: no-repeat;
+    background-size: contain;
+    display: block;
+    height: u(2rem);
+    left: 50%;
+    margin-left: u(-1rem);
+    position: absolute;
+    top: u(-1rem);
+    width: u(2rem);
+  }
+}

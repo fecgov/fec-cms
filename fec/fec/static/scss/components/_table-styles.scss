@@ -1,0 +1,367 @@
+// Simple table
+//
+// <table class="simple-table simple-table--display">
+//   <thead class="simple-table__header">
+//     <tr>
+//       <th class="simple-table__header-cell">Dates covered</th>
+//       <th class="simple-table__header-cell">Due <span class="simple-table__header-subtext">| Notes</span></th>
+//     </tr>
+//   </thead>
+//   <tbody>
+//     <tr class="simple-table__row">
+//       <td class="simple-table__cell">January 1–March 31</td>
+//       <td class="simple-table__cell">April 15</td>
+//     </tr>
+//     <tr class="simple-table__row">
+//       <td class="simple-table__cell">April 1–June 30</td>
+//       <td class="simple-table__cell">July 15</td>
+//     </tr>
+//   </tbody>
+// </table>
+//
+
+.simple-table {
+  border-color: $primary;
+  border-style: solid;
+  border-width: 2px 0;
+  font-family: $sans-serif;
+  margin: u(2rem 0);
+}
+
+.simple-table__header {
+  border-bottom: 1px solid $primary;
+  font-weight: 600;
+  text-align: left;
+
+  .simple-table__header-cell,
+  th {
+    padding: u(.5rem 0);
+  }
+
+  .simple-table__header-subtext {
+    font-weight: normal;
+  }
+}
+
+.simple-table__cell {
+  padding: u(1rem);
+  vertical-align: top;
+}
+
+.simple-table__row {
+  border-bottom: 1px solid $neutral;
+
+  &:last-of-type {
+    border-bottom: none;
+  }
+}
+
+// Table titles in content are h3, but those have bottom margins.
+// This closes that gap
+
+h3 + .simple-table {
+  margin-top: u(-1rem);
+}
+
+// More padding with vertical rules and alternating background color similar to `.datatables`
+.simple-table--display {
+  &.simple-table {
+    color: $base;
+    border: none;
+    margin: 0;
+  }
+
+  .simple-table__header-cell {
+    padding: u(0.5rem 1rem);
+  }
+
+  .simple-table__cell {
+    border-left: 1px solid $neutral;
+    padding: u(1rem);
+
+    &:first-child {
+      border-left: none;
+    }
+  }
+
+  .simple-table__row {
+    padding: u(1rem);
+
+    &:nth-child(even) {
+      background-color: rgba($gray-lightest, .5);
+    }
+  }
+
+  @include media($med) {
+    // We need to restore the padding on larger screens when combined with .simple-table--responsive
+    &.simple-table--responsive {
+      .simple-table__cell {
+        padding: u(1rem);
+      }
+    }
+  }
+}
+
+// Table-style display
+.simple-table--responsive {
+  .simple-table__header-cell {
+    display: none; // Hide all but the first header cell
+
+    &:first-child {
+      display: table-cell;
+    }
+  }
+
+  .simple-table__cell {
+    padding: 0;
+  }
+
+  .simple-table__cell,
+  .simple-table__header-cell {
+    border-left: none;
+  }
+
+  @include media($med) {
+    & {
+      border-collapse: collapse;
+      display: table;
+      table-layout: fixed;
+      width: 100%;
+    }
+
+    .simple-table__header {
+      display: table-header-group;
+    }
+
+    .simple-table__header-cell {
+      display: table-cell;
+    }
+
+    .simple-table__row-group {
+      display: table-row-group;
+    }
+
+    .simple-table__row {
+      display: table-row;
+    }
+
+    .simple-table__cell {
+      display: table-cell;
+    }
+  }
+}
+
+// Chart Table
+// Table style used on breakdown charts
+// Very similar to simple-table, but with slight differences
+.chart-table {
+  border-top: 2px solid $primary;
+  font-family: $sans-serif;
+
+  .simple-table__cell {
+    padding: u(.5rem 0 0 0);
+  }
+
+  .value-bar {
+    background-color: $gray-dark;
+    height: u(2rem);
+
+    &[data-party="DEM"] {
+      background-color: $blue-data;
+    }
+
+    &[data-party="REP"] {
+      background-color: $red-data;
+    }
+  }
+
+  & + .results-info {
+    border-top-width: 1px;
+  }
+
+  @include media($med) {
+    .simple-table__cell {
+      padding: u(1rem 0);
+      vertical-align: middle;
+
+      // Left padding for bar cells
+      &:last-of-type {
+        padding-left: u(1rem);
+      }
+    }
+  }
+}
+
+// "Balance sheet" table styles
+// These provide the visual sense of nested / hierarchical rows in a balance sheet
+.level--1,
+.level--2,
+.level--3,
+.level--4 {
+  border-collapse: separate;
+
+  td {
+    padding: u(.5rem);
+  }
+
+  td:last-child {
+    text-align: right;
+  }
+
+  @include media($lg) {
+    td:first-child {
+      width: 80%;
+    }
+  }
+}
+
+.level--1 {
+  background-color: $gray;
+  border-bottom: 2px solid $inverse;
+  text-transform: uppercase;
+  font-weight: bold;
+}
+
+.level--2 {
+  background-color: $gray-light;
+  border: 1px solid $gray-medium;
+  font-weight: bold;
+  text-transform: uppercase;
+
+  td:first-child {
+    border-right: 1px solid $gray-medium;
+  }
+}
+
+.level--3 {
+  border-bottom: 1px solid $gray-medium;
+
+  td:first-child {
+    border-right: 1px solid $gray-medium;
+    padding-left: u(2rem);
+  }
+}
+
+.level--4 {
+  font-style: italic;
+
+  td:first-child {
+    border-right: 1px solid $gray-medium;
+    padding-left: u(4rem);
+  }
+}
+
+// For custom_table_block
+
+.custom-table {
+  box-shadow: -10px 0 20px -10px $gray-medium inset;
+  overflow-x: scroll;
+  display: block;
+  margin-bottom: u(1rem);
+
+  table {
+    @extend .simple-table;
+    width: auto;
+    table-layout: auto;
+    line-height: 1;
+  }
+
+  th {
+    @extend .simple-table__header;
+    padding: u(1rem);
+    text-align: left;
+    border-right: 1px solid $gray-medium;
+  }
+
+  tbody th {
+    border-bottom: 1px solid $neutral;
+  }
+
+  tr {
+    @extend .simple-table__row;
+  }
+
+  // scss-lint:disable ImportantRule
+  td {
+    @extend .simple-table__cell;
+    border-right: 1px solid $gray-medium;
+    text-align: right;
+    padding: u(1rem) !important;
+  }
+
+  td:last-child,
+  th:last-child {
+    border-right: none;
+  }
+
+
+  @include media($lg) {
+    box-shadow: none;
+  }
+}
+
+.block-custom_table {
+  h2,
+  h3,
+  h4,
+  h5,
+  p {
+    margin: u(2rem 0 0.5rem);
+  }
+
+  .custom_footnote {
+    margin-bottom: u(1rem);
+  }
+}
+
+// Dense table
+// For tables with a lot of data that need to be condensed
+.dense-table-container {
+  box-shadow: -10px 0 20px -10px $gray-medium inset;
+  overflow-x: scroll;
+
+  @include media($lg) {
+    box-shadow: none;
+  }
+}
+
+.option__content .dense-table-container {
+  box-shadow: -10px 0 20px -10px $gray-medium inset;
+  overflow-x: scroll;
+}
+
+// scss-lint:disable ImportantRule
+.dense-table {
+  border-bottom-width: 0;
+  border-top: none !important;
+  table-layout: auto;
+
+  td,
+  th {
+    border-bottom: 1px solid $gray-light;
+    border-right: 1px solid $gray-light;
+    font-size: u(1.2rem);
+    line-height: 1.2;
+    padding: u(.5rem);
+    vertical-align: middle;
+    word-wrap: break-word;
+  }
+
+  thead th {
+    border-bottom: 1px solid $primary;
+    padding: u(.5rem);
+  }
+
+  tbody th {
+    border-right: 1px solid $primary;
+  }
+
+  th[scope="colgroup"],
+  th[scope="rowgroup"] {
+    text-align: center;
+    background-color: $primary;
+    color: $inverse;
+    border-bottom: none;
+    border-right: none;
+  }
+}

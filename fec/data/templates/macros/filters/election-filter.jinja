@@ -1,0 +1,45 @@
+{% macro full_cycle(name, title, cycle_name, full_name, office) %}
+  {% if office == 'president' %}
+    {% set duration = 4 %}
+    {% set years = range(2020, 1976, -4) %}
+    {% set default_cycle = constants.DEFAULT_PRESIDENTIAL_YEAR %}
+  {% elif office == 'senate' %}
+    {% set duration = 6 %}
+    {% set years = range(2022, 1976, -2) %}
+    {% set default_cycle = constants.DEFAULT_TIME_PERIOD %}
+  {% endif %}
+  <div
+      id="{{ name }}-field"
+      class="filter js-filter"
+      data-filter="election"
+      data-name="{{ name }}"
+      data-cycle-name="{{ cycle_name }}"
+      data-full-name="{{ full_name }}"
+      data-duration="{{ duration }}"
+      data-default-cycle="{{ default_cycle }}"
+    >
+  <label class="label" for="{{ name }}">{{ title }}</label>
+  <select id="{{name}}" name="{{ name }}" class="js-election select--full">
+    {% for year in years %}
+      <option value="{{ year }}">{{ year }}</option>
+    {% endfor %}
+  </select>
+  {% if office in ['president', 'senate'] %}
+  <fieldset class="toggles toggles--vertical">
+    <legend class="label">Time period</legend>
+    <div class="js-cycles"></div>
+  </fieldset>
+  <input type="hidden" name="{{ cycle_name }}" />
+  <input type="hidden" name="{{ full_name }}" />
+  {% endif %}
+</div>
+{% endmacro %}
+
+{% macro single_cycle(name, title) %}
+  <label class="label" for="{{ name }}">{{ title }}</label>
+  <select id="{{name}}" name="{{ name }}" class="js-election select--full">
+    {% for year in range(2020, 1976, -2) %}
+      <option value="{{ year }}" {% if year == constants.DEFAULT_TIME_PERIOD %}selected{% endif %}>{{ year|fmt_year_range }}</option>
+    {% endfor %}
+  </select>
+{% endmacro %}

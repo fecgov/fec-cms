@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+  <title>{% block title %}{% endblock %} | FEC </title>
+  {% set title = self.title() %}
+
+  {% include 'partials/meta-tags.jinja' %}
+
+  {% block css %}
+  {% compress css %}
+  <link rel="stylesheet" type="text/x-scss" href="{{ static('scss/base.scss') }}" />
+  {% endcompress %}
+  {% endblock css %}
+
+  <script>
+    ANALYTICS = 'false';
+    BASE_PATH = '/data';
+    CMS_URL = '{{ CMS_URL }}',
+    API_LOCATION = '{{ FEC_API_URL }}';
+    API_VERSION = 'v1';
+    API_KEY = '{{ FEC_API_KEY }}';
+    DEFAULT_TIME_PERIOD = '2018';
+    START_YEAR = '1979';
+    END_YEAR = '2018';
+    DISTRICT_MAP_CUTOFF = '2018';
+    WEBMANAGER_EMAIL = '{{ WEBMANAGER_EMAIL }}';
+    CANONICAL_BASE = '{{ CANONICAL_BASE }}';
+    TRANSITION_URL = '{{ TRANSITION_URL }}';
+
+    function trackMetric(name, imagesSelector) {
+      if (imagesSelector) {
+        var images = document.querySelectorAll(imagesSelector);
+        if (images && images.length) {
+          for (var i = 0, ilen = images.length; i < ilen; i++) {
+            images[i].addEventListener('load', function() {
+              window.performance.mark(name);
+            });
+          }
+        }
+      }
+      window.performance.mark(name);
+    }
+  </script>
+</head>
+<body>
+{% import 'macros/search.jinja' as search %}
+{% include 'partials/warnings.jinja' %}
+
+{% if site_orientation_banner %}
+  {% include "partials/site-orientation.html" %}
+{% endif %}
+
+<a href="#main" class="skip-nav" tabindex="0">skip navigation</a>
+
+  <header class="site-header">
+    <div class="masthead">
+      <div class="disclaimer">
+        <span class="disclaimer__right">
+          An official website of the United States Government
+          <img src="{{ static('img/us_flag_small.png') }}" alt="US flag signifying that this is a United States Federal Government website">
+        </span>
+      </div>
+      <div class="site-title--print"></div>
+      <a title="Home" href="/" rel="home" class="site-title"><span class="u-visually-hidden">Federal Election Commission | United States of America</span></a>
+      <ul class="utility-nav list--flat">
+        <li class="utility-nav__item"><a href="/calendar/">Calendar</a></li>
+        <li class="utility-nav__item"><button class="js-glossary-toggle glossary__toggle">Glossary</button></li>
+        <li class="utility-nav__search">
+          <form accept-charset="UTF-8" action="/search" class="combo" method="get" role="search">
+            <input type="hidden" name="type" value="candidates">
+            <input type="hidden" name="type" value="committees">
+            <input type="hidden" name="type" value="site">
+            <label class="u-visually-hidden" for="query">Search</label>
+            <input
+              class="js-site-search combo__input"
+              autocomplete="off"
+              id="query"
+              name="query"
+              type="text"
+              aria-label="Search FEC.gov">
+            <button type="submit" class="button--standard combo__button button--search">
+              <span class="u-visually-hidden">Search</span>
+            </button>
+          </form>
+        </li>
+      </ul>
+    </div>
+
+    {% include 'partials/navigation/navigation.html' %}
+
+  </header>
+
+  {% block header %}{% endblock %}
+  <main id="main" {% if section %} data-section="{{section}}"{% endif %}>
+    {% block body %}{% endblock %}
+  </main>
+  {% include 'partials/footer-navigation.html' %}
+  <footer class="footer">
+    <div class="container">
+      <div class="seal">
+        <img class="seal__img" width="140" height="140" src="{{ static('img/seal--inverse.svg') }}" alt="Seal of the Federal Election Commission | United States of America">
+        <p class="address__title">Federal Election Commission</p>
+      </div>
+
+      <div class="address">
+        <ul class="social-media">
+          <li>
+            <div class="i icon--twitter">
+              <a href="https://twitter.com/fec"><span class="u-visually-hidden">The FEC's Twitter page</span></a>
+            </div>
+          </li>
+          <li>
+            <div class="i icon--youtube">
+              <a href="https://www.youtube.com/user/FECTube"><span class="u-visually-hidden">The FEC's YouTube page</span></a>
+            </div>
+          </li>
+        </ul>
+
+        <p>999 E Street, NW<br>
+        Washington, DC 20463</p>
+      </div>
+    </div>
+  </footer>
+
+{% include './partials/glossary.html' %}
+
+{% block modals %}{% endblock %}
+<script src="{{ asset_for('vendor.js') }}"></script>
+<script src="{{ asset_for('data-init.js') }}"></script>
+{% block scripts %}{% endblock %}
+
+{% if use_analytics %}
+<script id="_fed_an_ua_tag" src="https://dap.digitalgov.gov/Universal-Federated-Analytics-Min.js?agency=FEC"></script>
+{% endif %}
+
+</body>
+</html>

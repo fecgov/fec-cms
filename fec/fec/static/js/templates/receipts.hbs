@@ -1,0 +1,80 @@
+<div class="panel__row">
+  <h4 class="panel__title">Contributor information</h4>
+  <table>
+    <tr>
+      {{#panelRow "Name"}}
+        {{#if contributor}}
+          {{#if (eq receipt_type (global 'EARMARKED_CODE'))}}
+            {{contributor_name}}
+          {{else}}
+            <a href="{{basePath}}/committee/{{contributor.committee_id}}">{{contributor.name}}</a>
+          {{/if}}
+        {{else}}
+          {{contributor_name}}
+        {{/if}}
+      {{/panelRow}}
+    </tr>
+    {{#if contributor}}
+      {{#if (eq receipt_type (global 'EARMARKED_CODE'))}}
+        {{#panelRow "Earmarked by"}}
+          <a href="{{basePath}}/committee/{{contributor.committee_id}}">{{contributor.name}}</a>
+        {{/panelRow}}
+      {{/if}}
+    {{/if}}
+    {{#panelRow "City and state"}}
+      {{contributor_city}}, {{contributor_state}}, {{contributor_zip}}
+    {{/panelRow}}
+    {{#if is_individual}}
+      {{#panelRow "Occupation"}}
+        {{contributor_occupation}}
+      {{/panelRow}}
+      {{#panelRow "Employer"}}
+        {{contributor_employer}}
+      {{/panelRow}}
+    {{/if}}
+    {{#panelRow "Year to date"}}
+      {{{currency contributor_aggregate_ytd}}}
+    {{/panelRow}}
+  </table>
+</div>
+
+<div class="panel__row">
+  <h4 class="panel__title">Contribution information</h4>
+  <table>
+    {{#panelRow "Amount"}}
+      {{{currency contribution_receipt_amount}}}
+    {{/panelRow}}
+    {{#panelRow "Receipt date"}}
+      {{{datetime contribution_receipt_date format="pretty"}}}
+    {{/panelRow}}
+    {{#panelRow "Memo"}}
+      {{memo_text}}
+    {{/panelRow}}
+    {{#if filing_form}}
+      {{#panelRow "Reported on"}}
+        Form {{formNumber filing_form }} on line {{line_number}}
+      {{/panelRow}}
+    {{/if}}
+    {{#panelRow "Election type"}}
+      {{fec_election_type_desc}}
+    {{/panelRow}}
+  </table>
+</div>
+
+<div class="panel__row">
+  <h4 class="panel__title">Recipient information</h4>
+  <table>
+    {{#panelRow "Committee"}}
+      <a href="{{basePath}}/committee/{{ committee.committee_id }}/">{{ committee.name }}</a>
+    {{/panelRow}}
+    {{#panelRow "Political party"}}
+      {{committee.party_full}}
+    {{/panelRow}}
+    {{#panelRow "Type"}}
+      {{committee.committee_type_full}}
+    {{/panelRow}}
+    {{#panelRow "State"}}
+      {{committee.state_full}}
+    {{/panelRow}}
+  </table>
+</div>

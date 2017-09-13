@@ -1,0 +1,21 @@
+<div class="filter">
+  <fieldset class="js-filter" data-filter="checkbox">
+    <legend class="label">
+      Restrict contributions
+      <div class="tooltip__container">
+        <button class="tooltip__trigger" type="button"><span class="u-visually-hidden">Learn more</span></button>
+        <div id="unique-tooltip" role="tooltip" class="tooltip tooltip--under tooltip--left">
+          <p class="tooltip__content">Some transactions — such as earmarked contributions and partnership contributions — are reported more than once for clarity on the printed page but can lead to confusion when viewed as data online. Use the unique only filter to remove these extra transactions.</p>
+        </div>
+      </div>
+    </legend>
+    <ul>
+      <li>
+        <input id="is-individual" name="is_individual" type="checkbox" value="true" class="tooltip-trigger" aria-describedby="unique-tooltip">
+        <label for="is-individual" class="t-inline-block">
+          From unique individuals only
+        </label>
+      </li>
+    </ul>
+  </fieldset>
+</div>

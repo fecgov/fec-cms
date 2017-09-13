@@ -1,0 +1,65 @@
+<div class="js-keyword-modal modal" id="keyword-modal" aria-hidden="true">
+  <div tabindex="-1" class="modal__overlay" data-a11y-dialog-hide></div>
+  <div role="dialog" class="modal__content" aria-labelledby="spending-modal-title">
+    <div role="document">
+      <button type="button" class="modal__close button--close--primary" data-a11y-dialog-hide title="Close this dialog window"></button>
+      <h2 id="spending-modal-title" class="heading--section">Find documents with...</h2>
+      <div class="row u-padding--top">
+        <form class="modal__form" action="">
+          <div class="filter">
+            <label class="label" for="keywords-any">Any of these words</label>
+            <input type="text" id="keywords-any" data-operator="or">
+            <span class="t-note t-sans">Entering <span class="t-underline">text message</span> will search <span class="t-underline">text</span> or <span class="t-underline">message</span></span>
+          </div>
+          <div class="filter">
+            <label class="label" for="keywords-all">All of these words</label>
+            <input type="text" id="keywords-all" data-operator="and">
+            <span class="t-note t-sans">Entering <span class="t-underline">text message</span> will search <span class="t-underline">text</span> and <span class="t-underline">message</span></span>
+          </div>
+          <div class="filter">
+            <label class="label" for="keywords-exact">This exact phrase</label>
+            <input type="text" id="keywords-exact" data-operator="exact">
+            <span class="t-note t-sans">Entering <span class="t-underline">text message</span> will search <span class="t-underline">"text message"</span></span>
+          </div>
+          <div class="filter">
+            <label class="label" for="keywords-none">None of these words</label>
+            <input type="text" id="keywords-none" data-operator="exclude">
+            <span class="t-note t-sans">Entering <span class="t-underline">text message</span> will exclude <span class="t-underline">text</span> and <span class="t-underline">message</span></span>
+            <button class="u-margin--top button button--cta button--search--text" type="submit">Search</button>
+          </div>
+        </form>
+        <div class="modal__tips">
+          <h3>Search tips</h3>
+          <p>Complex keyword searches can be created without using these special fields.</p>
+          <p>Use these symbols in the main search box:</p>
+          <table class="simple-table">
+            <thead class="simple-table__header">
+              <tr>
+                <th>Symbol</th>
+                <th>Meaning</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="simple-table__row">
+                <td class="simple-table__cell">OR</td>
+                <td class="simple-table__cell">or</td>
+              </tr>
+              <tr class="simple-table__row">
+                <td class="simple-table__cell">&amp;</td>
+                <td class="simple-table__cell">and</td>
+              </tr>
+              <tr class="simple-table__row">
+                <td class="simple-table__cell">&ldquo; &rdquo;</td>
+                <td class="simple-table__cell">exact phrase</td>
+              </tr>
+              <tr class="simple-table__row">
+                <td class="simple-table__cell">-</td>
+                <td class="simple-table__cell">but not</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

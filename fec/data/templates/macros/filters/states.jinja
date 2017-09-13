@@ -1,0 +1,21 @@
+{% macro field(name='name', id_suffix='') %}
+<div class="filter">
+  <fieldset class="js-dropdown js-filter" data-filter="checkbox">
+    <legend class="label" for="state">State or Territory</legend>
+    <ul class="dropdown__selected"></ul>
+    <div class="dropdown">
+      <button type="button" class="dropdown__button button--alt" data-name="{{ name }}">More</button>
+      <div id="state-dropdown{{id_suffix}}" class="dropdown__panel" aria-hidden="true">
+        <ul class="dropdown__list">
+          {% for state in constants.states.items() %}
+            <li class="dropdown__item">
+              <input name="{{ name }}" id="state-checkbox-{{state[0]}}{{id_suffix}}" type="checkbox" value="{{ state[0] }}">
+              <label class="dropdown__value" for="state-checkbox-{{ state[0] }}{{id_suffix}}">{{ state[1] }}</label>
+            </li>
+          {% endfor %}
+        </ul>
+      </div>
+    </div>
+  </fieldset>
+</div>
+{% endmacro %}

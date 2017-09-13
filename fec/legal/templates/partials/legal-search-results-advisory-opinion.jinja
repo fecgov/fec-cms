@@ -1,0 +1,36 @@
+<div class="message message--info">
+  <h3>This feature is still in progress.</h3>
+  <p>We&#39;re actively building the <strong>advisory opinion search</strong>, and it doesn&#39;t yet include some
+  advanced search functions. If you can&#39;t find what you&#39;re looking for, you can still <a href="http://saos.fec.gov/saos/searchao">search
+  opinions on the old FEC.gov</a>.</p>
+</div>
+
+{% for advisory_opinion in advisory_opinions %}
+  <h3 class="ao-result__title">
+    <a title="{{ advisory_opinion.description }}"
+      href="{{ url_for('advisory_opinion_page', ao_no=advisory_opinion.no) }}">
+      <span class="font-bolt">AO {{ advisory_opinion.no }}: </span></a>
+      <span class="t-normal">{{ advisory_opinion.name }}</span>
+  <p class="u-padding--top">
+  <span class="t-bold">Summary: </span> <span class="t-normal">
+    {{ advisory_opinion.summary }}
+  </span>
+  </p>
+  </h3>
+  <div class="u-padding--left">
+  <table>
+    <tbody>
+    <tr class="legal-search-result">
+      <td>
+        <div class="t-serif legal-search-result__hit u-padding--top">
+          &hellip;
+          {% for highlight in advisory_opinion.highlights %}
+            {{ highlight|safe }} &hellip;
+          {% endfor %}
+        </div>
+      </td>
+    </tr>
+  </tbody>
+  </table>
+  </div>
+{% endfor %}

@@ -1,0 +1,140 @@
+// Maps
+//
+// Election maps
+// <div id="election-map" class="map" aria-hidden="true"></div>
+//
+// Individual contributions/receipts
+// <div class="map-panel">
+//   <div class="state-map" data-candidate-id="{{ candidate_id }}" data-cycle="{{ max_cycle }}">
+//     <div class="legend-container">
+//       <span class="t-sans t-block">By state: total amount received</span>
+//       <svg></svg>
+//     </div>
+//   </div>
+// </div>
+//
+
+.election-map {
+  border: 1px solid $gray;
+  height: u(40rem);
+
+  svg path {
+    stroke-width: 1px;
+  }
+}
+
+.election-map--small {
+  height: u(24rem);
+}
+
+.choropleths {
+  position: relative;
+}
+
+.state-map {
+  padding-top: u(2rem);
+
+  .button--close {
+    float: right;
+  }
+
+  .candidate-select {
+    float: left;
+    margin-bottom: u(1rem);
+  }
+
+  @include media($lg) {
+    @include span-columns(6);
+
+    .candidate-select {
+      margin-bottom: 0;
+    }
+
+    .button--two-candidates {
+      position: absolute;
+      right: 0;
+      top: u(1rem);
+    }
+  }
+}
+
+path.shape {
+  stroke: $primary;
+  stroke-width: .5px;
+
+  &.active {
+    fill: rgba($primary, .5);
+    stroke: $primary;
+    stroke-width: 2px;
+  }
+}
+
+.state--hover {
+  &:hover {
+    stroke: $primary;
+    stroke-width: 2px;
+    cursor: pointer;
+  }
+}
+
+.legend-container {
+  font-family: $sans-serif;
+
+  rect {
+    stroke: $primary;
+  }
+
+  svg {
+    height: 40px;
+  }
+}
+
+.map-table,
+.map-panel {
+  @include media($med) {
+    @include span-columns(6, block-collapse);
+  }
+}
+
+.map-table {
+  border-bottom: 1px solid $gray-lightest;
+
+  tr {
+    cursor: pointer;
+  }
+
+  .row-active {
+    border-left: .5rem solid $primary;
+  }
+}
+
+.map-toggles {
+  margin-top: u(1rem);
+}
+
+.map-panel {
+  padding: u(2rem);
+  position: relative;
+
+  .state-map {
+    width: 100%;
+  }
+
+  @include media($med) {
+    background-color: rgba($gray-lightest, .3);
+    border: 1px solid $gray-lightest;
+    height: 432px;
+  }
+}
+
+@include media($med) {
+  .map-toggles {
+    float: right;
+    margin-top: 0;
+  }
+}
+
+// Hide the credits that show up at the bottom of the map
+.leaflet-bottom {
+  display: none;
+}

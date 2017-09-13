@@ -1,0 +1,38 @@
+{% macro reaction_box(name, location) %}
+  <div class="reaction-box js-reaction-box" data-name="{{ name }}" data-location="{{ location }}">
+    <form>
+      <div class="js-reaction-step-1">
+        <span class="reaction-box__heading">What do you think of this chart?</span>
+        <ul class="list--buttons">
+          <li>
+            <button type="button" class="button--standard button--informative js-reaction" data-reaction="informative">Informative</button>
+          </li>
+          <li>
+            <button type="button" class="button--standard button--confusing js-reaction" data-reaction="confusing">Confusing</button>
+          </li>
+          <li>
+            <button type="button" class="button--standard button--not-interested js-reaction" data-reaction="not-interested">Not interested</button>
+          </li>
+          <li>
+            <button type="button" class="button--standard js-reaction" data-reaction="none">None of the above</button>
+          </li>
+        </ul>
+      </div>
+      <div class="js-reaction-step-2 u-fade-in" aria-hidden="true">
+        <span class="reaction-box__heading">What do you think of this chart?</span>
+        <p><label for="reaction-more-{{ name }}"></label></p>
+        <textarea id="reaction-more-{{ name }}"></textarea>
+        <ul class="list--buttons">
+          <li><button type="button" class="button--standard js-skip">Skip</button></li>
+          <li><button type="submit" class="button--cta">Submit</button></li>
+      </div>
+    </form>
+    <div class="message message--success message--inverse-alt message--small js-reaction-success u-fade-in" aria-hidden="true">
+      Thanks for helping us improve!
+    </div>
+    <div class="message message--error message--inverse-alt message--small js-reaction-error u-fade-in" aria-hidden="true">
+      <p>Uh oh. Something went wrong. Please try again.</p>
+      <button type="button" class="js-reset button--cta">Start over</button>
+    </div>
+  </div>
+{% endmacro %}

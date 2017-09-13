@@ -1,0 +1,7 @@
+{% macro null(value) %}
+  {% if value is not none or value is not defined %}
+    {{ value }}
+  {% else %}
+    <a class='term' data-term='None'>None</a>
+  {% endif %}
+{% endmacro %}

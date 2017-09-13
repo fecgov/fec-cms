@@ -1,0 +1,20 @@
+// Raising and Spending breakdown
+//
+// <form action="" method="get" class="breakdown-cycle">
+// ...
+// </form>
+//
+
+.breakdown-cycle {
+  border-top: 4px solid $primary;
+  padding: u(2rem 0);
+
+  select {
+    width: 100%;
+  }
+}
+
+.breakdown__title {
+  line-height: u(3.4rem);
+  margin: 0;
+}

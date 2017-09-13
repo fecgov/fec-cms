@@ -1,0 +1,450 @@
+[
+  {
+    "term": "Status",
+    "definition": "Refers to whether the candidate is an incumbent, challenger or running unopposed."
+  },
+  {
+    "term": "Candidate ID",
+    "definition": "A unique identifier assigned to each candidate registered with the FEC. The initial character indicates the office sought. (H)ouse, (S)enate, (P)resident. If a person runs for several offices, they will have separate IDs for each office."
+  },
+  {
+    "term": "Political party",
+    "definition": "An association, committee or organization that nominates or selects a candidate for election to federal office whose name appears on the election ballot as the candidate of the organization."
+  },
+  {
+    "term": "District",
+    "definition": "A U.S. House of Representatives District. Because senators represent an entire state, Senate races do not have districts associated with them."
+  },
+  {
+    "term": "Organization type",
+    "definition": "Certain filers, like separate segregated funds and communication cost filers, identify the types of organizations they are connected with. These connected organizations can be identified as corporations, trade associations, labor organizations, cooperatives, membership organizations or corporations without capital stock."
+  },
+  {
+    "term": "Committee type",
+    "definition": "A definition that categorizes groups organized to receive and spend money in federal elections. The basic committee types are authorized committees, political party committees, separate segregated funds (SSFs) and nonconnected committees."
+  },
+  {
+    "term": "Total receipts",
+    "definition": "The sum of all contributions and other receipts received by a committee during a filing period."
+  },
+  {
+    "term": "Total disbursements",
+    "definition": "The sum of all purchases and payments made during a filing period by a political committee or any other person, including an organization that is not a political committee that is subject to the Federal Election Campaign Act."
+  },
+  {
+    "term": "Debt",
+    "definition": "Debts include unpaid bills. FEC reports show the amount of reportable debt a committee owes to other entities at the end of the filing period."
+  },
+  {
+    "term": "Joint fundraising",
+    "definition": "Fundraising conducted jointly by a political committee and one or more other political committees or unregistered organizations.  Joint fundraising is often conducted between a principal campaign committee and a political party committee."
+  },
+  {
+    "term": "Joint fundraising committee",
+    "definition": "A committee that has been set up for the purposes of fundraising for multiple committees at the same time or an existing committee that has been authorized to serve that purpose."
+  },
+  {
+    "term": "Reports, designations and statements",
+    "definition": "All committees registered with the FEC and other persons who make certain expenditures or disbursements are required to file reports, designations and statements that disclose their financial activity. The contents of those reports and statements, as well as the filing schedule, depend on the type of committee or organization, or the type of expenditure or disbursement made.  See also \"Filing\"."
+  },
+  {
+    "term": "Filing",
+    "definition": "A report, designation or statement submitted to the FEC or Secretary of the Senate by a candidate, committee or other entity. Required filings include declarations of candidacy and committee reports of the money they receive and spend.  See also \"Reports, designations and statements\"."
+  },
+  {
+    "term": "Authorized committee",
+    "definition": "A political committee that has been authorized by a candidate to accept contributions or make expenditures on his or her behalf, or one that accepts contributions or makes expenditures on behalf of a candidate and has not been disavowed by the candidate."
+  },
+  {
+    "term": "Political committee",
+    "definition": "An entity that meets one of the following conditions:<ul><li>An authorized committee of a candidate (see definition of candidate)</li><li>Any club, association or other group of persons that receives contributions or makes expenditures, either of which aggregate over $1,000 during a calendar year</li><li>A local unit of a political party (except a state party committee) that: (1) receives contributions aggregating over $5,000 during a calendar year; (2) makes contributions or expenditures either of which aggregate over $1,000 during a calendar year or (3) makes payments aggregating over $5,000 during a calendar year for certain activities that are exempt from the definitions of contribution and expenditure (11 CFR 100.80, 100.87 and 100.89; 11 CFR 100.140, 100.147 and 100.149)</li><li>Any separate segregated fund upon its establishment. 11 CFR 100.5.</li></ul>"
+  },
+  {
+    "term": "Principal campaign committee",
+    "definition": "An authorized committee designated by a candidate as the principal committee to raise contributions and make expenditures for his or her campaign for a federal office."
+  },
+  {
+    "term": "Candidate",
+    "definition": "An individual seeking nomination for election, or reelection, to a federal office becomes a candidate when he or she (or persons working on his or her behalf) receives contributions or makes expenditures that exceed $5,000."
+  },
+  {
+    "term": "None",
+    "definition": "If data appears as \"None\", it's best to check the source document. Common reasons that the data appears as \"None\" are:<ul><li>Data is not processed yet; often, paper filings cause delays and inconsistent upload times.</li><li>Data is from an amendment that did not properly identify the form it was amending.</li><li>The filer did not fill out the information on the form.</li></ul>If you think there is an error, you can report that via <a href='mailto:webmanager@fec.gov'>email</a>."
+  },
+  {
+    "term": "Independent expenditure",
+    "definition": "An expenditure for a communication <ul><li>That expressly advocates the election or defeat of a clearly identified candidate and</li><li>That is not made in cooperation, consultation or concert with, or at the request or suggestion of, any candidate, or his or her authorized committees or agents, or a political party committee or its agents. 11 CFR 100.16.</li></ul>"
+  },
+  {
+    "term": "Contribution",
+    "definition": "A gift, subscription, loan, advance or deposit of money or anything of value given to influence a federal election; or the payment by any person of compensation for the personal services of another person if those services are rendered without charge to a political committee for any purpose. 100.52(a) and 100.54."
+  },
+  {
+    "term": "Corporation",
+    "definition": "Any separately incorporated entity (other than a political committee that has incorporated for liability purposes only). 100.134(l) and 114.12(a). The term corporation covers both for-profit and nonprofit corporations and includes nonstock corporations, incorporated membership organizations, incorporated cooperatives, incorporated trade associations, professional corporations and, under certain circumstances, limited liability companies."
+  },
+  {
+    "term": "Disbursement",
+    "definition": "Any purchase or payment made by a political committee or any other person that is subject to the Federal Election Campaign Act. 300.2(d)."
+  },
+  {
+    "term": "Donation",
+    "definition": "A payment, gift, subscription, loan, advance, deposit or anything of value given to a person but does not include contributions. 300.2(e)."
+  },
+  {
+    "term": "Electioneering communication",
+    "definition": "Any broadcast, cable or satellite communication that (1) refers to a clearly identified candidate for federal office; (2) is publicly distributed within certain time periods before an election and (3) is targeted to the relevant electorate. 100.29."
+  },
+  {
+    "term": "Expenditure",
+    "definition": "A purchase, payment, distribution, loan, advance, deposit or gift of money or anything of value made for the purpose of influencing a federal election. A written agreement to make an expenditure is also considered an expenditure. 100.111 and 100.112."
+  },
+  {
+    "term": "Independent expenditure only committee",
+    "definition": "Political committees that make only independent expenditures that may solicit and accept unlimited contributions from individuals, corporations, labor organizations and other political committees. They may not accept contributions from foreign nationals, federal contractors, national banks or federally chartered corporations. See AO 2010-11. Such committees, popularly known as Super PACs, must register with the Commission and comply with all applicable reporting requirements of the Act."
+  },
+  {
+    "term": "Labor organization",
+    "definition": "An organization, agency or employee representative committee or plan, in which employees participate and which exists for the purpose of dealing with employers on grievances, labor disputes, wages, hours of employment or working conditions. 114.1(d)."
+  },
+  {
+    "term": "Communications filers",
+    "definition": "Form 5, Form 7 and Form 9 filers, whose activity includes: <ul><li>Contributions reported by persons other than political committees</li><li>Independent expenditures reported by persons other than political committees</li><li>Communication costs reported by corporations and membership organizations</li><li>Electioneering communications</li></ul>"
+  },
+  {
+    "term": "Person",
+    "definition": "An individual, partnership, political committee, corporation, labor organization or any other organization or group of persons, not including the federal government. 100.10."
+  },
+  {
+    "term": "Political Action Committee (PAC)",
+    "definition": "Popular term for a political committee that is neither a party committee nor an authorized committee of a candidate. PACs directly or indirectly established, administered or financially supported by a corporation or labor organization are called separate segregated funds (SSFs). PACs without such a corporate or labor sponsor are called nonconnected PACs."
+  },
+  {
+    "term": "Public communication",
+    "definition": "A communication by means of any broadcast, cable or satellite communication, newspaper, magazine, outdoor advertising facility, mass mailing or telephone bank to the general public, or any other form of general public political advertising. The term general public political advertising does not include communications made over the internet, except for communications placed for a fee on another person’s website. 100.26, 100.27 (definition of mass mailing) and 100.28 (definition of telephone bank)."
+  },
+  {
+    "term": "Receipt",
+    "definition": "Anything of value (money, goods, services or property) received by a political committee."
+  },
+  {
+    "term": "Special election",
+    "definition": "A primary, general or runoff election that is not a regularly scheduled election and that is held to fill a vacant seat in the House of Representatives or the Senate. 100.2(f)."
+  },
+  {
+    "term": "Separate segregated fund (SSF)",
+    "definition": "A political committee established, administered or financially supported by a corporation or labor organization, popularly called a Corporate or Labor Political Action Committee (PAC). See 114.1(a)(2)(iii). The term \"financially supported\" does not include contributions to the SSF, but does include the payment of establishment, administration or solicitation costs. 100.6(b)."
+  },
+  {
+    "term": "Trade association",
+    "definition": "A membership organization consisting of persons engaged in a similar or related line of commerce. A trade association is organized to promote and improve business conditions in that line of commerce and not to engage in a regular business for profit. No part of the net earnings of a trade association may inure to the benefit of any member."
+  },
+  {
+    "term": "Presidential public funds",
+    "definition": "Public funding of presidential elections means that qualified presidential candidates may choose to receive federal government funds to pay for certain expenses of their political campaigns in both the primary and general elections. Prior to the 2016 presidential election, national political parties could also receive federal money for their national nominating conventions."
+  },
+  {
+    "term": "Party committee",
+    "definition": "A political committee that represents a political party and is part of the official party structure at the national, state or local level."
+  },
+  {
+    "term": "Operating expenditures",
+    "definition": "A committee's day-to-day expenditures for items such as rent, overhead, administration, personnel, equipment, travel, advertising and fundraising."
+  },
+  {
+    "term": "Leadership PAC",
+    "definition": "A political committee that is directly or indirectly established, financed, maintained or controlled by a candidate or an individual holding federal office, but is not an authorized committee of the candidate or officeholder and is not affiliated with an authorized committee of a candidate or officeholder."
+  },
+  {
+    "term": "Super PAC",
+    "definition": "A committee that intends to make independent expenditures, and — consistent with the U.S. Court of Appeals for the District of Columbia Circuit decision in SpeechNow v. FEC — it therefore intends to raise funds in unlimited amounts. This committee will not use those funds to make contributions, whether direct, in-kind or via coordinated communications, to federal candidates or committees."
+  },
+  {
+    "term": "Hybrid PAC",
+    "definition": "A committee that intends to establish a separate bank account to deposit and withdraw funds raised in unlimited amounts from individuals, corporations, labor organizations and/or other political committees, consistent with the stipulated judgment in Carey v. FEC.  The funds maintained in this separate account will not be used to make contributions, whether direct, in-kind or via coordinated communications, or coordinated expenditures, to federal candidates or committees."
+  },
+  {
+    "term": "Lobbyist/Registrant PAC",
+    "definition": "Any political committee established or controlled by a person who is a current registrant under Lobbying Disclosure Act or an individual who is named on a current registration or report filed under the Lobbying Disclosure Act."
+  },
+  {
+    "term": "Overnight delivery service",
+    "definition": "A private delivery service business of established reliability that offers an overnight (next business day) delivery option."
+  },
+  {
+    "term": "Postmarked",
+    "definition": "A U.S. Postal Service postmark or the verifiable date of deposit with an overnight delivery service."
+  },
+  {
+    "term": "Exempt party activities",
+    "definition": "Certain candidate support activities that state and local party groups may undertake without making a contribution or expenditure, provided specific rules are followed."
+  },
+  {
+    "term": "Act",
+    "definition": "The Federal Election Campaign Act of 1971, as amended (52 U.S.C. §§30101-30146). 11 CFR 100.18. Prior to September 1, 2014, the Act appeared in Title 2 of the U.S. Code. Sometimes abbreviated FECA."
+  },
+  {
+    "term": "Administrative expense",
+    "definition": "For party committees, rent, utilities, office equipment, office supplies, routine building maintenance and other operating costs not attributable to a specific candidate."
+  },
+  {
+    "term": "Advisory opinion (AO)",
+    "definition": "A formal response from the Commission regarding the legality of a specific activity proposed in an advisory opinion request (AOR). 11 CFR Part 112."
+  },
+  {
+    "term": "Affiliated committees",
+    "definition": "Committees and organizations that are considered one committee for purposes of the contribution limits. 11 CFR 110.3(a)(1). Affiliated committees include (1) All committees established or authorized by a candidate as part of his or her campaign for federal or nonfederal office; and (2) All committees established, financed, maintained or controlled by the same person, group or organization. 11 CFR 100.5(g)(1) and (2); 110.3(a)(1)."
+  },
+  {
+    "term": "Allocation account",
+    "definition": "A separate federal account into which funds from either a committee’s federal and nonfederal accounts, or (for party committees) from its federal and Levin accounts, are deposited solely to pay expenses that must be allocated. (A party committee must have separate allocation accounts for its federal/nonfederal allocation and for its federal/Levin allocation.) 11 CFR 106.7(f) and 300.33(d)."
+  },
+  {
+    "term": "Bundled contribution",
+    "definition": "A contribution forwarded to a reporting committee by a lobbyist/registrant or lobbyist/registrant PAC, or received by a reporting committee and credited to a lobbyist/registrant or lobbyist/registrant PAC. See 11 CFR 104.22(a)(6)."
+  },
+  {
+    "term": "Campaign traveler",
+    "definition": "Any candidate traveling in connection with an election for federal office, or any individual traveling in connection with an election for federal office on behalf of a candidate or political committee; or any member of the news media traveling with a candidate. 11 CFR 100.93(a)(3)(i)."
+  },
+  {
+    "term": "Clearly identified candidate",
+    "definition": "A candidate is clearly identified when his or her name, nickname, photograph or drawing appears, or when his or her identity is otherwise apparent through an unambiguous reference such as “the President,” “your Congressman,” or “the incumbent,” or through an unambiguous reference to his or her status as a candidate such as “the Democratic presidential nominee” or “the Republican candidate for Senate in the State of Georgia.” 11 CFR 100.17."
+  },
+  {
+    "term": "Commercial vendor",
+    "definition": "Any person providing goods or services to a candidate or political committee whose usual and normal business involves the sale, rental, lease or provision of those goods or services. 11 CFR 116.1(c)."
+  },
+  {
+    "term": "Conduit or intermediary",
+    "definition": "Any person who receives and forwards an earmarked contribution to a candidate or a candidate’s authorized committee. 11 CFR 110.6(b)(2)."
+  },
+  {
+    "term": "Connected organization",
+    "definition": "An organization that uses its treasury funds to establish, administer or solicit contributions to a separate segregated fund. 11 CFR 100.6(a)."
+  },
+  {
+    "term": "Coordinated",
+    "definition": "Made in cooperation, consultation or concert with, or at the request or suggestion of, a candidate, a candidate’s authorized committee or their agents, or a political party committee or its agents. 11 CFR 109.20(a)."
+  },
+  {
+    "term": "Coordinated communication",
+    "definition": "A communication that satisfies a three-pronged test: <ol><li>The communication must be paid for by a person other than a federal candidate, authorized committee, or a political party committee, or any agents of the aforementioned entities with whom the communication is coordinated.</li><li>One or more of the five content standards set forth in 11 CFR 109.21(c) must be satisfied; and</li><li>One or more of the five conduct standards set forth in 11 CFR 109.21(d) must be satisfied.</li></ol>A payment for a communication satisfying all three prongs is an in-kind contribution to the candidate or political party committee with which it was coordinated. 11 CFR 109.21."
+  },
+  {
+    "term": "Coordinated party expenditure",
+    "definition": "A special type of expenditure that can be made only by a national or state political party committee in connection with the general election of a candidate. These expenditures are subject to a separate set of limits and do not count against the party’s normal contribution limits with respect to each candidate. 11 CFR 109.30 and 109.32-37."
+  },
+  {
+    "term": "Date made",
+    "definition": "The date the contributor relinquishes control over a contribution. A contribution that is mailed is considered made on the date of the postmark. In the case of an in-kind contribution, a contribution is made on the date the goods or services are provided by the contributor. This date determines the election or calendar year limit against which a contribution counts. 11 CFR 110.1(b)(6)."
+  },
+  {
+    "term": "Date received",
+    "definition": "The date a committee (or a person acting on the committee’s behalf) takes possession of the contribution. 11 CFR 102.8(a). This date is used for FEC reporting."
+  },
+  {
+    "term": "Delegate",
+    "definition": "An individual who is or seeks to become a delegate to a national nominating convention or to a state, district or local convention, caucus or primary held to select delegates to a national nominating convention. 11 CFR 110.14(b)(1)."
+  },
+  {
+    "term": "Delegate committee",
+    "definition": "A group organized for the purpose of influencing the selection of one or more delegates. The term includes a group of delegates, a group of individuals seeking to become delegates and a group of individuals supporting delegates. 11 CFR 110.14(b)(2)."
+  },
+  {
+    "term": "To Direct",
+    "definition": "For purposes of 11 CFR Part 300, to direct means to guide, directly or indirectly, a person who has expressed an intent to make a contribution, donation, transfer of funds or otherwise provide anything of value, by identifying a candidate, political committee or organization for the receipt of such funds or things of value. The contribution, donation, transfer or thing of value may be provided directly or through an intermediary. Direction does not include merely providing information or guidance as to the applicability of a particular law or regulation. 11 CFR 300.2(n)."
+  },
+  {
+    "term": "Direct mail",
+    "definition": "Any mailings made by a commercial vendor or made from a commercial list. 11 CFR 100.87(a), 100.89(a) 100.147(a) and 100.149(a)."
+  },
+  {
+    "term": "Earmarked contribution",
+    "definition": "A contribution that the contributor directs (either orally or in writing) to or on behalf of a clearly identified candidate or authorized committee through an intermediary or conduit. Earmarking may take the form of a designation, instruction or encumbrance, and it may be direct or indirect, express or implied. 11 CFR 110.6."
+  },
+  {
+    "term": "Election",
+    "definition": "Any one of several processes by which an individual seeks nomination for election, or election, to federal office. They include: a primary election, including a caucus or convention that has authority to select a nominee; a general election; a runoff election; and a special election held to fill a vacant seat. 11 CFR 100.2."
+  },
+  {
+    "term": "Election cycle",
+    "definition": "The period beginning the day after the previous general election for a given federal office and ending on the date of the general election for that office. The number of years in an election cycle differs according to the federal office sought. The election cycle spans two years for House candidates; four years for presidential candidates; and six years for Senate candidates. See 11 CFR 100.3(b)."
+  },
+  {
+    "term": "Express advocacy",
+    "definition": "Unambiguously advocating the election or defeat of a clearly identified federal candidate. There are two ways that a communication can be defined as express advocacy (candidate advocacy): by use of certain “explicit words of advocacy of election or defeat” and by the “only reasonable interpretation” test. See 11 CFR 100.22."
+  },
+  {
+    "term": "Facilitation",
+    "definition": "The use of corporate or labor organization resources or facilities to engage in fundraising activities in connection with any federal election (other than raising funds for the organization’s separate segregated fund). Facilitation results in a prohibited contribution to the committee that benefits from the activity. 11 CFR 114.2(f)."
+  },
+  {
+    "term": "Federal Election Activity (FEA)",
+    "definition": "Activity by state, district and local party committees, which may be paid for with federal or – in the case of the first two types – a combination of federal and Levin funds. The four types of federal election activity are as follows:<ul class=\"list-numbered\"><li>Voter registration activity during the period 120 days before a primary or general election and ending on election day itself;</li><li>Voter identification, get-out-the-vote and generic campaign activity conducted in connection with an election in which a federal candidate appears on the ballot;</li><li>A public communication that refers to a clearly identified candidate for federal office and that promotes, attacks, supports or opposes any candidate for federal office. The communication does not need to expressly advocate the election or defeat of the federal candidate to qualify as federal election activity; and </li><li>Services provided during a month by an employee of a state, district or local party committee who spends more than 25 percent of his or her compensated time during that month on activities in connection with a federal election including FEA.</li></ul> 11 CFR 100.24(b)."
+  },
+  {
+    "term": "Federal funds",
+    "definition": "Funds that comply with the limits, prohibitions and reporting requirements of the Federal Election Campaign Act. 11 CFR 300.2(g)."
+  },
+  {
+    "term": "Federal government contractor",
+    "definition": "A person who enters into a contract, or is bidding on such a contract, with any agency or department of the United States government and is paid, or is to be paid, for services, material, equipment, supplies, land or buildings with funds appropriated by Congress. 11 CFR 115.1."
+  },
+  {
+    "term": "Federal officeholder",
+    "definition": "An individual elected to or serving in the office of President or Vice President of the United States, or a Senator or Representative in, or a Delegate or Resident Commissioner, to the Congress of the United States. 11 CFR 113.1(c) and 300.2(o)."
+  },
+  {
+    "term": "Foreign national",
+    "definition": "<ol><li> An individual who is not a citizen of the United States or a national of the United States and has not been lawfully admitted to the U.S. for permanent residence, as defined in 8 U.S.C. §1101(a)(20); or</li><li>a foreign principal, as defined in 22 U.S.C. §611(b).</li></ol> 11 CFR 110.20(a)(3)."
+  },
+  {
+    "term": "Generic campaign activity",
+    "definition": "A type of Federal Election Activity, as distinguished from voter drive activity. Generic campaign activity is a public communication that promotes or opposes a political party and does not promote or oppose a clearly identified federal candidate or a nonfederal candidate. 11 CFR 100.25."
+  },
+  {
+    "term": "Get-Out-The-Vote (GOTV)",
+    "definition": "In regard to FEA, GOTV activity encompasses all means of assisting, encouraging or urging potential voters to vote. This activity includes, but is not limited to: <ul><li>Encouraging or urging potential voters to vote, whether by mail (including direct mail), email, in person, by telephone (including prerecorded telephone calls, phone banks and messaging such as SMS and MMS), or by any other means;</li><li>Informing potential voters, whether by mail (including direct mail), email, in person, by telephone (including pre-recorded telephone calls, phone banks and messaging such as SMS and MMS), or by any other means, about the hours or location of polling places, or about early voting or voting by absentee ballot;</li><li>Offering or arranging to transport, or actually transporting voters to the polls;</li><li>Any other activity that assists potential voters in voting.</li></ul> 11 CFR 100.24(a)(3)."
+  },
+  {
+    "term": "Identification",
+    "definition": "For purposes of recordkeeping and reporting, a person’s full name and address and, in the case of an individual, his or her occupation (principal job title or position) and employer (organization or person by whom an individual is employed) as well. 11 CFR 100.12, 100.20 and 100.21."
+  },
+  {
+    "term": "In-kind contribution",
+    "definition": "A contribution of goods, services or property offered free or at less than the usual and normal charge. The term also includes payments made on behalf of, but not directly to, candidates and political committees (except for independent expenditures or non-coordinated communications). 11 CFR 100.52(d)."
+  },
+  {
+    "term": "Joint contribution",
+    "definition": "A contribution made by more than one person on a single check or other written instrument. 11 CFR 110.1(k)(1)."
+  },
+  {
+    "term": "Levin funds",
+    "definition": "A category of funds raised by state, district and local party committees that may be spent for certain Federal Election Activities. Levin funds are donations from sources ordinarily prohibited by federal law but permitted by state law. 11 CFR 300.31 and 300.32."
+  },
+  {
+    "term": "Limited liability company (LLC)",
+    "definition": "A business entity that is recognized as a limited liability company under the laws of the state in which it is established. LLCs that are treated as partnerships under the IRS code may make contributions. LLCs that have publicly traded stock or are treated as corporations under the IRS code are prohibited from making contributions. 11 CFR 110.1(g)."
+  },
+  {
+    "term": "Lobbyist/registrant",
+    "definition": "A person who is a current registrant under the Lobbying Disclosure Act, or an individual who is named on a current registration or report filed under the Lobbying Disclosure Act. See 11 CFR 104.22."
+  },
+  {
+    "term": "Local or district party committee",
+    "definition": "A political committee that, by virtue of the bylaws of a political party, is responsible for the day-to-day operation of a political party at a level lower than the state level (e.g., city, county, ward). 11 CFR 100.14(b)."
+  },
+  {
+    "term": "Local party organization",
+    "definition": "A local party organization is an organization that is responsible for a political party's activities below the state level (such as city, county or district level) but is not registered with the Federal Election Commission as a district or local party committee."
+  },
+  {
+    "term": "Major party",
+    "definition": "A political party whose candidate in the preceding Presidential election received, as the candidate of such party, 25 percent or more of the popular vote. 11 CFR 9002.6 and 9008.2(c)."
+  },
+  {
+    "term": "Matter Under Review (MUR)",
+    "definition": "An FEC enforcement action, initiated by a sworn complaint or by an internal administrative action."
+  },
+  {
+    "term": "Member",
+    "definition": "With respect to a labor organization, a trade association, a cooperative or other incorporated membership organization, a member is an individual or other entity that: <ul><li>Satisfies the requirements for membership in a membership organization;</li><li> affirmatively accepts the organization’s invitation to become a member; and</li><li>maintains a long-term and continuous bond with the organization by:<ul><li>having a significant financial attachment, such as a significant investment or ownership stake;</li><li>paying annual dues; or</li><li>having direct participatory rights in the governance of the organization.</li></ul></li></ul> 11 CFR 114.1(e)(2)."
+  },
+  {
+    "term": "Membership organization",
+    "definition": "A labor organization or a trade association, cooperative or other incorporated membership organization that:<ul><li>is composed of members;</li><li>expressly states the qualifications for membership in its articles and by-laws;</li><li>makes its articles, by-laws and other organizational documents available to its members;</li><li>expressly seeks members;</li><li>acknowledges the acceptance of membership, such as by sending membership cards to new members or including them on a membership newsletter list; and</li><li>is not organized primarily for the purpose of influencing a federal election.</li></ul> 11 CFR 100.134(e) and 114.1(e)(1)."
+  },
+  {
+    "term": "Memo entry/memo item",
+    "definition": "Supplemental or explanatory information on a reporting schedule. A memo entry is often used to disclose additional information about an itemized transaction that is included in the total receipts or disbursements for the current report or a previous report. The dollar amount in a memo entry is not incorporated into the total figure for the schedule."
+  },
+  {
+    "term": "Multicandidate committee",
+    "definition": "A political action committee or party committee that has been registered at least 6 months, has more than 50 contributors and, with the exception of state party committees, has made contributions to at least 5 candidates for federal office. 11 CFR 100.5(e)(3)."
+  },
+  {
+    "term": "National committee",
+    "definition": "An organization that, by virtue of the bylaws of a political party, is responsible for the day-to-day operation of the political party at the national level, as determined by the Commission. 11 CFR 100.13."
+  },
+  {
+    "term": "National party committee",
+    "definition": "A political committee established and maintained by a national political party. A party’s national committee, House campaign committee and Senate campaign committee are considered national party committees, as determined by the Commission. 11 CFR 110.1(c)(2); 110.2(c)(2); 110.3(b)(2)."
+  },
+  {
+    "term": "Net debts outstanding",
+    "definition": "The total of a campaign’s unpaid debts incurred with respect to an election plus estimated costs to liquidate the debts plus costs of terminating political activity (if appropriate) minus cash on hand and receivables. 11 CFR 110.1(b)(3)(ii)."
+  },
+  {
+    "term": "Nonfederal funds",
+    "definition": "Funds that are not subject to the limitations or prohibitions of the Federal Election Campaign Act. 11 CFR 300.2(k)."
+  },
+  {
+    "term": "Nonconnected committee",
+    "definition": "Any committee that conducts activities in connection with an election, but that is not a party committee, an authorized committee of any candidate for federal election, or a separate segregated fund. 11 CFR 106.6(a)."
+  },
+  {
+    "term": "Person",
+    "definition": "An individual, partnership, political committee, corporation, labor organization, or any other organization or group of persons, not including the federal government. 11 CFR 100.10."
+  },
+  {
+    "term": "Prior approval",
+    "definition": "A written request to a member corporation of a trade association to a member corporation for permission to solicit the member’s restricted class. This request for approval must inform the member corporation that corporate approval is necessary before the trade association or its SSF may conduct a solicitation and the corporation may not approve solicitations by another trade association for the same calendar year. 11 CFR 114.8(d)(3)."
+  },
+  {
+    "term": "Reattributed contribution",
+    "definition": "The portion of an excessive contribution that has been attributed in writing to another contributor and signed by both contributors. 11 CFR 110.1(k)(3)(ii)."
+  },
+  {
+    "term": "Redesignated contribution",
+    "definition": "With regard to contributions made to candidates, the portion of a contribution that has been designated by the contributor, in writing, to an election other than the one for which the funds were originally given. 11 CFR 110.1(b)(5)."
+  },
+  {
+    "term": "Refunded contribution",
+    "definition": "A contribution is refunded when the recipient committee deposits the contribution and sends the contributor a check for the amount (or a portion) of the contribution. 11 CFR 103.3(b)."
+  },
+  {
+    "term": "Restricted class/solicitable class",
+    "definition": "Those persons, including the executive and administrative personnel, members or stockholders (and the families of each) within a corporation or labor organization, who may be solicited for contributions to the organization’s separate segregated fund at any time and who may receive certain communications from the organization. 11 CFR 114.1(j); 114.3(a); 114.5(g); 114.7(a) and (h); and 114.8(c), (h) and (i)."
+  },
+  {
+    "term": "to Solicit",
+    "definition": "For the purposes of 11 CFR Part 300, to solicit means to ask, request or recommend, explicitly or implicitly, that another person make a contribution, donation, transfer of funds or otherwise provide anything of value. A solicitation is an oral or written communication that, construed as reasonably understood in the context in which it is made, contains a clear message asking, requesting or recommending that a person make a contribution, donation, transfer of funds or otherwise provide anything of value. A solicitation may be made directly or indirectly. The context includes the conduct of persons involved in the communication. A solicitation does not include mere statements of political support or mere guidance as to the applicability of a particular law or regulation. 11 CFR 300.2(m)."
+  },
+  {
+    "term": "Solicitation (SSF)",
+    "definition": "A statement that publicizes the SSF’s right to accept unsolicited contributions from any lawful contributor; provides information on how to contribute to the SSF; or encourages support for the SSF. <a href=\"https://www.fec.gov/data/legal/advisory-opinions/1984-55/\">AO 1984–55, n. 2</a>; AOs <a href=\"https://www.fec.gov/data/legal/advisory-opinions/1979-66/\">1979–66</a> and <a href=\"https://www.fec.gov/data/legal/advisory-opinions/1979-13/\">1979–13</a>."
+  },
+  {
+    "term": "State party committee",
+    "definition": "A committee which, by virtue of the bylaws of a political party or the operation of state law is part of the official party structure and is responsible for the day-to-day operation of the party at the state level, including an entity that is directly or indirectly established, financed, maintained or controlled by that organization, as determined by the Commission. 11 CFR 100.14(a)."
+  },
+  {
+    "term": "Stockholder",
+    "definition": "A person who has a vested beneficial interest in stock, the power to direct how that stock is voted (if it is voting stock) and the right to receive dividends.11 CFR 114.1(h)."
+  },
+  {
+    "term": "Treasurer",
+    "definition": "Required for every political committee. The treasurer is responsible for filing the committee's registration form, depositing receipts, authorizing expenditures, monitoring contributions, keeping records, signing all reports and statements and filing all reports and statements on time."
+  },
+  {
+    "term": "Treasury funds",
+    "definition": "Funds of a corporation or labor organization that are derived from commercial activities or dues payments. Treasury funds may be used for the establishment, administrative and fundraising costs of the organization’s separate segregated fund, as well as for making independent expenditures and contributing to Super PACs and the non-contribution accounts of Hybrid PACs. See 11 CFR 114.5(b) and 114.10."
+  },
+  {
+    "term": "Usual and normal charge",
+    "definition": "With regard to goods provided to a political committee, the term refers to the price of those goods in the market from which they ordinarily would have been purchased at the time they were provided. With regard to services, the term refers to the hourly or piecework charge for the services at a commercially reasonable rate prevailing at the time the services were rendered. 11 CFR 100.52(d)(2)."
+  },
+  {
+    "term": "Voter drive activity",
+    "definition": "Voter identification, voter registration and get-out-the-vote-drives, or any other activities that urge the general public to register or vote, or that promote or oppose a political party, without promoting any federal or nonfederal candidate, that do not qualify as FEA. This is a category of allocable activity for mixed federal/nonfederal party activity sometimes also referred to as a “generic voter drive.” 11 CFR 106.7(c)(5)."
+  },
+  {
+    "term": "Voter identification",
+    "definition": "With regard to FEA, this means acquiring information about potential voters, including, but not limited to, obtaining voter lists and creating or enhancing voter lists by verifying or adding information about the voters’ likelihood of voting in an upcoming election or voting for specific candidates. 11 CFR 100.24(a)(4)."
+  },
+  {
+    "term": "Voter registration activity",
+    "definition": "In regard to FEA, voter registration activity encompasses all means of contacting potential voters to assist, encourage or urge them to register to vote. This activity includes, but is not limited to: <ul><li>Encouraging or urging potential voters to register to vote, whether by mail (including direct mail), email, in person, by telephone (including pre-recorded telephone calls, phone banks and messaging such as SMS and MMS), or by any other means;</li><li>Preparing and distributing information about registration and voting;</li><li>Distributing voter registration forms or instructions to potential voters;</li><li>Answering questions about how to complete or file a voter registration form, or assisting potential voters in completing or filing such forms;</li><li>Submitting or delivering a completed voter registration form on behalf of a potential voter;</li><li>Offering or arranging to transport, or actually transporting potential voters to a board of elections or county clerk’s office for them to fill out voter registration forms; or</li><li>any other activity that assists potential voters to register to vote.</li></ul> 11 CFR 100.24(a)(2)."
+  }
+]

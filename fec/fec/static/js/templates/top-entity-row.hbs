@@ -1,0 +1,11 @@
+<div role="row" class="simple-table__row js-top-row">
+  <div class="simple-table__cell">{{ rank }}. <a href="{{ url }}">{{ name }}</a>
+  {{#if party_code}}
+    {{ party_code }}
+  {{/if}}
+  </div>
+  <div class="simple-table__cell t-right-aligned">{{ amount }}</div>
+  <div class="simple-table__cell"><div class="bar-container">
+    <div class="value-bar" data-value="{{ value }}" data-party="{{ party }}"></div>
+  </div>
+</div>

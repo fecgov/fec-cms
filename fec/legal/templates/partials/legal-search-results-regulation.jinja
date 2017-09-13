@@ -1,0 +1,22 @@
+<div class="simple-table simple-table--responsive simple-table--display">
+  <div class="simple-table__header">
+    <div class="simple-table__header-cell cell--15">Section</div>
+    <div class="simple-table__header-cell">Description</div>
+  </div>
+  <div class="simple-table__row-group">
+  {% for section in regulations %}
+    <div class="simple-table__row legal-search-result">
+      <div class="simple-table__cell"><a title="{{ section.description }}" href="{{ section.url }}">§ {{ section.no }}</a></div>
+      <div class="simple-table__cell">
+        <div class="legal-search-result__name">{{ section.name }}</div>
+        <div class="t-serif legal-search-result__hit">
+          &hellip;
+          {% for highlight in section.highlights %}
+            {{ highlight|safe }} &hellip;
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+  {% endfor %}
+  </div>
+</div>

@@ -1,0 +1,81 @@
+// Typography Mixins
+//
+
+@mixin heading($level) {
+  margin: 0 0 1em 0;
+
+  @if $level == display {
+    font-family: $serif;
+    font-size: u(3.6rem);
+    font-weight: bold;
+    line-height: 1;
+    margin: u(0 0 1rem 0);
+    padding: u(1.2rem 0);
+
+    @include media($med) {
+      font-size: u(4rem);
+    }
+  }
+
+  @if $level == h1 {
+    font-family: $serif;
+    font-size: u(2.4rem);
+    font-weight: bold;
+    line-height: 1.2;
+    margin: 0;
+
+    @include media($med) {
+      font-size: u(3.6rem);
+    }
+  }
+
+  @if $level == h2 {
+    font-family: $serif;
+    font-size: u(2rem);
+    font-weight: bold;
+    line-height: 1.2;
+
+    @include media($med) {
+      font-size: u(2.4rem);
+    }
+  }
+
+  @if $level == h3 {
+    font-family: $serif;
+    font-size: u(1.8rem);
+    font-weight: bold;
+    line-height: 1.6;
+  }
+
+  @if $level == h4 {
+    font-family: $sans-serif;
+    font-size: u(1.8rem);
+    font-weight: bold;
+    line-height: 1.2;
+    letter-spacing: -.3px;
+    margin: u(1.4rem 0 1rem 0);
+  }
+
+  @if $level == h5 {
+    font-family: $serif;
+    font-size: u(1.6rem);
+    font-weight: bold;
+    margin: u(1.5rem 0 .75rem 0);
+    line-height: 1.33;
+  }
+
+  @if $level == h6 {
+    border-bottom: 1px solid $base;
+    font-family: $sans-serif;
+    font-size: u(1.3rem);
+    font-weight: bold;
+    line-height: 1.63;
+    text-transform: uppercase;
+  }
+}
+
+@mixin t-highlight {
+  background-color: rgba($aqua, .15);
+  font-weight: bold;
+  padding: 0 0.3em;
+}

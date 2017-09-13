@@ -1,0 +1,16 @@
+{% macro thumbnail(title, url, img="", size='', type="PDF") %}
+  <div class="grid__item document-thumbnail">
+    <a class="document-thumbnail__img" href="{{ url }}" target="_blank">
+      <img src="{{ static(img)}}" alt="{{ title }}">
+    </a>
+    <span class="document-thumbnail__description">
+      <a href="{{ url }}" target="_blank">{{ title }}</a>
+      {% if size %}
+        {% set metadata = [size, type] %}
+      {% else %}
+        {% set metadata = [type] %}
+      {% endif %}
+      <br>({{ ' '.join(metadata) }})
+    </span>
+  </div>
+{% endmacro %}

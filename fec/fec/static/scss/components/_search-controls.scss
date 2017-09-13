@@ -1,0 +1,186 @@
+// Search Controls
+//
+// Used at the top of election lookup page
+//
+
+.search-controls__row {
+  @include clearfix();
+  border-bottom: 1px solid $gray;
+  padding: u(1rem 0);
+
+  &:first-of-type {
+    padding-top: 0;
+  }
+
+  .cycle-select {
+    margin-bottom: 0;
+  }
+}
+
+// Either / Or
+//
+// Component with two halves, separated by an "or"
+
+.search-controls__or {
+  margin: u(1rem 0);
+  position: relative;
+  text-align: center;
+  width: 100%;
+
+  &::before,
+  &::after {
+    background-color: $gray;
+    content: '';
+    display: block;
+    position: absolute;
+    height: 1px;
+    width: 45%;
+    top: u(1rem);
+  }
+
+  &::before {
+    left: 0;
+  }
+
+  &::after {
+    right: 0;
+  }
+
+}
+
+.search-controls__submit {
+  @include span-columns(6);
+}
+
+// Aligns the elements that don't have a label with those that do
+.search-controls__no-label {
+  margin-top: u(3rem);
+}
+
+.search-controls__zip {
+  @include span-columns(6);
+
+  input {
+    width: 100%;
+  }
+}
+
+.search-controls__state {
+  @include span-columns(6);
+  margin-bottom: u(1rem);
+
+  select {
+    width: 100%;
+  }
+}
+
+.search-controls__district {
+  @include span-columns(6);
+
+  select {
+    width: 100%;
+  }
+}
+
+@include media($med) {
+  .search-controls__row {
+    padding: u(2rem 0);
+  }
+
+  // side by side
+  .search-controls__either {
+    @include span-columns(5.5);
+  }
+
+  .search-controls__submit {
+    @include span-columns(1.5 of 5.5);
+  }
+
+  .search-controls__zip {
+    @include span-columns(3.5 of 5.5);
+  }
+
+  .search-controls__or--vertical {
+    @include span-columns(1);
+    margin: u(5.5rem 0);
+    text-align: center;
+
+    &::before,
+    &::after {
+      height: u(6.5rem);
+      left: 50%;
+      width: 1px;
+    }
+
+    &::before {
+      top: u(-6.5rem);
+    }
+
+    &::after {
+      top: auto;
+      bottom: u(-6.5rem);
+    }
+  }
+
+  // We make it shorter on the home page
+  .slab--home {
+    .search-controls__or--vertical {
+      margin: u(2rem 0);
+
+      &::before,
+      &::after {
+        height: u(3rem);
+      }
+
+      &::before {
+        top: u(-3rem);
+      }
+
+      &::after {
+        bottom: u(-3rem);
+      }
+    }
+
+    .search-controls__zip {
+      width: 100%;
+    }
+
+    .search-controls__state,
+    .search-controls__district {
+      width: 100%;
+    }
+
+    .search-controls__submit {
+      margin-top: u(1rem);
+      clear: both;
+    }
+  }
+}
+
+// All form elements go in rows
+@include media($lg) {
+  .search-controls__state,
+  .search-controls__district {
+    @include span-columns(2 of 5.5);
+  }
+
+  .slab--home {
+    .search-controls__either {
+      @include span-columns(5);
+    }
+
+    .search-controls__zip {
+      @include span-columns(3.5 of 5.5);
+    }
+
+    .search-controls__state,
+    .search-controls__district {
+      @include span-columns(2 of 5.5);
+    }
+
+    .search-controls__submit {
+      margin-top: 0;
+      clear: none;
+    }
+  }
+}

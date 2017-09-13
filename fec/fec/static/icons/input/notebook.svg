@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="16px" height="20px" viewBox="0 0 16 20" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 42 (36781) - http://www.bohemiancoding.com/sketch -->
+    <title>notebook</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Flat-SVG-icons" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="notebook" fill-rule="nonzero" fill="#000000">
+            <path d="M1.17361411,0 L2.34840241,0 L2.34840241,20 L1.17361411,20 C0.524280839,20 0,19.440625 0,18.75 L0,1.25 C0,0.559375 0.524280839,0 1.17361411,0 Z M14.8257988,0 C15.474545,0 16,0.559375 16,1.25 L16,18.75 C16,19.440625 15.474545,20 14.8257988,20 L3.08378672,20 L3.08378672,0 L8.95479276,0 L8.99148654,5.94594595 L11.339889,3.44594595 L13.6882914,5.94594595 L13.6515976,0 L14.8257988,0 Z" id="Combined-Shape"></path>
+        </g>
+    </g>
+</svg>
