@@ -20,7 +20,7 @@ before_install:
 before_script:
   - psql -c 'create database cfdm_cms_unit_test;' -U postgres
   - travis_retry pip install -r requirements.txt
-  - travis_retry pip install coverage django_coverage_plugin
+  - travis_retry pip install coverage
   - ". $HOME/.nvm/nvm.sh"
   - nvm install v7.7.4
   - nvm use v7.7.4
@@ -31,7 +31,7 @@ before_script:
   - cd fec
   - webpack --optimize-minimize --define process.env.NODE_ENV="'production'"
 script:
-  - coverage run ./manage.py test
+  - ./manage.py test
   - npm run test-single
 after_success:
   - travis_retry pip install bandit
