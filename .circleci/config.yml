@@ -52,9 +52,10 @@ jobs:
             pip install -U pip setuptools wheel
             pip install -r requirements.txt
             pip install coverage
-            ". ~/.nvm/nvm.sh"
+            source ~/.nvm/nvm.sh
             nvm install v7.7.4
             nvm use v7.7.4
+            nvm alias default v7.7.4
             npm i -g npm
             npm install
             npm i -g webpack
