@@ -51,12 +51,12 @@ jobs:
             . venv/bin/activate
             pip install -U pip setuptools wheel
             pip install -r requirements.txt -r -r requirements-ci.txt
-            travis_retry pip install coverage
+            pip install coverage
             ". $HOME/.nvm/nvm.sh"
             nvm install v7.7.4
             nvm use v7.7.4
             npm i -g npm
-            travis_retry npm install
+            npm install
             npm i -g webpack
             npm run build
             cd fec
