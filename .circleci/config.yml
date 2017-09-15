@@ -84,6 +84,7 @@ jobs:
       - run:
           name: Run tests
           command: |
+            export NVM_DIR="$HOME/.nvm"
             ./manage.py test
             npm run test-single
 
