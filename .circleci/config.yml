@@ -62,7 +62,6 @@ jobs:
             export NVM_DIR="$HOME/.nvm"
             [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
             [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
-            /bin/bash: -c: line 12: unexpected EOF while looking for matching `"'
             nvm install v7.7.4
             nvm use v7.7.4
             nvm alias default v7.7.4
