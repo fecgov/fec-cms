@@ -1,0 +1,143 @@
+{% extends 'layouts/main.jinja' %}
+{% import 'macros/cycle-select.jinja' as select %}
+{% import 'macros/page-header.jinja' as header %}
+
+{% block title %}{{ name }} - Candidate overview{% endblock %}
+
+{% block css %}
+{% compress css %}
+<link rel="stylesheet" type="text/x-scss" href="{{ static('scss/entity.scss') }}" />
+{% endcompress %}
+{% endblock %}
+
+{% set breadcrumbs=[('', 'Candidate profiles')] %}
+
+{% block body %}
+
+{{ header.header(name, breadcrumbs) }}
+
+<div class="u-padding--left u-padding--right tab-interface">
+  <header class="main">
+    <h1 class="entity__name">{{ name }}</h1>
+    <div class="heading--section">
+      <span class="t-data t-bold entity__type">Candidate for {{ office_full }}</span>
+      {% if office == 'S' %}
+      <span class="t-data t-bold entity__type">{{ constants.states[state] }}</span>
+      {% elif office == 'H' %}
+      <span class="t-data t-bold entity__type">{{ constants.states[state] }} - {{ district }}</span>
+      {% endif %}
+      <span class="t-data t-bold entity__type">ID: {{ candidate_id }}</span>
+      <span class="t-data t-bold">{{ party_full }}</span>
+    </div>
+  </header>
+
+  <div class="data-container__wrapper">
+
+    <nav class="sidebar side-nav-alt">
+      <ul class="tablist" role="tablist" data-name="tab">
+        <li class="side-nav__item" role="presentation">
+          <a
+            class="side-nav__link"
+            role="tab"
+            data-name="summary"
+            tabindex="0"
+            aria-controls="panel1"
+            href="#section-1"
+            aria-selected="true">Financial Summary</a>
+            <ul>
+              <li><a href="#total-raised">Total raised</a></li>
+              <li><a href="#total-spent">Total spent</a></li>
+              <li><a href="#cash-summary">Cash summary</a></li>
+            </ul>
+        </li>
+        <li class="side-nav__item" role="presentation">
+          <a
+            class="side-nav__link"
+            role="tab"
+            data-name="about-candidate"
+            tabindex="0"
+            aria-controls="panel2"
+            href="#section-2">About this candidate</a>
+            <ul>
+              <li><a href="#information">Candidate information</a></li>
+              <li><a href="#other">Other documents filed</a></li>
+              <li><a href="#committees">Committees</a></li>
+            </ul>
+        </li>
+        {% if two_year_totals %}
+        <li class="side-nav__item" role="presentation">
+          <a
+            class="side-nav__link"
+            role="tab"
+            data-name="raising"
+            tabindex="0"
+            aria-controls="panel3"
+            href="#section-3">Raising</a>
+            <ul>
+              <li><a href="#total-receipts">Total receipts</a></li>
+              <li><a href="#individual-contribution-transactions">Individual contribution transactions</a></li>
+            </ul>
+        </li>
+        <li class="side-nav__item" role="presentation">
+          <a
+            class="side-nav__link"
+            role="tab"
+            data-name="spending"
+            tabindex="0"
+            aria-controls="panel4"
+            href="#section-4">Spending</a>
+            <ul>
+              <li><a href="#total-disbursements">Total disbursements</a></li>
+              <li><a href="#disbursement-transactions">Disbursement transactions</a></li>
+            </ul>
+        </li>
+        {% endif %}
+        <li class="side-nav__item" role="presentation">
+          <a
+            class="side-nav__link"
+            role="tab"
+            data-name="other-spending"
+            tabindex="0"
+            aria-controls="panel5"
+            href="#section-5">Spending by others to support or oppose</a>
+            <ul>
+              <li><a href="#independent-expenditures">Independent expenditures</a></li>
+              <li><a href="#communication-costs">Communication costs</a></li>
+              <li><a href="#electioneering-communication">Electioneering communication</a></li>
+            </ul>
+        </li>
+        <li class="side-nav__item">
+          <a class="button button--cta u-margin--top t-left-aligned button--two-candidates u-full-width" href="{{ get_election_url(candidate, cycle, district) }}">Compare to<br>opposing candidates</a>
+        </li>
+      </ul>
+    </nav>
+
+    <div class="main__content--right-full">
+
+      <section id="section-0" role="tabpanel" aria-hidden="false">
+        <div class="overlay__container">
+          <div class="overlay overlay--neutral is-loading"></div>
+        </div>
+      </section>
+
+      {% include 'partials/candidate/financial-summary.jinja' %}
+      {% include 'partials/candidate/about-candidate.jinja' %}
+      {% include 'partials/candidate/other-spending-tab.jinja' %}
+      {% if two_year_totals %}
+        {% include 'partials/candidate/raising.jinja' %}
+        {% include 'partials/candidate/spending.jinja' %}
+      {% endif %}
+    </div>
+  </div>
+
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+<script>
+  var context = {{ context_vars|to_json|safe }};
+</script>
+<script src="{{ asset_for('candidate-single.js') }}"></script>
+<script src="{{ asset_for('dataviz-common.js') }}"></script>
+{% endblock %}

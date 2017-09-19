@@ -1,0 +1,100 @@
+{% macro field(name, label, id_suffix='') %}
+  <div class="filter js-filter" id="{{ name }}{{id_suffix}}" data-name="{{ name }}" data-filter="date">
+  <fieldset>
+    <legend class="label">{{ label }}</legend>
+    <div class="range range--date js-date-range">
+      <div class="range__input range__input--min" data-filter="range">
+        <label for="min_{{ name }}{{id_suffix}}">Beginning</label>
+        <input type="text" id="min_{{ name }}{{id_suffix}}" name="min_{{ name }}" data-range="min" data-removable="true" class="js-min-date" data-prefix="Beginning">
+      </div>
+      <div class="range__hyphen">-</div>
+      <div class="range__input range__input--max" data-filter="range">
+        <label for="max_{{ name }}{{id_suffix}}">Ending</label>
+        <input type="text" id="max_{{ name }}{{id_suffix}}" name="max_{{ name }}" data-range="max" data-removable="true" class="js-max-date" data-prefix="Ending">
+      </div>
+      <button class="button--go button--standard" type="button">
+        <span class="u-visually-hidden">Search</span>
+      </button>
+    </div>
+  </fieldset>
+</div>
+{% endmacro %}
+
+{% macro partition_field(name, label, show_tooltip=True) %}
+<div class="filter">
+  <div class="js-filter js-filter-control" data-filter="select" data-validate="true" data-modifies-filter="{{ name }}" data-modifies-property="data-transaction-year" data-required-default="{{ constants.DEFAULT_TIME_PERIOD }}">
+    <label class="label t-inline-block" for="two-year-transaction-period">Transaction time period</label>
+    {% if show_tooltip %}
+      <div class="tooltip__container">
+        <button class="tooltip__trigger" type="button"><span class="u-visually-hidden">Learn more</span></button>
+        <div id="year-tooltip" role="tooltip" class="tooltip tooltip--under tooltip--left">
+          <p class="tooltip__content">The two-year period in which the transaction was made. Due to the large number of itemized transactions, you can only access one period at a time.</p>
+        </div>
+      </div>
+    {% endif %}
+    <select id="two-year-transaction-period" name="two_year_transaction_period">
+        <option value="">Select a value</option>
+      {% for year in range(constants.END_YEAR, constants.START_YEAR, -2) %}
+        <option value="{{year}}">{{ year | fmt_year_range }}</option>
+      {% endfor %}
+    </select>
+  </div>
+  <div class="js-filter" id="{{ name }}" data-filter="date" data-name="{{ name }}" data-validate="true">
+    <div class="range range--date js-date-range">
+      <div class="range__input range__input--min" data-filter="range">
+        <label for="min_{{ name }}">Beginning</label>
+        <input type="text" id="min_{{ name }}" name="min_{{ name }}" data-range="min" class="js-min-date" data-prefix="Beginning">
+      </div>
+      <div class="range__hyphen">-</div>
+      <div class="range__input range__input--max" data-filter="range">
+        <label for="max_{{ name }}">Ending</label>
+        <input type="text" id="max_{{ name }}" name="max_{{ name }}" data-range="max" class="js-max-date" data-prefix="Ending">
+      </div>
+      <button class="button--go button--standard" type="button">
+        <span class="u-visually-hidden">Search</span>
+      </button>
+    </div>
+    <div class="date-range__grid js-date-grid">
+      <div class="date-range__row">
+        <div class="date-range__year">
+        {{ constants.DEFAULT_TIME_PERIOD|int - 1 }}
+        </div>
+        <ul data-year="{{ constants.DEFAULT_TIME_PERIOD|int - 1 }}" class="date-range__months">
+          <li data-month="01"><div>Jan</div></li>
+          <li data-month="02"><div>Feb</div></li>
+          <li data-month="03"><div>Mar</div></li>
+          <li data-month="04"><div>Apr</div></li>
+          <li data-month="05"><div>May</div></li>
+          <li data-month="06"><div>Jun</div></li>
+          <li data-month="07"><div>Jul</div></li>
+          <li data-month="08"><div>Aug</div></li>
+          <li data-month="09"><div>Sep</div></li>
+          <li data-month="10"><div>Oct</div></li>
+          <li data-month="11"><div>Nov</div></li>
+          <li data-month="12"><div>Dec</div></li>
+        </ul>
+      </div>
+      <div class="date-range__row">
+        <div class="date-range__year">
+          {{ constants.DEFAULT_TIME_PERIOD }}
+        </div>
+        <ul data-year="{{ constants.DEFAULT_TIME_PERIOD }}" class="date-range__months">
+          <li data-month="01"><div>Jan</div></li>
+          <li data-month="02"><div>Feb</div></li>
+          <li data-month="03"><div>Mar</div></li>
+          <li data-month="04"><div>Apr</div></li>
+          <li data-month="05"><div>May</div></li>
+          <li data-month="06"><div>Jun</div></li>
+          <li data-month="07"><div>Jul</div></li>
+          <li data-month="08"><div>Aug</div></li>
+          <li data-month="09"><div>Sep</div></li>
+          <li data-month="10"><div>Oct</div></li>
+          <li data-month="11"><div>Nov</div></li>
+          <li data-month="12"><div>Dec</div></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endmacro %}

@@ -1,0 +1,122 @@
+// Site Footer
+//
+
+// List of links section before page footer
+.footer-links {
+  background-color: $navy;
+  color: $inverse;
+  font-family: $sans-serif;
+  padding: u(2rem 0 1rem 0);
+
+  a {
+    border-bottom: none;
+    color: $inverse;
+
+    &:hover {
+      border-bottom: 1px dotted $inverse;
+    }
+  }
+
+  li {
+    font-size: u(1.6rem);
+    line-height: u(1.9rem);
+    padding: (.75rem 0);
+    position: relative;
+  }
+
+  .grid--6-wide .grid__item {
+    @include span-columns(8);
+
+    // on large screens the second and third column are blank spacers
+    // so we do not need this space for tablet sizes and below
+    &:nth-child(2),
+    &:nth-child(3) {
+      display: none;
+    }
+
+    // override clear because of first empty column
+    &:nth-child(2n+1) {
+      clear: none;
+    }
+  }
+
+  @include media($med) {
+    .grid--6-wide .grid__item {
+      @include span-columns(2);
+    }
+  }
+
+  @include media($lg) {
+    .grid--6-wide .grid__item {
+      @include span-columns(2);
+    
+    &:nth-child(2),
+    &:nth-child(3) {
+        display: block;
+      }
+    }
+  }
+}
+
+.footer {
+  @include u-bg--primary();
+  @include u-font-color($neutral);
+  padding: u(5rem 0);
+
+  .address__title {
+    font-size: u(2.2rem);
+    font-weight: bold;
+  }
+
+  .social-media {
+    margin-bottom: u(2rem);
+
+    .icon--twitter {
+      @include u-icon($twitter-circle, $inverse, 3rem, 3rem, contain);
+    }
+
+    .icon--youtube {
+      @include u-icon($youtube-circle, $inverse, 3rem, 3rem, contain);
+    }
+
+    li {
+      margin-right: u(1.5rem);
+      display: inline-block;
+    }
+
+    a {
+      width: inherit;
+      height: inherit;
+      border: none;
+      display: block;
+    }
+  }
+
+  @include media($med) {
+    .seal {
+      @include span-columns(9);
+    }
+
+    .address {
+      @include span-columns(3);
+    }
+  }
+}
+
+.seal__img {
+  max-width: 140px;
+  height: auto;
+  margin-bottom: u(2.5rem);
+}
+
+// Content disclaimer on CMS pages
+.footer-disclaimer {
+  border-top: 1px solid $base;
+
+  p {
+    font-family: $sans-serif;
+    font-size: u(1.4rem);
+    letter-spacing: -.3px;
+    color: $base;
+  }
+}

@@ -1,0 +1,125 @@
+// Grids
+//
+// Utility class for displaying grids of items, such as cards, callouts, images, etc.
+//
+// <div class="grid grid--2-wide">
+//   <div class="grid__item">
+//     Grid item
+//   </div>
+//   <div class="grid__item">
+//     Grid item
+//   </div>
+//   <div class="grid__item">
+//     Grid item
+//   </div>
+//   <div class="grid__item">
+//     Grid item
+//   </div>
+// </div>
+//
+
+.grid {
+  @include outer-container;
+}
+
+// flexbox for full height cards
+.grid--flex {
+  flex-wrap: wrap;
+  display: flex;
+
+  .grid__item {
+    flex-direction: column;
+    display: flex !important;
+  }
+}
+
+.grid__item {
+  margin-bottom: u(2rem);
+  width: 100%;
+
+  &.commissioner-height {
+    min-height: u(10rem);
+  }
+}
+
+// homepage grid items
+.grid__item--featured {
+  background-color: $gray-medium;
+  padding: u(1.5rem);
+  border-radius: 3px;
+
+  h3 {
+    font-size: u(1.7rem);
+    font-style: italic;
+    border-bottom: 1px solid $base;
+    margin-bottom: u(1.5rem);
+  }
+}
+
+@include media($lg) {
+  .grid__item--home {
+    padding: u(1.5rem 0);
+  }
+}
+
+.grid__item--event {
+  padding-bottom: u(4.5rem);
+  position: relative;
+
+  .button {
+    bottom: 0;
+    position: absolute;
+  }
+}
+
+// BREAKPOINT: MEDIUM
+// We set a max-width to prevent the omega mixins from applying multiple times.
+// This is based on $large-screen, but we have to convert to px so that we can
+// subtract a pixel. Otherwise, the breakpoints will overlap at 860px (the
+// large breakpoint).
+@include media(min-width $medium-screen max-width (strip-units($large-screen) * $em-base - 1)) {
+  .grid--2-wide,
+  .grid--3-wide,
+  .grid--4-wide,
+  .grid--6-wide {
+    .grid__item {
+      @include span-columns(6);
+      @include omega(2n);
+    }
+  }
+
+  .grid__item--no-margin {
+    margin-bottom: 0;
+    padding-bottom: 0;
+  }
+}
+
+@include media($lg) {
+  .grid--2-wide {
+    .grid__item {
+      @include span-columns(6);
+      @include omega(2n);
+    }
+  }
+
+  .grid--3-wide {
+    .grid__item {
+      @include span-columns(4);
+      @include omega(3n);
+    }
+  }
+
+  .grid--4-wide {
+    .grid__item {
+      @include span-columns(3);
+      @include omega(4n);
+    }
+  }
+
+  .grid--6-wide {
+    .grid__item {
+      @include span-columns(2);
+      @include omega(6n);
+    }
+  }
+}

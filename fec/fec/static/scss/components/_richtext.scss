@@ -1,0 +1,65 @@
+// Rich Text styles
+//
+// These are styles specifically for content output by the CMS
+//
+
+.rich-text,
+.body-blocks {
+  ul {
+    @extend .list--bulleted;
+   }
+
+  ol {
+    @extend .list--numbered;
+  }
+}
+
+.rich-text,
+.block-table {
+  table {
+    @extend .simple-table;
+  }
+
+  thead {
+    @extend .simple-table__header;
+  }
+
+  tr {
+    @extend .simple-table__row;
+  }
+
+  td {
+    @extend .simple-table__cell;
+    padding-right: u(1rem) !important;
+  }
+
+  img {
+    display: block;
+    clear: both;
+    float: none;
+    margin-bottom: u(2rem);
+  }
+}
+
+@include media($lg) {
+  .richtext-image {
+    &.right {
+      float: right;
+      margin-left: u(5rem);
+      margin-bottom: u(4rem);
+    }
+
+    &.left {
+      float: left;
+      margin-right: u(5rem);
+      margin-bottom: u(4rem);
+    }
+  }
+}
+
+@media print {
+  .rich-text table,
+  .block-table table {
+    page-break-inside: avoid;
+  }
+}

@@ -1,5 +1,3 @@
 [run]
 branch = true
-plugins =
-    django_coverage_plugin
 source = .

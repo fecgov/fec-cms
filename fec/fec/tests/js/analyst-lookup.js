@@ -10,7 +10,7 @@ var $ = require('jquery');
 
 require('./setup')();
 
-var AnalystLookup = require('../../static/js/contact-form').AnalystLookup;
+var AnalystLookup = require('../../static/js/pages/contact-form').AnalystLookup;
 
 describe('AnalystLookup', function() {
     before(function() {

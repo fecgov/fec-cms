@@ -1,0 +1,74 @@
+// Meetings (Agendas)
+//
+// <div class="agenda__heading">
+//   <h2 class="u-padding--top u-no-margin">Agenda</h2>
+//   <p>Date</p>
+// </div>
+//
+// <ol class="agenda">
+//   <li>
+//     <h3 class="u-no-margin">Agenda Title</h3>
+//     <p class="t-sans u-no-margin">
+//       <span class="icon icon--inline--left i-speaker"></span>
+//       <a href="">Listen to discussion of this item</a>
+//     </p>
+//     <div class="agenda__text">
+//       Agenda Text
+//     </div>
+//    </li>
+// </ol>
+//
+
+.agenda__heading {
+  margin-bottom: u(2rem);
+}
+
+.agenda {
+  counter-reset: agenda;
+
+  & > li {
+    margin-bottom: u(4rem);
+    padding-left: u(3rem);
+    position: relative;
+
+    &::before {
+      @include heading(h3);
+      position: absolute;
+      left: 0;
+      top: 0;
+      counter-increment: agenda;
+      content: counters(agenda, '') '.';
+    }
+  }
+
+  a[href$=".pdf"] {
+    margin-left: u(6rem);
+
+    &::before {
+      @include u-icon($document, $base, 3rem, 3rem, 50%);
+      background-position: 0 50%;
+      content: '';
+      display: inline-block;
+      margin-left: u(-3rem);
+      vertical-align: middle;
+    }
+  }
+}
+
+.agenda__text {
+  margin-top: u(2.6rem);
+}
+
+// For minutes and notices links
+.pdf-link {
+  margin-left: u(3rem);
+
+  &::before {
+    @include u-icon($document, $base, 3rem, 3rem, 50%);
+    background-position: 0 50%;
+    content: '';
+    display: inline-block;
+    margin-left: u(-3rem);
+    vertical-align: middle;
+  }
+}

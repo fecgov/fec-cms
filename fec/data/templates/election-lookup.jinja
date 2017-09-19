@@ -1,0 +1,95 @@
+{% extends 'layouts/main.jinja' %}
+{% import 'macros/cycle-select.jinja' as select %}
+{% import 'macros/page-header.jinja' as header %}
+
+{% block title %}Find candidates and elections by location{% endblock %}
+
+{% block css %}
+{% compress css %}
+<link rel="stylesheet" type="text/x-scss" href="{{ static('scss/elections.scss') }}" />
+{% endcompress %}
+{% endblock %}
+
+{% block body %}
+  {{ header.header(title) }}
+<section class="main" id="election-lookup" >
+  <div class="container">
+    <header class="heading--main">
+      <h1>Search</h1>
+    </header>
+    <div class="search-controls">
+      <form>
+        <div class="search-controls__row">
+          {{ select.cycle_select(cycles, location='form', range=True) }}
+        </div>
+        <div class="search-controls__row">
+          <div class="search-controls__either">
+            <div class="row">
+              <label for="zip" class="label">Find by ZIP code</label>
+              <div class="search-controls__zip">
+                <input type="text" inputmode="numeric" id="zip" name="zip" >
+                <span class="t-note t-sans search__example">Example: 90210</span>
+              </div>
+              <div class="search-controls__submit">
+                <button type="submit" class="button--search--text button--standard">Search</button>
+              </div>
+            </div>
+          </div>
+          <div class="search-controls__or search-controls__or--vertical">or</div>
+          <div class="search-controls__either">
+            <fieldset>
+              <legend class="label">Find by state and <span class="term" data-term="District">district</span></span></legend>
+              <div class="search-controls__state">
+                <select id="state" name="state" aria-label="Select a state">
+                  <option value="">Select state</option>
+                  {% for value, label in constants.election_states.items() %}
+                  <option value="{{ value }}">{{ label }}</option>
+                  {% endfor %}
+                </select>
+              </div>
+              <div class="search-controls__district">
+                <select id="district" name="district" aria-label="Select a district" class="select--alt">
+                  <option value="">Select district</option>
+                  {% for value in range(1, 100) %}
+                  {% with formatted = '{0:02d}'.format(value) %}
+                  <option value="{{ formatted }}">{{ formatted }}</option>
+                  {% endwith %}
+                  {% endfor %}
+                </select>
+              </div>
+              <div class="search-controls__submit">
+                <button type="submit" class="button--search--text button--standard">Search</button>
+              </div>
+            </fieldset>
+          </div>
+        </div>
+      </form>
+    </div>
+    <div class="content__section--extra">
+      <div class="usa-width-one-half">
+        <div class="heading--section">
+          <h2>Results</h2>
+          <span class="heading__subtitle js-results-title"></span>
+        </div>
+        <div class="results__count t-italic">
+          <p>This page shows campaign finance data by district. If no candidates have filed (or if candidates have filed but not yet reported financial data), the district may not show up here. District maps on this page are approximate.</p>
+        </div>
+        <div class="results">
+          <div class="js-results-items"></div>
+        </div>
+      </div>
+      <div class="usa-width-one-half">
+        <div class="election-map"></div>
+        <div class="message message--info js-map-message" aria-hidden="true">
+          District maps are only available for elections in {{ constants.DISTRICT_MAP_CUTOFF | fmt_year_range }} and later.
+        </div>
+      </div>
+    </div>
+</section>
+
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ asset_for('dataviz-common.js') }}"></script>
+<script src="{{ asset_for('election-lookup.js') }}"></script>
+{% endblock %}

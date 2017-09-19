@@ -1,0 +1,73 @@
+<div class="panel__row">
+  <h4 class="panel__title">Recipient information</h4>
+  <table>
+    {{#panelRow "Recipient name"}}
+      {{#if recipient}}
+        <a href="{{basePath}}/committee/{{recipient.committee_id}}">{{recipient.name}}</a>
+      {{else}}
+        {{recipient_name}}
+      {{/if}}
+    {{/panelRow}}
+    {{#panelRow "Recipient city and state"}}
+      {{recipient_city}}, {{recipient_state}}, {{recipient_zip}}
+    {{/panelRow}}
+  </table>
+</div>
+
+<div class="panel__row">
+  <h4 class="panel__title">Transaction information</h4>
+  <table>
+    {{#panelRow "Amount"}}
+      {{{currency disbursement_amount}}}
+    {{/panelRow}}
+    {{#panelRow "Disbursement date"}}
+      {{{datetime disbursement_date format="pretty"}}}
+    {{/panelRow}}
+    {{#panelRow "Filing date"}}
+      {{{datetime receipt_date format="pretty"}}}
+    {{/panelRow}}
+    {{#panelRow "Description"}}
+      {{disbursement_description}}
+    {{/panelRow}}
+    {{#panelRow "Purpose category"}}
+      {{disbursement_purpose_category}}
+    {{/panelRow}}
+    {{#panelRow "Memo"}}
+      {{memo_text}}
+    {{/panelRow}}
+    {{#panelRow "Memo code"}}
+      {{memoed_subtotal}}
+    {{/panelRow}}
+    {{#panelRow "Reported on"}}
+      Form {{formNumber filing_form }} on line {{line_number}}
+    {{/panelRow}}    
+    {{#if election_type_full }}
+      {{#panelRow "Election type"}}
+        {{election_type_full}}
+      {{/panelRow}}
+    {{/if}}
+  </table>
+</div>
+
+<div class="panel__row">
+  <h4 class="panel__title">Committee information</h4>
+  <table>
+    {{#panelRow "Name"}}
+      <a href="{{basePath}}/committee/{{committee_id}}">{{committee.name}}</a>
+    {{/panelRow}}
+    {{#panelRow "Designation"}}
+      {{committee.designation_full}}
+    {{/panelRow}}
+    {{#if committee.type}}
+      {{#panelRow "Type"}}
+        {{committee.type_full}}
+      {{/panelRow}}
+    {{/if}}
+    {{#panelRow "Treasurer"}}
+      {{committee.treasurer_name}}
+    {{/panelRow}}
+    {{#panelRow "Committee city and state"}}
+      {{committee.city}}, {{committee.state}}, {{committee.zip}}
+    {{/panelRow}}
+  </table>
+</div>

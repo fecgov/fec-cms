@@ -1,0 +1,17 @@
+{{#each this}}
+  <label for="{{name}}-{{max}}-{{full}}">
+    <input
+        id="{{name}}-{{max}}-{{full}}"
+        type="radio"
+        name="_{{name}}"
+        value="{{max}}:{{full}}"
+        data-display-value="{{min}}-{{max}}"
+      />
+    <span class="button--alt">
+      {{#if full}}
+      Full cycle:
+      {{/if}}
+      {{min}}–{{max}}
+    </span>
+  </label>
+{{/each}}

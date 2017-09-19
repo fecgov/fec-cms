@@ -1,0 +1,55 @@
+// Reaction box
+//
+// Box for measuring reactions to charts or other components
+// "What do you think of this chart?"
+//
+// <div class="reaction-box js-reaction-box">
+//   <fieldset>
+//     <legend class="reaction-box__heading">What do you think of this chart?</legend>
+//   <ul>
+//     <li>
+//       <input type="radio" value="informative" name="reaction" id="reaction-informative">
+//       <label for="reaction-informative">Informative</label>
+//     </li>
+//     <li>
+//       <input type="radio" value="confusing" name="reaction" id="reaction-confusing">
+//       <label for="reaction-confusing">Confusing</label>
+//     </li>
+//     <li>
+//       <input type="radio" value="not-interested" name="reaction" id="reaction-not-interested">
+//       <label for="reaction-not-interested">Not interested</label>
+//     </li>
+//     <li>
+//       <input type="radio" value="none" name="reaction" id="reaction-none">
+//       <label for="reaction-none">None of these</label>
+//     </li>
+// </div>
+//
+
+.reaction-box {
+  background-color: $neutral;
+  border-radius: 4px;
+  padding: u(2rem);
+  position: relative;
+  overflow: hidden;
+
+  textarea {
+    height: u(11rem);
+    margin-bottom: u(1rem);
+  }
+
+  li {
+    margin-bottom: u(1rem);
+  }
+}
+
+.reaction-box__heading {
+  @include u-icon-bg($question-circle, $primary);
+  display: block;
+  font-size: u(1.6rem);
+  font-weight: bold;
+  line-height: 1.2;
+  border-bottom: 1px solid $primary;
+  margin-bottom: u(2rem);
+  padding: 0 0 u(1rem) u(3rem);
+}

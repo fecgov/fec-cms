@@ -1,0 +1,174 @@
+{
+  "TN": {
+    "districts": 9,
+    "fullname": "Tennessee"
+  },
+  "NE": {
+    "districts": 3,
+    "fullname": "Nebraska"
+  },
+  "MA": {
+    "districts": 9,
+    "fullname": "Massachusetts"
+  },
+  "CO": {
+    "districts": 7,
+    "fullname": "Colorado"
+  },
+  "PA": {
+    "districts": 18,
+    "fullname": "Pennsylvania"
+  },
+  "SC": {
+    "districts": 7,
+    "fullname": "South Carolina"
+  },
+  "UT": {
+    "districts": 4,
+    "fullname": "Utah"
+  },
+  "GA": {
+    "districts": 14,
+    "fullname": "Georgia"
+  },
+  "WI": {
+    "districts": 8,
+    "fullname": "Wisconsin"
+  },
+  "KY": {
+    "districts": 6,
+    "fullname": "Kentucky"
+  },
+  "CT": {
+    "districts": 5,
+    "fullname": "Connecticut"
+  },
+  "WA": {
+    "districts": 10,
+    "fullname": "Washington"
+  },
+  "CA": {
+    "districts": 53,
+    "fullname": "California"
+  },
+  "OK": {
+    "districts": 5,
+    "fullname": "Oklahoma"
+  },
+  "IA": {
+    "districts": 4,
+    "fullname": "Iowa"
+  },
+  "MS": {
+    "districts": 4,
+    "fullname": "Mississippi"
+  },
+  "IN": {
+    "districts": 9,
+    "fullname": "Indiana"
+  },
+  "NJ": {
+    "districts": 12,
+    "fullname": "New Jersey"
+  },
+  "AZ": {
+    "districts": 9,
+    "fullname": "Arizona"
+  },
+  "TX": {
+    "districts": 36,
+    "fullname": "Texas"
+  },
+  "NY": {
+    "districts": 27,
+    "fullname": "New York"
+  },
+  "MN": {
+    "districts": 8,
+    "fullname": "Minnesota"
+  },
+  "NM": {
+    "districts": 3,
+    "fullname": "New Mexico"
+  },
+  "RI": {
+    "districts": 2,
+    "fullname": "Rhode Island"
+  },
+  "MO": {
+    "districts": 8,
+    "fullname": "Missouri"
+  },
+  "NV": {
+    "districts": 4,
+    "fullname": "Nevada"
+  },
+  "MI": {
+    "districts": 14,
+    "fullname": "Michigan"
+  },
+  "AL": {
+    "districts": 7,
+    "fullname": "Alabama"
+  },
+  "LA": {
+    "districts": 6,
+    "fullname": "Louisiana"
+  },
+  "MD": {
+    "districts": 8,
+    "fullname": "Maryland"
+  },
+  "HI": {
+    "districts": 2,
+    "fullname": "Hawaii"
+  },
+  "NC": {
+    "districts": 13,
+    "fullname": "North Carolina"
+  },
+  "NH": {
+    "districts": 2,
+    "fullname": "New Hampshire"
+  },
+  "AR": {
+    "districts": 4,
+    "fullname": "Arkansas"
+  },
+  "KS": {
+    "districts": 4,
+    "fullname": "Kansas"
+  },
+  "ME": {
+    "districts": 2,
+    "fullname": "Maine"
+  },
+  "ID": {
+    "districts": 2,
+    "fullname": "Idaho"
+  },
+  "OH": {
+    "districts": 16,
+    "fullname": "Ohio"
+  },
+  "FL": {
+    "districts": 27,
+    "fullname": "Florida"
+  },
+  "VA": {
+    "districts": 11,
+    "fullname": "Virginia"
+  },
+  "WV": {
+    "districts": 3,
+    "fullname": "West Virginia"
+  },
+  "IL": {
+    "districts": 18,
+    "fullname": "Illinois"
+  },
+  "OR": {
+    "districts": 5,
+    "fullname": "Oregon"
+  }
+}

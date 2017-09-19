@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="10px" height="9px" viewBox="0 0 10 9" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 3.7.2 (28276) - http://www.bohemiancoding.com/sketch -->
+    <title>arrow-down</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="arrow-down" transform="translate(5.000000, 4.500000) scale(1, -1) translate(-5.000000, -4.500000) " fill="#000000">
+            <path d="M1.41831436,3.808855 L7.6518764,0.12434104 C7.7886657,0.04315058 7.9368068,3.99999977e-07 8.0948807,3.99999977e-07 C8.5651294,3.99999977e-07 8.9462664,0.38125491 8.9462664,0.85164859 L8.9462664,8.2325996 C8.9462664,8.7027094 8.5651294,9.0842478 8.0948807,9.0842478 C7.9368068,9.0842478 7.7886657,9.0408137 7.6618092,8.9655848 C7.6561333,8.9624621 1.41831436,5.2753932 1.41831436,5.2753932 C1.16800697,5.1269225 1.0000002,4.85411122 1.0000002,4.54212409 C1.0000002,4.22985309 1.16800697,3.95704179 1.41831436,3.808855 L1.41831436,3.808855 Z" id="Shape" transform="translate(4.973133, 4.542124) rotate(90.000000) translate(-4.973133, -4.542124) "></path>
+        </g>
+    </g>
+</svg>

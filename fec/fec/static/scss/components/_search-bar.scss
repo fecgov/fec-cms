@@ -1,0 +1,312 @@
+// Search Bar
+//
+// <div class="slab slab--primary">
+//   <div class="container">
+//     <form id="large-search" autocomplete="off" class="search__container js-search">
+//       <div class="combo combo--search combo--search--inline">
+//         <select class="search__select select--alt-primary js-search-type" name="search_type">
+//           <option value="candidates">Candidates</option>
+//           <option value="committees">Committees</option>
+//         </select>
+//         <input type="text" class="combo__input js-search-input">
+//         <button type="submit" class="button--standard combo__button button--search">
+//          <span class="u-visually-hidden">Search</span>
+//         </button>
+//       </div>
+//     </form>
+//   </div>
+// </div>
+//
+
+$search-button-width: u(5.6rem);
+
+.search__select {
+  border-radius: 4px 0 0 4px;
+  margin-right: -2px;
+  height: u(3.6rem);
+  width: u(14rem);
+  float: left;
+  line-height: 1;
+}
+
+.combo--search {
+  .combo__input {
+    float: left;
+    border-radius: 4px 0 0 4px;
+    width: calc(100% - #{$search-button-width});
+  }
+
+  .search__select + .combo__input {
+    border-radius: 0 4px 4px 0;
+    width: calc(100% - 14rem);
+
+    & + .combo__button {
+      width: 100%;
+      border-radius: 4px;
+      margin-top: u(1rem);
+    }
+  }
+
+  .combo__button {
+    border-radius: 0 4px 4px 0;
+    margin-top: 0;
+    width: $search-button-width;
+  }
+}
+
+.search__example {
+  line-height: 1.2;
+  margin-top: u(1rem);
+}
+
+.combo--search--inline {
+  .combo__input {
+    border-radius: 4px 0 0 4px;
+  }
+}
+
+.combo--search--mini {
+  .twitter-typeahead,
+  .combo__input {
+    border-radius: 4px 0 0 4px;
+    float: left;
+    width: calc(100% - #{$search-button-width});
+
+    .combo__input {
+      width: 100%;
+      color: $base;
+    }
+
+    .tt-hint {
+      color: $gray-dark;
+    }
+
+    pre {
+      color: $base;
+    }
+  }
+
+  .combo__button {
+    border-radius: 0 4px 4px 0;
+    margin-top: 0;
+    float: right;
+    height: u(3.6rem);
+    width: u(5.6rem);
+  }
+}
+
+// BREAKPOINT: MEDIUM
+@include media($med) {
+  .combo--search {
+    .combo__button {
+      width: $search-button-width;
+    }
+
+    .tt-menu {
+      width: calc(100% - #{$search-button-width});
+    }
+
+    .search__select {
+      width: u(15rem);
+    }
+
+    .search__select + .combo__input {
+      border-radius: 0;
+      width: calc(100% - #{$search-button-width} - 15rem);
+
+      & + .combo__button {
+        border-radius: 0 4px 4px 0;
+        margin-top: 0;
+        width: $search-button-width;
+      }
+    }
+  }
+
+  .combo--search--medium {
+    height: u(4.2rem);
+
+    .combo__input {
+      font-size: u(1.6rem);
+      height: u(4.2rem);
+      line-height: 1;
+      width: calc(100% - 10rem);
+    }
+
+    .combo__button {
+      height: u(4.2rem);
+      width: u(10rem);
+    }
+
+    .search__select {
+      height: u(4.2rem);
+      width: u(21rem);
+      font-size: u(1.6rem);
+    }
+  }
+
+  .combo--search--large {
+    height: u(6rem);
+
+    .combo__input {
+      font-size: u(1.8rem);
+      height: u(6rem);
+      line-height: 1;
+      width: calc(100% - 10rem);
+    }
+
+    .combo__button {
+      border-radius: 0 4px 4px 0;
+      height: u(6rem);
+      margin-top: 0;
+      width: u(10rem);
+    }
+
+    .search__select {
+      height: u(6rem);
+      width: u(21rem);
+      font-size: u(1.8rem);
+    }
+
+    .search__select + .combo__input {
+      border-radius: 0;
+      width: calc(100% - 31rem);
+
+      & + .combo__button {
+        border-radius: 0 4px 4px 0;
+        margin-top: 0;
+        width: u(10rem);
+      }
+    }
+
+    .tt-menu {
+      font-size: u(1.6rem);
+      top: u(5.9rem) !important;
+      width: calc(100% - 10.2rem);
+    }
+
+    .tt-suggestion__header {
+      display: none;
+    }
+  }
+
+  // For aligning the example text after a select input
+  .search__example--with-select {
+    margin: u(1rem) 0 0 u(21rem);
+  }
+}
+
+// Typeahead styles
+.twitter-typeahead {
+  height: 0;
+  width: 100%;
+}
+
+.tt-menu {
+  background-color: $inverse;
+  border: 1px solid $primary;
+  font-family: $sans-serif;
+  font-size: u(1.2rem);
+  left: 0;
+  position: absolute;
+  text-align: left;
+  top: u(3.5rem) !important;
+  width: 100%;
+}
+
+.tt-suggestion {
+  color: $base;
+  display: table;
+  position: relative;
+  padding: u(1rem);
+  margin-bottom: 0;
+  line-height: 1;
+  border-top: 1px solid $gray-lightest;
+  width: 100%;
+
+  .tt-suggestion__name,
+  .tt-suggestion__office {
+    display: table-cell;
+  }
+}
+
+.tt-suggestion__name.tt-suggestion__name {
+  color: $base;
+}
+
+.tt-suggestion__office.tt-suggestion__office {
+  color: $base;
+  font-size: u(1.2rem);
+  text-align: right;
+  font-style: italic;
+}
+
+.tt-cursor,
+.tt-suggestion:hover {
+  cursor: pointer;
+  background: $gray-lightest;
+  border-left: 4px solid $primary-contrast;
+
+  .tt-suggestion__name {
+    color: $base;
+  }
+
+  .tt-suggestion__office {
+    color: $base;
+  }
+}
+
+.tt-suggestion__header.tt-suggestion__header {
+  color: $base;
+  display: block;
+  font-weight: bold;
+  padding: u(1rem .5rem);
+}
+
+.tt-suggestion__loading.tt-suggestion__loading {
+  color: $primary;
+  display: block;
+  font-weight: bold;
+  padding: u(1rem .5rem);
+}
+
+.tt-dataset-0 {
+  border-bottom: 1px solid $base;
+}
+
+.tt-highlight {
+  background-color: rgba($aqua, .3);
+}
+
+// Specific styles for typeahead filters
+// Just testing things out. Refactor to use non-js class if we use it
+.typeahead-filter {
+  .button--search {
+    @include u-icon-button($magnifying-glass-arrow);
+    background-size: u(2.8rem);
+    background-position: 50%;
+    padding: 0;
+  }
+
+  &[data-allow-text] {
+    .tt-suggestion__missing {
+      display: none;
+    }
+
+    .button--search {
+      @include u-icon-button($magnifying-glass);
+      background-size: u(2.2rem);
+      background-position: 50%;
+      padding: 0;
+    }
+
+    button.is-loading {
+      background-image: url('../img/loading-ellipsis-gray.gif');
+    }
+
+    button.is-successful {
+      @include u-icon-button($check);
+      background-size: u(2.8rem);
+      background-position: 50%;
+    }
+  }
+}

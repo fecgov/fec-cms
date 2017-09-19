@@ -1,0 +1,21 @@
+  <fieldset class="filter toggles js-filter js-table-switcher" data-filter="toggle" data-filter-ignore-count="true">
+    <legend class="label t-inline-block">Data type</legend>
+    <div class="row">
+      <label for="switcher-processed" class="toggle">
+        <input type="radio" class="toggle" value="processed" id="switcher-processed" checked name="data_type" data-prefix="Data type:" data-tag-value="processed" aria-controls="processed-message">
+        <span class="button--alt">Processed</span>
+      </label>
+      <label for="switcher-efilings" class="toggle">
+        <input type="radio" class="toggle" value="efiling" id="switcher-efilings" name="data_type" data-prefix="Data type:" data-tag-value="raw" aria-controls="efiling-message">
+        <span class="button--alt">Raw</span>
+      </label>
+    </div>
+    <div class="data-type__message">
+      <div id="processed-message" class="js-table-switcher-message" aria-hidden="false">
+        <p>This data <em>has been</em> categorized and coded by the FEC. The FEC's multi-step process can take days (for electronic filings) or weeks (for paper filings).</p>
+      </div>
+      <div id="efiling-message" class="js-table-switcher-message" aria-hidden="true">
+        <p>This data <em>has not</em> yet been categorized and coded by the FEC. It's pulled directly from a committee's raw, electronic reports. It doesn't include paper filings.</p>
+      </div>
+    </div>
+  </fieldset>

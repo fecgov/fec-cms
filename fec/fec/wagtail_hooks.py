@@ -16,12 +16,12 @@ def editor_js():
         <script src="/static/js/vendor/rangy-core.js"></script>
         <script src="/static/js/vendor/rangy-selectionsaverestore.js"></script>
         <script src="/static/js/vendor/beautify-html.js"></script>
-        <script src="/static/js/hallo-edit-html.js"></script>
-        <script src="/static/js/hallo-sans-serif.js"></script>
-        <script src="/static/js/hallo-blockquote.js"></script>
-        <script src="/static/js/hallo-indent.js"></script>
-        <script src="/static/js/hallo-outdent.js"></script>
-        <script src="/static/js/customize-editor.js"></script>
+        <script src="/static/js/admin/hallo-edit-html.js"></script>
+        <script src="/static/js/admin/hallo-sans-serif.js"></script>
+        <script src="/static/js/admin/hallo-blockquote.js"></script>
+        <script src="/static/js/admin/hallo-indent.js"></script>
+        <script src="/static/js/admin/hallo-outdent.js"></script>
+        <script src="/static/js/admin/customize-editor.js"></script>
         <script src="/static/ace-builds/src-noconflict/ace.js"></script>
         <script src="/static/ace-builds/src-noconflict/mode-html.js"></script>
         <script>

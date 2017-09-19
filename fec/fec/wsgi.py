@@ -15,6 +15,7 @@ from whitenoise.django import DjangoWhiteNoise
 
 from fec.settings.env import env
 
+
 def initialize_newrelic():
     license_key = env.get_credential('NEW_RELIC_LICENSE_KEY')
 

@@ -1,0 +1,52 @@
+{% macro checkbox(name, value, label, prefix='') %}
+<li class="dropdown__item">
+  <input id="{{ name }}-{{ clean_id(value) }}" data-prefix="{{ prefix }}" name="{{ name }}" type="checkbox" value="{{ value }}">
+  <label class="dropdown__value" for="{{ name }}-{{ value }}">{{ label }}</label>
+</li>
+{% endmacro %}
+
+{% macro checkbox_list(name, options, prefix='', css_class='dropdown__list') %}
+<ul class="{{ css_class }}">
+{% for value, label in options.items() %}
+  {{ checkbox(name, value, label, prefix) }}
+{% endfor %}
+</ul>
+{% endmacro %}
+
+{% macro checkbox_options(name, options, prefix='') %}
+<div class="dropdown">
+  <button type="button" class="dropdown__button button--alt" data-name="{{ name }}">More</button>
+  <div class="dropdown__panel" aria-hidden="true">
+    {{ checkbox_list(name, options, prefix) }}
+  </div>
+</div>
+{% endmacro %}
+
+{% macro checkbox_dropdown(name, label, selected={}, options={}) %}
+<div class="filter">
+  <fieldset class="js-dropdown js-filter" data-filter="checkbox">
+    <label for="{{ name }}" class="label">{{ label }}</label>
+    {{ checkbox_list(name, selected, css_class='dropdown__selected') }}
+    {% if options %}
+    {{ checkbox_options(name, options,) }}
+    {% endif %}
+  </fieldset>
+</div>
+{% endmacro %}
+
+<!-- Used when there are multiple dropdowns within a single filter -->
+{% macro checkbox_dropdown_multiple(name, label, selected={}, options={}, legend=True, prefix='') %}
+<div class="filter" data-filter="checkbox">
+  <div class="js-dropdown">
+    {% if legend %}
+    <span class="label" for="{{ name }}">{{ label }}</span>
+    {% else %}
+    <label for="{{ name }}">{{ label }}</label>
+    {% endif %}
+    {{ checkbox_list(name, selected, prefix, css_class='dropdown__selected') }}
+    {% if options %}
+    {{ checkbox_options(name, options, prefix) }}
+    {% endif %}
+  </div>
+</div>
+{% endmacro %}
