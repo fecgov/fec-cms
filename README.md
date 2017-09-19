@@ -134,7 +134,7 @@ cd fec/
 ```
 
 ## Front End Development
-Front end assets are all located in `/fec/fec/static/*`. SCSS files are compiled served on the backend by `django-compressor`, but JS files need to be compiled by Webpack via the `npm run build` command.
+Front end assets are all located in `/fec/fec/static/*`. SCSS files are compiled and served on the backend by `django-compressor`, but JS files need to be compiled by Webpack via the `npm run build` command.
 
 
 ## Running tests
