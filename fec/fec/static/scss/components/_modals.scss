@@ -43,3 +43,13 @@
   right: u(1rem);
   top: u(1rem);
 }
+
+.modal__form {
+  @include span-columns(6);
+}
+
+.modal__tips {
+  @include span-columns(5);
+  @include shift(1);
+  padding-top: u(1rem);
+}

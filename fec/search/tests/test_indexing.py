@@ -15,7 +15,7 @@ if settings.FEC_CMS_ENVIRONMENT == 'PRODUCTION':
     DIGITALGOV_DRAWER_HANDLE = 'main'
 else:
     URL_BASE = 'http://localhost:8000'
-    DIGITALGOV_BASE_URL = 'http://localhost:3000'
+    DIGITALGOV_BASE_URL = '/data/'
     DIGITALGOV_DRAWER_KEY = ''
     DIGITALGOV_DRAWER_HANDLE = ''
 
@@ -50,7 +50,7 @@ class MockParent(object):
 # Override settings so the env will be treated as prod but we'll send to a nonexistent API url
 @override_settings(
     FEC_CMS_ENVIRONMENT='PRODUCTION',
-    DIGITALGOV_BASE_URL='http://localhost:3000',
+    DIGITALGOV_BASE_URL='/data/',
     CANONICAL_BASE='https://www.fec.gov')
 @mock.patch.object(search, 'scrape_page_content')
 class TestSearchIndexing(TestCase):
@@ -91,7 +91,7 @@ class TestSearchIndexing(TestCase):
     @requests_mock.Mocker()
     def test_add_document(self, scrape, m):
         # It makes a POST to the add endpoint
-        m.register_uri('POST', 'http://localhost:3000/documents', status_code=201)
+        m.register_uri('POST', '/data/documents', status_code=201)
         search.add_document(self.page)
         self.assertTrue(m.called)
 
@@ -100,7 +100,7 @@ class TestSearchIndexing(TestCase):
     @requests_mock.Mocker()
     def test_add_existing_document(self, update_document, scrape, m):
         # It handles a 422 if the doc already exists
-        m.register_uri('POST', 'http://localhost:3000/documents', status_code=422)
+        m.register_uri('POST', '/data/documents', status_code=422)
         search.add_document(self.page)
         update_document.assert_called_with(self.page)
 
@@ -108,7 +108,7 @@ class TestSearchIndexing(TestCase):
     @requests_mock.Mocker()
     def test_update_document(self, scrape, m):
         # It makes a PUT to the update endpoint
-        m.register_uri('PUT', 'http://localhost:3000/documents/123', status_code=200)
+        m.register_uri('PUT', '/data/documents/123', status_code=200)
         search.update_document(self.page)
         self.assertTrue(m.called)
 
@@ -116,7 +116,7 @@ class TestSearchIndexing(TestCase):
     @requests_mock.Mocker()
     def test_delete_document_in_prod(self, scrape, m):
         # It makes a DELETE to the update endpoint in production
-        m.register_uri('DELETE', 'http://localhost:3000/documents/123', status_code=200)
+        m.register_uri('DELETE', '/data/documents/123', status_code=200)
         search.handle_page_delete(123)
         self.assertTrue(m.called)
 
@@ -125,7 +125,7 @@ class TestSearchIndexing(TestCase):
     @requests_mock.Mocker()
     def test_delete_document_off_prod(self, scrape, m):
         # It does nothing if not on production
-        m.register_uri('DELETE', 'http://localhost:3000/documents/123', status_code=200)
+        m.register_uri('DELETE', '/data/documents/123', status_code=200)
         search.handle_page_delete(123)
         self.assertFalse(m.called)
 
