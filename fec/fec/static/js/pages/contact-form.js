@@ -3,7 +3,7 @@
 /* global window */
 
 var $ = require('jquery');
-var Typeahead = require('../modules/typeahead').Typeahead;
+var Typeahead = require('fec-style/js/typeahead').Typeahead;
 var URI = require('urijs');
 
 /* ServiceNow contact form */
@@ -59,6 +59,8 @@ function AnalystLookup($elm) {
   this.$analystContainer = this.$elm.find('.js-analyst-container');
   this.$prompt = this.$elm.find('.js-analyst-prompt');
   this.$ext = this.$elm.find('.js-analyst-ext');
+  this.$analystDetails = this.$elm.find('.js-yes-analyst');
+  this.$analystNoResults = this.$elm.find('.js-no-analyst');
 
   this.typeahead = new Typeahead(this.$input, 'committees', '');
   this.initTypeahead();
@@ -87,18 +89,25 @@ AnalystLookup.prototype.fetchAnalyst = function(e, opts) {
 };
 
 AnalystLookup.prototype.showAnalyst = function(response) {
-  var name = response.results[0].first_name + ' ' + response.results[0].last_name;
-  var ext = response.results[0].telephone_ext;
-  this.$name.html(name);
-  this.$ext.html(ext);
+  var hasResults = response.results.length > 0;
+  if (hasResults) {
+    var name = response.results[0].first_name + ' ' + response.results[0].last_name;
+    var ext = response.results[0].telephone_ext;
+    this.$name.html(name);
+    this.$ext.html(ext);
+  } 
   this.$analystContainer.attr('aria-hidden', 'false');
   this.$prompt.attr('aria-hidden', 'true');
+  this.$analystDetails.attr('aria-hidden', !hasResults);
+  this.$analystNoResults.attr('aria-hidden', hasResults);
 };
 
 AnalystLookup.prototype.hideAnalyst = function() {
   this.$name.empty();
   this.$ext.empty();
   this.$analystContainer.attr('aria-hidden', 'true');
+  this.$analystDetails.attr('aria-hidden', 'true');
+  this.$analystNoResults.attr('aria-hidden', 'true');
   this.$prompt.attr('aria-hidden', 'false');
 };
 
