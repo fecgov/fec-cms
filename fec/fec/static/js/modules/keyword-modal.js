@@ -89,18 +89,15 @@ KeywordModal.prototype.combineFields = function() {
  * @returns {string} The various words joined together with the correct operator
  */
 KeywordModal.prototype.parseValue = function($input) {
+  var words = $input.val().replace(/"/g,'').split(' ');
   var operator = $input.data('operator');
   if (operator === 'and') {
-    var words = $input.val().replace(/"/g,'').split(' ');
     return words.join(' & ');
   } else if (operator === 'or') {
-    var words = $input.val().replace(/"/g,'').split(' ');
     return words.join(' OR ');
   } else if (operator === 'exact') {
-    var words = $input.val().split(' ');
-    return '"' + $input.val() + '"';
+    return '"' + $input.val().replace(/"/g,'') + '"';
   } else if (operator === 'exclude') {
-    var words = $input.val().replace(/"/g,'').split(' ');
     return '-' + words.join(' -');
   }
 };
