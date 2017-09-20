@@ -41,6 +41,12 @@
           </ul>
         </nav>
       </div>
+
+      {# TODO check:
+        Check category variable (All Results link) for Regulations link (maybe Statutes too)
+        FEC Proxy?
+       #}
+
       <section class="main__content--right">
         {% if query %}
         <h1 class="main__title">Results for &ldquo;{{ query }}&rdquo;</h1>
@@ -64,7 +70,7 @@
                       {% include 'partials/legal-search-results-statute.jinja' %}
                       {% endwith %}
                       <div class="results-info">
-                      <a class="button button--browse button--alt" href="/{{ category }}/?search={{ query}}&search_type={{ category}}">All results</a>
+                      <a class="button button--browse button--alt" href="/data/{{ category }}/?search={{ query}}&search_type={{ category}}">All results</a>
                       </div>
                   {% else %}
                   {{ legal.no_results("statutes", category, query, fec_resources=['fec.gov']) }}
@@ -75,7 +81,7 @@
                       {% include 'partials/legal-search-results-regulation.jinja' %}
                       {% endwith %}
                       <div class="results-info">
-                      <a class="button button--browse button--alt" href="/{{ category }}/?search={{ query}}&search_type={{ category}}">All results</a>
+                      <a class="button button--browse button--alt" href="/data/{{ category }}/?search={{ query}}&search_type={{ category}}">All results</a>
                       </div>
                   {% else %}
                   {{ legal.no_results("regulations", category, query, fec_resources=['Rulemaster', 'fec.gov']) }}
@@ -86,7 +92,7 @@
                       {% include 'partials/legal-search-results-advisory-opinion.jinja' %}
                       {% endwith %}
                       <div class="results-info">
-                      <a class="button button--browse button--alt" href="/{{ category }}/?search={{ query}}&search_type={{ category}}">All results</a>
+                      <a class="button button--browse button--alt" href="/data/{{ category }}/?search={{ query}}&search_type={{ category}}">All results</a>
                       </div>
                   {% else %}
                   {{ legal.no_results("advisory opinions", category, query, fec_resources=['Advisory_Opinion', 'fec.gov']) }}
@@ -103,7 +109,7 @@
                       {% include 'partials/legal-search-results-mur.jinja' %}
                       {% endwith %}
                       <div class="results-info">
-                      <a class="button button--browse button--alt" href="/{{ category }}/?search={{ query}}&search_type={{ category}}">All results</a>
+                      <a class="button button--browse button--alt" href="/data/{{ category }}/?search={{ query}}&search_type={{ category}}">All results</a>
                       </div>
                   {% else %}
                   {{ legal.no_results("enforcement matters", category, query, fec_resources=['Administrative_Fine', 'Alternative_Dispute_Resolution', 'Audit_Reports', 'Matters_Under_Review', 'Matters_Under_Review_Archived', 'fec.gov']) }}
