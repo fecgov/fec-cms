@@ -8,7 +8,7 @@
 {% for advisory_opinion in advisory_opinions %}
   <h3 class="ao-result__title">
     <a title="{{ advisory_opinion.description }}"
-      href="{{ url_for('advisory_opinion_page', ao_no=advisory_opinion.no) }}">
+      href="/data/legal/advisory-opinions/{{ advisory_opinion.no }}">
       <span class="font-bolt">AO {{ advisory_opinion.no }}: </span></a>
       <span class="t-normal">{{ advisory_opinion.name }}</span>
   <p class="u-padding--top">
