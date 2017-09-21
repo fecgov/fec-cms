@@ -46,6 +46,8 @@ describe('AnalystLookup', function() {
       expect(this.lookup.$name.is('.js-analyst-name')).to.be.true;
       expect(this.lookup.$ext.is('.js-analyst-ext')).to.be.true;
       expect(this.lookup.$analystContainer.is('.js-analyst-container')).to.be.true;
+      expect(this.lookup.$analystDetails.is('.js-yes-analyst')).to.be.true;
+      expect(this.lookup.$analystNoResults.is('.js-no-analyst')).to.be.true;
       expect(this.lookup.$prompt.is('.js-analyst-prompt')).to.be.true;
     });
 
@@ -68,6 +70,16 @@ describe('AnalystLookup', function() {
     expect(this.lookup.$name.html()).to.equal('Kim Radical');
     expect(this.lookup.$ext.html()).to.equal('1234');
     expect(this.lookup.$analystContainer.attr('aria-hidden')).to.equal('false');
+    expect(this.lookup.$analystDetails.attr('aria-hidden')).to.equal('false');
+    expect(this.lookup.$analystNoResults.attr('aria-hidden')).to.equal('true');
+    expect(this.lookup.$prompt.attr('aria-hidden')).to.equal('true');
+  });
+
+  it('shows no assigned analyst', function() {
+    this.lookup.showAnalyst({'results': [0]});
+    expect(this.lookup.$analystContainer.attr('aria-hidden')).to.equal('true');
+    expect(this.lookup.$analystDetails.attr('aria-hidden')).to.equal('true');
+    expect(this.lookup.$analystNoResults.attr('aria-hidden')).to.equal('false');
     expect(this.lookup.$prompt.attr('aria-hidden')).to.equal('true');
   });
 
@@ -76,6 +88,8 @@ describe('AnalystLookup', function() {
     expect(this.lookup.$name.html()).to.equal('');
     expect(this.lookup.$ext.html()).to.equal('');
     expect(this.lookup.$analystContainer.attr('aria-hidden')).to.equal('true');
+    expect(this.lookup.$analystDetails.attr('aria-hidden')).to.equal('true');
+    expect(this.lookup.$analystNoResults.attr('aria-hidden')).to.equal('true');
     expect(this.lookup.$prompt.attr('aria-hidden')).to.equal('false');
   });
 
