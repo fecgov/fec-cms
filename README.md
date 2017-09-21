@@ -1,5 +1,5 @@
 **Develop**
-[![Build Status](https://img.shields.io/travis/18F/fec-cms/develop.svg)](https://travis-ci.org/18F/fec-cms)
+[![CircleCI](https://circleci.com/gh/18F/fec-cms.svg?style=svg)](https://circleci.com/gh/18F/fec-cms)
 
 **Master**
 [![Dependency Status](https://gemnasium.com/badges/github.com/18F/fec-cms.svg)](https://gemnasium.com/github.com/18F/fec-cms)
@@ -176,17 +176,13 @@ npm run watch
 ```
 
 ### Developing with openFEC (optional)
-To set the URL for the web app as an environment variable, run:
+To set the URL for the API as an environment variable, run:
 
 ```bash
-export FEC_APP_URL=http://localhost:3000
+export FEC_API_URL=http://localhost:5000
 ```
 
-Or, to set it in the settings file directly, include this line:
-
-```python
-FEC_APP_URL = 'http://localhost:3000'
-```
+The base settings file will read this value in instead of using the default (which is `http://localhost:5000`).
 
 ## Restoring your local database from a backup
 *Likely only useful for 18F FEC team members*

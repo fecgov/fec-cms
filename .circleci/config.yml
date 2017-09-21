@@ -33,11 +33,6 @@ jobs:
             sudo apt-get install postgresql-client
             echo ‘/usr/lib/postgresql/9.6/bin/:$PATH’ >> $BASH_ENV
 
-      - run:
-          name: Install Node.js
-          command: |
-            sudo apt-get update && curl -sL https://deb.nodesource.com/setup_6.x | sudo bash - && sudo apt-get install -y nodejs
-
       - restore_cache:
           keys:
           - fec-api-dependencies-{{ checksum "requirements.txt" }}-{{ checksum "package.json" }}
@@ -61,12 +56,11 @@ jobs:
             export NVM_DIR="$HOME/.nvm"
             [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
             [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
-            nvm install v7.7.4
-            nvm use v7.7.4
-            nvm alias default v7.7.4
-            npm i -g npm
+            nvm install 8.5.0
+            nvm use 8.5.0
+            nvm alias default 8.5.0
+            npm i -g npm webpack
             npm install
-            npm i -g webpack
             npm run build
             cd fec
             webpack --optimize-minimize --define process.env.NODE_ENV="'production'"
@@ -84,10 +78,11 @@ jobs:
       - run:
           name: Run tests
           command: |
-            . venv/bin/activate
             export NVM_DIR="$HOME/.nvm"
             [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
             [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+            . venv/bin/activate
+            nvm use default
             cd fec
             ./manage.py test
             npm run test-single
@@ -103,7 +98,7 @@ jobs:
           command: |
             mkdir -p $HOME/bin
             export PATH=$HOME/bin:$PATH
-            curl -L "https://cli.run.pivotal.io/stable?release=linux64-binary&version=6.25.0" | tar xzv -C $HOME/bin
+            curl -L "https://cli.run.pivotal.io/stable?release=linux64-binary&version=6.31.0" | tar xzv -C $HOME/bin
             cf install-plugin autopilot -f -r CF-Community
 
 
@@ -111,7 +106,11 @@ jobs:
           name: Deploy CMS
           command: |
             export PATH=$HOME/bin:$PATH
+            export NVM_DIR="$HOME/.nvm"
+            [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+            [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
             . venv/bin/activate
+            nvm use default
             npm run build
             cd fec
             DJANGO_SETTINGS_MODULE='fec.settings.production' python manage.py collectstatic --noinput -v 0
