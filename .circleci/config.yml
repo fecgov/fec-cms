@@ -70,7 +70,7 @@ jobs:
           paths:
             - ./venv
             - ./node_modules
-          key: fec-cms-dependencies-{{ checksum "requirements.txt" }}-{{ checksum "requirements-dev.txt" }}-{{ checksum "package.json" }}
+          key: fec-cms-dependencies-{{ checksum "requirements.txt" }}-{{ checksum "package.json" }}
 
       - run:
           name: Ensure database is available
