@@ -5,7 +5,7 @@
 var $ = require('jquery');
 var URI = require('urijs');
 var A11yDialog = require('a11y-dialog');
-var analytics = require('fec-style/js/analytics');
+var analytics = require('./analytics');
 
 /**
  * KeywordModal
@@ -89,14 +89,14 @@ KeywordModal.prototype.combineFields = function() {
  * @returns {string} The various words joined together with the correct operator
  */
 KeywordModal.prototype.parseValue = function($input) {
-  var words = $input.val().split(' ');
+  var words = $input.val().replace(/"/g,'').split(' ');
   var operator = $input.data('operator');
   if (operator === 'and') {
     return words.join(' & ');
   } else if (operator === 'or') {
     return words.join(' OR ');
   } else if (operator === 'exact') {
-    return '"' + $input.val() + '"';
+    return '"' + $input.val().replace(/"/g,'') + '"';
   } else if (operator === 'exclude') {
     return '-' + words.join(' -');
   }
