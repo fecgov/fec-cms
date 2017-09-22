@@ -87,8 +87,6 @@ class TestSearchIndexing(TestCase):
 
     @requests_mock.Mocker()
     def test_add_document(self, scrape, m):
-        #import pdb
-        #pdb.set_trace
         # It makes a POST to the add endpoint
         m.register_uri('POST', '{}/documents'.format(DIGITALGOV_BASE_URL), status_code=201)
         search.add_document(self.page)
