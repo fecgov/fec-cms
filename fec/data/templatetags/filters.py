@@ -15,7 +15,7 @@ from data import constants
 @library.filter
 def currency(num, grouping=True):
     # set locale for currency filter
-    locale.setlocale(locale.LC_ALL, '')
+    locale.setlocale(locale.LC_ALL, 'en_US.UTF-8')
 
     if isinstance(num, (int, float)):
         return locale.currency(num, grouping=grouping)
