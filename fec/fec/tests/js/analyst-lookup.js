@@ -24,8 +24,14 @@ describe('AnalystLookup', function() {
         '<input>' +
         '<p class="js-analyst-prompt" aria-hidden="false">Message.</p>' +
         '<div class="js-analyst-container">' +
-          '<h5 class="js-analyst-name"></h5>' +
-          '<span class="js-analyst-ext"></span>' +
+          '<div class="js-yes-analyst">' +
+            '<h5 class="js-analyst-name"></h5>' +
+            '<span class="js-analyst-ext"></span>' +
+          '</div>' +
+          '<div class="js-no-analyst">' +
+            '<h5 class="contact-item__title">Title for no analyst</h5>' +
+            '<span class="t-block">No analyst message.</span>' +
+          '</div>' +
         '</div>' +
       '</div>'
     );
@@ -76,8 +82,8 @@ describe('AnalystLookup', function() {
   });
 
   it('shows no assigned analyst', function() {
-    this.lookup.showAnalyst({'results': [0]});
-    expect(this.lookup.$analystContainer.attr('aria-hidden')).to.equal('true');
+    this.lookup.showAnalyst({'results': []});
+    expect(this.lookup.$analystContainer.attr('aria-hidden')).to.equal('false');
     expect(this.lookup.$analystDetails.attr('aria-hidden')).to.equal('true');
     expect(this.lookup.$analystNoResults.attr('aria-hidden')).to.equal('false');
     expect(this.lookup.$prompt.attr('aria-hidden')).to.equal('true');
