@@ -11,7 +11,7 @@ import data.utils as utils
 
 class TestUtils(TestCase):
     def test_currency_filter_not_none(self):
-        #locale.setlocale(locale.LC_ALL, '')
+        locale.setlocale(locale.LC_ALL, '')
         assert filters.currency(1.05) == '$1.05'
 
 

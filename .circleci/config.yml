@@ -32,6 +32,8 @@ jobs:
           command: |
             sudo apt-get install postgresql-client
             echo ‘/usr/lib/postgresql/9.6/bin/:$PATH’ >> $BASH_ENV
+            echo "en_US.UTF-8 UTF-8" | sudo tee /etc/locale.gen
+            sudo locale-gen en_US.UTF-8
 
       - restore_cache:
           keys:
