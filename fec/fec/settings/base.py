@@ -1,3 +1,4 @@
+import locale
 import os
 
 import dj_database_url
@@ -5,6 +6,10 @@ import dj_database_url
 from django.utils.crypto import get_random_string
 
 from .env import env
+
+# We need to reset the locale to ensure that the app runs with the correct
+# setting in any container-ized architecture, e.g., our continuous integration
+locale.setlocale(locale.LC_ALL, 'en_US.UTF-8')
 
 PROJECT_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 BASE_DIR = os.path.dirname(PROJECT_DIR)
