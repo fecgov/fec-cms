@@ -46,9 +46,8 @@ jobs:
           command: |
             python3 -m venv venv
             . venv/bin/activate
-            pip install -U pip setuptools wheel
+            pip install -U pip setuptools wheel codecov
             pip install -r requirements.txt
-            pip install coverage
 
       - run:
           name: Install node dependencies
@@ -94,6 +93,10 @@ jobs:
           command: |
             . venv/bin/activate
             codecov
+
+      - store_artifacts:
+          path: test-reports
+          destination: test-reports
 
       - run:
           name: Installs for deploy
