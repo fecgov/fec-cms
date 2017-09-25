@@ -12,12 +12,12 @@ var Feedback = require('../../static/js/modules/feedback').Feedback;
 
 describe('feedback', function() {
   beforeEach(function() {
-    this.feedback = new Feedback('http://localhost:3000/issue/');
+    this.feedback = new Feedback('/data/issue/');
   });
 
   describe('constructor', function() {
     it('memorizes its url', function() {
-      expect(this.feedback.url).to.equal('http://localhost:3000/issue/');
+      expect(this.feedback.url).to.equal('/data/issue/');
     });
 
     it('appends the feedback widget', function() {
