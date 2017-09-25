@@ -4,9 +4,9 @@
 //
 
 .feedback {
-  background-color: $base;
+  background-color: $gray-lightest;
   bottom: u(.5rem);
-  color: $inverse;
+  color: $base;
   display: block;
   left: u(.5rem);
   overflow-y: scroll;
@@ -17,13 +17,19 @@
   z-index: $z-feedback;
 
   legend {
-    color: $inverse;
+    color: $base;
+  }
+
+  hr {
+    border-top: 0.15rem dotted;
+    margin: 2rem 0;
+    color: $gray-dark;
   }
 
   textarea {
     height: u(7rem);
     margin-bottom: u(2rem);
-    border-color: $inverse;
+    border-color: $base;
 
     &:last-of-type {
       margin-bottom: u(1rem);
@@ -31,7 +37,7 @@
   }
 
   a:not(.button--cta-primary) {
-    border-color: $inverse;
+    border-color: $base;
   }
 
   .label {
