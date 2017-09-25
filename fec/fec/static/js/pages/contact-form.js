@@ -3,7 +3,7 @@
 /* global window */
 
 var $ = require('jquery');
-var Typeahead = require('fec-style/js/typeahead').Typeahead;
+var Typeahead = require('../modules/typeahead').Typeahead;
 var URI = require('urijs');
 
 /* ServiceNow contact form */
