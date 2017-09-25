@@ -119,6 +119,11 @@ cd fec/
 ./manage.py createsuperuser
 ```
 
+### Set local environment variables
+By default, `FEC_API_URL` points to the local running instance of the API (http://localhost:5000). Set it to either production, dev, or staging API URLs if you are not running the API locally.
+
+Also set API keys: `FEC_WEB_API_KEY` and `FEC_WEB_API_KEY_PUBLIC`
+
 ## Running the application
 In the root project folder, run:
 
@@ -128,7 +133,7 @@ cd fec/
 ```
 
 ## Front End Development
-Front end assets are all located in `/fec/fec/static/*`. SCSS files are automatically compiled on the backend by `django-compressor`, but JS files need to be compiled by Webpack via the `npm run build` command.
+Front end assets are all located in `/fec/fec/static/*`. SCSS files are compiled and served on the backend by `django-compressor`, but JS files need to be compiled by Webpack via the `npm run build` command.
 
 
 ## Running tests
@@ -167,8 +172,7 @@ FEC_FEATURE_LEGAL=1 python fec/manage.py runserver
 ## Additional local development instructions
 
 ### Watch for static asset changes
-To watch for changes to .js and .scss, run this command in the root project
-directory:
+To watch for changes to JavaScript files, run this command in the root project directory:
 
 ```bash
 npm run watch
