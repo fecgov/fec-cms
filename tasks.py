@@ -95,13 +95,14 @@ def deploy(ctx, space=None, branch=None, login=None, yes=False):
     # Build static assets
     # These must be built prior to deploying due to the collectstatic
     # functionality of the Python buildpack conflicting with our setup.
-    ctx.run('npm run build', echo=True)
+    ctx.run('npm run build-production', echo=True)
+    ctx.run('cd fec', echo=True)
     ctx.run(
-        'DJANGO_SETTINGS_MODULE=fec.settings.production python fec/manage.py collectstatic --noinput -v 0',
+        'DJANGO_SETTINGS_MODULE=fec.settings.production python manage.py collectstatic --noinput -v 0',
         echo=True
     )
     ctx.run(
-        'DJANGO_SETTINGS_MODULE=fec.settings.production python fec/manage.py compress -v 0',
+        'DJANGO_SETTINGS_MODULE=fec.settings.production python manage.py compress -v 0',
         echo=True
     )
 
