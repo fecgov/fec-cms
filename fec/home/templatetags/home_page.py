@@ -1,6 +1,5 @@
-import re
-
 import datetime
+import re
 
 from django import template
 from django.conf import settings
@@ -15,8 +14,8 @@ register = template.Library()
 
 @register.inclusion_tag('partials/home-page-banner-announcement.html')
 def home_page_banner_announcement():
-    on = datetime.datetime.today()
-    banners = HomePageBannerAnnouncement.objects.live().filter(active=True,date_active__lte=on, date_inactive__gt=on).order_by('-date_active')[:2]
+    datetime_now = datetime.datetime.today()
+    banners = HomePageBannerAnnouncement.objects.live().filter(active=True, date_active__lte=datetime_now, date_inactive__gt=datetime_now).order_by('-date_active')[:2]
 
     return {
         'banners': banners
