@@ -19,7 +19,7 @@ def home_page_banner_announcement():
     banners = HomePageBannerAnnouncement.objects.live().filter(active=True,date_active__lte=on, date_inactive__gt=on).order_by('-date_active')[:2]
 
     return {
-        'banners': banners,
+        'banners': banners
     }
 
 
