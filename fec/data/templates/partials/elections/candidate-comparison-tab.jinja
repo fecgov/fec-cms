@@ -1,0 +1,32 @@
+{% import 'macros/cycle-select.jinja' as select %}
+
+<section id="section-1" role="tabpanel" aria-hidden="true" aria-labelledby="section-1-heading">
+  <div class="container">
+    <h2 id="section-1-heading">Compare candidate financial totals</h2>
+    <p>This table only shows candidates who have registered <em>and</em> filed a financial report. Looking for <a href="/data/candidates/?office={{ office_code|upper }}&cycle={{ cycle }}&district={{ district }}&state={{ state|upper }}">all candidates who registered</a>?</p>
+    <div class="slab slab--inline slab--neutral u-padding--left u-padding--right">
+      {{ select.election_cycle_select(cycles, cycle, 'summary')}}
+      <div class="entity__figure row">
+        <div class="heading--section heading--with-action u-no-margin">
+          <h3 class="heading__left">Candidates in this election</h3>
+          <div class="heading__right">
+            <span class="is-incumbent t-sans t-note">Incumbent</span>
+          </div>
+        </div>
+        <table id="results" class="data-table data-table--heading-borders scrollX" data-type="candidates">
+          <thead>
+            <th role="col">Candidate</th>
+            <th role="col">Party</th>
+            <th role="col">Total receipts</th>
+            <th role="col">Total disbursements</th>
+            <th role="col">Cash on hand</th>
+            <th role="col">Source reports</th>
+          </thead>
+        </table>
+        <div class="datatable__note">
+          <span class="t-note">Totals reflect the sum reported by all of a candidate's authorized committees.</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

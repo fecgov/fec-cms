@@ -1,0 +1,45 @@
+// Documents
+//
+// Displaying documents as thumbnails.
+//
+// <div class="grid grid--2-wide">
+//   <div class="grid__item document-thumbnail">
+//     <a class="document-thumbnail__img" href="#" target="_blank">
+//       <img src="img/thumbnail--feca.jpg" alt="Title 52, Voting and Elections, GPO">
+//     </a>
+//     <span class="document-thumbnail__description">
+//       <a href="#" target="_blank">Title 52, Voting and Elections, GPO</a><br>(1.6MB PDF)
+//     </span>
+//   </div>
+//   <div class="grid__item document-thumbnail">
+//     <a class="document-thumbnail__img" href="#" target="_blank">
+//       <img src="img/thumbnail--title52.jpg" alt="Title 26, Internal Revenue Code, GPO">
+//     </a>
+//     <span class="document-thumbnail__description">
+//       <a href="#" target="_blank">Title 26, Internal Revenue Code, GPO</a><br>(1.6MB PDF)
+//     </span>
+//   </div>
+// </div>
+//
+
+.document-thumbnail {
+  .document-thumbnail__img {
+    border-bottom: none;
+    margin-right: 1rem;
+
+    img {
+      box-shadow: 0 0 8px rgba(0, 0, 0, .2);
+      max-width: 140px;
+      vertical-align: middle;
+    }
+  }
+
+  .document-thumbnail__description {
+    font-family: $sans-serif;
+    font-size: u(1.4rem);
+    display: inline-block;
+    max-width: calc(100% - 160px);
+    min-width: 18rem; // Drop to a new line if the line is too short
+    vertical-align: middle;
+  }
+}

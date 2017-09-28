@@ -1,0 +1,95 @@
+// Accordions
+//
+// .accordion--neutral         - No background, dark buttons
+// .accordion--inverse         - Dark background, light buttons
+//
+// <ul class="js-accordion" data-content-prefix="first">
+//   <li>
+//     <button class="accordion__button">
+//       First Item
+//     </button>
+//     <div class="accordion__content">
+//       <p>
+//         First Item Content
+//       </p>
+//     </div>
+//   </li>
+//   <li>
+//     <button class="accordion__button">
+//       Second Item
+//     </button>
+//     <div class="accordion__content">
+//       <p>
+//         Second Item Content
+//       </p>
+//     </div>
+//   </li>
+// </ul>
+//
+
+.accordion__button {
+  @include u-icon-bg($plus-circle, $primary);
+  background-size: u(2rem);
+  background-position: 95% 50%;
+  border-bottom: 1px solid $base;
+  margin: 0 0 -1px 0;
+  color: $base;
+  font-size: u(1.6rem);
+  font-weight: bold;
+  letter-spacing: -.3px;
+  padding: u(1rem 4rem 1rem 1rem);
+  text-align: left;
+  width: 100%;
+
+  &[aria-expanded='true'] {
+    @include u-icon-bg($minus-circle, $primary);
+    border-bottom: none;
+  }
+}
+
+.accordion__content {
+  @include clearfix();
+  border-bottom: 1px solid $base;
+  padding: u(1rem);
+}
+
+.accordion__button--spacious {
+  padding: u(2rem 4rem 2rem 2rem);
+}
+
+.accordion--neutral {
+  .accordion__button {
+    background-color: $gray-lightest;
+    border-top: 1px solid $primary;
+
+    &[aria-expanded='true'] {
+      background-color: $gray-light;
+      border-top: 1px solid $base;
+      border-bottom: 2px solid $gray;
+    }
+  }
+
+  .accordion__content {
+    background-color: $gray-light;
+    border-bottom-color: $base;
+    border-top-color: $gray;
+  }
+}
+
+.accordion--inverse {
+  .accordion__button {
+    @include u-icon-bg($plus-circle, $inverse);
+    background-position: 100% 50%;
+    border-color: $inverse;
+    color: $inverse;
+
+    &[aria-expanded='true'] {
+      @include u-icon-bg($minus-circle, $inverse);
+    }
+  }
+
+  .accordion__content {
+    @include u-font-color($inverse);
+    border-color: $inverse;
+  }
+}

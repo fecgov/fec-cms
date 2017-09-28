@@ -10,21 +10,24 @@
       </a>
     </td>
      <td class="simple-table__cell">
-      {% if meeting.sunshine_act_links %}
-        <ul>
-          {% for link in meeting.sunshine_act_links|splitlines %}
+
+       {% if meeting.sunshine_act_doc_upld %}
+          {% for block in meeting.sunshine_act_doc_upld %}
+            <a href="{{ block.value.file.url }}">{% if forloop.counter >= 2 %}Amended{% endif %}Sunshine Act Notice</a>
+            {% if meeting.sunshine_act_doc_upld|length > 2 and forloop.counter >= 2%}- {{ forloop.counter0 }}{% endif %}
+            <br>
+          {% endfor %}
+       {% elif meeting.sunshine_act_links  %}
+        {% for link in meeting.sunshine_act_links|splitlines %}
           {% if forloop.counter >= 2 %}
             <br><a href="{{ link }}">Amended
-          {% else %}
+           {% else %}
             <a href="{{ link }}">
           {% endif %}
-
             Sunshine Act Notice
             {% if meeting.sunshine_act_links|splitlines|length > 2 and forloop.counter >= 2 %}- {{ forloop.counter0 }}{% endif %}
           </a>
-          </li>
          {% endfor %}
-        </ul>
       {% endif %}
     </td>
   </tr>

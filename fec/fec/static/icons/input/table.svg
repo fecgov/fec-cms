@@ -1,0 +1,11 @@
+<svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20">
+  <defs>
+    <style>
+      .cls-1 {
+        fill-rule: evenodd;
+      }
+    </style>
+  </defs>
+  <title>betaFEC_icons</title>
+  <path class="cls-1" d="M18,0.5H2a2,2,0,0,0-2,2v15a2,2,0,0,0,2,2H18a2,2,0,0,0,2-2V2.5A2,2,0,0,0,18,.5ZM5,17.5H2V14.82H5V17.5Zm0-4H2V10.82H5v2.66Zm0-4H2V6.82H5V9.48Zm0-4H2v-3H5v3Zm13,12H7V14.82H18V17.5Zm0-4H7V10.82H18v2.66Zm0-4H7V6.82H18V9.48Zm0-4H7v-3H18v3Z"/>
+</svg>

@@ -1,0 +1,76 @@
+// Overviews
+//
+// Used on data landing page to describe Raising/Spending breakdowns
+//
+
+.overview {
+  @include clearfix();
+  padding: u(2rem) 0;
+}
+
+.overview__chart {
+  position: relative;
+
+  svg {
+    font-size: u(1rem);
+    font-family: $sans-serif;
+  }
+}
+
+.overview__methodology {
+  max-height: u(30rem);
+  overflow-y: scroll;
+
+  p,
+  li {
+    font-size: 1.4rem;
+  }
+}
+
+.breakdown-link {
+  @include heading(h4);
+  display: inline-block;
+  margin: 0 0 2rem 0;
+}
+
+.top-list {
+  border-style: solid;
+  border-color: $base;
+  border-width: 1px 0;
+  font-family: $sans-serif;
+  padding: u(1rem) 0;
+
+  ol {
+    padding-top: u(1rem);
+  }
+}
+
+.top-list__title {
+  margin-bottom: u(1.5rem);
+}
+
+.top-list__subtitle {
+  margin-bottom: u(.5rem);
+}
+
+@include media($med) {
+  .overview__chart {
+    @include span-columns(8);
+    @include omega();
+  }
+
+  .overview__feedback {
+    width: 100%;
+    clear: both;
+  }
+}
+
+@include media($lg) {
+  .overview__chart {
+    @include span-columns(9);
+  }
+
+  .top-list {
+    @include span-columns(4);
+  }
+}

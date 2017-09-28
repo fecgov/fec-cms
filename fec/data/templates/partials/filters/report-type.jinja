@@ -1,0 +1,44 @@
+{% import 'macros/filters/checkbox.jinja' as checkbox %}
+
+<fieldset class="js-filter" data-filter="checkbox">
+  <div class="filter">
+    <input id="report_type-YE" name="report_type" type="checkbox" value="YE">
+    <label for="report_type-YE">Year end</label>
+  </div>
+  {{ checkbox.checkbox_dropdown_multiple(
+    'report_type',
+    'Monthly Reports',
+    options=constants.monthly_reports,
+  ) }}
+
+  {{ checkbox.checkbox_dropdown_multiple(
+    'report_type',
+    'Quarterly Reports',
+    options=constants.quarterly_reports,
+  ) }}
+
+  {{ checkbox.checkbox_dropdown_multiple(
+    'report_type',
+    'Semiannual Reports',
+    options=constants.semiannual_reports,
+  ) }}
+
+  {{ checkbox.checkbox_dropdown_multiple(
+    'report_type',
+    'Election Sensitive Reports',
+    options=constants.election_sensitive_reports,
+  ) }}
+
+  {{ checkbox.checkbox_dropdown_multiple(
+    'report_type',
+    'Bundling Reports',
+    options=constants.bundling_reports,
+  ) }}
+
+  {{ checkbox.checkbox_dropdown_multiple(
+    'report_type',
+    'Other Reports',
+    options=constants.other_reports,
+  ) }}
+
+</fieldset>

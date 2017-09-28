@@ -1,0 +1,143 @@
+// Headings
+//
+// Contain the title, date select and action button.
+// Use `.heading--main` when the heading is the top-level heading on a page as it provides extra margin-bottom.
+// Use `.heading--section` When the heading is just a heading of a section on a page for less margin-bottom.
+//
+// Markup:
+// <header class="heading--main">
+//   <h1>Page heading</h1>
+// </header>
+// <header class="heading--section">
+//  <h2>Section heading</h2>
+//  <span class="heading__subtitle">Heading subtitle</span>
+// </header>
+//
+
+// %heading is a placeholder selector that provides base styles extended by the base classes
+%heading {
+  @include clearfix();
+  border-bottom: 2px solid $base;
+  padding-bottom: u(1rem);
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    margin: 0;
+  }
+}
+
+// Has extra margin
+// h1 breaks onto multiple lines if it's long on large screens
+.heading--main {
+  @extend %heading;
+  margin-bottom: u(3rem);
+
+  @include media($lg) {
+    h1 {
+      max-width: 75%;
+    }
+  }
+}
+
+// Has smaller margin
+.heading--section {
+  @extend %heading;
+  margin-bottom: u(1rem);
+}
+
+.heading__subtitle {
+  font-family: $sans-serif;
+  font-weight: bold;
+  letter-spacing: -.3px;
+  margin-bottom: u(1rem);
+  text-transform: uppercase;
+}
+
+// Headings with actions
+//
+// When the heading title includes an action, add this class to one of the base classes.
+// Set line height to the height of the buttons or selects in the heading.
+// Use `.heading__left` and `.heading__right` to float elements at `$med` breakpoints
+//
+// <header class="heading--section heading--with-action">
+//  <h2 class="heading__left">A heading with an action</h2>
+//  <div class="heading__right">
+//    <ul class="list--buttons">
+//      <li><a class="button button--standard button--table" href="#">Explore data</a></li>
+//      <li><button class="button button--standard button--share">Share</button></li>
+//    </ul>
+//  </div>
+// </header>
+//
+
+.heading--with-action {
+  h1,
+  h2,
+  h3,
+  h4 {
+    line-height: u(3.4rem); // Setting explicit value to height of the action button for vertical alignment
+  }
+
+  @include media($med) {
+    .heading__left {
+      float: left;
+    }
+
+    .heading__right {
+      float: right;
+    }
+  }
+}
+
+// Headings with dates
+//
+// Add this class when a heading includes a date on the right side, as with Press Releases
+//
+// <header class="heading--main heading--with-date">
+//   <div class="row">
+//     <h1 class="heading__left">Press release</h1>
+//     <div class="heading__right">
+//       <span class="t-sans">September 14, 2016</span>
+//     </div>
+//   </div>
+// </header>
+//
+
+.heading--with-date {
+  @include media($med) {
+    .row {
+      display: table-row;
+    }
+
+    .heading__left {
+      display: table-cell;
+      width: 100%;
+    }
+
+    .heading__right {
+      display: table-cell;
+      text-align: right;
+      vertical-align: bottom;
+      white-space: nowrap;
+    }
+  }
+}
+
+// Headings with images
+.heading--with-image {
+  .heading__text {
+    @include span-columns(11);
+  }
+
+  .heading__image {
+    @include span-columns(1);
+    border-radius: 100%;
+    height: auto;
+  }
+}
+
+.heading__pre-title {
+  margin-bottom: 0;
+}

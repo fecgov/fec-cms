@@ -1,0 +1,83 @@
+// Page Header
+//
+// The band of color at the top of a page that contains the parent category.
+// Consists of an h1 within a container within a slab. h1 may have an icon.
+//
+// <div class="page-header page-header--primary">
+//  <div class="container">
+//    <span>Page heading</span>
+//  </div>
+// </div>
+//
+
+.page-header {
+  display: none;
+}
+
+.page-header__icon {
+  float: left;
+  margin-right: 0;
+  width: u(4rem);
+}
+
+.page-header--primary {
+  background: $primary;
+}
+
+.page-header--secondary {
+  background: $secondary;
+}
+
+.page-header__title {
+  border-bottom: none;
+  font-family: $sans-serif;
+  font-size: u(1.6rem);
+  text-transform: uppercase;
+  margin-bottom: 0;
+  line-height: 1;
+}
+
+
+@include media($med) {
+  // Add padding, show the search bar in line with the page title
+  .page-header {
+    @include clearfix();
+    display: block;
+    padding: u(1rem 2rem);
+
+    a,
+    a:hover {
+      border-color: $inverse;
+    }
+
+    .search__container {
+      display: block;
+      float: right;
+      width: u(40rem);
+    }
+  }
+
+  .page-header__title {
+    float: left;
+    line-height: u(4rem);
+  }
+}
+
+@include media($lg) {
+  // wider search bar
+  .page-header {
+    .search__container {
+      width: u(50rem);
+    }
+  }
+}
+
+@media print {
+  .page-header {
+    @include clearfix();
+    display: block;
+    background: $inverse;
+    border-bottom: 1px solid $gray;
+    color: $gray-dark;
+  }
+}

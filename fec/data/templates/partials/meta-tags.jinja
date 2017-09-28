@@ -1,0 +1,51 @@
+{% if parent == 'legal' %}
+  {% set description = "Clarify campaign finance legal requirements on the new fec.gov. Search across advisory opinions, Matters Under Review, statutes, and regulations all at once, with search results designed to help you find what you need quickly." %}
+{% else %}
+  {% set description = "Explore current and historic federal campaign finance data on the new fec.gov. Look at totals and trends, and see how candidates and committees raise and spend money. When you find what you need, export results and save custom links." %}
+{% endif %}
+
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="description" content="{{ description }}">
+
+<!-- Mobile Specific Metas
+================================================== -->
+<meta name="HandheldFriendly" content="True">
+<meta name="MobileOptimized" content="320">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+
+<!-- Twitter
+================================================== -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="{{ title | trim }} - FEC.gov">
+<meta name="twitter:description" content="{{ description }}">
+<meta name="twitter:image" content="{{ static('img/social/data.png') }}">
+
+<!-- Facebook
+================================================== -->
+<meta property="og:type" content="website" />
+<meta property="og:url" content="{{ CANONICAL_BASE }}" />
+<meta property="og:title" content="{{ title | trim }} - FEC.gov" />
+<meta property="og:site_name" content="FEC.gov" />
+<meta property="og:description" content="{{ description }}" />
+<meta property="og:image" content="{{ static('img/social/data.png') }}" />
+
+<!-- Google
+================================================== -->
+<link rel="canonical" href="{{ CANONICAL_BASE }}">
+
+<!-- Favicons
+================================================== -->
+<link rel="apple-touch-icon-precomposed" sizes="57x57" href="{{ static('img/favicon/data/apple-touch-icon-57x57.png') }}" />
+<link rel="apple-touch-icon-precomposed" sizes="57x57" href="{{ static('img/favicon/data/apple-touch-icon-72x72.png') }}" />
+<link rel="apple-touch-icon-precomposed" sizes="57x57" href="{{ static('img/favicon/data/apple-touch-icon-114x114.png') }}" />
+<link rel="apple-touch-icon-precomposed" sizes="57x57" href="{{ static('img/favicon/data/apple-touch-icon-120x120.png') }}" />
+<link rel="apple-touch-icon-precomposed" sizes="57x57" href="{{ static('img/favicon/data/apple-touch-icon-144x144.png') }}" />
+<link rel="apple-touch-icon-precomposed" sizes="57x57" href="{{ static('img/favicon/data/apple-touch-icon-152x152.png') }}" />
+
+<link rel="icon" type="image/png" href="{{ static('img/favicon/favicon-32x32.png') }}" sizes="32x32" />
+<link rel="icon" type="image/png" href="{{ static('img/favicon/favicon-16x16.png') }}" sizes="16x16" />
+
+<meta name="application-name" content="&nbsp;"/>
+<meta name="msapplication-TileColor" content="#FFFFFF" />
+<meta name="msapplication-TileImage" href="{{ static('img/favicon/data/mstile-144x144.png') }}" />

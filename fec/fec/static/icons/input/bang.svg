@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="20px" height="20px" viewBox="0 0 20 20" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 3.7.1 (28215) - http://www.bohemiancoding.com/sketch -->
+    <title>bang</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="bang" fill="#000000">
+            <path d="M10.2858687,15.9671512 C11.0059551,15.9671512 11.5717374,15.3842241 11.5717374,14.7155723 C11.5717374,13.978341 11.0059551,13.4468486 10.2858687,13.4468486 C9.56578222,13.4468486 9,14.0297757 9,14.6984274 C9,15.4356588 9.56578222,15.9671512 10.2858687,15.9671512 L10.2858687,15.9671512 Z" id="Path"></path>
+            <path d="M10.628767,12.2809943 C10.9030856,10.5665027 11.6060272,5.88594073 11.6060272,5.13156444 C11.6060272,4.37718815 11.0231001,4 10.2858687,4 C9.5486373,4 9,4.37718815 9,5.13156444 C9,5.88594073 9.70294155,10.5665027 9.9772602,12.2809943 L10.628767,12.2809943 Z" id="Path"></path>
+        </g>
+    </g>
+</svg>

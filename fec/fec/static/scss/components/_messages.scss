@@ -1,0 +1,187 @@
+// Messages
+//
+// Banners and alerts
+//
+
+.message {
+  @include clearfix();
+  background-size: u(2rem);
+  background-position: u(2rem 2rem);
+  background-color: $neutral;
+  border-color: $gray;
+  border-style: solid;
+  border-width: 0 0 0 3px;
+  margin: u(2rem 0);
+  padding: u(5rem 2rem 2rem 2rem);
+
+  p:last-child {
+    margin-bottom: 0;
+  }
+}
+
+.message--inline {
+  display: block;
+
+  @include media($lg) {
+    margin-right: u(1rem);
+    display: inline-block;
+  }
+}
+
+.message--success {
+  @include u-icon-bg($check-circle, $primary);
+  border-color: $primary-contrast;
+}
+
+.message--error {
+  @include u-icon-bg($x-circle, $primary);
+  border-color: $secondary-contrast;
+}
+
+.message--alert {
+  @include u-icon-bg($bang-circle, $primary);
+}
+
+.message--info {
+  @include u-icon-bg($info-circle, $primary);
+}
+
+.message--alert__bottom {
+  border-top: 1px solid $gray;
+  margin-top: u(1rem);
+  padding-top: u(2rem);
+}
+
+.message__title {
+  border-bottom: none;
+  margin-bottom: u(1rem);
+}
+
+.message__content {
+  display: table-cell;
+}
+
+// Messages: Big
+//
+// <div class="message message--alert message--big">
+//   <h2 id="section-1-header" tabindex="0">Oops!</h2>
+//   <p>We couldn't find what you're looking for. Please double-check the URL and try again.</p>
+//   <div class="message--alert__bottom">
+//       <p>Still can't find what you're looking for?</p>
+//       <ul class="list--buttons">
+//         <li><a class="button button--cta" href="#">Return home</a></li>
+//         <li><a class="button button--standard" href="#">File an issue</a></li>
+//         <li><a class="button button--standard" href="#">Email our team</a></li>
+//       </ul>
+//   </div>
+// </div>
+//
+
+.message--big {
+  @include media($lg) {
+    @include span-columns(8);
+    @include shift(2);
+  }
+}
+
+// Small message
+//
+// <div class="message message--info message-small">
+//   <p>This entity has no financial data for the 2011-2012 election cycle in OpenFEC.</p>
+// </div>
+//
+
+.message--small {
+  background-position: u(1rem 1rem);
+  padding: u(4rem 1rem 1rem 1rem);
+
+  &.message {
+    min-height: 0;
+  }
+}
+
+.message--mini {
+  background-position: u(1rem) 50%;
+  font-size: u(1.2rem);
+  padding: u(.5rem 1rem .5rem 4rem);
+
+  &.message {
+    min-height: 0;
+  }
+}
+
+// Messages: Inverse
+//
+// <div class="message message--inverse message--success">
+//   <p>Sample message content.</p>
+// </div>
+//
+
+.message--inverse {
+  color: $inverse;
+  background-color: rgba($inverse, .1);
+  background-position: u(50% 2rem);
+  border-color: $inverse;
+
+  &.message--success {
+    @include u-icon-bg($check-circle, $inverse);
+    border-color: $primary-contrast;
+  }
+
+  &.message--error {
+    @include u-icon-bg($x-circle, $inverse);
+    border-color: $secondary-contrast;
+  }
+
+  &.message--alert {
+    @include u-icon-bg($bang-circle, $inverse);
+  }
+
+  &.message--info {
+    @include u-icon-bg($info-circle, $inverse);
+  }
+}
+
+.message--inverse-alt {
+  background-color: $inverse-translucent;
+}
+
+.message--red {
+  background-color: $deep-red;
+  border-color: $inverse;
+
+  &.message--info {
+    @include u-icon-bg($info-circle, $inverse);
+  }
+}
+
+@include media($med) {
+  .message {
+    background-position: u(2rem 2rem);
+    background-size: u(3rem);
+    min-height: u(8rem);
+    padding: u(2rem 2rem 2rem 6rem);
+
+    &.message--inverse {
+      background-position: u(2rem 2rem);
+    }
+  }
+
+  .message--small {
+    background-size: u(2rem);
+    background-position: u(1rem 1rem);
+    padding: u(1rem 1rem 1rem 4rem);
+  }
+
+  .message--mini {
+    background-position: u(1rem) 50%;
+    background-size: u(2rem);
+    font-size: u(1.2rem);
+    line-height: u(1.4rem);
+    padding: u(1rem 1rem 1rem 4rem);
+
+    &.message {
+      min-height: 0;
+    }
+  }
+}

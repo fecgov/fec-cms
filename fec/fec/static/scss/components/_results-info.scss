@@ -1,0 +1,115 @@
+// Results Info
+//
+// The box of controls and info above and below datatables.
+//
+
+.results-info {
+  @include clearfix();
+  border-top: 2px solid $primary;
+  border-bottom: 2px solid $primary;
+  padding: u(1rem 0);
+
+  .button--export {
+    float: right;
+  }
+}
+
+.results-info__left {
+  @include clearfix();
+  margin-bottom: u(1rem);
+}
+
+.results-info__right {
+  @include clearfix();
+}
+
+.results-info__title {
+  border: none;
+  float: left;
+  line-height: u(3.4rem);
+  margin: 0;
+}
+
+.results-info__details {
+  line-height: 2;
+  font-family: $sans-serif;
+}
+
+.results-info--simple {
+  border-top: none;
+}
+
+.results-info--bottom {
+  border-bottom: none;
+}
+
+.dataTables_wrapper {
+  .results-info {
+    font-family: $sans-serif;
+
+    .dataTables_paginate {
+      float: right;
+      padding: u(.5rem 0);
+    }
+
+    .dataTables_length {
+      float: left;
+      line-height: u(2rem);
+
+      select {
+        display: inline;
+      }
+    }
+
+    .dataTables_info {
+      padding-top: u(1rem);
+      clear: both;
+    }
+  }
+}
+
+@include media($med) {
+  .results-info {
+    padding: u(1rem 1rem);
+  }
+
+  .results-info__left {
+    float: left;
+    margin-bottom: 0;
+  }
+
+  .results-info__right {
+    float: right;
+  }
+
+  .dataTables_wrapper {
+    .results-info {
+      .dataTables_length {
+        float: left;
+        margin-left: 0;
+      }
+
+      .dataTables_paginate {
+        padding: u(.5rem 0 .5rem .5rem);
+      }
+
+      .dataTables_info {
+        margin-left: 1.5em;
+        padding-top: u(.75rem);
+        float: right;
+        clear: none;
+      }
+    }
+
+    .dataTables_length {
+      padding: u(0 1rem 0 0);
+    }
+
+  }
+}
+
+@include media($lg) {
+  .results-info {
+    padding: u(1rem 0);
+  }
+}

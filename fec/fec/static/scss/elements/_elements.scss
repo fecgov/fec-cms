@@ -1,0 +1,52 @@
+// Elements
+//
+// Base styles for html elements
+//
+
+@import 'typography';
+@import 'links';
+@import 'lists';
+@import 'forms';
+@import 'tables';
+@import 'images';
+
+// Base styles
+/* apply a natural box layout model to all elements, but allowing components to change */
+
+html {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+*, *:before, *:after {
+  box-sizing: inherit;
+}
+
+body {
+  background-color: $inverse;
+  margin: 0;
+  padding: 0;
+  position: relative;
+}
+
+main {
+  &[aria-hidden="true"] {
+    display: block !important;
+  }
+}
+
+[aria-hidden=true] {
+  display: none !important;
+}
+
+// Printer settings
+@media print {
+  nav,
+  aside,
+  footer {
+    display: none;
+  }
+}

@@ -1,0 +1,86 @@
+// Typography
+//
+// <h1>Introduction (h1)</h1>
+// <h2>Heading 2 (h2)</h2>
+// <h3>Heading 3 (h3)</h3>
+// <h4>Heading 4 (h4)</h4>
+// <h5>Heading 5 (h5)</h5>
+// <h6>Heading 6 (h6)</h6>
+// <p>Maecenas faucibus mollis interdum. Nulla vitae elit libero, a pharetra augue. Cras justo odio, dapibus ac facilisis in, egestas eget quam. Etiam porta sem malesuada magna mollis euismod. Vestibulum id ligula porta felis euismod semper.</p>
+//
+
+html {
+  font-size: 62.5%;
+}
+
+body {
+  @include font-feature-settings("kern", "liga", "pnum");
+  // -webkit-font-smoothing: antialiased;
+  color: $base;
+  font-family: $base-font-family;
+  font-size: u(1.4rem);
+  line-height: 1.8;
+}
+
+h1 {
+  @include heading(h1);
+}
+
+h2 {
+  @include heading(h2);
+}
+
+h3 {
+  @include heading(h3);
+}
+
+h4 {
+  @include heading(h4);
+}
+
+h5 {
+  @include heading(h5);
+}
+
+h6 {
+  @include heading(h6);
+}
+
+p {
+  color: inherit;
+  font-size: u(1.6rem);
+  margin: u(0 0 2.4rem 0);
+  max-width: u(80rem);
+  width: 100%;
+
+  & + h1 {
+    margin-top: u(3rem);
+  }
+
+  & + h2 {
+    margin-top: u(3rem);
+  }
+
+  & + h3 {
+    margin-top: u(2rem);
+  }
+
+  & + h4 {
+    margin-top: u(2rem);
+  }
+}
+
+hr {
+  border-bottom: $base;
+  border-left: none;
+  border-right: none;
+  border-top: none;
+  margin: u(1rem 0);
+}
+
+blockquote {
+  border-left: 10px solid $gray-lightest;
+  padding-left: 30px;
+  font-style: italic;
+  margin-left: 0;
+}

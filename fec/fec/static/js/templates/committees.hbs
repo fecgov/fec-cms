@@ -1,0 +1,30 @@
+<div class="panel__row">
+  <div class="panel__heading">
+    <h4 class="panel__title"><a href="{{basePath}}/committee/{{committee_id}}">{{name}}</a></h4>
+  </div>
+  <table>
+    {{#panelRow "Treasurer"}}
+      {{treasurer_name}}
+    {{/panelRow}}
+    {{#panelRow "State"}}
+      {{state}}
+    {{/panelRow}}
+    {{#panelRow "Political party"}}
+      {{party_full}}
+    {{/panelRow}}
+    {{#panelRow "First file date"}}
+      {{datetime first_file_date format="pretty"}}
+    {{/panelRow}}
+    {{#panelRow "Designation"}}
+      {{designation_full}}
+    {{/panelRow}}
+    {{#panelRow "Type"}}
+      {{committee_type_full}}
+    {{/panelRow}}
+    {{#if organization_type_full}}
+      {{#panelRow "Organization type"}}
+        {{organization_type_full}}
+      {{/panelRow}}
+    {{/if}}
+  </table>
+</div>

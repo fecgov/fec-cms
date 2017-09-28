@@ -1,0 +1,227 @@
+// Dropdowns
+//
+// Most dropdowns are used for Datatable filters
+//
+// <div class="dropdown">
+//   <button type="button" class="dropdown__button button--alt" data-name="name">More</button>
+//   <div id="name-dropdown" class="dropdown__panel" aria-hidden="true">
+//     <ul class="dropdown__list">
+//       <li class="dropdown__item">
+//         <input id="name-checkbox-2016" name="name" type="checkbox" value="2016" />
+//         <label class="dropdown__value" for="name-checkbox-2016">2016</label>
+//       </li>
+//     </ul>
+//   </div>
+// </div>
+//
+
+.dropdown {
+  font-family: $sans-serif;
+  position: relative;
+  width: 100%;
+}
+
+.dropdown__button {
+  position: relative;
+  text-align: left;
+  min-height: u(3.4rem);
+  width: 100%;
+
+  &::after {
+    @include u-icon-bg($arrow-down, $primary);
+    background-repeat: no-repeat;
+    background-position: 90% 50%;
+    background-size: 12px;
+    border-left: 1px solid $primary;
+    content: '';
+    display: block;
+    padding: u(1rem 2rem 1rem 1rem);
+    position: absolute;
+    right: u(1.5rem);
+    top: u(.5rem);
+  }
+
+  &.is-active::after {
+    @include u-icon-bg($arrow-up, $primary);
+  }
+
+  &.is-loading {
+    &::after {
+      background-image: url('../img/loading-ellipsis-gray.gif');
+      background-size: 18px;
+      padding-left: u(1.5rem);
+      right: u(1rem);
+    }
+  }
+
+  &.is-successful {
+    &::after {
+      @include u-icon-button($check);
+      background-position: u(1.25rem) 50%;
+      background-size: 18px;
+      padding-left: u(2.5rem);
+      right: 0;
+    }
+  }
+
+  &.button--alt-primary::after,
+  &.button--alt-secondary::after {
+    @include u-icon-bg($arrow-down, $inverse);
+    border-left: 1px solid $inverse;
+  }
+}
+
+.dropdown__button--mini {
+  &::after {
+    padding: u(1rem .5rem 1rem 1.5rem);
+    right: u(.5rem);
+  }
+
+  & + .dropdown__panel {
+    border-top: 2px solid $gray-dark;
+  }
+}
+
+.dropdown__panel {
+  position: absolute;
+  min-width: 100%;
+  background: $inverse;
+  border: 2px solid $gray-dark;
+  border-top: none;
+  margin-top: -1px;
+  max-height: u(30rem);
+  overflow: hidden;
+  text-align: left;
+  top: u(3.4rem);
+  z-index: $z1;
+
+  .dropdown__value,
+  label.dropdown__value {
+    background-color: transparent;
+    border-bottom: 1px solid $gray-dark;
+    color: $base;
+    display: block;
+    margin: 0;
+    padding: u(.5rem 1rem);
+    max-width: 100%;
+    white-space: nowrap;
+
+    &:hover {
+      background-color: $gray-light;
+      cursor: pointer;
+    }
+
+    &::before {
+      display: none;
+    }
+  }
+
+  .dropdown__item {
+    button {
+      border: 1px solid $gray;
+      display: block;
+      font-size: u(1.4rem);
+      padding: u(.5rem 1rem);
+      text-align: left;
+      width: 100%;
+
+      &:hover {
+        background-color: $gray-light;
+      }
+
+      &.is-checked {
+        @include u-icon-bg($check, $gray);
+        background-color: $gray-light;
+        background-position: right u(.5rem) top 50%;
+        padding-right: u(1.5rem);
+        cursor: default;
+      }
+    }
+
+    &:last-of-type {
+      .dropdown__value {
+        border-bottom: none;
+      }
+    }
+  }
+
+  // For labeling a group of options
+  .dropdown__subhead {
+    font-size: u(1.4rem);
+    font-weight: bold;
+
+    &:hover {
+      background-color: $inverse;
+    }
+  }
+}
+
+.dropdown__panel--right {
+  right: 0;
+}
+
+@include keyframes(fadeIn) {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.dropdown__selected {
+  margin: u(.5rem 0);
+
+  li {
+    @include animation(fadeIn .2s ease-in);
+    position: relative;
+
+    &:hover {
+      input[type="checkbox"]:not(:checked) + label:not(.is-loading) + .dropdown__remove {
+        display: inline-block;
+      }
+
+      input[type="checkbox"]:not(:checked) + label.is-unsuccessful + .dropdown__remove {
+        display: none;
+      }
+    }
+  }
+
+  input {
+    margin-left: 0;
+  }
+
+  [type="checkbox"] + label {
+    max-width: 90%;
+  }
+
+  .dropdown__remove {
+    @include u-icon-button($x, $gray-dark);
+    background-position: u(.75rem) 50%;
+    background-size: 18px;
+    display: none;
+    top: 0;
+    bottom: u(1rem);
+    position: absolute;
+    z-index: $z1;
+  }
+
+  @include media($med) {
+    &.list--flat .dropdown__item {
+      width: 30%;
+    }
+  }
+}
+
+.ps-scrollbar-y-rail {
+  position: absolute;
+  background: $gray-medium;
+  width: 4px;
+  border-left: 1px solid $gray-dark;
+}
+
+.ps-scrollbar-y {
+  position: absolute;
+  width: 4px;
+  background: $gray-dark;
+}

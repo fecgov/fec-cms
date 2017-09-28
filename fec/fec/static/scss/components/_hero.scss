@@ -1,0 +1,185 @@
+// Heroes
+//
+// Hero units are special solid-colored slabs that have a thin image slice at the top. They are used on landing pages for top-level sections.
+//
+
+.hero {
+  padding-bottom: u(2rem);
+  text-align: left;
+
+  h1 {
+    border-bottom: 2px solid $inverse;
+    padding: u(3rem 0 1rem 0);
+  }
+}
+
+.hero--primary {
+  @include u-bg--primary();
+  @include u-font-color($gray-lightest);
+}
+
+.hero--secondary {
+  @include u-bg--secondary();
+  @include u-font-color($gray-lightest);
+
+  .hero__action {
+    color: $secondary-contrast;
+  }
+}
+
+.hero__content {
+  padding-top: u(1rem);
+
+  @include media($lg) {
+    @include span-columns(8);
+  }
+}
+
+.hero__image {
+  background-repeat: no-repeat;
+  background-position: 50% 0;
+  background-size: cover;
+  height: u(3rem);
+  width: 100%;
+}
+
+.hero--home {
+  background-image: url('../img/hero-home.jpg');
+  background-repeat: no-repeat;
+  background-position: 50% 70%;
+  background-size: cover;
+  padding-top: u(2rem);
+
+  h2 {
+    color: $inverse;
+    font-size: u(2rem);
+    line-height: u(3rem);
+    margin-bottom: u(2rem);
+  }
+
+  .hero__content {
+    background-color: $primary;
+    padding: u(2.5rem);
+    margin: u(2rem 0);
+
+    a {
+      border-color: $inverse;
+      color: $inverse;
+    }
+  }
+
+  @include media($lg) {
+
+    h2 {
+      margin-bottom: u(3rem);
+    }
+
+    .hero__content {
+      @include span-columns(3);
+      // padding: u(3.5rem 2.5rem);
+    }
+  }
+}
+
+// Hero panel for the campaign finance data section
+.hero--data {
+  .hero__image {
+    background-image: url('../img/hero-data.jpg');
+  }
+}
+
+.hero--registration,
+.hero--services {
+  .hero__image {
+    background-image: url('../img/hero-registration.jpg');
+  }
+}
+
+// Hero panel for the legal resources section.
+.hero--legal {
+  .hero__image {
+    background-image: url('../img/hero-legal.jpg');
+  }
+}
+
+// Hero panel for the press section.
+.hero--press {
+  .hero__image {
+    background-image: url('../img/hero-press.jpg');
+  }
+}
+
+.hero--about {
+  .hero__image {
+    background-image: url('../img/hero-about.jpg');
+  }
+}
+
+.hero__banner {
+  background-position: right center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  height: u(32rem);
+  position: relative;
+  text-align: center;
+
+  .hero__title {
+    border-bottom: 2px solid $primary;
+  }
+
+  .hero__subtitle {
+    padding: u(2rem 0);
+  }
+
+  .hero__heading {
+    padding-top: u(4rem);
+  }
+
+  .photo-credit {
+    background: rgba($gray-lightest, .6);
+    font-size: u(1rem);
+    font-family: $sans-serif;
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    padding: u(.5rem);
+  }
+
+  @include media($lg) {
+    .hero__heading {
+      @include span-columns(6);
+      @include shift(3);
+    }
+  }
+}
+
+.hero__banner--office {
+  display: none;
+
+  @include media($med) {
+    display: block;
+    background-image: url('../img/fec-office.jpg');
+    background-position: right center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    height: u(20rem);
+  }
+
+  @include media($lg) {
+    background-size: cover;
+    height: u(28rem);
+  }
+}
+
+@media print {
+  .hero--primary,
+  .hero--secondary {
+    @include u-font-color($base);
+    background: $inverse;
+    border-bottom: 1px solid $base;
+  }
+
+  .hero__image {
+    display: none;
+  }
+}

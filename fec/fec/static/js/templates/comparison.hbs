@@ -1,0 +1,28 @@
+<div class="content__section">
+  <fieldset class="js-dropdown">
+  <legend class="label" for="candidate-list">Candidates to compare (listed by amount raised):</legend>
+    <ul class="dropdown__selected list--columns">
+      {{#each this.selected}}
+      <li class="dropdown__item">
+        <input id="checkbox-{{ this.candidate_id }}" name="candidate-list" type="checkbox" data-id="{{this.candidate_id}}" data-name="{{this.candidate_name}}" checked>
+        <label class="dropdown__value" for="checkbox-{{ this.candidate_id }}">{{this.candidate_name}}</label>
+      </li>
+      {{/each}}
+    </ul>
+    <div class="grid grid--3-wide">
+      <div class="dropdown grid__item">
+        <button type="button" class="dropdown__button button--alt">More</button>
+        <div class="dropdown__panel" aria-hidden="true">
+          <ul class="dropdown__list">
+            {{#each this.options}}
+            <li class="dropdown__item">
+              <input id="checkbox-{{ this.candidate_id }}" name="candidate-list" type="checkbox" data-id="{{this.candidate_id}}" data-name="{{this.candidate_name}}">
+              <label class="dropdown__value" for="checkbox-{{ this.candidate_id }}">{{this.candidate_name}}</label>
+            </li>
+            {{/each}}
+          </ul>
+        </div>
+      </div>
+    </div>
+  </fieldset>
+</div>

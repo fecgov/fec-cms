@@ -1,0 +1,31 @@
+{% extends "layouts/main.jinja" %}
+
+{% import 'macros/page-header.jinja' as header %}
+
+{% block title %}
+  {{ title }}
+{% endblock %}
+
+{% block body %}
+
+{{ header.header(title, '') }}
+
+<div class="main">
+  <div class="container">
+    <header class="heading--main">
+      {% block page_title %}{% endblock %}
+    </header>
+  </div>
+  <div id="options" class="container">
+    <div class="sidebar-container sidebar-container--left">
+      {% block sidebar %}{% endblock %}
+    </div>
+    <section class="main__content--right">
+      {% block sections %}{% endblock %}
+    </section>
+  </div>
+</div>
+{% endblock %}
+
+{% block modals %}{% endblock %}
+{% block scripts %}{% endblock %}

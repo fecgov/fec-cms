@@ -1,0 +1,119 @@
+// Glossary
+//
+
+.glossary {
+  @include transition(right, .3s);
+  background-color: $base;
+  bottom: 0;
+  color: $inverse;
+  max-width: u(30rem);
+  overflow-y: scroll;
+  padding: u(8rem 3rem);
+  position: fixed;
+  top: 0;
+  width: 75%;
+  z-index: $z-glossary;
+
+  &[aria-hidden='true'] {
+    display: block !important;
+    right: -100%;
+  }
+
+  &[aria-hidden='false'] {
+    @include transition(right, .3s);
+    right: 0;
+  }
+
+  .button--close--inverse {
+    position: absolute;
+    right: 0;
+    top: 0;
+  }
+
+  h2 {
+    color: $inverse;
+  }
+
+  .label {
+    color: $inverse;
+  }
+}
+
+.glossary__content {
+  padding: u(4rem 0);
+}
+
+.glossary__definition {
+  font-family: $sans-serif;
+  letter-spacing: -.3px;
+
+  ol {
+    @extend .list--numbered;
+    margin-left: 0;
+
+    li {
+      font-size: u(1.4rem);
+    }
+  }
+
+  ul {
+    @extend .list--bulleted;
+    margin-left: 0;
+
+    li {
+      font-size: u(1.4rem);
+    }
+  }
+
+  p {
+    font-size: u(1.4rem);
+  }
+
+}
+
+.glossary__toggle {
+  @include u-icon-bg($book, $base);
+  background-position: 0% 50%;
+  background-size: 1em;
+  padding-left: u(2.5rem);
+}
+
+// Term classes
+//
+// Wrap glossary terms with these classes
+
+// standard class, adds the book icon
+.term {
+  @include u-icon-bg($book, $primary);
+  @include transition(background-color, .2s, box-shadow, .2s, color, .2s);
+  background-size: .6em;
+  background-position: 100% 50%;
+  background-color: transparent;
+  box-shadow: 0 0 0 4px transparent;
+  border-bottom: none;
+  cursor: pointer;
+  margin-right: 2px;
+  padding-right: .9em;
+
+
+  &:focus,
+  &:hover {
+    box-shadow: 0 0 0 4px rgba($gray, .7);
+    background-color: rgba($gray, .7);
+    color: $primary;
+  }
+}
+
+// Used when the term is in a body paragaraph of text, reduces padding and adds margin
+.term--p {
+  margin-right: u(.5rem);
+  box-shadow: none;
+}
+
+@media print {
+  .term {
+    background-image: none;
+    margin-right: 0;
+    padding-right: 0;
+  }
+}

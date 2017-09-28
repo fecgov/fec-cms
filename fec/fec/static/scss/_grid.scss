@@ -1,0 +1,74 @@
+// Grid
+
+// Neat Breakpoints
+$medium-screen: em(640) !default;
+$large-screen: em(860) !default;
+$x-large-screen: em(1088) !default;
+
+$med: new-breakpoint(min-width $medium-screen 12);
+$lg: new-breakpoint(min-width $large-screen 12);
+$xl: new-breakpoint(min-width $x-large-screen 12);
+
+// Grid columns
+//
+// Classes from the US Web Design Standards library
+
+@include media($med) {
+  .usa-width-one-whole {
+    @include span-columns(12);
+  }
+
+  .usa-width-one-half {
+    @include span-columns(6);
+  }
+
+  .usa-width-one-third {
+    @include span-columns(4);
+  }
+
+  .usa-width-two-thirds {
+    @include span-columns(8);
+  }
+
+  .usa-width-one-fourth {
+    @include span-columns(3);
+  }
+
+  .usa-width-three-fourths {
+    @include span-columns(9);
+  }
+
+  .usa-width-one-sixth {
+    @include span-columns(2);
+  }
+
+  .usa-width-five-sixths {
+    @include span-columns(10);
+  }
+
+  .usa-width-one-twelfth {
+    @include span-columns(1);
+  }
+
+  .usa-end-row {
+    @include omega();
+  }
+}
+
+// Utilities for hiding things at certain breakpoints
+//
+// Use sparingly
+
+.u-under-lg-only {
+  @include media($lg) {
+    display: none !important;
+  }
+}
+
+.u-lg-only {
+  display: none !important;
+
+  @include media($lg) {
+    display: inherit !important;
+  }
+}

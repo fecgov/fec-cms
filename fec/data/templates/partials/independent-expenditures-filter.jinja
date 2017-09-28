@@ -1,0 +1,49 @@
+{% extends 'partials/filters.jinja' %}
+
+{% import 'macros/filters/text.jinja' as text %}
+{% import 'macros/filters/typeahead-filter.jinja' as typeahead %}
+{% import 'macros/filters/states.jinja' as states %}
+{% import 'macros/filters/years.jinja' as years %}
+{% import 'macros/filters/date.jinja' as date %}
+{% import 'macros/filters/range.jinja' as range %}
+{% import 'macros/filters/ie-reports.jinja' as reports %}
+{% import 'macros/filters/misc.jinja' as misc %}
+{% block heading %}
+Filter independent expenditures
+{% endblock %}
+
+{% block data_type_toggle %}
+  {% include 'partials/filters/efiling.jinja' %}
+{% endblock %}
+
+{% block efiling_filters %}
+<div class="filters__inner">
+  {{ typeahead.field('committee_id', 'Spender name or ID', id_suffix='_raw') }}
+  {{ text.field('candidate_name', 'Candidate mentioned', id_suffix='_raw')}}
+  {{ misc.support_oppose('_raw') }}
+  {{ date.field('expenditure_date', 'Expenditure date', id_suffix='_raw') }}
+</div>
+{% endblock %}
+
+{% block filters %}
+<div class="js-accordion accordion--neutral" data-content-prefix="filter" data-open-first="false">
+  <div class="filters__inner">
+    {{ typeahead.field('committee_id', 'Spender name or ID') }}
+    {{ years.cycles('cycle', 'Years') }}
+    {{ reports.type() }}
+    {{ reports.form()}}
+  </div>
+  <button type="button" class="js-accordion-trigger accordion__button">Candidate mentioned</button>
+  <div class="accordion__content">
+    {{ typeahead.field('candidate_id', 'Candidate', dataset='candidates') }}
+    {{ misc.support_oppose('_processed') }}
+  </div>
+
+  <button type="button" class="js-accordion-trigger accordion__button">Transaction information</button>
+  <div class="accordion__content">
+    {{ text.field('payee_name', 'Payee') }}
+    {{ range.amount('amount', 'Expenditure amount') }}
+    {{ date.field('date', 'Expenditure date', dates ) }}
+  </div>
+</div>
+{% endblock %}

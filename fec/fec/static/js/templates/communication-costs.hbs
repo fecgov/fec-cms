@@ -1,0 +1,54 @@
+<div class="panel__row">
+  <h4 class="panel__title">Disbursement information</h4>
+  <table>
+    {{#panelRow "Committee name"}}
+      <a href="{{basePath}}/committee/{{committee_id}}">{{committee_name}}</a>
+    {{/panelRow}}
+    {{#panelRow "Amount"}}
+      {{ currency transaction_amount }}
+    {{/panelRow}}
+    {{#panelRow "Report year"}}
+      {{ report_year }}
+    {{/panelRow}}
+    {{#panelRow "Transaction date"}}
+      {{ datetime transaction_date format=pretty }}
+    {{/panelRow}}
+    {{#panelRow "Transaction type"}}
+      {{transaction_type}}
+    {{/panelRow}}
+    {{#panelRow "Communication class"}}
+      {{ communication_class }}
+    {{/panelRow}}
+    {{#panelRow "Communication type"}}
+      {{ communication_type }}
+    {{/panelRow}}
+    {{#panelRow "Purpose"}}
+      {{ purpose }}
+    {{/panelRow}}
+  </table>
+</div>
+
+<div class="panel__row">
+  <h4 class="panel__title">Candidate information</h4>
+  <table>
+    {{#panelRow "Candidate"}}
+      <a href="{{basePath}}/candidate/{{candidate_id}}/">{{candidate_name}}</a> ({{decodeSupportOppose support_oppose_indicator}})
+    {{/panelRow}}
+    {{#panelRow "Party"}}
+      {{ decodeParty candidate_party_affiliation }}
+    {{/panelRow}}
+    {{#panelRow "Office"}}
+      {{ decodeOffice candidate_office }}
+    {{/panelRow}}
+    {{#if candidate_office_state }}
+      {{#panelRow "State"}}
+        {{ decodeState candidate_office_state }}
+      {{/panelRow}}
+    {{/if}}
+    {{#if candidate_office_district}}
+      {{#panelRow "District"}}
+        {{ candidate_office_district }}
+      {{/panelRow}}
+    {{/if}}
+  </table>
+</div>

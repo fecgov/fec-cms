@@ -1,0 +1,17 @@
+{% extends "layouts/legal-doc-search-results.jinja" %}
+{% import 'macros/legal.jinja' as legal %}
+{% set document_type_display_name = 'advisory opinions' %}
+
+{% block header %}
+<header class="page-header slab slab--primary">
+  {{ breadcrumb.breadcrumbs('Search results', [('/legal-resources', 'Legal resources'), ('/data/legal/advisory-opinions/', 'Advisory opinions')]) }}
+</header>
+{% endblock %}
+
+{% block search %}
+<input id="query" type="hidden" value="{{ query }}" />
+<input id="contact-email" type="hidden" value="{{ contact_email }}" />
+<input id="advisory_opinion_page" type="hidden" value="/data/legal/advisory-opinions/ao_no" />
+<div id="root"></div>
+<script src="{{ asset_for('legalApp.js') }}"></script>
+{% endblock %}

@@ -1,0 +1,21 @@
+<div id="filters" class="filters">
+{% if has_data_type_toggle %}
+  <button type="button" class="filters__header filters__toggle js-filter-toggle">Select data type</button>
+  <div class="filters__content" id="category-filters" aria-hidden="true" data-efiling-filters=true>
+    <div id="data-type-toggle" class="filters__inner data-type">
+      {% block data_type_toggle %}{% endblock %}
+    </div>
+    <div class="filters__header js-filter-header">Edit filters</div>
+{% else %}
+  <button type="button" class="filters__header filters__toggle js-filter-toggle">Edit filters</button>
+  <div class="filters__content" id="category-filters" aria-hidden="true">
+{% endif %}
+    {% block message %}{% endblock %}
+    <div class="js-efiling-filters" aria-hidden="true">
+      {% block efiling_filters %}{% endblock %}
+    </div>
+    <div class="js-processed-filters">
+      {% block filters %}{% endblock %}
+    </div>
+  </div>
+</div>

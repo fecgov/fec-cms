@@ -1,0 +1,164 @@
+// Data Container module
+//
+// Container for the content results for Datatable pages
+// Datatable name, export buttons, result information and tags, datatable results
+//
+
+.data-container {
+  @include clearfix();
+  position: relative;
+  width: 100%;
+}
+
+.is-showing-filters {
+  padding-top: 0;
+}
+
+.data-container__widgets {
+  @include clearfix();
+  border-bottom: 2px solid $primary;
+  font-family: $sans-serif;
+}
+
+.data-container__action {
+  @include clearfix();
+  float: right;
+}
+
+.data-container__share {
+  display: inline-block;
+  width: u(4rem);
+  padding: 8px 0;
+  background-position: 50%;
+  text-indent: -9999px;
+  margin-bottom: 0;
+}
+
+.data-container__export {
+  display: none;
+}
+
+.data-container__widgets--secondary {
+  background-color: $secondary;
+}
+
+.data-container__head {
+  @include clearfix();
+  border-bottom: 1px solid $gray;
+  padding: u(1rem);
+}
+
+.data-container__title {
+  border-bottom: none;
+  line-height: u(3.4rem);
+  margin: 0;
+  font-size: u(3rem);
+  float: left;
+}
+
+.data-container__body {
+  padding: u(0 1rem);
+}
+
+.data-container__tags {
+  @include clearfix();
+  padding: u(1rem);
+}
+
+.data-container__message {
+  display: none;
+}
+
+.export-widget {
+  @include span-columns(6);
+}
+
+.panel__controls {
+  @include clearfix();
+  clear: both;
+  padding-top: u(.5rem);
+}
+
+// BREAKPOINT: LARGE
+// Data-container shrinks and floats
+@include media($lg) {
+  .data-container__wrapper {
+    display: table;
+    width: 100%;
+  }
+
+  .data-container {
+    display: table-cell;
+    width: calc(100% - 4rem);
+    padding: 0;
+  }
+
+  .is-showing-filters {
+    .data-container {
+      width: calc(100% - 30rem);
+      display: table-cell;
+    }
+  }
+
+  .data-container__head {
+    padding: u(0 2rem 1rem 2rem);
+  }
+
+  .data-container__body {
+    border-top: 0;
+    padding: u(0 2rem);
+  }
+
+  .data-container__datatable {
+    padding: u(0 0 0 2rem);
+  }
+
+  .data-container__widgets {
+    padding: u(1rem 0 0 0);
+  }
+
+  .data-container__action {
+    @include span-columns(7);
+    float: right;
+    text-align: right;
+  }
+
+  .data-container__share {
+    @include u-icon-button($share, right);
+    padding-left: u(2rem);
+    text-indent: 0;
+    width: auto;
+    margin-right: u(1rem);
+  }
+
+  .data-container__export {
+    display: inline-block;
+    position: relative;
+  }
+
+  .data-container__message {
+    display: inline-block;
+    margin: 0 u(1rem) 0 0;
+    vertical-align: middle;
+  }
+
+  .data-container__tags {
+    padding: u(1rem 2rem);
+  }
+
+  .export-widget {
+    float: left;
+    margin-right: u(1rem);
+    width: auto;
+
+    &:last-of-type {
+      margin: 0;
+    }
+
+    .dropdown,
+    .button {
+      float: right;
+      width: 100%;
+    }
+  }
+}

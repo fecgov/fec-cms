@@ -1,0 +1,168 @@
+// Mega menu
+//
+// For site nav
+//
+
+.mega-container {
+  a:not(.mega__page-link, .button) {
+    border-bottom: none;
+
+    &:hover {
+      border-bottom: 1px dotted $inverse;
+    }
+  }
+
+  ul {
+    margin-left: 0;
+  }
+}
+
+.mega {
+  background-color: darken($primary, 5%);
+  font-family: $sans-serif;
+}
+
+.mega__inner {
+  padding: u(1rem);
+}
+
+.mega-heading__title {
+  display: none;
+}
+
+.mega-heading {
+  display: none;
+}
+
+.mega__intro {
+  padding: u(1rem 1rem 0 1rem);
+}
+
+.mega__page-link {
+  @include heading(h3);
+  border-bottom: 1px solid $inverse;
+  display: block;
+  margin: 0;
+  padding: u(1rem 0 1rem 1rem);
+
+  // scss-lint:disable ImportantRule
+  &:hover {
+    border-left: u(1rem) solid $primary-contrast !important;
+    padding-left: u(1rem);
+  }
+}
+
+
+
+.mega__list:last-of-type {
+  li:last-of-type {
+    .mega__page-link {
+      border-bottom: none;
+    }
+  }
+}
+
+.mega--secondary {
+  // scss-lint:disable ImportantRule
+  .mega__page-link:hover {
+    border-left: u(1rem) solid $secondary-contrast !important;
+    padding-left: u(1rem);
+  }
+}
+
+.mega__item {
+  margin-bottom: u(1.5rem);
+  padding-left: u(2rem);
+
+  &:first-of-type {
+    margin-top: u(1rem);
+  }
+}
+
+.mega__card {
+  border: 1px solid $inverse;
+  margin-bottom: u(1.5rem);
+
+  .card__image {
+    margin-right: 0;
+  }
+
+  .card__content {
+    padding-top: u(.5rem);
+  }
+}
+
+// scss-lint:disable ImportantRule
+@include media($lg) {
+  .mega-container {
+    @include u-font-color($inverse);
+    @include clearfix();
+    display: block !important; // Important to override [aria-hidden] styles
+    overflow: hidden;
+    position: absolute;
+    left: 0;
+    right: 0;
+    visibility: hidden;
+
+    &.is-open {
+      top: u(4rem);
+      visibility: visible;
+      padding-bottom: u(8rem); // Padding so that the shadow doesn't get cut off
+      z-index: $z-navigation;
+
+      .mega {
+        @include transition(all .4s ease-out);
+        @include transform(translateY(0));
+        box-shadow: 0 6px 8px 2px rgba(0, 0, 0, .3);
+        transform: translateY(0);
+      }
+    }
+
+    a {
+      border-color: $inverse;
+    }
+  }
+
+  .mega {
+    @include clearfix();
+    @include transition(all .4s ease-out);
+    @include transform(translateY(-100%));
+    background-color: $primary;
+    font-size: u(1.4rem);
+    color: $inverse;
+    padding: u(1rem 4rem 2rem 4rem);
+
+    .button--standard {
+      color: $base;
+      border: 1px solid $gray;
+    }
+  }
+
+  .mega--secondary {
+    background-color: $secondary;
+  }
+
+  .mega-heading {
+    display: block;
+    border-bottom: 2px solid $inverse;
+    padding-bottom: u(.8rem);
+    margin: u(1rem 0);
+  }
+
+  .mega-heading__title {
+    display: block;
+    margin-bottom: 0;
+  }
+
+  .mega__page-link {
+    padding-left: u(2rem);
+  }
+
+  .mega__list {
+    li:last-of-type {
+      .mega__page-link {
+        border-bottom: none;
+      }
+    }
+  }
+}

@@ -1,0 +1,164 @@
+.bar-chart {
+  .axis,
+  .axis {
+    path,
+    line {
+      fill: none;
+      stroke: $base;
+      shape-rendering: crispEdges;
+    }
+  }
+
+  .domain {
+    display: none;
+  }
+
+  .bar {
+    &.candidates {
+      fill: $deep-aqua;
+    }
+
+    &.pacs {
+      fill: $gray;
+    }
+
+    &.parties {
+      fill: $aqua;
+    }
+
+    &.other {
+      fill: $gray-dark;
+    }
+  }
+
+  .bar--empty,
+  .bar--in-progress {
+    fill: url('#stripes');
+  }
+
+  .tick line {
+    stroke: $gray-light;
+    stroke-style: dashed;
+  }
+}
+
+// Line charts
+.line--candidate {
+  stroke: $federal-blue;
+
+  circle {
+    fill: $federal-blue;
+  }
+}
+
+.line--pac {
+  stroke: $orange;
+
+  circle {
+    fill: $orange;
+  }
+}
+
+.line--party {
+  stroke: $aqua;
+
+  circle {
+    fill: $aqua;
+  }
+}
+
+.line--other {
+  stroke: $gray-dark;
+
+  circle: {
+    fill: $gray-dark;
+  }
+}
+
+.cursor {
+  stroke: $gray;
+}
+
+// Bottom x axis
+.y .tick:first-child line {
+  stroke: $primary;
+}
+
+// Snapshot component
+// Accompanies a line chart to show the totals at a given point
+.snapshot {
+  border-bottom: 2px solid $primary;
+
+  @include media($med) {
+    @include span-columns(4);
+  }
+
+  @include media($lg) {
+    @include span-columns(3);
+  }
+}
+
+.snapshot__item-title {
+  font-weight: bold;
+}
+
+.snapshot__item {
+  font-family: $sans-serif;
+  font-size: u(1.4rem);
+  padding: u(.5rem 0);
+  border-bottom: 1px solid $gray-light;
+}
+
+.snapshot__controls {
+  @include clearfix();
+  border-width: 2px 0;
+  border-style: solid;
+  border-color: $primary;
+  padding: 2px 0;
+  text-align: center;
+
+  h5 {
+    display: inline-block;
+    font-family: $sans-serif;
+    font-size: u(1.3rem);
+    font-weight: bold;
+    padding: u(.8rem 0);
+    margin: 0;
+  }
+
+  .button--previous {
+    float: left;
+    padding: u(1.5rem 1rem);
+  }
+
+  .button--next {
+    float: right;
+    padding: u(1.5rem 1rem);
+  }
+}
+
+// Swatches
+.swatch {
+  display: inline-block;
+  width: 1em;
+  height: 1em;
+  border-radius: 1em;
+  margin-right: .4em;
+  vertical-align: middle;
+
+  &.candidates {
+    background-color: $federal-blue;
+  }
+
+  &.pacs {
+    background-color: $orange;
+  }
+
+  &.parties {
+    background-color: $aqua;
+  }
+
+  &.other {
+    background-color: $gray-dark;
+  }
+}

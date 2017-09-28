@@ -1,0 +1,74 @@
+// Figures
+//
+// Styles for combinations of labels + numbers.
+// Labels can be either inline or above the numbers
+// Note: Zero-padding with decimals is handled by Javascript
+//
+// .figure--zero-pad    - Used when the numbers should be preceded by decimals
+//
+// <div class="figure--zero-pad">
+//   <div class="figure__item">
+//     <span class="figure__label">Label</span>
+//     <span class="figure__number">
+//      <span class="figure__decimals"></span>$20,000
+//     </span>
+//   </div>
+// </div>
+//
+
+.figure--zero-pad {
+  .figure__item {
+    display: inline-block;
+    margin-bottom: u(1rem);
+  }
+
+  .figure__label {
+    display: block;
+    font-weight: bold;
+  }
+}
+
+.figure__decimals {
+  color: $gray-dark;
+  font-weight: normal;
+  letter-spacing: 3px;
+
+  &[aria-hidden="true"] {
+    display: inline !important;
+  }
+}
+
+.entity__figure {
+  background-color: $inverse;
+  padding: u(1rem);
+  margin-bottom: u(2rem);
+  border-radius: 2px;
+  page-break-inside: avoid;
+
+  .figure__label {
+    font-weight: bold;
+  }
+
+  .figure__label,
+  .figure__value {
+    font-size: u(1.6rem);
+    padding: u(.5rem);
+    vertical-align: top;
+  }
+
+  .simple-table {
+    margin-top: u(1rem);
+  }
+
+  .tag__category {
+    margin-top: 0;
+  }
+
+  @include media($med) {
+    padding: u(2rem 4rem);
+  }
+}
+
+.entity__figure--narrow {
+  max-width: u(80rem);
+}

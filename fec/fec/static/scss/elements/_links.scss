@@ -1,0 +1,19 @@
+// Links
+//
+
+a {
+  border-bottom: 1px dotted $primary;
+  color: inherit;
+  cursor: pointer;
+  text-decoration: none;
+  transition: color 0.1s linear;
+
+  &:active,
+  &:hover {
+    border-bottom-color: $primary-contrast;
+  }
+
+  img {
+    border: none;
+  }
+}

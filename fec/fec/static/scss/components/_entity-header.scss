@@ -1,0 +1,182 @@
+// Entity headers
+//
+// Blue header for election pages
+//
+
+.entity__header {
+  padding: u(3rem 0);
+
+  @include media($med) {
+    .entity__term {
+      max-width: 200px;
+    }
+  }
+}
+
+.entity__header--map {
+  position: relative;
+
+  .map {
+    height: u(30rem);
+    width: 100%;
+
+    a {
+      color: $primary;
+    }
+  }
+
+  @include media($med) {
+    height: u(30rem);
+
+    .entity__header--info {
+      @include span-columns(6);
+    }
+
+    .map {
+      position: absolute;
+      width: 40%;
+      height: u(34rem);
+      top: 0;
+      bottom: 0;
+      right: 0;
+    }
+  }
+}
+
+.entity__header__top {
+  padding-bottom: u(.5rem);
+}
+
+.entity__header__bottom {
+  padding: u(2rem 0 0 0);
+}
+
+.entity__name {
+  border-bottom: none;
+  font-weight: bold;
+  margin-bottom: 0;
+}
+
+.entity__type {
+  display: block;
+}
+
+
+.entity__info {
+  @include clearfix();
+  border-bottom: 2px solid;
+  border-top: 2px solid;
+  font-family: $sans-serif;
+  letter-spacing: -.3px;
+  padding: u(1rem 0);
+  width: 100%;
+
+  @include media($med) {
+    display: table;
+  }
+}
+
+.entity__term {
+  @include clearfix();
+  width: 100%;
+  margin-bottom: u(1rem);
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+
+  @include media($med) {
+    display: table-cell;
+    width: auto;
+    margin-bottom: 0;
+    padding-right: u(3rem);
+  }
+}
+
+.entity__term--aligned {
+  @include media($med) {
+    vertical-align: top;
+  }
+}
+
+.entity__term--icon {
+  min-width: u(3rem);
+  width: u(3rem);
+  text-align: center;
+}
+
+.entity__term__label {
+  @include span-columns(6);
+  font-family: $sans-serif;
+  font-weight: bold;
+
+  @include media($med) {
+    float: none;
+    width: 100%;
+    margin: 0;
+  }
+}
+
+.entity__term__data {
+  @include span-columns(6);
+
+  @include media($med) {
+    float: none;
+    width: 100%;
+    margin: 0;
+  }
+}
+
+.entity__election {
+  clear: both;
+  padding-top: u(1rem);
+
+  .entity__term__label {
+    width: 100%;
+  }
+}
+
+// Color rules
+.entity__header--neutral {
+  @include u-bg--neutral();
+
+  .entity__info,
+  .entity__type  {
+    border-color: $primary;
+  }
+}
+
+.entity__header--primary {
+  @include u-bg--primary();
+  border-top: 1px solid $primary-contrast;
+
+  .entity__info,
+  .entity__type {
+    border-color: $primary-contrast;
+  }
+}
+
+@include media($med) {
+  .entity__type {
+    display: inline-block;
+    margin-right: u(1rem);
+    padding-right: u(1rem);
+    border-right: 1px solid;
+  }
+
+  .entity__election {
+    @include span-columns(6);
+  }
+}
+
+@include media($lg) {
+  .entity__cycle {
+    @include span-columns(8);
+  }
+
+  .entity__election {
+    @include span-columns(4);
+    clear: none;
+    padding-top: 0;
+  }
+}

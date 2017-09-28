@@ -1,0 +1,62 @@
+<div class="panel__row">
+  <h4 class="panel__title">Disbursement information</h4>
+  <table>
+    {{#panelRow "Spender"}}
+      <a href="{{basePath}}/committee/{{committee_id}}">{{committee_name}}</a>
+    {{/panelRow}}
+    {{#panelRow "Amount"}}
+      {{ currency disbursement_amount }}
+    {{/panelRow}}
+    {{#panelRow "Number of candidates mentioned"}}
+      {{ number_of_candidates }}
+    {{/panelRow}}
+    <tr>
+      <td class="panel__term">
+        <span>Amount per candidate</span>
+        <div class="tooltip__container">
+          <button class="tooltip__trigger" type="button"><span class="u-visually-hidden">Learn more</span></button>
+          <div id="unique-tooltip" role="tooltip" class="tooltip tooltip--under">
+            <p class="tooltip__content">To help users work with this data, we divide each itemized disbursement amount by the number of federal candidates named in connection with that disbursement. The resulting amount is listed here.</p>
+          </div>
+        </div>
+      </td>
+      <td class="panel__data">
+        {{ currency calculated_candidate_share }}
+      </td>
+    </tr>
+    {{#panelRow "Report year"}}
+      {{ report_year }}
+    {{/panelRow}}
+    {{#panelRow "Disbursement date"}}
+      {{ datetime disbursement_date format=pretty }}
+    {{/panelRow}}
+    {{#panelRow "Communication date"}}
+      {{ datetime communication_date format=pretty }}
+    {{/panelRow}}
+    {{#panelRow "Purpose description"}}
+      {{ purpose_description }}
+    {{/panelRow}}
+  </table>
+</div>
+
+<div class="panel__row">
+  <h4 class="panel__title">Candidate information</h4>
+  <table>
+    {{#panelRow "Candidate"}}
+      <a href="{{basePath}}/candidate/{{candidate_id}}/">{{candidate_name}}</a>
+    {{/panelRow}}
+    {{#panelRow "Office"}}
+      {{ decodeOffice candidate_office }}
+    {{/panelRow}}
+    {{#if candidate_state}}
+      {{#panelRow "State"}}
+        {{decodeState candidate_state}}
+      {{/panelRow}}
+    {{/if}}
+    {{#unless (eq candidate_district '00') }}
+      {{#panelRow "District"}}
+        {{candidate_district}}
+      {{/panelRow}}
+    {{/unless}}
+  </table>
+</div>

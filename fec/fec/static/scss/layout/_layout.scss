@@ -1,0 +1,182 @@
+// Layout
+//
+// These are basic grid and color styles to be applied to components
+//
+
+@import 'slabs';
+@import 'grid';
+
+// used to center and group grid items
+.container {
+  @include outer-container();
+  padding: u(0 2rem);
+
+  @include media($lg) {
+    padding: 0;
+  }
+}
+
+// clearfixes a group of divs / wraps grid columns
+.row {
+  @include clearfix();
+}
+
+// the main content area below heroes
+.main {
+  @include clearfix();
+  padding-bottom: u(2rem);
+  padding-top: u(2rem);
+  position: relative;
+
+  @include media($lg) {
+    padding-top: u(3rem);
+    padding-bottom: u(3rem);
+  }
+}
+
+.content--blank {
+  border-top: 1px solid $neutral;
+  padding: u(4rem 0);
+}
+
+// the area below page headers, next to sidebar
+.main__content {
+  @include clearfix();
+  position: relative;
+
+  @include media($med) {
+    @include span-columns(8);
+  }
+}
+
+.main__content--right {
+  @include clearfix();
+  position: relative;
+
+  @include media($med) {
+    @include span-columns(9);
+  }
+}
+
+// full-width main content area
+.main__content--full {
+  @include clearfix();
+  position: relative;
+}
+
+.main__content--right-full {
+  @include clearfix();
+  position: relative;
+  width: 100%;
+
+  @include media($med) {
+    display: table-cell;
+    width: calc(100% - 4rem);
+  }
+}
+
+// adds padding for breaking up sections of body content
+.content__section {
+  @include clearfix();
+  padding: u(0 0 2rem 0);
+}
+
+.content__section--extra {
+  @include clearfix();
+  padding: u(2rem 0);
+
+  @include media($lg) {
+    padding: u(4rem 0);
+  }
+}
+
+// narrow container for text interspersed with other elements
+.content__section--narrow {
+  max-width: u(80rem); // matches `p` tags
+}
+
+// adds a border
+.content__section--ruled {
+  border-top: 1px solid $primary;
+  margin-top: u(2rem);
+  padding-top: u(2rem);
+
+  &.content__section--extra {
+    padding-top: u(4rem);
+  }
+
+  & + .content__section--ruled {
+    margin-top: 0;
+  }
+}
+
+// Utility padding classes
+
+.u-padding--top {
+  padding-top: u(2rem);
+}
+
+.u-padding--bottom {
+  padding-bottom: u(2rem);
+}
+
+.u-padding--left {
+  padding-left: u(2rem);
+}
+
+.u-padding--right {
+  padding-right: u(2rem);
+}
+
+.u-small-icon-padding--left {
+  padding-left: u(2.5rem);
+}
+
+// Utility margin classes
+.u-margin--bottom {
+  margin-bottom: u(1rem);
+}
+
+.u-margin--top {
+  margin-top: u(1rem);
+}
+
+.u-margin--left {
+  margin-left: u(1rem);
+}
+
+.u-margin--right {
+  margin-right: u(1rem);
+}
+
+// horizontal rule
+
+.hr--lighter {
+  border-bottom: 1px solid $gray-light;
+  display: block;
+  margin: u(2rem 0 2rem);
+}
+
+.hr--light {
+  border: 1px solid $gray;
+  display: block;
+  margin: u(2rem 0 2rem);
+}
+
+.hr--dark {
+  border: 1px solid $gray-dark;
+  display: block;
+  margin-top: u(2rem);
+}
+
+// Class applied to candidate and committee pages with tabs
+.tab-interface {
+  overflow-x: hidden;
+  position: relative;
+}
+
+@media print {
+  .container {
+    padding: 0;
+  }
+}
