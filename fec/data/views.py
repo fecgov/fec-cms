@@ -386,7 +386,7 @@ def elections(request, office, cycle, state=None, district=None):
 
 def raising(request):
     top_category = request.GET.get('top_category', 'P')
-    cycle = request.GET.get('cycle', 2016)
+    cycle = request.GET.get('cycle', 2018)
 
     if top_category in ['pac']:
         top_raisers = api_caller.load_top_pacs('-receipts', cycle=cycle, per_page=10)
@@ -416,7 +416,7 @@ def raising(request):
 
 def spending(request):
     top_category = request.GET.get('top_category', 'P')
-    cycle = request.GET.get('cycle', 2016)
+    cycle = request.GET.get('cycle', 2018)
 
     if top_category in ['pac']:
         top_spenders = api_caller.load_top_pacs('-disbursements', cycle=cycle, per_page=10)
