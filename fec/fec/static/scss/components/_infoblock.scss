@@ -1,0 +1,34 @@
+//  <li class="grid__item grid__item--infoblock">
+//    <div class="infoblock__image infoblock__image--compare" role="img" aria-label="Description of the image"></div>
+//    <h3 class="t-sans">Explore financial data for current and past elections and the candidates in those races</h3>
+//    <a class="button infoblock__button button--cta button--go" href="/data/#compare-candidates-in-an-election">Compare candidates</a>
+//  </li>
+
+.infoblock__image {
+  background-image: url('../img/infoblock--get-started-2x.jpg');
+  background-repeat: no-repeat;
+  padding-top: u(20rem);
+}
+
+.infoblock__image--support {
+  background-position: 50% 0;
+}
+
+.infoblock__image--compare {
+  background-position: 50% 50%;
+}
+
+.infoblock__image--contribute {
+  background-position: 50% 100%;
+}
+
+.infoblock__subtext {
+  font-size: 1.4rem;
+  margin: 0 0 1rem 0;
+}
+
+a.infoblock__button {
+  color: $inverse;
+  bottom: 0;
+  position: absolute;
+}
