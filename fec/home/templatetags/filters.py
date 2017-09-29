@@ -1,12 +1,12 @@
-import re
 import json
+import os
+import re
 
-from django.conf import settings
 from django import template
-from django.utils.html import conditional_escape
+from django.conf import settings
+from django.templatetags.static import static
+from django.utils.html import conditional_escape, format_html
 from django.utils.safestring import mark_safe
-from django.utils.html import format_html
-from django.contrib.staticfiles.templatetags.staticfiles import static
 from wagtail.wagtailcore.models import Page
 
 register = template.Library()
@@ -131,7 +131,7 @@ def asset_for(path):
     without a hash"""
 
     key = '/static/js/{}'.format(path)
-    assets = json.load(open('./dist/fec/static/js/rev-manifest.json'))
+    assets = json.load(open(os.path.join(settings.STATIC_ROOT, 'js/rev-manifest.json')))
 
     return assets[key] if key in assets else key
 
