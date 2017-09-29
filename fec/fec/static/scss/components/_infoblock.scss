@@ -5,9 +5,18 @@
 //  </li>
 
 .infoblock__image {
-  background-image: url('../img/infoblock--get-started-2x.jpg');
+  background-image: url('../img/infoblock--get-started-1x.jpg');
   background-repeat: no-repeat;
-  padding-top: u(20rem);
+  padding-top: u(15rem);
+  margin-bottom: u(1rem);
+}
+
+@media 
+  (-webkit-min-device-pixel-ratio: 2), 
+  (min-resolution: 192dpi) { 
+  .infoblock__image {
+    background-image: url('../img/infoblock--get-started-2x.jpg');
+  }
 }
 
 .infoblock__image--support {
@@ -31,4 +40,23 @@ a.infoblock__button {
   color: $inverse;
   bottom: 0;
   position: absolute;
+}
+
+.infoblock__image--support,
+.infoblock__image--compare,
+.infoblock__image--contribute {
+  @include media($med) {
+    padding-top: u(15rem);
+  }
+  @include media($lg) {
+    padding-top: u(15rem);
+  }
+}
+
+.infoblock__image--support,
+.infoblock__image--compare,
+.infoblock__image--contribute {
+  @include media($xl) {
+    padding-top: u(20rem);
+  }
 }
