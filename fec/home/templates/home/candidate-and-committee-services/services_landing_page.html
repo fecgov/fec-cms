@@ -1,7 +1,11 @@
 {% extends "base.html" %}
 {% load wagtailcore_tags %}
+{% load filters %}
 {% load staticfiles %}
 {% load updates %}
+{% load home_page %}
+
+
 {% block body_class %}template-{{ self.get_verbose_name | slugify }}{% endblock %}
 
 {% block extra_js %}
@@ -21,90 +25,200 @@
   </div>
 </section>
 
-<div>
-  <div id="options" class="container main">
+<div class="container main">
+  <div class="container">
+    <h2>Guides</h2>
+    <div class="grid grid--4-wide">
+      <div class="grid__item">
+        <a href="/help-candidates-and-committees/candidates-and-their-authorized-committees-guide">
+          <aside class="card card--horizontal card--secondary">
+            <div class="card__image__container">
+                <span class="card__icon i-notebook"><span class="u-visually-hidden">Icon representing a question</span></span>
+            </div>
+            <div class="card__content">
+              Candidates and their authorized committees
+            </div>
+          </aside>
+        </a>
+      </div>
+      <div class="grid__item">
+        <a href="/help-candidates-and-committees/political-party-committees-guide">
+          <aside class="card card--horizontal card--secondary">
+            <div class="card__image__container">
+              <span class="card__icon i-notebook"><span class="u-visually-hidden">Icon of a training screen</span></span>
+            </div>
+            <div class="card__content">
+                Political party committees
+            </div>
+          </aside>
+        </a>
+      </div>
+      <div class="grid__item">
+        <a href="/help-candidates-and-committees/corporations-and-labor-organizations-guide">
+          <aside class="card card--horizontal card--secondary">
+            <div class="card__image__container">
+              <span class="card__icon i-notebook"><span class="u-visually-hidden">Icon of a candidate</span></span>
+            </div>
+            <div class="card__content">
+                Corporations and labor organizations
+            </div>
+          </aside>
+        </a>
+      </div>
+      <div class="grid__item">
+        <a href="/help-candidates-and-committees/political-action-committees-guide">
+          <aside class="card card--horizontal card--secondary">
+            <div class="card__image__container">
+              <span class="card__icon i-notebook"><span class="u-visually-hidden">Icon of a candidate</span></span>
+            </div>
+            <div class="card__content">
+                Political action committees (PACs)
+            </div>
+          </aside>
+        </a>
+      </div>
+    </div>
+  </div>
+  <div class="option u-margin—top">
+    <h2>Popular topics</h2>
     <div class="grid grid--2-wide">
-      <div class="grid__item grid__item--no-margin card card--wide">
-        <div class="tour__point tour__point--left" data-intro="<h5>Fast access to what's important</h5>Looking for a specific form? Need to double-check a compliance period? Common filer tasks are pulled out for easy access."></div>
-        <div class="card__image__container card__image__container--secondary">
-          <img class="card__image icon--complex" src="{% static 'img/i-calendar-circle.svg' %}" alt="Icon of a calendar">
-          <h2 class="card__title"><a href="{{ self.url }}dates-and-deadlines">Dates and deadlines</a></h2>
-        </div>
-        <div class="card__content">
-          <h2 class="card__title"><a href="{{ self.url }}dates-and-deadlines">Dates and deadlines</a></h2>
-          <span>All FEC reporting deadlines, reporting periods and compliance periods</span>
-        </div>
+      <div class="grid__item">
+      <img src="/static//img/tips.gif" alt="" />
+      <div class="t-lead">
+      <a href="/help-candidates-and-committees/candidate-taking-receipts/contribution-limits-candidates/">Contribution limits</a>
       </div>
-      <div class="grid__item grid__item--no-margin card card--wide">
-        <div class="card__image__container card__image__container--secondary">
-          <img class="card__image icon--complex" src="{% static 'img/i-document-circle.svg' %}" alt="Icon of a document">
-          <h2 class="card__title"><a href="{{ self.url }}forms">Forms</a></h2>
-        </div>
-        <div class="card__content">
-          <h2 class="card__title"><a href="{{ self.url }}forms">Forms</a></h2>
-          <span>All FEC registration and reporting forms</span>
-        </div>
+      <p>Under the Federal Election Campaign Finance Act, contributions are subject to limits. Those limits differ depending on the type of donor and recipient.</p>
       </div>
-    </div>
-
-    <div class="message message--info">
-      <h2 class="message__title">This page is still in progress</h2>
-      <div class="message__content">
-        <p class="u-no-margin">We're actively reorganizing our content about candidates and committees. If you can't find what you're looking for, you can try browsing this content in <a href="{{ settings.FEC_TRANSITION_URL }}/info/compliance.shtml">its previous form</a>.</p>
-      </div>
-    </div>
-
-    {% include 'partials/section-nav.html' with sections=self.sections container='options' %}
-
-    <div class="row" id="campaign-guidance">
-      <div class="main__content--right">
-        {{ self.sections }}
+      <div class="grid__item">
+        <div class="heading--section heading--with-action">
+          <h3 class="heading__left">Tips for treasurers</h3>
+          <a class="button button--updates heading__right" href="/updates/?update_type=tips-for-treasurers">All tips</a>
+         </div>
+            {% tips_for_treasurers_feed %}
       </div>
     </div>
   </div>
-  <div class="slab slab--neutral">
-    <div class="container">
-      <div class="grid grid--4-wide">
-        <div class="grid__item">
-          <a href="/contact-us">
-            <aside class="card card--horizontal card--secondary">
-              <div class="card__image__container">
-                  <span class="card__icon i-question-bubble"><span class="u-visually-hidden">Icon representing a question</span></span>
-              </div>
-              <div class="card__content">
-                Get help from the FEC by  phone or email
-              </div>
-            </aside>
-          </a>
-        </div>
-        <div class="grid__item">
-          <a href="{{ settings.FEC_TRANSITION_URL }}/info/outreach.shtml">
-            <aside class="card card--horizontal card--secondary">
-              <div class="card__image__container">
-                <span class="card__icon i-training"><span class="u-visually-hidden">Icon of a training screen</span></span>
-              </div>
-              <div class="card__content">
-                  Sign up for a training
-              </div>
-            </aside>
-          </a>
-        </div>
-        <div class="grid__item">
-          <a href="{{ settings.FEC_APP_URL }}">
-            <aside class="card card--horizontal card--primary">
-              <div class="card__image__container">
-                <span class="card__icon i-folder-with-person"><span class="u-visually-hidden">Icon of a candidate</span></span>
-              </div>
-              <div class="card__content">
-                  Find a candidate or committee
-              </div>
-            </aside>
-          </a>
-        </div>
-      </div>
+  <ul class="grid grid--4-wide">
+  <li class="grid__item">
+
+
+                <img src=/static/img/list.png />
+
+
+    <div class="t-lead t-sans">
+      <a href="/help-candidates-and-committees/filing-reports/electronic-filing/">Electronic filing information</a>
     </div>
-  </div>
-  {% include 'partials/disclaimer.html' %}
+  </li>
+
+  <li class="grid__item">
+
+
+        <img src=/static/img/form.png />
+
+
+    <div class="t-lead t-sans">
+      <a href="/help-candidates-and-committees/forms">Forms</a>
+    </div>
+    <p>All FEC registration reporting and forms</p>
+  </li>
+
+  <li class="grid__item" >
+
+
+        <img src=/static/img/cal.png />
+
+
+    <div class="t-lead t-sans">
+      <a href="/help-candidates-and-committees/dates-and-deadlines">Dates and deadlines</a>
+    </div>
+    <p>All FEC reporting deadlines, reporting periods and compliance periods</p>
+  </li>
+
+  <li class="grid__item">
+
+
+        <img src=/static/img/peeps.png />
+
+
+    <div class="t-lead t-sans">
+      <a href="/info/outreach.shtml">Education and learning</a>
+    </div>
+    <p>Videos, trainings, webinars and conferences</p>
+  </li>
+ </ul>
 </div>
+ <section class="slab slab--neutral">
+   <div class="container">
+     <h2>You might also like</h2>
+     <div class="grid grid--3-wide">
+       <div class="grid__item">
+         <div class="example--primary">
+            <h4 class="example__title">Look up information reported and filed with the FEC</h4>
+            <ul class="t-sans">
+              <li><a href="/data/advanced/?tab=filings">Search for your committee's information and filings</a></li>
+              <li><a href="/data/filings/?data_type=processed&form_type=F2">Statements of candidacy filed by office</a></li>
+              <li><a href="/data/filings/?data_type=processed&form_type=F1">Statements of organization filed by committees</a></li>
+            </ul>
+         </div>
+       </div>
+       <div class="grid__item">
+         <div class="example--primary">
+            <h4 class="example__title">Learn about enforcement of federal campaign finance law</h4>
+            <ul class="t-sans">
+              <li><a href="/legal-resources/enforcement/">Enforcement overview</a></li>
+              <li><a href="/data/legal/search/enforcement/?search_type=murs&search=&mur_no=&mur_respondents=">Search matters under review (MURs)</a></li>
+              <li><a href="/data/legal/search/advisory-opinions/?type=advisory_opinions&ao_category=F">Search advisory opinions (AOs)</a></li>
+            </ul>
+         </div>
+       </div>
+       <div class="grid__item">
+         <div class="example--primary">
+            <h4 class="example__title">Get help from an FEC analyst</h4>
+            <ul class="t-sans">
+              <li><a href="/help-candidates-and-committees/question-rad/">Find and contact your analyst</a></li>
+            </ul>
+         </div>
+       </div>
+     </div>
+   </div>
+ </section>
+
+
+ <section class="slab slab--neutral">
+  <div class="container">
+    <h2>You might also like</h2>
+    <div class="grid grid--{{ self.you_might_also_like| length }}-wide">
+    {% for block in self.you_might_also_like %}
+      <div class="grid__item">
+        <div class="example--primary">
+
+
+          <h4 class="example__title">{{ block.value.section_title }}</h4>
+          <ul class="t-sans">
+          {% for subblock in block.value.links %}
+
+            <li><a href="{{ subblock.bound_blocks.link_url }}">{{ subblock.bound_blocks.link_text }}</a></li>
+
+         {% endfor %}
+          </ul>
+
+         </div>
+        </div>
+       {% endfor %}
+      </div>
+
+    </div>
+  </div>
+ </section>
+
+{% for subblock in block.value.links %}
+
+            <li><a href="{{ subblock }}">{{ subblock }}</a></li>
+
+ {% endfor %}
+
+
+
+ {% include 'partials/disclaimer.html' %}
 
 {% endblock %}
