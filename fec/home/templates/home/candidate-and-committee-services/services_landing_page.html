@@ -99,91 +99,35 @@
     </div>
   </div>
   <ul class="grid grid--4-wide">
-  <li class="grid__item">
-
-
-                <img src=/static/img/list.png />
-
-
-    <div class="t-lead t-sans">
-      <a href="/help-candidates-and-committees/filing-reports/electronic-filing/">Electronic filing information</a>
-    </div>
-  </li>
-
-  <li class="grid__item">
-
-
-        <img src=/static/img/form.png />
-
-
-    <div class="t-lead t-sans">
-      <a href="/help-candidates-and-committees/forms">Forms</a>
-    </div>
-    <p>All FEC registration reporting and forms</p>
-  </li>
-
-  <li class="grid__item" >
-
-
-        <img src=/static/img/cal.png />
-
-
-    <div class="t-lead t-sans">
-      <a href="/help-candidates-and-committees/dates-and-deadlines">Dates and deadlines</a>
-    </div>
-    <p>All FEC reporting deadlines, reporting periods and compliance periods</p>
-  </li>
-
-  <li class="grid__item">
-
-
-        <img src=/static/img/peeps.png />
-
-
-    <div class="t-lead t-sans">
-      <a href="/info/outreach.shtml">Education and learning</a>
-    </div>
-    <p>Videos, trainings, webinars and conferences</p>
-  </li>
- </ul>
+    <li class="grid__item">
+      <img src=/static/img/list.png />
+      <div class="t-lead t-sans">
+        <a href="/help-candidates-and-committees/filing-reports/electronic-filing/">Electronic filing information</a>
+      </div>
+    </li>
+    <li class="grid__item">
+      <img src=/static/img/form.png />
+      <div class="t-lead t-sans">
+        <a href="/help-candidates-and-committees/forms">Forms</a>
+      </div>
+      <p>All FEC registration reporting and forms</p>
+    </li>
+    <li class="grid__item" >
+      <img src=/static/img/cal.png />
+      <div class="t-lead t-sans">
+        <a href="/help-candidates-and-committees/dates-and-deadlines">Dates and deadlines</a>
+      </div>
+      <p>All FEC reporting deadlines, reporting periods and compliance periods</p>
+    </li>
+    <li class="grid__item">
+      <img src=/static/img/peeps.png />
+      <div class="t-lead t-sans">
+        <a href="/info/outreach.shtml">Education and learning</a>
+      </div>
+      <p>Videos, trainings, webinars and conferences</p>
+    </li>
+   </ul>
 </div>
- <section class="slab slab--neutral">
-   <div class="container">
-     <h2>You might also like</h2>
-     <div class="grid grid--3-wide">
-       <div class="grid__item">
-         <div class="example--primary">
-            <h4 class="example__title">Look up information reported and filed with the FEC</h4>
-            <ul class="t-sans">
-              <li><a href="/data/advanced/?tab=filings">Search for your committee's information and filings</a></li>
-              <li><a href="/data/filings/?data_type=processed&form_type=F2">Statements of candidacy filed by office</a></li>
-              <li><a href="/data/filings/?data_type=processed&form_type=F1">Statements of organization filed by committees</a></li>
-            </ul>
-         </div>
-       </div>
-       <div class="grid__item">
-         <div class="example--primary">
-            <h4 class="example__title">Learn about enforcement of federal campaign finance law</h4>
-            <ul class="t-sans">
-              <li><a href="/legal-resources/enforcement/">Enforcement overview</a></li>
-              <li><a href="/data/legal/search/enforcement/?search_type=murs&search=&mur_no=&mur_respondents=">Search matters under review (MURs)</a></li>
-              <li><a href="/data/legal/search/advisory-opinions/?type=advisory_opinions&ao_category=F">Search advisory opinions (AOs)</a></li>
-            </ul>
-         </div>
-       </div>
-       <div class="grid__item">
-         <div class="example--primary">
-            <h4 class="example__title">Get help from an FEC analyst</h4>
-            <ul class="t-sans">
-              <li><a href="/help-candidates-and-committees/question-rad/">Find and contact your analyst</a></li>
-            </ul>
-         </div>
-       </div>
-     </div>
-   </div>
- </section>
-
-
  <section class="slab slab--neutral">
   <div class="container">
     <h2>You might also like</h2>
@@ -191,33 +135,19 @@
     {% for block in self.you_might_also_like %}
       <div class="grid__item">
         <div class="example--primary">
-
-
           <h4 class="example__title">{{ block.value.section_title }}</h4>
           <ul class="t-sans">
-          {% for subblock in block.value.links %}
-
+           {% for subblock in block.value.links %}
             <li><a href="{{ subblock.bound_blocks.link_url }}">{{ subblock.bound_blocks.link_text }}</a></li>
-
-         {% endfor %}
+           {% endfor %}
           </ul>
-
          </div>
         </div>
        {% endfor %}
       </div>
-
     </div>
   </div>
  </section>
-
-{% for subblock in block.value.links %}
-
-            <li><a href="{{ subblock }}">{{ subblock }}</a></li>
-
- {% endfor %}
-
-
 
  {% include 'partials/disclaimer.html' %}
 
