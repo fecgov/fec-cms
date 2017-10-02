@@ -66,6 +66,25 @@ def mur_page(request, mur_no):
     })
 
 
+def legal_search(request):
+    query = request.GET.get('search', '')
+    result_type = request.GET.get('search_type', 'all')
+
+    results = {}
+
+    # Only hit the API if there's an actual query
+    if query:
+        results = api_caller.load_legal_search_results(query, result_type, limit=3)
+
+    return render(request, 'legal-search-results.jinja', {
+        'parent': 'legal',
+        'query': query,
+        'results': results,
+        'result_type': result_type,
+        'category_order': get_legal_category_order(results)
+    })
+
+
 def legal_doc_search_ao(request):
     results = {}
     query = request.GET.get('search', '')
@@ -132,3 +151,13 @@ def legal_doc_search_statutes(request):
         'result_type': 'statutes',
         'query': query
     })
+
+
+def get_legal_category_order(results):
+    """ Return categories in pre-defined order, moving categories with empty results
+        to the end.
+    """
+    categories = ["advisory_opinions", "murs", "regulations", "statutes"]
+    category_order = [x for x in categories if results.get("total_" + x, 0) > 0] +\
+                    [x for x in categories if results.get("total_" + x, 0) == 0]
+    return category_order

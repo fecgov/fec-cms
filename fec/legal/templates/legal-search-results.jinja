@@ -2,7 +2,7 @@
 {% import 'macros/legal.jinja' as legal %}
 {% import 'macros/breadcrumbs.jinja' as breadcrumb %}
 
-{% set breadcrumb_links=[(cms_url + '/legal-resources', 'Legal resources')] %}
+{% set breadcrumb_links=[('/legal-resources', 'Legal resources')] %}
 
 {% block title %}
   {% if query %}
@@ -13,7 +13,9 @@
 {% endblock %}
 
 {% block css %}
-<link rel="stylesheet" href="{{ asset_for('dist/styles/legal.css') }}" />
+{% compress css %}
+<link rel="stylesheet" type="text/x-scss" href="{{ static('scss/legal.scss') }}" />
+{% endcompress %}
 {% endblock %}
 
 {% block body %}
@@ -39,6 +41,7 @@
           </ul>
         </nav>
       </div>
+
       <section class="main__content--right">
         {% if query %}
         <h1 class="main__title">Results for &ldquo;{{ query }}&rdquo;</h1>
@@ -52,7 +55,7 @@
                   </div>
               {% if results["total_" + category] %}
                   <div class="results-info__right">
-                  <span class="results-info__details">1&ndash;{{ results[category + "_returned"] }} of <a href="{{ url_for(category, search=query, search_type=category) }}"><strong>{{ results["total_" + category] }}</strong> results</a></span>
+                  <span class="results-info__details">1&ndash;{{ results[category + "_returned"] }} of <a href="/data/legal/search/enforcement/?search={{ query }}&search_type={{ category}}"><strong>{{ results["total_" + category] }}</strong> results</a></span>
                   </div>
               {% endif %}
               </div>
@@ -62,7 +65,7 @@
                       {% include 'partials/legal-search-results-statute.jinja' %}
                       {% endwith %}
                       <div class="results-info">
-                      <a class="button button--browse button--alt" href="{{ url_for(category, search=query, search_type=category) }}">All results</a>
+                      <a class="button button--browse button--alt" href="/data/legal/search/{{ category }}/?search={{ query }}&search_type={{ category}}">All results</a>
                       </div>
                   {% else %}
                   {{ legal.no_results("statutes", category, query, fec_resources=['fec.gov']) }}
@@ -73,7 +76,7 @@
                       {% include 'partials/legal-search-results-regulation.jinja' %}
                       {% endwith %}
                       <div class="results-info">
-                      <a class="button button--browse button--alt" href="{{ url_for(category, search=query, search_type=category) }}">All results</a>
+                      <a class="button button--browse button--alt" href="/data/legal/search/{{ category }}/?search={{ query }}&search_type={{ category}}">All results</a>
                       </div>
                   {% else %}
                   {{ legal.no_results("regulations", category, query, fec_resources=['Rulemaster', 'fec.gov']) }}
@@ -84,7 +87,7 @@
                       {% include 'partials/legal-search-results-advisory-opinion.jinja' %}
                       {% endwith %}
                       <div class="results-info">
-                      <a class="button button--browse button--alt" href="{{ url_for(category, search=query, search_type=category) }}">All results</a>
+                      <a class="button button--browse button--alt" href="/data/legal/search/{{ category }}/?search={{ query }}&search_type={{ category}}">All results</a>
                       </div>
                   {% else %}
                   {{ legal.no_results("advisory opinions", category, query, fec_resources=['Advisory_Opinion', 'fec.gov']) }}
@@ -101,7 +104,7 @@
                       {% include 'partials/legal-search-results-mur.jinja' %}
                       {% endwith %}
                       <div class="results-info">
-                      <a class="button button--browse button--alt" href="{{ url_for(category, search=query, search_type=category) }}">All results</a>
+                      <a class="button button--browse button--alt" href="/data/legal/search/enforcement/?search={{ query }}&search_type={{ category}}">All results</a>
                       </div>
                   {% else %}
                   {{ legal.no_results("enforcement matters", category, query, fec_resources=['Administrative_Fine', 'Alternative_Dispute_Resolution', 'Audit_Reports', 'Matters_Under_Review', 'Matters_Under_Review_Archived', 'fec.gov']) }}
