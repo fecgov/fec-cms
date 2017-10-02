@@ -1,0 +1,188 @@
+{% extends "base.html" %}
+{% load wagtailcore_tags %}
+{% load staticfiles %}
+
+
+{% block content %}
+
+{% include 'partials/breadcrumbs.html' with page=self links=self.get_ancestors style='secondary' %}
+<div class="container">
+ <header class="heading--main u-padding--top">
+    <h1>{{ self.title }}</h1>
+  </header>
+</div>
+<section class="main__content--full data-container__wrapper" id="feed">
+  <div class="container">
+    <section id="cand-comm-guides" class="tab-interface u-padding--bottom">
+      <div class="container">
+        <div class="sidebar-container sidebar-container--left">
+          <nav class="sidebar side-nav-alt">
+            <ul class="tablist" role="tablist" data-name="tab">
+              <li class="side-nav__item" role="presentation">
+                <a class="side-nav__link"
+                    role="tab"
+                    data-name="candidates-and-their-authorized-committees"
+                    tabindex="0"
+                    aria-controls="cand-comm-guides-candidates-and-their-authorized-committees""
+                    href="#cand-comm-guides-candidates-and-their-authorized-committees">Candidates and their authorized committees</a>
+              </li>
+              <li class="side-nav__item" role="presentation">
+                <a class="side-nav__link"
+                    role="tab"
+                    data-name="political-party-committees"
+                    tabindex="0"
+                    aria-controls="cand-comm-guides-political-party-committees"
+                    href="#cand-comm-guides-political-party-committees">Political party committees</a>
+              </li>
+              <li class="side-nav__item" role="presentation">
+                <a class="side-nav__link"
+                    role="tab"
+                    data-name="corporations-and-labor-organizations"
+                    tabindex="0"
+                    aria-controls="cand-comm-guides-corporations-and-labor-organizations"
+                    href="#cand-comm-guides-corporations-and-labor-organizations">Corporations and labor organizations</a>
+              </li>
+              <li class="side-nav__item" role="presentation">
+                <a class="side-nav__link"
+                    role="tab"
+                    data-name="political-action-committees"
+                    tabindex="0"
+                    aria-controls="cand-comm-guides-political-action-committees"
+                    href="#cand-comm-guides-political-action-committees">Political action committees (PACs)</a>
+              </li>
+            </ul>
+          </nav>
+        </div>
+        <div class="main__content--right">
+          <section id="cand-comm-guides-candidates-and-their-authorized-committees" role="tabpanel" aria-hidden="false" aria-labelledby="candidates-and-their-authorized-committees">
+            <h2>Candidates and their authorized committees</h2>
+             <p>An individual running for a seat in the Senate or the House of Representatives becomes a candidate when he or she raises or spends more than $5,000 in contributions or expenditures.</p>
+             <p>House and Senate candidates must designate a campaign committee. This "authorized committee" takes in contributions and make expenditures on behalf of the campaign.</p>
+             <div class="grid grid--2-wide">
+               <div class="grid__item">
+                 <p>
+                   <ul class="t-sans t-bold">
+                     <li><a href="https://www.fec.gov/help-candidates-and-committees/registering-candidate/">Registering as a candidate</a></li>
+                     <li><a href="https://www.fec.gov/help-candidates-and-committees/keeping-records/">Keeping records</a></li>
+                     <li><a href="https://www.fec.gov/help-candidates-and-committees/candidate-taking-receipts/">Taking in receipts</a></li>
+                     <li><a href="https://www.fec.gov/help-candidates-and-committees/filing-reports/">Filing candidate reports</a></li>
+                     <li><a href="https://www.fec.gov/help-candidates-and-committees/making-disbursements/">Making disbursements</a></li>
+                     <li><a href="https://www.fec.gov/help-candidates-and-committees/winding-down-candidate-campaign/">Winding down a campaign</a></li>
+                     <li><a href="https://www.fec.gov/help-candidates-and-committees/handling-loans-debts-and-advances/">Handling candidate loans, debts and advances</a></li>
+                   </ul>
+                 </p>
+               </div>
+               <div class="grid__item">
+                 <a class="u-no-border" href="https://www.fec.gov/resources/cms-content/documents/candgui.pdf">
+                   <img src="/static/img/pdf-icon-large.png" alt="PDF Icon">
+                 </a>
+                 <h3><a class="t-sans" href="https://www.fec.gov/resources/cms-content/documents/candgui.pdf">PDF Guide</a></h3>
+                 <div class="icon-heading--calendar--secondary option__aside__alt-action">
+                   <a class="t-sans t-bold" href="https://www.fec.gov/resources/cms-content/documents/candgui.pdf">Congressional candidates and committees campaign guide</a>
+                 </div>
+               </div>
+             </div>
+          </section>
+
+          <section id="cand-comm-guides-political-party-committees" role="tabpanel" aria-hidden="true" aria-labelledby="political-party-committees">
+            <h2>Political party committees</h2>
+            <p>Political party committees represent a political party at a local, state or national level. Examples of political party committees include the Democratic National Committee, the Green Party of the United States, the Libertarian National Committee and the Republican National Committee.</p>
+            <p>Political party committees can take in contributions and make expenditures to influence federal elections.</p>
+            <div class="grid grid--2-wide">
+               <div class="grid__item">
+                 <p>
+                   <ul class="t-sans t-bold">
+                     <li><a href="https://www.fec.gov/help-candidates-and-committees/registering-political-party/">Registering as a political party</a></li>
+                     <li><a href="https://www.fec.gov/help-candidates-and-committees/keeping-political-party-records/">Keeping party records</a></li>
+                     <li><a href="https://www.fec.gov/help-candidates-and-committees/taking-receipts-political-party/">Taking in receipts as a party</a></li>
+                     <li><a href="https://www.fec.gov/help-candidates-and-committees/filing-political-party-reports/">Filing political party reports</a></li>
+                     <li><a href="https://www.fec.gov/help-candidates-and-committees/making-disbursements-political-party/">Making disbursements as a party</a></li>
+                     <li><a href="https://www.fec.gov/help-candidates-and-committees/handling-political-party-loans-debts-and-advances/">Handling party loans, debts and advances</a></li>
+                     <li><a href="https://www.fec.gov/help-candidates-and-committees/terminating-a-committee/">Terminating a committee</a></li>
+                   </ul>
+                 </p>
+               </div>
+               <div class="grid__item">
+                 <a class="u-no-border" href="https://www.fec.gov/resources/cms-content/documents/partygui.pdf">
+                   <img src="/static/img/pdf-icon-large.png" alt="PDF Icon">
+                 </a>
+                 <h3><a class="t-sans" href="https://www.fec.gov/resources/cms-content/documents/partygui.pdf">PDF Guide</a></h3>
+                 <div class="icon-heading--calendar--secondary option__aside__alt-action">
+                   <a class="t-sans t-bold" href="https://www.fec.gov/resources/cms-content/documents/partygui.pdf">Political party committees campaign guide</a>
+                 </div>
+               </div>
+             </div>
+          </section>
+
+          <section id="cand-comm-guides-corporations-and-labor-organizations" role="tabpanel" aria-hidden="true" aria-labelledby="corporations-and-labor-organizations">
+            <h2>Corporations and labor organizations</h2>
+            <p>Corporations and labor organizations can’t make contributions to federal candidates, but they can establish and administer a special kind of political committee, called a separate segregated fund (SSF).</p>
+            <p>SSFs can solicit contributions from a limited group of people. They can make contributions to candidates and make expenditures that are coordinated with candidates.</p>
+            <div class="grid grid--2-wide">
+               <div class="grid__item">
+                 <p>
+                   <ul class="t-sans t-bold">
+                     <li><a href="https://www.fec.gov/help-candidates-and-committees/registering-ssf/">Registering as an SSF</a></li>
+                     <li>Keeping records as an SSF</li>
+                     <li>Taking in receipts as an SSF</li>
+                     <li><a href="https://www.fec.gov/help-candidates-and-committees/filing-ssf-reports/">Filing SSF reports</a></li>
+                     <li>Making disbursements as an SSF</li>
+                     <li>Handling SSF loans, debts and advances</li>
+                     <li><a href="https://www.fec.gov/help-candidates-and-committees/terminating-a-committee/">Terminating a committee</a></li>
+                   </ul>
+                 </p>
+               </div>
+               <div class="grid__item">
+                 <a class="u-no-border" href="https://transition.fec.gov/pdf/colagui.pdf">
+                   <img src="/static/img/pdf-icon-large.png" alt="PDF Icon">
+                 </a>
+                 <h3><a class="t-sans" href="https://transition.fec.gov/pdf/colagui.pdf">PDF Guide</a></h3>
+                 <div class="icon-heading--calendar--secondary option__aside__alt-action">
+                   <a class="t-sans t-bold" href="https://transition.fec.gov/pdf/colagui.pdf">Corporations and labor organizations campaign guide</a>
+                 </div>
+               </div>
+             </div>
+          </section>
+
+          <section id="cand-comm-guides-political-action-committees" role="tabpanel" aria-hidden="true" aria-labelledby="political-action-committees">
+            <h2>Political action committees (PACs)</h2>
+            <p>Groups that want to set up a PAC and aren't a candidate’s authorized committee, a political party committee or an SSF can set up a type of PAC called a nonconnected committee.</p>
+            <p>There are several types of nonconnected committees, including the following:
+              <ul class=list--bulleted>
+                <li>Hybrid PACs</li>
+                <li>Leadership PACs</li>
+                <li>Super PACs (also called independent expenditure committees)</li>
+              </ul>
+            </p>
+            <p>Nonconnected committees can take in contributions and make expenditures to influence federal elections.</p>
+            <div class="grid grid--2-wide">
+               <div class="grid__item">
+                 <p>
+                   <ul class="t-sans t-bold">
+                     <li><a href="https://www.fec.gov/help-candidates-and-committees/registering-pac/">Registering as a PAC</a></li>
+                    <li><a href="https://www.fec.gov/help-candidates-and-committees/keeping-pac-records-nonconnected/">Keeping PAC records</a></li>
+                    <li><a href="https://www.fec.gov/help-candidates-and-committees/taking-receipts-pac/">Taking in receipts as a PAC</a></li>
+                    <li><a href="https://www.fec.gov/help-candidates-and-committees/filing-pac-reports/">Filing PAC reports</a></li>
+                    <li><a href="https://www.fec.gov/help-candidates-and-committees/making-disbursements-pac/">Making disbursements as a PAC</a></li>
+                    <li><a href="https://www.fec.gov/help-candidates-and-committees/handling-nonconnected-pac-loans-debts-and-advances/">Handling PAC loans, debts and advances</a></li>
+                    <li><a href="https://www.fec.gov/help-candidates-and-committees/terminating-a-committee/">Terminating a committee</a></li>
+                   </ul>
+                 </p>
+               </div>
+               <div class="grid__item">
+                 <a class="u-no-border" href="https://www.fec.gov/resources/cms-content/documents/nongui.pdf">
+                   <img src="/static/img/pdf-icon-large.png" alt="PDF Icon">
+                 </a>
+                 <h3><a class="t-sans" href="https://www.fec.gov/resources/cms-content/documents/nongui.pdf">PDF Guide</a></h3>
+                 <div class="icon-heading--calendar--secondary option__aside__alt-action">
+                   <a class="t-sans t-bold" href="https://www.fec.gov/resources/cms-content/documents/nongui.pdf">Nonconnected committees campaign guide</a>
+                 </div>
+               </div>
+             </div>
+          </section>
+
+      </div>
+    </section>
+ </div>
+</section>
+{% endblock %}

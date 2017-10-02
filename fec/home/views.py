@@ -362,3 +362,12 @@ def index_meetings(request):
         'executive_years': executive_years,
         'executive_sessions': executive_sessions,
         })
+
+def guides(request):
+    page_context = {
+      'content_section': 'guides',
+      'title': 'Guides'
+    }
+    return render(request, 'home/candidate-and-committee-services/guides.html', {
+      'self': page_context,
+    })
