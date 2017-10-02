@@ -76,3 +76,15 @@ $z-header: $z6;
 $z-sticky: $z7;
 $z-glossary: $z8;
 $z-feedback: $z-max;
+
+// Neat Breakpoints
+$medium-screen: em(640) !default;
+$large-screen: em(860) !default;
+$x-large-screen: em(1088) !default;
+
+$med: new-breakpoint(min-width $medium-screen 12);
+$lg: new-breakpoint(min-width $large-screen 12);
+$xl: new-breakpoint(min-width $x-large-screen 12);
+
+$high-res-ratio: -webkit-min-device-pixel-ratio: 2;
+$high-res-dpi: min-resolution: 192dpi;

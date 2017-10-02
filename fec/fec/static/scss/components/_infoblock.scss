@@ -14,7 +14,7 @@
 //        <a href="/help-candidates-and-committees/dates-and-deadlines">Dates and deadlines</a>
 //      </div>
 //      <p>All FEC reporting deadlines, reporting periods and compliance periods</p>
-//    </li>
+//  </li>
 
 
 .infoblock__image {
@@ -22,6 +22,12 @@
   background-repeat: no-repeat;
   padding-top: u(15rem);
   margin-bottom: u(1rem);
+
+  @media 
+    $high-res-ratio,
+    $high-res-dpi { 
+      background-image: url('../img/infoblock--get-started-2x.jpg');
+    }
 }
 
 .infoblock__icon {
@@ -35,13 +41,6 @@
   }
 }
 
-@media 
-  (-webkit-min-device-pixel-ratio: 2), 
-  (min-resolution: 192dpi) { 
-  .infoblock__image {
-    background-image: url('../img/infoblock--get-started-2x.jpg');
-  }
-}
 
 .infoblock__image--support {
   background-position: 50% 0;
@@ -61,7 +60,7 @@
 
 .infoblock__subtext {
   font-size: 1.4rem;
-  margin: 0 0 1rem 0;
+  margin: u(0 0 1rem 0);
 }
 
 a.infoblock__button {
