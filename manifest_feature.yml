@@ -8,6 +8,6 @@ services:
 env:
   FEC_API_URL: https://fec-feature-api.app.cloud.gov
   FEC_APP_URL: https://fec-feature-proxy.app.cloud.gov/data
-  FEC_CMS_DEBUG: true
+  FEC_CMS_DEBUG: false
   FEC_CMS_ENVIRONMENT: dev
   NEW_RELIC_APP_NAME: beta.fec.gov | cms | feature
