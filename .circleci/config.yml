@@ -117,6 +117,6 @@ jobs:
             . venv/bin/activate
             nvm use default
             cd fec
-            ./manage.py compress
+            ./manage.py compress -f
             cd ..
             invoke deploy --branch $CIRCLE_BRANCH --login True --yes
