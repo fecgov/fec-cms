@@ -116,5 +116,6 @@ jobs:
             [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
             . venv/bin/activate
             nvm use default
+            . venv/bin/activate
             manage.py compress
             invoke deploy --branch $CIRCLE_BRANCH --login True --yes
