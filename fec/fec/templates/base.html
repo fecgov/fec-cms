@@ -32,9 +32,6 @@
     <![endif]-->
     {% wagtailuserbar %}
     <a href="#main" class="skip-nav">skip navigation</a>
-    {% if settings.FEATURES.site_orientation_banner %}
-      {% include "partials/site-orientation.html" %}
-    {% endif %}
 
     {% if self.title == "Homepage" or self.title == "Home" %}
     <header class="site-header site-header--homepage">
