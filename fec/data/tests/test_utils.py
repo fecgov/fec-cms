@@ -8,6 +8,7 @@ from unittest import mock
 
 from data.templatetags import filters
 import data.utils as utils
+import data.api_caller as api_caller
 
 class TestUtils(TestCase):
     def test_currency_filter_not_none(self):
@@ -68,12 +69,21 @@ class TestCycles(unittest.TestCase):
         assert utils.get_cycles(2020) == range(2020, 1979, -2)
 
     def test_get_senate_cycles(self):
-        assert utils.get_senate_cycles(1) == range(2018, 1979, -6)
+        assert utils.get_senate_cycles(1) == range(2018, 1979, -6) 
 
     def test_state_senate_cycles(self):
         # Testing with an example state, Wisconsin
         # There should be an election in 2016 but not 2014
         # because of the classes the state has
-        wisconsin = utils.get_state_senate_cycles('wi')
+        wisconsin = api_caller.get_state_senate_cycles('wi')
         assert 2016 in wisconsin
         assert 2014 not in wisconsin
+        #LBTODO: Make sure this works
+        #Alabama has a senate special election in 2018 and none in 2016
+        alabama = api_caller.get_state_senate_cycles('al')
+        assert 2018 in alabama
+        assert 2016 not in alabama
+        #west virginia had a special in 2010 and not 2004
+        west_virginia = api_caller.get_state_senate_cycles('wv')
+        assert 2010 in west_virginia
+        assert 2004 not in west_virginia

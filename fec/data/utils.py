@@ -211,14 +211,6 @@ def get_senate_cycles(senate_class):
     return range(next_election, constants.START_YEAR, -6)
 
 
-def get_state_senate_cycles(state):
-    senate_cycles = []
-    for senate_class in ['1', '2', '3', 'special']:
-        if state.upper() in constants.SENATE_CLASSES[str(senate_class)]:
-            senate_cycles += get_senate_cycles(senate_class)
-    return senate_cycles
-
-
 def two_days_ago():
     """Find the date two days ago"""
     two_days_ago = datetime.datetime.today() - datetime.timedelta(days=2)
