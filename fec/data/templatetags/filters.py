@@ -1,13 +1,15 @@
-from django_jinja import library
+import datetime
+import json
+import locale
+import os
+import re
 
 import jinja2
 
-import re
-import json
-import locale
-import datetime
-
 from dateutil.parser import parse as parse_date
+
+from django.conf import settings
+from django_jinja import library
 
 from data import constants
 
@@ -151,6 +153,6 @@ def asset_for(path):
     If the path doesn't exist there, then just return the path to the static file
     without a hash"""
     key = '/static/js/{}'.format(path)
-    assets = json.load(open('./dist/fec/static/js/rev-manifest.json'))
-    assets.update(json.load(open('./dist/fec/static/js/rev-legal-manifest.json')))
+    assets = json.load(open(os.path.join(settings.STATIC_ROOT, 'js/rev-manifest.json')))
+    assets.update(json.load(open(os.path.join(settings.STATIC_ROOT, 'js/rev-legal-manifest.json'))))
     return assets[key] if key in assets else key

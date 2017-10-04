@@ -71,7 +71,7 @@
 {% if location == 'hero' %}
   {% set size = 'combo--search--large' %}
 {% endif %}
-<form id="{{ location }}-search" action="{{ url_for('legal_search') }}" autocomplete="off" class="search__container">
+<form id="{{ location }}-search" action="/data/legal/search/" autocomplete="off" class="search__container">
   <div class="combo combo--search {{ size }}">
     {% set document_types = (('all', 'All'),('statutes', 'Statutes'),('regulations', 'Regulations'),('advisory_opinions', 'Advisory opinions'),('murs', 'Matters under review')) %}
     <select class="search__select {{select_class}}" name="search_type" aria-label="Select a document type">

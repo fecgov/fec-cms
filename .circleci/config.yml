@@ -30,8 +30,8 @@ jobs:
           # Commands listed here are from the CircleCI PostgreSQL config docs:
           # https://circleci.com/docs/2.0/postgres-config/#postgresql-circleci-configuration-example
           command: |
-            sudo apt-get install postgresql-client
-            echo ‘/usr/lib/postgresql/9.6/bin/:$PATH’ >> $BASH_ENV
+            sudo apt-get update -qq && sudo apt-get install -y build-essential postgresql-client
+            echo '/usr/lib/postgresql/9.6/bin/:$PATH' >> $BASH_ENV
             echo "en_US.UTF-8 UTF-8" | sudo tee /etc/locale.gen
             sudo locale-gen en_US.UTF-8
 
@@ -57,14 +57,12 @@ jobs:
             export NVM_DIR="$HOME/.nvm"
             [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
             [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
-            nvm install 8.5.0
-            nvm use 8.5.0
-            nvm alias default 8.5.0
+            nvm install 8.6.0
+            nvm use 8.6.0
+            nvm alias default 8.6.0
             npm i -g npm webpack
             npm install
             npm run build
-            cd fec
-            webpack --optimize-minimize --define process.env.NODE_ENV="'production'"
 
       - save_cache:
           paths:
@@ -85,6 +83,8 @@ jobs:
             . venv/bin/activate
             nvm use default
             cd fec
+            webpack
+            DJANGO_SETTINGS_MODULE=fec.settings.production python manage.py collectstatic --noinput -v 0
             ./manage.py test
             npm run test-single
 
@@ -103,7 +103,7 @@ jobs:
           command: |
             mkdir -p $HOME/bin
             export PATH=$HOME/bin:$PATH
-            curl -L "https://cli.run.pivotal.io/stable?release=linux64-binary&version=6.31.0" | tar xzv -C $HOME/bin
+            curl -L "https://cli.run.pivotal.io/stable?release=linux64-binary&version=6.32.0" | tar xzv -C $HOME/bin
             cf install-plugin autopilot -f -r CF-Community
 
 
@@ -116,10 +116,4 @@ jobs:
             [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
             . venv/bin/activate
             nvm use default
-            npm run build
-            cd fec
-            DJANGO_SETTINGS_MODULE='fec.settings.production' python manage.py collectstatic --noinput -v 0
-            DJANGO_SETTINGS_MODULE='fec.settings.production' python manage.py compress -v 0
-            cd ..
-            pip install -r requirements.txt
             invoke deploy --branch $CIRCLE_BRANCH --login True --yes

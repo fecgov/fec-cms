@@ -49,9 +49,9 @@ KeywordModal.prototype.handleSubmit = function(e) {
   var query = URI(window.location.search)
     .removeSearch('search')
     .addSearch('search', combinedValue);
-  window.location.search = query.toString();
   this.dialog.hide();
   this.fireEvent('Keyword modal query: ' + combinedValue);
+  window.location = this.$form.attr("action") + query.toString();
 };
 
 /**

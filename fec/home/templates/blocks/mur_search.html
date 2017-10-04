@@ -2,24 +2,44 @@
 
 <div class="u-no-print">
   <div class="slab slab--neutral slab--inline u-padding--left u-padding--right">
-    <div class="row">
-      <div class="usa-width-one-whole">
-        <form action="/data/legal/search/enforcement" autocomplete="off" class="search__container">
-          <label for="search-input" class="label">Search closed MURs</label>
-          <div class="combo combo--search--medium combo--search--inline">
-            <input id="search-input" type="text" name="search" class="combo__input">
-            <input id="search-type" type="hidden" name="search_type" value="murs">
-            <button class="combo__button button--search button--standard" type="submit">
-              <span class="u-visually-hidden">Search</span>
-            </button>
-          </div>
-        </form>
-      </div>
+    <div class="heading--section heading--with-action">
+      <h2 class="heading__left">Search closed MURs</h2>
+      <a class="button button--alt button--go heading__right" href="/data/legal/search/enforcement/?search_type=murs">Advanced search</a>
     </div>
-    <span class="t-note t-sans search__example">Examples: filings; 2405</span>
-    <div class="message message--info">
-      <h3>This feature is still in progress</h3>
-      <p>We're actively building the <strong>MUR search</strong> feature. Search cases closed between 1975 and 1998 on the old FEC.gov through the <a href="{{'/MUR/'|classic_url}}">MUR archive</a> and cases from 1999 to present on the <a href="http://eqs.fec.gov">Enforcement Query System</a>.</p>
+    <div class="row">
+      <form action="/data/legal/search/enforcement" autocomplete="off" class="search__container u-padding--top">
+        <div class="search-controls__row">
+          <div class="search-controls__either">
+            <label for="ao_no" class="label">Find by MUR number</label>
+            <div class="combo combo--search--medium combo--search--inline">
+              <input type="text" id="mur_no" name="mur_no" class="combo__input">
+              <button class="combo__button button--search button--standard" type="submit">
+                <span class="u-visually-hidden">Search</span>
+              </button>
+            </div>
+            <span class="t-note t-sans search__example">Example: 4321</span>
+          </div>
+          <div class="search-controls__or search-controls__or--vertical">or</div>
+          <div class="search-controls__either">
+            <label for="search-input" class="label">Search by keyword</label>
+            <div class="combo combo--search--medium combo--search--inline">
+              <input id="search-input" type="text" name="search" class="combo__input">
+              <button class="combo__button button--search button--standard" type="submit">
+                <span class="u-visually-hidden">Search</span>
+              </button>
+            </div>
+            <div class="row search__example">
+              <span class="t-note t-sans">Examples: charity, "spending prohibitions"</span>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+    <div class="row">
+      <div class="message message--info">
+        <h3>This feature is still in progress</h3>
+        <p>We&#39;re actively building the <strong>MUR search</strong> feature. Search cases closed between 1975 and 1998 on the old FEC.gov through the <a href="{{'/MUR/'|classic_url}}">MUR archive</a> and cases from 1999 to present on the <a href="http://eqs.fec.gov">Enforcement Query System</a>.</p>
+      </div>
     </div>
   </div>
 </div>

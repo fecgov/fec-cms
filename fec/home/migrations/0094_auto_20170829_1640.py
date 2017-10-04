@@ -16,4 +16,11 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
+        migrations.RemoveField(
+            model_name='folder',
+            name='page_ptr',
+        ),
+        migrations.DeleteModel(
+            name='Folder',
+        ),
     ]
