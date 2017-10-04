@@ -72,9 +72,14 @@ class TestCycles(unittest.TestCase):
         assert utils.get_senate_cycles(1) == range(2018, 1979, -6) 
 
     def test_state_senate_cycles(self):
+        get_senate_specials_mock_results = {2008: ['MS'], 2018: ['AL'], 2010: ['IL', 'WV']}
+        returns_none = None
         # Testing with an example state, Wisconsin
         # There should be an election in 2016 but not 2014
         # because of the classes the state has
+
+        #LBTODO: test regular senate cycles and "format senate specials"
+
         wisconsin = api_caller.get_state_senate_cycles('wi')
         assert 2016 in wisconsin
         assert 2014 not in wisconsin

@@ -312,13 +312,19 @@ def _get_sorted_documents(ao):
     sorted_documents = sorted(sorted_documents, key=itemgetter('date'), reverse=True)
     return sorted_documents
 
-def get_senate_specials():
-    senate_specials = dict()
-    #get all senate specials
+def call_senate_specials(state):
+    #get all senate specials from API
     api_response = _call_api('election-dates', 
         election_type_id = 'SG',
-        office_sought = 'S')
-    results = api_response['results']
+        office_sought = 'S',
+        election_state = state)
+    #here return a list of years instead
+    special_years = api_response['results']
+    return special_years if 'results' in api_response else None
+
+def format_senate_specials(special_years):
+    senate_specials = []
+    #FIX ALL THIS - it's now a list!
     for result in results:
         #here we permanently round odd years up to even years
         result['election_year'] = result['election_year'] + (result['election_year'] % 2)
@@ -328,22 +334,24 @@ def get_senate_specials():
         #add election state to the list of senate specials that year
         senate_specials[result['election_year']].append(result['election_state'])
     #returns dictionary: {2008: ['MS'], 2018: ['AL'], 2010: ['IL', 'WV']...
-    response = senate_specials
-    return response if 'results' in api_response else None
+    return senate_specials
 
-#LBTODO: Lindsay says: return a hard-coded list if no API reponse?
-
-def get_state_senate_cycles(state):
+def get_regular_senate_cycles(state):
     senate_cycles = []
-    senate_specials = get_senate_specials()
     #add corresponding election cycles for each sente class
     for senate_class in ['1', '2', '3']:
         if state.upper() in constants.SENATE_CLASSES[str(senate_class)]:
             senate_cycles += utils.get_senate_cycles(senate_class)
-    #here we aren't going to use get_senate_cycles because we only want to add this one cycle to the list
+    #here we aren't going to use get_senate_cycles() because we only add this cycle to the list
+    return senate_cycles
+
+def get_all_senate_cycles(state):
+    #separate formating specials from calling API for better tests
+    senate_specials = format_senate_specials(call_senate_specials()) #dictionary
+    senate_regular_cycles = get_regular_senate_cycles(state) #list
+    all_senate_cycles = []
     for special_year in senate_specials:
         #only add the election cycle to the dropdown if it's not already there
-        if state.upper() in senate_specials[special_year] and special_year not in senate_cycles:
-            #print(special_year)
-            senate_cycles.append(special_year)
-    return senate_cycles
+        if state.upper() in senate_specials[special_year] and special_year not in senate_regular_cycles:
+            all_senate_cycles.append(special_year)
+     all_senate_cycles   
