@@ -8,37 +8,31 @@
 
 /*** For icons ***/
 
-//  <li class="grid__item">
-//      <div class="infoblock__icon" role="img" aria-label="Description of the image"><img class="card__image icon--complex" src="{% static 'img/i-calendar-circle.svg' %}" alt="Icon of a calendar"></div>
-//      <div class="t-lead t-sans">
-//        <a href="/help-candidates-and-committees/dates-and-deadlines">Dates and deadlines</a>
-//      </div>
-//      <p>All FEC reporting deadlines, reporting periods and compliance periods</p>
+//  <li class="grid__item grid__item--infoblock">
+//    <div class="infoblock__icon infoblock__icon--calendar" role="img" aria-label="Description of the image"></div>
+//    <h3 class="u-no-margin"><a href="/help-candidates-and-committees/filing-reports/electronic-filing/">Dates and deadlines</a></h3>
+//    <p>All FEC reporting deadlines, reporting periods and compliance periods</p>
 //  </li>
 
+
+
+///// infoblock__image
 
 .infoblock__image {
   background-image: url('../img/infoblock--get-started-1x.jpg');
   background-repeat: no-repeat;
-  padding-top: u(15rem);
+  height: u(15rem);
   margin-bottom: u(1rem);
+  background-size:100%;
 
-  @media 
+//commented out temporarily to avoid error- see _variables.scss line 89
+/*  @media
     $high-res-ratio,
-    $high-res-dpi { 
-      background-image: url('../img/infoblock--get-started-2x.jpg');
+    $high-res-dpi {
+    background-image: url('../img/infoblock--get-started-2x.jpg');
     }
-}
+*/
 
-.infoblock__icon {
-  padding-top: 14rem;
-  
-  @include media($med) {
-    padding-top: u(14rem);
-  }
-  @include media($lg) {
-    padding-top: u(14rem);
-  }
 }
 
 
@@ -54,8 +48,17 @@
   background-position: 50% 100%;
 }
 
-.infoblock__image--icon {
-  padding-top: u(20rem);
+.infoblock__image--education {
+  background-position: 0 0;
+  background-image:url("/static/img/peeps.png")
+}
+
+.infoblock__image--forms {
+  background-position: 0 0;
+  background-image:url("/static/img/form.png");
+  background-size:cover;
+  border:2px solid $gray-medium;
+
 }
 
 .infoblock__subtext {
@@ -71,19 +74,56 @@ a.infoblock__button {
 
 .infoblock__image--support,
 .infoblock__image--compare,
-.infoblock__image--contribute {
+.infoblock__image--contribute,
+.infoblock__image--education,
+.infoblock__image--forms {
+
   @include media($med) {
-    padding-top: u(15rem);
+    height: u(15rem);
   }
   @include media($lg) {
-    padding-top: u(15rem);
+    height: u(15rem);
   }
 }
 
 .infoblock__image--support,
 .infoblock__image--compare,
-.infoblock__image--contribute {
+.infoblock__image--contribute,
+.infoblock__image--education,
+.infoblock__image--forms {
   @include media($xl) {
-    padding-top: u(20rem);
+    height: u(20rem);
   }
+}
+
+///// infoblock__icon
+
+.infoblock__icon {
+  height: u(15rem);
+  background-color: $secondary;
+  background-repeat: no-repeat;
+  margin-bottom: u(1rem);
+  background-position:50% 50%;
+  background-size:u(11rem);
+
+  @include media($med) {
+    height: u(15rem);
+  }
+  @include media($lg) {
+    height: u(15rem);
+  }
+  @include media($xl){
+    height: u(20rem);
+  }
+}
+
+
+.infoblock__icon--calendar {
+  background-image:url("/static/img/i-complex--calendar.png")
+
+}
+
+.infoblock__icon--regreport {
+  background-image:url("/static/img/i-complex--regreport.png")
+
 }
