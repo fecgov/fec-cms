@@ -5,32 +5,22 @@
 {% load updates %}
 {% load home_page %}
 
-
 {% block body_class %}template-{{ self.get_verbose_name | slugify }}{% endblock %}
-
-{% block extra_js %}
-  <script>
-    TOUR_PAGE = 'candidate-committee-services';
-  </script>
-{% endblock extra_js %}
 
 {% block content %}
 <section class="hero hero--secondary hero--services" aria-labelledby="hero-heading">
   <div class="hero__image"></div>
   <div class="container">
-    <h1 id="hero-heading">{{ self.title }}
-      <div class="tour__point tour__point--left tour__point--top-padding-med" data-intro="<h5>Everything in one place</h5>From first steps in starting a committee all the way to shutting down operations, learn how groups can be active in federal elections while staying in compliance with legal requirements."></div>
-    </h1>
+    <h1 id="hero-heading">{{ self.title }}</h1>
     <div class="hero__content">{{ self.hero }}</div>
   </div>
 </section>
-
 <div class="container main">
   <div class="container">
     <h2>Guides</h2>
     <div class="grid grid--4-wide">
       <div class="grid__item">
-        <a href="/help-candidates-and-committees/candidates-and-their-authorized-committees-guide">
+        <a href="/help-candidates-and-committees/guides/?tab=candidates-and-their-authorized-committees">
           <aside class="card card--horizontal card--secondary">
             <div class="card__image__container">
                 <span class="card__icon i-notebook"><span class="u-visually-hidden">Icon representing a question</span></span>
@@ -42,7 +32,7 @@
         </a>
       </div>
       <div class="grid__item">
-        <a href="/help-candidates-and-committees/political-party-committees-guide">
+        <a href="/help-candidates-and-committees/guides/?tab=political-party-committees">
           <aside class="card card--horizontal card--secondary">
             <div class="card__image__container">
               <span class="card__icon i-notebook"><span class="u-visually-hidden">Icon of a training screen</span></span>
@@ -54,7 +44,7 @@
         </a>
       </div>
       <div class="grid__item">
-        <a href="/help-candidates-and-committees/corporations-and-labor-organizations-guide">
+        <a href="/help-candidates-and-committees/guides/?tab=corporations-and-labor-organizations">
           <aside class="card card--horizontal card--secondary">
             <div class="card__image__container">
               <span class="card__icon i-notebook"><span class="u-visually-hidden">Icon of a candidate</span></span>
@@ -66,7 +56,7 @@
         </a>
       </div>
       <div class="grid__item">
-        <a href="/help-candidates-and-committees/political-action-committees-guide">
+        <a href="/help-candidates-and-committees/guides/?tab=political-action-committees">
           <aside class="card card--horizontal card--secondary">
             <div class="card__image__container">
               <span class="card__icon i-notebook"><span class="u-visually-hidden">Icon of a candidate</span></span>
@@ -84,9 +74,7 @@
     <div class="grid grid--2-wide">
       <div class="grid__item">
       <img src="/static//img/tips.gif" alt="" />
-      <div class="t-lead">
-      <a href="/help-candidates-and-committees/candidate-taking-receipts/contribution-limits-candidates/">Contribution limits</a>
-      </div>
+      <h3 class="u-no-margin"><a href="/help-candidates-and-committees/candidate-taking-receipts/contribution-limits-candidates/">Contribution limits</a></h3>
       <p>Under the Federal Election Campaign Finance Act, contributions are subject to limits. Those limits differ depending on the type of donor and recipient.</p>
       </div>
       <div class="grid__item">
@@ -98,35 +86,29 @@
       </div>
     </div>
   </div>
-  <ul class="grid grid--4-wide">
-    <li class="grid__item">
-      <img src=/static/img/list.png />
-      <div class="t-lead t-sans">
-        <a href="/help-candidates-and-committees/filing-reports/electronic-filing/">Electronic filing information</a>
-      </div>
-    </li>
-    <li class="grid__item">
-      <img src=/static/img/form.png />
-      <div class="t-lead t-sans">
-        <a href="/help-candidates-and-committees/forms">Forms</a>
-      </div>
-      <p>All FEC registration reporting and forms</p>
-    </li>
-    <li class="grid__item" >
-      <img src=/static/img/cal.png />
-      <div class="t-lead t-sans">
-        <a href="/help-candidates-and-committees/dates-and-deadlines">Dates and deadlines</a>
-      </div>
-      <p>All FEC reporting deadlines, reporting periods and compliance periods</p>
-    </li>
-    <li class="grid__item">
-      <img src=/static/img/peeps.png />
-      <div class="t-lead t-sans">
-        <a href="/info/outreach.shtml">Education and learning</a>
-      </div>
-      <p>Videos, trainings, webinars and conferences</p>
-    </li>
-   </ul>
+  <div class="container">
+     <ul class="grid grid--4-wide grid--flex t-sans">
+      <li class="grid__item grid__item--infoblock">
+        <div class="infoblock__icon infoblock__icon--regreport" role="img" aria-label="Description of the image"></div>
+        <h3 class="u-no-margin"><a href="/help-candidates-and-committees/filing-reports/electronic-filing/">Electronic filing information</a></h3>
+      </li>
+      <li class="grid__item grid__item--infoblock">
+        <div class="infoblock__image infoblock__image--forms"  role="img" aria-label="Description of the image"></div>
+        <h3 class="u-no-margin"><a href="/help-candidates-and-committees/forms">Forms</a></h3>
+        <p>All FEC registration reporting and forms</p>
+      </li>
+      <li class="grid__item grid__item--infoblock">
+        <div class="infoblock__icon infoblock__icon--calendar" role="img" aria-label="Description of the image"></div>
+        <h3 class="u-no-margin"><a href="/help-candidates-and-committees/filing-reports/electronic-filing/">Dates and deadlines</a></h3>
+        <p>All FEC reporting deadlines, reporting periods and compliance periods</p>
+      </li>
+      <li class="grid__item grid__item--infoblock">
+        <div class="infoblock__image infoblock__image--education" role="img" aria-label="Description of the image"></div>
+        <h3 class="u-no-margin"><a href="https://transition.fec.gov/info/outreach.shtml">Education and learning</a></h3>
+        <p>Videos, trainings, webinars and conferences</p>
+      </li>
+    </ul>
+  </div>
 </div>
  <section class="slab slab--neutral">
   <div class="container">
@@ -146,9 +128,8 @@
        {% endfor %}
       </div>
     </div>
-  </div>
  </section>
 
- {% include 'partials/disclaimer.html' %}
+{% include 'partials/disclaimer.html' %}
 
 {% endblock %}
