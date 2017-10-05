@@ -7,6 +7,39 @@ var consolidate = require('gulp-consolidate');
 var rename = require('gulp-rename');
 var svgmin = require('gulp-svgmin');
 var urlencode = require('gulp-css-urlencode-inline-svgs');
+var sass = require('gulp-sass');
+// minifies css
+var cleanCSS = require('gulp-clean-css');
+// Clears contents of directory
+var clean = require('gulp-clean');
+var rev = require('gulp-rev');
+//var sourcemaps = require('gulp-sourcemaps');
+
+// Consider using gulp-rev-delete-original later
+gulp.task('clear-css-dir', function () {
+    return gulp.src('./dist/fec/static/scss', {read: false})
+        .pipe(clean());
+});
+
+gulp.task('build-sass', ['clear-css-dir'], function() {
+  return gulp.src('./static/scss/*.scss')
+    // compiles sass
+    .pipe(sass().on('error', sass.logError))
+    // minifies css
+    .pipe(cleanCSS())
+    .pipe(rename(function(path) {
+      path.dirname = 'static/css';
+    }))
+    // sourcemaps for local to back-trace source of scss
+    //.pipe(gulpif(!production, sourcemaps.init()))*/
+    //makes manifest sass (static asset revision) and puts in destination
+    .pipe(rev())
+    .pipe(gulp.dest('./dist/fec/static/css'))
+    // writes manifest file into destination
+    .pipe(rev.manifest('./dist/fec/static/css/rev-manifest-css.json'))
+    .pipe(gulp.dest('.'));
+    //.pipe(gulpif(!production, sourcemaps.write()))
+});
 
 gulp.task('minify-icons', function() {
   return gulp.src('./fec/static/icons/input/*.svg')
