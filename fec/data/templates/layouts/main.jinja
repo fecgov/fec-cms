@@ -8,9 +8,7 @@
   {% include 'partials/meta-tags.jinja' %}
 
   {% block css %}
-  {% compress css %}
-  <link rel="stylesheet" type="text/x-scss" href="{{ static('scss/base.scss') }}" />
-  {% endcompress %}
+  <link rel="stylesheet" type="text/css" href="{{ asset_for_css('base.css') }}" />
   {% endblock css %}
 
   <script>

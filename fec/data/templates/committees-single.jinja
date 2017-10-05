@@ -8,9 +8,7 @@
 {% endblock %}
 
 {% block css %}
-{% compress css %}
-<link rel="stylesheet" type="text/x-scss" href="{{ static('scss/entity.scss') }}" />
-{% endcompress %}
+<link rel="stylesheet" type="text/css" href="{{ asset_for_css('entity.css') }}" />
 {% endblock %}
 
 {% set breadcrumbs=[('', 'Committee profiles')] %}

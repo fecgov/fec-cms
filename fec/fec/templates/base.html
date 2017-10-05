@@ -10,7 +10,7 @@
 
     <title>{% block title %}{% if self.seo_title %}{{ self.seo_title }}{% else %}{{ self.title }} | FEC {% endif %}{% endblock %}{% block title_suffix %}{% endblock %}</title>
 
-    {% block extra_css %}
+    {% block css %}
     <link rel="stylesheet" type="text/css" href="{% asset_for_css 'base.css' %}">
     {% endblock %}
 
@@ -155,10 +155,8 @@
     </script>
 
     {# Global javascript #}
-    {% compress js %}
     <script type="text/javascript" src="{% asset_for_js 'vendor.js' %}"></script>
     <script type="text/javascript" src="{% asset_for_js 'init.js' %}"></script>
-    {% endcompress %}
 
     {% block extra_js %}
     {# Override this in templates to add extra javascript #}

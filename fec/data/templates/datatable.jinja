@@ -9,9 +9,7 @@
 {% endblock %}
 
 {% block css %}
-{% compress css %}
-<link rel="stylesheet" type="text/x-scss" href="{{ static('scss/datatables.scss') }}" />
-{% endcompress %}
+<link rel="stylesheet" type="text/css" href="{{ asset_for_css('datatables.css') }}" />
 {% endblock %}
 
 {% block body %}

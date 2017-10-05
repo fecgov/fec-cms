@@ -5,9 +5,7 @@
 {% block title %}Find candidates and elections by location{% endblock %}
 
 {% block css %}
-{% compress css %}
-<link rel="stylesheet" type="text/x-scss" href="{{ static('scss/elections.scss') }}" />
-{% endcompress %}
+<link rel="stylesheet" type="text/css" href="{{ asset_for_css('elections.css') }}" />
 {% endblock %}
 
 {% block body %}
