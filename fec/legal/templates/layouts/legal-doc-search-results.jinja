@@ -14,9 +14,7 @@
 {% endblock %}
 
 {% block css %}
-{% compress css %}
-<link rel="stylesheet" type="text/x-scss"  href="{{ static('scss/legal.scss') }}" />
-{% endcompress %}
+<link rel="stylesheet" type="text/css"  href="{{ asset_for_css('legal.css') }}" />
 {% endblock %}
 
 {% block header %}

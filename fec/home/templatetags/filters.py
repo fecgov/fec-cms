@@ -135,16 +135,19 @@ def asset_for_js(path):
 
     return assets[key] if key in assets else key
 
+
 @register.simple_tag
-def asset_for_css(path):
-    """Looks up the hashed asset path in rev-manifest-css.json
-    If the path doesn't exist there, then just return the path to the static file
+def asset_for_css(key):
+    """Looks up the hashed asset key in rev-manifest-css.json
+    If the key doesn't exist there, then just return the key to the static file
     without a hash"""
 
-    key = '/static/css/{}'.format(path)
     assets = json.load(open(os.path.join(settings.STATIC_ROOT, 'css/rev-manifest-css.json')))
-    print('reading filter')
-    return assets[key] if key in assets else key
+
+    if key in assets:
+        return '/static/css/' + assets[key] 
+    else:
+        return key
 
 
 @register.filter(name='remove_word')

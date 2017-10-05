@@ -17,7 +17,7 @@
   {% include "partials/search-hero.html" %}
   <div class="slab slab--neutral slab--spacious">
     <div class="container">
-      <form id="large-search" method="get" action="{{ settings.FEC_APP_URL }}/legal/search/" autocomplete="off" class="search__container js-search">
+      <form id="large-search" method="get" action="/data/legal/search/" autocomplete="off" class="search__container js-search">
         <div class="combo combo--search combo--search--large">
           <div class="tour__point tour__point--left" data-intro="<h5>Streamlined legal search</h5>Search across advisory opinions, Matters Under Review (MURs), statutes and regulations all at once. This feature is still growing to include even more categories."></div>
           <select class="search__select select--alt js-search-type" name="search_type" aria-label="Select a search type">
@@ -80,11 +80,11 @@
           <div class="option">
             <h2 id="advisory-opinions">
               <div class="tour__point tour__point--left" data-intro="<h5>Search or browse advisory opinions</h5>Search results emphasize keywords and other important information, making it easier to tell if an advisory opinion is what you’re looking for— before you open it. Every URL is unique, so you can you can bookmark any opinion page or list of search results."></div>
-              <a href="{{ settings.FEC_APP_URL }}/legal/advisory-opinions/">Advisory opinions</a>
+              <a href="/data/legal/advisory-opinions/">Advisory opinions</a>
             </h2>
             <p>Advisory opinions are official Commission responses to questions about how federal campaign finance law applies to specific, factual situations.</p>
             <p>This archive contains advisory opinions from 1975 to the present. It also contains documents related to advisory opinions — such as requests, drafts and public comments — from 1990 to the present.</p>
-            <a class="button--cta button--go" href="{{ settings.FEC_APP_URL }}/legal/advisory-opinions/">Explore advisory opinions</a>
+            <a class="button--cta button--go" href="/data/legal/advisory-opinions/">Explore advisory opinions</a>
           </div>
           <div class="option">
             <h2 id="enforcement-matters">
@@ -112,14 +112,14 @@
           <div class="option">
             <h2 id="statutes">Statutes and legislation</h2>
             <div class="content__section">
-              <h3><a href="{{ settings.FEC_APP_URL }}/legal/statutes/">Statutes</a></h3>
+              <h3><a href="/data/legal/statutes/">Statutes</a></h3>
               <p>
                 The FEC administers and enforces the Federal Election Campaign Act, the Presidential Election Campaign Fund Act and the Presidential Primary Matching Payment Account Act. Those acts and amendments, which are passed by Congress and signed by the President, are collected and restated as law in Title 52 and Title 26 of the U.S. Code.
               </p>
               <p>
                 This archive contains the portions of Title 52 and Title 26 that are administered by FEC.
               </p>
-              <a class="button--cta button--go" href="{{ settings.FEC_APP_URL }}/legal/statutes/">Explore statutes</a>
+              <a class="button--cta button--go" href="/data/legal/statutes/">Explore statutes</a>
             </div>
             <h3><a href="/legal-resources/legislation/">Legislation</a></h3>
             <p>Browse selected amendments to the <em>Federal Election Campaign Act</em> and Commission recommendations to Congress.</p>

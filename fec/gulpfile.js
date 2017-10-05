@@ -27,9 +27,6 @@ gulp.task('build-sass', ['clear-css-dir'], function() {
     .pipe(sass().on('error', sass.logError))
     // minifies css
     .pipe(cleanCSS())
-    .pipe(rename(function(path) {
-      path.dirname = 'static/css';
-    }))
     // sourcemaps for local to back-trace source of scss
     //.pipe(gulpif(!production, sourcemaps.init()))*/
     //makes manifest sass (static asset revision) and puts in destination

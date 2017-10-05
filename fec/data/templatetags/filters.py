@@ -148,6 +148,20 @@ def filesize(value):
 #     return cycles[0]
 
 @library.global_function
+def asset_for_css(key):
+    """Looks up the hashed asset key in rev-manifest-css.json
+    If the key doesn't exist there, then just return the key to the static file
+    without a hash"""
+
+    assets = json.load(open(os.path.join(settings.STATIC_ROOT, 'css/rev-manifest-css.json')))
+
+    if key in assets:
+        return '/static/css/' + assets[key] 
+    else:
+        return key
+
+
+@library.global_function
 def asset_for_js(path):
     """Looks up the hashed asset path in rev-manifest.json
     If the path doesn't exist there, then just return the path to the static file
