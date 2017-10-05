@@ -97,6 +97,9 @@
     ],
     "./fec/fec/static/js/templates/*.hbs": [
       "build-js"
+    ],
+    "./fec/fec/static/scss/**/*.scss": [
+      "build-sass"
     ]
   },
   "engines": {
