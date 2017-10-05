@@ -62,7 +62,7 @@ module.exports = [
       }),
       new webpack.SourceMapDevToolPlugin(),
       new ManifestPlugin({
-        fileName: 'rev-manifest.json',
+        fileName: 'rev-manifest-js.json',
         basePath: '/static/js/'
       }),
       // Uncomment to compress and analyze the size of bundles

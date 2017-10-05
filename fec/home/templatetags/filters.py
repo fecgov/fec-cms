@@ -125,14 +125,25 @@ def get_meta_description(content_section):
 
 
 @register.simple_tag
-def asset_for(path):
-    """Looks up the hashed asset path in rev-manifest.json
+def asset_for_js(path):
+    """Looks up the hashed asset path in rev-manifest-js.json
     If the path doesn't exist there, then just return the path to the static file
     without a hash"""
 
     key = '/static/js/{}'.format(path)
-    assets = json.load(open(os.path.join(settings.STATIC_ROOT, 'js/rev-manifest.json')))
+    assets = json.load(open(os.path.join(settings.STATIC_ROOT, 'js/rev-manifest-js.json')))
 
+    return assets[key] if key in assets else key
+
+@register.simple_tag
+def asset_for_css(path):
+    """Looks up the hashed asset path in rev-manifest-css.json
+    If the path doesn't exist there, then just return the path to the static file
+    without a hash"""
+
+    key = '/static/css/{}'.format(path)
+    assets = json.load(open(os.path.join(settings.STATIC_ROOT, 'css/rev-manifest-css.json')))
+    print('reading filter')
     return assets[key] if key in assets else key
 
 

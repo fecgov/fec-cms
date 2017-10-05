@@ -122,8 +122,8 @@
 {% include './partials/glossary.html' %}
 
 {% block modals %}{% endblock %}
-<script src="{{ asset_for('vendor.js') }}"></script>
-<script src="{{ asset_for('data-init.js') }}"></script>
+<script src="{{ asset_for_js('vendor.js') }}"></script>
+<script src="{{ asset_for_js('data-init.js') }}"></script>
 {% block scripts %}{% endblock %}
 
 {% if use_analytics %}
