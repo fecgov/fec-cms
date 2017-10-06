@@ -157,3 +157,5 @@ def remove_word(str, words):
     Returns a new string
     """
     return str.replace(words, '')
+
+print (settings.DIST_DIR)
