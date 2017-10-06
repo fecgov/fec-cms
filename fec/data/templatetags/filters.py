@@ -153,7 +153,7 @@ def asset_for_css(key):
     If the key doesn't exist there, then just return the key to the static file
     without a hash"""
 
-    assets = json.load(open(settings.DIST_DIR + '/fec/static/css/rev-manifest-css.json'))
+    assets = json.load(open(DIST_DIR + '/fec/static/css/rev-manifest-css.json'))
 
     if key in assets:
         return '/static/css/' + assets[key]
@@ -167,6 +167,6 @@ def asset_for_js(path):
     If the path doesn't exist there, then just return the path to the static file
     without a hash"""
     key = '/static/js/{}'.format(path)
-    assets = json.load(open(settings.DIST_DIR + '/fec/static/js/rev-manifest-js.json'))
+    assets = json.load(open(DIST_DIR + '/fec/static/js/rev-manifest-js.json'))
 
     return assets[key] if key in assets else key
