@@ -168,5 +168,5 @@ def asset_for_js(path):
     without a hash"""
     key = '/static/js/{}'.format(path)
     assets = json.load(open(os.path.join(settings.STATIC_ROOT, 'js/rev-manifest-js.json')))
-    assets.update(json.load(open(os.path.join(settings.STATIC_ROOT, 'js/rev-legal-manifest.json'))))
+    assets.update(json.load(open(os.path.join(settings.STATIC_ROOT, 'js/rev-legal-manifest-js.json'))))
     return assets[key] if key in assets else key
