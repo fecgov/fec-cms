@@ -16,40 +16,110 @@
 
 {% block content %}
   {% include "partials/search-hero.html" %}
-  <div class="slab slab--neutral slab--spacious">
-
-
-  <div class="container main">
-    <div class="gcontainer grid--2-wide grid--flex">
-      <div class="grid__item card t-left-aligned">
-        <form id="large-search" method="get" action="{{ settings.FEC_APP_URL }}/legal/search/" autocomplete="off" class="search__container js-search">
-        <div class="combo combo--search combo--search--mini">
-          <div class="tour__point tour__point--left" data-intro="<h5>Streamlined legal search</h5>Search across advisory opinions, Matters Under Review (MURs), statutes and regulations all at once. This feature is still growing to include even more categories."></div>
-          <select class="search__select select--alt js-search-type" name="search_type" aria-label="Select a search type">
-            <option value="all" selected>All</option>
-            <option value="statutes">Statutes</option>
-            <option value="regulations">Regulations</option>
-            <option value="advisory_opinions">Advisory opinions</option>
-            <option value="murs">Matters under review</option>
-          </select>
-          <input type="text" name="search" class="combo__input js-search-input"
-          aria-label="Search">
-          <button type="submit" class="button--standard button--search combo__button">
-           <span class="u-visually-hidden">Search</span>
-          </button>
-        </div>
-        <button type="button" class="button--keywords u-float-right u-margin--top" aria-controls="keyword-modal" data-a11y-dialog-show="keyword-modal">More keyword options</button>
-      </form>
-      <span class="t-note t-sans search__example search__example--with-select">Examples: 102.2; electioneering</span>
-
+<div class="container main">
+  <div class="gcontainer grid--2-wide grid--flex">
+    <div class="grid__item card t-left-aligned">
+      <form id="large-search" method="get" action="{{ settings.FEC_APP_URL }}/legal/search/" autocomplete="off" class="search__container js-search">
+      <div class="combo combo--search combo--search--mini">
+        <div class="tour__point tour__point--left" data-intro="<h5>Streamlined legal search</h5>Search across advisory opinions, Matters Under Review (MURs), statutes and regulations all at once. This feature is still growing to include even more categories."></div>
+        <select class="search__select select--alt js-search-type" name="search_type" aria-label="Select a search type">
+          <option value="all" selected>All</option>
+          <option value="statutes">Statutes</option>
+          <option value="regulations">Regulations</option>
+          <option value="advisory_opinions">Advisory opinions</option>
+          <option value="murs">Matters under review</option>
+        </select>
+        <input type="text" name="search" class="combo__input js-search-input"
+        aria-label="Search">
+        <button type="submit" class="button--standard button--search combo__button">
+         <span class="u-visually-hidden">Search</span>
+        </button>
       </div>
-      <div class="grid__item card t-left-aligned">
-        {% home_page_news %}
-
-      </div>
+      <button type="button" class="button--keywords u-float-right u-margin--top" aria-controls="keyword-modal" data-a11y-dialog-show="keyword-modal">More keyword options</button>
+    </form>
+    <span class="t-note t-sans search__example search__example--with-select">Examples: 102.2; electioneering</span>
 
     </div>
-    <section class="content__section content__section--ruled">
+    <div class="grid__item">
+      {% home_page_news %}
+
+    </div>
+
+  </div>
+  <section class="content__section content__section--ruled">
+    <ul class="grid grid--4-wide">
+      <li class="grid__item card card--horizontal card--primary">
+        <div class="card__image__container">
+          <span class="card__icon icon-circle--advisory-opinions"><span class="u-visually-hidden">Icon representing advisory opinions</span></span>
+        </div>
+        <div class="card__content">
+          <a href="#advisory-opinions">Advisory opinions</a>
+        </div>
+      </li>
+      <li class="grid__item card card--horizontal card--primary">
+        <div class="card__image__container">
+          <span class="card__icon i-disbursement"><span class="u-visually-hidden">Icon of representing spending</span></span>
+        </div>
+        <div class="card__content">
+          <a href="/data/advanced?tab=spending">Spending</a>
+        </div>
+      </li>
+      <li class="grid__item card card--horizontal card--primary">
+        <div class="card__image__container">
+          <span class="card__icon i-candidate"><span class="u-visually-hidden">Icon of a candidate</span></span>
+        </div>
+        <div class="card__content">
+          <a href="/data/advanced?tab=candidates">Candidates</a>
+        </div>
+      </li>
+      <li class="grid__item card card--horizontal card--primary">
+        <div class="card__image__container">
+          <span class="card__icon i-committee"><span class="u-visually-hidden">Icon representing a committeek</span></span>
+        </div>
+        <div class="card__content">
+          <a href="/data/advanced?tab=committees">Committees</a>
+        </div>
+      </li>
+    </ul>
+    <ul class="grid grid--4-wide">
+      <li class="grid__item card card--horizontal card--primary">
+        <div class="card__image__container">
+          <span class="card__icon i-filings"><span class="u-visually-hidden">Icon representing filings</span></span>
+        </div>
+        <div class="card__content">
+          <a href="/data/advanced?tab=filings">Filings and reports</a>
+        </div>
+      </li>
+      <li class="grid__item card card--horizontal card--primary">
+        <div class="card__image__container">
+          <span class="card__icon i-loans"><span class="u-visually-hidden">Icon representing loans and debts</span></span>
+        </div>
+        <div class="card__content">
+          <a href="/data/advanced?tab=loans-debts">Loans and debts</a>
+        </div>
+      </li>
+      <li class="grid__item card card--horizontal card--primary">
+        <div class="card__image__container">
+          <span class="card__icon i-bulk"><span class="u-visually-hidden">Icon representing bulk data</span></span>
+        </div>
+        <div class="card__content">
+          <a href="/data/advanced?tab=other">Bulk data and other sources</a>
+        </div>
+      </li>
+      <li class="grid__item card card--horizontal card--primary">
+        <div class="card__image__container">
+          <span class="card__icon i-external"><span class="u-visually-hidden">Icon representing external pages</span></span>
+        </div>
+        <div class="card__content">
+          <a href="/data/advanced?tab=external">External data sources</a>
+        </div>
+      </li>
+    </ul>
+
+  </section>
+
+
+    <section>
       <div class="row">
         <div class="sidebar-container sidebar-container--left">
           <nav class="sidebar sidebar--neutral side-nav js-sticky-side js-toc" data-sticky-container="sections">
@@ -88,7 +158,8 @@
           </nav>
         </div>
       </div>
-  </div>
+    </section>
+</div>
   <div class="slab slab--neutral">
     <div class="container">
       <div class="grid grid--4-wide">
@@ -106,6 +177,7 @@
         </div>
     </div>
   </div>
+</div>
 
 {% include 'partials/disclaimer.html' %}
 {% include 'partials/legal-keyword-modal.html' %}
