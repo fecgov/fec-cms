@@ -85,7 +85,7 @@ jobs:
             npm run build-js
             npm run build-sass
             cd fec
-            DJANGO_SETTINGS_MODULE=fec.settings.production python manage.py collectstatic --noinput
+            DJANGO_SETTINGS_MODULE=fec.settings.production python manage.py collectstatic --noinput -v 0
             ./manage.py test
             npm run test-single
 
