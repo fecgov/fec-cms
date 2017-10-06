@@ -70,8 +70,7 @@ jobs:
             [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
             . .env/bin/activate
             nvm use default
-            cd fec
-            webpack
+            npm run build-js
             npm run build-sass
             DJANGO_SETTINGS_MODULE=fec.settings.production python manage.py collectstatic --noinput
             ./manage.py test

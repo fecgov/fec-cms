@@ -22,7 +22,7 @@ gulp.task('clear-css-dir', function () {
 });
 
 gulp.task('build-sass', ['clear-css-dir'], function() {
-  return gulp.src('./static/scss/*.scss')
+  return gulp.src('./fec/static/scss/*.scss')
     // compiles sass
     .pipe(sass().on('error', sass.logError))
     // minifies css
