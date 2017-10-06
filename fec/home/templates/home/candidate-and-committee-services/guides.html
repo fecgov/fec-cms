@@ -2,7 +2,6 @@
 {% load wagtailcore_tags %}
 {% load staticfiles %}
 
-
 {% block content %}
 
 {% include 'partials/breadcrumbs.html' with page=self links=self.get_ancestors style='secondary' %}
@@ -62,24 +61,22 @@
                <div class="grid__item">
                  <p>
                    <ul class="t-sans t-bold">
-                     <li><a href="https://www.fec.gov/help-candidates-and-committees/registering-candidate/">Registering as a candidate</a></li>
-                     <li><a href="https://www.fec.gov/help-candidates-and-committees/keeping-records/">Keeping records</a></li>
-                     <li><a href="https://www.fec.gov/help-candidates-and-committees/candidate-taking-receipts/">Taking in receipts</a></li>
-                     <li><a href="https://www.fec.gov/help-candidates-and-committees/filing-reports/">Filing candidate reports</a></li>
-                     <li><a href="https://www.fec.gov/help-candidates-and-committees/making-disbursements/">Making disbursements</a></li>
-                     <li><a href="https://www.fec.gov/help-candidates-and-committees/winding-down-candidate-campaign/">Winding down a campaign</a></li>
-                     <li><a href="https://www.fec.gov/help-candidates-and-committees/handling-loans-debts-and-advances/">Handling candidate loans, debts and advances</a></li>
+                     <li><a href="/help-candidates-and-committees/registering-candidate/">Registering as a candidate</a></li>
+                     <li><a href="/help-candidates-and-committees/keeping-records/">Keeping records</a></li>
+                     <li><a href="/help-candidates-and-committees/candidate-taking-receipts/">Taking in receipts</a></li>
+                     <li><a href="/help-candidates-and-committees/filing-reports/">Filing candidate reports</a></li>
+                     <li><a href="/help-candidates-and-committees/making-disbursements/">Making disbursements</a></li>
+                     <li><a href="/help-candidates-and-committees/winding-down-candidate-campaign/">Winding down a campaign</a></li>
+                     <li><a href="/help-candidates-and-committees/handling-loans-debts-and-advances/">Handling candidate loans, debts and advances</a></li>
                    </ul>
                  </p>
                </div>
                <div class="grid__item">
-                 <a class="u-no-border" href="https://www.fec.gov/resources/cms-content/documents/candgui.pdf">
-                   <img src="/static/img/pdf-icon-large.png" alt="PDF Icon">
+                 <a class="u-no-border" href="resources/cms-content/documents/candgui.pdf">
+                   <img src="{% static 'img/pdf-icon-large.png' %}" alt="Icon representing a large PDF file">
                  </a>
-                 <h3><a class="t-sans" href="https://www.fec.gov/resources/cms-content/documents/candgui.pdf">PDF Guide</a></h3>
-                 <div class="icon-heading--calendar--secondary option__aside__alt-action">
-                   <a class="t-sans t-bold" href="https://www.fec.gov/resources/cms-content/documents/candgui.pdf">Congressional candidates and committees campaign guide</a>
-                 </div>
+                 <h3><a class="t-sans" href="h/resources/cms-content/documents/candgui.pdf">PDF Guide</a></h3>
+                 <a class="t-sans t-bold" href="/resources/cms-content/documents/candgui.pdf">Congressional candidates and committees campaign guide</a>
                </div>
              </div>
           </section>
@@ -92,24 +89,22 @@
                <div class="grid__item">
                  <p>
                    <ul class="t-sans t-bold">
-                     <li><a href="https://www.fec.gov/help-candidates-and-committees/registering-political-party/">Registering as a political party</a></li>
-                     <li><a href="https://www.fec.gov/help-candidates-and-committees/keeping-political-party-records/">Keeping party records</a></li>
-                     <li><a href="https://www.fec.gov/help-candidates-and-committees/taking-receipts-political-party/">Taking in receipts as a party</a></li>
-                     <li><a href="https://www.fec.gov/help-candidates-and-committees/filing-political-party-reports/">Filing political party reports</a></li>
-                     <li><a href="https://www.fec.gov/help-candidates-and-committees/making-disbursements-political-party/">Making disbursements as a party</a></li>
-                     <li><a href="https://www.fec.gov/help-candidates-and-committees/handling-political-party-loans-debts-and-advances/">Handling party loans, debts and advances</a></li>
-                     <li><a href="https://www.fec.gov/help-candidates-and-committees/terminating-a-committee/">Terminating a committee</a></li>
+                     <li><a href="/help-candidates-and-committees/registering-political-party/">Registering as a political party</a></li>
+                     <li><a href="/help-candidates-and-committees/keeping-political-party-records/">Keeping party records</a></li>
+                     <li><a href="/help-candidates-and-committees/taking-receipts-political-party/">Taking in receipts as a party</a></li>
+                     <li><a href="/help-candidates-and-committees/filing-political-party-reports/">Filing political party reports</a></li>
+                     <li><a href="/help-candidates-and-committees/making-disbursements-political-party/">Making disbursements as a party</a></li>
+                     <li><a href="/help-candidates-and-committees/handling-political-party-loans-debts-and-advances/">Handling party loans, debts and advances</a></li>
+                     <li><a href="/help-candidates-and-committees/terminating-a-committee/">Terminating a committee</a></li>
                    </ul>
                  </p>
                </div>
                <div class="grid__item">
-                 <a class="u-no-border" href="https://www.fec.gov/resources/cms-content/documents/partygui.pdf">
-                   <img src="/static/img/pdf-icon-large.png" alt="PDF Icon">
+                 <a class="u-no-border" href="/resources/cms-content/documents/partygui.pdf">
+                   <img src="{% static 'img/pdf-icon-large.png' %}" alt="Icon representing a large PDF file">
                  </a>
-                 <h3><a class="t-sans" href="https://www.fec.gov/resources/cms-content/documents/partygui.pdf">PDF Guide</a></h3>
-                 <div class="icon-heading--calendar--secondary option__aside__alt-action">
-                   <a class="t-sans t-bold" href="https://www.fec.gov/resources/cms-content/documents/partygui.pdf">Political party committees campaign guide</a>
-                 </div>
+                 <h3><a class="t-sans" href="/resources/cms-content/documents/partygui.pdf">PDF Guide</a></h3>
+                 <a class="t-sans t-bold" href="/resources/cms-content/documents/partygui.pdf">Political party committees campaign guide</a>
                </div>
              </div>
           </section>
@@ -122,24 +117,22 @@
                <div class="grid__item">
                  <p>
                    <ul class="t-sans t-bold">
-                     <li><a href="https://www.fec.gov/help-candidates-and-committees/registering-ssf/">Registering as an SSF</a></li>
+                     <li><a href="/help-candidates-and-committees/registering-ssf/">Registering as an SSF</a></li>
                      <li>Keeping records as an SSF</li>
                      <li>Taking in receipts as an SSF</li>
-                     <li><a href="https://www.fec.gov/help-candidates-and-committees/filing-ssf-reports/">Filing SSF reports</a></li>
+                     <li><a href="/help-candidates-and-committees/filing-ssf-reports/">Filing SSF reports</a></li>
                      <li>Making disbursements as an SSF</li>
                      <li>Handling SSF loans, debts and advances</li>
-                     <li><a href="https://www.fec.gov/help-candidates-and-committees/terminating-a-committee/">Terminating a committee</a></li>
+                     <li><a href="/help-candidates-and-committees/terminating-a-committee/">Terminating a committee</a></li>
                    </ul>
                  </p>
                </div>
                <div class="grid__item">
                  <a class="u-no-border" href="https://transition.fec.gov/pdf/colagui.pdf">
-                   <img src="/static/img/pdf-icon-large.png" alt="PDF Icon">
+                   <img src="{% static 'img/pdf-icon-large.png' %}" alt="Icon representing a large PDF file">
                  </a>
                  <h3><a class="t-sans" href="https://transition.fec.gov/pdf/colagui.pdf">PDF Guide</a></h3>
-                 <div class="icon-heading--calendar--secondary option__aside__alt-action">
-                   <a class="t-sans t-bold" href="https://transition.fec.gov/pdf/colagui.pdf">Corporations and labor organizations campaign guide</a>
-                 </div>
+                 <a class="t-sans t-bold" href="https://transition.fec.gov/pdf/colagui.pdf">Corporations and labor organizations campaign guide</a>
                </div>
              </div>
           </section>
@@ -159,24 +152,22 @@
                <div class="grid__item">
                  <p>
                    <ul class="t-sans t-bold">
-                     <li><a href="https://www.fec.gov/help-candidates-and-committees/registering-pac/">Registering as a PAC</a></li>
-                    <li><a href="https://www.fec.gov/help-candidates-and-committees/keeping-pac-records-nonconnected/">Keeping PAC records</a></li>
-                    <li><a href="https://www.fec.gov/help-candidates-and-committees/taking-receipts-pac/">Taking in receipts as a PAC</a></li>
-                    <li><a href="https://www.fec.gov/help-candidates-and-committees/filing-pac-reports/">Filing PAC reports</a></li>
-                    <li><a href="https://www.fec.gov/help-candidates-and-committees/making-disbursements-pac/">Making disbursements as a PAC</a></li>
-                    <li><a href="https://www.fec.gov/help-candidates-and-committees/handling-nonconnected-pac-loans-debts-and-advances/">Handling PAC loans, debts and advances</a></li>
-                    <li><a href="https://www.fec.gov/help-candidates-and-committees/terminating-a-committee/">Terminating a committee</a></li>
+                     <li><a href="/help-candidates-and-committees/registering-pac/">Registering as a PAC</a></li>
+                    <li><a href="/help-candidates-and-committees/keeping-pac-records-nonconnected/">Keeping PAC records</a></li>
+                    <li><a href="/help-candidates-and-committees/taking-receipts-pac/">Taking in receipts as a PAC</a></li>
+                    <li><a href="/help-candidates-and-committees/filing-pac-reports/">Filing PAC reports</a></li>
+                    <li><a href="/help-candidates-and-committees/making-disbursements-pac/">Making disbursements as a PAC</a></li>
+                    <li><a href="/help-candidates-and-committees/handling-nonconnected-pac-loans-debts-and-advances/">Handling PAC loans, debts and advances</a></li>
+                    <li><a href="/help-candidates-and-committees/terminating-a-committee/">Terminating a committee</a></li>
                    </ul>
                  </p>
                </div>
                <div class="grid__item">
-                 <a class="u-no-border" href="https://www.fec.gov/resources/cms-content/documents/nongui.pdf">
-                   <img src="/static/img/pdf-icon-large.png" alt="PDF Icon">
+                 <a class="u-no-border" href="/resources/cms-content/documents/nongui.pdf">
+                   <img src="{% static 'img/pdf-icon-large.png' %}" alt="Icon representing a large PDF file">
                  </a>
-                 <h3><a class="t-sans" href="https://www.fec.gov/resources/cms-content/documents/nongui.pdf">PDF Guide</a></h3>
-                 <div class="icon-heading--calendar--secondary option__aside__alt-action">
-                   <a class="t-sans t-bold" href="https://www.fec.gov/resources/cms-content/documents/nongui.pdf">Nonconnected committees campaign guide</a>
-                 </div>
+                 <h3><a class="t-sans" href="/resources/cms-content/documents/nongui.pdf">PDF Guide</a></h3>
+                 <a class="t-sans t-bold" href="/resources/cms-content/documents/nongui.pdf">Nonconnected committees campaign guide</a>
                </div>
              </div>
           </section>
