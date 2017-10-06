@@ -85,7 +85,7 @@ jobs:
             cd fec
             webpack
             npm run build-sass
-            DJANGO_SETTINGS_MODULE=fec.settings.production python manage.py collectstatic --noinput -v 0
+            DJANGO_SETTINGS_MODULE=fec.settings.production python manage.py collectstatic
             ./manage.py test
             npm run test-single
 
