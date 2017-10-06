@@ -114,7 +114,7 @@ module.exports = [
     plugins: [
       new webpack.SourceMapDevToolPlugin(),
       new ManifestPlugin({
-        fileName: 'rev-legal-manifest.json',
+        fileName: 'rev-legal-manifest-js.json',
         basePath: '/static/js/'
       }),
     ],
