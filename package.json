@@ -4,7 +4,7 @@
     "build-icons": "cd fec && gulp minify-icons && gulp consolidate-icons",
     "build-sass": "cd fec && gulp build-sass",
     "build-js": "cd fec && webpack",
-    "build-production": "cd fec && gulp build-sass && webpack --optimize-minimize --define process.env.NODE_ENV='production'",
+    "build-production": "cd fec && webpack --optimize-minimize --define process.env.NODE_ENV='production' && gulp build-sass",
     "test": "karma start",
     "test-single": "karma start --single-run --browsers PhantomJS",
     "watch": "nswatch"

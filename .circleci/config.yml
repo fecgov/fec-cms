@@ -84,6 +84,7 @@ jobs:
             nvm use default
             cd fec
             webpack
+            gulp build-sass
             DJANGO_SETTINGS_MODULE=fec.settings.production python manage.py collectstatic --noinput -v 0
             ./manage.py test
             npm run test-single
