@@ -23,7 +23,7 @@
   background-repeat: no-repeat;
   height: u(15rem);
   margin-bottom: u(1rem);
-  background-size:100%;
+  background-size:cover;
 
 //commented out temporarily to avoid error- see _variables.scss line 89
 /*  @media
@@ -49,8 +49,16 @@
 }
 
 .infoblock__image--education {
-  background-position: 0 0;
-  background-image:url("/static/img/peeps.png")
+  background-position: u(0 -12rem);
+  background-image:url("/static/img/peeps.png");
+
+  @include media($med) {
+    background-position: u(0 -3rem);
+  }
+
+  @include media($lg) {
+    background-position: (0 0);
+  }
 }
 
 .infoblock__image--forms {
