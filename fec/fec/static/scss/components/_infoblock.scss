@@ -49,11 +49,11 @@
 }
 
 .infoblock__image--education {
-  background-position: u(0 -12rem);
+  background-position: u(0 -7rem);
   background-image:url("/static/img/peeps.png");
 
   @include media($med) {
-    background-position: u(0 -3rem);
+    background-position: u(0 0rem);
   }
 
   @include media($lg) {
