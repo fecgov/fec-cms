@@ -1,0 +1,9 @@
+{% load filters %}
+<ul>
+  {% for record in records %}
+  <li>
+    <a class="t-bold" href="{{ record.url }}">{% formatted_title record %}</a>
+    <span class="t-sans u-margin--left">{{ record.date|date:'F j, Y' }}</span>
+  </li>
+  {% endfor %}
+</ul>
