@@ -53,11 +53,11 @@
   background-image:url("/static/img/peeps.png");
 
   @include media($med) {
-    background-position: u(0 0rem);
+    background-position: 0 0;
   }
 
   @include media($lg) {
-    background-position: (0 0);
+    background-position: 0 0;
   }
 }
 
