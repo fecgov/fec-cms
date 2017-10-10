@@ -355,6 +355,10 @@
     &.i-loans {
       @include u-icon-bg($hand-money, $primary-contrast);
     }
+
+    &.i-mallet {
+      @include u-icon-bg($mallet, $primary-contrast);
+    }
   }
 }
 
