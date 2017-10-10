@@ -6,6 +6,8 @@ bower_components
 local.py
 
 *.py[cod]
+.cache
+.env
 
 # C extensions
 *.so
