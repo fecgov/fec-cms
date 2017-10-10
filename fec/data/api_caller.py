@@ -318,22 +318,21 @@ def call_senate_specials(state):
         election_type_id = 'SG',
         office_sought = 'S',
         election_state = state)
-    #here return a list of years instead
-    special_years = api_response['results']
-    return special_years if 'results' in api_response else None
+    special_results = api_response['results'] #returns a list of dictionaries
+    #[details for election1][details for election2]
+    #print("special_results: {0}".format(special_results))
+    return special_results if 'results' in api_response else None
 
-def format_senate_specials(special_years):
+def format_special_results(special_results):
+    #special_results is a list of dictionaries: #[election1][election2]
     senate_specials = []
-    #FIX ALL THIS - it's now a list!
-    for result in results:
+    for result in special_results:
         #here we permanently round odd years up to even years
         result['election_year'] = result['election_year'] + (result['election_year'] % 2)
-        #initiate an empty list for each special election year
-        senate_specials[result['election_year']] = []
-    for result in results:
-        #add election state to the list of senate specials that year
-        senate_specials[result['election_year']].append(result['election_state'])
-    #returns dictionary: {2008: ['MS'], 2018: ['AL'], 2010: ['IL', 'WV']...
+        #add election year to the list of senate specials for that state
+        senate_specials.append(result['election_year'])
+    #returns list of years
+    #print("senate_specials: {0}".format(senate_specials))
     return senate_specials
 
 def get_regular_senate_cycles(state):
@@ -342,16 +341,18 @@ def get_regular_senate_cycles(state):
     for senate_class in ['1', '2', '3']:
         if state.upper() in constants.SENATE_CLASSES[str(senate_class)]:
             senate_cycles += utils.get_senate_cycles(senate_class)
-    #here we aren't going to use get_senate_cycles() because we only add this cycle to the list
+    #print("senate_cycles: {0}".format(senate_cycles))
     return senate_cycles
 
 def get_all_senate_cycles(state):
     #separate formating specials from calling API for better tests
-    senate_specials = format_senate_specials(call_senate_specials()) #dictionary
+    senate_specials = format_special_results(call_senate_specials(state)) #list
     senate_regular_cycles = get_regular_senate_cycles(state) #list
-    all_senate_cycles = []
+    all_senate_cycles = senate_regular_cycles
     for special_year in senate_specials:
         #only add the election cycle to the dropdown if it's not already there
-        if state.upper() in senate_specials[special_year] and special_year not in senate_regular_cycles:
-            all_senate_cycles.append(special_year)
-     all_senate_cycles   
+        if special_year not in all_senate_cycles:
+            all_senate_cycles.append(special_year)  
+    all_senate_cycles.sort(reverse=True)
+    #print("{0} all_senate_cycles: {1}".format(state, all_senate_cycles))
+    return all_senate_cycles

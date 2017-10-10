@@ -72,23 +72,32 @@ class TestCycles(unittest.TestCase):
         assert utils.get_senate_cycles(1) == range(2018, 1979, -6) 
 
     def test_state_senate_cycles(self):
-        get_senate_specials_mock_results = {2008: ['MS'], 2018: ['AL'], 2010: ['IL', 'WV']}
+        call_senate_specials_mock_WV = [{'election_type_id': 'SG', 
+            'election_type_full': 'Special election general',
+            'create_date': '2010-07-22T17:27:16+00:00',
+            'election_state': 'WV',
+            'election_party': None,
+            'update_date': None, 
+            'election_year': 2010,
+            'office_sought': 'S', 
+            'election_date': '2010-11-02',
+            'election_notes': "Sen. Robert Byrd's Seat.", 
+            'primary_general_date': '2016-09-16T16:09:22.555513'}]
         returns_none = None
+
+        westvirginia = api_caller.format_special_results(call_senate_specials_mock_WV)
+        assert 2010 in westvirginia
+        assert 2022 not in westvirginia
+
+        alabama = api_caller.get_regular_senate_cycles('al')
+        assert 2016 in alabama
+        assert 2018 not in alabama
+
         # Testing with an example state, Wisconsin
         # There should be an election in 2016 but not 2014
         # because of the classes the state has
-
-        #LBTODO: test regular senate cycles and "format senate specials"
-
-        wisconsin = api_caller.get_state_senate_cycles('wi')
+        wisconsin = api_caller.get_all_senate_cycles('wi')
         assert 2016 in wisconsin
         assert 2014 not in wisconsin
-        #LBTODO: Make sure this works
-        #Alabama has a senate special election in 2018 and none in 2016
-        alabama = api_caller.get_state_senate_cycles('al')
-        assert 2018 in alabama
-        assert 2016 not in alabama
-        #west virginia had a special in 2010 and not 2004
-        west_virginia = api_caller.get_state_senate_cycles('wv')
-        assert 2010 in west_virginia
-        assert 2004 not in west_virginia
+        
+
