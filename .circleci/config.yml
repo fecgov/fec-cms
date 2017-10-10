@@ -35,6 +35,12 @@ jobs:
             echo "en_US.UTF-8 UTF-8" | sudo tee /etc/locale.gen
             sudo locale-gen en_US.UTF-8
 
+      - restore_cache:
+          keys:
+          - fec-cms-dependencies-{{ checksum "requirements.txt" }}-{{ checksum "package.json" }}
+          # fallback to using the latest cache if no exact match is found
+          - fec-cms-dependencies-
+
       - run:
           name: Install python dependencies
           command: |
@@ -58,6 +64,12 @@ jobs:
             npm install
             npm run build
             
+      - save_cache:
+          paths:
+            - ./.env
+            - ./node_modules
+          key: fec-cms-dependencies-{{ checksum "requirements.txt" }}-{{ checksum "package.json" }}
+
       - run:
           name: Ensure database is available
           command: dockerize -wait tcp://localhost:5432 -timeout 1m
@@ -70,9 +82,10 @@ jobs:
             [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
             . .env/bin/activate
             nvm use default
+            npm run build-js
+            npm run build-sass
             cd fec
-            webpack
-            DJANGO_SETTINGS_MODULE=fec.settings.production python manage.py collectstatic --noinput -v 0
+            DJANGO_SETTINGS_MODULE=fec.settings.production python manage.py collectstatic --noinput
             ./manage.py test
             npm run test-single
 

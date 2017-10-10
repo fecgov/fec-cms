@@ -5,9 +5,7 @@
 {% block title %}{{ title }}{% endblock %}
 
 {% block css %}
-{% compress css %}
-<link rel="stylesheet" type="text/x-scss" href="{{ static('scss/data-landing.scss') }}" />
-{% endcompress %}
+<link rel="stylesheet" type="text/css" href="{{ asset_for_css('data-landing.css') }}" />
 {% endblock %}
 
 {% block body %}
@@ -327,8 +325,8 @@
 {% endblock %}
 
 {% block scripts %}
-<script src="{{ asset_for('dataviz-common.js') }}"></script>
-<script src="{{ asset_for('landing.js') }}"></script>
+<script src="{{ asset_for_js('dataviz-common.js') }}"></script>
+<script src="{{ asset_for_js('landing.js') }}"></script>
 <script>
   TOUR_PAGE = 'campaign-finance-data';
 </script>

@@ -7,7 +7,6 @@ for t in TEMPLATES:
     t.setdefault('OPTIONS', {})
     t['OPTIONS']['debug'] = True
 
-
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 
