@@ -43,7 +43,7 @@ from fec import constants
 logger = logging.getLogger(__name__)
 
 from home.blocks import (ThumbnailBlock, AsideLinkBlock,
-                         ContactInfoBlock, CitationsBlock, LinksBlock, ResourceBlock,
+                         ContactInfoBlock, CitationsBlock, ResourceBlock,
                          OptionBlock, CollectionBlock, DocumentFeedBlurb,
                          ExampleParagraph, ExampleForms, ExampleImage,
                          CustomTableBlock, ReportingExampleCards)
@@ -908,20 +908,9 @@ class ServicesLandingPage(ContentPage, UniqueModel):
         ('paragraph', blocks.RichTextBlock())
     ], null=True)
 
-    #you_might_also_like = StreamField([('links', blocks.ListBlock(LinksBlock()))
-    #], null=True)
-
-    you_might_also_like = StreamField([
-        ('you_might_also_like_section', blocks.StructBlock([
-            ('section_title', blocks.TextBlock()),
-            ('links', blocks.ListBlock(LinksBlock()))
-        ]))
-    ], null=True, blank=True)
-
     content_panels = Page.content_panels + [
         StreamFieldPanel('hero'),
         StreamFieldPanel('intro'),
-        StreamFieldPanel('you_might_also_like'),
     ]
 
     @property

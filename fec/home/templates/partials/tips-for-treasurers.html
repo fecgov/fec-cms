@@ -1,5 +1,5 @@
 {% load filters %}
-<ul>
+<ul class="list--spacious">
   {% for tips_for_treasurer in tips_for_treasurers %}
   <li>
     <a class="t-bold" href="{{ tips_for_treasurer.url }}">{% formatted_title tips_for_treasurer %}</a>

@@ -23,7 +23,7 @@
         <a href="/help-candidates-and-committees/guides/?tab=candidates-and-their-authorized-committees">
           <aside class="card card--horizontal card--secondary">
             <div class="card__image__container">
-                <span class="card__icon i-notebook"><span class="u-visually-hidden">Icon representing a question</span></span>
+                <span class="card__icon i-notebook"><span class="u-visually-hidden">Icon representing a notebook</span></span>
             </div>
             <div class="card__content">
               Candidates and their authorized committees
@@ -73,9 +73,9 @@
     <h2>Popular topics</h2>
     <div class="grid grid--2-wide">
       <div class="grid__item">
-      <img src="/static//img/tips.gif" alt="" />
-      <h3 class="u-no-margin"><a href="/help-candidates-and-committees/candidate-taking-receipts/contribution-limits-candidates/">Contribution limits</a></h3>
-      <p>Under the Federal Election Campaign Finance Act, contributions are subject to limits. Those limits differ depending on the type of donor and recipient.</p>
+        <img src="/static/img/tips.gif" alt="money in evelope">
+        <h3 class="u-no-margin"><a href="/help-candidates-and-committees/candidate-taking-receipts/contribution-limits-candidates/">Contribution limits</a></h3>
+        <p>Under the Federal Election Campaign Finance Act, contributions are subject to limits. Those limits differ depending on the type of donor and recipient.</p>
       </div>
       <div class="grid__item">
         <div class="heading--section heading--with-action">
@@ -113,21 +113,38 @@
  <section class="slab slab--neutral">
   <div class="container">
     <h2>You might also like</h2>
-    <div class="grid grid--{{ self.you_might_also_like| length }}-wide">
-    {% for block in self.you_might_also_like %}
+    <div class="grid grid--3-wide">
       <div class="grid__item">
+        <h4>Look up information reported and filed with the FEC</h4>
         <div class="example--primary">
-          <h4 class="example__title">{{ block.value.section_title }}</h4>
-          <ul class="t-sans">
-           {% for subblock in block.value.links %}
-            <li><a href="{{ subblock.bound_blocks.link_url }}">{{ subblock.bound_blocks.link_text }}</a></li>
-           {% endfor %}
+          <ul class="t-sans list--spacious u-no-margin-top">
+            <li><a href="/data/advanced/?tab=filings">Search for your committee's information and filings</a></li>
+            <li><a href="/data/filings/?data_type=processed&amp;form_type=F2">Statements of candidacy filed by office</a></li>
+            <li><a href="/data/filings/?data_type=processed&amp;form_type=F1">https://www.fec.gov/data/filings/?data_type=processed&amp;form_type=F1</a></li>
           </ul>
-         </div>
         </div>
-       {% endfor %}
+      </div>
+      <div class="grid__item">
+        <h4>Learn about enforcement of federal campaign finance law</h4>
+        <div class="example--primary">
+          <ul class="t-sans list--spacious u-no-margin-top">
+            <li><a href="/legal-resources/enforcement/">Enforcement overview</a></li>
+            <li><a href="/legal/search/enforcement/?search_type=murs&amp;search=&amp;mur_no=&amp;mur_respondents=">Search matters under review </a><span class="term" data-term="matter under review (MUR)" title="Click to define" tabindex="0"> (MURs)</span></li>
+            <li><a href="/legal/search/advisory-opinions/?type=advisory_opinions&amp;ao_category=F">Search advisory opinions </a><span class="term" data-term="advisory opinion (AO)" title="Click to define" tabindex="0"> (AOs)</span></li>
+          </ul>
+        </div>
+      </div>
+      <div class="grid__item">
+        <h4>Get help from an FEC analyst</h4>
+        <p class="t-sans">If you represent a committee or another entitiy registered with the FEC, our staff can help answer your reporting questions.</p>
+        <div class="example--primary">
+          <ul class="t-sans list--spacious u-no-margin-top">
+            <li><a href="/help-candidates-and-committees/question-rad/">Find and contact your analyst</a></li>
+          </ul>
+        </div>
       </div>
     </div>
+  </div>
  </section>
 
 {% include 'partials/disclaimer.html' %}

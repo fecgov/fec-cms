@@ -1,4 +1,4 @@
-/*** For images ***/
+// For images
 
 //  <li class="grid__item grid__item--infoblock">
 //    <div class="infoblock__image infoblock__image--compare" role="img" aria-label="Description of the image"></div>
@@ -6,7 +6,7 @@
 //    <a class="button infoblock__button button--cta button--go" href="/data/#compare-candidates-in-an-election">Compare candidates</a>
 //  </li>
 
-/*** For icons ***/
+// For icons
 
 //  <li class="grid__item grid__item--infoblock">
 //    <div class="infoblock__icon infoblock__icon--calendar" role="img" aria-label="Description of the image"></div>
@@ -21,20 +21,18 @@
 .infoblock__image {
   background-image: url('../img/infoblock--get-started-1x.jpg');
   background-repeat: no-repeat;
+  background-size: cover;
   height: u(15rem);
   margin-bottom: u(1rem);
-  background-size:cover;
 
 //commented out temporarily to avoid error- see _variables.scss line 89
-/*  @media
-    $high-res-ratio,
-    $high-res-dpi {
-    background-image: url('../img/infoblock--get-started-2x.jpg');
-    }
-*/
+// @media
+//   $high-res-ratio,
+//  $high-res-dpi {
+//  background-image: url('../img/infoblock--get-started-2x.jpg');
+//    }
 
 }
-
 
 .infoblock__image--support {
   background-position: 50% 0;
@@ -49,8 +47,8 @@
 }
 
 .infoblock__image--education {
+  background-image: url('/static/img/classroom.png');
   background-position: u(0 -7rem);
-  background-image:url("/static/img/peeps.png");
 
   @include media($med) {
     background-position: 0 0;
@@ -62,19 +60,19 @@
 }
 
 .infoblock__image--forms {
+  background-image: url('/static/img/statement_of_organization_form.png');
   background-position: 0 0;
-  background-image:url("/static/img/form.png");
-  background-size:100%;
+  background-size: 100%;
 }
 
 .infoblock__subtext {
-  font-size: 1.4rem;
+  font-size: u(1.4rem);
   margin: u(0 0 1rem 0);
 }
 
 a.infoblock__button {
-  color: $inverse;
   bottom: 0;
+  color: $inverse;
   position: absolute;
 }
 
@@ -83,51 +81,30 @@ a.infoblock__button {
 .infoblock__image--contribute,
 .infoblock__image--education,
 .infoblock__image--forms {
+  height: u(15rem);
 
-  @include media($med) {
-    height: u(15rem);
-  }
-  @include media($lg) {
-    height: u(15rem);
-  }
-}
-
-.infoblock__image--support,
-.infoblock__image--compare,
-.infoblock__image--contribute,
-.infoblock__image--education,
-.infoblock__image--forms {
   @include media($xl) {
     height: u(20rem);
   }
 }
 
-//infoblock__icon
-
 .infoblock__icon {
-  height: u(15rem);
   background-color: $secondary;
+  background-position: 50% 50%;
   background-repeat: no-repeat;
+  background-size: u(11rem);
+  height: u(15rem);
   margin-bottom: u(1rem);
-  background-position:50% 50%;
-  background-size:u(11rem);
 
-  @include media($med) {
-    height: u(15rem);
-  }
-  @include media($lg) {
-    height: u(15rem);
-  }
-  @include media($xl){
+  @include media($xl) {
     height: u(20rem);
   }
 }
 
-
 .infoblock__icon--calendar {
-  background-image:url("/static/img/i-complex--calendar.svg")
+  background-image: url('/static/img/i-complex--calendar.svg');
 }
 
 .infoblock__icon--regreport {
-  background-image:url("/static/img/i-complex--regreport.svg")
+  background-image: url('/static/img/i-complex--regreport.svg');
 }

@@ -23,10 +23,4 @@ class Migration(migrations.Migration):
             model_name='serviceslandingpage',
             name='sections',
         ),
-        migrations.AddField(
-            model_name='serviceslandingpage',
-            name='you_might_also_like',
-            field=wagtail.wagtailcore.fields.StreamField((('you_might_also_like_item', wagtail.wagtailcore.blocks.StructBlock((('item_title', wagtail.wagtailcore.blocks.TextBlock()), ('links', wagtail.wagtailcore.blocks.ListBlock(wagtail.wagtailcore.blocks.StructBlock((('link_text', wagtail.wagtailcore.blocks.CharBlock()), ('link_url', wagtail.wagtailcore.blocks.URLBlock())))))))),), blank=True, null=True),
-        ),
-
     ]

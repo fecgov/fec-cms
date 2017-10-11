@@ -61,11 +61,6 @@ class CitationsBlock(blocks.StructBlock):
     label = blocks.CharBlock()
     content = blocks.RichTextBlock(help_text='Use Shift + Enter to add line breaks between citation and description')
 
-class LinksBlock(blocks.StructBlock):
-    """Block for a adding/editing a list of links"""
-    link_text = blocks.CharBlock()
-    link_url = blocks.URLBlock()
-
 class ExternalButtonBlock(blocks.StructBlock):
     """A block that makes a button to an external URl. Accepts a URL and text"""
     url = blocks.URLBlock()
