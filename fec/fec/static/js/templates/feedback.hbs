@@ -1,5 +1,5 @@
 <div>
-  <button class="js-feedback feedback__toggle button--cta-primary" aria-controls="feedback" aria-expanded="false" type="button">Feedback</button>
+  <button class="js-feedback feedback__toggle button--cta-secondary" aria-controls="feedback" aria-expanded="false" type="button">Feedback</button>
   <div id="feedback" class="js-feedback-box feedback" aria-hidden="true">
     <button class="js-feedback button--down feedback__close"><span class="u-visually-hidden">Close</span></button>
     <div class="js-status" aria-hidden="true">
@@ -12,11 +12,18 @@
     <form id="feedback-form" class="container">
       <fieldset>
         <legend class="feedback__title">Help us improve FEC.gov</legend>
-        <p class="t-sans">Test new features with our design team</p>
-        <button class="button--cta" href="/test-new-features-our-design-team/">Sign up</button>
-        <p class="t-sans">Sign up for a 30 minute video call to  help us test new website features.</p>
-        <p class="t-sans">Tell us how we can improve the site using the form below.  This feedback will be posted publicly, so don't include sensitive information like your name, contact information or Social Security number.</p>
+        <h3 class="t-sans">Test new features with our design team</h3>
+        <div class="signup__row">
+          <div class="signup__button">
+            <a class="button--cta" href="https://www.fec.gov/test-new-features-our-design-team/">Sign up</a>
+          </div>
+          <div class="signup__note">
+            <p class="t-sans t-note">Sign up for a 30 minute video call to  help us test new website features.</p>
+          </div>
+        </div>
         <hr />
+        <h3 class="t-sans">Or post public feedback anonymously</h3>
+        <p class="t-sans t-note">Tell us how we can improve the site using the form below.  This feedback will be posted publicly, so don't include sensitive information like your name, contact information or Social Security number.</p>
         <label for="feedback-1" class="label">What were you trying to do, and how can we improve it?* </label> <em class="t-note">(required)</em>
         <textarea id="feedback-1" name="action"></textarea>
         <label for="feedback-2" class="label">General feedback?</label>
@@ -24,7 +31,7 @@
         <label for="feedback-3" class="label">Tell us about yourself</label>
         <span class="label--help">I'm a ______ interested in ______.</span>
         <textarea id="feedback-3" name="about"></textarea>
-        <p class="t-sans"><a href="https://github.com/18f/fec/issues">Review all reported feedback</a>  |  <a href="mailto:webmanager@fec.gov">Contact the FEC about a specific question</a></p>
+        <p class="t-sans t-note"><a href="https://github.com/18f/fec/issues">Review all reported feedback</a>  |  <a href="mailto:webmanager@fec.gov">Contact the FEC about a specific question</a></p>
         <button type="submit" class="button--cta feedback__button">Post</button>
       </fieldset>
     </form>

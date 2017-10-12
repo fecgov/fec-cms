@@ -20,10 +20,19 @@
     color: $base;
   }
 
+  label {
+    margin-bottom: u(-0.5rem);
+  }
+
   hr {
     border-top: 0.15rem dotted;
-    margin: 2rem 0;
+    margin: u(0 0 1rem 0);
     color: $gray-dark;
+  }
+
+  .t-note {
+    font-style: normal;
+    line-height: u(2rem);
   }
 
   textarea {
@@ -34,13 +43,14 @@
     &:last-of-type {
       margin-bottom: u(1rem);
     }
+
   }
 
   a:not(.button--cta-primary) {
     border-color: $base;
   }
 
-  .label {
+  h3 {
     &:first-of-type {
       margin-top: u(2rem);
     }
@@ -66,6 +76,24 @@
       display: block !important;
       top: 100%;
     }
+  }
+}
+
+.signup__row {
+  clear:both;
+  display: table;
+
+  .signup__button {
+    float: left;
+    display:block;
+    margin-top: u(0.3rem);
+  }
+
+  .signup__note {
+    float: left;
+    display:block;
+    width: u(30rem);
+    margin-left: u(1rem);
   }
 }
 
