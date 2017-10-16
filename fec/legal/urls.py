@@ -11,6 +11,8 @@ urlpatterns = [
         views.mur_page),
     url(r'^data/legal/statutes/$', views.statutes_landing),
     # Legal search results
+    url(r'^data/legal/search/$', views.legal_search),
+
     url(r'^data/legal/search/advisory_opinions/$', views.legal_doc_search_ao),
     url(r'^data/legal/search/enforcement/$', views.legal_doc_search_mur),
     url(r'^data/legal/search/murs/$', views.legal_doc_search_mur),

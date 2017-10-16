@@ -17,7 +17,6 @@ var siteNav = require('./modules/site-nav');
 var dropdown = require('./modules/dropdowns');
 var toc = require('./modules/toc');
 var typeahead = require('./modules/typeahead');
-var SiteOrientation = require('./modules/site-orientation');
 var helpers = require('./modules/helpers');
 
 // Hack: Append jQuery to `window` for use by legacy libraries
@@ -27,9 +26,6 @@ var Sticky = require('component-sticky');
 var FormNav = require('./modules/form-nav').FormNav;
 
 $(document).ready(function() {
-
-  // new site orientation
-  new SiteOrientation.SiteOrientation('.js-new-site-orientation');
 
   // Initialize glossary
   new Glossary(terms, {}, {

@@ -1,12 +1,12 @@
-import re
 import json
+import os
+import re
 
-from django.conf import settings
 from django import template
-from django.utils.html import conditional_escape
+from django.conf import settings
+from django.templatetags.static import static
+from django.utils.html import conditional_escape, format_html
 from django.utils.safestring import mark_safe
-from django.utils.html import format_html
-from django.contrib.staticfiles.templatetags.staticfiles import static
 from wagtail.wagtailcore.models import Page
 
 register = template.Library()
@@ -125,15 +125,29 @@ def get_meta_description(content_section):
 
 
 @register.simple_tag
-def asset_for(path):
-    """Looks up the hashed asset path in rev-manifest.json
+def asset_for_js(path):
+    """Looks up the hashed asset path in rev-manifest-js.json
     If the path doesn't exist there, then just return the path to the static file
     without a hash"""
 
     key = '/static/js/{}'.format(path)
-    assets = json.load(open('./dist/fec/static/js/rev-manifest.json'))
+    assets = json.load(open(settings.DIST_DIR + '/fec/static/js/rev-manifest-js.json'))
 
     return assets[key] if key in assets else key
+
+
+@register.simple_tag
+def asset_for_css(key):
+    """Looks up the hashed asset key in rev-manifest-css.json
+    If the key doesn't exist there, then just return the key to the static file
+    without a hash"""
+
+    assets = json.load(open(settings.DIST_DIR + '/fec/static/css/rev-manifest-css.json'))
+
+    if key in assets:
+        return '/static/css/' + assets[key] 
+    else:
+        return key
 
 
 @register.filter(name='remove_word')
@@ -143,3 +157,5 @@ def remove_word(str, words):
     Returns a new string
     """
     return str.replace(words, '')
+
+print (settings.DIST_DIR)

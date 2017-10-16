@@ -8,9 +8,7 @@
   {% include 'partials/meta-tags.jinja' %}
 
   {% block css %}
-  {% compress css %}
-  <link rel="stylesheet" type="text/x-scss" href="{{ static('scss/base.scss') }}" />
-  {% endcompress %}
+  <link rel="stylesheet" type="text/css" href="{{ asset_for_css('base.css') }}" />
   {% endblock css %}
 
   <script>
@@ -46,10 +44,6 @@
 <body>
 {% import 'macros/search.jinja' as search %}
 {% include 'partials/warnings.jinja' %}
-
-{% if site_orientation_banner %}
-  {% include "partials/site-orientation.html" %}
-{% endif %}
 
 <a href="#main" class="skip-nav" tabindex="0">skip navigation</a>
 
@@ -126,8 +120,8 @@
 {% include './partials/glossary.html' %}
 
 {% block modals %}{% endblock %}
-<script src="{{ asset_for('vendor.js') }}"></script>
-<script src="{{ asset_for('data-init.js') }}"></script>
+<script src="{{ asset_for_js('vendor.js') }}"></script>
+<script src="{{ asset_for_js('data-init.js') }}"></script>
 {% block scripts %}{% endblock %}
 
 {% if use_analytics %}
