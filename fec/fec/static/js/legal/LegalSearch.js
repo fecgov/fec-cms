@@ -135,10 +135,7 @@ class LegalSearch extends React.Component {
           <Tags query={this.state.lastQuery} resultCount={this.state.resultCount} handleRemove={this.instantQuery} />
           <div className="u-padding--left u-padding--right">
             <div className="message message--info">
-              <h3>This feature is still in progress</h3>
-              <p>We&#39;re actively building the <strong>advisory opinion search</strong>, and it doesn&#39;t yet include some
-              advanced search functions. If you can&#39;t find what you&#39;re looking for, you can still <a href="http://saos.fec.gov/saos/searchao">search
-              opinions on the old fec.gov</a>.</p>
+              <p>The advisory opinion search feature includes all FEC advisory opinions &#40;AOs&#41; to date. You can search all FEC AOs using keywords, AO numbers, names of requesters and more. For additional search filters, you can still search AOs using our legacy <a href="http://saos.fec.gov/saos/searchao">AO search</a>.</p>
             </div>
           </div>
         </div>
