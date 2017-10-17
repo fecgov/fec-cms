@@ -13,7 +13,7 @@ Are you interested in seeing how much money a candidate raised? Or spent? How
 much debt they took on? Who contributed to their campaign? The FEC is the
 authoritative source for that information.
 
-The new FEC.gov is a collaboration between [18F](http://18f.gsa.gov) and the FEC. It
+The new FEC.gov is a collaboration between [18F](https://18f.gsa.gov) and the FEC. It
 aims to make campaign finance information more accessible (and understandable)
 to all users.
 
@@ -58,7 +58,7 @@ run into problems please
     * PostgreSQL (the latest 9.6 release).
          * Read a [Mac OSX tutorial](https://www.moncefbelyamani.com/how-to-install-postgresql-on-a-mac-with-homebrew-and-lunchy/).
          * Read a [Windows tutorial](http://www.postgresqltutorial.com/install-postgresql/).
-         * Read a [Linux tutorial](http://www.postgresql.org/docs/9.5/static/installation.html)
+         * Read a [Linux tutorial](https://www.postgresql.org/docs/9.5/static/installation.html)
            (or follow your OS package manager).
 
 2. Set up your Node environment — learn how to do this with our
@@ -272,4 +272,4 @@ our license page.
 
 A few restrictions limit the way you can use FEC data. For example, you can't
 use contributor lists for commercial purposes or to solicit donations.  Learn
-more on [FEC.gov](http://FEC.gov).
+more on [FEC.gov](https://FEC.gov).
