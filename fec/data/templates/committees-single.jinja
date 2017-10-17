@@ -159,6 +159,6 @@ var context = {{ context_vars | to_json | safe }};
   context.showIndependentExpenditures = true;
 {% endif %}
 </script>
-<script src="{{ asset_for_js('committee-single.js') }}"></script>
 <script src="{{ asset_for_js('dataviz-common.js') }}"></script>
+<script src="{{ asset_for_js('committee-single.js') }}"></script>
 {% endblock %}
