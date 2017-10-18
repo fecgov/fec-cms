@@ -1,0 +1,33 @@
+{% extends 'partials/filters.jinja' %}
+
+{% import 'macros/filters/text.jinja' as text %}
+{% import 'macros/filters/typeahead-filter.jinja' as typeahead %}
+{% import 'macros/filters/date.jinja' as date %}
+{% import 'macros/filters/range.jinja' as range %}
+
+
+{% block filters %}
+  <div class="filters__inner">
+    {{ typeahead.field('committee_id', 'Audited Committee Name or ID') }}
+    {{ typeahead.field('committee_id', 'Authorized Candidate Name or ID') }}
+
+    <button type="button" class="js-accordion-trigger accordion__button">Committee type</button>
+    <div class="accordion__content">
+      {% include 'partials/filters/committee-types.jinja' %}
+    </div>
+    <div class="range range--date js-date-range">
+      <div class="range__input range__input--min" data-filter="range">
+        <label for="min_{{ name }}">Beginning</label>
+        <input type="text" id="min_{{ name }}" name="min_{{ name }}" data-range="min" class="js-min-date" data-prefix="Beginning">
+      </div>
+      <div class="range__hyphen">-</div>
+      <div class="range__input range__input--max" data-filter="range">
+        <label for="max_{{ name }}">Ending</label>
+        <input type="text" id="max_{{ name }}" name="max_{{ name }}" data-range="max" class="js-max-date" data-prefix="Ending">
+      </div>
+      <button class="button--go button--standard" type="button">
+        <span class="u-visually-hidden">Search</span>
+      </button>
+    </div>
+ </div>
+{% endblock %}
