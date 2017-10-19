@@ -12,6 +12,7 @@ from home.models import (HomePageBannerAnnouncement, DigestPage, RecordPage, Pre
 register = template.Library()
 
 
+
 @register.inclusion_tag('partials/home-page-banner-announcement.html')
 def home_page_banner_announcement():
     datetime_now = datetime.datetime.now()
@@ -19,6 +20,16 @@ def home_page_banner_announcement():
 
     return {
         'banners': banners
+    }
+
+
+# This is for the Wagtail preview for Home Page Banner Announcement
+@register.inclusion_tag('partials/draft-home-page-banner-announcement.html')
+def draft_home_page_banner_announcement():
+    draft_banners = HomePageBannerAnnouncement.objects.all().order_by('-date_active')
+
+    return {
+        'draft_banners': draft_banners
     }
 
 
