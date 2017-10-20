@@ -269,6 +269,10 @@ candidate_status_extended = OrderedDict([
     ('P', 'Statutory candidate in prior cycle'),
 ])
 
+pac_party = OrderedDict([
+    ('PAC', 'PACs'),
+    ('PAR', 'Political Party Committees'),
+])
 pac_party_types = OrderedDict([
     ('N', 'PAC - nonqualified'),
     ('Q', 'PAC - qualified'),

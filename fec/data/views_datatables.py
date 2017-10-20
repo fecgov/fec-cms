@@ -128,7 +128,6 @@ def audit(request):
         'slug': 'audit',
         'title': 'Audit',
         'columns': constants.table_columns['audit'],
-        'has_data_type_toggle': True
     })
 
 

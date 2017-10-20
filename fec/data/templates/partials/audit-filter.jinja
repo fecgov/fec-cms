@@ -10,11 +10,7 @@
   <div class="filters__inner">
     {{ typeahead.field('committee_id', 'Audited Committee Name or ID') }}
     {{ typeahead.field('committee_id', 'Authorized Candidate Name or ID') }}
-
-    <button type="button" class="js-accordion-trigger accordion__button">Committee type</button>
-    <div class="accordion__content">
-      {% include 'partials/filters/committee-types.jinja' %}
-    </div>
+    {% include 'partials/filters/candcomtype.jinja' %}
     <div class="range range--date js-date-range">
       <div class="range__input range__input--min" data-filter="range">
         <label for="min_{{ name }}">Beginning</label>
