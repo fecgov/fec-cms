@@ -5,9 +5,7 @@
 {% block title %}Find candidates and elections by location{% endblock %}
 
 {% block css %}
-{% compress css %}
-<link rel="stylesheet" type="text/x-scss" href="{{ static('scss/elections.scss') }}" />
-{% endcompress %}
+<link rel="stylesheet" type="text/css" href="{{ asset_for_css('elections.css') }}" />
 {% endblock %}
 
 {% block body %}
@@ -90,6 +88,6 @@
 {% endblock %}
 
 {% block scripts %}
-<script src="{{ asset_for('dataviz-common.js') }}"></script>
-<script src="{{ asset_for('election-lookup.js') }}"></script>
+<script src="{{ asset_for_js('dataviz-common.js') }}"></script>
+<script src="{{ asset_for_js('election-lookup.js') }}"></script>
 {% endblock %}
