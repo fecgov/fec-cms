@@ -309,22 +309,26 @@ def _get_sorted_documents(ao):
        We do this in 2 passes, making use of the fact that Python's `sorted`
        function performs a _stable_ sort.
     """
-    sorted_documents = sorted(ao['documents'], key=itemgetter('description', 'document_id'), reverse=False)
-    sorted_documents = sorted(sorted_documents, key=itemgetter('date'), reverse=True)
+    sorted_documents = sorted(ao['documents'],
+                              key=itemgetter('description', 'document_id'),
+                              reverse=False)
+    sorted_documents = sorted(sorted_documents,
+                              key=itemgetter('date'),
+                              reverse=True)
     return sorted_documents
 
 
 def call_senate_specials(state):
-    """ Call the API to get Senate special election information for given state. 
-        Returns a list of dictionaries
+    """ Call the API to get Senate special election information for
+        given state. Returns a list of dictionaries
         Example: [{details for election1}][{details for election2}]
     """
-    api_response = _call_api('election-dates', 
-        election_type_id = 'SG',
-        office_sought = 'S',
-        election_state = state)
+    api_response = _call_api('election-dates',
+                             election_type_id='SG',
+                             office_sought='S',
+                             election_state=state)
 
-    special_results = api_response['results'] 
+    special_results = api_response['results']
 
     return special_results if 'results' in api_response else None
 
@@ -337,8 +341,10 @@ def format_special_results(special_results):
     senate_specials = []
 
     for result in special_results:
-        #Round odd years up to even years
+
+        # Round odd years up to even years
         result['election_year'] = result['election_year'] + (result['election_year'] % 2)
+
         senate_specials.append(result['election_year'])
 
     return senate_specials
@@ -360,18 +366,17 @@ def get_all_senate_cycles(state):
     """  Add together regularly scheduled and special senate elections
         Return a list of election years sorted in descending order
     """
-    senate_specials = format_special_results(call_senate_specials(state)) 
-    senate_regular_cycles = get_regular_senate_cycles(state) 
+    senate_specials = format_special_results(call_senate_specials(state))
+    senate_regular_cycles = get_regular_senate_cycles(state)
 
     all_senate_cycles = senate_regular_cycles
 
     for special_year in senate_specials:
-        #Prevent duplicates
+        # Prevent duplicates
         if special_year not in all_senate_cycles:
             all_senate_cycles.append(special_year)
 
-    #Sort for readability          
+    # Sort for readability
     all_senate_cycles.sort(reverse=True)
 
     return all_senate_cycles
-
