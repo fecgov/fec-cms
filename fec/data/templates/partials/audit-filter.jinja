@@ -4,6 +4,7 @@
 {% import 'macros/filters/typeahead-filter.jinja' as typeahead %}
 {% import 'macros/filters/date.jinja' as date %}
 {% import 'macros/filters/range.jinja' as range %}
+{% import 'macros/filters/years.jinja' as years %}
 
 
 {% block filters %}
@@ -11,6 +12,7 @@
     {{ typeahead.field('committee_id', 'Audited Committee Name or ID') }}
     {{ typeahead.field('committee_id', 'Authorized Candidate Name or ID') }}
     {% include 'partials/filters/candcomtype.jinja' %}
+    {% include 'partials/filters/audit-categories.jinja' %}
     <div class="range range--date js-date-range">
       <div class="range__input range__input--min" data-filter="range">
         <label for="min_{{ name }}">Beginning</label>

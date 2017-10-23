@@ -291,6 +291,29 @@ house_senate_types = OrderedDict([
     ('S', 'Senate')
 ])
 
+audit_categories = OrderedDict([
+    ('0', 'No Findings or Issues'),
+    ('1', 'Failure to File Reports/Schedules/Notices'),
+    ('2', 'Allocation Issues'),
+    ('3', 'Disclosure'),
+    ('4', 'Recordkeeping'),
+    ('5', 'Excessive Contributions'),
+    ('6', 'Prohibited Contributions'),
+    ('7', 'Misstatement of Financial Activity'),
+    ('8', 'Loans'),
+    ('9', 'Other'),
+    ('13', 'Repayment to US Treasury'),
+    ('14', 'Net Outstanding Campaign/Convention Expenditures/Obligations'),
+    ('15', 'Payments/Disgorgements'),
+    ('16', 'No Findings or Issues/Not a Committee'),
+    ('17', 'Referred Findings Not Listed'),
+    ('201', '24/48 Hour Notice-Independent Expenditures'),
+    ('202', '3Z-1'),
+    ('203', '48 Hour Notices'),
+    ('204', 'Activity from Building Fund Account'),
+    ('205', 'Allocation Issues')
+])
+
 table_columns = OrderedDict([
     ('candidates', ['Name', 'Office', 'Election years', 'Party', 'State', 'District', 'First filing date']),
     ('candidates-office-president', ['Name', 'Party', 'Receipts', 'Disbursements']),

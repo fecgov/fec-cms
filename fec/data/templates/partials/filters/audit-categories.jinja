@@ -1,0 +1,9 @@
+{% import 'macros/filters/checkbox.jinja' as checkbox %}
+
+{{ checkbox.checkbox_dropdown(
+  'audit-category',
+  'Findings and issue categories',
+  options=constants.audit_categories
+)
+}}
+

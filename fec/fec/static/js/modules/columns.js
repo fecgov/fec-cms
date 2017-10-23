@@ -618,6 +618,33 @@ var loans = [
   modalTriggerColumn
 ];
 
+var audit = [
+  columnHelpers.urlColumn('link_to_report', {data: 'committee_name', className: 'min-desktop hide-panel', orderable: false}),
+
+  {
+    data: 'cycle',
+    orderable: false,
+    className: 'all',
+  },
+  {data: 'far_release_date', orderable: true, className: 'min-tablet hide-panel column--small'},
+
+  {
+    data: 'primary_category',
+    orderable: false,
+    className: 'all',
+    render: function (data) {
+      if (data) {
+        return data
+      } else {
+        return '';
+      }
+    }
+  },
+
+ //{data: 'primary_category', orderable: false, className: 'min-tablet hide-panel column--small'},
+ {data: 'candidate_name', orderable: false, className: 'min-tablet hide-panel column--small'},
+];
+
 module.exports = {
   candidateColumn: candidateColumn,
   committeeColumn: committeeColumn,
@@ -637,5 +664,6 @@ module.exports = {
   filings: filings,
   receipts: receipts,
   reports: reports,
-  loans: loans
+  loans: loans,
+  audit: audit,
 };
