@@ -67,7 +67,6 @@ module.exports = [
       }),
       new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
       // Uncomment to compress and analyze the size of bundles
-      // new webpack.optimize.UglifyJsPlugin(),
       // new BundleAnalyzerPlugin()
     ],
     output: {
