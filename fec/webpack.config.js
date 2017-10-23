@@ -66,8 +66,12 @@ module.exports = [
         basePath: '/static/js/'
       }),
       new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
+      new webpack.DefinePlugin({
+        'process.env': {
+        NODE_ENV: '"production"'
+      }
+    }),
       // Uncomment to compress and analyze the size of bundles
-      // new webpack.optimize.UglifyJsPlugin(),
       // new BundleAnalyzerPlugin()
     ],
     output: {
