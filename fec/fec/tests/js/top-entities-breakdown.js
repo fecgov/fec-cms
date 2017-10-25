@@ -285,7 +285,6 @@ describe('Top entities breakdown', function() {
         var today = new Date();
         var lastYear = today.getFullYear() - 1;
         var formattedToday = moment(today).format('MM/DD/YYYY');
-        console.log("today:" + formattedToday);
         this.chart.cycle = today.getFullYear();
         this.chart.updateDates();
         expect(this.chart.$dates.html()).to.equal('01/01/' + lastYear + '–' + formattedToday);
