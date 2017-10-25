@@ -444,7 +444,10 @@ def spending(request):
 
 def feedback(request):
     if request.method == 'POST':
-        data = json.loads(request.body)
+
+        # json.loads() is expecting a string in JSON format:
+        # '{"param":"value"}'. Needs to be decoded in Python 3
+        data = json.loads(request.body.decode("utf-8"))
 
         if not any([data['action'], data['feedback'], data['about']]):
             return JsonResponse({'status': False}, status=500)
