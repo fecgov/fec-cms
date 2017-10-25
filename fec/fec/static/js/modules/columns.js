@@ -629,17 +629,19 @@ var audit = [
   {data: 'far_release_date', orderable: true, className: 'min-tablet hide-panel column--small'},
 
   {
-    data: 'primary_category',
+    data: 'primary_category_list',
     orderable: false,
     className: 'all',
-    render: function (data) {
+    render: function (data){
       if (data) {
         return data
-      } else {
+      }
+      else {
         return '';
       }
     }
   },
+
 
  //{data: 'primary_category', orderable: false, className: 'min-tablet hide-panel column--small'},
  {data: 'candidate_name', orderable: false, className: 'min-tablet hide-panel column--small'},

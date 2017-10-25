@@ -13,6 +13,7 @@
     {{ typeahead.field('committee_id', 'Authorized Candidate Name or ID') }}
     {% include 'partials/filters/candcomtype.jinja' %}
     {% include 'partials/filters/audit-categories.jinja' %}
+    {% include 'partials/filters/audit-sub-categories.jinja' %}
     <div class="range range--date js-date-range">
       <div class="range__input range__input--min" data-filter="range">
         <label for="min_{{ name }}">Beginning</label>
