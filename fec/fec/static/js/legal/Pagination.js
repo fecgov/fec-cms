@@ -4,10 +4,10 @@ function Pagination(props) {
   function interceptHandleChange(offset) {
     
     // from_hit is a zero-based index
-    var updatedFromHit = props.from_hit + offset;
+    let updatedFromHit = props.from_hit + offset;
 
     // when from_hit is less than 0, reset to 0 (ensures no negative value)
-    if (updatedFromHit < 0){
+    if (updatedFromHit < 0) {
       updatedFromHit = 0;
     } 
     // ensures that from_hit is less than result count
@@ -16,7 +16,12 @@ function Pagination(props) {
     }
 
     // create an event to update from_hit
-    const syntheticEvent = { target: { name: 'from_hit', value: updatedFromHit } };
+    const syntheticEvent = { 
+      target: { 
+        name: 'from_hit', 
+        value: updatedFromHit 
+      }
+    };
     props.handleChange(syntheticEvent);
   }
 
