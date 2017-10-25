@@ -261,7 +261,7 @@ function getTimePeriod(electionYear, cycle, electionFull, office) {
     max = cycle;
   }
 
-  return min.toString() + '–' + max.toString();
+  return min + '–' + max;
 }
 
 /*
