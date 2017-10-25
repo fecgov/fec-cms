@@ -634,7 +634,12 @@ var audit = [
     className: 'all',
     render: function (data){
       if (data) {
-        return data
+        var cat_arr=[]
+        for(var i in data){
+
+          cat_arr.push(data[i]['primary_category_name'])
+        }
+        return '<dl><dt>' + cat_arr.join('</dt><dt>') + '</dt></dl>'
       }
       else {
         return '';
