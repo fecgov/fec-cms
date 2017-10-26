@@ -1,3 +1,4 @@
+from django.views.decorators.csrf import ensure_csrf_cookie
 from django.shortcuts import render
 from django.http import Http404
 from django.http import JsonResponse
@@ -442,6 +443,7 @@ def spending(request):
     })
 
 
+@ensure_csrf_cookie
 def feedback(request):
     if request.method == 'POST':
 
