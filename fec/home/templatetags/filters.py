@@ -145,7 +145,7 @@ def asset_for_css(key):
     assets = json.load(open(settings.DIST_DIR + '/fec/static/css/rev-manifest-css.json'))
 
     if key in assets:
-        return '/static/css/' + assets[key] 
+        return '/static/css/' + assets[key]
     else:
         return key
 
@@ -157,5 +157,3 @@ def remove_word(str, words):
     Returns a new string
     """
     return str.replace(words, '')
-
-print (settings.DIST_DIR)
