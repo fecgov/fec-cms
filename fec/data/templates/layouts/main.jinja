@@ -119,6 +119,8 @@
 
 {% include './partials/glossary.html' %}
 
+{% csrf_token %}
+
 {% block modals %}{% endblock %}
 <script src="{{ asset_for_js('vendor.js') }}"></script>
 <script src="{{ asset_for_js('data-init.js') }}"></script>
