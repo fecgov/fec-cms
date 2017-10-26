@@ -1,0 +1,461 @@
+// Cards
+//
+// Small boxes that contain content. Default layout is image stacked on text.
+// All sizing is handled by using .grid and .grid__item,
+// either as containers or on the cards themselves
+//
+
+// Base style
+.card {
+  @include clearfix();
+  background-color: $neutral;
+  border-radius: 4px;
+  font-size: u(1.6rem);
+  padding: u(2rem);
+  text-align: center;
+  width: 100%;
+}
+
+.card--primary {
+  @include u-bg--primary();
+  @include u-font-color($gray-lightest);
+  font-weight: bold;
+}
+
+.card--secondary {
+  @include u-bg--secondary();
+  @include u-font-color($gray-lightest);
+  font-weight: bold;
+}
+
+.card--secondary-contrast {
+  @include u-font-color($inverse);
+  background-color: $bright-red;
+}
+
+.card--neutral {
+  background-color: $gray;
+  @include u-font-color($base);
+
+  .card__image__container {
+    @include clearfix();
+    background-color: $primary;
+  }
+}
+
+.card--empty {
+  background: none;
+}
+
+.card__image {
+  display: block;
+  margin: 0 auto;
+  max-width: u(6rem);
+  height: auto;
+  border-radius: 100%;
+}
+
+.card__image-link {
+  border-bottom: none;
+
+  &:hover {
+    border-bottom: none;
+  }
+}
+
+.card__content {
+  text-align: center;
+  padding: u(2rem 0 0 0);
+  font-family: $serif;
+  font-weight: normal;
+  line-height: 1.2;
+}
+
+.card__content--small {
+  font-size: u(1.4rem);
+}
+
+.card--horizontal {
+  display: table;
+  font-size: u(1.4rem);
+  padding: u(1rem 2rem);
+  text-align: left;
+
+  .card__image {
+    @include span-columns(1 of 3);
+    display: table-cell;
+  }
+
+  .card__image__container {
+    display: table-cell;
+    float: none;
+    text-align: center;
+    width: u(4.8rem);
+
+    .card__image {
+      display: inline;
+      float: none;
+      margin: 0;
+      width: 100%;
+    }
+  }
+
+  .card__image__container--secondary {
+    background-color: $secondary;
+  }
+
+  .card__content {
+    display: table-cell;
+    float: none;
+    text-align: left;
+    padding: 0 0 0 $gutter;
+    vertical-align: middle;
+  }
+
+  .card__content--full-width {
+    text-align: left;
+    padding: u(1.5rem 0 0 0);
+    font-family: $sans-serif;
+    font-weight: normal;
+    line-height: 1.2;
+    letter-spacing: -.3px;
+    clear: both;
+  }
+
+  // Option: .card--full-bleed makes the image full height
+  // image has no padding
+  &.card--full-bleed {
+    border: none;
+    padding: 0;
+
+    .card__image__container,
+    .card__image img {
+      border-radius: 4px 0 0 4px;
+      display: block;
+    }
+
+    .card__content {
+      padding: u(1rem 2rem 1rem 0);
+    }
+  }
+}
+
+// Wide cards
+// Used on data landing page. Big image container with a background
+
+.card--wide {
+  padding: 0;
+  text-align: left;
+
+  .card__image__container {
+    @include clearfix();
+    background-color: $primary;
+    border-radius: 4px 4px 0 0;
+    padding: u(1rem);
+    text-align: center;
+
+    .card__title {
+      float: left;
+      color: $primary-contrast;
+      padding: u(1rem);
+    }
+  }
+
+  .card__title {
+    margin-bottom: u(1rem);
+  }
+
+  .card__content {
+    text-align: left;
+    padding: u(2rem);
+
+    .card__title {
+      display: none;
+    }
+  }
+
+  .icon--complex {
+    max-height: u(4rem);
+    max-width: u(4rem);
+    display: block;
+    float: left;
+  }
+
+  .card__image__container--secondary {
+    background-color: $secondary;
+
+    .card__title {
+      color: $secondary-contrast;
+    }
+  }
+
+  @include media($lg) {
+
+    .card__image__container {
+      @include span-columns(2 of 6);
+      border-radius: 4px 0 0 4px;
+      padding: u(3rem);
+
+      .card__title {
+        display: none;
+        margin: 0;
+      }
+    }
+
+    .card__content {
+      @include span-columns(4 of 6);
+      padding-left: 0;
+
+      .card__title {
+        display: block;
+      }
+    }
+
+    .icon--complex {
+      max-height: u(10rem);
+      max-width: u(10rem);
+      display: inline;
+      float: none;
+    }
+  }
+}
+
+// For setting a background behind the image
+.card--alternating-bg {
+  min-height: u(8.3rem);
+  padding: 0;
+
+  .card__image__container {
+    @include span-columns(4);
+    display: table-cell;
+    float: none;
+    vertical-align: middle;
+  }
+
+  .card__image {
+    width: u(6rem);
+    vertical-align: middle;
+  }
+
+  .card__image__container--secondary {
+    background-color: $secondary;
+    border-radius: 4px 0 0 4px;
+  }
+
+  .card__content {
+    display: table-cell;
+    padding: 1.5rem;
+  }
+}
+
+// Stacked cards, when there's more than one in a vertical column
+.card--stacked {
+  margin-top: u(2rem);
+  margin-bottom: u(1rem);
+}
+
+// For lists of links, such as on data landing page cards
+.card__links {
+  letter-spacing: -.3px;
+  font-family: $sans-serif;
+  font-weight: normal;
+  margin-bottom: u(2rem);
+}
+
+// Card icons
+//
+// CSS generated icons for cards
+//
+// .i-candidate
+// .i-committee
+// .i-receipt
+// .i-disbursement
+// .i-overview
+// .i-profile
+// .i-elections
+//
+// <div class="grid--3-wide">
+//   <aside class="card card--primary card--horizontal grid__item">
+//     <div class="card__image">
+//       <span class="card__icon i-candidate"><span class="u-visually-hidden">Icon representing [something]</span></span>
+//     </div>
+//     <div class="card__content">
+//       Card icon
+//     </div>
+//   </aside>
+// </div>
+//
+
+.card__icon {
+  background-color: $neutral;
+  background-position: 50% 50%;
+  background-size: 50%;
+  border-radius: 100%;
+  display: block;
+  height: u(4.8rem);
+  width: u(4.8rem);
+}
+
+.card--primary {
+  .card__icon {
+    &.i-candidate {
+      @include u-icon-bg($candidate, $primary-contrast);
+      background-position: 60% 50%;
+      background-size: 40%;
+    }
+
+    &.i-committee {
+      @include u-icon-bg($committee, $primary-contrast);
+    }
+
+    &.i-receipt {
+      @include u-icon-bg($piggy-bank, $primary-contrast);
+    }
+
+    &.i-disbursement {
+      @include u-icon-bg($disbursement, $primary-contrast);
+    }
+
+    &.i-overview {
+      @include u-icon-bg($graph, $primary-contrast);
+    }
+
+    &.i-profile {
+      @include u-icon-bg($folder-with-person, $primary-contrast);
+    }
+
+    &.i-elections {
+      @include u-icon-bg($person-location, $primary-contrast);
+    }
+
+    &.i-individual-contributions {
+      @include u-icon-bg($individual-contributions, $primary-contrast);
+    }
+
+    &.i-folder-with-person {
+      @include u-icon-bg($folder-with-person, $primary-contrast);
+    }
+
+    &.i-data-flag {
+      @include u-icon-bg($data-flag, $primary-contrast);
+    }
+
+    &.i-external {
+      @include u-icon-bg($share, $primary-contrast);
+    }
+
+    &.i-filings {
+      @include u-icon-bg($papers, $primary-contrast);
+    }
+
+    &.i-bulk {
+      @include u-icon-bg($bulk, $primary-contrast);
+    }
+
+    &.i-loans {
+      @include u-icon-bg($hand-money, $primary-contrast);
+    }
+  }
+}
+
+.card--secondary {
+  .card__icon {
+    &.i-calendar {
+      @include u-icon-bg($calendar, $secondary-contrast);
+      background-position: 50% 50%;
+      background-size: 60%;
+    }
+
+    &.i-document {
+      @include u-icon-bg($document, $secondary-contrast);
+      background-position: 50% 50%;
+      background-size: 50%;
+    }
+
+    &.i-info-person {
+      @include u-icon-bg($info-person, $secondary-contrast);
+      background-position: 50% 110%;
+      background-size: 100%;
+    }
+
+    &.i-training {
+      @include u-icon-bg($training, $secondary-contrast);
+      background-size: 60%;
+    }
+
+    &.i-data-flag {
+      @include u-icon-bg($data-flag, $secondary-contrast);
+      background-size: 60%;
+    }
+
+    &.i-updates {
+      @include u-icon-bg($updates, $secondary-contrast);
+      background-size: 60%;
+    }
+
+    &.i-question-bubble {
+      @include u-icon-bg($question-bubble, $secondary-contrast);
+      background-size: 80%;
+    }
+
+    &.i-notebook {
+      @include u-icon-bg($notebook, $secondary-contrast);
+      background-size: 50%;
+    }
+  }
+}
+
+// Major cards
+// Style used when the cards are the primary feature of a layout,
+// such as the "Reports about the FEC" landing page.
+.card--major {
+  background-color: $gray-lightest;
+  border-top: u(1rem) solid $primary;
+  border-bottom: none;
+  display: block;
+  padding: u(2rem 1.5rem);
+  position: relative;
+  transition: border-top-color .2s ease-out;
+
+  @include media($med) {
+    min-height: u(20rem);
+  }
+
+  @include media($lg) {
+    min-height: u(27rem);
+
+    .card__count {
+      position: absolute;
+      bottom: u(2rem);
+      left: u(1.5rem);
+    }
+  }
+
+  &:hover,
+  &:focus {
+    border-top-color: $primary-contrast;
+
+    .card--major__title h2 {
+      border-bottom: 1px dotted $base;
+    }
+  }
+}
+
+.card--major__title {
+  margin-bottom: u(2rem);
+
+  h2 {
+    display: inline;
+    border-bottom: 1px solid transparent;
+  }
+}
+
+// Print styling
+@media print {
+  .card--primary,
+  .card--secondary {
+    border: 1px solid $gray;
+    background: $inverse;
+    color: $base;
+  }
+}

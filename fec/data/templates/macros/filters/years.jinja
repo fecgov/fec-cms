@@ -1,0 +1,39 @@
+{% macro cycles(name, label) %}
+<fieldset class="js-filter js-dropdown filter" data-filter="checkbox">
+  <legend class="label">{{ label }}</legend>
+  <ul class="dropdown__selected"></ul>
+  <div class="dropdown">
+    <button type="button" class="dropdown__button button--alt" data-name="{{ name }}">More</button>
+    <div id="{{ name }}-dropdown" class="dropdown__panel" aria-hidden="true">
+      <ul class="dropdown__list">
+      {% for year in range(constants.END_YEAR, constants.START_YEAR, -2) %}
+        <li class="dropdown__item">
+          <input id="{{ name }}-checkbox-{{ year }}" name="{{ name }}" type="checkbox" value="{{ year }}" />
+          <label class="dropdown__value" for="{{name}}-checkbox-{{ year }}">{{ year | fmt_year_range }}</label>
+        </li>
+      {% endfor %}
+      </ul>
+    </div>
+  </div>
+</fieldset>
+{% endmacro %}
+
+{% macro years(name, label) %}
+<fieldset class="js-filter js-dropdown filter" data-filter="checkbox">
+  <legend class="label">{{ label }}</legend>
+  <ul class="dropdown__selected"></ul>
+  <div class="dropdown">
+    <button type="button" class="dropdown__button button--alt" data-name="{{ name }}">More</button>
+    <div id="{{ name }}-dropdown" class="dropdown__panel" aria-hidden="true">
+      <ul class="dropdown__list">
+      {% for year in range(constants.END_YEAR, constants.START_YEAR, -1) %}
+        <li class="dropdown__item">
+          <input id="{{ name }}-checkbox-{{ year }}" name="{{ name }}" type="checkbox" value="{{ year }}" />
+          <label class="dropdown__value" for="{{name}}-checkbox-{{ year }}">{{ year }}</label>
+        </li>
+      {% endfor %}
+      </ul>
+    </div>
+  </div>
+</fieldset>
+{% endmacro %}

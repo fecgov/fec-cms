@@ -1,0 +1,59 @@
+// Cycle Select
+//
+// Used on various data pages (info about candidates, committees, election lookup, etc)
+//
+// <div class="cycle-select">
+//   <label class="cycle-select__label">Election:</label>
+//   <select class="select--alt" name="cycle">
+//     <option value="2016">2016</option>
+//     <option value="2014">2014</option>
+//     <option value="2012">2012</option>
+//   </select>
+// </div>
+//
+
+.cycle-select {
+  @include span-columns(6);
+
+  select {
+    width: 100%;
+  }
+}
+
+.cycle-select__label {
+  font-family: $sans-serif;
+  font-weight: bold;
+}
+
+.subcycle-select {
+  @include span-columns(6);
+  font-family: $sans-serif;
+
+  .toggles {
+    clear: both;
+
+    .button {
+      padding: u(.9rem 1rem);
+    }
+  }
+}
+
+@include media($med) {
+  .cycle-select {
+    @include span-columns(2 of 12);
+  }
+
+  .subcycle-select {
+    @include span-columns(10 of 12);
+  }
+}
+
+@include media($lg) {
+  .cycle-select {
+    @include span-columns(2 of 8);
+  }
+
+  .subcycle-select {
+    @include span-columns(6 of 8);
+  }
+}

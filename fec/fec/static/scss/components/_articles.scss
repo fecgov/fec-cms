@@ -1,0 +1,119 @@
+// Body-blocks component
+// could be moved to fec-style/scss/components/_body-blocks.scss
+//
+// Applies site styles to wagtail StreamField.
+
+.body-blocks {
+
+  .body-block {
+    @extend .content__section;
+  }
+
+  .block-heading {
+    @extend h2;
+  }
+
+  .block-image {
+    img {
+      height: auto;  // preserve ratio
+      border: 2px solid $gray-lightest;
+      border-radius: 2px;
+    }
+  }
+
+  .block-table {
+    table {
+      @extend .simple-table;
+    }
+
+    tr {
+      @extend .simple-table__row;
+    }
+
+    td {
+      @extend .simple-table__cell;
+    }
+
+    thead {
+      @extend .simple-table__header;
+    }
+  }
+}
+
+// Author-list component
+// could be moved to fec-style/scss/components/_author-list.scss
+//
+// Author attributions following an article.
+
+.author-list {
+  display: block;
+  clear: both;
+}
+
+.author-item {
+  margin-bottom: u(1rem);
+}
+
+@include media($med) {
+  .author-item {
+    @include span-columns(4);
+  }
+}
+
+@include media($lg) {
+  .author-item {
+    @include span-columns(3);
+  }
+}
+
+.author-item__info {
+  white-space: nowrap;  // keep .author-item__info next to image
+  overflow: hidden;  // better than overlapping
+}
+
+.author-item__image {
+  border-radius: 100%;
+  vertical-align: top;
+}
+
+.author-item__details {
+  display: inline-block;
+  white-space: normal;  // since .author-item is nowrap
+  vertical-align: top;
+  margin-left: 1rem;  // override default ul margin-left: 2rem
+}
+
+.icon--email--author {
+  @extend .icon--inline--right;
+  margin-left: u(.5rem);
+  max-width: 20px;
+
+}
+
+// Read-next component
+// could be moved to fec-style/scss/components/_read-next.scss
+//
+// Next article suggestion with title, abstract and image.
+
+.read_next__title {
+  margin-top: 0;
+}
+
+.read_next__image__container {
+  display: none;
+}
+
+.read_next__image {
+  height: auto;
+}
+
+@include media($med) {
+  .read_next__content {
+    @include span-columns(9);
+  }
+
+  .read_next__image__container {
+    @include span-columns(3);
+    display: block;
+  }
+}

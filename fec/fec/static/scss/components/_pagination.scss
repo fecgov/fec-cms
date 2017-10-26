@@ -1,0 +1,46 @@
+// Pagination
+//
+// Based on the datatables.js markup and classes
+//
+// <div class="dataTables_paginate paging_simple_numbers" id="results_paginate">
+//   <a class="paginate_button previous">Previous</a>
+//   <span>
+//     <a class="paginate_button">1</a>
+//     <a class="paginate_button">2</a>
+//     <a class="paginate_button current">3</a>
+//     <a class="paginate_button">4</a>
+//     <a class="paginate_button">5</a>
+//     <span class="ellipsis">…</span>
+//     <a class="paginate_button">162</a>
+//   </span>
+//   <a class="paginate_button next">Next</a>
+// </div>
+//
+
+.paginate_button {
+  @extend .button--standard;
+  @extend .button--sm;
+  display: inline-block;
+  height: auto;
+  margin-left: u(.5rem);
+
+  &.previous,
+  &.next {
+    text-indent: -99999px;
+    background-repeat: no-repeat;
+    background-position: 50% 50%;
+  }
+
+  &.previous {
+    @extend .button--previous;
+  }
+
+  &.next {
+    @extend .button--next;
+    text-indent: -99999px;
+  }
+
+  &.current {
+    background-color: $gray;
+  }
+}

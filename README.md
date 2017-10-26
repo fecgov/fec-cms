@@ -1,5 +1,5 @@
 **Develop**
-[![Build Status](https://img.shields.io/travis/18F/fec-cms/develop.svg)](https://travis-ci.org/18F/fec-cms)
+[![CircleCI](https://circleci.com/gh/18F/fec-cms.svg?style=svg)](https://circleci.com/gh/18F/fec-cms)
 
 **Master**
 [![Dependency Status](https://gemnasium.com/badges/github.com/18F/fec-cms.svg)](https://gemnasium.com/github.com/18F/fec-cms)
@@ -27,13 +27,8 @@ the new FEC.gov.
   [feedback](https://github.com/18F/fec/issues) from the FEC.gov feedback widget
   here, and this is the best place to submit general feedback.
 - [openFEC](https://github.com/18F/openfec): the first RESTful API for the Federal Election Commission
-- [openFEC-web-app](https://github.com/18f/openfec-web-app): the FEC’s web
-  app for exploring campaign finance data.
-- [fec-style](https://github.com/18F/fec-style): shared styles and user
-  interface components.
 - [fec-cms](https://github.com/18F/fec-cms): the content management system
-  (CMS) for the new FEC.gov. This project uses
-  [Wagtail](https://github.com/torchbox/wagtail), an open source CMS written
+  (CMS) for the new FEC.gov. This project uses [Wagtail](https://github.com/torchbox/wagtail), an open source CMS written
   in Python and built on the Django framework.
 
 ## Get involved
@@ -57,8 +52,7 @@ run into problems please
 ### Project prerequisites
 1. Ensure you have the following requirements installed:
 
-    * Python 3.5.3 (which includes `pip` and and a built-in version of
-      `virtualenv` called `pyvenv`).
+    * Python (the latest 3.5 release, which includes `pip` and and a built-in version of `virtualenv` called `venv`).
     * The latest long term support (LTS) or stable release of Node.js (which
       includes `npm`).
     * PostgreSQL (the latest 9.6 release).
@@ -125,6 +119,11 @@ cd fec/
 ./manage.py createsuperuser
 ```
 
+### Set local environment variables
+By default, `FEC_API_URL` points to the local running instance of the API (http://localhost:5000). Set it to either production, dev, or staging API URLs if you are not running the API locally.
+
+Also set API keys: `FEC_WEB_API_KEY` and `FEC_WEB_API_KEY_PUBLIC`
+
 ## Running the application
 In the root project folder, run:
 
@@ -132,6 +131,10 @@ In the root project folder, run:
 cd fec/
 ./manage.py runserver
 ```
+
+## Front End Development
+Front end assets are all located in `/fec/fec/static/*`. SCSS files are compiled and served on the backend by `django-compressor`, but JS files need to be compiled by Webpack via the `npm run build` command.
+
 
 ## Running tests
 There are two kinds of tests that you can run with the project, Python tests and JavaScript tests.
@@ -169,41 +172,20 @@ FEC_FEATURE_LEGAL=1 python fec/manage.py runserver
 ## Additional local development instructions
 
 ### Watch for static asset changes
-To watch for changes to .js and .scss, run this command in the root project
-directory:
+To watch for changes to JavaScript files, run this command in the root project directory:
 
 ```bash
 npm run watch
 ```
 
-### Developing with fec-style (optional)
-If you're developing with a local instance of
-[FEC-Style](https://github.com/18F/fec-style) and want to pull in styles and
-script changes as you go, use `npm link` to create a symbolic link to your
-local fec-style repo:
-
-```bash
-cd ~/fec-style
-npm link
-cd ~/openFEC-web-app
-npm link fec-style
-```
-
-After linking fec-style, `npm run watch` will rebuild on changes to your local
-copy of fec-style's .scss and .js files.
-
 ### Developing with openFEC (optional)
-To set the URL for the web app as an environment variable, run:
+To set the URL for the API as an environment variable, run:
 
 ```bash
-export FEC_APP_URL=http://localhost:3000
+export FEC_API_URL=http://localhost:5000
 ```
 
-Or, to set it in the settings file directly, include this line:
-
-```python
-FEC_APP_URL = 'http://localhost:3000'
-```
+The base settings file will read this value in instead of using the default (which is `http://localhost:5000`).
 
 ## Restoring your local database from a backup
 *Likely only useful for 18F FEC team members*

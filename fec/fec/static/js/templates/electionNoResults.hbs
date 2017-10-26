@@ -1,0 +1,14 @@
+<div class="message message--no-icon">
+  <h3 class="message__title">
+    {{#if this.zip}}
+    We can't find any results for this ZIP code
+    {{else}}
+    We can't find any results for this location
+    {{/if}}
+  </h3>
+  <p>Double-check that you entered it correctly, and if it still doesn't work, let us know:</p>
+  <ul class="list--buttons">
+    <li><a class="button button--alt" href="mailto:webmanager@fec.gov">Email our team</a></li>
+    <li><a class="button button--alt" href="https://github.com/18f/fec/issues/new">File an issue</a></li>
+  </ul>
+</div>

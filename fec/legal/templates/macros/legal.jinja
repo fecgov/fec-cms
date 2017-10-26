@@ -1,0 +1,152 @@
+{% macro keyword_search(result_type, query) %}
+<div class="filter">
+  <label class="label" for="search-input">Search keywords</label>
+  <div class="combo combo--search--mini">
+    <input id="search-input" type="text" name="search" class="combo__input"{% if query %} value="{{ query }}"{% endif %}>
+    <button class="combo__button button--search button--standard" type="submit">
+      <span class="u-visually-hidden">Search</span>
+    </button>
+  </div>
+  <button type="button" class="button--keywords" aria-controls="keyword-modal" data-a11y-dialog-show="keyword-modal">More keyword options</button>
+
+</div>
+{% endmacro %}
+
+{% macro text_filter(name, label, value) %}
+  <div class="filter">
+    <label class="label" for="{{name}}-filter">{{ label }}</label>
+    <input type="text" name="{{name}}" id="{{name}}-filter"{% if value%} value="{{ value }}"{% endif %}>
+  </div>
+{% endmacro %}
+
+{% macro checkbox_filter(name, label, value) %}
+<div class="filter">
+  <input type="checkbox" id="{{ name }}" name="{{ name }}" value="true" {% if value %} checked="true" {% endif %}>
+  <label for="{{ name }}">{{ label }}</label>
+</div>
+{% endmacro %}
+
+{% macro checkbox_list(name, label, options, value) %}
+<div class="filter">
+  <legend class="label">{{ label }}</legend>
+  {% for option in options %}
+    <div>
+      <input type="checkbox" id="ao_category_{{ option['value'] }}" name="{{ name }}" value="{{ option['value'] }}"
+        {% if value and option['value'] in value %} checked="true" {% endif %}>
+      <label for="ao_category_{{ option['value'] }}">{{ option['text'] }}</label>
+    </div>
+  {% endfor %}
+</div>
+{% endmacro %}
+
+{% macro dropdown(name, label, options, value) %}
+<div class="filter">
+<label for="{{ name }}" class="label">{{ label }}</label>
+<select id={{ name }} name="{{ name }}">
+  {% for option in options %}
+  <option value={{ option['value'] }} {% if option['value'] == value %} selected="true" {% endif %}>{{ option['text'] }}</option>
+  {% endfor %}
+</select>
+</div>
+{% endmacro %}
+
+{% macro date_filter(min_name, max_name, label, min_value, max_value) %}
+  <fieldset class="filter">
+    <legend class="label">{{ label }}</legend>
+    <div class="range range--date js-date-range">
+      <div class="range__input range__input--min" data-filter="range">
+        <label for="{{ min_name }}">Beginning</label>
+        <input type="text" id="{{ min_name }}" name="{{ min_name }}" value="{{ min_value }}" class="js-date-mask" required="">
+      </div>
+      <div class="range__hyphen">-</div>
+      <div class="range__input range__input--max" data-filter="range">
+        <label for="{{ max_name }}">Ending</label>
+        <input type="text" id="{{ max_name }}" name="{{ max_name }}" value="{{ max_value }}" class="js-date-mask" required="">
+      </div>
+    </div>
+  </fieldset>
+{% endmacro %}
+
+{% macro search(location, result_type, query, button_color="button--standard", select_class="select--alt-primary") %}
+{% if location == 'hero' %}
+  {% set size = 'combo--search--large' %}
+{% endif %}
+<form id="{{ location }}-search" action="/data/legal/search/" autocomplete="off" class="search__container">
+  <div class="combo combo--search {{ size }}">
+    {% set document_types = (('all', 'All'),('statutes', 'Statutes'),('regulations', 'Regulations'),('advisory_opinions', 'Advisory opinions'),('murs', 'Matters under review')) %}
+    <select class="search__select {{select_class}}" name="search_type" aria-label="Select a document type">
+      {% for value, name in document_types %}
+      <option value="{{ value }}" {% if result_type == value %}selected{% endif %}>{{ name }}</option>
+      {% endfor %}
+    </select>
+    <input class="combo__input" type="text" name="search"
+    aria-label="Search for legal documents"
+    autocomplete="off"
+    autocorrect="off" autocapitalize="off" spellcheck="false"
+    value="{{ query or '' }}">
+    <button type="submit" class="combo__button button--search {{ button_color }}">
+      <span class="u-visually-hidden">Search</span>
+    </button>
+  </div>
+</form>
+{% endmacro %}
+
+{% macro no_results(display_name, result_type, query, fec_resources=None) %}
+<div class="message message--no-icon">
+  <h2 class="message__title">No results</h2>
+  <p>Sorry, we didn&rsquo;t find any {{ display_name }} matching {% if query %}<span class="t-bold">{{ query }}</span>{% else %}your query{% endif %}.</p>
+  <div class="message--alert__bottom">
+    <p>Think this was a mistake?</p>
+    <ul class="list--buttons">
+      {% if query %}
+      <li><a class="button button--standard" href="http://search04.fec.gov/vivisimo/cgi-bin/query-meta?v%3Asources={{ '%2C'.join(fec_resources or []) }}&query={{ query }}&x=0&y=0&v%3aproject=fec_search_02_prj&v%3aframe=form&form=advanced-fec&">Try FEC.gov</a></li>
+      {% endif %}
+      <li><a class="button button--standard" href="mailto:{{ contact_email }}">Email our team</a></li>
+      <li><a class="button button--standard" href="https://github.com/18f/fec/issues">File an issue</a></li>
+    </ul>
+  </div>
+</div>
+{% endmacro %}
+
+{% macro mur_subject(node) %}
+{{ node.text }}
+<ul class="legal-mur__subject-list">
+  {% for child in node.children %}
+  <li class="legal-mur__subject-list-item">
+    <p>
+      {{ mur_subject(child) }}
+    </p>
+  </li>
+  {% endfor %}
+</ul>
+{% endmacro %}
+
+{% macro mur_subjects(subjects, func) %}
+{% if subjects|length > 0 %}
+    {% for node in subjects %}
+    </p>
+    <div>
+        <p>
+          {{ mur_subject(node) }}
+        </p>
+    </div>
+    {% endfor %}
+{% else %}
+    Unavailable
+    </p>
+
+    <div class="message message--no-icon">
+        <p>
+            <strong>No content available</strong>. Sometimes this information exists in case documents but isn't readable by computers. Open the case for more information.
+        </p>
+    </div>
+{% endif %}
+{% endmacro %}
+
+{% macro mur_date(date_property) %}
+{% if date_property %}
+    {{ date_property | date('%B %d, %Y') }}
+{% else %}
+    Unavailable
+{% endif %}
+{% endmacro %}

@@ -1,0 +1,136 @@
+{% extends "layouts/main.jinja" %}
+{% import 'macros/breadcrumbs.jinja' as breadcrumb %}
+{% import 'macros/legal.jinja' as legal %}
+
+{% set breadcrumb_links=[(cms_url + '/legal-resources', 'Legal resources'), (cms_url + '/legal-resources/enforcement', 'Enforcement')] %}
+
+{% block title %}MUR #{{ mur.no }}{% endblock %}
+
+{% block css %}
+<link rel="stylesheet" type="text/css" href="{{ asset_for_css('legal-common.css') }}" />
+{% endblock %}
+
+{% block body %}
+<header class="page-header slab slab--primary">
+  {{ breadcrumb.breadcrumbs('MUR #%s' % (mur.no,), breadcrumb_links) }}
+</header>
+
+<div class="container main legal-mur">
+  <div class="content__section">
+    <header class="heading--main">
+      <h1>MUR #{{ mur.no }}</h1>
+      <span class="heading__subtitle">{{ mur.name }}</span>
+    </header>
+  </div>
+  <div class="sidebar-container sidebar-container--left js-sticky-side" data-sticky-container="main">
+      <nav class="sidebar sidebar--neutral sidebar--left side-nav js-toc">
+        <ul class="sidebar__content">
+          <li class="side-nav__item"><a class="side-nav__link" href="#summary">Summary</a></li>
+          <li class="side-nav__item"><a class="side-nav__link" href="#documents">Documents</a></li>
+          <li class="side-nav__item"><a class="side-nav__link" href="#participants">Participants</a></li>
+        </ul>
+      </nav>
+  </div>
+  <div class="main__content--right">
+    <section id="summary" class="content__section">
+      <div class="main__content">
+        <h2 class="t-ruled--bold t-ruled--bottom">Summary</h2>
+        {% if mur.mur_type == 'archived' %}
+        <div class="legal-mur__archive"><span class="legal-mur__archive-icon"><span class="u-visually-hidden">Icon representing an archived case</span></span>Archived case</div>
+        {% endif %}
+        <div class="legal-mur__property">
+          <p>
+            <strong>OPEN DATE:</strong> {{ legal.mur_date(mur.open_date) }}
+          </p>
+        </div>
+        <div class="legal-mur__property">
+          <p>
+            <strong>CLOSE DATE:</strong> {{ legal.mur_date(mur.close_date) }}
+          </p>
+        </div>
+        <div class="legal-mur__property">
+          <p>
+            <strong>SUBJECT:</strong>
+        {{ legal.mur_subjects(mur.subject) }}
+        </div>
+      </div>
+      {% if mur.citations.regulations or mur.citations.us_code %}
+      <div class="sidebar-container">
+        <aside class="sidebar sidebar--primary">
+          <h4 class="sidebar__title">Cited in this case</h4>
+          <div class="sidebar__content">
+            {% if mur.citations.regulations %}
+              <p class="t-bold">Regulations</p>
+              <ul>
+                {% for citation in mur.citations.regulations %}
+                <li class="u-padding--bottom"><a href="{{ citation.url }}" target="_blank">{{ citation.text }}</a></li>
+                {% endfor %}
+              </ul>
+            {% endif %}
+            {% if mur.citations.us_code %}
+              <p class="t-bold">Statutes</p>
+              <ul>
+                {% for citation in mur.citations.us_code %}
+                <li class="u-padding--bottom"><a href="{{ citation.url }}" target="_blank">{{ citation.text }}</a></li>
+                {% endfor %}
+              </ul>
+            {% endif %}
+          </div>
+        </aside>
+      </div>
+      {% endif %}
+    </section>
+    <section id="documents" class="content__section">
+      <h2 class="t-ruled--bold t-ruled--bottom">Documents</h2>
+      <div class="content__section">
+        <a class="legal-mur__document-button button button--cta button--document button--lg" href="{{ mur.url }}" target="_blank">Case documents</a>
+        (<a class="t-sans" href="{{ mur.url }}" target="_blank">{{ mur.pdf_size | filesize}}</a>)
+      </div>
+    </section>
+    <section id="participants" class="content__section">
+      <h2 class="t-ruled--bold t-ruled--bottom u-no-margin">Participants</h2>
+      {% if ('complainants' in mur and mur.complainants) or ('respondents' in mur and mur.respondents) %}
+      <table class="data-table data-table--text data-table--heading-borders">
+        <thead>
+          <tr>
+            <th>Relationship</th>
+            <th>Name</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% if 'respondents' in mur %}
+            {% for respondent in mur.respondents %}
+            <tr class="row-color-normal">
+              {% if loop.first %}
+              <td rowspan="{{ mur.respondents | length }}">Respondent</td>
+              {% endif %}
+              <td>{{ respondent }}</td>
+            </tr>
+            {% endfor %}
+          {% endif %}
+          {% if 'complainants' in mur %}
+            {% for complainant in mur.complainants %}
+            <tr class="row-color-contrast">
+              {% if loop.first %}
+              <td rowspan="{{ mur.complainants | length }}">Complainant</td>
+              {% endif %}
+              <td>{{ complainant }}</td>
+            </tr>
+            {% endfor %}
+          {% endif %}
+        </tbody>
+      </table>
+      <div class="results-info results-info--bottom">
+        <a class="legal-top" href="#">Top of page</a>
+      </div>
+      {% else %}
+        <div class="message message--no-icon">
+            <p>
+                <strong>No content available</strong>. Sometimes this information exists in case documents but isn't readable by computers. Open the case for more information.
+            </p>
+        </div>
+      {% endif %}
+    </section>
+  </div>
+</div>
+{% endblock %}

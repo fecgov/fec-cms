@@ -1,0 +1,7 @@
+{% import 'macros/filters/checkbox.jinja' as checkbox %}
+
+{{ checkbox.checkbox_dropdown(
+  'form_type',
+  'Form Type',
+  options=constants.form_types,
+) }}

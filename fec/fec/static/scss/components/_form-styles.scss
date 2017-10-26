@@ -1,0 +1,305 @@
+// Form styles
+//
+// Selects
+//
+// Alternate styles to the base select style
+//
+// .select--alt              - Neutral background
+// .select--alt-primary      - Primary background
+// .select--alt-secondary    - Secondary background
+//
+// <div class="slab slab--neutral" style="padding: 2rem;">
+//   <select class="select--alt">
+//    <option>Alt select</option>
+//    <option>Option 2</option>
+//   </select>
+// </div>
+// <div class="slab slab--primary" style="padding: 2rem;">
+//   <select class="select--alt-primary">
+//    <option>Alt primary select</option>
+//    <option>Option 2</option>
+//   </select>
+// </div>
+// <div class="slab slab--secondary" style="padding: 2rem;">
+//   <select class="select--alt-secondary">
+//    <option>Alt secondary select</option>
+//    <option>Option 2</option>
+//   </select>
+// </div>
+//
+
+.select--alt {
+  background-color: none;
+  border: 2px solid $gray;
+  color: $base;
+
+  &:hover:not(.is-disabled):not([disabled]) {
+    border-color: $gray-medium;
+    background-color: transparent;
+  }
+
+  &:active:not(.is-disabled):not([disabled]),
+  &.is-active {
+    background-color: $gray-medium;
+    border-color: $gray-dark;
+    color: $base;
+  }
+}
+
+.select--alt-primary {
+  @include u-icon-bg($arrow-down, $inverse);
+  border: 2px solid $inverse;
+  color: $inverse;
+
+  &:hover:not(.is-disabled):not([disabled]) {
+    border-color: $gray-medium;
+    background-color: transparent;
+  }
+
+  &:active:not(.is-disabled):not([disabled]),
+  &:focus,
+  &.is-active {
+    background-color: rgba($inverse, .3);
+    border-color: $primary-contrast;
+    color: $inverse;
+  }
+
+  option {
+    background-color: $neutral;
+    color: $primary;
+    padding: u(.5rem);
+  }
+}
+
+.select--alt-secondary {
+  @include u-icon-bg($arrow-down, $inverse);
+  border: 2px solid $inverse;
+  color: $inverse;
+
+  &:hover:not(.is-disabled):not([disabled]) {
+    border-color: $gray-medium;
+    background-color: transparent;
+  }
+
+  &:active:not(.is-disabled):not([disabled]),
+  &:focus,
+  &.is-active {
+    background-color: rgba($inverse, .3);
+    border-color: $secondary-contrast;
+    color: $inverse;
+  }
+
+  &:focus {
+    color: $inverse;
+  }
+
+  option {
+    background-color: $neutral;
+    color: $primary;
+    padding: u(.5rem);
+  }
+}
+
+.select--full {
+  width: 100%;
+}
+
+// Labels
+
+.label {
+  color: inherit;
+  display: block;
+  font-family: $sans-serif;
+  font-size: u(1.4rem);
+  font-weight: bold;
+  margin-bottom: u(.5rem);
+  padding: 0;
+  text-transform: uppercase;
+
+  .label__optional {
+    font-weight: normal;
+    line-height: 1;
+    text-transform: none;
+  }
+}
+
+.label--help {
+  display: block;
+  font-family: $sans-serif;
+  font-style: italic;
+  margin-bottom: u(.5rem);
+}
+
+// Combo
+//
+// On medium and up, displays input and button right next to each other. On small screens they're stacked.
+//
+// .combo   - Base styling
+//
+// <div class="slab slab--primary">
+//   <div class="container">
+//   <div class="combo">
+//     <input type="text" class="combo__input">
+//     <button class="button--standard combo__button">Go</button>
+//   </div>
+// </div>
+//
+
+.combo {
+  @include clearfix();
+
+  .combo__input {
+    height: u(3.6rem);
+  }
+
+  .combo__button {
+    height: u(3.6rem);
+    margin-top: u(1rem);
+    width: 100%;
+  }
+
+  @include media($med) {
+    .combo__input {
+      height: u(3.6rem);
+      border-radius: 2px 0 0 2px;
+      float: left;
+      width: 80%;
+    }
+
+    .combo__button {
+      border-radius: 0 4px 4px 0;
+      float: left;
+      margin-top: 0;
+      width: 20%;
+    }
+  }
+}
+
+// Inline forms
+//
+// For displaying multiple form elements in a row
+//
+//  <div class="row">
+//  <input class="form-element--inline" type="text">
+//  <select class="form-element--inline" ><option>Select an option</option></select>
+//  <button class="form-element--inline button--standard">Submit</button>
+// </div>
+//
+
+.form-element--inline {
+  vertical-align: top;
+
+  @include media($med) {
+    display: inline;
+    margin: u(0 1rem 0 0);
+    width: auto;
+
+    &:last-child {
+      margin-right: 0;
+    }
+  }
+}
+
+// Date range inputs
+//
+// Combination of radio buttons and text inputs for selecting date ranges
+// Adds padding to the left of the input to line up with the radio button labels
+//
+
+.date-range-input {
+  padding-left: u(2.5rem);
+}
+
+[type="checkbox"]:checked + label,
+[type="radio"]:checked + label {
+  &.is-successful {
+    border: 1px solid $green-light;
+  }
+
+  &.is-unsuccessful {
+    border: 1px solid $error;
+  }
+}
+
+// Inline range inputs
+//
+// Half width inputs so min and max filters display side by side
+//
+
+.range {
+  margin-bottom: u(1rem);
+  position: relative;
+
+  .button--standard {
+    height: u(3.6rem);
+    background-position: right 50% top 50%;
+    padding: u(1.25rem 1.5rem);
+    margin-left: u(.25rem);
+    vertical-align: bottom;
+
+    &.is-loading {
+      background-image: url('../img/loading-ellipsis-gray.gif');
+      background-size: u(2rem);
+      background-position: 50%;
+    }
+
+    &.is-successful {
+      @include u-icon-button($check);
+      background-size: u(2rem);
+      background-position: 50%;
+      padding: u(1.5rem);
+    }
+  }
+}
+
+.range--currency {
+  .range__input {
+    input[type="text"] {
+      padding-left: u(2rem);
+      text-align: right;
+    }
+
+    &::before {
+      color: $gray;
+      content: '$';
+      top: u(2.15rem);
+      left: u(1rem);
+      position: absolute;
+    }
+  }
+}
+
+.range__input {
+  width: 100px;
+  font-family: $sans-serif;
+  display: inline-block;
+  vertical-align: top;
+  position: relative;
+
+  label {
+    padding-bottom: u(.3rem);
+  }
+
+  input[type="text"] {
+    margin-bottom: 0;
+  }
+
+  input[type="text"],
+  button {
+    display: inline-block;
+  }
+}
+
+.range__hyphen {
+  padding: u(0 .25rem 1rem .25rem);
+  vertical-align: bottom;
+  display: inline-block;
+}
+
+// Conditional field
+// When a field appears conditionally, i.e. when selecting an option reveals a new text input
+.conditional-field {
+  border-left: 8px solid $gray;
+  padding: u(2rem);
+  margin-bottom: u(2rem);
+}

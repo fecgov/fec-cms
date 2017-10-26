@@ -1,0 +1,426 @@
+// Filters Panel
+//
+// Filter side panel for Datatables
+//
+// <section class="layout--browse">
+// <div class="filters is-open">
+//   <button class="filters__toggle">
+//     <span class="filters__toggle__text">Show filters</span>
+//   </button>
+//   <div class="filters__content">
+//     <h4 class="filter__header">Filters</h4>
+//     <div class="filter">
+//      Some filter
+//     </div>
+//     <div class="filter">
+//      Some filter
+//     </div>
+//   </div>
+//  </div>
+// </section>
+//
+
+$icon-size: u(3rem);
+$filter-button-width: u(4.6rem);
+
+// by default show filters offscreen
+.filters {
+  @include clearfix();
+  background: $neutral;
+  display: block;
+
+  &.is-open {
+    .filters__content {
+      left: 0;
+      position: relative;
+    }
+
+    // For long filter titles, wrap them in a class to force icons to line up
+    // 7rem = width of filter icon + arrow icon + margin
+    .filters__title {
+      display: inline-block;
+      width: calc(100% - 7rem);
+    }
+
+    .filters__toggle {
+      &::after {
+        @include u-icon($arrow-left-border, $primary, $icon-size, $icon-size);
+        background-size: 65%;
+      }
+    }
+  }
+
+  .accordion__button {
+    padding-left: u(2rem);
+    padding-right: u(5rem);
+  }
+
+  .accordion__content {
+    padding: u(2rem 2rem 1rem 2rem);
+  }
+
+  .toggles {
+    margin: u(1rem 0);
+  }
+
+  .filter-count::before {
+    content: '(';
+  }
+
+  .filter-count::after {
+    content: ')';
+  }
+
+  // Loading states
+  label {
+    position: relative;
+
+    &::after {
+      background: transparent;
+      content: '';
+      display: inline-block;
+      width: u(2rem);
+      position: absolute;
+      top: 0;
+      bottom: 0;
+    }
+
+    &.is-loading {
+      position: relative;
+
+      &::after {
+        @include animation(fadeIn .8s ease-out);
+        background: url('../img/loading-ellipsis-gray.gif') no-repeat;
+        background-size: u(2rem);
+        right: u(-3rem);
+        opacity: 1;
+      }
+    }
+
+    &.is-successful {
+      position: relative;
+
+      &::after {
+        @include u-icon-bg($check, $green-light);
+        background-position: 50%;
+        right: u(-3rem);
+      }
+    }
+
+    &.is-unsuccessful {
+      position: relative;
+
+      &::after {
+        @include u-icon-bg($x, $error);
+        background-position: 50%;
+        right: u(-3rem);
+      }
+    }
+  }
+}
+
+.filters__content {
+  @include transition(left .2s ease-in-out);
+  @include u-bg--neutral();
+  position: absolute;
+  bottom: 0;
+  height: auto;
+  z-index: $z4;
+  width: 100%;
+  overflow: visible;
+  left: -800px;
+
+  &[aria-hidden=true] {
+    display: block !important;
+  }
+}
+
+.filters--fixed {
+  margin-right: u(2rem);
+}
+
+.filters__header {
+  @include clearfix();
+  @include heading(h2);
+  background-color: $neutral;
+  border-bottom: 1px solid $gray;
+  border-top: 2px solid $primary;
+  color: $primary;
+  line-height: u(3rem);
+  margin: 0;
+  padding: u(1rem);
+  text-align: left;
+  width: 100%;
+}
+
+.filters__toggle {
+  &::before {
+    @include u-icon-circle($filter, $primary, $inverse, $icon-size);
+    background-position: 50% 45%;
+    background-size: 70%;
+    content: '';
+    float: left;
+    margin-right: 1rem;
+  }
+
+  &::after {
+    @include u-icon($arrow-right-border, $primary, $icon-size, $icon-size);
+    content: '';
+    background-size: 65%;
+    clear: none;
+    float: right;
+  }
+}
+
+.filters__inner {
+  padding: u(1rem 2rem);
+}
+
+.filters__message-container {
+  padding: u(0 2rem 2rem 2rem);
+
+  .message {
+    margin: 0;
+  }
+}
+
+.filter {
+  border-bottom: 1px solid darken($neutral, 10%);
+  margin-top: u(1.5rem);
+  padding-bottom: u(.5rem);
+
+  &:first-child {
+    margin-top: 0;
+  }
+
+  &:last-child {
+    border-bottom: 0;
+  }
+
+  .twitter-typeahead {
+    height: auto;
+  }
+
+  .combo--filter--mini {
+    .combo__input {
+      border-radius: 4px 0 0 4px;
+      float: left;
+      width: calc(100% - #{$filter-button-width});
+    }
+
+    .combo__button {
+      background-position: 50% 50%;
+      border-radius: 0 4px 4px 0;
+      margin-top: 0;
+      float: right;
+      height: u(3.6rem);
+      width: u(4.6rem);
+
+      &.is-successful {
+        @include u-icon-button($check);
+        background-size: u(2.2rem);
+        background-position: 50%;
+      }
+    }
+
+    .button--go {
+      padding-right: 0;
+    }
+
+    .is-loading {
+      background-image: url('../img/loading-ellipsis-gray.gif');
+      background-size: u(2.8rem);
+      background-position: 50%;
+    }
+  }
+
+  label {
+    max-width: 90%;
+    line-height: 1;
+  }
+
+  select {
+    max-width: 26rem;
+  }
+
+  [type="text"],
+  select,
+  .dropdown__button {
+    margin-bottom: u(1rem);
+  }
+}
+
+.filter__instructions {
+  display: block;
+  font-family: $sans-serif;
+  font-size: u(1.2rem);
+  line-height: 1;
+  padding: u(.5rem);
+}
+
+.filter__message {
+  font-family: $sans-serif;
+  font-size: u(1.4rem);
+  padding-bottom: u(1rem);
+  clear: both;
+}
+
+.filter__message--success {
+  color: $green-dark;
+}
+
+.filter__message--error {
+  font-size: u(1.3rem);
+  color: $error;
+
+  button {
+    border-bottom: 1px dotted $error;
+    font-size: u(1.3rem);
+    color: $error;
+    padding: 0;
+  }
+}
+
+// Horizontal layout
+
+.filters--horizontal {
+  background-color: $neutral;
+  margin-bottom: u(2rem);
+  padding: u(2rem);
+
+  select {
+    width: 100%;
+  }
+}
+
+// BREAKPOINT: MEDIUM
+// Use flexbox to get the filters into rows of equal height
+
+@include media($med) {
+  .filter {
+    max-width: 50%;
+  }
+}
+
+// BREAKPOINT: LARGE
+// Stack filters vertically
+
+@include media($lg) {
+  .filters {
+    border-right: 1px solid $primary;
+    display: table-cell;
+    position: relative;
+    left: 0;
+    top: 0;
+    width: u(4rem);
+    vertical-align: top;
+
+    &.is-open {
+      position: relative;
+      top: 0;
+      left: 0;
+      width: u(30rem);
+
+      .filters__header {
+        width: 100%;
+        text-indent: 0;
+
+        &::after {
+          display: block;
+        }
+      }
+    }
+  }
+
+  .filters__header {
+    border-top: none;
+    text-indent: -9999px;
+    padding: u(1.2rem 2rem);
+    width: u(7rem);
+
+    &::after {
+      display: none;
+    }
+  }
+
+  .filters__content {
+    @include transition(unset);
+    position: relative;
+    top: 0;
+    overflow: visible;
+
+    &[aria-hidden="true"] {
+      display: none !important;
+    }
+  }
+
+  .filter {
+    border-bottom: 1px solid darken($neutral, 10%);
+    border-right: none;
+    margin-bottom: 0;
+    max-width: 100%;
+    width: 100%;
+
+    &:first-of-type {
+      padding-top: 0;
+    }
+
+    &:last-child {
+      border-bottom: 0;
+    }
+  }
+
+  .filters--horizontal {
+    form {
+      @include display(flex);
+      @include justify-content(flex-start);
+    }
+
+    .filter {
+      border-bottom: none;
+      border-top: none;
+      border-right: 1px solid $inverse;
+      margin-right: 0;
+      margin-top: 0;
+      max-width: 25%;
+      padding: u(0 1rem);
+      width: 100%;
+
+      &:first-child {
+        padding-left: 0;
+      }
+
+      &:last-child {
+        border-right: none;
+        padding-right: 0;
+      }
+    }
+
+    .filter--wide {
+       max-width: 50%;
+    }
+  }
+}
+
+@media print {
+  .filters {
+    display: none;
+  }
+}
+
+.data-type {
+  border-top: 1px solid $gray-dark;
+  border-bottom: 1px solid $gray-dark;
+  margin-top: -1px; // To line up the border
+}
+
+.data-type__message {
+  padding-top: u(1rem);
+
+  p {
+    font-size: u(1.2rem);
+    font-family: $sans-serif;
+    letter-spacing: -.3px;
+    margin: 0;
+  }
+}

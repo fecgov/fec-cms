@@ -1,0 +1,17 @@
+{% macro support_oppose(id_suffix) %}
+<div class="filter js-filter" data-filter="checkbox">
+  <fieldset>
+    <legend class="label" for="support_oppose_indicator">Support/Oppose a candidate</legend>
+    <ul>
+      <li>
+        <input id="so-checkbox-s{{id_suffix}}" name="support_oppose_indicator" type="checkbox" value="S">
+        <label for="so-checkbox-s{{id_suffix}}">Support</label>
+      </li>
+      <li>
+        <input id="so-checkbox-o{{id_suffix}}" name="support_oppose_indicator" type="checkbox" value="O">
+        <label for="so-checkbox-o{{id_suffix}}">Oppose</label>
+      </li>
+    </ul>
+  </fieldset>
+</div>
+{% endmacro %}

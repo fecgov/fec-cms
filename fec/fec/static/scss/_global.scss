@@ -1,0 +1,40 @@
+// This imports all the base libraries, mixins and variables that other files
+// depend on. It sets the global styles for components that exist on all pages.
+
+// Libraries
+@import "vendor/bourbon/bourbon";
+@import "vendor/neat/neat";
+
+// Variables and mixins
+@import "variables";
+@import "icon-variables";
+@import "fonts";
+@import "functions";
+@import "grid";
+@import "mixins/utilities";
+@import "mixins/type-mixins";
+@import "mixins/icon-mixins";
+
+// Base styling for html elements
+@import "elements/elements";
+
+// Layout: Basic grid and background styles
+@import "layout/layout";
+
+// Base styles
+@import "components/list-styles";
+@import "components/form-styles";
+
+// Universal components
+@import "components/accordions";
+@import "components/breadcrumbs";
+@import "components/buttons";
+@import "components/cards";
+@import "components/feedback";
+@import "components/footer";
+@import "components/glossary";
+@import "components/mega-menu";
+@import "components/nav";
+@import "components/page-headers";
+@import "components/search-bar";
+@import "components/site-header";

@@ -1,0 +1,273 @@
+// Datatable Panel
+//
+
+.panel__main {
+  @include clearfix();
+  left: 0;
+  clear: both;
+  position: relative;
+  width: 200%;
+  z-index: $z1;
+
+  .data-table {
+    float: left;
+    width: 50% !important;
+  }
+}
+
+.results-info {
+  position: relative;
+
+}
+
+// modal
+.panel__overlay {
+  @include transition(opacity .2s);
+  background-color: $inverse;
+  overflow: hidden;
+  padding: u(1rem);
+  float: right;
+  width: 50%;
+  opacity: 0;
+}
+
+// Open panel
+.panel-active {
+  .dataTables_wrapper {
+    height: auto;
+    overflow: hidden;
+    position: relative;
+  }
+
+  .data-table {
+    position: absolute;
+  }
+
+  .panel__overlay {
+    min-height: 100vh;
+    opacity: 1;
+  }
+
+  .panel__main {
+    left: -100%;
+    overflow: hidden;
+  }
+
+  .panel {
+    min-height: 100vh;
+  }
+}
+
+.panel {
+  background-color: rgba($gray-lightest, .3);
+  border: 1px solid $gray-lightest;
+  font-family: $sans-serif;
+  padding: u(1rem);
+
+  td {
+    padding-bottom: u(1rem);
+    vertical-align: top;
+  }
+}
+
+.panel__heading {
+  border-bottom: 1px solid $neutral;
+  margin-bottom: u(1rem);
+  padding-bottom: u(1rem);
+
+  .panel__title {
+    margin-bottom: 0;
+  }
+}
+
+.panel__title {
+  font-weight: bold;
+  letter-spacing: -.3px;
+  margin-top: u(1rem);
+}
+
+.panel__subtitle {
+  font-family: $sans-serif;
+}
+
+.panel__row {
+  padding: u(2rem 0 1rem 0);
+  border-bottom: 1px solid $neutral;
+
+  &:last-child {
+    border-bottom: none;
+  }
+}
+
+.panel__term {
+  font-weight: bold;
+  letter-spacing: -.3px;
+  padding-right: u(2rem);
+  vertical-align: top;
+}
+
+// Panel Navigation
+//
+// The top bar of the panel
+//
+// .panel__link   - Link to source page or document. Floats to the left on desktop and to the right on mobile
+// .panel__close  - Closes the panel. Shows up as a back arrow on the left on mobile and an x on the right on desktop
+
+.panel__navigation {
+  @include clearfix();
+  border-bottom: 1px solid $gray-lightest;
+  padding: u(0 0 1rem 0);
+  text-align: right;
+}
+
+.panel__link {
+  float: right;
+}
+
+.panel__close {
+  @include u-icon-bg($arrow-left-border, $primary);
+  background-position: 0 50%;
+  background-size: u(1.5rem);
+  background-repeat: no-repeat;
+  border: none;
+  cursor: pointer;
+  float: left;
+  padding-left: u(3rem);
+
+  &::after {
+    content: "Show all";
+  }
+}
+
+// BREAKPOINT: MEDIUM
+// Panel slides next to the table
+
+@include media($med) {
+  .panel__main {
+    height: 100%;
+    width: 100%;
+
+    .data-table {
+      width: 100% !important;
+    }
+  }
+
+  .panel__overlay {
+    background-color: rgba($gray-lightest, .3);
+    border-left: 1px solid $gray-lightest;
+    min-height: 70vh;
+    height: 100%;
+    width: 50%;
+    left: 100%;
+
+    &[aria-hidden="false"] {
+      left: 50%;
+    }
+  }
+
+  .panel-active {
+    .panel__main {
+      max-height: 100%;
+      position: relative;
+    }
+
+    .data-table {
+      position: relative;
+    }
+  }
+
+  .panel {
+    padding: 0;
+    background: none;
+    border: none;
+  }
+
+  .panel__navigation {
+    padding: u(.6rem 2rem);
+    text-align: left;
+    margin-bottom: 0;
+  }
+
+  .panel__link {
+    float: left;
+  }
+
+  .panel__close {
+    @include u-icon($x, $primary);
+    background-size: u(2rem);
+    position: absolute;
+    right: 0;
+    top: 0;
+
+    &::after {
+      content: '';
+    }
+  }
+
+// Open panel
+
+  .panel-active {
+    .panel__main {
+      left: 0;
+      width: 100%;
+      min-height: u(150rem);
+      height: auto;
+      overflow: visible;
+    }
+
+    .panel__overlay {
+      min-height: u(150rem);
+    }
+
+    .data-table {
+      @include transform(translateX(0));
+      width: 50% !important;
+    }
+
+    .dataTables_wrapper {
+      overflow: visible;
+    }
+  }
+
+  .panel__row {
+    padding: u(1rem 1.8rem);
+    margin-top: 0;
+
+    &:last-child {
+      border-bottom: none;
+    }
+  }
+}
+
+// Specifying in order to override datatable styles
+.data-table .panel__row {
+  table {
+    border: 0;
+  }
+
+  tr {
+    background-color: transparent;
+    border-bottom: none;
+  }
+
+  td {
+    border-bottom: 0;
+    padding: u(.3rem 0);
+    white-space: pre-wrap;
+    overflow: visible;
+
+    &:first-child {
+      font-weight: bold;
+    }
+  }
+}
+
+#datatable-modal .panel .panel__row {
+  // TODO This selector is overly specific because of a very specific selector in the tables.scss
+  // file which has to be refactored.
+  @include media($med) {
+    td {
+      padding-left: 0 !important;
+    }
+  }
+}

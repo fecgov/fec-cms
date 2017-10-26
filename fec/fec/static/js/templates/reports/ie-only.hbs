@@ -1,0 +1,55 @@
+<div class="panel__row">
+  <div class="panel__heading">
+    <h4 class="panel__title">{{document_description}}
+    {{#if is_amended}}
+      (This report has been amended)
+    {{/if}}
+    </h4>
+    {{#if amendment_version_description}}
+    <i class="icon-document--inline--left"></i>
+    {{{amendment_version_description}}} |
+    {{/if}}
+    {{{amendment_version}}}
+  </div>
+  <table>
+    {{#panelRow "Filer"}}
+      <a href="{{basePath}}/committee/{{committee_id}}">{{ committee_name }}</a>
+    {{/panelRow}}
+    {{#panelRow "FEC file number"}}
+      {{ fec_file_id }}
+    {{/panelRow}}
+    {{#panelRow "Report coverage"}}
+      {{datetime coverage_start_date format="pretty"}} to {{datetime coverage_end_date format="pretty"}}
+    {{/panelRow}}
+    {{#panelRow "Receipt date"}}
+      {{datetime receipt_date format="pretty"}}
+    {{/panelRow}}
+    {{#panelRow "Filing method"}}
+      {{ decodeMeans means_filed}}
+    {{/panelRow}}
+    {{#panelRow "Read report"}}
+      {{#if html_url}}
+        <a target="_blank" href="{{ html_url }}">Webpage</a> |
+      {{/if}}
+      {{#if csv_url}}
+      <a target="_blank" href="{{ csv_url }}">.csv</a> |
+      {{/if}}
+      {{#if pdf_url }}
+      <a target="_blank" href="{{ pdf_url }}">.pdf</a>
+      {{/if}}
+      {{#if fec_url}}
+      | <a target="_blank" href="{{ fec_url }}">.fec</a>
+      {{/if}}
+    {{/panelRow}}
+  </table>
+</div>
+<div class="panel__row">
+  <table>
+    {{#panelRow "Total contributions"}}
+      {{{currency independent_contributions_period }}}
+    {{/panelRow}}
+    {{#panelRow "Total independent expenditures"}}
+      {{{currency independent_expenditures_period }}}
+    {{/panelRow}}
+  </table>
+</div>

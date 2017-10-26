@@ -92,29 +92,11 @@ def get_tips(year=None, search=None):
     return tips
 
 
-def get_meetings(category_list=None, year=False, search=None):
-    meetings = MeetingPage.objects.live()
-
-    if category_list:
-        for category in category_list:
-            meetings = meetings.filter(meeting_type=category)
-
-    if year:
-        year = int(year)
-        meetings = meetings.filter(date__gte=datetime(year, 1, 1)).filter(date__lte=datetime(year, 12, 31))
-
-    if search:
-        meetings = meetings.search(search)
-
-    return meetings
-
-
 def updates(request):
     digests = ''
     records = ''
     press_releases = ''
     tips = ''
-    meetings = ''
 
     # Get values from query
     update_types = request.GET.getlist('update_type', None)
@@ -135,8 +117,6 @@ def updates(request):
             digests = get_digests(year=year, search=search)
         if 'tips-for-treasurers' in update_types:
             tips = get_tips(year=year, search=search)
-        if 'meetings' in update_types:
-            meetings = get_meetings(category_list=category_list, year=year, search=search)
 
     else:
         # Get everything and filter by year if necessary
@@ -144,7 +124,6 @@ def updates(request):
         press_releases = PressReleasePage.objects.live()
         records = RecordPage.objects.live()
         tips = TipsForTreasurersPage.objects.live()
-        meetings = MeetingPage.objects.live()
 
         if year:
             # Trying to filter using the built-in date__year parameter doesn't
@@ -154,19 +133,17 @@ def updates(request):
             digests = digests.filter(date__gte=datetime(year, 1, 1)).filter(date__lte=datetime(year, 12, 31))
             records = records.filter(date__gte=datetime(year, 1, 1)).filter(date__lte=datetime(year, 12, 31))
             tips = tips.filter(date__gte=datetime(year, 1, 1)).filter(date__lte=datetime(year, 12, 31))
-            meetings = meetings.filter(date__gte=datetime(year, 1, 1)).filter(date__lte=datetime(year, 12, 31))
 
         if search:
             press_releases = press_releases.search(search)
             digests = digests.search(search)
             records = records.search(search)
             tips = tips.search(search)
-            meetings = meetings.search(search)
 
     # Chain all the QuerySets together
     # via http://stackoverflow.com/a/434755/1864981
     updates = sorted(
-      chain(press_releases, digests, records, tips, meetings),
+      chain(press_releases, digests, records, tips),
       key=attrgetter('date'),
       reverse=True
     )
@@ -301,7 +278,7 @@ def index_meetings(request):
     meetings = MeetingPage.objects.live().order_by("-date")
     open_meetings = meetings.filter(meeting_type ='O')
     executive_sessions = meetings.filter(meeting_type ='E')
-    hearings= meetings.filter(title__contains='Hearing')
+    hearings= meetings.filter(title__icontains='Hearing')
     year = request.GET.get('year', '')
     search = request.GET.get('search', '')
     active = request.GET.get('tab', 'open-meetings')

@@ -1,0 +1,77 @@
+{% extends 'layouts/main.jinja' %}
+{% import 'macros/page-header.jinja' as header %}
+{% import 'macros/datatables.jinja' as datatables %}
+{% set breadcrumbs_title=title %}
+{% set breadcrumbs=[('/data/advanced/', 'Advanced data')] %}
+
+{% block title %}
+  Browse {{ title }}
+{% endblock %}
+
+{% block css %}
+<link rel="stylesheet" type="text/css" href="{{ asset_for_css('datatables.css') }}" />
+{% endblock %}
+
+{% block body %}
+
+{{ header.header(breadcrumbs_title | title, breadcrumbs) }}
+
+<section class="main__content--full data-container__wrapper">
+  {% include 'partials/' + slug + '-filter.jinja' %}
+    <div class="data-container">
+      <div class="data-container__widgets js-data-widgets">
+        <noscript>
+          <h1>{{ title }}</h1>
+        </noscript>
+        <div class="js-filter-tags data-container__tags">
+        </div>
+      </div>
+      <div id="{{slug}}" class="data-container__datatable">
+        <table id="results" class="data-table data-table--heading-borders" aria-live="polite" role="grid">
+          <thead role="rowgroup">
+            <tr role="row">
+              {% for column in columns %}
+                <th scope="col" role="columnheader">{{ column }}</th>
+              {% endfor %}
+              <th scope="col"></th>
+            </tr>
+          </thead>
+          <noscript>
+            {% if result_type == 'candidates' %}
+              {{ datatables.candidates(data) }}
+            {% elif result_type == 'committees' %}
+              {{ datatables.committees(data) }}
+            {% endif %}
+          </noscript>
+        </table>
+        <noscript>
+          {% if query %}
+          <div class="results-info">
+            <div class="dataTables_paginate paging_simple">
+              {% if query['page']|int > 1 %}
+                <a href="?page={{query['page']|int - 1}}" class="button button--previous button--standard"></a>
+              {% endif %}
+                <a href="?page={{query['page']|int + 1}}" class="button button--next button--standard"></a>
+            </div>
+          </div>
+          {% endif %}
+        </noscript>
+      </div>
+    </div>
+</section>
+
+{% include 'partials/datatable-modal.jinja' %}
+
+{% endblock %}
+
+{% block scripts %}
+
+{% if table_context %}
+<script type="text/javascript">
+var context = {{ table_context|to_json|safe }};
+</script>
+{% endif %}
+
+<script src="{{ asset_for_js('datatable-common.js') }}"></script>
+<script src="{{ asset_for_js('datatable-' + slug + '.js') }}"></script>
+{% endblock %}

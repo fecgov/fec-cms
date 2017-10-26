@@ -1,0 +1,78 @@
+// Callout
+//
+// Action-oriented components. 100% width of their container.
+// Used on about candidate pages.
+//
+// .callout             - Base class
+// .callout--primary    - Primary
+// .callout--secondary  - Secondary
+//
+// <div class="callout callout--primary">
+//   <div class="callout__content">
+//     <h4 class="callout__title">
+//       <a href="#">Committee name</a>
+//     </h4>
+//     <span class="callout__subtitle">Principal campaign committee</span>
+//     <span class="callout__subtitle t-block">2008 - 2012</span>
+//   </div>
+//   <div class="callout__action">
+//     <ul class="callout__sublinks">
+//       <li><a href="#">Money received</a></li>
+//       <li><a href="#">Money spent</a></li>
+//       <li><a href="#">Reports filed</a></li>
+//     </ul>
+//   </div>
+// </div>
+//
+
+.callout {
+  @include clearfix();
+  padding: u(1rem 1.5rem);
+  margin-bottom: u(2rem);
+  border-radius: 4px;
+}
+
+.callout--primary {
+  @include u-bg--primary();
+}
+
+.callout--secondary {
+  @include u-bg--secondary();
+}
+
+.callout--neutral {
+  @include u-bg--neutral();
+}
+
+.callout__title {
+  font-weight: bold;
+  margin: u(0 0 .5rem 0);
+}
+
+.callout__subtitle {
+  font-family: $sans-serif;
+  font-size: u(1.4rem);
+}
+
+.callout__action {
+  padding-top: u(1rem);
+}
+
+.callout__sublinks {
+  font-family: $sans-serif;
+  letter-spacing: -.3px;
+}
+
+// BREAKPOINT: MEDIUM
+@include media($med){
+  .callout__content {
+    @include span-columns(4 of 6);
+  }
+
+  .callout__action {
+    @include span-columns(2 of 6);
+    border-left: 1px solid;
+    padding-left: u(1rem);
+    padding-top: 0;
+  }
+}

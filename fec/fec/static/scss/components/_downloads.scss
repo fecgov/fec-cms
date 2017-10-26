@@ -1,0 +1,113 @@
+// Downloads
+//
+// Triggered by the export button
+//
+// <div class="downloads">
+//   <div class="container">
+//     <span class="downloads__title js-download-status-message">Your downloads</span>
+//     <ul class="downloads__list js-downloads-list">
+//     </ul>
+//   </div>
+// </div>
+//
+
+.downloads {
+  background-color: $neutral;
+  border-top: 3px solid $primary;
+  bottom: 0;
+  color: $primary;
+  font-family: $sans-serif;
+  max-height: 50vh;
+  overflow: scroll;
+  padding: u(1.5rem 0);
+  position: fixed;
+  width: 100%;
+  z-index: $z-downloads;
+}
+
+.downloads__title {
+  display: block;
+  font-size: u(1.6rem);
+  font-weight: bold;
+  margin-bottom: u(2rem);
+}
+
+.download {
+  @include clearfix();
+  font-size: u(1.2rem);
+  margin-bottom: u(1rem);
+  padding-left: u(3rem);
+
+  &.is-pending {
+    background-image: url('../img/loading-ellipsis.gif');
+    background-position: u(0 .4rem);
+    background-repeat: no-repeat;
+    background-size: u(2rem);
+  }
+
+  &.is-complete {
+    @include u-icon-bg($check, $primary);
+    background-size: u(2rem);
+    background-position: u(0 .5rem);
+  }
+}
+
+.download__name {
+  @include u-truncate();
+  display: block;
+  font-weight: bold;
+  padding: u(.5rem 0);
+}
+
+.download__button {
+  padding: u(.5rem);
+}
+
+.download__cancel {
+  position: relative;
+  top: 4px;
+}
+
+.download__message {
+  letter-spacing: -.3px;
+  font-size: u(1.4rem);
+  margin: 0;
+}
+
+@include media($med) {
+  .download__item {
+    @include span-columns(9);
+  }
+
+  .download__message {
+    @include span-columns(3);
+  }
+
+  .download__name {
+    @include span-columns(5);
+    float: left;
+  }
+
+  .download__button {
+    @include span-columns(3);
+    margin: u(0 2rem);
+  }
+}
+
+@include media($lg) {
+  .downloads {
+    max-height: auto;
+  }
+
+  .download {
+    min-height: u(4.2rem);
+  }
+
+  .download__item {
+    @include span-columns(5);
+  }
+
+  .download__message {
+    @include span-columns(7);
+  }
+}

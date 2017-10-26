@@ -1,0 +1,27 @@
+{% extends "layouts/main.jinja" %}
+{% import 'macros/legal.jinja' as legal %}
+{% import 'macros/breadcrumbs.jinja' as breadcrumb %}
+
+{% set breadcrumb_links=[('/legal-resources', 'Legal resources')] %}
+
+{% block title %}{{ display_name | capitalize }}{% endblock %}
+
+{% block css %}
+<link rel="stylesheet" type="text/css" href="{{ asset_for_css('legal.css') }}" />
+{% endblock %}
+
+{% block body %}
+<header class="page-header slab slab--primary">
+  {{ breadcrumb.breadcrumbs(display_name.capitalize(), breadcrumb_links) }}
+</header>
+
+<div class="main container">
+  {% block content %}{% endblock %}
+</div>
+
+{% include 'partials/legal-disclaimer.jinja' %}
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ asset_for_js('legal.js') }}"></script>
+{% endblock %}

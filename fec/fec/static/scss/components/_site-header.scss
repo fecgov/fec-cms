@@ -1,0 +1,285 @@
+// Site Header
+//
+
+// Banner for dev
+.banner {
+  background-color: $navy;
+  color: $inverse;
+  font-family: $sans-serif;
+  padding: u(1rem 0);
+  position: relative;
+  text-align: center;
+  width: 100%;
+
+  a {
+    border-bottom-color: $inverse;
+    color: $inverse;
+  }
+}
+
+// Skip nav
+.skip-nav {
+  @include transition(top, .2s);
+  background-color: $primary;
+  border: 2px solid $primary-contrast;
+  color: $inverse;
+  font-family: $sans-serif;
+  left: u(2rem);
+  padding: u(1rem 2rem);
+  position: absolute;
+  top: u(-10rem);
+  z-index: $z4;
+
+  &:focus {
+    border-bottom-color: $primary-contrast;
+    top: 0;
+  }
+}
+
+// US Bar
+//
+// <div class="disclaimer">
+//   <span class="disclaimer__right">
+//     An official website of the United States government.
+//     <img alt="US flag signifying that this is a United States federal government website" src="img/us_flag_small.png">
+//   </span>
+// </div>
+//
+
+.disclaimer {
+  @include clearfix();
+  border-bottom: 1px solid $neutral;
+  color: $gray-dark;
+  font-family: $sans-serif;
+  font-size: u(1.2rem);
+  line-height: 1;
+  padding: u(5px 2rem);
+  text-align: center;
+}
+
+.disclaimer__right {
+  text-align: center;
+
+  img {
+    vertical-align: bottom;
+  }
+}
+
+.site-header--homepage .disclaimer {
+  padding: u(.75rem 2rem);
+
+  .flag {
+    margin-left: u(1rem);
+  }
+}
+
+// Masthead
+//
+// The combination of the logo, site title and utility nav
+//
+// <div class="masthead">
+//   <a href="/" title="Home" class="site-title"><span class="u-visually-hidden">Federal Election Commission | United States of America</span></a>
+//   <ul class="utility-nav list--flat">
+//     <li class="utility-nav__item">About</li>
+//     <li class="utility-nav__item">Contact</li>
+//     <li class="utility-nav__item">Contact</li>
+//     <li class="utility-nav__item">Glossary</li>
+//   </ul>
+// </div>
+//
+
+.masthead {
+  @include clearfix();
+}
+
+.site-header {
+  border-bottom: 1px solid $neutral;
+  position: relative;
+}
+
+.homepage-seal {
+  display: none;
+}
+
+.site-title {
+  margin-bottom: 0;
+  border-bottom: 0;
+  display: none;
+  float: left;
+  width: 100%;
+}
+
+.site-title--print {
+  display: none;
+}
+
+.utility-nav {
+  font-family: $sans-serif;
+  display: none;
+  float: right;
+  padding: u(1rem 0);
+}
+
+.site-nav {
+  .site-title {
+    @include u-background-image('wordmark', 0% 50%);
+    background-size: contain;
+    display: block;
+    height: u(3rem);
+    margin: u(.5rem 1rem);
+    width: calc(100% - 15rem);
+    max-width: u(40rem);
+  }
+}
+
+@media (min-width: $medium-screen), print {
+
+  .disclaimer {
+    float: right;
+    width: calc(100% - 9rem);
+  }
+
+  .disclaimer__left {
+    display: block;
+    padding-left: u(1rem);
+  }
+
+  .disclaimer__right {
+    float: right;
+  }
+
+  .masthead {
+    @include u-background-image('seal--cropped', 0% 100%);
+    border-bottom: 2px solid $neutral;
+    display: block;
+    background-size: u(11rem);
+  }
+
+  .site-title {
+    @include u-background-image('wordmark', u(12rem) 50%);
+    background-size: contain;
+    display: block;
+    margin: u(1rem 0 .7rem 0);
+    padding-left: u(12rem);
+    height: u(3.4rem);
+    width: 100%;
+  }
+
+  // Mobile site title is included in the .site-nav nav element
+  .site-nav .site-title {
+    display: none;
+  }
+}
+
+@media (min-width: $large-screen) {
+  .homepage-seal {
+    width: 160px;
+    top: u(1rem);
+    left: u(3rem);
+    display: block;
+    position: absolute;
+    z-index: $z6;
+
+    img {
+      width: 100%;
+    }
+  }
+
+  .site-header {
+    border-bottom: none;
+    position: relative;
+    z-index: $z-header;
+  }
+
+  .site-header--homepage {
+    .masthead {
+      background: none;
+      margin-left: u(4rem);
+    }
+
+    .site-title {
+      @include u-background-image('wordmark', u(16.5rem) 50%);
+    }
+
+    .site-nav__panel {
+      padding-left: u(20rem);
+    }
+  }
+
+  .site-title {
+    width: 50%;
+  }
+
+  .utility-nav {
+    display: block;
+  }
+
+  li.utility-nav__item {
+    border-left: 1px solid $gray;
+    margin-right: 0;
+    padding: u(0 1.5rem);
+    line-height: u(3.6rem);
+    font-size: u(1.4rem);
+
+    &:first-child {
+      border-left: none;
+    }
+
+    button {
+      color: inherit;
+      font-size: inherit;
+    }
+
+    a {
+      border: none;
+
+      &:hover {
+        border-bottom: 1px dotted $base;
+      }
+    }
+  }
+}
+
+.utility-nav__search {
+  padding-right: u(2rem);
+  width: u(30rem);
+
+  .tt-menu {
+    z-index: $z-max;
+  }
+}
+
+@media print {
+  .disclaimer {
+    display: none;
+  }
+
+  .site-header {
+    border-bottom: none;
+  }
+
+  .masthead {
+    background: none;
+  }
+
+  .site-title {
+    display: none;
+  }
+
+  .utility-nav {
+    display: none;
+  }
+
+  .site-title--print {
+    background-image: url('../img/print-logo.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+    display: block;
+    height: 114px;
+    width: 100%;
+  }
+
+  .homepage-seal {
+    display: none;
+  }
+}

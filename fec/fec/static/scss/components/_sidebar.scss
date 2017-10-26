@@ -1,0 +1,168 @@
+// Sidebar
+//
+// .sidebar--primary    - Blue background sidebar
+// .sidebar--secondary  - Crimson background sidebar
+//
+// Markup:
+// <div class="container">
+//   <div class="sidebar-container">
+//     <aside class="sidebar sidebar--primary">
+//       <h4 class="sidebar__title">Sidebar title</h4>
+//       <div class="sidebar__content">
+//         <h5>Legal Resources</h5>
+//         <ul>
+//           <li><a href="#">102.2(a) »</a></li>
+//           <li><a href="#">102.7(a), (b), (c) »</a></li>
+//           <li><a href="#">102.9(c)  »</a></li>
+//         </ul>
+//       </div>
+//     </aside>
+//   </div>
+// </div>
+//
+
+.sidebar-container {
+  @include clearfix();
+  position: relative;
+  min-height: 1px;
+
+  @include media($med) {
+    @include span-columns(3);
+    @include shift(1);
+  }
+}
+
+.sidebar {
+  font-family: $sans-serif;
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-family: $sans-serif;
+  }
+
+  &.is-fixed {
+    position: fixed;
+    top: u(2rem);
+    left: auto;
+  }
+}
+
+.sidebar__title {
+  font-size: u(1.4rem);
+  font-weight: bold;
+  margin: 0;
+  padding: u(1rem 2rem);
+  text-transform: uppercase;
+  color: $inverse;
+}
+
+.sidebar__title--large {
+  @include heading(h2);
+  line-height: u(4rem);
+  margin-bottom: 0;
+  padding: u(2rem);
+  text-transform: none;
+}
+
+.sidebar__content {
+  @include clearfix();
+  background-color: $neutral;
+  padding: u(2rem);
+
+  p {
+    font-size: u(1.4rem);
+    color: $base;
+  }
+}
+
+.sidebar-container--left {
+  @include media($med) {
+    @include shift(0);
+  }
+}
+
+.sidebar--primary {
+  .sidebar__title {
+    @include u-bg--primary();
+  }
+
+  .sidebar__section {
+    border-bottom-color: $primary-contrast;
+  }
+}
+
+.sidebar--secondary {
+  .sidebar__title {
+    @include u-bg--secondary();
+  }
+
+  .sidebar__section {
+    border-bottom-color: $secondary-contrast;
+  }
+
+  .card {
+    @include u-font-color($inverse);
+    background-color: #dd3700;
+  }
+}
+
+.sidebar--neutral {
+  @include u-bg--neutral();
+  @include u-font-color($base);
+  border-top: 4px solid $primary;
+}
+
+.sidebar--breakdown {
+  background-color: $neutral;
+  color: $base;
+
+  .sidebar__title {
+    background-color: $gray-dark;
+    color: $inverse;
+    display: block;
+  }
+}
+
+.sidebar__related-links {
+  margin-bottom: u(4rem);
+
+  li {
+    margin-bottom: u(1rem);
+  }
+}
+
+.sidebar__record-title {
+  &::before {
+    @include u-icon-circle($updates, $secondary, $inverse, 3rem);
+    background-size: u(1.5rem);
+  }
+}
+
+.sidebar__question {
+  &::before {
+    @include u-icon-circle($question-bubble, $secondary, $inverse, 3rem);
+  }
+}
+
+.sidebar__record-title,
+.sidebar__question {
+  margin-bottom: u(1rem);
+  line-height: u(3rem);
+
+  &::before {
+    content: '';
+    float: left;
+    margin-right: u(1.5rem);
+    vertical-align: middle;
+  }
+}
+
+@media print {
+  .sidebar {
+    display: none;
+  }
+}

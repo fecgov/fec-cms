@@ -6,6 +6,8 @@ bower_components
 local.py
 
 *.py[cod]
+.cache
+.env
 
 # C extensions
 *.so
@@ -13,7 +15,6 @@ local.py
 # Packages
 *.egg
 *.egg-info
-dist
 build
 eggs
 parts
@@ -52,6 +53,3 @@ README.html
 _sandbox
 
 npm-debug.log
-
-# Data import files
-fec/data_loader/data/**/*.json

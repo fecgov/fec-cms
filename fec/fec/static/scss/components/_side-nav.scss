@@ -1,0 +1,128 @@
+// Side nav
+//
+// Sticky side nav that tracks the user's scroll progress through a page
+//
+// <div class="sidebar-container sidebar-container--left">
+//   <nav class="sidebar sidebar--neutral sidebar--left side-nav">
+//     <ul class="sidebar__content">
+//       <li class="side-nav__item"><a class="side-nav__link is-active" href="#">Link (active)</a></li>
+//       <li class="side-nav__item"><a class="side-nav__link" href="#">Link</a></li>
+//       <li class="side-nav__item"><a class="side-nav__link" href="#">Link</a></li>
+//       <li class="is-disabled side-nav__item"><span class="side-nav__link" href="#">TBD</span></li>
+//     </ul>
+//   </nav>
+// </div>
+//
+
+.side-nav {
+  display: none;
+
+  .side-nav__item {
+    padding: u(1rem 0);
+
+    &:first-child {
+      padding-top: 0;
+    }
+
+    &:last-child {
+      padding-bottom: 0;
+    }
+
+    &.is-disabled {
+      .side-nav__link {
+        &:hover,
+        &:focus {
+          background-color: transparent;
+        }
+      }
+    }
+  }
+}
+
+.side-nav__link {
+  border-bottom: none;
+  display: block;
+  font-family: $sans-serif;
+  padding: 4px;
+  text-transform: uppercase;
+  line-height: u(2rem);
+
+  &:hover,
+  &.is-active {
+    background-color: $gray;
+  }
+
+  &.is-active {
+    font-weight: bold;
+  }
+}
+
+// Alternate Side Nav (on full width)
+//
+// Used on homepage (help for candidate/committes), candidate and committee pages
+//
+
+.side-nav-alt {
+  width: 100%;
+
+  ul {
+    margin: u(0 2rem 2rem 0);
+  }
+
+  .side-nav__item {
+    border-bottom: 1px solid $gray;
+
+    &:last-child {
+      border-bottom: none;
+    }
+
+    ul {
+      display: none;
+    }
+  }
+
+  .side-nav__link {
+    padding: u(.85rem 1rem .85rem 1.8rem);
+
+    &:hover,
+    &.is-active:hover {
+      background-color: $gray-lightest;
+    }
+
+    &[aria-selected=true] {
+      font-weight: bold;
+      background-color: initial;
+      border-left: 4px solid $base;
+      padding-left: 1.4rem;
+    }
+  }
+
+  .side-nav__link[aria-selected=true] + ul {
+    margin: u(1rem 0 2rem 0);
+    display: block;
+
+    li {
+      line-height: u(2rem);
+      margin: u(1rem 2rem 1rem 2.75rem);
+    }
+
+    a {
+      border-bottom: none;
+
+      &:hover {
+        border-bottom: 1px dotted $primary;
+      }
+    }
+  }
+
+  @include media($med) {
+    display: table-cell;
+    width: 250px;
+  }
+}
+
+@include media($med) {
+  .side-nav {
+    display: block;
+  }
+}

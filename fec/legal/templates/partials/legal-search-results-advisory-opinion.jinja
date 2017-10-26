@@ -1,0 +1,33 @@
+<div class="message message--info">
+  <p>The advisory opinion search feature includes all FEC advisory opinions &#40;AOs&#41; to date. You can search all FEC AOs using keywords, AO numbers, names of requesters and more. For additional search filters, you can still search AOs using our legacy <a href="http://saos.fec.gov/saos/searchao">AO search</a>.</p>
+</div>
+
+{% for advisory_opinion in advisory_opinions %}
+  <h3 class="ao-result__title">
+    <a title="{{ advisory_opinion.description }}"
+      href="/data/legal/advisory-opinions/{{ advisory_opinion.no }}">
+      <span class="font-bolt">AO {{ advisory_opinion.no }}: </span></a>
+      <span class="t-normal">{{ advisory_opinion.name }}</span>
+  <p class="u-padding--top">
+  <span class="t-bold">Summary: </span> <span class="t-normal">
+    {{ advisory_opinion.summary }}
+  </span>
+  </p>
+  </h3>
+  <div class="u-padding--left">
+  <table>
+    <tbody>
+    <tr class="legal-search-result">
+      <td>
+        <div class="t-serif legal-search-result__hit u-padding--top">
+          &hellip;
+          {% for highlight in advisory_opinion.highlights %}
+            {{ highlight|safe }} &hellip;
+          {% endfor %}
+        </div>
+      </td>
+    </tr>
+  </tbody>
+  </table>
+  </div>
+{% endfor %}

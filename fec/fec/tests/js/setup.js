@@ -12,6 +12,7 @@ module.exports = function() {
     BASE_PATH: '/',
     API_LOCATION: '',
     API_VERSION: '/v1',
-    API_KEY: '12345'
+    API_KEY: '12345',
+    DEFAULT_TIME_PERIOD: '2016'
   });
 };

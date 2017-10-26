@@ -1,0 +1,69 @@
+{% import 'macros/missing.jinja' as missing %}
+{% import 'macros/tables.jinja' as tables %}
+{% import 'macros/cycle-select.jinja' as select %}
+
+<section id="section-1" role="tabpanel" aria-hidden="true" aria-labelledby="section-1-heading">
+  <h2 id="section-1-heading">Financial summary</h2>
+  <div class="slab slab--inline slab--neutral u-padding--left u-padding--right">
+    <div class="content__section">
+      {{ select.cycle_select(election_years, cycle, duration=duration, id="cycle-1") }}
+    </div>
+
+    {% if committee_groups['P'] or committee_groups['A']%}
+    <span class="t-sans t-bold">Data is included from these committees:</span>
+    <ul class="list--bulleted">
+      {% for committee in committee_groups['P'] | reverse %}
+      <li>
+        <a class="t-sans" href="/data/committee/{{ committee.committee_id }}/?cycle={{ committee.related_cycle }}">{{ committee.name }}</a>
+      </li>
+      {% endfor %}
+      {% for committee in committee_groups['A'] | reverse %}
+      <li>
+        <a class="t-sans" href="/data/committee/{{ committee.committee_id }}&cycle={{ committee.related_cycle }}">{{ committee.name }}</a>
+      </li>
+      {% endfor %}
+    </ul>
+    {% endif %}
+
+    {% if raising_summary %}
+      <div class="entity__figure entity__figure--narrow" id="total-raised">
+        <div class="heading--section heading--with-action">
+          <h3 class="heading__left">Total raised</h3>
+          <a class="heading__right button--alt button--browse"
+              href="/data/receipts/?{% for committee in committee_ids %}committee_id={{ committee}}&{% endfor %}two_year_transaction_period={{ max_cycle }}">Browse receipts
+          </a>
+        </div>
+        <div class="tag__category u-no-margin">
+          <div class="tag__item">Coverage dates: {{ aggregate.coverage_start_date|date }} to {{ aggregate.coverage_end_date|date }}</div>
+        </div>
+        {{ tables.summary(raising_summary, committee_ids, cycle, office) }}
+      </div>
+      <div class="entity__figure entity__figure--narrow" id="total-spent">
+        <div class="heading--section heading--with-action">
+          <h3 class="heading__left">Total spent</h3>
+          <a class="heading__right button--alt button--browse"
+              href="/data/disbursements/?{% for committee in committee_ids %}committee_id={{ committee}}&{% endfor %}two_year_transaction_period={{ max_cycle }}">Browse disbursements
+          </a>
+        </div>
+        <div class="tag__category u-no-margin">
+          <div class="tag__item">Coverage dates: {{ aggregate.coverage_start_date|date }} to {{ aggregate.coverage_end_date|date }}</div>
+        </div>
+        {{ tables.summary(spending_summary, committee_ids, cycle, office) }}
+      </div>
+      <div class="entity__figure entity__figure--narrow" id="cash-summary">
+        <div class="heading--section heading--with-action">
+          <h3 class="heading__left">Cash summary</h3>
+        </div>
+        <div class="tag__category u-no-margin">
+          <div class="tag__item">Coverage dates: {{ aggregate.coverage_start_date|date }} to {{ aggregate.coverage_end_date|date }}</div>
+        </div>
+        {{ tables.summary(cash_summary) }}
+      </div>
+    {% else %}
+    <div class="entity__figure entity__figure--narrow">
+      {{ missing.missing_financials(name, cycle) }}
+    </div>
+    {% endif %}
+  </div>
+
+</section>

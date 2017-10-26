@@ -1,0 +1,68 @@
+{{!--
+Template for Party Coordinated Expenditures datatable details panel
+---------------------
+This shows all the fields available on the Schedule F form.
+--}}
+
+<div class="panel__row">
+  <h4 class="panel__title">Committee information</h4>
+  <table>
+    {{#panelRow "Name"}}
+      <a href="{{basePath}}/committee/{{committee_id}}">{{committee.name}}</a>
+    {{/panelRow}}
+    {{#if subordinate_committee}}
+      {{#panelRow "Full Name of Subordinate Committee"}}
+        {{subordinate_committee.name}}
+      {{/panelRow}}
+    {{/if}}
+    {{#panelRow "Mailing Address"}}
+      {{committee.street_1}}<br>
+      {{committee.city}}, {{committee.state}} {{committee.zip}}
+    {{/panelRow}}
+  </table>
+</div>
+
+<div class="panel__row">
+  <h4 class="panel__title">Candidate information</h4>
+  <table>
+    {{#panelRow "Candidate"}}
+      <a href="{{basePath}}/candidate/{{candidate_id}}">{{candidate_last_name}}, {{candidate_first_name}} {{candidate_middle_name}}</a>
+    {{/panelRow}}
+    {{#panelRow "Office"}}
+      {{candidate_office_full}}
+    {{/panelRow}}
+    {{#if candidate_office_state}}
+      {{#panelRow "State"}}
+        {{candidate_office_state_full}}
+      {{/panelRow}}
+    {{/if}}
+    {{#if candidate_office_district}}
+      {{#panelRow "District"}}
+        {{candidate_office_district}}
+      {{/panelRow}}
+    {{/if}}
+  </table>
+</div>
+
+<div class="panel__row">
+  <h4 class="panel__title">Expenditure information</h4>
+  <table>
+    {{#panelRow "Payee"}}
+      {{#if payee_name}}
+        {{payee_name}}
+      {{/if}}
+    {{/panelRow}}
+    {{#panelRow "Purpose of Expenditure"}}
+      {{{expenditure_purpose_full}}}
+    {{/panelRow}}
+    {{#panelRow "Category/Type"}}
+      {{{expenditure_type}}}
+    {{/panelRow}}
+    {{#panelRow "Date"}}
+      {{datetime expenditure_date}}
+    {{/panelRow}}
+    {{#panelRow "Amount"}}
+      {{currency expenditure_amount}}
+    {{/panelRow}}
+  </table>
+</div>

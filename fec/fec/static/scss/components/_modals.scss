@@ -1,0 +1,55 @@
+// Modals
+//
+// For Methodology on landing, raising, spending breakdowns.
+//
+
+.modal__overlay {
+  background-color: rgba($base, .5);
+  bottom: 0;
+  left: 0;
+  right: 0;
+  top: 0;
+  position: fixed;
+  z-index: $z-max;
+}
+
+.modal__content {
+  background-color: $inverse;
+  bottom: u(2rem);
+  left: u(2rem);
+  right: u(2rem);
+  top: u(2rem);
+  overflow-y: scroll;
+  padding: u(2rem);
+  position: fixed;
+  z-index: $z-max;
+
+  @include media($med) {
+    bottom: auto;
+    left: 50%;
+    right: auto;
+    margin-left: u(-30rem);
+    width: u(60rem);
+  }
+
+  @include media($lg) {
+    margin-left: u(-40rem);
+    width: u(80rem);
+  }
+}
+
+.modal__close {
+  position: absolute;
+  right: u(1rem);
+  top: u(1rem);
+}
+
+.modal__form {
+  @include span-columns(6);
+}
+
+.modal__tips {
+  @include span-columns(5);
+  @include shift(1);
+  padding-top: u(1rem);
+}

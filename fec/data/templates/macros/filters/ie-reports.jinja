@@ -1,0 +1,40 @@
+{% macro type(id_suffix) %}
+<fieldset class="filter toggles toggles--vertical js-filter" data-filter="toggle" data-remove-on-switch="true" id="is_notice-toggle{{id_suffix}}">
+  <legend class="label t-inline-block u-float-left">Report type</legend>
+  <div class="tooltip__container">
+    <button class="tooltip__trigger" type="button" aria-controls="data-type-tooltip"><span class="u-visually-hidden">Learn more</span></button>
+    <div id="data-type-tooltip" role="tooltip" class="tooltip tooltip--under tooltip--left">
+      <div class="tooltip__content">
+        <p class="tooltip__content">Political committees file regular reports about their financial activity.</p>
+        <p class="tooltip__content">In certain circumstances — in addition to regularly scheduled repots — committees must also report independent expenditures within 24 or 48 hours.</p>
+      </div>
+    </div>
+  </div>
+  <label for="summary{{id_suffix}}" class="toggle">
+    <input type="radio" class="toggle" value="false" id="summary{{id_suffix}}" checked name="is_notice" data-tag-value="Regularly scheduled reports">
+    <span class="button--alt">Regularly scheduled reports</span>
+  </label>
+  <label for="notice{{id_suffix}}" class="toggle">
+    <input type="radio" class="toggle" value="true" id="notice{{id_suffix}}" name="is_notice" data-tag-value="24- and 48-Hour Reports">
+    <span class="button--alt">24- and 48-Hour Reports</span>
+  </label>
+</fieldset>
+{% endmacro %}
+
+{% macro form(id_suffix) %}
+<div class="filter">
+  <fieldset class="filter js-filter" data-filter="checkbox">
+    <legend class="label">Regularly scheduled report form</legend>
+    <ul>
+      <li>
+        <input id="filing-form-f3x{{id_suffix}}" name="filing_form" type="checkbox" value="F3X">
+        <label for="filing-form-f3x{{id_suffix}}">Form 3X</label>
+      </li>
+      <li>
+        <input id="filing-form-f5{{id_suffix}}" name="filing_form" type="checkbox" value="F5">
+        <label for="filing-form-f5{{id_suffix}}">Form 5</label>
+      </li>
+    </ul>
+  </fieldset>
+</div>
+{% endmacro %}

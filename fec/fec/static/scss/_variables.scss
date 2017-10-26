@@ -1,0 +1,78 @@
+// Typography
+$serif: 'gandhi', serif;
+$sans-serif: 'karla', sans-serif;
+$base-font-family: $serif;
+
+// Primary colors
+$crimson: #631010;
+$orange: #f77b42;
+
+$federal-blue: #112e51; // U.S. Web Design Standards color (blue) $primary-darkest //
+$aqua: #36bdbb;
+
+$base: #212121; // U.S. Web Design Standards color $base //
+$inverse: #ffffff;
+$inverse-translucent: rgba(255, 255, 255, .7);
+
+// Accent colors
+$bright-red: #dc3b00;
+$deep-orange: #e36641;
+$deep-red: #961a16;
+
+$bright-blue: #0aacfa;
+$deep-aqua: #3e8a9a;
+$navy: #164f85;
+
+$gray-lightest: #f1f1f1; // U.S. Web Design Standards color $gray-lightest //
+$gray-light: #e8e8e8;
+$gray-medium: #d6d7d9; // U.S. Web Design Standards color $gray-lighter //
+$gray: #aeb0b5; // U.S. Web Design Standards color $gray-light //
+$gray-dark: #5b616b; // U.S. Web Design Standards color $gray //
+
+
+$disabled: #737373;
+$green-light: #4aa564; // U.S. Web Design Standards color $green-light //
+$green-dark: #287538;
+
+$error: #cd2026; // U.S. Web Design Standards color (red) $secondary-dark //
+
+// Chart colors
+$blue-data: #21adf7;
+$red-data: #da3c18;
+
+// Focus
+$focus: #5b9dd9; // Focus color in order to simulate focus ring on checkboxes
+
+// Color aliases
+$primary: $federal-blue;
+$primary-contrast: $aqua;
+$primary-focus: $deep-aqua;
+
+$secondary: $crimson;
+$secondary-contrast: $orange;
+$secondary-focus: $deep-red;
+
+$neutral: $gray-lightest;
+$neutral-contrast: $gray-dark;
+$neutral-focus: $primary;
+
+// Z-Indices
+
+$z1: 100;
+$z2: 200;
+$z3: 300;
+$z4: 400;
+$z5: 500;
+$z6: 600;
+$z7: 700;
+$z8: 800;
+$z-max: 90000000;
+
+$z-overlay: $z2;
+$z-tooltip: $z4;
+$z-downloads: $z4;
+$z-navigation: $z7;
+$z-header: $z6;
+$z-sticky: $z7;
+$z-glossary: $z8;
+$z-feedback: $z-max;

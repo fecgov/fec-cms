@@ -1,0 +1,67 @@
+// Breadcrumbs
+//
+// .breadcrumbs     - Base class, used on blue and crimson backgrounds
+//
+// <ul class="breadcrumbs">
+//   <li class="breadcrumbs__item"><a href="#" class="breadcrumbs__link" rel="Home">Home</a></li>
+//   <li class="breadcrumbs__item">
+//     <span class="breadcrumbs__separator">›</span>
+//     <a href="#" class="breadcrumbs__link">Campaign finance data</a>
+//   </li>
+//   <li class="breadcrumbs__item">
+//     <span class="breadcrumbs__separator">›</span>
+//     <span>Advanced data</span>
+//   </li>
+//   <li class="breadcrumbs__item breadcrumbs__item--current">
+//     <span class="breadcrumbs__separator">›</span>
+//     <span>Candidates</span>
+//   </li>
+// </ul>
+//
+
+.breadcrumbs {
+  display: none;
+  color: $gray;
+  float: left;
+  font-family: $sans-serif;
+  letter-spacing: -.3px;
+}
+
+.breadcrumbs__item {
+  @include u-truncate();
+  float: left;
+  max-width: u(20rem);
+  padding: u(.8rem 0);
+}
+
+.breadcrumbs__item--current {
+  color: $inverse;
+}
+
+.breadcrumbs__link {
+  color: $inverse;
+}
+
+.breadcrumbs__separator {
+  padding: u(.5rem .8rem);
+}
+
+@include media($lg) {
+  .breadcrumbs {
+    display: block;
+  }
+}
+
+@media print {
+  .breadcrumbs {
+    display: block;
+    float: none;
+
+    .breadcrumbs__link,
+    .breadcrumbs__item {
+      color: $gray-dark;
+      border-bottom: none;
+      max-width: 100%;
+    }
+  }
+}

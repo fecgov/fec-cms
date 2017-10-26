@@ -1,0 +1,71 @@
+// Option components
+//
+// Used for presenting a list of options, each of which is a row with main content and an aside. Used on the landing_page template.
+//
+
+.option {
+  @include clearfix();
+  border-top: 2px solid $primary;
+  padding: u(2rem 0);
+
+  &.option--border-bottom {
+    border-bottom: 1px solid $primary;
+  }
+
+  &.option--no-top-border {
+    border-top: none;
+    padding-top: 0;
+  }
+}
+
+.option__aside {
+  @include span-columns(4);
+  padding-top: u(2rem);
+
+  h6 {
+    border-bottom: none;
+  }
+}
+
+.option__aside__block + .option__aside__block {
+  border-top: 1px solid $primary;
+  margin-top: u(2rem);
+  padding-top: u(2rem);
+}
+
+.option__content {
+  .label {
+    margin-bottom: u(2rem);
+  }
+}
+
+.option__aside__alt-action {
+  margin-top: u(1rem);
+}
+
+@include media($lg) {
+  .option__content {
+    @include span-columns(6 of 9);
+
+    .block-page,
+    .block-disabled_page {
+      @include span-columns(3 of 6);
+
+      &:nth-child(odd) {
+        margin-right: 0;
+      }
+
+      a::after {
+        content: '»';
+        display: inline;
+        margin-left: 5px;
+      }
+    }
+  }
+
+  .option__aside {
+    @include span-columns(2 of 9);
+    @include shift(1);
+    padding-top: 0;
+  }
+}

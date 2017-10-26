@@ -1,0 +1,93 @@
+{% extends 'partials/filters.jinja' %}
+
+{% import 'macros/filters/text.jinja' as text %}
+{% import 'macros/filters/typeahead-filter.jinja' as typeahead %}
+{% import 'macros/filters/states.jinja' as states %}
+{% import 'macros/filters/years.jinja' as years %}
+{% import 'macros/filters/date.jinja' as date %}
+{% import 'macros/filters/checkbox.jinja' as checkbox %}
+{% import 'macros/filters/report-type.jinja' as report_types %}
+{% import 'macros/filters/range.jinja' as range %}
+{% block heading %}
+Filter reports
+{% endblock %}
+
+{% block data_type_toggle %}
+  {% include 'partials/filters/efiling.jinja' %}
+{% endblock %}
+
+{% block efiling_filters %}
+  <div class="filters__inner">
+    {{ typeahead.field('committee_id', 'Committee name or ID', id_suffix='raw') }}
+    {{ date.field('receipt_date', 'Receipt date', id_suffix='raw') }}
+  </div>
+{% endblock %}
+
+{% block filters %}
+<div class="js-accordion accordion--neutral" data-content-prefix="filter" data-open-first="true">
+  <button type="button" class="js-accordion-trigger accordion__button">Filer</button>
+  <div class="accordion__content">
+    {{ typeahead.field('committee_id', 'Committee name or ID', '') }}
+    {% if table_context['form_type'] == 'presidential' %}
+      {{ typeahead.field('candidate_id', 'Authorizing candidate', dataset='candidates') }}
+    {% elif table_context['form_type'] == 'house-senate' %}
+      {{ typeahead.field('candidate_id', 'Authorizing candidate', dataset='candidates') }}
+      <fieldset class="filter js-filter" data-filter="checkbox">
+      <legend class="label">Committee type</legend>
+      <ul>
+        {% for value, label in constants.house_senate_types.items() %}
+        <li>
+          <input id="type-{{ value }}" name="type" type="checkbox" value="{{ value }}">
+          <label for="type-{{ value }}">{{ label }}</label>
+        </li>
+        {% endfor %}
+      </ul>
+    </fieldset>
+    {% elif table_context['form_type'] == 'pac-party' %}
+      {{ checkbox.checkbox_dropdown('type', 'Committee type', options=constants.pac_party_types) }}
+    </fieldset>
+    {% endif %}
+  </div>
+  <button type="button" class="js-accordion-trigger accordion__button">Version</button>
+  <div class="accordion__content">
+    {% include 'partials/filters/version-status.jinja' %}
+  </div>
+  <button type="button" class="js-accordion-trigger accordion__button">Totals</button>
+  <div class="accordion__content">
+    {{ range.amount('receipts_amount', 'Total receipts') }}
+    {{ range.amount('disbursements_amount', 'Total disbursements') }}
+    {{ range.amount('cash_on_hand_amount', 'Ending cash on hand') }}
+    {% if table_context['form_type'] in ['pac-party', 'ie-only'] %}
+     {{ range.amount('independent_expenditures', 'Total independent expenditures') }}
+    {% endif %}
+    {% if table_context['form_type'] == 'pac-party' %}
+     {{ range.amount('party_coordinated_expenditures', 'Total party coordinated expenditures') }}
+    {% endif %}
+  </div>
+  <button type="button" class="js-accordion-trigger accordion__button">Date</button>
+  <div class="accordion__content">
+    {{ years.cycles('cycle', 'Years')  }}
+    {% if table_context['form_type'] == 'pac-party' %}
+      {{ date.partition_field('receipt_date', 'Receipt date', show_tooltip=False) }}
+    {% else %}
+      {{ date.field('receipt_date', 'Receipt date' ) }}
+    {% endif %}
+  </div>
+  <button type="button" class="js-accordion-trigger accordion__button">Report type</button>
+  <div class="accordion__content">
+    <fieldset class="js-filter" data-filter="checkbox">
+      <legend class="u-visually-hidden">Report type</legend>
+      {{ report_types.year_end() }}
+      {% if table_context['form_type'] == 'presidential' %}
+        {{ report_types.monthly() }}
+      {% endif %}
+      {{ report_types.quarterly() }}
+      {{ report_types.election_sensitive() }}
+      {{ report_types.other() }}
+      {% if table_context['form_type'] == 'pac-party' %}
+        {{ report_types.bundling() }}
+      {% endif %}
+    </fieldset>
+  </div>
+</div>
+{% endblock %}
