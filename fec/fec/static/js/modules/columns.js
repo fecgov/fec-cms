@@ -635,11 +635,14 @@ var audit = [
     render: function (data){
       if (data) {
         var cat_arr=[]
+        var sub_arr=[]
         for(var i in data){
-
-          cat_arr.push(data[i]['primary_category_name'])
+         cat_arr.push(data[i]['primary_category_name'])
+           for(var j in data[i]['sub_category_list']){
+              cat_arr.push(data[i]['sub_category_list'][j]['sub_category_name'])
+           }
         }
-        return '<dl><dt>' + cat_arr.join('</dt><dt>') + '</dt></dl>'
+        return '<dl><dt>' + cat_arr.join('</dt><dt>') + '</dt><dl>'
       }
       else {
         return '';
