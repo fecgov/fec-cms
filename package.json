@@ -4,7 +4,7 @@
     "build-icons": "cd fec && gulp minify-icons && gulp consolidate-icons",
     "build-sass": "cd fec && gulp build-sass",
     "build-js": "cd fec && webpack",
-    "build-production": "cd fec && webpack --optimize-minimize --define process.env.NODE_ENV='production' && gulp build-sass",
+    "build-production": "cd fec && webpack -p && gulp build-sass",
     "test": "karma start",
     "test-single": "karma start --single-run --browsers PhantomJS",
     "watch": "nswatch"
@@ -31,7 +31,7 @@
     "jquery": "3.2.1",
     "jquery.inputmask": "3.3.4",
     "leaflet-providers": "1.1.6",
-    "moment": "2.10.3",
+    "moment": "2.17.1",
     "numeral": "^1.5.3",
     "perfect-scrollbar": "0.6.2",
     "react": "^15.4.2",
