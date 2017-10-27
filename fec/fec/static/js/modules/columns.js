@@ -628,21 +628,20 @@ var audit = [
   },
   {data: 'far_release_date', orderable: true, className: 'min-tablet hide-panel column--small'},
 
-  {
+ {
     data: 'primary_category_list',
     orderable: false,
     className: 'all',
     render: function (data){
       if (data) {
         var cat_arr=[]
-        var sub_arr=[]
         for(var i in data){
-         cat_arr.push(data[i]['primary_category_name'])
+         cat_arr.push('<dt>' + data[i]['primary_category_name'] + '</dt>')
            for(var j in data[i]['sub_category_list']){
-              cat_arr.push(data[i]['sub_category_list'][j]['sub_category_name'])
+              cat_arr.push('<dd>'+ data[i]['sub_category_list'][j]['sub_category_name'] + '</dd>')
            }
         }
-        return '<dl><dt>' + cat_arr.join('</dt><dt>') + '</dt><dl>'
+        return '<dl>' + cat_arr.join('') + '</dl>'
       }
       else {
         return '';
@@ -650,8 +649,6 @@ var audit = [
     }
   },
 
-
- //{data: 'primary_category', orderable: false, className: 'min-tablet hide-panel column--small'},
  {data: 'candidate_name', orderable: false, className: 'min-tablet hide-panel column--small'},
 ];
 
