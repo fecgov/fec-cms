@@ -635,13 +635,15 @@ var audit = [
     render: function (data){
       if (data) {
         var cat_arr=[]
+        var html= '<ol style="list-style-type:decimal; padding-left:1rem">'
         for(var i in data){
-         cat_arr.push('<dt>' + data[i]['primary_category_name'] + '</dt>')
+         html += '<li>' + data[i]['primary_category_name'] + '<ol style="list-style-type:lower-alpha">'
            for(var j in data[i]['sub_category_list']){
-              cat_arr.push('<dd>'+ data[i]['sub_category_list'][j]['sub_category_name'] + '</dd>')
+              html += '<li>'+ data[i]['sub_category_list'][j]['sub_category_name'] + '</li>'
            }
+           html += '</ol></li>'
         }
-        return '<dl>' + cat_arr.join('') + '</dl>'
+        return html + '</ol>'
       }
       else {
         return '';
