@@ -619,29 +619,41 @@ var loans = [
 ];
 
 var audit = [
-  columnHelpers.urlColumn('link_to_report', {data: 'committee_name', className: 'min-desktop hide-panel', orderable: false}),
+  columnHelpers.urlColumn
+  ('link_to_report',
+    {
+      data: 'committee_name',
+      className: 'min-desktop hide-panel',
+      orderable: true
+    }
+  ),
 
   {
     data: 'cycle',
-    orderable: false,
     className: 'all',
+    orderable: true
   },
-  {data: 'far_release_date', orderable: true, className: 'min-tablet hide-panel column--small'},
 
- {
+  {
+    data: 'far_release_date',
+    className: 'min-tablet hide-panel column--small',
+    orderable: true
+  },
+ 
+  {
     data: 'primary_category_list',
-    orderable: false,
     className: 'all',
+    orderable: false,
     render: function (data){
       if (data) {
-        var cat_arr=[]
-        var html= '<ol style="list-style-type:decimal; padding-left:1rem">'
+        var cat_arr = []
+        var html = '<ol style="list-style-type:decimal; padding-left:1rem">'
         for(var i in data){
-         html += '<li>' + data[i]['primary_category_name'] + '<ol style="list-style-type:lower-alpha">'
-           for(var j in data[i]['sub_category_list']){
-              html += '<li>'+ data[i]['sub_category_list'][j]['sub_category_name'] + '</li>'
-           }
-           html += '</ol></li>'
+          html += '<li>' + data[i]['primary_category_name'] + '<ol style="list-style-type:lower-alpha">'
+          for(var j in data[i]['sub_category_list']){
+            html += '<li>'+ data[i]['sub_category_list'][j]['sub_category_name'] + '</li>'
+          }
+          html += '</ol></li>'
         }
         return html + '</ol>'
       }
@@ -651,7 +663,11 @@ var audit = [
     }
   },
 
- {data: 'candidate_name', orderable: false, className: 'min-tablet hide-panel column--small'},
+  {
+    data: 'candidate_name',
+    className: 'min-tablet hide-panel column--small',
+    orderable: true
+  },
 ];
 
 module.exports = {
