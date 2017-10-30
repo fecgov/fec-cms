@@ -358,6 +358,40 @@
 
     &.i-mallet {
       @include u-icon-bg($mallet, $primary-contrast);
+      background-size: 75%;
+    }
+
+    &.i-committee-audit {
+      @include u-icon-bg($committee-audit, $primary-contrast);
+    }
+
+    &.i-shield {
+      @include u-icon-bg($shield, $primary-contrast);
+      background-size: 75%;
+    }
+
+    &.i-direction-sign {
+      @include u-icon-bg($direction-sign, $primary-contrast);
+      background-size: 75%
+    }
+
+     &.i-scale {
+      @include u-icon-bg($scale, $primary-contrast);
+    }
+
+    &.i-usc {
+      @include u-icon-bg($usc, $primary-contrast);
+      background-size: 70%
+    }
+
+    &.i-cfr {
+      @include u-icon-bg($cfr, $primary-contrast);
+      background-size: 70%
+    }
+
+    &.i-compass {
+      @include u-icon-bg($compass, $primary-contrast);
+      background-size: 65%
     }
   }
 }
