@@ -8,6 +8,7 @@ from unittest import mock
 
 from data.templatetags import filters
 import data.utils as utils
+import data.api_caller as api_caller
 
 class TestUtils(TestCase):
     def test_currency_filter_not_none(self):
@@ -68,12 +69,33 @@ class TestCycles(unittest.TestCase):
         assert utils.get_cycles(2020) == range(2020, 1979, -2)
 
     def test_get_senate_cycles(self):
-        assert utils.get_senate_cycles(1) == range(2018, 1979, -6)
+        assert utils.get_senate_cycles(1) == range(2018, 1979, -6) 
 
     def test_state_senate_cycles(self):
+
+        #Testing mock call_senate_specials() and format_special_results() results
+        call_senate_specials_mock_WV = [{'election_type_id': 'SG', 
+            'election_type_full': 'Special election general',
+            'create_date': '2010-07-22T17:27:16+00:00',
+            'election_state': 'WV',
+            'election_party': None,
+            'update_date': None, 
+            'election_year': 2010,
+            'office_sought': 'S', 
+            'election_date': '2010-11-02',
+            'election_notes': "Sen. Robert Byrd's Seat.", 
+            'primary_general_date': '2016-09-16T16:09:22.555513'}]
+
+        #according to our mock call, WV has a special in 2010 and not 2018
+        westvirginia = api_caller.format_special_results(call_senate_specials_mock_WV)
+        assert 2010 in westvirginia
+        assert 2018 not in westvirginia
+
         # Testing with an example state, Wisconsin
         # There should be an election in 2016 but not 2014
         # because of the classes the state has
-        wisconsin = utils.get_state_senate_cycles('wi')
+        wisconsin = api_caller.get_regular_senate_cycles('wi')
         assert 2016 in wisconsin
         assert 2014 not in wisconsin
+        
+
