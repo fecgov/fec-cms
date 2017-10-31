@@ -19,6 +19,7 @@ django_jinja==2.3.1
 CacheControl==0.11.5
 cachetools==1.0.2
 github3.py==0.9.6
+scrubadub==1.2.0
 
 # Development
 invoke==0.15.0
