@@ -8,6 +8,8 @@
 // .list--numbered      - Numbered list (for ol)
 // .list--flat          - Lay out items horizontally
 // .list--spacious      - Adds padding above and below list items
+// .list--columns       - layout list in two or three columns based on screen size
+// .list--columns--two       - layout list in two columns
 //
 // <ul class="list--bulleted">
 //  <li>Unordered list item 1</li>
@@ -137,6 +139,10 @@
   @include media($lg) {
     @include columns(3)
   }
+}
+
+.list--columns--two {
+  @include columns(2)
 }
 
 .list--spacious {
