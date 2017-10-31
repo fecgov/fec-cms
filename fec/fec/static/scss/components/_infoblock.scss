@@ -76,18 +76,6 @@ a.infoblock__button {
   position: absolute;
 }
 
-.infoblock__image--support,
-.infoblock__image--compare,
-.infoblock__image--contribute,
-.infoblock__image--education,
-.infoblock__image--forms {
-  height: u(15rem);
-
-  @include media($xl) {
-    height: u(20rem);
-  }
-}
-
 .infoblock__icon {
   background-color: $secondary;
   background-position: 50% 50%;
@@ -95,11 +83,8 @@ a.infoblock__button {
   background-size: u(11rem);
   height: u(15rem);
   margin-bottom: u(1rem);
-
-  @include media($xl) {
-    height: u(20rem);
+  height: u(15rem);
   }
-}
 
 .infoblock__icon--calendar {
   background-image: url('/static/img/i-complex--calendar.svg');
