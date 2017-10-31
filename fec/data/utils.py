@@ -220,6 +220,6 @@ def get_state_senate_cycles(state):
 
 
 def three_days_ago():
-    """Find the date two days ago"""
+    """Find the date three days ago"""
     three_days_ago = datetime.datetime.today() - datetime.timedelta(days=3)
     return three_days_ago.strftime('%m/%d/%y')

@@ -328,7 +328,7 @@ def committee(request, committee_id):
                 )
 
     # If it's not a senate committee and we're in the current cycle
-    # check if there's any raw filings in the last two days
+    # check if there's any raw filings in the last three days
     if committee['committee_type'] != 'S' and cycle == utils.current_cycle():
         raw_filings = api_caller._call_api(
             'efile', 'filings',
