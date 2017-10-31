@@ -7,6 +7,7 @@ import datetime
 import github3
 import json
 import re
+import scrubadub
 
 from data import api_caller
 from data import constants
@@ -466,8 +467,10 @@ def feedback(request):
                         request.META.get('HTTP_REFERER'),
                         request.META['HTTP_USER_AGENT'])
 
+            scrubbed=scrubadub.clean(body)
+
             client = github3.login(token=settings.FEC_GITHUB_TOKEN)
-            issue = client.repository('18F', 'fec').create_issue(title, body=body)
+            issue = client.repository('18F', 'fec').create_issue(title, body=scrubbed)
 
             return JsonResponse(issue.to_json(), status=201)
     else:
