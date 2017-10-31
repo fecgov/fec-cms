@@ -386,7 +386,7 @@ def elections(request, office, cycle, state=None, district=None):
 
 def raising(request):
     top_category = request.GET.get('top_category', 'P')
-    cycle = request.GET.get('cycle', 2016)
+    cycle = request.GET.get('cycle', constants.DEFAULT_TIME_PERIOD)
 
     if top_category in ['pac']:
         top_raisers = api_caller.load_top_pacs('-receipts', cycle=cycle, per_page=10)
@@ -416,7 +416,7 @@ def raising(request):
 
 def spending(request):
     top_category = request.GET.get('top_category', 'P')
-    cycle = request.GET.get('cycle', 2016)
+    cycle = request.GET.get('cycle', constants.DEFAULT_TIME_PERIOD)
 
     if top_category in ['pac']:
         top_spenders = api_caller.load_top_pacs('-disbursements', cycle=cycle, per_page=10)
@@ -444,7 +444,10 @@ def spending(request):
 
 def feedback(request):
     if request.method == 'POST':
-        data = json.loads(request.body)
+
+        # json.loads() is expecting a string in JSON format:
+        # '{"param":"value"}'. Needs to be decoded in Python 3
+        data = json.loads(request.body.decode("utf-8"))
 
         if not any([data['action'], data['feedback'], data['about']]):
             return JsonResponse({'status': False}, status=500)

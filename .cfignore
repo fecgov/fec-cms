@@ -6,6 +6,8 @@ bower_components
 local.py
 
 *.py[cod]
+.cache
+.env
 
 # C extensions
 *.so
@@ -13,7 +15,6 @@ local.py
 # Packages
 *.egg
 *.egg-info
-dist
 build
 eggs
 parts

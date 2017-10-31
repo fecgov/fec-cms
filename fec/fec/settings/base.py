@@ -43,7 +43,6 @@ FEATURES = {
     'agendas': bool(env.get_credential('FEC_FEATURE_AGENDAS', '')),
     'tips': bool(env.get_credential('FEC_FEATURE_TIPS', '')),
     'radform': bool(env.get_credential('FEC_FEATURE_RADFORM', '')),
-    'site_orientation_banner': bool(env.get_credential('FEC_SITE_ORIENTATION_BANNER'))
 }
 
 ENVIRONMENTS = {
@@ -138,7 +137,6 @@ TEMPLATES = [
                 'CMS_URL': CMS_URL,
                 'TRANSITION_URL': FEC_TRANSITION_URL,
                 'CLASSIC_URL': FEC_CLASSIC_URL,
-                'site_orientation_banner': FEATURES['site_orientation_banner']
             },
         }
     },
@@ -201,6 +199,8 @@ STATICFILES_DIRS = (
     os.path.join(BASE_DIR, 'dist', 'fec', 'static'),
     os.path.join(PROJECT_DIR, 'static'),
 )
+
+DIST_DIR = os.path.join(BASE_DIR, 'dist')
 
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 STATIC_URL = '/static/'
