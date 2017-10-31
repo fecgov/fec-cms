@@ -302,7 +302,7 @@ def committee(request, committee_id):
         'report_type': report_type,
         'reports': reports,
         'totals': totals,
-        'min_receipt_date': utils.two_days_ago(),
+        'min_receipt_date': utils.three_days_ago(),
         'context_vars': context_vars,
     }
 
