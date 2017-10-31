@@ -302,6 +302,7 @@ def committee(request, committee_id):
         'report_type': report_type,
         'reports': reports,
         'totals': totals,
+        'min_receipt_date': utils.three_days_ago(),
         'context_vars': context_vars,
     }
 
@@ -327,13 +328,13 @@ def committee(request, committee_id):
                 )
 
     # If it's not a senate committee and we're in the current cycle
-    # check if there's any raw filings in the last two days
+    # check if there's any raw filings in the last three days
     if committee['committee_type'] != 'S' and cycle == utils.current_cycle():
         raw_filings = api_caller._call_api(
             'efile', 'filings',
             cycle=cycle,
             committee_id=committee['committee_id'],
-            min_receipt_date=utils.two_days_ago()
+            min_receipt_date=template_variables['min_receipt_date']
         )
         if len(raw_filings.get('results')) > 0:
             template_variables['has_raw_filings'] = True
