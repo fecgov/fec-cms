@@ -10,23 +10,10 @@
 {% block filters %}
   <div class="filters__inner">
     {{ typeahead.field('committee_id', 'Audited Committee Name or ID') }}
-    {{ typeahead.field('committee_id', 'Authorized Candidate Name or ID') }}
+    {{ typeahead.field('candidate_name', 'Authorized Candidate Name or ID') }}
     {% include 'partials/filters/candcomtype.jinja' %}
     {% include 'partials/filters/audit-categories.jinja' %}
     {% include 'partials/filters/audit-sub-categories.jinja' %}
-    <div class="range range--date js-date-range">
-      <div class="range__input range__input--min" data-filter="range">
-        <label for="min_{{ name }}">Beginning</label>
-        <input type="text" id="min_{{ name }}" name="min_{{ name }}" data-range="min" class="js-min-date" data-prefix="Beginning">
-      </div>
-      <div class="range__hyphen">-</div>
-      <div class="range__input range__input--max" data-filter="range">
-        <label for="max_{{ name }}">Ending</label>
-        <input type="text" id="max_{{ name }}" name="max_{{ name }}" data-range="max" class="js-max-date" data-prefix="Ending">
-      </div>
-      <button class="button--go button--standard" type="button">
-        <span class="u-visually-hidden">Search</span>
-      </button>
-    </div>
- </div>
+    {{ date.field('cycle', 'Election Cycles covered by audit' ) }}
+  </div>
 {% endblock %}
