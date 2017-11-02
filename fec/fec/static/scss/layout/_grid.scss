@@ -62,7 +62,7 @@
   }
 }
 
-.grid__item--event {
+.grid__item--with-button {
   padding-bottom: u(4.5rem);
   position: relative;
 
@@ -72,7 +72,6 @@
   }
 }
 
-// BREAKPOINT: MEDIUM
 // We set a max-width to prevent the omega mixins from applying multiple times.
 // This is based on $large-screen, but we have to convert to px so that we can
 // subtract a pixel. Otherwise, the breakpoints will overlap at 860px (the

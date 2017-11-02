@@ -910,14 +910,9 @@ class ServicesLandingPage(ContentPage, UniqueModel):
         ('paragraph', blocks.RichTextBlock())
     ], null=True)
 
-    sections = StreamField([
-        ('sections', ResourceBlock())
-    ], null=True)
-
     content_panels = Page.content_panels + [
         StreamFieldPanel('hero'),
         StreamFieldPanel('intro'),
-        StreamFieldPanel('sections'),
     ]
 
     @property
