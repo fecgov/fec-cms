@@ -19,7 +19,6 @@
 //infoblock__image
 
 .infoblock__image {
-  background-image: url('../img/infoblock--get-started-1x.jpg');
   background-repeat: no-repeat;
   background-size: cover;
   height: u(15rem);
@@ -27,15 +26,21 @@
 }
 
 .infoblock__image--support {
-  background-position: 50% 0;
+  background-image: url('/static/img/feature--candidate-support.jpg');
+  background-position: 0 0;
+  background-size: 100%;
 }
 
 .infoblock__image--compare {
-  background-position: 50% 50%;
+  background-image: url('/static/img/feature--compare-candidates.jpg');
+  background-position: 0 0;
+  background-size: 100%;
 }
 
-.infoblock__image--contribute {
-  background-position: 50% 100%;
+.infoblock__image--contributions {
+  background-image: url('/static/img/feature--contributions.jpg');
+  background-position: 0 0;
+  background-size: 100%;
 }
 
 .infoblock__image--education {
