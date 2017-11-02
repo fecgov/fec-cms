@@ -24,14 +24,6 @@
   background-size: cover;
   height: u(15rem);
   margin-bottom: u(1rem);
-
-//commented out temporarily to avoid error- see _variables.scss line 89
-// @media
-//   $high-res-ratio,
-//  $high-res-dpi {
-//  background-image: url('../img/infoblock--get-started-2x.jpg');
-//    }
-
 }
 
 .infoblock__image--support {
