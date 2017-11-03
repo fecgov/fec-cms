@@ -143,6 +143,9 @@
 
 .list--columns--two {
   @include columns(2)
+  li {
+    page-break-inside: avoid;
+  }
 }
 
 .list--spacious {
