@@ -31,21 +31,21 @@
         <a class="button--cta heading__right button--calendar" href="/calendar">Full calendar</a>
       </div>
       <ul class="grid grid--4-wide grid--flex t-sans">
-        <li class="grid__item grid__item--event">
+        <li class="grid__item grid__item--with-button">
           <div class="t-bold">Next commission meeting:</div>
           <div class="js-next-commission-meeting"></div>
           <a class="button button--alt button--updates" href="/meetings">All meetings</a>
-        <li class="grid__item grid__item--event">
+        <li class="grid__item grid__item--with-button">
           <div class="t-sans t-bold">Next filing deadline:</div>
           <div class="js-next-filing-deadline"></div>
           <a class="button button--alt button--calendar" href="/calendar/?category=report-E&category=report-M&category=report-MY&category=report-Q&category=report-YE">All filing deadlines</a>
         </li>
-        <li class="grid__item grid__item--event">
+        <li class="grid__item grid__item--with-button">
           <div class="t-sans t-bold">Next training or conference:</div>
           <div class="js-next-training-or-conference"></div>
           <a class="button button--alt button--calendar" href="/calendar/?category=Conferences&category=Roundtables">All outreach</a>
         </li>
-        <li class="grid__item grid__item--event">
+        <li class="grid__item grid__item--with-button">
           <div class="t-sans t-bold">Next public comment deadline:</div>
           <div class="js-next-public-comment-deadline"></div>
           <a class="button button--alt button--calendar" href="/calendar/?category=AOs+and+Rules">All legal events</a>
@@ -58,20 +58,20 @@
     <div class="container">
       <h2 class="heading--section u-margin--bottom">Get started</h2>
       <ul class="grid grid--3-wide grid--flex t-sans">
-        <li class="grid__item grid__item--infoblock">
-          <div class="infoblock__image infoblock__image--support" role="img" aria-label="Description of the image"></div>
-          <h3 class="t-sans">Find out how individuals can support federal candidates</h3>
-          <p class="infoblock__subtext">Including making contributions, volunteering, internet activities and filing complaints</p>
-          <a class="button infoblock__button button--cta button--go" href="/introduction-campaign-finance/understanding-ways-support-federal-candidates/">Start learning</a>
-        <li class="grid__item grid__item--infoblock">
-          <div class="infoblock__image infoblock__image--compare" role="img" aria-label="Description of the image"></div>
-          <h3 class="t-sans">Explore financial data for current and past elections and the candidates in those races</h3>
-          <a class="button infoblock__button button--cta button--go" href="/data/#compare-candidates-in-an-election">Compare candidates</a>
+        <li class="grid__item grid__item--with-button">
+          <img src="{% static "img/feature--candidate-support.jpg" %}" alt="">
+          <h3 class="t-sans u-margin--top">Find out how individuals can support federal candidates</h3>
+          <div>Including making contributions, volunteering, internet activities and filing complaints</div>
+          <a class="button button--cta button--go" href="/introduction-campaign-finance/understanding-ways-support-federal-candidates/">Start learning</a>
+        <li class="grid__item grid__item--with-button">
+          <img src="{% static "img/feature--compare-candidates.jpg" %}" alt="">
+          <h3 class="t-sans u-margin--top">Explore financial data for current and past elections and the candidates in those races</h3>
+          <a class="button button--cta button--go" href="/data/#compare-candidates-in-an-election">Compare candidates</a>
         </li>
-        <li class="grid__item grid__item--infoblock">
-          <div class="infoblock__image infoblock__image--contributions" role="img" aria-label="Description of the image"></div>
-          <h3 class="t-sans">Learn about how much contributors can give to different types of committees</h3>
-          <a class="button infoblock__button button--cta button--go" href="/help-candidates-and-committees/candidate-taking-receipts/contribution-limits-candidates/">Get the contribution limits</a>
+        <li class="grid__item grid__item--with-button">
+          <img src="{% static "img/feature--contributions.jpg" %}" alt="">
+          <h3 class="t-sans u-margin--top">Learn about how much contributors can give to different types of committees</h3>
+          <a class="button button--cta button--go" href="/help-candidates-and-committees/candidate-taking-receipts/contribution-limits-candidates/">Get the contribution limits</a>
         </li>
       </ul>
     </div>

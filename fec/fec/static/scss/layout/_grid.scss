@@ -62,7 +62,7 @@
   }
 }
 
-.grid__item--event {
+.grid__item--with-button {
   padding-bottom: u(4.5rem);
   position: relative;
 
@@ -70,11 +70,6 @@
     bottom: 0;
     position: absolute;
   }
-}
-
-.grid__item--infoblock {
-  padding-bottom: u(4.5rem);
-  position: relative;
 }
 
 // We set a max-width to prevent the omega mixins from applying multiple times.
