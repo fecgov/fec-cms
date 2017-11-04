@@ -22,8 +22,8 @@ def editor_js():
         <script src="/static/js/admin/hallo-indent.js"></script>
         <script src="/static/js/admin/hallo-outdent.js"></script>
         <script src="/static/js/admin/customize-editor.js"></script>
-        <script src="/static/ace-builds/src-noconflict/ace.js"></script>
-        <script src="/static/ace-builds/src-noconflict/mode-html.js"></script>
+        <script src="/static/js/vendor/ace-builds/src-noconflict/ace.js"></script>
+        <script src="/static/js/vendor/ace-builds/src-noconflict/mode-html.js"></script>
         <script>
             registerHalloPlugin('editHtmlButton');
             registerHalloPlugin('hallocleanhtml');
