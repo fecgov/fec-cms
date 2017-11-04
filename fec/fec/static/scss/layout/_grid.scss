@@ -72,6 +72,34 @@
   }
 }
 
+.grid__item--with-img {
+  img {
+    object-fit: cover;
+    width:100%;
+    height:u(15rem);
+    max-height:u(15rem);
+  }
+}
+
+.grid__item--with-icon--primary {
+  img {
+    @include u-bg--primary();
+    padding: u(2rem);
+    object-fit: contain;
+    max-height:u(15rem);
+  }
+}
+
+.grid__item--with-icon--secondary {
+  img {
+    @include u-bg--secondary();
+    padding: u(2rem);
+    object-fit: contain;
+    width:100%;
+    max-height:u(15rem);
+  }
+}
+
 // We set a max-width to prevent the omega mixins from applying multiple times.
 // This is based on $large-screen, but we have to convert to px so that we can
 // subtract a pixel. Otherwise, the breakpoints will overlap at 860px (the
