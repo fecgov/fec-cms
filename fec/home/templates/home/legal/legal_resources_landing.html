@@ -19,7 +19,7 @@
 <div class="container main">
   <div class="gcontainer grid--2-wide grid--flex">
     <div class="grid__item card t-left-aligned">
-      <h3>Search accross all legal resources</h3>
+      <h3>Search across all legal resources</h3>
       <form id="large-search" method="get" action="{{ settings.FEC_APP_URL }}/legal/search/" autocomplete="off" class="search__container js-search">
         <div class="combo combo--search combo--search--inline">
           <select class="search__select select--alt js-search-type" name="search_type" aria-label="Select a search type">
@@ -52,7 +52,7 @@
     <div class="grid__item">
         <div class="heading--section heading--with-action">
           <h3 class="heading__left">Legal News</h3>
-          <a class="button button--updates heading__right" href="/updates">All News</a>
+          <a class="button button--alt heading__right" href="/updates">All News</a>
          </div>
             {% legal_news_feed %}
     </div>
@@ -144,8 +144,8 @@
             <img src="{% static "img/feature--contributions.jpg" %}" alt="">
           </li>
           <li class="grid__item">
-            <h3 class="u-no-margin"><a href="/help-candidates-and-committees/candidate-taking-receipts/contribution-limits-candidates/">Contribution Limits</a></h3>
-            <p>Under the Federal Election Campaign Finance Act, contributions are subject to limits. Those limits differ depending on the type of donor and recipient.</p>
+            <h3 class="u-no-margin"><a href="/help-candidates-and-committees/candidate-taking-receipts/contribution-limits-candidates/">Contribution limits</a></h3>
+            <p>Under the Federal Election Campaign Act, contributions are subject to limits. Those limits differ depending on the type of donor and recipient.</p>
           </li>
        </ul>
     </div>
