@@ -75,9 +75,7 @@
 .grid__item--with-img {
   img {
     object-fit: cover;
-    width:100%;
     height:u(15rem);
-    max-height:u(15rem);
   }
 }
 
@@ -86,7 +84,7 @@
     @include u-bg--primary();
     padding: u(2rem);
     object-fit: contain;
-    max-height:u(15rem);
+    height:u(15rem);
   }
 }
 
@@ -95,8 +93,7 @@
     @include u-bg--secondary();
     padding: u(2rem);
     object-fit: contain;
-    width:100%;
-    max-height:u(15rem);
+    height:u(15rem);
   }
 }
 
