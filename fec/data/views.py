@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.http import Http404
 from django.http import JsonResponse
 from django.conf import settings
@@ -302,7 +302,9 @@ def committee(request, committee_id):
         'report_type': report_type,
         'reports': reports,
         'totals': totals,
+        'min_receipt_date': utils.three_days_ago(),
         'context_vars': context_vars,
+        'party_full': committee['party_full']
     }
 
 
@@ -321,19 +323,19 @@ def committee(request, committee_id):
         # If there's no reports, find the first year with reports and redirect there
         for c in sorted(committee['cycles'], reverse=True):
             financials = api_caller.load_cmte_financials(committee['committee_id'], cycle=c)
-            if financials['reports']:
-                return redirect(
-                    url_for('committee_page', c_id=committee['committee_id'], cycle=c)
-                )
+            # if financials['reports']:
+            #     return redirect(
+            #         url_for('committee_page', c_id=committee['committee_id'], cycle=c)
+            #     )
 
     # If it's not a senate committee and we're in the current cycle
-    # check if there's any raw filings in the last two days
+    # check if there's any raw filings in the last three days
     if committee['committee_type'] != 'S' and cycle == utils.current_cycle():
         raw_filings = api_caller._call_api(
             'efile', 'filings',
             cycle=cycle,
             committee_id=committee['committee_id'],
-            min_receipt_date=utils.two_days_ago()
+            min_receipt_date=template_variables['min_receipt_date']
         )
         if len(raw_filings.get('results')) > 0:
             template_variables['has_raw_filings'] = True
