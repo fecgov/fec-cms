@@ -135,7 +135,7 @@ class LegalSearch extends React.Component {
           <Tags query={this.state.lastQuery} resultCount={this.state.resultCount} handleRemove={this.instantQuery} />
           <div className="u-padding--left u-padding--right">
             <div className="message message--info">
-              <p>The advisory opinion search feature includes all FEC advisory opinions &#40;AOs&#41; to date. You can search all FEC AOs using keywords, AO numbers, names of requesters and more. For additional search filters, you can still search AOs using our legacy <a href="http://saos.fec.gov/saos/searchao">AO search</a>.</p>
+              <p>The advisory opinion search feature includes all FEC advisory opinions &#40;AOs&#41; to date. You can search all FEC AOs using keywords, AO numbers, names of requestors and more. For additional search filters, you can still search AOs using our legacy <a href="http://saos.fec.gov/saos/searchao">AO search</a>.</p>
             </div>
           </div>
         </div>
