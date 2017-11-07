@@ -3,8 +3,8 @@
 Fixes # [_Issue number this PR fixes_]
 _Include a summary of proposed changes._
 
-## Impacted areas if the website
-List general components of the website that this PR will affect:
+## Impacted areas if the application
+List general components of the application that this PR will affect:
 
 * 
 
