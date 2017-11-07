@@ -281,11 +281,10 @@ More information about using SSH with cloud.dov can be found in the [cloud.gov S
 Accounts are handled in the cms admin. All accounts will be reviewed annually.
 
 
-## Copyright and licensing
-This project is in the public domain within the United States, and we waive
-worldwide copyright and related rights through [CC0 universal public domain
-dedication](https://creativecommons.org/publicdomain/zero/1.0/). Read more on
-our license page.
+## Licensing and attribution
+A few parts of this project are not in the public domain. Attribution and licensing information for those parts are described in detail in [LICENSE.md](LICENSE.md).
+
+The rest of this project is in the worldwide public domain, released under the [CC0 1.0 Universal public domain dedication](https://creativecommons.org/publicdomain/zero/1.0/). Read more in [LICENSE.md](LICENSE.md).
 
 A few restrictions limit the way you can use FEC data. For example, you can't
 use contributor lists for commercial purposes or to solicit donations.  Learn
