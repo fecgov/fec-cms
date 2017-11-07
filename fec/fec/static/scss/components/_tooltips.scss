@@ -87,8 +87,10 @@
 //
 
 .tooltip--under {
+  $top: u(1.5rem);
   width: u(30rem);
-  margin-top: u(1.5rem);
+  left: u(-14rem);
+  top: calc(100% + #{$top});
 
   &::before {
     background-image: url('../img/tooltip-point.svg');

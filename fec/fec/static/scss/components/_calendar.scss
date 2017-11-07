@@ -244,9 +244,9 @@
 // Event details
 .cal-details {
   font-size: u(1.4rem);
-  left: auto;
-  top: auto;
-  margin-top: u(1rem);
+  left: auto !important;
+  top: auto !important;
+  margin-top: u(1.5rem);
   margin-left: u(-8rem);
   padding: 0 !important;
   text-align: left;
