@@ -1,6 +1,6 @@
 ## Summary (required)
 
-Fixes # [_Issue number this PR fixes_]
+- Addresses # [_Issue number this PR fixes_]
 _Include a summary of proposed changes._
 
 ## Impacted areas if the application
