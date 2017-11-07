@@ -65,7 +65,7 @@
     "gulp-sourcemaps": "^2.6.0",
     "gulp-svgmin": "^1.2.2",
     "gulp-uglify": "3.0.0",
-    "handlebars": "^4.0.5",
+    "handlebars": "^4.0.11",
     "handlebars-template-loader": "^0.8.0",
     "hbsfy": "2.2.1",
     "karma": "^0.13.19",
