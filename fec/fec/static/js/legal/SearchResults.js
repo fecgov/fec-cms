@@ -13,9 +13,9 @@ function SearchResults(props) {
   }
 
   function getIssueDate(advisory_opinion) {
-    if(advisory_opinion.status === "Pending") {
+    if(advisory_opinion.status === 'Pending') {
         return "Pending";
-    } else if (advisory_opinion.status === "Withdrawn") {
+    } else if (advisory_opinion.status === 'Withdrawn') {
         return "Withdrawn";
     } else {
         return moment(advisory_opinion.issue_date).format('MM/DD/YYYY');

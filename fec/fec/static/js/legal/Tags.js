@@ -8,7 +8,7 @@ function Tags(props) {
   const namedFields = [];
   Array.prototype.push.apply(namedFields, requestorOptions);
   Array.prototype.push.apply(namedFields, documentTypes);
-  namedFields.push({value: 'ao_status', text: "Pending"});
+  namedFields.push({value: 'ao_status', text: 'Pending'});
   var citationRequireAll = props.query.ao_citation_require_all && props.query.ao_citation_require_all !== 'false';
 
   function removeQuery(name, value) {
