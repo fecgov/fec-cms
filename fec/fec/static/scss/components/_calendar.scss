@@ -247,7 +247,8 @@
   left: auto;
   top: auto;
   margin-top: u(1rem);
-  padding: 0;
+  margin-left: u(-8rem);
+  padding: 0 !important;
   text-align: left;
   width: u(26rem);
   white-space: initial;
@@ -256,6 +257,7 @@
     @include triangle(2rem, $primary, up);
     background-image: none;
     left: 20%;
+    top: u(-2rem) !important;
   }
 
   .button--close--primary {
