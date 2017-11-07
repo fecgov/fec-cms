@@ -6,7 +6,7 @@ _Include a summary of proposed changes._
 ## Impacted areas if the application
 List general components of the application that this PR will affect:
 
-* 
+-  
 
 ## Screenshots
 
