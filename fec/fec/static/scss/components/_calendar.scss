@@ -267,6 +267,17 @@
   }
 }
 
+.fc-event-container:nth-child(1) {
+  .cal-details {
+    margin-left: unset;
+
+    &::before {
+      right: auto;
+      left: u(2rem);
+    }
+  }
+}
+
 .fc-event-container:nth-child(7) {
   .cal-details {
     right: 0;
