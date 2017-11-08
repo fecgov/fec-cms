@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.http import Http404
 from django.http import JsonResponse
 from django.conf import settings
@@ -302,6 +302,7 @@ def committee(request, committee_id):
         'report_type': report_type,
         'reports': reports,
         'totals': totals,
+        'min_receipt_date': utils.three_days_ago(),
         'context_vars': context_vars,
     }
 
@@ -321,19 +322,19 @@ def committee(request, committee_id):
         # If there's no reports, find the first year with reports and redirect there
         for c in sorted(committee['cycles'], reverse=True):
             financials = api_caller.load_cmte_financials(committee['committee_id'], cycle=c)
-            if financials['reports']:
-                return redirect(
-                    url_for('committee_page', c_id=committee['committee_id'], cycle=c)
-                )
+            # if financials['reports']:
+            #     return redirect(
+            #         url_for('committee_page', c_id=committee['committee_id'], cycle=c)
+            #     )
 
     # If it's not a senate committee and we're in the current cycle
-    # check if there's any raw filings in the last two days
+    # check if there's any raw filings in the last three days
     if committee['committee_type'] != 'S' and cycle == utils.current_cycle():
         raw_filings = api_caller._call_api(
             'efile', 'filings',
             cycle=cycle,
             committee_id=committee['committee_id'],
-            min_receipt_date=utils.two_days_ago()
+            min_receipt_date=template_variables['min_receipt_date']
         )
         if len(raw_filings.get('results')) > 0:
             template_variables['has_raw_filings'] = True
@@ -386,7 +387,7 @@ def elections(request, office, cycle, state=None, district=None):
 
 def raising(request):
     top_category = request.GET.get('top_category', 'P')
-    cycle = request.GET.get('cycle', 2016)
+    cycle = request.GET.get('cycle', constants.DEFAULT_TIME_PERIOD)
 
     if top_category in ['pac']:
         top_raisers = api_caller.load_top_pacs('-receipts', cycle=cycle, per_page=10)
@@ -416,7 +417,7 @@ def raising(request):
 
 def spending(request):
     top_category = request.GET.get('top_category', 'P')
-    cycle = request.GET.get('cycle', 2016)
+    cycle = request.GET.get('cycle', constants.DEFAULT_TIME_PERIOD)
 
     if top_category in ['pac']:
         top_spenders = api_caller.load_top_pacs('-disbursements', cycle=cycle, per_page=10)
@@ -444,7 +445,10 @@ def spending(request):
 
 def feedback(request):
     if request.method == 'POST':
-        data = json.loads(request.body)
+
+        # json.loads() is expecting a string in JSON format:
+        # '{"param":"value"}'. Needs to be decoded in Python 3
+        data = json.loads(request.body.decode("utf-8"))
 
         if not any([data['action'], data['feedback'], data['about']]):
             return JsonResponse({'status': False}, status=500)

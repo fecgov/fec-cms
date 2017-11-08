@@ -49,9 +49,9 @@ KeywordModal.prototype.handleSubmit = function(e) {
   var query = URI(window.location.search)
     .removeSearch('search')
     .addSearch('search', combinedValue);
-  window.location.search = query.toString();
   this.dialog.hide();
   this.fireEvent('Keyword modal query: ' + combinedValue);
+  window.location = this.$form.attr("action") + query.toString();
 };
 
 /**
@@ -75,7 +75,7 @@ KeywordModal.prototype.combineFields = function() {
   });
 
   if (this.$excludeField.val() && query) {
-    query = '(' + query + ') & (' + self.parseValue(this.$excludeField) + ')';
+    query = '(' + query + ') AND (' + self.parseValue(this.$excludeField) + ')';
   } else if (this.$excludeField.val()) {
     query = self.parseValue(this.$excludeField);
   }
@@ -92,7 +92,7 @@ KeywordModal.prototype.parseValue = function($input) {
   var words = $input.val().replace(/"/g,'').split(' ');
   var operator = $input.data('operator');
   if (operator === 'and') {
-    return words.join(' & ');
+    return words.join(' AND ');
   } else if (operator === 'or') {
     return words.join(' OR ');
   } else if (operator === 'exact') {

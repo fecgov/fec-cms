@@ -10,10 +10,8 @@
 
     <title>{% block title %}{% if self.seo_title %}{{ self.seo_title }}{% else %}{{ self.title }} | FEC {% endif %}{% endblock %}{% block title_suffix %}{% endblock %}</title>
 
-    {% block extra_css %}
-    {% compress css %}
-    <link rel="stylesheet" type="text/x-scss" href="{% static 'scss/base.scss' %}">
-    {% endcompress %}
+    {% block css %}
+    <link rel="stylesheet" type="text/css" href="{% asset_for_css 'base.css' %}">
     {% endblock %}
 
     <script>
@@ -32,9 +30,6 @@
     <![endif]-->
     {% wagtailuserbar %}
     <a href="#main" class="skip-nav">skip navigation</a>
-    {% if settings.FEATURES.site_orientation_banner %}
-      {% include "partials/site-orientation.html" %}
-    {% endif %}
 
     {% if self.title == "Homepage" or self.title == "Home" %}
     <header class="site-header site-header--homepage">
@@ -146,8 +141,10 @@
 
     {% include './partials/glossary.html' %}
 
+    {% csrf_token %}
+
     <script>
-      window.CMS_URL = '{{ cms_url }}'
+      window.CMS_URL = '/data'
       window.FEC_APP_URL = '{{ settings.FEC_APP_URL }}';
       window.API_LOCATION = '{{ settings.FEC_API_URL }}';
       window.API_VERSION = '{{ settings.FEC_API_VERSION }}';
@@ -157,10 +154,8 @@
     </script>
 
     {# Global javascript #}
-    {% compress js %}
-    <script type="text/javascript" src="{% asset_for 'vendor.js' %}"></script>
-    <script type="text/javascript" src="{% asset_for 'init.js' %}"></script>
-    {% endcompress %}
+    <script type="text/javascript" src="{% asset_for_js 'vendor.js' %}"></script>
+    <script type="text/javascript" src="{% asset_for_js 'init.js' %}"></script>
 
     {% block extra_js %}
     {# Override this in templates to add extra javascript #}

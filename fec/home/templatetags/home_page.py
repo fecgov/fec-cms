@@ -1,3 +1,4 @@
+import datetime
 import re
 
 from django import template
@@ -13,12 +14,22 @@ register = template.Library()
 
 @register.inclusion_tag('partials/home-page-banner-announcement.html')
 def home_page_banner_announcement():
-    banners = HomePageBannerAnnouncement.objects.live().filter(active=True).order_by('-date_active')[:2]
+    datetime_now = datetime.datetime.today()
+    banners = HomePageBannerAnnouncement.objects.live().filter(active=True, date_active__lte=datetime_now, date_inactive__gt=datetime_now).order_by('-date_active')[:2]
 
     return {
         'banners': banners
     }
 
+
+# This is for the Wagtail preview for Home Page Banner Announcement
+@register.inclusion_tag('partials/draft-home-page-banner-announcement.html')
+def draft_home_page_banner_announcement():
+    draft_banners = HomePageBannerAnnouncement.objects.all().order_by('-date_active')
+
+    return {
+        'draft_banners': draft_banners
+    }
 
 @register.inclusion_tag('partials/home-page-news.html')
 def home_page_news():

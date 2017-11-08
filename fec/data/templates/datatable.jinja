@@ -9,9 +9,7 @@
 {% endblock %}
 
 {% block css %}
-{% compress css %}
-<link rel="stylesheet" type="text/x-scss" href="{{ static('scss/datatables.scss') }}" />
-{% endcompress %}
+<link rel="stylesheet" type="text/css" href="{{ asset_for_css('datatables.css') }}" />
 {% endblock %}
 
 {% block body %}
@@ -74,6 +72,6 @@ var context = {{ table_context|to_json|safe }};
 </script>
 {% endif %}
 
-<script src="{{ asset_for('datatable-common.js') }}"></script>
-<script src="{{ asset_for('datatable-' + slug + '.js') }}"></script>
+<script src="{{ asset_for_js('datatable-common.js') }}"></script>
+<script src="{{ asset_for_js('datatable-' + slug + '.js') }}"></script>
 {% endblock %}

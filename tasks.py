@@ -100,10 +100,6 @@ def deploy(ctx, space=None, branch=None, login=None, yes=False):
         'cd fec && DJANGO_SETTINGS_MODULE=fec.settings.production python manage.py collectstatic --noinput -v 0',
         echo=True
     )
-    ctx.run(
-        'cd fec && DJANGO_SETTINGS_MODULE=fec.settings.production python manage.py compress -v 0',
-        echo=True
-    )
 
     # Set api
     api = 'https://api.fr.cloud.gov'

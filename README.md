@@ -133,7 +133,24 @@ cd fec/
 ```
 
 ## Front End Development
-Front end assets are all located in `/fec/fec/static/*`. SCSS files are compiled and served on the backend by `django-compressor`, but JS files need to be compiled by Webpack via the `npm run build` command.
+Front end assets are all located in `/fec/fec/static/*`.
+
+### Icon building
+Icons only need to be built if there are new SVG files in the `/fec/fec/static/icons/input` directory, which transforms that SVG file into a SCSS variable to be used on the stylesheets.
+
+``` npm run build-icons ```
+
+### SCSS compilation
+``` npm run build-sass ```
+
+### JavaScript compilation
+``` npm run build-js ```
+
+### Compilation of both SCSS and JS files
+``` npm run build ```
+
+### Command to watch for SCSS and JS changes
+``` npm run watch ```
 
 
 ## Running tests
