@@ -1,7 +1,6 @@
 {% extends "base.html" %}
 {% load wagtailcore_tags %}
 {% load staticfiles %}
-
 {% block content %}
 
 {% include 'partials/breadcrumbs.html' with page=self links=self.get_ancestors style='secondary' %}
@@ -10,6 +9,7 @@
     <h1>{{ self.title }}</h1>
   </header>
 </div>
+
 <section class="main__content--full data-container__wrapper" id="feed">
   <div class="container">
     <section id="cand-comm-guides" class="tab-interface u-padding--bottom">
@@ -22,7 +22,7 @@
                     role="tab"
                     data-name="candidates-and-their-authorized-committees"
                     tabindex="0"
-                    aria-controls="cand-comm-guides-candidates-and-their-authorized-committees""
+                    aria-controls="cand-comm-guides-candidates-and-their-authorized-committees"
                     href="#cand-comm-guides-candidates-and-their-authorized-committees">Candidates and their authorized committees</a>
               </li>
               <li class="side-nav__item" role="presentation">
@@ -60,23 +60,21 @@
              <div class="grid grid--2-wide">
                <div class="grid__item">
                  <p>
-                   <ul class="t-sans t-bold">
-                     <li><a href="/help-candidates-and-committees/registering-candidate/">Registering as a candidate</a></li>
-                     <li><a href="/help-candidates-and-committees/keeping-records/">Keeping records</a></li>
-                     <li><a href="/help-candidates-and-committees/candidate-taking-receipts/">Taking in receipts</a></li>
-                     <li><a href="/help-candidates-and-committees/filing-reports/">Filing candidate reports</a></li>
-                     <li><a href="/help-candidates-and-committees/making-disbursements/">Making disbursements</a></li>
-                     <li><a href="/help-candidates-and-committees/winding-down-candidate-campaign/">Winding down a campaign</a></li>
-                     <li><a href="/help-candidates-and-committees/handling-loans-debts-and-advances/">Handling candidate loans, debts and advances</a></li>
+                   <ul class="t-sans list--spacious">
+                     <li><a href="/help-candidates-and-committees/registering-candidate/">Registering as a candidate</a> &#187;</li>
+                     <li><a href="/help-candidates-and-committees/keeping-records/">Keeping records</a> &#187;</li>
+                     <li><a href="/help-candidates-and-committees/candidate-taking-receipts/">Taking in receipts</a> &#187;</li>
+                     <li><a href="/help-candidates-and-committees/filing-reports/">Filing candidate reports</a> &#187;</li>
+                     <li><a href="/help-candidates-and-committees/making-disbursements/">Making disbursements</a> &#187;</li>
+                     <li><a href="/help-candidates-and-committees/winding-down-candidate-campaign/">Winding down a campaign</a> &#187;</li>
+                     <li><a href="/help-candidates-and-committees/handling-loans-debts-and-advances/">Handling candidate loans, debts and advances</a> &#187;</li>
                    </ul>
                  </p>
                </div>
                <div class="grid__item">
-                 <a class="u-no-border" href="resources/cms-content/documents/candgui.pdf">
-                   <img src="{% static 'img/pdf-icon-large.png' %}" alt="Icon representing a large PDF file">
-                 </a>
-                 <h3><a class="t-sans" href="h/resources/cms-content/documents/candgui.pdf">PDF Guide</a></h3>
-                 <a class="t-sans t-bold" href="/resources/cms-content/documents/candgui.pdf">Congressional candidates and committees campaign guide</a>
+                 <img src="{% static 'img/thumbnail--pdf-guide.png' %}" alt="Icon representing a large PDF file">
+                 <span class="label">PDF Guide</span>
+                 <a class="t-sans" href="/resources/cms-content/documents/candgui.pdf">Congressional candidates and committees campaign guide</a>
                </div>
              </div>
           </section>
@@ -88,23 +86,21 @@
             <div class="grid grid--2-wide">
                <div class="grid__item">
                  <p>
-                   <ul class="t-sans t-bold">
-                     <li><a href="/help-candidates-and-committees/registering-political-party/">Registering as a political party</a></li>
-                     <li><a href="/help-candidates-and-committees/keeping-political-party-records/">Keeping party records</a></li>
-                     <li><a href="/help-candidates-and-committees/taking-receipts-political-party/">Taking in receipts as a party</a></li>
-                     <li><a href="/help-candidates-and-committees/filing-political-party-reports/">Filing political party reports</a></li>
-                     <li><a href="/help-candidates-and-committees/making-disbursements-political-party/">Making disbursements as a party</a></li>
-                     <li><a href="/help-candidates-and-committees/handling-political-party-loans-debts-and-advances/">Handling party loans, debts and advances</a></li>
-                     <li><a href="/help-candidates-and-committees/terminating-a-committee/">Terminating a committee</a></li>
+                   <ul class="t-sans list--spacious">
+                     <li><a href="/help-candidates-and-committees/registering-political-party/">Registering as a political party</a> &#187;</li>
+                     <li><a href="/help-candidates-and-committees/keeping-political-party-records/">Keeping party records</a> &#187;</li>
+                     <li><a href="/help-candidates-and-committees/taking-receipts-political-party/">Taking in receipts as a party</a> &#187;</li>
+                     <li><a href="/help-candidates-and-committees/filing-political-party-reports/">Filing political party reports</a> &#187;</li>
+                     <li><a href="/help-candidates-and-committees/making-disbursements-political-party/">Making disbursements as a party</a> &#187;</li>
+                     <li><a href="/help-candidates-and-committees/handling-political-party-loans-debts-and-advances/">Handling party loans, debts and advances</a> &#187;</li>
+                     <li><a href="/help-candidates-and-committees/terminating-a-committee/">Terminating a committee</a> &#187;</li>
                    </ul>
                  </p>
                </div>
                <div class="grid__item">
-                 <a class="u-no-border" href="/resources/cms-content/documents/partygui.pdf">
-                   <img src="{% static 'img/pdf-icon-large.png' %}" alt="Icon representing a large PDF file">
-                 </a>
-                 <h3><a class="t-sans" href="/resources/cms-content/documents/partygui.pdf">PDF Guide</a></h3>
-                 <a class="t-sans t-bold" href="/resources/cms-content/documents/partygui.pdf">Political party committees campaign guide</a>
+                 <img src="{% static 'img/thumbnail--pdf-guide.png' %}" alt="Icon representing a large PDF file">
+                 <span class="label">PDF Guide</span>
+                 <a class="t-sans" href="/resources/cms-content/documents/partygui.pdf">Political party committees campaign guide</a>
                </div>
              </div>
           </section>
@@ -116,23 +112,21 @@
             <div class="grid grid--2-wide">
                <div class="grid__item">
                  <p>
-                   <ul class="t-sans t-bold">
-                     <li><a href="/help-candidates-and-committees/registering-ssf/">Registering as an SSF</a></li>
-                     <li>Keeping records as an SSF</li>
-                     <li>Taking in receipts as an SSF</li>
-                     <li><a href="/help-candidates-and-committees/filing-ssf-reports/">Filing SSF reports</a></li>
+                   <ul class="t-sans list--spacious">
+                     <li><a href="/help-candidates-and-committees/registering-ssf/">Registering as an SSF</a> &#187;</li>
+                     <li><span class="t-sans is-disabled">Taking in receipts as an SSF</span></li>
+                     <li><span class="t-sans is-disabled">Taking in receipts as an SSF</span></li>
+                     <li><a href="/help-candidates-and-committees/filing-ssf-reports/">Filing SSF reports</a> &#187;</li>
                      <li>Making disbursements as an SSF</li>
                      <li>Handling SSF loans, debts and advances</li>
-                     <li><a href="/help-candidates-and-committees/terminating-a-committee/">Terminating a committee</a></li>
+                     <li><a href="/help-candidates-and-committees/terminating-a-committee/">Terminating a committee</a> &#187;</li>
                    </ul>
                  </p>
                </div>
                <div class="grid__item">
-                 <a class="u-no-border" href="https://transition.fec.gov/pdf/colagui.pdf">
-                   <img src="{% static 'img/pdf-icon-large.png' %}" alt="Icon representing a large PDF file">
-                 </a>
-                 <h3><a class="t-sans" href="https://transition.fec.gov/pdf/colagui.pdf">PDF Guide</a></h3>
-                 <a class="t-sans t-bold" href="https://transition.fec.gov/pdf/colagui.pdf">Corporations and labor organizations campaign guide</a>
+                 <img src="{% static 'img/thumbnail--pdf-guide.png' %}" alt="Icon representing a large PDF file">
+                 <span class="label">PDF Guide</span>
+                 <a class="t-sans" href="https://transition.fec.gov/pdf/colagui.pdf">Corporations and labor organizations campaign guide</a>
                </div>
              </div>
           </section>
@@ -151,23 +145,21 @@
             <div class="grid grid--2-wide">
                <div class="grid__item">
                  <p>
-                   <ul class="t-sans t-bold">
-                     <li><a href="/help-candidates-and-committees/registering-pac/">Registering as a PAC</a></li>
-                    <li><a href="/help-candidates-and-committees/keeping-pac-records-nonconnected/">Keeping PAC records</a></li>
-                    <li><a href="/help-candidates-and-committees/taking-receipts-pac/">Taking in receipts as a PAC</a></li>
-                    <li><a href="/help-candidates-and-committees/filing-pac-reports/">Filing PAC reports</a></li>
-                    <li><a href="/help-candidates-and-committees/making-disbursements-pac/">Making disbursements as a PAC</a></li>
-                    <li><a href="/help-candidates-and-committees/handling-nonconnected-pac-loans-debts-and-advances/">Handling PAC loans, debts and advances</a></li>
-                    <li><a href="/help-candidates-and-committees/terminating-a-committee/">Terminating a committee</a></li>
+                   <ul class="t-sans list--spacious">
+                    <li><a href="/help-candidates-and-committees/registering-pac/">Registering as a PAC</a> &#187;</li>
+                    <li><a href="/help-candidates-and-committees/keeping-pac-records-nonconnected/">Keeping PAC records</a> &#187;</li>
+                    <li><a href="/help-candidates-and-committees/taking-receipts-pac/">Taking in receipts as a PAC</a> &#187;</li>
+                    <li><a href="/help-candidates-and-committees/filing-pac-reports/">Filing PAC reports</a> &#187;</li>
+                    <li><a href="/help-candidates-and-committees/making-disbursements-pac/">Making disbursements as a PAC</a> &#187;</li>
+                    <li><a href="/help-candidates-and-committees/handling-nonconnected-pac-loans-debts-and-advances/">Handling PAC loans, debts and advances</a> &#187;</li>
+                    <li><a href="/help-candidates-and-committees/terminating-a-committee/">Terminating a committee</a> &#187;</li>
                    </ul>
                  </p>
                </div>
                <div class="grid__item">
-                 <a class="u-no-border" href="/resources/cms-content/documents/nongui.pdf">
-                   <img src="{% static 'img/pdf-icon-large.png' %}" alt="Icon representing a large PDF file">
-                 </a>
-                 <h3><a class="t-sans" href="/resources/cms-content/documents/nongui.pdf">PDF Guide</a></h3>
-                 <a class="t-sans t-bold" href="/resources/cms-content/documents/nongui.pdf">Nonconnected committees campaign guide</a>
+                 <img src="{% static 'img/thumbnail--pdf-guide.png' %}" alt="Icon representing a large PDF file">
+                 <span class="label">PDF Guide</span>
+                 <a class="t-sans" href="/resources/cms-content/documents/nongui.pdf">Nonconnected committees campaign guide</a>
                </div>
              </div>
           </section>
