@@ -199,7 +199,7 @@ STATICFILES_DIRS = (
     os.path.join(BASE_DIR, 'dist', 'fec', 'static'),
     os.path.join(PROJECT_DIR, 'static'),
     # We will need just the assets of certain npm modules for Wagtail
-    # So we are including af older of symlinks to modules to access
+    # So we are including a folder of symlinks to modules for access
     os.path.join(BASE_DIR, 'fec', 'wagtail_npm_dependencies'),
 )
 
