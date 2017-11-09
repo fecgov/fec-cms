@@ -244,10 +244,11 @@
 // Event details
 .cal-details {
   font-size: u(1.4rem);
-  left: auto;
-  top: auto;
-  margin-top: u(1rem);
-  padding: 0;
+  left: auto !important;
+  top: auto !important;
+  margin-top: u(1.5rem);
+  margin-left: u(-8rem);
+  padding: 0 !important;
   text-align: left;
   width: u(26rem);
   white-space: initial;
@@ -256,12 +257,24 @@
     @include triangle(2rem, $primary, up);
     background-image: none;
     left: 20%;
+    top: u(-2rem) !important;
   }
 
   .button--close--primary {
     position: absolute;
     top: 0;
     right: 0;
+  }
+}
+
+.fc-event-container:nth-child(1) {
+  .cal-details {
+    margin-left: unset;
+
+    &::before {
+      right: auto;
+      left: u(2rem);
+    }
   }
 }
 
