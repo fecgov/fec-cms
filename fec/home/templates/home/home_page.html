@@ -31,21 +31,21 @@
         <a class="button--cta heading__right button--calendar" href="/calendar">Full calendar</a>
       </div>
       <ul class="grid grid--4-wide grid--flex t-sans">
-        <li class="grid__item grid__item--event">
+        <li class="grid__item grid__item--with-button">
           <div class="t-bold">Next commission meeting:</div>
           <div class="js-next-commission-meeting"></div>
           <a class="button button--alt button--updates" href="/meetings">All meetings</a>
-        <li class="grid__item grid__item--event">
+        <li class="grid__item grid__item--with-button">
           <div class="t-sans t-bold">Next filing deadline:</div>
           <div class="js-next-filing-deadline"></div>
           <a class="button button--alt button--calendar" href="/calendar/?category=report-E&category=report-M&category=report-MY&category=report-Q&category=report-YE">All filing deadlines</a>
         </li>
-        <li class="grid__item grid__item--event">
+        <li class="grid__item grid__item--with-button">
           <div class="t-sans t-bold">Next training or conference:</div>
           <div class="js-next-training-or-conference"></div>
           <a class="button button--alt button--calendar" href="/calendar/?category=Conferences&category=Roundtables">All outreach</a>
         </li>
-        <li class="grid__item grid__item--event">
+        <li class="grid__item grid__item--with-button">
           <div class="t-sans t-bold">Next public comment deadline:</div>
           <div class="js-next-public-comment-deadline"></div>
           <a class="button button--alt button--calendar" href="/calendar/?category=AOs+and+Rules">All legal events</a>
@@ -56,69 +56,24 @@
 
   <section class="slab slab--home slab--neutral">
     <div class="container">
-      <h2 class="heading--section u-margin--bottom">Introduction to campaign finance and elections</h2>
-
-      <div class="sidebar-container sidebar-container--left u-padding--top">
-        <a class="u-no-border" href="https://youtu.be/yIH_kBQdmdQ" target="_blank">
-        <img class="billboard__image" src={% static 'img/thumbnail--video.png' %} alt="Video icon"></a>
-        <div class="document-thumbnail__description">
-          <a href="https://youtu.be/yIH_kBQdmdQ" target="_blank">A citizen's guide to<br>
-          supporting candidates</a>
-        </div>
-      </div>
-
-      <div class="main__content--right-full u-padding--top  u-padding--bottom">
-        <h3>The FEC maintains financial data for past and current elections and the candidates in those races</h3>
-          <form action="/data/elections" method="GET">
-             <div class="search-controls__row">
-              <div class="search-controls__either">
-                 <div class="row">
-                    <label for="zip" class="label">Find by ZIP code</label>
-                   <div class="search-controls__zip">
-                     <input type="text" class="form-element--inline" inputmode="numeric" id="zip" name="zip" >
-                   </div>
-                   <div class="search-controls__submit">
-                     <button type="submit" class="button--search--text form-element--inline button--standard">Search</button>
-                   </div>
-                 </div>
-               </div>
-               <div class="search-controls__or search-controls__or--vertical">or</div>
-               <div class="search-controls__either">
-                 <fieldset>
-                   <legend class="label">Find by state and <span class="term" data-term="District">district</span></legend>
-                  <div class="search-controls__state combo combo--filter--mini">
-                   <select id="state" class="form-element--inline" name="state" aria-label="Select a state">
-                    <option value="" class="form-element--inline" selected>State</option>
-                    {% for value, label in settings.CONSTANTS.states.items %}
-                      <option value="{{ value }}" class="form-element--inline">{{ label }}</option>
-                    {% endfor %}
-                     </select>
-                   </div>
-                   <div class="search-controls__district combo combo--filter--mini">
-                     <select id="district" name="district" aria-label="Select a district" class="select--alt form-element--inline">
-                       <option value="" selected>District</option>
-                        {% for district in 100|districts %}
-                       <option value="{{ district }}">{{ district }}</option>
-                        {% endfor %}
-                     </select>
-                   </div>
-                   <div class="search-controls__submit">
-                     <button type="submit" class="button--search--text button--standard form-element--inline">Search</button>
-                   </div>
-                 </fieldset>
-               </div>
-             </div>
-
-             </form>
-             <ul class="list--border list--extra-spacious">
-               <li>
-                 <h3>There are different limits to how much contributors can give to <span class="term" data-term="Candidate">candidates </span>, <span class="term" data-term="Party committee">parties</span> and <span class="term" data-term="Political Action Committee (PAC)">political action committees (PACs)</span></h3>
-                  <a class="t-sans" href="/help-candidates-and-committees/candidate-taking-receipts/contribution-limits-candidates/" target="_blank">Find 2017–2018 contribution limits »</a>
-               </li>
-             </ul>
-          </div>
-        </div>
-      </div>
+      <h2 class="heading--section u-margin--bottom">Get started</h2>
+      <ul class="grid grid--3-wide grid--flex t-sans">
+        <li class="grid__item grid__item--with-img grid__item--with-button">
+          <img src="{% static 'img/feature--candidate-support.jpg' %}" alt="">
+          <h3 class="t-sans u-margin--top">Find out how individuals can support federal candidates</h3>
+          <div>Including making contributions, volunteering, internet activities and filing complaints</div>
+          <a class="button button--cta button--go" href="/introduction-campaign-finance/understanding-ways-support-federal-candidates/">Start learning</a>
+        <li class="grid__item grid__item--with-img grid__item--with-button">
+          <img src="{% static 'img/feature--compare-candidates.jpg' %}" alt="">
+          <h3 class="t-sans u-margin--top">Explore financial data for current and past elections and the candidates in those races</h3>
+          <a class="button button--cta button--go" href="/data/#compare-candidates-in-an-election">Compare candidates</a>
+        </li>
+        <li class="grid__item grid__item--with-img grid__item--with-button">
+          <img src="{% static 'img/feature--contributions.jpg' %}" alt="">
+          <h3 class="t-sans u-margin--top">Learn about how much contributors can give to different types of committees</h3>
+          <a class="button button--cta button--go" href="/help-candidates-and-committees/candidate-taking-receipts/contribution-limits-candidates/">Get the contribution limits</a>
+        </li>
+      </ul>
     </div>
   </section>
 
@@ -133,7 +88,7 @@
       <div class="grid grid--3-wide grid--no-border">
         <div class="grid__item">
           <div class="icon-heading">
-            <img class="icon-heading__image" src="{% static "img/headshot--walther.jpg" %}" alt="Headshot of Steven T. Walther">
+            <img class="icon-heading__image" src="{% static 'img/headshot--walther.jpg' %}" alt="Headshot of Steven T. Walther">
             <div class="icon-heading__content">
               <div class="t-lead"><a href="/about/leadership-and-structure/steven-t-walther">Steven T. Walther</a></div>
               <div class="t-note">Chairman</div>
@@ -143,7 +98,7 @@
         </div>
         <div class="grid__item">
           <div class="icon-heading">
-            <img class="icon-heading__image" src="{% static "img/headshot--hunter.jpg" %}" alt="Headshot of Caroline C. Hunter">
+            <img class="icon-heading__image" src="{% static 'img/headshot--hunter.jpg' %}" alt="Headshot of Caroline C. Hunter">
             <div class="icon-heading__content">
               <div class="t-lead"><a href="/about/leadership-and-structure/caroline-c-hunter">Caroline C. Hunter</a></div>
               <div class="t-note">Vice Chair</div>
@@ -153,7 +108,7 @@
         </div>
         <div class="grid__item">
           <div class="icon-heading">
-            <img class="icon-heading__image" src="{% static "img/headshot--goodman.jpg" %}" alt="Headshot of Lee E. Goodman">
+            <img class="icon-heading__image" src="{% static 'img/headshot--goodman.jpg' %}" alt="Headshot of Lee E. Goodman">
             <div class="icon-heading__content">
               <div class="t-lead"><a href="/about/leadership-and-structure/lee-e-goodman">Lee E. Goodman</a></div>
               <div class="t-sans">Republican</div>
@@ -162,7 +117,7 @@
         </div>
         <div class="grid__item">
           <div class="icon-heading">
-            <img class="icon-heading__image" src="{% static "img/headshot--petersen.jpg" %}" alt="Headshot of Matthew S. Petersen">
+            <img class="icon-heading__image" src="{% static 'img/headshot--petersen.jpg' %}" alt="Headshot of Matthew S. Petersen">
             <div class="icon-heading__content">
               <div class="t-lead"><a href="/about/leadership-and-structure/mathew-s-petersen">Matthew S. Petersen</a></div>
               <div class="t-sans">Republican</div>
@@ -171,7 +126,7 @@
         </div>
         <div class="grid__item">
           <div class="icon-heading">
-            <img class="icon-heading__image" src="{% static "img/headshot--weintraub.jpg" %}" alt="Headshot of Ellen L. Weintraub">
+            <img class="icon-heading__image" src="{% static 'img/headshot--weintraub.jpg' %}" alt="Headshot of Ellen L. Weintraub">
             <div class="icon-heading__content">
               <div class="t-lead"><a href="/about/leadership-and-structure/ellen-l-weintraub">Ellen L. Weintraub</a></div>
               <div class="t-sans">Democrat</div>
@@ -180,7 +135,7 @@
         </div>
         <div class="grid__item">
           <div class="icon-heading">
-            <img class="icon-heading__image" src="{% static "img/headshot--no-photo.jpg" %}" alt="Vacant Position">
+            <img class="icon-heading__image" src="{% static 'img/headshot--no-photo.jpg' %}" alt="Vacant Position">
             <div class="icon-heading__content">
               <div class="t-lead">Vacant seat</div>
               <div class="t-sans"></div>
