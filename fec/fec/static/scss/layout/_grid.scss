@@ -74,29 +74,30 @@
 
 .grid__item--with-img {
   img {
+    height: u(15rem);
     object-fit: cover;
-    height:u(15rem);
   }
 }
 
-.grid__item--with-icon--primary {
+.grid__item--with-icon {
   img {
-    @include u-bg--primary();
-    padding: u(2rem);
+    height: u(15rem);
     object-fit: contain;
-    height:u(15rem);
-    width:100%;
+    padding: u(2rem);
+    width: 100%;
+    }
   }
-}
 
-.grid__item--with-icon--secondary {
+.grid__icon--secondary {
   img {
     @include u-bg--secondary();
-    padding: u(2rem);
-    object-fit: contain;
-    height:u(15rem);
-    width:100%;
-  }
+ }
+}
+
+.grid__icon--primary {
+  img {
+    @include u-bg--primary();
+ }
 }
 
 // We set a max-width to prevent the omega mixins from applying multiple times.
