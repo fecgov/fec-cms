@@ -88,15 +88,15 @@
     }
   }
 
-.grid__icon--secondary {
+.grid__icon--deep-red {
   img {
-    @include u-bg--secondary();
+    background-color:$deep-red;
  }
 }
 
-.grid__icon--primary {
+.grid__icon--navy {
   img {
-    @include u-bg--primary();
+    background-color:$navy;
  }
 }
 
