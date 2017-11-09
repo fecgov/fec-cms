@@ -2,6 +2,8 @@
 {% import 'macros/breadcrumbs.jinja' as breadcrumb %}
 {% import 'macros/legal.jinja' as legal %}
 
+{% set breadcrumb_links=[('/legal-resources', 'Legal resources'), ('/legal-resources/enforcement', 'Enforcement')] %}
+
 {% block title %}MUR #{{ mur.no }}{% endblock %}
 
 {% block css %}
