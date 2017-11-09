@@ -69,11 +69,3 @@ class TestCycles(unittest.TestCase):
 
     def test_get_senate_cycles(self):
         assert utils.get_senate_cycles(1) == range(2018, 1979, -6)
-
-    def test_state_senate_cycles(self):
-        # Testing with an example state, Wisconsin
-        # There should be an election in 2016 but not 2014
-        # because of the classes the state has
-        wisconsin = utils.get_state_senate_cycles('wi')
-        assert 2016 in wisconsin
-        assert 2014 not in wisconsin
