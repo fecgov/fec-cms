@@ -1,9 +1,9 @@
 {% load filters %}
 <ul class="list--spacious">
-  {% for tips_for_treasurer in tips_for_treasurers %}
+  {% for tip in tips_for_treasurers %}
   <li>
-    <a class="t-bold" href="{{ tips_for_treasurer.url }}">{% formatted_title tips_for_treasurer %}</a>
-    <span class="t-sans u-margin--left">{{ tips_for_treasurer.date|date:'F j, Y' }}</span>
+    <a class="t-bold" href="{{ tip.url }}">{% formatted_title tip %}</a>
+    <span class="t-sans u-margin--left">{{ tip.date|date:'F j, Y' }}</span>
   </li>
   {% endfor %}
 </ul>

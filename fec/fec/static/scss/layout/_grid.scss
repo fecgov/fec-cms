@@ -90,14 +90,14 @@
 
 .grid__icon--deep-red {
   img {
-    background-color:$deep-red;
- }
+    background-color: $deep-red;
+  }
 }
 
 .grid__icon--navy {
   img {
-    background-color:$navy;
- }
+    background-color: $navy;
+  }
 }
 
 // We set a max-width to prevent the omega mixins from applying multiple times.
