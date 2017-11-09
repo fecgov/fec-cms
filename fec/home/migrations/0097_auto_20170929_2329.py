@@ -18,9 +18,4 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.AddField(
-            model_name='homepagebannerannouncement',
-            name='date_inactive',
-            field=models.DateTimeField(null=True),
-        )
     ]
