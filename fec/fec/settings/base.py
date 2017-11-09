@@ -69,6 +69,14 @@ INSTALLED_APPS = (
     'modelcluster',
     'storages',
 
+    'fec',
+    'search',
+    'home',
+    'data',
+    'legal',
+    'uaa_client',
+    'extend_admin',
+
     'wagtail.wagtailcore',
     'wagtail.wagtailadmin',
     'wagtail.wagtailsearch',
@@ -87,14 +95,6 @@ INSTALLED_APPS = (
     'wagtail.contrib.wagtailstyleguide',
 
     'django_jinja',
-
-    'fec',
-    'search',
-    'home',
-    'data',
-    'legal',
-    'uaa_client',
-    'extend_admin',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -198,6 +198,9 @@ STATICFILES_FINDERS = (
 STATICFILES_DIRS = (
     os.path.join(BASE_DIR, 'dist', 'fec', 'static'),
     os.path.join(PROJECT_DIR, 'static'),
+    # We will need just the assets of certain npm modules for Wagtail
+    # So we are including af older of symlinks to modules to access
+    os.path.join(BASE_DIR, 'fec', 'wagtail_npm_dependencies'),
 )
 
 DIST_DIR = os.path.join(BASE_DIR, 'dist')
