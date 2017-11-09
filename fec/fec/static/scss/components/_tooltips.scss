@@ -87,7 +87,7 @@
 //
 
 .tooltip--under {
-  $top: u(1rem);
+  $top: u(1.5rem);
   width: u(30rem);
   left: u(-14rem);
   top: calc(100% + #{$top});
