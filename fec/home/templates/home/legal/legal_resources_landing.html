@@ -57,6 +57,7 @@
             {% legal_news_feed %}
     </div>
   </div>
+
   <section class="content__section content__section--ruled">
     <h3>Browse legal resources</h3>
     <ul class="grid grid--4-wide">
@@ -128,19 +129,20 @@
       </li>
     </ul>
   </section>
+
 </div>
   <section class="slab slab--neutral">
     <div class="container">
        <h2>You might also like</h2>
        <ul class="grid grid--4-wide grid--flex t-sans">
-          <li class="grid__item">
-            <img src="{% static "img/feature--filing.jpg" %}" alt="">
-          </li>
+         <li class="grid__item grid__item--with-icon grid__icon--deep-red">
+         <img src="{% static 'img/i-complex--regreport.svg' %}" alt="">
+      </li>
           <li class="grid__item">
             <h3 class="u-no-margin"><a href="/help-candidates-and-committees/guides">Guides for candidates and committees</a></h3>
             <p>Learn more about how individuals and groups can be active in federal elections and the requirements that apply to them.</p>
           </li>
-          <li class="grid__item">
+          <li class="grid__item grid__item--with-img">
             <img src="{% static "img/feature--contributions.jpg" %}" alt="">
           </li>
           <li class="grid__item">
@@ -150,7 +152,6 @@
        </ul>
     </div>
   </section>
-
 
 {% include 'partials/disclaimer.html' %}
 {% include 'partials/legal-keyword-modal.html' %}
