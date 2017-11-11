@@ -13,15 +13,13 @@ function SearchResults(props) {
   }
 
   function getIssueDate(advisory_opinion) {
-    if(advisory_opinion.issue_date === "1900-01-01") {
-      if(advisory_opinion.is_pending) {
+    if(advisory_opinion.status === 'Pending') {
         return "Pending";
-      } else {
+    } else if (advisory_opinion.status === 'Withdrawn') {
         return "Withdrawn";
-      }
     } else {
         return moment(advisory_opinion.issue_date).format('MM/DD/YYYY');
-      }
+    }
   }
 
   if(props.loading) {

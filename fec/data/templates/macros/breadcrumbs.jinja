@@ -1,6 +1,6 @@
 {% macro breadcrumbs(title, links) %}
 <ul class="breadcrumbs">
-  <li class="breadcrumbs__item"><a href="{{ cms_url }}" class="breadcrumbs__link" rel="Home">Home</a></li>
+  <li class="breadcrumbs__item"><a href="/" class="breadcrumbs__link" rel="Home">Home</a></li>
   {% for link in links %}
   <li class="breadcrumbs__item">
     {% if link[0] != '' %}
