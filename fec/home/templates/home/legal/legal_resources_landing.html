@@ -7,20 +7,13 @@
 {% block title %}Legal resources{% endblock %}
 {% block body_class %}template-{{ self.get_verbose_name | slugify }}{% endblock %}
 
-{% block extra_js %}
-  <script>
-    TOUR_PAGE = 'legal-resources';
-  </script>
-  <script type="text/javascript" src="{% asset_for_js 'legal.js' %}"></script>
-{% endblock extra_js %}
-
 {% block content %}
   {% include "partials/search-hero.html" %}
 <div class="container main">
   <div class="gcontainer grid--2-wide grid--flex">
     <div class="grid__item card t-left-aligned">
       <h3>Search across all legal resources</h3>
-      <form id="large-search" method="get" action="{{ settings.FEC_APP_URL }}/legal/search/" autocomplete="off" class="search__container js-search">
+      <form id="large-search" method="get" action="/data/legal/search/" autocomplete="off" class="search__container js-search">
         <div class="combo combo--search combo--search--inline">
           <select class="search__select select--alt js-search-type" name="search_type" aria-label="Select a search type">
             <option value="all" selected>All Sources</option>
@@ -53,8 +46,8 @@
         <div class="heading--section heading--with-action">
           <h3 class="heading__left">Legal News</h3>
           <a class="button button--alt heading__right" href="/updates">All News</a>
-         </div>
-            {% legal_news_feed %}
+        </div>
+        {% legal_news_feed %}
     </div>
   </div>
 
@@ -131,6 +124,7 @@
   </section>
 
 </div>
+
   <section class="slab slab--neutral">
     <div class="container">
        <h2>You might also like</h2>
