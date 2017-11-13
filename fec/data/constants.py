@@ -291,133 +291,108 @@ house_senate_types = OrderedDict([
     ('S', 'Senate')
 ])
 
-audit_categories = OrderedDict([
-    ('0', 'No Findings or Issues'),
-    ('1', 'Failure to File Reports/Schedules/Notices'),
-    ('2', 'Allocation Issues'),
-    ('3', 'Disclosure'),
-    ('4', 'Recordkeeping'),
-    ('5', 'Excessive Contributions'),
-    ('6', 'Prohibited Contributions'),
-    ('7', 'Misstatement of Financial Activity'),
-    ('8', 'Loans'),
-    ('9', 'Other'),
-    ('13', 'Repayment to US Treasury'),
-    ('14', 'Net Outstanding Campaign/Convention Expenditures/Obligations'),
-    ('15', 'Payments/Disgorgements'),
-    ('16', 'No Findings or Issues/Not a Committee'),
-    ('17', 'Referred Findings Not Listed'),
-    ('201', '24/48 Hour Notice-Independent Expenditures'),
-    ('202', '3Z-1'),
-    ('203', '48 Hour Notices'),
-    ('204', 'Activity from Building Fund Account'),
-    ('205', 'Allocation Issues')
-])
 
-audit_sub_categories = OrderedDict([
-    ('235', 'Failure to File Reports/Schedules/Notices'),
-    ('203', 'Failure to File Reports/Schedules/Notices'),
-    ('202', 'Failure to File Reports/Schedules/Notices'),
-    ('201', 'Failure to File Reports/Schedules/Notices'),
-    ('264', 'Failure to File Reports/Schedules/Notices'),
-    ('286', 'Allocation Issues'),
-    ('260', 'Allocation Issues'),
-    ('218', 'Disclosure'),
-    ('204', 'Disclosure'),
-    ('244', 'Disclosure'),
-    ('249', 'Disclosure'),
-    ('251', 'Disclosure'),
-    ('257', 'Disclosure'),
-    ('264', 'Disclosure'),
-    ('267', 'Disclosure'),
-    ('283', 'Disclosure'),
-    ('202', 'Disclosure'),
-    ('236', 'Disclosure'),
-    ('230', 'Disclosure'),
-    ('227', 'Disclosure'),
-    ('220', 'Disclosure'),
-    ('224', 'Disclosure'),
-    ('237', 'Disclosure'),
-    ('283', 'Recordkeeping'),
-    ('212', 'Recordkeeping'),
-    ('224', 'Recordkeeping'),
-    ('285', 'Recordkeeping'),
-    ('227', 'Recordkeeping'),
-    ('244', 'Recordkeeping'),
-    ('253', 'Recordkeeping'),
-    ('256', 'Recordkeeping'),
-    ('257', 'Recordkeeping'),
-    ('289', 'Recordkeeping'),
-    ('248', 'Excessive Contributions'),
-    ('249', 'Excessive Contributions'),
-    ('252', 'Excessive Contributions'),
-    ('262', 'Excessive Contributions'),
-    ('266', 'Excessive Contributions'),
-    ('269', 'Excessive Contributions'),
-    ('246', 'Excessive Contributions'),
-    ('245', 'Excessive Contributions'),
-    ('234', 'Excessive Contributions'),
-    ('220', 'Excessive Contributions'),
-    ('219', 'Excessive Contributions'),
-    ('217', 'Excessive Contributions'),
-    ('215', 'Excessive Contributions'),
-    ('209', 'Excessive Contributions'),
-    ('278', 'Excessive Contributions'),
-    ('272', 'Excessive Contributions'),
-    ('281', 'Prohibited Contributions'),
-    ('221', 'Prohibited Contributions'),
-    ('222', 'Prohibited Contributions'),
-    ('234', 'Prohibited Contributions'),
-    ('239', 'Prohibited Contributions'),
-    ('246', 'Prohibited Contributions'),
-    ('248', 'Prohibited Contributions'),
-    ('249', 'Prohibited Contributions'),
-    ('268', 'Prohibited Contributions'),
-    ('269', 'Prohibited Contributions'),
-    ('218', 'Prohibited Contributions'),
-    ('211', 'Misstatement of Financial Activity'),
-    ('243', 'Misstatement of Financial Activity'),
-    ('257', 'Misstatement of Financial Activity'),
-    ('249', 'Misstatement of Financial Activity'),
-    ('287', 'Misstatement of Financial Activity'),
-    ('227', 'Misstatement of Financial Activity'),
-    ('242', 'Misstatement of Financial Activity'),
-    ('270', 'Loans'),
-    ('237', 'Loans'),
-    ('236', 'Loans'),
-    ('210', 'Loans'),
-    ('277', 'Loans'),
-    ('3', 'Loans'),
-    ('204', 'Other'),
-    ('213', 'Other'),
-    ('216', 'Other'),
-    ('228', 'Other'),
-    ('241', 'Other'),
-    ('254', 'Other'),
-    ('266', 'Other'),
-    ('271', 'Other'),
-    ('256', 'Other'),
-    ('234', 'Other'),
-    ('279', 'Other'),
-    ('282', 'Other'),
-    ('288', 'Other'),
-    ('284', 'Other'),
-    ('212', 'Other'),
-    ('207', 'Repayment to US Treasury'),
-    ('265', 'Repayment to US Treasury'),
-    ('214', 'Repayment to US Treasury'),
-    ('209', 'Repayment to US Treasury'),
-    ('232', 'Repayment to US Treasury'),
-    ('274', 'Repayment to US Treasury'),
-    ('247', 'Repayment to US Treasury'),
-    ('0', 'Net Outstanding Campaign/Convention Expenditures/Obligations'),
-    ('280', 'Payments/Disgorgements'),
-    ('209', 'Payments/Disgorgements'),
-    ('231', 'Payments/Disgorgements'),
-    ('263', 'Payments/Disgorgements'),
-    ('0', 'No Findings or Issues/Not a Committee'),
-    ('0', 'Referred Findings Not Listed'),
-])
+primary_category_keys = ['primary_category_id', 'primary_category_name']
+sub_category_keys = ['sub_category_id', 'sub_category_name']
+
+audit_primary_categories_options = [
+    {
+        "primary_category_id": 0,
+        "primary_category_name": "Please select"
+    },
+    {
+        "primary_category_id": 2,
+        "primary_category_name": "Allocation Issues"
+    },
+    {
+        "primary_category_id": 3,
+        "primary_category_name": "Disclosure"
+    },
+    {
+        "primary_category_id": 5,
+        "primary_category_name": "Excessive Contributions"
+    },
+    {
+        "primary_category_id": 1,
+        "primary_category_name": "Failure to File Reports/Schedules/Notices"
+    },
+    {
+        "primary_category_id": 8,
+        "primary_category_name": "Loans"
+    },
+    {
+        "primary_category_id": 7,
+        "primary_category_name": "Misstatement of Financial Activity"
+    },
+    {
+        "primary_category_id": 14,
+        "primary_category_name": "Net Outstanding Campaign/Convention Expenditures/Obligations"
+    },
+    {
+        "primary_category_id": 16,
+        "primary_category_name": "No Findings or Issues/Not a Committee"
+    },
+    {
+        "primary_category_id": 9,
+        "primary_category_name": "Other"
+    },
+    {
+        "primary_category_id": 15,
+        "primary_category_name": "Payments/Disgorgements"
+    },
+    {
+        "primary_category_id": 6,
+        "primary_category_name": "Prohibited Contributions"
+    },
+    {
+        "primary_category_id": 4,
+        "primary_category_name": "Recordkeeping"
+    },
+    {
+        "primary_category_id": 17,
+        "primary_category_name": "Referred Findings Not Listed"
+    },
+    {
+        "primary_category_id": 13,
+        "primary_category_name": "Repayment to US Treasury"
+    }
+]
+
+audit_sub_categories_options = [
+    {
+        "sub_category_name": "3Z-1",
+        "sub_category_id": 202
+    },
+    {
+        "sub_category_name": "Activity from Building Fund Account",
+        "sub_category_id": 204
+    },
+    {
+        "sub_category_name": "Contributions Made",
+        "sub_category_id": 218
+    },
+    {
+        "sub_category_name": "Coordinated Expenditures",
+        "sub_category_id": 220
+    },
+    {
+        "sub_category_name": "Debt and Obligations",
+        "sub_category_id": 224
+    },
+    {
+        "sub_category_name": "Disbursements",
+        "sub_category_id": 227
+    },
+    {
+        "sub_category_name": "Earmarked Contributions",
+        "sub_category_id": 230
+    },
+    {
+        "sub_category_name": "Failure to Itemize  Expenditures",
+        "sub_category_id": 236
+    }
+]
+
 
 table_columns = OrderedDict([
     ('candidates', ['Name', 'Office', 'Election years', 'Party', 'State', 'District', 'First filing date']),

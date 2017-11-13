@@ -1,9 +1,67 @@
-{% import 'macros/filters/checkbox.jinja' as checkbox %}
+{% import 'macros/filters/dropdown-json.jinja' as dropdown %}
 
-{{ checkbox.checkbox_dropdown(
-  'audit-category',
-  'Findings and issue categories',
-  options=constants.audit_categories
+{{ dropdown.select_json_formate(
+	'primary_category_id',
+	'Primary Categories',
+	keys=constants.primary_category_keys,
+	options=constants.audit_primary_categories_options
 )
 }}
 
+{{ dropdown.select_json_formate(
+	'sub_category_id',
+	'SubCategories',
+	keys=constants.sub_category_keys,
+	options=constants.audit_sub_categories_options
+)
+}}
+{#{% macro dropdown(name, label, options, value) %}
+<div class="filter">
+<label for="{{ name }}" class="label">{{ label }}</label>
+<select id={{ name }} name="{{ name }}">
+  {% for option in options %}
+  <option value={{ option['value'] }} {% if option['value'] == value %} selected="true" {% endif %}>{{ option['text'] }}</option>
+  {% endfor %}
+</select>
+</div>
+{% endmacro %}##}
+
+{#{% macro dropdown(name, label, options) %}
+<div class="filter">
+<label for="{{ name }}" class="label">{{ label }}</label>
+<select id={{ name }} name="{{ name }}">
+  {% for value, text in options.items() %}
+  <option value="{{ value}}">{{text}}</option>
+  {% endfor %}
+</select>
+</div>
+{% endmacro %}
+##}
+
+
+{#{% macro render_form(form, dropdown=None) -%}
+    {% if dropdown %}
+    {% else %}
+    {% endif %}
+{%- endmacro %}
+{% from "form.html" import render_form %}
+{{ render_form(form, dropdown) }} ##}
+
+
+
+
+{#}
+
+{{ dropdown(
+  'audit-category',
+  'Primary Categories',
+  options=constants.audit_categories
+)
+}}##}
+
+{#{{ checkbox.checkbox_dropdown(
+  'audit-category',
+  'Sub Categories',
+  options=constants.audit_sub_categories
+)
+}}##}

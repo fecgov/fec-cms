@@ -1,19 +1,23 @@
 {% extends 'partials/filters.jinja' %}
 
 {% import 'macros/filters/text.jinja' as text %}
-{% import 'macros/filters/typeahead-filter.jinja' as typeahead %}
-{% import 'macros/filters/date.jinja' as date %}
-{% import 'macros/filters/range.jinja' as range %}
 {% import 'macros/filters/years.jinja' as years %}
 
 
 {% block filters %}
   <div class="filters__inner">
-    {{ typeahead.field('committee_id', 'Audited Committee Name or ID') }}
+  	{{ text.field('committee_name', 'Audited committee name') }}
+  	{{ text.field('committee_id', 'Audited committee id') }}
+  	{{ text.field('candidate_name', 'Authorized candidate name') }}
+ 
+  {#{{ typeahead.field('committee_id', 'Audited Committee Name or ID') }}
     {{ typeahead.field('candidate_name', 'Authorized Candidate Name or ID') }}
-    {% include 'partials/filters/candcomtype.jinja' %}
+   #}  
+   	{% include 'partials/filters/committee-types.jinja' %}
+    
     {% include 'partials/filters/audit-categories.jinja' %}
-    {% include 'partials/filters/audit-sub-categories.jinja' %}
-    {{ date.field('cycle', 'Election Cycles covered by audit' ) }}
+
+  	{{ years.range('cycle', 'Election Cycles covered by audit' ) }}
+   
   </div>
 {% endblock %}
