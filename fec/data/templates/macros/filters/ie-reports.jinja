@@ -10,13 +10,13 @@
       </div>
     </div>
   </div>
-  <label for="summary{{id_suffix}}" class="toggle">
-    <input type="radio" class="toggle" value="false" id="summary{{id_suffix}}" checked name="is_notice" data-tag-value="Regularly scheduled reports">
-    <span class="button--alt">Regularly scheduled reports</span>
-  </label>
   <label for="notice{{id_suffix}}" class="toggle">
     <input type="radio" class="toggle" value="true" id="notice{{id_suffix}}" name="is_notice" data-tag-value="24- and 48-Hour Reports">
     <span class="button--alt">24- and 48-Hour Reports</span>
+  </label>
+  <label for="summary{{id_suffix}}" class="toggle">
+    <input type="radio" class="toggle" value="false" id="summary{{id_suffix}}" checked name="is_notice" data-tag-value="Regularly scheduled reports">
+    <span class="button--alt">Regularly scheduled reports</span>
   </label>
 </fieldset>
 {% endmacro %}
