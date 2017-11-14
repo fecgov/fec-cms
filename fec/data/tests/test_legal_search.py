@@ -1,7 +1,6 @@
 import unittest
 import datetime
 
-from webargs import fields
 from django.test import Client
 from django.test import TestCase
 from unittest import mock
