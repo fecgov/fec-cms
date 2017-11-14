@@ -37,3 +37,7 @@ django-storages==1.5.2
 boto3==1.4.4
 
 cg-django-uaa==1.0.1
+
+# Testing
+pytest==3.2.3
+Faker==0.8.6
