@@ -1,9 +1,9 @@
 ## Welcome
-We're glad you're thinking about contributing to an 18F open source project! If you're unsure about anything, ask us — or submit the issue or pull request anyway. The worst that can happen is that we’ll politely ask you to change something. 
+We're glad you're thinking about contributing to an 18F open source project! If you're unsure about anything, ask us — or submit the issue or pull request anyway. The worst that can happen is that we’ll politely ask you to change something.
 
-We love all friendly contributions, and we welcome your ideas about how to make the FEC's online presence more user friendly, accessible, and elegant. 
+We love all friendly contributions, and we welcome your ideas about how to make the FEC's online presence more user friendly, accessible, and elegant.
 
-To ensure a welcoming environment for our projects, our staff follows the [18F Code of Conduct](https://github.com/18F/code-of-conduct/blob/master/code-of-conduct.md); contributors should do the same. Please also check out the [18F Open Source Policy GitHub repository]( https://github.com/18f/open-source-policy). 
+To ensure a welcoming environment for our projects, our staff follows the [18F Code of Conduct](https://github.com/18F/code-of-conduct/blob/master/code-of-conduct.md); contributors should do the same. Please also check out the [18F Open Source Policy GitHub repository]( https://github.com/18f/open-source-policy).
 
 If you’d prefer, you can also reach us by [email](mailto:betafeedback@fec.gov).
 
@@ -12,42 +12,88 @@ All contributions to this project will be released under the CC0 dedication. By 
 
 ### Issues
 We use GitHub issues to track user issues and team tasks. Whenever possible, we follow this outline:
- 
+
 1. Goal: a quick blurb explaining the bug or what the issue should accomplish. What is the user need?
 2. Completion criteria: how we’ll know that this issue has been completed
 3. Tasks to completion:
-    - [ ] Use 
+    - [ ] Use
     - [ ] Markdown
-    - [ ] Checklists 
+    - [ ] Checklists
 4. Dependencies (optional): What other issues out there need to be completed before you can do this one? Include links to tickets with the dependency.
-5. For development issues, include:
-Unknown tasks or dependencies that need investigation
-[The boilerplate tasks for each development issue](https://gist.github.com/theresaanna/86be7e29214a7f31ab73)
 
-### Commit messages
-- Good commit messages start with a verb, like “adds” or “changes” or “removes.” 
-- Be sure to talk about the nature of the change you're making. Explain why the change is needed, rather than simply describing the bug or task it addresses. 
-- If your commit resolves an issue, reference it in the commit messages. For example “fixes #555.” Read more GitHub guidance on [closing issues via commit messages](https://help.github.com/articles/closing-issues-via-commit-messages/).
-- We encourage you to follow the [50/72 format](http://stackoverflow.com/questions/2290016/git-commit-messages-50-72-formatting).
+## Pull request and branching guidance
 
 ### Pull requests
-- Anyone may informally review a pull request and make comments or suggestions. 
-- When a pull request is ready for review, label it `plz-review`. 
-- Include a summary of all work and changes.
-- Use `cc @username` to notify a specific team member to review a pull request.
 
-## 18F team processes
-* Use PEP8 as the coding standard for Python, but don't worry about fitting lines within 79 characters.
-* Create pull requests for all commits, even typo fixes.
-* Don't merge your own pull request. Ask a colleague to review your code and merge.
-* Pull requests contain some tests. Ideally they would contain decent test coverage.
+#### Writing a pull request
+Authoring a good pull request saves time for both the developer and anyone reviewing changes in code. It re-enforces the purpose and validity of the code change and it also makes it easier for reviewers to understand the changes at a glance before diving in.
 
-## 18F team workflow
-1. Pull an issue from the current sprint only, please (unless there is an *URGENT* issue). Take an unassigned issue or re-assign an issue with the label "[stealable](https://github.com/18F/openFEC/labels/stealable)." If a non *URGENT* issue comes up, but you want to prioritize it, coordinate with the PM or tech lead on slack.
-2. Before starting, [write the dev issue checklist](https://github.com/18f/openFEC/blob/develop/CONTRIBUTING.md#development-issues-should-include).
-3. While working, submit `[WIP]` [pull requests](https://github.com/18f/openFEC/blob/develop/CONTRIBUTING.md#pull-requests) liberally.
-4. Time boxing! If you have spent half the time of the estimated size of the issue and you're not sure that you're half-way finished, notify the tech lead or PM in slack. This isn't bad, we just like knowing what's up. :)
-5. Make sure your PR includes significant test coverage.
-6. Once you're done with your PR, notify the team in slack that your PR is ready for review. Do a review of someone else's PR. (Follow the above PR guidelines.)
+Do:
 
-
+  * Use a descriptive but succinct title
+  * Try to keep it under 75 characters
+  * Use a _verb/adjective_ aimed at a particular **feature**:
+    * “_New_ **meetings archive** page,”
+    * “_Changes_ to **candidate page** design,”
+    * “_Fix_ for **election page** button”
+  * Follow the pre-populated fields in the pull request template. Remember to delete fields you don’t use.
+  * Include a summary that describes components that will be affected in the application
+    * Include issue number(s) and other related PRs
+  * Add screenshots, short videos, or gifs
+    * When there are changes to styling or to the interface, a before/after image is helpful
+    * In interactive features, an animated gif captures the movement and activity
+  * Check to remove `print` statements and commented out code
+  * Lint your code and double check indents and make sure to use proper spacing
+
+Don’t:
+
+  * Use overly verbose or technically detailed PR titles.
+    * “New class .foo-bar on profile sections plus javascript changes on design pages,” could be “New interactions and designs for Committee profiles,”
+    * “Tooltips on calendar now works when hovered with points” could be “Fixes for Calendar tooltips”
+  * Leave unused blank fields in the pull request template when you submit it
+
+
+**Resources**
+
+* An [article about writing effective pull requests](https://www.atlassian.com/blog/git/written-unwritten-guide-pull-requests) from Atlassian.
+* An [article on writing good commit messages](https://chris.beams.io/posts/git-commit/) by Chris Beams
+
+
+### Branching
+
+#### Feature development branching
+If you are developing a new feature, you can make a branch `feature/name-of-new-feature` but you can also use git flow to start it using `git flow feature start name-of-new-feature`.
+
+#### Quick fix branching
+Branches for fixes to an existing feature or modifications to the general codebase can be established as a feature with a name starting with “fix-” to differentiate themselves from full fledged features, for example `feature/fix-broken-button`.
+
+#### Work in progress (WIP)
+Work in progress PRs may be helpful to show that a feature is in active development for an extended period of time. WIP PRs should be limited so that they don’t distract from active and open PRs that are waiting for review, and because work shouldn’t generally sit unmerged for long periods of time (that is a development antipattern). Early and in progress code can still be reviewed in a remote branch directly and in communication with peers without having to explicitly open a pull request, and then can be opened when it is ready for final review.
+
+That said, if you are working steadily on an issue by yourself in the beginning, you should still consider opening a PR early on. This will provide visibility into your work and help inform others of what you’ve been accomplishing, and it will allow the tests to run in CircleCI, providing you with feedback as you work. You should be pushing your commits regularly as you make progress so that you receive automated testing feedback early and often. Furthermore, someone else might take a glance at what’s currently in flight and may be able to pick up on something that requires a change in direction earlier on in development, making it much easier to pivot.
+
+#### Ready for review
+
+##### Labeling
+After you open the PRs and it’s ready for review, apply the label “plz-review” and tag a specific person to review it. If the PRs needs to be included in the next release, apply the “Before release” label so that reviewers recognize that it’s a priority.
+
+##### Getting a PR review
+Sometimes tagging a reviewer may not be enough. If a PR needs to be reviewed in a timely manner, reach out to folks individually to ask for help as they may not know the urgency of the PR needing a review.
+
+##### Reviewing a pull request
+Reviewing pull requests is not always easy and reviewers should make sure to block out time in their schedule so they are not rushed. Always make sure to pull down the branch and test the work on your local machine. DO NOT BLINDLY MERGE IN PRS YOU DO NOT UNDERSTAND. Do not feel shy about asking questions and requesting the author of the pull request to explain certain sections of their code. That is the purpose of a code review.
+
+**Resources**
+* [Tips for code reviews](http://engineering.khanacademy.org/posts/tips-for-code-reviews.htm) from Khan Academy
+
+### Urgent fixes between releases
+
+#### Hotfixes
+To reiterate the onboarding documentation:<br>
+<br>
+_“A hotfix is intended to address an issue that is having a critical impact to the production site that must be remediated outside of the normal release schedule. These should very much be the exception, not the rule, but they do come up from time to time and can range from a glaring typo to something that brings down core functionality (e.g., an API endpoint failing).”_<br>
+<br>
+Hotfixes should only address urgent issues that are determined by project managers to be a critical detriment to production. Otherwise, fixes and updates can be rolled into the next release. If there is a large number of hotfixes needed, the team should consider making an extra mid-sprint mini release instead of deploying several hotfixes.<br>
+<br>
+A detailed step-by-step guide to creating hotfixes can be found in the onboarding documentation.
+
