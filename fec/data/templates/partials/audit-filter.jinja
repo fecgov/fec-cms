@@ -2,10 +2,14 @@
 
 {% import 'macros/filters/text.jinja' as text %}
 {% import 'macros/filters/years.jinja' as years %}
+{% import 'macros/filters/typeahead-filter.jinja' as typeahead %}
 
 
 {% block filters %}
   <div class="filters__inner">
+    {{ typeahead.field('q', 'Candidate name or ID', '', dataset='audit_candidates', allow_text=True) }}
+
+
   	{{ text.field('committee_name', 'Audited committee name') }}
   	{{ text.field('committee_id', 'Audited committee id') }}
   	{{ text.field('candidate_name', 'Authorized candidate name') }}
