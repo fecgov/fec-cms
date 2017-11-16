@@ -35,6 +35,22 @@ function formatCommittee(result) {
     id: result.id,
     type: 'committee'
   };
+} 
+
+function formatAuditCommittee(result) {
+  return {
+    name: result.name,
+    id: result.id,
+    type: 'committee'
+  };
+}
+
+function formatAuditCandidate(result) {
+  return {
+    name: result.name,
+    id: result.id,
+    type: 'audit_candidates'
+  };
 }
 
 function getUrl(resource) {
@@ -77,6 +93,26 @@ var committeeEngine = createEngine({
   }
 });
 
+var audit_committeeEngine = createEngine({
+  remote: {
+    url: getUrl('audit_committees'),
+    wildcard: '%QUERY',
+    transform: function(response) {
+      return _.map(response.results, formatAuditCommittee);
+    },
+  }
+});
+
+var audit_candidateEngine = createEngine({
+  remote: {
+    url: getUrl('audit_candidates'),
+    wildcard: '%QUERY',
+    transform: function(response) {
+      return _.map(response.results, formatAuditCandidate);
+    },
+  }
+});
+
 var candidateDataset = {
   name: 'candidate',
   display: 'name',
@@ -103,6 +139,37 @@ var committeeDataset = {
   templates: {
     header: '<span class="tt-suggestion__header">Select a committee:</span>',
     pending: '<span class="tt-suggestion__loading">Loading committees...</span>',
+    notFound: Handlebars.compile(''), // This has to be empty to not show anything
+    suggestion: Handlebars.compile(
+      '<span class="tt-suggestion__name">{{ name }} ({{ id }})</span>'
+    )
+  }
+};
+
+
+var audit_committeeDataset = {
+  name: 'audit_committee',
+  display: 'name',
+  limit: 10,
+  source: audit_committeeEngine,
+  templates: {
+    header: '<span class="tt-suggestion__header">Select a committee:</span>',
+    pending: '<span class="tt-suggestion__loading">Loading committees...</span>',
+    notFound: Handlebars.compile(''), // This has to be empty to not show anything
+    suggestion: Handlebars.compile(
+      '<span class="tt-suggestion__name">{{ name }} ({{ id }})</span>'
+    )
+  }
+};
+
+var audit_candidateDataset = {
+  name: 'audit_committee',
+  display: 'name',
+  limit: 10,
+  source: audit_candidateEngine,
+  templates: {
+    header: '<span class="tt-suggestion__header">Select a candidate:</span>',
+    pending: '<span class="tt-suggestion__loading">Loading candidates...</span>',
     notFound: Handlebars.compile(''), // This has to be empty to not show anything
     suggestion: Handlebars.compile(
       '<span class="tt-suggestion__name">{{ name }} ({{ id }})</span>'
@@ -150,6 +217,8 @@ var siteDataset = {
 var datasets = {
   candidates: candidateDataset,
   committees: committeeDataset,
+  audit_candidates: audit_candidateDataset,
+  audit_committees: audit_committeeDataset,
   allData: [candidateDataset, committeeDataset],
   all: [candidateDataset, committeeDataset, individualDataset, siteDataset]
 };
