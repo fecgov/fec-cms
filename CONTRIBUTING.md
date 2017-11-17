@@ -53,7 +53,7 @@ Authoring a good pull request saves time for both the developer and anyone revie
   * Leave unused blank fields in the pull request template when you submit it
 
 
-#### Resources
+##### Resources
 
 * An [article about writing effective pull requests](https://www.atlassian.com/blog/git/written-unwritten-guide-pull-requests) from Atlassian.
 * An [article on writing good commit messages](https://chris.beams.io/posts/git-commit/) by Chris Beams
@@ -72,18 +72,18 @@ Work in progress PRs may be helpful to show that a feature is in active developm
 
 That said, if you are working steadily on an issue by yourself in the beginning, you should still consider opening a PR early on. This will provide visibility into your work and help inform others of what you’ve been accomplishing, and it will allow the tests to run in CircleCI, providing you with feedback as you work. You should be pushing your commits regularly as you make progress so that you receive automated testing feedback early and often. Furthermore, someone else might take a glance at what’s currently in flight and may be able to pick up on something that requires a change in direction earlier on in development, making it much easier to pivot.
 
-#### Ready for review
+### Ready for review
 
-##### Labeling
+#### Labeling
 After you open the PRs and it’s ready for review, apply the label “plz-review” and tag a specific person to review it. If the PRs needs to be included in the next release, apply the “Before release” label so that reviewers recognize that it’s a priority.
 
-##### Getting a PR review
+#### Getting a PR review
 Sometimes tagging a reviewer may not be enough. If a PR needs to be reviewed in a timely manner, reach out to folks individually to ask for help as they may not know the urgency of the PR needing a review.
 
-##### Reviewing a pull request
+#### Reviewing a pull request
 Reviewing pull requests is not always easy and reviewers should make sure to block out time in their schedule so they are not rushed. Always make sure to pull down the branch and test the work on your local machine. DO NOT BLINDLY MERGE IN PRS YOU DO NOT UNDERSTAND. Do not feel shy about asking questions and requesting the author of the pull request to explain certain sections of their code. That is the purpose of a code review.
 
-#### Resources
+##### Resources
 * [Tips for code reviews](http://engineering.khanacademy.org/posts/tips-for-code-reviews.htm) from Khan Academy
 
 ### Urgent fixes between releases
