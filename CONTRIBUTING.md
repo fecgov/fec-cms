@@ -89,10 +89,10 @@ Reviewing pull requests is not always easy and reviewers should make sure to blo
 ### Urgent fixes between releases
 
 #### Hotfixes
-To reiterate the onboarding documentation:<br>
+To reiterate the [onboarding documentation](https://docs.google.com/document/d/18ZjPvNrdW3wn9pUx7hSNbaMlaEaPPOGzOHh-WjLiVOg/edit#heading=h.8a6bhbb6fbdz):<br>
 <br>
 _“A hotfix is intended to address an issue that is having a critical impact to the production site that must be remediated outside of the normal release schedule. These should very much be the exception, not the rule, but they do come up from time to time and can range from a glaring typo to something that brings down core functionality (e.g., an API endpoint failing).”_<br>
 <br>
 Hotfixes should only address urgent issues that are determined by project managers to be a critical detriment to production. Otherwise, fixes and updates can be rolled into the next release. If there is a large number of hotfixes needed, the team should consider making an extra mid-sprint mini release instead of deploying several hotfixes.<br>
 <br>
-A detailed step-by-step guide to creating hotfixes can be found in the onboarding documentation.
+A detailed step-by-step guide to creating hotfixes can be found in the [onboarding documentation](https://docs.google.com/document/d/18ZjPvNrdW3wn9pUx7hSNbaMlaEaPPOGzOHh-WjLiVOg/edit#heading=h.8a6bhbb6fbdz).
