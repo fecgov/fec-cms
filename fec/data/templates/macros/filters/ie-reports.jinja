@@ -6,17 +6,17 @@
     <div id="data-type-tooltip" role="tooltip" class="tooltip tooltip--under tooltip--left">
       <div class="tooltip__content">
         <p class="tooltip__content">Political committees file regular reports about their financial activity.</p>
-        <p class="tooltip__content">In certain circumstances — in addition to regularly scheduled repots — committees must also report independent expenditures within 24 or 48 hours.</p>
+        <p class="tooltip__content">In certain circumstances — in addition to regularly scheduled reports — committees must also report independent expenditures within 24 or 48 hours.</p>
       </div>
     </div>
   </div>
-  <label for="summary{{id_suffix}}" class="toggle">
-    <input type="radio" class="toggle" value="false" id="summary{{id_suffix}}" checked name="is_notice" data-tag-value="Regularly scheduled reports">
-    <span class="button--alt">Regularly scheduled reports</span>
-  </label>
   <label for="notice{{id_suffix}}" class="toggle">
-    <input type="radio" class="toggle" value="true" id="notice{{id_suffix}}" name="is_notice" data-tag-value="24- and 48-Hour Reports">
+    <input type="radio" class="toggle" value="true" id="notice{{id_suffix}}" checked name="is_notice" data-tag-value="24- and 48-Hour Reports">
     <span class="button--alt">24- and 48-Hour Reports</span>
+  </label>
+  <label for="summary{{id_suffix}}" class="toggle">
+    <input type="radio" class="toggle" value="false" id="summary{{id_suffix}}" name="is_notice" data-tag-value="Regularly scheduled reports">
+    <span class="button--alt">Regularly scheduled reports</span>
   </label>
 </fieldset>
 {% endmacro %}
