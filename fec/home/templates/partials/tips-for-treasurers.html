@@ -3,7 +3,7 @@
   {% for tip in tips_for_treasurers %}
   <li>
     <a class="t-bold" href="{{ tip.url }}">{% formatted_title tip %}</a>
-    <span class="t-sans u-margin--left">{{ tip.date|date:'F j, Y' }}</span>
+    <span class="t-sans u-margin--left date--gray-dark">{{ tip.date|date:'F j, Y' }}</span>
   </li>
   {% endfor %}
 </ul>
