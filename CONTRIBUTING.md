@@ -28,7 +28,7 @@ We use GitHub issues to track user issues and team tasks. Whenever possible, we 
 #### Writing a pull request
 Authoring a good pull request saves time for both the developer and anyone reviewing changes in code. It re-enforces the purpose and validity of the code change and it also makes it easier for reviewers to understand the changes at a glance before diving in.
 
-Do:
+**Do:**
 
   * Use a descriptive but succinct title
   * Try to keep it under 75 characters
@@ -45,7 +45,7 @@ Do:
   * Check to remove `print` statements and commented out code
   * Lint your code and double check indents and make sure to use proper spacing
 
-Don’t:
+**Don’t:**
 
   * Use overly verbose or technically detailed PR titles.
     * “New class .foo-bar on profile sections plus javascript changes on design pages,” could be “New interactions and designs for Committee profiles,”
@@ -53,7 +53,7 @@ Don’t:
   * Leave unused blank fields in the pull request template when you submit it
 
 
-**Resources**
+#### Resources
 
 * An [article about writing effective pull requests](https://www.atlassian.com/blog/git/written-unwritten-guide-pull-requests) from Atlassian.
 * An [article on writing good commit messages](https://chris.beams.io/posts/git-commit/) by Chris Beams
@@ -83,7 +83,7 @@ Sometimes tagging a reviewer may not be enough. If a PR needs to be reviewed in 
 ##### Reviewing a pull request
 Reviewing pull requests is not always easy and reviewers should make sure to block out time in their schedule so they are not rushed. Always make sure to pull down the branch and test the work on your local machine. DO NOT BLINDLY MERGE IN PRS YOU DO NOT UNDERSTAND. Do not feel shy about asking questions and requesting the author of the pull request to explain certain sections of their code. That is the purpose of a code review.
 
-**Resources**
+#### Resources
 * [Tips for code reviews](http://engineering.khanacademy.org/posts/tips-for-code-reviews.htm) from Khan Academy
 
 ### Urgent fixes between releases
@@ -96,4 +96,3 @@ _“A hotfix is intended to address an issue that is having a critical impact to
 Hotfixes should only address urgent issues that are determined by project managers to be a critical detriment to production. Otherwise, fixes and updates can be rolled into the next release. If there is a large number of hotfixes needed, the team should consider making an extra mid-sprint mini release instead of deploying several hotfixes.<br>
 <br>
 A detailed step-by-step guide to creating hotfixes can be found in the onboarding documentation.
-
