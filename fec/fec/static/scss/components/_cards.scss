@@ -16,18 +16,6 @@
   width: 100%;
 }
 
-.card--primary {
-  @include u-bg--primary();
-  @include u-font-color($gray-lightest);
-  font-weight: bold;
-}
-
-.card--secondary {
-  @include u-bg--secondary();
-  @include u-font-color($gray-lightest);
-  font-weight: bold;
-}
-
 .card--secondary-contrast {
   @include u-font-color($inverse);
   background-color: $bright-red;
@@ -297,6 +285,22 @@
 }
 
 .card--primary {
+  @include u-bg--primary();
+  @include u-font-color($gray-lightest);
+  font-weight: bold;
+
+  &:hover {
+    background-color: $navy;
+
+    .card__content {
+      text-decoration: underline dotted $primary-contrast;
+    }
+  }
+
+  &:focus {
+    box-shadow: 0 0 2px 2px $focus;
+    }
+
   .card__icon {
     &.i-candidate {
       @include u-icon-bg($candidate, $primary-contrast);
@@ -397,6 +401,22 @@
 }
 
 .card--secondary {
+  @include u-bg--secondary();
+  @include u-font-color($gray-lightest);
+  font-weight: bold;
+
+  &:hover {
+    background-color: $deep-red;
+
+    .card__content {
+      text-decoration: underline dotted $secondary-contrast
+    }
+  }
+
+  &:focus {
+    box-shadow: 0 0 2px 2px $focus;
+  }
+
   .card__icon {
     &.i-calendar {
       @include u-icon-bg($calendar, $secondary-contrast);
