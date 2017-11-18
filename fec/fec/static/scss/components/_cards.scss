@@ -234,6 +234,21 @@
     display: table-cell;
     padding: 1.5rem;
   }
+
+  &:hover {
+    .card__image__container--secondary {
+      background-color: $deep-red;
+    }
+
+    .card__content {
+      text-decoration: underline dotted $base;
+     }
+  }
+
+  &:focus {
+    box-shadow: 0 0 2px 2px $focus;
+  }
+
 }
 
 // Stacked cards, when there's more than one in a vertical column
