@@ -242,6 +242,9 @@
 
     .card__content {
       text-decoration: underline dotted $base;
+      .label {
+        text-decoration: underline dotted $neutral;
+        }
      }
   }
 
