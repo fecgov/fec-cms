@@ -56,10 +56,6 @@
   font-weight: normal;
   font-style: italic;
   font-size: u(1.4rem);
-
-  &.t-normal {
-    font-style: normal;
-  }
 }
 
 .t-block {
@@ -93,6 +89,7 @@
 
 .t-normal {
   font-weight: normal;
+  font-style: normal;
 }
 
 .t-highlight {
