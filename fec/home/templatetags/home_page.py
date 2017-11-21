@@ -66,3 +66,4 @@ def home_page_news():
     return {
         'updates': updates
     }
+    
