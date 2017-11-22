@@ -51,6 +51,7 @@
   @include clearfix();
   border-bottom: 1px solid $base;
   padding: u(1rem);
+  font-family: $sans-serif;
 }
 
 .accordion__button--spacious {
