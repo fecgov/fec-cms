@@ -17,7 +17,7 @@ var rev = require('gulp-rev');
 
 // Consider using gulp-rev-delete-original later
 gulp.task('clear-css-dir', function () {
-    return gulp.src('./dist/fec/static/scss', {read: false})
+    return gulp.src('./dist/fec/static/css', {read: false})
         .pipe(clean());
 });
 
