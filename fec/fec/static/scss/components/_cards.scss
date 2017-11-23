@@ -236,16 +236,11 @@
   }
 
   &:hover {
+    box-shadow: 0 0 0 2px $gray inset;
+
     .card__image__container--secondary {
       background-color: $deep-red;
     }
-
-    .card__content {
-      text-decoration: underline dotted $base;
-      .label {
-        text-decoration: underline dotted $neutral;
-        }
-     }
   }
 
   &:focus {
@@ -309,11 +304,8 @@
 
   &:hover {
     background-color: $navy;
-
-    .card__content {
-      text-decoration: underline dotted $primary-contrast;
-    }
-  }
+    box-shadow: 0 0 0 2px $aqua inset;
+   }
 
   &:focus {
     box-shadow: 0 0 2px 2px $focus;
@@ -394,26 +386,26 @@
 
     &.i-direction-sign {
       @include u-icon-bg($direction-sign, $primary-contrast);
-      background-size: 75%
+      background-size: 75%;
     }
 
-     &.i-scale {
+    &.i-scale {
       @include u-icon-bg($scale, $primary-contrast);
     }
 
     &.i-usc {
       @include u-icon-bg($usc, $primary-contrast);
-      background-size: 70%
+      background-size: 70%;
     }
 
     &.i-cfr {
       @include u-icon-bg($cfr, $primary-contrast);
-      background-size: 70%
+      background-size: 70%;
     }
 
     &.i-compass {
       @include u-icon-bg($compass, $primary-contrast);
-      background-size: 65%
+      background-size: 65%;
     }
   }
 }
@@ -425,10 +417,7 @@
 
   &:hover {
     background-color: $deep-red;
-
-    .card__content {
-      text-decoration: underline dotted $secondary-contrast
-    }
+    box-shadow: 0 0 0 2px $orange inset;
   }
 
   &:focus {
