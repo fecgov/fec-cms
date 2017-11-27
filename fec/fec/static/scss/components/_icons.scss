@@ -72,6 +72,10 @@
   display: inline-block;
   margin-left: u(1rem);
   vertical-align: text-bottom;
+
+  &.i-arrow-right{
+    vertical-align: baseline;
+  }
 }
 
 .icon--inline--left {
@@ -278,3 +282,5 @@
   content: '';
   width: 20px;
 }
+
+

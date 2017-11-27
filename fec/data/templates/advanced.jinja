@@ -104,14 +104,32 @@
         <div class="main__content--right-full">
           <section class="row" id="raising" aria-hidden="false" role="tabpanel" >
             <h2>Raising</h2>
-            <div class="post-feed">
-              <div class="post">
-                <h3><i class="icon i-all-files icon--inline--left"></i><a href="/data/receipts/">All receipts</a></h3>
+            <div class="content__section--ruled t-sans">
+              <h4 class="post__magnifyer"><a href="/data/receipts/">All receipts</a></h4>
+              <div class="post--child-adv-data">
                 <p>Receipts are anything of value, like money, services or property. Search candidate and committee receipt data by contributor, amount and date.</p>
               </div>
-              <div class="post post--child">
-                <h4><a href="/data/receipts/individual-contributions">Individual contributions</a></h4>
-                <p>Search individual contributions to see who is donating to candidates and committees. Search for contributors by name, location, employer and occupation.</p>
+                <h4 class="post__magnifyer"><a href="/data/receipts/individual-contributions">Individual contributions</a></h4>
+                <div class="post--child-adv-data">
+                  <p>Search individual contributions to see who is donating to candidates and committees. Search for contributors by name, location, employer and occupation.</p>
+              </div>
+              <div class="post--child-adv-data">
+              <h4><a href="/data/committees">Lobbyist bundled contributions</a></h4>
+                <div class="js-accordion accordion--neutral" data-content-prefix="lobbyist_bundled_contributions">
+                  <button type="button" class="js-accordion-trigger accordion__button">Download this data as .CSV to use on your own</button>
+                  <div class="accordion__content">
+                    <h4 class="t-upper">Lobbyist bundled contributions</h4>
+                    <ul class="list--flat-bordered list--download">
+                      <li><a href="#">2017–2018</a></li>
+                      <li><a href="#">2015–2016</a></li>
+                      <li><a href="#">2013–2014</a></li>
+                      <li><a href="#">2011–2012</a></li>
+                      <li><a href="#">2009–2010</a></li>
+                    </ul>
+                    <p><a href="#">Metadata for this file</a><i class="icon icon--small i-arrow-right icon--inline--right" href="#"></i></p>
+                    <p>The list of PACs that are established or controlled by lobbyists or others registered with Congress for lobby disclosure. Campaigns, parties and leadership PACs who received bundled contributions from these PACs may be required to disclose that bundling activity to the FEC.</p>
+                  </div>
+                </div>
               </div>
             </div>
             <div class="content__section--extra">
@@ -199,21 +217,91 @@
           <section id="committees" class="row" aria-hidden="true" role="tabpanel">
             <h2>Committees</h2>
             <p>The term <span class="term" data-term="political committee">committee</span> encompasses several different political groups that receive and spend money in federal elections.</p>
-            <div class="content__section--ruled">
-              <h3 class="t-sans"><i class="icon i-magnifying-glass icon--inline--left"></i><a href="/data/committees">All committees</a></h3>
-              <p>Search for committees by type, years active, political party, location and treasurer.</p>
-              <div class="js-accordion accordion--neutral" data-content-prefix="committees">
-                <button type="button" class="js-accordion-trigger accordion__button">Download this data as .CSV to use on your own</button>
+             <h4>Search or browse data</h4>
+            <div class="content__section--ruled t-sans">
+              <h4 class="post__magnifyer"><a href="/data/committees">All committees</a></h4>
+              <div class="post--child-adv-data">
+                <p class ="u-margin--bottom">Search for committees by type, years active, political party, location and treasurer.</p>
+                <div class="js-accordion accordion--neutral" data-content-prefix="committees">
+                  <button type="button" class="js-accordion-trigger accordion__button">Download this data as .CSV to use on your own</button>
                   <div class="accordion__content">
-                    <h6>Committee summary</h6>
-                    <p>Weekly Digests are published every Friday and summarize the week's publicly disclosed activity. Press releases are published as news happens.</p>
-                    <p>FEC Record articles inform candidates and committees about FEC developments and are published as news happens. Tips for Treasurers are published once a week.</p>
+                    <h4 class="t-upper">Committee summary</h4>
+                    <ul class="list--flat-bordered list--download">
+                      <li><a href="#">2017–2018</a></li>
+                      <li><a href="#">2015–2016</a></li>
+                      <li><a href="#">2013–2014</a></li>
+                      <li><a href="#">2011–2012</a></li>
+                      <li><a href="#">2009–2010</a></li>
+                      <li><a href="#">2007-2008</a></li>
+                    </ul>
+                    <p><a href="#">Metadata for this file</a><i class="icon icon--small i-arrow-right icon--inline--right" href="#"></i></p>
+                    <p>This file contains overall receipts and disbursements for each political committee, group or individual registered with the Federal Election Commission, along with a breakdown of overall receipts by source and totals for contributions to other committees, independent expenditures made, etc.</p>
                   </div>
+                </div>
               </div>
-              <h3><a href="/data/filings/?form_type=RFAI">Requests for Additional Information sent to committees</a></h3>
-              <p>Requests for Additional Information (RFAIs) are sent to committees when a Campaign Finance Analyst needs additional clarification on a committee's filing or identifies an error, omission or possible prohibited activity. Search RFAIs by committee or date.</p>
+              <h4 class="post__magnifyer"><a href="#">Leadership PACs and sponsors</a></h4>
+              <div class="post--child-adv-data">
+                <div class="js-accordion accordion--neutral" data-content-prefix="pacs">
+                  <button type="button" class="js-accordion-trigger accordion__button">Download this data as .CSV to use on your own</button>
+                  <div class="accordion__content">
+                    <h4 class="t-upper">Leadership PACs and sponsors</h4>
+                    <ul class="list--flat-bordered list--download">
+                      <li><a href="#">2017–2018</a></li>
+                      <li><a href="#">2015–2016</a></li>
+                      <li><a href="#">2013–2014</a></li>
+                      <li><a href="#">2011–2012</a></li>
+                      <li><a href="#">2009–2010</a></li>
+                      <li><a href="#">2007-2008</a></li>
+                    </ul>
+                    <p><a href="#">Metadata for this file</a><i class="icon icon--small i-arrow-right icon--inline--right" href="#"></i></p>
+                    <p>Candidates and members of Congress can create "leadership PACs" to raise funds to support other candidates for federal office. This file lists the PACs who have registered with the FEC as a leadership.</p>
+                  </div>
+                </div>
+              </div>
+              <h4 class="post__magnifyer"><a href="#">Lobbyist/registrant committees</a></h4>
+              <div class="post--child-adv-data">
+                <div class="js-accordion accordion--neutral" data-content-prefix="lobbyist_registrant_committees">
+                  <button type="button" class="js-accordion-trigger accordion__button">Download this data as .CSV to use on your own</button>
+                  <div class="accordion__content">
+                    <h4 class="t-upper">Lobbyist/registrant committees</h4>
+                    <ul class="list--flat-bordered list--download">
+                      <li><a href="#">2017–2018</a></li>
+                      <li><a href="#">2015–2016</a></li>
+                      <li><a href="#">2013–2014</a></li>
+                      <li><a href="#">2011–2012</a></li>
+                      <li><a href="#">2009–2010</a></li>
+                      <li><a href="#">2007-2008</a></li>
+                    </ul>
+                    <p><a href="#">Metadata for this file</a><i class="icon icon--small i-arrow-right icon--inline--right" href="#"></i></p>
+                    <p>The list of PACs that are established or controlled by lobbyists or others registered with Congress for lobby disclosure. Campaigns, parties and leadership PACs who received bundled contributions from these PACs may be required to disclose that bundling activity to the FEC.</p>
+                  </div>
+                </div>
+              </div>
+              <h4 class="post__magnifyer"><a href="#">Most recent Statements of Organization (Form 1)</a></h4>
+              <div class="post--child-adv-data">
+                <p class="u-margin--bottom">Statements of Organization (Form 1) contain basic information about committees, including type, address and treasurer.</p>
+                <div class="js-accordion accordion--neutral" data-content-prefix="statements_of_organization">
+                  <button type="button" class="js-accordion-trigger accordion__button">Download this data as .CSV to use on your own</button>
+                  <div class="accordion__content">
+                    <h4 class="t-upper">New committee registrants</h4>
+                    <ul class="list--flat-bordered list--download">
+                      <li><a href="#">2017–2018</a></li>
+                      <li><a href="#">2015–2016</a></li>
+                      <li><a href="#">2013–2014</a></li>
+                      <li><a href="#">2011–2012</a></li>
+                      <li><a href="#">2009–2010</a></li>
+                    </ul>
+                    <p><a href="#">Metadata for this file</a><i class="icon icon--small i-arrow-right icon--inline--right" href="#"></i></p>
+                    <p>This file lists all committees that have filed an initial Statement of Organization (FEC Form 1) with the FEC to register as a Federal committee since January 1, 2009.</p>
+                  </div>
+                </div>
+              </div>
+              <h4 class="post__magnifyer"><a href="/data/filings/?form_type=RFAI">Requests for Additional Information sent to committees</a></h4>
+              <div class="post--child-adv-data">
+                <p>Requests for Additional Information (RFAIs) are sent to committees when a Campaign Finance Analyst needs additional clarification on a committee's filing or identifies an error, omission or possible prohibited activity. Search RFAIs by committee or date.</p>
+              </div>
             </div>
-            <div class="content__section--extra" data-content-prefix="pacronym">
+            <div class="content__section--ruled">
               <h3>PACronyms</h3>
               <p>PACronyms, an alphabetical list of acronyms, abbreviations, initials and common names of federal political action committees (PACs), was prepared to help researchers readily identify committees when their full names are not disclosed on campaign finance reports.</p>
               <p>The list includes the PACronym, FEC ID number, full committee name, city and state, name of sponsoring, connected, or affiliated organization, committee designation and committee type.  Unless noted otherwise in the full committee name, the acronym "PAC" refers to "political action committee."  The PACronym is listed in italics if the committee's PACronym is not specifically provided on the committee's Statement of Organization (FEC Form 1).</p>

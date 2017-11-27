@@ -73,6 +73,13 @@
   margin-left: u(3rem);
 }
 
+.post--child-adv-data {
+  @extend .post--child ;
+  padding: 0;
+
+}
+
+
 // If there's an icon in the title, use this class to align everything to the right of the icon
 .post--icon {
   padding-left: u(3rem);
@@ -92,6 +99,18 @@
 .post__doc {
   &::before {
     @include u-icon-bg($document, $base);
+    content: '';
+    display: inline-block;
+    width: 2rem;
+    height: 2rem;
+    vertical-align: middle;
+    margin-right: 1rem;
+  }
+}
+
+.post__magnifyer{
+  &::before {
+    @include u-icon-bg($magnifying-glass, $base);
     content: '';
     display: inline-block;
     width: 2rem;

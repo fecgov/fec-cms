@@ -26,6 +26,9 @@
 //   </li>
 // </ul>
 //
+.js-accordion {
+  margin-bottom: u(4rem);
+ }
 
 .accordion__button {
   @include u-icon-bg($plus-circle, $primary);
