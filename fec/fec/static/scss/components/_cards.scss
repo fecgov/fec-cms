@@ -236,7 +236,7 @@
   }
 
   &:hover {
-    box-shadow: 0 0 0 2px $gray inset;
+    border: 2px solid $gray;
 
     .card__image__container--secondary {
       background-color: $deep-red;
@@ -244,7 +244,7 @@
   }
 
   &:focus {
-    box-shadow: 0 0 2px 2px $focus;
+    border: 2px solid $focus;
   }
 
 }
@@ -301,15 +301,16 @@
   @include u-bg--primary();
   @include u-font-color($gray-lightest);
   font-weight: bold;
+  border: 2px solid transparent;
 
   &:hover {
     background-color: $navy;
-    box-shadow: 0 0 0 2px $aqua inset;
-   }
+    border: 2px solid $aqua;
+  }
 
   &:focus {
-    box-shadow: 0 0 2px 2px $focus;
-    }
+    border: 2px solid $focus;
+  }
 
   .card__icon {
     &.i-candidate {
@@ -414,14 +415,15 @@
   @include u-bg--secondary();
   @include u-font-color($gray-lightest);
   font-weight: bold;
+  border: 2px solid transparent;
 
   &:hover {
     background-color: $deep-red;
-    box-shadow: 0 0 0 2px $orange inset;
+    border: 2px solid $orange;
   }
 
   &:focus {
-    box-shadow: 0 0 2px 2px $focus;
+    border: 2px solid $focus;
   }
 
   .card__icon {
