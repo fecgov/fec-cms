@@ -1,7 +1,15 @@
 [
   {
+    "term": "Act",
+    "definition": "The Federal Election Campaign Act of 1971, as amended (<a href=\"https://www.fec.gov/data/legal/statutes/\">52 U.S.C. §§30101-30146</a>). 11 CFR <a href=\"https://www.fec.gov/regulations/100-18/CURRENT#100-18\">100.18</a>. Prior to September 1, 2014, the Act appeared in Title 2 of the U.S. Code. Sometimes abbreviated FECA."
+  },
+  {
     "term": "Administrative expense",
     "definition": "For party committees, rent, utilities, office equipment, office supplies, routine building maintenance and other operating costs not attributable to a specific candidate."
+  },
+  {
+    "term": "Advance",
+    "definition": "The payment by an individual from his or her personal funds, including a personal credit card, for the costs incurred in providing goods or services to, or obtaining goods or services that are used by or on behalf of, a candidate or a political committee.  See <a href=\"https://www.fec.gov/regulations/116-5/CURRENT#116-5\">11 CFR 116.5</a>."
   },
   {
     "term": "Advisory opinion (AO)",
@@ -44,6 +52,10 @@
     "definition": "A unique identifier assigned to each candidate registered with the FEC. The initial character indicates the office sought. (H)ouse, (S)enate, (P)resident. If a person runs for several offices, they will have separate IDs for each office."
   },
   {
+    "term": "Cash-on-hand",
+    "definition": "Cash on hand includes funds held in checking and savings accounts, certificates of deposit, petty cash funds, traveler’s checks, treasury bills and other investments valued at cost. <a href=\"https://www.fec.gov/regulations/104-3/CURRENT#104-3-a-1\">11 CFR 104.3(a)(1)</a>."
+  },
+  {
     "term": "CFR",
     "definition": "Code of Federal Regulations. The annual collection of executive-agency regulations published in the daily Federal Register, combined with previously issued regulations that are still in effect. The sections of the CFR containing federal campaign finance regulations may be found in Title 11 and are <a href=\"https://www.fec.gov/regulations/\">available on the FEC’s website</a> or as a free publication from the FEC."
   },
@@ -74,6 +86,10 @@
   {
     "term": "Contribution",
     "definition": "A gift, subscription, loan, advance or deposit of money or anything of value given to influence a federal election; or the payment by any person of compensation for the personal services of another person if those services are rendered without charge to a political committee for any purpose. 11 CFR <a href=\"https://www.fec.gov/regulations/100-52/CURRENT#100-52\">100.52(a)</a> and <a href=\"https://www.fec.gov/regulations/100-54/CURRENT#100-54\">100.54</a>."
+  },
+  {
+    "term": "Contribution in the name of another",
+    "definition": "Giving money or anything of value, all or part of which was provided to the contributor by another person (the true contributor) without disclosing the source of the money or the thing of value to the recipient candidate or committee at the time the contribution is made; or making a contribution of money or anything of value and attributing as the source another person when in fact the contributor is the source. <a href=\"https://www.fec.gov/regulations/110-4/CURRENT#110-4-b\">11 CFR 110.4(b)</a>."
   },
   {
     "term": "Coordinated",
@@ -116,6 +132,10 @@
     "definition": "A group organized for the purpose of influencing the selection of one or more delegates. The term includes a group of delegates, a group of individuals seeking to become delegates and a group of individuals supporting delegates. 11 CFR <a href=\"https://www.fec.gov/regulations/110-14/CURRENT#110-14-b-2\">110.14(b)(2)</a>."
   },
   {
+    "term": "Designated/designation",
+    "definition": "A contribution is considered to be designated in writing for a particular election if <ol><li>The contribution is made by check, money order, or other negotiable instrument which clearly indicates the particular election with respect to which the contribution is made;</li><li>The contribution is accompanied by a writing, signed by the contributor, which clearly indicates the particular election with respect to which the contribution is made; or</li>The contribution is redesignated in accordance with <a href=\"https://www.fec.gov/regulations/110-1/CURRENT#110-1-b-4-iii\">11 CFR 110.1(b)(5)</a>.</li></ol> <a href=\"https://www.fec.gov/regulations/110-1/CURRENT#110-1-b-4\">11 CFR 110.1(b)(4)</a>."
+  },
+  {
     "term": "Direct mail",
     "definition": "Any mailings made by a commercial vendor or made from a commercial list. 11 CFR <a href=\"https://www.fec.gov/regulations/100-87/CURRENT#100-87\">100.87(a)</a>, <a href=\"https://www.fec.gov/regulations/100-89/CURRENT#100-89-a\">100.89(a)</a>, <a href=\"https://www.fec.gov/regulations/100-147/CURRENT#100-147-a\">100.147(a)</a> and 100.149(a)."
   },
@@ -152,6 +172,14 @@
     "definition": "Any broadcast, cable or satellite communication that (1) refers to a clearly identified candidate for federal office; (2) is publicly distributed within certain time periods before an election and (3) is targeted to the relevant electorate. 11 CFR <a href=\"https://www.fec.gov/regulations/100-29/CURRENT#100-29\">100.29</a>."
   },
   {
+    "term": "Employer",
+    "definition": "The organization or person by whom an individual is employed, and not the name of his or her supervisor. <a href=\"https://www.fec.gov/regulations/100-21/CURRENT#100-21\">11 CFR 100.21</a>."
+  },
+  {
+    "term": "Ending cash-on-hand",
+    "definition": "The total amount of cash on hand that remains after the amount of cash-on-hand at the beginning of the reporting period is adjusted to add the total receipts for the reporting period and subtract the total disbursements for the reporting period."
+  },
+  {
     "term": "Executive and administrative personnel",
     "definition": "Individuals employed by a corporation or labor organization who are paid on a salary rather than hourly basis and who have policymaking, managerial, professional, or supervisory responsibilities. The definition does not include professionals who are represented by a labor organization, salaried foremen and lower-level supervisors having direct supervision over hourly employees, former or retired personnel who are not stockholders, and consultants who are not employees under the Internal Revenue Code. 11 CFR <a href=\"https://www.fec.gov/regulations/114-1/CURRENT#114-1-c\">114.1(c)</a>, <a href=\"https://www.ecfr.gov/cgi-bin/text-idx?SID=8fcc28cd0cc7d6262e5dbe3865335df0&mc=true&node=se26.17.31_13401_2c_3_61&rgn=div8\">26 CFR 31.3401(c)-1</a>."
   },
@@ -172,6 +200,10 @@
     "definition": "The use of corporate or labor organization resources or facilities to engage in fundraising activities in connection with any federal election (other than raising funds for the organization’s separate segregated fund). Facilitation results in a prohibited contribution to the committee that benefits from the activity. 11 CFR <a href=\"https://www.fec.gov/regulations/114-2/CURRENT#114-2-f\">114.2(f)</a>."
   },
   {
+    "term": "Family",
+    "definition": "For purposes of the rules governing fundraising by corporate/labor/trade PACs, the Commission views the term \"family\" to mean the spouses, parents, and children who live in the same household. Spouse is defined by state law. See <a href=\"https://www.fec.gov/data/legal/advisory-opinions/2013-06\">AOs 2013-06</a> and <a href=\"https://www.fec.gov/data/legal/advisory-opinions/1980-102\">1980-102</a>. For purposes of the rules governing the use of campaign funds by candidates, a candidate’s family includes the candidate’s spouse, any child, step-child, parent, grandparent, sibling, half-sibling or step-sibling of the candidate or the candidate's spouse, the spouse of any child, step-child, parent, grandparent, sibling, half-sibling or step-sibling of the candidate; and any person who shares a residence with the candidate. See 11 CFR  <a href=\"https://www.fec.gov/regulations/113-1/CURRENT#113-1-g-7\">113.1(g)(7)</a>. Publicly funded presidential candidates should refer to 11 CFR <a href=\"https://www.fec.gov/regulations/9003-2/CURRENT#9003-2-c-1\">9003.2(c)(1)</a> and <a href=\"https://www.fec.gov/regulations/9035-2/2017-annual-9035#9035-2-b\">9035.2(b)</a>."
+  },
+  {
     "term": "Federal Election Activity (FEA)",
     "definition": "Activity by state, district and local party committees, which may be paid for with federal or – in the case of the first two types – a combination of federal and Levin funds. The four types of federal election activity are as follows:<ul class=\"list-numbered\"><li>Voter registration activity during the period 120 days before a primary or general election and ending on election day itself;</li><li>Voter identification, get-out-the-vote and generic campaign activity conducted in connection with an election in which a federal candidate appears on the ballot;</li><li>A public communication that refers to a clearly identified candidate for federal office and that promotes, attacks, supports or opposes any candidate for federal office. The communication does not need to expressly advocate the election or defeat of the federal candidate to qualify as federal election activity; and </li><li>Services provided during a month by an employee of a state, district or local party committee who spends more than 25 percent of his or her compensated time during that month on activities in connection with a federal election including FEA.</li></ul> 11 CFR <a href=\"https://www.fec.gov/regulations/100-24/CURRENT#100-24-b\">100.24(b)</a>."
   },
@@ -188,12 +220,16 @@
     "definition": "An individual elected to or serving in the office of President or Vice President of the United States, or a Senator or Representative in, or a Delegate or Resident Commissioner, to the Congress of the United States. 11 CFR <a href=\"https://www.fec.gov/regulations/113-1/CURRENT#113-1-c\">113.1(c)</a> and <a href=\"https://www.fec.gov/regulations/300-2/CURRENT#300-2-o\">300.2(o)</a>."
   },
   {
+    "term": "Federally chartered corporation",
+    "definition": "- A corporation that is organized pursuant to a federal statute and that became a corporation when it received a charter from a federal agency. See <a href=\"https://www.fec.gov/data/legal/advisory-opinions/1988-12\">AOs 1988-12</a> and <a href=\"https://www.fec.gov/data/legal/advisory-opinions/1984-63\">1984-63</a>."
+  },
+  {
     "term": "Filing",
     "definition": "A report, designation or statement submitted to the FEC or Secretary of the Senate by a candidate, committee or other entity. Required filings include declarations of candidacy and committee reports of the money they receive and spend.  See also \"Reports, designations and statements\"."
   },
   {
     "term": "Foreign national",
-    "definition": "<ol><li> An individual who is not a citizen of the United States or a national of the United States and has not been lawfully admitted to the U.S. for permanent residence, as defined in 8 U.S.C. § 1101(a)(20); or</li><li>A foreign principal, as defined in 22 U.S.C. § 611(b).</li></ol> <a href=\"https://www.fec.gov/regulations/110-20/CURRENT#110-20-a\">11 CFR 110.20(a)(3)</a>."
+    "definition": "<ol><li> An individual who is not a citizen of the United States or a national of the United States and has not been lawfully admitted to the U.S. for permanent residence, as defined in 8 U.S.C. § 1101(a)(20); or</li><li>A foreign principal, as defined in 22 U.S.C. § 611(b).</li></ol> 11 CFR <a href=\"https://www.fec.gov/regulations/110-20/CURRENT#110-20-a\">110.20(a)(3)</a>."
   },
   {
     "term": "Generic campaign activity",
@@ -205,7 +241,7 @@
   },
   {
     "term": "Hybrid PAC",
-    "definition": "A committee that intends to establish a separate bank account to deposit and withdraw funds raised in unlimited amounts from individuals, corporations, labor organizations and/or other political committees, consistent with the stipulated judgment in <i>Carey v. FEC</i>.  The funds maintained in this separate account will not be used to make contributions, whether direct, in-kind or via coordinated communications, or coordinated expenditures, to federal candidates or committees."
+    "definition": "A committee that, in addition to making contributions, establishes a separate bank account to deposit and withdraw funds raised in unlimited amounts from individuals, corporations, labor organizations and/or other political committees, consistent with the stipulated judgment in <i>Carey v. FEC</i>. The funds maintained in this separate account will not be used to make contributions, whether direct, in-kind or via coordinated communications, or coordinated expenditures, to federal candidates or committees."
   },
   {
     "term": "Identification",
@@ -296,6 +332,10 @@
     "definition": "A political action committee or party committee that has been registered at least 6 months, has more than 50 contributors and, with the exception of state party committees, has made contributions to at least 5 candidates for federal office. 11 CFR <a href=\"https://www.fec.gov/regulations/100-5/CURRENT#100-5-e-3\">100.5(e)(3)</a>."
   },
   {
+    "term": "National bank",
+    "definition": "A bank that is subject to the supervision of the <a href=\"https://www.helpwithmybank.gov/dictionary/index-dictionary.html#N\">Comptroller of the Currency</a>. The Office of the Comptroller of the Currency is a bureau of the U.S. Treasury Department."
+  },
+  {
     "term": "National committee",
     "definition": "An organization that, by virtue of the bylaws of a political party, is responsible for the day-to-day operation of the political party at the national level, as determined by the Commission. 11 CFR <a href=\"https://www.fec.gov/regulations/100-13/CURRENT#100-13\">100.13</a>."
   },
@@ -320,12 +360,24 @@
     "definition": "Funds that are not subject to the limitations or prohibitions of the Federal Election Campaign Act. 11 CFR <a href=\"https://www.fec.gov/regulations/300-2/CURRENT#300-2-k\">300.2(k)</a>."
   },
   {
+    "term": "Occupation",
+    "definition": "The principal job title or position of an individual and whether or not self-employed. 11 CFR <a href=\"https://www.fec.gov/regulations/100-20/CURRENT#100-20\">100.20</a>."
+  },
+  {
     "term": "One-third rule",
     "definition": "A formula used to ensure the treasury funds of a connected organization are not traded for voluntary contributions when the organization pays for prizes or entertainment to offer as an incentive to make a contribution to its SSF. Under the one-third rule, the SSF must reimburse the connected organization for costs that exceed one-third of the money raised. See 11 CFR <a href=\"https://www.fec.gov/regulations/114-5/CURRENT#114-5-b-2\">114.5(b)(2)</a>."
   },
   {
+    "term": "Ongoing committee",
+    "definition": "Any political committee that has not terminated and does not qualify as a terminating committee. 11 CFR <a href=\"https://www.fec.gov/regulations/116-1/CURRENT#116-1-b\">116.1(b)</a>."
+  },
+  {
     "term": "Operating expenditures",
     "definition": "A committee's day-to-day expenditures for items such as rent, overhead, administration, personnel, equipment, travel, advertising and fundraising."
+  },
+  {
+    "term": "Ordinary course of business",
+    "definition": "In determining whether credit was extended in the ordinary course of business, the Commission will consider—<ol><li>Whether the commercial vendor followed its established procedures and its past practice in approving the extension of credit;</li><li>Whether the commercial vendor received prompt payment in full if it previously extended credit to the same candidate or political committee; and</li><li>Whether the extension of credit conformed to the usual and normal practice in the commercial vendor's trade or industry. </li></ol> 11 CFR <a href=\"https://www.fec.gov/regulations/116-3/CURRENT#116-3-c\">116.3(c)</a>."
   },
   {
     "term": "Organization type",
@@ -346,6 +398,10 @@
   {
     "term": "Person",
     "definition": "An individual, partnership, political committee, corporation, labor organization or any other organization or group of persons, not including the federal government. 11 CFR <a href=\"https://www.fec.gov/regulations/100-10/CURRENT#100-10\">100.10</a>."
+  },
+  {
+    "term": "Personal funds of a candidae",
+    "definition": "The personal funds of a candidate include: <ol><li>Assets which the candidate has a legal right of access to or control over, and which he or she has legal title to or an equitable interest in, at the time of candidacy;</li><li>Income from employment;</li><li>Dividends and interest from, and proceeds from sale or liquidation of, stocks and other investments;</li><li>Income from trusts, if established before the election cycle;</li><li>Income from trusts established by bequests (even after candidacy)</li><li>Bequests to the candidate;</li><li>Personal gifts that had been customarily received by the candidate prior to the beginning of the election cycle; and</li><li>Proceeds from lotteries and similar games of chance.</li></ol> 11 CFR <a href=\"https://www.fec.gov/regulations/100-33/CURRENT#100-33\">100.33(a) and (b)</a>."
   },
   {
     "term": "Political Action Committee (PAC)",
@@ -436,6 +492,10 @@
     "definition": "A committee that intends to make independent expenditures, and — consistent with the U.S. Court of Appeals for the District of Columbia Circuit decision in <i>SpeechNow v. FEC</i> — it therefore intends to raise funds in unlimited amounts. This committee will not use those funds to make contributions, whether direct, in-kind or via coordinated communications, to federal candidates or committees."
   },
   {
+    "term": "Terminating committee",
+    "definition": "A political committee that is winding down its activities in preparation for filing a termination report. A terminating committee has ceased to make or receive contributions or make expenditures (other than for debt retirement purposes or winding-down costs). 11 CFR <a href=\"https://www.fec.gov/regulations/116-1/CURRENT#116-1\">116.1(a)</a>."
+  },
+  {
     "term": "to Direct",
     "definition": "For purposes of 11 CFR Part 300, to direct means to guide, directly or indirectly, a person who has expressed an intent to make a contribution, donation, transfer of funds or otherwise provide anything of value, by identifying a candidate, political committee or organization for the receipt of such funds or things of value. The contribution, donation, transfer or thing of value may be provided directly or through an intermediary. Direction does not include merely providing information or guidance as to the applicability of a particular law or regulation. 11 CFR <a href=\"https://www.fec.gov/regulations/300-2/2017-annual-300#300-2-n\">300.2(n)</a>."
   },
@@ -464,12 +524,20 @@
     "definition": "Funds of a corporation or labor organization that are derived from commercial activities or dues payments. Treasury funds may be used for the establishment, administrative and fundraising costs of the organization’s separate segregated fund, as well as for making independent expenditures and contributing to Super PACs and the non-contribution accounts of Hybrid PACs. See 11 CFR <a href=\"https://www.fec.gov/regulations/114-5/CURRENT#114-5-b\">114.5(b)</a> and <a href=\"https://www.fec.gov/regulations/114-10/CURRENT#114-10\">114.10</a>."
   },
   {
+    "term": "Undesignated contribution",
+    "definition": "Contributors may designate contributions for a particular election by indicating in writing the specific election to which they intend a contribution to apply. A contribution that is not designated by the contributor for a specific election is an undesignated contribution. Undesignated contributions count against the donor’s contribution limits for the candidate’s next election. 11 CFR <a href=\"https://www.fec.gov/regulations/110-1/CURRENT#110-1-b-2-ii\">110.1(b)(2)</a>."
+  },
+  {
+    "term": "Unique identifier",
+    "definition": "A unique title or code assigned by a party committee to each program or event for which it reports an allocation ratio. Party committees must use that identifier consistently when reporting the activity. 11 CFR <a href=\"https://www.fec.gov/regulations/104-17/CURRENT#104-17-b-1-iii\">104.17(b)(1)(iii)</a>."
+  },
+  {
     "term": "U.S.C.",
     "definition": "The United States Code (U.S.C.) contains the federal statutory laws of the United States, arranged into 54 broad titles according to subject matter. The FEC administers the <a href=\"https://www.fec.gov/data/legal/statutes/\">campaign finance laws</a> found in Title 52 and the portions of Title 26 of the United States Code concerning public financing of presidential election campaigns."
   },
   {
     "term": "Usual and normal charge",
-    "definition": "With regard to goods provided to a political committee, the term refers to the price of those goods in the market from which they ordinarily would have been purchased at the time they were provided. With regard to services, the term refers to the hourly or piecework charge for the services at a commercially reasonable rate prevailing at the time the services were rendered. 11 CFR 100.52(d)(2)."
+    "definition": "With regard to goods provided to a political committee, the term refers to the price of those goods in the market from which they ordinarily would have been purchased at the time they were provided. With regard to services, the term refers to the hourly or piecework charge for the services at a commercially reasonable rate prevailing at the time the services were rendered. 11 CFR <a href=\"https://www.fec.gov/regulations/100-52/CURRENT#100-52-d-2\">100.52(d)(2)</a>."
   },
   {
     "term": "Voter drive activity",
