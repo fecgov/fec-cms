@@ -6,6 +6,7 @@ from home.models import RecordPage
 
 register = template.Library()
 
+
 @register.inclusion_tag('partials/legal-news.html')
 def legal_news_feed():
 
