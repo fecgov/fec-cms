@@ -65,7 +65,7 @@ Authoring a good pull request saves time for both the developer and anyone revie
 If you are developing a new feature, you can make a branch `feature/name-of-new-feature` but you can also use git flow to start it using `git flow feature start name-of-new-feature`.
 
 #### Quick fix branching
-Branches for fixes to an existing feature or modifications to the general codebase can be established as a feature with a name starting with “fix-” to differentiate themselves from full fledged features, for example `feature/fix-broken-button`.
+Branches for fixes to an existing feature or modifications to the general codebase that are not critical (in other words, can wait until the next scheduled release) can be established as a feature with a name starting with “fix-” to differentiate themselves from full fledged features, for example `feature/fix-broken-button`.
 
 #### Work in progress (WIP)
 Work in progress PRs may be helpful to show that a feature is in active development for an extended period of time, especially if you're collaborating with other folks on an issue. Generally speaking, work shouldn't sit unmerged for long periods of time (that is a development antipattern), but in some cases this is preferred as it helps facilitate communication between team members and provides visibility into ongoing work. Furthermore, it will allow the tests to run in CircleCI, which provides you with feedback as you work. You should be pushing your commits regularly as you make progress so that you receive automated testing feedback early and often to take advantage of this!
