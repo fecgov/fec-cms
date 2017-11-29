@@ -1,4 +1,5 @@
 from django.shortcuts import render, redirect
+from django.urls import reverse
 from django.http import Http404
 from django.http import JsonResponse
 from django.conf import settings
@@ -323,10 +324,10 @@ def committee(request, committee_id):
         # If there's no reports, find the first year with reports and redirect there
         for c in sorted(committee['cycles'], reverse=True):
             financials = api_caller.load_cmte_financials(committee['committee_id'], cycle=c)
-            # if financials['reports']:
-            #     return redirect(
-            #         url_for('committee_page', c_id=committee['committee_id'], cycle=c)
-            #     )
+            if financials['reports']:
+                return redirect(
+                    reverse('committee-by-id', kwargs={'committee_id': committee['committee_id']}) + '?cycle=' + str(c)
+                )
 
     # If it's not a senate committee and we're in the current cycle
     # check if there's any raw filings in the last three days
