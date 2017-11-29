@@ -1,4 +1,6 @@
 {
+  "name": "fec-cms",
+  "version": "1.0.0",
   "scripts": {
     "build": "cd fec && webpack && gulp build-sass",
     "build-icons": "cd fec && gulp minify-icons && gulp consolidate-icons",
