@@ -70,6 +70,13 @@ Branches for fixes to an existing feature or modifications to the general codeba
 #### Work in progress (WIP)
 Work in progress PRs may be helpful to show that a feature is in active development for an extended period of time, especially if you're collaborating with other folks on an issue. Generally speaking, work shouldn't sit unmerged for long periods of time (that is a development antipattern), but in some cases this is preferred as it helps facilitate communication between team members and provides visibility into ongoing work. Furthermore, it will allow the tests to run in CircleCI, which provides you with feedback as you work. You should be pushing your commits regularly as you make progress so that you receive automated testing feedback early and often to take advantage of this!
 
+If you are intentially opening a PR early and intend it to be a work in progress, please do the following:
+
+* Put `[WIP]` at the start of the PR title
+* Place `WIP:  PLEASE DO NOT MERGE` in bold at the top of the PR description
+
+When the PR is ready for full review and no longer a WIP, please remove these two items.
+
 ### Ready for review
 
 #### Labeling
