@@ -72,10 +72,18 @@ Work in progress PRs may be helpful to show that a feature is in active developm
 
 If you are intentially opening a PR early and intend it to be a work in progress, please do the following:
 
-* Put `[WIP]` at the start of the PR title
-* Place `WIP:  PLEASE DO NOT MERGE` in bold at the top of the PR description
+- Put `[WIP]` at the start of the PR title
+- Place `WIP:  PLEASE DO NOT MERGE` in bold at the top of the PR description
 
 When the PR is ready for full review and no longer a WIP, please remove these two items.
+
+### Committing work in a branch
+When you begin to work in a branch, you'll want to follow these guidelines for the commits you will make before you push them remotely:
+
+- Good commit messages start with a verb, like “adds” or “changes” or “removes.”
+- Be sure to talk about the nature of the change you're making. Explain why the change is needed, rather than simply describing the bug or task it addresses.
+- If your commit resolves an issue, reference it in the commit messages. For example “fixes #555.” Read more GitHub guidance on [closing issues via commit messages](https://help.github.com/articles/closing-issues-via-commit-messages/).
+- We encourage you to follow the [50/72 format](http://stackoverflow.com/questions/2290016/git-commit-messages-50-72-formatting).
 
 ### Ready for review
 
