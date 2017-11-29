@@ -69,7 +69,11 @@ class TestCycles(unittest.TestCase):
         assert utils.get_cycles(2020) == range(2020, 1979, -2)
 
     def test_get_senate_cycles(self):
-        assert utils.get_senate_cycles(1) == range(2018, 1979, -6)
+        current_cycle = 2018
+        assert utils.get_senate_cycles('1') == range(current_cycle, 1979, -6)
+        assert utils.get_senate_cycles('2') == range(current_cycle + 2, 1979, -6)
+        assert utils.get_senate_cycles('3') == range(current_cycle + 4, 1979, -6)
+
 
     def test_state_senate_cycles(self):
 
