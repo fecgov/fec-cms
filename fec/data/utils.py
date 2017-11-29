@@ -207,7 +207,15 @@ def process_ie_data(totals):
 
 
 def get_senate_cycles(senate_class):
-    next_election = constants.NEXT_SENATE_ELECTIONS[str(senate_class)]
+    # next_election = constants.NEXT_SENATE_ELECTIONS[str(senate_class)]
+    if senate_class in '1':
+        next_election = current_cycle()
+    elif senate_class in '2':
+        next_election = current_cycle() + 2
+    elif senate_class in '3':
+        next_election = current_cycle() + 4
+
+    print(next_election)
     return range(next_election, constants.START_YEAR, -6)
 
 

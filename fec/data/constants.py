@@ -635,8 +635,8 @@ SENATE_CLASSES = {
     '3': ['AL', 'AK', 'AZ', 'AR', 'CA', 'CO', 'CT', 'FL', 'GA', 'HI', 'ID', 'IL', 'IN', 'IA', 'KS', 'KY', 'LA', 'MD', 'MO', 'NV', 'NH', 'NY', 'NC', 'ND', 'OH', 'OK', 'OR', 'PA', 'SC', 'SD', 'UT', 'VT', 'WA', 'WI']
 }
 
-NEXT_SENATE_ELECTIONS = {
-    '1': 2018,
-    '2': 2020,
-    '3': 2022
-}
+# NEXT_SENATE_ELECTIONS = {
+#     '1': 2018,
+#     '2': 2020,
+#     '3': 2022
+# }
