@@ -7,6 +7,10 @@
 {% block title %}Legal resources{% endblock %}
 {% block body_class %}template-{{ self.get_verbose_name | slugify }}{% endblock %}
 
+{% block extra_js %}
+  <script type="text/javascript" src="{% asset_for_js 'legal.js' %}"></script>
+{% endblock extra_js %}
+
 {% block content %}
 {% include "partials/search-hero.html" %}
 
