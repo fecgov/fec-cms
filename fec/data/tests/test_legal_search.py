@@ -120,8 +120,6 @@ class TestLegalSearch(unittest.TestCase):
         # http://stackoverflow.com/questions/7242433/asserting-successive-calls-to-a-mock-method
         calls = [
             mock.call(query='', query_type='advisory_opinions', 
-                      ao_min_issue_date=ao_min_date, ao_category=['F', 'W']),
-            mock.call(query='', query_type='advisory_opinions', 
-                      ao_is_pending=True, ao_category='R')
+                      ao_min_issue_date=ao_min_date, ao_category=['F', 'W'])
         ]
         load_legal_search_results.assert_has_calls(calls, any_order=True)
