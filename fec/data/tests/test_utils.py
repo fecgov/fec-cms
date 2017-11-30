@@ -101,3 +101,4 @@ class TestCycles(unittest.TestCase):
         wisconsin = api_caller.get_regular_senate_cycles('wi')
         assert 2016 in wisconsin
         assert 2014 not in wisconsin
+        
