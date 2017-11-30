@@ -13,7 +13,6 @@ def current_cycle():
     year = datetime.datetime.now().year
     return year + year % 2
 
-
 class LRUCache(cachecontrol.cache.BaseCache):
     """A thread-safe least recently updated cache adapted to work with
     Cache-Control.
@@ -206,13 +205,43 @@ def process_ie_data(totals):
     return financial_summary_processor(totals, constants.IE_FORMATTER)
 
 
+def get_current_year_class():
+    """Get Class number for current year
+    """
+    if (current_cycle() - constants.END_YEAR) % 6 == 0:
+        current_year_class = '1'
+    elif (current_cycle() - constants.END_YEAR + 4) % 6 == 0:
+        current_year_class = '2'
+    elif (current_cycle() - constants.END_YEAR + 2) % 6 == 0:
+        current_year_class = '3'
+    return current_year_class
+
+
 def get_senate_cycles(senate_class):
-    if senate_class in '1':
-        next_election = current_cycle()
-    elif senate_class in '2':
-        next_election = current_cycle() + 2
-    elif senate_class in '3':
-        next_election = current_cycle() + 4
+
+    if get_current_year_class() in '1':
+        if senate_class in '1':
+            next_election = current_cycle()
+        elif senate_class in '2':
+            next_election = current_cycle() + 2
+        elif senate_class in '3':
+            next_election = current_cycle() + 4
+
+    elif get_current_year_class() in '2':
+        if senate_class in '1':
+            next_election = current_cycle() + 4
+        elif senate_class in '2':
+            next_election = current_cycle()
+        elif senate_class in '3':
+            next_election = current_cycle() + 2
+
+    elif get_current_year_class() in '3':
+        if senate_class in '1':
+            next_election = current_cycle() + 2
+        elif senate_class in '2':
+            next_election = current_cycle() + 4
+        elif senate_class in '3':
+            next_election = current_cycle()
 
     return range(next_election, constants.START_YEAR, -6)
 
