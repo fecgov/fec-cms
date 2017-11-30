@@ -1,0 +1,9 @@
+{% load filters %}
+<ul class="list--spacious">
+  {% for tip in tips_for_treasurers %}
+  <li>
+    <a class="t-bold" href="{{ tip.url }}">{% formatted_title tip %}</a>
+    <span class="t-sans u-margin--left feed--list__date">{{ tip.date|date:'F j, Y' }}</span>
+  </li>
+  {% endfor %}
+</ul>

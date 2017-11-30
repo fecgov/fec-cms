@@ -10,6 +10,7 @@ psycopg2==2.7.1
 requests==2.13.0
 slacker==0.8.6
 whitenoise==2.0.3
+# before updating wagtail, look at wagtailadmin template override
 wagtail>=1.8,<1.9
 bandit==1.4.0
 # TODO: pin version

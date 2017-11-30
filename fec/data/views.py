@@ -304,6 +304,7 @@ def committee(request, committee_id):
         'totals': totals,
         'min_receipt_date': utils.three_days_ago(),
         'context_vars': context_vars,
+        'party_full': committee['party_full']
     }
 
 
@@ -365,7 +366,7 @@ def elections(request, office, cycle, state=None, district=None):
     if office.lower() == 'president':
         cycles = [each for each in cycles if each % 4 == 0]
     elif office.lower() == 'senate':
-        cycles = utils.get_state_senate_cycles(state)
+        cycles = api_caller.get_all_senate_cycles(state)
 
     if office.lower() not in ['president', 'senate', 'house']:
         raise Http404()

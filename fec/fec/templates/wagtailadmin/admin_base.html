@@ -1,0 +1,34 @@
+{% extends "wagtailadmin/skeleton.html" %}
+{% load staticfiles wagtailadmin_tags %}
+
+{% block css %}
+    <link rel="stylesheet" href="{% static 'wagtailadmin/css/vendor/jquery-ui/jquery-ui-1.10.3.verdant.css' %}" />
+    <link rel="stylesheet" href="{% static 'wagtailadmin/css/vendor/jquery.tagit.css' %}">
+    <link rel="stylesheet" href="{% static 'wagtailadmin/css/core.css' %}" type="text/css" />
+    {% hook_output 'insert_global_admin_css' %}
+
+    {% block extra_css %}{% endblock %}
+{% endblock %}
+
+{% block branding_favicon %}
+    <link rel="shortcut icon" href="{% static 'wagtailadmin/images/favicon.ico' %}" />
+{% endblock %}
+
+{% block js %}
+    {% comment %}Make sure to use symlinked latest jquery version grabbed from package.json{% endcomment %}
+    <script src="{% static 'jquery/dist/jquery.min.js' %}"></script>
+    <script src="{% static 'wagtailadmin/js/vendor/jquery-ui-1.10.3.js' %}"></script>
+    <script src="{% static 'wagtailadmin/js/vendor/jquery.datetimepicker.js' %}"></script>
+    <script src="{% static 'wagtailadmin/js/vendor/jquery.autosize.js' %}"></script>
+    <script src="{% static 'wagtailadmin/js/vendor/bootstrap-transition.js' %}"></script>
+    <script src="{% static 'wagtailadmin/js/vendor/bootstrap-modal.js' %}"></script>
+    <script src="{% static 'wagtailadmin/js/vendor/bootstrap-tab.js' %}"></script>
+    <script src="{% static 'wagtailadmin/js/vendor/jquery.dlmenu.js' %}"></script>
+    <script src="{% static 'wagtailadmin/js/vendor/tag-it.js' %}"></script>
+    <script src="{% static 'wagtailadmin/js/core.js' %}"></script>
+    {% hook_output 'insert_global_admin_js' %}
+
+    {% main_nav_js %}
+
+    {% block extra_js %}{% endblock %}
+{% endblock %}
