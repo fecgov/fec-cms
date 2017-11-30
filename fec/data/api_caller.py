@@ -1,20 +1,25 @@
-from django.conf import settings
-from django.http import Http404
-
-from operator import itemgetter
+import logging
 import os
-from urllib import parse
 import re
 
 import requests
 
-from data import utils
-
-from data import constants
-
 from collections import OrderedDict
+from operator import itemgetter
+from urllib import parse
+
+from django.conf import settings
+from django.http import Http404
+
+from data import constants, utils
+
 
 MAX_FINANCIALS_COUNT = 4
+
+
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
+
 
 session = requests.Session()
 http_adapter = requests.adapters.HTTPAdapter(max_retries=2)
@@ -25,13 +30,23 @@ def _call_api(*path_parts, **filters):
     if settings.FEC_API_KEY:
         filters['api_key'] = settings.FEC_API_KEY
 
-    path = os.path.join(settings.FEC_API_VERSION,
-                        *[x.strip('/') for x in path_parts])
+    path = os.path.join(
+        settings.FEC_API_VERSION,
+        *[x.strip('/') for x in path_parts]
+    )
     url = parse.urljoin(settings.FEC_API_URL, path)
-
     results = session.get(url, params=filters)
 
-    return results.json() if results.ok else {}
+    if results.ok:
+        return results.json()
+    else:
+        logger.error('API ERROR with status {0} for {1} with filters: {2}'.format(
+            results.status_code,
+            url,
+            filters
+        ))
+
+        return {'results': []}
 
 
 def load_search_results(query, query_type=None):
