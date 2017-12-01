@@ -215,22 +215,24 @@ def get_next_senate_elections(current_cycle):
     For example, class 1 will always be up for election in years
     with year % 6 = 2, for example 2018.
     """
-    next_election_cycles = {
+    next_election_decoder = {
         2: {'1': current_cycle, '2': (current_cycle + 2), '3': (current_cycle + 4)},
         4: {'2': current_cycle, '3': (current_cycle + 2), '1': (current_cycle + 4)},
         0: {'3': current_cycle, '1': (current_cycle + 2), '2': (current_cycle + 4)}
     }
-    return next_election_cycles.get(current_cycle % 6)
+    return next_election_decoder.get(current_cycle % 6)
 
 
-def get_senate_cycles(senate_class, current_cycle=current_cycle()):
+def get_senate_cycles(senate_class, cycle=None):
     """
     Returns an list of elections based on senate class
     Uses get_next_senate_elections to find out
     which classes are up for election
     Adds years to current cycle depending on what position the class is in
     """
-    senate_classes = get_next_senate_elections(current_cycle)
+    if cycle is None:
+        cycle = current_cycle()
+    senate_classes = get_next_senate_elections(cycle)
     return range(senate_classes.get(senate_class), constants.START_YEAR, -6)
 
 
