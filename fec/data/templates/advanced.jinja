@@ -83,11 +83,11 @@
               <a
                 class="side-nav__link"
                 role="tab"
-                data-name="other"
+                data-name="external"
                 tabindex="0"
-                aria-controls="other"
-                href="#other"
-                aria-selected="false">Bulk data and other sources</a>
+                aria-controls="external"
+                href="#historical"
+                aria-selected="false">Historical statistics</a>
             </li>
             <li class="side-nav__item" role="presentation">
               <a
@@ -99,11 +99,22 @@
                 href="#external"
                 aria-selected="false">External sources</a>
             </li>
+            <li class="side-nav__item" role="presentation">
+              <a
+                class="side-nav__link"
+                role="tab"
+                data-name="other"
+                tabindex="0"
+                aria-controls="other"
+                href="#other"
+                aria-selected="false">Download bulk data</a>
+            </li>
           </ul>
         </nav>
         <div class="main__content--right-full">
           <section class="row" id="raising" aria-hidden="false" role="tabpanel" >
             <h2>Raising</h2>
+            <h3>Search or browse data</h3>
             <div class="content__section--ruled t-sans">
               <h4 class="post__magnifyer"><a href="/data/receipts/">All receipts</a></h4>
               <div class="post--child-adv-data">
@@ -119,7 +130,7 @@
                   <button type="button" class="js-accordion-trigger accordion__button">Download this data as .CSV to use on your own</button>
                   <div class="accordion__content">
                     <h4 class="t-upper">Lobbyist bundled contributions</h4>
-                    <ul class="list--flat-bordered list--download">
+                    <ul class="list--flat-bordered icon-download--inline--left">
                       <li><a href="#">2017–2018</a></li>
                       <li><a href="#">2015–2016</a></li>
                       <li><a href="#">2013–2014</a></li>
@@ -136,10 +147,12 @@
           <section class="row" id="spending" aria-hidden="true" role="tabpanel" >
             <h2>Spending</h2>
             <p>Spending includes all the types of <span class="term" data-term="disbursement">disbursements</span> candidates and committees make.</p>
-            <h4>Search or browse data</h4>
+            <h3>Search or browse data</h3>
             <div class="content__section--ruled t-sans">
               <h4 class="post__magnifyer u-margin--bottom"><a href="/data/disbursements">All disbursements</a></h4>
-              <div class="post--child-adv-data">&nbsp;</div>
+              <div class="post--child-adv-data">
+                <p>Search all disbursements from committees by the recipient, purpose, amount and date.</p>
+              </div>
               <h4 class="post__magnifyer"><a href="#">Independent expenditures</a></h4>
               <div class="post--child-adv-data">
                 <p class ="u-margin--bottom">Search <span class="term" data-term="independent expenditure" title="Click to define" tabindex="0">independent expenditures</span> to find specific spenders, candidates mentioned and transaction information.</p>
@@ -147,7 +160,7 @@
                   <button type="button" class="js-accordion-trigger accordion__button">Download this data as .CSV to use on your own</button>
                   <div class="accordion__content">
                     <h4 class="t-upper">Independent expenditures</h4>
-                    <ul class="list--flat-bordered list--download">
+                    <ul class="list--flat-bordered icon-download--inline--left">
                       <li><a href="#">2017–2018</a></li>
                       <li><a href="#">2015–2016</a></li>
                       <li><a href="#">2013–2014</a></li>
@@ -159,8 +172,7 @@
                   </div>
                 </div>
               </div>
-              <h4 class="post__magnifyer u-margin--bottom"><a href="/data/party-coordinated-expenditures/">Party coordinated expenditures</a></h4>
-              <div class="post--child-adv-data">&nbsp;</div>
+              <h4 class="post__magnifyer u-padding--bottom"><a href="/data/party-coordinated-expenditures/">Party coordinated expenditures</a></h4>
               <h4 class="post__magnifyer"><a href="/data/electioneering-communications/">Electioneering communications</a></h4>
               <div class="post--child-adv-data">
                 <p class ="u-margin--bottom">Search electioneering communications for communications that support or oppose specific candidates. Search by date and amount spent.</p>
@@ -168,7 +180,7 @@
                   <button type="button" class="js-accordion-trigger accordion__button">Download this data as .CSV to use on your own</button>
                   <div class="accordion__content">
                     <h4 class="t-upper">Electioneering communications</h4>
-                    <ul class="list--flat-bordered list--download">
+                    <ul class="list--flat-bordered icon-download--inline--left">
                       <li><a href="#">2017–2018</a></li>
                       <li><a href="#">2015–2016</a></li>
                       <li><a href="#">2013–2014</a></li>
@@ -187,7 +199,7 @@
                   <button type="button" class="js-accordion-trigger accordion__button">Download this data as .CSV to use on your own</button>
                   <div class="accordion__content">
                     <h4 class="t-upper">Communication costs</h4>
-                    <ul class="list--flat-bordered list--download">
+                    <ul class="list--flat-bordered icon-download--inline--left">
                       <li><a href="#">2017–2018</a></li>
                       <li><a href="#">2015–2016</a></li>
                       <li><a href="#">2013–2014</a></li>
@@ -203,12 +215,9 @@
           </section>
           <section class="row" id="loans-debts" aria-hidden="true" role="tabpanel">
             <h2>Loans and debts</h2>
-            <h4>Search or browse data</h4>
+            <h3>Search or browse data</h3>
             <div class="content__section--ruled t-sans">
-              <h4 class="post__magnifyer u-margin--bottom"><a href="/data/loans">Loans</a></h4>
-              <div class="post--child-adv-data">
-                &nbsp;
-              </div>
+              <h4 class="post__magnifyer u-padding--bottom"><a href="/data/loans">Loans</a></h4>
               <h4 class="is-disabled post__magnifyer u-margin--bottom">Debts (coming soon)</h4>
               <div class="post--child-adv-data">
                  &nbsp;
@@ -217,33 +226,60 @@
           </section>
           <section id="candidates" class="row" aria-hidden="true" role="tabpanel">
             <h2>Candidates</h2>
-            <div class="post-feed">
-              <div class="post">
-                <h3><i class="icon i-all-files icon--inline--left"></i><a href="/data/candidates/?has_raised_funds=true">All candidates</a></h3>
-                <p>Search candidates for president, Senate and House for all years by location, party and more.</p>
+            <p>Search candidates for president, Senate and House for all years by location, party and more.</p>
+            <h3>Search or browse data</h3>
+            <div class="content__section--ruled t-sans">
+              <h4 class="post__magnifyer u-margin--bottom"><a href="/data/candidates/?has_raised_funds=true">All candidates</a></h4>
+              <div class="post--child-adv-data">
+                <p class ="u-margin--bottom">Search candidates for president, Senate and House for all years by location, party and more</p>
+                <div class="js-accordion accordion--neutral" data-content-prefix="all-candidates">
+                  <button type="button" class="js-accordion-trigger accordion__button">Download this data as .CSV to use on your own</button>
+                  <div class="accordion__content">
+                    <h4 class="t-upper">Candidate summary</h4>
+                    <ul class="list--flat-bordered icon-download--inline--left">
+                      <li><a href="#">2017–2018</a></li>
+                      <li><a href="#">2015–2016</a></li>
+                      <li><a href="#">2013–2014</a></li>
+                      <li><a href="#">2011–2012</a></li>
+                      <li><a href="#">2009–2010</a></li>
+                      <li><a href="#">2007-2008</a></li>
+                    </ul>
+                    <p><a href="#">Metadata for this file</a><i class="icon icon--small i-arrow-right icon--inline--right" href="#"></i></p>
+                    <p>This file contains information for each candidate who has registered with the FEC or appears on an official state ballot for an election to the U.S. House of Representatives, U.S. Senate or U.S. President.</p>
+                  </div>
+                </div>
               </div>
-              <div class="post post--child">
-                <h4><a href="/data/candidates/president/">Presidential candidates</a></h4>
-                <p>Search presidential <span class="term" data-term="candidate">candidate</span> data including money raised, money spent, cash on hand and debt.</p>
+              <h4 class="post__magnifyer u-margin--bottom"><a href="/data/candidates/president/">Presidential candidates</a></h4>
+              <div class="post--child-adv-data">
+                <p>Search presidential <span class="term" data-term="candidate" title="Click to define" tabindex="0">candidate</span> data including money raised, money spent, cash on hand and debt.</p>
+                <p><a href="#">Find which candidates have applied for presidential funding</a></p>
               </div>
-              <div class="post post--child">
-                <h4><a href="/data/candidates/senate/">Senate candidates</a></h4>
+              <h4 class="post__magnifyer u-margin--bottom"><a href="/data/candidates/senate/">Senate candidates</a></h4>
+              <div class="post--child-adv-data">
                 <p>Search Senate candidate data including money raised, money spent, cash on hand and debt.</p>
               </div>
-              <div class="post post--child">
-                <h4><a href="/data/candidates/house/">House of Representatives candidates</a></h4>
+              <h4 class="post__magnifyer u-margin--bottom"><a href="/data/candidates/house/">House of Representatives candidates</a></h4>
+              <div class="post--child-adv-data">
                 <p>Search House candidate data including money raised, money spent, cash on hand and debt.</p>
               </div>
-              <div class="post">
-                <h3><a href="/data/filings/?form_type=F2">Most recent Statements of Candidacy (Form 2)</a></h3>
+              <h4 class="post__magnifyer u-margin--bottom"><a href="/data/filings/?form_type=F2">Most recent Statements of Candidacy (Form 2)</a></h3>
+              <div class="post--child-adv-data">
                 <p>Statements of Candidacy (Form 2) contain basic information about individuals running for federal office, including their names, addresses and authorized campaign committees.</p>
-              </div>
-            </div>
-            <div class="content__section--extra grid grid--3-wide">
-              <div class="icon-heading grid__item">
-                <i class="icon-heading__image icon-circle--checklist"><span class="u-visually-hidden">Icon of a checklist</span></i>
-                <div class="icon-heading__content">
-                  <a href="/help-candidates-and-committees#candidates-and-their-authorized-committees">Help for candidates and their committees</a>
+                <div class="js-accordion accordion--neutral" data-content-prefix="statements-of-candidacy">
+                <button type="button" class="js-accordion-trigger accordion__button">Download this data as .CSV to use on your own</button>
+                  <div class="accordion__content">
+                    <h4 class="t-upper">New statement of candidacy</h4>
+                    <ul class="list--flat-bordered icon-download--inline--left">
+                      <li><a href="#">2017–2018</a></li>
+                      <li><a href="#">2015–2016</a></li>
+                      <li><a href="#">2013–2014</a></li>
+                      <li><a href="#">2011–2012</a></li>
+                      <li><a href="#">2009–2010</a></li>
+                      <li><a href="#">2007-2008</a></li>
+                    </ul>
+                    <p><a href="#">Metadata for this file</a><i class="icon icon--small i-arrow-right icon--inline--right" href="#"></i></p>
+                    <p>This file lists all individuals who have filed a Statement of Candidacy (FEC Form 2) with the FEC to register as a candidate for federal office (U.S. House of Representatives, U.S. Senate and U.S. President) in a given election cycle.</p>
+                  </div>
                 </div>
               </div>
             </div>
@@ -251,7 +287,7 @@
           <section id="committees" class="row" aria-hidden="true" role="tabpanel">
             <h2>Committees</h2>
             <p>The term <span class="term" data-term="political committee">committee</span> encompasses several different political groups that receive and spend money in federal elections.</p>
-            <h4>Search or browse data</h4>
+            <h3>Search or browse data</h3>
             <div class="content__section--ruled t-sans">
               <h4 class="post__magnifyer"><a href="/data/committees">All committees</a></h4>
               <div class="post--child-adv-data">
@@ -260,7 +296,7 @@
                   <button type="button" class="js-accordion-trigger accordion__button">Download this data as .CSV to use on your own</button>
                   <div class="accordion__content">
                     <h4 class="t-upper">Committee summary</h4>
-                    <ul class="list--flat-bordered list--download">
+                    <ul class="list--flat-bordered icon-download--inline--left">
                       <li><a href="#">2017–2018</a></li>
                       <li><a href="#">2015–2016</a></li>
                       <li><a href="#">2013–2014</a></li>
@@ -274,12 +310,12 @@
                 </div>
               </div>
               <div class="post--child-adv-data">
-                <h4><a href="#">Leadership PACs and sponsors</a></h4>
+                <h4>Leadership PACs and sponsors</h4>
                 <div class="js-accordion accordion--neutral" data-content-prefix="pacs">
                   <button type="button" class="js-accordion-trigger accordion__button">Download this data as .CSV to use on your own</button>
                   <div class="accordion__content">
                     <h4 class="t-upper">Leadership PACs and sponsors</h4>
-                    <ul class="list--flat-bordered list--download">
+                    <ul class="list--flat-bordered icon-download--inline--left">
                       <li><a href="#">2017–2018</a></li>
                       <li><a href="#">2015–2016</a></li>
                       <li><a href="#">2013–2014</a></li>
@@ -293,12 +329,12 @@
                 </div>
               </div>
               <div class="post--child-adv-data">
-                <h4><a href="#">Lobbyist/registrant committees</a></h4>
+                <h4>Lobbyist/registrant committees</h4>
                 <div class="js-accordion accordion--neutral" data-content-prefix="lobbyist_registrant_committees">
                   <button type="button" class="js-accordion-trigger accordion__button">Download this data as .CSV to use on your own</button>
                   <div class="accordion__content">
                     <h4 class="t-upper">Lobbyist/registrant committees</h4>
-                    <ul class="list--flat-bordered list--download">
+                    <ul class="list--flat-bordered icon-download--inline--left">
                       <li><a href="#">2017–2018</a></li>
                       <li><a href="#">2015–2016</a></li>
                       <li><a href="#">2013–2014</a></li>
@@ -318,7 +354,7 @@
                   <button type="button" class="js-accordion-trigger accordion__button">Download this data as .CSV to use on your own</button>
                   <div class="accordion__content">
                     <h4 class="t-upper">New committee registrants</h4>
-                    <ul class="list--flat-bordered list--download">
+                    <ul class="list--flat-bordered icon-download--inline--left">
                       <li><a href="#">2017–2018</a></li>
                       <li><a href="#">2015–2016</a></li>
                       <li><a href="#">2013–2014</a></li>
@@ -339,116 +375,378 @@
               <h3>PACronyms</h3>
               <p>PACronyms, an alphabetical list of acronyms, abbreviations, initials and common names of federal political action committees (PACs), was prepared to help researchers readily identify committees when their full names are not disclosed on campaign finance reports.</p>
               <p>The list includes the PACronym, FEC ID number, full committee name, city and state, name of sponsoring, connected, or affiliated organization, committee designation and committee type.  Unless noted otherwise in the full committee name, the acronym "PAC" refers to "political action committee."  The PACronym is listed in italics if the committee's PACronym is not specifically provided on the committee's Statement of Organization (FEC Form 1).</p>
-              <ul class="list--buttons">
-                <li>
-                  <a class="button button--standard button--document" href="http://www.fec.gov/pubrec/pacronyms/Pacronyms.pdf">Open PDF</a>
-                </li>
-                <li>
-                  <a class="button button--standard button--download" href="http://www.fec.gov/pubrec/pacronyms/Pacronyms.xlsx">Download for Excel</a>
-                </li>
-              </ul>
             </div>
+            <ul class="list--buttons">
+              <li>
+                <a class="button button--standard button--document" href="http://www.fec.gov/pubrec/pacronyms/Pacronyms.pdf">Open PDF</a>
+              </li>
+              <li>
+                <a class="button button--standard button--download" href="http://www.fec.gov/pubrec/pacronyms/Pacronyms.xlsx">Download for Excel</a>
+              </li>
+            </ul>
           </section>
           <section class="row" id="filings" aria-hidden="true" role="tabpanel">
             <h2>Filings and reports</h2>
             <p>Filings contain all the statements, reports and notices that candidates and committees file. Search by date, type and filing candidate or committee.</p>
-            <div class="post-feed">
-              <div class="post">
-                <h3><i class="icon i-all-files icon--inline--left"></i><a href="/data/filings">All filings</a></h3>
+            <h3>Search or browse data</h3>
+            <div class="content__section--ruled t-sans">
+
+            <h4 class="post__magnifyer u-padding--bottom"><a href="/data/filings">All filings</a></h4>
+
+            <h4 class="post__magnifyer u-padding--bottom""><a href="/data/reports/presidential/?is_amended=false">Presidential committee reports</a></h4>
+            <h4 class="post__magnifyer"><a href="/data/reports/house-senate/?is_amended=false">House and Senate committee reports</a></h4>
+            <div class="post--child-adv-data">
+            <p class="u-margin--bottom">Statements of Organization (Form 1) contain basic information about committees, including type, address and treasurer.</p>
+              <div class="js-accordion accordion--neutral" data-content-prefix="house-senate">
+                <button type="button" class="js-accordion-trigger accordion__button">Download this data as .CSV to use on your own</button>
+                <div class="accordion__content">
+                  <h4 class="t-upper">Senate unofficial electronic filings</h4>
+                  <ul class="list--flat-bordered icon-download--inline--left">
+                    <li><a href="#">2017–2018</a></li>
+                    <li><a href="#">2015–2016</a></li>
+                    <li><a href="#">2013–2014</a></li>
+                    <li><a href="#">2011–2012</a></li>
+                    <li><a href="#">2009–2010</a></li>
+                    <li><a href="#">2007-2008</a></li>
+                  </ul>
+                  <p><a href="#">Metadata for this file</a><i class="icon icon--small i-arrow-right icon--inline--right" href="#"></i></p>
+                </div>
               </div>
-              <div class="post post--child">
-                <h4><a href="/data/reports/presidential/?is_amended=false">Presidential committee reports</a></h4>
+            </div>
+            <h4 class="post__magnifyer u-padding--bottom"><a href="/data/reports/pac-party/?is_amended=false">PAC and party committee reports</a></h4>
+            <div class="post--child-adv-data">
+            <h4>Unverified filers</h4>
+            <p class="u-margin--bottom">Statements of Organization (Form 1) contain basic information about committees, including type, address and treasurer.</p>
+              <div class="js-accordion accordion--neutral" data-content-prefix="unverified-filers">
+                <button type="button" class="js-accordion-trigger accordion__button">Download this data as .CSV to use on your own</button>
+                <div class="accordion__content">
+                  <h4 class="t-upper">Unverified filers</h4>
+                  <ul class="list--flat-bordered icon-download--inline--left">
+                    <li><a href="#">2017–2018</a></li>
+                    <li><a href="#">2015–2016</a></li>
+                    <li><a href="#">2013–2014</a></li>
+                    <li><a href="#">2011–2012</a></li>
+                    <li><a href="#">2009–2010</a></li>
+                    <li><a href="#">2007-2008</a></li>
+                  </ul>
+                  <p><a href="#">Metadata for this file</a><i class="icon icon--small i-arrow-right icon--inline--right" href="#"></i></p>
+                </div>
               </div>
-              <div class="post post--child">
-                <h4><a href="/data/reports/house-senate/?is_amended=false">House and Senate committee reports</a></h4>
-              </div>
-              <div class="post post--child">
-                <h4><a href="/data/reports/pac-party/?is_amended=false">PAC and party committee reports</a></h4>
-              </div>
+            </div>
+
               {#
               <!-- Commenting out while page is in progress -->
               <!--<li><a href="{{ url_for('reports', form_type='ie-only', is_amended='false') }}">Independent expenditure (Form 5) filer reports</a></li>-->
               #}
             </div>
           </section>
-          <section id="other" class="row" aria-hidden="true" role="tabpanel">
-            <h2>Bulk data and other sources</h2>
-            <div class="content__section">
-              <h3><a href="{{ TRANSITION_URL }}/press/campaign_finance_statistics.shtml">Historical statistics</a></h3>
-              <p>Data tables that summarize campaign financial activity by filer type, election cycle and reporting period.</p>
-            </div>
-            <div class="content__section">
-              <h3>Bulk data downloads</h3>
-              <p>The FEC prepares some data sets to be downloadable as a complete set.</p>
-              <div class="post-feed">
-                <div class="post">
-                  <h4><i class="icon i-all-files icon--inline--left"></i><a href="{{ CLASSIC_URL }}/finance/disclosure/ftpdet.shtml">Detailed data files</a></h4>
-                  <p>Here you will find the committees, candidates and linkages, itemized records, contributions to candidates, individual contributions and cperating expenditures files.</p>
-                  <p>These files contain committee, candidate and campaign finance data for the current election cycle and for election cycles through 1980. The files for the current election cycle plus the two most recent election cycles are regularly updated. The committees, candidates and linkages files are updated daily. The itemized records, contributions to candidates, individual contributions and operating expenditures files are udated weekly on Sunday. Please note that complete entry from each reporting period takes about 30 days. It is important to be careful when making conclusions from these data because some information may not have completed the entry process when these files where create. Committees do not have the same filing requirements. You should be careful when comparing financial information about committees with different filing requirements.</p>
-                </div>
-                <div class="post">
-                  <h4><i class="icon i-all-files icon--inline--left"></i><a href="{{ CLASSIC_URL }}/finance/disclosure/ftpsum.shtml">Summary data files</a></h4>
-                  <p>Here you will find the current campaign summary file, the all candidates summary file and the current PAC summary file. The most recent 10 years of data, the current two-year election period plus the five most recent two-year election periods, are updated daily.</p>
-                </div>
-                <div class="post">
-                  <h4><i class="icon i-all-files icon--inline--left"></i><a href="{{ CLASSIC_URL }}/finance/disclosure/ftpefile.shtml">Electronically filed reports</a></h4>
-                  <p>You will find here a daily compilation of electronically filed reports and statements. These are available from Feburary 2001 to present. Filing formats, valid dates for these formats and header files for version 1 through the most recent version are available.</p>
-                </div>
-                <div class="post">
-                  <h4><i class="icon i-all-files icon--inline--left"></i><a href="{{ CLASSIC_URL }}/finance/disclosure/ftppaper.shtml">Paper filed reports</a></h4>
-                  <p>The summary financial information and transactions disclosed in paper reports are data entered into an electronic format, and then stored in a downloadable file similar to electronically filed reports, known as a .fec file. Paper filings are data entered in a batch process; therefore, the Commission does not receive converted paper filings every day from our contractor. On days the Commission does not receive converted paper filings, an empty file (YYYYMMDD.nofiles.zip) will be placed on the FTP server. On days the Commission receives converted paper filings, a file (YYYYMMDD.zip) will contain that day's .fec files.</p>
-                  <p>Forms 3, 3L, 3X, 5, 6, 7 and 24-hour and 48-hour independent expenditures reports are converted to .fec files. The Commission began this paper to electronic conversion process in October 2005. The first data file was uploaded to the Commission on December 8, 2005.</p>
-                </div>
-              </div>
-            </div>
-            <div class="content__section">
-              <h3>Other FEC data sources</h3>
-              <div class="post-feed">
-                <div class="post">
-                  <h4><i class="icon i-all-files icon--inline--left"></i><a href="{{ CLASSIC_URL }}/data/DataCatalog.do">Legacy data catalog</a></h4>
-                  <p>The files available in the data catalog can be downloaded in either CSV or XML formats. Each also has a metadata page that describes the information included and the structure of the file itself. The maps provide a graphic interface for users to explore presidential and congressional data.</p>
-                  <p><a href="{{ CLASSIC_URL }}/disclosurep/pnational.do">Presidential election map</a> | <a href="{{ CLASSIC_URL }}/disclosurehs/hsnational.do">House and Senate elections data map</a>
-                </div>
-                <div class="post">
-                  <h4>Presidential campaign matching fund submissions</h4>
-                  <p>
-                    <a href="{{ CLASSIC_URL }}/finance/disclosure/2016MatchingFundSubmissions.shtml">2016</a> |
-                    <a href="{{ CLASSIC_URL }}/finance/2012matching/2012matching.shtml">2012</a> |
-                    <a href="{{ CLASSIC_URL }}/finance/2008matching/2008matching.shtml">2008</a> |
-                    <a href="{{ CLASSIC_URL }}/finance/disclosure/2004MatchingFundSubmissions.shtml">2004</a> |
-                    <a href="{{ CLASSIC_URL }}/finance/disclosure/submiss.shtml">2000</a>
-                  </p>
-                  <p>You will find here the threshold files for Presidential candidates seeking matching funds.</p>
-                  <p>In addition to regular quarterly or monthly disclosure reports, presidential candidates who seek matching funds must submit information about "matchable" contributions to the FEC for review. Contributions from individuals where the aggregate amount contributed by the individual is $250 or less are eligible to be matched on a dollar for dollar basis from the Presidential Election Campaign Fund. This Fund includes proceeds from the voluntary check-off of $3 per person from income tax returns of eligible taxpayers.</p>
-                </div>
-                <div class="post">
-                  <h4><i class="icon i-magnifying-glass icon--inline--left"></i><a href="http://docquery.fec.gov/senate/">Senate unofficial electronic filings</a></h4>
-                </div>
-              </div>
-            </div>
+          <section class="row" id="historical" aria-hidden="true" role="tabpanel">
+            <h2>Historical statistics</h2>
+            <p>Datatables that summarize campaign financial activity by filer type, electon cycle and reporting period.</p>
+            <a class="button button--cta button--go" href="/data/">Find statistics</a>
           </section>
           <section id="external" class="row" aria-hidden="true" role="tabpanel">
             <h2>External sources</h2>
             <p>Certain information is reported to the FEC, but more information is reported to other governmental agencies.</p>
-            <div class="post-feed">
-              <div class="post">
-                <h3><i class="icon i-share icon--inline--left"></i><a href="https://www.irs.gov/charities-non-profits/political-organizations/political-organization-filing-and-disclosure">Internal Revenue Service (IRS) filings</a></h3>
+            <div class="content__section--ruled t-sans">
+              <h4><i class="icon i-share icon--inline--left"></i><a href="https://www.irs.gov/charities-non-profits/political-organizations/political-organization-filing-and-disclosure">Internal Revenue Service (IRS) filings</a></h4>
+              <div class="post--child-adv-data">
                 <p>Search and download filings and disclosures by political organizations.</p>
               </div>
-              <div class="post">
-                <h3><i class="icon i-share icon--inline--left"></i><a href="http://apps.fcc.gov/ecd/">Federal Communications Commission (FCC) electioneering communications database</a></h3>
+              <h4><i class="icon i-share icon--inline--left"></i><a href="http://apps.fcc.gov/ecd/">Federal Communications Commission (FCC) electioneering communications database</a></h4>
+              <div class="post--child-adv-data">
                 <p>Search electioneering communications.</p>
               </div>
-              <div class="post">
-                <h3><i class="icon i-share icon--inline--left"></i><a href="https://www.oge.gov/web/oge.nsf/Presidential%20Candidates?OpenView">Office of Government Ethics (OGE) presidential candidate financial disclosure reports</a></h3>
+              <h4><i class="icon i-share icon--inline--left"></i><a href="https://www.oge.gov/web/oge.nsf/Presidential%20Candidates?OpenView">Office of Government Ethics (OGE) presidential candidate financial disclosure reports</a></h4>
+              <div class="post--child-adv-data">
                 <p>View financial disclosure reports filed by presidential candidates.</p>
               </div>
             </div>
           </section>
+          <section id="other" class="row" aria-hidden="true" role="tabpanel">
+            <h2>Download bulk data</h2>
+            <p>Sed posuere consectetur est at lobortis. Vivamus sagittis lacus vel augue laoreet rutrum faucibus dolor auctor. Duis mollis, est non commodo luctus, nisi erat porttitor ligula, eget lacinia odio sem nec elit. Maecenas sed diam eget risus varius blandit sit amet non magna. Sed posuere consectetur est at lobortis. Vivamus sagittis lacus vel augue laoreet rutrum faucibus dolor auctor. Duis mollis, est non commodo luctus, nisi erat porttitor ligula, eget lacinia odio sem nec elit. Maecenas sed diam eget risus varius blandit sit amet non magna.</p>
+            <div class="content__section t-sans">
+              <div class="js-accordion accordion--neutral" data-content-prefix="first">
+                <button type="button" class="js-accordion-trigger accordion__button">All candidates</button>
+                <div class="accordion__content">
+                  <ul class="list--flat-bordered icon-download--inline--left u-margin--bottom">
+                    <li><a href="#">2017–2018</a></li>
+                    <li><a href="#">2015–2016</a></li>
+                    <li><a href="#">2013–2014</a></li>
+                    <li><a href="#">2011–2012</a></li>
+                    <li><a href="#">2009–2010</a></li>
+                    <li><a href="#">2007-2008</a></li>
+                    <li><a href="#">2005–2006</a></li>
+                    <li><a href="#">2003–2004</a></li>
+                    <li><a href="#">2001-2002</a></li>
+                    <li><a href="#">1999–2000</a></li>
+                    <li><a href="#">1997–1998</a></li>
+                    <li><a href="#">1995–1996</a></li>
+                    <li><a href="#">1993–1994</a></li>
+                    <li><a href="#">1991–1992</a></li>
+                    <li><a href="#">1989–1990</a></li>
+                    <li><a href="#">1987–1988</a></li>
+                    <li><a href="#">1985–1986</a></li>
+                    <li><a href="#">1983–1984</a></li>
+                    <li><a href="#">1981–1982</a></li>
+                    <li><a href="#">1979–1980</a></li>
+                  </ul>
+                  <p class="icon-download--inline--left"><a href="#">Header file</a></p>
+                  <p><a href="#">Metadata for this file</a><i class="icon icon--small i-arrow-right icon--inline--right" href="#"></i></p>
+                  <p>The all candidate summary file contains one record including summary financial information for all candidates who raised or spent money during the period no matter when they are up for election. </p>
+                </div>
+                <button type="button" class="js-accordion-trigger accordion__button">Candidate master</button>
+                <div class="accordion__content">
+                  <h4 class="t-upper">Candidate master</h4>
+                  <ul class="list--flat-bordered icon-download--inline--left u-margin--bottom">
+                    <li><a href="#">2017–2018</a></li>
+                    <li><a href="#">2015–2016</a></li>
+                    <li><a href="#">2013–2014</a></li>
+                    <li><a href="#">2011–2012</a></li>
+                    <li><a href="#">2009–2010</a></li>
+                    <li><a href="#">2007-2008</a></li>
+                    <li><a href="#">2005–2006</a></li>
+                    <li><a href="#">2003–2004</a></li>
+                    <li><a href="#">2001-2002</a></li>
+                    <li><a href="#">1999–2000</a></li>
+                    <li><a href="#">1997–1998</a></li>
+                    <li><a href="#">1995–1996</a></li>
+                    <li><a href="#">1993–1994</a></li>
+                    <li><a href="#">1991–1992</a></li>
+                    <li><a href="#">1989–1990</a></li>
+                    <li><a href="#">1987–1988</a></li>
+                    <li><a href="#">1985–1986</a></li>
+                    <li><a href="#">1983–1984</a></li>
+                    <li><a href="#">1981–1982</a></li>
+                    <li><a href="#">1979–1980</a></li>
+                  </ul>
+                  <p class="icon-download--inline--left"><a href="#">Header file</a></p>
+                  <p><a href="#">Metadata for this file</a><i class="icon icon--small i-arrow-right icon--inline--right" href="#"></i></p>
+                  <p>The candidate master file contains one record for each candidate who has either registered with the Federal Election Commission or appeared on a ballot list prepared by a state elections office.</p>
+                  <p>The file contains basic information about the candidate, including name, party, whether the candidate is an incumbent, challenger, or involved in an open seat, address, state and district in which the candidate is running and the year of the election for which the candidate is registered. (Note that incumbent/challenger status is dynamic in the current election cycle and there may be delays in identifying districts that will involve open seats. The file also includes the ID number assigned to the candidate by the FEC which is used in tracking campaign finance information about the campaign, as well as the ID number of the candidate's principal campaign committee. A comma delimited header file is available on this file's data dictionary page.</p>
+                </div>
+                <button type="button" class="js-accordion-trigger accordion__button">Candidate-committee linkages</button>
+                <div class="accordion__content">
+                  <ul class="list--flat-bordered icon-download--inline--left u-margin--bottom">
+                    <li><a href="#">2017–2018</a></li>
+                    <li><a href="#">2015–2016</a></li>
+                    <li><a href="#">2013–2014</a></li>
+                    <li><a href="#">2011–2012</a></li>
+                    <li><a href="#">2009–2010</a></li>
+                    <li><a href="#">2007-2008</a></li>
+                    <li><a href="#">2005–2006</a></li>
+                    <li><a href="#">2003–2004</a></li>
+                    <li><a href="#">2001-2002</a></li>
+                    <li><a href="#">1999–2000</a></li>
+                  </ul>
+                  <p class="icon-download--inline--left"><a href="#">Header file</a></p>
+                  <p><a href="#">Metadata for this file</a><i class="icon icon--small i-arrow-right icon--inline--right" href="#"></i></p>
+                  <p>This file contains one record for each candidate to committee linkage.</p>
+                </div>
+                <button type="button" class="js-accordion-trigger accordion__button">House/Senate current campaigns</button>
+                <div class="accordion__content">
+                  <ul class="list--flat-bordered icon-download--inline--left u-margin--bottom">
+                    <li><a href="#">2017–2018</a></li>
+                    <li><a href="#">2015–2016</a></li>
+                    <li><a href="#">2013–2014</a></li>
+                    <li><a href="#">2011–2012</a></li>
+                    <li><a href="#">2009–2010</a></li>
+                    <li><a href="#">2007-2008</a></li>
+                    <li><a href="#">2005–2006</a></li>
+                    <li><a href="#">2003–2004</a></li>
+                    <li><a href="#">2001-2002</a></li>
+                    <li><a href="#">1999–2000</a></li>
+                    <li><a href="#">1997–1998</a></li>
+                    <li><a href="#">1995–1996</a></li>
+                  </ul>
+                  <p class="icon-download--inline--left"><a href="#">Header file</a></p>
+                  <p><a href="#">Metadata for this file</a><i class="icon icon--small i-arrow-right icon--inline--right" href="#"></i></p>
+                  <p>These files contain one record for each campaign.  This record contains summary financial information.</p>
+                </div>
+                <button type="button" class="js-accordion-trigger accordion__button">Committee master</button>
+                <div class="accordion__content">
+                  <ul class="list--flat-bordered icon-download--inline--left u-margin--bottom">
+                    <li><a href="#">2017–2018</a></li>
+                    <li><a href="#">2015–2016</a></li>
+                    <li><a href="#">2013–2014</a></li>
+                    <li><a href="#">2011–2012</a></li>
+                    <li><a href="#">2009–2010</a></li>
+                    <li><a href="#">2007-2008</a></li>
+                    <li><a href="#">2005–2006</a></li>
+                    <li><a href="#">2003–2004</a></li>
+                    <li><a href="#">2001-2002</a></li>
+                    <li><a href="#">1999–2000</a></li>
+                    <li><a href="#">1997–1998</a></li>
+                    <li><a href="#">1995–1996</a></li>
+                    <li><a href="#">1993–1994</a></li>
+                    <li><a href="#">1991–1992</a></li>
+                    <li><a href="#">1989–1990</a></li>
+                    <li><a href="#">1987–1988</a></li>
+                    <li><a href="#">1985–1986</a></li>
+                    <li><a href="#">1983–1984</a></li>
+                    <li><a href="#">1981–1982</a></li>
+                    <li><a href="#">1979–1980</a></li>
+                  </ul>
+                  <p class="icon-download--inline--left"><a href="#">Header file</a></p>
+                  <p><a href="#">Metadata for this file</a><i class="icon icon--small i-arrow-right icon--inline--right" href="#"></i></p>
+                  <p>The committee master file contains one record for each committee registered with the Federal Election Commission. This includes federal political action committees and party committees, campaign committees for presidential, house and senate candidates, as well as groups or organizations who are spending money for or against candidates for federal office.</p>
+                  <p>The file contains basic information about the committees. The ID number the Commission assigned to the committee is first, along with the name of the committee, the sponsor, where appropriate, the treasurer's name and the committee's address. The file also includes information about what type of committee is being described, along with the candidate's ID number if it is a campaign committee. A comma delimited header file is available on this file's data dictionary page.</p>
+                </div>
+                <button type="button" class="js-accordion-trigger accordion__button">PAC Summary</button>
+                <div class="accordion__content">
+                  <ul class="list--flat-bordered icon-download--inline--left u-margin--bottom">
+                    <li><a href="#">2017–2018</a></li>
+                    <li><a href="#">2015–2016</a></li>
+                    <li><a href="#">2013–2014</a></li>
+                    <li><a href="#">2011–2012</a></li>
+                    <li><a href="#">2009–2010</a></li>
+                    <li><a href="#">2007-2008</a></li>
+                    <li><a href="#">2005–2006</a></li>
+                    <li><a href="#">2003–2004</a></li>
+                    <li><a href="#">2001-2002</a></li>
+                    <li><a href="#">1999–2000</a></li>
+                    <li><a href="#">1997–1998</a></li>
+                    <li><a href="#">1995–1996</a></li>
+                  </ul>
+                  <p class="icon-download--inline--left"><a href="#">Header file</a></p>
+                  <p><a href="#">Metadata for this file</a><i class="icon icon--small i-arrow-right icon--inline--right" href="#"></i></p>
+                  <p>The most current information available for PACs is a file called, webk. This file gives overall receipts and disbursements for each PAC and party committee registered with the commission, along with a breakdown of overall receipts by source and totals for contributions to other committees, independent expenditures made and other information. A comma delimited header file is available on this file's data dictionary page.</p>
+                </div>
+                <button type="button" class="js-accordion-trigger accordion__button">Contributions by individuals</button>
+                <div class="accordion__content">
+                  <ul class="list--flat-bordered icon-download--inline--left u-margin--bottom">
+                    <li><a href="#">2017–2018</a></li>
+                    <li><a href="#">2015–2016</a></li>
+                    <li><a href="#">2013–2014</a></li>
+                    <li><a href="#">2011–2012</a></li>
+                    <li><a href="#">2009–2010</a></li>
+                    <li><a href="#">2007-2008</a></li>
+                    <li><a href="#">2005–2006</a></li>
+                    <li><a href="#">2003–2004</a></li>
+                    <li><a href="#">2001-2002</a></li>
+                    <li><a href="#">1999–2000</a></li>
+                    <li><a href="#">1997–1998</a></li>
+                    <li><a href="#">1995–1996</a></li>
+                    <li><a href="#">1993–1994</a></li>
+                    <li><a href="#">1991–1992</a></li>
+                    <li><a href="#">1989–1990</a></li>
+                    <li><a href="#">1987–1988</a></li>
+                    <li><a href="#">1985–1986</a></li>
+                    <li><a href="#">1983–1984</a></li>
+                    <li><a href="#">1981–1982</a></li>
+                    <li><a href="#">1979–1980</a></li>
+                  </ul>
+                  <p class="icon-download--inline--left"><a href="#">Header file</a></p>
+                  <p><a href="#">Metadata for this file</a><i class="icon icon--small i-arrow-right icon--inline--right" href="#"></i></p>
+                  <p>The individual contributions file contains each contribution from an individual to a federal committee. It includes the ID number of the committee receiving the contribution, the name, city, state, zip code, and place of business of the contributor along with the date and amount of the contribution.</p>
+                </div>
+                <button type="button" class="js-accordion-trigger accordion__button">Contributions to candidates</button>
+                <div class="accordion__content">
+                  <ul class="list--flat-bordered icon-download--inline--left u-margin--bottom">
+                    <li><a href="#">2017–2018</a></li>
+                    <li><a href="#">2015–2016</a></li>
+                    <li><a href="#">2013–2014</a></li>
+                    <li><a href="#">2011–2012</a></li>
+                    <li><a href="#">2009–2010</a></li>
+                    <li><a href="#">2007-2008</a></li>
+                    <li><a href="#">2005–2006</a></li>
+                    <li><a href="#">2003–2004</a></li>
+                    <li><a href="#">2001-2002</a></li>
+                    <li><a href="#">1999–2000</a></li>
+                    <li><a href="#">1997–1998</a></li>
+                    <li><a href="#">1995–1996</a></li>
+                    <li><a href="#">1993–1994</a></li>
+                    <li><a href="#">1991–1992</a></li>
+                    <li><a href="#">1989–1990</a></li>
+                    <li><a href="#">1987–1988</a></li>
+                    <li><a href="#">1985–1986</a></li>
+                    <li><a href="#">1983–1984</a></li>
+                    <li><a href="#">1981–1982</a></li>
+                    <li><a href="#">1979–1980</a></li>
+                  </ul>
+                  <p class="icon-download--inline--left"><a href="#">Header file</a></p>
+                  <p><a href="#">Metadata for this file</a><i class="icon icon--small i-arrow-right icon--inline--right" href="#"></i></p>
+                  <p>The itemized committee contributions file contains each contribution or independent expenditure made by a PAC, party committee, candidate committee, or other federal committee to a candidate during the two-year election cycle.</p>
+                </div>
+                <button type="button" class="js-accordion-trigger accordion__button">Any transaction from one committee to another</button>
+                <div class="accordion__content">
+                  <ul class="list--flat-bordered icon-download--inline--left u-margin--bottom">
+                    <li><a href="#">2017–2018</a></li>
+                    <li><a href="#">2015–2016</a></li>
+                    <li><a href="#">2013–2014</a></li>
+                    <li><a href="#">2011–2012</a></li>
+                    <li><a href="#">2009–2010</a></li>
+                    <li><a href="#">2007-2008</a></li>
+                    <li><a href="#">2005–2006</a></li>
+                    <li><a href="#">2003–2004</a></li>
+                    <li><a href="#">2001-2002</a></li>
+                    <li><a href="#">1999–2000</a></li>
+                    <li><a href="#">1997–1998</a></li>
+                    <li><a href="#">1995–1996</a></li>
+                    <li><a href="#">1993–1994</a></li>
+                    <li><a href="#">1991–1992</a></li>
+                    <li><a href="#">1989–1990</a></li>
+                    <li><a href="#">1987–1988</a></li>
+                    <li><a href="#">1985–1986</a></li>
+                    <li><a href="#">1983–1984</a></li>
+                    <li><a href="#">1981–1982</a></li>
+                    <li><a href="#">1979–1980</a></li>
+                  </ul>
+                  <p class="icon-download--inline--left"><a href="#">Header file</a></p>
+                  <p><a href="#">Metadata for this file</a><i class="icon icon--small i-arrow-right icon--inline--right" href="#"></i></p>
+                  <p>The itemized records (miscellaneous transactions) file contains all transactions (contributions, transfers, etc. among federal committees). It contains all data in the itemized committee contributions file plus PAC contributions to party committees, party transfers from state committee to state committee, and party transfers from national committee to state committee. Note that this file only includes federal transfers not soft money transactions. A comma delimited header file is available on this file's data dictionary page.</p>
+                </div>
+                <button type="button" class="js-accordion-trigger accordion__button">Any transaction from one committee to another</button>
+                <div class="accordion__content">
+                  <ul class="list--flat-bordered icon-download--inline--left u-margin--bottom">
+                    <li><a href="#">2017–2018</a></li>
+                    <li><a href="#">2015–2016</a></li>
+                    <li><a href="#">2013–2014</a></li>
+                    <li><a href="#">2011–2012</a></li>
+                    <li><a href="#">2009–2010</a></li>
+                    <li><a href="#">2007-2008</a></li>
+                    <li><a href="#">2005–2006</a></li>
+                    <li><a href="#">2003–2004</a></li>
+                  </ul>
+                  <p class="icon-download--inline--left"><a href="#">Header file</a></p>
+                  <p><a href="#">Metadata for this file</a><i class="icon icon--small i-arrow-right icon--inline--right" href="#"></i></p>
+                  <p>The itemized records (miscellaneous transactions) file contains all transactions (contributions, transfers, etc. among federal committees). It contains all data in the itemized committee contributions file plus PAC contributions to party committees, party transfers from state committee to state committee, and party transfers from national committee to state committee. Note that this file only includes federal transfers not soft money transactions. A comma delimited header file is available on this file's data dictionary page.</p>
+                </div>
+                <button type="button" class="js-accordion-trigger accordion__button">Operating expenditures</button>
+                <div class="accordion__content">
+                  <ul class="list--flat-bordered icon-download--inline--left u-margin--bottom">
+                    <li><a href="#">2017–2018</a></li>
+                    <li><a href="#">2015–2016</a></li>
+                    <li><a href="#">2013–2014</a></li>
+                    <li><a href="#">2011–2012</a></li>
+                    <li><a href="#">2009–2010</a></li>
+                    <li><a href="#">2007-2008</a></li>
+                    <li><a href="#">2005–2006</a></li>
+                    <li><a href="#">2003–2004</a></li>
+                  </ul>
+                  <p class="icon-download--inline--left"><a href="#">Header file</a></p>
+                  <p><a href="#">Metadata for this file</a><i class="icon icon--small i-arrow-right icon--inline--right" href="#"></i></p>
+                  <p>The Operating Expenditures file contains disbursements reported on FEC Form 3 Line 17, FEC Form 3P Line 23and FEC Form 3X Lines 21(a)(i), 21(a)(ii) and 21(b). Operating expenditures disclosed by electronic filers are available for the current election cycle and for election cycles through 2004. Operating expenditures disclosed by paper filers, excluding Form 3P, are available for the current election cycle and for election cycles through 2006. Please note, operating expenditures disclosed by paper filers during the 2006 cycle are only available from reports filed in October 2005 and later. NOTE: this file can be very large file. A comma delimited header file is available on this file's data dictionary page.</p>
+                </div>
+                <button type="button" class="js-accordion-trigger accordion__button">Electronically filed reports (.fec files)</button>
+                <div class="accordion__content">
+                  <p class="icon-download--inline--left"><a href="#">File formats, header file and metadata</a></p>
+                  <p><a href="#">Download files by day</a> &#187;</p>
+                  <p>A paper report submitted to the Commission is a committee's official campaign finance disclosure filing for paper filers. If there are any discrepancies between the paper report and the electronic data file received from our data entry contractor, the paper report takes precedence. </p>
+                </div>
+                <button type="button" class="js-accordion-trigger accordion__button">Electronically filed reports (.fec files)</button>
+                <div class="accordion__content">
+                  <p class="icon-download--inline--left"><a href="#">File formats, header file and metadata</a></p>
+                  <p><a href="#">Download files by day</a> &#187;</p>
+                  <p>A paper report submitted to the Commission is a committee's official campaign finance disclosure filing for paper filers. If there are any discrepancies between the paper report and the electronic data file received from our data entry contractor, the paper report takes precedence. </p>
+                </div>
+              </div>
+             </div>
+          </section>
         </div>
       </div>
     </div>
-
     <div class="slab slab--neutral">
       <div class="container">
         <h2>More ways to explore data</h2>

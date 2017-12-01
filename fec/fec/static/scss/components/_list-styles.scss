@@ -255,13 +255,3 @@
     }
   }
 }
-
-.list--download {
-
-  &::before {
-    @include u-icon-bg($download, $primary);
-    content: '';
-    float: left;
-    padding: 1.5rem;
-  }
-}
