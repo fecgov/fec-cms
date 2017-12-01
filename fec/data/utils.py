@@ -205,45 +205,33 @@ def process_ie_data(totals):
     return financial_summary_processor(totals, constants.IE_FORMATTER)
 
 
-def get_current_year_class():
-    """Get Class number for current year
+def get_next_senate_elections(current_cycle):
     """
-    if (current_cycle() - constants.END_YEAR) % 6 == 0:
-        current_year_class = '1'
-    elif (current_cycle() - constants.END_YEAR + 4) % 6 == 0:
-        current_year_class = '2'
-    elif (current_cycle() - constants.END_YEAR + 2) % 6 == 0:
-        current_year_class = '3'
-    return current_year_class
+    Returns an dictionary of senate classes in chronological order
+    based on current cycle year
+    Uses mod 6 to determine what senate classes are up for election
+    in the current cycle
+
+    For example, class 1 will always be up for election in years
+    with year % 6 = 2, for example 2018.
+    """
+    next_election_cycles = {
+        2: {'1': current_cycle, '2': (current_cycle + 2), '3': (current_cycle + 4)},
+        4: {'2': current_cycle, '3': (current_cycle + 2), '1': (current_cycle + 4)},
+        0: {'3': current_cycle, '1': (current_cycle + 2), '2': (current_cycle + 4)}
+    }
+    return next_election_cycles.get(current_cycle % 6)
 
 
-def get_senate_cycles(senate_class):
-
-    if get_current_year_class() in '1':
-        if senate_class in '1':
-            next_election = current_cycle()
-        elif senate_class in '2':
-            next_election = current_cycle() + 2
-        elif senate_class in '3':
-            next_election = current_cycle() + 4
-
-    elif get_current_year_class() in '2':
-        if senate_class in '1':
-            next_election = current_cycle() + 4
-        elif senate_class in '2':
-            next_election = current_cycle()
-        elif senate_class in '3':
-            next_election = current_cycle() + 2
-
-    elif get_current_year_class() in '3':
-        if senate_class in '1':
-            next_election = current_cycle() + 2
-        elif senate_class in '2':
-            next_election = current_cycle() + 4
-        elif senate_class in '3':
-            next_election = current_cycle()
-
-    return range(next_election, constants.START_YEAR, -6)
+def get_senate_cycles(senate_class, current_cycle=current_cycle()):
+    """
+    Returns an list of elections based on senate class
+    Uses get_next_senate_elections to find out
+    which classes are up for election
+    Adds years to current cycle depending on what position the class is in
+    """
+    senate_classes = get_next_senate_elections(current_cycle)
+    return range(senate_classes.get(senate_class), constants.START_YEAR, -6)
 
 
 def three_days_ago():
