@@ -13,7 +13,10 @@ var $ = require('jquery');
 var tables = require('../modules/tables');
 var columns = require('../modules/columns');
 var tablePanels = require('../modules/table-panels');
+var auditCategorySubcCategory = require('../modules/audit-category-sub-category');
 
+
+print("hihi" + auditCategorySubcCategory.testHello);
 
 $(document).ready(function() {
   var $table = $('#results');
