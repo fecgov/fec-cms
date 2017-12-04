@@ -360,36 +360,8 @@ audit_primary_categories_options = [
 
 audit_sub_categories_options = [
     {
-        "sub_category_name": "3Z-1",
-        "sub_category_id": 202
-    },
-    {
-        "sub_category_name": "Activity from Building Fund Account",
-        "sub_category_id": 204
-    },
-    {
-        "sub_category_name": "Contributions Made",
-        "sub_category_id": 218
-    },
-    {
-        "sub_category_name": "Coordinated Expenditures",
-        "sub_category_id": 220
-    },
-    {
-        "sub_category_name": "Debt and Obligations",
-        "sub_category_id": 224
-    },
-    {
-        "sub_category_name": "Disbursements",
-        "sub_category_id": 227
-    },
-    {
-        "sub_category_name": "Earmarked Contributions",
-        "sub_category_id": 230
-    },
-    {
-        "sub_category_name": "Failure to Itemize  Expenditures",
-        "sub_category_id": 236
+        "sub_category_id": 0,
+        "sub_category_name": "Please select"
     }
 ]
 

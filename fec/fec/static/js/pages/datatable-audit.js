@@ -1,10 +1,9 @@
 'use strict';
 
 /**
-* Loans datatable page
+* audit datatable page
 * ---------------------
-* Schedule C shows loans to
-* the committee that are required to be disclosed.
+* inital show all audit case.
 *
 */
 
@@ -15,8 +14,6 @@ var columns = require('../modules/columns');
 var tablePanels = require('../modules/table-panels');
 var auditCategorySubcCategory = require('../modules/audit-category-sub-category');
 
-
-print("hihi" + auditCategorySubcCategory.testHello);
 
 $(document).ready(function() {
   var $table = $('#results');

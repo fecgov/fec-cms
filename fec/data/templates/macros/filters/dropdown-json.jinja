@@ -1,4 +1,4 @@
-{% macro select_json_formate(name, label, keys, options) %}
+{% macro select_json_formate(name, label, keys=none, options={}) %}
 <div class="filter">
 <label for="{{ name }}" class="label">{{ label }}</label>
 <select id={{ name }} name="{{ name }}">
