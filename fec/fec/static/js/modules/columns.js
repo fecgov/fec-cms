@@ -639,17 +639,16 @@ var audit = [
     className: 'min-tablet hide-panel column--small',
     orderable: true
   },
- 
+
   {
     data: 'primary_category_list',
     className: 'all',
     orderable: false,
     render: function (data){
       if (data) {
-        var cat_arr = []
-        var html = '<ol style="list-style-type:decimal; padding-left:1rem">'
+        var html = '<ol class="list--numbered">'
         for(var i in data){
-          html += '<li>' + data[i]['primary_category_name'] + '<ol style="list-style-type:lower-alpha">'
+          html += '<li>' + data[i]['primary_category_name'] + '<ol>'
           for(var j in data[i]['sub_category_list']){
             html += '<li>'+ data[i]['sub_category_list'][j]['sub_category_name'] + '</li>'
           }
