@@ -73,10 +73,10 @@
   margin-left: u(3rem);
 }
 
-.post--child-adv-data {
-  @extend .post--child ;
+.post--child--spacious {
+  @extend .post--child;
+  margin-left: u(4rem);
   padding: 0;
-
 }
 
 
@@ -108,7 +108,7 @@
   }
 }
 
-.post__magnifyer{
+.post__magnifying-glass{
   &::before {
     @include u-icon-bg($magnifying-glass, $base);
     content: '';
@@ -116,7 +116,7 @@
     width: 2rem;
     height: 2rem;
     vertical-align: middle;
-    margin-right: 1rem;
+    margin: 0 u(1rem);
   }
 }
 
