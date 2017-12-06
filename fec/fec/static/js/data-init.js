@@ -1,7 +1,5 @@
 'use strict';
 
-/* global window, document, ANALYTICS, BASE_PATH, CMS_URL */
-
 // Implementing a polyfill for js native WeakMap
 // in order to patch functionality in an included library
 require('es6-weak-map/implement');
@@ -21,7 +19,6 @@ var siteNav = require('./modules/site-nav');
 var skipNav = require('./modules/skip-nav');
 var feedback = require('./modules/feedback');
 var typeahead = require('./modules/typeahead');
-var analytics = require('./modules/analytics');
 var stickyBar = require('./modules/sticky-bar');
 var toc = require('./modules/toc');
 var Search = require('./modules/search');
@@ -118,11 +115,6 @@ $(document).ready(function() {
   // var perf = require('./modules/performance');
   // perf.bar();
   // @endif
-
-  if (ANALYTICS) {
-    analytics.init();
-    analytics.pageView();
-  }
 
   // Initialize cycle selects
   $('.js-cycle').each(function(idx, elm) {
