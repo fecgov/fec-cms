@@ -14,7 +14,7 @@ $(document).ready(function() {
   var $table = $('#results');
   new tables.DataTable($table, {
     autoWidth: false,
-    title: 'Committee',
+    title: 'Committees',
     path: ['committees'],
     columns: columns.committees,
     useFilters: true,
