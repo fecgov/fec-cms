@@ -108,37 +108,6 @@
   }
 }
 
-.post__magnifying-glass{
-  margin-left: 4rem;
-  text-indent: -4rem;
-
-  &::before {
-    @include u-icon-bg($magnifying-glass, $base);
-    content: '';
-    display: inline-block;
-    width: 2rem;
-    height: 2rem;
-    vertical-align: middle;
-    margin: 0 u(1rem);
-  }
-}
-
-.post__share{
-  margin-left: 4rem;
-  text-indent: -4rem;
-
-  &::before {
-    @include u-icon-bg($share, $base);
-    background-size: 80%;
-    content: '';
-    display: inline-block;
-    width: 2rem;
-    height: 2rem;
-    vertical-align: middle;
-    margin: 0 u(1rem);
-  }
-}
-
 .post__read-more {
   display: inline;
   font-weight: bold;

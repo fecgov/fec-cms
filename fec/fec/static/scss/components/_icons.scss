@@ -274,6 +274,22 @@
   }
 }
 
+//for hanging icons where a block of content is idented-right from the icon
+.icon--hanging {
+  margin-left: u(1rem);
+  padding-left: u(3rem);
+
+  &.i-magnifying-glass {
+    @include u-icon-bg($magnifying-glass, $base);
+  }
+
+  &.i-share {
+    @include u-icon-bg($share, $base);
+    background-size: u(1.6rem);
+  }
+
+}
+
 .icon-star {
   @include u-icon-bg($star, $orange);
   width: u(1.5rem);
