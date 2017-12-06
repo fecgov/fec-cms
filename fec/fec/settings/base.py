@@ -137,6 +137,7 @@ TEMPLATES = [
                 'CMS_URL': CMS_URL,
                 'TRANSITION_URL': FEC_TRANSITION_URL,
                 'CLASSIC_URL': FEC_CLASSIC_URL,
+                'FEC_CMS_ENVIRONMENT': FEC_CMS_ENVIRONMENT,
             },
         }
     },
@@ -257,6 +258,7 @@ if FEC_CMS_ENVIRONMENT != 'LOCAL':
     DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
     AWS_LOCATION = 'cms-content'
     AWS_S3_REGION_NAME = env.get_credential('CMS_AWS_DEFAULT_REGION')
+
 
 UAA_CLIENT_ID = env.get_credential('CMS_LOGIN_CLIENT_ID', 'my-client-id')
 UAA_CLIENT_SECRET = env.get_credential('CMS_LOGIN_CLIENT_SECRET', 'my-client-secret')
