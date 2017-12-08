@@ -3,7 +3,7 @@
 <label for="{{ name }}" class="label">{{ label }}</label>
 <select id={{ name }} name="{{ name }}">
 {% for option in options %}
-	<option value={{option[keys[0]]}}>{{ option[keys[1]] }}</option>
+  <option value={{option[keys[0]]}}>{{ option[keys[1]] }}</option>
 {% endfor %}
 </select>
 </div>
