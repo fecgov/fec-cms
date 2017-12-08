@@ -1,4 +1,10 @@
 {
+  "name": "fec-cms",
+  "version": "1.0.0",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/18F/fec-cms.git"
+  },
   "scripts": {
     "build": "cd fec && webpack && gulp build-sass",
     "build-icons": "cd fec && gulp minify-icons && gulp consolidate-icons",
@@ -31,7 +37,7 @@
     "jquery": "3.2.1",
     "jquery.inputmask": "3.3.4",
     "leaflet-providers": "1.1.6",
-    "moment": "2.17.1",
+    "moment": "2.19.3",
     "numeral": "^1.5.3",
     "perfect-scrollbar": "0.6.2",
     "rangy": "^1.3.0",
@@ -106,5 +112,6 @@
   "engines": {
     "node": "8.9.1",
     "npm": "5.5.1"
-  }
+  },
+  "license": "CC0"
 }
