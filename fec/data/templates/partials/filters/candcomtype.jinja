@@ -1,8 +1,0 @@
-{% import 'macros/filters/checkbox.jinja' as checkbox %}
-
-{{ checkbox.checkbox_dropdown(
-  'cand-committee-type',
-  'Candidate or committee type',
-  selected=constants.pac_party,
-  options=constants.pac_party_types,
-) }}

@@ -11,6 +11,6 @@
   {{ typeahead.field('candidate_id', 'Authorized candidate name or ID', '', dataset='auditCandidates', allow_text=True) }}	
   {% include 'partials/filters/committee-types.jinja' %}   
   {% include 'partials/filters/audit-categories.jinja' %}
-  {{ years.range('cycle', 'Election cycles covered by audit' ) }} 
+  {{ years.cycleRange('cycle', 'Election cycles covered by audit' ) }} 
 </div>
 {% endblock %}
