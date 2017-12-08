@@ -41,7 +41,7 @@ function formatAuditCommittee(result) {
   return {
     name: result.name,
     id: result.id,
-    type: 'committee'
+    type: 'auditCommittee'
   };
 }
 
@@ -49,7 +49,7 @@ function formatAuditCandidate(result) {
   return {
     name: result.name,
     id: result.id,
-    type: 'audit_candidates'
+    type: 'auditCandidate'
   };
 }
 
@@ -93,7 +93,7 @@ var committeeEngine = createEngine({
   }
 });
 
-var audit_committeeEngine = createEngine({
+var auditCommitteeEngine = createEngine({
   remote: {
     url: getUrl('audit_committees'),
     wildcard: '%QUERY',
@@ -103,7 +103,7 @@ var audit_committeeEngine = createEngine({
   }
 });
 
-var audit_candidateEngine = createEngine({
+var auditCandidateEngine = createEngine({
   remote: {
     url: getUrl('audit_candidates'),
     wildcard: '%QUERY',
@@ -147,11 +147,11 @@ var committeeDataset = {
 };
 
 
-var audit_committeeDataset = {
-  name: 'audit_committee',
+var auditCommitteeDataset = {
+  name: 'auditCommittees',
   display: 'name',
   limit: 10,
-  source: audit_committeeEngine,
+  source: auditCommitteeEngine,
   templates: {
     header: '<span class="tt-suggestion__header">Select a committee:</span>',
     pending: '<span class="tt-suggestion__loading">Loading committees...</span>',
@@ -162,11 +162,11 @@ var audit_committeeDataset = {
   }
 };
 
-var audit_candidateDataset = {
-  name: 'audit_committee',
+var auditCandidateDataset = {
+  name: 'auditCandidates',
   display: 'name',
   limit: 10,
-  source: audit_candidateEngine,
+  source: auditCandidateEngine,
   templates: {
     header: '<span class="tt-suggestion__header">Select a candidate:</span>',
     pending: '<span class="tt-suggestion__loading">Loading candidates...</span>',
@@ -191,7 +191,8 @@ var individualDataset = {
   },
   templates: {
     suggestion: function(datum) {
-      return '<span><strong>Search individual contributions from:</strong> "' + datum.id + '"</span>';
+      return '<span><strong>Search individual contributions from:</strong> "' + datum.id +
+      '"</span>';
     }
   }
 };
@@ -217,8 +218,8 @@ var siteDataset = {
 var datasets = {
   candidates: candidateDataset,
   committees: committeeDataset,
-  audit_candidates: audit_candidateDataset,
-  audit_committees: audit_committeeDataset,
+  auditCandidates: auditCandidateDataset,
+  auditCommittees: auditCommitteeDataset,
   allData: [candidateDataset, committeeDataset],
   all: [candidateDataset, committeeDataset, individualDataset, siteDataset]
 };
