@@ -55,7 +55,7 @@
   @extend .button;
   background-color: $primary;
   border-color: $primary;
-  color: $inverse;
+  color: $inverse !important;
 
   &:hover:not(.is-disabled):not(.is-active) {
     background-color: $navy;

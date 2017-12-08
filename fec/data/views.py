@@ -1,4 +1,5 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
+from django.urls import reverse
 from django.http import Http404
 from django.http import JsonResponse
 from django.conf import settings
@@ -302,7 +303,9 @@ def committee(request, committee_id):
         'report_type': report_type,
         'reports': reports,
         'totals': totals,
+        'min_receipt_date': utils.three_days_ago(),
         'context_vars': context_vars,
+        'party_full': committee['party_full']
     }
 
 
@@ -323,17 +326,17 @@ def committee(request, committee_id):
             financials = api_caller.load_cmte_financials(committee['committee_id'], cycle=c)
             if financials['reports']:
                 return redirect(
-                    url_for('committee_page', c_id=committee['committee_id'], cycle=c)
+                    reverse('committee-by-id', kwargs={'committee_id': committee['committee_id']}) + '?cycle=' + str(c)
                 )
 
     # If it's not a senate committee and we're in the current cycle
-    # check if there's any raw filings in the last two days
+    # check if there's any raw filings in the last three days
     if committee['committee_type'] != 'S' and cycle == utils.current_cycle():
         raw_filings = api_caller._call_api(
             'efile', 'filings',
             cycle=cycle,
             committee_id=committee['committee_id'],
-            min_receipt_date=utils.two_days_ago()
+            min_receipt_date=template_variables['min_receipt_date']
         )
         if len(raw_filings.get('results')) > 0:
             template_variables['has_raw_filings'] = True
@@ -364,7 +367,7 @@ def elections(request, office, cycle, state=None, district=None):
     if office.lower() == 'president':
         cycles = [each for each in cycles if each % 4 == 0]
     elif office.lower() == 'senate':
-        cycles = utils.get_state_senate_cycles(state)
+        cycles = api_caller.get_all_senate_cycles(state)
 
     if office.lower() not in ['president', 'senate', 'house']:
         raise Http404()
@@ -444,7 +447,10 @@ def spending(request):
 
 def feedback(request):
     if request.method == 'POST':
-        data = json.loads(request.body)
+
+        # json.loads() is expecting a string in JSON format:
+        # '{"param":"value"}'. Needs to be decoded in Python 3
+        data = json.loads(request.body.decode("utf-8"))
 
         if not any([data['action'], data['feedback'], data['about']]):
             return JsonResponse({'status': False}, status=500)

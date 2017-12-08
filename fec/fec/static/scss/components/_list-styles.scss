@@ -8,6 +8,8 @@
 // .list--numbered      - Numbered list (for ol)
 // .list--flat          - Lay out items horizontally
 // .list--spacious      - Adds padding above and below list items
+// .list--columns       - layout list in two or three columns based on screen size
+// .list--columns--two  - layout list in two columns
 //
 // <ul class="list--bulleted">
 //  <li>Unordered list item 1</li>
@@ -63,6 +65,10 @@
     ol li {
       list-style-type: lower-roman;
     }
+
+    li {
+      list-style-type: decimal;
+    }
   }
 }
 
@@ -79,12 +85,6 @@
 
   ul li {
     list-style-type: none;
-  }
-}
-
-.list--numbered {
-  li {
-    list-style-type: decimal;
   }
 }
 
@@ -129,7 +129,13 @@
   }
 }
 
-.list--columns {
+.list--2-columns {
+  @include media($lg) {
+    @include columns(2)
+  }
+}
+
+.list--3-columns {
   @include media($med) {
     @include columns(2)
   }

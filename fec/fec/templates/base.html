@@ -141,8 +141,10 @@
 
     {% include './partials/glossary.html' %}
 
+    {% csrf_token %}
+
     <script>
-      window.CMS_URL = '{{ cms_url }}'
+      window.CMS_URL = '/data'
       window.FEC_APP_URL = '{{ settings.FEC_APP_URL }}';
       window.API_LOCATION = '{{ settings.FEC_API_URL }}';
       window.API_VERSION = '{{ settings.FEC_API_VERSION }}';

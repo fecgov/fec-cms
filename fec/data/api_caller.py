@@ -1,20 +1,25 @@
-from django.conf import settings
-from django.http import Http404
-
-from operator import itemgetter
+import logging
 import os
-from urllib import parse
 import re
 
 import requests
 
-from data import utils
-
-from data import constants
-
 from collections import OrderedDict
+from operator import itemgetter
+from urllib import parse
+
+from django.conf import settings
+from django.http import Http404
+
+from data import constants, utils
+
 
 MAX_FINANCIALS_COUNT = 4
+
+
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
+
 
 session = requests.Session()
 http_adapter = requests.adapters.HTTPAdapter(max_retries=2)
@@ -25,13 +30,23 @@ def _call_api(*path_parts, **filters):
     if settings.FEC_API_KEY:
         filters['api_key'] = settings.FEC_API_KEY
 
-    path = os.path.join(settings.FEC_API_VERSION,
-                        *[x.strip('/') for x in path_parts])
+    path = os.path.join(
+        settings.FEC_API_VERSION,
+        *[x.strip('/') for x in path_parts]
+    )
     url = parse.urljoin(settings.FEC_API_URL, path)
-
     results = session.get(url, params=filters)
 
-    return results.json() if results.ok else {}
+    if results.ok:
+        return results.json()
+    else:
+        logger.error('API ERROR with status {0} for {1} with filters: {2}'.format(
+            results.status_code,
+            url,
+            filters
+        ))
+
+        return {'results': []}
 
 
 def load_search_results(query, query_type=None):
@@ -311,3 +326,67 @@ def _get_sorted_documents(ao):
     sorted_documents = sorted(ao['documents'], key=itemgetter('description', 'document_id'), reverse=False)
     sorted_documents = sorted(sorted_documents, key=itemgetter('date'), reverse=True)
     return sorted_documents
+
+
+def call_senate_specials(state):
+    """ Call the API to get Senate special election information for
+        given state. Returns a list of dictionaries
+        Example: [{details for election1}][{details for election2}]
+    """
+    api_response = _call_api('election-dates',
+                             election_type_id='SG',
+                             office_sought='S',
+                             election_state=state)
+
+    special_results = api_response['results']
+
+    return special_results if 'results' in api_response else None
+
+
+def format_special_results(special_results):
+    """ Takes special_results, which is a list of dictionaries,
+        returns a list of election years. Round odd years up to even.
+        Example: [2008, 2000]
+    """
+    senate_specials = []
+
+    for result in special_results:
+
+        # Round odd years up to even years
+        result['election_year'] = result['election_year'] + (result['election_year'] % 2)
+
+        senate_specials.append(result['election_year'])
+
+    return senate_specials
+
+
+def get_regular_senate_cycles(state):
+    """ Get the list of election cycles based off Senate class
+    """
+    senate_cycles = []
+
+    for senate_class in ['1', '2', '3']:
+        if state.upper() in constants.SENATE_CLASSES[str(senate_class)]:
+            senate_cycles += utils.get_senate_cycles(senate_class)
+
+    return senate_cycles
+
+
+def get_all_senate_cycles(state):
+    """  Add together regularly scheduled and special senate elections
+        Return a list of election years sorted in descending order
+    """
+    senate_specials = format_special_results(call_senate_specials(state))
+    senate_regular_cycles = get_regular_senate_cycles(state)
+
+    all_senate_cycles = senate_regular_cycles
+
+    for special_year in senate_specials:
+        # Prevent duplicates
+        if special_year not in all_senate_cycles:
+            all_senate_cycles.append(special_year)
+
+    # Sort for readability
+    all_senate_cycles.sort(reverse=True)
+
+    return all_senate_cycles

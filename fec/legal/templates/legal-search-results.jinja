@@ -94,10 +94,7 @@
                   {% if results["total_" + category] %}
                       {% with murs = results[category] %}
                       <div class="message message--info">
-                        <h3>This feature is still in progress.</h3>
-                        <p>We&#39;re actively building the <span className="font-bold">MUR search</span>, and it doesn&#39;t yet include some
-                        advanced search functions. If you can&#39;t find what you&#39;re looking for,
-                        you can still <a href="http://eqs.fec.gov/eqs/searcheqs">search MURS on the old fec.gov</a>.</p>
+                        <p>The MUR search feature includes all cases dating back to 1977. You can search all FEC MURs using keywords, MUR numbers, names of respondents and more. For additional search filters, you can still search MURs using our legacy <a href="http://eqs.fec.gov">FEC Enforcement Query System</a>.</p>
                       </div>
                       {% include 'partials/legal-search-results-mur.jinja' %}
                       {% endwith %}

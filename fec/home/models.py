@@ -512,6 +512,7 @@ class HomePageBannerAnnouncement(Page):
     link_title_2 = models.CharField(max_length=255, blank=True)
     link_url_2 = models.URLField(max_length=255, blank=True)
     date_active = models.DateTimeField(blank=False)
+    date_inactive = models.DateTimeField(null=True, blank=False)
     active = models.BooleanField(default=True)
 
     content_panels = Page.content_panels + [
@@ -521,6 +522,7 @@ class HomePageBannerAnnouncement(Page):
         FieldPanel('link_title_2'),
         FieldPanel('link_url_2'),
         FieldPanel('date_active'),
+        FieldPanel('date_inactive'),
         FieldPanel('active'),
     ]
 
@@ -908,14 +910,9 @@ class ServicesLandingPage(ContentPage, UniqueModel):
         ('paragraph', blocks.RichTextBlock())
     ], null=True)
 
-    sections = StreamField([
-        ('sections', ResourceBlock())
-    ], null=True)
-
     content_panels = Page.content_panels + [
         StreamFieldPanel('hero'),
         StreamFieldPanel('intro'),
-        StreamFieldPanel('sections'),
     ]
 
     @property
