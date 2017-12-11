@@ -19,6 +19,8 @@ html {
   margin: 0;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  height: 100%;
+  overflow: hidden;
 }
 
 *, *:before, *:after {
@@ -30,6 +32,8 @@ body {
   margin: 0;
   padding: 0;
   position: relative;
+  height: 100%;
+  overflow: auto;
 }
 
 main {
