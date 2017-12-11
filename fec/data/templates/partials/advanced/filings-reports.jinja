@@ -1,0 +1,81 @@
+<section class="row" id="filings" aria-hidden="true" role="tabpanel">
+  <h2>Filings and reports</h2>
+  <p>Filings contain all the statements, reports and notices that candidates and committees file. Search by date, type and filing candidate or committee.</p>
+  <h3>Search or browse data</h3>
+  <div class="content__section--ruled t-sans">
+    <ul>
+      <li>
+        <i class="icon i-magnifying-glass icon--absolute--left"></i>
+        <div class="content__section--indent-left">
+          <h4><a href="/data/filings">All filings</a></h4>
+        </div>
+      </li>
+      <li>
+          <i class="icon i-magnifying-glass icon--absolute--left"></i>
+          <div class="content__section--indent-left">
+            <h4><a href="/data/reports/presidential/?is_amended=false">Presidential committee reports</a></h4>
+        </div>
+      </li>
+      <li>
+        <i class="icon i-magnifying-glass icon--absolute--left"></i>
+        <div class="content__section--indent-left">
+          <h4><a href="/data/reports/house-senate/?is_amended=false">House and Senate committee reports</a></h4>
+          <p class="u-margin--bottom">Statements of Organization (Form 1) contain basic information about committees, including type, address and treasurer.</p>
+          <div class="js-accordion accordion--neutral" data-content-prefix="house-senate">
+            <button type="button" class="js-accordion-trigger accordion__button">Download this data as .CSV to use on your own</button>
+            <div class="accordion__content">
+              <h4 class="t-upper">Senate unofficial electronic filings</h4>
+              <i class="icon i-download icon--absolute--left"></i>
+              <div class="content__section--indent-left">
+                <ul class="list--flat-bordered">
+                  <li><a href="#">2017–2018</a></li>
+                  <li><a href="#">2015–2016</a></li>
+                  <li><a href="#">2013–2014</a></li>
+                  <li><a href="#">2011–2012</a></li>
+                  <li><a href="#">2009–2010</a></li>
+                  <li><a href="#">2007-2008</a></li>
+                </ul>
+              </div>
+              <p><a href="#">Metadata for this file</a><i class="icon icon--small i-arrow-right icon--inline--right"></i></p>
+            </div>
+          </div>
+        </div>
+      </li>
+      <li>
+        <i class="icon i-magnifying-glass icon--absolute--left"></i>
+        <div class="content__section--indent-left">
+          <h4><a href="/data/reports/pac-party/?is_amended=false">PAC and party committee reports</a></h4>
+        </div>
+      </li>
+      <li>
+       <i class="icon i-magnifying-glass icon--absolute--left"></i>
+        <div class="content__section--indent-left">
+          <h4>Unverified filers</h4>
+          <p class="u-margin--bottom">Statements of Organization (Form 1) contain basic information about committees, including type, address and treasurer.</p>
+          <div class="js-accordion accordion--neutral" data-content-prefix="unverified-filers">
+            <button type="button" class="js-accordion-trigger accordion__button">Download this data as .CSV to use on your own</button>
+            <div class="accordion__content">
+              <h4 class="t-upper">Unverified filers</h4>
+              <i class="icon i-download icon--absolute--left"></i>
+              <div class="content__section--indent-left">
+                <ul class="list--flat-bordered">
+                  <li><a href="#">2017–2018</a></li>
+                  <li><a href="#">2015–2016</a></li>
+                  <li><a href="#">2013–2014</a></li>
+                  <li><a href="#">2011–2012</a></li>
+                  <li><a href="#">2009–2010</a></li>
+                  <li><a href="#">2007-2008</a></li>
+                </ul>
+              </div>
+              <p><a href="#">Metadata for this file</a><i class="icon icon--small i-arrow-right icon--inline--right"></i></p>
+            </div>
+          </div>
+        </div>
+      </li>
+    </ul>
+    {#
+    <!-- Commenting out while page is in progress -->
+    <!--<li><a href="{{ url_for('reports', form_type='ie-only', is_amended='false') }}">Independent expenditure (Form 5) filer reports</a></li>-->
+    #}
+  </div>
+</section>
