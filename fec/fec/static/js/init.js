@@ -81,9 +81,6 @@ $(document).ready(function() {
     new typeahead.Typeahead($(this), 'all', '/data/');
   });
 
-  // Initialize CFD home typeahead
-  new typeahead.Typeahead($('.js-typeahead'), 'allData', window.FEC_APP_URL + '/');
-
   // For any link that should scroll to a section on the page apply .js-scroll to <a>
   $('.js-scroll').on('click', function(e) {
     e.preventDefault();
