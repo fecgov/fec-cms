@@ -19,7 +19,6 @@ var siteNav = require('./modules/site-nav');
 var skipNav = require('./modules/skip-nav');
 var feedback = require('./modules/feedback');
 var typeahead = require('./modules/typeahead');
-var stickyBar = require('./modules/sticky-bar');
 var toc = require('./modules/toc');
 var Search = require('./modules/search');
 
@@ -48,11 +47,6 @@ $(document).ready(function() {
       within: document.getElementById(container)
     };
     new Sticky(this, opts);
-  });
-
-  // Initialize sticky bar elements
-  $('.js-sticky-bar').each(function() {
-    new stickyBar.StickyBar(this);
   });
 
   // Initialize glossary
