@@ -439,12 +439,6 @@
       background-size: 50%;
     }
 
-    &.i-info-person {
-      @include u-icon-bg($info-person, $secondary-contrast);
-      background-position: 50% 110%;
-      background-size: 100%;
-    }
-
     &.i-training {
       @include u-icon-bg($training, $secondary-contrast);
       background-size: 60%;
