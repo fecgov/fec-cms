@@ -369,6 +369,7 @@
 
     &.i-loans {
       @include u-icon-bg($hand-money, $primary-contrast);
+      background-size: 70%;
     }
 
     &.i-mallet {
