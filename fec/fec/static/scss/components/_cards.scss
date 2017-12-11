@@ -357,6 +357,7 @@
 
     &.i-external {
       @include u-icon-bg($share, $primary-contrast);
+      background-size: 45%;
     }
 
     &.i-filings {
