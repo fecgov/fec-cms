@@ -48,11 +48,7 @@ $(document).ready(function() {
   });
 
   new skipNav.Skipnav('.skip-nav', 'main');
-  new siteNav.SiteNav('.js-site-nav', {
-    cmsUrl: '',
-    webAppUrl: window.FEC_APP_URL,
-    transitionUrl: window.TRANSITION_URL
-  });
+  new siteNav.SiteNav('.js-site-nav');
 
   // Initialize table of contents
   new toc.TOC('.js-toc');
@@ -82,7 +78,7 @@ $(document).ready(function() {
 
   // Initialize header typeaheads (mobile and desktop)
   $('.js-site-search').each(function() {
-    new typeahead.Typeahead($(this), 'all', window.FEC_APP_URL + '/');
+    new typeahead.Typeahead($(this), 'all', '/data/');
   });
 
   // Initialize CFD home typeahead

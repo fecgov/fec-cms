@@ -13,10 +13,6 @@
     {% block css %}
     <link rel="stylesheet" type="text/css" href="{% asset_for_css 'base.css' %}">
     {% endblock %}
-
-    <script>
-      BASE_PATH = '/';
-    </script>
   </head>
 
   <body class="{% block body_class %}{% endblock %}">
@@ -144,7 +140,7 @@
     {% csrf_token %}
 
     <script>
-      window.CMS_URL = '/data'
+      window.BASE_PATH = '/';
       window.FEC_APP_URL = '{{ settings.FEC_APP_URL }}';
       window.API_LOCATION = '{{ settings.FEC_API_URL }}';
       window.API_VERSION = '{{ settings.FEC_API_VERSION }}';
