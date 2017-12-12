@@ -23,25 +23,6 @@
             <button type="button" class="js-accordion-trigger accordion__button" id="label-1">Elections, deadlines and compliance</button>
             <div class="accordion__content">
               <div class="filter">
-                <fieldset class="js-filter js-dropdown" data-filter="checkbox">
-                  <legend class="label" for="state">State</legend>
-                  <ul class="dropdown__selected"></ul>
-                  <div class="dropdown">
-                    <button type="button" class="dropdown__button button--alt">Select</button>
-                    <div class="dropdown__panel" aria-hidden="true">
-                      <ul class="{{ css_class }}">
-                      {% for value, label in settings.CONSTANTS.states.items %}
-                      <li class="dropdown__item">
-                        <input id="state-{{ value }}" name="state" type="checkbox" value="{{ value }}">
-                        <label class="dropdown__value" for="state-{{ value }}">{{ label }}</label>
-                      </li>
-                      {% endfor %}
-                      </ul>
-                    </div>
-                  </div>
-                </fieldset>
-              </div>
-              <div class="filter">
                 <fieldset class="js-sub-filter" data-name="category" data-filter-label="label-1">
                   <legend class="label">Election dates</legend>
                   <ul>
