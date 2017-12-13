@@ -13,7 +13,7 @@ $("#primary_category_id").change(function(event){
   $.getJSON(helpers.buildUrl(['audit-category'],{'primary_category_id': $('#primary_category_id').val(), 'per_page': 100}),function(data){
     $select.html('');
     $.each(data.results[0].sub_category_list, function(key, val){
-      $select.append('<option id="' + val.sub_category_id + '">' + val.sub_category_name + '</option>');
+      $select.append('<option selected="selected" value="' + val.sub_category_id + '">' + val.sub_category_name + '</option>');
     });
   });
 });

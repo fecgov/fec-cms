@@ -1,10 +1,13 @@
 {% macro select_json_formate(name, label, keys=none, options={}) %}
 <div class="filter">
-<label for="{{ name }}" class="label">{{ label }}</label>
-<select id={{ name }} name="{{ name }}">
-{% for option in options %}
-  <option value={{option[keys[0]]}}>{{ option[keys[1]] }}</option>
-{% endfor %}
-</select>
+  <div class="js-filter js-filter-control" data-filter="select" 
+  data-validate="false" data-modifies-filter="{{ name }}" data-required-default="-1">
+    <label for="{{ name }}" class="label">{{ label }}</label>
+    <select id={{ name }} name="{{ name }}">
+    {% for option in options %}
+      <option value={{option[keys[0]]}}>{{ option[keys[1]] }}</option>
+    {% endfor %}
+    </select>
+  </div>
 </div>
 {% endmacro %}

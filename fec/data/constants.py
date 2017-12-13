@@ -297,7 +297,7 @@ sub_category_keys = ['sub_category_id', 'sub_category_name']
 
 audit_primary_categories_options = [
     {
-        "primary_category_id": 0,
+        "primary_category_id": -1,
         "primary_category_name": "Please select"
     },
     {
@@ -360,7 +360,7 @@ audit_primary_categories_options = [
 
 audit_sub_categories_options = [
     {
-        "sub_category_id": 0,
+        "sub_category_id": -2,
         "sub_category_name": "Please select"
     }
 ]
