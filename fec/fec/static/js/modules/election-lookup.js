@@ -3,7 +3,6 @@
 /* window */
 
 var $ = require('jquery');
-var helpers = require('./helpers');
 var ElectionForm = require('./election-form').ElectionForm;
 var ElectionMap = require('./election-map').ElectionMap;
 
@@ -22,12 +21,7 @@ function ElectionLookup(selector) {
   this.$district = this.$form.find('[name="district"]').prop('disabled', true);
   this.$submit = this.$form.find('[type="submit"]');
 
-  this.districts = 0;
-  if (helpers.isInViewport(this.$elm)) {
-    this.init();
-  } else {
-    $(window).on('scroll', this.init.bind(this));
-  }
+  this.init();
 }
 
 ElectionLookup.prototype = Object.create(ElectionForm.prototype);
