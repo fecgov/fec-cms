@@ -27,7 +27,7 @@ describe('Election filter', function() {
         'data-full-name="election_full"' +
         'data-duration="4"' +
         'data-default-cycle="2016">' +
-        '<label class="label" for="election_year">Election cycle</label>' +
+        '<label class="label" for="election_year">Election</label>' +
         '<select name="election_year" class="js-election">' +
             '<option value="2016">2016</option>' +
             '<option value="2012">2012</option>' +
