@@ -54,15 +54,15 @@ $(document).ready(function() {
   new toc.TOC('.js-toc');
 
   // Initialize sticky elements
-    $('.js-sticky-side').each(function() {
-      var container = $(this).data('sticky-container');
-      var opts = {
-        within: document.getElementById(container)
-      };
-      if (helpers.isLargeScreen()) {
-        new Sticky(this, opts);
-      }
-    });
+  $('.js-sticky-side').each(function() {
+    var container = $(this).data('sticky-container');
+    var opts = {
+      within: document.getElementById(container)
+    };
+    if (helpers.isLargeScreen()) {
+      new Sticky(this, opts);
+    }
+  });
 
   // Initialize checkbox dropdowns
   $('.js-dropdown').each(function() {
