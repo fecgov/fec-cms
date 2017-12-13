@@ -21,11 +21,7 @@ function Overview(selector, type, index) {
 
   $(window).on('resize', this.zeroPadTotals.bind(this));
 
-  if (helpers.isInViewport(this.$element)) {
-    this.init();
-  } else {
-    $(window).on('scroll', this.init.bind(this));
-  }
+  this.init();
 }
 
 Overview.prototype.init = function() {
