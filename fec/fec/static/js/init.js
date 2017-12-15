@@ -48,25 +48,21 @@ $(document).ready(function() {
   });
 
   new skipNav.Skipnav('.skip-nav', 'main');
-  new siteNav.SiteNav('.js-site-nav', {
-    cmsUrl: '',
-    webAppUrl: window.FEC_APP_URL,
-    transitionUrl: window.TRANSITION_URL
-  });
+  new siteNav.SiteNav('.js-site-nav');
 
   // Initialize table of contents
   new toc.TOC('.js-toc');
 
   // Initialize sticky elements
-    $('.js-sticky-side').each(function() {
-      var container = $(this).data('sticky-container');
-      var opts = {
-        within: document.getElementById(container)
-      };
-      if (helpers.isLargeScreen()) {
-        new Sticky(this, opts);
-      }
-    });
+  $('.js-sticky-side').each(function() {
+    var container = $(this).data('sticky-container');
+    var opts = {
+      within: document.getElementById(container)
+    };
+    if (helpers.isLargeScreen()) {
+      new Sticky(this, opts);
+    }
+  });
 
   // Initialize checkbox dropdowns
   $('.js-dropdown').each(function() {
@@ -82,11 +78,8 @@ $(document).ready(function() {
 
   // Initialize header typeaheads (mobile and desktop)
   $('.js-site-search').each(function() {
-    new typeahead.Typeahead($(this), 'all', window.FEC_APP_URL + '/');
+    new typeahead.Typeahead($(this), 'all', '/data/');
   });
-
-  // Initialize CFD home typeahead
-  new typeahead.Typeahead($('.js-typeahead'), 'allData', window.FEC_APP_URL + '/');
 
   // For any link that should scroll to a section on the page apply .js-scroll to <a>
   $('.js-scroll').on('click', function(e) {
