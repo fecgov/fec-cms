@@ -1,5 +1,6 @@
 from collections import OrderedDict
 
+# Calendar page filter categories
 election_types = OrderedDict([
     ('36', 'All elections'),
 ])
