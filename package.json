@@ -102,7 +102,7 @@
     "./fec/fec/static/js/**/*.js": [
       "build-js"
     ],
-    "./fec/fec/static/js/templates/*.hbs": [
+    "./fec/fec/static/js/templates/**/*.hbs": [
       "build-js"
     ],
     "./fec/fec/static/scss/**/*.scss": [
