@@ -12,9 +12,14 @@ var eventTemplate = require('../templates/calendar/events.hbs');
 var FC = $.fullCalendar;
 var View = FC.View;
 
+// 'Sort by: Category' view
+// Property name is the category
+// Then followed by a list of the types of events under that category
+// List items are the first token of the event category parameter from the API
+// example: 'ie' for 'IE Periods'
 var categories = {
   Elections: ['election'],
-  'Reporting Deadlines': ['report'],
+  'Filing deadlines': ['reporting', 'pre'],
   'Reporting and compliance periods': ['ie', 'ec', 'fea'],
   Outreach: ['roundtables', 'conferences'],
   Meetings: ['open', 'executive'],
@@ -77,6 +82,7 @@ var chronologicalGroups = function(events, start, end) {
   return events;
 };
 
+
 var ListView = View.extend({
   setDate: function(date) {
     var intervalUnit = this.options.duration.intervalUnit || this.intervalUnit;
@@ -91,6 +97,7 @@ var ListView = View.extend({
       duration: this.options.duration.intervalUnit,
       sortBy: this.options.sortBy
     };
+
     this.el.html(eventTemplate({groups: groups, settings: settings}));
     this.dropdowns = $(this.el.html).find('.dropdown').map(function(idx, elm) {
       return new dropdown.Dropdown($(elm), {checkboxes: false});
