@@ -352,6 +352,10 @@
     "definition": "Any committee that conducts activities in connection with an election, but that is not a party committee, an authorized committee of any candidate for federal election, or a separate segregated fund. 11 CFR <a href=\"https://www.fec.gov/regulations/100-6/CURRENT#100-6\">106.6(a)</a>."
   },
   {
+    "term": "Non-contribution account",
+    "definition": "A separate bank account to deposit and withdraw funds raised in unlimited amounts from individuals, corporations, labor organizations and/or other political committees, consistent with the stipulated judgment in <i>Carey v. FEC</i>. The funds maintained in this separate account will not be used to make contributions, whether direct, in-kind or via coordinated communications, or coordinated expenditures, to federal candidates or committees."
+  },
+  {
     "term": "None",
     "definition": "If data appears as \"None\", it's best to check the source document. Common reasons that the data appears as \"None\" are:<ul><li>Data is not processed yet; often, paper filings cause delays and inconsistent upload times.</li><li>Data is from an amendment that did not properly identify the form it was amending.</li><li>The filer did not fill out the information on the form.</li></ul>If you think there is an error, you can report that via <a href='mailto:webmanager@fec.gov'>email</a>."
   },
