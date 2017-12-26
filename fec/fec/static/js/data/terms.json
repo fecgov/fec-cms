@@ -21,7 +21,7 @@
   },
   {
     "term": "Agent (of a candidate)",
-    "definition": "An agent of a federal candidate or officeholder is any person who has actual authority, either express or implied, to engage in any of the following activities on behalf of the candidate or officeholder: <ul class='list-bulleted'> <li>To request or suggest that a communication be created, produced or distributed; </li><li>To make or authorize a communication that meets one or more of the “content standards” for coordination;</li><li>To request or suggest that any other person create, produce, or distribute any communication;</li><li>To be materially involved in decisions regarding the content, intended audience, means, media outlet, timing, frequency, size, prominence or duration of a communication;</li><li>To provide material or information to assist another person in the creation, production or distribution of any communication;</li>\n<li>To make or direct a communication that is created, produced or distributed with the use of material or information derived from a substantial discussion about the communication with a different candidate; or</li> <li>To solicit, receive, direct, transfer or spend funds in connection with any election.</li></ul> 11 CFR <a href=\"https://www.fec.gov/regulations/109-3/CURRENT#109-3-b\">109.3(b)</a> and <a href=\"https://www.fec.gov/regulations/300-2/CURRENT#300-2-b-3\">300.2(b)(3)</a>."
+    "definition": "An agent of a federal candidate or officeholder is any person who has actual authority, either express or implied, to engage in any of the following activities on behalf of the candidate or officeholder: <ul class='list-bulleted'> <li>To solicit, receive, direct, transfer or spend funds in connection with any election.</li><li>To request or suggest that a communication be created, produced or distributed; </li><li>To make or authorize a communication that meets one or more of the “content standards” for coordination;</li><li>To request or suggest that any other person create, produce, or distribute any communication;</li><li>To be materially involved in decisions regarding the content, intended audience, means, media outlet, timing, frequency, size, prominence or duration of a communication;</li><li>To provide material or information to assist another person in the creation, production or distribution of any communication; or</li>\n<li>To make or direct a communication that is created, produced or distributed with the use of material or information derived from a substantial discussion about the communication with a different candidate;</li></ul> 11 CFR <a href=\"https://www.fec.gov/regulations/109-3/CURRENT#109-3-b\">109.3(b)</a> and <a href=\"https://www.fec.gov/regulations/300-2/CURRENT#300-2-b-3\">300.2(b)(3)</a>."
   },
   {
     "term": "Agent (of a party)",
@@ -29,7 +29,7 @@
   },
   {
     "term": "Allocation account",
-    "definition": "A separate federal account into which funds from either a committee’s federal and nonfederal accounts, or (for party committees) from its federal and Levin accounts, are deposited solely to pay expenses that must be allocated. (A party committee must have separate allocation accounts for its federal/nonfederal allocation and for its federal/Levin allocation.) 11 CFR <a href=\"https://www.fec.gov/regulations/106-7/CURRENT#106-7\">106.7(f)</a> and <a href=\"https://www.fec.gov/regulations/300-33/CURRENT#300-33-d\">300.33(d)</a>."
+    "definition": "A separate federal account into which funds from either a committee’s federal and nonfederal accounts, or (for party committees) from its federal and Levin accounts, are deposited solely to pay expenses that must be allocated. (A party committee must have separate allocation accounts for its federal/nonfederal allocation and for its federal/Levin allocation). 11 CFR <a href=\"https://www.fec.gov/regulations/106-7/CURRENT#106-7\">106.7(f)</a> and <a href=\"https://www.fec.gov/regulations/300-33/CURRENT#300-33-d\">300.33(d)</a>."
   },
   {
     "term": "Authorized committee",
@@ -97,7 +97,7 @@
   },
   {
     "term": "Coordinated communication",
-    "definition": "A communication that satisfies a three-pronged test: <ol><li>The communication must be paid for by a person other than a federal candidate, authorized committee, or a political party committee, or any agents of the aforementioned entities with whom the communication is coordinated.</li><li>One or more of the five content standards set forth in <a href=\"https://www.fec.gov/regulations/109-21/CURRENT#109-21-c\">11 CFR 109.21(c)</a> must be satisfied; and</li><li>One or more of the five conduct standards set forth in <a href=\"https://www.fec.gov/regulations/109-21/CURRENT#109-21-d\">11 CFR 109.21(d)</a> must be satisfied.</li></ol>A payment for a communication satisfying all three prongs is an in-kind contribution to the candidate or political party committee with which it was coordinated. 11 CFR <a href=\"https://www.fec.gov/regulations/109-21/CURRENT#109-21>109.21</a>."
+    "definition": "A communication that satisfies a three-pronged test: <ol class='list-bulleted'>><li>The communication must be paid for by a person other than a federal candidate, authorized committee, or a political party committee, or any agents of the aforementioned entities with whom the communication is coordinated.</li><li>One or more of the five content standards set forth in <a href=\"https://www.fec.gov/regulations/109-21/CURRENT#109-21-c\">11 CFR 109.21(c)</a> must be satisfied; and</li><li>One or more of the five conduct standards set forth in <a href=\"https://www.fec.gov/regulations/109-21/CURRENT#109-21-d\">11 CFR 109.21(d)</a> must be satisfied.</li></ol>A payment for a communication satisfying all three prongs is an in-kind contribution to the candidate or political party committee with which it was coordinated. 11 CFR <a href=\"https://www.fec.gov/regulations/109-21/CURRENT#109-21\">109.21</a>."
   },
   {
     "term": "Coordinated party expenditure",
@@ -133,11 +133,11 @@
   },
   {
     "term": "Designated/designation",
-    "definition": "A contribution is considered to be designated in writing for a particular election if <ol><li>The contribution is made by check, money order, or other negotiable instrument which clearly indicates the particular election with respect to which the contribution is made;</li><li>The contribution is accompanied by a writing, signed by the contributor, which clearly indicates the particular election with respect to which the contribution is made; or</li>The contribution is redesignated in accordance with <a href=\"https://www.fec.gov/regulations/110-1/CURRENT#110-1-b-4-iii\">11 CFR 110.1(b)(5)</a>.</li></ol> <a href=\"https://www.fec.gov/regulations/110-1/CURRENT#110-1-b-4\">11 CFR 110.1(b)(4)</a>."
+    "definition": "A contribution is considered to be designated in writing for a particular election if <ul class='list-bulleted'><li>The contribution is made by check, money order, or other negotiable instrument which clearly indicates the particular election with respect to which the contribution is made;</li><li>The contribution is accompanied by a writing, signed by the contributor, which clearly indicates the particular election with respect to which the contribution is made; or</li>The contribution is redesignated in accordance with <a href=\"https://www.fec.gov/regulations/110-1/CURRENT#110-1-b-4-iii\">11 CFR 110.1(b)(5)</a>.</li></ul> <a href=\"https://www.fec.gov/regulations/110-1/CURRENT#110-1-b-4\">11 CFR 110.1(b)(4)</a>."
   },
   {
     "term": "Direct mail",
-    "definition": "Any mailings made by a commercial vendor or made from a commercial list. 11 CFR <a href=\"https://www.fec.gov/regulations/100-87/CURRENT#100-87\">100.87(a)</a>, <a href=\"https://www.fec.gov/regulations/100-89/CURRENT#100-89-a\">100.89(a)</a>, <a href=\"https://www.fec.gov/regulations/100-147/CURRENT#100-147-a\">100.147(a)</a> and 100.149(a)."
+    "definition": "Any mailings made by a commercial vendor or made from a commercial list. 11 CFR <a href=\"https://www.fec.gov/regulations/100-87/CURRENT#100-87\">100.87(a)</a>, <a href=\"https://www.fec.gov/regulations/100-89/CURRENT#100-89-a\">100.89(a)</a>, <a href=\"https://www.fec.gov/regulations/100-147/CURRENT#100-147-a\">100.147(a)</a> and <a href=\"https://www.fec.gov/regulations/100-149/CURRENT#100-149\">100.149(a)</a>"
   },
   {
     "term": "Disbursement",
@@ -357,7 +357,7 @@
   },
   {
     "term": "None",
-    "definition": "If data appears as \"None\", it's best to check the source document. Common reasons that the data appears as \"None\" are:<ul><li>Data is not processed yet; often, paper filings cause delays and inconsistent upload times.</li><li>Data is from an amendment that did not properly identify the form it was amending.</li><li>The filer did not fill out the information on the form.</li></ul>If you think there is an error, you can report that via <a href='mailto:webmanager@fec.gov'>email</a>."
+    "definition": "If data appears as \"None\", it's best to check the source document. Common reasons that the data appears as \"None\" are:<ul><li>Data is not processed yet; often, paper filings cause delays and inconsistent upload times.</li><li>Data is from an amendment that did not properly identify the form it was amending.</li><li>The filer did not fill out the information on the form.</li></ul>If you think there is an error, you can report that via our feedback tool."
   },
   {
     "term": "Nonfederal funds",
@@ -381,7 +381,7 @@
   },
   {
     "term": "Ordinary course of business",
-    "definition": "In determining whether credit was extended in the ordinary course of business, the Commission will consider—<ol><li>Whether the commercial vendor followed its established procedures and its past practice in approving the extension of credit;</li><li>Whether the commercial vendor received prompt payment in full if it previously extended credit to the same candidate or political committee; and</li><li>Whether the extension of credit conformed to the usual and normal practice in the commercial vendor's trade or industry. </li></ol> 11 CFR <a href=\"https://www.fec.gov/regulations/116-3/CURRENT#116-3-c\">116.3(c)</a>."
+    "definition": "In determining whether credit was extended in the ordinary course of business, the Commission will consider—<ul class='list-bulleted'>><li>Whether the commercial vendor followed its established procedures and its past practice in approving the extension of credit;</li><li>Whether the commercial vendor received prompt payment in full if it previously extended credit to the same candidate or political committee; and</li><li>Whether the extension of credit conformed to the usual and normal practice in the commercial vendor's trade or industry. </li></ul> 11 CFR <a href=\"https://www.fec.gov/regulations/116-3/CURRENT#116-3-c\">116.3(c)</a>."
   },
   {
     "term": "Organization type",
@@ -405,7 +405,7 @@
   },
   {
     "term": "Personal funds of a candidate",
-    "definition": "The personal funds of a candidate include: <ol><li>Assets which the candidate has a legal right of access to or control over, and which he or she has legal title to or an equitable interest in, at the time of candidacy;</li><li>Income from employment;</li><li>Dividends and interest from, and proceeds from sale or liquidation of, stocks and other investments;</li><li>Income from trusts, if established before the election cycle;</li><li>Income from trusts established by bequests (even after candidacy)</li><li>Bequests to the candidate;</li><li>Personal gifts that had been customarily received by the candidate prior to the beginning of the election cycle; and</li><li>Proceeds from lotteries and similar games of chance.</li></ol> 11 CFR <a href=\"https://www.fec.gov/regulations/100-33/CURRENT#100-33\">100.33(a) and (b)</a>."
+    "definition": "The personal funds of a candidate include: <ul class='list-bulleted'><li>Assets which the candidate has a legal right of access to or control over, and which he or she has legal title to or an equitable interest in, at the time of candidacy;</li><li>Income from employment;</li><li>Dividends and interest from, and proceeds from sale or liquidation of, stocks and other investments;</li><li>Income from trusts, if established before the election cycle;</li><li>Income from trusts established by bequests (even after candidacy)</li><li>Bequests to the candidate;</li><li>Personal gifts that had been customarily received by the candidate prior to the beginning of the election cycle; and</li><li>Proceeds from lotteries and similar games of chance.</li></ul> 11 CFR <a href=\"https://www.fec.gov/regulations/100-33/CURRENT#100-33\">100.33(a) and (b)</a>."
   },
   {
     "term": "Political Action Committee (PAC)",
