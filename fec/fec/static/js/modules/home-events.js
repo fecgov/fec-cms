@@ -12,11 +12,14 @@ var todaysDate = year + '-' + month + '-' + day;
 
 var eventsTemplate = require('../templates/homepage/events-and-deadlines.hbs');
 
+// These values come from constants.py
+// and need to match API parameter `calendar_category_id`
+
 var updates = {
-  '.js-next-commission-meeting': ['Executive+Sessions', 'Open+Meetings', 'Public+Hearings'],
-  '.js-next-filing-deadline': ['report+E', 'report-M', 'report-MY', 'report-Q', 'report-YE'],
-  '.js-next-training-or-conference': ['Conferences', 'Roundtables'],
-  '.js-next-public-comment-deadline': ['AOs+and+Rules']
+  '.js-next-commission-meeting': ['32', '39', '40'],
+  '.js-next-filing-deadline': ['21', '27'],
+  '.js-next-training-or-conference': ['33', '34'],
+  '.js-next-public-comment-deadline': ['23']
 };
 
 // Home Page: Events and deadlines
@@ -25,7 +28,7 @@ function HomepageEvents() {
     var url = calendarHelpers.getUrl('calendar-dates',
       { 'sort': 'start_date',
         'min_start_date': todaysDate,
-        'category': eventCategories
+        'calendar_category_id': eventCategories
       });
 
     $.getJSON(url).done(function(events) {
