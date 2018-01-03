@@ -106,20 +106,20 @@ class TestLegalSearch(unittest.TestCase):
         assert results['statutes_returned'] == 4
         assert results['regulations_returned'] == 5
 
-    # # Test 8: OK
+    # Test 8: OK
     @mock.patch.object(api_caller, 'load_legal_search_results')
     def test_ao_landing_page(self, load_legal_search_results):
         today = datetime.date.today()
         ao_min_date = today - datetime.timedelta(weeks=26)
         response = client.get('/data/legal/advisory-opinions/')
-
         assert response.status_code == 200
-
         # load_legal_search_results gets called twice in this view,
         # so this mocks the two different calls and then we assert they happend
         # http://stackoverflow.com/questions/7242433/asserting-successive-calls-to-a-mock-method
         calls = [
             mock.call(query='', query_type='advisory_opinions', 
-                      ao_min_issue_date=ao_min_date, ao_category=['F', 'W'])
+                      ao_min_issue_date=ao_min_date, ao_category=['F', 'W']), 
+            mock.call(query='', query_type='advisory_opinions', 
+                      ao_status='Pending', ao_category='R')
         ]
         load_legal_search_results.assert_has_calls(calls, any_order=True)
