@@ -30,7 +30,7 @@
 {% macro candidate_cycle_select(cycles, cycle=none, id='') %}
 {% set cycle = cycle | int %}
   <div class="content__section">
-    <label for="{{id}}-cycle" class="label cycle-select__label">Election cycle</label>
+    <label for="{{id}}-cycle" class="label cycle-select__label">Election</label>
     <select id="{{id}}-cycle" class="js-cycle" name="cycle" data-cycle-location="query" data-election-full="False">
       {% for each in cycles | sort(reverse=True) %}
         <option
@@ -46,7 +46,7 @@
 {% set cycle = cycle | int %}
   <div class="row content__section">
     <div class="cycle-select">
-      <label for="{{id}}-cycle" class="label cycle-select__label">Election cycle</label>
+      <label for="{{id}}-cycle" class="label cycle-select__label">Two-year period</label>
       <select id="{{id}}-cycle" class="js-cycle" name="cycle" data-cycle-location="query">
         {% for each in cycles | sort(reverse=True) %}
           <option
@@ -63,7 +63,7 @@
 {% set cycle = cycle | int %}
   <div class="row content__section">
     <div class="cycle-select">
-      <label for="{{id}}-cycle" class="label cycle-select__label">Election cycle</label>
+      <label for="{{id}}-cycle" class="label cycle-select__label">Two-year period</label>
       <select id="{{id}}-cycle" class="js-cycle" name="cycle" data-cycle-location="path">
         {% for each in cycles | sort(reverse=True) %}
           <option

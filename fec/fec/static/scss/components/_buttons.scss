@@ -388,6 +388,12 @@
   @include u-icon-button($calendar);
 }
 
+.button--envelope {
+  @include u-icon-button($moving-envelope, left);
+  background-size: u(3rem);
+  padding-left: u(5rem);
+}
+
 .button--previous {
   @include u-icon-button($arrow-left, left, 1rem);
   background-position: 50% 50%;

@@ -1,7 +1,5 @@
 'use strict';
 
-/* window */
-
 var $ = require('jquery');
 var helpers = require('./helpers');
 var ElectionForm = require('./election-form').ElectionForm;
