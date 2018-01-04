@@ -228,7 +228,7 @@ then run this command:
 
 `pg_restore --dbname cfdm_cms_test --no-acl --no-owner <path/to/backup_file>`
 
-lastly run migrations to account for any very recent changes that are not present in the latest backup 
+Lastly run migrations to account for any very recent changes that are not present in the latest backup 
 run this command:
 `./manage.py migrate`
 
