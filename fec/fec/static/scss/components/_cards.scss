@@ -357,6 +357,7 @@
 
     &.i-external {
       @include u-icon-bg($share, $primary-contrast);
+      background-size: 45%;
     }
 
     &.i-filings {
@@ -369,6 +370,7 @@
 
     &.i-loans {
       @include u-icon-bg($hand-money, $primary-contrast);
+      background-size: 70%;
     }
 
     &.i-mallet {
@@ -437,12 +439,6 @@
       @include u-icon-bg($document, $secondary-contrast);
       background-position: 50% 50%;
       background-size: 50%;
-    }
-
-    &.i-info-person {
-      @include u-icon-bg($info-person, $secondary-contrast);
-      background-position: 50% 110%;
-      background-size: 100%;
     }
 
     &.i-training {

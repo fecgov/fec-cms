@@ -1,6 +1,12 @@
 'use strict';
 
-/* global module, ga */
+// THIS MODULE IS CURRENTLY NOT IN USE.
+//
+// This requires modifications to `/data/views.py` feedback view
+// to post as a Github issue.
+//
+// Previously implemented here (needs a port to this Django project):
+// https://github.com/18F/openFEC-web-app/blob/develop/openfecwebapp/views.py#L302
 
 var $ = require('jquery');
 var helpers = require('./helpers');

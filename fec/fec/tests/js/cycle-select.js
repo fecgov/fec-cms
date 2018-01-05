@@ -82,7 +82,7 @@ describe('cycle select', function() {
     it('renders two-year period select', function() {
       var $cycles = this.cycleSelect.$cycles.find('span');
       expect($cycles.length).to.equal(3);
-      var labels = ['Full cycle: 2013–2016', '2013–2014', '2015–2016'];
+      var labels = ['All years: 2013–2016', '2013–2014', '2015–2016'];
       expect(
         $cycles.map(function(idx, elm) {
           return trim($(elm).text());
