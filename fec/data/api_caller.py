@@ -340,10 +340,10 @@ def call_senate_specials(state):
 
     special_results = api_response['results']
 
-    return special_results if 'results' in api_response else None
+    return api_response.get('results', None)
 
 
-def format_special_results(special_results):
+def format_special_results(special_results=[]):
     """ Takes special_results, which is a list of dictionaries,
         returns a list of election years. Round odd years up to even.
         Example: [2008, 2000]
@@ -355,7 +355,7 @@ def format_special_results(special_results):
         # Round odd years up to even years
         result['election_year'] = result['election_year'] + (result['election_year'] % 2)
 
-        senate_specials.append(result['election_year'])
+        senate_specials.append(result.get('election_year', None))
 
     return senate_specials
 
@@ -366,7 +366,7 @@ def get_regular_senate_cycles(state):
     senate_cycles = []
 
     for senate_class in ['1', '2', '3']:
-        if state.upper() in constants.SENATE_CLASSES[str(senate_class)]:
+        if state.upper() in constants.SENATE_CLASSES[senate_class]:
             senate_cycles += utils.get_senate_cycles(senate_class)
 
     return senate_cycles
