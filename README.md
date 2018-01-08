@@ -102,8 +102,8 @@ createdb cfdm_cms_test
 ##### Load our sample data into the local development database:
 For details see the section below: Restoring your local database from a backup
 
-### Set environmental variables
-You will also need to set environmental variables:
+### Set environment variables
+You will also need to set the environment variables:
 
 #### Set local environment variables
 Connection string for the local database as an
