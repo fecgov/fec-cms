@@ -99,14 +99,37 @@ Before you can run this project locally, you'll need a development database:
 createdb cfdm_cms_test
 ```
 
-You will also need to set environmental variables:
+##### Load our sample data into the local development database:
+For details see the section below: Restoring your local database from a backup
 
+### Set environment variables
+You will also need to set the environment variables:
+
+#### Set local environment variables
 Connection string for the local database as an
 environment variable:
 
 ```bash
 export DATABASE_URL=postgresql://:@/cfdm_cms_test
 ```
+
+#### running with openFEC API 
+By default, `FEC_API_URL` points to the local running instance of the API (http://localhost:5000). 
+To set the URL for the API as an environment variable, run:
+
+```bash
+export FEC_API_URL=http://localhost:5000
+```
+
+Set it to either production, dev, or staging API URLs if you are not running the API locally.
+
+for example: (prod API) https://api.open.fec.gov 
+export FEC_API_URL=https://api.open.fec.gov 
+
+The base settings file will read this value in instead of using the default (which is `http://localhost:5000`).
+
+
+Also set API keys: `FEC_WEB_API_KEY` and `FEC_WEB_API_KEY_PUBLIC`
 
 ### Finish project setup
 Once all prerequisites and dependencies are installed, you can finish the
@@ -118,11 +141,6 @@ cd fec/
 ./manage.py migrate
 ./manage.py createsuperuser
 ```
-
-### Set local environment variables
-By default, `FEC_API_URL` points to the local running instance of the API (http://localhost:5000). Set it to either production, dev, or staging API URLs if you are not running the API locally.
-
-Also set API keys: `FEC_WEB_API_KEY` and `FEC_WEB_API_KEY_PUBLIC`
 
 ## Running the application
 In the root project folder, run:
@@ -195,20 +213,24 @@ To watch for changes to JavaScript files, run this command in the root project d
 npm run watch
 ```
 
-### Developing with openFEC (optional)
-To set the URL for the API as an environment variable, run:
-
-```bash
-export FEC_API_URL=http://localhost:5000
-```
-
-The base settings file will read this value in instead of using the default (which is `http://localhost:5000`).
-
-## Restoring your local database from a backup
+### Restoring your local database from a backup
 *Likely only useful for 18F FEC team members*
-To restore your local database from a backup from production, download the database dump and run this command:
+
+### Load our sample data into the local development database from a production backup  
+
+first download the web app sample database dump
+
+*18F FEC team can download from the project's google drive folder: CMS DB Backups*
+
+then save the file to a local drive: <path/to/backup_file>
+
+then run this command:
 
 `pg_restore --dbname cfdm_cms_test --no-acl --no-owner <path/to/backup_file>`
+
+Lastly run migrations to account for any very recent changes that are not present in the latest backup 
+run this command:
+`./manage.py migrate`
 
 ## Deploy
 *Likely only useful for 18F FEC team members*
