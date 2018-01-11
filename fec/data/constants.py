@@ -383,6 +383,8 @@ line_numbers = {
             ('F3X-28C', 'Refunds of contributions to other political committees (Line 28c)'),
             ('F3X-28D', 'Total contributions refunds (Line 28d)'),
             ('F3X-29', 'Other disbursements (Line 29)'),
+            ('F3X-30A', 'Allocated federal election activity/Schedule H6 (Line 30a)'),
+            ('F3X-30B', 'Federal election activity paid entirely with federal funds (Line 30b)'),
         ])
     }
 }
