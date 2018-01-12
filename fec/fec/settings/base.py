@@ -48,6 +48,7 @@ ENVIRONMENTS = {
     'dev': 'DEVELOPMENT',
     'stage': 'STAGING',
     'prod': 'PRODUCTION',
+    'feature': 'FEATURE',
 }
 FEC_CMS_ENVIRONMENT = ENVIRONMENTS.get(env.get_credential('FEC_CMS_ENVIRONMENT'), 'LOCAL')
 CONTACT_EMAIL = 'webmanager@fec.gov'
@@ -248,14 +249,12 @@ AUTH_PASSWORD_VALIDATORS = [
 
 if FEC_CMS_ENVIRONMENT != 'LOCAL':
     AWS_QUERYSTRING_AUTH = False
-    AWS_ACCESS_KEY_ID = env.get_credential('CMS_AWS_ACCESS_KEY_ID')
-    AWS_SECRET_ACCESS_KEY = env.get_credential('CMS_AWS_SECRET_ACCESS_KEY')
-    AWS_STORAGE_BUCKET_NAME = env.get_credential('CMS_AWS_STORAGE_BUCKET_NAME')
-    AWS_S3_CUSTOM_DOMAIN = env.get_credential('CMS_AWS_CUSTOM_DOMAIN')
+    AWS_ACCESS_KEY_ID = env.get_credential('access_key_id')
+    AWS_SECRET_ACCESS_KEY = env.get_credential('secret_access_key')
+    AWS_STORAGE_BUCKET_NAME = env.get_credential('bucket')
+    AWS_S3_REGION_NAME = env.get_credential('region')
     DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
     AWS_LOCATION = 'cms-content'
-    AWS_S3_REGION_NAME = env.get_credential('CMS_AWS_DEFAULT_REGION')
-
 
 UAA_CLIENT_ID = env.get_credential('CMS_LOGIN_CLIENT_ID', 'my-client-id')
 UAA_CLIENT_SECRET = env.get_credential('CMS_LOGIN_CLIENT_SECRET', 'my-client-secret')
