@@ -110,7 +110,7 @@ var electionColumns = [
         }
       );
       var anchor = document.createElement('a');
-      anchor.textContent = 'View';
+      anchor.textContent = 'View all';
       anchor.setAttribute('href', url);
       anchor.setAttribute('target', '_blank');
       return anchor.outerHTML;
