@@ -276,7 +276,7 @@ and specifying the corresponding manifest, as well as the app you want, like
 so:
 
 ```bash
-cf target -s [feature|dev|stage|prod] && cf push -f manifest_<[feature|dev|stage|prod]>.yml [api|web]
+cf target -s [feature|dev|stage|prod] && cf push -f manifest_<[feature|dev|stage|prod]>.yml [api|cms]
 ```
 
 **NOTE:**  Performing a deploy in this manner will result in a brief period of
@@ -291,7 +291,7 @@ In the case of the `feature` space, there are a few things to note:
 * Only the CMS app is setup and configured for the `feature` space; it points to the `dev` space for all other things (e.g., the API).
 * In order to deploy to the `feature` space, you must have the proper org and space permissions setup (please contact the cloud.gov account administrator if you do not).
 * The `feature` version of the CMS does have New Relic running against it.
-* The CMS in the `feature` space has its own database that has been loaded with data from a production backup; this data can be refreshed in the future using the same steps outline in the Wiki.
+* The CMS in the `feature` space has its own database that has been loaded with data from a production backup; this data can be refreshed in the future using the same steps outlined in the Wiki.
 * The `feature` space has its own S3 bucket for content.
 
 ## SSH
