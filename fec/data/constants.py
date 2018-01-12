@@ -463,6 +463,7 @@ line_numbers = {
             ('F3X-28C', 'Refunds of contributions to other political committees (Line 28c)'),
             ('F3X-28D', 'Total contributions refunds (Line 28d)'),
             ('F3X-29', 'Other disbursements (Line 29)'),
+            ('F3X-30B', 'Party - Types 3 & 4 Federal Election Activity (FEA) (Line 30(b))'),
         ])
     }
 }
