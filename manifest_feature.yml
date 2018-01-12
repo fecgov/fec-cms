@@ -5,6 +5,7 @@ services:
   - cms-creds-feature
   - fec-creds-feature
   - fec-feature-cms
+  - content-s3
 env:
   # We are not setting up the API in feature, so we are pointing to the dev
   # API instead.

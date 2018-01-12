@@ -9,13 +9,13 @@ jobs:
       # use `-browsers` prefix for selenium tests, e.g. `<image_name>-browsers`
 
       # Python
-      - image: circleci/python:3.5.3
+      - image: circleci/python:3.5.4-jessie-node
         environment:
           TZ: America/New_York
           DATABASE_URL: postgres://postgres@0.0.0.0/cfdm_cms_test
 
       # PostgreSQL
-      - image: circleci/postgres:9.6.2
+      - image: circleci/postgres:9.6.6
         environment:
           POSTGRES_USER: postgres
           POSTGRES_DB: cfdm_cms_test
@@ -50,16 +50,8 @@ jobs:
             pip install -r requirements.txt
 
       - run:
-          name: Install node dependencies
+          name: Install Node.js dependencies
           command: |
-            curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.33.6/install.sh | bash
-            echo ". ~/.nvm/nvm.sh" >> $BASH_ENV
-            export NVM_DIR="$HOME/.nvm"
-            [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-            [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
-            nvm install 8.9.1
-            nvm use 8.9.1
-            nvm alias default 8.9.1
             npm i -g npm webpack
             npm install
             npm run build
@@ -77,11 +69,7 @@ jobs:
       - run:
           name: Run tests
           command: |
-            export NVM_DIR="$HOME/.nvm"
-            [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-            [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
             . .env/bin/activate
-            nvm use default
             npm run build-js
             npm run build-sass
             cd fec
@@ -104,7 +92,7 @@ jobs:
           command: |
             mkdir -p $HOME/bin
             export PATH=$HOME/bin:$PATH
-            curl -L "https://cli.run.pivotal.io/stable?release=linux64-binary&version=6.32.0" | tar xzv -C $HOME/bin
+            curl -L "https://cli.run.pivotal.io/stable?release=linux64-binary&version=6.34.0" | tar xzv -C $HOME/bin
             cf install-plugin autopilot -f -r CF-Community
 
 
@@ -112,9 +100,5 @@ jobs:
           name: Deploy CMS
           command: |
             export PATH=$HOME/bin:$PATH
-            export NVM_DIR="$HOME/.nvm"
-            [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-            [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
             . .env/bin/activate
-            nvm use default
             invoke deploy --branch $CIRCLE_BRANCH --login True --yes
