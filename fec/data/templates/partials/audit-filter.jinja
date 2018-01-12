@@ -7,10 +7,10 @@
 {% block filters %}
 <div class="filters__inner">
 	
+  {% include 'partials/filters/audit-categories.jinja' %}
   {{ typeahead.field('committee_id', 'Audited committee name or ID', '', dataset='auditCommittees', allow_text=True) }}
   {{ typeahead.field('candidate_id', 'Authorized candidate name or ID', '', dataset='auditCandidates', allow_text=True) }}	
-  {% include 'partials/filters/committee-types.jinja' %}   
-  {% include 'partials/filters/audit-categories.jinja' %}
   {{ years.cycleRange('cycle', 'Election cycles covered by audit' ) }} 
+  {% include 'partials/filters/committee-types.jinja' %}   
 </div>
 {% endblock %}
