@@ -637,7 +637,12 @@ var audit = [
   {
     data: 'far_release_date',
     className: 'min-tablet hide-panel column--small',
-    orderable: true
+    orderable: true,
+    render: function(data, type, row) {
+      var parsed;
+      parsed = moment(row.far_release_date, 'YYYY-MM-DD');
+      return parsed.isValid() ? parsed.format('MM/DD/YYYY') : 'Invalid date';
+    }
   },
 
   {
