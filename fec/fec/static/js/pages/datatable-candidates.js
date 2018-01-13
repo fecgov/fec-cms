@@ -10,7 +10,7 @@ $(document).ready(function() {
   var $table = $('#results');
   new tables.DataTable($table, {
     autoWidth: false,
-    title: 'Candidate',
+    title: 'Candidates',
     path: ['candidates'],
     columns: columns.candidates,
     order: [[6, 'desc']],

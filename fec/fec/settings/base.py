@@ -20,8 +20,6 @@ FEC_API_VERSION = env.get_credential('FEC_API_VERSION', 'v1')
 FEC_API_KEY_PUBLIC = env.get_credential('FEC_WEB_API_KEY_PUBLIC', '')
 FEC_CMS_ROBOTS = env.get_credential('FEC_CMS_ROBOTS')
 
-CMS_URL = env.get_credential('CMS_URL', 'https://www.fec.gov')
-
 FEC_GITHUB_TOKEN = env.get_credential('FEC_GITHUB_TOKEN')
 
 # Config for the ServiceNow API for contacting RAD
@@ -134,9 +132,9 @@ TEMPLATES = [
                 'FEC_API_KEY_PUBLIC': FEC_API_KEY_PUBLIC,
                 'FEC_API_URL': FEC_API_URL,
                 'WEBMANAGER_EMAIL': WEBMANAGER_EMAIL,
-                'CMS_URL': CMS_URL,
                 'TRANSITION_URL': FEC_TRANSITION_URL,
                 'CLASSIC_URL': FEC_CLASSIC_URL,
+                'FEC_CMS_ENVIRONMENT': FEC_CMS_ENVIRONMENT,
             },
         }
     },
@@ -257,6 +255,7 @@ if FEC_CMS_ENVIRONMENT != 'LOCAL':
     DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
     AWS_LOCATION = 'cms-content'
     AWS_S3_REGION_NAME = env.get_credential('CMS_AWS_DEFAULT_REGION')
+
 
 UAA_CLIENT_ID = env.get_credential('CMS_LOGIN_CLIENT_ID', 'my-client-id')
 UAA_CLIENT_SECRET = env.get_credential('CMS_LOGIN_CLIENT_SECRET', 'my-client-secret')

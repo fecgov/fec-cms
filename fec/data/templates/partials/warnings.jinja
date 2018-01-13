@@ -15,12 +15,3 @@
   <p style="color: #ffffff; font-size: 16px;">You can still access an archive of the old FEC.gov at <a style="color: #ffffff; text-decoration: underline" href="http://classic.fec.gov">classic.fec.gov</a></p>
 </div>
 <![endif]-->
-
-{% if get_env_name() != 'PRODUCTION' %}
- <div class="banner">
-   <div class="container">
-     <span class="t-block t-bold t-centered">{{ 'STAGING' if get_env_name() == 'STAGING' else 'DEVELOPMENT' }}</span>
-     <span class="t-block t-centered">This site is for testing new ideas and code. Access the most accurate data on the <a href="https://beta.fec.gov">live site</a>.</span>
-   </div>
- </div>
-{% endif %}

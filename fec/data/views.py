@@ -1,7 +1,10 @@
 from django.shortcuts import render, redirect
+from django.urls import reverse
 from django.http import Http404
 from django.http import JsonResponse
 from django.conf import settings
+
+from distutils.util import strtobool
 
 import datetime
 import github3
@@ -89,6 +92,9 @@ def candidate(request, candidate_id):
     if cycle is not None:
         cycle = int(cycle)
 
+    # set election_full to boolean from passed string variable
+    election_full = bool(strtobool(str(election_full)))
+
     candidate, committees, cycle = api_caller.load_with_nested(
         'candidate', candidate_id, 'committees',
         cycle=cycle, cycle_key='two_year_period',
@@ -96,6 +102,7 @@ def candidate(request, candidate_id):
     )
 
     if election_full and cycle and cycle not in candidate['election_years']:
+
         next_cycle = next(
             (
                 year for year in sorted(candidate['election_years'])
@@ -323,10 +330,10 @@ def committee(request, committee_id):
         # If there's no reports, find the first year with reports and redirect there
         for c in sorted(committee['cycles'], reverse=True):
             financials = api_caller.load_cmte_financials(committee['committee_id'], cycle=c)
-            # if financials['reports']:
-            #     return redirect(
-            #         url_for('committee_page', c_id=committee['committee_id'], cycle=c)
-            #     )
+            if financials['reports']:
+                return redirect(
+                    reverse('committee-by-id', kwargs={'committee_id': committee['committee_id']}) + '?cycle=' + str(c)
+                )
 
     # If it's not a senate committee and we're in the current cycle
     # check if there's any raw filings in the last three days

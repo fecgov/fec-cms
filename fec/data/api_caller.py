@@ -1,20 +1,25 @@
-from django.conf import settings
-from django.http import Http404
-
-from operator import itemgetter
+import logging
 import os
-from urllib import parse
 import re
 
 import requests
 
-from data import utils
-
-from data import constants
-
 from collections import OrderedDict
+from operator import itemgetter
+from urllib import parse
+
+from django.conf import settings
+from django.http import Http404
+
+from data import constants, utils
+
 
 MAX_FINANCIALS_COUNT = 4
+
+
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
+
 
 session = requests.Session()
 http_adapter = requests.adapters.HTTPAdapter(max_retries=2)
@@ -25,13 +30,23 @@ def _call_api(*path_parts, **filters):
     if settings.FEC_API_KEY:
         filters['api_key'] = settings.FEC_API_KEY
 
-    path = os.path.join(settings.FEC_API_VERSION,
-                        *[x.strip('/') for x in path_parts])
+    path = os.path.join(
+        settings.FEC_API_VERSION,
+        *[x.strip('/') for x in path_parts]
+    )
     url = parse.urljoin(settings.FEC_API_URL, path)
-
     results = session.get(url, params=filters)
 
-    return results.json() if results.ok else {}
+    if results.ok:
+        return results.json()
+    else:
+        logger.error('API ERROR with status {0} for {1} with filters: {2}'.format(
+            results.status_code,
+            url,
+            filters
+        ))
+
+        return {'results': []}
 
 
 def load_search_results(query, query_type=None):
@@ -325,10 +340,10 @@ def call_senate_specials(state):
 
     special_results = api_response['results']
 
-    return special_results if 'results' in api_response else None
+    return api_response.get('results', None)
 
 
-def format_special_results(special_results):
+def format_special_results(special_results=[]):
     """ Takes special_results, which is a list of dictionaries,
         returns a list of election years. Round odd years up to even.
         Example: [2008, 2000]
@@ -340,7 +355,7 @@ def format_special_results(special_results):
         # Round odd years up to even years
         result['election_year'] = result['election_year'] + (result['election_year'] % 2)
 
-        senate_specials.append(result['election_year'])
+        senate_specials.append(result.get('election_year', None))
 
     return senate_specials
 
@@ -351,7 +366,7 @@ def get_regular_senate_cycles(state):
     senate_cycles = []
 
     for senate_class in ['1', '2', '3']:
-        if state.upper() in constants.SENATE_CLASSES[str(senate_class)]:
+        if state.upper() in constants.SENATE_CLASSES[senate_class]:
             senate_cycles += utils.get_senate_cycles(senate_class)
 
     return senate_cycles

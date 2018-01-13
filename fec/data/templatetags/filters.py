@@ -170,10 +170,3 @@ def asset_for_js(path):
     assets = json.load(open(settings.DIST_DIR + '/fec/static/js/rev-manifest-js.json'))
     assets.update(json.load(open(settings.DIST_DIR + '/fec/static/js/rev-legal-manifest-js.json')))
     return assets[key] if key in assets else key
-
-
-@library.global_function
-def get_env_name():
-    """Returns the name of the current environment that the application is
-    running in:  PRODUCTION, STAGING, DEVELOPMENT, or LOCAL."""
-    return settings.FEC_CMS_ENVIRONMENT

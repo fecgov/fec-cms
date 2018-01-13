@@ -383,6 +383,7 @@ line_numbers = {
             ('F3X-28C', 'Refunds of contributions to other political committees (Line 28c)'),
             ('F3X-28D', 'Total contributions refunds (Line 28d)'),
             ('F3X-29', 'Other disbursements (Line 29)'),
+            ('F3X-30B', 'Party - Types 3 & 4 Federal Election Activity (FEA) (Line 30(b))'),
         ])
     }
 }
@@ -633,10 +634,4 @@ SENATE_CLASSES = {
     '1': ['AZ', 'CA', 'CT', 'DE', 'FL', 'HI', 'IN', 'ME', 'MD', 'MA', 'MI', 'MN', 'MS', 'MO', 'MT', 'NE', 'NV', 'NJ', 'NM', 'NY', 'ND', 'OH', 'PA', 'RI', 'TN', 'TX', 'UT', 'VT', 'VA', 'WA', 'WV', 'WI', 'WY'],
     '2': ['AL', 'AK', 'AR', 'CO', 'DE', 'GA', 'ID', 'IL', 'IA', 'KS', 'KY', 'LA', 'ME', 'MA', 'MI', 'MN', 'MS', 'MT', 'NE', 'NH', 'NJ', 'NM', 'NC', 'OK', 'OR', 'RI', 'SC', 'SD', 'TN', 'TX', 'VA', 'WV', 'WY'],
     '3': ['AL', 'AK', 'AZ', 'AR', 'CA', 'CO', 'CT', 'FL', 'GA', 'HI', 'ID', 'IL', 'IN', 'IA', 'KS', 'KY', 'LA', 'MD', 'MO', 'NV', 'NH', 'NY', 'NC', 'ND', 'OH', 'OK', 'OR', 'PA', 'SC', 'SD', 'UT', 'VT', 'WA', 'WI']
-}
-
-NEXT_SENATE_ELECTIONS = {
-    '1': 2018,
-    '2': 2020,
-    '3': 2022
 }

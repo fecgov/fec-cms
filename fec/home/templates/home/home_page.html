@@ -20,7 +20,7 @@
   <section class="slab">
     <div class="container">
       <div class="heading--section heading--with-action">
-        <h2 class="heading__left"><div class="tour__point tour__point--left" data-intro="<h5>Stay informed</h5>Check in on the most recent communications from the FEC all in one place, including press releases, meeting agendas and Tips for Treasurers."></div>News and announcements</h2>
+        <h2 class="heading__left">News and announcements</h2>
         <a class="button--cta button--updates heading__right" href="/updates">All news</a>
       </div>
 
@@ -88,21 +88,21 @@
       <div class="grid grid--3-wide grid--no-border">
         <div class="grid__item">
           <div class="icon-heading">
-            <img class="icon-heading__image" src="{% static 'img/headshot--walther.jpg' %}" alt="Headshot of Steven T. Walther">
+            <img class="icon-heading__image" src="{% static 'img/headshot--hunter.jpg' %}" alt="Headshot of Caroline C. Hunter">
             <div class="icon-heading__content">
-              <div class="t-lead"><a href="/about/leadership-and-structure/steven-t-walther">Steven T. Walther</a></div>
-              <div class="t-note">Chairman</div>
-              <div class="t-sans">Independent</div>
+              <div class="t-lead"><a href="/about/leadership-and-structure/caroline-c-hunter">Caroline C. Hunter</a></div>
+              <div class="t-note">Chair</div>
+              <div class="t-sans">Republican</div>
             </div>
           </div>
         </div>
         <div class="grid__item">
           <div class="icon-heading">
-            <img class="icon-heading__image" src="{% static 'img/headshot--hunter.jpg' %}" alt="Headshot of Caroline C. Hunter">
+            <img class="icon-heading__image" src="{% static 'img/headshot--weintraub.jpg' %}" alt="Headshot of Ellen L. Weintraub">
             <div class="icon-heading__content">
-              <div class="t-lead"><a href="/about/leadership-and-structure/caroline-c-hunter">Caroline C. Hunter</a></div>
+              <div class="t-lead"><a href="/about/leadership-and-structure/ellen-l-weintraub">Ellen L. Weintraub</a></div>
               <div class="t-note">Vice Chair</div>
-              <div class="t-sans">Republican</div>
+              <div class="t-sans">Democrat</div>
             </div>
           </div>
         </div>
@@ -126,10 +126,10 @@
         </div>
         <div class="grid__item">
           <div class="icon-heading">
-            <img class="icon-heading__image" src="{% static 'img/headshot--weintraub.jpg' %}" alt="Headshot of Ellen L. Weintraub">
+            <img class="icon-heading__image" src="{% static 'img/headshot--walther.jpg' %}" alt="Headshot of Steven T. Walther">
             <div class="icon-heading__content">
-              <div class="t-lead"><a href="/about/leadership-and-structure/ellen-l-weintraub">Ellen L. Weintraub</a></div>
-              <div class="t-sans">Democrat</div>
+              <div class="t-lead"><a href="/about/leadership-and-structure/steven-t-walther">Steven T. Walther</a></div>
+              <div class="t-sans">Independent</div>
             </div>
           </div>
         </div>
@@ -149,8 +149,5 @@
 {% endblock %}
 
 {% block extra_js %}
-  <script>
-    TOUR_PAGE = 'introduction';
-  </script>
   <script type="text/javascript" src="{% asset_for_js 'home.js' %}"></script>
 {% endblock %}

@@ -4,7 +4,6 @@ var $ = require('jquery');
 var _ = require('underscore');
 
 var accessibility = require('./accessibility');
-var helpers = require('./helpers');
 
 var feedback = require('../templates/feedback.hbs');
 

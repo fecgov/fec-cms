@@ -4,11 +4,7 @@
 {% endif %}
 <form id="{{ location }}-search" action="/data/search" autocomplete="off" class="search__container">
   <div class="combo combo--search {{ size }}">
-    <label for="search" class="label">
-      {% if location == 'hero' %}
-        <div class="tour__point tour__point--left" data-intro="<h5>Find candidates and committees</h5>Track raising, spending, debts and loans, filings and summary information for candidates and committees on redesigned profile pages."></div>
-      {% endif %}
-      Candidate or committee name or ID</label>
+    <label for="search" class="label">Candidate or committee name or ID</label>
     <input id="search" class="js-search-input combo__input" type="text" name="search"
     autocorrect="off" autocapitalize="off" spellcheck="false"
     value="{{ query or '' }}">

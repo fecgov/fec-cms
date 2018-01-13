@@ -1,7 +1,5 @@
 'use strict';
 
-/* global window, document, ANALYTICS, BASE_PATH, CMS_URL */
-
 // Implementing a polyfill for js native WeakMap
 // in order to patch functionality in an included library
 require('es6-weak-map/implement');
@@ -21,8 +19,6 @@ var siteNav = require('./modules/site-nav');
 var skipNav = require('./modules/skip-nav');
 var feedback = require('./modules/feedback');
 var typeahead = require('./modules/typeahead');
-var analytics = require('./modules/analytics');
-var stickyBar = require('./modules/sticky-bar');
 var toc = require('./modules/toc');
 var Search = require('./modules/search');
 
@@ -40,12 +36,7 @@ $(document).ready(function() {
     new dropdown.Dropdown(this);
   });
 
-  $('.js-site-nav').each(function() {
-    new siteNav.SiteNav(this, {
-      cmsUrl: CMS_URL,
-      webAppUrl: BASE_PATH,
-    });
-  });
+  new siteNav.SiteNav('.js-site-nav');
 
   new skipNav.Skipnav('.skip-nav', 'main');
 
@@ -58,11 +49,6 @@ $(document).ready(function() {
     new Sticky(this, opts);
   });
 
-  // Initialize sticky bar elements
-  $('.js-sticky-bar').each(function() {
-    new stickyBar.StickyBar(this);
-  });
-
   // Initialize glossary
   new Glossary(terms, {}, {
     termClass: 'glossary__term accordion__button',
@@ -70,10 +56,10 @@ $(document).ready(function() {
   });
 
   // Initialize main search typeahead
-  new typeahead.Typeahead('.js-search-input', 'allData', BASE_PATH + '/');
+  new typeahead.Typeahead('.js-search-input', 'allData', '/data/');
 
   // Initialize header typeahead
-  new typeahead.Typeahead($('.js-site-search'), 'all', BASE_PATH + '/');
+  new typeahead.Typeahead($('.js-site-search'), 'all', '/data/');
 
 
   // Initialize feedback
@@ -118,11 +104,6 @@ $(document).ready(function() {
   // var perf = require('./modules/performance');
   // perf.bar();
   // @endif
-
-  if (ANALYTICS) {
-    analytics.init();
-    analytics.pageView();
-  }
 
   // Initialize cycle selects
   $('.js-cycle').each(function(idx, elm) {
