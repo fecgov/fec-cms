@@ -595,7 +595,8 @@ $(document).ready(function() {
           order: [[2, 'desc']],
           path: ['committee', committeeId, 'filings'],
           query: _.extend({
-            form_type: ['F1']
+            form_type: ['F1', 'RFAI']
+            /*request_type: ['1']*/
           }, query),
         }, filingsOpts);
         tables.DataTable.defer($table, opts);
