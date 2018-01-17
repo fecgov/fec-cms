@@ -113,7 +113,11 @@ var electionColumns = [
       anchor.textContent = 'View all';
       anchor.setAttribute('href', url);
       anchor.setAttribute('target', '_blank');
-      return anchor.outerHTML;
+
+      var span = document.createElement('span');
+      span.textContent = "Coverage ending: "+ row.candidate_election_year +"</br>";
+
+      return span.textContent + anchor.outerHTML;
     },
     className: 'all',
     orderable: false,
