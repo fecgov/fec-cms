@@ -12,7 +12,12 @@
       >
     {% for each in cycles | sort(reverse=True) %}
       <option
+          {# If odd year election, increment to even election year #}
+          {% if each % 2 > 0  %}
+          value="{{ each + 1}}"
+          {% else %}
           value="{{ each }}"
+          {% endif %}
           {% if cycle and cycle <= each and cycle > (each - duration) %}selected{% endif %}
         >
         {% if range %}
