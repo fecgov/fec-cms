@@ -11,15 +11,14 @@
         data-duration="{{ duration }}"
       >
     {% for each in cycles | sort(reverse=True) %}
+      {# if each is odd year special election, change to even year #}
+      {% if (each % 2 > 0) %}   
+        {% set each = each+1 %}
+      {% endif %}
       <option
-          {# If odd year election, increment to even election year #}
-          {% if each % 2 > 0  %}
-          value="{{ each + 1}}"
-          {% else %}
           value="{{ each }}"
-          {% endif %}
           {% if cycle and cycle <= each and cycle > (each - duration) %}selected{% endif %}
-        >
+      >
         {% if range %}
           {{ each|fmt_year_range }}
         {% else %}
