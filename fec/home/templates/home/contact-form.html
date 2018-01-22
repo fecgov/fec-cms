@@ -10,149 +10,15 @@
 <article class="main">
   <div class="container">
     <header class="heading--main">
-      <h1>{{ self.title }}</h1>
+      <h1>RAD contact temporarily unavailable</h1>
     </header>
     <div class="main__content--full">
       <div class="row">
         <div class="main__content">
-          <h2>Authorized representatives</h2>
-          <p>If you represent a committee or another entity registered with the FEC, RAD staff can help answer your reporting questions.</p>
-          {% if settings.FEATURES.radform %}<p>Submit this form and your committee's RAD analyst will email you, usually within 3 business days. Or, for immediate assistance, use your designated analyst's provided contact information to call the analyst by phone during business hours.</p>{% endif %}
-        </div>
-        <div class="sidebar-container">
-          <div class="contact-item contact-item--phone">
-            <div class="contact-item__content">
-              <h5 class="contact-item__title">General information</h5>
-              <span class="t-block">1-800-424-9530</span>
-              <span class="t-block">8:30 a.m. to 5:30 p.m. Eastern Time</span>
-            </div>
-          </div>
+          <p>Analysts and specialists are unavailable to receive questions at this time. The FEC will be closed until it receives an appropriation to fund its operations. Click <a href="#">here</a> for details.</p>
         </div>
       </div>
-      <div class="main__content">
-        <div class="js-accordion accordion--neutral" data-content-prefix="lookup" {% if not settings.FEATURES.radform %}data-open-first="true"{% endif %}>
-          <button class="accordion__button js-accordion-trigger">Find your committee's analyst</button>
-          <div class="accordion__content row js-analyst-lookup">
-            <div class="contact-form">
-              <div class="content__section">
-                <label class="label" for="committee-id-field">Committee name or ID</label>
-                <input id="committee-id-field">
-              </div>
-
-              <p class="js-analyst-prompt" aria-hidden="false">Search for your committee to find your campaign finance analyst.</p>
-              <div class="row js-analyst-container" aria-hidden="true">
-              <h4 class="label js-yes-analyst" aria-hidden="true">Campaign finance analyst</h4>
-                <div class="usa-width-one-half">
-                  <div class="contact-item contact-item--phone">
-                    <div class="contact-item__content">
-                      <div class="js-yes-analyst" aria-hidden="true">
-                        <h5 class="contact-item__title js-analyst-name"></h5>
-                        <span class="t-block">Local: 202-694-<span class="js-analyst-ext"></span></span>
-                      </div>
-                      <div class="js-no-analyst" aria-hidden="true">
-                        <h5 class="contact-item__title">Your committee does not have an assigned analyst yet.</h5>
-                        <span class="t-block"><span>Call our toll-free number or 202-694-1130 and our administrative staff will connect you to an analyst.</span></span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div class="usa-width-one-half">
-                  <div class="contact-item contact-item--phone">
-                    <div class="contact-item__content">
-                      <h5 class="contact-item__title">Reports Analysis Division</h5>
-                      <span class="t-block">Toll free: 1-800-424-9530, extension 5</span>
-                      <span class="t-block">8:30 a.m. to 5:30 p.m. Eastern Time</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        {% if success %}
-          <div class="message message--success">
-            <h2 class="message__title">Success</h2>
-            <p>Thanks for reaching out to the FEC. A RAD analyst will contact you by email, usually within 3 business days.</p>
-            <p><a href="/help-candidates-and-committees" class="button button--cta">Return to Help for candidates and committees</a></p>
-            <p><a href="" class="button button--alt">Submit another question</a></p>
-          </div>
-        {% elif form and form.errors %}
-          <div class="message message--error">
-            <h2 class="message__title">Error</h2>
-            <p>Something went wrong. Please try again.</p>
-          </div>
-        {% elif form %}
-      <div class="js-accordion accordion--neutral" data-content-prefix="contact" data-open-first="true">
-        <button class="accordion__button js-accordion-trigger">Submit a question</button>
-        <div class="accordion__content row">
-          <form class="js-contact-form contact-form" action="" method="post">
-            {% csrf_token %}
-            {% if server_error %}
-            <div class="message message--error">
-              <h2 class="message__title">Error</h2>
-              <p>Something went wrong with the server. Please try again later.</p>
-            </div>
-            {% endif %}
-
-            <div class="contact-form__element">
-              <h2>Your contact information</h2>
-            </div>
-
-            {% for field in form %}
-              {% if field.is_hidden %}
-                {{ field }}
-              {% else %}
-              <div class="contact-form__element {% if field.errors %}is-erroring{% endif %}">
-                {% if field.id_for_label == 'id_committee_name' %}
-                  <hr class="hr--light">
-                {% endif %}
-
-                {% if field.id_for_label == 'id_u_category' %}
-                  <hr class="hr--dark">
-                  <h2>Your question</h2>
-                {% endif %}
-
-                {% if field.id_for_label == 'id_u_contact_title' %}
-                  <div class="row">
-                    <label class="label" for="{{ field.id_for_label }}">{{ field.label }}<span class="label__optional"> (optional)</span></label>
-                    {{ field }}
-                    <span class="t-note t-sans">Examples: Treasurer; Counsel</span>
-                  </div>
-                    {{ field.errors }}
-                {% elif field.id_for_label == 'id_u_description' %}
-                  <div class="row">
-                    <label class="label" for="{{ field.id_for_label }}">{{ field.label }}</label>
-                    <span class="t-note t-sans">Please be as detailed as possible</span>
-                    {{ field }}
-                  </div>
-                  {{ field.errors }}
-                {% elif field.id_for_label == 'id_u_committee_member_certification' %}
-                  <p><a href="/about/privacy-and-security-policy/" class="t-sans">How FEC.gov keeps personal information private</a></p>
-                  <p class="t-italic">Submitting a question on this page is not a response to a Request for Additional Information (RFAI), a Notice of Failure to File or a response to any other written communication from the FEC.</p>
-                  <p class="t-italic">To respond to an official FEC communication, follow the instructions provided in that letter or email.</p>
-                  <p class="t-bold t-italic">By submitting this inquiry, I certify that I’m an authorized  representative of the indicated committee or filing entity.</p>
-                  {{ field }}
-                  <label for="{{ field.id_for_label }}">{{ field.label }}</label>
-                  {{ field.errors }}
-                {% else %}
-                  <div class="row">
-                    <label class="label" for="{{ field.id_for_label }}">{{ field.label }}</label>
-                    {{ field }}
-                  </div>
-                  {{ field.errors }}
-                {% endif %}
-              </div>
-              {% endif %}
-            {% endfor %}
-
-            <div class="contact-form__element">
-              <button class="js-submit button button--cta">Submit</button>
-              <span class="contact-form__reset t-sans">Or <button type="button" class="js-cancel button--unstyled">cancel submission and clear form</button></span>
-            </div>
-          </form>
-        </div>
-      </div>
-    {% endif %}
+    </div>
   </div>
 </article>
 {% endblock %}
