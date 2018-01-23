@@ -1,13 +1,24 @@
-{% macro select_json_formate(name, label, keys=none, options={}) %}
-<div class="filter">
-  <div class="js-filter js-filter-control" data-filter="select" 
-  data-validate="false" data-modifies-filter="{{ name }}" data-required-default="-1">
-    <label for="{{ name }}" class="label">{{ label }}</label>
-    <select id={{ name }} name="{{ name }}">
+{% macro select_json(name, label, keys, options={}, default=none) %}
+<div class="filter js-filter js-filter-control" data-filter="select" 
+data-validate="false" data-modifies-filter="{{ name }}" data-required-default="{{ default }}">
+  <label for="{{ name }}" class="label">{{ label }}</label>
+  <select id={{ name }} name="{{ name }}">
     {% for option in options %}
       <option value={{option[keys[0]]}}>{{ option[keys[1]] }}</option>
     {% endfor %}
-    </select>
-  </div>
+  </select>
+</div>
+{% endmacro %}
+
+
+{% macro select_json_indentation(name, label, keys, options={}, default=none) %}
+<div class="filter js-filter js-filter-control" data-filter="select" 
+data-validate="false" data-modifies-filter="{{ name }}" data-required-default="{{ default }}>
+  <label for="{{ name }}" class="label">{{ label }}</label>
+  <select id={{ name }} name="{{ name }}">
+    {% for option in options %}
+      <option value={{option[keys[0]]}}>{{ option[keys[1]] }}</option>
+    {% endfor %}
+  </select>
 </div>
 {% endmacro %}

@@ -298,7 +298,7 @@ sub_category_keys = ['sub_category_id', 'sub_category_name']
 audit_primary_categories_options = [
     {
         "primary_category_id": -1,
-        "primary_category_name": "Please select"
+        "primary_category_name": "All"
     },
     {
         "primary_category_id": 2,
@@ -326,7 +326,8 @@ audit_primary_categories_options = [
     },
     {
         "primary_category_id": 14,
-        "primary_category_name": "Net Outstanding Campaign/Convention Expenditures/Obligations"
+        "primary_category_name": "Net Outstanding Campaign/Convention " +
+        "Expenditures/Obligations"
     },
     {
         "primary_category_id": 16,
@@ -361,7 +362,7 @@ audit_primary_categories_options = [
 audit_sub_categories_options = [
     {
         "sub_category_id": -2,
-        "sub_category_name": "Please select"
+        "sub_category_name": " "
     }
 ]
 
