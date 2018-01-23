@@ -276,11 +276,22 @@ and specifying the corresponding manifest, as well as the app you want, like
 so:
 
 ```bash
-cf target -s [feature|dev|stage|prod] && cf push -f manifest_<[feature|dev|stage|prod]>.yml [api|web]
+cf target -s [feature|dev|stage|prod] && cf push -f manifest_<[feature|dev|stage|prod]>.yml [api|cms]
 ```
 
 **NOTE:**  Performing a deploy in this manner will result in a brief period of
 downtime.
+
+### A note about deploying to the `feature` space
+As noted above, you can manually deploy the application if you specify the space you want to deploy to, e.g., `invoke deploy --space feature`.
+
+In the case of the `feature` space, there are a few things to note:
+
+* To deploy to the feature space, an automated deployer account has been set up. To trigger, go to the `tasks.py` file `DEPLOY_RULES` [here](https://github.com/18F/fec-cms/blob/784e6540cfcec58e6e763fa711de19cdcb475bb7/tasks.py#L74). 
+* Only the CMS app is setup and configured for the `feature` space; it points to the `dev` space for all other things (e.g., the API).
+* The `feature` version of the CMS does have New Relic running against it.
+* The CMS in the `feature` space has its own database that has been loaded with data from a production backup; this data can be refreshed in the future using the same steps outlined in the Wiki.
+* The `feature` space has its own S3 bucket for content.
 
 ## SSH
 *Likely only useful for 18F FEC team members*
