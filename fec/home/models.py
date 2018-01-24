@@ -506,14 +506,15 @@ class TipsForTreasurersPage(ContentPage):
 
 class HomePageBannerAnnouncement(Page):
     # Home page banner alert
-    description = models.CharField(max_length=255, blank=False)
-    link_title = models.CharField(max_length=255, blank=False)
-    link_url = models.URLField(max_length=255, blank=False)
+    description = models.CharField(max_length=255, blank=True)
+    link_title = models.CharField(max_length=255, blank=True)
+    link_url = models.URLField(max_length=255, blank=True)
     link_title_2 = models.CharField(max_length=255, blank=True)
     link_url_2 = models.URLField(max_length=255, blank=True)
     date_active = models.DateTimeField(blank=False)
     date_inactive = models.DateTimeField(null=True, blank=False)
     active = models.BooleanField(default=True)
+    prominent = models.BooleanField(default=False)
 
     content_panels = Page.content_panels + [
         FieldPanel('description'),
@@ -524,6 +525,7 @@ class HomePageBannerAnnouncement(Page):
         FieldPanel('date_active'),
         FieldPanel('date_inactive'),
         FieldPanel('active'),
+        FieldPanel('prominent'),
     ]
 
 class CustomPage(Page):
