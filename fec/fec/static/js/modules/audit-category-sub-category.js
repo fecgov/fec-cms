@@ -16,4 +16,7 @@ $("#primary_category_id").change(function(event){
       $select.append('<option selected="selected" value="' + val.sub_category_id + '">' + val.sub_category_name + '</option>');
     });
   });
+  if ($("#primary_category_id").val() == -1){
+  	$("#sub_category_id").val("-2");
+  }
 });
