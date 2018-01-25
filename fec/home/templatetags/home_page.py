@@ -9,7 +9,7 @@ from operator import attrgetter
 from itertools import chain, islice
 from datetime import date
 from pytz import timezone
-from home.models import (HomePageBannerAnnouncement, DigestPage, RecordPage, PressReleasePage,
+from home.models import (HomePageBannerAnnouncement, HomePageBannerAlert, DigestPage, RecordPage, PressReleasePage,
                         TipsForTreasurersPage, ServicesLandingPage)
 
 register = template.Library()
@@ -20,9 +20,13 @@ def home_page_banner_announcement():
     eastern = timezone('America/New_York')
     datetime_now = eastern.localize(datetime.datetime.today())
     banners = HomePageBannerAnnouncement.objects.live().filter(active=True, date_active__lte=datetime_now, date_inactive__gt=datetime_now).order_by('-date_active')[:2]
+    alert_banners = HomePageBannerAlert.objects.live().filter(alert_active=True, alert_date_active__lte=datetime_now, alert_date_inactive__gt=datetime_now).order_by('-alert_date_active')[:2]
+
+
 
     return {
-        'banners': banners
+        'banners': banners,
+        'alert_banners': alert_banners
     }
 
 
@@ -30,9 +34,12 @@ def home_page_banner_announcement():
 @register.inclusion_tag('partials/draft-home-page-banner-announcement.html')
 def draft_home_page_banner_announcement():
     draft_banners = HomePageBannerAnnouncement.objects.all().order_by('-date_active')
+    draft_alert_banners = HomePageBannerAlert.objects.all().order_by('-alert_date_active')
+
 
     return {
-        'draft_banners': draft_banners
+        'draft_banners': draft_banners,
+        'draft_alert_banners': draft_alert_banners
     }
 
 @register.inclusion_tag('partials/home-page-news.html')
@@ -66,4 +73,3 @@ def home_page_news():
     return {
         'updates': updates
     }
-    

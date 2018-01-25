@@ -514,7 +514,6 @@ class HomePageBannerAnnouncement(Page):
     date_active = models.DateTimeField(blank=False)
     date_inactive = models.DateTimeField(null=True, blank=False)
     active = models.BooleanField(default=True)
-    prominent = models.BooleanField(default=False)
 
     content_panels = Page.content_panels + [
         FieldPanel('description'),
@@ -525,7 +524,28 @@ class HomePageBannerAnnouncement(Page):
         FieldPanel('date_active'),
         FieldPanel('date_inactive'),
         FieldPanel('active'),
-        FieldPanel('prominent'),
+    ]
+
+class HomePageBannerAlert(Page):
+    # Home page banner alert
+    alert_description = models.CharField(max_length=255, blank=True)
+    alert_link_title = models.CharField(max_length=255, blank=True)
+    alert_link_url = models.URLField(max_length=255, blank=True)
+    alert_link_title_2 = models.CharField(max_length=255, blank=True)
+    alert_link_url_2 = models.URLField(max_length=255, blank=True)
+    alert_date_active = models.DateTimeField(blank=False)
+    alert_date_inactive = models.DateTimeField(null=True, blank=False)
+    alert_active = models.BooleanField(default=True)
+
+    content_panels = Page.content_panels + [
+        FieldPanel('alert_description'),
+        FieldPanel('alert_link_title'),
+        FieldPanel('alert_link_url'),
+        FieldPanel('alert_link_title_2'),
+        FieldPanel('alert_link_url_2'),
+        FieldPanel('alert_date_active'),
+        FieldPanel('alert_date_inactive'),
+        FieldPanel('alert_active'),
     ]
 
 class CustomPage(Page):

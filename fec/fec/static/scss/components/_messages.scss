@@ -110,6 +110,7 @@
   }
 }
 
+
 // Messages: Inverse
 //
 // <div class="message message--inverse message--success">
@@ -184,4 +185,19 @@
       min-height: 0;
     }
   }
+
+  .message--large {
+    background-position: u(1.5rem) 25%;
+    font-size: u(2rem);
+    padding: u(1rem 1rem 1rem 6rem);
+    line-height: u(2.5rem);
+
+    a {
+      font-size: u(1.5rem);
+      }
+
+    &.message {
+      min-height: 0;
+  }
+}
 }
