@@ -505,7 +505,7 @@ class TipsForTreasurersPage(ContentPage):
 
 
 class HomePageBannerAnnouncement(Page):
-    # Home page banner alert
+    # Home page banner announcement
     description = models.CharField(max_length=255, blank=True)
     link_title = models.CharField(max_length=255, blank=True)
     link_url = models.URLField(max_length=255, blank=True)
@@ -528,14 +528,14 @@ class HomePageBannerAnnouncement(Page):
 
 class HomePageBannerAlert(Page):
     # Home page banner alert
-    alert_description = models.CharField(max_length=255, blank=True)
+    alert_description = models.CharField(max_length=255, blank=True, help_text="This feature requires approval by Amy Kort or Wei Luo prior to deployment.")
     alert_link_title = models.CharField(max_length=255, blank=True)
     alert_link_url = models.URLField(max_length=255, blank=True)
     alert_link_title_2 = models.CharField(max_length=255, blank=True)
     alert_link_url_2 = models.URLField(max_length=255, blank=True)
     alert_date_active = models.DateTimeField(blank=False)
     alert_date_inactive = models.DateTimeField(null=True, blank=False)
-    alert_active = models.BooleanField(default=True)
+    alert_active = models.BooleanField(default=False)
 
     content_panels = Page.content_panels + [
         FieldPanel('alert_description'),
