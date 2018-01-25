@@ -10,8 +10,6 @@ import datetime
 import github3
 import json
 import re
-# python debugger
-import pdb      
 
 from data import api_caller
 from data import constants
@@ -87,15 +85,11 @@ def advanced(request):
 
 
 def candidate(request, candidate_id):
-    pdb.set_trace()
     # grab url query string parameters
     cycle = request.GET.get('cycle', None)
-    print("cycle is:{}".format(cycle))
-    #print("election_years is:{}".format(election_years))
    
     election_full = request.GET.get('election_full', True)
-    print("election_full is:{}".format(election_full))
-
+ 
     if cycle is not None:
         cycle = int(cycle)
 
@@ -155,8 +149,7 @@ def candidate(request, candidate_id):
     #  for displaying elections for pulldown menu in Candidate pages
     even_election_years = list()  # empty list
     for year in candidate['election_years']:
- #       print("year is {}".format(year))
-        if year % 2 > 0 :
+         if year % 2 > 0 :
             even_election_years.append(year+1)  # make even year
         else:
             even_election_years.append(year)  # already even year
