@@ -107,8 +107,8 @@ def candidate(request, candidate_id):
         cycle=cycle, cycle_key='two_year_period',
         election_full=election_full,
     )
-# cycle corresponds to the two-year period for which the committee has financial activity.
-# when selected election cycle is not in list of election years, get the next election cycle
+    # cycle corresponds to the two-year period for which the committee has financial activity.
+    # when selected election cycle is not in list of election years, get the next election cycle
     if election_full and cycle and cycle not in candidate['election_years']:
 
         next_cycle = next(
@@ -155,7 +155,7 @@ def candidate(request, candidate_id):
     #  for displaying elections for pulldown menu in Candidate pages
     even_election_years = list()  # empty list
     for year in candidate['election_years']:
-        print("year is {}".format(year))
+ #       print("year is {}".format(year))
         if year % 2 > 0 :
             even_election_years.append(year+1)  # make even year
         else:
