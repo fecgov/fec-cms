@@ -511,41 +511,53 @@ class HomePageBannerAnnouncement(Page):
     link_url = models.URLField(max_length=255, blank=True)
     link_title_2 = models.CharField(max_length=255, blank=True)
     link_url_2 = models.URLField(max_length=255, blank=True)
-    date_active = models.DateTimeField(blank=False)
-    date_inactive = models.DateTimeField(null=True, blank=False)
+    date_active = models.DateTimeField(blank=False, help_text='Set active date-active here and \
+        leave Go-Live and Expiry fields blank in the Settings-Tab above')
+    date_inactive = models.DateTimeField(null=True, blank=False, help_text='Set date-inactive here and \
+        leave Go-Live and Expiry fields blank in the Settings-Tab above')
     active = models.BooleanField(default=True)
 
     content_panels = Page.content_panels + [
-        FieldPanel('description'),
-        FieldPanel('link_title'),
-        FieldPanel('link_url'),
-        FieldPanel('link_title_2'),
-        FieldPanel('link_url_2'),
-        FieldPanel('date_active'),
-        FieldPanel('date_inactive'),
-        FieldPanel('active'),
+        MultiFieldPanel([
+            FieldPanel('description'),
+            FieldPanel('link_title'),
+            FieldPanel('link_url'),
+            FieldPanel('link_title_2'),
+            FieldPanel('link_url_2'),
+            FieldPanel('date_active'),
+            FieldPanel('date_inactive'),
+            FieldPanel('active'),
+            ],
+            heading="Home page banner announcement"
+        )
     ]
 
 class HomePageBannerAlert(Page):
     # Home page banner alert
-    alert_description = models.CharField(max_length=255, blank=True, help_text="This feature requires approval by Amy Kort or Wei Luo prior to deployment.")
+    alert_description = models.CharField(max_length=255, blank=True)
     alert_link_title = models.CharField(max_length=255, blank=True)
     alert_link_url = models.URLField(max_length=255, blank=True)
-    alert_link_title_2 = models.CharField(max_length=255, blank=True)
-    alert_link_url_2 = models.URLField(max_length=255, blank=True)
-    alert_date_active = models.DateTimeField(blank=False)
-    alert_date_inactive = models.DateTimeField(null=True, blank=False)
+    alert_date_active = models.DateTimeField(blank=False, help_text='Set active date-active here and \
+        leave Go-Live and Expiry fields blank in the Settings-Tab above')
+    alert_date_inactive = models.DateTimeField(null=True, blank=False, help_text='Set date-inactive here and \
+        leave Go-Live and Expiry fields blank in the Settings-Tab above')
     alert_active = models.BooleanField(default=False)
 
     content_panels = Page.content_panels + [
-        FieldPanel('alert_description'),
-        FieldPanel('alert_link_title'),
-        FieldPanel('alert_link_url'),
-        FieldPanel('alert_link_title_2'),
-        FieldPanel('alert_link_url_2'),
-        FieldPanel('alert_date_active'),
-        FieldPanel('alert_date_inactive'),
-        FieldPanel('alert_active'),
+        MultiFieldPanel([
+            FieldPanel('alert_description'),
+            FieldPanel('alert_link_title'),
+            FieldPanel('alert_link_url'),
+            FieldPanel('alert_date_active'),
+            FieldPanel('alert_date_inactive'),
+            FieldPanel('alert_active'),
+            ],
+            heading="This 'alert for emergency use only' feature \
+            is used exclusively for an agency shutdown, or emergency \
+            event in which the agency as a whole cannot assist the \
+            regulated community or the public. The use of this feature \
+            requires approval by Amy Kort or Wei Luo prior to deployment."
+        )
     ]
 
 class CustomPage(Page):
