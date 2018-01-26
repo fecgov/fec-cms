@@ -4,14 +4,15 @@
 <section class="slab slab--secondary message--red">
   <div class="container">
   {% for draft_alert_banner in draft_alert_banners %}
-    <div class="u-margin--top">
-      <div class="message message--red message--mini message--info message--inline u-no-margin-top u-no-margin-bottom">
-        <span class="t-bold">{{ draft_alert_banner.alert_title }}: </span> {{ draft_alert_banner.alert_description }}
+    <div>
+      <div class="message message--red message--large message--info message--inline u-no-margin-top u-no-margin-bottom">
+        <span class="t-bold">{{ draft_alert_banner.title }}: </span> {{ draft_alert_banner.alert_description }}
+        <br>
+        <a class="t-sans" href="{{ draft_alert_banner.alert_link_url }}" class="t-sans">{{ draft_alert_banner.alert_link_title }}</a> »
       </div>
-      <a href="{{ draft_alert_banner.alert_link_url }}" class="t-sans">{{ draft_alert_banner.alert_link_title }}</a> »
     </div>
   {% endfor %}
-</div>
+  </div>
 </section>
 
 {% endif %}
