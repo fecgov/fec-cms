@@ -512,9 +512,9 @@ class HomePageBannerAnnouncement(Page):
     link_title_2 = models.CharField(max_length=255, blank=True)
     link_url_2 = models.URLField(max_length=255, blank=True)
     date_active = models.DateTimeField(blank=False, help_text='Set active date-active here and \
-        leave Go-Live and Expiry fields blank in the Settings-Tab above')
+        leave Go-Live and Expiry fields blank in the Settings-Tab above.')
     date_inactive = models.DateTimeField(null=True, blank=False, help_text='Set date-inactive here and \
-        leave Go-Live and Expiry fields blank in the Settings-Tab above')
+        leave Go-Live and Expiry fields blank in the Settings-Tab above.')
     active = models.BooleanField(default=True)
 
     content_panels = Page.content_panels + [
@@ -532,16 +532,16 @@ class HomePageBannerAnnouncement(Page):
         )
     ]
 
-class HomePageBannerAlert(Page):
+class AlertForEmergencyUseOnly(Page):
     # Home page banner alert
     alert_description = models.CharField(max_length=255, blank=True)
     alert_link_title = models.CharField(max_length=255, blank=True)
     alert_link_url = models.URLField(max_length=255, blank=True)
     alert_date_active = models.DateTimeField(blank=False, help_text='Set active date-active here and \
-        leave Go-Live and Expiry fields blank in the Settings-Tab above')
+        leave Go-Live and Expiry fields blank in the Settings-Tab above.')
     alert_date_inactive = models.DateTimeField(null=True, blank=False, help_text='Set date-inactive here and \
-        leave Go-Live and Expiry fields blank in the Settings-Tab above')
-    alert_active = models.BooleanField(default=False)
+        leave Go-Live and Expiry fields blank in the Settings-Tab above.')
+    alert_active = models.BooleanField(default=False, help_text='Requires approval by Amy Kort or Wei Luo prior to deployment.')
 
     content_panels = Page.content_panels + [
         MultiFieldPanel([
