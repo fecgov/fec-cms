@@ -6,6 +6,7 @@ services:
   - cms-creds-prod
   - fec-creds-prod
   - fec-cms-prod
+  - content-s3
 env:
   FEC_API_URL: "https://api.open.fec.gov"
   FEC_APP_URL: "/data"
