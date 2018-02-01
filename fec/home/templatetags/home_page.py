@@ -22,20 +22,16 @@ def home_page_banner_announcement():
     banners = HomePageBannerAnnouncement.objects.live().filter(active=True, date_active__lte=datetime_now, date_inactive__gt=datetime_now).order_by('-date_active')[:2]
     alert_banners = AlertForEmergencyUseOnly.objects.live().filter(alert_active=True, alert_date_active__lte=datetime_now, alert_date_inactive__gt=datetime_now).order_by('-alert_date_active')[:2]
 
-
-
     return {
         'banners': banners,
         'alert_banners': alert_banners
     }
-
 
 # This is for the Wagtail preview for Home Page Banner Announcement
 @register.inclusion_tag('partials/draft-home-page-banner-announcement.html')
 def draft_home_page_banner_announcement():
     draft_banners = HomePageBannerAnnouncement.objects.all().order_by('-date_active')
     draft_alert_banners = AlertForEmergencyUseOnly.objects.all().order_by('-alert_date_active')
-
 
     return {
         'draft_banners': draft_banners,
