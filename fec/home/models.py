@@ -532,6 +532,7 @@ class HomePageBannerAnnouncement(Page):
         )
     ]
 
+
 class AlertForEmergencyUseOnly(Page):
     # Home page banner alert
     alert_description = models.CharField(max_length=255, blank=True)
@@ -559,6 +560,7 @@ class AlertForEmergencyUseOnly(Page):
             requires approval by Amy Kort or Wei Luo prior to deployment."
         )
     ]
+
 
 class CustomPage(Page):
     """Flexible customizable page."""
