@@ -108,7 +108,7 @@ var electionColumns = [
 
       var anchor = document.createElement('a');
       anchor.textContent = 'View all';
-      anchor.setAttribute('href', url + "&tab=fiiings");
+      anchor.setAttribute('href', url + "&tab=filings");
       anchor.setAttribute('target', '_blank');
 
       return anchor.outerHTML;
