@@ -95,29 +95,23 @@ var electionColumns = [
   {
     render: function(data, type, row, meta) {
       var dates = helpers.cycleDates(context.election.cycle);
-      var urlBase;
-      if (context.election.office === 'president') {
-        urlBase = ['reports', 'presidential'];
-      } else {
-        urlBase = ['reports','house-senate'];
-      }
       var url = helpers.buildAppUrl(
-        urlBase,
+        ['committee', row.committee_ids],
         {
-          committee_id: row.committee_ids,
           cycle: context.election.cycle,
-          is_amended: 'false'
         }
       );
+
+      //var p = document.createElement('p');
+      //var end_date = row.coverage_end_date;
+      //p.textContent = "Coverage ending: "+ row.coverage_end_date
+
       var anchor = document.createElement('a');
       anchor.textContent = 'View all';
-      anchor.setAttribute('href', url);
+      anchor.setAttribute('href', url + "&tab=fiiings");
       anchor.setAttribute('target', '_blank');
 
-      var span = document.createElement('span');
-      span.textContent = "Coverage ending: "+ row.candidate_election_year +"</br>";
-
-      return span.textContent + anchor.outerHTML;
+      return anchor.outerHTML;
     },
     className: 'all',
     orderable: false,
