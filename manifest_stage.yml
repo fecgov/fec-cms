@@ -5,6 +5,7 @@ services:
   - cms-creds-stage
   - fec-creds-stage
   - fec-stage-cms
+  - content-s3
 env:
   FEC_API_URL: https://api-stage.open.fec.gov
   FEC_APP_URL: '/data'
