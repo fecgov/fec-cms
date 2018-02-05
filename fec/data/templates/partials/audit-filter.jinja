@@ -6,8 +6,7 @@
 
 {% block filters %}
 <div class="filters__inner">
-  {% include 'partials/filters/audit-committee-types.jinja' %}   
-{# category/subcategory filter #}
+ {# category/subcategory filter #}
   {{ 
   	dropdown.select_json(
       'primary_category_id',
@@ -32,5 +31,6 @@
   {{ typeahead.field('candidate_id', 'Authorized candidate name or ID', '', dataset='auditCandidates', allow_text=True) }}	
 {# election cycle range filter #}
   {{ years.cycleRange('cycle', 'Election cycles covered by audit' ) }} 
+  {% include 'partials/filters/audit-committee-types.jinja' %}   
 </div>
 {% endblock %}
