@@ -20,17 +20,17 @@
 
 <div class="filter">
   <fieldset class="js-dropdown js-filter" data-filter="checkbox">
-    <legend class="label" for="committee_type">Other committees</legend>
+    <legend class="label" for="committee_type">Party committees</legend>
     <ul class="dropdown__selected">
-      <li class="dropdown__item">
+      <li>
         <input id="committee-type-checkbox-X" type="checkbox" name="committee_type" value="X">
         <label class="dropdown__value" for="committee-type-checkbox-X">Party - nonqualified</label>
       </li>
-      <li class="dropdown__item">
+      <li >
         <input id="committee-type-checkbox-Y" type="checkbox" name="committee_type" value="Y">
         <label class="dropdown__value" for="committee-type-checkbox-Y">Party - qualified</label>
       </li>
-      <li class="dropdown__item">
+      <li>
         <input id="committee-type-checkbox-Z" type="checkbox" name="committee_type" value="Z">
         <label class="dropdown__value" for="committee-type-checkbox-Z">National party nonfederal account</label>
       </li>
@@ -46,23 +46,12 @@
         <input id="committee-type-checkbox-O" type="checkbox" name="committee_type" value="O">
         <label class="dropdown__value" for="committee-type-checkbox-O">Super PAC (independent expenditure only)</label>
       </li>
-    </ul>
-    <div class="dropdown">
-      <button type="button" class="dropdown__button button--alt" data-name="{{ name }}">More</button>
-      <div id="ie-dropdown" class="dropdown__panel" aria-hidden="true">
-      <ul class="dropdown__list">
-        <li class="dropdown__item">
-          <input id="committee-type-checkbox-U" type="checkbox" name="committee_type" value="U">
-          <label class="dropdown__value" for="committee-type-checkbox-U">Single candidate independent expenditure</label>
-        </li>
-        <li class="dropdown__item">
+      <li class="dropdown__item">
           <input id="committee-type-checkbox-I" type="checkbox" name="committee_type" value="I">
           <label class="dropdown__value" for="committee-type-checkbox-I">Independent expenditor (person or group)</label>
-        </li>
-      </ul>
-    </div>
-  </div>
-</fieldset>
+      </li>
+    </ul>
+  </fieldset>
 </div>
 
 <div class="filter">
@@ -74,14 +63,6 @@
       <div id="pac-dropdown" class="dropdown__panel" aria-hidden="true">
       <ul class="dropdown__list">
         <li class="dropdown__item">
-          <input id="designation-checkbox-B" type="checkbox" name="designation" value="B">
-          <label class="dropdown__value" for="designation-checkbox-B">Lobbyist/Registrant PAC</label>
-        </li>
-        <li class="dropdown__item">
-          <input id="designation-checkbox-D" type="checkbox" name="designation" value="D">
-          <label class="dropdown__value" for="designation-checkbox-D">Leadership PAC</label>
-        </li>
-        <li class="dropdown__item">
           <input id="committee-type-checkbox-N" type="checkbox" name="committee_type" value="N">
           <label class="dropdown__value" for="committee-type-checkbox-N">PAC - nonqualified</label>
         </li>
@@ -89,70 +70,7 @@
           <input id="committee-type-checkbox-Q" type="checkbox" name="committee_type" value="Q">
           <label class="dropdown__value" for="committee-type-checkbox-Q">PAC - qualified</label>
         </li>
-        <li class="dropdown__item">
-          <input id="committee-type-checkbox-V" type="checkbox" name="committee_type" value="V">
-          <label class="dropdown__value" for="committee-type-checkbox-V">PAC with non-contribution account - nonqualified</label>
-        </li>
-        <li class="dropdown__item">
-          <input id="committee-type-checkbox-W" type="checkbox" name="committee_type" value="W">
-          <label class="dropdown__value" for="committee-type-checkbox-W">PAC with non-contribution account - qualified</label>
-        </li>
-        <li class="dropdown__subhead">Separate segregated funds</li>
-        <li class="dropdown__item">
-          <input id="org-type-checkbox-C" name="organization_type" type="checkbox" value="C">
-          <label class="dropdown__value" for="org-type-checkbox-C">Corporation</label>
-        </li>
-        <li class="dropdown__item">
-          <input id="org-type-checkbox-L" name="organization_type" type="checkbox" value="L">
-          <label class="dropdown__value" for="org-type-checkbox-L">Labor organization</label>
-        </li>
-        <li class="dropdown__item">
-          <input id="org-type-checkbox-M" name="organization_type" type="checkbox" value="M">
-          <label class="dropdown__value" for="org-type-checkbox-M">Membership organization</label>
-        </li>
-        <li class="dropdown__item">
-          <input id="org-type-checkbox-T" name="organization_type" type="checkbox" value="T">
-          <label class="dropdown__value" for="org-type-checkbox-T">Trade association</label>
-        </li>
-        <li class="dropdown__item">
-          <input id="org-type-checkbox-V" name="organization_type" type="checkbox" value="V">
-          <label class="dropdown__value" for="org-type-checkbox-V">Cooperative</label>
-        </li>
-        <li class="dropdown__item">
-          <input id="org-type-checkbox-W" name="organization_type" type="checkbox" value="W">
-          <label class="dropdown__value" for="org-type-checkbox-W">Corporation without capital stock</label>
-        </li>
-      </ul>
-    </div>
-  </fieldset>
-</div>
-
-<div class="filter">
-  <fieldset class="js-dropdown js-filter" data-filter="checkbox">
-    <legend class="label" for="committee_type">Other committees</legend>
-    <ul class="dropdown__selected">
-      <li>
-        <input id="designation-checkbox-J" type="checkbox" name="designation" value="J">
-        <label class="dropdown__value" for="designation-checkbox-J">Joint fundraising committee</label>
-      </li>
-    </ul>
-    <div class="dropdown">
-      <button type="button" class="dropdown__button button--alt" data-name="{{ name }}">More</button>
-      <div id="other-dropdown" class="dropdown__panel" aria-hidden="true">
-      <ul class="dropdown__list">
-        <li class="dropdown__item">
-          <input id="committee-type-checkbox-C" type="checkbox" name="committee_type" value="C">
-          <label class="dropdown__value" for="committee-type-checkbox-C">Communication cost</label>
-        </li>
-        <li class="dropdown__item">
-          <input id="committee-type-checkbox-D" type="checkbox" name="committee_type" value="D">
-          <label class="dropdown__value" for="committee-type-checkbox-D">Delegate committee</label>
-        </li>
-        <li class="dropdown__item">
-          <input id="committee-type-checkbox-E" type="checkbox" name="committee_type" value="E">
-          <label class="dropdown__value" for="committee-type-checkbox-E">Electioneering communication</label>
-        </li>
-      </ul>
+       </ul>
     </div>
   </fieldset>
 </div>

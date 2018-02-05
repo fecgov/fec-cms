@@ -386,7 +386,7 @@ table_columns = OrderedDict([
     ('reports-house-senate', ['Committee', 'Report type', 'Version', 'Receipt date', 'Coverage end date', 'Total receipts', 'Total disbursements']),
     ('reports-pac-party', ['Committee', 'Report type', 'Version', 'Receipt date', 'Coverage end date', 'Total receipts', 'Total disbursements', 'Total independent expenditures']),
     ('reports-ie-only', ['Filer', 'Report type', 'Version', 'Receipt date', 'Coverage end date', 'Total contributions', 'Total independent expenditures']),
-    ('audit', ['Report and committee name', 'Election cycle', 'Final report', 'Findings and issues', 'Candidate']),
+    ('audit', ['Committee name', 'Election cycle', 'Final report', 'Findings and issues', 'Candidate']),
 ])
 
 line_numbers = {
