@@ -6,6 +6,7 @@ var d3 = require('d3');
 var $ = require('jquery');
 var _ = require('underscore');
 var chroma = require('chroma-js');
+var moment = require('moment');
 
 var dropdown = require('../modules/dropdowns');
 
@@ -100,19 +101,25 @@ var electionColumns = [
         ['committee', row.committee_pcc],
         {
           cycle: context.election.cycle,
-          tab:'filings'}
+          tab:'filings'
+        }
       );
 
-      //var p = document.createElement('p');
-      //var end_date = row.coverage_end_date;
-      //p.textContent = "Coverage ending: "+ row.coverage_end_date
+
+      var end_date = row.coverage_end_date ? moment(row.coverage_end_date).format('YYYY-MM-DD') : null;
+
+
+      var p = document.createElement('p');
+      p.innerHTML = end_date !== null ? 'Coverage ending:<br>' + end_date : 'No reports this period'
+      //p.innerHTML = "Coverage ending: "+ end_date
+
       var txt_content = (comm_id !== null ? 'View All' : 'No Data Provided');
       var anchor = document.createElement('a');
       anchor.textContent = txt_content;
       anchor.setAttribute('href', url);
       anchor.setAttribute('target', '_blank');
 
-      return anchor.outerHTML;
+      return anchor.outerHTML + p.outerHTML ;
     },
     className: 'all',
     orderable: false,
