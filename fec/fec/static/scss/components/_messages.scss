@@ -147,13 +147,18 @@
   background-color: $inverse-translucent;
 }
 
-.message--red {
+.message--vivid {
   background-color: $deep-red;
   border-color: $inverse;
 
   &.message--info {
     @include u-icon-bg($info-circle, $inverse);
   }
+
+  &.message--alert {
+    @include u-icon-bg($bang-circle, $inverse);
+  }
+
 }
 
 @include media($med) {
@@ -198,6 +203,6 @@
 
     &.message {
       min-height: 0;
+    }
   }
-}
 }
