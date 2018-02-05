@@ -145,15 +145,10 @@ def candidate(request, candidate_id):
         'candidateID': candidate['candidate_id']
     }
 
-    # Addresses issue#1644 - make any odd year special election even years 
+     # Addresses issue#1644 - make any odd year special election an even year 
     #  for displaying elections for pulldown menu in Candidate pages
-    even_election_years = list()  # empty list
-    for year in candidate['election_years']:
-        if year % 2 > 0 :
-            even_election_years.append(year+1)  # make even year
-        else:
-            even_election_years.append(year)  # already even year
-
+    #  Using Set to ensure no duplicate years in list
+    even_election_years = { year + (year % 2) for year in candidate.get('election_years', []) }
 
     # In the case of when a presidential or senate candidate has filed
     # for a future year that's beyond the current cycle,
