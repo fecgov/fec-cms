@@ -623,20 +623,20 @@ var audit = [
   ('link_to_report',
     {
       data: 'committee_name',
-      className: 'min-desktop hide-panel',
+      className: 'min-desktop hide-panel align-top',
       orderable: true
     }
   ),
 
   {
     data: 'cycle',
-    className: 'all',
+    className: 'all align-top',
     orderable: true
   },
 
   {
     data: 'far_release_date',
-    className: 'min-tablet hide-panel column--small',
+    className: 'min-tablet hide-panel column--small align-top',
     orderable: true,
     render: function(data, type, row) {
       var parsed;
@@ -647,7 +647,7 @@ var audit = [
 
   {
     data: 'primary_category_list',
-    className: 'all',
+    className: 'all align-top',
     orderable: false,
     render: function (data){
       if (data) {
@@ -669,7 +669,7 @@ var audit = [
 
   {
     data: 'candidate_name',
-    className: 'min-tablet hide-panel column--small',
+    className: 'min-tablet hide-panel column--small align-top',
     orderable: true
   },
 ];
