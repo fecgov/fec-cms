@@ -35,11 +35,11 @@ jobs:
             echo "en_US.UTF-8 UTF-8" | sudo tee /etc/locale.gen
             sudo locale-gen en_US.UTF-8
 
-      - restore_cache:
-          keys:
-          - fec-cms-dependencies-{{ checksum "requirements.txt" }}-{{ checksum "package.json" }}
+      #- restore_cache:
+      #    keys:
+      #    - fec-cms-dependencies-{{ checksum "requirements.txt" }}-{{ checksum "package.json" }}
           # fallback to using the latest cache if no exact match is found
-          - fec-cms-dependencies-
+      #    - fec-cms-dependencies-
 
       - run:
           name: Install python dependencies
@@ -56,11 +56,11 @@ jobs:
             sudo npm install
             npm run build
 
-      - save_cache:
-          paths:
-            - ./.env
-            - ./node_modules
-          key: fec-cms-dependencies-{{ checksum "requirements.txt" }}-{{ checksum "package.json" }}
+      #- save_cache:
+      #    paths:
+      #      - ./.env
+      #      - ./node_modules
+      #    key: fec-cms-dependencies-{{ checksum "requirements.txt" }}-{{ checksum "package.json" }}
 
       - run:
           name: Ensure database is available
