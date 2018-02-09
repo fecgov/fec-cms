@@ -104,7 +104,7 @@ module.exports = [
       ignored: /node_modules/
     },
     stats: {
-      assetSort: 'field',
+      assetsSort: 'field',
       modules: false,
       warnings: false
     }
