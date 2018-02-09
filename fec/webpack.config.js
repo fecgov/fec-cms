@@ -136,7 +136,7 @@ module.exports = [
       ]
     },
     stats: {
-      assetSort: 'field',
+      assetsSort: 'field',
       modules: false,
       warnings: false
     }
