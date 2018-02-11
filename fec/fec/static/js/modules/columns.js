@@ -623,7 +623,7 @@ var audit = [
   ('link_to_report',
     {
       data: 'committee_name',
-      className: 'min-desktop hide-panel',
+      className: 'all',
       orderable: true
     }
   ),
@@ -650,7 +650,7 @@ var audit = [
     className: 'all',
     orderable: false,
     render: function (data){
-      if (data) {
+      if (data) {     
         var html = '<ol class="list--numbered">'
         for(var i in data){
           html += '<li>' + data[i]['primary_category_name'] + '<ol>'

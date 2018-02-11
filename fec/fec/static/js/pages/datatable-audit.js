@@ -22,7 +22,7 @@ $(document).ready(function() {
     title: 'Audit reports',
     path: ['audit-case'],
     columns: columns.audit,
-    order: [[1, 'desc']],
+    order: [[1, 'desc'],[0, 'asc']],
     useFilters: true,
     useExport: true,
     rowCallback: tables.modalRenderRow,
