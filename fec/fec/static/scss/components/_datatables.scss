@@ -150,6 +150,10 @@
     &:first-child {
       border-left: none;
     }
+
+    &.align-top {
+      vertical-align: top;
+    }
   }
 
   .sorting_disabled {
