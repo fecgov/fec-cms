@@ -12,19 +12,21 @@ var helpers = require('./helpers');
 
 var $span = $("<span>", {id: "selected-category", class: "t-bold"}).appendTo('.data-container__tags');
 var $subspan = $("<span>", {id: "selected-sub-category", class: "t-bold"}).insertAfter('#selected-category');
-//$(".list--numbered li ol li").css('background-color','none')
+$("#sub_category_id").css({'width': '75%','position': 'relative','right': '-25%'});
 
 var primary_selected
 
 $("#primary_category_id").change(function(event){
   var $select = $('#sub_category_id');
-  $.getJSON(helpers.buildUrl(['audit-category'],{'primary_category_id': $('#primary_category_id').val(), 'per_page': 100}),function(data){
+  $.getJSON(helpers.buildUrl(['audit-category'],{'primary_category_id': $('#primary_category_id').val(), 'per_page': 100}), function(data){
     $select.html('');
     $.each(data.results[0].sub_category_list, function(key, val){
       $select.append('<option value="' + val.sub_category_id + '">' + val.sub_category_name + '</option>');
     });
+
     $select.prepend('<option selected value="">Choose a sub-category</option>');
   })
+
   if ($("#primary_category_id").val() == -1){
   	$("#sub_category_id").val("-2");
   }
