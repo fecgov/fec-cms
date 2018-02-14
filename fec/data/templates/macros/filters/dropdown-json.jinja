@@ -1,5 +1,5 @@
 {% macro select_json(name, label, keys, options={}, default=none) %}
-<div class="filter js-filter js-filter-control" data-filter="select" 
+<div class="filter js-filter js-filter-control" data-filter="select"
 data-validate="false" data-modifies-filter="{{ name }}" data-required-default="{{ default }}">
   <label for="{{ name }}" class="label">{{ label }}</label>
   <select id={{ name }} name="{{ name }}">
@@ -12,7 +12,7 @@ data-validate="false" data-modifies-filter="{{ name }}" data-required-default="{
 
 
 {% macro select_json_indentation(name, label, keys, options={}, default=none) %}
-<div class="filter js-filter js-filter-control" data-filter="select" 
+<div class="filter js-filter js-filter-control" data-filter="select"
 data-validate="false" data-modifies-filter="{{ name }}" data-required-default="{{ default }}>
   <label for="{{ name }}" class="label">{{ label }}</label>
   <select id={{ name }} name="{{ name }}">
