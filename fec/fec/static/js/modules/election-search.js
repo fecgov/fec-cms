@@ -142,7 +142,7 @@ ElectionSearch.prototype.search = function(e, opts) {
     if (!_.isEqual(serialized, self.serialized)) {
       // Requested search options differ from saved options; request new data.
       self.xhr && self.xhr.abort();
-      self.xhr = $.getJSON(self.getUrl(serialized) + '&sort=district').done(function(response) {
+      self.xhr = $.getJSON(self.getUrl(serialized)).done(function(response) {
         self.results = self.removeWrongPresidentialElections(response.results, serialized.cycle);
         // Note: Update district color map before rendering results
         var encodedDistricts = self.encodeDistricts(self.results);
