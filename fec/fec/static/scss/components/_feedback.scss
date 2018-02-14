@@ -4,9 +4,9 @@
 //
 
 .feedback {
-  background-color: $base;
+  background-color: $gray-lightest;
   bottom: u(.5rem);
-  color: $inverse;
+  color: $base;
   display: block;
   left: u(.5rem);
   overflow-y: scroll;
@@ -17,24 +17,40 @@
   z-index: $z-feedback;
 
   legend {
-    color: $inverse;
+    color: $base;
+  }
+
+  label {
+    margin-bottom: u(-0.5rem);
+  }
+
+  hr {
+    border-top: 0.15rem dotted;
+    margin: u(0 0 1rem 0);
+    color: $gray-dark;
+  }
+
+  .t-note {
+    font-style: normal;
+    line-height: u(2rem);
   }
 
   textarea {
     height: u(7rem);
     margin-bottom: u(2rem);
-    border-color: $inverse;
+    border-color: $base;
 
     &:last-of-type {
       margin-bottom: u(1rem);
     }
+
   }
 
   a:not(.button--cta-primary) {
-    border-color: $inverse;
+    border-color: $base;
   }
 
-  .label {
+  h3 {
     &:first-of-type {
       margin-top: u(2rem);
     }
@@ -60,6 +76,24 @@
       display: block !important;
       top: 2000px;
     }
+  }
+}
+
+.signup__row {
+  clear:both;
+  display: table;
+
+  .signup__button {
+    float: left;
+    display:block;
+    margin-top: u(0.3rem);
+  }
+
+  .signup__note {
+    float: left;
+    display:block;
+    width: u(30rem);
+    margin-left: u(1rem);
   }
 }
 

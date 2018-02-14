@@ -421,7 +421,7 @@
 }
 
 .button--down {
-  @include u-icon($arrow-down-border, $primary-contrast);
+  @include u-icon($arrow-down-border, $primary);
 }
 
 .button--cancel {
