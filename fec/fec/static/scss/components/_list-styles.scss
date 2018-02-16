@@ -50,6 +50,10 @@
 }
 
 .list--numbered {
+  & > li {
+    list-style-type: decimal;
+  }
+
   ul {
     margin-bottom: 0;
     margin-left: u(1.5rem);

@@ -212,6 +212,7 @@
 .card--alternating-bg {
   min-height: u(8.3rem);
   padding: 0;
+  border: 2px solid transparent;
 
   .card__image__container {
     @include span-columns(4);
