@@ -17,7 +17,7 @@ var eventsTemplate = require('../templates/homepage/events-and-deadlines.hbs');
 
 var updates = {
   '.js-next-commission-meeting': ['32', '39', '40'],
-  '.js-next-filing-deadline': ['21', '27'],
+  '.js-next-filing-deadline': ['21', '26', '27'],
   '.js-next-training-or-conference': ['33', '34'],
   '.js-next-public-comment-deadline': ['23']
 };
