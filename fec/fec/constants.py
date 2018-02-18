@@ -7,6 +7,8 @@ election_types = OrderedDict([
 
 deadline_types = OrderedDict([
     ('21', 'Reporting deadlines'),
+    ('25', 'Quarterly reports'),
+    ('26', 'Monthly reports'),
     ('27', 'Pre- and post-election')
 ])
 

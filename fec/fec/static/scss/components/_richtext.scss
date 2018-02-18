@@ -4,7 +4,8 @@
 //
 
 .rich-text,
-.body-blocks {
+.body-blocks,
+.block-html {
   ul {
     @extend .list--bulleted;
    }
@@ -14,8 +15,10 @@
   }
 }
 
+
 .rich-text,
-.block-table {
+.block-table,
+.block-html {
   table {
     @extend .simple-table;
   }
