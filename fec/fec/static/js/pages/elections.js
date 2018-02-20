@@ -9,6 +9,7 @@ var chroma = require('chroma-js');
 var moment = require('moment');
 
 var dropdown = require('../modules/dropdowns');
+var coverageEndDate = require('../templates/coverageEndDate.hbs');
 
 var fips = require('../modules/fips');
 var maps = require('../modules/maps');
@@ -94,32 +95,28 @@ var electionColumns = [
   columns.currencyColumn({data: 'total_disbursements', className: 'column--number', orderSequence: ['desc', 'asc']}),
   columns.barCurrencyColumn({data: 'cash_on_hand_end_period', className: 'column--number'}),
   {
-    render: function(data, type, row, meta) {
-      var dates = helpers.cycleDates(context.election.cycle);
-      var comm_id = row.committee_pcc ? row.committee_pcc : null;
-      var url = helpers.buildAppUrl(
-        ['committee', row.committee_pcc],
-        {
-          cycle: context.election.cycle,
-          tab:'filings'
+      render: function(data, type, row, meta) {
+        var dates = helpers.cycleDates(context.election.cycle);
+        var urlBase;
+        if (context.election.office === 'president') {
+          urlBase = ['reports', 'presidential'];
+        } else {
+          urlBase = ['reports','house-senate'];
         }
-      );
-
-
-      var end_date = row.coverage_end_date ? moment(row.coverage_end_date).format('YYYY-MM-DD') : null;
-
-
-      var p = document.createElement('p');
-      p.innerHTML = end_date !== null ? 'Coverage ending:<br>' + end_date : 'No reports this period'
-      //p.innerHTML = "Coverage ending: "+ end_date
-
-      var txt_content = (comm_id !== null ? 'View All' : 'No Data Provided');
-      var anchor = document.createElement('a');
-      anchor.textContent = txt_content;
-      anchor.setAttribute('href', url);
-      anchor.setAttribute('target', '_blank');
-
-      return anchor.outerHTML + p.outerHTML ;
+        var url = helpers.buildAppUrl(
+          urlBase,
+          {
+            committee_id: row.committee_ids,
+            cycle: context.election.cycle,
+            is_amended: 'false'
+          }
+        );
+        var coverage_end_date = row.coverage_end_date ? moment(row.coverage_end_date).format('MM/DD/YYYY') : null;
+        return coverageEndDate({
+          coverage_end_date: coverage_end_date,
+          url: url
+        }
+      )
     },
     className: 'all',
     orderable: false,
