@@ -1,9 +1,11 @@
 {{#if coverage_end_date }}
  Coverage ending: {{ coverage_end_date }}
+   <br>
+   {{#if url}}
+   <a href="{{ url }}" target="_blank">View all</a>
+   {{/if}}
 {{else}}
 No processed data this period.
 {{/if}}
- <br>
-{{#if url}}
-  <a href="{{ url }}" target="_blank">View all</a>
-{{/if}}
+
+
