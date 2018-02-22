@@ -6,8 +6,10 @@ var d3 = require('d3');
 var $ = require('jquery');
 var _ = require('underscore');
 var chroma = require('chroma-js');
+var moment = require('moment');
 
 var dropdown = require('../modules/dropdowns');
+var coverageEndDate = require('../templates/coverageEndDate.hbs');
 
 var fips = require('../modules/fips');
 var maps = require('../modules/maps');
@@ -93,27 +95,28 @@ var electionColumns = [
   columns.currencyColumn({data: 'total_disbursements', className: 'column--number', orderSequence: ['desc', 'asc']}),
   columns.barCurrencyColumn({data: 'cash_on_hand_end_period', className: 'column--number'}),
   {
-    render: function(data, type, row, meta) {
-      var dates = helpers.cycleDates(context.election.cycle);
-      var urlBase;
-      if (context.election.office === 'president') {
-        urlBase = ['reports', 'presidential'];
-      } else {
-        urlBase = ['reports','house-senate'];
-      }
-      var url = helpers.buildAppUrl(
-        urlBase,
-        {
-          committee_id: row.committee_ids,
-          cycle: context.election.cycle,
-          is_amended: 'false'
+      render: function(data, type, row, meta) {
+        var dates = helpers.cycleDates(context.election.cycle);
+        var urlBase;
+        if (context.election.office === 'president') {
+          urlBase = ['reports', 'presidential'];
+        } else {
+          urlBase = ['reports','house-senate'];
         }
-      );
-      var anchor = document.createElement('a');
-      anchor.textContent = 'View';
-      anchor.setAttribute('href', url);
-      anchor.setAttribute('target', '_blank');
-      return anchor.outerHTML;
+        var url = helpers.buildAppUrl(
+          urlBase,
+          {
+            committee_id: row.committee_ids,
+            cycle: context.election.cycle,
+            is_amended: 'false'
+          }
+        );
+        var coverage_end_date = row.coverage_end_date ? moment(row.coverage_end_date).format('MM/DD/YYYY') : null;
+        return coverageEndDate({
+          coverage_end_date: coverage_end_date,
+          url: url
+        }
+      )
     },
     className: 'all',
     orderable: false,
