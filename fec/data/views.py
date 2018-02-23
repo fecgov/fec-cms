@@ -87,9 +87,9 @@ def advanced(request):
 def candidate(request, candidate_id):
     # grab url query string parameters
     cycle = request.GET.get('cycle', None)
-   
+
     election_full = request.GET.get('election_full', True)
- 
+
     if cycle is not None:
         cycle = int(cycle)
 
@@ -145,7 +145,7 @@ def candidate(request, candidate_id):
         'candidateID': candidate['candidate_id']
     }
 
-     # Addresses issue#1644 - make any odd year special election an even year 
+     # Addresses issue#1644 - make any odd year special election an even year
     #  for displaying elections for pulldown menu in Candidate pages
     #  Using Set to ensure no duplicate years in final list
     even_election_years = list({ year + (year % 2) for year in candidate.get('election_years', []) })
@@ -483,7 +483,7 @@ def feedback(request):
                         request.META['HTTP_USER_AGENT'])
 
             client = github3.login(token=settings.FEC_GITHUB_TOKEN)
-            issue = client.repository('18F', 'fec').create_issue(title, body=body)
+            issue = client.repository('fecgov', 'fec').create_issue(title, body=body)
 
             return JsonResponse(issue.to_json(), status=201)
     else:
