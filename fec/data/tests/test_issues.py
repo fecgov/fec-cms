@@ -73,7 +73,7 @@ class TestGithub:
         )
         assert res.status_code == 201
         mock_login.assert_called_with(token=config.github_token)
-        mock_client.repository.assert_called_with('18F', 'fec')
+        mock_client.repository.assert_called_with('fecgov', 'fec')
         assert len(mock_repo.create_issue.call_args_list) == 1
         args, kwargs = mock_repo.create_issue.call_args
         assert referer in args[0]
