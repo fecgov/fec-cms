@@ -17,9 +17,12 @@ var $subspan = $("<span>", {id: "selected-sub-category", class: "t-bold"}).inser
 var primary_selected
 
 $("#primary_category_id").change(function(event){
-// when user choses a primary_category_id, inital sub_category_id(-2),
-// in order to get all sub categorys beased on this primary category.
-  $("#sub_category_id").val("-2");
+// when user choses a primary_category_id, inital sub_category_id=all,
+// in order to get all sub categorys based on this primary category.
+  // if(("#primary_category_id") == 'all'){
+  // 	$("#sub_category_id").val("all");
+  // }
+  $("#sub_category_id").val("all");
 
   var $select = $('#sub_category_id');
   $.getJSON(helpers.buildUrl(['audit-category'],{'primary_category_id': $('#primary_category_id').val(), 'per_page': 100}),function(data){
@@ -27,7 +30,7 @@ $("#primary_category_id").change(function(event){
     $.each(data.results[0].sub_category_list, function(key, val){
       $select.append('<option value="' + val.sub_category_id + '">' + val.sub_category_name + '</option>');
     });
-    $select.prepend('<option selected value="">Choose a sub-category</option>');
+    $select.prepend('<option selected value="all">Choose a sub-category</option>');
   })
   primary_selected = $("#primary_category_id option:selected").text()
   $('#selected-category').html("Primary category: "+ primary_selected + "<br>")
