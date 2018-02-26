@@ -12,7 +12,9 @@ var helpers = require('./helpers');
 
 var $span = $("<span>", {id: "selected-category", class: "t-bold"}).appendTo('.data-container__tags');
 var $subspan = $("<span>", {id: "selected-sub-category", class: "t-bold"}).insertAfter('#selected-category');
-$("#sub_category_id").css({'width': '75%','position': 'relative','right': '-25%'});
+$("#sub_category_id").css({'width': '70%','position': 'relative','right': '-5%'});
+$("label[for=sub_category_id]").css({'width': '70%','position': 'relative','right': '-5%'});
+$("div[data-modifies-filter=sub_category_id]").css({'border-left': '2px solid #000','margin-left': '25%'});
 var primary_selected
 
 $("#primary_category_id").change(function(event){

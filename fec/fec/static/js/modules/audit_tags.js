@@ -73,7 +73,7 @@ $(document).on({
 
     mouseenter: function () {
       if ($("#sub_category_id").html()==''){
-        $("#sub_category_id").after('<div class="tooltip tooltip--under tooltip--right sub-details message--alert" role="tooltip" style="background-position:2rem 1.5rem">Choose a primary category first</div>')
+        $("#sub_category_id").after('<div class="tooltip tooltip--under tooltip--right sub-details message--alert" role="tooltip" style="background-position:1rem 1.5rem; width:90%; top:15%">Choose a primary category first</div>')
     }
   },
 
