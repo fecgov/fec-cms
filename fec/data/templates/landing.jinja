@@ -72,7 +72,7 @@
             <label for="state" class="label">State</label>
             <select id="state" name="state" aria-label="Select a state">
               <option value="">Select state</option>
-              {% for value, label in constants.election_states.items() %}
+              {% for value, label in constants.states.items() %}
               <option value="{{ value }}">{{ label }}</option>
               {% endfor %}
             </select>

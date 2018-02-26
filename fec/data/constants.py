@@ -7,44 +7,44 @@ DEFAULT_PRESIDENTIAL_YEAR = 2016
 DISTRICT_MAP_CUTOFF = 2018 # The year we show district maps for on election pages
 
 states = OrderedDict([
-    ('AK', 'Alaska'),
     ('AL', 'Alabama'),
-    ('AR', 'Arkansas'),
+    ('AK', 'Alaska'),
     ('AS', 'American Samoa'),
     ('AZ', 'Arizona'),
+    ('AR', 'Arkansas'),
     ('CA', 'California'),
     ('CO', 'Colorado'),
     ('CT', 'Connecticut'),
-    ('DC', 'District of Columbia'),
     ('DE', 'Delaware'),
+    ('DC', 'District of Columbia'),
     ('FL', 'Florida'),
     ('GA', 'Georgia'),
     ('GU', 'Guam'),
     ('HI', 'Hawaii'),
-    ('IA', 'Iowa'),
     ('ID', 'Idaho'),
     ('IL', 'Illinois'),
     ('IN', 'Indiana'),
+    ('IA', 'Iowa'),
     ('KS', 'Kansas'),
     ('KY', 'Kentucky'),
     ('LA', 'Louisiana'),
-    ('MA', 'Massachusetts'),
-    ('MD', 'Maryland'),
     ('ME', 'Maine'),
+    ('MD', 'Maryland'),
+    ('MA', 'Massachusetts'),
     ('MI', 'Michigan'),
     ('MN', 'Minnesota'),
-    ('MO', 'Missouri'),
-    ('MP', 'Northern Mariana Islands'),
     ('MS', 'Mississippi'),
+    ('MO', 'Missouri'),
     ('MT', 'Montana'),
-    ('NC', 'North Carolina'),
-    ('ND', 'North Dakota'),
     ('NE', 'Nebraska'),
+    ('NV', 'Nevada'),
     ('NH', 'New Hampshire'),
     ('NJ', 'New Jersey'),
     ('NM', 'New Mexico'),
-    ('NV', 'Nevada'),
     ('NY', 'New York'),
+    ('NC', 'North Carolina'),
+    ('ND', 'North Dakota'),
+    ('MP', 'Northern Mariana Islands'),
     ('OH', 'Ohio'),
     ('OK', 'Oklahoma'),
     ('OR', 'Oregon'),
@@ -55,67 +55,13 @@ states = OrderedDict([
     ('SD', 'South Dakota'),
     ('TN', 'Tennessee'),
     ('TX', 'Texas'),
+    ('VI', 'U.S. Virgin Islands'),
     ('UT', 'Utah'),
-    ('VA', 'Virginia'),
-    ('VI', 'Virgin Islands'),
     ('VT', 'Vermont'),
-    ('WA', 'Washington'),
-    ('WI', 'Wisconsin'),
-    ('WV', 'West Virginia'),
-    ('WY', 'Wyoming'),
-])
-
-election_states = OrderedDict([
-    ('AK', 'Alaska'),
-    ('AL', 'Alabama'),
-    ('AR', 'Arkansas'),
-    ('AZ', 'Arizona'),
-    ('CA', 'California'),
-    ('CO', 'Colorado'),
-    ('CT', 'Connecticut'),
-    ('DC', 'District of Columbia'),
-    ('DE', 'Delaware'),
-    ('FL', 'Florida'),
-    ('GA', 'Georgia'),
-    ('HI', 'Hawaii'),
-    ('IA', 'Iowa'),
-    ('ID', 'Idaho'),
-    ('IL', 'Illinois'),
-    ('IN', 'Indiana'),
-    ('KS', 'Kansas'),
-    ('KY', 'Kentucky'),
-    ('LA', 'Louisiana'),
-    ('MA', 'Massachusetts'),
-    ('MD', 'Maryland'),
-    ('ME', 'Maine'),
-    ('MI', 'Michigan'),
-    ('MN', 'Minnesota'),
-    ('MO', 'Missouri'),
-    ('MS', 'Mississippi'),
-    ('MT', 'Montana'),
-    ('NC', 'North Carolina'),
-    ('ND', 'North Dakota'),
-    ('NE', 'Nebraska'),
-    ('NH', 'New Hampshire'),
-    ('NJ', 'New Jersey'),
-    ('NM', 'New Mexico'),
-    ('NV', 'Nevada'),
-    ('NY', 'New York'),
-    ('OH', 'Ohio'),
-    ('OK', 'Oklahoma'),
-    ('OR', 'Oregon'),
-    ('PA', 'Pennsylvania'),
-    ('RI', 'Rhode Island'),
-    ('SC', 'South Carolina'),
-    ('SD', 'South Dakota'),
-    ('TN', 'Tennessee'),
-    ('TX', 'Texas'),
-    ('UT', 'Utah'),
     ('VA', 'Virginia'),
-    ('VT', 'Vermont'),
     ('WA', 'Washington'),
-    ('WI', 'Wisconsin'),
     ('WV', 'West Virginia'),
+    ('WI', 'Wisconsin'),
     ('WY', 'Wyoming'),
 ])
 
@@ -297,72 +243,72 @@ sub_category_keys = ['sub_category_id', 'sub_category_name']
 
 audit_primary_categories_options = [
     {
-        "primary_category_id": -1,
-        "primary_category_name": "All"
+        "primary_category_id": 'all',
+        "primary_category_name": 'All'
     },
     {
-        "primary_category_id": 2,
-        "primary_category_name": "Allocation Issues"
+        "primary_category_id": '2',
+        "primary_category_name": 'Allocation Issues'
     },
     {
-        "primary_category_id": 3,
-        "primary_category_name": "Disclosure"
+        "primary_category_id": '3',
+        "primary_category_name": 'Disclosure'
     },
     {
-        "primary_category_id": 5,
-        "primary_category_name": "Excessive Contributions"
+        "primary_category_id": '5',
+        "primary_category_name": 'Excessive Contributions'
     },
     {
-        "primary_category_id": 1,
-        "primary_category_name": "Failure to File Reports/Schedules/Notices"
+        "primary_category_id": '1',
+        "primary_category_name": 'Failure to File Reports/Schedules/Notices'
     },
     {
-        "primary_category_id": 8,
-        "primary_category_name": "Loans"
+        "primary_category_id": '8',
+        "primary_category_name": 'Loans'
     },
     {
-        "primary_category_id": 7,
-        "primary_category_name": "Misstatement of Financial Activity"
+        "primary_category_id": '7',
+        "primary_category_name": 'Misstatement of Financial Activity'
     },
     {
-        "primary_category_id": 14,
-        "primary_category_name": "Net Outstanding Campaign/Convention " +
-        "Expenditures/Obligations"
+        "primary_category_id": '14',
+        "primary_category_name": 'Net Outstanding Campaign/Convention ' +
+        'Expenditures/Obligations'
     },
     {
-        "primary_category_id": 16,
-        "primary_category_name": "No Findings or Issues/Not a Committee"
+        "primary_category_id": '16',
+        "primary_category_name": 'No Findings or Issues/Not a Committee'
     },
     {
-        "primary_category_id": 9,
-        "primary_category_name": "Other"
+        "primary_category_id": '9',
+        "primary_category_name": 'Other'
     },
     {
-        "primary_category_id": 15,
-        "primary_category_name": "Payments/Disgorgements"
+        "primary_category_id": '15',
+        "primary_category_name": 'Payments/Disgorgements'
     },
     {
-        "primary_category_id": 6,
-        "primary_category_name": "Prohibited Contributions"
+        "primary_category_id": '6',
+        "primary_category_name": 'Prohibited Contributions'
     },
     {
-        "primary_category_id": 4,
-        "primary_category_name": "Recordkeeping"
+        "primary_category_id": '4',
+        "primary_category_name": 'Recordkeeping'
     },
     {
-        "primary_category_id": 17,
-        "primary_category_name": "Referred Findings Not Listed"
+        "primary_category_id": '17',
+        "primary_category_name": 'Referred Findings Not Listed'
     },
     {
-        "primary_category_id": 13,
-        "primary_category_name": "Repayment to US Treasury"
+        "primary_category_id": '13',
+        "primary_category_name": 'Repayment to US Treasury'
     }
 ]
 
 audit_sub_categories_options = [
     {
-        "sub_category_id": -2,
-        "sub_category_name": " "
+        "sub_category_id": 'all',
+        "sub_category_name": ' '
     }
 ]
 

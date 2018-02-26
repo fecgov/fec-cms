@@ -50,9 +50,10 @@
 }
 
 .list--numbered {
-  li {
-    list-style-type:decimal;
-   }
+
+  & > li {
+    list-style-type: decimal;
+  }
 
   ul {
     margin-bottom: 0;

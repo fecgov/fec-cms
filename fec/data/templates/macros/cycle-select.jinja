@@ -9,9 +9,9 @@
         name="cycle"
         data-cycle-location="{{ location }}"
         data-duration="{{ duration }}"
-      >
+    >
     {% for each in cycles | sort(reverse=True) %}
-      <option
+        <option
           value="{{ each }}"
           {% if cycle and cycle <= each and cycle > (each - duration) %}selected{% endif %}
         >

@@ -87,8 +87,9 @@ def advanced(request):
 def candidate(request, candidate_id):
     # grab url query string parameters
     cycle = request.GET.get('cycle', None)
+   
     election_full = request.GET.get('election_full', True)
-
+ 
     if cycle is not None:
         cycle = int(cycle)
 
@@ -100,7 +101,8 @@ def candidate(request, candidate_id):
         cycle=cycle, cycle_key='two_year_period',
         election_full=election_full,
     )
-
+    # cycle corresponds to the two-year period for which the committee has financial activity.
+    # when selected election cycle is not in list of election years, get the next election cycle
     if election_full and cycle and cycle not in candidate['election_years']:
 
         next_cycle = next(
@@ -111,13 +113,13 @@ def candidate(request, candidate_id):
             max(candidate['election_years']),
         )
 
-        # If the next_cycle is odd set it to whatever the cycle value was
+        # If the next_cycle is odd set it to whatever the cycle value was- falls back to the cycle
         # and then set election_full to false
-        # This solves an issue with special elections
+        # This solves issue# 1945 with odd year special elections
         if next_cycle % 2 > 0:
             next_cycle = cycle
             election_full = False
-
+        # get the next election cycle data for this candidate
         candidate, committees, cycle = api_caller.load_with_nested(
             'candidate', candidate_id, 'committees',
             cycle=next_cycle, cycle_key='two_year_period',
@@ -142,6 +144,11 @@ def candidate(request, candidate_id):
         'electionFull': election_full,
         'candidateID': candidate['candidate_id']
     }
+
+     # Addresses issue#1644 - make any odd year special election an even year 
+    #  for displaying elections for pulldown menu in Candidate pages
+    #  Using Set to ensure no duplicate years in final list
+    even_election_years = list({ year + (year % 2) for year in candidate.get('election_years', []) })
 
     # In the case of when a presidential or senate candidate has filed
     # for a future year that's beyond the current cycle,
@@ -231,7 +238,7 @@ def candidate(request, candidate_id):
         'party_full': candidate['party_full'],
         'incumbent_challenge_full': candidate['incumbent_challenge_full'],
         'election_year': election_year,
-        'election_years': candidate['election_years'],
+        'election_years': even_election_years,
         'result_type': result_type,
         'duration': duration,
         'min_cycle': min_cycle,

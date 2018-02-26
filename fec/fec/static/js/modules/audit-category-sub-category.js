@@ -17,6 +17,13 @@ $("#sub_category_id").css({'width': '75%','position': 'relative','right': '-25%'
 var primary_selected
 
 $("#primary_category_id").change(function(event){
+// when user choses a primary_category_id, inital sub_category_id=all,
+// in order to get all sub categorys based on this primary category.
+  // if(("#primary_category_id") == 'all'){
+  // 	$("#sub_category_id").val("all");
+  // }
+  $("#sub_category_id").val("all");
+
   var $select = $('#sub_category_id');
   $.getJSON(helpers.buildUrl(['audit-category'],{'primary_category_id': $('#primary_category_id').val(), 'per_page': 100}), function(data){
     $select.html('');
@@ -24,12 +31,9 @@ $("#primary_category_id").change(function(event){
       $select.append('<option value="' + val.sub_category_id + '">' + val.sub_category_name + '</option>');
     });
 
-    $select.prepend('<option selected value="">Choose a sub-category</option>');
+    $select.prepend('<option selected value="all">Choose a sub-category</option>');
   })
 
-  if ($("#primary_category_id").val() == -1){
-  	$("#sub_category_id").val("-2");
-  }
   primary_selected = $("#primary_category_id option:selected").text()
   $('#selected-category').html("Primary category: "+ primary_selected + "<br>")
 })
