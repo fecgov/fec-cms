@@ -3,8 +3,6 @@
 var $ = require('jquery');
 var _ = require('underscore');
 
-
-var Handlebars = require('hbsfy/runtime');
 var helpers = require('./helpers');
 
 var AuditCategorySubCategory = require('./audit-category-sub-category');
@@ -14,7 +12,7 @@ var AuditCategorySubCategory = require('./audit-category-sub-category');
 //require('./calendar-list-view');
 
 
-var $audit_tooltip = require('../templates/audit-tooltip.hbs');
+var $auditCategoryTags= require('../templates/audit_tags.hbs');
 
 
 //Handlebars.registerHelper(helpers.helpers);
@@ -31,19 +29,11 @@ var $audit_tooltip = require('../templates/audit-tooltip.hbs');
 
 //var primary_selected = $("#primary_category_id option:selected").text()
 
-Handlebars.registerHelper('primary_selected', function() {
-  var primary_selected = $("#primary_category_id option:selected").text()
-  //return primary_selected;
-  return new Handlebars.SafeString(
-    "<span> I really want  " + primary_selected + "</span>"
-  );
-});
-
 
 //getPrimaryCategory()
 
 
-$('.data-container__tags').prepend($audit_tooltip,)
+$('.data-container__tags').prepend($auditCategoryTags,)
 $('.tag__category.sub').css('visibility','hidden')
 
 
@@ -70,7 +60,6 @@ $('.js-close_sub').click(function(){
 $('.js-close_primary').click(function(){
    $("#primary_category_id").val("-1")
   //$("#sub_category_id").val("-2")
-  console.log(AuditCategorySubCategory.hello)
   //$("#sub_category_id").html('')
   $("#primary_category_id").trigger('change')
 
