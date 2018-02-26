@@ -18,9 +18,9 @@ var primary_selected
 $("#primary_category_id").change(function(event){
 // when user choses a primary_category_id, inital sub_category_id=all,
 // in order to get all sub categorys based on this primary category.
-  // if(("#primary_category_id") == 'all'){
-  // 	$("#sub_category_id").val("all");
-  // }
+  if(("#primary_category_id") == 'all'){
+  $("#sub_category_id").val("all");
+  }
   $("#sub_category_id").val("all");
 
   var $select = $('#sub_category_id');
@@ -54,7 +54,7 @@ function show_sub_category(){
 
     $(".list--numbered").find(target_parent).find(target).css({'background-color':'#f6f9a4', 'border-radius':'6pc'});
 
-    sub_selected == ("Choose a sub-category")  || ($("#sub_category_id").val() == "-2") || ($("#sub_category_id").html()=='')
+    sub_selected == ("Choose a sub-category")  || ($("#sub_category_id").val() == "all") || ($("#sub_category_id").html()=='')
      ? $('.tag__category.sub').css('visibility','hidden')
      : $('.tag__category.sub').css('visibility','visible')
 
