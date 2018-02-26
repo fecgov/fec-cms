@@ -13,7 +13,6 @@ var helpers = require('./helpers');
 var $span = $("<span>", {id: "selected-category", class: "t-bold"}).appendTo('.data-container__tags');
 var $subspan = $("<span>", {id: "selected-sub-category", class: "t-bold"}).insertAfter('#selected-category');
 $("#sub_category_id").css({'width': '75%','position': 'relative','right': '-25%'});
-
 var primary_selected
 
 $("#primary_category_id").change(function(event){
@@ -27,17 +26,19 @@ $("#primary_category_id").change(function(event){
   var $select = $('#sub_category_id');
   $.getJSON(helpers.buildUrl(['audit-category'],{'primary_category_id': $('#primary_category_id').val(), 'per_page': 100}), function(data){
     $select.html('');
+    if (data.results[0]){
     $.each(data.results[0].sub_category_list, function(key, val){
       $select.append('<option value="' + val.sub_category_id + '">' + val.sub_category_name + '</option>');
     });
 
     $select.prepend('<option selected value="all">Choose a sub-category</option>');
+    }
   })
 
   primary_selected = $("#primary_category_id option:selected").text()
-  $('#selected-category').html("Primary category: "+ primary_selected + "<br>")
 })
 
+//for highlighting
 function show_sub_category(){
     var sub_selected = $("#sub_category_id option:selected").text()
     //var target = "li ol li:contains('" + sub_selected + "')";
@@ -52,8 +53,10 @@ function show_sub_category(){
     });
 
     $(".list--numbered").find(target_parent).find(target).css({'background-color':'#f6f9a4', 'border-radius':'6pc'});
-    $('#selected-sub-category').html("  Subcategory: <span>"+ sub_selected +"</span>")
-    sub_selected == "Choose a sub-category" ? $('#selected-sub-category span').css('color',"red") : $('#selected-sub-category span').css('color',"#000")
+
+    sub_selected == ("Choose a sub-category")  || ($("#sub_category_id").val() == "-2") || ($("#sub_category_id").html()=='')
+     ? $('.tag__category.sub').css('visibility','hidden')
+     : $('.tag__category.sub').css('visibility','visible')
 
 }
 
