@@ -18,12 +18,13 @@ $("div[data-modifies-filter=sub_category_id]").css({'border-left': '2px solid #0
 var primary_selected
 
 $("#primary_category_id").change(function(event){
+  $("#sub_category_id").val("all");
 // when user choses a primary_category_id, inital sub_category_id=all,
 // in order to get all sub categorys based on this primary category.
   if(("#primary_category_id") == 'all'){
   $("#sub_category_id").val("all");
   }
-  $("#sub_category_id").val("all");
+
 
   var $select = $('#sub_category_id');
   $.getJSON(helpers.buildUrl(['audit-category'],{'primary_category_id': $('#primary_category_id').val(), 'per_page': 100}), function(data){
