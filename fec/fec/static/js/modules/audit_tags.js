@@ -38,11 +38,11 @@ $('.tag__category.sub').css('visibility','hidden')
 
 
 $("#primary_category_id").change(function(){
-    $("#sub_category_id").val("all");//maybe move this to audit-cat-subcat.js file-needed to clear sub cat each time
-    //$("#sub_category_id").val("-2")
+    //$("#sub_category_id").val("all");//maybe move this to audit-cat-subcat.js file-needed to clear sub cat each time
     var latest = $("#primary_category_id option:selected").text()
     $('.tag__category.sub').css('visibility','hidden')
     $('.tag__item.primary').contents()[0].nodeValue = "Primary Category: " + latest
+    $("#sub_category_id").prepend('<option selected value="all">Choose a sub-category</option>');
 })
 
 
