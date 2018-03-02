@@ -569,7 +569,8 @@ $(document).ready(function() {
           order: [],
           path: ['committee', committeeId, 'filings'],
           query: _.extend({
-            form_type: ['F3', 'F3X', 'F3P', 'F3L', 'F4', 'F7', 'F13', 'RFAI'],
+            form_type: ['F3', 'F3X', 'F3P', 'F3L', 'F4', 'F5', 'F7', 'F13', 'RFAI'],
+            report_type: ['-24', '-48'],
             sort: ['-coverage_end_date', 'report_type_full', '-beginning_image_number']
           }, query),
           callbacks: {
@@ -584,7 +585,8 @@ $(document).ready(function() {
           order: [[2, 'desc']],
           path: ['committee', committeeId, 'filings'],
           query: _.extend({
-            form_type: ['F5', 'F24', 'F6', 'F9', 'F10', 'F11']
+            form_type: ['F5', 'F24', 'F6', 'F9', 'F10', 'F11'],
+            report_type: ['-Q1', '-Q2', '-Q3', '-YE']
           }, query),
         }, filingsOpts);
         tables.DataTable.defer($table, opts);
