@@ -207,7 +207,10 @@ function initOtherDocumentsTable() {
     path: path,
     query: {
       candidate_id: candidateId,
-      form_type: 'F99'
+      form_type: ['F99','RFAI'],
+      //exclude all request types except for RQ-5: RFAI referencing Statement of Candidacy
+      request_type: ['-1','-2','-3','-4','-6','-7','-8','-9'],
+      sort_hide_null: ['false']
     },
     columns: otherDocumentsColumns,
     order: [[2, 'desc']],
