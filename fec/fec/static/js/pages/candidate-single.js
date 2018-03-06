@@ -208,7 +208,11 @@ function initOtherDocumentsTable() {
     query: {
       candidate_id: candidateId,
       form_type: ['F99','RFAI'],
-      //exclude all request types except for RQ-5: RFAI referencing Statement of Candidacy
+      /* Performing an include would only show RFAI form types. For this reason, excludes need to be
+         used for request_type
+      
+      Exclude all request types except for: 
+      // RQ-5: RFAI referencing Statement of Candidacy */
       request_type: ['-1','-2','-3','-4','-6','-7','-8','-9'],
       sort_hide_null: ['false']
     },
