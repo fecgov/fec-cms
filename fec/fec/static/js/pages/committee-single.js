@@ -571,8 +571,16 @@ $(document).ready(function() {
           query: _.extend({
             form_type: ['F3', 'F3X', 'F3P', 'F3L', 'F4', 'F5', 'F7', 'F13', 'RFAI'],
             report_type: ['-24', '-48'],
-            //exclude all request types except for RQ-2: RFAI referencing Report of Receipts and Expenditures
-            request_type: ['-1','-3','-4','-5','-6','-7','-8','-9'],
+            /* Performing an include would only show RFAI form types. For this reason, excludes need to be
+               used for request_type
+            
+            Exclude all request types except for: 
+               - RQ-2: RFAI referencing Report of Receipts and Expenditures
+               - RQ-3: RFAI referencing second notice reports
+               - RQ-4: RFAI referencing Independent Expenditure filer
+               - RQ-7: RFAI referencing failure to file
+               - RQ-8: RFAI referencing public disclosure */
+            request_type: ['-1','-5','-6','-9'],
             sort: ['-coverage_end_date', 'report_type_full', '-beginning_image_number'],
             sort_hide_null: ['false']
           }, query),
@@ -602,8 +610,13 @@ $(document).ready(function() {
           path: ['committee', committeeId, 'filings'],
           query: _.extend({
             form_type: ['F1','RFAI'],
-            //exclude all request types except for RQ-1: RFAI referencing Statement of organization
-            request_type: ['-2','-3','-4','-5','-6','-7','-8','-9'],
+            /* Performing an include would only show RFAI form types. For this reason, excludes need to be
+               used for request_type
+            
+            Exclude all request types except for: 
+               - RQ-1: RFAI referencing Statement of organization
+               - RQ-6: RFAI referencing 2nd notice State of organization */
+            request_type: ['-2','-3','-4','-5','-7','-8','-9'],
             sort_hide_null: ['false']
           }, query),
         }, filingsOpts);
@@ -616,7 +629,11 @@ $(document).ready(function() {
           path: ['committee', committeeId, 'filings'],
           query: _.extend({
             form_type: ['F1M', 'F8', 'F99', 'F12','RFAI'],
-            //exclude all request types except for RQ-9: RFAI referencing Multicandidate status
+            /* Performing an include would only show RFAI form types. For this reason, excludes need to be
+               used for request_type
+            
+            Exclude all request types except for: 
+               - RQ-9: RFAI referencing Multicandidate status */
             request_type: ['-1','-2','-3','-4','-5','-6','-7','-8'],
             sort_hide_null: ['false']
           }, query),
