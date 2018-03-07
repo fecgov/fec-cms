@@ -493,7 +493,7 @@ SPENDING_FORMATTER = OrderedDict([
         {'label': 'Independent expenditures', 'level': '2',
             'link': 'independent-expenditures'}),
     ('coordinated_expenditures_by_party_committee',  # F3X
-        {'label': 'Coordinated party expenditures', 'level': '2',
+        {'label': 'Party coordinated expenditures', 'level': '2',
             'link': 'party-coordinated-expenditures'}),
     ('loans_made',  # F3X
         {'label': 'Loans made', 'level': '2', 'type': {
