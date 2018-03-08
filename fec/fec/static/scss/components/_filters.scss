@@ -248,6 +248,23 @@ $filter-button-width: u(4.6rem);
   .dropdown__button {
     margin-bottom: u(1rem);
   }
+
+  &.sub--filter--indent {
+      border-left: 2px solid $gray;
+      margin-left: 25%;
+
+      label {
+        width: 70%;
+        position: relative;
+        right: -5%;
+      }
+
+      select {
+        width: 70%;
+        position: relative;
+        right: -5%;
+      }
+    }
 }
 
 .filter__instructions {

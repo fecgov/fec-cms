@@ -12,7 +12,7 @@ data-validate="false" data-modifies-filter="{{ name }}" data-required-default="{
 
 
 {% macro select_json_indentation(name, label, keys, options={}, default=none) %}
-<div class="filter js-filter js-filter-control sub_indent" data-filter="select"
+<div class="filter js-filter js-filter-control sub--filter--indent" data-filter="select"
 data-validate="false" data-modifies-filter="{{ name }}" data-required-default="{{ default }}">
   <label for="{{ name }}" class="label">{{ label }}</label>
   <select id={{ name }} name="{{ name }}">

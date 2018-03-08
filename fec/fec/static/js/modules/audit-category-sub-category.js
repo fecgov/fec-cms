@@ -10,17 +10,10 @@ var _ = require('underscore');
 var $ = require('jquery');
 var helpers = require('./helpers');
 
-var $span = $("<span>", {id: "selected-category", class: "t-bold"}).appendTo('.data-container__tags');
-var $subspan = $("<span>", {id: "selected-sub-category", class: "t-bold"}).insertAfter('#selected-category');
-$("#sub_category_id").css({'width': '70%','position': 'relative','right': '-5%'});
-$("label[for=sub_category_id]").css({'width': '70%','position': 'relative','right': '-5%'});
-$("div[data-modifies-filter=sub_category_id]").css({'border-left': '2px solid #000','margin-left': '25%'});
-var primary_selected
+var primary_selected//how can we remove this global variable !?
 
-$("#primary_category_id").change(function(event){
-  $("#sub_category_id").val("all");//do we need this if it is below?
-// when user choses a primary_category_id, inital sub_category_id=all,
-// in order to get all sub categorys based on this primary category.
+$("#primary_category_id").change(function(event) {
+  $("#sub_category_id").val("all");//do we need explicity set this here first is it is set below?
   if(("#primary_category_id") == 'all'){
   $("#sub_category_id").val("all");
   }
@@ -40,10 +33,9 @@ $("#primary_category_id").change(function(event){
   primary_selected = $("#primary_category_id option:selected").text()
 })
 
-//for highlighting
-function show_sub_category(){
+//for cub category filter-tag and results highlighting(remove hghighting for MVP?)
+function showSubCategory(){
     var sub_selected = $("#sub_category_id option:selected").text()
-    //var target = "li ol li:contains('" + sub_selected + "')";
     var target =
       $('.list--numbered li ol li').filter(function() {
       return $(this).text() === sub_selected;
@@ -54,7 +46,7 @@ function show_sub_category(){
        return $($(this).contents()[0]).text() === primary_selected;
     });
 
-    $(".list--numbered").find(target_parent).find(target).css({'background-color':'#f6f9a4', 'border-radius':'6pc'});
+    $(".list--numbered").find(target_parent).find(target).css({'background-color':'#f9fcc0', 'border-radius':'3px'});
 
     sub_selected == ("Choose a sub-category")  || ($("#sub_category_id").val() == "all") || ($("#sub_category_id").html()=='')
      ? $('.tag__category.sub').css('visibility','hidden')
@@ -62,6 +54,6 @@ function show_sub_category(){
 
 }
 
-$(document).bind('ready ajaxComplete', '#sub_category_id', _.debounce(show_sub_category, 250));
+$(document).bind('ready ajaxComplete', '#sub_category_id', showSubCategory);
 
 
