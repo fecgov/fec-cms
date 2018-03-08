@@ -46,6 +46,7 @@
   }
 
   &.current {
+    font-weight: 700;
     color: $inverse;
     background-color: $gray-dark;
   }
