@@ -3,18 +3,23 @@
 // Based on the datatables.js markup and classes
 //
 // <div class="dataTables_paginate paging_simple_numbers" id="results_paginate">
-//   <a class="paginate_button previous">Previous</a>
-//   <span>
-//     <a class="paginate_button">1</a>
-//     <a class="paginate_button">2</a>
-//     <a class="paginate_button current">3</a>
-//     <a class="paginate_button">4</a>
-//     <a class="paginate_button">5</a>
-//     <span class="ellipsis">…</span>
-//     <a class="paginate_button">162</a>
-//   </span>
-//   <a class="paginate_button next">Next</a>
-// </div>
+//    <div class="results-info">
+//      <a class="paginate_button previous">Previous</a>
+//      <span>
+//        <a class="paginate_button">1</a>
+//        <a class="paginate_button">2</a>
+//        <a class="paginate_button current">3</a>
+//        <a class="paginate_button">4</a>
+//        <a class="paginate_button">5</a>
+//        <span class="ellipsis">…</span>
+//        <a class="paginate_button">24</a>
+//      </span>
+//      <a class="paginate_button next">Next</a>
+//      <div class="u-float-right t-sans">Showing
+//        <span class="js-page-info">1-10 of 240</span> entries
+//      </div>
+//    </div>
+//  </div>
 //
 
 .paginate_button {
