@@ -83,11 +83,11 @@
               <a
                 class="side-nav__link"
                 role="tab"
-                data-name="other"
+                data-name="historical"
                 tabindex="0"
-                aria-controls="other"
-                href="#other"
-                aria-selected="false">Bulk data and other sources</a>
+                aria-controls="historical"
+                href="#historical"
+                aria-selected="false">Historical statistics</a>
             </li>
             <li class="side-nav__item" role="presentation">
               <a
@@ -99,256 +99,31 @@
                 href="#external"
                 aria-selected="false">External sources</a>
             </li>
+            <li class="side-nav__item" role="presentation">
+              <a
+                class="side-nav__link"
+                role="tab"
+                data-name="bulk-data"
+                tabindex="0"
+                aria-controls="bulk-data"
+                href="#bulk-data"
+                aria-selected="false">Download bulk data</a>
+            </li>
           </ul>
         </nav>
         <div class="main__content--right-full">
-          <section class="row" id="raising" aria-hidden="false" role="tabpanel" >
-            <h2>Raising</h2>
-            <div class="post-feed">
-              <div class="post">
-                <h3><i class="icon i-all-files icon--inline--left"></i><a href="/data/receipts/">All receipts</a></h3>
-                <p>Receipts are anything of value, like money, services or property. Search candidate and committee receipt data by contributor, amount and date.</p>
-              </div>
-              <div class="post post--child">
-                <h4><a href="/data/receipts/individual-contributions">Individual contributions</a></h4>
-                <p>Search individual contributions to see who is donating to candidates and committees. Search for contributors by name, location, employer and occupation.</p>
-              </div>
-            </div>
-            <div class="content__section--extra">
-              <div class="icon-heading">
-                <i class="icon-heading__image icon-circle--raising"><span class="u-visually-hidden">Icon of a piggy bank</span></i>
-                <div class="icon-heading__content"><a href="/data/#raising">Raising data overview</a></div>
-              </div>
-            </div>
-          </section>
-          <section class="row" id="spending" aria-hidden="true" role="tabpanel" >
-            <h2>Spending</h2>
-            <p>Spending includes all the types of <span class="term" data-term="disbursement">disbursements</span> candidates and committees make.</p>
-            <div class="post-feed">
-              <div class="post">
-                <h3><i class="icon i-all-files icon--inline--left"></i><a href="/data/disbursements">All disbursements</a></h3>
-                <p>Search all disbursements from committees by the recipient, purpose, amount and date.</p>
-              </div>
-              <div class="post">
-                <h3><i class="icon i-all-files icon--inline--left"></i><a href="/data/independent-expenditures/">Independent expenditures</a></h3>
-                <p>Search <span class="term" data-term="independent expenditure">independent expenditures</span> to find specific spenders, candidates mentioned and transaction information.</p>
-              </div>
-              <div class="post">
-                <h3><i class="icon i-all-files icon--inline--left"></i><a href="/data/party-coordinated-expenditures/">Party coordinated expenditures</a></h3>
-              </div>
-              <div class="post">
-                <h3><i class="icon i-all-files icon--inline--left"></i><a href="/data/electioneering-communications/">Electioneering communications</a></h3>
-                <p>Search <span class="term" data-term="electioneering communication">electioneering communications</span> for communications that support or oppose specific candidates. Search by date and amount spent.</p>
-              </div>
-              <div class="post">
-                <h3><i class="icon i-all-files icon--inline--left"></i><a href="/data/communication-costs">Communication costs</a></h3>
-                <p>Search communication costs for communications that support or oppose specific candidates. Search by date and amount spent.</p>
-              </div>
-            </div>
-            <div class="content__section--extra">
-              <div class="icon-heading">
-                <i class="icon-heading__image icon-circle--spending"><span class="u-visually-hidden">Icon of a spreading dollar sign</span></i>
-                <div class="icon-heading__content"><a href="/data/#spending">Spending data overview</a></div>
-              </div>
-            </div>
-          </section>
-          <section class="row" id="loans-debts" aria-hidden="true" role="tabpanel">
-            <h2>Loans and debts</h2>
-            <div class="post-feed">
-              <div class="post">
-                <h3><i class="icon i-all-files icon--inline--left"></i><a href="/data/loans">Loans</a></h3>
-              </div>
-              <div class="post">
-                <h3 class="is-disabled"><i class="icon i-all-files icon--inline--left"></i>Debts (coming soon)</h3>
-              </div>
-            </div>
-          </section>
-          <section id="candidates" class="row" aria-hidden="true" role="tabpanel">
-            <h2>Candidates</h2>
-            <div class="post-feed">
-              <div class="post">
-                <h3><i class="icon i-all-files icon--inline--left"></i><a href="/data/candidates/?has_raised_funds=true">All candidates</a></h3>
-                <p>Search candidates for president, Senate and House for all years by location, party and more.</p>
-              </div>
-              <div class="post post--child">
-                <h4><a href="/data/candidates/president/">Presidential candidates</a></h4>
-                <p>Search presidential <span class="term" data-term="candidate">candidate</span> data including money raised, money spent, cash on hand and debt.</p>
-              </div>
-              <div class="post post--child">
-                <h4><a href="/data/candidates/senate/">Senate candidates</a></h4>
-                <p>Search Senate candidate data including money raised, money spent, cash on hand and debt.</p>
-              </div>
-              <div class="post post--child">
-                <h4><a href="/data/candidates/house/">House of Representatives candidates</a></h4>
-                <p>Search House candidate data including money raised, money spent, cash on hand and debt.</p>
-              </div>
-              <div class="post">
-                <h3><a href="/data/filings/?form_type=F2">Most recent Statements of Candidacy (Form 2)</a></h3>
-                <p>Statements of Candidacy (Form 2) contain basic information about individuals running for federal office, including their names, addresses and authorized campaign committees.</p>
-              </div>
-            </div>
-            <div class="content__section--extra grid grid--3-wide">
-              <div class="icon-heading grid__item">
-                <i class="icon-heading__image icon-circle--checklist"><span class="u-visually-hidden">Icon of a checklist</span></i>
-                <div class="icon-heading__content">
-                  <a href="/help-candidates-and-committees#candidates-and-their-authorized-committees">Help for candidates and their committees</a>
-                </div>
-              </div>
-            </div>
-          </section>
-          <section id="committees" class="row" aria-hidden="true" role="tabpanel">
-            <h2>Committees</h2>
-            <p>The term <span class="term" data-term="political committee">committee</span> encompasses several different political groups that receive and spend money in federal elections.</p>
-            <div class="post-feed">
-              <div class="post">
-                <h3><i class="icon i-all-files icon--inline--left"></i><a href="/data/committees">All committees</a></h3>
-                <p>Search for committees by type, years active, political party, location and treasurer.</p>
-              </div>
-              <div class="post">
-                <h3><a href="/data/filings/?form_type=F1">Most recent Statements of Organization (Form 1)</a></h3>
-                <p>Statements of Organization (Form 1) contain basic information about committees, including type, address and treasurer.</p>
-              </div>
-              <div class="post">
-                <h3><a href="/data/filings/?form_type=RFAI">Requests for Additional Information sent to committees</a></h3>
-                <p>Requests for Additional Information (RFAIs) are sent to committees when a Campaign Finance Analyst needs additional clarification on a committee's filing or identifies an error, omission or possible prohibited activity. Search RFAIs by committee or date.</p>
-              </div>
-            </div>
-            <div class="content__section--extra" data-content-prefix="pacronym">
-              <h3>PACronyms</h3>
-              <p>PACronyms, an alphabetical list of acronyms, abbreviations, initials and common names of federal political action committees (PACs), was prepared to help researchers readily identify committees when their full names are not disclosed on campaign finance reports.</p>
-              <p>The list includes the PACronym, FEC ID number, full committee name, city and state, name of sponsoring, connected, or affiliated organization, committee designation and committee type.  Unless noted otherwise in the full committee name, the acronym "PAC" refers to "political action committee."  The PACronym is listed in italics if the committee's PACronym is not specifically provided on the committee's Statement of Organization (FEC Form 1).</p>
-              <ul class="list--buttons">
-                <li>
-                  <a class="button button--standard button--document" href="http://www.fec.gov/pubrec/pacronyms/Pacronyms.pdf">Open PDF</a>
-                </li>
-                <li>
-                  <a class="button button--standard button--download" href="http://www.fec.gov/pubrec/pacronyms/Pacronyms.xlsx">Download for Excel</a>
-                </li>
-              </ul>
-            </div>
-            <div class="content__section--extra">
-              <div class="icon-heading">
-                <i class="icon-heading__image icon-circle--checklist"><span class="u-visually-hidden">Icon of a checklist</span></i>
-                <div class="icon-heading__content">
-                  <h4>More information about:</h4>
-                  <div class="grid grid--2-wide">
-                    <div class="grid__item">
-                      <a href="/help-candidates-and-committees#candidates-and-their-authorized-committees">Candidates and their committees</a>
-                    </div>
-                    <div class="grid__item">
-                      <a href="/help-candidates-and-committees#political-action-committees-pacs">Nonconnected committees</a>
-                    </div>
-                    <div class="grid__item">
-                      <a href="/help-candidates-and-committees#political-party-committees">Political party committees</a>
-                    </div>
-                    <div class="grid__item">
-                      <a href="/help-candidates-and-committees#corporations-and-labor-organizations">Corporations and labor organizations</a>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </section>
-          <section class="row" id="filings" aria-hidden="true" role="tabpanel">
-            <h2>Filings and reports</h2>
-            <p>Filings contain all the statements, reports and notices that candidates and committees file. Search by date, type and filing candidate or committee.</p>
-            <div class="post-feed">
-              <div class="post">
-                <h3><i class="icon i-all-files icon--inline--left"></i><a href="/data/filings">All filings</a></h3>
-              </div>
-              <div class="post post--child">
-                <h4><a href="/data/reports/presidential/?is_amended=false">Presidential committee reports</a></h4>
-              </div>
-              <div class="post post--child">
-                <h4><a href="/data/reports/house-senate/?is_amended=false">House and Senate committee reports</a></h4>
-              </div>
-              <div class="post post--child">
-                <h4><a href="/data/reports/pac-party/?is_amended=false">PAC and party committee reports</a></h4>
-              </div>
-              {#
-              <!-- Commenting out while page is in progress -->
-              <!--<li><a href="{{ url_for('reports', form_type='ie-only', is_amended='false') }}">Independent expenditure (Form 5) filer reports</a></li>-->
-              #}
-            </div>
-          </section>
-          <section id="other" class="row" aria-hidden="true" role="tabpanel">
-            <h2>Bulk data and other sources</h2>
-            <div class="content__section">
-              <h3><a href="{{ TRANSITION_URL }}/press/campaign_finance_statistics.shtml">Historical statistics</a></h3>
-              <p>Data tables that summarize campaign financial activity by filer type, election cycle and reporting period.</p>
-            </div>
-            <div class="content__section">
-              <h3>Bulk data downloads</h3>
-              <p>The FEC prepares some data sets to be downloadable as a complete set.</p>
-              <div class="post-feed">
-                <div class="post">
-                  <h4><i class="icon i-all-files icon--inline--left"></i><a href="{{ CLASSIC_URL }}/finance/disclosure/ftpdet.shtml">Detailed data files</a></h4>
-                  <p>Here you will find the committees, candidates and linkages, itemized records, contributions to candidates, individual contributions and cperating expenditures files.</p>
-                  <p>These files contain committee, candidate and campaign finance data for the current election cycle and for election cycles through 1980. The files for the current election cycle plus the two most recent election cycles are regularly updated. The committees, candidates and linkages files are updated daily. The itemized records, contributions to candidates, individual contributions and operating expenditures files are udated weekly on Sunday. Please note that complete entry from each reporting period takes about 30 days. It is important to be careful when making conclusions from these data because some information may not have completed the entry process when these files where create. Committees do not have the same filing requirements. You should be careful when comparing financial information about committees with different filing requirements.</p>
-                </div>
-                <div class="post">
-                  <h4><i class="icon i-all-files icon--inline--left"></i><a href="{{ CLASSIC_URL }}/finance/disclosure/ftpsum.shtml">Summary data files</a></h4>
-                  <p>Here you will find the current campaign summary file, the all candidates summary file and the current PAC summary file. The most recent 10 years of data, the current two-year election period plus the five most recent two-year election periods, are updated daily.</p>
-                </div>
-                <div class="post">
-                  <h4><i class="icon i-all-files icon--inline--left"></i><a href="{{ CLASSIC_URL }}/finance/disclosure/ftpefile.shtml">Electronically filed reports</a></h4>
-                  <p>You will find here a daily compilation of electronically filed reports and statements. These are available from Feburary 2001 to present. Filing formats, valid dates for these formats and header files for version 1 through the most recent version are available.</p>
-                </div>
-                <div class="post">
-                  <h4><i class="icon i-all-files icon--inline--left"></i><a href="{{ CLASSIC_URL }}/finance/disclosure/ftppaper.shtml">Paper filed reports</a></h4>
-                  <p>The summary financial information and transactions disclosed in paper reports are data entered into an electronic format, and then stored in a downloadable file similar to electronically filed reports, known as a .fec file. Paper filings are data entered in a batch process; therefore, the Commission does not receive converted paper filings every day from our contractor. On days the Commission does not receive converted paper filings, an empty file (YYYYMMDD.nofiles.zip) will be placed on the FTP server. On days the Commission receives converted paper filings, a file (YYYYMMDD.zip) will contain that day's .fec files.</p>
-                  <p>Forms 3, 3L, 3X, 5, 6, 7 and 24-hour and 48-hour independent expenditures reports are converted to .fec files. The Commission began this paper to electronic conversion process in October 2005. The first data file was uploaded to the Commission on December 8, 2005.</p>
-                </div>
-              </div>
-            </div>
-            <div class="content__section">
-              <h3>Other FEC data sources</h3>
-              <div class="post-feed">
-                <div class="post">
-                  <h4><i class="icon i-all-files icon--inline--left"></i><a href="{{ CLASSIC_URL }}/data/DataCatalog.do">Legacy data catalog</a></h4>
-                  <p>The files available in the data catalog can be downloaded in either CSV or XML formats. Each also has a metadata page that describes the information included and the structure of the file itself. The maps provide a graphic interface for users to explore presidential and congressional data.</p>
-                  <p><a href="{{ CLASSIC_URL }}/disclosurep/pnational.do">Presidential election map</a> | <a href="{{ CLASSIC_URL }}/disclosurehs/hsnational.do">House and Senate elections data map</a>
-                </div>
-                <div class="post">
-                  <h4>Presidential campaign matching fund submissions</h4>
-                  <p>
-                    <a href="{{ CLASSIC_URL }}/finance/disclosure/2016MatchingFundSubmissions.shtml">2016</a> |
-                    <a href="{{ CLASSIC_URL }}/finance/2012matching/2012matching.shtml">2012</a> |
-                    <a href="{{ CLASSIC_URL }}/finance/2008matching/2008matching.shtml">2008</a> |
-                    <a href="{{ CLASSIC_URL }}/finance/disclosure/2004MatchingFundSubmissions.shtml">2004</a> |
-                    <a href="{{ CLASSIC_URL }}/finance/disclosure/submiss.shtml">2000</a>
-                  </p>
-                  <p>You will find here the threshold files for Presidential candidates seeking matching funds.</p>
-                  <p>In addition to regular quarterly or monthly disclosure reports, presidential candidates who seek matching funds must submit information about "matchable" contributions to the FEC for review. Contributions from individuals where the aggregate amount contributed by the individual is $250 or less are eligible to be matched on a dollar for dollar basis from the Presidential Election Campaign Fund. This Fund includes proceeds from the voluntary check-off of $3 per person from income tax returns of eligible taxpayers.</p>
-                </div>
-                <div class="post">
-                  <h4><i class="icon i-magnifying-glass icon--inline--left"></i><a href="http://docquery.fec.gov/senate/">Senate unofficial electronic filings</a></h4>
-                </div>
-              </div>
-            </div>
-          </section>
-          <section id="external" class="row" aria-hidden="true" role="tabpanel">
-            <h2>External sources</h2>
-            <p>Certain information is reported to the FEC, but more information is reported to other governmental agencies.</p>
-            <div class="post-feed">
-              <div class="post">
-                <h3><i class="icon i-share icon--inline--left"></i><a href="https://www.irs.gov/charities-non-profits/political-organizations/political-organization-filing-and-disclosure">Internal Revenue Service (IRS) filings</a></h3>
-                <p>Search and download filings and disclosures by political organizations.</p>
-              </div>
-              <div class="post">
-                <h3><i class="icon i-share icon--inline--left"></i><a href="http://apps.fcc.gov/ecd/">Federal Communications Commission (FCC) electioneering communications database</a></h3>
-                <p>Search electioneering communications.</p>
-              </div>
-              <div class="post">
-                <h3><i class="icon i-share icon--inline--left"></i><a href="https://www.oge.gov/web/oge.nsf/Presidential%20Candidates?OpenView">Office of Government Ethics (OGE) presidential candidate financial disclosure reports</a></h3>
-                <p>View financial disclosure reports filed by presidential candidates.</p>
-              </div>
-            </div>
-          </section>
+          {% include 'partials/advanced/raising.jinja' %}
+          {% include 'partials/advanced/spending.jinja' %}
+          {% include 'partials/advanced/loans-debts.jinja' %}
+          {% include 'partials/advanced/candidates.jinja' %}
+          {% include 'partials/advanced/committees.jinja' %}
+          {% include 'partials/advanced/filings-reports.jinja' %}
+          {% include 'partials/advanced/historical.jinja' %}
+          {% include 'partials/advanced/external.jinja' %}
+          {% include 'partials/advanced/bulk-data.jinja' %}
         </div>
       </div>
     </div>
-
     <div class="slab slab--neutral">
       <div class="container">
         <h2>More ways to explore data</h2>
