@@ -569,8 +569,12 @@ $(document).ready(function() {
           order: [],
           path: ['committee', committeeId, 'filings'],
           query: _.extend({
-            form_type: ['F3', 'F3X', 'F3P', 'F3L', 'F4', 'F7', 'F13', 'RFAI'],
-            sort: ['-coverage_end_date', 'report_type_full', '-beginning_image_number']
+            form_type: ['F3', 'F3X', 'F3P', 'F3L', 'F4', 'F5', 'F7', 'F13', 'RFAI'],
+            report_type: ['-24', '-48'],
+            //exclude all request types except for RQ-2: RFAI referencing Report of Receipts and Expenditures
+            request_type: ['-1','-3','-4','-5','-6','-7','-8','-9'],
+            sort: ['-coverage_end_date', 'report_type_full', '-beginning_image_number'],
+            sort_hide_null: ['false']
           }, query),
           callbacks: {
             afterRender: filings.renderModal
@@ -584,7 +588,9 @@ $(document).ready(function() {
           order: [[2, 'desc']],
           path: ['committee', committeeId, 'filings'],
           query: _.extend({
-            form_type: ['F5', 'F24', 'F6', 'F9', 'F10', 'F11']
+            form_type: ['F5', 'F24', 'F6', 'F9', 'F10', 'F11'],
+            report_type: ['-Q1', '-Q2', '-Q3', '-YE'],
+            sort_hide_null: ['false']
           }, query),
         }, filingsOpts);
         tables.DataTable.defer($table, opts);
@@ -595,7 +601,10 @@ $(document).ready(function() {
           order: [[2, 'desc']],
           path: ['committee', committeeId, 'filings'],
           query: _.extend({
-            form_type: ['F1']
+            form_type: ['F1','RFAI'],
+            //exclude all request types except for RQ-1: RFAI referencing Statement of organization
+            request_type: ['-2','-3','-4','-5','-6','-7','-8','-9'],
+            sort_hide_null: ['false']
           }, query),
         }, filingsOpts);
         tables.DataTable.defer($table, opts);
@@ -606,7 +615,10 @@ $(document).ready(function() {
           order: [[2, 'desc']],
           path: ['committee', committeeId, 'filings'],
           query: _.extend({
-            form_type: ['F1M', 'F8', 'F99', 'F12']
+            form_type: ['F1M', 'F8', 'F99', 'F12','RFAI'],
+            //exclude all request types except for RQ-9: RFAI referencing Multicandidate status
+            request_type: ['-1','-2','-3','-4','-5','-6','-7','-8'],
+            sort_hide_null: ['false']
           }, query),
         }, filingsOpts);
         tables.DataTable.defer($table, opts);
