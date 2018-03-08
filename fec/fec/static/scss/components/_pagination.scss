@@ -41,6 +41,7 @@
   }
 
   &.current {
-    background-color: $gray;
+    color: $inverse;
+    background-color: $gray-dark;
   }
 }
