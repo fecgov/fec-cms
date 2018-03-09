@@ -1,8 +1,8 @@
 **Develop**
-[![CircleCI](https://circleci.com/gh/18F/fec-cms.svg?style=svg)](https://circleci.com/gh/18F/fec-cms)
+[![CircleCI](https://circleci.com/gh/fecgov/fec-cms.svg?style=svg)](https://circleci.com/gh/fecgov/fec-cms)
 
 **Master**
-[![Dependency Status](https://gemnasium.com/badges/github.com/18F/fec-cms.svg)](https://gemnasium.com/github.com/18F/fec-cms)
+[![Dependency Status](https://gemnasium.com/badges/github.com/fecgov/fec-cms.svg)](https://gemnasium.com/github.com/fecgov/fec-cms)
 
 ## Campaign finance for everyone
 The Federal Election Commission (FEC) releases information to the public about
@@ -13,9 +13,7 @@ Are you interested in seeing how much money a candidate raised? Or spent? How
 much debt they took on? Who contributed to their campaign? The FEC is the
 authoritative source for that information.
 
-The new FEC.gov is a collaboration between [18F](https://18f.gsa.gov) and the [FEC](https://www.fec.gov). It
-aims to make campaign finance information more accessible (and understandable)
-to all users.
+The new FEC.gov aims to make campaign finance information more accessible (and understandable) to all users.
 
 ## FEC repositories
 We welcome you to explore, make suggestions, and contribute to our code.
@@ -26,15 +24,15 @@ the new FEC.gov.
 - [FEC](https://github.com/fecgov/fec): a general discussion forum. We compile
   [feedback](https://github.com/fecgov/fec/issues) from the FEC.gov feedback widget
   here, and this is the best place to submit general feedback.
-- [openFEC](https://github.com/18F/openfec): the first RESTful API for the Federal Election Commission
-- [fec-cms](https://github.com/18F/fec-cms): the content management system
+- [openFEC](https://github.com/fecgov/openfec): the first RESTful API for the Federal Election Commission
+- [fec-cms](https://github.com/fecgov/fec-cms): the content management system
   (CMS) for the new FEC.gov. This project uses [Wagtail](https://github.com/torchbox/wagtail), an open source CMS written
   in Python and built on the Django framework.
 
 ## Get involved
 We’re thrilled you want to get involved!
 - Read our contributing
-  [guidelines](https://github.com/18F/openfec/blob/master/CONTRIBUTING.md).
+  [guidelines](https://github.com/fecgov/openfec/blob/master/CONTRIBUTING.md).
   Then, file an [issue](https://github.com/fecgov/fec/issues) or submit a pull
   request.
 - Send us an email at betafeedback@fec.gov.
@@ -44,7 +42,7 @@ We’re thrilled you want to get involved!
 ## Set up
 We are always trying to improve our documentation. If you have suggestions or
 run into problems please
-[file an issue](https://github.com/18F/fec-cms/issues)!
+[file an issue](https://github.com/fecgov/fec-cms/issues)!
 
 ### Project prerequisites
 1. Ensure you have the following requirements installed:
@@ -194,7 +192,7 @@ env DATABASE_URL=postgresql://:@/cfdm_cms_test ./manage.py test
 ```
 
 ## Enabling/toggling features
-[settings/base.py](https://github.com/18F/fec-cms/blob/develop/fec/fec/settings/base.py)
+[settings/base.py](https://github.com/fecgov/fec-cms/blob/develop/fec/fec/settings/base.py)
 includes a set of `FEATURES` which can also be enabled using environment flags:
 
 ```bash
@@ -232,9 +230,9 @@ run this command:
 ## Deploy
 *Likely only useful for FEC team members*
 
-We use Travis for automated deploys after tests pass. If you want to deploy something it is much better to push an empty commit with a tag than doing a manual deploy.
+We use CircleCI for automated deploys after tests pass. If you want to deploy something it is much better to push an empty commit with a tag than doing a manual deploy.
 
-If there is a problem with Travis and something needs to be deployed, you can do so with the following commands. Though, you will need to pull the environment variables from the space you are deploying to and remake your static assets. That will ensure things like the links are correct. You will also want to clear your dist/ directory. That way, you will not exceed the alloted space.
+If there is a problem with CircleCI and something needs to be deployed, you can do so with the following commands. Though, you will need to pull the environment variables from the space you are deploying to and remake your static assets. That will ensure things like the links are correct. You will also want to clear your dist/ directory. That way, you will not exceed the alloted space.
 
 Before deploying, install the
 [Cloud Foundry CLI](https://docs.cloudfoundry.org/devguide/cf-cli/install-go-cli.html)
@@ -284,7 +282,7 @@ As noted above, you can manually deploy the application if you specify the space
 
 In the case of the `feature` space, there are a few things to note:
 
-* To deploy to the feature space, an automated deployer account has been set up. To trigger, go to the `tasks.py` file `DEPLOY_RULES` [here](https://github.com/18F/fec-cms/blob/784e6540cfcec58e6e763fa711de19cdcb475bb7/tasks.py#L74).
+* To deploy to the feature space, an automated deployer account has been set up. To trigger, go to the `tasks.py` file `DEPLOY_RULES` [here](https://github.com/fecgov/fec-cms/blob/784e6540cfcec58e6e763fa711de19cdcb475bb7/tasks.py#L74).
 * Only the CMS app is setup and configured for the `feature` space; it points to the `dev` space for all other things (e.g., the API).
 * The `feature` version of the CMS does have New Relic running against it.
 * The CMS in the `feature` space has its own database that has been loaded with data from a production backup; this data can be refreshed in the future using the same steps outlined in the Wiki.
