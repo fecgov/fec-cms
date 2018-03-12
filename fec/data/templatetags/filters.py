@@ -97,7 +97,11 @@ def fmt_state_full(value):
 
 @library.filter
 def strip_zero_pad(number):
-    return number.strip("0")
+    '''
+    Removes leading 0's for display purposes
+    Commonly used for congressional districts
+    '''
+    return number.lstrip("0")
 
 
 def date_filter(value, fmt='%m/%d/%Y'):
