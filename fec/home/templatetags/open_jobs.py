@@ -10,11 +10,11 @@ register = template.Library()
 def get_jobs():
     """query USAJobs for FEC jobs and hiring path code-list to cross reference agianst"""
     url = "https://data.usajobs.gov/api/Search"
-    get_codes_url = settings.USAJOBS_API_KEY
+    get_codes_url = 'https://data.usajobs.gov/api/codelist/hiringpaths'
 
     querystring = {"Organization":"LF00", "WhoMayApply":"All"}
     headers = {
-        'authorization-key': '',
+        'authorization-key': settings.USAJOBS_API_KEY,
         'user-agent': "jcarroll@fec.gov",
         'host': "data.usajobs.gov",
         'cache-control': "no-cache",
