@@ -2,6 +2,7 @@
 from django import template
 import requests
 import dateutil.parser
+from django.conf import settings
 
 register = template.Library()
 
@@ -9,11 +10,11 @@ register = template.Library()
 def get_jobs():
     """query USAJobs for FEC jobs and hiring path code-list to cross reference agianst"""
     url = "https://data.usajobs.gov/api/Search"
-    get_codes_url = "https://data.usajobs.gov/api/codelist/hiringpaths"
+    get_codes_url = settings.USAJOBS_API_KEY
 
     querystring = {"Organization":"LF00", "WhoMayApply":"All"}
     headers = {
-        'authorization-key': 'nPBInwg8jHzg4fjcxznoFxfAyp79RfOHG6s0mhEKU8Q=',
+        'authorization-key': '',
         'user-agent': "jcarroll@fec.gov",
         'host': "data.usajobs.gov",
         'cache-control': "no-cache",
