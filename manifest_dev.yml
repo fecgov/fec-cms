@@ -1,13 +1,23 @@
 ---
-inherit: manifest_base.yml
-host: fec-dev-cms
+stack: cflinuxfs2
+buildpack: python_buildpack
+routes:
+  - route: fec-dev-cms.app.cloud.gov
 services:
   - cms-creds-dev
   - fec-creds-dev
   - fec-dev-cms
   - content-s3
 env:
+  DISABLE_COLLECTSTATIC: 1
+  DJANGO_SETTINGS_MODULE: fec.settings.production
   FEC_API_URL: "https://fec-dev-api.app.cloud.gov"
   FEC_APP_URL: "/data"
+  FEC_CMS_DEBUG: false
   FEC_CMS_ENVIRONMENT: dev
+  FEC_TRANSITION_URL: https://transition.fec.gov
   NEW_RELIC_APP_NAME: govcloud | cms | dev
+  NEW_RELIC_CONFIG_FILE: /home/vcap/app/newrelic.ini
+  NEW_RELIC_LOG: stdout
+applications:
+  - name: cms
