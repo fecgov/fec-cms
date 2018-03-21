@@ -20,7 +20,9 @@ $("#primary_category_id").change(function(event) {
 
   var $select = $('#sub_category_id');
   $.getJSON(helpers.buildUrl(['audit-category'],{'primary_category_id': $('#primary_category_id').val(), 'per_page': 100}), function(data){
-    $select.html('');
+    $select.html('<option selected value="all">All</option>')
+    //$("#sub_category_id option:first").attr('selected','this');
+    //$select.val('all').children('option').text('')
     if (data.results[0]){
     $.each(data.results[0].sub_category_list, function(key, val){
       $select.append('<option value="' + val.sub_category_id + '">' + val.sub_category_name + '</option>');
