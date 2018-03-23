@@ -250,21 +250,13 @@ $filter-button-width: u(4.6rem);
   }
 
   &.sub--filter--indent {
-      border-left: 2px solid $gray;
-      margin-left: 25%;
+    border-left: 3px solid $gray;
+    padding-left: 5%;
 
-      label {
-        width: 70%;
-        position: relative;
-        right: -5%;
-      }
-
-      select {
-        width: 70%;
-        position: relative;
-        right: -5%;
-      }
+    select, input {
+      width: 100%;
     }
+  }
 }
 
 .filter__instructions {
