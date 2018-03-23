@@ -316,4 +316,4 @@ The rest of this project is in the worldwide public domain, released under the [
 
 A few restrictions limit the way you can use FEC data. For example, you can't
 use contributor lists for commercial purposes or to solicit donations.  Learn
-more on [FEC.gov](https://FEC.gov).
+more on [FEC.gov](https://www.FEC.gov).
