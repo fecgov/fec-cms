@@ -13,8 +13,8 @@ def whitelister_element_rules():
 def editor_js():
     return format_html('''
         <script src="/static/js/vendor/jquery.htmlClean.min.js"></script>
-        <script src="/static/js/vendor/rangy-core.js"></script>
-        <script src="/static/js/vendor/rangy-selectionsaverestore.js"></script>
+        <script src="/static/rangy/lib/rangy-core.js"></script>
+        <script src="/static/rangy/lib/rangy-selectionsaverestore.js"></script>
         <script src="/static/js/vendor/beautify-html.js"></script>
         <script src="/static/js/admin/hallo-edit-html.js"></script>
         <script src="/static/js/admin/hallo-sans-serif.js"></script>

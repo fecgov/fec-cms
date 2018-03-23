@@ -194,9 +194,17 @@ Handlebars.registerHelper('format_range', function(year) {
     return new Handlebars.SafeString(firstYear.toString() + '–' + year.toString());
 });
 
+/**
+  Formats a cycle range based on a year and a duration.
+  If no year is provided, return null;
+**/
 function formatCycleRange(year, duration) {
+  // Year and duration is requred, if not provided return null
+  if( year == null || duration == null) {
+    return null;
+  }
   var firstYear = Number(year) - duration + 1;
-  return firstYear.toString() + '–' + year.toString();
+  return firstYear + '–' + year;
 }
 
 function cycleDates(year) {
@@ -253,7 +261,7 @@ function getTimePeriod(electionYear, cycle, electionFull, office) {
     max = cycle;
   }
 
-  return min.toString() + '–' + max.toString();
+  return min + '–' + max;
 }
 
 /*

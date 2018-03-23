@@ -284,7 +284,7 @@ describe('Top entities breakdown', function() {
       it('updates the coverage dates for the current year', function() {
         var today = new Date();
         var lastYear = today.getFullYear() - 1;
-        var formattedToday = moment(today, 'DD/MM/YYYY');
+        var formattedToday = moment(today).format('MM/DD/YYYY');
         this.chart.cycle = today.getFullYear();
         this.chart.updateDates();
         expect(this.chart.$dates.html()).to.equal('01/01/' + lastYear + '–' + formattedToday);

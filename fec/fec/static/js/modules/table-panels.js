@@ -59,7 +59,7 @@ var renderCandidatePanel = function(showFinancialTotals) {
       var query = URI.parseQuery(window.location.search);
       // Parse all of the time-related variables
       var electionYear = query.election_year;
-      var cycle = query.cycle || query.election_year;
+      var cycle = query.cycle || query.election_year || $('#cycle').val();
       var electionFull = query.election_full === 'true' ? true : false;
 
       // Build a string showing the range covered by the financial totals

@@ -21,8 +21,12 @@
       </td>
       <td class="simple-table__cell">
       {% set committee_id = committee_id|replace("['", "")|replace("']", "") %}
-        {% if item[1]['link'] %}
-          <a href="/{{ item[1]['link'] }}/?committee_id={{ committee_id }}&two_year_transaction_period={{ cycle }}&cycle={{ cycle }}">
+        {% if item[1]['link'] == "independent-expenditures" or item[1]['link'] == "party-coordinated-expenditures" %}
+          <a href="/data/{{ item[1]['link'] }}/?committee_id={{ committee_id }}&cycle={{ cycle }}">
+            {{ item[0]|currency }}
+          </a>
+        {% elif item[1]['link'] %}
+          <a href="/data/{{ item[1]['link'] }}/?committee_id={{ committee_id }}&two_year_transaction_period={{ cycle }}&cycle={{ cycle }}">
             {{ item[0]|currency }}
           </a>
         {% elif item[1]['type'] and cycle|int > 2006 %}

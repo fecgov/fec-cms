@@ -17,7 +17,7 @@ var rev = require('gulp-rev');
 
 // Consider using gulp-rev-delete-original later
 gulp.task('clear-css-dir', function () {
-    return gulp.src('./dist/fec/static/scss', {read: false})
+    return gulp.src('./dist/fec/static/css', {read: false})
         .pipe(clean());
 });
 
@@ -38,7 +38,13 @@ gulp.task('build-sass', ['clear-css-dir'], function() {
     //.pipe(gulpif(!production, sourcemaps.write()))
 });
 
-gulp.task('minify-icons', function() {
+// clear icons output folder to clean old icons
+gulp.task('clean-output-icons', function () {
+    return gulp.src('./fec/static/icons/output', {read: false})
+        .pipe(clean());
+});
+
+gulp.task('minify-icons', ['clean-output-icons'], function() {
   return gulp.src('./fec/static/icons/input/*.svg')
     .pipe(svgmin({
       plugins: [

@@ -162,10 +162,10 @@ Calendar.prototype.success = function(response) {
 
   return response.results.map(function(event) {
     var processed = {
-      category: calendarHelpers.mapCategoryTitle(event.category),
+      category: event.category,
       location: event.location,
       title: event.description || 'Event title',
-      summary: event.summary || 'Event summary',
+      summary: event.description || 'Event summary',
       state: event.state ? event.state.join(', ') : null,
       start: event.start_date ? moment(event.start_date) : null,
       hasStartTime: calendarHelpers.checkStartTime(event),

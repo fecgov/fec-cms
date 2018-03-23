@@ -19,7 +19,7 @@ def advisory_opinions_landing(request):
         query='',
         query_type='advisory_opinions',
         ao_category='R',
-        ao_is_pending=True
+        ao_status='Pending'
     )
     return render(request, 'legal-advisory-opinions-landing.jinja', {
         'parent': 'legal',

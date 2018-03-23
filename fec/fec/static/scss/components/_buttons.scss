@@ -55,7 +55,7 @@
   @extend .button;
   background-color: $primary;
   border-color: $primary;
-  color: $inverse;
+  color: $inverse !important;
 
   &:hover:not(.is-disabled):not(.is-active) {
     background-color: $navy;
@@ -386,6 +386,12 @@
 
 .button--calendar {
   @include u-icon-button($calendar);
+}
+
+.button--envelope {
+  @include u-icon-button($moving-envelope, left);
+  background-size: u(3rem);
+  padding-left: u(5rem);
 }
 
 .button--previous {

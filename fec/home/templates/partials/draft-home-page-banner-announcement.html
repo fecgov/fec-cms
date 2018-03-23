@@ -1,0 +1,39 @@
+{% load wagtailcore_tags %}
+{% if draft_alert_banners %}
+
+<section class="slab slab--secondary message--vivid">
+  <div class="container">
+  {% for draft_alert_banner in draft_alert_banners %}
+    <div>
+      <div class="message message--vivid message--large message--alert message--inline u-no-margin-top u-no-margin-bottom">
+        <span class="t-bold">{{ draft_alert_banner.title }}: </span> {{ draft_alert_banner.alert_description }}
+        <br>
+        <a class="t-sans" href="{{ draft_alert_banner.alert_link_url }}" class="t-sans">{{ draft_alert_banner.alert_link_title }}</a> »
+      </div>
+    </div>
+  {% endfor %}
+  </div>
+</section>
+
+{% endif %}
+
+{% if draft_banners %}
+
+<section class="slab slab--secondary">
+  <div class="container">
+  {% for draft_banner in draft_banners %}
+    <div{% if forloop.counter == 2 %} class="u-margin--top"{% endif %}>
+      <div class="message message--vivid message--mini message--info message--inline u-no-margin-top u-no-margin-bottom">
+        <span class="t-bold">{{ draft_banner.title }}: </span> {{ draft_banner.description }}
+      </div>
+      <a href="{{ draft_banner.link_url }}" class="t-sans">{{ draft_banner.link_title }}</a> »
+      {% if draft_banner.link_url_2 %}
+      &nbsp; | &nbsp; <a href="{{ draft_banner.link_url_2 }}" class="t-sans">{{ draft_banner.link_title_2 }}</a> »
+      {% endif %}
+    </div>
+  {% endfor %}
+</div>
+</section>
+
+{% endif %}
+

@@ -1,9 +1,7 @@
 'use strict';
 
 var $ = require('jquery');
-var _ = require('underscore');
 var helpers = require('./helpers');
-var moment = require('moment');
 
 window.$ = window.jQuery = $;
 
@@ -17,18 +15,7 @@ require('accessible-mega-menu');
  * @param {object} opts - Options, including base URLs
  */
 
-var today = new Date();
-
-var defaultOpts = {
-  cmsUrl: 'http://localhost:8000',
-  transitionUrl: 'https://transition.fec.gov',
-  cycle: 2016,
-  today: moment(today).format('MM/DD/YYYY'),
-  tomorrow: moment(today).add(1, 'day').format('MM/DD/YYYY')
-};
-
-function SiteNav(selector, opts) {
-  this.opts = _.extend({}, defaultOpts, opts);
+function SiteNav(selector) {
   this.$body = $('body');
   this.$element = $(selector);
   this.$menu = this.$element.find('#site-menu');

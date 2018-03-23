@@ -12,7 +12,7 @@
   <div class="filters__inner">
     {{ typeahead.field('q', 'Candidate name or ID', '', dataset='candidates', allow_text=True) }}
     {% if table_context['office'] == 'house' %}
-      {{ election_filter.single_cycle('cycle', 'Election cycle') }}
+      {{ election_filter.single_cycle('cycle', 'Two-year period') }}
     {% else %}
       {{ election_filter.full_cycle('election_year', 'Election year', 'cycle', 'election_full', table_context['office']) }}
       <input id="election_full" name="election_full" type="checkbox" value="true">

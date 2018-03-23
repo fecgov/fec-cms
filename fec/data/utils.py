@@ -13,7 +13,6 @@ def current_cycle():
     year = datetime.datetime.now().year
     return year + year % 2
 
-
 class LRUCache(cachecontrol.cache.BaseCache):
     """A thread-safe least recently updated cache adapted to work with
     Cache-Control.
@@ -206,20 +205,38 @@ def process_ie_data(totals):
     return financial_summary_processor(totals, constants.IE_FORMATTER)
 
 
-def get_senate_cycles(senate_class):
-    next_election = constants.NEXT_SENATE_ELECTIONS[str(senate_class)]
-    return range(next_election, constants.START_YEAR, -6)
+def get_next_senate_elections(current_cycle):
+    """
+    Returns an dictionary of senate classes in chronological order
+    based on current cycle year
+    Uses mod 6 to determine what senate classes are up for election
+    in the current cycle
+
+    For example, class 1 will always be up for election in years
+    with year % 6 = 2, for example 2018.
+    """
+    next_election_decoder = {
+        2: {'1': current_cycle, '2': (current_cycle + 2), '3': (current_cycle + 4)},
+        4: {'2': current_cycle, '3': (current_cycle + 2), '1': (current_cycle + 4)},
+        0: {'3': current_cycle, '1': (current_cycle + 2), '2': (current_cycle + 4)}
+    }
+    return next_election_decoder.get(current_cycle % 6)
 
 
-def get_state_senate_cycles(state):
-    senate_cycles = []
-    for senate_class in ['1', '2', '3', 'special']:
-        if state.upper() in constants.SENATE_CLASSES[str(senate_class)]:
-            senate_cycles += get_senate_cycles(senate_class)
-    return senate_cycles
+def get_senate_cycles(senate_class, cycle=None):
+    """
+    Returns an list of elections based on senate class
+    Uses get_next_senate_elections to find out
+    which classes are up for election
+    Adds years to current cycle depending on what position the class is in
+    """
+    if cycle is None:
+        cycle = current_cycle()
+    senate_classes = get_next_senate_elections(cycle)
+    return range(senate_classes.get(senate_class), constants.START_YEAR, -6)
 
 
-def two_days_ago():
-    """Find the date two days ago"""
-    two_days_ago = datetime.datetime.today() - datetime.timedelta(days=2)
-    return two_days_ago.strftime('%m/%d/%y')
+def three_days_ago():
+    """Find the date three days ago"""
+    three_days_ago = datetime.datetime.today() - datetime.timedelta(days=3)
+    return three_days_ago.strftime('%m/%d/%y')

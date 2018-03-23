@@ -1,16 +1,22 @@
 {
+  "name": "fec-cms",
+  "version": "1.0.0",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/18F/fec-cms.git"
+  },
   "scripts": {
     "build": "cd fec && webpack && gulp build-sass",
     "build-icons": "cd fec && gulp minify-icons && gulp consolidate-icons",
     "build-sass": "cd fec && gulp build-sass",
     "build-js": "cd fec && webpack",
-    "build-production": "cd fec && webpack --optimize-minimize --define process.env.NODE_ENV='production' && gulp build-sass",
+    "build-production": "cd fec && webpack -p && gulp build-sass",
     "test": "karma start",
     "test-single": "karma start --single-run --browsers PhantomJS",
     "watch": "nswatch"
   },
   "dependencies": {
-    "a11y-dialog": "2.3.1",
+    "a11y-dialog": "4.0.0",
     "accessible-mega-menu": "git+https://github.com/noahmanger/Accessible-Mega-Menu.git",
     "ace-builds": "1.2.2",
     "aria-accordion": "1.0.0",
@@ -31,9 +37,10 @@
     "jquery": "3.2.1",
     "jquery.inputmask": "3.3.4",
     "leaflet-providers": "1.1.6",
-    "moment": "2.10.3",
+    "moment": "2.20.1",
     "numeral": "^1.5.3",
     "perfect-scrollbar": "0.6.2",
+    "rangy": "^1.3.0",
     "react": "^15.4.2",
     "react-dom": "^15.4.2",
     "react-input-mask": "^0.7.8",
@@ -65,7 +72,7 @@
     "gulp-sourcemaps": "^2.6.0",
     "gulp-svgmin": "^1.2.2",
     "gulp-uglify": "3.0.0",
-    "handlebars": "^4.0.5",
+    "handlebars": "^4.0.11",
     "handlebars-template-loader": "^0.8.0",
     "hbsfy": "2.2.1",
     "karma": "^0.13.19",
@@ -95,7 +102,7 @@
     "./fec/fec/static/js/**/*.js": [
       "build-js"
     ],
-    "./fec/fec/static/js/templates/*.hbs": [
+    "./fec/fec/static/js/templates/**/*.hbs": [
       "build-js"
     ],
     "./fec/fec/static/scss/**/*.scss": [
@@ -103,7 +110,8 @@
     ]
   },
   "engines": {
-    "node": "8.6.0",
-    "npm": "5.4.2"
-  }
+    "node": "8.9.1",
+    "npm": "5.5.1"
+  },
+  "license": "CC0"
 }

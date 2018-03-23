@@ -1,7 +1,7 @@
 <div class="content__section">
   <fieldset class="js-dropdown">
   <legend class="label" for="candidate-list">Candidates to compare (listed by amount raised):</legend>
-    <ul class="dropdown__selected list--columns">
+    <ul class="dropdown__selected list--3-columns">
       {{#each this.selected}}
       <li class="dropdown__item">
         <input id="checkbox-{{ this.candidate_id }}" name="candidate-list" type="checkbox" data-id="{{this.candidate_id}}" data-name="{{this.candidate_name}}" checked>

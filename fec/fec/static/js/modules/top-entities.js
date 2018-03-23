@@ -185,7 +185,7 @@ TopEntities.prototype.drawBars = function() {
 TopEntities.prototype.updateDates = function() {
   var today = new Date();
   var startDate = '01/01/' + String(this.cycle - 1);
-  var endDate = this.cycle !== today.getFullYear() ? '12/31/' + this.cycle : moment(today, 'DD/MM/YYYY');
+  var endDate = this.cycle !== today.getFullYear() ? '12/31/' + this.cycle : moment(today).format('MM/DD/YYYY');
   this.$dates.html(startDate + '–' + endDate);
 };
 

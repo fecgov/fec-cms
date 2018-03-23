@@ -1,36 +1,36 @@
 from collections import OrderedDict
 
+# Calendar page filter categories
 election_types = OrderedDict([
-    ('election', 'All elections'),
+    ('36', 'All elections'),
 ])
 
 deadline_types = OrderedDict([
-    ('report-M', 'Monthly'),
-    ('report-Q', 'Quarterly'),
-    ('report-E', 'Pre- and post-election'),
-    ('report-MY', 'Mid-Year'),
-    ('report-YE', 'Year-End')
+    ('21', 'Reporting deadlines'),
+    ('25', 'Quarterly reports'),
+    ('26', 'Monthly reports'),
+    ('27', 'Pre- and post-election')
 ])
 
 reporting_periods = OrderedDict([
-    ('IE Periods', 'Independent expenditures'),
-    ('EC Periods', 'Electioneering communications'),
-    ('FEA Periods', 'Federal election activity periods')
+    ('29', 'Independent expenditures'),
+    ('28', 'Electioneering communications'),
+    ('38', 'Federal election activity periods')
 ])
 
 outreach_types = OrderedDict([
-    ('Conferences', 'Conferences'),
-    ('Roundtables', 'Webinars'),
+    ('33', 'Conferences'),
+    ('34', 'Webinars'),
 ])
 
 meeting_types = OrderedDict([
-    ('Open Meetings', 'Open meeting'),
-    ('Executive Sessions', 'Executive session'),
-    ('Public Hearings', 'Public hearing'),
+    ('32', 'Open meeting'),
+    ('39', 'Executive session'),
+    ('40', 'Public hearing'),
 ])
 
 rule_types = OrderedDict([
-    ('AOs and Rules', 'Advisory opinions and rulemakings'),
+    ('23', 'Advisory opinions and rulemakings'),
 ])
 
 states = OrderedDict([

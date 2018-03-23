@@ -97,7 +97,11 @@ def fmt_state_full(value):
 
 @library.filter
 def strip_zero_pad(number):
-    return number.strip("0")
+    '''
+    Removes leading 0's for display purposes
+    Commonly used for congressional districts
+    '''
+    return number.lstrip("0")
 
 
 def date_filter(value, fmt='%m/%d/%Y'):
@@ -156,7 +160,7 @@ def asset_for_css(key):
     assets = json.load(open(settings.DIST_DIR + '/fec/static/css/rev-manifest-css.json'))
 
     if key in assets:
-        return '/static/css/' + assets[key] 
+        return '/static/css/' + assets[key]
     else:
         return key
 

@@ -40,7 +40,7 @@
               <div class="search-controls__state">
                 <select id="state" name="state" aria-label="Select a state">
                   <option value="">Select state</option>
-                  {% for value, label in constants.election_states.items() %}
+                  {% for value, label in constants.states.items() %}
                   <option value="{{ value }}">{{ label }}</option>
                   {% endfor %}
                 </select>
@@ -56,6 +56,7 @@
                 </select>
               </div>
               <div class="search-controls__submit">
+                <input type="hidden" value="district" name="sort" />
                 <button type="submit" class="button--search--text button--standard">Search</button>
               </div>
             </fieldset>

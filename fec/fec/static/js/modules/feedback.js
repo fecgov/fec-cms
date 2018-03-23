@@ -4,7 +4,6 @@ var $ = require('jquery');
 var _ = require('underscore');
 
 var accessibility = require('./accessibility');
-var helpers = require('./helpers');
 
 var feedback = require('../templates/feedback.hbs');
 
@@ -72,7 +71,7 @@ Feedback.prototype.submit = function(e) {
      beforeSend: function(xhr, settings) {
        if (!(/^http:.*/.test(settings.url) || /^https:.*/.test(settings.url))) {
            // Only send the token to relative URLs i.e. locally.
-           xhr.setRequestHeader('X-CSRFToken', helpers.getCookie('csrftoken'));
+           xhr.setRequestHeader('X-CSRFToken', $('input[name="csrfmiddlewaretoken"]').val());
        }
      }
   });

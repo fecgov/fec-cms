@@ -1,7 +1,10 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
+from django.urls import reverse
 from django.http import Http404
 from django.http import JsonResponse
 from django.conf import settings
+
+from distutils.util import strtobool
 
 import datetime
 import github3
@@ -84,18 +87,24 @@ def advanced(request):
 def candidate(request, candidate_id):
     # grab url query string parameters
     cycle = request.GET.get('cycle', None)
+
     election_full = request.GET.get('election_full', True)
 
     if cycle is not None:
         cycle = int(cycle)
+
+    # set election_full to boolean from passed string variable
+    election_full = bool(strtobool(str(election_full)))
 
     candidate, committees, cycle = api_caller.load_with_nested(
         'candidate', candidate_id, 'committees',
         cycle=cycle, cycle_key='two_year_period',
         election_full=election_full,
     )
-
+    # cycle corresponds to the two-year period for which the committee has financial activity.
+    # when selected election cycle is not in list of election years, get the next election cycle
     if election_full and cycle and cycle not in candidate['election_years']:
+
         next_cycle = next(
             (
                 year for year in sorted(candidate['election_years'])
@@ -104,13 +113,13 @@ def candidate(request, candidate_id):
             max(candidate['election_years']),
         )
 
-        # If the next_cycle is odd set it to whatever the cycle value was
+        # If the next_cycle is odd set it to whatever the cycle value was- falls back to the cycle
         # and then set election_full to false
-        # This solves an issue with special elections
+        # This solves issue# 1945 with odd year special elections
         if next_cycle % 2 > 0:
             next_cycle = cycle
             election_full = False
-
+        # get the next election cycle data for this candidate
         candidate, committees, cycle = api_caller.load_with_nested(
             'candidate', candidate_id, 'committees',
             cycle=next_cycle, cycle_key='two_year_period',
@@ -135,6 +144,11 @@ def candidate(request, candidate_id):
         'electionFull': election_full,
         'candidateID': candidate['candidate_id']
     }
+
+     # Addresses issue#1644 - make any odd year special election an even year
+    #  for displaying elections for pulldown menu in Candidate pages
+    #  Using Set to ensure no duplicate years in final list
+    even_election_years = list({ year + (year % 2) for year in candidate.get('election_years', []) })
 
     # In the case of when a presidential or senate candidate has filed
     # for a future year that's beyond the current cycle,
@@ -224,7 +238,7 @@ def candidate(request, candidate_id):
         'party_full': candidate['party_full'],
         'incumbent_challenge_full': candidate['incumbent_challenge_full'],
         'election_year': election_year,
-        'election_years': candidate['election_years'],
+        'election_years': even_election_years,
         'result_type': result_type,
         'duration': duration,
         'min_cycle': min_cycle,
@@ -302,7 +316,9 @@ def committee(request, committee_id):
         'report_type': report_type,
         'reports': reports,
         'totals': totals,
+        'min_receipt_date': utils.three_days_ago(),
         'context_vars': context_vars,
+        'party_full': committee['party_full']
     }
 
 
@@ -323,17 +339,17 @@ def committee(request, committee_id):
             financials = api_caller.load_cmte_financials(committee['committee_id'], cycle=c)
             if financials['reports']:
                 return redirect(
-                    url_for('committee_page', c_id=committee['committee_id'], cycle=c)
+                    reverse('committee-by-id', kwargs={'committee_id': committee['committee_id']}) + '?cycle=' + str(c)
                 )
 
     # If it's not a senate committee and we're in the current cycle
-    # check if there's any raw filings in the last two days
+    # check if there's any raw filings in the last three days
     if committee['committee_type'] != 'S' and cycle == utils.current_cycle():
         raw_filings = api_caller._call_api(
             'efile', 'filings',
             cycle=cycle,
             committee_id=committee['committee_id'],
-            min_receipt_date=utils.two_days_ago()
+            min_receipt_date=template_variables['min_receipt_date']
         )
         if len(raw_filings.get('results')) > 0:
             template_variables['has_raw_filings'] = True
@@ -364,7 +380,7 @@ def elections(request, office, cycle, state=None, district=None):
     if office.lower() == 'president':
         cycles = [each for each in cycles if each % 4 == 0]
     elif office.lower() == 'senate':
-        cycles = utils.get_state_senate_cycles(state)
+        cycles = api_caller.get_all_senate_cycles(state)
 
     if office.lower() not in ['president', 'senate', 'house']:
         raise Http404()
@@ -444,7 +460,10 @@ def spending(request):
 
 def feedback(request):
     if request.method == 'POST':
-        data = json.loads(request.body)
+
+        # json.loads() is expecting a string in JSON format:
+        # '{"param":"value"}'. Needs to be decoded in Python 3
+        data = json.loads(request.body.decode("utf-8"))
 
         if not any([data['action'], data['feedback'], data['about']]):
             return JsonResponse({'status': False}, status=500)
@@ -464,7 +483,7 @@ def feedback(request):
                         request.META['HTTP_USER_AGENT'])
 
             client = github3.login(token=settings.FEC_GITHUB_TOKEN)
-            issue = client.repository('18F', 'fec').create_issue(title, body=body)
+            issue = client.repository('fecgov', 'fec').create_issue(title, body=body)
 
             return JsonResponse(issue.to_json(), status=201)
     else:
