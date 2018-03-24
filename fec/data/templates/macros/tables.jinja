@@ -20,21 +20,26 @@
         {% endif %}
       </td>
       <td class="simple-table__cell">
-      {% set committee_id = committee_id|replace("['", "")|replace("']", "") %}
-        {% if item[1]['link'] == "independent-expenditures" or item[1]['link'] == "party-coordinated-expenditures" %}
-          <a href="/data/{{ item[1]['link'] }}/?committee_id={{ committee_id }}&cycle={{ cycle }}">
+{# 
+case 1: this page comes from data/candidate/<candidate_id>/ :
+The committee_id is a tuple list(the count =1 or 2)
+  a)one candidate has only one committee, committee_id=['C00580100'], count=1
+  b)one candidate has two committees, committee_id = ['C00496075','C00462069']
+    count=2
+
+case 2: this page comes from data/committee/<committee_id>/:
+The committee_id is a string, the count=9.
+#}
+        {% if item[1]['type'] and cycle|int > 2006 and committee_id|count < 3 %}
+          <a href="/data/{{ item[1]['type']['link'] }}/?{% for id in committee_id -%}committee_id={{ id }}&{%- endfor %}two_year_transaction_period={{ cycle }}&cycle={{ cycle }}&line_number={{ item[1]['type'][office_or_committee] }}">
             {{ item[0]|currency }}
           </a>
-        {% elif item[1]['link'] %}
-          <a href="/data/{{ item[1]['link'] }}/?committee_id={{ committee_id }}&two_year_transaction_period={{ cycle }}&cycle={{ cycle }}">
-            {{ item[0]|currency }}
-          </a>
-        {% elif item[1]['type'] and cycle|int > 2006 %}
+        {% elif item[1]['type'] and cycle|int > 2006 and committee_id|count == 9 %}
           <a href="/data/{{ item[1]['type']['link'] }}/?committee_id={{ committee_id }}&two_year_transaction_period={{ cycle }}&cycle={{ cycle }}&line_number={{ item[1]['type'][office_or_committee] }}">
             {{ item[0]|currency }}
           </a>
         {% else %}
-          {{ item[0]|currency }}
+            {{ item[0]|currency }}
         {% endif %}
       </td>
     </tr>
