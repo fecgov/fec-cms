@@ -1,43 +1,71 @@
+import dateutil.parser
+
+import requests
 
 from django import template
-import requests
 from django.conf import settings
-from django.conf import os
-import dateutil.parser
+
 
 register = template.Library()
 
 @register.inclusion_tag('partials/jobs.html')
 def get_jobs():
-    url = "https://data.usajobs.gov/api/Search"
+    url = 'https://data.usajobs.gov/api/Search'
+    codes_url = 'https://data.usajobs.gov/api/codelist/hiringpaths'
+    querystring = {'Organization':'LF00','WhoMayApply':'All'}
 
-    querystring = {"Organization":"LF00","WhoMayApply":"All"}
     headers = {
-        'authorization-key': settings.USAJOBS_API_KEY,  
-        'user-agent': "jcarroll@fec.gov",
-        'host': "data.usajobs.gov",
-        'cache-control': "no-cache",
-        }
-    
-    response = requests.request("GET", url, headers=headers, params=querystring)
+        'authorization-key': settings.USAJOBS_API_KEY,
+        'user-agent': 'jcarroll@fec.gov',
+        'host': 'data.usajobs.gov',
+        'cache-control': 'no-cache',
+    }
 
-    responses=response.json()    
+    #query usajobs API for all open fec jobs
+    response = requests.get(
+        url,
+        headers=headers,
+        params=querystring
+    )
+
+    #query usajobs API for list of all hiring-path codes
+    codes_response = requests.get(
+        codes_url,
+        headers=headers
+    )
+
+    responses = response.json()
+    codes_responses = codes_response.json()
 
     jobData = []
-    for i in responses['SearchResult']['SearchResultItems']:
-        x= {}
-        x = { 
-        "position_title": i["MatchedObjectDescriptor"]["PositionTitle"] , 
-        "position_id": i["MatchedObjectDescriptor"]["PositionID"], 
-        "position_uri": i ["MatchedObjectDescriptor"]["PositionURI"],
-        "position_start_date" : dateutil.parser.parse(i['MatchedObjectDescriptor']['PositionStartDate']),
-        "position_end_date" : dateutil.parser.parse(i['MatchedObjectDescriptor']['PositionEndDate']),
-        "who_may_apply" : i['MatchedObjectDescriptor']['UserArea']['Details']['WhoMayApply']['Name'],
-        "job_grade" : i['MatchedObjectDescriptor']['JobGrade'][0]['Code'],
-        "low_grade" : i['MatchedObjectDescriptor']['UserArea']['Details']['LowGrade'],
-        "high_grade" : i['MatchedObjectDescriptor']['UserArea']['Details']['HighGrade'] }
-        jobData.append(x)
+    search_results = responses.get('SearchResult', {})
 
-    return ({'jobData':jobData})
+    #iterate over returned job data
+    if 'SearchResultItems' in search_results:
+        for result in search_results.get('SearchResultItems', {}):
+            matched_object_descriptor = result.get('MatchedObjectDescriptor')
 
+            x = {
+                'position_title': matched_object_descriptor.get('PositionTitle', ''),
+                'position_id': matched_object_descriptor.get('PositionID', ''),
+                'position_uri': matched_object_descriptor.get('PositionURI', ''),
+                'position_start_date': dateutil.parser.parse(matched_object_descriptor.get('PositionStartDate', '')),
+                'position_end_date': dateutil.parser.parse(matched_object_descriptor.get('PositionEndDate', '')),
+                'job_grade': matched_object_descriptor.get('JobGrade', {})[0].get('Code', ''),
+                'low_grade': matched_object_descriptor.get('UserArea', {}).get('Details', {}).get('LowGrade', ''),
+                'high_grade': matched_object_descriptor.get('UserArea', {}).get('Details', {}).get('HighGrade', '')
+            }
+            #map hiring-path code(s) for each job to description(s)
+            hiring_path_codes = codes_responses['CodeList'][0]['ValidValue']
 
+            hiring_path = [item for item in result['MatchedObjectDescriptor']['UserArea']['Details']['HiringPath']]
+            hp = []
+            for path in hiring_path:
+                hpa = [item for item in hiring_path_codes if item['Code'] == path.upper()]
+                hp.append(hpa[0]['Value'])
+                hiring_path_list = ', '.join(str(n) for n in hp)
+                open_to = {'open_to':hiring_path_list}
+            x.update(open_to)
+            jobData.append(x)
+
+    return {'jobData': jobData }
