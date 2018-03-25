@@ -42,10 +42,10 @@ def get_jobs():
 
     #iterate over returned job data
     if 'SearchResultItems' in search_results:
-        for result in search_results.get('SearchResultItems', {}):
-            matched_object_descriptor = result.get('MatchedObjectDescriptor')
+        for result in search_results.get('SearchResultItems', None):
+            matched_object_descriptor = result.get('MatchedObjectDescriptor', '')
 
-            x = {
+            jobs_dict = {
                 'position_title': matched_object_descriptor.get('PositionTitle', ''),
                 'position_id': matched_object_descriptor.get('PositionID', ''),
                 'position_uri': matched_object_descriptor.get('PositionURI', ''),
@@ -65,7 +65,7 @@ def get_jobs():
                 hp.append(hpa[0]['Value'])
                 hiring_path_list = ', '.join(str(n) for n in hp)
                 open_to = {'open_to':hiring_path_list}
-            x.update(open_to)
-            jobData.append(x)
+            jobs_dict.update(open_to)
+            jobData.append(jobs_dict)
 
     return {'jobData': jobData }
