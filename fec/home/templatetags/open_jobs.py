@@ -43,7 +43,7 @@ def get_jobs():
     #iterate over returned job data
     if 'SearchResultItems' in search_results:
         for result in search_results.get('SearchResultItems', None):
-            matched_object_descriptor = result.get('MatchedObjectDescriptor', '')
+            matched_object_descriptor = result.get('MatchedObjectDescriptor', {})
 
             jobs_dict = {
                 'position_title': matched_object_descriptor.get('PositionTitle', ''),
