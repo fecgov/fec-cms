@@ -12,6 +12,22 @@
       <p>FEC Record articles inform candidates and committees about FEC developments and are published as news happens. Tips for Treasurers are published once a week.</p>
     </div>
   </div>
+  <div class="js-accordion accordion--neutral" data-content-prefix="email_signup">
+  <button type="button" class="js-accordion-trigger accordion__button">Sign up for emiail updates
+  </button>
+  <div class="accordion__content">
+    <form id="GD-snippet-form" action="https://public.govdelivery.com/accounts/USFEC/subscriber/qualify?qsp=USFEC_1" accept-charset="UTF-8" method="post" target="_blank">
+      <input name="utf8" type="hidden" value="&#x2713;" /><input type="hidden" name="authenticity_token" value="{{ settings.GOV_DELIVERY_TOKEN }}" />
+        <fieldset>
+          <div class="example--primary">
+            <p class="t-upper u-no-margin">Email</p>
+            <input class="form-element--inline" type="text" name="email" id="email" placeholder="Email address">
+            <button class="button--cta heading__right form-element--inline" type="submit" name="commit" value="Subscribe" class="form_button">Subscribe</button>
+          </div>
+        </fieldset>
+      </form>
+   </div>
+  </div>
 {% endblock %}
 
 {% block filters %}
