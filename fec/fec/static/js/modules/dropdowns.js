@@ -90,7 +90,6 @@ Dropdown.prototype.handleFocusAway = function(e) {
       !this.$panel.is($target) && !$target.is(this.$button)) {
     this.hide();
   }
-
 };
 
 Dropdown.prototype.handleKeyup = function(e) {
