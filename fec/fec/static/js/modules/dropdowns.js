@@ -47,7 +47,7 @@ function Dropdown(selector, opts) {
 
   this.events = new listeners.Listeners();
   this.events.on(document.body, 'click', this.handleClickAway.bind(this));
-  this.events.on(document.body, 'focus', this.handleFocusAway.bind(this));
+  this.events.on(document.body, 'focusin', this.handleFocusAway.bind(this));
   this.events.on(document.body, 'keyup', this.handleKeyup.bind(this));
 
   // Set ARIA attributes
