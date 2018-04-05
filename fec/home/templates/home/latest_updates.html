@@ -19,15 +19,18 @@
     <form id="GD-snippet-form" action="https://public.govdelivery.com/accounts/USFEC/subscriber/qualify?qsp=USFEC_1" accept-charset="UTF-8" method="post" target="_blank">
       <input name="utf8" type="hidden" value="&#x2713;" /><input type="hidden" name="authenticity_token" value="{{ settings.GOV_DELIVERY_TOKEN }}" />
         <fieldset>
-          <div class="example--primary">
+          <div class="message">
             <label for="submit" class="label">Email</label>
             <input class="form-element--inline" size="40" type="text" name="email" id="email">
             <button class="button--cta form-element--inline" type="submit" name="commit" value="Subscribe" class="form_button">Subscribe</button>
-   On the next page, set your email preferences, then complete your subscription by selecting which latest updates publications types you want to receive by email.
+
             <ul class="list--flat-bordered t-small t-sans u-margin--top">
               <li><a href="https://public.govdelivery.com/accounts/USFEC/subscriber/topics?qsp=CODE_RED" target="_blank">Edit an existing subscription</a></li>
               <li><a href="https://insights.govdelivery.com/Communications/Subscriber_Help_Center/What_information_does_GovDelivery_collect%3F_How_is_it_used%3F" target="_blank">Privacy policy</a></li>
             </ul>
+            <p class="u-margin--top">
+            On the next page, set your email preferences, then complete your subscription by selecting which latest updates publications types you want to receive by email.
+            </p>
           </div>
         </fieldset>
       </form>
