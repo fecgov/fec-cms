@@ -9,12 +9,12 @@ register = template.Library()
 
 @register.inclusion_tag('partials/jobs.html')
 def get_jobs():
-    url = 'https://data.usajobs.gov/api/Search'
+    url = settings.USAJOBS_API_KEY,
     codes_url = 'https://data.usajobs.gov/api/codelist/hiringpaths'
     querystring = {'Organization':'LF00','WhoMayApply':'All'}
 
     headers = {
-        'authorization-key': settings.USAJOBS_API_KEY,
+        'authorization-key': "zEyg39/Nb5Y5yAW5+/0H7iNwYxGqBDJvNGeMxRdeFNc=",
         'user-agent': 'jcarroll@fec.gov',
         'host': 'data.usajobs.gov',
         'cache-control': 'no-cache',
@@ -59,7 +59,10 @@ def get_jobs():
                 'high_grade': matched_object_descriptor.get('UserArea', {}).get('Details', {}).get('HighGrade', '')
             }
             #map hiring-path code(s) for each job to description(s)
-            hiring_path_codes = codes_responses.get('CodeList', [])[0].get('ValidValue')
+            if len(codes_responses.get('CodeList', [])) > 0:
+                hiring_path_codes = codes_responses.get('CodeList', [])[0].get('ValidValue', [])
+            else:
+                hiring_path_codes = ''
             hiring_path = [item for item in result.get('MatchedObjectDescriptor', {}).get('UserArea', {}).get('Details', {}).get('HiringPath', [])]
             hp = []
             for path in hiring_path:
