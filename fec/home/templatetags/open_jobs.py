@@ -10,11 +10,11 @@ register = template.Library()
 @register.inclusion_tag('partials/jobs.html')
 def get_jobs():
     url = settings.USAJOBS_API_KEY,
-    codes_url = 'https://data.usajobs.gov/api/codelist/hiringpaths'
+    codes_url = 'https://data.usajobs.gov/api/Search'
     querystring = {'Organization':'LF00','WhoMayApply':'All'}
 
     headers = {
-        'authorization-key': "zEyg39/Nb5Y5yAW5+/0H7iNwYxGqBDJvNGeMxRdeFNc=",
+        'authorization-key': settings.USAJOBS_API_KEY,
         'user-agent': 'jcarroll@fec.gov',
         'host': 'data.usajobs.gov',
         'cache-control': 'no-cache',
