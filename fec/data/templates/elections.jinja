@@ -30,7 +30,7 @@
       </h1>
       <div class="heading--section">
         <span class="t-data t-bold">
-          Compare candidates for this office
+          {{ cycle }} | {{ office }}
         </span>
       </div>
     {% endif %}
@@ -47,7 +47,7 @@
             tabindex="0"
             aria-controls="panel1"
             href="#section-1"
-            >Candidate financial totals</a>
+            >Election data and reporting deadlines</a>
         </li>
         <li class="side-nav__item" role="presentation">
           <a
@@ -57,17 +57,7 @@
             tabindex="0"
             aria-controls="panel2"
             href="#section-2"
-            >Individual contributions</a>
-        </li>
-        <li class="side-nav__item" role="presentation">
-          <a
-            class="side-nav__link"
-            role="tab"
-            data-name="spending-by-others"
-            tabindex="0"
-            aria-controls="panel3"
-            href="#section-3"
-            >Spending by others to support/oppose</a>
+            >About this election</a>
         </li>
         <li class="side-nav__item">
           <div class="accordion--neutral js-accordion" data-accordion-prefix="election-lookup">
@@ -109,9 +99,9 @@
 
     <div class="main__content--right-full">
       {% include 'partials/loading-tab.jinja' %}
-      {% include 'partials/elections/candidate-comparison-tab.jinja' %}
-      {% include 'partials/elections/detailed-comparison-tab.jinja' %}
-      {% include 'partials/elections/other-spending-tab.jinja' %}
+      {% include 'partials/elections/election-data-and-compliance-tab.jinja' %}
+      {% include 'partials/elections/about-this-election-tab.jinja' %}
+      <!--{% include 'partials/elections/other-spending-tab.jinja' %}-->
     </div>
 </div>
 {% endblock %}
@@ -120,7 +110,7 @@
 <script>
 var context = {
   election: {
-    cycle: {{ cycle }},
+    cycle: '{{ cycle }}',
     office: '{{ office }}',
     state: '{{ state or '' }}',
     stateFull: '{{ state_full or '' }}',

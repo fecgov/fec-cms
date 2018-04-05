@@ -21,6 +21,7 @@ var ElectionForm = require('../modules/election-form').ElectionForm;
 
 var comparisonTemplate = require('../templates/comparison.hbs');
 var candidateStateMapTemplate = require('../templates/candidateStateMap.hbs');
+var electionSummaryTemplate = require('../templates/electionSummary.hbs');
 
 var MAX_MAPS = 2;
 
@@ -529,6 +530,20 @@ $(document).ready(function() {
       })
       .object()
       .value();
+
+    var incumbents = response.results.filter( function(result) {
+      return result.incumbent_challenge_full=='Incumbent';
+    });
+    var $election_summary_results = $('.election-summary');
+    var summary = {
+      incumbent_name: incumbents[0].candidate_name,
+      party_name: incumbents[0].party_full,
+      candidate_id: incumbents[0].candidate_id
+      //next_election_date: new Date(),
+      //last_election_date: new Date()
+    };
+    $election_summary_results.html(electionSummaryTemplate(summary));
+
     });
 
   if ($('#election-map').length) {

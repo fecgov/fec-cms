@@ -1,0 +1,113 @@
+{% import 'macros/cycle-select.jinja' as select %}
+
+<section id="section-2" role="tabpanel" aria-hidden="true" aria-labelledby="section-2-heading">
+  <div class="container">
+    <h2 id="section-1-heading">About this election</h2>
+    <div class="entity__figure u-no-padding row">
+      <table class="t-sans usa-width-one-whole">
+        <tbody>
+          <tr>
+            <td class="figure__label">Last general election:</td>
+            <td class="figure__value">November 4, 2014</td>
+          </tr>
+          <tr>
+            <td class="figure__label">Primary election:</td>
+            <td class="figure__value">August 8, 2016</td>
+          </tr>
+          <tr>
+            <td class="figure__label">General election:</td>
+            <td class="figure__value">November 8, 2016</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="grid grid--3-wide">
+      <div class="grid__item">
+        <a href="/help-candidates-and-committees/dates-and-deadlines/">
+          <aside class="card card--horizontal card--primary">
+            <div class="card__image__container">
+              <span class="card__icon i-checklist-2"><span class="u-visually-hidden">Icon of dates and deadlines</span></span>
+            </div>
+            <div class="card__content">
+              Dates and deadlines
+            </div>
+          </aside>
+        </a>
+      </div>
+      {% if office == 'president' %}
+      <div class="grid__item is-disabled" style="display: none;">
+          <aside class="card card--horizontal card--neutral">
+            <div class="card__image__container">
+              <span class="card__icon i-checklist"><span class="u-visually-hidden">Icon of elections</span></span>
+            </div>
+            <div class="card__content">
+              All {% if state %} - {{ state|fmt_state_full }} {% endif %}state elections  
+            </div>
+          </aside>
+      </div>
+      {% else %}
+      <div class="grid__item is-disabled">
+          <aside class="card card--horizontal card--neutral">
+            <div class="card__image__container">
+              <span class="card__icon i-election"><span class="u-visually-hidden">Icon of elections</span></span>
+            </div>
+            <div class="card__content">
+              All {% if state %} - {{ state|fmt_state_full }} {% endif %}state elections  
+            </div>
+          </aside>
+      </div>
+      {% endif %}
+      <div class="grid__item is-disabled">
+          <aside class="card card--horizontal card--neutral">
+            <div class="card__image__container">
+              <span class="card__icon i-election"><span class="u-visually-hidden">Icon of elections</span></span>
+            </div>
+            <div class="card__content">
+              All {{ office|title }} elections
+            </div>
+          </aside>
+      </div>
+    </div>
+    <!--<p>This table only shows candidates who have registered <em>and</em> filed a financial report. Looking for <a href="/data/candidates/?office={{ office_code|upper }}&cycle={{ cycle }}&district={{ district }}&state={{ state|upper }}">all candidates who registered</a>?</p>-->
+    <div class="slab slab--inline slab--neutral u-padding--left u-padding--right">
+      <div class="entity__figure row" style="padding:0">
+        <img src="/static/img/candidate_info.png" style="width:100%;" />
+      </div>
+      <div class="entity__figure row">
+        <div class="heading--section heading--with-action u-no-margin">
+          <h3 class="heading__left">State election offices</h3>
+        </div>
+        <p>State laws and procedures govern elections for state or local offices as well as how candidates come to appear on election ballots. Contact the appropriate state election office for more information.</p>
+        <div class="usa-width-one-half">
+          <ul>
+            <li class="contact-item contact-item--phone">
+              <div class="contact-item__content">
+                <h5 class="contact-item__title">State ballot access office</h5>
+                <span class="t-block">Office of the Secretary of State <br>
+                State Capitol, Executive Tower, 7th Floor 1700 West Washington <br>
+                Phoenix, AZ 85007-2808<br>
+                <a href="http://www.azsos.gov">www.azsos.gov</a>
+                </span>
+                <span class="t-block">602-542-0681</span>
+              </div>
+            </li>
+          </ul>
+        </div>
+        <div class="usa-width-one-half">
+          <ul>
+            <li class="contact-item contact-item--phone">
+              <div class="contact-item__content">
+                <h5 class="contact-item__title">State campaign finance information</h5>
+                State Capitol, Executive Tower, 7th Floor 1700 West Washington <br>
+                Phoenix, AZ 85007-2808<br>
+                <a href="http://www.azsos.gov">www.azsos.gov</a>
+                </span>
+                <span class="t-block">602-542-0681</span>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

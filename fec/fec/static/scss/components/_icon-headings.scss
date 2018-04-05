@@ -80,6 +80,16 @@
   }
 }
 
+.icon-heading--calendar-circle-primary {
+  &::before {
+    $size: u(4rem);
+    @include u-icon-circle($calendar, $primary, $inverse, $size);
+    content: '';
+    float: left;
+    margin-right: u(1rem);
+  }
+}
+
 // homepage - registration and reporting (on secondary [red] slab)
 .icon-heading--checklist-circle {
   &::before {
