@@ -9,13 +9,14 @@ register = template.Library()
 
 @register.inclusion_tag('partials/jobs.html')
 def get_jobs():
-    url = settings.USAJOBS_API_KEY,
-    codes_url = 'https://data.usajobs.gov/api/Search'
-    querystring = {'Organization':'LF00','WhoMayApply':'All'}
+    url = 'https://data.usajobs.gov/api/Search'
+    codes_url = 'https://data.usajobs.gov/api/codelist/hiringpaths'
+    querystring = {}
+    querystring['Organization']=settings.USAJOBS_AGENCY_CODE
+    querystring['WhoMayApply']=settings.USAJOBS_WHOMAYAPPLY
 
     headers = {
         'authorization-key': settings.USAJOBS_API_KEY,
-        'user-agent': 'jcarroll@fec.gov',
         'host': 'data.usajobs.gov',
         'cache-control': 'no-cache',
     }
@@ -62,7 +63,7 @@ def get_jobs():
             if len(codes_responses.get('CodeList', [])) > 0:
                 hiring_path_codes = codes_responses.get('CodeList', [])[0].get('ValidValue', [])
             else:
-                hiring_path_codes = ''
+                hiring_path_codes = []
             hiring_path = [item for item in result.get('MatchedObjectDescriptor', {}).get('UserArea', {}).get('Details', {}).get('HiringPath', [])]
             hp = []
             for path in hiring_path:
