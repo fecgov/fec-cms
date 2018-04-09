@@ -210,6 +210,7 @@ button {
   @include appearance(none);
   background: none;
   border: none;
+  border-radius: 0;
   cursor: pointer;
   display: inline-block;
   font-family: $sans-serif;

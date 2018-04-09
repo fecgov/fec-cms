@@ -56,7 +56,7 @@ describe('feedback', function() {
     });
 
     it('clears text on success', function() {
-      this.feedback.handleSuccess({html_url: 'https://github.com/18F/FEC/issue/1'});
+      this.feedback.handleSuccess({html_url: 'https://github.com/fecgov/FEC/issue/1'});
       expect(this.feedback.$box.find('textarea').val()).to.equal('');
       expect(this.feedback.message).to.have.been.called;
     });

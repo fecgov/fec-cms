@@ -62,11 +62,16 @@ module.exports = [
       }),
       new webpack.SourceMapDevToolPlugin(),
       new ManifestPlugin({
-        fileName: 'rev-manifest.json',
+        fileName: 'rev-manifest-js.json',
         basePath: '/static/js/'
       }),
+      new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
+      new webpack.DefinePlugin({
+        'process.env': {
+        NODE_ENV: '"production"'
+      }
+    }),
       // Uncomment to compress and analyze the size of bundles
-      // new webpack.optimize.UglifyJsPlugin(),
       // new BundleAnalyzerPlugin()
     ],
     output: {
@@ -99,7 +104,7 @@ module.exports = [
       ignored: /node_modules/
     },
     stats: {
-      assetSort: 'field',
+      assetsSort: 'field',
       modules: false,
       warnings: false
     }
@@ -114,7 +119,7 @@ module.exports = [
     plugins: [
       new webpack.SourceMapDevToolPlugin(),
       new ManifestPlugin({
-        fileName: 'rev-legal-manifest.json',
+        fileName: 'rev-legal-manifest-js.json',
         basePath: '/static/js/'
       }),
     ],
@@ -131,7 +136,7 @@ module.exports = [
       ]
     },
     stats: {
-      assetSort: 'field',
+      assetsSort: 'field',
       modules: false,
       warnings: false
     }

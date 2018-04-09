@@ -278,7 +278,7 @@ def index_meetings(request):
     meetings = MeetingPage.objects.live().order_by("-date")
     open_meetings = meetings.filter(meeting_type ='O')
     executive_sessions = meetings.filter(meeting_type ='E')
-    hearings= meetings.filter(title__contains='Hearing')
+    hearings= meetings.filter(title__icontains='Hearing')
     year = request.GET.get('year', '')
     search = request.GET.get('search', '')
     active = request.GET.get('tab', 'open-meetings')
@@ -362,3 +362,12 @@ def index_meetings(request):
         'executive_years': executive_years,
         'executive_sessions': executive_sessions,
         })
+
+def guides(request):
+    page_context = {
+      'content_section': 'guides',
+      'title': 'Guides'
+    }
+    return render(request, 'home/candidate-and-committee-services/guides.html', {
+      'self': page_context,
+    })

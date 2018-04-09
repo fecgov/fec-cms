@@ -5,10 +5,8 @@
 {% load compress %}
 {% block body_class %}template-{{ self.get_verbose_name | slugify }}{% endblock %}
 
-{% block extra_css %}
-{% compress css %}
-<link rel="stylesheet" type="text/x-scss" href="{% static 'scss/calendar.scss' %}">
-{% endcompress %}
+{% block css %}
+<link rel="stylesheet" type="text/css" href="{% asset_for_css 'calendar.css' %}">
 {% endblock %}
 
 {% block content %}
@@ -21,35 +19,16 @@
       <button type="button" class="filters__header filters__toggle js-filter-toggle">Edit filters</button>
       <div class="filters__content" aria-hidden="true">
         <div id="category-filters" class="js-accordion accordion--neutral" data-content-prefix="filter" data-open-first="true">
-          <div class="js-filter" data-filter="multi" data-name="category">
+          <div class="js-filter" data-filter="multi" data-name="calendar_category_id">
             <button type="button" class="js-accordion-trigger accordion__button" id="label-1">Elections, deadlines and compliance</button>
             <div class="accordion__content">
               <div class="filter">
-                <fieldset class="js-filter js-dropdown" data-filter="checkbox">
-                  <legend class="label" for="state">State</legend>
-                  <ul class="dropdown__selected"></ul>
-                  <div class="dropdown">
-                    <button type="button" class="dropdown__button button--alt">Select</button>
-                    <div class="dropdown__panel" aria-hidden="true">
-                      <ul class="{{ css_class }}">
-                      {% for value, label in settings.CONSTANTS.states.items %}
-                      <li class="dropdown__item">
-                        <input id="state-{{ value }}" name="state" type="checkbox" value="{{ value }}">
-                        <label class="dropdown__value" for="state-{{ value }}">{{ label }}</label>
-                      </li>
-                      {% endfor %}
-                      </ul>
-                    </div>
-                  </div>
-                </fieldset>
-              </div>
-              <div class="filter">
-                <fieldset class="js-sub-filter" data-name="category" data-filter-label="label-1">
+                <fieldset class="js-sub-filter" data-name="calendar_category_id" data-filter-label="label-1">
                   <legend class="label">Election dates</legend>
                   <ul>
                     {% for value, label in settings.CONSTANTS.election_types.items %}
                       <li>
-                        <input id="{{ value | clean_whitespace }}" type="checkbox" name="category" value="{{ value }}" />
+                        <input id="{{ value | clean_whitespace }}" type="checkbox" name="calendar_category_id" value="{{ value }}" />
                         <label for="{{ value | clean_whitespace }}">{{ label }}</label>
                       </li>
                     {% endfor %}
@@ -58,12 +37,12 @@
                 </fieldset>
               </div>
               <div class="filter">
-                <fieldset class="js-sub-filter" data-name="category" data-filter-label="label-1">
+                <fieldset class="js-sub-filter" data-name="calendar_category_id" data-filter-label="label-1">
                   <legend class="label">Filing deadlines</legend>
                   <ul>
                     {% for value, label in settings.CONSTANTS.deadline_types.items %}
                       <li>
-                        <input id="{{ value | clean_whitespace }}" type="checkbox" name="category" value="{{ value }}" />
+                        <input id="{{ value | clean_whitespace }}" type="checkbox" name="calendar_category_id" value="{{ value }}" />
                         <label for="{{ value | clean_whitespace }}">{{ label }}</label>
                       </li>
                     {% endfor %}
@@ -71,12 +50,12 @@
                 </fieldset>
               </div>
               <div class="filter filter--meeting">
-                <fieldset class="js-sub-filter" data-name="category" data-filter-label="label-1">
+                <fieldset class="js-sub-filter" data-name="calendar_category_id" data-filter-label="label-1">
                   <legend class="label">Reporting and compliance periods </legend>
                   <ul>
                     {% for value, label in settings.CONSTANTS.reporting_periods.items %}
                       <li>
-                        <input id="{{ value | clean_whitespace }}" type="checkbox" name="category" value="{{ value }}" />
+                        <input id="{{ value | clean_whitespace }}" type="checkbox" name="calendar_category_id" value="{{ value }}" />
                         <label for="{{ value | clean_whitespace }}">{{ label }}</label>
                       </li>
                     {% endfor %}
@@ -87,12 +66,12 @@
             <button type="button" class="js-accordion-trigger accordion__button" id="label-2">Meetings and outreach</button>
             <div class="accordion__content">
               <div class="filter">
-                <fieldset class="js-sub-filter" data-name="category" data-filter-label="label-2">
+                <fieldset class="js-sub-filter" data-name="calendar_category_id" data-filter-label="label-2">
                   <legend class="label">Commission meetings </legend>
                   <ul>
                     {% for value, label in settings.CONSTANTS.meeting_types.items %}
                       <li>
-                        <input id="{{ value | clean_whitespace }}" type="checkbox" name="category" value="{{ value }}" />
+                        <input id="{{ value | clean_whitespace }}" type="checkbox" name="calendar_category_id" value="{{ value }}" />
                         <label for="{{ value | clean_whitespace }}">{{ label }}</label>
                       </li>
                     {% endfor %}
@@ -100,12 +79,12 @@
                 </fieldset>
               </div>
               <div class="filter">
-                <fieldset class="js-sub-filter" data-name="category" data-filter-label="label-2">
+                <fieldset class="js-sub-filter" data-name="calendar_category_id" data-filter-label="label-2">
                   <legend class="label">Outreach </legend>
                   <ul>
                     {% for value, label in settings.CONSTANTS.outreach_types.items %}
                       <li>
-                        <input id="{{ value | clean_whitespace }}" type="checkbox" name="category" value="{{ value }}" />
+                        <input id="{{ value | clean_whitespace }}" type="checkbox" name="calendar_category_id" value="{{ value }}" />
                         <label for="{{ value | clean_whitespace }}">{{ label }}</label>
                       </li>
                     {% endfor %}
@@ -116,11 +95,11 @@
             <button type="button" class="js-accordion-trigger accordion__button" id="label-3">Legal</button>
             <div class="accordion__content">
               <div class="filter">
-                <div class="js-sub-filter" data-name="category" data-filter-label="label-3">
+                <div class="js-sub-filter" data-name="calendar_category_id" data-filter-label="label-3">
                   <ul>
                     {% for value, label in settings.CONSTANTS.rule_types.items %}
                       <li>
-                        <input id="{{ value | clean_whitespace }}" type="checkbox" name="category" value="{{ value }}" />
+                        <input id="{{ value | clean_whitespace }}" type="checkbox" name="calendar_category_id" value="{{ value }}" />
                         <label for="{{ value | clean_whitespace }}">{{ label }}</label>
                       </li>
                     {% endfor %}
@@ -154,5 +133,5 @@
 {% endblock %}
 
 {% block extra_js %}
-  <script type="text/javascript" src="{% asset_for 'calendar-page.js' %}"></script>
+  <script type="text/javascript" src="{% asset_for_js 'calendar-page.js' %}"></script>
 {% endblock %}

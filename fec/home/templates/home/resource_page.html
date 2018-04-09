@@ -26,7 +26,7 @@
       </ul>
       {% if self.show_search %}
       <h4 class="sidebar__title">Already registered?</h4>
-      <form class="sidebar__content" action="{{ settings.FEC_APP_URL }}" method="GET">
+      <form class="sidebar__content" action="/data" method="GET">
         <label class="label" for="committee-search">Find your committee</label>
         <div class="combo--search--mini">
           <input id="committee-search" name="search" class="combo__input" type="text">
@@ -73,7 +73,7 @@
               <span class="card__icon i-question-bubble"><span class="u-visually-hidden">Icon representing a question</span></span>
           </div>
           <div class="card__content">
-            Get help from the FEC by  phone or email
+            Get help from the FEC by  phone or email
           </div>
         </aside>
       </a>

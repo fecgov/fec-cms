@@ -2,156 +2,188 @@
 {% load wagtailcore_tags %}
 {% load staticfiles %}
 {% load filters %}
+{% load legal_news %}
 
 {% block title %}Legal resources{% endblock %}
 {% block body_class %}template-{{ self.get_verbose_name | slugify }}{% endblock %}
 
 {% block extra_js %}
-  <script>
-    TOUR_PAGE = 'legal-resources';
-  </script>
-  <script type="text/javascript" src="{% asset_for 'legal.js' %}"></script>
+  <script type="text/javascript" src="{% asset_for_js 'legal.js' %}"></script>
 {% endblock extra_js %}
 
 {% block content %}
-  {% include "partials/search-hero.html" %}
-  <div class="slab slab--neutral slab--spacious">
-    <div class="container">
-      <form id="large-search" method="get" action="{{ settings.FEC_APP_URL }}/legal/search/" autocomplete="off" class="search__container js-search">
-        <div class="combo combo--search combo--search--large">
-          <div class="tour__point tour__point--left" data-intro="<h5>Streamlined legal search</h5>Search across advisory opinions, Matters Under Review (MURs), statutes and regulations all at once. This feature is still growing to include even more categories."></div>
-          <select class="search__select select--alt js-search-type" name="search_type" aria-label="Select a search type">
-            <option value="all" selected>All</option>
-            <option value="statutes">Statutes</option>
-            <option value="regulations">Regulations</option>
-            <option value="advisory_opinions">Advisory opinions</option>
-            <option value="murs">Matters under review</option>
-          </select>
-          <input type="text" name="search" class="combo__input js-search-input"
-          aria-label="Search">
-          <button type="submit" class="button--standard button--search combo__button">
-           <span class="u-visually-hidden">Search</span>
-          </button>
-        </div>
-        <button type="button" class="button--keywords u-float-right u-margin--top" aria-controls="keyword-modal" data-a11y-dialog-show="keyword-modal">More keyword options</button>
-      </form>
-      <span class="t-note t-sans search__example search__example--with-select">Examples: 102.2; electioneering</span>
-    </div>
-  </div>
-  <div class="container main" id="sections">
-      <div class="row">
-        <div class="sidebar-container sidebar-container--left">
-          <nav class="sidebar sidebar--neutral side-nav js-sticky-side js-toc" data-sticky-container="sections">
-            <ul class="sidebar__content">
-              <li class="side-nav__item">
-                <a class="side-nav__link" href="#advisory-opinions">
-                Advisory opinions
-                </a>
-              </li>
-              <li class="side-nav__item">
-                <a class="side-nav__link" href="#enforcement-matters">
-                Enforcement
-                </a>
-              </li>
-              <li class="side-nav__item">
-                <a class="side-nav__link" href="#regulations">
-                Regulations
-                </a>
-              </li>
-              <li class="side-nav__item">
-                <a class="side-nav__link" href="#statutes">
-                Statutes and legislation
-                </a>
-              </li>
-              <li class="side-nav__item">
-                <a class="side-nav__link" href="#court-cases">
-                Court cases
-                </a>
-              </li>
-              <li class="side-nav__item">
-                <a class="side-nav__link" href="#policy">
-                Policy statements and other guidance
-                </a>
-              </li>
-            </ul>
-          </nav>
-        </div>
-        <section class="main__content--right">
-          <div class="option">
-            <h2 id="advisory-opinions">
-              <div class="tour__point tour__point--left" data-intro="<h5>Search or browse advisory opinions</h5>Search results emphasize keywords and other important information, making it easier to tell if an advisory opinion is what you’re looking for— before you open it. Every URL is unique, so you can you can bookmark any opinion page or list of search results."></div>
-              <a href="{{ settings.FEC_APP_URL }}/legal/advisory-opinions/">Advisory opinions</a>
-            </h2>
-            <p>Advisory opinions are official Commission responses to questions about how federal campaign finance law applies to specific, factual situations.</p>
-            <p>This archive contains advisory opinions from 1975 to the present. It also contains documents related to advisory opinions — such as requests, drafts and public comments — from 1990 to the present.</p>
-            <a class="button--cta button--go" href="{{ settings.FEC_APP_URL }}/legal/advisory-opinions/">Explore advisory opinions</a>
+{% include "partials/search-hero.html" %}
+
+<div class="container main">
+  <div class="grid--2-wide grid--flex">
+    <div class="grid__item card t-left-aligned">
+      <h3>Search across all legal resources</h3>
+      <div class="content__section">
+        <form id="large-search" method="get" action="/data/legal/search/" autocomplete="off" class="search__container js-search">
+          <div class="combo combo--search combo--search--inline">
+            <select class="search__select select--alt js-search-type" name="search_type" aria-label="Select a search type">
+              <option value="all" selected>All sources</option>
+              <option value="statutes">Statutes</option>
+              <option value="regulations">Regulations</option>
+              <option value="advisory_opinions">Advisory opinions</option>
+              <option value="murs">Matters under review</option>
+            </select>
+            <input type="text" name="search" class="combo__input js-search-input"
+            aria-label="Search">
+            <button type="submit" class="button--standard button--search combo__button">
+              <span class="u-visually-hidden">Search</span>
+            </button>
           </div>
-          <div class="option">
-            <h2 id="enforcement-matters">
-              <div class="tour__point tour__point--left" data-intro="<h5>Understand enforcement programs</h5>Learn about the FEC’s enforcement process and programs with better-organized content. Search for closed Matters Under Review (MURs) by keyword, and bookmark or share unique links to closed cases."></div>
-              <a href="/legal-resources/enforcement/">Enforcement</a>
-            </h2>
-            <p>The FEC has exclusive jurisdiction over the civil enforcement of the federal campaign finance law.</p>
-            <p>FEC enforcement matters, called Matters Under Review (MURs), are primarily handled by the Office of General Counsel. Enforcement cases must be kept confidential until the cases are closed.</p>
-            <p>Other programs designed to augment the Office of General Counsel’s enforcement role include the Alternative Dispute Resolution Program, Administrative Fine Program and Audit Program.</p>
-            <p>Learn more about each program or search closed cases and audits.</p>
-            <a class="button--cta button--go" href="/legal-resources/enforcement/">Explore enforcement</a>
-          </div>
-          <div class="option">
-            <h2 id="regulations">
-              <div class="tour__point tour__point--left" data-intro="<h5>Searchable regulations</h5>Search, share and move between regulations with the new interface. Learn more about past changes to regulations and find upcoming hearings where you can weigh in on proposed amendments."></div>
-              <a href="/legal-resources/regulations">Regulations</a>
-            </h2>
-            <p>As part of its role administering campaign finance law,
-              the Commission issues regulations,
-              which are published every year in Title 11 of the Code of Federal Regulations (CFR).
-              This archive contains a full-text version of 11 CFR, as published January 1, 2017.
-            </p>
-            <a class="button--cta button--go" href="/legal-resources/regulations">Explore regulations</a>
-          </div>
-          <div class="option">
-            <h2 id="statutes">Statutes and legislation</h2>
-            <div class="content__section">
-              <h3><a href="{{ settings.FEC_APP_URL }}/legal/statutes/">Statutes</a></h3>
-              <p>
-                The FEC administers and enforces the Federal Election Campaign Act, the Presidential Election Campaign Fund Act and the Presidential Primary Matching Payment Account Act. Those acts and amendments, which are passed by Congress and signed by the President, are collected and restated as law in Title 52 and Title 26 of the U.S. Code.
-              </p>
-              <p>
-                This archive contains the portions of Title 52 and Title 26 that are administered by FEC.
-              </p>
-              <a class="button--cta button--go" href="{{ settings.FEC_APP_URL }}/legal/statutes/">Explore statutes</a>
-            </div>
-            <h3><a href="/legal-resources/legislation/">Legislation</a></h3>
-            <p>Browse selected amendments to the <em>Federal Election Campaign Act</em> and Commission recommendations to Congress.</p>
-          </div>
-          <div class="option">
-            <h2 id="court-cases"><a href="/legal-resources/court-cases">Court cases</a></h2>
-            <p>Learn more about active and past cases involving the FEC.</p>
-          </div>
-          <div class="option">
-            <h2 id="policy"><a href="{{ settings.FEC_TRANSITION_URL }}/law/policy.shtml">Policy statements and other guidance</a></h2>
-            <p>Access statements, interpretive rules and other guidance issued by the FEC.</p>
-          </div>
-        </section>
+          <span class="t-note t-sans search__example">Examples: 102.2; electioneering</span>
+          <button type="button" class="button--keywords u-float-right u-margin--top" aria-controls="keyword-modal" data-a11y-dialog-show="keyword-modal">More keyword options</button>
+        </form>
       </div>
-  </div>
-  <div class="slab slab--neutral">
-    <div class="container">
-      <div class="grid grid--4-wide">
-        <div class="grid__item">
-          <a href="{{ settings.FEC_TRANSITION_URL }}/pages/brochures/fecfeca.shtml">
-            <aside class="card card--horizontal card--secondary">
-              <div class="card__image__container">
-                <span class="card__icon i-notebook"><span class="u-visually-hidden">Icon of a notebook</span></span>
-              </div>
-              <div class="card__content">
-                  The FEC and the Federal Campaign Finance Law brochure
-              </div>
-            </aside>
-          </a>
-        </div>
+      <div class="example--primary">
+        <h4 class="example__title">Advanced searches:</h4>
+        <ul class="t-sans list--2-columns">
+          <li><a href="/data/legal/search/advisory-opinions/">Advisory opinions</a></li>
+          <li><a href="/data/legal/search/enforcement/">Matters under review</a></li>
+          <!--<li><a href="/data/audit">Audits</a></li> -->
+          <li><a href="/regulations">Regulations</a></li>
+          <li><a href="/data/legal/search/statutes">Statutes</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="grid__item">
+      <div class="heading--section heading--with-action">
+        <h3 class="heading__left">Legal news</h3>
+        <a class="button--alt button--updates heading__right" href="/updates">All news</a>
+      </div>
+      {% legal_news_feed %}
     </div>
   </div>
+
+  <section class="content__section content__section--ruled">
+    <h3>Browse legal resources</h3>
+    <div class="grid grid--4-wide">
+      <div class="grid__item">
+        <a href="/data/legal/advisory-opinions/">
+          <aside class="card card--horizontal card--primary">
+            <div class="card__image__container">
+              <span class="card__icon i-direction-sign"><span class="u-visually-hidden">Icon representing advisory opinions</span></span>
+            </div>
+            <div class="card__content">
+              Advisory opinions
+            </div>
+          </aside>
+        </a>
+      </div>
+      <div class="grid__item">
+        <a href="/legal-resources/enforcement/">
+          <aside class="card card--horizontal card--primary">
+            <div class="card__image__container">
+              <span class="card__icon i-shield"><span class="u-visually-hidden">Icon representing enforcement of federal campaign finance law</span></span>
+            </div>
+            <div class="card__content">
+              Enforcement of federal campaign finance law
+            </div>
+          </aside>
+        </a>
+      </div>
+      <div class="grid__item">
+        <a href="/legal-resources/regulations/">
+          <aside class="card card--horizontal card--primary">
+            <div class="card__image__container">
+              <span class="card__icon i-cfr"><span class="u-visually-hidden">Icon representing regulations/</span></span>
+            </div>
+            <div class="card__content">
+              Regulations
+            </div>
+          </aside>
+        </a>
+      </div>
+      <div class="grid__item">
+        <a href="/legal-resources/statutes">
+          <aside class="card card--horizontal card--primary">
+            <div class="card__image__container">
+              <span class="card__icon i-usc"><span class="u-visually-hidden">Icon representing statutes</span></span>
+            </div>
+            <div class="card__content">
+              Statutes
+            </div>
+          </aside>
+        </a>
+      </div>
+    </div>
+    <div class="grid grid--4-wide">
+      <div class="grid__item">
+        <a href="/legal-resources/legislation">
+          <aside class="card card--horizontal card--primary">
+            <div class="card__image__container">
+              <span class="card__icon i-scale"><span class="u-visually-hidden">Icon representing legislation</span></span>
+            </div>
+            <div class="card__content">
+              Legislation
+            </div>
+          </aside>
+        </a>
+      </div>
+      <div class="grid__item">
+        <a href="/legal-resources/court-cases">
+          <aside class="card card--horizontal card--primary">
+            <div class="card__image__container">
+              <span class="card__icon i-mallet"><span class="u-visually-hidden">Icon representing court cases</span></span>
+            </div>
+            <div class="card__content">
+              Court cases
+            </div>
+          </aside>
+        </a>
+      </div>
+      <div class="grid__item">
+        <a href="/legal-resources/enforcement/audit-reports/">
+          <aside class="card card--horizontal card--primary">
+            <div class="card__image__container">
+              <span class="card__icon i-committee-audit"><span class="u-visually-hidden">Icon representing audits</span></span>
+            </div>
+            <div class="card__content">
+              Audits
+            </div>
+          </aside>
+        </a>
+      </div>
+      <div class="grid__item">
+        <a href="https://transition.fec.gov/law/policy.shtml">
+          <aside class="card card--horizontal card--primary">
+            <div class="card__image__container">
+              <span class="card__icon i-compass"><span class="u-visually-hidden">Icon representing policy and other guidance</span></span>
+            </div>
+            <div class="card__content">
+              Policy and other guidance
+            </div>
+          </aside>
+        </a>
+      </div>
+    </div>
+  </section>
+</div>
+
+<div class="slab slab--neutral">
+  <div class="container">
+     <h2>You might also like</h2>
+     <ul class="grid grid--4-wide grid--flex t-sans">
+       <li class="grid__item grid__item--with-icon grid__icon--deep-red">
+       <img src="{% static 'img/i-complex--regreport.svg' %}" alt="">
+    </li>
+    <li class="grid__item">
+      <h3><a href="/help-candidates-and-committees/guides">Guides for candidates and committees</a></h3>
+      <p>Learn more about how individuals and groups can be active in federal elections and the requirements that apply to them.</p>
+    </li>
+    <li class="grid__item grid__item--with-img">
+      <img src="{% static "img/feature--contributions.jpg" %}" alt="">
+    </li>
+    <li class="grid__item">
+      <h3><a href="/help-candidates-and-committees/candidate-taking-receipts/contribution-limits-candidates/">Contribution limits</a></h3>
+      <p>Under the Federal Election Campaign Act, contributions are subject to limits. Those limits differ depending on the type of donor and recipient.</p>
+    </li>
+     </ul>
+  </div>
+</div>
 
 {% include 'partials/disclaimer.html' %}
 {% include 'partials/legal-keyword-modal.html' %}

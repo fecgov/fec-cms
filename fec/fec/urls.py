@@ -22,6 +22,7 @@ urlpatterns = [
     url(r'^contact-us/$', home_views.contact),
     url(r'^documents/', include(wagtaildocs_urls)),
     url(r'^help-candidates-and-committees/question-rad/$', home_views.contact_rad),
+    url(r'^help-candidates-and-committees/guides/$', home_views.guides),
     url(r'^meetings/$', home_views.index_meetings, name="meetings_page"),
     url(r'^search/$', search_views.search, name='search'),
     url(r'^updates/$', home_views.updates),
@@ -35,7 +36,7 @@ if settings.FEC_CMS_ENVIRONMENT != 'LOCAL':
     urlpatterns.insert(0,url(r'^admin/login', uaa_views.login, name='login'))
 
 if settings.FEC_CMS_ROBOTS:
-    url(
+    urlpatterns += url(
         r'^robots\.txt$',
         TemplateView.as_view(
             template_name='robots.txt',

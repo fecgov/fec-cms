@@ -1,8 +1,8 @@
 **Develop**
-[![CircleCI](https://circleci.com/gh/18F/fec-cms.svg?style=svg)](https://circleci.com/gh/18F/fec-cms)
+[![CircleCI](https://circleci.com/gh/fecgov/fec-cms.svg?style=svg)](https://circleci.com/gh/fecgov/fec-cms)
 
 **Master**
-[![Dependency Status](https://gemnasium.com/badges/github.com/18F/fec-cms.svg)](https://gemnasium.com/github.com/18F/fec-cms)
+[![Dependency Status](https://gemnasium.com/badges/github.com/fecgov/fec-cms.svg)](https://gemnasium.com/github.com/fecgov/fec-cms)
 
 ## Campaign finance for everyone
 The Federal Election Commission (FEC) releases information to the public about
@@ -13,9 +13,7 @@ Are you interested in seeing how much money a candidate raised? Or spent? How
 much debt they took on? Who contributed to their campaign? The FEC is the
 authoritative source for that information.
 
-The new FEC.gov is a collaboration between [18F](http://18f.gsa.gov) and the FEC. It
-aims to make campaign finance information more accessible (and understandable)
-to all users.
+The new FEC.gov aims to make campaign finance information more accessible (and understandable) to all users.
 
 ## FEC repositories
 We welcome you to explore, make suggestions, and contribute to our code.
@@ -23,31 +21,28 @@ We welcome you to explore, make suggestions, and contribute to our code.
 This repository, fec-cms, houses the content management system (CMS) for
 the new FEC.gov.
 
-- [FEC](https://github.com/18F/fec): a general discussion forum. We compile
-  [feedback](https://github.com/18F/fec/issues) from the FEC.gov feedback widget
+- [FEC](https://github.com/fecgov/fec): a general discussion forum. We compile
+  [feedback](https://github.com/fecgov/fec/issues) from the FEC.gov feedback widget
   here, and this is the best place to submit general feedback.
-- [openFEC](https://github.com/18F/openfec): the first RESTful API for the Federal Election Commission
-- [fec-cms](https://github.com/18F/fec-cms): the content management system
+- [openFEC](https://github.com/fecgov/openfec): the first RESTful API for the Federal Election Commission
+- [fec-cms](https://github.com/fecgov/fec-cms): the content management system
   (CMS) for the new FEC.gov. This project uses [Wagtail](https://github.com/torchbox/wagtail), an open source CMS written
   in Python and built on the Django framework.
 
 ## Get involved
 We’re thrilled you want to get involved!
 - Read our contributing
-  [guidelines](https://github.com/18F/openfec/blob/master/CONTRIBUTING.md).
-  Then, file an [issue](https://github.com/18F/fec/issues) or submit a pull
+  [guidelines](https://github.com/fecgov/openfec/blob/master/CONTRIBUTING.md).
+  Then, file an [issue](https://github.com/fecgov/fec/issues) or submit a pull
   request.
 - Send us an email at betafeedback@fec.gov.
 - If you're a developer, follow the installation instructions in the
   README.md page of each repository to run the apps on your computer.
-- Check out our StoriesonBoard
-  [FEC story map](https://18f.storiesonboard.com/m/fec) to get a sense of the
-  user needs we'll be addressing in the future.
 
 ## Set up
 We are always trying to improve our documentation. If you have suggestions or
 run into problems please
-[file an issue](https://github.com/18F/fec-cms/issues)!
+[file an issue](https://github.com/fecgov/fec-cms/issues)!
 
 ### Project prerequisites
 1. Ensure you have the following requirements installed:
@@ -58,7 +53,7 @@ run into problems please
     * PostgreSQL (the latest 9.6 release).
          * Read a [Mac OSX tutorial](https://www.moncefbelyamani.com/how-to-install-postgresql-on-a-mac-with-homebrew-and-lunchy/).
          * Read a [Windows tutorial](http://www.postgresqltutorial.com/install-postgresql/).
-         * Read a [Linux tutorial](http://www.postgresql.org/docs/9.5/static/installation.html)
+         * Read a [Linux tutorial](https://www.postgresql.org/docs/9.5/static/installation.html)
            (or follow your OS package manager).
 
 2. Set up your Node environment — learn how to do this with our
@@ -99,14 +94,37 @@ Before you can run this project locally, you'll need a development database:
 createdb cfdm_cms_test
 ```
 
-You will also need to set environmental variables:
+##### Load our sample data into the local development database:
+For details see the section below: Restoring your local database from a backup
 
+### Set environment variables
+You will also need to set the environment variables:
+
+#### Set local environment variables
 Connection string for the local database as an
 environment variable:
 
 ```bash
 export DATABASE_URL=postgresql://:@/cfdm_cms_test
 ```
+
+#### running with openFEC API
+By default, `FEC_API_URL` points to the local running instance of the API (http://localhost:5000).
+To set the URL for the API as an environment variable, run:
+
+```bash
+export FEC_API_URL=http://localhost:5000
+```
+
+Set it to either production, dev, or staging API URLs if you are not running the API locally.
+
+for example: (prod API) https://api.open.fec.gov
+export FEC_API_URL=https://api.open.fec.gov
+
+The base settings file will read this value in instead of using the default (which is `http://localhost:5000`).
+
+
+Also set API keys: `FEC_WEB_API_KEY` and `FEC_WEB_API_KEY_PUBLIC`
 
 ### Finish project setup
 Once all prerequisites and dependencies are installed, you can finish the
@@ -119,11 +137,6 @@ cd fec/
 ./manage.py createsuperuser
 ```
 
-### Set local environment variables
-By default, `FEC_API_URL` points to the local running instance of the API (http://localhost:5000). Set it to either production, dev, or staging API URLs if you are not running the API locally.
-
-Also set API keys: `FEC_WEB_API_KEY` and `FEC_WEB_API_KEY_PUBLIC`
-
 ## Running the application
 In the root project folder, run:
 
@@ -133,7 +146,24 @@ cd fec/
 ```
 
 ## Front End Development
-Front end assets are all located in `/fec/fec/static/*`. SCSS files are compiled and served on the backend by `django-compressor`, but JS files need to be compiled by Webpack via the `npm run build` command.
+Front end assets are all located in `/fec/fec/static/*`.
+
+### Icon building
+Icons only need to be built if there are new SVG files in the `/fec/fec/static/icons/input` directory, which transforms that SVG file into a SCSS variable to be used on the stylesheets.
+
+``` npm run build-icons ```
+
+### SCSS compilation
+``` npm run build-sass ```
+
+### JavaScript compilation
+``` npm run build-js ```
+
+### Compilation of both SCSS and JS files
+``` npm run build ```
+
+### Command to watch for SCSS and JS changes
+``` npm run watch ```
 
 
 ## Running tests
@@ -162,7 +192,7 @@ env DATABASE_URL=postgresql://:@/cfdm_cms_test ./manage.py test
 ```
 
 ## Enabling/toggling features
-[settings/base.py](https://github.com/18F/fec-cms/blob/develop/fec/fec/settings/base.py)
+[settings/base.py](https://github.com/fecgov/fec-cms/blob/develop/fec/fec/settings/base.py)
 includes a set of `FEATURES` which can also be enabled using environment flags:
 
 ```bash
@@ -178,27 +208,31 @@ To watch for changes to JavaScript files, run this command in the root project d
 npm run watch
 ```
 
-### Developing with openFEC (optional)
-To set the URL for the API as an environment variable, run:
+### Restoring your local database from a backup
+*Likely only useful for FEC team members*
 
-```bash
-export FEC_API_URL=http://localhost:5000
-```
+### Load our sample data into the local development database from a production backup
 
-The base settings file will read this value in instead of using the default (which is `http://localhost:5000`).
+first download the web app sample database dump
 
-## Restoring your local database from a backup
-*Likely only useful for 18F FEC team members*
-To restore your local database from a backup from production, download the database dump and run this command:
+*FEC team can download from the project's google drive folder: CMS DB Backups*
+
+then save the file to a local drive: <path/to/backup_file>
+
+then run this command:
 
 `pg_restore --dbname cfdm_cms_test --no-acl --no-owner <path/to/backup_file>`
 
+Lastly run migrations to account for any very recent changes that are not present in the latest backup
+run this command:
+`./manage.py migrate`
+
 ## Deploy
-*Likely only useful for 18F FEC team members*
+*Likely only useful for FEC team members*
 
-We use Travis for automated deploys after tests pass. If you want to deploy something it is much better to push an empty commit with a tag than doing a manual deploy.
+We use CircleCI for automated deploys after tests pass. If you want to deploy something it is much better to push an empty commit with a tag than doing a manual deploy.
 
-If there is a problem with Travis and something needs to be deployed, you can do so with the following commands. Though, you will need to pull the environment variables from the space you are deploying to and remake your static assets. That will ensure things like the links are correct. You will also want to clear your dist/ directory. That way, you will not exceed the alloted space.
+If there is a problem with CircleCI and something needs to be deployed, you can do so with the following commands. Though, you will need to pull the environment variables from the space you are deploying to and remake your static assets. That will ensure things like the links are correct. You will also want to clear your dist/ directory. That way, you will not exceed the alloted space.
 
 Before deploying, install the
 [Cloud Foundry CLI](https://docs.cloudfoundry.org/devguide/cf-cli/install-go-cli.html)
@@ -237,14 +271,25 @@ and specifying the corresponding manifest, as well as the app you want, like
 so:
 
 ```bash
-cf target -s [feature|dev|stage|prod] && cf push -f manifest_<[feature|dev|stage|prod]>.yml [api|web]
+cf target -s [feature|dev|stage|prod] && cf push -f manifest_<[feature|dev|stage|prod]>.yml [api|cms]
 ```
 
 **NOTE:**  Performing a deploy in this manner will result in a brief period of
 downtime.
 
+### A note about deploying to the `feature` space
+As noted above, you can manually deploy the application if you specify the space you want to deploy to, e.g., `invoke deploy --space feature`.
+
+In the case of the `feature` space, there are a few things to note:
+
+* To deploy to the feature space, an automated deployer account has been set up. To trigger, go to the `tasks.py` file `DEPLOY_RULES` [here](https://github.com/fecgov/fec-cms/blob/784e6540cfcec58e6e763fa711de19cdcb475bb7/tasks.py#L74).
+* Only the CMS app is setup and configured for the `feature` space; it points to the `dev` space for all other things (e.g., the API).
+* The `feature` version of the CMS does have New Relic running against it.
+* The CMS in the `feature` space has its own database that has been loaded with data from a production backup; this data can be refreshed in the future using the same steps outlined in the Wiki.
+* The `feature` space has its own S3 bucket for content.
+
 ## SSH
-*Likely only useful for 18F FEC team members*
+*Likely only useful for FEC team members*
 
 You can SSH directly into the running app container to help troubleshoot or inspect things with the instance(s).  Run the following command:
 
@@ -264,12 +309,11 @@ More information about using SSH with cloud.dov can be found in the [cloud.gov S
 Accounts are handled in the cms admin. All accounts will be reviewed annually.
 
 
-## Copyright and licensing
-This project is in the public domain within the United States, and we waive
-worldwide copyright and related rights through [CC0 universal public domain
-dedication](https://creativecommons.org/publicdomain/zero/1.0/). Read more on
-our license page.
+## Licensing and attribution
+A few parts of this project are not in the public domain. Attribution and licensing information for those parts are described in detail in [LICENSE.md](LICENSE.md).
+
+The rest of this project is in the worldwide public domain, released under the [CC0 1.0 Universal public domain dedication](https://creativecommons.org/publicdomain/zero/1.0/). Read more in [LICENSE.md](LICENSE.md).
 
 A few restrictions limit the way you can use FEC data. For example, you can't
 use contributor lists for commercial purposes or to solicit donations.  Learn
-more on [FEC.gov](http://FEC.gov).
+more on [FEC.gov](https://www.FEC.gov).

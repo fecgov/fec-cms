@@ -75,6 +75,8 @@ DEPLOY_RULES = (
     ('prod', _detect_prod),
     ('stage', lambda _, branch: branch.startswith('release')),
     ('dev', lambda _, branch: branch == 'develop'),
+    # Uncomment below and adjust branch name to deploy desired feature branch to the feature space
+    # ('feature', lambda _, branch: branch == 'feature/INSERT_BRANCH_NAME'),
 )
 
 
@@ -98,10 +100,6 @@ def deploy(ctx, space=None, branch=None, login=None, yes=False):
     ctx.run('npm run build-production', echo=True)
     ctx.run(
         'cd fec && DJANGO_SETTINGS_MODULE=fec.settings.production python manage.py collectstatic --noinput -v 0',
-        echo=True
-    )
-    ctx.run(
-        'cd fec && DJANGO_SETTINGS_MODULE=fec.settings.production python manage.py compress -v 0',
         echo=True
     )
 

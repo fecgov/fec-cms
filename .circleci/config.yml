@@ -9,13 +9,13 @@ jobs:
       # use `-browsers` prefix for selenium tests, e.g. `<image_name>-browsers`
 
       # Python
-      - image: circleci/python:3.5.3
+      - image: circleci/python:3.5.4-jessie-node
         environment:
           TZ: America/New_York
           DATABASE_URL: postgres://postgres@0.0.0.0/cfdm_cms_test
 
       # PostgreSQL
-      - image: circleci/postgres:9.6.2
+      - image: circleci/postgres:9.6.6
         environment:
           POSTGRES_USER: postgres
           POSTGRES_DB: cfdm_cms_test
@@ -44,29 +44,22 @@ jobs:
       - run:
           name: Install python dependencies
           command: |
-            python3 -m venv venv
-            . venv/bin/activate
+            python3 -m venv .env
+            . .env/bin/activate
             pip install -U pip setuptools wheel codecov
             pip install -r requirements.txt
 
       - run:
-          name: Install node dependencies
+          name: Install Node.js dependencies
           command: |
-            curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.33.4/install.sh | bash
-            echo ". ~/.nvm/nvm.sh" >> $BASH_ENV
-            export NVM_DIR="$HOME/.nvm"
-            [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-            [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
-            nvm install 8.6.0
-            nvm use 8.6.0
-            nvm alias default 8.6.0
-            npm i -g npm webpack
+            sudo npm install -g npm 
+            npm install webpack
             npm install
             npm run build
 
       - save_cache:
           paths:
-            - ./venv
+            - ./.env
             - ./node_modules
           key: fec-cms-dependencies-{{ checksum "requirements.txt" }}-{{ checksum "package.json" }}
 
@@ -77,21 +70,18 @@ jobs:
       - run:
           name: Run tests
           command: |
-            export NVM_DIR="$HOME/.nvm"
-            [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-            [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
-            . venv/bin/activate
-            nvm use default
+            . .env/bin/activate
+            npm run build-js
+            npm run build-sass
             cd fec
-            webpack
-            DJANGO_SETTINGS_MODULE=fec.settings.production python manage.py collectstatic --noinput -v 0
+            DJANGO_SETTINGS_MODULE=fec.settings.production python manage.py collectstatic --noinput
             ./manage.py test
             npm run test-single
 
       - run:
           name: Perform post-test checks
           command: |
-            . venv/bin/activate
+            . .env/bin/activate
             codecov
 
       - store_artifacts:
@@ -103,7 +93,7 @@ jobs:
           command: |
             mkdir -p $HOME/bin
             export PATH=$HOME/bin:$PATH
-            curl -L "https://cli.run.pivotal.io/stable?release=linux64-binary&version=6.32.0" | tar xzv -C $HOME/bin
+            curl -L "https://cli.run.pivotal.io/stable?release=linux64-binary&version=6.34.0" | tar xzv -C $HOME/bin
             cf install-plugin autopilot -f -r CF-Community
 
 
@@ -111,9 +101,5 @@ jobs:
           name: Deploy CMS
           command: |
             export PATH=$HOME/bin:$PATH
-            export NVM_DIR="$HOME/.nvm"
-            [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-            [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
-            . venv/bin/activate
-            nvm use default
+            . .env/bin/activate
             invoke deploy --branch $CIRCLE_BRANCH --login True --yes

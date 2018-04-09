@@ -13,15 +13,13 @@ function SearchResults(props) {
   }
 
   function getIssueDate(advisory_opinion) {
-    if(advisory_opinion.issue_date === "1900-01-01") {
-      if(advisory_opinion.is_pending) {
+    if(advisory_opinion.status === 'Pending') {
         return "Pending";
-      } else {
+    } else if (advisory_opinion.status === 'Withdrawn') {
         return "Withdrawn";
-      }
     } else {
         return moment(advisory_opinion.issue_date).format('MM/DD/YYYY');
-      }
+    }
   }
 
   if(props.loading) {
@@ -72,7 +70,7 @@ function SearchResults(props) {
           <ul className="list--buttons">
             {props.query && <li><a className="button button--standard" href="http://search04.fec.gov/vivisimo/cgi-bin/query-meta?v%3Asources=Administrative_Fine%2CAdvisory_Opinion%2CAlternative_Dispute_Resolution%2CAudit_Reports%2CMatters_Under_Review%2CMatters_Under_Review_Archived%2CRulemaster%2CCandidate_Summary%2CCommittee_Summary%2Cfec.gov&query={{ query }}&x=0&y=0&v%3aproject=fec_search_02_prj&v%3aframe=form&form=advanced-fec&">Try FEC.gov</a></li>}
             <li><a className="button button--standard" href={ "mailto:" + $('#contact-email').val() }>Email our team</a></li>
-            <li><a className="button button--standard" href="https://github.com/18f/fec/issues">File an issue</a></li>
+            <li><a className="button button--standard" href="https://github.com/fecgov/fec/issues">File an issue</a></li>
           </ul>
         </div>
       </div>

@@ -207,7 +207,14 @@ function initOtherDocumentsTable() {
     path: path,
     query: {
       candidate_id: candidateId,
-      form_type: 'F99'
+      form_type: ['F99','RFAI'],
+      /* Performing an include would only show RFAI form types. For this reason, excludes need to be
+         used for request_type
+      
+      Exclude all request types except for: 
+      // RQ-5: RFAI referencing Statement of Candidacy */
+      request_type: ['-1','-2','-3','-4','-6','-7','-8','-9'],
+      sort_hide_null: ['false']
     },
     columns: otherDocumentsColumns,
     order: [[2, 'desc']],
@@ -247,7 +254,9 @@ function initSpendingTables() {
       election_full: $table.data('election-full')
     };
     var displayCycle = helpers.formatCycleRange($table.data('cycle'), $table.data('duration'));
-
+    if(displayCycle == null) {
+      displayCycle = "unspecified cycle";
+    }
     if (opts) {
       tables.DataTable.defer($table, {
         path: opts.path,
@@ -275,15 +284,22 @@ function initSpendingTables() {
 function initDisbursementsTable() {
   var $table = $('table[data-type="itemized-disbursements"]');
   var path = ['schedules', 'schedule_b'];
+  var committeeIdData = $table.data('committee-id');
+  var committeeIds = "";
+  if(committeeIdData) {
+    committeeIds = committeeIdData.split(',').filter(Boolean);
+  }
   var opts = {
     // possibility of multiple committees, so split into array
-    committee_id: $table.data('committee-id').split(','),
+    committee_id: committeeIds,
     title: 'itemized disbursements',
     name: $table.data('name'),
     cycle: $table.data('cycle')
   };
   var displayCycle = helpers.formatCycleRange($table.data('cycle'), $table.data('duration'));
-
+  if(displayCycle == null) {
+    displayCycle = "unspecified cycle";
+  }
   tables.DataTable.defer($table, {
     path: path,
     query: {
@@ -315,10 +331,15 @@ function initContributionsTables() {
   var $contributorState = $('table[data-type="contributor-state"]');
   var displayCycle = helpers.formatCycleRange($allTransactions.data('cycle'), 2);
   var candidateName = $allTransactions.data('name');
+  var committeeIdData = $allTransactions.data('committee-id');
+  var committeeIds = "";
+  if(committeeIdData) {
+    committeeIds = committeeIdData.split(',').filter(Boolean);
+  }
   var opts = {
     // possibility of multiple committees, so split into array
     // also, filter array to remove any blank values
-    committee_id: $allTransactions.data('committee-id').split(',').filter(Boolean),
+    committee_id: committeeIds,
     candidate_id: $allTransactions.data('candidate-id'),
     title: 'individual contributions',
     name: candidateName,

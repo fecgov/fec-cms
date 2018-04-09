@@ -8,15 +8,11 @@
   {% include 'partials/meta-tags.jinja' %}
 
   {% block css %}
-  {% compress css %}
-  <link rel="stylesheet" type="text/x-scss" href="{{ static('scss/base.scss') }}" />
-  {% endcompress %}
+  <link rel="stylesheet" type="text/css" href="{{ asset_for_css('base.css') }}" />
   {% endblock css %}
 
   <script>
-    ANALYTICS = 'false';
     BASE_PATH = '/data';
-    CMS_URL = '{{ CMS_URL }}',
     API_LOCATION = '{{ FEC_API_URL }}';
     API_VERSION = 'v1';
     API_KEY = '{{ FEC_API_KEY }}';
@@ -61,7 +57,7 @@
       <a title="Home" href="/" rel="home" class="site-title"><span class="u-visually-hidden">Federal Election Commission | United States of America</span></a>
       <ul class="utility-nav list--flat">
         <li class="utility-nav__item"><a href="/calendar/">Calendar</a></li>
-        <li class="utility-nav__item"><button class="js-glossary-toggle glossary__toggle">Glossary</button></li>
+        <li class="utility-nav__item"><a class="js-glossary-toggle glossary__toggle">Glossary</a></li>
         <li class="utility-nav__search">
           <form accept-charset="UTF-8" action="/search" class="combo" method="get" role="search">
             <input type="hidden" name="type" value="candidates">
@@ -113,21 +109,38 @@
           </li>
         </ul>
 
-        <p>999 E Street, NW<br>
+        <p>1050 First Street, NE<br>
         Washington, DC 20463</p>
+
+        <a href="https://public.govdelivery.com/accounts/USFEC/subscriber/topics?qsp=CODE_RED" target="_blank">
+          <button class="button--standard button--envelope">Sign up for FECMail</button>
+        </a>
       </div>
     </div>
   </footer>
 
 {% include './partials/glossary.html' %}
 
+{% csrf_token %}
+
 {% block modals %}{% endblock %}
-<script src="{{ asset_for('vendor.js') }}"></script>
-<script src="{{ asset_for('data-init.js') }}"></script>
+<script src="{{ asset_for_js('vendor.js') }}"></script>
+<script src="{{ asset_for_js('data-init.js') }}"></script>
 {% block scripts %}{% endblock %}
 
-{% if use_analytics %}
-<script id="_fed_an_ua_tag" src="https://dap.digitalgov.gov/Universal-Federated-Analytics-Min.js?agency=FEC"></script>
+{% if FEC_CMS_ENVIRONMENT == 'PRODUCTION' %}
+  <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+    ga('set', 'anonymizeIp', true);
+    ga('set', 'forceSSL', true);
+    ga('create', 'UA-48605964-22', 'auto');
+    ga('send', 'pageview');
+  </script>
+  <script id="_fed_an_ua_tag" src="https://dap.digitalgov.gov/Universal-Federated-Analytics-Min.js?agency=FEC"></script>
 {% endif %}
 
 </body>

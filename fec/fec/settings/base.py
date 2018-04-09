@@ -18,9 +18,9 @@ FEC_API_URL = env.get_credential('FEC_API_URL', 'http://localhost:5000')
 FEC_API_KEY = env.get_credential('FEC_WEB_API_KEY')
 FEC_API_VERSION = env.get_credential('FEC_API_VERSION', 'v1')
 FEC_API_KEY_PUBLIC = env.get_credential('FEC_WEB_API_KEY_PUBLIC', '')
-FEC_CMS_ROBOTS = env.get_credential('FEC_CMS_ROBOTS')
 
-CMS_URL = env.get_credential('CMS_URL', 'https://www.fec.gov')
+# Disables crawling for all of our environments except for production
+FEC_CMS_ROBOTS = True
 
 FEC_GITHUB_TOKEN = env.get_credential('FEC_GITHUB_TOKEN')
 
@@ -53,6 +53,7 @@ ENVIRONMENTS = {
     'dev': 'DEVELOPMENT',
     'stage': 'STAGING',
     'prod': 'PRODUCTION',
+    'feature': 'FEATURE',
 }
 FEC_CMS_ENVIRONMENT = ENVIRONMENTS.get(env.get_credential('FEC_CMS_ENVIRONMENT'), 'LOCAL')
 CONTACT_EMAIL = 'webmanager@fec.gov'
@@ -72,6 +73,14 @@ INSTALLED_APPS = (
     'modelcluster',
     'storages',
 
+    'fec',
+    'search',
+    'home',
+    'data',
+    'legal',
+    'uaa_client',
+    'extend_admin',
+
     'wagtail.wagtailcore',
     'wagtail.wagtailadmin',
     'wagtail.wagtailsearch',
@@ -90,14 +99,6 @@ INSTALLED_APPS = (
     'wagtail.contrib.wagtailstyleguide',
 
     'django_jinja',
-
-    'fec',
-    'search',
-    'home',
-    'data',
-    'legal',
-    'uaa_client',
-    'extend_admin',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -137,9 +138,9 @@ TEMPLATES = [
                 'FEC_API_KEY_PUBLIC': FEC_API_KEY_PUBLIC,
                 'FEC_API_URL': FEC_API_URL,
                 'WEBMANAGER_EMAIL': WEBMANAGER_EMAIL,
-                'CMS_URL': CMS_URL,
                 'TRANSITION_URL': FEC_TRANSITION_URL,
                 'CLASSIC_URL': FEC_CLASSIC_URL,
+                'FEC_CMS_ENVIRONMENT': FEC_CMS_ENVIRONMENT,
             },
         }
     },
@@ -201,7 +202,12 @@ STATICFILES_FINDERS = (
 STATICFILES_DIRS = (
     os.path.join(BASE_DIR, 'dist', 'fec', 'static'),
     os.path.join(PROJECT_DIR, 'static'),
+    # We will need just the assets of certain npm modules for Wagtail
+    # So we are including a folder of symlinks to modules for access
+    os.path.join(BASE_DIR, 'fec', 'wagtail_npm_dependencies'),
 )
+
+DIST_DIR = os.path.join(BASE_DIR, 'dist')
 
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 STATIC_URL = '/static/'
@@ -248,13 +254,13 @@ AUTH_PASSWORD_VALIDATORS = [
 
 if FEC_CMS_ENVIRONMENT != 'LOCAL':
     AWS_QUERYSTRING_AUTH = False
-    AWS_ACCESS_KEY_ID = env.get_credential('CMS_AWS_ACCESS_KEY_ID')
-    AWS_SECRET_ACCESS_KEY = env.get_credential('CMS_AWS_SECRET_ACCESS_KEY')
-    AWS_STORAGE_BUCKET_NAME = env.get_credential('CMS_AWS_STORAGE_BUCKET_NAME')
+    AWS_ACCESS_KEY_ID = env.get_credential('access_key_id')
+    AWS_SECRET_ACCESS_KEY = env.get_credential('secret_access_key')
+    AWS_STORAGE_BUCKET_NAME = env.get_credential('bucket')
+    AWS_S3_REGION_NAME = env.get_credential('region')
     AWS_S3_CUSTOM_DOMAIN = env.get_credential('CMS_AWS_CUSTOM_DOMAIN')
     DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
     AWS_LOCATION = 'cms-content'
-    AWS_S3_REGION_NAME = env.get_credential('CMS_AWS_DEFAULT_REGION')
 
 UAA_CLIENT_ID = env.get_credential('CMS_LOGIN_CLIENT_ID', 'my-client-id')
 UAA_CLIENT_SECRET = env.get_credential('CMS_LOGIN_CLIENT_SECRET', 'my-client-secret')

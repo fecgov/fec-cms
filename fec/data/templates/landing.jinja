@@ -5,9 +5,7 @@
 {% block title %}{{ title }}{% endblock %}
 
 {% block css %}
-{% compress css %}
-<link rel="stylesheet" type="text/x-scss" href="{{ static('scss/data-landing.scss') }}" />
-{% endcompress %}
+<link rel="stylesheet" type="text/css" href="{{ asset_for_css('data-landing.css') }}" />
 {% endblock %}
 
 {% block body %}
@@ -41,7 +39,6 @@
         <h2>Find contributions from <br> specific individuals</h2>
         <form action="/data/receipts/individual-contributions/" autocomplete="off" class="search__container content__section">
           <div class="combo combo--search combo--search--medium">
-            <div class="tour__point tour__point--left" data-intro="<h5>Find individual contributions</h5>See who's contributing to candidates and committees. Filter results, download and share the results."></div>
             <label for="contributor-search" class="label">Individual contributor name</label>
             <input id="contributor-search" class="combo__input" type="text" name="contributor_name"
             autocorrect="off" autocapitalize="off" spellcheck="false">
@@ -64,7 +61,6 @@
   </section>
 
   <section class="content__section">
-    <div class="tour__point tour__point--left" data-intro="<h5>Find election data that matters to you</h5>New election pages show all candidates running for a particular office. Compare what they’re raising and spending. Search by state and district."></div>
     <h2>Compare candidates in an election</h2>
     <div class="grid grid--2-wide" id="election-lookup">
       <div class="grid__item">
@@ -76,7 +72,7 @@
             <label for="state" class="label">State</label>
             <select id="state" name="state" aria-label="Select a state">
               <option value="">Select state</option>
-              {% for value, label in constants.election_states.items() %}
+              {% for value, label in constants.states.items() %}
               <option value="{{ value }}">{{ label }}</option>
               {% endfor %}
             </select>
@@ -114,84 +110,113 @@
   </section>
 
   <section class="content__section content__section--ruled">
-    <div class="tour__point tour__point--left" data-intro="<h5>Better data browsing</h5>Look up individual contributions, campaign spending and original filings. Refine results as you go, using more precise controls— no need to enter all search criteria upfront. When you’re ready, export results and save links to custom searches."></div>
     <h2>Browse full advanced data sets</h2>
-    <ul class="grid grid--4-wide">
-      <li class="grid__item card card--horizontal card--primary">
-        <div class="card__image__container">
-          <span class="card__icon i-receipt"><span class="u-visually-hidden">Icon of a piggy bank</span></span>
-        </div>
-        <div class="card__content">
-          <a href="/data/advanced?tab=raising">Raising</a>
-        </div>
-      </li>
-      <li class="grid__item card card--horizontal card--primary">
-        <div class="card__image__container">
-          <span class="card__icon i-disbursement"><span class="u-visually-hidden">Icon of representing spending</span></span>
-        </div>
-        <div class="card__content">
-          <a href="/data/advanced?tab=spending">Spending</a>
-        </div>
-      </li>
-      <li class="grid__item card card--horizontal card--primary">
-        <div class="card__image__container">
-          <span class="card__icon i-candidate"><span class="u-visually-hidden">Icon of a candidate</span></span>
-        </div>
-        <div class="card__content">
-          <a href="/data/advanced?tab=candidates">Candidates</a>
-        </div>
-      </li>
-      <li class="grid__item card card--horizontal card--primary">
-        <div class="card__image__container">
-          <span class="card__icon i-committee"><span class="u-visually-hidden">Icon representing a committeek</span></span>
-        </div>
-        <div class="card__content">
-          <a href="/data/advanced?tab=committees">Committees</a>
-        </div>
-      </li>
-    </ul>
-    <ul class="grid grid--4-wide">
-      <li class="grid__item card card--horizontal card--primary">
-        <div class="card__image__container">
-          <span class="card__icon i-filings"><span class="u-visually-hidden">Icon representing filings</span></span>
-        </div>
-        <div class="card__content">
-          <a href="/data/advanced?tab=filings">Filings and reports</a>
-        </div>
-      </li>
-      <li class="grid__item card card--horizontal card--primary">
-        <div class="card__image__container">
-          <span class="card__icon i-loans"><span class="u-visually-hidden">Icon representing loans and debts</span></span>
-        </div>
-        <div class="card__content">
-          <a href="/data/advanced?tab=loans-debts">Loans and debts</a>
-        </div>
-      </li>
-      <li class="grid__item card card--horizontal card--primary">
-        <div class="card__image__container">
-          <span class="card__icon i-bulk"><span class="u-visually-hidden">Icon representing bulk data</span></span>
-        </div>
-        <div class="card__content">
-          <a href="/data/advanced?tab=other">Bulk data and other sources</a>
-        </div>
-      </li>
-      <li class="grid__item card card--horizontal card--primary">
-        <div class="card__image__container">
-          <span class="card__icon i-external"><span class="u-visually-hidden">Icon representing external pages</span></span>
-        </div>
-        <div class="card__content">
-          <a href="/data/advanced?tab=external">External data sources</a>
-        </div>
-      </li>
-    </ul>
+    <div class="grid grid--4-wide">
+      <div class="grid__item">
+        <a href="/data/advanced?tab=raising">
+          <aside class="card card--horizontal card--primary">
+            <div class="card__image__container">
+              <span class="card__icon i-receipt"><span class="u-visually-hidden">Icon of a piggy bank</span></span>
+            </div>
+            <div class="card__content">
+              Raising
+            </div>
+          </aside>
+        </a>
+      </div>
+      <div class="grid__item">
+        <a href="/data/advanced?tab=spending">
+          <aside class="card card--horizontal card--primary">
+            <div class="card__image__container">
+              <span class="card__icon i-disbursement"><span class="u-visually-hidden">Icon of representing spending</span></span>
+            </div>
+            <div class="card__content">
+              Spending
+            </div>
+          </aside>
+        </a>
+      </div>
+      <div class="grid__item">
+        <a href="/data/advanced?tab=candidates">
+          <aside class="card card--horizontal card--primary">
+            <div class="card__image__container">
+              <span class="card__icon i-candidate"><span class="u-visually-hidden">Icon of a candidate</span></span>
+            </div>
+            <div class="card__content">
+              Candidates
+            </div>
+          </aside>
+        </a>
+      </div>
+      <div class="grid__item">
+        <a href="/data/advanced?tab=committees">
+          <aside class="card card--horizontal card--primary">
+            <div class="card__image__container">
+              <span class="card__icon i-committee"><span class="u-visually-hidden">Icon of a committee</span></span>
+            </div>
+            <div class="card__content">
+              Committees
+            </div>
+          </aside>
+        </a>
+      </div>
+    </div>
+    <div class="grid grid--4-wide">
+      <div class="grid__item">
+        <a href="/data/advanced?tab=filings">
+          <aside class="card card--horizontal card--primary">
+            <div class="card__image__container">
+              <span class="card__icon i-filings"><span class="u-visually-hidden">Icon of filed papers</span></span>
+            </div>
+            <div class="card__content">
+              Filings and reports
+            </div>
+          </aside>
+        </a>
+      </div>
+      <div class="grid__item">
+        <a href="/data/advanced?tab=loans-debts">
+          <aside class="card card--horizontal card--primary">
+            <div class="card__image__container">
+              <span class="card__icon i-loans"><span class="u-visually-hidden">Icon of an open hand with a dollar symbol</span></span>
+            </div>
+            <div class="card__content">
+              Loans and debts
+            </div>
+          </aside>
+        </a>
+      </div>
+      <div class="grid__item">
+        <a href="/data/advanced?tab=other">
+          <aside class="card card--horizontal card--primary">
+            <div class="card__image__container">
+              <span class="card__icon i-bulk"><span class="u-visually-hidden">Icon of bulk data</span></span>
+            </div>
+            <div class="card__content">
+              Bulk data and other sources
+            </div>
+          </aside>
+        </a>
+      </div>
+      <div class="grid__item">
+        <a href="/data/advanced?tab=external">
+          <aside class="card card--horizontal card--primary">
+            <div class="card__image__container">
+              <span class="card__icon i-external"><span class="u-visually-hidden">Icon representing external pages</span></span>
+            </div>
+            <div class="card__content">
+              External data sources
+            </div>
+          </aside>
+        </a>
+      </div>
+    </div>
   </section>
 
   <div class="content__section--extra">
     <h2 class="t-ruled--bottom">Get started with campaign finance data</h2>
     <section class="content__section" id="raising">
-      <h3 class="u-no-margin">Raising
-        <div class="tour__point tour__point--left" data-intro="<h5>Spot trends with data visualizations</h5>Compare raising and spending trends over time. Dig deeper for a detailed analysis. Check back regularly: More visualizations are coming soon!"></div>
-      </h3>
+      <h3 class="u-no-margin">Raising</h3>
       <p>This graph shows how much <span class="term" data-term="candidate">candidates</span>, <span class="term" data-term="party committee">party committees</span> and <span class="term" data-term="political action committee (PAC)">political action committees</span> (PACs) have reported raising, up to specific points in time. Although the graph displays these numbers month-by-month, different committee types have different reporting schedules.</p>
       <div class="content__section">
         <div class="heading--section heading--with-action">
@@ -327,9 +352,6 @@
 {% endblock %}
 
 {% block scripts %}
-<script src="{{ asset_for('dataviz-common.js') }}"></script>
-<script src="{{ asset_for('landing.js') }}"></script>
-<script>
-  TOUR_PAGE = 'campaign-finance-data';
-</script>
+<script src="{{ asset_for_js('dataviz-common.js') }}"></script>
+<script src="{{ asset_for_js('data-landing.js') }}"></script>
 {% endblock %}

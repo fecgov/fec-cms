@@ -16,18 +16,6 @@
   width: 100%;
 }
 
-.card--primary {
-  @include u-bg--primary();
-  @include u-font-color($gray-lightest);
-  font-weight: bold;
-}
-
-.card--secondary {
-  @include u-bg--secondary();
-  @include u-font-color($gray-lightest);
-  font-weight: bold;
-}
-
 .card--secondary-contrast {
   @include u-font-color($inverse);
   background-color: $bright-red;
@@ -224,6 +212,7 @@
 .card--alternating-bg {
   min-height: u(8.3rem);
   padding: 0;
+  border: 2px solid transparent;
 
   .card__image__container {
     @include span-columns(4);
@@ -237,6 +226,11 @@
     vertical-align: middle;
   }
 
+  .card__image__container--primary {
+    background-color: $primary;
+    border-radius: 4px 0 0 4px;
+  }
+
   .card__image__container--secondary {
     background-color: $secondary;
     border-radius: 4px 0 0 4px;
@@ -246,6 +240,23 @@
     display: table-cell;
     padding: 1.5rem;
   }
+
+  &:hover {
+    border: 2px solid $gray;
+
+    .card__image__container--primary {
+      background-color: $navy;
+    }
+
+    .card__image__container--secondary {
+      background-color: $deep-red;
+    }
+  }
+
+  &:focus {
+    border: 2px solid $focus;
+  }
+
 }
 
 // Stacked cards, when there's more than one in a vertical column
@@ -297,6 +308,20 @@
 }
 
 .card--primary {
+  @include u-bg--primary();
+  @include u-font-color($gray-lightest);
+  font-weight: bold;
+  border: 2px solid transparent;
+
+  &:hover {
+    background-color: $navy;
+    border: 2px solid $aqua;
+  }
+
+  &:focus {
+    border: 2px solid $focus;
+  }
+
   .card__icon {
     &.i-candidate {
       @include u-icon-bg($candidate, $primary-contrast);
@@ -342,6 +367,7 @@
 
     &.i-external {
       @include u-icon-bg($share, $primary-contrast);
+      background-size: 45%;
     }
 
     &.i-filings {
@@ -354,11 +380,64 @@
 
     &.i-loans {
       @include u-icon-bg($hand-money, $primary-contrast);
+      background-size: 70%;
+    }
+
+    &.i-mallet {
+      @include u-icon-bg($mallet, $primary-contrast);
+      background-size: 75%;
+    }
+
+    &.i-committee-audit {
+      @include u-icon-bg($committee-audit, $primary-contrast);
+    }
+
+    &.i-shield {
+      @include u-icon-bg($shield, $primary-contrast);
+      background-size: 75%;
+    }
+
+    &.i-direction-sign {
+      @include u-icon-bg($direction-sign, $primary-contrast);
+      background-size: 75%;
+    }
+
+    &.i-scale {
+      @include u-icon-bg($scale, $primary-contrast);
+    }
+
+    &.i-usc {
+      @include u-icon-bg($usc, $primary-contrast);
+      background-size: 70%;
+    }
+
+    &.i-cfr {
+      @include u-icon-bg($cfr, $primary-contrast);
+      background-size: 70%;
+    }
+
+    &.i-compass {
+      @include u-icon-bg($compass, $primary-contrast);
+      background-size: 65%;
     }
   }
 }
 
 .card--secondary {
+  @include u-bg--secondary();
+  @include u-font-color($gray-lightest);
+  font-weight: bold;
+  border: 2px solid transparent;
+
+  &:hover {
+    background-color: $deep-red;
+    border: 2px solid $orange;
+  }
+
+  &:focus {
+    border: 2px solid $focus;
+  }
+
   .card__icon {
     &.i-calendar {
       @include u-icon-bg($calendar, $secondary-contrast);
@@ -370,12 +449,6 @@
       @include u-icon-bg($document, $secondary-contrast);
       background-position: 50% 50%;
       background-size: 50%;
-    }
-
-    &.i-info-person {
-      @include u-icon-bg($info-person, $secondary-contrast);
-      background-position: 50% 110%;
-      background-size: 100%;
     }
 
     &.i-training {
