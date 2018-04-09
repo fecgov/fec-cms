@@ -982,8 +982,10 @@ class MeetingPage(Page):
     approved_minutes_link = models.URLField(blank=True)
     sunshine_act_links = models.TextField(
         blank=True, help_text='URLs separated by a newline')
-    live_video_url = models.URLField(blank=True)
-    live_video_captions = models.URLField(blank=True)
+    live_video_url = models.URLField(blank=True, help_text='Leave this field blank to use the default url')
+    live_video_captions = models.URLField(blank=True, help_text='Leave this field blank to use the default url')
+    show_streaming_info = models.BooleanField(default=True, help_text='Uncheck this to hide Live video url and Live video captions information')
+
 
     imported_html = StreamField(
         [('html_block', blocks.RawHTMLBlock())],
@@ -1046,7 +1048,8 @@ class MeetingPage(Page):
                 FieldPanel('full_audio_url'),
                 FieldPanel('mtg_transcript_url'),
                 FieldPanel('live_video_url'),
-                FieldPanel('live_video_captions')
+                FieldPanel('live_video_captions'),
+                FieldPanel('show_streaming_info'),
             ],
             heading='Meeting media',
             classname='collapsible collapsed'

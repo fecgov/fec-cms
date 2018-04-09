@@ -47,7 +47,7 @@
     {% now 'F j, Y' as today %}
     {% now 'H:i' as current_time %}
     {% if self.date|date:'F j, Y' == today or self.end_date|date:'F j, Y' == today %}
-    {% if current_time > '07:30' and current_time < '17:00' %}
+    {% if current_time > '07:30' and current_time < '17:00' and self.show_streaming_info %}
     <div class="row">
       <div class="slab slab--neutral u-padding--left usa-width-five-sixths">
         <div class="usa-width-one-fourth u-padding--left">
