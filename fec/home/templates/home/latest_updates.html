@@ -12,6 +12,31 @@
       <p>FEC Record articles inform candidates and committees about FEC developments and are published as news happens. Tips for Treasurers are published once a week.</p>
     </div>
   </div>
+  <div class="js-accordion accordion--neutral" data-content-prefix="email_signup">
+  <button type="button" class="js-accordion-trigger accordion__button">Get latest updates by email
+  </button>
+  <div class="accordion__content">
+    <form id="GD-snippet-form" action="https://public.govdelivery.com/accounts/USFEC/subscriber/qualify?qsp=USFEC_1" accept-charset="UTF-8" method="post" target="_blank">
+      <input name="utf8" type="hidden" value="&#x2713;" /><input type="hidden" name="authenticity_token" value="{{ settings.GOV_DELIVERY_TOKEN }}" />
+        <fieldset class="u-margin--left u-padding--left u-padding--right u-margin--top">
+          <label for="submit" class="label">Email</label>
+            <input class="form-element--inline" size="40" type="text" name="email" id="email">
+            <button class="button--cta form-element--inline" type="submit" name="commit" value="Subscribe" class="form_button">Subscribe</button>
+            <ul class="list--flat-bordered t-small t-sans u-margin--top">
+              <li><a href="https://public.govdelivery.com/accounts/USFEC/subscriber/topics?qsp=CODE_RED" target="_blank">Edit an existing subscription</a></li>
+            </ul>
+            <div class="message message--info message--small">
+              <p>
+              On the next page, set your email preferences, then complete your subscription by selecting which latest updates publications types you want to receive by email.
+              </p>
+            </div>
+            <ul class="list--flat-bordered t-small t-sans u-margin--top u-margin--bottom">
+              <li><a href="https://insights.govdelivery.com/Communications/Subscriber_Help_Center/What_information_does_GovDelivery_collect%3F_How_is_it_used%3F" target="_blank">Privacy policy</a></li>
+            </ul>
+        </fieldset>
+      </form>
+    </div>
+  </div>
 {% endblock %}
 
 {% block filters %}
