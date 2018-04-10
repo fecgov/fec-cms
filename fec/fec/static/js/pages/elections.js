@@ -22,6 +22,7 @@ var ElectionForm = require('../modules/election-form').ElectionForm;
 var comparisonTemplate = require('../templates/comparison.hbs');
 var candidateStateMapTemplate = require('../templates/candidateStateMap.hbs');
 var electionDatesTemplate = require('../templates/electionDates.hbs');
+var electionOfficesTemplate = require('../templates/electionOffices.hbs');
 
 var MAX_MAPS = 2;
 
@@ -503,6 +504,18 @@ function initSpendingTables() {
   });
 }
 
+function getStateElectionOffices(state) {
+  var query = {
+    state: state
+  };
+  var url = helpers.buildUrl(['state-election-office'], query); 
+  $.getJSON(url).done(function(response) {
+    var $offices_list = $('#election-offices');
+    var offices = response.results;
+    $offices_list.html(electionOfficesTemplate(offices));
+  });
+}
+
 $(document).ready(function() {
   var $table = $('#results');
   var query = _.chain(context.election)
@@ -545,6 +558,8 @@ $(document).ready(function() {
     $election_dates_results.html(electionDatesTemplate(dates));
 
     });
+
+    getStateElectionOffices(context.election.state);
 
   if ($('#election-map').length) {
     var districtMap = new maps.DistrictMap(
