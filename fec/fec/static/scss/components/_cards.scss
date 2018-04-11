@@ -226,6 +226,11 @@
     vertical-align: middle;
   }
 
+  .card__image__container--primary {
+    background-color: $primary;
+    border-radius: 4px 0 0 4px;
+  }
+
   .card__image__container--secondary {
     background-color: $secondary;
     border-radius: 4px 0 0 4px;
@@ -238,6 +243,10 @@
 
   &:hover {
     border: 2px solid $gray;
+
+    .card__image__container--primary {
+      background-color: $navy;
+    }
 
     .card__image__container--secondary {
       background-color: $deep-red;

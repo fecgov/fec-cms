@@ -53,7 +53,7 @@ run into problems please
     * PostgreSQL (the latest 9.6 release).
          * Read a [Mac OSX tutorial](https://www.moncefbelyamani.com/how-to-install-postgresql-on-a-mac-with-homebrew-and-lunchy/).
          * Read a [Windows tutorial](http://www.postgresqltutorial.com/install-postgresql/).
-         * Read a [Linux tutorial](http://www.postgresql.org/docs/9.5/static/installation.html)
+         * Read a [Linux tutorial](https://www.postgresql.org/docs/9.5/static/installation.html)
            (or follow your OS package manager).
 
 2. Set up your Node environment — learn how to do this with our
@@ -316,4 +316,4 @@ The rest of this project is in the worldwide public domain, released under the [
 
 A few restrictions limit the way you can use FEC data. For example, you can't
 use contributor lists for commercial purposes or to solicit donations.  Learn
-more on [FEC.gov](http://FEC.gov).
+more on [FEC.gov](https://www.FEC.gov).
