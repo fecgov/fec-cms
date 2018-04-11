@@ -218,3 +218,8 @@ SEARCH_CHILDREN_OF = [
     '/home/about/',
     '/home/about/leadership-and-structure/'
 ]
+
+streaming_info = OrderedDict([
+    ("live-video-url", "https://fec.adobeconnect.com/openmeeting/"),
+    ("live-video-captions", "http://www.streamtext.net/player?event=BIS-FEC")
+])
