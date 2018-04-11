@@ -36,7 +36,7 @@ if settings.FEC_CMS_ENVIRONMENT != 'LOCAL':
     urlpatterns.insert(0,url(r'^admin/login', uaa_views.login, name='login'))
 
 if settings.FEC_CMS_ROBOTS:
-    url(
+    urlpatterns += url(
         r'^robots\.txt$',
         TemplateView.as_view(
             template_name='robots.txt',
