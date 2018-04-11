@@ -34,10 +34,10 @@
   border-bottom: 1px solid $base;
   margin: 0 0 -1px 0;
   color: $base;
-  font-size: u(1.6rem);
+  font-size: u(1.4rem);
   font-weight: bold;
   letter-spacing: -.3px;
-  padding: u(1rem 4rem 1rem 1rem);
+  padding: u(1rem 4rem 1rem 2rem);
   text-align: left;
   width: 100%;
 
@@ -50,7 +50,8 @@
 .accordion__content {
   @include clearfix();
   border-bottom: 1px solid $base;
-  padding: u(1rem);
+  padding: u(2rem);
+  font-family: $sans-serif;
 }
 
 .accordion__button--spacious {
