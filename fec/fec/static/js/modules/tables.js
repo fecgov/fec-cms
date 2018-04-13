@@ -92,7 +92,7 @@ function mapSort(order, columns) {
 
 function getCount(response) {
   // for audit data set, retrun real data result rows
-  if (window.location.pathname === '/data/audit/'){
+  if (window.location.pathname === '/legal-resources/enforcement/audit-search/'){
     return response.pagination.count;
   }
   var pagination_count = response.pagination.count;
