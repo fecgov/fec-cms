@@ -21,13 +21,12 @@ $("#primary_category_id").change(function(event) {
     $.each(data.results[0].sub_category_list, function(key, val){
       $select.append('<option value="' + val.sub_category_id + '">' + val.sub_category_name + '</option>');
     });
-     $(".sub--filter--indent").css('opacity','1').css({pointerEvents: "auto"})
-     //$select.prepend('<option selected value="all">Choose sub category</option>');
+     $(".sub--filter--indent").css('opacity','1').css({pointerEvents: "auto"});
     }
   })
 })
 
-//for cub category filter-tag and results
+//for sub category filter-tag and results
 function showSubCategory(){
     var sub_selected = $("#sub_category_id option:selected").text()
     sub_selected == ("Choose a sub-category")  || ($("#sub_category_id").val() == "all")
