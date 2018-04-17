@@ -38,6 +38,8 @@ from django.db.models.signals import m2m_changed
 
 from wagtail.contrib.table_block.blocks import TableBlock
 
+from django.utils.encoding import python_2_unicode_compatible
+
 from fec import constants
 
 logger = logging.getLogger(__name__)
@@ -47,6 +49,7 @@ from home.blocks import (ThumbnailBlock, AsideLinkBlock,
                          OptionBlock, CollectionBlock, DocumentFeedBlurb,
                          ExampleParagraph, ExampleForms, ExampleImage,
                          CustomTableBlock, ReportingExampleCards)
+from fec import settings
 
 
 stream_factory = functools.partial(
@@ -959,10 +962,11 @@ class ServicesLandingPage(ContentPage, UniqueModel):
     def hero_class(self):
         return 'services'
 
-def live_video_url():
-    return constants.streaming_info['live-video-captions']
-
 class MeetingPage(Page):
+
+    def live_video_url():
+        return constants.streaming_info['live-video-captions']
+
     OPEN = 'O'
     EXECUTIVE = 'E'
     MEETING_TYPE_CHOICES = (
@@ -984,7 +988,7 @@ class MeetingPage(Page):
     approved_minutes_link = models.URLField(blank=True)
     sunshine_act_links = models.TextField(
         blank=True, help_text='URLs separated by a newline')
-    live_video_url = models.URLField(default=live_video_url, blank=False, help_text='Leave this field blank to use the default url')
+    live_video_url = models.URLField(default=live_video_url, help_text=settings.LIVE_VIDEO_URL, null=True, blank=True)
     live_video_captions = models.URLField(blank=True, help_text='Leave this field blank to use the default url')
     show_streaming_info = models.BooleanField(default=True, help_text='Uncheck this to hide Live video url and Live video captions information')
 
@@ -1013,6 +1017,7 @@ class MeetingPage(Page):
             ('item_audio', DocumentChooserBlock(required=False)),
         ]))
     ])
+
 
     content_panels = Page.content_panels + [
         StreamFieldPanel('agenda'),
