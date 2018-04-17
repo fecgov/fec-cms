@@ -17,7 +17,7 @@ $('.tag__category.sub').css('visibility','hidden')
 $("#primary_category_id").change(function(){
     var current_category = $("#primary_category_id option:selected").text()
     $('.tag__category.sub').css('visibility','hidden')
-    $('.tag__item.primary').contents()[0].nodeValue = "Primary Category: " + current_category
+    $('.tag__item.primary').contents()[0].nodeValue = "Findings and issue: " + current_category
     $("#primary_category_id").val() == 'all'
      ? $('.tag__item.primary button').hide()
      : $('.tag__item.primary button').show()
