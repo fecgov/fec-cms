@@ -81,6 +81,15 @@
   padding: u(0 0 2rem 0);
 }
 
+.content__section--extra {
+  @include clearfix();
+  padding: u(2rem 0);
+
+  @include media($lg) {
+    padding: u(4rem 0);
+  }
+}
+
 //to allow a block of content to be indented to the right of an icon or other content
 .content__section--indent-left {
   margin: u(0 0 3rem 3rem);
