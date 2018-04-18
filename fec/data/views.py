@@ -277,8 +277,7 @@ def committee(request, committee_id):
     # without cycle query parameter
     # See https://github.com/fecgov/openFEC/issues/1536
     # For each candidate, set related_cycle to the most recent election year
-    # relative to the selected cycle. Ensures that the related cycle is always less than
-    # or equal to the selected cycle.
+    # relative to the selected cycle.
     for candidate in candidates:
         election_years = []
         for election_year in candidate['election_years']:
