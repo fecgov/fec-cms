@@ -57,7 +57,7 @@
             <td class="figure__value">
               {% for c in candidates %}
                 {% if c.related_cycle is not none %}
-                  <a href="/data/candidate/{{ c.candidate_id }}/?cycle={{ c.related_cycle }}">{{ c.name }}</a>
+                  <a href="/data/candidate/{{ c.candidate_id }}/?cycle={{ c.related_cycle }}&election_full=false">{{ c.name }}</a>
                 {% else %}
                   <a href="/data/candidate/{{ c.candidate_id }}/">{{ c.name }}</a>
                 {% endif %}
