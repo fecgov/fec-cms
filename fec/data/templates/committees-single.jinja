@@ -138,7 +138,11 @@
         {% if candidates %}
           {% for c in candidates %}
             <li class="side-nav__item">
-              <a class="button button--cta u-margin--top t-left-aligned button--candidate u-full-width" href="/data/candidate/{{ c.candidate_id }}/?cycle={{ c.related_cycle }}">
+              {% if c.related_cycle is not none %}
+                <a class="button button--cta u-margin--top t-left-aligned button--candidate u-full-width" href="/data/candidate/{{ c.candidate_id }}/?cycle={{ c.related_cycle }}">
+              {% else %}
+                <a class="button button--cta u-margin--top t-left-aligned button--candidate u-full-width" href="/data/candidate/{{ c.candidate_id }}/">
+              {% endif %}
                 <h4 class="callout__title">{{ c.name }}</h4>
                 <span class="callout__subtitle">Authorizing candidate</span>
               </a>

@@ -36,12 +36,6 @@ report_types = {
     'I': 'ie-only'
 }
 
-"""
- Returns true if date is in between start and end
-"""
-def is_date_in_date_range(start_date, date, end_date):
-    return start_date < date and date <= end_date
-
 
 def to_date(committee, cycle):
     if committee['committee_type'] in ['H', 'S', 'P']:
@@ -289,7 +283,7 @@ def committee(request, committee_id):
         election_years = []
         for election_year in candidate['election_years']:
             start_of_election_period = election_year - election_durations[candidate['office']]
-            if is_date_in_date_range(start_of_election_period, election_year, cycle):
+            if start_of_election_period < cycle and cycle <= election_year:
                 election_years.append(election_year)
 
         candidate['related_cycle'] = max(election_years) if election_years else None

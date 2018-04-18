@@ -56,7 +56,11 @@
             <td class="figure__label">Authorizing candidate:</td>
             <td class="figure__value">
               {% for c in candidates %}
-                <a href="/data/candidate/{{ c.candidate_id }}/?cycle={{ c.related_cycle }}">{{ c.name }}</a>
+                {% if c.related_cycle is not none %}
+                  <a href="/data/candidate/{{ c.candidate_id }}/?cycle={{ c.related_cycle }}">{{ c.name }}</a>
+                {% else %}
+                  <a href="/data/candidate/{{ c.candidate_id }}/">{{ c.name }}</a>
+                {% endif %}
               {% endfor %}
             </td>
           </tr>
