@@ -135,6 +135,16 @@
               <li><a href="#other">Other documents</a></li>
             </ul>
         </li>
+        {% if candidates %}
+          {% for c in candidates %}
+            <li class="side-nav__item">
+              <a class="button button--cta u-margin--top t-left-aligned button--candidate u-full-width" href="/data/candidate/{{ c.candidate_id }}/?cycle={{ c.related_cycle }}">
+                <h4 class="callout__title">{{ c.name }}</h4>
+                <span class="callout__subtitle">Authorizing candidate</span>
+              </a>
+            </li>
+          {% endfor %}
+        {% endif %}
       </ul>
     </nav>
 

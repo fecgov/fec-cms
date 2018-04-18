@@ -56,7 +56,7 @@
             <td class="figure__label">Authorizing candidate:</td>
             <td class="figure__value">
               {% for c in candidates %}
-                <a href="{{ url_for('candidate_page', c_id=c.candidate_id, cycle=c.related_cycle) }}">{{ c.name }}</a>
+                <a href="/data/candidate/{{ c.candidate_id }}/?cycle={{ c.related_cycle }}">{{ c.name }}</a>
               {% endfor %}
             </td>
           </tr>
