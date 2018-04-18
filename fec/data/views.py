@@ -273,8 +273,25 @@ def committee(request, committee_id):
     year = to_date(committee, cycle)
     result_type = 'committees'
 
+    # Link to current cycle if candidate has a corresponding page, else link
+    # without cycle query parameter
+    # See https://github.com/fecgov/openFEC/issues/1536
+    # For each candidate, set related_cycle to the most recent election year
+    # relative to the selected cycle.
+    for candidate in candidates:
+        election_years = []
+        for election_year in candidate['election_years']:
+            start_of_election_period = election_year - election_durations[candidate['office']]
+            if start_of_election_period < cycle and cycle <= election_year:
+                election_years.append(election_year)
+
+        candidate['related_cycle'] = max(election_years) if election_years else None
+    
+
     # Load financial totals and reports for a given committee
     financials = api_caller.load_cmte_financials(committee_id, cycle=cycle)
+
+
     report_type = report_types.get(committee['committee_type'], 'pac-party')
     reports = financials['reports']
     totals = financials['totals']

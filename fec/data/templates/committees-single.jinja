@@ -138,8 +138,8 @@
         {% if candidates %}
           {% for c in candidates %}
             <li class="side-nav__item">
-              {% if c is not none %}
-                <a class="button button--cta u-margin--top t-left-aligned button--candidate u-full-width" href="/data/candidate/{{ c.candidate_id }}/?cycle={{ cycle }}&election_full=false">
+              {% if c.related_cycle is not none %}
+                <a class="button button--cta u-margin--top t-left-aligned button--candidate u-full-width" href="/data/candidate/{{ c.candidate_id }}/?cycle={{ c.related_cycle }}">
               {% else %}
                 <a class="button button--cta u-margin--top t-left-aligned button--candidate u-full-width" href="/data/candidate/{{ c.candidate_id }}/">
               {% endif %}
