@@ -988,6 +988,7 @@ class MeetingPage(Page):
     approved_minutes_link = models.URLField(blank=True)
     sunshine_act_links = models.TextField(
         blank=True, help_text='URLs separated by a newline')
+    #Testing in below line using both settings and constants to set the url for botht the field value and help-text, in production, I would use one or the other
     live_video_url = models.URLField(default=live_video_url, help_text=settings.LIVE_VIDEO_URL, null=True, blank=True)
     live_video_captions = models.URLField(blank=True, help_text='Leave this field blank to use the default url')
     show_streaming_info = models.BooleanField(default=True, help_text='Uncheck this to hide Live video url and Live video captions information')
