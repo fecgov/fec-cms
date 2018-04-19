@@ -1,5 +1,6 @@
-SOURCE_FILE=src/tl_2016_us_cd115.shp # unzipped http://www2.census.gov/geo/tiger/TIGER2016/CD/tl_2016_us_cd115.zip to ./src/
-OUT_FILE=districts.json
+SOURCE_FILE=src/cd_update.shp #unzipped http://www2.census.gov/geo/tiger/TIGER2016/CD/tl_2016_us_cd115.zip to ./src/
+#updated Pennsylvania disticts for 2018 redsitricting,
+OUT_FILE=districts_test.json
 SIMP_PARAM=0.015 # lower value = more simplification, ref: https://github.com/topojson/topojson-simplify/blob/master/README.md#toposimplify_spherical_quantile
 QUANTIZE_PARAM=1e5
 PATH=$(npm bin):$PATH
@@ -9,6 +10,8 @@ PATH=$(npm bin):$PATH
 set -eu
 
 shp2json $SOURCE_FILE | \
+  # formats json
+  ndjson-cat | \
   # convert to ndjson
   ndjson-split 'd.features' | \
   # Only keep features that have strictly numeric GEOID props
@@ -18,6 +21,8 @@ shp2json $SOURCE_FILE | \
   ndjson-map 'd.id = parseInt(d.properties.GEOID, 10), d' | \
   # remove all properties
   ndjson-map 'd.properties = {}, d' > .tmp.ndjson
+
+
 
 # covert to topojson and simplify + quantize
 geo2topo -n districts=.tmp.ndjson | \
