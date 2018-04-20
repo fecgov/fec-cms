@@ -3,6 +3,7 @@
 
 **Master**
 [![Dependency Status](https://gemnasium.com/badges/github.com/fecgov/fec-cms.svg)](https://gemnasium.com/github.com/fecgov/fec-cms)
+[![Known Vulnerabilities](https://snyk.io/test/github/fecgov/fec-cms/badge.svg)](https://snyk.io/test/github/fecgov/fec-cms)
 
 ## Campaign finance for everyone
 The Federal Election Commission (FEC) releases information to the public about
