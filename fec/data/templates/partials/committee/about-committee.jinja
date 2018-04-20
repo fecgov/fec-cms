@@ -56,7 +56,7 @@
                   {% endfor %}
                 </h4>
                 <span class="callout__subtitle t-block">
-                  Candidate for {{ committee_type_full }} | 
+                  {{ committee_type_full }} candidate | 
                   {% if candidates[0].office == 'S' %}
                     {{ candidates[0].state|fmt_state_full }} -  |
                   {% elif candidates[0].office == 'H' %}
