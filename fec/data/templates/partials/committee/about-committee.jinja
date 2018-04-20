@@ -22,7 +22,7 @@
           </td>
         </tr>
         <tr>
-          <td class="figure__label">Treasurer</td>
+          <td class="figure__label">Treasurer:</td>
           <td class="figure__value">{{ treasurer_name }}</td>
         </tr>
         <tr>
@@ -46,7 +46,7 @@
             <td class="figure__label">Authorizing candidate:</td>
             <td>
               <div class="callout callout--primary u-margin--top">
-                <h4 class="callout__title">
+                <h5 class="callout__title t-sans">
                   {% for c in candidates %}
                     {% if c.related_cycle is not none %}
                       <a href="/data/candidate/{{ c.candidate_id }}/?cycle={{ c.related_cycle }}&election_full=false">{{ c.name }}</a>
@@ -54,15 +54,16 @@
                       <a href="/data/candidate/{{ c.candidate_id }}/">{{ c.name }}</a>
                     {% endif %}
                   {% endfor %}
-                </h4>
-                <span class="callout__subtitle t-block">
-                  {{ committee_type_full }} candidate | 
+                </h5>
+                  <span class="entity__type">{{ committee_type_full }} candidate</span>
+
                   {% if candidates[0].office == 'S' %}
-                    {{ candidates[0].state|fmt_state_full }} -  |
+                    <span class="entity__type">{{ candidates[0].state|fmt_state_full }}</span>
                   {% elif candidates[0].office == 'H' %}
-                      {{ candidates[0].state|fmt_state_full }} - {{ candidates[0].district }} |
+                      <span class="entity__type">{{ candidates[0].state|fmt_state_full }} - {{ candidates[0].district }}</span>
                   {% endif %}
-                  {{ candidates[0].party_full|lower|title }} </span>
+
+                  {{ candidates[0].party_full|lower|title }}
               </div>
             </td>
           </tr>
