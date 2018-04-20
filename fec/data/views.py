@@ -266,7 +266,16 @@ def committee(request, committee_id):
     cycle = request.GET.get('cycle', None)
 
     redirect_to_previous = False if cycle else True
-    committee, candidates, cycle = api_caller.load_with_nested('committee', committee_id, 'candidates', cycle)
+    committee, all_candidates, cycle = api_caller.load_with_nested('committee', committee_id, 'candidates', cycle)
+
+    # When there are multiple candidate records of various offices (H, S, P) linked to a single
+    # committee ID, we want to associate the candidate record with the matching committee type 
+    # For each candidate, check if the committee type is equal to the candidate's office. If true
+    # add that candidate to the list of candidates to return
+    candidates = []
+    for candidate in all_candidates:
+        if committee['committee_type'] == candidate['office']:
+            candidates.append(candidate)
 
     parent = 'data'
     cycle = int(cycle)
@@ -276,7 +285,7 @@ def committee(request, committee_id):
     # Link to current cycle if candidate has a corresponding page, else link
     # without cycle query parameter
     # See https://github.com/fecgov/openFEC/issues/1536
-    # For each candidate, set related_cycle to the most recent election year
+    # For each candidate, set related_cycle to the candidate's time period
     # relative to the selected cycle. 
     for candidate in candidates:
         election_years = []
