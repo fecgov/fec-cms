@@ -12,16 +12,6 @@
           <td class="figure__value">{{name}}</td>
         </tr>
         <tr>
-          <td class="figure__label">Political party:</td>
-          <td class="figure__value">
-            {% if party_full %}
-              {{party_full}}
-            {% else %}
-              None
-            {% endif %}
-          </td>
-        </tr>
-        <tr>
           <td class="figure__label">Mailing address:</td>
           <td class="figure__value">
             <span class="t-block">{{ street_1 }}</span>
@@ -32,7 +22,7 @@
           </td>
         </tr>
         <tr>
-          <td class="figure__label">Treasurer</td>
+          <td class="figure__label">Treasurer:</td>
           <td class="figure__value">{{ treasurer_name }}</td>
         </tr>
         <tr>
@@ -54,27 +44,29 @@
         {% if candidates %}
           <tr>
             <td class="figure__label">Authorizing candidate:</td>
-            <td class="figure__value">
-              {% for c in candidates %}
-                <a href="{{ url_for('candidate_page', c_id=c.candidate_id, cycle=c.related_cycle) }}">{{ c.name }}</a>
-              {% endfor %}
+            <td>
+              <div class="callout callout--primary u-margin--top">
+                <h5 class="callout__title t-sans">
+                  {% for c in candidates %}
+                    {% if c.related_cycle is not none %}
+                      <a href="/data/candidate/{{ c.candidate_id }}/?cycle={{ c.related_cycle }}&election_full=false">{{ c.name }}</a>
+                    {% else %}
+                      <a href="/data/candidate/{{ c.candidate_id }}/">{{ c.name }}</a>
+                    {% endif %}
+                  {% endfor %}
+                </h5>
+                  <span class="entity__type">{{ committee_type_full }} candidate</span>
+
+                  {% if candidates[0].office == 'S' %}
+                    <span class="entity__type">{{ candidates[0].state|fmt_state_full }}</span>
+                  {% elif candidates[0].office == 'H' %}
+                      <span class="entity__type">{{ candidates[0].state|fmt_state_full }} - {{ candidates[0].district }}</span>
+                  {% endif %}
+
+                  {{ candidates[0].party_full|lower|title }}
+              </div>
             </td>
           </tr>
-          <tr>
-            <td class="figure__label">Candidates's political party:</td>
-            <td class="figure__value">{{ candidates[0].party_full }}</td>
-          </tr>
-          {% if candidates[0].office == 'S' %}
-            <tr>
-              <td class="figure__label">Candidates's state:</td>
-              <td class="figure__value">{{ candidates[0].state|fmt_state_full }}</td>
-            </tr>
-          {% elif candidates[0].office == 'H' %}
-            <tr>
-              <td class="figure__label">Candidates's state and district:</td>
-              <td class="figure__value">{{ candidates[0].state|fmt_state_full }} district {{ candidates[0].district }}</td>
-            </tr>
-          {% endif %}
         {% endif %}
       </table>
     </div>
