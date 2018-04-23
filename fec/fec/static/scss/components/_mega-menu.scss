@@ -2,9 +2,9 @@
 //
 // For site nav
 //
-
+// change line7, before push to: a:not(.mega__page-link, .button) {
 .mega-container {
-  a:not(.mega__page-link, .button) {
+  a:not(.mega__page-link) {
     border-bottom: none;
 
     &:hover {
@@ -28,6 +28,10 @@
 
 .mega-heading__title {
   display: none;
+  a {
+    border-bottom: 1px dotted $inverse !important;
+    display:table;
+  }
 }
 
 .mega-heading {

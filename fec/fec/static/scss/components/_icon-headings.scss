@@ -60,6 +60,8 @@
   padding-left: u(3rem);
 }
 
+
+
 .icon-heading--raising-circle {
   &::before {
     $size: u(4rem);
@@ -77,6 +79,28 @@
     content: '';
     float: left;
     margin-right: u(1rem);
+  }
+}
+
+.icon-heading--data-flag-circle--primary {
+  &::before {
+    $size: u(4rem);
+    @include u-icon-circle($data-flag, $inverse, $primary-contrast, $size);
+    background-size: 50%;
+    content: '';
+    float: left;
+    margin-right: u(1.5rem);
+  }
+}
+
+.icon-heading--data-flag-circle--secondary {
+  &::before {
+    $size: u(4rem);
+    @include u-icon-circle($data-flag, $inverse, $secondary-contrast, $size);
+    background-size: 50%;
+    content: '';
+    float: left;
+    margin-right: u(1.5rem);
   }
 }
 
@@ -170,6 +194,39 @@
   }
 }
 
+.icon-heading--person-location-circle {
+  &::before {
+    $size: u(4rem);
+    @include u-icon-circle($person-location, $inverse, $primary-contrast, $size);
+    background-size: 50%;
+    content: '';
+    float: left;
+    margin-right: u(1.5rem);
+  }
+}
+
+.icon-heading--individual-contributions-circle {
+  &::before {
+    $size: u(4rem);
+    @include u-icon-circle($individual-contributions, $inverse, $primary-contrast, $size);
+    background-size: 50%;
+    content: '';
+    float: left;
+    margin-right: u(1.5rem);
+  }
+}
+
+.icon-heading--magnifying-glass-circle {
+  &::before {
+    $size: u(4rem);
+    @include u-icon-circle($magnifying-glass, $inverse, $primary-contrast, $size);
+    background-size: 50%;
+    content: '';
+    float: left;
+    margin-right: u(1.5rem);
+  }
+}
+
 // Data landing page links to breakdowns
 .icon-heading--graph-circle {
   &::before {
@@ -207,7 +264,8 @@
 
 .icon-heading--graph-circle,
 .icon-heading--graph-unordered-circle,
-.icon-heading--map-circle {
+.icon-heading--map-circle,
+.icon-heading--data-flag-circle {
   border-bottom: none;
   display: table;
 
