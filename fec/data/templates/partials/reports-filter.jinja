@@ -84,9 +84,6 @@ Filter reports
       {{ report_types.quarterly() }}
       {{ report_types.election_sensitive() }}
       {{ report_types.other() }}
-      {% if table_context['form_type'] == 'pac-party' %}
-        {{ report_types.bundling() }}
-      {% endif %}
     </fieldset>
   </div>
 </div>
