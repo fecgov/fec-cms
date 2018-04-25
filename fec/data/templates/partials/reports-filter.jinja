@@ -78,7 +78,7 @@ Filter reports
     <fieldset class="js-filter" data-filter="checkbox">
       <legend class="u-visually-hidden">Report type</legend>
       {{ report_types.year_end() }}
-      {% if table_context['form_type'] == 'presidential' %}
+      {% if table_context['form_type'] in ['presidential', 'pac-party'] %}
         {{ report_types.monthly() }}
       {% endif %}
       {{ report_types.quarterly() }}
