@@ -83,9 +83,9 @@
       <div class="usa-width-one-half">
       {% for committee in committee_groups['P'] | reverse %}
         <div class="callout callout--primary{% if loop.last %} u-no-margin{% endif %}">
-          <h4 class="callout__title">
+          <h5 class="callout__title t-sans">
             <a href="/data/committee/{{ committee.committee_id }}/?cycle={{ committee.related_cycle }}">{{ committee.name }}</a>
-          </h4>
+          </h5>
           <span class="callout__subtitle term" data-term="principal campaign committee">Principal campaign committee</span>
         </div>
       {% endfor %}
