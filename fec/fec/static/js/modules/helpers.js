@@ -8,7 +8,6 @@ var _ = require('underscore');
 var moment = require('moment');
 var decoders = require('./decoders');
 var Handlebars = require('hbsfy/runtime');
-var bleach = require('bleach');
 var numeral = require('numeral');
 
 // set parameters from the API

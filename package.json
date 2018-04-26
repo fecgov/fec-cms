@@ -23,7 +23,6 @@
     "babel-eslint": "^7.1.1",
     "babel-preset-latest": "^6.24.0",
     "babelify": "^7.3.0",
-    "bleach": "0.3.0",
     "chroma-js": "1.0.1",
     "colorbrewer": "0.0.2",
     "component-sticky": "1.0.0",
