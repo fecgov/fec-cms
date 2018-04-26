@@ -3,9 +3,9 @@
 from __future__ import unicode_literals
 
 from django.db import migrations, models
-import wagtail.wagtailcore.blocks
-import wagtail.wagtailcore.fields
-import wagtail.wagtaildocs.blocks
+import wagtail.core.blocks
+import wagtail.core.fields
+import wagtail.documents.blocks
 
 
 class Migration(migrations.Migration):
@@ -69,7 +69,7 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='meetingpage',
             name='agenda',
-            field=wagtail.wagtailcore.fields.StreamField((('agenda_item', wagtail.wagtailcore.blocks.StructBlock((('item_title', wagtail.wagtailcore.blocks.TextBlock()), ('item_text', wagtail.wagtailcore.blocks.RichTextBlock(required=False)), ('item_audio', wagtail.wagtaildocs.blocks.DocumentChooserBlock(required=False))))),)),
+            field=wagtail.core.fields.StreamField((('agenda_item', wagtail.core.blocks.StructBlock((('item_title', wagtail.core.blocks.TextBlock()), ('item_text', wagtail.core.blocks.RichTextBlock(required=False)), ('item_audio', wagtail.documents.blocks.DocumentChooserBlock(required=False))))),)),
         ),
         migrations.AlterField(
             model_name='meetingpage',

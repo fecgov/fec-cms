@@ -80,22 +80,22 @@ INSTALLED_APPS = (
     'uaa_client',
     'extend_admin',
 
-    'wagtail.wagtailcore',
-    'wagtail.wagtailadmin',
-    'wagtail.wagtailsearch',
-    'wagtail.wagtailimages',
-    'wagtail.wagtaildocs',
-    'wagtail.wagtailsnippets',
-    'wagtail.wagtailusers',
-    'wagtail.wagtailsites',
-    'wagtail.wagtailembeds',
-    'wagtail.wagtailredirects',
-    'wagtail.wagtailforms',
+    'wagtail.core',
+    'wagtail.admin',
+    'wagtail.search',
+    'wagtail.images',
+    'wagtail.documents',
+    'wagtail.snippets',
+    'wagtail.users',
+    'wagtail.sites',
+    'wagtail.embeds',
+    'wagtail.contrib.redirects',
+    'wagtail.contrib.forms',
 
     'wagtail.contrib.modeladmin',
-    'wagtail.contrib.wagtailsearchpromotions',
+    'wagtail.contrib.search_promotions',
     'wagtail.contrib.table_block',
-    'wagtail.contrib.wagtailstyleguide',
+    'wagtail.contrib.styleguide',
 
     'django_jinja',
 )
@@ -111,8 +111,8 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django.middleware.security.SecurityMiddleware',
 
-    'wagtail.wagtailcore.middleware.SiteMiddleware',
-    'wagtail.wagtailredirects.middleware.RedirectMiddleware',
+    'wagtail.core.middleware.SiteMiddleware',
+    'wagtail.contrib.redirects.middleware.RedirectMiddleware',
 
     # logs
     'audit_log.middleware.UserLoggingMiddleware',

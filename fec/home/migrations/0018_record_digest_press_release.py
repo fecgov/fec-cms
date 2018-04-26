@@ -8,9 +8,9 @@ import django.db.models.deletion
 import home.models
 import modelcluster.fields
 import wagtail.contrib.table_block.blocks
-import wagtail.wagtailcore.blocks
-import wagtail.wagtailcore.fields
-import wagtail.wagtailimages.blocks
+import wagtail.core.blocks
+import wagtail.core.fields
+import wagtail.images.blocks
 
 
 class Migration(migrations.Migration):
@@ -38,7 +38,7 @@ class Migration(migrations.Migration):
             name='DigestPage',
             fields=[
                 ('page_ptr', models.OneToOneField(auto_created=True, on_delete=django.db.models.deletion.CASCADE, parent_link=True, primary_key=True, serialize=False, to='wagtailcore.Page')),
-                ('body', wagtail.wagtailcore.fields.StreamField([(b'heading', wagtail.wagtailcore.blocks.CharBlock(classname=b'full title')), (b'paragraph', wagtail.wagtailcore.blocks.RichTextBlock()), (b'html', wagtail.wagtailcore.blocks.RawHTMLBlock()), (b'image', wagtail.wagtailimages.blocks.ImageChooserBlock()), (b'table', wagtail.contrib.table_block.blocks.TableBlock())], blank=True, null=True)),
+                ('body', wagtail.core.fields.StreamField([(b'heading', wagtail.core.blocks.CharBlock(classname=b'full title')), (b'paragraph', wagtail.core.blocks.RichTextBlock()), (b'html', wagtail.core.blocks.RawHTMLBlock()), (b'image', wagtail.images.blocks.ImageChooserBlock()), (b'table', wagtail.contrib.table_block.blocks.TableBlock())], blank=True, null=True)),
                 ('date', models.DateField(default=datetime.date.today)),
                 ('feed_image', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='+', to='wagtailimages.Image')),
                 ('read_next', models.ForeignKey(blank=True, default=home.models.get_previous_digest_page, null=True, on_delete=django.db.models.deletion.SET_NULL, to='home.DigestPage')),
@@ -66,7 +66,7 @@ class Migration(migrations.Migration):
             name='PressReleasePage',
             fields=[
                 ('page_ptr', models.OneToOneField(auto_created=True, on_delete=django.db.models.deletion.CASCADE, parent_link=True, primary_key=True, serialize=False, to='wagtailcore.Page')),
-                ('body', wagtail.wagtailcore.fields.StreamField([(b'heading', wagtail.wagtailcore.blocks.CharBlock(classname=b'full title')), (b'paragraph', wagtail.wagtailcore.blocks.RichTextBlock()), (b'html', wagtail.wagtailcore.blocks.RawHTMLBlock()), (b'image', wagtail.wagtailimages.blocks.ImageChooserBlock()), (b'table', wagtail.contrib.table_block.blocks.TableBlock())], blank=True, null=True)),
+                ('body', wagtail.core.fields.StreamField([(b'heading', wagtail.core.blocks.CharBlock(classname=b'full title')), (b'paragraph', wagtail.core.blocks.RichTextBlock()), (b'html', wagtail.core.blocks.RawHTMLBlock()), (b'image', wagtail.images.blocks.ImageChooserBlock()), (b'table', wagtail.contrib.table_block.blocks.TableBlock())], blank=True, null=True)),
                 ('date', models.DateField(default=datetime.date.today)),
                 ('category', models.CharField(choices=[(b'audit reports', b'Audit reports'), (b'campaign finance data summaries', b'Campaign finance data summaries'), (b'commission appointments', b'Commission appointments'), (b'disclosure initiatives', b'Disclosure initiatives'), (b'enforcement matters', b'Enforcement matters'), (b'hearings', b'Hearings'), (b'litigation', b'Litigation'), (b'non-filer publications', b'Non-filer publications'), (b'open meetings and related matters', b'Open meetings and related matters'), (b'presidential public funds', b'Presidential public funds'), (b'rulemakings', b'Rulemakings'), (b'other agency actions', b'Other agency actions')], max_length=255)),
                 ('feed_image', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='+', to='wagtailimages.Image')),
@@ -95,7 +95,7 @@ class Migration(migrations.Migration):
             name='RecordPage',
             fields=[
                 ('page_ptr', models.OneToOneField(auto_created=True, on_delete=django.db.models.deletion.CASCADE, parent_link=True, primary_key=True, serialize=False, to='wagtailcore.Page')),
-                ('body', wagtail.wagtailcore.fields.StreamField([(b'heading', wagtail.wagtailcore.blocks.CharBlock(classname=b'full title')), (b'paragraph', wagtail.wagtailcore.blocks.RichTextBlock()), (b'html', wagtail.wagtailcore.blocks.RawHTMLBlock()), (b'image', wagtail.wagtailimages.blocks.ImageChooserBlock()), (b'table', wagtail.contrib.table_block.blocks.TableBlock())], blank=True, null=True)),
+                ('body', wagtail.core.fields.StreamField([(b'heading', wagtail.core.blocks.CharBlock(classname=b'full title')), (b'paragraph', wagtail.core.blocks.RichTextBlock()), (b'html', wagtail.core.blocks.RawHTMLBlock()), (b'image', wagtail.images.blocks.ImageChooserBlock()), (b'table', wagtail.contrib.table_block.blocks.TableBlock())], blank=True, null=True)),
                 ('date', models.DateField(default=datetime.date.today)),
                 ('category', models.CharField(choices=[(b'advisory opinions', b'Advisory Opinions'), (b'commission', b'Commission'), (b'compliance', b'Compliance'), (b'litigation', b'Litigation'), (b'outreach', b'Outreach'), (b'public funding', b'Public Funding'), (b'regulations', b'Regulations'), (b'reporting', b'Reporting'), (b'statistics', b'Statistics')], max_length=255)),
                 ('related_section_title', models.CharField(blank=True, default=b'Explore campaign finance data', max_length=255)),

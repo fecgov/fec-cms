@@ -16,14 +16,14 @@
 
 {% block js %}
     {% comment %}Make sure to use symlinked latest jquery version grabbed from package.json{% endcomment %}
-    <script src="{% static 'jquery/dist/jquery.min.js' %}"></script>
-    <script src="{% static 'wagtailadmin/js/vendor/jquery-ui-1.10.3.js' %}"></script>
+    <!--<script src="{% static 'jquery/dist/jquery.min.js' %}"></script>-->
+    <script src="{% static 'wagtailadmin/js/vendor/jquery-3.2.1.min.js' %}"></script>
+    <script src="{% static 'wagtailadmin/js/vendor/jquery-ui-1.12.1.min.js' %}"></script>
     <script src="{% static 'wagtailadmin/js/vendor/jquery.datetimepicker.js' %}"></script>
     <script src="{% static 'wagtailadmin/js/vendor/jquery.autosize.js' %}"></script>
     <script src="{% static 'wagtailadmin/js/vendor/bootstrap-transition.js' %}"></script>
     <script src="{% static 'wagtailadmin/js/vendor/bootstrap-modal.js' %}"></script>
     <script src="{% static 'wagtailadmin/js/vendor/bootstrap-tab.js' %}"></script>
-    <script src="{% static 'wagtailadmin/js/vendor/jquery.dlmenu.js' %}"></script>
     <script src="{% static 'wagtailadmin/js/vendor/tag-it.js' %}"></script>
     <script src="{% static 'wagtailadmin/js/core.js' %}"></script>
     {% hook_output 'insert_global_admin_js' %}

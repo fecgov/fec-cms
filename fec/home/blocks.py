@@ -1,9 +1,9 @@
 from django.db import models
-from wagtail.wagtailcore import blocks
-from wagtail.wagtailimages.blocks import ImageChooserBlock
-from wagtail.wagtaildocs.blocks import DocumentChooserBlock
+from wagtail.core import blocks
+from wagtail.images.blocks import ImageChooserBlock
+from wagtail.documents.blocks import DocumentChooserBlock
 from wagtail.contrib.table_block.blocks import TableBlock
-from wagtail.wagtailsnippets.blocks import SnippetChooserBlock
+from wagtail.snippets.blocks import SnippetChooserBlock
 
 class ThumbnailBlock(blocks.StructBlock):
     """A block that combines a thumbnail and a caption,
