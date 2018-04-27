@@ -1,5 +1,6 @@
 {% extends "layouts/sidebar-page.jinja" %}
 {% import "macros/breakdowns.jinja" as breakdowns %}
+{% import 'macros/cycle-select.jinja' as select %}
 
 {% block css %}
 <link rel="stylesheet" type="text/css" href="{{ asset_for_css('data-landing.css') }}" />
@@ -11,12 +12,7 @@
 
 {% block sidebar %}
 <form action="" method="get" class="breakdown-cycle">
-  <label for="cycle" class="label">Time period</label>
-  <select id="cycle" name="cycle" class="js-cycle" aria-controls="raising-breakdowns">
-    <option value="2018" {% if cycle == '2018' %}selected{% endif %}>2017&ndash;2018</option>
-    <option value="2016" {% if cycle == '2016' %}selected{% endif %}>2015&ndash;2016</option>
-    <option value="2012" {% if cycle == '2012' %}selected{% endif %}>2011&ndash;2012</option>
-  </select>
+  {{ select.cycle_select(cycles, cycle, location='form', range=True) }}
   <noscript>
     <button type="submit" class="button button--cta">Submit</button>
   </noscript>
