@@ -23,13 +23,16 @@
 
 .mega__inner {
   padding: u(1rem);
+  margin: u(1rem 0 0 0);
 }
 
 .mega-heading__title {
   display: none;
   a {
     border-bottom: 1px dotted $inverse !important;
-    display:table;
+  }
+  &::before {
+    margin-bottom:u(3rem);
   }
 }
 
@@ -76,6 +79,7 @@
 .mega__item {
   margin-bottom: u(1.5rem);
   padding-left: u(2rem);
+  line-height:1.2;
 
   &:first-of-type {
     margin-top: u(1rem);

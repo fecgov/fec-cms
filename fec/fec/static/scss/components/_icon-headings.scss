@@ -107,8 +107,8 @@
 // homepage - registration and reporting (on secondary [red] slab)
 .icon-heading--checklist-circle {
   &::before {
-    @include u-icon-circle($checklist, $inverse, $secondary-contrast, 4.5rem);
-    background-size: u(4rem);
+    @include u-icon-circle($checklist, $inverse, $secondary-contrast, 4rem);
+    background-size: u(3rem);
     content: '';
     float: left;
     margin-right: u(1.5rem);
@@ -117,8 +117,8 @@
 
 .icon-heading--question-bubble-circle {
   &::before {
-    @include u-icon-circle($question-bubble, $inverse, $secondary-contrast, 4.5rem);
-    background-size: u(4rem);
+    @include u-icon-circle($question-bubble, $inverse, $secondary-contrast, 4rem);
+    background-size: u(3rem);
     content: '';
     float: left;
     margin-right: u(1.5rem);
@@ -220,7 +220,7 @@
   &::before {
     $size: u(4rem);
     @include u-icon-circle($magnifying-glass, $inverse, $primary-contrast, $size);
-    background-size: 50%;
+    background-size: 45%;
     content: '';
     float: left;
     margin-right: u(1.5rem);
@@ -265,7 +265,14 @@
 .icon-heading--graph-circle,
 .icon-heading--graph-unordered-circle,
 .icon-heading--map-circle,
-.icon-heading--data-flag-circle {
+.icon-heading--data-flag-circle,
+.icon-heading--question-bubble-circle,
+.icon-heading--checklist-circle,
+.icon-heading--magnifying-glass-circle,
+.icon-heading--question-bubble-circle,
+.icon-heading--individual-contributions-circle,
+.icon-heading--person-location-circle
+ {
   border-bottom: none;
   display: table;
 
@@ -273,6 +280,7 @@
     line-height: 1.2;
     display: table-cell;
     vertical-align: middle;
+    color:inherit;
   }
 
   &::before {
