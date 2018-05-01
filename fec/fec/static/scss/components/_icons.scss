@@ -51,6 +51,12 @@
   &.i-star {
     @include u-icon-bg($star, $base);
   }
+
+  &.i-speaker {
+    @include u-icon-bg($speaker, $base);
+  }
+
+
 }
 
 .icon--small {
