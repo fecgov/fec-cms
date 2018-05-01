@@ -18,7 +18,7 @@ li.sequence-member .sequence-member-inner .sequence-type-list .sequence-containe
   font-family: sans-serif;
 }
 
-blockquote {
+.Draftail-block--blockquote {
 	 border-left: 10px solid #f1f1f1;
 	 padding-left: 30px;
 	 margin-left: 0;
