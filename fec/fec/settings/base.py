@@ -67,18 +67,12 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
+    'django_jinja',
+
     'taggit',
     'compressor',
     'modelcluster',
     'storages',
-
-    'fec',
-    'search',
-    'home',
-    'data',
-    'legal',
-    'uaa_client',
-    'extend_admin',
 
     'wagtail.core',
     'wagtail.admin',
@@ -97,7 +91,13 @@ INSTALLED_APPS = (
     'wagtail.contrib.table_block',
     'wagtail.contrib.styleguide',
 
-    'django_jinja',
+    'fec',
+    'search',
+    'home',
+    'data',
+    'legal',
+    'uaa_client',
+    'extend_admin',
 )
 
 MIDDLEWARE_CLASSES = (

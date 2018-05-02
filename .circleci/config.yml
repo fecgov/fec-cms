@@ -52,7 +52,7 @@ jobs:
       - run:
           name: Install Node.js dependencies
           command: |
-            sudo npm install -g npm 
+            sudo npm install -g npm
             npm install webpack
             npm install
             npm run build
@@ -73,7 +73,6 @@ jobs:
             . .env/bin/activate
             cd fec
             ./manage.py makemigrations
-            ./manage.py migrate wagtailcore
             ./manage.py migrate
 
       - run:
