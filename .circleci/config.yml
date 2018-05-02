@@ -70,6 +70,8 @@ jobs:
       - run:
           name: Migrates latest changes to the wagtail database
           command: |
+            . .env/bin/activate
+            cd fec
             ./manage.py makemigrations
             ./manage.py migrate
 
