@@ -35,22 +35,6 @@ function formatCommittee(result) {
     id: result.id,
     type: 'committee'
   };
-} 
-
-function formatAuditCommittee(result) {
-  return {
-    name: result.name,
-    id: result.id,
-    type: 'auditCommittee'
-  };
-}
-
-function formatAuditCandidate(result) {
-  return {
-    name: result.name,
-    id: result.id,
-    type: 'auditCandidate'
-  };
 }
 
 function getUrl(resource) {
@@ -93,26 +77,6 @@ var committeeEngine = createEngine({
   }
 });
 
-var auditCommitteeEngine = createEngine({
-  remote: {
-    url: getUrl('audit_committees'),
-    wildcard: '%QUERY',
-    transform: function(response) {
-      return _.map(response.results, formatAuditCommittee);
-    },
-  }
-});
-
-var auditCandidateEngine = createEngine({
-  remote: {
-    url: getUrl('audit_candidates'),
-    wildcard: '%QUERY',
-    transform: function(response) {
-      return _.map(response.results, formatAuditCandidate);
-    },
-  }
-});
-
 var candidateDataset = {
   name: 'candidate',
   display: 'name',
@@ -146,37 +110,6 @@ var committeeDataset = {
   }
 };
 
-
-var auditCommitteeDataset = {
-  name: 'auditCommittees',
-  display: 'name',
-  limit: 10,
-  source: auditCommitteeEngine,
-  templates: {
-    header: '<span class="tt-suggestion__header">Select a committee:</span>',
-    pending: '<span class="tt-suggestion__loading">Loading committees...</span>',
-    notFound: Handlebars.compile(''), // This has to be empty to not show anything
-    suggestion: Handlebars.compile(
-      '<span class="tt-suggestion__name">{{ name }} ({{ id }})</span>'
-    )
-  }
-};
-
-var auditCandidateDataset = {
-  name: 'auditCandidates',
-  display: 'name',
-  limit: 10,
-  source: auditCandidateEngine,
-  templates: {
-    header: '<span class="tt-suggestion__header">Select a candidate:</span>',
-    pending: '<span class="tt-suggestion__loading">Loading candidates...</span>',
-    notFound: Handlebars.compile(''), // This has to be empty to not show anything
-    suggestion: Handlebars.compile(
-      '<span class="tt-suggestion__name">{{ name }} ({{ id }})</span>'
-    )
-  }
-};
-
 /* This is a fake dataset for showing an empty option with the query
  * when clicked, this will load the receipts page,
  * filtered to contributions from this person
@@ -191,8 +124,7 @@ var individualDataset = {
   },
   templates: {
     suggestion: function(datum) {
-      return '<span><strong>Search individual contributions from:</strong> "' + datum.id +
-      '"</span>';
+      return '<span><strong>Search individual contributions from:</strong> "' + datum.id + '"</span>';
     }
   }
 };
@@ -218,8 +150,6 @@ var siteDataset = {
 var datasets = {
   candidates: candidateDataset,
   committees: committeeDataset,
-  auditCandidates: auditCandidateDataset,
-  auditCommittees: auditCommitteeDataset,
   allData: [candidateDataset, committeeDataset],
   all: [candidateDataset, committeeDataset, individualDataset, siteDataset]
 };

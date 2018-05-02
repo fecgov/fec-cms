@@ -91,10 +91,6 @@ function mapSort(order, columns) {
 }
 
 function getCount(response) {
-  // for audit data set, retrun real data result rows
-  if (window.location.pathname === '/legal-resources/enforcement/audit-search/'){
-    return response.pagination.count;
-  }
   var pagination_count = response.pagination.count;
 
   if (response.pagination.count > 1000) {
@@ -475,8 +471,7 @@ DataTable.prototype.initFilters = function() {
       resultType: 'results',
       showResultCount: true
     });
-    this.$widgets.find('.js-filter-tags').prepend(tagList.
-      $body);
+    this.$widgets.find('.js-filter-tags').prepend(tagList.$body);
     this.filterPanel = new FilterPanel();
     this.filterSet = this.filterPanel.filterSet;
     $(window).on('popstate', this.handlePopState.bind(this));
