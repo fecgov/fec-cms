@@ -121,15 +121,6 @@ def loans(request):
         'columns': constants.table_columns['loans']
     })
 
-def audit(request):
-    return render(request, 'datatable.jinja', {
-        'parent': 'data',
-        'result_type': 'audit',
-        'slug': 'audit',
-        'title': 'Audit',
-        'columns': constants.table_columns['audit'],
-    })
-
 
 def party_coordinated_expenditures(request):
     return render(request, 'datatable.jinja', {
