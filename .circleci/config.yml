@@ -68,6 +68,12 @@ jobs:
           command: dockerize -wait tcp://localhost:5432 -timeout 1m
 
       - run:
+          name: Migrates latest changes to the wagtail database
+          command: |
+            ./manage.py makemigrations
+            ./manage.py migrate
+
+      - run:
           name: Run tests
           command: |
             . .env/bin/activate
