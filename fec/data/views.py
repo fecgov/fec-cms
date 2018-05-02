@@ -266,7 +266,16 @@ def committee(request, committee_id):
     cycle = request.GET.get('cycle', None)
 
     redirect_to_previous = False if cycle else True
-    committee, candidates, cycle = api_caller.load_with_nested('committee', committee_id, 'candidates', cycle)
+    committee, all_candidates, cycle = api_caller.load_with_nested('committee', committee_id, 'candidates', cycle)
+
+    # When there are multiple candidate records of various offices (H, S, P) linked to a single
+    # committee ID, we want to associate the candidate record with the matching committee type 
+    # For each candidate, check if the committee type is equal to the candidate's office. If true
+    # add that candidate to the list of candidates to return
+    candidates = []
+    for candidate in all_candidates:
+        if committee['committee_type'] == candidate['office']:
+            candidates.append(candidate)
 
     parent = 'data'
     cycle = int(cycle)
@@ -275,16 +284,22 @@ def committee(request, committee_id):
 
     # Link to current cycle if candidate has a corresponding page, else link
     # without cycle query parameter
-    # See https://github.com/18F/openFEC/issues/1536
+    # See https://github.com/fecgov/openFEC/issues/1536
+    # For each candidate, set related_cycle to the candidate's time period
+    # relative to the selected cycle. 
     for candidate in candidates:
-        election_years = [
-            election_year for election_year in candidate['election_years']
-            if election_year - election_durations[candidate['office']] < cycle <= election_year
-        ]
-        candidate['related_cycle'] = max(election_years) if election_years else None
+        election_years = []
+        for election_year in candidate['election_years']:
+            start_of_election_period = election_year - election_durations[candidate['office']]
+            if start_of_election_period < cycle and cycle <= election_year:
+                election_years.append(election_year)
 
-    # add related candidates a level below
+        candidate['related_cycle'] = cycle if election_years else None
+    
+
+    # Load financial totals and reports for a given committee
     financials = api_caller.load_cmte_financials(committee_id, cycle=cycle)
+
 
     report_type = report_types.get(committee['committee_type'], 'pac-party')
     reports = financials['reports']
@@ -318,7 +333,8 @@ def committee(request, committee_id):
         'totals': totals,
         'min_receipt_date': utils.three_days_ago(),
         'context_vars': context_vars,
-        'party_full': committee['party_full']
+        'party_full': committee['party_full'],
+        'candidates': candidates,
     }
 
 
