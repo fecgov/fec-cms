@@ -73,6 +73,7 @@ jobs:
             . .env/bin/activate
             cd fec
             ./manage.py makemigrations
+            ./manage.py migrate wagtailcore
             ./manage.py migrate
 
       - run:
