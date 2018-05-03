@@ -28,13 +28,15 @@
 
 .mega-heading__title {
   display: none;
+  margin-left: u(-2rem);
+
   a {
     border-bottom: 1px dotted $inverse !important;
   }
   &::before {
-    margin-bottom:u(3rem);
-    height:u(5rem) !important;
-    width:u(5rem) !important;
+    margin-bottom: u(3rem);
+    height: u(5rem) !important;
+    width: u(5rem) !important;
   }
 }
 
@@ -175,3 +177,5 @@
     }
   }
 }
+
+

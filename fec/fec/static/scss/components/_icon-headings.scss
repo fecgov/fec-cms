@@ -13,6 +13,11 @@
 
 .icon-heading {
   @include clearfix();
+  margin-top:0;
+
+  @include media($med) {
+    margin-top: u(1rem);
+  }
 }
 
 .icon-heading__image {
@@ -107,8 +112,9 @@
 // homepage - registration and reporting (on secondary [red] slab)
 .icon-heading--checklist-circle {
   &::before {
-    @include u-icon-circle($checklist, $inverse, $secondary-contrast, 4rem);
-    background-size: u(3rem);
+    $size: u(3.5rem);
+    @include u-icon-circle($checklist, $inverse, $secondary-contrast, $size);
+    background-size: 70%;
     content: '';
     float: left;
     margin-right: u(1.5rem);
@@ -117,8 +123,9 @@
 
 .icon-heading--question-bubble-circle {
   &::before {
-    @include u-icon-circle($question-bubble, $inverse, $secondary-contrast, 4rem);
-    background-size: u(3rem);
+    $size: u(3.5rem);
+    @include u-icon-circle($question-bubble, $inverse, $secondary-contrast, $size);
+    background-size: 70%;
     content: '';
     float: left;
     margin-right: u(1.5rem);
@@ -196,7 +203,7 @@
 
 .icon-heading--person-location-circle {
   &::before {
-    $size: u(4rem);
+    $size: u(3.5rem);
     @include u-icon-circle($person-location, $inverse, $primary-contrast, $size);
     background-size: 50%;
     content: '';
@@ -207,7 +214,7 @@
 
 .icon-heading--individual-contributions-circle {
   &::before {
-    $size: u(4rem);
+    $size: u(3.5rem);
     @include u-icon-circle($individual-contributions, $inverse, $primary-contrast, $size);
     background-size: 50%;
     content: '';
@@ -218,9 +225,9 @@
 
 .icon-heading--magnifying-glass-circle {
   &::before {
-    $size: u(4rem);
+    $size: u(3.5rem);
     @include u-icon-circle($magnifying-glass, $inverse, $primary-contrast, $size);
-    background-size: 45%;
+    background-size: 50%;
     content: '';
     float: left;
     margin-right: u(1.5rem);
