@@ -24,6 +24,7 @@
     "babel-preset-latest": "^6.24.0",
     "babelify": "^7.3.0",
     "chroma-js": "1.0.1",
+    "bleach": "0.3.0",
     "colorbrewer": "0.0.2",
     "component-sticky": "1.0.0",
     "d3": "3.5.5",
