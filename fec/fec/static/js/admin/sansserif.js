@@ -1,9 +1,5 @@
-const React = window.React;
-const Modifier = window.DraftJS.Modifier;
-const EditorState = window.DraftJS.EditorState;
-
 // Creates the entities as soon as it is rendered.
-class GlossarySource extends React.Component {
+class SansserifSource extends React.Component {
     componentDidMount() {
         const { editorState, entityType, onComplete } = this.props;
 
@@ -38,18 +34,19 @@ class GlossarySource extends React.Component {
     }
 }
 
+
 // This adds additional 'term' class to the editor
 // to add custom editor styles inside customize-editor.css
-const Glossary = (props) => {
+const Sansserif = (props) => {
     const { entityKey, contentState } = props;
 
-    return React.createElement('b', {
-        class: 'term'
+    return React.createElement('span', {
+        class: 't-sans'
     }, props.children);
 };
 
 window.draftail.registerPlugin({
-    type: 'GLOSSARY',
-    source: GlossarySource,
-    decorator: Glossary,
+    type: 'SANSSERIF',
+    source: SansserifSource,
+    decorator: Sansserif,
 });
