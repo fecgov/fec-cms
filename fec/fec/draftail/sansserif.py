@@ -17,3 +17,9 @@ class SansserifEntityElementHandler(InlineEntityElementHandler):
     Converts the span tag into a SANSSERIF entity, with the right data.
     """
     mutability = 'IMMUTABLE'
+
+    def get_attribute_data(self, attrs):
+        """
+        Take the ``sansserif`` value from the ``data-term`` HTML attribute.
+        """
+        return {}
