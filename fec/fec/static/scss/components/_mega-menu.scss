@@ -2,7 +2,6 @@
 //
 // For site nav
 //
-
 .mega-container {
   a:not(.mega__page-link, .button) {
     border-bottom: none;
@@ -24,10 +23,21 @@
 
 .mega__inner {
   padding: u(1rem);
+  margin: u(1rem 0 0 0);
 }
 
 .mega-heading__title {
   display: none;
+  margin-left: u(-2rem);
+
+  a {
+    border-bottom: 1px dotted $inverse !important;
+  }
+  &::before {
+    margin-bottom: u(3rem);
+    height: u(5rem) !important;
+    width: u(5rem) !important;
+  }
 }
 
 .mega-heading {
@@ -35,7 +45,7 @@
 }
 
 .mega__intro {
-  padding: u(1rem 1rem 0 1rem);
+  padding: u(0rem 1rem 0 1rem);
 }
 
 .mega__page-link {
@@ -73,6 +83,7 @@
 .mega__item {
   margin-bottom: u(1.5rem);
   padding-left: u(2rem);
+  line-height:1.2;
 
   &:first-of-type {
     margin-top: u(1rem);
@@ -166,3 +177,5 @@
     }
   }
 }
+
+
