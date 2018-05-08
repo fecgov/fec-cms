@@ -1125,3 +1125,17 @@ class EmbedTableSnippet(models.Model):
 
     def __str__(self):
         return '{} ({})'.format(self.title, self.description)
+
+class ContactPage(Page):
+    contact_items = StreamField([
+        ('contact_items', ContactInfoBlock())
+    ])
+    sections = StreamField([
+        ('sections', blocks.RichTextBlock())
+    ])
+
+    content_panels = Page.content_panels + [
+        StreamFieldPanel('contact_items'),
+        StreamFieldPanel('sections'),
+    ]
+

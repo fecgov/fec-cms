@@ -53,7 +53,7 @@ class ContactInfoBlock(blocks.StructBlock):
     contact_items = blocks.ListBlock(ContactItemBlock())
 
     class Meta:
-        template = 'blocks/contact-info.html'
+        template = 'blocks/contact-info-template.html'
         icon = 'placeholder'
 
 class CitationsBlock(blocks.StructBlock):
