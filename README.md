@@ -2,7 +2,7 @@
 [![CircleCI](https://circleci.com/gh/fecgov/fec-cms.svg?style=svg)](https://circleci.com/gh/fecgov/fec-cms)
 
 **Master**
-[![Dependency Status](https://gemnasium.com/badges/github.com/fecgov/fec-cms.svg)](https://gemnasium.com/github.com/fecgov/fec-cms)
+[![Known Vulnerabilities](https://snyk.io/test/github/fecgov/fec-cms/badge.svg)](https://snyk.io/test/github/fecgov/fec-cms)
 
 ## Campaign finance for everyone
 The Federal Election Commission (FEC) releases information to the public about
@@ -47,7 +47,7 @@ run into problems please
 ### Project prerequisites
 1. Ensure you have the following requirements installed:
 
-    * Python (the latest 3.5 release, which includes `pip` and and a built-in version of `virtualenv` called `venv`).
+    * Python (the latest 3.6 release, which includes `pip` and and a built-in version of `virtualenv` called `venv`).
     * The latest long term support (LTS) or stable release of Node.js (which
       includes `npm`).
     * PostgreSQL (the latest 9.6 release).
