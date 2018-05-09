@@ -90,6 +90,14 @@
   }
 }
 
+.contact-item--question-bubble {
+  &::before {
+    @include u-icon-circle($question-bubble, $primary, $inverse, 3.4rem);
+    background-size:75% !important;
+
+  }
+}
+
 .contact-item--hand {
   &.contact-item::before {
     @include u-icon-circle($hand-envelope, $primary, $inverse, 3.4rem);

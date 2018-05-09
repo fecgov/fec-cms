@@ -3,9 +3,9 @@
 
 <div class="row">
   {% if self.label %}
-    <p class="label">{{ self.label }}</p>
+    <h2>{{ self.label }}</h2>
   {% endif %}
-  <div class="grid grid--2-wide">
+  <div>
       {% for item in self.contact_items %}
       <div class="grid__item">
         <div class="contact-item contact-item--{{ item.item_icon }}">
