@@ -2,21 +2,19 @@
 {% load wagtailimages_tags %}
 
 <div class="row">
-  {% if self.label %}
-    <h2>{{ self.label }}</h2>
-  {% endif %}
-  <div>
-      {% for item in self.contact_items %}
-      <div class="grid__item">
-        <div class="contact-item contact-item--{{ item.item_icon }}">
-          <div class="contact-item__content">
-            {% if item.item_label %}
-            <h5 class="contact-item__title">{{ item.item_label }}</h5>
-            {% endif %}
-            {{ item.item_info }}
-          </div>
+{% if self.label %}
+  <h2>{{ self.label }}</h2>
+{% endif %}
+    {% for item in self.contact_items %}
+    <div class="grid__item">
+      <div class="contact-item contact-item--{{ item.item_icon }}">
+        <div class="contact-item__content">
+          {% if item.item_label %}
+          <h5 class="contact-item__title">{{ item.item_label }}</h5>
+          {% endif %}
+          {{ item.item_info }}
         </div>
       </div>
-    {% endfor %}
-  </div>
+    </div>
+  {% endfor %}
 </div>
