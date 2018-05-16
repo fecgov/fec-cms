@@ -269,7 +269,7 @@ def committee(request, committee_id):
     committee, all_candidates, cycle = api_caller.load_with_nested('committee', committee_id, 'candidates', cycle)
 
     # When there are multiple candidate records of various offices (H, S, P) linked to a single
-    # committee ID, we want to associate the candidate record with the matching committee type 
+    # committee ID, we want to associate the candidate record with the matching committee type
     # For each candidate, check if the committee type is equal to the candidate's office. If true
     # add that candidate to the list of candidates to return
     candidates = []
@@ -286,7 +286,7 @@ def committee(request, committee_id):
     # without cycle query parameter
     # See https://github.com/fecgov/openFEC/issues/1536
     # For each candidate, set related_cycle to the candidate's time period
-    # relative to the selected cycle. 
+    # relative to the selected cycle.
     for candidate in candidates:
         election_years = []
         for election_year in candidate['election_years']:
@@ -295,7 +295,7 @@ def committee(request, committee_id):
                 election_years.append(election_year)
 
         candidate['related_cycle'] = cycle if election_years else None
-    
+
 
     # Load financial totals and reports for a given committee
     financials = api_caller.load_cmte_financials(committee_id, cycle=cycle)
@@ -418,6 +418,7 @@ def elections(request, office, cycle, state=None, district=None):
 
 def raising(request):
     top_category = request.GET.get('top_category', 'P')
+    cycles = utils.get_cycles(utils.current_cycle())
     cycle = request.GET.get('cycle', constants.DEFAULT_TIME_PERIOD)
 
     if top_category in ['pac']:
@@ -440,6 +441,7 @@ def raising(request):
         'top_category': top_category,
         'coverage_start_date': datetime.date(cycle - 1, 1, 1),
         'coverage_end_date': coverage_end_date,
+        'cycles': cycles,
         'cycle': cycle,
         'top_raisers': top_raisers['results'],
         'page_info': utils.page_info(top_raisers['pagination'])
@@ -448,6 +450,7 @@ def raising(request):
 
 def spending(request):
     top_category = request.GET.get('top_category', 'P')
+    cycles = utils.get_cycles(utils.current_cycle())
     cycle = request.GET.get('cycle', constants.DEFAULT_TIME_PERIOD)
 
     if top_category in ['pac']:
@@ -468,6 +471,7 @@ def spending(request):
         'top_category': top_category,
         'coverage_start_date': datetime.date(cycle - 1, 1, 1),
         'coverage_end_date': coverage_end_date,
+        'cycles': cycles,
         'cycle': cycle,
         'top_spenders': top_spenders['results'],
         'page_info': utils.page_info(top_spenders['pagination'])
