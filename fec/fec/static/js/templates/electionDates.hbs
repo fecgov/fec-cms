@@ -1,3 +1,21 @@
-<p>Current office holder: <a href="/data/candidate/{{ candidate_id }}">{{ incumbent_name }}</a> | {{ party_name }}</p>
-<p>Last general election: </p>
-<p>General election: </p>
+<div class="container t-sans">
+  <div class="grid grid--4-wide">
+    <div class="grid__item">
+      <h3>Last general election:</h3>
+    </div>
+    <div class="grid__item">
+      <p>{{last}}</p>
+    </div>
+  </div>
+</div>
+
+<div class="container t-sans">
+  <div class="grid grid--4-wide">
+    <div class="grid__item">
+      <h3>General election:</h3>
+    </div>
+    <div class="grid__item">
+      <p>{{current}}</p>
+    </div>
+  </div>
+</div>

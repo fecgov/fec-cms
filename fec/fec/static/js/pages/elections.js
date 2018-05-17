@@ -6,6 +6,7 @@ var d3 = require('d3');
 var $ = require('jquery');
 var _ = require('underscore');
 var chroma = require('chroma-js');
+var Glossary = require('glossary-panel');
 var moment = require('moment');
 
 var dropdown = require('../modules/dropdowns');
@@ -43,6 +44,25 @@ var independentExpenditureColumns = [
         };
     })
   },
+];
+
+var candidateInformationColumns = [
+  {
+    data: 'candidate_name',
+    className: 'all column--large',
+    render: function(data, type, row, meta) {
+      return columnHelpers.buildEntityLink(
+        data,
+        helpers.buildAppUrl(['candidate', row.candidate_id]),
+        'candidate',
+        {isIncumbent: row.incumbent_challenge_full === 'Incumbent'}
+      );
+    }
+  },
+  {
+    data: 'party_full',
+    className: 'all'
+  }
 ];
 
 var communicationCostColumns = [
@@ -92,33 +112,47 @@ var electionColumns = [
       );
     }
   },
-  {data: 'party_full', className: 'all'},
-  columns.currencyColumn({data: 'total_receipts', className: 'column--number', orderSequence: ['desc', 'asc']}),
-  columns.currencyColumn({data: 'total_disbursements', className: 'column--number', orderSequence: ['desc', 'asc']}),
-  columns.barCurrencyColumn({data: 'cash_on_hand_end_period', className: 'column--number'}),
   {
-      render: function(data, type, row, meta) {
-        var dates = helpers.cycleDates(context.election.cycle);
-        var urlBase;
-        if (context.election.office === 'president') {
-          urlBase = ['reports', 'presidential'];
-        } else {
-          urlBase = ['reports','house-senate'];
+    data: 'party_full',
+    className: 'all'
+  },
+  columns.currencyColumn({
+    data: 'total_receipts',
+    className: 'column--number',
+    orderSequence: ['desc', 'asc']
+  }),
+  columns.currencyColumn({
+    data: 'total_disbursements',
+    className: 'column--number',
+    orderSequence: ['desc', 'asc']
+  }),
+  columns.barCurrencyColumn({
+    data: 'cash_on_hand_end_period',
+    className: 'column--number'
+  }),
+  {
+    render: function(data, type, row, meta) {
+      var dates = helpers.cycleDates(context.election.cycle);
+      var urlBase;
+      if (context.election.office === 'president') {
+        urlBase = ['reports', 'presidential'];
+      } else {
+        urlBase = ['reports','house-senate'];
+      }
+      var url = helpers.buildAppUrl(
+        urlBase,
+        {
+          committee_id: row.committee_ids,
+          cycle: context.election.cycle,
+          is_amended: 'false'
         }
-        var url = helpers.buildAppUrl(
-          urlBase,
-          {
-            committee_id: row.committee_ids,
-            cycle: context.election.cycle,
-            is_amended: 'false'
-          }
-        );
-        var coverage_end_date = row.coverage_end_date ? moment(row.coverage_end_date).format('MM/DD/YYYY') : null;
-        return coverageEndDate({
-          coverage_end_date: coverage_end_date,
-          url: url
-        }
-      )
+      );
+      var coverage_end_date = row.coverage_end_date ? moment(row.coverage_end_date).format('MM/DD/YYYY') : null;
+
+      return coverageEndDate({
+        coverage_end_date: coverage_end_date,
+        url: url
+      });
     },
     className: 'all',
     orderable: false,
@@ -178,6 +212,7 @@ function stateColumns(results) {
       }
     );
   });
+
   return [stateColumn].concat(columns);
 }
 
@@ -190,6 +225,7 @@ function refreshTables(e) {
       candidate_name: $input.attr('data-name')
     };
   });
+
   if (selected.length > 0) {
     drawSizeTable(selected);
     drawStateTable(selected);
@@ -251,6 +287,8 @@ var defaultOpts = {
   searching: false,
   serverSide: false,
   lengthChange: true,
+  useExport: true,
+  singleEntityItemizedExport: true,
   dom: tables.simpleDOM,
   language: {
     lengthMenu: 'Results per page: _MENU_',
@@ -494,6 +532,8 @@ function initSpendingTables() {
         pageLength: 10,
         lengthMenu: [10, 30, 50, 100],
         hideEmpty: true,
+        useExport: true,
+        singleEntityItemizedExport: true,
         hideEmptyOpts: {
           dataType: opts.title,
           name: 'this election',
@@ -508,7 +548,7 @@ function getStateElectionOffices(state) {
   var query = {
     state: state
   };
-  var url = helpers.buildUrl(['state-election-office'], query); 
+  var url = helpers.buildUrl(['state-election-office'], query);
   $.getJSON(url).done(function(response) {
     var $offices_list = $('#election-offices');
     var offices = response.results;
@@ -516,25 +556,97 @@ function getStateElectionOffices(state) {
   });
 }
 
+function getElections(state, office) {
+  var officeSymbol = {
+    'house': 'H',
+    'senate': 'S',
+    'presidential': 'P'
+  };
+
+  var query = {
+    'sort': '-election_date',
+    'per_page': 2,
+    'election_type_id': 'G',
+    'election_state': state,
+    'office_sought': officeSymbol[office]
+  };
+
+  var url = helpers.buildUrl(['election-dates'], query);
+  var $election_dates_results = $('.election-dates');
+  $.getJSON(url).done(function(response) {
+    var results = {
+      last: moment(response.results[1].election_date).format('MMMM DD, YYYY'),
+      current: moment(response.results[0].election_date).format('MMMM DD, YYYY')
+    };
+    $election_dates_results.html(electionDatesTemplate(results));
+  });
+}
+
+function buildTableQuery(contextObj, pageLength) {
+  var pageLength = pageLength || 10;
+  var query = _.chain(context.election)
+  .pairs()
+  .filter(function(pair) {
+    return pair[1];
+  })
+  .object()
+  .value();
+
+  return _.extend(query, {
+    per_page: pageLength,
+    sort_hide_null: true
+  });
+}
+
 $(document).ready(function() {
   var $table = $('#results');
-  var query = _.chain(context.election)
-    .pairs()
-    .filter(function(pair) {
-      return pair[1];
-    })
-    .object()
-    .value();
+  var $candidateInfo = $('#candidate-information-results');
+  var query = buildTableQuery(context.election);
+
   var url = helpers.buildUrl(
     ['elections'],
-    _.extend(query, {per_page: 0, sort_hide_null: true})
+    query
   );
+
+  tables.DataTable.defer($candidateInfo, {
+    autoWidth: false,
+    path: ['elections'],
+    query: query,
+    columns: candidateInformationColumns,
+    order: [[0, 'asc']],
+    dom: tables.simpleDOM,
+    pagingType: 'simple',
+    lengthChange: true,
+    pageLength: 10,
+    lengthMenu: [10, 30, 50, 100],
+    hideEmpty: true,
+    useExport: true,
+    singleEntityItemizedExport: true
+  });
+
+  tables.DataTable.defer($table, {
+    autoWidth: false,
+    path: ['elections'],
+    query: query,
+    columns: electionColumns,
+    order: [[2, 'desc']],
+    dom: tables.simpleDOM,
+    pagingType: 'simple',
+    lengthChange: true,
+    pageLength: 10,
+    lengthMenu: [10, 30, 50, 100],
+    hideEmpty: true,
+    useExport: true,
+    singleEntityItemizedExport: true,
+    hideEmptyOpts: {
+      dataType: 'candidate-financial-totals',
+      name: 'candidate financial totals',
+      timePeriod: context.timePeriod,
+    }
+  });
+
   $.getJSON(url).done(function(response) {
-    $table.dataTable(_.extend({}, defaultOpts, {
-      columns: electionColumns,
-      data: response.results,
-      order: [[2, 'desc']]
-    }));
+
     drawComparison(response.results);
     initStateMaps(response.results);
     context.candidates = _.chain(response.results)
@@ -547,19 +659,10 @@ $(document).ready(function() {
     var incumbents = response.results.filter( function(result) {
       return result.incumbent_challenge_full=='Incumbent';
     });
-    var $election_dates_results = $('.election-dates');
-    var dates = {
-      incumbent_name: incumbents[0].candidate_name,
-      party_name: incumbents[0].party_full,
-      candidate_id: incumbents[0].candidate_id
-      //next_election_date: new Date(),
-      //last_election_date: new Date()
-    };
-    $election_dates_results.html(electionDatesTemplate(dates));
+  });
 
-    });
-
-    getStateElectionOffices(context.election.state);
+  getStateElectionOffices(context.election.state);
+  getElections(context.election.state, context.election.office,);
 
   if ($('#election-map').length) {
     var districtMap = new maps.DistrictMap(

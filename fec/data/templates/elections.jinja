@@ -1,5 +1,7 @@
 {% extends 'layouts/main.jinja' %}
 {% import 'macros/page-header.jinja' as header %}
+{% set senate_crumb = state_full + ' - ' + office|title + ' | ' + cycle|string %}
+{% set house_crumb = state_full + ' - ' + office|title + ' ' + district|string + ' | ' + cycle|string %}
 
 {{ cycle }} Election - US {{ office|title }} {% if state %} - {{ state|fmt_state_full }} {% if district %} - District {{ district }} {% endif %} {% endif %}
 
@@ -10,100 +12,44 @@
 {% endblock %}
 
 {% block body %}
-{{ header.header(title) }}
-<div class="u-padding--left u-padding--right tab-interface">
-  <header class="main">
-    {% if office == 'president' %}
-      <h1 class="entity__name">US President</h1>
-      <div class="heading--section">
-        <span class="t-data t-bold">
-          Compare candidates for president
-        </span>
-      </div>
-    {% else %}
-      <h1 class="entity__name">{{ state|fmt_state_full }} -
-      {% if district %}
-        House District {{ district | strip_zero_pad }}
+  {% if office == 'house' %}
+    {{ header.header(house_crumb) }}
+  {% else %}
+    {{ header.header(senate_crumb) }}
+  {% endif %}
+  <div class="u-padding--left u-padding--right tab-interface">
+    <header class="main">
+      {% if office == 'president' %}
+        <h1 class="entity__name">US President</h1>
+        <div class="heading--section">
+          <span class="t-data t-bold">
+            Compare candidates for president
+          </span>
+        </div>
       {% else %}
-        Senate
+        <h1 class="entity__name">{{ state|fmt_state_full }} -
+        {% if district %}
+          House District {{ district | strip_zero_pad }}
+        {% else %}
+          Senate
+        {% endif %}
+        </h1>
+        <div class="heading--section">
+          <span class="t-data t-bold">
+            {{ cycle }} | {{ office }}
+          </span>
+        </div>
       {% endif %}
-      </h1>
-      <div class="heading--section">
-        <span class="t-data t-bold">
-          {{ cycle }} | {{ office }}
-        </span>
+    </header>
+    <div class="data-container__wrapper">
+        {% include 'partials/elections/sidebar-nav.jinja' %}
+      <div class="main__content--right-full">
+        {% include 'partials/loading-tab.jinja' %}
+        {% include 'partials/elections/election-data-and-compliance-tab.jinja' %}
+        {% include 'partials/elections/about-this-election-tab.jinja' %}
+        <!--{% include 'partials/elections/other-spending-tab.jinja' %}-->
       </div>
-    {% endif %}
-  </header>
-
-  <div class="data-container__wrapper">
-    <nav class="sidebar side-nav-alt">
-      <ul class="tablist" role="tablist" data-name="tab">
-        <li class="side-nav__item" role="presentation">
-          <a
-            class="side-nav__link"
-            role="tab"
-            data-name="totals"
-            tabindex="0"
-            aria-controls="panel1"
-            href="#section-1"
-            >Election data and reporting deadlines</a>
-        </li>
-        <li class="side-nav__item" role="presentation">
-          <a
-            class="side-nav__link"
-            role="tab"
-            data-name="contributions"
-            tabindex="0"
-            aria-controls="panel2"
-            href="#section-2"
-            >About this election</a>
-        </li>
-        <li class="side-nav__item">
-          <div class="accordion--neutral js-accordion" data-accordion-prefix="election-lookup">
-            <button class="js-accordion-trigger accordion__button">Find another election</button>
-            <div class="accordion__content" aria-hidden="true">
-              <form action="/data/elections" id="election-nav">
-                <div class="filter">
-                  <label for="state" class="label">State</label>
-                  <select id="state" name="state" class="u-full-width">
-                    <option value="">Select state</option>
-                    {% for value, label in constants.states.items() %}
-                    <option value="{{ value }}">{{ label }}</option>
-                    {% endfor %}
-                  </select>
-                </div>
-                <div class="filter">
-                  <label for="district" class="label">District <span class="label__optional">(optional)</span></label>
-                  <select id="district" name="district" aria-label="Select a district" class="select--alt u-full-width">
-                    <option value="">Select district</option>
-                    <option value="S">Senate</option>
-                    <optgroup label="House">
-                      {% for value in range(1, 100) %}
-                      {% with formatted = '{0:02d}'.format(value) %}
-                      <option value="{{ formatted }}">{{ formatted }}</option>
-                        {% endwith %}
-                        {% endfor %}
-                    </optgroup>
-                  </select>
-                </div>
-                <div class="filter">
-                  <button class="button button--cta">View results</button>
-                </div>
-              </form>
-            </div>
-          </div>
-        </li>
-      </ul>
-    </nav>
-
-    <div class="main__content--right-full">
-      {% include 'partials/loading-tab.jinja' %}
-      {% include 'partials/elections/election-data-and-compliance-tab.jinja' %}
-      {% include 'partials/elections/about-this-election-tab.jinja' %}
-      <!--{% include 'partials/elections/other-spending-tab.jinja' %}-->
-    </div>
-</div>
+  </div>
 {% endblock %}
 
 {% block scripts %}

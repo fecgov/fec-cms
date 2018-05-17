@@ -1,0 +1,74 @@
+  <nav class="sidebar side-nav-alt">
+    <ul class="tablist" role="tablist" data-name="tab">
+      <li class="side-nav__item" role="presentation">
+        <a
+          class="side-nav__link"
+          role="tab"
+          data-name="election-data"
+          tabindex="0"
+          aria-controls="panel1"
+          href="#section-1"
+        >
+          Election data and reporting deadlines
+        </a>
+        <ul>
+            <li><a href="#candidate-financial-totals">Candidate financial totals</a></li>
+            <li><a href="#individual-contributions">Individual contributions</a></li>
+            <li><a href="#independent-expenditures">Independent expenditures</a></li>
+            <li><a href="#communication-costs">Communication costs</a></li>
+            <li><a href="#electioneering-communication">Electioneering communication</a></li>
+        </ul>
+      </li>
+      <li class="side-nav__item" role="presentation">
+        <a
+          class="side-nav__link"
+          role="tab"
+          data-name="about-election"
+          tabindex="0"
+          aria-controls="panel2"
+          href="#section-2"
+          >About this election</a>
+        <ul>
+          <li><a href="#candidate-information">Candidate information</a></li>
+          <li><a href="#state-election-offices">State election offices</a></li>
+        </ul>
+      </li>
+      <li class="side-nav__item">
+        <div class="accordion--neutral js-accordion" data-accordion-prefix="election-lookup">
+          <button class="js-accordion-trigger accordion__button">Find another election</button>
+          <div class="accordion__content" aria-hidden="true">
+            <form action="/data/elections" id="election-nav">
+              <div class="filter">
+                <label for="state" class="label">State</label>
+                <select id="state" name="state" class="u-full-width">
+                  <option value="">Select state</option>
+                  {% for value, label in constants.states.items() %}
+                    <option value="{{ value }}">{{ label }}</option>
+                  {% endfor %}
+                </select>
+              </div>
+              <div class="filter">
+                <label for="district" class="label">
+                  District <span class="label__optional">(optional)</span>
+                </label>
+                <select id="district" name="district" aria-label="Select a district" class="select--alt u-full-width">
+                  <option value="">Select district</option>
+                  <option value="S">Senate</option>
+                  <optgroup label="House">
+                    {% for value in range(1, 100) %}
+                      {% with formatted = '{0:02d}'.format(value) %}
+                        <option value="{{ formatted }}">{{ formatted }}</option>
+                      {% endwith %}
+                    {% endfor %}
+                  </optgroup>
+                </select>
+              </div>
+              <div class="filter">
+                <button class="button button--cta">View results</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </li>
+    </ul>
+  </nav>

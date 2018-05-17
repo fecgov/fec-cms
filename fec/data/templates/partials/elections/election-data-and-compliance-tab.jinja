@@ -1,66 +1,58 @@
 {% import 'macros/cycle-select.jinja' as select %}
+{% import 'macros/reporting-info.jinja' as reporting %}
+{% set anchors = {
+  'AL': {'p':'1', 'ie': 'AL', 'ec': 'AL'},'AK': {'p':'1', 'ie': 'AL', 'ec': 'AL'},'AS': {'p':'1', 'ie': 'AL', 'ec': 'AL'},
+  'AZ': {'p':'1', 'ie': 'AZ', 'ec': 'AL'},'AR': {'p':'1', 'ie': 'AZ', 'ec': 'AL'},'CA': {'p':'1', 'ie': 'AZ', 'ec': 'CA'},
+  'CO': {'p':'2', 'ie': 'AZ', 'ec': 'CA'},'CT': {'p':'2', 'ie': 'CT', 'ec': 'CA'},'DE': {'p':'2', 'ie': 'DE', 'ec': 'DE'},
+  'DC': {'p':'2', 'ie': 'DE', 'ec': 'DE'},'FL': {'p':'2', 'ie': 'DE', 'ec': 'DE'},'GA': {'p':'2', 'ie': 'GA', 'ec': 'DE'},
+  'GU': {'p':'3', 'ie': 'GA', 'ec': 'DE'},'HI': {'p':'3', 'ie': 'GA', 'ec': 'DE'},'ID': {'p':'3', 'ie': 'ID', 'ec': 'DE'},
+  'IL': {'p':'3', 'ie': 'ID', 'ec': 'DE'},'IN': {'p':'3', 'ie': 'ID', 'ec': 'IN'},'IA': {'p':'3', 'ie': 'ID', 'ec': 'IN'},
+  'KS': {'p':'3', 'ie': 'ID', 'ec': 'IN'},'KY': {'p':'3', 'ie': 'KY', 'ec': 'IN'},'LA': {'p':'4', 'ie': 'KY', 'ec': 'IN'},
+  'ME': {'p':'4', 'ie': 'KY', 'ec': 'IN'},'MH': {'p':'4', 'ie': 'KY', 'ec': 'IN'},'MD': {'p':'4', 'ie': 'KY', 'ec': 'IN'},
+  'MA': {'p':'4', 'ie': 'MA', 'ec': 'MA'},'MI': {'p':'4', 'ie': 'MA', 'ec': 'MA'},'MN': {'p':'4', 'ie': 'MA', 'ec': 'MA'},
+  'MS': {'p':'4', 'ie': 'MA', 'ec': 'MA'},'MO': {'p':'4', 'ie': 'MO', 'ec': 'MA'},'MT': {'p':'5', 'ie': 'MO', 'ec': 'MA'},
+  'NE': {'p':'5', 'ie': 'MO', 'ec': 'MA'},'NV': {'p':'5', 'ie': 'MO', 'ec': 'MA'},'NH': {'p':'5', 'ie': 'MO', 'ec': 'NH'},
+  'NJ': {'p':'5', 'ie': 'MO', 'ec': 'NH'},'NM': {'p':'5', 'ie': 'NM', 'ec': 'NH'},'NY': {'p':'5', 'ie': 'NM', 'ec': 'NH'},
+  'NC': {'p':'5', 'ie': 'NM', 'ec': 'NH'},'ND': {'p':'5', 'ie': 'NM', 'ec': 'NH'},'MP': {'p':'5', 'ie': 'NM', 'ec': 'NH'},
+  'OH': {'p':'5', 'ie': 'OH', 'ec': 'NH'},'OK': {'p':'6', 'ie': 'OH', 'ec': 'NH'},'OR': {'p':'6', 'ie': 'OH', 'ec': 'OR'},
+  'PA': {'p':'6', 'ie': 'OH', 'ec': 'OR'},'PR': {'p':'6', 'ie': 'OH', 'ec': 'OR'},'RI': {'p':'6', 'ie': 'OH', 'ec': 'OR'},
+  'SC': {'p':'6', 'ie': 'SC', 'ec': 'OR'},'SD': {'p':'6', 'ie': 'SC', 'ec': 'SD'},'TN': {'p':'6', 'ie': 'TN', 'ec': 'SD'},
+  'TX': {'p':'7', 'ie': 'TN', 'ec': 'SD'},'UT': {'p':'7', 'ie': 'UT', 'ec': 'UT'},'VT': {'p':'7', 'ie': 'VT', 'ec': 'UT'},
+  'VI': {'p':'7', 'ie': 'VT', 'ec': 'VI'},'VA': {'p':'8', 'ie': 'VT', 'ec': 'VI'},'WA': {'p':'8', 'ie': 'WA', 'ec': 'WA'},
+  'WV': {'p':'8', 'ie': 'WA', 'ec': 'WA'},'WI': {'p':'8', 'ie': 'WA', 'ec': 'WA'},'WY': {'p':'8', 'ie': 'WA', 'ec': 'WA'},
+} %}
 
 <section id="section-1" role="tabpanel" aria-hidden="true" aria-labelledby="section-1-heading">
   <div class="container">
     <h2 id="section-1-heading">Election data and reporting deadlines</h2>
-    <!--<p>This table only shows candidates who have registered <em>and</em> filed a financial report. Looking for <a href="/data/candidates/?office={{ office_code|upper }}&cycle={{ cycle }}&district={{ district }}&state={{ state|upper }}">all candidates who registered</a>?</p>-->
-    <div class="grid grid--3-wide">
-      <div class="grid__item">
-        <a href="/help-candidates-and-committees/dates-and-deadlines/">
-          <aside class="card card--horizontal card--primary">
-            <div class="card__image__container">
-              <span class="card__icon i-checklist-2"><span class="u-visually-hidden">Icon of dates and deadlines</span></span>
-            </div>
-            <div class="card__content">
-              Dates and deadlines
-            </div>
-          </aside>
-        </a>
-      </div>
-      {% if office == 'president' %}
-      <div class="grid__item is-disabled" style="display: none;">
-          <aside class="card card--horizontal card--neutral">
-            <div class="card__image__container">
-              <span class="card__icon i-election"><span class="u-visually-hidden">Icon of elections</span></span>
-            </div>
-            <div class="card__content">
-              All {% if state %} - {{ state|fmt_state_full }} {% endif %}state elections  
-            </div>
-          </aside>
-        </div>
-        {% else %}
-        <div class="grid__item is-disabled">
-          <aside class="card card--horizontal card--neutral">
-            <div class="card__image__container">
-              <span class="card__icon i-election"><span class="u-visually-hidden">Icon of elections</span></span>
-            </div>
-            <div class="card__content">
-              All {% if state %} - {{ state|fmt_state_full }} {% endif %}state elections  
-            </div>
-          </aside>
-        </div>
-        {% endif %}
-      <div class="grid__item is-disabled">
-        <aside class="card card--horizontal card--neutral">
-          <div class="card__image__container">
-            <span class="card__icon i-election"><span class="u-visually-hidden">Icon of elections</span></span>
-          </div>
-          <div class="card__content">
-            All {{ office|title }} elections
-          </div>
-        </aside>
-      </div>
-    </div>
+    {% include 'partials/elections/election-profile-cards.jinja' %}
     <div class="slab slab--inline slab--neutral u-padding--left u-padding--right">
       {{ select.election_cycle_select(cycles, cycle, 'summary')}}
-      <div class="entity__figure row">
+      <div id="candidate-financial-totals" class="entity__figure row">
         <div class="heading--section heading--with-action u-no-margin">
           <h3 class="heading__left">Candidate financial totals</h3>
           <div class="heading__right">
-            <span class="is-incumbent t-sans t-note">Incumbent</span>
+            <span class="is-incumbent t-sans t-note" style="padding-right: 1em">Incumbent</span>
+            <div
+              class="message message--info message--mini t-left-aligned data-container__message"
+              data-export-message-for="candidates"
+              aria-hidden="true"
+            >
+            </div>
+            <button
+              type="button"
+              class="js-export button button--cta button--export"
+              data-export-for="candidates"
+            >
+              Export
+            </button>
           </div>
         </div>
-        <table id="results" class="data-table data-table--heading-borders scrollX" data-type="candidates">
+        <table
+          id="results"
+          class="data-table data-table--heading-borders scrollX"
+          data-type="candidates"
+        >
           <thead>
             <th role="col">Candidate</th>
             <th role="col">Party</th>
@@ -71,27 +63,47 @@
           </thead>
         </table>
         <div class="datatable__note">
-          <span class="t-note">This table only shows candidates who have registered and filed a financial report. Information in this table may not include the most recently submitted filings.</span>
+          <p class="t-note">
+            This table only shows candidates who have registered and filed a financial report. Information in this table may not include the most recently submitted filings.
+          </p>
         </div>
-        <div class="container u-no-padding-left">
-          <div class="grid__item">
-            <div class="icon-heading--calendar-circle-primary">
-              <div class="icon-heading__content">
-                <div class="t-lead">Congressional commitee reports:</div>
-                <div class="t-sans">Quarterly filing and pre-/post-election reports</div>
-                <div class="container u-padding--top u-no-padding-left">
-                  <a class="button--cta button--go" href="https://transition.fec.gov/pages/report_notices/2016/state_notices/az_prim.shtml">Primary deadlines</a>
-                  <a class="button--cta button--go" href="https://transition.fec.gov/pages/report_notices/2016/PreG_cong.shtml">General deadlines</a>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
+        {% if cycle >= 2010 %}
+          {{ reporting.info(
+                'Congressional committee reports',
+                'Quarterly filing and pre-/post-election reports',
+                [{
+                  'text': 'Convention and Primary deadlines',
+                  'href': 'https://transition.fec.gov/info/charts_primary_dates_'+cycle|string+'.shtml#anchor'+anchors[state]['p']
+                },{
+                  'text': 'General deadlines',
+                  'href': 'https://transition.fec.gov/info/report_dates_'+cycle|string+'.shtml#general'
+                }]
+              )
+            }}
+        {% else %}
+          {{ reporting.warning(cycle='2010') }}
+        {% endif %}
       </div>
-      <div class="entity__figure row">
+
+      <div id="individual-contributions" class="entity__figure row">
         <div class="heading--section heading--with-action">
           <h3 class="heading__left">Individual contributions</h3>
-      </div>
+{#           <div class="heading__right">
+            <div
+              class="message message--info message--mini t-left-aligned data-container__message"
+              data-export-message-for="by-size"
+              aria-hidden="true"
+            >
+            </div>
+            <button
+              type="button"
+              class="js-export button button--cta button--export"
+              data-export-for="by-size"
+            >
+              Export
+            </button>
+          </div> #}
+        </div>
         <div class="row">
           <fieldset class="toggles js-toggles">
             <legend class="label">Group by:</legend>
@@ -105,10 +117,27 @@
             </label>
           </fieldset>
         </div>
+
       <div id="comparison"></div>
         <div class="row">
           <div id="by-size" class="panel-toggle-element" aria-hidden="false">
-            <div class="results-info results-info--simple"></div>
+            <div class="heading--section heading--with-action">
+              <div class="heading__right">
+                <div
+                  class="message message--info message--mini t-left-aligned data-container__message"
+                  data-export-message-for="by-size"
+                  aria-hidden="true"
+                >
+                </div>
+                <button
+                  type="button"
+                  class="js-export button button--cta button--export"
+                  data-export-for="by-size"
+                >
+                  Export
+                </button>
+              </div>
+            </div>
             <table class="data-table data-table--heading-borders scrollX" data-type="by-size">
               <thead>
                 <th scope="col">Candidate</th>
@@ -137,6 +166,23 @@
               </div>
             </div>
             <div id="state-table">
+              <div class="slab heading--section heading--with-action">
+                <div class="heading__right">
+                  <div
+                    class="message message--info message--mini t-left-aligned data-container__message"
+                    data-export-message-for="by-state"
+                    aria-hidden="true"
+                  >
+                  </div>
+                  <button
+                    type="button"
+                    class="js-export button button--cta button--export"
+                    data-export-for="by-state"
+                  >
+                    Export
+                  </button>
+                </div>
+              </div>
               <table class="data-table data-table--heading-borders scrollX panel-toggle-element" data-type="by-state" aria-hidden="false">
                 <thead><tr></tr></thead>
               </table>
@@ -153,11 +199,35 @@
           </div>
         </div>
       </div>
-      <div class="entity__figure row">
+
+      <div id="independent-expenditures" class="entity__figure row">
         <div class="heading--section heading--with-action u-no-margin">
           <h3 class="heading__left">Independent expenditures</h3>
+          <ul class="heading__left">
+            <li class="utility-nav__item">
+              <a class="glossary__toggle" data-term="Independent expenditure"></a>
+            </li>
+          </ul>
+          <div class="heading__right">
+            <div
+              class="message message--info message--mini t-left-aligned data-container__message"
+              data-export-message-for="independent-expenditures"
+              aria-hidden="true"
+            >
+            </div>
+            <button
+              type="button"
+              class="js-export button button--cta button--export"
+              data-export-for="independent-expenditures"
+            >
+              Export
+            </button>
+          </div>
         </div>
-        <table class="data-table data-table--heading-borders scrollX" data-type="independent-expenditures">
+        <table
+          class="data-table data-table--heading-borders scrollX"
+          data-type="independent-expenditures"
+        >
           <thead>
             <th scope="col">Spent by</th>
             <th scope="col">Support/Oppose</th>
@@ -166,57 +236,48 @@
           </thead>
         </table>
         <div class="datatable__note">
-          <p class="t-note">These totals are drawn from quarterly, monthly and semi-annual reports. 24- and 48-Hour Reports of independent expenditures aren't included.</p>
+          <p class="t-note">
+            These totals are drawn from quarterly, monthly and semi-annual reports. 24- and 48-Hour Reports of independent expenditures aren't included.
+          </p>
         </div>
-        <div class="container u-no-padding-left">
-          <div class="grid__item">
-            <div class="icon-heading--calendar-circle-primary">
-              <div class="icon-heading__content">
-                <div class="t-lead">Independent expenditure reports:</div>
-                <div class="t-sans">24- and 48-hour report periods</div>
-                <div class="container u-padding--top u-no-padding-left">
-                  <a class="button--cta button--go" href="https://transition.fec.gov/info/report_dates_2016.shtml#ie">Independent expenditure deadlines</a>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="entity__figure row">
-        <div class="heading--section heading--with-action u-no-margin">
-          <h3 class="heading__left">Electioneering communications</h3>
-        </div>
-        <table class="data-table data-table--heading-borders scrollX" data-type="electioneering">
-          <thead>
-            <th scope="col">Spent by</th>
-            <th scope="col">Candidate</th>
-            <th scope="col">Aggregate amount</th>
-          </thead>
-        </table>
-        <div class="datatable__note">
-          <p class="t-note">To help users work with this data, we divide each itemized disbursement amount by the number of federal candidates named in connection with that disbursement. The resulting amount is listed here.</p>
-        </div>
-
-        <div class="container u-no-padding-left">
-          <div class="grid__item">
-            <div class="icon-heading--calendar-circle-primary">
-              <div class="icon-heading__content">
-                <div class="t-lead">Electioneering communication reports:</div>
-                <div class="t-sans">30- and 60-day report periods</div>
-                <div class="container u-padding--top u-no-padding-left">
-                  <a class="button--cta button--go" href="https://transition.fec.gov/info/report_dates_2016.shtml#ec">Electioneering communication deadlines</a>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
+        {% if cycle >= 2010 %}
+          {{ reporting.info(
+                'Independent expenditure reports',
+                '24- and 48-hour report periods',
+                [{
+                  'text': 'Independent expenditure deadlines',
+                  'href': 'https://transition.fec.gov/info/charts_ie_dates_'+cycle|string+'.shtml#anchor'+anchors[state]['ie']
+                }]
+              )
+            }}
+        {% else %}
+          {{ reporting.warning(cycle='2010') }}
+        {% endif %}
       </div>
 
-      <div class="entity__figure row">
+      <div id="communication-costs" class="entity__figure row">
         <div class="heading--section heading--with-action u-no-margin">
           <h3 class="heading__left">Communication costs</h3>
+          <div class="heading__right">
+            <div
+              class="message message--info message--mini t-left-aligned data-container__message"
+              data-export-message-for="communication-costs"
+              aria-hidden="true"
+            >
+            </div>
+            <button
+              type="button"
+              class="js-export button button--cta button--export"
+              data-export-for="communication-costs"
+            >
+              Export
+            </button>
+          </div>
         </div>
-        <table class="data-table data-table--heading-borders scrollX" data-type="communication-costs">
+        <table
+          class="data-table data-table--heading-borders scrollX"
+          data-type="communication-costs"
+        >
           <thead>
             <th scope="col">Spent by</th>
             <th scope="col">Support/Oppose</th>
@@ -224,6 +285,60 @@
             <th scope="col">Aggregate amount</th>
           </thead>
         </table>
+      </div>
+
+      <div id="electioneering-communication" class="entity__figure row">
+        <div class="heading--section heading--with-action u-no-margin">
+          <h3 class="heading__left">Electioneering communications</h3>
+          <ul class="heading__left">
+            <li class="utility-nav__item">
+              <a class="glossary__toggle" data-term="Electioneering communication"></a>
+            </li>
+          </ul>
+          <div class="heading__right">
+            <div
+              class="message message--info message--mini t-left-aligned data-container__message"
+              data-export-message-for="electioneering"
+              aria-hidden="true"
+            >
+            </div>
+            <button
+              type="button"
+              class="js-export button button--cta button--export"
+              data-export-for="electioneering"
+            >
+              Export
+            </button>
+          </div>
+        </div>
+        <table
+          class="data-table data-table--heading-borders scrollX"
+          data-type="electioneering"
+        >
+          <thead>
+            <th scope="col">Spent by</th>
+            <th scope="col">Candidate</th>
+            <th scope="col">Aggregate amount</th>
+          </thead>
+        </table>
+        <div class="datatable__note">
+          <p class="t-note">
+            To help users work with this data, we divide each itemized disbursement amount by the number of federal candidates named in connection with that disbursement. The resulting amount is listed here.
+          </p>
+        </div>
+        {% if cycle >= 2010 %}
+          {{ reporting.info(
+                'Electioneering communication reports',
+                '30- and 60-day report periods',
+                [{
+                  'text': 'Electioneering communication deadlines',
+                  'href': 'https://transition.fec.gov/info/charts_ec_dates_'+cycle|string+'.shtml#anchor'+anchors[state]['ec']
+                }]
+              )
+            }}
+        {% else %}
+          {{ reporting.warning(cycle='2010') }}
+        {% endif %}
       </div>
     </div>
   </div>

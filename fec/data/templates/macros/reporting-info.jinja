@@ -1,0 +1,29 @@
+{% macro info(text, subtext, links) %}
+  <div class="container u-no-padding-left">
+    <div class="grid__item">
+      <div class="icon-heading--calendar-circle-primary">
+        <div class="icon-heading__content">
+          <div class="t-lead">{{ text }}:</div>
+          <div class="t-sans">{{ subtext }}</div>
+          <div class="container u-padding--top u-no-padding-left">
+            {% for link in links %}
+              <a class="button--cta button--go" href="{{ link.href }}">
+                {{ link.text }}
+              </a>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endmacro %}
+
+{% macro warning(cycle='2010') %}
+  <div class="container u-no-padding-left">
+    <div class="grid__item">
+      <div class="message message--info message--small">
+          Reporting deadlines are only available for elections {{cycle}} and later.
+      </div>
+    </div>
+  </div>
+{% endmacro %}

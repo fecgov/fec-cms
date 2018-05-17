@@ -1,0 +1,47 @@
+<div class="grid grid--3-wide">
+  <div class="grid__item">
+    <a href="/help-candidates-and-committees/dates-and-deadlines/">
+      <aside class="card card--horizontal card--primary">
+        <div class="card__image__container">
+          <span class="card__icon i-checklist-2"><span class="u-visually-hidden">Icon of dates and deadlines</span></span>
+        </div>
+        <div class="card__content">
+          Dates and deadlines
+        </div>
+      </aside>
+    </a>
+  </div>
+  {% if office == 'president' %}
+    <div class="grid__item is-disabled" style="display: none;">
+        <aside class="card card--horizontal card--neutral">
+          <div class="card__image__container">
+            <span class="card__icon i-election"><span class="u-visually-hidden">Icon of elections</span></span>
+          </div>
+          <div class="card__content">
+            All {% if state %} - {{ state|fmt_state_full }} {% endif %}state elections
+          </div>
+        </aside>
+    </div>
+  {% else %}
+    <div class="grid__item is-disabled">
+      <aside class="card card--horizontal card--neutral">
+        <div class="card__image__container">
+          <span class="card__icon i-election"><span class="u-visually-hidden">Icon of elections</span></span>
+        </div>
+        <div class="card__content">
+          All {% if state %} - {{ state|fmt_state_full }} {% endif %}state elections
+        </div>
+      </aside>
+    </div>
+  {% endif %}
+  <div class="grid__item is-disabled">
+    <aside class="card card--horizontal card--neutral">
+      <div class="card__image__container">
+        <span class="card__icon i-election"><span class="u-visually-hidden">Icon of elections</span></span>
+      </div>
+      <div class="card__content">
+        All {{ office|title }} elections
+      </div>
+    </aside>
+  </div>
+</div>
