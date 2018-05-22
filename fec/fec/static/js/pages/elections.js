@@ -27,6 +27,21 @@ var electionOfficesTemplate = require('../templates/electionOffices.hbs');
 
 var MAX_MAPS = 2;
 
+var defaultOpts = {
+  autoWidth: false,
+  destroy: true,
+  searching: false,
+  serverSide: false,
+  lengthChange: true,
+  useExport: true,
+  singleEntityItemizedExport: true,
+  dom: tables.simpleDOM,
+  language: {
+    lengthMenu: 'Results per page: _MENU_',
+  },
+  pagingType: 'simple'
+};
+
 var independentExpenditureColumns = [
   columns.committeeColumn({data: 'committee', className: 'all'}),
   columns.supportOpposeColumn,
@@ -39,8 +54,7 @@ var independentExpenditureColumns = [
     render: columnHelpers.buildTotalLink(['independent-expenditures'], function(data, type, row, meta) {
         return {
           support_oppose_indicator: row.support_oppose_indicator,
-          candidate_id: row.candidate_id,
-          // is_notice: false
+          candidate_id: row.candidate_id
         };
     })
   },
@@ -61,8 +75,25 @@ var candidateInformationColumns = [
   },
   {
     data: 'party_full',
-    className: 'all'
-  }
+    className: 'all column--large',
+  },
+  {
+    data: 'candidate_pcc_name',
+    className: 'all column--large',
+    render: function(data, type, row, meta) {
+      return columnHelpers.buildEntityLink(
+        data,
+        helpers.buildAppUrl(['committee', row.candidate_pcc_id]),
+        'candidate_pcc_id',
+      );
+    }
+  },
+  columns.currencyColumn({
+    data: 'total_receipts',
+    className: 'column--number',
+    orderSequence: ['desc', 'asc'],
+    visible: false
+  })
 ];
 
 var communicationCostColumns = [
@@ -280,21 +311,6 @@ function mapState(response) {
       pair[1], {state: pair[0]});
   });
 }
-
-var defaultOpts = {
-  autoWidth: false,
-  destroy: true,
-  searching: false,
-  serverSide: false,
-  lengthChange: true,
-  useExport: true,
-  singleEntityItemizedExport: true,
-  dom: tables.simpleDOM,
-  language: {
-    lengthMenu: 'Results per page: _MENU_',
-  },
-  pagingType: 'simple'
-};
 
 function destroyTable($table) {
   if ($.fn.dataTable.isDataTable($table)) {
@@ -530,7 +546,7 @@ function initSpendingTables() {
         pagingType: 'simple',
         lengthChange: true,
         pageLength: 10,
-        lengthMenu: [10, 30, 50, 100],
+        lengthMenu: [10, 25, 50, 100],
         hideEmpty: true,
         useExport: true,
         singleEntityItemizedExport: true,
@@ -583,7 +599,7 @@ function getElections(state, office) {
 }
 
 function buildTableQuery(contextObj, pageLength) {
-  var pageLength = pageLength || 10;
+  var pageLength = pageLength || 0;
   var query = _.chain(context.election)
   .pairs()
   .filter(function(pair) {
@@ -608,44 +624,22 @@ $(document).ready(function() {
     query
   );
 
-  tables.DataTable.defer($candidateInfo, {
-    autoWidth: false,
-    path: ['elections'],
-    query: query,
-    columns: candidateInformationColumns,
-    order: [[0, 'asc']],
-    dom: tables.simpleDOM,
-    pagingType: 'simple',
-    lengthChange: true,
-    pageLength: 10,
-    lengthMenu: [10, 30, 50, 100],
-    hideEmpty: true,
-    useExport: true,
-    singleEntityItemizedExport: true
-  });
-
-  tables.DataTable.defer($table, {
-    autoWidth: false,
-    path: ['elections'],
-    query: query,
-    columns: electionColumns,
-    order: [[2, 'desc']],
-    dom: tables.simpleDOM,
-    pagingType: 'simple',
-    lengthChange: true,
-    pageLength: 10,
-    lengthMenu: [10, 30, 50, 100],
-    hideEmpty: true,
-    useExport: true,
-    singleEntityItemizedExport: true,
-    hideEmptyOpts: {
-      dataType: 'candidate-financial-totals',
-      name: 'candidate financial totals',
-      timePeriod: context.timePeriod,
-    }
-  });
-
   $.getJSON(url).done(function(response) {
+    $table.DataTable(_.extend({}, defaultOpts, {
+      columns: electionColumns,
+      data: response.results,
+      order: [[2, 'desc']]
+    }));
+
+    var candidateInfoOpts = _.extend({}, defaultOpts, {
+      columns: candidateInformationColumns,
+      data: response.results,
+      order: [[3, 'desc']]
+    });
+
+    console.log(candidateInfoOpts);
+
+    $candidateInfo.DataTable(candidateInfoOpts);
 
     drawComparison(response.results);
     initStateMaps(response.results);

@@ -8,7 +8,7 @@
 {% block title %}{{ title }}{% endblock %}
 
 {% block css %}
-<link rel="stylesheet" type="text/css" href="{{ asset_for_css('elections.css') }}" />
+  <link rel="stylesheet" type="text/css" href="{{ asset_for_css('elections.css') }}" />
 {% endblock %}
 
 {% block body %}
@@ -27,12 +27,8 @@
           </span>
         </div>
       {% else %}
-        <h1 class="entity__name">{{ state|fmt_state_full }} -
-        {% if district %}
-          House District {{ district | strip_zero_pad }}
-        {% else %}
-          Senate
-        {% endif %}
+        <h1 class="entity__name">
+          {{ state | fmt_state_full }} - {{ office | title }} {% if district %}District {{ district }}{% endif %}
         </h1>
         <div class="heading--section">
           <span class="t-data t-bold">
@@ -42,13 +38,13 @@
       {% endif %}
     </header>
     <div class="data-container__wrapper">
-        {% include 'partials/elections/sidebar-nav.jinja' %}
+      {% include 'partials/elections/sidebar-nav.jinja' %}
       <div class="main__content--right-full">
         {% include 'partials/loading-tab.jinja' %}
         {% include 'partials/elections/election-data-and-compliance-tab.jinja' %}
         {% include 'partials/elections/about-this-election-tab.jinja' %}
-        <!--{% include 'partials/elections/other-spending-tab.jinja' %}-->
       </div>
+    </div>
   </div>
 {% endblock %}
 
