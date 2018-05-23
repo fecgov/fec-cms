@@ -631,15 +631,11 @@ $(document).ready(function() {
       order: [[2, 'desc']]
     }));
 
-    var candidateInfoOpts = _.extend({}, defaultOpts, {
+    $candidateInfo.DataTable(_.extend({}, defaultOpts, {
       columns: candidateInformationColumns,
       data: response.results,
       order: [[3, 'desc']]
-    });
-
-    console.log(candidateInfoOpts);
-
-    $candidateInfo.DataTable(candidateInfoOpts);
+    }));
 
     drawComparison(response.results);
     initStateMaps(response.results);
