@@ -84,7 +84,7 @@ var candidateInformationColumns = [
       return columnHelpers.buildEntityLink(
         data,
         helpers.buildAppUrl(['committee', row.candidate_pcc_id]),
-        'candidate_pcc_id',
+        'candidate_pcc_id'
       );
     }
   },
@@ -652,7 +652,7 @@ $(document).ready(function() {
   });
 
   getStateElectionOffices(context.election.state);
-  getElections(context.election.state, context.election.office,);
+  getElections(context.election.state, context.election.office);
 
   if ($('#election-map').length) {
     var districtMap = new maps.DistrictMap(
