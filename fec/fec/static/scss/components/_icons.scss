@@ -43,6 +43,20 @@
   &.i-download {
     @include u-icon-bg($download, $base);
   }
+
+  &.i-document {
+    @include u-icon-bg($document, $base);
+  }
+
+  &.i-star {
+    @include u-icon-bg($star, $base);
+  }
+
+  &.i-speaker {
+    @include u-icon-bg($speaker, $base);
+  }
+
+
 }
 
 .icon--small {
