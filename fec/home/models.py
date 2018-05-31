@@ -1132,7 +1132,7 @@ class ContactPage(Page):
     ])
     services_title = models.TextField()
     services = StreamField([
-        ('services', blocks.RichTextBlock()) #services
+        ('services', blocks.RichTextBlock())
     ])
 
     content_panels = Page.content_panels + [
