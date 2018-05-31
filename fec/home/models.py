@@ -1130,12 +1130,14 @@ class ContactPage(Page):
     contact_items = StreamField([
         ('contact_items', ContactInfoBlock())
     ])
-    help_with_sections = StreamField([
-        ('help_with_sections', blocks.RichTextBlock())
+    services_title = models.TextField()
+    services = StreamField([
+        ('services', blocks.RichTextBlock()) #services
     ])
 
     content_panels = Page.content_panels + [
         StreamFieldPanel('contact_items'),
-        StreamFieldPanel('help_with_sections'),
+        FieldPanel('services_title'),
+        StreamFieldPanel('services'),
     ]
 

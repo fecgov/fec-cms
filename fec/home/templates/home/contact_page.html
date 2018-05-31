@@ -20,8 +20,8 @@
 
     </div>
     <div class="usa-width-two-thirds u-padding--left"">
-      <h2>Help with</h2>
-      {% for block in self.help_with_sections %}
+      <h2>{{ self.services_title }}</h2>
+      {% for block in self.services %}
       {{ block.value }}
       {% endfor %}
 
