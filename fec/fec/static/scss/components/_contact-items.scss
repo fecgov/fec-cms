@@ -62,7 +62,7 @@
 
 .contact-item--phone {
   &::before {
-    @include u-icon-bg($telephone-circle, $primary);
+    @include u-icon-circle($telephone-circle, $inverse, $primary, 3.4rem);
   }
 }
 
@@ -87,6 +87,13 @@
 .contact-item--fax {
   &::before {
     @include u-icon-circle($fax, $primary, $inverse, 3.4rem);
+  }
+}
+
+.contact-item--question-bubble {
+  &::before {
+    @include u-icon-circle($question-bubble, $primary, $inverse, 3.4rem);
+    background-size:75% !important;
   }
 }
 
