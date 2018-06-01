@@ -21,7 +21,7 @@
   },
   {
     "term": "Agent (of a candidate)",
-    "definition": "An agent of a federal candidate or officeholder is any person who has actual authority, either express or implied, to engage in any of the following activities on behalf of the candidate or officeholder: <ul class='list-bulleted'> <li>To solicit, receive, direct, transfer or spend funds in connection with any election.</li><li>To request or suggest that a communication be created, produced or distributed; </li><li>To make or authorize a communication that meets one or more of the “content standards” for coordination;</li><li>To request or suggest that any other person create, produce, or distribute any communication;</li><li>To be materially involved in decisions regarding the content, intended audience, means, media outlet, timing, frequency, size, prominence or duration of a communication;</li><li>To provide material or information to assist another person in the creation, production or distribution of any communication; or</li>\n<li>To make or direct a communication that is created, produced or distributed with the use of material or information derived from a substantial discussion about the communication with a different candidate;</li></ul> 11 CFR <a href=\"https://www.fec.gov/regulations/109-3/CURRENT#109-3-b\">109.3(b)</a> and <a href=\"https://www.fec.gov/regulations/300-2/CURRENT#300-2-b-3\">300.2(b)(3)</a>."
+    "definition": "An agent of a federal candidate or officeholder is any person who has actual authority, either express or implied, to engage in any of the following activities on behalf of the candidate or officeholder: <ul class='list-bulleted'><li>To solicit, receive, direct, transfer or spend funds in connection with any election.</li><li>To request or suggest that a communication be created, produced or distributed; </li><li>To make or authorize a communication that meets one or more of the “content standards” for coordination;</li><li>To request or suggest that any other person create, produce, or distribute any communication;</li><li>To be materially involved in decisions regarding the content, intended audience, means, media outlet, timing, frequency, size, prominence or duration of a communication;</li><li>To provide material or information to assist another person in the creation, production or distribution of any communication; or</li>\n<li>To make or direct a communication that is created, produced or distributed with the use of material or information derived from a substantial discussion about the communication with a different candidate;</li></ul> 11 CFR <a href=\"https://www.fec.gov/regulations/109-3/CURRENT#109-3-b\">109.3(b)</a> and <a href=\"https://www.fec.gov/regulations/300-2/CURRENT#300-2-b-3\">300.2(b)(3)</a>."
   },
   {
     "term": "Agent (of a party)",
@@ -257,7 +257,7 @@
   },
   {
     "term": "Independent expenditure only committee",
-    "definition": "Political committees that make only independent expenditures that may solicit and accept unlimited contributions from individuals, corporations, labor organizations and other political committees. They may not accept contributions from foreign nationals, federal contractors, national banks or federally chartered corporations. See <a href=\"https://www.fec.gov/data/legal/advisory-opinions/2010-11/\">AO 2010-11</a>. Such committees, popularly known as Super PACs, must register with the Commission and comply with all applicable reporting requirements of the Act."
+    "definition": "A political committee that makes only independent expenditures that may solicit and accept unlimited contributions from individuals, corporations, labor organizations and other political committees. It may not accept contributions from foreign nationals, federal contractors, national banks or federally chartered corporations. See <a href=\"https://www.fec.gov/data/legal/advisory-opinions/2010-11/\">AO 2010-11</a>. Such committees, popularly known as Super PACs, must register with the Commission and comply with all applicable reporting requirements of the Act."
   },
   {
     "term": "Joint contribution",
@@ -493,7 +493,7 @@
   },
   {
     "term": "Super PAC",
-    "definition": "A committee that intends to make independent expenditures, and — consistent with the U.S. Court of Appeals for the District of Columbia Circuit decision in <i>SpeechNow v. FEC</i> — it therefore intends to raise funds in unlimited amounts. This committee will not use those funds to make contributions, whether direct, in-kind or via coordinated communications, to federal candidates or committees."
+    "definition": "A political committee that makes only independent expenditures that may solicit and accept unlimited contributions from individuals, corporations, labor organizations and other political committees. It may not accept contributions from foreign nationals, federal contractors, national banks or federally chartered corporations. See <a href=\"https://www.fec.gov/data/legal/advisory-opinions/2010-11/\">AO 2010-11</a>. Such committees, also known as independent expenditure only committees, must register with the Commission and comply with all applicable reporting requirements of the Act."
   },
   {
     "term": "Terminating committee",
