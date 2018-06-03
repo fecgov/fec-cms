@@ -37,8 +37,8 @@ Filter receipts
     {{ text.field('contributor_city', 'City') }}
     {{ states.field('contributor_state') }}
     {{ text.field('contributor_zip', 'ZIP code')}}
+    {% include 'partials/filters/occupation.jinja' %}
     {{ text.field('contributor_employer', 'Employer') }}
-    {{ text.field('contributor_occupation', 'Occupation') }}
     {% include 'partials/filters/unique-receipts.jinja' %}
   </div>
   <button type="button" class="js-accordion-trigger accordion__button">Receipt details</button>
