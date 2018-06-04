@@ -257,7 +257,7 @@
   },
   {
     "term": "Independent expenditure only committee",
-    "definition": "Political committees that make only independent expenditures that may solicit and accept unlimited contributions from individuals, corporations, labor organizations and other political committees. They may not accept contributions from foreign nationals, federal contractors, national banks or federally chartered corporations. See <a href=\"https://www.fec.gov/data/legal/advisory-opinions/2010-11/\">AO 2010-11</a>. Such committees, popularly known as Super PACs, must register with the Commission and comply with all applicable reporting requirements of the Act."
+    "definition": "A political committee that makes only independent expenditures may solicit and accept unlimited contributions from individuals, corporations, labor organizations and other political committees. It may not accept contributions from foreign nationals, federal contractors, national banks or federally chartered corporations. See <a href=\"https://www.fec.gov/data/legal/advisory-opinions/2010-11/\">AO 2010-11</a>. Such committees, popularly known as Super PACs, must register with the Commission and comply with all applicable reporting requirements of the Act."
   },
   {
     "term": "Joint contribution",
@@ -493,7 +493,7 @@
   },
   {
     "term": "Super PAC",
-    "definition": "A committee that intends to make independent expenditures, and — consistent with the U.S. Court of Appeals for the District of Columbia Circuit decision in <i>SpeechNow v. FEC</i> — it therefore intends to raise funds in unlimited amounts. This committee will not use those funds to make contributions, whether direct, in-kind or via coordinated communications, to federal candidates or committees."
+    "definition": "A political committee that makes only independent expenditures may solicit and accept unlimited contributions from individuals, corporations, labor organizations and other political committees. It may not accept contributions from foreign nationals, federal contractors, national banks or federally chartered corporations. See <a href=\"https://www.fec.gov/data/legal/advisory-opinions/2010-11/\">AO 2010-11</a>. Such committees, popularly known as Super PACs, must register with the Commission and comply with all applicable reporting requirements of the Act."
   },
   {
     "term": "Terminating committee",
@@ -554,5 +554,13 @@
   {
     "term": "Voter registration activity",
     "definition": "In regard to FEA, voter registration activity encompasses all means of contacting potential voters to assist, encourage or urge them to register to vote. This activity includes, but is not limited to: <ul><li>Encouraging or urging potential voters to register to vote, whether by mail (including direct mail), email, in person, by telephone (including pre-recorded telephone calls, phone banks and messaging such as SMS and MMS), or by any other means;</li><li>Preparing and distributing information about registration and voting;</li><li>Distributing voter registration forms or instructions to potential voters;</li><li>Answering questions about how to complete or file a voter registration form, or assisting potential voters in completing or filing such forms;</li><li>Submitting or delivering a completed voter registration form on behalf of a potential voter;</li><li>Offering or arranging to transport, or actually transporting potential voters to a board of elections or county clerk’s office for them to fill out voter registration forms; or</li><li>any other activity that assists potential voters to register to vote.</li></ul> 11 CFR <a href=\"https://www.fec.gov/regulations/100-24/CURRENT#100-24-a-2\">100.24(a)(2)</a>."
+  },
+  {
+    "term": "Voter identification,\"With regard to FEA, this means acquiring information about potential voters, including, but not limited to, obtaining voter lists and creating or enhancing voter lists by verifying or adding information about the voters’ likelihood of voting in an upcoming election or voting for specific candidates. 11 CFR <a href=\"\"https://www.fec.gov/regulations/100-24/CURRENT#100-24-a-4\"\">100.24(a)(4)</a>.",
+    "definition": ""
+  },
+  {
+    "term": "Voter registration activity,\"In regard to FEA, voter registration activity encompasses all means of contacting potential voters to assist, encourage or urge them to register to vote. This activity includes, but is not limited to: <ul><li>Encouraging or urging potential voters to register to vote, whether by mail (including direct mail), email, in person, by telephone (including pre-recorded telephone calls, phone banks and messaging such as SMS and MMS), or by any other means;</li><li>Preparing and distributing information about registration and voting;</li><li>Distributing voter registration forms or instructions to potential voters;</li><li>Answering questions about how to complete or file a voter registration form, or assisting potential voters in completing or filing such forms;</li><li>Submitting or delivering a completed voter registration form on behalf of a potential voter;</li><li>Offering or arranging to transport, or actually transporting potential voters to a board of elections or county clerk’s office for them to fill out voter registration forms; or</li><li>any other activity that assists potential voters to register to vote.</li></ul> 11 CFR <a href=\"\"https://www.fec.gov/regulations/100-24/CURRENT#100-24-a-2\"\">100.24(a)(2)</a>.",
+    "definition": ""
   }
 ]
