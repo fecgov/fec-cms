@@ -319,6 +319,7 @@ def committee(request, committee_id):
         'committee_type': committee['committee_type'],
         'designation_full': committee['designation_full'],
         'street_1': committee['street_1'],
+        'street_2': committee['street_2'],
         'city': committee['city'],
         'state': committee['state'],
         'zip': committee['zip'],
