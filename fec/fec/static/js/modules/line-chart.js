@@ -72,11 +72,305 @@ LineChart.prototype.fetch = function(cycle) {
 };
 
 LineChart.prototype.handleResponse = function(response) {
+
+  var raisingData = [
+    {
+      'date': new Date('1/31/2017'),
+      'cumulative_candidate_receipts': -12682.75,
+      'cumulative_pac_receipts': 37003916.07,
+      'cumulative_party_receipts': 25788128.68,
+      'other': 0
+    },
+    {
+      'date': new Date('2/28/2017'),
+      'cumulative_candidate_receipts': -8489.5,
+      'cumulative_pac_receipts': 74983338.56,
+      'cumulative_party_receipts': 57135469.9,
+      'other': 0
+    },
+    {
+      'date': new Date('3/31/2017'),
+      'cumulative_candidate_receipts': 77471251.47,
+      'cumulative_pac_receipts': 131920394.65,
+      'cumulative_party_receipts': 108478260.8,
+      'other': 0
+    },
+    {
+      'date': new Date('4/30/2017'),
+      'cumulative_candidate_receipts': 79254923.83,
+      'cumulative_pac_receipts': 165777331.44,
+      'cumulative_party_receipts': 143447373.04,
+      'other': 0
+    },
+    {
+      'date': new Date('5/31/2017'),
+      'cumulative_candidate_receipts': 79756275,
+      'cumulative_pac_receipts': 219853185.05,
+      'cumulative_party_receipts': 175708723.52,
+      'other': 0
+    },
+    {
+      'date': new Date('6/30/2017'),
+      'cumulative_candidate_receipts': 306281796.83,
+      'cumulative_pac_receipts': 680699507.41,
+      'cumulative_party_receipts': 217820132.44,
+      'other': 7741.44
+    },
+    {
+      'date': new Date('7/31/2017'),
+      'cumulative_candidate_receipts': 306281934.83,
+      'cumulative_pac_receipts': 713693933.17,
+      'cumulative_party_receipts': 247255114.46,
+      'other': 7741.44
+    },
+    {
+      'date': new Date('8/31/2017'),
+      'cumulative_candidate_receipts': 306452016.63,
+      'cumulative_pac_receipts': 743702357.88,
+      'cumulative_party_receipts': 274769180.12,
+      'other': 7741.44
+    },
+    {
+      'date': new Date('9/30/2017'),
+      'cumulative_candidate_receipts': 547949082.18,
+      'cumulative_pac_receipts': 787100447.64,
+      'cumulative_party_receipts': 306676455.62,
+      'other': 18593.72
+    },
+    {
+      'date': new Date('10/31/2017'),
+      'cumulative_candidate_receipts': 547985611.14,
+      'cumulative_pac_receipts': 829836998.42,
+      'cumulative_party_receipts': 339247248.86,
+      'other': 18593.72
+    },
+    {
+      'date': new Date('11/30/2017'),
+      'cumulative_candidate_receipts': 548035663.06,
+      'cumulative_pac_receipts': 865012187.47,
+      'cumulative_party_receipts': 380107443.46,
+      'other': 18593.72
+    },
+    {
+      'date': new Date('12/31/2017'),
+      'cumulative_candidate_receipts': 826270029.99,
+      'cumulative_pac_receipts': 1266094336.89,
+      'cumulative_party_receipts': 427423055.68,
+      'other': 27254.16
+    },
+    {
+      'date': new Date('1/31/2018'),
+      'cumulative_candidate_receipts': 889916727.71,
+      'cumulative_pac_receipts': 1362510597.53,
+      'cumulative_party_receipts': 466875794.46,
+      'other': 27254.16
+    },
+    {
+      'date': new Date('2/29/2018'),
+      'cumulative_candidate_receipts': 1014513347.83,
+      'cumulative_pac_receipts': 1521849207.62,
+      'cumulative_party_receipts': 512752193.95,
+      'other': 329954.16
+    },
+    {
+      'date': new Date('3/31/2018'),
+      'cumulative_candidate_receipts': 1255190531.27,
+      'cumulative_pac_receipts': 1770658383.78,
+      'cumulative_party_receipts': 573280493.93,
+      'other': 438816.05
+    },
+    {
+      'date': new Date('4/30/2018'),
+      'cumulative_candidate_receipts': 1357106254.2,
+      'cumulative_pac_receipts': 1902939937.38,
+      'cumulative_party_receipts': 626533176.64,
+      'other': 438816.05
+    },
+    {
+      'date': new Date('5/31/2018'),
+      'cumulative_candidate_receipts': 1423653380.02,
+      'cumulative_pac_receipts': 1986069098.4,
+      'cumulative_party_receipts': 688615850.11,
+      'other': 438816.05
+    },
+    {
+      'date': new Date('6/30/2018'),
+      'cumulative_candidate_receipts': 1653502082.93,
+      'cumulative_pac_receipts': 2238044532.19,
+      'cumulative_party_receipts': 763919938.29,
+      'other': 551787.99
+    },
+    {
+      'date': new Date('7/31/2018'),
+      'cumulative_candidate_receipts': 1753134740.88,
+      'cumulative_pac_receipts': 2351682858.81,
+      'cumulative_party_receipts': 871732170.06,
+      'other': 3306707.99
+    },
+    {
+      'date': new Date('8/31/2018'),
+      'cumulative_candidate_receipts': 1883399322.78,
+      'cumulative_pac_receipts': 2525845906.85,
+      'cumulative_party_receipts': 997221077.99,
+      'other': 3307935
+    }
+  ];
+
+  var spendingData = [
+    {
+      'date': new Date('1/31/2017'),
+      'cumulative_candidate_disbursements': 4523.45,
+      'cumulative_pac_disbursements': 4394922.87,
+      'cumulative_party_disbursements': 22904618.72,
+      'other': 0
+    },
+    {
+      'date': new Date('2/28/2017'),
+      'cumulative_candidate_disbursements': 14521.54,
+      'cumulative_pac_disbursements': 9588279.13,
+      'cumulative_party_disbursements': 51439279.4,
+      'other': 0
+    },
+    {
+      'date': new Date('3/31/2017'),
+      'cumulative_candidate_disbursements': 40627021.18,
+      'cumulative_pac_disbursements': 16963283.67,
+      'cumulative_party_disbursements': 96683390.24,
+      'other': 0
+    },
+    {
+      'date': new Date('4/30/2017'),
+      'cumulative_candidate_disbursements': 42274671.24,
+      'cumulative_pac_disbursements': 22064866.87,
+      'cumulative_party_disbursements': 131245052.68,
+      'other': 0
+    },
+    {
+      'date': new Date('5/31/2017'),
+      'cumulative_candidate_disbursements': 43417423.33,
+      'cumulative_pac_disbursements': 28172066.57,
+      'cumulative_party_disbursements': 157712838.59,
+      'other': 0
+    },
+    {
+      'date': new Date('6/30/2017'),
+      'cumulative_candidate_disbursements': 146850413.53,
+      'cumulative_pac_disbursements': 118483804.3,
+      'cumulative_party_disbursements': 192007781.85,
+      'other': 259698.7
+    },
+    {
+      'date': new Date('7/31/2017'),
+      'cumulative_candidate_disbursements': 146851473.97,
+      'cumulative_pac_disbursements': 122854322.18,
+      'cumulative_party_disbursements': 217638297.02,
+      'other': 259698.7
+    },
+    {
+      'date': new Date('8/31/2017'),
+      'cumulative_candidate_disbursements': 147124262.35,
+      'cumulative_pac_disbursements': 127557243.85,
+      'cumulative_party_disbursements': 242490412.37,
+      'other': 259698.7
+    },
+    {
+      'date': new Date('9/30/2017'),
+      'cumulative_candidate_disbursements': 314744654.56,
+      'cumulative_pac_disbursements': 138193996.5,
+      'cumulative_party_disbursements': 266525194.23,
+      'other': 5472476.94
+    },
+    {
+      'date': new Date('10/31/2017'),
+      'cumulative_candidate_disbursements': 314774418.87,
+      'cumulative_pac_disbursements': 145302594.16,
+      'cumulative_party_disbursements': 293118672.58,
+      'other': 5479943.94
+    },
+    {
+      'date': new Date('11/30/2017'),
+      'cumulative_candidate_disbursements': 314803873.36,
+      'cumulative_pac_disbursements': 152934297.35,
+      'cumulative_party_disbursements': 330809753.67,
+      'other': 5479943.94
+    },
+    {
+      'date': new Date('12/31/2017'),
+      'cumulative_candidate_disbursements': 556186558.75,
+      'cumulative_pac_disbursements': 378497477.78,
+      'cumulative_party_disbursements': 365215334.98,
+      'other': 5826240.51
+    },
+    {
+      'date': new Date('1/31/2018'),
+      'cumulative_candidate_disbursements': 665682379.23,
+      'cumulative_pac_disbursements': 464054988.76,
+      'cumulative_party_disbursements': 393226722.27,
+      'other': 5826240.51
+    },
+    {
+      'date': new Date('2/29/2018'),
+      'cumulative_candidate_disbursements': 817866324.5,
+      'cumulative_pac_disbursements': 543149103.41,
+      'cumulative_party_disbursements': 430339545.43,
+      'other': 5928818.51
+    },
+    {
+      'date': new Date('3/31/2018'),
+      'cumulative_candidate_disbursements': 1031711259.38,
+      'cumulative_pac_disbursements': 642094482.12,
+      'cumulative_party_disbursements': 467329102.38,
+      'other': 29276716.81
+    },
+    {
+      'date': new Date('4/30/2018'),
+      'cumulative_candidate_disbursements': 1155854448.98,
+      'cumulative_pac_disbursements': 686534537.84,
+      'cumulative_party_disbursements': 503221013.18,
+      'other': 29794357.81
+    },
+    {
+      'date': new Date('5/31/2018'),
+      'cumulative_candidate_disbursements': 1232409045.19,
+      'cumulative_pac_disbursements': 721016082.94,
+      'cumulative_party_disbursements': 540943762.78,
+      'other': 29903378.81
+    },
+    {
+      'date': new Date('6/30/2018'),
+      'cumulative_candidate_disbursements': 1461659280.9,
+      'cumulative_pac_disbursements': 878327171.01,
+      'cumulative_party_disbursements': 586613869.92,
+      'other': 51593515.84
+    },
+    {
+      'date': new Date('7/31/2018'),
+      'cumulative_candidate_disbursements': 1539874244.13,
+      'cumulative_pac_disbursements': 928715997.77,
+      'cumulative_party_disbursements': 649361275.53,
+      'other': 52852523.84
+    },
+    {
+      'date': new Date('8/31/2018'),
+      'cumulative_candidate_disbursements': 1669086332.88,
+      'cumulative_pac_disbursements': 1014344445.93,
+      'cumulative_party_disbursements': 734898386.06,
+      'other': 152958212.84
+    }
+  ];
+
+  if (this.dataType === 'raised') {
+    this.groupDataByType(raisingData);
+  } else {
+    this.groupDataByType(spendingData);
+  }
+
   // Format the response and call all necessary methods to get the presentation right
-  this.groupDataByType(response.results);
+  
   this.drawChart();
   this.moveCursor();
   this.setupSnapshot(this.cycle);
+
 };
 
 LineChart.prototype.groupDataByType = function(results) {
