@@ -1,5 +1,5 @@
 from wagtail.contrib.modeladmin.options import ModelAdmin, ModelAdminGroup, modeladmin_register
-from wagtail.wagtailcore import hooks
+from wagtail.core import hooks
 
 from .models import Author, PressReleasePage, DigestPage, TipsForTreasurersPage, RecordPage
 from search.utils.search_indexing import handle_page_edit_or_create, handle_page_delete

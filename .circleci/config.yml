@@ -52,7 +52,7 @@ jobs:
       - run:
           name: Install Node.js dependencies
           command: |
-            sudo npm install -g npm 
+            sudo npm install -g npm
             npm install webpack
             npm install
             npm run build
@@ -68,13 +68,21 @@ jobs:
           command: dockerize -wait tcp://localhost:5432 -timeout 1m
 
       - run:
+          name: Migrates latest changes to the wagtail database
+          command: |
+            . .env/bin/activate
+            cd fec
+            ./manage.py makemigrations
+            ./manage.py migrate
+
+      - run:
           name: Run tests
           command: |
             . .env/bin/activate
             npm run build-js
             npm run build-sass
             cd fec
-            DJANGO_SETTINGS_MODULE=fec.settings.production python manage.py collectstatic --noinput
+            DJANGO_SETTINGS_MODULE=fec.settings.production python manage.py collectstatic --noinput -v 0
             ./manage.py test
             npm run test-single
 
