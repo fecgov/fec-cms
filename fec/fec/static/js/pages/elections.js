@@ -81,6 +81,8 @@ var candidateInformationColumns = [
     data: 'candidate_pcc_name',
     className: 'all column--large',
     render: function(data, type, row, meta) {
+      if (!data) return 'No principal campaign committee identified';
+
       return columnHelpers.buildEntityLink(
         data,
         helpers.buildAppUrl(['committee', row.candidate_pcc_id]),
