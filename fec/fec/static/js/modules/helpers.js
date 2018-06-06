@@ -139,6 +139,11 @@ Handlebars.registerHelper('formNumber', function(value) {
   return value.split('F')[1];
 });
 
+Handlebars.registerHelper('formatSentence', function(value) {
+  var str = value.fn(this);
+  return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
+});
+
 Handlebars.registerHelper('basePath', BASE_PATH);
 
 Handlebars.registerHelper('panelRow', function(label, options) {
