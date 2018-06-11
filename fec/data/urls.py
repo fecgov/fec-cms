@@ -13,8 +13,6 @@ urlpatterns = [
     url(r'^data/elections/(?P<office>\w+)/(?P<state>\w+)/(?P<cycle>[0-9]+)/$', views.elections),
     url(r'^data/elections/(?P<office>\w+)/(?P<cycle>[0-9]+)/$', views.elections),
     url(r'^data/elections/$', views.elections_lookup),
-    url(r'^data/raising/$', views.raising),
-    url(r'^data/spending/$', views.spending),
 
     # Feedback Tool
     url(r'^data/issue/$', views.feedback),
