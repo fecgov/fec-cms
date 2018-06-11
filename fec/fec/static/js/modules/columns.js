@@ -403,7 +403,7 @@ var individualContributions = [
     orderable: false,
     className: 'all hide-panel-tablet',
     render: function(data, type, row, meta) {
-      if (data && row.receipt_type !== helpers.globals.EARMARKED_CODE) {
+      if (data && helpers.globals.EARMARKED_CODES.indexOf(row.receipt_type) === -1){
         return columnHelpers.buildEntityLink(
           data.name,
           helpers.buildAppUrl(['committee', data.committee_id]),
@@ -486,13 +486,14 @@ var receipts = [
     orderable: false,
     className: 'all',
     render: function(data, type, row, meta) {
-      if (data && row.receipt_type !== helpers.globals.EARMARKED_CODE) {
+      if (data && helpers.globals.EARMARKED_CODES.indexOf(row.receipt_type) === -1){
         return columnHelpers.buildEntityLink(
           data.name,
           helpers.buildAppUrl(['committee', data.committee_id]),
           'committee'
         );
-      } else {
+       }
+      else {
         return row.contributor_name;
       }
     }
@@ -650,7 +651,7 @@ var audit = [
     className: 'all align-top',
     orderable: false,
     render: function (data){
-      if (data) {     
+      if (data) {
         var html = '<ol class="list--numbered">'
         for(var i in data){
           html += '<li>' + data[i]['primary_category_name'] + '<ol>'
