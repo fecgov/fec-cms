@@ -46,8 +46,8 @@
 
   <section class="content__section">
     <h2 class="t-ruled--bottom">Compare candidates in an election</h2>
-    <div class="grid" id="election-lookup">
-      <div class="grid__item">
+    <div id="election-lookup">
+      <div class="usa-width-three-fourths">
         <form action="/data/elections" class="content__section">
           <div class="search-controls__state">
             <label for="state" class="label">State</label>
@@ -76,9 +76,9 @@
             <button type="submit" class="button--search--text button--standard">Search</button>
           </div>
         </form>
-        <div class="election-map election-map--small"></div>
-
+      </div>
     </div>
+    <div class="election-map election-map--small usa-width-one-whole"></div>
   </section>
 
   </section>
@@ -186,6 +186,7 @@
       </div>
     </div>
   </section>
+</div>
 {% endblock %}
 {% block scripts %}
 <script src="{{ asset_for_js('dataviz-common.js') }}"></script>
