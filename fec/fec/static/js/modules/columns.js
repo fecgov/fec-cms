@@ -403,7 +403,7 @@ var individualContributions = [
     orderable: false,
     className: 'all hide-panel-tablet',
     render: function(data, type, row, meta) {
-      if (data && helpers.globals.EARMARKED_CODES.indexOf(row.receipt_type) === -1){
+        if(data &&  !(_.contains(helpers.globals.EARMARKED_CODES, row.receipt_type))){
         return columnHelpers.buildEntityLink(
           data.name,
           helpers.buildAppUrl(['committee', data.committee_id]),
@@ -486,7 +486,7 @@ var receipts = [
     orderable: false,
     className: 'all',
     render: function(data, type, row, meta) {
-      if (data && helpers.globals.EARMARKED_CODES.indexOf(row.receipt_type) === -1){
+        if(data &&  !(_.contains(helpers.globals.EARMARKED_CODES, row.receipt_type))){
         return columnHelpers.buildEntityLink(
           data.name,
           helpers.buildAppUrl(['committee', data.committee_id]),
