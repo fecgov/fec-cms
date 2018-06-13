@@ -403,7 +403,7 @@ var individualContributions = [
     orderable: false,
     className: 'all hide-panel-tablet',
     render: function(data, type, row, meta) {
-      if (data && row.receipt_type !== helpers.globals.EARMARKED_CODE) {
+        if(data &&  !(_.contains(helpers.globals.EARMARKED_CODES, row.receipt_type))){
         return columnHelpers.buildEntityLink(
           data.name,
           helpers.buildAppUrl(['committee', data.committee_id]),
@@ -486,13 +486,14 @@ var receipts = [
     orderable: false,
     className: 'all',
     render: function(data, type, row, meta) {
-      if (data && row.receipt_type !== helpers.globals.EARMARKED_CODE) {
+        if(data &&  !(_.contains(helpers.globals.EARMARKED_CODES, row.receipt_type))){
         return columnHelpers.buildEntityLink(
           data.name,
           helpers.buildAppUrl(['committee', data.committee_id]),
           'committee'
         );
-      } else {
+       }
+      else {
         return row.contributor_name;
       }
     }
@@ -618,6 +619,62 @@ var loans = [
   modalTriggerColumn
 ];
 
+var audit = [
+  columnHelpers.urlColumn
+  ('link_to_report',
+    {
+      data: 'committee_name',
+      className: 'all align-top',
+      orderable: true
+    }
+  ),
+
+  {
+    data: 'cycle',
+    className: 'all align-top',
+    orderable: true
+  },
+
+  {
+    data: 'far_release_date',
+    className: 'min-tablet hide-panel column--small align-top',
+    orderable: true,
+    render: function(data, type, row) {
+      var parsed;
+      parsed = moment(row.far_release_date, 'YYYY-MM-DD');
+      return parsed.isValid() ? parsed.format('MM/DD/YYYY') : 'Invalid date';
+    }
+  },
+
+  {
+    data: 'primary_category_list',
+    className: 'all align-top',
+    orderable: false,
+    render: function (data){
+      if (data) {
+        var html = '<ol class="list--numbered">'
+        for(var i in data){
+          html += '<li>' + data[i]['primary_category_name'] + '<ol>'
+          for(var j in data[i]['sub_category_list']){
+            html += '<li>'+ data[i]['sub_category_list'][j]['sub_category_name'] + '</li>'
+          }
+          html += '</ol></li>'
+        }
+        return html + '</ol>'
+      }
+      else {
+        return '';
+      }
+    }
+  },
+
+  {
+    data: 'candidate_name',
+    className: 'min-tablet hide-panel column--small align-top',
+    orderable: true
+  },
+];
+
 module.exports = {
   candidateColumn: candidateColumn,
   committeeColumn: committeeColumn,
@@ -637,5 +694,6 @@ module.exports = {
   filings: filings,
   receipts: receipts,
   reports: reports,
-  loans: loans
+  loans: loans,
+  audit: audit,
 };

@@ -39,4 +39,5 @@ urlpatterns = [
         views_datatables.individual_contributions),
     url(r'^data/receipts/$', views_datatables.receipts),
     url(r'^data/reports/(?P<form_type>[\w-]+)/$', views_datatables.reports),
+    url(r'^legal-resources/enforcement/audit-search/$', views_datatables.audit),
 ]

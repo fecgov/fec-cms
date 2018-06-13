@@ -4,9 +4,9 @@
     <tr>
       {{#panelRow "Name"}}
         {{#if contributor}}
-          {{#if (eq receipt_type (global 'EARMARKED_CODE'))}}
-            {{contributor_name}}
-          {{else}}
+          {{#if (isEarmarked receipt_type) }}
+           {{contributor_name}}
+          {{else }}
             <a href="{{basePath}}/committee/{{contributor.committee_id}}">{{contributor.name}}</a>
           {{/if}}
         {{else}}
@@ -15,7 +15,7 @@
       {{/panelRow}}
     </tr>
     {{#if contributor}}
-      {{#if (eq receipt_type (global 'EARMARKED_CODE'))}}
+      {{#if (isEarmarked receipt_type) }}
         {{#panelRow "Earmarked by"}}
           <a href="{{basePath}}/committee/{{contributor.committee_id}}">{{contributor.name}}</a>
         {{/panelRow}}
