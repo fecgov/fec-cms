@@ -53,6 +53,8 @@ var independentExpenditureColumns = [
     orderSequence: ['desc', 'asc'],
     render: columnHelpers.buildTotalLink(['independent-expenditures'], function(data, type, row, meta) {
         return {
+          data_type: 'processed',
+          is_notice: 'false',
           support_oppose_indicator: row.support_oppose_indicator,
           candidate_id: row.candidate_id
         };
