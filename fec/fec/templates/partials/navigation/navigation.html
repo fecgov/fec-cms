@@ -1,6 +1,26 @@
 <nav class="site-nav js-site-nav">
   <div id="site-menu" class="site-nav__container">
     <ul class="site-nav__panel site-nav__panel--main">
+      <li class="mobile-search utility-nav__search">
+        <form accept-charset="UTF-8" action="/search" id="search_form" class="combo" method="get" role="search">
+          <input type="hidden" name="type" value="candidates">
+          <input type="hidden" name="type" value="committees">
+          <input type="hidden" name="type" value="site">
+          <label class="u-visually-hidden" for="query">Search</label>
+          <div class="combo combo--search combo--search--mini">
+            <input
+              class="js-site-search combo__input"
+              autocomplete="off"
+              id="query"
+              name="query"
+              type="text"
+              aria-label="Search FEC.gov">
+            <button type="submit" class="button--standard combo__button button--search">
+              <span class="u-visually-hidden">Search</span>
+            </button>
+         </div>
+        </form>
+      </li>
       <li><h2 class="site-nav__title u-under-lg-only">Menu</h2></li>
       <li class="site-nav__item u-under-lg-only">
         <a class="site-nav__link" href="/" rel="home">

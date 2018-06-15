@@ -253,3 +253,25 @@
     display: none;
   }
 }
+
+.mobile-search.utility-nav__search {
+  width: u(30rem);
+  padding: u(1rem);
+  display:block;
+
+  .twitter-typeahead input{
+
+  }
+ }
+
+
+@include media($lg) {
+  .mobile-search.utility-nav__search {
+    display:none;
+  }
+}
+
+
+
+
+

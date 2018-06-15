@@ -27,16 +27,14 @@
 }
 
 .mega-heading__title {
-  display: none;
-  margin-left: u(-2rem);
+  display: block;
+  margin-left: u(3rem);
 
   a {
     border-bottom: 1px dotted $inverse !important;
   }
-  &::before {
-    margin-bottom: u(3rem);
-    height: u(5rem) !important;
-    width: u(5rem) !important;
+  &::before{
+    content: none !important;
   }
 }
 
@@ -163,7 +161,20 @@
   .mega-heading__title {
     display: block;
     margin-bottom: 0;
-  }
+    margin-left: u(-2rem);
+
+      a {
+        border-bottom: 1px dotted $inverse !important;
+      }
+
+      &::before {
+        margin-bottom: u(3rem);
+        height: u(5rem) !important;
+        width: u(5rem) !important;
+        content: ''!important;
+      }
+
+    }
 
   .mega__page-link {
     padding-left: u(2rem);
