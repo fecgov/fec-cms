@@ -4,8 +4,7 @@ from wagtail.admin.rich_text.converters.editor_html import WhitelistRule
 from wagtail.core import hooks
 from wagtail.core.whitelist import attribute_rule, check_url, allow_without_attributes
 from django.utils.html import format_html
-from fec.draftail import glossary
-from fec.draftail import sansserif
+from fec.draftail import glossary, sansserif, anchor
 
 
 @hooks.register('register_rich_text_features')
@@ -38,7 +37,31 @@ def register_blockquote_feature(features):
     features.default_features.append(feature_name)
 
 
+@hooks.register('register_rich_text_features')
+def register_anchor_feature(features):
+    features.default_features.append('anchor')
+    """
+    Registering the `anchor` feature, which uses the `Anchor` Draft.js entity type,
+    and is stored as HTML with a `<a data-anchor>` tag.
+    """
+    feature_name = 'anchor'
+    type_ = 'ANCHOR'
 
+    control = {
+        'type': type_,
+        'label': '#',
+        'description': 'Anchor',
+    }
+
+    features.register_editor_plugin(
+        'draftail', feature_name, draftail_features.EntityFeature(control)
+    )
+
+    features.register_converter_rule('contentstate', feature_name, {
+        # Note here that the conversion is more complicated than for blocks and inline styles.
+        'from_database_format': {'span[data-anchor]': anchor.AnchorEntityElementHandler(type_)},
+        'to_database_format': {'entity_decorators': {type_: anchor.anchor_entity_decorator}},
+    })
 
 @hooks.register('register_rich_text_features')
 def register_glossary_feature(features):
@@ -100,7 +123,7 @@ def editor_js():
         <script src="/static/wagtailadmin/js/draftail.js"></script>
         <script src="/static/js/admin/glossary.js"></script>
         <script src="/static/js/admin/sansserif.js"></script>
-
+        <script src="/static/js/admin/anchor.js"></script>
     ''')
 
 @hooks.register('insert_editor_css')

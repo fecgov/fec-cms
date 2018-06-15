@@ -578,15 +578,15 @@ class CustomPage(Page):
     ])
     sidebar = stream_factory(null=True, blank=True)
     citations = StreamField([('citations', blocks.ListBlock(CitationsBlock()))],
-                    null=True)
+                    null=True, blank=True)
     record_articles = StreamField([
         ('record_articles', blocks.ListBlock(
             blocks.PageChooserBlock(target_model=RecordPage)
         ))
-    ], null=True)
+    ], null=True, blank=True)
     continue_learning = StreamField([
         ('continue_learning', blocks.ListBlock(ThumbnailBlock(), icon='doc-empty')),
-    ], null=True)
+    ], null=True, blank=True)
     show_contact_link = models.BooleanField(
                                     max_length=255, default=True,
                                     null=False, blank=False,
@@ -864,15 +864,15 @@ class ResourcePage(Page):
     ], null=True, blank=True)
     sections = StreamField([
         ('sections', ResourceBlock())
-    ], null=True)
+    ], null=True, blank=True)
     citations = StreamField([
         ('citations', blocks.ListBlock(CitationsBlock()))
-    ], null=True)
+    ], null=True, blank=True)
     related_topics = StreamField([
         ('related_topics', blocks.ListBlock(
             blocks.PageChooserBlock(label="Related topic")
         ))
-    ], null=True)
+    ], null=True, blank=True)
     category = models.CharField(max_length=255,
                                 choices=constants.report_child_categories.items(),
                                 help_text='If this is a report, add a category',

@@ -157,7 +157,8 @@ class ResourceBlock(blocks.StructBlock):
     ],
 
     template='blocks/section-aside.html',
-    icon='placeholder')
+    icon='placeholder',
+    required=False)
 
     class Meta:
         template = 'blocks/section.html'
