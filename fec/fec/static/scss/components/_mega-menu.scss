@@ -29,6 +29,7 @@
 .mega-heading__title {
   display: block;
   margin-left: u(3rem);
+  font-family:sans-serif;
 
   a {
     border-bottom: 1px dotted $inverse !important;
@@ -162,6 +163,7 @@
     display: block;
     margin-bottom: 0;
     margin-left: u(-2rem);
+    font-family:serif;
 
       a {
         border-bottom: 1px dotted $inverse !important;
@@ -189,4 +191,8 @@
   }
 }
 
-
+@media screen and (max-width: 40em){
+  .mega-heading__title{
+    font-size:1.6rem;
+  }
+}
