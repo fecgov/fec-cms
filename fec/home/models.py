@@ -46,7 +46,8 @@ from home.blocks import (ThumbnailBlock, AsideLinkBlock,
                          ContactInfoBlock, CitationsBlock, ResourceBlock,
                          OptionBlock, CollectionBlock, DocumentFeedBlurb,
                          ExampleParagraph, ExampleForms, ExampleImage,
-                         CustomTableBlock, ReportingExampleCards)
+                         CustomTableBlock, ReportingExampleCards, InternalButtonBlock,
+                         ExternalButtonBlock, SnippetChooserBlock)
 
 
 stream_factory = functools.partial(
@@ -565,7 +566,7 @@ class AlertForEmergencyUseOnly(Page):
 class CustomPage(Page):
     """Flexible customizable page."""
     author = models.CharField(max_length=255)
-    date = models.DateField('Post date')
+    date = models.DateField('Creation date')
     body = StreamField([
         ('heading', blocks.CharBlock(classname='full title')),
         ('paragraph', blocks.RichTextBlock()),
@@ -574,7 +575,11 @@ class CustomPage(Page):
         ('table', TableBlock()),
         ('example_paragraph', ExampleParagraph()),
         ('example_forms', ExampleForms()),
-        ('reporting_example_cards', ReportingExampleCards())
+        ('reporting_example_cards', ReportingExampleCards()),
+        ('contact_info', ContactInfoBlock()),
+        ('internal_button', InternalButtonBlock()),
+        ('external_button', ExternalButtonBlock()),
+        ('contribution_limits_table', SnippetChooserBlock('home.EmbedTableSnippet', template = 'blocks/embed-table.html', icon='table')),
     ])
     sidebar = stream_factory(null=True, blank=True)
     citations = StreamField([('citations', blocks.ListBlock(CitationsBlock()))],
@@ -813,7 +818,7 @@ class CollectionPage(Page):
 
     reporting_examples = StreamField([
         ('reporting_examples', blocks.ListBlock(CitationsBlock()))
-    ], null=True)
+    ], null=True, blank=True)
 
     show_search = models.BooleanField(
                                     max_length=255, default=False,
@@ -857,13 +862,14 @@ class ResourcePage(Page):
     date = models.DateField(default=datetime.date.today)
     intro = StreamField([
         ('paragraph', blocks.RichTextBlock())
-    ], null=True)
+    ], null=True, blank=True)
     sidebar_title = models.CharField(max_length=255, null=True, blank=True)
     related_pages = StreamField([
         ('related_pages', blocks.ListBlock(blocks.PageChooserBlock()))
     ], null=True, blank=True)
     sections = StreamField([
-        ('sections', ResourceBlock())
+        ('sections', ResourceBlock()),
+        ('image', ImageChooserBlock())
     ], null=True, blank=True)
     citations = StreamField([
         ('citations', blocks.ListBlock(CitationsBlock()))
