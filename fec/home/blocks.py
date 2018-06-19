@@ -40,7 +40,9 @@ class ContactItemBlock(blocks.StructBlock):
         ('fax', 'Fax'),
         ('hand', 'Hand delivery'),
         ('phone', 'Phone'),
-        ('mail', 'Mail')
+        ('mail', 'Mail'),
+        ('github','Github'),
+        ('question-bubble','Question')
     ], required=True)
     item_info = blocks.RichTextBlock(required=True)
 

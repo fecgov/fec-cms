@@ -95,11 +95,16 @@ Handlebars.registerHelper({
 });
 
 var globals = {
-  EARMARKED_CODE: '15E'
-};
+  EARMARKED_CODES: ['15E', '24I', '24T']
+}
 
-Handlebars.registerHelper('global', function(value) {
-  return globals[value];
+Handlebars.registerHelper('isEarmarked', function(receipt_type) {
+  if (globals.EARMARKED_CODES.indexOf(receipt_type) > -1) {
+     return true;
+  }
+  else {
+    return false;
+  }
 });
 
 Handlebars.registerHelper('decodeAmendment', function(value) {
