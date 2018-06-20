@@ -99,7 +99,6 @@
   line-height:1.2;
 
   &:first-of-type {
-    margin-top: u(1rem);
   }
 }
 
@@ -230,7 +229,7 @@
 
     &::before {
       margin-top: u(-.5rem);
-      margin-bottom: u(1rem);
+      margin-bottom: u(0rem);
     }
   }
 }
