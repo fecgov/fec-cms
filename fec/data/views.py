@@ -159,7 +159,7 @@ def candidate(request, candidate_id):
     # the cycle should never be beyond the one we're in.
     cycles = [cycle for cycle in candidate['cycles'] if cycle <= utils.current_cycle()]
     max_cycle = cycle if cycle <= utils.current_cycle() else utils.current_cycle()
-    show_full_election = election_full if cycle <= utils.current_cycle() else False
+    show_full_election = election_full if cycle > utils.current_cycle() else False
 
     # Annotate committees with most recent available cycle
     aggregate_cycles = (
