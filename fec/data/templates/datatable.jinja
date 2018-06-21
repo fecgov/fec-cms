@@ -14,7 +14,7 @@
 
 {% block body %}
 
-{{ header.header(breadcrumbs_title | title, breadcrumbs) }}
+{{ header.header(breadcrumbs_title, breadcrumbs) }}
 
 <section class="main__content--full data-container__wrapper">
   {% include 'partials/' + slug + '-filter.jinja' %}

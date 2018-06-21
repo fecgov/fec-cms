@@ -23,8 +23,7 @@ Filter individual contributions
     {{ text.field('contributor_city', 'City') }}
     {{ states.field('contributor_state') }}
     {{ text.field('contributor_zip', 'ZIP code', {'maxlength':5}) }}
-    {{ text.field('contributor_employer', 'Employer') }}
-    {{ text.field('contributor_occupation', 'Occupation') }}
+    {% include 'partials/filters/occupation-employer.jinja' %}
   </div>
   <button type="button" class="js-accordion-trigger accordion__button">Transaction details</button>
   <div class="accordion__content">

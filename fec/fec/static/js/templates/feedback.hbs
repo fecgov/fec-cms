@@ -1,9 +1,9 @@
 <div>
-  <button class="js-feedback feedback__toggle button--cta-primary" aria-controls="feedback" aria-expanded="false" type="button">Feedback</button>
+  <button class="js-feedback feedback__toggle button--cta-secondary" aria-controls="feedback" aria-expanded="false" type="button">Feedback</button>
   <div id="feedback" class="js-feedback-box feedback" aria-hidden="true">
     <button class="js-feedback button--down feedback__close"><span class="u-visually-hidden">Close</span></button>
     <div class="js-status" aria-hidden="true">
-      <div class="message message--inverse js-message">
+      <div class="message js-message">
       </div>
       <ul class="list--buttons">
         <li><button class="js-reset button--cta-primary feedback__button" type="button">Submit another issue</button></li>
@@ -12,17 +12,27 @@
     <form id="feedback-form" class="container">
       <fieldset>
         <legend class="feedback__title">Help us improve FEC.gov</legend>
-        <p class="t-sans">Don't include sensitive information like your name, contact information or Social Security number.</p>
-        <label for="feedback-1" class="label">What were you trying to do and how can we improve it?*</label>
+        <h3 class="t-sans">Test new features with our design team</h3>
+        <div class="signup__row">
+          <div class="signup__button">
+          <a class="button--cta" href="https://ethn.io/12085">Sign up</a>
+          </div>
+          <div class="signup__note">
+            <p class="t-sans t-note">Sign up for a 30 minute video call to  help us test new website features.</p>
+          </div>
+        </div>
+        <hr />
+        <h3 class="t-sans">Or post public feedback anonymously</h3>
+        <p class="t-sans t-note">Tell us how we can improve the site using the form below.  This feedback will be posted publicly, so don't include sensitive information like your name, contact information or Social Security number.</p>
+        <label for="feedback-1" class="label">What were you trying to do, and how can we improve it? </label> <span class="label--help">(required)</em>
         <textarea id="feedback-1" name="action"></textarea>
         <label for="feedback-2" class="label">General feedback?</label>
         <textarea id="feedback-2" name="feedback"></textarea>
         <label for="feedback-3" class="label">Tell us about yourself</label>
         <span class="label--help">I'm a <span class="u-blank-space"></span> interested in <span class="u-blank-space"></span>.</span>
         <textarea id="feedback-3" name="about"></textarea>
-        <p class="t-sans">This information will be reported on GitHub where it will be publicly visible. You can review all reported feedback on <a href="https://github.com/fecgov/fec/issues">our GitHub page</a>.</p>
-        <p class="t-sans t-note">*Required</p>
-        <button type="submit" class="button--standard feedback__button">Submit</button>
+        <button type="submit" class="button--cta feedback__button u-no-margin">Post</button>
+        <p class="t-sans t-note u-margin--top"><a href="https://github.com/FECgov/FEC/issues">Review all reported feedback</a>  |  <a href="/contact-us/">Contact the FEC about a specific question</a></p>
       </fieldset>
     </form>
   </div>

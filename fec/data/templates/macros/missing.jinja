@@ -1,15 +1,27 @@
 {% macro missing_financials(entity, cycle) %}
 <div class="message message--info">
-  <p>We don't have any financial data for <span class="t-bold">{{ entity }}</span> in <span class="t-bold">{{ cycle | fmt_year_range }}</span>.</p>
+  <p>
+    We don't have
+    <span class="t-bold">
+      {{ entity }}
+    </span>
+    for <span class="t-bold">{{ cycle | fmt_year_range }}</span>.
+  </p>
   <p>This can be because:</p>
   <ul class="list--bulleted">
-    <li>There hasn't been a filing deadline yet or</li>
-    <li>A filing deadline has passed, but the FEC hasn’t finished processing the financial data</li>
+    <li>
+      We’re still processing the data. Try looking for
+      <a href="https://www.fec.gov/data/filings/?data_type=efiling" target="_blank" rel="noopener noreferrer">raw versions of committee filings</a>.
+      Raw files are only available for electronic filers.</li>
+    <li>No one filed this type of activity during the time period.</li>
+    <li>The filing deadline hasn’t passed yet.</li>
   </ul>
-  <p>To find the most recent activity for this candidate or committee, try changing the election cycle.</p>
   <div class="message--alert__bottom">
-    <p>Think this was a mistake?</p>
-    <p>Send us an <a href="mailto:{{ webmanager_email }}">email</a> or file a <a href="https://github.com/fecgov/fec/issues">GitHub issue</a>.
+    <p>Think this result is a mistake or have questions?</p>
+    <p>
+      Send us more information in the feedback box or
+      <a href="https://www.fec.gov/contact-us/" target="_blank" rel="noopener noreferrer">contact us</a>.
+    </p>
   </div>
 </div>
 {% endmacro %}

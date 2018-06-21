@@ -38,8 +38,9 @@ Overview.prototype.zeroPadTotals = function() {
   helpers.zeroPad(this.selector + ' .js-snapshot', '.snapshot__item-number', '.figure__decimals');
 };
 
-new Overview('.js-raised-overview', 'raised', 1);
-new Overview('.js-spent-overview', 'spent', 2);
+//temporarily removed to remove line-charts from landng.jinja without error
+//new Overview('.js-raised-overview', 'raised', 1);
+//new Overview('.js-spent-overview', 'spent', 2);
 
 $(document).ready(function() {
   new lookup.ElectionLookup('#election-lookup', false);
