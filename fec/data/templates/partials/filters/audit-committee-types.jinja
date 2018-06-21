@@ -2,15 +2,15 @@
   <fieldset class="js-dropdown js-filter" data-filter="checkbox">
     <legend class="label" for="committee_type">Authorized committees</legend>
     <ul class="dropdown__selected">
-      <li>
+      <li class="dropdown__item">
         <input id="committee-type-checkbox-P" type="checkbox" name="committee_type" value="P">
         <label class="dropdown__value" for="committee-type-checkbox-P">Presidential</label>
       </li>
-      <li>
+      <li class="dropdown__item">
         <input id="committee-type-checkbox-S" type="checkbox" name="committee_type" value="S">
         <label class="dropdown__value" for="committee-type-checkbox-S">Senate</label>
       </li>
-      <li>
+      <li class="dropdown__item">
         <input id="committee-type-checkbox-H" type="checkbox" name="committee_type" value="H">
         <label class="dropdown__value" for="committee-type-checkbox-H">House</label>
       </li>
@@ -26,11 +26,11 @@
       <button type="button" class="dropdown__button button--alt" data-name="{{ name }}">More</button>
       <div id="pac-dropdown" class="dropdown__panel" aria-hidden="true">
         <ul class="dropdown__list">
-          <li>
+          <li class="dropdown__item">
             <input id="committee-type-checkbox-X" type="checkbox" name="committee_type" value="X">
             <label class="dropdown__value" for="committee-type-checkbox-X">Party - nonqualified</label>
           </li>
-          <li>
+          <li class="dropdown__item">
             <input id="committee-type-checkbox-Y" type="checkbox" name="committee_type" value="Y">
             <label class="dropdown__value" for="committee-type-checkbox-Y">Party - qualified</label>
           </li>
@@ -48,7 +48,7 @@
       <button type="button" class="dropdown__button button--alt" data-name="{{ name }}">More</button>
       <div id="pac-dropdown" class="dropdown__panel" aria-hidden="true">
         <ul class="dropdown__list">
-          <li>
+          <li class="dropdown__item">
             <input id="committee-type-checkbox-O" type="checkbox" name="committee_type" value="O">
             <label class="dropdown__value" for="committee-type-checkbox-O">Super PAC (independent expenditure only)</label>
           </li>
@@ -74,7 +74,7 @@
       <button type="button" class="dropdown__button button--alt" data-name="{{ name }}">More</button>
       <div id="pac-dropdown" class="dropdown__panel" aria-hidden="true">
         <ul class="dropdown__list">
-          <li>
+          <li class="dropdown__item">
             <input id="committee-type-checkbox-N" type="checkbox" name="committee_type" value="N">
             <label class="dropdown__value" for="committee-type-checkbox-N">PAC - nonqualified</label>
           </li>
@@ -82,7 +82,7 @@
             <input id="committee-type-checkbox-Q" type="checkbox" name="committee_type" value="Q">
             <label class="dropdown__value" for="committee-type-checkbox-Q">PAC - qualified</label>
           </li>
-          <li>
+          <li class="dropdown__item">
             <input id="committee-type-checkbox-V" type="checkbox" name="committee_type" value="V">
             <label class="dropdown__value" for="committee-type-checkbox-V">PAC with non-contribution account - nonqualified</label>
           </li>
