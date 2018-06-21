@@ -75,7 +75,18 @@
           {% else %}
             {% set cp = '' %}
           {% endif %}
-          {{ reporting.info(
+          {% if office == 'president' and cycle >= 2012 %}
+            {{ reporting.info(
+                'Presidential committee reports',
+                'Quarterly / monthly filing and pre-/post-election reports',
+                [{
+                  'text': 'Reporting deadlines and notices',
+                  'href': 'https://transition.fec.gov/info/report_dates_'+cycle|string+'.shtml'
+                }]
+              )
+            }}
+          {% else %}
+            {{ reporting.info(
                 'Congressional committee reports',
                 'Quarterly filing and pre-/post-election reports',
                 [{
@@ -87,6 +98,7 @@
                 }]
               )
             }}
+          {% endif %}
         {% else %}
           {{ reporting.warning(cycle='2010') }}
         {% endif %}
