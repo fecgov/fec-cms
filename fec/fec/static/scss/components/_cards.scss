@@ -27,7 +27,13 @@
 
   .card__image__container {
     @include clearfix();
-    background-color: $primary;
+    /*background-color: $primary;*/
+  }
+  .card__icon {
+    &.i-election {
+      @include u-icon-bg($election, $primary);
+      background-size: 65%;
+    }
   }
 }
 
@@ -418,6 +424,11 @@
 
     &.i-compass {
       @include u-icon-bg($compass, $primary-contrast);
+      background-size: 65%;
+    }
+
+    &.i-checklist-2 {
+      @include u-icon-bg($checklist-2, $primary-contrast);
       background-size: 65%;
     }
   }

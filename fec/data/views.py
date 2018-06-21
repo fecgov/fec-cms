@@ -401,7 +401,7 @@ def elections(request, office, cycle, state=None, district=None):
 
     if office.lower() not in ['president', 'senate', 'house']:
         raise Http404()
-    if state and state.upper() not in constants.states:
+    if (state is not None) and (state and state.upper() not in constants.states):
         raise Http404()
 
     return render(request, 'elections.jinja', {
@@ -415,7 +415,6 @@ def elections(request, office, cycle, state=None, district=None):
         'district': district,
         'title': utils.election_title(cycle, office, state, district),
     })
-
 
 def raising(request):
     top_category = request.GET.get('top_category', 'P')
