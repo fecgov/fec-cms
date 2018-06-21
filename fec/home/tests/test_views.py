@@ -12,12 +12,6 @@ class TestViews(TestCase):
     self.assertTemplateUsed(resp, 'home/contact-form.html')
     self.assertEqual(resp.context['self']['content_section'], 'help')
 
-  def test_contact_page(self):
-    resp = self.client.get('/contact-us/')
-    self.assertEqual(resp.status_code, 200)
-    self.assertTemplateUsed(resp, 'home/contact.html')
-    self.assertEqual(resp.context['self']['content_section'], 'contact')
-
   def test_calendar(self):
     resp = self.client.get('/calendar/')
     self.assertEqual(resp.status_code, 200)
