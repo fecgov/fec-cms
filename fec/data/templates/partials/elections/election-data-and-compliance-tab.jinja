@@ -27,7 +27,7 @@
     <h2 id="section-1-heading">Election data and reporting deadlines</h2>
     {% include 'partials/elections/election-profile-cards.jinja' %}
     <div class="slab slab--inline slab--neutral u-padding--left u-padding--right">
-      {{ select.election_cycle_select(cycles, cycle, 'summary')}}
+      {{ select.election_cycle_select(cycles, cycle, 'summary') }}
 
       <div id="candidate-financial-totals" class="entity__figure row">
         <div class="heading--section heading--with-action u-no-margin">
@@ -70,12 +70,17 @@
           </p>
         </div>
         {% if cycle >= 2010 %}
+          {% if anchors[state] %}
+            {% set cp = '#anchor'+anchors[state]['p'] %}
+          {% else %}
+            {% set cp = '' %}
+          {% endif %}
           {{ reporting.info(
                 'Congressional committee reports',
                 'Quarterly filing and pre-/post-election reports',
                 [{
                   'text': 'Convention and Primary deadlines',
-                  'href': 'https://transition.fec.gov/info/charts_primary_dates_'+cycle|string+'.shtml#anchor'+anchors[state]['p']
+                  'href': 'https://transition.fec.gov/info/charts_primary_dates_'+cycle|string+'.shtml'+cp
                 },{
                   'text': 'General deadlines',
                   'href': 'https://transition.fec.gov/info/report_dates_'+cycle|string+'.shtml#general'
@@ -193,15 +198,20 @@
           </p>
         </div>
         {% if cycle >= 2010 %}
+          {% if anchors[state] %}
+            {% set ie = '#anchor'+anchors[state]['ie'] %}
+          {% else %}
+            {% set ie = '' %}
+          {% endif %}
           {{ reporting.info(
-                'Independent expenditure reports',
-                '24- and 48-hour report periods',
-                [{
-                  'text': 'Independent expenditure deadlines',
-                  'href': 'https://transition.fec.gov/info/charts_ie_dates_'+cycle|string+'.shtml#anchor'+anchors[state]['ie']
-                }]
-              )
-            }}
+              'Independent expenditure reports',
+              '24- and 48-hour report periods',
+              [{
+                'text': 'Independent expenditure deadlines',
+                'href': 'https://transition.fec.gov/info/charts_ie_dates_'+cycle|string+'.shtml'+ie,
+              }]
+            )
+          }}
         {% else %}
           {{ reporting.warning(cycle='2010') }}
         {% endif %}
@@ -274,12 +284,17 @@
           </p>
         </div>
         {% if cycle >= 2010 %}
+          {% if anchors[state] %}
+            {% set ec = '#anchor'+anchors[state]['ec'] %}
+          {% else %}
+            {% set ec = '' %}
+          {% endif %}
           {{ reporting.info(
                 'Electioneering communication reports',
                 '30- and 60-day report periods',
                 [{
                   'text': 'Electioneering communication deadlines',
-                  'href': 'https://transition.fec.gov/info/charts_ec_dates_'+cycle|string+'.shtml#anchor'+anchors[state]['ec']
+                  'href': 'https://transition.fec.gov/info/charts_ec_dates_'+cycle|string+'.shtml'+ec,
                 }]
               )
             }}

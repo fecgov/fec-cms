@@ -1,7 +1,12 @@
 {% extends 'layouts/main.jinja' %}
 {% import 'macros/page-header.jinja' as header %}
-{% set senate_crumb = state_full + ' - ' + office|title + ' | ' + cycle|string %}
-{% set house_crumb = state_full + ' - ' + office|title + ' ' + district|string + ' | ' + cycle|string %}
+{% if office == 'house' %}
+  {% set crumb = state_full + ' - ' + office|title + ' ' + district|string + ' | ' + cycle|string %}
+{% elif office == 'senate' %}
+  {% set crumb = state_full + ' - ' + office|title + ' | ' + cycle|string %}
+{% else %}
+  {% set crumb = office|title + ' | ' + cycle|string %}
+{% endif %}
 
 {{ cycle }} Election - US {{ office|title }} {% if state %} - {{ state|fmt_state_full }} {% if district %} - District {{ district }} {% endif %} {% endif %}
 
@@ -12,11 +17,7 @@
 {% endblock %}
 
 {% block body %}
-  {% if office == 'house' %}
-    {{ header.header(house_crumb) }}
-  {% else %}
-    {{ header.header(senate_crumb) }}
-  {% endif %}
+  {{ header.header(crumb) }}
   <div class="u-padding--left u-padding--right tab-interface">
     <header class="main">
       {% if office == 'president' %}
@@ -28,7 +29,7 @@
         </div>
       {% else %}
         <h1 class="entity__name">
-          {{ state | fmt_state_full }} - {{ office | title }} {% if district %}District {{ district }}{% endif %}
+          {% if state %}{{ state | fmt_state_full }} - {% endif %}{{ office | title }} {% if district %}District {{ district }}{% endif %}
         </h1>
         <div class="heading--section">
           <span class="t-data t-bold">
