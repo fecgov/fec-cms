@@ -44,8 +44,12 @@
         <div class="heading--section heading--with-action">
           <h3 class="heading__left">State election offices</h3>
         </div>
-        <p>State laws and procedures govern elections for state or local offices as well as how candidates come to appear on election ballots. Contact the appropriate state election office for more information.</p>
-        <div id="election-offices"></div>
+        {% if office == 'president' %}
+          <p>Ballot access procedures for presidential candidates vary by state. Contact each <a href="https://transition.fec.gov/pubrec/stateelection.shtml">state election office</a> for information.</p>
+        {% else %}
+          <p>State laws and procedures govern elections for state or local offices as well as how candidates come to appear on election ballots. Contact the appropriate state election office for more information.</p>
+          <div id="election-offices"></div>
+        {% endif %}
       </div>
     </div>
   </div>
