@@ -358,7 +358,6 @@ var independentExpenditures = [
     orderable: false,
     className: 'all',
     render: function(data, type, row, meta) {
-      console.log(data)
       if (data) {
         return columnHelpers.buildEntityLink(
           data.name,

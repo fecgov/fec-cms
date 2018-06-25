@@ -68,6 +68,7 @@ function yearRange(first, last) {
 function getCycle(value, meta) {
   var dataTable = DataTable.registry[meta.settings.sTableId];
   var filters = dataTable && dataTable.filters;
+
   if (filters && filters.cycle) {
     var cycles = _.intersection(
       _.map(filters.cycle, function(cycle) { return parseInt(cycle); }),
