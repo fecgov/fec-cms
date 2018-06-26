@@ -260,7 +260,7 @@ describe('data table', function() {
     });
   });
 
-  describe('drawsComparison', function() {
+  describe('drawComparison', function() {
     before(function(done) {
       this.$fixture = $('<div id="fixtures"></div>');
       $('body').empty().append(this.$fixture);

@@ -64,20 +64,22 @@ function findDistricts(districts) {
   });
 }
 
-function getElections(state, office) {
+function getElections(state, office, cycle) {
   var officeSymbol = {
     'house': 'H',
     'senate': 'S',
-    'presidential': 'P'
+    'president': 'P'
   };
 
-  var query = {
+  var defaultQuery = {
     'sort': '-election_date',
     'per_page': 2,
     'election_type_id': 'G',
     'election_state': state,
     'office_sought': officeSymbol[office]
   };
+
+  var query = office !== 'president' ? defaultQuery : _.omit(defaultQuery, 'election_state');
 
   var url = helpers.buildUrl(['election-dates'], query);
   var $election_dates_results = $('.election-dates');

@@ -828,7 +828,24 @@ function buildUrl(selected, context, path) {
     candidate_id: _.pluck(selected, 'candidate_id'),
     per_page: 0
   };
+
   return helpers.buildUrl(path, query);
+}
+
+
+var drawTableOpts = {
+  autoWidth: false,
+  destroy: true,
+  searching: false,
+  serverSide: false,
+  lengthChange: true,
+  useExport: true,
+  singleEntityItemizedExport: true,
+  dom: simpleDOM,
+  language: {
+    lengthMenu: 'Results per page: _MENU_',
+  },
+  pagingType: 'simple'
 }
 
 function drawSizeTable(selected, context) {
@@ -846,7 +863,8 @@ function drawSizeTable(selected, context) {
       data: data,
       columns: columnsModule.sizeColumns(context),
       order: [[1, 'desc']]
-    }, defaultOpts));
+    }, drawTableOpts));
+
     barsAfterRender(null, $table.DataTable());
   });
 }
@@ -876,7 +894,7 @@ function drawStateTable(selected, context) {
       drawCallback: function(settings, $table) {
         barsAfterRender(null, this.api());
       }
-    }, defaultOpts));
+    }, drawTableOpts));
   });
 }
 
