@@ -159,7 +159,7 @@ def candidate(request, candidate_id):
     # the cycle should never be beyond the one we're in.
     cycles = [cycle for cycle in candidate['cycles'] if cycle <= utils.current_cycle()]
     max_cycle = cycle if cycle <= utils.current_cycle() else utils.current_cycle()
-    show_full_election = election_full if cycle <= utils.current_cycle() else False
+    show_full_election = election_full if cycle <= utils.current_cycle() else False              
 
     # Annotate committees with most recent available cycle
     aggregate_cycles = (
@@ -187,7 +187,7 @@ def candidate(request, candidate_id):
     aggregate = api_caller.load_candidate_totals(
         candidate['candidate_id'],
         cycle=max_cycle,
-        election_full=show_full_election,
+        election_full=election_full,
     )
     if aggregate:
         raising_summary = utils.process_raising_data(aggregate)
@@ -401,7 +401,7 @@ def elections(request, office, cycle, state=None, district=None):
 
     if office.lower() not in ['president', 'senate', 'house']:
         raise Http404()
-    if state and state.upper() not in constants.states:
+    if (state is not None) and (state and state.upper() not in constants.states):
         raise Http404()
 
     return render(request, 'elections.jinja', {
@@ -415,7 +415,6 @@ def elections(request, office, cycle, state=None, district=None):
         'district': district,
         'title': utils.election_title(cycle, office, state, district),
     })
-
 
 def raising(request):
     top_category = request.GET.get('top_category', 'P')
