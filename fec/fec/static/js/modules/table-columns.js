@@ -1,7 +1,11 @@
-'use strict':
+'use strict';
 
+var moment = require('moment');
 var columns = require('./columns');
 var columnHelpers = require('./column-helpers');
+var helpers = require('./helpers');
+
+var coverageEndDate = require('../templates/coverageEndDate.hbs');
 
 var candidateInformationColumns = [
   {
@@ -59,65 +63,67 @@ var communicationCostColumns = [
   },
 ];
 
-var electionColumns = [
-  {
-    data: 'candidate_name',
-    className: 'all column--large',
-    render: function(data, type, row, meta) {
-      return columnHelpers.buildEntityLink(
-        data,
-        helpers.buildAppUrl(['candidate', row.candidate_id]),
-        'candidate',
-        {isIncumbent: row.incumbent_challenge_full === 'Incumbent'}
-      );
-    }
-  },
-  {
-    data: 'party_full',
-    className: 'all'
-  },
-  columns.currencyColumn({
-    data: 'total_receipts',
-    className: 'column--number',
-    orderSequence: ['desc', 'asc']
-  }),
-  columns.currencyColumn({
-    data: 'total_disbursements',
-    className: 'column--number',
-    orderSequence: ['desc', 'asc']
-  }),
-  columns.barCurrencyColumn({
-    data: 'cash_on_hand_end_period',
-    className: 'column--number'
-  }),
-  {
-    render: function(data, type, row, meta) {
-      var dates = helpers.cycleDates(context.election.cycle);
-      var urlBase;
-      if (context.election.office === 'president') {
-        urlBase = ['reports', 'presidential'];
-      } else {
-        urlBase = ['reports','house-senate'];
+function createElectionColumns(context) {
+  return [
+    {
+      data: 'candidate_name',
+      className: 'all column--large',
+      render: function(data, type, row, meta) {
+        return columnHelpers.buildEntityLink(
+          data,
+          helpers.buildAppUrl(['candidate', row.candidate_id]),
+          'candidate',
+          {isIncumbent: row.incumbent_challenge_full === 'Incumbent'}
+        );
       }
-      var url = helpers.buildAppUrl(
-        urlBase,
-        {
-          committee_id: row.committee_ids,
-          cycle: context.election.cycle,
-          is_amended: 'false'
-        }
-      );
-      var coverage_end_date = row.coverage_end_date ? moment(row.coverage_end_date).format('MM/DD/YYYY') : null;
-
-      return coverageEndDate({
-        coverage_end_date: coverage_end_date,
-        url: url
-      });
     },
-    className: 'all',
-    orderable: false,
-  }
-];
+    {
+      data: 'party_full',
+      className: 'all'
+    },
+    columns.currencyColumn({
+      data: 'total_receipts',
+      className: 'column--number',
+      orderSequence: ['desc', 'asc']
+    }),
+    columns.currencyColumn({
+      data: 'total_disbursements',
+      className: 'column--number',
+      orderSequence: ['desc', 'asc']
+    }),
+    columns.barCurrencyColumn({
+      data: 'cash_on_hand_end_period',
+      className: 'column--number'
+    }),
+    {
+      render: function(data, type, row, meta) {
+        var dates = helpers.cycleDates(context.election.cycle);
+        var urlBase;
+        if (context.election.office === 'president') {
+          urlBase = ['reports', 'presidential'];
+        } else {
+          urlBase = ['reports','house-senate'];
+        }
+        var url = helpers.buildAppUrl(
+          urlBase,
+          {
+            committee_id: row.committee_ids,
+            cycle: context.election.cycle,
+            is_amended: 'false'
+          }
+        );
+        var coverage_end_date = row.coverage_end_date ? moment(row.coverage_end_date).format('MM/DD/YYYY') : null;
+
+        return coverageEndDate({
+          coverage_end_date: coverage_end_date,
+          url: url
+        });
+      },
+      className: 'all',
+      orderable: false,
+    }
+  ];
+}
 
 var electioneeringColumns = [
   columns.committeeColumn({data: 'committee', className: 'all'}),
@@ -158,7 +164,7 @@ var independentExpenditureColumns = [
 module.exports = {
   candidateInformationColumns: candidateInformationColumns,
   communicationCostColumns: communicationCostColumns,
-  electionColumns: electionColumns,
+  createElectionColumns: createElectionColumns,
   electioneeringColumns: electioneeringColumns,
   independentExpenditureColumns: independentExpenditureColumns
 };

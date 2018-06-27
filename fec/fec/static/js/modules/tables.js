@@ -9,7 +9,7 @@ require('datatables.net');
 require('datatables.net-responsive');
 
 var accessibility = require('./accessibility');
-var columnsModule = require('./columns');
+var columnHelpers = require('./column-helpers');
 var download = require('./download');
 var dropdown = require('./dropdowns');
 var helpers = require('./helpers');
@@ -82,9 +82,9 @@ function getCycle(value, meta) {
   }
 }
 
-function mapSort(order, columns) {
+function mapSort(order, column) {
   return _.map(order, function(item) {
-    var name = columns[item.column].data;
+    var name = column[item.column].data;
     if (item.dir === 'desc') {
       name = '-' + name;
     }
@@ -861,7 +861,7 @@ function drawSizeTable(selected, context) {
     $table.dataTable(_.extend({
       autoWidth: false,
       data: data,
-      columns: columnsModule.sizeColumns(context),
+      columns: columnHelpers.sizeColumns(context),
       order: [[1, 'desc']]
     }, drawTableOpts));
 
@@ -889,7 +889,7 @@ function drawStateTable(selected, context) {
     $table.dataTable(_.extend({
       autoWidth: false,
       data: data,
-      columns: columnsModule.stateColumns(selected, context),
+      columns: columnHelpers.stateColumns(selected, context),
       order: [[1, 'desc']],
       drawCallback: function(settings, $table) {
         barsAfterRender(null, this.api());
