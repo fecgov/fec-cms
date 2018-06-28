@@ -3,6 +3,8 @@
 var chai = require('chai');
 var expect = chai.expect;
 var columnHelpers = require('../../static/js/modules/column-helpers');
+var context = require('../fixtures/context');
+var houseResults = require('../fixtures/house-results');
 
 function stringToElement(str) {
   var div = document.createElement('div');
@@ -191,10 +193,25 @@ describe('column helpers', function() {
     });
   });
 
+  describe('sizeColumns', function() {
+    it('should build a sizeColumns from context', function() {
+      var results = columnHelpers.sizeColumns(context);
+      expect(results).to.be.an('array');
+    });
+  });
+
   describe('sizeInfo', function() {
     it('should be a constants object', function() {
       var results = columnHelpers.sizeInfo;
       expect(results).to.be.an('object');
+    });
+  });
+
+  describe('stateColumns', function() {
+    it('should build a stateColumns from context and results', function() {
+      var results = columnHelpers.stateColumns(houseResults, context);
+      expect(results).to.be.an('array');
+      expect(results.length).to.equal(houseResults.length+1);
     });
   });
 
