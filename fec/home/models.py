@@ -582,6 +582,11 @@ class CustomPage(Page):
         ('contribution_limits_table', SnippetChooserBlock('home.EmbedTableSnippet', template = 'blocks/embed-table.html', icon='table')),
     ])
     sidebar = stream_factory(null=True, blank=True)
+    related_topics = StreamField([
+        ('related_topics', blocks.ListBlock(
+            blocks.PageChooserBlock(label="Related topic")
+        ))
+    ], null=True, blank=True)
     citations = StreamField([('citations', blocks.ListBlock(CitationsBlock()))],
                     null=True, blank=True)
     record_articles = StreamField([
@@ -604,6 +609,7 @@ class CustomPage(Page):
         FieldPanel('author'),
         FieldPanel('date'),
         StreamFieldPanel('body'),
+        StreamFieldPanel('related_topics'),
         StreamFieldPanel('citations'),
         StreamFieldPanel('continue_learning'),
         MultiFieldPanel([
