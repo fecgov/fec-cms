@@ -115,7 +115,7 @@ class AuditSearchBlock(blocks.StaticBlock):
     class Meta:
         icon = 'search'
         admin_text = 'Show the audit search field. No configuration needed.'
-        template = 'blocks/audit_search.html'
+        template = 'blocks/audit.html'
 
 class ReportingExampleCards(blocks.StructBlock):
     """Create links to reporting example pages that display as cards
