@@ -1,46 +1,45 @@
 {% load wagtailcore_tags %}
 {% load staticfiles %}
 {% load filters %}
+
+
 <div class="u-no-print">
   <div class="slab slab--neutral slab--inline u-padding--left u-padding--right">
     <div class="heading--section heading--with-action">
       <h3 class="heading__left">Search audits</h3>
       <a class="button button--alt button--go heading__right" href="/legal-resources/enforcement/audit-search/">Advanced search</a>
     </div>
-    <div class="row">
-      <div autocomplete="off" class="search__container u-padding--top">
-        <div class="search-controls__row">
-          <div class="search-controls__either">
-            <form action="/legal-resources/enforcement/audit-search/">
-              <label for="q" class="label">Committee Name or ID</label>
-              <div class="combo combo--search combo--search--inline">
-                <input type="text" id="q" name="q" class="combo__input audit">
-                <button class="combo__button button--search button--standard" type="submit">
-                  <span class="u-visually-hidden">Search</span>
-                </button>
-              </div>
-            </form>
-            <span class="t-note t-sans search__example">Example: President Ford Committee C00031336</span>
-          </div>
-          <div class="search-controls__or search-controls__or--vertical">or</div>
-          <div class="search-controls__either">
-            <form action="/legal-resources/enforcement/audit-search/" class="js-form-nav container">
-              <label for="primary_category_id" class="label">Findings and issue categories</label>
-              <div class="combo search--medium combo--search--inline">
-                <select id="primary_category_id" name="primary_category_id" aria-label="Select a district" class="select--full ">
-                  {% for j in findings %}
-                    <option value="{{ j.primary_category_id }}">
-                     {{ j.primary_category_name }}
-                    </option>
-                  {% endfor %}
-                </select>
+    <div autocomplete="off" class="search__container u-padding--top">
+      <div class="search-controls__row">
+        <div class="search-controls__either">
+          <form action="/legal-resources/enforcement/audit-search/">
+            <label for="q" class="label">Committee Name or ID</label>
+            <div class="combo combo--search__medium combo--search--inline">
+              <input type="text" id="q" name="q" class="combo__input audit">
+              <button class="combo__button button--search button--standard" type="submit">
                 <span class="u-visually-hidden">Search</span>
               </button>
             </div>
           </form>
-         </div>
+          <span class="t-note t-sans search__example">Example: President Ford Committee; C00031336</span>
+        </div>
+        <div class="search-controls__or search-controls__or--vertical">or</div>
+        <div class="search-controls__either">
+          <form action="/legal-resources/enforcement/audit-search/" class="js-form-nav container">
+            <label for="primary_category_id" class="label">Findings and issue categories</label>
+            <div class="combo search--medium combo--search--inline">
+              <select id="primary_category_id" name="primary_category_id" aria-label="Select a district" class="select--full ">
+                {% for finding in findings %}
+                  <option value="{{ finding.primary_category_id }}">
+                   {{ finding.primary_category_name }}
+                  </option>
+                {% endfor %}
+              </select>
+              <span class="u-visually-hidden">Search</span>
+            </div>
+          </form>
+        </div>
        </div>
-      </div>
+     </div>
     </div>
   </div>
-</div>

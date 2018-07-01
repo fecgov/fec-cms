@@ -1,8 +1,4 @@
-import dateutil.parser
-import requests
-
 from django import template
-from django.conf import settings
 from data import constants
 
 register = template.Library()
