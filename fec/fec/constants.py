@@ -9,7 +9,6 @@ deadline_types = OrderedDict([
     ('25', 'Quarterly reports'),
     ('26', 'Monthly reports'),
     ('27', 'Pre- and post-election'),
-    ('21', 'Mid-year and year-end'),
 ])
 
 reporting_periods = OrderedDict([
