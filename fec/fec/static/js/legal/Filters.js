@@ -4,6 +4,8 @@ const TextFilter = require('./filters/TextFilter');
 const CheckboxFilter = require('./filters/CheckboxFilter');
 const CheckboxList = require('./filters/CheckboxList');
 const DateFilter = require('./filters/DateFilter');
+const CitationFilter = require('./filters/CitationFilter');
+const CitationRequireAllRadio = require('./filters/CitationRequireAllRadio');
 const FilterPanel = require('./FilterPanel');
 const requestorOptions = require('./requestorOptions');
 const documentTypes = require('./documentTypes');
@@ -28,6 +30,18 @@ function Filters(props) {
                   checked={props.query.ao_is_pending} handleChange={props.instantQuery} />
                 <CheckboxList key="ao_category" name="ao_category" label="Document Type" value={props.query.ao_category}
                   handleChange={props.instantQuery} options={documentTypes}/>
+              </FilterPanel>
+              <FilterPanel id="first-content-1" header="Citations">
+                <CitationRequireAllRadio key="ao_citation_require_all" name="ao_citation_require_all" handleChange={props.instantQuery}
+                  value={props.query.ao_citation_require_all} />
+                <CitationFilter handleChange={props.setQuery} getResults={props.getResults}
+                    key="ao_regulatory_citation" name="ao_regulatory_citation" label="Regulatory citation" instantQuery={props.instantQuery}
+                    citationType="regulation" value={props.query.ao_regulatory_citation}
+                    resultCountChange={resultCountChange} lastFilter={props.query.lastFilter}/>
+                <CitationFilter handleChange={props.setQuery} getResults={props.getResults}
+                    key="ao_statutory_citation" name="ao_statutory_citation" label="Statutory citation" instantQuery={props.instantQuery}
+                    citationType="statute" value={props.query.ao_statutory_citation}
+                    resultCountChange={resultCountChange} lastFilter={props.query.lastFilter}/>
               </FilterPanel>
               <FilterPanel id="first-content-2" header="Time period">
                   <DateFilter key="issue_date" label="Issued date" min_name="ao_min_issue_date" max_name="ao_max_issue_date"
