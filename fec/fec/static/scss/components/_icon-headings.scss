@@ -13,6 +13,11 @@
 
 .icon-heading {
   @include clearfix();
+  margin-top:0;
+
+  @include media($med) {
+    margin-top: u(1rem);
+  }
 }
 
 .icon-heading__image {
@@ -60,6 +65,8 @@
   padding-left: u(3rem);
 }
 
+
+
 .icon-heading--raising-circle {
   &::before {
     $size: u(4rem);
@@ -80,11 +87,42 @@
   }
 }
 
+.icon-heading--calendar-circle-primary {
+  &::before {
+    $size: u(4rem);
+    @include u-icon-circle($calendar, $primary, $inverse, $size);
+    content: '';
+    float: left;
+    margin-right: u(1rem);
+  }
+}
+
+.icon-heading--data-flag-circle--primary {
+  &::before {
+    $size: u(4rem);
+    @include u-icon-circle($data-flag, $inverse, $primary-contrast, $size);
+    background-size: 50%;
+    content: '';
+    float: left;
+  }
+}
+
+.icon-heading--data-flag-circle--secondary {
+  &::before {
+    $size: u(4rem);
+    @include u-icon-circle($data-flag, $inverse, $secondary-contrast, $size);
+    background-size: 50%;
+    content: '';
+    float: left;
+  }
+}
+
 // homepage - registration and reporting (on secondary [red] slab)
 .icon-heading--checklist-circle {
   &::before {
-    @include u-icon-circle($checklist, $inverse, $secondary-contrast, 4.5rem);
-    background-size: u(4rem);
+    $size: u(4rem);
+    @include u-icon-circle($checklist, $inverse, $secondary-contrast, $size);
+    background-size: 70%;
     content: '';
     float: left;
     margin-right: u(1.5rem);
@@ -93,8 +131,9 @@
 
 .icon-heading--question-bubble-circle {
   &::before {
-    @include u-icon-circle($question-bubble, $inverse, $secondary-contrast, 4.5rem);
-    background-size: u(4rem);
+    $size: u(4rem);
+    @include u-icon-circle($question-bubble, $inverse, $secondary-contrast, $size);
+    background-size: 70%;
     content: '';
     float: left;
     margin-right: u(1.5rem);
@@ -170,6 +209,39 @@
   }
 }
 
+.icon-heading--person-location-circle {
+  &::before {
+    $size: u(4rem);
+    @include u-icon-circle($person-location, $inverse, $primary-contrast, $size);
+    background-size: 50%;
+    content: '';
+    float: left;
+    margin-right: u(1.5rem);
+  }
+}
+
+.icon-heading--individual-contributions-circle {
+  &::before {
+    $size: u(4rem);
+    @include u-icon-circle($individual-contributions, $inverse, $primary-contrast, $size);
+    background-size: 50%;
+    content: '';
+    float: left;
+    margin-right: u(1.5rem);
+  }
+}
+
+.icon-heading--magnifying-glass-circle {
+  &::before {
+    $size: u(4rem);
+    @include u-icon-circle($magnifying-glass, $inverse, $primary-contrast, $size);
+    background-size: 50%;
+    content: '';
+    float: left;
+    margin-right: u(1.5rem);
+  }
+}
+
 // Data landing page links to breakdowns
 .icon-heading--graph-circle {
   &::before {
@@ -207,14 +279,24 @@
 
 .icon-heading--graph-circle,
 .icon-heading--graph-unordered-circle,
-.icon-heading--map-circle {
+.icon-heading--map-circle,
+.icon-heading--data-flag-circle,
+.icon-heading--question-bubble-circle,
+.icon-heading--checklist-circle,
+.icon-heading--magnifying-glass-circle,
+.icon-heading--question-bubble-circle,
+.icon-heading--individual-contributions-circle,
+.icon-heading--person-location-circle
+ {
   border-bottom: none;
   display: table;
+  padding-bottom: u(1.3rem);
 
   .icon-heading__text {
     line-height: 1.2;
     display: table-cell;
     vertical-align: middle;
+    color:inherit;
   }
 
   &::before {

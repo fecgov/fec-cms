@@ -150,6 +150,25 @@
     &:first-child {
       border-left: none;
     }
+
+    &.align-top {
+      vertical-align: top;
+    }
+
+    ul,
+    ol {
+      line-height: u(1rem);
+
+      li {
+        font-size: u(1.4rem);
+        line-height: u(1.4rem);
+
+        ol, li {
+          margin-left :u(.9rem);
+          line-height: u(1.4rem);
+        }
+      }
+    }
   }
 
   .sorting_disabled {
@@ -240,7 +259,7 @@
   }
 
   .dropdown__value {
-    padding: u(0 .75rem);
+    padding: u(.5rem .75rem);
   }
 }
 

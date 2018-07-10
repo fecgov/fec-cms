@@ -40,7 +40,9 @@ class ContactItemBlock(blocks.StructBlock):
         ('fax', 'Fax'),
         ('hand', 'Hand delivery'),
         ('phone', 'Phone'),
-        ('mail', 'Mail')
+        ('mail', 'Mail'),
+        ('github','Github'),
+        ('question-bubble','Question')
     ], required=True)
     item_info = blocks.RichTextBlock(required=True)
 
@@ -108,6 +110,13 @@ class MURSearchBlock(blocks.StaticBlock):
         admin_text = 'Show the MUR search field. No configuration needed.'
         template = 'blocks/mur_search.html'
 
+class AuditSearchBlock(blocks.StaticBlock):
+    """A block that displays the Audit search box"""
+    class Meta:
+        icon = 'search'
+        admin_text = 'Show the audit search field. No configuration needed.'
+        template = 'blocks/audit.html'
+
 class ReportingExampleCards(blocks.StructBlock):
     """Create links to reporting example pages that display as cards
     card_width is used in the template to set the grid class. On reporting example pages,
@@ -142,6 +151,7 @@ class ResourceBlock(blocks.StructBlock):
         ('current_commissioners', CurrentCommissionersBlock()),
         ('fec_jobs', CareersBlock()),
         ('mur_search', MURSearchBlock()),
+        ('audit_search', AuditSearchBlock()),
         ('table', TableBlock()),
         ('html', blocks.RawHTMLBlock()),
         ('reporting_example_cards', ReportingExampleCards()),

@@ -12,13 +12,18 @@ REPO_DIR = os.path.dirname(BASE_DIR)
 
 CANONICAL_BASE = env.get_credential('CANONICAL_BASE', 'https://www.fec.gov')
 
+USAJOBS_WHOMAYAPPLY = env.get_credential('USAJOBS_WHOMAYAPPLY')
+USAJOBS_AGENCY_CODE = env.get_credential('USAJOBS_AGENCY_CODE')
 USAJOBS_API_KEY = env.get_credential('USAJOBS_API_KEY')
+GOVDELIVERY_TOKEN = env.get_credential('GOVDELIVERY_TOKEN')
 FEC_APP_URL = env.get_credential('FEC_APP_URL')
 FEC_API_URL = env.get_credential('FEC_API_URL', 'http://localhost:5000')
 FEC_API_KEY = env.get_credential('FEC_WEB_API_KEY')
 FEC_API_VERSION = env.get_credential('FEC_API_VERSION', 'v1')
 FEC_API_KEY_PUBLIC = env.get_credential('FEC_WEB_API_KEY_PUBLIC', '')
-FEC_CMS_ROBOTS = env.get_credential('FEC_CMS_ROBOTS')
+
+# Disables crawling for all of our environments except for production
+FEC_CMS_ROBOTS = True
 
 FEC_GITHUB_TOKEN = env.get_credential('FEC_GITHUB_TOKEN')
 

@@ -326,6 +326,12 @@
   padding-left: u(5rem);
 }
 
+.button--candidate {
+  @include u-icon-button($candidate, left);
+  background-size: u(2rem);
+  padding-left: u(4rem);
+}
+
 .button--election {
   @include u-icon-button($person-location, left);
 }
@@ -421,7 +427,7 @@
 }
 
 .button--down {
-  @include u-icon($arrow-down-border, $primary-contrast);
+  @include u-icon($arrow-down-border, $primary);
 }
 
 .button--cancel {

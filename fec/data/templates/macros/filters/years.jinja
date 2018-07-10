@@ -18,7 +18,7 @@
 </fieldset>
 {% endmacro %}
 
-{% macro years(name, label) %}
+{% macro years(name, label, start_year=constants.START_YEAR, end_year=constants.END_YEAR) %}
 <fieldset class="js-filter js-dropdown filter" data-filter="checkbox">
   <legend class="label">{{ label }}</legend>
   <ul class="dropdown__selected"></ul>
@@ -26,7 +26,7 @@
     <button type="button" class="dropdown__button button--alt" data-name="{{ name }}">More</button>
     <div id="{{ name }}-dropdown" class="dropdown__panel" aria-hidden="true">
       <ul class="dropdown__list">
-      {% for year in range(constants.END_YEAR, constants.START_YEAR, -1) %}
+      {% for year in range(end_year, start_year, -1) %}
         <li class="dropdown__item">
           <input id="{{ name }}-checkbox-{{ year }}" name="{{ name }}" type="checkbox" value="{{ year }}" />
           <label class="dropdown__value" for="{{name}}-checkbox-{{ year }}">{{ year }}</label>
@@ -34,6 +34,27 @@
       {% endfor %}
       </ul>
     </div>
+  </div>
+</fieldset>
+{% endmacro %}
+
+
+{% macro cycleRange(name, label) %}
+<fieldset class="filter" id="{{name}}-field">
+  <legend class="label">{{ label }}</legend>
+  <div class="range range--amount">
+    <div class="range__input range__input--min js-filter" data-filter="range">
+      <label for="min_election_{{name}}">From</label>
+      <input id="min_election_{{name}}" type="text" name="min_election_{{name}}" data-range="min" data-prefix="" data-suffix="" tabindex="0">
+    </div>
+    <div class="range__hyphen">-</div>
+    <div class="range__input range__input--max js-filter" data-filter="range">
+      <label for="max_election_{{name}}">To</label>
+      <input id="max_election_{{name}}" type="text" name="max_election_{{name}}" data-range="max" data-prefix="" data-suffix="" tabindex="0">
+    </div>
+    <button class="button--go button--standard" type="button">
+      <span class="u-visually-hidden">Search</span>
+    </button>
   </div>
 </fieldset>
 {% endmacro %}

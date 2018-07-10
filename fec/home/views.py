@@ -183,18 +183,6 @@ def calendar(request):
       'self': page_context,
     })
 
-
-def contact(request):
-    page_context = {
-      'content_section': 'contact',
-      'title': 'Contact'
-    }
-
-    return render(request, 'home/contact.html', {
-      'self': page_context,
-    })
-
-
 def commissioners(request):
     chair_commissioner = CommissionerPage.objects.filter(commissioner_title__contains='Chair') \
       .exclude(commissioner_title__contains='Vice').first()

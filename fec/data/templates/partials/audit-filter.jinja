@@ -1,0 +1,42 @@
+{% extends 'partials/filters.jinja' %}
+
+{% import 'macros/filters/dropdown-json.jinja' as dropdown %}
+{% import 'macros/filters/typeahead-filter.jinja' as typeahead %}
+{% import 'macros/filters/years.jinja' as years %}
+
+{% block filters %}
+<div class="js-accordion accordion--neutral" data-content-prefix="filter" data-open-first="false">
+  <div class="filters__inner">
+ {# category/subcategory filter #}
+    {{
+  	  dropdown.select_json(
+          'primary_category_id',
+          'Findings and issue categories',
+          keys=constants.primary_category_keys,
+          options=constants.audit_primary_categories_options,
+          default=all
+      )
+    }}
+    {{
+  	  dropdown.select_json_indentation(
+        'sub_category_id',
+        'Sub Categories',
+        keys=constants.sub_category_keys,
+        options=constants.audit_sub_categories_options,
+        default=all
+      )
+    }}
+
+{# committee/candidate name/id filter #}
+    {{ typeahead.field('q', 'Committee name or ID', '', dataset='auditCommittees', allow_text=True) }}
+    {{ typeahead.field('qq', 'Authorized candidate name or ID', '', dataset='auditCandidates', allow_text=True) }}
+
+{# election cycle range filter #}
+  {{ years.cycleRange('cycle', 'Election cycles covered by audit' ) }}
+  </div>
+  <button type="button" class="js-accordion-trigger accordion__button">Committee type</button>
+  <div class="accordion__content">
+    {% include 'partials/filters/audit-committee-types.jinja' %}
+  </div>
+</div>
+{% endblock %}

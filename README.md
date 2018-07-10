@@ -2,7 +2,7 @@
 [![CircleCI](https://circleci.com/gh/fecgov/fec-cms.svg?style=svg)](https://circleci.com/gh/fecgov/fec-cms)
 
 **Master**
-[![Dependency Status](https://gemnasium.com/badges/github.com/fecgov/fec-cms.svg)](https://gemnasium.com/github.com/fecgov/fec-cms)
+[![Known Vulnerabilities](https://snyk.io/test/github/fecgov/fec-cms/badge.svg)](https://snyk.io/test/github/fecgov/fec-cms)
 
 ## Campaign finance for everyone
 The Federal Election Commission (FEC) releases information to the public about
@@ -47,7 +47,7 @@ run into problems please
 ### Project prerequisites
 1. Ensure you have the following requirements installed:
 
-    * Python (the latest 3.5 release, which includes `pip` and and a built-in version of `virtualenv` called `venv`).
+    * Python (the latest 3.6 release, which includes `pip` and and a built-in version of `virtualenv` called `venv`).
     * The latest long term support (LTS) or stable release of Node.js (which
       includes `npm`).
     * PostgreSQL (the latest 9.6 release).
@@ -56,11 +56,11 @@ run into problems please
          * Read a [Linux tutorial](https://www.postgresql.org/docs/9.5/static/installation.html)
            (or follow your OS package manager).
 
-2. Set up your Node environment — learn how to do this with our
-   [Javascript Ecosystem Guide](https://pages.18f.gov/dev-environment-standardization/languages/javascript/).
+2. Set up your Node environment — learn how to do this with 18F's
+   [Javascript Ecosystem Guide](https://github.com/18F/dev-environment-standardization/blob/18f-pages/pages/languages/javascript.md).
 
-3. Set up your Python environment — learn how to do this with our
-   [Python Ecosystem Guide](https://pages.18f.gov/dev-environment-standardization/languages/python/).
+3. Set up your Python environment — learn how to do this with 18F's
+   [Python Ecosystem Guide](https://github.com/18F/dev-environment-standardization/blob/18f-pages/pages/languages/python.md).
 
 4. Clone this repository.
 

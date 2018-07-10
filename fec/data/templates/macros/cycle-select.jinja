@@ -65,11 +65,13 @@
     <div class="cycle-select">
       <label for="{{id}}-cycle" class="label cycle-select__label">Two-year period</label>
       <select id="{{id}}-cycle" class="js-cycle" name="cycle" data-cycle-location="path">
-        {% for each in cycles | sort(reverse=True) %}
-          <option
-              value="{{ each }}"
-              {% if cycle and cycle <= each and cycle > (each - 2) %}selected{% endif %}
-            >{{ each|fmt_year_range }}</option>
+        {% for cycle_value in cycles | sort(reverse=True) %}
+          {% if cycle_value <= 2018 %}
+            <option
+              value="{{ cycle_value }}"
+              {% if cycle and cycle <= cycle_value and cycle > (cycle_value - 2) %}selected{% endif %}
+            >{{ cycle_value|fmt_year_range }}</option>
+          {% endif %}
         {% endfor %}
       </select>
     </div>

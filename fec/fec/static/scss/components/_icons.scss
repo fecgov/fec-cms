@@ -39,6 +39,24 @@
   &.i-committee {
     @include u-icon-bg($committee, $base);
   }
+
+  &.i-download {
+    @include u-icon-bg($download, $base);
+  }
+
+  &.i-document {
+    @include u-icon-bg($document, $base);
+  }
+
+  &.i-star {
+    @include u-icon-bg($star, $base);
+  }
+
+  &.i-speaker {
+    @include u-icon-bg($speaker, $base);
+  }
+
+
 }
 
 .icon--small {
@@ -72,6 +90,10 @@
   display: inline-block;
   margin-left: u(1rem);
   vertical-align: text-bottom;
+
+  &.i-arrow-right {
+    vertical-align: baseline;
+  }
 }
 
 .icon--inline--left {
@@ -82,6 +104,10 @@
   &.i-share {
     background-size: 80%;
   }
+}
+
+.icon--absolute--left {
+  position: absolute;
 }
 
 .icon-circle--calendar {
@@ -255,6 +281,18 @@
     display: block;
     width: u(1.5rem);
     height: u(1.5rem);
+  }
+}
+
+.icon-download--inline--left {
+  display: inline-block;
+  vertical-align: middle;
+
+  &::before {
+    @include u-icon-bg($download, $primary);
+    content: '';
+    float: left;
+    padding: u(1.5rem);
   }
 }
 

@@ -159,7 +159,7 @@ def candidate(request, candidate_id):
     # the cycle should never be beyond the one we're in.
     cycles = [cycle for cycle in candidate['cycles'] if cycle <= utils.current_cycle()]
     max_cycle = cycle if cycle <= utils.current_cycle() else utils.current_cycle()
-    show_full_election = election_full if cycle <= utils.current_cycle() else False
+    show_full_election = election_full if cycle <= utils.current_cycle() else False              
 
     # Annotate committees with most recent available cycle
     aggregate_cycles = (
@@ -187,7 +187,7 @@ def candidate(request, candidate_id):
     aggregate = api_caller.load_candidate_totals(
         candidate['candidate_id'],
         cycle=max_cycle,
-        election_full=show_full_election,
+        election_full=election_full,
     )
     if aggregate:
         raising_summary = utils.process_raising_data(aggregate)
@@ -266,7 +266,16 @@ def committee(request, committee_id):
     cycle = request.GET.get('cycle', None)
 
     redirect_to_previous = False if cycle else True
-    committee, candidates, cycle = api_caller.load_with_nested('committee', committee_id, 'candidates', cycle)
+    committee, all_candidates, cycle = api_caller.load_with_nested('committee', committee_id, 'candidates', cycle)
+
+    # When there are multiple candidate records of various offices (H, S, P) linked to a single
+    # committee ID, we want to associate the candidate record with the matching committee type
+    # For each candidate, check if the committee type is equal to the candidate's office. If true
+    # add that candidate to the list of candidates to return
+    candidates = []
+    for candidate in all_candidates:
+        if committee['committee_type'] == candidate['office']:
+            candidates.append(candidate)
 
     parent = 'data'
     cycle = int(cycle)
@@ -275,16 +284,22 @@ def committee(request, committee_id):
 
     # Link to current cycle if candidate has a corresponding page, else link
     # without cycle query parameter
-    # See https://github.com/18F/openFEC/issues/1536
+    # See https://github.com/fecgov/openFEC/issues/1536
+    # For each candidate, set related_cycle to the candidate's time period
+    # relative to the selected cycle.
     for candidate in candidates:
-        election_years = [
-            election_year for election_year in candidate['election_years']
-            if election_year - election_durations[candidate['office']] < cycle <= election_year
-        ]
-        candidate['related_cycle'] = max(election_years) if election_years else None
+        election_years = []
+        for election_year in candidate['election_years']:
+            start_of_election_period = election_year - election_durations[candidate['office']]
+            if start_of_election_period < cycle and cycle <= election_year:
+                election_years.append(election_year)
 
-    # add related candidates a level below
+        candidate['related_cycle'] = cycle if election_years else None
+
+
+    # Load financial totals and reports for a given committee
     financials = api_caller.load_cmte_financials(committee_id, cycle=cycle)
+
 
     report_type = report_types.get(committee['committee_type'], 'pac-party')
     reports = financials['reports']
@@ -304,6 +319,7 @@ def committee(request, committee_id):
         'committee_type': committee['committee_type'],
         'designation_full': committee['designation_full'],
         'street_1': committee['street_1'],
+        'street_2': committee['street_2'],
         'city': committee['city'],
         'state': committee['state'],
         'zip': committee['zip'],
@@ -318,7 +334,8 @@ def committee(request, committee_id):
         'totals': totals,
         'min_receipt_date': utils.three_days_ago(),
         'context_vars': context_vars,
-        'party_full': committee['party_full']
+        'party_full': committee['party_full'],
+        'candidates': candidates,
     }
 
 
@@ -384,7 +401,7 @@ def elections(request, office, cycle, state=None, district=None):
 
     if office.lower() not in ['president', 'senate', 'house']:
         raise Http404()
-    if state and state.upper() not in constants.states:
+    if (state is not None) and (state and state.upper() not in constants.states):
         raise Http404()
 
     return render(request, 'elections.jinja', {
@@ -399,9 +416,9 @@ def elections(request, office, cycle, state=None, district=None):
         'title': utils.election_title(cycle, office, state, district),
     })
 
-
 def raising(request):
     top_category = request.GET.get('top_category', 'P')
+    cycles = utils.get_cycles(utils.current_cycle())
     cycle = request.GET.get('cycle', constants.DEFAULT_TIME_PERIOD)
 
     if top_category in ['pac']:
@@ -424,6 +441,7 @@ def raising(request):
         'top_category': top_category,
         'coverage_start_date': datetime.date(cycle - 1, 1, 1),
         'coverage_end_date': coverage_end_date,
+        'cycles': cycles,
         'cycle': cycle,
         'top_raisers': top_raisers['results'],
         'page_info': utils.page_info(top_raisers['pagination'])
@@ -432,6 +450,7 @@ def raising(request):
 
 def spending(request):
     top_category = request.GET.get('top_category', 'P')
+    cycles = utils.get_cycles(utils.current_cycle())
     cycle = request.GET.get('cycle', constants.DEFAULT_TIME_PERIOD)
 
     if top_category in ['pac']:
@@ -452,6 +471,7 @@ def spending(request):
         'top_category': top_category,
         'coverage_start_date': datetime.date(cycle - 1, 1, 1),
         'coverage_end_date': coverage_end_date,
+        'cycles': cycles,
         'cycle': cycle,
         'top_spenders': top_spenders['results'],
         'page_info': utils.page_info(top_spenders['pagination'])
