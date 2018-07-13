@@ -95,9 +95,9 @@
       {% if committee_groups['A']|length > 0 %}
       <div class='grid'>
         <div class="grid__item u-no-margin">
-          <ul class="list--bulleted">
+          <ul class="list--bulleted" style="margin-top: 1rem">
           {% for committee in committee_groups['A'] | reverse %}
-            <li>
+            <li class="u-no-margin-bottom">
               <a class="t-sans" href="/data/committee/{{ committee.committee_id }}/?cycle={{ committee.related_cycle }}">{{ committee.name }}</a>
             </li>
           {% endfor %}
