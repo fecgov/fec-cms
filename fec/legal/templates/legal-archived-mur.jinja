@@ -82,10 +82,24 @@
     </section>
     <section id="documents" class="content__section">
       <h2 class="t-ruled--bold t-ruled--bottom">Documents</h2>
-      <div class="content__section">
-        <a class="legal-mur__document-button button button--cta button--document button--lg" href="{{ mur.url }}" target="_blank">Case documents</a>
-        (<a class="t-sans" href="{{ mur.url }}" target="_blank">{{ mur.pdf_size | filesize}}</a>)
-      </div>
+      {% if 'documents' not in mur %}
+      <!-- Most archived MURs don't have nested documents, and have a MUR-level URL and PDF details -->
+        <div class="content__section">
+          <a class="legal-mur__document-button button button--cta button--document button--lg" href="{{ mur.url }}" target="_blank">Case documents</a>
+          (<a class="t-sans" href="{{ mur.url }}" target="_blank">{{ mur.pdf_size | filesize}}</a>)
+        </div>
+      {% endif %}
+      {% if 'documents' in mur%}
+      <!-- Some archived MURs have nested documents and no MUR-level URL. See issue #2157 -->
+        <table class="data-table data-table--text data-table--heading-borders">
+        <tbody>
+          {% for document in mur.documents %}
+            <td><a href="{{ document.url }}">Case documents, part {{ document.document_id }}</a> ({{ document.size | filesize }})</td>
+            </tr>
+          {% endfor %}
+       {% endif %}
+      </tbody>
+    </table>
     </section>
     <section id="participants" class="content__section">
       <h2 class="t-ruled--bold t-ruled--bottom u-no-margin">Participants</h2>
