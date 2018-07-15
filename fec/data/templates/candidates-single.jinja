@@ -58,7 +58,6 @@
             href="#section-2">About this candidate</a>
             <ul>
               <li><a href="#information">Candidate information</a></li>
-              <li><a href="#other">Other documents filed</a></li>
               <li><a href="#committees">Committees</a></li>
             </ul>
         </li>
@@ -104,6 +103,19 @@
               <li><a href="#electioneering-communication">Electioneering communication</a></li>
             </ul>
         </li>
+        <li class="side-nav__item" role="presentation">
+          <a
+            class="side-nav__link"
+            role="tab"
+            data-name="filings"
+            tabindex="0"
+            aria-controls="panel6"
+            href="#section-6">Candidate filings</a>
+            <ul>
+              <li><a href="#statements-of-candidacy">Statements of candidacy</a></li>
+              <li><a href="#other">Other documents filed</a></li>
+            </ul>
+        </li>
         <li class="side-nav__item">
           <a class="button button--cta u-margin--top t-left-aligned button--two-candidates u-full-width" href="{{ get_election_url(candidate, cycle, district) }}">Compare to<br>opposing candidates</a>
         </li>
@@ -125,6 +137,7 @@
         {% include 'partials/candidate/raising.jinja' %}
         {% include 'partials/candidate/spending.jinja' %}
       {% endif %}
+      {% include 'partials/candidate/filings-tab.jinja' %}
     </div>
   </div>
 
