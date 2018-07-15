@@ -13,6 +13,7 @@ var columnHelpers = require('../modules/column-helpers');
 var columns = require('../modules/columns');
 var events = require('../modules/events');
 var OtherSpendingTotals = require('../modules/other-spending-totals');
+var filings = require('../modules/filings');
 
 var aggregateCallbacks = {
   afterRender: tables.barsAfterRender.bind(undefined, undefined),
@@ -185,6 +186,66 @@ var individualContributionsColumns = [
   }),
 ];
 
+var statementsOfCandidacyColumns = [
+  {
+    data: 'document_description',
+    className: 'all column--doc-download',
+    orderable: false,
+    render: function(data, type, row) {
+      var doc_description = row.document_description ? row.document_description : row.form_type;
+      var amendment_version = helpers.amendmentVersionDescription(row);
+      var pdf_url = row.pdf_url ? row.pdf_url : null;
+      var csv_url = row.csv_url ? row.csv_url : null;
+      var fec_url = row.fec_url ? row.fec_url : null;
+      var html_url = row.html_url ? row.html_url : null;
+
+      // If it's a Form 3L we should append that to the doc title
+      if (row.form_type == 'F3L') {
+        doc_description = doc_description + ' - Lobbyist Bundling Report';
+      }
+
+      return {
+        doc_description: doc_description,
+        amendment_version: amendment_version,
+        fec_url: fec_url,
+        pdf_url: pdf_url,
+        csv_url: csv_url,
+        html_url: html_url
+      };
+    }
+  },
+  {
+    data: 'most_recent',
+    className: 'all',
+    orderable: false,
+    render: function(data, type, row) {
+      var version = helpers.amendmentVersion(data);
+      if (version === 'Version unknown') {
+        return '<i class="icon-blank"></i>Version unknown<br>' +
+          '<i class="icon-blank"></i>' + row.fec_file_id;
+      } else {
+        if (row.fec_file_id !== null) {
+          version = version + '<br><i class="icon-blank"></i>' + row.fec_file_id;
+        }
+        return version;
+      }
+    }
+  },
+  columns.dateColumn({
+    data: 'receipt_date',
+    className: 'min-tablet'
+  }),
+  {
+  data: 'beginning_image_number',
+  orderable: false,
+  className: 'min-tablet hide-panel column--xs column--number',
+  render: function(data, type, row) {
+        return row.beginning_image_number;
+      }
+  }
+
+]
+
 // Begin datatable functions in order of tab appearance
 // - Financial summary:
 //   * Candidate filing years
@@ -198,6 +259,8 @@ var individualContributionsColumns = [
 //   * Disbursements by transaction
 // - Individual contributions:
 //   * Contributor state, size, all transactions
+// - Statements of Candidacy:
+//   * tbd
 
 function initOtherDocumentsTable() {
   var $table = $('table[data-type="other-documents"]');
@@ -210,8 +273,8 @@ function initOtherDocumentsTable() {
       form_type: ['F99','RFAI'],
       /* Performing an include would only show RFAI form types. For this reason, excludes need to be
          used for request_type
-      
-      Exclude all request types except for: 
+
+      Exclude all request types except for:
       // RQ-5: RFAI referencing Statement of Candidacy */
       request_type: ['-1','-2','-3','-4','-6','-7','-8','-9'],
       sort_hide_null: ['false']
@@ -459,10 +522,36 @@ function initContributionsTables() {
       reason: reason,
     }
   });
-
   // Set up state map
-  mapsEvent.init($map, $contributorState);
+    mapsEvent.init($map, $contributorState);
 }
+function initStatementsOfCandidacyTable() {
+  var $table = $('table[data-type="statements-of-candidacy"]');
+  var candidateId = $table.data('candidate');
+  var path = ['filings'];
+  tables.DataTable.defer($table, {
+    path: path,
+    query: {
+      candidate_id: candidateId,
+      form_type: ['F2'],
+      /* Performing an include would only show RFAI form types. For this reason, excludes need to be
+         used for request_type
+
+      Exclude all request types except for:
+      // RQ-5: RFAI referencing Statement of Candidacy */
+      request_type: ['-1','-2','-3','-4','-6','-7','-8','-9'],
+      sort_hide_null: ['false']
+    },
+    columns: statementsOfCandidacyColumns,
+    order: [[2, 'desc']],
+    dom: tables.simpleDOM,
+    pagingType: 'simple',
+    lengthMenu: [10, 30, 50],
+    hideEmpty: false
+  });
+}
+
+
 
 $(document).ready(function() {
   var query = URI.parseQuery(window.location.search);
@@ -471,6 +560,7 @@ $(document).ready(function() {
   initSpendingTables();
   initDisbursementsTable();
   initContributionsTables();
+  initStatementsOfCandidacyTable();
 
   // If on the other spending tab, init the totals
   // Otherwise add an event listener to build them on showing the tab
