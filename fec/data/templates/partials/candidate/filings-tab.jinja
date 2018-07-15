@@ -1,0 +1,99 @@
+{% import 'macros/cycle-select.jinja' as select %}
+
+<section id="section-6" role="tabpanel" aria-hidden="true" aria-labelledby="section-6-heading">
+
+  <h2 id="section-6-heading">Candidate filings</h2>
+
+
+  <div class="slab slab--inline slab--neutral u-padding--left u-padding--right">
+
+    {{ select.election_cycle_select(cycles, max_cycle, id="cycle-5") }}
+
+    {% if committee_groups['P'] or committee_groups['A']%}
+      <span class="t-sans t-bold">Data is included from these committees:</span>
+
+      <ul class="list--bulleted">
+        {% for committee in committee_groups['P'] | reverse %}
+        {% if committee.cycle == max_cycle %}
+        <li>
+          <a class="t-sans" href="/data/committee/{{ committee.committee_id }}/?cycle={{ committee.related_cycle }}">{{ committee.name }}</a>
+        </li>
+        {% endif %}
+        {% endfor %}
+        {% for committee in committee_groups['A'] | reverse %}
+        {% if committee.cycle == max_cycle %}
+        <li>
+          <a class="t-sans" href="/data/committee/{{ committee.committee_id }}/?cycle={{ committee.related_cycle }}">{{ committee.name }}</a>
+        </li>
+        {% endif %}
+        {% endfor %}
+      </ul>
+    {% endif %}
+
+    <div id="individual-contribution-transactions" class="entity__figure row">
+      <div class="content__section">
+        <div class="heading--section heading--with-action">
+          <h3 class="heading__left">Statements of candidacy</h3>
+          <a class="heading__right button--alt button--browse"
+              href="/data/receipts/individual-contributions/?two_year_transaction_period={{ max_cycle }}&{% for id in committee_ids %}&committee_id={{ id }}{% endfor %}">Filter this data</a>
+          </div>
+
+
+        <div id="all-transactions" class="panel-toggle-element">
+          <div class="results-info results-info--simple">
+            <div class="u-float-left tag__category">
+              <div class="tag__item">Coverage dates: {{two_year_totals.coverage_start_date|date}} to {{two_year_totals.coverage_end_date|date}}</div>
+            </div>
+            <div class="u-float-right">
+              <div class="message message--info message--mini t-left-aligned data-container__message" data-export-message-for="individual-contributions" aria-hidden="true">
+              </div>
+              <button type="button" class="js-export button button--cta button--export" data-export-for="individual-contributions">Export</button>
+            </div>
+          </div>
+
+          <table
+              class="data-table data-table--heading-borders"
+              data-type="statements-of-candidacy"
+              data-candidate-id="{{ candidate_id }}"
+              data-committee-id="{% for c in committee_groups['P'] | reverse %}{{ c.committee_id }},{% endfor %}{% for c in committee_groups['A'] | reverse %}{{ c.committee_id }},{% endfor %}"
+              data-name="{{ name }}"
+              data-cycle="{{ max_cycle }}"
+              data-duration="2"
+            >
+            <thead>
+              <tr>
+                <th scope="col">Document</th>
+                <th scope="col">Version</th>
+                <th scope="col">Receipt date</th>
+                <th scope="col">Image number</th>
+              </tr>
+            </thead>
+          </table>
+        </div>
+      </div>
+    </div>
+
+
+
+    <div class="entity__figure entity__figure row" id="other">
+      <h3 class="heading--section u-no-margin">Other documents filed</h3>
+
+      <table
+          class="data-table data-table--heading-borders"
+          data-type="other-documents"
+          data-candidate="{{ candidate_id }}"
+          data-name="{{ name }}"
+          data-cycle="{{ cycle }}"
+        >
+        <thead>
+          <tr>
+            <th scope="col">Document</th>
+            <th scope="col">Version</th>
+            <th scope="col">Date filed</th>
+          </tr>
+        </thead>
+      </table>
+    </div>
+  </div>
+
+</section>
