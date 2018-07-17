@@ -41,19 +41,28 @@
     {% elif self.meeting_type == 'E' %}
       <p>The Commission meets regularly in executive sessions to discuss pending enforcement actions, litigation and other matters that, by law, must be kept confidential.</p>
     {% endif %}
-
-    {% if self.live_video_url %}
+    {% comment %}
+     Show streaming info if it is start_date or end_date of meeting AND between 7:30am and 5:00pm
+    {% endcomment %}
+    {% now 'F j, Y' as today %}
+    {% now 'H:i' as current_time %}
+    {% if self.date|date:'F j, Y' == today or self.end_date|date:'F j, Y' == today %}
+    {% if current_time > '07:30' and current_time < '17:00' and self.show_streaming_info %}
     <div class="row">
       <div class="slab slab--neutral u-padding--left usa-width-five-sixths">
         <div class="usa-width-one-fourth u-padding--left">
-          <a class="u-no-border" href="{{ self.live_video_url }}"><img src={% static 'img/thumbnail--video.png' %} alt="Video"></a>
+          {% comment %}
+           If there is live video or captions URLs provided in the template, use those. otherwise use default settings URLs
+          {% endcomment %}
+          <a class="u-no-border" href="{% if self.live_video_url %}{{ self.live_video_url }}{% else %}{{ settings.LIVE_VIDEO_URL }}{% endif %}"><img src={% static 'img/thumbnail--video.png' %} alt="video play button icon"></a>
           </div>
         <div class="usa-width-two-thirds">
-          <h3 class="u-no-margin"><a href="{{ self.live_video_url }}">Watch the meeting live</a></h3>
-          <p class="u-no-margin">This meeting will be streamed{% if self.live_video_captions %} with <a href="{{ self.live_video_captions }}">live captions</a>{% endif %}. The recorded video, audio and captions will be posted on this page after the meeting ends.</p>
+          <h3 class="u-no-margin"><a href="{% if self.live_video_url %}{{ self.live_video_url }}{% else %}{{ settings.LIVE_VIDEO_URL }}{% endif %}">Watch the meeting live</a></h3>
+          <p class="u-no-margin">This meeting will be streamed with <a href="{% if self.live_video_captions %}{{ self.live_video_captions }}{% else %}{{ settings.LIVE_CAPTIONS_URL }}{% endif %}">live captions</a>. The recorded video, audio and captions will be posted on this page after the meeting ends.</p>
         </div>
       </div>
     </div>
+    {% endif %}
     {% endif %}
 
     <div class="u-padding--top">

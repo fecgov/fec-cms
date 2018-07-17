@@ -40,6 +40,9 @@ DIGITALGOV_DRAWER_HANDLE = 'main'
 FEC_TRANSITION_URL = env.get_credential('FEC_TRANSITION_URL', 'https://transition.fec.gov')
 FEC_CLASSIC_URL = env.get_credential('FEC_CLASSIC_URL', 'http://classic.fec.gov')
 
+LIVE_VIDEO_URL = "https://fec.adobeconnect.com/openmeeting/"
+LIVE_CAPTIONS_URL = "http://www.streamtext.net/player?event=BIS-FEC"
+
 FEATURES = {
     'record': bool(env.get_credential('FEC_FEATURE_RECORD', '')),
     'about': bool(env.get_credential('FEC_FEATURE_ABOUT', '')),
