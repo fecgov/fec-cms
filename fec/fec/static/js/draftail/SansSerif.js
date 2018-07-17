@@ -1,16 +1,8 @@
-// Creates a slug from a string
-
-function slugify(text) {
-  return text.toString().toLowerCase()
-    .replace(/\s+/g, '-')
-    .replace(/[^\w\-]+/g, '')
-    .replace(/\-\-+/g, '-')
-    .replace(/^-+/, '')
-    .replace(/-+$/, '');
-}
+import React from 'react';
+import { EditorState, Modifier } from 'draft-js';
 
 // Creates the entities as soon as it is rendered.
-class AnchorSource extends React.Component {
+class SansserifSource extends React.Component {
   componentDidMount() {
     const { editorState, entityType, onComplete } = this.props;
 
@@ -27,7 +19,7 @@ class AnchorSource extends React.Component {
 
     // Uses the Draft.js API to create a new entity with the right data.
     const contentWithEntity = content.createEntity(entityType.type, 'IMMUTABLE', {
-        anchor: slugify(selectedText),
+        term: selectedText,
     });
     const entityKey = contentWithEntity.getLastCreatedEntityKey();
 
@@ -45,25 +37,19 @@ class AnchorSource extends React.Component {
   }
 }
 
+
 // This adds additional 'term' class to the editor
 // to add custom editor styles inside customize-editor.css
-const Anchor = (props) => {
+const Sansserif = (props) => {
   const { entityKey, contentState } = props;
 
   return React.createElement('span', {
-    style: {
-      fontSize: '2.4rem',
-      margin: '0 0 1em 0',
-      fontFamily: 'gandhi,serif',
-      fontSize: '2rem',
-      fontWeight: '700',
-      lineHeight: '1.2'
-    }
+    class: 't-sans'
   }, props.children);
 };
 
-window.draftail.registerPlugin({
-  type: 'ANCHOR',
-  source: AnchorSource,
-  decorator: Anchor,
-});
+module.exports = {
+  type: 'SANSSERIF',
+  source: SansserifSource,
+  decorator: Sansserif,
+};
