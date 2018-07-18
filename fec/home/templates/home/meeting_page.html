@@ -30,27 +30,38 @@
         {% spaceless %}{# for inline blocks #}
         <h1 class="heading__left">{% formatted_title self %}</h1>
         <div class="heading__right">
-          <span class="t-sans">{{ self.date|date:'F j, Y' }}</span><br>
+          <span class="t-sans">{{ self.date|date:'F j, Y' }}{% if self.end_date %} - {{self.end_date|date:'F j, Y' }}{% endif %}</span><br>
         </div>
         {% endspaceless %}
       </div>
     </header>
+    {% if self.additional_information %}
+       <p class="t-bold">{{ self.additional_information }}</p>
+      {% endif %}
     {% if self.meeting_type == 'O' %}
       <p>The Commission considers new regulations, advisory opinions and other public matters at open meetings, which are typically held at FEC headquarters on Thursdays at 10:00am.</p>
       <p>Members of the public can attend any open meeting or hearing in person. Open meetings are also streamed live online. To attend in person, please bring a photo ID and be prepared to go through a security check. After security, attendees are escorted to the Commission's hearing room.</p>
     {% elif self.meeting_type == 'E' %}
       <p>The Commission meets regularly in executive sessions to discuss pending enforcement actions, litigation and other matters that, by law, must be kept confidential.</p>
+    {% elif self.meeting_type == 'H' %}
+       <p>The Commission considers new regulations, advisory opinions and other public matters at public hearings. Members of the public can attend public hearing in person. Public hearings are also streamed live online. To attend in person, please bring a photo ID and be prepared to go through a security check. After security, attendees are escorted to the Commission's hearing room.</p>
+       {% if self.extra_hearing_text %}
+       <p>{{ self.extra_hearing_text }}</p>
+       {% endif %}
+
+
     {% endif %}
 
-    {% if self.live_video_url %}
+    {% if self.live_video_embed %}
     <div class="row">
-      <div class="slab slab--neutral u-padding--left usa-width-five-sixths">
-        <div class="usa-width-one-fourth u-padding--left">
-          <a class="u-no-border" href="{{ self.live_video_url }}"><img src={% static 'img/thumbnail--video.png' %} alt="Video"></a>
+      <div class="slab slab--neutral slab--inline">
+        <h2 class="u-padding--left">Watch the meeting live</h2>
+        <p class="u-padding--left">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+        <div class="u-margin--left u-margin--right">
+          <div class="video__wrapper">
+            <iframe width="100%" height="100%" src="https://www.youtube.com/embed/{{ self.live_video_embed }}?modestbranding=0&rel=0" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen>
+            </iframe>
           </div>
-        <div class="usa-width-two-thirds">
-          <h3 class="u-no-margin"><a href="{{ self.live_video_url }}">Watch the meeting live</a></h3>
-          <p class="u-no-margin">This meeting will be streamed{% if self.live_video_captions %} with <a href="{{ self.live_video_captions }}">live captions</a>{% endif %}. The recorded video, audio and captions will be posted on this page after the meeting ends.</p>
         </div>
       </div>
     </div>
@@ -60,13 +71,17 @@
       {% if self.agenda %}
       <div class="agenda__heading">
         <h2 class="u-padding--top u-no-margin">Agenda</h2>
-        <p>{{ self.date|date:'l, F j, Y' }} &nbsp;|&nbsp; {% if self.time %}{{ self.time|date:'h:i A' }}{% else %}10:00 AM{% endif %}</p>
+        <p>{{ self.date|date:'l, F j, Y' }} {% if self.end_date %}through {{self.end_date|date:'l, F j, Y' }}{% endif %}
+        &nbsp;|&nbsp; {% if self.time %}{{ self.time|date:'h:i A' }}{% else %}10:00 AM{% endif %}</p>
       </div>
       <ol class="agenda">
       {% for block in self.agenda %}
         <li>
             <h3 class="u-no-margin">{{ block.value.item_title }}</h3>
             {% if block.value.item_audio %}<p class="t-sans u-no-margin"><span class="icon icon--inline--left i-speaker"></span><a href="{{ block.value.item_audio.file.url }}">Listen to discussion of this item</a></p>{% endif %}
+
+            {% if block.value.item_video %}<p class="t-sans u-no-margin"><span class="icon icon--inline--left i-play"></span><a href="{{ block.value.item_video }}">Watch the discussion of this item</a></p>{% endif %}
+
             <div class="agenda__text">
               {{ block.value.item_text }}
             </div>
