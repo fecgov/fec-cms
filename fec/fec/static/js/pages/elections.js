@@ -134,7 +134,7 @@ var electioneeringColumns = [
   },
 ];
 
-var electionColumns = [
+var candidateFinancialTotalsColumns = [
   {
     data: 'candidate_name',
     className: 'all column--large',
@@ -532,6 +532,18 @@ var tableOpts = {
     title: 'electioneering communications',
     order: [[2, 'desc']]
   },
+  'candidate-financial-totals': {
+    path: ['elections'],
+    columns: candidateFinancialTotalsColumns,
+    title: 'candidate financial total',
+    order: [[2, 'desc']]
+  },
+  'candidate-information': {
+    path: ['elections'],
+    columns: candidateInformationColumns,
+    title: 'candidate information',
+    order: [[3, 'desc']]
+  },
 };
 
 function initSpendingTables() {
@@ -619,8 +631,6 @@ function buildTableQuery(contextObj, pageLength) {
 }
 
 $(document).ready(function() {
-  var $table = $('#results');
-  var $candidateInfo = $('#candidate-information-results');
   var query = buildTableQuery(context.election);
 
   var url = helpers.buildUrl(
@@ -629,18 +639,6 @@ $(document).ready(function() {
   );
 
   $.getJSON(url).done(function(response) {
-    $table.DataTable(_.extend({}, defaultOpts, {
-      columns: electionColumns,
-      data: response.results,
-      order: [[2, 'desc']]
-    }));
-
-    $candidateInfo.DataTable(_.extend({}, defaultOpts, {
-      columns: candidateInformationColumns,
-      data: response.results,
-      order: [[3, 'desc']]
-    }));
-
     drawComparison(response.results);
     initStateMaps(response.results);
     context.candidates = _.chain(response.results)
