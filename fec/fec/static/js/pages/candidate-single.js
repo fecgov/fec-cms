@@ -15,6 +15,10 @@ var events = require('../modules/events');
 var OtherSpendingTotals = require('../modules/other-spending-totals');
 var filings = require('../modules/filings');
 
+var dropdown = require('../modules/dropdowns');
+var reportType = require('../templates/reports/reportType.hbs');
+
+
 var aggregateCallbacks = {
   afterRender: tables.barsAfterRender.bind(undefined, undefined),
 };
@@ -187,6 +191,11 @@ var individualContributionsColumns = [
 ];
 
 var statementsOfCandidacyColumns = [
+  columnHelpers.urlColumn('pdf_url', {
+    data: 'document_description',
+    className: 'all column--medium',
+    orderable: false
+  }),
   {
     data: 'document_description',
     className: 'all column--doc-download',
