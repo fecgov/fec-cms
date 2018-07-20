@@ -1,6 +1,7 @@
 /* global process */
 
 var istanbul = require('browserify-istanbul');
+var path = require('path');
 
 module.exports = function(config) {
   var browserify = {
@@ -8,7 +9,7 @@ module.exports = function(config) {
     transform: ['hbsfy']
   };
 
-  var reporters = ['progress'];
+  var reporters = ['progress', 'coverage-istanbul'];
 
   if (process.argv.indexOf('--debug') === -1) {
     browserify.transform.push(
@@ -35,7 +36,8 @@ module.exports = function(config) {
     ],
 
     preprocessors: {
-      'fec/fec/tests/js/**/*.js': ['browserify'],
+      'fec/fec/tests/js/*.js': ['browserify'],
+      'fec/fec/tests/js/draftail/**/*.js': ['webpack']
     },
 
     browserify: browserify,
@@ -49,7 +51,34 @@ module.exports = function(config) {
       ]
     },
 
+    webpack: {
+      devtool: 'inline-source-map',
+      module: {
+        loaders: [
+          {
+            test: /\.js$/,
+            exclude: /node_modules/,
+            loader: 'babel-loader',
+            options: {
+              presets: ['latest', 'react']
+            }
+          },
+          {
+            test: /\.js$/,
+            exclude: /node_modules/,
+            loader: 'istanbul-instrumenter-loader',
+            query: {
+                esModules: true
+            }
+          }
+        ]
+      }
+    },
     reporters: reporters,
+    coverageIstanbulReporter: {
+      reports: [ 'text-summary' ],
+      fixWebpackSourcePaths: true
+    },
     browsers: ['Chrome'],
     port: 9876
   });

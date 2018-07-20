@@ -38,26 +38,22 @@ class AnchorSource extends React.Component {
   }
 }
 
-module.exports.AnchorSource = AnchorSource;
-
 // This adds additional 'term' class to the editor
 // to add custom editor styles inside customize-editor.css
-const Anchor = (props) => {
-  const { entityKey, contentState } = props;
-
-  return React.createElement('span', {
-    style: {
+const Anchor = ({children}) => (
+  <span
+    style={{
       fontSize: '2.4rem',
       margin: '0 0 1em 0',
       fontFamily: 'gandhi,serif',
       fontSize: '2rem',
       fontWeight: '700',
       lineHeight: '1.2'
-    }
-  }, props.children);
-};
-
-module.exports.Anchor = Anchor;
+    }}
+  >
+    {children}
+  </span>
+);
 
 module.exports = {
   type: 'ANCHOR',

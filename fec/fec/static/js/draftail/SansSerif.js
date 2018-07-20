@@ -40,13 +40,9 @@ class SansserifSource extends React.Component {
 
 // This adds additional 'term' class to the editor
 // to add custom editor styles inside customize-editor.css
-const Sansserif = (props) => {
-  const { entityKey, contentState } = props;
-
-  return React.createElement('span', {
-    class: 't-sans'
-  }, props.children);
-};
+const Sansserif = ({children}) => (
+  <span className='t-sans'>{children}</span>
+);
 
 module.exports = {
   type: 'SANSSERIF',
