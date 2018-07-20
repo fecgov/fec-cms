@@ -191,11 +191,11 @@ var individualContributionsColumns = [
 ];
 
 var statementsOfCandidacyColumns = [
-  columnHelpers.urlColumn('pdf_url', {
-    data: 'document_description',
-    className: 'all column--medium',
-    orderable: false
-  }),
+  //   columnHelpers.urlColumn('pdf_url', {
+  //   data: 'document_description',
+  //   className: 'all column--medium',
+  //   orderable: false
+  // }),
   {
     data: 'document_description',
     className: 'all column--doc-download',
@@ -207,20 +207,21 @@ var statementsOfCandidacyColumns = [
       var csv_url = row.csv_url ? row.csv_url : null;
       var fec_url = row.fec_url ? row.fec_url : null;
       var html_url = row.html_url ? row.html_url : null;
+      console.log(pdf_url)
 
       // If it's a Form 3L we should append that to the doc title
       if (row.form_type == 'F3L') {
         doc_description = doc_description + ' - Lobbyist Bundling Report';
       }
 
-      return {
+      return reportType({
         doc_description: doc_description,
         amendment_version: amendment_version,
         fec_url: fec_url,
         pdf_url: pdf_url,
         csv_url: csv_url,
         html_url: html_url
-      };
+      });
     }
   },
   {
@@ -536,13 +537,17 @@ function initContributionsTables() {
 }
 function initStatementsOfCandidacyTable() {
   var $table = $('table[data-type="statements-of-candidacy"]');
-  var candidateId = $table.data('candidate');
+  var candidateId = $table.data('candidate-id');
   var path = ['filings'];
+  // var opts = {
+  //   cycle: $table.data('cycle')
+  // };
   tables.DataTable.defer($table, {
     path: path,
     query: {
       candidate_id: candidateId,
       form_type: ['F2'],
+      // two_year_transaction_period: opts.cycle,
       /* Performing an include would only show RFAI form types. For this reason, excludes need to be
          used for request_type
 
@@ -556,7 +561,15 @@ function initStatementsOfCandidacyTable() {
     dom: tables.simpleDOM,
     pagingType: 'simple',
     lengthMenu: [10, 30, 50],
-    hideEmpty: false
+    hideEmpty: false,
+    callbacks: {
+      afterRender: filings.renderModal
+    },
+    drawCallback: function () {
+      this.dropdowns = $table.find('.dropdown').map(function(idx, elm) {
+        return new dropdown.Dropdown($(elm), {checkboxes: false});
+      });
+    }
   });
 }
 
