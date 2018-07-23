@@ -77,14 +77,13 @@
       <ol class="agenda">
       {% for block in self.agenda %}
         <li>
-            <h3 class="u-no-margin">{{ block.value.item_title }}</h3>
-            {% if block.value.item_audio %}<p class="t-sans u-no-margin"><span class="icon icon--inline--left i-speaker"></span><a href="{{ block.value.item_audio.file.url }}">Listen to discussion of this item</a></p>{% endif %}
-
-            {% if block.value.item_video %}<p class="t-sans u-no-margin"><span class="icon icon--inline--left i-play"></span><a href="{{ block.value.item_video }}">Watch the discussion of this item</a></p>{% endif %}
-
-            <div class="agenda__text">
-              {{ block.value.item_text }}
-            </div>
+          <h3 class="u-no-margin">{{ block.value.item_title }}</h3>
+          {% if block.value.item_audio %}<p class="t-sans u-no-margin t-small"><span class="icon icon--inline--left i-speaker"></span><a href="{{ block.value.item_audio.file.url }}">Listen to discussion of this item</a>{% endif %}
+          {% if block.value.item_audio and block.value.item_video %} &nbsp;|&nbsp; {% endif %}
+          {% if block.value.item_video %}<span class="icon icon--inline--left i-play"></span><a href="{{ block.value.item_video }}">Watch the discussion of this item</a></p>{% endif %}
+          <div class="agenda__text">
+            {{ block.value.item_text }}
+          </div>
          </li>
       {% endfor %}
       </ol>
