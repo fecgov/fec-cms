@@ -36,8 +36,8 @@
       </div>
     </header>
     {% if self.additional_information %}
-       <p class="t-bold">{{ self.additional_information }}</p>
-      {% endif %}
+       <p class="t-bold">{% autoescape off %}{{ self.additional_information}}{% endautoescape %}</p>
+    {% endif %}
     {% if self.meeting_type == 'O' %}
       <p>The Commission considers new regulations, advisory opinions and other public matters at open meetings, which are typically held at FEC headquarters on Thursdays at 10:00am.</p>
       <p>Members of the public can attend any open meeting or hearing in person. Open meetings are also streamed live online. To attend in person, please bring a photo ID and be prepared to go through a security check. After security, attendees are escorted to the Commission's hearing room.</p>
@@ -45,18 +45,13 @@
       <p>The Commission meets regularly in executive sessions to discuss pending enforcement actions, litigation and other matters that, by law, must be kept confidential.</p>
     {% elif self.meeting_type == 'H' %}
        <p>The Commission considers new regulations, advisory opinions and other public matters at public hearings. Members of the public can attend public hearing in person. Public hearings are also streamed live online. To attend in person, please bring a photo ID and be prepared to go through a security check. After security, attendees are escorted to the Commission's hearing room.</p>
-       {% if self.extra_hearing_text %}
-       <p>{{ self.extra_hearing_text }}</p>
-       {% endif %}
-
-
     {% endif %}
 
     {% if self.live_video_embed %}
     <div class="row">
       <div class="slab slab--neutral slab--inline">
         <h2 class="u-padding--left">Watch the meeting live</h2>
-        <p class="u-padding--left">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+        <p class="u-padding--left"> The webcast will include closed captions. The recorded video, audio and captions will be posted on this page after the meeting ends.</p>
         <div class="u-margin--left u-margin--right">
           <div class="video__wrapper">
             <iframe width="100%" height="100%" src="https://www.youtube.com/embed/{{ self.live_video_embed }}?modestbranding=0&rel=0" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen>

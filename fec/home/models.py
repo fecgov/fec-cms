@@ -972,24 +972,23 @@ class MeetingPage(Page):
 
     date = models.DateField(default=datetime.date.today)
     end_date = models.DateField(null=True, blank=True)
-    time = models.TimeField(null=True, blank=True, help_text='If no time is entered the time will be set to 10 a.m.')
+    time = models.TimeField(null=True, blank=True, help_text='If no time is entered,\
+     the time will be set to 10 a.m.')
     meeting_type = models.CharField(
         max_length=2,
         choices=MEETING_TYPE_CHOICES,
         default=OPEN
     )
-    additional_information = models.TextField(blank=True)
+    additional_information = models.TextField(blank=True, help_text='This field\
+        accepts html')
     draft_minutes_links = models.TextField(
         blank=True, help_text='URLs separated by a newline')
     approved_minutes_date = models.DateField(null=True, blank=True)
     approved_minutes_link = models.URLField(blank=True)
     sunshine_act_links = models.TextField(
         blank=True, help_text='URLs separated by a newline')
-    #live_video_url = models.URLField(blank=True)
-    #live_video_captions = models.URLField(blank=True)
     live_video_embed = models.CharField(blank=True, max_length=255,\
-        help_text="Video ID of the \
-        live-stream of the meeting")
+        help_text='Youtube video ID of the live-stream of the meeting')
 
 
     imported_html = StreamField(
@@ -1015,8 +1014,8 @@ class MeetingPage(Page):
             ('item_title', blocks.TextBlock()),
             ('item_text', blocks.RichTextBlock(required=False)),
             ('item_audio', DocumentChooserBlock(required=False)),
-            ('item_video', blocks.URLBlock(required=False, help_text="Add a youtube URL to a specific place \
-                in a video for this agenda item")),
+            ('item_video', blocks.URLBlock(required=False, help_text='Add a Youtube URL to a specific\
+                time in a video for this agenda item')),
 
         ]))
     ])
@@ -1056,8 +1055,6 @@ class MeetingPage(Page):
                 FieldPanel('full_video_url'),
                 FieldPanel('full_audio_url'),
                 FieldPanel('mtg_transcript_url'),
-                #FieldPanel('live_video_url'),
-                #FieldPanel('live_video_captions')
                 FieldPanel('live_video_embed')
             ],
             heading='Meeting media',
