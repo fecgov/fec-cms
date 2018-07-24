@@ -9,6 +9,7 @@ from operator import attrgetter
 
 from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
+from django.db.models import Q
 
 from django.shortcuts import get_object_or_404
 from django.shortcuts import redirect
@@ -264,9 +265,9 @@ def serve_wagtail_doc(request, document_id, document_filename):
 
 def index_meetings(request):
     meetings = MeetingPage.objects.live().order_by("-date")
-    open_meetings = meetings.filter(meeting_type ='O')
+    open_meetings = meetings.filter(Q(meeting_type ='O') | Q(title__icontains='Hearing')| Q(meeting_type ='H'))
     executive_sessions = meetings.filter(meeting_type ='E')
-    hearings= meetings.filter(title__icontains='Hearing')
+    hearings= meetings.filter(Q(title__icontains='Hearing')| Q(meeting_type ='H'))
     year = request.GET.get('year', '')
     search = request.GET.get('search', '')
     active = request.GET.get('tab', 'open-meetings')

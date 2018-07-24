@@ -53,6 +53,25 @@
       vertical-align: middle;
     }
   }
+
+  .list--flat-bordered li{
+
+    &::after {
+      content: '';
+      padding-left: 0;
+
+      @include media($med) {
+        content: '|';
+        padding-left: u(1rem);
+
+      }
+    }
+
+    &:last-child::after {
+      content: '';
+      padding-left: 0;
+    }
+  }
 }
 
 .agenda__text {
@@ -72,3 +91,24 @@
     vertical-align: middle;
   }
 }
+
+//For responsive video embed
+
+.video__wrapper {
+  height: 0;
+  padding-bottom: 56.25%; /* 16:9 */
+  position: relative;
+  padding-top: 20px;
+
+  iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width:100%;
+    height:100%;
+  }
+}
+
+
