@@ -253,10 +253,6 @@ function buildUrl(path, query) {
     .toString();
 }
 
-function buildCycleUrl(candidate, cycle, path) {
-
-}
-
 function buildTableQuery(context, perPage) {
   var pageLength = pageLength || 0;
   var query = _.chain(context)
