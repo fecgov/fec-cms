@@ -573,8 +573,8 @@ $(document).ready(function() {
             report_type: ['-24', '-48'],
             /* Performing an include would only show RFAI form types. For this reason, excludes need to be
                used for request_type
-            
-            Exclude all request types except for: 
+
+            Exclude all request types except for:
                - RQ-2: RFAI referencing Report of Receipts and Expenditures
                - RQ-3: RFAI referencing second notice reports
                - RQ-4: RFAI referencing Independent Expenditure filer
@@ -596,8 +596,18 @@ $(document).ready(function() {
           order: [[2, 'desc']],
           path: ['committee', committeeId, 'filings'],
           query: _.extend({
-            form_type: ['F5', 'F24', 'F6', 'F9', 'F10', 'F11'],
+            form_type: ['F5', 'F24', 'F6', 'F9', 'F10', 'F11', 'RFAI'],
             report_type: ['-Q1', '-Q2', '-Q3', '-YE'],
+            /* Performing an include would only show RFAI form types. For this reason, excludes need to be
+               used for request_type
+
+            Exclude all request types except for:
+               - RQ-2: RFAI referencing Report of Receipts and Expenditures
+               - RQ-4: RFAI referencing Independent Expenditure filer
+
+            Exclude quarterly report_types so F5 quarterlies don't appear
+            */
+            request_type: ['-1', '-3', '-5', '-6', '-7', '-8', '-9'],
             sort_hide_null: ['false']
           }, query),
         }, filingsOpts);
@@ -612,8 +622,8 @@ $(document).ready(function() {
             form_type: ['F1','RFAI'],
             /* Performing an include would only show RFAI form types. For this reason, excludes need to be
                used for request_type
-            
-            Exclude all request types except for: 
+
+            Exclude all request types except for:
                - RQ-1: RFAI referencing Statement of organization
                - RQ-6: RFAI referencing 2nd notice State of organization */
             request_type: ['-2','-3','-4','-5','-7','-8','-9'],
@@ -631,8 +641,8 @@ $(document).ready(function() {
             form_type: ['F1M', 'F8', 'F99', 'F12','RFAI'],
             /* Performing an include would only show RFAI form types. For this reason, excludes need to be
                used for request_type
-            
-            Exclude all request types except for: 
+
+            Exclude all request types except for:
                - RQ-9: RFAI referencing Multicandidate status */
             request_type: ['-1','-2','-3','-4','-5','-6','-7','-8'],
             sort_hide_null: ['false']

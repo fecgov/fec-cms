@@ -6,7 +6,7 @@ urlpatterns = [
     url(r'^data/legal/advisory-opinions/(?P<ao_no>[\w-]+)/$',
         views.advisory_opinion_page),
     url(r'^data/legal/advisory-opinions/$', views.advisory_opinions_landing),
-    url(r'^data/legal/matter-under-review/(?P<mur_no>[0-9]+)/$',
+    url(r'^data/legal/matter-under-review/(?P<mur_no>[\w-]+)/$',
         views.mur_page),
     url(r'^data/legal/statutes/$', views.statutes_landing),
     # Legal search results

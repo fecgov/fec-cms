@@ -3,7 +3,7 @@ from collections import OrderedDict
 START_YEAR = 1979
 END_YEAR = 2018
 DEFAULT_TIME_PERIOD = 2018
-DEFAULT_PRESIDENTIAL_YEAR = 2016
+DEFAULT_PRESIDENTIAL_YEAR = 2020
 DISTRICT_MAP_CUTOFF = 2018 # The year we show district maps for on election pages
 
 states = OrderedDict([

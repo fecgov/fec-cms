@@ -12,48 +12,40 @@ var helpers = require('../modules/helpers');
 var ElectionForm = require('../modules/election-form').ElectionForm;
 var tableColumns = require('../modules/table-columns');
 
-var MAX_MAPS = 2;
-
-var defaultOpts = {
-  autoWidth: false,
-  destroy: true,
-  searching: false,
-  serverSide: false,
-  lengthChange: true,
-  useExport: true,
-  singleEntityItemizedExport: true,
-  dom: tables.simpleDOM,
-  language: {
-    lengthMenu: 'Results per page: _MENU_',
-  },
-  pagingType: 'simple'
-};
-
-var spendingTableOpts = {
-  'independent-expenditures': {
-    path: ['schedules', 'schedule_e', 'by_candidate'],
-    columns: tableColumns.independentExpenditureColumns,
-    title: 'independent expenditures',
-    order: [[3, 'desc']],
-  },
-  'communication-costs': {
-    path: ['communication_costs', 'by_candidate'],
-    columns: tableColumns.communicationCostColumns,
-    title: 'communication costs',
-    order: [[3, 'desc']]
-  },
-  'electioneering': {
-    path: ['electioneering', 'by_candidate'],
-    columns: tableColumns.electioneeringColumns,
-    title: 'electioneering communications',
-    order: [[2, 'desc']]
-  },
-};
-
 $(document).ready(function() {
-  var $table = $('#results');
-  var $candidateInfo = $('#candidate-information-results');
   var query = helpers.buildTableQuery(context.election);
+  var spendingTableOpts = {
+    'independent-expenditures': {
+      path: ['schedules', 'schedule_e', 'by_candidate'],
+      columns: tableColumns.independentExpenditureColumns,
+      title: 'independent expenditures',
+      order: [[3, 'desc']],
+    },
+    'communication-costs': {
+      path: ['communication_costs', 'by_candidate'],
+      columns: tableColumns.communicationCostColumns,
+      title: 'communication costs',
+      order: [[3, 'desc']]
+    },
+    'electioneering': {
+      path: ['electioneering', 'by_candidate'],
+      columns: tableColumns.electioneeringColumns,
+      title: 'electioneering communications',
+      order: [[2, 'desc']]
+    },
+    'candidate-financial-totals': {
+      path: ['elections'],
+      columns: tableColumns.createElectionColumns(context),
+      title: 'candidate financial total',
+      order: [[2, 'desc']]
+    },
+    'candidate-information': {
+      path: ['elections'],
+      columns: tableColumns.candidateInformationColumns,
+      title: 'candidate information',
+      order: [[3, 'desc']]
+    },
+  };
 
   var url = helpers.buildUrl(
     ['elections'],
@@ -61,18 +53,6 @@ $(document).ready(function() {
   );
 
   $.getJSON(url).done(function(response) {
-    $table.DataTable(_.extend({}, defaultOpts, {
-      columns: tableColumns.createElectionColumns(context),
-      data: response.results,
-      order: [[2, 'desc']]
-    }));
-
-    $candidateInfo.DataTable(_.extend({}, defaultOpts, {
-      columns: tableColumns.candidateInformationColumns,
-      data: response.results,
-      order: [[3, 'desc']]
-    }));
-
     context.candidates = _.chain(response.results)
       .map(function(candidate) {
         return [candidate.candidate_id, candidate];
