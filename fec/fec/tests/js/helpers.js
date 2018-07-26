@@ -3,9 +3,65 @@
 var chai = require('chai');
 var expect = chai.expect;
 
+var $ = require('jquery');
+
+require('./setup')();
+
 var helpers = require('../../static/js/modules/helpers');
 
 describe('helpers', function() {
+  describe('anchorify', function() {
+
+    before(function(done) {
+      this.$fixture = $('<div id="fixtures"></div>');
+      $('body').append(this.$fixture);
+      done();
+    });
+
+    beforeEach(function() {
+      this.$fixture.empty().append(
+        '<div>' +
+          '<span id="test" data-anchor="test">Test</span>' +
+          '<span id="other-test" data-anchor="other-test">Other Test</span>' +
+          '<span></span>' +
+        '</div>'
+      );
+    });
+
+    afterEach(function() {
+      this.$fixture.empty();
+    });
+
+    it('should find, build, and attach links with data-anchor attribute', function() {
+      helpers.anchorify('data-anchor');
+      var anchors = $('[data-anchor]');
+      var links = $('a');
+
+      expect(anchors.length).to.equal(2);
+      expect(links.length).to.equal(2);
+
+      anchors.each(function(idx, item) {
+        var elt = $(item);
+        var anchorLink = '#' + elt.attr('id');
+        var a = elt.find('a');
+        var link = a.attr('href');
+
+        expect(link).to.be.a('string');
+        expect(link).contains('#');
+        expect(link).to.equal(anchorLink)
+      });
+    });
+
+    it.skip('should not build links when attribute not found', function() {
+      helpers.anchorify('not-available');
+      var anchors = $('[data-anchor]');
+      var links = $('a');
+
+      expect(anchors.length).to.equal(2);
+      expect(links.length).to.equal(0);
+    });
+  });
+
   describe('sanitizeValue', function() {
     it('sanitizes a string', function() {
       var value = 'X0YZ12345><sCrIPt>alert(document.cookie)</ScRiPt>';

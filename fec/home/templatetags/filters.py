@@ -7,7 +7,7 @@ from django.conf import settings
 from django.templatetags.static import static
 from django.utils.html import conditional_escape, format_html
 from django.utils.safestring import mark_safe
-from wagtail.wagtailcore.models import Page
+from wagtail.core.models import Page
 
 register = template.Library()
 

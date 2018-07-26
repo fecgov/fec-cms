@@ -4,7 +4,7 @@ from __future__ import unicode_literals
 
 from django.db import migrations
 import wagtail.contrib.table_block.blocks
-import wagtail.wagtailcore.fields
+import wagtail.core.fields
 
 
 class Migration(migrations.Migration):
@@ -17,7 +17,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='custompage',
             name='content',
-            field=wagtail.wagtailcore.fields.StreamField((('table', wagtail.contrib.table_block.blocks.TableBlock()),)),
+            field=wagtail.core.fields.StreamField((('table', wagtail.contrib.table_block.blocks.TableBlock()),)),
             preserve_default=False,
         ),
     ]
