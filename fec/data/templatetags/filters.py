@@ -137,20 +137,6 @@ def filesize(value):
 
     return '%d %s' % (value, units[unit])
 
-# def _unique(values):
-#     ret = []
-#     for value in values:
-#         if value not in ret:
-#             ret.append(value)
-#     return ret
-
-
-# @app.template_filter()
-# def fmt_cycle_min_max(cycles):
-#     if len(cycles) > 1:
-#         return '{}–{}'.format(min(cycles), max(cycles))
-#     return cycles[0]
-
 @library.global_function
 def asset_for_css(key):
     """Looks up the hashed asset key in rev-manifest-css.json

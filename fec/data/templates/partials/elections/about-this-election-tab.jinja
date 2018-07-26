@@ -1,0 +1,56 @@
+{% import 'macros/cycle-select.jinja' as select %}
+
+<section id="section-2" role="tabpanel" aria-hidden="true" aria-labelledby="section-2-heading">
+  <div class="container">
+    <h2 id="section-2-heading">About this election</h2>
+    <div class="entity__figure u-no-padding row election-dates">
+    </div>
+    {% include 'partials/elections/election-profile-cards.jinja' %}
+    <div class="slab slab--inline slab--neutral u-padding--left u-padding--right">
+      <div id="candidate-information" class="entity__figure row">
+        <div class="heading--section heading--with-action u-no-margin">
+          <h3 class="heading__left">Candidate information</h3>
+          <div class="heading__right">
+            <span class="is-incumbent t-sans t-note" style="padding-right: 1em">Incumbent</span>
+            <div
+              class="message message--info message--mini t-left-aligned data-container__message"
+              data-export-message-for="candidate-information"
+              aria-hidden="false"
+            >
+              Exports coming soon.
+            </div>
+            <button
+              type="button"
+              class="js-export button button--cta button--export"
+              data-export-for="candidate-information"
+            >
+              Export
+            </button>
+          </div>
+        </div>
+        <table
+          id="candidate-information-results"
+          class="data-table data-table--heading-borders scrollX"
+          data-type="candidate-information"
+        >
+          <thead>
+            <th role="col">Name</th>
+            <th role="col">Party</th>
+            <th role="col">Principal campaign committee</th>
+          </thead>
+        </table>
+      </div>
+      <div id="state-election-offices" class="entity__figure row">
+        <div class="heading--section heading--with-action">
+          <h3 class="heading__left">State election offices</h3>
+        </div>
+        {% if office == 'president' %}
+          <p>Ballot access procedures for presidential candidates vary by state. Contact each <a href="https://transition.fec.gov/pubrec/stateelection.shtml">state election office</a> for information.</p>
+        {% else %}
+          <p>State laws and procedures govern elections for state or local offices as well as how candidates come to appear on election ballots. Contact the appropriate state election office for more information.</p>
+          <div id="election-offices"></div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</section>

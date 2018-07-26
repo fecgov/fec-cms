@@ -108,11 +108,16 @@ Handlebars.registerHelper({
 });
 
 var globals = {
-  EARMARKED_CODE: '15E'
-};
+  EARMARKED_CODES: ['15E', '24I', '24T']
+}
 
-Handlebars.registerHelper('global', function(value) {
-  return globals[value];
+Handlebars.registerHelper('isEarmarked', function(receipt_type) {
+  if (globals.EARMARKED_CODES.indexOf(receipt_type) > -1) {
+     return true;
+  }
+  else {
+    return false;
+  }
 });
 
 Handlebars.registerHelper('decodeAmendment', function(value) {
@@ -150,6 +155,11 @@ Handlebars.registerHelper('decodeMeans', function(value) {
 Handlebars.registerHelper('formNumber', function(value) {
   // Strips the F from F3X etc.
   return value.split('F')[1];
+});
+
+Handlebars.registerHelper('formatSentence', function(value) {
+  var str = value.fn(this);
+  return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
 });
 
 Handlebars.registerHelper('basePath', BASE_PATH);

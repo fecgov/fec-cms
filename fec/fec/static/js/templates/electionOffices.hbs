@@ -1,0 +1,17 @@
+{{#each this}}
+<div class="usa-width-one-half">
+  <ul>
+    <li class="contact-item contact-item--phone">
+      <div class="contact-item__content">
+        <h5 class="contact-item__title">{{#formatSentence}}{{ office_type }}{{/formatSentence}}</h5>
+        <span class="t-block">{{ office_name }} <br>
+        {{ address_line1 }}<br>
+        {{ city }}, {{ state }} {{ zip_code }}<br>
+        <a href="{{ website_url1 }}">{{ website_url1 }}</a>
+        </span>
+        <span class="t-block">{{ primary_phone_number }}</span>
+      </div>
+    </li>
+  </ul>
+</div>
+{{/each}}

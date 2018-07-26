@@ -79,29 +79,40 @@
 
       {% if committee_groups['P'] or committee_groups['A'] %}
       <h4>Authorized campaign committees:</h4>
-
-      <div class="usa-width-one-half">
       {% for committee in committee_groups['P'] | reverse %}
-        <div class="callout callout--primary{% if loop.last %} u-no-margin{% endif %}">
-          <h5 class="callout__title t-sans">
-            <a href="/data/committee/{{ committee.committee_id }}/?cycle={{ committee.related_cycle }}">{{ committee.name }}</a>
-          </h5>
-          <span class="callout__subtitle term" data-term="principal campaign committee">Principal campaign committee</span>
+      <div class='grid'>
+        <div class="grid__item u-no-margin">
+          <div class="callout callout--primary{% if loop.last %} u-no-margin{% endif %}" style="width: 100%; max-width: 300px">
+            <h5 class="callout__title t-sans">
+              <a href="/data/committee/{{ committee.committee_id }}/?cycle={{ committee.related_cycle }}">{{ committee.name }}</a>
+            </h5>
+            <span class="callout__subtitle term" data-term="principal campaign committee">Principal campaign committee</span>
+          </div>
         </div>
-      {% endfor %}
       </div>
-
-      <ul class="list--bulleted row">
-      {% for committee in committee_groups['A'] | reverse %}
-        <li>
-          <a class="t-sans" href="/data/committee/{{ committee.committee_id }}/?cycle={{ committee.related_cycle }}">{{ committee.name }}</a>
-        </li>
       {% endfor %}
-      </ul>
+
+      {% if committee_groups['A']|length > 0 %}
+      <div class='grid'>
+        <div class="grid__item u-no-margin">
+          <ul class="list--bulleted" style="margin-top: 1rem">
+          {% for committee in committee_groups['A'] | reverse %}
+            <li class="u-no-margin-bottom">
+              <a class="t-sans" href="/data/committee/{{ committee.committee_id }}/?cycle={{ committee.related_cycle }}">{{ committee.name }}</a>
+            </li>
+          {% endfor %}
+          </ul>
+        </div>
+      </div>
       {% endif %}
 
       {% if committee_groups['J'] %}
       <hr class="hr--lighter">
+      {% endif %}
+
+      {% endif %}
+
+      {% if committee_groups['J'] %}
 
       <h4>Joint fundraising committees:</h4>
 
