@@ -547,7 +547,7 @@ function initStatementsOfCandidacyTable() {
     query: {
       candidate_id: candidateId,
       form_type: ['F2'],
-      // two_year_transaction_period: opts.cycle,
+       //two_year_transaction_period: opts.cycle,
       /* Performing an include would only show RFAI form types. For this reason, excludes need to be
          used for request_type
 
