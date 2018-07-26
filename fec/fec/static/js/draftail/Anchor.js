@@ -1,13 +1,6 @@
-// Creates a slug from a string
-
-function slugify(text) {
-  return text.toString().toLowerCase()
-    .replace(/\s+/g, '-')
-    .replace(/[^\w\-]+/g, '')
-    .replace(/\-\-+/g, '-')
-    .replace(/^-+/, '')
-    .replace(/-+$/, '');
-}
+import React from 'react';
+import { EditorState, Modifier } from 'draft-js';
+import { slugify } from './utils';
 
 // Creates the entities as soon as it is rendered.
 class AnchorSource extends React.Component {
@@ -47,23 +40,23 @@ class AnchorSource extends React.Component {
 
 // This adds additional 'term' class to the editor
 // to add custom editor styles inside customize-editor.css
-const Anchor = (props) => {
-  const { entityKey, contentState } = props;
-
-  return React.createElement('span', {
-    style: {
+const Anchor = ({children}) => (
+  <span
+    style={{
       fontSize: '2.4rem',
       margin: '0 0 1em 0',
       fontFamily: 'gandhi,serif',
       fontSize: '2rem',
       fontWeight: '700',
       lineHeight: '1.2'
-    }
-  }, props.children);
-};
+    }}
+  >
+    {children}
+  </span>
+);
 
-window.draftail.registerPlugin({
+module.exports = {
   type: 'ANCHOR',
   source: AnchorSource,
-  decorator: Anchor,
-});
+  decorator: Anchor
+};
