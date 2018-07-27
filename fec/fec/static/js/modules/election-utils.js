@@ -5,8 +5,9 @@
 var _ = require('underscore');
 var topojson = require('topojson');
 
-var s = require('underscore.string');
-_.mixin(s.exports());
+var sprintf = require('sprintf-js').sprintf
+//var s = require('underscore.string');
+//.mixin(s.exports());
 
 var fips = require('./fips');
 
@@ -18,7 +19,7 @@ function encodeDistrict(state, district) {
 }
 
 function decodeDistrict(district) {
-  district = _.sprintf('%04d', district);
+  district = sprintf('%04d', district);
   return {
     state: fips.fipsByCode[parseInt(district.substring(0, 2))].STUSAB,
     district: parseInt(district.substring(2, 4))
