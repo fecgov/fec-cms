@@ -4,8 +4,8 @@ from __future__ import unicode_literals
 
 from django.db import migrations, models
 import django.db.models.deletion
-import wagtail.wagtailcore.blocks
-import wagtail.wagtailcore.fields
+import wagtail.core.blocks
+import wagtail.core.fields
 
 
 class Migration(migrations.Migration):
@@ -28,7 +28,7 @@ class Migration(migrations.Migration):
                 ('term_expiration', models.DateField(blank=True, null=True)),
                 ('party_affiliation', models.CharField(choices=[('D', 'Democrat'), ('R', 'Republican'), ('I', 'Independent')], max_length=2)),
                 ('commissioner_title', models.CharField(blank=True, max_length=255)),
-                ('commissioner_bio', wagtail.wagtailcore.fields.StreamField((('paragraph', wagtail.wagtailcore.blocks.RichTextBlock()),), blank=True, null=True)),
+                ('commissioner_bio', wagtail.core.fields.StreamField((('paragraph', wagtail.core.blocks.RichTextBlock()),), blank=True, null=True)),
                 ('commissioner_email', models.CharField(blank=True, max_length=255)),
                 ('commissioner_phone', models.CharField(blank=True, max_length=255, null=True)),
                 ('commissioner_twitter', models.CharField(blank=True, max_length=255, null=True)),

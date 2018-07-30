@@ -64,6 +64,30 @@
         </div>
       </div>
     {% endif %}
+
+    {% if self.related_topics %}
+      {% block related_topics %}
+        <h2>Related topics</h2>
+        <div class="grid grid--4-wide">
+          {% for block in self.related_topics %}
+            {% with topics=block.value %}
+              {% for topic in topics %}
+              <div class="grid__item">
+                <a href="{{ topic.url }}">
+                  <aside class="card card--horizontal card--primary">
+                    <div class="card__content">
+                    {{ topic }}
+                    </div>
+                  </aside>
+                </a>
+              </div>
+              {% endfor %}
+            {% endwith %}
+          {% endfor %}
+        </div>
+      {% endblock %}
+    {% endif %}
+
     {% if self.citations %}
       <div id="legal-citations" class="sidebar--secondary t-sans">
         <h4 class="sidebar__title">Legal citations</h4>

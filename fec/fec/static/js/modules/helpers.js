@@ -35,6 +35,19 @@ var formatMap = {
   fullDayOfWeek: 'dddd'
 };
 
+function anchorify(attr) {
+  // Attach anchor <a> links to any tag with a given attribute
+  $('['+attr+']').each(function(idx, item) {
+    var elt = $(item);
+    var link = $('<a></a>');
+    var href = '#' + elt.attr('id');
+    link.attr('href', href);
+    link.html(elt.html());
+    elt.html('');
+    link.appendTo(elt);
+  });
+}
+
 function getWindowWidth() {
   // window.innerWidth accounts for scrollbars and should match the width used
   // for media queries.
@@ -467,6 +480,7 @@ function getCookie(name) {
 }
 
 module.exports = {
+  anchorify: anchorify,
   buildAppUrl: buildAppUrl,
   buildUrl: buildUrl,
   buildTableQuery: buildTableQuery,

@@ -1,4 +1,4 @@
-Django>=1.10,<1.11
+Django==1.11.13
 cfenv==0.5.2
 dj-database-url==0.4.2
 django-libsass==0.7
@@ -10,8 +10,8 @@ psycopg2==2.7.1
 requests==2.13.0
 slacker==0.8.6
 whitenoise==2.0.3
-# before updating wagtail, look at wagtailadmin template override
-wagtail>=1.8,<1.9
+wagtail==2.0.1
+bandit==1.4.0
 # TODO: pin version
 django-audit-log
 Jinja2==2.9.6
@@ -36,7 +36,7 @@ beautifulsoup4==4.5.1
 django-storages==1.5.2
 boto3==1.7.21
 
-cg-django-uaa==1.0.1
+cg-django-uaa==1.2.0
 
 # Testing
 pytest==3.2.3

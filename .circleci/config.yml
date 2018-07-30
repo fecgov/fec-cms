@@ -52,7 +52,7 @@ jobs:
       - run:
           name: Install Node.js dependencies
           command: |
-            sudo npm install -g npm 
+            sudo npm install -g npm
             npm install webpack
             npm install
             npm run build
@@ -74,8 +74,7 @@ jobs:
             npm run build-js
             npm run build-sass
             cd fec
-            DJANGO_SETTINGS_MODULE=fec.settings.production python manage.py collectstatic --noinput
-            ./manage.py test
+            DJANGO_SETTINGS_MODULE=fec.settings.production python manage.py collectstatic --noinput -v 0
             npm run test-single
 
       - run:
