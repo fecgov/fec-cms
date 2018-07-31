@@ -266,6 +266,22 @@ function buildUrl(path, query) {
     .toString();
 }
 
+function buildTableQuery(context, perPage) {
+  var pageLength = pageLength || 0;
+  var query = _.chain(context)
+  .pairs()
+  .filter(function(pair) {
+    return pair[1];
+  })
+  .object()
+  .value();
+
+  return _.extend(query, {
+    per_page: pageLength,
+    sort_hide_null: true
+  });
+}
+
 function getTimePeriod(electionYear, cycle, electionFull, office) {
   var durations = {
     P: 3,
@@ -467,6 +483,7 @@ module.exports = {
   anchorify: anchorify,
   buildAppUrl: buildAppUrl,
   buildUrl: buildUrl,
+  buildTableQuery: buildTableQuery,
   currency: currency,
   cycleDates: cycleDates,
   datetime: datetime,
