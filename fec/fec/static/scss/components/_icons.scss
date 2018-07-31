@@ -56,6 +56,10 @@
     @include u-icon-bg($speaker, $base);
   }
 
+  &.i-play {
+    @include u-icon-bg($play-button, $base);
+  }
+
 
 }
 

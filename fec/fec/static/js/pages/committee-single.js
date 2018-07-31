@@ -603,10 +603,11 @@ $(document).ready(function() {
 
             Exclude all request types except for:
                - RQ-2: RFAI referencing Report of Receipts and Expenditures
+               - RQ-4: RFAI referencing Independent Expenditure filer
 
             Exclude quarterly report_types so F5 quarterlies don't appear
             */
-            request_type: ['-1', '-3', '-4', '-5', '-6', '-7', '-8', '-9'],
+            request_type: ['-1', '-3', '-5', '-6', '-7', '-8', '-9'],
             sort_hide_null: ['false']
           }, query),
         }, filingsOpts);
