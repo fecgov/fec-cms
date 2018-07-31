@@ -14,8 +14,13 @@ require('./setup')();
 require('datatables.net')();
 require('datatables.net-responsive')();
 
+var columns = require('../../static/js/modules/columns');
+var columnHelpers = require('../../static/js/modules/column-helpers');
 var helpers = require('../../static/js/modules/helpers');
 var tables = require('../../static/js/modules/tables');
+var tablist = require('../../static/js/vendor/tablist');
+var context = require('../fixtures/context');
+var houseResults = require('../fixtures/house-results');
 var DataTable = tables.DataTable;
 
 describe('data table', function() {
@@ -252,6 +257,215 @@ describe('data table', function() {
       this.table.filters = serialized;
       this.table.handlePopState();
       expect(this.table.api.ajax.reload).to.have.not.been.called;
+    });
+  });
+
+  describe('drawComparison', function() {
+    before(function(done) {
+      this.$fixture = $('<div id="fixtures"></div>');
+      $('body').empty().append(this.$fixture);
+      done();
+    });
+
+    after(function(done) {
+      $('body').empty()
+      this.$fixture = null;
+      done();
+    });
+
+    beforeEach(function(done) {
+      this.$fixture.empty().append(
+        '<div id="comparison"></div>' +
+          '<table class="data-table data-table--heading-borders scrollX" data-type="by-size">' +
+            '<thead>' +
+              '<th scope="col">Candidate</th>' +
+              '<th scope="col">$200 and under</th>' +
+              '<th scope="col">$200.01—$499.99</th>' +
+              '<th scope="col">$500—$999.99</th>' +
+              '<th scope="col">$1,000—$1,999.99</th>' +
+              '<th scope="col">$2,000 and over</th>' +
+            '</thead>' +
+          '</table>' +
+          '<table class="data-table data-table--heading-borders scrollX panel-toggle-element" data-type="by-state" aria-hidden="false">' +
+            '<thead><tr></tr></thead>' +
+          '</table>'
+      );
+      tables.drawComparison(houseResults, context);
+      done();
+    });
+
+    afterEach(function(done) {
+      this.$fixture.empty();
+      done();
+    });
+
+    it('should draw tables dropdowns for comparison', function(done) {
+      var dropdowns = $('.dropdown__item');
+      expect(dropdowns.length).to.equal(houseResults.length);
+      done();
+    });
+
+    it('should draw tables for comparison and show by-size by default', function(done) {
+      var tables = $('#fixtures');
+      done();
+    });
+  });
+
+  describe('initSpendingTables', function() {
+    before(function(done) {
+      this.$fixture = $('<div id="fixtures"></div>');
+      $('body').empty().append(this.$fixture);
+
+      this.independentExpenditureColumns = [
+        columns.committeeColumn({data: 'committee', className: 'all'}),
+        columns.supportOpposeColumn,
+        columns.candidateColumn({data: 'candidate', className: 'all'}),
+        {
+          data: 'total',
+          className: 'all column--number',
+          orderable: true,
+          orderSequence: ['desc', 'asc'],
+          render: columnHelpers.buildTotalLink(['independent-expenditures'], function(data, type, row, meta) {
+              return {
+                data_type: 'processed',
+                is_notice: 'false',
+                support_oppose_indicator: row.support_oppose_indicator,
+                candidate_id: row.candidate_id
+              };
+          })
+        },
+      ];
+
+      this.tableOpts = {
+        'independent-expenditures': {
+          path: ['schedules', 'schedule_e', 'by_candidate'],
+          columns: this.independentExpenditureColumns,
+          title: 'independent expenditures',
+          order: [[3, 'desc']],
+        }
+      };
+      done();
+    });
+
+    after(function(done) {
+      $('body').empty();
+      this.$fixture = null;
+      done();
+    });
+
+    beforeEach(function(done) {
+      this.$fixture.empty().append(
+        '<div class="tab-interface">' +
+          '<ul role="tablist" data-name="tab">' +
+            '<li><a role="tab" data-name="tab0" href="#section-0">0</a></li>' +
+          '</ul>' +
+          '<section id="section-0" role="tabpanel" aria-hidden="true">' +
+            '<div id="init-spending"></div>' +
+            '<table ' +
+              'class="data-table data-table--heading-borders scrollX" ' +
+              'data-type="independent-expenditures"' +
+            '>' +
+              '<thead>' +
+                '<th scope="col">Spent by</th>' +
+                '<th scope="col">Support/Oppose</th>' +
+                '<th scope="col">Candidate</th>' +
+                '<th scope="col">Aggregate amount</th>' +
+              '</thead>' +
+            '</table>' +
+          '</section>' +
+        '</div>'
+      );
+      tablist.init();
+      done();
+    });
+
+    afterEach(function(done) {
+      this.$fixture.empty();
+      done();
+    });
+
+    it('should add and init the tables', function() {
+      tables.initSpendingTables('.data-table', context, this.tableOpts);
+      $('[role="tab"]').trigger($.Event('click'));
+      var toggle = $('.js-panel-toggle');
+      expect(toggle.length).to.equal(1);
+    });
+  });
+
+  describe('getCycle', function() {
+
+    before(function(done) {
+      this.spy = sinon.spy(tables.getCycle);
+      done();
+    });
+
+    after(function(done) {
+      done();
+    });
+
+    it('should return an object when no table available', function() {
+      var meta = {settings: {sTableId: 'notable'}};
+      var results = this.spy(null, meta);
+      this.spy.calledOnce;
+      this.spy.returned({});
+    });
+
+  });
+
+  describe('yearRange', function() {
+
+    it('should return a single year when same', function() {
+      var results = tables.yearRange('2018', '2018');
+      expect(results).to.equal('2018');
+    });
+
+    it('should return a year range with hyphen', function() {
+      var results = tables.yearRange('2018', '2020');
+      expect(results).to.equal('2018 - 2020');
+    });
+  });
+
+  describe('mapSort', function() {
+
+    it('should return column name for ASC order', function() {
+      var order = [{column: 'test'}];
+      var columns = {test: { data: 'hello'}};
+      var expected = ['hello'];
+      var results = tables.mapSort(order, columns);
+      expect(results).to.deep.equal(expected);
+    });
+
+    it('should return column name for DESC order', function() {
+      var order = [{column: 'test', dir: 'desc'}];
+      var columns = {test: { data: 'hello'}};
+      var expected = ['-hello'];
+      var results = tables.mapSort(order, columns);
+      expect(results).to.deep.equal(expected);
+    });
+  });
+
+  describe('mapResponse', function() {
+
+    it('should return response pagination count', function() {
+      var response = { pagination: { count: 501 }, results: 'test'};
+      var expected = {
+        recordsTotal: 501,
+        recordsFiltered: 501,
+        data: 'test'
+      };
+      var results = tables.mapResponse(response);
+      expect(results).to.deep.equal(expected);
+    });
+
+    it('should return round responses over 1000 to the nearest thousand', function() {
+      var response = { pagination: { count: 1500 }, results: 'test'};
+      var expected = {
+        recordsTotal: 2000,
+        recordsFiltered: 2000,
+        data: 'test'
+      };
+      var results = tables.mapResponse(response);
+      expect(results).to.deep.equal(expected);
     });
   });
 });
