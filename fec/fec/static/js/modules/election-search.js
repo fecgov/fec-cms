@@ -69,7 +69,7 @@ ElectionSearch.prototype = Object.create(ElectionForm.prototype);
 ElectionSearch.constructor = ElectionSearch;
 
 ElectionSearch.prototype.updateRedistrictingMessage = function() {
-  if(this.$cycle.val() > 2017 && this.$state.val() == 'PA') {
+  if(this.$cycle.val() == 2018 && this.$state.val() == 'PA') {
     $('.pa-message').show();
   } else {
     $('.pa-message').hide();

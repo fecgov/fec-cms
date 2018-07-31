@@ -26,7 +26,7 @@
   <div class='container'>
     <h2 id="section-1-heading">Election data and reporting deadlines</h2>
     {% include 'partials/elections/election-profile-cards.jinja' %}
-    {% if state == 'PA' and office == 'house' %}
+    {% if state == 'PA' and office == 'house' and cycle == 2018 %}
     <div class="message message--info">
         <p>On February 19, 2018, Pennsylvania's Supreme Court released a new congressional map for Pennsylvannia. Some candidates subsequently amended their registration forms to reflect new district numbers. Candidates are listed using information from their registration forms and may be running in different districts than in the past.</p>
     </div>
