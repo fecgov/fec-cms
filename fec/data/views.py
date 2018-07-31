@@ -159,7 +159,7 @@ def candidate(request, candidate_id):
     # the cycle should never be beyond the one we're in.
     cycles = [cycle for cycle in candidate['cycles'] if cycle <= utils.current_cycle()]
     max_cycle = cycle if cycle <= utils.current_cycle() else utils.current_cycle()
-    show_full_election = election_full if cycle <= utils.current_cycle() else False              
+    show_full_election = election_full if cycle <= utils.current_cycle() else False
 
     # Annotate committees with most recent available cycle
     aggregate_cycles = (
@@ -404,6 +404,27 @@ def elections(request, office, cycle, state=None, district=None):
     if (state is not None) and (state and state.upper() not in constants.states):
         raise Http404()
 
+    tab = request.GET.get('tab','')
+    if (tab == 'contributions' or tab =='contributions/'):
+        #tab = 'election-data'
+       #return redirect(
+       #    reverse('elections',kwargs={'office': office } ) + '#individual-contributions'
+       #   )
+    #   tab = 'election-data'
+    #   url = '/data/elections/president/2012/#individual-contributions'
+        url = '/data/elections/'+office+'/'+str(cycle)+'/#individual-contributions'#individual-contributions'
+        return redirect(url)
+    elif (tab == 'totals' or tab =='totals/'):
+        url = '/data/elections/'+office+'/'+str(cycle)+'/#candidate-financial-totals'
+        return redirect(url)
+    elif  (tab == 'spending-by-others' or tab =='spending-by-others/'):
+       url = '/data/elections/'+office+'/'+str(cycle)+'/#independent-expenditures'
+       return redirect(url)
+    #    return redirect(
+    #       reverse('elections', kwargs={'tab': tab })
+    #          )
+        #raise Http404()
+
     return render(request, 'elections.jinja', {
         'office': office,
         'office_code': office[0],
@@ -414,7 +435,9 @@ def elections(request, office, cycle, state=None, district=None):
         'state_full': constants.states[state.upper()] if state else None,
         'district': district,
         'title': utils.election_title(cycle, office, state, district),
+
     })
+
 
 def raising(request):
     top_category = request.GET.get('top_category', 'P')
@@ -508,3 +531,18 @@ def feedback(request):
             return JsonResponse(issue.to_json(), status=201)
     else:
         raise Http404()
+
+from django.views.generic import RedirectView
+
+# class QuerystringRedirect(RedirectView):
+#     """
+#     Used to redirect to remove GET parameters from url
+
+#     e.g. /permalink/?id=10 to /permalink/10/
+#     """
+
+#     def get_redirect_url(self):
+#         if 'tab' in self.request.GET:
+#             return reverse('views.elections', args=('#individual-contributions'))
+#         else:
+#             raise Http404()

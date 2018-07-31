@@ -2,6 +2,7 @@ from django.conf.urls import url
 
 from data import views
 from data import views_datatables
+from django.views.generic import RedirectView
 
 urlpatterns = [
     url(r'^data/$', views.landing),
@@ -11,8 +12,22 @@ urlpatterns = [
     url(r'^data/committee/(?P<committee_id>\w+)/$', views.committee, name='committee-by-id'),
     url(r'^data/elections/(?P<office>\w+)/(?P<state>\w+)/(?P<district>\w+)/(?P<cycle>[0-9]+)/$', views.elections),
     url(r'^data/elections/(?P<office>\w+)/(?P<state>\w+)/(?P<cycle>[0-9]+)/$', views.elections),
-    url(r'^data/elections/(?P<office>\w+)/(?P<cycle>[0-9]+)/$', views.elections),
+    url(r'^data/elections/(?P<office>\w+)/(?P<cycle>[0-9]+)/$', views.elections, name='elections'),
+    #url(r'^data/elections/(?P<office>\w+)/(?P<cycle>[0-9]+)/$', views.elections),
+    #url(r'^data/elections/(?P<office>\w+)/(?P<cycle>[0-9]+)/(?P<tab>\w+)/$', views.elections_tab, name='elections'),
     url(r'^data/elections/$', views.elections_lookup),
+    #url('articles/<slug:title>/', views.article, name='article-detail'),
+
+    #url(r'^data/elections/(?P<office>\w+)/(?P<cycle>[0-9]+)/#individual-contributions/$', views.elections, name='new_view'),
+    #url(r'^data/elections/(?P<office>\w+)/(?P<cycle>[0-9]+)/(?P<tab>contributions)/$', RedirectView.as_view(url='/')),
+
+
+    #url(r'^elections/$', views.QuerystringRedirect.as_view(), name="elections_redirect"),
+    #url(r'^data/elections/(?P<office>\w+)/(?P<cycle>[0-9]+)/?tab=contributions/$', views.QuerystringRedirect.as_view(), name='elections'),
+
+    #url(r'^data/elections/(?P<office>\w+)/(?P<cycle>[0-9]+)/?P<contributions>/$', RedirectView.as_view(url='/')),
+    #url(r'^data/elections/(?P<office>\w+)/(?P<cycle>[0-9]+)/(?P<contributions>)/$', views.elections),
+
 
     # Feedback Tool
     url(r'^data/issue/$', views.feedback),
