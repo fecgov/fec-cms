@@ -57,7 +57,7 @@ function ElectionSearch(selector) {
   this.$zip.on('change', this.handleZipChange.bind(this));
   this.$state.on('change', this.performStateChange.bind(this));
   this.$form.on('change', 'input,select', this.performSearch.bind(this));
-  this.$form.on('submit', this.search.bind(this));
+  this.$form.on('submit', this.performSearch.bind(this));
   $(window).on('popstate', this.handlePopState.bind(this));
 
   this.getUpcomingElections();
@@ -190,7 +190,7 @@ ElectionSearch.prototype.handlePopState = function() {
   this.handleStateChange();
   this.$district.val(params.district);
   this.$cycle.val(params.cycle || this.$cycle.val());
-  this.search(null, {pushState: false});
+  this.performSearch(null, {pushState: false});
 };
 
 ElectionSearch.prototype.shouldSearch = function(serialized) {
