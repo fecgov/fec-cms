@@ -55,8 +55,8 @@ function ElectionSearch(selector) {
   });
 
   this.$zip.on('change', this.handleZipChange.bind(this));
-  this.$state.on('change', this.handleStateChange.bind(this));
-  this.$form.on('change', 'input,select', this.search.bind(this));
+  this.$state.on('change', this.performStateChange.bind(this));
+  this.$form.on('change', 'input,select', this.performSearch.bind(this));
   this.$form.on('submit', this.search.bind(this));
   $(window).on('popstate', this.handlePopState.bind(this));
 
@@ -68,6 +68,21 @@ function ElectionSearch(selector) {
 ElectionSearch.prototype = Object.create(ElectionForm.prototype);
 ElectionSearch.constructor = ElectionSearch;
 
+ElectionSearch.prototype.updateRedistrictingMessage = function() {
+  if(this.$cycle.val() > 2017 && this.$state.val() == 'PA') {
+    $('.pa-message').show();
+  } else {
+    $('.pa-message').hide();
+  }
+}
+ElectionSearch.prototype.performSearch = function() {
+  this.search();
+  this.updateRedistrictingMessage();
+}
+ElectionSearch.prototype.performStateChange = function() {
+  this.handleStateChange();
+  this.updateRedistrictingMessage();
+}
 /**
  * Call the API to get a list of upcoming election dates
  */
@@ -109,7 +124,7 @@ ElectionSearch.prototype.handleSelectMap = function(state, district) {
   if (district && this.hasOption(this.$district, district)) {
     this.$district.val(district);
   }
-  this.search();
+  this.performSearch();
 };
 
 /**
