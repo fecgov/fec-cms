@@ -381,7 +381,7 @@ def elections_lookup(request):
 
     return render(request, 'election-lookup.jinja', {
         'parent': 'data',
-        'cycles': cycles,
+        'cycles': cycles
     })
 
 
