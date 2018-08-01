@@ -124,6 +124,10 @@ function buildTotalLink(path, getParams) {
       ));
       link.setAttribute('href', uri);
       span.appendChild(link);
+      // Temporarily disable "other" state aggs
+      if (params.contributor_state == 'OT'){
+        span.textContent = helpers.currency(data);
+      }
     } else {
       span.textContent = helpers.currency(data);
     }
