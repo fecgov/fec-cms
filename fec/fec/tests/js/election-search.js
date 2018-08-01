@@ -50,6 +50,7 @@ describe('election search', function() {
           '<div class="js-results-items"></div>' +
         '</div>' +
         '<div class="election-map"></div>' +
+        '<div class="js-map-approx-message"></div>' +
         '<div class="js-map-message"></div>' +
       '</div>'
     );

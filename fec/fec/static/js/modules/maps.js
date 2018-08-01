@@ -15,6 +15,8 @@ var utils = require('./election-utils');
 
 var states = require('../data/us-states-10m.json');
 
+var candidateStateMapTemplate = require('../templates/candidateStateMap.hbs');
+
 var stateFeatures = topojson.feature(states, states.objects.states).features;
 var stateFeatureMap = _.chain(stateFeatures)
   .map(function(feature) {
@@ -23,15 +25,15 @@ var stateFeatureMap = _.chain(stateFeatures)
   .object()
   .value();
 
+var colorZero = '#ffffff';
+var colorScale = ['#e2ffff', '#278887'];
 var compactRules = [
   ['B', 9],
   ['M', 6],
   ['k', 3],
   ['', 0]
 ];
-
-var colorZero = '#ffffff';
-var colorScale = ['#e2ffff', '#278887'];
+var MAX_MAPS = 2;
 
 _.templateSettings = {
   interpolate: /\{\{(.+?)\}\}/g
@@ -225,11 +227,145 @@ DistrictMap.prototype.render = function(data) {
   this.map.fitBounds(this.overlay.getBounds());
 };
 
+function mapMin(cached) {
+  return _.chain(cached)
+    .map(function(value, key) {
+      return _.chain(value)
+        .values()
+        .filter(function(value) {
+          return !!value;
+        })
+        .min()
+        .value();
+    })
+    .min()
+    .value();
+}
+
+function mapMax(cached) {
+  return _.chain(cached)
+    .map(function(value, key) {
+      return _.max(_.values(value));
+    })
+    .max()
+    .value();
+}
+
+function updateColorScale($container, cached) {
+  $container = $container.closest('#state-maps');
+  var displayed = $container.find('.state-map select').map(function(_, select) {
+    return $(select).val();
+  }).get();
+  _.each(_.keys(cached), function(key) {
+    if (displayed.indexOf(key) === -1) {
+      delete cached[key];
+    }
+  });
+  var min = mapMin(cached);
+  var max = mapMax(cached);
+  var scale = chroma.scale(colorScale).domain([min, max]);
+  var quantize = d3.scale.linear().domain([min, max]);
+  $container.find('.state-map').each(function(_, elm) {
+    var $elm = $(elm);
+    var results = cached[$elm.find('select').val()];
+    d3.select($elm.find('g')[0])
+      .selectAll('path')
+      .attr('fill', function(d) {
+        return results[d.id] ? scale(results[d.id]) : colorZero;
+      });
+  });
+  $container.find('.legend-container svg g').remove();
+  var svg = d3.select($container.get(0)).select('.legend-container svg');
+  if (isFinite(max)) {
+    stateLegend(svg, scale, quantize, 4);
+  }
+}
+
+function updateButtonsDisplay($parent) {
+  var $maps = $parent.find('.state-map');
+  var showAdd = $maps.length < MAX_MAPS ? 'block' : 'none';
+  var showRemove = $maps.length > 1 ? 'block' : 'none';
+  $parent.find('.js-add-map').css('display', showAdd);
+  $parent.find('.js-remove-map').css('display', showRemove);
+}
+
+function appendStateMap($parent, results, cached) {
+  var ids = _.pluck(results, 'candidate_id');
+  var displayed = $parent.find('.candidate-select').map(function(_, select) {
+    return $(select).val();
+  }).get();
+  var value = _.find(ids, function(each) {
+    return displayed.indexOf(each) === -1;
+  }) || _.last(ids);
+  $parent.append(candidateStateMapTemplate(results));
+  var $select = $parent.find('.state-map:last select');
+  $select.val(value);
+  $select.trigger('change');
+  updateButtonsDisplay($parent);
+  updateColorScale($parent, cached);
+}
+
+function drawStateMap($container, candidateId, cached) {
+  var url = helpers.buildUrl(
+    ['schedules', 'schedule_a', 'by_state', 'by_candidate'],
+    {cycle: context.election.cycle, candidate_id: candidateId, per_page: 99}
+  );
+  var $map = $container.find('.state-map-choropleth');
+  $map.html('');
+  $.getJSON(url).done(function(data) {
+    var results = _.reduce(
+      data.results,
+      function(acc, val) {
+        var state = val.state ? val.state.toUpperCase() : val.state;
+        var row = fips.fipsByState[state] || {};
+        var code = row.STATE ? parseInt(row.STATE) : null;
+        acc[code] = val.total;
+        return acc;
+      },
+      {}
+    );
+    cached[candidateId] = results;
+    updateColorScale($container, cached);
+    var min = mapMin(cached);
+    var max = mapMax(cached);
+    stateMap($map, data, 400, 300, min, max, false, true);
+  });
+}
+
+function initStateMaps(results) {
+  var cached = {};
+  var $stateMaps = $('#state-maps');
+  var $choropleths = $stateMaps.find('.choropleths');
+  appendStateMap($choropleths, results, cached);
+
+  $choropleths.on('change', 'select', function(e) {
+    var $target = $(e.target);
+    var $parent = $target.closest('.state-map');
+    drawStateMap($parent, $target.val(), cached);
+  });
+
+  $choropleths.on('click', '.js-add-map', function(e) {
+    appendStateMap($choropleths, results, cached);
+  });
+
+  $choropleths.on('click', '.js-remove-map', function(e) {
+    var $target = $(e.target);
+    var $parent = $target.closest('.state-map');
+    var $container = $parent.closest('#state-maps');
+    $parent.remove();
+    updateButtonsDisplay($container);
+    updateColorScale($container, cached);
+  });
+  $choropleths.find('.state-map').remove();
+  appendStateMap($choropleths, results, cached);
+}
+
 module.exports = {
   stateMap: stateMap,
   colorZero: colorZero,
   colorScale: colorScale,
   stateLegend: stateLegend,
   highlightState: highlightState,
-  DistrictMap: DistrictMap
+  DistrictMap: DistrictMap,
+  initStateMaps: initStateMaps
 };

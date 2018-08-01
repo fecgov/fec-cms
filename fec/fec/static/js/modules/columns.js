@@ -695,5 +695,5 @@ module.exports = {
   receipts: receipts,
   reports: reports,
   loans: loans,
-  audit: audit,
+  audit: audit
 };

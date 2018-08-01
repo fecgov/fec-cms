@@ -63,6 +63,7 @@ function ElectionMap(elm, opts) {
   this.statePalette = getStatePalette(this.opts.colorScale);
   this.districtPalette = getDistrictPalette(this.opts.colorScale);
   this.mapMessage = document.querySelector('.js-map-message');
+  this.mapApproxMessage = document.querySelector('.js-map-approx-message');
   this.init();
 }
 
@@ -217,6 +218,7 @@ ElectionMap.prototype.handleReset = function(e) {
 ElectionMap.prototype.hide = function() {
   this.elm.setAttribute('aria-hidden', 'true');
   this.mapMessage.setAttribute('aria-hidden', 'false');
+  this.mapApproxMessage.setAttribute('aria-hidden', 'true');
 };
 
 /**
@@ -225,6 +227,7 @@ ElectionMap.prototype.hide = function() {
 ElectionMap.prototype.show = function() {
   this.elm.setAttribute('aria-hidden', 'false');
   this.mapMessage.setAttribute('aria-hidden', 'true');
+  this.mapApproxMessage.setAttribute('aria-hidden', 'false');
 };
 
 module.exports = {
