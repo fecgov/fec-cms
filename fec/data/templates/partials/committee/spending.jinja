@@ -7,6 +7,11 @@
     {{ select.committee_cycle_select(cycles, cycle, 'disbursements')}}
 
     {% if totals and committee_type not in ['C', 'E', 'I'] %}
+      {% if totals.0.transaction_coverage_date is not none %}
+        {% set transaction_end = totals.0.transaction_coverage_date %}
+      {% else %}
+        {% set transaction_end = totals.0.coverage_end_date %}
+      {% endif %}
     <div id="total-disbursements" class="entity__figure row">
       <div class="content__section">
         <div class="heading--section heading--with-action">
@@ -83,7 +88,7 @@
       <p>This tab shows spending that this committee has made in support of or opposition to a candidate. None of the funds are directly given to or spent by the candidate.</p>
       {% if totals %}
       <div class="tag__category">
-        <div class="tag__item">Coverage dates: {{totals.0.coverage_start_date|date}} to {{totals.0.coverage_end_date|date}}</div>
+        <div class="tag__item">Coverage dates: {{totals.0.coverage_start_date|date}} to {{transaction_end|date}}</div>
       </div>
       {% endif %}
       <table class="data-table data-table--heading-borders data-table--entity u-margin--top" data-type="independent-expenditure-committee" data-committee="{{ committee_id }}" data-cycle="{{ cycle }}">
@@ -128,7 +133,7 @@
         <div class="results-info results-info--simple">
           {% if totals %}
           <div class="u-float-left tag__category">
-            <div class="tag__item">Coverage dates: {{totals.0.coverage_start_date|date}} to {{totals.0.coverage_end_date|date}}</div>
+            <div class="tag__item">Coverage dates: {{totals.0.coverage_start_date|date}} to {{transaction_end|date}}</div>
           </div>
           {% endif %}
           <button type="button" class="u-float-right js-export button button--cta button--export" data-export-for="disbursements-by-recipient">Export</button>
@@ -151,7 +156,7 @@
         <div class="results-info results-info--simple">
           {% if totals %}
           <div class="u-float-left tag__category">
-            <div class="tag__item">Coverage dates: {{totals.0.coverage_start_date|date}} to {{totals.0.coverage_end_date|date}}</div>
+            <div class="tag__item">Coverage dates: {{totals.0.coverage_start_date|date}} to {{transaction_end|date}}</div>
           </div>
           {% endif %}
           <div class="u-float-right">
@@ -184,7 +189,7 @@
         <div class="results-info results-info--simple">
           {% if totals %}
           <div class="u-float-left tag__category">
-            <div class="tag__item">Coverage dates: {{totals.0.coverage_start_date|date}} to {{totals.0.coverage_end_date|date}}</div>
+            <div class="tag__item">Coverage dates: {{totals.0.coverage_start_date|date}} to {{transaction_end|date}}</div>
           </div>
           {% endif %}
           <button type="button" class="u-float-right js-export button button--cta button--export" data-export-for="disbursements-by-recipient-id">Export</button>
