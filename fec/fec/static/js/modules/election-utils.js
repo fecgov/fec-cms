@@ -6,7 +6,6 @@ var _ = require('underscore');
 var fips = require('./fips');
 var helpers = require('./helpers');
 var moment = require('moment');
-var s = require('underscore.string');
 var topojson = require('topojson');
 
 var sprintf = require('sprintf-js').sprintf
