@@ -6,10 +6,9 @@ var _ = require('underscore');
 var fips = require('./fips');
 var helpers = require('./helpers');
 var moment = require('moment');
-var s = require('underscore.string');
 var topojson = require('topojson');
 
-_.mixin(s.exports());
+var sprintf = require('sprintf-js').sprintf
 
 var electionDatesTemplate = require('../templates/electionDates.hbs');
 var electionOfficesTemplate = require('../templates/electionOffices.hbs');
@@ -22,7 +21,7 @@ function encodeDistrict(state, district) {
 }
 
 function decodeDistrict(district) {
-  district = _.sprintf('%04d', district);
+  district = sprintf('%04d', district);
   return {
     state: fips.fipsByCode[parseInt(district.substring(0, 2))].STUSAB,
     district: parseInt(district.substring(2, 4))
