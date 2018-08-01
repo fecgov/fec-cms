@@ -404,26 +404,18 @@ def elections(request, office, cycle, state=None, district=None):
     if (state is not None) and (state and state.upper() not in constants.states):
         raise Http404()
 
-    tab = request.GET.get('tab','')
-    if (tab == 'contributions' or tab =='contributions/'):
-        #tab = 'election-data'
-       #return redirect(
-       #    reverse('elections',kwargs={'office': office } ) + '#individual-contributions'
-       #   )
-    #   tab = 'election-data'
-    #   url = '/data/elections/president/2012/#individual-contributions'
-        url = '/data/elections/'+office+'/'+str(cycle)+'/#individual-contributions'#individual-contributions'
-        return redirect(url)
-    elif (tab == 'totals' or tab =='totals/'):
-        url = '/data/elections/'+office+'/'+str(cycle)+'/#candidate-financial-totals'
-        return redirect(url)
-    elif  (tab == 'spending-by-others' or tab =='spending-by-others/'):
-       url = '/data/elections/'+office+'/'+str(cycle)+'/#independent-expenditures'
-       return redirect(url)
-    #    return redirect(
-    #       reverse('elections', kwargs={'tab': tab })
-    #          )
-        #raise Http404()
+    #map/redirect legacy tab names to correct anchor
+    tab = request.GET.get('tab','').replace('/','')
+    legacy_tabs = {'contributions':'individual-contributions', 'totals' : 'candidate-financial-totals','spending-by-others':'independent-expenditures'}
+    if tab in legacy_tabs.keys():
+        if office == 'senate' or office == 'house':
+            return redirect(
+               reverse('elections-state-district', args=(office,state,district,cycle)) +'#'+legacy_tabs[tab]
+               )
+        if office == 'president':
+            return redirect(
+               reverse('elections', args=(office,cycle)) +'#'+legacy_tabs[tab]
+               )
 
     return render(request, 'elections.jinja', {
         'office': office,
@@ -533,16 +525,3 @@ def feedback(request):
         raise Http404()
 
 from django.views.generic import RedirectView
-
-# class QuerystringRedirect(RedirectView):
-#     """
-#     Used to redirect to remove GET parameters from url
-
-#     e.g. /permalink/?id=10 to /permalink/10/
-#     """
-
-#     def get_redirect_url(self):
-#         if 'tab' in self.request.GET:
-#             return reverse('views.elections', args=('#individual-contributions'))
-#         else:
-#             raise Http404()
