@@ -378,15 +378,12 @@ def committee(request, committee_id):
 
 def elections_lookup(request):
     cycles = utils.get_cycles(utils.current_cycle())
-    cycle = request.GET.get('cycle', None)
-    state = request.GET.get('state', None)
 
     return render(request, 'election-lookup.jinja', {
         'parent': 'data',
         'cycles': cycles,
-        'cycle': cycle,
-        'state': state
     })
+
 
 def elections(request, office, cycle, state=None, district=None):
     cycle = int(cycle)

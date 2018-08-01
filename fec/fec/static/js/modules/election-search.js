@@ -61,7 +61,7 @@ function ElectionSearch(selector) {
   $(window).on('popstate', this.handlePopState.bind(this));
 
   this.getUpcomingElections();
-  this.handleStateChange();
+  this.performStateChange();
   this.handlePopState();
 }
 

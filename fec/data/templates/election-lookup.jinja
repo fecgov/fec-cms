@@ -72,22 +72,12 @@
         </div>
         <div class="results__count">
           <p class="t-italic">This page shows campaign finance data by district. If no candidates have filed (or if candidates have filed but not yet reported financial data), the district may not show up here.</p>
-          {% if state == 'PA' and cycle == '2018' %}
-            <div class="js-accordion accordion--neutral pa-message" data-content-prefix="pa-redistricting">
-              <button type="button" class="js-accordion-trigger accordion__button" aria-controls="pa-redistricting-content-0" aria-expanded="false">Information about 2018 Pennsylvania redistricting</button>
-              <div class="accordion__content" id="pa-redistricting-content-0" aria-hidden="true">
-                <p>On February 19, 2018, Pennsylvania's Supreme Court released a new congressional map for Pennsylvannia. Some candidates subsequently amended their registration forms to reflect new district numbers. Candidates are listed using information from their registration forms and may be running in different districts than in the past.</p>
-              </div>
+          <div class="js-accordion accordion--neutral pa-message" data-content-prefix="pa-redistricting" style="display: none;">
+            <button type="button" class="js-accordion-trigger accordion__button" aria-controls="pa-redistricting-content-0" aria-expanded="false">Information about 2018 Pennsylvania redistricting</button>
+            <div class="accordion__content" id="pa-redistricting-content-0" aria-hidden="true">
+              <p>On February 19, 2018, Pennsylvania's Supreme Court released a new congressional map for Pennsylvannia. Some candidates subsequently amended their registration forms to reflect new district numbers. Candidates are listed using information from their registration forms and may be running in different districts than in the past.</p>
             </div>
-          {% else %}
-            <div class="js-accordion accordion--neutral pa-message" data-content-prefix="pa-redistricting" style="display: none;">
-              <button type="button" class="js-accordion-trigger accordion__button" aria-controls="pa-redistricting-content-0" aria-expanded="false">Information about 2018 Pennsylvania redistricting</button>
-              <div class="accordion__content" id="pa-redistricting-content-0" aria-hidden="true">
-                <p>On February 19, 2018, Pennsylvania's Supreme Court released a new congressional map for Pennsylvannia. Some candidates subsequently amended their registration forms to reflect new district numbers. Candidates are listed using information from their registration forms and may be running in different districts than in the past.</p>
-              </div>
-            </div>
-
-          {% endif %}
+          </div>
         </div>
         <div class="results">
           <div class="js-results-items"></div>
