@@ -240,3 +240,12 @@ def three_days_ago():
     """Find the date three days ago"""
     three_days_ago = datetime.datetime.today() - datetime.timedelta(days=3)
     return three_days_ago.strftime('%m/%d/%y')
+
+
+def extend(*dicts):
+    """Create a new dictionary from multiple existing dictionaries
+    without overwriting."""
+    new_dict = {}
+    for each in dicts:
+        new_dict.update(each)
+    return new_dict
