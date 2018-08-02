@@ -8,7 +8,7 @@ var _ = require('underscore');
 var moment = require('moment');
 var decoders = require('./decoders');
 var Handlebars = require('hbsfy/runtime');
-var bleach = require('bleach');
+var sanitize = require('sanitize-html');
 var numeral = require('numeral');
 
 // set parameters from the API
@@ -436,14 +436,14 @@ function sanitizeValue(value) {
     if (_.isArray(value)) {
       for (var i = 0; i < value.length; i++) {
         if (value[i] !== null && value[i] !== undefined) {
-          value[i] = bleach.sanitize(value[i]).replace(
+          value[i] = sanitize(value[i]).replace(
             validCharactersRegEx,
             ''
           );
         }
       }
     } else {
-      value = bleach.sanitize(value).replace(validCharactersRegEx, '');
+      value = sanitize(value).replace(validCharactersRegEx, '');
     }
   }
 
