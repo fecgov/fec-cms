@@ -1,4 +1,7 @@
 from collections import OrderedDict
+import operator
+
+from data import utils
 
 START_YEAR = 1979
 END_YEAR = 2018
@@ -64,6 +67,12 @@ states = OrderedDict([
     ('WI', 'Wisconsin'),
     ('WY', 'Wyoming'),
 ])
+
+contributor_states = OrderedDict(sorted(utils.extend(states, {
+    ('AA', 'Armed Forces Americas'),
+    ('AE', 'Armed Forces Europe'),
+    ('AP', 'Armed Forces Pacific'),
+    ('ZZ', 'Foreign Countries'), }).items(), key=operator.itemgetter(1)))
 
 parties = OrderedDict([
     ('DEM', 'Democratic Party'),
