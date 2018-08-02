@@ -406,15 +406,20 @@ def elections(request, office, cycle, state=None, district=None):
 
     #map/redirect legacy tab names to correct anchor
     tab = request.GET.get('tab','').replace('/','')
-    legacy_tabs = {'contributions':'individual-contributions', 'totals' : 'candidate-financial-totals','spending-by-others':'independent-expenditures'}
+    legacy_tabs = {
+         'contributions':'#individual-contributions',
+         'totals' : '#candidate-financial-totals',
+         'spending-by-others':'#independent-expenditures'
+         }
+
     if tab in legacy_tabs.keys():
         if office == 'senate' or office == 'house':
             return redirect(
-               reverse('elections-state-district', args=(office,state,district,cycle)) +'#'+legacy_tabs[tab]
+               reverse('elections-state-district', args=(office,state,district,cycle)) + legacy_tabs[tab]
                )
         if office == 'president':
             return redirect(
-               reverse('elections', args=(office,cycle)) +'#'+legacy_tabs[tab]
+               reverse('elections-president', args=(office,cycle)) + legacy_tabs[tab]
                )
 
     return render(request, 'elections.jinja', {
@@ -524,4 +529,3 @@ def feedback(request):
     else:
         raise Http404()
 
-from django.views.generic import RedirectView
