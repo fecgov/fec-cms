@@ -4,7 +4,7 @@ from operator import attrgetter
 
 from django.conf import settings
 from home.models import DocumentPage, ResourcePage
-from wagtail.wagtailcore.models import Page, Orderable
+from wagtail.core.models import Page, Orderable
 
 register = template.Library()
 
