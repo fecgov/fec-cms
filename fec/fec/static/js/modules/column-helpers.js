@@ -124,11 +124,75 @@ function buildTotalLink(path, getParams) {
       ));
       link.setAttribute('href', uri);
       span.appendChild(link);
+      // Temporarily disable "other" state aggs
+      if (params.contributor_state == 'OT'){
+        span.textContent = helpers.currency(data);
+      }
     } else {
       span.textContent = helpers.currency(data);
     }
     return span.outerHTML;
   };
+}
+
+function makeCommitteeColumn(opts, context, factory) {
+  return _.extend({}, {
+    orderSequence: ['desc', 'asc'],
+    className: 'column--number',
+    render: buildTotalLink(['receipts', 'individual-contributions'], function(data, type, row, meta) {
+      row.cycle = context.election.cycle;
+      var column = meta.settings.aoColumns[meta.col].data;
+      return _.extend({
+        committee_id: (context.candidates[row.candidate_id] || {}).committee_ids,
+        two_year_transaction_period: row.cycle,
+      }, factory(data, type, row, meta, column));
+    })
+  }, opts);
+}
+
+var makeSizeColumn = _.partial(makeCommitteeColumn, _, _, function(data, type, row, meta, column) {
+  return getSizeParams(column);
+});
+
+function sizeColumns(context) {
+  return [
+    {
+      data: 'candidate_name',
+      className: 'all',
+      width: 'column--med',
+      render: function(data, type, row, meta) {
+        return buildEntityLink(
+          data,
+          helpers.buildAppUrl(['candidate', row.candidate_id]),
+          'candidate'
+        );
+      }
+    },
+    makeSizeColumn({data: '0'}, context),
+    makeSizeColumn({data: '200'}, context),
+    makeSizeColumn({data: '500'}, context),
+    makeSizeColumn({data: '1000'}, context),
+    makeSizeColumn({data: '2000'}, context)
+  ];
+}
+
+function stateColumns(results, context) {
+  var stateColumn = {'data': 'state'};
+  var columns = _.map(results, function(result) {
+    return makeCommitteeColumn(
+      {data: result.candidate_id},
+      context,
+      function(data, type, row, meta, column) {
+        return {
+          contributor_state: row.state,
+          committee_id: (context.candidates[column] || {}).committee_ids,
+          is_individual: 'true'
+        };
+      }
+    );
+  });
+
+  return [stateColumn].concat(columns);
 }
 
 module.exports = {
@@ -140,5 +204,7 @@ module.exports = {
   getColumns: getColumns,
   getSizeParams: getSizeParams,
   sizeInfo: sizeInfo,
-  urlColumn: urlColumn
+  urlColumn: urlColumn,
+  sizeColumns: sizeColumns,
+  stateColumns: stateColumns
 };

@@ -8,7 +8,7 @@ var _ = require('underscore');
 var moment = require('moment');
 var decoders = require('./decoders');
 var Handlebars = require('hbsfy/runtime');
-var bleach = require('bleach');
+var sanitize = require('sanitize-html');
 var numeral = require('numeral');
 
 // set parameters from the API
@@ -266,6 +266,22 @@ function buildUrl(path, query) {
     .toString();
 }
 
+function buildTableQuery(context, perPage) {
+  var pageLength = pageLength || 0;
+  var query = _.chain(context)
+  .pairs()
+  .filter(function(pair) {
+    return pair[1];
+  })
+  .object()
+  .value();
+
+  return _.extend(query, {
+    per_page: pageLength,
+    sort_hide_null: true
+  });
+}
+
 function getTimePeriod(electionYear, cycle, electionFull, office) {
   var durations = {
     P: 3,
@@ -420,14 +436,14 @@ function sanitizeValue(value) {
     if (_.isArray(value)) {
       for (var i = 0; i < value.length; i++) {
         if (value[i] !== null && value[i] !== undefined) {
-          value[i] = bleach.sanitize(value[i]).replace(
+          value[i] = sanitize(value[i]).replace(
             validCharactersRegEx,
             ''
           );
         }
       }
     } else {
-      value = bleach.sanitize(value).replace(validCharactersRegEx, '');
+      value = sanitize(value).replace(validCharactersRegEx, '');
     }
   }
 
@@ -467,6 +483,7 @@ module.exports = {
   anchorify: anchorify,
   buildAppUrl: buildAppUrl,
   buildUrl: buildUrl,
+  buildTableQuery: buildTableQuery,
   currency: currency,
   cycleDates: cycleDates,
   datetime: datetime,

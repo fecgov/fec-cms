@@ -29,6 +29,11 @@
     {% endif %}
 
     {% if two_year_totals %}
+      {% if two_year_totals.transaction_coverage_date is not none %}
+        {% set transaction_end = two_year_totals.transaction_coverage_date %}
+      {% else %}
+        {% set transaction_end = two_year_totals.coverage_end_date %}
+      {% endif %}
     <div id="total-receipts" class="entity__figure row">
       <div class="content__section">
         <div class="heading--section heading--with-action">
@@ -81,7 +86,7 @@
         <div id="contributor-state" class="panel-toggle-element" aria-hidden="true">
           <div class="results-info results-info--simple">
             <div class="tag__category">
-              <div class="tag__item">Coverage dates: {{two_year_totals.coverage_start_date|date}} to {{two_year_totals.coverage_end_date|date}}</div>
+              <div class="tag__item">Coverage dates: {{two_year_totals.coverage_start_date|date}} to {{transaction_end|date}}</div>
             </div>
           </div>
           <div class="map-table">
@@ -111,7 +116,7 @@
         <div id="contribution-size" class="panel-toggle-element" aria-hidden="true">
           <div class="results-info results-info--simple">
             <div class="tag__category">
-              <div class="tag__item">Coverage dates: {{two_year_totals.coverage_start_date|date}} to {{two_year_totals.coverage_end_date|date}}</div>
+              <div class="tag__item">Coverage dates: {{two_year_totals.coverage_start_date|date}} to {{transaction_end|date}}</div>
             </div>
           </div>
           <table
@@ -128,7 +133,7 @@
         <div id="all-transactions" class="panel-toggle-element">
           <div class="results-info results-info--simple">
             <div class="u-float-left tag__category">
-              <div class="tag__item">Coverage dates: {{two_year_totals.coverage_start_date|date}} to {{two_year_totals.coverage_end_date|date}}</div>
+              <div class="tag__item">Coverage dates: {{two_year_totals.coverage_start_date|date}} to {{transaction_end|date}}</div>
             </div>
             <div class="u-float-right">
               <div class="message message--info message--mini t-left-aligned data-container__message" data-export-message-for="individual-contributions" aria-hidden="true">
