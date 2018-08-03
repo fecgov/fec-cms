@@ -67,17 +67,7 @@ $(document).ready(function() {
 
     tables.drawComparison(response.results, context);
     maps.initStateMaps(response.results);
-
-    $('.data-table').each(function(index, table) {
-    var $table = $(table);
-    tabs.onShow($table, function(){
-      if(window.location.hash) {
-      $('html, body').animate({
-      scrollTop : $(window.location.hash).offset().top
-      })
-    }
-   });
-  });
+    helpers.scrollAnchor();
 
   });
 

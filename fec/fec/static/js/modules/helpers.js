@@ -48,6 +48,17 @@ function anchorify(attr) {
   });
 }
 
+function scrollAnchor(ms){
+  ms = ms || 1000
+  if(window.location.hash) {
+    setTimeout( function(){
+      $('html, body').animate({
+        scrollTop : $(window.location.hash).offset().top
+      })
+    }, ms)
+  }
+}
+
 function getWindowWidth() {
   // window.innerWidth accounts for scrollbars and should match the width used
   // for media queries.
@@ -481,6 +492,7 @@ function getCookie(name) {
 
 module.exports = {
   anchorify: anchorify,
+  scrollAnchor: scrollAnchor,
   buildAppUrl: buildAppUrl,
   buildUrl: buildUrl,
   buildTableQuery: buildTableQuery,
