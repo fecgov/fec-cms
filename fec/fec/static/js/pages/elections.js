@@ -11,7 +11,6 @@ var electionUtils = require('../modules/election-utils');
 var helpers = require('../modules/helpers');
 var ElectionForm = require('../modules/election-form').ElectionForm;
 var tableColumns = require('../modules/table-columns');
-var tabs = require('../vendor/tablist');
 
 $(document).ready(function() {
   var query = helpers.buildTableQuery(context.election);
