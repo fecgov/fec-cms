@@ -33,7 +33,7 @@ var downloadCapFormatted = helpers.formatNumber(DOWNLOAD_CAP);
 var MAX_DOWNLOADS = 5;
 var DOWNLOAD_MESSAGES = {
   recordCap:
-    'Use <a href="' + window.BASE_PATH + '/advanced?tab=other">' +
+    'Use <a href="' + window.BASE_PATH + '/advanced?tab=bulk-data">' +
     'bulk data</a> to export more than ' +
     downloadCapFormatted +
     ' records.',
