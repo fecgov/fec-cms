@@ -66,6 +66,8 @@ $(document).ready(function() {
 
     tables.drawComparison(response.results, context);
     maps.initStateMaps(response.results);
+    helpers.scrollAnchor();
+
   });
 
   electionUtils.getStateElectionOffices(context.election.state);
@@ -81,4 +83,6 @@ $(document).ready(function() {
     );
     districtMap.load(context.election);
   }
+
+
 });
