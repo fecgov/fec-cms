@@ -2,7 +2,6 @@ from django.conf.urls import url
 
 from data import views
 from data import views_datatables
-from django.views.generic import RedirectView
 
 urlpatterns = [
     url(r'^data/$', views.landing),
