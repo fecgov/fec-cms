@@ -7,7 +7,9 @@
 
 
   <div class="slab slab--inline slab--neutral u-padding--left u-padding--right">
-    {{ select.candidate_cycle_select(cycles, cycle, 'filings')}}
+    <div class="content__section">
+    {{ select.cycle_select(election_years, cycle, duration=duration, id="cycle-1") }}
+    </div>
 
 
     <div id="individual-contribution-transactions" class="entity__figure row">
@@ -15,7 +17,7 @@
         <div class="heading--section heading--with-action">
           <h3 class="heading__left">Statements of candidacy</h3>
           <a class="heading__right button--alt button--browse"
-              href="/data/receipts/individual-contributions/?two_year_transaction_period={{ max_cycle }}&{% for id in candidate_ids %}&candidate_id={{ id }}{% endfor %}">Filter this data</a>
+              href="/data/receipts/individual-contributions/?two_year_transaction_period={{ max_cycle }}&{% for id in committee_ids %}&committee_id={{ id }}{% endfor %}">Filter this data</a>
           </div>
 
 
