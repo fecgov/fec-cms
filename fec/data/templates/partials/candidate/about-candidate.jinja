@@ -39,17 +39,12 @@
                   <i class="icon-circle--check-outline--inline--left"></i>
                   <a href="{{ statement.pdf_url }}">Current version (PDF)</a>
                 </div>
-                {% else %}
-                <div class="t-block">
-                  <i class="icon-circle--clock-reverse--inline--left"></i>
-                  <a href="{{ statement.pdf_url }}">Previous version (PDF)</a>
-                </div>
-                {% endif %}
                 {% if statement.fec_file_id %}
                   <div class="t-small u-small-icon-padding--left"> {{ statement.fec_file_id }}</div>
                 {% endif %}
                 <div class="u-small-icon-padding--left"> Filed {{ statement.receipt_date }}</div>
               </li>
+              {% endif %}
             {% endfor %}
             </ul>
           </td>

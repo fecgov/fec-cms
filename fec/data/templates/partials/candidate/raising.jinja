@@ -5,28 +5,30 @@
 
   <div class="slab slab--inline slab--neutral u-padding--left u-padding--right">
 
-    {{ select.candidate_cycle_select(cycles, max_cycle, id="cycle-5") }}
+    <div class="content__section">
+    {{ select.cycle_select(election_years, cycle, duration=duration, id="cycle-1") }}
+    </div>
 
-    {% if committee_groups['P'] or committee_groups['A']%}
-      <span class="t-sans t-bold">Data is included from these committees:</span>
+      {% if committee_groups['P'] or committee_groups['A']%}
+        <span class="t-sans t-bold">Data is included from these committees:</span>
 
-      <ul class="list--bulleted">
-        {% for committee in committee_groups['P'] | reverse %}
-        {% if committee.cycle == max_cycle %}
-        <li>
-          <a class="t-sans" href="/data/committee/{{ committee.committee_id }}/?cycle={{ committee.related_cycle }}">{{ committee.name }}</a>
-        </li>
-        {% endif %}
-        {% endfor %}
-        {% for committee in committee_groups['A'] | reverse %}
-        {% if committee.cycle == max_cycle %}
-        <li>
-          <a class="t-sans" href="/data/committee/{{ committee.committee_id }}/?cycle={{ committee.related_cycle }}">{{ committee.name }}</a>
-        </li>
-        {% endif %}
-        {% endfor %}
-      </ul>
-    {% endif %}
+        <ul class="list--bulleted">
+          {% for committee in committee_groups['P'] | reverse %}
+          {% if committee.cycle == max_cycle %}
+          <li>
+            <a class="t-sans" href="/data/committee/{{ committee.committee_id }}/?cycle={{ committee.related_cycle }}">{{ committee.name }}</a>
+          </li>
+          {% endif %}
+          {% endfor %}
+          {% for committee in committee_groups['A'] | reverse %}
+          {% if committee.cycle == max_cycle %}
+          <li>
+            <a class="t-sans" href="/data/committee/{{ committee.committee_id }}/?cycle={{ committee.related_cycle }}">{{ committee.name }}</a>
+          </li>
+          {% endif %}
+          {% endfor %}
+        </ul>
+      {% endif %}
 
     {% if two_year_totals %}
       {% if two_year_totals.transaction_coverage_date is not none %}
@@ -56,6 +58,7 @@
         </div>
       </div>
     </div>
+
     {% endif %}
 
     <div id="individual-contribution-transactions" class="entity__figure row">
@@ -164,4 +167,5 @@
       </div>
     </div>
   </div>
+
 </section>
