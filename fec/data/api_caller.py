@@ -374,15 +374,15 @@ def call_senate_specials(state):
         given state. Returns a list of dictionaries
         Example: [{details for election1}][{details for election2}]
     """
-    api_response = _call_api(
+    special_results = _call_api(
         'election-dates',
         election_type_id='SG',
         office_sought='S',
         election_state=state,
     )
-    special_results = api_response['results']
 
-    return api_response.get('results', None)
+    return special_results.get('results')
+
 
 
 def format_special_results(special_results=[]):
