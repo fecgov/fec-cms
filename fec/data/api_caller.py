@@ -1,8 +1,8 @@
 import logging
 import os
 import re
-
 import requests
+import inspect
 
 from collections import OrderedDict
 from operator import itemgetter
@@ -36,6 +36,11 @@ def _call_api(*path_parts, **filters):
     )
     url = parse.urljoin(settings.FEC_API_URL, path)
     results = session.get(url, params=filters)
+
+    # Log the caller function and API endpoint
+    current_frame = inspect.currentframe()
+    caller_frame = inspect.getouterframes(current_frame, 2)
+    logger.info('{0}: {1}'.format(caller_frame[1][3], results.url))
 
     if results.ok:
         return results.json()
