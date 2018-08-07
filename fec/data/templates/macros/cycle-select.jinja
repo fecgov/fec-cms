@@ -63,13 +63,13 @@
 {% set cycle = cycle | int %}
   <div class="row content__section">
     <div class="cycle-select">
-      <label for="{{id}}-cycle" class="label cycle-select__label">Two-year period</label>
+      <label for="{{id}}-cycle" class="label cycle-select__label">Election</label>
       <select id="{{id}}-cycle" class="js-cycle" name="cycle" data-cycle-location="path">
         {% for each in cycles | sort(reverse=True) %}
           <option
               value="{{ each }}"
               {% if cycle and cycle <= each and cycle > (each - 2) %}selected{% endif %}
-            >{{ each|fmt_year_range }}</option>
+            >{{ each }}</option>
         {% endfor %}
       </select>
     </div>
