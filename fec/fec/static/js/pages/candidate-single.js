@@ -276,11 +276,15 @@ function initOtherDocumentsTable() {
   var $table = $('table[data-type="other-documents"]');
   var candidateId = $table.data('candidate');
   var path = ['filings'];
+   var opts = {
+     cycle: $table.data('cycle')
+   };
   tables.DataTable.defer($table, {
     path: path,
     query: {
       candidate_id: candidateId,
       form_type: ['F99','RFAI'],
+      cycle:opts.cycle,
       /* Performing an include would only show RFAI form types. For this reason, excludes need to be
          used for request_type
 
@@ -539,9 +543,9 @@ function initStatementsOfCandidacyTable() {
   var $table = $('table[data-type="statements-of-candidacy"]');
   var candidateId = $table.data('candidate-id');
   var path = ['filings'];
-  // var opts = {
-  //   cycle: $table.data('cycle')
-  // };
+  var opts = {
+     cycle: $table.data('cycle')
+   };
   tables.DataTable.defer($table, {
     path: path,
     query: {
