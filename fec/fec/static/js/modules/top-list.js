@@ -55,7 +55,6 @@ TopList.prototype.showSpending = function() {
   this.zeroPad();
 };
 
-
 module.exports = {
   TopList: TopList
 };

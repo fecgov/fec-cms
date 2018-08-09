@@ -16,13 +16,13 @@ var candidateInformationColumns = [
         data,
         helpers.buildAppUrl(['candidate', row.candidate_id]),
         'candidate',
-        {isIncumbent: row.incumbent_challenge_full === 'Incumbent'}
+        { isIncumbent: row.incumbent_challenge_full === 'Incumbent' }
       );
     }
   },
   {
     data: 'party_full',
-    className: 'all column--large',
+    className: 'all column--large'
   },
   {
     data: 'candidate_pcc_name',
@@ -46,21 +46,26 @@ var candidateInformationColumns = [
 ];
 
 var communicationCostColumns = [
-  columns.committeeColumn({data: 'committee', className: 'all'}),
+  columns.committeeColumn({ data: 'committee', className: 'all' }),
   columns.supportOpposeColumn,
-  columns.candidateColumn({data: 'candidate', className: 'all'}),
+  columns.candidateColumn({ data: 'candidate', className: 'all' }),
   {
     data: 'total',
     className: 'all column--number',
     orderable: true,
     orderSequence: ['desc', 'asc'],
-    render: columnHelpers.buildTotalLink(['communication-costs'], function(data, type, row, meta) {
-        return {
-          support_oppose_indicator: row.support_oppose_indicator,
-          candidate_id: row.candidate_id,
-        };
+    render: columnHelpers.buildTotalLink(['communication-costs'], function(
+      data,
+      type,
+      row,
+      meta
+    ) {
+      return {
+        support_oppose_indicator: row.support_oppose_indicator,
+        candidate_id: row.candidate_id
+      };
     })
-  },
+  }
 ];
 
 function createElectionColumns(context) {
@@ -73,7 +78,7 @@ function createElectionColumns(context) {
           data,
           helpers.buildAppUrl(['candidate', row.candidate_id]),
           'candidate',
-          {isIncumbent: row.incumbent_challenge_full === 'Incumbent'}
+          { isIncumbent: row.incumbent_challenge_full === 'Incumbent' }
         );
       }
     },
@@ -102,17 +107,16 @@ function createElectionColumns(context) {
         if (context.election.office === 'president') {
           urlBase = ['reports', 'presidential'];
         } else {
-          urlBase = ['reports','house-senate'];
+          urlBase = ['reports', 'house-senate'];
         }
-        var url = helpers.buildAppUrl(
-          urlBase,
-          {
-            committee_id: row.committee_ids,
-            cycle: context.election.cycle,
-            is_amended: 'false'
-          }
-        );
-        var coverage_end_date = row.coverage_end_date ? moment(row.coverage_end_date).format('MM/DD/YYYY') : null;
+        var url = helpers.buildAppUrl(urlBase, {
+          committee_id: row.committee_ids,
+          cycle: context.election.cycle,
+          is_amended: 'false'
+        });
+        var coverage_end_date = row.coverage_end_date
+          ? moment(row.coverage_end_date).format('MM/DD/YYYY')
+          : null;
 
         return coverageEndDate({
           coverage_end_date: coverage_end_date,
@@ -120,45 +124,53 @@ function createElectionColumns(context) {
         });
       },
       className: 'all',
-      orderable: false,
+      orderable: false
     }
   ];
 }
 
 var electioneeringColumns = [
-  columns.committeeColumn({data: 'committee', className: 'all'}),
-  columns.candidateColumn({data: 'candidate', className: 'all'}),
+  columns.committeeColumn({ data: 'committee', className: 'all' }),
+  columns.candidateColumn({ data: 'candidate', className: 'all' }),
   {
     data: 'total',
     className: 'all column--number',
     orderable: true,
     orderSequence: ['desc', 'asc'],
-    render: columnHelpers.buildTotalLink(['electioneering-communications'], function(data, type, row, meta) {
+    render: columnHelpers.buildTotalLink(
+      ['electioneering-communications'],
+      function(data, type, row, meta) {
         return {
-          candidate_id: row.candidate_id,
+          candidate_id: row.candidate_id
         };
-    })
-  },
+      }
+    )
+  }
 ];
 
 var independentExpenditureColumns = [
-  columns.committeeColumn({data: 'committee', className: 'all'}),
+  columns.committeeColumn({ data: 'committee', className: 'all' }),
   columns.supportOpposeColumn,
-  columns.candidateColumn({data: 'candidate', className: 'all'}),
+  columns.candidateColumn({ data: 'candidate', className: 'all' }),
   {
     data: 'total',
     className: 'all column--number',
     orderable: true,
     orderSequence: ['desc', 'asc'],
-    render: columnHelpers.buildTotalLink(['independent-expenditures'], function(data, type, row, meta) {
-        return {
-          data_type: 'processed',
-          is_notice: 'false',
-          support_oppose_indicator: row.support_oppose_indicator,
-          candidate_id: row.candidate_id
-        };
+    render: columnHelpers.buildTotalLink(['independent-expenditures'], function(
+      data,
+      type,
+      row,
+      meta
+    ) {
+      return {
+        data_type: 'processed',
+        is_notice: 'false',
+        support_oppose_indicator: row.support_oppose_indicator,
+        candidate_id: row.candidate_id
+      };
     })
-  },
+  }
 ];
 
 module.exports = {

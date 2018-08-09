@@ -19,7 +19,7 @@ $(document).ready(function() {
       path: ['schedules', 'schedule_e', 'by_candidate'],
       columns: tableColumns.independentExpenditureColumns,
       title: 'independent expenditures',
-      order: [[3, 'desc']],
+      order: [[3, 'desc']]
     },
     'communication-costs': {
       path: ['communication_costs', 'by_candidate'],
@@ -27,7 +27,7 @@ $(document).ready(function() {
       title: 'communication costs',
       order: [[3, 'desc']]
     },
-    'electioneering': {
+    electioneering: {
       path: ['electioneering', 'by_candidate'],
       columns: tableColumns.electioneeringColumns,
       title: 'electioneering communications',
@@ -44,13 +44,10 @@ $(document).ready(function() {
       columns: tableColumns.candidateInformationColumns,
       title: 'candidate information',
       order: [[3, 'desc']]
-    },
+    }
   };
 
-  var url = helpers.buildUrl(
-    ['elections'],
-    query
-  );
+  var url = helpers.buildUrl(['elections'], query);
 
   $.getJSON(url).done(function(response) {
     context.candidates = _.chain(response.results)
@@ -61,28 +58,28 @@ $(document).ready(function() {
       .value();
 
     var incumbents = response.results.filter(function(result) {
-      return result.incumbent_challenge_full=='Incumbent';
+      return result.incumbent_challenge_full == 'Incumbent';
     });
 
     tables.drawComparison(response.results, context);
     maps.initStateMaps(response.results);
     helpers.scrollAnchor();
-
   });
 
   electionUtils.getStateElectionOffices(context.election.state);
-  electionUtils.getElections(context.election.state, context.election.office, context.election.cycle);
+  electionUtils.getElections(
+    context.election.state,
+    context.election.office,
+    context.election.cycle
+  );
   tables.initSpendingTables('.data-table', context, spendingTableOpts);
 
   new ElectionForm('#election-nav');
 
   if ($('#election-map').length) {
-    var districtMap = new maps.DistrictMap(
-      $('#election-map').get(0),
-      {color: '#36BDBB'}
-    );
+    var districtMap = new maps.DistrictMap($('#election-map').get(0), {
+      color: '#36BDBB'
+    });
     districtMap.load(context.election);
   }
-
-
 });

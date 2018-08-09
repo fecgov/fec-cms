@@ -15,7 +15,7 @@ var events = require('../modules/events');
 var OtherSpendingTotals = require('../modules/other-spending-totals');
 
 var aggregateCallbacks = {
-  afterRender: tables.barsAfterRender.bind(undefined, undefined),
+  afterRender: tables.barsAfterRender.bind(undefined, undefined)
 };
 
 // DOM element and URL for building the state map
@@ -35,10 +35,14 @@ var expenditureColumns = [
     className: 'all',
     orderable: true,
     orderSequence: ['desc', 'asc'],
-    render: columnHelpers.buildTotalLink(['independent-expenditures'], function(data, type, row) {
+    render: columnHelpers.buildTotalLink(['independent-expenditures'], function(
+      data,
+      type,
+      row
+    ) {
       return {
         support_oppose_indicator: row.support_oppose_indicator,
-        candidate_id: row.candidate_id,
+        candidate_id: row.candidate_id
       };
     })
   },
@@ -55,10 +59,14 @@ var communicationCostColumns = [
     className: 'all',
     orderable: true,
     orderSequence: ['desc', 'asc'],
-    render: columnHelpers.buildTotalLink(['communication-costs'], function(data, type, row) {
+    render: columnHelpers.buildTotalLink(['communication-costs'], function(
+      data,
+      type,
+      row
+    ) {
       return {
         support_oppose_indicator: row.support_oppose_indicator,
-        candidate_id: row.candidate_id,
+        candidate_id: row.candidate_id
       };
     })
   },
@@ -75,12 +83,14 @@ var electioneeringColumns = [
     className: 'all',
     orderable: true,
     orderSequence: ['desc', 'asc'],
-    render: columnHelpers.buildTotalLink(['electioneering-communications'],
+    render: columnHelpers.buildTotalLink(
+      ['electioneering-communications'],
       function(data, type, row) {
         return {
           candidate_id: row.candidate_id
         };
-      })
+      }
+    )
   },
   columns.committeeColumn({
     data: 'committee',
@@ -101,11 +111,15 @@ var otherDocumentsColumns = [
     render: function(data, type, row) {
       var version = helpers.amendmentVersion(data);
       if (version === 'Version unknown') {
-        return '<i class="icon-blank"></i>Version unknown<br>' +
-          '<i class="icon-blank"></i>' + row.fec_file_id;
+        return (
+          '<i class="icon-blank"></i>Version unknown<br>' +
+          '<i class="icon-blank"></i>' +
+          row.fec_file_id
+        );
       } else {
         if (row.fec_file_id !== null) {
-          version = version + '<br><i class="icon-blank"></i>' + row.fec_file_id;
+          version =
+            version + '<br><i class="icon-blank"></i>' + row.fec_file_id;
         }
         return version;
       }
@@ -133,12 +147,12 @@ var itemizedDisbursementColumns = [
   {
     data: 'recipient_name',
     className: 'all',
-    orderable: false,
+    orderable: false
   },
   {
     data: 'recipient_state',
     className: 'min-tablet hide-panel',
-    orderable: false,
+    orderable: false
   },
   {
     data: 'disbursement_description',
@@ -153,14 +167,14 @@ var itemizedDisbursementColumns = [
   columns.currencyColumn({
     data: 'disbursement_amount',
     className: 'column--number'
-  }),
+  })
 ];
 
 var individualContributionsColumns = [
   {
     data: 'contributor_name',
     className: 'all',
-    orderable: false,
+    orderable: false
   },
   {
     data: 'committee',
@@ -182,7 +196,7 @@ var individualContributionsColumns = [
   columns.currencyColumn({
     data: 'contribution_receipt_amount',
     className: 'column--number'
-  }),
+  })
 ];
 
 // Begin datatable functions in order of tab appearance
@@ -207,13 +221,13 @@ function initOtherDocumentsTable() {
     path: path,
     query: {
       candidate_id: candidateId,
-      form_type: ['F99','RFAI'],
+      form_type: ['F99', 'RFAI'],
       /* Performing an include would only show RFAI form types. For this reason, excludes need to be
          used for request_type
       
       Exclude all request types except for: 
       // RQ-5: RFAI referencing Statement of Candidacy */
-      request_type: ['-1','-2','-3','-4','-6','-7','-8','-9'],
+      request_type: ['-1', '-2', '-3', '-4', '-6', '-7', '-8', '-9'],
       sort_hide_null: ['false']
     },
     columns: otherDocumentsColumns,
@@ -236,7 +250,7 @@ var tableOpts = {
     columns: communicationCostColumns,
     title: 'communication costs'
   },
-  'electioneering': {
+  electioneering: {
     path: ['electioneering', 'by_candidate'],
     columns: electioneeringColumns,
     title: 'electioneering communications'
@@ -253,9 +267,12 @@ function initSpendingTables() {
       cycle: $table.data('cycle'),
       election_full: $table.data('election-full')
     };
-    var displayCycle = helpers.formatCycleRange($table.data('cycle'), $table.data('duration'));
-    if(displayCycle == null) {
-      displayCycle = "unspecified cycle";
+    var displayCycle = helpers.formatCycleRange(
+      $table.data('cycle'),
+      $table.data('duration')
+    );
+    if (displayCycle == null) {
+      displayCycle = 'unspecified cycle';
     }
     if (opts) {
       tables.DataTable.defer($table, {
@@ -285,8 +302,8 @@ function initDisbursementsTable() {
   var $table = $('table[data-type="itemized-disbursements"]');
   var path = ['schedules', 'schedule_b'];
   var committeeIdData = $table.data('committee-id');
-  var committeeIds = "";
-  if(committeeIdData) {
+  var committeeIds = '';
+  if (committeeIdData) {
     committeeIds = committeeIdData.split(',').filter(Boolean);
   }
   var opts = {
@@ -296,9 +313,12 @@ function initDisbursementsTable() {
     name: $table.data('name'),
     cycle: $table.data('cycle')
   };
-  var displayCycle = helpers.formatCycleRange($table.data('cycle'), $table.data('duration'));
-  if(displayCycle == null) {
-    displayCycle = "unspecified cycle";
+  var displayCycle = helpers.formatCycleRange(
+    $table.data('cycle'),
+    $table.data('duration')
+  );
+  if (displayCycle == null) {
+    displayCycle = 'unspecified cycle';
   }
   tables.DataTable.defer($table, {
     path: path,
@@ -329,11 +349,14 @@ function initContributionsTables() {
   var $allTransactions = $('table[data-type="individual-contributions"]');
   var $contributionSize = $('table[data-type="contribution-size"]');
   var $contributorState = $('table[data-type="contributor-state"]');
-  var displayCycle = helpers.formatCycleRange($allTransactions.data('cycle'), 2);
+  var displayCycle = helpers.formatCycleRange(
+    $allTransactions.data('cycle'),
+    2
+  );
   var candidateName = $allTransactions.data('name');
   var committeeIdData = $allTransactions.data('committee-id');
-  var committeeIds = "";
-  if(committeeIdData) {
+  var committeeIds = '';
+  if (committeeIdData) {
     committeeIds = committeeIdData.split(',').filter(Boolean);
   }
   var opts = {
@@ -343,7 +366,7 @@ function initContributionsTables() {
     candidate_id: $allTransactions.data('candidate-id'),
     title: 'individual contributions',
     name: candidateName,
-    cycle: $allTransactions.data('cycle'),
+    cycle: $allTransactions.data('cycle')
   };
 
   var reason = helpers.missingDataReason('contributions');
@@ -380,24 +403,26 @@ function initContributionsTables() {
       sort_hide_null: false,
       per_page: 99
     },
-    columns: [{
-      data: 'state_full',
-      width: '50%',
-      className: 'all',
-      render: function(data, type, row, meta) {
-        var span = document.createElement('span');
-        span.textContent = data;
-        span.setAttribute('data-state', data);
-        span.setAttribute('data-row', meta.row);
-        return span.outerHTML;
-      }
-    },
+    columns: [
+      {
+        data: 'state_full',
+        width: '50%',
+        className: 'all',
+        render: function(data, type, row, meta) {
+          var span = document.createElement('span');
+          span.textContent = data;
+          span.setAttribute('data-state', data);
+          span.setAttribute('data-row', meta.row);
+          return span.outerHTML;
+        }
+      },
       {
         data: 'total',
         width: '50%',
         className: 'all',
         orderSequence: ['desc', 'asc'],
-        render: columnHelpers.buildTotalLink(['receipts', 'individual-contributions'],
+        render: columnHelpers.buildTotalLink(
+          ['receipts', 'individual-contributions'],
           function(data, type, row) {
             return {
               contributor_state: row.state,
@@ -405,7 +430,8 @@ function initContributionsTables() {
             };
           }
         )
-      }],
+      }
+    ],
     callbacks: aggregateCallbacks,
     dom: 't',
     order: [[1, 'desc']],
@@ -421,29 +447,32 @@ function initContributionsTables() {
       cycle: opts.cycle,
       sort: 'size'
     },
-    columns: [{
-      data: 'size',
-      width: '50%',
-      className: 'all',
-      orderable: false,
-      render: function(data) {
-        return columnHelpers.sizeInfo[data].label;
-      }
-    },
+    columns: [
+      {
+        data: 'size',
+        width: '50%',
+        className: 'all',
+        orderable: false,
+        render: function(data) {
+          return columnHelpers.sizeInfo[data].label;
+        }
+      },
       {
         data: 'total',
         width: '50%',
         className: 'all',
         orderSequence: ['desc', 'asc'],
         orderable: false,
-        render: columnHelpers.buildTotalLink(['receipts', 'individual-contributions'],
+        render: columnHelpers.buildTotalLink(
+          ['receipts', 'individual-contributions'],
           function(data, type, row) {
             var params = columnHelpers.getSizeParams(row.size);
             params.committee_id = opts.committee_id;
             return params;
           }
         )
-      }],
+      }
+    ],
     callbacks: aggregateCallbacks,
     dom: 't',
     order: false,
@@ -456,7 +485,7 @@ function initContributionsTables() {
       email: WEBMANAGER_EMAIL,
       name: candidateName,
       timePeriod: displayCycle,
-      reason: reason,
+      reason: reason
     }
   });
 

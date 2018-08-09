@@ -8,7 +8,11 @@ var URI = require('urijs');
 function lineNumberFilters() {
   lineNumberFiltersCheck();
 
-  $('#filters').on('change', 'input,select', _.debounce(lineNumberFiltersCheck, 250));
+  $('#filters').on(
+    'change',
+    'input,select',
+    _.debounce(lineNumberFiltersCheck, 250)
+  );
 }
 
 function lineNumberFiltersCheck() {
@@ -17,8 +21,7 @@ function lineNumberFiltersCheck() {
   if (Number(params.two_year_transaction_period) < 2007) {
     $('.js-line-number-filters').hide();
     $('.js-line-number-message').show();
-  }
-  else {
+  } else {
     $('.js-line-number-filters').show();
     $('.js-line-number-message').hide();
   }

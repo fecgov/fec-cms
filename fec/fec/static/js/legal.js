@@ -18,7 +18,9 @@ function KeywordModal() {
   this.elm = document.querySelector('.js-keyword-modal');
   this.$elm = $(this.elm);
   this.$form = this.$elm.find('form');
-  this.$fields = this.$elm.find('#keywords-any, #keywords-all, #keywords-exact');
+  this.$fields = this.$elm.find(
+    '#keywords-any, #keywords-all, #keywords-exact'
+  );
   this.$excludeField = this.$elm.find('#keywords-none');
   this.$submit = this.$elm.find('button[type="submit"]');
   this.$submit.on('click', this.handleSubmit.bind(this));
@@ -46,7 +48,9 @@ KeywordModal.prototype.handleSubmit = function(e) {
   e.preventDefault();
   var combinedValue = this.combineFields();
   this.$hiddenField.val(combinedValue);
-  this.$fields.each(function() { $(this).val(); });
+  this.$fields.each(function() {
+    $(this).val();
+  });
   this.$excludeField.val();
   this.$form.submit();
 };

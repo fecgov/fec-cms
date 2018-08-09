@@ -12,9 +12,9 @@ function FormNav(form) {
 FormNav.prototype.handleChange = function() {
   var allSelects = this.form.querySelectorAll('select,input');
   // Remove names from all selects with no values
-  for(var i = 0; i < allSelects.length; i++) {
+  for (var i = 0; i < allSelects.length; i++) {
     var select = allSelects[i];
-    if(select.getAttribute('name') && !select.value) {
+    if (select.getAttribute('name') && !select.value) {
       select.setAttribute('name', '');
     }
   }
@@ -22,4 +22,4 @@ FormNav.prototype.handleChange = function() {
   this.form.submit();
 };
 
-module.exports = {FormNav: FormNav};
+module.exports = { FormNav: FormNav };

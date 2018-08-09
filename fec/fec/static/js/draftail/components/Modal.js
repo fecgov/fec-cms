@@ -1,8 +1,8 @@
 import React from 'react';
 
-const Cancel = ({handleClose}) => (
+const Cancel = ({ handleClose }) => (
   <div
-    className='modal-close'
+    className="modal-close"
     onClick={() => handleClose()}
     style={{
       backgroundColor: 'rgb(51,51,51)',
@@ -31,7 +31,7 @@ const Cancel = ({handleClose}) => (
   </div>
 );
 
-const Title = ({title}) => (
+const Title = ({ title }) => (
   <h2
     style={{
       padding: '5px 0',
@@ -42,7 +42,7 @@ const Title = ({title}) => (
   </h2>
 );
 
-const Modal = ({children, handleClose, title}) => (
+const Modal = ({ children, handleClose, title }) => (
   <div
     style={{
       backgroundColor: '#fff',
@@ -60,7 +60,7 @@ const Modal = ({children, handleClose, title}) => (
     }}
   >
     <Cancel handleClose={handleClose} />
-    <Title title={title}/>
+    <Title title={title} />
     {children}
   </div>
 );
@@ -69,6 +69,5 @@ Modal.defaultProps = {
   handleClose: () => {},
   title: ''
 };
-
 
 export default Modal;

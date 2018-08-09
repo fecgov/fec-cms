@@ -18,16 +18,30 @@ class SansserifSource extends React.Component {
     var selectedText = currentContentBlock.getText().slice(start, end);
 
     // Uses the Draft.js API to create a new entity with the right data.
-    const contentWithEntity = content.createEntity(entityType.type, 'IMMUTABLE', {
-        term: selectedText,
-    });
+    const contentWithEntity = content.createEntity(
+      entityType.type,
+      'IMMUTABLE',
+      {
+        term: selectedText
+      }
+    );
     const entityKey = contentWithEntity.getLastCreatedEntityKey();
 
     // Add some text for the entity to be activated on.
     const text = `${selectedText}`;
 
-    const newContent = Modifier.replaceText(content, selection, text, null, entityKey);
-    const nextState = EditorState.push(editorState, newContent, 'insert-characters');
+    const newContent = Modifier.replaceText(
+      content,
+      selection,
+      text,
+      null,
+      entityKey
+    );
+    const nextState = EditorState.push(
+      editorState,
+      newContent,
+      'insert-characters'
+    );
 
     onComplete(nextState);
   }
@@ -37,15 +51,12 @@ class SansserifSource extends React.Component {
   }
 }
 
-
 // This adds additional 'term' class to the editor
 // to add custom editor styles inside customize-editor.css
-const Sansserif = ({children}) => (
-  <span className='t-sans'>{children}</span>
-);
+const Sansserif = ({ children }) => <span className="t-sans">{children}</span>;
 
 module.exports = {
   type: 'SANSSERIF',
   source: SansserifSource,
-  decorator: Sansserif,
+  decorator: Sansserif
 };

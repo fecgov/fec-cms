@@ -42,9 +42,12 @@ var sizeColumns = [
     className: 'all',
     orderSequence: ['desc', 'asc'],
     orderable: false,
-    render: columnHelpers.buildTotalLink(['receipts', 'individual-contributions'], function(data, type, row, meta) {
-      return columnHelpers.getSizeParams(row.size);
-    })
+    render: columnHelpers.buildTotalLink(
+      ['receipts', 'individual-contributions'],
+      function(data, type, row, meta) {
+        return columnHelpers.getSizeParams(row.size);
+      }
+    )
   }
 ];
 
@@ -66,12 +69,15 @@ var stateColumns = [
     width: '50%',
     className: 'all',
     orderSequence: ['desc', 'asc'],
-    render: columnHelpers.buildTotalLink(['receipts', 'individual-contributions'], function(data, type, row, meta) {
-      return {
-        contributor_state: row.state,
-      };
-    })
-  },
+    render: columnHelpers.buildTotalLink(
+      ['receipts', 'individual-contributions'],
+      function(data, type, row, meta) {
+        return {
+          contributor_state: row.state
+        };
+      }
+    )
+  }
 ];
 
 var employerColumns = [
@@ -86,15 +92,18 @@ var employerColumns = [
     className: 'all',
     orderable: false,
     orderSequence: ['desc', 'asc'],
-    render: columnHelpers.buildTotalLink(['receipts', 'individual-contributions'], function(data, type, row, meta) {
-      if (row.employer) {
-        return {
-          contributor_employer: row.employer,
-        };
-      } else {
-        return null;
+    render: columnHelpers.buildTotalLink(
+      ['receipts', 'individual-contributions'],
+      function(data, type, row, meta) {
+        if (row.employer) {
+          return {
+            contributor_employer: row.employer
+          };
+        } else {
+          return null;
+        }
       }
-    })
+    )
   }
 ];
 
@@ -110,15 +119,18 @@ var occupationColumns = [
     className: 'all',
     orderable: false,
     orderSequence: ['desc', 'asc'],
-    render: columnHelpers.buildTotalLink(['receipts', 'individual-contributions'], function(data, type, row, meta) {
-      if (row.occupation) {
-        return {
-          contributor_occupation: row.occupation,
-        };
-      } else {
-        return null;
+    render: columnHelpers.buildTotalLink(
+      ['receipts', 'individual-contributions'],
+      function(data, type, row, meta) {
+        if (row.occupation) {
+          return {
+            contributor_occupation: row.occupation
+          };
+        } else {
+          return null;
+        }
       }
-    })
+    )
   }
 ];
 
@@ -133,7 +145,12 @@ var disbursementRecipientColumns = [
     className: 'all',
     orderable: false,
     orderSequence: ['desc', 'asc'],
-    render: columnHelpers.buildTotalLink(['disbursements'], function(data, type, row, meta) {
+    render: columnHelpers.buildTotalLink(['disbursements'], function(
+      data,
+      type,
+      row,
+      meta
+    ) {
       return {
         recipient_name: row.recipient_name
       };
@@ -159,7 +176,12 @@ var disbursementRecipientIDColumns = [
     className: 'all',
     orderable: false,
     orderSequence: ['desc', 'asc'],
-    render: columnHelpers.buildTotalLink(['disbursements'], function(data, type, row, meta) {
+    render: columnHelpers.buildTotalLink(['disbursements'], function(
+      data,
+      type,
+      row,
+      meta
+    ) {
       return {
         recipient_name: row.recipient_id
       };
@@ -173,11 +195,16 @@ var expendituresColumns = [
     className: 'all',
     orderable: true,
     orderSequence: ['desc', 'asc'],
-    render: columnHelpers.buildTotalLink(['independent-expenditures'], function(data, type, row, meta) {
+    render: columnHelpers.buildTotalLink(['independent-expenditures'], function(
+      data,
+      type,
+      row,
+      meta
+    ) {
       return {
         support_oppose_indicator: row.support_oppose_indicator,
-        candidate_id: row.candidate_id,
-      // is_notice: false,
+        candidate_id: row.candidate_id
+        // is_notice: false,
       };
     })
   },
@@ -194,12 +221,15 @@ var electioneeringColumns = [
     className: 'all',
     orderable: true,
     orderSequence: ['desc', 'asc'],
-    render: columnHelpers.buildTotalLink(['electioneering-communications'], function(data, type, row, meta) {
-      return {
-        support_oppose_indicator: row.support_oppose_indicator,
-        candidate_id: row.candidate_id,
-      };
-    })
+    render: columnHelpers.buildTotalLink(
+      ['electioneering-communications'],
+      function(data, type, row, meta) {
+        return {
+          support_oppose_indicator: row.support_oppose_indicator,
+          candidate_id: row.candidate_id
+        };
+      }
+    )
   },
   columns.candidateColumn({
     data: 'candidate',
@@ -213,10 +243,15 @@ var communicationCostColumns = [
     className: 'all',
     orderable: true,
     orderSequence: ['desc', 'asc'],
-    render: columnHelpers.buildTotalLink(['communication-costs'], function(data, type, row, meta) {
+    render: columnHelpers.buildTotalLink(['communication-costs'], function(
+      data,
+      type,
+      row,
+      meta
+    ) {
       return {
         support_oppose_indicator: row.support_oppose_indicator,
-        candidate_id: row.candidate_id,
+        candidate_id: row.candidate_id
       };
     })
   },
@@ -231,12 +266,12 @@ var itemizedDisbursementColumns = [
   {
     data: 'recipient_name',
     className: 'all',
-    orderable: false,
+    orderable: false
   },
   {
     data: 'recipient_state',
     className: 'min-tablet hide-panel',
-    orderable: false,
+    orderable: false
   },
   {
     data: 'disbursement_description',
@@ -251,19 +286,19 @@ var itemizedDisbursementColumns = [
   columns.currencyColumn({
     data: 'disbursement_amount',
     className: 'column--number'
-  }),
+  })
 ];
 
 var individualContributionsColumns = [
   {
     data: 'contributor_name',
     className: 'all',
-    orderable: false,
+    orderable: false
   },
   {
     data: 'contributor_state',
     className: 'all',
-    orderable: false,
+    orderable: false
   },
   columns.dateColumn({
     data: 'contribution_receipt_date',
@@ -272,29 +307,37 @@ var individualContributionsColumns = [
   columns.currencyColumn({
     data: 'contribution_receipt_amount',
     className: 'column--number'
-  }),
+  })
 ];
 
-
 var aggregateCallbacks = {
-  afterRender: tables.barsAfterRender.bind(undefined, undefined),
+  afterRender: tables.barsAfterRender.bind(undefined, undefined)
 };
 
 // Settings for filings tables
-var rawFilingsColumns = columnHelpers.getColumns(
-  columns.filings,
-  ['document_type', 'coverage_start_date', 'coverage_end_date', 'receipt_date']
-);
+var rawFilingsColumns = columnHelpers.getColumns(columns.filings, [
+  'document_type',
+  'coverage_start_date',
+  'coverage_end_date',
+  'receipt_date'
+]);
 
-var filingsColumns = columnHelpers.getColumns(
-  columns.filings,
-  ['document_type', 'version', 'receipt_date', 'pages']
-);
+var filingsColumns = columnHelpers.getColumns(columns.filings, [
+  'document_type',
+  'version',
+  'receipt_date',
+  'pages'
+]);
 
-var filingsReportsColumns = columnHelpers.getColumns(
-  columns.filings,
-  ['document_type', 'version', 'coverage_start_date', 'coverage_end_date', 'receipt_date_unorderable', 'pages', 'modal_trigger']
-);
+var filingsReportsColumns = columnHelpers.getColumns(columns.filings, [
+  'document_type',
+  'version',
+  'coverage_start_date',
+  'coverage_end_date',
+  'receipt_date_unorderable',
+  'pages',
+  'modal_trigger'
+]);
 
 $(document).ready(function() {
   var $mapTable;
@@ -347,7 +390,13 @@ $(document).ready(function() {
         });
         break;
       case 'receipts-by-state':
-        path = ['committee', committeeId, 'schedules', 'schedule_a', 'by_state'];
+        path = [
+          'committee',
+          committeeId,
+          'schedules',
+          'schedule_a',
+          'by_state'
+        ];
         query = _.extend(query, {
           per_page: 99
         });
@@ -368,7 +417,13 @@ $(document).ready(function() {
 
         break;
       case 'receipts-by-employer':
-        path = ['committee', committeeId, 'schedules', 'schedule_a', 'by_employer'];
+        path = [
+          'committee',
+          committeeId,
+          'schedules',
+          'schedule_a',
+          'by_employer'
+        ];
         tables.DataTable.defer(
           $table,
           _.extend({}, tableOpts, {
@@ -381,13 +436,19 @@ $(document).ready(function() {
               dataType: 'individual contributions',
               name: context.name,
               timePeriod: context.timePeriod,
-              reason: helpers.missingDataReason('contributions'),
-            },
+              reason: helpers.missingDataReason('contributions')
+            }
           })
         );
         break;
       case 'receipts-by-occupation':
-        path = ['committee', committeeId, 'schedules', 'schedule_a', 'by_occupation'];
+        path = [
+          'committee',
+          committeeId,
+          'schedules',
+          'schedule_a',
+          'by_occupation'
+        ];
         tables.DataTable.defer(
           $table,
           _.extend({}, tableOpts, {
@@ -400,8 +461,8 @@ $(document).ready(function() {
               dataType: 'individual contributions',
               name: context.name,
               timePeriod: context.timePeriod,
-              reason: helpers.missingDataReason('contributions'),
-            },
+              reason: helpers.missingDataReason('contributions')
+            }
           })
         );
         break;
@@ -414,7 +475,7 @@ $(document).ready(function() {
             query: {
               committee_id: committeeId,
               two_year_transaction_period: cycle,
-              is_individual: true,
+              is_individual: true
             },
             columns: individualContributionsColumns,
             callbacks: aggregateCallbacks,
@@ -426,13 +487,19 @@ $(document).ready(function() {
               dataType: 'individual contributions',
               name: context.name,
               timePeriod: context.timePeriod,
-              reason: helpers.missingDataReason('contributions'),
-            },
+              reason: helpers.missingDataReason('contributions')
+            }
           })
         );
         break;
       case 'disbursements-by-recipient':
-        path = ['committee', committeeId, 'schedules', 'schedule_b', 'by_recipient'];
+        path = [
+          'committee',
+          committeeId,
+          'schedules',
+          'schedule_b',
+          'by_recipient'
+        ];
         tables.DataTable.defer(
           $table,
           _.extend({}, tableOpts, {
@@ -446,7 +513,7 @@ $(document).ready(function() {
               name: context.name,
               reason: helpers.missingDataReason('disbursements'),
               timePeriod: context.timePeriod
-            },
+            }
           })
         );
         break;
@@ -471,12 +538,18 @@ $(document).ready(function() {
               name: context.name,
               reason: helpers.missingDataReason('disbursements'),
               timePeriod: context.timePeriod
-            },
+            }
           })
         );
         break;
       case 'disbursements-by-recipient-id':
-        path = ['committee', committeeId, 'schedules', 'schedule_b', 'by_recipient_id'];
+        path = [
+          'committee',
+          committeeId,
+          'schedules',
+          'schedule_b',
+          'by_recipient_id'
+        ];
         tables.DataTable.defer(
           $table,
           _.extend({}, tableOpts, {
@@ -490,12 +563,18 @@ $(document).ready(function() {
               name: context.name,
               reason: helpers.missingDataReason('disbursements'),
               timePeriod: context.timePeriod
-            },
+            }
           })
         );
         break;
       case 'independent-expenditure-committee':
-        path = ['committee', committeeId, 'schedules', 'schedule_e', 'by_candidate'];
+        path = [
+          'committee',
+          committeeId,
+          'schedules',
+          'schedule_e',
+          'by_candidate'
+        ];
         tables.DataTable.defer($table, {
           path: path,
           query: query,
@@ -509,7 +588,7 @@ $(document).ready(function() {
             name: context.name,
             reason: helpers.missingDataReason('ie-made'),
             timePeriod: context.timePeriod
-          },
+          }
         });
         break;
       case 'electioneering-committee':
@@ -526,11 +605,16 @@ $(document).ready(function() {
             dataType: 'electioneering communications',
             name: context.name,
             timePeriod: context.timePeriod
-          },
+          }
         });
         break;
       case 'communication-cost-committee':
-        path = ['committee', committeeId, 'communication_costs', 'by_candidate'];
+        path = [
+          'committee',
+          committeeId,
+          'communication_costs',
+          'by_candidate'
+        ];
         tables.DataTable.defer($table, {
           path: path,
           query: query,
@@ -543,35 +627,53 @@ $(document).ready(function() {
             dataType: 'communication costs',
             name: context.name,
             timePeriod: context.timePeriod
-          },
+          }
         });
         break;
       case 'raw-filings':
         var min_date = $table.attr('data-min-date');
-        opts = _.extend({
-          columns: rawFilingsColumns,
-          order: [[1, 'desc']],
-          path: ['efile', 'filings'],
-          query: _.extend({
-            committee_id: committeeId,
-            min_receipt_date: min_date,
-            sort: ['-receipt_date']
-          }, query),
-          callbacks: {
-            afterRender: filings.renderModal
-          }
-        }, filingsOpts);
+        opts = _.extend(
+          {
+            columns: rawFilingsColumns,
+            order: [[1, 'desc']],
+            path: ['efile', 'filings'],
+            query: _.extend(
+              {
+                committee_id: committeeId,
+                min_receipt_date: min_date,
+                sort: ['-receipt_date']
+              },
+              query
+            ),
+            callbacks: {
+              afterRender: filings.renderModal
+            }
+          },
+          filingsOpts
+        );
         tables.DataTable.defer($table, opts);
         break;
       case 'filings-reports':
-        opts = _.extend({
-          columns: filingsReportsColumns,
-          order: [],
-          path: ['committee', committeeId, 'filings'],
-          query: _.extend({
-            form_type: ['F3', 'F3X', 'F3P', 'F3L', 'F4', 'F5', 'F7', 'F13', 'RFAI'],
-            report_type: ['-24', '-48'],
-            /* Performing an include would only show RFAI form types. For this reason, excludes need to be
+        opts = _.extend(
+          {
+            columns: filingsReportsColumns,
+            order: [],
+            path: ['committee', committeeId, 'filings'],
+            query: _.extend(
+              {
+                form_type: [
+                  'F3',
+                  'F3X',
+                  'F3P',
+                  'F3L',
+                  'F4',
+                  'F5',
+                  'F7',
+                  'F13',
+                  'RFAI'
+                ],
+                report_type: ['-24', '-48'],
+                /* Performing an include would only show RFAI form types. For this reason, excludes need to be
                used for request_type
 
             Exclude all request types except for:
@@ -580,25 +682,35 @@ $(document).ready(function() {
                - RQ-4: RFAI referencing Independent Expenditure filer
                - RQ-7: RFAI referencing failure to file
                - RQ-8: RFAI referencing public disclosure */
-            request_type: ['-1','-5','-6','-9'],
-            sort: ['-coverage_end_date', 'report_type_full', '-beginning_image_number'],
-            sort_hide_null: ['false']
-          }, query),
-          callbacks: {
-            afterRender: filings.renderModal
-          }
-        }, filingsOpts);
+                request_type: ['-1', '-5', '-6', '-9'],
+                sort: [
+                  '-coverage_end_date',
+                  'report_type_full',
+                  '-beginning_image_number'
+                ],
+                sort_hide_null: ['false']
+              },
+              query
+            ),
+            callbacks: {
+              afterRender: filings.renderModal
+            }
+          },
+          filingsOpts
+        );
         tables.DataTable.defer($table, opts);
         break;
       case 'filings-notices':
-        opts = _.extend({
-          columns: filingsColumns,
-          order: [[2, 'desc']],
-          path: ['committee', committeeId, 'filings'],
-          query: _.extend({
-            form_type: ['F5', 'F24', 'F6', 'F9', 'F10', 'F11', 'RFAI'],
-            report_type: ['-Q1', '-Q2', '-Q3', '-YE'],
-            /* Performing an include would only show RFAI form types. For this reason, excludes need to be
+        opts = _.extend(
+          {
+            columns: filingsColumns,
+            order: [[2, 'desc']],
+            path: ['committee', committeeId, 'filings'],
+            query: _.extend(
+              {
+                form_type: ['F5', 'F24', 'F6', 'F9', 'F10', 'F11', 'RFAI'],
+                report_type: ['-Q1', '-Q2', '-Q3', '-YE'],
+                /* Performing an include would only show RFAI form types. For this reason, excludes need to be
                used for request_type
 
             Exclude all request types except for:
@@ -607,47 +719,63 @@ $(document).ready(function() {
 
             Exclude quarterly report_types so F5 quarterlies don't appear
             */
-            request_type: ['-1', '-3', '-5', '-6', '-7', '-8', '-9'],
-            sort_hide_null: ['false']
-          }, query),
-        }, filingsOpts);
+                request_type: ['-1', '-3', '-5', '-6', '-7', '-8', '-9'],
+                sort_hide_null: ['false']
+              },
+              query
+            )
+          },
+          filingsOpts
+        );
         tables.DataTable.defer($table, opts);
         break;
       case 'filings-statements':
-        opts = _.extend({
-          columns: filingsColumns,
-          order: [[2, 'desc']],
-          path: ['committee', committeeId, 'filings'],
-          query: _.extend({
-            form_type: ['F1','RFAI'],
-            /* Performing an include would only show RFAI form types. For this reason, excludes need to be
+        opts = _.extend(
+          {
+            columns: filingsColumns,
+            order: [[2, 'desc']],
+            path: ['committee', committeeId, 'filings'],
+            query: _.extend(
+              {
+                form_type: ['F1', 'RFAI'],
+                /* Performing an include would only show RFAI form types. For this reason, excludes need to be
                used for request_type
 
             Exclude all request types except for:
                - RQ-1: RFAI referencing Statement of organization
                - RQ-6: RFAI referencing 2nd notice State of organization */
-            request_type: ['-2','-3','-4','-5','-7','-8','-9'],
-            sort_hide_null: ['false']
-          }, query),
-        }, filingsOpts);
+                request_type: ['-2', '-3', '-4', '-5', '-7', '-8', '-9'],
+                sort_hide_null: ['false']
+              },
+              query
+            )
+          },
+          filingsOpts
+        );
         tables.DataTable.defer($table, opts);
         break;
       case 'filings-other':
-        opts = _.extend({
-          columns: filingsColumns,
-          order: [[2, 'desc']],
-          path: ['committee', committeeId, 'filings'],
-          query: _.extend({
-            form_type: ['F1M', 'F8', 'F99', 'F12','RFAI'],
-            /* Performing an include would only show RFAI form types. For this reason, excludes need to be
+        opts = _.extend(
+          {
+            columns: filingsColumns,
+            order: [[2, 'desc']],
+            path: ['committee', committeeId, 'filings'],
+            query: _.extend(
+              {
+                form_type: ['F1M', 'F8', 'F99', 'F12', 'RFAI'],
+                /* Performing an include would only show RFAI form types. For this reason, excludes need to be
                used for request_type
 
             Exclude all request types except for:
                - RQ-9: RFAI referencing Multicandidate status */
-            request_type: ['-1','-2','-3','-4','-5','-6','-7','-8'],
-            sort_hide_null: ['false']
-          }, query),
-        }, filingsOpts);
+                request_type: ['-1', '-2', '-3', '-4', '-5', '-6', '-7', '-8'],
+                sort_hide_null: ['false']
+              },
+              query
+            )
+          },
+          filingsOpts
+        );
         tables.DataTable.defer($table, opts);
         break;
     }
@@ -656,7 +784,13 @@ $(document).ready(function() {
   // Set up state map
   var $map = $('.state-map');
   var mapUrl = helpers.buildUrl(
-    ['committee', $map.data('committee-id'), 'schedules', 'schedule_a', 'by_state'],
+    [
+      'committee',
+      $map.data('committee-id'),
+      'schedules',
+      'schedule_a',
+      'by_state'
+    ],
     {
       cycle: $map.data('cycle'),
       per_page: 99

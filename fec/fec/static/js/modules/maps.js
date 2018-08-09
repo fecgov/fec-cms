@@ -27,12 +27,7 @@ var stateFeatureMap = _.chain(stateFeatures)
 
 var colorZero = '#ffffff';
 var colorScale = ['#e2ffff', '#278887'];
-var compactRules = [
-  ['B', 9],
-  ['M', 6],
-  ['k', 3],
-  ['', 0]
-];
+var compactRules = [['B', 9], ['M', 6], ['k', 3], ['', 0]];
 var MAX_MAPS = 2;
 
 _.templateSettings = {
@@ -51,11 +46,13 @@ function compactNumber(value, rule) {
 }
 
 function stateMap($elm, data, width, height, min, max, addLegend, addTooltips) {
-  var svg = d3.select($elm[0])
+  var svg = d3
+    .select($elm[0])
     .append('svg')
-      .attr('width', width)
-      .attr('height', height);
-  var projection = d3.geo.albersUsa()
+    .attr('width', width)
+    .attr('height', height);
+  var projection = d3.geo
+    .albersUsa()
     .scale(450)
     .translate([220, 150]);
   var path = d3.geo.path().projection(projection);
@@ -81,18 +78,20 @@ function stateMap($elm, data, width, height, min, max, addLegend, addTooltips) {
   max = max || _.max(totals);
   var scale = chroma.scale(colorScale).domain([min, max]);
   var quantize = d3.scale.linear().domain([min, max]);
-  svg.append('g')
+  svg
+    .append('g')
     .selectAll('path')
-      .data(stateFeatures)
-    .enter().append('path')
-      .attr('fill', function(d) {
-        return results[d.id] ? scale(results[d.id]) : colorZero;
-      })
-      .attr('data-state', function(d) {
-        return fips.fipsByCode[d.id].STATE_NAME;
-      })
-      .attr('class', 'shape')
-      .attr('d', path)
+    .data(stateFeatures)
+    .enter()
+    .append('path')
+    .attr('fill', function(d) {
+      return results[d.id] ? scale(results[d.id]) : colorZero;
+    })
+    .attr('data-state', function(d) {
+      return fips.fipsByCode[d.id].STATE_NAME;
+    })
+    .attr('class', 'shape')
+    .attr('d', path)
     .on('mouseover', function(d) {
       if (results[d.id]) {
         this.parentNode.appendChild(this);
@@ -115,12 +114,14 @@ function stateLegend(svg, scale, quantize, quantiles) {
   var legendWidth = 40;
   var legendBar = 35;
   var ticks = quantize.ticks(quantiles);
-  var legend = svg.selectAll('g.legend')
+  var legend = svg
+    .selectAll('g.legend')
     .data(ticks)
     .enter()
-      .append('g')
-      .attr('class', 'legend');
-  legend.append('rect')
+    .append('g')
+    .attr('class', 'legend');
+  legend
+    .append('rect')
     .attr('x', function(d, i) {
       return i * legendWidth + (legendWidth - legendBar) / 2;
     })
@@ -133,7 +134,8 @@ function stateLegend(svg, scale, quantize, quantiles) {
 
   // Add legend text
   var compactRule = chooseRule(ticks[Math.ceil(ticks.length / 2)]);
-  legend.append('text')
+  legend
+    .append('text')
     .attr('x', function(d, i) {
       return (i + 0.5) * legendWidth;
     })
@@ -149,26 +151,27 @@ function stateLegend(svg, scale, quantize, quantiles) {
 
 var tooltipTemplate = _.template(
   '<div class="tooltip__title">{{ name }}</div>' +
-  '<div class="tooltip__value">{{ total }}</div>'
+    '<div class="tooltip__value">{{ total }}</div>'
 );
 
 function stateTooltips(svg, path, results) {
-  var tooltip = d3.select('body').append('div')
+  var tooltip = d3
+    .select('body')
+    .append('div')
     .attr('id', 'map-tooltip')
     .attr('class', 'tooltip tooltip--above tooltip--mouse')
     .style('position', 'absolute')
     .style('pointer-events', 'none')
     .style('display', 'none');
-  svg.selectAll('path')
+  svg
+    .selectAll('path')
     .on('mouseover', function(d) {
       this.parentNode.appendChild(this);
       var html = tooltipTemplate({
         name: fips.fipsByCode[d.id].STATE_NAME,
         total: helpers.currency(results[d.id] || 0)
       });
-      tooltip
-        .style('display', 'block')
-        .html(html);
+      tooltip.style('display', 'block').html(html);
       moveTooltip(tooltip);
     })
     .on('mouseout', function() {
@@ -180,11 +183,9 @@ function stateTooltips(svg, path, results) {
 }
 
 function moveTooltip(tooltip) {
-  var x = d3.event.pageX - (tooltip[0][0].offsetWidth / 2);
-  var y = d3.event.pageY - (tooltip[0][0].offsetHeight);
-  tooltip
-    .style('left', x + 'px')
-    .style('top', y + 'px');
+  var x = d3.event.pageX - tooltip[0][0].offsetWidth / 2;
+  var y = d3.event.pageY - tooltip[0][0].offsetHeight;
+  tooltip.style('left', x + 'px').style('top', y + 'px');
 }
 
 function highlightState($parent, state) {
@@ -223,7 +224,7 @@ DistrictMap.prototype.render = function(data) {
   this.elm.setAttribute('aria-hidden', 'false');
   this.map = L.map(this.elm);
   L.tileLayer.provider('Stamen.TonerLite').addTo(this.map);
-  this.overlay = L.geoJson(data, {style: this.style}).addTo(this.map);
+  this.overlay = L.geoJson(data, { style: this.style }).addTo(this.map);
   this.map.fitBounds(this.overlay.getBounds());
 };
 
@@ -253,9 +254,12 @@ function mapMax(cached) {
 
 function updateColorScale($container, cached) {
   $container = $container.closest('#state-maps');
-  var displayed = $container.find('.state-map select').map(function(_, select) {
-    return $(select).val();
-  }).get();
+  var displayed = $container
+    .find('.state-map select')
+    .map(function(_, select) {
+      return $(select).val();
+    })
+    .get();
   _.each(_.keys(cached), function(key) {
     if (displayed.indexOf(key) === -1) {
       delete cached[key];
@@ -291,12 +295,16 @@ function updateButtonsDisplay($parent) {
 
 function appendStateMap($parent, results, cached) {
   var ids = _.pluck(results, 'candidate_id');
-  var displayed = $parent.find('.candidate-select').map(function(_, select) {
-    return $(select).val();
-  }).get();
-  var value = _.find(ids, function(each) {
-    return displayed.indexOf(each) === -1;
-  }) || _.last(ids);
+  var displayed = $parent
+    .find('.candidate-select')
+    .map(function(_, select) {
+      return $(select).val();
+    })
+    .get();
+  var value =
+    _.find(ids, function(each) {
+      return displayed.indexOf(each) === -1;
+    }) || _.last(ids);
   $parent.append(candidateStateMapTemplate(results));
   var $select = $parent.find('.state-map:last select');
   $select.val(value);
@@ -308,7 +316,7 @@ function appendStateMap($parent, results, cached) {
 function drawStateMap($container, candidateId, cached) {
   var url = helpers.buildUrl(
     ['schedules', 'schedule_a', 'by_state', 'by_candidate'],
-    {cycle: context.election.cycle, candidate_id: candidateId, per_page: 99}
+    { cycle: context.election.cycle, candidate_id: candidateId, per_page: 99 }
   );
   var $map = $container.find('.state-map-choropleth');
   $map.html('');

@@ -11,15 +11,11 @@ var $ = require('jquery');
  */
 
 function removeTabindex($elm) {
-  $elm
-    .find('a, button, :input, [tabindex]')
-    .attr('tabindex', '-1');
+  $elm.find('a, button, :input, [tabindex]').attr('tabindex', '-1');
 }
 
 function restoreTabindex($elm) {
-  $elm
-    .find('a, button, :input, [tabindex]')
-    .attr('tabindex', '0');
+  $elm.find('a, button, :input, [tabindex]').attr('tabindex', '0');
 }
 
 module.exports = {

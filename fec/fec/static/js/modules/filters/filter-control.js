@@ -42,4 +42,4 @@ FilterControl.prototype.handleChange = function() {
   ]);
 };
 
-module.exports = {FilterControl: FilterControl};
+module.exports = { FilterControl: FilterControl };

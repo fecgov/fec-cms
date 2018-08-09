@@ -12,7 +12,7 @@ var filterPanel = new FilterPanel();
 // Initialize filter tags
 var $tagList = new filterTags.TagList({
   resultType: 'events',
-  emptyText: 'all events',
+  emptyText: 'all events'
 }).$body;
 
 $('.js-filter-tags').prepend($tagList);
@@ -24,5 +24,5 @@ new Calendar({
   subscribe: '#calendar-subscribe',
   url: calendarHelpers.getUrl(['calendar-dates']),
   exportUrl: calendarHelpers.getUrl(['calendar-dates', 'export']),
-  filterPanel: filterPanel,
+  filterPanel: filterPanel
 });
