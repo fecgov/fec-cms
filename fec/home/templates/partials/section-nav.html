@@ -6,7 +6,7 @@
       <ul class="sidebar__content">
           {% for section in sections %}
             <li class="side-nav__item">
-              <a class="side-nav__link" href="#{% filter remove_digits|slugify %}{{ section.value.title }}{% endfilter %}">{{ section.value.title }}</a>
+              <a class="side-nav__link" href="#{{ section.value.title | slugify }}">{{ section.value.title }}</a>
             </li>
           {% endfor %}
           {% if citations %}
