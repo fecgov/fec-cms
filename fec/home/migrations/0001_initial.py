@@ -17,3 +17,4 @@ class Migration(migrations.Migration):
             bases=('wagtailcore.page',),
         ),
     ]
+    dependencies = [('wagtailcore', '0040_page_draft_title')]
