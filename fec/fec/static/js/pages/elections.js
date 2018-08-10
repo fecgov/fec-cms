@@ -71,7 +71,6 @@ $(document).ready(function() {
   });
 
   electionUtils.getStateElectionOffices(context.election.state);
-  electionUtils.getElections(context.election.state, context.election.office, context.election.cycle);
   tables.initSpendingTables('.data-table', context, spendingTableOpts);
 
   new ElectionForm('#election-nav');
