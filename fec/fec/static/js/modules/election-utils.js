@@ -10,7 +10,6 @@ var topojson = require('topojson');
 
 var sprintf = require('sprintf-js').sprintf
 
-var electionDatesTemplate = require('../templates/electionDates.hbs');
 var electionOfficesTemplate = require('../templates/electionOffices.hbs');
 
 var districts = require('../data/districts.json');
@@ -63,34 +62,6 @@ function findDistricts(districts) {
   });
 }
 
-function getElections(state, office, cycle) {
-  var officeSymbol = {
-    'house': 'H',
-    'senate': 'S',
-    'president': 'P'
-  };
-
-  var defaultQuery = {
-    'sort': '-election_date',
-    'per_page': 2,
-    'election_type_id': 'G',
-    'election_state': state,
-    'office_sought': officeSymbol[office]
-  };
-
-  var query = office !== 'president' ? defaultQuery : _.omit(defaultQuery, 'election_state');
-
-  var url = helpers.buildUrl(['election-dates'], query);
-  var $election_dates_results = $('.election-dates');
-  $.getJSON(url).done(function(response) {
-    var results = {
-      last: moment(response.results[1].election_date).format('MMMM DD, YYYY'),
-      current: moment(response.results[0].election_date).format('MMMM DD, YYYY')
-    };
-    $election_dates_results.html(electionDatesTemplate(results));
-  });
-}
-
 function getStateElectionOffices(state) {
   var query = {
     state: state
@@ -110,6 +81,5 @@ module.exports = {
   encodeDistrict: encodeDistrict,
   findDistrict: findDistrict,
   findDistricts: findDistricts,
-  getElections: getElections,
   getStateElectionOffices: getStateElectionOffices
 };
