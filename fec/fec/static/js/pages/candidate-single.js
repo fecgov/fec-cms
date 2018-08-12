@@ -202,7 +202,6 @@ var statementsOfCandidacyColumns = [
       var csv_url = row.csv_url ? row.csv_url : null;
       var fec_url = row.fec_url ? row.fec_url : null;
       var html_url = row.html_url ? row.html_url : null;
-      console.log(pdf_url)
 
       // If it's a Form 3L we should append that to the doc title
       if (row.form_type == 'F3L') {
@@ -566,13 +565,7 @@ function initStatementsOfCandidacyTable() {
     query: {
       candidate_id: candidateId,
       form_type: ['F2'],
-       cycle: opts.cycle,
-      /* Performing an include would only show RFAI form types. For this reason, excludes need to be
-         used for request_type
-
-      Exclude all request types except for:
-      // RQ-5: RFAI referencing Statement of Candidacy */
-      request_type: ['-1','-2','-3','-4','-6','-7','-8','-9'],
+      cycle: opts.cycle,
       sort_hide_null: ['false']
     },
     columns: statementsOfCandidacyColumns,
