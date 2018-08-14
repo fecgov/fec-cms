@@ -260,7 +260,71 @@
   </div>
 </div>
 {% endblock %}
+
+{% block modals %}
+<div class="js-modal modal" id="raised-modal" aria-hidden="true">
+  <div tabindex="-1" class="modal__overlay" data-a11y-dialog-hide></div>
+  <div role="dialog" class="modal__content" aria-labelledby="raised-modal-title">
+    <div role="document">
+      <button type="button" class="modal__close button--close--primary" data-a11y-dialog-hide title="Close this dialog window"></button>
+      <h2 id="raised-modal-title" tabindex="0">Methodology</h2>
+      <p>This data includes Forms 3, 3P, and 3X.</p>
+      <h3>Methodology overview</h3>
+      <p><strong>Money raised</strong> includes each of the following:</p>
+      <ul class="list--bulleted">
+        <li><em>Adjusted receipts</em> for PACs, parties, congressional filers and presidential filers</li>
+      </ul>
+      <p><em>Adjusted receipts</em> are the total receipts minus the following:</p>
+      <ul class="list--bulleted">
+        <li>Contribution refunds</li>
+        <li>Contributions from political party committees and other political committees</li>
+        <li>Loan repayments</li>
+        <li>Offsets to operating expenditures</li>
+        <li>Transfers from nonfederal accounts for allocated activities</li>
+      </ul>
+      <p><span>The form-by-form breakdown for adjusted receipts is:</span></p>
+      <ul class="list--bulleted">
+        <li><strong>Form 3:</strong> <em>line 16</em> - (<em>line 11(b)</em> + <em>line 11(c)</em> + <em>line 14</em> + <em>line 19(c)</em> + <em>line 20(d))</em></li>
+        <li><strong>Form 3P:</strong> <em>line 22</em> - (<em>line 17(b)</em> + <em>line 17(c)</em> + <em>line 20(d)</em> + <em>line 27(c)</em> + <em>line 28(d)</em>)</li>
+        <li><strong>Form 3X:</strong> <em>line 19</em> - (<em>line 11(b)</em> + <em>line 11(c)</em> + <em>line 15</em> + <em>line 16</em> + <em>line 18(a)</em> + <em>line 26</em> + <em>line 28(d)</em>)</li>
+      </ul>
+    </div>
+  </div>
+</div>
+<div class="js-modal modal" id="spending-modal" aria-hidden="true">
+  <div tabindex="-1" class="modal__overlay" data-a11y-dialog-hide></div>
+  <div role="dialog" class="modal__content" aria-labelledby="spending-modal-title">
+    <div role="document">
+      <button type="button" class="modal__close button--close--primary" data-a11y-dialog-hide title="Close this dialog window"></button>
+      <h2 id="spending-modal-title">Methodology</h2>
+      <p>This data includes Forms 3, 3P, and 3X.</p>
+      <h5>Methodology overview</h5>
+      <p><strong>Money spent</strong> includes each of the following:</p>
+      <ul class="list--bulleted">
+        <li><em>Adjusted disbursements</em> for PACs, parties, congressional filers and presidential filers</li>
+      </ul>
+      <p><em>Adjusted disbursements</em> are total disbursements minus the following:</p>
+      <ul class="list--bulleted">
+        <li>Contribution refunds</li>
+        <li>Contributions to candidates and other political committees</li>
+        <li>Loan repayments</li>
+        <li>Nonfederal share of allocated disbursements</li>
+        <li>Offsets to expenditures</li>
+        <li>Other disbursements</li>
+        <li>Transfers to other authorized committees and affiliated committees</li>
+      </ul>
+      <p>The form-by-form breakdown for adjusted disbursements is:</p>
+      <ul class="list--bulleted">
+        <li><strong>Form 3:</strong> <em>line 22</em> - (<em>line 18</em> + <em>line 19(c)</em> + <em>line 20(d)</em> + <em>line 21</em>)</li>
+        <li><strong>Form 3P:</strong> <em>line 30</em> - (<em>line 20(d)</em> + <em>line 24</em> + <em>line 27(c)</em> + <em>line 28(d)</em> + <em>line 29</em>)</li>
+        <li><strong>Form 3X:</strong> <em>line 31</em> - (<em>line 21(a)(ii)</em> + <em>line 22</em> + <em>line 23</em> + <em>line 26</em> + <em>line 28(d)</em> + <em>line 29</em>)</li>
+      </ul>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
 {% block scripts %}
-<script src="{{ asset_for_js('dataviz-common.js') }}"></script>
-<script src="{{ asset_for_js('data-landing.js') }}"></script>
+  <script src="{{ asset_for_js('dataviz-common.js') }}"></script>
+  <script src="{{ asset_for_js('data-landing.js') }}"></script>
 {% endblock %}

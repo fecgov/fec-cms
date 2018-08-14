@@ -25,7 +25,6 @@
   z-index: $z-max;
 
   @include media($med) {
-    bottom: auto;
     left: 50%;
     right: auto;
     margin-left: u(-30rem);
