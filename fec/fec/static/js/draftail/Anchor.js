@@ -43,12 +43,7 @@ class AnchorSource extends React.Component {
 const Anchor = ({children}) => (
   <span
     style={{
-      fontSize: '2.4rem',
-      margin: '0 0 1em 0',
-      fontFamily: 'gandhi,serif',
-      fontSize: '2rem',
-      fontWeight: '700',
-      lineHeight: '1.2'
+      backgroundColor: '#00FFFF',
     }}
   >
     {children}
