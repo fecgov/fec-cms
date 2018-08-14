@@ -9,10 +9,11 @@ urlpatterns = [
     url(r'^data/advanced/$', views.advanced),
     url(r'^data/candidate/(?P<candidate_id>\w+)/$', views.candidate),
     url(r'^data/committee/(?P<committee_id>\w+)/$', views.committee, name='committee-by-id'),
-    url(r'^data/elections/(?P<office>\w+)/(?P<state>\w+)/(?P<district>\w+)/(?P<cycle>[0-9]+)/$', views.elections),
+    url(r'^data/elections/(?P<office>\w+)/(?P<state>\w+)/(?P<district>\w+)/(?P<cycle>[0-9]+)/$', views.elections, name='elections-state-district'),
     url(r'^data/elections/(?P<office>\w+)/(?P<state>\w+)/(?P<cycle>[0-9]+)/$', views.elections),
-    url(r'^data/elections/(?P<office>\w+)/(?P<cycle>[0-9]+)/$', views.elections),
+    url(r'^data/elections/(?P<office>\w+)/(?P<cycle>[0-9]+)/$', views.elections, name='elections-president'),
     url(r'^data/elections/$', views.elections_lookup),
+
 
     # Feedback Tool
     url(r'^data/issue/$', views.feedback),

@@ -3,8 +3,8 @@
 from __future__ import unicode_literals
 
 from django.db import migrations
-import wagtail.wagtailcore.blocks
-import wagtail.wagtailcore.fields
+import wagtail.core.blocks
+import wagtail.core.fields
 
 
 class Migration(migrations.Migration):
@@ -17,7 +17,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='aboutlandingpage',
             name='option_blocks',
-            field=wagtail.wagtailcore.fields.StreamField([(b'option_blocks', wagtail.wagtailcore.blocks.StructBlock([(b'title', wagtail.wagtailcore.blocks.CharBlock(required=True)), (b'intro', wagtail.wagtailcore.blocks.RichTextBlock(blank=False, null=False, required=False)), (b'button_text', wagtail.wagtailcore.blocks.CharBlock(blank=False, null=False, required=True)), (b'related_page', wagtail.wagtailcore.blocks.PageChooserBlock())]))], default=''),
+            field=wagtail.core.fields.StreamField([(b'option_blocks', wagtail.core.blocks.StructBlock([(b'title', wagtail.core.blocks.CharBlock(required=True)), (b'intro', wagtail.core.blocks.RichTextBlock(blank=False, null=False, required=False)), (b'button_text', wagtail.core.blocks.CharBlock(blank=False, null=False, required=True)), (b'related_page', wagtail.core.blocks.PageChooserBlock())]))], default=''),
             preserve_default=False,
         ),
     ]

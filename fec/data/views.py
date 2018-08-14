@@ -159,7 +159,7 @@ def candidate(request, candidate_id):
     # the cycle should never be beyond the one we're in.
     cycles = [cycle for cycle in candidate['cycles'] if cycle <= utils.current_cycle()]
     max_cycle = cycle if cycle <= utils.current_cycle() else utils.current_cycle()
-    show_full_election = election_full if cycle <= utils.current_cycle() else False              
+    show_full_election = election_full if cycle <= utils.current_cycle() else False
 
     # Annotate committees with most recent available cycle
     aggregate_cycles = (
@@ -404,6 +404,24 @@ def elections(request, office, cycle, state=None, district=None):
     if (state is not None) and (state and state.upper() not in constants.states):
         raise Http404()
 
+    #map/redirect legacy tab names to correct anchor
+    tab = request.GET.get('tab','').replace('/','')
+    legacy_tabs = {
+         'contributions':'#individual-contributions',
+         'totals' : '#candidate-financial-totals',
+         'spending-by-others':'#independent-expenditures'
+         }
+
+    if tab in legacy_tabs.keys():
+        if office == 'senate' or office == 'house':
+            return redirect(
+               reverse('elections-state-district', args=(office,state,district,cycle)) + legacy_tabs[tab]
+               )
+        if office == 'president':
+            return redirect(
+               reverse('elections-president', args=(office,cycle)) + legacy_tabs[tab]
+               )
+
     return render(request, 'elections.jinja', {
         'office': office,
         'office_code': office[0],
@@ -414,7 +432,9 @@ def elections(request, office, cycle, state=None, district=None):
         'state_full': constants.states[state.upper()] if state else None,
         'district': district,
         'title': utils.election_title(cycle, office, state, district),
+
     })
+
 
 def raising(request):
     top_category = request.GET.get('top_category', 'P')
@@ -508,3 +528,4 @@ def feedback(request):
             return JsonResponse(issue.to_json(), status=201)
     else:
         raise Http404()
+

@@ -3,12 +3,14 @@
 /* global require, module */
 
 var _ = require('underscore');
+var fips = require('./fips');
+var helpers = require('./helpers');
+var moment = require('moment');
 var topojson = require('topojson');
 
-var s = require('underscore.string');
-_.mixin(s.exports());
+var sprintf = require('sprintf-js').sprintf
 
-var fips = require('./fips');
+var electionOfficesTemplate = require('../templates/electionOffices.hbs');
 
 var districts = require('../data/districts.json');
 var districtFeatures = topojson.feature(districts, districts.objects.districts);
@@ -18,7 +20,7 @@ function encodeDistrict(state, district) {
 }
 
 function decodeDistrict(district) {
-  district = _.sprintf('%04d', district);
+  district = sprintf('%04d', district);
   return {
     state: fips.fipsByCode[parseInt(district.substring(0, 2))].STUSAB,
     district: parseInt(district.substring(2, 4))
@@ -60,11 +62,24 @@ function findDistricts(districts) {
   });
 }
 
+function getStateElectionOffices(state) {
+  var query = {
+    state: state
+  };
+  var url = helpers.buildUrl(['state-election-office'], query);
+  $.getJSON(url).done(function(response) {
+    var $offices_list = $('#election-offices');
+    var offices = response.results;
+    $offices_list.html(electionOfficesTemplate(offices));
+  });
+}
+
 module.exports = {
+  districtFeatures: districtFeatures,
+  decodeDistrict: decodeDistrict,
+  decodeState: decodeState,
+  encodeDistrict: encodeDistrict,
   findDistrict: findDistrict,
   findDistricts: findDistricts,
-  districtFeatures: districtFeatures,
-  encodeDistrict: encodeDistrict,
-  decodeDistrict: decodeDistrict,
-  decodeState: decodeState
+  getStateElectionOffices: getStateElectionOffices
 };

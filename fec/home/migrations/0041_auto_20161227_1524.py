@@ -4,9 +4,9 @@ from __future__ import unicode_literals
 
 from django.db import migrations
 import wagtail.contrib.table_block.blocks
-import wagtail.wagtailcore.blocks
-import wagtail.wagtailcore.fields
-import wagtail.wagtailimages.blocks
+import wagtail.core.blocks
+import wagtail.core.fields
+import wagtail.images.blocks
 
 
 class Migration(migrations.Migration):
@@ -19,21 +19,21 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='aboutlandingpage',
             name='business_intro',
-            field=wagtail.wagtailcore.fields.StreamField([(b'heading', wagtail.wagtailcore.blocks.CharBlock(classname=b'full title')), (b'paragraph', wagtail.wagtailcore.blocks.RichTextBlock()), (b'html', wagtail.wagtailcore.blocks.RawHTMLBlock()), (b'image', wagtail.wagtailimages.blocks.ImageChooserBlock()), (b'table', wagtail.contrib.table_block.blocks.TableBlock())], blank=True, null=True),
+            field=wagtail.core.fields.StreamField([(b'heading', wagtail.core.blocks.CharBlock(classname=b'full title')), (b'paragraph', wagtail.core.blocks.RichTextBlock()), (b'html', wagtail.core.blocks.RawHTMLBlock()), (b'image', wagtail.images.blocks.ImageChooserBlock()), (b'table', wagtail.contrib.table_block.blocks.TableBlock())], blank=True, null=True),
         ),
         migrations.AddField(
             model_name='aboutlandingpage',
             name='careers_intro',
-            field=wagtail.wagtailcore.fields.StreamField([(b'heading', wagtail.wagtailcore.blocks.CharBlock(classname=b'full title')), (b'paragraph', wagtail.wagtailcore.blocks.RichTextBlock()), (b'html', wagtail.wagtailcore.blocks.RawHTMLBlock()), (b'image', wagtail.wagtailimages.blocks.ImageChooserBlock()), (b'table', wagtail.contrib.table_block.blocks.TableBlock())], blank=True, null=True),
+            field=wagtail.core.fields.StreamField([(b'heading', wagtail.core.blocks.CharBlock(classname=b'full title')), (b'paragraph', wagtail.core.blocks.RichTextBlock()), (b'html', wagtail.core.blocks.RawHTMLBlock()), (b'image', wagtail.images.blocks.ImageChooserBlock()), (b'table', wagtail.contrib.table_block.blocks.TableBlock())], blank=True, null=True),
         ),
         migrations.AddField(
             model_name='aboutlandingpage',
             name='org_intro',
-            field=wagtail.wagtailcore.fields.StreamField([(b'heading', wagtail.wagtailcore.blocks.CharBlock(classname=b'full title')), (b'paragraph', wagtail.wagtailcore.blocks.RichTextBlock()), (b'html', wagtail.wagtailcore.blocks.RawHTMLBlock()), (b'image', wagtail.wagtailimages.blocks.ImageChooserBlock()), (b'table', wagtail.contrib.table_block.blocks.TableBlock())], blank=True, null=True),
+            field=wagtail.core.fields.StreamField([(b'heading', wagtail.core.blocks.CharBlock(classname=b'full title')), (b'paragraph', wagtail.core.blocks.RichTextBlock()), (b'html', wagtail.core.blocks.RawHTMLBlock()), (b'image', wagtail.images.blocks.ImageChooserBlock()), (b'table', wagtail.contrib.table_block.blocks.TableBlock())], blank=True, null=True),
         ),
         migrations.AddField(
             model_name='aboutlandingpage',
             name='org_report_intro',
-            field=wagtail.wagtailcore.fields.StreamField([(b'heading', wagtail.wagtailcore.blocks.CharBlock(classname=b'full title')), (b'paragraph', wagtail.wagtailcore.blocks.RichTextBlock()), (b'html', wagtail.wagtailcore.blocks.RawHTMLBlock()), (b'image', wagtail.wagtailimages.blocks.ImageChooserBlock()), (b'table', wagtail.contrib.table_block.blocks.TableBlock())], blank=True, null=True),
+            field=wagtail.core.fields.StreamField([(b'heading', wagtail.core.blocks.CharBlock(classname=b'full title')), (b'paragraph', wagtail.core.blocks.RichTextBlock()), (b'html', wagtail.core.blocks.RawHTMLBlock()), (b'image', wagtail.images.blocks.ImageChooserBlock()), (b'table', wagtail.contrib.table_block.blocks.TableBlock())], blank=True, null=True),
         ),
     ]

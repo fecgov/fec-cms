@@ -7,6 +7,11 @@
   <div class="slab slab--inline slab--neutral u-padding--left u-padding--right">
     {{ select.committee_cycle_select(cycles, cycle, 'receipts')}}
     {% if totals and committee_type not in ['C', 'E', 'I'] %}
+      {% if totals.0.transaction_coverage_date is not none %}
+        {% set transaction_end = totals.0.transaction_coverage_date %}
+      {% else %}
+        {% set transaction_end = totals.0.coverage_end_date %}
+      {% endif %}
       <div id="total-receipts" class="entity__figure row">
         <div class="heading--section heading--with-action">
           <h3 class="heading__left">Total receipts</h3>
@@ -62,7 +67,7 @@
           <div class="results-info results-info--simple">
             {% if totals %}
             <div class="u-float-left tag__category">
-              <div class="tag__item">Coverage dates: {{totals.0.coverage_start_date|date}} to {{totals.0.coverage_end_date|date}}</div>
+              <div class="tag__item">Coverage dates: {{totals.0.coverage_start_date|date}} to {{transaction_end|date}}</div>
             </div>
             {% endif %}
             <button type="button" class="u-float-right js-export button button--cta button--export" data-export-for="receipts-by-state">Export</button>
@@ -94,7 +99,7 @@
           <div class="results-info results-info--simple">
             {% if totals %}
             <div class="u-float-left tag__category">
-              <div class="tag__item">Coverage dates: {{totals.0.coverage_start_date|date}} to {{totals.0.coverage_end_date|date}}</div>
+              <div class="tag__item">Coverage dates: {{totals.0.coverage_start_date|date}} to {{transaction_end|date}}</div>
             </div>
             {% endif %}
             <button type="button" class="u-float-right js-export button button--cta button--export" data-export-for="contribution-size">Export</button>
@@ -114,7 +119,7 @@
           <div class="results-info results-info--simple">
             {% if totals %}
             <div class="u-float-left tag__category">
-              <div class="tag__item">Coverage dates: {{totals.0.coverage_start_date|date}} to {{totals.0.coverage_end_date|date}}</div>
+              <div class="tag__item">Coverage dates: {{totals.0.coverage_start_date|date}} to {{transaction_end|date}}</div>
             </div>
             {% endif %}
             <button type="button" class="u-float-right js-export button button--cta button--export" data-export-for="receipts-by-employer">Export</button>
@@ -137,7 +142,7 @@
           <div class="results-info results-info--simple">
             {% if totals %}
             <div class="u-float-left tag__category">
-              <div class="tag__item">Coverage dates: {{totals.0.coverage_start_date|date}} to {{totals.0.coverage_end_date|date}}</div>
+              <div class="tag__item">Coverage dates: {{totals.0.coverage_start_date|date}} to {{transaction_end|date}}</div>
             </div>
             {% endif %}
             <button type="button" class="u-float-right js-export button button--cta button--export" data-export-for="receipts-by-occupation">Export</button>
@@ -160,7 +165,7 @@
           <div class="results-info results-info--simple">
             {% if totals %}
             <div class="u-float-left tag__category">
-              <div class="tag__item">Coverage dates: {{totals.0.coverage_start_date|date}} to {{totals.0.coverage_end_date|date}}</div>
+              <div class="tag__item">Coverage dates: {{totals.0.coverage_start_date|date}} to {{transaction_end|date}}</div>
             </div>
             {% endif %}
             <div class="u-float-right">

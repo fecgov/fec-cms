@@ -140,5 +140,41 @@ module.exports = [
       modules: false,
       warnings: false
     }
+  },
+  {
+    name: 'draftail',
+    entry: {'draftail': './fec/static/js/draftail/App.js'},
+    output: {
+      filename: 'draftail-[hash].js',
+      path: path.resolve(__dirname, './dist/fec/static/js')
+    },
+    node: {
+      fs: 'empty',
+      path: true
+    },
+    plugins: [
+      new webpack.SourceMapDevToolPlugin(),
+      new ManifestPlugin({
+        fileName: 'rev-draftail-manifest-js.json',
+        basePath: '/static/js/'
+      }),
+    ],
+    module: {
+      loaders: [
+        {
+          test: /\.js$/,
+          exclude: /node_modules/,
+          loader: 'babel-loader',
+          options: {
+            presets: ['latest', 'react']
+          }
+        }
+      ]
+    },
+    stats: {
+      assetsSort: 'field',
+      modules: false,
+      warnings: false
+    }
   }
 ];

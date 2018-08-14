@@ -5,21 +5,22 @@
 var $ = require('jquery');
 var _ = require('underscore');
 
-var tabs = require('../vendor/tablist');
-
-var urls = require('./urls');
-var accessibility = require('./accessibility');
-
 require('datatables.net');
 require('datatables.net-responsive');
 
-var helpers = require('./helpers');
+var accessibility = require('./accessibility');
+var columnHelpers = require('./column-helpers');
 var download = require('./download');
+var dropdown = require('./dropdowns');
+var helpers = require('./helpers');
+var tabs = require('../vendor/tablist');
+var urls = require('./urls');
 
 // Widgets
 var filterTags = require('../modules/filters/filter-tags');
 var FilterPanel = require('../modules/filters/filter-panel').FilterPanel;
 
+var comparisonTemplate = require('../templates/comparison.hbs');
 var exportWidgetTemplate = require('../templates/tables/exportWidget.hbs');
 var missingTemplate = require('../templates/tables/noData.hbs');
 
@@ -32,7 +33,7 @@ var downloadCapFormatted = helpers.formatNumber(DOWNLOAD_CAP);
 var MAX_DOWNLOADS = 5;
 var DOWNLOAD_MESSAGES = {
   recordCap:
-    'Use <a href="' + window.BASE_PATH + '/advanced?tab=other">' +
+    'Use <a href="' + window.BASE_PATH + '/advanced?tab=bulk-data">' +
     'bulk data</a> to export more than ' +
     downloadCapFormatted +
     ' records.',
@@ -67,6 +68,7 @@ function yearRange(first, last) {
 function getCycle(value, meta) {
   var dataTable = DataTable.registry[meta.settings.sTableId];
   var filters = dataTable && dataTable.filters;
+
   if (filters && filters.cycle) {
     var cycles = _.intersection(
       _.map(filters.cycle, function(cycle) { return parseInt(cycle); }),
@@ -80,9 +82,9 @@ function getCycle(value, meta) {
   }
 }
 
-function mapSort(order, columns) {
+function mapSort(order, column) {
   return _.map(order, function(item) {
-    var name = columns[item.column].data;
+    var name = column[item.column].data;
     if (item.dir === 'desc') {
       name = '-' + name;
     }
@@ -714,6 +716,188 @@ DataTable.prototype.handleSwitch = function(e, opts) {
   this.refreshExport();
 };
 
+function initSpendingTables(className, context, options) {
+  $(className).each(function(index, table) {
+    var $table = $(table);
+    var dataType = $table.attr('data-type');
+    var opts = options[dataType];
+    if (opts) {
+      DataTable.defer($table, {
+        autoWidth: false,
+        path: opts.path,
+        query: helpers.filterNull(context.election),
+        columns: opts.columns,
+        order: opts.order,
+        dom: simpleDOM,
+        pagingType: 'simple',
+        lengthChange: true,
+        pageLength: 10,
+        lengthMenu: [10, 25, 50, 100],
+        hideEmpty: true,
+        useExport: true,
+        singleEntityItemizedExport: true,
+        hideEmptyOpts: {
+          dataType: opts.title,
+          name: 'this election',
+          timePeriod: context.timePeriod,
+        }
+      });
+    }
+  });
+}
+
+function refreshTables(e, context) {
+  var $comparison = $('#comparison');
+  var selected = $comparison.find('input[type="checkbox"]:checked').map(function(_, input) {
+    var $input = $(input);
+    return {
+      candidate_id: $input.attr('data-id'),
+      candidate_name: $input.attr('data-name')
+    };
+  });
+
+  if (selected.length > 0) {
+    drawSizeTable(selected, context);
+    drawStateTable(selected, context);
+  }
+
+  if (e) {
+    $(e.target).next('label').addClass('is-loading');
+
+    setTimeout(function() {
+      $comparison.find('.is-loading').removeClass('is-loading').addClass('is-successful');
+    }, helpers.LOADING_DELAY);
+
+    setTimeout(function() {
+      $comparison.find('.is-successful').removeClass('is-successful');
+    }, helpers.SUCCESS_DELAY);
+  }
+}
+
+function drawComparison(results, pageContext) {
+  var $comparison = $('#comparison');
+  var context = {selected: results.slice(0, 10), options: results.slice(10)};
+  $comparison.prepend(comparisonTemplate(context));
+  new dropdown.Dropdown($comparison.find('.js-dropdown'));
+  $comparison.on('change', 'input[type="checkbox"]', function(e) {
+    refreshTables(e, pageContext);
+  });
+  refreshTables(null, pageContext);
+}
+
+function mapSize(response, primary) {
+  var groups = {};
+  _.each(response.results, function(result) {
+    groups[result.candidate_id] = groups[result.candidate_id] || {};
+    groups[result.candidate_id][result.size] = result.total;
+  });
+  return _.map(_.pairs(groups), function(pair) {
+    return _.extend(
+      pair[1], {
+        candidate_id: pair[0],
+        candidate_name: primary[pair[0]].candidate_name
+      });
+  });
+}
+
+function mapState(response) {
+  var groups = {};
+  _.each(response.results, function(result) {
+    groups[result.state] = groups[result.state] || {};
+    groups[result.state][result.candidate_id] = result.total;
+    groups[result.state].state_full = result.state_full;
+  });
+  return _.map(_.pairs(groups), function(pair) {
+    return _.extend(
+      pair[1], {state: pair[0]});
+  });
+}
+
+function destroyTable($table) {
+  if ($.fn.dataTable.isDataTable($table)) {
+    var api = $table.DataTable();
+    api.clear();
+    api.destroy();
+    $table.data('max', null);
+  }
+}
+
+function buildUrl(selected, context, path) {
+  var query = {
+    cycle: context.election.cycle,
+    candidate_id: _.pluck(selected, 'candidate_id'),
+    per_page: 0
+  };
+
+  return helpers.buildUrl(path, query);
+}
+
+
+var drawTableOpts = {
+  autoWidth: false,
+  destroy: true,
+  searching: false,
+  serverSide: false,
+  lengthChange: true,
+  useExport: true,
+  singleEntityItemizedExport: true,
+  dom: simpleDOM,
+  language: {
+    lengthMenu: 'Results per page: _MENU_',
+  },
+  pagingType: 'simple'
+}
+
+function drawSizeTable(selected, context) {
+  var $table = $('table[data-type="by-size"]');
+  var primary = _.object(_.map(selected, function(result) {
+    return [result.candidate_id, result];
+  }));
+  $.getJSON(
+    buildUrl(selected, context, ['schedules', 'schedule_a', 'by_size', 'by_candidate'])
+  ).done(function(response) {
+    var data = mapSize(response, primary);
+    destroyTable($table);
+    $table.dataTable(_.extend({
+      autoWidth: false,
+      data: data,
+      columns: columnHelpers.sizeColumns(context),
+      order: [[1, 'desc']]
+    }, drawTableOpts));
+
+    barsAfterRender(null, $table.DataTable());
+  });
+}
+
+function drawStateTable(selected, context) {
+  var $table = $('table[data-type="by-state"]');
+  var primary = _.object(_.map(selected, function(result) {
+    return [result.candidate_id, result];
+  }));
+  $.getJSON(
+    buildUrl(selected, context, ['schedules', 'schedule_a', 'by_state', 'by_candidate'])
+  ).done(function(response) {
+    var data = mapState(response, primary);
+    // Populate headers with correct text
+    var headerLabels = ['State'].concat(_.pluck(selected, 'candidate_name'));
+    $table.find('thead tr')
+      .empty()
+      .append(_.map(headerLabels, function(label) {
+        return $('<th>').text(label);
+      }));
+    destroyTable($table);
+    $table.dataTable(_.extend({
+      autoWidth: false,
+      data: data,
+      columns: columnHelpers.stateColumns(selected, context),
+      order: [[1, 'desc']],
+      drawCallback: function(settings, $table) {
+        barsAfterRender(null, this.api());
+      }
+    }, drawTableOpts));
+  });
+}
+
 module.exports = {
   simpleDOM: simpleDOM,
   browseDOM: browseDOM,
@@ -729,4 +913,6 @@ module.exports = {
   DataTable: DataTable,
   OffsetPaginator: OffsetPaginator,
   SeekPaginator: SeekPaginator,
+  drawComparison: drawComparison,
+  initSpendingTables: initSpendingTables
 };

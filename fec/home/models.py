@@ -17,22 +17,22 @@ from audit_log.models.managers import AuditLog
 from modelcluster.fields import ParentalKey
 from modelcluster.contrib.taggit import ClusterTaggableManager
 from taggit.models import TaggedItemBase
-from wagtail.wagtailcore.models import Page, Orderable, PageRevision
-from wagtail.wagtailcore.fields import StreamField
-from wagtail.wagtailcore import blocks
-from wagtail.wagtailadmin.edit_handlers import (FieldPanel, StreamFieldPanel,
+from wagtail.core.models import Page, Orderable, PageRevision
+from wagtail.core.fields import StreamField
+from wagtail.core import blocks
+from wagtail.admin.edit_handlers import (FieldPanel, StreamFieldPanel,
                                                 PageChooserPanel, InlinePanel, MultiFieldPanel)
-from wagtail.wagtailimages.blocks import ImageChooserBlock
-from wagtail.wagtailimages.edit_handlers import ImageChooserPanel
+from wagtail.images.blocks import ImageChooserBlock
+from wagtail.images.edit_handlers import ImageChooserPanel
 
-from wagtail.wagtaildocs.blocks import DocumentChooserBlock
-from wagtail.wagtaildocs.edit_handlers import DocumentChooserPanel
-from wagtail.wagtaildocs.models import Document
+from wagtail.documents.blocks import DocumentChooserBlock
+from wagtail.documents.edit_handlers import DocumentChooserPanel
+from wagtail.documents.models import Document
 
 from django.utils.encoding import python_2_unicode_compatible
-from wagtail.wagtailsnippets.models import register_snippet
+from wagtail.snippets.models import register_snippet
 
-from wagtail.wagtailsearch import index
+from wagtail.search import index
 
 from django.db.models.signals import m2m_changed
 
@@ -46,7 +46,8 @@ from home.blocks import (ThumbnailBlock, AsideLinkBlock,
                          ContactInfoBlock, CitationsBlock, ResourceBlock,
                          OptionBlock, CollectionBlock, DocumentFeedBlurb,
                          ExampleParagraph, ExampleForms, ExampleImage,
-                         CustomTableBlock, ReportingExampleCards)
+                         CustomTableBlock, ReportingExampleCards, InternalButtonBlock,
+                         ExternalButtonBlock, SnippetChooserBlock)
 
 
 stream_factory = functools.partial(
@@ -565,7 +566,7 @@ class AlertForEmergencyUseOnly(Page):
 class CustomPage(Page):
     """Flexible customizable page."""
     author = models.CharField(max_length=255)
-    date = models.DateField('Post date')
+    date = models.DateField('Creation date')
     body = StreamField([
         ('heading', blocks.CharBlock(classname='full title')),
         ('paragraph', blocks.RichTextBlock()),
@@ -574,19 +575,28 @@ class CustomPage(Page):
         ('table', TableBlock()),
         ('example_paragraph', ExampleParagraph()),
         ('example_forms', ExampleForms()),
-        ('reporting_example_cards', ReportingExampleCards())
+        ('reporting_example_cards', ReportingExampleCards()),
+        ('contact_info', ContactInfoBlock()),
+        ('internal_button', InternalButtonBlock()),
+        ('external_button', ExternalButtonBlock()),
+        ('contribution_limits_table', SnippetChooserBlock('home.EmbedTableSnippet', template = 'blocks/embed-table.html', icon='table')),
     ])
     sidebar = stream_factory(null=True, blank=True)
+    related_topics = StreamField([
+        ('related_topics', blocks.ListBlock(
+            blocks.PageChooserBlock(label="Related topic")
+        ))
+    ], null=True, blank=True)
     citations = StreamField([('citations', blocks.ListBlock(CitationsBlock()))],
-                    null=True)
+                    null=True, blank=True)
     record_articles = StreamField([
         ('record_articles', blocks.ListBlock(
             blocks.PageChooserBlock(target_model=RecordPage)
         ))
-    ], null=True)
+    ], null=True, blank=True)
     continue_learning = StreamField([
         ('continue_learning', blocks.ListBlock(ThumbnailBlock(), icon='doc-empty')),
-    ], null=True)
+    ], null=True, blank=True)
     show_contact_link = models.BooleanField(
                                     max_length=255, default=True,
                                     null=False, blank=False,
@@ -599,6 +609,7 @@ class CustomPage(Page):
         FieldPanel('author'),
         FieldPanel('date'),
         StreamFieldPanel('body'),
+        StreamFieldPanel('related_topics'),
         StreamFieldPanel('citations'),
         StreamFieldPanel('continue_learning'),
         MultiFieldPanel([
@@ -813,7 +824,7 @@ class CollectionPage(Page):
 
     reporting_examples = StreamField([
         ('reporting_examples', blocks.ListBlock(CitationsBlock()))
-    ], null=True)
+    ], null=True, blank=True)
 
     show_search = models.BooleanField(
                                     max_length=255, default=False,
@@ -857,22 +868,23 @@ class ResourcePage(Page):
     date = models.DateField(default=datetime.date.today)
     intro = StreamField([
         ('paragraph', blocks.RichTextBlock())
-    ], null=True)
+    ], null=True, blank=True)
     sidebar_title = models.CharField(max_length=255, null=True, blank=True)
     related_pages = StreamField([
         ('related_pages', blocks.ListBlock(blocks.PageChooserBlock()))
     ], null=True, blank=True)
     sections = StreamField([
-        ('sections', ResourceBlock())
-    ], null=True)
+        ('sections', ResourceBlock()),
+        ('image', ImageChooserBlock())
+    ], null=True, blank=True)
     citations = StreamField([
         ('citations', blocks.ListBlock(CitationsBlock()))
-    ], null=True)
+    ], null=True, blank=True)
     related_topics = StreamField([
         ('related_topics', blocks.ListBlock(
             blocks.PageChooserBlock(label="Related topic")
         ))
-    ], null=True)
+    ], null=True, blank=True)
     category = models.CharField(max_length=255,
                                 choices=constants.report_child_categories.items(),
                                 help_text='If this is a report, add a category',

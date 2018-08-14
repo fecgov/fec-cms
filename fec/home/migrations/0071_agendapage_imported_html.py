@@ -3,8 +3,8 @@
 from __future__ import unicode_literals
 
 from django.db import migrations
-import wagtail.wagtailcore.blocks
-import wagtail.wagtailcore.fields
+import wagtail.core.blocks
+import wagtail.core.fields
 
 
 class Migration(migrations.Migration):
@@ -17,6 +17,6 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='agendapage',
             name='imported_html',
-            field=wagtail.wagtailcore.fields.StreamField((('html_block', wagtail.wagtailcore.blocks.RawHTMLBlock()),), blank=True, null=True),
+            field=wagtail.core.fields.StreamField((('html_block', wagtail.core.blocks.RawHTMLBlock()),), blank=True, null=True),
         ),
     ]

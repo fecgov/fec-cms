@@ -8,7 +8,7 @@ var _ = require('underscore');
 var moment = require('moment');
 var decoders = require('./decoders');
 var Handlebars = require('hbsfy/runtime');
-var bleach = require('bleach');
+var sanitize = require('sanitize-html');
 var numeral = require('numeral');
 
 // set parameters from the API
@@ -34,6 +34,30 @@ var formatMap = {
   dayOfWeek: 'ddd',
   fullDayOfWeek: 'dddd'
 };
+
+function anchorify(attr) {
+  // Attach anchor <a> links to any tag with a given attribute
+  $('['+attr+']').each(function(idx, item) {
+    var elt = $(item);
+    var link = $('<a></a>');
+    var href = '#' + elt.attr('id');
+    link.attr('href', href);
+    link.html(elt.html());
+    elt.html('');
+    link.appendTo(elt);
+  });
+}
+
+function scrollAnchor(ms){
+  ms = ms || 1000
+  if(window.location.hash) {
+    setTimeout( function(){
+      $('html, body').animate({
+        scrollTop : $(window.location.hash).offset().top
+      })
+    }, ms)
+  }
+}
 
 function getWindowWidth() {
   // window.innerWidth accounts for scrollbars and should match the width used
@@ -253,6 +277,22 @@ function buildUrl(path, query) {
     .toString();
 }
 
+function buildTableQuery(context, perPage) {
+  var pageLength = pageLength || 0;
+  var query = _.chain(context)
+  .pairs()
+  .filter(function(pair) {
+    return pair[1];
+  })
+  .object()
+  .value();
+
+  return _.extend(query, {
+    per_page: pageLength,
+    sort_hide_null: true
+  });
+}
+
 function getTimePeriod(electionYear, cycle, electionFull, office) {
   var durations = {
     P: 3,
@@ -407,14 +447,14 @@ function sanitizeValue(value) {
     if (_.isArray(value)) {
       for (var i = 0; i < value.length; i++) {
         if (value[i] !== null && value[i] !== undefined) {
-          value[i] = bleach.sanitize(value[i]).replace(
+          value[i] = sanitize(value[i]).replace(
             validCharactersRegEx,
             ''
           );
         }
       }
     } else {
-      value = bleach.sanitize(value).replace(validCharactersRegEx, '');
+      value = sanitize(value).replace(validCharactersRegEx, '');
     }
   }
 
@@ -451,8 +491,11 @@ function getCookie(name) {
 }
 
 module.exports = {
+  anchorify: anchorify,
+  scrollAnchor: scrollAnchor,
   buildAppUrl: buildAppUrl,
   buildUrl: buildUrl,
+  buildTableQuery: buildTableQuery,
   currency: currency,
   cycleDates: cycleDates,
   datetime: datetime,
