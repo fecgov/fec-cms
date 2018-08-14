@@ -191,6 +191,13 @@ command line, e.g.:
 env DATABASE_URL=postgresql://:@/cfdm_cms_test ./manage.py test
 ```
 
+For test coverage, run:
+```bash
+cd fec/
+coverage run --source='.' manage.py test
+coverage report --omit="*migrations*"
+```
+
 ## Enabling/toggling features
 [settings/base.py](https://github.com/fecgov/fec-cms/blob/develop/fec/fec/settings/base.py)
 includes a set of `FEATURES` which can also be enabled using environment flags:
