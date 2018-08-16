@@ -236,6 +236,12 @@ Lastly run migrations to account for any very recent changes that are not presen
 run this command:
 `./manage.py migrate`
 
+### Generating code.json
+
+Code.gov uses the code.json file located at fec.gov/code.json to inventory our repositories. The file is generated using [LLNL's scraper tool](https://github.com/LLNL/scraper). Follow the instructions in scraper's README file to generate a new code.json, or manually update as needed.
+
+Examples of code.json files: https://github.com/GSA/code-gov/blob/master/METADATA_EXAMPLES.md
+
 ## Deploy
 *Likely only useful for FEC team members*
 
