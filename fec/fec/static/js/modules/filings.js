@@ -44,7 +44,7 @@ var renderModal = tables.modalRenderFactory(
   fetchReportDetails
 );
 
-function renderRow(row, data, index) {
+function renderRow(row, data) {
   if (data.form_type && data.form_type.match(/^F[35][XP]?$/)) {
     row.classList.add(tables.MODAL_TRIGGER_CLASS, 'row--has-panel');
   }

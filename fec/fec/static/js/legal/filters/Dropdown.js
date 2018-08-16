@@ -1,4 +1,5 @@
 const React = require('react');
+const PropTypes = require('prop-types');
 
 function Dropdown(props) {
   function handleDropdownChange(e) {
@@ -21,5 +22,21 @@ function Dropdown(props) {
     </div>
   );
 }
+
+Dropdown.defaultProps = {
+  handleChange: function() {},
+  label: '',
+  name: '',
+  options: [],
+  value: ''
+};
+
+Dropdown.propTypes = {
+  handleChange: PropTypes.func,
+  label: PropTypes.string,
+  name: PropTypes.string,
+  options: PropTypes.array,
+  value: PropTypes.string
+};
 
 module.exports = Dropdown;

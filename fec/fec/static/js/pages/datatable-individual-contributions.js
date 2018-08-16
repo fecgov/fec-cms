@@ -3,7 +3,6 @@
 var $ = require('jquery');
 
 var tables = require('../modules/tables');
-var helpers = require('../modules/helpers');
 var columns = require('../modules/columns');
 
 var donationTemplate = require('../templates/receipts.hbs');

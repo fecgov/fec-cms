@@ -1,4 +1,5 @@
 const React = require('react');
+const PropTypes = require('prop-types');
 
 function CitationRequireAllRadio(props) {
   const require_all = props.value === 'true';
@@ -30,5 +31,13 @@ function CitationRequireAllRadio(props) {
     </div>
   );
 }
+
+CitationRequireAllRadio.defaultProps = {
+  value: false
+};
+
+CitationRequireAllRadio.propTypes = {
+  value: PropTypes.oneOfType([PropTypes.bool, PropTypes.string])
+};
 
 module.exports = CitationRequireAllRadio;

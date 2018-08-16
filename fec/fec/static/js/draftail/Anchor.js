@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { EditorState, Modifier } from 'draft-js';
 import { slugify } from './utils';
 
@@ -52,22 +53,37 @@ class AnchorSource extends React.Component {
   }
 }
 
-// This adds additional 'term' class to the editor
-// to add custom editor styles inside customize-editor.css
+AnchorSource.defaultProps = {
+  editorState: {},
+  entityType: {},
+  onComplete: {},
+  children: {}
+};
+
+AnchorSource.propTypes = {
+  editorState: PropTypes.oneOfType(PropTypes.object, PropTypes.func),
+  entityType: PropTypes.oneOfType(PropTypes.object, PropTypes.func),
+  onComplete: PropTypes.oneOfType(PropTypes.object, PropTypes.func),
+  children: PropTypes.oneOfType(PropTypes.object, PropTypes.func)
+};
+
 const Anchor = ({ children }) => (
   <span
     style={{
-      fontSize: '2.4rem',
-      margin: '0 0 1em 0',
-      fontFamily: 'gandhi,serif',
-      fontSize: '2rem',
-      fontWeight: '700',
-      lineHeight: '1.2'
+      backgroundColor: '#00FFFF'
     }}
   >
     {children}
   </span>
 );
+
+Anchor.defaultProps = {
+  children: {}
+};
+
+Anchor.propTypes = {
+  children: PropTypes.oneOfType(PropTypes.object, PropTypes.func)
+};
 
 module.exports = {
   type: 'ANCHOR',

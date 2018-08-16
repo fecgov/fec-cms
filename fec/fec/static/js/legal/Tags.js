@@ -13,7 +13,7 @@ function Tags(props) {
     props.query.ao_citation_require_all !== 'false';
 
   function removeQuery(name, value) {
-    function handleRemove(e) {
+    function handleRemove() {
       var newEvent;
       if (Array.isArray(props.query[name])) {
         let currentValues = _.extend(props.query[name]);
@@ -58,14 +58,15 @@ function Tags(props) {
   }
 
   function getTagCategory(query, tagName) {
-    if (Array.isArray(query[tagName])) {
-      function getArrayTagClasses() {
-        var classes = 'tag__category';
-        if (tagName.indexOf('citation') >= 0 && citationRequireAll) {
-          classes += ' tag__category--and';
-        }
-        return classes;
+    function getArrayTagClasses() {
+      var classes = 'tag__category';
+      if (tagName.indexOf('citation') >= 0 && citationRequireAll) {
+        classes += ' tag__category--and';
       }
+      return classes;
+    }
+
+    if (Array.isArray(query[tagName])) {
       return (
         <li key={tagName} className={getArrayTagClasses()}>
           {query[tagName].map(val => getTag(tagName, val))}

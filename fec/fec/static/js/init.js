@@ -106,8 +106,4 @@ $(document).ready(function() {
       $link.remove();
     }
   });
-
-  // helpers.anchorify
-  // Add 'a' href to anchor links
-  helpers.anchorify('data-anchor');
 });

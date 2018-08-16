@@ -44,7 +44,7 @@ var sizeColumns = [
     orderable: false,
     render: columnHelpers.buildTotalLink(
       ['receipts', 'individual-contributions'],
-      function(data, type, row, meta) {
+      function(data, type, row) {
         return columnHelpers.getSizeParams(row.size);
       }
     )
@@ -71,7 +71,7 @@ var stateColumns = [
     orderSequence: ['desc', 'asc'],
     render: columnHelpers.buildTotalLink(
       ['receipts', 'individual-contributions'],
-      function(data, type, row, meta) {
+      function(data, type, row) {
         return {
           contributor_state: row.state
         };
@@ -94,7 +94,7 @@ var employerColumns = [
     orderSequence: ['desc', 'asc'],
     render: columnHelpers.buildTotalLink(
       ['receipts', 'individual-contributions'],
-      function(data, type, row, meta) {
+      function(data, type, row) {
         if (row.employer) {
           return {
             contributor_employer: row.employer
@@ -121,7 +121,7 @@ var occupationColumns = [
     orderSequence: ['desc', 'asc'],
     render: columnHelpers.buildTotalLink(
       ['receipts', 'individual-contributions'],
-      function(data, type, row, meta) {
+      function(data, type, row) {
         if (row.occupation) {
           return {
             contributor_occupation: row.occupation
@@ -148,8 +148,7 @@ var disbursementRecipientColumns = [
     render: columnHelpers.buildTotalLink(['disbursements'], function(
       data,
       type,
-      row,
-      meta
+      row
     ) {
       return {
         recipient_name: row.recipient_name
@@ -163,7 +162,7 @@ var disbursementRecipientIDColumns = [
     data: 'recipient_name',
     className: 'all',
     orderable: false,
-    render: function(data, type, row, meta) {
+    render: function(data, type, row) {
       return columnHelpers.buildEntityLink(
         data,
         helpers.buildAppUrl(['committee', row.recipient_id]),
@@ -179,8 +178,7 @@ var disbursementRecipientIDColumns = [
     render: columnHelpers.buildTotalLink(['disbursements'], function(
       data,
       type,
-      row,
-      meta
+      row
     ) {
       return {
         recipient_name: row.recipient_id
@@ -198,8 +196,7 @@ var expendituresColumns = [
     render: columnHelpers.buildTotalLink(['independent-expenditures'], function(
       data,
       type,
-      row,
-      meta
+      row
     ) {
       return {
         support_oppose_indicator: row.support_oppose_indicator,
@@ -223,7 +220,7 @@ var electioneeringColumns = [
     orderSequence: ['desc', 'asc'],
     render: columnHelpers.buildTotalLink(
       ['electioneering-communications'],
-      function(data, type, row, meta) {
+      function(data, type, row) {
         return {
           support_oppose_indicator: row.support_oppose_indicator,
           candidate_id: row.candidate_id
@@ -246,8 +243,7 @@ var communicationCostColumns = [
     render: columnHelpers.buildTotalLink(['communication-costs'], function(
       data,
       type,
-      row,
-      meta
+      row
     ) {
       return {
         support_oppose_indicator: row.support_oppose_indicator,

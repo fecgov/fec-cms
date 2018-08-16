@@ -20,7 +20,7 @@ var barCurrencyColumn = columnHelpers.barColumn(helpers.currency);
 
 var supportOpposeColumn = {
   data: 'support_oppose_indicator',
-  render: function(data, type, row, meta) {
+  render: function(data) {
     return decoders.supportOppose[data] || 'Unknown';
   }
 };
@@ -53,7 +53,7 @@ var versionColumn = {
 var modalTriggerColumn = {
   className: 'all column--trigger',
   orderable: false,
-  render: function(data, type, row, meta) {
+  render: function() {
     return tables.MODAL_TRIGGER_HTML;
   }
 };
@@ -125,7 +125,7 @@ var committeeColumn = columnHelpers.formattedColumn(function(data, type, row) {
   }
 });
 
-var renderCandidateColumn = function(data, type, row, meta) {
+var renderCandidateColumn = function(data, type, row) {
   if (data) {
     return columnHelpers.buildEntityLink(
       data,
@@ -137,7 +137,7 @@ var renderCandidateColumn = function(data, type, row, meta) {
   }
 };
 
-var renderCommitteeColumn = function(data, type, row, meta) {
+var renderCommitteeColumn = function(data, type, row) {
   if (data) {
     return columnHelpers.buildEntityLink(
       data,
@@ -155,7 +155,7 @@ var candidates = [
   {
     data: 'election_years',
     className: 'min-tablet hide-panel',
-    render: function(data, type, row, meta) {
+    render: function(data) {
       return tables.yearRange(_.first(data), _.last(data));
     }
   },
@@ -251,7 +251,7 @@ var disbursements = [
     data: 'committee',
     orderable: false,
     className: 'all',
-    render: function(data, type, row, meta) {
+    render: function(data) {
       if (data) {
         return columnHelpers.buildEntityLink(
           data.name,
@@ -267,7 +267,7 @@ var disbursements = [
     data: 'recipient_name',
     orderable: false,
     className: 'all',
-    render: function(data, type, row, meta) {
+    render: function(data, type, row) {
       var committee = row.recipient_committee;
       if (committee) {
         return columnHelpers.buildEntityLink(
@@ -449,7 +449,7 @@ var independentExpenditures = [
     data: 'committee',
     orderable: false,
     className: 'all',
-    render: function(data, type, row, meta) {
+    render: function(data) {
       if (data) {
         return columnHelpers.buildEntityLink(
           data.name,
@@ -509,7 +509,7 @@ var individualContributions = [
     data: 'contributor',
     orderable: false,
     className: 'all hide-panel-tablet',
-    render: function(data, type, row, meta) {
+    render: function(data, type, row) {
       if (
         data &&
         !_.contains(helpers.globals.EARMARKED_CODES, row.receipt_type)
@@ -528,7 +528,7 @@ var individualContributions = [
     data: 'committee',
     orderable: false,
     className: 'all',
-    render: function(data, type, row, meta) {
+    render: function(data) {
       if (data) {
         return columnHelpers.buildEntityLink(
           data.name,
@@ -566,7 +566,7 @@ var partyCoordinatedExpenditures = [
     data: 'committee',
     orderable: false,
     className: 'all',
-    render: function(data, type, row) {
+    render: function(data) {
       if (data) {
         return columnHelpers.buildEntityLink(
           data.name,
@@ -615,7 +615,7 @@ var receipts = [
     data: 'contributor',
     orderable: false,
     className: 'all',
-    render: function(data, type, row, meta) {
+    render: function(data, type, row) {
       if (
         data &&
         !_.contains(helpers.globals.EARMARKED_CODES, row.receipt_type)
@@ -634,7 +634,7 @@ var receipts = [
     data: 'committee',
     orderable: false,
     className: 'all',
-    render: function(data, type, row, meta) {
+    render: function(data) {
       if (data) {
         return columnHelpers.buildEntityLink(
           data.name,

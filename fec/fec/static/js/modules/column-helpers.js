@@ -72,7 +72,7 @@ function barColumn(formatter) {
 function urlColumn(attr, opts) {
   return _.extend(
     {
-      render: function(data, type, row, meta) {
+      render: function(data, type, row) {
         if (row[attr]) {
           var anchor = document.createElement('a');
           anchor.textContent = data;
@@ -200,7 +200,7 @@ function sizeColumns(context) {
       data: 'candidate_name',
       className: 'all',
       width: 'column--med',
-      render: function(data, type, row, meta) {
+      render: function(data, type, row) {
         return buildEntityLink(
           data,
           helpers.buildAppUrl(['candidate', row.candidate_id]),

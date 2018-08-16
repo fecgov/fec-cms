@@ -230,7 +230,7 @@ DistrictMap.prototype.render = function(data) {
 
 function mapMin(cached) {
   return _.chain(cached)
-    .map(function(value, key) {
+    .map(function(value) {
       return _.chain(value)
         .values()
         .filter(function(value) {
@@ -245,7 +245,7 @@ function mapMin(cached) {
 
 function mapMax(cached) {
   return _.chain(cached)
-    .map(function(value, key) {
+    .map(function(value) {
       return _.max(_.values(value));
     })
     .max()
@@ -352,7 +352,7 @@ function initStateMaps(results) {
     drawStateMap($parent, $target.val(), cached);
   });
 
-  $choropleths.on('click', '.js-add-map', function(e) {
+  $choropleths.on('click', '.js-add-map', function() {
     appendStateMap($choropleths, results, cached);
   });
 

@@ -1,5 +1,4 @@
 'use strict';
-var _ = require('underscore');
 
 /**
  * two dropdowns:#primary_category_id and #sub_category_id
@@ -10,7 +9,7 @@ var _ = require('underscore');
 var $ = require('jquery');
 var helpers = require('./helpers');
 
-$('#primary_category_id').change(function(event) {
+$('#primary_category_id').change(function() {
   var $select = $('#sub_category_id');
   $.getJSON(
     helpers.buildUrl(['audit-category'], {

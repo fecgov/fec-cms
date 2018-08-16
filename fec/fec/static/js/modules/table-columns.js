@@ -11,7 +11,7 @@ var candidateInformationColumns = [
   {
     data: 'candidate_name',
     className: 'all column--large',
-    render: function(data, type, row, meta) {
+    render: function(data, type, row) {
       return columnHelpers.buildEntityLink(
         data,
         helpers.buildAppUrl(['candidate', row.candidate_id]),
@@ -27,7 +27,7 @@ var candidateInformationColumns = [
   {
     data: 'candidate_pcc_name',
     className: 'all column--large',
-    render: function(data, type, row, meta) {
+    render: function(data, type, row) {
       if (!data) return 'No principal campaign committee identified';
 
       return columnHelpers.buildEntityLink(
@@ -57,8 +57,7 @@ var communicationCostColumns = [
     render: columnHelpers.buildTotalLink(['communication-costs'], function(
       data,
       type,
-      row,
-      meta
+      row
     ) {
       return {
         support_oppose_indicator: row.support_oppose_indicator,
@@ -73,7 +72,7 @@ function createElectionColumns(context) {
     {
       data: 'candidate_name',
       className: 'all column--large',
-      render: function(data, type, row, meta) {
+      render: function(data, type, row) {
         return columnHelpers.buildEntityLink(
           data,
           helpers.buildAppUrl(['candidate', row.candidate_id]),
@@ -101,8 +100,7 @@ function createElectionColumns(context) {
       className: 'column--number'
     }),
     {
-      render: function(data, type, row, meta) {
-        var dates = helpers.cycleDates(context.election.cycle);
+      render: function(data, type, row) {
         var urlBase;
         if (context.election.office === 'president') {
           urlBase = ['reports', 'presidential'];
@@ -139,7 +137,7 @@ var electioneeringColumns = [
     orderSequence: ['desc', 'asc'],
     render: columnHelpers.buildTotalLink(
       ['electioneering-communications'],
-      function(data, type, row, meta) {
+      function(data, type, row) {
         return {
           candidate_id: row.candidate_id
         };
@@ -160,8 +158,7 @@ var independentExpenditureColumns = [
     render: columnHelpers.buildTotalLink(['independent-expenditures'], function(
       data,
       type,
-      row,
-      meta
+      row
     ) {
       return {
         data_type: 'processed',

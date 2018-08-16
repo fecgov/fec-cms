@@ -11,9 +11,6 @@ var $ = require('jquery');
 
 var tables = require('../modules/tables');
 var columns = require('../modules/columns');
-var tablePanels = require('../modules/table-panels');
-var auditCategorySubcCategory = require('../modules/audit-category-sub-category');
-var auditTags = require('../modules/audit_tags');
 
 $(document).ready(function() {
   var $table = $('#results');

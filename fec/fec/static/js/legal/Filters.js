@@ -1,4 +1,5 @@
 const React = require('react');
+const PropTypes = require('prop-types');
 const Dropdown = require('./filters/Dropdown');
 const TextFilter = require('./filters/TextFilter');
 const CheckboxFilter = require('./filters/CheckboxFilter');
@@ -138,5 +139,58 @@ function Filters(props) {
     </div>
   );
 }
+
+Filters.propTypes = {
+  getResults: function() {},
+  instantQuery: function() {},
+  query: {
+    resultCount: 0,
+    lastResultCount: 0,
+    ao_no: '',
+    ao_requestor: '',
+    ao_requestor_type: '',
+    q: '',
+    ao_is_pending: false,
+    ao_category: '',
+    ao_citation_require_all: '',
+    ao_regulatory_citation: [],
+    lastFilter: '',
+    ao_statutory_citation: [],
+    ao_min_issue_date: new Date(),
+    ao_max_issue_date: new Date(),
+    ao_min_request_date: new Date(),
+    ao_max_request_date: new Date(),
+    ao_entity_name: ''
+  },
+  setQuery: function() {}
+};
+
+Filters.propTypes = {
+  getResults: PropTypes.func,
+  instantQuery: PropTypes.func,
+  query: PropTypes.shape({
+    resultCount: PropTypes.number,
+    lastResultCount: PropTypes.number,
+    ao_no: PropTypes.string,
+    ao_requestor: PropTypes.string,
+    ao_requestor_type: PropTypes.string,
+    q: PropTypes.string,
+    ao_is_pending: PropTypes.bool,
+    ao_category: PropTypes.string,
+    ao_citation_require_all: PropTypes.oneOfType([
+      PropTypes.bool,
+      PropTypes.string
+    ]),
+    ao_regulatory_citation: PropTypes.array,
+    lastFilter: PropTypes.string,
+    ao_statutory_citation: PropTypes.array,
+    ao_min_issue_date: PropTypes.instanceOf(Date),
+    ao_max_issue_date: PropTypes.instanceOf(Date),
+    ao_min_request_date: PropTypes.instanceOf(Date),
+    ao_max_request_date: PropTypes.instanceOf(Date),
+    ao_entity_name: PropTypes.string
+  }),
+  setQuery: PropTypes.func
+};
 
 module.exports = Filters;

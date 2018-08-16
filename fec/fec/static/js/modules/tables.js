@@ -130,7 +130,7 @@ var MODAL_TRIGGER_HTML =
   '<span class="u-visually-hidden">Toggle details</span>' +
   '</button>';
 
-function modalRenderRow(row, data, index) {
+function modalRenderRow(row) {
   row.classList.add(MODAL_TRIGGER_CLASS, 'row--has-panel');
 }
 
@@ -225,7 +225,7 @@ function hidePanel(api, $modal) {
   accessibility.removeTabindex($modal);
 }
 
-function barsAfterRender(template, api, data, response) {
+function barsAfterRender(template, api) {
   var $table = $(api.table().node());
   var $cols = $table.find('div[data-value]');
 
@@ -658,7 +658,6 @@ DataTable.prototype.buildUrl = function(data, paginate) {
 };
 
 DataTable.prototype.fetchSuccess = function(resp) {
-  var self = this;
   this.paginator.handleResponse(this.fetchContext.data, resp);
   this.fetchContext.callback(mapResponse(resp));
   this.callbacks.afterRender(this.api, this.fetchContext.data, resp);
@@ -970,7 +969,7 @@ function drawStateTable(selected, context) {
           data: data,
           columns: columnHelpers.stateColumns(selected, context),
           order: [[1, 'desc']],
-          drawCallback: function(settings, $table) {
+          drawCallback: function() {
             barsAfterRender(null, this.api());
           }
         },

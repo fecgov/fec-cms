@@ -1,4 +1,5 @@
 const React = require('react');
+const PropTypes = require('prop-types');
 
 function Pagination(props) {
   function interceptHandleChange(offset) {
@@ -56,5 +57,19 @@ function Pagination(props) {
     </div>
   ) : null;
 }
+
+Pagination.defaultProps = {
+  advisory_opinions: [],
+  handleChange: function() {},
+  from_hit: 0,
+  resultCoun: 0
+};
+
+Pagination.propTypes = {
+  advisory_opinions: PropTypes.array,
+  handleChange: PropTypes.func,
+  from_hit: PropTypes.number,
+  resultCount: PropTypes.number
+};
 
 module.exports = Pagination;

@@ -36,7 +36,7 @@ function bar() {
 
   _.chain(marks)
     .groupBy('name')
-    .each(function(marks, name) {
+    .each(function(marks) {
       var mark = _.max(marks, 'startTime');
       perfBar.addMetric(getMetric(mark));
     });

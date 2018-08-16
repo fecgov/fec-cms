@@ -1,4 +1,5 @@
 const React = require('react');
+const PropTypes = require('prop-types');
 
 class FilterPanel extends React.Component {
   constructor(props) {
@@ -33,5 +34,19 @@ class FilterPanel extends React.Component {
     );
   }
 }
+
+FilterPanel.propTypes = {
+  children: {},
+  header: '',
+  id: '',
+  startOpen: true
+};
+
+FilterPanel.propTypes = {
+  children: PropTypes.object,
+  header: PropTypes.string,
+  id: PropTypes.string,
+  startOpen: PropTypes.bool
+};
 
 module.exports = FilterPanel;

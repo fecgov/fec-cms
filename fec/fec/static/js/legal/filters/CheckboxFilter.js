@@ -1,4 +1,5 @@
 const React = require('react');
+const PropTypes = require('prop-types');
 const Checkbox = require('./Checkbox');
 
 function CheckboxFilter(props) {
@@ -13,5 +14,19 @@ function CheckboxFilter(props) {
     </div>
   );
 }
+
+CheckboxFilter.propTypes = {
+  checked: false,
+  handleChange: function() {},
+  label: '',
+  name: ''
+};
+
+CheckboxFilter.propTypes = {
+  checked: PropTypes.bool,
+  handleChange: PropTypes.func,
+  label: PropTypes.string,
+  name: PropTypes.string
+};
 
 module.exports = CheckboxFilter;

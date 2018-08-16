@@ -1,6 +1,6 @@
 'use strict';
 
-/* global Intl, BASE_PATH, API_LOCATION, API_VERSION, API_KEY */
+/* global BASE_PATH, API_LOCATION, API_VERSION, API_KEY */
 
 var URI = require('urijs');
 var $ = require('jquery');
@@ -280,7 +280,7 @@ function buildUrl(path, query) {
     .toString();
 }
 
-function buildTableQuery(context, perPage) {
+function buildTableQuery(context) {
   var pageLength = pageLength || 0;
   var query = _.chain(context)
     .pairs()

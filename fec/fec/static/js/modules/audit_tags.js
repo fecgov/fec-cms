@@ -1,12 +1,6 @@
 'use strict';
 
 var $ = require('jquery');
-var _ = require('underscore');
-
-var helpers = require('./helpers');
-
-var AuditCategorySubCategory = require('./audit-category-sub-category');
-
 var $auditCategoryTags = require('../templates/audit_tags.hbs');
 
 $('.data-container__tags').prepend($auditCategoryTags);

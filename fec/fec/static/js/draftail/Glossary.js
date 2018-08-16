@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { EditorState, Modifier } from 'draft-js';
 import Modal from './components/Modal';
 import { slugify } from './utils';
@@ -8,7 +9,6 @@ const terms = [{ term: 'Select term' }].concat(glossaryTerms);
 
 const GlossarySelect = ({ handleChange, terms }) => {
   const options = terms.map(function(t, idx) {
-    const disabled = idx === 0 ? true : false;
     const slug = `${slugify(t.term)}-${idx}`;
 
     return (
@@ -25,6 +25,11 @@ const GlossarySelect = ({ handleChange, terms }) => {
   );
 };
 
+GlossarySelect.propTypes = {
+  handleChange: PropTypes.func,
+  terms: PropTypes.array
+};
+
 GlossarySelect.defaultProps = {
   handleChange: function() {},
   terms: terms
@@ -35,6 +40,12 @@ const GlossaryEntity = ({ handleChange, handleClose, title }) => (
     <GlossarySelect handleChange={handleChange} />
   </Modal>
 );
+
+GlossaryEntity.propTypes = {
+  handleChange: PropTypes.func,
+  handleClose: PropTypes.func,
+  title: PropTypes.string
+};
 
 GlossaryEntity.defaultProps = {
   handleChange: function() {},
@@ -108,9 +119,29 @@ class GlossarySource extends React.Component {
   }
 }
 
-// This adds additional 'term' class to the editor
-// to add custom editor styles inside customize-editor.css
+GlossarySource.defaultProps = {
+  editorState: {},
+  entityType: {},
+  onComplete: {},
+  children: {}
+};
+
+GlossarySource.propTypes = {
+  editorState: PropTypes.oneOfType(PropTypes.object, PropTypes.func),
+  entityType: PropTypes.oneOfType(PropTypes.object, PropTypes.func),
+  onComplete: PropTypes.oneOfType(PropTypes.object, PropTypes.func),
+  children: PropTypes.oneOfType(PropTypes.object, PropTypes.func)
+};
+
 const Glossary = ({ children }) => <b className="term">{children}</b>;
+
+Glossary.defaultProps = {
+  children: {}
+};
+
+Glossary.propTypes = {
+  children: PropTypes.oneOfType(PropTypes.object, PropTypes.func)
+};
 
 module.exports = {
   type: 'GLOSSARY',

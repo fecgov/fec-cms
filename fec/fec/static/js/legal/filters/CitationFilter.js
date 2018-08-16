@@ -1,4 +1,5 @@
 const React = require('react');
+const PropTypes = require('prop-types');
 const URI = require('urijs');
 const $ = require('jquery');
 const Checkbox = require('./Checkbox');
@@ -215,5 +216,17 @@ class CitationFilter extends React.Component {
     );
   }
 }
+
+CitationFilter.defaultProps = {
+  lastFilter: '',
+  name: '',
+  value: []
+};
+
+CitationFilter.propTypes = {
+  lastFilter: PropTypes.string,
+  name: PropTypes.string,
+  value: PropTypes.array
+};
 
 module.exports = CitationFilter;

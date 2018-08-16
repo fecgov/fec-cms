@@ -45,4 +45,22 @@ function TextFilter(props) {
   );
 }
 
+TextFilter.defaultProps = {
+  getResults: function() {},
+  handleChange: function() {},
+  helpText: '',
+  keywordModal: true,
+  name: '',
+  value: ''
+};
+
+TextFilter.propTypes = {
+  getResults: PropTypes.func,
+  handleChange: PropTypes.func,
+  helpText: PropTypes.string,
+  keywordModal: PropTypes.bool,
+  name: PropTypes.string,
+  value: PropTypes.string
+};
+
 module.exports = TextFilter;

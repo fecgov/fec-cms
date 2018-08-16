@@ -1,4 +1,5 @@
 const React = require('react');
+const PropTypes = require('prop-types');
 
 function CheckboxList(props) {
   function handleCheckboxListChange(e) {
@@ -42,5 +43,21 @@ function CheckboxList(props) {
     </div>
   );
 }
+
+CheckboxList.propTypes = {
+  handleChange: function() {},
+  label: '',
+  name: '',
+  options: [],
+  value: ''
+};
+
+CheckboxList.propTypes = {
+  handleChange: PropTypes.func,
+  label: PropTypes.string,
+  name: PropTypes.string,
+  options: PropTypes.array,
+  value: PropTypes.string
+};
 
 module.exports = CheckboxList;

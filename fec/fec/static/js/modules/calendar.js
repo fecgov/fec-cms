@@ -301,7 +301,7 @@ Calendar.prototype.handleDayRender = function(date, cell) {
   }
 };
 
-Calendar.prototype.handleEventClick = function(calEvent, jsEvent, view) {
+Calendar.prototype.handleEventClick = function(calEvent, jsEvent) {
   var $target = $(jsEvent.target);
   if (!$target.closest('.tooltip').length) {
     var $eventContainer = $target.closest('.fc-event');

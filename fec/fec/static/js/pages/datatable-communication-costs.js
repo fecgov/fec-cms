@@ -3,8 +3,6 @@
 var $ = require('jquery');
 
 var tables = require('../modules/tables');
-var helpers = require('../modules/helpers');
-var columnHelpers = require('../modules/column-helpers');
 var columns = require('../modules/columns');
 
 var electioneeringTemplate = require('../templates/communication-costs.hbs');

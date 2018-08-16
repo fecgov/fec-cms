@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { EditorState, Modifier } from 'draft-js';
 
 // Creates the entities as soon as it is rendered.
@@ -51,9 +52,29 @@ class SansserifSource extends React.Component {
   }
 }
 
-// This adds additional 'term' class to the editor
-// to add custom editor styles inside customize-editor.css
+SansserifSource.defaultProps = {
+  editorState: {},
+  entityType: {},
+  onComplete: {},
+  children: {}
+};
+
+SansserifSource.propTypes = {
+  editorState: PropTypes.oneOfType(PropTypes.object, PropTypes.func),
+  entityType: PropTypes.oneOfType(PropTypes.object, PropTypes.func),
+  onComplete: PropTypes.oneOfType(PropTypes.object, PropTypes.func),
+  children: PropTypes.oneOfType(PropTypes.object, PropTypes.func)
+};
+
 const Sansserif = ({ children }) => <span className="t-sans">{children}</span>;
+
+Sansserif.defaultTypes = {
+  children: {}
+};
+
+Sansserif.propTypes = {
+  children: PropTypes.oneOfType(PropTypes.object, PropTypes.func)
+};
 
 module.exports = {
   type: 'SANSSERIF',
