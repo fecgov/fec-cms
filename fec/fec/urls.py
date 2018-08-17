@@ -14,37 +14,25 @@ from search import views as search_views
 
 
 urlpatterns = [
-    url(
-        r'^documents/(\d+)/(.*)$',
-        home_views.serve_wagtail_doc,
-        name='wagtaildocs_serve'
-    ),
+    url(r'^documents/(\d+)/(.*)$', home_views.serve_wagtail_doc, name='wagtaildocs_serve'),
     url(r'^auth/', include(uaa_urls)),
     url(r'^admin/', include(wagtailadmin_urls)),
     url(r'^calendar/$', home_views.calendar),
-    url(
-        r'^about/leadership-and-structure/commissioners/$',
-        home_views.commissioners
-    ),
+    url(r'^about/leadership-and-structure/commissioners/$', home_views.commissioners),
     url(r'^documents/', include(wagtaildocs_urls)),
-    url(
-        r'^help-candidates-and-committees/question-rad/$',
-        home_views.contact_rad
-    ),
+    url(r'^help-candidates-and-committees/question-rad/$', home_views.contact_rad),
     url(r'^help-candidates-and-committees/guides/$', home_views.guides),
     url(r'^meetings/$', home_views.index_meetings, name="meetings_page"),
     url(r'^search/$', search_views.search, name='search'),
     url(r'^updates/$', home_views.updates),
     url(r'', include('data.urls')),  # URLs for /data
     url(r'', include('legal.urls')),  # URLs for legal pages
-    url(r'', include('checkweb.urls')),  # URL for check web
     url(r'', include(wagtail_urls)),
 ]
 
 if settings.FEC_CMS_ENVIRONMENT != 'LOCAL':
-    # admin/login always must come before admin/,
-    # so place at beginning of list
-    urlpatterns.insert(0, url(r'^admin/login', uaa_views.login, name='login'))
+    #admin/login always must come before admin/, so place at beginning of list
+    urlpatterns.insert(0,url(r'^admin/login', uaa_views.login, name='login'))
 
 if settings.FEC_CMS_ROBOTS:
     urlpatterns += url(
@@ -62,9 +50,7 @@ if settings.DEBUG:
 
     # Serve static and media files from development server
     urlpatterns += staticfiles_urlpatterns()
-    urlpatterns += static(
-        settings.MEDIA_URL, document_root=settings.MEDIA_ROOT
-    )
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
-    # hide django-admin unless DEBUG=True
-    urlpatterns.insert(1, url(r'^django-admin/', include(admin.site.urls)))
+    #hide django-admin unless DEBUG=True
+    urlpatterns.insert(1,url(r'^django-admin/', include(admin.site.urls)))
