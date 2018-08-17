@@ -1,0 +1,45 @@
+{% extends 'layouts/main.jinja' %}
+{% import 'macros/page-header-checkweb.jinja' as header %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block css %}
+  <link rel="stylesheet" type="text/css" href="{{ asset_for_css('elections.css') }}" />
+{% endblock %}
+
+{% block body %}
+  {{ header.header('check web') }}
+  <div class="u-padding--left u-padding--right tab-interface">
+    <header class="main">
+      <h1 class="entity__name">Check FEC website</h1>
+      <div class="heading--section">
+        <span class="t-data t-bold"></span>
+      </div>
+     </header>
+    <div>
+      {% include 'partials/checkweb-sidebar-nav.jinja' %}
+      <div class="main__content--right-full">
+        <section id="section-1" role="tabpanel" aria-hidden="true" aria-labelledby="section-1-heading">
+         {% include 'partials/election-candidate-totals.jinja' %}
+         {% include 'partials/api-info.jinja' %}
+        </section> 
+      </div>
+    </div>
+  </div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+var context = {
+  election: {
+    cycle: '{{ cycle }}',
+    office: '{{ office }}',
+    state: '{{ state or '' }}',
+    stateFull: '{{ state_full or '' }}',
+    district: '{{ district or '' }}'
+  }
+};
+</script>
+<script src="{{ asset_for_js('dataviz-common.js') }}"></script>
+<script src="{{ asset_for_js('elections.js') }}"></script>
+{% endblock %}
