@@ -46,8 +46,8 @@ function CheckboxList(props) {
 
 CheckboxList.propTypes = {
   handleChange: function() {},
-  label: '',
-  name: '',
+  label: 'label',
+  name: 'name',
   options: [],
   value: ''
 };

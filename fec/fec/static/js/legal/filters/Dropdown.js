@@ -25,8 +25,8 @@ function Dropdown(props) {
 
 Dropdown.defaultProps = {
   handleChange: function() {},
-  label: '',
-  name: '',
+  label: 'label',
+  name: 'name',
   options: [],
   value: ''
 };

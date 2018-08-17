@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 const Cancel = ({ handleClose }) => (
   <div
@@ -68,6 +69,16 @@ const Modal = ({ children, handleClose, title }) => (
 Modal.defaultProps = {
   handleClose: () => {},
   title: ''
+};
+
+Modal.propTypes = {
+  children: PropTypes.oneOfType([
+    PropTypes.array,
+    PropTypes.object,
+    PropTypes.func
+  ]),
+  handleClose: PropTypes.func,
+  title: PropTypes.string
 };
 
 export default Modal;

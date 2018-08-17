@@ -37,6 +37,8 @@ CitationRequireAllRadio.defaultProps = {
 };
 
 CitationRequireAllRadio.propTypes = {
+  handleChange: PropTypes.func,
+  name: PropTypes.string,
   value: PropTypes.oneOfType([PropTypes.bool, PropTypes.string])
 };
 

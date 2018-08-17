@@ -119,28 +119,25 @@ class GlossarySource extends React.Component {
   }
 }
 
-GlossarySource.defaultProps = {
-  editorState: {},
-  entityType: {},
-  onComplete: {},
-  children: {}
-};
-
 GlossarySource.propTypes = {
-  editorState: PropTypes.oneOfType(PropTypes.object, PropTypes.func),
-  entityType: PropTypes.oneOfType(PropTypes.object, PropTypes.func),
-  onComplete: PropTypes.oneOfType(PropTypes.object, PropTypes.func),
-  children: PropTypes.oneOfType(PropTypes.object, PropTypes.func)
+  children: PropTypes.oneOfType([
+    PropTypes.array,
+    PropTypes.object,
+    PropTypes.func
+  ]),
+  editorState: PropTypes.oneOfType([PropTypes.object, PropTypes.func]),
+  entityType: PropTypes.oneOfType([PropTypes.object, PropTypes.func]),
+  onComplete: PropTypes.oneOfType([PropTypes.object, PropTypes.func])
 };
 
 const Glossary = ({ children }) => <b className="term">{children}</b>;
 
-Glossary.defaultProps = {
-  children: {}
-};
-
 Glossary.propTypes = {
-  children: PropTypes.oneOfType(PropTypes.object, PropTypes.func)
+  children: PropTypes.oneOfType([
+    PropTypes.array,
+    PropTypes.object,
+    PropTypes.func
+  ])
 };
 
 module.exports = {

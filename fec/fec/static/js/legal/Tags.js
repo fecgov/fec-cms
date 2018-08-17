@@ -1,4 +1,5 @@
 const React = require('react');
+const PropTypes = require('prop-types');
 const _ = require('underscore');
 const requestorOptions = require('./requestorOptions');
 const documentTypes = require('./documentTypes');
@@ -161,5 +162,11 @@ function Tags(props) {
     return;
   }
 }
+
+Tags.propTypes = {
+  handleRemove: PropTypes.func,
+  query: PropTypes.object,
+  resultCount: PropTypes.number
+};
 
 module.exports = Tags;

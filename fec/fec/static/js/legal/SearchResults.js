@@ -1,4 +1,5 @@
 const React = require('react');
+const PropTypes = require('prop-types');
 const $ = require('jquery');
 const moment = require('moment');
 
@@ -161,5 +162,11 @@ function SearchResults(props) {
     }
   }
 }
+
+SearchResults.propTypes = {
+  advisory_opinion: PropTypes.array,
+  loading: PropTypes.string,
+  query: PropTypes.string
+};
 
 module.exports = SearchResults;

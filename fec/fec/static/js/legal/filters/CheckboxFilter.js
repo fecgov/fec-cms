@@ -18,8 +18,8 @@ function CheckboxFilter(props) {
 CheckboxFilter.propTypes = {
   checked: false,
   handleChange: function() {},
-  label: '',
-  name: ''
+  label: 'label',
+  name: 'name'
 };
 
 CheckboxFilter.propTypes = {

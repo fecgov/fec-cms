@@ -1,4 +1,5 @@
 const React = require('react');
+const PropTypes = require('prop-types');
 const InputElement = require('react-input-mask');
 
 function DateFilter(props) {
@@ -46,5 +47,25 @@ function DateFilter(props) {
     </fieldset>
   );
 }
+
+DateFilter.defaultProps = {
+  instantQuery: function() {},
+  label: 'label',
+  max_name: 'max_name',
+  max_value: '',
+  min_name: 'min_name',
+  min_value: '',
+  setQuery: function() {}
+};
+
+DateFilter.propTypes = {
+  instantQuery: PropTypes.func,
+  label: PropTypes.string,
+  max_name: PropTypes.string,
+  max_value: PropTypes.string,
+  min_name: PropTypes.string,
+  min_value: PropTypes.string,
+  setQuery: PropTypes.func
+};
 
 module.exports = DateFilter;

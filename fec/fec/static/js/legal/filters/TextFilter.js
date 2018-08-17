@@ -1,4 +1,5 @@
 const React = require('react');
+const PropTypes = require('prop-types');
 
 function TextFilter(props) {
   function handleKeydown(e) {
@@ -48,9 +49,9 @@ function TextFilter(props) {
 TextFilter.defaultProps = {
   getResults: function() {},
   handleChange: function() {},
-  helpText: '',
+  helpText: 'help',
   keywordModal: true,
-  name: '',
+  name: 'name',
   value: ''
 };
 

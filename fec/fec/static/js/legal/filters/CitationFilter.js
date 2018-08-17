@@ -219,11 +219,12 @@ class CitationFilter extends React.Component {
 
 CitationFilter.defaultProps = {
   lastFilter: '',
-  name: '',
+  name: 'name',
   value: []
 };
 
 CitationFilter.propTypes = {
+  citationType: PropTypes.string,
   lastFilter: PropTypes.string,
   name: PropTypes.string,
   value: PropTypes.array

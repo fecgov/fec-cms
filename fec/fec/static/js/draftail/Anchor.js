@@ -53,18 +53,15 @@ class AnchorSource extends React.Component {
   }
 }
 
-AnchorSource.defaultProps = {
-  editorState: {},
-  entityType: {},
-  onComplete: {},
-  children: {}
-};
-
 AnchorSource.propTypes = {
-  editorState: PropTypes.oneOfType(PropTypes.object, PropTypes.func),
-  entityType: PropTypes.oneOfType(PropTypes.object, PropTypes.func),
-  onComplete: PropTypes.oneOfType(PropTypes.object, PropTypes.func),
-  children: PropTypes.oneOfType(PropTypes.object, PropTypes.func)
+  children: PropTypes.oneOfType([
+    PropTypes.array,
+    PropTypes.object,
+    PropTypes.func
+  ]),
+  editorState: PropTypes.oneOfType([PropTypes.object, PropTypes.func]),
+  entityType: PropTypes.oneOfType([PropTypes.object, PropTypes.func]),
+  onComplete: PropTypes.oneOfType([PropTypes.object, PropTypes.func])
 };
 
 const Anchor = ({ children }) => (
@@ -77,12 +74,12 @@ const Anchor = ({ children }) => (
   </span>
 );
 
-Anchor.defaultProps = {
-  children: {}
-};
-
 Anchor.propTypes = {
-  children: PropTypes.oneOfType(PropTypes.object, PropTypes.func)
+  children: PropTypes.oneOfType([
+    PropTypes.array,
+    PropTypes.object,
+    PropTypes.func
+  ])
 };
 
 module.exports = {

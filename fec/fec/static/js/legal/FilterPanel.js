@@ -36,14 +36,17 @@ class FilterPanel extends React.Component {
 }
 
 FilterPanel.propTypes = {
-  children: {},
   header: '',
   id: '',
   startOpen: true
 };
 
 FilterPanel.propTypes = {
-  children: PropTypes.object,
+  children: PropTypes.oneOfType([
+    PropTypes.array,
+    PropTypes.object,
+    PropTypes.func
+  ]),
   header: PropTypes.string,
   id: PropTypes.string,
   startOpen: PropTypes.bool
