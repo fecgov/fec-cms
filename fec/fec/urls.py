@@ -28,6 +28,11 @@ urlpatterns = [
     url(r'', include('data.urls')),  # URLs for /data
     url(r'', include('legal.urls')),  # URLs for legal pages
     url(r'', include(wagtail_urls)),
+    url(r'^code\.json$',
+        TemplateView.as_view(
+            template_name='code.json'
+        )
+    )
 ]
 
 if settings.FEC_CMS_ENVIRONMENT != 'LOCAL':
