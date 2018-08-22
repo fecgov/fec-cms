@@ -91,8 +91,10 @@ def get_candidate(candidate_id, cycle, election_full):
         cycle=cycle, cycle_key='two_year_period',
         election_full=election_full,
     )
-    # cycle corresponds to the two-year period for which the committee has financial activity.
-    # when selected election cycle is not in list of election years, get the next election cycle
+
+    # cycle corresponds to the two-year period for which the committee has
+    # financial activity. when selected election cycle is not in list of
+    # election years, get the next election cycle
     if election_full and cycle and cycle not in candidate['election_years']:
 
         next_cycle = next(
@@ -103,8 +105,8 @@ def get_candidate(candidate_id, cycle, election_full):
             max(candidate['election_years']),
         )
 
-        # If the next_cycle is odd set it to whatever the cycle value was- falls back to the cycle
-        # and then set election_full to false
+        # If the next_cycle is odd set it to whatever the cycle value was-
+        # falls back to the cycle and then set election_full to false
         # This solves issue# 1945 with odd year special elections
         if next_cycle % 2 > 0:
             next_cycle = cycle
@@ -117,7 +119,8 @@ def get_candidate(candidate_id, cycle, election_full):
         )
 
     election_year = next(
-        (year for year in sorted(candidate['election_years']) if year >= cycle),
+        (year for year in sorted(candidate['election_years'])
+            if year >= cycle),
         None,
     )
 
@@ -135,10 +138,11 @@ def get_candidate(candidate_id, cycle, election_full):
         'candidateID': candidate['candidate_id']
     }
 
-     # Addresses issue#1644 - make any odd year special election an even year
+    # Addresses issue#1644 - make any odd year special election an even year
     #  for displaying elections for pulldown menu in Candidate pages
     #  Using Set to ensure no duplicate years in final list
-    even_election_years = list({ year + (year % 2) for year in candidate.get('election_years', []) })
+    even_election_years = list(
+       {year + (year % 2) for year in candidate.get('election_years', [])})
 
     # In the case of when a presidential or senate candidate has filed
     # for a future year that's beyond the current cycle,
@@ -159,7 +163,8 @@ def get_candidate(candidate_id, cycle, election_full):
     )
     for committee in committees:
         committee['related_cycle'] = (
-            max(cycle for cycle in aggregate_cycles if cycle in committee['cycles'])
+            max(cycle for cycle in aggregate_cycles
+                if cycle in committee['cycles'])
             if election_full
             else candidate['two_year_period']
         )
@@ -168,8 +173,6 @@ def get_candidate(candidate_id, cycle, election_full):
     committee_groups = groupby(committees, lambda each: each['designation'])
     committees_authorized = committee_groups.get('P', []) + committee_groups.get('A', [])
 
-    committee_groups = committee_groups
-    committees_authorized = committees_authorized
     committee_ids = [committee['committee_id'] for committee in committees_authorized]
 
     # Get aggregate totals for the financial summary
