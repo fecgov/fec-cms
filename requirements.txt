@@ -10,7 +10,7 @@ psycopg2==2.7.1
 requests==2.13.0
 slacker==0.8.6
 whitenoise==2.0.3
-wagtail==2.0.1
+wagtail==2.2.1
 # TODO: pin version
 django-audit-log
 Jinja2==2.9.6
