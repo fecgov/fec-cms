@@ -7,7 +7,7 @@
 
   <div class="slab slab--inline slab--neutral u-padding--left u-padding--right">
 
-    {{ select.candidate_cycle_select(cycles, cycle, id="cycle-4") }}
+    {{ select.two_year_select(cycles, cycle, id="cycle-4", election_full="false") }}
 
     {% if committee_groups['P'] or committee_groups['A']%}
     <span class="t-sans t-bold">Data is included from these committees:</span>
