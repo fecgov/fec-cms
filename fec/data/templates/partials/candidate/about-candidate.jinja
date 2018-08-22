@@ -59,8 +59,8 @@
 
       <div class="usa-width-one-fourth">
         <div class="card">
-          {% if get_election_url(candidate, cycle, district) %}
-          <a href="{{ get_election_url(candidate, cycle, district) }}">
+          {% if get_election_url(candidate, election_year, district) %}
+          <a href="{{ get_election_url(candidate, election_year, district) }}">
             <div class="card__image__container">
               <img class="icon--complex" src="/static/img/i-elections--primary.svg" alt="Icon representing elections">
             </div>
