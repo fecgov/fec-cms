@@ -205,11 +205,6 @@ var individualContributionsColumns = [
 ];
 
 var statementsOfCandidacyColumns = [
-  //   columnHelpers.urlColumn('pdf_url', {
-  //   data: 'document_description',
-  //   className: 'all column--medium',
-  //   orderable: false
-  // }),
   {
     data: 'document_description',
     className: 'all column--doc-download',
@@ -266,8 +261,28 @@ var statementsOfCandidacyColumns = [
   render: function(data, type, row) {
         return row.beginning_image_number;
       }
+  },
+  {
+  data: 'beginning_image_number',
+  orderable: false,
+  className: 'min-tablet hide-panel column--xs column--number',
+  render: function(data, type, row) {
+    // Image numbers in 2015 and later begin with YYYYMMDD,
+    // which makes for a very big number.
+    // This results in inaccurate subtraction
+    // so instead we slice it after the first 8 digits
+    // Earlier image numbers are only 11 digits, so we just leave those as-is
+    var shorten = function(number) {
+      if (number.toString().length === 18) {
+        return Number(number.toString().slice(8));
+      } else {
+        return number;
+      }
+    };
+    var pages = shorten(row.ending_image_number) - shorten(row.beginning_image_number) + 1;
+    return pages.toLocaleString();
   }
-
+ }
 ]
 
 // Begin datatable functions in order of tab appearance
@@ -290,6 +305,9 @@ function initOtherDocumentsTable() {
   var $table = $('table[data-type="other-documents"]');
   var candidateId = $table.data('candidate');
   var path = ['filings'];
+   var opts = {
+     cycle: $table.data('cycle')
+   };
   tables.DataTable.defer($table, {
     path: path,
     query: {
@@ -568,15 +586,15 @@ function initStatementsOfCandidacyTable() {
   var $table = $('table[data-type="statements-of-candidacy"]');
   var candidateId = $table.data('candidate-id');
   var path = ['filings'];
-  // var opts = {
-  //   cycle: $table.data('cycle')
-  // };
+  var opts = {
+     cycle: $table.data('cycle')
+   };
   tables.DataTable.defer($table, {
     path: path,
     query: {
       candidate_id: candidateId,
       form_type: ['F2'],
-      // two_year_transaction_period: opts.cycle,
+       cycle: opts.cycle,
       /* Performing an include would only show RFAI form types. For this reason, excludes need to be
          used for request_type
 
