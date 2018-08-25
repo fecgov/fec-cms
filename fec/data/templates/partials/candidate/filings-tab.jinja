@@ -1,5 +1,6 @@
 {% import 'macros/cycle-select.jinja' as select %}
 {% import 'macros/entity-pages.jinja' as entity %}
+{% import 'macros/missing.jinja' as missing %}
 
 <section id="section-6" role="tabpanel" aria-hidden="true" aria-labelledby="section-6-heading">
 
@@ -8,6 +9,7 @@
     <div class="content__section">
     {{ select.cycle_select(election_years, cycle, duration=duration, id="cycle-1") }}
     </div>
+    {% if two_year_totals.coverage_start_date %}
     <div id="individual-contribution-transactions" class="entity__figure row">
       <div class="content__section">
         <div class="heading--section heading--with-action">
@@ -15,7 +17,6 @@
           <a class="heading__right button--alt button--browse"
               href="/data/filings/?cycle={{ cycle }}&form_type=F2&candidate_id={{ candidate_id }}">Filter this data</a>
           </div>
-
 
         <div id="all-transactions" class="panel-toggle-element">
           <div class="results-info results-info--simple">
@@ -51,8 +52,9 @@
         </div>
       </div>
     </div>
-
-
+    {% else %}
+      {{ missing.missing_financials(name, cycle) }}
+    {% endif %}
 
     <div class="entity__figure entity__figure row" id="other">
       <h3 class="heading--section u-no-margin">Other documents filed</h3>
