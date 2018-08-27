@@ -2,7 +2,7 @@
 var _ = require('underscore');
 
 /**
- * When two-year-transaction-period on change, 
+ * When two-year-transaction-period on change,
  * trigger committee_type dropdown to change  options list
  */
 var $ = require('jquery');
@@ -56,17 +56,22 @@ var spender_committee_types = {
 
 
 
-// $("#two-year-transaction-period").change(function(event) {
-//   var two_year_transaction_period = $("#two-year-transaction-period").value;
-//   var $select = $('#committee_type');
-//   var committee_types_list = spender_committee_types[two_year_transaction_period];
-//   for (i = 0, length = committee_types_list.length; i < length; i++) {
-//       $select.html('<option value='+committee_types_list[i]+'>'
-//         +committee_type_desc[committee_types_list[i]]
-//         +'</option>')
+$(function(){
+ $(document).on('change',"#two-year-transaction-period",function(event) {
+  var two_year_transaction_period = this.value;
+  var $select = $('#committee_type');
+  var committee_types_list = spender_committee_types[two_year_transaction_period]
+  console.log(this.options[event.target.selectedIndex].text)
+  console.log(two_year_transaction_period)
+  console.log(committee_types_list)
+  for (var i = 0; i < committee_types_list.length; i++) {
+      $select.html.('<option value='+committee_types_list[i]+'>'
+        +committee_type_desc[committee_types_list[i]]
+        +'</option>')
 
-//   }
-// })
+  }
+})
+})
 
 //for committee_type filter-tag and results
 function showSpenderCommitteeType(){
