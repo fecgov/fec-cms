@@ -321,6 +321,131 @@ audit_sub_categories_options = [
     }
 ]
 
+committee_type_desc = OrderedDict([
+    ('C', 'Communication cost'),
+    ('D', 'Delegate committee'),
+    ('E', 'Electioneering communication'),
+    ('H', 'House'),
+    ('I', 'Independent expenditure filer (not a committee))'),
+    ('N', 'PAC - nonqualified'),
+    ('O', 'Super PAC (independent expenditure only)'),
+    ('P', 'Presidential'),
+    ('Q', 'PAC - qualified'),
+    ('S', 'Senate'),
+    ('U', 'Single candidate independent expenditure'),
+    ('V', 'PAC with non-contribution account - nonqualified'),
+    ('W', 'PAC with non-contribution account - qualified'),
+    ('X', 'Party - nonqualified'),
+    ('Y', 'Party - qualified'),
+    ('Z', 'National party nonfederal account')
+])
+
+spender_committee_types = {
+    2018: (['D', 'E', 'H', 'I', 'N', 'O', 'P', 'Q', 'S',
+            'U', 'W', 'V', 'X', 'Y']),
+    2016: (['D', 'E', 'H', 'N', 'O', 'P', 'Q', 'S', 'U',
+            'V', 'W', 'X', 'Y']),
+    2014: (['D', 'E', 'H', 'N', 'O', 'P', 'Q', 'S', 'U',
+            'V', 'W', 'X', 'Y']),
+    2012: (['D', 'E', 'H', 'N', 'O', 'P', 'Q', 'S', 'U',
+            'V', 'W', 'X', 'Y']),
+    2010: ['E', 'H', 'N', 'O', 'P', 'Q', 'S', 'U', 'X', 'Y'],
+    2008: ['D', 'E', 'H', 'N', 'P', 'Q', 'S', 'U', 'X', 'Y'],
+    2006: ['C', 'E', 'H', 'I', 'N', 'P', 'Q', 'S', 'U', 'X', 'Y'],
+    2004: (['C', 'D', 'E', 'H', 'I', 'N', 'P', 'Q', 'S',
+            'U', 'X', 'Y', 'Z']),
+    2002: ['C', 'D', 'H', 'I', 'N', 'P', 'Q', 'S', 'U', 'X', 'Y', 'Z'],
+    2000: ['D', 'H', 'N', 'P', 'Q', 'S', 'U', 'X', 'Y', 'Z'],
+    1998: ['H', 'N', 'P', 'Q', 'S', 'U', 'X', 'Y', 'Z'],
+    1996: ['D', 'H', 'N', 'P', 'Q', 'S', 'U', 'X', 'Y', 'Z'],
+    1994: ['H', 'N', 'P', 'Q', 'S', 'U', 'X', 'Y', 'Z'],
+    1992: ['H', 'N', 'P', 'Q', 'S', 'U', 'X', 'Y', 'Z'],
+    1990: ['H', 'N', 'P', 'Q', 'S', 'U', 'X', 'Y'],
+    1988: ['D', 'H', 'N', 'P', 'Q', 'S', 'U', 'X', 'Y'],
+    1986: ['D', 'H', 'N', 'P', 'Q', 'S', 'U', 'X', 'Y'],
+    1984: ['D', 'H', 'N', 'P', 'Q', 'S', 'U', 'X', 'Y'],
+    1982: ['C', 'D', 'H', 'N', 'P', 'Q', 'S', 'U', 'X', 'Y'],
+    1980: ['C', 'D', 'H', 'N', 'P', 'Q', 'S', 'U', 'X', 'Y'],
+    1978: ['H', 'I', 'N', 'P', 'Q', 'S', 'U', 'X', 'Y'],
+    1976: ['H', 'N', 'P', 'Q', 'S', 'X', 'Y']
+}
+
+filer_committee_types_keys = ['committee_type', 'committee_type_desc']
+
+filer_committee_types = [
+    {
+        "committee_type": 'null',
+        "committee_type_desc": 'More'
+    },
+    {
+        "committee_type": 'P',
+        "committee_type_desc": 'Presidential'
+    },
+    {
+        "committee_type": 'H',
+        "committee_type_desc": 'House'
+    },
+    {
+        "committee_type": 'S',
+        "committee_type_desc": 'Senate'
+    },
+    {
+        "committee_type": 'O',
+        "committee_type_desc": 'Super PAC (independent expenditure only)'
+    },
+    {
+        "committee_type": 'U',
+        "committee_type_desc": 'Single candidate independent expenditure'
+    },
+    {
+        "committee_type":
+            'I',
+        "committee_type_desc":
+            'Independent expenditure filer (not a committee)'
+    },
+    {
+        "committee_type": 'N',
+        "committee_type_desc": 'PAC - nonqualified'
+    },
+    {
+        "committee_type": 'Q',
+        "committee_type_desc": 'PAC - qualified'
+    },
+    {
+        "committee_type":
+            'V',
+        "committee_type_desc":
+            'PAC with non-contribution account - nonqualified'
+    },
+    {
+        "committee_type": 'W',
+        "committee_type_desc": 'PAC with non-contribution account - qualified'
+    },
+    {
+        "committee_type": 'C',
+        "committee_type_desc": 'Communication cost'
+    },
+    {
+        "committee_type": 'D',
+        "committee_type_desc": 'Delegate committee'
+    },
+    {
+        "committee_type": 'E',
+        "committee_type_desc": 'Electioneering communication'
+    },
+    {
+        "committee_type": 'X',
+        "committee_type_desc": 'Party - nonqualified'
+    },
+    {
+        "committee_type": 'Y',
+        "committee_type_desc": 'Party - qualified'
+    },
+    {
+        "committee_type": 'Z',
+        "committee_type_desc": 'National party nonfederal account'
+    }
+]
 
 table_columns = OrderedDict([
     ('candidates', ['Name', 'Office', 'Election years', 'Party', 'State', 'District', 'First filing date']),

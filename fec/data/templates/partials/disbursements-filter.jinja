@@ -6,6 +6,7 @@
 {% import 'macros/filters/date.jinja' as date %}
 {% import 'macros/filters/range.jinja' as range %}
 {% import 'macros/filters/checkbox.jinja' as checkbox %}
+{% import 'macros/filters/dropdown-json.jinja' as dropdown %}
 
 {% block heading %}
 Filter disbursements
@@ -33,6 +34,15 @@ Filter disbursements
   <div class="accordion__content">
     {{ text.field('recipient_city', 'City') }}
     {{ states.field('recipient_state')}}
+    {{
+      dropdown.select_json(
+          'committee_type',
+          'Spender committee type',
+          keys=constants.filer_committee_types_keys,
+          options=constants.filer_committee_types,
+          default=all
+      )
+    }}    
   </div>
 
   <button type="button" class="js-accordion-trigger accordion__button">Disbursement details</button>

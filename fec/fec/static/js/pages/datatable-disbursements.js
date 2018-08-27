@@ -10,6 +10,7 @@ var columns = require('../modules/columns');
 var filtersEvent = require('../modules/filters-event');
 
 var disbursementTemplate = require('../templates/disbursements.hbs');
+var spenderCommitteeType = require('../modules/disbursements-spender-committee-type');
 
 $(document).ready(function() {
   var $table = $('#results');
