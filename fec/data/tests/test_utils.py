@@ -6,6 +6,7 @@ from unittest import mock
 
 from data.templatetags import filters
 import data.utils as utils
+from data.utils import election_title
 import data.api_caller as api_caller
 
 
@@ -48,6 +49,14 @@ class TestUtils(TestCase):
             'district': '02'}
         assert (filters.get_election_url(candidate, 2012)
                 == '/data/elections/house/NJ/02/2012')
+
+    def test_election_title(self):
+        assert election_title(2016, 'President') == (
+                '2016 Election United States President')
+        assert election_title(2016, 'Senate', state='CA') == (
+            '2016 Election United States Senate - California')
+        assert election_title(2016, 'House', state='CA', district='08') == (
+            '2016 Election United States House - California - District 08')
 
     def test_financial_summary_processor(self):
         totals = {

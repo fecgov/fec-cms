@@ -57,7 +57,8 @@ def get_cycles(max_cycle=None):
 
 def election_title(cycle, office, state=None, district=None):
     # If this logic changes, please update `page-header.jinja` logic
-    base = ' '.join([str(cycle), 'Election', 'United States', office.capitalize()])
+    base = ' '.join(
+        [str(cycle), 'Election', 'United States', office.capitalize()])
     parts = [base]
     if state:
         parts.append(constants.states[state.upper()])
