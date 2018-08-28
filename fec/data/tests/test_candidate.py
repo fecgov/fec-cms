@@ -58,7 +58,7 @@ class TestCandidate(TestCase):
             cycle
         )
         load_candidate_totals_mock.return_value = {}
-        candidate = get_candidate('C001', 2018, show_full_election)
+        candidate = get_candidate('C001', cycle, show_full_election)
 
         assert candidate['candidate_id'] == test_candidate['candidate_id']
         assert candidate['name'] == test_candidate['name']
