@@ -43,9 +43,6 @@ Filter disbursements
           default=all
       )
     }}
-    <fieldset class="js-filter js-line-number-filters" data-filter="checkbox">
-      {{ checkbox.checkbox_dropdown_multiple('committee_type', 'Spender committee type', options=constants.committee_type_desc, legend=False, prefix='Spender committee type:') }}
-    </fieldset>
   </div>
 
   <button type="button" class="js-accordion-trigger accordion__button">Disbursement details</button>

@@ -61,26 +61,24 @@ $(function(){
   var two_year_transaction_period = this.value;
   var $select = $('#committee_type');
   var committee_types_list = spender_committee_types[two_year_transaction_period]
-  console.log(this.options[event.target.selectedIndex].text)
   console.log(two_year_transaction_period)
-  console.log(committee_types_list)
-  for (var i = 0; i < committee_types_list.length; i++) {
-      $select.html.('<option value='+committee_types_list[i]+'>'
-        +committee_type_desc[committee_types_list[i]]
-        +'</option>')
-
-  }
-})
-})
+  console.log('Length:'+committee_types_list.length+' / Types:'+committee_types_list)
+  $select.html('<option selected disabled>More</option>');
+   $(committee_types_list).each(function(i,v) {
+     $select.append(
+        '<option value='+ v +'>'+ committee_type_desc[v] + '</option>'
+     )
+   })
+  })
+ })
 
 //for committee_type filter-tag and results
-function showSpenderCommitteeType(){
-    var sub_selected = $("#committee_type option:selected").text()
+//function showSpenderCommitteeType(){
+//   var sub_selected = $("#committee_type option:selected").text()
     // sub_selected == ("Choose a sub-category")  || ($("#sub_category_id").val() == "all")
     //  ? $('.tag__category.sub').css('visibility','hidden')
     //  : $('.tag__category.sub').css('visibility','visible')
-
-}
+//}
 
 // $(document).bind('ready ajaxComplete', '#committee_type', showSpenderCommitteeType);
 
