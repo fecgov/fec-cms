@@ -160,6 +160,9 @@ class TestCandidate(TestCase):
         assert candidate['candidate_id'] == test_candidate['candidate_id']
         assert candidate['name'] == test_candidate['name']
         assert candidate['cycles'] == test_candidate['cycles']
+        assert candidate['min_cycle'] == cycle - 2
+        assert candidate['max_cycle'] == cycle
+        assert candidate['election_year'] == cycle
         assert candidate['election_years'] == test_candidate['election_years']
         assert candidate['office'] == test_candidate['office']
         assert candidate['office_full'] == test_candidate['office_full']
@@ -169,21 +172,42 @@ class TestCandidate(TestCase):
         assert candidate['incumbent_challenge_full'] == test_candidate[
                 'incumbent_challenge_full']
         assert candidate['cycle'] == cycle
-        assert candidate['election_year'] == cycle
         assert candidate['result_type'] == 'candidates'
         assert candidate['duration'] == 2
-        assert candidate['min_cycle'] == cycle - 2
         assert candidate['report_type'] == 'house-senate'
-        assert candidate['max_cycle'] == cycle
         assert candidate['show_full_election'] == show_full_election
 
         committee_groups = groupby(
             self.STOCK_COMMITTEE_LIST, lambda each: each['designation']
         )
+        assert candidate['committee_groups'] == {
+            'P': [{
+                'designation': 'P',
+                'cycles': [2016, 2014, 2012, 2018],
+                'name': 'My Primary Campaign Committee',
+                'cycle': 2016,
+                'related_cycle': 2016,
+                'committee_id': 'C001'}],
+            'A': [{
+                'designation': 'A',
+                'cycles': [2016, 2014, 2012, 2018],
+                'name': 'My Authorized Campaign Committee',
+                'cycle': 2016,
+                'related_cycle': 2016,
+                'committee_id': 'C002'}],
+            'J': [{
+                'designation': 'J',
+                'cycles': [2016, 2014, 2012, 2018],
+                'name': 'Joint Fundraising Committee',
+                'cycle': 2016,
+                'related_cycle': 2016,
+                'committee_id': 'C003'}]
+        }
 
         assert candidate['committee_groups'] == committee_groups
-        assert candidate['committees_authorized'] == committee_groups.get(
-            'P', []) + committee_groups.get('A', [])
+        assert candidate['committees_authorized'] == (
+            candidate['committee_groups']['P'] +
+            candidate['committee_groups']['A'])
         assert candidate['committee_ids'] == [
             committee['committee_id']
             for committee in candidate['committees_authorized']
