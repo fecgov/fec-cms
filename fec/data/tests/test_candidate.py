@@ -97,8 +97,8 @@ class TestCandidate(TestCase):
         }
 
     def test_special_election_election_years_only_rounded(
-        self, load_with_nested_mock, load_candidate_totals_mock,
-        load_candidate_statement_of_candidacy_mock):
+            self, load_with_nested_mock, load_candidate_totals_mock,
+            load_candidate_statement_of_candidacy_mock):
 
         # Candidate ran in 2017 and 2018. Passing 2016 as cycle.
         # Election years should be rounded, election year should be 2017
@@ -116,8 +116,8 @@ class TestCandidate(TestCase):
         assert candidate["election_year"] == 2017
 
     def test_candidate_with_future_cycle_falls_back_to_present(
-        self, load_with_nested_mock, load_candidate_totals_mock,
-        load_candidate_statement_of_candidacy_mock):
+            self, load_with_nested_mock, load_candidate_totals_mock,
+            load_candidate_statement_of_candidacy_mock):
 
         candidate = copy.deepcopy(self.STOCK_CANDIDATE)
         candidate["election_years"] = [2018, 2100]
@@ -133,8 +133,8 @@ class TestCandidate(TestCase):
         assert candidate["cycles"] == [2018]
 
     def test_election_full_returns_false_nested_returns_future_cycle(
-        self, load_with_nested_mock, load_candidate_totals_mock,
-        load_candidate_statement_of_candidacy_mock):
+            self, load_with_nested_mock, load_candidate_totals_mock,
+            load_candidate_statement_of_candidacy_mock):
 
         candidate = copy.deepcopy(self.STOCK_CANDIDATE)
         committee = copy.deepcopy(self.STOCK_COMMITTEE_LIST[0])
@@ -149,8 +149,9 @@ class TestCandidate(TestCase):
         candidate = get_candidate('C001', 2100, True)
         assert candidate["show_full_election"] is False
 
-    def test_aggregates(self, load_with_nested_mock, load_candidate_totals_mock,
-                        load_candidate_statement_of_candidacy_mock):
+    def test_aggregates(
+            self, load_with_nested_mock, load_candidate_totals_mock,
+            load_candidate_statement_of_candidacy_mock):
         load_with_nested_mock.return_value = (
             self.STOCK_CANDIDATE,
             self.STOCK_COMMITTEE_LIST,
@@ -159,7 +160,7 @@ class TestCandidate(TestCase):
         load_candidate_totals_mock.side_effect = [
             # 'aggregate'
             {
-                'loan_repayments_other_loans':0.0,
+                'loan_repayments_other_loans': 0.0,
                 'contributions': 26127221.0,
                 'loan_repayments_candidate_loans': 0.0,
                 'net_operating_expenditures': 13403095.0,
@@ -457,8 +458,9 @@ class TestCandidate(TestCase):
             }
         })]
 
-    def test_no_aggregates(self, load_with_nested_mock, load_candidate_totals_mock,
-                           load_candidate_statement_of_candidacy_mock):
+    def test_no_aggregates(
+            self, load_with_nested_mock, load_candidate_totals_mock,
+            load_candidate_statement_of_candidacy_mock):
         load_with_nested_mock.return_value = (
             self.STOCK_CANDIDATE,
             self.STOCK_COMMITTEE_LIST,
