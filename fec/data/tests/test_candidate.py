@@ -51,17 +51,25 @@ class TestCandidate(TestCase):
         cycle = 2016
         show_full_election = True
 
+        test_candidate = copy.deepcopy(self.STOCK_CANDIDATE)
         load_with_nested_mock.return_value = (
-            self.STOCK_CANDIDATE,
+            test_candidate,
             self.STOCK_COMMITTEE_LIST,
             cycle
         )
         candidate = get_candidate('C001', 2018, show_full_election)
 
-        for field in self.STOCK_CANDIDATE:
-            if field != "election_districts":
-                assert candidate[field] == self.STOCK_CANDIDATE[field]
-
+        assert candidate['candidate_id'] == test_candidate['candidate_id']
+        assert candidate['name'] == test_candidate['name']
+        assert candidate['cycles'] == test_candidate['cycles']
+        assert candidate['election_years'] == test_candidate['election_years']
+        assert candidate['office'] == test_candidate['office']
+        assert candidate['office_full'] == test_candidate['office_full']
+        assert candidate['state'] == test_candidate['state']
+        assert candidate['district'] == test_candidate['district']
+        assert candidate['party_full'] == test_candidate['party_full']
+        assert candidate['incumbent_challenge_full'] == test_candidate[
+                'incumbent_challenge_full']
         assert candidate['cycle'] == cycle
         assert candidate['election_year'] == cycle
         assert candidate['result_type'] == 'candidates'
