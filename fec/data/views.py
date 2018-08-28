@@ -179,7 +179,7 @@ def get_candidate(candidate_id, cycle, election_full):
     # And pass through the data processing utils
     aggregate = api_caller.load_candidate_totals(
         candidate['candidate_id'],
-        cycle=max_cycle,
+        cycle=cycle,
         election_full=election_full,
     )
     if aggregate:
@@ -197,7 +197,7 @@ def get_candidate(candidate_id, cycle, election_full):
     # raising and spending tabs
     two_year_totals = api_caller.load_candidate_totals(
         candidate['candidate_id'],
-        cycle=max_cycle,
+        cycle=cycle,
         election_full=False
     )
 
@@ -231,7 +231,6 @@ def get_candidate(candidate_id, cycle, election_full):
         'min_cycle': min_cycle,
         'report_type': report_type,
         'cycles': cycles,
-        'max_cycle': max_cycle,
         'show_full_election': show_full_election,
         'committee_groups': committee_groups,
         'committees_authorized': committees_authorized,

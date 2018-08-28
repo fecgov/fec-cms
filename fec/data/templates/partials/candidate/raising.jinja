@@ -5,25 +5,21 @@
 
   <div class="slab slab--inline slab--neutral u-padding--left u-padding--right">
 
-    {{ select.candidate_cycle_select(cycles, max_cycle, id="cycle-5") }}
+    {{ select.candidate_cycle_select(cycles, cycle, id="cycle-5") }}
 
     {% if committee_groups['P'] or committee_groups['A']%}
       <span class="t-sans t-bold">Data is included from these committees:</span>
 
       <ul class="list--bulleted">
         {% for committee in committee_groups['P'] | reverse %}
-        {% if committee.cycle == max_cycle %}
         <li>
           <a class="t-sans" href="/data/committee/{{ committee.committee_id }}/?cycle={{ committee.related_cycle }}">{{ committee.name }}</a>
         </li>
-        {% endif %}
         {% endfor %}
         {% for committee in committee_groups['A'] | reverse %}
-        {% if committee.cycle == max_cycle %}
         <li>
           <a class="t-sans" href="/data/committee/{{ committee.committee_id }}/?cycle={{ committee.related_cycle }}">{{ committee.name }}</a>
         </li>
-        {% endif %}
         {% endfor %}
       </ul>
     {% endif %}
@@ -39,7 +35,7 @@
         <div class="heading--section heading--with-action">
           <h3 class="heading__left">Total receipts</h3>
           <a class="heading__right button--alt button--browse"
-              href="/data/receipts/?two_year_transaction_period={{ max_cycle }}{% for id in committee_ids %}&committee_id={{ id }}{% endfor %}">Filter all receipts</a>
+              href="/data/receipts/?two_year_transaction_period={{ cycle }}{% for id in committee_ids %}&committee_id={{ id }}{% endfor %}">Filter all receipts</a>
         </div>
         <div class="content__section--narrow">
           <div class="row u-margin-bottom">
@@ -63,7 +59,7 @@
         <div class="heading--section heading--with-action">
           <h3 class="heading__left">Individual contributions</h3>
           <a class="heading__right button--alt button--browse"
-              href="/data/receipts/individual-contributions/?two_year_transaction_period={{ max_cycle }}&{% for id in committee_ids %}&committee_id={{ id }}{% endfor %}">Filter this data</a>
+              href="/data/receipts/individual-contributions/?two_year_transaction_period={{ cycle }}&{% for id in committee_ids %}&committee_id={{ id }}{% endfor %}">Filter this data</a>
           </div>
         <div class="row">
           <fieldset class="toggles js-toggles">
@@ -93,7 +89,7 @@
             <table
                 class="data-table data-table--heading-borders"
                 data-type="contributor-state"
-                data-cycle="{{ max_cycle }}"
+                data-cycle="{{ cycle }}"
               >
               <thead>
                 <th scope="col">State</th>
@@ -103,7 +99,7 @@
           </div>
 
           <div class="map-panel">
-            <div class="state-map" data-candidate-id="{{ candidate_id }}" data-cycle="{{ max_cycle }}">
+            <div class="state-map" data-candidate-id="{{ candidate_id }}" data-cycle="{{ cycle }}">
               <div class="legend-container">
                 <span class="t-sans t-block">By state: total amount received</span>
                 <svg></svg>
@@ -122,7 +118,7 @@
           <table
              class="data-table data-table--heading-borders"
              data-type="contribution-size"
-             data-cycle="{{ max_cycle }}">
+             data-cycle="{{ cycle }}">
             <thead>
               <th scope="col">Contribution size</th>
               <th scope="col">Total contributed</th>
@@ -148,7 +144,7 @@
               data-candidate-id="{{ candidate_id }}"
               data-committee-id="{% for c in committee_groups['P'] | reverse %}{{ c.committee_id }},{% endfor %}{% for c in committee_groups['A'] | reverse %}{{ c.committee_id }},{% endfor %}"
               data-name="{{ name }}"
-              data-cycle="{{ max_cycle }}"
+              data-cycle="{{ cycle }}"
               data-duration="2"
             >
             <thead>

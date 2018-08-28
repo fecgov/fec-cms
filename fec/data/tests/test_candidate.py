@@ -63,8 +63,8 @@ class TestCandidate(TestCase):
         assert candidate['candidate_id'] == test_candidate['candidate_id']
         assert candidate['name'] == test_candidate['name']
         assert candidate['cycles'] == test_candidate['cycles']
+        assert candidate['cycle'] == cycle
         assert candidate['min_cycle'] == cycle - 2
-        assert candidate['max_cycle'] == cycle
         assert candidate['election_year'] == cycle
         assert candidate['election_years'] == test_candidate['election_years']
         assert candidate['office'] == test_candidate['office']
@@ -73,8 +73,8 @@ class TestCandidate(TestCase):
         assert candidate['district'] == test_candidate['district']
         assert candidate['party_full'] == test_candidate['party_full']
         assert candidate['incumbent_challenge_full'] == test_candidate[
-                'incumbent_challenge_full']
-        assert candidate['cycle'] == cycle
+            'incumbent_challenge_full']
+
         assert candidate['result_type'] == 'candidates'
         assert candidate['duration'] == 2
         assert candidate['report_type'] == 'house-senate'

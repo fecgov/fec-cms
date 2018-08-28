@@ -15,25 +15,25 @@
       <div class="heading--section heading--with-action">
         <h3 class="heading__left">Independent expenditures</h3>
         <a class="heading__right button--alt button--browse"
-          href="/data/independent-expenditures/?min_date={{ cycle_start(min_cycle) | date(fmt='%m-%d-%Y') }}&max_date={{ cycle_end(max_cycle) | date(fmt='%m-%d-%Y') }}&candidate_id={{ candidate_id }}">Filter this data</a>
+          href="/data/independent-expenditures/?min_date={{ cycle_start(min_cycle) | date(fmt='%m-%d-%Y') }}&max_date={{ cycle_end(cycle) | date(fmt='%m-%d-%Y') }}&candidate_id={{ candidate_id }}">Filter this data</a>
       </div>
       <div class="results-info results-info--simple js-other-spending-totals" data-spending-type="independentExpenditures">
         <div class="usa-width-one-half">
           <span class="label">Support</span>
           <span class="t-big-data js-support"><img src="{{ static('img/loading-ellipsis.gif') }}" alt="Loading indicator"></span>
-          <span class="t-block t-sans">Spent by others to <strong>support</strong> from <strong>{{cycle_start(min_cycle)|date_full}} to {{cycle_end(max_cycle)|date_full}}.</strong></span>
+          <span class="t-block t-sans">Spent by others to <strong>support</strong> from <strong>{{cycle_start(min_cycle)|date_full}} to {{cycle_end(cycle)|date_full}}.</strong></span>
         </div>
         <div class="usa-width-one-half">
           <span class="label">Oppose</span>
           <span class="t-big-data js-oppose"><img src="{{ static('img/loading-ellipsis.gif') }}" alt="Loading indicator"></span>
-          <span class="t-block t-sans">Spent by others to <strong>oppose</strong> from <strong>{{cycle_start(min_cycle)|date_full}} to {{cycle_end(max_cycle)|date_full}}.</strong></span>
+          <span class="t-block t-sans">Spent by others to <strong>oppose</strong> from <strong>{{cycle_start(min_cycle)|date_full}} to {{cycle_end(cycle)|date_full}}.</strong></span>
         </div>
       </div>
       <table
           class="data-table data-table--heading-borders"
           data-type="independent-expenditures"
           data-candidate="{{ candidate_id }}"
-          data-cycle="{{ max_cycle }}"
+          data-cycle="{{ cycle }}"
           data-election-full="{{ show_full_election }}"
           data-duration="{% if election_full %}{{ duration }}{% else %}2{% endif %}"
         >
@@ -57,26 +57,26 @@
           href="{{ url_for(
             'communication_costs',
             min_date=cycle_start(min_cycle) | date(fmt='%m-%d-%Y'),
-            max_date=cycle_end(max_cycle) | date(fmt='%m-%d-%Y')
+            max_date=cycle_end(cycle) | date(fmt='%m-%d-%Y')
           ) }}&candidate_id={{ candidate_id }}">Filter this data</a> #}
       </div>
       <div class="results-info results-info--simple js-other-spending-totals" data-spending-type="communicationCosts">
         <div class="usa-width-one-half">
           <span class="label">Support</span>
           <span class="t-big-data js-support"><img src="{{ static('img/loading-ellipsis.gif') }}" alt="Loading indicator"></span>
-          <span class="t-block t-sans">Spent by others to <strong>support</strong> from <strong>{{cycle_start(min_cycle)|date_full}} to {{cycle_end(max_cycle)|date_full}}.</strong></span>
+          <span class="t-block t-sans">Spent by others to <strong>support</strong> from <strong>{{cycle_start(min_cycle)|date_full}} to {{cycle_end(cycle)|date_full}}.</strong></span>
         </div>
         <div class="usa-width-one-half">
           <span class="label">Oppose</span>
           <span class="t-big-data js-oppose"><img src="{{ static('img/loading-ellipsis.gif') }}" alt="Loading indicator"></span>
-          <span class="t-block t-sans">Spent by others to <strong>support</strong> from <strong>{{cycle_start(min_cycle)|date_full}} to {{cycle_end(max_cycle)|date_full}}.</strong></span>
+          <span class="t-block t-sans">Spent by others to <strong>support</strong> from <strong>{{cycle_start(min_cycle)|date_full}} to {{cycle_end(cycle)|date_full}}.</strong></span>
         </div>
       </div>
       <table
           class="data-table data-table--heading-borders"
           data-type="communication-costs"
           data-candidate="{{ candidate_id }}"
-          data-cycle="{{ max_cycle }}"
+          data-cycle="{{ cycle }}"
           data-election-full="{{ show_full_election }}"
           data-duration="{% if election_full %}{{ duration }}{% else %}2{% endif %}"
         >
@@ -94,12 +94,12 @@
       <div class="heading--section heading--with-action u-no-margin">
         <h3 class="heading__left">Electioneering communication</h3>
         <a class="heading__right button--alt button--browse"
-          href="/data/electioneering-communications/?min_date={{ cycle_start(min_cycle) | date(fmt='%m-%d-%Y') }}&max_date={{ cycle_end(max_cycle) | date(fmt='%m-%d-%Y') }}&candidate_id={{ candidate_id }}">Filter this data</a>
+          href="/data/electioneering-communications/?min_date={{ cycle_start(min_cycle) | date(fmt='%m-%d-%Y') }}&max_date={{ cycle_end(cycle) | date(fmt='%m-%d-%Y') }}&candidate_id={{ candidate_id }}">Filter this data</a>
       </div>
       <div class="results-info results-info--simple js-other-spending-totals" data-spending-type="electioneering">
         <div class="usa-width-one-half">
           <span class="t-big-data js-total-electioneering u-margin--top"><img src="{{ static('img/loading-ellipsis.gif') }}" alt="Loading indicator"></span>
-          <span class="t-block t-sans">Spent by others that mentioned this candidate <strong>{{cycle_start(min_cycle)|date_full}} to {{cycle_end(max_cycle)|date_full}}.</strong></span>
+          <span class="t-block t-sans">Spent by others that mentioned this candidate <strong>{{cycle_start(min_cycle)|date_full}} to {{cycle_end(cycle)|date_full}}.</strong></span>
         </div>
       </div>
 
@@ -107,7 +107,7 @@
           class="data-table data-table--heading-borders"
           data-type="electioneering"
           data-candidate="{{ candidate_id }}"
-          data-cycle="{{ max_cycle }}"
+          data-cycle="{{ cycle }}"
           data-election-full="{{ show_full_election }}"
           data-duration="{% if election_full %}{{ duration }}{% else %}2{% endif %}"
         >
