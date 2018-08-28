@@ -126,7 +126,7 @@ def get_candidate(candidate_id, cycle, election_full):
 
     result_type = 'candidates'
     duration = election_durations.get(candidate['office'], 2)
-    min_cycle = cycle - duration if election_full else cycle
+    cycle_start_year = cycle - duration if election_full else cycle
     report_type = report_types.get(candidate['office'])
 
     # For JavaScript
@@ -228,7 +228,7 @@ def get_candidate(candidate_id, cycle, election_full):
         'election_years': even_election_years,
         'result_type': result_type,
         'duration': duration,
-        'min_cycle': min_cycle,
+        'cycle_start_year': cycle_start_year,
         'report_type': report_type,
         'cycles': cycles,
         'show_full_election': show_full_election,
