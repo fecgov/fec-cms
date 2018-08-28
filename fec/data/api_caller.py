@@ -1,13 +1,12 @@
 import logging
 import os
 import re
-
 import requests
+import inspect
 
 from collections import OrderedDict
 from operator import itemgetter
 from urllib import parse
-
 from django.conf import settings
 from django.http import Http404
 
@@ -16,10 +15,8 @@ from data import constants, utils
 
 MAX_FINANCIALS_COUNT = 4
 
-
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
-
 
 session = requests.Session()
 http_adapter = requests.adapters.HTTPAdapter(max_retries=2)
@@ -36,6 +33,11 @@ def _call_api(*path_parts, **filters):
     )
     url = parse.urljoin(settings.FEC_API_URL, path)
     results = session.get(url, params=filters)
+
+    # Log the caller function and API endpoint
+    current_frame = inspect.currentframe()
+    caller_frame = inspect.getouterframes(current_frame, 2)
+    logger.info('{0}: {1}'.format(caller_frame[1][3], results.url))
 
     if results.ok:
         return results.json()
@@ -176,7 +178,14 @@ def load_single_type(data_type, c_id, *path, **filters):
 
 def load_nested_type(parent_type, c_id, nested_type, *path, **filters):
     # Call API with nested types in load_with_nested
-    return _call_api(parent_type, c_id, nested_type, *path, per_page=100, **filters)
+    return _call_api(
+        parent_type,
+        c_id,
+        nested_type,
+        *path,
+        per_page=100,
+        **filters
+    )
 
 
 def load_with_nested(primary_type, primary_id, secondary_type, cycle=None,
@@ -191,7 +200,13 @@ def load_with_nested(primary_type, primary_id, secondary_type, cycle=None,
     """ Get data for just primary_type
         Example: candidate data for /candidate/* or committee data for /committee/*
     """
-    data = load_single_type(primary_type, primary_id, *path, per_page=1, **query)
+    data = load_single_type(
+        primary_type,
+        primary_id,
+        *path,
+        per_page=1,
+        **query
+    )
 
     cycle = cycle or max(data['cycles'])
 
@@ -199,7 +214,13 @@ def load_with_nested(primary_type, primary_id, secondary_type, cycle=None,
     """ Get data for secondary_type
         Example: committee data for /candidate/P80003338/committees
     """
-    nested_data = load_nested_type(primary_type, primary_id, secondary_type, *path, **query)
+    nested_data = load_nested_type(
+        primary_type,
+        primary_id,
+        secondary_type,
+        *path,
+        **query
+    )
 
     return data, nested_data['results'], cycle
 
@@ -223,17 +244,20 @@ def load_cmte_financials(committee_id, **filters):
 
 def load_candidate_totals(candidate_id, cycle, election_full=True):
     response = _call_api(
-        'candidate', candidate_id, 'totals',
-        cycle=cycle, full_election=election_full,
+        'candidate',
+        candidate_id,
+        'totals',
+        cycle=cycle,
+        full_election=election_full,
     )
-
     return response['results'][0] if response['results'] else None
 
 
 def load_candidate_statement_of_candidacy(candidate_id, cycle):
     response = _call_api(
         'filings',
-        candidate_id=candidate_id, form_type='F2'
+        candidate_id=candidate_id,
+        form_type='F2',
     )
 
     # Cycle is always the even year; so to include odd year statements,
@@ -241,7 +265,10 @@ def load_candidate_statement_of_candidacy(candidate_id, cycle):
     year = cycle - 1
 
     if 'results' in response:
-        return [statement for statement in response['results'] if statement['election_year'] >= year]
+        return [
+            statement for statement in response['results']
+            if statement['election_year'] >= year
+        ]
     else:
         return []
 
@@ -253,33 +280,38 @@ def result_or_404(data):
 
 
 def load_top_candidates(sort, office=None, cycle=constants.DEFAULT_TIME_PERIOD, per_page=5):
-        response = _call_api(
-            'candidates', 'totals',
-            sort_hide_null=True,
-            cycle=cycle,
-            election_full=False,
-            office=office,
-            sort=sort,
-            per_page=per_page
-        )
-
-        return response if 'results' in response else None
+    response = _call_api(
+        'candidates', 'totals',
+        sort_hide_null=True,
+        cycle=cycle,
+        election_full=False,
+        office=office,
+        sort=sort,
+        per_page=per_page,
+    )
+    return response if 'results' in response else None
 
 
 def load_top_pacs(sort, cycle=constants.DEFAULT_TIME_PERIOD, per_page=5):
-        response = _call_api(
-            'totals', 'pac',
-            sort_hide_null=True, cycle=cycle, sort=sort, per_page=per_page
-        )
-        return response if 'results' in response else None
+    response = _call_api(
+        'totals', 'pac',
+        sort_hide_null=True,
+        cycle=cycle,
+        sort=sort,
+        per_page=per_page,
+    )
+    return response if 'results' in response else None
 
 
 def load_top_parties(sort, cycle=constants.DEFAULT_TIME_PERIOD, per_page=5):
-        response = _call_api(
-            'totals', 'party',
-            sort_hide_null=True, cycle=cycle, sort=sort, per_page=per_page
-        )
-        return response if 'results' in response else None
+    response = _call_api(
+        'totals', 'party',
+        sort_hide_null=True,
+        cycle=cycle,
+        sort=sort,
+        per_page=per_page,
+    )
+    return response if 'results' in response else None
 
 
 def _get_sorted_participants_by_type(mur):
@@ -318,13 +350,22 @@ def _get_sorted_participants_by_type(mur):
 
     return participants_by_type
 
+
 def _get_sorted_documents(ao):
     """Sort documents within an AO by date DESC, description and document_id.
        We do this in 2 passes, making use of the fact that Python's `sorted`
        function performs a _stable_ sort.
     """
-    sorted_documents = sorted(ao['documents'], key=itemgetter('description', 'document_id'), reverse=False)
-    sorted_documents = sorted(sorted_documents, key=itemgetter('date'), reverse=True)
+    sorted_documents = sorted(
+        ao['documents'],
+        key=itemgetter('description', 'document_id'),
+        reverse=False,
+    )
+    sorted_documents = sorted(
+        sorted_documents,
+        key=itemgetter('date'),
+        reverse=True,
+    )
     return sorted_documents
 
 
@@ -333,14 +374,15 @@ def call_senate_specials(state):
         given state. Returns a list of dictionaries
         Example: [{details for election1}][{details for election2}]
     """
-    api_response = _call_api('election-dates',
-                             election_type_id='SG',
-                             office_sought='S',
-                             election_state=state)
+    special_results = _call_api(
+        'election-dates',
+        election_type_id='SG',
+        office_sought='S',
+        election_state=state,
+    )
 
-    special_results = api_response['results']
+    return special_results.get('results')
 
-    return api_response.get('results', None)
 
 
 def format_special_results(special_results=[]):
@@ -351,10 +393,8 @@ def format_special_results(special_results=[]):
     senate_specials = []
 
     for result in special_results:
-
         # Round odd years up to even years
         result['election_year'] = result['election_year'] + (result['election_year'] % 2)
-
         senate_specials.append(result.get('election_year', None))
 
     return senate_specials

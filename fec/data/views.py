@@ -377,21 +377,21 @@ def committee(request, committee_id):
 
 
 def elections_lookup(request):
-    cycles = utils.get_cycles(utils.current_cycle())
+
+    cycle = utils.current_cycle()
+    cycles = utils.get_cycles(cycle + 4)
 
     return render(request, 'election-lookup.jinja', {
         'parent': 'data',
-        'cycles': cycles
+        'cycles': cycles,
+        'cycle': cycle,
     })
 
 
 def elections(request, office, cycle, state=None, district=None):
     cycle = int(cycle)
 
-    # Get all cycles up until the cycle from the URL if it's beyond the current cycle
-    # this fixes the issue of an election page not showing user-provided cycle
-    # in the cycle select
-    max_cycle = cycle if cycle > utils.current_cycle() else utils.current_cycle()
+    max_cycle = utils.current_cycle() + 4
     cycles = utils.get_cycles(max_cycle)
 
     if office.lower() == 'president':

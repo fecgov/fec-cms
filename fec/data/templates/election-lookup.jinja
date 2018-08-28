@@ -18,7 +18,7 @@
     <div class="search-controls">
       <form>
         <div class="search-controls__row">
-          {{ select.cycle_select(cycles, location='form', range=True) }}
+          {{ select.cycle_select(cycles, cycle, location='form', id='cycle-1') }}
         </div>
         <div class="search-controls__row">
           <div class="search-controls__either">
@@ -56,7 +56,6 @@
                 </select>
               </div>
               <div class="search-controls__submit">
-                <input type="hidden" value="district" name="sort" />
                 <button type="submit" class="button--search--text button--standard">Search</button>
               </div>
             </fieldset>
