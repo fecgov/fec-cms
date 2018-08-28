@@ -39,17 +39,12 @@
                   <i class="icon-circle--check-outline--inline--left"></i>
                   <a href="{{ statement.pdf_url }}">Current version (PDF)</a>
                 </div>
-                {% else %}
-                <div class="t-block">
-                  <i class="icon-circle--clock-reverse--inline--left"></i>
-                  <a href="{{ statement.pdf_url }}">Previous version (PDF)</a>
-                </div>
-                {% endif %}
                 {% if statement.fec_file_id %}
                   <div class="t-small u-small-icon-padding--left"> {{ statement.fec_file_id }}</div>
                 {% endif %}
                 <div class="u-small-icon-padding--left"> Filed {{ statement.receipt_date }}</div>
               </li>
+              {% endif %}
             {% endfor %}
             </ul>
           </td>
@@ -124,26 +119,6 @@
       {% endfor %}
       </ul>
       {% endif %}
-    </div>
-
-    <div class="entity__figure entity__figure--narrow row" id="other">
-      <h3 class="heading--section u-no-margin">Other documents filed</h3>
-
-      <table
-          class="data-table data-table--heading-borders"
-          data-type="other-documents"
-          data-candidate="{{ candidate_id }}"
-          data-name="{{ name }}"
-          data-cycle="{{ cycle }}"
-        >
-        <thead>
-          <tr>
-            <th scope="col">Document</th>
-            <th scope="col">Version</th>
-            <th scope="col">Date filed</th>
-          </tr>
-        </thead>
-      </table>
     </div>
   </div>
 
