@@ -207,12 +207,6 @@ def get_candidate(candidate_id, cycle, election_full):
         cycle=cycle
     )
 
-    if statement_of_candidacy:
-        for statement in statement_of_candidacy:
-            # convert string to python datetime and parse for readable output
-            statement['receipt_date'] = datetime.datetime.strptime(statement['receipt_date'], '%Y-%m-%dT%H:%M:%S')
-            statement['receipt_date'] = statement['receipt_date'].strftime('%m/%d/%Y')
-
     # Get all the elections
     elections = sorted(
         zip(candidate['election_years'], candidate['election_districts']),

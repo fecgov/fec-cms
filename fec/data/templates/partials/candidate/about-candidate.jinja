@@ -48,7 +48,7 @@
                 {% if statement.fec_file_id %}
                   <div class="t-small u-small-icon-padding--left"> {{ statement.fec_file_id }}</div>
                 {% endif %}
-                <div class="u-small-icon-padding--left"> Filed {{ statement.receipt_date }}</div>
+                <div class="u-small-icon-padding--left"> Filed {{ statement.receipt_date|date }}</div>
               </li>
             {% endfor %}
             </ul>
