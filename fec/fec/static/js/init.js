@@ -25,6 +25,11 @@ window.$ = window.jQuery = $;
 var Sticky = require('component-sticky');
 var FormNav = require('./modules/form-nav').FormNav;
 
+var feedbackWidget = null;
+var submitFeedback = function() {
+  feedbackWidget.submit();
+}
+
 $(document).ready(function() {
 
   // Initialize glossary
@@ -70,7 +75,7 @@ $(document).ready(function() {
   });
 
   // Initialize feedback widget
-  new feedback.Feedback('/data/issue/');
+  feedbackWidget = new feedback.Feedback('/data/issue/');
 
   $('.js-form-nav').each(function() {
     new FormNav(this);

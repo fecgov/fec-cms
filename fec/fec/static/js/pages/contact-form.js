@@ -18,6 +18,12 @@ function ContactForm($elm) {
   this.initOtherReason();
   this.category.on('change', this.toggleOtherReason.bind(this));
   this.$cancel.on('click', this.clearForm.bind(this));
+
+  this.$submit = $elm.find('.js-submit');
+  this.$submit.on('click', function(e) {
+    e.preventDefault();
+    grecaptcha.execute();
+  });
 }
 
 ContactForm.prototype.initTypeahead = function() {
