@@ -103,6 +103,18 @@ function currency(value) {
 }
 Handlebars.registerHelper('currency', currencyFormatter);
 
+var dollarFormatter = function(number) {
+  return numeral(number).format('$0,0');
+};
+
+function dollar(value) {
+  if (!isNaN(parseInt(value))) {
+    return dollarFormatter(value);
+  } else {
+    return '--';
+  }
+}
+
 var numberFormatter = function(number) {
   return numeral(number).format('0,0');
 };
@@ -499,6 +511,7 @@ module.exports = {
   currency: currency,
   cycleDates: cycleDates,
   datetime: datetime,
+  dollar: dollar,
   ensureArray: ensureArray,
   filterNull: filterNull,
   formatNumber: numberFormatter,

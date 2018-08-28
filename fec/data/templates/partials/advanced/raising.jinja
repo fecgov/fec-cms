@@ -1,7 +1,9 @@
+{% import 'macros/committee-totals-chart.jinja' as chart %}
+
 <section class="row" id="raising" aria-hidden="false" role="tabpanel">
   <h2>Raising</h2>
   <h3>Search or browse data</h3>
-  <div class="content__section--ruled t-sans">
+  <div class="content__section--ruled-responsive t-sans">
     <ul>
       <li>
         <i class="icon i-magnifying-glass icon--absolute--left"></i>
@@ -32,6 +34,56 @@
                 <p class="u-margin--top"><a href="/campaign-finance-data/lobbyist-bundled-contributions-file-description/">Data description for this file</a><i class="icon icon--small i-arrow-right icon--inline--right"></i></p>
               </div>
               <p>The list of PACs that are established or controlled by lobbyists or others registered with Congress for lobby disclosure. Campaigns, parties and leadership PACs who received bundled contributions from these PACs may be required to disclose that bundling activity to the FEC.</p>
+            </div>
+          </div>
+        </div>
+      </li>
+      <li>
+        <section class="content__section" id="raising">
+          <div class="content__section">
+            <div class="heading--section heading--with-action">
+              <h4 class="heading__left">Cumulative amount raised by committees</h4>
+            </div>
+            <div class="heading--section heading--with-action" style="border: none;">
+              <div class="heading__right">
+                <ul class="list--buttons">
+                  <button class="button button--cta button--go"  data-a11y-dialog-show="spending-modal" data-ga-event="Spending methodology modal clicked" aria-controls="spending-modal">More raising charts</button>
+                </ul>
+              </div>
+            </div>
+            <div class="container" style="padding: 0">
+              {{ chart.plot('raised')}}
+            </div>
+          </div>
+        </section>
+      </li>
+      <li>
+        <div class="content__section">
+          <div class="js-accordion accordion--neutral" data-content-prefix="methodology_raising">
+            <button type="button" class="js-accordion-trigger accordion__button">Methodology</button>
+            <div class="accordion__content">
+              <div role="document">
+                <h6 class="t-no-rules">Methodology Overview</h4>
+                <p class="t-note">This data includes Forms 3, 3P, and 3X.</p>
+                <p><strong>Money raised</strong> includes each of the following:</p>
+                <ul class="list--bulleted">
+                  <li><em>Adjusted receipts</em> for PACs, parties, congressional filers and presidential filers</li>
+                </ul>
+                <p><em>Adjusted receipts</em> are the total receipts minus the following:</p>
+                <ul class="list--bulleted">
+                  <li>Contribution refunds</li>
+                  <li>Contributions from political party committees and other political committees</li>
+                  <li>Loan repayments</li>
+                  <li>Offsets to operating expenditures</li>
+                  <li>Transfers from nonfederal accounts for allocated activities</li>
+                </ul>
+                <p><span>The form-by-form breakdown for adjusted receipts is:</span></p>
+                <ul class="list--bulleted">
+                  <li><strong>Form 3:</strong> <em>line 16</em> - (<em>line 11(b)</em> + <em>line 11(c)</em> + <em>line 14</em> + <em>line 19(c)</em> + <em>line 20(d))</em></li>
+                  <li><strong>Form 3P:</strong> <em>line 22</em> - (<em>line 17(b)</em> + <em>line 17(c)</em> + <em>line 20(d)</em> + <em>line 27(c)</em> + <em>line 28(d)</em>)</li>
+                  <li><strong>Form 3X:</strong> <em>line 19</em> - (<em>line 11(b)</em> + <em>line 11(c)</em> + <em>line 15</em> + <em>line 16</em> + <em>line 18(a)</em> + <em>line 26</em> + <em>line 28(d)</em>)</li>
+                </ul>
+              </div>
             </div>
           </div>
         </div>

@@ -59,6 +59,11 @@
     @include omega();
   }
 
+  .overview__chart-line {
+    @include span-columns(12);
+    @include omega();
+  }
+
   .overview__feedback {
     width: 100%;
     clear: both;
@@ -68,6 +73,11 @@
 @include media($lg) {
   .overview__chart {
     @include span-columns(9);
+  }
+
+  .overview__chart-line {
+    @include span-columns(12);
+    @include omega();
   }
 
   .top-list {

@@ -1,0 +1,72 @@
+{% macro plot(total_type) %}
+  <div class="overview js-{{total_type}}-overview js-{{total_type}}-snapshot">
+    <div>
+      <div class="container">
+        <div class="usa-width-one-half">
+          <h5>Cumulative money {{total_type}} by committee</h5>
+        </div>
+        <div class="usa-width-one-half">
+          <div class="snapshot__line-controls">
+            <button class="button button--standard button--previous js-snapshot-prev"><span class="u-visually-hidden">Previous month</span></button>
+            <h5><span class="js-min-date"></span>&ndash;<span class="js-max-date"></span></h5>
+            <button class="button button--standard button--next js-snapshot-next"><span class="u-visually-hidden">next month</span></button>
+          </div>
+        </div>
+      </div>
+    <div>
+    <div class="usa-width-three-fourths">
+      <div class="container">
+        <div class="overview__chart-line js-chart"></div>
+      </div>
+    </div>
+    <div class="usa-width-one-fourth">
+      <div class="js-snapshot">
+        <div class="snapshot__line-item">
+          <div class="snapshot__line-item-title">
+            <span class="swatch candidates"></span>Candidates
+          </div>
+          <div class="snapshot__line-item-number">
+            <div class="snapshot__point-padding">
+              <div class="point-padding"></div>
+            </div>
+            <span data-total-for="candidate"></span>
+          </div>
+        </div>
+        <div class="snapshot__line-item">
+          <div class="snapshot__line-item-title">
+            <span class="swatch pacs"></span>PACs
+          </div>
+          <div class="snapshot__line-item-number">
+            <div class="snapshot__point-padding">
+              <div class="point-padding"></div>
+            </div>
+            <span data-total-for="pac"></span>
+          </div>
+        </div>
+        <div class="snapshot__line-item">
+          <div class="snapshot__line-item-title">
+            <span class="swatch parties"></span>Party committees
+          </div>
+          <div class="snapshot__line-item-number">
+            <div class="snapshot__point-padding">
+              <div class="point-padding"></div>
+            </div>
+            <span data-total-for="party"></span>
+          </div>
+        </div>
+        <div class="snapshot__line-item">
+          <div class="snapshot__line-item-title">
+            <span class="swatch"></span>
+            All committees
+          </div>
+          <div class="snapshot__line-item-number">
+            <div class="snapshot__point-padding">
+              <div class="point-padding"></div>
+            </div>
+            <span data-total-for="all"></span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endmacro %}
