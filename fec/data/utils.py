@@ -75,7 +75,8 @@ def page_info(pagination):
     count = '{:,}'.format(pagination['count'])
     range_start = per_page * (page - 1) + 1
     range_end = (page - 1) * 10 + per_page
-    return '{range_start}-{range_end} of {count}'.format(range_start=range_start, range_end=range_end, count=count)
+    return '{range_start}-{range_end} of {count}'.format(
+        range_start=range_start, range_end=range_end, count=count)
 
 
 def financial_summary_processor(totals, formatter):
@@ -92,8 +93,9 @@ def financial_summary_processor(totals, formatter):
 def process_raising_data(totals):
     """
     Processes raising totals by mapping to the RAISING_FORMATTER constant
-    Occassionally, the API schema is slightly out of sync with what we want to display,
-    so there's logic here to remove or rename items depending on the form we're showing
+    Occasionally, the API schema is slightly out of sync with what we want to
+    display, so there's logic here to remove or rename items depending on the
+    form we're showing
     """
 
     # If there's repayments_loans_made_by_candidate, it's an F3P .
