@@ -87,13 +87,13 @@ class TestCandidate(TestCase):
         assert candidate['spending_summary'] == []
         assert candidate['cash_summary'] == []
         assert candidate['elections'] == [(2018, '02'), (2016, '01')]
-        assert candidate['candidate'] == self.STOCK_CANDIDATE
+        assert candidate['candidate'] == test_candidate
         assert candidate['context_vars'] == {
             'cycles': [2014, 2016, 2018],
-            'name': self.STOCK_CANDIDATE["name"],
+            'name': test_candidate["name"],
             'cycle': cycle,
             'electionFull': show_full_election,
-            'candidateID': self.STOCK_CANDIDATE["candidate_id"]
+            'candidateID': test_candidate["candidate_id"]
         }
 
     def test_special_election_election_years_only_rounded(
@@ -102,12 +102,12 @@ class TestCandidate(TestCase):
 
         # Candidate ran in 2017 and 2018. Passing 2016 as cycle.
         # Election years should be rounded, election year should be 2017
-        candidate = copy.deepcopy(self.STOCK_CANDIDATE)
-        candidate["cycles"] = [2016, 2018]
-        candidate["election_years"] = [2017, 2018, 2019]
+        test_candidate = copy.deepcopy(self.STOCK_CANDIDATE)
+        test_candidate["cycles"] = [2016, 2018]
+        test_candidate["election_years"] = [2017, 2018, 2019]
 
         load_with_nested_mock.return_value = (
-            candidate,
+            test_candidate,
             mock.MagicMock(),
             2016
         )
@@ -119,12 +119,12 @@ class TestCandidate(TestCase):
             self, load_with_nested_mock, load_candidate_totals_mock,
             load_candidate_statement_of_candidacy_mock):
 
-        candidate = copy.deepcopy(self.STOCK_CANDIDATE)
-        candidate["election_years"] = [2018, 2100]
-        candidate["cycles"] = [2018]
-        candidate["office"] == 'S'
+        test_candidate = copy.deepcopy(self.STOCK_CANDIDATE)
+        test_candidate["election_years"] = [2018, 2100]
+        test_candidate["cycles"] = [2018]
+        test_candidate["office"] == 'S'
         load_with_nested_mock.return_value = (
-            candidate,
+            test_candidate,
             self.STOCK_COMMITTEE_LIST,
             2018
         )
@@ -136,14 +136,14 @@ class TestCandidate(TestCase):
             self, load_with_nested_mock, load_candidate_totals_mock,
             load_candidate_statement_of_candidacy_mock):
 
-        candidate = copy.deepcopy(self.STOCK_CANDIDATE)
-        committee = copy.deepcopy(self.STOCK_COMMITTEE_LIST[0])
-        candidate["election_years"] = [2018, 2100]
-        committee["cycles"] = [2018, 2100]
+        test_candidate = copy.deepcopy(self.STOCK_CANDIDATE)
+        test_committee = copy.deepcopy(self.STOCK_COMMITTEE_LIST[0])
+        test_candidate["election_years"] = [2018, 2100]
+        test_committee["cycles"] = [2018, 2100]
 
         load_with_nested_mock.return_value = (
-            candidate,
-            [committee],
+            test_candidate,
+            [test_committee],
             2100
         )
         candidate = get_candidate('C001', 2100, True)
