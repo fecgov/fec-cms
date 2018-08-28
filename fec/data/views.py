@@ -84,17 +84,7 @@ def advanced(request):
     })
 
 
-def candidate(request, candidate_id):
-    # grab url query string parameters
-    cycle = request.GET.get('cycle', None)
-
-    election_full = request.GET.get('election_full', True)
-
-    if cycle is not None:
-        cycle = int(cycle)
-
-    # set election_full to boolean from passed string variable
-    election_full = bool(strtobool(str(election_full)))
+def get_candidate(candidate_id, cycle, election_full):
 
     candidate, committees, cycle = api_caller.load_with_nested(
         'candidate', candidate_id, 'committees',
@@ -227,7 +217,7 @@ def candidate(request, candidate_id):
         reverse=True,
     )
 
-    return render(request, 'candidates-single.jinja', {
+    return {
         'name': candidate['name'],
         'cycle': int(cycle),
         'office': candidate['office'],
@@ -258,7 +248,19 @@ def candidate(request, candidate_id):
         'elections': elections,
         'candidate': candidate,
         'context_vars': context_vars
-    })
+    }
+
+
+def candidate(request, candidate_id):
+    cycle = request.GET.get('cycle', None)
+    if cycle is not None:
+        cycle = int(cycle)
+
+    election_full = request.GET.get('election_full', True)
+    election_full = bool(strtobool(str(election_full)))
+
+    candidate = get_candidate(candidate_id, cycle, election_full)
+    return render(request, 'candidates-single.jinja', candidate)
 
 
 def committee(request, committee_id):
