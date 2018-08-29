@@ -105,32 +105,6 @@ def get_candidate(candidate_id, cycle, election_full):
         election_full=show_full_election,
     )
 
-    # cycle corresponds to the two-year period for which the committee has
-    # financial activity. when selected election cycle is not in list of
-    # election years, get the next election cycle
-    if election_full and cycle and cycle not in candidate['election_years']:
-
-        next_cycle = next(
-            (
-                year for year in sorted(candidate['election_years'])
-                if year > cycle
-            ),
-            max(candidate['election_years']),
-        )
-
-        # If the next_cycle is odd set it to whatever the cycle value was-
-        # falls back to the cycle and then set election_full to false
-        # This solves issue# 1945 with odd year special elections
-        if next_cycle % 2 > 0:
-            next_cycle = cycle
-            election_full = False
-        # get the next election cycle data for this candidate
-        candidate, committees, cycle = api_caller.load_with_nested(
-            'candidate', candidate_id, 'committees',
-            cycle=next_cycle, cycle_key='two_year_period',
-            election_full=election_full,
-        )
-
     election_year = next(
         (year for year in sorted(candidate['election_years'])
             if year >= cycle),
