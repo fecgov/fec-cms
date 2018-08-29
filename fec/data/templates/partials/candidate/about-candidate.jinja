@@ -84,7 +84,7 @@
         <div class="grid__item u-no-margin">
           <div class="callout callout--primary{% if loop.last %} u-no-margin{% endif %}" style="width: 100%; max-width: 300px">
             <h5 class="callout__title t-sans">
-              <a href="/data/committee/{{ committee.committee_id }}/?cycle={{ committee.related_cycle }}">{{ committee.name }}</a>
+              <a href="/data/committee/{{ committee.committee_id }}/?cycle={{ cycle }}">{{ committee.name }}</a>
             </h5>
             <span class="callout__subtitle term" data-term="principal campaign committee">Principal campaign committee</span>
           </div>
@@ -98,7 +98,7 @@
           <ul class="list--bulleted" style="margin-top: 1rem">
           {% for committee in committee_groups['A'] | reverse %}
             <li class="u-no-margin-bottom">
-              <a class="t-sans" href="/data/committee/{{ committee.committee_id }}/?cycle={{ committee.related_cycle }}">{{ committee.name }}</a>
+              <a class="t-sans" href="/data/committee/{{ committee.committee_id }}/?cycle={{ cycle }}">{{ committee.name }}</a>
             </li>
           {% endfor %}
           </ul>
@@ -119,7 +119,7 @@
       <ul class="list--bulleted">
       {% for committee in committee_groups['J'] | reverse %}
         <li>
-          <a class="t-sans" href="/data/committee/{{ committee.committee_id }}/?cycle={{ committee.related_cycle }}">{{ committee.name }}</a>
+          <a class="t-sans" href="/data/committee/{{ committee.committee_id }}/?cycle={{ cycle }}">{{ committee.name }}</a>
         </li>
       {% endfor %}
       </ul>
