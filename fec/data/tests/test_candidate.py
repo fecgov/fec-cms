@@ -16,6 +16,7 @@ class TestCandidate(TestCase):
         "name": "Lady Liberty",
         "cycles": [2014, 2016, 2018],
         "election_years": [2016, 2018],
+        "two_year_period": 2016,
         "election_districts": ["01", "02"],
         "office": "H",
         "office_full": "House",
@@ -58,13 +59,13 @@ class TestCandidate(TestCase):
             cycle
         )
         load_candidate_totals_mock.return_value = {}
-        candidate = get_candidate('C001', 2018, show_full_election)
+        candidate = get_candidate('C001', cycle, show_full_election)
 
         assert candidate['candidate_id'] == test_candidate['candidate_id']
         assert candidate['name'] == test_candidate['name']
         assert candidate['cycles'] == test_candidate['cycles']
-        assert candidate['min_cycle'] == cycle - 2
-        assert candidate['max_cycle'] == cycle
+        assert candidate['cycle'] == cycle
+        assert candidate['cycle_start_year'] == cycle - 2
         assert candidate['election_year'] == cycle
         assert candidate['election_years'] == test_candidate['election_years']
         assert candidate['office'] == test_candidate['office']
@@ -73,8 +74,7 @@ class TestCandidate(TestCase):
         assert candidate['district'] == test_candidate['district']
         assert candidate['party_full'] == test_candidate['party_full']
         assert candidate['incumbent_challenge_full'] == test_candidate[
-                'incumbent_challenge_full']
-        assert candidate['cycle'] == cycle
+            'incumbent_challenge_full']
         assert candidate['result_type'] == 'candidates'
         assert candidate['duration'] == 2
         assert candidate['report_type'] == 'house-senate'
@@ -86,32 +86,22 @@ class TestCandidate(TestCase):
                 'cycles': [2016, 2014, 2012, 2018],
                 'name': 'My Primary Campaign Committee',
                 'cycle': 2016,
-                'related_cycle': 2016,
                 'committee_id': 'C001'}],
             'A': [{
                 'designation': 'A',
                 'cycles': [2016, 2014, 2012, 2018],
                 'name': 'My Authorized Campaign Committee',
                 'cycle': 2016,
-                'related_cycle': 2016,
                 'committee_id': 'C002'}],
             'J': [{
                 'designation': 'J',
                 'cycles': [2016, 2014, 2012, 2018],
                 'name': 'Joint Fundraising Committee',
                 'cycle': 2016,
-                'related_cycle': 2016,
                 'committee_id': 'C003'}]
         }
 
-        assert candidate['committees_authorized'] == (
-            candidate['committee_groups']['P'] +
-            candidate['committee_groups']['A'])
-        assert candidate['committee_ids'] == [
-            committee['committee_id']
-            for committee in candidate['committees_authorized']
-        ]
-
+        assert candidate['committee_ids'] == ['C001', 'C002']
         assert candidate['elections'] == [(2018, '02'), (2016, '01')]
         assert candidate['candidate'] == test_candidate
         assert candidate['context_vars'] == {
