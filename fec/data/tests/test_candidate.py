@@ -16,6 +16,7 @@ class TestCandidate(TestCase):
         "name": "Lady Liberty",
         "cycles": [2014, 2016, 2018],
         "election_years": [2016, 2018],
+        "two_year_period": 2016,
         "election_districts": ["01", "02"],
         "office": "H",
         "office_full": "House",
@@ -103,14 +104,7 @@ class TestCandidate(TestCase):
                 'committee_id': 'C003'}]
         }
 
-        assert candidate['committees_authorized'] == (
-            candidate['committee_groups']['P'] +
-            candidate['committee_groups']['A'])
-        assert candidate['committee_ids'] == [
-            committee['committee_id']
-            for committee in candidate['committees_authorized']
-        ]
-
+        assert candidate['committee_ids'] == ['C001', 'C002']
         assert candidate['elections'] == [(2018, '02'), (2016, '01')]
         assert candidate['candidate'] == test_candidate
         assert candidate['context_vars'] == {
