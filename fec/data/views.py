@@ -127,20 +127,6 @@ def get_candidate(candidate_id, cycle, election_full):
         if cycle_in_range(cycle_tmp)
     ]
 
-    # Annotate committees with most recent available cycle
-    aggregate_cycles = (
-        list(range(cycle, cycle - cycle_duration, -2))
-        if show_full_election
-        else [cycle]
-    )
-    for committee in committees:
-        committee['related_cycle'] = (
-            max(cycle for cycle in aggregate_cycles
-                if cycle in committee['cycles'])
-            if show_full_election
-            else candidate['two_year_period']
-        )
-
     # Group the committees by designation
     committee_groups = groupby(committees, lambda each: each['designation'])
     authorized_committee_ids = [
@@ -205,7 +191,6 @@ def get_candidate(candidate_id, cycle, election_full):
         'result_type': 'candidates',
         'duration': cycle_duration,
         'cycle_start_year': cycle_start_year,
-
         'report_type': report_type,
         'cycles': cycles,
         'show_full_election': show_full_election,

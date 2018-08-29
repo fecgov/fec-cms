@@ -86,21 +86,18 @@ class TestCandidate(TestCase):
                 'cycles': [2016, 2014, 2012, 2018],
                 'name': 'My Primary Campaign Committee',
                 'cycle': 2016,
-                'related_cycle': 2016,
                 'committee_id': 'C001'}],
             'A': [{
                 'designation': 'A',
                 'cycles': [2016, 2014, 2012, 2018],
                 'name': 'My Authorized Campaign Committee',
                 'cycle': 2016,
-                'related_cycle': 2016,
                 'committee_id': 'C002'}],
             'J': [{
                 'designation': 'J',
                 'cycles': [2016, 2014, 2012, 2018],
                 'name': 'Joint Fundraising Committee',
                 'cycle': 2016,
-                'related_cycle': 2016,
                 'committee_id': 'C003'}]
         }
 

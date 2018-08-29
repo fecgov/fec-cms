@@ -15,12 +15,12 @@
     <ul class="list--bulleted">
       {% for committee in committee_groups['P'] | reverse %}
       <li>
-        <a class="t-sans" href="/data/committee/{{ committee.committee_id }}/?cycle={{ committee.related_cycle }}">{{ committee.name }}</a>
+        <a class="t-sans" href="/data/committee/{{ committee.committee_id }}/?cycle={{ cycle }}">{{ committee.name }}</a>
       </li>
       {% endfor %}
       {% for committee in committee_groups['A'] | reverse %}
       <li>
-        <a class="t-sans" href="/data/committee/{{ committee.committee_id }}/?cycle={{ committee.related_cycle }}">{{ committee.name }}</a>
+        <a class="t-sans" href="/data/committee/{{ committee.committee_id }}/?cycle={{ cycle }}">{{ committee.name }}</a>
       </li>
       {% endfor %}
     </ul>
