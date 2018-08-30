@@ -25,9 +25,11 @@ window.$ = window.jQuery = $;
 var Sticky = require('component-sticky');
 var FormNav = require('./modules/form-nav').FormNav;
 
+// initialize a feedbackWidget which will be set after document is loaded.
 var feedbackWidget = null;
-var submitFeedback = function() {
-  feedbackWidget.submit();
+// expose a global function for Recaptcha to invoke after the challenge is complete.
+window.submitFeedback = function(token) {
+  feedbackWidget.submit(token);
 }
 
 $(document).ready(function() {

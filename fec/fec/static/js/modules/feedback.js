@@ -34,7 +34,6 @@ function Feedback(url, parent) {
 
   this.$button.on('click', this.toggle.bind(this));
   this.$reset.on('click', this.reset.bind(this));
-  this.$form.on('submit', this.submit.bind(this));
 
   accessibility.removeTabindex(this.$box);
 
@@ -62,7 +61,7 @@ Feedback.prototype.hide = function() {
   accessibility.removeTabindex(this.$box);
 };
 
-Feedback.prototype.submit = function(e) {
+Feedback.prototype.submit = function(token) {
   /**
    * setup JQuery's AJAX methods to setup CSRF token in the request before sending it off.
    * http://stackoverflow.com/questions/5100539/django-csrf-check-failing-with-an-ajax-post-request
@@ -76,8 +75,6 @@ Feedback.prototype.submit = function(e) {
      }
   });
 
-  e.preventDefault();
-
   var data = _.chain(this.$box.find('textarea'))
     .map(function(elm) {
       var $elm = $(elm);
@@ -85,6 +82,9 @@ Feedback.prototype.submit = function(e) {
     })
     .object()
     .value();
+    
+  // explicitly set token as g-recaptcha-response
+  data['g-recaptcha-response'] = token;
 
   if (!_.some(_.values(data))) {
     var message =

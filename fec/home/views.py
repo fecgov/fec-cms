@@ -231,19 +231,32 @@ def contact_rad(request):
     if settings.FEATURES['radform']:
         # If it's a POST, post to the ServiceNow API
         if request.method == 'POST':
-            form = ContactRAD(request.POST)
-            response = form.post_to_service_now()
-            if response == 201:
-                return render(request, 'home/contact-form.html', {
-                  'self': page_context,
-                  'success': True
-                })
-            else:
+            token = request.POST['g-recaptcha-response']
+            # verify recaptcha
+            verifyRecaptcha = requests.post("https://www.google.com/recaptcha/api/siteverify", data={'secret': settings.FEC_RECAPTCHA_SECRET_KEY, 'response': token })
+            recaptchaResponse = verifyRecaptcha.json()
+            if not recaptchaResponse['success']:
+                # if captcha failed, return failure
                 return render(request, 'home/contact-form.html', {
                   'self': page_context,
                   'form': form,
                   'server_error': True
                 })
+            else:
+                # captcha passed, we're ready to submit the issue.
+                form = ContactRAD(request.POST)
+                response = form.post_to_service_now()
+                if response == 201:
+                    return render(request, 'home/contact-form.html', {
+                      'self': page_context,
+                      'success': True
+                    })
+                else:
+                    return render(request, 'home/contact-form.html', {
+                      'self': page_context,
+                      'form': form,
+                      'server_error': True
+                    })
         else:
             form = ContactRAD()
     else:
