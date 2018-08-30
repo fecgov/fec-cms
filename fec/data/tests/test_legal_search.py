@@ -9,7 +9,7 @@ from data import legal_test_data
 client = Client()
 
 
-class TestLegalSearch(unittest.TestCase):
+class TestLegalSearch(TestCase):
 
     # Test1 : OK
     @mock.patch.object(api_caller, 'load_legal_search_results')

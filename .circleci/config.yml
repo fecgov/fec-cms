@@ -73,10 +73,8 @@ jobs:
             . .env/bin/activate
             npm run build-js
             npm run build-sass
-            cd fec
-            DJANGO_SETTINGS_MODULE=fec.settings.production python manage.py collectstatic --noinput -v 0
-            coverage run --source='.' manage.py test
-            coverage xml --omit="*migrations*"
+            pytest
+            cd fec; DJANGO_SETTINGS_MODULE=fec.settings.production python manage.py collectstatic --noinput -v 0
             npm run test-single
 
       - run:
