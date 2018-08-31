@@ -2,13 +2,13 @@
 
 /* global require, module */
 
+var $ = require('jquery');
 var _ = require('underscore');
 var fips = require('./fips');
 var helpers = require('./helpers');
-var moment = require('moment');
 var topojson = require('topojson');
 
-var sprintf = require('sprintf-js').sprintf
+var sprintf = require('sprintf-js').sprintf;
 
 var electionOfficesTemplate = require('../templates/electionOffices.hbs');
 
@@ -16,7 +16,10 @@ var districts = require('../data/districts.json');
 var districtFeatures = topojson.feature(districts, districts.objects.districts);
 
 function encodeDistrict(state, district) {
-  return fips.fipsByState[state.toUpperCase()].STATE * 100 + (parseInt(district) || 0);
+  return (
+    fips.fipsByState[state.toUpperCase()].STATE * 100 +
+    (parseInt(district) || 0)
+  );
 }
 
 function decodeDistrict(district) {
@@ -44,8 +47,7 @@ function truncate(value, digits) {
  */
 function findDistrict(district) {
   return _.find(districtFeatures.features, function(feature) {
-    return feature.id === district ||
-      truncate(feature.id, 2) === district;
+    return feature.id === district || truncate(feature.id, 2) === district;
   });
 }
 
@@ -57,8 +59,10 @@ function findDistrict(district) {
  */
 function findDistricts(districts) {
   return _.filter(districtFeatures.features, function(feature) {
-    return districts.indexOf(feature.id) !== -1 ||
-      districts.indexOf(truncate(feature.id, 2)) !== -1;
+    return (
+      districts.indexOf(feature.id) !== -1 ||
+      districts.indexOf(truncate(feature.id, 2)) !== -1
+    );
   });
 }
 

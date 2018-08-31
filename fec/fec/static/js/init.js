@@ -26,12 +26,15 @@ var Sticky = require('component-sticky');
 var FormNav = require('./modules/form-nav').FormNav;
 
 $(document).ready(function() {
-
   // Initialize glossary
-  new Glossary(terms, {}, {
-    termClass: 'glossary__term accordion__button',
-    definitionClass: 'glossary__definition accordion__content'
-  });
+  new Glossary(
+    terms,
+    {},
+    {
+      termClass: 'glossary__term accordion__button',
+      definitionClass: 'glossary__definition accordion__content'
+    }
+  );
 
   // Initialize new accordions
   $('.js-accordion').each(function() {

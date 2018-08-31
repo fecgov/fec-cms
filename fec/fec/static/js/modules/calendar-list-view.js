@@ -27,14 +27,18 @@ var categories = {
   Other: ['other']
 };
 
-var categoriesInverse = _.reduce(_.pairs(categories), function(memo, pair) {
-  var key = pair[0];
-  var values = pair[1];
-  _.each(values, function(value) {
-    memo[value] = key;
-  });
-  return memo;
-}, {});
+var categoriesInverse = _.reduce(
+  _.pairs(categories),
+  function(memo, pair) {
+    var key = pair[0];
+    var values = pair[1];
+    _.each(values, function(value) {
+      memo[value] = key;
+    });
+    return memo;
+  },
+  {}
+);
 
 var categoryGroups = function(events, start, end) {
   return _.chain(events)
@@ -43,7 +47,9 @@ var categoryGroups = function(events, start, end) {
     })
     .sortBy('start')
     .groupBy(function(event) {
-      var category = event.category ? event.category.split(/[ -]+/)[0].toLowerCase() : null;
+      var category = event.category
+        ? event.category.split(/[ -]+/)[0].toLowerCase()
+        : null;
       return categoriesInverse[category];
     })
     .map(function(values, key) {
@@ -82,7 +88,6 @@ var chronologicalGroups = function(events, start, end) {
   return events;
 };
 
-
 var ListView = View.extend({
   setDate: function(date) {
     var intervalUnit = this.options.duration.intervalUnit || this.intervalUnit;
@@ -90,18 +95,20 @@ var ListView = View.extend({
   },
 
   renderEvents: function(events) {
-    var groups = this.options.categories ?
-      categoryGroups(events, this.start, this.end) :
-      chronologicalGroups(events, this.start, this.end);
+    var groups = this.options.categories
+      ? categoryGroups(events, this.start, this.end)
+      : chronologicalGroups(events, this.start, this.end);
     var settings = {
       duration: this.options.duration.intervalUnit,
       sortBy: this.options.sortBy
     };
 
-    this.el.html(eventTemplate({groups: groups, settings: settings}));
-    this.dropdowns = $(this.el.html).find('.dropdown').map(function(idx, elm) {
-      return new dropdown.Dropdown($(elm), {checkboxes: false});
-    });
+    this.el.html(eventTemplate({ groups: groups, settings: settings }));
+    this.dropdowns = $(this.el.html)
+      .find('.dropdown')
+      .map(function(idx, elm) {
+        return new dropdown.Dropdown($(elm), { checkboxes: false });
+      });
   },
 
   unrenderEvents: function() {

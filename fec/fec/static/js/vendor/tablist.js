@@ -21,7 +21,7 @@ function show($target, push) {
     'aria-selected': null
   });
   $target.attr({
-    'aria-selected': 'true',
+    'aria-selected': 'true'
   });
 
   // Toggle panels
@@ -37,12 +37,14 @@ function show($target, push) {
       URI.parseQuery(window.location.search),
       _.object([[name, value]])
     );
-    var search = URI('').query(query).toString();
+    var search = URI('')
+      .query(query)
+      .toString();
     window.history.pushState(query, search, search || window.location.pathname);
     analytics.pageView();
   }
 
-  events.emit('tabs.show.' + value, {$tab: $target, $panel: $panel});
+  events.emit('tabs.show.' + value, { $tab: $target, $panel: $panel });
 }
 
 function refreshTabs() {
@@ -50,9 +52,9 @@ function refreshTabs() {
   $('ul[role="tablist"]').each(function(index, tabs) {
     var $tabs = $(tabs);
     var name = $tabs.attr('data-name');
-    var $target = query[name] ?
-      $tabs.find('[role="tab"][data-name="' + query[name] + '"]') :
-      $tabs.find('[role="tab"]').eq(0);
+    var $target = query[name]
+      ? $tabs.find('[role="tab"][data-name="' + query[name] + '"]')
+      : $tabs.find('[role="tab"]').eq(0);
     if ($target.length) {
       show($target);
     } else {
@@ -85,5 +87,5 @@ function init() {
 
 module.exports = {
   onShow: onShow,
-  init: init,
+  init: init
 };

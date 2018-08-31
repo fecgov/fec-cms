@@ -14,9 +14,13 @@ function highlightRowAndState($map, $table, state, scroll) {
     $scrollBody.find('.row-active').removeClass('row-active');
     $row.parents('tr').addClass('row-active');
     if (scroll) {
-      $scrollBody.animate({
-        scrollTop: $row.closest('tr').height() * parseInt($row.attr('data-row'))
-      }, 500);
+      $scrollBody.animate(
+        {
+          scrollTop:
+            $row.closest('tr').height() * parseInt($row.attr('data-row'))
+        },
+        500
+      );
     }
   }
 }
@@ -24,12 +28,14 @@ function highlightRowAndState($map, $table, state, scroll) {
 function init($map, $table) {
   $map.on('click', 'path[data-state]', function() {
     var state = $(this).attr('data-state');
-    events.emit('state.map', {state: state});
+    events.emit('state.map', { state: state });
   });
 
   $table.on('click', 'tr', function() {
     events.emit('state.table', {
-      state: $(this).find('span[data-state]').attr('data-state')
+      state: $(this)
+        .find('span[data-state]')
+        .attr('data-state')
     });
   });
 

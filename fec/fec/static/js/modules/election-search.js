@@ -69,20 +69,20 @@ ElectionSearch.prototype = Object.create(ElectionForm.prototype);
 ElectionSearch.constructor = ElectionSearch;
 
 ElectionSearch.prototype.updateRedistrictingMessage = function() {
-  if(this.$cycle.val() == 2018 && this.$state.val() == 'PA') {
+  if (this.$cycle.val() == 2018 && this.$state.val() == 'PA') {
     $('.pa-message').show();
   } else {
     $('.pa-message').hide();
   }
-}
+};
 ElectionSearch.prototype.performSearch = function() {
   this.search();
   this.updateRedistrictingMessage();
-}
+};
 ElectionSearch.prototype.performStateChange = function() {
   this.handleStateChange();
   this.updateRedistrictingMessage();
-}
+};
 /**
  * Call the API to get a list of upcoming election dates
  */
@@ -91,14 +91,14 @@ ElectionSearch.prototype.getUpcomingElections = function() {
   var month = now.getMonth() + 1;
   var today = now.getFullYear() + '-' + month + '-' + now.getDate();
   var query = {
-    'sort': 'election_date',
-    'min_election_date': today
+    sort: 'election_date',
+    min_election_date: today
   };
   var url = helpers.buildUrl(['election-dates'], query);
   var self = this;
   if (Number(this.$cycle.val()) >= now.getFullYear()) {
     $.getJSON(url).done(function(response) {
-        self.upcomingElections = response.results;
+      self.upcomingElections = response.results;
     });
   }
 };
@@ -128,12 +128,15 @@ ElectionSearch.prototype.handleSelectMap = function(state, district) {
 };
 
 /**
-  * Hack to remove the presidential result in non-presidential years
-  * Eventually this will be handled by the API
-  * @param {array} results - Array of API results
-  * @param {int} cycle - The even-year value of a cycle
+ * Hack to remove the presidential result in non-presidential years
+ * Eventually this will be handled by the API
+ * @param {array} results - Array of API results
+ * @param {int} cycle - The even-year value of a cycle
  */
-ElectionSearch.prototype.removeWrongPresidentialElections = function(results, cycle) {
+ElectionSearch.prototype.removeWrongPresidentialElections = function(
+  results,
+  cycle
+) {
   if (Number(cycle) % 4 > 0) {
     return _.filter(results, function(result) {
       return result.office !== 'P';
@@ -150,7 +153,7 @@ ElectionSearch.prototype.removeWrongPresidentialElections = function(results, cy
  */
 ElectionSearch.prototype.search = function(e, opts) {
   e && e.preventDefault();
-  opts = _.extend({pushState: true}, opts || {});
+  opts = _.extend({ pushState: true }, opts || {});
   var self = this;
   var serialized = self.serialize();
   if (self.shouldSearch(serialized)) {
@@ -158,7 +161,10 @@ ElectionSearch.prototype.search = function(e, opts) {
       // Requested search options differ from saved options; request new data.
       self.xhr && self.xhr.abort();
       self.xhr = $.getJSON(self.getUrl(serialized)).done(function(response) {
-        self.results = self.removeWrongPresidentialElections(response.results, serialized.cycle);
+        self.results = self.removeWrongPresidentialElections(
+          response.results,
+          serialized.cycle
+        );
         // Note: Update district color map before rendering results
         var encodedDistricts = self.encodeDistricts(self.results);
         self.map.drawDistricts(encodedDistricts);
@@ -166,7 +172,13 @@ ElectionSearch.prototype.search = function(e, opts) {
       });
       self.serialized = serialized;
       if (opts.pushState) {
-        window.history.pushState(serialized, null, URI('').query(serialized).toString());
+        window.history.pushState(
+          serialized,
+          null,
+          URI('')
+            .query(serialized)
+            .toString()
+        );
         analytics.pageView();
       }
     } else if (self.results) {
@@ -190,7 +202,7 @@ ElectionSearch.prototype.handlePopState = function() {
   this.handleStateChange();
   this.$district.val(params.district);
   this.$cycle.val(params.cycle || this.$cycle.val());
-  this.performSearch(null, {pushState: false});
+  this.performSearch(null, { pushState: false });
 };
 
 ElectionSearch.prototype.shouldSearch = function(serialized) {
@@ -224,7 +236,7 @@ ElectionSearch.prototype.draw = function(results) {
     this.map.hide();
   } else {
     this.map.show();
-    }
+  }
 };
 
 /**
@@ -240,17 +252,23 @@ ElectionSearch.prototype.drawResult = function(result) {
   var election = this.formatResult(result, this);
   var upcomingElections = _.filter(this.upcomingElections, function(upcoming) {
     if (election.office === 'H') {
-      return upcoming.election_state === election.state &&
-              upcoming.election_district === Number(election.district);
+      return (
+        upcoming.election_state === election.state &&
+        upcoming.election_district === Number(election.district)
+      );
     } else if (election.office === 'S') {
-      return upcoming.election_state === election.state &&
-              upcoming.office_sought === election.office;
+      return (
+        upcoming.election_state === election.state &&
+        upcoming.office_sought === election.office
+      );
     }
   });
 
   if (upcomingElections.length > 0) {
     var parsed = moment(upcomingElections[0].election_date, 'YYYY-MM-DD');
-    election.electionDate = parsed.isValid() ? parsed.format('MMMM Do, YYYY') : '';
+    election.electionDate = parsed.isValid()
+      ? parsed.format('MMMM Do, YYYY')
+      : '';
     election.electionType = upcomingElections[0].election_type_full;
     this.$resultsItems.append(resultTemplate(election));
   } else {
@@ -272,8 +290,11 @@ ElectionSearch.prototype.drawZipWarning = function() {
  */
 ElectionSearch.prototype.updateLocations = function() {
   var self = this;
-  var svg = self.$svg || $.get('/static/img/i-map--primary.svg', '', null, 'xml')
-    .then(function(document) {
+  var svg =
+    self.$svg ||
+    $.get('/static/img/i-map--primary.svg', '', null, 'xml').then(function(
+      document
+    ) {
       self.$svg = $(document.querySelector('svg'));
       return self.$svg;
     });
@@ -306,7 +327,7 @@ ElectionSearch.prototype.getTitle = function() {
   } else {
     title += ' in ' + decoders.states[params.state];
     if (params.district && params.district !== '00') {
-       title += ', district ' + params.district;
+      title += ', district ' + params.district;
     }
   }
   return title;
@@ -322,7 +343,7 @@ ElectionSearch.prototype.formatResult = function(result) {
     electionName: this.formatName(result),
     incumbent: this.formatIncumbent(result),
     color: this.formatColor(result),
-    url: this.formatUrl(result),
+    url: this.formatUrl(result)
   });
 };
 
@@ -359,11 +380,8 @@ ElectionSearch.prototype.formatGenericElectionDate = function(result) {
   while (date.format('E') !== '1') {
     date = date.add(1, 'day');
   }
-  return date
-    .add(1, 'day')
-    .format('MMMM Do, YYYY');
+  return date.add(1, 'day').format('MMMM Do, YYYY');
 };
-
 
 /**
  * If the result has an incumber, this formats the name of the person

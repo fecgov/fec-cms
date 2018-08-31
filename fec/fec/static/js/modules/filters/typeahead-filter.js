@@ -13,7 +13,11 @@ function TypeaheadFilter(elm) {
   var allowText = this.$elm.data('allow-text') !== undefined;
   var dataset = key ? typeahead.datasets[key] : null;
   this.typeaheadFilter = new FilterTypeahead(this.$elm, dataset, allowText);
-  this.typeaheadFilter.$elm.on('change', 'input[type="checkbox"]', this.handleNestedChange.bind(this));
+  this.typeaheadFilter.$elm.on(
+    'change',
+    'input[type="checkbox"]',
+    this.handleNestedChange.bind(this)
+  );
 }
 
 TypeaheadFilter.prototype = Object.create(Filter.Filter.prototype);
@@ -47,7 +51,10 @@ TypeaheadFilter.prototype.handleNestedChange = function(e) {
 };
 
 TypeaheadFilter.prototype.disable = function() {
-  this.$elm.find('input, label, button').addClass('is-disabled').prop('disabled', true);
+  this.$elm
+    .find('input, label, button')
+    .addClass('is-disabled')
+    .prop('disabled', true);
   this.$elm.find('input:checked').each(function() {
     $(this).trigger('filter:disabled', {
       key: $(this).attr('id')
@@ -56,7 +63,10 @@ TypeaheadFilter.prototype.disable = function() {
 };
 
 TypeaheadFilter.prototype.enable = function() {
-  this.$elm.find('input, label, button').removeClass('is-disabled').prop('disabled', false);
+  this.$elm
+    .find('input, label, button')
+    .removeClass('is-disabled')
+    .prop('disabled', false);
   this.$elm.find('input:checked').each(function() {
     $(this).trigger('filter:enabled', {
       key: $(this).attr('id')
@@ -64,4 +74,4 @@ TypeaheadFilter.prototype.enable = function() {
   });
 };
 
-module.exports = {TypeaheadFilter: TypeaheadFilter};
+module.exports = { TypeaheadFilter: TypeaheadFilter };

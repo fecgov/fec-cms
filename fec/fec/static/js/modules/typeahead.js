@@ -35,7 +35,7 @@ function formatCommittee(result) {
     id: result.id,
     type: 'committee'
   };
-} 
+}
 
 function formatAuditCommittee(result) {
   return {
@@ -89,7 +89,7 @@ var committeeEngine = createEngine({
     wildcard: '%QUERY',
     transform: function(response) {
       return _.map(response.results, formatCommittee);
-    },
+    }
   }
 });
 
@@ -99,7 +99,7 @@ var auditCommitteeEngine = createEngine({
     wildcard: '%QUERY',
     transform: function(response) {
       return _.map(response.results, formatAuditCommittee);
-    },
+    }
   }
 });
 
@@ -109,7 +109,7 @@ var auditCandidateEngine = createEngine({
     wildcard: '%QUERY',
     transform: function(response) {
       return _.map(response.results, formatAuditCandidate);
-    },
+    }
   }
 });
 
@@ -120,13 +120,14 @@ var candidateDataset = {
   source: candidateEngine,
   templates: {
     header: '<span class="tt-suggestion__header">Select a candidate:</span>',
-    pending: '<span class="tt-suggestion__loading">Loading candidates...</span>',
+    pending:
+      '<span class="tt-suggestion__loading">Loading candidates...</span>',
     notFound: Handlebars.compile(''), // This has to be empty to not show anything
     suggestion: Handlebars.compile(
       '<span>' +
-      '<span class="tt-suggestion__name">{{ name }} ({{ id }})</span>' +
-      '<span class="tt-suggestion__office">{{ office }}</span>' +
-      '</span>'
+        '<span class="tt-suggestion__name">{{ name }} ({{ id }})</span>' +
+        '<span class="tt-suggestion__office">{{ office }}</span>' +
+        '</span>'
     )
   }
 };
@@ -138,14 +139,14 @@ var committeeDataset = {
   source: committeeEngine,
   templates: {
     header: '<span class="tt-suggestion__header">Select a committee:</span>',
-    pending: '<span class="tt-suggestion__loading">Loading committees...</span>',
+    pending:
+      '<span class="tt-suggestion__loading">Loading committees...</span>',
     notFound: Handlebars.compile(''), // This has to be empty to not show anything
     suggestion: Handlebars.compile(
       '<span class="tt-suggestion__name">{{ name }} ({{ id }})</span>'
     )
   }
 };
-
 
 var auditCommitteeDataset = {
   name: 'auditCommittees',
@@ -154,7 +155,8 @@ var auditCommitteeDataset = {
   source: auditCommitteeEngine,
   templates: {
     header: '<span class="tt-suggestion__header">Select a committee:</span>',
-    pending: '<span class="tt-suggestion__loading">Loading committees...</span>',
+    pending:
+      '<span class="tt-suggestion__loading">Loading committees...</span>',
     notFound: Handlebars.compile(''), // This has to be empty to not show anything
     suggestion: Handlebars.compile(
       '<span class="tt-suggestion__name">{{ name }} ({{ id }})</span>'
@@ -169,7 +171,8 @@ var auditCandidateDataset = {
   source: auditCandidateEngine,
   templates: {
     header: '<span class="tt-suggestion__header">Select a candidate:</span>',
-    pending: '<span class="tt-suggestion__loading">Loading candidates...</span>',
+    pending:
+      '<span class="tt-suggestion__loading">Loading candidates...</span>',
     notFound: Handlebars.compile(''), // This has to be empty to not show anything
     suggestion: Handlebars.compile(
       '<span class="tt-suggestion__name">{{ name }} ({{ id }})</span>'
@@ -184,15 +187,20 @@ var auditCandidateDataset = {
 var individualDataset = {
   display: 'id',
   source: function(query, syncResults) {
-    syncResults([{
-      id: helpers.sanitizeValue(query),
-      type: 'individual'
-    }]);
+    syncResults([
+      {
+        id: helpers.sanitizeValue(query),
+        type: 'individual'
+      }
+    ]);
   },
   templates: {
     suggestion: function(datum) {
-      return '<span><strong>Search individual contributions from:</strong> "' + datum.id +
-      '"</span>';
+      return (
+        '<span><strong>Search individual contributions from:</strong> "' +
+        datum.id +
+        '"</span>'
+      );
     }
   }
 };
@@ -203,14 +211,18 @@ var individualDataset = {
 var siteDataset = {
   display: 'id',
   source: function(query, syncResults) {
-    syncResults([{
-      id: helpers.sanitizeValue(query),
-      type: 'site'
-    }]);
+    syncResults([
+      {
+        id: helpers.sanitizeValue(query),
+        type: 'site'
+      }
+    ]);
   },
   templates: {
     suggestion: function(datum) {
-      return '<span><strong>Search other pages:</strong> "' + datum.id + '"</span>';
+      return (
+        '<span><strong>Search other pages:</strong> "' + datum.id + '"</span>'
+      );
     }
   }
 };
@@ -259,7 +271,10 @@ Typeahead.prototype.handleChangeEvent = function(data) {
 
 Typeahead.prototype.select = function(event, datum) {
   if (datum.type === 'individual') {
-    window.location = this.url + 'receipts/individual-contributions/?contributor_name=' + datum.id;
+    window.location =
+      this.url +
+      'receipts/individual-contributions/?contributor_name=' +
+      datum.id;
   } else if (datum.type === 'site') {
     this.searchSite(datum.id);
   } else {

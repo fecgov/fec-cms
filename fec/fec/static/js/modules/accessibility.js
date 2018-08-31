@@ -2,8 +2,6 @@
 
 /* global require, module */
 
-var $ = require('jquery');
-
 /**
  * Utilities for setting or removing tabindex on all focusable elements
  * in a parent div. Useful for hiding elements off-canvas without setting
@@ -11,15 +9,11 @@ var $ = require('jquery');
  */
 
 function removeTabindex($elm) {
-  $elm
-    .find('a, button, :input, [tabindex]')
-    .attr('tabindex', '-1');
+  $elm.find('a, button, :input, [tabindex]').attr('tabindex', '-1');
 }
 
 function restoreTabindex($elm) {
-  $elm
-    .find('a, button, :input, [tabindex]')
-    .attr('tabindex', '0');
+  $elm.find('a, button, :input, [tabindex]').attr('tabindex', '0');
 }
 
 module.exports = {

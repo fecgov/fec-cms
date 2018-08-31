@@ -11,7 +11,9 @@ var parseM = d3.time.format('%b');
 var parseMY = d3.time.format('%b %Y');
 var parseMDY = d3.time.format('%b %e, %Y');
 
-var bisectDate = d3.bisector(function(d) { return d.date; }).left;
+var bisectDate = d3.bisector(function(d) {
+  return d.date;
+}).left;
 
 var currentYear = new Date().getFullYear();
 var MIN_CYCLE = 2008;
@@ -36,7 +38,7 @@ function LineChart(selector, snapshot, dataType) {
   this.dataType = dataType;
   this.cycle = Number(DEFAULT_TIME_PERIOD);
   this.entityNames = ['candidate', 'party', 'pac'];
-  this.margin = {top: 10, right: 20, bottom: 30, left: 50};
+  this.margin = { top: 10, right: 20, bottom: 30, left: 50 };
   this.baseWidth = $(selector).width();
   this.baseHeight = this.baseWidth * 0.5;
   this.height = this.baseHeight - this.margin.top - this.margin.bottom;
@@ -63,10 +65,10 @@ function LineChart(selector, snapshot, dataType) {
 }
 
 LineChart.prototype.fetch = function(cycle) {
-  var entityTotalsURL = helpers.buildUrl(
-    ['totals', 'by_entity'],
-    { 'cycle': cycle, 'per_page': '100'}
-  );
+  var entityTotalsURL = helpers.buildUrl(['totals', 'by_entity'], {
+    cycle: cycle,
+    per_page: '100'
+  });
 
   $.getJSON(entityTotalsURL).done(this.handleResponse.bind(this));
 };
@@ -90,21 +92,23 @@ LineChart.prototype.groupDataByType = function(results) {
     var datum;
     var date = helpers.utcDate(item.date);
     // If the data is in the future, it's probably wrong, so ignore it
-    if (date > today) { return; }
+    if (date > today) {
+      return;
+    }
 
     if (dataType === 'raised') {
       datum = {
-        'date': date,
-        'candidate': item.cumulative_candidate_receipts,
-        'pac': item.cumulative_pac_receipts,
-        'party': item.cumulative_party_receipts
+        date: date,
+        candidate: item.cumulative_candidate_receipts,
+        pac: item.cumulative_pac_receipts,
+        party: item.cumulative_party_receipts
       };
     } else {
       datum = {
-        'date': date,
-        'candidate': item.cumulative_candidate_disbursements,
-        'pac': item.cumulative_pac_disbursements,
-        'party': item.cumulative_party_disbursements
+        date: date,
+        candidate: item.cumulative_candidate_disbursements,
+        pac: item.cumulative_pac_disbursements,
+        party: item.cumulative_party_disbursements
       };
     }
     formattedData.push(datum);
@@ -113,7 +117,7 @@ LineChart.prototype.groupDataByType = function(results) {
   this.chartData = _.sortBy(formattedData, 'date');
 };
 
-LineChart.prototype.groupEntityTotals  = function() {
+LineChart.prototype.groupEntityTotals = function() {
   // Create separate arrays of data for each entity type
   // These will be used to draw the lines on the chart
   var chartData = this.chartData;
@@ -132,9 +136,12 @@ LineChart.prototype.groupEntityTotals  = function() {
 
 LineChart.prototype.setXScale = function() {
   // Set the x-scale to be from the first of the first year to the last day of the cycle
-  var x = d3.time.scale()
-    .domain([new Date('01/01/' + String(this.cycle - 1)),
-              new Date('12/31/' + String(this.cycle))])
+  var x = d3.time
+    .scale()
+    .domain([
+      new Date('01/01/' + String(this.cycle - 1)),
+      new Date('12/31/' + String(this.cycle))
+    ])
     .nice(d3.time.month)
     .range([0, this.width]);
   this.x = x;
@@ -143,20 +150,25 @@ LineChart.prototype.setXScale = function() {
 
 LineChart.prototype.setYScale = function() {
   // Set the y-axis from 0 to the MAX_RANGE ($4 billion)
-  var y = d3.scale.linear()
-      .domain([0, Math.ceil(MAX_RANGE / 1000000000) * 1000000000])
-      .range([this.height, 0]);
+  var y = d3.scale
+    .linear()
+    .domain([0, Math.ceil(MAX_RANGE / 1000000000) * 1000000000])
+    .range([this.height, 0]);
   return y;
 };
 
 LineChart.prototype.appendSVG = function() {
   // Adds a basic SVG container with all the right dimensions
-  var svg = this.element.append('svg')
-      .attr('class', 'bar-chart')
-      .attr('width', '100%')
-      .attr('height', this.height + this.margin.top + this.margin.bottom)
+  var svg = this.element
+    .append('svg')
+    .attr('class', 'bar-chart')
+    .attr('width', '100%')
+    .attr('height', this.height + this.margin.top + this.margin.bottom)
     .append('g')
-      .attr('transform', 'translate(' + this.margin.left + ',' + this.margin.top + ')');
+    .attr(
+      'transform',
+      'translate(' + this.margin.left + ',' + this.margin.top + ')'
+    );
   return svg;
 };
 
@@ -164,61 +176,74 @@ LineChart.prototype.drawChart = function() {
   var entityTotals = this.groupEntityTotals();
   var x = this.setXScale();
   var y = this.setYScale();
-  var xAxis = d3.svg.axis()
-      .scale(x)
-      .ticks(d3.time.month)
-      .tickFormat(this.xAxisFormatter())
-      .orient('bottom');
-  var yAxis = d3.svg.axis()
-      .scale(y)
-      .orient('right')
-      .tickSize(this.width)
-      .tickFormat(function(d) {
-        return numeral(d).format('($0.0a)');
-      });
+  var xAxis = d3.svg
+    .axis()
+    .scale(x)
+    .ticks(d3.time.month)
+    .tickFormat(this.xAxisFormatter())
+    .orient('bottom');
+  var yAxis = d3.svg
+    .axis()
+    .scale(y)
+    .orient('right')
+    .tickSize(this.width)
+    .tickFormat(function(d) {
+      return numeral(d).format('($0.0a)');
+    });
 
   // Create the base SVG
   var svg = this.appendSVG();
 
   // Add the xAxis
-  svg.append('g')
-      .attr('class', 'x axis')
-      .attr('transform', 'translate(0,' + this.height + ')')
-      .call(xAxis);
+  svg
+    .append('g')
+    .attr('class', 'x axis')
+    .attr('transform', 'translate(0,' + this.height + ')')
+    .call(xAxis);
 
   // Add the yAxis
-  svg.append('g')
-      .attr('class', 'y axis')
-      .call(yAxis)
-      .selectAll('text')
-        .attr('y', -4)
-        .attr('x', -4)
-        .attr('dy', '.71em')
-        .style('text-anchor', 'end');
+  svg
+    .append('g')
+    .attr('class', 'y axis')
+    .call(yAxis)
+    .selectAll('text')
+    .attr('y', -4)
+    .attr('x', -4)
+    .attr('dy', '.71em')
+    .style('text-anchor', 'end');
 
-  var lineBuilder = d3.svg.line()
-    .x(function(d) { return x(d.date); })
-    .y(function(d) { return y(d.amount); });
+  var lineBuilder = d3.svg
+    .line()
+    .x(function(d) {
+      return x(d.date);
+    })
+    .y(function(d) {
+      return y(d.amount);
+    });
 
   // Draw a line and populate data for each entity type
   this.entityNames.forEach(function(entity) {
     var line = svg.append('g').attr('class', 'line--' + entity);
     var points = line.append('g').attr('class', 'line__points');
 
-    line.append('path')
+    line
+      .append('path')
       .datum(entityTotals[entity])
       .attr('d', lineBuilder)
       .attr('stroke-width', 2)
       .attr('fill', 'none');
 
-    points.selectAll('circle')
+    points
+      .selectAll('circle')
       .data(entityTotals[entity])
       .enter()
       .append('circle')
       .attr('cx', function(d) {
-          return x(d.date);
+        return x(d.date);
       })
-      .attr('cy', function(d) { return y(d.amount); })
+      .attr('cy', function(d) {
+        return y(d.amount);
+      })
       .attr('r', 2);
   });
 
@@ -227,11 +252,14 @@ LineChart.prototype.drawChart = function() {
 
 LineChart.prototype.drawCursor = function(svg) {
   // Add a dotted vertical line for the cursor
-  this.cursor = svg.append('line')
+  this.cursor = svg
+    .append('line')
     .attr('class', 'cursor')
     .attr('stroke-dasharray', '5,5')
-    .attr('x1', 10).attr('x2', 10)
-    .attr('y1', 0).attr('y2', this.height);
+    .attr('x1', 10)
+    .attr('x2', 10)
+    .attr('y1', 0)
+    .attr('y2', this.height);
 };
 
 LineChart.prototype.xAxisFormatter = function() {
@@ -274,10 +302,11 @@ LineChart.prototype.moveCursor = function(datum) {
   var target = datum ? datum : this.getCursorStartPosition();
   var i = this.chartData.indexOf(target);
   this.cursor.attr('x1', this.x(target.date)).attr('x2', this.x(target.date));
-  this.nextDatum = this.chartData[i+1] || false;
-  this.prevDatum = this.chartData[i-1] || false;
+  this.nextDatum = this.chartData[i + 1] || false;
+  this.prevDatum = this.chartData[i - 1] || false;
   this.populateSnapshot(target);
-  this.element.selectAll('.line__points circle')
+  this.element
+    .selectAll('.line__points circle')
     .attr('r', 2)
     .filter(function(d) {
       return d.date === target.date;
@@ -308,7 +337,11 @@ LineChart.prototype.populateSnapshot = function(datum) {
   this.snapshotSubtotals(datum);
   this.snapshotTotal(datum);
   this.$snapshot.find('.js-max-date').html(parseMDY(datum.date));
-  helpers.zeroPad(this.$snapshot, '.snapshot__item-number', '.figure__decimals');
+  helpers.zeroPad(
+    this.$snapshot,
+    '.snapshot__item-number',
+    '.figure__decimals'
+  );
 };
 
 LineChart.prototype.snapshotSubtotals = function(datum) {
@@ -325,7 +358,9 @@ LineChart.prototype.snapshotTotal = function(datum) {
   var total = _.chain(datum)
     .omit('date')
     .values()
-    .reduce(function(a, b) { return a + b; })
+    .reduce(function(a, b) {
+      return a + b;
+    })
     .value();
   this.$snapshot.find('[data-total-for="all"]').html(helpers.currency(total));
 };

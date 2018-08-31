@@ -25,24 +25,26 @@ var exportWidgetTemplate = require('../templates/tables/exportWidget.hbs');
 var missingTemplate = require('../templates/tables/noData.hbs');
 
 var simpleDOM = 't<"results-info"lpi>';
-var browseDOM = '<"panel__main"t>' +
-                '<"results-info"lp>';
+var browseDOM = '<"panel__main"t>' + '<"results-info"lp>';
 
 var DOWNLOAD_CAP = 500000;
 var downloadCapFormatted = helpers.formatNumber(DOWNLOAD_CAP);
 var MAX_DOWNLOADS = 5;
 var DOWNLOAD_MESSAGES = {
   recordCap:
-    'Use <a href="' + window.BASE_PATH + '/advanced?tab=bulk-data">' +
+    'Use <a href="' +
+    window.BASE_PATH +
+    '/advanced?tab=bulk-data">' +
     'bulk data</a> to export more than ' +
     downloadCapFormatted +
     ' records.',
-  downloadCap: 'Each user is limited to ' +
+  downloadCap:
+    'Each user is limited to ' +
     MAX_DOWNLOADS +
     ' exports at a time. This helps us keep things running smoothly.',
   empty: 'This table has no data to export.',
   comingSoon: 'Data exports for this page are coming soon.',
-  pending: 'You\'re already exporting this data set.'
+  pending: "You're already exporting this data set."
 };
 
 var DATA_WIDGETS = '.js-data-widgets';
@@ -54,7 +56,7 @@ var messageTimer;
 // Only show table after draw
 $(document.body).on('draw.dt', function() {
   $('.dataTable tbody').attr('role', 'rowgroup');
-  $('.dataTable tbody td:first-child').attr('scope','row');
+  $('.dataTable tbody td:first-child').attr('scope', 'row');
 });
 
 function yearRange(first, last) {
@@ -71,12 +73,12 @@ function getCycle(value, meta) {
 
   if (filters && filters.cycle) {
     var cycles = _.intersection(
-      _.map(filters.cycle, function(cycle) { return parseInt(cycle); }),
+      _.map(filters.cycle, function(cycle) {
+        return parseInt(cycle);
+      }),
       value
     );
-    return cycles.length ?
-      {cycle: _.max(cycles)} :
-      {};
+    return cycles.length ? { cycle: _.max(cycles) } : {};
   } else {
     return {};
   }
@@ -94,7 +96,9 @@ function mapSort(order, column) {
 
 function getCount(response) {
   // for audit data set, retrun real data result rows
-  if (window.location.pathname === '/legal-resources/enforcement/audit-search/'){
+  if (
+    window.location.pathname === '/legal-resources/enforcement/audit-search/'
+  ) {
     return response.pagination.count;
   }
   var pagination_count = response.pagination.count;
@@ -121,11 +125,12 @@ function identity(value) {
 }
 
 var MODAL_TRIGGER_CLASS = 'js-panel-trigger';
-var MODAL_TRIGGER_HTML = '<button class="js-panel-button button--panel">' +
+var MODAL_TRIGGER_HTML =
+  '<button class="js-panel-button button--panel">' +
   '<span class="u-visually-hidden">Toggle details</span>' +
-'</button>';
+  '</button>';
 
-function modalRenderRow(row, data, index) {
+function modalRenderRow(row) {
   row.classList.add(MODAL_TRIGGER_CLASS, 'row--has-panel');
 }
 
@@ -144,7 +149,11 @@ function modalRenderFactory(template, fetch) {
     // Add a class to the .dataTables_wrapper
     $table.closest('.dataTables_wrapper').addClass('dataTables_wrapper--panel');
 
-    $table.off('click keypress', '.js-panel-toggle tr.' + MODAL_TRIGGER_CLASS, callback);
+    $table.off(
+      'click keypress',
+      '.js-panel-toggle tr.' + MODAL_TRIGGER_CLASS,
+      callback
+    );
     callback = function(e) {
       if (e.which === 13 || e.type === 'click') {
         // Note: Use `currentTarget` to get parent row, since the target column
@@ -185,7 +194,11 @@ function modalRenderFactory(template, fetch) {
         }
       }
     };
-    $table.on('click keypress', '.js-panel-toggle tr.' + MODAL_TRIGGER_CLASS, callback);
+    $table.on(
+      'click keypress',
+      '.js-panel-toggle tr.' + MODAL_TRIGGER_CLASS,
+      callback
+    );
 
     $modal.on('click', '.js-panel-close', function(e) {
       e.preventDefault();
@@ -195,24 +208,24 @@ function modalRenderFactory(template, fetch) {
 }
 
 function hidePanel(api, $modal) {
-    $('.row-active .js-panel-button').focus();
-    $('.js-panel-toggle tr').toggleClass('row-active', false);
-    $('body').toggleClass('panel-active', false);
-    $modal.attr('aria-hidden', 'true');
+  $('.row-active .js-panel-button').focus();
+  $('.js-panel-toggle tr').toggleClass('row-active', false);
+  $('body').toggleClass('panel-active', false);
+  $modal.attr('aria-hidden', 'true');
 
-    if ($(document).width() > 640) {
-      api.columns('.hide-panel-tablet').visible(true);
-      api.columns('.hide-panel.min-tablet').visible(true);
-    }
+  if ($(document).width() > 640) {
+    api.columns('.hide-panel-tablet').visible(true);
+    api.columns('.hide-panel.min-tablet').visible(true);
+  }
 
-    if ($(document).width() > 980) {
-      api.columns('.hide-panel').visible(true);
-    }
+  if ($(document).width() > 980) {
+    api.columns('.hide-panel').visible(true);
+  }
 
-    accessibility.removeTabindex($modal);
+  accessibility.removeTabindex($modal);
 }
 
-function barsAfterRender(template, api, data, response) {
+function barsAfterRender(template, api) {
   var $table = $(api.table().node());
   var $cols = $table.find('div[data-value]');
 
@@ -230,13 +243,17 @@ function barsAfterRender(template, api, data, response) {
   var tableMax = $table.data('max');
   $cols.after(function() {
     var value = $(this).attr('data-value');
-    var width = 100 * parseFloat(value) / tableMax;
+    var width = (100 * parseFloat(value)) / tableMax;
     if ($(this).next('.bar-container').length > 0) {
       return;
     } else {
-      return '<div class="bar-container">' +
-        '<div class="value-bar" style="width: ' + width + '%"></div>' +
-      '</div>';
+      return (
+        '<div class="bar-container">' +
+        '<div class="value-bar" style="width: ' +
+        width +
+        '%"></div>' +
+        '</div>'
+      );
     }
   });
 }
@@ -281,25 +298,24 @@ function filterSuccessUpdates(changeCount) {
     } else if (type === 'radio') {
       // Add the message after the last radio button / toggle
       $label = $('label[for="' + updateChangedEl.id + '"]').closest('fieldset');
-      filterAction = $elm.attr('name') == 'data_type' ?
-        'Data type changed.' : 'Filter applied.';
+      filterAction =
+        $elm.attr('name') == 'data_type'
+          ? 'Data type changed.'
+          : 'Filter applied.';
 
       if (!$elm.is(':checked')) {
         filterAction = 'Filter removed.';
       }
-    }
-    else if (type === 'text') {
+    } else if (type === 'text') {
       // typeahead
       if ($elm.hasClass('tt-input')) {
         // show message after generated checkbox (last item in list)
         $label = $('[data-filter="typeahead"] li').last();
         filterAction = 'Filter added';
-      }
-      else if ($elm.closest('.range').hasClass('range--currency')) {
+      } else if ($elm.closest('.range').hasClass('range--currency')) {
         $label = $elm.closest('.range');
         filterAction = 'Filter applied';
-      }
-      else if ($elm.closest('.range').hasClass('range--date')) {
+      } else if ($elm.closest('.range').hasClass('range--date')) {
         $label = $('.date-range-grid');
         filterAction = 'Filter applied';
       }
@@ -308,24 +324,23 @@ function filterSuccessUpdates(changeCount) {
         $label = $('.is-loading:not(.overlay)');
         filterAction = 'Filter added';
       }
-    }
-    else {
+    } else {
       // probably a select dropdown
       $label = $elm;
       filterAction = '"' + $elm.find('option:selected').text() + '" applied.';
     }
 
-    $('.is-loading:not(.overlay)').removeClass('is-loading').addClass('is-successful');
+    $('.is-loading:not(.overlay)')
+      .removeClass('is-loading')
+      .addClass('is-successful');
 
     // build message with number of results returned
 
     if (changeCount > 0) {
       filterResult = changeCount.toLocaleString() + ' more results';
-    }
-    else if (changeCount === 0) {
+    } else if (changeCount === 0) {
       filterResult = 'No change in results';
-    }
-    else {
+    } else {
       filterResult = Math.abs(changeCount).toLocaleString() + ' fewer results';
     }
 
@@ -342,19 +357,25 @@ function filterSuccessUpdates(changeCount) {
     // so we check to make sure the message isn't shown inside the dropdown panel.
     if ($label.closest('.dropdown__list').length < 1) {
       // append filter change count message after input
-      $label.after($('<div class="filter__message filter__message--success">' + message + '</div>')
-        .hide().fadeIn());
+      $label.after(
+        $(
+          '<div class="filter__message filter__message--success">' +
+            message +
+            '</div>'
+        )
+          .hide()
+          .fadeIn()
+      );
     }
 
     messageTimer = setTimeout(function() {
       $('.is-successful').removeClass('is-successful');
 
-      $('.filter__message').fadeOut(function () {
+      $('.filter__message').fadeOut(function() {
         $(this).remove();
       });
 
       $('.date-range-grid').fadeOut();
-
     }, helpers.SUCCESS_DELAY);
   }
 }
@@ -364,7 +385,7 @@ function OffsetPaginator() {}
 OffsetPaginator.prototype.mapQuery = function(data) {
   return {
     per_page: data.length,
-    page: Math.floor(data.start / data.length) + 1,
+    page: Math.floor(data.start / data.length) + 1
   };
 };
 
@@ -395,30 +416,38 @@ SeekPaginator.prototype.mapQuery = function(data, query) {
   }
   var indexes = this.getIndexes(data.length, data.start);
   return _.extend(
-    {per_page: data.length},
+    { per_page: data.length },
     _.chain(Object.keys(indexes))
-      .filter(function(key) { return indexes[key]; })
-      .map(function(key) { return [key, indexes[key]]; })
+      .filter(function(key) {
+        return indexes[key];
+      })
+      .map(function(key) {
+        return [key, indexes[key]];
+      })
       .object()
       .value()
   );
 };
 
 SeekPaginator.prototype.handleResponse = function(data, response) {
-  this.setIndexes(data.length, data.length + data.start, response.pagination.last_indexes);
+  this.setIndexes(
+    data.length,
+    data.length + data.start,
+    response.pagination.last_indexes
+  );
 };
 
 var defaultOpts = {
   serverSide: true,
   searching: false,
   lengthMenu: [30, 50, 100],
-  responsive: {details: false},
+  responsive: { details: false },
   language: {
-    lengthMenu: 'Results per page: _MENU_',
+    lengthMenu: 'Results per page: _MENU_'
   },
   pagingType: 'simple',
   title: null,
-  dom: browseDOM,
+  dom: browseDOM
 };
 
 var defaultCallbacks = {
@@ -428,7 +457,7 @@ var defaultCallbacks = {
 function DataTable(selector, opts) {
   opts = opts || {};
   this.$body = $(selector);
-  this.opts = _.extend({}, defaultOpts, {ajax: this.fetch.bind(this)}, opts);
+  this.opts = _.extend({}, defaultOpts, { ajax: this.fetch.bind(this) }, opts);
   this.callbacks = _.extend({}, defaultCallbacks, opts.callbacks);
   this.xhr = null;
   this.fetchContext = null;
@@ -477,8 +506,7 @@ DataTable.prototype.initFilters = function() {
       resultType: 'results',
       showResultCount: true
     });
-    this.$widgets.find('.js-filter-tags').prepend(tagList.
-      $body);
+    this.$widgets.find('.js-filter-tags').prepend(tagList.$body);
     this.filterPanel = new FilterPanel();
     this.filterSet = this.filterPanel.filterSet;
     $(window).on('popstate', this.handlePopState.bind(this));
@@ -489,18 +517,18 @@ DataTable.prototype.refreshExport = function() {
   if (this.opts.useExport && !this.opts.disableExport) {
     var numRows = this.api.context[0].fnRecordsTotal();
     if (numRows > DOWNLOAD_CAP) {
-      this.disableExport({message: DOWNLOAD_MESSAGES.recordCap});
+      this.disableExport({ message: DOWNLOAD_MESSAGES.recordCap });
     } else if (numRows === 0) {
-      this.disableExport({message: DOWNLOAD_MESSAGES.empty});
+      this.disableExport({ message: DOWNLOAD_MESSAGES.empty });
     } else if (this.isPending()) {
-      this.disableExport({message: DOWNLOAD_MESSAGES.pending});
+      this.disableExport({ message: DOWNLOAD_MESSAGES.pending });
     } else if (download.pendingCount() >= MAX_DOWNLOADS) {
-      this.disableExport({message: DOWNLOAD_MESSAGES.downloadCap});
+      this.disableExport({ message: DOWNLOAD_MESSAGES.downloadCap });
     } else {
       this.enableExport();
     }
   } else if (this.opts.disableExport) {
-    this.disableExport({message: DOWNLOAD_MESSAGES.comingSoon});
+    this.disableExport({ message: DOWNLOAD_MESSAGES.comingSoon });
   } else if (this.opts.aggregateExport) {
     // If it's an aggregate table, just enable the export
     this.enableExport();
@@ -521,12 +549,14 @@ DataTable.prototype.handlePopState = function() {
 };
 
 DataTable.prototype.ensureWidgets = function() {
-  if (this.hasWidgets) { return; }
+  if (this.hasWidgets) {
+    return;
+  }
   this.$processing = $('<div class="overlay is-loading"></div>').hide();
   this.$body.before(this.$processing);
 
   if (this.opts.useExport) {
-    this.$exportWidget = $(exportWidgetTemplate({title: this.opts.title}));
+    this.$exportWidget = $(exportWidgetTemplate({ title: this.opts.title }));
     this.$widgets.prepend(this.$exportWidget);
     this.$exportButton = $('.js-export');
     this.$exportMessage = $('.js-export-message');
@@ -537,15 +567,19 @@ DataTable.prototype.ensureWidgets = function() {
   }
 
   if (this.opts.disableExport) {
-    this.disableExport({message: DOWNLOAD_MESSAGES.comingSoon});
+    this.disableExport({ message: DOWNLOAD_MESSAGES.comingSoon });
   }
 
   if (this.opts.aggregateExport || this.opts.singleEntityItemizedExport) {
-    this.$exportButton = $('[data-export-for="' + this.$body.data('type') + '"]');
+    this.$exportButton = $(
+      '[data-export-for="' + this.$body.data('type') + '"]'
+    );
   }
 
   if (this.opts.singleEntityItemizedExport) {
-    this.$exportMessage = $('[data-export-message-for="' + this.$body.data('type') + '"]');
+    this.$exportMessage = $(
+      '[data-export-message-for="' + this.$body.data('type') + '"]'
+    );
   }
 
   this.hasWidgets = true;
@@ -600,7 +634,7 @@ DataTable.prototype.fetch = function(data, callback) {
 DataTable.prototype.export = function() {
   var url = this.buildUrl(this.api.ajax.params(), false);
   download.download(url, false, true);
-  this.disableExport({message: DOWNLOAD_MESSAGES.pending});
+  this.disableExport({ message: DOWNLOAD_MESSAGES.pending });
 };
 
 DataTable.prototype.isPending = function() {
@@ -609,7 +643,7 @@ DataTable.prototype.isPending = function() {
 };
 
 DataTable.prototype.buildUrl = function(data, paginate) {
-  var query = _.extend({sort_hide_null: true}, this.filters || {});
+  var query = _.extend({ sort_hide_null: true }, this.filters || {});
   paginate = typeof paginate === 'undefined' ? true : paginate;
   query.sort = mapSort(data.order, this.opts.columns);
 
@@ -617,11 +651,13 @@ DataTable.prototype.buildUrl = function(data, paginate) {
     query = _.extend(query, this.paginator.mapQuery(data, query));
   }
 
-  return helpers.buildUrl(this.opts.path, _.extend({}, query, this.opts.query || {}));
+  return helpers.buildUrl(
+    this.opts.path,
+    _.extend({}, query, this.opts.query || {})
+  );
 };
 
 DataTable.prototype.fetchSuccess = function(resp) {
-  var self = this;
   this.paginator.handleResponse(this.fetchContext.data, resp);
   this.fetchContext.callback(mapResponse(resp));
   this.callbacks.afterRender(this.api, this.fetchContext.data, resp);
@@ -630,9 +666,12 @@ DataTable.prototype.fetchSuccess = function(resp) {
 
   var changeCount = this.newCount - this.currentCount;
 
-  var countHTML = this.newCount > 0 ?
-    'about <span class="tags__count">' + this.newCount.toLocaleString('en-US') + '</span>' :
-    '<span class="tags__count">0</span>';
+  var countHTML =
+    this.newCount > 0
+      ? 'about <span class="tags__count">' +
+        this.newCount.toLocaleString('en-US') +
+        '</span>'
+      : '<span class="tags__count">0</span>';
   this.$widgets.find('.js-count').html(countHTML);
 
   filterSuccessUpdates(changeCount);
@@ -651,25 +690,36 @@ DataTable.prototype.fetchSuccess = function(resp) {
 
 DataTable.prototype.fetchError = function() {
   var self = this;
-  var errorMessage = '<div class="filter__message filter__message--error">' +
-      '<strong>We had trouble processing your request</strong><br>' +
-      'Please try again. If you still have trouble, ' +
-      '<button class="js-filter-feedback">let us know</button></div>';
+  var errorMessage =
+    '<div class="filter__message filter__message--error">' +
+    '<strong>We had trouble processing your request</strong><br>' +
+    'Please try again. If you still have trouble, ' +
+    '<button class="js-filter-feedback">let us know</button></div>';
 
   $('.filter__message').remove();
 
-  if ($(updateChangedEl).parent().hasClass('range__input')) {
-    $(updateChangedEl).closest('.range').after($(errorMessage));
-  }
-  else if ($(updateChangedEl).attr('type') === 'text' && $(updateChangedEl).hasClass('tt-input') === false) {
-    $(updateChangedEl).parent().after($(errorMessage));
-  }
-  else {
+  if (
+    $(updateChangedEl)
+      .parent()
+      .hasClass('range__input')
+  ) {
+    $(updateChangedEl)
+      .closest('.range')
+      .after($(errorMessage));
+  } else if (
+    $(updateChangedEl).attr('type') === 'text' &&
+    $(updateChangedEl).hasClass('tt-input') === false
+  ) {
+    $(updateChangedEl)
+      .parent()
+      .after($(errorMessage));
+  } else {
     $('label.is-loading')
       .removeClass('is-loading')
       .addClass('is-unsuccessful')
       .after($(errorMessage))
-      .hide().fadeIn();
+      .hide()
+      .fadeIn();
   }
 
   $('button.is-loading').removeClass('is-loading');
@@ -739,7 +789,7 @@ function initSpendingTables(className, context, options) {
         hideEmptyOpts: {
           dataType: opts.title,
           name: 'this election',
-          timePeriod: context.timePeriod,
+          timePeriod: context.timePeriod
         }
       });
     }
@@ -748,13 +798,15 @@ function initSpendingTables(className, context, options) {
 
 function refreshTables(e, context) {
   var $comparison = $('#comparison');
-  var selected = $comparison.find('input[type="checkbox"]:checked').map(function(_, input) {
-    var $input = $(input);
-    return {
-      candidate_id: $input.attr('data-id'),
-      candidate_name: $input.attr('data-name')
-    };
-  });
+  var selected = $comparison
+    .find('input[type="checkbox"]:checked')
+    .map(function(_, input) {
+      var $input = $(input);
+      return {
+        candidate_id: $input.attr('data-id'),
+        candidate_name: $input.attr('data-name')
+      };
+    });
 
   if (selected.length > 0) {
     drawSizeTable(selected, context);
@@ -762,10 +814,15 @@ function refreshTables(e, context) {
   }
 
   if (e) {
-    $(e.target).next('label').addClass('is-loading');
+    $(e.target)
+      .next('label')
+      .addClass('is-loading');
 
     setTimeout(function() {
-      $comparison.find('.is-loading').removeClass('is-loading').addClass('is-successful');
+      $comparison
+        .find('.is-loading')
+        .removeClass('is-loading')
+        .addClass('is-successful');
     }, helpers.LOADING_DELAY);
 
     setTimeout(function() {
@@ -776,7 +833,7 @@ function refreshTables(e, context) {
 
 function drawComparison(results, pageContext) {
   var $comparison = $('#comparison');
-  var context = {selected: results.slice(0, 10), options: results.slice(10)};
+  var context = { selected: results.slice(0, 10), options: results.slice(10) };
   $comparison.prepend(comparisonTemplate(context));
   new dropdown.Dropdown($comparison.find('.js-dropdown'));
   $comparison.on('change', 'input[type="checkbox"]', function(e) {
@@ -792,11 +849,10 @@ function mapSize(response, primary) {
     groups[result.candidate_id][result.size] = result.total;
   });
   return _.map(_.pairs(groups), function(pair) {
-    return _.extend(
-      pair[1], {
-        candidate_id: pair[0],
-        candidate_name: primary[pair[0]].candidate_name
-      });
+    return _.extend(pair[1], {
+      candidate_id: pair[0],
+      candidate_name: primary[pair[0]].candidate_name
+    });
   });
 }
 
@@ -808,8 +864,7 @@ function mapState(response) {
     groups[result.state].state_full = result.state_full;
   });
   return _.map(_.pairs(groups), function(pair) {
-    return _.extend(
-      pair[1], {state: pair[0]});
+    return _.extend(pair[1], { state: pair[0] });
   });
 }
 
@@ -832,7 +887,6 @@ function buildUrl(selected, context, path) {
   return helpers.buildUrl(path, query);
 }
 
-
 var drawTableOpts = {
   autoWidth: false,
   destroy: true,
@@ -843,27 +897,39 @@ var drawTableOpts = {
   singleEntityItemizedExport: true,
   dom: simpleDOM,
   language: {
-    lengthMenu: 'Results per page: _MENU_',
+    lengthMenu: 'Results per page: _MENU_'
   },
   pagingType: 'simple'
-}
+};
 
 function drawSizeTable(selected, context) {
   var $table = $('table[data-type="by-size"]');
-  var primary = _.object(_.map(selected, function(result) {
-    return [result.candidate_id, result];
-  }));
+  var primary = _.object(
+    _.map(selected, function(result) {
+      return [result.candidate_id, result];
+    })
+  );
   $.getJSON(
-    buildUrl(selected, context, ['schedules', 'schedule_a', 'by_size', 'by_candidate'])
+    buildUrl(selected, context, [
+      'schedules',
+      'schedule_a',
+      'by_size',
+      'by_candidate'
+    ])
   ).done(function(response) {
     var data = mapSize(response, primary);
     destroyTable($table);
-    $table.dataTable(_.extend({
-      autoWidth: false,
-      data: data,
-      columns: columnHelpers.sizeColumns(context),
-      order: [[1, 'desc']]
-    }, drawTableOpts));
+    $table.dataTable(
+      _.extend(
+        {
+          autoWidth: false,
+          data: data,
+          columns: columnHelpers.sizeColumns(context),
+          order: [[1, 'desc']]
+        },
+        drawTableOpts
+      )
+    );
 
     barsAfterRender(null, $table.DataTable());
   });
@@ -871,30 +937,45 @@ function drawSizeTable(selected, context) {
 
 function drawStateTable(selected, context) {
   var $table = $('table[data-type="by-state"]');
-  var primary = _.object(_.map(selected, function(result) {
-    return [result.candidate_id, result];
-  }));
+  var primary = _.object(
+    _.map(selected, function(result) {
+      return [result.candidate_id, result];
+    })
+  );
   $.getJSON(
-    buildUrl(selected, context, ['schedules', 'schedule_a', 'by_state', 'by_candidate'])
+    buildUrl(selected, context, [
+      'schedules',
+      'schedule_a',
+      'by_state',
+      'by_candidate'
+    ])
   ).done(function(response) {
     var data = mapState(response, primary);
     // Populate headers with correct text
     var headerLabels = ['State'].concat(_.pluck(selected, 'candidate_name'));
-    $table.find('thead tr')
+    $table
+      .find('thead tr')
       .empty()
-      .append(_.map(headerLabels, function(label) {
-        return $('<th>').text(label);
-      }));
+      .append(
+        _.map(headerLabels, function(label) {
+          return $('<th>').text(label);
+        })
+      );
     destroyTable($table);
-    $table.dataTable(_.extend({
-      autoWidth: false,
-      data: data,
-      columns: columnHelpers.stateColumns(selected, context),
-      order: [[1, 'desc']],
-      drawCallback: function(settings, $table) {
-        barsAfterRender(null, this.api());
-      }
-    }, drawTableOpts));
+    $table.dataTable(
+      _.extend(
+        {
+          autoWidth: false,
+          data: data,
+          columns: columnHelpers.stateColumns(selected, context),
+          order: [[1, 'desc']],
+          drawCallback: function() {
+            barsAfterRender(null, this.api());
+          }
+        },
+        drawTableOpts
+      )
+    );
   });
 }
 

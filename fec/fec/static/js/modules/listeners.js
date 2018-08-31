@@ -11,7 +11,7 @@ Listeners.prototype.on = function(elm) {
   var $elm = $(elm);
   var args = _.toArray(arguments).slice(1);
   this.listeners = this._listeners || [];
-  this.listeners.push({$elm: $elm, args: args});
+  this.listeners.push({ $elm: $elm, args: args });
   $elm.on.apply($elm, args);
 };
 
@@ -23,4 +23,4 @@ Listeners.prototype.clear = function() {
   });
 };
 
-module.exports = {Listeners: Listeners};
+module.exports = { Listeners: Listeners };

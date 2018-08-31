@@ -16,9 +16,15 @@ var pacPartyTemplate = require('../templates/reports/pac.hbs');
 var ieOnlyTemplate = require('../templates/reports/ie-only.hbs');
 
 var pageTitle,
-    pageTemplate,
-    pageColumns,
-    columnKeys = ['committee', 'document_type', 'version', 'receipt_date', 'coverage_end_date'];
+  pageTemplate,
+  pageColumns,
+  columnKeys = [
+    'committee',
+    'document_type',
+    'version',
+    'receipt_date',
+    'coverage_end_date'
+  ];
 
 if (context.form_type === 'presidential') {
   pageTitle = 'Presidential committee reports';
@@ -31,17 +37,19 @@ if (context.form_type === 'presidential') {
 } else if (context.form_type === 'pac-party') {
   pageTitle = 'PAC and party committee reports';
   pageTemplate = pacPartyTemplate;
-  columnKeys.push('receipts', 'disbursements', 'independentExpenditures', 'trigger');
+  columnKeys.push(
+    'receipts',
+    'disbursements',
+    'independentExpenditures',
+    'trigger'
+  );
 } else if (context.form_type === 'ie-only') {
   pageTitle = 'Independent expenditure only committee reports';
   pageTemplate = ieOnlyTemplate;
   columnKeys.push('contributions', 'independentExpenditures', 'trigger');
 }
 
-pageColumns = columnHelpers.getColumns(
-  columns.reports,
-  columnKeys
-);
+pageColumns = columnHelpers.getColumns(columns.reports, columnKeys);
 
 $(document).ready(function() {
   var $table = $('#results');
@@ -57,11 +65,14 @@ $(document).ready(function() {
     useFilters: true,
     useExport: true,
     callbacks: {
-      afterRender: tables.modalRenderFactory(pageTemplate, filings.fetchReportDetails)
+      afterRender: tables.modalRenderFactory(
+        pageTemplate,
+        filings.fetchReportDetails
+      )
     },
-    drawCallback: function () {
+    drawCallback: function() {
       this.dropdowns = $table.find('.dropdown').map(function(idx, elm) {
-        return new dropdown.Dropdown($(elm), {checkboxes: false});
+        return new dropdown.Dropdown($(elm), { checkboxes: false });
       });
     }
   });

@@ -56,13 +56,16 @@ FilterPanel.prototype.show = function(focus) {
   // Don't focus on the first filter unless explicitly intended to
   // Prevents the first filter from being focused on initial page load
   if (focus) {
-    this.$body.find('input, select, button:not(.js-filter-close)').first().focus();
+    this.$body
+      .find('input, select, button:not(.js-filter-close)')
+      .first()
+      .focus();
   }
 };
 
 FilterPanel.prototype.hide = function() {
   if (!helpers.isLargeScreen()) {
-    var top = this.$toggle.outerHeight() +  this.$toggle.position().top;
+    var top = this.$toggle.outerHeight() + this.$toggle.position().top;
     this.$content.css('top', top);
   }
   this.$body.removeClass('is-open');
@@ -83,29 +86,31 @@ FilterPanel.prototype.toggle = function() {
 
 FilterPanel.prototype.handleAddEvent = function(e, opts) {
   // If it's a data-type toggle, we tell it to ignore for the count of active filters
-  if (opts.ignoreCount) { return; }
+  if (opts.ignoreCount) {
+    return;
+  }
 
   var filterCount = this.$filterHeader.find('.filter-count');
 
   if (filterCount.html()) {
     filterCount.html(parseInt(filterCount.html(), 10) + 1);
-  }
-  else {
+  } else {
     this.$filterHeader.append(' <span class="filter-count">1</span>');
   }
 };
 
 FilterPanel.prototype.handleRemoveEvent = function(e, opts) {
-  if (opts.loadedOnce !== true) { return; }
+  if (opts.loadedOnce !== true) {
+    return;
+  }
 
   var filterCount = this.$filterHeader.find('.filter-count');
 
   if (filterCount.html() === '1') {
     filterCount.remove();
-  }
-  else {
+  } else {
     filterCount.html(parseInt(filterCount.html(), 10) - 1);
   }
 };
 
-module.exports = {FilterPanel: FilterPanel};
+module.exports = { FilterPanel: FilterPanel };
