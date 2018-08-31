@@ -1,10 +1,6 @@
 'use strict';
-var _ = require('underscore');
 
-/**
- * When two-year-transaction-period on change,
- * trigger committee_type dropdown to change  options list
- */
+var _ = require('underscore');
 var $ = require('jquery');
 var helpers = require('./helpers');
 
@@ -14,7 +10,7 @@ var committee_type_desc = {
     'D': 'Delegate committee',
     'E': 'Electioneering communication',
     'H': 'House',
-    'I': 'Independent expenditure filer (not a committee))',
+    'I': 'Independent expenditure filer (not a committee)',
     'N': 'PAC - nonqualified',
     'O': 'Super PAC (independent expenditure only)',
     'P': 'Presidential',
@@ -54,8 +50,13 @@ var spender_committee_types = {
     1976: ['H', 'N', 'P', 'Q', 'S', 'X', 'Y']
 }
 
+var $spenderTypeTags= require('../templates/spender_tags.hbs');
+$('.js-filter-tags').prepend($spenderTypeTags)
 
-
+/**
+ * When two-year-transaction-period on change,
+ * trigger committee_type dropdown to change  options list
+ */
 $(function(){
  $(document).on('change',"#two-year-transaction-period",function(event) {
   var two_year_transaction_period = this.value;
@@ -63,7 +64,8 @@ $(function(){
   var committee_types_list = spender_committee_types[two_year_transaction_period]
   console.log(two_year_transaction_period)
   console.log('Length:'+committee_types_list.length+' / Types:'+committee_types_list)
-  $select.html('<option selected disabled>More</option>');
+  $("#committee_type").val("null")
+  $select.html('<option value="null" selected>More</option>');
    $(committee_types_list).each(function(i,v) {
      $select.append(
         '<option value='+ v +'>'+ committee_type_desc[v] + '</option>'
@@ -72,14 +74,19 @@ $(function(){
   })
  })
 
-//for committee_type filter-tag and results
-//function showSpenderCommitteeType(){
-//   var sub_selected = $("#committee_type option:selected").text()
-    // sub_selected == ("Choose a sub-category")  || ($("#sub_category_id").val() == "all")
-    //  ? $('.tag__category.sub').css('visibility','hidden')
-    //  : $('.tag__category.sub').css('visibility','visible')
-//}
+$("#committee_type").change(function(){
+    var current_type = $("#committee_type option:selected").text()
+    $('.tag__item.type').contents()[0].nodeValue = "Spender type: " + current_type
+    $("#committee_type").val() == 'null'
+     ? $('.tag__category.type').hide()
+     : $('.tag__category.type').show()
+});
 
-// $(document).bind('ready ajaxComplete', '#committee_type', showSpenderCommitteeType);
+$('.js-close_type').click(function() {
+   $("#committee_type").val("null")
+   $("#two-year-transaction-period").trigger('change')
+   $('.tag__category.type').hide()
+})
+
 
 
