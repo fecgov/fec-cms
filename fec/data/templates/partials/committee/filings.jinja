@@ -6,7 +6,7 @@
     Committee filings
   </h2>
   <div class="slab slab--inline slab--neutral u-padding--left u-padding--right">
-    {{ select.committee_cycle_select(cycles, cycle, 'filings')}}
+    {{ select.two_year_select(cycles, cycle, 'filings')}}
     {% if has_raw_filings %}
       {{ entity.raw_filings_table(cycle, committee_id, min_receipt_date) }}
     {% endif %}
