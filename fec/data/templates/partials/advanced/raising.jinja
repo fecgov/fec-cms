@@ -1,4 +1,5 @@
 {% import 'macros/committee-totals-chart.jinja' as chart %}
+{% import 'macros/reaction-box.jinja' as reaction %}
 
 <section class="row" id="raising" aria-hidden="false" role="tabpanel">
   <h2>Raising</h2>
@@ -55,6 +56,11 @@
               {{ chart.plot('raised')}}
             </div>
           </div>
+        </section>
+      </li>
+      <li>
+        <section class="content__section">
+          {{ reaction.reaction_box('raised', 'advanced') }}
         </section>
       </li>
       <li>

@@ -10,7 +10,7 @@
 
 var $ = require('jquery');
 var helpers = require('./helpers');
-var analytics = require('../analytics');
+var analytics = require('./analytics');
 
 function ReactionBox(selector) {
   this.$element = $(selector);
@@ -24,7 +24,7 @@ function ReactionBox(selector) {
 
   this.name = this.$element.data('name');
   this.location = this.$element.data('location');
-
+  this.path = window ? window.location.pathname : null;
   this.url = helpers.buildAppUrl(['issue']);
 
   this.$element.on('click', '.js-reaction', this.submitReaction.bind(this));
@@ -63,12 +63,26 @@ ReactionBox.prototype.showTextarea = function() {
 };
 
 ReactionBox.prototype.handleSubmit = function(e) {
+  $.ajaxSetup({
+     beforeSend: function(xhr, settings) {
+       if (!(/^http:.*/.test(settings.url) || /^https:.*/.test(settings.url))) {
+           // Only send the token to relative URLs i.e. locally.
+           xhr.setRequestHeader('X-CSRFToken', $('input[name="csrfmiddlewaretoken"]').val());
+       }
+     }
+  });
+
   e.preventDefault();
+
+  var chartLocation = this.path || this.location;
+  var action = '\nChart Name: '+this.name + '\nChart Location: '+ chartLocation;
+  var about = '\nThe reaction to the chart is: ' + this.reaction;
+  var feedback = '\n' + this.$textarea.val();
+
   var data = {
-    chart_reaction: this.reaction,
-    chart_name: this.name,
-    chart_location: this.location,
-    chart_comment: this.$textarea.val()
+    action: action,
+    about: about,
+    feedback: feedback
   };
 
   var promise = $.ajax({

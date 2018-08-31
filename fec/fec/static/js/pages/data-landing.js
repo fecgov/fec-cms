@@ -6,6 +6,7 @@ var $ = require('jquery');
 var lookup = require('../modules/election-lookup');
 
 var LineChart = require('../modules/line-chart').LineChart;
+var ReactionBox = require('../modules/reaction-box').ReactionBox;
 var helpers = require('../modules/helpers');
 var analytics = require('../modules/analytics');
 
@@ -43,6 +44,8 @@ $(document).ready(function() {
   new Overview('.js-raised-overview', 'raised', 1);
   new Overview('.js-spent-overview', 'spent', 2);
   new lookup.ElectionLookup('#election-lookup', false);
+  new ReactionBox('[data-name="raised"][data-location="landing"]');
+  new ReactionBox('[data-name="spent"][data-location="landing"]');
 });
 
 $('.js-ga-event').each(function() {

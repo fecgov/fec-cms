@@ -1,6 +1,7 @@
 {% extends 'layouts/main.jinja' %}
 {% import 'macros/cycle-select.jinja' as select %}
 {% import 'macros/overviews.jinja' as overviews %}
+{% import 'macros/reaction-box.jinja' as reaction %}
 
 {% block title %}{{ title }}{% endblock %}
 
@@ -222,6 +223,7 @@
            </li>
          </ul>
       </div>
+      {{ reaction.reaction_box('raised', 'landing') }}
     </section>
     <section class="content__section" id="spending">
       <h3 class="u-no-margin">Spending</h3>
@@ -256,6 +258,7 @@
           </li>
         </ul>
       </div>
+      {{ reaction.reaction_box('spent', 'landing') }}
     </section>
   </div>
 </div>

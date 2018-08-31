@@ -5,6 +5,7 @@
 var $ = require('jquery');
 
 var ChartLineRaising = require('../modules/chart-line-raising').ChartLineRaising;
+var ReactionBox = require('../modules/reaction-box').ReactionBox;
 var tabs = require('../vendor/tablist');
 
 function PlotChart(selector, type, index) {
@@ -25,9 +26,11 @@ PlotChart.prototype.init = function() {
 $(document).ready(function() {
   tabs.onShow($('#raising'), function() {
     new PlotChart('.js-raised-overview', 'raised', 1).init();
+    new ReactionBox('[data-name="raised"][data-location="advanced"]');
   });
 
   tabs.onShow($('#spending'), function() {
     new PlotChart('.js-spent-overview', 'spent', 2).init();
+    new ReactionBox('[data-name="spent"][data-location="advanced"]');
   });
 });
