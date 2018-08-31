@@ -65,6 +65,7 @@ $(function(){
   console.log(two_year_transaction_period)
   console.log('Length:'+committee_types_list.length+' / Types:'+committee_types_list)
   $("#committee_type").val("null")
+  $('.tag__category.type').hide()
   $select.html('<option value="null" selected>More</option>');
    $(committee_types_list).each(function(i,v) {
      $select.append(
