@@ -73,17 +73,15 @@ jobs:
             . .env/bin/activate
             npm run build-js
             npm run build-sass
-            cd fec
-            DJANGO_SETTINGS_MODULE=fec.settings.production python manage.py collectstatic --noinput -v 0
-            coverage run --source='.' manage.py test
-            coverage xml --omit="*migrations*"
             npm run test-single
+            pytest
 
       - run:
-          name: Perform post-test checks
+          name: Perform post-test work
           command: |
             . .env/bin/activate
             codecov
+            cd fec; DJANGO_SETTINGS_MODULE=fec.settings.production python manage.py collectstatic --noinput -v 0
 
       - store_artifacts:
           path: test-reports

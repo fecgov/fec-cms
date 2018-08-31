@@ -179,26 +179,20 @@ npm run test-single
 
 *Note: You may be prompted to allow `node` to accept connections; this is okay and required for the tests to run.*
 
-To run the Python tests, run these commands in the root project directory:
+To run the Python tests, run this command in the root project directory:
 
 ```bash
-cd fec/
-./manage.py test
+pytest
 ```
 
 It's necessary to specify the Postgresql URL, which can be done on the
 command line, e.g.:
 
 ```bash
-env DATABASE_URL=postgresql://:@/cfdm_cms_test ./manage.py test
+env DATABASE_URL=postgresql://:@/cfdm_cms_test pytest
 ```
 
-For test coverage, run:
-```bash
-cd fec/
-coverage run --source='.' manage.py test
-coverage report --omit="*migrations*"
-```
+`pytest` is configured to report test coverage automatically.
 
 ## Enabling/toggling features
 [settings/base.py](https://github.com/fecgov/fec-cms/blob/develop/fec/fec/settings/base.py)

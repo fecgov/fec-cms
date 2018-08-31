@@ -1,23 +1,21 @@
-import unittest
 import datetime
+from unittest import mock
 
 from django.test import Client
 from django.test import TestCase
-from unittest import mock
-from urllib.parse import urlparse, parse_qs
 from data import api_caller
 from data import legal_test_data
 
 client = Client()
 
 
-class TestLegalSearch(unittest.TestCase):
+class TestLegalSearch(TestCase):
 
     # Test1 : OK
     @mock.patch.object(api_caller, 'load_legal_search_results')
     def test_no_query(self, load_legal_search_results):
         response = client.get('/data/legal/search/')
-        assert response.status_code == 200 
+        assert response.status_code == 200
         load_legal_search_results.assert_not_called()
 
     # Test2 : A new issue is opened https://github.com/18F/fec-cms/issues/1477
@@ -42,13 +40,15 @@ class TestLegalSearch(unittest.TestCase):
     # Test3 : OK
     @mock.patch.object(api_caller, 'load_legal_search_results')
     def test_search_universal(self, load_legal_search_results):
-        load_legal_search_results.return_value = legal_test_data.legal_universal_search_results()
+        load_legal_search_results.return_value =\
+                legal_test_data.legal_universal_search_results()
         response = client.get('/data/legal/search/',
                               data={
                                   'search': 'in kind donation',
                                   'search_type': 'all'})
         assert response.status_code == 200
-        load_legal_search_results.assert_called_once_with('in kind donation', 'all', limit=3)
+        load_legal_search_results.assert_called_once_with(
+            'in kind donation', 'all', limit=3)
 
     # Test4 : This test is checking against the static data on legal_test_data.py.
     # offset value is 3 and not 0. revisit the test
@@ -56,34 +56,37 @@ class TestLegalSearch(unittest.TestCase):
     # Actual call: load_legal_search_results('in kind donation', 'regulations', limit=3)  
     @mock.patch.object(api_caller, 'load_legal_search_results')
     def test_search_regulations(self, load_legal_search_results):
-        load_legal_search_results.return_value = legal_test_data.regulations_search_results()
+        load_legal_search_results.return_value =\
+                legal_test_data.regulations_search_results()
         response = client.get('/data/legal/search/regulations/',
                               data={
                                   'search': 'in kind donation',
                                   'search_type': 'regulations'})
         assert response.status_code == 200
-        load_legal_search_results.assert_called_once_with('in kind donation',
-                                                          'regulations', offset=0)
+        load_legal_search_results.assert_called_once_with(
+            'in kind donation', 'regulations', offset=0)
 
     # Test5 : OK. This test works only if offset value is set
-    # as a string and not integer in the assert_called_once_with. 
+    # as a string and not integer in the assert_called_once_with.
     @mock.patch.object(api_caller, 'load_legal_search_results')
     def test_search_pagination(self, load_legal_search_results):
-        load_legal_search_results.return_value = legal_test_data.regulations_search_results()
-        
+        load_legal_search_results.return_value =\
+                legal_test_data.regulations_search_results()
+
         response = client.get('/data/legal/search/regulations/',
                               data={
                                   'search': 'in kind donation',
                                   'search_type': 'regulations',
                                   'offset': 20})
         assert response.status_code == 200
-        load_legal_search_results.assert_called_once_with('in kind donation',
-                                                          'regulations', offset='20')
+        load_legal_search_results.assert_called_once_with(
+            'in kind donation', 'regulations', offset='20')
 
     # Test 6 : OK
     @mock.patch.object(api_caller, 'load_legal_search_results')
     def test_search_statutes(self, load_legal_search_results):
-        load_legal_search_results.return_value = legal_test_data.statutes_search_results()
+        load_legal_search_results.return_value =\
+                legal_test_data.statutes_search_results()
         response = client.get('/data/legal/search/statutes/',
                               data={
                                   'search': 'in kind donation',
@@ -96,7 +99,8 @@ class TestLegalSearch(unittest.TestCase):
     @mock.patch.object(api_caller, '_call_api')
     def test_result_counts(self, _call_api_mock):
         _call_api_mock.return_value = {
-            'advisory_opinions': [{'no': 1, 'date': '2016'}, {'no': 2, 'date': '1999'}],
+            'advisory_opinions': [
+                {'no': 1, 'date': '2016'}, {'no': 2, 'date': '1999'}],
             'statutes': [{}] * 4,
             'regulations': [{}] * 5}
         results = api_caller.load_legal_search_results(query='president')
@@ -117,9 +121,9 @@ class TestLegalSearch(unittest.TestCase):
         # so this mocks the two different calls and then we assert they happend
         # http://stackoverflow.com/questions/7242433/asserting-successive-calls-to-a-mock-method
         calls = [
-            mock.call(query='', query_type='advisory_opinions', 
-                      ao_min_issue_date=ao_min_date, ao_category=['F', 'W']), 
-            mock.call(query='', query_type='advisory_opinions', 
+            mock.call(query='', query_type='advisory_opinions',
+                      ao_min_issue_date=ao_min_date, ao_category=['F', 'W']),
+            mock.call(query='', query_type='advisory_opinions',
                       ao_status='Pending', ao_category='R')
         ]
         load_legal_search_results.assert_has_calls(calls, any_order=True)
