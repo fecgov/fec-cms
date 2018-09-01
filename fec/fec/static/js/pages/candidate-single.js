@@ -18,7 +18,6 @@ var filings = require('../modules/filings');
 var dropdown = require('../modules/dropdowns');
 var reportType = require('../templates/reports/reportType.hbs');
 
-
 var aggregateCallbacks = {
   afterRender: tables.barsAfterRender.bind(undefined, undefined)
 };
@@ -210,7 +209,9 @@ var statementsOfCandidacyColumns = [
     className: 'all column--doc-download',
     orderable: false,
     render: function(data, type, row) {
-      var doc_description = row.document_description ? row.document_description : row.form_type;
+      var doc_description = row.document_description
+        ? row.document_description
+        : row.form_type;
       var amendment_version = helpers.amendmentVersionDescription(row);
       var pdf_url = row.pdf_url ? row.pdf_url : null;
       var csv_url = row.csv_url ? row.csv_url : null;
@@ -239,11 +240,15 @@ var statementsOfCandidacyColumns = [
     render: function(data, type, row) {
       var version = helpers.amendmentVersion(data);
       if (version === 'Version unknown') {
-        return '<i class="icon-blank"></i>Version unknown<br>' +
-          '<i class="icon-blank"></i>' + row.fec_file_id;
+        return (
+          '<i class="icon-blank"></i>Version unknown<br>' +
+          '<i class="icon-blank"></i>' +
+          row.fec_file_id
+        );
       } else {
         if (row.fec_file_id !== null) {
-          version = version + '<br><i class="icon-blank"></i>' + row.fec_file_id;
+          version =
+            version + '<br><i class="icon-blank"></i>' + row.fec_file_id;
         }
         return version;
       }
@@ -254,35 +259,38 @@ var statementsOfCandidacyColumns = [
     className: 'min-tablet'
   }),
   {
-  data: 'beginning_image_number',
-  orderable: false,
-  className: 'min-tablet hide-panel column--xs column--number',
-  render: function(data, type, row) {
-        return row.beginning_image_number;
-      }
+    data: 'beginning_image_number',
+    orderable: false,
+    className: 'min-tablet hide-panel column--xs column--number',
+    render: function(data, type, row) {
+      return row.beginning_image_number;
+    }
   },
   {
-  data: 'beginning_image_number',
-  orderable: false,
-  className: 'min-tablet hide-panel column--xs column--number',
-  render: function(data, type, row) {
-    // Image numbers in 2015 and later begin with YYYYMMDD,
-    // which makes for a very big number.
-    // This results in inaccurate subtraction
-    // so instead we slice it after the first 8 digits
-    // Earlier image numbers are only 11 digits, so we just leave those as-is
-    var shorten = function(number) {
-      if (number.toString().length === 18) {
-        return Number(number.toString().slice(8));
-      } else {
-        return number;
-      }
-    };
-    var pages = shorten(row.ending_image_number) - shorten(row.beginning_image_number) + 1;
-    return pages.toLocaleString();
+    data: 'beginning_image_number',
+    orderable: false,
+    className: 'min-tablet hide-panel column--xs column--number',
+    render: function(data, type, row) {
+      // Image numbers in 2015 and later begin with YYYYMMDD,
+      // which makes for a very big number.
+      // This results in inaccurate subtraction
+      // so instead we slice it after the first 8 digits.
+      // Earlier image numbers are only 11 digits, so we just leave those as-is
+      var shorten = function(number) {
+        if (number.toString().length === 18) {
+          return Number(number.toString().slice(8));
+        } else {
+          return number;
+        }
+      };
+      var pages =
+        shorten(row.ending_image_number) -
+        shorten(row.beginning_image_number) +
+        1;
+      return pages.toLocaleString();
+    }
   }
- }
-]
+];
 
 // Begin datatable functions in order of tab appearance
 // - Financial summary:
@@ -304,9 +312,6 @@ function initOtherDocumentsTable() {
   var $table = $('table[data-type="other-documents"]');
   var candidateId = $table.data('candidate');
   var path = ['filings'];
-   var opts = {
-     cycle: $table.data('cycle')
-   };
   tables.DataTable.defer($table, {
     path: path,
     query: {
@@ -579,15 +584,15 @@ function initContributionsTables() {
     }
   });
   // Set up state map
-    mapsEvent.init($map, $contributorState);
+  mapsEvent.init($map, $contributorState);
 }
 function initStatementsOfCandidacyTable() {
   var $table = $('table[data-type="statements-of-candidacy"]');
   var candidateId = $table.data('candidate-id');
   var path = ['filings'];
   var opts = {
-     cycle: $table.data('cycle')
-   };
+    cycle: $table.data('cycle')
+  };
   tables.DataTable.defer($table, {
     path: path,
     query: {
@@ -605,15 +610,13 @@ function initStatementsOfCandidacyTable() {
     callbacks: {
       afterRender: filings.renderModal
     },
-    drawCallback: function () {
+    drawCallback: function() {
       this.dropdowns = $table.find('.dropdown').map(function(idx, elm) {
-        return new dropdown.Dropdown($(elm), {checkboxes: false});
+        return new dropdown.Dropdown($(elm), { checkboxes: false });
       });
     }
   });
 }
-
-
 
 $(document).ready(function() {
   var query = URI.parseQuery(window.location.search);
