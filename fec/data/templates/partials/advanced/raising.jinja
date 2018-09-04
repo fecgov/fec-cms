@@ -40,31 +40,22 @@
         </div>
       </li>
       <li>
-        <section class="content__section" id="raising">
-          <div class="content__section">
-            <div class="heading--section heading--with-action">
-              <h4 class="heading__left">Cumulative amount raised by committees</h4>
+        <section class="content__section" style="padding-top: 3rem;">
+          <div class="heading--section heading--with-action" style="border: none;padding: 0">
+            <h3 class="heading__left">Cumulative amount raised by committees</h3>
+            <div class="heading__right">
+              <ul class="list--buttons">
+                <button disabled="true" class="button button--cta button--go"  data-a11y-dialog-show="spending-modal" data-ga-event="Spending methodology modal clicked" aria-controls="spending-modal">More raising charts</button>
+              </ul>
             </div>
-            <div class="heading--section heading--with-action" style="border: none;">
-              <div class="heading__right">
-                <ul class="list--buttons">
-                  <button class="button button--cta button--go"  data-a11y-dialog-show="spending-modal" data-ga-event="Spending methodology modal clicked" aria-controls="spending-modal">More raising charts</button>
-                </ul>
-              </div>
-            </div>
-            <div class="container" style="padding: 0">
-              {{ chart.plot('raised')}}
-            </div>
+          </div>
+          <div class="content__section--ruled-responsive t-sans">
+            {{ chart.plot('raised')}}
           </div>
         </section>
       </li>
       <li>
-        <section class="content__section">
-          {{ reaction.reaction_box('raised', 'advanced') }}
-        </section>
-      </li>
-      <li>
-        <div class="content__section">
+        <div class="content__section--indent-left">
           <div class="js-accordion accordion--neutral" data-content-prefix="methodology_raising">
             <button type="button" class="js-accordion-trigger accordion__button">Methodology</button>
             <div class="accordion__content">
@@ -93,6 +84,11 @@
             </div>
           </div>
         </div>
+      </li>
+      <li>
+        <section class="content__section">
+          {{ reaction.reaction_box('raised', 'advanced') }}
+        </section>
       </li>
     </ul>
   </div>

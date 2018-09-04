@@ -28,7 +28,7 @@ function ReactionBox(selector) {
   this.url = helpers.buildAppUrl(['issue']);
 
   this.$element.on('click', '.js-reaction', this.submitReaction.bind(this));
-  this.$element.on('click', '.js-skip', this.handleSuccess.bind(this));
+  this.$element.on('click', '.js-skip', this.handleSubmit.bind(this));
   this.$element.on('click', '.js-reset', this.handleReset.bind(this));
 
   this.$form.on('submit', this.handleSubmit.bind(this));

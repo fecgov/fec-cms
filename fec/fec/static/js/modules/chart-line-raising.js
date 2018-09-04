@@ -18,8 +18,33 @@ var MIN_CYCLE = 2008;
 var MAX_CYCLE = currentYear % 2 === 0 ? currentYear : currentYear + 1;
 var MAX_RANGE = 4000000000; // Set the max y-axis to 4 billion
 
+function wrap(text) {
+  text.each(function() {
+    var text = d3.select(this);
+    var words = text.text().split(/\s+/).reverse();
+    var word;
+    var line = [];
+    var lineNumber = 0;
+    var lineHeight = .8;
+    var y = text.attr("y");
+    var dy = parseFloat(text.attr("dy"));
+    var tspan = text.text(null).append("tspan").attr("x", 0).attr("y", y).attr("dy", dy + "em");
+
+    while (word = words.pop()) {
+      line.push(word);
+      tspan.text(line.join(" "));
+      if (tspan.node().getComputedTextLength() > 4) {
+        line.pop();
+        tspan.text(line.join(" "));
+        line = [word];
+        tspan = text.append("tspan").attr("x", 0).attr("y", y).attr("dy", ++lineNumber * lineHeight + dy + "em").text(word);
+      }
+    }
+  });
+}
+
 /**
- * Line Chart
+ * Chart Line
  * @constructor
  *
  * Creates an SVG line chart for total raising and spending
@@ -36,7 +61,7 @@ function ChartLineRaising(selector, snapshot, dataType) {
   this.dataType = dataType;
   this.cycle = Number(DEFAULT_TIME_PERIOD);
   this.entityNames = ['candidate', 'party', 'pac'];
-  this.margin = {top: 10, right: 20, bottom: 30, left: 50};
+  this.margin = {top: 10, right: 40, bottom: 35, left: 50};
   this.baseWidth = $(selector).width();
   this.baseHeight = this.baseWidth * 0.5;
   this.height = this.baseHeight - this.margin.top - this.margin.bottom;
@@ -198,7 +223,9 @@ ChartLineRaising.prototype.drawChart = function() {
   svg.append('g')
       .attr('class', 'x axis')
       .attr('transform', 'translate(0,' + this.height + ')')
-      .call(xAxis);
+      .call(xAxis)
+      .selectAll(".tick text")
+      .call(wrap);
 
   // Add the yAxis
   svg.append('g')
@@ -255,6 +282,7 @@ ChartLineRaising.prototype.drawCursor = function(svg) {
 ChartLineRaising.prototype.xAxisFormatter = function() {
   // Draw tick marks for the x-axis at different intervals depending on screen size
   var formatter;
+
   if (helpers.isMediumScreen()) {
     formatter = function(d) {
       if (d.getMonth() === 0) {

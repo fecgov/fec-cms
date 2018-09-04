@@ -1,11 +1,11 @@
 {% macro plot(total_type) %}
   <div class="overview js-{{total_type}}-overview js-{{total_type}}-snapshot">
     <div>
-      <div class="container">
-        <div class="usa-width-one-half">
-          <h5>Cumulative money {{total_type}} by committee</h5>
+      <div class="grid--flex" style="align-items: center">
+        <div class="u-padding--right" style="flex: auto">
+          <p class="heading__subtitle">How much money has been {{total_type}} between:</p>
         </div>
-        <div class="usa-width-one-half">
+        <div style="flex: auto">
           <div class="snapshot__line-controls">
             <button class="button button--standard button--previous js-snapshot-prev"><span class="u-visually-hidden">Previous month</span></button>
             <h5><span class="js-min-date"></span>&ndash;<span class="js-max-date"></span></h5>
@@ -15,9 +15,7 @@
       </div>
     <div>
     <div class="usa-width-three-fourths">
-      <div class="container">
-        <div class="overview__chart-line js-chart"></div>
-      </div>
+      <div class="overview__chart-line js-chart"></div>
     </div>
     <div class="usa-width-one-fourth">
       <div class="js-snapshot">
