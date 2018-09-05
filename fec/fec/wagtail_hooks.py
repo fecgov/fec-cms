@@ -141,9 +141,9 @@ def editor_js():
     transpiled = draftail_js()
     polyfills = polyfills_js()
     scripts = [
+        '<script src="{}"></script>'.format(polyfills),
         '<script src="/static/wagtailadmin/js/draftail.js"></script>',
-        '<script src="{}"></script>'.format(transpiled),
-        '<script src="{}"></script>'.format(polyfills)
+        '<script src="{}"></script>'.format(transpiled)
     ]
 
     html = '\n'.join(str(s) for s in scripts)

@@ -11,6 +11,8 @@
   <link rel="stylesheet" type="text/css" href="{{ asset_for_css('base.css') }}" />
   {% endblock css %}
 
+  {% block head_js %}{% endblock %}
+
   <script>
     BASE_PATH = '/data';
     API_LOCATION = '{{ FEC_API_URL }}';
