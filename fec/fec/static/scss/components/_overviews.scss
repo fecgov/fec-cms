@@ -5,7 +5,7 @@
 
 .overview {
   @include clearfix();
-  padding: u(2rem) 0;
+  padding-bottom: u(2rem);
 }
 
 .overview__chart {
@@ -61,6 +61,14 @@
   }
 }
 
+.overview__chart-subtitle {
+  flex: 1 1 100%;
+}
+
+.overview__chart-controls {
+  flex: 1 1 100%;
+}
+
 @include media($med) {
   .overview__chart {
     @include span-columns(8);
@@ -76,6 +84,14 @@
     width: 100%;
     clear: both;
   }
+
+  .overview__chart-subtitle {
+    flex: 1 1 100%;
+  }
+
+  .overview__chart-controls {
+    flex: 1 1 100%;
+  }
 }
 
 @include media($lg) {
@@ -90,5 +106,13 @@
 
   .top-list {
     @include span-columns(4);
+  }
+
+  .overview__chart-subtitle {
+    flex: 1 1 50%;
+  }
+
+  .overview__chart-controls {
+    flex: 1 1 40%;
   }
 }

@@ -61,7 +61,7 @@ function ChartLineRaising(selector, snapshot, dataType) {
   this.dataType = dataType;
   this.cycle = Number(DEFAULT_TIME_PERIOD);
   this.entityNames = ['candidate', 'party', 'pac'];
-  this.margin = {top: 10, right: 40, bottom: 35, left: 50};
+  this.margin = {top: 10, right: 10, bottom: 35, left: 50};
   this.baseWidth = $(selector).width();
   this.baseHeight = this.baseWidth * 0.5;
   this.height = this.baseHeight - this.margin.top - this.margin.bottom;
