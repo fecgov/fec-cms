@@ -6,28 +6,23 @@
   <h2 id="section-6-heading">Candidate filings</h2>
   <div class="slab slab--inline slab--neutral u-padding--left u-padding--right">
     <div class="content__section">
-    {% if two_year_totals.coverage_start_date %}
-    <div id="individual-contribution-transactions" class="entity__figure row">
-      <div class="content__section">
-        <div class="heading--section heading--with-action">
-          <h3 class="heading__left">Statements of candidacy</h3>
-          <a class="heading__right button--alt button--browse"
-              href="/data/filings/?cycle={{ cycle }}&form_type=F2&candidate_id={{ candidate_id }}">Filter this data</a>
+      <div id="individual-contribution-transactions" class="entity__figure row">
+        <div class="content__section">
+          <div class="heading--section heading--with-action">
+            <h3 class="heading__left">All statements of candidacy</h3>
+            <a class="heading__right button--alt button--browse"
+                href="/data/filings/?cycle={{ cycle }}&form_type=F2&candidate_id={{ candidate_id }}">Filter this data
+            </a>
           </div>
-
-        <div id="all-transactions" class="panel-toggle-element">
-          <div class="results-info results-info--simple">
-            <div class="u-float-left tag__category">
-              <div class="tag__item">Coverage dates:
-              {{(elections|last)[0] -2 }} to {{elections[0][0]}}</div>
-            </div>
-            <div class="u-float-right">
-              <div class="message message--info message--mini t-left-aligned data-container__message" data-export-message-for="individual-contributions" aria-hidden="true">
+          <div id="all-transactions" class="panel-toggle-element">
+            <div class="results-info results-info--simple">
+              <div class="u-float-right">
+                <div class="message message--info message--mini t-left-aligned data-container__message" data-export-message-for="individual-contributions" aria-hidden="true">
+                </div>
+                <button type="button" class="js-export button button--cta button--export" data-export-for="individual-contributions">Export</button>
               </div>
-              <button type="button" class="js-export button button--cta button--export" data-export-for="individual-contributions">Export</button>
             </div>
           </div>
-        </div>
           <table
               class="data-table data-table--heading-borders"
               data-type="statements-of-candidacy"
@@ -49,12 +44,9 @@
         </div>
       </div>
     </div>
-    {% else %}
-      {{ missing.missing_financials(name, cycle) }}
-    {% endif %}
 
     <div class="entity__figure entity__figure row" id="other">
-      <h3 class="heading--section u-no-margin">Other documents filed</h3>
+      <h3 class="heading--section u-no-margin">All other documents filed</h3>
 
       <table
           class="data-table data-table--heading-borders"
