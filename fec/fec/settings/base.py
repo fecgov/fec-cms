@@ -259,6 +259,7 @@ if FEC_CMS_ENVIRONMENT != 'LOCAL':
     AWS_STORAGE_BUCKET_NAME = env.get_credential('bucket')
     AWS_S3_REGION_NAME = env.get_credential('region')
     AWS_S3_CUSTOM_DOMAIN = env.get_credential('CMS_AWS_CUSTOM_DOMAIN')
+    AWS_S3_FILE_OVERWRITE = False
     DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
     AWS_LOCATION = 'cms-content'
 
