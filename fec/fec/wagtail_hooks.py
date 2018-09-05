@@ -127,13 +127,23 @@ def draftail_js():
     assets = json.load(open(settings.DIST_DIR + '/fec/static/js/rev-draftail-manifest-js.json'))
     return assets[key] if key in assets else key
 
+def polyfills_js():
+    """Looks up the hashed asset path in rev-draftail-manifest-js.json
+    If the path doesn't exist there, then just return the path to the static file
+    without a hash"""
+    key = '/static/js/polyfills.js'
+    assets = json.load(open(settings.DIST_DIR + '/fec/static/js/rev-legal-manifest-js.json'))
+    return assets[key] if key in assets else key
+
 # Inserts custom editor js
 @hooks.register('insert_editor_js')
 def editor_js():
     transpiled = draftail_js()
+    polyfills = polyfills_js()
     scripts = [
         '<script src="/static/wagtailadmin/js/draftail.js"></script>',
-        '<script src="{}"></script>'.format(transpiled)
+        '<script src="{}"></script>'.format(transpiled),
+        '<script src="{}"></script>'.format(polyfills)
     ]
 
     html = '\n'.join(str(s) for s in scripts)
