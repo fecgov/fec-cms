@@ -146,7 +146,7 @@
             {% endfor %}
 
             <div class="contact-form__element">
-              <button class="js-submit button button--cta">Submit</button>
+              <button class="g-recaptcha js-submit button button--cta" data-sitekey="6Lc0uGwUAAAAALGRGXt3mTteJeb_lbse2frNdWjv" data-callback="submitContactForm" data-badge="bottomleft">Submit</button>
               <span class="contact-form__reset t-sans">Or <button type="button" class="js-cancel button--unstyled">cancel submission and clear form</button></span>
             </div>
           </form>
@@ -155,8 +155,14 @@
     {% endif %}
   </div>
 </article>
+
 {% endblock %}
 
 {% block extra_js %}
+  <script type="text/javascript">
+    function submitContactForm() {
+      $('.js-contact-form').submit();
+    }
+  </script>
   <script type="text/javascript" src="{% asset_for_js 'contact-form.js' %}"></script>
 {% endblock %}
