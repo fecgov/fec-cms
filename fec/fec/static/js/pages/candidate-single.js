@@ -607,6 +607,7 @@ function initStatementsOfCandidacyTable() {
     pagingType: 'simple',
     lengthMenu: [10, 30, 50],
     hideEmpty: false,
+    useExport: true,
     callbacks: {
       afterRender: filings.renderModal
     },
