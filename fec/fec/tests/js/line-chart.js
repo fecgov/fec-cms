@@ -346,7 +346,7 @@ var LineChart = require('../../static/js/modules/line-chart').LineChart;
       });
 
       it('fills the max date', function() {
-        expect(this.lineChart.$snapshot.find('.js-max-date').html()).to.equal('Jan 31, 2015');
+        expect(this.lineChart.$snapshot.find('.js-max-date').html()).to.equal('01/31/2015');
       });
 
       it('calls zeroPad()', function() {
