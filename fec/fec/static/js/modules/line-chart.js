@@ -9,7 +9,7 @@ var helpers = require('./helpers');
 
 var parseM = d3.time.format('%b');
 var parseMY = d3.time.format('%b %Y');
-var parseMDY = d3.time.format('%b %e, %Y');
+var parseMDY = d3.time.format('%m/%d/%Y');
 
 var bisectDate = d3.bisector(function(d) { return d.date; }).left;
 

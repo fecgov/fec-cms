@@ -4,7 +4,7 @@
 
 var $ = require('jquery');
 
-var ChartLineRaising = require('../modules/chart-line-raising').ChartLineRaising;
+var LineChartCommittees = require('../modules/line-chart-committees').LineChartCommittees;
 var ReactionBox = require('../modules/reaction-box').ReactionBox;
 var tabs = require('../vendor/tablist');
 
@@ -19,7 +19,7 @@ function PlotChart(selector, type, index) {
 
 PlotChart.prototype.init = function() {
   if (this.initialized) { return; }
-  new ChartLineRaising(this.selector + ' .js-chart','.js-'+this.type+'-snapshot', this.type, this.index);
+  new LineChartCommittees(this.selector + ' .js-chart','.js-'+this.type+'-snapshot', this.type, this.index);
   this.initialized = true;
 }
 

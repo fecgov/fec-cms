@@ -69,6 +69,14 @@
   flex: 1 1 100%;
 }
 
+.overview__chart-section {
+  @include span-columns(12);
+}
+
+.overview__snapshot-section {
+  @include span-columns(12);
+}
+
 @include media($med) {
   .overview__chart {
     @include span-columns(8);
@@ -92,6 +100,14 @@
   .overview__chart-controls {
     flex: 1 1 100%;
   }
+
+  .overview__chart-section {
+    @include span-columns(12);
+  }
+
+  .overview__snapshot-section {
+    @include span-columns(12);
+  }
 }
 
 @include media($lg) {
@@ -114,5 +130,13 @@
 
   .overview__chart-controls {
     flex: 1 1 40%;
+  }
+
+  .overview__chart-section {
+    @include span-columns(8);
+  }
+
+  .overview__snapshot-section {
+    @include span-columns(4);
   }
 }
