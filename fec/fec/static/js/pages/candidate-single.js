@@ -322,7 +322,7 @@ function initOtherDocumentsTable() {
 
       Exclude all request types except for:
       // RQ-5: RFAI referencing Statement of Candidacy */
-      request_type: ['-1', '-2', '-3', '-4', '-6', '-7', '-8', '-9'],
+      request_type: ['-1', '-2', '-3', '-4', '-5', '-6', '-7', '-8', '-9'],
       sort_hide_null: ['false']
     },
     columns: otherDocumentsColumns,
@@ -597,7 +597,8 @@ function initStatementsOfCandidacyTable() {
     path: path,
     query: {
       candidate_id: candidateId,
-      form_type: ['F2'],
+      form_type: ['F2', 'RFAI'],
+      request_type: ['-1', '-2', '-3', '-4', '-6', '-7', '-8', '-9'],
       cycle: opts.cycle,
       sort_hide_null: ['false']
     },
