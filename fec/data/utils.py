@@ -1,10 +1,6 @@
 import math
 import calendar
 import datetime
-import threading
-
-import cachetools
-import cachecontrol
 
 from data import constants
 
@@ -12,61 +8,6 @@ from data import constants
 def current_cycle():
     year = datetime.datetime.now().year
     return year + year % 2
-
-class LRUCache(cachecontrol.cache.BaseCache):
-    """A thread-safe least recently updated cache adapted to work with
-    Cache-Control.
-    """
-    def __init__(self, maxsize):
-        self.lock = threading.Lock()
-        self.data = cachetools.LRUCache(maxsize)
-
-    def get(self, key):
-        return self.data.get(key, None)
-
-    def set(self, key, value):
-        with self.lock:
-            self.data[key] = value
-
-    def delete(self, key):
-        with self.lock:
-            self.data.clear()
-
-
-class ReverseProxied(object):
-    """Wrap the application in this middleware and configure the
-    front-end server to add these headers, to let you quietly bind
-    this to a URL other than / and to an HTTP scheme that is
-    different than what is used locally.
-
-    From http://flask.pocoo.org/snippets/35/.
-
-    In nginx:
-    location /myprefix {
-        proxy_pass http://192.168.0.1:5001;
-        proxy_set_header Host $host;
-        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-        proxy_set_header X-Scheme $scheme;
-        proxy_set_header X-Script-Name /myprefix;
-    }
-
-    :param app: the WSGI application
-    """
-    def __init__(self, app):
-        self.app = app
-
-    def __call__(self, environ, start_response):
-        script_name = environ.get('HTTP_X_SCRIPT_NAME', '')
-        if script_name:
-            environ['SCRIPT_NAME'] = script_name
-            path_info = environ['PATH_INFO']
-            if path_info.startswith(script_name):
-                environ['PATH_INFO'] = path_info[len(script_name):]
-
-        scheme = environ.get('HTTP_X_SCHEME', '')
-        if scheme:
-            environ['wsgi.url_scheme'] = scheme
-        return self.app(environ, start_response)
 
 
 def date_ranges():
@@ -116,7 +57,8 @@ def get_cycles(max_cycle=None):
 
 def election_title(cycle, office, state=None, district=None):
     # If this logic changes, please update `page-header.jinja` logic
-    base = ' '.join([str(cycle), 'Election', 'United States', office.capitalize()])
+    base = ' '.join(
+        [str(cycle), 'Election', 'United States', office.capitalize()])
     parts = [base]
     if state:
         parts.append(constants.states[state.upper()])
@@ -134,7 +76,8 @@ def page_info(pagination):
     count = '{:,}'.format(pagination['count'])
     range_start = per_page * (page - 1) + 1
     range_end = (page - 1) * 10 + per_page
-    return '{range_start}-{range_end} of {count}'.format(range_start=range_start, range_end=range_end, count=count)
+    return '{range_start}-{range_end} of {count}'.format(
+        range_start=range_start, range_end=range_end, count=count)
 
 
 def financial_summary_processor(totals, formatter):
@@ -151,8 +94,9 @@ def financial_summary_processor(totals, formatter):
 def process_raising_data(totals):
     """
     Processes raising totals by mapping to the RAISING_FORMATTER constant
-    Occassionally, the API schema is slightly out of sync with what we want to display,
-    so there's logic here to remove or rename items depending on the form we're showing
+    Occasionally, the API schema is slightly out of sync with what we want to
+    display, so there's logic here to remove or rename items depending on the
+    form we're showing
     """
 
     # If there's repayments_loans_made_by_candidate, it's an F3P .

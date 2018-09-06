@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { EditorState, Modifier } from 'draft-js';
 
 // Creates the entities as soon as it is rendered.
@@ -18,16 +19,30 @@ class SansserifSource extends React.Component {
     var selectedText = currentContentBlock.getText().slice(start, end);
 
     // Uses the Draft.js API to create a new entity with the right data.
-    const contentWithEntity = content.createEntity(entityType.type, 'IMMUTABLE', {
-        term: selectedText,
-    });
+    const contentWithEntity = content.createEntity(
+      entityType.type,
+      'IMMUTABLE',
+      {
+        term: selectedText
+      }
+    );
     const entityKey = contentWithEntity.getLastCreatedEntityKey();
 
     // Add some text for the entity to be activated on.
     const text = `${selectedText}`;
 
-    const newContent = Modifier.replaceText(content, selection, text, null, entityKey);
-    const nextState = EditorState.push(editorState, newContent, 'insert-characters');
+    const newContent = Modifier.replaceText(
+      content,
+      selection,
+      text,
+      null,
+      entityKey
+    );
+    const nextState = EditorState.push(
+      editorState,
+      newContent,
+      'insert-characters'
+    );
 
     onComplete(nextState);
   }
@@ -37,15 +52,26 @@ class SansserifSource extends React.Component {
   }
 }
 
+SansserifSource.propTypes = {
+  editorState: PropTypes.oneOfType([PropTypes.object, PropTypes.func]),
+  entityType: PropTypes.oneOfType([PropTypes.object, PropTypes.func]),
+  onComplete: PropTypes.oneOfType([PropTypes.object, PropTypes.func])
+};
 
-// This adds additional 'term' class to the editor
-// to add custom editor styles inside customize-editor.css
-const Sansserif = ({children}) => (
-  <span className='t-sans'>{children}</span>
-);
+const Sansserif = ({ children }) => <span className="t-sans">{children}</span>;
+
+Sansserif.propTypes = {
+  children: PropTypes.oneOfType([
+    PropTypes.array,
+    PropTypes.element,
+    PropTypes.func,
+    PropTypes.object,
+    PropTypes.string
+  ])
+};
 
 module.exports = {
   type: 'SANSSERIF',
   source: SansserifSource,
-  decorator: Sansserif,
+  decorator: Sansserif
 };

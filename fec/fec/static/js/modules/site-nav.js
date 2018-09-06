@@ -36,9 +36,12 @@ SiteNav.prototype.initMenu = function() {
 SiteNav.prototype.initMegaMenu = function() {
   this.$element.find('[data-submenu]').each(function() {
     // Remove hrefs and default click behavior for links that have submenus
-    $(this).find('.site-nav__link').attr('href', '#0').on('click', function(e) {
-      e.preventDefault();
-    });
+    $(this)
+      .find('.site-nav__link')
+      .attr('href', '#0')
+      .on('click', function(e) {
+        e.preventDefault();
+      });
   });
 
   this.$menu.accessibleMegaMenu({
@@ -73,7 +76,7 @@ SiteNav.prototype.toggleMenu = function() {
 
 SiteNav.prototype.showMenu = function() {
   this.$body.css({
-    'overflow': 'hidden'
+    overflow: 'hidden'
   });
   this.$element.addClass('is-open');
   this.$toggle.addClass('active');
@@ -83,7 +86,7 @@ SiteNav.prototype.showMenu = function() {
 
 SiteNav.prototype.hideMenu = function() {
   this.$body.css({
-    'overflow': 'auto'
+    overflow: 'auto'
   });
   this.$element.removeClass('is-open');
   this.$toggle.removeClass('active');

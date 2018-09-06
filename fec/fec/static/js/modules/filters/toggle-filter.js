@@ -18,7 +18,10 @@ ToggleFilter.prototype = Object.create(Filter.prototype);
 ToggleFilter.constructor = ToggleFilter;
 
 ToggleFilter.prototype.fromQuery = function(query) {
-  this.$elm.find('input[value="' + query[this.name] + '"]').prop('checked', true).change();
+  this.$elm
+    .find('input[value="' + query[this.name] + '"]')
+    .prop('checked', true)
+    .change();
 };
 
 ToggleFilter.prototype.handleChange = function(e) {
@@ -44,8 +47,8 @@ ToggleFilter.prototype.setInitialValue = function() {
   // If a toggle is checked by default in the DOM, call handleChange()
   var $checked = this.$elm.find('input:checked');
   if ($checked.length > 0) {
-    this.handleChange({target: $checked});
+    this.handleChange({ target: $checked });
   }
 };
 
-module.exports = {ToggleFilter: ToggleFilter};
+module.exports = { ToggleFilter: ToggleFilter };

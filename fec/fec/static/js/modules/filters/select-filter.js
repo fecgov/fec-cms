@@ -35,4 +35,4 @@ SelectFilter.prototype.setValue = function(value) {
   this.$input.change();
 };
 
-module.exports = {SelectFilter: SelectFilter};
+module.exports = { SelectFilter: SelectFilter };

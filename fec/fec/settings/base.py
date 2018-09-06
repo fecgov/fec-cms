@@ -282,10 +282,16 @@ DEFAULT_AUTHENTICATION_CLASSES = ['rest_framework_jwt.authentication.JSONWebToke
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
+    'formatters': {
+        'console': {
+            'format': '%(levelname)s:%(name)s: %(message)s',
+        },
+    },
     'handlers': {
         'console': {
             'class': 'logging.StreamHandler',
             'level': 'INFO',
+            'formatter': 'console',
         },
     },
     'loggers': {

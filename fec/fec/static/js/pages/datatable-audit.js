@@ -1,20 +1,16 @@
 'use strict';
 
 /**
-* audit datatable page
-* ---------------------
-* inital show all audit case.
-*
-*/
+ * audit datatable page
+ * ---------------------
+ * inital show all audit case.
+ *
+ */
 
 var $ = require('jquery');
 
 var tables = require('../modules/tables');
 var columns = require('../modules/columns');
-var tablePanels = require('../modules/table-panels');
-var auditCategorySubcCategory = require('../modules/audit-category-sub-category');
-var auditTags = require('../modules/audit_tags');
-
 
 $(document).ready(function() {
   var $table = $('#results');
@@ -28,7 +24,7 @@ $(document).ready(function() {
     useExport: true,
     rowCallback: tables.modalRenderRow,
     callbacks: {
- //     afterRender: tablePanels.renderauditPanel(false)
+      //     afterRender: tablePanels.renderauditPanel(false)
     }
   });
 });

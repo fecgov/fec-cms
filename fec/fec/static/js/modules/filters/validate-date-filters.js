@@ -85,18 +85,18 @@ ValidateDateFilter.prototype.validate = function() {
   var minDate = moment(this.$minDate.val(), 'MM/DD/YYYY');
   var maxDate = moment(this.$maxDate.val(), 'MM/DD/YYYY');
   var span = maxDate.diff(minDate, 'years', true);
-  if ( span <= this.duration ) {
+  if (span <= this.duration) {
     this.hideWarning();
     this.$elm.trigger('filters:validation', [
       {
-        isValid: true,
+        isValid: true
       }
     ]);
   } else {
     this.showWarning();
     this.$elm.trigger('filters:validation', [
       {
-        isValid: false,
+        isValid: false
       }
     ]);
   }
@@ -106,9 +106,13 @@ ValidateDateFilter.prototype.fromQuery = function(query) {
   // If no values are passed in the query, then default to today - Jan 1 from last year
   var now = moment().format('MM/DD/YYYY');
   var startYear = moment().format('YYYY') - 1;
-  var defaultStart = moment('01/01/' + startYear, 'MM-DD-YYYY').format('MM/DD/YYYY');
+  var defaultStart = moment('01/01/' + startYear, 'MM-DD-YYYY').format(
+    'MM/DD/YYYY'
+  );
 
-  var minDate = query['min_' + this.name] ? query['min_' + this.name] : defaultStart;
+  var minDate = query['min_' + this.name]
+    ? query['min_' + this.name]
+    : defaultStart;
   var maxDate = query['max_' + this.name] ? query['max_' + this.name] : now;
   this.$minDate.val(minDate).change();
   this.$maxDate.val(maxDate).change();
@@ -123,22 +127,22 @@ ValidateDateFilter.prototype.handleRemoveAll = function(e, opts) {
   function remove($filter) {
     $filter.val('');
     $filter.data('had-value', false);
-    $filter.trigger('filter:removed', {loadedOnce: true});
+    $filter.trigger('filter:removed', { loadedOnce: true });
   }
 
   if (forceRemove) {
-   remove(this.$minDate);
-   remove(this.$maxDate);
+    remove(this.$minDate);
+    remove(this.$maxDate);
   }
 };
 
 ValidateDateFilter.prototype.showWarning = function() {
   if (!this.showingWarning) {
     var warning =
-    '<div class="filter__message filter__message--error">' +
+      '<div class="filter__message filter__message--error">' +
       '<strong>Time period is too broad</strong><br>' +
       'Please enter dates within six years of each other.' +
-    '</div>';
+      '</div>';
     this.$range.after(warning);
     this.showingWarning = true;
   }
@@ -151,4 +155,4 @@ ValidateDateFilter.prototype.hideWarning = function() {
   }
 };
 
-module.exports = {ValidateDateFilter: ValidateDateFilter};
+module.exports = { ValidateDateFilter: ValidateDateFilter };

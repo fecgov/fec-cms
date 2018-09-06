@@ -22,8 +22,7 @@ CheckboxFilter.constructor = CheckboxFilter;
 CheckboxFilter.prototype.handleChange = function(e) {
   var $input = $(e.target);
   var id = $input.attr('id');
-  var loadedOnce,
-      eventName;
+  var loadedOnce, eventName;
 
   var $label = this.$elm.find('label[for="' + id + '"]');
   loadedOnce = $input.data('loaded-once') || false;
@@ -34,7 +33,9 @@ CheckboxFilter.prototype.handleChange = function(e) {
 
     // dropdown loading status
     if ($input.parent().hasClass('dropdown__item')) {
-      this.$elm.find('button[data-name="' + $input.attr('name') + '"]').addClass('is-loading');
+      this.$elm
+        .find('button[data-name="' + $input.attr('name') + '"]')
+        .addClass('is-loading');
     }
   }
 
@@ -65,9 +66,9 @@ CheckboxFilter.prototype.removeCheckbox = function(e, opts) {
 // "Clear all filters" will remove unchecked checkboxes
 CheckboxFilter.prototype.handleClearFilters = function() {
   var self = this;
-  this.$elm.find('input:checkbox:not(:checked)').each(function () {
-    self.removeCheckbox({target: this});
+  this.$elm.find('input:checkbox:not(:checked)').each(function() {
+    self.removeCheckbox({ target: this });
   });
 };
 
-module.exports = {CheckboxFilter: CheckboxFilter};
+module.exports = { CheckboxFilter: CheckboxFilter };

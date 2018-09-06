@@ -40,4 +40,4 @@ ElectionSummary.prototype.draw = function(response) {
   this.$expenditures.text(helpers.currency(response.independent_expenditures));
 };
 
-module.exports = {ElectionSummary: ElectionSummary};
+module.exports = { ElectionSummary: ElectionSummary };

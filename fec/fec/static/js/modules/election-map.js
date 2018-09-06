@@ -20,7 +20,7 @@ var defaultOpts = {
 };
 
 var boundsOverrides = {
-  200: {coords: [64.06, -152.23], zoom: 3}
+  200: { coords: [64.06, -152.23], zoom: 3 }
 };
 
 function getStatePalette(scale) {
@@ -91,7 +91,9 @@ ElectionMap.prototype.init = function() {
  * Draw state overlays
  */
 ElectionMap.prototype.drawStates = function() {
-  if (this.featureType === FEATURE_TYPES.STATES) { return; }
+  if (this.featureType === FEATURE_TYPES.STATES) {
+    return;
+  }
   this.featureType = FEATURE_TYPES.STATES;
   if (this.overlay) {
     this.map.removeLayer(this.overlay);
@@ -107,11 +109,13 @@ ElectionMap.prototype.drawStates = function() {
  * @param {array} districts - array of unique district identifiers
  */
 ElectionMap.prototype.drawDistricts = function(districts) {
-  if (this.featureType === FEATURE_TYPES.DISTRICTS && !districts) { return; }
+  if (this.featureType === FEATURE_TYPES.DISTRICTS && !districts) {
+    return;
+  }
   this.featureType = FEATURE_TYPES.DISTRICTS;
-  var features = districts ?
-    this.filterDistricts(districts) :
-    utils.districtFeatures;
+  var features = districts
+    ? this.filterDistricts(districts)
+    : utils.districtFeatures;
   if (this.overlay) {
     this.map.removeLayer(this.overlay);
   }
@@ -128,32 +132,41 @@ ElectionMap.prototype.drawDistricts = function(districts) {
  * @param {array} districts - array of unique district identifiers
  */
 ElectionMap.prototype.updateBounds = function(districts) {
-  var rule = districts && _.find(boundsOverrides, function(rule, district) {
-    return districts.indexOf(parseInt(district)) !== -1;
-  });
+  var rule =
+    districts &&
+    _.find(boundsOverrides, function(rule, district) {
+      return districts.indexOf(parseInt(district)) !== -1;
+    });
   this._viewReset = !!(rule || districts);
   if (rule) {
     this.map.setView(rule.coords, rule.zoom);
-  }
-  else if (districts) {
+  } else if (districts) {
     this.map.fitBounds(this.overlay.getBounds());
   }
 };
 
 ElectionMap.prototype.drawBackgroundDistricts = function(districts) {
-  if (!districts) { return; }
+  if (!districts) {
+    return;
+  }
   var states = _.chain(districts)
     .map(function(district) {
       return Math.floor(district / 100);
     })
     .unique()
     .value();
-  var stateDistricts = _.filter(utils.districtFeatures.features, function(feature) {
-    return states.indexOf(Math.floor(feature.id / 100)) !== -1 &&
-      districts.indexOf(feature.id) === -1;
+  var stateDistricts = _.filter(utils.districtFeatures.features, function(
+    feature
+  ) {
+    return (
+      states.indexOf(Math.floor(feature.id / 100)) !== -1 &&
+      districts.indexOf(feature.id) === -1
+    );
   });
   L.geoJson(stateDistricts, {
-    onEachFeature: _.partial(this.onEachDistrict.bind(this), _, _, {color: '#bbbbbb'})
+    onEachFeature: _.partial(this.onEachDistrict.bind(this), _, _, {
+      color: '#bbbbbb'
+    })
   }).addTo(this.overlay);
 };
 
@@ -177,7 +190,7 @@ ElectionMap.prototype.handleTileLoad = function(e) {
 
 ElectionMap.prototype.onEachState = function(feature, layer) {
   var color = this.statePalette[feature.id % this.statePalette.length];
-  layer.setStyle({color: color});
+  layer.setStyle({ color: color });
   layer.on('click', this.handleStateClick.bind(this));
 };
 
@@ -186,7 +199,7 @@ ElectionMap.prototype.onEachDistrict = function(feature, layer, opts) {
   var decoded = utils.decodeDistrict(feature.id);
   var palette = this.districtPalette[decoded.state];
   var color = palette[decoded.district % palette.length];
-  layer.setStyle({color: opts.color || color});
+  layer.setStyle({ color: opts.color || color });
   layer.on('click', this.handleDistrictClick.bind(this));
 };
 
@@ -231,5 +244,5 @@ ElectionMap.prototype.show = function() {
 };
 
 module.exports = {
-  ElectionMap: ElectionMap,
+  ElectionMap: ElectionMap
 };

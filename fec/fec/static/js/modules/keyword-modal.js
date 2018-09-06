@@ -20,17 +20,22 @@ function KeywordModal() {
   this.elm = document.querySelector('.js-keyword-modal');
   this.$elm = $(this.elm);
   this.$form = this.$elm.find('form');
-  this.$fields = this.$elm.find('#keywords-any, #keywords-all, #keywords-exact');
+  this.$fields = this.$elm.find(
+    '#keywords-any, #keywords-all, #keywords-exact'
+  );
   this.$excludeField = this.$elm.find('#keywords-none');
   this.$submit = this.$elm.find('button[type="submit"]');
   this.$submit.on('click', this.handleSubmit.bind(this));
 
   this.dialog = new A11yDialog(this.elm);
 
-  this.$elm.on('dialog:show', function() {
-    $('body').css('overflow', 'hidden');
-    this.fireEvent('Keyword modal: opened');
-  }.bind(this));
+  this.$elm.on(
+    'dialog:show',
+    function() {
+      $('body').css('overflow', 'hidden');
+      this.fireEvent('Keyword modal: opened');
+    }.bind(this)
+  );
 
   this.$elm.on('dialog:hide', function() {
     $('body').css('overflow', 'scroll');
@@ -51,7 +56,7 @@ KeywordModal.prototype.handleSubmit = function(e) {
     .addSearch('search', combinedValue);
   this.dialog.hide();
   this.fireEvent('Keyword modal query: ' + combinedValue);
-  window.location = this.$form.attr("action") + query.toString();
+  window.location = this.$form.attr('action') + query.toString();
 };
 
 /**
@@ -89,14 +94,17 @@ KeywordModal.prototype.combineFields = function() {
  * @returns {string} The various words joined together with the correct operator
  */
 KeywordModal.prototype.parseValue = function($input) {
-  var words = $input.val().replace(/"/g,'').split(' ');
+  var words = $input
+    .val()
+    .replace(/"/g, '')
+    .split(' ');
   var operator = $input.data('operator');
   if (operator === 'and') {
     return words.join(' AND ');
   } else if (operator === 'or') {
     return words.join(' OR ');
   } else if (operator === 'exact') {
-    return '"' + $input.val().replace(/"/g,'') + '"';
+    return '"' + $input.val().replace(/"/g, '') + '"';
   } else if (operator === 'exclude') {
     return '-' + words.join(' -');
   }

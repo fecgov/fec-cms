@@ -11,7 +11,7 @@ var ElectionMap = require('./election-map').ElectionMap;
  * The simpler form of the full ElectionSearch tool, used on the data landing page
  * This component has a map and the state and district selects
  * Inherits from the ElectionForm class
-*/
+ */
 
 function ElectionLookup(selector) {
   this.$elm = $(selector);
@@ -32,7 +32,9 @@ ElectionLookup.prototype = Object.create(ElectionForm.prototype);
 ElectionLookup.constructor = ElectionLookup;
 
 ElectionLookup.prototype.init = function() {
-  if (this.initialized) { return; }
+  if (this.initialized) {
+    return;
+  }
   this.$state.on('change', this.handleStateChange.bind(this));
   this.$district.on('change', this.handleDistrictChange.bind(this));
 
@@ -96,5 +98,5 @@ ElectionLookup.prototype.search = function(e) {
 };
 
 module.exports = {
-  ElectionLookup: ElectionLookup,
+  ElectionLookup: ElectionLookup
 };

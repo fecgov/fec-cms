@@ -75,24 +75,24 @@ TextFilter.prototype.handleBlur = function() {
 TextFilter.prototype.checkboxTemplate = _.template(
   '<li>' +
     '<input ' +
-      'id="{{id}}" ' +
-      'name="{{name}}" ' +
-      'value="{{value}}" ' +
-      'type="checkbox" ' +
-      'checked' +
+    'id="{{id}}" ' +
+    'name="{{name}}" ' +
+    'value="{{value}}" ' +
+    'type="checkbox" ' +
+    'checked' +
     '/>' +
     '<label for="{{id}}">"{{value}}"</label>' +
     '<button class="dropdown__remove js-remove">' +
-      '<span class="u-visually-hidden">Remove</span>' +
+    '<span class="u-visually-hidden">Remove</span>' +
     '</button>' +
-  '</li>',
-  {interpolate: /\{\{(.+?)\}\}/g}
+    '</li>',
+  { interpolate: /\{\{(.+?)\}\}/g }
 );
 
 // Remove the event handlers for adding and removing tags
 // So the filter count doesn't count double for the text filter and checkbox
-TextFilter.prototype.handleAddEvent = function(){};
-TextFilter.prototype.handleRemoveEvent = function(){};
+TextFilter.prototype.handleAddEvent = function() {};
+TextFilter.prototype.handleRemoveEvent = function() {};
 
 TextFilter.prototype.appendCheckbox = function(value) {
   if (!this.checkboxList) {
@@ -111,10 +111,12 @@ TextFilter.prototype.appendCheckbox = function(value) {
 };
 
 TextFilter.prototype.appendCheckboxList = function() {
-  var $checkboxes = $('<ul class="js-filter dropdown__selected" data-filter="checkbox" data-removable="true"></ul>');
+  var $checkboxes = $(
+    '<ul class="js-filter dropdown__selected" data-filter="checkbox" data-removable="true"></ul>'
+  );
   this.$elm.find('label').after($checkboxes);
   this.checkboxList = new CheckboxFilter($checkboxes);
   this.checkboxList.name = this.name;
 };
 
-module.exports = {TextFilter: TextFilter};
+module.exports = { TextFilter: TextFilter };
