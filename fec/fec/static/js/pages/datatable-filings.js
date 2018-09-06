@@ -11,12 +11,14 @@ var tables = require('../modules/tables');
 var TableSwitcher = require('../modules/table-switcher').TableSwitcher;
 var dropdown = require('../modules/dropdowns');
 
-var columns = columnHelpers.getColumns(
-  columns.filings,
-  [
-    'filer_name', 'document_type', 'version', 'receipt_date', 'beginning_image_number', 'modal_trigger'
-  ]
-);
+var filingsColumns = columnHelpers.getColumns(columns.filings, [
+  'filer_name',
+  'document_type',
+  'version',
+  'receipt_date',
+  'beginning_image_number',
+  'modal_trigger'
+]);
 
 $(document).ready(function() {
   var $table = $('#results');
@@ -25,7 +27,7 @@ $(document).ready(function() {
     tableSwitcher: true,
     title: 'Filings',
     path: ['filings'],
-    columns: columns,
+    columns: filingsColumns,
     rowCallback: filings.renderRow,
     order: [[3, 'desc']],
     hideColumns: '.hide-processed',
@@ -34,9 +36,9 @@ $(document).ready(function() {
     callbacks: {
       afterRender: filings.renderModal
     },
-    drawCallback: function () {
+    drawCallback: function() {
       this.dropdowns = $table.find('.dropdown').map(function(idx, elm) {
-        return new dropdown.Dropdown($(elm), {checkboxes: false});
+        return new dropdown.Dropdown($(elm), { checkboxes: false });
       });
     }
   });

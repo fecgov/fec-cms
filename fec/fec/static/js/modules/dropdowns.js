@@ -9,7 +9,7 @@ var KEYCODE_ESC = 27;
 var KEYCODE_ENTER = 13;
 
 var defaultOpts = {
-  checkboxes: true,
+  checkboxes: true
 };
 
 /**
@@ -29,12 +29,32 @@ function Dropdown(selector, opts) {
 
   if (this.opts.checkboxes) {
     this.$selected = this.$body.find('.dropdown__selected');
-    this.$panel.on('keyup', 'input[type="checkbox"]', this.handleCheckKeyup.bind(this));
-    this.$panel.on('change', 'input[type="checkbox"]', this.handleCheck.bind(this));
-    this.$panel.on('click', '.dropdown__item--selected', this.handleDropdownItemClick.bind(this));
+    this.$panel.on(
+      'keyup',
+      'input[type="checkbox"]',
+      this.handleCheckKeyup.bind(this)
+    );
+    this.$panel.on(
+      'change',
+      'input[type="checkbox"]',
+      this.handleCheck.bind(this)
+    );
+    this.$panel.on(
+      'click',
+      '.dropdown__item--selected',
+      this.handleDropdownItemClick.bind(this)
+    );
 
-    this.$selected.on('click', 'input[type="checkbox"]', this.handleSelectedInputClick.bind(this));
-    this.$selected.on('click', '.dropdown__remove', this.handleRemoveClick.bind(this));
+    this.$selected.on(
+      'click',
+      'input[type="checkbox"]',
+      this.handleSelectedInputClick.bind(this)
+    );
+    this.$selected.on(
+      'click',
+      '.dropdown__remove',
+      this.handleRemoveClick.bind(this)
+    );
 
     if (this.isEmpty()) {
       this.removePanel();
@@ -52,7 +72,7 @@ function Dropdown(selector, opts) {
 
   // Set ARIA attributes
   this.$button.attr('aria-haspopup', 'true');
-  this.$panel.attr('aria-label','More options');
+  this.$panel.attr('aria-label', 'More options');
 }
 
 Dropdown.prototype.toggle = function(e) {
@@ -65,7 +85,7 @@ Dropdown.prototype.toggle = function(e) {
 
 Dropdown.prototype.show = function() {
   this.$panel.attr('aria-hidden', 'false');
-  this.$panel.perfectScrollbar({suppressScrollX: true});
+  this.$panel.perfectScrollbar({ suppressScrollX: true });
   this.$panel.find('input[type="checkbox"]:first').focus();
   this.$button.addClass('is-active');
   this.isOpen = true;
@@ -86,8 +106,12 @@ Dropdown.prototype.handleClickAway = function(e) {
 
 Dropdown.prototype.handleFocusAway = function(e) {
   var $target = $(e.target);
-  if (this.isOpen && !this.$panel.has($target).length &&
-      !this.$panel.is($target) && !$target.is(this.$button)) {
+  if (
+    this.isOpen &&
+    !this.$panel.has($target).length &&
+    !this.$panel.is($target) &&
+    !$target.is(this.$button)
+  ) {
     this.hide();
   }
 };
@@ -103,7 +127,9 @@ Dropdown.prototype.handleKeyup = function(e) {
 
 Dropdown.prototype.handleCheckKeyup = function(e) {
   if (e.keyCode === KEYCODE_ENTER) {
-    $(e.target).prop('checked', true).change();
+    $(e.target)
+      .prop('checked', true)
+      .change();
   }
 };
 
@@ -132,7 +158,9 @@ Dropdown.prototype.handleSelectedInputClick = function(e) {
 Dropdown.prototype.handleCheckboxRemoval = function($input) {
   var $item = $input.parent();
   var $label = $input.parent().find('label');
-  var $button = this.$panel.find('button[data-label="' + $input.attr('id') +'"]');
+  var $button = this.$panel.find(
+    'button[data-label="' + $input.attr('id') + '"]'
+  );
 
   if ($button.length > 0) {
     $button.parent().append($input);
@@ -144,7 +172,9 @@ Dropdown.prototype.handleCheckboxRemoval = function($input) {
 };
 
 Dropdown.prototype.handleRemoveClick = function(e, opts) {
-  var $input = $(e.target).parent().find('input');
+  var $input = $(e.target)
+    .parent()
+    .find('input');
 
   // tag removal
   if (opts) {
@@ -158,7 +188,7 @@ Dropdown.prototype.handleRemoveClick = function(e, opts) {
 Dropdown.prototype.handleClearFilters = function() {
   var self = this;
   if (this.$selected) {
-    this.$selected.find('input:checkbox:not(:checked)').each(function () {
+    this.$selected.find('input:checkbox:not(:checked)').each(function() {
       self.handleCheckboxRemoval($(this));
     });
   }
@@ -170,21 +200,32 @@ Dropdown.prototype.selectItem = function($input) {
   var prev = $item.prevAll('.dropdown__item');
   var next = $item.nextAll('.dropdown__item');
 
-  $item.after('<li class="dropdown__item">' +
-    '<button class="dropdown__item--selected is-checked"' +
-    ' data-label="' + $label.attr('for') + '" >' +
-    $label.text() + '</button></li>');
+  $item.after(
+    '<li class="dropdown__item">' +
+      '<button class="dropdown__item--selected is-checked"' +
+      ' data-label="' +
+      $label.attr('for') +
+      '" >' +
+      $label.text() +
+      '</button></li>'
+  );
 
   this.$selected.append($item);
 
-  $item.append('<button class="dropdown__remove">' +
-    '<span class="u-visually-hidden">Remove</span></button>');
+  $item.append(
+    '<button class="dropdown__remove">' +
+      '<span class="u-visually-hidden">Remove</span></button>'
+  );
 
   if (!this.isEmpty()) {
     if (next.length) {
-      $(next[0]).find('input[type="checkbox"]').focus();
+      $(next[0])
+        .find('input[type="checkbox"]')
+        .focus();
     } else if (prev.length) {
-      $(prev[0]).find('input[type="checkbox"]').focus();
+      $(prev[0])
+        .find('input[type="checkbox"]')
+        .focus();
     }
   } else {
     this.removePanel();
@@ -205,4 +246,4 @@ Dropdown.prototype.destroy = function() {
   this.events.clear();
 };
 
-module.exports = {Dropdown: Dropdown};
+module.exports = { Dropdown: Dropdown };

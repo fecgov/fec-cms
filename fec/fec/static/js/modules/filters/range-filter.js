@@ -64,4 +64,4 @@ RangeFilter.prototype.handleKeyup = function() {
   this.$submit.removeClass('is-disabled');
 };
 
-module.exports = {RangeFilter: RangeFilter};
+module.exports = { RangeFilter: RangeFilter };

@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { EditorState, Modifier } from 'draft-js';
 import { slugify } from './utils';
 
@@ -19,16 +20,30 @@ class AnchorSource extends React.Component {
     var selectedText = currentContentBlock.getText().slice(start, end);
 
     // Uses the Draft.js API to create a new entity with the right data.
-    const contentWithEntity = content.createEntity(entityType.type, 'IMMUTABLE', {
-        anchor: slugify(selectedText),
-    });
+    const contentWithEntity = content.createEntity(
+      entityType.type,
+      'IMMUTABLE',
+      {
+        anchor: slugify(selectedText)
+      }
+    );
     const entityKey = contentWithEntity.getLastCreatedEntityKey();
 
     // Add some text for the entity to be activated on.
     const text = `${selectedText}`;
 
-    const newContent = Modifier.replaceText(content, selection, text, null, entityKey);
-    const nextState = EditorState.push(editorState, newContent, 'insert-characters');
+    const newContent = Modifier.replaceText(
+      content,
+      selection,
+      text,
+      null,
+      entityKey
+    );
+    const nextState = EditorState.push(
+      editorState,
+      newContent,
+      'insert-characters'
+    );
 
     onComplete(nextState);
   }
@@ -38,22 +53,34 @@ class AnchorSource extends React.Component {
   }
 }
 
-// This adds additional 'term' class to the editor
-// to add custom editor styles inside customize-editor.css
-const Anchor = ({children}) => (
+AnchorSource.propTypes = {
+  children: PropTypes.oneOfType([
+    PropTypes.array,
+    PropTypes.object,
+    PropTypes.func
+  ]),
+  editorState: PropTypes.oneOfType([PropTypes.object, PropTypes.func]),
+  entityType: PropTypes.oneOfType([PropTypes.object, PropTypes.func]),
+  onComplete: PropTypes.oneOfType([PropTypes.object, PropTypes.func])
+};
+
+const Anchor = ({ children }) => (
   <span
     style={{
-      fontSize: '2.4rem',
-      margin: '0 0 1em 0',
-      fontFamily: 'gandhi,serif',
-      fontSize: '2rem',
-      fontWeight: '700',
-      lineHeight: '1.2'
+      backgroundColor: '#00FFFF'
     }}
   >
     {children}
   </span>
 );
+
+Anchor.propTypes = {
+  children: PropTypes.oneOfType([
+    PropTypes.array,
+    PropTypes.object,
+    PropTypes.func
+  ])
+};
 
 module.exports = {
   type: 'ANCHOR',

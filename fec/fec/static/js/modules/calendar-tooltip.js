@@ -10,7 +10,9 @@ function CalendarTooltip(content, $container) {
   this.$container = $container;
   this.$close = this.$content.find('.js-close');
   this.$dropdown = this.$content.find('.dropdown');
-  this.exportDropdown = new dropdown.Dropdown(this.$dropdown, {checkboxes: false});
+  this.exportDropdown = new dropdown.Dropdown(this.$dropdown, {
+    checkboxes: false
+  });
 
   this.events = new listeners.Listeners();
   this.events.on(this.$close, 'click', this.close.bind(this));
@@ -21,7 +23,10 @@ function CalendarTooltip(content, $container) {
 
 CalendarTooltip.prototype.handleClickAway = function(e) {
   var $target = $(e.target);
-  if (!this.$content.has($target).length && !this.$container.has($target).length) {
+  if (
+    !this.$content.has($target).length &&
+    !this.$container.has($target).length
+  ) {
     this.close();
   }
 };
@@ -34,4 +39,4 @@ CalendarTooltip.prototype.close = function() {
   this.events.clear();
 };
 
-module.exports = {CalendarTooltip: CalendarTooltip};
+module.exports = { CalendarTooltip: CalendarTooltip };

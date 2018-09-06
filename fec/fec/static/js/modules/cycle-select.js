@@ -43,11 +43,12 @@ CycleSelect.prototype.initCyclesMulti = function(selected) {
       max: cycle,
       electionFull: false,
       cycleId: cycleId,
-      active: typeof context !== 'undefined' && context.cycles ?
-        context.cycles.indexOf(cycle) !== -1 :
-        true,
-      checked: cycle.toString() === params.cycle &&
-        params.electionFull === 'false'
+      active:
+        typeof context !== 'undefined' && context.cycles
+          ? context.cycles.indexOf(cycle) !== -1
+          : true,
+      checked:
+        cycle.toString() === params.cycle && params.electionFull === 'false'
     };
   });
   bins.unshift({
@@ -56,7 +57,7 @@ CycleSelect.prototype.initCyclesMulti = function(selected) {
     electionFull: true,
     cycleId: cycleId,
     active: true,
-    checked: true,
+    checked: true
   });
   this.$cycles.html(cyclesTemplate(bins));
   this.$cycles.on('change', this.handleChange.bind(this));
@@ -72,7 +73,7 @@ CycleSelect.prototype.initCyclesSingle = function(selected) {
   var min = selected - 1;
   var max = selected;
   this.setTimePeriod(min, max);
-  this.$cycles.html(cycleTemplate({min: min, max: max}));
+  this.$cycles.html(cycleTemplate({ min: min, max: max }));
 };
 
 CycleSelect.prototype.setTimePeriod = function(min, max) {
@@ -149,16 +150,18 @@ PathCycleSelect.prototype.getParams = function() {
 
 PathCycleSelect.prototype.nextUrl = function(cycle, electionFull) {
   var uri = URI(window.location.href);
-  var path = uri.path()
+  var path = uri
+    .path()
     .replace(/^\/|\/$/g, '')
     .split('/')
     .slice(0, -1)
     .concat([cycle])
     .join('/')
     .concat('/');
-  return uri.path(path)
-    .search({election_full: electionFull})
+  return uri
+    .path(path)
+    .search({ election_full: electionFull })
     .toString();
 };
 
-module.exports = {CycleSelect: CycleSelect};
+module.exports = { CycleSelect: CycleSelect };

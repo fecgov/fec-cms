@@ -4,7 +4,8 @@
 
 var $ = require('jquery');
 
-var LineChartCommittees = require('../modules/line-chart-committees').LineChartCommittees;
+var LineChartCommittees = require('../modules/line-chart-committees')
+  .LineChartCommittees;
 var ReactionBox = require('../modules/reaction-box').ReactionBox;
 var tabs = require('../vendor/tablist');
 
@@ -18,10 +19,17 @@ function PlotChart(selector, type, index) {
 }
 
 PlotChart.prototype.init = function() {
-  if (this.initialized) { return; }
-  new LineChartCommittees(this.selector + ' .js-chart','.js-'+this.type+'-snapshot', this.type, this.index);
+  if (this.initialized) {
+    return;
+  }
+  new LineChartCommittees(
+    this.selector + ' .js-chart',
+    '.js-' + this.type + '-snapshot',
+    this.type,
+    this.index
+  );
   this.initialized = true;
-}
+};
 
 $(document).ready(function() {
   tabs.onShow($('#raising'), function() {

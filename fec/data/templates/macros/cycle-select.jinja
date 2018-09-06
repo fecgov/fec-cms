@@ -27,27 +27,12 @@
 {% endif %}
 {% endmacro %}
 
-{% macro candidate_cycle_select(cycles, cycle=none, id='') %}
-{% set cycle = cycle | int %}
-  <div class="content__section">
-    <label for="{{id}}-cycle" class="label cycle-select__label">Election</label>
-    <select id="{{id}}-cycle" class="js-cycle" name="cycle" data-cycle-location="query" data-election-full="False">
-      {% for each in cycles | sort(reverse=True) %}
-        <option
-            value="{{ each }}"
-            {% if cycle and cycle <= each and cycle > (each - 2) %}selected{% endif %}
-          >{{ each }}</option>
-      {% endfor %}
-    </select>
-  </div>
-{% endmacro %}
-
-{% macro committee_cycle_select(cycles, cycle=none, id='') %}
+{% macro two_year_select(cycles, cycle=none, id='', election_full='') %}
 {% set cycle = cycle | int %}
   <div class="row content__section">
     <div class="cycle-select">
       <label for="{{id}}-cycle" class="label cycle-select__label">Two-year period</label>
-      <select id="{{id}}-cycle" class="js-cycle" name="cycle" data-cycle-location="query">
+      <select id="{{id}}-cycle" class="js-cycle" name="cycle" data-cycle-location="query" {% if election_full%}data-election-full="{{election_full}}"{%endif%}>
         {% for each in cycles | sort(reverse=True) %}
           <option
               value="{{ each }}"
@@ -63,15 +48,13 @@
 {% set cycle = cycle | int %}
   <div class="row content__section">
     <div class="cycle-select">
-      <label for="{{id}}-cycle" class="label cycle-select__label">Two-year period</label>
+      <label for="{{id}}-cycle" class="label cycle-select__label">Election</label>
       <select id="{{id}}-cycle" class="js-cycle" name="cycle" data-cycle-location="path">
-        {% for cycle_value in cycles | sort(reverse=True) %}
-          {% if cycle_value <= 2018 %}
-            <option
-              value="{{ cycle_value }}"
-              {% if cycle and cycle <= cycle_value and cycle > (cycle_value - 2) %}selected{% endif %}
-            >{{ cycle_value|fmt_year_range }}</option>
-          {% endif %}
+        {% for each in cycles | sort(reverse=True) %}
+          <option
+              value="{{ each }}"
+              {% if cycle and cycle <= each and cycle > (each - 2) %}selected{% endif %}
+            >{{ each }}</option>
         {% endfor %}
       </select>
     </div>

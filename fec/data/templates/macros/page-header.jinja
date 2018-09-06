@@ -15,6 +15,19 @@
         <span class="breadcrumbs__separator">&rsaquo;</span>
         Audit search
       </li>
+    {% elif 'Election United States' in title %}
+        <li class="breadcrumbs__item">
+          <span class="breadcrumbs__separator">&rsaquo;</span>
+          <a href="/data" class="breadcrumbs__link">Campaign finance data</a>
+        </li>
+        <li class="breadcrumbs__item">
+          <span class="breadcrumbs__separator">&rsaquo;</span>
+          <a href="/data/elections" class="breadcrumbs__link">Find candidates and elections by location</a>
+        </li>
+        <li class="breadcrumbs__item breadcrumbs__item--current">
+          <span class="breadcrumbs__separator">&rsaquo;</span>
+            <span>{{ links }}</span>
+        </li>
     {% else %}
       {% if title != 'Campaign finance data' %}
         <li class="breadcrumbs__item">

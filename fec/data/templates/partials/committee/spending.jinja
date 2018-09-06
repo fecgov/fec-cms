@@ -1,17 +1,20 @@
 {% import 'macros/disclaimer.jinja' as disclaimer %}
 {% import 'macros/cycle-select.jinja' as select %}
 
+{% if totals %}
+  {% if totals.0.transaction_coverage_date is not none %}
+    {% set transaction_end = totals.0.transaction_coverage_date %}
+  {% else %}
+    {% set transaction_end = totals.0.coverage_end_date %}
+  {% endif %}
+{% endif %}
+
 <section id="section-4" role="tabpanel" aria-hidden="true" aria-labelledby="section-4-heading">
   <h2 id="section-4-heading">Spending</h2>
   <div class="slab slab--inline slab--neutral u-padding--left u-padding--right">
-    {{ select.committee_cycle_select(cycles, cycle, 'disbursements')}}
+    {{ select.two_year_select(cycles, cycle, 'disbursements')}}
 
     {% if totals and committee_type not in ['C', 'E', 'I'] %}
-      {% if totals.0.transaction_coverage_date is not none %}
-        {% set transaction_end = totals.0.transaction_coverage_date %}
-      {% else %}
-        {% set transaction_end = totals.0.coverage_end_date %}
-      {% endif %}
     <div id="total-disbursements" class="entity__figure row">
       <div class="content__section">
         <div class="heading--section heading--with-action">

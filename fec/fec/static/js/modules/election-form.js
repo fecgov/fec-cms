@@ -39,7 +39,6 @@ ElectionForm.prototype.hasOption = function($select, value) {
  * If there's a zip field, it clears that.
  */
 ElectionForm.prototype.handleStateChange = function() {
-
   var state = this.$state.val();
   this.updateDistricts(state);
   if (state && this.$zip) {
@@ -58,10 +57,12 @@ ElectionForm.prototype.updateDistricts = function(state) {
   this.districts = districts[state] ? districts[state].districts : 0;
   if (this.districts) {
     this.$district
-      .html(districtTemplate({
-        districts: _.range(1, this.districts + 1),
-        senate: this.showSenateOption
-      }))
+      .html(
+        districtTemplate({
+          districts: _.range(1, this.districts + 1),
+          senate: this.showSenateOption
+        })
+      )
       .val('')
       .prop('disabled', false);
   } else if (this.showSenateOption) {
@@ -70,17 +71,18 @@ ElectionForm.prototype.updateDistricts = function(state) {
     // navigate to the house page.
     // If showSenateOption is true, we also want to show an at-large house district
     this.$district
-      .html(districtTemplate({
-        districts: null,
-        atLargeHouse: true,
-        senate: this.showSenateOption
-      }))
+      .html(
+        districtTemplate({
+          districts: null,
+          atLargeHouse: true,
+          senate: this.showSenateOption
+        })
+      )
       .val('')
       .prop('disabled', false);
   } else {
     this.$district.prop('disabled', true);
   }
-
 };
 
 /**
@@ -88,7 +90,7 @@ ElectionForm.prototype.updateDistricts = function(state) {
  * @param {object} query - the query to pass to the URL
  */
 ElectionForm.prototype.getUrl = function(query) {
-  var params = _.extend({}, {per_page: 100}, query);
+  var params = _.extend({}, { per_page: 100 }, query);
   return helpers.buildUrl(['elections', 'search'], params);
 };
 

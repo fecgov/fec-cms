@@ -3,7 +3,6 @@
 var $ = require('jquery');
 
 var tables = require('../modules/tables');
-var helpers = require('../modules/helpers');
 var columns = require('../modules/columns');
 
 var donationTemplate = require('../templates/receipts.hbs');
@@ -14,7 +13,7 @@ $(document).ready(function() {
     autoWidth: false,
     title: 'Individual contributions',
     path: ['schedules', 'schedule_a'],
-    query: {is_individual: true},
+    query: { is_individual: true },
     columns: columns.individualContributions,
     paginator: tables.SeekPaginator,
     order: [[4, 'desc']],

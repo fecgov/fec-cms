@@ -18,9 +18,9 @@ function slugify(value) {
 }
 
 function formatLabel(datum) {
-  return datum.name ?
-    datum.name + ' (' + datum.id + ')' :
-    '"' + stripQuotes(datum.id) + '"';
+  return datum.name
+    ? datum.name + ' (' + datum.id + ')'
+    : '"' + stripQuotes(datum.id) + '"';
 }
 
 function formatId(value) {
@@ -31,11 +31,10 @@ function stripQuotes(value) {
   return value.replace(/["]+/g, '');
 }
 
-
 var textDataset = {
   display: 'id',
   source: function(query, syncResults) {
-    syncResults([{id: helpers.sanitizeValue(query)}]);
+    syncResults([{ id: helpers.sanitizeValue(query) }]);
   },
   templates: {
     suggestion: function(datum) {
@@ -55,7 +54,11 @@ var FilterTypeahead = function(selector, dataset, allowText) {
   this.$selected = this.$elm.find('.dropdown__selected');
 
   this.$elm.on('change', 'input[type="text"]', this.handleChange.bind(this));
-  this.$elm.on('change', 'input[type="checkbox"]', this.handleCheckbox.bind(this));
+  this.$elm.on(
+    'change',
+    'input[type="checkbox"]',
+    this.handleCheckbox.bind(this)
+  );
   this.$elm.on('click', '.dropdown__remove', this.removeCheckbox.bind(this));
 
   this.$elm.on('mouseenter', '.tt-suggestion', this.handleHover.bind(this));
@@ -75,7 +78,7 @@ var FilterTypeahead = function(selector, dataset, allowText) {
 };
 
 FilterTypeahead.prototype.typeaheadInit = function() {
-  var opts = {minLength: 3, hint: false, highlight: true};
+  var opts = { minLength: 3, hint: false, highlight: true };
   if (this.allowText && this.dataset) {
     this.$field.typeahead(opts, textDataset, this.dataset);
   } else if (this.allowText && !this.dataset) {
@@ -125,10 +128,15 @@ FilterTypeahead.prototype.handleKeypress = function(e) {
 };
 
 FilterTypeahead.prototype.handleChange = function() {
-  if ((this.allowText && this.$field.typeahead('val').length > 1) || this.datum) {
+  if (
+    (this.allowText && this.$field.typeahead('val').length > 1) ||
+    this.datum
+  ) {
     this.enableButton();
-  } else if (this.$field.typeahead('val').length === 0 ||
-    (!this.allowText && this.$field.typeahead('val').length < 3)) {
+  } else if (
+    this.$field.typeahead('val').length === 0 ||
+    (!this.allowText && this.$field.typeahead('val').length < 3)
+  ) {
     this.datum = null;
     this.disableButton();
   }
@@ -172,7 +180,7 @@ FilterTypeahead.prototype.handleSubmit = function(e) {
   } else if (!this.datum && !this.allowText) {
     this.handleSelect(e, this.firstItem);
   } else if (this.allowText && this.$field.typeahead('val').length > 0) {
-    this.handleSelect(e, {id: this.$field.typeahead('val')});
+    this.handleSelect(e, { id: this.$field.typeahead('val') });
   }
 };
 
@@ -183,29 +191,35 @@ FilterTypeahead.prototype.clearInput = function() {
 
 FilterTypeahead.prototype.enableButton = function() {
   this.searchEnabled = true;
-  this.$button.removeClass('is-disabled').attr('tabindex', '1').attr('disabled', false);
+  this.$button
+    .removeClass('is-disabled')
+    .attr('tabindex', '1')
+    .attr('disabled', false);
 };
 
 FilterTypeahead.prototype.disableButton = function() {
   this.searchEnabled = false;
-  this.$button.addClass('is-disabled').attr('tabindex', '-1').attr('disabled', false);
+  this.$button
+    .addClass('is-disabled')
+    .attr('tabindex', '-1')
+    .attr('disabled', false);
 };
 
 FilterTypeahead.prototype.checkboxTemplate = _.template(
   '<li>' +
     '<input ' +
-      'id="{{id}}" ' +
-      'name="{{name}}" ' +
-      'value="{{value}}" ' +
-      'type="checkbox" ' +
-      'checked' +
+    'id="{{id}}" ' +
+    'name="{{name}}" ' +
+    'value="{{value}}" ' +
+    'type="checkbox" ' +
+    'checked' +
     '/>' +
     '<label for="{{id}}">{{label}}</label>' +
     '<button class="dropdown__remove">' +
-      '<span class="u-visually-hidden">Remove</span>' +
+    '<span class="u-visually-hidden">Remove</span>' +
     '</button>' +
-  '</li>',
-  {interpolate: /\{\{(.+?)\}\}/g}
+    '</li>',
+  { interpolate: /\{\{(.+?)\}\}/g }
 );
 
 FilterTypeahead.prototype.appendCheckbox = function(opts) {
@@ -266,13 +280,19 @@ FilterTypeahead.prototype.updateFilters = function(response) {
     var idKey = this.dataset.name + '_id';
     response.results.forEach(function(result) {
       var label = result.name + ' (' + result[idKey] + ')';
-      self.$elm.find('label[for="' + self.fieldName + '-' + result[idKey] + '-checkbox"]').text(label);
-      self.$elm.find('#' + self.fieldName + '-' + result[idKey] + '-checkbox').trigger('filter:renamed', [
-        {
-          key: self.fieldName + '-' + result[idKey] + '-checkbox',
-          value: label
-        }
-      ]);
+      self.$elm
+        .find(
+          'label[for="' + self.fieldName + '-' + result[idKey] + '-checkbox"]'
+        )
+        .text(label);
+      self.$elm
+        .find('#' + self.fieldName + '-' + result[idKey] + '-checkbox')
+        .trigger('filter:renamed', [
+          {
+            key: self.fieldName + '-' + result[idKey] + '-checkbox',
+            value: label
+          }
+        ]);
     });
   }
 };
@@ -285,7 +305,10 @@ FilterTypeahead.prototype.changeDataset = function(e, opts) {
     this.$field.typeahead('destroy');
     // If the value array is only individuals and not committees
     // set the dataset to empty and re-init
-    if (opts.filterValue.indexOf('individual') > -1 && opts.filterValue.indexOf('committee') < 0) {
+    if (
+      opts.filterValue.indexOf('individual') > -1 &&
+      opts.filterValue.indexOf('committee') < 0
+    ) {
       this.dataset = null;
       this.allowText = true;
       this.typeaheadInit();
@@ -297,4 +320,4 @@ FilterTypeahead.prototype.changeDataset = function(e, opts) {
   }
 };
 
-module.exports = {FilterTypeahead: FilterTypeahead};
+module.exports = { FilterTypeahead: FilterTypeahead };

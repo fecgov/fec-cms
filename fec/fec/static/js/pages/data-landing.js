@@ -30,15 +30,25 @@ function Overview(selector, type, index) {
 }
 
 Overview.prototype.init = function() {
-  if (this.initialized) { return; }
-  new LineChart(this.selector + ' .js-chart', this.selector + ' .js-snapshot', this.type, this.index);
+  if (this.initialized) {
+    return;
+  }
+  new LineChart(
+    this.selector + ' .js-chart',
+    this.selector + ' .js-snapshot',
+    this.type,
+    this.index
+  );
   this.initialized = true;
 };
 
 Overview.prototype.zeroPadTotals = function() {
-  helpers.zeroPad(this.selector + ' .js-snapshot', '.snapshot__item-number', '.figure__decimals');
+  helpers.zeroPad(
+    this.selector + ' .js-snapshot',
+    '.snapshot__item-number',
+    '.figure__decimals'
+  );
 };
-
 
 $(document).ready(function() {
   new Overview('.js-raised-overview', 'raised', 1);

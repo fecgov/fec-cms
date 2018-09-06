@@ -18,10 +18,25 @@ function trackerExists() {
 */
 function init() {
   if (!trackerExists()) {
-    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-    })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+    (function(i, s, o, g, r, a, m) {
+      i['GoogleAnalyticsObject'] = r;
+      (i[r] =
+        i[r] ||
+        function() {
+          (i[r].q = i[r].q || []).push(arguments);
+        }),
+        (i[r].l = 1 * new Date());
+      (a = s.createElement(o)), (m = s.getElementsByTagName(o)[0]);
+      a.async = 1;
+      a.src = g;
+      m.parentNode.insertBefore(a, m);
+    })(
+      window,
+      document,
+      'script',
+      'https://www.google-analytics.com/analytics.js',
+      'ga'
+    );
   }
 
   ga('create', 'UA-48605964-22', 'auto', 'notDAP');
@@ -30,10 +45,14 @@ function init() {
 }
 
 function pageView() {
-  if (typeof ga === 'undefined') { return; }
+  if (typeof ga === 'undefined') {
+    return;
+  }
   var path = document.location.pathname;
   if (document.location.search) {
-    var query = helpers.sanitizeQueryParams(URI.parseQuery(document.location.search));
+    var query = helpers.sanitizeQueryParams(
+      URI.parseQuery(document.location.search)
+    );
     path += '?' + sortQuery(query);
   }
   ga('notDAP.send', 'pageview', path);
@@ -46,9 +65,11 @@ function sortQuery(query) {
       return [pair[0], _.isArray(pair[1]) ? pair[1] : [pair[1]]];
     })
     .reduce(function(memo, pair) {
-      return memo.concat(_.map(pair[1], function(value) {
-        return [pair[0], value];
-      }));
+      return memo.concat(
+        _.map(pair[1], function(value) {
+          return [pair[0], value];
+        })
+      );
     }, [])
     .sort()
     .map(function(pair) {

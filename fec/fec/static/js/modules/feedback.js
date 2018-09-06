@@ -68,12 +68,15 @@ Feedback.prototype.submit = function(e) {
    * http://stackoverflow.com/questions/5100539/django-csrf-check-failing-with-an-ajax-post-request
    */
   $.ajaxSetup({
-     beforeSend: function(xhr, settings) {
-       if (!(/^http:.*/.test(settings.url) || /^https:.*/.test(settings.url))) {
-           // Only send the token to relative URLs i.e. locally.
-           xhr.setRequestHeader('X-CSRFToken', $('input[name="csrfmiddlewaretoken"]').val());
-       }
-     }
+    beforeSend: function(xhr, settings) {
+      if (!(/^http:.*/.test(settings.url) || /^https:.*/.test(settings.url))) {
+        // Only send the token to relative URLs i.e. locally.
+        xhr.setRequestHeader(
+          'X-CSRFToken',
+          $('input[name="csrfmiddlewaretoken"]').val()
+        );
+      }
+    }
   });
 
   e.preventDefault();
@@ -110,8 +113,10 @@ Feedback.prototype.submit = function(e) {
 Feedback.prototype.handleSuccess = function(response) {
   var message =
     '<h2 class="feedback__title">Thanks for helping us improve</h2>' +
-    '<p>This information has been reported on GitHub, where it\'s publicly visible. ' +
-    '<a href="' + response.html_url + '">Track the status of your feedback</a>.</p>';
+    "<p>This information has been reported on GitHub, where it's publicly visible. " +
+    '<a href="' +
+    response.html_url +
+    '">Track the status of your feedback</a>.</p>';
   var buttonText = 'Submit another issue';
   this.$box.find('textarea').val('');
   this.message(message, buttonText, 'success');
@@ -141,4 +146,4 @@ Feedback.prototype.reset = function() {
   this.$status.attr('aria-hidden', true);
 };
 
-module.exports = {Feedback: Feedback};
+module.exports = { Feedback: Feedback };

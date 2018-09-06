@@ -32,10 +32,12 @@ var Grid = FC.Grid;
 // Globally override event sorting to order all-day events last
 // TODO: Convince fullcalendar.io support this behavior without monkey-patching
 Grid.prototype.compareEventSegs = function(seg1, seg2) {
-  return seg1.event.allDay - seg2.event.allDay || // put all-day events last (booleans cast to 0/1)
+  return (
+    seg1.event.allDay - seg2.event.allDay || // put all-day events last (booleans cast to 0/1)
     seg1.eventStartMS - seg2.eventStartMS || // tie? earlier events go first
     seg2.eventDurationMS - seg1.eventDurationMS || // tie? longer events go first
-    FC.compareByFieldSpecs(seg1.event, seg2.event, this.view.eventOrderSpecs);
+    FC.compareByFieldSpecs(seg1.event, seg2.event, this.view.eventOrderSpecs)
+  );
 };
 
 function Calendar(opts) {
@@ -60,7 +62,11 @@ function Calendar(opts) {
 
   this.$calendar.on('click', '.js-toggle-view', this.toggleListView.bind(this));
 
-  this.$calendar.on('keypress', '.fc-event, .fc-more, .fc-close', this.simulateClick.bind(this));
+  this.$calendar.on(
+    'keypress',
+    '.fc-event, .fc-more, .fc-close',
+    this.simulateClick.bind(this)
+  );
   this.$calendar.on('click', '.fc-more', this.managePopoverControl.bind(this));
 
   this.filterPanel.$form.on('change', this.filter.bind(this));
@@ -92,7 +98,7 @@ Calendar.prototype.defaultOpts = function() {
       buttonIcons: false,
       buttonText: {
         today: 'This Month',
-        week: 'Week',
+        week: 'Week'
       },
       contentHeight: 'auto',
       dayRender: this.handleDayRender.bind(this),
@@ -117,14 +123,14 @@ Calendar.prototype.defaultOpts = function() {
           type: 'list',
           categories: true,
           sortBy: 'category',
-          duration: {months: 1, intervalUnit: 'month'}
+          duration: { months: 1, intervalUnit: 'month' }
         },
         monthTime: {
           type: 'list',
           buttonText: 'List',
           sortBy: 'time',
-          duration: {months: 1, intervalUnit: 'month'}
-        },
+          duration: { months: 1, intervalUnit: 'month' }
+        }
       }
     },
     sourceOpts: {
@@ -140,10 +146,13 @@ Calendar.prototype.filter = function() {
   if (_.isEqual(params, this.params)) {
     return;
   }
-  var url = this.url.clone().addQuery(params || {}).toString();
+  var url = this.url
+    .clone()
+    .addQuery(params || {})
+    .toString();
   urls.pushQuery(this.filterSet.serialize(), this.filterSet.fields);
   this.$calendar.fullCalendar('removeEventSource', this.sources);
-  this.sources = $.extend({}, this.opts.sourceOpts, {url: url});
+  this.sources = $.extend({}, this.opts.sourceOpts, { url: url });
   this.$calendar.fullCalendar('addEventSource', this.sources);
   this.updateLinks(params);
   this.params = params;
@@ -153,7 +162,9 @@ Calendar.prototype.success = function(response) {
   var self = this;
 
   setTimeout(function() {
-    $('.is-loading').removeClass('is-loading').addClass('is-successful');
+    $('.is-loading')
+      .removeClass('is-loading')
+      .addClass('is-successful');
   }, helpers.LOADING_DELAY);
 
   setTimeout(function() {
@@ -177,7 +188,10 @@ Calendar.prototype.success = function(response) {
     };
     _.extend(processed, {
       google: calendarHelpers.getGoogleUrl(processed),
-      download: self.exportUrl.clone().addQuery({event_id: event.event_id}).toString()
+      download: self.exportUrl
+        .clone()
+        .addQuery({ event_id: event.event_id })
+        .toString()
     });
     return processed;
   });
@@ -187,11 +201,20 @@ Calendar.prototype.updateLinks = function(params) {
   var url = this.exportUrl.clone().addQuery(params || {});
   var urls = {
     ics: url.toString(),
-    csv: url.clone().addQuery({renderer: 'csv'}).toString(),
+    csv: url
+      .clone()
+      .addQuery({ renderer: 'csv' })
+      .toString(),
     // Note: The cid parameter silently rejects https links; use http and allow
     // the backend to redirect to https
-    google: 'https://calendar.google.com/calendar/render?cid=' +
-      encodeURIComponent(url.clone().protocol('http').toString()),
+    google:
+      'https://calendar.google.com/calendar/render?cid=' +
+      encodeURIComponent(
+        url
+          .clone()
+          .protocol('http')
+          .toString()
+      ),
     calendar: url.protocol('webcal').toString()
   };
   this.$download.html(templates.download(urls));
@@ -205,18 +228,30 @@ Calendar.prototype.updateLinks = function(params) {
     this.subscribeButton.destroy();
   }
 
-  this.downloadButton = new dropdown.Dropdown(this.$download, {checkboxes: false});
-  this.subscribeButton = new dropdown.Dropdown(this.$subscribe, {checkboxes: false});
+  this.downloadButton = new dropdown.Dropdown(this.$download, {
+    checkboxes: false
+  });
+  this.subscribeButton = new dropdown.Dropdown(this.$subscribe, {
+    checkboxes: false
+  });
 };
 
 Calendar.prototype.styleButtons = function() {
   var baseClasses = 'button';
   this.$calendar.find('.fc-button').addClass(baseClasses);
   this.$calendar.find('.fc-today-button').addClass('button--alt');
-  this.$calendar.find('.fc-next-button').addClass('button--next button--standard');
-  this.$calendar.find('.fc-prev-button').addClass('button--previous button--standard');
-  this.$calendar.find('.fc-right .fc-button-group').addClass('toggles--buttons');
-  this.$calendar.find('.fc-monthTime-button').addClass('button--list button--alt');
+  this.$calendar
+    .find('.fc-next-button')
+    .addClass('button--next button--standard');
+  this.$calendar
+    .find('.fc-prev-button')
+    .addClass('button--previous button--standard');
+  this.$calendar
+    .find('.fc-right .fc-button-group')
+    .addClass('toggles--buttons');
+  this.$calendar
+    .find('.fc-monthTime-button')
+    .addClass('button--list button--alt');
   this.$calendar.find('.fc-month-button').addClass('button--grid button--alt');
 };
 
@@ -228,7 +263,9 @@ Calendar.prototype.handleRender = function(view) {
     this.$listToggles.remove();
     this.$listToggles = null;
   }
-  this.$calendar.find('.fc-more').attr({'tabindex': '0', 'aria-describedby': this.popoverId});
+  this.$calendar
+    .find('.fc-more')
+    .attr({ tabindex: '0', 'aria-describedby': this.popoverId });
   this.$head.find('.js-calendar-title').html(view.title);
 };
 
@@ -245,11 +282,14 @@ Calendar.prototype.manageListToggles = function(view) {
 };
 
 Calendar.prototype.handleEventRender = function(event, element) {
-  var eventLabel = event.title + ' ' +
+  var eventLabel =
+    event.title +
+    ' ' +
     event.start.format('dddd MMMM D, YYYY') +
-    '. Category: ' + event.category;
+    '. Category: ' +
+    event.category;
   element.attr({
-    'tabindex': '0',
+    tabindex: '0',
     'aria-describedby': this.detailsId,
     'aria-label': eventLabel
   });
@@ -261,12 +301,12 @@ Calendar.prototype.handleDayRender = function(date, cell) {
   }
 };
 
-Calendar.prototype.handleEventClick = function(calEvent, jsEvent, view) {
+Calendar.prototype.handleEventClick = function(calEvent, jsEvent) {
   var $target = $(jsEvent.target);
   if (!$target.closest('.tooltip').length) {
     var $eventContainer = $target.closest('.fc-event');
     var tooltip = new calendarTooltip.CalendarTooltip(
-      templates.details(_.extend({}, calEvent, {detailsId: this.detailsId})),
+      templates.details(_.extend({}, calEvent, { detailsId: this.detailsId })),
 
       $eventContainer
     );
@@ -285,7 +325,8 @@ Calendar.prototype.managePopoverControl = function(e) {
   var $target = $(e.target);
   var $popover = this.$calendar.find('.fc-popover');
   $popover.attr('id', this.popoverId).attr('role', 'tooltip');
-  $popover.find('.fc-close')
+  $popover
+    .find('.fc-close')
     .attr('tabindex', '0')
     .focus()
     .on('click', function() {
@@ -293,4 +334,4 @@ Calendar.prototype.managePopoverControl = function(e) {
     });
 };
 
-module.exports = {Calendar: Calendar};
+module.exports = { Calendar: Calendar };

@@ -30,15 +30,15 @@ function FilterSet(elm) {
 }
 
 var filterMap = {
-  'text': TextFilter,
-  'checkbox': CheckboxFilter,
-  'date': DateFilter,
-  'typeahead': TypeaheadFilter,
-  'election': ElectionFilter,
-  'multi': MultiFilter,
-  'select': SelectFilter,
-  'toggle': ToggleFilter,
-  'range': RangeFilter,
+  text: TextFilter,
+  checkbox: CheckboxFilter,
+  date: DateFilter,
+  typeahead: TypeaheadFilter,
+  election: ElectionFilter,
+  multi: MultiFilter,
+  select: SelectFilter,
+  toggle: ToggleFilter,
+  range: RangeFilter
 };
 
 FilterSet.prototype.buildFilter = function($elm) {
@@ -49,7 +49,9 @@ FilterSet.prototype.buildFilter = function($elm) {
 
 FilterSet.prototype.activate = function($selector) {
   var self = this;
-  var query = helpers.sanitizeQueryParams(URI.parseQuery(window.location.search));
+  var query = helpers.sanitizeQueryParams(
+    URI.parseQuery(window.location.search)
+  );
   var filters = _.chain($selector)
     .map(function(elm) {
       var filter = self.buildFilter($(elm)); // .fromQuery(query);
@@ -107,16 +109,20 @@ FilterSet.prototype.activateAll = function() {
 };
 
 FilterSet.prototype.serialize = function() {
-  return _.reduce(this.$body.find('input,select').serializeArray(), function(memo, val) {
-    if (val.value && val.name.slice(0, 1) !== '_') {
-      if (memo[val.name]) {
-        memo[val.name].push(val.value);
-      } else{
-        memo[val.name] = [val.value];
+  return _.reduce(
+    this.$body.find('input,select').serializeArray(),
+    function(memo, val) {
+      if (val.value && val.name.slice(0, 1) !== '_') {
+        if (memo[val.name]) {
+          memo[val.name].push(val.value);
+        } else {
+          memo[val.name] = [val.value];
+        }
       }
-    }
-    return memo;
-  }, {});
+      return memo;
+    },
+    {}
+  );
 };
 
 FilterSet.prototype.clear = function() {
@@ -143,7 +149,8 @@ FilterSet.prototype.handleValidation = function(e, opts) {
 FilterSet.prototype.switchFilters = function(dataType) {
   // Identify which filter group to show and which to hide
   var currentFilters = '.js-' + dataType + '-filters';
-  var otherFilters = dataType == 'efiling' ? '.js-processed-filters' : '.js-efiling-filters';
+  var otherFilters =
+    dataType == 'efiling' ? '.js-processed-filters' : '.js-efiling-filters';
 
   // Toggle visibility of filters
   this.$body.find(otherFilters).attr('aria-hidden', true);
@@ -161,10 +168,12 @@ FilterSet.prototype.switchFilters = function(dataType) {
 
 FilterSet.prototype.activateSwitchedFilters = function(dataType) {
   // Save the current query for later
-  var query = helpers.sanitizeQueryParams(URI.parseQuery(window.location.search));
+  var query = helpers.sanitizeQueryParams(
+    URI.parseQuery(window.location.search)
+  );
 
   // Set forceRemove: true to clear date filters that are usually nonremovable
-  this.$body.trigger('tag:removeAll', {forceRemove: true});
+  this.$body.trigger('tag:removeAll', { forceRemove: true });
   // Go through the current panel and set loaded-once on each input
   // So that they don't show loading indicators
   _.each(this.filters, function(filter) {
@@ -178,7 +187,8 @@ FilterSet.prototype.activateSwitchedFilters = function(dataType) {
   }
 
   // Identify which set of filters to activate and store as this.filters
-  this.filters = dataType === 'efiling' ? this.efilingFilters : this.processedFilters;
+  this.filters =
+    dataType === 'efiling' ? this.efilingFilters : this.processedFilters;
 
   _.each(this.filters, function(filter) {
     filter.fromQuery(query);
@@ -188,4 +198,4 @@ FilterSet.prototype.activateSwitchedFilters = function(dataType) {
   this.firstLoad = false;
 };
 
-module.exports = {FilterSet: FilterSet};
+module.exports = { FilterSet: FilterSet };

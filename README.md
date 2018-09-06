@@ -1,8 +1,10 @@
 **Develop**
 [![CircleCI](https://circleci.com/gh/fecgov/fec-cms.svg?style=svg)](https://circleci.com/gh/fecgov/fec-cms)
+[![Test Coverage](https://img.shields.io/codecov/c/github/fecgov/fec-cms/develop.svg)](https://codecov.io/github/fecgov/fec-cms)
 
 **Master**
 [![Known Vulnerabilities](https://snyk.io/test/github/fecgov/fec-cms/badge.svg)](https://snyk.io/test/github/fecgov/fec-cms)
+[![Test Coverage](https://img.shields.io/codecov/c/github/fecgov/fec-cms/master.svg)](https://codecov.io/github/fecgov/fec-cms)
 
 ## Campaign finance for everyone
 The Federal Election Commission (FEC) releases information to the public about
@@ -177,19 +179,20 @@ npm run test-single
 
 *Note: You may be prompted to allow `node` to accept connections; this is okay and required for the tests to run.*
 
-To run the Python tests, run these commands in the root project directory:
+To run the Python tests, run this command in the root project directory:
 
 ```bash
-cd fec/
-./manage.py test
+pytest
 ```
 
 It's necessary to specify the Postgresql URL, which can be done on the
 command line, e.g.:
 
 ```bash
-env DATABASE_URL=postgresql://:@/cfdm_cms_test ./manage.py test
+env DATABASE_URL=postgresql://:@/cfdm_cms_test pytest
 ```
+
+`pytest` is configured to report test coverage automatically.
 
 ## Enabling/toggling features
 [settings/base.py](https://github.com/fecgov/fec-cms/blob/develop/fec/fec/settings/base.py)
@@ -226,6 +229,12 @@ then run this command:
 Lastly run migrations to account for any very recent changes that are not present in the latest backup
 run this command:
 `./manage.py migrate`
+
+### Generating code.json
+
+Code.gov uses the code.json file located at fec.gov/code.json to inventory our repositories. The file is generated using [LLNL's scraper tool](https://github.com/LLNL/scraper). Follow the instructions in scraper's README file to generate a new code.json, or manually update as needed.
+
+Examples of code.json files: https://github.com/GSA/code-gov/blob/master/METADATA_EXAMPLES.md
 
 ## Deploy
 *Likely only useful for FEC team members*

@@ -1,12 +1,12 @@
 'use strict';
 
 /**
-* Party Coordinated Expenditures datatable page
-* ---------------------
-* Schedule F shows all special expenditures a national or state party committee
-* makes in connection with the general election campaigns of federal candidates.
-*
-*/
+ * Party Coordinated Expenditures datatable page
+ * ---------------------
+ * Schedule F shows all special expenditures a national or state party committee
+ * makes in connection with the general election campaigns of federal candidates.
+ *
+ */
 
 var $ = require('jquery');
 
@@ -27,7 +27,9 @@ $(document).ready(function() {
     useFilters: true,
     rowCallback: tables.modalRenderRow,
     callbacks: {
-      afterRender: tables.modalRenderFactory(partyCoordinatedExpendituresTemplate)
+      afterRender: tables.modalRenderFactory(
+        partyCoordinatedExpendituresTemplate
+      )
     }
   });
 });

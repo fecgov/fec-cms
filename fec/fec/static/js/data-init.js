@@ -31,7 +31,6 @@ var download = require('./modules/download');
 var CycleSelect = require('./modules/cycle-select').CycleSelect;
 
 $(document).ready(function() {
-
   $('.js-dropdown').each(function() {
     new dropdown.Dropdown(this);
   });
@@ -50,17 +49,20 @@ $(document).ready(function() {
   });
 
   // Initialize glossary
-  new Glossary(terms, {}, {
-    termClass: 'glossary__term accordion__button',
-    definitionClass: 'glossary__definition accordion__content'
-  });
+  new Glossary(
+    terms,
+    {},
+    {
+      termClass: 'glossary__term accordion__button',
+      definitionClass: 'glossary__definition accordion__content'
+    }
+  );
 
   // Initialize main search typeahead
   new typeahead.Typeahead('.js-search-input', 'allData', '/data/');
 
   // Initialize header typeahead
   new typeahead.Typeahead($('.js-site-search'), 'all', '/data/');
-
 
   // Initialize feedback
   new feedback.Feedback(helpers.buildAppUrl(['issue']));

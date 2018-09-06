@@ -16,7 +16,7 @@
   <link rel="stylesheet" type="text/css" href="{{ asset_for_css('elections.css') }}" />
 {% endblock %}
 {% block body %}
-  {{ header.header(crumb) }}
+  {{ header.header(title, crumb) }}
   <div class="u-padding--left u-padding--right tab-interface">
     <header class="main">
       {% if office == 'president' %}
@@ -52,6 +52,7 @@
 var context = {
   election: {
     cycle: '{{ cycle }}',
+    election_full: true,
     office: '{{ office }}',
     state: '{{ state or '' }}',
     stateFull: '{{ state_full or '' }}',

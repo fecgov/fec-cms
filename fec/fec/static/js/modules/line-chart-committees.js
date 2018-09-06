@@ -11,7 +11,9 @@ var parseM = d3.time.format('%b');
 var parseMY = d3.time.format('%b %Y');
 var parseMDY = d3.time.format('%m/%d/%Y');
 
-var bisectDate = d3.bisector(function(d) { return d.date; }).left;
+var bisectDate = d3.bisector(function(d) {
+  return d.date;
+}).left;
 
 var currentYear = new Date().getFullYear();
 var MIN_CYCLE = 2008;
@@ -36,7 +38,7 @@ function LineChartCommittees(selector, snapshot, dataType) {
   this.dataType = dataType;
   this.cycle = Number(DEFAULT_TIME_PERIOD);
   this.entityNames = ['candidate', 'party', 'pac'];
-  this.margin = {top: 10, right: 10, bottom: 35, left: 50};
+  this.margin = { top: 10, right: 10, bottom: 35, left: 50 };
   this.baseWidth = $(selector).width();
   this.baseHeight = this.baseWidth * 0.5;
   this.height = this.baseHeight - this.margin.top - this.margin.bottom;
@@ -63,10 +65,10 @@ function LineChartCommittees(selector, snapshot, dataType) {
 }
 
 LineChartCommittees.prototype.fetch = function(cycle) {
-  var entityTotalsURL = helpers.buildUrl(
-    ['totals', 'by_entity'],
-    { 'cycle': cycle, 'per_page': '100'}
-  );
+  var entityTotalsURL = helpers.buildUrl(['totals', 'by_entity'], {
+    cycle: cycle,
+    per_page: '100'
+  });
 
   $.getJSON(entityTotalsURL).done(this.handleResponse.bind(this));
 };
@@ -90,21 +92,23 @@ LineChartCommittees.prototype.groupDataByType = function(results) {
     var datum;
     var date = helpers.utcDate(item.end_date);
     // If the data is in the future, it's probably wrong, so ignore it
-    if (date > today) { return; }
+    if (date > today) {
+      return;
+    }
 
     if (dataType === 'raised') {
       datum = {
-        'date':  date,
-        'candidate': item.cumulative_candidate_receipts,
-        'pac': item.cumulative_pac_receipts,
-        'party': item.cumulative_party_receipts
+        date: date,
+        candidate: item.cumulative_candidate_receipts,
+        pac: item.cumulative_pac_receipts,
+        party: item.cumulative_party_receipts
       };
     } else {
       datum = {
-        'date': date,
-        'candidate': item.cumulative_candidate_disbursements,
-        'pac': item.cumulative_pac_disbursements,
-        'party': item.cumulative_party_disbursements
+        date: date,
+        candidate: item.cumulative_candidate_disbursements,
+        pac: item.cumulative_pac_disbursements,
+        party: item.cumulative_party_disbursements
       };
     }
     formattedData.push(datum);
@@ -113,7 +117,7 @@ LineChartCommittees.prototype.groupDataByType = function(results) {
   this.chartData = _.sortBy(formattedData, 'date');
 };
 
-LineChartCommittees.prototype.groupEntityTotals  = function() {
+LineChartCommittees.prototype.groupEntityTotals = function() {
   // Create separate arrays of data for each entity type
   // These will be used to draw the lines on the chart
   var chartData = this.chartData;
@@ -134,18 +138,23 @@ LineChartCommittees.prototype.getMaxAmount = function(entityTotals) {
   var max = 0;
 
   _.each(entityTotals, function(element) {
-      var entityMax = _.max(element, function(item) { return item.amount; });
-      max = max >= entityMax.amount ? max : entityMax.amount
+    var entityMax = _.max(element, function(item) {
+      return item.amount;
+    });
+    max = max >= entityMax.amount ? max : entityMax.amount;
   });
 
   return max;
-}
+};
 
 LineChartCommittees.prototype.setXScale = function() {
   // Set the x-scale to be from the first of the first year to the last day of the cycle
-  var x = d3.time.scale()
-    .domain([new Date('01/01/' + String(this.cycle - 1)),
-              new Date('12/31/' + String(this.cycle))])
+  var x = d3.time
+    .scale()
+    .domain([
+      new Date('01/01/' + String(this.cycle - 1)),
+      new Date('12/31/' + String(this.cycle))
+    ])
     .nice(d3.time.month)
     .range([0, this.width]);
   this.x = x;
@@ -156,20 +165,25 @@ LineChartCommittees.prototype.setYScale = function(amount) {
   // Set the y-axis from 0 to the MAX_RANGE ($4 billion)
   amount = amount || MAX_RANGE;
 
-  var y = d3.scale.linear()
-      .domain([0, Math.ceil(amount / 100000000) * 100000000])
-      .range([this.height, 0]);
+  var y = d3.scale
+    .linear()
+    .domain([0, Math.ceil(amount / 100000000) * 100000000])
+    .range([this.height, 0]);
   return y;
 };
 
 LineChartCommittees.prototype.appendSVG = function() {
   // Adds a basic SVG container with all the right dimensions
-  var svg = this.element.append('svg')
-      .attr('class', 'bar-chart')
-      .attr('width', '100%')
-      .attr('height', this.height + this.margin.top + this.margin.bottom)
+  var svg = this.element
+    .append('svg')
+    .attr('class', 'bar-chart')
+    .attr('width', '100%')
+    .attr('height', this.height + this.margin.top + this.margin.bottom)
     .append('g')
-      .attr('transform', 'translate(' + this.margin.left + ',' + this.margin.top + ')');
+    .attr(
+      'transform',
+      'translate(' + this.margin.left + ',' + this.margin.top + ')'
+    );
   return svg;
 };
 
@@ -179,59 +193,68 @@ LineChartCommittees.prototype.drawChart = function() {
   var wrap = this.wrapLabel;
   var x = this.setXScale();
   var y = this.setYScale(maxY);
-  var xAxis = d3.svg.axis()
-      .scale(x)
-      .ticks(d3.time.month)
-      .tickFormat(this.xAxisFormatter())
-      .orient('bottom');
-  var yAxis = d3.svg.axis()
-      .scale(y)
-      .orient('right')
-      .tickSize(this.width)
-      .tickFormat(function(d) {
-        return numeral(d).format('($0.0a)');
-      });
+  var xAxis = d3.svg
+    .axis()
+    .scale(x)
+    .ticks(d3.time.month)
+    .tickFormat(this.xAxisFormatter())
+    .orient('bottom');
+  var yAxis = d3.svg
+    .axis()
+    .scale(y)
+    .orient('right')
+    .tickSize(this.width)
+    .tickFormat(function(d) {
+      return numeral(d).format('($0.0a)');
+    });
 
   // Create the base SVG
   var svg = this.appendSVG();
 
   // Add the xAxis
-  svg.append('g')
-      .attr('class', 'x axis')
-      .attr('transform', 'translate(0,' + this.height + ')')
-      .call(xAxis)
-      .selectAll(".tick text")
-      .call(wrap);
+  svg
+    .append('g')
+    .attr('class', 'x axis')
+    .attr('transform', 'translate(0,' + this.height + ')')
+    .call(xAxis)
+    .selectAll('.tick text')
+    .call(wrap);
 
   // Add the yAxis
-  svg.append('g')
-      .attr('class', 'y axis')
-      .call(yAxis)
-      .selectAll('text')
-        .attr('y', -4)
-        .attr('x', -4)
-        .attr('dy', '.71em')
-        .style('text-anchor', 'end');
+  svg
+    .append('g')
+    .attr('class', 'y axis')
+    .call(yAxis)
+    .selectAll('text')
+    .attr('y', -4)
+    .attr('x', -4)
+    .attr('dy', '.71em')
+    .style('text-anchor', 'end');
 
-  var lineBuilder = d3.svg.line()
+  var lineBuilder = d3.svg
+    .line()
     .x(function(d) {
-        var myDate = new Date(parseMY(d.date));
-        return x(myDate);
-      })
-    .y(function(d) { return y(d.amount); });
+      var myDate = new Date(parseMY(d.date));
+      return x(myDate);
+    })
+    .y(function(d) {
+      return y(d.amount);
+    });
 
   // Draw a line and populate data for each entity type
   this.entityNames.forEach(function(entity) {
     var line = svg.append('g').attr('class', 'line--' + entity);
     var points = line.append('g').attr('class', 'line__points');
 
-    line.append('path')
+    line
+      .append('path')
       .datum(entityTotals[entity])
       .attr('d', lineBuilder)
       .attr('stroke-width', 2)
       .attr('fill', 'none');
 
-    points.selectAll('circle')
+    points
+      .selectAll('circle')
       .data(entityTotals[entity])
       .enter()
       .append('circle')
@@ -239,7 +262,9 @@ LineChartCommittees.prototype.drawChart = function() {
         var myDate = new Date(parseMY(d.date));
         return x(myDate);
       })
-      .attr('cy', function(d) { return y(d.amount); })
+      .attr('cy', function(d) {
+        return y(d.amount);
+      })
       .attr('r', 2);
   });
 
@@ -248,11 +273,14 @@ LineChartCommittees.prototype.drawChart = function() {
 
 LineChartCommittees.prototype.drawCursor = function(svg) {
   // Add a dotted vertical line for the cursor
-  this.cursor = svg.append('line')
+  this.cursor = svg
+    .append('line')
     .attr('class', 'cursor')
     .attr('stroke-dasharray', '5,5')
-    .attr('x1', 10).attr('x2', 10)
-    .attr('y1', 0).attr('y2', this.height - 2);
+    .attr('x1', 10)
+    .attr('x2', 10)
+    .attr('y1', 0)
+    .attr('y2', this.height - 2);
 };
 
 LineChartCommittees.prototype.xAxisFormatter = function() {
@@ -287,7 +315,7 @@ LineChartCommittees.prototype.xAxisFormatter = function() {
 LineChartCommittees.prototype.handleMouseMove = function() {
   var svg = this.element.select('svg')[0][0];
   // console.log(d3.mouse(svg)[0])
-  var x0 = this.x.invert(d3.mouse(svg)[0]-20);
+  var x0 = this.x.invert(d3.mouse(svg)[0] - 20);
   var i = bisectDate(this.chartData, x0, 1);
   var d = this.chartData[i - 1];
   this.moveCursor(d);
@@ -298,10 +326,11 @@ LineChartCommittees.prototype.moveCursor = function(datum) {
   var i = this.chartData.indexOf(target);
   var myDate = new Date(parseMY(target.date));
   this.cursor.attr('x1', this.x(myDate)).attr('x2', this.x(myDate));
-  this.nextDatum = this.chartData[i+1] || false;
-  this.prevDatum = this.chartData[i-1] || false;
+  this.nextDatum = this.chartData[i + 1] || false;
+  this.prevDatum = this.chartData[i - 1] || false;
   this.populateSnapshot(target);
-  this.element.selectAll('.line__points circle')
+  this.element
+    .selectAll('.line__points circle')
     .attr('r', 2)
     .filter(function(d) {
       return d.date === target.date;
@@ -348,7 +377,9 @@ LineChartCommittees.prototype.snapshotTotal = function(datum) {
   var total = _.chain(datum)
     .omit('date')
     .values()
-    .reduce(function(a, b) { return a + b; })
+    .reduce(function(a, b) {
+      return a + b;
+    })
     .value();
   this.$snapshot.find('[data-total-for="all"]').html(helpers.dollar(total));
 };
@@ -393,27 +424,40 @@ LineChartCommittees.prototype.wrapLabel = function(text) {
   // X axis.
   text.each(function() {
     var text = d3.select(this);
-    var words = text.text().split(/\s+/).reverse();
+    var words = text
+      .text()
+      .split(/\s+/)
+      .reverse();
     var word;
     var line = [];
     var lineNumber = 0;
-    var lineHeight = .8;
-    var y = text.attr("y");
-    var dy = parseFloat(text.attr("dy"));
-    var tspan = text.text(null).append("tspan").attr("x", 0).attr("y", y).attr("dy", dy + "em");
+    var lineHeight = 0.8;
+    var y = text.attr('y');
+    var dy = parseFloat(text.attr('dy'));
+    var tspan = text
+      .text(null)
+      .append('tspan')
+      .attr('x', 0)
+      .attr('y', y)
+      .attr('dy', dy + 'em');
 
-    while (word = words.pop()) {
+    while ((word = words.pop())) {
       line.push(word);
-      tspan.text(line.join(" "));
+      tspan.text(line.join(' '));
       if (tspan.node().getComputedTextLength() > 4) {
         line.pop();
-        tspan.text(line.join(" "));
+        tspan.text(line.join(' '));
         line = [word];
-        tspan = text.append("tspan").attr("x", 0).attr("y", y).attr("dy", ++lineNumber * lineHeight + dy + "em").text(word);
+        tspan = text
+          .append('tspan')
+          .attr('x', 0)
+          .attr('y', y)
+          .attr('dy', ++lineNumber * lineHeight + dy + 'em')
+          .text(word);
       }
     }
   });
-}
+};
 
 module.exports = {
   LineChartCommittees: LineChartCommittees

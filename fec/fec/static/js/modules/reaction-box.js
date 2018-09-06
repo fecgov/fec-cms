@@ -53,10 +53,10 @@ ReactionBox.prototype.showTextarea = function() {
   this.$step2.attr('aria-hidden', false);
 
   var labelMap = {
-    'informative': 'Great! \n What did you learn?',
-    'confusing': 'We’re sorry to hear that. What didn\'t make sense?',
+    informative: 'Great! \n What did you learn?',
+    confusing: "We’re sorry to hear that. What didn't make sense?",
     'not-interested': 'We’re sorry to hear that. What would you like to see?',
-    'none': 'How we can make this better?'
+    none: 'How we can make this better?'
   };
 
   this.$step2.find('label').text(labelMap[this.reaction]);
@@ -64,18 +64,22 @@ ReactionBox.prototype.showTextarea = function() {
 
 ReactionBox.prototype.handleSubmit = function(e) {
   $.ajaxSetup({
-     beforeSend: function(xhr, settings) {
-       if (!(/^http:.*/.test(settings.url) || /^https:.*/.test(settings.url))) {
-           // Only send the token to relative URLs i.e. locally.
-           xhr.setRequestHeader('X-CSRFToken', $('input[name="csrfmiddlewaretoken"]').val());
-       }
-     }
+    beforeSend: function(xhr, settings) {
+      if (!(/^http:.*/.test(settings.url) || /^https:.*/.test(settings.url))) {
+        // Only send the token to relative URLs i.e. locally.
+        xhr.setRequestHeader(
+          'X-CSRFToken',
+          $('input[name="csrfmiddlewaretoken"]').val()
+        );
+      }
+    }
   });
 
   e.preventDefault();
 
   var chartLocation = this.path || this.location;
-  var action = '\nChart Name: '+this.name + '\nChart Location: '+ chartLocation;
+  var action =
+    '\nChart Name: ' + this.name + '\nChart Location: ' + chartLocation;
   var about = '\nThe reaction to the chart is: ' + this.reaction;
   var feedback = '\n' + this.$textarea.val();
 
@@ -114,4 +118,3 @@ ReactionBox.prototype.handleReset = function() {
 };
 
 module.exports = { ReactionBox: ReactionBox };
-
