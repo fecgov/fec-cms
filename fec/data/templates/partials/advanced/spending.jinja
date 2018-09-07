@@ -1,8 +1,11 @@
+{% import 'macros/chart-committee-overviews.jinja' as chart %}
+{% import 'macros/reaction-box.jinja' as reaction %}
+
 <section class="row" id="spending" aria-hidden="true" role="tabpanel" >
   <h2>Spending</h2>
   <p>Spending includes all the types of <span class="term" data-term="disbursement">disbursements</span> candidates and committees make.</p>
   <h3>Search or browse data</h3>
-  <div class="content__section--ruled t-sans">
+  <div class="content__section--ruled-responsive t-sans">
     <ul>
       <li>
         <i class="icon i-magnifying-glass icon--absolute--left"></i>
@@ -91,6 +94,60 @@
             </div>
           </div>
         </div>
+      </li>
+      <li>
+      <li>
+        <section class="content__section" style="padding-top: 3rem;">
+          <div class="heading--section heading--with-action" style="border: none;padding: 0">
+            <h3 class="heading__left">Cumulative amount spent by committees</h3>
+            <div class="heading__right">
+              <ul class="list--buttons">
+                <button disabled="true" class="button button--cta button--go"  data-a11y-dialog-show="spending-modal" data-ga-event="Spending methodology modal clicked" aria-controls="spending-modal">More spending charts</button>
+              </ul>
+            </div>
+          </div>
+          <div class="content__section--ruled-responsive t-sans">
+            {{ chart.plot('spent')}}
+          </div>
+        </section>
+      </li>
+      <li>
+        <div class="content__section--indent-left">
+          <div class="js-accordion accordion--neutral" data-content-prefix="methodology_spending">
+            <button type="button" class="js-accordion-trigger accordion__button">Methodology</button>
+            <div class="accordion__content">
+              <div role="document">
+                <h6 class="t-no-rules">Methodology Overview</h4>
+                <p class="t-note">This data includes Forms 3, 3P, and 3X.</p>
+                <p><strong>Money spent</strong> includes each of the following:</p>
+                <ul class="list--bulleted">
+                  <li><em>Adjusted disbursements</em> for PACs, parties, congressional filers and presidential filers</li>
+                </ul>
+                <p><em>Adjusted disbursements</em> are total disbursements minus the following:</p>
+                <ul class="list--bulleted">
+                  <li>Contribution refunds</li>
+                  <li>Contributions to candidates and other political committees</li>
+                  <li>Loan repayments</li>
+                  <li>Nonfederal share of allocated disbursements</li>
+                  <li>Offsets to expenditures</li>
+                  <li>Other disbursements</li>
+                  <li>Transfers to other authorized committees and affiliated committees</li>
+                </ul>
+                <p>The form-by-form breakdown for adjusted disbursements is:</p>
+                <ul class="list--bulleted">
+                  <li><strong>Form 3:</strong> <em>line 22</em> - (<em>line 18</em> + <em>line 19(c)</em> + <em>line 20(d)</em> + <em>line 21</em>)</li>
+                  <li><strong>Form 3P:</strong> <em>line 30</em> - (<em>line 20(d)</em> + <em>line 24</em> + <em>line 27(c)</em> + <em>line 28(d)</em> + <em>line 29</em>)</li>
+                  <li><strong>Form 3X:</strong> <em>line 31</em> - (<em>line 21(a)(ii)</em> + <em>line 22</em> + <em>line 23</em> + <em>line 26</em> + <em>line 28(d)</em> + <em>line 29</em>)</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </li>
+      <li>
+        <section class="content__section">
+          {{ reaction.reaction_box('spent', 'advanced') }}
+        </section>
       </li>
     </ul>
   </div>

@@ -480,6 +480,9 @@ def feedback(request):
                         request.META.get('HTTP_REFERER'),
                         request.META['HTTP_USER_AGENT'])
 
+            if not settings.FEC_GITHUB_TOKEN:
+                return JsonResponse({'results': 'No Github token available.'}, status=201)
+
             client = github3.login(token=settings.FEC_GITHUB_TOKEN)
             issue = client.repository('fecgov', 'fec').create_issue(title, body=body)
 

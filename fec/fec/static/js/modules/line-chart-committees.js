@@ -21,7 +21,7 @@ var MAX_CYCLE = currentYear % 2 === 0 ? currentYear : currentYear + 1;
 var MAX_RANGE = 4000000000; // Set the max y-axis to 4 billion
 
 /**
- * Line Chart
+ * Chart Line
  * @constructor
  *
  * Creates an SVG line chart for total raising and spending
@@ -33,12 +33,12 @@ var MAX_RANGE = 4000000000; // Set the max y-axis to 4 billion
  *
  */
 
-function LineChart(selector, snapshot, dataType) {
+function LineChartCommittees(selector, snapshot, dataType) {
   this.element = d3.select(selector);
   this.dataType = dataType;
   this.cycle = Number(DEFAULT_TIME_PERIOD);
   this.entityNames = ['candidate', 'party', 'pac'];
-  this.margin = { top: 10, right: 20, bottom: 30, left: 50 };
+  this.margin = { top: 10, right: 10, bottom: 35, left: 50 };
   this.baseWidth = $(selector).width();
   this.baseHeight = this.baseWidth * 0.5;
   this.height = this.baseHeight - this.margin.top - this.margin.bottom;
@@ -64,7 +64,7 @@ function LineChart(selector, snapshot, dataType) {
   this.$next.on('click', this.goToNextMonth.bind(this));
 }
 
-LineChart.prototype.fetch = function(cycle) {
+LineChartCommittees.prototype.fetch = function(cycle) {
   var entityTotalsURL = helpers.buildUrl(['totals', 'by_entity'], {
     cycle: cycle,
     per_page: '100'
@@ -73,7 +73,7 @@ LineChart.prototype.fetch = function(cycle) {
   $.getJSON(entityTotalsURL).done(this.handleResponse.bind(this));
 };
 
-LineChart.prototype.handleResponse = function(response) {
+LineChartCommittees.prototype.handleResponse = function(response) {
   // Format the response and call all necessary methods to get the presentation right
   this.groupDataByType(response.results);
   this.drawChart();
@@ -81,7 +81,7 @@ LineChart.prototype.handleResponse = function(response) {
   this.setupSnapshot(this.cycle);
 };
 
-LineChart.prototype.groupDataByType = function(results) {
+LineChartCommittees.prototype.groupDataByType = function(results) {
   // Takes the results of the response and groups it into data for the chart
   // Stores an array of objects for each month,
   // with either raising or spending totals depending on the dataType of the chart
@@ -117,7 +117,7 @@ LineChart.prototype.groupDataByType = function(results) {
   this.chartData = _.sortBy(formattedData, 'date');
 };
 
-LineChart.prototype.groupEntityTotals = function() {
+LineChartCommittees.prototype.groupEntityTotals = function() {
   // Create separate arrays of data for each entity type
   // These will be used to draw the lines on the chart
   var chartData = this.chartData;
@@ -134,7 +134,7 @@ LineChart.prototype.groupEntityTotals = function() {
   return entityTotals;
 };
 
-LineChart.prototype.getMaxAmount = function(entityTotals) {
+LineChartCommittees.prototype.getMaxAmount = function(entityTotals) {
   var max = 0;
 
   _.each(entityTotals, function(element) {
@@ -147,7 +147,7 @@ LineChart.prototype.getMaxAmount = function(entityTotals) {
   return max;
 };
 
-LineChart.prototype.setXScale = function() {
+LineChartCommittees.prototype.setXScale = function() {
   // Set the x-scale to be from the first of the first year to the last day of the cycle
   var x = d3.time
     .scale()
@@ -161,7 +161,7 @@ LineChart.prototype.setXScale = function() {
   return x;
 };
 
-LineChart.prototype.setYScale = function(amount) {
+LineChartCommittees.prototype.setYScale = function(amount) {
   // Set the y-axis from 0 to the MAX_RANGE ($4 billion)
   amount = amount || MAX_RANGE;
 
@@ -172,7 +172,7 @@ LineChart.prototype.setYScale = function(amount) {
   return y;
 };
 
-LineChart.prototype.appendSVG = function() {
+LineChartCommittees.prototype.appendSVG = function() {
   // Adds a basic SVG container with all the right dimensions
   var svg = this.element
     .append('svg')
@@ -187,9 +187,10 @@ LineChart.prototype.appendSVG = function() {
   return svg;
 };
 
-LineChart.prototype.drawChart = function() {
+LineChartCommittees.prototype.drawChart = function() {
   var entityTotals = this.groupEntityTotals();
   var maxY = this.getMaxAmount(entityTotals);
+  var wrap = this.wrapLabel;
   var x = this.setXScale();
   var y = this.setYScale(maxY);
   var xAxis = d3.svg
@@ -215,7 +216,9 @@ LineChart.prototype.drawChart = function() {
     .append('g')
     .attr('class', 'x axis')
     .attr('transform', 'translate(0,' + this.height + ')')
-    .call(xAxis);
+    .call(xAxis)
+    .selectAll('.tick text')
+    .call(wrap);
 
   // Add the yAxis
   svg
@@ -268,7 +271,7 @@ LineChart.prototype.drawChart = function() {
   this.drawCursor(svg);
 };
 
-LineChart.prototype.drawCursor = function(svg) {
+LineChartCommittees.prototype.drawCursor = function(svg) {
   // Add a dotted vertical line for the cursor
   this.cursor = svg
     .append('line')
@@ -280,9 +283,10 @@ LineChart.prototype.drawCursor = function(svg) {
     .attr('y2', this.height - 2);
 };
 
-LineChart.prototype.xAxisFormatter = function() {
+LineChartCommittees.prototype.xAxisFormatter = function() {
   // Draw tick marks for the x-axis at different intervals depending on screen size
   var formatter;
+
   if (helpers.isMediumScreen()) {
     formatter = function(d) {
       if (d.getMonth() === 0) {
@@ -308,15 +312,16 @@ LineChart.prototype.xAxisFormatter = function() {
   return formatter;
 };
 
-LineChart.prototype.handleMouseMove = function() {
+LineChartCommittees.prototype.handleMouseMove = function() {
   var svg = this.element.select('svg')[0][0];
-  var x0 = this.x.invert(d3.mouse(svg)[0]);
+  // console.log(d3.mouse(svg)[0])
+  var x0 = this.x.invert(d3.mouse(svg)[0] - 20);
   var i = bisectDate(this.chartData, x0, 1);
   var d = this.chartData[i - 1];
   this.moveCursor(d);
 };
 
-LineChart.prototype.moveCursor = function(datum) {
+LineChartCommittees.prototype.moveCursor = function(datum) {
   var target = datum ? datum : this.getCursorStartPosition();
   var i = this.chartData.indexOf(target);
   var myDate = new Date(parseMY(target.date));
@@ -333,7 +338,7 @@ LineChart.prototype.moveCursor = function(datum) {
     .attr('r', 4);
 };
 
-LineChart.prototype.getCursorStartPosition = function() {
+LineChartCommittees.prototype.getCursorStartPosition = function() {
   // Determines whether to start the cursor at the begining or end of a time period
   // this.startCursorAtEnd is set to true by default, but when navigating
   // to next cycle, it is set to false so that the cursor starts at the beginning
@@ -344,35 +349,30 @@ LineChart.prototype.getCursorStartPosition = function() {
   }
 };
 
-LineChart.prototype.setupSnapshot = function(cycle) {
+LineChartCommittees.prototype.setupSnapshot = function(cycle) {
   // Change the header of the snapshot to show the correct dates when a new cycle is set
   var firstYear = cycle - 1;
   var firstOfCycle = new Date('01/01/' + firstYear);
   this.$snapshot.find('.js-min-date').html(parseMDY(firstOfCycle));
 };
 
-LineChart.prototype.populateSnapshot = function(datum) {
+LineChartCommittees.prototype.populateSnapshot = function(datum) {
   // Update the snapshot with the correct dates, data and decimal-padding\
   this.snapshotSubtotals(datum);
   this.snapshotTotal(datum);
   this.$snapshot.find('.js-max-date').html(parseMDY(datum.date));
-  helpers.zeroPad(
-    this.$snapshot,
-    '.snapshot__item-number',
-    '.figure__decimals'
-  );
 };
 
-LineChart.prototype.snapshotSubtotals = function(datum) {
+LineChartCommittees.prototype.snapshotSubtotals = function(datum) {
   // Update the snapshot with the values for each category
   this.$snapshot.find('[data-total-for]').each(function() {
     var category = $(this).data('total-for');
-    var value = helpers.currency(datum[category]);
+    var value = helpers.dollar(datum[category]);
     $(this).html(value);
   });
 };
 
-LineChart.prototype.snapshotTotal = function(datum) {
+LineChartCommittees.prototype.snapshotTotal = function(datum) {
   // Total all the categories and show it as the total total
   var total = _.chain(datum)
     .omit('date')
@@ -381,10 +381,10 @@ LineChart.prototype.snapshotTotal = function(datum) {
       return a + b;
     })
     .value();
-  this.$snapshot.find('[data-total-for="all"]').html(helpers.currency(total));
+  this.$snapshot.find('[data-total-for="all"]').html(helpers.dollar(total));
 };
 
-LineChart.prototype.goToNextMonth = function() {
+LineChartCommittees.prototype.goToNextMonth = function() {
   if (this.nextDatum) {
     this.moveCursor(this.nextDatum);
   } else if (this.cycle < MAX_CYCLE) {
@@ -393,7 +393,7 @@ LineChart.prototype.goToNextMonth = function() {
   }
 };
 
-LineChart.prototype.goToPreviousMonth = function() {
+LineChartCommittees.prototype.goToPreviousMonth = function() {
   if (this.prevDatum) {
     this.moveCursor(this.prevDatum);
   } else if (this.cycle > MIN_CYCLE) {
@@ -402,22 +402,63 @@ LineChart.prototype.goToPreviousMonth = function() {
   }
 };
 
-LineChart.prototype.removeSVG = function() {
+LineChartCommittees.prototype.removeSVG = function() {
   this.element.select('svg').remove();
 };
 
-LineChart.prototype.previousCycle = function() {
+LineChartCommittees.prototype.previousCycle = function() {
   this.removeSVG();
   this.cycle = this.cycle - 2;
   this.fetch(this.cycle);
 };
 
-LineChart.prototype.nextCycle = function() {
+LineChartCommittees.prototype.nextCycle = function() {
   this.removeSVG();
   this.cycle = this.cycle + 2;
   this.fetch(this.cycle);
 };
 
+LineChartCommittees.prototype.wrapLabel = function(text) {
+  // Traverses through axis labels and stacks them when length
+  // of line is over 4 spaces. Used to wrap Month Year labels on
+  // X axis.
+  text.each(function() {
+    var text = d3.select(this);
+    var words = text
+      .text()
+      .split(/\s+/)
+      .reverse();
+    var word;
+    var line = [];
+    var lineNumber = 0;
+    var lineHeight = 0.8;
+    var y = text.attr('y');
+    var dy = parseFloat(text.attr('dy'));
+    var tspan = text
+      .text(null)
+      .append('tspan')
+      .attr('x', 0)
+      .attr('y', y)
+      .attr('dy', dy + 'em');
+
+    while ((word = words.pop())) {
+      line.push(word);
+      tspan.text(line.join(' '));
+      if (tspan.node().getComputedTextLength() > 4) {
+        line.pop();
+        tspan.text(line.join(' '));
+        line = [word];
+        tspan = text
+          .append('tspan')
+          .attr('x', 0)
+          .attr('y', y)
+          .attr('dy', ++lineNumber * lineHeight + dy + 'em')
+          .text(word);
+      }
+    }
+  });
+};
+
 module.exports = {
-  LineChart: LineChart
+  LineChartCommittees: LineChartCommittees
 };
