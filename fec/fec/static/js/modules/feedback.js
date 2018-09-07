@@ -82,18 +82,20 @@ Feedback.prototype.submit = function(token) {
     })
     .object()
     .value();
-    
-  // explicitly set token as g-recaptcha-response
-  data['g-recaptcha-response'] = token;
 
-  if (!_.some(_.values(data))) {
+  // only action field is required
+  if (!data['action']) {
     var message =
       '<h2 class="feedback__title">Input required</h2>' +
-      '<p>Please fill out at least one field.</p>';
+      '<p>Please fill out the required field.</p>';
     var buttonText = 'Try again';
     this.message(message, buttonText, 'error');
+    grecaptcha.reset();
     return;
   }
+
+  // explicitly set token as g-recaptcha-response
+  data['g-recaptcha-response'] = token;
 
   var promise = $.ajax({
     method: 'POST',
