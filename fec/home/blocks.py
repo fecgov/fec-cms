@@ -135,6 +135,38 @@ class ReportingExampleCards(blocks.StructBlock):
         template = 'blocks/reporting-example-cards.html'
         icon = 'doc-empty'
 
+class CustomTableBlock(blocks.StructBlock):
+    """A custom table, works well with finacial information
+    Typicallyused for Statistical Press Release tables
+    """
+    custom_table_options = {
+    'startRows': 7,
+    'startCols': 6,
+    'colHeaders': True,
+    'rowHeaders': True,
+    'height': 108,
+    'language': 'en',
+    }
+
+    custom_table = blocks.StreamBlock([
+        ('title', blocks.CharBlock(required=False)),
+        ('table_intro', blocks.RichTextBlock(required=False)),
+        ('table', TableBlock(table_options=custom_table_options)),
+        ('footnote', blocks.CharBlock(required=False))
+    ])
+
+class ExampleImage(blocks.StructBlock):
+    """Creates an example module with an image and a caption, side-by-side
+    Typically used for showing reporting Examples
+    """
+    title = blocks.CharBlock(required=False)
+    caption = blocks.RichTextBlock(required=True)
+    image = ImageChooserBlock(required=True)
+
+    class Meta:
+        template = 'blocks/example-image.html'
+        icon = 'doc-empty'
+
 class ResourceBlock(blocks.StructBlock):
     """A section of a ResourcePage"""
     title = blocks.CharBlock(required=True)
@@ -153,9 +185,12 @@ class ResourceBlock(blocks.StructBlock):
         ('mur_search', MURSearchBlock()),
         ('audit_search', AuditSearchBlock()),
         ('table', TableBlock()),
+        ('custom_table', CustomTableBlock()),
         ('html', blocks.RawHTMLBlock()),
         ('reporting_example_cards', ReportingExampleCards()),
         ('contribution_limits_table', SnippetChooserBlock('home.EmbedTableSnippet', template = 'blocks/embed-table.html', icon='table')),
+        ('image', ImageChooserBlock()),
+        ('example_image', ExampleImage())
     ])
 
     aside = blocks.StreamBlock([
@@ -204,42 +239,12 @@ class ExampleParagraph(blocks.StructBlock):
 
 class ExampleForms(blocks.StructBlock):
     """For showing one or two example documents"""
-    title = blocks.CharBlock(required=True);
+    title = blocks.CharBlock(required=True)
     forms = blocks.ListBlock(ThumbnailBlock())
 
     class Meta:
         template = 'blocks/example-forms.html'
         icon = 'doc-empty'
-
-class ExampleImage(blocks.StructBlock):
-    """Creates an example module with an image and a caption, side-by-side
-    Typically used for showing reporting Examples
-    """
-    title = blocks.CharBlock(required=False)
-    caption = blocks.RichTextBlock(required=True)
-    image = ImageChooserBlock(required=True)
-
-    class Meta:
-        template = 'blocks/example-image.html'
-        icon = 'doc-empty'
-
-class CustomTableBlock(blocks.StructBlock):
-    """A custom table"""
-    custom_table_options = {
-    'startRows': 7,
-    'startCols': 6,
-    'colHeaders': True,
-    'rowHeaders': True,
-    'height': 108,
-    'language': 'en',
-    }
-
-    custom_table = blocks.StreamBlock([
-        ('title', blocks.CharBlock(required=False)),
-        ('table_intro', blocks.RichTextBlock(required=False)),
-        ('table', TableBlock(table_options=custom_table_options)),
-        ('footnote', blocks.CharBlock(required=False))
-    ])
 
     class Meta:
         template = 'blocks/custom_table.html'
