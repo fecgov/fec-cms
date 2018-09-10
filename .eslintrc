@@ -27,5 +27,10 @@
   },
   plugins: [
     'prettier'
-  ]
+  ],
+  "settings": {
+    "react": {
+      "version": "16",
+    }
+  }
 }

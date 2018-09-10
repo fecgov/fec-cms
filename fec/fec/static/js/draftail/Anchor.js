@@ -54,11 +54,6 @@ class AnchorSource extends React.Component {
 }
 
 AnchorSource.propTypes = {
-  children: PropTypes.oneOfType([
-    PropTypes.array,
-    PropTypes.object,
-    PropTypes.func
-  ]),
   editorState: PropTypes.oneOfType([PropTypes.object, PropTypes.func]),
   entityType: PropTypes.oneOfType([PropTypes.object, PropTypes.func]),
   onComplete: PropTypes.oneOfType([PropTypes.object, PropTypes.func])
@@ -77,8 +72,10 @@ const Anchor = ({ children }) => (
 Anchor.propTypes = {
   children: PropTypes.oneOfType([
     PropTypes.array,
+    PropTypes.element,
+    PropTypes.func,
     PropTypes.object,
-    PropTypes.func
+    PropTypes.string
   ])
 };
 

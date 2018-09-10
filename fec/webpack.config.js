@@ -111,9 +111,12 @@ module.exports = [
   },
   {
     name: 'legal',
-    entry: {'legalApp': './fec/static/js/legal/LegalApp.js'},
+    entry: {
+      'legalApp': './fec/static/js/legal/LegalApp.js',
+      'polyfills': './fec/static/js/polyfills.js'
+    },
     output: {
-      filename: 'legalApp-[hash].js',
+      filename: '[name]-[hash].js',
       path: path.resolve(__dirname, './dist/fec/static/js')
     },
     plugins: [
@@ -145,7 +148,7 @@ module.exports = [
     name: 'draftail',
     entry: {'draftail': './fec/static/js/draftail/App.js'},
     output: {
-      filename: 'draftail-[hash].js',
+      filename: '[name]-[hash].js',
       path: path.resolve(__dirname, './dist/fec/static/js')
     },
     node: {

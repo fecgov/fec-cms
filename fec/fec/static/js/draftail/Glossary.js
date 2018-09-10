@@ -120,11 +120,6 @@ class GlossarySource extends React.Component {
 }
 
 GlossarySource.propTypes = {
-  children: PropTypes.oneOfType([
-    PropTypes.array,
-    PropTypes.object,
-    PropTypes.func
-  ]),
   editorState: PropTypes.oneOfType([PropTypes.object, PropTypes.func]),
   entityType: PropTypes.oneOfType([PropTypes.object, PropTypes.func]),
   onComplete: PropTypes.oneOfType([PropTypes.object, PropTypes.func])
@@ -135,8 +130,10 @@ const Glossary = ({ children }) => <b className="term">{children}</b>;
 Glossary.propTypes = {
   children: PropTypes.oneOfType([
     PropTypes.array,
+    PropTypes.element,
+    PropTypes.func,
     PropTypes.object,
-    PropTypes.func
+    PropTypes.string
   ])
 };
 
