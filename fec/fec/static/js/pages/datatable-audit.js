@@ -16,9 +16,6 @@ var auditCategorySubcategory = require('../modules/audit-category-sub-category')
 var auditTags = require('../modules/audit_tags');
 //for sub category filter-tag and results
 
-//fixes bug but need to still refactor to match conventions in rest of app
-auditCategorySubcategory.auditCategorySubcategory();
-
 $(document).bind(
   'ready ajaxComplete',
   '#sub_category_id',
@@ -26,6 +23,7 @@ $(document).bind(
 );
 
 $(document).ready(function() {
+  auditCategorySubcategory.auditCategorySubcategory();
   auditTags();
   var $table = $('#results');
   new tables.DataTable($table, {
