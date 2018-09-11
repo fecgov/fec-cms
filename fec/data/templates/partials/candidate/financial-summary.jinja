@@ -14,12 +14,12 @@
     <ul class="list--bulleted">
       {% for committee in committee_groups['P'] | reverse %}
       <li>
-        <a class="t-sans" href="/data/committee/{{ committee.committee_id }}/?cycle={{ cycle }}">{{ committee.name }}</a>
+        <a class="t-sans" href="/data/committee/{{ committee.committee_id }}/?cycle={{ committee.related_cycle }}">{{ committee.name }}</a>
       </li>
       {% endfor %}
       {% for committee in committee_groups['A'] | reverse %}
       <li>
-        <a class="t-sans" href="/data/committee/{{ committee.committee_id }}/?cycle={{ cycle }}">{{ committee.name }}</a>
+        <a class="t-sans" href="/data/committee/{{ committee.committee_id }}/?cycle={{ committee.related_cycle }}">{{ committee.name }}</a>
       </li>
       {% endfor %}
     </ul>
@@ -30,7 +30,7 @@
         <div class="heading--section heading--with-action">
           <h3 class="heading__left">Total raised</h3>
           <a class="heading__right button--alt button--browse"
-              href="/data/receipts/?{% for committee in committee_ids %}committee_id={{ committee}}&{% endfor %}two_year_transaction_period={{ cycle }}">Browse receipts
+              href="/data/receipts/?{% for committee in committee_ids %}committee_id={{ committee}}&{% endfor %}two_year_transaction_period={{ max_cycle }}">Browse receipts
           </a>
         </div>
         <div class="tag__category u-no-margin">
@@ -42,7 +42,7 @@
         <div class="heading--section heading--with-action">
           <h3 class="heading__left">Total spent</h3>
           <a class="heading__right button--alt button--browse"
-              href="/data/disbursements/?{% for committee in committee_ids %}committee_id={{ committee}}&{% endfor %}two_year_transaction_period={{ cycle }}">Browse disbursements
+              href="/data/disbursements/?{% for committee in committee_ids %}committee_id={{ committee}}&{% endfor %}two_year_transaction_period={{ max_cycle }}">Browse disbursements
           </a>
         </div>
         <div class="tag__category u-no-margin">
