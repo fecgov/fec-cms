@@ -5,7 +5,7 @@
 <section id="section-1" role="tabpanel" aria-hidden="true" aria-labelledby="section-1-heading">
   <h2 id="section-1-heading">Financial summary</h2>
   <div class="slab slab--inline slab--neutral u-padding--left u-padding--right">
-    {{ select.two_year_select(cycles, cycle, 'summary')}}
+    {{ select.committee_cycle_select(cycles, cycle, 'summary')}}
     {% if reports and totals %}
       {% if committee_type == 'I' %}
         <div class="entity__figure">

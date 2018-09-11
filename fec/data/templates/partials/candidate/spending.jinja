@@ -7,21 +7,25 @@
 
   <div class="slab slab--inline slab--neutral u-padding--left u-padding--right">
 
-    {{ select.two_year_select(cycles, cycle, id="cycle-4", election_full="false") }}
+    {{ select.candidate_cycle_select(cycles, max_cycle, id="cycle-4") }}
 
     {% if committee_groups['P'] or committee_groups['A']%}
     <span class="t-sans t-bold">Data is included from these committees:</span>
 
     <ul class="list--bulleted">
       {% for committee in committee_groups['P'] | reverse %}
+      {% if committee.cycle == max_cycle %}
       <li>
-        <a class="t-sans" href="/data/committee/{{ committee.committee_id }}/?cycle={{ cycle }}">{{ committee.name }}</a>
+        <a class="t-sans" href="/data/committee/{{ committee.committee_id }}/?cycle={{ committee.related_cycle }}">{{ committee.name }}</a>
       </li>
+      {% endif %}
       {% endfor %}
       {% for committee in committee_groups['A'] | reverse %}
+      {% if committee.cycle == max_cycle %}
       <li>
-        <a class="t-sans" href="/data/committee/{{ committee.committee_id }}/?cycle={{ cycle }}">{{ committee.name }}</a>
+        <a class="t-sans" href="/data/committee/{{ committee.committee_id }}/?cycle={{ committee.related_cycle }}">{{ committee.name }}</a>
       </li>
+      {% endif %}
       {% endfor %}
     </ul>
     {% endif %}
@@ -38,7 +42,7 @@
         <div class="heading--section heading--with-action">
           <h3 class="heading__left">Total disbursements</h3>
             <a class="heading__right button--alt button--browse"
-              href="/data/disbursements/?two_year_transaction_period={{ cycle }}{% for id in committee_ids %}&committee_id={{ id }}{% endfor %}">Filter all disbursements</a>
+              href="/data/disbursements/?two_year_transaction_period={{ max_cycle }}{% for id in committee_ids %}&committee_id={{ id }}{% endfor %}">Filter all disbursements</a>
         </div>
 
         <div class="content__section--narrow">
@@ -63,7 +67,7 @@
         <div class="heading--section heading--with-action u-no-margin">
           <h3 class="heading__left">Disbursement transactions</h3>
           <a class="heading__right button--alt button--browse"
-              href="/data/disbursements/?two_year_transaction_period={{ cycle }}{% for id in committee_ids %}&committee_id={{ id }}{% endfor %}">Filter this data</a>
+              href="/data/disbursements/?two_year_transaction_period={{ max_cycle }}{% for id in committee_ids %}&committee_id={{ id }}{% endfor %}">Filter this data</a>
         </div>
 
         <div class="results-info results-info--simple">
@@ -81,7 +85,7 @@
             data-type="itemized-disbursements"
             data-committee-id="{% for id in committee_ids %}{{ id }}{% if not loop.last %},{% endif %}{% endfor %}"
             data-name="{{ name }}"
-            data-cycle="{{ cycle }}"
+            data-cycle="{{ max_cycle }}"
             data-duration="2"
           >
           <thead>
