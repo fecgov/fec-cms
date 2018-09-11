@@ -29,8 +29,10 @@ TableSwitcher.prototype.handleChange = function(e) {
 
 TableSwitcher.prototype.toggleMessage = function(table) {
   // Hide the visible message and show the message for the selected toggle
-  this.$control.find('.js-table-switcher-message[aria-hidden="false"]').attr('aria-hidden', true);
+  this.$control
+    .find('.js-table-switcher-message[aria-hidden="false"]')
+    .attr('aria-hidden', true);
   this.$control.find('#' + table + '-message').attr('aria-hidden', false);
 };
 
-module.exports = {TableSwitcher: TableSwitcher};
+module.exports = { TableSwitcher: TableSwitcher };

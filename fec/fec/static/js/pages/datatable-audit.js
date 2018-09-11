@@ -1,22 +1,30 @@
 'use strict';
 
 /**
-* audit datatable page
-* ---------------------
-* inital show all audit case.
-*
-*/
+ * audit datatable page
+ * ---------------------
+ * inital show all audit case.
+ *
+ */
 
 var $ = require('jquery');
 
 var tables = require('../modules/tables');
 var columns = require('../modules/columns');
-var tablePanels = require('../modules/table-panels');
-var auditCategorySubcCategory = require('../modules/audit-category-sub-category');
-var auditTags = require('../modules/audit_tags');
 
+var auditCategorySubcategory = require('../modules/audit-category-sub-category');
+var auditTags = require('../modules/audit_tags');
+//for sub category filter-tag and results
+
+$(document).bind(
+  'ready ajaxComplete',
+  '#sub_category_id',
+  auditCategorySubcategory.showSubCategory
+);
 
 $(document).ready(function() {
+  auditCategorySubcategory.auditCategorySubcategory();
+  auditTags();
   var $table = $('#results');
   new tables.DataTable($table, {
     autoWidth: false,
@@ -28,7 +36,7 @@ $(document).ready(function() {
     useExport: true,
     rowCallback: tables.modalRenderRow,
     callbacks: {
- //     afterRender: tablePanels.renderauditPanel(false)
+      //     afterRender: tablePanels.renderauditPanel(false)
     }
   });
 });

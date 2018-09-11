@@ -1,6 +1,6 @@
 'use strict';
 
-/* global Intl, BASE_PATH, API_LOCATION, API_VERSION, API_KEY */
+/* global BASE_PATH, API_LOCATION, API_VERSION, API_KEY */
 
 var URI = require('urijs');
 var $ = require('jquery');
@@ -37,7 +37,7 @@ var formatMap = {
 
 function anchorify(attr) {
   // Attach anchor <a> links to any tag with a given attribute
-  $('['+attr+']').each(function(idx, item) {
+  $('[' + attr + ']').each(function(idx, item) {
     var elt = $(item);
     var link = $('<a></a>');
     var href = '#' + elt.attr('id');
@@ -48,14 +48,14 @@ function anchorify(attr) {
   });
 }
 
-function scrollAnchor(ms){
-  ms = ms || 1000
-  if(window.location.hash) {
-    setTimeout( function(){
+function scrollAnchor(ms) {
+  ms = ms || 1000;
+  if (window.location.hash) {
+    setTimeout(function() {
       $('html, body').animate({
-        scrollTop : $(window.location.hash).offset().top
-      })
-    }, ms)
+        scrollTop: $(window.location.hash).offset().top
+      });
+    }, ms);
   }
 }
 
@@ -110,23 +110,22 @@ var numberFormatter = function(number) {
 Handlebars.registerHelper('formatNumber', numberFormatter);
 
 Handlebars.registerHelper({
-  eq: function (v1, v2) {
+  eq: function(v1, v2) {
     return v1 === v2;
   },
   toUpperCase: function(value) {
-    return value.substr(0,1).toUpperCase() + value.substr(1);
+    return value.substr(0, 1).toUpperCase() + value.substr(1);
   }
 });
 
 var globals = {
   EARMARKED_CODES: ['15E', '24I', '24T']
-}
+};
 
 Handlebars.registerHelper('isEarmarked', function(receipt_type) {
   if (globals.EARMARKED_CODES.indexOf(receipt_type) > -1) {
-     return true;
-  }
-  else {
+    return true;
+  } else {
     return false;
   }
 });
@@ -178,16 +177,18 @@ Handlebars.registerHelper('basePath', BASE_PATH);
 Handlebars.registerHelper('panelRow', function(label, options) {
   return new Handlebars.SafeString(
     '<tr>' +
-      '<td class="panel__term">' + label + '</td>' +
-      '<td class="panel__data">' + options.fn(this) + '</td>' +
-    '</tr>'
+      '<td class="panel__term">' +
+      label +
+      '</td>' +
+      '<td class="panel__data">' +
+      options.fn(this) +
+      '</td>' +
+      '</tr>'
   );
 });
 
 Handlebars.registerHelper('entityUrl', function(entity, options) {
-  var query,
-      id,
-      url;
+  var query, id, url;
   if (options.hash.query) {
     query = {
       cycle: options.hash.query.cycle || null,
@@ -224,8 +225,10 @@ Handlebars.registerHelper('convertBoolean', function(bool) {
 });
 
 Handlebars.registerHelper('format_range', function(year) {
-    var firstYear = Number(year) - 1;
-    return new Handlebars.SafeString(firstYear.toString() + '–' + year.toString());
+  var firstYear = Number(year) - 1;
+  return new Handlebars.SafeString(
+    firstYear.toString() + '–' + year.toString()
+  );
 });
 
 /**
@@ -234,7 +237,7 @@ Handlebars.registerHelper('format_range', function(year) {
 **/
 function formatCycleRange(year, duration) {
   // Year and duration is requred, if not provided return null
-  if( year == null || duration == null) {
+  if (year == null || duration == null) {
     return null;
   }
   var firstYear = Number(year) - duration + 1;
@@ -272,20 +275,20 @@ function buildAppUrl(path, query) {
 function buildUrl(path, query) {
   return URI(API_LOCATION)
     .path(Array.prototype.concat(API_VERSION, path, '').join('/'))
-    .addQuery({api_key: API_KEY})
+    .addQuery({ api_key: API_KEY })
     .addQuery(query)
     .toString();
 }
 
-function buildTableQuery(context, perPage) {
+function buildTableQuery(context) {
   var pageLength = pageLength || 0;
   var query = _.chain(context)
-  .pairs()
-  .filter(function(pair) {
-    return pair[1];
-  })
-  .object()
-  .value();
+    .pairs()
+    .filter(function(pair) {
+      return pair[1];
+    })
+    .object()
+    .value();
 
   return _.extend(query, {
     per_page: pageLength,
@@ -300,8 +303,8 @@ function getTimePeriod(electionYear, cycle, electionFull, office) {
     H: 1
   };
   var min,
-      max,
-      duration = durations[office];
+    max,
+    duration = durations[office];
 
   if (electionFull) {
     min = parseInt(electionYear) - duration;
@@ -327,30 +330,32 @@ function getTimePeriod(electionYear, cycle, electionFull, office) {
 function zeroPad(container, item, appendee) {
   // Subtract 2 so if it's close we don't go over
   var maxWidth = $(container).width() - 6;
-  $(container).find(appendee).empty();
-  $(container).find(item).each(function() {
-    var itemWidth = $(this).width();
-    // $appendee is where the period will be appended to
-    // You can pass either a child element of item or else it will be appended
-    // to item itself
-    var $appendee = appendee ? $(this).find(appendee) : $(this);
-    var value = $appendee.text();
-    while ( itemWidth < maxWidth) {
-      value = '.' + value;
-      $appendee.text(value);
-      itemWidth = $(this).width();
-    }
-  });
+  $(container)
+    .find(appendee)
+    .empty();
+  $(container)
+    .find(item)
+    .each(function() {
+      var itemWidth = $(this).width();
+      // $appendee is where the period will be appended to
+      // You can pass either a child element of item or else it will be appended
+      // to item itself
+      var $appendee = appendee ? $(this).find(appendee) : $(this);
+      var value = $appendee.text();
+      while (itemWidth < maxWidth) {
+        value = '.' + value;
+        $appendee.text(value);
+        itemWidth = $(this).width();
+      }
+    });
 }
 
 function amendmentVersion(most_recent) {
   if (most_recent === true) {
     return '<i class="icon-circle--check-outline--inline--left"></i>Current version';
-  }
-  else if (most_recent === false) {
+  } else if (most_recent === false) {
     return '<i class="icon-circle--clock-reverse--inline--left"></i>Past version';
-  }
-  else {
+  } else {
     return 'Version unknown';
   }
 }
@@ -363,7 +368,10 @@ function amendmentVersionDescription(row) {
   var amendment_num = 1;
 
   // because of messy data, do not show if not e-filing or null amendment indicator
-  if (row.means_filed !== API.means_filed_e_file || row.amendment_indicator === null) {
+  if (
+    row.means_filed !== API.means_filed_e_file ||
+    row.amendment_indicator === null
+  ) {
     return description;
   }
 
@@ -400,7 +408,6 @@ function amendmentVersionDescription(row) {
   return description;
 }
 
-
 function utcDate(dateString) {
   var originalDate = new Date(dateString);
   var date = originalDate.getUTCDate();
@@ -413,11 +420,14 @@ function missingDataReason(dataType) {
   // Returns a string explaining why data may not be showing
   // which is then used by the noData.hbs message
   var reasons = {
-    'contributions': 'The committee has not received any contributions over $200',
-    'disbursements': 'The committee has not made any disbursements',
-    'independent-expenditures': 'No independent expenditures have been made in support or opposition of this candidate',
-    'communication-costs': 'No communication costs have been made in support or opposition of this candidate',
-    'electioneering': 'No electioneering communications have been made that mention this candidate',
+    contributions: 'The committee has not received any contributions over $200',
+    disbursements: 'The committee has not made any disbursements',
+    'independent-expenditures':
+      'No independent expenditures have been made in support or opposition of this candidate',
+    'communication-costs':
+      'No communication costs have been made in support or opposition of this candidate',
+    electioneering:
+      'No electioneering communications have been made that mention this candidate',
     'ie-made': 'The committee has not made any independent expenditures'
   };
 
@@ -441,16 +451,13 @@ function isInViewport($elm) {
 // Sanitizes a single value by removing HTML tags and whitelisting valid
 // characters.
 function sanitizeValue(value) {
-  var validCharactersRegEx = /[^a-z0-9-',.()\s]/ig;
+  var validCharactersRegEx = /[^a-z0-9-',.()\s]/gi;
 
   if (value !== null && value !== undefined) {
     if (_.isArray(value)) {
       for (var i = 0; i < value.length; i++) {
         if (value[i] !== null && value[i] !== undefined) {
-          value[i] = sanitize(value[i]).replace(
-            validCharactersRegEx,
-            ''
-          );
+          value[i] = sanitize(value[i]).replace(validCharactersRegEx, '');
         }
       }
     } else {
@@ -481,7 +488,7 @@ function getCookie(name) {
     for (var i = 0; i < cookies.length; i++) {
       var cookie = $.trim(cookies[i]);
       // Does this cookie string begin with the name we want?
-      if (cookie.substring(0, name.length + 1) == (name + '=')) {
+      if (cookie.substring(0, name.length + 1) == name + '=') {
         cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
         break;
       }

@@ -12,7 +12,11 @@ function ContactForm($elm) {
   this.committeeId = $elm.find('#id_u_committee');
   this.category = $elm.find('#id_u_category');
   this.otherReason = $elm.find('#id_u_other_reason').closest('div');
-  this.typeahead = new Typeahead($elm.find('.js-contact-typeahead'), 'committees', '');
+  this.typeahead = new Typeahead(
+    $elm.find('.js-contact-typeahead'),
+    'committees',
+    ''
+  );
   this.$cancel = $elm.find('.js-cancel');
   this.initTypeahead();
   this.initOtherReason();
@@ -24,7 +28,7 @@ ContactForm.prototype.initTypeahead = function() {
   // Overriding default typeahead behavior
   // This will set the value of a hidden input when selecting a value from typeahead
   var self = this;
-  this.typeahead.$element.css({'height': 'auto'});
+  this.typeahead.$element.css({ height: 'auto' });
   this.typeahead.$input.off('typeahead:select');
   this.typeahead.$input.on('typeahead:select', function(e, opts) {
     self.committeeId.val(opts.id);
@@ -70,20 +74,20 @@ function AnalystLookup($elm) {
 
 AnalystLookup.prototype.initTypeahead = function() {
   // Overriding default typeahead behavior
-  this.typeahead.$element.css({'height': 'auto'});
+  this.typeahead.$element.css({ height: 'auto' });
   this.typeahead.$input.off('typeahead:select');
   this.typeahead.$input.on('typeahead:select', this.fetchAnalyst.bind(this));
 };
 
 AnalystLookup.prototype.fetchAnalyst = function(e, opts) {
   var url = URI(window.API_LOCATION)
-      .path(Array.prototype.concat(window.API_VERSION, 'rad-analyst').join('/'))
-      .addQuery({
-        api_key: window.API_KEY,
-        per_page: 1,
-        committee_id: opts.id
-      })
-      .toString();
+    .path(Array.prototype.concat(window.API_VERSION, 'rad-analyst').join('/'))
+    .addQuery({
+      api_key: window.API_KEY,
+      per_page: 1,
+      committee_id: opts.id
+    })
+    .toString();
 
   $.getJSON(url).done(this.showAnalyst.bind(this));
 };
@@ -91,11 +95,12 @@ AnalystLookup.prototype.fetchAnalyst = function(e, opts) {
 AnalystLookup.prototype.showAnalyst = function(response) {
   var hasResults = response.results.length > 0;
   if (hasResults) {
-    var name = response.results[0].first_name + ' ' + response.results[0].last_name;
+    var name =
+      response.results[0].first_name + ' ' + response.results[0].last_name;
     var ext = response.results[0].telephone_ext;
     this.$name.html(name);
     this.$ext.html(ext);
-  } 
+  }
   this.$analystContainer.attr('aria-hidden', 'false');
   this.$prompt.attr('aria-hidden', 'true');
   this.$analystDetails.attr('aria-hidden', !hasResults);

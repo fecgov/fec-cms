@@ -5,15 +5,20 @@
 var _ = require('underscore');
 
 function byField(values, key) {
-  var getter = typeof key === 'function' ?
-    key :
-    function(val) {
-      return val[key];
-    };
-  return _.reduce(values, function(acc, val) {
-    acc[getter(val)] = val;
-    return acc;
-  }, {});
+  var getter =
+    typeof key === 'function'
+      ? key
+      : function(val) {
+          return val[key];
+        };
+  return _.reduce(
+    values,
+    function(acc, val) {
+      acc[getter(val)] = val;
+      return acc;
+    },
+    {}
+  );
 }
 
 var fips = _.each(require('../data/state.json'), function(row) {

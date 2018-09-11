@@ -1,12 +1,12 @@
 'use strict';
 
 /**
-* Loans datatable page
-* ---------------------
-* Schedule C shows loans to
-* the committee that are required to be disclosed.
-*
-*/
+ * Loans datatable page
+ * ---------------------
+ * Schedule C shows loans to
+ * the committee that are required to be disclosed.
+ *
+ */
 
 var $ = require('jquery');
 
@@ -20,7 +20,7 @@ $(document).ready(function() {
   new tables.DataTable($table, {
     autoWidth: false,
     title: 'Loans',
-    path: ['schedules','schedule_c'],
+    path: ['schedules', 'schedule_c'],
     columns: columns.loans,
     order: [[2, 'desc']],
     useFilters: true,

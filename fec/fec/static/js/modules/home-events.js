@@ -25,11 +25,11 @@ var updates = {
 // Home Page: Events and deadlines
 function HomepageEvents() {
   $.each(updates, function(eventClass, eventCategories) {
-    var url = calendarHelpers.getUrl('calendar-dates',
-      { 'sort': 'start_date',
-        'min_start_date': todaysDate,
-        'calendar_category_id': eventCategories
-      });
+    var url = calendarHelpers.getUrl('calendar-dates', {
+      sort: 'start_date',
+      min_start_date: todaysDate,
+      calendar_category_id: eventCategories
+    });
 
     $.getJSON(url).done(function(events) {
       var event = events.results[0];
@@ -37,16 +37,17 @@ function HomepageEvents() {
 
       if (typeof event !== 'undefined') {
         startDate = moment(event.start_date).format('MMMM D');
-      }
-      else {
+      } else {
         event = '';
       }
 
-      $(eventClass).html(eventsTemplate({
-        startDate: startDate,
-        url: event.url,
-        summary: event.summary
-      }));
+      $(eventClass).html(
+        eventsTemplate({
+          startDate: startDate,
+          url: event.url,
+          summary: event.summary
+        })
+      );
     });
   });
 }

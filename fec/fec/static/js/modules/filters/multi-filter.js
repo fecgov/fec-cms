@@ -19,13 +19,15 @@ MultiFilter.constructor = MultiFilter;
 MultiFilter.prototype.activateSubfilters = function() {
   var subfilters = [];
   // Activate each sub-filter and add it to an array
-  this.$elm.find('.js-sub-filter[data-name="' + this.name + '"]').each(function() {
-    var subfilter = new CheckboxFilter(this);
-    // Explicitly assign filterLabel, which will show the count
-    // Necessary because each subfilter may be part of a different accordion
-    subfilter.$filterLabel = $('#' + subfilter.$elm.data('filter-label'));
-    subfilters.push(subfilter);
-  });
+  this.$elm
+    .find('.js-sub-filter[data-name="' + this.name + '"]')
+    .each(function() {
+      var subfilter = new CheckboxFilter(this);
+      // Explicitly assign filterLabel, which will show the count
+      // Necessary because each subfilter may be part of a different accordion
+      subfilter.$filterLabel = $('#' + subfilter.$elm.data('filter-label'));
+      subfilters.push(subfilter);
+    });
 
   return subfilters;
 };

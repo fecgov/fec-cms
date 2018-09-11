@@ -35,7 +35,7 @@ TOC.prototype.addWatchers = function() {
 
   return this.sections.map(function(idx, section) {
     var elm = document.querySelector(section);
-    var watcher = scrollMonitor.create(elm, {top: self.offset});
+    var watcher = scrollMonitor.create(elm, { top: self.offset });
     watcher.$menuItem = self.$menu.find('a[href="' + section + '"]');
     watcher.enterViewport(function() {
       self.highlightActiveItem(this);

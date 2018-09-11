@@ -24,9 +24,15 @@ function TopEntities(elm, type) {
   this.init();
 
   $('.js-cycle').on('change', this.handleCycleChange.bind(this));
-  this.$elm.find('.js-category').on('change', this.handleCategoryChange.bind(this));
-  this.$elm.find('.js-previous').on('click', this.handlePagination.bind(this, 'previous'));
-  this.$elm.find('.js-next').on('click', this.handlePagination.bind(this, 'next'));
+  this.$elm
+    .find('.js-category')
+    .on('change', this.handleCategoryChange.bind(this));
+  this.$elm
+    .find('.js-previous')
+    .on('click', this.handlePagination.bind(this, 'previous'));
+  this.$elm
+    .find('.js-next')
+    .on('click', this.handlePagination.bind(this, 'next'));
 }
 
 TopEntities.prototype.init = function() {
@@ -41,7 +47,12 @@ TopEntities.prototype.init = function() {
     sort_hide_null: true,
     cycle: this.cycle
   };
-  this.maxValue = Number(this.$table.find('.value-bar').first().data('value'));
+  this.maxValue = Number(
+    this.$table
+      .find('.value-bar')
+      .first()
+      .data('value')
+  );
 
   // Store the current query for use in pagination and more
   this.currentQuery = this.baseQuery;
@@ -64,7 +75,7 @@ TopEntities.prototype.handleCycleChange = function(e) {
   e.preventDefault();
   this.cycle = e.target.value;
   if (this.category === 'candidates') {
-      this.currentQuery = _.extend({}, this.baseQuery, {
+    this.currentQuery = _.extend({}, this.baseQuery, {
       cycle: this.cycle,
       office: this.office,
       page: 1
@@ -91,7 +102,7 @@ TopEntities.prototype.handleCategoryChange = function(e) {
       cycle: this.cycle,
       page: 1
     });
-   } else {
+  } else {
     this.basePath = ['totals', category];
     this.category = category;
     this.currentQuery = _.extend({}, this.baseQuery, {
@@ -103,7 +114,9 @@ TopEntities.prototype.handleCategoryChange = function(e) {
 };
 
 TopEntities.prototype.handlePagination = function(direction, e) {
-  if ($(e.target).hasClass('is-disabled')) { return; }
+  if ($(e.target).hasClass('is-disabled')) {
+    return;
+  }
   var currentPage = this.currentQuery.page || 1;
   if (direction === 'next') {
     this.currentQuery.page = currentPage + 1;
@@ -116,9 +129,7 @@ TopEntities.prototype.handlePagination = function(direction, e) {
 
 TopEntities.prototype.loadData = function(query) {
   var self = this;
-  $.getJSON(
-    helpers.buildUrl(this.basePath, query)
-  ).done(function(response) {
+  $.getJSON(helpers.buildUrl(this.basePath, query)).done(function(response) {
     self.populateTable(response);
   });
 };
@@ -176,7 +187,7 @@ TopEntities.prototype.formatData = function(result, rank) {
 
 TopEntities.prototype.drawBars = function() {
   var maxValue = this.maxValue;
-  this.$table.find('.value-bar').each(function(){
+  this.$table.find('.value-bar').each(function() {
     var width = Number(this.getAttribute('data-value')) / maxValue;
     this.style.width = String(width * 100) + '%';
   });
@@ -185,31 +196,34 @@ TopEntities.prototype.drawBars = function() {
 TopEntities.prototype.updateDates = function() {
   var today = new Date();
   var startDate = '01/01/' + String(this.cycle - 1);
-  var endDate = this.cycle !== today.getFullYear() ? '12/31/' + this.cycle : moment(today).format('MM/DD/YYYY');
+  var endDate =
+    this.cycle !== today.getFullYear()
+      ? '12/31/' + this.cycle
+      : moment(today).format('MM/DD/YYYY');
   this.$dates.html(startDate + '–' + endDate);
 };
 
 TopEntities.prototype.updatePagination = function(pagination) {
-    var page = pagination.page;
-    var per_page = pagination.per_page;
-    var count = pagination.count.toLocaleString();
-    var range_start = String(per_page * (page - 1) + 1);
-    var range_end = String((page - 1) * 10 + per_page);
-    var info = range_start + '-' + range_end + ' of ' + count;
+  var page = pagination.page;
+  var per_page = pagination.per_page;
+  var count = pagination.count.toLocaleString();
+  var range_start = String(per_page * (page - 1) + 1);
+  var range_end = String((page - 1) * 10 + per_page);
+  var info = range_start + '-' + range_end + ' of ' + count;
 
-    if (page === pagination.pages) {
-      this.$next.addClass('is-disabled');
-    } else {
-      this.$next.removeClass('is-disabled');
-    }
+  if (page === pagination.pages) {
+    this.$next.addClass('is-disabled');
+  } else {
+    this.$next.removeClass('is-disabled');
+  }
 
-    if (page === 1) {
-      this.$previous.addClass('is-disabled');
-    } else {
-      this.$previous.removeClass('is-disabled');
-    }
+  if (page === 1) {
+    this.$previous.addClass('is-disabled');
+  } else {
+    this.$previous.removeClass('is-disabled');
+  }
 
-    this.$pageInfo.html(info);
+  this.$pageInfo.html(info);
 };
 
-module.exports = {TopEntities: TopEntities};
+module.exports = { TopEntities: TopEntities };

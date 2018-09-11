@@ -1023,14 +1023,14 @@ class MeetingPage(Page):
 
     agenda = StreamField([
         ('agenda_item', blocks.StructBlock([
-            ('item_title', blocks.TextBlock()),
+            ('item_title', blocks.TextBlock(required=True)),
             ('item_text', blocks.RichTextBlock(required=False)),
             ('item_audio', DocumentChooserBlock(required=False)),
             ('item_video', blocks.URLBlock(required=False, help_text='Add a Youtube URL to a specific\
                 time in a video for this agenda item')),
 
         ]))
-    ])
+    ], blank=True, null=True)
 
     content_panels = Page.content_panels + [
         FieldPanel('additional_information'),

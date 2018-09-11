@@ -53,10 +53,10 @@ ReactionBox.prototype.showTextarea = function() {
   this.$step2.attr('aria-hidden', false);
 
   var labelMap = {
-    'informative': 'Great! \n What did you learn?',
-    'confusing': 'We’re sorry to hear that. What didn\'t make sense?',
+    informative: 'Great! \n What did you learn?',
+    confusing: "We’re sorry to hear that. What didn't make sense?",
     'not-interested': 'We’re sorry to hear that. What would you like to see?',
-    'none': 'How we can make this better?'
+    none: 'How we can make this better?'
   };
 
   this.$step2.find('label').text(labelMap[this.reaction]);
@@ -100,4 +100,3 @@ ReactionBox.prototype.handleReset = function() {
 };
 
 module.exports = { ReactionBox: ReactionBox };
-

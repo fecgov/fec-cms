@@ -9,7 +9,11 @@ var helpers = require('./helpers');
 function updateQuery(params, fields) {
   var queryString = nextUrl(params, fields);
   if (queryString !== null) {
-    window.history.replaceState(params, queryString, queryString || window.location.pathname);
+    window.history.replaceState(
+      params,
+      queryString,
+      queryString || window.location.pathname
+    );
     analytics.pageView();
   }
 }
@@ -17,20 +21,28 @@ function updateQuery(params, fields) {
 function pushQuery(params, fields) {
   var queryString = nextUrl(params, fields);
   if (queryString !== null) {
-    window.history.pushState(params, queryString, queryString || window.location.pathname);
+    window.history.pushState(
+      params,
+      queryString,
+      queryString || window.location.pathname
+    );
     analytics.pageView();
   }
 }
 
 function nextUrl(params, fields) {
-  var query = helpers.sanitizeQueryParams(URI.parseQuery(window.location.search));
+  var query = helpers.sanitizeQueryParams(
+    URI.parseQuery(window.location.search)
+  );
   if (!compareQuery(query, params, fields)) {
     // Clear and update filter fields
     _.each(fields, function(field) {
       delete query[field];
     });
     params = _.extend(query, params);
-    return URI('').query(params).toString();
+    return URI('')
+      .query(params)
+      .toString();
   } else {
     return null;
   }
