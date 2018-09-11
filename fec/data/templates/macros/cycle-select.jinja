@@ -27,12 +27,27 @@
 {% endif %}
 {% endmacro %}
 
-{% macro two_year_select(cycles, cycle=none, id='', election_full='') %}
+{% macro candidate_cycle_select(cycles, cycle=none, id='') %}
+{% set cycle = cycle | int %}
+  <div class="content__section">
+    <label for="{{id}}-cycle" class="label cycle-select__label">Election</label>
+    <select id="{{id}}-cycle" class="js-cycle" name="cycle" data-cycle-location="query" data-election-full="False">
+      {% for each in cycles | sort(reverse=True) %}
+        <option
+            value="{{ each }}"
+            {% if cycle and cycle <= each and cycle > (each - 2) %}selected{% endif %}
+          >{{ each }}</option>
+      {% endfor %}
+    </select>
+  </div>
+{% endmacro %}
+
+{% macro committee_cycle_select(cycles, cycle=none, id='') %}
 {% set cycle = cycle | int %}
   <div class="row content__section">
     <div class="cycle-select">
       <label for="{{id}}-cycle" class="label cycle-select__label">Two-year period</label>
-      <select id="{{id}}-cycle" class="js-cycle" name="cycle" data-cycle-location="query" {% if election_full%}data-election-full="{{election_full}}"{%endif%}>
+      <select id="{{id}}-cycle" class="js-cycle" name="cycle" data-cycle-location="query">
         {% for each in cycles | sort(reverse=True) %}
           <option
               value="{{ each }}"
