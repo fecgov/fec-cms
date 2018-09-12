@@ -874,8 +874,7 @@ class ResourcePage(Page):
         ('related_pages', blocks.ListBlock(blocks.PageChooserBlock()))
     ], null=True, blank=True)
     sections = StreamField([
-        ('sections', ResourceBlock()),
-        ('image', ImageChooserBlock())
+        ('sections', ResourceBlock())
     ], null=True, blank=True)
     citations = StreamField([
         ('citations', blocks.ListBlock(CitationsBlock()))
