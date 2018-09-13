@@ -3,6 +3,7 @@
 {% import 'macros/filters/text.jinja' as text %}
 {% import 'macros/filters/typeahead-filter.jinja' as typeahead %}
 {% import 'macros/filters/states.jinja' as states %}
+{% import 'macros/filters/office-sought.jinja' as office %}
 {% import 'macros/filters/years.jinja' as years %}
 {% import 'macros/filters/date.jinja' as date %}
 {% import 'macros/filters/checkbox.jinja' as checkbox %}
@@ -29,8 +30,8 @@ Filter reports
     {{ typeahead.field('committee_id', 'Committee name or ID', '') }}
     {{ typeahead.field('candidate_id', 'Candidate name or ID', '', dataset='candidates') }}
     {{ states.field('state') }}
-    {% include 'partials/filters/office-sought.jinja' %}
     {% include 'partials/filters/parties.jinja' %}
+    {{ office.checkbox() }}
   </div>
 
   <button type="button" class="js-accordion-trigger accordion__button">Filing date</button>
