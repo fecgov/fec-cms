@@ -3,6 +3,7 @@
 {% import 'macros/filters/office-sought.jinja' as office %}
 {% import 'macros/filters/parties.jinja' as parties %}
 {% import 'macros/filters/states.jinja' as states %}
+{% import 'macros/filters/districts.jinja' as districts %}
 {% import 'macros/filters/typeahead-filter.jinja' as typeahead %}
 {% import 'macros/filters/years.jinja' as years %}
 {% import 'macros/filters/date.jinja' as date %}
@@ -15,7 +16,7 @@
   {{ office.checkbox() }}
   {{ parties.checkbox() }}
   {{ states.field('state') }}
-  {% include 'partials/filters/districts.jinja' %}
+  {{ districts.dropdown() }}
 
   {{ date.field('first_file_date', 'Date first filed statement of candidacy', '') }}
   <div class="filter">

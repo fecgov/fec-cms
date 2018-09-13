@@ -3,6 +3,7 @@
 {% import 'macros/filters/text.jinja' as text %}
 {% import 'macros/filters/parties.jinja' as parties %}
 {% import 'macros/filters/states.jinja' as states %}
+{% import 'macros/filters/districts.jinja' as districts %}
 {% import 'macros/filters/typeahead-filter.jinja' as typeahead %}
 {% import 'macros/filters/election-filter.jinja' as election_filter %}
 {% import 'macros/filters/range.jinja' as range_filter %}
@@ -26,7 +27,7 @@
       {{ states.field('state') }}
     {% endif %}
     {% if table_context['office'] == 'house' %}
-      {% include 'partials/filters/districts.jinja' %}
+      {{ districts.dropdown() }}
     {% endif %}
   </div>
   <button type="button" class="js-accordion-trigger accordion__button">Candidate financials</button>
