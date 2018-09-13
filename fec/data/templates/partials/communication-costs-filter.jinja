@@ -6,7 +6,7 @@
 {% import 'macros/filters/date.jinja' as date %}
 {% import 'macros/filters/years.jinja' as years %}
 {% import 'macros/filters/range.jinja' as range %}
-{% import 'macros/filters/misc.jinja' as misc %}
+{% import 'macros/filters/support-oppose.jinja' as support_oppose %}
 
 {% block heading %}
 Filter communication costs
@@ -21,7 +21,7 @@ Filter communication costs
   <button type="button" class="js-accordion-trigger accordion__button">Candidate mentioned</button>
   <div class="accordion__content">
     {{ typeahead.field('candidate_id', 'Candidate name or ID', dataset='candidates') }}
-    {{ misc.support_oppose('_processed') }}
+    {{ support_oppose.checkbox('_processed') }}
   </div>
   <button type="button" class="js-accordion-trigger accordion__button">Transaction information</button>
   <div class="accordion__content">
