@@ -1,0 +1,12 @@
+{% macro checkbox(name='party') %}
+
+    {% import 'macros/filters/checkbox.jinja' as checkbox %}
+
+    {{ checkbox.checkbox_dropdown(
+      name=name,
+      label='Political party',
+      selected=constants.parties,
+      options=constants.parties_extended,
+    ) }}
+
+{% endmacro %}

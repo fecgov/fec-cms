@@ -1,6 +1,7 @@
 {% extends 'partials/filters.jinja' %}
 
 {% import 'macros/filters/text.jinja' as text %}
+{% import 'macros/filters/parties.jinja' as parties %}
 {% import 'macros/filters/states.jinja' as states %}
 {% import 'macros/filters/typeahead-filter.jinja' as typeahead %}
 {% import 'macros/filters/years.jinja' as years %}
@@ -15,7 +16,7 @@
   <button type="button" class="js-accordion-trigger accordion__button">Committee details</button>
   <div class="accordion__content">
     {{ text.field('treasurer_name', 'Most recent treasurer') }}
-    {% include 'partials/filters/parties.jinja' %}
+    {{ parties.checkbox() }}
     {{ states.field('state') }}
     {{ date.field('first_file_date', 'Date first filed statement of organization', '') }}
   </div>

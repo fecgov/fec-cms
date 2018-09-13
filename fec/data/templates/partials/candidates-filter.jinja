@@ -1,6 +1,7 @@
 {% extends 'partials/filters.jinja' %}
 
 {% import 'macros/filters/office-sought.jinja' as office %}
+{% import 'macros/filters/parties.jinja' as parties %}
 {% import 'macros/filters/states.jinja' as states %}
 {% import 'macros/filters/typeahead-filter.jinja' as typeahead %}
 {% import 'macros/filters/years.jinja' as years %}
@@ -11,8 +12,8 @@
   {{ typeahead.field('q', 'Candidate name or ID', '', dataset='candidates', allow_text=True) }}
 
   {{ years.years('election_year', 'Election year', end_year=constants.END_YEAR + 4) }}
-  {% include 'partials/filters/parties.jinja' %}
   {{ office.checkbox() }}
+  {{ parties.checkbox() }}
   {{ states.field('state') }}
   {% include 'partials/filters/districts.jinja' %}
 
