@@ -38,7 +38,7 @@ Filter independent expenditures
   </div>
   <button type="button" class="js-accordion-trigger accordion__button">Candidate mentioned</button>
   <div class="accordion__content">
-    {{ typeahead.field('candidate_id', 'Candidate', dataset='candidates') }}
+    {{ typeahead.field('candidate_id', 'Candidate name or ID', dataset='candidates') }}
     {{ support_oppose.checkbox('_processed') }}
     {{ office.checkbox(name='candidate_office') }}
     {{ parties.checkbox(name='candidate_party') }}
