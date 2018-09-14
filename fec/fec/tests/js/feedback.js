@@ -87,7 +87,15 @@ describe('feedback', function() {
       sinon.stub(this.feedback, 'handleSuccess');
       sinon.stub(this.feedback, 'handleError');
       this.event = {preventDefault: sinon.spy()};
+      this.token = "fake-token";
       this.feedback.$box.find('textarea').val('awesome site good job');
+      var grecaptchaMock = sinon.stub({
+            render: function (options) { },
+            reset: function (id) { },
+            getResponse: function (id) { },
+            execute: function() { }
+        })
+       window.grecaptcha = grecaptchaMock;
     });
 
     afterEach(function() {
@@ -98,8 +106,8 @@ describe('feedback', function() {
 
     it('skips submit on empty inputs', function() {
       var message = sinon.spy(this.feedback, 'message');
-      this.feedback.$box.find('textarea').val('');
-      this.feedback.submit(this.event);
+      this.feedback.$box.find('#feedback-1').val('');
+      this.feedback.submit(this.token);
       expect(message).to.have.been.called;
       expect(this.ajaxStub).to.have.not.been.called;
     });
@@ -107,7 +115,7 @@ describe('feedback', function() {
     it('calls handleSuccess on success', function() {
       var deferred = $.Deferred().resolve({});
       this.ajaxStub.returns(deferred);
-      this.feedback.submit(this.event);
+      this.feedback.submit(this.token);
       expect(this.feedback.handleSuccess).to.have.been.called;
       expect(this.feedback.handleError).to.have.not.been.called;
     });
@@ -115,7 +123,7 @@ describe('feedback', function() {
     it('calls handleError on error', function() {
       var deferred = $.Deferred().reject();
       this.ajaxStub.returns(deferred);
-      this.feedback.submit(this.event);
+      this.feedback.submit(this.token);
       expect(this.feedback.handleSuccess).to.have.not.been.called;
       expect(this.feedback.handleError).to.have.been.called;
     });
