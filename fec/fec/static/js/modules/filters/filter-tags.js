@@ -6,7 +6,7 @@ var _ = require('underscore');
 var BODY_TEMPLATE = _.template(
   '<div>' +
     '<div class="row">' +
-    '<h3 class="tags__title">Viewing ' +
+    '<h3 class="tags__title">Viewing all' +
     '<span class="js-count" aria-hidden="true"></span> ' +
     '<span class="js-result-type">filtered {{ resultType }} for:</span>' +
     '</h3>' +
