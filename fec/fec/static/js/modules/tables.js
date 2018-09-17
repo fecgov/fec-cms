@@ -269,10 +269,9 @@ function updateOnChange($form, api) {
   $form.on('change', 'input,select', _.debounce(onChange, 250));
 }
 
-function filterSuccessUpdates(changeCount) {
+function filterSuccessUpdates() {
   // on filter change update:
   // - loading/success status
-  // - count change message
 
   // check if there is a changed form element
   if (updateChangedEl) {
@@ -333,16 +332,6 @@ function filterSuccessUpdates(changeCount) {
     $('.is-loading:not(.overlay)')
       .removeClass('is-loading')
       .addClass('is-successful');
-
-    // build message with number of results returned
-
-    if (changeCount > 0) {
-      filterResult = changeCount.toLocaleString() + ' more results';
-    } else if (changeCount === 0) {
-      filterResult = 'No change in results';
-    } else {
-      filterResult = Math.abs(changeCount).toLocaleString() + ' fewer results';
-    }
 
     message = '<strong>' + filterAction + '</strong><br>' + filterResult;
 
@@ -661,26 +650,13 @@ DataTable.prototype.fetchSuccess = function(resp) {
   this.paginator.handleResponse(this.fetchContext.data, resp);
   this.fetchContext.callback(mapResponse(resp));
   this.callbacks.afterRender(this.api, this.fetchContext.data, resp);
-  this.newCount = getCount(resp);
   this.refreshExport();
 
-  var changeCount = this.newCount - this.currentCount;
-
-  var countHTML =
-    this.newCount > 0
-      ? 'about <span class="tags__count">' +
-        this.newCount.toLocaleString('en-US') +
-        '</span>'
-      : '<span class="tags__count">0</span>';
-  this.$widgets.find('.js-count').html(countHTML);
-
-  filterSuccessUpdates(changeCount);
+  filterSuccessUpdates();
 
   if (this.opts.hideEmpty) {
     this.hideEmpty(resp);
   }
-
-  this.currentCount = this.newCount;
 
   if (this.opts.hideColumns) {
     this.api.columns().visible(true);
