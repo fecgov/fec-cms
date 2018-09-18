@@ -58,7 +58,8 @@ stream_factory = functools.partial(
         ('html', blocks.RawHTMLBlock()),
         ('image', ImageChooserBlock()),
         ('table', TableBlock()),
-        ('custom_table', CustomTableBlock())
+        ('custom_table', CustomTableBlock()),
+        ('contact', ContactInfoBlock())
     ],
 )
 
