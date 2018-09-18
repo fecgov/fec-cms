@@ -95,7 +95,7 @@
           </div>
         </div>
       </li>
-      <li>
+      {% if FEATURES.linecharts %}
       <li>
         <section class="content__section" style="padding-top: 3rem;">
           <div class="heading--section heading--with-action" style="border: none;padding: 0">
@@ -149,6 +149,7 @@
           {{ reaction.reaction_box('spent', 'advanced') }}
         </section>
       </li>
+      {% endif %}
     </ul>
   </div>
 </section>
