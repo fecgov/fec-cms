@@ -261,7 +261,7 @@ var statementsOfCandidacyColumns = [
   {
     data: 'beginning_image_number',
     orderable: false,
-    className: 'min-tablet hide-panel column--xs column--number',
+    className: 'min-desktop',
     render: function(data, type, row) {
       return row.beginning_image_number;
     }
@@ -269,7 +269,7 @@ var statementsOfCandidacyColumns = [
   {
     data: 'beginning_image_number',
     orderable: false,
-    className: 'min-tablet hide-panel column--xs column--number',
+    className: 'min-desktop',
     render: function(data, type, row) {
       // Image numbers in 2015 and later begin with YYYYMMDD,
       // which makes for a very big number.
