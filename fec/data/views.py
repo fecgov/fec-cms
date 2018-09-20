@@ -459,7 +459,7 @@ def raising(request):
 
     return render(request, 'raising-breakdown.jinja', {
         'parent': 'data',
-        'title': 'Raising breakdown',
+        'title': 'Raising: by the numbers',
         'top_category': top_category,
         'coverage_start_date': datetime.date(cycle - 1, 1, 1),
         'coverage_end_date': coverage_end_date,
@@ -489,7 +489,7 @@ def spending(request):
 
     return render(request, 'spending-breakdown.jinja', {
         'parent': 'data',
-        'title': 'Spending breakdown',
+        'title': 'Spending: by the numbers',
         'top_category': top_category,
         'coverage_start_date': datetime.date(cycle - 1, 1, 1),
         'coverage_end_date': coverage_end_date,
