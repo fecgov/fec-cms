@@ -10,6 +10,7 @@ var helpers = require('./helpers');
 var parseM = d3.time.format('%b');
 var parseMY = d3.time.format('%b %Y');
 var parseMDY = d3.time.format('%m/%d/%Y');
+var parsePlotPoints = d3.time.format('%Y-%m-01T%H:%M:%S.%L');
 
 var bisectDate = d3.bisector(function(d) {
   return d.date;
@@ -234,7 +235,7 @@ LineChartCommittees.prototype.drawChart = function() {
   var lineBuilder = d3.svg
     .line()
     .x(function(d) {
-      var myDate = new Date(parseMY(d.date));
+      var myDate = new Date(parsePlotPoints(d.date));
       return x(myDate);
     })
     .y(function(d) {
@@ -259,7 +260,7 @@ LineChartCommittees.prototype.drawChart = function() {
       .enter()
       .append('circle')
       .attr('cx', function(d) {
-        var myDate = new Date(parseMY(d.date));
+        var myDate = new Date(parsePlotPoints(d.date));
         return x(myDate);
       })
       .attr('cy', function(d) {
@@ -324,7 +325,7 @@ LineChartCommittees.prototype.handleMouseMove = function() {
 LineChartCommittees.prototype.moveCursor = function(datum) {
   var target = datum ? datum : this.getCursorStartPosition();
   var i = this.chartData.indexOf(target);
-  var myDate = new Date(parseMY(target.date));
+  var myDate = new Date(parsePlotPoints(target.date));
   this.cursor.attr('x1', this.x(myDate)).attr('x2', this.x(myDate));
   this.nextDatum = this.chartData[i + 1] || false;
   this.prevDatum = this.chartData[i - 1] || false;
