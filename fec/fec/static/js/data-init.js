@@ -58,6 +58,13 @@ $(document).ready(function() {
     }
   );
 
+  // initialize a feedbackWidget which will be set after document is loaded.
+  var feedbackWidget = null;
+  // expose a global function for Recaptcha to invoke after the challenge is complete.
+  window.submitFeedback = function(token) {
+    feedbackWidget.submit(token);
+  }
+
   // Initialize main search typeahead
   new typeahead.Typeahead('.js-search-input', 'allData', '/data/');
 
@@ -65,7 +72,7 @@ $(document).ready(function() {
   new typeahead.Typeahead($('.js-site-search'), 'all', '/data/');
 
   // Initialize feedback
-  new feedback.Feedback(helpers.buildAppUrl(['issue']));
+  feedbackWidget = new feedback.Feedback(helpers.buildAppUrl(['issue']));
 
   // Initialize new accordions
   $('.js-accordion').each(function() {
