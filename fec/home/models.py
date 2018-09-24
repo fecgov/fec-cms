@@ -1119,7 +1119,7 @@ class ReportingExamplePage(Page):
     related_media_title = models.CharField(blank=True, null=True, max_length=255)
     related_media = StreamField([
         ('continue_learning', blocks.ListBlock(ThumbnailBlock(), icon='doc-empty', template='blocks/related-media.html')),
-    ], null=True)
+    ], null=True, blank=True)
 
     content_panels = Page.content_panels + [
         FieldPanel('pre_title'),
