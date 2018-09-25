@@ -9,7 +9,6 @@ var mount = Enzyme.mount;
 var shallow = Enzyme.shallow;
 var expect = chai.expect;
 var EditorState = draftjs.EditorState;
-var Entity = draftjs.Entity;
 var SansSerif = require('../../../static/js/draftail/SansSerif');
 
 describe('draftail - SansSerif Block Component', function() {
@@ -29,7 +28,7 @@ describe('draftail - SansSerif Block Component', function() {
   it('the SansSerif source should make selected font sans serif', function(done) {
     var Source = SansSerif.source;
     var editorState = EditorState.createEmpty();
-    var entityType = Entity.create();
+    var entityType = editorState.getCurrentContent().createEntity();
     var onComplete = function(next) {
       expect(next).to.be.an('object');
       done();

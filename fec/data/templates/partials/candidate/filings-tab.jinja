@@ -1,0 +1,71 @@
+{% import 'macros/entity-pages.jinja' as entity %}
+{% import 'macros/missing.jinja' as missing %}
+
+<section id="section-6" role="tabpanel" aria-hidden="true" aria-labelledby="section-6-heading">
+
+  <h2 id="section-6-heading">Candidate filings</h2>
+  <div class="slab slab--inline slab--neutral u-padding--left u-padding--right">
+    <div class="content__section">
+      <div id="statements-of-candidacy" class="entity__figure row">
+        <div class="content__section">
+          <div class="heading--section heading--with-action">
+            <h3 class="heading__left">Statements of candidacy</h3>
+            <a class="heading__right button--alt button--browse"
+                href="/data/filings/?form_type=F2&form_type=RFAI&candidate_id={{ candidate_id }}">Filter this data
+            </a>
+          </div>
+          <div class="results-info results-info--simple">
+            <div class="u-float-right">
+              <div class="message message--info message--mini t-left-aligned data-container__message" data-export-message-for="statements-of-candidacy" aria-hidden="true">
+              </div>
+              <button type="button" class="js-export button button--cta button--export" data-export-for="statements-of-candidacy">Export</button>
+            </div>
+          </div>
+          <table
+              class="data-table data-table--heading-borders"
+              data-type="statements-of-candidacy"
+              data-candidate-id="{{ candidate_id }}"
+              data-committee-id="{% for c in committee_groups['P'] | reverse %}{{ c.committee_id }},{% endfor %}{% for c in committee_groups['A'] | reverse %}{{ c.committee_id }},{% endfor %}"
+              data-name="{{ name }}"
+              data-duration="2"
+            >
+            <thead>
+              <tr>
+                <th scope="col">Document</th>
+                <th scope="col">Version</th>
+                <th scope="col">Date filed</th>
+                <th scope="col">Image number</th>
+                <th scope="col">Pages</th>
+              </tr>
+            </thead>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="entity__figure entity__figure row" id="other">
+      <div class="heading--section heading--with-action">
+        <h3 class="heading__left">Other documents filed</h3>
+        <a class="heading__right button--alt button--browse"href="/data/filings/?candidate_id={{ candidate_id }}">Filter this data
+        </a>
+      </div>
+      <table
+          class="data-table data-table--heading-borders"
+          data-type="other-documents"
+          data-candidate="{{ candidate_id }}"
+
+          data-name="{{ name }}"
+
+        >
+        <thead>
+          <tr>
+            <th scope="col">Document</th>
+            <th scope="col">Version</th>
+            <th scope="col">Date filed</th>
+          </tr>
+        </thead>
+      </table>
+    </div>
+  </div>
+
+</section>

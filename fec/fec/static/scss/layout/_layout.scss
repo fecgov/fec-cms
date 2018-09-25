@@ -116,6 +116,20 @@
   }
 }
 
+.content__section--ruled-responsive {
+  border-top: 1px solid $primary;
+  margin-top: u(2rem);
+  padding-top: u(2rem);
+
+  &.content__section--extra-responsive {
+    padding-top: u(4rem);
+  }
+
+  & + .content__section--ruled-responsive {
+    margin-top: 0;
+  }
+}
+
 // Utility padding classes
 
 .u-padding--top {

@@ -1,0 +1,23 @@
+{% macro checkbox(id_suffix='', name='office') %}
+
+<div class="filter">
+    <fieldset class="js-filter" data-filter="checkbox">
+      <legend class="label" for="{{ name }}">Office Sought</legend>
+      <ul>
+        <li>
+          <input id="cycle-checkbox-p" name="{{ name }}" type="checkbox" value="P">
+          <label for="cycle-checkbox-p">President</label>
+        </li>
+        <li>
+          <input id="cycle-checkbox-s" name="{{ name }}" type="checkbox" value="S">
+          <label for="cycle-checkbox-s">Senate</label>
+        </li>
+        <li>
+          <input id="cycle-checkbox-h" name="{{ name }}" type="checkbox" value="H">
+          <label for="cycle-checkbox-h">House</label>
+        </li>
+      </ul>
+    </fieldset>
+</div>
+
+{% endmacro %}

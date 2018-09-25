@@ -27,7 +27,8 @@ module.exports = function(config) {
     frameworks: ['browserify', 'phantomjs-shim', 'mocha', 'chai-sinon'],
 
     files: [
-      'fec/fec/tests/js/**/*.js',
+      'node_modules/babel-polyfill/dist/polyfill.js',
+      'fec/fec/tests/js/**/*.js'
     ],
 
     exclude: [

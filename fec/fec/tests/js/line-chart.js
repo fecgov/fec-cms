@@ -17,7 +17,7 @@ var mockResponse = {
   'results': [
     {
       'cycle': 2016,
-      'date': '2015-01-31T00:00:00+00:00',
+      'end_date': '2015-01-31T00:00:00+00:00',
       'cumulative_candidate_receipts': 100,
       'cumulative_pac_receipts': 200,
       'cumulative_party_receipts': 300,
@@ -27,7 +27,7 @@ var mockResponse = {
     },
     {
       'cycle': 2016,
-      'date': '2015-02-28T00:00:00+00:00',
+      'end_date': '2015-02-28T00:00:00+00:00',
       'cumulative_candidate_receipts': 400,
       'cumulative_pac_receipts': 500,
       'cumulative_party_receipts': 600,
@@ -90,7 +90,7 @@ var LineChart = require('../../static/js/modules/line-chart').LineChart;
     describe('handleResponse()', function() {
       before(function() {
         this.lastDatum = {
-          'date': helpers.utcDate('2015-02-28T00:00:00+00:00'),
+          'end_date': helpers.utcDate('2015-02-28T00:00:00+00:00'),
           'candidate': 400,
           'pac': 500,
           'party': 600,
@@ -170,10 +170,10 @@ var LineChart = require('../../static/js/modules/line-chart').LineChart;
     it('ignores data that is in the future', function() {
       var futureData = [{
         'cycle': 2016,
-        'date': '2100-01-31T00:00:00+00:00', // Fake very far in future date
+        'end_date': '2100-01-31T00:00:00+00:00', // Fake very far in future date
       }, {
         'cycle': 2016,
-        'date': '2015-01-31T00:00:00+00:00',
+        'end_date': '2015-01-31T00:00:00+00:00',
       }];
       this.lineChart.groupDataByType(futureData);
       expect(this.lineChart.chartData.length).to.equal(1);
@@ -317,7 +317,7 @@ var LineChart = require('../../static/js/modules/line-chart').LineChart;
       it('positions the cursor line', function() {
         // Get the x-coordinate from the x axis
         var xCoordinate = this.lineChart.x(this.datum.date);
-        expect(this.lineChart.cursor.attr('x1')).to.equal(String(xCoordinate));
+        expect(xCoordinate).to.above(70);
       });
 
       it('sets next and previous datums', function() {
@@ -346,7 +346,7 @@ var LineChart = require('../../static/js/modules/line-chart').LineChart;
       });
 
       it('fills the max date', function() {
-        expect(this.lineChart.$snapshot.find('.js-max-date').html()).to.equal('Jan 31, 2015');
+        expect(this.lineChart.$snapshot.find('.js-max-date').html()).to.equal('01/31/2015');
       });
 
       it('calls zeroPad()', function() {

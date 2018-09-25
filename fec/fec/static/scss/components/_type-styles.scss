@@ -130,7 +130,9 @@
 
 // Set a bigger size to lead paragraphs
 .t-lead,
-.t-lead p {
+.t-lead p,
+.t-lead ul li,
+.t-lead ol li {
   font-weight: regular;
   font-size: u(1.8rem);
   line-height: u(2.8rem);

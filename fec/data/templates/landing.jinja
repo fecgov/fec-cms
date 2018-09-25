@@ -1,6 +1,7 @@
 {% extends 'layouts/main.jinja' %}
 {% import 'macros/cycle-select.jinja' as select %}
 {% import 'macros/overviews.jinja' as overviews %}
+{% import 'macros/reaction-box.jinja' as reaction %}
 
 {% block title %}{{ title }}{% endblock %}
 
@@ -83,7 +84,7 @@
 
   </section>
 
-  <section class="content__section content__section--ruled">
+  <section class="content__section">
     <h2>Browse full advanced data sets</h2>
     <div class="grid grid--4-wide">
       <div class="grid__item">
@@ -186,9 +187,149 @@
       </div>
     </div>
   </section>
+  {% if FEATURES.linecharts %}
+  <div class="content__section--extra">
+    <h2 class="t-ruled--bottom">Get started with campaign finance data</h2>
+    <section class="content__section" id="raising">
+      <h3 class="u-no-margin">Raising</h3>
+      <p>This graph shows how much <span class="term" data-term="candidate">candidates</span>, <span class="term" data-term="party committee">party committees</span> and <span class="term" data-term="political action committee (PAC)">political action committees</span> (PACs) have reported raising, up to specific points in time. Although the graph displays these numbers month-by-month, different committee types have different reporting schedules.</p>
+      <div class="content__section">
+        <div class="heading--section heading--with-action">
+          <h4 class="heading__left t-upper">Cumulative amount raised by committees</h4>
+          <div class="heading__right">
+            <ul class="list--buttons">
+              <li><a class="button button--standard button--table" href="/data/receipts">Explore data</a></li>
+              <li><button class="button button--standard js-ga-event"  data-a11y-dialog-show="raised-modal" data-ga-event="Raised methodology modal clicked" aria-controls="raised-modal">
+              Methodology</button></li>
+            </ul>
+          </div>
+        </div>
+        {{ overviews.overview('raised', 'landing')}}
+         <div class="breakdown-link is-disabled">More raising charts &raquo;</div>
+         <ul class="grid grid--4-wide t-sans">
+           <li class="grid__item is-disabled">
+             <div class="icon-heading--graph-circle">
+               <div class="icon-heading__text"><span>Who's raising the most</span></div>
+             </div>
+           </li>
+           <li class="grid__item is-disabled">
+             <div class="icon-heading--map-circle" title="Coming soon">
+               <div class="icon-heading__text"><span>Where contributions come from</span></div>
+             </div>
+           </li>
+           <li class="grid__item is-disabled">
+             <div class="icon-heading--graph-unordered-circle" title="Coming soon">
+               <div class="icon-heading__text"><span>The size of contributions</span></div>
+             </div>
+           </li>
+         </ul>
+      </div>
+      {{ reaction.reaction_box('raised', 'landing') }}
+    </section>
+    <section class="content__section" id="spending">
+      <h3 class="u-no-margin">Spending</h3>
+      <p>This graph shows how much <span class="term" data-term="candidate">candidates</span>, <span class="term" data-term="party committee">party committees</span> and <span class="term" data-term="political action committee (PAC)">political action committees</span> (PACs) have reported spending, up to specific points in time. Although the graph displays these numbers month-by-month, different committee types have different reporting schedules.</p>
+      <div class="content__section">
+        <div class="heading--section heading--with-action">
+          <h4 class="heading__left t-upper">Cumulative amount spent by committees</h4>
+          <div class="heading__right">
+            <ul class="list--buttons">
+              <li><a class="button button--standard button--table" href="/data/disbursements">Explore data</a></li>
+              <li><button class="button button--standard js-ga-event"  data-a11y-dialog-show="spending-modal" data-ga-event="Spending methodology modal clicked" aria-controls="spending-modal">Methodology</button></li>
+            </ul>
+          </div>
+        </div>
+        {{ overviews.overview('spent', 'landing') }}
+        <div class="breakdown-link is-disabled">More spending charts &raquo;</div>
+        <ul class="grid grid--4-wide t-sans">
+          <li class="grid__item is-disabled">
+            <div class="icon-heading--graph-circle">
+              <div class="icon-heading__text"><span>Who's spending the most</span></div>
+            </div>
+          </li>
+          <li class="grid__item is-disabled">
+            <div class="icon-heading--graph-unordered-circle" title="Coming soon">
+              <div class="icon-heading__text"><span>What's spent on day-to-day activities</span></div>
+            </div>
+          </li>
+          <li class="grid__item is-disabled">
+            <div class="icon-heading--map-circle" title="Coming soon">
+              <div class="icon-heading__text"><span>Where money is spent to support and oppose candidates</span></div>
+            </div>
+          </li>
+        </ul>
+      </div>
+      {{ reaction.reaction_box('spent', 'landing') }}
+    </section>
+  </div>
+  {% endif %}
 </div>
 {% endblock %}
+
+{% block modals %}
+<div class="js-modal modal" id="raised-modal" aria-hidden="true">
+  <div tabindex="-1" class="modal__overlay" data-a11y-dialog-hide></div>
+  <div role="dialog" class="modal__content" aria-labelledby="raised-modal-title">
+    <div role="document">
+      <button type="button" class="modal__close button--close--primary" data-a11y-dialog-hide title="Close this dialog window"></button>
+      <h2 id="raised-modal-title" tabindex="0">Methodology</h2>
+      <p>This data includes Forms 3, 3P, and 3X.</p>
+      <h3>Methodology overview</h3>
+      <p><strong>Money raised</strong> includes each of the following:</p>
+      <ul class="list--bulleted">
+        <li><em>Adjusted receipts</em> for PACs, parties, congressional filers and presidential filers</li>
+      </ul>
+      <p><em>Adjusted receipts</em> are the total receipts minus the following:</p>
+      <ul class="list--bulleted">
+        <li>Contribution refunds</li>
+        <li>Contributions from political party committees and other political committees</li>
+        <li>Loan repayments</li>
+        <li>Offsets to operating expenditures</li>
+        <li>Transfers from nonfederal accounts for allocated activities</li>
+      </ul>
+      <p><span>The form-by-form breakdown for adjusted receipts is:</span></p>
+      <ul class="list--bulleted">
+        <li><strong>Form 3:</strong> <em>line 16</em> - (<em>line 11(b)</em> + <em>line 11(c)</em> + <em>line 14</em> + <em>line 19(c)</em> + <em>line 20(d))</em></li>
+        <li><strong>Form 3P:</strong> <em>line 22</em> - (<em>line 17(b)</em> + <em>line 17(c)</em> + <em>line 20(d)</em> + <em>line 27(c)</em> + <em>line 28(d)</em>)</li>
+        <li><strong>Form 3X:</strong> <em>line 19</em> - (<em>line 11(b)</em> + <em>line 11(c)</em> + <em>line 15</em> + <em>line 16</em> + <em>line 18(a)</em> + <em>line 26</em> + <em>line 28(d)</em>)</li>
+      </ul>
+    </div>
+  </div>
+</div>
+<div class="js-modal modal" id="spending-modal" aria-hidden="true">
+  <div tabindex="-1" class="modal__overlay" data-a11y-dialog-hide></div>
+  <div role="dialog" class="modal__content" aria-labelledby="spending-modal-title">
+    <div role="document">
+      <button type="button" class="modal__close button--close--primary" data-a11y-dialog-hide title="Close this dialog window"></button>
+      <h2 id="spending-modal-title">Methodology</h2>
+      <p>This data includes Forms 3, 3P, and 3X.</p>
+      <h5>Methodology overview</h5>
+      <p><strong>Money spent</strong> includes each of the following:</p>
+      <ul class="list--bulleted">
+        <li><em>Adjusted disbursements</em> for PACs, parties, congressional filers and presidential filers</li>
+      </ul>
+      <p><em>Adjusted disbursements</em> are total disbursements minus the following:</p>
+      <ul class="list--bulleted">
+        <li>Contribution refunds</li>
+        <li>Contributions to candidates and other political committees</li>
+        <li>Loan repayments</li>
+        <li>Nonfederal share of allocated disbursements</li>
+        <li>Offsets to expenditures</li>
+        <li>Other disbursements</li>
+        <li>Transfers to other authorized committees and affiliated committees</li>
+      </ul>
+      <p>The form-by-form breakdown for adjusted disbursements is:</p>
+      <ul class="list--bulleted">
+        <li><strong>Form 3:</strong> <em>line 22</em> - (<em>line 18</em> + <em>line 19(c)</em> + <em>line 20(d)</em> + <em>line 21</em>)</li>
+        <li><strong>Form 3P:</strong> <em>line 30</em> - (<em>line 20(d)</em> + <em>line 24</em> + <em>line 27(c)</em> + <em>line 28(d)</em> + <em>line 29</em>)</li>
+        <li><strong>Form 3X:</strong> <em>line 31</em> - (<em>line 21(a)(ii)</em> + <em>line 22</em> + <em>line 23</em> + <em>line 26</em> + <em>line 28(d)</em> + <em>line 29</em>)</li>
+      </ul>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
 {% block scripts %}
-<script src="{{ asset_for_js('dataviz-common.js') }}"></script>
-<script src="{{ asset_for_js('data-landing.js') }}"></script>
+  <script src="{{ asset_for_js('dataviz-common.js') }}"></script>
+  <script src="{{ asset_for_js('data-landing.js') }}"></script>
 {% endblock %}

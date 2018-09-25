@@ -3,11 +3,14 @@
 {% import 'macros/filters/text.jinja' as text %}
 {% import 'macros/filters/typeahead-filter.jinja' as typeahead %}
 {% import 'macros/filters/states.jinja' as states %}
+{% import 'macros/filters/districts.jinja' as districts %}
+{% import 'macros/filters/office-sought.jinja' as office %}
+{% import 'macros/filters/parties.jinja' as parties %}
 {% import 'macros/filters/years.jinja' as years %}
 {% import 'macros/filters/date.jinja' as date %}
 {% import 'macros/filters/range.jinja' as range %}
 {% import 'macros/filters/ie-reports.jinja' as reports %}
-{% import 'macros/filters/misc.jinja' as misc %}
+{% import 'macros/filters/support-oppose.jinja' as support_oppose %}
 {% block heading %}
 Filter independent expenditures
 {% endblock %}
@@ -20,7 +23,7 @@ Filter independent expenditures
 <div class="filters__inner">
   {{ typeahead.field('committee_id', 'Spender name or ID', id_suffix='_raw') }}
   {{ text.field('candidate_name', 'Candidate mentioned', id_suffix='_raw')}}
-  {{ misc.support_oppose('_raw') }}
+  {{ support_oppose.checkbox('_raw') }}
   {{ date.field('expenditure_date', 'Expenditure date', id_suffix='_raw') }}
 </div>
 {% endblock %}
@@ -35,10 +38,13 @@ Filter independent expenditures
   </div>
   <button type="button" class="js-accordion-trigger accordion__button">Candidate mentioned</button>
   <div class="accordion__content">
-    {{ typeahead.field('candidate_id', 'Candidate', dataset='candidates') }}
-    {{ misc.support_oppose('_processed') }}
+    {{ typeahead.field('candidate_id', 'Candidate name or ID', dataset='candidates') }}
+    {{ support_oppose.checkbox('_processed') }}
+    {{ office.checkbox(name='candidate_office') }}
+    {{ parties.checkbox(name='candidate_party') }}
+    {{ states.field(name='candidate_office_state') }}
+    {{ districts.dropdown(name='candidate_office_district') }}
   </div>
-
   <button type="button" class="js-accordion-trigger accordion__button">Transaction information</button>
   <div class="accordion__content">
     {{ text.field('payee_name', 'Payee') }}

@@ -46,6 +46,7 @@ FEATURES = {
     'agendas': bool(env.get_credential('FEC_FEATURE_AGENDAS', '')),
     'tips': bool(env.get_credential('FEC_FEATURE_TIPS', '')),
     'radform': bool(env.get_credential('FEC_FEATURE_RADFORM', '')),
+    'linecharts': bool(env.get_credential('FEC_FEATURE_LINECHARTS', '')),
 }
 
 ENVIRONMENTS = {
@@ -141,6 +142,7 @@ TEMPLATES = [
                 'TRANSITION_URL': FEC_TRANSITION_URL,
                 'CLASSIC_URL': FEC_CLASSIC_URL,
                 'FEC_CMS_ENVIRONMENT': FEC_CMS_ENVIRONMENT,
+                'FEATURES': FEATURES,
             },
         }
     },

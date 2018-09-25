@@ -47,7 +47,7 @@ from home.blocks import (ThumbnailBlock, AsideLinkBlock,
                          OptionBlock, CollectionBlock, DocumentFeedBlurb,
                          ExampleParagraph, ExampleForms, ExampleImage,
                          CustomTableBlock, ReportingExampleCards, InternalButtonBlock,
-                         ExternalButtonBlock, SnippetChooserBlock)
+                         ExternalButtonBlock, SnippetChooserBlock, ExampleImage)
 
 
 stream_factory = functools.partial(
@@ -58,7 +58,8 @@ stream_factory = functools.partial(
         ('html', blocks.RawHTMLBlock()),
         ('image', ImageChooserBlock()),
         ('table', TableBlock()),
-        ('custom_table', CustomTableBlock())
+        ('custom_table', CustomTableBlock()),
+        ('contact', ContactInfoBlock())
     ],
 )
 
@@ -571,6 +572,7 @@ class CustomPage(Page):
         ('heading', blocks.CharBlock(classname='full title')),
         ('paragraph', blocks.RichTextBlock()),
         ('html', blocks.RawHTMLBlock()),
+        ('example_image', ExampleImage()),
         ('image', ImageChooserBlock()),
         ('table', TableBlock()),
         ('example_paragraph', ExampleParagraph()),
@@ -580,7 +582,7 @@ class CustomPage(Page):
         ('internal_button', InternalButtonBlock()),
         ('external_button', ExternalButtonBlock()),
         ('contribution_limits_table', SnippetChooserBlock('home.EmbedTableSnippet', template = 'blocks/embed-table.html', icon='table')),
-    ])
+    ], null=True)
     sidebar = stream_factory(null=True, blank=True)
     related_topics = StreamField([
         ('related_topics', blocks.ListBlock(
@@ -874,8 +876,7 @@ class ResourcePage(Page):
         ('related_pages', blocks.ListBlock(blocks.PageChooserBlock()))
     ], null=True, blank=True)
     sections = StreamField([
-        ('sections', ResourceBlock()),
-        ('image', ImageChooserBlock())
+        ('sections', ResourceBlock())
     ], null=True, blank=True)
     citations = StreamField([
         ('citations', blocks.ListBlock(CitationsBlock()))
@@ -1118,7 +1119,7 @@ class ReportingExamplePage(Page):
     related_media_title = models.CharField(blank=True, null=True, max_length=255)
     related_media = StreamField([
         ('continue_learning', blocks.ListBlock(ThumbnailBlock(), icon='doc-empty', template='blocks/related-media.html')),
-    ], null=True)
+    ], null=True, blank=True)
 
     content_panels = Page.content_panels + [
         FieldPanel('pre_title'),

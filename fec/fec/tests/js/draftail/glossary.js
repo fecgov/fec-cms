@@ -9,7 +9,6 @@ var mount = Enzyme.mount;
 var shallow = Enzyme.shallow;
 var expect = chai.expect;
 var EditorState = draftjs.EditorState;
-var Entity = draftjs.Entity;
 var Glossary = require('../../../static/js/draftail/Glossary');
 var terms = require('../../../static/js/data/terms.json');
 
@@ -46,7 +45,7 @@ describe('draftail - Glossary Block Component', function() {
   it('the Glossary should update the content when component changes', function(done) {
     var Source = Glossary.source;
     var editorState = EditorState.createEmpty();
-    var entityType = Entity.create();
+    var entityType = editorState.getCurrentContent().createEntity();
     var onComplete = function(next) {
       expect(next).to.be.an('object');
       done();
