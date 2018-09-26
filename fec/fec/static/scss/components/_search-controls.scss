@@ -124,8 +124,11 @@
 
   // We make it shorter on the home page
   .slab--home {
+    .search-controls__either {
+      margin: u(.5rem 0);
+        }
     .search-controls__or--vertical {
-      margin: u(2rem 0);
+      margin: u(4rem 0);
 
       &::before,
       &::after {
@@ -141,18 +144,8 @@
       }
     }
 
-    .search-controls__zip {
-      width: 100%;
-    }
-
-    .search-controls__state,
-    .search-controls__district {
-      width: 100%;
-    }
-
-    .search-controls__submit {
-      margin-top: u(1rem);
-      clear: both;
+    &.filters--horizontal {
+    padding: u(1rem 0 1rem 0);
     }
   }
 }
@@ -166,21 +159,38 @@
 
   .slab--home {
     .search-controls__either {
-      @include span-columns(5);
+      @include span-columns(5.5);
     }
-
-    .search-controls__zip {
-      @include span-columns(3.5 of 5.5);
-    }
-
-    .search-controls__state,
-    .search-controls__district {
-      @include span-columns(2 of 5.5);
-    }
-
-    .search-controls__submit {
-      margin-top: 0;
-      clear: none;
+    .search-controls__or--vertical {
+      margin:u(4rem 0 4rem 0);
     }
   }
 }
+
+
+.election_search {
+
+
+  .search-controls__cycle {
+    @include span-columns(2.75 of 5.5);
+    &::after {
+    content: '';
+    border-left:1px solid $gray;;
+    display: block;
+    position: absolute;
+    height: auto;
+    width: 1px;
+
+  }
+    .cycle-select{
+      width:100%;
+      margin-right: 2rem;
+    }
+  }
+
+  .search-controls__zip {
+    @include span-columns(2.75 of 5.5);
+  }
+
+}
+

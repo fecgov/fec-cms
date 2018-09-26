@@ -10,33 +10,34 @@
 
 {% block body %}
   {{ header.header(title) }}
-<section class="main" id="election-lookup" >
+<section class="main" >
   <div class="container">
     <header class="heading--main">
       <h1>Search</h1>
     </header>
 </section>
-<section class="main__content--full data-container__wrapper">
-  <div class="search-controls filters--horizontal">
+<section class="main__content--full data-container__wrapper election_search" id="election-lookup">
+  <div class="search-controls filters--horizontal slab--home">
     <form class="js-form-nav container">
 
       <div class="search-controls__either">
         <div class="row">
-          <div class="search-controls search--medium">
+          <div class="search-controls__cycle">
           {{ select.cycle_select(cycles, cycle, location='form', id='cycle-1') }}
           </div>
-          <label for="zip" class="label">Find by ZIP code</label>
-          <div class="search-controls__zip">
-          <div class="combo combo--search__medium combo--search--inline u-padding--left">
+
+
+          <div class="search-controls__zip combo combo--search__medium combo--search--inline">
+            <label for="zip" class="label">Find by ZIP code</label>
             <input type="text" inputmode="numeric" id="zip" name="zip" class="combo__input" >
             <button class="combo__button button--search button--standard" type="submit">
               <span class="u-visually-hidden">Search</span>
             </button>
-          </div>
+
             <span class="t-note t-sans search__example">Example: 90210</span>
           </div>
-
         </div>
+
       </div>
       <div class="search-controls__or search-controls__or--vertical">or</div>
 
@@ -74,6 +75,7 @@
     </form>
   </div>
 </section>
+<section>
   <div class="container">
     <div class="content__section--extra">
       <div class="usa-width-one-half">
