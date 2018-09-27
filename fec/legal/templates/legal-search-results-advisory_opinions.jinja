@@ -2,10 +2,6 @@
 {% import 'macros/legal.jinja' as legal %}
 {% set document_type_display_name = 'advisory opinions' %}
 
-{% block head_js %}
-<script src="{{ asset_for_js('polyfills.js') }}"></script>
-{% endblock %}
-
 {% block header %}
 <header class="page-header slab slab--primary">
   {{ breadcrumb.breadcrumbs('Search results', [('/legal-resources', 'Legal resources'), ('/data/legal/advisory-opinions/', 'Advisory opinions')]) }}
