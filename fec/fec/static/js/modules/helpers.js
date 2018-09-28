@@ -416,7 +416,8 @@ function amendmentVersionDescription(row) {
     if (row.amendment_chain) {
       amendment_num = row.amendment_chain.length - 1;
     }
-    if (amendment_num === 0) {
+    // Don't show amendment number for F1 and F2 - it's unreliable data
+    if (amendment_num === 0 || row.form_type == 'F2' || row.form_type == 'F1') {
       amendment_num = '';
     }
     description = ' Amendment ' + amendment_num;
