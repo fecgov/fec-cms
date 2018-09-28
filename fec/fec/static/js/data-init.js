@@ -63,7 +63,7 @@ $(document).ready(function() {
   // expose a global function for Recaptcha to invoke after the challenge is complete.
   window.submitFeedback = function(token) {
     feedbackWidget.submit(token);
-  }
+  };
 
   // Initialize main search typeahead
   new typeahead.Typeahead('.js-search-input', 'allData', '/data/');

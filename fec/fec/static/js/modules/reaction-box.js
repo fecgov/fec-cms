@@ -72,7 +72,6 @@ ReactionBox.prototype.handleSubmit = function(token) {
     }
   });
 
-  
   var chartLocation = this.path || this.location;
   var action =
     '\nChart Name: ' + this.name + '\nChart Location: ' + chartLocation;
@@ -86,7 +85,6 @@ ReactionBox.prototype.handleSubmit = function(token) {
   };
   // explicitly set token as g-recaptcha-response
   data['g-recaptcha-response'] = token;
-
 
   var promise = $.ajax({
     method: 'POST',

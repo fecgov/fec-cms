@@ -30,7 +30,7 @@ var feedbackWidget = null;
 // expose a global function for Recaptcha to invoke after the challenge is complete.
 window.submitFeedback = function(token) {
   feedbackWidget.submit(token);
-}
+};
 
 $(document).ready(function() {
   // Initialize glossary
