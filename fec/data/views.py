@@ -457,7 +457,7 @@ def raising(request):
 
     page_info = top_raisers['pagination']
 
-    return render(request, 'raising-breakdown.jinja', {
+    return render(request, 'raising-bythenumbers.jinja', {
         'parent': 'data',
         'title': 'Raising: by the numbers',
         'top_category': top_category,
@@ -487,7 +487,7 @@ def spending(request):
     else:
         coverage_end_date = datetime.date(cycle, 12, 31)
 
-    return render(request, 'spending-breakdown.jinja', {
+    return render(request, 'spending-bythenumbers.jinja', {
         'parent': 'data',
         'title': 'Spending: by the numbers',
         'top_category': top_category,
