@@ -82,6 +82,15 @@
   }
 }
 
+.slab--home {
+  padding: u(1rem 0 1rem 0);
+  background: $gray-lightest;
+
+  .search-controls__either {
+    margin: u(.5rem 0)!important;
+  }
+}
+
 @include media($med) {
   .search-controls__row {
     padding: u(2rem 0);
@@ -124,9 +133,7 @@
 
   // We make it shorter on the home page
   .slab--home {
-    .search-controls__either {
-      margin: u(.5rem 0);
-        }
+
     .search-controls__or--vertical {
       margin: u(4rem 0);
 
@@ -158,9 +165,11 @@
   }
 
   .slab--home {
+
     .search-controls__either {
       @include span-columns(5.5);
-    }
+      }
+
     .search-controls__or--vertical {
       margin:u(4rem 0 4rem 0);
     }
@@ -168,28 +177,37 @@
 }
 
 
-.election_search {
-
+.election-search {
 
   .search-controls__cycle {
-    @include span-columns(2.75 of 5.5);
-    &::after {
-    content: '';
-    border-left:1px solid $gray;;
-    display: block;
-    position: absolute;
-    height: auto;
-    width: 1px;
+    @include span-columns(2.58 of 5.5);
 
-  }
     .cycle-select{
       width:100%;
       margin-right: 2rem;
     }
   }
 
+  .divider{
+    @include span-columns(.5 of 5.5);
+    float: left;
+    display: block;
+    display: block;
+    margin-left: -1.5rem;
+    height: 8.3rem;
+    display: block;
+    border-right: 1px solid #bbb;
+    margin-top: .5rem;
+
+    &::after{
+      content:'';
+      width:1px;
+      background:#aaa;
+    };
+  }
+
   .search-controls__zip {
-    @include span-columns(2.75 of 5.5);
+    @include span-columns(2.58 of 5.5);
   }
 
 }

@@ -10,73 +10,66 @@
 
 {% block body %}
   {{ header.header(title) }}
-<section class="main" >
+<section class="main election-search" id="election-lookup" >
   <div class="container">
     <header class="heading--main">
       <h1>Search</h1>
     </header>
-</section>
-<section class="main__content--full data-container__wrapper election_search" id="election-lookup">
-  <div class="search-controls filters--horizontal slab--home">
-    <form class="js-form-nav container">
-
-      <div class="search-controls__either">
-        <div class="row">
-          <div class="search-controls__cycle">
-          {{ select.cycle_select(cycles, cycle, location='form', id='cycle-1') }}
-          </div>
-
-
-          <div class="search-controls__zip combo combo--search__medium combo--search--inline">
-            <label for="zip" class="label">Find by ZIP code</label>
-            <input type="text" inputmode="numeric" id="zip" name="zip" class="combo__input" >
-            <button class="combo__button button--search button--standard" type="submit">
-              <span class="u-visually-hidden">Search</span>
-            </button>
-
-            <span class="t-note t-sans search__example">Example: 90210</span>
-          </div>
-        </div>
-
-      </div>
-      <div class="search-controls__or search-controls__or--vertical">or</div>
-
-        <div class="search-controls__either">
-          <fieldset>
-            <legend class="label">Find by state and <span class="term" data-term="District">district</span></span></legend>
-            <div class="search-controls__state">
-              <select id="state" name="state" aria-label="Select a state">
-                <option value="">Select state</option>
-                {% for value, label in constants.states.items() %}
-                <option value="{{ value }}">{{ label }}</option>
-                {% endfor %}
-              </select>
-            </div>
-
-            <div class="search-controls__district">
-              <select id="district" name="district" aria-label="Select a district" class="select--alt">
-                <option value="">Select district</option>
-                {% for value in range(1, 100) %}
-                {% with formatted = '{0:02d}'.format(value) %}
-                <option value="{{ formatted }}">{{ formatted }}</option>
-                {% endwith %}
-                {% endfor %}
-              </select>
-            </div>
-
-            <div class="search-controls__submit">
-              <button type="submit" class="button--search--text button--standard">Search</button>
-            </div>
-
-          </fieldset>
-         </div>
-
-      </div>
-    </form>
   </div>
-</section>
-<section>
-  <div class="container">
+    <div class="search-controls slab--home">
+      <div class="container">
+        <form>
+          <div class="search-controls">
+            <div class="search-controls__either">
+              <div class="row">
+                <div class="search-controls search-controls__cycle">
+                {{ select.cycle_select(cycles, cycle, location='form', id='cycle-1') }}
+                </div>
+
+                <div class="divider"></div>
+                <div class="search-controls__zip combo combo--search__medium combo--search--inline">
+                  <label for="zip" class="label">Find by ZIP code</label>
+                  <input type="text" inputmode="numeric" id="zip" name="zip" class="combo__input" >
+                  <button class="combo__button button--search button--standard" type="submit">
+                    <span class="u-visually-hidden">Search</span>
+                  </button>
+
+                  <span class="t-note t-sans search__example">Example: 90210</span>
+                </div>
+              </div>
+            </div>
+            <div class="search-controls__or search-controls__or--vertical">or</div>
+            <div class="search-controls__either">
+              <fieldset>
+                <legend class="label">Find by state and <span class="term" data-term="District">district</span></span></legend>
+                <div class="search-controls__state">
+                  <select id="state" name="state" aria-label="Select a state">
+                    <option value="">Select state</option>
+                    {% for value, label in constants.states.items() %}
+                    <option value="{{ value }}">{{ label }}</option>
+                    {% endfor %}
+                  </select>
+                </div>
+                <div class="search-controls__district">
+                  <select id="district" name="district" aria-label="Select a district" class="select--alt">
+                    <option value="">Select district</option>
+                    {% for value in range(1, 100) %}
+                    {% with formatted = '{0:02d}'.format(value) %}
+                    <option value="{{ formatted }}">{{ formatted }}</option>
+                    {% endwith %}
+                    {% endfor %}
+                  </select>
+                </div>
+                <div class="search-controls__submit">
+                  <button type="submit" class="button--search--text button--standard">Search</button>
+                </div>
+              </fieldset>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+    <div class="container">
     <div class="content__section--extra">
       <div class="usa-width-one-half">
         <div class="heading--section">
@@ -84,7 +77,6 @@
           <span class="heading__subtitle js-results-title"></span>
         </div>
         <div class="results__count">
-          <p class="t-italic">This page shows campaign finance data by district. If no candidates have filed (or if candidates have filed but not yet reported financial data), the district may not show up here.</p>
           <div class="js-accordion accordion--neutral pa-message" data-content-prefix="pa-redistricting" style="display: none;">
             <button type="button" class="js-accordion-trigger accordion__button" aria-controls="pa-redistricting-content-0" aria-expanded="false">Information about 2018 Pennsylvania redistricting</button>
             <div class="accordion__content" id="pa-redistricting-content-0" aria-hidden="true">
