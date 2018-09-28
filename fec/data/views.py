@@ -6,6 +6,7 @@ from django.conf import settings
 
 from distutils.util import strtobool
 
+import requests
 import datetime
 import github3
 import json
@@ -499,7 +500,7 @@ def spending(request):
         'page_info': utils.page_info(top_spenders['pagination'])
     })
 
-
+    
 def feedback(request):
     if request.method == 'POST':
 
@@ -507,30 +508,35 @@ def feedback(request):
         # '{"param":"value"}'. Needs to be decoded in Python 3
         data = json.loads(request.body.decode("utf-8"))
 
-        if not any([data['action'], data['feedback'], data['about']]):
+        if not any([data['action'], data['feedback'], data['about'], data['g-recaptcha-response']]):
             return JsonResponse({'status': False}, status=500)
         else:
-            title = 'User feedback on ' + request.META.get('HTTP_REFERER')
+            # verify recaptcha
+            verifyRecaptcha = requests.post("https://www.google.com/recaptcha/api/siteverify", data={'secret': settings.FEC_RECAPTCHA_SECRET_KEY, 'response': data['g-recaptcha-response']})
+            recaptchaResponse = verifyRecaptcha.json()
+            if not recaptchaResponse['success']:
+                # if captcha failed, return failure
+                return JsonResponse({'status': False}, status=500)
+            else:
+                # captcha passed, we're ready to submit the issue.
+                title = 'User feedback on ' + request.META.get('HTTP_REFERER')
 
-            body = ("## What were you trying to do and how can we improve it?\n %s \n\n"
-                    "## General feedback?\n %s \n\n"
-                    "## Tell us about yourself\n %s \n\n"
-                    "## Details\n"
-                    "* URL: %s \n"
-                    "* User Agent: %s") % (
-                        data['action'],
-                        data['feedback'],
-                        data['about'],
-                        request.META.get('HTTP_REFERER'),
-                        request.META['HTTP_USER_AGENT'])
+                body = ("## What were you trying to do and how can we improve it?\n %s \n\n"
+                        "## General feedback?\n %s \n\n"
+                        "## Tell us about yourself\n %s \n\n"
+                        "## Details\n"
+                        "* URL: %s \n"
+                        "* User Agent: %s") % (
+                            data['action'],
+                            data['feedback'],
+                            data['about'],
+                            request.META.get('HTTP_REFERER'),
+                            request.META['HTTP_USER_AGENT'])
 
-            if not settings.FEC_GITHUB_TOKEN:
-                return JsonResponse({'results': 'No Github token available.'}, status=201)
+                client = github3.login(token=settings.FEC_GITHUB_TOKEN)
+                issue = client.repository('fecgov', 'fec').create_issue(title, body=body)
 
-            client = github3.login(token=settings.FEC_GITHUB_TOKEN)
-            issue = client.repository('fecgov', 'fec').create_issue(title, body=body)
-
-            return JsonResponse(issue.to_json(), status=201)
+                return JsonResponse(issue.to_json(), status=201)
     else:
         raise Http404()
 

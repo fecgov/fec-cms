@@ -28,10 +28,7 @@ function ReactionBox(selector) {
   this.url = helpers.buildAppUrl(['issue']);
 
   this.$element.on('click', '.js-reaction', this.submitReaction.bind(this));
-  this.$element.on('click', '.js-skip', this.handleSubmit.bind(this));
   this.$element.on('click', '.js-reset', this.handleReset.bind(this));
-
-  this.$form.on('submit', this.handleSubmit.bind(this));
 }
 
 ReactionBox.prototype.submitReaction = function(e) {
@@ -62,7 +59,7 @@ ReactionBox.prototype.showTextarea = function() {
   this.$step2.find('label').text(labelMap[this.reaction]);
 };
 
-ReactionBox.prototype.handleSubmit = function(e) {
+ReactionBox.prototype.handleSubmit = function(token) {
   $.ajaxSetup({
     beforeSend: function(xhr, settings) {
       if (!(/^http:.*/.test(settings.url) || /^https:.*/.test(settings.url))) {
@@ -75,8 +72,6 @@ ReactionBox.prototype.handleSubmit = function(e) {
     }
   });
 
-  e.preventDefault();
-
   var chartLocation = this.path || this.location;
   var action =
     '\nChart Name: ' + this.name + '\nChart Location: ' + chartLocation;
@@ -88,6 +83,8 @@ ReactionBox.prototype.handleSubmit = function(e) {
     about: about,
     feedback: feedback
   };
+  // explicitly set token as g-recaptcha-response
+  data['g-recaptcha-response'] = token;
 
   var promise = $.ajax({
     method: 'POST',
