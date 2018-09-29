@@ -388,7 +388,12 @@ function amendmentVersionDescription(row) {
   }
 
   // Filings with amendment_indicator = N are the originals
-  if (row.amendment_indicator === API.amendment_indicator_new) {
+  // Amendment chain should be 1 - this handles filings with unknown versions
+  // and F1N & F2 that are filed as N but are not originals
+  if (
+    row.amendment_indicator === API.amendment_indicator_new &&
+    row.amendment_chain.length === 1
+  ) {
     description = ' Original';
   }
 
@@ -411,7 +416,8 @@ function amendmentVersionDescription(row) {
     if (row.amendment_chain) {
       amendment_num = row.amendment_chain.length - 1;
     }
-    if (amendment_num === 0) {
+    // Don't show amendment number for F1 and F2 - it's unreliable data
+    if (amendment_num === 0 || row.form_type == 'F2' || row.form_type == 'F1') {
       amendment_num = '';
     }
     description = ' Amendment ' + amendment_num;
