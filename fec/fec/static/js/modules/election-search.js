@@ -61,6 +61,20 @@ function ElectionSearch(selector) {
   $(window).on('popstate', this.handlePopState.bind(this));
 
   this.getUpcomingElections();
+
+  // Get the last presidential election year
+  var now = new Date();
+  var prevPresidentialYear = now.getFullYear() - now.getFullYear() % 4;
+  var selectedCycle = URI.parseQuery(window.location.search).cycle;
+  if (selectedCycle == undefined){
+    selectedCycle = this.$cycle.val();
+  }
+
+  // Only show presidential election if selected cycle is after the previous presidential election
+  if (Number(selectedCycle) > prevPresidentialYear && now.getFullYear() >= prevPresidentialYear){
+    this.getUpcomingPresidentialElection();
+  }
+
   this.performStateChange();
   this.handlePopState();
 }
@@ -101,6 +115,31 @@ ElectionSearch.prototype.getUpcomingElections = function() {
       self.upcomingElections = response.results;
     });
   }
+};
+
+// Display upcoming presidential election by default
+ElectionSearch.prototype.getUpcomingPresidentialElection = function() {
+  var now = new Date();
+  var currentYear = now.getFullYear();
+  var queryP = {
+    state: 'US',
+    // Get upcoming presidential election year
+    cycle: currentYear + 4 - currentYear % 4
+  };
+  var presidentialUrl = helpers.buildUrl(['elections','search'], queryP);
+  var self = this;
+  // Display the result based on election result template
+  $.getJSON(presidentialUrl).done(function(response) {
+    var result = response.results[0];
+    var election = {
+      cycle: result.cycle,
+      electionName: self.formatName(result),
+      url: self.formatUrl(result),
+      electionDate: self.formatGenericElectionDate(result),
+      electionType: 'General election'
+    };
+    self.$resultsItems.append(resultTemplate(election));
+  });
 };
 
 /**
