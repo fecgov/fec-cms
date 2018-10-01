@@ -64,14 +64,17 @@ function ElectionSearch(selector) {
 
   // Get the last presidential election year
   var now = new Date();
-  var prevPresidentialYear = now.getFullYear() - now.getFullYear() % 4;
+  var prevPresidentialYear = now.getFullYear() - (now.getFullYear() % 4);
   var selectedCycle = URI.parseQuery(window.location.search).cycle;
-  if (selectedCycle == undefined){
+  if (selectedCycle == undefined) {
     selectedCycle = this.$cycle.val();
   }
 
   // Only show presidential election if selected cycle is after the previous presidential election
-  if (Number(selectedCycle) > prevPresidentialYear && now.getFullYear() >= prevPresidentialYear){
+  if (
+    Number(selectedCycle) > prevPresidentialYear &&
+    now.getFullYear() >= prevPresidentialYear
+  ) {
     this.getUpcomingPresidentialElection();
   }
 
@@ -124,9 +127,9 @@ ElectionSearch.prototype.getUpcomingPresidentialElection = function() {
   var queryP = {
     state: 'US',
     // Get upcoming presidential election year
-    cycle: currentYear + 4 - currentYear % 4
+    cycle: currentYear + 4 - (currentYear % 4)
   };
-  var presidentialUrl = helpers.buildUrl(['elections','search'], queryP);
+  var presidentialUrl = helpers.buildUrl(['elections', 'search'], queryP);
   var self = this;
   // Display the result based on election result template
   $.getJSON(presidentialUrl).done(function(response) {
