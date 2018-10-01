@@ -60,6 +60,11 @@
     top: u(1rem);
   }
 
+  .feedback-links {
+    position: relative;
+    bottom: u(6rem);
+  }
+
   @include media($lg) {
     @include transition(top .5s);
     height: 95vh;
@@ -110,6 +115,13 @@
 
 .feedback__button {
   margin-top: u(1rem);
+  position: relative;
+  bottom: u(6rem);
+}
+
+.grecaptcha-badge {
+  position: relative;
+  bottom: u(-10rem);
 }
 
 @media print {
