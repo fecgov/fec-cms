@@ -361,9 +361,8 @@ def committee(request, committee_id):
                     reverse('committee-by-id', kwargs={'committee_id': committee['committee_id']}) + '?cycle=' + str(c)
                 )
 
-    # If it's not a senate committee and we're in the current cycle
-    # check if there's any raw filings in the last three days
-    if committee['committee_type'] != 'S' and cycle == utils.current_cycle():
+    # If we're in the current cycle, check for raw filings in the last three days
+    if cycle == utils.current_cycle():
         raw_filings = api_caller._call_api(
             'efile', 'filings',
             cycle=cycle,
