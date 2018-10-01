@@ -145,6 +145,25 @@ class TestCandidate(TestCase):
         assert candidate["election_years"] == [2018, 2020]
         assert candidate["election_year"] == 2018
 
+    def test_past_special_returns_election_year(
+            self, load_with_nested_mock, load_candidate_totals_mock,
+            load_candidate_statement_of_candidacy_mock):
+
+        # Candidate ran in 2017 and 2018. Passing 2020 as cycle.
+        # Election years should be rounded, election year should be 2018
+        test_candidate = copy.deepcopy(self.STOCK_CANDIDATE)
+        test_candidate["cycles"] = [2016, 2018]
+        test_candidate["election_years"] = [2017, 2018]
+
+        load_with_nested_mock.return_value = (
+            test_candidate,
+            mock.MagicMock(),
+            2020
+        )
+        candidate = get_candidate('C001', 2020, True)
+        assert candidate["election_years"] == [2018]
+        assert candidate["election_year"] == 2018
+
     def test_candidate_with_future_cycle_falls_back_to_present(
             self, load_with_nested_mock, load_candidate_totals_mock,
             load_candidate_statement_of_candidacy_mock):
