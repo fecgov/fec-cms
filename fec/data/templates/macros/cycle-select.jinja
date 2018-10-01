@@ -30,15 +30,17 @@
 {% macro candidate_cycle_select(cycles, cycle=none, id='') %}
 {% set cycle = cycle | int %}
   <div class="content__section">
-    <label for="{{id}}-cycle" class="label cycle-select__label">Election</label>
-    <select id="{{id}}-cycle" class="js-cycle" name="cycle" data-cycle-location="query" data-election-full="False">
-      {% for each in cycles | sort(reverse=True) %}
-        <option
-            value="{{ each }}"
-            {% if cycle and cycle <= each and cycle > (each - 2) %}selected{% endif %}
-          >{{ each }}</option>
-      {% endfor %}
-    </select>
+    <div class="cycle-select">
+      <label for="{{id}}-cycle" class="label cycle-select__label">Two-year period</label>
+      <select id="{{id}}-cycle" class="js-cycle" name="cycle" data-cycle-location="query" data-election-full="False">
+        {% for each in cycles | sort(reverse=True) %}
+          <option
+              value="{{ each }}"
+              {% if cycle and cycle <= each and cycle > (each - 2) %}selected{% endif %}
+            >{{ each|fmt_year_range }}</option>
+        {% endfor %}
+      </select>
+    </div>
   </div>
 {% endmacro %}
 
