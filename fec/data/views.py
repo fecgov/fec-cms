@@ -118,9 +118,11 @@ def get_candidate(candidate_id, cycle, election_full):
         )
 
     election_year = next(
-        (year for year in sorted(candidate['election_years']) if year >= cycle),
+        (year for year in sorted(candidate['election_years']) if year + year % 2 >= cycle),
         None,
     )
+    if election_year:
+        election_year = election_year + election_year % 2
 
     result_type = 'candidates'
     duration = election_durations.get(candidate['office'], 2)
