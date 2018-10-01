@@ -58,6 +58,7 @@ function ElectionSearch(selector) {
   this.$state.on('change', this.performStateChange.bind(this));
   this.$form.on('change', 'input,select', this.performSearch.bind(this));
   this.$form.on('submit', this.performSearch.bind(this));
+  this.$cycle.on('change', this.getPresidentialElections.bind(this));
   $(window).on('popstate', this.handlePopState.bind(this));
 
   this.getUpcomingElections();
@@ -197,13 +198,98 @@ ElectionSearch.prototype.search = function(e, opts) {
  */
 ElectionSearch.prototype.handlePopState = function() {
   var params = URI.parseQuery(window.location.search);
+  var resultsItems = this.$resultsItems;
+  if (!_.isEmpty(params))
+  {
+  console.log(params)
   this.$zip.val(params.zip);
   this.$state.val(params.state);
   this.handleStateChange();
   this.$district.val(params.district);
   this.$cycle.val(params.cycle || this.$cycle.val());
   this.performSearch(null, { pushState: false });
+  }
+  else{
+  var self = this
+  this.$cycle.val('2020')
+  var cycle = this.$cycle.val();
+  //var cycle = this.$cycle.val()
+  $.getJSON(
+       this.getUrl(
+      //helpers.buildUrl(['elections'],
+        {office:'president',
+         cycle:cycle,
+         election_full:'true',
+      }),
+      function(data) {
+        if (data.results[0]) {
+            console.log('results')
+            var electionDate = self.formatGenericElectionDate(data.results[0])
+            resultsItems.append(resultTemplate({office:'Presidential', electionType: 'General election', electionDate:electionDate, electionName:officeMap[data.results[0].office]}))
+
+        }
+      }
+    )
+
+  console.log('no-params')
+  //this.$cycle.val('2020');
+  //var cycle = this.$cycle.val()
+  //var pquery = this.getUrl({office:'president', cycle:'2020'})
+  //console.log(pquery)
+  //var cycle = '2020';
+  //opts = _.extend({ pushState: true }, opts || {cycle:'2020'});
+  //opts = {cycle:'2020'};
+  //this.search()
+  //this.$resultsItems.append(resultTemplate({office:'Presidential', electionDate:cycle}))
+  //this.$resultsItems.html(noResultsTemplate(this.serialized));
+  //this.getUpcomingElections(null, { pushState: false })
+  //this.performSearch(null, { pushState: false });
+
+  }
+
 };
+
+ElectionSearch.prototype.getPresidentialElections = function(){
+  var resultsItems = this.$resultsItems;
+  var inputs = this.$form.find(':input').not(this.$cycle)
+  if (inputs.val() == '' && Number(this.$cycle.val()) % 4 == 0){
+  var self = this;
+  var cycle = this.$cycle.val();
+    $.getJSON(
+       this.getUrl(
+        {office:'president',
+         cycle:cycle,
+         election_full:'true',
+      }),
+      function(data) {
+        if (data.results[0]) {
+            console.log('results')
+            var electionDate = self.formatGenericElectionDate(data.results[0])
+            var urlBase = ['elections/president']
+            var url = helpers.buildAppUrl([urlBase, data.results[0].cycle])
+            resultsItems.empty();
+            resultsItems.append(resultTemplate({office:'Presidential', electionType: 'General election', electionDate:electionDate, electionName:officeMap[data.results[0].office], url:url}));
+            var obj = { office:'president',
+                        cycle:cycle,
+                        election_full:'true',
+                      }
+            window.history.pushState(
+             obj,
+             null,
+             URI('')
+              .query(obj)
+              .toString()
+            );
+        }
+      }
+    )
+  }
+  else {
+    resultsItems.empty();
+    resultsItems.append('No general elections for ' + this.$cycle.val())
+
+  }
+}
 
 ElectionSearch.prototype.shouldSearch = function(serialized) {
   return serialized.zip || serialized.state;
