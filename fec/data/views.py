@@ -117,10 +117,20 @@ def get_candidate(candidate_id, cycle, election_full):
             election_full=election_full,
         )
 
+    # Addresses issue#1644 - make any odd year special election an even year
+    #  for displaying elections for pulldown menu in Candidate pages
+    #  Using Set to ensure no duplicate years in final list
+    even_election_years = list({ year + (year % 2) for year in candidate.get('election_years', []) })
+
     election_year = next(
-        (year for year in sorted(candidate['election_years']) if year >= cycle),
+        (year for year in sorted(even_election_years) if year >= cycle),
         None,
     )
+
+    # If the candidate is not running in a future election, 
+    # return the most recent even eleciton year
+    if not election_year:
+        election_year = max(even_election_years)
 
     result_type = 'candidates'
     duration = election_durations.get(candidate['office'], 2)
@@ -135,11 +145,6 @@ def get_candidate(candidate_id, cycle, election_full):
         'electionFull': election_full,
         'candidateID': candidate['candidate_id']
     }
-
-     # Addresses issue#1644 - make any odd year special election an even year
-    #  for displaying elections for pulldown menu in Candidate pages
-    #  Using Set to ensure no duplicate years in final list
-    even_election_years = list({ year + (year % 2) for year in candidate.get('election_years', []) })
 
     # In the case of when a presidential or senate candidate has filed
     # for a future year that's beyond the current cycle,
