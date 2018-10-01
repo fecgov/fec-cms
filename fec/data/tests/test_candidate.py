@@ -143,7 +143,7 @@ class TestCandidate(TestCase):
         )
         candidate = get_candidate('C001', 2016, True)
         assert candidate["election_years"] == [2018, 2020]
-        assert candidate["election_year"] == 2017
+        assert candidate["election_year"] == 2018
 
     def test_candidate_with_future_cycle_falls_back_to_present(
             self, load_with_nested_mock, load_candidate_totals_mock,
