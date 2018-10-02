@@ -77,6 +77,7 @@ ElectionSearch.prototype.updateRedistrictingMessage = function() {
   }
 };
 ElectionSearch.prototype.performSearch = function() {
+  this.getPresidentialElections()
   this.search();
   this.updateRedistrictingMessage();
 };
