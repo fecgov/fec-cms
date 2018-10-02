@@ -264,7 +264,11 @@ ElectionSearch.prototype.getPresidentialElections = function() {
   var resultsItems = this.$resultsItems;
   var inputs = this.$form.find(':input').not(this.$cycle);
   var cycle = this.$cycle.val(); //|| URI.parseQuery(window.location.search).cycle
-  if (inputs.val() == '' && Number(this.$cycle.val()) % 4 == 0) {
+  var cycle = Number(this.$cycle.val()) % 4 == 0
+      ? this.$cycle.val()
+      : parseInt(cycle) + Number(this.$cycle.val()) % 4
+  console.log('this'+cycle)
+  if (inputs.val() == '') { // && Number(this.$cycle.val()) % 4 == 0) {
     var self = this;
     console.log(cycle);
     $.getJSON(
@@ -280,6 +284,10 @@ ElectionSearch.prototype.getPresidentialElections = function() {
           var urlBase = ['elections/president'];
           var url = helpers.buildAppUrl([urlBase, data.results[0].cycle]);
           resultsItems.empty();
+          if (Number(cycle) % 4 > 0) {
+             resultsItems.append('Next:')
+             console.log('FOO')
+            }
           resultsItems.append(
             resultTemplate({
               office: 'Presidential',
@@ -292,10 +300,11 @@ ElectionSearch.prototype.getPresidentialElections = function() {
         }
       }
     );
-  } else if (inputs.val() == '' && Number(this.$cycle.val()) % 4 !== 0) {
-    resultsItems.empty();
-    resultsItems.append('No general elections for ' + this.$cycle.val());
   }
+  //   else if (inputs.val() == '' && Number(this.$cycle.val()) % 4 !== 0) {
+  //   resultsItems.empty();
+  //   resultsItems.append('No general elections for ' + this.$cycle.val());
+  // }
   var obj = {
     office: 'president',
     cycle: cycle,
