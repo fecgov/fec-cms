@@ -118,7 +118,7 @@
 
 }
 
-#feedback-3 + div {
+.feedback textarea:last-of-type + div{
   height:0;
 }
 
