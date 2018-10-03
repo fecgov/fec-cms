@@ -10,7 +10,7 @@
   display: block;
   left: u(.5rem);
   overflow-y: scroll;
-  padding: u(2rem .5rem);
+  padding: u(2rem .5rem 8rem .5rem);
   position: fixed;
   right: u(.5rem);
   top: u(.5rem);
@@ -60,17 +60,12 @@
     top: u(1rem);
   }
 
-  .feedback-links {
-    position: relative;
-    bottom: u(6rem);
-  }
-
   @include media($lg) {
     @include transition(top .5s);
     height: 95vh;
     left: auto;
     overflow: auto;
-    padding: u(3rem 3rem 0 3rem);
+    padding: u(3rem 3rem 8rem 3rem);
     right: u(4rem);
     top: 5vh;
     width: u(52rem);
@@ -115,13 +110,16 @@
 
 .feedback__button {
   margin-top: u(1rem);
-  position: relative;
-  bottom: u(6rem);
 }
 
 .grecaptcha-badge {
   position: relative;
   bottom: u(-10rem);
+
+}
+
+#feedback-3 + div {
+  height:0;
 }
 
 @media print {
