@@ -109,17 +109,23 @@
 }
 
 .feedback__button {
-  margin-top: u(1rem);
+  margin-top:1rem;
 }
 
 .grecaptcha-badge {
   position: relative;
   bottom: u(-10rem);
+}
 
+.feedback__button {
+  margin-top:1rem;
 }
 
 .feedback textarea:last-of-type + div{
-  height:0;
+display:block;
+height:0px;
+width:1px;
+zoom:1;
 }
 
 @media print {
