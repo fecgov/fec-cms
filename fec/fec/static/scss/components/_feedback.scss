@@ -117,15 +117,12 @@
   bottom: u(-10rem);
 }
 
-.feedback__button {
-  margin-top:1rem;
-}
-
-.feedback textarea:last-of-type + div{
-display:block;
-height:0px;
-width:1px;
-zoom:1;
+/*this hides the recaptcha containing div so we can move the badge to bottom*/
+.feedback textarea:last-of-type + div {
+  display: block;
+  height: 0px;
+  width: 1px;
+  zoom: 1;
 }
 
 @media print {
