@@ -109,7 +109,7 @@
 }
 
 .feedback__button {
-  margin-top:1rem;
+  margin-top: u(1rem);
 }
 
 .grecaptcha-badge {
@@ -117,7 +117,7 @@
   bottom: u(-10rem);
 }
 
-/*this hides the recaptcha containing div so we can move the badge to bottom*/
+/* Hides the recaptcha containing div so we can move the badge to bottom */
 .feedback textarea:last-of-type + div {
   display: block;
   height: 0px;
