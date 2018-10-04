@@ -48,6 +48,7 @@ FEATURES = {
     'tips': bool(env.get_credential('FEC_FEATURE_TIPS', '')),
     'radform': bool(env.get_credential('FEC_FEATURE_RADFORM', '')),
     'linecharts': bool(env.get_credential('FEC_FEATURE_LINECHARTS', '')),
+    'linecharts_testb': bool(env.get_credential('FEC_FEATURE_LINECHARTS_TESTB', '')),
 }
 
 ENVIRONMENTS = {
