@@ -11,7 +11,7 @@
     <li class="breadcrumbs__item"><a href="/" class="breadcrumbs__link" rel="Home">Home</a></li>
     <li class="breadcrumbs__item">
       <span class="breadcrumbs__separator">›</span>
-      <a class="breadcrumbs__link" href="/updates?record-category={{self.get_category_display|slugify}}">FEC Record: {{ self.get_category_display }}</a>
+      <a class="breadcrumbs__link" href="/updates?update_type=fec-record&category={{self.get_category_display|slugify}}">FEC Record: {{ self.get_category_display }}</a>
     </li>
     <li class="breadcrumbs__item breadcrumbs__item--current">
       <span class="breadcrumbs__separator">›</span>
