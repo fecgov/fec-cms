@@ -493,7 +493,7 @@ DataTable.prototype.initFilters = function() {
   if (this.opts.useFilters) {
     var tagList = new filterTags.TagList({
       resultType: 'results',
-      showResultCount: false
+      showResultCount: true
     });
     this.$widgets.find('.js-filter-tags').prepend(tagList.$body);
     this.filterPanel = new FilterPanel();
