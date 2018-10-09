@@ -82,40 +82,43 @@
   }
 }
 
-.slab--home {
+.search--container {
   padding: u(1rem 0 1rem 0);
   background: $gray-lightest;
-
-  .search-controls__either {
-    margin: u(.5rem 0)!important;
-  }
 }
 
 .election-search {
 
+  .search--container {
+    position: relative;
+    overflow:hidden;
+
+    &:first-child {
+    height: auto;
+    margin-bottom: u(2rem);
+    }
+  }
   .search-controls__cycle {
-    @include span-columns(2.58 of 5.5);
+    @include span-columns(4.5 of 5.5);
+    margin: u(.5rem 2rem);
 
     .cycle-select{
-      width:100%;
-      margin-right: u(2rem);
+      width:95%;
     }
   }
   .search-controls__zip {
-    @include span-columns(2.58 of 5.5);
+    @include span-columns(4.5 of 5.5);
+    margin-left: u(2rem);
   }
 
-  .divider{
-    width:0!important;
-    float: left;
-    display: block;
-    display: block;
-    margin-left: u(-1.5rem);
-    height: u(8.3rem);
-    display: block;
-    border-right: 1px solid #bbb;
-    margin-top: u(.5rem);
-    padding-left: u(1.5rem);
+  .search-controls__either:first-child {
+    margin: u(.5rem 0)!important;
+  }
+
+  .search-controls__either:last-child {
+    fieldset{
+      margin-left: u(2rem);
+    }
   }
 
 }
@@ -160,8 +163,17 @@
     }
   }
 
-  // We make it shorter on the home page
-  .slab--home {
+  .election-search {
+
+    .search--container:first-child {
+    height: u(13.1rem);
+    margin-bottom: 0;
+    }
+
+    .search-controls__cycle {
+    @include span-columns(4.5 of 5.5);
+    margin: u(.5rem 2rem);
+    }
 
     .search-controls__or--vertical {
       margin: u(4rem 0);
@@ -179,11 +191,10 @@
         bottom: u(-3rem);
       }
     }
-    .divider {
-      @include span-columns(.5 of 5.5);
-    }
   }
-}
+
+
+}/*end MED breakpoint*/
 
 // All form elements go in rows
 @include media($lg) {
@@ -192,7 +203,44 @@
     @include span-columns(2 of 5.5);
   }
 
-  .slab--home {
+  .election-search {
+
+    .search--container:first-child {
+    height: u(12.6rem);
+    margin-bottom: 0;
+    }
+
+    .search-controls__state,
+    .search-controls__district {
+      @include span-columns(1.90 of 5.5);
+    }
+    .search-controls__zip {
+      @include span-columns(4.5 of 5.5);
+      margin-left: u(3rem);
+      position: relative;
+      top: u(0rem);
+    }
+
+    .search-controls__cycle {
+    margin: u(.5rem 2.5rem);
+    }
+
+    .search-controls__either:first-child {
+      @include span-columns(3.5);
+      margin: u(.5rem 0)!important;
+    }
+
+    .search-controls__either:last-child {
+      @include span-columns(8);
+      margin: u(.5rem 0)!important;
+
+      fieldset{
+        margin-left: u(1rem);
+      }
+    }
+  }
+
+  .search--container {
 
     .search-controls__either {
       @include span-columns(5.5);
