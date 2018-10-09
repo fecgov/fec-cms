@@ -1,5 +1,5 @@
 {% extends "layouts/sidebar-page.jinja" %}
-{% import "macros/breakdowns.jinja" as breakdowns %}
+{% import "macros/bythenumbers.jinja" as breakdowns %}
 {% import 'macros/cycle-select.jinja' as select %}
 
 {% block css %}
@@ -62,5 +62,5 @@
     type: 'disbursements'
   }
   </script>
-  <script src="{{ asset_for_js('breakdowns.js') }}"></script>
+  <script src="{{ asset_for_js('bythenumbers.js') }}"></script>
 {% endblock %}

@@ -7,7 +7,8 @@
     'module': true,
     'setTimeout': true,
     'clearTimeout': true,
-    'ga': true
+    'ga': true,
+    'grecaptcha': true
   },
   "extends": [
     "plugin:react/recommended",

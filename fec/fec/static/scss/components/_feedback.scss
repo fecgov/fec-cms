@@ -10,7 +10,7 @@
   display: block;
   left: u(.5rem);
   overflow-y: scroll;
-  padding: u(2rem .5rem);
+  padding: u(2rem .5rem 8rem .5rem);
   position: fixed;
   right: u(.5rem);
   top: u(.5rem);
@@ -65,7 +65,7 @@
     height: 95vh;
     left: auto;
     overflow: auto;
-    padding: u(3rem 3rem 0 3rem);
+    padding: u(3rem 3rem 8rem 3rem);
     right: u(4rem);
     top: 5vh;
     width: u(52rem);
@@ -110,6 +110,19 @@
 
 .feedback__button {
   margin-top: u(1rem);
+}
+
+.grecaptcha-badge {
+  position: relative;
+  bottom: u(-10rem);
+}
+
+/* Hides the recaptcha containing div so we can move the badge to bottom */
+.feedback textarea:last-of-type + div {
+  display: block;
+  height: 0px;
+  width: 1px;
+  zoom: 1;
 }
 
 @media print {

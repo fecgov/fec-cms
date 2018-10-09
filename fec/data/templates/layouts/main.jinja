@@ -11,7 +11,9 @@
   <link rel="stylesheet" type="text/css" href="{{ asset_for_css('base.css') }}" />
   {% endblock css %}
 
-  {% block head_js %}{% endblock %}
+  {% block head_js %}
+    <script src="{{ asset_for_js('polyfills.js') }}"></script>
+  {% endblock %}
 
   <script>
     BASE_PATH = '/data';
@@ -128,6 +130,7 @@
 {% block modals %}{% endblock %}
   <script src="{{ asset_for_js('vendor.js') }}"></script>
   <script src="{{ asset_for_js('data-init.js') }}"></script>
+  <script type="text/javascript" src='https://www.google.com/recaptcha/api.js'></script>
 {% block scripts %}{% endblock %}
 
 {% if FEC_CMS_ENVIRONMENT == 'PRODUCTION' %}

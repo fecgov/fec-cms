@@ -49,12 +49,26 @@ Overview.prototype.zeroPadTotals = function() {
   );
 };
 
+window.reactionBoxes = {};
+
+window.submitReactionspent = function(token) {
+  window.reactionBoxes['spent'].handleSubmit(token);
+};
+
+window.submitReactionraised = function(token) {
+  window.reactionBoxes['raised'].handleSubmit(token);
+};
+
 $(document).ready(function() {
   new Overview('.js-raised-overview', 'raised', 1);
   new Overview('.js-spent-overview', 'spent', 2);
   new lookup.ElectionLookup('#election-lookup', false);
-  new ReactionBox('[data-name="raised"][data-location="landing"]');
-  new ReactionBox('[data-name="spent"][data-location="landing"]');
+  window.reactionBoxes['raised'] = new ReactionBox(
+    '[data-name="raised"][data-location="landing"]'
+  );
+  window.reactionBoxes['spent'] = new ReactionBox(
+    '[data-name="spent"][data-location="landing"]'
+  );
 });
 
 $('.js-ga-event').each(function() {
