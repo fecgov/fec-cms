@@ -1,0 +1,17 @@
+<div class="slab--inline slab--neutral callout" data-office="{{office}}">
+  <span class="t-note t-small">You might also like:</span>
+  <h3 class="u-margin--bottom">
+    {{#if district}}
+    <span data-color="{{color}}"></span>
+    {{/if}}
+    <a href="{{url}}">{{electionName}}</a>
+  </h3>
+  <div class="row">
+    <span class="result__term">{{electionType}}:</span>
+    <span class="result__definition">{{electionDate}}</span>
+  </div>
+  <div class="row">
+    <span class="result__term">Current candidates:</span>
+    <a class="result__definition" href="{{url}}">Show all &raquo;</a>
+  </div>
+</div>
