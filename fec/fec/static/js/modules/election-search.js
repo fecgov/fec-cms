@@ -48,7 +48,7 @@ function ElectionSearch(selector) {
 
   this.$resultsItems = this.$elm.find('.js-results-items');
   this.$resultsTitle = this.$elm.find('.js-results-title');
-  this.$upcomingPresidential = this.$elm.find('.js-upcoming-presidential')
+  this.$upcomingPresidential = this.$elm.find('.js-upcoming-presidential');
 
   this.$map = $('.election-map');
   this.map = new ElectionMap(this.$map.get(0), {
@@ -80,14 +80,15 @@ ElectionSearch.prototype.updateRedistrictingMessage = function() {
 };
 ElectionSearch.prototype.performSearch = function() {
   var inputs = this.$form.find(':input').not(this.$cycle);
-//only search presidential elections if no other parameters (zip, state, district) are present
-  if ($(inputs).filter(function () {
-    return $(this).val().length > 0
-    }).length == 0)
- {
-  this.getPresidentialElections()
-  this.$resultsTitle.empty()
- }
+  //only search presidential elections if no other parameters (zip, state, district) are present
+  if (
+    $(inputs).filter(function() {
+      return $(this).val().length > 0;
+    }).length == 0
+  ) {
+    this.getPresidentialElections();
+    this.$resultsTitle.empty();
+  }
 
   this.search();
   this.updateRedistrictingMessage();
@@ -210,24 +211,21 @@ ElectionSearch.prototype.search = function(e, opts) {
  */
 ElectionSearch.prototype.handlePopState = function() {
   var params = URI.parseQuery(window.location.search);
-  var resultsItems = this.$resultsItems;
-    this.$zip.val(params.zip);
-    this.$state.val(params.state);
-    this.handleStateChange();
-    this.$district.val(params.district);
-    this.$cycle.val(params.cycle || this.$cycle.val());
-    this.performSearch(null, { pushState: false });
+  this.$zip.val(params.zip);
+  this.$state.val(params.state);
+  this.handleStateChange();
+  this.$district.val(params.district);
+  this.$cycle.val(params.cycle || this.$cycle.val());
+  this.performSearch(null, { pushState: false });
 };
 
 //search presidential elections only if no other parameters (zip, state, district) are present
 ElectionSearch.prototype.getPresidentialElections = function() {
-  console.log('ran getPresidentialElection')
   var resultsItems = this.$resultsItems;
   var cycle = this.$cycle.val();
-  if (Number(this.$cycle.val()) % 4 == 0)
-  {
+  if (Number(this.$cycle.val()) % 4 == 0) {
     var self = this;
-    $.getJSON (
+    $.getJSON(
       this.getUrl({
         state: 'US',
         cycle: cycle,
@@ -239,7 +237,7 @@ ElectionSearch.prototype.getPresidentialElections = function() {
           var urlBase = ['elections/president'];
           var url = helpers.buildAppUrl([urlBase, data.results[0].cycle]);
           resultsItems.empty();
-          self.$resultsTitle.text('')
+          self.$resultsTitle.text('');
           resultsItems.append(
             resultTemplate({
               office: 'Presidential',
@@ -252,15 +250,13 @@ ElectionSearch.prototype.getPresidentialElections = function() {
         }
       }
     );
-  }
-  else {
-  resultsItems.empty();
+  } else {
+    resultsItems.empty();
   }
 };
 
 //Show next upcoming presidential election on page load
 ElectionSearch.prototype.getUpcomingPresidentialElection = function() {
-  console.log('ran getUpcomingPresidentialElection')
   var params = URI.parseQuery(window.location.search);
   var now = new Date();
   var currentYear = now.getFullYear();
@@ -281,15 +277,12 @@ ElectionSearch.prototype.getUpcomingPresidentialElection = function() {
       electionDate: self.formatGenericElectionDate(result),
       electionType: 'General election'
     };
-    if (
-    _.isEmpty(params))
-    {
-    self.$resultsItems.append(resultTemplate(election));
+    if (_.isEmpty(params)) {
+      self.$resultsItems.append(resultTemplate(election));
     }
-    self.$upcomingPresidential .append(upcomingTemplate(election));
+    self.$upcomingPresidential.append(upcomingTemplate(election));
   });
 };
-
 
 ElectionSearch.prototype.shouldSearch = function(serialized) {
   return serialized.zip || serialized.state;
