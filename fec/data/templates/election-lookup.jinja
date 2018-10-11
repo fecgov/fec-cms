@@ -10,69 +10,64 @@
 
 {% block body %}
   {{ header.header(title) }}
-<section class="main election-search" id="election-lookup" >
+<section class="main election-search" id="election-lookup">
   <div class="container">
     <header class="heading--main">
       <h1>Search</h1>
     </header>
   </div>
 
-      <div class="container">
-        <form>
-
-           <div class="usa-width-one-fourth search--container">
-           <div class="search-controls search-controls__cycle">
-                {{ select.cycle_select(cycles, cycle , location='form', id='cycle-1') }}
-          </div>
-           </div>
-           <div class="usa-width-three-fourths search-controls search--container">
-            <div class="search-controls__either">
-              <div class="row">
-                <div class="search-controls__zip combo combo--search__medium combo--search--inline">
-                  <label for="zip" class="label">Find by ZIP code</label>
-                  <input type="text" inputmode="numeric" id="zip" name="zip" class="combo__input" >
-                  <button class="combo__button button--search button--standard" type="submit">
-                    <span class="u-visually-hidden">Search</span>
-                  </button>
-
-                  <span class="t-note t-sans search__example">Example: 90210</span>
-                </div>
-              </div>
-            </div>
-            <div class="search-controls__or search-controls__or--vertical">or</div>
-            <div class="search-controls__either">
-              <fieldset>
-                <legend class="label">Find by state and <span class="term" data-term="District">district</span></span></legend>
-                <div class="search-controls__state">
-                  <select id="state" name="state" aria-label="Select a state">
-                    <option value="">Select state</option>
-                    {% for value, label in constants.states.items() %}
-                    <option value="{{ value }}">{{ label }}</option>
-                    {% endfor %}
-                  </select>
-                </div>
-                <div class="search-controls__district">
-                  <select id="district" name="district" aria-label="Select a district" class="select--alt">
-                    <option value="">Select district</option>
-                    {% for value in range(1, 100) %}
-                    {% with formatted = '{0:02d}'.format(value) %}
-                    <option value="{{ formatted }}">{{ formatted }}</option>
-                    {% endwith %}
-                    {% endfor %}
-                  </select>
-                </div>
-                <div class="search-controls__submit">
-                  <button type="submit" class="button--search--text button--standard">Search</button>
-                </div>
-              </fieldset>
-            </div>
-          </div>
-          </div>
-
-        </form>
+  <div class="container">
+    <form>
+      <div class="usa-width-one-fourth search--container">
+        <div class="search-controls search-controls__cycle">
+          {{ select.cycle_select(cycles, cycle , location='form', id='cycle-1') }}
+        </div>
       </div>
+      <div class="usa-width-three-fourths search-controls search--container">
+        <div class="search-controls__either">
+          <div class="row">
+            <div class="search-controls__zip combo combo--search__medium combo--search--inline">
+              <label for="zip" class="label">Find by ZIP code</label>
+              <input type="text" inputmode="numeric" id="zip" name="zip" class="combo__input">
+              <button class="combo__button button--search button--standard" type="submit">
+                  <span class="u-visually-hidden">Search</span>
+              </button>
 
-    <div class="container">
+              <span class="t-note t-sans search__example">Example: 90210</span>
+            </div>
+          </div>
+        </div>
+        <div class="search-controls__or search-controls__or--vertical">or</div>
+        <div class="search-controls__either">
+          <fieldset>
+            <legend class="label">Find by state and <span class="term" data-term="District">district</span></span>
+            </legend>
+            <div class="search-controls__state">
+              <select id="state" name="state" aria-label="Select a state">
+                <option value="">Select state</option>
+                 {% for value, label in constants.states.items() %}
+                <option value="{{ value }}">{{ label }}</option>
+                 {% endfor %}
+              </select>
+            </div>
+            <div class="search-controls__district">
+              <select id="district" name="district" aria-label="Select a district" class="select--alt">
+                <option value="">Select district</option>
+                 {% for value in range(1, 100) %} {% with formatted = '{0:02d}'.format(value) %}
+                <option value="{{ formatted }}">{{ formatted }}</option>
+                 {% endwith %} {% endfor %}
+              </select>
+            </div>
+            <div class="search-controls__submit">
+                <button type="submit" class="button--search--text button--standard">Search</button>
+            </div>
+          </fieldset>
+        </div>
+      </div>
+    </form>
+  </div>
+  <div class="container">
     <div class="content__section--extra">
       <div class="usa-width-one-half">
         <div class="heading--section">
@@ -83,7 +78,8 @@
           <div class="js-accordion accordion--neutral pa-message" data-content-prefix="pa-redistricting">
             <button type="button" class="js-accordion-trigger accordion__button" aria-controls="pa-redistricting-content-0" aria-expanded="false">Information about 2018 Pennsylvania redistricting</button>
             <div class="accordion__content" id="pa-redistricting-content-0" aria-hidden="true">
-              <p>On February 19, 2018, Pennsylvania's Supreme Court released a new congressional map for Pennsylvannia. Some candidates subsequently amended their registration forms to reflect new district numbers. Candidates are listed using information from their registration forms and may be running in different districts than in the past.</p>
+                <p>On February 19, 2018, Pennsylvania's Supreme Court released a new congressional map for Pennsylvannia. Some candidates subsequently amended their registration forms to reflect new district numbers. Candidates are listed using
+                    information from their registration forms and may be running in different districts than in the past.</p>
             </div>
           </div>
         </div>
@@ -94,12 +90,12 @@
       <div class="usa-width-one-half">
         <div class="election-map"></div>
         <div class="t-italic js-map-approx-message">
-          <p>District maps on this page are approximate.</p>
+            <p>District maps on this page are approximate.</p>
         </div>
         <div class="message message--info js-map-message" aria-hidden="true">
-          District maps are only available for elections in {{ constants.DISTRICT_MAP_CUTOFF | fmt_year_range }} and later.
+            District maps are only available for elections in {{ constants.DISTRICT_MAP_CUTOFF | fmt_year_range }} and later.
         </div>
-          <div class="js-upcoming-presidential"></div>
+        <div class="js-upcoming-presidential"></div>
       </div>
     </div>
   </div>

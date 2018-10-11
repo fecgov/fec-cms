@@ -91,7 +91,7 @@
 
   .search--container {
     position: relative;
-    overflow:hidden;
+    overflow: hidden;
 
     &:first-child {
     height: auto;
@@ -120,7 +120,6 @@
       margin-left: u(2rem);
     }
   }
-
 }
 
 @include media($med) {
@@ -139,6 +138,11 @@
 
   .search-controls__zip {
     @include span-columns(3.5 of 5.5);
+
+    .button--search {
+    background-size: u(1.5rem);
+    background-position: 45%;
+    }
   }
 
   .search-controls__or--vertical {
@@ -165,6 +169,22 @@
 
   .election-search {
 
+    .search-controls__either:first-child {
+      @include span-columns(4);
+    }
+
+    .search-controls__either:last-child {
+      @include span-columns(7.3);
+
+      .search-controls__submit {
+        @include span-columns(7.3 of 7.3);
+        margin-top: u(0rem);
+         button {
+          width:94%;
+         }
+      }
+    }
+
     .search--container:first-child {
     height: u(13.1rem);
     margin-bottom: 0;
@@ -173,6 +193,18 @@
     .search-controls__cycle {
     @include span-columns(4.5 of 5.5);
     margin: u(.5rem 2rem);
+    }
+
+    .search-controls__zip {
+      .button--search {
+        background-size: u(1.5rem);
+        background-position: 45%;
+      }
+    }
+
+    .search-controls__state,
+    .search-controls__district {
+      @include span-columns(2.6 of 5.5);
     }
 
     .search-controls__or--vertical {
@@ -219,6 +251,8 @@
       margin-left: u(3rem);
       position: relative;
       top: u(0rem);
+
+
     }
 
     .search-controls__cycle {
@@ -236,6 +270,10 @@
 
       fieldset{
         margin-left: u(1rem);
+      }
+      .search-controls__submit {
+        @include span-columns(1.5 of 5.5);
+        margin-top: u(0rem);
       }
     }
   }
