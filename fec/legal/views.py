@@ -116,11 +116,11 @@ def legal_doc_search_mur(request):
     results = {}
     query = request.GET.get('search', '')
     offset = request.GET.get('offset', 0)
-    mur_no = request.GET.get('mur_no', '')
-    mur_respondents = request.GET.get('mur_respondents', '')
-    mur_election_cycles = request.GET.get('mur_election_cycles', '')
+    mur_no = request.GET.get('case_no', '')
+    mur_respondents = request.GET.get('case_respondents', '')
+    mur_election_cycles = request.GET.get('case_election_cycles', '')
 
-    results = api_caller.load_legal_search_results(query, 'murs', offset=offset, mur_no=mur_no, mur_respondents=mur_respondents)
+    results = api_caller.load_legal_search_results(query, 'murs', offset=offset, case_no=mur_no, case_respondents=mur_respondents)
 
     return render(request, 'legal-search-results-murs.jinja', {
         'parent': 'legal',
