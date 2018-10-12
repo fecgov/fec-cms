@@ -46,6 +46,7 @@ function ElectionSearch(selector) {
   this.$district = this.$form.find('[name="district"]').prop('disabled', true);
   this.$cycle = this.$form.find('[name="cycle"]');
 
+  this.$resultsHeading = this.$elm.find('.js-results-heading');
   this.$resultsItems = this.$elm.find('.js-results-items');
   this.$resultsTitle = this.$elm.find('.js-results-title');
   this.$upcomingPresidential = this.$elm.find('.js-upcoming-presidential');
@@ -196,6 +197,7 @@ ElectionSearch.prototype.search = function(e, opts) {
         analytics.pageView();
       }
     } else if (self.results) {
+      self.$resultsHeading.show();
       // Requested options match saved options; redraw cached results. This
       // ensures that clicking on a state or district will highlight it when
       // the search options don't match the state of the map, e.g. after the
@@ -236,28 +238,28 @@ ElectionSearch.prototype.getPresidentialElections = function() {
           var electionDate = self.formatGenericElectionDate(data.results[0]);
           var urlBase = ['elections/president'];
           var url = helpers.buildAppUrl([urlBase, data.results[0].cycle]);
-          resultsItems.empty();
+          var election = {
+            office: 'Presidential',
+            electionType: 'General election',
+            electionDate: electionDate,
+            electionName: officeMap[data.results[0].office],
+            url: url
+          };
+          self.$resultsHeading.show();
           self.$resultsTitle.text('');
-          resultsItems.append(
-            resultTemplate({
-              office: 'Presidential',
-              electionType: 'General election',
-              electionDate: electionDate,
-              electionName: officeMap[data.results[0].office],
-              url: url
-            })
-          );
+          self.$resultsItems.empty();
+          resultsItems.append(resultTemplate(election));
         }
       }
     );
   } else {
+    this.$resultsHeading.hide();
     resultsItems.empty();
   }
 };
 
 //Show next upcoming presidential election on page load
 ElectionSearch.prototype.getUpcomingPresidentialElection = function() {
-  var params = URI.parseQuery(window.location.search);
   var now = new Date();
   var currentYear = now.getFullYear();
   var queryP = {
@@ -277,9 +279,6 @@ ElectionSearch.prototype.getUpcomingPresidentialElection = function() {
       electionDate: self.formatGenericElectionDate(result),
       electionType: 'General election'
     };
-    if (_.isEmpty(params)) {
-      self.$resultsItems.append(resultTemplate(election));
-    }
     self.$upcomingPresidential.append(upcomingTemplate(election));
   });
 };
