@@ -126,7 +126,6 @@ def legal_doc_search_adr(request):
     case_no = request.GET.get('case_no', '')
     case_respondents = request.GET.get('case_respondents', '')
     adr_election_cycles = request.GET.get('adr_election_cycles', '')
-    print ('adrs: ' + query)
 
     results = api_caller.load_legal_search_results(query, 'adrs', offset=offset, case_no=case_no, case_respondents=case_respondents)
 
