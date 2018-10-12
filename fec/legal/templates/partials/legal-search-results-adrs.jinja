@@ -1,0 +1,49 @@
+<div class="simple-table simple-table--responsive simple-table--display legal-search-results legal-mur data-container__datatable">
+  <div class="simple-table__header">
+    <div class="simple-table__header-cell cell--25">Case</div>
+    <div class="simple-table__header-cell">Election cycle(s)</div>
+    <div class="simple-table__header-cell">Closing date</div>
+    <div class="simple-table__header-cell">Subject(s)</div>
+  </div>
+  <div class="simple-table__row-group">
+  {% for adr in adrs %}
+    <div class="simple-table__row legal-search-result">
+      <div class="simple-table__cell">
+        <div class="t-sans">
+          <a title="{{ adr.name }}" href="/data/legal/alternative-dispute-resolution/{{ adr.no }}">
+            <span class="t-bold">ADR #{{ adr.no }}</span><br />
+            {{ adr.name.upper() }}
+          </a>
+          {% for document in adr.documents %}
+            <a href="https://www.fec.gov{{ document.url }}">Complaint</a><br />
+          {% endfor %}
+          {% if adr.highlights %}
+            <div class="t-sans u-padding--top">Keyword match:</div>
+            {% for highlight in adr.highlights %}
+              <div class="t-serif legal-search-result__hit u-padding--left">
+                &hellip;
+                  {{ highlight|safe }} &hellip;
+              </div>
+            {% endfor %}
+          {% endif %}
+        </div>
+      </div>
+      <div class="simple-table__cell">
+        <div class="t-sans">
+          {% for election_cycle in adr.election_cycles %}
+            {{ election_cycle }}<br />
+          {% endfor %}
+        </div>
+      </div>
+      <div class="simple-table__cell">
+        <div class="t-sans">{{ adr.close_date | date(fmt='%m/%d/%Y') }}</div>
+      </div>
+      <div class="simple-table__cell">
+        {% for subject in adr.subjects %}
+          <div class="t-sans">{{ subject }}</div>
+        {% endfor %}
+      </div>
+    </div>
+  {% endfor %}
+  </div>
+</div>

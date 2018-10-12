@@ -1,0 +1,36 @@
+{% extends "layouts/legal-doc-search-results.jinja" %}
+{% import 'macros/legal.jinja' as legal %}
+{% set document_type_display_name = 'Alternative dispute resolutions' %}
+
+{% block header %}
+<header class="page-header slab slab--primary">
+  {{ breadcrumb.breadcrumbs('Search results', [('/legal-resources', 'Legal resources'), ('/legal-resources/enforcement', 'Enforcement')]) }}
+</header>
+{% endblock %}
+
+{% block filters %}
+  {{ legal.keyword_search(result_type, query) }}
+  <div class="filter">
+    <label class="label" for="adr_no">ADR number</label>
+    <input id="adr_no" name="adr_no" type="text" value="{{ adr_no }}">
+  </div>
+  <div class="filter">
+    <label class="label" for="adr_respondents">ADR respondents</label>
+    <input id="adr_respondents" name="adr_respondents" type="text" value="{{ adr_respondents }}">
+  </div>
+  <div class="filter">
+    <button type="submit" class="button button--cta">Apply filters</button>
+  </div>
+{% endblock %}
+
+{% block results %}
+{% with adrs = results.adrs %}
+
+{% include 'partials/legal-search-results-adrs.jinja' %}
+{% endwith %}
+
+{% with results=results %}
+{% include 'partials/legal-pagination.jinja' %}
+{% endwith %}
+
+{% endblock %}
