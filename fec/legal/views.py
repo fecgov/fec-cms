@@ -123,19 +123,19 @@ def legal_doc_search_adr(request):
     results = {}
     query = request.GET.get('search', '')
     offset = request.GET.get('offset', 0)
-    adr_no = request.GET.get('adr_no', '')
-    adr_respondents = request.GET.get('adr_respondents', '')
+    case_no = request.GET.get('case_no', '')
+    case_respondents = request.GET.get('case_respondents', '')
     adr_election_cycles = request.GET.get('adr_election_cycles', '')
     print ('adrs: ' + query)
 
-    results = api_caller.load_legal_search_results(query, 'adrs', offset=offset, adr_no=adr_no, adr_respondents=adr_respondents)
+    results = api_caller.load_legal_search_results(query, 'adrs', offset=offset, case_no=case_no, case_respondents=case_respondents)
 
     return render(request, 'legal-search-results-adrs.jinja', {
         'parent': 'legal',
         'results': results,
         'result_type': 'adrs',
-        'adr_no': adr_no,
-        'adr_respondents': adr_respondents,
+        'case_no': case_no,
+        'case_respondents': case_respondents,
         'query': query
     })
 
