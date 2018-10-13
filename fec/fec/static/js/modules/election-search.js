@@ -256,6 +256,18 @@ ElectionSearch.prototype.getPresidentialElections = function() {
     this.$resultsHeading.hide();
     resultsItems.empty();
   }
+  var obj = {
+    state: '',
+    cycle: cycle,
+    election_full: 'true'
+  };
+  window.history.pushState(
+    obj,
+    null,
+    URI('')
+      .query(obj)
+      .toString()
+  );
 };
 
 //Show next upcoming presidential election on page load
