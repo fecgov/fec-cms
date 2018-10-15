@@ -95,15 +95,9 @@ function mapSort(order, column) {
 }
 
 function getCount(response) {
-  // for audit data set, retrun real data result rows
-  if (
-    window.location.pathname === '/legal-resources/enforcement/audit-search/'
-  ) {
-    return response.pagination.count;
-  }
   var pagination_count = response.pagination.count;
 
-  if (response.pagination.count > 1000) {
+  if (response.pagination.count > 500000) {
     pagination_count = Math.round(response.pagination.count / 1000) * 1000;
   }
 
