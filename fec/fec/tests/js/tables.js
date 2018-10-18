@@ -457,11 +457,11 @@ describe('data table', function() {
       expect(results).to.deep.equal(expected);
     });
 
-    it('should return round responses over 1000 to the nearest thousand', function() {
-      var response = { pagination: { count: 1500 }, results: 'test'};
+    it('should return round responses over 500000 to the nearest thousand', function() {
+      var response = { pagination: { count: 512345 }, results: 'test'};
       var expected = {
-        recordsTotal: 2000,
-        recordsFiltered: 2000,
+        recordsTotal: 512000,
+        recordsFiltered: 512000,
         data: 'test'
       };
       var results = tables.mapResponse(response);
