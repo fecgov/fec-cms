@@ -127,7 +127,7 @@ def get_candidate(candidate_id, cycle, election_full):
         None,
     )
 
-    # If the candidate is not running in a future election, 
+    # If the candidate is not running in a future election,
     # return the most recent even eleciton year
     if not election_year:
         election_year = max(even_election_years)
@@ -269,17 +269,17 @@ def candidate(request, candidate_id):
     return render(request, 'candidates-single.jinja', candidate)
 
 
-def committee(request, committee_id):
-    # grab url query string parameters
-    cycle = request.GET.get('cycle', None)
+def get_committee(committee_id, cycle):
 
     redirect_to_previous = False if cycle else True
     committee, all_candidates, cycle = api_caller.load_with_nested('committee', committee_id, 'candidates', cycle)
 
-    # When there are multiple candidate records of various offices (H, S, P) linked to a single
-    # committee ID, we want to associate the candidate record with the matching committee type
-    # For each candidate, check if the committee type is equal to the candidate's office. If true
-    # add that candidate to the list of candidates to return
+    # When there are multiple candidate records of various offices (H, S, P)
+    # linked to a single committee ID, we want to associate the candidate record
+    # with the matching committee type
+    # For each candidate, check if the committee type is equal to
+    # the candidate's office.
+    # If true add that candidate to the list of candidates to return
     candidates = []
     for candidate in all_candidates:
         if committee['committee_type'] == candidate['office']:
@@ -304,11 +304,8 @@ def committee(request, committee_id):
 
         candidate['related_cycle'] = cycle if election_years else None
 
-
     # Load financial totals and reports for a given committee
     financials = api_caller.load_cmte_financials(committee_id, cycle=cycle)
-
-
     report_type = report_types.get(committee['committee_type'], 'pac-party')
     reports = financials['reports']
     totals = financials['totals']
@@ -346,7 +343,6 @@ def committee(request, committee_id):
         'candidates': candidates,
     }
 
-
     if financials['reports'] and financials['totals']:
         # Format the current two-year-period's totals using the process utilities
         if committee['committee_type'] == 'I':
@@ -380,6 +376,13 @@ def committee(request, committee_id):
     else:
         template_variables['has_raw_filings'] = False
 
+    return template_variables
+
+
+def committee(request, committee_id):
+    # grab url query string parameters
+    cycle = request.GET.get('cycle', None)
+    template_variables = get_committee(committee_id, cycle)
     return render(request, 'committees-single.jinja', template_variables)
 
 
@@ -504,7 +507,7 @@ def spending(request):
         'page_info': utils.page_info(top_spenders['pagination'])
     })
 
-    
+
 def feedback(request):
     if request.method == 'POST':
 
