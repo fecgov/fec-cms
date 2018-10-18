@@ -32,7 +32,7 @@ class TestCommittee(TestCase):
         'filing_frequency': 'Q',
         'cycle': 2018,
         'city': 'BRENTWOOD',
-        'name': 'MY JOINT FUNDRAISING COMMITTEE'
+        'name': 'MY JOINT FUNDRAISING COMMITTEE',
     }
 
     STOCK_FINANCIALS = {
@@ -187,15 +187,18 @@ class TestCommittee(TestCase):
         assert committee['state'] == test_committee['state']
         assert committee['zip'] == test_committee['zip']
         assert committee['treasurer_name'] == test_committee['treasurer_name']
-        # assert committee['parent'] == test_committee['parent']
+        assert committee['parent'] == 'data'
         assert committee['cycle'] == test_committee['cycle']
         assert committee['cycles'] == test_committee['cycles']
-        # assert committee['year'] == test_committee['year']
-        # assert committee['result_type'] == test_committee['result_type']
-        # assert committee['report_type'] == test_committee['report_type']
-        # assert committee['reports'] == test_committee['reports']
+        assert committee['year'] == test_committee['cycle']
+        assert committee['result_type'] == 'committees'
+        assert committee['report_type'] == 'pac-party'
+        assert committee['reports'] == self.STOCK_FINANCIALS['reports']
+        assert committee['party_full'] == test_committee['party_full']
         assert committee['context_vars'] == {
             'cycle': 2018,
             'timePeriod': '2017–2018',
             'name': 'MY JOINT FUNDRAISING COMMITTEE'
         }
+        assert committee['totals'] == []
+        assert committee['candidates'] == []

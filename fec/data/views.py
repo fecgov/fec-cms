@@ -359,9 +359,7 @@ def get_committee(committee_id, cycle):
         for c in sorted(committee['cycles'], reverse=True):
             financials = api_caller.load_cmte_financials(committee['committee_id'], cycle=c)
             if financials['reports']:
-                return redirect(
-                    reverse('committee-by-id', kwargs={'committee_id': committee['committee_id']}) + '?cycle=' + str(c)
-                )
+                return get_committee(committee_id, c)
 
     # If we're in the current cycle, check for raw filings in the last three days
     if cycle == utils.current_cycle():
