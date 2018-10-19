@@ -26,8 +26,8 @@
       <nav class="sidebar sidebar--neutral sidebar--left side-nav js-toc">
         <ul class="sidebar__content">
           <li class="side-nav__item"><a class="side-nav__link" href="#summary">Summary</a></li>
+          <li class="side-nav__item"><a class="side-nav__link" href="#disposition">Disposition</a></li>
           <li class="side-nav__item"><a class="side-nav__link" href="#documents">Documents</a></li>
-          <li class="side-nav__item"><a class="side-nav__link" href="#commission_votes">Commission votes</a></li>
           <li class="side-nav__item"><a class="side-nav__link" href="#participants">Participants</a></li>
         </ul>
       </nav>
@@ -38,7 +38,11 @@
       <h2 class="t-ruled--bold t-ruled--bottom">Summary</h2>
       <div class="legal-adr__property">
         <p>
-          <strong>SUBJECT:</strong> {{ '; '.join(adr['subjects']) }}
+          {% if adr['respondents']|length == 1 %}
+            <strong>SUBJECT:</strong> {{ '; '.join(adr['subjects']) }}
+          {% else %}
+            <strong>SUBJECT:</strong> None
+          {% endif %}
         </p>
       </div>
       <div class="legal-adr__property">
@@ -71,10 +75,8 @@
       <div class="legal-adr__property">
           {% if adr['election_cycles']|length > 1 %}
             <p><strong>ELECTION CYCLES:</strong>
-          {% elif adr['election_cycles']|length == 1 %}
-            <p><strong>ELECTION CYCLE:</strong>
           {% else %}
-            <p style="display:none"></p>
+            <p><strong>ELECTION CYCLE:</strong>
           {% endif %}
           {% for election_cycle in adr.election_cycles %}
             {{ election_cycle }};
@@ -89,6 +91,11 @@
       <div class="legal-adr__property">
         <p>
           <strong>OPENING DATE:</strong> {{ adr.close_date | date(fmt='%m/%d/%Y') }}
+        </p>
+      </div>
+      <div class="legal-adr__property">
+        <p>
+          <strong>DISPOSITION:</strong> {{ '<br>'.join(adr['disposition_text']) | safe }}
         </p>
       </div>
     </div>
@@ -139,14 +146,6 @@
         {% endfor %}
       </tbody>
     </table>
-  </section>
-  <section id="commission_votes" class="content__section">
-    <h2 class="t-ruled--bold t-ruled--bottom u-no-margin">Commission votes</h2>
-    <div class="legal-adr__property u-padding--top">
-      <p>
-        <strong>ACTION:</strong> {{ '<br>'.join(adr['disposition_text']) | safe }}
-      </p>
-    </div>
   </section>
   <section id="documents" class="content__section">
     <h2 class="t-ruled--bold t-ruled--bottom u-no-margin">Documents</h2>
