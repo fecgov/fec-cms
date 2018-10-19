@@ -38,7 +38,7 @@
       <h2 class="t-ruled--bold t-ruled--bottom">Summary</h2>
       <div class="legal-adr__property">
         <p>
-          {% if adr['respondents']|length == 1 %}
+          {% if adr['respondents']|length > 1 %}
             <strong>SUBJECT:</strong> {{ '; '.join(adr['subjects']) }}
           {% else %}
             <strong>SUBJECT:</strong> None
@@ -73,13 +73,13 @@
         <p></p>
       </div>
       <div class="legal-adr__property">
-          {% if adr['election_cycles']|length > 1 %}
+          {% if adr.election_cycles|length > 1 %}
             <p><strong>ELECTION CYCLES:</strong>
           {% else %}
             <p><strong>ELECTION CYCLE:</strong>
           {% endif %}
           {% for election_cycle in adr.election_cycles %}
-            {{ election_cycle }};
+            {{ election_cycle }}{% if loop.index < loop.length %};{% endif %}
           {% endfor %}
         </p>
       </div>
