@@ -23,6 +23,17 @@
   </div>
 {% endblock %}
 
+{% block message %}
+<div class="data-container__tags">
+  <div class="row">
+    <h3 class="tags__title">Viewing <span class="tags__count">{{ results.total_adrs }}</span>  filtered results for:</h3>
+  </div>
+</div>
+<div class="message message--info u-no-margin-top">
+  <p>You can search all FEC ADR cases using keywords, ADR case numbers, names of respondents and more. For additional search filters, you can still search ADR cases using our legacy <a href="http://eqs.fec.gov">FEC Enforcement Query System</a>.</p>
+</div>
+{% endblock %}
+
 {% block results %}
 {% with results=results %}
 
