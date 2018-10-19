@@ -86,6 +86,10 @@ def advanced(request):
 
 
 def get_candidate(candidate_id, cycle, election_full):
+    """
+    Given candidate_id, cycle, election_full, call the API and get the candidate
+    and candidate financial data needed to render the candidate profile page
+    """
 
     candidate, committees, cycle = api_caller.load_with_nested(
         'candidate', candidate_id, 'committees',
@@ -258,6 +262,11 @@ def get_candidate(candidate_id, cycle, election_full):
 
 
 def candidate(request, candidate_id):
+    """
+    Take in the request, call get_candidate to get the required information
+    from the API, and render the candidate profile page template
+    """
+
     cycle = request.GET.get('cycle', None)
     if cycle is not None:
         cycle = int(cycle)
@@ -270,41 +279,42 @@ def candidate(request, candidate_id):
 
 
 def get_committee(committee_id, cycle):
+    """
+    Given a committee_id and cycle, call the API and get the committee
+    and committee financial data needed to render the committee profile page
+    """
 
     redirect_to_previous = False if cycle else True
     committee, all_candidates, cycle = api_caller.load_with_nested('committee', committee_id, 'candidates', cycle)
 
     # When there are multiple candidate records of various offices (H, S, P)
-    # linked to a single committee ID, we want to associate the candidate record
-    # with the matching committee type
-    # For each candidate, check if the committee type is equal to
-    # the candidate's office.
-    # If true add that candidate to the list of candidates to return
-    candidates = []
-    for candidate in all_candidates:
-        if committee['committee_type'] == candidate['office']:
-            candidates.append(candidate)
+    # linked to a single committee ID,
+    # associate the candidate record with the matching committee type
+    candidates = [
+        candidate
+        for candidate in all_candidates
+        if committee['committee_type'] == candidate['office']
+    ]
 
     parent = 'data'
+    result_type = 'committees'
     cycle = int(cycle)
     year = to_date(committee, cycle)
-    result_type = 'committees'
 
     # Link to current cycle if candidate has a corresponding page, else link
     # without cycle query parameter
     # See https://github.com/fecgov/openFEC/issues/1536
-    # For each candidate, set related_cycle to the candidate's time period
-    # relative to the selected cycle.
     for candidate in candidates:
         election_years = []
         for election_year in candidate['election_years']:
             start_of_election_period = election_year - election_durations[candidate['office']]
             if start_of_election_period < cycle and cycle <= election_year:
                 election_years.append(election_year)
-
+        # For each candidate, set related_cycle to the candidate's time period
+        # relative to the selected cycle.
         candidate['related_cycle'] = cycle if election_years else None
 
-    # Load financial totals and reports for a given committee
+    # Load financial totals and reports for the committee
     financials = api_caller.load_cmte_financials(committee_id, cycle=cycle)
     report_type = report_types.get(committee['committee_type'], 'pac-party')
     reports = financials['reports']
@@ -347,27 +357,39 @@ def get_committee(committee_id, cycle):
         # Format the current two-year-period's totals using the process utilities
         if committee['committee_type'] == 'I':
             # IE-only committees have very little data, so they just get this one
-            template_variables['ie_summary'] = utils.process_ie_data(financials['totals'][0])
+            template_variables['ie_summary'] = utils.process_ie_data(
+                financials['totals'][0]
+            )
         else:
             # All other committees have three tables
-            template_variables['raising_summary'] = utils.process_raising_data(financials['totals'][0])
-            template_variables['spending_summary'] = utils.process_spending_data(financials['totals'][0])
-            template_variables['cash_summary'] = utils.process_cash_data(financials['totals'][0])
+            template_variables['raising_summary'] = utils.process_raising_data(
+                financials['totals'][0]
+            )
+            template_variables['spending_summary'] = utils.process_spending_data(
+                financials['totals'][0]
+            )
+            template_variables['cash_summary'] = utils.process_cash_data(
+                financials['totals'][0]
+            )
 
+    # If there are no reports, find the first cycle with reports and start again
     if redirect_to_previous and not financials['reports']:
-        # If there's no reports, find the first year with reports and redirect there
-        for c in sorted(committee['cycles'], reverse=True):
-            financials = api_caller.load_cmte_financials(committee['committee_id'], cycle=c)
+        for previous_cycle in sorted(committee['cycles'], reverse=True):
+            financials = api_caller.load_cmte_financials(
+                committee['committee_id'], cycle=previous_cycle
+            )
             if financials['reports']:
-                return get_committee(committee_id, c)
+                # Start again with the given cycle
+                return get_committee(committee_id, previous_cycle)
 
     # If we're in the current cycle, check for raw filings in the last three days
     if cycle == utils.current_cycle():
         raw_filings = api_caller._call_api(
-            'efile', 'filings',
+            'efile',
+            'filings',
             cycle=cycle,
             committee_id=committee['committee_id'],
-            min_receipt_date=template_variables['min_receipt_date']
+            min_receipt_date=template_variables['min_receipt_date'],
         )
         if len(raw_filings.get('results')) > 0:
             template_variables['has_raw_filings'] = True
@@ -378,10 +400,14 @@ def get_committee(committee_id, cycle):
 
 
 def committee(request, committee_id):
-    # grab url query string parameters
+    """
+    Take in the request, call get_committee to get the required information
+    from the API, and render the committee profile page template
+    """
+
     cycle = request.GET.get('cycle', None)
-    template_variables = get_committee(committee_id, cycle)
-    return render(request, 'committees-single.jinja', template_variables)
+    committee = get_committee(committee_id, cycle)
+    return render(request, 'committees-single.jinja', committee)
 
 
 def elections_lookup(request):
