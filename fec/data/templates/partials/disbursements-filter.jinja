@@ -29,7 +29,7 @@ Filter disbursements
   {{ date.partition_field('date', 'Disbursement date', dates ) }}
 </div>
 <div class="js-accordion accordion--neutral" data-content-prefix="filter" data-open-first="false">
-  <button type="button" class="js-accordion-trigger accordion__button">Spender details</button>
+  <button type="button" class="js-accordion-trigger accordion__button">Recipient details</button>
   <div class="accordion__content">
     {{ text.field('recipient_city', 'City') }}
     {{ states.field('recipient_state')}}
@@ -52,6 +52,10 @@ Filter disbursements
     <div class="message message--info message--small">
       <span class="t-block">Disbursements are reported periodically, according to the filer's reporting schedule. Disbursements are updated as they’re processed— that time can vary.</span>
     </div>
+  </div>
+  <button type="button" class="js-accordion-trigger accordion__button">Spender committee type</button>
+  <div class="accordion__content">
+    {% include 'partials/filters/spender-committee-types.jinja' %}
   </div>
 </div>
 {% endblock %}
