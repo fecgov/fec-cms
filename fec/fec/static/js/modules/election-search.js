@@ -15,6 +15,7 @@ var helpers = require('./helpers');
 var decoders = require('./decoders');
 
 var resultTemplate = require('../templates/electionResult.hbs');
+var upcomingTemplate = require('../templates/upcomingPresidential.hbs');
 var zipWarningTemplate = require('../templates/electionZipWarning.hbs');
 var noResultsTemplate = require('../templates/electionNoResults.hbs');
 
@@ -45,8 +46,10 @@ function ElectionSearch(selector) {
   this.$district = this.$form.find('[name="district"]').prop('disabled', true);
   this.$cycle = this.$form.find('[name="cycle"]');
 
+  this.$resultsHeading = this.$elm.find('.js-results-heading');
   this.$resultsItems = this.$elm.find('.js-results-items');
   this.$resultsTitle = this.$elm.find('.js-results-title');
+  this.$upcomingPresidential = this.$elm.find('.js-upcoming-presidential');
 
   this.$map = $('.election-map');
   this.map = new ElectionMap(this.$map.get(0), {
@@ -60,6 +63,7 @@ function ElectionSearch(selector) {
   this.$form.on('submit', this.performSearch.bind(this));
   $(window).on('popstate', this.handlePopState.bind(this));
 
+  this.getUpcomingPresidentialElection();
   this.getUpcomingElections();
   this.performStateChange();
   this.handlePopState();
@@ -76,6 +80,17 @@ ElectionSearch.prototype.updateRedistrictingMessage = function() {
   }
 };
 ElectionSearch.prototype.performSearch = function() {
+  var inputs = this.$form.find(':input').not(this.$cycle);
+  //only search presidential elections if no other parameters (zip, state, district) are present
+  if (
+    $(inputs).filter(function() {
+      return $(this).val().length > 0;
+    }).length == 0
+  ) {
+    this.getPresidentialElections();
+    this.$resultsTitle.empty();
+  }
+
   this.search();
   this.updateRedistrictingMessage();
 };
@@ -182,6 +197,7 @@ ElectionSearch.prototype.search = function(e, opts) {
         analytics.pageView();
       }
     } else if (self.results) {
+      self.$resultsHeading.show();
       // Requested options match saved options; redraw cached results. This
       // ensures that clicking on a state or district will highlight it when
       // the search options don't match the state of the map, e.g. after the
@@ -203,6 +219,80 @@ ElectionSearch.prototype.handlePopState = function() {
   this.$district.val(params.district);
   this.$cycle.val(params.cycle || this.$cycle.val());
   this.performSearch(null, { pushState: false });
+};
+
+//search presidential elections only if no other parameters (zip, state, district) are present
+ElectionSearch.prototype.getPresidentialElections = function() {
+  var resultsItems = this.$resultsItems;
+  var cycle = this.$cycle.val();
+  if (Number(this.$cycle.val()) % 4 == 0) {
+    var self = this;
+    $.getJSON(
+      this.getUrl({
+        state: 'US',
+        cycle: cycle,
+        election_full: 'true'
+      }),
+      function(data) {
+        if (data.results[0]) {
+          var electionDate = self.formatGenericElectionDate(data.results[0]);
+          var urlBase = ['elections/president'];
+          var url = helpers.buildAppUrl([urlBase, data.results[0].cycle]);
+          var election = {
+            office: 'Presidential',
+            electionType: 'General election',
+            electionDate: electionDate,
+            electionName: officeMap[data.results[0].office],
+            url: url
+          };
+          self.$resultsHeading.show();
+          self.$resultsTitle.text('');
+          self.$resultsItems.empty();
+          resultsItems.append(resultTemplate(election));
+        }
+      }
+    );
+  } else {
+    this.$resultsHeading.hide();
+    resultsItems.empty();
+  }
+  var obj = {
+    state: '',
+    cycle: cycle,
+    election_full: 'true'
+  };
+  window.history.pushState(
+    obj,
+    null,
+    URI('')
+      .query(obj)
+      .toString()
+  );
+};
+
+//Show next upcoming presidential election on page load
+ElectionSearch.prototype.getUpcomingPresidentialElection = function() {
+  var now = new Date();
+  var currentYear = now.getFullYear();
+  var queryP = {
+    state: 'US',
+    // Get upcoming presidential election year
+    cycle: currentYear + 4 - (currentYear % 4)
+  };
+  var presidentialUrl = helpers.buildUrl(['elections', 'search'], queryP);
+  var self = this;
+  // Display the result based on election result template
+  $.getJSON(presidentialUrl).done(function(response) {
+    var result = response.results[0];
+    var election = {
+      cycle: result.cycle,
+      electionName: self.formatName(result),
+      url: self.formatUrl(result),
+      electionDate: self.formatGenericElectionDate(result),
+      electionType: 'General election'
+    };
+    self.$upcomingPresidential.append(upcomingTemplate(election));
+  });
 };
 
 ElectionSearch.prototype.shouldSearch = function(serialized) {
