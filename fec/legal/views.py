@@ -66,6 +66,18 @@ def mur_page(request, mur_no):
     })
 
 
+def adr_page(request, adr_no):
+    adr = api_caller.load_legal_adr(adr_no)
+
+    if not adr:
+        raise Http404()
+
+    return render(request, 'legal' + '-adr.jinja', {
+        'adr': adr,
+        'parent': 'legal'
+    })
+
+
 def legal_search(request):
     query = request.GET.get('search', '')
     result_type = request.GET.get('search_type', 'all')
