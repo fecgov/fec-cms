@@ -342,6 +342,7 @@ def get_committee(committee_id, cycle):
         'committee_id': committee_id,
         'committee_type_full': committee['committee_type_full'],
         'committee_type': committee['committee_type'],
+        'organization_type': committee['organization_type'],
         'designation_full': committee['designation_full'],
         'street_1': committee['street_1'],
         'street_2': committee['street_2'],
@@ -368,6 +369,11 @@ def get_committee(committee_id, cycle):
         if committee['committee_type'] == 'I':
             # IE-only committees have very little data, so they just get this one
             template_variables['ie_summary'] = utils.process_ie_data(
+                financials['totals'][0]
+            )
+        # Inaugural Committees
+        elif committee['organization_type'] == 'I':
+            template_variables['inaugural_summary'] = utils.process_inaugural_data(
                 financials['totals'][0]
             )
         else:

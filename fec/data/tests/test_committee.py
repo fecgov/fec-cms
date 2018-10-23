@@ -157,22 +157,19 @@ class TestCommittee(TestCase):
                 'total_operating_expenditures_period': None,
                 'other_disbursements_period': None,
                 'nonfed_share_allocated_disbursements_period': None,
-                'is_amended': False
+                'is_amended': False,
             }
         ],
-        'totals': []
+        'totals': [],
     }
 
-    def test_base_case(self, load_with_nested_mock, load_cmte_financials_mock,
-                       _call_api_mock):
+    def test_base_case(
+        self, load_with_nested_mock, load_cmte_financials_mock, _call_api_mock
+    ):
         cycle = 2018
 
         test_committee = copy.deepcopy(self.STOCK_COMMITTEE)
-        load_with_nested_mock.return_value = (
-            test_committee,
-            [],
-            cycle
-        )
+        load_with_nested_mock.return_value = (test_committee, [], cycle)
         load_cmte_financials_mock.return_value = self.STOCK_FINANCIALS
         committee = get_committee('C001', 2018)
 
@@ -198,7 +195,54 @@ class TestCommittee(TestCase):
         assert committee['context_vars'] == {
             'cycle': 2018,
             'timePeriod': '2017–2018',
-            'name': 'MY JOINT FUNDRAISING COMMITTEE'
+            'name': 'MY JOINT FUNDRAISING COMMITTEE',
         }
         assert committee['totals'] == []
         assert committee['candidates'] == []
+
+    def test_ie_summary(
+        self, load_with_nested_mock, load_cmte_financials_mock, _call_api_mock
+    ):
+        cycle = 2018
+
+        test_committee = copy.deepcopy(self.STOCK_COMMITTEE)
+        test_committee['committee_type'] = 'I'
+        load_with_nested_mock.return_value = (test_committee, [], cycle)
+        load_cmte_financials_mock.return_value = {
+            'reports': [{'report_type_full': 'YEAR-END', 'report_type': 'YE'}],
+            'totals': [
+                {
+                    'total_independent_contributions': 11000.0,
+                    'total_independent_expenditures': 4262.0,
+                }
+            ],
+        }
+
+        committee = get_committee('C001', 2018)
+
+        assert committee['ie_summary'] == [
+            (11000.0, {'label': 'Contributions received', 'level': '1'}),
+            (4262.0, {'label': 'Independent expenditures', 'level': '1'}),
+        ]
+
+    def test_inaugural_summary(
+        self, load_with_nested_mock, load_cmte_financials_mock, _call_api_mock
+    ):
+        cycle = 2018
+
+        test_committee = copy.deepcopy(self.STOCK_COMMITTEE)
+        test_committee['organization_type'] = 'I'
+        load_with_nested_mock.return_value = (test_committee, [], cycle)
+        load_cmte_financials_mock.return_value = {
+            'reports': [
+                {'report_type_full': 'POST INAUGURAL SUPPLEMENT', 'report_type': '90S'}
+            ],
+            'totals': [{'receipts': 85530042.0, 'contribution_refunds': 966240.0}],
+        }
+
+        committee = get_committee('C001', 2018)
+
+        assert committee['inaugural_summary'] == [
+            (85530042.0, {'label': 'Total Donations Accepted', 'level': '1'}),
+            (966240.0, {'label': 'Total Donations Refunded', 'level': '1'}),
+        ]
