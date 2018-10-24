@@ -1,4 +1,5 @@
 from django.conf.urls import url
+from django.conf import settings
 
 from legal import views
 
@@ -19,3 +20,9 @@ urlpatterns = [
         views.legal_doc_search_regulations),
     url(r'^data/legal/search/statutes/$', views.legal_doc_search_statutes),
 ]
+
+if settings.FEATURES['adrs']:
+    urlpatterns += url(
+        r'^data/legal/search/adrs/$', views.legal_doc_search_adr
+    ),
+
