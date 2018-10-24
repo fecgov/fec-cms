@@ -376,6 +376,20 @@ def get_committee(committee_id, cycle):
             template_variables['inaugural_summary'] = utils.process_inaugural_data(
                 financials['totals'][0]
             )
+        # Host Committees that file on Form 4
+        elif (
+            committee['organization_type'] == 'H'
+            and financials['reports'][0]['report_form'] == 'Form 4'
+        ):
+            template_variables['raising_summary'] = utils.process_host_raising_data(
+                financials['totals'][0]
+            )
+            template_variables['spending_summary'] = utils.process_host_spending_data(
+                financials['totals'][0]
+            )
+            template_variables['cash_summary'] = utils.process_cash_data(
+                financials['totals'][0]
+            )
         else:
             # All other committees have three tables
             template_variables['raising_summary'] = utils.process_raising_data(

@@ -645,6 +645,88 @@ SPENDING_FORMATTER = OrderedDict([
         {'label': 'Total federal disbursements', 'level': '2'}),
 ])
 
+HOST_RAISING_FORMATTER = OrderedDict([
+    ('receipts',  # Line 20
+        {'label': 'Total receipts', 'level': '1', 'term': 'total receipts'}),
+    ('federal_funds',  # Line 13
+        {'label': 'Federal funds', 'level': '2'}),
+    ('contributions',  # Line 14
+        {'label': 'Total Contributions to Defray Convention Expenses', 'level': '2'}),
+    ('individual_contributions',  # Line 14a
+        {'label': 'Itemized Contributions to Defray Convention Expenses', 'level': '3'}),
+    ('individual_unitemized_contributions',  # Line 14b
+        {'label': 'Unitemized Contributions to Defray Convention Expenses', 'level': '3',
+    }),
+    ('transfers_from_affiliated_party',  # Line 15
+        {'label': 'Transfers from affiliated committees', 'level': '2'}),
+    ('loans_and_loan_repayments',  # Line 16
+        {'label': 'Loans and Loan Repayments Received', 'level': '2'}),
+    ('all_loans_received',  # Line 16a
+        {'label': 'Loans Received', 'level': '3'}),
+    ('loan_repayments_received',  # Line 16b
+        {'label': 'Loan Repayments Received', 'level': '3',
+        }),
+    ('refunds_relating_convention_exp',  # Line 17
+        {'label': 'Refunds, Rebates, Returns of Deposits Relating to Convention Expenditures', 'level': '2'}),
+    ('itemized_refunds_relating_convention_exp',  # Line 17a
+        {'label': ' Itemized Refunds, Rebates, Returns of Deposits Relating to Convention', 'level': '3'}),
+    ('unitemized_refunds_relating_convention_exp',  # Line 17b
+        {'label': 'Unitemized Refunds, Rebates, Returns of Deposits Relating to Convention', 'level': '3',
+        }),
+    ('refunds_relating_convention_exp',  # Line 18
+        {'label': 'Other Refunds, Rebates, Returns of Deposits', 'level': '2'}),
+    ('itemized_refunds_relating_convention_exp',  # Line 18a
+        {'label': ' Itemized Other Refunds, Rebates, Returns of Deposits', 'level': '3'}),
+    ('unitemized_refunds_relating_convention_exp',  # Line 18b
+        {'label': 'Unitemized Other Refunds, Rebates, Returns of Deposits', 'level': '3',
+        }),
+    ('other_fed_receipts',  # Line 19
+        {'label': ' Other Income', 'level': '2'}),
+    ('itemized_other_income',  # Line 19a
+        {'label': 'Itemized Other Income', 'level': '3'}),
+    ('unitemized_other_income',  # Line 19b
+        {'label': 'Unitemized Other Income', 'level': '3',
+        }),
+
+])
+
+HOST_SPENDING_FORMATTER = OrderedDict([
+    ('disbursements',
+        {'label': 'Total disbursements', 'level': '1',
+            'term': 'total disbursements'}),
+    ('convention_exp',  # Line 21
+        {'label': 'Convention Expenditures',
+            'level': '2'}),
+    ('itemized_convention_exp',  # Line 21a
+        {'label': 'Itemized Convention Expenditures',
+            'level': '3'}),
+    ('unitemized_convention_exp',  # Line 21a
+        {'label': 'Unitemized Convention Expenditures',
+            'level': '3'}),
+    ('transfers_to_affiliated_committee',  # Line 22
+        {'label': 'Transfers to Affiliated Committees',
+            'level': '2'}),
+    ('loans_and_loan_repayments_made',  # Line 23
+        {'label': 'Loans and Loan Repayments Made',
+            'level': '2'}),
+    ('loans_made',  # Line 23a
+        {'label': 'Loans Made',
+            'level': '3'}),
+    ('loan_repayments_made',  # Line 23a
+        {'label': 'Loan Repayments Made',
+            'level': '3'}),
+    ('other_disbursements',  # Line 24
+        {'label': 'Other Disbursements',
+            'level': '2'}),
+    ('itemized_other_disb',  # Line 24a
+        {'label': 'Itemized Other Disbursements',
+            'level': '3'}),
+    ('unitemized_other_disb',  # Line 24a
+        {'label': 'Unitemized Other Disbursements',
+            'level': '3'}),
+
+])
+
 CASH_FORMATTER = OrderedDict([
     ('cash_on_hand_beginning_period', {'label': 'Beginning cash on hand', 'level': '2'}), #F3, F3P, #F3X
     ('last_cash_on_hand_end_period', {'label': 'Ending cash on hand', 'term': 'ending cash on hand', 'level': '2'}), #F3, F3P, #F3X
@@ -660,6 +742,8 @@ CASH_FORMATTER = OrderedDict([
     # ('subtotal_offsets_to_operating_expenditures', {'label': 'Offsets to operating expenditures', 'level': '3'}), #F3P
 ])
 
+
+
 IE_FORMATTER = OrderedDict([
     ('total_independent_contributions', {'label': 'Contributions received', 'level': '1'}),
     ('total_independent_expenditures', {'label': 'Independent expenditures', 'level': '1'})
@@ -669,6 +753,7 @@ INAUGURAL_FORMATTER = OrderedDict([
     ('receipts', {'label': 'Total Donations Accepted', 'level': '1'}),
     ('contribution_refunds', {'label': 'Total Donations Refunded', 'level': '1'})
 ])
+
 
 SENATE_CLASSES = {
     '1': ['AZ', 'CA', 'CT', 'DE', 'FL', 'HI', 'IN', 'ME', 'MD', 'MA', 'MI', 'MN', 'MS', 'MO', 'MT', 'NE', 'NV', 'NJ', 'NM', 'NY', 'ND', 'OH', 'PA', 'RI', 'TN', 'TX', 'UT', 'VT', 'VA', 'WA', 'WV', 'WI', 'WY'],
