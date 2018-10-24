@@ -69,7 +69,7 @@ def load_search_results(query, query_type=None):
 def load_legal_search_results(query, query_type='all', offset=0, limit=20, **kwargs):
     filters = dict((key, value) for key, value in kwargs.items() if value)
 
-    if query or query_type in ['advisory_opinions', 'murs']:
+    if query or query_type in ['advisory_opinions', 'murs', 'adrs']:
         filters['hits_returned'] = limit
         filters['type'] = query_type
         filters['from_hit'] = offset
@@ -92,6 +92,9 @@ def load_legal_search_results(query, query_type='all', offset=0, limit=20, **kwa
 
     if 'murs' in results:
         results['murs_returned'] = len(results['murs'])
+
+    if 'adrs' in results:
+        results['adrs_returned'] = len(results['adrs'])
 
     return results
 

@@ -1,0 +1,48 @@
+<table class="simple-table simple-table--display">
+  <thead>
+    <tr class="simple-table__header">
+      <th class="simple-table__header-cell cell--50">Case</th>
+      <th class="simple-table__header-cell">Election cycle(s)</th>
+      <th class="simple-table__header-cell">Closing date</th>
+      <th class="simple-table__header-cell">Subject(s)</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for adr in results.adrs %}
+    <tr class="simple-table__row">
+      <td class="simple-table__cell">
+        <div class="t-sans">
+          <i class="icon i-folder icon--inline--left"></i>
+          <a class="t-bold" title="{{ adr.name }}" href="/data/legal/alternative-dispute-resolution/{{ adr.no }}">ADR #{{ adr.no }}</a><br />
+            {{ adr.name.upper() }}
+          {% if adr.highlights %}
+            <div class="t-sans u-padding--top">Keyword match:</div>
+            <div class="legal-search-result__hit u-padding--left">
+              {% for highlight in adr.highlights %}
+                <span class="t-serif">
+                    {{ highlight|safe }} &hellip;
+                </span>
+              {% endfor %}
+            </div>
+          {% endif %}
+        </div>
+      </td>
+      <td class="simple-table__cell">
+        <div class="t-sans">
+          {% for election_cycle in adr.election_cycles %}
+            {{ election_cycle }}<br />
+          {% endfor %}
+        </div>
+      </td>
+      <td class="simple-table__cell">
+        <div class="t-sans">{{ adr.close_date | date(fmt='%m/%d/%Y') }}</div>
+      </td>
+      <td class="simple-table__cell">
+        {% for subject in adr.subjects %}
+          <div class="t-sans">{{ subject }}</div>
+        {% endfor %}
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
