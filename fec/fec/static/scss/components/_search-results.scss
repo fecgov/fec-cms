@@ -11,7 +11,13 @@
 // </div>
 //
 .results__count {
-  padding: u(2rem 0);
+  padding: u(2rem 0 0 0);
+}
+
+// To show/hide special PA district message on /data/elections (in election-search.js)
+.pa-message {
+  display:none;
+  padding: 0 0 2rem 0;
 }
 
 // Search results: Name search result

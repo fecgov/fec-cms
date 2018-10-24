@@ -82,6 +82,46 @@
   }
 }
 
+.search--container {
+  padding: u(1rem 0 1rem 0);
+  background: $gray-lightest;
+}
+
+.election-search {
+
+  .search--container {
+    position: relative;
+    overflow: hidden;
+
+    &:first-child {
+    height: auto;
+    margin-bottom: u(2rem);
+    }
+  }
+  .search-controls__cycle {
+    @include span-columns(4.5 of 5.5);
+    margin: u(.5rem 2rem);
+
+    .cycle-select{
+      width:95%;
+    }
+  }
+  .search-controls__zip {
+    @include span-columns(4.5 of 5.5);
+    margin-left: u(2rem);
+  }
+
+  .search-controls__either:first-child {
+    margin: u(.5rem 0)!important;
+  }
+
+  .search-controls__either:last-child {
+    fieldset{
+      margin-left: u(2rem);
+    }
+  }
+}
+
 @include media($med) {
   .search-controls__row {
     padding: u(2rem 0);
@@ -98,6 +138,11 @@
 
   .search-controls__zip {
     @include span-columns(3.5 of 5.5);
+
+    .button--search {
+    background-size: u(1.5rem);
+    background-position: 45%;
+    }
   }
 
   .search-controls__or--vertical {
@@ -122,10 +167,48 @@
     }
   }
 
-  // We make it shorter on the home page
-  .slab--home {
+  .election-search {
+
+    .search-controls__either:first-child {
+      @include span-columns(4);
+    }
+
+    .search-controls__either:last-child {
+      @include span-columns(7.3);
+
+      .search-controls__submit {
+        @include span-columns(7.3 of 7.3);
+        margin-top: u(0rem);
+         button {
+          width:94%;
+         }
+      }
+    }
+
+    .search--container:first-child {
+    height: u(13.1rem);
+    margin-bottom: 0;
+    }
+
+    .search-controls__cycle {
+    @include span-columns(4.5 of 5.5);
+    margin: u(.5rem 2rem);
+    }
+
+    .search-controls__zip {
+      .button--search {
+        background-size: u(1.5rem);
+        background-position: 45%;
+      }
+    }
+
+    .search-controls__state,
+    .search-controls__district {
+      @include span-columns(2.6 of 5.5);
+    }
+
     .search-controls__or--vertical {
-      margin: u(2rem 0);
+      margin: u(4rem 0);
 
       &::before,
       &::after {
@@ -140,22 +223,10 @@
         bottom: u(-3rem);
       }
     }
-
-    .search-controls__zip {
-      width: 100%;
-    }
-
-    .search-controls__state,
-    .search-controls__district {
-      width: 100%;
-    }
-
-    .search-controls__submit {
-      margin-top: u(1rem);
-      clear: both;
-    }
   }
-}
+
+
+}/*end MED breakpoint*/
 
 // All form elements go in rows
 @include media($lg) {
@@ -164,23 +235,59 @@
     @include span-columns(2 of 5.5);
   }
 
-  .slab--home {
-    .search-controls__either {
-      @include span-columns(5);
-    }
+  .election-search {
 
-    .search-controls__zip {
-      @include span-columns(3.5 of 5.5);
+    .search--container:first-child {
+    height: u(12.6rem);
+    margin-bottom: 0;
     }
 
     .search-controls__state,
     .search-controls__district {
-      @include span-columns(2 of 5.5);
+      @include span-columns(1.90 of 5.5);
+    }
+    .search-controls__zip {
+      @include span-columns(4.5 of 5.5);
+      margin-left: u(3rem);
+      position: relative;
+      top: u(0rem);
+
+
     }
 
-    .search-controls__submit {
-      margin-top: 0;
-      clear: none;
+    .search-controls__cycle {
+    margin: u(.5rem 2.5rem);
+    }
+
+    .search-controls__either:first-child {
+      @include span-columns(3.5);
+      margin: u(.5rem 0)!important;
+    }
+
+    .search-controls__either:last-child {
+      @include span-columns(8);
+      margin: u(.5rem 0)!important;
+
+      fieldset{
+        margin-left: u(1rem);
+      }
+      .search-controls__submit {
+        @include span-columns(1.5 of 5.5);
+        margin-top: u(0rem);
+      }
+    }
+  }
+
+  .search--container {
+
+    .search-controls__either {
+      @include span-columns(5.5);
+      }
+
+    .search-controls__or--vertical {
+      margin:u(4rem 0 4rem 0);
     }
   }
 }
+
+

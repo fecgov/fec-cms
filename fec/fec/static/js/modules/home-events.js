@@ -16,7 +16,7 @@ var eventsTemplate = require('../templates/homepage/events-and-deadlines.hbs');
 // and need to match API parameter `calendar_category_id`
 
 var updates = {
-  '.js-next-commission-meeting': ['32', '39', '40'],
+  '.js-next-commission-meeting': ['32', '40'],
   '.js-next-filing-deadline': ['21', '25', '26', '27'],
   '.js-next-training-or-conference': ['33', '34'],
   '.js-next-public-comment-deadline': ['23']

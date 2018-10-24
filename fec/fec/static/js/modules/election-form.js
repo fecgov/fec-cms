@@ -44,6 +44,9 @@ ElectionForm.prototype.handleStateChange = function() {
   if (state && this.$zip) {
     this.$zip.val('');
   }
+  if (this.$state.val().length == 0) {
+    this.$district.val('');
+  }
 
   this.search();
 };

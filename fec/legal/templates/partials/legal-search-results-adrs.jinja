@@ -1,19 +1,16 @@
-<div class="js-filter-tags data-container__tags">
-  <div class="row">
-    <h3 class="tags__title">Viewing <span class="tags__count">{{ results.total_adrs }}</span>  filtered results for:</h3>
-  </div>
-</div>
-<div class="simple-table simple-table--responsive simple-table--display legal-search-results legal-adr data-container__datatable">
-  <div class="simple-table__header">
-    <div class="simple-table__header-cell cell--50">Case</div>
-    <div class="simple-table__header-cell">Election cycle(s)</div>
-    <div class="simple-table__header-cell">Closing date</div>
-    <div class="simple-table__header-cell">Subject(s)</div>
-  </div>
-  <div class="simple-table__row-group">
-  {% for adr in results.adrs %}
-    <div class="simple-table__row legal-search-result">
-      <div class="simple-table__cell">
+<table class="simple-table simple-table--display">
+  <thead>
+    <tr class="simple-table__header">
+      <th class="simple-table__header-cell cell--50">Case</th>
+      <th class="simple-table__header-cell">Election cycle(s)</th>
+      <th class="simple-table__header-cell">Closing date</th>
+      <th class="simple-table__header-cell">Subject(s)</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for adr in results.adrs %}
+    <tr class="simple-table__row">
+      <td class="simple-table__cell">
         <div class="t-sans">
           <i class="icon i-folder icon--inline--left"></i>
           <a class="t-bold" title="{{ adr.name }}" href="/data/legal/alternative-dispute-resolution/{{ adr.no }}">ADR #{{ adr.no }}</a><br />
@@ -29,23 +26,23 @@
             </div>
           {% endif %}
         </div>
-      </div>
-      <div class="simple-table__cell">
+      </td>
+      <td class="simple-table__cell">
         <div class="t-sans">
           {% for election_cycle in adr.election_cycles %}
             {{ election_cycle }}<br />
           {% endfor %}
         </div>
-      </div>
-      <div class="simple-table__cell">
+      </td>
+      <td class="simple-table__cell">
         <div class="t-sans">{{ adr.close_date | date(fmt='%m/%d/%Y') }}</div>
-      </div>
-      <div class="simple-table__cell">
+      </td>
+      <td class="simple-table__cell">
         {% for subject in adr.subjects %}
           <div class="t-sans">{{ subject }}</div>
         {% endfor %}
-      </div>
-    </div>
-  {% endfor %}
-  </div>
-</div>
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
