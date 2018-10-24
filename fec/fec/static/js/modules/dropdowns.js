@@ -228,7 +228,7 @@ Dropdown.prototype.selectItem = function($input) {
         .focus();
     }
   } else {
-    //this.removePanel();
+    this.removePanel();
     this.$selected.find('input[type="checkbox"]').focus();
   }
 };
