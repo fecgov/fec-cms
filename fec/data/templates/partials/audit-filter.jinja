@@ -36,11 +36,7 @@
   </div>
   <button type="button" class="js-accordion-trigger accordion__button">Committee type</button>
   <div class="accordion__content">
-    {{ super() }}
-    {% with name="committee_type" %}
     {% include 'partials/filters/audit-committee-types.jinja' %}
-    {% endwith %}
-
   </div>
 </div>
 {% endblock %}
