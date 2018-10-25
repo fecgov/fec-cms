@@ -9,6 +9,8 @@ urlpatterns = [
     url(r'^data/legal/advisory-opinions/$', views.advisory_opinions_landing),
     url(r'^data/legal/matter-under-review/(?P<mur_no>[\w-]+)/$',
         views.mur_page),
+    url(r'^data/legal/alternative-dispute-resolution/(?P<adr_no>[\w-]+)/$',
+        views.adr_page),        
     url(r'^data/legal/statutes/$', views.statutes_landing),
     # Legal search results
     url(r'^data/legal/search/$', views.legal_search),
