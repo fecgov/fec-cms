@@ -665,6 +665,11 @@ IE_FORMATTER = OrderedDict([
     ('total_independent_expenditures', {'label': 'Independent expenditures', 'level': '1'})
 ])
 
+INAUGURAL_FORMATTER = OrderedDict([
+    ('receipts', {'label': 'Total Donations Accepted', 'level': '1'}),
+    ('contribution_refunds', {'label': 'Total Donations Refunded', 'level': '1'})
+])
+
 SENATE_CLASSES = {
     '1': ['AZ', 'CA', 'CT', 'DE', 'FL', 'HI', 'IN', 'ME', 'MD', 'MA', 'MI', 'MN', 'MS', 'MO', 'MT', 'NE', 'NV', 'NJ', 'NM', 'NY', 'ND', 'OH', 'PA', 'RI', 'TN', 'TX', 'UT', 'VT', 'VA', 'WA', 'WV', 'WI', 'WY'],
     '2': ['AL', 'AK', 'AR', 'CO', 'DE', 'GA', 'ID', 'IL', 'IA', 'KS', 'KY', 'LA', 'ME', 'MA', 'MI', 'MN', 'MS', 'MT', 'NE', 'NH', 'NJ', 'NM', 'NC', 'OK', 'OR', 'RI', 'SC', 'SD', 'TN', 'TX', 'VA', 'WV', 'WY'],

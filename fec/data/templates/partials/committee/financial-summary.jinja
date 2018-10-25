@@ -16,6 +16,16 @@
           </div>
           {{ tables.summary(ie_summary) }}
         </div>
+      <!-- Inaugural Committees -->
+      {% elif organization_type == 'I' %}
+        <div class="entity__figure">
+          <div class="row">
+            <div class="tag__category">
+              <div class="tag__item">Coverage dates: {{totals.0.coverage_start_date|date}} to {{totals.0.coverage_end_date|date}}</div>
+            </div>
+          </div>
+          {{ tables.summary(inaugural_summary) }}
+        </div>
       {% else %}
         <div class="entity__figure entity__figure--narrow" id="total-raised">
           <div class="heading--section heading--with-action">
