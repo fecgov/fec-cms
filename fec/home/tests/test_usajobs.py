@@ -3,10 +3,12 @@ import json
 import logging
 from unittest import mock
 
-from home.templatetags.open_jobs import (get_jobs,
-                                         USAJOB_SEARCH_ERROR,
-                                         JOB_URL,
-                                         CODES_URL)
+from home.templatetags.open_jobs import (
+    get_jobs,
+    USAJOB_SEARCH_ERROR,
+    JOB_URL,
+    CODES_URL,
+)
 from fec.constants import USAJOBS_CODE_LIST
 
 logger = logging.getLogger(__name__)
@@ -76,6 +78,7 @@ JOB_DATA = """
  ]}}
 """
 
+
 class MockResponse:
     def __init__(self, json_data, status_code):
         self.json_data = json_data
@@ -83,7 +86,6 @@ class MockResponse:
 
     def json(self):
         return self.json_data
-
 
 
 # Our test case class
@@ -98,62 +100,61 @@ class MyGreatClassTestCase(unittest.TestCase):
         return MockResponse(None, 404)
 
     # first test case: everything normal
-    @mock.patch('requests.get', side_effect=mocked_requests_get1)
+    @mock.patch("requests.get", side_effect=mocked_requests_get1)
     def test_get_job1(self, mock_get):
-        logger.info('usajob test1:')
+        logger.info("usajob test1:")
         job_data = get_jobs()
         # print(job_data)
-        self.assertEqual(job_data['jobData'][0]['open_to'], 'The public')
+        self.assertEqual(job_data["jobData"][0]["open_to"], "The public")
 
     # second test case: job search failed
     def mocked_requests_get2(*args, **kwargs):
         if args[0] == JOB_URL:
-            return MockResponse(json.loads(JOB_DATA), 500)#error response
+            return MockResponse(json.loads(JOB_DATA), 500)  # error response
         elif args[0] == CODES_URL:
             return MockResponse(json.loads(USAJOBS_CODE_LIST), 200)
         return MockResponse(None, 404)
 
-
-    @mock.patch('requests.get', side_effect=mocked_requests_get2)
+    @mock.patch("requests.get", side_effect=mocked_requests_get2)
     def test_get_job2(self, mock_get):
-        logger.info('usajob test2:')
+        logger.info("usajob test2:")
         job_data = get_jobs()
-        self.assertTrue('error' in job_data)
+        self.assertTrue("error" in job_data)
 
     def mocked_requests_get3(*args, **kwargs):
         if args[0] == JOB_URL:
-            return MockResponse(json.loads(JOB_DATA), 200)#error response
+            return MockResponse(json.loads(JOB_DATA), 200)  # error response
         elif args[0] == CODES_URL:
             return MockResponse(json.loads(USAJOBS_CODE_LIST), 500)
         return MockResponse(None, 404)
 
     # 3rd test case: code list query failed, hard cached copy kick in
-    @mock.patch('requests.get', side_effect=mocked_requests_get3)
+    @mock.patch("requests.get", side_effect=mocked_requests_get3)
     def test_get_job3(self, mock_get):
-        logger.info('usajob test3:')
+        logger.info("usajob test3:")
         job_data = get_jobs()
-        self.assertEqual(job_data['jobData'][0]['open_to'], 'The public')
+        self.assertEqual(job_data["jobData"][0]["open_to"], "The public")
 
     def mocked_requests_get4(*args, **kwargs):
         job_data = json.loads(JOB_DATA)
-        job_data['SearchResult'
-        ]['SearchResultItems'][0]['MatchedObjectDescriptor'
-        ]['UserArea']['Details']['HiringPath'] = ['some new code']
+        job_data["SearchResult"]["SearchResultItems"][0]["MatchedObjectDescriptor"][
+            "UserArea"
+        ]["Details"]["HiringPath"] = ["some new code"]
 
         if args[0] == JOB_URL:
-            return MockResponse(job_data, 200)#error response
+            return MockResponse(job_data, 200)  # error response
         elif args[0] == CODES_URL:
             return MockResponse(json.loads(USAJOBS_CODE_LIST), 500)
         return MockResponse(None, 404)
 
     # 4th test case: code list query failed, hard cached copy kick in,
     # but new code found, use original job data
-    @mock.patch('requests.get', side_effect=mocked_requests_get4)
+    @mock.patch("requests.get", side_effect=mocked_requests_get4)
     def test_get_job4(self, mock_get):
-        logger.info('usajob test4:')
+        logger.info("usajob test4:")
         job_data = get_jobs()
-        self.assertEqual(job_data['jobData'][0]['open_to'], 'some new code')
+        self.assertEqual(job_data["jobData"][0]["open_to"], "some new code")
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()
