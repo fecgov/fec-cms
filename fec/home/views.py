@@ -263,6 +263,7 @@ def serve_wagtail_doc(request, document_id, document_filename):
     doc = get_object_or_404(Document, id=document_id)
     return HttpResponseRedirect(doc.file.url)
 
+# TODO: undefined name 'paginator' in the function, need to be fixed.
 def index_meetings(request):
     meetings = MeetingPage.objects.live().order_by("-date")
     open_meetings = meetings.filter(Q(meeting_type ='O') | Q(title__icontains='Hearing')| Q(meeting_type ='H'))
