@@ -4,146 +4,7 @@ import json
 
 from django import template
 from django.conf import settings
-
-# a copy of code list for hard caching
-CODE_LIST = """
-{
-  "CodeList": [
-    {
-      "ValidValue": [
-        {
-          "Code": "DISABILITY",
-          "Value": "Individuals with disabilities",
-          "LastModified": "2017-06-30T08:16:59.55",
-          "IsDisabled": "No"
-        },
-        {
-          "Code": "FED",
-          "Value": "Federal employees",
-          "LastModified": "2018-04-18T06:07:55.647",
-          "IsDisabled": "Yes"
-        },
-        {
-          "Code": "FED-COMPETITIVE",
-          "Value": "Federal employees - Competitive service",
-          "LastModified": "2018-02-23T06:04:26.54",
-          "IsDisabled": "No"
-        },
-        {
-          "Code": "FED-EXCEPTED",
-          "Value": "Federal employees - Excepted service",
-          "LastModified": "2018-02-23T06:04:26.54",
-          "IsDisabled": "No"
-        },
-        {
-          "Code": "FED-INTERNAL-NOSEARCH",
-          "Value": "Internal to an agency - does not appear on USAJOBS",
-          "LastModified": "2017-06-30T08:16:59.547",
-          "IsDisabled": "No"
-        },
-        {
-          "Code": "FED-INTERNAL-SEARCH",
-          "Value": "Internal to an agency - appears on USAJOBS",
-          "LastModified": "2017-06-30T08:16:59.547",
-          "IsDisabled": "No"
-        },
-        {
-          "Code": "FED-TRANSITION",
-          "Value": "Career transition (CTAP, ICTAP, RPL)",
-          "LastModified": "2018-02-23T06:04:26.54",
-          "IsDisabled": "No"
-        },
-        {
-          "Code": "GRADUATES",
-          "Value": "Recent graduates",
-          "LastModified": "2018-02-23T06:04:26.53",
-          "IsDisabled": "No"
-        },
-        {
-          "Code": "LAND",
-          "Value": "Land & base management",
-          "LastModified": "2018-02-23T06:04:26.537",
-          "IsDisabled": "No"
-        },
-        {
-          "Code": "MSPOUSE",
-          "Value": "Military spouses",
-          "LastModified": "2017-06-30T08:16:59.55",
-          "IsDisabled": "No"
-        },
-        {
-          "Code": "NATIVE",
-          "Value": "Native Americans",
-          "LastModified": "2017-06-30T08:16:59.55",
-          "IsDisabled": "No"
-        },
-        {
-          "Code": "NGUARD",
-          "Value": "National Guard & Reserves",
-          "LastModified": "2017-06-30T08:16:59.55",
-          "IsDisabled": "No"
-        },
-        {
-          "Code": "NOPUBLIC",
-          "Value": "Exclusive posting",
-          "LastModified": "2017-06-30T08:16:59.553",
-          "IsDisabled": "No"
-        },
-        {
-          "Code": "OVERSEAS",
-          "Value": "Family of overseas employees",
-          "LastModified": "2017-06-30T08:16:59.55",
-          "IsDisabled": "No"
-        },
-        {
-          "Code": "PEACE",
-          "Value": "Peace Corps & AmeriCorps Vista",
-          "LastModified": "2017-06-30T08:16:59.553",
-          "IsDisabled": "No"
-        },
-        {
-          "Code": "PUBLIC",
-          "Value": "The public",
-          "LastModified": "2017-06-30T08:16:59.547",
-          "IsDisabled": "No"
-        },
-        {
-          "Code": "SE-OTHER",
-          "Value": "Senior executives - Other",
-          "LastModified": "2018-06-01T06:02:36.58",
-          "IsDisabled": "Yes"
-        },
-        {
-          "Code": "SES",
-          "Value": "Senior executives",
-          "LastModified": "2018-06-01T06:02:36.58",
-          "IsDisabled": "No"
-        },
-        {
-          "Code": "SPECIAL-AUTHORITIES",
-          "Value": "Special authorities",
-          "LastModified": "2018-02-23T06:04:26.537",
-          "IsDisabled": "No"
-        },
-        {
-          "Code": "STUDENT",
-          "Value": "Students",
-          "LastModified": "2018-02-23T06:04:26.53",
-          "IsDisabled": "No"
-        },
-        {
-          "Code": "VET",
-          "Value": "Veterans",
-          "LastModified": "2017-06-30T08:16:59.547",
-          "IsDisabled": "No"
-        }
-      ],
-      "id": "HiringPath"
-    }
-  ],
-  "DateGenerated": "2018-10-24T14:45:06.2321547-04:00"
-}
-"""
+from fec.constants import USAJOBS_CODE_LIST as CODE_LIST
 
 USAJOB_SEARCH_ERROR = """
 Error:
@@ -160,6 +21,7 @@ def get_jobs():
     it also query code list to update hirepath info. a hard-coded code list
     is used for backup if query failed.
     """
+
     url = 'https://data.usajobs.gov/api/Search'
     codes_url = 'https://data.usajobs.gov/api/codelist/hiringpaths'
     querystring = {}
