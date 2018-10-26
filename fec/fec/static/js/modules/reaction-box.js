@@ -71,7 +71,6 @@ ReactionBox.prototype.handleSubmit = function(token) {
       }
     }
   });
-  
   var chartLocation = this.path || this.location;
 
   var data = {
