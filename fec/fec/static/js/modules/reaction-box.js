@@ -25,7 +25,7 @@ function ReactionBox(selector) {
   this.name = this.$element.data('name');
   this.location = this.$element.data('location');
   this.path = window ? window.location.pathname : null;
-  this.url = helpers.buildAppUrl(['issue']);
+  this.url = helpers.buildAppUrl(['issue', 'reaction']);
 
   this.$element.on('click', '.js-reaction', this.submitReaction.bind(this));
   this.$element.on('click', '.js-reset', this.handleReset.bind(this));
@@ -71,17 +71,15 @@ ReactionBox.prototype.handleSubmit = function(token) {
       }
     }
   });
-
+  
   var chartLocation = this.path || this.location;
-  var action =
-    '\nChart Name: ' + this.name + '\nChart Location: ' + chartLocation;
-  var about = '\nThe reaction to the chart is: ' + this.reaction;
-  var feedback = '\n' + this.$textarea.val();
 
   var data = {
-    action: action,
-    about: about,
-    feedback: feedback
+    name: this.name ? this.name : '',
+    location: chartLocation ? chartLocation : '',
+    reaction: this.reaction ? this.reaction : '',
+    feedback: this.$textarea.val(),
+    userAgent: navigator.userAgent
   };
   // explicitly set token as g-recaptcha-response
   data['g-recaptcha-response'] = token;
