@@ -602,7 +602,56 @@ def feedback(request):
             else:
                 # captcha passed, we're ready to submit the issue.
                 title = 'User feedback on ' + request.META.get('HTTP_REFERER')
+                body = ("## What were you trying to do and how can we improve it?\n %s \n\n"
+                        "## General feedback?\n %s \n\n"
+                        "## Tell us about yourself\n %s \n\n"
+                        "## Details\n"
+                        "* URL: %s \n"
+                        "* User Agent: %s") % (
+                            data['action'],
+                            data['feedback'],
+                            data['about'],
+                            request.META.get('HTTP_REFERER'),
+                            request.META['HTTP_USER_AGENT'])
 
+                client = github3.login(token=settings.FEC_GITHUB_TOKEN)
+                issue = client.repository('fecgov', 'fec').create_issue(
+                    title, body=body
+                )
+
+                return JsonResponse(issue.to_json(), status=201)
+    else:
+        raise Http404()
+
+
+def reactionFeedback(request):
+    if request.method == 'POST':
+
+        # json.loads() is expecting a string in JSON format:
+        # '{"param":"value"}'. Needs to be decoded in Python 3
+        data = json.loads(request.body.decode("utf-8"))
+
+        if not all(
+            [
+                data['name'],
+                data['location'],
+                data['reaction'],
+                data['g-recaptcha-response'],
+                data['userAgent'],
+            ]
+        ) :
+            # the required fields were not provided, return error.
+            return JsonResponse({'status': False}, status=500)
+        else:
+            # verify recaptcha
+            verifyRecaptcha = requests.post("https://www.google.com/recaptcha/api/siteverify", data={'secret': settings.FEC_RECAPTCHA_SECRET_KEY, 'response': data['g-recaptcha-response']})
+            recaptchaResponse = verifyRecaptcha.json()
+            if not recaptchaResponse['success']:
+                # if captcha failed, return failure
+                return JsonResponse({'status': False}, status=500)
+            else:
+                # captcha passed, we're ready to submit the issue.
+                title = 'User feedback on ' + request.META.get('HTTP_REFERER')
                 body = (
                     "## What were you trying to do and how can we improve it?\n %s \n\n"
                     "## General feedback?\n %s \n\n"
@@ -611,17 +660,15 @@ def feedback(request):
                     "* URL: %s \n"
                     "* User Agent: %s"
                 ) % (
-                    data['action'],
+                    "\nChart Name: " + data['name'] + "\nChart Location: " + data['location'],
                     data['feedback'],
-                    data['about'],
+                    "\nThe reaction to the chart is: " + data['reaction'],
                     request.META.get('HTTP_REFERER'),
-                    request.META['HTTP_USER_AGENT'],
+                    data['userAgent'],
                 )
 
                 client = github3.login(token=settings.FEC_GITHUB_TOKEN)
-                issue = client.repository('fecgov', 'fec').create_issue(
-                    title, body=body
-                )
+                issue = client.repository('fecgov', 'fec').create_issue(title, body=body)
 
                 return JsonResponse(issue.to_json(), status=201)
     else:

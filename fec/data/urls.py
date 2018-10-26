@@ -18,6 +18,7 @@ urlpatterns = [
 
 
     # Feedback Tool
+    url(r'^data/issue/reaction/$', views.reactionFeedback),
     url(r'^data/issue/$', views.feedback),
 
     # Datatables
