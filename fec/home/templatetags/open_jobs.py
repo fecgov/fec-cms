@@ -6,6 +6,8 @@ from django import template
 from django.conf import settings
 from fec.constants import USAJOBS_CODE_LIST as CODE_LIST
 
+JOB_URL = 'https://data.usajobs.gov/api/Search'
+CODES_URL = 'https://data.usajobs.gov/api/codelist/hiringpaths'
 USAJOB_SEARCH_ERROR = """
 Error:
 USAJOBS is unavailable. Please visit usajobs.gov for more information.
@@ -22,8 +24,8 @@ def get_jobs():
     is used for backup if query failed.
     """
 
-    url = 'https://data.usajobs.gov/api/Search'
-    codes_url = 'https://data.usajobs.gov/api/codelist/hiringpaths'
+    # url = 'https://data.usajobs.gov/api/Search'
+    # codes_url = 'https://data.usajobs.gov/api/codelist/hiringpaths'
     querystring = {}
     querystring['Organization']=settings.USAJOBS_AGENCY_CODE
     querystring['WhoMayApply']=settings.USAJOBS_WHOMAYAPPLY
@@ -35,7 +37,7 @@ def get_jobs():
 
     #query usajobs API for all open fec jobs
     response = requests.get(
-        url,
+        JOB_URL,
         headers=headers,
         params=querystring
     )
@@ -46,11 +48,11 @@ def get_jobs():
 
     #query usajobs API for list of all hiring-path codes
     codes_response = requests.get(
-        codes_url,
+        CODES_URL,
         headers=headers
     )
     if codes_response.status_code != 200:
-        codes_responses = json.load(CODE_LIST)
+        codes_responses = json.loads(CODE_LIST)
     else:
         codes_responses = codes_response.json()
 
