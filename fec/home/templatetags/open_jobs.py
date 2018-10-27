@@ -9,7 +9,6 @@ from fec.constants import USAJOBS_CODE_LIST as CODE_LIST
 JOB_URL = "https://data.usajobs.gov/api/Search"
 CODES_URL = "https://data.usajobs.gov/api/codelist/hiringpaths"
 USAJOB_SEARCH_ERROR = """
-Error:
 USAJOBS is unavailable. Please visit usajobs.gov for more information.
 """
 register = template.Library()

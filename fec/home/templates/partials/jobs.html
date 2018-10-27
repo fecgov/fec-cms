@@ -13,9 +13,12 @@
       </li>
   {% empty %}
     {% if error %}
-        <div class="alert" style="background-color:red">
-            <strong>{{error}}</strong>
-        </div>
+    <div style="padding: 2rem">
+      <div class="message message--alert">
+        <h2 class="message__title">Error:</h2>
+        <p>{{error}}</p>
+      </div>
+    </div>
     {% else %}
         <li class='t-sans'>There are currently no open positions available. Please check back on this page or on <a href='https://www.usajobs.gov/' title='USAJobs website'>USAJOBs</a> for the latest FEC vacancy announcements.</li>
     {% endif %}
