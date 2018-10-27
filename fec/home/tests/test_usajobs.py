@@ -17,7 +17,7 @@ logger = logging.getLogger(__name__)
 # from django.test import Client, TestCase
 
 """
-things need to tested:
+things need to be tested:
 1. both requests GET are fired when get_jobs are called
 2. when search request failed, need to check error message are back
 3. when code_list request failed, need to make sure hard-coded copy kicks in.
@@ -89,7 +89,7 @@ class MockResponse:
 
 
 # Our test case class
-class MyGreatClassTestCase(unittest.TestCase):
+class USAJobTestCase(unittest.TestCase):
 
     # This method will be used by the mock to replace requests.get
     def mocked_requests_get1(*args, **kwargs):
@@ -102,10 +102,11 @@ class MyGreatClassTestCase(unittest.TestCase):
     # first test case: everything normal
     @mock.patch("requests.get", side_effect=mocked_requests_get1)
     def test_get_job1(self, mock_get):
-        logger.info("usajob test1:")
+        logger.info("\n\nusajob test1:")
         job_data = get_jobs()
         # print(job_data)
         self.assertEqual(job_data["jobData"][0]["open_to"], "The public")
+        logger.info("pass.")
 
     # second test case: job search failed
     def mocked_requests_get2(*args, **kwargs):
@@ -120,12 +121,13 @@ class MyGreatClassTestCase(unittest.TestCase):
         logger.info("usajob test2:")
         job_data = get_jobs()
         self.assertTrue("error" in job_data)
+        logger.info("pass.")
 
     def mocked_requests_get3(*args, **kwargs):
         if args[0] == JOB_URL:
             return MockResponse(json.loads(JOB_DATA), 200)  # error response
         elif args[0] == CODES_URL:
-            return MockResponse(json.loads(USAJOBS_CODE_LIST), 500)
+            return MockResponse(json.loads('{"dummy":"dummy"}'), 500)
         return MockResponse(None, 404)
 
     # 3rd test case: code list query failed, hard cached copy kick in
@@ -134,6 +136,7 @@ class MyGreatClassTestCase(unittest.TestCase):
         logger.info("usajob test3:")
         job_data = get_jobs()
         self.assertEqual(job_data["jobData"][0]["open_to"], "The public")
+        logger.info("pass.")
 
     def mocked_requests_get4(*args, **kwargs):
         job_data = json.loads(JOB_DATA)
@@ -144,7 +147,7 @@ class MyGreatClassTestCase(unittest.TestCase):
         if args[0] == JOB_URL:
             return MockResponse(job_data, 200)  # error response
         elif args[0] == CODES_URL:
-            return MockResponse(json.loads(USAJOBS_CODE_LIST), 500)
+            return MockResponse(json.loads('{"dummy":"dummy"}'), 500)
         return MockResponse(None, 404)
 
     # 4th test case: code list query failed, hard cached copy kick in,
@@ -154,6 +157,7 @@ class MyGreatClassTestCase(unittest.TestCase):
         logger.info("usajob test4:")
         job_data = get_jobs()
         self.assertEqual(job_data["jobData"][0]["open_to"], "some new code")
+        logger.info("pass.")
 
 
 if __name__ == "__main__":
