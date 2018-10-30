@@ -143,14 +143,6 @@ describe('dropdown', function() {
       expect(document.activeElement).to.equal($('#A').get(0));
     });
 
-    it('calls remove on selecting the last item', function() {
-      sinon.spy(this.dropdown, 'removePanel');
-      this.dropdown.selectItem($('#A'));
-      expect(this.dropdown.removePanel).to.have.not.been.called;
-      this.dropdown.selectItem($('#B'));
-      expect(this.dropdown.removePanel).to.have.been.called;
-    });
-
     it('removes the panel', function() {
       this.dropdown.removePanel();
       expect(this.dropdown.$body.find('.dropdown__panel').length).to.equal(0);
