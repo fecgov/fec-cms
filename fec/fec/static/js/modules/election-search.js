@@ -443,7 +443,6 @@ ElectionSearch.prototype.formatResult = function(result) {
  */
 ElectionSearch.prototype.formatColor = function(result) {
   var palette = this.map.districtPalette[result.state] || {};
-  console.log(officeMap[result.office]);
   if (officeMap[result.office] == 'Senate') {
     return '#000000';
   } else {
