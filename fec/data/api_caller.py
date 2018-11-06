@@ -69,7 +69,7 @@ def load_search_results(query, query_type=None):
 def load_legal_search_results(query, query_type='all', offset=0, limit=20, **kwargs):
     filters = dict((key, value) for key, value in kwargs.items() if value)
 
-    if query or query_type in ['advisory_opinions', 'murs']:
+    if query or query_type in ['advisory_opinions', 'murs', 'adrs']:
         filters['hits_returned'] = limit
         filters['type'] = query_type
         filters['from_hit'] = offset
@@ -92,6 +92,9 @@ def load_legal_search_results(query, query_type='all', offset=0, limit=20, **kwa
 
     if 'murs' in results:
         results['murs_returned'] = len(results['murs'])
+
+    if 'adrs' in results:
+        results['adrs_returned'] = len(results['adrs'])
 
     return results
 
@@ -153,6 +156,51 @@ def load_legal_mur(mur_no):
                 documents_by_type[doc['category']] = [doc]
         mur['documents_by_type'] = documents_by_type
     return mur
+
+
+def load_legal_adr(adr_no):
+
+    url = '/legal/docs/adrs/'
+    adr = _call_api(url, parse.quote(adr_no))
+
+    if not adr:
+        raise Http404
+
+    adr = adr['docs'][0]
+
+    complainants = []
+    for participant in adr['participants']:
+        citations = []
+        for stage in participant['citations']:
+            for url in participant['citations'][stage]:
+                if 'uscode' in url:
+                    section = re.search('section=([0-9]+)', url).group(1)
+                    citations.append({'text': section, 'url': url})
+                if 'cfr' in url:
+                    title_no = re.search('titlenum=([0-9]+)', url).group(1)
+                    part_no = re.search('partnum=([0-9]+)', url).group(1)
+                    section_no = re.search('sectionnum=([0-9]+)', url).group(1)
+                    text = '%s C.F.R. %s.%s' % (title_no, part_no, section_no)
+                    citations.append({'text': text, 'url': url})
+        participant['citations'] = citations
+
+        if 'complainant' in participant['role'].lower():
+            complainants.append(participant['name'])
+
+    adr['disposition_text'] = [d['action'] for d in adr['commission_votes']]
+
+    adr['collated_dispositions'] = collate_dispositions(adr['dispositions'])
+    adr['complainants'] = complainants
+    adr['participants_by_type'] = _get_sorted_participants_by_type(adr)
+
+    documents_by_type = OrderedDict()
+    for doc in adr['documents']:
+        if doc['category'] in documents_by_type:
+            documents_by_type[doc['category']].append(doc)
+        else:
+            documents_by_type[doc['category']] = [doc]
+    adr['documents_by_type'] = documents_by_type
+    return adr
 
 
 def collate_dispositions(dispositions):

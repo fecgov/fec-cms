@@ -1,4 +1,5 @@
 from django.conf.urls import url
+from django.conf import settings
 
 from legal import views
 
@@ -8,6 +9,8 @@ urlpatterns = [
     url(r'^data/legal/advisory-opinions/$', views.advisory_opinions_landing),
     url(r'^data/legal/matter-under-review/(?P<mur_no>[\w-]+)/$',
         views.mur_page),
+    url(r'^data/legal/alternative-dispute-resolution/(?P<adr_no>[\w-]+)/$',
+        views.adr_page),        
     url(r'^data/legal/statutes/$', views.statutes_landing),
     # Legal search results
     url(r'^data/legal/search/$', views.legal_search),
@@ -19,3 +22,9 @@ urlpatterns = [
         views.legal_doc_search_regulations),
     url(r'^data/legal/search/statutes/$', views.legal_doc_search_statutes),
 ]
+
+if settings.FEATURES['adrs']:
+    urlpatterns += url(
+        r'^data/legal/search/adrs/$', views.legal_doc_search_adr
+    ),
+

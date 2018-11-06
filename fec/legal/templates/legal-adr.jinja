@@ -1,0 +1,209 @@
+{% extends "layouts/main.jinja" %}
+{% import 'macros/breadcrumbs.jinja' as breadcrumb %}
+{% import 'macros/legal.jinja' as legal %}
+
+{% set breadcrumb_links=[('/legal-resources', 'Legal resources'), ('/legal-resources/enforcement', 'Enforcement'), ('/data/legal/search/adrs', 'Alternative dispute resolution')] %}
+
+{% block title %}ADR #{{ adr.no }}{% endblock %}
+
+{% block css %}
+<link rel="stylesheet" type="text/css" href="{{ asset_for_css('legal-common.css') }}" />
+{% endblock %}
+
+{% block body %}
+<header class="page-header slab slab--primary">
+  {{ breadcrumb.breadcrumbs('ADR #%s' % (adr.no,), breadcrumb_links) }}
+</header>
+
+<div class="container main legal-adr">
+  <div class="content__section">
+    <header class="heading--main">
+      <h1>Alternative Dispute Resolution #{{ adr.no }}</h1>
+      <span class="heading__subtitle">{{ adr.name }}</span>
+    </header>
+  </div>
+  <div class="sidebar-container sidebar-container--left js-sticky-side" data-sticky-container="main">
+      <nav class="sidebar sidebar--neutral sidebar--left side-nav js-toc">
+        <ul class="sidebar__content">
+          <li class="side-nav__item"><a class="side-nav__link" href="#summary">Summary</a></li>
+          <li class="side-nav__item"><a class="side-nav__link" href="#disposition">Disposition</a></li>
+          <li class="side-nav__item"><a class="side-nav__link" href="#documents">Documents</a></li>
+          <li class="side-nav__item"><a class="side-nav__link" href="#participants">Participants</a></li>
+        </ul>
+      </nav>
+  </div>
+  <div class="main__content--right">
+    <section id="summary" class="content__section">
+    <div>
+      <h2 class="t-ruled--bold t-ruled--bottom">Summary</h2>
+      <div class="legal-adr__property">
+        <p>
+          {% if adr['respondents']|length > 1 %}
+            <strong>SUBJECT:</strong> {{ '; '.join(adr['subjects']) }}
+          {% else %}
+            <strong>SUBJECT:</strong> None
+          {% endif %}
+        </p>
+      </div>
+      <div class="legal-adr__property">
+        <p>   
+          <strong>
+              {% if adr['complainants']|length > 1 %}
+                COMPLAINANTS:
+              {% else %}
+                COMPLAINANT:
+              {% endif %}
+          </strong>
+          {{ '; '.join(adr['complainants']) }}
+        </p>
+      </div>
+      <div class="legal-adr__property">
+        <p>
+          <strong>
+              {% if adr['respondents']|length > 1 %}
+                RESPONDENTS:
+              {% else %}
+                RESPONDENT:
+              {% endif %}
+          </strong>
+          {{ '; '.join(adr['respondents']) }}
+        </p>
+      </div>
+      <div class="legal-adr__property">
+        <p></p>
+      </div>
+      <div class="legal-adr__property">
+          {% if adr.election_cycles|length > 1 %}
+            <p><strong>ELECTION CYCLES:</strong>
+          {% else %}
+            <p><strong>ELECTION CYCLE:</strong>
+          {% endif %}
+          {% for election_cycle in adr.election_cycles %}
+            {{ election_cycle }}{% if loop.index < loop.length %};{% endif %}
+          {% endfor %}
+        </p>
+      </div>
+      <div class="legal-adr__property">
+        <p>
+          <strong>OPENING DATE:</strong> {{ adr.open_date | date(fmt='%m/%d/%Y') }}
+        </p>
+      </div>
+      <div class="legal-adr__property">
+        <p>
+          <strong>CLOSING DATE:</strong> {{ adr.close_date | date(fmt='%m/%d/%Y') }}
+        </p>
+      </div>
+      <div class="legal-adr__property">
+        <p>
+          <strong>DISPOSITION:</strong> {{ '<br>'.join(adr['disposition_text']) | safe }}
+        </p>
+      </div>
+    </div>
+  </section>
+  <section id="disposition" class="content__section">
+    <h2 class="t-ruled--bold t-ruled--bottom u-no-margin">Disposition</h2>
+    <table class="data-table data-table--text data-table--heading-borders">
+      <thead>
+        <tr>
+          <th>Disposition</th>
+          <th>Penalty</th>
+          <th>Respondent</th>
+          <th>Citation</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for disposition in adr.collated_dispositions %}
+          {% set dispositionloop = loop %}
+          {% for penalty in adr.collated_dispositions[disposition] %}
+            {% for entry in adr.collated_dispositions[disposition][penalty] %}
+              <tr class="{{ dispositionloop.cycle('row-color-normal', 'row-color-contrast') }}">
+                {% if loop.first %}
+                <td rowspan="{{ adr.collated_dispositions[disposition][penalty] | length }}">{{ disposition }}</td>
+                <td rowspan="{{ adr.collated_dispositions[disposition][penalty] | length }}"> {{ penalty | currency or '' }} </td>
+                {% endif %}
+                <td> {{ entry.respondent }}</td>
+                <td>
+                {% for citation in entry.citations %}
+                    {{ citation.title }}
+                    {% if citation.type == 'statute' %}
+                        U.S.C.
+                    {% else %}
+                        CFR
+                    {% endif %}
+                    <a href="{{ citation.url }}">
+                    {% if citation.type == 'statute' %}
+                        &sect;{{ citation.text -}}
+                    {% else %}
+                        {{ citation.text }}
+                    {% endif %}
+                    {% if not loop.last %}<br>{% endif %}
+                    </a>
+                {% endfor %}
+                </td>
+              </tr>
+            {% endfor %}
+          {% endfor %}
+        {% endfor %}
+      </tbody>
+    </table>
+  </section>
+  <section id="documents" class="content__section">
+    <h2 class="t-ruled--bold t-ruled--bottom u-no-margin">Documents</h2>
+    <table class="data-table data-table--text data-table--heading-borders">
+      <thead>
+        <tr>
+          <th>Date</th>
+          <th>Type</th>
+          <th>Title</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% if 'documents' in adr and adr.documents_by_type %}
+          {% for category in adr.documents_by_type %}
+            {% set categoryloop = loop %}
+            {% for document in adr.documents_by_type[category] %}
+              <tr class="{{ categoryloop.cycle('row-color-normal', 'row-color-contrast') }}">
+                <td>{{ document.document_date | date('%m/%d/%Y')}}</td>
+                {% if loop.first %}
+                <td rowspan="{{ adr.documents_by_type[category] | length }}">{{ category }}</td>
+                {% endif %}
+                <td><a href="{{ document.url }}">{{ document.description }}</a>  {{ document.length | filesize }}</td>
+              </tr>
+            {% endfor %}
+          {% endfor %}
+        {% endif %}
+      </tbody>
+    </table>
+  </section>
+  <section id="participants" class="content__section">
+    <h2 class="t-ruled--bold t-ruled--bottom u-no-margin">Participants</h2>
+    <table class="data-table data-table--text data-table--heading-borders">
+      <thead>
+        <tr>
+          <th>Relationship</th>
+          <th>Name</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% if 'participants' in adr and adr.participants_by_type %}
+          {% for role in adr.participants_by_type %}
+            {% set roleloop = loop %}
+            {% for participant in adr.participants_by_type[role] %}
+              <tr class="{{ roleloop.cycle('row-color-normal', 'row-color-contrast') }}">
+                {% if loop.first %}
+                <td rowspan="{{ adr.participants_by_type[role] | length }}">{{ role | capitalize }}</td>
+                {% endif %}
+                <td>{{ participant }}</td>
+              </tr>
+            {% endfor %}
+          {% endfor %}
+        {% endif %}
+      </tbody>
+    </table>
+    <div class="results-info results-info--bottom">
+         <a class="legal-top" href="#">Top of page</a>
+   </div>
+  </section>
+  </div>
+</div>
+{% endblock %}

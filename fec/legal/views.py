@@ -66,6 +66,18 @@ def mur_page(request, mur_no):
     })
 
 
+def adr_page(request, adr_no):
+    adr = api_caller.load_legal_adr(adr_no)
+
+    if not adr:
+        raise Http404()
+
+    return render(request, 'legal' + '-adr.jinja', {
+        'adr': adr,
+        'parent': 'legal'
+    })
+
+
 def legal_search(request):
     query = request.GET.get('search', '')
     result_type = request.GET.get('search_type', 'all')
@@ -116,6 +128,25 @@ def legal_doc_search_mur(request):
         'result_type': 'murs',
         'mur_no': mur_no,
         'mur_respondents': mur_respondents,
+        'query': query
+    })
+
+def legal_doc_search_adr(request):
+    results = {}
+    query = request.GET.get('search', '')
+    offset = request.GET.get('offset', 0)
+    case_no = request.GET.get('case_no', '')
+    case_respondents = request.GET.get('case_respondents', '')
+    adr_election_cycles = request.GET.get('adr_election_cycles', '')
+
+    results = api_caller.load_legal_search_results(query, 'adrs', offset=offset, case_no=case_no, case_respondents=case_respondents)
+
+    return render(request, 'legal-search-results-adrs.jinja', {
+        'parent': 'legal',
+        'results': results,
+        'result_type': 'adrs',
+        'case_no': case_no,
+        'case_respondents': case_respondents,
         'query': query
     })
 

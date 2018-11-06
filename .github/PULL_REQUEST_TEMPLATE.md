@@ -20,6 +20,10 @@ branch | PR
 fix/other_pr | [link]()
 feature/other_pr | [link]()
 
+## How to test
+Include any information that may be helpful to the reviewer(s).
+  This might inclide:
+  - links to sample pages to test
+  - Any local environmental setup that is different than the usual (env vars, API version to point to)
 ____
 
-**IF ANY OF THE ABOVE FIELDS DO NOT APPLY, PLEASE DELETE THEM BEFORE SUBMITTING**

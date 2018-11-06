@@ -150,6 +150,18 @@ def process_ie_data(totals):
     return financial_summary_processor(totals, constants.IE_FORMATTER)
 
 
+def process_inaugural_data(totals):
+    return financial_summary_processor(totals, constants.INAUGURAL_FORMATTER)
+
+
+def process_host_raising_data(totals):
+    return financial_summary_processor(totals, constants.HOST_RAISING_FORMATTER)
+
+
+def process_host_spending_data(totals):
+    return financial_summary_processor(totals, constants.HOST_SPENDING_FORMATTER)
+
+
 def get_next_senate_elections(current_cycle):
     """
     Returns an dictionary of senate classes in chronological order
