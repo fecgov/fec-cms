@@ -1,6 +1,5 @@
 import unittest
 import json
-import logging
 from unittest import mock
 
 from home.templatetags.open_jobs import (
