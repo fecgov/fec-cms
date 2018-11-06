@@ -34,7 +34,9 @@ JOB_DATA = """
     {"MatchedObjectDescriptor":
                   {
                  "ApplicationCloseDate": "2018-11-06",
-                 "ApplyURI": ["https://www.usajobs.gov:443/GetJob/ViewDetails/513873400?PostingChannelID=RESTAPI"],
+                 "ApplyURI": [
+"https://www.usajobs.gov:443/GetJob/ViewDetails/513873400?PostingChannelID=RESTAPI"
+                 ],
                  "DepartmentName": "Organizations",
                  "JobCategory": [{"Code": "2210", "Name": " "}],
                  "JobGrade": [{"Code": "GS"}],
@@ -160,5 +162,5 @@ class USAJobTestCase(unittest.TestCase):
         logger.info("pass.")
 
 
-if __name__ == "__main__":
-    unittest.main()
+# if __name__ == "__main__":
+#     unittest.main()
