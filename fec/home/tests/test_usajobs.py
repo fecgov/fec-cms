@@ -11,10 +11,6 @@ from home.templatetags.open_jobs import (
 )
 from fec.constants import USAJOBS_CODE_LIST
 
-logger = logging.getLogger(__name__)
-
-# import home.views as views
-# from django.test import Client, TestCase
 
 """
 things need to be tested:
@@ -104,11 +100,8 @@ class USAJobTestCase(unittest.TestCase):
     # first test case: everything normal
     @mock.patch("requests.get", side_effect=mocked_requests_get1)
     def test_get_job1(self, mock_get):
-        logger.info("\n\nusajob test1:")
         job_data = get_jobs()
-        # print(job_data)
         self.assertEqual(job_data["jobData"][0]["open_to"], "The public")
-        logger.info("pass.")
 
     # second test case: job search failed
     def mocked_requests_get2(*args, **kwargs):
@@ -120,10 +113,8 @@ class USAJobTestCase(unittest.TestCase):
 
     @mock.patch("requests.get", side_effect=mocked_requests_get2)
     def test_get_job2(self, mock_get):
-        logger.info("usajob test2:")
         job_data = get_jobs()
         self.assertTrue("error" in job_data)
-        logger.info("pass.")
 
     def mocked_requests_get3(*args, **kwargs):
         if args[0] == JOB_URL:
@@ -135,10 +126,8 @@ class USAJobTestCase(unittest.TestCase):
     # 3rd test case: code list query failed, hard cached copy kick in
     @mock.patch("requests.get", side_effect=mocked_requests_get3)
     def test_get_job3(self, mock_get):
-        logger.info("usajob test3:")
         job_data = get_jobs()
         self.assertEqual(job_data["jobData"][0]["open_to"], "The public")
-        logger.info("pass.")
 
     def mocked_requests_get4(*args, **kwargs):
         job_data = json.loads(JOB_DATA)
@@ -156,11 +145,5 @@ class USAJobTestCase(unittest.TestCase):
     # but new code found, use original job data
     @mock.patch("requests.get", side_effect=mocked_requests_get4)
     def test_get_job4(self, mock_get):
-        logger.info("usajob test4:")
         job_data = get_jobs()
         self.assertEqual(job_data["jobData"][0]["open_to"], "some new code")
-        logger.info("pass.")
-
-
-# if __name__ == "__main__":
-#     unittest.main()
