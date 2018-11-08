@@ -67,9 +67,15 @@ def nullify(value, *nulls):
 def get_election_url(candidate, cycle, district=None):
     if cycle:
         if candidate['office'] == 'H':
-            district_url = '/' + str(candidate['state']) + '/' + candidate['district']
+            if candidate.get('state') and candidate.get('district'):
+                district_url = '/' + str(candidate['state']) + '/' + candidate['district']
+            else:
+                return None
         elif candidate['office'] == 'S':
-            district_url = '/' + str(candidate['state'])
+            if candidate.get('state'):
+                district_url = '/' + str(candidate['state'])
+            else:
+                return None
         else:
             district_url = ''
 
@@ -101,7 +107,9 @@ def strip_zero_pad(number):
     Removes leading 0's for display purposes
     Commonly used for congressional districts
     '''
-    return number.lstrip("0")
+    if number:
+        return number.lstrip("0")
+    return "None"
 
 
 def date_filter(value, fmt='%m/%d/%Y'):
