@@ -76,7 +76,7 @@ ElectionMap.prototype.init = function() {
   this.map = L.map(this.elm, {
     scrollWheelZoom: false,
     draggable: false,
-    touchZoom: false
+    touchZoom: false,
   });
   this.map.on('viewreset', this.handleReset.bind(this));
   this.tileLayer = L.tileLayer.provider('Stamen.TonerLite');
