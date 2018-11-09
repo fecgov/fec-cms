@@ -187,8 +187,6 @@ def get_candidate(candidate_id, cycle, election_full):
         'A', []
     )
 
-    committee_groups = committee_groups
-    committees_authorized = committees_authorized
     committee_ids = [committee['committee_id'] for committee in committees_authorized]
 
     # Get aggregate totals for the financial summary
@@ -204,8 +202,6 @@ def get_candidate(candidate_id, cycle, election_full):
         raising_summary = None
         spending_summary = None
         cash_summary = None
-
-    aggregate = aggregate
 
     # Get totals for the last two-year period of a cycle for showing on
     # raising and spending tabs
