@@ -76,7 +76,7 @@ ElectionMap.prototype.init = function() {
   this.map = L.map(this.elm, {
     scrollWheelZoom: false,
     draggable: false,
-    touchZoom: false,
+    touchZoom: false
   });
   this.map.on('viewreset', this.handleReset.bind(this));
   this.tileLayer = L.tileLayer.provider('Stamen.TonerLite');
@@ -142,7 +142,7 @@ ElectionMap.prototype.updateBounds = function(districts) {
   if (rule) {
     this.map.setView(rule.coords, rule.zoom);
   } else if (districts) {
-    this.map.flyToBounds(this.overlay.getBounds(), {duration:.15})
+    this.map.flyToBounds(this.overlay.getBounds(), { duration: 0.15 });
   }
 };
 
