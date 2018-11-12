@@ -142,7 +142,9 @@ ElectionMap.prototype.updateBounds = function(districts) {
   if (rule) {
     this.map.setView(rule.coords, rule.zoom);
   } else if (districts) {
-    this.map.flyToBounds(this.overlay.getBounds(), { duration: 0.15 });
+    window.setTimeout(() => {
+      this.map.flyToBounds(this.overlay.getBounds(), { duration: 0.5 });
+    }, 500);
   }
 };
 
