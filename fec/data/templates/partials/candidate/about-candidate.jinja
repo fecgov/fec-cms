@@ -53,8 +53,8 @@
       </table>
 
       <div class="usa-width-one-fourth">
+        {% if get_election_url(candidate, election_year, district) %}
         <div class="card">
-          {% if get_election_url(candidate, election_year, district) %}
           <a href="{{ get_election_url(candidate, election_year, district) }}">
             <div class="card__image__container">
               <img class="icon--complex" src="/static/img/i-elections--primary.svg" alt="Icon representing elections">
@@ -63,8 +63,8 @@
               View all candidates in the {% if election_year %}{{ election_year }} {% endif %}{% if constants.states[state] %}{{ constants.states[state] }}{% endif %} {% if office == 'P' %}Presidential{% else %}{{ office_full }}{% endif %}{% if office_full == 'House' %} District {{ district|strip_zero_pad }}{% endif %} election
             </div>
           </a>
-          {% endif %}
         </div>
+        {% endif %}
       </div>
     </div>
 
