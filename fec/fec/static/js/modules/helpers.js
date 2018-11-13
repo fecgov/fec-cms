@@ -392,6 +392,7 @@ function amendmentVersionDescription(row) {
   // and F1N & F2 that are filed as N but are not originals
   if (
     row.amendment_indicator === API.amendment_indicator_new &&
+    row.amendment_chain != null &&
     row.amendment_chain.length === 1
   ) {
     description = ' Original';
