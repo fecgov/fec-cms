@@ -125,7 +125,6 @@ ElectionMap.prototype.drawDistricts = function(districts) {
   }).addTo(this.map);
   this.updateBounds(districts);
   this.drawBackgroundDistricts(districts);
-  //this.overlay.bindPopup('popupContent').openPopup();
 };
 
 /**
