@@ -13,7 +13,7 @@ $(document).ready(function() {
     autoWidth: false,
     title: 'Individual contributions',
     path: ['schedules', 'schedule_a'],
-    query: { is_individual: true },
+    query: { is_individual: true, sort_nulls_last: false },
     columns: columns.individualContributions,
     paginator: tables.SeekPaginator,
     order: [[4, 'desc']],

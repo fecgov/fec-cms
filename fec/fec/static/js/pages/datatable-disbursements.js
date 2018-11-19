@@ -18,6 +18,7 @@ $(document).ready(function() {
     title: 'Disbursements',
     path: ['schedules', 'schedule_b'],
     columns: columns.disbursements,
+    query: { sort_nulls_last: false },
     paginator: tables.SeekPaginator,
     order: [[4, 'desc']],
     useFilters: true,
