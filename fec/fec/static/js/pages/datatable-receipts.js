@@ -16,6 +16,7 @@ $(document).ready(function() {
     title: 'Receipts',
     path: ['schedules', 'schedule_a'],
     columns: columns.receipts,
+    query: { sort_nulls_last: false },
     paginator: tables.SeekPaginator,
     order: [[4, 'desc']],
     useFilters: true,
