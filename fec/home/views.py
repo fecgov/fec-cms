@@ -352,6 +352,7 @@ def index_meetings(request):
         'executive_sessions': executive_sessions,
         })
 
+
 def guides(request):
     page_context = {
       'content_section': 'guides',

@@ -132,6 +132,7 @@ ElectionMap.prototype.drawDistricts = function(districts) {
  * @param {array} districts - array of unique district identifiers
  */
 ElectionMap.prototype.updateBounds = function(districts) {
+  var self = this;
   var rule =
     districts &&
     _.find(boundsOverrides, function(rule, district) {
@@ -141,7 +142,7 @@ ElectionMap.prototype.updateBounds = function(districts) {
   if (rule) {
     this.map.setView(rule.coords, rule.zoom);
   } else if (districts) {
-    this.map.fitBounds(this.overlay.getBounds());
+    self.map.flyToBounds(self.overlay.getBounds(), { duration: 0.25 });
   }
 };
 

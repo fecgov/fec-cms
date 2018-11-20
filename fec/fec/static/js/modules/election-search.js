@@ -443,7 +443,11 @@ ElectionSearch.prototype.formatResult = function(result) {
  */
 ElectionSearch.prototype.formatColor = function(result) {
   var palette = this.map.districtPalette[result.state] || {};
-  return palette[result.district % palette.length] || '#000000';
+  if (officeMap[result.office] == 'Senate') {
+    return '#000000';
+  } else {
+    return palette[result.district % palette.length] || '#000000';
+  }
 };
 
 /**

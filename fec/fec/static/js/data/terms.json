@@ -148,6 +148,10 @@
     "definition": "A “disclaimer” notice is a statement that identifies the person(s) who paid for a communication and whether the communication was authorized by one or more candidates. 11 CFR <a href=\"https://www.fec.gov/regulations/110-11/CURRENT#110-11\">110.11</a>."
   },
   {
+    "term": "Disclosure date",
+    "definition": "The disclosure date is <ul class='list-bulleted'><li>the first date on which an electioneering communication is publicly distributed provided that the person making the electioneering communication has made one or more disbursements, or has executed one or more contracts to make disbursements, for the direct costs of producing or airing one or more electioneering communications aggregating in excess of $10,000; or</li><li>Any other date during the same calendar year on which an electioneering communication is publicly distributed provided that the person making the electioneering communication has made one or more disbursements, or has executed one or more contracts to make disbursements, for the direct costs of producing or airing one or more electioneering communications aggregating in excess of $10,000 since the most recent disclosure date during such calendar year.</li></ul> 11 CFR <a href=\"https://www.fec.gov/regulations/104-20/CURRENT#104-20\">104.20(a)(1)</a>."
+  },
+  {
     "term": "District",
     "definition": "A U.S. House of Representatives District. Because Senators represent an entire state, Senate races do not have districts associated with them."
   },
