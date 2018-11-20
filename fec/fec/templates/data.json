@@ -1,38 +1,38 @@
 {
-"conformsTo": "https://project-open-data.cio.gov/v1.1/schema",
-"describedBy": "https://project-open-data.cio.gov/v1.1/schema/catalog.json",
-"@context": "https://project-open-data.cio.gov/v1.1/schema/catalog.jsonld",
-"@type": "dcat:Catalog",
-"dataset": [
-    {
-        "@type": "dcat:Dataset",
-        "title": "FEC API",
-        "description": "The FEC is A RESTful web service supporting full-text and field-specific searches on federal campaign finance data.",
-        "keyword": ["campaign", "finance", "FEC", "elections"],
-        "modified": "R/P2W",
-        "publisher": {
-          "@type": "org:Organization",
-          "name": "Federal Election Commission"
-        },
-        "contactPoint": {
-          "@type": "vcard:Contact",
-          "fn": "Open Source",
-          "hasEmail": "mailto:apiinfo@fec.gov"
-        },
-        "identifier": "https://api.open.fec.gov/",
-        "accessLevel": "public",
-        "bureauCode": ["360:00"],
-        "programCode": ["000:000"],
-        "distribution": [
-            {
-                "accessURL": "https://api.open.fec.gov",
-                "description": "A fully queryable REST API with JSON output",
-                "describedBy": "https://api.open.fec.gov/swagger/",
-                "describedByType": "application/swagger+json",
-                "format": "API",
-                "title": "OpenFEC REST API"
-            }
-        ]
-    }
-]
+    "conformsTo": "https://project-open-data.cio.gov/v1.1/schema",
+    "describedBy": "https://project-open-data.cio.gov/v1.1/schema/catalog.json",
+    "@context": "https://project-open-data.cio.gov/v1.1/schema/catalog.jsonld",
+    "@type": "dcat:Catalog",
+    "dataset": [
+        {
+            "@type": "dcat:Dataset",
+            "title": "FEC API",
+            "description": "The FEC is A RESTful web service supporting full-text and field-specific searches on federal campaign finance data.",
+            "keyword": ["campaign", "finance", "FEC", "elections"],
+            "modified": "R/P2W",
+            "publisher": {
+                "@type": "org:Organization",
+                "name": "Federal Election Commission",
+            },
+            "contactPoint": {
+                "@type": "vcard:Contact",
+                "fn": "Open Source",
+                "hasEmail": "mailto:apiinfo@fec.gov",
+            },
+            "identifier": "https://api.open.fec.gov/",
+            "accessLevel": "public",
+            "bureauCode": ["360:00"],
+            "programCode": ["000:000"],
+            "distribution": [
+                {
+                    "accessURL": "https://api.open.fec.gov",
+                    "description": "A fully queryable REST API with JSON output",
+                    "describedBy": "https://api.open.fec.gov/swagger/",
+                    "describedByType": "application/swagger+json",
+                    "format": "API",
+                    "title": "OpenFEC REST API",
+                }
+            ],
+        }
+    ],
 }

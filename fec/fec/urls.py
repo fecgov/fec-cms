@@ -14,7 +14,11 @@ from search import views as search_views
 
 
 urlpatterns = [
-    url(r'^documents/(\d+)/(.*)$', home_views.serve_wagtail_doc, name='wagtaildocs_serve'),
+    url(
+        r'^documents/(\d+)/(.*)$',
+        home_views.serve_wagtail_doc,
+        name='wagtaildocs_serve',
+    ),
     url(r'^auth/', include(uaa_urls)),
     url(r'^admin/', include(wagtailadmin_urls)),
     url(r'^calendar/$', home_views.calendar),
@@ -28,30 +32,21 @@ urlpatterns = [
     url(r'', include('data.urls')),  # URLs for /data
     url(r'', include('legal.urls')),  # URLs for legal pages
     url(r'', include(wagtail_urls)),
-    url(r'^code\.json$',
-        TemplateView.as_view(
-            template_name='code.json'
-        )
-    ),
-    url(r'^data\.json$',
-        TemplateView.as_view(
-            template_name='data.json'
-        )
-    ),
+    url(r'^code\.json$', TemplateView.as_view(template_name='code.json')),
+    url(r'^data\.json$', TemplateView.as_view(template_name='data.json')),
 ]
 
 if settings.FEC_CMS_ENVIRONMENT != 'LOCAL':
-    #admin/login always must come before admin/, so place at beginning of list
-    urlpatterns.insert(0,url(r'^admin/login', uaa_views.login, name='login'))
+    # admin/login always must come before admin/, so place at beginning of list
+    urlpatterns.insert(0, url(r'^admin/login', uaa_views.login, name='login'))
 
 if settings.FEC_CMS_ROBOTS:
-    urlpatterns += url(
-        r'^robots\.txt$',
-        TemplateView.as_view(
-            template_name='robots.txt',
-            content_type='text/plain'
+    urlpatterns += (
+        url(
+            r'^robots\.txt$',
+            TemplateView.as_view(template_name='robots.txt', content_type='text/plain'),
         ),
-    ),
+    )
 
 
 if settings.DEBUG:
@@ -62,5 +57,5 @@ if settings.DEBUG:
     urlpatterns += staticfiles_urlpatterns()
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
-    #hide django-admin unless DEBUG=True
-    urlpatterns.insert(1,url(r'^django-admin/', include(admin.site.urls)))
+    # hide django-admin unless DEBUG=True
+    urlpatterns.insert(1, url(r'^django-admin/', include(admin.site.urls)))
