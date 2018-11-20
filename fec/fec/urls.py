@@ -39,7 +39,8 @@ if settings.FEC_CMS_ENVIRONMENT != 'LOCAL':
     #admin/login always must come before admin/, so place at beginning of list
     urlpatterns.insert(0,url(r'^admin/login', uaa_views.login, name='login'))
 
-if settings.FEC_CMS_ROBOTS:
+
+if settings.FEC_CMS_ENVIRONMENT != 'PRODUCTION':
     urlpatterns += url(
         r'^robots\.txt$',
         TemplateView.as_view(
