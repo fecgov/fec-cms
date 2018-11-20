@@ -32,7 +32,12 @@ urlpatterns = [
         TemplateView.as_view(
             template_name='code.json'
         )
-    )
+    ),
+    url(r'^data\.json$',
+        TemplateView.as_view(
+            template_name='data.json'
+        )
+    ),
 ]
 
 if settings.FEC_CMS_ENVIRONMENT != 'LOCAL':
