@@ -23,6 +23,7 @@
             "accessLevel": "public",
             "bureauCode": ["360:00"],
             "programCode": ["000:000"],
+            "licence": "https://github.com/fecgov/FEC/blob/master/LICENSE.md",
             "distribution": [
                 {
                     "accessURL": "https://api.open.fec.gov",
