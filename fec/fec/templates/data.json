@@ -12,12 +12,12 @@
             "modified": "R/P2W",
             "publisher": {
                 "@type": "org:Organization",
-                "name": "Federal Election Commission",
+                "name": "Federal Election Commission"
             },
             "contactPoint": {
                 "@type": "vcard:Contact",
                 "fn": "Open Source",
-                "hasEmail": "mailto:apiinfo@fec.gov",
+                "hasEmail": "mailto:apiinfo@fec.gov"
             },
             "identifier": "https://api.open.fec.gov/",
             "accessLevel": "public",
@@ -31,9 +31,9 @@
                     "describedBy": "https://api.open.fec.gov/swagger/",
                     "describedByType": "application/swagger+json",
                     "format": "API",
-                    "title": "OpenFEC REST API",
+                    "title": "OpenFEC REST API"
                 }
-            ],
+            ]
         }
-    ],
+    ]
 }
