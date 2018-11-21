@@ -22,9 +22,6 @@ FEC_API_KEY = env.get_credential('FEC_WEB_API_KEY')
 FEC_API_VERSION = env.get_credential('FEC_API_VERSION', 'v1')
 FEC_API_KEY_PUBLIC = env.get_credential('FEC_WEB_API_KEY_PUBLIC', '')
 
-# Disables crawling for all of our environments except for production
-FEC_CMS_ROBOTS = True
-
 FEC_RECAPTCHA_SECRET_KEY = env.get_credential('FEC_RECAPTCHA_SECRET_KEY')
 FEC_GITHUB_TOKEN = env.get_credential('FEC_GITHUB_TOKEN')
 
