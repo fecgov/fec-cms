@@ -7,7 +7,7 @@ gevent==1.2.1
 lxml==3.7.0
 newrelic==2.82.0.62
 psycopg2==2.7.1
-requests==2.13.0
+requests==2.20.1
 slacker==0.8.6
 whitenoise==2.0.3
 wagtail==2.2.1
