@@ -26,7 +26,12 @@ from home.models import (
     MeetingPage
 )
 
+
 def replace_dash(string):
+    # Leave the dash in place for non-filer publications
+    # This matches what's in the database
+    if string == 'non-filer-publications':
+        return 'non-filer publications'
     return string.replace('-', ' ')
 
 
