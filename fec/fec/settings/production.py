@@ -3,6 +3,9 @@ from .env import env
 
 SECRET_KEY = env.get_credential('DJANGO_SECRET_KEY')
 
+# These settings are used for all public environments:
+# dev, stage, feature, and production
+
 DEBUG = False
 TEMPLATE_DEBUG = False
 
