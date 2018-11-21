@@ -1,9 +1,40 @@
 {% import 'macros/cycle-select.jinja' as select %}
 
 <section id="section-2" role="tabpanel" aria-hidden="true" aria-labelledby="section-2-heading">
+  <!-- For Electioneering Communication committee type -->
+  {% if committee_type == 'E' %}
+  <h2 id="section-2-heading">About this filer</h2>
+   {% else %}
   <h2 id="section-2-heading">About this committee</h2>
+   {% endif %}
   <div class="slab slab--inline slab--neutral u-padding--left u-padding--right">
     {{ select.committee_cycle_select(cycles, cycle, 'about')}}
+    {% if committee_type == 'E' %}
+    <div class="entity__figure row">
+      <h3 class="heading--section">Filer information</h3>
+      <table class="t-sans usa-width-three-fourths">
+        <tr>
+          <td class="figure__label">Filer name:</td>
+          <td class="figure__value">{{name}}</td>
+        </tr>
+        <tr>
+          <td class="figure__label">Mailing address:</td>
+          <td class="figure__value">
+            <span class="t-block">{{ street_1 }}</span>
+            {% if street_2 %}
+              <span class="t-block">{{ street_2 }}</span>
+            {% endif %}
+            <span class="t-block">{{ city }}, {{ state }} {{ zip }}</span>
+          </td>
+        </tr>
+        <tr>
+          <td class="figure__label">Filer type:</td>
+          <td class="figure__value">{{ committee_type_full }}</td>
+        </tr>
+      </table>
+    </div>
+    <!-- For all other committee types -->
+    {% else %}
     <div class="entity__figure row">
       <h3 class="heading--section">Committee information</h3>
       <table class="t-sans usa-width-three-fourths">
@@ -70,5 +101,6 @@
         {% endif %}
       </table>
     </div>
+    {% endif %}
   </div>
 </section>

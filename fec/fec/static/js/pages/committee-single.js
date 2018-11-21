@@ -213,6 +213,10 @@ var expendituresColumns = [
 ];
 
 var electioneeringColumns = [
+  columns.candidateColumn({
+    data: 'candidate',
+    className: 'all'
+  }),
   {
     data: 'total',
     className: 'all',
@@ -227,11 +231,7 @@ var electioneeringColumns = [
         };
       }
     )
-  },
-  columns.candidateColumn({
-    data: 'candidate',
-    className: 'all'
-  })
+  }
 ];
 
 var communicationCostColumns = [
@@ -282,7 +282,12 @@ var itemizedDisbursementColumns = [
   columns.currencyColumn({
     data: 'disbursement_amount',
     className: 'column--number'
-  })
+  }),
+  {
+    data: 'candidate_name',
+    className: 'all',
+    orderable: false
+  }
 ];
 
 var individualContributionsColumns = [
@@ -596,7 +601,7 @@ $(document).ready(function() {
           path: path,
           query: query,
           columns: electioneeringColumns,
-          order: [[0, 'desc']],
+          order: [[1, 'desc']],
           dom: tables.simpleDOM,
           pagingType: 'simple',
           hideEmpty: true,

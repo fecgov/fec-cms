@@ -63,16 +63,16 @@
     {% if committee_type == 'E' %}
     <div class="entity__figure row" id="electioneering-communicaiton">
       <div class="heading--section heading--with-action">
-        <h3 class="heading__left">Electioneering communication</h3>
+        <h3 class="heading__left">Electioneering communications</h3>
         <a class="heading__right button--alt button--browse"
             href="/data/electioneering-communications/?committee_id={{ committee_id }}&min_date={{ cycle_start(cycle) | date(fmt='%m-%d-%Y') }}&max_date={{ cycle_end(cycle) | date(fmt='%m-%d-%Y') }}">Filter this data
         </a>
       </div>
-      <p>Any broadcast, cable or satellite communication that (1) refers to a clearly identified candidate for federal office; (2) is publicly distributed within certain time periods before an election and (3) is targeted to the relevant electorate.</p>
+      <p>Any disbursement for a broadcast, cable or satellite communication that (1) refers to a clearly identified candidate for federal office; (2) is publicly distributed within certain time periods before an election and (3) is targeted to the relevant electorate.</p>
       <table class="data-table data-table--heading-borders data-table--entity u-margin--top" data-type="electioneering-committee" data-committee="{{ committee_id }}" data-cycle="{{ cycle }}">
         <thead>
-          <th scope="col">Amount</th>
-          <th scope="col">Candidate</th>
+          <th scope="col">Candidate</th> 
+          <th scope="col">Amount</th>   
         </thead>
       </table>
       <div class="datatable__note">
@@ -183,6 +183,7 @@
               <th scope="col">Description</th>
               <th scope="col">Date</th>
               <th scope="col">Amount</th>
+              <th scope="col">Candidate</th>
             </tr>
           </thead>
         </table>
