@@ -150,6 +150,24 @@ def legal_doc_search_adr(request):
         'query': query
     })
 
+def legal_doc_search_af(request):
+    results = {}
+    query = request.GET.get('search', '')
+    offset = request.GET.get('offset', 0)
+    case_no = request.GET.get('case_no', '')
+    case_respondents = request.GET.get('case_respondents', '')
+    af_election_cycles = request.GET.get('af_election_cycles', '')
+
+    results = api_caller.load_legal_search_results(query, 'admin_fines', offset=offset, case_no=case_no, case_respondents=case_respondents)
+
+    return render(request, 'legal-search-results-afs.jinja', {
+        'parent': 'legal',
+        'results': results,
+        'result_type': 'admin_fines',
+        'case_no': case_no,
+        'case_respondents': case_respondents,
+        'query': query
+    })
 
 def legal_doc_search_regulations(request):
     results = {}
