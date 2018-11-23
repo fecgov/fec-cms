@@ -1,0 +1,47 @@
+{% extends "layouts/legal-doc-search-results.jinja" %}
+{% import 'macros/legal.jinja' as legal %}
+{% set document_type_display_name = 'Administrative fines' %}
+
+{% block header %}
+<header class="page-header slab slab--primary">
+  {{ breadcrumb.breadcrumbs('Search results', [('/legal-resources', 'Legal resources'), ('/legal-resources/enforcement', 'Enforcement')]) }}
+</header>
+{% endblock %}
+
+{% block filters %}
+  {{ legal.keyword_search(result_type, query) }}
+  <div class="filter">
+    <label class="label" for="case_no">Administrative fine number</label>
+    <input id="case_no" name="case_no" type="text" value="{{ case_no }}">
+  </div>
+  <div class="filter">
+    <label class="label" for="case_respondents">Administrative fine respondents</label>
+    <input id="case_respondents" name="case_respondents" type="text" value="{{ case_respondents }}">
+  </div>
+  <div class="filter">
+    <button type="submit" class="button button--cta">Apply filters</button>
+  </div>
+{% endblock %}
+
+{% block message %}
+<div class="data-container__tags">
+  <div class="row">
+    <h3 class="tags__title">Viewing <span class="tags__count">{{ results.total_admin_fines }}</span>  filtered results for:</h3>
+  </div>
+</div>
+<div class="message message--info u-no-margin-top">
+  <p>You can search all FEC administrative fine cases using keywords, administrative fine case numbers, names of respondents and more. For additional search filters, you can still search Administrative fine cases using our legacy <a href="http://eqs.fec.gov">FEC Enforcement Query System</a>.</p>
+</div>
+{% endblock %}
+
+{% block results %}
+{% with results=results %}
+
+{% include 'partials/legal-search-results-afs.jinja' %}
+{% endwith %}
+
+{% with results=results %}
+{% include 'partials/legal-pagination.jinja' %}
+{% endwith %}
+
+{% endblock %}
