@@ -28,3 +28,8 @@ if settings.FEATURES['adrs']:
         r'^data/legal/search/adrs/$', views.legal_doc_search_adr
     ),
 
+if settings.FEATURES['afs']:
+    urlpatterns += url(
+        r'^data/legal/search/admin_fines/$', views.legal_doc_search_af
+    ),
+
