@@ -57,7 +57,7 @@ if settings.FEC_CMS_ENVIRONMENT != 'PRODUCTION':
             template_name='robots.txt',
             content_type='text/plain'
         ),
-    )
+    ),
 
 
 if settings.DEBUG:
