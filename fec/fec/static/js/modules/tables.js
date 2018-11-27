@@ -882,7 +882,8 @@ function buildUrl(selected, context, path) {
   var query = {
     cycle: context.election.cycle,
     candidate_id: _.pluck(selected, 'candidate_id'),
-    per_page: 0
+    per_page: 0,
+    election_full: true
   };
 
   return helpers.buildUrl(path, query);
