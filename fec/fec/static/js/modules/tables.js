@@ -878,17 +878,6 @@ function destroyTable($table) {
   }
 }
 
-function buildUrl(selected, context, path) {
-  var query = {
-    cycle: context.election.cycle,
-    candidate_id: _.pluck(selected, 'candidate_id'),
-    per_page: 0,
-    election_full: true
-  };
-
-  return helpers.buildUrl(path, query);
-}
-
 var drawTableOpts = {
   autoWidth: false,
   destroy: true,
@@ -911,14 +900,17 @@ function drawSizeTable(selected, context) {
       return [result.candidate_id, result];
     })
   );
-  $.getJSON(
-    buildUrl(selected, context, [
-      'schedules',
-      'schedule_a',
-      'by_size',
-      'by_candidate'
-    ])
-  ).done(function(response) {
+  var query = {
+    cycle: context.election.cycle,
+    candidate_id: _.pluck(selected, 'candidate_id'),
+    per_page: 0,
+    election_full: true
+  };
+  var url = helpers.buildUrl(
+    ['schedules', 'schedule_a', 'by_size', 'by_candidate'],
+    query
+  );
+  $.getJSON(url).done(function(response) {
     var data = mapSize(response, primary);
     destroyTable($table);
     $table.dataTable(
@@ -944,14 +936,17 @@ function drawStateTable(selected, context) {
       return [result.candidate_id, result];
     })
   );
-  $.getJSON(
-    buildUrl(selected, context, [
-      'schedules',
-      'schedule_a',
-      'by_state',
-      'by_candidate'
-    ])
-  ).done(function(response) {
+  var query = {
+    cycle: context.election.cycle,
+    candidate_id: _.pluck(selected, 'candidate_id'),
+    per_page: 0,
+    election_full: true
+  };
+  var url = helpers.buildUrl(
+    ['schedules', 'schedule_a', 'by_state', 'by_candidate'],
+    query
+  );
+  $.getJSON(url).done(function(response) {
     var data = mapState(response, primary);
     // Populate headers with correct text
     var headerLabels = ['State'].concat(_.pluck(selected, 'candidate_name'));
