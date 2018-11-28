@@ -282,6 +282,9 @@ def serve_wagtail_doc(request, document_id, document_filename):
 
 
 def index_meetings(request):
+    """
+    Serve 'commission meetings' page under 'about'
+    """
     meetings = MeetingPage.objects.live().order_by("-date")
     open_meetings = meetings.filter(
         Q(meeting_type='O') | Q(title__icontains='Hearing') | Q(meeting_type='H')
@@ -344,7 +347,7 @@ def index_meetings(request):
     except PageNotAnInteger:
         open_meetings = meetings_paginator.page(1)
     except EmptyPage:
-        open_meetings = meetings_paginator.page(paginator.num_pages)
+        open_meetings = meetings_paginator.page(meetings_paginator.num_pages)
 
     hearings_paginator = Paginator(hearings, 20)
     hearings_page = page if active == 'hearings' else 1
@@ -353,7 +356,7 @@ def index_meetings(request):
     except PageNotAnInteger:
         hearings = hearings_paginator.page(1)
     except EmptyPage:
-        hearings = hearings_paginator.page(paginator.num_pages)
+        hearings = hearings_paginator.page(hearings_paginator.num_pages)
 
     executive_paginator = Paginator(executive_sessions, 20)
     executive_page = page if active == 'executive-sessions' else 1
@@ -362,7 +365,7 @@ def index_meetings(request):
     except PageNotAnInteger:
         executive_sessions = executive_paginator.page(1)
     except EmptyPage:
-        executive_sessions = executive_paginator.page(paginator.num_pages)
+        executive_sessions = executive_paginator.page(executive_paginator.num_pages)
 
     page_context = {'title': 'Commission meetings'}
 
