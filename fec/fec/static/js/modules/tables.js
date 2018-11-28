@@ -810,8 +810,8 @@ function refreshTables(e, context) {
     });
 
   if (selected.length > 0) {
-    drawSizeTable(selected, context);
-    drawStateTable(selected, context);
+    drawContributionsBySizeTable(selected, context);
+    drawContributionsByStateTable(selected, context);
   }
 
   if (e) {
@@ -893,7 +893,8 @@ var drawTableOpts = {
   pagingType: 'simple'
 };
 
-function drawSizeTable(selected, context) {
+// For election profile page "Individual contributions to candidates"
+function drawContributionsBySizeTable(selected, context) {
   var $table = $('table[data-type="by-size"]');
   var primary = _.object(
     _.map(selected, function(result) {
@@ -929,7 +930,8 @@ function drawSizeTable(selected, context) {
   });
 }
 
-function drawStateTable(selected, context) {
+// For election profile page "Individual contributions to candidates"
+function drawContributionsByStateTable(selected, context) {
   var $table = $('table[data-type="by-state"]');
   var primary = _.object(
     _.map(selected, function(result) {
