@@ -90,7 +90,7 @@ var employerColumns = [
   {
     data: 'total',
     className: 'all',
-    orderable: false,
+    orderable: true,
     orderSequence: ['desc', 'asc'],
     render: columnHelpers.buildTotalLink(
       ['receipts', 'individual-contributions'],
@@ -117,7 +117,7 @@ var occupationColumns = [
   {
     data: 'total',
     className: 'all',
-    orderable: false,
+    orderable: true,
     orderSequence: ['desc', 'asc'],
     render: columnHelpers.buildTotalLink(
       ['receipts', 'individual-contributions'],
