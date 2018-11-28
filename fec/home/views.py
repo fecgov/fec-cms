@@ -1,35 +1,29 @@
+import urllib
 from datetime import datetime
-from django.shortcuts import render
-from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-from django.conf import settings
 from itertools import chain
 from operator import attrgetter
-from django.http import HttpResponseRedirect
+
+import requests
+from django.conf import settings
+from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
+from django.core.urlresolvers import reverse
 from django.db.models import Q
-from django.shortcuts import get_object_or_404
+from django.http import HttpResponseRedirect
+from django.shortcuts import get_object_or_404, redirect, render
 from wagtail.documents.models import Document
 
-from fec.forms import ContactRAD
-from home.models import (
-    CommissionerPage,
-    DigestPage,
-    PressReleasePage,
-    RecordPage,
-    TipsForTreasurersPage,
-    MeetingPage,
-)
+from fec.forms import ContactRAD, form_categories
+from home.models import (CommissionerPage, DigestPage, MeetingPage,
+                         PressReleasePage, RecordPage, TipsForTreasurersPage)
+
 
 
 def replace_dash(string):
-    # Leave the dash in place for non-filer publications
-    # This matches what's in the database
-    if string == 'non-filer-publications':
-        return 'non-filer publications'
-    return string.replace('-', ' ')
+    return string.replace("-", " ")
 
 
 def replace_space(string):
-    return string.replace(' ', '-')
+    return string.replace(" ", "-")
 
 
 def get_records(category_list=None, year=None, search=None):
@@ -100,30 +94,30 @@ def get_tips(year=None, search=None):
 
 
 def updates(request):
-    digests = ''
-    records = ''
-    press_releases = ''
-    tips = ''
+    digests = ""
+    records = ""
+    press_releases = ""
+    tips = ""
 
     # Get values from query
-    update_types = request.GET.getlist('update_type', None)
-    category_list = request.GET.getlist('category', '')
-    year = request.GET.get('year', '')
-    search = request.GET.get('search', '')
+    update_types = request.GET.getlist("update_type", None)
+    category_list = request.GET.getlist("category", "")
+    year = request.GET.get("year", "")
+    search = request.GET.get("search", "")
 
     category_list = list(map(replace_dash, category_list))
 
     # If there's a query, only get the types in the query
     if update_types:
-        if 'fec-record' in update_types:
+        if "fec-record" in update_types:
             records = get_records(category_list=category_list, year=year, search=search)
-        if 'press-release' in update_types:
+        if "press-release" in update_types:
             press_releases = get_press_releases(
                 category_list=category_list, year=year, search=search
             )
-        if 'weekly-digest' in update_types:
+        if "weekly-digest" in update_types:
             digests = get_digests(year=year, search=search)
-        if 'tips-for-treasurers' in update_types:
+        if "tips-for-treasurers" in update_types:
             tips = get_tips(year=year, search=search)
 
     else:
@@ -160,12 +154,12 @@ def updates(request):
     # via http://stackoverflow.com/a/434755/1864981
     updates = sorted(
         chain(press_releases, digests, records, tips),
-        key=attrgetter('date'),
+        key=attrgetter("date"),
         reverse=True,
     )
 
     # Handle pagination
-    page = request.GET.get('page', 1)
+    page = request.GET.get("page", 1)
     paginator = Paginator(updates, 20)
     try:
         updates = paginator.page(page)
@@ -174,92 +168,93 @@ def updates(request):
     except EmptyPage:
         updates = paginator.page(paginator.num_pages)
 
-    page_context = {'title': 'Latest updates'}
+    page_context = {"title": "Latest updates"}
 
     category_list = list(map(replace_space, category_list))
+
     return render(
         request,
-        'home/latest_updates.html',
+        "home/latest_updates.html",
         {
-            'self': page_context,
-            'category_list': category_list,
-            'update_types': update_types,
-            'updates': updates,
-            'year': year,
-            'search': search,
+            "self": page_context,
+            "category_list": category_list,
+            "update_types": update_types,
+            "updates": updates,
+            "year": year,
+            "search": search,
         },
     )
 
 
 def calendar(request):
-    page_context = {'content_section': 'calendar', 'title': 'Calendar'}
-    return render(request, 'home/calendar.html', {'self': page_context})
+    page_context = {"content_section": "calendar", "title": "Calendar"}
+    return render(request, "home/calendar.html", {"self": page_context})
 
 
 def commissioners(request):
     chair_commissioner = (
-        CommissionerPage.objects.filter(commissioner_title__contains='Chair')
-        .exclude(commissioner_title__contains='Vice')
+        CommissionerPage.objects.filter(commissioner_title__contains="Chair")
+        .exclude(commissioner_title__contains="Vice")
         .first()
     )
     vice_commissioner = CommissionerPage.objects.filter(
-        commissioner_title__startswith='Vice'
+        commissioner_title__startswith="Vice"
     ).first()
 
     current_commissioners = CommissionerPage.objects.filter(
-        commissioner_title__exact='', term_expiration__isnull=True
-    ).order_by('last_name')
+        commissioner_title__exact="", term_expiration__isnull=True
+    ).order_by("last_name")
     past_commissioners = CommissionerPage.objects.filter(
-        commissioner_title__exact='', term_expiration__isnull=False
-    ).order_by('-term_expiration')
+        commissioner_title__exact="", term_expiration__isnull=False
+    ).order_by("-term_expiration")
 
     page_context = {
-        'title': 'All Commissioners',
-        'chair_commissioner': chair_commissioner,
-        'vice_commissioner': vice_commissioner,
-        'current_commissioners': current_commissioners,
-        'past_commissioners': past_commissioners,
-        'content_section': 'about',
-        'ancestors': [
-            {'title': 'About the FEC', 'url': '/about/'},
+        "title": "All Commissioners",
+        "chair_commissioner": chair_commissioner,
+        "vice_commissioner": vice_commissioner,
+        "current_commissioners": current_commissioners,
+        "past_commissioners": past_commissioners,
+        "content_section": "about",
+        "ancestors": [
+            {"title": "About the FEC", "url": "/about/"},
             {
-                'title': 'Leadership and structure',
-                'url': '/about/leadership-and-structure',
+                "title": "Leadership and structure",
+                "url": "/about/leadership-and-structure",
             },
         ],
     }
 
-    return render(request, 'home/commissioners.html', {'self': page_context})
+    return render(request, "home/commissioners.html", {"self": page_context})
 
 
 def contact_rad(request):
     page_context = {
-        'title': 'Submit a question to the Reports Analysis Division (RAD)',
-        'ancestors': [
+        "title": "Submit a question to the Reports Analysis Division (RAD)",
+        "ancestors": [
             {
-                'title': 'Help for candidates and committees',
-                'url': '/help-candidates-and-committees/',
+                "title": "Help for candidates and committees",
+                "url": "/help-candidates-and-committees/",
             }
         ],
-        'content_section': 'help',
+        "content_section": "help",
     }
 
-    if settings.FEATURES['radform']:
+    if settings.FEATURES["radform"]:
         # If it's a POST, post to the ServiceNow API
-        if request.method == 'POST':
+        if request.method == "POST":
             form = ContactRAD(request.POST)
             response = form.post_to_service_now()
             if response == 201:
                 return render(
                     request,
-                    'home/contact-form.html',
-                    {'self': page_context, 'success': True},
+                    "home/contact-form.html",
+                    {"self": page_context, "success": True},
                 )
             else:
                 return render(
                     request,
-                    'home/contact-form.html',
-                    {'self': page_context, 'form': form, 'server_error': True},
+                    "home/contact-form.html",
+                    {"self": page_context, "form": form, "server_error": True},
                 )
         else:
             form = ContactRAD()
@@ -267,7 +262,7 @@ def contact_rad(request):
         form = False
 
     return render(
-        request, 'home/contact-form.html', {'self': page_context, 'form': form}
+        request, "home/contact-form.html", {"self": page_context, "form": form}
     )
 
 
@@ -287,30 +282,30 @@ def index_meetings(request):
     """
     meetings = MeetingPage.objects.live().order_by("-date")
     open_meetings = meetings.filter(
-        Q(meeting_type='O') | Q(title__icontains='Hearing') | Q(meeting_type='H')
+        Q(meeting_type="O") | Q(title__icontains="Hearing") | Q(meeting_type="H")
     )
-    executive_sessions = meetings.filter(meeting_type='E')
-    hearings = meetings.filter(Q(title__icontains='Hearing') | Q(meeting_type='H'))
-    year = request.GET.get('year', '')
-    search = request.GET.get('search', '')
-    active = request.GET.get('tab', 'open-meetings')
-    page = request.GET.get('page', 1)
+    executive_sessions = meetings.filter(meeting_type="E")
+    hearings = meetings.filter(Q(title__icontains="Hearing") | Q(meeting_type="H"))
+    year = request.GET.get("year", "")
+    search = request.GET.get("search", "")
+    active = request.GET.get("tab", "open-meetings")
+    page = request.GET.get("page", 1)
 
     # Get the range of all years for each meeting type
     # Used to populate the selects with only values that make sense
     meeting_years = list(
-        map(lambda x: x.year, MeetingPage.objects.dates('date', 'year', order='DESC'))
+        map(lambda x: x.year, MeetingPage.objects.dates("date", "year", order="DESC"))
     )
     hearing_years = list(
-        map(lambda x: x.year, hearings.dates('date', 'year', order='DESC'))
+        map(lambda x: x.year, hearings.dates("date", "year", order="DESC"))
     )
     executive_years = list(
-        map(lambda x: x.year, executive_sessions.dates('date', 'year', order='DESC'))
+        map(lambda x: x.year, executive_sessions.dates("date", "year", order="DESC"))
     )
 
-    meetings_query = ''
-    hearings_query = ''
-    executive_query = ''
+    meetings_query = ""
+    hearings_query = ""
+    executive_query = ""
 
     if year:
         # Trying to filter using the built-in date__year parameter doesn't
@@ -330,18 +325,18 @@ def index_meetings(request):
         ).filter(date__lte=datetime(year, 12, 31))
 
     if search:
-        if active == 'open-meetings':
+        if active == "open-meetings":
             meetings_query = search
             meetings = meetings.search(meetings_query)
-        if active == 'hearings':
+        if active == "hearings":
             hearings_query = search
             hearings = hearings.search(hearings_query)
-        if active == 'executive-sessions':
+        if active == "executive-sessions":
             executive_query = search
             executive_sessions = executive_sessions.search(executive_query)
 
     meetings_paginator = Paginator(open_meetings, 20)
-    meetings_page = page if active == 'open-meetings' else 1
+    meetings_page = page if active == "open-meetings" else 1
     try:
         open_meetings = meetings_paginator.page(meetings_page)
     except PageNotAnInteger:
@@ -350,7 +345,7 @@ def index_meetings(request):
         open_meetings = meetings_paginator.page(meetings_paginator.num_pages)
 
     hearings_paginator = Paginator(hearings, 20)
-    hearings_page = page if active == 'hearings' else 1
+    hearings_page = page if active == "hearings" else 1
     try:
         hearings = hearings_paginator.page(hearings_page)
     except PageNotAnInteger:
@@ -359,7 +354,7 @@ def index_meetings(request):
         hearings = hearings_paginator.page(hearings_paginator.num_pages)
 
     executive_paginator = Paginator(executive_sessions, 20)
-    executive_page = page if active == 'executive-sessions' else 1
+    executive_page = page if active == "executive-sessions" else 1
     try:
         executive_sessions = executive_paginator.page(executive_page)
     except PageNotAnInteger:
@@ -367,31 +362,31 @@ def index_meetings(request):
     except EmptyPage:
         executive_sessions = executive_paginator.page(executive_paginator.num_pages)
 
-    page_context = {'title': 'Commission meetings'}
+    page_context = {"title": "Commission meetings"}
 
     return render(
         request,
-        'home/commission_meetings.html',
+        "home/commission_meetings.html",
         {
-            'self': page_context,
-            'year': year,
-            'meetings_query': meetings_query,
-            'hearings_query': hearings_query,
-            'executive_query': executive_query,
-            'open_meetings': open_meetings,
-            'meeting_years': meeting_years,
-            'hearing_years': hearing_years,
-            'hearings': hearings,
-            'executive_years': executive_years,
-            'executive_sessions': executive_sessions,
+            "self": page_context,
+            "year": year,
+            "meetings_query": meetings_query,
+            "hearings_query": hearings_query,
+            "executive_query": executive_query,
+            "open_meetings": open_meetings,
+            "meeting_years": meeting_years,
+            "hearing_years": hearing_years,
+            "hearings": hearings,
+            "executive_years": executive_years,
+            "executive_sessions": executive_sessions,
         },
     )
 
 
 def guides(request):
-    page_context = {'content_section': 'guides', 'title': 'Guides'}
+    page_context = {"content_section": "guides", "title": "Guides"}
     return render(
         request,
-        'home/candidate-and-committee-services/guides.html',
-        {'self': page_context},
+        "home/candidate-and-committee-services/guides.html",
+        {"self": page_context},
     )
