@@ -1,32 +1,53 @@
 {% load wagtailimages_tags %}
+{% load author_groups %}
 
-<ul class="author-list">
-  {% for page_author in self.authors.all %}
-  {% with author=page_author.author role=page_author.get_role_display %}
-  <li class="author-item">
-    <legend class="label t-upper">{% ifchanged %}{{ role }}{% endifchanged %}&nbsp;</legend>
-    <div class="author-item__info">
-      {% spaceless %}
-      {% image author.photo fill-40x40 class="author-item__image" %}
-      <ul class="author-item__details t-sans">
-        <li>
-          {% if author.email and author.email != 'N/A' %}
-            <a href="mailto:{{ author.email }}">{{ author.name }}</a>
-            <img class="icon--email--author" src="/static/img/i-email--primary.svg" alt="Icon of email being sent">
-          {% else %}
-            {{ author.name }}
-          {% endif %}
-        </li>
-        {% if author.title and author.title != 'N/A' %}
-        <li>{{ author.title }}</li>
-        {% endif %}
-        {% if author.phone %}
-          <li>{{ author.phone }}</li>
-        {% endif %}
-      </ul>
-      {% endspaceless %}
-    </div>
-  </li>
+{% comment "Optional note" %}
+    Check first to see if the first author.name is an author group instead of
+    an individual. If so, render the author_groups.py templatetag, else render the template below.
+{% endcomment %}
+
+{% with self.authors.all|first as first_author %}
+{{ first_author.author.name }}
+   {% if first_author.author.name in settings.CONSTANTS.author_groups.keys %}
+   {{ first_author.author.name }}
+ {% endif %}
   {% endwith %}
-  {% endfor %}
-</ul>
+{{settings.CONSTANTS.author_groups.keys}}
+
+  {% with self.authors.all|first as first_author %}
+   {% if first_author.author.name in settings.CONSTANTS.author_groups.keys %}
+    {% author_group first_author.author.name %}
+  {% else %}
+    <ul class="author-list">
+      {% for page_author in self.authors.all %}
+      {% with author=page_author.author role=page_author.get_role_display %}
+        <li class="author-item">
+          <legend class="label t-upper">{% ifchanged %}{{ role }}{% endifchanged %}&nbsp;</legend>
+          <div class="author-item__info">
+            {% spaceless %}
+            {% image author.photo fill-40x40 class="author-item__image" %}
+            <ul class="author-item__details t-sans">
+              <li>
+                {% if author.email and author.email != 'N/A' %}
+                  <a href="mailto:{{ author.email }}">{{ author.name }}</a>
+                  <img class="icon--email--author" src="/static/img/i-email--primary.svg" alt="Icon of email being sent">
+                {% else %}
+                  {{ author.name }}
+                {% endif %}
+              </li>
+              {% if author.title and author.title != 'N/A' %}
+              <li>{{ author.title }}</li>
+              {% endif %}
+              {% if author.phone %}
+              <li>{{ author.phone }}</li>
+              {% endif %}
+            </ul>
+            {% endspaceless %}
+          </div>
+        </li>
+      {% endwith %}
+      {% endfor %}
+    </ul>
+    {% endif %}
+  {% endwith %}
+
