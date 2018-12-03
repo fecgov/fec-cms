@@ -1,0 +1,14 @@
+[
+  { "city":"New York", "population":"8550405", "lat":"40.71455", "lon":"-74.007124" },
+  { "city":"Los Angeles", "population":"3971883", "lat":"34.05349", "lon":"-118.245319" },
+  { "city":"Chicago", "population":"2720546", "lat":"41.88415", "lon":"-87.632409" },
+  { "city":"Houston", "population":"2296224", "lat":"29.76045", "lon":"-95.369784" },
+  { "city":"Philadelphia", "population":"1567442", "lat":"39.95228", "lon":"-75.162454" },
+  { "city":"Phoenix", "population":"1563025", "lat":"33.44826", "lon":"-112.075774" },
+  { "city":"San Antonio", "population":"1469845", "lat":"29.42449", "lon":"-98.494619" },
+  { "city":"San Diego", "population":"1394928", "lat":"32.715695", "lon":"-117.161719" },
+  { "city":"Dallas", "population":"1300092", "lat":"32.778155", "lon":"-96.795404" },
+  { "city":"San Jose", "population":"1026908", "lat":"37.338475", "lon":"-121.885794" },
+  { "city":"Austin", "population":"931830", "lat":"30.267605", "lon":"-97.742984" },
+  { "city":"San Francisco", "population":"864816", "lat":"37.777125", "lon":"-122.419644" }
+]
