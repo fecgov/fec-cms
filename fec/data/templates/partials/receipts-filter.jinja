@@ -40,6 +40,11 @@ Filter receipts
     {% include 'partials/filters/occupation-employer.jinja' %}
     {% include 'partials/filters/unique-receipts.jinja' %}
   </div>
+  <button type="button" class="js-accordion-trigger accordion__button">Recipient committee type</button>
+  <div class="accordion__content">
+    {% import 'macros/filters/committee-types.jinja' as committee_type %}
+    {{ committee_type.field(name='recipient_committee_type') }}
+  </div>
   <button type="button" class="js-accordion-trigger accordion__button">Receipt details</button>
   <div class="accordion__content">
     {{ range.amount('amount', 'Receipt amount') }}
