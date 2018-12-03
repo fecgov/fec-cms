@@ -27,7 +27,8 @@ Filter individual contributions
   </div>
   <button type="button" class="js-accordion-trigger accordion__button">Recipient committee type</button>
   <div class="accordion__content">
-    {% include 'partials/filters/committee-types.jinja' %}
+    {% import 'macros/filters/committee-types.jinja' as committee_type %}
+    {{ committee_type.field(name='recipient_committee_type') }}
   </div>
   <button type="button" class="js-accordion-trigger accordion__button">Transaction details</button>
   <div class="accordion__content">
