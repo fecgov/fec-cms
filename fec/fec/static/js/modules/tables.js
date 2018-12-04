@@ -810,8 +810,8 @@ function refreshTables(e, context) {
     });
 
   if (selected.length > 0) {
-    drawSizeTable(selected, context);
-    drawStateTable(selected, context);
+    drawContributionsBySizeTable(selected, context);
+    drawContributionsByStateTable(selected, context);
   }
 
   if (e) {
@@ -878,16 +878,6 @@ function destroyTable($table) {
   }
 }
 
-function buildUrl(selected, context, path) {
-  var query = {
-    cycle: context.election.cycle,
-    candidate_id: _.pluck(selected, 'candidate_id'),
-    per_page: 0
-  };
-
-  return helpers.buildUrl(path, query);
-}
-
 var drawTableOpts = {
   autoWidth: false,
   destroy: true,
@@ -903,21 +893,25 @@ var drawTableOpts = {
   pagingType: 'simple'
 };
 
-function drawSizeTable(selected, context) {
+// For election profile page "Individual contributions to candidates"
+function drawContributionsBySizeTable(selected, context) {
   var $table = $('table[data-type="by-size"]');
   var primary = _.object(
     _.map(selected, function(result) {
       return [result.candidate_id, result];
     })
   );
-  $.getJSON(
-    buildUrl(selected, context, [
-      'schedules',
-      'schedule_a',
-      'by_size',
-      'by_candidate'
-    ])
-  ).done(function(response) {
+  var query = {
+    cycle: context.election.cycle,
+    candidate_id: _.pluck(selected, 'candidate_id'),
+    per_page: 0,
+    election_full: true
+  };
+  var url = helpers.buildUrl(
+    ['schedules', 'schedule_a', 'by_size', 'by_candidate'],
+    query
+  );
+  $.getJSON(url).done(function(response) {
     var data = mapSize(response, primary);
     destroyTable($table);
     $table.dataTable(
@@ -936,21 +930,25 @@ function drawSizeTable(selected, context) {
   });
 }
 
-function drawStateTable(selected, context) {
+// For election profile page "Individual contributions to candidates"
+function drawContributionsByStateTable(selected, context) {
   var $table = $('table[data-type="by-state"]');
   var primary = _.object(
     _.map(selected, function(result) {
       return [result.candidate_id, result];
     })
   );
-  $.getJSON(
-    buildUrl(selected, context, [
-      'schedules',
-      'schedule_a',
-      'by_state',
-      'by_candidate'
-    ])
-  ).done(function(response) {
+  var query = {
+    cycle: context.election.cycle,
+    candidate_id: _.pluck(selected, 'candidate_id'),
+    per_page: 0,
+    election_full: true
+  };
+  var url = helpers.buildUrl(
+    ['schedules', 'schedule_a', 'by_state', 'by_candidate'],
+    query
+  );
+  $.getJSON(url).done(function(response) {
     var data = mapState(response, primary);
     // Populate headers with correct text
     var headerLabels = ['State'].concat(_.pluck(selected, 'candidate_name'));
