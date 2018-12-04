@@ -1,5 +1,6 @@
 from .base import *  # noqa
 
+# These settings are for local development only.
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
