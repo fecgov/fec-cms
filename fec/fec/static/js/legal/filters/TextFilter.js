@@ -1,5 +1,6 @@
 const React = require('react');
 const PropTypes = require('prop-types');
+const TooltipHelp = require('./TooltipHelp');
 
 function TextFilter(props) {
   function handleKeydown(e) {
@@ -9,6 +10,8 @@ function TextFilter(props) {
   }
 
   return (
+    <div>
+    <TooltipHelp message={'Hello, I am a super cool tooltip'} position={'top'}></TooltipHelp>
     <div className="filter">
       <label className="label" htmlFor={props.name + '-filter'}>
         {props.label}
@@ -43,6 +46,7 @@ function TextFilter(props) {
         <span className="t-note t-sans search__example">{props.helpText}</span>
       )}
     </div>
+    </div>
   );
 }
 
@@ -51,6 +55,7 @@ TextFilter.defaultProps = {
   handleChange: function() {},
   helpText: 'help',
   keywordModal: true,
+  TooltipHelp : false,
   name: 'name',
   value: ''
 };
@@ -60,6 +65,7 @@ TextFilter.propTypes = {
   handleChange: PropTypes.func,
   helpText: PropTypes.string,
   keywordModal: PropTypes.bool,
+  TooltipHelp : PropTypes.bool,
   name: PropTypes.string,
   value: PropTypes.string
 };

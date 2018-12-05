@@ -1,6 +1,9 @@
 // Search Controls
 //
-// Used at the top of election lookup page
+// Used on:
+// election lookup page
+// embedded searches (MUR, AUDIT)
+// keyword modals
 //
 
 .search-controls__row {
@@ -87,6 +90,7 @@
   background: $gray-lightest;
 }
 
+//For data/election search boxes
 .election-search {
 
   .search--container {
@@ -121,6 +125,23 @@
     }
   }
 }
+
+ //for keyword-options modals on AO, MUR, Statues searches
+.keyword-modal{
+  .modal__tips, modal__form {
+    display:table-row;
+    width:100%;
+  }
+  .modal__tips {
+    margin-left:0;
+  }
+
+  .search-controls__or--vertical {
+  width: 100%;
+  display:inline-grid;
+  }
+}
+
 
 @include media($med) {
   .search-controls__row {
@@ -225,6 +246,35 @@
     }
   }
 
+  //for keyword-options modals on AO, MUR, Statues searches
+.keyword-modal{
+  .modal__tips, .modal__form {
+    display:table-cell;
+    width:44%;
+  }
+  .modal__tips {
+    margin-left: u(1rem);
+    padding-top: 0;
+  }
+  .search-controls__or--vertical {
+    margin: u(22.5rem 0);
+    width: u(3.5rem);
+    display:table-cell;
+
+    &::before,
+    &::after {
+      height: u(22.5rem);
+    }
+    &::before {
+      top: u(-22.5rem);
+    }
+
+    &::after {
+      top: auto;
+      bottom: u(-22.5rem);
+    }
+  }
+}
 
 }/*end MED breakpoint*/
 
