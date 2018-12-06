@@ -472,15 +472,18 @@ def elections(request, office, cycle, state=None, district=None):
         'spending-by-others': '#independent-expenditures',
     }
 
-    if tab in legacy_tabs.keys():
-        if office == 'senate' or office == 'house':
+    if tab in legacy_tabs:
+        if office == 'house':
             return redirect(
-                reverse(
-                    'elections-state-district', args=(office, state, district, cycle)
-                )
+                reverse('elections-house', args=(office, state, district, cycle))
                 + legacy_tabs[tab]
             )
-        if office == 'president':
+        elif office == 'senate':
+            return redirect(
+                reverse('elections-senate', args=(office, state, cycle))
+                + legacy_tabs[tab]
+            )
+        elif office == 'president':
             return redirect(
                 reverse('elections-president', args=(office, cycle)) + legacy_tabs[tab]
             )
