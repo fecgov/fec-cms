@@ -11,46 +11,54 @@ function TextFilter(props) {
 
   return (
     <div>
-    <div className="filter">
-      <label className="label t-inline-block" htmlFor={props.name + '-filter'}>
-        {props.label}
-      </label>
-      {props.TooltipHelp.addTooltip &&
-      <TooltipHelp  message={props.TooltipHelp.message} verticalPosition={props.TooltipHelp.verticalPosition} horizontalPosition={props.TooltipHelp.horizontalPosition}></TooltipHelp>
-       }
-      <div className="combo combo--search--mini">
-        <input
-          id={props.name + '-filter'}
-          type="text"
-          name={props.name}
-          className="combo__input"
-          value={props.value || ''}
-          onChange={props.handleChange}
-          onKeyDown={handleKeydown}
-        />
-        <button
-          className="combo__button button--search button--standard"
-          onClick={props.getResults}
+      <div className="filter">
+        <label
+          className="label t-inline-block"
+          htmlFor={props.name + '-filter'}
         >
-          <span className="u-visually-hidden">Search</span>
-        </button>
+          {props.label}
+        </label>
+        {props.TooltipHelp.addTooltip && (
+          <TooltipHelp
+            message={props.TooltipHelp.message}
+            verticalPosition={props.TooltipHelp.verticalPosition}
+            horizontalPosition={props.TooltipHelp.horizontalPosition}
+          />
+        )}
+        <div className="combo combo--search--mini">
+          <input
+            id={props.name + '-filter'}
+            type="text"
+            name={props.name}
+            className="combo__input"
+            value={props.value || ''}
+            onChange={props.handleChange}
+            onKeyDown={handleKeydown}
+          />
+          <button
+            className="combo__button button--search button--standard"
+            onClick={props.getResults}
+          >
+            <span className="u-visually-hidden">Search</span>
+          </button>
+        </div>
+        {props.keywordModal && (
+          <button
+            className="button--keywords"
+            aria-controls="keyword-modal"
+            data-a11y-dialog-show="keyword-modal"
+          >
+            More keyword options
+          </button>
+        )}
+        {props.helpText && (
+          <span className="t-note t-sans search__example">
+            {props.helpText}
+          </span>
+        )}
       </div>
-      {props.keywordModal && (
-        <button
-          className="button--keywords"
-          aria-controls="keyword-modal"
-          data-a11y-dialog-show="keyword-modal"
-        >
-          More keyword options
-        </button>
-      )}
-      {props.helpText && (
-        <span className="t-note t-sans search__example">{props.helpText}</span>
-      )}
-    </div>
     </div>
   );
-
 }
 
 TextFilter.defaultProps = {
@@ -58,7 +66,7 @@ TextFilter.defaultProps = {
   handleChange: function() {},
   helpText: '',
   keywordModal: true,
-  TooltipHelp:{},
+  TooltipHelp: {},
   name: 'name',
   value: ''
 };
