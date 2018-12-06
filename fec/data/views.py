@@ -472,7 +472,7 @@ def elections(request, office, cycle, state=None, district=None):
         'spending-by-others': '#independent-expenditures',
     }
 
-    if tab in legacy_tabs.keys():
+    if tab in legacy_tabs:
         if office == 'house':
             return redirect(
                 reverse('elections-house', args=(office, state, district, cycle))
