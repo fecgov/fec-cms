@@ -11,11 +11,13 @@ function TextFilter(props) {
 
   return (
     <div>
-    <TooltipHelp message={'Hello, I am a super cool tooltip'} position={'top'}></TooltipHelp>
     <div className="filter">
-      <label className="label" htmlFor={props.name + '-filter'}>
+      <label className="label t-inline-block" htmlFor={props.name + '-filter'}>
         {props.label}
       </label>
+      {props.TooltipHelp.addTooltip &&
+      <TooltipHelp  message={props.TooltipHelp.message} verticalPosition={props.TooltipHelp.verticalPosition} horizontalPosition={props.TooltipHelp.horizontalPosition}></TooltipHelp>
+       }
       <div className="combo combo--search--mini">
         <input
           id={props.name + '-filter'}
@@ -48,14 +50,15 @@ function TextFilter(props) {
     </div>
     </div>
   );
+
 }
 
 TextFilter.defaultProps = {
   getResults: function() {},
   handleChange: function() {},
-  helpText: 'help',
+  helpText: '',
   keywordModal: true,
-  TooltipHelp : false,
+  TooltipHelp:{},
   name: 'name',
   value: ''
 };
@@ -65,7 +68,7 @@ TextFilter.propTypes = {
   handleChange: PropTypes.func,
   helpText: PropTypes.string,
   keywordModal: PropTypes.bool,
-  TooltipHelp : PropTypes.bool,
+  TooltipHelp: PropTypes.object,
   name: PropTypes.string,
   value: PropTypes.string
 };
