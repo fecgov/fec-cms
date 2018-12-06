@@ -161,9 +161,10 @@
   background-size: contain;
   cursor: pointer;
   display: inline-block;
-  height: 1.5em;
+  height: u(1.8rem);
   vertical-align: middle;
-  width: 1.5em;
+  width: u(1.8rem);
+  margin: u(0 0 .5rem .3rem);
 
   &:hover + .tooltip,
   &:focus + .tooltip {

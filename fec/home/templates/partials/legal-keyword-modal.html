@@ -1,11 +1,12 @@
 <div class="js-keyword-modal modal" id="keyword-modal" aria-hidden="true">
   <div tabindex="-1" class="modal__overlay" data-a11y-dialog-hide></div>
   <div role="dialog" class="modal__content" aria-labelledby="spending-modal-title">
-    <div role="document">
+    <div role="document" class="keyword-modal">
       <button type="button" class="modal__close button--close--primary" data-a11y-dialog-hide title="Close this dialog window"></button>
-      <h2 id="spending-modal-title" class="heading--section">Find documents withZ...</h2>
+      <h2 id="spending-modal-title" class="heading--section">Find documents with...</h2>
       <div class="row u-padding--top">
-        <form class="modal__form" action="/data/legal/search/">
+        <form class="modal__form  search-controls__either" action="/data/legal/search/">
+          <p>Use these search boxes to refine your search:</p>
           <div class="filter">
             <label class="label" for="keywords-any">Any of these words</label>
             <input type="text" id="keywords-any" data-operator="or">
@@ -29,9 +30,9 @@
             <button class="u-margin--top button button--cta button--search--text" type="submit">Search</button>
           </div>
         </form>
-        <div class="modal__tips">
-          <h3>Search tips</h3>
-          <p>Complex keyword searches can be created without using these special fields.</p>
+        <div class="search-controls__or search-controls__or--vertical">or</div>
+
+        <div class="modal__tips search-controls__either">
           <p>Use these symbols in the main search box:</p>
           <table class="simple-table">
             <thead class="simple-table__header">
