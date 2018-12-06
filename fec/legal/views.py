@@ -155,17 +155,17 @@ def legal_doc_search_af(request):
     query = request.GET.get('search', '')
     offset = request.GET.get('offset', 0)
     case_no = request.GET.get('case_no', '')
-    case_respondents = request.GET.get('case_respondents', '')
+    af_name = request.GET.get('af_name', '')
     af_election_cycles = request.GET.get('af_election_cycles', '')
 
-    results = api_caller.load_legal_search_results(query, 'admin_fines', offset=offset, case_no=case_no, case_respondents=case_respondents)
+    results = api_caller.load_legal_search_results(query, 'admin_fines', offset=offset, case_no=case_no, af_name=af_name)
 
     return render(request, 'legal-search-results-afs.jinja', {
         'parent': 'legal',
         'results': results,
         'result_type': 'admin_fines',
         'case_no': case_no,
-        'case_respondents': case_respondents,
+        'af_name': af_name,
         'query': query
     })
 
