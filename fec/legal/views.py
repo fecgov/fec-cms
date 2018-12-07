@@ -80,13 +80,13 @@ def adr_page(request, adr_no):
 
 def admin_fine_page(request, admin_fine_no):
     admin_fine = api_caller.load_legal_admin_fines(admin_fine_no)
-     if not admin_fine:
-        raise Http404()
-     return render(request, 'legal' + '-admin_fine.jinja', {
-        'admin_fine': admin_fine,
-        'parent': 'legal'
+    if not admin_fine:
+       raise Http404()
+    return render(request, 'legal' + '-admin_fine.jinja', {
+       'admin_fine': admin_fine,
+       'parent': 'legal'
     })
-    
+
 
 def legal_search(request):
     query = request.GET.get('search', '')
