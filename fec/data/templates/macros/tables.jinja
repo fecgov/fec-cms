@@ -34,16 +34,16 @@ case 3: for committe profile page.
 not 'type' object, so use 'link' to check for 'independent-expenditures' and 'party-coordinated-expenditure'
 #}
 
-        {% if item[1]['type'] and cycle|int > 2006 and committee_id|count < 9 %}
+        {% if item[1]['type'] and committee_id|count < 9 %}
           <a href="/data/{{ item[1]['type']['link'] }}/?{% for id in committee_id -%}committee_id={{ id }}&{%- endfor %}two_year_transaction_period={{ cycle }}&cycle={{ cycle }}&line_number={{ item[1]['type'][office_or_committee] }}">
             {{ item[0]|currency }}
           </a>
-        {% elif item[1]['type'] and cycle|int > 2006 and committee_id|count == 9 %}
+        {% elif item[1]['type'] and committee_id|count == 9 %}
           <a href="/data/{{ item[1]['type']['link'] }}/?committee_id={{ committee_id }}&two_year_transaction_period={{ cycle }}&cycle={{ cycle }}&line_number={{ item[1]['type'][office_or_committee] }}">
             {{ item[0]|currency }}
           </a>
 
-        {% elif (item[1]['link']=="independent-expenditures" or item[1]['link'] == "party-coordinated-expenditures")and cycle|int > 2006 and committee_id|count == 9 %}
+        {% elif (item[1]['link']=="independent-expenditures" or item[1]['link'] == "party-coordinated-expenditures") and committee_id|count == 9 %}
           <a href="/data/{{ item[1]['link'] }}/?committee_id={{ committee_id }}&two_year_transaction_period={{ cycle }}&cycle={{ cycle }}">
             {{ item[0]|currency }}
           </a>

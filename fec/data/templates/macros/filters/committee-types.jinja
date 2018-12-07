@@ -1,17 +1,19 @@
+{% macro field(name='committee_type') %}
+
 <div class="filter">
   <fieldset class="js-dropdown js-filter" data-filter="checkbox" data-name="hsp-committee_type">
     <legend class="label" for="committee_type">Authorized committees</legend>
     <ul class="dropdown__selected">
       <li>
-        <input id="committee-type-checkbox-P" type="checkbox" name="committee_type" value="P">
+        <input id="committee-type-checkbox-P" type="checkbox" name="{{ name }}" value="P">
         <label class="dropdown__value" for="committee-type-checkbox-P">Presidential</label>
       </li>
       <li>
-        <input id="committee-type-checkbox-S" type="checkbox" name="committee_type" value="S">
+        <input id="committee-type-checkbox-S" type="checkbox" name="{{ name }}" value="S">
         <label class="dropdown__value" for="committee-type-checkbox-S">Senate</label>
       </li>
       <li>
-        <input id="committee-type-checkbox-H" type="checkbox" name="committee_type" value="H">
+        <input id="committee-type-checkbox-H" type="checkbox" name="{{ name }}" value="H">
         <label class="dropdown__value" for="committee-type-checkbox-H">House</label>
       </li>
     </ul>
@@ -23,7 +25,7 @@
     <legend class="label" for="committee_type">Independent expenditure committees</legend>
     <ul class="dropdown__selected">
       <li>
-        <input id="committee-type-checkbox-O" type="checkbox" name="committee_type" value="O">
+        <input id="committee-type-checkbox-O" type="checkbox" name="{{ name }}" value="O">
         <label class="dropdown__value" for="committee-type-checkbox-O">Super PAC (independent expenditure only)</label>
       </li>
     </ul>
@@ -32,11 +34,11 @@
       <div id="ie-dropdown" class="dropdown__panel" aria-hidden="true">
       <ul class="dropdown__list">
         <li class="dropdown__item">
-          <input id="committee-type-checkbox-U" type="checkbox" name="committee_type" value="U">
+          <input id="committee-type-checkbox-U" type="checkbox" name="{{ name }}" value="U">
           <label class="dropdown__value" for="committee-type-checkbox-U">Single candidate independent expenditure</label>
         </li>
         <li class="dropdown__item">
-          <input id="committee-type-checkbox-I" type="checkbox" name="committee_type" value="I">
+          <input id="committee-type-checkbox-I" type="checkbox" name="{{ name }}" value="I">
           <label class="dropdown__value" for="committee-type-checkbox-I">Independent expenditure filer (not a committee)</label>
         </li>
       </ul>
@@ -62,19 +64,19 @@
           <label class="dropdown__value" for="designation-checkbox-D">Leadership PAC</label>
         </li>
         <li class="dropdown__item">
-          <input id="committee-type-checkbox-N" type="checkbox" name="committee_type" value="N">
+          <input id="committee-type-checkbox-N" type="checkbox" name="{{ name }}" value="N">
           <label class="dropdown__value" for="committee-type-checkbox-N">PAC - nonqualified</label>
         </li>
         <li class="dropdown__item">
-          <input id="committee-type-checkbox-Q" type="checkbox" name="committee_type" value="Q">
+          <input id="committee-type-checkbox-Q" type="checkbox" name="{{ name }}" value="Q">
           <label class="dropdown__value" for="committee-type-checkbox-Q">PAC - qualified</label>
         </li>
         <li class="dropdown__item">
-          <input id="committee-type-checkbox-V" type="checkbox" name="committee_type" value="V">
+          <input id="committee-type-checkbox-V" type="checkbox" name="{{ name }}" value="V">
           <label class="dropdown__value" for="committee-type-checkbox-V">PAC with non-contribution account - nonqualified</label>
         </li>
         <li class="dropdown__item">
-          <input id="committee-type-checkbox-W" type="checkbox" name="committee_type" value="W">
+          <input id="committee-type-checkbox-W" type="checkbox" name="{{ name }}" value="W">
           <label class="dropdown__value" for="committee-type-checkbox-W">PAC with non-contribution account - qualified</label>
         </li>
         <li class="dropdown__subhead">Separate segregated funds</li>
@@ -122,30 +124,33 @@
       <div id="other-dropdown" class="dropdown__panel" aria-hidden="true">
       <ul class="dropdown__list">
         <li class="dropdown__item">
-          <input id="committee-type-checkbox-C" type="checkbox" name="committee_type" value="C">
+          <input id="committee-type-checkbox-C" type="checkbox" name="{{ name }}" value="C">
           <label class="dropdown__value" for="committee-type-checkbox-C">Communication cost</label>
         </li>
         <li class="dropdown__item">
-          <input id="committee-type-checkbox-D" type="checkbox" name="committee_type" value="D">
+          <input id="committee-type-checkbox-D" type="checkbox" name="{{ name }}" value="D">
           <label class="dropdown__value" for="committee-type-checkbox-D">Delegate committee</label>
         </li>
         <li class="dropdown__item">
-          <input id="committee-type-checkbox-E" type="checkbox" name="committee_type" value="E">
+          <input id="committee-type-checkbox-E" type="checkbox" name="{{ name }}" value="E">
           <label class="dropdown__value" for="committee-type-checkbox-E">Electioneering communication</label>
         </li>
         <li class="dropdown__item">
-          <input id="committee-type-checkbox-X" type="checkbox" name="committee_type" value="X">
+          <input id="committee-type-checkbox-X" type="checkbox" name="{{ name }}" value="X">
           <label class="dropdown__value" for="committee-type-checkbox-X">Party - nonqualified</label>
         </li>
         <li class="dropdown__item">
-          <input id="committee-type-checkbox-Y" type="checkbox" name="committee_type" value="Y">
+          <input id="committee-type-checkbox-Y" type="checkbox" name="{{ name }}" value="Y">
           <label class="dropdown__value" for="committee-type-checkbox-Y">Party - qualified</label>
         </li>
         <li class="dropdown__item">
-          <input id="committee-type-checkbox-Z" type="checkbox" name="committee_type" value="Z">
+          <input id="committee-type-checkbox-Z" type="checkbox" name="{{ name }}" value="Z">
           <label class="dropdown__value" for="committee-type-checkbox-Z">National party nonfederal account</label>
         </li>
       </ul>
     </div>
   </fieldset>
 </div>
+
+
+{% endmacro %}

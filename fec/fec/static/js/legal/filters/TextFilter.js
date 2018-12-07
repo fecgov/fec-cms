@@ -1,5 +1,6 @@
 const React = require('react');
 const PropTypes = require('prop-types');
+const TooltipHelp = require('./TooltipHelp');
 
 function TextFilter(props) {
   function handleKeydown(e) {
@@ -9,39 +10,53 @@ function TextFilter(props) {
   }
 
   return (
-    <div className="filter">
-      <label className="label" htmlFor={props.name + '-filter'}>
-        {props.label}
-      </label>
-      <div className="combo combo--search--mini">
-        <input
-          id={props.name + '-filter'}
-          type="text"
-          name={props.name}
-          className="combo__input"
-          value={props.value || ''}
-          onChange={props.handleChange}
-          onKeyDown={handleKeydown}
-        />
-        <button
-          className="combo__button button--search button--standard"
-          onClick={props.getResults}
+    <div>
+      <div className="filter">
+        <label
+          className="label t-inline-block"
+          htmlFor={props.name + '-filter'}
         >
-          <span className="u-visually-hidden">Search</span>
-        </button>
+          {props.label}
+        </label>
+        {props.TooltipHelp.addTooltip && (
+          <TooltipHelp
+            message={props.TooltipHelp.message}
+            verticalPosition={props.TooltipHelp.verticalPosition}
+            horizontalPosition={props.TooltipHelp.horizontalPosition}
+          />
+        )}
+        <div className="combo combo--search--mini">
+          <input
+            id={props.name + '-filter'}
+            type="text"
+            name={props.name}
+            className="combo__input"
+            value={props.value || ''}
+            onChange={props.handleChange}
+            onKeyDown={handleKeydown}
+          />
+          <button
+            className="combo__button button--search button--standard"
+            onClick={props.getResults}
+          >
+            <span className="u-visually-hidden">Search</span>
+          </button>
+        </div>
+        {props.keywordModal && (
+          <button
+            className="button--keywords"
+            aria-controls="keyword-modal"
+            data-a11y-dialog-show="keyword-modal"
+          >
+            More keyword options
+          </button>
+        )}
+        {props.helpText && (
+          <span className="t-note t-sans search__example">
+            {props.helpText}
+          </span>
+        )}
       </div>
-      {props.keywordModal && (
-        <button
-          className="button--keywords"
-          aria-controls="keyword-modal"
-          data-a11y-dialog-show="keyword-modal"
-        >
-          More keyword options
-        </button>
-      )}
-      {props.helpText && (
-        <span className="t-note t-sans search__example">{props.helpText}</span>
-      )}
     </div>
   );
 }
@@ -49,8 +64,9 @@ function TextFilter(props) {
 TextFilter.defaultProps = {
   getResults: function() {},
   handleChange: function() {},
-  helpText: 'help',
+  helpText: '',
   keywordModal: true,
+  TooltipHelp: {},
   name: 'name',
   value: ''
 };
@@ -60,6 +76,7 @@ TextFilter.propTypes = {
   handleChange: PropTypes.func,
   helpText: PropTypes.string,
   keywordModal: PropTypes.bool,
+  TooltipHelp: PropTypes.object,
   name: PropTypes.string,
   value: PropTypes.string
 };

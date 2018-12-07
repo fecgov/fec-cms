@@ -52,3 +52,11 @@
   @include shift(1);
   padding-top: u(1rem);
 }
+
+.keyword-modal {
+  .simple-table{
+    border-width: 0 0;
+  }
+
+}
+
