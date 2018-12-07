@@ -206,6 +206,23 @@ def load_legal_adr(adr_no):
     return adr
 
 
+def load_legal_admin_fines(admin_fine_no):
+    url = '/legal/docs/admin_fines/'
+    admin_fine = _call_api(url, parse.quote(admin_fine_no))
+    if not admin_fine:
+       raise Http404
+    admin_fine = admin_fine['docs'][0]
+    admin_fine['disposition_text'] = [d['action'] for d in admin_fine['commission_votes']]
+    documents_by_type = OrderedDict()
+    for doc in admin_fine['documents']:
+        if doc['category'] in documents_by_type:
+            documents_by_type[doc['category']].append(doc)
+        else:
+            documents_by_type[doc['category']] = [doc]
+    admin_fine['documents_by_type'] = documents_by_type
+    return admin_fine
+
+
 def collate_dispositions(dispositions):
     """ Collate dispositions - group them by disposition, penalty """
     collated_dispositions = OrderedDict()
