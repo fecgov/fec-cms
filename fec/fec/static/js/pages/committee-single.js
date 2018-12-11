@@ -282,6 +282,33 @@ var itemizedDisbursementColumns = [
   columns.currencyColumn({
     data: 'disbursement_amount',
     className: 'column--number'
+  })
+];
+
+var ecItemizedDisbursementColumns = [
+  {
+    data: 'payee_name',
+    className: 'all',
+    orderable: false
+  },
+  {
+    data: 'payee_state',
+    className: 'min-tablet hide-panel',
+    orderable: false
+  },
+  {
+    data: 'purpose_description',
+    className: 'all',
+    orderable: false,
+    defaultContent: 'NOT REPORTED'
+  },
+  columns.dateColumn({
+    data: 'disbursement_date',
+    className: 'min-tablet'
+  }),
+  columns.currencyColumn({
+    data: 'disbursement_amount',
+    className: 'column--number'
   }),
   {
     data: 'candidate_name',
@@ -532,6 +559,31 @@ $(document).ready(function() {
               two_year_transaction_period: cycle
             },
             columns: itemizedDisbursementColumns,
+            callbacks: aggregateCallbacks,
+            order: [[3, 'desc']],
+            useExport: true,
+            singleEntityItemizedExport: true,
+            paginator: tables.SeekPaginator,
+            hideEmptyOpts: {
+              dataType: 'disbursements to committees',
+              name: context.name,
+              reason: helpers.missingDataReason('disbursements'),
+              timePeriod: context.timePeriod
+            }
+          })
+        );
+        break;
+      case 'ec-itemized-disbursements':
+        path = ['electioneering'];
+        tables.DataTable.defer(
+          $table,
+          _.extend({}, tableOpts, {
+            path: path,
+            query: {
+              committee_id: committeeId,
+              two_year_transaction_period: cycle
+            },
+            columns: ecItemizedDisbursementColumns,
             callbacks: aggregateCallbacks,
             order: [[3, 'desc']],
             useExport: true,
