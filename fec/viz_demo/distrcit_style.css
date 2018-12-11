@@ -1,0 +1,15 @@
+svg {
+	margin-left: auto;
+    margin-right: auto;
+    display: block;
+}
+
+/* .counties {
+	fill: none;
+} */
+
+.districts {
+	fill: none;
+	stroke: #fff;
+	stroke-linejoin: round;
+}
