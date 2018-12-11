@@ -86,8 +86,8 @@ def search(request):
         )
 
 
-def advanced(request):
-    return render(request, 'advanced.jinja', {'title': 'Advanced data'})
+def browse_data(request):
+    return render(request, 'browse-data.jinja', {'title': 'Browse data'})
 
 
 def get_candidate(candidate_id, cycle, election_full):

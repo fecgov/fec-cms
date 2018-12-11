@@ -45,14 +45,14 @@ $(document).ready(function() {
   tabs.onShow($('#raising'), function() {
     new PlotChart('.js-raised-overview', 'raised', 1).init();
     window.reactionBoxes['raised'] = new ReactionBox(
-      '[data-name="raised"][data-location="advanced"]'
+      '[data-name="raised"][data-location="browse-data"]'
     );
   });
 
   tabs.onShow($('#spending'), function() {
     new PlotChart('.js-spent-overview', 'spent', 2).init();
     window.reactionBoxes['spent'] = new ReactionBox(
-      '[data-name="spent"][data-location="advanced"]'
+      '[data-name="spent"][data-location="browse-data"]'
     );
   });
 });
