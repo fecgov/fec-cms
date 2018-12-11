@@ -265,7 +265,7 @@ class RecordPageTag(TaggedItemBase):
 class RecordPage(ContentPage):
     formatted_title = models.CharField(max_length=255, null=True, blank=True, default='',
                                         help_text="Use if you need italics in the title. e.g. <em>Italicized words</em>")
-    date = models.DateField(default=datetime.date.today)
+    date = models.DateTimeField(default=datetime.date.today)
     category = models.CharField(
         max_length=255,
         choices=constants.record_page_categories.items()
@@ -394,7 +394,7 @@ def get_previous_press_release_page():
 
 
 class PressReleasePage(ContentPage):
-    date = models.DateField(default=datetime.date.today)
+    date = models.DateTimeField(default=datetime.date.today)
     formatted_title = models.CharField(max_length=255, null=True, blank=True, default='',
                                         help_text="Use if you need italics in the title. e.g. <em>Italicized words</em>")
     category = models.CharField(max_length=255,
@@ -460,7 +460,7 @@ def get_previous_tips_page():
 
 
 class TipsForTreasurersPage(ContentPage):
-    date = models.DateField(default=datetime.date.today)
+    date = models.DateTimeField(default=datetime.date.today)
     read_next = models.ForeignKey('TipsForTreasurersPage', blank=True, null=True,
                                   default=get_previous_tips_page,
                                   on_delete=models.SET_NULL)
