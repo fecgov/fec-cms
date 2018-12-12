@@ -57,8 +57,8 @@ function Filters(props) {
               addTooltip: true,
               message:
                 'Refine a keyword search by using AND, OR, “ ”, -, to expand or limit results.',
-              verticalPosition: 'under',
-              horizontalPosition: 'left'
+              verticalPosition: 'above',
+              horizontalPosition: 'center'
             }}
           />
           <CheckboxFilter

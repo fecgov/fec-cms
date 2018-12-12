@@ -50,16 +50,51 @@
   }
 }
 
+
+
+// Tooltips under/over an element
+//
+// By default, this class centers a tooltip with the element it's referencing and centers the point.
+//
+// .tooltip--over or .tooltip--under -Required
+// .tooltip--center    - The default, aligns tooltip centered with the element
+// .tooltip--left      - Aligns the tooltip along the right side of an element; useful when the element is near the left side of the page.
+// .tooltip--right     - Aligns the tooltip along the left side of the element; useful when the element is near the right side of the page.
+//
+// .tooltip-left and .tooltip--right are 30rem wide making them render shorter in height so they can be used where we want to avoid obstructing
+// content below or above
+
+// For tooltips on regular DOM elements (rather than on maps) that contain additional info
+//
+// <label class="label tooltip__trigger-text">Select something</label>
+// <div class="tooltip__container">
+//   <button class="tooltip__trigger"><span class="u-visually-hidden">Learn more</span></button>
+//   <div class="tooltip tooltip--under">
+//     <p class="tooltip__content">Learn more about this thing!</p>
+//   </div>
+//   <select><option>Select one</option></select>
+// </div>
+//
+// <button class="button button--cta button--export">Export</button>
+// <div class="tooltip tooltip--under tooltip--left">
+//   <p class="tooltip__content">Explanatory content about this element</p>
+// </div>
+//
+
+
 // When the tooltip is above the content. Puts the arrow at the bottom center of the tooltip
 .tooltip--above {
   width: u(12rem);
+  $bottom: u(1.5rem);
+  left: u(-4rem);
+  bottom: calc(100% + #{$bottom});
 
   &::before {
     @include triangle(2rem, $primary, down);
     bottom: u(-1rem);
     content: '';
     display: block;
-    left: u(5rem);
+    left: u(4.2rem);
     position: absolute;
   }
 
@@ -68,27 +103,43 @@
     content: '';
     display: block;
     position: absolute;
-    left: u(5.2rem);
+    left: u(4.4rem);
     bottom: u(-.7rem);
   }
-}
 
-// Tooltips under an element
-//
-// By default, this class centers a tooltip below the element it's referencing and centers the point.
-//
-// .tooltip--left      - Aligns the tooltip along the left side of an element; useful when the element is near the left side of the page.
-// .tooltip--right     - Aligns the tooltip along the right side of the element; useful when the element is near the right side of the page.
-//
-// <button class="button button--cta button--export">Export</button>
-// <div class="tooltip tooltip--under tooltip--under">
-//   <p class="tooltip__content">Explanatory content about this element</p>
-// </div>
-//
+  &.tooltip--left {
+    width: u(30rem);
+    left: u(-2rem);
+
+    &::before {
+      left: u(2rem);
+    }
+
+    &::after {
+      left: u(2.2rem);
+    }
+  }
+
+  &.tooltip--right {
+    width: u(30rem);
+    left: auto;
+    right: u(-3rem);
+
+    &::before {
+      left: auto;
+      right: u(2.8rem);
+    }
+    &::after {
+      left:auto;
+      right: u(3rem);
+    }
+  }
+
+}
 
 .tooltip--under {
   $top: u(1.5rem);
-  width: u(30rem);
+  width: u(12rem);
   left: u(-14rem);
   top: calc(100% + #{$top});
 
@@ -107,6 +158,7 @@
   }
 
   &.tooltip--left {
+    width: u(30rem);
     left: u(-2rem);
 
     &::before {
@@ -115,8 +167,9 @@
   }
 
   &.tooltip--right {
+    width: u(30rem);
     left: auto;
-    right: u(2rem);
+    right: u(-3rem);
 
     &::before {
       left: auto;
@@ -125,19 +178,61 @@
   }
 }
 
-// Tooltips: Learn more
-//
-// For tooltips on regular DOM elements (rather than on maps) that contain additional info
-//
-// <label class="label tooltip__trigger-text">Select something</label>
-// <div class="tooltip__container">
-//   <button class="tooltip__trigger"><span class="u-visually-hidden">Learn more</span></button>
-//   <div class="tooltip tooltip--under">
-//     <p class="tooltip__content">Learn more about this thing!</p>
-//   </div>
-//   <select><option>Select one</option></select>
-// </div>
-//
+// When the tooltip is above the content. Puts the arrow at the bottom center of the tooltip
+.tooltip--above {
+  width: u(12rem);
+  $bottom: u(1.5rem);
+  left: u(-4rem);
+  bottom: calc(100% + #{$bottom});
+
+  &::before {
+    @include triangle(2rem, $primary, down);
+    bottom: u(-1rem);
+    content: '';
+    display: block;
+    left: u(4.2rem);
+    position: absolute;
+  }
+
+  &::after {
+    @include triangle(1.6rem, $inverse, down);
+    content: '';
+    display: block;
+    position: absolute;
+    left: u(4.4rem);
+    bottom: u(-.7rem);
+  }
+
+  &.tooltip--left {
+    width: u(30rem);
+    left: u(-2rem);
+
+    &::before {
+      left: u(2rem);
+    }
+
+    &::after {
+      left: u(2.2rem);
+    }
+  }
+
+  &.tooltip--right {
+    width: u(30rem);
+    left: auto;
+    right: u(-3rem);
+
+    &::before {
+      left: auto;
+      right: u(2.8rem);
+    }
+    &::after {
+      left:auto;
+      right: u(3rem);
+    }
+  }
+
+}
+
 
 .tooltip__container {
   width: u(2rem);
