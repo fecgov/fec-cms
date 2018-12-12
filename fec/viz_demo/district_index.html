@@ -117,7 +117,7 @@
     //this is the function for making the map visualization
     function ready(us) {
         svg.append("g")
-            .attr("class", "dsitricts")
+            .attr("class", "districts")
             .selectAll("path")
                 .data(topojson.feature(us, us.objects.districts).features)
             .enter().append("path")
