@@ -98,6 +98,11 @@ author_roles = OrderedDict([
     ('contact', 'Contact'),
 ])
 
+author_groups = OrderedDict([
+    ('Press Office', 'Press authors'),
+    ('Information Division', 'Information Division authors'),
+])
+
 record_page_categories = OrderedDict((x.lower(), x) for x in [
     "Advisory opinions",
     "Commission",

@@ -1,0 +1,31 @@
+{% load wagtailimages_tags %}
+
+<ul class="author-list">
+  <legend class="label t-upper">Contact&nbsp;</legend>
+  {% for author in authors %}
+  <li class="author-item">
+    <div class="author-item__info">
+      {% spaceless %}
+      {% image author.photo fill-40x40 class="author-item__image" %}
+      <ul class="author-item__details t-sans">
+        <li>
+          {% if author.email and author.email != 'N/A' %}
+            <a href="mailto:{{ author.email }}">{{ author.name }}</a>
+            <img class="icon--email--author" src="/static/img/i-email--primary.svg" alt="Icon of email being sent">
+          {% else %}
+            {{ author.name }}
+          {% endif %}
+        </li>
+        {% if author.title and author.title != 'N/A' %}
+        <li>{{ author.title }}</li>
+        {% endif %}
+        {% if author.phone %}
+          <li>{{ author.phone }}</li>
+        {% endif %}
+      </ul>
+      {% endspaceless %}
+    </div>
+  </li>
+  {% endfor %}
+
+</ul>
