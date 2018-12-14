@@ -1,6 +1,7 @@
 // Width and height
 var chart_width     =   800;
 var chart_height    =   600;
+
 var color           =   d3.scaleQuantize().range([
     'rgb(255,245,240)', 'rgb(254,224,210)', 'rgb(252,187,161)',
     'rgb(252,146,114)', 'rgb(251,106,74)', 'rgb(239,59,44)',
