@@ -12,7 +12,7 @@ var projection = d3.geoAlbersUsa()
 var path = d3.geoPath(projection);
 
 // Create SVG
-var svg             =   d3.select("#chart")
+var svg             =   d3.select("#chart1")
     .append("svg")
     .attr("width", chart_width)
     .attr("height", chart_height);

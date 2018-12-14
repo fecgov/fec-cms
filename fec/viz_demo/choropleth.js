@@ -52,22 +52,48 @@ d3.json("us.json").then(function(us_data){
     });
   });
 
-//draw the map, fill the color for each state based on 'num' and color scale
-//add a 'tile' element for a quick tooltip in the end
-svg.selectAll('path')
+  //draw the map, fill the color for each state based on 'num' and color scale
+  //add a 'tile' element for a quick tooltip in the end
+  svg.selectAll('path')
     .data(us_data.features)
     .enter()
     .append('path')
     .attr('d', path)
-    .attr('fill', function(d){
+    .attr('fill', function (d) {
       var num = d.properties.num;
-      return num? color(num):'#ddd';
+      return num ? color(num) : '#ddd';
     })
     .attr('stroke', '#fff')
     .attr('stroke-width', 1)
     .append('title')
-    .text(function(d){
-      return d.properties.name+'\n'+d.properties.num
+    .text(function (d) {
+      return d.properties.name + '\n' + d.properties.num
     });
+
+    draw_cities()
 });
 });
+
+function draw_cities(){
+  d3.json('us-cities.json').then(function(city_data){
+    svg.selectAll('circle')
+      .data(city_data)
+      .enter()
+      .append('circle')
+      .style('fill', 'green')
+      .style('opacity', 0.5)
+      .attr('cx', function(d){
+        return projection([d.lon, d.lat])[0]
+      })
+      .attr('cy', function(d){
+        return projection([d.lon, d.lat])[1]
+      })
+      .attr('r', function(d){
+        return Math.sqrt(parseInt( d.population )*0.00005);
+      })
+      .append('title')
+      .text(function(d){
+        return d.city
+      });
+  });
+}
