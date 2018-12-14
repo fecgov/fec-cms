@@ -13,11 +13,10 @@ class TooltipHelp extends React.Component {
             this.props.verticalPosition
           } tooltip--${this.props.horizontalPosition}`}
         >
-          <p className="tooltip--content tooltip__content">
+          <p className="tooltip__content tooltip__content">
             {this.props.message}
           </p>
         </div>
-        {this.props.children}
       </div>
     );
   }
