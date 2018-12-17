@@ -1,6 +1,12 @@
 {% macro keyword_search(result_type, query) %}
 <div class="filter">
-  <label class="label" for="search-input">Search keywords</label>
+  <label class="label t-inline-block" for="search-input">Search keywords</label>
+  <div class="tooltip__container">
+   <button class="tooltip__trigger"><span class="u-visually-hidden">Learn more</span></button>
+   <div class="tooltip tooltip--left tooltip--above">
+     <p class="tooltip__content tooltip__content">Refine a keyword search by using AND, OR, “ ”, -, to expand or limit results.</p>
+   </div>
+  </div>
   <div class="combo combo--search--mini">
     <input id="search-input" type="text" name="search" class="combo__input"{% if query %} value="{{ query }}"{% endif %}>
     <button class="combo__button button--search button--standard" type="submit">
