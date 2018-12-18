@@ -34,7 +34,7 @@ var DOWNLOAD_MESSAGES = {
   recordCap:
     'Use <a href="' +
     window.BASE_PATH +
-    '/advanced?tab=bulk-data">' +
+    '/browse-data?tab=bulk-data">' +
     'bulk data</a> to export more than ' +
     downloadCapFormatted +
     ' records.',

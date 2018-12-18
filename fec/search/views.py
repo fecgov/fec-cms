@@ -40,7 +40,7 @@ def parse_icon(path):
     But because some /data/ pages aren't data tables, screen those out with
     the pages list
     """
-    pages = ['/legal/advisory-opinions/', '/legal/statutes/', '/advanced/']
+    pages = ['/legal/advisory-opinions/', '/legal/statutes/', '/browse-data/']
     if '/data/' in path and not any(p for p in pages if p in path):
         return 'data'
     else:
