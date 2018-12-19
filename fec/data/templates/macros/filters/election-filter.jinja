@@ -6,7 +6,7 @@
   {% elif office == 'senate' %}
     {% set duration = 6 %}
     {% set years = range(2022, 1976, -2) %}
-    {% set default_cycle = constants.DEFAULT_TIME_PERIOD %}
+    {% set default_cycle = constants.DEFAULT_ELECTION_CYCLE %}
   {% endif %}
   <div
       id="{{ name }}-field"
