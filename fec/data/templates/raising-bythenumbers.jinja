@@ -21,7 +21,7 @@
   <a class="sidebar__title" href="/data/#raising">&lsaquo; Raising overview</a>
   <ul class="sidebar__content js-toc">
     <li class="side-nav__item"><a class="side-nav__link" href="#top-raisers">Who's raising the most</a></li>
-    <li class="side-nav__item"><span class="side-nav__link is-disabled">Where contributions come from</span></li>
+    <li class="side-nav__item"><a class="side-nav__link" href="#contributions-from">Where contributions come from</a></li>
     <li class="side-nav__item"><span class="side-nav__link is-disabled">The size of contributions</span></li>
   </ul>
 </nav>
@@ -32,6 +32,35 @@
   <section id="top-raisers" class="content__section">
     <h2>Who's raising the most</h2>
     {{ breakdowns.top_entities(top_raisers, coverage_start_date, coverage_end_date, cycle, 'raised', top_category, page_info ) }}
+  </section>
+  <section id="contributions-from" class="content__section">
+    <h2>Where contributions come from</h2>
+    <div id="contributor-state">
+      <div class="results-info results-info--simple">
+        <div class="tag__category">
+          <div class="tag__item">Coverage dates: {{ coverage_start_date|date}} to {{coverage_end_date|date}}</div>
+        </div>
+      </div>
+      <div class="map-table">
+        <table
+            class="data-table data-table--heading-borders"
+            data-type="contribution-totals"
+            data-cycle="2018"
+          >
+          <thead>
+            <th scope="col">State</th>
+            <th scope="col">Total contributed</th>
+          </thead>
+        </table>
+      </div>
+      <div class="map-panel">
+            <div class="state-map"  data-cycle="2018">
+              <div class="legend-container">
+                <span class="t-sans t-block">By state: total amount received</span>
+                <svg></svg>
+              </div>
+            </div>
+          </div>
   </section>
 </section>
 {% endblock %}
@@ -58,9 +87,11 @@
 
 {% block scripts %}
   <script type="text/javascript">
-  var context = {
-    type: 'receipts'
-  }
+    var context = {
+      type: 'receipts'
+    };
   </script>
+<script src="{{ asset_for_js('dataviz-common.js') }}"></script>
+{# <script src="{{ asset_for_js('candidate-single.js') }}"></script> #}
   <script src="{{ asset_for_js('bythenumbers.js') }}"></script>
 {% endblock %}
