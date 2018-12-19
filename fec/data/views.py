@@ -434,7 +434,7 @@ def committee(request, committee_id):
 
 def elections_lookup(request):
 
-    cycle = constants.DEFAULT_ELECTION_CYCLE
+    cycle = constants.DEFAULT_ELECTION_YEAR
     cycles = utils.get_cycles(cycle + 4)
 
     return render(

@@ -5,8 +5,8 @@
     {% set default_cycle = constants.DEFAULT_PRESIDENTIAL_YEAR %}
   {% elif office == 'senate' %}
     {% set duration = 6 %}
-    {% set years = range(constants.DEFAULT_ELECTION_CYCLE + 4, 1976, -2) %}
-    {% set default_cycle = constants.DEFAULT_ELECTION_CYCLE %}
+    {% set years = range(constants.DEFAULT_ELECTION_YEAR + 4, 1976, -2) %}
+    {% set default_cycle = constants.DEFAULT_ELECTION_YEAR %}
   {% endif %}
   <div
       id="{{ name }}-field"
