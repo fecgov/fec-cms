@@ -1,12 +1,12 @@
 {% macro full_cycle(name, title, cycle_name, full_name, office) %}
   {% if office == 'president' %}
     {% set duration = 4 %}
-    {% set years = range(2020, 1976, -4) %}
+    {% set years = range(constants.DEFAULT_PRESIDENTIAL_YEAR, 1976, -4) %}
     {% set default_cycle = constants.DEFAULT_PRESIDENTIAL_YEAR %}
   {% elif office == 'senate' %}
     {% set duration = 6 %}
-    {% set years = range(2022, 1976, -2) %}
-    {% set default_cycle = constants.DEFAULT_TIME_PERIOD %}
+    {% set years = range(constants.DEFAULT_ELECTION_YEAR + 4, 1976, -2) %}
+    {% set default_cycle = constants.DEFAULT_ELECTION_YEAR %}
   {% endif %}
   <div
       id="{{ name }}-field"

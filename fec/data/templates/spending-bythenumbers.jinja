@@ -12,7 +12,7 @@
 
 {% block sidebar %}
 <form action="" method="get" class="breakdown-cycle">
-  {{ select.cycle_select(cycles, cycle, location='form', range=True) }}
+  {{ select.cycle_select(cycles, cycle, location='form', range=True, label='Two-Year Period') }}
   <noscript>
     <button type="submit" class="button button--cta">Submit</button>
   </noscript>

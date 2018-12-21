@@ -213,6 +213,10 @@ class Author(models.Model):
                               on_delete=models.SET_NULL, related_name='+')
     phone = models.CharField(max_length=255, blank=True)
     bio = models.TextField(blank=True)
+    author_group = models.CharField(max_length=255,
+                            choices=constants.author_groups.items(),
+                            blank=True, help_text="Not required: Only choose this if you \
+                            want this author to show up as part an official author group")
 
     panels = [
         FieldPanel('name'),
@@ -221,6 +225,10 @@ class Author(models.Model):
         ImageChooserPanel('photo'),
         FieldPanel('phone'),
         FieldPanel('bio'),
+        MultiFieldPanel([
+            FieldPanel('author_group')],
+            heading="Author Groups - Not required (For admin use only)",
+            classname="collapsible collapsed")
     ]
 
     def __str__(self):

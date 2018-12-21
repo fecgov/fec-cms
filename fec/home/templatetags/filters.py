@@ -114,14 +114,9 @@ def get_touch_icon(content_section, dimension):
 @register.filter(name='get_meta_description')
 def get_meta_description(content_section):
     """
-    Returns a meta description based on the parent section
+    Returns a meta description for social media
     """
-    if content_section == 'help':
-        return 'Learn how individuals and groups can be active in federal elections. The new fec.gov organizes reporting and compliance guidance by the type of committee you’re researching, so you can find what you need right away.'
-    if content_section == 'legal':
-        return 'Clarify campaign finance legal requirements on the new fec.gov. Search across advisory opinions, Matters Under Review, statutes, and regulations all at once, with search results designed to help you find what you need quickly.'
-    else:
-        return 'The new fec.gov makes it easier than ever to find what you need to know about the federal campaign finance process. Explore legal resources, campaign finance data, help for candidates and committees, and more.'
+    return 'Find what you need to know about the federal campaign finance process. Explore legal resources, campaign finance data, help for candidates and committees, and more.'
 
 
 @register.simple_tag
