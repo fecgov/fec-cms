@@ -1,6 +1,7 @@
 'use strict';
 
 var $ = require('jquery');
+var URI = require('urijs');
 var _ = require('underscore');
 var helpers = require('../modules/helpers');
 var moment = require('moment');
@@ -45,7 +46,8 @@ TopEntities.prototype.init = function() {
     sort: '-' + this.type,
     per_page: 10,
     sort_hide_null: true,
-    cycle: this.cycle
+    cycle: this.cycle,
+    office: this.office
   };
   this.maxValue = Number(
     this.$table
@@ -88,6 +90,7 @@ TopEntities.prototype.handleCycleChange = function(e) {
   }
   this.loadData(this.currentQuery);
   this.updateDates();
+  this.pushStateToURL({ cycle: this.cycle });
 };
 
 TopEntities.prototype.handleCategoryChange = function(e) {
@@ -111,6 +114,7 @@ TopEntities.prototype.handleCategoryChange = function(e) {
     });
   }
   this.loadData(this.currentQuery);
+  this.pushStateToURL({ office: this.office });
 };
 
 TopEntities.prototype.handlePagination = function(direction, e) {
@@ -224,6 +228,15 @@ TopEntities.prototype.updatePagination = function(pagination) {
   }
 
   this.$pageInfo.html(info);
+};
+
+TopEntities.prototype.pushStateToURL = function(keyValPairsObj) {
+  var query = _.extend(URI.parseQuery(window.location.search), keyValPairsObj);
+  var search = URI('')
+    .query(query)
+    .toString();
+  window.history.pushState(query, search, search || window.location.pathname);
+  // analytics.pageView();
 };
 
 module.exports = { TopEntities: TopEntities };
