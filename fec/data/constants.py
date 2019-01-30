@@ -5,9 +5,10 @@ from data import utils
 
 START_YEAR = 1979
 END_YEAR = 2018
-DEFAULT_TIME_PERIOD = 2018
+DEFAULT_TIME_PERIOD = 2018  # Change after final YE report (1/31/19)
+DEFAULT_ELECTION_YEAR = 2020  # Change after election day (11/3/20)
 DEFAULT_PRESIDENTIAL_YEAR = 2020
-DISTRICT_MAP_CUTOFF = 2018 # The year we show district maps for on election pages
+DISTRICT_MAP_CUTOFF = 2018  # The year we show district maps for on election pages
 
 states = OrderedDict([
     ('AL', 'Alabama'),
@@ -327,7 +328,7 @@ table_columns = OrderedDict([
     ('candidates-office-president', ['Name', 'Party', 'Receipts', 'Disbursements']),
     ('candidates-office-senate', ['Name', 'Party', 'State', 'Receipts', 'Disbursements']),
     ('candidates-office-house', ['Name', 'Party', 'State', 'District', 'Receipts', 'Disbursements']),
-    ('committees', ['Name', 'Treasurer', 'Type', 'Designation', 'First filing date']),
+    ('committees', ['Name', 'Committee ID', 'Treasurer', 'Type', 'Designation', 'First filing date']),
     ('communication-costs', ['Committee', 'Support/Oppose', 'Candidate', 'Amount', 'Date']),
     ('disbursements', ['Spender', 'Recipient', 'State', 'Description', 'Disbursement date', 'Amount']),
     ('electioneering-communications', ['Spender', 'Candidate mentioned','Number of candidates', 'Amount per candidate', 'Date', 'Disbursement amount' ]),

@@ -59,6 +59,16 @@
             aria-controls="panel2"
             href="#section-2">About this committee</a>
         </li>
+        {% elif committee_type == 'E' %}
+        <li class="side-nav__item" role="presentation">
+          <a
+            class="side-nav__link"
+            role="tab"
+            data-name="about-committee"
+            tabindex="0"
+            aria-controls="panel2"
+            href="#section-2">About this filer</a>
+        </li>
         {% else %}
         <li class="side-nav__item" role="presentation">
           <a
@@ -70,7 +80,7 @@
             href="#section-2">About this committee</a>
         </li>
         {% endif %}
-        {% if committee_type not in ['C'] %}
+        {% if committee_type not in ['C', 'E'] %}
           <li class="side-nav__item" role="presentation">
             <a
               class="side-nav__link"
@@ -102,7 +112,7 @@
             </ul>
             {% elif committee_type == 'E' %}
             <ul>
-              <li><a href="#electioneering-communication">Electioneering communication</a></li>
+              <li><a href="#electioneering-communication">Electioneering communications</a></li>
               <li><a href="#disbursement-transactions">Disbursement transactions</a></li>
             </ul>
             {% else %}
@@ -129,10 +139,15 @@
               {% if has_raw_filings %}
               <li><a href="#raw-filings">Raw electronic filings</a></li>
               {% endif %}
-              <li><a href="#reports">Regularly filed reports</a></li>
-              <li><a href="#notices">24- and 48-hour reports</a></li>
-              <li><a href="#statements">Statements of organization</a></li>
-              <li><a href="#other">Other documents</a></li>
+              {% if committee_type == 'E' %}
+                <li><a href="#notices">24 hour reports</a></li>
+                <li><a href="#other">Other documents</a></li>
+              {% else %}
+                <li><a href="#reports">Regularly filed reports</a></li>
+                <li><a href="#notices">24- and 48-hour reports</a></li>
+                <li><a href="#statements">Statements of organization</a></li>
+                <li><a href="#other">Other documents</a></li>
+              {% endif %}
             </ul>
         </li>
         {% if candidates %}

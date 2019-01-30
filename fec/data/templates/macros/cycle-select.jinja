@@ -1,8 +1,8 @@
-{% macro cycle_select(cycles, cycle=none, duration=2, location='query', id='cycle-select', class='', range=False) %}
+{% macro cycle_select(cycles, cycle=none, duration=2, location='query', id='cycle-select', class='', range=False, label='Election') %}
 {% set cycle = cycle | int %}
 {% if cycles %}
   <div class="cycle-select js-cycle-select">
-    <label for="{{ id }}" class="label cycle-select__label">Election</label>
+    <label for="{{ id }}" class="label cycle-select__label">{{ label }}</label>
     <select
         id="{{ id }}"
         class="{{ class }} js-cycle"

@@ -316,7 +316,12 @@ function appendStateMap($parent, results, cached) {
 function drawStateMap($container, candidateId, cached) {
   var url = helpers.buildUrl(
     ['schedules', 'schedule_a', 'by_state', 'by_candidate'],
-    { cycle: context.election.cycle, candidate_id: candidateId, per_page: 99 }
+    {
+      cycle: context.election.cycle,
+      candidate_id: candidateId,
+      per_page: 99,
+      election_full: true
+    }
   );
   var $map = $container.find('.state-map-choropleth');
   $map.html('');

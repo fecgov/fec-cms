@@ -10,10 +10,15 @@
     {% if has_raw_filings %}
       {{ entity.raw_filings_table(cycle, committee_id, min_receipt_date) }}
     {% endif %}
-    {{ entity.filings_table('Regularly filed reports', 'reports', cycle, committee_id, showTrigger=True) }}
-    {{ entity.filings_table('24- and 48-hour reports', 'notices', cycle, committee_id) }}
-    {{ entity.filings_table('Statements of organization', 'statements', cycle, committee_id) }}
-    {{ entity.filings_table('Other documents', 'other', cycle, committee_id) }}
+    {% if committee_type == 'E' %}
+      {{ entity.filings_table('24 hour reports', 'notices', cycle, committee_id) }}
+      {{ entity.filings_table('Other documents', 'other', cycle, committee_id) }}
+    {% else %}
+      {{ entity.filings_table('Regularly filed reports', 'reports', cycle, committee_id, showTrigger=True) }}
+      {{ entity.filings_table('24- and 48-hour reports', 'notices', cycle, committee_id) }}
+      {{ entity.filings_table('Statements of organization', 'statements', cycle, committee_id) }}
+      {{ entity.filings_table('Other documents', 'other', cycle, committee_id) }}
+    {% endif %}
   </div>
 </section>
 

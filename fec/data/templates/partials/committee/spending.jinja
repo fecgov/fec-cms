@@ -63,16 +63,16 @@
     {% if committee_type == 'E' %}
     <div class="entity__figure row" id="electioneering-communicaiton">
       <div class="heading--section heading--with-action">
-        <h3 class="heading__left">Electioneering communication</h3>
+        <h3 class="heading__left">Electioneering communications</h3>
         <a class="heading__right button--alt button--browse"
             href="/data/electioneering-communications/?committee_id={{ committee_id }}&min_date={{ cycle_start(cycle) | date(fmt='%m-%d-%Y') }}&max_date={{ cycle_end(cycle) | date(fmt='%m-%d-%Y') }}">Filter this data
         </a>
       </div>
-      <p>Any broadcast, cable or satellite communication that (1) refers to a clearly identified candidate for federal office; (2) is publicly distributed within certain time periods before an election and (3) is targeted to the relevant electorate.</p>
+      <p>Any disbursement for a broadcast, cable or satellite communication that (1) refers to a clearly identified candidate for federal office; (2) is publicly distributed within certain time periods before an election and (3) is targeted to the relevant electorate.</p>
       <table class="data-table data-table--heading-borders data-table--entity u-margin--top" data-type="electioneering-committee" data-committee="{{ committee_id }}" data-cycle="{{ cycle }}">
         <thead>
-          <th scope="col">Amount</th>
-          <th scope="col">Candidate</th>
+          <th scope="col">Candidate</th> 
+          <th scope="col">Amount</th>   
         </thead>
       </table>
       <div class="datatable__note">
@@ -108,8 +108,113 @@
       </div>
     </div>
     {% endif %}
-
+    
+    {% if committee_type == 'E' %}
     <div class="entity__figure row" id="disbursement-transactions" >
+      <div class="heading--section heading--with-action">
+        <h3 class="heading__left">Disbursements</h3>
+        <a class="heading__right button--alt button--browse"
+            href="/data/disbursements/?committee_id={{ committee_id }}&two_year_transaction_period={{ cycle }}">Filter this data</a>
+      </div>
+
+      <fieldset class="row toggles js-toggles">
+        <legend class="label">Group by:</legend>
+        <label for="toggle-all-disbursements">
+          <input id="toggle-all-disbursements" type="radio" class="js-panel-toggle-control" name="disbursements" value="ec-itemized-disbursements" checked>
+          <span class="button--alt">All transactions</span>
+        </label>
+        <label for="toggle-recipient">
+          <input id="toggle-recipient" type="radio" class="js-panel-toggle-control" name="disbursements" value="by-recipient">
+          <span class="button--alt">Recipient name</span>
+        </label>
+        <label for="toggle-to">
+          <input id="toggle-to" type="radio" class="js-panel-toggle-control" name="disbursements" value="to-committees">
+          <span class="button--alt">Recipient committee ID</span>
+        </label>
+      </fieldset>
+
+      <div id="by-recipient" class="panel-toggle-element" aria-hidden="true">
+        <div class="results-info results-info--simple">
+          {% if totals %}
+          <div class="u-float-left tag__category">
+            <div class="tag__item">Coverage dates: {{totals.0.coverage_start_date|date}} to {{transaction_end|date}}</div>
+          </div>
+          {% endif %}
+          <button type="button" class="u-float-right js-export button button--cta button--export" data-export-for="disbursements-by-recipient">Export</button>
+        </div>
+        <table
+            class="data-table data-table--heading-borders"
+            data-type="disbursements-by-recipient"
+            data-committee="{{ committee.committee_id }}"
+            data-cycle="{{ cycle }}"
+          >
+          <thead>
+            <th scope="col">Recipient</th>
+            <th scope="col">Total</th>
+          </thead>
+        </table>
+        {{ disclaimer.disclaimer('disbursements', committee.committee_id, cycle) }}
+      </div>
+
+      <div id="ec-itemized-disbursements" class="panel-toggle-element" aria-hidden="false">
+        <div class="results-info results-info--simple">
+          {% if totals %}
+          <div class="u-float-left tag__category">
+            <div class="tag__item">Coverage dates: {{totals.0.coverage_start_date|date}} to {{transaction_end|date}}</div>
+          </div>
+          {% endif %}
+          <div class="u-float-right">
+            <div class="message message--info message--mini t-left-aligned data-container__message" data-export-message-for="ec-itemized-disbursements" aria-hidden="true">
+            </div>
+            <button type="button" class="js-export button button--cta button--export" data-export-for="ec-itemized-disbursements">Export</button>
+          </div>
+        </div>
+
+        <table
+            class="data-table data-table--heading-borders"
+            data-type="ec-itemized-disbursements"
+            data-committee="{{ committee.committee_id }}"
+            data-name="{{ name }}"
+            data-cycle="{{ cycle }}"
+          >
+          <thead>
+            <tr>
+              <th scope="col">Recipient</th>
+              <th scope="col">Recipient state</th>
+              <th scope="col">Description</th>
+              <th scope="col">Date</th>
+              <th scope="col">Amount</th>
+              <th scope="col">Candidate</th>
+            </tr>
+          </thead>
+        </table>
+      </div>
+
+      <div id="to-committees" class="panel-toggle-element" aria-hidden="true">
+        <div class="results-info results-info--simple">
+          {% if totals %}
+          <div class="u-float-left tag__category">
+            <div class="tag__item">Coverage dates: {{totals.0.coverage_start_date|date}} to {{transaction_end|date}}</div>
+          </div>
+          {% endif %}
+          <button type="button" class="u-float-right js-export button button--cta button--export" data-export-for="disbursements-by-recipient-id">Export</button>
+        </div>
+        <table
+            class="data-table data-table--heading-borders"
+            data-type="disbursements-by-recipient-id"
+            data-committee="{{ committee.committee_id }}"
+            data-cycle="{{ cycle }}"
+          >
+          <thead>
+            <th scope="col">Committee</th>
+            <th scope="col">Total</th>
+          </thead>
+        </table>
+      </div>
+    </div>
+  </div>
+  {% else %}
+  <div class="entity__figure row" id="disbursement-transactions" >
       <div class="heading--section heading--with-action">
         <h3 class="heading__left">Disbursements</h3>
         <a class="heading__right button--alt button--browse"
@@ -210,5 +315,5 @@
         </table>
       </div>
     </div>
-  </div>
+  {% endif %}
 </section>

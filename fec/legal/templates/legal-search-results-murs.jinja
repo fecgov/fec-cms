@@ -11,12 +11,12 @@
 {% block filters %}
   {{ legal.keyword_search(result_type, query) }}
   <div class="filter">
-    <label class="label" for="mur_no">MUR number</label>
-    <input id="mur_no" name="mur_no" type="text" value="{{ mur_no }}">
+    <label class="label" for="case_no">MUR number</label>
+    <input id="case_no" name="case_no" type="text" value="{{ case_no }}">
   </div>
   <div class="filter">
-    <label class="label" for="mur_respondents">MUR respondents</label>
-    <input id="mur_respondents" name="mur_respondents" type="text" value="{{ mur_respondents }}">
+    <label class="label" for="case_respondents">MUR respondents</label>
+    <input id="case_respondents" name="case_respondents" type="text" value="{{ case_respondents }}">
   </div>
   <div class="filter">
     <button type="submit" class="button button--cta">Apply filters</button>

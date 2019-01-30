@@ -42,7 +42,6 @@ def to_date(committee, cycle):
 
 
 def landing(request):
-    top_candidates_raising = api_caller.load_top_candidates('-receipts', per_page=3)
 
     return render(
         request,
@@ -50,9 +49,6 @@ def landing(request):
         {
             'title': 'Campaign finance data',
             'dates': utils.date_ranges(),
-            'top_candidates_raising': top_candidates_raising['results']
-            if top_candidates_raising
-            else None,
             'first_of_year': datetime.date(datetime.date.today().year, 1, 1).strftime(
                 '%m/%d/%Y'
             ),
@@ -86,8 +82,8 @@ def search(request):
         )
 
 
-def advanced(request):
-    return render(request, 'advanced.jinja', {'title': 'Advanced data'})
+def browse_data(request):
+    return render(request, 'browse-data.jinja', {'title': 'Browse data'})
 
 
 def get_candidate(candidate_id, cycle, election_full):
@@ -438,7 +434,7 @@ def committee(request, committee_id):
 
 def elections_lookup(request):
 
-    cycle = utils.current_cycle()
+    cycle = constants.DEFAULT_ELECTION_YEAR
     cycles = utils.get_cycles(cycle + 4)
 
     return render(
@@ -472,15 +468,18 @@ def elections(request, office, cycle, state=None, district=None):
         'spending-by-others': '#independent-expenditures',
     }
 
-    if tab in legacy_tabs.keys():
-        if office == 'senate' or office == 'house':
+    if tab in legacy_tabs:
+        if office == 'house':
             return redirect(
-                reverse(
-                    'elections-state-district', args=(office, state, district, cycle)
-                )
+                reverse('elections-house', args=(office, state, district, cycle))
                 + legacy_tabs[tab]
             )
-        if office == 'president':
+        elif office == 'senate':
+            return redirect(
+                reverse('elections-senate', args=(office, state, cycle))
+                + legacy_tabs[tab]
+            )
+        elif office == 'president':
             return redirect(
                 reverse('elections-president', args=(office, cycle)) + legacy_tabs[tab]
             )

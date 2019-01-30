@@ -50,7 +50,7 @@ class TestViews(TestCase):
 
 
     def test_parse_icon_datapage(self, m):
-        icon = parse_icon('/data/advanced/')
+        icon = parse_icon('/data/browse-data/')
         self.assertEqual(icon, 'page')
 
 
