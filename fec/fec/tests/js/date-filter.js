@@ -161,6 +161,7 @@ describe('date filter', function() {
       this.today = moment(today).format('MM/DD/YYYY');
       this.thisYear = today.getFullYear();
       this.lastYear = today.getFullYear() - 1;
+      this.firstDayOfLastYear = "01/01/" + this.lastYear.valueOf()
       var opts = {
         filterName: 'date',
         filterValue: this.thisYear,
@@ -175,7 +176,7 @@ describe('date filter', function() {
     });
 
     it('sets the min date to the first of the min year', function() {
-      expect(this.filter.$minDate.val()).to.equal('01/01/2017');
+      expect(this.filter.$minDate.val()).to.equal(this.firstDayOfLastYear);
     });
 
     it('sets the max date to today if max year is this year', function() {
