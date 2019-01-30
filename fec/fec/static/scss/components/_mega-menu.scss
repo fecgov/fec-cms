@@ -97,6 +97,7 @@
   margin-bottom: u(1.5rem);
   padding-left: u(2rem);
   line-height:1.2;
+  break-inside: avoid;
 
   &:first-of-type {
   }
