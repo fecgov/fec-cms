@@ -163,8 +163,8 @@ def get_candidate(candidate_id, cycle, election_full):
     # the cycle for itemized tables. Because these are only in 2-year chunks,
     # the cycle should never be beyond the one we're in.
     cycles = [cycle for cycle in candidate['cycles'] if cycle <= utils.current_cycle()]
-    # New transactions will appear after the Q1 - around 4/15/19
-    max_cycle = cycle if cycle <= constants.DEFAULT_TIME_PERIOD else constants.DEFAULT_TIME_PERIOD
+    # New transactions will appear after the Q1 of a new election year - this delays the rollover to a new cycle by 104 days
+    max_cycle = cycle if cycle <= utils.current_cycle(delayed_start=True) else utils.current_cycle(delayed_start=True)
     show_full_election = election_full if cycle <= utils.current_cycle() else False
 
     # Annotate committees with most recent available cycle
