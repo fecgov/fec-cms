@@ -502,9 +502,16 @@ def elections(request, office, cycle, state=None, district=None):
 
 def raising(request):
     top_category = request.GET.get('top_category', 'P')
+    
+    # DOES THIS KIND OF LIST EXIST ELSEWHERE?
+    validListValues = ['P', 'S', 'H', 'pac', 'party']
+    # IGNORING INVALID list URL PARAMETERS
+    if request.GET.get('list') and request.GET.get('list') and request.GET.get('list') in validListValues:
+        top_category = request.GET.get('list')
+        # IF A VALID list VALUE EXISTS, WE'LL LET IT OVERRIDE top_category
+
     cycles = utils.get_cycles(utils.current_cycle())
     cycle = int(request.GET.get('cycle', constants.DEFAULT_TIME_PERIOD))
-    office = request.GET.get('office', top_category) # ADDED office TO USE IT IN THE URL; DO WE STILL NEED top_category?
 
     if top_category in ['pac']:
         top_raisers = api_caller.load_top_pacs('-receipts', cycle=cycle, per_page=10)
@@ -512,7 +519,7 @@ def raising(request):
         top_raisers = api_caller.load_top_parties('-receipts', cycle=cycle, per_page=10)
     else:
         top_raisers = api_caller.load_top_candidates(
-            '-receipts', office=office, cycle=cycle, per_page=10
+            '-receipts', office=top_category, cycle=cycle, per_page=10
         )
 
     if cycle == datetime.datetime.today().year:
@@ -535,7 +542,7 @@ def raising(request):
             'cycle': cycle,
             'top_raisers': top_raisers['results'],
             'page_info': utils.page_info(top_raisers['pagination']),
-            'office': office
+            'office': top_category
         },
     )
 
@@ -544,7 +551,6 @@ def spending(request):
     top_category = request.GET.get('top_category', 'P')
     cycles = utils.get_cycles(utils.current_cycle())
     cycle = int(request.GET.get('cycle', constants.DEFAULT_TIME_PERIOD))
-    office = request.GET.get('office', top_category) # ADDED office TO USE IT IN THE URL; DO WE STILL NEED top_category?
 
     if top_category in ['pac']:
         top_spenders = api_caller.load_top_pacs(
@@ -556,7 +562,7 @@ def spending(request):
         )
     else:
         top_spenders = api_caller.load_top_candidates(
-            '-disbursements', office=office, cycle=cycle, per_page=10
+            '-disbursements', cycle=cycle, per_page=10
         )
 
     if cycle == datetime.datetime.today().year:
@@ -576,8 +582,7 @@ def spending(request):
             'cycles': cycles,
             'cycle': cycle,
             'top_spenders': top_spenders['results'],
-            'page_info': utils.page_info(top_spenders['pagination']),
-            'office': office
+            'page_info': utils.page_info(top_spenders['pagination'])
         },
     )
 

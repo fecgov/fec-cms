@@ -46,8 +46,7 @@ TopEntities.prototype.init = function() {
     sort: '-' + this.type,
     per_page: 10,
     sort_hide_null: true,
-    cycle: this.cycle,
-    office: this.office
+    cycle: this.cycle
   };
   this.maxValue = Number(
     this.$table
@@ -114,7 +113,7 @@ TopEntities.prototype.handleCategoryChange = function(e) {
     });
   }
   this.loadData(this.currentQuery);
-  this.pushStateToURL({ office: this.office });
+  this.pushStateToURL({ list: e.target.value });
 };
 
 TopEntities.prototype.handlePagination = function(direction, e) {
