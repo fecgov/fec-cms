@@ -4,7 +4,7 @@ import operator
 from data import utils
 
 START_YEAR = 1979
-END_YEAR = 2018
+END_YEAR = 2020
 DEFAULT_TIME_PERIOD = 2018  # Change after final YE report (1/31/19)
 DEFAULT_ELECTION_YEAR = 2020  # Change after election day (11/3/20)
 DEFAULT_PRESIDENTIAL_YEAR = 2020
