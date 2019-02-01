@@ -34,6 +34,8 @@ report_types = {
     'I': 'ie-only',
 }
 
+validListUrlParamValues = ['P', 'S', 'H', 'pac', 'party']
+# INITIALLY USED BY raising() AND spending() FOR VALIDATING URL PARAMETERS, THE list URL PARAM
 
 def to_date(committee, cycle):
     if committee['committee_type'] in ['H', 'S', 'P']:
@@ -503,10 +505,8 @@ def elections(request, office, cycle, state=None, district=None):
 def raising(request):
     top_category = request.GET.get('top_category', 'P')
     
-    # DOES THIS KIND OF LIST EXIST ELSEWHERE?
-    validListValues = ['P', 'S', 'H', 'pac', 'party']
     # IGNORING INVALID list URL PARAMETERS
-    if request.GET.get('list') and request.GET.get('list') in validListValues:
+    if request.GET.get('list') and request.GET.get('list') in validListUrlParamValues:
         top_category = request.GET.get('list')
         # IF A VALID list VALUE EXISTS, WE'LL LET IT OVERRIDE top_category
 
@@ -550,13 +550,10 @@ def raising(request):
 def spending(request):
     top_category = request.GET.get('top_category', 'P')
 
-    # DOES THIS KIND OF LIST EXIST ELSEWHERE?
-    validListValues = ['P', 'S', 'H', 'pac', 'party']
     # IGNORING INVALID list URL PARAMETERS
-    if request.GET.get('list') and request.GET.get('list') in validListValues:
+    if request.GET.get('list') and request.GET.get('list') in validListUrlParamValues:
         top_category = request.GET.get('list')
         # IF A VALID list VALUE EXISTS, WE'LL LET IT OVERRIDE top_category
-
     
     cycles = utils.get_cycles(utils.current_cycle())
     cycle = int(request.GET.get('cycle', constants.DEFAULT_TIME_PERIOD))
