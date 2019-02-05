@@ -5,8 +5,21 @@ import datetime
 from data import constants
 
 
-def current_cycle():
-    year = datetime.datetime.now().year
+def current_cycle(delayed_start=False):
+    """
+    Calculate the current cycle from the calendar date,
+    except when `delayed_start` is True - in that case,
+    don't roll over to the next cycle
+    until April 15th of the next year.
+
+    Example: on 1/20/19, current_cycle should be 2018 because we don't have
+    2020 data yet. On 4/15/19 (April Quarterly deadline), roll over to 2020
+    """
+    if delayed_start:
+        date = datetime.date.today() + datetime.timedelta(-104)
+    else:
+        date = datetime.date.today()
+    year = date.year
     return year + year % 2
 
 

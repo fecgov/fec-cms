@@ -165,7 +165,12 @@ def get_candidate(candidate_id, cycle, election_full):
     # the cycle for itemized tables. Because these are only in 2-year chunks,
     # the cycle should never be beyond the one we're in.
     cycles = [cycle for cycle in candidate['cycles'] if cycle <= utils.current_cycle()]
-    max_cycle = cycle if cycle <= utils.current_cycle() else utils.current_cycle()
+    # New transactions will appear after the Q1 of a new election year - this delays the rollover to a new cycle by 104 days
+    max_cycle = (
+        cycle
+        if cycle <= utils.current_cycle(delayed_start=True)
+        else utils.current_cycle(delayed_start=True)
+    )
     show_full_election = election_full if cycle <= utils.current_cycle() else False
 
     # Annotate committees with most recent available cycle
@@ -190,7 +195,7 @@ def get_candidate(candidate_id, cycle, election_full):
     # Get aggregate totals for the financial summary
     # And pass through the data processing utils
     aggregate = api_caller.load_candidate_totals(
-        candidate['candidate_id'], cycle=max_cycle, election_full=election_full
+        candidate['candidate_id'], cycle=cycle, election_full=election_full
     )
     if aggregate:
         raising_summary = utils.process_raising_data(aggregate)
