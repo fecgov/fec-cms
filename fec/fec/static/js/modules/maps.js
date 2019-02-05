@@ -185,7 +185,17 @@ function stateTooltips(svg, path, results) {
 function moveTooltip(tooltip) {
   var x = d3.event.pageX - tooltip[0][0].offsetWidth / 2;
   var y = d3.event.pageY - tooltip[0][0].offsetHeight;
-  tooltip.style('left', x + 'px').style('top', y + 'px');
+
+  var bottomPointerHeight = '.8rem';
+
+  var contentHeight = $('#map-tooltip .tooltip__title').innerHeight();
+  contentHeight += $('#map-tooltip .tooltip__value').innerHeight();
+  contentHeight += 30; // (padding)
+
+  tooltip
+    .style('left', x + 'px')
+    .style('top', 'calc(' + y + 'px - ' + bottomPointerHeight + ')')
+    .style('height', contentHeight + 'px');
 }
 
 function highlightState($parent, state) {

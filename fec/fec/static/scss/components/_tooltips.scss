@@ -84,7 +84,7 @@
 
 // When the tooltip is above the content. Puts the arrow at the bottom center of the tooltip
 .tooltip--above {
-  width: u(12rem);
+  min-width: u(12rem);
   $bottom: u(1.5rem);
   left: u(-4rem);
   bottom: calc(100% + #{$bottom});
@@ -94,7 +94,7 @@
     bottom: u(-1rem);
     content: '';
     display: block;
-    left: u(4.2rem);
+    left: calc(50% - 1rem);
     position: absolute;
   }
 
@@ -103,7 +103,7 @@
     content: '';
     display: block;
     position: absolute;
-    left: u(4.4rem);
+    left: calc(50% - .8rem);
     bottom: u(-.7rem);
   }
 
@@ -180,28 +180,10 @@
 
 // When the tooltip is above the content. Puts the arrow at the bottom center of the tooltip
 .tooltip--above {
-  width: u(12rem);
+  min-width: u(12rem);
   $bottom: u(1.5rem);
   left: u(-4rem);
   bottom: calc(100% + #{$bottom});
-
-  &::before {
-    @include triangle(2rem, $primary, down);
-    bottom: u(-1rem);
-    content: '';
-    display: block;
-    left: u(4.2rem);
-    position: absolute;
-  }
-
-  &::after {
-    @include triangle(1.6rem, $inverse, down);
-    content: '';
-    display: block;
-    position: absolute;
-    left: u(4.4rem);
-    bottom: u(-.7rem);
-  }
 
   &.tooltip--left {
     width: u(30rem);
@@ -284,7 +266,7 @@
   }
 
   .tooltip__title {
-    line-height: u(4rem);
+    line-height: u(2rem);
     padding-left: u(1rem);
     float: left;
   }
