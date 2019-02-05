@@ -34,6 +34,8 @@ report_types = {
     'I': 'ie-only',
 }
 
+validListUrlParamValues = ['P', 'S', 'H', 'pac', 'party']
+# INITIALLY USED BY raising() AND spending() FOR VALIDATING URL PARAMETERS, THE list URL PARAM
 
 def to_date(committee, cycle):
     if committee['committee_type'] in ['H', 'S', 'P']:
@@ -163,7 +165,12 @@ def get_candidate(candidate_id, cycle, election_full):
     # the cycle for itemized tables. Because these are only in 2-year chunks,
     # the cycle should never be beyond the one we're in.
     cycles = [cycle for cycle in candidate['cycles'] if cycle <= utils.current_cycle()]
-    max_cycle = cycle if cycle <= utils.current_cycle() else utils.current_cycle()
+    # New transactions will appear after the Q1 of a new election year - this delays the rollover to a new cycle by 104 days
+    max_cycle = (
+        cycle
+        if cycle <= utils.current_cycle(delayed_start=True)
+        else utils.current_cycle(delayed_start=True)
+    )
     show_full_election = election_full if cycle <= utils.current_cycle() else False
 
     # Annotate committees with most recent available cycle
@@ -188,7 +195,7 @@ def get_candidate(candidate_id, cycle, election_full):
     # Get aggregate totals for the financial summary
     # And pass through the data processing utils
     aggregate = api_caller.load_candidate_totals(
-        candidate['candidate_id'], cycle=max_cycle, election_full=election_full
+        candidate['candidate_id'], cycle=cycle, election_full=election_full
     )
     if aggregate:
         raising_summary = utils.process_raising_data(aggregate)
@@ -500,11 +507,16 @@ def elections(request, office, cycle, state=None, district=None):
         },
     )
 
-
 def raising(request):
     top_category = request.GET.get('top_category', 'P')
+    
+    # IGNORING INVALID list URL PARAMETERS
+    if request.GET.get('list') and request.GET.get('list') in validListUrlParamValues:
+        top_category = request.GET.get('list')
+        # IF A VALID list VALUE EXISTS, WE'LL LET IT OVERRIDE top_category
+
     cycles = utils.get_cycles(utils.current_cycle())
-    cycle = request.GET.get('cycle', constants.DEFAULT_TIME_PERIOD)
+    cycle = int(request.GET.get('cycle', constants.DEFAULT_TIME_PERIOD))
 
     if top_category in ['pac']:
         top_raisers = api_caller.load_top_pacs('-receipts', cycle=cycle, per_page=10)
@@ -535,14 +547,21 @@ def raising(request):
             'cycle': cycle,
             'top_raisers': top_raisers['results'],
             'page_info': utils.page_info(top_raisers['pagination']),
+            'office': top_category
         },
     )
 
 
 def spending(request):
     top_category = request.GET.get('top_category', 'P')
+
+    # IGNORING INVALID list URL PARAMETERS
+    if request.GET.get('list') and request.GET.get('list') in validListUrlParamValues:
+        top_category = request.GET.get('list')
+        # IF A VALID list VALUE EXISTS, WE'LL LET IT OVERRIDE top_category
+    
     cycles = utils.get_cycles(utils.current_cycle())
-    cycle = request.GET.get('cycle', constants.DEFAULT_TIME_PERIOD)
+    cycle = int(request.GET.get('cycle', constants.DEFAULT_TIME_PERIOD))
 
     if top_category in ['pac']:
         top_spenders = api_caller.load_top_pacs(
@@ -575,6 +594,7 @@ def spending(request):
             'cycle': cycle,
             'top_spenders': top_spenders['results'],
             'page_info': utils.page_info(top_spenders['pagination']),
+            'office': top_category
         },
     )
 

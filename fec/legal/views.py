@@ -78,6 +78,16 @@ def adr_page(request, adr_no):
     })
 
 
+def admin_fine_page(request, admin_fine_no):
+    admin_fine = api_caller.load_legal_admin_fines(admin_fine_no)
+    if not admin_fine:
+       raise Http404()
+    return render(request, 'legal' + '-admin_fine.jinja', {
+       'admin_fine': admin_fine,
+       'parent': 'legal'
+    })
+
+
 def legal_search(request):
     query = request.GET.get('search', '')
     result_type = request.GET.get('search_type', 'all')
@@ -149,6 +159,24 @@ def legal_doc_search_adr(request):
         'query': query
     })
 
+def legal_doc_search_af(request):
+    results = {}
+    query = request.GET.get('search', '')
+    offset = request.GET.get('offset', 0)
+    case_no = request.GET.get('case_no', '')
+    af_name = request.GET.get('af_name', '')
+    af_election_cycles = request.GET.get('af_election_cycles', '')
+
+    results = api_caller.load_legal_search_results(query, 'admin_fines', offset=offset, case_no=case_no, af_name=af_name)
+
+    return render(request, 'legal-search-results-afs.jinja', {
+        'parent': 'legal',
+        'results': results,
+        'result_type': 'admin_fines',
+        'case_no': case_no,
+        'af_name': af_name,
+        'query': query
+    })
 
 def legal_doc_search_regulations(request):
     results = {}

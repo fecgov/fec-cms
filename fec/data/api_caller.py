@@ -69,7 +69,7 @@ def load_search_results(query, query_type=None):
 def load_legal_search_results(query, query_type='all', offset=0, limit=20, **kwargs):
     filters = dict((key, value) for key, value in kwargs.items() if value)
 
-    if query or query_type in ['advisory_opinions', 'murs', 'adrs']:
+    if query or query_type in ['advisory_opinions', 'murs', 'adrs', 'admin_fines']:
         filters['hits_returned'] = limit
         filters['type'] = query_type
         filters['from_hit'] = offset
@@ -95,6 +95,9 @@ def load_legal_search_results(query, query_type='all', offset=0, limit=20, **kwa
 
     if 'adrs' in results:
         results['adrs_returned'] = len(results['adrs'])
+
+    if 'admin_fines' in results:
+        results['admin_fines_returned'] = len(results['admin_fines'])
 
     return results
 
@@ -201,6 +204,23 @@ def load_legal_adr(adr_no):
             documents_by_type[doc['category']] = [doc]
     adr['documents_by_type'] = documents_by_type
     return adr
+
+
+def load_legal_admin_fines(admin_fine_no):
+    url = '/legal/docs/admin_fines/'
+    admin_fine = _call_api(url, parse.quote(admin_fine_no))
+    if not admin_fine:
+       raise Http404
+    admin_fine = admin_fine['docs'][0]
+    admin_fine['disposition_text'] = [d['action'] for d in admin_fine['commission_votes']]
+    documents_by_type = OrderedDict()
+    for doc in admin_fine['documents']:
+        if doc['category'] in documents_by_type:
+            documents_by_type[doc['category']].append(doc)
+        else:
+            documents_by_type[doc['category']] = [doc]
+    admin_fine['documents_by_type'] = documents_by_type
+    return admin_fine
 
 
 def collate_dispositions(dispositions):
