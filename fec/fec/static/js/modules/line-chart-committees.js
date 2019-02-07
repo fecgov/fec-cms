@@ -3,14 +3,21 @@
 /* global module, DEFAULT_TIME_PERIOD */
 var $ = require('jquery');
 var _ = require('underscore');
-var d3 = require('d3');
+var d3 = Object.assign({},
+  require('d3-array'), // d3.bisector, ticks
+  require('d3-axis'), // d3.axisBottom
+  require('d3-scale'), // d3.scaleTime
+  require('d3-selection'), // d3.select, d3.event
+  require('d3-shape'), // d3.line
+  require('d3-time-format') // d3.timeFormat
+);
 var numeral = require('numeral');
 var helpers = require('./helpers');
 
-var parseM = d3.time.format('%b');
-var parseMY = d3.time.format('%b %Y');
-var parseMDY = d3.time.format('%m/%d/%Y');
-var parsePlotPoints = d3.time.format('%Y-%m-01T%H:%M:%S.%L');
+var parseM = d3.timeFormat('%b');
+var parseMY = d3.timeFormat('%b %Y');
+var parseMDY = d3.timeFormat('%m/%d/%Y');
+var parsePlotPoints = d3.timeFormat('%Y-%m-01T%H:%M:%S.%L');
 
 var bisectDate = d3.bisector(function(d) {
   return d.date;
@@ -150,13 +157,13 @@ LineChartCommittees.prototype.getMaxAmount = function(entityTotals) {
 
 LineChartCommittees.prototype.setXScale = function() {
   // Set the x-scale to be from the first of the first year to the last day of the cycle
-  var x = d3.time
-    .scale()
+  var x = d3
+    .scaleTime()
     .domain([
       new Date('01/01/' + String(this.cycle - 1)),
       new Date('12/31/' + String(this.cycle))
     ])
-    .nice(d3.time.month)
+    .nice(d3.timeMonth)
     .range([0, this.width]);
   this.x = x;
   return x;
@@ -166,8 +173,8 @@ LineChartCommittees.prototype.setYScale = function(amount) {
   // Set the y-axis from 0 to the MAX_RANGE ($4 billion)
   amount = amount || MAX_RANGE;
 
-  var y = d3.scale
-    .linear()
+  var y = d3
+    .scaleLinear()
     .domain([0, Math.ceil(amount / 100000000) * 100000000])
     .range([this.height, 0]);
   return y;
@@ -194,16 +201,12 @@ LineChartCommittees.prototype.drawChart = function() {
   var wrap = this.wrapLabel;
   var x = this.setXScale();
   var y = this.setYScale(maxY);
-  var xAxis = d3.svg
-    .axis()
-    .scale(x)
-    .ticks(d3.time.month)
-    .tickFormat(this.xAxisFormatter())
-    .orient('bottom');
-  var yAxis = d3.svg
-    .axis()
-    .scale(y)
-    .orient('right')
+  var xAxis = d3
+    .axisBottom(x)
+    .ticks(d3.timeMonth)
+    .tickFormat(this.xAxisFormatter());
+  var yAxis = d3
+    .axisRight(y)
     .tickSize(this.width)
     .tickFormat(function(d) {
       return numeral(d).format('($0.0a)');
@@ -232,7 +235,7 @@ LineChartCommittees.prototype.drawChart = function() {
     .attr('dy', '.71em')
     .style('text-anchor', 'end');
 
-  var lineBuilder = d3.svg
+  var lineBuilder = d3
     .line()
     .x(function(d) {
       var myDate = new Date(parsePlotPoints(d.date));
@@ -314,9 +317,13 @@ LineChartCommittees.prototype.xAxisFormatter = function() {
 };
 
 LineChartCommittees.prototype.handleMouseMove = function() {
-  var svg = this.element.select('svg')[0][0];
-  // console.log(d3.mouse(svg)[0])
-  var x0 = this.x.invert(d3.mouse(svg)[0] - 20);
+  // REQUIRED TO USE d3.event WITH BUNDLERS:
+  d3.getEvent = () => require('d3-selection').event;
+
+  // NEED TO FIND A DOM ELEMENT TO USE WITH d3.clientPoint()
+  var domElement = this.element.select('svg')._groups[0][0];
+
+  var x0 = this.x.invert(d3.clientPoint(domElement, d3.getEvent())[0] - 20);
   var i = bisectDate(this.chartData, x0, 1);
   var d = this.chartData[i - 1];
   this.moveCursor(d);

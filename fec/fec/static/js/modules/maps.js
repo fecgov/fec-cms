@@ -1,8 +1,12 @@
 'use strict';
 
-var d3 = require('d3');
 var $ = require('jquery');
 var _ = require('underscore');
+var d3 = Object.assign({},
+  require('d3-geo'), // d3.geo, etc
+  require('d3-scale'), // d3.scaleTime
+  require('d3-selection') // d3.select, d3.event
+);
 var chroma = require('chroma-js');
 var topojson = require('topojson');
 
@@ -55,7 +59,7 @@ function stateMap($elm, data, width, height, min, max, addLegend, addTooltips) {
     .albersUsa()
     .scale(450)
     .translate([220, 150]);
-  var path = d3.geo.path().projection(projection);
+  var path = d3.geoPath().projection(projection);
 
   var results = _.reduce(
     data.results,
@@ -77,7 +81,7 @@ function stateMap($elm, data, width, height, min, max, addLegend, addTooltips) {
   min = min || _.min(totals);
   max = max || _.max(totals);
   var scale = chroma.scale(colorScale).domain([min, max]);
-  var quantize = d3.scale.linear().domain([min, max]);
+  var quantize = d3.scaleLinear().domain([min, max]);
   svg
     .append('g')
     .selectAll('path')
@@ -268,7 +272,7 @@ function updateColorScale($container, cached) {
   var min = mapMin(cached);
   var max = mapMax(cached);
   var scale = chroma.scale(colorScale).domain([min, max]);
-  var quantize = d3.scale.linear().domain([min, max]);
+  var quantize = d3.scaleLinear().domain([min, max]);
   $container.find('.state-map').each(function(_, elm) {
     var $elm = $(elm);
     var results = cached[$elm.find('select').val()];
