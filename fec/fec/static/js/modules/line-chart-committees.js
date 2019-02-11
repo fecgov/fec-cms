@@ -3,7 +3,8 @@
 /* global module, DEFAULT_TIME_PERIOD */
 var $ = require('jquery');
 var _ = require('underscore');
-var d3 = Object.assign({},
+var d3 = Object.assign(
+  {},
   require('d3-array'), // d3.bisector, ticks
   require('d3-axis'), // d3.axisBottom
   require('d3-scale'), // d3.scaleTime

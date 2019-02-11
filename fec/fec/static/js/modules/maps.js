@@ -2,7 +2,8 @@
 
 var $ = require('jquery');
 var _ = require('underscore');
-var d3 = Object.assign({},
+var d3 = Object.assign(
+  {},
   require('d3-geo'), // d3.geo, etc
   require('d3-scale'), // d3.scaleTime
   require('d3-selection') // d3.select, d3.event
