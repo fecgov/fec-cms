@@ -182,7 +182,6 @@ LineChart.prototype.getMaxAmount = function(entityTotals) {
  * @returns {Number} x
  */
 LineChart.prototype.setXScale = function() {
-  // 
   var x = d3
     .scaleTime()
     .domain([
