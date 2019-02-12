@@ -1,6 +1,7 @@
 'use strict';
 
 /* global module, DEFAULT_TIME_PERIOD */
+
 var $ = require('jquery');
 var _ = require('underscore');
 var d3 = Object.assign(
@@ -76,6 +77,7 @@ function LineChartCommittees(selector, snapshot, dataType) {
 LineChartCommittees.prototype.fetch = function(cycle) {
   var entityTotalsURL = helpers.buildUrl(['totals', 'by_entity'], {
     cycle: cycle,
+    // jshint camelcase: false
     per_page: '100'
   });
 
@@ -108,8 +110,11 @@ LineChartCommittees.prototype.groupDataByType = function(results) {
     if (dataType === 'raised') {
       datum = {
         date: date,
+        // jshint camelcase: false
         candidate: item.cumulative_candidate_receipts,
+        // jshint camelcase: false
         pac: item.cumulative_pac_receipts,
+        // jshint camelcase: false
         party: item.cumulative_party_receipts
       };
     } else {
