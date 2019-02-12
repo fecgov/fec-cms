@@ -192,8 +192,8 @@
       typeof options.extra_liners == 'object' && options.extra_liners
         ? options.extra_liners.concat()
         : typeof options.extra_liners === 'string'
-          ? options.extra_liners.split(',')
-          : 'head,body,/html'.split(',');
+        ? options.extra_liners.split(',')
+        : 'head,body,/html'.split(',');
     eol = options.eol ? options.eol : '\n';
 
     if (options.indent_with_tabs) {

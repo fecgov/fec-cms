@@ -9,7 +9,7 @@
     'clearTimeout': true,
     'ga': true,
     'grecaptcha': true,
-    'navigator': true
+    'navigator': true,
   },
   "extends": [
     "plugin:react/recommended",
@@ -20,6 +20,7 @@
     'no-useless-escape': [0],
     'prettier/prettier': 'error',
   },
+  'parser': 'babel-eslint',
   'parserOptions': {
       'ecmaVersion': 6,
       'sourceType': 'module',

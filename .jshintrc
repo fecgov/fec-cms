@@ -5,6 +5,7 @@
   "camelcase": true,
   "curly": true,
   "expr": true,
+  "esversion": 6,
   "forin": true,
   "immed": true,
   "latedef": "nofunc",
