@@ -100,7 +100,7 @@
 //   });
 
 //   it('locates dom elements', function() {
-//     // expect($(this.lineChart.element[0]).is('#fixtures .js-chart')).to.be.true; // TODO: ROBERT, UPDATE THIS/THESE FOR D3 v5
+//     // expect($(this.lineChart.element[0]).is('#fixtures .js-chart')).to.be.true;
 //     // expect(this.lineChart.$snapshot.is('#fixtures .js-snapshot')).to.be.true;
 //     // expect(this.lineChart.$prev.is('#fixtures .js-snapshot-prev')).to.be.true;
 //     // expect(this.lineChart.$next.is('#fixtures .js-snapshot-next')).to.be.true;

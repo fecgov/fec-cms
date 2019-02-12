@@ -3,20 +3,20 @@
 /* global module, DEFAULT_TIME_PERIOD */
 
 /**
- * @fileOverview Write what's going on in the file here.
+ * @fileOverview Used to write the line charts into the page(s)
  *
- * @author       fec.gov
+ * @author      fec.gov
  *
- * @requires      jquery
- * @requires      underscore
- * @requires      d3-array
- * @requires      d3-axis
- * @requires      d3-scale
- * @requires      d3-selection
- * @requires      d3-shape
- * @requires      d3-time-format
- * @requires      numeral
- * @requires      ./helpers
+ * @requires    jquery
+ * @requires    underscore
+ * @requires    d3-array
+ * @requires    d3-axis
+ * @requires    d3-scale
+ * @requires    d3-selection
+ * @requires    d3-shape
+ * @requires    d3-time-format
+ * @requires    numeral
+ * @requires    ./helpers
  */
 
 var $ = require('jquery');
@@ -228,7 +228,7 @@ LineChart.prototype.appendSVG = function() {
 };
 
 /**
- * @todo SOMEWHERE IN HERE WE SEEM TO HAVE LOST THE BLACK BOTTOM BORDER/X AXIS LINE
+ * @todo Restore the black bottom border / x axis
  * @ desc
  */
 LineChart.prototype.drawChart = function() {
