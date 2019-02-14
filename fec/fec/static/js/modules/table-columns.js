@@ -14,7 +14,10 @@ var candidateInformationColumns = [
     render: function(data, type, row) {
       return columnHelpers.buildEntityLink(
         data,
-        helpers.buildAppUrl(['candidate', row.candidate_id]),
+        helpers.buildAppUrl(['candidate', row.candidate_id], {
+          cycle: context.election.cycle,
+          election_full: true
+        }),
         'candidate',
         { isIncumbent: row.incumbent_challenge_full === 'Incumbent' }
       );
@@ -75,7 +78,10 @@ function createElectionColumns(context) {
       render: function(data, type, row) {
         return columnHelpers.buildEntityLink(
           data,
-          helpers.buildAppUrl(['candidate', row.candidate_id]),
+          helpers.buildAppUrl(['candidate', row.candidate_id], {
+            cycle: context.election.cycle,
+            election_full: true
+          }),
           'candidate',
           { isIncumbent: row.incumbent_challenge_full === 'Incumbent' }
         );
