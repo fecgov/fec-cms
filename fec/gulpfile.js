@@ -21,7 +21,7 @@ gulp.task('clear-css-dir', function () {
         .pipe(clean());
 });
 
-gulp.task('build-sass', ['clear-css-dir'], function() {
+gulp.task('build-sass', gulp.series('clear-css-dir', function() {
   return gulp.src('./fec/static/scss/*.scss')
     // compiles sass
     .pipe(sass().on('error', sass.logError))
@@ -36,7 +36,7 @@ gulp.task('build-sass', ['clear-css-dir'], function() {
     .pipe(rev.manifest('./dist/fec/static/css/rev-manifest-css.json'))
     .pipe(gulp.dest('.'));
     //.pipe(gulpif(!production, sourcemaps.write()))
-});
+}));
 
 // clear icons output folder to clean old icons
 gulp.task('clean-output-icons', function () {
@@ -44,7 +44,7 @@ gulp.task('clean-output-icons', function () {
         .pipe(clean());
 });
 
-gulp.task('minify-icons', ['clean-output-icons'], function() {
+gulp.task('minify-icons', gulp.series('clean-output-icons', function() {
   return gulp.src('./fec/static/icons/input/*.svg')
     .pipe(svgmin({
       plugins: [
@@ -60,7 +60,7 @@ gulp.task('minify-icons', ['clean-output-icons'], function() {
       ]
     }))
     .pipe(gulp.dest('./fec/static/icons/output', {overwrite: true}));
-});
+}));
 
 gulp.task('consolidate-icons', function() {
   function getSVGs() {
