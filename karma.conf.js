@@ -24,7 +24,7 @@ module.exports = function(config) {
   }
 
   config.set({
-    frameworks: ['browserify', 'phantomjs-shim', 'mocha', 'chai-sinon'],
+    frameworks: ['browserify', 'mocha', 'chai-sinon'],
 
     files: [
       'node_modules/babel-polyfill/dist/polyfill.js',

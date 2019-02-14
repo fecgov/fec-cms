@@ -15,7 +15,7 @@
     "lint": "eslint --quiet ./fec/fec/static/js/**/*.js",
     "format-lint": "npm run format && npm run lint",
     "test": "karma start",
-    "test-single": "npm run lint && karma start --single-run --browsers PhantomJS",
+    "test-single": "npm run lint && karma start --single-run --browsers",
     "watch": "nswatch"
   },
   "dependencies": {
@@ -99,14 +99,11 @@
     "karma-coverage": "^0.5.3",
     "karma-coverage-istanbul-reporter": "^2.0.1",
     "karma-mocha": "^0.2.1",
-    "karma-phantomjs-launcher": "^0.2.3",
-    "karma-phantomjs-shim": "^1.2.0",
     "karma-webpack": "^3.0.0",
     "leaflet": "^1.2.0",
     "mocha": "^2.3.4",
     "mockdate": "^2.0.2",
     "nswatch": "0.2.0",
-    "phantomjs": "^2.1.7",
     "prettier": "^1.14.2",
     "scrollmonitor": "^1.2.3",
     "sinon": "^1.17.2",
