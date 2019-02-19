@@ -14,10 +14,7 @@ module.exports = function(config) {
   if (process.argv.indexOf('--debug') === -1) {
     browserify.transform.push(
       istanbul({
-        ignore: [
-          '**/tests/**/*.js',
-          '**/*.hbs'
-        ]
+        ignore: ['**/tests/**/*.js', '**/*.hbs']
       })
     );
     reporters.push('coverage');
@@ -31,10 +28,7 @@ module.exports = function(config) {
       'fec/fec/tests/js/**/*.js'
     ],
 
-    exclude: [
-      '**/hallo-edit-html.js',
-      'fec/fec/static/js/init.js'
-    ],
+    exclude: ['**/hallo-edit-html.js', 'fec/fec/static/js/init.js'],
 
     preprocessors: {
       'fec/fec/tests/js/*.js': ['browserify'],
@@ -46,9 +40,9 @@ module.exports = function(config) {
     coverageReporter: {
       subdir: '.',
       reporters: [
-        {type: 'html'},
-        {type: 'text'},
-        {type: 'json', file: 'coverage.json'}
+        { type: 'html' },
+        { type: 'text' },
+        { type: 'json', file: 'coverage.json' }
       ]
     },
 
@@ -69,18 +63,22 @@ module.exports = function(config) {
             exclude: /node_modules/,
             loader: 'istanbul-instrumenter-loader',
             query: {
-                esModules: true
+              esModules: true
             }
           }
         ]
       }
     },
+
     reporters: reporters,
+
     coverageIstanbulReporter: {
-      reports: [ 'text-summary' ],
+      reports: ['text-summary'],
       fixWebpackSourcePaths: true
     },
+
     browsers: ['Chrome'],
+
     port: 9876
   });
 };
