@@ -15,7 +15,7 @@
     "lint": "eslint --quiet ./fec/fec/static/js/**/*.js",
     "format-lint": "npm run format && npm run lint",
     "test": "karma start",
-    "test-single": "npm run lint && karma start --single-run --browsers",
+    "test-single": "npm run lint",
     "watch": "nswatch"
   },
   "dependencies": {
