@@ -74,6 +74,7 @@ TopEntities.prototype.init = function() {
 
 TopEntities.prototype.handleCycleChange = function(e) {
   e.preventDefault();
+  console.log('cycle-change')
   this.cycle = e.target.value;
   if (this.category === 'candidates') {
     this.currentQuery = _.extend({}, this.baseQuery, {
@@ -94,6 +95,7 @@ TopEntities.prototype.handleCycleChange = function(e) {
 
 TopEntities.prototype.handleCategoryChange = function(e) {
   e.preventDefault();
+  console.log('cat-change')
   var category = e.target.value;
   if (candidateCategories.indexOf(category) > -1) {
     this.basePath = ['candidates', 'totals'];
@@ -167,7 +169,8 @@ TopEntities.prototype.formatData = function(result, rank) {
       value: result[this.type],
       rank: rank,
       party: result.party,
-      party_code: '[' + result.party.charAt('0').toUpperCase() + ']',
+      party_code: (result.party===null) ? '' :'[' + result.party.charAt('0').toUpperCase() + ']',
+      //party_code: '[' + result.party.charAt('0').toUpperCase() + ']';
       url: helpers.buildAppUrl(['candidate', result.candidate_id], {
         cycle: this.cycle,
         election_full: false

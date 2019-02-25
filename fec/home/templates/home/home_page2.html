@@ -76,6 +76,9 @@
       </ul>
     </div>
   </section>
+  <section>
+    <iframe style="width:100%; height:800px" scrolling="no" src="/data/raising-bythenumbers/?embed=yes"></iframe>
+  </section>
   <section class="slab">
     <div class="container">
       <h1>Commissioners</h1>
@@ -144,9 +147,17 @@
       </div>
     </div>
   </section>
+  <section id="load">
 
+ </section>
 {% endblock %}
 
 {% block extra_js %}
+  <script>
+    $(function(){
+     $('#load').load("/data/raising-bythenumbers/?embed=yes")
+
+    })
+  </script>
   <script type="text/javascript" src="{% asset_for_js 'home.js' %}"></script>
 {% endblock %}

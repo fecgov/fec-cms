@@ -1,8 +1,5 @@
 {% extends "base.html" %}
-{% load wagtailcore_tags %}
-{% load staticfiles %}
-{% load home_page %}
-{% load filters %}
+
 {% block body_class %}template-{{ self.get_verbose_name | slugify }}{% endblock %}
 
 {% block content %}
@@ -15,7 +12,7 @@
     </div>
   </section>
 
-  {% home_page_banner_announcement %}
+
 
   <section class="slab">
     <div class="container">
@@ -75,6 +72,9 @@
         </li>
       </ul>
     </div>
+  </section>
+  <section>
+    {% include "raising-bythenumbers-home.jinja" %}
   </section>
   <section class="slab">
     <div class="container">

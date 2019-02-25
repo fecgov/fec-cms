@@ -509,7 +509,7 @@ def elections(request, office, cycle, state=None, district=None):
 
 def raising(request):
     top_category = request.GET.get('top_category', 'P')
-    
+
     # IGNORING INVALID list URL PARAMETERS
     if request.GET.get('list') and request.GET.get('list') in validListUrlParamValues:
         top_category = request.GET.get('list')
@@ -534,9 +534,13 @@ def raising(request):
 
     page_info = top_raisers['pagination']
 
-    return render(
+    #embed = request.GET.get('embed')
+    embed = request.GET.get('embed', '').replace('/', '')
+
+    if request.GET.get('embed'):
+        return render(
         request,
-        'raising-bythenumbers.jinja',
+        'raising-bythenumbers-homeA.jinja',
         {
             'parent': 'data',
             'title': 'Raising: by the numbers',
@@ -550,6 +554,23 @@ def raising(request):
             'office': top_category
         },
     )
+    else:
+        return render(
+            request,
+            'raising-bythenumbers.jinja',
+            {
+                'parent': 'data',
+                'title': 'Raising: by the numbers',
+                'top_category': top_category,
+                'coverage_start_date': datetime.date(cycle - 1, 1, 1),
+                'coverage_end_date': coverage_end_date,
+                'cycles': cycles,
+                'cycle': cycle,
+                'top_raisers': top_raisers['results'],
+                'page_info': utils.page_info(top_raisers['pagination']),
+                'office': top_category
+            },
+        )
 
 
 def spending(request):
@@ -559,7 +580,7 @@ def spending(request):
     if request.GET.get('list') and request.GET.get('list') in validListUrlParamValues:
         top_category = request.GET.get('list')
         # IF A VALID list VALUE EXISTS, WE'LL LET IT OVERRIDE top_category
-    
+
     cycles = utils.get_cycles(utils.current_cycle())
     cycle = int(request.GET.get('cycle', constants.DEFAULT_TIME_PERIOD))
 

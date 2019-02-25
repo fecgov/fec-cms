@@ -29,6 +29,7 @@ urlpatterns = [
     url(r'^meetings/$', home_views.index_meetings, name="meetings_page"),
     url(r'^search/$', search_views.search, name='search'),
     url(r'^updates/$', home_views.updates),
+    url(r'^home/$', home_views.home2, name="home2"),
     url(r'', include('data.urls')),  # URLs for /data
     url(r'', include('legal.urls')),  # URLs for legal pages
     url(r'', include(wagtail_urls)),

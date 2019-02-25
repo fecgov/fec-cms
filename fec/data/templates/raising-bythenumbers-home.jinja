@@ -1,0 +1,56 @@
+{% extends "layouts/embed.jinja" %}
+{% import "macros/bythenumbers.jinja" as breakdowns %}
+{% import 'macros/cycle-select.jinja' as select %}
+
+{% block css %}
+<link rel="stylesheet" type="text/css" href="{{ asset_for_css('data-landing.css') }}" />
+{% endblock %}
+
+{% block page_title %}
+  <h1 class="icon-heading--raising-circle">TEST{{ title }}</h1>
+{% endblock %}
+
+
+{% block sections %}
+<form action="" method="get" class="breakdown-cycle">
+  {{ select.cycle_select(cycles, cycle, location='form', range=True, label='Two-Year Period') }}
+  <noscript>
+    <button type="submit" class="button button--cta">Submit</button>
+  </noscript>
+</form>
+<section id="raising-breakdowns">
+  <section id="top-raisers" class="content__section">
+    <h2>Who's raising the most</h2>
+    {{ breakdowns.top_entities(top_raisers, coverage_start_date, coverage_end_date, cycle, 'raised', top_category, page_info ) }}
+  </section>
+</section>
+{% endblock %}
+
+{% block modals %}
+<div class="js-modal modal" id="raised-modal" aria-hidden="true">
+  <div tabindex="-1" class="modal__overlay" data-a11y-dialog-hide></div>
+  <div role="dialog" class="modal__content" aria-labelledby="raised-modal-title">
+    <div role="document">
+      <button type="button" class="modal__close button--close--primary" data-a11y-dialog-hide title="Close this dialog window"></button>
+      <h2 id="raised-modal-title">Methodology</h2>
+      <p>Committees are displayed in descending order of total <span class="term" data-term="receipt">receipts</span>. Total receipts are the sum of all contributions and other receipts received by a committee.</p>
+      <p>This chart includes data up to and including the most recent report filed by each committee. It's displayed in two-year cycles.</p>
+      <p>The form and line used to calculate total receipt sums are:</p>
+      <ul class="list--bulleted">
+        <li>Presidential committees: Form 3P, Line 22, Column A</li>
+        <li>Senate and House committees: Form 3, Line 16, Column A</li>
+        <li>PACs and party committees: Form 3X, Line 20, Column A</li>
+      </ul>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+  <script type="text/javascript">
+  var context = {
+    type: 'receipts'
+  }
+  </script>
+  <script src="{{ asset_for_js('bythenumbers.js') }}"></script>
+{% endblock %}
