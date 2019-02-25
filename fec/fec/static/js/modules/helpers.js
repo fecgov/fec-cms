@@ -330,14 +330,14 @@ function getTimePeriod(electionYear, cycle, electionFull, office) {
 }
 
 /*
-* zeroPad: used to add decimals to numbers in order to right-align them
-* It does so by getting the width of a container element, measuring the length
-* of an item, and then appending decimals until the item is as long as the container
-*
-* @param container: a selector for the item to use as the maxWidth
-* @param item: a selector for the items whose width we will equalize
-* @param appendee (optional): what to append the decimal to
-*/
+ * zeroPad: used to add decimals to numbers in order to right-align them
+ * It does so by getting the width of a container element, measuring the length
+ * of an item, and then appending decimals until the item is as long as the container
+ *
+ * @param container: a selector for the item to use as the maxWidth
+ * @param item: a selector for the items whose width we will equalize
+ * @param appendee (optional): what to append the decimal to
+ */
 
 function zeroPad(container, item, appendee) {
   // Subtract 2 so if it's close we don't go over
