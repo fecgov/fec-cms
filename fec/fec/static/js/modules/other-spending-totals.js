@@ -8,9 +8,9 @@ var _ = require('underscore');
 var helpers = require('../modules/helpers');
 
 var pathMap = {
-  independentExpenditures: '/schedules/schedule_e/by_candidate/',
-  communicationCosts: '/communication_costs/by_candidate/',
-  electioneering: '/electioneering/by_candidate/'
+  independentExpenditures: ['schedules', 'schedule_e', 'by_candidate'],
+  communicationCosts: ['communication_costs', 'by_candidate'],
+  electioneering: ['electioneering', 'by_candidate']
 };
 
 function OtherSpendingTotals(type) {
