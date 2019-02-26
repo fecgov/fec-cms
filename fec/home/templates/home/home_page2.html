@@ -147,6 +147,24 @@
       </div>
     </div>
   </section>
+<section>
+      <div id="data-type-toggle" class="filters__inner data-type">
+
+    <fieldset class="filter toggles js-filter js-table-switcher" data-filter="toggle" data-filter-ignore-count="true">
+    <legend class="label t-inline-block">Data type</legend>
+    <div class="row">
+      <label for="switcher-processed" class="toggle">
+        <input type="radio" class="chart_toggle" value="raising" id="switcher-processed" checked="" name="data_type" data-prefix="Data type:" data-tag-value="processed" aria-controls="processed-message" tabindex="0">
+        <span class="button--alt">Raised</span>
+      </label>
+      <label for="switcher-efilings" class="toggle">
+        <input type="radio" class="chart_toggle" value="spending" id="switcher-efilings" name="data_type" data-prefix="Data type:" data-tag-value="raw" aria-controls="efiling-message" tabindex="0">
+        <span class="button--alt">Spent</span>
+      </label>
+    </div>
+
+    </fieldset>
+  </div>
   <section id="load">
 
  </section>
@@ -155,8 +173,12 @@
 {% block extra_js %}
   <script>
     $(function(){
-     $('#load').load("/data/raising-bythenumbers/?embed=yes")
-
+      $('#load').load("/data/raising-bythenumbers/?embed=yes")
+      $('.js-table-switcher').on( 'change', '.chart_toggle',function(){
+      var type = $(this).val()
+      console.log(type)
+     $('#load').load("/data/"+type+"-bythenumbers/?embed=yes")
+      })
     })
   </script>
   <script type="text/javascript" src="{% asset_for_js 'home.js' %}"></script>

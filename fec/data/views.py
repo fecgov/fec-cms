@@ -602,9 +602,14 @@ def spending(request):
     else:
         coverage_end_date = datetime.date(cycle, 12, 31)
 
-    return render(
+    page_info = top_spenders['pagination']
+
+    embed = request.GET.get('embed', '').replace('/', '')
+
+    if request.GET.get('embed'):
+        return render(
         request,
-        'spending-bythenumbers.jinja',
+        'spending-bythenumbers-homeA.jinja',
         {
             'parent': 'data',
             'title': 'Spending: by the numbers',
@@ -618,6 +623,23 @@ def spending(request):
             'office': top_category
         },
     )
+    else:
+        return render(
+            request,
+            'spending-bythenumbers.jinja',
+            {
+                'parent': 'data',
+                'title': 'Spending: by the numbers',
+                'top_category': top_category,
+                'coverage_start_date': datetime.date(cycle - 1, 1, 1),
+                'coverage_end_date': coverage_end_date,
+                'cycles': cycles,
+                'cycle': cycle,
+                'top_spenders': top_spenders['results'],
+                'page_info': utils.page_info(top_spenders['pagination']),
+                'office': top_category
+            },
+        )
 
 
 def feedback(request):

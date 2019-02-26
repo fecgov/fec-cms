@@ -54,6 +54,8 @@
         <a href="/data/{{ route }}/{{ datum[id_field] }}/?cycle={{ cycle }}&election_full=false" title="{{ datum[name_field] }}">{{ datum[name_field] }}</a>
         {% if datum.party %}
           [{{ datum.party | truncate(1, end='') | upper }}]
+        {% else %}
+          [UNK]
         {% endif %}
       </div>
       <div class="simple-table__cell t-right-aligned">{{ datum[value_field] | currency }}</div>
