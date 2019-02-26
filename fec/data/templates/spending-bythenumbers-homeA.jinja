@@ -1,0 +1,70 @@
+{% extends "layouts/embed.jinja" %}
+{% import "macros/bythenumbers-embed-macro.jinja" as breakdowns %}
+{% import 'macros/cycle-select.jinja' as select %}
+{% import 'macros/categories.jinja' as category_select %}
+
+{% block css %}
+<link rel="stylesheet" type="text/css" href="{{ asset_for_css('data-landing.css') }}" />
+{% endblock %}
+
+{% block page_title %}
+  <h1 class="icon-heading--spending-circle">{{ title }}</h1>
+{% endblock %}
+
+
+{% block sections %}
+<div class="grid grid--2-wide grid--flex">
+  <div class="grid__item">
+<section id="spending-breakdown">
+  <section id="top-spenders" class="content__section">
+    <h2>Who's spending the most</h2>
+    {{ breakdowns.top_entities(top_spenders, coverage_start_date, coverage_end_date, cycle, 'spent', top_category, page_info ) }}
+  </section>
+</section>
+</div>
+<div class="grid__item example--primary">
+<form action="" method="get">
+{{ category_select.categories(categories, category, action='spent', location='form') }}
+<noscript>
+        <button type="submit" class="button button--cta">Submit</button>
+</noscript>
+</form>
+<form action="" method="get" class="breakdown-cycle">
+  {{ select.cycle_select(cycles, cycle, location='form', range=True, label='Two-Year Period') }}
+  <noscript>
+    <button type="submit" class="button button--cta">Submit</button>
+  </noscript>
+</form>
+
+</div>
+</div>
+{% endblock %}
+
+{% block modals %}
+<div class="js-modal modal" id="spent-modal" aria-hidden="true">
+  <div tabindex="-1" class="modal__overlay" data-a11y-dialog-hide></div>
+  <div role="dialog" class="modal__content" aria-labelledby="spent-modal-title">
+    <div role="document">
+      <button type="button" class="modal__close button--close--primary" data-a11y-dialog-hide title="Close this dialog window"></button>
+      <h2 id="spent-modal-title">Methodology</h2>
+      <p>Committees are displayed in descending order of total <span class="term" data-term="disbursement">disbursements</span>. Total disbursements are the sum of all purchases and payments made by a committee.</p>
+      <p>This chart includes data up to and including the most recent report filed by each committee. It's displayed in two-year cycles.</p>
+      <p>The form and line used to calculate total disbursement sums are:</p>
+      <ul class="list--bulleted">
+        <li>Presidential committees: Form 3P, Line 30, Column A</li>
+        <li>Senate and House committees: Form 3, Line 22, Column A</li>
+        <li>PACs and party committees: Form 3X, Line 31, Column A</li>
+      </ul>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+  <script type="text/javascript">
+  var context = {
+    type: 'disbursements'
+  }
+  </script>
+  <script src="{{ asset_for_js('bythenumbers.js') }}"></script>
+{% endblock %}
