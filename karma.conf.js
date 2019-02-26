@@ -1,7 +1,9 @@
 /* global process */
 
-var istanbul = require('browserify-istanbul');
-var path = require('path');
+const istanbul = require('browserify-istanbul');
+const path = require('path');
+const puppeteer = require('puppeteer');
+process.env.CHROME_BIN = puppeteer.executablePath();
 
 module.exports = function(config) {
   var browserify = {
@@ -77,8 +79,14 @@ module.exports = function(config) {
       fixWebpackSourcePaths: true
     },
 
-    browsers: ['Chrome'],
+    browsers: ['ChromeHeadless'],
 
-    port: 9876
+    port: 9876,
+
+    autoWatch: false,
+
+    colors: true,
+
+    logLevel: config.LOG_INFO
   });
 };
