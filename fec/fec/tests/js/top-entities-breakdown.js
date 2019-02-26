@@ -241,7 +241,7 @@ describe('Top entities breakdown', function() {
             value: 2000,
             rank: 1,
             party: 'dem',
-            party_code: '[D]',
+            party_code: '[DEM]',
             url: '//candidate/1234/?cycle=2016&election_full=false'
           });
         });

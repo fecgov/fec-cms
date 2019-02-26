@@ -53,9 +53,9 @@
       <div role="gridcell" class="simple-table__cell">{{ loop.index }}.
         <a href="/data/{{ route }}/{{ datum[id_field] }}/?cycle={{ cycle }}&election_full=false" title="{{ datum[name_field] }}">{{ datum[name_field] }}</a>
         {% if datum.party %}
-          [{{ datum.party | upper }}]
+           [{{ datum.party | upper }}]
         {% else %}
-           [UNK]
+          [UNK]
         {% endif %}
       </div>
       <div class="simple-table__cell t-right-aligned">{{ datum[value_field] | currency }}</div>
