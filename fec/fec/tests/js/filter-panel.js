@@ -14,9 +14,19 @@ const FilterSet = require('../../static/js/modules/filters/filter-set')
   .FilterSet;
 const helpers = require('../../static/js/modules/helpers');
 
+// let loopCount = 0; // TESTING
+// let loopToLog = 1; // TESTING
+
 function expectOpen(panel) {
-  expect(panel.isOpen).to.be.true; // TODO: THIS IS FAILING TESTS
+  // if (loopCount == loopToLog) console.log('expectOpen() panel: '); // TESTING
+  // if (loopCount == loopToLog) console.log(panel); // TESTING
+  // if (loopCount == loopToLog) console.log('panel.$body:'); // TESTING
+  // if (loopCount == loopToLog) console.log(panel.$body); // TESTING
+  // if (loopCount == loopToLog) console.log('expectOpen() 1: ' + panel.isOpen); // TESTING
+  expect(panel.isOpen).to.be.true;
+  // if (loopCount == loopToLog) console.log('expectOpen() 2: ' + panel.$body.hasClass('is-open')); // TESTING
   expect(panel.$body.hasClass('is-open')).to.be.true;
+  // if (loopCount == loopToLog) console.log('expectOpen() 3' + $('body').hasClass('is-showing-filters')); // TESTING
   expect($('body').hasClass('is-showing-filters')).to.be.true;
 }
 
@@ -77,18 +87,34 @@ describe('filter panel', function() {
   });
 
   describe('interaction with filterset', function() {
+    // console.log('loopCount, loopToLog: ' + loopCount + ', ' + loopToLog); // TESTING
+    // if (loopCount == loopToLog) console.log('INTERACTION WITH FILTERSET'); // TESTING
+    // if (loopCount == loopToLog) console.log('beforeEach()'); // TESTING
     beforeEach(function() {
+      // if (loopCount == loopToLog) console.log('stub: '); // TESTING
       sinon.stub(FilterSet.prototype, 'serialize').returns({ name: 'jed' });
+      // let trash = sinon.stub(FilterSet.prototype, 'serialize').returns({ name: 'jed' }); // TESTING
+      // if (loopCount == loopToLog) console.log(trash); // TESTING
+      // if (loopCount == loopToLog) console.log('/stub'); // TESTING
     });
 
+    // if (loopCount == loopToLog) console.log('afterEach()'); // TESTING
     afterEach(function() {
       FilterSet.prototype.serialize.restore();
     });
 
+    // TODO: THIS IS FAILING TESTS:
+    // if (loopCount == loopToLog) console.log('it'); // TESTING
     it('should start off open when contained filterset has values', function() {
+      // if (loopCount == loopToLog) console.log('it 1'); // TESTING
       var panel = new FilterPanel();
+      // if (loopCount == loopToLog) console.log('it 2'); // TESTING
       expectOpen(panel);
+      // if (loopCount == loopToLog) console.log('it 3'); // TESTING
     });
+    // if (loopCount == loopToLog) console.log(' / INTERACTION WITH FILTERSET'); // TESTING
+
+    // loopCount++; // TESTING
   });
 
   describe('handleAddEvent()', function() {
