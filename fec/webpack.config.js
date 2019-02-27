@@ -1,29 +1,29 @@
 /* global __dirname */
 /* jslint maxlen: false */
 
-var path = require('path');
-var webpack = require('webpack');
-var ManifestPlugin = require('webpack-manifest-plugin');
-var CleanWebpackPlugin = require('clean-webpack-plugin');
-var BundleAnalyzerPlugin = require('webpack-bundle-analyzer')
+const path = require('path');
+const webpack = require('webpack');
+const ManifestPlugin = require('webpack-manifest-plugin');
+const CleanWebpackPlugin = require('clean-webpack-plugin');
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer')
   .BundleAnalyzerPlugin;
 
-var fs = require('fs');
+const fs = require('fs');
 
-var entries = {
+const entries = {
   init: './fec/static/js/init.js',
   'data-init': './fec/static/js/data-init.js',
   vendor: ['jquery', 'handlebars']
 };
 
-var datatablePages = [];
+const datatablePages = [];
 
 fs.readdirSync('./fec/static/js/pages').forEach(function(f) {
   if (f.search('.js') < 0) {
     return;
   } // Skip non-js files
-  var name = f.split('.js')[0];
-  var p = path.join('./fec/static/js/pages', f);
+  let name = f.split('.js')[0];
+  let p = path.join('./fec/static/js/pages', f);
   entries[name] = './' + p;
 
   // Note all datatable pages for getting the common chunk

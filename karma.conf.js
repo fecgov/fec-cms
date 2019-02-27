@@ -6,12 +6,12 @@ const puppeteer = require('puppeteer');
 process.env.CHROME_BIN = puppeteer.executablePath();
 
 module.exports = function(config) {
-  var browserify = {
+  const browserify = {
     debug: true,
     transform: ['hbsfy']
   };
 
-  var reporters = ['progress', 'coverage-istanbul'];
+  let reporters = ['progress', 'coverage-istanbul'];
 
   if (process.argv.indexOf('--debug') === -1) {
     browserify.transform.push(

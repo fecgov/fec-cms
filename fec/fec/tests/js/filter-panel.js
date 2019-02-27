@@ -1,17 +1,18 @@
 'use strict';
 
-var chai = require('chai');
-var sinon = require('sinon');
-var expect = chai.expect;
+const chai = require('chai');
+const sinon = require('sinon');
+const expect = chai.expect;
 
 require('./setup')();
 
-var $ = require('jquery');
+const $ = require('jquery');
 
-var FilterPanel = require('../../static/js/modules/filters/filter-panel')
+const FilterPanel = require('../../static/js/modules/filters/filter-panel')
   .FilterPanel;
-var FilterSet = require('../../static/js/modules/filters/filter-set').FilterSet;
-var helpers = require('../../static/js/modules/helpers');
+const FilterSet = require('../../static/js/modules/filters/filter-set')
+  .FilterSet;
+const helpers = require('../../static/js/modules/helpers');
 
 function expectOpen(panel) {
   expect(panel.isOpen).to.be.true; // TODO: THIS IS FAILING TESTS
