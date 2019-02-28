@@ -1,7 +1,5 @@
 {% extends 'layouts/main.jinja' %}
 {% import 'macros/cycle-select.jinja' as select %}
-{% import 'macros/overviews.jinja' as overviews %}
-{% import 'macros/reaction-box.jinja' as reaction %}
 
 {% block title %}{{ title }}{% endblock %}
 
@@ -27,6 +25,14 @@
           {{ search.search('hero', button_color="button--standard") }}
           <span class="t-note t-sans search__example">Examples: Obama for America; C00431445; Bush, George W.; P00003335; or enter an image number for a filing.</span>
         </div>
+        <div class="example--primary">	
+          <h4 class="example__title">Top raising candidates running in {{ constants.DEFAULT_ELECTION_YEAR }}:</h4>	
+          <ul class="t-sans">	
+            {% for candidate in top_candidates_raising %}	
+              <li><a href="/data/candidate/{{ candidate.candidate_id }}">{{ candidate.name }} [{{ candidate.party }}] | {{ candidate.state }}-{{ candidate.office_full }}</a></li>	
+            {% endfor %}	
+          </ul>	
+        </div>
       </div>
       <div class="grid__item card t-left-aligned">
         <h2>Find contributions from <br> specific individuals</h2>
@@ -41,6 +47,14 @@
           </div>
           <span class="t-note t-sans search__example">Examples: your name, a celebrity, someone running for office.</span>
         </form>
+        <div class="example--primary">	
+          <h4 class="example__title">Possible uses of this data:</h4>	
+          <ul class="t-sans">	
+            <li><a href="/data/receipts/individual-contributions/?min_amount=2000">All contributions over $2,000</a></li>	
+            <li><a href="/data/receipts/individual-contributions/?min_date={{ first_of_year }}&max_date={{ last_of_year }}">All contributions in this year</a></li>	
+            <li><a href="/data/receipts/individual-contributions/">Browse all and apply custom filters</a></li>	
+          </ul>	
+        </div>
       </div>
     </div>
   </section>
