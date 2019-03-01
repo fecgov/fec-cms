@@ -493,11 +493,18 @@
   background-color: $neutral;
   @include u-font-color($base);
 
+  a {
+    border-bottom: none;
+  }
+
   .card__image__container {
     @include clearfix();
-    text-align: center;
+    display: inline-block;
   }
   .card__icon {
+      height: 5.8rem;
+      width: 5.8rem;
+
     &.i-graph-horizontal-ordered {
       @include u-icon-bg($graph-horizontal-ordered, $inverse);
       background-color: $primary;
