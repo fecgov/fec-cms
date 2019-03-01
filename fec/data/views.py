@@ -444,12 +444,20 @@ def elections_lookup(request):
     cycle = constants.DEFAULT_ELECTION_YEAR
     cycles = utils.get_cycles(cycle + 4)
 
-    return render(
-        request,
-        'election-lookup.jinja',
-        {'parent': 'data', 'cycles': cycles, 'cycle': cycle},
-    )
+    embed = request.GET.get('embed', '').replace('/', '')
 
+    if request.GET.get('embed'):
+        return render(
+            request,
+            'election-lookup-embed.jinja',
+            {'parent': 'data', 'cycles': cycles, 'cycle': cycle},
+        )
+    else:
+        return render(
+            request,
+            'election-lookup.jinja',
+            {'parent': 'data', 'cycles': cycles, 'cycle': cycle},
+        )
 
 def elections(request, office, cycle, state=None, district=None):
     cycle = int(cycle)
@@ -518,14 +526,25 @@ def raising(request):
     cycles = utils.get_cycles(utils.current_cycle())
     cycle = int(request.GET.get('cycle', constants.DEFAULT_TIME_PERIOD))
 
-    if top_category in ['pac']:
-        top_raisers = api_caller.load_top_pacs('-receipts', cycle=cycle, per_page=10)
-    elif top_category in ['party']:
-        top_raisers = api_caller.load_top_parties('-receipts', cycle=cycle, per_page=10)
+    if request.GET.get('embed'):
+        if top_category in ['pac']:
+            top_raisers = api_caller.load_top_pacs('-receipts', cycle=cycle, per_page=3)
+        elif top_category in ['party']:
+            top_raisers = api_caller.load_top_parties('-receipts', cycle=cycle, per_page=3)
+        else:
+            top_raisers = api_caller.load_top_candidates(
+                '-receipts', office=top_category, cycle=cycle, per_page=3
+            )
+
     else:
-        top_raisers = api_caller.load_top_candidates(
-            '-receipts', office=top_category, cycle=cycle, per_page=10
-        )
+        if top_category in ['pac']:
+            top_raisers = api_caller.load_top_pacs('-receipts', cycle=cycle, per_page=10)
+        elif top_category in ['party']:
+            top_raisers = api_caller.load_top_parties('-receipts', cycle=cycle, per_page=10)
+        else:
+            top_raisers = api_caller.load_top_candidates(
+                '-receipts', office=top_category, cycle=cycle, per_page=10
+            )
 
     if cycle == datetime.datetime.today().year:
         coverage_end_date = datetime.datetime.today()
@@ -551,7 +570,8 @@ def raising(request):
             'cycle': cycle,
             'top_raisers': top_raisers['results'],
             'page_info': utils.page_info(top_raisers['pagination']),
-            'office': top_category
+            'office': top_category,
+
         },
     )
     else:
@@ -568,7 +588,7 @@ def raising(request):
                 'cycle': cycle,
                 'top_raisers': top_raisers['results'],
                 'page_info': utils.page_info(top_raisers['pagination']),
-                'office': top_category
+                'office': top_category,
             },
         )
 
@@ -583,19 +603,32 @@ def spending(request):
 
     cycles = utils.get_cycles(utils.current_cycle())
     cycle = int(request.GET.get('cycle', constants.DEFAULT_TIME_PERIOD))
-
-    if top_category in ['pac']:
-        top_spenders = api_caller.load_top_pacs(
-            '-disbursements', cycle=cycle, per_page=10
-        )
-    elif top_category in ['party']:
-        top_spenders = api_caller.load_top_parties(
-            '-disbursements', cycle=cycle, per_page=10
-        )
+    if request.GET.get('embed'):
+        if top_category in ['pac']:
+            top_spenders = api_caller.load_top_pacs(
+                '-disbursements', cycle=cycle, per_page=3
+            )
+        elif top_category in ['party']:
+            top_spenders = api_caller.load_top_parties(
+                '-disbursements', cycle=cycle, per_page=3
+            )
+        else:
+            top_spenders = api_caller.load_top_candidates(
+                '-disbursements', office=top_category, cycle=cycle, per_page=3
+            )
     else:
-        top_spenders = api_caller.load_top_candidates(
-            '-disbursements', office=top_category, cycle=cycle, per_page=10
-        )
+        if top_category in ['pac']:
+            top_spenders = api_caller.load_top_pacs(
+                '-disbursements', cycle=cycle, per_page=10
+            )
+        elif top_category in ['party']:
+            top_spenders = api_caller.load_top_parties(
+                '-disbursements', cycle=cycle, per_page=10
+            )
+        else:
+            top_spenders = api_caller.load_top_candidates(
+                '-disbursements', office=top_category, cycle=cycle, per_page=10
+            )
 
     if cycle == datetime.datetime.today().year:
         coverage_end_date = datetime.datetime.today()
@@ -745,3 +778,8 @@ def reactionFeedback(request):
                 return JsonResponse(issue.to_json(), status=201)
     else:
         raise Http404()
+
+#for testing-remove before committing
+def home3(request):
+    page_context = {""}
+    return render(request, "home_page.jinja", {"self": page_context})

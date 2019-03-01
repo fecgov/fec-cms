@@ -5,9 +5,10 @@
   cycle,
   action,
   category,
-  page_info
+  page_info,
+  per_page
 ) %}
-
+{% set per_page=3 %}
 {% if category in ['P', 'S', 'H'] %}
   {% set name_field='name' %}
   {% set id_field='candidate_id' %}
@@ -25,7 +26,7 @@
 {% else %}
   {% set value_field='disbursements' %}
 {% endif %}
-<div class="js-top-entities content__section" data-category="{{ category }}" data-cycle="{{ cycle }}">
+<div class="js-top-entities content__section" data-category="{{ category }}" data-cycle="{{ cycle }}"" data-perpage="{{ per_page }}">
   <span class="t-sans js-dates">{{ coverage_start_date|date }} to {{ coverage_end_date|date }}</span>
   <div class="chart-table simple-table--responsive js-top-table" id="top-table" aria-live="polite" role="grid">
     <div role="row" class="simple-table__header">

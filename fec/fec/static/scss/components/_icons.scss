@@ -59,7 +59,9 @@
   &.i-play {
     @include u-icon-bg($play-button, $base);
   }
-
+  &.i-graph {
+      @include u-icon-bg($graph, $base);
+    }
 
 }
 
@@ -81,7 +83,7 @@
   }
 
   &.i-book {
-    @include u-icon-bg($book, $base);
+    @include u-icon-bg($book, $inverse);
   }
 }
 

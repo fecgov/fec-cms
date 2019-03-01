@@ -23,6 +23,20 @@
 </section>
 </div>
 <div class="grid__item example--primary">
+  <div id="data-type-toggle" class="filters__inner data-type">
+
+    <fieldset class="filter toggles js-filter js-table-switcher" data-filter="toggle" data-filter-ignore-count="true">
+    <legend class="label t-inline-block">Data type</legend>
+    <div class="row">
+      <label for="switcher-processed" class="toggle">
+        <input type="radio" class="chart_toggle" value="raising" id="switcher-processed"  name="data_type" data-prefix="Data type:" data-tag-value="processed" aria-controls="processed-message" tabindex="0">
+        <span class="button--alt">Raised</span>
+      </label>
+      <label for="switcher-efilings" class="toggle">
+        <input type="radio" class="chart_toggle" value="spending" id="switcher-efilings" checked="" name="data_type" data-prefix="Data type:" data-tag-value="raw" aria-controls="efiling-message" tabindex="0">
+        <span class="button--alt">Spent</span>
+      </label>
+    </div>
 <form action="" method="get">
 {{ category_select.categories(categories, category, action='spent', location='form') }}
 <noscript>
@@ -67,4 +81,5 @@
   }
   </script>
   <script src="{{ asset_for_js('bythenumbers.js') }}"></script>
+
 {% endblock %}

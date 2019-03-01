@@ -54,30 +54,13 @@
     </div>
   </section>
 
-  <section class="slab slab--home slab--neutral">
+
+  <section class="slab--neutral">
     <div class="container">
-      <h2 class="heading--section u-margin--bottom">Get started</h2>
-      <ul class="grid grid--3-wide grid--flex t-sans">
-        <li class="grid__item grid__item--with-img grid__item--with-button">
-          <img src="{% static 'img/feature--candidate-support.jpg' %}" alt="">
-          <h4>Find out how individuals can support federal candidates</h4>
-          <p class="t-note t-normal t-sans">Including making contributions, volunteering, internet activities and filing complaints</p>
-          <a class="button button--cta button--go" href="/introduction-campaign-finance/understanding-ways-support-federal-candidates/">Start learning</a>
-        <li class="grid__item grid__item--with-img grid__item--with-button">
-          <img src="{% static 'img/feature--compare-candidates.jpg' %}" alt="">
-          <h4>Explore financial data for current and past elections and the candidates in those races</h4>
-          <a class="button button--cta button--go" href="/data/#compare-candidates-in-an-election">Compare candidates</a>
-        </li>
-        <li class="grid__item grid__item--with-img grid__item--with-button">
-          <img src="{% static 'img/feature--contributions.jpg' %}" alt="">
-          <h4>Learn about how much contributors can give to different types of committees</h4>
-          <a class="button button--cta button--go" href="/help-candidates-and-committees/candidate-taking-receipts/contribution-limits-candidates/">Get the contribution limits</a>
-        </li>
-      </ul>
+      <div id="load2"></div>
+        <h2 class="heading--section u-margin--bottom">Who is raising and spending the most</h2>
+      <div id="load"></div>
     </div>
-  </section>
-  <section>
-    <iframe style="width:100%; height:800px" scrolling="no" src="/data/raising-bythenumbers/?embed=yes"></iframe>
   </section>
   <section class="slab">
     <div class="container">
@@ -147,37 +130,19 @@
       </div>
     </div>
   </section>
-<section>
-      <div id="data-type-toggle" class="filters__inner data-type">
 
-    <fieldset class="filter toggles js-filter js-table-switcher" data-filter="toggle" data-filter-ignore-count="true">
-    <legend class="label t-inline-block">Data type</legend>
-    <div class="row">
-      <label for="switcher-processed" class="toggle">
-        <input type="radio" class="chart_toggle" value="raising" id="switcher-processed" checked="" name="data_type" data-prefix="Data type:" data-tag-value="processed" aria-controls="processed-message" tabindex="0">
-        <span class="button--alt">Raised</span>
-      </label>
-      <label for="switcher-efilings" class="toggle">
-        <input type="radio" class="chart_toggle" value="spending" id="switcher-efilings" name="data_type" data-prefix="Data type:" data-tag-value="raw" aria-controls="efiling-message" tabindex="0">
-        <span class="button--alt">Spent</span>
-      </label>
-    </div>
 
-    </fieldset>
-  </div>
-  <section id="load">
-
- </section>
 {% endblock %}
 
 {% block extra_js %}
-  <script>
+   <script>
     $(function(){
+      $('#load2').load("/data/elections/?embed=yes")
       $('#load').load("/data/raising-bythenumbers/?embed=yes")
-      $('.js-table-switcher').on( 'change', '.chart_toggle',function(){
-      var type = $(this).val()
-      console.log(type)
-     $('#load').load("/data/"+type+"-bythenumbers/?embed=yes")
+      $('body').on( 'change', '.chart_toggle',function(){
+        var type = $(this).val()
+        console.log(type)
+        $('#load').load("/data/"+type+"-bythenumbers/?embed=yes")
       })
     })
   </script>

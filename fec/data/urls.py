@@ -2,8 +2,12 @@ from django.conf.urls import url
 
 from data import views
 from data import views_datatables
+#below line is for testing -mremove before any commit
+from home import views as home_views
 
 urlpatterns = [
+    url(r'^home/$', views.home3, name="home3"),
+    #above for testing-remove before any commits
     url(r'^data/$', views.landing),
     url(r'^data/search/$', views.search),
     url(r'^data/browse-data/$', views.browse_data, name='browse-data'),

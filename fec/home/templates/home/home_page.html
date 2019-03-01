@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 {% load wagtailcore_tags %}
 {% load staticfiles %}
+{% load top_entities %}
 {% load home_page %}
 {% load filters %}
 {% block body_class %}template-{{ self.get_verbose_name | slugify }}{% endblock %}
@@ -14,7 +15,7 @@
       </div>
     </div>
   </section>
-
+  {% raising request%}
   {% home_page_banner_announcement %}
 
   <section class="slab">

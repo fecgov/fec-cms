@@ -18,11 +18,24 @@
   <section id="raising-breakdowns">
   <section id="top-raisers" class="content__section">
     <h2>Who's raising the most</h2>
-    {{ breakdowns.top_entities(top_raisers, coverage_start_date, coverage_end_date, cycle, 'raised', top_category, page_info ) }}
+    {{ breakdowns.top_entities(top_raisers, coverage_start_date, coverage_end_date, cycle, 'raised', top_category, page_info, per_page) }}
   </section>
 </section>
 </div>
 <div class="grid__item example--primary">
+  <div id="data-type-toggle" class="filters__inner data-type">
+    <fieldset class="filter toggles js-filter js-table-switcher" data-filter="toggle" data-filter-ignore-count="true">
+    <legend class="label t-inline-block">Data type</legend>
+    <div class="row">
+      <label for="switcher-processed" class="toggle">
+        <input type="radio" class="chart_toggle" value="raising" id="switcher-processed" checked="" name="data_type" data-prefix="Data type:" data-tag-value="processed" aria-controls="processed-message" tabindex="0">
+        <span class="button--alt">Raised</span>
+      </label>
+      <label for="switcher-efilings" class="toggle">
+        <input type="radio" class="chart_toggle" value="spending" id="switcher-efilings" name="data_type" data-prefix="Data type:" data-tag-value="raw" aria-controls="efiling-message" tabindex="0">
+        <span class="button--alt">Spent</span>
+      </label>
+    </div>
   <form action="" method="get">
 {{ category_select.categories(categories, category, action='raised', location='form') }}
 <noscript>
@@ -66,4 +79,5 @@
   }
   </script>
   <script src="{{ asset_for_js('bythenumbers.js') }}"></script>
+
 {% endblock %}
