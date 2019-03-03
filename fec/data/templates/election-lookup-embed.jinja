@@ -1,0 +1,87 @@
+{% extends "layouts/embed.jinja" %}
+{% import 'macros/cycle-select.jinja' as select %}
+{% import 'macros/page-header.jinja' as header %}
+
+{% block title %}Find candidates and elections by location{% endblock %}
+
+{% block css %}
+<link rel="stylesheet" type="text/css" href="{{ asset_for_css('elections.css') }}" />
+{% endblock %}
+
+{% block sections %}
+
+<section class="content__section">
+    <h2 class="t-ruled--bottom">Compare candidates in an election</h2>
+    <div id="election-lookup">
+      <div class="election-map election-map--small usa-width-one-half">
+
+      </div>
+      <div class="usa-width-one-half search-controls search--container">
+        <form action="/data/elections" class="content__section">
+           {# commenting out
+           <div class="search-controls search-controls__cycle">
+            {{ select.cycle_select(cycles, cycle , location='form', id='cycle-1') }}
+           </div>
+              #}
+          <div class="row">
+            <div class="search-controls__zip">
+              <label for="zip" class="label">Find by ZIP code</label>
+              <input type="text" inputmode="numeric" id="zip" name="zip" class="combo__input">
+              <div class="search-controls__submit search-controls__no-label">
+                <button type="submit" class="button--search--text button--standard">Search</button>
+              </div>
+
+              <span class="t-note t-sans search__example">Example: 90210</span>
+            </div>
+          </div>
+        </form>
+        <div class="row">
+          <form action="/data/elections" class="content__section">
+          <div class="search-controls__state">
+            <label for="state" class="label">State</label>
+            <select id="state" name="state" aria-label="Select a state">
+              <option value="">Select state</option>
+              {% for value, label in constants.states.items() %}
+              <option value="{{ value }}">{{ label }}</option>
+              {% endfor %}
+            </select>
+          </div>
+          <div class="search-controls__district">
+            <label for="District" class="label">District <span class="label__optional">(optional)</span></label>
+            <select id="district" name="district" aria-label="Select a district" class="select--alt">
+              <option value="">Select district</option>
+              <option value="S">Senate</option>
+              <optgroup label="House">
+                {% for value in range(1, 100) %}
+                {% with formatted = '{0:02d}'.format(value) %}
+                <option value="{{ formatted }}">{{ formatted }}</option>
+                {% endwith %}
+                {% endfor %}
+              </optgroup>
+            </select>
+          </div>
+          <div class="search-controls__submit search-controls__no-label">
+            <button type="submit" class="button--search--text button--standard">Search</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+
+  </section>
+
+{% endblock %}
+
+{% block scripts %}
+<script>
+var context = {
+  election: {
+    cycle: '{{ cycle }}',
+    state: '{{ state or '' }}'
+  }
+};
+</script>
+<script src="{{ asset_for_js('dataviz-common.js') }}"></script>
+<script src="{{ asset_for_js('election-lookup.js') }}"></script>
+{% endblock %}

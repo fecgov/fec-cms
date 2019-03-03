@@ -1,0 +1,27 @@
+{% load static compress wagtailuserbar %}
+{% load filters %}
+    {% block css %}
+    <link rel="stylesheet" type="text/css" href="{% asset_for_css 'base.css' %}">
+    {% endblock %}
+
+      {% block content %}{% endblock %}
+
+
+<script>
+      window.BASE_PATH = '/';
+      window.FEC_APP_URL = '{{ settings.FEC_APP_URL }}';
+      window.API_LOCATION = '{{ settings.FEC_API_URL }}';
+      window.API_VERSION = '{{ settings.FEC_API_VERSION }}';
+      window.API_KEY = '{{ settings.FEC_API_KEY_PUBLIC }}';
+      window.TRANSITION_URL = '{{ settings.FEC_TRANSITION_URL }}';
+      window.CANONICAL_BASE = '{{ settings.CANONICAL_BASE }}';
+    </script>
+
+    {# Global javascript #}
+    <script type="text/javascript" src="{% asset_for_js 'vendor.js' %}"></script>
+    <script type="text/javascript" src="{% asset_for_js 'init.js' %}"></script>
+    <script type="text/javascript" src='https://www.google.com/recaptcha/api.js'></script>
+    {% block extra_js %}
+    {# Override this in templates to add extra javascript #}
+    {% endblock %}
+
