@@ -14,7 +14,7 @@ var candidateCategories = ['P', 'S', 'H'];
 function TopEntities(elm, type) {
   this.$elm = $(elm);
   this.type = type;
-  this.per_page = this.$elm.data('perpage') ;
+  this.per_page = this.$elm.data('perpage');
   this.category = this.$elm.data('category');
   this.cycle = this.$elm.data('cycle');
 
@@ -25,7 +25,7 @@ function TopEntities(elm, type) {
   this.$pageInfo = this.$elm.find('.js-page-info');
   this.init();
 
-  console.log('data:'+ this.per_page)
+  //console.log('data:'+ this.per_page)
 
   $('.js-cycle').on('change', this.handleCycleChange.bind(this));
   this.$elm
@@ -40,16 +40,16 @@ function TopEntities(elm, type) {
 }
 
 TopEntities.prototype.init = function() {
-  var self=this
+  var self = this;
   if (candidateCategories.indexOf(this.category) > -1) {
     this.basePath = ['candidates', 'totals'];
   } else {
     this.basePath = ['totals', this.category];
   }
-   //added by JC for testing- remove or resolve before committing
-  var params = URI.parseQuery(window.location.search);
+  //added by JC for testing- remove or resolve before committing
+  //var params = URI.parseQuery(window.location.search);
   //console.log(params)
-   //end
+  //end
   //per_page = params.hasOwnProperty('embed') ? 3 : 10
 
   this.baseQuery = {
@@ -58,7 +58,7 @@ TopEntities.prototype.init = function() {
     sort_hide_null: true,
     cycle: this.cycle
   };
-  console.log(this.baseQuery)
+  //console.log(this.baseQuery)
   this.maxValue = Number(
     this.$table
       .find('.value-bar')
@@ -85,7 +85,7 @@ TopEntities.prototype.init = function() {
 
 TopEntities.prototype.handleCycleChange = function(e) {
   e.preventDefault();
-  console.log('cycle-change')
+  //console.log('cycle-change')
   this.cycle = e.target.value;
   if (this.category === 'candidates') {
     this.currentQuery = _.extend({}, this.baseQuery, {
@@ -106,7 +106,7 @@ TopEntities.prototype.handleCycleChange = function(e) {
 
 TopEntities.prototype.handleCategoryChange = function(e) {
   e.preventDefault();
-  console.log('cat-change')
+  //console.log('cat-change')
   var category = e.target.value;
   if (candidateCategories.indexOf(category) > -1) {
     this.basePath = ['candidates', 'totals'];
@@ -154,13 +154,15 @@ TopEntities.prototype.populateTable = function(response) {
   var self = this;
   self.$table.find('.js-top-row').remove();
   var index = 1;
-  var rankBase = ((parseFloat(response.pagination.page) - 1) * parseFloat(self.per_page)) || ((parseFloat(response.pagination.page) - 1) * 10)// So that page 2 starts at 4 or 11
-  console.log("parseFloat(self.per_page)="+parseFloat(self.per_page))
-  console.log(self.currentQuery.per_page)
-  console.log("SUM="+((parseFloat(response.pagination.page) - 1) * parseFloat(self.per_page)) )
+  var rankBase =
+    (parseFloat(response.pagination.page) - 1) * parseFloat(self.per_page) ||
+    (parseFloat(response.pagination.page) - 1) * 10; // So that page 2 starts at 4 or 11
+  //console.log("parseFloat(self.per_page)="+parseFloat(self.per_page))
+  //console.log(self.currentQuery.per_page)
+  //console.log("SUM="+((parseFloat(response.pagination.page) - 1) * parseFloat(self.per_page)) )
   _.each(response.results, function(result) {
     var rank = parseInt(rankBase) + index;
-    console.log("rankbase="+rankBase)
+    //console.log("rankbase="+rankBase)
     var data = self.formatData(result, rank);
     self.$table.append(TOP_ROW(data));
     index++;
@@ -225,7 +227,6 @@ TopEntities.prototype.updateDates = function() {
 };
 
 TopEntities.prototype.updatePagination = function(pagination) {
-  var self=this
   var page = pagination.page;
   var per_page = pagination.per_page;
   var count = pagination.count.toLocaleString();

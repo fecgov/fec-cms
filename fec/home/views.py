@@ -388,6 +388,11 @@ def guides(request):
         {"self": page_context},
     )
 #These two are for testing-remove before committing
+#for testing-remove before committing
+def home1(request):
+    page_context = {""}
+    return render(request, "home/home_page1.html", {"self": page_context})
+
 def home2(request):
     page_context = {""}
     return render(request, "home/home_page2.html", {"self": page_context})

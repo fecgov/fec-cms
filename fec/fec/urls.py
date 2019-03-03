@@ -11,6 +11,7 @@ from uaa_client import views as uaa_views
 
 from home import views as home_views
 from search import views as search_views
+from data import views as data_views
 
 
 urlpatterns = [
@@ -29,7 +30,11 @@ urlpatterns = [
     url(r'^meetings/$', home_views.index_meetings, name="meetings_page"),
     url(r'^search/$', search_views.search, name='search'),
     url(r'^updates/$', home_views.updates),
-    url(r'^home/$', home_views.home2, name="home2"),
+    # For testing --change before commmit
+    url(r'^home1/$', home_views.home1, name="home1"),
+    url(r'^home2/$', home_views.home2, name="home2"),
+    url(r'^raisers/$', data_views.raising, name="raisers"),
+    # /END for testing --change before commmit
     url(r'', include('data.urls')),  # URLs for /data
     url(r'', include('legal.urls')),  # URLs for legal pages
     url(r'', include(wagtail_urls)),

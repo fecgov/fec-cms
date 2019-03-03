@@ -4,7 +4,22 @@
 {% load home_page %}
 {% load filters %}
 {% block body_class %}template-{{ self.get_verbose_name | slugify }}{% endblock %}
-
+{% block extra_js %}
+   <script>
+    //jc-Maybe move this back to bottom, seems to load a MS faster at top-research
+    // jc- Condidered removing document ready to see if loads quicker-researching pitfals
+    $(function(){
+      $('#load2').load("/data/elections/?embed=yes")
+      $('#load').load("/data/raising-bythenumbers/?embed=yes")
+      $('body').on( 'change', '.chart_toggle',function(){
+        var type = $(this).val()
+        console.log(type)
+        $('#load').load("/data/"+type+"-bythenumbers/?embed=yes")
+      })
+    })
+  </script>
+  <script type="text/javascript" src="{% asset_for_js 'home.js' %}"></script>
+{% endblock %}
 {% block content %}
   <section class="hero hero--home" aria-labelledby="hero-heading">
     <div class="container">
@@ -134,17 +149,4 @@
 
 {% endblock %}
 
-{% block extra_js %}
-   <script>
-    $(function(){
-      $('#load2').load("/data/elections/?embed=yes")
-      $('#load').load("/data/raising-bythenumbers/?embed=yes")
-      $('body').on( 'change', '.chart_toggle',function(){
-        var type = $(this).val()
-        console.log(type)
-        $('#load').load("/data/"+type+"-bythenumbers/?embed=yes")
-      })
-    })
-  </script>
-  <script type="text/javascript" src="{% asset_for_js 'home.js' %}"></script>
-{% endblock %}
+

@@ -779,7 +779,4 @@ def reactionFeedback(request):
     else:
         raise Http404()
 
-#for testing-remove before committing
-def home3(request):
-    page_context = {""}
-    return render(request, "home_page.jinja", {"self": page_context})
+
