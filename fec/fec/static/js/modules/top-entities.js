@@ -88,6 +88,7 @@ TopEntities.prototype.handleOfficeChange = function(e) {
     office: this.office
   });
   this.updateElectionYearOptions(this.office);
+  this.updateCoverageDateRange();
   this.loadData(this.currentQuery);
   this.pushStateToURL({ office: this.office });
 };
