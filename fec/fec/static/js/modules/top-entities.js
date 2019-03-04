@@ -112,9 +112,6 @@ TopEntities.prototype.updateElectionYearOptions = function(office) {
       }
     });
     var currentOption = $('#election-year option[value="' + this.election_year +'"]');
-    console.log(this.election_year);
-    console.log(currentOption);
-    console.log(currentOption.css('display') == 'none');
     if (currentOption.css('display') == 'none') {
       $('#election-year')
         .val(minFutureYear)
