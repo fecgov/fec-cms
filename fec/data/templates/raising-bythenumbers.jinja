@@ -12,10 +12,19 @@
 
 {% block sidebar %}
 <form action="" method="get" class="breakdown-cycle">
-  {{ select.cycle_select(cycles, cycle, location='form', range=True, label='Two-Year Period') }}
-  <noscript>
-    <button type="submit" class="button button--cta">Submit</button>
-  </noscript>
+  <div class="row content__section">
+    <div class="cycle-select">
+      <label for="election-year" class="label cycle-select__label">Election</label>
+      <select id="election-year" class="js-election-year" name="cycle">
+        {% for each in election_years | sort(reverse=True) %}
+          <option
+              value="{{ each }}"
+              {% if election_year == each %}selected{% endif %}
+            >{{ each }}</option>
+        {% endfor %}
+      </select>
+    </div>
+  </div>  
 </form>
 <nav class="sidebar sidebar--breakdown sidebar--left side-nav js-sticky-side" data-sticky-container="options">
   <a class="sidebar__title" href="/data/#raising">&lsaquo; Raising overview</a>
@@ -32,7 +41,7 @@
 <section id="raising-breakdowns">
   <section id="top-raisers" class="content__section">
     <h2>Top raising candidates</h2>
-    {{ breakdowns.top_entities(top_raisers, coverage_start_date, coverage_end_date, cycle, 'raised', top_category, page_info ) }}
+    {{ breakdowns.top_entities(election_year, 'raised', office ) }}
   </section>
 </section>
 {% endblock %}
