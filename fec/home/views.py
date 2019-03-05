@@ -396,3 +396,9 @@ def home1(request):
 def home2(request):
     page_context = {""}
     return render(request, "home/home_page2.html", {"self": page_context})
+
+def home3(request):
+    page_context = {""}
+    return render(request, "home/home_page3.html", {"self": page_context})
+
+

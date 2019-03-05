@@ -37,6 +37,7 @@ function TopEntities(elm, type) {
   this.$elm
     .find('.js-next')
     .on('click', this.handlePagination.bind(this, 'next'));
+  $('input:radio.chart_toggle').on('change', this.handleTypeChange.bind(this));
 }
 
 TopEntities.prototype.init = function() {
@@ -106,7 +107,6 @@ TopEntities.prototype.handleCycleChange = function(e) {
 
 TopEntities.prototype.handleCategoryChange = function(e) {
   e.preventDefault();
-  //console.log('cat-change')
   var category = e.target.value;
   if (candidateCategories.indexOf(category) > -1) {
     this.basePath = ['candidates', 'totals'];
@@ -256,6 +256,33 @@ TopEntities.prototype.pushStateToURL = function(keyValPairsObj) {
     .toString();
   window.history.pushState(query, search, search || window.location.pathname);
   // analytics.pageView();
+};
+
+TopEntities.prototype.handleTypeChange = function(e) {
+  this.type = e.target.value;
+  var category = $('.js-category').val();
+  var cycle = $('.js-cycle').val();
+
+  if (candidateCategories.indexOf(category) > -1) {
+    this.basePath = ['candidates', 'totals'];
+    this.category = 'candidates';
+    this.office = category;
+    this.currentQuery = _.extend({}, this.baseQuery, {
+      office: this.office,
+      cycle: cycle,
+      page: 1
+    });
+  } else {
+    this.basePath = ['totals', category];
+    this.category = category;
+    this.currentQuery = _.extend({}, this.baseQuery, {
+      cycle: this.cycle,
+      page: 1
+    });
+  }
+  this.loadData(this.currentQuery);
+  this.updateDates();
+  //console.log(this.currentQuery);
 };
 
 module.exports = { TopEntities: TopEntities };

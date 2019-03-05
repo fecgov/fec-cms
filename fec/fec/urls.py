@@ -33,6 +33,7 @@ urlpatterns = [
     # For testing --change before commmit
     url(r'^home1/$', home_views.home1, name="home1"),
     url(r'^home2/$', home_views.home2, name="home2"),
+    url(r'^home3/$', home_views.home3, name="home3"),
     url(r'^raisers/$', data_views.raising, name="raisers"),
     # /END for testing --change before commmit
     url(r'', include('data.urls')),  # URLs for /data

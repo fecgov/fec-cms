@@ -55,13 +55,35 @@
       </div>
     </div>
   </section>
+
   <section class="slab slab--home slab--neutral">
+    <div class="container">
+      <h2 class="heading--section u-margin--bottom">Get started</h2>
+      <ul class="grid grid--3-wide grid--flex t-sans">
+        <li class="grid__item grid__item--with-img grid__item--with-button">
+          <img src="{% static 'img/feature--candidate-support.jpg' %}" alt="">
+          <h4>Find out how individuals can support federal candidates</h4>
+          <p class="t-note t-normal t-sans">Including making contributions, volunteering, internet activities and filing complaints</p>
+          <a class="button button--cta button--go" href="/introduction-campaign-finance/understanding-ways-support-federal-candidates/">Start learning</a>
+        <li class="grid__item grid__item--with-img grid__item--with-button">
+          <img src="{% static 'img/feature--compare-candidates.jpg' %}" alt="">
+          <h4>Explore financial data for current and past elections and the candidates in those races</h4>
+          <a class="button button--cta button--go" href="/data/#compare-candidates-in-an-election">Compare candidates</a>
+        </li>
+        <li class="grid__item grid__item--with-img grid__item--with-button">
+          <img src="{% static 'img/feature--contributions.jpg' %}" alt="">
+          <h4>Learn about how much contributors can give to different types of committees</h4>
+          <a class="button button--cta button--go" href="/help-candidates-and-committees/candidate-taking-receipts/contribution-limits-candidates/">Get the contribution limits</a>
+        </li>
+      </ul>
+    </div>
+  </section>
 
-    {% elections_lookup request %}
-
-    {% raising request %}
+  <section class="slab">
+   <iframe style="height: 450px; overflow:scroll; width: 100%" src="/data/raising-bythenumbers/?embed=yes" marginheight="1" marginwidth="1" name="cboxmain" id="" seamless="seamless" scrolling="no" frameborder="0" allowtransparency="true"></iframe>
 
   </section>
+
   <section class="slab">
     <div class="container">
       <h1>Commissioners</h1>
@@ -134,11 +156,5 @@
 {% endblock %}
 
 {% block extra_js %}
-  <script>
-  $(function(){
-  $('#top-category').trigger('change')
-  console.log("TC"+('#top-category').value)
-  })
-  </script>
   <script type="text/javascript" src="{% asset_for_js 'home.js' %}"></script>
 {% endblock %}
