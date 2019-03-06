@@ -142,7 +142,6 @@
   }
 }
 
-
 @include media($med) {
   .search-controls__row {
     padding: u(2rem 0);
@@ -201,19 +200,19 @@
         @include span-columns(7.3 of 7.3);
         margin-top: u(0rem);
          button {
-          width:94%;
+          width: 94%;
          }
       }
     }
 
     .search--container:first-child {
-    height: u(13.1rem);
-    margin-bottom: 0;
+      height: u(13.1rem);
+      margin-bottom: 0;
     }
 
     .search-controls__cycle {
-    @include span-columns(4.5 of 5.5);
-    margin: u(.5rem 2rem);
+      @include span-columns(4.5 of 5.5);
+      margin: u(.5rem 2rem);
     }
 
     .search-controls__zip {
@@ -245,36 +244,63 @@
       }
     }
   }
+  #election-lookup {
+    display: flex;
 
-  //for keyword-options modals on AO, MUR, Statues searches
-.keyword-modal{
-  .modal__tips, .modal__form {
-    display:table-cell;
-    width:44%;
-  }
-  .modal__tips {
-    margin-left: u(1rem);
-    padding-top: 0;
-  }
-  .search-controls__or--vertical {
-    margin: u(22.5rem 0);
-    width: u(3.5rem);
-    display:table-cell;
-
-    &::before,
-    &::after {
-      height: u(22.5rem);
+    .usa-width-one-half:first-child {
+      order: 2;
+      margin-left: $gutter / 2;
+      margin-right: $gutter;
     }
-    &::before {
-      top: u(-22.5rem);
-    }
-
-    &::after {
-      top: auto;
-      bottom: u(-22.5rem);
+    
+    .search-controls__state, .search-controls__district {
+      width: 100%;
     }
   }
-}
+  
+  .callout-holder {
+    border: none;
+    padding: 0;
+
+    a h3 {
+      border-bottom: 1px dotted $gray-lightest;
+      clear: both;
+      display: inline-block;
+    }
+    a:hover h3 {
+      border-bottom-color: $aqua;
+    }
+  }
+
+    //for keyword-options modals on AO, MUR, Statues searches
+  .keyword-modal{
+    .modal__tips, .modal__form {
+      display:table-cell;
+      width:44%;
+    }
+    .modal__tips {
+      margin-left: u(1rem);
+      padding-top: 0;
+    }
+    .search-controls__or--vertical {
+      margin: u(22.5rem 0);
+      width: u(3.5rem);
+      display:table-cell;
+
+      &::before,
+      &::after {
+        height: u(22.5rem);
+      }
+      &::before {
+        top: u(-22.5rem);
+      }
+
+      &::after {
+        top: auto;
+        bottom: u(-22.5rem);
+      }
+    }
+  }
 
 }/*end MED breakpoint*/
 
@@ -288,8 +314,8 @@
   .election-search {
 
     .search--container:first-child {
-    height: u(12.6rem);
-    margin-bottom: 0;
+      height: u(12.6rem);
+      margin-bottom: 0;
     }
 
     .search-controls__state,
