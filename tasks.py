@@ -77,7 +77,6 @@ DEPLOY_RULES = (
     ('dev', lambda _, branch: branch == 'develop'),
     # Uncomment below and adjust branch name to deploy desired feature branch to the feature space
     # ('feature', lambda _, branch: branch == 'feature/INSERT_BRANCH_NAME'),
-    ('feature', lambda _, branch: branch == 'test/2653-upgrade-node')
 )
 
 
