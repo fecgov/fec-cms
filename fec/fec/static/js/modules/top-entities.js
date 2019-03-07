@@ -4,7 +4,6 @@ var $ = require('jquery');
 var URI = require('urijs');
 var _ = require('underscore');
 var helpers = require('../modules/helpers');
-var moment = require('moment');
 
 var TOP_ROW = require('../templates/top-entity-row.hbs');
 
@@ -68,7 +67,6 @@ TopEntities.prototype.init = function() {
 
 TopEntities.prototype.handleElectionYearChange = function(e) {
   e.preventDefault();
-  
   this.election_year = e.target.value;
   this.currentQuery = _.extend({}, this.currentQuery, {
     election_year: this.election_year,
@@ -106,13 +104,15 @@ TopEntities.prototype.updateElectionYearOptions = function(office) {
       if (optValue % 4 !== 0) {
         $(this).hide();
       } else {
-        // track the nearest future presidential election 
+        // track the nearest future presidential election
         if (optValue > currentYear) {
           minFutureYear = optValue;
         }
       }
     });
-    var currentOption = $('#election-year option[value="' + this.election_year +'"]');
+    var currentOption = $(
+      '#election-year option[value="' + this.election_year + '"]'
+    );
     if (currentOption.css('display') == 'none') {
       $('#election-year')
         .val(minFutureYear)
@@ -122,8 +122,6 @@ TopEntities.prototype.updateElectionYearOptions = function(office) {
     // show all options!
     $('#election-year option').show();
   }
-  
-
 };
 
 TopEntities.prototype.handlePagination = function(direction, e) {
