@@ -1,6 +1,5 @@
 {% extends "layouts/sidebar-page.jinja" %}
 {% import "macros/bythenumbers.jinja" as breakdowns %}
-{% import 'macros/cycle-select.jinja' as select %}
 
 {% block css %}
 <link rel="stylesheet" type="text/css" href="{{ asset_for_css('data-landing.css') }}" />
@@ -11,12 +10,6 @@
 {% endblock %}
 
 {% block sidebar %}
-<form action="" method="get" class="breakdown-cycle">
-  {{ select.cycle_select(cycles, cycle, location='form', range=True, label='Two-Year Period') }}
-  <noscript>
-    <button type="submit" class="button button--cta">Submit</button>
-  </noscript>
-</form>
 <nav class="sidebar sidebar--breakdown sidebar--left side-nav js-sticky-side" data-sticky-container="options">
   <a class="sidebar__title" href="/data/#spending">&lsaquo; Spending overview</a>
   <ul class="sidebar__content js-toc">
@@ -32,7 +25,7 @@
 <section id="spending-breakdown">
   <section id="top-spenders" class="content__section">
     <h2>Top spending candidates</h2>
-    {{ breakdowns.top_entities(top_spenders, coverage_start_date, coverage_end_date, cycle, 'spent', top_category, page_info ) }}
+    {{ breakdowns.top_entities(election_years, election_year, 'spent', office ) }}
   </section>
 </section>
 {% endblock %}

@@ -1,5 +1,6 @@
 {% macro top_entities(
   
+  election_years,
   election_year,
   action,
   office
@@ -18,17 +19,22 @@
 {% endif %}
 <div class="js-top-entities content__section" data-office="{{ office }}" data-election-year="{{ election_year }}">
   <form action="" method="GET">
-    <h3 class="u-no-margin">
-      <label for="top-category" class="breakdown__title label t-inline-block">How much has been {{ action }} by </label>
+      <label for="top-category" class="breakdown__title label t-inline-block">How much has been {{ action }} by: </label>
       <select id="top-category" name="top_category" class="js-office form-element--inline" aria-controls="top-table">
         <option value="P" {% if office == 'P' %}selected{% endif %}>Presidential candidates</option>
         <option value="S" {% if office == 'S' %}selected{% endif %}>Senate candidates</option>
         <option value="H" {% if office == 'H' %}selected{% endif %}>House candidates</option>
       </select>
-      <noscript>
-        <button type="submit" class="button button--cta">Submit</button>
-      </noscript>
-    </h3>
+
+      <label for="top-category" class="breakdown__title label t-inline-block">Running in</label>
+      <select id="election-year" class="js-election-year form-element--inline" name="cycle">
+        {% for each in election_years | sort(reverse=True) %}
+          <option
+              value="{{ each }}"
+              {% if election_year == each %}selected{% endif %}
+            >{{ each }}</option>
+        {% endfor %}
+      </select>
   </form>
   <span class="t-sans js-dates"></span>
   <div class="chart-table simple-table--responsive js-top-table" id="top-table" aria-live="polite" role="grid">

@@ -529,33 +529,12 @@ def raising(request):
 
 
 def spending(request):
-    top_category = request.GET.get('top_category', 'P')
+    office = request.GET.get('office', 'P')
 
-    # IGNORING INVALID list URL PARAMETERS
-    if request.GET.get('list') and request.GET.get('list') in validListUrlParamValues:
-        top_category = request.GET.get('list')
-        # IF A VALID list VALUE EXISTS, WE'LL LET IT OVERRIDE top_category
-    
-    cycles = utils.get_cycles(utils.current_cycle())
-    cycle = int(request.GET.get('cycle', constants.DEFAULT_TIME_PERIOD))
+    election_year = int(request.GET.get('election_year', constants.DEFAULT_ELECTION_YEAR))
 
-    if top_category in ['pac']:
-        top_spenders = api_caller.load_top_pacs(
-            '-disbursements', cycle=cycle, per_page=10
-        )
-    elif top_category in ['party']:
-        top_spenders = api_caller.load_top_parties(
-            '-disbursements', cycle=cycle, per_page=10
-        )
-    else:
-        top_spenders = api_caller.load_top_candidates(
-            '-disbursements', office=top_category, cycle=cycle, per_page=10
-        )
-
-    if cycle == datetime.datetime.today().year:
-        coverage_end_date = datetime.datetime.today()
-    else:
-        coverage_end_date = datetime.date(cycle, 12, 31)
+    max_election_year = utils.current_cycle() + 4
+    election_years = utils.get_cycles(max_election_year)
 
     return render(
         request,
@@ -563,14 +542,9 @@ def spending(request):
         {
             'parent': 'data',
             'title': 'Spending: by the numbers',
-            'top_category': top_category,
-            'coverage_start_date': datetime.date(cycle - 1, 1, 1),
-            'coverage_end_date': coverage_end_date,
-            'cycles': cycles,
-            'cycle': cycle,
-            'top_spenders': top_spenders['results'],
-            'page_info': utils.page_info(top_spenders['pagination']),
-            'office': top_category
+            'election_years': election_years,
+            'election_year': election_year,
+            'office': office,
         },
     )
 
