@@ -2,7 +2,6 @@
 
 var $ = require('jquery');
 var URI = require('urijs');
-var _ = require('underscore');
 var helpers = require('../modules/helpers');
 
 var TOP_ROW = require('../templates/top-entity-row.hbs');
@@ -68,7 +67,7 @@ TopEntities.prototype.init = function() {
 TopEntities.prototype.handleElectionYearChange = function(e) {
   e.preventDefault();
   this.election_year = e.target.value;
-  this.currentQuery = _.extend({}, this.currentQuery, {
+  this.currentQuery = Object.assign({}, this.currentQuery, {
     election_year: this.election_year,
     page: 1
   });
@@ -82,7 +81,7 @@ TopEntities.prototype.handleOfficeChange = function(e) {
   e.preventDefault();
   this.office = e.target.value;
 
-  this.currentQuery = _.extend({}, this.currentQuery, {
+  this.currentQuery = Object.assign({}, this.currentQuery, {
     office: this.office
   });
   this.updateElectionYearOptions(this.office);
@@ -150,7 +149,7 @@ TopEntities.prototype.populateTable = function(response) {
   self.$table.find('.js-top-row').remove();
   var index = 1;
   var rankBase = (response.pagination.page - 1) * 10; // So that page 2 starts at 11
-  _.each(response.results, function(result) {
+  response.results.forEach(function(result) {
     var rank = rankBase + index;
     var data = self.formatData(result, rank);
     self.$table.append(TOP_ROW(data));
@@ -235,7 +234,10 @@ TopEntities.prototype.updatePagination = function(pagination) {
 };
 
 TopEntities.prototype.pushStateToURL = function(keyValPairsObj) {
-  var query = _.extend(URI.parseQuery(window.location.search), keyValPairsObj);
+  var query = Object.assign(
+    URI.parseQuery(window.location.search),
+    keyValPairsObj
+  );
   var search = URI('')
     .query(query)
     .toString();

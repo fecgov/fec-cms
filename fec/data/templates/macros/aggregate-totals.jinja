@@ -1,0 +1,8 @@
+{% macro build_block(year, type) %}
+  {% if (year and type) %}
+    <aside class="aggregate-totals-block js-not-loaded">
+      <h1 class="value">$45,456,345,234.56</h1>
+      <h2 class="description">Total raised by all {{ type }} candidates running in {{ year }}</h2>
+    </aside>
+    {% endif %}
+{% endmacro %}

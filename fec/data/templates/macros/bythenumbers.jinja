@@ -1,16 +1,15 @@
+{% import "macros/aggregate-totals.jinja" as aggTotals %}
+
 {% macro top_entities(
-  
   election_years,
   election_year,
   action,
   office
-
 ) %}
 
 {% set name_field='name' %}
 {% set id_field='candidate_id' %}
 {% set route='candidate' %}
-
 
 {% if action == 'raised' %}
   {% set value_field='receipts' %}
@@ -26,8 +25,8 @@
         <option value="H" {% if office == 'H' %}selected{% endif %}>House candidates</option>
       </select>
 
-      <label for="top-category" class="breakdown__title label t-inline-block">Running in</label>
-      <select id="election-year" class="js-election-year form-element--inline" name="cycle">
+      <label for="election-year" class="breakdown__title label t-inline-block">Running in</label>
+      <select id="election-year" name="cycle" class="js-election-year form-element--inline" aria-controls="top-table">
         {% for each in election_years | sort(reverse=True) %}
           <option
               value="{{ each }}"
@@ -36,6 +35,7 @@
         {% endfor %}
       </select>
   </form>
+  {{ aggTotals.build_block('2020', 'president') }}
   <span class="t-sans js-dates"></span>
   <div class="chart-table simple-table--responsive js-top-table" id="top-table" aria-live="polite" role="grid">
     <div role="row" class="simple-table__header">
