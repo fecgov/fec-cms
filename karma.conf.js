@@ -1,15 +1,15 @@
 /* global process */
 
-var istanbul = require('browserify-istanbul');
-var path = require('path');
+const istanbul = require('browserify-istanbul');
+process.env.CHROME_BIN = require('puppeteer').executablePath();
 
 module.exports = function(config) {
-  var browserify = {
+  const browserify = {
     debug: true,
     transform: ['hbsfy']
   };
 
-  var reporters = ['progress', 'coverage-istanbul'];
+  let reporters = ['progress', 'coverage-istanbul'];
 
   if (process.argv.indexOf('--debug') === -1) {
     browserify.transform.push(
@@ -77,8 +77,14 @@ module.exports = function(config) {
       fixWebpackSourcePaths: true
     },
 
-    browsers: ['Chrome'],
+    browsers: ['ChromeHeadless'],
 
-    port: 9876
+    port: 9876,
+
+    autoWatch: false,
+
+    colors: true,
+
+    logLevel: config.LOG_INFO
   });
 };

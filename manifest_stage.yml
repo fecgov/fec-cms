@@ -1,5 +1,5 @@
 ---
-stack: cflinuxfs3
+stack: cflinuxfs2
 buildpack: python_buildpack
 routes:
   - route: fec-stage-cms.app.cloud.gov
