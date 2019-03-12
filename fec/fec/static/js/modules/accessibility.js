@@ -1,6 +1,6 @@
 'use strict';
 
-/* global require, module */
+/* global module */
 
 /**
  * Utilities for setting or removing tabindex on all focusable elements

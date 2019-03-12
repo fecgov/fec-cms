@@ -669,10 +669,10 @@ DataTable.prototype.fetchSuccess = function(resp) {
         this.newCount.toLocaleString('en-US') +
         '</span>'
       : this.newCount > 500000
-        ? 'about <span class="tags__count">' +
-          this.newCount.toLocaleString('en-US') +
-          '</span>'
-        : '<span class="tags__count">0</span>';
+      ? 'about <span class="tags__count">' +
+        this.newCount.toLocaleString('en-US') +
+        '</span>'
+      : '<span class="tags__count">0</span>';
   this.$widgets.find('.js-count').html(countHTML);
 
   filterSuccessUpdates(changeCount);
