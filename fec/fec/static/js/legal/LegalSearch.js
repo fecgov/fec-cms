@@ -176,7 +176,13 @@ class LegalSearch extends React.Component {
                   using keywords, AO numbers, names of requestors and more. For
                   additional search filters, you can still search AOs using our
                   legacy{' '}
-                  <a href="http://saos.fec.gov/saos/searchao">AO search</a>.
+                  <a
+                    href="https://saos.fec.gov/saos/searchao"
+                    title="Search advisory opinions"
+                  >
+                    AO search
+                  </a>
+                  .
                 </p>
               </div>
             </div>
