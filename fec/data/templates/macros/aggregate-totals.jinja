@@ -1,8 +1,9 @@
-{% macro build_block(year, type) %}
-  {% if (year and type) %}
-    <aside class="aggregate-totals-block js-not-loaded">
-      <h1 class="value">$45,456,345,234.56</h1>
-      <h2 class="description">Total raised by all {{ type }} candidates running in {{ year }}</h2>
+{% macro build_block(year, office, action) %}
+  {% if (year and office) %}
+    <aside id="aggregate-totals-block-1" class="aggregate-totals-block js-not-loaded">
+      <h1 class="value"></h1>
+      <h2 class="description"></h2>
     </aside>
-    {% endif %}
+    <script defer data-target=".aggregate-totals-block"  src="{{ asset_for_js('modules/aggregate-totals.js') }}" data-year={{ year }} data-type={{ type }} data-action={{ action }}></script>
+  {% endif %}
 {% endmacro %}
