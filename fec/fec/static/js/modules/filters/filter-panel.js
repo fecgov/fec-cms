@@ -1,13 +1,12 @@
 'use strict';
 
-var $ = require('jquery');
-var _ = require('underscore');
+const $ = require('jquery');
 
-var FilterSet = require('./filter-set').FilterSet;
-var accessibility = require('../accessibility');
-var helpers = require('../helpers');
+const FilterSet = require('./filter-set').FilterSet;
+const accessibility = require('../accessibility');
+const helpers = require('../helpers');
 
-var defaultOptions = {
+const defaultOptions = {
   body: '.filters',
   content: '.filters__content',
   filterHeader: '.js-filter-header',
@@ -18,7 +17,7 @@ var defaultOptions = {
 
 function FilterPanel(options) {
   this.isOpen = false;
-  this.options = _.extend({}, defaultOptions, options);
+  this.options = Object.assign(defaultOptions, options);
 
   this.$body = $(this.options.body);
   this.$content = this.$body.find(this.options.content);

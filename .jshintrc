@@ -4,6 +4,7 @@
   "browser": true,
   "camelcase": true,
   "curly": true,
+  "esversion": 6,
   "expr": true,
   "forin": true,
   "immed": true,
@@ -11,6 +12,7 @@
   "maxlen": 100,
   "newcap": true,
   "noarg": true,
+  "node": true,
   "noempty": true,
   "nonew": false,
   "predef": [

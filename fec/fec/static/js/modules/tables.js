@@ -1,7 +1,5 @@
 'use strict';
 
-/* jshint camelcase: false */
-
 var $ = require('jquery');
 var _ = require('underscore');
 
@@ -95,21 +93,21 @@ function mapSort(order, column) {
 }
 
 function getCount(response) {
-  var pagination_count = response.pagination.count;
+  var pagination_count = response.pagination.count; // eslint-disable-line camelcase
 
   if (response.pagination.count > 500000) {
-    pagination_count = Math.round(response.pagination.count / 1000) * 1000;
+    pagination_count = Math.round(response.pagination.count / 1000) * 1000; // eslint-disable-line camelcase
   }
 
-  return pagination_count;
+  return pagination_count; // eslint-disable-line camelcase
 }
 
 function mapResponse(response) {
-  var pagination_count = getCount(response);
+  var pagination_count = getCount(response); // eslint-disable-line camelcase
 
   return {
-    recordsTotal: pagination_count,
-    recordsFiltered: pagination_count,
+    recordsTotal: pagination_count, // eslint-disable-line camelcase
+    recordsFiltered: pagination_count, // eslint-disable-line camelcase
     data: response.results
   };
 }
@@ -378,7 +376,7 @@ function OffsetPaginator() {}
 
 OffsetPaginator.prototype.mapQuery = function(data) {
   return {
-    per_page: data.length,
+    per_page: data.length, // eslint-disable-line camelcase
     page: Math.floor(data.start / data.length) + 1
   };
 };
@@ -410,7 +408,7 @@ SeekPaginator.prototype.mapQuery = function(data, query) {
   }
   var indexes = this.getIndexes(data.length, data.start);
   return _.extend(
-    { per_page: data.length },
+    { per_page: data.length }, // eslint-disable-line camelcase
     _.chain(Object.keys(indexes))
       .filter(function(key) {
         return indexes[key];
@@ -638,7 +636,7 @@ DataTable.prototype.isPending = function() {
 
 DataTable.prototype.buildUrl = function(data, paginate) {
   var query = _.extend(
-    { sort_hide_null: false, sort_nulls_last: true },
+    { sort_hide_null: false, sort_nulls_last: true }, // eslint-disable-line camelcase
     this.filters || {}
   );
   paginate = typeof paginate === 'undefined' ? true : paginate;
@@ -804,8 +802,8 @@ function refreshTables(e, context) {
     .map(function(_, input) {
       var $input = $(input);
       return {
-        candidate_id: $input.attr('data-id'),
-        candidate_name: $input.attr('data-name')
+        candidate_id: $input.attr('data-id'), // eslint-disable-line camelcase
+        candidate_name: $input.attr('data-name') // eslint-disable-line camelcase
       };
     });
 
@@ -851,8 +849,8 @@ function mapSize(response, primary) {
   });
   return _.map(_.pairs(groups), function(pair) {
     return _.extend(pair[1], {
-      candidate_id: pair[0],
-      candidate_name: primary[pair[0]].candidate_name
+      candidate_id: pair[0], // eslint-disable-line camelcase
+      candidate_name: primary[pair[0]].candidate_name // eslint-disable-line camelcase
     });
   });
 }
@@ -862,7 +860,7 @@ function mapState(response) {
   _.each(response.results, function(result) {
     groups[result.state] = groups[result.state] || {};
     groups[result.state][result.candidate_id] = result.total;
-    groups[result.state].state_full = result.state_full;
+    groups[result.state].state_full = result.state_full; // eslint-disable-line camelcase
   });
   return _.map(_.pairs(groups), function(pair) {
     return _.extend(pair[1], { state: pair[0] });
@@ -903,9 +901,9 @@ function drawContributionsBySizeTable(selected, context) {
   );
   var query = {
     cycle: context.election.cycle,
-    candidate_id: _.pluck(selected, 'candidate_id'),
-    per_page: 0,
-    election_full: true
+    candidate_id: _.pluck(selected, 'candidate_id'), // eslint-disable-line camelcase
+    per_page: 0, // eslint-disable-line camelcase
+    election_full: true // eslint-disable-line camelcase
   };
   var url = helpers.buildUrl(
     ['schedules', 'schedule_a', 'by_size', 'by_candidate'],
@@ -940,9 +938,9 @@ function drawContributionsByStateTable(selected, context) {
   );
   var query = {
     cycle: context.election.cycle,
-    candidate_id: _.pluck(selected, 'candidate_id'),
-    per_page: 0,
-    election_full: true
+    candidate_id: _.pluck(selected, 'candidate_id'), // eslint-disable-line camelcase
+    per_page: 0, // eslint-disable-line camelcase
+    election_full: true // eslint-disable-line camelcase
   };
   var url = helpers.buildUrl(
     ['schedules', 'schedule_a', 'by_state', 'by_candidate'],
