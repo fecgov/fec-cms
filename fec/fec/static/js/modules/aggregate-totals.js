@@ -110,7 +110,7 @@ AggregateTotals.prototype.init = function() {
   // this.updateElectionYearOptions(this.office);
   // this.updateCoverageDateRange();
 
-//  this.loadData(this.currentQuery);
+  //  this.loadData(this.currentQuery);
 };
 
 // TopEntities.prototype.handleElectionYearChange = function(e) {
