@@ -7,10 +7,10 @@ const helpers = require('./helpers');
 // var TOP_ROW = require('../templates/top-entity-row.hbs');
 
 function AggregateTotals() {
-  this.scriptNode = document.currentScript;
-  this.election_year = 2020;
-  this.office = 'P';
-  this.value = 0;
+  this.scriptElement;
+  this.election_year;
+  this.office;
+  this.value;
   this.valueField;
   this.descriptionField;
   this.value;
@@ -65,11 +65,16 @@ AggregateTotals.prototype.buildElement = function(
 };
 
 AggregateTotals.prototype.init = function() {
+  this.scriptElement = document.currentScript; // the <script> on the page
+  var dataObjStr = String(this.scriptElement.dataset.obj); // grab the data-obj param
+  dataObjStr = dataObjStr.replace(/'/g, '"'); // convert the single quotes to double to be JSON-friendlier
+  this.dataObj = JSON.parse('[' + dataObjStr + ']'); // and make it into a usable object
+
   this.valueField = document.querySelector(
-    String(this.scriptNode.dataset.target) + ' .value'
+    String(this.dataObj.target) + ' .value'
   );
   this.descriptionField = document.querySelector(
-    String(this.scriptNode.dataset.target) + ' .description'
+    String(this.dataObj.target) + ' .description'
   );
 
   // $('.js-election-year')
@@ -105,7 +110,7 @@ AggregateTotals.prototype.init = function() {
   // this.updateElectionYearOptions(this.office);
   // this.updateCoverageDateRange();
 
-  this.loadData(this.currentQuery);
+//  this.loadData(this.currentQuery);
 };
 
 // TopEntities.prototype.handleElectionYearChange = function(e) {

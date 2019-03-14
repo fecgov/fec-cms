@@ -47,6 +47,7 @@ FEATURES = {
     'linecharts': bool(env.get_credential('FEC_FEATURE_LINECHARTS', '')),
     'adrs': bool(env.get_credential('FEC_FEATURE_ADRS', '')),
     'afs': bool(env.get_credential('FEC_FEATURE_AFS', '')),
+    'aggregatetotals': bool(env.get_credential('FEC_FEATURE_AGGR_TOTS', '')),
 }
 
 ENVIRONMENTS = {
