@@ -199,9 +199,10 @@
       .search-controls__submit {
         @include span-columns(7.3 of 7.3);
         margin-top: u(0rem);
-         button {
+
+        button {
           width: 94%;
-         }
+        }
       }
     }
 
@@ -246,11 +247,15 @@
   }
   #election-lookup {
     display: flex;
+    flex-wrap: wrap;
 
     .usa-width-one-half:first-child {
-      order: 2;
       margin-left: $gutter / 2;
       margin-right: $gutter;
+      width: 100%;
+    }
+    .usa-width-one-half:last-child {
+      width: 100%;
     }
     
     .search-controls__state, .search-controls__district {
@@ -327,8 +332,6 @@
       margin-left: u(3rem);
       position: relative;
       top: u(0rem);
-
-
     }
 
     .search-controls__cycle {
@@ -364,6 +367,17 @@
       margin:u(4rem 0 4rem 0);
     }
   }
+
+  #election-lookup {
+    flex-wrap: initial;
+
+    .usa-width-one-half:first-child {
+      order: 2;
+      width: 33.33%;
+    }
+    .usa-width-one-half:last-child {
+      order: 1;
+      width: 66.66%;
+    }
+  }
 }
-
-
