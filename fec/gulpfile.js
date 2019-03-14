@@ -17,54 +17,62 @@ var rev = require('gulp-rev');
 
 // Consider using gulp-rev-delete-original later
 gulp.task('clear-css-dir', function() {
-  return gulp.src('./dist/fec/static/css', { read: false }).pipe(clean());
+  return gulp
+    .src('./dist/fec/static/css', { read: false, allowEmpty: true })
+    .pipe(clean());
 });
 
-gulp.task('build-sass', ['clear-css-dir'], function() {
-  return (
-    gulp
-      .src('./fec/static/scss/*.scss')
-      // compiles sass
-      .pipe(sass().on('error', sass.logError))
-      // minifies css
-      .pipe(cleanCSS())
-      // sourcemaps for local to back-trace source of scss
-      //.pipe(gulpif(!production, sourcemaps.init()))*/
-      //makes manifest sass (static asset revision) and puts in destination
-      .pipe(rev())
-      .pipe(gulp.dest('./dist/fec/static/css'))
-      // writes manifest file into destination
-      .pipe(rev.manifest('./dist/fec/static/css/rev-manifest-css.json'))
-      .pipe(gulp.dest('.'))
-  );
-  //.pipe(gulpif(!production, sourcemaps.write()))
-});
+gulp.task(
+  'build-sass',
+  gulp.series('clear-css-dir', function() {
+    return (
+      gulp
+        .src('./fec/static/scss/*.scss')
+        // compiles sass
+        .pipe(sass().on('error', sass.logError))
+        // minifies css
+        .pipe(cleanCSS())
+        // sourcemaps for local to back-trace source of scss
+        //.pipe(gulpif(!production, sourcemaps.init()))*/
+        //makes manifest sass (static asset revision) and puts in destination
+        .pipe(rev())
+        .pipe(gulp.dest('./dist/fec/static/css'))
+        // writes manifest file into destination
+        .pipe(rev.manifest('./dist/fec/static/css/rev-manifest-css.json'))
+        .pipe(gulp.dest('.'))
+    );
+    //.pipe(gulpif(!production, sourcemaps.write()))
+  })
+);
 
 // clear icons output folder to clean old icons
 gulp.task('clean-output-icons', function() {
   return gulp.src('./fec/static/icons/output', { read: false }).pipe(clean());
 });
 
-gulp.task('minify-icons', ['clean-output-icons'], function() {
-  return gulp
-    .src('./fec/static/icons/input/*.svg')
-    .pipe(
-      svgmin({
-        plugins: [
-          {
-            removeAttrs: { attrs: '(fill|fill-rule)' }
-          },
-          {
-            removeStyleElement: true
-          },
-          {
-            removeTitle: true
-          }
-        ]
-      })
-    )
-    .pipe(gulp.dest('./fec/static/icons/output', { overwrite: true }));
-});
+gulp.task(
+  'minify-icons',
+  gulp.series('clean-output-icons', function() {
+    return gulp
+      .src('./fec/static/icons/input/*.svg')
+      .pipe(
+        svgmin({
+          plugins: [
+            {
+              removeAttrs: { attrs: '(fill|fill-rule)' }
+            },
+            {
+              removeStyleElement: true
+            },
+            {
+              removeTitle: true
+            }
+          ]
+        })
+      )
+      .pipe(gulp.dest('./fec/static/icons/output', { overwrite: true }));
+  })
+);
 
 gulp.task('consolidate-icons', function() {
   function getSVGs() {
