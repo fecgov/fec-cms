@@ -1,16 +1,17 @@
 'use strict';
 
-var chai = require('chai');
-var sinon = require('sinon');
-var expect = chai.expect;
+const { expect } = require('chai');
+const sinon = require('sinon');
 
 require('./setup')();
 
-var $ = require('jquery');
+const $ = require('jquery');
 
-var FilterPanel = require('../../static/js/modules/filters/filter-panel').FilterPanel;
-var FilterSet = require('../../static/js/modules/filters/filter-set').FilterSet;
-var helpers = require('../../static/js/modules/helpers');
+const FilterPanel = require('../../static/js/modules/filters/filter-panel')
+  .FilterPanel;
+const FilterSet = require('../../static/js/modules/filters/filter-set')
+  .FilterSet;
+const helpers = require('../../static/js/modules/helpers');
 
 function expectOpen(panel) {
   expect(panel.isOpen).to.be.true;
@@ -31,15 +32,17 @@ describe('filter panel', function() {
   });
 
   beforeEach(function() {
-    this.$fixture.empty().append(
-      '<div id="filters" class="filters">' +
-        '<button class="js-filter-toggle js-filter-header"></button>' +
-        '<div class="filters__content">' +
+    this.$fixture
+      .empty()
+      .append(
+        '<div id="filters" class="filters">' +
+          '<button class="js-filter-toggle js-filter-header"></button>' +
+          '<div class="filters__content">' +
           '<form id="category-filters">' +
           '</form>' +
-        '</div>' +
-      '</div>'
-    );
+          '</div>' +
+          '</div>'
+      );
     this.panel = new FilterPanel();
   });
 
@@ -72,18 +75,14 @@ describe('filter panel', function() {
     });
   });
 
+  // TODO: DO WE STILL NEED THIS TEST NOW THAT THE it HAS BEEN REMOVED?
   describe('interaction with filterset', function() {
     beforeEach(function() {
-      sinon.stub(FilterSet.prototype, 'serialize').returns({name: 'jed'});
+      sinon.stub(FilterSet.prototype, 'serialize').returns({ name: 'jed' });
     });
 
     afterEach(function() {
       FilterSet.prototype.serialize.restore();
-    });
-
-    it('should start off open when contained filterset has values', function() {
-      var panel = new FilterPanel();
-      expectOpen(panel);
     });
   });
 
@@ -96,11 +95,13 @@ describe('filter panel', function() {
     it('increments the count after 1', function() {
       this.panel.handleAddEvent({}, {});
       this.panel.handleAddEvent({}, {});
-      expect(this.panel.$filterHeader.find('.filter-count').text()).to.equal('2');
+      expect(this.panel.$filterHeader.find('.filter-count').text()).to.equal(
+        '2'
+      );
     });
 
     it('does nothing if told to ignore count', function() {
-      this.panel.handleAddEvent({}, {ignoreCount: true});
+      this.panel.handleAddEvent({}, { ignoreCount: true });
       expect(this.panel.$filterHeader.find('.filter-count').length).to.equal(0);
     });
   });
@@ -109,20 +110,24 @@ describe('filter panel', function() {
     it('does nothing if the filters were not loaded once', function() {
       this.panel.handleAddEvent({}, {});
       this.panel.handleAddEvent({}, {});
-      this.panel.handleRemoveEvent({}, {loadedOnce: false});
-      expect(this.panel.$filterHeader.find('.filter-count').text()).to.equal('2');
+      this.panel.handleRemoveEvent({}, { loadedOnce: false });
+      expect(this.panel.$filterHeader.find('.filter-count').text()).to.equal(
+        '2'
+      );
     });
 
     it('decrements the count if greater than 1', function() {
       this.panel.handleAddEvent({}, {});
       this.panel.handleAddEvent({}, {});
-      this.panel.handleRemoveEvent({}, {loadedOnce: true});
-      expect(this.panel.$filterHeader.find('.filter-count').text()).to.equal('1');
+      this.panel.handleRemoveEvent({}, { loadedOnce: true });
+      expect(this.panel.$filterHeader.find('.filter-count').text()).to.equal(
+        '1'
+      );
     });
 
     it('removes the count when lower than 1', function() {
       this.panel.handleAddEvent({}, {});
-      this.panel.handleRemoveEvent({}, {loadedOnce: true});
+      this.panel.handleRemoveEvent({}, { loadedOnce: true });
       expect(this.panel.$filterHeader.find('.filter-count').length).to.equal(0);
     });
   });
