@@ -11,6 +11,7 @@ function TopEntities(elm, type) {
   this.type = type;
   this.office = this.$elm.data('office');
   this.election_year = this.$elm.data('election-year');
+  this.per_page = this.$elm.data('perpage');
 
   this.$table = this.$elm.find('.js-top-table');
   this.$dates = this.$elm.find('.js-dates');
@@ -26,6 +27,7 @@ function TopEntities(elm, type) {
   this.$elm
     .find('.js-next')
     .on('click', this.handlePagination.bind(this, 'next'));
+  $('.js-chart-toggle').on('change', this.handleTypeChange.bind(this))
 }
 
 TopEntities.prototype.init = function() {
@@ -37,7 +39,7 @@ TopEntities.prototype.init = function() {
 
   var baseQuery = {
     sort: '-' + this.type,
-    per_page: 10,
+    per_page: this.per_page || 10,
     sort_hide_null: true,
     election_year: this.election_year,
     election_full: true,
@@ -244,5 +246,33 @@ TopEntities.prototype.pushStateToURL = function(keyValPairsObj) {
   window.history.pushState(query, search, search || window.location.pathname);
   // analytics.pageView();
 };
+
+TopEntities.prototype.handleTypeChange = function(e) {
+  this.type = e.target.value;
+  this.basePath = ['candidates', 'totals'];
+  this.prefix = $(e.target).data('prefix');
+  this.action = this.type == 'receipts' ? 'raised' : 'spent';
+
+  var baseQuery = {
+    sort: '-' + this.type,
+    per_page: 10,
+    sort_hide_null: true,
+    election_year: this.election_year,
+    election_full: true,
+    office: this.office,
+    active_candidates: true
+  };
+
+  this.loadData(this.currentQuery);
+  this.updateCoverageDateRange();
+
+  $('a.js-browse').attr({
+    'href':"/data/"+this.type
+  }).html('Browse top '+this.prefix+' candidates')
+
+  $('.js-type-label span').html(this.action)
+
+};
+
 
 module.exports = { TopEntities: TopEntities };

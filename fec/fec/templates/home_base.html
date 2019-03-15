@@ -1,0 +1,178 @@
+{% load static compress wagtailuserbar %}
+{% load filters %}
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html lang="en"> <![endif]-->
+<!--[if IE 7]>         <html lang="en"> <![endif]-->
+<!--[if IE 8]>         <html lang="en"> <![endif]-->
+<!--[if gt IE 8]><!--> <html lang="en"> <!--<![endif]-->
+  <head>
+    {% include './partials/meta-tags.html' %}
+
+    <title>{% block title %}{% if self.seo_title %}{{ self.seo_title }}{% else %}{{ self.title }} | FEC {% endif %}{% endblock %}{% block title_suffix %}{% endblock %}</title>
+
+    {% block css %}
+    <link rel="stylesheet" type="text/css" href="{% asset_for_css 'base.css' %}">
+    {% endblock %}
+  </head>
+
+  <body class="{% block body_class %}{% endblock %}">
+    <!--[if lt IE 10]>
+    <div style="background-color: #212121; padding: 10px">
+      <h2 style="color: #ffffff">Your browser is outdated</h2>
+      <p style="color: #ffffff; font-size: 16px;">You're using an older version of Internet Explorer. Please update or switch to another browser like Chrome, Firefox, or Safari for a better experience.</p>
+      <p style="color: #ffffff; font-size: 16px;"><a style="color: #ffffff; text-decoration: underline" target="_blank" href="http://browsehappy.com/">Learn how to update your browser.</a></p>
+      <p style="color: #ffffff; font-size: 16px;">You can still access an archive of the old FEC.gov at <a style="color: #ffffff; text-decoration: underline" href="http://classic.fec.gov">classic.fec.gov</a></p>
+    </div>
+    <![endif]-->
+    {% wagtailuserbar %}
+    <a href="#main" class="skip-nav">skip navigation</a>
+    {% if self.title == "Homepage" or self.title == "Home" %}
+    <header class="site-header site-header--homepage">
+      <div class="masthead">
+        <div class="homepage-seal">
+          <img src="{% static 'img/seal.svg' %}" alt="FEC logo">
+        </div>
+        <div class="disclaimer">
+          <span class="disclaimer__right">An official website of the U.S. government <img src="{% static 'img/us_flag_small.png' %}" class="flag" alt="US flag signifying that this is a United States Federal Government website"></span>
+        </div>
+        <div class="site-title--print"></div>
+        <a title="Home" href="/" class="site-title" rel="home"><span class="u-visually-hidden">Federal Election Commission | United States of America</span></a>
+        <ul class="utility-nav list--flat">
+          <li class="utility-nav__item"><a href="/calendar/">Calendar</a></li>
+          <li class="utility-nav__item">
+            <a class="js-glossary-toggle glossary__toggle">Glossary</a>
+          </li>
+          <li class="utility-nav__search">
+            <form accept-charset="UTF-8" action="/search" class="combo" method="get" role="search">
+              <input type="hidden" name="type" value="candidates">
+              <input type="hidden" name="type" value="committees">
+              <input type="hidden" name="type" value="site">
+              <label class="u-visually-hidden" for="query">Search</label>
+              <input
+                class="js-site-search combo__input"
+                autocomplete="off"
+                id="query"
+                name="query"
+                type="text"
+                aria-label="Search FEC.gov">
+              <button type="submit" class="button--standard combo__button button--search">
+                <span class="u-visually-hidden">Search</span>
+              </button>
+            </form>
+          </li>
+        </ul>
+      </div>
+      {% include 'partials/navigation/navigation.html' %}
+    </header>
+    {% else %}
+    <header class="site-header">
+      <div class="masthead">
+        <div class="disclaimer">
+          <span class="disclaimer__right">An official website of the United States Government <img src="{% static 'img/us_flag_small.png' %}"  alt="US flag signifying that this is a United States Federal Government website"></span>
+        </div>
+        <div class="site-title--print"></div>
+        <a title="Home" href="/" class="site-title" rel="home"><span class="u-visually-hidden">Federal Election Commission | United States of America</span></a>
+        <ul class="utility-nav list--flat">
+          <li class="utility-nav__item{% if self.content_section == 'calendar' %} is-active{% endif %}"><a href="/calendar/">Calendar</a></li>
+          <li class="utility-nav__item"><a class="js-glossary-toggle glossary__toggle">Glossary</a></li>
+          <li class="utility-nav__search">
+            <form accept-charset="UTF-8" action="/search" id="search_form" class="combo" method="get" role="search">
+              <input type="hidden" name="type" value="candidates">
+              <input type="hidden" name="type" value="committees">
+              <input type="hidden" name="type" value="site">
+              <label class="u-visually-hidden" for="query">Search</label>
+              <input
+                class="js-site-search combo__input"
+                autocomplete="off"
+                id="query"
+                name="query"
+                type="text"
+                aria-label="Search FEC.gov">
+              <button type="submit" class="button--standard combo__button button--search">
+                <span class="u-visually-hidden">Search</span>
+              </button>
+            </form>
+          </li>
+        </ul>
+      </div>
+      {% include 'partials/navigation/navigation.html' %}
+    </header>
+    {% endif %}
+
+    <main id="main">
+      {% block content %}{% endblock %}
+    </main>
+
+    {% include 'partials/footer-navigation.html' %}
+    <footer class="footer">
+      <div class="container">
+        <div class="seal">
+          <img class="seal__img" width="140" height="140" src="{% static "img/seal--inverse.svg" %}" alt="Seal of the Federal Election Commission | United States of America">
+          <p class="address__title">Federal Election Commission</p>
+        </div>
+
+        <div class="address">
+          <ul class="social-media">
+            <li>
+              <div class="i icon--twitter">
+                <a href="https://twitter.com/fec"><span class="u-visually-hidden">The FEC's Twitter page</span></a>
+              </div>
+            </li>
+            <li>
+              <div class="i icon--youtube">
+                <a href="https://www.youtube.com/user/FECTube"><span class="u-visually-hidden">The FEC's YouTube page</span></a>
+              </div>
+            </li>
+          </ul>
+
+          <p>1050 First Street, NE<br>
+          Washington, DC 20463</p>
+
+          <a href="https://public.govdelivery.com/accounts/USFEC/subscriber/topics?qsp=CODE_RED" target="_blank">
+            <button class="button--standard button--envelope">Sign up for FECMail</button>
+          </a>
+        </div>
+      </div>
+    </footer>
+
+    {% include './partials/glossary.html' %}
+
+    {% csrf_token %}
+
+    <script>
+      window.BASE_PATH = '/data';
+      window.FEC_APP_URL = '{{ settings.FEC_APP_URL }}';
+      window.API_LOCATION = '{{ settings.FEC_API_URL }}';
+      window.API_VERSION = '{{ settings.FEC_API_VERSION }}';
+      window.API_KEY = '{{ settings.FEC_API_KEY_PUBLIC }}';
+      window.TRANSITION_URL = '{{ settings.FEC_TRANSITION_URL }}';
+      window.CANONICAL_BASE = '{{ settings.CANONICAL_BASE }}'
+    </script>
+
+
+    {# Global javascript #}
+    <script type="text/javascript" src="{% asset_for_js 'vendor.js' %}"></script>
+    <script type="text/javascript" src="{% asset_for_js 'init.js' %}"></script>
+    <script type="text/javascript" src='https://www.google.com/recaptcha/api.js'></script>
+
+    {% block extra_js %}
+    {# Override this in templates to add extra javascript #}
+    {% endblock %}
+
+    {% if not settings.DEBUG %}
+    <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+      ga('set', 'anonymizeIp', true);
+      ga('set', 'forceSSL', true);
+      ga('create', 'UA-48605964-22', 'auto');
+      ga('send', 'pageview');
+    </script>
+
+    <script id="_fed_an_ua_tag" src="https://dap.digitalgov.gov/Universal-Federated-Analytics-Min.js?agency=FEC"></script>
+    {% endif %}
+  </body>
+</html>

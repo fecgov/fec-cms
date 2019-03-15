@@ -1,0 +1,105 @@
+{% if FEATURES.barcharts %}
+{% load wagtailcore_tags %}
+{% load filters %}
+
+    <link rel="stylesheet" type="text/css" href="{% asset_for_css 'base.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% asset_for_css 'data-landing.css' %}">
+
+<h2 class="heading--section u-margin--bottom">Who is raising and spending the most</h2>
+<section class="usa-grid-full">
+  <p class="t-bold">Learn how much individual candidates have raised and spent for presidential, Senate and House elections.</p>
+  <div class="usa-width-two-thirds grid--flex">
+    <section id="raising-breakdowns">
+       <div class="js-top-entities" data-office="{{ office }}" data-election-year="{{ election_year }}" data-perpage="3">
+
+       <div class="chart-table chart-table-home simple-table--responsive js-top-table" id="top-table" aria-live="polite" role="grid">
+
+        <div role="row" class="simple-table__header">
+          <div role="columnheader" class="simple-table__header-cell cell--40">Name</div>
+          <div role="columnheader" class="simple-table__header-cell cell--20 t-right-aligned js-type-label">Total <span>{{ action }}</span></div>
+          <div role="columnheader" class="simple-table__header-cell cell--40"></div>
+        </div>
+
+        {% for datum in data %}
+        <div role="row" class="js-top-row simple-table__row">
+
+        </div>
+        {% endfor %}
+        </div>
+
+      <div class="content__section row u-margin--top">
+        <ul class="list--buttons u-float-right">
+          <li><a class="button button--standard button--table js-browse"  href="/data/receipts">Explore top <span>raising</span> candidates</a></li>
+        </ul>
+      </div>
+     </div>
+    </section>
+  </div>
+  <div class="usa-width-one-third example--primary">
+    <fieldset class="toggles u-margin--bottom" data-filter="toggle" data-filter-ignore-count="true">
+      <legend class="label input__label-home t-inline-block">Data type</legend>
+      <div class="row">
+        <label for="switcher-receipts" class="toggle">
+          <input type="radio" class="js-chart-toggle" value="receipts" id="switcher-receipts" checked name="data_type" data-prefix="raising"  aria-controls="processed-message" tabindex="0">
+          <span class="button--alt">Money raised</span>
+        </label>
+        <label for="switcher-disbursements" class="toggle">
+          <input type="radio" class="js-chart-toggle" value="disbursements" id="switcher-disbursements" name="data_type" data-prefix="spending" aria-controls="processed-message" tabindex="0">
+          <span class="button--alt">Money spent</span>
+        </label>
+      </div>
+    </fieldset>
+
+    <div class="js-top-entities raising-spending-controls content__section" data-office="{{ office }}" data-election-year="{{ election_year }}">
+      <form action="" method="GET" class="u-margin--bottom">
+        <div class="office-select u-margin--bottom">
+        <label for="top-category" class="js-type-label input__label-home label t-inline-block">How much has been <span>{{ action }}</span> by </label>
+          <select id="top-category" name="top_category" class="js-office" aria-controls="top-table">
+            <option value="P" {% if office == 'P' %}selected{% endif %}>Presidential candidates</option>
+            <option value="S" {% if office == 'S' %}selected{% endif %}>Senate candidates</option>
+            <option value="H" {% if office == 'H' %}selected{% endif %}>House candidates</option>
+          </select>
+        </div>
+          <noscript>
+            <button type="submit" class="button button--cta">Submit</button>
+          </noscript>
+      </form>
+      <form action="" method="get">
+        <div class="row">
+          <div class="cycle-select">
+            <label for="election-year" class="label input__label-home">Running in</label>
+            <select id="election-year" class="js-election-year" name="cycle">
+              {% for each in election_years %}
+                <option
+                    value="{{ each }}"
+                    {% if election_year == each %}selected{% endif %}
+                  >{{ each }}</option>
+              {% endfor %}
+            </select>
+          </div>
+        </div>
+        <noscript>
+          <button type="submit" class="button button--cta">Submit</button>
+        </noscript>
+      </form>
+    </div>
+  </div>
+</section>
+
+ <script type="text/javascript">
+ var context = {
+   type: 'receipts'
+ }
+
+API_LOCATION = '{{ API_LOCATION }}';
+API_VERSION = '{{ API_VERSION }}';
+FEC_APP_URL = '{{ FEC_APP_URL }}';
+BASE_PATH = '{{ BASE_PATH }}';
+API_KEY = '{{ API_KEY }}';
+CANONICAL_BASE = '{{ CANONICAL_BASE }}';
+BASE_URL = '{{ BASE_URL }}';
+</script>
+
+<script type="text/javascript" src="{% asset_for_js 'vendor.js' %}"></script>
+<script src="{% asset_for_js 'bythenumbers.js' %}"></script>
+{% endif %}

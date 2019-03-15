@@ -48,6 +48,8 @@ FEATURES = {
     'adrs': bool(env.get_credential('FEC_FEATURE_ADRS', '')),
     'afs': bool(env.get_credential('FEC_FEATURE_AFS', '')),
     'aggregatetotals': bool(env.get_credential('FEC_FEATURE_AGGR_TOTS', '')),
+    'map': bool(env.get_credential('FEC_FEATURE_HOME_MAP', '')),
+    'barcharts': bool(env.get_credential('FEC_FEATURE_HOME_BARCHARTS', '')),
 }
 
 ENVIRONMENTS = {

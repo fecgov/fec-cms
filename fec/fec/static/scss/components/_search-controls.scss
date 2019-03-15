@@ -126,6 +126,31 @@
   }
 }
 
+//For home-page embedded election map form fields
+.election-search-home {
+  .search-controls__zip {
+  @include span-columns(6);
+  margin-bottom: u(1rem);
+
+  input {
+    width: 100%;
+  }
+}
+
+}
+
+.raising-spending-controls {
+  .office-select {
+    @include span-columns(10);
+    select {
+     width:100%;
+   }
+  }
+  .cycle-select {
+    @include span-columns(6);
+  }
+}
+
  //for keyword-options modals on AO, MUR, Statues searches
 .keyword-modal{
   .modal__tips, modal__form {
@@ -340,9 +365,4 @@
   }
 }
 
-select#top-category {
-  min-width: 15em;
-}
-select#election-year {
-  min-width: 6.5em;
-}
+
