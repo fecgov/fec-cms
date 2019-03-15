@@ -27,7 +27,7 @@ function TopEntities(elm, type) {
   this.$elm
     .find('.js-next')
     .on('click', this.handlePagination.bind(this, 'next'));
-  $('.js-chart-toggle').on('change', this.handleTypeChange.bind(this))
+  $('.js-chart-toggle').on('change', this.handleTypeChange.bind(this));
 }
 
 TopEntities.prototype.init = function() {
@@ -255,7 +255,7 @@ TopEntities.prototype.handleTypeChange = function(e) {
 
   var baseQuery = {
     sort: '-' + this.type,
-    per_page: 10,
+    per_page: this.per_page,
     sort_hide_null: true,
     election_year: this.election_year,
     election_full: true,
@@ -263,16 +263,18 @@ TopEntities.prototype.handleTypeChange = function(e) {
     active_candidates: true
   };
 
+  this.currentQuery = baseQuery;
+
   this.loadData(this.currentQuery);
   this.updateCoverageDateRange();
 
-  $('a.js-browse').attr({
-    'href':"/data/"+this.type
-  }).html('Browse top '+this.prefix+' candidates')
+  $('a.js-browse')
+    .attr({
+      href: '/data/' + this.type
+    })
+    .html('Browse top ' + this.prefix + ' candidates');
 
-  $('.js-type-label span').html(this.action)
-
+  $('.js-type-label span').html(this.action);
 };
-
 
 module.exports = { TopEntities: TopEntities };

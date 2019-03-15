@@ -6,7 +6,7 @@ var CheckboxFilter = require('./checkbox-filter').CheckboxFilter;
 
 /* MultiFilters used when there are multiple filters that share the
  * same name attribute
-*/
+ */
 
 function MultiFilter(elm) {
   Filter.call(this, elm);
