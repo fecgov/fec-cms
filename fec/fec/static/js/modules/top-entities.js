@@ -84,7 +84,8 @@ TopEntities.prototype.handleOfficeChange = function(e) {
   this.office = e.target.value;
 
   this.currentQuery = Object.assign({}, this.currentQuery, {
-    office: this.office
+    office: this.office,
+    page: 1
   });
   this.updateElectionYearOptions(this.office);
   this.updateCoverageDateRange();
