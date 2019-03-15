@@ -15,15 +15,13 @@ require('./setup')();
 var TopEntities = require('../../static/js/modules/top-entities').TopEntities;
 
 var DOM =
-  '<select class="js-category">' +
+'<select class="js-office">' +
   '<option value="P">President</option>' +
   '<option value="S">Senate</option>' +
   '<option value="H">House</option>' +
-  '<option value="pac">PACs</option>' +
-  '<option value="party">Party</option>' +
-  '</select>' +
-  '<span class="js-dates"></span>' +
-  '<div class="js-top-table">' +
+'</select>' +
+'<span class="js-dates"></span>' +
+'<div class="js-top-table">' +
   '<div class="js-top-row">' +
   '<div class="value-bar" data-value="1000"></div>' +
   '</div>' +
@@ -43,13 +41,11 @@ describe('Top entities breakdown', function() {
 
   describe('candidate initialization', function() {
     beforeEach(function() {
-      this.$fixture
-        .empty()
-        .append(
-          '<div class="js-top-entities" data-category="P" data-cycle="2016">' +
-            DOM +
-            '</div>'
-        );
+      this.$fixture.empty().append(
+        '<div class="js-top-entities" data-office="P" data-election-year="2016">' +
+          DOM +
+        '</div>'
+      );
       this.chart = new TopEntities('.js-top-entities', 'receipts');
     });
 
@@ -62,23 +58,23 @@ describe('Top entities breakdown', function() {
       expect(this.chart.$pageInfo.is('#fixtures .js-page-info')).to.be.true;
     });
 
-    it('sets the correct properties', function() {
-      expect(this.chart.category).to.equal('candidates');
-      expect(this.chart.type).to.equal('receipts');
-      expect(this.chart.cycle).to.equal(2016);
+    it('tests updating the office type from presidential to senate', function() {
+      expect(this.chart.office == 'P', 'office should be P').to.be.true;
+      expect(this.chart.election_year == 2016, 'year should be 2016').to.be.true;
+      this.chart.handleOfficeChange({target: {value: 'S'}, preventDefault: function(){}});
+      expect(this.chart.office == 'S', 'office should now be S').to.be.true;
+      expect(this.chart.election_year == 2016, 'year should still be 2016').to.be.true;
     });
   });
 
   describe('alternate initialization', function() {
     // This tests for initializing for Senate, disbursements and previous election years
     beforeEach(function() {
-      this.$fixture
-        .empty()
-        .append(
-          '<div class="js-top-entities" data-category="pac" data-cycle="2012">' +
-            DOM +
-            '</div>'
-        );
+      this.$fixture.empty().append(
+        '<div class="js-top-entities" data-office="S" data-election-year="2012">' +
+          DOM +
+        '</div>'
+      );
       this.chart = new TopEntities('.js-top-entities', 'disbursements');
     });
 
@@ -94,20 +90,18 @@ describe('Top entities breakdown', function() {
       });
     });
 
-    it('saves the correct base path', function() {
-      expect(this.chart.basePath).to.deep.equal(['totals', 'pac']);
+    it('saves the correct base path', function(){
+      expect(this.chart.basePath).to.deep.equal(['candidates', 'totals']);
     });
   });
 
   describe('chart methods', function() {
     beforeEach(function() {
-      this.$fixture
-        .empty()
-        .append(
-          '<div class="js-top-entities" data-category="P" data-cycle="2016">' +
-            DOM +
-            '</div>'
-        );
+      this.$fixture.empty().append(
+        '<div class="js-top-entities" data-office="P" data-election-year="2016">' +
+          DOM +
+        '</div>'
+      );
       this.chart = new TopEntities('.js-top-entities', 'receipts');
     });
 
@@ -145,38 +139,19 @@ describe('Top entities breakdown', function() {
 
       afterEach(function() {
         this.chart.loadData.restore();
-        this.chart.updateDates.restore();
+        this.chart.updateCoverageDateRange.restore();
       });
 
-      it('handles cycle changes', function() {
-        this.chart.handleCycleChange({
-          target: { value: '2012' },
-          preventDefault: function() {}
-        });
-        expect(this.chart.currentQuery.cycle).to.equal('2012');
-        expect(this.chart.currentQuery.office).to.equal('P');
-        expect(this.chart.currentQuery.page).to.equal(1);
-        expect(this.chart.loadData).to.have.been.called;
-        expect(this.chart.updateDates).to.have.been.called;
-      });
-
-      it('handles category change to non-candidates', function() {
-        this.chart.handleCategoryChange({
-          target: { value: 'pac' },
-          preventDefault: function() {}
-        });
-        expect(this.chart.basePath).to.deep.equal(['totals', 'pac']);
-        expect(this.chart.category).to.equal('pac');
-        expect(this.chart.currentQuery.page).to.equal(1);
+      it('handles election-year changes', function() {
+        
+        this.chart.handleElectionYearChange({target: {value: '2012'}, preventDefault: function(){}});
+        expect(this.chart.currentQuery.election_year).to.equal('2012');
         expect(this.chart.loadData).to.have.been.called;
         expect(this.chart.updateCoverageDateRange).to.have.been.called;
       });
 
-      it('handles category change to candidates', function() {
-        this.chart.handleCategoryChange({
-          target: { value: 'S' },
-          preventDefault: function() {}
-        });
+      it('handles office change to S', function() {
+        this.chart.handleOfficeChange({target: {value: 'S'}, preventDefault: function(){}});
         expect(this.chart.basePath).to.deep.equal(['candidates', 'totals']);
         expect(this.chart.currentQuery.office).to.equal('S');
         expect(this.chart.loadData).to.have.been.called;
@@ -235,35 +210,6 @@ describe('Top entities breakdown', function() {
           this.chart.drawBars.restore();
         });
 
-        it('formats a candidate response', function() {
-          this.chart.category = 'candidates';
-          var data = this.chart.formatData(
-            this.candidateResponse.results[0],
-            1
-          );
-          expect(data).to.deep.equal({
-            name: 'Thing A',
-            amount: '$2,000.00',
-            value: 2000,
-            rank: 1,
-            party: 'dem',
-            party_code: '[DEM]',
-            url: '//candidate/1234/?cycle=2016&election_full=false'
-          });
-        });
-
-        it('formats a pac response', function() {
-          this.chart.category = 'pac';
-          var data = this.chart.formatData(this.pacResponse.results[0], 1);
-          expect(data).to.deep.equal({
-            name: 'Thing B',
-            amount: '$1,000.00',
-            rank: 1,
-            value: 1000,
-            url: '//committee/1234/?cycle=2016'
-          });
-        });
-
         it('populates the table with a response', function() {
           this.chart.populateTable(this.candidateResponse);
           expect(this.chart.maxValue).equals(2000);
@@ -288,13 +234,11 @@ describe('Top entities breakdown', function() {
 
       it('updates the coverage dates for the current year', function() {
         var today = new Date();
-        var lastYear = today.getFullYear() - 1;
-        var formattedToday = moment(today).format('MM/DD/YYYY');
-        this.chart.cycle = today.getFullYear();
-        this.chart.updateDates();
-        expect(this.chart.$dates.html()).to.equal(
-          '01/01/' + lastYear + '–' + formattedToday
-        );
+        var lastYear = today.getFullYear() - 3;
+        var formattedToday = "12/31/" + today.getFullYear();
+        this.chart.election_year = today.getFullYear();
+        this.chart.updateCoverageDateRange();
+        expect(this.chart.$dates.html()).to.equal('01/01/' + lastYear + '–' + formattedToday);
       });
 
       it('updates the page info', function() {
