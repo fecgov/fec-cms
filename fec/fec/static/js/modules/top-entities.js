@@ -2,20 +2,15 @@
 
 var $ = require('jquery');
 var URI = require('urijs');
-var _ = require('underscore');
 var helpers = require('../modules/helpers');
-var moment = require('moment');
 
 var TOP_ROW = require('../templates/top-entity-row.hbs');
-
-// Store candidate office letters for to look up when a chart category is a candidate
-var candidateCategories = ['P', 'S', 'H'];
 
 function TopEntities(elm, type) {
   this.$elm = $(elm);
   this.type = type;
-  this.category = this.$elm.data('category');
-  this.cycle = this.$elm.data('cycle');
+  this.office = this.$elm.data('office');
+  this.election_year = this.$elm.data('election-year');
 
   this.$table = this.$elm.find('.js-top-table');
   this.$dates = this.$elm.find('.js-dates');
@@ -24,10 +19,7 @@ function TopEntities(elm, type) {
   this.$pageInfo = this.$elm.find('.js-page-info');
   this.init();
 
-  $('.js-cycle').on('change', this.handleCycleChange.bind(this));
-  this.$elm
-    .find('.js-category')
-    .on('change', this.handleCategoryChange.bind(this));
+  this.$elm.find('.js-office').on('change', this.handleOfficeChange.bind(this));
   this.$elm
     .find('.js-previous')
     .on('click', this.handlePagination.bind(this, 'previous'));
@@ -37,16 +29,21 @@ function TopEntities(elm, type) {
 }
 
 TopEntities.prototype.init = function() {
-  if (candidateCategories.indexOf(this.category) > -1) {
-    this.basePath = ['candidates', 'totals'];
-  } else {
-    this.basePath = ['totals', this.category];
-  }
-  this.baseQuery = {
+  $('.js-election-year')
+    .off()
+    .on('change', this.handleElectionYearChange.bind(this));
+
+  this.basePath = ['candidates', 'totals'];
+
+  var baseQuery = {
     sort: '-' + this.type,
     per_page: 10,
     sort_hide_null: true,
-    cycle: this.cycle
+    election_year: this.election_year,
+    election_full: true,
+    office: this.office,
+    active_candidates: true,
+    page: 1
   };
   this.maxValue = Number(
     this.$table
@@ -56,64 +53,76 @@ TopEntities.prototype.init = function() {
   );
 
   // Store the current query for use in pagination and more
-  this.currentQuery = this.baseQuery;
-
-  // If it's a candidate table, add the office to the current query
-  if (candidateCategories.indexOf(this.category) > -1) {
-    this.office = this.category;
-    this.currentQuery.office = this.office;
-    this.category = 'candidates';
-  }
+  this.currentQuery = baseQuery;
 
   if (!this.currentQuery.page) {
     this.$previous.addClass('is-disabled');
   }
 
-  this.drawBars();
+  this.updateElectionYearOptions(this.office);
+  this.updateCoverageDateRange();
+
+  this.loadData(this.currentQuery);
 };
 
-TopEntities.prototype.handleCycleChange = function(e) {
+TopEntities.prototype.handleElectionYearChange = function(e) {
   e.preventDefault();
-  this.cycle = e.target.value;
-  if (this.category === 'candidates') {
-    this.currentQuery = _.extend({}, this.baseQuery, {
-      cycle: this.cycle,
-      office: this.office,
-      page: 1
-    });
-  } else {
-    this.currentQuery = _.extend({}, this.baseQuery, {
-      cycle: this.cycle,
-      page: 1
-    });
-  }
+  this.election_year = e.target.value;
+  this.currentQuery = Object.assign({}, this.currentQuery, {
+    election_year: this.election_year,
+    page: 1
+  });
+
   this.loadData(this.currentQuery);
-  this.updateDates();
-  this.pushStateToURL({ cycle: this.cycle });
+  this.updateCoverageDateRange();
+  this.pushStateToURL({ election_year: this.election_year });
 };
 
-TopEntities.prototype.handleCategoryChange = function(e) {
+TopEntities.prototype.handleOfficeChange = function(e) {
   e.preventDefault();
-  var category = e.target.value;
-  if (candidateCategories.indexOf(category) > -1) {
-    this.basePath = ['candidates', 'totals'];
-    this.category = 'candidates';
-    this.office = category;
-    this.currentQuery = _.extend({}, this.baseQuery, {
-      office: this.office,
-      cycle: this.cycle,
-      page: 1
-    });
-  } else {
-    this.basePath = ['totals', category];
-    this.category = category;
-    this.currentQuery = _.extend({}, this.baseQuery, {
-      cycle: this.cycle,
-      page: 1
-    });
-  }
+  this.office = e.target.value;
+
+  this.currentQuery = Object.assign({}, this.currentQuery, {
+    office: this.office,
+    page: 1
+  });
+  this.updateElectionYearOptions(this.office);
+  this.updateCoverageDateRange();
   this.loadData(this.currentQuery);
-  this.pushStateToURL({ list: e.target.value });
+  this.pushStateToURL({ office: this.office });
+};
+
+TopEntities.prototype.updateElectionYearOptions = function(office) {
+  var now = new Date();
+  var currentYear = now.getFullYear();
+  var minFutureYear = currentYear;
+
+  if (office == 'P') {
+    // only show presential options
+    $('#election-year option').each(function() {
+      var optValue = parseInt($(this).val());
+      // hide all of the non-presidential election years
+      if (optValue % 4 !== 0) {
+        $(this).hide();
+      } else {
+        // track the nearest future presidential election
+        if (optValue > currentYear) {
+          minFutureYear = optValue;
+        }
+      }
+    });
+    var currentOption = $(
+      '#election-year option[value="' + this.election_year + '"]'
+    );
+    if (currentOption.css('display') == 'none') {
+      $('#election-year')
+        .val(minFutureYear)
+        .change();
+    }
+  } else {
+    // show all options!
+    $('#election-year option').show();
+  }
 };
 
 TopEntities.prototype.handlePagination = function(direction, e) {
@@ -142,7 +151,7 @@ TopEntities.prototype.populateTable = function(response) {
   self.$table.find('.js-top-row').remove();
   var index = 1;
   var rankBase = (response.pagination.page - 1) * 10; // So that page 2 starts at 11
-  _.each(response.results, function(result) {
+  response.results.forEach(function(result) {
     var rank = rankBase + index;
     var data = self.formatData(result, rank);
     self.$table.append(TOP_ROW(data));
@@ -151,7 +160,9 @@ TopEntities.prototype.populateTable = function(response) {
 
   // Set max value if it's the first page
   if (response.pagination.page === 1) {
-    self.maxValue = response.results[0].receipts;
+    if (response.results.length > 0) {
+      self.maxValue = response.results[0].receipts;
+    }
     self.$previous.addClass('is-disabled');
   }
   self.updatePagination(response.pagination);
@@ -159,32 +170,19 @@ TopEntities.prototype.populateTable = function(response) {
 };
 
 TopEntities.prototype.formatData = function(result, rank) {
-  var data;
-  if (this.category === 'candidates') {
-    data = {
-      name: result.name,
-      amount: helpers.currency(result[this.type]),
-      value: result[this.type],
-      rank: rank,
-      party: result.party,
-      party_code:
-        result.party === null ? '' : '[' + result.party.toUpperCase() + ']',
-      url: helpers.buildAppUrl(['candidate', result.candidate_id], {
-        cycle: this.cycle,
-        election_full: false
-      })
-    };
-  } else {
-    data = {
-      name: result.committee_name,
-      amount: helpers.currency(result[this.type]),
-      value: result[this.type],
-      rank: rank,
-      url: helpers.buildAppUrl(['committee', result.committee_id], {
-        cycle: this.cycle
-      })
-    };
-  }
+  var data = {
+    name: result.name,
+    amount: helpers.currency(result[this.type]),
+    value: result[this.type],
+    rank: rank,
+    party: result.party,
+    party_code:
+      result.party === null ? '' : '[' + result.party.toUpperCase() + ']',
+    url: helpers.buildAppUrl(['candidate', result.candidate_id], {
+      cycle: this.election_year,
+      election_full: true
+    })
+  };
 
   return data;
 };
@@ -197,14 +195,21 @@ TopEntities.prototype.drawBars = function() {
   });
 };
 
-TopEntities.prototype.updateDates = function() {
-  var today = new Date();
-  var startDate = '01/01/' + String(this.cycle - 1);
-  var endDate =
-    this.cycle !== today.getFullYear()
-      ? '12/31/' + this.cycle
-      : moment(today).format('MM/DD/YYYY');
-  this.$dates.html(startDate + '–' + endDate);
+TopEntities.prototype.updateCoverageDateRange = function() {
+  var coverage_start_date = null;
+  var coverage_end_date = '12/31/' + this.election_year;
+  if (this.office === 'P') {
+    //For Presidential coverage start dates
+    coverage_start_date = '01/01/' + String(this.election_year - 3);
+  } else if (this.office === 'S') {
+    // For Senate coverage start dates
+    coverage_start_date = '01/01/' + String(this.election_year - 5);
+  } else {
+    // For House coverage start dates
+    coverage_start_date = '01/01/' + String(this.election_year - 1);
+  }
+
+  this.$dates.html(coverage_start_date + '–' + coverage_end_date);
 };
 
 TopEntities.prototype.updatePagination = function(pagination) {
@@ -231,7 +236,10 @@ TopEntities.prototype.updatePagination = function(pagination) {
 };
 
 TopEntities.prototype.pushStateToURL = function(keyValPairsObj) {
-  var query = _.extend(URI.parseQuery(window.location.search), keyValPairsObj);
+  var query = Object.assign(
+    URI.parseQuery(window.location.search),
+    keyValPairsObj
+  );
   var search = URI('')
     .query(query)
     .toString();

@@ -1,0 +1,42 @@
+.aggregate-totals-block {
+  background-color: $neutral;
+  color: $base;
+  margin: 2rem 0;
+  padding: 2rem;
+
+  h1 {
+    font-family: $sans-serif;
+    line-height: 1em;
+    margin: 0 0 .75rem;
+    text-align: center;
+  }
+  h2 {
+    font-family: $sans-serif;
+    font-size: u(1.4rem);
+    line-height: 1.2em;
+    margin: 0;
+    text-align: center;
+  }
+  
+  @include media($lg) {
+    align-items: center;
+    display: flex;
+    margin: 2rem 0;
+    padding: 2rem;
+
+    h1 {
+      flex-grow: 4;
+      margin: 0 0 0 .6rem;
+      order: 1;
+      text-align: right;
+    }
+    h2 {
+      flex-grow: 1;
+      font-size: u(1.4rem);
+      margin-left: .6rem;
+      order: 2;
+      text-align: left;
+      width: 30%;
+    }
+  }
+}
