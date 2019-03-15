@@ -42,7 +42,8 @@ TopEntities.prototype.init = function() {
     election_year: this.election_year,
     election_full: true,
     office: this.office,
-    active_candidates: true
+    active_candidates: true,
+    page: 1
   };
   this.maxValue = Number(
     this.$table
@@ -82,7 +83,8 @@ TopEntities.prototype.handleOfficeChange = function(e) {
   this.office = e.target.value;
 
   this.currentQuery = Object.assign({}, this.currentQuery, {
-    office: this.office
+    office: this.office,
+    page: 1
   });
   this.updateElectionYearOptions(this.office);
   this.updateCoverageDateRange();

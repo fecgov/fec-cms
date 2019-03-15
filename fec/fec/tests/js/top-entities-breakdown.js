@@ -29,7 +29,7 @@ var DOM =
   '<div class="value-bar" data-value="500"></div>' +
   '</div>' +
   '</div>' +
-  '<button class="js-previous"></button>' +
+  '<button class="js-previous is-disabled"></button>' +
   '<button class="js-next"></button>' +
   '<span class="js-page-info"></button>';
 
@@ -86,7 +86,8 @@ describe('Top entities breakdown', function() {
         election_year: 2012,
         election_full: true,
         office: 'S',
-        active_candidates: true
+        active_candidates: true,
+        page: 1
       });
     });
 
@@ -118,7 +119,8 @@ describe('Top entities breakdown', function() {
           election_year: 2016,
           election_full: true,
           office: 'P',
-          active_candidates: true
+          active_candidates: true,
+          page: 1
         });
       });
 
