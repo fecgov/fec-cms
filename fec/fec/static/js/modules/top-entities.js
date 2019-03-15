@@ -271,7 +271,7 @@ TopEntities.prototype.handleTypeChange = function(e) {
 
   $('a.js-browse')
     .attr({
-      href: '/data/' + this.type
+      href: '/data/'+this.prefix+'-bythenumbers/'
     })
     .html('Browse top ' + this.prefix + ' candidates');
 
