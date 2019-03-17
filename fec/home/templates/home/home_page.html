@@ -79,7 +79,7 @@
         </div>
       </div>
 
-    {% raising request %}
+    {% raising_spending request %}
 
     </div>
   </section>
@@ -151,9 +151,10 @@
       </div>
     </div>
   </section>
-
 {% endblock %}
 
 {% block extra_js %}
-  <script type="text/javascript" src="{% asset_for_js 'home.js' %}"></script>
+<script src="{% asset_for_js 'bythenumbers.js' %}"></script>
+<script src="{% asset_for_js 'dataviz-common.js' %}"></script>
+<script src="{% asset_for_js 'election-lookup.js' %}"></script>
 {% endblock %}

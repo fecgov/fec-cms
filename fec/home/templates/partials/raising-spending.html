@@ -2,9 +2,6 @@
 {% load wagtailcore_tags %}
 {% load filters %}
 
-    <link rel="stylesheet" type="text/css" href="{% asset_for_css 'base.css' %}">
-    <link rel="stylesheet" type="text/css" href="{% asset_for_css 'data-landing.css' %}">
-
 <h2 class="heading--section u-margin--bottom">Who is raising and spending the most</h2>
 <section class="usa-grid-full">
   <p class="t-bold">Learn how much individual candidates have raised and spent for presidential, Senate and House elections.</p>
@@ -90,16 +87,5 @@
  var context = {
    type: 'receipts'
  }
-
-API_LOCATION = '{{ API_LOCATION }}';
-API_VERSION = '{{ API_VERSION }}';
-FEC_APP_URL = '{{ FEC_APP_URL }}';
-BASE_PATH = '{{ BASE_PATH }}';
-API_KEY = '{{ API_KEY }}';
-CANONICAL_BASE = '{{ CANONICAL_BASE }}';
-BASE_URL = '{{ BASE_URL }}';
 </script>
-
-<script type="text/javascript" src="{% asset_for_js 'vendor.js' %}"></script>
-<script src="{% asset_for_js 'bythenumbers.js' %}"></script>
 {% endif %}

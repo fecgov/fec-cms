@@ -2,10 +2,6 @@
 {% load wagtailcore_tags %}
 {% load filters %}
 
-
-
-<link rel="stylesheet" type="text/css" href="{% asset_for_css 'elections.css' %}" />
-
 <h2 class="heading--section">Compare candidates in an election</h2>
 <div class="grid grid--2-wide grid--flex" id="election-lookup">
   <div class="grid__item">
@@ -75,16 +71,8 @@ var context = {
   }
 };
 
-  API_LOCATION = '{{ API_LOCATION }}';
-  API_VERSION = '{{ API_VERSION }}';
-  FEC_APP_URL = '{{ FEC_APP_URL }}';
-  BASE_PATH = '{{ BASE_PATH }}';
-  API_KEY = '{{ API_KEY }}';
-  CANONICAL_BASE = '{{ CANONICAL_BASE }}';
-  BASE_URL = '{{ BASE_URL }}';
+
 </script>
 
-<script type="text/javascript" src="{% asset_for_js 'vendor.js' %}"></script>
-<script src="{% asset_for_js 'dataviz-common.js' %}"></script>
-<script src="{% asset_for_js 'election-lookup.js' %}"></script>
+
 {% endif %}

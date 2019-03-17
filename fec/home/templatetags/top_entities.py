@@ -1,6 +1,7 @@
 from django import template
 from data import constants
 
+import datetime
 from django.conf import settings
 from data import constants
 from data import utils
@@ -9,7 +10,7 @@ register = template.Library()
 
 
 @register.inclusion_tag('partials/raising-spending.html')
-def raising(request):
+def raising_spending(request):
     office = request.GET.get('office', 'P')
 
     election_year = int(request.GET.get('election_year', constants.DEFAULT_ELECTION_YEAR))
