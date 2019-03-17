@@ -157,4 +157,20 @@
 <script src="{% asset_for_js 'bythenumbers.js' %}"></script>
 <script src="{% asset_for_js 'dataviz-common.js' %}"></script>
 <script src="{% asset_for_js 'election-lookup.js' %}"></script>
+<script>
+  //remove competing/cofusing querystrings on homepage
+  $(function(){
+    function cleanURI(){
+      let uri = window.location.toString();
+      const clean_uri = uri.substring(0, uri.indexOf("?"));
+      if (uri.indexOf("?") > 0) {
+        window.history.replaceState({}, document.title, clean_uri);
+      }
+    }
+    $('body').on('change ', 'input, select', function(){
+      cleanURI()
+    })
+  cleanURI()
+  });
+</script>
 {% endblock %}
