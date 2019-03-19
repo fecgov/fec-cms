@@ -153,7 +153,7 @@ TopEntities.prototype.populateTable = function(response) {
   var index = 1;
   var rankBase = (response.pagination.page - 1) * 10; // So that page 2 starts at 11
   response.results.forEach(function(result) {
-    var rank = rankBase + index;
+    var rank = self.per_page==3 ? '' :rankBase + index +'.';
     var data = self.formatData(result, rank);
     self.$table.append(TOP_ROW(data));
     index++;

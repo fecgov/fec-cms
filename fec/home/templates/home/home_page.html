@@ -158,19 +158,22 @@
 <script src="{% asset_for_js 'dataviz-common.js' %}"></script>
 <script src="{% asset_for_js 'election-lookup.js' %}"></script>
 <script>
-  //remove competing/cofusing querystrings on homepage
+  //remove competing/confusing querystrings on homepage
   $(function(){
+    cleanURI()
     function cleanURI(){
-      let uri = window.location.toString();
-      const clean_uri = uri.substring(0, uri.indexOf("?"));
-      if (uri.indexOf("?") > 0) {
-        window.history.replaceState({}, document.title, clean_uri);
+      const uri = window.location.toString();
+      if (uri.indexOf('?') > 0) {
+        window.history.replaceState({}, document.title, location.href.split('?')[0]);
       }
     }
-    $('body').on('change ', 'input, select', function(){
-      cleanURI()
+    $('#main').on('change ', 'input, select', function(){
+      cleanURI();
     })
-  cleanURI()
+    //handle Chrome insconsistency with History API
+    $('.js-office').val('P');
+    $('.js-election-year').val('2020')
+    $('.js-chart-toggle').filter('[value=receipts]').prop('checked', true)
   });
 </script>
 {% endblock %}

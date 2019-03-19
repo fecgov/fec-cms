@@ -18,6 +18,9 @@
 // Neutral gray background with base accents and type (default)
 .slab--neutral {
   @include u-bg--neutral();
+  a:hover {
+    border-bottom: 2px solid ;
+  }
 }
 
 // Primary background with primary-contrast accents and type
