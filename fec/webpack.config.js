@@ -1,29 +1,27 @@
 /* global __dirname */
-/* jslint maxlen: false */
 
 var path = require('path');
 var webpack = require('webpack');
 var ManifestPlugin = require('webpack-manifest-plugin');
 var CleanWebpackPlugin = require('clean-webpack-plugin');
-var BundleAnalyzerPlugin = require('webpack-bundle-analyzer')
-  .BundleAnalyzerPlugin;
+// var BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 
-var fs = require('fs');
+const fs = require('fs');
 
-var entries = {
+const entries = {
   init: './fec/static/js/init.js',
   'data-init': './fec/static/js/data-init.js',
   vendor: ['jquery', 'handlebars']
 };
 
-var datatablePages = [];
+const datatablePages = [];
 
 fs.readdirSync('./fec/static/js/pages').forEach(function(f) {
   if (f.search('.js') < 0) {
     return;
   } // Skip non-js files
-  var name = f.split('.js')[0];
-  var p = path.join('./fec/static/js/pages', f);
+  let name = f.split('.js')[0];
+  let p = path.join('./fec/static/js/pages', f);
   entries[name] = './' + p;
 
   // Note all datatable pages for getting the common chunk
@@ -31,6 +29,10 @@ fs.readdirSync('./fec/static/js/pages').forEach(function(f) {
     datatablePages.push(name);
   }
 });
+
+// add the aggregate totals block
+entries['modules/aggregate-totals'] =
+  './fec/static/js/modules/aggregate-totals.js';
 
 module.exports = [
   {
@@ -61,7 +63,7 @@ module.exports = [
         // Contains jquery and handlebars
         // Included on every page
         name: 'vendor',
-        filename: 'vendor.js',
+        filename: 'vendor.js'
       }),
       new webpack.SourceMapDevToolPlugin(),
       new ManifestPlugin({
@@ -161,9 +163,7 @@ module.exports = [
   },
   {
     name: 'draftail',
-    entry: {
-      draftail: './fec/static/js/draftail/App.js'
-    },
+    entry: { draftail: './fec/static/js/draftail/App.js' },
     output: {
       filename: '[name]-[hash].js',
       path: path.resolve(__dirname, './dist/fec/static/js')

@@ -12,6 +12,7 @@
   "maxlen": 100,
   "newcap": true,
   "noarg": true,
+  "node": true,
   "noempty": true,
   "nonew": false,
   "predef": [

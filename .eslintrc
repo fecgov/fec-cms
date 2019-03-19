@@ -12,13 +12,16 @@
     "navigator": true
   },
   "extends": [
-    "plugin:react/recommended",
-    "eslint:recommended"
+    "plugin:prettier/recommended",
+    "eslint:recommended",
+    "plugin:react/recommended"
   ],
   "rules": {
     "comma-dangle": ["error", "never"],
     "no-useless-escape": [0],
-    "prettier/prettier": "error"
+    "prettier/prettier": "error",
+    "react/jsx-uses-react": "error",
+    "react/jsx-uses-vars": "error"
   },
   "parser": "babel-eslint",
   "parserOptions": {
@@ -29,7 +32,8 @@
       }
   },
   "plugins": [
-    "prettier"
+    "prettier",
+    "react"
   ],
   "settings": {
     "react": {

@@ -15,14 +15,14 @@ describe('draftail - Anchor Block Component', function() {
   it('should build a Anchor object for Draftail to consume', function() {
     expect(Anchor).to.be.an('object');
     expect(Anchor).to.have.keys('type', 'source', 'decorator');
-    expect(Anchor.type).to.equal('ANCHOR')
+    expect(Anchor.type).to.equal('ANCHOR');
   });
 
   it('the Anchor decorator should build a react element', function() {
     var Decorator = Anchor.decorator;
     var element = shallow(<Decorator>test</Decorator>);
     expect(element.childAt(0).text()).to.equal('test');
-    expect(element.type()).to.equal('span')
+    expect(element.type()).to.equal('span');
   });
 
   it('the Anchor source should build an anchor component from selected text', function(done) {

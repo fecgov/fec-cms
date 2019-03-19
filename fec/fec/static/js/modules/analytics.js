@@ -15,7 +15,7 @@ function trackerExists() {
 
 /* Initialize a non Digital Analytics Program GA tracker
  * This tracker's name is "nonDAP", so all commands will need to be prefixed
-*/
+ */
 function init() {
   if (!trackerExists()) {
     (function(i, s, o, g, r, a, m) {

@@ -394,6 +394,18 @@
   @include u-icon-button($calendar);
 }
 
+.button--disbursements {
+  @include u-icon-button($disbursement, left);
+  background-size: u(3rem);
+  padding: u(2rem 3rem 2rem 5rem);
+}
+
+.button--raising {
+  @include u-icon-button($piggy-bank, left);
+  background-size: u(3rem);
+  padding: u(2rem 3rem 2rem 5rem);
+}
+
 .button--envelope {
   @include u-icon-button($moving-envelope, left);
   background-size: u(3rem);
