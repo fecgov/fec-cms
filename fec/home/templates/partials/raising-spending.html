@@ -2,9 +2,9 @@
 {% load wagtailcore_tags %}
 {% load filters %}
 
-<h2 class="heading--section u-margin--bottom">Who is raising and spending the most</h2>
+<h2 class="heading--section">Who is raising and spending the most</h2>
 <section class="usa-grid-full">
-  <p class="t-bold">Learn how much individual candidates have raised and spent for presidential, Senate and House elections.</p>
+  <p class="t-bold u-padding--top">Learn how much individual candidates have raised and spent for presidential, Senate and House elections.</p>
   <div class="usa-width-two-thirds grid--flex">
     <section id="raising-breakdowns">
        <div class="js-top-entities" data-office="{{ office }}" data-election-year="{{ election_year }}" data-perpage="3">
@@ -24,15 +24,15 @@
         {% endfor %}
         </div>
 
-      <div class="content__section row u-margin--top">
+      <div class="content__section row u-padding--top">
         <ul class="list--buttons u-float-right">
-          <li><a class="button button button--go js-browse"  href="/data/raising-bythenumbers/">Explore top <span>raising</span> candidates</a></li>
+          <li><a class="button button--cta button--go js-browse"  href="/data/raising-bythenumbers/">Explore top <span>raising</span> candidates</a></li>
         </ul>
       </div>
      </div>
     </section>
   </div>
-  <div class="usa-width-one-third example--primary">
+  <div class="usa-width-one-third example--primary u-padding--top--small">
     <fieldset class="toggles u-margin--bottom" data-filter="toggle" data-filter-ignore-count="true">
       <legend class="label input__label-home t-inline-block">Data type</legend>
       <div class="row">

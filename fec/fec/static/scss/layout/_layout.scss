@@ -136,8 +136,16 @@
   padding-top: u(2rem);
 }
 
+.u-padding--top--small {
+  padding-top: u(.5rem) !important;
+}
+
 .u-padding--bottom {
   padding-bottom: u(2rem);
+}
+
+.u-padding--bottom--small {
+  padding-bottom: u(.5rem) !important;
 }
 
 .u-padding--left {

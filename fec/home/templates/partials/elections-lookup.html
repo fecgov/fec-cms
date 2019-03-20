@@ -3,13 +3,13 @@
 {% load filters %}
 
 <h2 class="heading--section">Compare candidates in an election</h2>
-<div class="grid grid--2-wide grid--flex" id="election-lookup">
-  <div class="grid__item">
-    <div class="election-map election-map--small u-margin--top">
+<div class="grid grid--2-wide grid--flex u-padding--top" id="election-lookup">
+  <div class="grid__item u-margin--bottom">
+    <div class="election-map election-map--home">
       <!--map renders here -->
     </div>
   </div>
-  <div class="grid__item example--primary search-controls election-search-home">
+  <div class="grid__item example--primary u-margin--bottom search-controls election-search-home">
     <p class="t-bold">Learn about candidates running in a particular state or district for past or upcoming elections.</p>
     <form action="/data/elections">
       <div class="row u-margin--bottom">
