@@ -1,0 +1,78 @@
+{% if FEATURES.map %}
+{% load wagtailcore_tags %}
+{% load filters %}
+
+<h2 class="heading--section">Compare candidates in an election</h2>
+<div class="grid grid--2-wide grid--flex u-padding--top" id="election-lookup">
+  <div class="grid__item u-margin--bottom">
+    <div class="election-map election-map--home">
+      <!--map renders here -->
+    </div>
+  </div>
+  <div class="grid__item example--primary u-margin--bottom search-controls election-search-home">
+    <p class="t-bold">Learn about candidates running in a particular state or district for past or upcoming elections.</p>
+    <form action="/data/elections">
+      <div class="row u-margin--bottom">
+        <div class="search-controls__zip">
+          <label for="zip" class="label input__label-home">Find by ZIP code</label>
+          <input type="text" inputmode="numeric" id="zip" name="zip" class="combo__input">
+        </div>
+        <div class="search-controls__submit search-controls__no-label">
+          <button type="submit" class="button--search--text button--standard">Search</button>
+        </div>
+      </div>
+      <div class="row">
+        <div class="search-controls__state">
+          <label for="state" class="label input__label-home">State</label>
+          <select id="state" name="state" aria-label="Select a state">
+            <option value="">Select state</option>
+            {% for value, label in states.items %}
+            <option value="{{ value }}">{{ label }}</option>
+            {% endfor %}
+          </select>
+        </div>
+        <div class="search-controls__district">
+          <label for="District" class="label input__label-home">District <span class="label__optional">(optional)</span></label>
+          <select id="district" name="district" aria-label="Select a district" class="select--alt">
+            <option value="">Select district</option>
+            <option value="S">Senate</option>
+            <optgroup label="House">
+              {% for value in range %}
+
+              {% comment %}
+              {% for value in range|districts(100) %}
+              {% with formatted = '{0:02d}'.format(value) %}
+              {% endcomment %}
+
+              <option value="{{ value.normalize }}">{{ value.normalize }}</option>
+
+              {% comment %}
+              {% endwith %}
+              {% endcomment %}
+
+              {% endfor %}
+            </optgroup>
+          </select>
+        </div>
+        <div class="search-controls__submit search-controls__no-label">
+         <button type="submit" class="button--search--text button--standard">Search</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+
+
+<script>
+var context = {
+  election: {
+    cycle: '{{ cycle }}',
+    state: '{{ state|default_if_none:"" }}'
+  }
+};
+
+
+</script>
+
+
+{% endif %}

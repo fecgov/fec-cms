@@ -158,6 +158,16 @@ h3 + .simple-table {
   border-top: 2px solid $primary;
   font-family: $sans-serif;
 
+  &.chart-table-home {
+    border-top: none;
+    .simple-table__row {
+      border-bottom: 1px dotted $gray-dark;
+      .simple-table__cell {
+        font-weight:bold;
+      }
+    }
+  }
+
   .simple-table__cell {
     padding: u(.5rem 0 0 0);
   }
