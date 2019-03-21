@@ -1,12 +1,10 @@
 /* global __dirname */
-/* jslint maxlen: false */
 
-const path = require('path');
-const webpack = require('webpack');
-const ManifestPlugin = require('webpack-manifest-plugin');
-const CleanWebpackPlugin = require('clean-webpack-plugin');
-const BundleAnalyzerPlugin = require('webpack-bundle-analyzer')
-  .BundleAnalyzerPlugin;
+var path = require('path');
+var webpack = require('webpack');
+var ManifestPlugin = require('webpack-manifest-plugin');
+var CleanWebpackPlugin = require('clean-webpack-plugin');
+// var BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 
 const fs = require('fs');
 
@@ -31,6 +29,10 @@ fs.readdirSync('./fec/static/js/pages').forEach(function(f) {
     datatablePages.push(name);
   }
 });
+
+// add the aggregate totals block
+entries['modules/aggregate-totals'] =
+  './fec/static/js/modules/aggregate-totals.js';
 
 module.exports = [
   {

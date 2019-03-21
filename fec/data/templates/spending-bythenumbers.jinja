@@ -1,6 +1,5 @@
 {% extends "layouts/sidebar-page.jinja" %}
 {% import "macros/bythenumbers.jinja" as breakdowns %}
-{% import 'macros/cycle-select.jinja' as select %}
 
 {% block css %}
 <link rel="stylesheet" type="text/css" href="{{ asset_for_css('data-landing.css') }}" />
@@ -11,27 +10,22 @@
 {% endblock %}
 
 {% block sidebar %}
-<form action="" method="get" class="breakdown-cycle">
-  {{ select.cycle_select(cycles, cycle, location='form', range=True, label='Two-Year Period') }}
-  <noscript>
-    <button type="submit" class="button button--cta">Submit</button>
-  </noscript>
-</form>
 <nav class="sidebar sidebar--breakdown sidebar--left side-nav js-sticky-side" data-sticky-container="options">
   <a class="sidebar__title" href="/data/#spending">&lsaquo; Spending overview</a>
   <ul class="sidebar__content js-toc">
-    <li class="side-nav__item"><a class="side-nav__link" href="#top-spenders">Who's spending the most</a></li>
+    <li class="side-nav__item"><a class="side-nav__link" href="#top-spenders">Top spending candidates</a></li>
     <li class="side-nav__item"><span class="side-nav__link is-disabled">Where contributions come from</span></li>
     <li class="side-nav__item"><span class="side-nav__link is-disabled">The size of contributions</span></li>
   </ul>
+  <a class="button button--cta u-margin--top t-left-aligned button--raising u-full-width" href="/data/raising-bythenumbers/">Explore raising charts</a>
 </nav>
 {% endblock %}
 
 {% block sections %}
 <section id="spending-breakdown">
   <section id="top-spenders" class="content__section">
-    <h2>Who's spending the most</h2>
-    {{ breakdowns.top_entities(top_spenders, coverage_start_date, coverage_end_date, cycle, 'spent', top_category, page_info ) }}
+    <h2>Top spending candidates</h2>
+    {{ breakdowns.top_entities(election_years, election_year, 'spent', office ) }}
   </section>
 </section>
 {% endblock %}
@@ -43,13 +37,13 @@
     <div role="document">
       <button type="button" class="modal__close button--close--primary" data-a11y-dialog-hide title="Close this dialog window"></button>
       <h2 id="spent-modal-title">Methodology</h2>
-      <p>Committees are displayed in descending order of total <span class="term" data-term="disbursement">disbursements</span>. Total disbursements are the sum of all purchases and payments made by a committee.</p>
-      <p>This chart includes data up to and including the most recent report filed by each committee. It's displayed in two-year cycles.</p>
-      <p>The form and line used to calculate total disbursement sums are:</p>
+      <p>This chart includes data up to and including the most recent report filed by each campaign. It displays an overall total for the selected office and also displays totals for individual candidate's campaigns.</p>
+      <p>The overall total is the sum of the total <span class="term" data-term="disbursement">disbursements</span> of the campaign committees of all candidates for the selected office.</p>
+      <p>Candidates are displayed in descending order of total disbursements, Total disbursements are the sum of all expenditures and other disbursements made by the candidate’s authorized committees: two-year cycles for House candidates, four-year cycles for presidential candidates and six-year cycles for Senate candidates.</p>
+      <p>The form and line used to calculate candidate campaign total disbursement sums are:</p>
       <ul class="list--bulleted">
-        <li>Presidential committees: Form 3P, Line 30, Column A</li>
-        <li>Senate and House committees: Form 3, Line 22, Column A</li>
-        <li>PACs and party committees: Form 3X, Line 31, Column A</li>
+        <li>Presidential campaigns: Form 3P, Line 30, Column A</li>
+        <li>Senate and House campaigns: Form 3, Line 22, Column A</li>
       </ul>
       <p><a href="/campaign-finance-data/party-code-descriptions/">See a list of political party abbreviations.</a></p>
     </div>

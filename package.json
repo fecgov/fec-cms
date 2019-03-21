@@ -116,6 +116,7 @@
     "leaflet": "^1.4.0",
     "mocha": "^5.2.0",
     "mockdate": "^2.0.2",
+    "natives": "^1.1.6",
     "nswatch": "0.2.0",
     "prettier": "^1.16.4",
     "puppeteer": "^1.12.2",

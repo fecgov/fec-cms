@@ -347,12 +347,13 @@ def result_or_404(data):
     return data['results'][0]
 
 
-def load_top_candidates(sort, office=None, cycle=constants.DEFAULT_TIME_PERIOD, per_page=5):
+def load_top_candidates(sort, office=None, election_year=constants.DEFAULT_ELECTION_YEAR, per_page=5):
     response = _call_api(
         'candidates', 'totals',
         sort_hide_null=True,
-        cycle=cycle,
-        election_full=False,
+        election_year=election_year,
+        election_full=True,
+        active_candidates=True,
         office=office,
         sort=sort,
         per_page=per_page,
