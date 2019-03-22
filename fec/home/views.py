@@ -16,6 +16,12 @@ from home.models import (CommissionerPage, DigestPage, MeetingPage,
 
 
 def replace_dash(string):
+    # Leave the dash in place for non-filer publications
+    # This matches what's in the database
+    # Seems to have been a problem testing for the hyphenated version,
+    # suspect the hyphen is escaped or encoded
+    if all(x in string for x in ['non', 'filer', 'publications']):
+        return "non-filer publications"
     return string.replace("-", " ")
 
 
