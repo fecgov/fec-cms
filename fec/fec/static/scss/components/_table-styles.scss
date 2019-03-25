@@ -158,16 +158,6 @@ h3 + .simple-table {
   border-top: 2px solid $primary;
   font-family: $sans-serif;
 
-  &.chart-table-home {
-    border-top: none;
-    .simple-table__row {
-      border-bottom: 1px dotted $gray-dark;
-      .simple-table__cell {
-        font-weight:bold;
-      }
-    }
-  }
-
   .simple-table__cell {
     padding: u(.5rem 0 0 0);
   }
@@ -374,5 +364,96 @@ h3 + .simple-table {
     color: $inverse;
     border-bottom: none;
     border-right: none;
+  }
+}
+
+//Special rearrangement grid styles for homepage embedded raising-spending barcharts
+.chart-table-home {
+  border-top: none;
+
+  .simple-table__row {
+    display: grid;
+    grid-template-columns: 100% 50% 100%;
+    grid-template-rows: 30px 30px 30px;
+    grid-auto-flow: column;
+    border-bottom:0;
+    }
+
+  .simple-table__cell {
+    /* name cell */
+    grid-column: 1;
+    grid-row: 1;
+    border-bottom: 0;
+    font-weight:bold;
+  }
+
+  .simple-table__cell:nth-child(2) {
+    /* $amount cell $ */
+    grid-column: 1;
+    grid-row: 3/4;
+    border-bottom: 1px solid $gray-dark;
+    text-align: left;
+    margin-top: -9px;
+  }
+
+  .simple-table__cell:nth-child(3) {
+  /* bar cell */
+    grid-column: 1/3;
+    grid-row: 2/2;
+    padding-left: 0;
+    border-bottom: 0;
+  }
+
+  @include media($med) {
+    .simple-table__row {
+      display: grid;
+      grid-template-columns: 100% 50% 100%;
+      grid-template-rows: 30px 30px;
+      grid-auto-flow: column;
+
+    }
+    .simple-table__cell {
+      grid-column: 1;
+      grid-row: 1/3;
+      border-bottom: 1px dotted $gray-dark;
+      padding-bottom: u(7rem);
+
+       a {
+        font-size: inherit;
+        display: inline-block;
+        padding-top: 2rem;
+       }
+    }
+
+    .simple-table__cell:nth-child(2) {
+      /* $amount cell $ */
+      grid-column: auto / span 2;
+      grid-row: 2/3;
+      border-bottom: 1px dotted $gray-dark;
+      padding: u(2rem) 0 u(3rem) 0;
+      margin-top: 0;
+      font-size: inherit;
+    }
+
+    .simple-table__cell:nth-child(3) {
+    /* bar cell */
+      grid-column: 2/4;
+      grid-row: 1/2;
+      padding-left: 0;
+      border-bottom: 0;
+      padding-top: u(3rem);
+    }
+  }
+
+  @include media($lg) {
+    .simple-table__cell {
+      a {
+      font-size: 1.6rem;
+      }
+    }
+    .simple-table__cell:nth-child(2) {
+      /* $amount cell $ */
+      font-size: u(1.6rem);
+    }
   }
 }
