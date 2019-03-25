@@ -179,7 +179,9 @@ TopEntities.prototype.formatData = function(result, rank) {
     rank: rank,
     party: result.party,
     party_code:
-      result.party === null || this.per_page == 3 ? '' : '[' + result.party.toUpperCase() + ']',
+      result.party === null || this.per_page == 3
+        ? ''
+        : '[' + result.party.toUpperCase() + ']',
     url: helpers.buildAppUrl(['candidate', result.candidate_id], {
       cycle: this.election_year,
       election_full: true
