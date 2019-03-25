@@ -167,7 +167,6 @@
   }
 }
 
-
 @include media($med) {
   .search-controls__row {
     padding: u(2rem 0);
@@ -225,20 +224,21 @@
       .search-controls__submit {
         @include span-columns(7.3 of 7.3);
         margin-top: u(0rem);
-         button {
-          width:94%;
-         }
+
+        button {
+          width: 94%;
+        }
       }
     }
 
     .search--container:first-child {
-    height: u(13.1rem);
-    margin-bottom: 0;
+      height: u(13.1rem);
+      margin-bottom: 0;
     }
 
     .search-controls__cycle {
-    @include span-columns(4.5 of 5.5);
-    margin: u(.5rem 2rem);
+      @include span-columns(4.5 of 5.5);
+      margin: u(.5rem 2rem);
     }
 
     .search-controls__zip {
@@ -270,36 +270,67 @@
       }
     }
   }
+  #election-lookup {
+    display: flex;
+    flex-wrap: wrap;
 
-  //for keyword-options modals on AO, MUR, Statues searches
-.keyword-modal{
-  .modal__tips, .modal__form {
-    display:table-cell;
-    width:44%;
-  }
-  .modal__tips {
-    margin-left: u(1rem);
-    padding-top: 0;
-  }
-  .search-controls__or--vertical {
-    margin: u(22.5rem 0);
-    width: u(3.5rem);
-    display:table-cell;
-
-    &::before,
-    &::after {
-      height: u(22.5rem);
+    .usa-width-one-half:first-child {
+      margin-left: $gutter / 2;
+      margin-right: $gutter;
+      width: 100%;
     }
-    &::before {
-      top: u(-22.5rem);
+    .usa-width-one-half:last-child {
+      width: 100%;
     }
-
-    &::after {
-      top: auto;
-      bottom: u(-22.5rem);
+    
+    .search-controls__state, .search-controls__district {
+      width: 100%;
     }
   }
-}
+  
+  .callout-holder {
+    border: none;
+    padding: 0;
+
+    a h3 {
+      border-bottom: 1px dotted $gray-lightest;
+      clear: both;
+      display: inline-block;
+    }
+    a:hover h3 {
+      border-bottom-color: $aqua;
+    }
+  }
+
+    //for keyword-options modals on AO, MUR, Statues searches
+  .keyword-modal{
+    .modal__tips, .modal__form {
+      display:table-cell;
+      width:44%;
+    }
+    .modal__tips {
+      margin-left: u(1rem);
+      padding-top: 0;
+    }
+    .search-controls__or--vertical {
+      margin: u(22.5rem 0);
+      width: u(3.5rem);
+      display:table-cell;
+
+      &::before,
+      &::after {
+        height: u(22.5rem);
+      }
+      &::before {
+        top: u(-22.5rem);
+      }
+
+      &::after {
+        top: auto;
+        bottom: u(-22.5rem);
+      }
+    }
+  }
 
 }/*end MED breakpoint*/
 
@@ -313,8 +344,8 @@
   .election-search {
 
     .search--container:first-child {
-    height: u(12.6rem);
-    margin-bottom: 0;
+      height: u(12.6rem);
+      margin-bottom: 0;
     }
 
     .search-controls__state,
@@ -326,8 +357,6 @@
       margin-left: u(3rem);
       position: relative;
       top: u(0rem);
-
-
     }
 
     .search-controls__cycle {
@@ -363,6 +392,17 @@
       margin:u(4rem 0 4rem 0);
     }
   }
+
+  #election-lookup {
+    flex-wrap: initial;
+
+    .usa-width-one-half:first-child {
+      order: 2;
+      width: 33.33%;
+    }
+    .usa-width-one-half:last-child {
+      order: 1;
+      width: 66.66%;
+    }
+  }
 }
-
-

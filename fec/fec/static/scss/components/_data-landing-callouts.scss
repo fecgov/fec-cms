@@ -1,0 +1,16 @@
+// Data Landing Callouts
+//
+// Used on:
+// data landing page, callout width overrides
+//
+
+@include media($med) {
+    .callout-holder .grid__item {
+        width: 100%; // We want them full-width until we get to $lg
+    }
+}
+@include media($lg) {
+    .callout-holder .grid__item {
+        width: 48.82117%; // borrowed from the grid__item definition in the framework
+    }
+}

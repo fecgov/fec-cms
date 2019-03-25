@@ -1,7 +1,5 @@
 {% extends 'layouts/main.jinja' %}
 {% import 'macros/cycle-select.jinja' as select %}
-{% import 'macros/overviews.jinja' as overviews %}
-{% import 'macros/reaction-box.jinja' as reaction %}
 
 {% block title %}{{ title }}{% endblock %}
 
@@ -27,6 +25,14 @@
           {{ search.search('hero', button_color="button--standard") }}
           <span class="t-note t-sans search__example">Examples: Obama for America; C00431445; Bush, George W.; P00003335; or enter an image number for a filing.</span>
         </div>
+        <div class="example--primary">	
+          <h4 class="example__title">Top raising candidates running in {{ constants.DEFAULT_ELECTION_YEAR }}:</h4>	
+          <ul class="t-sans">	
+            {% for candidate in top_candidates_raising %}	
+              <li><a href="/data/candidate/{{ candidate.candidate_id }}">{{ candidate.name }} [{{ candidate.party }}] | {{ candidate.state }}-{{ candidate.office_full }}</a></li>	
+            {% endfor %}	
+          </ul>	
+        </div>
       </div>
       <div class="grid__item card t-left-aligned">
         <h2>Find contributions from <br> specific individuals</h2>
@@ -41,47 +47,87 @@
           </div>
           <span class="t-note t-sans search__example">Examples: your name, a celebrity, someone running for office.</span>
         </form>
+        <div class="example--primary">	
+          <h4 class="example__title">Possible uses of this data:</h4>	
+          <ul class="t-sans">	
+            <li><a href="/data/receipts/individual-contributions/?min_amount=2000">All contributions over $2,000</a></li>	
+            <li><a href="/data/receipts/individual-contributions/?min_date={{ first_of_year }}&max_date={{ last_of_year }}">All contributions in this year</a></li>	
+            <li><a href="/data/receipts/individual-contributions/">Browse all and apply custom filters</a></li>	
+          </ul>	
+        </div>
       </div>
     </div>
   </section>
 
   <section class="content__section">
-    <h2 class="t-ruled--bottom">Compare candidates in an election</h2>
-    <div id="election-lookup">
-      <div class="usa-width-three-fourths">
-        <form action="/data/elections" class="content__section">
-          <div class="search-controls__state">
-            <label for="state" class="label">State</label>
-            <select id="state" name="state" aria-label="Select a state">
-              <option value="">Select state</option>
-              {% for value, label in constants.states.items() %}
-              <option value="{{ value }}">{{ label }}</option>
-              {% endfor %}
-            </select>
+    <div class="grid--2-wide grid--flex">
+      <div class="grid__item">
+        <h2>Compare candidates</h2>
+        <div id="election-lookup">
+          <div class="usa-width-one-half">
+            <form action="/data/elections" class="content__section">
+              <div class="search-controls__state">
+                <label for="state" class="label">State</label>
+                <select id="state" name="state" aria-label="Select a state">
+                  <option value="">Select state</option>
+                  {% for value, label in constants.states.items() %}
+                  <option value="{{ value }}">{{ label }}</option>
+                  {% endfor %}
+                </select>
+              </div>
+              <div class="search-controls__district">
+                <label for="District" class="label">District <span class="label__optional">(optional)</span></label>
+                <select id="district" name="district" aria-label="Select a district" class="select--alt">
+                  <option value="">Select district</option>
+                  <option value="S">Senate</option>
+                  <optgroup label="House">
+                    {% for value in range(1, 100) %}
+                    {% with formatted = '{0:02d}'.format(value) %}
+                    <option value="{{ formatted }}">{{ formatted }}</option>
+                    {% endwith %}
+                    {% endfor %}
+                  </optgroup>
+                </select>
+              </div>
+              <div class="search-controls__submit search-controls__no-label">
+                <button type="submit" class="button--search--text button--standard">Search</button>
+              </div>
+            </form>
           </div>
-          <div class="search-controls__district">
-            <label for="District" class="label">District <span class="label__optional">(optional)</span></label>
-            <select id="district" name="district" aria-label="Select a district" class="select--alt">
-              <option value="">Select district</option>
-              <option value="S">Senate</option>
-              <optgroup label="House">
-                {% for value in range(1, 100) %}
-                {% with formatted = '{0:02d}'.format(value) %}
-                <option value="{{ formatted }}">{{ formatted }}</option>
-                {% endwith %}
-                {% endfor %}
-              </optgroup>
-            </select>
-          </div>
-          <div class="search-controls__submit search-controls__no-label">
-            <button type="submit" class="button--search--text button--standard">Search</button>
-          </div>
-        </form>
+          <div class="election-map election-map--small usa-width-one-half"></div>
+        </div>
       </div>
-    </div>
-    <div class="election-map election-map--small usa-width-one-whole"></div>
-  </section>
-
+      <div class="grid__item example--primary callout-holder">
+        <h2>&nbsp;</h2>
+        <div class="grid grid--2-wide">  
+          <div class="grid__item">
+            <div class="card card--neutral">
+              <a href="/data/raising-bythenumbers" title="Raising: by the numbers">
+                  <div class="card__image__container">
+                    <span class="card__icon i-graph-horizontal-ordered"><span class="u-visually-hidden">Icon of a graph</span></span>
+                  </div>
+                  <div class="card__content">
+                    <h3>Raising &raquo;</h3>
+                    <p>Discover which candidates are raising the most</p>
+                  </div>
+              </a>
+            </div>
+          </div>
+          <div class="grid__item">
+            <div class="card card--neutral">
+              <a href="/data/spending-bythenumbers" title="Spending: by the numbers">
+                <div class="card__image__container">
+                  <span class="card__icon i-graph-horizontal-ordered"><span class="u-visually-hidden">Icon of a graph</span></span>
+                </div>
+                <div class="card__content">
+                  <h3>Spending &raquo;</h3>
+                  <p>Discover which candidates are spending the most</p>
+                </div>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
   </section>
 
   <section class="content__section">
@@ -187,80 +233,6 @@
       </div>
     </div>
   </section>
-  {% if FEATURES.linecharts %}
-  <div class="content__section--extra">
-    <h2 class="t-ruled--bottom">Get started with campaign finance data</h2>
-    <section class="content__section" id="raising">
-      <h3 class="u-no-margin">Raising</h3>
-      <p>This graph shows how much <span class="term" data-term="candidate">candidates</span>, <span class="term" data-term="party committee">party committees</span> and <span class="term" data-term="political action committee (PAC)">political action committees</span> (PACs) have reported raising, up to specific points in time. Although the graph displays these numbers month-by-month, different committee types have different reporting schedules.</p>
-      <div class="content__section">
-        <div class="heading--section heading--with-action">
-          <h4 class="heading__left t-upper">Cumulative amount raised by committees</h4>
-          <div class="heading__right">
-            <ul class="list--buttons">
-              <li><a class="button button--standard button--table" href="/data/receipts">Explore data</a></li>
-              <li><button class="button button--standard js-ga-event"  data-a11y-dialog-show="raised-modal" data-ga-event="Raised methodology modal clicked" aria-controls="raised-modal">
-              Methodology</button></li>
-            </ul>
-          </div>
-        </div>
-        {{ overviews.overview('raised', 'landing')}}
-         <a href="/data/raising-bythenumbers/" class="breakdown-link">More raising charts &raquo;</a>
-         <ul class="grid grid--4-wide t-sans">
-           <li class="grid__item">
-             <a href="/data/raising/" class="icon-heading--graph-circle">
-               <div class="icon-heading__text"><span>Who's raising the most</span></div>
-             </a>
-           </li>
-           <li class="grid__item is-disabled">
-             <div class="icon-heading--map-circle" title="Coming soon">
-               <div class="icon-heading__text"><span>Where contributions come from</span></div>
-             </div>
-           </li>
-           <li class="grid__item is-disabled">
-             <div class="icon-heading--graph-unordered-circle" title="Coming soon">
-               <div class="icon-heading__text"><span>The size of contributions</span></div>
-             </div>
-           </li>
-         </ul>
-      </div>
-    </section>
-    <section class="content__section" id="spending">
-      <h3 class="u-no-margin">Spending</h3>
-      <p>This graph shows how much <span class="term" data-term="candidate">candidates</span>, <span class="term" data-term="party committee">party committees</span> and <span class="term" data-term="political action committee (PAC)">political action committees</span> (PACs) have reported spending, up to specific points in time. Although the graph displays these numbers month-by-month, different committee types have different reporting schedules.</p>
-      <div class="content__section">
-        <div class="heading--section heading--with-action">
-          <h4 class="heading__left t-upper">Cumulative amount spent by committees</h4>
-          <div class="heading__right">
-            <ul class="list--buttons">
-              <li><a class="button button--standard button--table" href="/data/disbursements">Explore data</a></li>
-              <li><button class="button button--standard js-ga-event"  data-a11y-dialog-show="spending-modal" data-ga-event="Spending methodology modal clicked" aria-controls="spending-modal">Methodology</button></li>
-            </ul>
-          </div>
-        </div>
-        {{ overviews.overview('spent', 'landing') }}
-        <a href="/data/spending-bythenumbers/" class="breakdown-link">More spending charts &raquo;</a>
-        <ul class="grid grid--4-wide t-sans">
-          <li class="grid__item">
-            <a href="/data/spending-bythenumbers" class="icon-heading--graph-circle">
-              <div class="icon-heading__text"><span>Who's spending the most</span></div>
-            </a>
-          </li>
-          <li class="grid__item is-disabled">
-            <div class="icon-heading--graph-unordered-circle" title="Coming soon">
-              <div class="icon-heading__text"><span>What's spent on day-to-day activities</span></div>
-            </div>
-          </li>
-          <li class="grid__item is-disabled">
-            <div class="icon-heading--map-circle" title="Coming soon">
-              <div class="icon-heading__text"><span>Where money is spent to support and oppose candidates</span></div>
-            </div>
-          </li>
-        </ul>
-      </div>
-    </section>
-  </div>
-  {% endif %}
 </div>
 {% endblock %}
 
