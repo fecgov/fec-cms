@@ -270,7 +270,7 @@
       }
     }
   }
-  #election-lookup {
+  #election-lookup.search--election-mini {
     display: flex;
     flex-wrap: wrap;
 
@@ -393,7 +393,7 @@
     }
   }
 
-  #election-lookup {
+  #election-lookup.search--election-mini {
     flex-wrap: initial;
 
     .usa-width-one-half:first-child {
