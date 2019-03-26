@@ -1,5 +1,3 @@
-{% import "macros/aggregate-totals.jinja" as aggTotals %}
-
 {% macro top_entities(
   election_years,
   election_year,
@@ -36,7 +34,7 @@
       </select>
   </form>
   {% if FEATURES.aggregatetotals %}
-  {{ aggTotals.build_block({"election_year": election_year, "office": office, "action": action, "year_control": "#election-year", "office_control": "#top-category"}) }}
+  <script defer data-election-year="{{ election_year }}" data-office="{{ office }}" data-action="{{ action }}" data-year-control="#election-year" data-office-control="#top-category" src="{{ asset_for_js('modules/aggregate-totals.js') }}"></script>
   {% endif %}
   <span class="t-sans js-dates"></span>
   <div class="chart-table simple-table--responsive js-top-table" id="top-table" aria-live="polite" role="grid">
