@@ -16,13 +16,11 @@ function AggregateTotals() {
   this.yearControl;
 
   this.basePath = ['candidates', 'totals', 'by_office'];
-  // this.year; // This instance's current election year
-  // this.office; // This instance's current office var
-  this.baseQuery; // Object for data load
+  this.baseQuery; // Vars for data load
   this.animVars = {
     value: 0, // This instance's current value, only used for animation
     stepCount: 0
-  }
+  };
 
   this.init();
 }
@@ -39,23 +37,38 @@ AggregateTotals.prototype.displayUpdatedData = function(queryResponse) {
   // If this is the first build
   if (this.animVars.stepCount == 0) {
     this.animVars.stepCount = Math.ceil(Math.random() * 5) + 1; // How many animation steps should we have?
-    this.animVars.value = this.action == 'raised' ? queryResponse.results[0].total_receipts : queryResponse.results[0].total_disbursements;
+    this.animVars.value =
+      this.action == 'raised'
+        ? queryResponse.results[0].total_receipts
+        : queryResponse.results[0].total_disbursements;
     this.animVars.stepAmount = Math.random() * 10; // How much should each step increment?
-    this.animVars.startingValue = this.animVars.value - this.animVars.stepAmount * this.animVars.stepCount; // Considering this.animVars.stepAmount, where should we start the animation?
+    this.animVars.startingValue =
+      this.animVars.value - this.animVars.stepAmount * this.animVars.stepCount; // Considering this.animVars.stepAmount, where should we start the animation?
 
-  // Otherwise, only update the steps values
+    // Otherwise, only update the steps values
   } else {
     this.animVars.startingValue = this.animVars.value;
-    this.animVars.value = this.action == 'raised' ? queryResponse.results[0].total_receipts : queryResponse.results[0].total_disbursements;
-    this.animVars.stepAmount = (this.animVars.value - this.animVars.startingValue) / this.animVars.stepCount;
+    this.animVars.value =
+      this.action == 'raised'
+        ? queryResponse.results[0].total_receipts
+        : queryResponse.results[0].total_disbursements;
+    this.animVars.stepAmount =
+      (this.animVars.value - this.animVars.startingValue) /
+      this.animVars.stepCount;
   }
 
   // Animating numbers can be messy and it was here
   // We're going to set the animation as a series of setTimeout updates
   // We're going to jump by stepAmount every anim_delay ms for stepCurrent steps
   // This will handle from $0 where we're jumping from just ~$100 back as well as on control change where we may be jumping up or down by $1B
-  for (this.animVars.stepCurrent = 0; this.animVars.stepCurrent <= this.animVars.stepCount; this.animVars.stepCurrent++) {
-    let anim_tempVal = this.animVars.startingValue + this.animVars.stepCurrent * this.animVars.stepAmount; // How much this step should display
+  for (
+    this.animVars.stepCurrent = 0;
+    this.animVars.stepCurrent <= this.animVars.stepCount;
+    this.animVars.stepCurrent++
+  ) {
+    let anim_tempVal =
+      this.animVars.startingValue +
+      this.animVars.stepCurrent * this.animVars.stepAmount; // How much this step should display
     let anim_delay = this.animVars.stepCurrent * 750; // How long this step should wait from the start
     let instance = this; // The calling instance
     setTimeout(function() {
@@ -70,10 +83,12 @@ AggregateTotals.prototype.displayUpdatedData = function(queryResponse) {
     P: 'Presidential',
     S: 'Senate',
     H: 'House'
-  }
+  };
   // Set the description
   this.descriptionField.innerHTML =
-    'Total ' + this.action + ' by all ' +
+    'Total ' +
+    this.action +
+    ' by all ' +
     officeDefs[this.baseQuery.office] +
     ' candidates running in ' +
     this.baseQuery.election_year;
@@ -102,28 +117,32 @@ AggregateTotals.prototype.init = function() {
   let allSet = true;
   // If we have a control for the office value, let's work with that
   if (this.scriptElement.dataset['officeControl']) {
-    this.officeControl = document.querySelector(String(this.scriptElement.dataset['officeControl']));
+    this.officeControl = document.querySelector(
+      String(this.scriptElement.dataset['officeControl'])
+    );
     $(this.officeControl).on('change', this.handleOfficeChange.bind(this));
     this.baseQuery.office = $(this.officeControl).val();
 
-  // alternatively, we can use a hard-coded single value, too
+    // alternatively, we can use a hard-coded single value, too
   } else if (this.scriptElement.dataset.office) {
     this.baseQuery.office = this.scriptElement.dataset.office;
 
-  // without one of those, we can't do anything
+    // without one of those, we can't do anything
   } else allSet = false;
 
   // If we have a control for the year value, let's work with that
   if (this.scriptElement.dataset['yearControl']) {
-    this.yearControl = document.querySelector(String(this.scriptElement.dataset['yearControl']));
+    this.yearControl = document.querySelector(
+      String(this.scriptElement.dataset['yearControl'])
+    );
     $(this.yearControl).on('change', this.handleElectionYearChange.bind(this));
     this.baseQuery.election_year = $(this.yearControl).val();
-  
-  // alternatively, we can use a hard-coded single value, too
+
+    // alternatively, we can use a hard-coded single value, too
   } else if (this.scriptElement.dataset['electionYear']) {
     this.baseQuery.election_year = this.scriptElement.dataset['electionYear'];
-  
-  // without one of those, we can't do anything
+
+    // without one of those, we can't do anything
   } else allSet = false;
 
   // Should we look at receipts or disbursements?
@@ -135,14 +154,17 @@ AggregateTotals.prototype.init = function() {
 
   // Make the <aside> for the html doc and give it its attributes
   this.element = document.createElement('aside');
-  this.element.setAttribute('id', "fec_at_" + Math.floor(Math.random() * 10000)); // Random so we can have multiple on a page, if needed
+  this.element.setAttribute(
+    'id',
+    'fec_at_' + Math.floor(Math.random() * 10000)
+  ); // Random so we can have multiple on a page, if needed
   this.element.setAttribute('class', 'aggregate-totals-block');
   // Create the value element
   this.valueField = document.createElement('h1');
   this.valueField.setAttribute('class', 'value');
   // Create the description element
   this.descriptionField = document.createElement('h2');
-  this.descriptionField.setAttribute('class', 'description')
+  this.descriptionField.setAttribute('class', 'description');
   // Put the value and description in the <aside>
   this.element.appendChild(this.valueField);
   this.element.appendChild(this.descriptionField);
@@ -163,25 +185,21 @@ AggregateTotals.prototype.loadData = function(query) {
   console.log('TESTING - loading data query:');
   console.log(query);
   let self = this;
-  $.getJSON(helpers.buildUrl(this.basePath, query))
-    .done(response => {
-      self.displayUpdatedData(response);
-    })
-    .fail((jqxhr, textStatus, error) => {
-      // FAIL SILENTY
-    });
+  $.getJSON(helpers.buildUrl(this.basePath, query)).done(response => {
+    self.displayUpdatedData(response);
+  });
 };
 
 AggregateTotals.prototype.handleOfficeChange = function(e) {
   e.preventDefault();
   this.baseQuery.office = e.target.value; // Save the updated value
   this.loadData(this.baseQuery); // Reload the data
-}
+};
 
 AggregateTotals.prototype.handleElectionYearChange = function(e) {
   e.preventDefault();
   this.baseQuery.election_year = e.target.value; // Save the updated value
   this.loadData(this.baseQuery); // Reload the data
-}
+};
 
 new AggregateTotals();
