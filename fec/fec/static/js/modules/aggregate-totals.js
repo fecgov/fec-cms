@@ -3,43 +3,45 @@
 const $ = require('jquery');
 const helpers = require('./helpers');
 
+/**
+ * Handles the functionality for the aggregate totals box(es)
+ */
 function AggregateTotals() {
-  this.scriptElement;
-  this.election_year;
-  this.office;
-  this.value;
-  this.valueField;
-  this.descriptionField;
-  this.value;
+  this.scriptElement; // the <script>
+  this.element; // the HTML element of this box
+  this.descriptionField; // the HTML element that holds the explanation
+  this.valueField; // the HTML element that holds the value
+
+  this.basePath = ['candidates', 'totals', 'by_office'];
+  this.election_year; // this instance's current election year
+  this.office; // this instance's current office var
+  this.queryObj; // 
+  this.value; // this instance's current value
 
   this.init();
 }
-AggregateTotals.prototype.buildElement = function(
-  passedTotal,
-  passedOffice,
-  passedYear
-) {
-  this.value = passedTotal;
-  this.office = passedOffice; // (just in case it's changed)
-  this.year = passedYear;
+/**
+ * Called by {@link loadData} to parse and display the data
+ * @param Response queryResponse - the successful API reply
+ */
+AggregateTotals.prototype.buildElement = function(queryResponse) {
+  this.value = queryResponse.results[0].total_disbursements;
+  this.office = queryResponse.results[0].office; // (Again, in case it's changed)
+  this.year = queryResponse.results[0].election_year;
 
-  this.stepCount = Math.ceil(Math.random() * 5) + 1;
-  this.stepAmount = Math.random() * 10;
-  this.startingValue = this.value - this.stepAmount * this.stepCount;
+  let stepCount = Math.ceil(Math.random() * 5) + 1; // How many animation steps should we have?
+  let stepAmount = Math.random() * 10; // How much should each step increment?
+  let startingValue = this.value - stepAmount * stepCount; // Considering stepAmount, where should we start the animation?
 
-  for (
-    this.stepCurrent = 0;
-    this.stepCurrent <= this.stepCount;
-    this.stepCurrent++
-  ) {
-    this.tempVal = this.startingValue + this.stepCurrent * this.stepAmount;
-    this.delay = this.stepCurrent * 500;
-    this.instance = this;
+  for (let stepCurrent = 0; stepCurrent <= stepCount; stepCurrent++) {
+    let tempVal = startingValue + stepCurrent * stepAmount; // How much this step should display
+    let delay = stepCurrent * 750; // How long this step should wait from the start
+    let instance = this; // The calling instance
     setTimeout(function() {
-      this.valString =
-        '$' + this.tempVal.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
-      this.instance.valueField.innerHTML = this.valString;
-    }, this.delay);
+      let valString =
+        '$' + tempVal.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,'); // Format for US dollars and cents
+      instance.valueField.innerHTML = valString; // Display this value
+    }, delay);
   }
 
   this.descriptionField.innerHTML =
@@ -47,13 +49,26 @@ AggregateTotals.prototype.buildElement = function(
     this.office +
     ' candidates running in ' +
     this.year;
+
+  $(this.element).slideDown();
 };
 
+/**
+ * Called from the constructor, sets up its vars and starts {@link loadData}
+ */
 AggregateTotals.prototype.init = function() {
-  this.scriptElement = document.currentScript; // the <script> on the page
-  var dataObjStr = String(this.scriptElement.dataset.obj); // grab the data-obj param
-  dataObjStr = dataObjStr.replace(/'/g, '"'); // convert the single quotes to double to be JSON-friendlier
-  this.dataObj = JSON.parse('[' + dataObjStr + ']'); // and make it into a usable object
+  this.scriptElement = document.currentScript; // The <script> on the page
+  var dataObjStr = String(this.scriptElement.dataset.obj); // Grab the data-obj param
+  dataObjStr = dataObjStr.replace(/'/g, '"'); // Convert the single quotes to double to be JSON-friendlier
+  this.dataObj = JSON.parse('[' + dataObjStr + ']')[0]; // And make it into a usable object, but only the first element
+  // this.dataObj = this.dataObj[0]; // 
+
+  this.office = this.dataObj.office;
+  this.election_year = this.dataObj.election_year;
+
+  this.element = document.querySelector(String(this.dataObj.target));
+
+  $(this.element).slideUp(0);
 
   this.valueField = document.querySelector(
     String(this.dataObj.target) + ' .value'
@@ -62,9 +77,7 @@ AggregateTotals.prototype.init = function() {
     String(this.dataObj.target) + ' .description'
   );
 
-  this.basePath = ['candidates', 'totals', 'by_office'];
-
-  this.baseQuery = {
+  this.queryObj = {
     office: this.office,
     per_page: 20,
     active_candidates: false,
@@ -74,18 +87,23 @@ AggregateTotals.prototype.init = function() {
     page: 1,
     election_year: this.election_year
   };
-  this.currentQuery = this.baseQuery;
+
+  this.loadData(this.queryObj);
 };
 
+/**
+ * Starts the data load, called by {@link init}
+ * @param Object query - The data object for the query, {@link queryObj}
+ */
 AggregateTotals.prototype.loadData = function(query) {
-  this.self = this;
-  $.getJSON(helpers.buildUrl(this.basePath, query)).done(function(response) {
-    this.theTotal = response.results[0].total_disbursement;
-    this.theOffice = response.results[0].office;
-    this.theYear = response.results[0].election_year;
-
-    this.self.buildElement(this.theTotal, this.theOffice, this.theYear);
-  });
+  let self = this;
+  $.getJSON(helpers.buildUrl(this.basePath, query))
+    .done(response => {
+      self.buildElement(response);
+    })
+    .fail((jqxhr, textStatus, error) => {
+      // FAIL SILENTY
+    });
 };
 
 new AggregateTotals();

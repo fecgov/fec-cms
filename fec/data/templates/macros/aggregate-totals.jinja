@@ -1,6 +1,6 @@
 {% macro build_block(dataObj={}) %}
-  {% do dataObj.update({"target": "#aggregate-totals-block-1"}) %}
-    <aside id="aggregate-totals-block-1" class="aggregate-totals-block js-not-loaded">
+  {% do dataObj.update({"target": "#aggregate-totals-block"}) %}
+    <aside id="aggregate-totals-block" class="aggregate-totals-block" style="display: none">
       <h1 class="value"></h1>
       <h2 class="description"></h2>
     </aside>
