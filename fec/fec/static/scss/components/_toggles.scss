@@ -98,6 +98,14 @@
     font-weight: normal;
     margin-bottom: -2px;
   }
+
+  &[data-toggle="home-barcharts"] {
+    @include media($med) {
+      span.button--alt{
+        min-width: u(13.5rem);
+      }
+    }
+  }
 }
 
 .toggles--small {

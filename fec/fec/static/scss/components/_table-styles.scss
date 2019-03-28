@@ -445,6 +445,7 @@ h3 + .simple-table {
     }
   }
 
+
   @include media($lg) {
     .simple-table__cell {
       a {
