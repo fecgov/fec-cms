@@ -39,6 +39,10 @@
   padding: u(4rem 0);
 }
 
+.slab--spacious-margin {
+  margin: u(3rem 0);
+}
+
 .slab--inline {
   border-radius: 4px;
   margin: u(2rem 0);
@@ -53,6 +57,11 @@
     @include span-columns(10);
     padding-left: u(2rem);
   }
+}
+
+.slab--ruled {
+  border-top: 2px solid $inverse;
+  border-bottom: 2px solid $inverse;
 }
 
 // Reset all slab colors on print

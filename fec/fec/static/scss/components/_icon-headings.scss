@@ -197,6 +197,14 @@
     float: left;
     margin-right: u(1.5rem);
   }
+
+  &.primary{
+    &::before {
+      @include u-icon-circle($direction-sign, $primary, $inverse, 4.5rem);
+      background-size: u(4rem);
+      }
+  }
+
 }
 
 .icon-heading--shield-circle {
@@ -275,6 +283,31 @@
     float: left;
     margin-right: u(1.5rem);
   }
+
+  &.primary{
+    &::before {
+      @include u-icon-circle($financial-document, $primary, $inverse, 4.5rem);
+      background-size: 40%;
+      }
+  }
+}
+
+.icon-heading--election-circle {
+  &::before {
+    $size: u(4rem);
+    @include u-icon-circle($election, $inverse, $secondary-contrast, $size);
+    background-size: 50%;
+    content: '';
+    float: left;
+    margin-right: u(1.5rem);
+  }
+
+  &.primary{
+    &::before {
+      @include u-icon-circle($election, $primary, $inverse, 4.5rem);
+      background-size: 40%;
+      }
+  }
 }
 
 .icon-heading--graph-circle,
@@ -286,7 +319,10 @@
 .icon-heading--magnifying-glass-circle,
 .icon-heading--question-bubble-circle,
 .icon-heading--individual-contributions-circle,
-.icon-heading--person-location-circle
+.icon-heading--person-location-circle,
+.icon-heading--direction-sign-circle,
+.icon-heading--financial-document,
+.icon-heading--election-circle
  {
   border-bottom: none;
   display: table;

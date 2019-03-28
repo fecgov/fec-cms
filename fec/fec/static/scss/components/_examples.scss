@@ -38,8 +38,13 @@
 
 .example--primary {
   font-size: u(1.6rem);
-  border-left: 2px solid $primary;
   padding: u(1rem 1.5rem);
+}
+@include media($med) {
+  .example--primary {
+    border-left: 2px solid $primary;
+    padding-right: 0;
+  }
 }
 
 .example__title {

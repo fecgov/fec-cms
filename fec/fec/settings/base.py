@@ -44,10 +44,11 @@ FEATURES = {
     'agendas': bool(env.get_credential('FEC_FEATURE_AGENDAS', '')),
     'tips': bool(env.get_credential('FEC_FEATURE_TIPS', '')),
     'radform': bool(env.get_credential('FEC_FEATURE_RADFORM', '')),
-    'linecharts': bool(env.get_credential('FEC_FEATURE_LINECHARTS', '')),
     'adrs': bool(env.get_credential('FEC_FEATURE_ADRS', '')),
     'afs': bool(env.get_credential('FEC_FEATURE_AFS', '')),
     'aggregatetotals': bool(env.get_credential('FEC_FEATURE_AGGR_TOTS', '')),
+    'map': bool(env.get_credential('FEC_FEATURE_HOME_MAP', '')),
+    'barcharts': bool(env.get_credential('FEC_FEATURE_HOME_BARCHARTS', '')),
 }
 
 ENVIRONMENTS = {
