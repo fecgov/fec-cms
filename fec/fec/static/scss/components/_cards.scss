@@ -21,8 +21,8 @@
   background-color: $bright-red;
 }
 
-.card--neutral {
-  background-color: $gray;
+.card--neutral-base {
+  background-color: $neutral-base;
   @include u-font-color($base);
 
   .card__image__container {
@@ -488,6 +488,31 @@
     }
   }
 }
+
+.card--neutral {
+  background-color: $neutral;
+  @include u-font-color($base);
+
+  a {
+    border-bottom: none;
+  }
+
+  .card__image__container {
+    @include clearfix();
+    display: inline-block;
+  }
+  .card__icon {
+      height: 5.8rem;
+      width: 5.8rem;
+
+    &.i-graph-horizontal-ordered {
+      @include u-icon-bg($graph-horizontal-ordered, $inverse);
+      background-color: $primary;
+      background-size: 50%;
+    }
+  }
+}
+
 
 // Major cards
 // Style used when the cards are the primary feature of a layout,

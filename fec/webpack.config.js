@@ -1,26 +1,27 @@
 /* global __dirname */
-/* jslint maxlen: false */
 
 var path = require('path');
 var webpack = require('webpack');
 var ManifestPlugin = require('webpack-manifest-plugin');
 var CleanWebpackPlugin = require('clean-webpack-plugin');
-var BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
+// var BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 
-var fs = require('fs');
+const fs = require('fs');
 
-var entries = {
-  'init': './fec/static/js/init.js',
+const entries = {
+  init: './fec/static/js/init.js',
   'data-init': './fec/static/js/data-init.js',
-  'vendor': ['jquery', 'handlebars']
+  vendor: ['jquery', 'handlebars']
 };
 
-var datatablePages = [];
+const datatablePages = [];
 
 fs.readdirSync('./fec/static/js/pages').forEach(function(f) {
-  if (f.search('.js') < 0 ) { return; } // Skip non-js files
-  var name = f.split('.js')[0];
-  var p = path.join('./fec/static/js/pages', f);
+  if (f.search('.js') < 0) {
+    return;
+  } // Skip non-js files
+  let name = f.split('.js')[0];
+  let p = path.join('./fec/static/js/pages', f);
   entries[name] = './' + p;
 
   // Note all datatable pages for getting the common chunk
@@ -28,6 +29,10 @@ fs.readdirSync('./fec/static/js/pages').forEach(function(f) {
     datatablePages.push(name);
   }
 });
+
+// add the aggregate totals block
+entries['modules/aggregate-totals'] =
+  './fec/static/js/modules/aggregate-totals.js';
 
 module.exports = [
   {
@@ -58,7 +63,7 @@ module.exports = [
         // Contains jquery and handlebars
         // Included on every page
         name: 'vendor',
-        filename: 'vendor.js',
+        filename: 'vendor.js'
       }),
       new webpack.SourceMapDevToolPlugin(),
       new ManifestPlugin({
@@ -68,9 +73,9 @@ module.exports = [
       new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
       new webpack.DefinePlugin({
         'process.env': {
-        NODE_ENV: '"production"'
-      }
-    }),
+          NODE_ENV: '"production"'
+        }
+      })
       // Uncomment to compress and analyze the size of bundles
       // new BundleAnalyzerPlugin()
     ],
@@ -79,22 +84,34 @@ module.exports = [
       path: path.resolve(__dirname, './dist/fec/static/js')
     },
     module: {
-        loaders: [
-            {
-              test: /\.hbs/,
-              use: ['handlebars-template-loader', 'cache-loader']
-            }
-        ],
+      loaders: [
+        {
+          test: /\.hbs/,
+          use: ['handlebars-template-loader', 'cache-loader']
+        }
+      ]
     },
     resolve: {
       alias: {
         // There's a known issue with jquery.inputmask and webpack.
         // These aliases resolve the issues
-        'jquery': path.join(__dirname, '../node_modules/jquery/dist/jquery.js'),
-        'inputmask.dependencyLib': path.join(__dirname, '../node_modules/jquery.inputmask/dist/inputmask/inputmask.dependencyLib.js'),
-        'jquery.inputmask/dist/inputmask/inputmask.date.extensions': path.join(__dirname, '../node_modules/jquery.inputmask/dist/inputmask/inputmask.date.extensions.js'),
-        'inputmask': path.join(__dirname, '../node_modules/jquery.inputmask/dist/inputmask/inputmask.js'),
-        'jquery.inputmask': path.join(__dirname, '../node_modules/jquery.inputmask/dist/inputmask/jquery.inputmask.js')
+        jquery: path.join(__dirname, '../node_modules/jquery/dist/jquery.js'),
+        'inputmask.dependencyLib': path.join(
+          __dirname,
+          '../node_modules/jquery.inputmask/dist/inputmask/inputmask.dependencyLib.js'
+        ),
+        'jquery.inputmask/dist/inputmask/inputmask.date.extensions': path.join(
+          __dirname,
+          '../node_modules/jquery.inputmask/dist/inputmask/inputmask.date.extensions.js'
+        ),
+        inputmask: path.join(
+          __dirname,
+          '../node_modules/jquery.inputmask/dist/inputmask/inputmask.js'
+        ),
+        'jquery.inputmask': path.join(
+          __dirname,
+          '../node_modules/jquery.inputmask/dist/inputmask/jquery.inputmask.js'
+        )
       }
     },
     node: {
@@ -112,8 +129,8 @@ module.exports = [
   {
     name: 'legal',
     entry: {
-      'legalApp': './fec/static/js/legal/LegalApp.js',
-      'polyfills': './fec/static/js/polyfills.js'
+      legalApp: './fec/static/js/legal/LegalApp.js',
+      polyfills: './fec/static/js/polyfills.js'
     },
     output: {
       filename: '[name]-[hash].js',
@@ -124,7 +141,7 @@ module.exports = [
       new ManifestPlugin({
         fileName: 'rev-legal-manifest-js.json',
         basePath: '/static/js/'
-      }),
+      })
     ],
     module: {
       loaders: [
@@ -146,7 +163,7 @@ module.exports = [
   },
   {
     name: 'draftail',
-    entry: {'draftail': './fec/static/js/draftail/App.js'},
+    entry: { draftail: './fec/static/js/draftail/App.js' },
     output: {
       filename: '[name]-[hash].js',
       path: path.resolve(__dirname, './dist/fec/static/js')
@@ -160,7 +177,7 @@ module.exports = [
       new ManifestPlugin({
         fileName: 'rev-draftail-manifest-js.json',
         basePath: '/static/js/'
-      }),
+      })
     ],
     module: {
       loaders: [
