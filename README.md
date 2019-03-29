@@ -1,15 +1,16 @@
-## Develop
+**Develop**
 [![CircleCI](https://circleci.com/gh/fecgov/fec-cms.svg?style=svg)](https://circleci.com/gh/fecgov/fec-cms)
 [![Test Coverage](https://img.shields.io/codecov/c/github/fecgov/fec-cms/develop.svg)](https://codecov.io/github/fecgov/fec-cms)
+**package.json**
+[![[Known Vulnerabilities]](https://snyk.io/test/github/fecgov/fec-cms/badge.svg)](https://snyk.io/test/github/fecgov/fec-cms?targetFile=package.json)
+**requirements.txt**
+[![[Known Vulnerabilities]](https://snyk.io/test/github/fecgov/fec-cms/badge.svg)](https://snyk.io/test/github/fecgov/fec-cms?targetFile=requirements.txt)
 
-## Master
+**Master**
 [![Test Coverage](https://img.shields.io/codecov/c/github/fecgov/fec-cms/master.svg)](https://codecov.io/github/fecgov/fec-cms)
 
-## Snyk vulnerabilities
-**package.json**
-[![[Known Vulnerabilities]](https://snyk.io/test/github/fecgov/fec-cms/badge.svg?targetFile=package.json)](https://snyk.io/test/github/fecgov/fec-cms?targetFile=package.json)
-**requirements.txt**
-[![[Known Vulnerabilities]](https://snyk.io/test/github/fecgov/fec-cms/badge.svg?targetFile=requirements.txt)](https://snyk.io/test/github/fecgov/fec-cms?targetFile=requirements.txt)
+
+
 
 ## Campaign finance for everyone
 The Federal Election Commission (FEC) releases information to the public about
