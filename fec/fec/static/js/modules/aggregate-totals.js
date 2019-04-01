@@ -36,12 +36,12 @@ AggregateTotals.prototype.displayUpdatedData = function(queryResponse) {
 
   // If this is the first build
   if (this.animVars.stepCount == 0) {
-    this.animVars.stepCount = Math.ceil(Math.random() * 5) + 1; // How many animation steps should we have?
+    this.animVars.stepCount = Math.ceil(Math.random() * 10) + 5; // How many animation steps should we have? (random(1-11) + 5)
     this.animVars.value =
       this.action == 'raised'
         ? queryResponse.results[0].total_receipts
         : queryResponse.results[0].total_disbursements;
-    this.animVars.stepAmount = Math.random() * 10; // How much should each step increment?
+    this.animVars.stepAmount = Math.random() * 100 + 123.456; // How much should each step increment? (random(1-11) + 20)
     this.animVars.startingValue =
       this.animVars.value - this.animVars.stepAmount * this.animVars.stepCount; // Considering this.animVars.stepAmount, where should we start the animation?
 
@@ -69,7 +69,7 @@ AggregateTotals.prototype.displayUpdatedData = function(queryResponse) {
     let anim_tempVal =
       this.animVars.startingValue +
       this.animVars.stepCurrent * this.animVars.stepAmount; // How much this step should display
-    let anim_delay = this.animVars.stepCurrent * 750; // How long this step should wait from the start
+    let anim_delay = this.animVars.stepCurrent * 250; // How long this step should wait from the start
     let instance = this; // The calling instance
     setTimeout(function() {
       let valString =
