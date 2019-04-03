@@ -263,7 +263,6 @@ AggregateTotals.prototype.startAnimation = function() {
     window.clearInterval(instance.animVars.interval);
   }
   instance.animVars.interval = window.setInterval(function() {
-    console.log('tick');
     let nextVal = getNextValue(
       instance.animVars.valueTemp,
       instance.animVars.valueTotal
