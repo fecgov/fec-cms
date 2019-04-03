@@ -25,18 +25,17 @@
     padding: 2rem;
 
     h1 {
-      flex-grow: 4;
-      margin: 0 0 0 .6rem;
+      margin: 0 0 0 1rem;
       order: 1;
       text-align: right;
+      width: 60%
     }
     h2 {
-      flex-grow: 1;
       font-size: u(1.4rem);
-      margin-left: .6rem;
+      margin-left: 1rem;
       order: 2;
       text-align: left;
-      width: 30%;
+      width: 40%;
     }
   }
 }
