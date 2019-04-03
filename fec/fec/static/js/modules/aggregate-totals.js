@@ -259,8 +259,11 @@ AggregateTotals.prototype.displayValue = function(instance, passedValue) {
 AggregateTotals.prototype.startAnimation = function() {
   let instance = this;
   // If there's an existing interval, clear it
-  if (instance.animVars.interval) clearInterval(instance.animVars.interval);
-  instance.animVars.interval = setInterval(function() {
+  if (instance.animVars.interval) {
+    window.clearInterval(instance.animVars.interval);
+  }
+  instance.animVars.interval = window.setInterval(function() {
+    console.log('tick');
     let nextVal = getNextValue(
       instance.animVars.valueTemp,
       instance.animVars.valueTotal
@@ -270,7 +273,7 @@ AggregateTotals.prototype.startAnimation = function() {
 
     // If our values match, we can stop the animations
     if (instance.animVars.valueTemp == instance.animVars.valueTotal) {
-      clearInterval(instance.animVars.interval);
+      window.clearInterval(instance.animVars.interval);
     }
   }, 25);
 };
