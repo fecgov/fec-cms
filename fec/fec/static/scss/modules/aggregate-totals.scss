@@ -1,3 +1,14 @@
+@import '../vendor/bourbon/bourbon';
+@import '../vendor/neat/neat';
+
+@import '../grid';
+@import '../variables';
+
+@font-face {
+  font-family: FECKarlaMonoReg;
+  src: url('/static/fonts/FEC-Karla-Mono-Regular.otf'); // TODO - make this more universal
+}
+
 .aggregate-totals-block {
   background-color: $neutral;
   color: $base;
@@ -5,7 +16,7 @@
   padding: 2rem;
 
   h1 {
-    font-family: $sans-serif;
+    font-family: 'FECKarlaMonoReg', $sans-serif;
     line-height: 1em;
     margin: 0 0 .75rem;
     text-align: center;
