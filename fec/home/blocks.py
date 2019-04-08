@@ -155,6 +155,9 @@ class CustomTableBlock(blocks.StructBlock):
         ('footnote', blocks.CharBlock(required=False))
     ])
 
+    class Meta:
+        template = 'blocks/custom_table.html'
+
 class ExampleImage(blocks.StructBlock):
     """Creates an example module with an image and a caption, side-by-side
     Typically used for showing reporting Examples
@@ -245,6 +248,3 @@ class ExampleForms(blocks.StructBlock):
     class Meta:
         template = 'blocks/example-forms.html'
         icon = 'doc-empty'
-
-    class Meta:
-        template = 'blocks/custom_table.html'
