@@ -7,7 +7,10 @@
 
 @font-face {
   font-family: FECKarlaMonoReg;
-  src: url('/static/fonts/FEC-Karla-Mono-Regular.otf'); // TODO - make this more universal
+  src: url('/static/fonts/fec-mono-regular.woff2') format('woff2'),
+    url('/static/fonts/fec-mono-regular.woff') format('woff'),
+    url('/static/fonts/fec-mono-regular.ttf') format('truetype');
+    // TODO - move these to their final home
 }
 
 .aggregate-totals-block {

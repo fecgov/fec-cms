@@ -1,17 +1,25 @@
 /* global __dirname */
 
-var path = require('path');
-var webpack = require('webpack');
-var ManifestPlugin = require('webpack-manifest-plugin');
-var CleanWebpackPlugin = require('clean-webpack-plugin');
-// var BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
+const path = require('path');
+const webpack = require('webpack');
+const ManifestPlugin = require('webpack-manifest-plugin');
+const CleanWebpackPlugin = require('clean-webpack-plugin');
+// const BundleAnalyzerPlugin = require('webpack-bundle-analyzer')
+//   .BundleAnalyzerPlugin;
 
 const fs = require('fs');
 
 const entries = {
   init: './fec/static/js/init.js',
   'data-init': './fec/static/js/data-init.js',
-  vendor: ['jquery', 'handlebars']
+  vendor: ['jquery', 'handlebars'],
+  fonts: [
+    // TODO - move these to their final home
+    './fec/static/fonts/fec-mono-regular.eot',
+    './fec/static/fonts/fec-mono-regular.ttf',
+    './fec/static/fonts/fec-mono-regular.woff',
+    './fec/static/fonts/fec-mono-regular.woff2'
+  ]
 };
 
 const datatablePages = [];
@@ -36,10 +44,13 @@ module.exports = [
     entry: entries,
     plugins: [
       // deletes old build files
-      new CleanWebpackPlugin(['./dist/fec/static/js'], {
-        verbose: true,
-        dry: false
-      }),
+      new CleanWebpackPlugin(
+        ['./dist/fec/static/js', './dist/fec/static/fonts'],
+        {
+          verbose: true,
+          dry: false
+        }
+      ),
       new webpack.optimize.CommonsChunkPlugin({
         // Contains d3, leaflet, and other shared code for maps and charts
         // Included on data landing, candidate single, committee single and election pages
@@ -92,6 +103,19 @@ module.exports = [
           options: {
             presets: ['latest']
           }
+        },
+        {
+          // TODO - move these to their final home
+          test: /\.(woff(2)?|ttf|eot|svg)(\?v=\d+\.\d+\.\d+)?$/,
+          use: [
+            {
+              loader: 'file-loader',
+              options: {
+                name: '[name].[ext]',
+                outputPath: '../fonts'
+              }
+            }
+          ]
         }
       ]
     },
