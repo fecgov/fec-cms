@@ -30,10 +30,6 @@ fs.readdirSync('./fec/static/js/pages').forEach(function(f) {
   }
 });
 
-// add the aggregate totals block
-entries['modules/aggregate-totals'] =
-  './fec/static/js/modules/aggregate-totals.js';
-
 module.exports = [
   {
     name: 'all',
@@ -127,6 +123,45 @@ module.exports = [
     },
     watchOptions: {
       ignored: /node_modules/
+    },
+    stats: {
+      assetsSort: 'field',
+      modules: false,
+      warnings: false
+    }
+  },
+  {
+    // The modules are separate because we want them in a specific place and named predictably
+    name: 'modules',
+    entry: {
+      'aggregate-totals': './fec/static/js/modules/aggregate-totals.js'
+    },
+    output: {
+      filename: 'modules/[name].js',
+      path: path.resolve(__dirname, './dist/fec/static/js')
+    },
+    node: {
+      fs: 'empty',
+      path: true
+    },
+    plugins: [
+      new webpack.SourceMapDevToolPlugin(),
+      new ManifestPlugin({
+        fileName: 'rev-modules-manifest-js.json',
+        basePath: '/static/js/'
+      })
+    ],
+    module: {
+      loaders: [
+        {
+          test: /\.js$/,
+          exclude: /node_modules/,
+          loader: 'babel-loader',
+          options: {
+            presets: ['latest', 'react']
+          }
+        }
+      ]
     },
     stats: {
       assetsSort: 'field',
