@@ -2,7 +2,8 @@
 @import '../vendor/neat/neat';
 
 @import '../grid';
-@import '../variables';
+@import '../functions'; // Handles the u()
+@import '../variables'; // $neutral, $sans-serif, etc
 
 @font-face {
   font-family: FECKarlaMonoReg;
