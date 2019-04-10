@@ -47,10 +47,11 @@
   }
 
   &.email__button {
+    padding: u(1rem 4rem 1rem 1rem);
     &::before {
       content:'';
-      @extend .button--envelope
-
+      @extend .button--envelope;
+      padding: u(1rem 0rem 1rem 0);
     }
   }
 }
