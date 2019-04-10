@@ -88,6 +88,14 @@ module.exports = [
         {
           test: /\.hbs/,
           use: ['handlebars-template-loader', 'cache-loader']
+        },
+        {
+          test: /\.js$/,
+          exclude: /node_modules/,
+          loader: 'babel-loader',
+          options: {
+            presets: ['latest']
+          }
         }
       ]
     },
