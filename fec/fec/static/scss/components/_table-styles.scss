@@ -376,3 +376,29 @@ h3 + .simple-table {
     border-right: none;
   }
 }
+
+table.generated{
+  @extend .simple-table--display;
+  border:5px solid #ccc;
+
+}
+table.generated th {
+  @extend .simple-table__header;
+  background: #eee;
+  padding:u(1rem);
+  border: 1px solid #aaa
+
+}
+
+table.generated tr {
+  @extend .simple-table__row;
+
+}
+
+table.generated td {
+    border:1px solid #ccc;
+    padding: u(1rem);
+
+}
+
+
