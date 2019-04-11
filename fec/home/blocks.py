@@ -170,6 +170,21 @@ class ExampleImage(blocks.StructBlock):
         template = 'blocks/example-image.html'
         icon = 'doc-empty'
 
+class TableGeneratorBlock(blocks.StructBlock):
+    table_title= models.CharField(max_length=255)
+    table = blocks.StreamBlock([
+            ('table_header', blocks.ListBlock(blocks.StructBlock([
+                ('table_cell',blocks.RichTextBlock(required=False))
+            ]))),
+            ('table_row', blocks.ListBlock(blocks.StructBlock([
+                ('table_cell',blocks.RichTextBlock(required=False))
+            ]))),
+    ])
+
+    class Meta:
+        template = 'blocks/table-gen.html'
+        icon = 'table'
+
 class ResourceBlock(blocks.StructBlock):
     """A section of a ResourcePage"""
     title = blocks.CharBlock(required=True)
@@ -193,7 +208,8 @@ class ResourceBlock(blocks.StructBlock):
         ('reporting_example_cards', ReportingExampleCards()),
         ('contribution_limits_table', SnippetChooserBlock('home.EmbedTableSnippet', template = 'blocks/embed-table.html', icon='table')),
         ('image', ImageChooserBlock()),
-        ('example_image', ExampleImage())
+        ('example_image', ExampleImage()),
+        ('TableGenerator',TableGeneratorBlock())
     ])
 
     aside = blocks.StreamBlock([
@@ -248,3 +264,6 @@ class ExampleForms(blocks.StructBlock):
     class Meta:
         template = 'blocks/example-forms.html'
         icon = 'doc-empty'
+
+
+

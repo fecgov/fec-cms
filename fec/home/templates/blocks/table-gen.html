@@ -1,0 +1,49 @@
+{% load wagtailcore_tags %}
+<style>
+table.generated{
+border-collapse: collapse;
+border: 1px solid #bbb;
+}
+table.generated th {
+    background: #ddd;
+    font-weight:bold;
+}
+
+table.generated th, table.generated td {
+    border:1px solid #bbb;
+}
+
+</style>
+<table class="generated">
+ <thead>
+{% for block in self.table %}
+{% if block.block_type == 'table_header' %}
+    <tr>
+    {% for subblock in block.value %}
+
+    <th>
+      {{ subblock.bound_blocks.table_cell.render }}
+    </th>
+
+    {% endfor %}
+     </tr>
+  {% endif %}
+   </thead>
+     <tbody>
+   {% if block.block_type == 'table_row' %}
+     <tr>
+     {% for subblock in block.value %}
+
+      <td>
+       {{ subblock.bound_blocks.table_cell.render }}
+      </td>
+
+     {% endfor %}
+     </tr>
+    {% endif %}
+{% endfor %}
+   </tbody>
+</table>
+
+
+
