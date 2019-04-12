@@ -14,7 +14,9 @@
      </tr>
   {% endif %}
    </thead>
-     <tbody>
+   {% endfor %}
+    <tbody>
+    {% for block in self.table %}
    {% if block.block_type == 'table_row' %}
      <tr>
      {% for subblock in block.value %}
@@ -27,6 +29,7 @@
      </tr>
     {% endif %}
 {% endfor %}
+
    </tbody>
 </table>
 

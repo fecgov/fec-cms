@@ -48,7 +48,10 @@ from home.blocks import (ThumbnailBlock, AsideLinkBlock,
                          ExampleParagraph, ExampleForms, ExampleImage,
                          CustomTableBlock, ReportingExampleCards, InternalButtonBlock,
                          ExternalButtonBlock, SnippetChooserBlock, ExampleImage)
+core_table_options = {
 
+    'renderer': 'html',
+}
 
 stream_factory = functools.partial(
     StreamField,
@@ -57,7 +60,7 @@ stream_factory = functools.partial(
         ('paragraph', blocks.RichTextBlock()),
         ('html', blocks.RawHTMLBlock()),
         ('image', ImageChooserBlock()),
-        ('table', TableBlock()),
+        ('table', TableBlock(table_options=core_table_options)),
         ('custom_table', CustomTableBlock()),
         ('contact', ContactInfoBlock())
     ],
@@ -582,7 +585,7 @@ class CustomPage(Page):
         ('html', blocks.RawHTMLBlock()),
         ('example_image', ExampleImage()),
         ('image', ImageChooserBlock()),
-        ('table', TableBlock()),
+        ('table', TableBlock(table_options=core_table_options)),
         ('example_paragraph', ExampleParagraph()),
         ('example_forms', ExampleForms()),
         ('reporting_example_cards', ReportingExampleCards()),
