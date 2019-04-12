@@ -5,6 +5,12 @@ from wagtail.documents.blocks import DocumentChooserBlock
 from wagtail.contrib.table_block.blocks import TableBlock
 from wagtail.snippets.blocks import SnippetChooserBlock
 
+"""options for wagtail default table_block """
+core_table_options = {
+
+    'renderer': 'html',
+}
+
 class ThumbnailBlock(blocks.StructBlock):
     """A block that combines a thumbnail and a caption,
         both of which link to a URL"""
@@ -146,6 +152,8 @@ class CustomTableBlock(blocks.StructBlock):
     'rowHeaders': True,
     'height': 108,
     'language': 'en',
+    'renderer': 'html',
+
     }
 
     custom_table = blocks.StreamBlock([
@@ -187,7 +195,7 @@ class ResourceBlock(blocks.StructBlock):
         ('fec_jobs', CareersBlock()),
         ('mur_search', MURSearchBlock()),
         ('audit_search', AuditSearchBlock()),
-        ('table', TableBlock()),
+        ('table', TableBlock(table_options=core_table_options)),
         ('custom_table', CustomTableBlock()),
         ('html', blocks.RawHTMLBlock()),
         ('reporting_example_cards', ReportingExampleCards()),
