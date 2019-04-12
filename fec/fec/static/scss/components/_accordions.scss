@@ -45,6 +45,15 @@
     @include u-icon-bg($minus-circle, $primary);
     border-bottom: none;
   }
+
+  &.email__button {
+    padding: u(1rem 4rem 1rem 1rem);
+    &::before {
+      content:'';
+      @extend .button--envelope;
+      padding: u(1rem 0rem 1rem 0);
+    }
+  }
 }
 
 .accordion__content {
