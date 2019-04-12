@@ -50,7 +50,7 @@ from home.blocks import (ThumbnailBlock, AsideLinkBlock,
                          ExternalButtonBlock, SnippetChooserBlock, ExampleImage)
 core_table_options = {
 
-    'renderer': 'html',
+    'renderer': 'html'
 }
 
 stream_factory = functools.partial(
