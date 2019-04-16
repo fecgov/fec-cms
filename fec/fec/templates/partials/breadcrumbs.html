@@ -1,4 +1,4 @@
-<nav class="page-header page-header--{{ style }}">
+<nav class="page-header page-header--{% if "/legal-resources/" in request.path or "/campaign-finance-data/" in request.path or "/introduction-campaign-finance/" in request.path %}primary {% else %}secondary{% endif %}">
   <ul class="breadcrumbs">
     <li class="breadcrumbs__item"><a href="/" class="breadcrumbs__link" rel="Home">Home</a></li>
     {% for link in links %}

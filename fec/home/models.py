@@ -899,6 +899,7 @@ class ResourcePage(Page):
                                 help_text='If this is a report, add a category',
                                 blank=True,
                                 null=True)
+    #breadcrumb_style removed from promote-panel in favor of controlling breadcrumbs by parent section
     breadcrumb_style = models.CharField(max_length=255,
         choices=[('primary', 'Blue'), ('secondary', 'Red')],
         default='primary')
@@ -921,7 +922,6 @@ class ResourcePage(Page):
     ]
 
     promote_panels = Page.promote_panels + [
-        FieldPanel('breadcrumb_style'),
         FieldPanel('category'),
         FieldPanel('date')
     ]
