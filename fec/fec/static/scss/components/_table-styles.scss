@@ -377,7 +377,7 @@ h3 + .simple-table {
     grid-template-rows: 30px 30px 30px;
     grid-auto-flow: column;
     border-bottom:0;
-    }
+  }
 
   .simple-table__cell {
     /* name cell */
@@ -410,8 +410,12 @@ h3 + .simple-table {
       grid-template-columns: 100% 50% 100%;
       grid-template-rows: 30px 30px;
       grid-auto-flow: column;
-
     }
+
+    .simple-table__row:nth-child(2){
+        margin-top: u(-2rem);
+    }
+
     .simple-table__cell {
       grid-column: 1;
       grid-row: 1/3;
