@@ -7,8 +7,7 @@ from wagtail.snippets.blocks import SnippetChooserBlock
 
 """options for wagtail default table_block """
 core_table_options = {
-
-    'renderer': 'html',
+    'renderer': 'html'
 }
 
 class ThumbnailBlock(blocks.StructBlock):
@@ -146,14 +145,13 @@ class CustomTableBlock(blocks.StructBlock):
     Typicallyused for Statistical Press Release tables
     """
     custom_table_options = {
-    'startRows': 7,
-    'startCols': 6,
-    'colHeaders': True,
-    'rowHeaders': True,
-    'height': 108,
-    'language': 'en',
-    'renderer': 'html',
-
+        'startRows': 7,
+        'startCols': 6,
+        'colHeaders': True,
+        'rowHeaders': True,
+        'height': 108,
+        'language': 'en',
+        'renderer': 'html'
     }
 
     custom_table = blocks.StreamBlock([
