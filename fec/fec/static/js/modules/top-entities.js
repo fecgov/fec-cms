@@ -44,7 +44,7 @@ TopEntities.prototype.init = function() {
     election_year: this.election_year,
     election_full: true,
     office: this.office,
-    active_candidates: true,
+    is_active_candidate: true,
     page: 1
   };
   this.maxValue = Number(
@@ -262,7 +262,7 @@ TopEntities.prototype.handleTypeChange = function(e) {
     election_year: this.election_year,
     election_full: true,
     office: this.office,
-    active_candidates: true
+    is_active_candidate: true
   };
 
   this.currentQuery = baseQuery;
