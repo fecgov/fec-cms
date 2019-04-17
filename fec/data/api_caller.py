@@ -353,7 +353,7 @@ def load_top_candidates(sort, office=None, election_year=constants.DEFAULT_ELECT
         sort_hide_null=True,
         election_year=election_year,
         election_full=True,
-        active_candidates=True,
+        is_active_candidate=True,
         office=office,
         sort=sort,
         per_page=per_page,

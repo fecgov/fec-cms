@@ -139,7 +139,7 @@ AggregateTotals.prototype.init = function() {
   this.baseQuery = {
     office: '',
     per_page: 20,
-    active_candidates: false,
+    is_active_candidate: true,
     sort_null_only: false,
     sort_hide_null: false,
     sort_nulls_last: false,
