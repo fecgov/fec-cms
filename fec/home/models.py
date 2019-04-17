@@ -79,11 +79,11 @@ def get_content_section(page):
         'legal-resources': 'legal',
         'about':'about',
         'campaign-finance-data': 'data',
-        'data':'data'
-
-
+        'data':'data',
     }
+
     ancestors = page.get_ancestors()
+
     content_sections = [
         slugs.get(ancestor.slug) for ancestor in ancestors
         if slugs.get(ancestor.slug) != None
@@ -127,10 +127,11 @@ class ContentPage(Page):
         index.SearchField('body')
     ]
 
-    # Default content section for determining the active nav
+    #Default content section for determining the active nav
     @property
     def content_section(self):
-        return ''
+       return ''
+
 '''
 class Person(User):
     objects = User()
@@ -353,7 +354,7 @@ class RecordPage(ContentPage):
 
     @property
     def content_section(self):
-        return ''
+        return 'about'
 
     @property
     def get_update_type(self):
@@ -392,7 +393,7 @@ class DigestPage(ContentPage):
 
     @property
     def content_section(self):
-        return ''
+        return 'about'
 
     @property
     def get_update_type(self):
@@ -453,7 +454,7 @@ class PressReleasePage(ContentPage):
 
     @property
     def content_section(self):
-        return ''
+        return 'about'
 
     @property
     def get_update_type(self):
@@ -517,7 +518,7 @@ class TipsForTreasurersPage(ContentPage):
 
     @property
     def content_section(self):
-        return ''
+        return 'about'
 
     @property
     def get_author_office(self):
@@ -705,7 +706,6 @@ class DocumentPage(ContentPage):
         # Return the file extension of file_url
         return self.file_url.rsplit('.', 1)[1].upper()
 
-
 class DocumentFeedPage(ContentPage):
     subpage_types = ['DocumentPage', 'ResourcePage']
     intro = StreamField([
@@ -720,7 +720,7 @@ class DocumentFeedPage(ContentPage):
 
     @property
     def content_section(self):
-        return ''
+        return get_content_section(self)
 
     @property
     def category_filters(self):
@@ -1117,6 +1117,7 @@ class MeetingPage(Page):
     @property
     def get_update_type(self):
         return constants.update_types['commission-meeting']
+
     @property
     def content_section(self):
         return 'about'
