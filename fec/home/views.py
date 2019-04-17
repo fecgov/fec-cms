@@ -171,7 +171,7 @@ def updates(request):
     except EmptyPage:
         updates = paginator.page(paginator.num_pages)
 
-    page_context = {"title": "Latest updates"}
+    page_context = {"title": "Latest updates", "content_section" : "about"}
 
     category_list = list(map(replace_space, category_list))
 
@@ -365,7 +365,7 @@ def index_meetings(request):
     except EmptyPage:
         executive_sessions = executive_paginator.page(executive_paginator.num_pages)
 
-    page_context = {"title": "Commission meetings"}
+    page_context = {"content_section": "about","title": "Commission meetings"}
 
     return render(
         request,
@@ -387,7 +387,7 @@ def index_meetings(request):
 
 
 def guides(request):
-    page_context = {"content_section": "guides", "title": "Guides"}
+    page_context = {"content_section": "help", "title": "Guides"}
     return render(
         request,
         "home/candidate-and-committee-services/guides.html",

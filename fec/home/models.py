@@ -76,7 +76,12 @@ def get_content_section(page):
     """
     slugs = {
         'help-candidates-and-committees': 'help',
-        'legal-resources': 'legal'
+        'legal-resources': 'legal',
+        'about':'about',
+        'campaign-finance-data': 'data',
+        'data':'data'
+
+
     }
     ancestors = page.get_ancestors()
     content_sections = [
@@ -739,7 +744,7 @@ class ReportsLandingPage(ContentPage, UniqueModel):
 
     @property
     def content_section(self):
-        return ''
+        return 'about'
 
 
 class AboutLandingPage(Page):
@@ -754,7 +759,9 @@ class AboutLandingPage(Page):
         StreamFieldPanel('hero'),
         StreamFieldPanel('sections')
     ]
-
+    @property
+    def content_section(self):
+        return 'about'
 
 class CommissionerPage(Page):
     first_name = models.CharField(max_length=255, default='', blank=False)
@@ -1110,6 +1117,9 @@ class MeetingPage(Page):
     @property
     def get_update_type(self):
         return constants.update_types['commission-meeting']
+    @property
+    def content_section(self):
+        return 'about'
 
 
 class ReportingExamplePage(Page):
@@ -1176,3 +1186,6 @@ class ContactPage(Page):
         StreamFieldPanel('services'),
     ]
 
+    @property
+    def content_section(self):
+        return 'about'
