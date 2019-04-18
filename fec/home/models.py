@@ -92,17 +92,6 @@ def get_content_section(page):
     else:
         return ''
 
-
-
-    # content_sections = [
-    #     slugs.get(ancestor.slug) for ancestor in ancestors
-    #     if slugs.get(ancestor.slug) != None
-    # ]
-    # if len(content_sections):
-    #     return content_sections[0]
-    # else:
-    #     return ''
-
 class UniqueModel(models.Model):
     """Abstract base class for unique pages."""
     class Meta:
