@@ -77,9 +77,9 @@ def get_content_section(page):
     slugs = {
         'help-candidates-and-committees': 'help',
         'legal-resources': 'legal',
-        'about':'about',
+        'about': 'about',
         'campaign-finance-data': 'data',
-        'data':'data',
+        'data': 'data',
     }
 
     ancestors = page.get_ancestors()

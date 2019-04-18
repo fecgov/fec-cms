@@ -365,7 +365,7 @@ def index_meetings(request):
     except EmptyPage:
         executive_sessions = executive_paginator.page(executive_paginator.num_pages)
 
-    page_context = {"content_section": "about","title": "Commission meetings"}
+    page_context = {"content_section": "about", "title": "Commission meetings"}
 
     return render(
         request,
