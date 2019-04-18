@@ -83,7 +83,6 @@ def get_content_section(page):
     }
 
     ancestors = page.get_ancestors()
-
     content_sections = [
         slugs.get(ancestor.slug) for ancestor in ancestors
         if slugs.get(ancestor.slug) != None
@@ -92,6 +91,17 @@ def get_content_section(page):
         return content_sections[0]
     else:
         return ''
+
+
+
+    # content_sections = [
+    #     slugs.get(ancestor.slug) for ancestor in ancestors
+    #     if slugs.get(ancestor.slug) != None
+    # ]
+    # if len(content_sections):
+    #     return content_sections[0]
+    # else:
+    #     return ''
 
 class UniqueModel(models.Model):
     """Abstract base class for unique pages."""
@@ -127,7 +137,8 @@ class ContentPage(Page):
         index.SearchField('body')
     ]
 
-    #Default content section for determining the active nav
+    """Returns no content section so the active nav can be set in the page-type \
+    that extends the ContentPage model """
     @property
     def content_section(self):
        return ''
@@ -354,7 +365,7 @@ class RecordPage(ContentPage):
 
     @property
     def content_section(self):
-        return 'about'
+        return get_content_section(self)
 
     @property
     def get_update_type(self):
