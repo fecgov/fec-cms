@@ -50,6 +50,7 @@ def landing(request):
         request,
         'landing.jinja',
         {
+            'parent':'data',
             'title': 'Campaign finance data',
             'dates': utils.date_ranges(),
             'top_candidates_raising': top_candidates_raising['results']
@@ -89,7 +90,7 @@ def search(request):
 
 
 def browse_data(request):
-    return render(request, 'browse-data.jinja', {'title': 'Browse data'})
+    return render(request, 'browse-data.jinja', {'title': 'Browse data', 'parent': 'data'})
 
 
 def get_candidate(candidate_id, cycle, election_full):

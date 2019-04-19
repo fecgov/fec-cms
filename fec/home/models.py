@@ -76,8 +76,12 @@ def get_content_section(page):
     """
     slugs = {
         'help-candidates-and-committees': 'help',
-        'legal-resources': 'legal'
+        'legal-resources': 'legal',
+        'about':'about',
+        'campaign-finance-data': 'data',
+        'data':'data',
     }
+
     ancestors = page.get_ancestors()
     content_sections = [
         slugs.get(ancestor.slug) for ancestor in ancestors
@@ -87,6 +91,17 @@ def get_content_section(page):
         return content_sections[0]
     else:
         return ''
+
+
+
+    # content_sections = [
+    #     slugs.get(ancestor.slug) for ancestor in ancestors
+    #     if slugs.get(ancestor.slug) != None
+    # ]
+    # if len(content_sections):
+    #     return content_sections[0]
+    # else:
+    #     return ''
 
 class UniqueModel(models.Model):
     """Abstract base class for unique pages."""
@@ -122,10 +137,12 @@ class ContentPage(Page):
         index.SearchField('body')
     ]
 
-    # Default content section for determining the active nav
+    """Returns no content section so the active nav can be set in the page-type \
+    that extends the ContentPage model """
     @property
     def content_section(self):
-        return ''
+       return ''
+
 '''
 class Person(User):
     objects = User()
@@ -348,7 +365,7 @@ class RecordPage(ContentPage):
 
     @property
     def content_section(self):
-        return ''
+        return get_content_section(self)
 
     @property
     def get_update_type(self):
@@ -387,7 +404,7 @@ class DigestPage(ContentPage):
 
     @property
     def content_section(self):
-        return ''
+        return 'about'
 
     @property
     def get_update_type(self):
@@ -448,7 +465,7 @@ class PressReleasePage(ContentPage):
 
     @property
     def content_section(self):
-        return ''
+        return 'about'
 
     @property
     def get_update_type(self):
@@ -512,7 +529,7 @@ class TipsForTreasurersPage(ContentPage):
 
     @property
     def content_section(self):
-        return ''
+        return 'about'
 
     @property
     def get_author_office(self):
@@ -700,7 +717,6 @@ class DocumentPage(ContentPage):
         # Return the file extension of file_url
         return self.file_url.rsplit('.', 1)[1].upper()
 
-
 class DocumentFeedPage(ContentPage):
     subpage_types = ['DocumentPage', 'ResourcePage']
     intro = StreamField([
@@ -715,7 +731,7 @@ class DocumentFeedPage(ContentPage):
 
     @property
     def content_section(self):
-        return ''
+        return get_content_section(self)
 
     @property
     def category_filters(self):
@@ -739,7 +755,7 @@ class ReportsLandingPage(ContentPage, UniqueModel):
 
     @property
     def content_section(self):
-        return ''
+        return 'about'
 
 
 class AboutLandingPage(Page):
@@ -754,7 +770,9 @@ class AboutLandingPage(Page):
         StreamFieldPanel('hero'),
         StreamFieldPanel('sections')
     ]
-
+    @property
+    def content_section(self):
+        return 'about'
 
 class CommissionerPage(Page):
     first_name = models.CharField(max_length=255, default='', blank=False)
@@ -1111,6 +1129,10 @@ class MeetingPage(Page):
     def get_update_type(self):
         return constants.update_types['commission-meeting']
 
+    @property
+    def content_section(self):
+        return 'about'
+
 
 class ReportingExamplePage(Page):
     """Page tempalte for "how to report" and "example scenario" pages
@@ -1176,3 +1198,6 @@ class ContactPage(Page):
         StreamFieldPanel('services'),
     ]
 
+    @property
+    def content_section(self):
+        return 'about'
