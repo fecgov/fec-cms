@@ -79,7 +79,7 @@ def get_content_section(page):
         'legal-resources': 'legal',
         'about': 'about',
         'campaign-finance-data': 'data',
-        'data': 'data',
+        'data': 'data'
     }
 
     ancestors = page.get_ancestors()
@@ -354,7 +354,7 @@ class RecordPage(ContentPage):
 
     @property
     def content_section(self):
-        return get_content_section(self)
+        return 'about'
 
     @property
     def get_update_type(self):
