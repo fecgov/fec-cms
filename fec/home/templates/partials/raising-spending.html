@@ -6,7 +6,7 @@
 <section class="usa-grid-full">
   <p class="t-bold u-padding--top">Learn how much individual candidates have raised and spent for presidential, Senate and House elections.</p>
   <div class="usa-width-two-thirds grid--flex">
-    <section id="raising-breakdowns">
+    <section id="raising-breakdowns" class="breakdowns-home">
        <div class="js-top-entities" data-office="{{ office }}" data-election-year="{{ election_year }}" data-perpage="3">
 
        <div class="chart-table chart-table-home simple-table--responsive js-top-table" id="top-table" aria-live="polite" role="grid">
@@ -33,16 +33,16 @@
     </section>
   </div>
   <div class="usa-width-one-third example--primary u-padding--top--small">
-    <fieldset class="toggles u-margin--bottom" data-filter="toggle" data-filter-ignore-count="true">
+    <fieldset class="toggles u-margin--bottom" data-toggle="home-barcharts" data-filter-ignore-count="true">
       <legend class="label input__label-home t-inline-block">Data type</legend>
       <div class="row">
         <label for="switcher-receipts" class="toggle">
           <input type="radio" class="js-chart-toggle" value="receipts" id="switcher-receipts" checked name="data_type" data-prefix="raising"  aria-controls="processed-message" tabindex="0">
-          <span class="button--alt">Money raised</span>
+          <span class="button--alt button-first">Money raised</span>
         </label>
         <label for="switcher-disbursements" class="toggle">
           <input type="radio" class="js-chart-toggle" value="disbursements" id="switcher-disbursements" name="data_type" data-prefix="spending" aria-controls="processed-message" tabindex="0">
-          <span class="button--alt">Money spent</span>
+          <span class="button--alt button-last">Money spent</span>
         </label>
       </div>
     </fieldset>
