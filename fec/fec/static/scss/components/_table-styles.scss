@@ -164,7 +164,7 @@ h3 + .simple-table {
 
     .bar-container {
       margin-left: 0;
-      background: $gray-medium;
+      background: $gray-light;
     }
 
     .simple-table__row {
@@ -187,8 +187,11 @@ h3 + .simple-table {
 
       .t-right-aligned {
         text-align: left;
-
       }
+    }
+
+    .simple-table__header-cell:nth-child(2) {
+      text-align: left;
     }
   }
 

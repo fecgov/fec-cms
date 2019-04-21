@@ -14,6 +14,7 @@ function TopEntities(elm, type) {
   this.per_page = this.$elm.data('perpage');
 
   this.$table = this.$elm.find('.js-top-table');
+
   this.$dates = this.$elm.find('.js-dates');
   this.$previous = this.$elm.find('.js-previous');
   this.$next = this.$elm.find('.js-next');
@@ -163,7 +164,10 @@ TopEntities.prototype.populateTable = function(response) {
   // Set max value if it's the first page
   if (response.pagination.page === 1) {
     if (response.results.length > 0) {
-      self.maxValue = response.results[0].receipts;
+      self.maxValue =
+        this.type == 'receipts'
+          ? response.results[0].receipts
+          : response.results[0].disbursements;
     }
     self.$previous.addClass('is-disabled');
   }
