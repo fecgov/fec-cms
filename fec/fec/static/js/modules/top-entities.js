@@ -196,7 +196,7 @@ TopEntities.prototype.formatData = function(result, rank) {
 TopEntities.prototype.drawBars = function() {
   var maxValue = this.maxValue;
   this.$table.find('.value-bar').each(function() {
-    var width = Number(this.getAttribute('data-value')) / maxValue;
+    var width = Number(this.getAttribute('data-value')) / maxValue || 0;
     this.style.width = String(width * 100) + '%';
   });
 };
