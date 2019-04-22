@@ -2,9 +2,9 @@
 
 {% import 'macros/filters/text.jinja' as text %}
 {% import 'macros/filters/typeahead-filter.jinja' as typeahead %}
-
 {% import 'macros/filters/contributor-states.jinja' as states %}
 {% import 'macros/filters/date.jinja' as date %}
+{% import 'macros/filters/years.jinja' as years %}
 {% import 'macros/filters/range.jinja' as range %}
 
 {% block heading %}
@@ -15,7 +15,8 @@ Filter individual contributions
 <div class="filters__inner">
   {{ typeahead.field('committee_id', 'Recipient name or ID') }}
   {{ text.field('contributor_name', 'Contributor name') }}
-  {{ date.partition_field('date', 'Receipt date', dates ) }}
+  {{ years.two_year_transaction_period('two_year_transaction_period', 'Report years')  }}
+  {{ date.field('date', 'Receipt date', dates ) }}
 </div>
 <div class="js-accordion accordion--neutral" data-content-prefix="filter" data-open-first="false">
   <button type="button" class="js-accordion-trigger accordion__button">Contributor details</button>
