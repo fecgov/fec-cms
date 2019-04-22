@@ -157,7 +157,7 @@ DownloadItem.prototype.handleSuccess = function(response) {
 
 DownloadItem.prototype.handleError = function(xhr, textStatus) {
   if (textStatus === 'error') {
-    this.handleServerError();
+    this.handleServerError(xhr);
   } else if (textStatus !== 'abort') {
     this.schedule();
   } else if (xhr.status === 403) {
@@ -182,14 +182,22 @@ DownloadItem.prototype.close = function() {
   this.container.subtract();
 };
 
-DownloadItem.prototype.handleServerError = function() {
+DownloadItem.prototype.handleServerError = function(xhr) {
   // This is how we handle a 500 server error
   // First, display a message
-  this.$body.html(
-    '<div class="message message--alert message--mini">' +
-      'Sorry, there was a server error. Please try again later.' +
-      '</div>'
-  );
+  if (xhr.status === 429) {
+    this.$body.html(
+      '<div class="message message--alert message--mini">' +
+        'Sorry, you have exceeded your maximum downloads for the hour. Please try again later.' +
+        '</div>'
+    );
+  } else {
+    this.$body.html(
+      '<div class="message message--alert message--mini">' +
+        'Sorry, there was a server error. Please try again later.' +
+        '</div>'
+    );
+  }
 
   // Clear all traces of the downloadUrl
   window.clearTimeout(this.timeout);
