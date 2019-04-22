@@ -14,6 +14,7 @@ function TopEntities(elm, type) {
   this.per_page = this.$elm.data('perpage');
 
   this.$table = this.$elm.find('.js-top-table');
+
   this.$dates = this.$elm.find('.js-dates');
   this.$previous = this.$elm.find('.js-previous');
   this.$next = this.$elm.find('.js-next');
@@ -163,7 +164,10 @@ TopEntities.prototype.populateTable = function(response) {
   // Set max value if it's the first page
   if (response.pagination.page === 1) {
     if (response.results.length > 0) {
-      self.maxValue = response.results[0].receipts;
+      self.maxValue =
+        this.type == 'receipts'
+          ? response.results[0].receipts
+          : response.results[0].disbursements;
     }
     self.$previous.addClass('is-disabled');
   }
@@ -192,7 +196,7 @@ TopEntities.prototype.formatData = function(result, rank) {
 TopEntities.prototype.drawBars = function() {
   var maxValue = this.maxValue;
   this.$table.find('.value-bar').each(function() {
-    var width = Number(this.getAttribute('data-value')) / maxValue;
+    var width = Number(this.getAttribute('data-value')) / maxValue || 0;
     this.style.width = String(width * 100) + '%';
   });
 };

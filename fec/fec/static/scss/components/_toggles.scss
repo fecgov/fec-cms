@@ -98,6 +98,35 @@
     font-weight: normal;
     margin-bottom: -2px;
   }
+
+  &[data-toggle="home-barcharts"] {
+    .button--alt{
+      min-width: u(13.5rem);
+    }
+    label.toggle {
+        float:none;
+      }
+    @include media($med) {
+      .button-first {
+        border-radius: 4px 4px 0 0 !important;
+      }
+      .button-last {
+        border-radius:0 0  4px 4px !important;
+      }
+
+    }
+    @include media($lg) {
+     label.toggle {
+        float:left;
+      }
+      .button-first {
+        border-radius: 4px 0 0 4px !important;
+      }
+      .button-last {
+        border-radius:0 4px 4px 0 !important;
+      }
+    }
+  }
 }
 
 .toggles--small {
