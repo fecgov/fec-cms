@@ -285,11 +285,15 @@ function buildAppUrl(path, query) {
 }
 
 function buildUrl(path, query) {
-  return URI(API_LOCATION)
+  var uri = URI(API_LOCATION)
     .path(Array.prototype.concat(API_VERSION, path, '').join('/'))
-    .addQuery({ api_key: API_KEY })
-    .addQuery(query)
-    .toString();
+    .addQuery({ api_key: API_KEY });
+
+  if (query.api_key) {
+    // if query provides api_key, use that.
+    uri.removeQuery('api_key');
+  }
+  return uri.addQuery(query).toString();
 }
 
 function buildTableQuery(context) {

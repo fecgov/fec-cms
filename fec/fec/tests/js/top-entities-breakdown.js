@@ -86,7 +86,7 @@ describe('Top entities breakdown', function() {
         election_year: 2012,
         election_full: true,
         office: 'S',
-        active_candidates: true,
+        is_active_candidate: true,
         page: 1
       });
     });
@@ -119,7 +119,7 @@ describe('Top entities breakdown', function() {
           election_year: 2016,
           election_full: true,
           office: 'P',
-          active_candidates: true,
+          is_active_candidate: true,
           page: 1
         });
       });

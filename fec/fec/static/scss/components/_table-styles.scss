@@ -319,7 +319,7 @@ h3 + .simple-table {
 
 .custom-table {
   box-shadow: -10px 0 20px -10px $gray-medium inset;
-  overflow-x: scroll;
+  overflow-x: auto;
   display: block;
   margin-bottom: u(1rem);
 

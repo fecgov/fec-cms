@@ -1,9 +1,14 @@
 'use strict';
 
-const $ = require('jquery');
-const helpers = require('./helpers');
-
+// Editable vars
 const doInitialNumberBuild = false;
+const stylesheetPath = '/static/css/modules/aggregate-totals.css';
+
+// Includes
+const $ = require('jquery'); // TODO - Do we need to import it all here?
+// const helpers = require('./helpers'); // TODO - Slim this down
+import { buildUrl } from './helpers';
+
 /**
  * Handles the functionality for the aggregate totals box(es).
  * Loads, creates an <aside> with {@link init}, then makes itself visible (with {@link displayUpdatedData}) after it has some data to show.
@@ -134,7 +139,7 @@ AggregateTotals.prototype.init = function() {
   this.baseQuery = {
     office: '',
     per_page: 20,
-    active_candidates: false,
+    is_active_candidate: true,
     sort_null_only: false,
     sort_hide_null: false,
     sort_nulls_last: false,
@@ -204,6 +209,14 @@ AggregateTotals.prototype.init = function() {
   // Put it in the page right before this <script>
   $(this.element).insertBefore(this.scriptElement);
 
+  // Add the stylesheet to the document <head>
+  let head = document.head;
+  let linkElement = document.createElement('link');
+  linkElement.type = 'text/css';
+  linkElement.rel = 'stylesheet';
+  linkElement.href = stylesheetPath;
+  head.appendChild(linkElement);
+
   // Start the initial data load
   this.loadData(this.baseQuery);
 };
@@ -214,7 +227,7 @@ AggregateTotals.prototype.init = function() {
  */
 AggregateTotals.prototype.loadData = function(query) {
   let instance = this;
-  $.getJSON(helpers.buildUrl(this.basePath, query)).done(response => {
+  $.getJSON(buildUrl(this.basePath, query)).done(response => {
     instance.displayUpdatedData(response);
   });
 };

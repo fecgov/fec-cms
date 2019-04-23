@@ -624,7 +624,7 @@ DataTable.prototype.fetch = function(data, callback) {
 };
 
 DataTable.prototype.export = function() {
-  var url = this.buildUrl(this.api.ajax.params(), false);
+  var url = this.buildUrl(this.api.ajax.params(), false, true);
   download.download(url, false, true);
   this.disableExport({ message: DOWNLOAD_MESSAGES.pending });
 };
@@ -634,7 +634,7 @@ DataTable.prototype.isPending = function() {
   return download.isPending(url);
 };
 
-DataTable.prototype.buildUrl = function(data, paginate) {
+DataTable.prototype.buildUrl = function(data, paginate, download) {
   var query = _.extend(
     { sort_hide_null: false, sort_nulls_last: true }, // eslint-disable-line camelcase
     this.filters || {}
@@ -644,6 +644,11 @@ DataTable.prototype.buildUrl = function(data, paginate) {
 
   if (paginate) {
     query = _.extend(query, this.paginator.mapQuery(data, query));
+  }
+  if (download) {
+    query = _.extend(query, {
+      api_key: window.DOWNLOAD_API_KEY
+    });
   }
 
   return helpers.buildUrl(

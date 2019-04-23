@@ -5,6 +5,11 @@ from wagtail.documents.blocks import DocumentChooserBlock
 from wagtail.contrib.table_block.blocks import TableBlock
 from wagtail.snippets.blocks import SnippetChooserBlock
 
+"""options for wagtail default table_block """
+core_table_options = {
+    'renderer': 'html'
+}
+
 class ThumbnailBlock(blocks.StructBlock):
     """A block that combines a thumbnail and a caption,
         both of which link to a URL"""
@@ -140,12 +145,13 @@ class CustomTableBlock(blocks.StructBlock):
     Typicallyused for Statistical Press Release tables
     """
     custom_table_options = {
-    'startRows': 7,
-    'startCols': 6,
-    'colHeaders': True,
-    'rowHeaders': True,
-    'height': 108,
-    'language': 'en',
+        'startRows': 7,
+        'startCols': 6,
+        'colHeaders': True,
+        'rowHeaders': True,
+        'height': 108,
+        'language': 'en',
+        'renderer': 'html'
     }
 
     custom_table = blocks.StreamBlock([
@@ -154,6 +160,9 @@ class CustomTableBlock(blocks.StructBlock):
         ('table', TableBlock(table_options=custom_table_options)),
         ('footnote', blocks.CharBlock(required=False))
     ])
+
+    class Meta:
+        template = 'blocks/custom_table.html'
 
 class ExampleImage(blocks.StructBlock):
     """Creates an example module with an image and a caption, side-by-side
@@ -184,7 +193,7 @@ class ResourceBlock(blocks.StructBlock):
         ('fec_jobs', CareersBlock()),
         ('mur_search', MURSearchBlock()),
         ('audit_search', AuditSearchBlock()),
-        ('table', TableBlock()),
+        ('table', TableBlock(table_options=core_table_options)),
         ('custom_table', CustomTableBlock()),
         ('html', blocks.RawHTMLBlock()),
         ('reporting_example_cards', ReportingExampleCards()),
@@ -245,6 +254,3 @@ class ExampleForms(blocks.StructBlock):
     class Meta:
         template = 'blocks/example-forms.html'
         icon = 'doc-empty'
-
-    class Meta:
-        template = 'blocks/custom_table.html'

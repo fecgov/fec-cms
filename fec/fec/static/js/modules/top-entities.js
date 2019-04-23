@@ -45,7 +45,7 @@ TopEntities.prototype.init = function() {
     election_year: this.election_year,
     election_full: true,
     office: this.office,
-    active_candidates: true,
+    is_active_candidate: true,
     page: 1
   };
   this.maxValue = Number(
@@ -104,9 +104,11 @@ TopEntities.prototype.updateElectionYearOptions = function(office) {
     // only show presential options
     $('#election-year option').each(function() {
       var optValue = parseInt($(this).val());
-      // hide all of the non-presidential election years
+      // hide all of the non-presidential election years/disable for Safari
       if (optValue % 4 !== 0) {
-        $(this).hide();
+        $(this)
+          .hide()
+          .prop('disabled', true);
       } else {
         // track the nearest future presidential election
         if (optValue > currentYear) {
@@ -123,8 +125,10 @@ TopEntities.prototype.updateElectionYearOptions = function(office) {
         .change();
     }
   } else {
-    // show all options!
-    $('#election-year option').show();
+    // show all options/enable for Safari!
+    $('#election-year option')
+      .show()
+      .prop('disabled', false);
   }
 };
 
@@ -266,7 +270,7 @@ TopEntities.prototype.handleTypeChange = function(e) {
     election_year: this.election_year,
     election_full: true,
     office: this.office,
-    active_candidates: true
+    is_active_candidate: true
   };
 
   this.currentQuery = baseQuery;

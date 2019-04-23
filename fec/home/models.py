@@ -49,6 +49,11 @@ from home.blocks import (ThumbnailBlock, AsideLinkBlock,
                          CustomTableBlock, ReportingExampleCards, InternalButtonBlock,
                          ExternalButtonBlock, SnippetChooserBlock, ExampleImage)
 
+"""options for wagtail default table_block """
+core_table_options = {
+
+    'renderer': 'html',
+}
 
 stream_factory = functools.partial(
     StreamField,
@@ -57,7 +62,7 @@ stream_factory = functools.partial(
         ('paragraph', blocks.RichTextBlock()),
         ('html', blocks.RawHTMLBlock()),
         ('image', ImageChooserBlock()),
-        ('table', TableBlock()),
+        ('table', TableBlock(table_options=core_table_options)),
         ('custom_table', CustomTableBlock()),
         ('contact', ContactInfoBlock())
     ],
@@ -582,7 +587,7 @@ class CustomPage(Page):
         ('html', blocks.RawHTMLBlock()),
         ('example_image', ExampleImage()),
         ('image', ImageChooserBlock()),
-        ('table', TableBlock()),
+        ('table', TableBlock(table_options=core_table_options)),
         ('example_paragraph', ExampleParagraph()),
         ('example_forms', ExampleForms()),
         ('reporting_example_cards', ReportingExampleCards()),
@@ -899,6 +904,7 @@ class ResourcePage(Page):
                                 help_text='If this is a report, add a category',
                                 blank=True,
                                 null=True)
+    #breadcrumb_style removed from promote-panel in favor of controlling breadcrumbs by parent section
     breadcrumb_style = models.CharField(max_length=255,
         choices=[('primary', 'Blue'), ('secondary', 'Red')],
         default='primary')
@@ -921,7 +927,6 @@ class ResourcePage(Page):
     ]
 
     promote_panels = Page.promote_panels + [
-        FieldPanel('breadcrumb_style'),
         FieldPanel('category'),
         FieldPanel('date')
     ]
