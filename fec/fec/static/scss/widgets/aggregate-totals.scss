@@ -61,9 +61,10 @@ $fontWeightBold: 700;
   margin: 0;
 }
 
+// The aggregate totals aside
 .aggr-totals {
   
-  &, & * { // THESE ARE PASSED DOWN TO CHILDREN, ACTING LIKE 
+  &, & * { // THESE ARE PASSED DOWN TO CHILDREN
     box-sizing: border-box;
     transition: all 1.5s;
   }
@@ -119,7 +120,6 @@ $fontWeightBold: 700;
       padding: 0 2.5em 0 1em;
       text-overflow: ellipsis;
       white-space: nowrap;
-      // vertical-align: top;
       width: auto;
       -moz-appearance: none;
       -webkit-appearance: none;
@@ -153,7 +153,7 @@ $fontWeightBold: 700;
       font-size: $fontSizeBase * 3.6;
       line-height: 1em;
       margin: 0 0 ($fontSizeBase * .75);
-      // order: 2;
+      width: 100%;
     }
     .description {
       font-family: $fontFamilySansSerif;
@@ -161,7 +161,6 @@ $fontWeightBold: 700;
       // font-weight: $fontWeightBold;
       line-height: 1.2em;
       margin: 0;
-      // order: 1;
     }
   }
   .parties-wrapper {
@@ -284,13 +283,11 @@ $fontWeightBold: 700;
       .value {
         margin: 0 0 $fontSizeBase 0;
         order: 1;
-        // width: 60%
       }
       .description {
         font-size: $fontSizeBase * 1.4;
         margin: 0;
         order: 2;
-        // width: 40%;
       }
     }
     .parties-wrapper {
@@ -376,8 +373,8 @@ $fontWeightBold: 700;
         }
       }
     }
-    // Larger sizes of the dark theme
-    @media (min-width: #{$breakpointToLarge}) {
+    // Medium sizes of the dark theme
+    @media (min-width: #{$breakpointToMedium}) {
       footer {
         a.gov-fec-seal {
           background-image: url('/static/img/wordmark--inverse.svg');
