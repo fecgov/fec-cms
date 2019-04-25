@@ -34,8 +34,14 @@
       </select>
   </form>
   {% if FEATURES.aggregatetotals %}
-  <script defer data-election-year="{{ election_year }}" data-office="{{ office }}" data-action="{{ action }}" data-year-control="#election-year" data-office-control="#top-category" src="{{ asset_for_js('modules/aggregate-totals.js') }}"></script>
+  <script defer data-year-control="#election-year" data-office-control="#top-category" data-action="{{ action }}" src="{{ asset_for_js('widgets/aggregate-totals.js') }}"></script>
+  <script defer data-election-year="2020" data-office="P" data-action="spending" src="{{ asset_for_js('widgets/aggregate-totals.js') }}"></script>
+  <script defer data-election-year="2016" data-office="S" data-action="raising" src="{{ asset_for_js('widgets/aggregate-totals.js') }}"></script>
+  <script defer data-TESTING_force_iframe="true" data-theme="dark" data-action="{{ action }}" src="{{ asset_for_js('widgets/aggregate-totals.js') }}"></script>
+  <script defer data-TESTING_force_iframe="true" data-theme="light" data-action="{{ action }}" src="{{ asset_for_js('widgets/aggregate-totals.js') }}"></script>
+  {# <a class="twitter-timeline" href="https://twitter.com/PeteButtigieg?ref_src=twsrc%5Etfw">Tweets by PeteButtigieg</a> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script> #}
   {% endif %}
+  
   <span class="t-sans js-dates"></span>
   <div class="chart-table simple-table--responsive js-top-table" id="top-table" aria-live="polite" role="grid">
     <div role="row" class="simple-table__header">

@@ -45,18 +45,18 @@ gulp.task(
   })
 );
 
-// The modules are separate because we want them in a specific place with a predictable naming convention
-gulp.task('clear-modules-css-dir', function() {
+// The widgets are separate because we want them in a specific place with a predictable naming convention
+gulp.task('clear-widgets-css-dir', function() {
   return gulp
-    .src('./dist/fec/static/css/modules', { read: false, allowEmpty: true })
+    .src('./dist/fec/static/css/widgets', { read: false, allowEmpty: true })
     .pipe(clean());
 });
 gulp.task(
-  'build-modules-sass',
-  gulp.series('clear-modules-css-dir', function() {
+  'build-widgets-sass',
+  gulp.series('clear-widgets-css-dir', function() {
     return (
       gulp
-        .src('./fec/static/scss/modules/*.scss')
+        .src('./fec/static/scss/widgets/*.scss')
         // compiles sass
         .pipe(sass().on('error', sass.logError))
         // minifies css
@@ -65,10 +65,10 @@ gulp.task(
         //.pipe(gulpif(!production, sourcemaps.init()))*/
         //makes manifest sass (static asset revision) and puts in destination
         // .pipe(rev())
-        .pipe(gulp.dest('./dist/fec/static/css/modules'))
+        .pipe(gulp.dest('./dist/fec/static/css/widgets'))
         // writes manifest file into destination
         // .pipe(rev.manifest('./dist/fec/static/css/rev-manifest-modules-css.json'))
-        .pipe(gulp.dest('./dist/fec/static/css/modules'))
+        .pipe(gulp.dest('./dist/fec/static/css/widgets'))
     );
     //.pipe(gulpif(!production, sourcemaps.write()))
   })

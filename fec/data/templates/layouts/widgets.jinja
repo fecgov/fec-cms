@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+  <title>{% block title %}{% endblock %} | FEC</title>
+  {% set title = self.title() %}
+
+  {% include 'partials/meta-tags.jinja' %}
+
+  {% block css %}{% endblock css %}
+
+  {% block head_js %}
+    <script src="{{ asset_for_js('polyfills.js') }}"></script>
+  {% endblock %}
+
+  <script>
+    BASE_PATH = '/data';
+    API_LOCATION = '{{ FEC_API_URL }}';
+    API_VERSION = 'v1';
+    API_KEY = '{{ FEC_API_KEY }}';
+    {# DEFAULT_TIME_PERIOD = '2018'; #}
+    {# START_YEAR = '1979'; #}
+    {# END_YEAR = '2018'; #}
+    {# DISTRICT_MAP_CUTOFF = '2018'; #}
+    {# WEBMANAGER_EMAIL = '{{ WEBMANAGER_EMAIL }}'; #}
+    {# CANONICAL_BASE = '{{ CANONICAL_BASE }}'; #}
+    {# TRANSITION_URL = '{{ TRANSITION_URL }}'; #}
+    var ELECTION_YEARS = ['2024','2022','2020','2018','2016','2014','2012','2010','2008','2006','2004','2002','2000','1998','1996','1994','1992','1990','1988','1986','1984','1982','1980'];
+    var ELECTION_YEAR = 2012;
+    var TEST = 'YAY!';
+
+    function trackMetric(name, imagesSelector) {
+      if (imagesSelector) {
+        var images = document.querySelectorAll(imagesSelector);
+        if (images && images.length) {
+          for (var i = 0, ilen = images.length; i < ilen; i++) {
+            images[i].addEventListener('load', function() {
+              window.performance.mark(name);
+            });
+          }
+        }
+      }
+      window.performance.mark(name);
+    }
+  </script>
+</head>
+<body>
+  <main id="main" {% if section %} data-section="{{section}}"{% endif %}>
+    {% block body %}{% endblock %}
+  </main>
+  
+{# {% csrf_token %} #}
+
+{# {% block modals %}{% endblock %} #}
+{% block scripts %}{% endblock %}
+
+{% if FEC_CMS_ENVIRONMENT == 'PRODUCTION' %}
+  <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+    ga('set', 'anonymizeIp', true);
+    ga('set', 'forceSSL', true);
+    ga('create', 'UA-48605964-22', 'auto');
+    ga('send', 'pageview');
+  </script>
+  <script id="_fed_an_ua_tag" src="https://dap.digitalgov.gov/Universal-Federated-Analytics-Min.js?agency=FEC"></script>
+{% endif %}
+
+</body>
+</html>
