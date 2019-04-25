@@ -43,6 +43,28 @@ def to_date(committee, cycle):
     return min(datetime.datetime.now().year, int(cycle))
 
 
+def aggregate_totals(request):
+    office = request.GET.get('office', 'P')
+
+    election_year = int(request.GET.get('election_year', constants.DEFAULT_ELECTION_YEAR))
+
+    max_election_year = utils.current_cycle() + 4
+    election_years = utils.get_cycles(max_election_year)
+    
+    FEATURES = settings.FEATURES
+
+    return render(
+        request,
+        'widgets/aggregate-totals.jinja',
+        {
+            'title': 'Aggregate Totals',
+            'election_years': election_years,
+            'election_year': election_year,
+            'office': office,
+            'FEATURES': FEATURES
+        }
+    )
+
 def landing(request):
     top_candidates_raising = api_caller.load_top_candidates('-receipts', per_page=3)
 

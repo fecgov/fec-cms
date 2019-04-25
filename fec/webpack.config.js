@@ -156,12 +156,12 @@ module.exports = [
   },
   {
     // The modules are separate because we want them in a specific place and named predictably
-    name: 'modules',
+    name: 'widgets',
     entry: {
-      'aggregate-totals': './fec/static/js/modules/aggregate-totals.js'
+      'aggregate-totals': './fec/static/js/widgets/aggregate-totals.js'
     },
     output: {
-      filename: 'modules/[name].js',
+      filename: 'widgets/[name].js',
       path: path.resolve(__dirname, './dist/fec/static/js')
     },
     node: {
@@ -171,7 +171,7 @@ module.exports = [
     plugins: [
       new webpack.SourceMapDevToolPlugin(),
       new ManifestPlugin({
-        fileName: 'rev-modules-manifest-js.json',
+        fileName: 'rev-widgets-manifest-js.json',
         basePath: '/static/js/'
       })
     ],

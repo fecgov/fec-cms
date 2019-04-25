@@ -188,13 +188,21 @@ AggregateTotals.prototype.init = function() {
   // If we're missing something, stop here
   if (!allSet && this.action) return;
 
-  // Make the <aside> for the dom and give it its attributes
+  // Make the <aside> or <iframe> for the dom and give it its attributes
+  // TODO: add an aside if on fec.gov or an <iframe> otherwise
   this.element = document.createElement('aside');
   this.element.setAttribute(
     'id',
     'fec_at_' + Math.floor(Math.random() * 10000)
   ); // Random so we can have multiple on a page, if needed
   this.element.setAttribute('class', 'aggregate-totals-block');
+  // this.element.setAttribute('id', '');
+  // this.element.setAttribute('scrolling', 'no');
+  // this.element.setAttribute('frameborder', '0');
+  // this.element.setAttribute('allowtransparency', 'true');
+  // this.element.setAttribute('style', '0');
+  // this.element.setAttribute('title', '0');
+  // this.element.setAttribute('src', '0'); // Only if it's an <iframe>
   // Create the value element
   this.valueField = document.createElement('h1');
   this.valueField.setAttribute('class', 'value');
@@ -208,6 +216,7 @@ AggregateTotals.prototype.init = function() {
   $(this.element).slideUp(0);
   // Put it in the page right before this <script>
   $(this.element).insertBefore(this.scriptElement);
+
 
   // Add the stylesheet to the document <head>
   let head = document.head;
