@@ -23,20 +23,10 @@
 
   .block-table {
     table {
-      @extend .simple-table;
+      @extend .simple-table-cms;
     }
 
-    tr {
-      @extend .simple-table__row;
-    }
 
-    td {
-      @extend .simple-table__cell;
-    }
-
-    thead {
-      @extend .simple-table__header;
-    }
   }
 }
 

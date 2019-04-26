@@ -3,6 +3,68 @@
 // These are styles specifically for content output by the CMS
 //
 
+// Simple table cms
+//
+// <table class="simple-table-cms">
+//   <thead class="simple-table-cms__header">
+//     <tr>
+//       <th class="simple-table-cms__header-cell">Dates covered</th>
+//       <th class="simple-table-cms__header-cell">Due <span class="simple-table-cms__header-subtext">| Notes</span></th>
+//     </tr>
+//   </thead>
+//   <tbody>
+//     <tr class="simple-table-cms__row">
+//       <td class="simple-table-cms__cell">January 1–March 31</td>
+//       <td class="simple-table-cms__cell">April 15</td>
+//     </tr>
+//     <tr class="simple-table-cms__row">
+//       <td class="simple-table-cms__cell">April 1–June 30</td>
+//       <td class="simple-table-cms__cell">July 15</td>
+//     </tr>
+//   </tbody>
+// </table>
+//
+
+.simple-table-cms {
+  border-color: $primary;
+  border-style: solid;
+  border-width: 2px 0;
+  font-family: $sans-serif;
+  margin: u(2rem 0);
+
+
+  thead tr {
+    border-bottom: 1px solid $primary;
+    font-weight: 600;
+    text-align: left;
+
+    th {
+      padding: u(.5rem 0);
+
+      .simple-table-cms__header-subtext {
+        font-weight: normal;
+      }
+    }
+  }
+
+  td {
+    padding: u(1rem);
+    vertical-align: top;
+  }
+
+  tr {
+    border-bottom: 1px solid $neutral;
+
+    &:nth-child(even) {
+      background-color: rgba($gray-lightest, .5);
+    }
+
+    &:last-of-type {
+      border-bottom: none;
+    }
+  }
+}
+
 .rich-text,
 .body-blocks,
 .block-html {
@@ -20,20 +82,7 @@
 .block-table,
 .block-html {
   table {
-    @extend .simple-table;
-  }
-
-  thead {
-    @extend .simple-table__header;
-  }
-
-  tr {
-    @extend .simple-table__row;
-  }
-
-  td {
-    @extend .simple-table__cell;
-    padding-right: u(1rem) !important;
+    @extend .simple-table-cms;
   }
 
   img {
