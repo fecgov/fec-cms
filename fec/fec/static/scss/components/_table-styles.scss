@@ -394,7 +394,7 @@ h3 + .simple-table {
   }
 
   th {
-    padding: u(1rem);
+    padding: u(1rem) !important;
     text-align: left;
     border-right: 1px solid $gray-medium;
   }
