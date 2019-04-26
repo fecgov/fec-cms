@@ -151,6 +151,68 @@ h3 + .simple-table {
   }
 }
 
+// Simple table cms
+//
+// <table>
+//   <thead>
+//     <tr>
+//       <th>Dates covered</th>
+//       <th>Due <span class="simple-table-cms__header-subtext">| Notes</span></th>
+//     </tr>
+//   </thead>
+//   <tbody>
+//     <tr>
+//       <td>January 1–March 31</td>
+//       <td>April 15</td>
+//     </tr>
+//     <tr>
+//       <td>April 1–June 30</td>
+//       <td>July 15</td>
+//     </tr>
+//   </tbody>
+// </table>
+//
+
+.simple-table-cms {
+  border-color: $primary;
+  border-style: solid;
+  border-width: 2px 0;
+  font-family: $sans-serif;
+  margin: u(2rem 0);
+
+
+  thead tr {
+    border-bottom: 1px solid $primary;
+    font-weight: 600;
+    text-align: left;
+
+    th {
+      padding: u(.5rem 0);
+
+      .simple-table-cms__header-subtext {
+        font-weight: normal;
+      }
+    }
+  }
+
+  td {
+    padding: u(1rem);
+    vertical-align: top;
+  }
+
+  tr {
+    border-bottom: 1px solid $neutral;
+
+    &:nth-child(even) {
+      background-color: rgba($gray-lightest, .5);
+    }
+
+    &:last-of-type {
+      border-bottom: none;
+    }
+  }
+}
+
 // Chart Table
 // Table style used on breakdown charts
 // Very similar to simple-table, but with slight differences
@@ -325,17 +387,20 @@ h3 + .simple-table {
   margin-bottom: u(1rem);
 
   table {
-    @extend .simple-table;
+    @extend .simple-table-cms;
     width: auto;
     table-layout: auto;
     line-height: 1;
   }
 
   th {
-    @extend .simple-table__header;
     padding: u(1rem);
     text-align: left;
     border-right: 1px solid $gray-medium;
+  }
+
+  thead tr {
+    border-bottom: 1px solid $primary !important;
   }
 
   tbody th {
@@ -343,12 +408,11 @@ h3 + .simple-table {
   }
 
   tr {
-    @extend .simple-table__row;
+
   }
 
   // scss-lint:disable ImportantRule
   td {
-    @extend .simple-table__cell;
     border-right: 1px solid $gray-medium;
     text-align: right;
     padding: u(1rem) !important;
