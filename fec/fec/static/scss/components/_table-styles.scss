@@ -152,6 +152,7 @@ h3 + .simple-table {
 }
 
 // Simple table cms
+// Any table added to an html block in thr CMS will automatically have this class extended
 //
 // <table>
 //   <thead>
@@ -220,44 +221,8 @@ h3 + .simple-table {
   border-top: 2px solid $primary;
   font-family: $sans-serif;
 
-  .simple-table__cell {
-    padding: u(.5rem 0 0 0);
-  }
-
-  .value-bar {
-    background-color: $gray-dark;
-    height: u(2rem);
-
-    &[data-party="DEM"] {
-      background-color: $blue-data;
-    }
-
-    &[data-party="REP"] {
-      background-color: $red-data;
-    }
-  }
-
-  & + .results-info {
-    border-top-width: 1px;
-  }
-
-  @include media($med) {
-    .simple-table__cell {
-      padding: u(1rem 0);
-      vertical-align: middle;
-
-      // Left padding for bar cells
-      &:last-of-type {
-        padding-left: u(1rem);
-      }
-    }
-  }
-}
-
-
-//For homepage barcharts
-
-  .chart-table-home {
+  // For homepage barcharts
+  &.chart-table-home {
     border-top: none;
 
     .bar-container {
@@ -291,34 +256,76 @@ h3 + .simple-table {
     .simple-table__header-cell:nth-child(2) {
       text-align: left;
     }
+  }
 
-    @include media($med) {
+  .simple-table__cell {
+    padding: u(.5rem 0 0 0);
+  }
+
+  .value-bar {
+    background-color: $gray-dark;
+    height: u(2rem);
+
+    &[data-party="DEM"] {
+      background-color: $blue-data;
+    }
+
+    &[data-party="REP"] {
+      background-color: $red-data;
+    }
+  }
+
+  & + .results-info {
+    border-top-width: 1px;
+  }
+
+  @include media($med) {
+    .simple-table__cell {
+      padding: u(1rem 0);
+      vertical-align: middle;
+
+      // Left padding for bar cells
+      &:last-of-type {
+        padding-left: u(1rem);
+      }
+    }
+
+    // For homepage barcharts
+    &.chart-table-home {
+
       .bar-container {
         margin-left: u(2rem);
       }
 
       .simple-table__row {
+
         &:after {
           display: none;
         }
-
         .simple-table__cell {
           border-bottom: 1px solid $gray-medium;
         }
       }
     }
+  }
 
-    @include media($lg) {
+  @include media($lg) {
+    &.chart-table-home {
+
       .bar-container {
         margin-left: 0;
       }
     }
   }
+}
+
+
 
 //for home barchart-full width on mobile
 .breakdowns-home {
    width: 100%;
   }
+
 // "Balance sheet" table styles
 // These provide the visual sense of nested / hierarchical rows in a balance sheet
 .level--1,
