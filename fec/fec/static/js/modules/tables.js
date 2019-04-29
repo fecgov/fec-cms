@@ -696,9 +696,7 @@ DataTable.prototype.fetchError = function() {
   var self = this;
   var errorMessage =
     '<div class="filter__message filter__message--error">' +
-    '<strong>We had trouble processing your request</strong><br>' +
-    'Please try again. If you still have trouble, ' +
-    '<button class="js-filter-feedback">let us know</button></div>';
+    '<strong>Please choose a single report year or add one of the filters listed above: recipient name, contributor name, city, zip code, occuplation, employer, recipt type, or image number.</strong>';
 
   $('.filter__message').remove();
 

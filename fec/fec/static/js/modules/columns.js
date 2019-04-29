@@ -661,6 +661,11 @@ var receipts = [
     data: 'contribution_receipt_date',
     className: 'min-tablet hide-panel column--small'
   }),
+  dateColumn({
+    data: 'report_year',
+    orderable: false,
+    className: 'min-tablet hide-panel column--small'
+  }),
   currencyColumn({
     data: 'contribution_receipt_amount',
     className: 'min-tablet hide-panel column--number'
