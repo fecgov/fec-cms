@@ -154,6 +154,7 @@
 {% endblock %}
 
 {% block extra_js %}
+<script src="{% asset_for_js 'object-assign-polyfill.js' %}"></script>
 <script src="{% asset_for_js 'home.js' %}"></script>
 <script src="{% asset_for_js 'bythenumbers.js' %}"></script>
 <script src="{% asset_for_js 'dataviz-common.js' %}"></script>
