@@ -158,7 +158,8 @@ module.exports = [
     // The modules are separate because we want them in a specific place and named predictably
     name: 'widgets',
     entry: {
-      'aggregate-totals': './fec/static/js/widgets/aggregate-totals.js'
+      'aggregate-totals': './fec/static/js/widgets/aggregate-totals.js',
+      'aggregate-totals-box': './fec/static/js/widgets/aggregate-totals-box.js'
     },
     output: {
       filename: 'widgets/[name].js',

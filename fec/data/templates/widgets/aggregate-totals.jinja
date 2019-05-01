@@ -5,6 +5,12 @@
 
 {% block css %}
   <link rel="stylesheet" type="text/css" href="/static/css/widgets/aggregate-totals.css" />
+  <style>
+    body {
+      margin: 0 !important;
+      padding: 0 !important;
+    }
+  </style>
 {% endblock %}
 
 {% block body %}{% endblock %}
@@ -15,5 +21,5 @@
     window.ELECTION_YEAR = 2008;
     {# '{% for each in election_years | sort(reverse=True) %}<option value="{{ each }}"{% if election_year == each %} selected{% endif %}>{{ each }}</option>{% endfor %}'; #}
   </script>
-  <script defer src="{{ asset_for_js('widgets/aggregate-totals.js') }}" data-standalone="true"></script>
+  <script defer src="{{ asset_for_js('widgets/aggregate-totals-box.js') }}" data-standalone="true"></script>
 {% endblock %}

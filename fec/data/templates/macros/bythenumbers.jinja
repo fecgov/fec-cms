@@ -34,12 +34,132 @@
       </select>
   </form>
   {% if FEATURES.aggregatetotals %}
-  <script defer data-year-control="#election-year" data-office-control="#top-category" data-action="{{ action }}" src="{{ asset_for_js('widgets/aggregate-totals.js') }}"></script>
-  <script defer data-election-year="2020" data-office="P" data-action="spending" src="{{ asset_for_js('widgets/aggregate-totals.js') }}"></script>
-  <script defer data-election-year="2016" data-office="S" data-action="raising" src="{{ asset_for_js('widgets/aggregate-totals.js') }}"></script>
-  <script defer data-TESTING_force_iframe="true" data-theme="dark" data-action="{{ action }}" src="{{ asset_for_js('widgets/aggregate-totals.js') }}"></script>
-  <script defer data-TESTING_force_iframe="true" data-theme="light" data-action="{{ action }}" src="{{ asset_for_js('widgets/aggregate-totals.js') }}"></script>
-  {# <a class="twitter-timeline" href="https://twitter.com/PeteButtigieg?ref_src=twsrc%5Etfw">Tweets by PeteButtigieg</a> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script> #}
+  <style>
+    ul.agg-tots-attr-list {
+      color: forestgreen;
+      font-family: sans-serif;
+    }
+    ul.agg-tots-attr-list li {
+      display: inline-block;
+      min-width: 12rem
+    }
+    ul.agg-tots-attr-list li:before {
+      display: inline-block;
+      content: "∙ ";
+    }
+    ul.agg-tots-attr-list li:first-child:before {
+      display: none;
+    }
+  </style>
+  <ul class="agg-tots-attr-list">
+    <li>&lt;aside&gt;</li>
+    <li>year: external</li>
+    <li>office: external</li>
+    <li>controls: both</li>
+    <li>theme: light</li>
+  </ul>
+  <script defer data-theme="light" data-office-control="#top-category" data-year-control="#election-year" data-action="{{ action }}" src="{{ asset_for_js('widgets/aggregate-totals-box.js') }}"></script>
+  <!--
+  -->
+  <ul class="agg-tots-attr-list">
+    <li>&lt;aside&gt;</li>
+    <li>office: all</li>
+    <li>year: all</li> 
+    <li>controls: internal</li>
+    <li>theme: light</li>
+  </ul>
+  <script defer data-theme="light" data-action="{{ action }}" src="{{ asset_for_js('widgets/aggregate-totals-box.js') }}"></script>
+  <!--
+  -->
+  <ul class="agg-tots-attr-list">
+    <li>&lt;aside&gt;</li>
+    <li>year: one</li>
+    <li>office: all</li>
+    <li>controls: internal</li>
+    <li>theme: light</li>
+  </ul>
+  <script defer data-theme="light" data-election-year="2020" data-year-control="none" data-action="{{ action }}" src="{{ asset_for_js('widgets/aggregate-totals-box.js') }}"></script>
+  <!--
+  -->
+  <ul class="agg-tots-attr-list">
+    <li>&lt;aside&gt;</li>
+    <li>year: one</li>
+    <li>office: one</li>
+    <li>controls: none</li>
+    <li>theme: light</li>
+  </ul>
+  <script defer data-theme="light" data-election-year="2020" data-office="P" data-office-control="none" data-year-control="none" data-action="{{ action }}" src="{{ asset_for_js('widgets/aggregate-totals-box.js') }}"></script>
+  <!--
+  -->
+  <ul class="agg-tots-attr-list">
+    <li>&lt;aside&gt;</li>
+    <li>office: all</li>
+    <li>year: all</li>
+    <li>controls: internal</li>
+    <li>theme: dark</li>
+  </ul>
+  <script defer data-theme="dark" data-action="{{ action }}" src="{{ asset_for_js('widgets/aggregate-totals-box.js') }}"></script>
+  <!--
+  -->
+  <ul class="agg-tots-attr-list">
+    <li>&lt;aside&gt;</li>
+    <li>year: one</li>
+    <li>office: all</li>
+    <li>controls: internal</li>
+    <li>theme: dark</li>
+  </ul>
+  <script defer data-theme="dark" data-election-year="2020" data-action="{{ action }}" src="{{ asset_for_js('widgets/aggregate-totals-box.js') }}"></script>
+  <!--
+  -->
+  <ul class="agg-tots-attr-list">
+    <li>&lt;aside&gt;</li>
+    <li>year: one</li>
+    <li>office: one</li>
+    <li>controls: none</li>
+    <li>theme: dark</li>
+  </ul>
+  <script defer data-theme="dark" data-election-year="2020" data-office="P" data-action="{{ action }}" src="{{ asset_for_js('widgets/aggregate-totals-box.js') }}"></script>
+  <!--
+  -->
+  <ul class="agg-tots-attr-list">
+    <li>&lt;aside&gt;</li>
+    <li>year: external</li>
+    <li>office: external</li>
+    <li>controls: both</li>
+    <li>theme: dark</li>
+  </ul>
+  <script defer data-theme="dark" data-office-control="" data-office-control="" data-action="{{ action }}" src="{{ asset_for_js('widgets/aggregate-totals-box.js') }}"></script>
+  <!--
+  -->
+  <ul class="agg-tots-attr-list">
+    <li>&lt;iframe&gt;</li>
+    <li>office: all</li>
+    <li>year: all</li>
+    <li>controls: internal</li>
+    <li>theme: light</li>
+  </ul>
+  <script defer data-theme="light" data-action="{{ action }}" src="{{ asset_for_js('widgets/aggregate-totals.js') }}"></script>
+  <!--
+  -->
+  <ul class="agg-tots-attr-list">
+    <li>&lt;iframe&gt;</li>
+    <li>year: 2008</li>
+    <li>office: all</li>
+    <li>controls: internal</li>
+    <li>theme: dark</li>
+  </ul>
+  <script defer data-theme="dark" data-election-year="2008" data-action="{{ action }}" src="{{ asset_for_js('widgets/aggregate-totals.js') }}"></script>
+  <!--
+  -->
+  <ul class="agg-tots-attr-list">
+    <li>&lt;iframe&gt;</li>
+    <li>year: 2012</li>
+    <li>office: one</li>
+    <li>controls: none</li>
+    <li>theme: light</li>
+  </ul>
+  <script defer data-theme="light" data-election-year="2012" data-office="P" data-action="{{ action }}" src="{{ asset_for_js('widgets/aggregate-totals.js') }}"></script>
+  {# <a class="twitter-timeline" href="https://twitter.com/FEC?ref_src=twsrc%5Etfw">Tweets by the Federal Election Commission</a> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script> #}
   {% endif %}
   
   <span class="t-sans js-dates"></span>

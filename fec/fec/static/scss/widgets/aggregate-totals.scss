@@ -66,7 +66,6 @@ $fontWeightBold: 700;
   
   &, & * { // THESE ARE PASSED DOWN TO CHILDREN
     box-sizing: border-box;
-    transition: all 1.5s;
   }
 
   background-color: $colorBgLight;
@@ -76,7 +75,7 @@ $fontWeightBold: 700;
   font-family: fontFamilySerif; // TODO - complete it
   font-feature-settings: "kern","liga","pnum";
   font-size: $fontSizeBase;
-  margin: ($fontSizeBase * 2) 0;
+  margin: 0 0 ($fontSizeBase * 2);
   padding: ($fontSizeBase * 2) ($fontSizeBase * 2) $fontSizeBase;
 
   .controls-wrapper {
@@ -139,6 +138,28 @@ $fontWeightBold: 700;
       padding: 0px 2px 1px;
       white-space: pre;
       -webkit-rtl-ordering: logical;
+    }
+    .election-radios {
+      border: solid thin black;
+      font-size: $fontSizeBase * 1.4;
+      font-weight: $fontWeightBold;
+      padding: 1em;
+      -moz-appearance: button;
+      -webkit-appearance: button;
+      appearance: button;
+
+      &:first-child {
+        border-top-left-radius: 5px;
+        border-bottom-left-radius: 5px;
+      }
+      &:last-child {
+        border-top-right-radius: 5px;
+        border-bottom-right-radius: 5px;
+      }
+      &:disabled {
+        background-color: grey;
+        color: black;
+      }
     }
   }
   .total-wrapper {
@@ -241,6 +262,7 @@ $fontWeightBold: 700;
       font-size: $fontSizeBase;
     }
     a.gov-fec-seal {
+      border: none;
       text-decoration: none;
 
       img {
@@ -257,7 +279,7 @@ $fontWeightBold: 700;
     align-items: center;
     display: flex;
     flex-wrap: wrap;
-    margin: ($fontSizeBase * 2) 0;
+    // margin: ($fontSizeBase * 2) 0;
     
     .controls-wrapper {
       fieldset {
@@ -314,7 +336,7 @@ $fontWeightBold: 700;
     footer {
       margin-top: 0;
 
-      a {
+      a.gov-fec-seal {
         background-image: url('/static/img/wordmark.svg');
         background-position: right center;
         background-repeat: no-repeat;
@@ -362,6 +384,7 @@ $fontWeightBold: 700;
 
     footer {
       a.gov-fec-seal {
+        border-bottom: none;
         text-decoration: none;
   
         img {
