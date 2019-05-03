@@ -1,9 +1,9 @@
 ---
-name: 
-about: 
+name: Bug Report
+about: Template to help guide bug reports
 title: New Bug
-labels: 
-assignees: 
+labels: Bug
+assignees: ''
 
 ---
 

@@ -1,9 +1,9 @@
 ---
-name: 
-about: 
+name: Feature request
+about: Template to help guide feature requests
 title: Feature Request
-labels: 
-assignees: 
+labels: ''
+assignees: ''
 
 ---
 
