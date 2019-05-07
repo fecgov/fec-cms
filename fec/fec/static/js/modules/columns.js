@@ -252,7 +252,6 @@ var disbursements = [
     data: 'committee',
     orderable: false,
     className: 'all',
-    two_year_transaction_period: 2020,
     render: function(data) {
       if (data) {
         return columnHelpers.buildEntityLink(
@@ -296,11 +295,6 @@ var disbursements = [
     data: 'disbursement_date',
     className: 'min-tablet hide-panel column--small'
   }),
-  {
-    data: 'report_year',
-    orderable: false,
-    className: 'min-tablet hide-panel column--small'
-  },
   currencyColumn({
     data: 'disbursement_amount',
     className: 'min-tablet hide-panel column--number'

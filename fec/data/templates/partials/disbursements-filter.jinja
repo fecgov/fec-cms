@@ -27,8 +27,8 @@ Filter disbursements
 <div class="filters__inner">
   {{ typeahead.field('committee_id', 'Spender name or ID') }}
   {{ typeahead.field('recipient_name', 'Recipient name or ID', allow_text=True) }}
-  {{ years.two_year_transaction_period('two_year_transaction_period', 'Transaction report year')  }}
-  {{ date.field('date', 'Disbursement date', dates ) }}
+  {{ years.two_year_transaction_period('two_year_transaction_period', 'Report time period')  }}
+  {{ date.field('date', 'Disbursement date range', dates ) }}
 </div>
 <div class="js-accordion accordion--neutral" data-content-prefix="filter" data-open-first="false">
   <button type="button" class="js-accordion-trigger accordion__button">Recipient details</button>

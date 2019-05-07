@@ -330,7 +330,7 @@ table_columns = OrderedDict([
     ('candidates-office-house', ['Name', 'Party', 'State', 'District', 'Receipts', 'Disbursements']),
     ('committees', ['Name', 'Committee ID', 'Treasurer', 'Type', 'Designation', 'First filing date']),
     ('communication-costs', ['Committee', 'Support/Oppose', 'Candidate', 'Amount', 'Date']),
-    ('disbursements', ['Spender', 'Recipient', 'State', 'Description', 'Disbursement date', 'Transaction report year', 'Amount']),
+    ('disbursements', ['Spender', 'Recipient', 'State', 'Description', 'Disbursement date', 'Amount']),
     ('electioneering-communications', ['Spender', 'Candidate mentioned','Number of candidates', 'Amount per candidate', 'Date', 'Disbursement amount' ]),
     ('filings', ['Filer name', 'Document', 'Version', 'Receipt date', 'Beginning image number']),
     ('independent-expenditures', ['Spender', 'Support/Oppose', 'Candidate', 'Description', 'Payee', 'Expenditure date', 'Amount']),
