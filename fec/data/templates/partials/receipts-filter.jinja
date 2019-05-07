@@ -5,6 +5,7 @@
 
 {% import 'macros/filters/contributor-states.jinja' as states %}
 {% import 'macros/filters/date.jinja' as date %}
+{% import 'macros/filters/years.jinja' as years %}
 {% import 'macros/filters/range.jinja' as range %}
 {% import 'macros/filters/checkbox.jinja' as checkbox %}
 
@@ -27,17 +28,25 @@ Filter receipts
 
 {% block filters %}
 <div class="filters__inner">
+  <legend class="label  u-margin--top">Contributor details</legend>
   {{ typeahead.field('committee_id', 'Recipient name or ID') }}
   {{ typeahead.field('contributor_name', 'Contributor name or ID', dataset='committees', allow_text=True) }}
-  {{ date.partition_field('date', 'Receipt date', dates ) }}
+  {{ text.field('contributor_city', 'City') }}
+  {{ text.field('contributor_zip', 'ZIP code')}}
+  {% include 'partials/filters/occupation-employer.jinja' %}
+  {{ text.field('image_number', 'Image number') }}
+</div>
+<div class="js-accordion accordion--neutral" data-content-prefix="filter" data-open-first="true">
+  <button type="button" class="js-accordion-trigger accordion__button">Time period</button>
+  <div class="accordion__content">
+    {{ years.two_year_transaction_period('two_year_transaction_period', 'Report time period')  }}
+    {{ date.field('date', 'Receipt date', dates ) }}
+  </div>
 </div>
 <div class="js-accordion accordion--neutral" data-content-prefix="filter" data-open-first="false">
-  <button type="button" class="js-accordion-trigger accordion__button">Contributor details</button>
+  <button type="button" class="js-accordion-trigger accordion__button">More contributor details</button>
   <div class="accordion__content">
-    {{ text.field('contributor_city', 'City') }}
     {{ states.field('contributor_state') }}
-    {{ text.field('contributor_zip', 'ZIP code')}}
-    {% include 'partials/filters/occupation-employer.jinja' %}
     {% include 'partials/filters/unique-receipts.jinja' %}
   </div>
   <button type="button" class="js-accordion-trigger accordion__button">Recipient committee type</button>
@@ -57,7 +66,6 @@ Filter receipts
     <div class="js-line-number-message message message--info message--small">
       <span class="t-block">Filters for receipt types are available only for filings from 2007 or later.</span>
     </div>
-    {{ text.field('image_number', 'Image number') }}
     <div class="message message--info message--small">
       <span class="t-block">Receipts updated according to the filer's schedule. Processing time can vary.</span>
     </div>
