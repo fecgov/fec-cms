@@ -27,7 +27,7 @@ $(document).ready(function() {
     }
   });
 
-  new TableSwitcher('.js-table-switcher', {
+  var switcher = new TableSwitcher('.js-table-switcher', {
     efiling: {
       path: ['schedules', 'schedule_a', 'efile'],
       dataType: 'efiling',
@@ -40,7 +40,9 @@ $(document).ready(function() {
       hideColumns: '.hide-processed',
       paginator: tables.SeekPaginator
     }
-  }).init();
+  });
+
+  switcher.init();
 
   filtersEvent.lineNumberFilters();
 });

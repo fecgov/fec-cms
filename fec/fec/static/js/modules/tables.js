@@ -692,14 +692,21 @@ DataTable.prototype.fetchSuccess = function(resp) {
   }
 };
 
-DataTable.prototype.fetchError = function() {
+DataTable.prototype.fetchError = function(jqXHR, textStatus) {
   var self = this;
   var errorMessage =
     '<div class="filter__message filter__message--error">' +
-    '<strong>We had trouble processing your request</strong><br>' +
-    'Please try again. If you still have trouble, ' +
+    '<strong>We had trouble processing your request,</strong><br>' +
+    'please try again. If you still have trouble, ' +
     '<button class="js-filter-feedback">let us know</button></div>';
-
+  if (textStatus == 'abort') {
+    errorMessage = '<div><strong>Previous request aborted.</strong></div>';
+  } else if (jqXHR.status == 400) {
+    errorMessage =
+      '<div class="filter__message filter__message--error">' +
+      "<strong>You're searching a large dateset. Narrow your search with additional filters.</strong>" +
+      '</div>';
+  }
   $('.filter__message').remove();
 
   if (
