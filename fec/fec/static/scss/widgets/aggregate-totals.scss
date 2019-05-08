@@ -1,14 +1,6 @@
-// @import '../vendor/bourbon/bourbon';
-// @import '../vendor/neat/neat';
+// TODO - There's a vertical alignment issue in .controls-wrapper but only when the <aside> is in a different page—not when it's the only thing in the iframe
+// TODO - Need color guidance for the buttons/pills/radios for the dark theme
 
-// @import '../grid';
-// @import '../functions'; // Handles the u()
-// @import '../variables'; // $neutral, $sans-serif, etc
-
-$breakpointToMedium: 640px !default;
-$breakpointToMedLrg: 700px !default;
-$breakpointToLarge: 860px !default;
-$breakpointToXL: 1088px !default;
 $colorBgDark: #112e51;
 $colorBgLight: #fff;
 $colorElementBordersOnLight: #aeb0b5;
@@ -20,7 +12,7 @@ $colorBarRep: #da3c18;
 $fontFamilyMonospace: 'FECKarlaMonoReg', 'karla', sans-serif;
 $fontFamilySansSerif: 'karla', sans-serif;
 $fontFamilySerif: gandhi, serif;
-$fontSizeBase: 7.5pt; // (10px); 10.5pt; // (14px)// Keeping this as a default so values here are as close to our main scss values as possible
+$fontSizeBase: 7.5pt; // (10px); Keeping this as a default so values here are as close to our main scss values as possible
 $fontWeightRegular: 500;
 $fontWeightBold: 700;
 
@@ -55,14 +47,8 @@ $fontWeightBold: 700;
     // TODO - move these to their final home
 }
 
-// The aggregate totals iframe
-.gov-fec-aggr-totals {
-  width: 100% !important;
-  margin: 0;
-}
-
 // The aggregate totals aside
-.aggr-totals {
+aside.aggr-totals[id^="gov_fec_at_"] {
   
   &, & * { // THESE ARE PASSED DOWN TO CHILDREN
     box-sizing: border-box;
@@ -118,6 +104,7 @@ $fontWeightBold: 700;
       overflow: hidden;
       padding: 0 2.5em 0 1em;
       text-overflow: ellipsis;
+      vertical-align: initial;
       white-space: nowrap;
       width: auto;
       -moz-appearance: none;
@@ -217,35 +204,54 @@ $fontWeightBold: 700;
       height: $fontSizeBase * 1.5;
       width: 100%;
       
-      // note#1: * Chrome and Sass don't agree to these rules when they're combined to one entry:
+      // note#1: * Chrome and Sass don't agree on these rules when they're combined to single entries:
       &::-webkit-meter-bar { // note#1
         background: transparent;
+        transition: all 1s;
       }
       &::-moz-meter-bar { // note#1
         background: transparent;
+        transition: all 1s;
       }
       &::-webkit-meter-optimum-value { // note#1
         background: $colorBarDef;
+        transition: all 1s;
       }
       &:-moz-meter-optimum::-moz-meter-bar { // note#1
         background: $colorBarDef;
+        transition: all 1s;
       }
       &[data-party=DEM] { 
-        &::-webkit-meter-optimum-value { // note#1
+        &::-webkit-meter-optimum-value{ // note#1
           background: $colorBarDem;
+          transition: all 1s;
         }
-        &:-moz-meter-optimum::-moz-meter-bar { // note#1
+         &:-moz-meter-optimum::-moz-meter-bar { // note#1
           background: $colorBarDem;
+          transition: all 1s;
         }
       }
       &[data-party=REP] {
         &::-webkit-meter-optimum-value { // note#1
           background: $colorBarRep;
+          transition: all 1s;
         }
         &:-moz-meter-optimum::-moz-meter-bar { // note#1
           background: $colorBarRep;
+          transition: all 1s;
         }
       }
+    }
+    // Trying to get the widths to animate when the values change
+    meter::-webkit-meter-suboptimum-value,
+    meter::-webkit-meter-even-less-good-value {
+      transition: all 1s;
+    }
+    meter:-moz-meter-sub-optimum::-moz-meter-bar {
+      transition: all 1s;
+    }
+    meter:-moz-meter-sub-sub-optimum::-moz-meter-bar {
+      transition: all 1s;
     }
   }
   
@@ -275,11 +281,10 @@ $fontWeightBold: 700;
     }
   }
   // Medium sizes for the light theme, which is the default
-  @media (min-width: #{$breakpointToMedium}) {
+  &.width-m {
     align-items: center;
     display: flex;
     flex-wrap: wrap;
-    // margin: ($fontSizeBase * 2) 0;
     
     .controls-wrapper {
       fieldset {
@@ -300,11 +305,13 @@ $fontWeightBold: 700;
       margin: 0 0 ($fontSizeBase * 3) 0;
       padding-bottom: 0;
       padding-right: $fontSizeBase * 4;
+      text-align: right;
       width: 50%;
 
       .value {
         margin: 0 0 $fontSizeBase 0;
         order: 1;
+        text-align: right;
       }
       .description {
         font-size: $fontSizeBase * 1.4;
@@ -347,7 +354,8 @@ $fontWeightBold: 700;
     }
   }
   // Large sizes for the light theme, which is the default
-  @media (min-width: #{$breakpointToLarge }) {
+  &.width-l {
+    @extend .width-m;
     .parties-wrapper {
       .simple-table--responsive {
         .simple-table__cell {
@@ -397,7 +405,7 @@ $fontWeightBold: 700;
       }
     }
     // Medium sizes of the dark theme
-    @media (min-width: #{$breakpointToMedium}) {
+    &.width-m {
       footer {
         a.gov-fec-seal {
           background-image: url('/static/img/wordmark--inverse.svg');

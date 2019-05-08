@@ -18,13 +18,15 @@
     API_LOCATION = '{{ FEC_API_URL }}';
     API_VERSION = 'v1';
     API_KEY = '{{ FEC_API_KEY }}';
-    {# DEFAULT_TIME_PERIOD = '2018'; #}
-    {# START_YEAR = '1979'; #}
-    {# END_YEAR = '2018'; #}
-    {# DISTRICT_MAP_CUTOFF = '2018'; #}
-    {# WEBMANAGER_EMAIL = '{{ WEBMANAGER_EMAIL }}'; #}
-    {# CANONICAL_BASE = '{{ CANONICAL_BASE }}'; #}
-    {# TRANSITION_URL = '{{ TRANSITION_URL }}'; #}
+    DEFAULT_TIME_PERIOD = '2018';
+    START_YEAR = '1979';
+    END_YEAR = '2018';
+    DISTRICT_MAP_CUTOFF = '2018';
+    WEBMANAGER_EMAIL = '{{ WEBMANAGER_EMAIL }}';
+    CANONICAL_BASE = '{{ CANONICAL_BASE }}';
+    TRANSITION_URL = '{{ TRANSITION_URL }}';
+
+    // TODO - Which of these ^ ^ can we remove?
 
     function trackMetric(name, imagesSelector) {
       if (imagesSelector) {

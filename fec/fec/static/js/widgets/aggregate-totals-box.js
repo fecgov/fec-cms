@@ -1,52 +1,56 @@
 'use strict';
 
+// TODO - add a loading animation of some kind? Something to tell users that it's official but still loading?
+
 // Editable vars
 const stylesheetPath = '/static/css/widgets/aggregate-totals.css';
+const breakpointToMedium = 675;
+const breakpointToMedLrg = 700;
+const breakpointToLarge = 860;
 
 // Includes
-const $ = require('jquery'); // TODO - Do we need to import it all here?
+// const $ = require('jquery'); // TODO - Do we need to import it all here?
 import { buildUrl } from '../modules/helpers';
 import {
   defaultElectionYear,
-  electionYearsList,
+  electionYearsOptions,
   officeDefs
 } from './widget-vars';
 
-// TODO: - UPDATE ALL COMMENTS AND JSDOC CONTENT
-// TODO - add a loading animation of some kind? Something to tell users that it's official but still loading?
 /**
  * Handles the functionality for the aggregate totals box(es).
- * Loads, creates an <aside> with {@link init}, then makes itself visible (with {@link displayUpdatedData}) after it has some data to show.
- * @param {String} office - Required. Can be set through data-office for the <script> or collected from the target specified with data-office-control.
- * @param {String} election_year - Required. Can be set through data-election-year for the <script> or collected from the target specied with data-year-control.
- * @param {String} officeControl - Required. Set with data-office-control on <script> but not required if data-office is set.
- * @param {String} yearControl - Required. Set with data-year-control on <script> but not required if data-election-year is set.
- * @param {String} action - Required. Can be 'raised' or 'spending'? 'spent'?
- * @param {Boolean} doInitialNumberBuild - Should we animate the first value or just display it and be done? Default: false.
-//  * @param {String} layout - // TODO full or mini
-//  * @param {String} theme - // TODO light or dark
+ * Loads, creates an <aside> with {@see init()}, then makes itself visible (with {@see displayUpdatedData_grandTotal}) after it has some data to show.
+ * @param {String} office - Can be set through data-office for the <script> or collected from the target specified with data-office-control.
+ * @param {String} election_year - Can be set through data-election-year for the <script> or collected from the target specied with data-year-control.
+ * @param {String} officeControl - Set with data-office-control on <script> but not required if data-office is set.
+ * @param {String} yearControl - Set with data-year-control on <script> but not required if data-election-year is set.
+ * @param {String} action - Can be 'raised' or 'spending'
+ * @param {Boolean} doInitialNumberBuild - Should we animate the first value or just display it and be done? {@default false}.
+ * TODO - ^ update these ^
  */
 function AggregateTotalsBox() {
-  this.action; // Whether we should display 'raised' or 'spending'
+  this.action = 'raised'; // Whether we should display 'raised' or 'spending'
+  this.layout = 'full'; // Shortcut to know what elements we're offering. Options
   this.descriptionField; // The HTML element that holds the explanation
   this.element; // The HTML element of this box
-  // this.layout; // The layout version, either full or mini. Full has its own controls included
   this.officeControl; // The HTML Element to change the office
+  this.partiesHolder; // The HTML Element that holds the parties' <meter> elements
   this.scriptElement; // The <script>
-  // this.theme = 'light'; // The style theme, only used for when {@link layout} is 'full'
   this.valueField; // The HTML element that holds the value
   this.yearControl; // The HTML element to change the year
-
-  this.basePath = ['candidates', 'totals', 'by_office'];
+  // Where to find the big number:
+  this.basePath_grandTotal = ['candidates', 'totals', 'by_office'];
+  // Where to find the party numbers:
+  this.basePath_partyTotals = ['candidates', 'totals', 'by_office', 'by_party'];
   this.baseQuery = {
     office: 'P',
+    election_year: defaultElectionYear(),
+    is_active_candidate: true,
     per_page: 20,
-    is_active_candidate: false,
     sort_null_only: false,
     sort_hide_null: false,
     sort_nulls_last: false,
-    page: 1,
-    election_year: defaultElectionYear()
+    page: 1
   }; // Vars for data load
   this.animVars = {
     valueTotal: 0, // This instance's current value, only used for animation
@@ -58,12 +62,16 @@ function AggregateTotalsBox() {
   this.init();
 }
 /**
- * Called by {@link loadData} to parse and display the data
+ * Called by {@see loadData} to parse and display the data
  * @param {Response} queryResponse - The successful API reply
  */
-AggregateTotalsBox.prototype.displayUpdatedData = function(queryResponse) {
-  console.log('displayUpdatedData! queryResponse:');
-  console.log(queryResponse);
+AggregateTotalsBox.prototype.displayUpdatedData_grandTotal = function(
+  queryResponse
+) {
+  console.log(
+    'VERIFY THIS: displayUpdatedData_grandTotal! queryResponse:',
+    queryResponse
+  );
   // Get the office value from the <script>
   this.baseQuery.office = queryResponse.results[0].office;
   // Get the office value from the <script>, but scrub it
@@ -81,67 +89,163 @@ AggregateTotalsBox.prototype.displayUpdatedData = function(queryResponse) {
   this.startAnimation();
 
   // Set the description text
-  this.descriptionField.innerHTML =
-    'Total ' +
-    this.action +
-    ' by all ' +
-    officeDefs[this.baseQuery.office] +
-    ' candidates running in&nbsp;' +
-    this.baseQuery.election_year;
+  this.descriptionField.innerHTML = `Total ${this.action} by all ${
+    officeDefs[this.baseQuery.office]
+  } candidates running in&nbsp;${this.baseQuery.election_year}`;
 
   // Start the opening animation
   // $(this.element).slideDown();
 };
 
 /**
- * Called from the constructor, sets up its vars and starts {@link loadData}
+ * Called by {@see loadData} to parse and display the data
+ * @param {Response} queryResponse - The successful API reply
+ */
+AggregateTotalsBox.prototype.displayUpdatedData_parties = function(
+  queryResponse
+) {
+  console.log(
+    'VERIFY THIS: displayUpdatedData_parties! queryResponse:',
+    queryResponse
+  );
+
+  // which values will we compare?
+  let valuesToCompare =
+    this.action == 'raised' ? 'total_receipts' : 'total_disbursements';
+
+  // Let's sort the arrays
+  let theResults = queryResponse.results;
+  theResults.sort((obj1, obj2) => {
+    // We want the larger values first
+    if (obj1[valuesToCompare] < obj2[valuesToCompare]) return 1;
+    else if (obj1[valuesToCompare] > obj2[valuesToCompare]) return -1;
+    else return 0;
+  });
+
+  let theMeters = this.partiesHolder.querySelectorAll('meter');
+  for (let i = 0; i < theMeters.length; i++) {
+    // We'll set the value to the greater of its own value or 1% of the max value
+    // So the smaller parties show up on the graph at all
+    let thisPartyTotal = Math.max(
+      theResults[i][valuesToCompare],
+      theResults[0][valuesToCompare] * 0.01
+    );
+
+    let thisPartyLongName = theResults[i].party;
+    // If we know it's DEM or REP, we'll give them their proper names. ('Other' isn't abbreviated)
+    if (thisPartyLongName == 'DEM') thisPartyLongName = 'Democrat';
+    else if (thisPartyLongName == 'REP') thisPartyLongName = 'Republican';
+
+    let thisRowTitleCell = this.partiesHolder.querySelectorAll(
+      '.js-party-title'
+    )[i];
+    let thisRowValueCell = this.partiesHolder.querySelectorAll(
+      '.js-party-value'
+    )[i];
+
+    thisRowTitleCell.innerHTML = thisPartyLongName;
+    thisRowValueCell.innerHTML = formatAsCurrency(thisPartyTotal);
+
+    theMeters[i].min = 0;
+    theMeters[i].max = theResults[0][valuesToCompare];
+    theMeters[i].value = thisPartyTotal;
+    theMeters[i].dataset['party'] = theResults[i].party;
+  }
+};
+
+/**
+ * Called from the constructor, sets up its vars and starts {@see loadData}
  */
 AggregateTotalsBox.prototype.init = function() {
-  this.scriptElement = document.currentScript; // The <script> on the page
+  // Save self
+  let instance = this;
 
-  // If we're coming from an <iframe>, we need to inherit the dataset from window.frameElement
-  if (window.frameElement && window.frameElement.dataset) {
-    for (var item in window.frameElement.dataset) {
-      if (!this.scriptElement.dataset[item]) {
-        this.scriptElement.dataset[item] = window.frameElement.dataset[item];
-      }
-    }
-  }
+  // The <script> on the page:
+  this.scriptElement = document.currentScript;
 
   // We're going to be checking the dataset several times
   let dataset = this.scriptElement.dataset;
 
-  // In case something goes wrong and we can't show anything,
-  // TODO - Do we still need this?
-  let allSet = true;
+  // Should we look at receipts or disbursements?
+  this.action = dataset['action'];
+
+  // If we're coming from an <iframe>, we need to inherit the dataset from window.frameElement
+  // Let's grab each item in the dataset for the <iframe></iframe> and copy it to the <script>
+  if (window.frameElement && window.frameElement.dataset) {
+    for (var item in window.frameElement.dataset) {
+      if (!dataset[item]) dataset[item] = window.frameElement.dataset[item];
+      // TODO - Could we use something like Object.assign here?
+    }
+  }
 
   // Initialize the office data (H, P, or S)
   // If we aren't supposed to use an interface, remember that we don't need to build one
+  // TODO - this isn't fully working yet
+  // todo - Should be...
+  /*
+    if data-year
+      set that to the default
+
+    if data-year-control == 'none'
+      don't build a year control
+      also, switch to the pills controls
+    else if data-year-control and we can find it
+      listen to it
+    else
+      build a year control
+      listen to it
+    
+    if data-office
+      set that to the default
+
+    if data-office-control == 'none'
+      don't build an office control
+      (also remove the year control?)
+    else if data-office-control and we can find it
+      listen to it
+    else
+      build the election control (pills or select)
+      listen to it/them
+  */
+
+  // If there are default values for office or year, let's grab them
+  if (dataset.office) this.baseQuery.office = dataset.office;
+  if (dataset.electionYear) this.baseQuery.election_year = dataset.electionYear;
+
+  // What kinds of office control should we offer?
   if (dataset.officeControl == 'none') {
+    // If explicitly 'none', we're done with this
     this.officeControl = 'none';
-  } else if (dataset.officeControl && dataset.officeControl != 'none') {
-    if (document.querySelector(dataset.officeControl)) {
-      this.officeControl = document.querySelector(dataset.officeControl);
-    }
-    // TODO - add a class to indicate we have an external
+  } else if (
+    dataset.officeControl &&
+    document.querySelector(dataset.officeControl)
+  ) {
+    // else if there's a value for officeControl and we can find the element in the page
+    this.officeControl = document.querySelector(dataset.officeControl);
+    // Save the external control's value to our base_query so we're in sync w/ the rest of the page
+    this.baseQuery.office = this.officeControl.value;
+    // TODO - add a class to indicate we have an external?
   } else {
-    // Else if we have an office specified,
-    // Else build the office control inside self
+    // else we'll build and internal office control
     this.officeControl = 'internal';
-    // TODO - add class for this
+    // TODO - add class for this ?
   }
 
   // Initialize the year data
   // If we aren't supposed to have a yearControl, don't
   if (dataset.yearControl == 'none') {
     this.yearControl = 'none';
-    // If we have a year control and we can find it (it's inside our frame), listen to it.
-  } else if (dataset.yearControl) {
-    if (document.querySelector(dataset.yearControl)) {
-      this.yearControl = document.querySelector(dataset.yearControl);
-    }
-    // TODO - Add a class to indicate that we have a year control
+  } else if (
+    dataset.yearControl &&
+    document.querySelector(dataset.yearControl)
+  ) {
+    // If we have a year control and we can find it (it's inside our frame), listen to it
+    this.yearControl = document.querySelector(dataset.yearControl);
+    // Save the external control's value to our base_query so we're in sync w/ the rest of the page
+    this.baseQuery.election_year = this.yearControl.value;
+    // TODO - Add a class to indicate that we have a year control?
   } else {
+    // Otherwise, we'll build a year control
     this.yearControl = 'internal';
     // TODO - what if we don't want a year control and only want to show a single year's elections?
     // TODO - ... add a different value (e.g. "internal") to yearControl?
@@ -155,25 +259,23 @@ AggregateTotalsBox.prototype.init = function() {
   TODO
   */
 
-  // Should we look at receipts or disbursements?
-  this.action = this.scriptElement.dataset['action'];
-  if (!this.action) allSet = false;
+  // Build the element (likely <aside>)
+  this.element = buildElement(instance, this.scriptElement);
 
-  // If we're missing something, stop here
-  if (!allSet && this.action) return;
-
-  // Build the actual element (the <aside>)
-  let instance = this;
-  this.element = buildElement(instance, this.scriptElement, this.scriptElement);
-
-  // Find the large value and save it
+  // Now that we have an element
+  // Find the large value element and save it
   this.valueField = this.element.querySelector('.js-value-large');
   // And find its description
   this.descriptionField = this.element.querySelector('.js-value-large-desc');
 
+  // Find the parties (meters) holder
+  this.partiesHolder = this.element.querySelector('.js-parties-holder');
+
+  // If we have an office control, save it
   if (this.officeControl == 'internal') {
     this.officeControl = this.element.querySelector('.js-select-office');
   }
+
   // If we have an officeControl, listen to it
   if (this.officeControl && this.officeControl != 'none') {
     this.officeControl.addEventListener(
@@ -182,9 +284,17 @@ AggregateTotalsBox.prototype.init = function() {
     );
   }
 
+  // If we have a year control, save it
   if (this.yearControl == 'internal') {
     this.yearControl = this.element.querySelector('.js-select-year');
+
+    // Since it's internal, populate its options before we add listeners
+    this.refreshYearsSelect(
+      this.baseQuery.office,
+      this.baseQuery.election_year
+    );
   }
+
   // If we have a year control, listen to it
   if (this.yearControl && this.yearControl != 'none') {
     this.yearControl.addEventListener(
@@ -193,47 +303,64 @@ AggregateTotalsBox.prototype.init = function() {
     );
   }
 
-  // If we have officeControl pills,
+  // If we have officeControl buttons / pills / radios,
   let thePills = this.element.querySelectorAll('.js-election-radios');
-  thePills.forEach((currentValue, currentIndex, listObj) => {
-    currentValue.addEventListener('click', this.handleRadiosClick);
-  }, this.instance);
+  thePills.forEach(element => {
+    element.addEventListener('click', this.handleRadiosClick.bind(this));
+  });
+
+  // Listen for resize events
+  window.addEventListener('resize', this.handleResize.bind(this));
+  // Call for a resize on init
+  this.handleResize();
 
   // Start the initial data load
   this.loadData(this.baseQuery);
 };
 
 /**
- * Starts the data load, called by {@link init}
- * @param {Object} query - The data object for the query, {@link baseQuery}
+ * Starts the data load, called by {@see init}
+ * @param {Object} query - The data object for the query, {@see baseQuery}
  */
 AggregateTotalsBox.prototype.loadData = function(query) {
   let instance = this;
 
-  // console.log('would have called ' + buildUrl(this.basePath, query));
+  window
+    .fetch(buildUrl(this.basePath_grandTotal, query), {
+      cache: 'no-cache',
+      mode: 'cors'
+    })
+    .then(response => {
+      if (response.status !== 200)
+        throw new Error('The network rejected the grand total request.');
+      // else if (response.type == 'cors') throw new Error('CORS error');
+      response.json().then(data => {
+        instance.displayUpdatedData_grandTotal(data);
+      });
+    })
+    .catch(error => {
+      console.log('Error while loading grand total data: ', error);
+    });
+  // $.getJSON(buildUrl(this.basePath, query)).done(response => {
+  //   instance.displayUpdatedData_grandTotal(response);
+  // });
 
-  // window
-  //   .fetch(buildUrl(this.basePath, query))
-  //   .then(response => {
-  //     // console.log('response: ', response);
-  //     if (!response.ok) throw new Error('Network response was not ok.');
-  //   })
-  //   // .then(res => {
-  //   //   console.log('then() res: ', res);
-  //   //   res.json();
-  //   // })
-  //   .then(response => {
-  //     // console.log('then() response: ', response);
-  //     instance.displayUpdatedData(response);
-  //   })
-  //   .catch(error => {
-  //     //
-  //     console.log('CATCH - error: ', error);
-  //   });
-
-  $.getJSON(buildUrl(this.basePath, query)).done(response => {
-    instance.displayUpdatedData(response);
-  });
+  window
+    .fetch(buildUrl(this.basePath_partyTotals, query), {
+      cache: 'no-cache',
+      mode: 'cors'
+    })
+    .then(response => {
+      if (response.status !== 200)
+        throw new Error('The network rejected the parties totals request.');
+      // else if (response.type == 'cors') throw new Error('CORS error');
+      response.json().then(data => {
+        instance.displayUpdatedData_parties(data);
+      });
+    })
+    .catch(error => {
+      console.log('Error while loading parties totals: ', error);
+    });
 };
 
 /**
@@ -244,7 +371,15 @@ AggregateTotalsBox.prototype.loadData = function(query) {
 AggregateTotalsBox.prototype.handleOfficeChange = function(e) {
   e.preventDefault();
   this.baseQuery.office = e.target.value; // Save the updated value
-  this.loadData(this.baseQuery); // Reload the data
+
+  // If it's now a Presidential election, but not a presidential election year
+  if (e.target.value == 'P' && this.baseQuery.election_year % 4) {
+    // Do nothing—lean on refreshYearsSelect();
+  } else {
+    // Otherwise, it's cool to load the data now
+    this.loadData(this.baseQuery);
+  }
+  this.refreshYearsSelect(e.target.value, this.baseQuery.election_year);
 };
 
 /**
@@ -263,30 +398,73 @@ AggregateTotalsBox.prototype.handleElectionYearChange = function(e) {
  */
 AggregateTotalsBox.prototype.handleRadiosClick = function(e) {
   e.preventDefault();
-  this.parentElement
+  this.element.parentElement
     .querySelectorAll('.js-election-radios')
     .forEach(element => {
       element.removeAttribute('disabled');
     });
   e.currentTarget.setAttribute('disabled', 'disabled');
-  // TODO this.baseQuery.office = e.currentTarget.value
-  // TODO - reload data
+  this.baseQuery.office = e.currentTarget.value;
+  this.loadData(this.baseQuery); // Reload the data
 };
 
 /**
- * Formats the given value and puts it into the dom element.
- * @param {Element} instance - The dom element whose valueField will hold the text
- * @param {Number} passedValue - The number to format and plug into the element
+ * TODO -
  */
-AggregateTotalsBox.prototype.displayValue = function(instance, passedValue) {
-  let valString =
-    '$' + passedValue.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,'); // Format for US dollars and cents
-  instance.valueField.innerHTML = valString;
+AggregateTotalsBox.prototype.handleResize = function(e = null) {
+  if (e) e.preventDefault();
+
+  let newWidth = this.element.offsetWidth;
+
+  if (newWidth < breakpointToMedium) {
+    // this.element.classList.add('width-s');
+    this.element.classList.remove('width-m');
+    this.element.classList.remove('width-l');
+  } else if (newWidth < 700) {
+    // this.element.classList.remove('w-s');
+    this.element.classList.add('width-m');
+    this.element.classList.remove('width-l');
+  } else {
+    // this.element.classList.remove('w-s');
+    this.element.classList.remove('width-m');
+    this.element.classList.add('width-l');
+  }
+};
+
+/**
+ * Called from {@see handleOfficeChange} when it's been changed
+ * Updates baseQuery.election_year in case there's a discrepancy
+ * Causes the yearControl to fire a change event
+ */
+AggregateTotalsBox.prototype.refreshYearsSelect = function() {
+  // If it's an internal control, we have the only listeners on that object so we're free to change it
+  // Otherwise, if it's an external control, let's have it trigger a change event
+  // TODO - is it important for an external control to fire a change event?
+  // TODO - Should we go ahead and try to change external <select> values?
+  if (this.element.contains(this.yearControl)) {
+    this.yearControl.innerHTML = electionYearsOptions(
+      this.baseQuery.office,
+      this.baseQuery.election_year
+    );
+    // Sync the new value back to baseQuery in case there's a difference
+    this.baseQuery.election_year = this.yearControl.value;
+  }
+  // Change events only fire when a user interacts with the control so we need to fire one ourselves
+  //
+  // If the browser uses createEvent, init and dispatch the event
+  // Otherwise, fire a generic onchange event
+  if ('createEvent' in document) {
+    let e = document.createEvent('HTMLEvents');
+    e.initEvent('change', false, true);
+    this.yearControl.dispatchEvent(e);
+  } else {
+    this.yearControl.fireEvent('onchange');
+  }
 };
 
 /**
  * Starts the timers to update the displayed value from one to the next (not part of the initial display)
- * Called by {@link displayUpdatedData} when the displayed value should changed.
+ * Called by {@see displayUpdatedData_grandTotal} when the displayed value should changed.
  */
 AggregateTotalsBox.prototype.startAnimation = function() {
   let instance = this;
@@ -300,7 +478,8 @@ AggregateTotalsBox.prototype.startAnimation = function() {
       instance.animVars.valueTotal
     );
     instance.animVars.valueTemp = nextVal; // Save for next loop
-    instance.displayValue(instance, nextVal); // Update the element
+    instance.valueField.innerHTML = formatAsCurrency(nextVal); // Update the element
+    // instance.formatAsCurrency(nextVal); // Update the element
 
     // If our values match, we can stop the animations
     if (instance.animVars.valueTemp == instance.animVars.valueTotal) {
@@ -308,6 +487,19 @@ AggregateTotalsBox.prototype.startAnimation = function() {
     }
   }, 25);
 };
+
+/**
+ * Formats the given value and puts it into the dom element.
+ * @param {Number} passedValue - The number to format and plug into the element
+ * @param {Boolean} roundToWhole - Should we drop the cents or no?
+ * @returns {String} A string of the given value formatted with a dollar sign, commas, and (if roundToWhole === false) decimal
+ */
+function formatAsCurrency(passedValue, roundToWhole = true) {
+  // Format for US dollars and cents
+  if (roundToWhole)
+    return '$' + passedValue.toFixed().replace(/\d(?=(\d{3})+$)/g, '$&,');
+  else return '$' + passedValue.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+}
 
 /**
  * Returns the next value to step from `currentValue` to `goalValue`, when animating each place from current to goal.
@@ -370,6 +562,7 @@ function getNextValue(currentValue, goalValue) {
  * @param {String, Number} year - The year to scrub / correct
  * @param {String} office - The office of that cycle
  * @returns {Number} - Either `office` or the next valid election year
+ * TODO - Could probably combine this with widget-vars/getNextPresidentialElectionYear() for something like getNextElectionYear('P')
  */
 function scrubElectionYear(year, office) {
   let toReturn = year;
@@ -383,12 +576,14 @@ function scrubElectionYear(year, office) {
 }
 
 /**
- *
- * @param {HTMLObjectElement} callingInstance -
- * @param {Elem} domAnchor -
- * @param {String} elementType -
+ * Creates the <aside> and its elements.
+ * Inserts the element into the page, according to domAnchor (or scriptElement)
+ * Adds a <link> to the <head>, pointing to {@see stylesheetPath}
+ * @param {AggregateTotalsBox} callingInstance - Where to find the this values like baseQuery
+ * @param {HTMLScriptElement} scriptElement - The <script> where this file lives
+ * @returns {HTMLElement} - The new <aside>, in the page
  */
-function buildElement(callingInstance, scriptElement, domAnchor) {
+function buildElement(callingInstance, scriptElement) {
   let toReturn = document.createElement('aside');
   toReturn.setAttribute(
     'id',
@@ -411,12 +606,20 @@ function buildElement(callingInstance, scriptElement, domAnchor) {
         // Let's only build the tabbed content, not the pull-down
         let theRadiosString = '';
         for (var def in officeDefs) {
-          theRadiosString +=
-            '<button value="' +
-            def +
-            '" class="election-radios js-election-radios">' +
-            officeDefs[def] +
-            '</button>';
+          if (def == 'P' && callingInstance.baseQuery.election_year % 4 > 0) {
+            // Skip the President button if we're looking at a non-presidential year
+          } else {
+            theRadiosString +=
+              '<button value="' +
+              def +
+              '" ' +
+              (def == callingInstance.baseQuery.office
+                ? 'disabled="disabled" '
+                : '') +
+              'class="election-radios js-election-radios">' +
+              officeDefs[def] +
+              '</button>';
+          }
         }
         theInnerHTML += `<fieldset class="pills">${theRadiosString}</fieldset>`;
       } else {
@@ -427,34 +630,19 @@ function buildElement(callingInstance, scriptElement, domAnchor) {
             '<option value="' + def + '">' + officeDefs[def] + '</option>';
         }
         theInnerHTML += `<fieldset class="select">
-            <label for="top-category" class="breakdown__title label t-inline-block">How much has been raised by:</label>
+            <label for="top-category" class="breakdown__title label t-inline-block">How much has been ${
+              callingInstance.action == 'raised' ? 'raised' : 'spent'
+            } by:</label>
             <select id="top-category" name="top_category" class="js-select-office form-element--inline" aria-controls="top-table">
               ${theOptionsString}
             </select>
           </fieldset>`;
       }
     }
-    // If we have an election year and a list of possible years
-    // TODO - make this a different test
-
     if (callingInstance.yearControl == 'internal') {
       theInnerHTML += `<fieldset class="select">
           <label for="election-year" class="breakdown__title label t-inline-block">Running in: </label>
-          <select id="election-year" name="cycle" class="js-select-year form-element--inline" aria-controls="top-table">
-            ${electionYearsList().map(item => {
-              return (
-                '<option value="' +
-                item +
-                '"' +
-                (item == callingInstance.baseQuery.election_year
-                  ? ' selected'
-                  : '') +
-                '>' +
-                item +
-                '</option>'
-              );
-            })}
-          </select>
+          <select id="election-year" name="cycle" class="js-select-year form-element--inline" aria-controls="top-table"></select>
         </fieldset>`;
     }
     theInnerHTML += `</div>`;
@@ -466,34 +654,37 @@ function buildElement(callingInstance, scriptElement, domAnchor) {
       </div>`;
   theInnerHTML += `
       <div class="parties-wrapper">
-        <div class="simple-table--responsive" role="grid">
+        <div class="simple-table--responsive js-parties-holder" role="grid">
           <div class="simple-table__row" role="row">
-            <div role="cell" class="simple-table__cell">Republican</div>
-            <div role="cell" class="simple-table__cell t-mono-stacked-currency">$64,701,975</div>
+            <div role="cell" class="simple-table__cell js-party-title"></div>
+            <div role="cell" class="simple-table__cell js-party-value t-mono-stacked-currency"></div>
             <div role="cell" class="simple-table__cell">
-              <meter min="0" max="64701975.35" value="64701975.35" title="US Dollars" data-party="REP"></meter>
-              <!-- <div class="bar-container">
+              <meter min="0" max="" value="" title="US Dollars" data-party=""></meter>
+              <!-- DO WE NEED THIS FOR IE?
+              <div class="bar-container">
                 <div class="value-bar" data-value="64701975.35" data-party="REP" style="width: 100%;"></div>
               </div> //-->
             </div>
           </div>
           <div class="simple-table__row" role="row">
-            <div role="cell" class="simple-table__cell">Democrat</div>
-            <div role="cell" class="simple-table__cell t-mono-stacked-currency">$51,111,111</div>
+            <div role="cell" class="simple-table__cell js-party-title"></div>
+            <div role="cell" class="simple-table__cell js-party-value t-mono-stacked-currency"></div>
             <div role="cell" class="simple-table__cell">
-              <meter min="0" max="64701975.35" value="51111111" title="US Dollars" data-party="DEM"></meter>
-              <!-- <div class="bar-container">
+              <meter min="0" max="" value="" title="US Dollars" data-party=""></meter>
+              <!-- DO WE NEED THIS FOR IE?
+              <div class="bar-container">
                 <div class="value-bar" data-value="64701975.35" data-party="DEM" style="width: 90%;"></div>
               </div> //-->
             </div>
           </div>
           <div class="simple-table__row" role="row">
-            <div role="cell" class="simple-table__cell">Other</div>
-            <div role="cell" class="simple-table__cell t-mono-stacked-currency">$12,000,000</div>
+            <div role="cell" class="simple-table__cell js-party-title"></div>
+            <div role="cell" class="simple-table__cell js-party-value t-mono-stacked-currency"></div>
             <div role="cell" class="simple-table__cell">
-              <meter min="0" max="64701975.35" value="12000000" title="US Dollars"  data-party="O"></meter>
-              <!-- <div class="bar-container">
-                <div class="value-bar" data-value="64701975.35" data-party="O" style="width: 20%;"></div>
+              <meter min="0" max="" value="" title="US Dollars"  data-party=""></meter>
+              <!-- DO WE NEED THIS FOR IE?
+              <div class="bar-container">
+                <div class="value-bar" data-value="64701975.35" data-party="Other" style="width: 20%;"></div>
               </div> //-->
             </div>
           </div>
@@ -516,9 +707,6 @@ function buildElement(callingInstance, scriptElement, domAnchor) {
     `;
   toReturn.innerHTML = theInnerHTML;
 
-  // It's not visible yet, but let's make sure it doesn't show up until we have something to show
-  // $(toReturn).slideUp(0);
-
   // Add the stylesheet to the document <head>
   let head = document.head;
   let linkElement = document.createElement('link');
@@ -527,28 +715,15 @@ function buildElement(callingInstance, scriptElement, domAnchor) {
   linkElement.href = stylesheetPath;
   head.appendChild(linkElement);
 
-  // If the in-page placeholder and <script> are the same,
-  if (scriptElement == domAnchor) {
-    // Put it in the page right before this <script>
-    domAnchor.parentElement.insertBefore(toReturn, domAnchor);
-  } else {
-    // Otherwise, replace the anchor element
-    domAnchor.replaceWith(toReturn);
-  }
+  // The default in-page element to replace
+  let domElementToReplace = document.querySelector('div.gov-fec-agg-tots');
 
-  // Create the value element
-  // this.valueField = document.createElement('h1');
-  // this.valueField.setAttribute('class', 'value');
-  // Create the description element
-  // this.descriptionField = document.createElement('h2');
-  // this.descriptionField.setAttribute('class', 'description');
-  // Put the value and description in the <aside>
-  // this.element.appendChild(this.valueField);
-  // this.element.appendChild(this.descriptionField);
+  // If there's a default element to replace
+  // else put it in the page right before this <script>
+  if (domElementToReplace) domElementToReplace.replaceWith(toReturn);
+  else scriptElement.parentElement.insertBefore(toReturn, scriptElement);
 
-  // If the script element is the anchor element, we'll put the new element right before the <script>.
-
-  return toReturn; // TODO
+  return toReturn;
 }
 
 new AggregateTotalsBox();

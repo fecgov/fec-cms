@@ -36,8 +36,12 @@
   {% if FEATURES.aggregatetotals %}
   <style>
     ul.agg-tots-attr-list {
-      color: forestgreen;
+      background: lightgray;
+      color: #112e51;
+      display: flex;
       font-family: sans-serif;
+      justify-content: space-evenly;
+      margin-bottom: 2px;
     }
     ul.agg-tots-attr-list li {
       display: inline-block;
@@ -58,22 +62,23 @@
     <li>controls: both</li>
     <li>theme: light</li>
   </ul>
+  <div class="gov-fec-agg-tots">This div will be replaced by the first Aggregate Totals &lt;aside&gt;</div>
   <script defer data-theme="light" data-office-control="#top-category" data-year-control="#election-year" data-action="{{ action }}" src="{{ asset_for_js('widgets/aggregate-totals-box.js') }}"></script>
   <!--
   -->
   <ul class="agg-tots-attr-list">
     <li>&lt;aside&gt;</li>
     <li>office: all</li>
-    <li>year: all</li> 
+    <li>year: 2008+</li> 
     <li>controls: internal</li>
     <li>theme: light</li>
   </ul>
-  <script defer data-theme="light" data-action="{{ action }}" src="{{ asset_for_js('widgets/aggregate-totals-box.js') }}"></script>
+  <script defer data-theme="light" data-election-year="2008" data-action="{{ action }}" src="{{ asset_for_js('widgets/aggregate-totals-box.js') }}"></script>
   <!--
   -->
   <ul class="agg-tots-attr-list">
     <li>&lt;aside&gt;</li>
-    <li>year: one</li>
+    <li>year: 2020</li>
     <li>office: all</li>
     <li>controls: internal</li>
     <li>theme: light</li>
@@ -83,18 +88,18 @@
   -->
   <ul class="agg-tots-attr-list">
     <li>&lt;aside&gt;</li>
-    <li>year: one</li>
-    <li>office: one</li>
+    <li>year: 2020</li>
+    <li>office: S</li>
     <li>controls: none</li>
     <li>theme: light</li>
   </ul>
-  <script defer data-theme="light" data-election-year="2020" data-office="P" data-office-control="none" data-year-control="none" data-action="{{ action }}" src="{{ asset_for_js('widgets/aggregate-totals-box.js') }}"></script>
+  <script defer data-theme="light" data-election-year="2020" data-office="S" data-office-control="none" data-year-control="none" data-action="{{ action }}" src="{{ asset_for_js('widgets/aggregate-totals-box.js') }}"></script>
   <!--
   -->
   <ul class="agg-tots-attr-list">
     <li>&lt;aside&gt;</li>
     <li>office: all</li>
-    <li>year: all</li>
+    <li>year: any</li>
     <li>controls: internal</li>
     <li>theme: dark</li>
   </ul>
@@ -103,7 +108,7 @@
   -->
   <ul class="agg-tots-attr-list">
     <li>&lt;aside&gt;</li>
-    <li>year: one</li>
+    <li>year: 2020</li>
     <li>office: all</li>
     <li>controls: internal</li>
     <li>theme: dark</li>
@@ -113,12 +118,12 @@
   -->
   <ul class="agg-tots-attr-list">
     <li>&lt;aside&gt;</li>
-    <li>year: one</li>
-    <li>office: one</li>
+    <li>year: 2018</li>
+    <li>office: H</li>
     <li>controls: none</li>
     <li>theme: dark</li>
   </ul>
-  <script defer data-theme="dark" data-election-year="2020" data-office="P" data-action="{{ action }}" src="{{ asset_for_js('widgets/aggregate-totals-box.js') }}"></script>
+  <script defer data-theme="dark" data-election-year="2018" data-office="H" data-office-control="none" data-year-control="none" data-action="{{ action }}" src="{{ asset_for_js('widgets/aggregate-totals-box.js') }}"></script>
   <!--
   -->
   <ul class="agg-tots-attr-list">
@@ -128,7 +133,7 @@
     <li>controls: both</li>
     <li>theme: dark</li>
   </ul>
-  <script defer data-theme="dark" data-office-control="" data-office-control="" data-action="{{ action }}" src="{{ asset_for_js('widgets/aggregate-totals-box.js') }}"></script>
+  <script defer data-theme="dark" data-office-control="#top-category" data-year-control="#election-year" data-action="{{ action }}" src="{{ asset_for_js('widgets/aggregate-totals-box.js') }}"></script>
   <!--
   -->
   <ul class="agg-tots-attr-list">
@@ -138,7 +143,7 @@
     <li>controls: internal</li>
     <li>theme: light</li>
   </ul>
-  <script defer data-theme="light" data-action="{{ action }}" src="{{ asset_for_js('widgets/aggregate-totals.js') }}"></script>
+  <script defer data-theme="light" data-action="{{ action }}" src="http://127.0.0.1:8000/widgets/aggregate-totals.js"></script>
   <!--
   -->
   <ul class="agg-tots-attr-list">
@@ -148,17 +153,27 @@
     <li>controls: internal</li>
     <li>theme: dark</li>
   </ul>
-  <script defer data-theme="dark" data-election-year="2008" data-action="{{ action }}" src="{{ asset_for_js('widgets/aggregate-totals.js') }}"></script>
+  <script defer data-theme="dark" data-election-year="2008" data-action="{{ action }}" src="http://127.0.0.1:8000/widgets/aggregate-totals.js"></script>
   <!--
   -->
   <ul class="agg-tots-attr-list">
     <li>&lt;iframe&gt;</li>
     <li>year: 2012</li>
-    <li>office: one</li>
+    <li>office: P</li>
     <li>controls: none</li>
     <li>theme: light</li>
   </ul>
-  <script defer data-theme="light" data-election-year="2012" data-office="P" data-action="{{ action }}" src="{{ asset_for_js('widgets/aggregate-totals.js') }}"></script>
+  <script defer data-theme="light" data-election-year="2012" data-office="P" data-office-control="none" data-year-control="none"data-action="{{ action }}" src="http://127.0.0.1:8000/widgets/aggregate-totals.js"></script>
+  <!--
+  -->
+  <ul class="agg-tots-attr-list">
+    <li>&lt;iframe&gt;</li>
+    <li>year: 2010</li>
+    <li>office: S</li>
+    <li>controls: office</li>
+    <li>theme: dark</li>
+  </ul>
+  <script defer data-theme="dark" data-election-year="2012" data-office="S" data-year-control="none" data-action="{{ action }}" src="http://127.0.0.1:8000/static/js/widgets/aggregate-totals.js"></script>
   {# <a class="twitter-timeline" href="https://twitter.com/FEC?ref_src=twsrc%5Etfw">Tweets by the Federal Election Commission</a> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script> #}
   {% endif %}
   
