@@ -694,17 +694,22 @@ DataTable.prototype.fetchSuccess = function(resp) {
 
 DataTable.prototype.fetchError = function(jqXHR, textStatus) {
   var self = this;
+  // Default error message that occurs most likely due to timeout
   var errorMessage =
     '<div class="filter__message filter__message--error">' +
     '<strong>We had trouble processing your request,</strong><br>' +
     'please try again. If you still have trouble, ' +
     '<button class="js-filter-feedback">let us know</button></div>';
   if (textStatus == 'abort') {
-    errorMessage = '<div><strong>Previous request aborted.</strong></div>';
-  } else if (jqXHR.status == 400) {
+    // Pending message occurs when the previous query was cancelled due to
+    // the user adding or removing filters
     errorMessage =
-      '<div class="filter__message filter__message--error">' +
-      "<strong>You're searching a large dateset. Narrow your search with additional filters.</strong>" +
+      '<div class="filter__message message--error" style="color: #E36641"><strong>Just a moment while we process your new request. You are searching a large dataset.</strong></div>';
+  } else if (jqXHR.status == 400) {
+    // Narrow search results message occurs when multiple time periods are requested
+    errorMessage =
+      '<div class="message filter__message message--error">' +
+      '<p>When searching multiple time periods, choose one or more fields: recipient name or ID, contributor name or ID, city, ZIP code, occupation or employer, or image numbers.</p>' +
       '</div>';
   }
   $('.filter__message').remove();
