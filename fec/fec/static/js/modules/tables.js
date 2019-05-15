@@ -704,7 +704,7 @@ DataTable.prototype.fetchError = function(jqXHR, textStatus) {
     // Pending message occurs when the previous query was cancelled due to
     // the user adding or removing filters
     errorMessage =
-      '<div class="filter__message message--error" style="color: #E36641"><strong>Just a moment while we process your new request. You are searching a large dataset.</strong></div>';
+      '<div class="filter__message filter__message--delayed"><strong>Just a moment while we process your new request. You are searching a large dataset.</strong></div>';
   } else if (jqXHR.status == 400) {
     // Narrow search results message occurs when multiple time periods are requested
     errorMessage =

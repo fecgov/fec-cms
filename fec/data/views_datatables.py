@@ -181,6 +181,9 @@ def reports(request, form_type):
 
 
 def individual_contributions(request):
+    if len(request.GET) == 0: 
+        return redirect('/data/receipts/individual-contributions/?two_year_transaction_period=' + str(constants.DEFAULT_ELECTION_YEAR))
+
     return render(request, 'datatable.jinja', {
         'parent': 'data',
         'result_type': 'receipts',

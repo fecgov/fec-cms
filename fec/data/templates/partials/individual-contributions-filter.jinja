@@ -15,17 +15,22 @@ Filter individual contributions
 {% block filters %}
 <div class="filters__inner">
   {{ typeahead.field('committee_id', 'Recipient name or ID') }}
+  <legend class="label  u-margin--top">Contributor details</legend>
   {{ text.field('contributor_name', 'Contributor name') }}
-  {{ years.two_year_transaction_period('two_year_transaction_period', 'Report years')  }}
-  {{ date.field('date', 'Receipt date', dates ) }}
+  {{ text.field('contributor_zip', 'ZIP code', {'maxlength':5}) }}
+  {{ text.field('contributor_city', 'City') }}
+  {% include 'partials/filters/occupation-employer.jinja' %}
+  {{ text.field('image_number', 'Image number') }}
 </div>
-<div class="js-accordion accordion--neutral" data-content-prefix="filter" data-open-first="false">
-  <button type="button" class="js-accordion-trigger accordion__button">Contributor details</button>
+<div class="js-accordion accordion--neutral" data-content-prefix="filter" data-open-first="true">
+  <button type="button" class="js-accordion-trigger accordion__button">Time period</button>
   <div class="accordion__content">
-    {{ text.field('contributor_city', 'City') }}
+    {{ years.cycles('two_year_transaction_period', 'Report years')  }}
+    {{ date.field('date', 'Receipt date', dates ) }}
+  </div>
+  <button type="button" class="js-accordion-trigger accordion__button">More contributor details</button>
+  <div class="accordion__content">
     {{ states.field('contributor_state') }}
-    {{ text.field('contributor_zip', 'ZIP code', {'maxlength':5}) }}
-    {% include 'partials/filters/occupation-employer.jinja' %}
   </div>
   <button type="button" class="js-accordion-trigger accordion__button">Recipient committee type</button>
   <div class="accordion__content">
@@ -35,7 +40,6 @@ Filter individual contributions
   <button type="button" class="js-accordion-trigger accordion__button">Transaction details</button>
   <div class="accordion__content">
     {{ range.amount('amount', 'Contribution amount') }}
-    {{ text.field('image_number', 'Image number') }}
     <div class="message message--info message--small">
       <span class="t-block">Receipts are reported periodically, according to the filer's reporting schedule. Receipts are updated as they’re processed— that time can vary.</span>
     </div>
