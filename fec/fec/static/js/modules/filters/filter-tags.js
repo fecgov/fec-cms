@@ -87,6 +87,10 @@ TagList.prototype.addTag = function(e, opts) {
   if (!opts.nonremovable) {
     this.$clear.attr('aria-hidden', false);
   }
+  if (name === 'two_year_transaction_period') {
+    // anytime we add a tag, we check if we need to remove the all years tag based on the filter name
+    $('li[data-tag-category="all-years"]').remove();
+  }
 };
 
 TagList.prototype.addTagItem = function($tagCategory, tag, opts) {
@@ -159,6 +163,28 @@ TagList.prototype.removeAllTags = function(e, opts, emit) {
 
 TagList.prototype.removeTagEvt = function(e, opts) {
   this.removeTag(opts.key, false);
+  // logic to handle adding an all years tag if
+  // no two year transaction period filter is provided
+  // we evaluate on every tag removal
+  if (opts.name === 'two_year_transaction_period') {
+    var tytp = $('li[data-tag-category="two_year_transaction_period"]');
+    var ay = $('li[data-tag-category="all-years"]');
+    if (tytp.length == 0 && ay.length == 0) {
+      // if we didn't already add the all years tag and there are no two year transiaction period filters,
+      // add the all year tag
+      this.$body.trigger('filter:added', [
+        {
+          key: 'two_year_transaction_period-all',
+          value: 'All years',
+          loadedOnce: true,
+          filterLabel: 'All years',
+          name: 'all-years',
+          nonremovable: true,
+          removeOnSwitch: true
+        }
+      ]);
+    }
+  }
 };
 
 TagList.prototype.removeTagDom = function(e) {
