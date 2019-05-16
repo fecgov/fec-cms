@@ -6,11 +6,11 @@
 @import '../variables'; // $neutral, $sans-serif, etc
 
 @font-face {
-  font-family: FECKarlaMonoReg;
-  src: url('/static/fonts/fec-mono-regular.woff2') format('woff2'),
-    url('/static/fonts/fec-mono-regular.woff') format('woff'),
-    url('/static/fonts/fec-mono-regular.ttf') format('truetype');
-    // TODO - move these to their final home
+  font-family: fec_currency_mono;
+  src: url('/static/fonts/fec_currencymono-regular.woff2') format('woff2'),
+    url('/static/fonts/fec_currencymono-regular.woff') format('woff'),
+    url('/static/fonts/fec_currencymono-regular.ttf') format('truetype');
+  // TODO - move these to their final home
 }
 
 .aggregate-totals-block {
@@ -20,9 +20,9 @@
   padding: 2rem;
 
   h1 {
-    font-family: 'FECKarlaMonoReg', $sans-serif;
+    font-family: 'fec_currency_mono', $sans-serif;
     line-height: 1em;
-    margin: 0 0 .75rem;
+    margin: 0 0 0.75rem;
     text-align: center;
   }
   h2 {
@@ -32,7 +32,7 @@
     margin: 0;
     text-align: center;
   }
-  
+
   @include media($lg) {
     align-items: center;
     display: flex;
@@ -43,7 +43,7 @@
       margin: 0 0 0 1rem;
       order: 1;
       text-align: right;
-      width: 60%
+      width: 60%;
     }
     h2 {
       font-size: u(1.4rem);
