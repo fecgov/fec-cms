@@ -89,7 +89,7 @@ TagList.prototype.addTag = function(e, opts) {
   }
   if (name === 'two_year_transaction_period') {
     // anytime we add a tag, we check if we need to remove the all years tag based on the filter name
-    $('li[data-tag-category="all-years"]').remove();
+    $('li[data-tag-category="all-report-years"]').remove();
   }
 };
 
@@ -168,17 +168,17 @@ TagList.prototype.removeTagEvt = function(e, opts) {
   // we evaluate on every tag removal
   if (opts.name === 'two_year_transaction_period') {
     var tytp = $('li[data-tag-category="two_year_transaction_period"]');
-    var ay = $('li[data-tag-category="all-years"]');
-    if (tytp.length == 0 && ay.length == 0) {
+    var ary = $('li[data-tag-category="all-report-years"]');
+    if (tytp.length == 0 && ary.length == 0) {
       // if we didn't already add the all years tag and there are no two year transiaction period filters,
       // add the all year tag
       this.$body.trigger('filter:added', [
         {
           key: 'two_year_transaction_period-all',
-          value: 'All years',
+          value: 'All report years',
           loadedOnce: true,
-          filterLabel: 'All years',
-          name: 'all-years',
+          filterLabel: 'All report years',
+          name: 'all-report-years',
           nonremovable: true,
           removeOnSwitch: true
         }
