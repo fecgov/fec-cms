@@ -11,6 +11,7 @@
 var $ = require('jquery');
 var helpers = require('./helpers');
 var analytics = require('./analytics');
+// TODO - Move this to Tag Manager?
 
 function ReactionBox(selector) {
   this.$element = $(selector);

@@ -8,6 +8,7 @@ var _ = require('underscore');
 var moment = require('moment');
 
 var analytics = require('./analytics');
+// TODO - Move this to Tag Manager?
 
 var ElectionForm = require('./election-form').ElectionForm;
 var ElectionMap = require('./election-map').ElectionMap;

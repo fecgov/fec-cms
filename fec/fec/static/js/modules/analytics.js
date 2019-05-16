@@ -2,6 +2,8 @@
 
 /* global ga */
 
+// TODO - should move all of this into Tag Manager
+
 var _ = require('underscore');
 var URI = require('urijs');
 

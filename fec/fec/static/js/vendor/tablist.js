@@ -10,6 +10,7 @@ var _ = require('underscore');
 var events = require('../modules/events');
 
 var analytics = require('../modules//analytics');
+// TODO - Move this to Tag Manager?
 
 // The class for the container div
 

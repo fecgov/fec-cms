@@ -15,6 +15,12 @@
     <script src="{{ asset_for_js('polyfills.js') }}"></script>
   {% endblock %}
 
+  {% if FEC_CMS_ENVIRONMENT == 'PRODUCTION' %}
+  {# Google Tag Manager #}
+  <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start': new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer','GTM-T5HPRLH');</script>
+  {# End Google Tag Manager #}
+{% endif %}
+
   <script>
     BASE_PATH = '/data';
     API_LOCATION = '{{ FEC_API_URL }}';
@@ -45,6 +51,12 @@
   </script>
 </head>
 <body>
+{% if FEC_CMS_ENVIRONMENT == 'PRODUCTION' %}
+{# Google Tag Manager (noscript) #}
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-T5HPRLH" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+{# End Google Tag Manager (noscript) #}
+{% endif %}
+
 {% import 'macros/search.jinja' as search %}
 {% include 'partials/warnings.jinja' %}
 
@@ -133,21 +145,6 @@
   <script src="{{ asset_for_js('data-init.js') }}"></script>
   <script defer type="text/javascript" src='https://www.google.com/recaptcha/api.js'></script>
 {% block scripts %}{% endblock %}
-
-{% if FEC_CMS_ENVIRONMENT == 'PRODUCTION' %}
-  <script>
-    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-    })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
-
-    ga('set', 'anonymizeIp', true);
-    ga('set', 'forceSSL', true);
-    ga('create', 'UA-48605964-22', 'auto');
-    ga('send', 'pageview');
-  </script>
-  <script id="_fed_an_ua_tag" src="https://dap.digitalgov.gov/Universal-Federated-Analytics-Min.js?agency=FEC"></script>
-{% endif %}
 
 </body>
 </html>

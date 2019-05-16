@@ -4,7 +4,7 @@
 
 var $ = require('jquery');
 var lookup = require('../modules/election-lookup');
-var analytics = require('../modules/analytics');
+var analytics = require('../modules/analytics'); // TODO - Move this to Tag Manager?
 
 $(document).ready(function() {
   new lookup.ElectionLookup('#election-lookup', false);
