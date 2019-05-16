@@ -68,7 +68,7 @@
 
 .t-sans {
   font-family: $sans-serif;
-  letter-spacing: -.3px;
+  letter-spacing: -0.3px;
 }
 
 .t-serif {
@@ -105,7 +105,7 @@
   display: inline-block;
   font-family: $sans-serif;
   font-weight: bold;
-  letter-spacing: -.3px;
+  letter-spacing: -0.3px;
   margin-bottom: 0;
 }
 
@@ -191,4 +191,8 @@
   background-size: 1em;
   background-position: 0 30%;
   padding-left: u(2rem);
+}
+
+.t-mono {
+  font-family: $currency-monospace !important;
 }
