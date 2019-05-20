@@ -22,9 +22,15 @@
 {% endblock %}
 
 {% block sections %}
+{% if FEATURES.aggregatetotals %}
+<section>
+  <h2>Raising summary</h2>
+  <script defer data-theme="dark" data-office="{{ office }}" data-year="{{ election_year }}" data-action="raised" src="{{ asset_for_js('widgets/aggregate-totals-box.js') }}"></script>
+</section>
+{% endif %}
 <section id="raising-breakdowns">
   <section id="top-raisers" class="content__section">
-    <h2>Top raising candidates</h2>
+    <h2>Who&apos;s raising the most</h2>
     {{ breakdowns.top_entities(election_years, election_year, 'raised', office ) }}
   </section>
 </section>

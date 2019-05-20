@@ -14,9 +14,7 @@
 {% else %}
   {% set value_field='disbursements' %}
 {% endif %}
-{% if FEATURES.aggregatetotals %}
-  <script defer data-theme="dark" data-office="{{ office }}" data-year="{{ election_year }}" data-action="{{ action }}" src="{{ asset_for_js('widgets/aggregate-totals-box.js') }}"></script>
-{% endif %}
+
 <div class="js-top-entities content__section" data-office="{{ office }}" data-election-year="{{ election_year }}">
   <form action="" method="GET">
       <label for="top-category" class="breakdown__title label t-inline-block">How much has been {{ action }} by: </label>

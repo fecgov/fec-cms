@@ -11,8 +11,8 @@ const electionYearsCount = 42; // Display election years back this many years
  */
 let officeDefs = {
   P: 'presidential',
-  S: 'senate',
-  H: 'house'
+  S: 'Senate',
+  H: 'House'
 };
 
 /**
@@ -23,12 +23,12 @@ let officeDefs = {
  * TODO - May need to expand this to default to midterms when we're away from a presidential year
  */
 let defaultElectionYear = () => {
+  // If the DEFAULT_PRESIDENTIAL_YEAR exists, we'll use that
   if (window.DEFAULT_PRESIDENTIAL_YEAR) return window.DEFAULT_PRESIDENTIAL_YEAR;
   else {
     let now = new Date();
     let thisYear = now.getFullYear();
 
-    // Hold up.
     // If next year is a presidential election year
     // and today's after April 15
     // let's use next year

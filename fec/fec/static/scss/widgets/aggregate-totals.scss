@@ -9,6 +9,7 @@ $colorTextOnLight: #212121;
 $colorBarDef: #5b616b;
 $colorBarDem: #21adf7;
 $colorBarRep: #da3c18;
+$colorBarOtherOnDark: #d6d7d9;
 $fontFamilyMonospace: 'FECKarlaMonoReg', 'karla', sans-serif;
 $fontFamilySansSerif: 'karla', sans-serif;
 $fontFamilySerif: gandhi, serif;
@@ -393,9 +394,23 @@ aside.aggr-totals[id^='gov_fec_at_'] {
       }
     }
 
-    .parties-wrapper.simple-table--responsive {
-      .simple-table__cell:last-child {
-        border-left-color: $colorTextOnDark;
+    .parties-wrapper {
+      .simple-table--responsive {
+        .simple-table__cell:last-child {
+          border-left-color: $colorTextOnDark;
+        }
+      }
+      meter {
+        &[data-party='Other'] {
+          &::-webkit-meter-optimum-value {
+            background: $colorBarOtherOnDark;
+            transition: all 1s;
+          }
+          &:-moz-meter-optimum::-moz-meter-bar {
+            background: $colorBarOtherOnDark;
+            transition: all 1s;
+          }
+        }
       }
     }
 

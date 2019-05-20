@@ -22,9 +22,15 @@
 {% endblock %}
 
 {% block sections %}
+{% if FEATURES.aggregatetotals %}
+<section>
+  <h2>Spending summary</h2>
+  <script defer data-theme="dark" data-office="{{ office }}" data-year="{{ election_year }}" data-action="spending" src="{{ asset_for_js('widgets/aggregate-totals-box.js') }}"></script>
+</section>
+{% endif %}
 <section id="spending-breakdown">
   <section id="top-spenders" class="content__section">
-    <h2>Top spending candidates</h2>
+    <h2>Who&apos;s spending the most</h2>
     {{ breakdowns.top_entities(election_years, election_year, 'spent', office ) }}
   </section>
 </section>

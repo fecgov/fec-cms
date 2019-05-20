@@ -71,11 +71,8 @@ AggregateTotalsBox.prototype.displayUpdatedData_grandTotal = function(
 ) {
   // Get the office value from the <script>
   this.baseQuery.office = queryResponse.results[0].office;
-  // Get the office value from the <script>, but scrub it
-  this.baseQuery.election_year = scrubElectionYear(
-    queryResponse.results[0].election_year,
-    this.baseQuery.office
-  );
+  // Get the office value from the <script>
+  this.baseQuery.election_year = queryResponse.results[0].election_year;
 
   this.animVars.startingValue = this.animVars.valueTotal;
 
@@ -173,7 +170,7 @@ AggregateTotalsBox.prototype.init = function() {
 
   // If there are default values for office or year, let's grab them
   if (dataset.office) this.baseQuery.office = dataset.office;
-  if (dataset.electionYear) this.baseQuery.election_year = dataset.electionYear;
+  if (dataset.year) this.baseQuery.election_year = dataset.year;
 
   // What kinds of office control should we offer?
   if (dataset.officeControl == 'none') {
@@ -550,16 +547,6 @@ function getNextValue(currentValue, goalValue) {
  * @returns {Number} - Either `office` or the next valid election year
  * TODO - Could probably combine this with widget-vars/getNextPresidentialElectionYear() for something like getNextElectionYear('P')
  */
-function scrubElectionYear(year, office) {
-  let toReturn = year;
-  if (office.toLowerCase() == 'p') {
-    toReturn = parseInt(toReturn);
-    // If election year isn't cleanly divisble by four,
-    // we need to increment it by the difference between its modulus and four
-    if (toReturn % 4) toReturn += 4 - (toReturn % 4);
-  }
-  return toReturn;
-}
 
 /**
  * Creates the <aside> and its elements.
@@ -612,8 +599,9 @@ function buildElement(callingInstance, scriptElement) {
         // Otherwise, build the <select>
         let theOptionsString = '';
         for (def in officeDefs) {
-          theOptionsString +=
-            '<option value="' + def + '">' + officeDefs[def] + '</option>';
+          theOptionsString += `<option value="${def}"${
+            def == callingInstance.baseQuery.office ? ' selected' : ''
+          }>${officeDefs[def]}</option>`;
         }
         theInnerHTML += `<fieldset class="select">
             <label for="top-category" class="breakdown__title label t-inline-block">How much has been ${
