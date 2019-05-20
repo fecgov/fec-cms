@@ -21,19 +21,19 @@ $fontWeightBold: 700;
   font-style: normal;
   font-weight: normal;
   src: url('/static/fonts/gandhiserif-regular.woff2') format('woff2'),
-       url('/static/fonts/gandhiserif-regular.woff') format('woff');
+    url('/static/fonts/gandhiserif-regular.woff') format('woff');
 }
 @font-face {
   font-family: 'karla';
   font-style: normal;
   font-weight: normal;
   src: url('/static/fonts/karla-regular.woff2') format('woff2'),
-       url('/static/fonts/karla-regular.woff') format('woff');
+    url('/static/fonts/karla-regular.woff') format('woff');
 }
 @font-face {
   font-family: 'karla';
   src: url('/static/fonts/karla-bold.woff2') format('woff2'),
-       url('/static/fonts/karla-bold.woff') format('woff');
+    url('/static/fonts/karla-bold.woff') format('woff');
   font-weight: bold;
   font-style: normal;
 }
@@ -42,15 +42,16 @@ $fontWeightBold: 700;
   font-style: normal;
   font-weight: normal;
   src: url('/static/fonts/fec-mono-regular.woff2') format('woff2'),
-       url('/static/fonts/fec-mono-regular.woff') format('woff'),
-       url('/static/fonts/fec-mono-regular.ttf') format('truetype');
-    // TODO - move these to their final home
+    url('/static/fonts/fec-mono-regular.woff') format('woff'),
+    url('/static/fonts/fec-mono-regular.ttf') format('truetype');
+  // TODO - move these to their final home
 }
 
 // The aggregate totals aside
-aside.aggr-totals[id^="gov_fec_at_"] {
-  
-  &, & * { // THESE ARE PASSED DOWN TO CHILDREN
+aside.aggr-totals[id^='gov_fec_at_'] {
+  &,
+  & * {
+    // THESE ARE PASSED DOWN TO CHILDREN
     box-sizing: border-box;
   }
 
@@ -59,7 +60,7 @@ aside.aggr-totals[id^="gov_fec_at_"] {
   box-shadow: 0 0 0 2px $colorTextOnLight inset;
   color: $colorTextOnLight;
   font-family: fontFamilySerif; // TODO - complete it
-  font-feature-settings: "kern","liga","pnum";
+  font-feature-settings: 'kern', 'liga', 'pnum';
   font-size: $fontSizeBase;
   margin: 0 0 ($fontSizeBase * 2);
   padding: ($fontSizeBase * 2) ($fontSizeBase * 2) $fontSizeBase;
@@ -79,13 +80,13 @@ aside.aggr-totals[id^="gov_fec_at_"] {
       font-weight: $fontWeightBold;
       font-size: $fontSizeBase * 1.4;
       line-height: 1em;
-      margin-bottom: .25em;
+      margin-bottom: 0.25em;
       text-transform: uppercase;
       -moz-osx-font-smoothing: grayscale;
       -webkit-font-smoothing: antialiased;
     }
     select {
-      display: block;
+      // display: block;
       // TODO - Make this :down: more like the main code—not just the computed value
       background-image: url('data:image/svg+xml;charset=utf8, %3Csvg%20%20fill%3D%27%23211e51%27%20width%3D%2210%22%20height%3D%229%22%20viewBox%3D%220%200%2010%209%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Cpath%20d%3D%22M5.706%208.013l3.685-6.234A.851.851%200%200%200%208.664.485H1.283A.852.852%200%200%200%20.55%201.769l3.69%206.244a.852.852%200%200%200%201.466%200z%22%2F%3E%3C%2Fsvg%3E');
       background-repeat: no-repeat;
@@ -104,7 +105,8 @@ aside.aggr-totals[id^="gov_fec_at_"] {
       overflow: hidden;
       padding: 0 2.5em 0 1em;
       text-overflow: ellipsis;
-      vertical-align: initial;
+      text-transform: capitalize;
+      vertical-align: inherit;
       white-space: nowrap;
       width: auto;
       -moz-appearance: none;
@@ -131,6 +133,7 @@ aside.aggr-totals[id^="gov_fec_at_"] {
       font-size: $fontSizeBase * 1.4;
       font-weight: $fontWeightBold;
       padding: 1em;
+      text-transform: capitalize;
       -moz-appearance: button;
       -webkit-appearance: button;
       appearance: button;
@@ -158,15 +161,14 @@ aside.aggr-totals[id^="gov_fec_at_"] {
 
     .value {
       font-family: $fontFamilyMonospace;
-      font-size: $fontSizeBase * 3.6;
+      font-size: $fontSizeBase * 3;
       line-height: 1em;
-      margin: 0 0 ($fontSizeBase * .75);
+      margin: 0 0 ($fontSizeBase * 0.75);
       width: 100%;
     }
     .description {
       font-family: $fontFamilySansSerif;
       font-size: $fontSizeBase * 1.4;
-      // font-weight: $fontWeightBold;
       line-height: 1.2em;
       margin: 0;
     }
@@ -186,14 +188,16 @@ aside.aggr-totals[id^="gov_fec_at_"] {
       }
       .simple-table__cell {
         display: table-cell;
-        padding: ($fontSizeBase * .25) 0;
+        padding: ($fontSizeBase * 0.25) 0;
         vertical-align: middle;
-    
+
         &:nth-child(2) {
           padding-right: $fontSizeBase;
+          width: 8em;
         }
         &:last-child {
           border-left: solid thin $colorTextOnLight;
+          width: 20%;
         }
       }
     }
@@ -203,40 +207,48 @@ aside.aggr-totals[id^="gov_fec_at_"] {
       background: transparent;
       height: $fontSizeBase * 1.5;
       width: 100%;
-      
+
       // note#1: * Chrome and Sass don't agree on these rules when they're combined to single entries:
-      &::-webkit-meter-bar { // note#1
+      &::-webkit-meter-bar {
+        // note#1
         background: transparent;
         transition: all 1s;
       }
-      &::-moz-meter-bar { // note#1
+      &::-moz-meter-bar {
+        // note#1
         background: transparent;
         transition: all 1s;
       }
-      &::-webkit-meter-optimum-value { // note#1
+      &::-webkit-meter-optimum-value {
+        // note#1
         background: $colorBarDef;
         transition: all 1s;
       }
-      &:-moz-meter-optimum::-moz-meter-bar { // note#1
+      &:-moz-meter-optimum::-moz-meter-bar {
+        // note#1
         background: $colorBarDef;
         transition: all 1s;
       }
-      &[data-party=DEM] { 
-        &::-webkit-meter-optimum-value{ // note#1
+      &[data-party='DEM'] {
+        &::-webkit-meter-optimum-value {
+          // note#1
           background: $colorBarDem;
           transition: all 1s;
         }
-         &:-moz-meter-optimum::-moz-meter-bar { // note#1
+        &:-moz-meter-optimum::-moz-meter-bar {
+          // note#1
           background: $colorBarDem;
           transition: all 1s;
         }
       }
-      &[data-party=REP] {
-        &::-webkit-meter-optimum-value { // note#1
+      &[data-party='REP'] {
+        &::-webkit-meter-optimum-value {
+          // note#1
           background: $colorBarRep;
           transition: all 1s;
         }
-        &:-moz-meter-optimum::-moz-meter-bar { // note#1
+        &:-moz-meter-optimum::-moz-meter-bar {
+          // note#1
           background: $colorBarRep;
           transition: all 1s;
         }
@@ -254,7 +266,7 @@ aside.aggr-totals[id^="gov_fec_at_"] {
       transition: all 1s;
     }
   }
-  
+
   footer {
     align-items: baseline;
     display: flex;
@@ -285,7 +297,7 @@ aside.aggr-totals[id^="gov_fec_at_"] {
     align-items: center;
     display: flex;
     flex-wrap: wrap;
-    
+
     .controls-wrapper {
       fieldset {
         display: inline-block;
@@ -324,13 +336,13 @@ aside.aggr-totals[id^="gov_fec_at_"] {
       padding-left: $fontSizeBase * 4;
       width: 50%;
 
-      .simple-table--responsive {  
+      .simple-table--responsive {
         margin: 0 0 0 auto; // (right-align the table itself)
         max-width: 400px;
 
         .simple-table__cell {
           &:first-child {
-            width: 5.5em;
+            width: 3em;
           }
           &:last-child {
             border-left: none;
@@ -359,9 +371,6 @@ aside.aggr-totals[id^="gov_fec_at_"] {
     .parties-wrapper {
       .simple-table--responsive {
         .simple-table__cell {
-          &:first-child {
-            width: auto;
-          }
           &:last-child {
             width: 33%;
           }
@@ -394,7 +403,7 @@ aside.aggr-totals[id^="gov_fec_at_"] {
       a.gov-fec-seal {
         border-bottom: none;
         text-decoration: none;
-  
+
         img {
           display: none;
 
@@ -410,6 +419,19 @@ aside.aggr-totals[id^="gov_fec_at_"] {
         a.gov-fec-seal {
           background-image: url('/static/img/wordmark--inverse.svg');
         }
+      }
+    }
+  }
+
+  // For when we have external controls, or only the election selector
+  &.controls-none,
+  &.controls-office-only {
+    .total-wrapper {
+      .value {
+        order: 2;
+      }
+      .description {
+        order: 1;
       }
     }
   }

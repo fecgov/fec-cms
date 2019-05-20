@@ -3,36 +3,41 @@
 /**
  * How many election years should we include? In places like lists.
  */
-const electionYearsCount = 20; // Display election years back this many years
+const electionYearsCount = 42; // Display election years back this many years
 
 /**
- * Simple list of election letter codes with their proper-case adjectives
+ * Simple list of election letter codes with their adjectives
+ * TODO - set this through constants?
  */
 let officeDefs = {
-  P: 'Presidential',
-  S: 'Senate',
-  H: 'House'
+  P: 'presidential',
+  S: 'senate',
+  H: 'house'
 };
 
 /**
- * Returns the next election year with the goal of not displaying data when there is none.
+ * If the constants value of DEFAULT_PRESIDENTIAL_YEAR is set, return that.
+ * Otherwise return the next election year with the goal of not displaying data when there is none.
  * If next year is an election year, but today is before 15 April, returns the previous election year.
  * @returns {Number} Four-digit year
  * TODO - May need to expand this to default to midterms when we're away from a presidential year
  */
 let defaultElectionYear = () => {
-  let now = new Date();
-  let thisYear = now.getFullYear();
+  if (window.DEFAULT_PRESIDENTIAL_YEAR) return window.DEFAULT_PRESIDENTIAL_YEAR;
+  else {
+    let now = new Date();
+    let thisYear = now.getFullYear();
 
-  // Hold up.
-  // If next year is a presidential election year
-  // and today's after April 15
-  // let's use next year
-  if ((thisYear + 1) % 4 == 0 && now.getMonth() >= 3 && now.getDate() > 15) {
-    return thisYear + 1;
-  } else {
-    // Otherwise, let's find the most recent presidential election
-    return thisYear % 4 == 0 ? thisYear : thisYear + (4 - (thisYear % 4));
+    // Hold up.
+    // If next year is a presidential election year
+    // and today's after April 15
+    // let's use next year
+    if ((thisYear + 1) % 4 == 0 && now.getMonth() >= 3 && now.getDate() > 15) {
+      return thisYear + 1;
+    } else {
+      // Otherwise, let's find the most recent presidential election
+      return thisYear % 4 == 0 ? thisYear : thisYear + (4 - (thisYear % 4));
+    }
   }
 };
 

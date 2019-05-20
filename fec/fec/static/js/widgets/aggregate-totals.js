@@ -1,7 +1,24 @@
 'use strict';
 
-// TODO - UPDATE ALL COMMENTS AND JSDOC CONTENT
 // TODO - Polish the resize functionality
+/**
+ * The code that runs the in-page iframe, though the same vars will apply to aggregate-totals-box.
+ * These dataset values are passed from the <script> to the <iframe> and then into the <aside>.
+ * Some implementation options:
+ * To have the new element replace an element already on the page, give the element to replaced a class of `gov-fec-agg-tots`
+ * @param {String} `data-action=` - ["raised"|"spending"] Controls whether to show money raised (default) or spent.
+ * @param {String} `data-theme` - ["light"|"dark"] Default: "light"
+ * @param {String} `data-office-control` - ["none"|null] Optional. Provide a query selector for an external office control.
+ * Use 'none' to prevent any office control from being built. The tool will compare exactly one office.
+ * If no control is specified (or prevented), one will be created.
+ * @param {String} `data-year-control` - ["none"|null] Optional. Provide a query selector for an external year control.
+ * Use 'none' to prevent any year control from being built. The tool will compare exactly one year.
+ * If no control is specified (or prevented), one will be created.
+ * @param {String} `data-election-year` - Must be set for single-year implementations.
+ * If provided for multi-year views, this is the starting election year displayed.
+ * @param {String} `data-office` - ["H"|"P"|"S"] Optional. (House, President, Senate) Which race to show first (or only). Default: "P"
+ * If no year is provided, the internal office control will be the tabs/buttons/radios rather than the <select>
+ */
 
 /**
  * @fileoverview This file runs the show for embedded Aggregate Totals
@@ -48,7 +65,7 @@ function AggregateTotalsFrame() {
 }
 
 /**
- * TODO - document
+ * Sets values that will be needed by and/or transferred into the <iframe>
  */
 AggregateTotalsFrame.prototype.init = function() {
   this.scriptElement = document.currentScript; // The <script> on the page
@@ -77,7 +94,7 @@ AggregateTotalsFrame.prototype.init = function() {
 };
 
 /**
- * TODO - document
+ * Adjusts the <iframe> height when the window width changes
  */
 AggregateTotalsFrame.prototype.handleResize = function(e = null) {
   if (e) e.preventDefault();
@@ -93,10 +110,9 @@ AggregateTotalsFrame.prototype.handleResize = function(e = null) {
 };
 
 /**
- * TODO - document
- * @param {HTMLObjectElement} callingInstance -
- * @param {Elem} domAnchor -
- * @param {String} elementType -
+ * Builds the <iframe> and puts it into the page
+ * @param {HTMLScriptElement} scriptElement - Used to transfer dataset from <script> to <iframe>
+ * @return {HTMLObjectElement} - An <iframe> element that has been inserted into the page.
  */
 function buildElement(scriptElement) {
   let toReturn = document.createElement('iframe');

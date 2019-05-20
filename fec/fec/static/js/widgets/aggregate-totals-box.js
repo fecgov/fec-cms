@@ -4,12 +4,13 @@
 
 // Editable vars
 const stylesheetPath = '/static/css/widgets/aggregate-totals.css';
+// const breakpointToXS = 0; // retaining just in case
+const breakpointToSmall = 430;
 const breakpointToMedium = 675;
-const breakpointToMedLrg = 700;
-const breakpointToLarge = 860;
+const breakpointToLarge = 700;
+const breakpointToXL = 860;
 
 // Includes
-// const $ = require('jquery'); // TODO - Do we need to import it all here?
 import { buildUrl } from '../modules/helpers';
 import {
   defaultElectionYear,
@@ -68,10 +69,6 @@ function AggregateTotalsBox() {
 AggregateTotalsBox.prototype.displayUpdatedData_grandTotal = function(
   queryResponse
 ) {
-  console.log(
-    'VERIFY THIS: displayUpdatedData_grandTotal! queryResponse:',
-    queryResponse
-  );
   // Get the office value from the <script>
   this.baseQuery.office = queryResponse.results[0].office;
   // Get the office value from the <script>, but scrub it
@@ -81,6 +78,7 @@ AggregateTotalsBox.prototype.displayUpdatedData_grandTotal = function(
   );
 
   this.animVars.startingValue = this.animVars.valueTotal;
+
   this.animVars.valueTotal =
     this.action == 'raised'
       ? queryResponse.results[0].total_receipts
@@ -104,11 +102,6 @@ AggregateTotalsBox.prototype.displayUpdatedData_grandTotal = function(
 AggregateTotalsBox.prototype.displayUpdatedData_parties = function(
   queryResponse
 ) {
-  console.log(
-    'VERIFY THIS: displayUpdatedData_parties! queryResponse:',
-    queryResponse
-  );
-
   // which values will we compare?
   let valuesToCompare =
     this.action == 'raised' ? 'total_receipts' : 'total_disbursements';
@@ -133,8 +126,8 @@ AggregateTotalsBox.prototype.displayUpdatedData_parties = function(
 
     let thisPartyLongName = theResults[i].party;
     // If we know it's DEM or REP, we'll give them their proper names. ('Other' isn't abbreviated)
-    if (thisPartyLongName == 'DEM') thisPartyLongName = 'Democrat';
-    else if (thisPartyLongName == 'REP') thisPartyLongName = 'Republican';
+    if (thisPartyLongName == 'DEM') thisPartyLongName = 'Dem.';
+    else if (thisPartyLongName == 'REP') thisPartyLongName = 'Rep.';
 
     let thisRowTitleCell = this.partiesHolder.querySelectorAll(
       '.js-party-title'
@@ -166,9 +159,6 @@ AggregateTotalsBox.prototype.init = function() {
   // We're going to be checking the dataset several times
   let dataset = this.scriptElement.dataset;
 
-  // Should we look at receipts or disbursements?
-  this.action = dataset['action'];
-
   // If we're coming from an <iframe>, we need to inherit the dataset from window.frameElement
   // Let's grab each item in the dataset for the <iframe></iframe> and copy it to the <script>
   if (window.frameElement && window.frameElement.dataset) {
@@ -178,35 +168,8 @@ AggregateTotalsBox.prototype.init = function() {
     }
   }
 
-  // Initialize the office data (H, P, or S)
-  // If we aren't supposed to use an interface, remember that we don't need to build one
-  // TODO - this isn't fully working yet
-  // todo - Should be...
-  /*
-    if data-year
-      set that to the default
-
-    if data-year-control == 'none'
-      don't build a year control
-      also, switch to the pills controls
-    else if data-year-control and we can find it
-      listen to it
-    else
-      build a year control
-      listen to it
-    
-    if data-office
-      set that to the default
-
-    if data-office-control == 'none'
-      don't build an office control
-      (also remove the year control?)
-    else if data-office-control and we can find it
-      listen to it
-    else
-      build the election control (pills or select)
-      listen to it/them
-  */
+  // Should we look at receipts or disbursements?
+  this.action = dataset['action'];
 
   // If there are default values for office or year, let's grab them
   if (dataset.office) this.baseQuery.office = dataset.office;
@@ -247,17 +210,7 @@ AggregateTotalsBox.prototype.init = function() {
   } else {
     // Otherwise, we'll build a year control
     this.yearControl = 'internal';
-    // TODO - what if we don't want a year control and only want to show a single year's elections?
-    // TODO - ... add a different value (e.g. "internal") to yearControl?
   }
-
-  /* TODO
-  TODO
-  TODO
-  TODO
-  TODO
-  TODO
-  */
 
   // Build the element (likely <aside>)
   this.element = buildElement(instance, this.scriptElement);
@@ -309,6 +262,20 @@ AggregateTotalsBox.prototype.init = function() {
     element.addEventListener('click', this.handleRadiosClick.bind(this));
   });
 
+  // Let's add classes so we can change the layout based on which controls are present
+  if (thePills.length > 0) {
+    // If we only have the buttons/pills/radios
+    this.element.classList.add('controls-office-only');
+  } else if (
+    // Else if we explictly have no controls,
+    // or both controls are external/outside this.element
+    (this.yearControl == 'none' && this.officeControl == 'none') ||
+    (!this.element.contains(this.officeControl) &&
+      !this.element.contains(this.yearControl))
+  ) {
+    this.element.classList.add('controls-none');
+  }
+
   // Listen for resize events
   window.addEventListener('resize', this.handleResize.bind(this));
   // Call for a resize on init
@@ -338,8 +305,8 @@ AggregateTotalsBox.prototype.loadData = function(query) {
         instance.displayUpdatedData_grandTotal(data);
       });
     })
-    .catch(error => {
-      console.log('Error while loading grand total data: ', error);
+    .catch(() => {
+      // TODO - handle error
     });
   // $.getJSON(buildUrl(this.basePath, query)).done(response => {
   //   instance.displayUpdatedData_grandTotal(response);
@@ -358,8 +325,8 @@ AggregateTotalsBox.prototype.loadData = function(query) {
         instance.displayUpdatedData_parties(data);
       });
     })
-    .catch(error => {
-      console.log('Error while loading parties totals: ', error);
+    .catch(() => {
+      // TODO - handle error
     });
 };
 
@@ -409,25 +376,44 @@ AggregateTotalsBox.prototype.handleRadiosClick = function(e) {
 };
 
 /**
- * TODO -
+ * Handles when the window changes size, but only looks at the relevant element's size.
+ * Toggles classes for the element based on {@see breakpointToSmall, @see breakpointToMedium, @see breakpointToLarge, @see breakpointToXL}
  */
 AggregateTotalsBox.prototype.handleResize = function(e = null) {
   if (e) e.preventDefault();
 
   let newWidth = this.element.offsetWidth;
 
-  if (newWidth < breakpointToMedium) {
-    // this.element.classList.add('width-s');
+  if (newWidth < breakpointToSmall) {
+    // It's XS
+    this.element.classList.remove('width-s');
     this.element.classList.remove('width-m');
     this.element.classList.remove('width-l');
-  } else if (newWidth < 700) {
-    // this.element.classList.remove('w-s');
+    this.element.classList.remove('width-xl');
+  } else if (newWidth < breakpointToMedium) {
+    // It's small
+    this.element.classList.add('width-s');
+    this.element.classList.remove('width-m');
+    this.element.classList.remove('width-l');
+    this.element.classList.remove('width-xl');
+  } else if (newWidth < breakpointToLarge) {
+    // It's medium
+    this.element.classList.remove('w-s');
     this.element.classList.add('width-m');
     this.element.classList.remove('width-l');
-  } else {
-    // this.element.classList.remove('w-s');
+    this.element.classList.remove('width-xl');
+  } else if (newWidth < breakpointToXL) {
+    // It's large
+    this.element.classList.remove('w-s');
     this.element.classList.remove('width-m');
     this.element.classList.add('width-l');
+    this.element.classList.remove('width-xl');
+  } else {
+    // It's XL
+    this.element.classList.remove('w-s');
+    this.element.classList.remove('width-m');
+    this.element.classList.remove('width-l');
+    this.element.classList.add('width-xl');
   }
 };
 
@@ -690,21 +676,22 @@ function buildElement(callingInstance, scriptElement) {
           </div>
         </div>
       </div>`;
-  let theNow = new Date(); // TODO - Make the timestamp update
-  let theDateString = theNow.toLocaleDateString('en-US', {
-    month: 'long',
-    day: '2-digit',
-    year: 'numeric'
-  });
-  theInnerHTML += `
-      <footer>
-        <div class="timestamp">Updated as of <time datetime="${theNow}">${theDateString}</time></div>
-        <a class="gov-fec-seal" href="https://www.fec.gov" target="_blank">
-          <img class="theme-light" src="/static/img/seal.svg" alt="Seal of the Federal Election Commission | United States of America">
-          <img class="theme-dark" src="/static/img/seal--inverse.svg" alt="Seal of the Federal Election Commission | United States of America">
-        </a>
-      </footer>
-    `;
+  // TODO - This will come back when we activate the <iframe> functionality
+  // let theNow = new Date(); // TODO - Make the timestamp update
+  // let theDateString = theNow.toLocaleDateString('en-US', {
+  //   month: 'long',
+  //   day: '2-digit',
+  //   year: 'numeric'
+  // });
+  // theInnerHTML += `
+  //     <footer>
+  //       <div class="timestamp">Updated as of <time datetime="${theNow}">${theDateString}</time></div>
+  //       <a class="gov-fec-seal" href="https://www.fec.gov" target="_blank">
+  //         <img class="theme-light" src="/static/img/seal.svg" alt="Seal of the Federal Election Commission | United States of America">
+  //         <img class="theme-dark" src="/static/img/seal--inverse.svg" alt="Seal of the Federal Election Commission | United States of America">
+  //       </a>
+  //     </footer>
+  //   `;
   toReturn.innerHTML = theInnerHTML;
 
   // Add the stylesheet to the document <head>
