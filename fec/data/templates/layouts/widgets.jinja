@@ -18,15 +18,12 @@
     API_LOCATION = '{{ FEC_API_URL }}';
     API_VERSION = 'v1';
     API_KEY = '{{ FEC_API_KEY }}';
-    DEFAULT_TIME_PERIOD = '2018';
-    START_YEAR = '1979';
-    END_YEAR = '2018';
-    DISTRICT_MAP_CUTOFF = '2018';
-    WEBMANAGER_EMAIL = '{{ WEBMANAGER_EMAIL }}';
-    CANONICAL_BASE = '{{ CANONICAL_BASE }}';
-    TRANSITION_URL = '{{ TRANSITION_URL }}';
-
-    // TODO - Which of these ^ ^ can we remove?
+    DEFAULT_TIME_PERIOD = '{{ DEFAULT_TIME_PERIOD }}';{# see note #}
+    DEFAULT_PRESIDENTIAL_YEAR = '{{ DEFAULT_PRESIDENTIAL_YEAR }}';{# see note #}
+    DEFAULT_ELECTION_YEAR = '{{ DEFAULT_ELECTION_YEAR }}';{# see note #}
+    START_YEAR = '{{ START_YEAR }}';{# see note #}
+    END_YEAR = '{{ END_YEAR }}';{# see note #}
+    {# note: these are set through fec/data/views.py and come from /data/constants.py #}
 
     function trackMetric(name, imagesSelector) {
       if (imagesSelector) {
