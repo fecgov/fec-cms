@@ -11,9 +11,9 @@
 
 {% block sidebar %}
 <nav class="sidebar sidebar--breakdown sidebar--left side-nav js-sticky-side" data-sticky-container="options">
-  <a class="sidebar__title" href="/data/browse-data/?tab=raising#raising-overview">&lsaquo; Raising overview</a>
+  <a class="sidebar__title" href="/data/browse-data/?tab=raising#raising-overview">&lsaquo; Browse all raising data</a>
   <ul class="sidebar__content js-toc">
-    <li class="side-nav__item"><a class="side-nav__link" href="#top-raisers">Top raising candidates</a></li>
+    <li class="side-nav__item"><a class="side-nav__link" href="#top-raisers">Who&apos;s raising the most</a></li>
     <li class="side-nav__item"><span class="side-nav__link is-disabled">Where contributions come from</span></li>
     <li class="side-nav__item"><span class="side-nav__link is-disabled">The size of contributions</span></li>
   </ul>
@@ -23,7 +23,7 @@
 
 {% block sections %}
 {% if FEATURES.aggregatetotals %}
-<section>
+<section class="aggregate-totals-section">
   <h2>Raising summary</h2>
   <script defer data-theme="dark" data-office="{{ office }}" data-year="{{ election_year }}" data-action="raised" src="{{ asset_for_js('widgets/aggregate-totals-box.js') }}"></script>
 </section>

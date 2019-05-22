@@ -85,7 +85,9 @@ AggregateTotalsBox.prototype.displayUpdatedData_grandTotal = function(
 
   // Set the description text
   this.descriptionField.innerHTML = `Total ${this.action} by all ${
-    officeDefs[this.baseQuery.office]
+    this.baseQuery.office == 'P'
+      ? 'presidential'
+      : officeDefs[this.baseQuery.office] // lowercase for President but keep the others capped
   } candidates running in&nbsp;${this.baseQuery.election_year}`;
 
   // Start the opening animation
@@ -601,7 +603,7 @@ function buildElement(callingInstance, scriptElement) {
         for (def in officeDefs) {
           theOptionsString += `<option value="${def}"${
             def == callingInstance.baseQuery.office ? ' selected' : ''
-          }>${officeDefs[def]}</option>`;
+          }>${officeDefs[def]} candidates</option>`;
         }
         theInnerHTML += `<fieldset class="select">
             <label for="top-category" class="breakdown__title label t-inline-block">How much has been ${

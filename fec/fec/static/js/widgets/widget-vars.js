@@ -10,7 +10,7 @@ const electionYearsCount = 42; // Display election years back this many years
  * TODO - set this through constants?
  */
 let officeDefs = {
-  P: 'presidential',
+  P: 'Presidential',
   S: 'Senate',
   H: 'House'
 };
@@ -92,7 +92,9 @@ let electionYearsOptions = (office = 'P', selectedValue) => {
   // Let's show the previous presidential election if we can,
   // Otherwise, we'll show the next presidential election
   if (office == 'P' && !theList.includes(adjustedValue)) {
-    if (theList.includes(adjustedValue - 2)) adjustedValue -= 2;
+    if (window.DEFAULT_PRESIDENTIAL_YEAR)
+      adjustedValue = window.DEFAULT_PRESIDENTIAL_YEAR;
+    else if (theList.includes(adjustedValue - 2)) adjustedValue -= 2;
     else if (theList.includes(adjustedValue + 2)) adjustedValue += 2;
   }
   // TODO - comment up and down

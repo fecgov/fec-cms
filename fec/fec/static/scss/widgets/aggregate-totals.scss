@@ -48,6 +48,10 @@ $fontWeightBold: 700;
   // TODO - move these to their final home
 }
 
+section.aggregate-totals-section {
+  margin-bottom: 30px;
+}
+
 // The aggregate totals aside
 aside.aggr-totals[id^='gov_fec_at_'] {
   &,
@@ -95,7 +99,7 @@ aside.aggr-totals[id^='gov_fec_at_'] {
       background-position: right $fontSizeBase top 50%;
       background-size: 12px;
       border: 2px solid $colorElementBordersOnLight;
-      border-radius: 1px;
+      border-radius: 4px;
       color: $colorTextOnLight;
       font-family: karla, sans-serif;
       font-size: $fontSizeBase * 1.4;
@@ -106,7 +110,6 @@ aside.aggr-totals[id^='gov_fec_at_'] {
       overflow: hidden;
       padding: 0 2.5em 0 1em;
       text-overflow: ellipsis;
-      text-transform: capitalize;
       vertical-align: inherit;
       white-space: nowrap;
       width: auto;
@@ -134,7 +137,6 @@ aside.aggr-totals[id^='gov_fec_at_'] {
       font-size: $fontSizeBase * 1.4;
       font-weight: $fontWeightBold;
       padding: 1em;
-      text-transform: capitalize;
       -moz-appearance: button;
       -webkit-appearance: button;
       appearance: button;
@@ -322,13 +324,13 @@ aside.aggr-totals[id^='gov_fec_at_'] {
       width: 50%;
 
       .value {
-        margin: 0 0 $fontSizeBase 0;
+        margin: -5px 0 $fontSizeBase 0;
         order: 1;
         text-align: right;
       }
       .description {
         font-size: $fontSizeBase * 1.4;
-        margin: 0;
+        margin: 5px 0 0;
         order: 2;
       }
     }
