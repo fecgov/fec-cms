@@ -26,16 +26,18 @@ The new FEC.gov aims to make campaign finance information more accessible (and u
 ## FEC repositories
 We welcome you to explore, make suggestions, and contribute to our code.
 
-This repository, fec-cms, houses the content management system (CMS) for
-the new FEC.gov.
+This repository, fec-cms, houses the content management system (CMS) for FEC.gov.
 
 - [FEC](https://github.com/fecgov/fec): a general discussion forum. We compile
   [feedback](https://github.com/fecgov/fec/issues) from the FEC.gov feedback widget
   here, and this is the best place to submit general feedback.
 - [openFEC](https://github.com/fecgov/openfec): the first RESTful API for the Federal Election Commission
 - [fec-cms](https://github.com/fecgov/fec-cms): the content management system
-  (CMS) for the new FEC.gov. This project uses [Wagtail](https://github.com/torchbox/wagtail), an open source CMS written
+  (CMS) for FEC.gov. This project uses [Wagtail](https://github.com/torchbox/wagtail), an open source CMS written
   in Python and built on the Django framework.
+- [fec-eregs](https://github.com/fecgov/fec-eregs): the FEC's Code of Federal Regulations explorer
+- [fec-proxy](https://github.com/fecgov/fec-proxy): the proxy application to manage and route requests coming to the FEC.gov site
+- [fec-infrastructure](https://github.com/fecgov/fec-infrastructure): manages the gov cloud RDS instances
 
 ## Get involved
 We’re thrilled you want to get involved!
