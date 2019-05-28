@@ -35,11 +35,11 @@
 </div>
 {% endmacro %}
 
-{% macro single_cycle(name, title) %}
-  <label class="label" for="{{ name }}">{{ title }}</label>
-  <select id="{{name}}" name="{{ name }}" class="js-election select--full">
-    {% for year in range(2020, 1976, -2) %}
-      <option value="{{ year }}" {% if year == constants.DEFAULT_TIME_PERIOD %}selected{% endif %}>{{ year|fmt_year_range }}</option>
-    {% endfor %}
-  </select>
+{% macro single_cycle(name, title) %}	
+  <label class="label" for="{{ name }}">{{ title }}</label>	
+  <select id="{{name}}" name="{{ name }}" class="js-election select--full">	
+    {% for year in range(2020, 1976, -2) %}	
+      <option value="{{ year }}" {% if year == constants.DEFAULT_TIME_PERIOD %}selected{% endif %}>{{ year|fmt_year_range }}</option>	
+    {% endfor %}	
+  </select>	
 {% endmacro %}
