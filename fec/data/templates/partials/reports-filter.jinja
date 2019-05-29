@@ -66,7 +66,7 @@ Filter reports
   </div>
   <button type="button" class="js-accordion-trigger accordion__button">Date</button>
   <div class="accordion__content">
-    {{ years.cycles('cycle', 'Years')  }}
+    {{ years.cycles('cycle', 'Years', show_tooltip=False)  }}
     {% if table_context['form_type'] == 'pac-party' %}
       {{ date.partition_field('receipt_date', 'Receipt date', show_tooltip=False) }}
     {% else %}
