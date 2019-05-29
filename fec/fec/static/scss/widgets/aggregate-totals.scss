@@ -68,7 +68,7 @@ aside.aggr-totals[id^='gov_fec_at_'] {
   font-feature-settings: 'kern', 'liga', 'pnum';
   font-size: $fontSizeBase;
   margin: 0 0 ($fontSizeBase * 2);
-  padding: ($fontSizeBase * 2) ($fontSizeBase * 2) $fontSizeBase;
+  padding: ($fontSizeBase * 2);
 
   .controls-wrapper {
     font-family: $fontFamilySansSerif;
@@ -106,7 +106,7 @@ aside.aggr-totals[id^='gov_fec_at_'] {
       font-weight: $fontWeightBold;
       height: $fontSizeBase * 3;
       line-height: $fontSizeBase * 1.4;
-      margin: 0 $fontSizeBase 0 0;
+      margin: 0;
       overflow: hidden;
       padding: 0 2.5em 0 1em;
       text-overflow: ellipsis;
@@ -188,6 +188,7 @@ aside.aggr-totals[id^='gov_fec_at_'] {
 
       .simple-table__row {
         display: table-row;
+        border-bottom: none;
       }
       .simple-table__cell {
         display: table-cell;
@@ -295,15 +296,15 @@ aside.aggr-totals[id^='gov_fec_at_'] {
       }
     }
   }
-  // Medium sizes for the light theme, which is the default
-  &.width-m {
-    align-items: center;
-    display: flex;
-    flex-wrap: wrap;
-
+  // Small sizes for the light theme, which is the default
+  &.w-s {
     .controls-wrapper {
       fieldset {
         display: inline-block;
+
+        &:first-child {
+          margin-right: $fontSizeBase;
+        }
 
         label {
           display: inline;
@@ -314,28 +315,37 @@ aside.aggr-totals[id^='gov_fec_at_'] {
         }
       }
     }
+  }
+  // Medium sizes for the light theme, which is the default
+  &.w-m {
+    @extend .w-s;
+    align-items: center;
+    display: flex;
+    flex-wrap: wrap;
+    padding: ($fontSizeBase * 2) ($fontSizeBase * 2) $fontSizeBase;
+
     .total-wrapper {
       border-bottom: none;
-      border-right: solid thin $colorElementBordersOnLight;
-      margin: 0 0 ($fontSizeBase * 3) 0;
+      // border-right: solid thin $colorElementBordersOnLight;
+      margin: 0;
       padding-bottom: 0;
       padding-right: $fontSizeBase * 4;
       text-align: right;
       width: 50%;
 
       .value {
-        margin: -5px 0 $fontSizeBase 0;
+        // margin: -5px 0 $fontSizeBase 0;
         order: 1;
         text-align: right;
       }
       .description {
         font-size: $fontSizeBase * 1.4;
-        margin: 5px 0 0;
+        // margin: 5px 0 0;
         order: 2;
       }
     }
     .parties-wrapper {
-      margin: 0 0 ($fontSizeBase * 3) 0;
+      margin: 0;
       padding-left: $fontSizeBase * 4;
       width: 50%;
 
@@ -369,9 +379,18 @@ aside.aggr-totals[id^='gov_fec_at_'] {
     }
   }
   // Large sizes for the light theme, which is the default
-  &.width-l {
-    @extend .width-m;
+  &.w-l {
+    @extend .w-m;
+    .controls-wrapper {
+      display: flex;
+      justify-content: space-between;
+    }
+    .total-wrapper {
+      margin-bottom: 0;
+    }
     .parties-wrapper {
+      margin-bottom: 0;
+
       .simple-table--responsive {
         .simple-table__cell {
           &:last-child {
@@ -418,7 +437,7 @@ aside.aggr-totals[id^='gov_fec_at_'] {
 
     footer {
       a.gov-fec-seal {
-        border-bottom: none;
+        border: none;
         text-decoration: none;
 
         img {
@@ -431,7 +450,23 @@ aside.aggr-totals[id^='gov_fec_at_'] {
       }
     }
     // Medium sizes of the dark theme
-    &.width-m {
+    &.w-m {
+      .main-content-wrapper {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: ($fontSizeBase * 3);
+        .total-wrapper {
+          padding: 0;
+        }
+        .visual-divider {
+          background-color: $colorElementBordersOnLight;
+          margin: 5px 30pt;
+          width: 1px;
+        }
+        .parties-wrapper {
+          padding: 0;
+        }
+      }
       footer {
         a.gov-fec-seal {
           background-image: url('/static/img/wordmark--inverse.svg');

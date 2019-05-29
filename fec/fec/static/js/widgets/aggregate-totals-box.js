@@ -1,6 +1,7 @@
 'use strict';
 
 // TODO - add a loading animation of some kind? Something to tell users that it's official but still loading?
+// TODO - When adding the small implementations (i.e., with no controls), reference #2803 for designs
 
 // Editable vars
 const stylesheetPath = '/static/css/widgets/aggregate-totals.css';
@@ -385,34 +386,34 @@ AggregateTotalsBox.prototype.handleResize = function(e = null) {
 
   if (newWidth < breakpointToSmall) {
     // It's XS
-    this.element.classList.remove('width-s');
-    this.element.classList.remove('width-m');
-    this.element.classList.remove('width-l');
-    this.element.classList.remove('width-xl');
+    this.element.classList.remove('w-s');
+    this.element.classList.remove('w-m');
+    this.element.classList.remove('w-l');
+    this.element.classList.remove('w-xl');
   } else if (newWidth < breakpointToMedium) {
     // It's small
-    this.element.classList.add('width-s');
-    this.element.classList.remove('width-m');
-    this.element.classList.remove('width-l');
-    this.element.classList.remove('width-xl');
+    this.element.classList.add('w-s');
+    this.element.classList.remove('w-m');
+    this.element.classList.remove('w-l');
+    this.element.classList.remove('w-xl');
   } else if (newWidth < breakpointToLarge) {
     // It's medium
     this.element.classList.remove('w-s');
-    this.element.classList.add('width-m');
-    this.element.classList.remove('width-l');
-    this.element.classList.remove('width-xl');
+    this.element.classList.add('w-m');
+    this.element.classList.remove('w-l');
+    this.element.classList.remove('w-xl');
   } else if (newWidth < breakpointToXL) {
     // It's large
     this.element.classList.remove('w-s');
-    this.element.classList.remove('width-m');
-    this.element.classList.add('width-l');
-    this.element.classList.remove('width-xl');
+    this.element.classList.remove('w-m');
+    this.element.classList.add('w-l');
+    this.element.classList.remove('w-xl');
   } else {
     // It's XL
     this.element.classList.remove('w-s');
-    this.element.classList.remove('width-m');
-    this.element.classList.remove('width-l');
-    this.element.classList.add('width-xl');
+    this.element.classList.remove('w-m');
+    this.element.classList.remove('w-l');
+    this.element.classList.add('w-xl');
   }
 };
 
@@ -623,11 +624,13 @@ function buildElement(callingInstance, scriptElement) {
     }
     theInnerHTML += `</div>`;
   }
+  theInnerHTML += `<div class="main-content-wrapper">`;
   theInnerHTML += `
       <div class="total-wrapper">
         <h1 class="value js-value-large"></h1>
         <h2 class="description js-value-large-desc"></h2>
       </div>`;
+  theInnerHTML += `<div class="visual-divider" role="presentation"></div>`;
   theInnerHTML += `
       <div class="parties-wrapper">
         <div class="simple-table--responsive js-parties-holder" role="grid">
@@ -666,6 +669,7 @@ function buildElement(callingInstance, scriptElement) {
           </div>
         </div>
       </div>`;
+  theInnerHTML += `</div>`; // Close main-content-wrapper
   // TODO - This will come back when we activate the <iframe> functionality
   // let theNow = new Date(); // TODO - Make the timestamp update
   // let theDateString = theNow.toLocaleDateString('en-US', {
