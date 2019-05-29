@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.http import Http404
 
 import datetime
@@ -58,6 +58,9 @@ def communication_costs(request):
 
 
 def disbursements(request):
+    if len(request.GET) == 0: 
+        return redirect('/data/disbursements/?two_year_transaction_period=' + str(constants.DEFAULT_ELECTION_YEAR))
+
     return render(request, 'datatable.jinja', {
         'parent': 'data',
         'slug': 'disbursements',
