@@ -61,12 +61,7 @@ def aggregate_totals(request):
             'election_years': election_years,
             'election_year': election_year,
             'office': office,
-            'FEATURES': FEATURES,
-            'START_YEAR': constants.START_YEAR,
-            'END_YEAR': constants.END_YEAR,
-            'DEFAULT_TIME_PERIOD': constants.DEFAULT_TIME_PERIOD,
-            'DEFAULT_ELECTION_YEAR': constants.DEFAULT_ELECTION_YEAR,
-            'DEFAULT_PRESIDENTIAL_YEAR': constants.DEFAULT_PRESIDENTIAL_YEAR,
+            'FEATURES': FEATURES
         }
     )
 
@@ -555,13 +550,7 @@ def raising(request):
             'title': 'Raising: by the numbers',
             'election_years': election_years,
             'election_year': election_year,
-            'office': office,
-            'START_YEAR': constants.START_YEAR,
-            'END_YEAR': constants.END_YEAR,
-            'DEFAULT_TIME_PERIOD': constants.DEFAULT_TIME_PERIOD,
-            'DEFAULT_ELECTION_YEAR': constants.DEFAULT_ELECTION_YEAR,
-            'DEFAULT_PRESIDENTIAL_YEAR': constants.DEFAULT_PRESIDENTIAL_YEAR,
-            'DISTRICT_MAP_CUTOFF': constants.DISTRICT_MAP_CUTOFF
+            'office': office
         },
     )
 
@@ -582,13 +571,7 @@ def spending(request):
             'title': 'Spending: by the numbers',
             'election_years': election_years,
             'election_year': election_year,
-            'office': office,
-            'START_YEAR': constants.START_YEAR,
-            'END_YEAR': constants.END_YEAR,
-            'DEFAULT_TIME_PERIOD': constants.DEFAULT_TIME_PERIOD,
-            'DEFAULT_ELECTION_YEAR': constants.DEFAULT_ELECTION_YEAR,
-            'DEFAULT_PRESIDENTIAL_YEAR': constants.DEFAULT_PRESIDENTIAL_YEAR,
-            'DISTRICT_MAP_CUTOFF': constants.DISTRICT_MAP_CUTOFF
+            'office': office
         },
     )
 
