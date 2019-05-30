@@ -26,7 +26,9 @@ var DataTable = tables.DataTable;
 describe('data table', function() {
   before(function() {
     this.$fixture = $('<div id="fixtures"></div>');
-    $('body').empty().append(this.$fixture);
+    $('body')
+      .empty()
+      .append(this.$fixture);
     sinon.spy(DataTable.prototype, 'export');
   });
 
@@ -35,26 +37,24 @@ describe('data table', function() {
   });
 
   beforeEach(function() {
-    this.$fixture.empty().append(
-      '<div class="js-data-widgets"></div>' +
-      '<table id="table">' +
-        '<thead>' +
+    this.$fixture
+      .empty()
+      .append(
+        '<div class="js-data-widgets"></div>' +
+          '<table id="table">' +
+          '<thead>' +
           '<tr>' +
-            '<th>Name</th>' +
-            '<th>Office</th>' +
-            '<th>Party</th>' +
+          '<th>Name</th>' +
+          '<th>Office</th>' +
+          '<th>Party</th>' +
           '</tr>' +
-        '</thead>' +
-      '</table>'
-    );
+          '</thead>' +
+          '</table>'
+      );
     this.deferred = $.Deferred();
     sinon.stub($, 'ajax').returns(this.deferred);
     this.table = new DataTable('table', {
-      columns: [
-        {data: 'name'},
-        {data: 'office'},
-        {data: 'party'},
-      ],
+      columns: [{ data: 'name' }, { data: 'office' }, { data: 'party' }],
       useExport: true
     });
   });
@@ -138,30 +138,32 @@ describe('data table', function() {
     it('builds URLs', function() {
       _.extend(this.table.opts, {
         path: ['path', 'to', 'endpoint'],
-        query: {extra: 'true'}
+        query: { extra: 'true' }
       });
-      this.table.filters = {party: 'DFL'};
+      this.table.filters = { party: 'DFL' };
       var data = {
         start: 60,
         length: 30,
-        order: [{column: 1, dir: 'desc'}]
+        order: [{ column: 1, dir: 'desc' }]
       };
       var url = this.table.buildUrl(data);
-      var expected = helpers.buildUrl(
-        ['path', 'to', 'endpoint'],
-        {sort_hide_null: 'false', sort_nulls_last: 'true', party: 'DFL',
-        sort: '-office', per_page: 30, page: 3, extra: 'true'}
-      );
+      var expected = helpers.buildUrl(['path', 'to', 'endpoint'], {
+        sort_hide_null: 'false',
+        sort_nulls_last: 'true',
+        party: 'DFL',
+        sort: '-office',
+        per_page: 30,
+        page: 3,
+        extra: 'true'
+      });
       expect(URI(url).equals(expected)).to.be.true;
     });
 
     it('renders data', function() {
       var callback = sinon.stub();
       var resp = {
-        results: [
-          {name: 'Jed Bartlet', office: 'President', party: 'DEM'},
-        ],
-        pagination: {count: 42}
+        results: [{ name: 'Jed Bartlet', office: 'President', party: 'DEM' }],
+        pagination: { count: 42 }
       };
       this.table.fetch({}, callback);
       this.deferred.resolve(resp);
@@ -173,13 +175,12 @@ describe('data table', function() {
       var callback = sinon.stub();
       var resp = {
         results: [],
-        pagination: {count: 0}
+        pagination: { count: 0 }
       };
       this.table.fetch({}, callback);
       this.deferred.resolve(resp);
-      expect(
-        $.fn.DataTable.isDataTable(this.table.api.table().node())
-      ).to.be.false;
+      expect($.fn.DataTable.isDataTable(this.table.api.table().node())).to.be
+        .false;
     });
 
     describe('post-fetch', function() {
@@ -196,9 +197,9 @@ describe('data table', function() {
       it('disables export button if too many results', function() {
         var resp = {
           results: [],
-          pagination: {count: 1000000}
+          pagination: { count: 1000000 }
         };
-        this.table.fetch({}, function(){});
+        this.table.fetch({}, function() {});
         this.deferred.resolve(resp);
         expect(this.table.disableExport).to.have.been.called;
         expect(this.table.enableExport).not.to.have.been.called;
@@ -212,7 +213,9 @@ describe('data table', function() {
         party: 'democrat'
       };
       this.table.filterSet = {
-        serialize: function() { return serialized; },
+        serialize: function() {
+          return serialized;
+        },
         fields: ['name', 'office', 'party']
       };
       this.table.filterSet.isValid = true;
@@ -223,7 +226,7 @@ describe('data table', function() {
     });
 
     it('terminates ongoing ajax requests', function() {
-      var xhr = this.table.xhr = {abort: sinon.stub()};
+      var xhr = (this.table.xhr = { abort: sinon.stub() });
       this.table.fetch({}, function() {});
       expect(xhr.abort).to.have.been.called;
     });
@@ -239,10 +242,12 @@ describe('data table', function() {
     });
 
     it('calls fetch on reload', function() {
-      var serialized = {name: 'bartlet'};
+      var serialized = { name: 'bartlet' };
       this.table.filterSet = {
         activateAll: function() {},
-        serialize: function() { return serialized; }
+        serialize: function() {
+          return serialized;
+        }
       };
       this.table.filters = null;
       this.table.handlePopState();
@@ -250,10 +255,12 @@ describe('data table', function() {
     });
 
     it('does not call fetch on reload when state is unchanged', function() {
-      var serialized = {name: 'bartlet'};
+      var serialized = { name: 'bartlet' };
       this.table.filterSet = {
         activateAll: function() {},
-        serialize: function() { return serialized; }
+        serialize: function() {
+          return serialized;
+        }
       };
       this.table.filters = serialized;
       this.table.handlePopState();
@@ -264,33 +271,37 @@ describe('data table', function() {
   describe('drawComparison', function() {
     before(function(done) {
       this.$fixture = $('<div id="fixtures"></div>');
-      $('body').empty().append(this.$fixture);
+      $('body')
+        .empty()
+        .append(this.$fixture);
       done();
     });
 
     after(function(done) {
-      $('body').empty()
+      $('body').empty();
       this.$fixture = null;
       done();
     });
 
     beforeEach(function(done) {
-      this.$fixture.empty().append(
-        '<div id="comparison"></div>' +
-          '<table class="data-table data-table--heading-borders scrollX" data-type="by-size">' +
+      this.$fixture
+        .empty()
+        .append(
+          '<div id="comparison"></div>' +
+            '<table class="data-table data-table--heading-borders scrollX" data-type="by-size">' +
             '<thead>' +
-              '<th scope="col">Candidate</th>' +
-              '<th scope="col">$200 and under</th>' +
-              '<th scope="col">$200.01—$499.99</th>' +
-              '<th scope="col">$500—$999.99</th>' +
-              '<th scope="col">$1,000—$1,999.99</th>' +
-              '<th scope="col">$2,000 and over</th>' +
+            '<th scope="col">Candidate</th>' +
+            '<th scope="col">$200 and under</th>' +
+            '<th scope="col">$200.01—$499.99</th>' +
+            '<th scope="col">$500—$999.99</th>' +
+            '<th scope="col">$1,000—$1,999.99</th>' +
+            '<th scope="col">$2,000 and over</th>' +
             '</thead>' +
-          '</table>' +
-          '<table class="data-table data-table--heading-borders scrollX panel-toggle-element" data-type="by-state" aria-hidden="false">' +
+            '</table>' +
+            '<table class="data-table data-table--heading-borders scrollX panel-toggle-element" data-type="by-state" aria-hidden="false">' +
             '<thead><tr></tr></thead>' +
-          '</table>'
-      );
+            '</table>'
+        );
       tables.drawComparison(houseResults, context);
       done();
     });
@@ -315,26 +326,31 @@ describe('data table', function() {
   describe('initSpendingTables', function() {
     before(function(done) {
       this.$fixture = $('<div id="fixtures"></div>');
-      $('body').empty().append(this.$fixture);
+      $('body')
+        .empty()
+        .append(this.$fixture);
 
       this.independentExpenditureColumns = [
-        columns.committeeColumn({data: 'committee', className: 'all'}),
+        columns.committeeColumn({ data: 'committee', className: 'all' }),
         columns.supportOpposeColumn,
-        columns.candidateColumn({data: 'candidate', className: 'all'}),
+        columns.candidateColumn({ data: 'candidate', className: 'all' }),
         {
           data: 'total',
-          className: 'all column--number',
+          className: 'all column--number t-mono',
           orderable: true,
           orderSequence: ['desc', 'asc'],
-          render: columnHelpers.buildTotalLink(['independent-expenditures'], function(data, type, row, meta) {
+          render: columnHelpers.buildTotalLink(
+            ['independent-expenditures'],
+            function(data, type, row, meta) {
               return {
                 data_type: 'processed',
                 is_notice: 'false',
                 support_oppose_indicator: row.support_oppose_indicator,
                 candidate_id: row.candidate_id
               };
-          })
-        },
+            }
+          )
+        }
       ];
 
       this.tableOpts = {
@@ -342,7 +358,7 @@ describe('data table', function() {
           path: ['schedules', 'schedule_e', 'by_candidate'],
           columns: this.independentExpenditureColumns,
           title: 'independent expenditures',
-          order: [[3, 'desc']],
+          order: [[3, 'desc']]
         }
       };
       done();
@@ -355,27 +371,29 @@ describe('data table', function() {
     });
 
     beforeEach(function(done) {
-      this.$fixture.empty().append(
-        '<div class="tab-interface">' +
-          '<ul role="tablist" data-name="tab">' +
+      this.$fixture
+        .empty()
+        .append(
+          '<div class="tab-interface">' +
+            '<ul role="tablist" data-name="tab">' +
             '<li><a role="tab" data-name="tab0" href="#section-0">0</a></li>' +
-          '</ul>' +
-          '<section id="section-0" role="tabpanel" aria-hidden="true">' +
+            '</ul>' +
+            '<section id="section-0" role="tabpanel" aria-hidden="true">' +
             '<div id="init-spending"></div>' +
             '<table ' +
-              'class="data-table data-table--heading-borders scrollX" ' +
-              'data-type="independent-expenditures"' +
+            'class="data-table data-table--heading-borders scrollX" ' +
+            'data-type="independent-expenditures"' +
             '>' +
-              '<thead>' +
-                '<th scope="col">Spent by</th>' +
-                '<th scope="col">Support/Oppose</th>' +
-                '<th scope="col">Candidate</th>' +
-                '<th scope="col">Aggregate amount</th>' +
-              '</thead>' +
+            '<thead>' +
+            '<th scope="col">Spent by</th>' +
+            '<th scope="col">Support/Oppose</th>' +
+            '<th scope="col">Candidate</th>' +
+            '<th scope="col">Aggregate amount</th>' +
+            '</thead>' +
             '</table>' +
-          '</section>' +
-        '</div>'
-      );
+            '</section>' +
+            '</div>'
+        );
       tablist.init();
       done();
     });
@@ -394,7 +412,6 @@ describe('data table', function() {
   });
 
   describe('getCycle', function() {
-
     before(function(done) {
       this.spy = sinon.spy(tables.getCycle);
       done();
@@ -405,16 +422,14 @@ describe('data table', function() {
     });
 
     it('should return an object when no table available', function() {
-      var meta = {settings: {sTableId: 'notable'}};
+      var meta = { settings: { sTableId: 'notable' } };
       var results = this.spy(null, meta);
       this.spy.calledOnce;
       this.spy.returned({});
     });
-
   });
 
   describe('yearRange', function() {
-
     it('should return a single year when same', function() {
       var results = tables.yearRange('2018', '2018');
       expect(results).to.equal('2018');
@@ -427,18 +442,17 @@ describe('data table', function() {
   });
 
   describe('mapSort', function() {
-
     it('should return column name for ASC order', function() {
-      var order = [{column: 'test'}];
-      var columns = {test: { data: 'hello'}};
+      var order = [{ column: 'test' }];
+      var columns = { test: { data: 'hello' } };
       var expected = ['hello'];
       var results = tables.mapSort(order, columns);
       expect(results).to.deep.equal(expected);
     });
 
     it('should return column name for DESC order', function() {
-      var order = [{column: 'test', dir: 'desc'}];
-      var columns = {test: { data: 'hello'}};
+      var order = [{ column: 'test', dir: 'desc' }];
+      var columns = { test: { data: 'hello' } };
       var expected = ['-hello'];
       var results = tables.mapSort(order, columns);
       expect(results).to.deep.equal(expected);
@@ -446,9 +460,8 @@ describe('data table', function() {
   });
 
   describe('mapResponse', function() {
-
     it('should return response pagination count', function() {
-      var response = { pagination: { count: 501 }, results: 'test'};
+      var response = { pagination: { count: 501 }, results: 'test' };
       var expected = {
         recordsTotal: 501,
         recordsFiltered: 501,
@@ -459,7 +472,7 @@ describe('data table', function() {
     });
 
     it('should return round responses over 500000 to the nearest thousand', function() {
-      var response = { pagination: { count: 512345 }, results: 'test'};
+      var response = { pagination: { count: 512345 }, results: 'test' };
       var expected = {
         recordsTotal: 512000,
         recordsFiltered: 512000,
