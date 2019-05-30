@@ -21,7 +21,7 @@ class TestDatatablesRender(TestCase):
 
     def test_disbursements(self):
         response = client.get('/data/disbursements/')
-        assert response.status_code == 200
+        assert response.status_code in (200, 302)
 
     def test_independent_expenditures(self):
         response = client.get('/data/independent-expenditures/')
