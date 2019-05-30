@@ -18,7 +18,7 @@ Filter party coordinated expenditures
   <button type="button" class="js-accordion-trigger accordion__button">Transaction details</button>
   <div class="accordion__content">
     {{ text.field('payee_name', 'Payee') }}
-    {{ years.cycles('cycle', 'Years') }}
+    {{ years.cycles('cycle', 'Years', show_tooltip=False) }}
     {{ date.field('date', 'Expenditure date', dates ) }}
     {{ range.amount('amount', 'Expenditure amount') }}
   </div>

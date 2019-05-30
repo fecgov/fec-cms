@@ -17,7 +17,8 @@ var RangeFilter = require('./range-filter').RangeFilter;
 
 function FilterSet(elm) {
   this.$body = $(elm);
-  $(document.body).on('tag:removed', this.handleTagRemove.bind(this));
+  $(document.body).on('tag:removed', this.handleTagRemoved.bind(this));
+
   this.$body.on('filters:validation', this.handleValidation.bind(this));
   this.efiling = this.$body.data('efiling-filters') || false;
 
@@ -131,14 +132,16 @@ FilterSet.prototype.clear = function() {
   });
 };
 
-FilterSet.prototype.handleTagRemove = function(e, opts) {
+FilterSet.prototype.handleTagRemoved = function(e, opts) {
   var $input = this.$body.find('#' + opts.key);
-  var type = $input.get(0).type;
+  if ($input.length > 0) {
+    var type = $input.get(0).type;
 
-  if (type === 'checkbox' || type === 'radio') {
-    $input.click();
-  } else if (type === 'text') {
-    $input.val('').trigger('change');
+    if (type === 'checkbox' || type === 'radio') {
+      $input.click();
+    } else if (type === 'text') {
+      $input.val('').trigger('change');
+    }
   }
 };
 
