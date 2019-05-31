@@ -443,7 +443,8 @@ function missingDataReason(dataType) {
   // Returns a string explaining why data may not be showing
   // which is then used by the noData.hbs message
   var reasons = {
-    contributions: 'The committee has not received any contributions over $200.',
+    contributions:
+      'The committee has not received any contributions over $200.',
     disbursements: 'The committee has not made any disbursements.',
     'independent-expenditures':
       'No independent expenditures have been made in support or opposition of this candidate.',
