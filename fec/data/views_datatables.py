@@ -23,15 +23,18 @@ def candidates(request):
 
 
 def candidates_office(request, office):
-    if office.lower() not in ['president', 'senate', 'house']:
+    office = office.lower()
+    if office not in ['president', 'senate', 'house']:
         raise Http404()
+    # only House/Senate are proper-cased
+    office_breadcrumb = office.title() if office in ['senate', 'house'] else office
     return render(request, 'datatable.jinja', {
         'parent': 'data',
         'result_type': 'candidates',
-        'title': 'candidates for ' + office,
+        'title': 'Candidates for ' + office_breadcrumb,
         'slug': 'candidates-office',
         'table_context': OrderedDict([('office', office)]),
-        'columns': constants.table_columns['candidates-office-' + office.lower()]
+        'columns': constants.table_columns['candidates-office-' + office]
     })
 
 
