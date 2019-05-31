@@ -63,10 +63,10 @@ def communication_costs(request):
 # Temporarily adding min and max date redirect until we can
 # handle null disbursement dates in a future implementation
 def disbursements(request):
-    if len(request.GET) == 0: 
-        return redirect('/data/disbursements/?two_year_transaction_period=' 
-        + str(constants.DEFAULT_ELECTION_YEAR) 
-        + '&min_date=' + '01/01/' + str(constants.DEFAULT_ELECTION_YEAR - 1) 
+    if len(request.GET) == 0:
+        return redirect('/data/disbursements/?two_year_transaction_period='
+        + str(constants.DEFAULT_ELECTION_YEAR)
+        + '&min_date=' + '01/01/' + str(constants.DEFAULT_ELECTION_YEAR - 1)
         + '&max_date=' + '12/31/' + str(constants.DEFAULT_ELECTION_YEAR))
 
     return render(request, 'datatable.jinja', {
