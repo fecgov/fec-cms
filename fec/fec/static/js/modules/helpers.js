@@ -443,15 +443,15 @@ function missingDataReason(dataType) {
   // Returns a string explaining why data may not be showing
   // which is then used by the noData.hbs message
   var reasons = {
-    contributions: 'The committee has not received any contributions over $200',
-    disbursements: 'The committee has not made any disbursements',
+    contributions: 'The committee has not received any contributions over $200.',
+    disbursements: 'The committee has not made any disbursements.',
     'independent-expenditures':
-      'No independent expenditures have been made in support or opposition of this candidate',
+      'No independent expenditures have been made in support or opposition of this candidate.',
     'communication-costs':
-      'No communication costs have been made in support or opposition of this candidate',
+      'No communication costs have been made in support or opposition of this candidate.',
     electioneering:
-      'No electioneering communications have been made that mention this candidate',
-    'ie-made': 'The committee has not made any independent expenditures'
+      'No electioneering communications have been made that mention this candidate.',
+    'ie-made': 'The committee has not made any independent expenditures.'
   };
 
   return reasons[dataType] || false;
