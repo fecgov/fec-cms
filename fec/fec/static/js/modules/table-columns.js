@@ -42,7 +42,7 @@ var candidateInformationColumns = [
   },
   columns.currencyColumn({
     data: 'total_receipts',
-    className: 'column--number',
+    className: 'column--number t-mono',
     orderSequence: ['desc', 'asc'],
     visible: false
   })
@@ -54,7 +54,7 @@ var communicationCostColumns = [
   columns.candidateColumn({ data: 'candidate', className: 'all' }),
   {
     data: 'total',
-    className: 'all column--number',
+    className: 'all column--number t-mono',
     orderable: true,
     orderSequence: ['desc', 'asc'],
     render: columnHelpers.buildTotalLink(['communication-costs'], function(
@@ -93,17 +93,17 @@ function createElectionColumns(context) {
     },
     columns.currencyColumn({
       data: 'total_receipts',
-      className: 'column--number',
+      className: 'column--number t-mono',
       orderSequence: ['desc', 'asc']
     }),
     columns.currencyColumn({
       data: 'total_disbursements',
-      className: 'column--number',
+      className: 'column--number t-mono',
       orderSequence: ['desc', 'asc']
     }),
     columns.barCurrencyColumn({
       data: 'cash_on_hand_end_period',
-      className: 'column--number'
+      className: 'column--number t-mono'
     }),
     {
       render: function(data, type, row) {
@@ -138,7 +138,7 @@ var electioneeringColumns = [
   columns.candidateColumn({ data: 'candidate', className: 'all' }),
   {
     data: 'total',
-    className: 'all column--number',
+    className: 'all column--number t-mono',
     orderable: true,
     orderSequence: ['desc', 'asc'],
     render: columnHelpers.buildTotalLink(
@@ -158,7 +158,7 @@ var independentExpenditureColumns = [
   columns.candidateColumn({ data: 'candidate', className: 'all' }),
   {
     data: 'total',
-    className: 'all column--number',
+    className: 'all column--number t-mono',
     orderable: true,
     orderSequence: ['desc', 'asc'],
     render: columnHelpers.buildTotalLink(['independent-expenditures'], function(

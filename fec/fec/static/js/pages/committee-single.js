@@ -281,7 +281,7 @@ var itemizedDisbursementColumns = [
   }),
   columns.currencyColumn({
     data: 'disbursement_amount',
-    className: 'column--number'
+    className: 'column--number t-mono'
   })
 ];
 
@@ -308,7 +308,7 @@ var ecItemizedDisbursementColumns = [
   }),
   columns.currencyColumn({
     data: 'disbursement_amount',
-    className: 'column--number'
+    className: 'column--number t-mono'
   }),
   {
     data: 'candidate_name',
@@ -334,7 +334,7 @@ var individualContributionsColumns = [
   }),
   columns.currencyColumn({
     data: 'contribution_receipt_amount',
-    className: 'column--number'
+    className: 'column--number t-mono'
   })
 ];
 
