@@ -14,7 +14,6 @@
   <div class="filters__inner">
     {{ typeahead.field('q', 'Candidate name or ID', '', dataset='candidates', allow_text=True) }}
     {{ election_filter.full_cycle('election_year', 'Election year', 'cycle', 'election_full', table_context['office']) }}
-    <input id="election_full" name="election_full" type="checkbox" value="true">
   </div>
   <button type="button" class="js-accordion-trigger accordion__button">Candidate information</button>
   <div class="accordion__content">
