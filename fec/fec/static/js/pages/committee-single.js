@@ -565,7 +565,7 @@ $(document).ready(function() {
             singleEntityItemizedExport: true,
             paginator: tables.SeekPaginator,
             hideEmptyOpts: {
-              dataType: 'disbursements to committees',
+              dataType: 'disbursements',
               name: context.name,
               reason: helpers.missingDataReason('disbursements'),
               timePeriod: context.timePeriod
@@ -590,7 +590,7 @@ $(document).ready(function() {
             singleEntityItemizedExport: true,
             paginator: tables.SeekPaginator,
             hideEmptyOpts: {
-              dataType: 'disbursements to committees',
+              dataType: 'disbursements',
               name: context.name,
               reason: helpers.missingDataReason('disbursements'),
               timePeriod: context.timePeriod
@@ -615,7 +615,7 @@ $(document).ready(function() {
             callbacks: aggregateCallbacks,
             order: [[1, 'desc']],
             hideEmptyOpts: {
-              dataType: 'disbursements to committees',
+              dataType: 'disbursements',
               name: context.name,
               reason: helpers.missingDataReason('disbursements'),
               timePeriod: context.timePeriod
