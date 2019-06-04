@@ -9,7 +9,7 @@
 {% block filters %}
   <div class="filters__inner">
     {{ typeahead.field('committee_id', 'Committee Name or ID') }}
-    {{ text.field('loaner_name', 'Loaner name') }}
+    {{ text.field('loan_source_name', 'Loaner name') }}
     {{ date.field('incurred_date', 'Incurred date', id_suffix='_raw') }}
     {{ range.amount('payment_to_date', 'Payment to date') }}
     {{ range.amount('amount', 'Original loan amount') }}

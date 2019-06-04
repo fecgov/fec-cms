@@ -1,0 +1,20 @@
+{% extends 'layouts/widgets.jinja' %}
+{% import 'macros/page-header.jinja' as header %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block css %}
+  <link rel="stylesheet" type="text/css" href="/static/css/widgets/aggregate-totals.css" />
+  <style>
+    body {
+      margin: 0 !important;
+      padding: 0 !important;
+    }
+  </style>
+{% endblock %}
+
+{% block body %}{% endblock %}
+
+{% block scripts %}
+  <script defer src="{{ asset_for_js('widgets/aggregate-totals-box.js') }}" data-standalone="true"></script>
+{% endblock %}

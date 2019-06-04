@@ -203,7 +203,7 @@ h3 + .simple-table {
     background-color: $gray-dark;
     height: u(2rem);
 
-    &[data-party="DEM"] {
+    &[data-party="DEM"], &[data-party="DFL"] {
       background-color: $blue-data;
     }
 
