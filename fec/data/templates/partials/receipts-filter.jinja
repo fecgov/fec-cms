@@ -43,7 +43,7 @@ Filter receipts
   <button type="button" class="js-accordion-trigger accordion__button">Recipient committee type</button>
   <div class="accordion__content">
     {% import 'macros/filters/committee-types.jinja' as committee_type %}
-    {{ committee_type.field(name='recipient_committee_type') }}
+    {{ committee_type.field(name='recipient_committee_type', include_ssfs = False) }}
   </div>
   <button type="button" class="js-accordion-trigger accordion__button">Receipt details</button>
   <div class="accordion__content">
