@@ -43,7 +43,7 @@ var defaultSort = {
 };
 
 var officeTitleMap = {
-  president: 'President',
+  president: 'president',
   senate: 'Senate',
   house: 'House of Representatives'
 };

@@ -281,7 +281,7 @@ var itemizedDisbursementColumns = [
   }),
   columns.currencyColumn({
     data: 'disbursement_amount',
-    className: 'column--number'
+    className: 'column--number t-mono'
   })
 ];
 
@@ -308,7 +308,7 @@ var ecItemizedDisbursementColumns = [
   }),
   columns.currencyColumn({
     data: 'disbursement_amount',
-    className: 'column--number'
+    className: 'column--number t-mono'
   }),
   {
     data: 'candidate_name',
@@ -334,7 +334,7 @@ var individualContributionsColumns = [
   }),
   columns.currencyColumn({
     data: 'contribution_receipt_amount',
-    className: 'column--number'
+    className: 'column--number t-mono'
   })
 ];
 
@@ -565,7 +565,7 @@ $(document).ready(function() {
             singleEntityItemizedExport: true,
             paginator: tables.SeekPaginator,
             hideEmptyOpts: {
-              dataType: 'disbursements to committees',
+              dataType: 'disbursements',
               name: context.name,
               reason: helpers.missingDataReason('disbursements'),
               timePeriod: context.timePeriod
@@ -590,7 +590,7 @@ $(document).ready(function() {
             singleEntityItemizedExport: true,
             paginator: tables.SeekPaginator,
             hideEmptyOpts: {
-              dataType: 'disbursements to committees',
+              dataType: 'disbursements',
               name: context.name,
               reason: helpers.missingDataReason('disbursements'),
               timePeriod: context.timePeriod
@@ -615,7 +615,7 @@ $(document).ready(function() {
             callbacks: aggregateCallbacks,
             order: [[1, 'desc']],
             hideEmptyOpts: {
-              dataType: 'disbursements to committees',
+              dataType: 'disbursements',
               name: context.name,
               reason: helpers.missingDataReason('disbursements'),
               timePeriod: context.timePeriod

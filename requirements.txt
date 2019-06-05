@@ -13,7 +13,7 @@ whitenoise==2.0.3
 wagtail==2.2.1
 # TODO: pin version
 django-audit-log
-Jinja2==2.9.6
+Jinja2==2.10.1
 django_jinja==2.4.1
 CacheControl==0.11.5
 cachetools==1.0.2

@@ -2,6 +2,7 @@
 $serif: 'gandhi', serif;
 $sans-serif: 'karla', sans-serif;
 $base-font-family: $serif;
+$currency-monospace: 'fec_currency_mono', $sans-serif;
 
 // Primary colors
 $crimson: #631010;
@@ -12,7 +13,7 @@ $aqua: #36bdbb;
 
 $base: #212121; // U.S. Web Design Standards color $base //
 $inverse: #ffffff;
-$inverse-translucent: rgba(255, 255, 255, .7);
+$inverse-translucent: rgba(255, 255, 255, 0.7);
 
 // Accent colors
 $bright-red: #dc3b00;
@@ -28,7 +29,6 @@ $gray-light: #e8e8e8;
 $gray-medium: #d6d7d9; // U.S. Web Design Standards color $gray-lighter //
 $gray: #aeb0b5; // U.S. Web Design Standards color $gray-light //
 $gray-dark: #5b616b; // U.S. Web Design Standards color $gray //
-
 
 $disabled: #737373;
 $green-light: #4aa564; // U.S. Web Design Standards color $green-light //
