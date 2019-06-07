@@ -193,6 +193,7 @@
   padding-left: u(2rem);
 }
 
-.t-mono {
+// mono space currency font, except don't apply it to <th> or "role=columnheader" elements
+.t-mono:not(th), .t-mono:not([role="columnheader"]) {
   font-family: $currency-monospace !important;
 }
