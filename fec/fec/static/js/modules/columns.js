@@ -79,7 +79,7 @@ var receiptDateColumn = {
 var pagesColumn = {
   data: 'beginning_image_number',
   orderable: false,
-  className: 'min-tablet hide-panel column--xs column--number t-mono',
+  className: 'min-tablet hide-panel column--xs column--number',
   render: function(data, type, row) {
     // Image numbers in 2015 and later begin with YYYYMMDD,
     // which makes for a very big number.
