@@ -147,5 +147,10 @@
     "node": "10.15.1",
     "npm": "6.9.0"
   },
+  "browserslist": [
+    "last 1 version",
+    "> 1%",
+    "ie 10"
+  ],
   "license": "CC0-1.0"
 }

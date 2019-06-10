@@ -2,6 +2,8 @@
 
 /* global require, ga */
 
+require('babel-polyfill');
+
 var $ = require('jquery');
 var lookup = require('../modules/election-lookup');
 var analytics = require('../modules/analytics');

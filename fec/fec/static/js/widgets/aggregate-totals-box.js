@@ -3,6 +3,8 @@
 // TODO - add a loading animation of some kind? Something to tell users that it's official but still loading?
 // TODO - When adding the small implementations (i.e., with no controls), reference #2803 for designs
 
+require('babel-polyfill');
+
 // Editable vars
 const stylesheetPath = '/static/css/widgets/aggregate-totals.css';
 // const breakpointToXS = 0; // retaining just in case
@@ -154,7 +156,11 @@ AggregateTotalsBox.prototype.init = function() {
   let instance = this;
 
   // The <script> on the page:
-  this.scriptElement = document.currentScript;
+  if (document.currentScript) this.scriptElement = document.currentScript;
+  else
+    this.scriptElement = document.querySelector(
+      'script[id="aggregate-totals-js"]'
+    );
 
   // We're going to be checking the dataset several times
   let dataset = this.scriptElement.dataset;
@@ -367,6 +373,7 @@ AggregateTotalsBox.prototype.handleRadiosClick = function(e) {
   e.preventDefault();
   this.element.parentElement
     .querySelectorAll('.js-election-radios')
+    //
     .forEach(element => {
       element.removeAttribute('disabled');
     });
