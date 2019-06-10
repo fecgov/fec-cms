@@ -338,12 +338,10 @@ function filterSuccessUpdates(changeCount) {
 
     message = '<strong>' + filterAction + '</strong><br>' + filterResult;
 
-    if ($filterMessage.length) {
-      $filterMessage.fadeOut().remove();
-      // if there is a message already, cancel existing message timeout
-      // to avoid timing weirdness
-      clearTimeout(messageTimer);
-    }
+    $filterMessage.fadeOut().remove();
+    // if there is a message already, cancel existing message timeout
+    // to avoid timing weirdness
+    clearTimeout(messageTimer);
 
     // Clicking on "Clear all filters" will remove all dropdown checkboxes,
     // so we check to make sure the message isn't shown inside the dropdown panel.
@@ -361,12 +359,10 @@ function filterSuccessUpdates(changeCount) {
     }
 
     messageTimer = setTimeout(function() {
-      $('.is-successful').removeClass('is-successful');
-
-      $('.filter__message').fadeOut(function() {
+      $('.filter__message.filter__message--success').fadeOut(function() {
         $(this).remove();
       });
-
+      $('.is-successful').removeClass('is-successful');
       $('.date-range-grid').fadeOut();
     }, helpers.SUCCESS_DELAY);
   }
@@ -709,7 +705,7 @@ DataTable.prototype.fetchError = function(jqXHR, textStatus) {
     // Narrow search results message occurs when multiple time periods are requested
     errorMessage =
       '<div class="message filter__message message--error">' +
-      '<p>When searching multiple time periods, choose one or more fields: recipient name or ID, contributor name or ID, city, ZIP code, occupation or employer, or image numbers.</p>' +
+      '<p>To expand your search to multiple time periods, filter by recipient name or ID, contributor details, or image number.</p>' +
       '</div>';
   }
   $('.filter__message').remove();

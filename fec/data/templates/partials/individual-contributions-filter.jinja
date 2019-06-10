@@ -16,11 +16,12 @@ Filter individual contributions
 <div class="filters__inner">
   {{ typeahead.field('committee_id', 'Recipient name or ID') }}
   <legend class="label  u-margin--top">Contributor details</legend>
-  {{ text.field('contributor_name', 'Contributor name') }}
-  {{ text.field('contributor_zip', 'ZIP code', {'maxlength':5}) }}
-  {{ text.field('contributor_city', 'City') }}
-  {% include 'partials/filters/occupation-employer.jinja' %}
-  {{ text.field('image_number', 'Image number') }}
+  {{ text.field(name = 'contributor_name', title = 'Contributor name', minor_label_text = True) }}
+  {{ text.field(name = 'contributor_zip', title = 'ZIP code', attrs = {'maxlength':5}, minor_label_text = True) }}
+  {{ text.field(name = 'contributor_city', title = 'City', minor_label_text = True) }}
+  {{ text.field(name = 'contributor_occupation', title = 'Occupation', minor_label_text = True, helper_text = 'Use the employer field to search by occupation in reports filed before 2003') }}
+  {{ text.field(name = 'contributor_employer', title = 'Employer', minor_label_text = True) }}
+  {{ text.field(name = 'image_number', title = 'Image number') }}
 </div>
 <div class="js-accordion accordion--neutral" data-content-prefix="filter" data-open-first="true">
   <button type="button" class="js-accordion-trigger accordion__button">Time period</button>
