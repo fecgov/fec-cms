@@ -1,4 +1,4 @@
-{% macro cycles(name, label, show_tooltip=True) %}
+{% macro cycles(name, label, show_tooltip=True, multi_time_period_label=False) %}
 <fieldset class="js-filter js-dropdown filter" data-filter="checkbox">
   <label class="label t-inline-block">{{ label }}</label>
   {% if show_tooltip %}
@@ -22,6 +22,9 @@
       {% endfor %}
       </ul>
     </div>
+    {% if multi_time_period_label %}
+      <label class="label--help u-margin--top">When searching multiple time periods, choose one or more fields: recipient name or ID, contributor name or ID, city, ZIP code, occupation or employer, or image number.</label>
+    {% endif %}
   </div>
 </fieldset>
 {% endmacro %}
