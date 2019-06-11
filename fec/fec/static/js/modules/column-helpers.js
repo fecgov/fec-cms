@@ -161,7 +161,7 @@ function makeCommitteeColumn(opts, context, factory) {
     {},
     {
       orderSequence: ['desc', 'asc'],
-      className: 'column--number',
+      className: 'column--number t-mono',
       render: buildTotalLink(['receipts', 'individual-contributions'], function(
         data,
         type,

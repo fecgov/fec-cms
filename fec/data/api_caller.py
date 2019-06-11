@@ -361,28 +361,6 @@ def load_top_candidates(sort, office=None, election_year=constants.DEFAULT_ELECT
     return response if 'results' in response else None
 
 
-def load_top_pacs(sort, cycle=constants.DEFAULT_TIME_PERIOD, per_page=5):
-    response = _call_api(
-        'totals', 'pac',
-        sort_hide_null=True,
-        cycle=cycle,
-        sort=sort,
-        per_page=per_page,
-    )
-    return response if 'results' in response else None
-
-
-def load_top_parties(sort, cycle=constants.DEFAULT_TIME_PERIOD, per_page=5):
-    response = _call_api(
-        'totals', 'party',
-        sort_hide_null=True,
-        cycle=cycle,
-        sort=sort,
-        per_page=per_page,
-    )
-    return response if 'results' in response else None
-
-
 def _get_sorted_participants_by_type(mur):
     """
     Returns the participants in a MUR sorted in the order
