@@ -162,7 +162,7 @@ FilterTypeahead.prototype.removeCheckbox = function(e, opts) {
   if (opts) {
     //$input = this.$selected.find('#' + opts.key);
     var $input_id = $(document.getElementById(opts.key))
-    input = this.$selected.find($input_id);
+    $input = this.$selected.find($input_id);
 
   }
 
