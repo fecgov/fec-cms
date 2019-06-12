@@ -133,9 +133,7 @@ FilterSet.prototype.clear = function() {
 };
 
 FilterSet.prototype.handleTagRemoved = function(e, opts) {
-  //var $input = this.$body.find('#' + opts.key);
-  var $input = $(document.getElementById(opts.key))
-
+  var $input = this.$body.find('#' + opts.key);
   if ($input.length > 0) {
     var type = $input.get(0).type;
 
