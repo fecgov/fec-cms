@@ -37,7 +37,7 @@ Filter receipts
   {{ text.field(name = 'contributor_employer', title = 'Employer', minor_label_text = True) }}
   {{ text.field('image_number', 'Image number') }}
 </div>
-<div class="js-accordion accordion--neutral" data-content-prefix="filter" data-open-first="true">
+<div class="js-accordion accordion--neutral restricted-fields" data-content-prefix="filter" data-open-first="true">
   <button type="button" class="js-accordion-trigger accordion__button">Time period</button>
   <div class="accordion__content">
     {{ years.cycles('two_year_transaction_period', 'Report time period', multi_time_period_label=True)  }}

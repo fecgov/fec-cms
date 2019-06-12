@@ -278,6 +278,10 @@ function filterSuccessUpdates(changeCount) {
 
     $('.is-successful').removeClass('is-successful');
     $('.is-unsuccessful').removeClass('is-unsuccessful');
+    // Enable all restricted fields on success
+    $('.restricted-fields')
+      .css('opacity', '1')
+      .css({ pointerEvents: 'auto' });
 
     if (type === 'checkbox') {
       $label = $('label[for="' + updateChangedEl.id + '"]');
@@ -707,6 +711,11 @@ DataTable.prototype.fetchError = function(jqXHR, textStatus) {
       '<div class="message filter__message message--error">' +
       '<p>You’re searching a large dataset. Filter by recipient name or ID, contributor details, or image number.</p>' +
       '</div>';
+
+    // Disable restricted fields on 400 error
+    $('.restricted-fields')
+      .css('opacity', '.5')
+      .css({ pointerEvents: 'none' });
   }
   $('.filter__message').remove();
 
