@@ -705,7 +705,7 @@ DataTable.prototype.fetchError = function(jqXHR, textStatus) {
     // Narrow search results message occurs when multiple time periods are requested
     errorMessage =
       '<div class="message filter__message message--error">' +
-      '<p>To expand your search to multiple time periods, filter by recipient name or ID, contributor details, or image number.</p>' +
+      '<p>You’re searching a large dataset. Filter by recipient name or ID, contributor details, or image number.</p>' +
       '</div>';
   }
   $('.filter__message').remove();
