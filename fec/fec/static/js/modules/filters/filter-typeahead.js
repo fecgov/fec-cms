@@ -163,7 +163,6 @@ FilterTypeahead.prototype.removeCheckbox = function(e, opts) {
     //$input = this.$selected.find('#' + opts.key);
     var $input_id = $(document.getElementById(opts.key))
     $input = this.$selected.find($input_id);
-
   }
 
   $input.closest('li').remove();
