@@ -279,7 +279,9 @@ function filterSuccessUpdates(changeCount) {
     $('.is-successful').removeClass('is-successful');
     $('.is-unsuccessful').removeClass('is-unsuccessful');
     // Enable all restricted fields on success
-    $('.restricted-fields')
+    $(
+      '.restricted-fields input, .restricted-fields label, .restricted-fields button, .restricted-fields legend'
+    )
       .css('opacity', '1')
       .css({ pointerEvents: 'auto' });
 
@@ -710,7 +712,9 @@ DataTable.prototype.fetchError = function(jqXHR, textStatus) {
       '<div class="filter__message filter__message--delayed"><strong>Just a moment while we process your new request. You are searching a large dataset.</strong></div>';
   } else if (jqXHR.status == 400) {
     // Disable restricted fields on 400 error
-    $('.restricted-fields')
+    $(
+      '.restricted-fields input, .restricted-fields label, .restricted-fields button, .restricted-fields legend'
+    )
       .css('opacity', '.5')
       .css({ pointerEvents: 'none' });
   }
