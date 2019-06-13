@@ -21,7 +21,7 @@ $(document).ready(function() {
     useExport: true,
     rowCallback: tables.modalRenderRow,
     error400Message:
-      '<p>When searching multiple time periods, choose one or more fields: recipient name or ID, contributor name or ID, city, ZIP code, occupation or employer, or image number.</p>',
+      '<p>When searching multiple time periods, choose one or more fields: recipient name or ID, contributor name, city, ZIP code, occupation or employer, or image number.</p>',
     callbacks: {
       afterRender: tables.modalRenderFactory(donationTemplate)
     }
