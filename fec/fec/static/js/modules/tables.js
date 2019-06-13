@@ -439,7 +439,11 @@ var defaultOpts = {
   },
   pagingType: 'simple',
   title: null,
-  dom: browseDOM
+  dom: browseDOM,
+  error400Message:
+    '<strong>We had trouble processing your request,</strong><br>' +
+    'please try again. If you still have trouble, ' +
+    '<button class="js-filter-feedback">let us know</button>'
 };
 
 var defaultCallbacks = {
@@ -696,22 +700,15 @@ DataTable.prototype.fetchError = function(jqXHR, textStatus) {
   var self = this;
   // Default error message that occurs most likely due to timeout
   var errorMessage =
-    '<div class="filter__message filter__message--error">' +
-    '<strong>We had trouble processing your request,</strong><br>' +
-    'please try again. If you still have trouble, ' +
-    '<button class="js-filter-feedback">let us know</button></div>';
+    '<div class="message filter__message message--error">' +
+    self.opts.error400Message +
+    '</div>';
   if (textStatus == 'abort') {
     // Pending message occurs when the previous query was cancelled due to
     // the user adding or removing filters
     errorMessage =
       '<div class="filter__message filter__message--delayed"><strong>Just a moment while we process your new request. You are searching a large dataset.</strong></div>';
   } else if (jqXHR.status == 400) {
-    // Narrow search results message occurs when multiple time periods are requested
-    errorMessage =
-      '<div class="message filter__message message--error">' +
-      '<p>You’re searching a large dataset. Filter by recipient name or ID, contributor details, or image number.</p>' +
-      '</div>';
-
     // Disable restricted fields on 400 error
     $('.restricted-fields')
       .css('opacity', '.5')
