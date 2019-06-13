@@ -130,6 +130,15 @@
   margin-bottom: u(.5rem);
 }
 
+.label--help--filter {
+  display: block;
+  font-family: $sans-serif;
+  margin-bottom: u(.5rem);
+  letter-spacing: -.3px;
+  font-size: u(1.2rem);
+  line-height: 1.8 !important;
+}
+
 // Combo
 //
 // On medium and up, displays input and button right next to each other. On small screens they're stacked.
