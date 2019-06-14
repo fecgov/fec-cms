@@ -711,6 +711,10 @@ DataTable.prototype.fetchError = function(jqXHR, textStatus) {
     errorMessage =
       '<div class="filter__message filter__message--delayed"><strong>Just a moment while we process your new request. You are searching a large dataset.</strong></div>';
   } else if (jqXHR.status == 400) {
+    $('#two_year_transaction_period-dropdown').attr('aria-hidden', 'true');
+    $('.restricted-fields .dropdown .dropdown__button ').removeClass(
+      'is-active'
+    );
     // Disable restricted fields on 400 error
     $(
       '.restricted-fields input, .restricted-fields button, .restricted-fields legend'
