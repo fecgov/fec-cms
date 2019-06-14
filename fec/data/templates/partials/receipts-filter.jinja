@@ -28,7 +28,7 @@ Filter receipts
 
 {% block filters %}
 <div class="filters__inner">
-  {{ typeahead.field('committee_id', 'Name or ID') }}
+  {{ typeahead.field('committee_id', 'Recipient name or ID') }}
   <legend class="label u-margin--top">Contributor details</legend>
   {{ typeahead.field(name = 'contributor_name', title = 'Name or ID', dataset='committees', allow_text=True, minor_label_text = True) }}
   {{ text.field(name = 'contributor_city', title = 'City', minor_label_text = True) }}
@@ -40,7 +40,7 @@ Filter receipts
 <div class="js-accordion accordion--neutral restricted-fields" data-content-prefix="filter" data-open-first="true">
   <button type="button" class="js-accordion-trigger accordion__button">Time period</button>
   <div class="accordion__content">
-    {{ years.cycles('two_year_transaction_period', 'Report time period', multi_time_period_label=True)  }}
+    {{ years.cycles('two_year_transaction_period', 'Report time period', multi_time_period_label="When searching multiple time periods, choose one or more fields: recipient name or ID, contributor name or ID, city, ZIP code, occupation or employer, or image number.")  }}
     {{ date.field('date', 'Receipt date range' ) }}
   </div>
   <button type="button" class="js-accordion-trigger accordion__button">More contributor details</button>
