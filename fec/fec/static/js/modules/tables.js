@@ -282,8 +282,8 @@ function filterSuccessUpdates(changeCount) {
     $(
       '.restricted-fields input, .restricted-fields button, .restricted-fields legend'
     )
-      .css('opacity', '1')
-      .css({ pointerEvents: 'auto' });
+      .removeClass('is-disabled-filter')
+      .addClass('is-active-filter');
 
     if (type === 'checkbox') {
       $label = $('label[for="' + updateChangedEl.id + '"]');
@@ -719,8 +719,8 @@ DataTable.prototype.fetchError = function(jqXHR, textStatus) {
     $(
       '.restricted-fields input, .restricted-fields button, .restricted-fields legend'
     )
-      .css('opacity', '.5')
-      .css({ pointerEvents: 'none' });
+      .removeClass('is-active-filter')
+      .addClass('is-disabled-filter');
   }
   $('.filter__message').remove();
 

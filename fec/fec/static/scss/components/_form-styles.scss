@@ -312,3 +312,15 @@
   padding: u(2rem);
   margin-bottom: u(2rem);
 }
+
+// Disable and active styles for filter fields
+
+.is-active-filter {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.is-disabled-filter {
+  opacity: .5;
+  pointer-events: none;
+}
