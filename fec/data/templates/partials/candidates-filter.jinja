@@ -11,13 +11,12 @@
 {% block filters %}
 <div class="filters__inner">
   {{ typeahead.field('q', 'Candidate name or ID', '', dataset='candidates', allow_text=True) }}
-
   {{ years.years('election_year', 'Election year', end_year=constants.END_YEAR + 4) }}
   {{ office.checkbox() }}
   {{ parties.checkbox() }}
   {{ states.field('state') }}
   {{ districts.dropdown() }}
-
+  {% include 'partials/filters/active-candidates.jinja' %}
   {{ date.field('first_file_date', 'Date first filed statement of candidacy', '') }}
   <div class="filter">
     <fieldset class="js-filter" data-filter="checkbox">
