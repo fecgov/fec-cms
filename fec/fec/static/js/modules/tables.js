@@ -443,8 +443,8 @@ var defaultOpts = {
   title: null,
   dom: browseDOM,
   error400Message:
-    '<strong>We had trouble processing your request,</strong><br>' +
-    'please try again. If you still have trouble, ' +
+    '<strong>We had trouble processing your request</strong><br>' +
+    'Please try again. If you still have trouble, ' +
     '<button class="js-filter-feedback">let us know</button>'
 };
 
