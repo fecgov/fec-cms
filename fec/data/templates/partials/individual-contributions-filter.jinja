@@ -5,6 +5,7 @@
 
 {% import 'macros/filters/contributor-states.jinja' as states %}
 {% import 'macros/filters/date.jinja' as date %}
+{% import 'macros/filters/years.jinja' as years %}
 {% import 'macros/filters/range.jinja' as range %}
 
 {% block heading %}
@@ -13,27 +14,33 @@ Filter individual contributions
 
 {% block filters %}
 <div class="filters__inner">
-  {{ typeahead.field('committee_id', 'Recipient name or ID') }}
-  {{ text.field('contributor_name', 'Contributor name') }}
-  {{ date.partition_field('date', 'Receipt date', dates ) }}
+  {{ typeahead.field('committee_id', 'Recipient Name or ID') }}
+  <legend class="label  u-margin--top">Contributor details</legend>
+  {{ text.field(name = 'contributor_name', title = 'Name', minor_label_text = True) }}
+  {{ text.field(name = 'contributor_zip', title = 'ZIP code', attrs = {'maxlength':5}, minor_label_text = True) }}
+  {{ text.field(name = 'contributor_city', title = 'City', minor_label_text = True) }}
+  {{ text.field(name = 'contributor_occupation', title = 'Occupation', minor_label_text = True, helper_text = 'Use the employer field to search by occupation in reports filed before 2003') }}
+  {{ text.field(name = 'contributor_employer', title = 'Employer', minor_label_text = True) }}
+  {{ text.field(name = 'image_number', title = 'Image number') }}
 </div>
-<div class="js-accordion accordion--neutral" data-content-prefix="filter" data-open-first="false">
-  <button type="button" class="js-accordion-trigger accordion__button">Contributor details</button>
+<div class="js-accordion accordion--neutral restricted-fields" data-content-prefix="filter" data-open-first="true">
+  <button type="button" class="js-accordion-trigger accordion__button">Time period</button>
   <div class="accordion__content">
-    {{ text.field('contributor_city', 'City') }}
+    {{ years.cycles('two_year_transaction_period', 'Report time period', multi_time_period_label="When searching multiple time periods, choose one or more fields: recipient name or ID, contributor name, city, ZIP code, occupation or employer, or image number.")  }}
+    {{ date.field('date', 'Receipt date range' ) }}
+  </div>
+  <button type="button" class="js-accordion-trigger accordion__button">More contributor details</button>
+  <div class="accordion__content">
     {{ states.field('contributor_state') }}
-    {{ text.field('contributor_zip', 'ZIP code', {'maxlength':5}) }}
-    {% include 'partials/filters/occupation-employer.jinja' %}
   </div>
   <button type="button" class="js-accordion-trigger accordion__button">Recipient committee type</button>
   <div class="accordion__content">
     {% import 'macros/filters/committee-types.jinja' as committee_type %}
     {{ committee_type.field(name='recipient_committee_type', include_ssfs = False) }}
   </div>
-  <button type="button" class="js-accordion-trigger accordion__button">Transaction details</button>
+  <button type="button" class="js-accordion-trigger accordion__button">Contribution details</button>
   <div class="accordion__content">
     {{ range.amount('amount', 'Contribution amount') }}
-    {{ text.field('image_number', 'Image number') }}
     <div class="message message--info message--small">
       <span class="t-block">Receipts are reported periodically, according to the filer's reporting schedule. Receipts are updated as they’re processed— that time can vary.</span>
     </div>

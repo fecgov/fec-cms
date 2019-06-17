@@ -50,8 +50,8 @@
         <div class="example--primary">	
           <h4 class="example__title">Possible uses of this data:</h4>	
           <ul class="t-sans">	
-            <li><a href="/data/receipts/individual-contributions/?min_amount=2000">All contributions over $2,000</a></li>	
-            <li><a href="/data/receipts/individual-contributions/?min_date={{ first_of_year }}&max_date={{ last_of_year }}">All contributions in this year</a></li>	
+            <li><a href="/data/receipts/individual-contributions/?two_year_transaction_period={{ constants.DEFAULT_ELECTION_YEAR }}&min_amount=2000">All contributions over $2,000</a></li>	
+            <li><a href="/data/receipts/individual-contributions/?two_year_transaction_period={{ constants.DEFAULT_ELECTION_YEAR }}&min_date={{ first_of_year }}&max_date={{ last_of_year }}">All contributions in this year</a></li>	
             <li><a href="/data/receipts/individual-contributions/">Browse all and apply custom filters</a></li>	
           </ul>	
         </div>

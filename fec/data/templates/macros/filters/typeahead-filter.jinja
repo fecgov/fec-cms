@@ -1,11 +1,15 @@
-{% macro field(name, title, instructions=False, dataset='committees', allow_text=False, id_suffix='') %}
+{% macro field(name, title, instructions=False, dataset='committees', allow_text=False, id_suffix='', minor_label_text=False) %}
 <div
   class="filter js-filter typeahead-filter"
   data-filter="typeahead"
   data-name="{{ name }}"
   id="{{ name }}-field{{id_suffix}}"
   data-dataset="{{ dataset }}" {% if allow_text %}data-allow-text{% endif %}>
-  <label class="label" for="{{ name }}{{id_suffix}}">{{ title }}</label>
+  {% if minor_label_text %}
+    <label for="{{ name }}{{id_suffix}}">{{ title }}</label>
+  {% else %}
+    <label class="label" for="{{ name }}{{id_suffix}}">{{ title }}</label>
+  {% endif %}
   <div class="combo combo--search--mini filter__typeahead">
     <ul class="dropdown__selected"></ul>
     <input id="{{ name }}{{id_suffix}}" type="text" class="combo__input">
