@@ -19,9 +19,9 @@
  * @requires    ./helpers
  */
 
-var $ = require('jquery');
-var _ = require('underscore');
-var d3 = Object.assign(
+const $ = require('jquery');
+const _ = require('underscore');
+const d3 = Object.assign(
   {},
   require('d3-array'), // d3.bisector, ticks
   require('d3-axis'), // d3.axisBottom
@@ -30,22 +30,22 @@ var d3 = Object.assign(
   require('d3-shape'), // d3.line
   require('d3-time-format') // d3.timeFormat
 );
-var numeral = require('numeral');
-var helpers = require('./helpers');
+const numeral = require('numeral');
+const helpers = require('./helpers');
 
-var parseM = d3.timeFormat('%b');
-var parseMY = d3.timeFormat('%b %Y');
-var parseMDY = d3.timeFormat('%m/%d/%Y');
-var parsePlotPoints = d3.timeFormat('%Y-%m-01T%H:%M:%S.%L');
+const parseM = d3.timeFormat('%b');
+const parseMY = d3.timeFormat('%b %Y');
+const parseMDY = d3.timeFormat('%m/%d/%Y');
+const parsePlotPoints = d3.timeFormat('%Y-%m-01T%H:%M:%S.%L');
 
-var bisectDate = d3.bisector(function(d) {
+const bisectDate = d3.bisector(function(d) {
   return d.date;
 }).left;
 
-var currentYear = new Date().getFullYear();
-var MIN_CYCLE = 2008;
-var MAX_CYCLE = currentYear % 2 === 0 ? currentYear : currentYear + 1;
-var MAX_RANGE = 4000000000; // Set the max y-axis to 4 billion
+const currentYear = new Date().getFullYear();
+const MIN_CYCLE = 2008;
+const MAX_CYCLE = currentYear % 2 === 0 ? currentYear : currentYear + 1;
+const MAX_RANGE = 4000000000; // Set the max y-axis to 4 billion
 
 /**
  * Line Chart
@@ -150,10 +150,10 @@ LineChart.prototype.groupDataByType = function(results) {
  * @returns {Object}
  */
 LineChart.prototype.groupEntityTotals = function() {
-  var chartData = this.chartData;
-  var entityTotals = {};
+  let chartData = this.chartData;
+  let entityTotals = {};
   this.entityNames.forEach(function(type) {
-    var totals = chartData.map(function(d) {
+    let totals = chartData.map(function(d) {
       return {
         date: d.date,
         amount: d[type] || 0
@@ -165,10 +165,10 @@ LineChart.prototype.groupEntityTotals = function() {
 };
 
 LineChart.prototype.getMaxAmount = function(entityTotals) {
-  var max = 0;
+  let max = 0;
 
   _.each(entityTotals, function(element) {
-    var entityMax = _.max(element, function(item) {
+    let entityMax = _.max(element, function(item) {
       return item.amount;
     });
     max = max >= entityMax.amount ? max : entityMax.amount;
@@ -182,7 +182,7 @@ LineChart.prototype.getMaxAmount = function(entityTotals) {
  * @returns {Number} x
  */
 LineChart.prototype.setXScale = function() {
-  var x = d3
+  let x = d3
     .scaleTime()
     .domain([
       new Date('01/01/' + String(this.cycle - 1)),
@@ -202,7 +202,7 @@ LineChart.prototype.setXScale = function() {
 LineChart.prototype.setYScale = function(amount) {
   amount = amount || MAX_RANGE;
 
-  var y = d3
+  let y = d3
     .scaleLinear()
     .domain([0, Math.ceil(amount / 100000000) * 100000000])
     .range([this.height, 0]);
@@ -214,7 +214,7 @@ LineChart.prototype.setYScale = function(amount) {
  * @returns svg
  */
 LineChart.prototype.appendSVG = function() {
-  var svg = this.element
+  let svg = this.element
     .append('svg')
     .attr('class', 'bar-chart')
     .attr('width', '100%')
@@ -232,15 +232,15 @@ LineChart.prototype.appendSVG = function() {
  * @ desc
  */
 LineChart.prototype.drawChart = function() {
-  var entityTotals = this.groupEntityTotals();
-  var maxY = this.getMaxAmount(entityTotals);
-  var x = this.setXScale();
-  var y = this.setYScale(maxY);
-  var xAxis = d3
+  let entityTotals = this.groupEntityTotals();
+  let maxY = this.getMaxAmount(entityTotals);
+  let x = this.setXScale();
+  let y = this.setYScale(maxY);
+  let xAxis = d3
     .axisBottom(x)
     .ticks(d3.timeMonth)
     .tickFormat(this.xAxisFormatter());
-  var yAxis = d3
+  let yAxis = d3
     .axisRight(y)
     .tickSize(this.width)
     .tickFormat(function(d) {
@@ -248,7 +248,7 @@ LineChart.prototype.drawChart = function() {
     });
 
   // Create the base SVG
-  var svg = this.appendSVG();
+  let svg = this.appendSVG();
 
   // Add the xAxis
   svg
@@ -268,7 +268,7 @@ LineChart.prototype.drawChart = function() {
     .attr('dy', '.71em')
     .style('text-anchor', 'end');
 
-  var lineBuilder = d3
+  let lineBuilder = d3
     .line()
     .x(function(d) {
       var myDate = new Date(parsePlotPoints(d.date));
@@ -280,8 +280,8 @@ LineChart.prototype.drawChart = function() {
 
   // Draw a line and populate data for each entity type
   this.entityNames.forEach(function(entity) {
-    var line = svg.append('g').attr('class', 'line--' + entity);
-    var points = line.append('g').attr('class', 'line__points');
+    let line = svg.append('g').attr('class', 'line--' + entity);
+    let points = line.append('g').attr('class', 'line__points');
 
     line
       .append('path')
@@ -322,7 +322,7 @@ LineChart.prototype.drawCursor = function(svg) {
 
 LineChart.prototype.xAxisFormatter = function() {
   // Draw tick marks for the x-axis at different intervals depending on screen size
-  var formatter;
+  let formatter;
   if (helpers.isMediumScreen()) {
     formatter = function(d) {
       if (d.getMonth() === 0) {
@@ -356,11 +356,11 @@ LineChart.prototype.handleMouseMove = function() {
   d3.getEvent = () => require('d3-selection').event;
 
   // NEED TO FIND A DOM ELEMENT TO USE WITH d3.clientPoint()
-  var domElement = this.element.select('svg')._groups[0][0];
+  let domElement = this.element.select('svg')._groups[0][0];
 
-  var x0 = this.x.invert(d3.clientPoint(domElement, d3.getEvent())[0]);
-  var i = bisectDate(this.chartData, x0, 1);
-  var d = this.chartData[i - 1];
+  let x0 = this.x.invert(d3.clientPoint(domElement, d3.getEvent())[0]);
+  let i = bisectDate(this.chartData, x0, 1);
+  let d = this.chartData[i - 1];
   this.moveCursor(d);
 };
 
@@ -369,9 +369,9 @@ LineChart.prototype.handleMouseMove = function() {
  * @param object $datum - chartData from handleMouseMove()
  */
 LineChart.prototype.moveCursor = function(datum) {
-  var target = datum ? datum : this.getCursorStartPosition();
-  var i = this.chartData.indexOf(target);
-  var myDate = new Date(parsePlotPoints(target.date));
+  let target = datum ? datum : this.getCursorStartPosition();
+  let i = this.chartData.indexOf(target);
+  let myDate = new Date(parsePlotPoints(target.date));
   this.cursor.attr('x1', this.x(myDate)).attr('x2', this.x(myDate));
   this.nextDatum = this.chartData[i + 1] || false;
   this.prevDatum = this.chartData[i - 1] || false;
@@ -404,8 +404,8 @@ LineChart.prototype.getCursorStartPosition = function() {
  * @param object $cycle -
  */
 LineChart.prototype.setupSnapshot = function(cycle) {
-  var firstYear = cycle - 1;
-  var firstOfCycle = new Date('01/01/' + firstYear);
+  let firstYear = cycle - 1;
+  let firstOfCycle = new Date('01/01/' + firstYear);
   this.$snapshot.find('.js-min-date').html(parseMDY(firstOfCycle));
 };
 
@@ -430,8 +430,8 @@ LineChart.prototype.populateSnapshot = function(datum) {
  */
 LineChart.prototype.snapshotSubtotals = function(datum) {
   this.$snapshot.find('[data-total-for]').each(function() {
-    var category = $(this).data('total-for');
-    var value = helpers.currency(datum[category]);
+    let category = $(this).data('total-for');
+    let value = helpers.currency(datum[category]);
     $(this).html(value);
   });
 };
@@ -441,7 +441,7 @@ LineChart.prototype.snapshotSubtotals = function(datum) {
  * @param object $datum -
  */
 LineChart.prototype.snapshotTotal = function(datum) {
-  var total = _.chain(datum)
+  let total = _.chain(datum)
     .omit('date')
     .values()
     .reduce(function(a, b) {

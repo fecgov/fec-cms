@@ -36,16 +36,15 @@
               <th scope="col"></th>
             </tr>
           </thead>
-          <noscript>
             {% if result_type == 'candidates' %}
-              {{ datatables.candidates(data) }}
+            <noscript>{{ datatables.candidates(data) }}</noscript>
             {% elif result_type == 'committees' %}
-              {{ datatables.committees(data) }}
+              <noscript>{{ datatables.committees(data) }}</noscript>
             {% endif %}
-          </noscript>
+          
         </table>
-        <noscript>
-          {% if query %}
+        {% if query %}
+        <noscript>  
           <div class="results-info">
             <div class="dataTables_paginate paging_simple">
               {% if query['page']|int > 1 %}
@@ -54,8 +53,8 @@
                 <a href="?page={{query['page']|int + 1}}" class="button button--next button--standard"></a>
             </div>
           </div>
-          {% endif %}
         </noscript>
+        {% endif %}
       </div>
     </div>
 </section>

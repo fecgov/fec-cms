@@ -2,9 +2,9 @@
 
 /* global module, DEFAULT_TIME_PERIOD */
 
-var $ = require('jquery');
-var _ = require('underscore');
-var d3 = Object.assign(
+const $ = require('jquery');
+const _ = require('underscore');
+const d3 = Object.assign(
   {},
   require('d3-array'), // d3.bisector, ticks
   require('d3-axis'), // d3.axisBottom
@@ -13,22 +13,22 @@ var d3 = Object.assign(
   require('d3-shape'), // d3.line
   require('d3-time-format') // d3.timeFormat
 );
-var numeral = require('numeral');
-var helpers = require('./helpers');
+const numeral = require('numeral');
+const helpers = require('./helpers');
 
-var parseM = d3.timeFormat('%b');
-var parseMY = d3.timeFormat('%b %Y');
-var parseMDY = d3.timeFormat('%m/%d/%Y');
-var parsePlotPoints = d3.timeFormat('%Y-%m-01T%H:%M:%S.%L');
+const parseM = d3.timeFormat('%b');
+const parseMY = d3.timeFormat('%b %Y');
+const parseMDY = d3.timeFormat('%m/%d/%Y');
+const parsePlotPoints = d3.timeFormat('%Y-%m-01T%H:%M:%S.%L');
 
-var bisectDate = d3.bisector(function(d) {
+const bisectDate = d3.bisector(function(d) {
   return d.date;
 }).left;
 
-var currentYear = new Date().getFullYear();
-var MIN_CYCLE = 2008;
-var MAX_CYCLE = currentYear % 2 === 0 ? currentYear : currentYear + 1;
-var MAX_RANGE = 4000000000; // Set the max y-axis to 4 billion
+const currentYear = new Date().getFullYear();
+const MIN_CYCLE = 2008;
+const MAX_CYCLE = currentYear % 2 === 0 ? currentYear : currentYear + 1;
+const MAX_RANGE = 4000000000; // Set the max y-axis to 4 billion
 
 /**
  * Chart Line
@@ -75,7 +75,7 @@ function LineChartCommittees(selector, snapshot, dataType) {
 }
 
 LineChartCommittees.prototype.fetch = function(cycle) {
-  var entityTotalsURL = helpers.buildUrl(['totals', 'by_entity'], {
+  let entityTotalsURL = helpers.buildUrl(['totals', 'by_entity'], {
     cycle: cycle,
     // jshint camelcase: false
     per_page: '100'
@@ -96,12 +96,12 @@ LineChartCommittees.prototype.groupDataByType = function(results) {
   // Takes the results of the response and groups it into data for the chart
   // Stores an array of objects for each month,
   // with either raising or spending totals depending on the dataType of the chart
-  var formattedData = [];
-  var dataType = this.dataType;
-  var today = new Date();
+  let formattedData = [];
+  let dataType = this.dataType;
+  let today = new Date();
   _.each(results, function(item) {
-    var datum;
-    var date = helpers.utcDate(item.end_date);
+    let datum;
+    let date = helpers.utcDate(item.end_date);
     // If the data is in the future, it's probably wrong, so ignore it
     if (date > today) {
       return;
@@ -134,10 +134,10 @@ LineChartCommittees.prototype.groupDataByType = function(results) {
 LineChartCommittees.prototype.groupEntityTotals = function() {
   // Create separate arrays of data for each entity type
   // These will be used to draw the lines on the chart
-  var chartData = this.chartData;
-  var entityTotals = {};
+  let chartData = this.chartData;
+  let entityTotals = {};
   this.entityNames.forEach(function(type) {
-    var totals = chartData.map(function(d) {
+    let totals = chartData.map(function(d) {
       return {
         date: d.date,
         amount: d[type] || 0
@@ -149,10 +149,10 @@ LineChartCommittees.prototype.groupEntityTotals = function() {
 };
 
 LineChartCommittees.prototype.getMaxAmount = function(entityTotals) {
-  var max = 0;
+  let max = 0;
 
   _.each(entityTotals, function(element) {
-    var entityMax = _.max(element, function(item) {
+    let entityMax = _.max(element, function(item) {
       return item.amount;
     });
     max = max >= entityMax.amount ? max : entityMax.amount;
@@ -163,7 +163,7 @@ LineChartCommittees.prototype.getMaxAmount = function(entityTotals) {
 
 LineChartCommittees.prototype.setXScale = function() {
   // Set the x-scale to be from the first of the first year to the last day of the cycle
-  var x = d3
+  let x = d3
     .scaleTime()
     .domain([
       new Date('01/01/' + String(this.cycle - 1)),
@@ -179,7 +179,7 @@ LineChartCommittees.prototype.setYScale = function(amount) {
   // Set the y-axis from 0 to the MAX_RANGE ($4 billion)
   amount = amount || MAX_RANGE;
 
-  var y = d3
+  let y = d3
     .scaleLinear()
     .domain([0, Math.ceil(amount / 100000000) * 100000000])
     .range([this.height, 0]);
@@ -188,7 +188,7 @@ LineChartCommittees.prototype.setYScale = function(amount) {
 
 LineChartCommittees.prototype.appendSVG = function() {
   // Adds a basic SVG container with all the right dimensions
-  var svg = this.element
+  let svg = this.element
     .append('svg')
     .attr('class', 'bar-chart')
     .attr('width', '100%')
@@ -202,16 +202,16 @@ LineChartCommittees.prototype.appendSVG = function() {
 };
 
 LineChartCommittees.prototype.drawChart = function() {
-  var entityTotals = this.groupEntityTotals();
-  var maxY = this.getMaxAmount(entityTotals);
-  var wrap = this.wrapLabel;
-  var x = this.setXScale();
-  var y = this.setYScale(maxY);
-  var xAxis = d3
+  let entityTotals = this.groupEntityTotals();
+  let maxY = this.getMaxAmount(entityTotals);
+  let wrap = this.wrapLabel;
+  let x = this.setXScale();
+  let y = this.setYScale(maxY);
+  let xAxis = d3
     .axisBottom(x)
     .ticks(d3.timeMonth)
     .tickFormat(this.xAxisFormatter());
-  var yAxis = d3
+  let yAxis = d3
     .axisRight(y)
     .tickSize(this.width)
     .tickFormat(function(d) {
@@ -219,7 +219,7 @@ LineChartCommittees.prototype.drawChart = function() {
     });
 
   // Create the base SVG
-  var svg = this.appendSVG();
+  let svg = this.appendSVG();
 
   // Add the xAxis
   svg
@@ -241,10 +241,10 @@ LineChartCommittees.prototype.drawChart = function() {
     .attr('dy', '.71em')
     .style('text-anchor', 'end');
 
-  var lineBuilder = d3
+  let lineBuilder = d3
     .line()
     .x(function(d) {
-      var myDate = new Date(parsePlotPoints(d.date));
+      let myDate = new Date(parsePlotPoints(d.date));
       return x(myDate);
     })
     .y(function(d) {
@@ -253,8 +253,8 @@ LineChartCommittees.prototype.drawChart = function() {
 
   // Draw a line and populate data for each entity type
   this.entityNames.forEach(function(entity) {
-    var line = svg.append('g').attr('class', 'line--' + entity);
-    var points = line.append('g').attr('class', 'line__points');
+    let line = svg.append('g').attr('class', 'line--' + entity);
+    let points = line.append('g').attr('class', 'line__points');
 
     line
       .append('path')
@@ -269,7 +269,7 @@ LineChartCommittees.prototype.drawChart = function() {
       .enter()
       .append('circle')
       .attr('cx', function(d) {
-        var myDate = new Date(parsePlotPoints(d.date));
+        let myDate = new Date(parsePlotPoints(d.date));
         return x(myDate);
       })
       .attr('cy', function(d) {
@@ -295,7 +295,7 @@ LineChartCommittees.prototype.drawCursor = function(svg) {
 
 LineChartCommittees.prototype.xAxisFormatter = function() {
   // Draw tick marks for the x-axis at different intervals depending on screen size
-  var formatter;
+  let formatter;
 
   if (helpers.isMediumScreen()) {
     formatter = function(d) {
@@ -327,18 +327,18 @@ LineChartCommittees.prototype.handleMouseMove = function() {
   d3.getEvent = () => require('d3-selection').event;
 
   // NEED TO FIND A DOM ELEMENT TO USE WITH d3.clientPoint()
-  var domElement = this.element.select('svg')._groups[0][0];
+  let domElement = this.element.select('svg')._groups[0][0];
 
-  var x0 = this.x.invert(d3.clientPoint(domElement, d3.getEvent())[0] - 20);
-  var i = bisectDate(this.chartData, x0, 1);
-  var d = this.chartData[i - 1];
+  let x0 = this.x.invert(d3.clientPoint(domElement, d3.getEvent())[0] - 20);
+  let i = bisectDate(this.chartData, x0, 1);
+  let d = this.chartData[i - 1];
   this.moveCursor(d);
 };
 
 LineChartCommittees.prototype.moveCursor = function(datum) {
-  var target = datum ? datum : this.getCursorStartPosition();
-  var i = this.chartData.indexOf(target);
-  var myDate = new Date(parsePlotPoints(target.date));
+  let target = datum ? datum : this.getCursorStartPosition();
+  let i = this.chartData.indexOf(target);
+  let myDate = new Date(parsePlotPoints(target.date));
   this.cursor.attr('x1', this.x(myDate)).attr('x2', this.x(myDate));
   this.nextDatum = this.chartData[i + 1] || false;
   this.prevDatum = this.chartData[i - 1] || false;
@@ -365,8 +365,8 @@ LineChartCommittees.prototype.getCursorStartPosition = function() {
 
 LineChartCommittees.prototype.setupSnapshot = function(cycle) {
   // Change the header of the snapshot to show the correct dates when a new cycle is set
-  var firstYear = cycle - 1;
-  var firstOfCycle = new Date('01/01/' + firstYear);
+  let firstYear = cycle - 1;
+  let firstOfCycle = new Date('01/01/' + firstYear);
   this.$snapshot.find('.js-min-date').html(parseMDY(firstOfCycle));
 };
 
@@ -380,15 +380,15 @@ LineChartCommittees.prototype.populateSnapshot = function(datum) {
 LineChartCommittees.prototype.snapshotSubtotals = function(datum) {
   // Update the snapshot with the values for each category
   this.$snapshot.find('[data-total-for]').each(function() {
-    var category = $(this).data('total-for');
-    var value = helpers.dollar(datum[category]);
+    let category = $(this).data('total-for');
+    let value = helpers.dollar(datum[category]);
     $(this).html(value);
   });
 };
 
 LineChartCommittees.prototype.snapshotTotal = function(datum) {
   // Total all the categories and show it as the total total
-  var total = _.chain(datum)
+  let total = _.chain(datum)
     .omit('date')
     .values()
     .reduce(function(a, b) {
@@ -437,18 +437,18 @@ LineChartCommittees.prototype.wrapLabel = function(text) {
   // of line is over 4 spaces. Used to wrap Month Year labels on
   // X axis.
   text.each(function() {
-    var text = d3.select(this);
-    var words = text
+    let text = d3.select(this);
+    let words = text
       .text()
       .split(/\s+/)
       .reverse();
-    var word;
-    var line = [];
-    var lineNumber = 0;
-    var lineHeight = 0.8;
-    var y = text.attr('y');
-    var dy = parseFloat(text.attr('dy'));
-    var tspan = text
+    let word;
+    let line = [];
+    let lineNumber = 0;
+    let lineHeight = 0.8;
+    let y = text.attr('y');
+    let dy = parseFloat(text.attr('dy'));
+    let tspan = text
       .text(null)
       .append('tspan')
       .attr('x', 0)

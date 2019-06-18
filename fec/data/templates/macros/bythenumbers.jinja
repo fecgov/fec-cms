@@ -1,5 +1,3 @@
-{% import "macros/aggregate-totals.jinja" as aggTotals %}
-
 {% macro top_entities(
   election_years,
   election_year,
@@ -16,6 +14,7 @@
 {% else %}
   {% set value_field='disbursements' %}
 {% endif %}
+
 <div class="js-top-entities content__section" data-office="{{ office }}" data-election-year="{{ election_year }}">
   <form action="" method="GET">
       <label for="top-category" class="breakdown__title label t-inline-block">How much has been {{ action }} by: </label>
@@ -35,9 +34,7 @@
         {% endfor %}
       </select>
   </form>
-  {% if FEATURES.aggregatetotals %}
-  {{ aggTotals.build_block({"election_year": election_year, "office": office, "action": action, "year_control": "#election-year", "office_control": "#top-category"}) }}
-  {% endif %}
+  
   <span class="t-sans js-dates"></span>
   <div class="chart-table simple-table--responsive js-top-table" id="top-table" aria-live="polite" role="grid">
     <div role="row" class="simple-table__header">

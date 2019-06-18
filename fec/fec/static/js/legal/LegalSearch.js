@@ -1,5 +1,4 @@
 const $ = require('jquery');
-const _ = require('underscore');
 const React = require('react');
 const URI = require('urijs');
 const Filters = require('./Filters');
@@ -81,7 +80,7 @@ class LegalSearch extends React.Component {
   }
 
   getUserSearchCriteria(state) {
-    const queryState = _.extend({}, state);
+    const queryState = Object.assign({}, state);
     queryState.search = queryState.q;
     Object.keys(queryState).forEach(function(queryParam) {
       if (

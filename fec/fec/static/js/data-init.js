@@ -4,31 +4,31 @@
 // in order to patch functionality in an included library
 require('es6-weak-map/implement');
 
-var $ = require('jquery');
-var Sticky = require('component-sticky');
-var Accordion = require('aria-accordion').Accordion;
-var Glossary = require('glossary-panel');
-var A11yDialog = require('a11y-dialog');
+const $ = require('jquery');
+const Sticky = require('component-sticky');
+const Accordion = require('aria-accordion').Accordion;
+const Glossary = require('glossary-panel');
+const A11yDialog = require('a11y-dialog');
 
 // Hack: Append jQuery to `window` for use by legacy libraries
 window.$ = window.jQuery = $;
 
-var terms = require('./data/terms');
-var dropdown = require('./modules/dropdowns');
-var siteNav = require('./modules/site-nav');
-var skipNav = require('./modules/skip-nav');
-var feedback = require('./modules/feedback');
-var typeahead = require('./modules/typeahead');
-var toc = require('./modules/toc');
-var Search = require('./modules/search');
+const terms = require('./data/terms');
+const dropdown = require('./modules/dropdowns');
+const siteNav = require('./modules/site-nav');
+const skipNav = require('./modules/skip-nav');
+const feedback = require('./modules/feedback');
+const typeahead = require('./modules/typeahead');
+const toc = require('./modules/toc');
+const Search = require('./modules/search');
 
 // Include vendor scripts
 require('./vendor/tablist').init();
 
-var toggle = require('./modules/toggle');
-var helpers = require('./modules/helpers');
-var download = require('./modules/download');
-var CycleSelect = require('./modules/cycle-select').CycleSelect;
+const toggle = require('./modules/toggle');
+const helpers = require('./modules/helpers');
+const download = require('./modules/download');
+const CycleSelect = require('./modules/cycle-select').CycleSelect;
 
 $(document).ready(function() {
   $('.js-dropdown').each(function() {

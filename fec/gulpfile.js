@@ -45,6 +45,35 @@ gulp.task(
   })
 );
 
+// The widgets are separate because we want them in a specific place with a predictable naming convention
+gulp.task('clear-widgets-css-dir', function() {
+  return gulp
+    .src('./dist/fec/static/css/widgets', { read: false, allowEmpty: true })
+    .pipe(clean());
+});
+gulp.task(
+  'build-widgets-sass',
+  gulp.series('clear-widgets-css-dir', function() {
+    return (
+      gulp
+        .src('./fec/static/scss/widgets/*.scss')
+        // compiles sass
+        .pipe(sass().on('error', sass.logError))
+        // minifies css
+        .pipe(cleanCSS())
+        // sourcemaps for local to back-trace source of scss
+        //.pipe(gulpif(!production, sourcemaps.init()))*/
+        //makes manifest sass (static asset revision) and puts in destination
+        // .pipe(rev())
+        .pipe(gulp.dest('./dist/fec/static/css/widgets'))
+        // writes manifest file into destination
+        // .pipe(rev.manifest('./dist/fec/static/css/rev-manifest-modules-css.json'))
+        .pipe(gulp.dest('./dist/fec/static/css/widgets'))
+    );
+    //.pipe(gulpif(!production, sourcemaps.write()))
+  })
+);
+
 // clear icons output folder to clean old icons
 gulp.task('clean-output-icons', function() {
   return gulp.src('./fec/static/icons/output', { read: false }).pipe(clean());

@@ -43,14 +43,41 @@ def to_date(committee, cycle):
     return min(datetime.datetime.now().year, int(cycle))
 
 
+def aggregate_totals(request):
+    office = request.GET.get('office', 'P')
+
+    election_year = int(request.GET.get('election_year', constants.DEFAULT_ELECTION_YEAR))
+
+    max_election_year = utils.current_cycle() + 4
+    election_years = utils.get_cycles(max_election_year)
+    
+    FEATURES = settings.FEATURES
+
+    return render(
+        request,
+        'widgets/aggregate-totals.jinja',
+        {
+            'title': 'Aggregate Totals',
+            'election_years': election_years,
+            'election_year': election_year,
+            'office': office,
+            'FEATURES': FEATURES
+        }
+    )
+
 def landing(request):
+    top_candidates_raising = api_caller.load_top_candidates('-receipts', per_page=3)
 
     return render(
         request,
         'landing.jinja',
         {
+            'parent':'data',
             'title': 'Campaign finance data',
             'dates': utils.date_ranges(),
+            'top_candidates_raising': top_candidates_raising['results']
+            if top_candidates_raising
+            else None,
             'first_of_year': datetime.date(datetime.date.today().year, 1, 1).strftime(
                 '%m/%d/%Y'
             ),
@@ -85,7 +112,7 @@ def search(request):
 
 
 def browse_data(request):
-    return render(request, 'browse-data.jinja', {'title': 'Browse data'})
+    return render(request, 'browse-data.jinja', {'title': 'Browse data', 'parent': 'data'})
 
 
 def get_candidate(candidate_id, cycle, election_full):
@@ -523,7 +550,7 @@ def raising(request):
             'title': 'Raising: by the numbers',
             'election_years': election_years,
             'election_year': election_year,
-            'office': office,
+            'office': office
         },
     )
 
@@ -544,7 +571,7 @@ def spending(request):
             'title': 'Spending: by the numbers',
             'election_years': election_years,
             'election_year': election_year,
-            'office': office,
+            'office': office
         },
     )
 

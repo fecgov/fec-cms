@@ -1,39 +1,39 @@
 'use strict';
 
-var $ = require('jquery');
-var _ = require('underscore');
-var d3 = Object.assign(
+const $ = require('jquery');
+const _ = require('underscore');
+const d3 = Object.assign(
   {},
   require('d3-geo'), // d3.geo, etc
   require('d3-scale'), // d3.scaleTime
   require('d3-selection') // d3.select, d3.event
 );
-var chroma = require('chroma-js');
-var topojson = require('topojson');
+const chroma = require('chroma-js');
+const topojson = require('topojson');
 
-var L = require('leaflet');
+const L = require('leaflet');
 require('leaflet-providers');
 
-var fips = require('./fips');
-var helpers = require('./helpers');
-var utils = require('./election-utils');
+const fips = require('./fips');
+const helpers = require('./helpers');
+const utils = require('./election-utils');
 
-var states = require('../data/us-states-10m.json');
+const states = require('../data/us-states-10m.json');
 
-var candidateStateMapTemplate = require('../templates/candidateStateMap.hbs');
+const candidateStateMapTemplate = require('../templates/candidateStateMap.hbs');
 
-var stateFeatures = topojson.feature(states, states.objects.states).features;
-var stateFeatureMap = _.chain(stateFeatures)
+const stateFeatures = topojson.feature(states, states.objects.states).features;
+const stateFeatureMap = _.chain(stateFeatures)
   .map(function(feature) {
     return [feature.id, feature];
   })
   .object()
   .value();
 
-var colorZero = '#ffffff';
-var colorScale = ['#e2ffff', '#278887'];
-var compactRules = [['B', 9], ['M', 6], ['k', 3], ['', 0]];
-var MAX_MAPS = 2;
+const colorZero = '#ffffff';
+const colorScale = ['#e2ffff', '#278887'];
+const compactRules = [['B', 9], ['M', 6], ['k', 3], ['', 0]];
+const MAX_MAPS = 2;
 
 _.templateSettings = {
   interpolate: /\{\{(.+?)\}\}/g
@@ -46,34 +46,34 @@ function chooseRule(value) {
 }
 
 function compactNumber(value, rule) {
-  var divisor = Math.pow(10, rule[1]);
+  let divisor = Math.pow(10, rule[1]);
   return d3.round(value / divisor, 1).toString() + rule[0];
 }
 
 function stateMap($elm, data, width, height, min, max, addLegend, addTooltips) {
-  var svg = d3
+  let svg = d3
     .select($elm[0])
     .append('svg')
     .attr('width', width)
     .attr('height', height);
-  var projection = d3.geo
+  let projection = d3.geo
     .albersUsa()
     .scale(450)
     .translate([220, 150]);
-  var path = d3.geoPath().projection(projection);
+  let path = d3.geoPath().projection(projection);
 
-  var results = _.reduce(
+  let results = _.reduce(
     data.results,
     function(acc, val) {
-      var row = fips.fipsByState[val.state] || {};
-      var code = row.STATE ? parseInt(row.STATE) : null;
+      let row = fips.fipsByState[val.state] || {};
+      let code = row.STATE ? parseInt(row.STATE) : null;
       acc[code] = val.total;
       return acc;
     },
     {}
   );
-  var quantiles = 4;
-  var totals = _.chain(data.results)
+  let quantiles = 4;
+  let totals = _.chain(data.results)
     .pluck('total')
     .filter(function(value) {
       return !!value;
@@ -81,8 +81,8 @@ function stateMap($elm, data, width, height, min, max, addLegend, addTooltips) {
     .value();
   min = min || _.min(totals);
   max = max || _.max(totals);
-  var scale = chroma.scale(colorScale).domain([min, max]);
-  var quantize = d3.scaleLinear().domain([min, max]);
+  let scale = chroma.scale(colorScale).domain([min, max]);
+  let quantize = d3.scaleLinear().domain([min, max]);
   svg
     .append('g')
     .selectAll('path')
@@ -105,7 +105,7 @@ function stateMap($elm, data, width, height, min, max, addLegend, addTooltips) {
     });
 
   if (addLegend || typeof addLegend === 'undefined') {
-    var legendSVG = d3.select('.legend-container svg');
+    let legendSVG = d3.select('.legend-container svg');
     stateLegend(legendSVG, scale, quantize, quantiles);
   }
 
@@ -116,10 +116,10 @@ function stateMap($elm, data, width, height, min, max, addLegend, addTooltips) {
 
 function stateLegend(svg, scale, quantize, quantiles) {
   // Add legend swatches
-  var legendWidth = 40;
-  var legendBar = 35;
-  var ticks = quantize.ticks(quantiles);
-  var legend = svg
+  let legendWidth = 40;
+  let legendBar = 35;
+  let ticks = quantize.ticks(quantiles);
+  let legend = svg
     .selectAll('g.legend')
     .data(ticks)
     .enter()
@@ -138,7 +138,7 @@ function stateLegend(svg, scale, quantize, quantiles) {
     });
 
   // Add legend text
-  var compactRule = chooseRule(ticks[Math.ceil(ticks.length / 2)]);
+  let compactRule = chooseRule(ticks[Math.ceil(ticks.length / 2)]);
   legend
     .append('text')
     .attr('x', function(d, i) {
@@ -154,13 +154,13 @@ function stateLegend(svg, scale, quantize, quantiles) {
     });
 }
 
-var tooltipTemplate = _.template(
+let tooltipTemplate = _.template(
   '<div class="tooltip__title">{{ name }}</div>' +
     '<div class="tooltip__value">{{ total }}</div>'
 );
 
 function stateTooltips(svg, path, results) {
-  var tooltip = d3
+  let tooltip = d3
     .select('body')
     .append('div')
     .attr('id', 'map-tooltip')
@@ -172,7 +172,7 @@ function stateTooltips(svg, path, results) {
     .selectAll('path')
     .on('mouseover', function(d) {
       this.parentNode.appendChild(this);
-      var html = tooltipTemplate({
+      let html = tooltipTemplate({
         name: fips.fipsByCode[d.id].STATE_NAME,
         total: helpers.currency(results[d.id] || 0)
       });
@@ -188,12 +188,12 @@ function stateTooltips(svg, path, results) {
 }
 
 function moveTooltip(tooltip) {
-  var x = d3.event.pageX - tooltip[0][0].offsetWidth / 2;
-  var y = d3.event.pageY - tooltip[0][0].offsetHeight;
+  let x = d3.event.pageX - tooltip[0][0].offsetWidth / 2;
+  let y = d3.event.pageY - tooltip[0][0].offsetHeight;
 
-  var bottomPointerHeight = '.8rem';
+  let bottomPointerHeight = '.8rem';
 
-  var contentHeight = $('#map-tooltip .tooltip__title').innerHeight();
+  let contentHeight = $('#map-tooltip .tooltip__title').innerHeight();
   contentHeight += $('#map-tooltip .tooltip__value').innerHeight();
   contentHeight += 30; // (padding)
 
@@ -204,11 +204,11 @@ function moveTooltip(tooltip) {
 }
 
 function highlightState($parent, state) {
-  var rule = '[data-state="' + state + '"]';
+  let rule = '[data-state="' + state + '"]';
   $parent.find('path:not(' + rule + ')').each(function(idx, elm) {
     elm.classList.remove('active');
   });
-  var $path = $parent.find('path' + rule);
+  let $path = $parent.find('path' + rule);
   if ($path.length) {
     $path[0].classList.add('active');
   }
@@ -222,12 +222,12 @@ function DistrictMap(elm, style) {
 }
 
 DistrictMap.prototype.load = function(election) {
-  var feature;
+  let feature;
   if (election.district) {
-    var encoded = utils.encodeDistrict(election.state, election.district);
+    let encoded = utils.encodeDistrict(election.state, election.district);
     feature = utils.findDistrict(encoded);
   } else if (election.state) {
-    var state = fips.fipsByState[election.state.toUpperCase()];
+    let state = fips.fipsByState[election.state.toUpperCase()];
     if (state) {
       feature = stateFeatureMap[state.STATE];
     }
@@ -269,7 +269,7 @@ function mapMax(cached) {
 
 function updateColorScale($container, cached) {
   $container = $container.closest('#state-maps');
-  var displayed = $container
+  let displayed = $container
     .find('.state-map select')
     .map(function(_, select) {
       return $(select).val();
@@ -280,13 +280,13 @@ function updateColorScale($container, cached) {
       delete cached[key];
     }
   });
-  var min = mapMin(cached);
-  var max = mapMax(cached);
-  var scale = chroma.scale(colorScale).domain([min, max]);
-  var quantize = d3.scaleLinear().domain([min, max]);
+  let min = mapMin(cached);
+  let max = mapMax(cached);
+  let scale = chroma.scale(colorScale).domain([min, max]);
+  let quantize = d3.scaleLinear().domain([min, max]);
   $container.find('.state-map').each(function(_, elm) {
-    var $elm = $(elm);
-    var results = cached[$elm.find('select').val()];
+    let $elm = $(elm);
+    let results = cached[$elm.find('select').val()];
     d3.select($elm.find('g')[0])
       .selectAll('path')
       .attr('fill', function(d) {
@@ -294,34 +294,34 @@ function updateColorScale($container, cached) {
       });
   });
   $container.find('.legend-container svg g').remove();
-  var svg = d3.select($container.get(0)).select('.legend-container svg');
+  let svg = d3.select($container.get(0)).select('.legend-container svg');
   if (isFinite(max)) {
     stateLegend(svg, scale, quantize, 4);
   }
 }
 
 function updateButtonsDisplay($parent) {
-  var $maps = $parent.find('.state-map');
-  var showAdd = $maps.length < MAX_MAPS ? 'block' : 'none';
-  var showRemove = $maps.length > 1 ? 'block' : 'none';
+  let $maps = $parent.find('.state-map');
+  let showAdd = $maps.length < MAX_MAPS ? 'block' : 'none';
+  let showRemove = $maps.length > 1 ? 'block' : 'none';
   $parent.find('.js-add-map').css('display', showAdd);
   $parent.find('.js-remove-map').css('display', showRemove);
 }
 
 function appendStateMap($parent, results, cached) {
-  var ids = _.pluck(results, 'candidate_id');
-  var displayed = $parent
+  let ids = _.pluck(results, 'candidate_id');
+  let displayed = $parent
     .find('.candidate-select')
     .map(function(_, select) {
       return $(select).val();
     })
     .get();
-  var value =
+  let value =
     _.find(ids, function(each) {
       return displayed.indexOf(each) === -1;
     }) || _.last(ids);
   $parent.append(candidateStateMapTemplate(results));
-  var $select = $parent.find('.state-map:last select');
+  let $select = $parent.find('.state-map:last select');
   $select.val(value);
   $select.trigger('change');
   updateButtonsDisplay($parent);
@@ -329,7 +329,7 @@ function appendStateMap($parent, results, cached) {
 }
 
 function drawStateMap($container, candidateId, cached) {
-  var url = helpers.buildUrl(
+  let url = helpers.buildUrl(
     ['schedules', 'schedule_a', 'by_state', 'by_candidate'],
     {
       cycle: context.election.cycle,
@@ -338,15 +338,15 @@ function drawStateMap($container, candidateId, cached) {
       election_full: true
     }
   );
-  var $map = $container.find('.state-map-choropleth');
+  let $map = $container.find('.state-map-choropleth');
   $map.html('');
   $.getJSON(url).done(function(data) {
-    var results = _.reduce(
+    let results = _.reduce(
       data.results,
       function(acc, val) {
-        var state = val.state ? val.state.toUpperCase() : val.state;
-        var row = fips.fipsByState[state] || {};
-        var code = row.STATE ? parseInt(row.STATE) : null;
+        let state = val.state ? val.state.toUpperCase() : val.state;
+        let row = fips.fipsByState[state] || {};
+        let code = row.STATE ? parseInt(row.STATE) : null;
         acc[code] = val.total;
         return acc;
       },
@@ -354,21 +354,21 @@ function drawStateMap($container, candidateId, cached) {
     );
     cached[candidateId] = results;
     updateColorScale($container, cached);
-    var min = mapMin(cached);
-    var max = mapMax(cached);
+    let min = mapMin(cached);
+    let max = mapMax(cached);
     stateMap($map, data, 400, 300, min, max, false, true);
   });
 }
 
 function initStateMaps(results) {
-  var cached = {};
-  var $stateMaps = $('#state-maps');
-  var $choropleths = $stateMaps.find('.choropleths');
+  let cached = {};
+  let $stateMaps = $('#state-maps');
+  let $choropleths = $stateMaps.find('.choropleths');
   appendStateMap($choropleths, results, cached);
 
   $choropleths.on('change', 'select', function(e) {
-    var $target = $(e.target);
-    var $parent = $target.closest('.state-map');
+    let $target = $(e.target);
+    let $parent = $target.closest('.state-map');
     drawStateMap($parent, $target.val(), cached);
   });
 
@@ -377,9 +377,9 @@ function initStateMaps(results) {
   });
 
   $choropleths.on('click', '.js-remove-map', function(e) {
-    var $target = $(e.target);
-    var $parent = $target.closest('.state-map');
-    var $container = $parent.closest('#state-maps');
+    let $target = $(e.target);
+    let $parent = $target.closest('.state-map');
+    let $container = $parent.closest('#state-maps');
     $parent.remove();
     updateButtonsDisplay($container);
     updateColorScale($container, cached);

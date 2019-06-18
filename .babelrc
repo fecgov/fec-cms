@@ -1,0 +1,15 @@
+{
+  "presets": [
+    [
+      "@babel/env",
+      {
+        "modules": true
+      }
+    ]
+  ]
+  // "plugins": [
+  //   "transform-class-properties",
+  //   "transform-object-rest-spread",
+  //   "transform-object-assign"
+  // ]
+}

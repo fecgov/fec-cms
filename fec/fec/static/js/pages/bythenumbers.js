@@ -2,9 +2,9 @@
 
 /* global context, ga */
 
-var $ = require('jquery');
-var analytics = require('../modules/analytics');
-var TopEntities = require('../modules/top-entities').TopEntities;
+const $ = require('jquery');
+const analytics = require('../modules/analytics');
+const TopEntities = require('../modules/top-entities').TopEntities;
 
 new TopEntities('.js-top-entities', context.type);
 

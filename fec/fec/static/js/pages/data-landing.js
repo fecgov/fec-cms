@@ -1,14 +1,14 @@
 'use strict';
 
-/* global require, ga */
+/* global require, ga, $ */
 
-var $ = require('jquery');
-var lookup = require('../modules/election-lookup');
+// const $ = require('jquery');
+const lookup = require('../modules/election-lookup');
 
-var LineChart = require('../modules/line-chart').LineChart;
-var ReactionBox = require('../modules/reaction-box').ReactionBox;
-var helpers = require('../modules/helpers');
-var analytics = require('../modules/analytics');
+const LineChart = require('../modules/line-chart').LineChart;
+const ReactionBox = require('../modules/reaction-box').ReactionBox;
+const helpers = require('../modules/helpers');
+const analytics = require('../modules/analytics');
 
 function Overview(selector, type, index) {
   this.selector = selector;

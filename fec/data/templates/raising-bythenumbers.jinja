@@ -11,9 +11,12 @@
 
 {% block sidebar %}
 <nav class="sidebar sidebar--breakdown sidebar--left side-nav js-sticky-side" data-sticky-container="options">
-  <a class="sidebar__title" href="/data/#raising">&lsaquo; Raising overview</a>
+  <a class="sidebar__title" href="/data/browse-data/?tab=raising#raising-overview">&lsaquo; All raising data</a>
   <ul class="sidebar__content js-toc">
-    <li class="side-nav__item"><a class="side-nav__link" href="#top-raisers">Top raising candidates</a></li>
+    {% if FEATURES.aggregatetotals %}
+    <li class="side-nav__item"><a class="side-nav__link" href="#raising-summary">Raising summary</a></li>
+    {% endif %}
+    <li class="side-nav__item"><a class="side-nav__link" href="#top-raisers">Who&apos;s raising the most</a></li>
     <li class="side-nav__item"><span class="side-nav__link is-disabled">Where contributions come from</span></li>
     <li class="side-nav__item"><span class="side-nav__link is-disabled">The size of contributions</span></li>
   </ul>
@@ -22,9 +25,15 @@
 {% endblock %}
 
 {% block sections %}
+{% if FEATURES.aggregatetotals %}
+<section id="raising-summary" class="aggregate-totals-section">
+  <h2>Raising summary</h2>
+  <script defer data-theme="dark" data-office="{{ office }}" data-year="{{ election_year }}" data-action="raised" src="{{ asset_for_js('widgets/aggregate-totals-box.js') }}"></script>
+</section>
+{% endif %}
 <section id="raising-breakdowns">
   <section id="top-raisers" class="content__section">
-    <h2>Top raising candidates</h2>
+    <h2>Who&apos;s raising the most</h2>
     {{ breakdowns.top_entities(election_years, election_year, 'raised', office ) }}
   </section>
 </section>

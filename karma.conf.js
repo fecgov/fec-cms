@@ -67,6 +67,9 @@ module.exports = function(config) {
             }
           }
         ]
+      },
+      output: {
+        filename: '[name]'
       }
     },
 
