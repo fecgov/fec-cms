@@ -33,10 +33,10 @@
     <div class="entity__figure row" id="raw-filings">
       <div class="heading--section heading--with-action">
         <h3 class="heading__left">Raw electronic filings</h3>
-        {% set link = "/data/filings/?data_type=efiling&committee_id="+committee_id+
-        "&min_receipt_date="+min_receipt_date %}
+        {% set link = "/data/filings/?data_type=efiling&committee_id=" + committee_id +
+          "&min_receipt_date=" + min_receipt_date %}
         {% if cycle %}
-          {% set link = link +"&cycle="+cycle|string %}
+          {% set link = link + "&cycle=" + cycle|string %}
         {% endif %}
         <a class="heading__right button button--alt button--browse"
            href="{{ link }}">
