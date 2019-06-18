@@ -135,6 +135,14 @@ var otherDocumentsColumns = [
   })
 ];
 
+var rawFilingsColumns = columnHelpers.getColumns(columns.filings, [
+  'document_type',
+  'coverage_start_date',
+  'coverage_end_date',
+  'receipt_date',
+  'beginning_image_number'
+]);
+
 var itemizedDisbursementColumns = [
   {
     data: 'committee_id',
@@ -620,6 +628,36 @@ function initStatementsOfCandidacyTable() {
   });
 }
 
+function initRawFilingsTable() {
+  var $table = $('table[data-type="raw-filings"]');
+  var candidateId = $table.attr('data-committee');
+  var min_date = $table.attr('data-min-date');
+  var path = ['efile', 'filings'];
+  tables.DataTable.defer($table, {
+    path: path,
+    query: {
+      committee_id: candidateId,
+      min_receipt_date: min_date,
+      sort: ['-receipt_date']
+    },
+    columns: rawFilingsColumns,
+    order: [[2, 'desc']],
+    dom: tables.simpleDOM,
+    pagingType: 'simple',
+    lengthMenu: [10, 30, 50],
+    hideEmpty: false,
+    useExport: true,
+    callbacks: {
+      afterRender: filings.renderModal
+    },
+    drawCallback: function() {
+      this.dropdowns = $table.find('.dropdown').map(function(idx, elm) {
+        return new dropdown.Dropdown($(elm), { checkboxes: false });
+      });
+    }
+  });
+}
+
 $(document).ready(function() {
   var query = URI.parseQuery(window.location.search);
 
@@ -628,6 +666,7 @@ $(document).ready(function() {
   initDisbursementsTable();
   initContributionsTables();
   initStatementsOfCandidacyTable();
+  initRawFilingsTable();
 
   // If on the other spending tab, init the totals
   // Otherwise add an event listener to build them on showing the tab
