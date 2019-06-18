@@ -7,7 +7,7 @@
   <div class="slab slab--inline slab--neutral u-padding--left u-padding--right">
     <div class="content__section">
     {% if has_raw_filings %}
-      {{ entity.raw_filings_table(cycle, candidate_id, min_receipt_date) }}
+      {{ entity.raw_filings_table(cycle=None, committee_id=candidate_id, min_receipt_date=min_receipt_date) }}
     {% endif %}
       <div id="statements-of-candidacy" class="entity__figure row">
         <div class="content__section">
