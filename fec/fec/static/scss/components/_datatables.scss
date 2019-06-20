@@ -60,16 +60,17 @@
 .data-table {
   @include transform(translateX(0%));
   @include transition-property(transform);
-  @include transition-duration(.5s);
+  @include transition-duration(0.5s);
   height: 100%;
   font-family: $sans-serif;
   position: relative;
   table-layout: auto;
+  z-index: $z1;
 
   th {
     line-height: u(1.4rem);
-    letter-spacing: -.3px;
-    padding: u(.5rem 1rem);
+    letter-spacing: -0.3px;
+    padding: u(0.5rem 1rem);
     border-bottom: 1px solid $primary;
 
     &.sorting,
@@ -116,7 +117,7 @@
 
     &.row-color-contrast,
     &:nth-child(even) {
-      background-color: rgba($gray-lightest, .5);
+      background-color: rgba($gray-lightest, 0.5);
     }
 
     &.row-color-normal {
@@ -124,12 +125,12 @@
     }
 
     &.row-active {
-      border-left: .5rem solid $primary;
+      border-left: 0.5rem solid $primary;
     }
   }
 
   td {
-    @include transition(padding-left, .2s);
+    @include transition(padding-left, 0.2s);
     padding: u(1rem);
     border-left: 1px solid $neutral;
 
@@ -163,8 +164,9 @@
         font-size: u(1.4rem);
         line-height: u(1.4rem);
 
-        ol, li {
-          margin-left :u(.9rem);
+        ol,
+        li {
+          margin-left: u(0.9rem);
           line-height: u(1.4rem);
         }
       }
@@ -176,8 +178,8 @@
   }
 
   .value-bar {
-    margin-top: u(.5rem);
-    height: u(.5rem);
+    margin-top: u(0.5rem);
+    height: u(0.5rem);
   }
 
   @include media($lg) {
@@ -210,7 +212,7 @@
   border-top: 2px solid $primary;
 
   td {
-    padding: u(.5rem);
+    padding: u(0.5rem);
     vertical-align: middle;
   }
 
@@ -221,14 +223,13 @@
 
 // Special styles for rows that trigger panels
 .row--has-panel {
-    @include transition(border-left-width, .2s);
-    cursor: pointer;
+  @include transition(border-left-width, 0.2s);
+  cursor: pointer;
 }
 
 .row-active {
-
   td {
-    background-color: rgba($gray-lightest, .3);
+    background-color: rgba($gray-lightest, 0.3);
     border-top: 1px solid $gray-lightest;
     border-bottom: 1px solid $gray-lightest;
   }
@@ -254,12 +255,12 @@
 
   .dropdown__panel {
     right: 0;
-    top: u(3rem);
+    top: calc(50% + 1.5rem - 1px);
     min-width: 70px;
   }
 
   .dropdown__value {
-    padding: u(.5rem .75rem);
+    padding: u(0.5rem 0.75rem);
   }
 }
 
@@ -278,7 +279,7 @@
     display: block;
     height: u(1rem);
     left: u(-1.5rem);
-    margin-top: u(-.5rem);
+    margin-top: u(-0.5rem);
     position: absolute;
     top: 50%;
     width: u(1rem);
@@ -287,7 +288,7 @@
 
 .data-table {
   .is-incumbent::before {
-    top: u(.8rem);
+    top: u(0.8rem);
   }
 }
 
@@ -297,7 +298,6 @@
 }
 
 .dataTables_scrollBody {
-
   .data-table {
     position: static;
   }
