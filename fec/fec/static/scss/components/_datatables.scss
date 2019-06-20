@@ -255,7 +255,7 @@
 
   .dropdown__panel {
     right: 0;
-    top: u(3rem);
+    top: calc(50% + 1.5rem - 1px);
     min-width: 70px;
   }
 
