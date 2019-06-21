@@ -154,6 +154,35 @@ TagList.prototype.removeAllTags = function(e, opts, emit) {
     self.removeTag($(this).data('id'), true, forceRemove);
   });
 
+  // We don't necessarily want to remove everything—only to reset to default values
+  // So let's add the date filters
+  // If we already have a default date tag
+  var theDefaultDateTag = $(
+    '#two_year_transaction_period-checkbox-' + window.DEFAULT_ELECTION_YEAR
+  );
+  // let's just click it,
+  // else let's create a new one
+  if (theDefaultDateTag) theDefaultDateTag.click();
+  else {
+    var theLabel =
+      window.DEFAULT_ELECTION_YEAR - 1 + '–' + window.DEFAULT_ELECTION_YEAR;
+    this.$body.trigger('filter:added', [
+      {
+        key: 'two_year_transaction_period-' + window.DEFAULT_ELECTION_YEAR,
+        value: theLabel,
+        loadedOnce: true,
+        filterLabel: theLabel,
+        name: 'two_year_transaction_period',
+        // nonremovable: true,
+        removeOnSwitch: false
+      }
+    ]);
+  }
+  // The min_date and max_date fields don't really go away so let's set their values,
+  // and trigger change events to their defalt functionality takes over
+  if ($('#min_date')) $('#min_date').val('01/01/' + (window.DEFAULT_ELECTION_YEAR - 1)).change();
+  if ($('#max_date')) $('#max_date').val('12/31/' + (window.DEFAULT_ELECTION_YEAR)).change();
+
   // Don't emit another event unless told to do so
   // This way it can be triggered as an event listener without creating more
   if (emit) {
