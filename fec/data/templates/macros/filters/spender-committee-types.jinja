@@ -1,4 +1,4 @@
-{% macro field(name='spender_committee_type', include_ssfs = True) %}
+{% macro field(name='spender_committee_type', include_ssfs = True, include_leadership_pac = True) %}
 <div class="filter">
   <fieldset class="js-dropdown js-filter" data-name="spender_committee_type" data-filter="checkbox">
     <legend class="label" for="committee_type">Authorized committees</legend>
@@ -58,10 +58,13 @@
           <input id="designation-checkbox-B" type="checkbox" name="designation" value="B">
           <label class="dropdown__value" for="designation-checkbox-B">Lobbyist/Registrant PAC</label>
         </li>
+        {# Temporarily adding Leadership PAC committee type exclusion from disbursements until it is fixed in our data #}
+        {% if include_leadership_pac %}
         <li class="dropdown__item">
           <input id="designation-checkbox-D" type="checkbox" name="designation" value="D">
           <label class="dropdown__value" for="designation-checkbox-D">Leadership PAC</label>
         </li>
+        {% endif %}
         <li class="dropdown__item">
           <input id="committee-type-checkbox-N" type="checkbox" name="spender_committee_type" value="N">
           <label class="dropdown__value" for="committee-type-checkbox-N">PAC - nonqualified</label>
@@ -78,8 +81,8 @@
           <input id="committee-type-checkbox-W" type="checkbox" name="spender_committee_type" value="W">
           <label class="dropdown__value" for="committee-type-checkbox-W">PAC with non-contribution account - qualified</label>
         </li>
-        {# Temporarily adding SSFs committee type exclusion from receipts and individual contributions until it is fixed in our data #}
-          {% if include_ssfs %}
+        {# Temporarily adding SSFs committee type exclusion from disbursements until it is fixed in our data #}
+        {% if include_ssfs %}
         <li class="dropdown__subhead">Separate segregated funds</li>
         <li class="dropdown__item">
           <input id="org-type-checkbox-C" name="organization_type" type="checkbox" value="C">
