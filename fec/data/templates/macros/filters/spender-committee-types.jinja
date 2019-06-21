@@ -1,4 +1,4 @@
-{% macro field(name='spender_committee_type', include_ssfs = True, include_leadership_pac = True) %}
+{% macro field(name='spender_committee_type', include_ssfs = True, include_leadership_pac = True, include_lobbyist_pac = True) %}
 <div class="filter">
   <fieldset class="js-dropdown js-filter" data-name="spender_committee_type" data-filter="checkbox">
     <legend class="label" for="committee_type">Authorized committees</legend>
@@ -54,10 +54,13 @@
       <button type="button" class="dropdown__button button--alt" data-name="{{ name }}">More</button>
       <div id="pac-dropdown" class="dropdown__panel" aria-hidden="true">
       <ul class="dropdown__list">
+        {# Temporarily adding Lobbyist/Registrant PAC committee type exclusion from disbursements until it is fixed in our data #}
+        {% if include_lobbyist_pac %}
         <li class="dropdown__item">
           <input id="designation-checkbox-B" type="checkbox" name="designation" value="B">
           <label class="dropdown__value" for="designation-checkbox-B">Lobbyist/Registrant PAC</label>
         </li>
+        {% endif %}
         {# Temporarily adding Leadership PAC committee type exclusion from disbursements until it is fixed in our data #}
         {% if include_leadership_pac %}
         <li class="dropdown__item">
