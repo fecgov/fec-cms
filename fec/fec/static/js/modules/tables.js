@@ -502,7 +502,11 @@ DataTable.prototype.initFilters = function() {
   if (this.opts.useFilters) {
     var tagList = new filterTags.TagList({
       resultType: 'results',
-      showResultCount: true
+      showResultCount: true,
+      tableTitle: this.opts.title
+      // We're using the table title to decide whether to clear or reset filters.
+      // This is a temporary solution to clear filters and not break pages/tables that still require two-year restrictions
+      // TODO
     });
     this.$widgets.find('.js-filter-tags').prepend(tagList.$body);
     this.filterPanel = new FilterPanel();

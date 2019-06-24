@@ -10,7 +10,7 @@ var BODY_TEMPLATE = _.template(
     '<span class="js-count" aria-hidden="true"></span> ' +
     '<span class="js-result-type">filtered {{ resultType }} for:</span>' +
     '</h3>' +
-    '<button type="button" class="js-filter-clear button--unstyled tags__clear" aria-hidden="true">Clear all filters</button>' +
+    '<button type="button" class="{{ clearResetFiltersClass }} button--unstyled tags__clear" aria-hidden="true">{{ clearResetFiltersLabel }}</button>' +
     '</div>' +
     '<ul class="tags">' +
     '</ul>' +
@@ -38,10 +38,29 @@ var NONREMOVABLE_TAG_TEMPLATE = _.template(
 function TagList(opts) {
   this.opts = opts;
 
-  this.$body = $(BODY_TEMPLATE({ resultType: this.opts.resultType }));
+  // Resetting filters will re-apply two-year limitations, like when users first land on the page.
+  // Right now we're only applying the two-year filters for Receipts and Individual Contributions
+  // Otherwise, we'll leave the functionality as 'Clear all filters'
+  var shouldResetFilters =
+    this.opts &&
+    (this.opts.tableTitle == 'Receipts' ||
+      this.opts.tableTitle == 'Individual contributions');
+
+  this.$body = $(
+    BODY_TEMPLATE({
+      resultType: this.opts.resultType,
+      clearResetFiltersLabel: shouldResetFilters
+        ? 'Reset filters'
+        : 'Clear all filters',
+      clearResetFiltersClass: shouldResetFilters
+        ? 'js-filter-reset'
+        : 'js-filter-clear'
+    })
+  );
   this.$list = this.$body.find('.tags');
   this.$resultType = this.$body.find('.js-result-type');
-  this.$clear = this.$body.find('.js-filter-clear');
+  // We're going to use the same handler for either clear or reset functionality:
+  this.$clear = this.$body.find('.js-filter-clear, .js-filter-reset');
 
   $(document.body)
     .on('filter:added', this.addTag.bind(this))
@@ -154,35 +173,43 @@ TagList.prototype.removeAllTags = function(e, opts, emit) {
     self.removeTag($(this).data('id'), true, forceRemove);
   });
 
-  // We don't necessarily want to remove everything—only to reset to default values
-  // So let's add the date filters
-  // If we already have a default date tag
-  var theDefaultDateTag = $(
-    '#two_year_transaction_period-checkbox-' + window.DEFAULT_ELECTION_YEAR
-  );
-  // let's just click it,
-  // else let's create a new one
-  if (theDefaultDateTag) theDefaultDateTag.click();
-  else {
-    var theLabel =
-      window.DEFAULT_ELECTION_YEAR - 1 + '–' + window.DEFAULT_ELECTION_YEAR;
-    this.$body.trigger('filter:added', [
-      {
-        key: 'two_year_transaction_period-' + window.DEFAULT_ELECTION_YEAR,
-        value: theLabel,
-        loadedOnce: true,
-        filterLabel: theLabel,
-        name: 'two_year_transaction_period',
-        // nonremovable: true,
-        removeOnSwitch: false
-      }
-    ]);
+  // If the element has the reset class, we don't just want to clear the tags, but revert to the original page state
+  if ($(this.$clear[0]).hasClass('js-filter-reset')) {
+    console.log('RESET!');
+    // So let's add the date filters.
+    // If we already have a default date tag,
+    var theDefaultDateTag = $(
+      '#two_year_transaction_period-checkbox-' + window.DEFAULT_ELECTION_YEAR
+    );
+    // let's just click it,
+    // else let's create a new one
+    if (theDefaultDateTag) theDefaultDateTag.click();
+    else {
+      var theLabel =
+        window.DEFAULT_ELECTION_YEAR - 1 + '–' + window.DEFAULT_ELECTION_YEAR;
+      this.$body.trigger('filter:added', [
+        {
+          key: 'two_year_transaction_period-' + window.DEFAULT_ELECTION_YEAR,
+          value: theLabel,
+          loadedOnce: true,
+          filterLabel: theLabel,
+          name: 'two_year_transaction_period',
+          // nonremovable: true,
+          removeOnSwitch: false
+        }
+      ]);
+    }
+    // The min_date and max_date fields don't really go away so let's set their values,
+    // and trigger change events to their defalt functionality takes over
+    if ($('#min_date'))
+      $('#min_date')
+        .val('01/01/' + (window.DEFAULT_ELECTION_YEAR - 1))
+        .change();
+    if ($('#max_date'))
+      $('#max_date')
+        .val('12/31/' + window.DEFAULT_ELECTION_YEAR)
+        .change();
   }
-  // The min_date and max_date fields don't really go away so let's set their values,
-  // and trigger change events to their defalt functionality takes over
-  if ($('#min_date')) $('#min_date').val('01/01/' + (window.DEFAULT_ELECTION_YEAR - 1)).change();
-  if ($('#max_date')) $('#max_date').val('12/31/' + (window.DEFAULT_ELECTION_YEAR)).change();
-
   // Don't emit another event unless told to do so
   // This way it can be triggered as an event listener without creating more
   if (emit) {
