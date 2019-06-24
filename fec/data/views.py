@@ -121,6 +121,12 @@ def get_candidate(candidate_id, cycle, election_full):
     and candidate financial data needed to render the candidate profile page
     """
 
+    """
+    for House, set election_full=False except State=PR to solve cms issue#2937
+    """
+    if candidate_id.startswith('H', 0, 1) and candidate_id[2:4] != 'PR':
+        election_full = False
+
     candidate, committees, cycle = api_caller.load_with_nested(
         'candidate',
         candidate_id,
