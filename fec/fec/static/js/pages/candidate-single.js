@@ -137,8 +137,6 @@ var otherDocumentsColumns = [
 
 var rawFilingsColumns = columnHelpers.getColumns(columns.filings, [
   'document_type',
-  'coverage_start_date',
-  'coverage_end_date',
   'receipt_date',
   'beginning_image_number'
 ]);
