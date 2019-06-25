@@ -50,7 +50,7 @@ def aggregate_totals(request):
 
     max_election_year = utils.current_cycle() + 4
     election_years = utils.get_cycles(max_election_year)
-    
+
     FEATURES = settings.FEATURES
 
     return render(
@@ -259,6 +259,16 @@ def get_candidate(candidate_id, cycle, election_full):
         reverse=True,
     )
 
+    raw_filing_start_date = utils.three_days_ago()
+    raw_filings = api_caller._call_api(
+        'efile',
+        'filings',
+        cycle=cycle,
+        committee_id=candidate['candidate_id'],
+        min_receipt_date=raw_filing_start_date,
+    )
+    has_raw_filings = True if raw_filings.get('results') else False
+
     return {
         'name': candidate['name'],
         'cycle': int(cycle),
@@ -289,6 +299,8 @@ def get_candidate(candidate_id, cycle, election_full):
         'statement_of_candidacy': statement_of_candidacy,
         'elections': elections,
         'candidate': candidate,
+        'has_raw_filings': has_raw_filings,
+        'min_receipt_date': raw_filing_start_date,
         'context_vars': context_vars,
     }
 
@@ -447,8 +459,9 @@ def get_committee(committee_id, cycle):
             committee_id=committee['committee_id'],
             min_receipt_date=template_variables['min_receipt_date'],
         )
-        if len(raw_filings.get('results')) > 0:
-            template_variables['has_raw_filings'] = True
+        template_variables['has_raw_filings'] = (
+            True if raw_filings.get('results') else False
+        )
     else:
         template_variables['has_raw_filings'] = False
 
