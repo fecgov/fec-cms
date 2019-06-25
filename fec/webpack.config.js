@@ -10,6 +10,7 @@ const CleanWebpackPlugin = require('clean-webpack-plugin');
 const fs = require('fs');
 
 const entries = {
+  polyfills: './fec/static/js/polyfills.js',
   init: './fec/static/js/init.js',
   'data-init': './fec/static/js/data-init.js',
   vendor: ['jquery', 'handlebars']

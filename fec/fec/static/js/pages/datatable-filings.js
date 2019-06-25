@@ -2,8 +2,6 @@
 
 /* global require, document */
 
-require('babel-polyfill');
-
 var $ = require('jquery');
 
 var filings = require('../modules/filings');

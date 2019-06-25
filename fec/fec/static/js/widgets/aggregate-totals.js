@@ -30,8 +30,6 @@
  * TODO - How should we handle things like this?
  */
 
-require('babel-polyfill');
-
 // For when we have both internal controls
 const breakPointsAndHeights_full = [
   { widthLTE: 600, height: 377 },
