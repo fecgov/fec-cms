@@ -3,8 +3,6 @@
 // TODO - add a loading animation of some kind? Something to tell users that it's official but still loading?
 // TODO - When adding the small implementations (i.e., with no controls), reference #2803 for designs
 
-require('babel-polyfill');
-
 // Editable vars
 const stylesheetPath = '/static/css/widgets/aggregate-totals.css';
 // const breakpointToXS = 0; // retaining just in case
@@ -156,11 +154,10 @@ AggregateTotalsBox.prototype.init = function() {
   let instance = this;
 
   // The <script> on the page:
+  // (Starting with a polyfill if !document.currentScript support)
   if (document.currentScript) this.scriptElement = document.currentScript;
-  else
-    this.scriptElement = document.querySelector(
-      'script[id="aggregate-totals-js"]'
-    );
+  else this.scriptElement = document.querySelector('#gov_fec_agg_tots_script');
+  // TODO -- figure out this ID :up:
 
   // We're going to be checking the dataset several times
   let dataset = this.scriptElement.dataset;
@@ -303,7 +300,7 @@ AggregateTotalsBox.prototype.loadData = function(query) {
       cache: 'no-cache',
       mode: 'cors'
     })
-    .then(response => {
+    .then(function(response) {
       if (response.status !== 200)
         throw new Error('The network rejected the grand total request.');
       // else if (response.type == 'cors') throw new Error('CORS error');
@@ -311,19 +308,16 @@ AggregateTotalsBox.prototype.loadData = function(query) {
         instance.displayUpdatedData_grandTotal(data);
       });
     })
-    .catch(() => {
-      // TODO - handle error
+    .catch(function() {
+      // TODO - handle catch
     });
-  // $.getJSON(buildUrl(this.basePath, query)).done(response => {
-  //   instance.displayUpdatedData_grandTotal(response);
-  // });
 
   window
     .fetch(buildUrl(this.basePath_partyTotals, query), {
       cache: 'no-cache',
       mode: 'cors'
     })
-    .then(response => {
+    .then(function(response) {
       if (response.status !== 200)
         throw new Error('The network rejected the parties totals request.');
       // else if (response.type == 'cors') throw new Error('CORS error');
@@ -331,8 +325,8 @@ AggregateTotalsBox.prototype.loadData = function(query) {
         instance.displayUpdatedData_parties(data);
       });
     })
-    .catch(() => {
-      // TODO - handle error
+    .catch(function() {
+      // TODO - handle catch
     });
 };
 
@@ -373,7 +367,6 @@ AggregateTotalsBox.prototype.handleRadiosClick = function(e) {
   e.preventDefault();
   this.element.parentElement
     .querySelectorAll('.js-election-radios')
-    //
     .forEach(element => {
       element.removeAttribute('disabled');
     });
