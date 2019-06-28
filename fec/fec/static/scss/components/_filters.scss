@@ -278,6 +278,10 @@ $filter-button-width: u(4.6rem);
   color: $green-dark;
 }
 
+.filter__message--delayed {
+  color: $deep-orange;
+}
+
 .filter__message--error {
   font-size: u(1.3rem);
   color: $error;
