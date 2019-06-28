@@ -52,7 +52,7 @@ jobs:
       - run:
           name: Install Node.js dependencies
           command: |
-            sudo npm install -g npm@6.9.1
+            sudo npm install -g npm
             npm install webpack
             npm install
             npm run build
