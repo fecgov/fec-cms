@@ -10,7 +10,7 @@ var BODY_TEMPLATE = _.template(
     '<span class="js-count" aria-hidden="true"></span> ' +
     '<span class="js-result-type">filtered {{ resultType }} for:</span>' +
     '</h3>' +
-    '<button type="button" class="js-filter-clear button--unstyled tags__clear" aria-hidden="true">Clear all filters</button>' +
+    '{{ clearFiltersButton }}' +
     '</div>' +
     '<ul class="tags">' +
     '</ul>' +
@@ -35,10 +35,34 @@ var NONREMOVABLE_TAG_TEMPLATE = _.template(
   { interpolate: /\{\{(.+?)\}\}/g }
 );
 
+/**
+ * TagLists are created by modules/tables.js and calendar-page.js
+ * @param {*} opts
+ * @param {*} opts.resultType
+ * @param {*} opts.showResultCount
+ * @param {*} opts.tableTitle
+ */
 function TagList(opts) {
   this.opts = opts;
 
-  this.$body = $(BODY_TEMPLATE({ resultType: this.opts.resultType }));
+  // As we're in the transition period between global and no two-year restrictions,
+  // let's hide the "Clear all filters" link for the Receipts and Individual contributions tables
+  var clearFiltersButton = '';
+  if (
+    this.opts &&
+    (this.opts.tableTitle != 'Receipts' &&
+      this.opts.tableTitle != 'Individual contributions')
+  ) {
+    clearFiltersButton =
+      '<button type="button" class="js-filter-clear button--unstyled tags__clear" aria-hidden="true">Clear all filters</button>';
+  }
+
+  this.$body = $(
+    BODY_TEMPLATE({
+      resultType: this.opts.resultType,
+      clearFiltersButton: clearFiltersButton
+    })
+  );
   this.$list = this.$body.find('.tags');
   this.$resultType = this.$body.find('.js-result-type');
   this.$clear = this.$body.find('.js-filter-clear');
@@ -59,6 +83,15 @@ function TagList(opts) {
   }
 }
 
+/**
+ * Called document.body hears filter:added
+ * @param {} e
+ * @param {} opts
+ * @param {} opts.key
+ * @param {} opts.name
+ * @param {} opts.range
+ * @param {} opts.rangeName
+ */
 TagList.prototype.addTag = function(e, opts) {
   var tag = opts.nonremovable
     ? NONREMOVABLE_TAG_TEMPLATE(opts)
@@ -93,6 +126,13 @@ TagList.prototype.addTag = function(e, opts) {
   }
 };
 
+/**
+ * Called from within @see TagList.prototype.addTag
+ * @param {} $tagCategory
+ * @param {} tag
+ * @param {} opts
+ * @param {} opts.range
+ */
 TagList.prototype.addTagItem = function($tagCategory, tag, opts) {
   var rangeClass = 'tag__category__range--' + opts.rangeName;
 
@@ -105,6 +145,11 @@ TagList.prototype.addTagItem = function($tagCategory, tag, opts) {
   }
 };
 
+/**
+ * Called from @see TagList.prototype.removeTag
+ * @param {} $tag
+ * @param {} emit
+ */
 TagList.prototype.removeTagElement = function($tag, emit) {
   // This handles the actual removal of the DOM elementrs
   var $tagCategory = $tag.parent();
@@ -121,6 +166,14 @@ TagList.prototype.removeTagElement = function($tag, emit) {
   }
 };
 
+/**
+ * Called from @see TagList.prototype.removeAllTags
+ * Called from @see TagList.prototype.removeTagEvt
+ * Called from @see TagList.prototype.addTag
+ * @param {} key
+ * @param {} emit
+ * @param {} forceRemove
+ */
 TagList.prototype.removeTag = function(key, emit, forceRemove) {
   var $tag = this.$list.find('[data-id="' + key + '"]');
   if ($tag.length > 0) {
@@ -147,6 +200,14 @@ TagList.prototype.removeTag = function(key, emit, forceRemove) {
   }
 };
 
+/**
+ * Handler for this.$clear click
+ * Handler for document.body tag:removeAll
+ * @param {} e
+ * @param {} opts
+ * @param {} opts.forceRemove
+ * @param {} emit
+ */
 TagList.prototype.removeAllTags = function(e, opts, emit) {
   var self = this;
   var forceRemove = opts.forceRemove || false;
@@ -161,11 +222,20 @@ TagList.prototype.removeAllTags = function(e, opts, emit) {
   }
 };
 
+/**
+ * The handler when document.body hears filter:removed
+ * @param {} e
+ * @param {} opts
+ * @param {} opts.key
+ * @param {} opts.name
+ */
 TagList.prototype.removeTagEvt = function(e, opts) {
   this.removeTag(opts.key, false);
   // logic to handle adding an all years tag if
   // no two year transaction period filter is provided
-  // we evaluate on every tag removal
+  // we evaluate on every tag removal=
+  //
+  /* Hiding this for now since we're removing the Clear all filters option for Indiv Contribs & Receipts
   if (opts.name === 'two_year_transaction_period') {
     var tytp = $('li[data-tag-category="two_year_transaction_period"]');
     var ary = $('li[data-tag-category="all-report-years"]');
@@ -184,9 +254,13 @@ TagList.prototype.removeTagEvt = function(e, opts) {
         }
       ]);
     }
-  }
+  }*/
 };
 
+/**
+ * Click handler for this.$list .js-close
+ * @param {} e
+ */
 TagList.prototype.removeTagDom = function(e) {
   var key = $(e.target)
     .closest('.tag__item')
@@ -194,6 +268,13 @@ TagList.prototype.removeTagDom = function(e) {
   this.removeTag(key, true);
 };
 
+/**
+ * Handles document.body filter:renamed
+ * @param {} e
+ * @param {} opts
+ * @param {} opts.key
+ * @param {} opts.nonremovable
+ */
 TagList.prototype.renameTag = function(e, opts) {
   var tag = opts.nonremovable
     ? NONREMOVABLE_TAG_TEMPLATE(opts)
@@ -204,11 +285,23 @@ TagList.prototype.renameTag = function(e, opts) {
   }
 };
 
+/**
+ * Handler for document.body filter:disabled
+ * @param {} e
+ * @param {} opts
+ * @param {} opts.key
+ */
 TagList.prototype.disableTag = function(e, opts) {
   var $tag = this.$list.find('[data-id="' + opts.key + '"]');
   $tag.closest('.tag__category').hide();
 };
 
+/**
+ * Handler for document.body filter:enabled
+ * @param {} e
+ * @param {} opts
+ * @param {} opts.key
+ */
 TagList.prototype.enableTag = function(e, opts) {
   var $tag = this.$list.find('[data-id="' + opts.key + '"]');
   $tag.closest('.tag__category').show();
