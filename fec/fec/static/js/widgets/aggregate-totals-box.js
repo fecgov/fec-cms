@@ -446,6 +446,8 @@ AggregateTotalsBox.prototype.refreshYearsSelect = function() {
   } else {
     this.yearControl.fireEvent('onchange');
   }
+
+  logUsage(this.baseQuery.office, this.baseQuery.election_year);
 };
 
 /**
@@ -705,6 +707,22 @@ function buildElement(callingInstance, scriptElement) {
   else scriptElement.parentElement.insertBefore(toReturn, scriptElement);
 
   return toReturn;
+}
+
+/**
+ * Handles the usage analytics for this module
+ * @todo - Decide how to gather usage insights while embedded
+ * @param {String} officeAbbrev - The user-selected election office
+ * @param {*} electionYear - String or Number, the user-selected election year
+ */
+function logUsage(officeAbbrev, electionYear) {
+  if (window.ga) {
+    window.ga('send', 'event', {
+      eventCategory: 'Widget-AggregateTotals',
+      eventAction: 'interaction',
+      eventLabel: officeAbbrev + ',' + electionYear
+    });
+  }
 }
 
 new AggregateTotalsBox();
