@@ -347,6 +347,13 @@ var filings = {
           helpers.buildAppUrl(['candidate', row.candidate_id], cycle),
           'candidate'
         );
+        // If committee ID is actually a candidate ID, use 'candidate' in URI
+      } else if (row.committee_id.match(/^[H, S, P]+\w+$/)) {
+        return columnHelpers.buildEntityLink(
+          row.committee_name,
+          helpers.buildAppUrl(['candidate', row.committee_id], cycle),
+          'committee'
+        );
       } else if (row.committee_name) {
         return columnHelpers.buildEntityLink(
           row.committee_name,
