@@ -171,12 +171,20 @@ input[type="file"] {
   border-radius: u(1.6rem);
 }
 
-[type="checkbox"]:checked + label,
+[type="checkbox"]:checked + label {
+  background-color: transparent;
+
+  &::before {
+    background-color: $gray-dark;
+  }
+}
+
 [type="radio"]:checked + label {
   background-color: transparent;
 
   &::before {
     background-color: $gray-dark;
+    box-shadow: 0 0 0 1.2px $inverse inset;
   }
 }
 
