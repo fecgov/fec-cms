@@ -11,6 +11,8 @@ const breakpointToMedium = 675;
 const breakpointToLarge = 700;
 const breakpointToXL = 860;
 
+const isModernBrowser = ('fetch' in window && 'assign' in Object);
+
 // Includes
 import { buildUrl } from '../modules/helpers';
 import {
@@ -567,8 +569,15 @@ function buildElement(callingInstance, scriptElement) {
   ); // Random so we can have multiple on a page, if needed
 
   let theme = scriptElement.dataset.theme;
+
+  // Should we add a class for ancient browsers?
+  let browserClass = isModernBrowser ? '' : 'no-meters';
+
   // Set its class
-  toReturn.setAttribute('class', 'aggr-totals theme-' + theme);
+  toReturn.setAttribute(
+    'class',
+    'aggr-totals theme-' + theme + ' ' + browserClass
+  );
 
   // Let's build its html
   let theInnerHTML = ``;
