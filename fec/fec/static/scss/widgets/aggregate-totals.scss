@@ -513,6 +513,7 @@ aside.aggr-totals[id^='gov_fec_at_'] {
   &.no-meters {
     .parties-wrapper .simple-table__cell:last-child {
       display: none;
+      width: 0;
     }
   }
 }
