@@ -413,6 +413,7 @@ line_numbers = {
             ('F3X-22', 'Transfers to affiliated/other party committees (Line 22)'),
             ('F3X-23', 'Contributions to federal candidates/committees and other political committees (Line 23)'),
             ('F3X-24', 'Independent expenditures (Line 24)'),
+            ('F3X-25', 'Party Coordinated Expenditures  (Line 25)'),
             ('F3X-26', 'Loan repayments made (Line 26)'),
             ('F3X-27', 'Loans made (Line 27)'),
             ('F3X-28A', 'Refunds of Contributions Made to Individuals/Persons Other Than Political Committees (Line 28a)'),
