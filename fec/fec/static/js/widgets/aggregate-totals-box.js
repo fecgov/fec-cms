@@ -11,7 +11,7 @@ const breakpointToMedium = 675;
 const breakpointToLarge = 700;
 const breakpointToXL = 860;
 
-const isModernBrowser = ('fetch' in window && 'assign' in Object);
+const isModernBrowser = 'fetch' in window && 'assign' in Object;
 
 // Includes
 import { buildUrl } from '../modules/helpers';
