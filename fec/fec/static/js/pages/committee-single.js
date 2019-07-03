@@ -649,6 +649,9 @@ $(document).ready(function() {
         break;
       case 'electioneering-committee':
         path = ['committee', committeeId, 'electioneering', 'by_candidate'];
+        query = _.extend(query, {
+          election_full: false
+        });
         tables.DataTable.defer($table, {
           path: path,
           query: query,
