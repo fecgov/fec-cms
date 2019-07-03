@@ -13,25 +13,6 @@ const entries = {
   init: './fec/static/js/init.js',
   'data-init': './fec/static/js/data-init.js',
   vendor: ['jquery', 'handlebars']
-  // fonts: [
-  //   // TODO - move these to their final home
-  //   './fec/static/fonts/fec_currencymono-bold.eot',
-  //   './fec/static/fonts/fec_currencymono-bold.ttf',
-  //   './fec/static/fonts/fec_currencymono-bold.woff',
-  //   './fec/static/fonts/fec_currencymono-bold.woff2',
-  //   './fec/static/fonts/fec_currencymono-bolditalic.eot',
-  //   './fec/static/fonts/fec_currencymono-bolditalic.ttf',
-  //   './fec/static/fonts/fec_currencymono-bolditalic.woff',
-  //   './fec/static/fonts/fec_currencymono-bolditalic.woff2',
-  //   './fec/static/fonts/fec_currencymono-italic.eot',
-  //   './fec/static/fonts/fec_currencymono-italic.ttf',
-  //   './fec/static/fonts/fec_currencymono-italic.woff',
-  //   './fec/static/fonts/fec_currencymono-italic.woff2',
-  //   './fec/static/fonts/fec_currencymono-regular.eot',
-  //   './fec/static/fonts/fec_currencymono-regular.ttf',
-  //   './fec/static/fonts/fec_currencymono-regular.woff',
-  //   './fec/static/fonts/fec_currencymono-regular.woff2'
-  // ]
 };
 
 const datatablePages = [];
@@ -113,19 +94,6 @@ module.exports = [
             presets: ['latest']
           }
         }
-        // {
-        //   // TODO - move these to their final home
-        //   test: /\.(woff(2)?|ttf|eot|svg)(\?v=\d+\.\d+\.\d+)?$/,
-        //   use: [
-        //     {
-        //       loader: 'file-loader',
-        //       options: {
-        //         name: '[name].[ext]',
-        //         outputPath: '../fonts'
-        //       }
-        //     }
-        //   ]
-        // }
       ]
     },
     resolve: {
