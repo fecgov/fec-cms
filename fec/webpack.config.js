@@ -10,6 +10,7 @@ const CleanWebpackPlugin = require('clean-webpack-plugin');
 const fs = require('fs');
 
 const entries = {
+  polyfills: './fec/static/js/polyfills.js',
   init: './fec/static/js/init.js',
   'data-init': './fec/static/js/data-init.js',
   vendor: ['jquery', 'handlebars']
@@ -91,7 +92,7 @@ module.exports = [
           exclude: /node_modules/,
           loader: 'babel-loader',
           options: {
-            presets: ['latest']
+            presets: ['es2015']
           }
         }
       ]
@@ -151,16 +152,17 @@ module.exports = [
       new ManifestPlugin({
         fileName: 'rev-widgets-manifest-js.json',
         basePath: '/static/js/'
-      })
+      }),
+      new webpack.ProvidePlugin({ _: 'lodash' })
     ],
     module: {
-      loaders: [
+      rules: [
         {
           test: /\.js$/,
           exclude: /node_modules/,
           loader: 'babel-loader',
           options: {
-            presets: ['latest', 'react']
+            presets: ['es2015', 'react']
           }
         }
       ]
@@ -195,7 +197,7 @@ module.exports = [
           exclude: /node_modules/,
           loader: 'babel-loader',
           options: {
-            presets: ['latest', 'react']
+            presets: ['es2015', 'react']
           }
         }
       ]
@@ -231,7 +233,7 @@ module.exports = [
           exclude: /node_modules/,
           loader: 'babel-loader',
           options: {
-            presets: ['latest', 'react']
+            presets: ['es2015', 'react']
           }
         }
       ]

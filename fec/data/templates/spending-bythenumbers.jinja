@@ -27,7 +27,7 @@
 {% if FEATURES.aggregatetotals %}
 <section id="spending-summary" class="aggregate-totals-section">
   <h2>Spending summary</h2>
-  <script defer data-theme="dark" data-office="{{ office }}" data-year="{{ election_year }}" data-action="spending" src="{{ asset_for_js('widgets/aggregate-totals-box.js') }}"></script>
+  <script defer id="gov_fec_agg_tots_script" data-theme="dark" data-office="{{ office }}" data-year="{{ election_year }}" data-action="spending" src="{{ asset_for_js('widgets/aggregate-totals-box.js') }}"></script>
 </section>
 {% endif %}
 <section id="spending-breakdown">
