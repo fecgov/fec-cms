@@ -193,6 +193,12 @@
   padding-left: u(2rem);
 }
 
+// mono space currency font
 .t-mono {
-  font-family: $currency-monospace !important;
+  font-family: $currency-monospace;
+}
+// except for where it's inside a <thead> or <th>
+thead .t-mono,
+th .t-mono {
+  font-family: inherit;
 }
