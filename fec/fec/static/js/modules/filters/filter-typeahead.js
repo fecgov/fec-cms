@@ -160,7 +160,8 @@ FilterTypeahead.prototype.removeCheckbox = function(e, opts) {
 
   // tag removal
   if (opts) {
-    $input = this.$selected.find('#' + opts.key);
+    var $input_id = $(document.getElementById(opts.key));
+    $input = this.$selected.find($input_id);
   }
 
   $input.closest('li').remove();

@@ -24,6 +24,9 @@
     {% if table_context['office'] == 'house' %}
       {{ districts.dropdown() }}
     {% endif %}
+    {% if table_context['office'] in ['senate', 'house'] %}
+      {% include 'partials/filters/active-candidates.jinja' %}
+    {% endif %}
   </div>
   <button type="button" class="js-accordion-trigger accordion__button">Candidate financials</button>
   <div class="accordion__content">

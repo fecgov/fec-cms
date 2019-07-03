@@ -278,6 +278,12 @@ function filterSuccessUpdates(changeCount) {
 
     $('.is-successful').removeClass('is-successful');
     $('.is-unsuccessful').removeClass('is-unsuccessful');
+    // Enable all restricted fields on success
+    $(
+      '.restricted-fields input, .restricted-fields button, .restricted-fields legend'
+    )
+      .removeClass('is-disabled-filter')
+      .addClass('is-active-filter');
 
     if (type === 'checkbox') {
       $label = $('label[for="' + updateChangedEl.id + '"]');
@@ -338,12 +344,10 @@ function filterSuccessUpdates(changeCount) {
 
     message = '<strong>' + filterAction + '</strong><br>' + filterResult;
 
-    if ($filterMessage.length) {
-      $filterMessage.fadeOut().remove();
-      // if there is a message already, cancel existing message timeout
-      // to avoid timing weirdness
-      clearTimeout(messageTimer);
-    }
+    $filterMessage.fadeOut().remove();
+    // if there is a message already, cancel existing message timeout
+    // to avoid timing weirdness
+    clearTimeout(messageTimer);
 
     // Clicking on "Clear all filters" will remove all dropdown checkboxes,
     // so we check to make sure the message isn't shown inside the dropdown panel.
@@ -361,12 +365,10 @@ function filterSuccessUpdates(changeCount) {
     }
 
     messageTimer = setTimeout(function() {
-      $('.is-successful').removeClass('is-successful');
-
-      $('.filter__message').fadeOut(function() {
+      $('.filter__message.filter__message--success').fadeOut(function() {
         $(this).remove();
       });
-
+      $('.is-successful').removeClass('is-successful');
       $('.date-range-grid').fadeOut();
     }, helpers.SUCCESS_DELAY);
   }
@@ -439,7 +441,11 @@ var defaultOpts = {
   },
   pagingType: 'simple',
   title: null,
-  dom: browseDOM
+  dom: browseDOM,
+  error400Message:
+    '<strong>We had trouble processing your request</strong><br>' +
+    'Please try again. If you still have trouble, ' +
+    '<button class="js-filter-feedback">let us know</button>'
 };
 
 var defaultCallbacks = {
@@ -496,7 +502,8 @@ DataTable.prototype.initFilters = function() {
   if (this.opts.useFilters) {
     var tagList = new filterTags.TagList({
       resultType: 'results',
-      showResultCount: true
+      showResultCount: true,
+      tableTitle: this.opts.title
     });
     this.$widgets.find('.js-filter-tags').prepend(tagList.$body);
     this.filterPanel = new FilterPanel();
@@ -692,14 +699,30 @@ DataTable.prototype.fetchSuccess = function(resp) {
   }
 };
 
-DataTable.prototype.fetchError = function() {
+DataTable.prototype.fetchError = function(jqXHR, textStatus) {
   var self = this;
+  // Default error message that occurs most likely due to timeout
   var errorMessage =
-    '<div class="filter__message filter__message--error">' +
-    '<strong>We had trouble processing your request</strong><br>' +
-    'Please try again. If you still have trouble, ' +
-    '<button class="js-filter-feedback">let us know</button></div>';
-
+    '<div class="message filter__message message--error">' +
+    self.opts.error400Message +
+    '</div>';
+  if (textStatus == 'abort') {
+    // Pending message occurs when the previous query was cancelled due to
+    // the user adding or removing filters
+    errorMessage =
+      '<div class="filter__message filter__message--delayed"><strong>Just a moment while we process your new request. You are searching a large dataset.</strong></div>';
+  } else if (jqXHR && jqXHR.status == 400) {
+    $('#two_year_transaction_period-dropdown').attr('aria-hidden', 'true');
+    $('.restricted-fields .dropdown .dropdown__button ').removeClass(
+      'is-active'
+    );
+    // Disable restricted fields on 400 error
+    $(
+      '.restricted-fields input, .restricted-fields button, .restricted-fields legend'
+    )
+      .removeClass('is-active-filter')
+      .addClass('is-disabled-filter');
+  }
   $('.filter__message').remove();
 
   if (

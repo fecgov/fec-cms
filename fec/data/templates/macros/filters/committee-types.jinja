@@ -1,4 +1,4 @@
-{% macro field(name='committee_type', include_ssfs = True) %}
+{% macro field(name='committee_type', include_ssfs = True, include_leadership_pac = True, include_lobbyist_pac = True) %}
 
 <div class="filter">
   <fieldset class="js-dropdown js-filter" data-filter="checkbox" data-name="hsp-committee_type">
@@ -32,19 +32,19 @@
     <div class="dropdown">
       <button type="button" class="dropdown__button button--alt" data-name="{{ name }}">More</button>
       <div id="ie-dropdown" class="dropdown__panel" aria-hidden="true">
-      <ul class="dropdown__list">
-        <li class="dropdown__item">
-          <input id="committee-type-checkbox-U" type="checkbox" name="{{ name }}" value="U">
-          <label class="dropdown__value" for="committee-type-checkbox-U">Single candidate independent expenditure</label>
-        </li>
-        <li class="dropdown__item">
-          <input id="committee-type-checkbox-I" type="checkbox" name="{{ name }}" value="I">
-          <label class="dropdown__value" for="committee-type-checkbox-I">Independent expenditure filer (not a committee)</label>
-        </li>
-      </ul>
+        <ul class="dropdown__list">
+          <li class="dropdown__item">
+            <input id="committee-type-checkbox-U" type="checkbox" name="{{ name }}" value="U">
+            <label class="dropdown__value" for="committee-type-checkbox-U">Single candidate independent expenditure</label>
+          </li>
+          <li class="dropdown__item">
+            <input id="committee-type-checkbox-I" type="checkbox" name="{{ name }}" value="I">
+            <label class="dropdown__value" for="committee-type-checkbox-I">Independent expenditure filer (not a committee)</label>
+          </li>
+        </ul>
+      </div>
     </div>
-  </div>
-</fieldset>
+  </fieldset>
 </div>
 
 <div class="filter">
@@ -54,60 +54,67 @@
     <div class="dropdown">
       <button type="button" class="dropdown__button button--alt" data-name="{{ name }}">More</button>
       <div id="pac-dropdown" class="dropdown__panel" aria-hidden="true">
-      <ul class="dropdown__list">
+        <ul class="dropdown__list">
+          {# Temporarily adding Lobbyist/Registrant PAC committee type exclusion from receipts and individual contributions until it is fixed in our data #}
+        {% if include_lobbyist_pac %}
         <li class="dropdown__item">
           <input id="designation-checkbox-B" type="checkbox" name="designation" value="B">
           <label class="dropdown__value" for="designation-checkbox-B">Lobbyist/Registrant PAC</label>
         </li>
+        {% endif %}
+        {# Temporarily adding Leadership PAC committee type exclusion from receipts and individual contributions until it is fixed in our data #}
+        {% if include_leadership_pac %}
         <li class="dropdown__item">
           <input id="designation-checkbox-D" type="checkbox" name="designation" value="D">
           <label class="dropdown__value" for="designation-checkbox-D">Leadership PAC</label>
         </li>
-        <li class="dropdown__item">
-          <input id="committee-type-checkbox-N" type="checkbox" name="{{ name }}" value="N">
-          <label class="dropdown__value" for="committee-type-checkbox-N">PAC - nonqualified</label>
-        </li>
-        <li class="dropdown__item">
-          <input id="committee-type-checkbox-Q" type="checkbox" name="{{ name }}" value="Q">
-          <label class="dropdown__value" for="committee-type-checkbox-Q">PAC - qualified</label>
-        </li>
-        <li class="dropdown__item">
-          <input id="committee-type-checkbox-V" type="checkbox" name="{{ name }}" value="V">
-          <label class="dropdown__value" for="committee-type-checkbox-V">PAC with non-contribution account - nonqualified</label>
-        </li>
-        <li class="dropdown__item">
-          <input id="committee-type-checkbox-W" type="checkbox" name="{{ name }}" value="W">
-          <label class="dropdown__value" for="committee-type-checkbox-W">PAC with non-contribution account - qualified</label>
-        </li>
-        {# Temporarily adding SSFs committee type exclusion from receipts and individual contributions until it is fixed in our data #}
-        {% if include_ssfs %}
-          <li class="dropdown__subhead">Separate segregated funds</li>
-          <li class="dropdown__item">
-            <input id="org-type-checkbox-C" name="organization_type" type="checkbox" value="C">
-            <label class="dropdown__value" for="org-type-checkbox-C">Corporation</label>
-          </li>
-          <li class="dropdown__item">
-            <input id="org-type-checkbox-L" name="organization_type" type="checkbox" value="L">
-            <label class="dropdown__value" for="org-type-checkbox-L">Labor organization</label>
-          </li>
-          <li class="dropdown__item">
-            <input id="org-type-checkbox-M" name="organization_type" type="checkbox" value="M">
-            <label class="dropdown__value" for="org-type-checkbox-M">Membership organization</label>
-          </li>
-          <li class="dropdown__item">
-            <input id="org-type-checkbox-T" name="organization_type" type="checkbox" value="T">
-            <label class="dropdown__value" for="org-type-checkbox-T">Trade association</label>
-          </li>
-          <li class="dropdown__item">
-            <input id="org-type-checkbox-V" name="organization_type" type="checkbox" value="V">
-            <label class="dropdown__value" for="org-type-checkbox-V">Cooperative</label>
-          </li>
-          <li class="dropdown__item">
-            <input id="org-type-checkbox-W" name="organization_type" type="checkbox" value="W">
-            <label class="dropdown__value" for="org-type-checkbox-W">Corporation without capital stock</label>
-          </li>
         {% endif %}
-      </ul>
+          <li class="dropdown__item">
+            <input id="committee-type-checkbox-N" type="checkbox" name="{{ name }}" value="N">
+            <label class="dropdown__value" for="committee-type-checkbox-N">PAC - nonqualified</label>
+          </li>
+          <li class="dropdown__item">
+            <input id="committee-type-checkbox-Q" type="checkbox" name="{{ name }}" value="Q">
+            <label class="dropdown__value" for="committee-type-checkbox-Q">PAC - qualified</label>
+          </li>
+          <li class="dropdown__item">
+            <input id="committee-type-checkbox-V" type="checkbox" name="{{ name }}" value="V">
+            <label class="dropdown__value" for="committee-type-checkbox-V">PAC with non-contribution account - nonqualified</label>
+          </li>
+          <li class="dropdown__item">
+            <input id="committee-type-checkbox-W" type="checkbox" name="{{ name }}" value="W">
+            <label class="dropdown__value" for="committee-type-checkbox-W">PAC with non-contribution account - qualified</label>
+          </li>
+          {# Temporarily adding SSFs committee type exclusion from receipts and individual contributions until it is fixed in our data #}
+          {% if include_ssfs %}
+            <li class="dropdown__subhead">Separate segregated funds</li>
+            <li class="dropdown__item">
+              <input id="org-type-checkbox-C" name="organization_type" type="checkbox" value="C">
+              <label class="dropdown__value" for="org-type-checkbox-C">Corporation</label>
+            </li>
+            <li class="dropdown__item">
+              <input id="org-type-checkbox-L" name="organization_type" type="checkbox" value="L">
+              <label class="dropdown__value" for="org-type-checkbox-L">Labor organization</label>
+            </li>
+            <li class="dropdown__item">
+              <input id="org-type-checkbox-M" name="organization_type" type="checkbox" value="M">
+              <label class="dropdown__value" for="org-type-checkbox-M">Membership organization</label>
+            </li>
+            <li class="dropdown__item">
+              <input id="org-type-checkbox-T" name="organization_type" type="checkbox" value="T">
+              <label class="dropdown__value" for="org-type-checkbox-T">Trade association</label>
+            </li>
+            <li class="dropdown__item">
+              <input id="org-type-checkbox-V" name="organization_type" type="checkbox" value="V">
+              <label class="dropdown__value" for="org-type-checkbox-V">Cooperative</label>
+            </li>
+            <li class="dropdown__item">
+              <input id="org-type-checkbox-W" name="organization_type" type="checkbox" value="W">
+              <label class="dropdown__value" for="org-type-checkbox-W">Corporation without capital stock</label>
+            </li>
+          {% endif %}
+        </ul>
+      </div>
     </div>
   </fieldset>
 </div>

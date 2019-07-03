@@ -5,6 +5,7 @@
 
 {% import 'macros/filters/contributor-states.jinja' as states %}
 {% import 'macros/filters/date.jinja' as date %}
+{% import 'macros/filters/years.jinja' as years %}
 {% import 'macros/filters/range.jinja' as range %}
 {% import 'macros/filters/checkbox.jinja' as checkbox %}
 
@@ -18,7 +19,7 @@ Filter receipts
 
 {% block efiling_filters %}
 <div class="filters__inner">
-  {{ typeahead.field('committee_id', 'Recipient name or ID', id_suffix='_raw') }}
+  {{ typeahead.field('committee_id', 'Contributor name or ID', id_suffix='_raw') }}
   {{ text.field('contributor_name', 'Contributor name', id_suffix='_raw') }}
   {{ text.field('contributor_city', 'Contributor city', id_suffix='_raw') }}
   {{ states.field('contributor_state', id_suffix='_raw') }}
@@ -28,22 +29,29 @@ Filter receipts
 {% block filters %}
 <div class="filters__inner">
   {{ typeahead.field('committee_id', 'Recipient name or ID') }}
-  {{ typeahead.field('contributor_name', 'Contributor name or ID', dataset='committees', allow_text=True) }}
-  {{ date.partition_field('date', 'Receipt date', dates ) }}
+  <legend class="label u-margin--top">Contributor details</legend>
+  {{ typeahead.field(name = 'contributor_name', title = 'Name or ID', dataset='committees', allow_text=True, minor_label_text = True) }}
+  {{ text.field(name = 'contributor_city', title = 'City', minor_label_text = True) }}
+  {{ text.field(name = 'contributor_zip', title = 'ZIP code', attrs = {'maxlength':5}, minor_label_text = True) }}
+  {{ text.field(name = 'contributor_occupation', title = 'Occupation', minor_label_text = True, helper_text = 'Use the employer field to search by occupation in reports filed before 2003') }}
+  {{ text.field(name = 'contributor_employer', title = 'Employer', minor_label_text = True) }}
+  {{ text.field('image_number', 'Image number') }}
 </div>
-<div class="js-accordion accordion--neutral" data-content-prefix="filter" data-open-first="false">
-  <button type="button" class="js-accordion-trigger accordion__button">Contributor details</button>
+<div class="js-accordion accordion--neutral restricted-fields" data-content-prefix="filter" data-open-first="true">
+  <button type="button" class="js-accordion-trigger accordion__button">Time period</button>
   <div class="accordion__content">
-    {{ text.field('contributor_city', 'City') }}
+    {{ years.cycles('two_year_transaction_period', 'Report time period', multi_time_period_label="When searching multiple time periods, choose one or more fields: recipient name or ID, contributor name or ID, city, ZIP code, occupation or employer, or image number.")  }}
+    {{ date.field('date', 'Receipt date range' ) }}
+  </div>
+  <button type="button" class="js-accordion-trigger accordion__button">More contributor details</button>
+  <div class="accordion__content">
     {{ states.field('contributor_state') }}
-    {{ text.field('contributor_zip', 'ZIP code')}}
-    {% include 'partials/filters/occupation-employer.jinja' %}
     {% include 'partials/filters/unique-receipts.jinja' %}
   </div>
   <button type="button" class="js-accordion-trigger accordion__button">Recipient committee type</button>
   <div class="accordion__content">
     {% import 'macros/filters/committee-types.jinja' as committee_type %}
-    {{ committee_type.field(name='recipient_committee_type', include_ssfs = False) }}
+    {{ committee_type.field(name='recipient_committee_type', include_ssfs = False, include_leadership_pac = False, include_lobbyist_pac = False) }}
   </div>
   <button type="button" class="js-accordion-trigger accordion__button">Receipt details</button>
   <div class="accordion__content">
@@ -57,7 +65,6 @@ Filter receipts
     <div class="js-line-number-message message message--info message--small">
       <span class="t-block">Filters for receipt types are available only for filings from 2007 or later.</span>
     </div>
-    {{ text.field('image_number', 'Image number') }}
     <div class="message message--info message--small">
       <span class="t-block">Receipts updated according to the filer's schedule. Processing time can vary.</span>
     </div>

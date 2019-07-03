@@ -79,7 +79,7 @@ var receiptDateColumn = {
 var pagesColumn = {
   data: 'beginning_image_number',
   orderable: false,
-  className: 'min-tablet hide-panel column--xs column--number t-mono',
+  className: 'min-tablet hide-panel column--xs column--number',
   render: function(data, type, row) {
     // Image numbers in 2015 and later begin with YYYYMMDD,
     // which makes for a very big number.
@@ -346,6 +346,13 @@ var filings = {
           row.candidate_name,
           helpers.buildAppUrl(['candidate', row.candidate_id], cycle),
           'candidate'
+        );
+        // If committee ID is actually a candidate ID, use 'candidate' in URI
+      } else if (row.committee_id.match(/^[H, S, P]+\w+$/)) {
+        return columnHelpers.buildEntityLink(
+          row.committee_name,
+          helpers.buildAppUrl(['candidate', row.committee_id], cycle),
+          'committee'
         );
       } else if (row.committee_name) {
         return columnHelpers.buildEntityLink(
