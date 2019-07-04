@@ -17,7 +17,9 @@
     "format-lint": "npm run format && npm run lint",
     "test": "karma start",
     "test-single": "npm run lint && karma start --single-run --browsers ChromeHeadless",
-    "watch": "nswatch"
+    "watch": "nswatch",
+    "snyk-protect": "snyk protect",
+    "prepare": "npm run snyk-protect"
   },
   "dependencies": {
     "a11y-dialog": "4.0.0",
@@ -59,7 +61,8 @@
     "tough-cookie": "^2.5.0",
     "tunnel-agent": "^0.6.0",
     "typeahead.js": "0.11.1",
-    "underscore": "^1.8.3"
+    "underscore": "^1.8.3",
+    "snyk": "^1.189.0"
   },
   "devDependencies": {
     "@babel/core": "^7.0.0",
@@ -146,5 +149,6 @@
     "node": "10.16.0",
     "npm": "6.9.2"
   },
-  "license": "CC0-1.0"
+  "license": "CC0-1.0",
+  "snyk": true
 }
