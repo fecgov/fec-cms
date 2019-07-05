@@ -1,0 +1,23 @@
+{# TODO - This will be used when the contributions-by-state tool is a stand-alone widget #}
+{% extends 'layouts/widgets.jinja' %}
+{% import 'macros/page-header.jinja' as header %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block css %}
+  <link rel="stylesheet" type="text/css" href="/static/css/widgets/contributions-by-state.css" />
+  <style>
+    body {
+      margin: 0 !important;
+      padding: 0 !important;
+    }
+  </style>
+{% endblock %}
+
+{% block body %}
+{% include 'partials/widgets/contributions-by-state.jinja' %}
+{% endblock %}
+
+{% block scripts %}
+  <script defer src="{{ asset_for_js('widgets/contributions-by-state-box.js') }}" data-standalone="true"></script>
+{% endblock %}

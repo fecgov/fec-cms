@@ -1,0 +1,18 @@
+{% import "macros/widgets.jinja" as widgets %}
+{% import "macros/filters/typeahead-filter.jinja" as typeahead %}
+
+<aside id="gov-fec-contribs-by-state" class="contribs-by-state">
+    <div class="controls-wrapper">
+        {{ typeahead.field('noname','Contributions received by: ', False, dataset='candidates', allow_text=True) }}
+        {{ widgets.select_election_year(election_years) }}
+    </div>
+    <div class="state-list-wrapper">
+        {{ widgets.list_states() }}
+    </div>
+    <div class="map-wrapper">
+        <div class="election-map"></div>
+        <div class="t-italic js-map-approx-message">
+            <p>District maps on this page are approximate.</p>
+        </div>
+    </div>
+</aside>

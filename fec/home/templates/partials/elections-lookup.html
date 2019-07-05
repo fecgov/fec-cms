@@ -61,18 +61,12 @@
     </form>
   </div>
 </div>
-
-
 <script>
-var context = {
-  election: {
-    cycle: '{{ cycle }}',
-    state: '{{ state|default_if_none:"" }}'
-  }
-};
-
-
+  var context = {
+    election: {
+      cycle: '{{ cycle }}',
+      state: '{{ state|default_if_none:"" }}'
+    }
+  };
 </script>
-
-
 {% endif %}

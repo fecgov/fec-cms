@@ -46,4 +46,5 @@ urlpatterns = [
     url(r'^legal-resources/enforcement/audit-search/$', views_datatables.audit),
 
     url(r'^widgets/aggregate-totals/$', views.aggregate_totals),
+    url(r'^widgets/contributions-by-state/$', views.contributions_by_state),
 ]
