@@ -36,7 +36,7 @@
         <div class="tag__category u-no-margin">
           <div class="tag__item">Coverage dates: {{ aggregate.coverage_start_date|date }} to {{ aggregate.coverage_end_date|date }}</div>
         </div>
-        {{ tables.summary(raising_summary, committee_ids, cycle, office) }}
+        {{ tables.summary(raising_summary, committee_ids, cycle, office, election_full, aggregate_cycles) }}
       </div>
       <div class="entity__figure entity__figure--narrow" id="total-spent">
         <div class="heading--section heading--with-action">
@@ -48,7 +48,7 @@
         <div class="tag__category u-no-margin">
           <div class="tag__item">Coverage dates: {{ aggregate.coverage_start_date|date }} to {{ aggregate.coverage_end_date|date }}</div>
         </div>
-        {{ tables.summary(spending_summary, committee_ids, cycle, office) }}
+        {{ tables.summary(spending_summary, committee_ids, cycle, office, election_full, aggregate_cycles) }}
       </div>
       <div class="entity__figure entity__figure--narrow" id="cash-summary">
         <div class="heading--section heading--with-action">
