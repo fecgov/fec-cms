@@ -128,20 +128,20 @@ def legal_doc_search_mur(request):
     offset = request.GET.get('offset', 0)
     case_no = request.GET.get('case_no', '')
     case_respondents = request.GET.get('case_respondents', '')
-    min_open_date = request.GET.get('case_min_open_date', '')
-    max_open_date = request.GET.get('case_max_open_date', '')
-    min_close_date = request.GET.get('case_min_close_date', '')
-    max_close_date = request.GET.get('case_max_close_date', '')
+    case_min_open_date = request.GET.get('case_min_open_date', '')
+    case_max_open_date = request.GET.get('case_max_open_date', '')
+    case_min_close_date = request.GET.get('case_min_close_date', '')
+    case_max_close_date = request.GET.get('case_max_close_date', '')
 
     results = api_caller.load_legal_search_results(
         query, 'murs', 
         offset=offset, 
         case_no=case_no, 
         case_respondents=case_respondents,
-        min_open_date=min_open_date,
-        max_open_date=max_open_date,
-        min_close_date=min_close_date,
-        max_close_date=max_close_date
+        case_min_open_date=case_min_open_date,
+        case_max_open_date=case_max_open_date,
+        case_min_close_date=case_min_close_date,
+        case_max_close_date=case_max_close_date
     )
 
     return render(request, 'legal-search-results-murs.jinja', {
@@ -150,10 +150,10 @@ def legal_doc_search_mur(request):
         'result_type': 'murs',
         'case_no': case_no,
         'case_respondents': case_respondents,
-        'min_open_date': min_open_date,
-        'max_open_date': max_open_date,
-        'min_close_date': min_close_date,
-        'max_close_date': max_close_date,
+        'case_min_open_date': case_min_open_date,
+        'case_max_open_date': case_max_open_date,
+        'case_min_close_date': case_min_close_date,
+        'case_max_close_date': case_max_close_date,
         'query': query
     })
 
