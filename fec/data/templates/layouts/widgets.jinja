@@ -10,7 +10,15 @@
   {% block css %}{% endblock css %}
 
   {% block head_js %}
-    <script src="{{ asset_for_js('polyfills.js') }}"></script>
+    <script>
+      var canSkipPolyfills = ('fetch' in window && 'assign' in Object);
+      if (!canSkipPolyfills) {
+        var pfScriptElem = document.createElement('script');
+        pfScriptElem.async = false;
+        pfScriptElem.src = '{{ asset_for_js('polyfills.js') }}';
+        document.head.appendChild(pfScriptElem);
+      }
+    </script>
   {% endblock %}
 
   <script>

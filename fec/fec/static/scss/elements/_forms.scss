@@ -67,7 +67,7 @@ select {
   background-size: 12px;
   color: $base;
   border: 2px solid $gray;
-  padding: u(.6rem 3rem .6rem 1rem);
+  padding: u(.6rem 3em .6rem 1rem);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -171,12 +171,20 @@ input[type="file"] {
   border-radius: u(1.6rem);
 }
 
-[type="checkbox"]:checked + label,
+[type="checkbox"]:checked + label {
+  background-color: transparent;
+
+  &::before {
+    background-color: $gray-dark;
+  }
+}
+
 [type="radio"]:checked + label {
   background-color: transparent;
 
   &::before {
     background-color: $gray-dark;
+    box-shadow: 0 0 0 1.2px $inverse inset;
   }
 }
 

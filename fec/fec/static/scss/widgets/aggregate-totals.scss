@@ -156,7 +156,9 @@ aside.aggr-totals[id^='gov_fec_at_'] {
   }
   .total-wrapper {
     border-bottom: solid thin $colorElementBordersOnLight;
+    display: -ms-flexbox;
     display: flex;
+    -ms-flex-wrap: wrap;
     flex-wrap: wrap;
     margin-bottom: $fontSizeBase * 2;
     padding-bottom: $fontSizeBase * 2;
@@ -271,8 +273,11 @@ aside.aggr-totals[id^='gov_fec_at_'] {
   }
 
   footer {
+    -ms-flex-align: baseline;
     align-items: baseline;
+    display: -ms-flexbox;
     display: flex;
+    -ms-flex-pack: justify;
     justify-content: space-between;
     margin-top: $fontSizeBase * 2;
     width: 100%;
@@ -318,8 +323,11 @@ aside.aggr-totals[id^='gov_fec_at_'] {
   // Medium sizes for the light theme, which is the default
   &.w-m {
     @extend .w-s;
+    -ms-flex-align: center;
     align-items: center;
+    display: -ms-flexbox;
     display: flex;
+    -ms-flex-wrap: wrap;
     flex-wrap: wrap;
     padding: ($fontSizeBase * 2) ($fontSizeBase * 2) $fontSizeBase;
 
@@ -334,12 +342,14 @@ aside.aggr-totals[id^='gov_fec_at_'] {
 
       .value {
         // margin: -5px 0 $fontSizeBase 0;
+        -ms-flex-order: 1;
         order: 1;
         text-align: right;
       }
       .description {
         font-size: $fontSizeBase * 1.4;
         // margin: 5px 0 0;
+        -ms-flex-order: 2;
         order: 2;
       }
     }
@@ -381,7 +391,9 @@ aside.aggr-totals[id^='gov_fec_at_'] {
   &.w-l {
     @extend .w-m;
     .controls-wrapper {
+      display: -ms-flexbox;
       display: flex;
+      -ms-flex-pack: justify;
       justify-content: space-between;
     }
     .total-wrapper {
@@ -451,7 +463,9 @@ aside.aggr-totals[id^='gov_fec_at_'] {
     // Medium sizes of the dark theme
     &.w-m {
       .main-content-wrapper {
+        display: -ms-flexbox;
         display: flex;
+        -ms-flex-pack: justify;
         justify-content: space-between;
         margin-bottom: ($fontSizeBase * 3);
         .total-wrapper {
@@ -479,9 +493,11 @@ aside.aggr-totals[id^='gov_fec_at_'] {
   &.controls-office-only {
     .total-wrapper {
       .value {
+        -ms-flex-order: 2;
         order: 2;
       }
       .description {
+        -ms-flex-order: 1;
         order: 1;
       }
     }
@@ -491,5 +507,13 @@ aside.aggr-totals[id^='gov_fec_at_'] {
   .t-mono-stacked-currency {
     font-family: fec_currency_mono;
     text-align: right;
+  }
+
+  // For when we can't use meters, let's hide those cells
+  &.no-meters {
+    .parties-wrapper .simple-table__cell:last-child {
+      display: none;
+      width: 0;
+    }
   }
 }
