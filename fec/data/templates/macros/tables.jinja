@@ -1,4 +1,4 @@
-{% macro summary(data, committee_id, cycle, office_or_committee, election_full, aggregate_cycles) %}
+{% macro summary(data, committee_id, cycle, office_or_committee, aggregate_cycles) %}
 
 {% if office_or_committee not in ['P', 'H', 'S'] %}
   {#
@@ -42,7 +42,7 @@ not 'type' object, so use 'link' to check for 'independent-expenditures' and 'pa
           {%- for year in aggregate_cycles -%}
           two_year_transaction_period={{year}}&
           {%- endfor -%}
-          election_full={{election_full}}&line_number={{ item[1]['type'][office_or_committee] }}">
+          line_number={{ item[1]['type'][office_or_committee] }}">
             {{ item[0]|currency }}
           </a>
 
