@@ -19,47 +19,38 @@
       <label class="label" for="case_respondents">MUR respondents</label>
       <input id="case_respondents" name="case_respondents" type="text" value="{{ case_respondents }}">
     </div>
-  </div>
-  <ul class="js-accordion accordion--neutral" data-content-prefix="filter">
-    <li>
-      <button type="button" class="accordion__button js-accordion-trigger" aria-expanded="true">Time period</button>
-      <div  class="accordion__content filters-inner">
-        <div class="filter">
-          <legend class="label">Case open date range</legend>
-          <div class="range range--date js-date-range">
-            <div class="range__input range__input--min" data-filter="range">
-              <label for="case_min_open_date">Beginning</label>
-              <input id="case_min_open_date" name="case_min_open_date" placeholder="mm/dd/yyyy" value="{{ case_min_open_date }}">
-            </div>
-            <div class="range__hyphen">-</div>
-            <div class="range__input range__input--max" data-filter="range">
-              <label for="case_max_open_date">Ending</label>
-              <input id="case_max_open_date" name="case_max_open_date" placeholder="mm/dd/yyyy" value="{{ case_max_open_date }}">
-            </div>
-          </div>
+    <div class="filter">
+      <legend class="label">Case open date range</legend>
+      <div class="range range--date js-date-range">
+        <div class="range__input range__input--min" data-filter="range">
+          <label for="case_min_open_date">Beginning</label>
+          <input id="case_min_open_date" name="case_min_open_date" placeholder="mm/dd/yyyy" value="{{ case_min_open_date }}">
         </div>
-        <div class="filter">
-          <legend class="label">Case close date range</legend>
-          <div class="range range--date js-date-range">
-            <div class="range__input range__input--min" data-filter="range">
-              <label for="case_min_close_date">Beginning</label>
-              <input id="case_min_close_date" name="case_min_close_date" placeholder="mm/dd/yyyy" value="{{ case_min_close_date }}">
-            </div>
-            <div class="range__hyphen">-</div>
-            <div class="range__input range__input--max" data-filter="range">
-              <label for="case_max_close_date">Ending</label>
-              <input id="case_max_close_date" name="case_max_close_date" placeholder="mm/dd/yyyy" value="{{ case_max_close_date }}">
-            </div>
-          </div>
+        <div class="range__hyphen">-</div>
+        <div class="range__input range__input--max" data-filter="range">
+          <label for="case_max_open_date">Ending</label>
+          <input id="case_max_open_date" name="case_max_open_date" placeholder="mm/dd/yyyy" value="{{ case_max_open_date }}">
         </div>
       </div>
-    </li>
-  </ul>
-  <div class="filters__inner">
-    <button type="submit" class="button button--cta u-margin--top">Apply filters</button>
+    </div>
+    <div class="filter">
+      <legend class="label">Case close date range</legend>
+      <div class="range range--date js-date-range">
+        <div class="range__input range__input--min" data-filter="range">
+          <label for="case_min_close_date">Beginning</label>
+          <input id="case_min_close_date" name="case_min_close_date" placeholder="mm/dd/yyyy" value="{{ case_min_close_date }}">
+        </div>
+        <div class="range__hyphen">-</div>
+        <div class="range__input range__input--max" data-filter="range">
+          <label for="case_max_close_date">Ending</label>
+          <input id="case_max_close_date" name="case_max_close_date" placeholder="mm/dd/yyyy" value="{{ case_max_close_date }}">
+        </div>
+      </div>
+    </div>
+    <div class="filter">
+      <button type="submit" class="button button--cta u-margin--top">Apply filters</button>
+    </div>
   </div>
-</div>
-
 {% endblock %}
 
 {% block message %}
