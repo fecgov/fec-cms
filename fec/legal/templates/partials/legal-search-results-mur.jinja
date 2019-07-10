@@ -24,7 +24,8 @@
             {{ highlight|safe }} &hellip;
           {% endfor %}
         </div>
-        <div><strong>Date closed:</strong> {{ mur.close_date | date('%Y') | default('Unknown', True) }}</div>
+        <div><strong>Date opened:</strong> {{ mur.open_date | date('%m/%d/%Y') | default('Unknown', True) }}</div>
+        <div><strong>Date closed:</strong> {{ mur.close_date | date('%m/%d/%Y') | default('Unknown', True) }}</div>
         {% if mur.mur_type == 'current' %}
         {# Archived MUR subjects are a tree-structure so we don't render them inline #}
           <div>
