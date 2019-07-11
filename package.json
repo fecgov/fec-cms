@@ -43,6 +43,7 @@
     "jquery.inputmask": "3.3.4",
     "leaflet-providers": "1.1.6",
     "lodash": "^4.17.11",
+    "lodash.mergewith": "^4.6.2",
     "minimatch": "^3.0.4",
     "moment": "2.20.1",
     "numeral": "^1.5.3",
