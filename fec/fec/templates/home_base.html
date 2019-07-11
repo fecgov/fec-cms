@@ -1,10 +1,7 @@
 {% load static compress wagtailuserbar %}
 {% load filters %}
 <!DOCTYPE html>
-<!--[if lt IE 7]>      <html lang="en"> <![endif]-->
-<!--[if IE 7]>         <html lang="en"> <![endif]-->
-<!--[if IE 8]>         <html lang="en"> <![endif]-->
-<!--[if gt IE 8]><!--> <html lang="en"> <!--<![endif]-->
+<html lang="en">
   <head>
     {% include './partials/meta-tags.html' %}
 
@@ -17,12 +14,10 @@
   </head>
 
   <body class="{% block body_class %}{% endblock %}">
-    <!--[if lt IE 10]>
+    <!--[if lte IE 10]>
     <div style="background-color: #212121; padding: 10px">
       <h2 style="color: #ffffff">Your browser is outdated</h2>
-      <p style="color: #ffffff; font-size: 16px;">You're using an older version of Internet Explorer. Please update or switch to another browser like Chrome, Firefox, or Safari for a better experience.</p>
-      <p style="color: #ffffff; font-size: 16px;"><a style="color: #ffffff; text-decoration: underline" target="_blank" href="http://browsehappy.com/">Learn how to update your browser.</a></p>
-      <p style="color: #ffffff; font-size: 16px;">You can still access an archive of the old FEC.gov at <a style="color: #ffffff; text-decoration: underline" href="http://classic.fec.gov">classic.fec.gov</a></p>
+      <p style="color: #ffffff; font-size: 16px;">You&apos;re using an older version of Internet Explorer. Please update or switch to another browser like Chrome, Firefox, or Edge for a better experience. <a style="color: #ffffff; text-decoration: underline" target="_blank" href="http://browsehappy.com/">Learn how to update your browser</a>.</p>
     </div>
     <![endif]-->
     {% wagtailuserbar %}
@@ -145,7 +140,7 @@
       window.FEC_APP_URL = '{{ settings.FEC_APP_URL }}';
       window.API_LOCATION = '{{ settings.FEC_API_URL }}';
       window.API_VERSION = '{{ settings.FEC_API_VERSION }}';
-      window.API_KEY = '{{ settings.FEC_API_KEY_PUBLIC }}';
+      window.API_KEY_PUBLIC = '{{ settings.FEC_API_KEY_PUBLIC }}';
       window.TRANSITION_URL = '{{ settings.FEC_TRANSITION_URL }}';
       window.CANONICAL_BASE = '{{ settings.CANONICAL_BASE }}'
     </script>

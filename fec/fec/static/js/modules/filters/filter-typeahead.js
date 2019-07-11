@@ -1,6 +1,6 @@
 'use strict';
 
-/* global API_LOCATION, API_VERSION, API_KEY */
+/* global API_LOCATION, API_VERSION, API_KEY_PUBLIC */
 
 var $ = require('jquery');
 var URI = require('urijs');
@@ -160,7 +160,7 @@ FilterTypeahead.prototype.removeCheckbox = function(e, opts) {
 
   // tag removal
   if (opts) {
-    var $input_id = $(document.getElementById(opts.key))
+    var $input_id = $(document.getElementById(opts.key));
     $input = this.$selected.find($input_id);
   }
 
@@ -265,7 +265,7 @@ FilterTypeahead.prototype.getFilters = function(values) {
       $.getJSON(
         URI(API_LOCATION)
           .path([API_VERSION, dataset].join('/'))
-          .addQuery('api_key', API_KEY)
+          .addQuery('api_key', API_KEY_PUBLIC)
           .addQuery(idKey, ids)
           .toString()
       ).done(this.updateFilters.bind(this));

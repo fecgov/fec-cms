@@ -11,6 +11,8 @@ const breakpointToMedium = 675;
 const breakpointToLarge = 700;
 const breakpointToXL = 860;
 
+const isModernBrowser = 'fetch' in window && 'assign' in Object;
+
 // Includes
 import { buildUrl } from '../modules/helpers';
 import {
@@ -154,7 +156,10 @@ AggregateTotalsBox.prototype.init = function() {
   let instance = this;
 
   // The <script> on the page:
-  this.scriptElement = document.currentScript;
+  // (Starting with a polyfill if !document.currentScript support)
+  if (document.currentScript) this.scriptElement = document.currentScript;
+  else this.scriptElement = document.querySelector('#gov_fec_agg_tots_script');
+  // TODO -- figure out this ID :up:
 
   // We're going to be checking the dataset several times
   let dataset = this.scriptElement.dataset;
@@ -297,7 +302,7 @@ AggregateTotalsBox.prototype.loadData = function(query) {
       cache: 'no-cache',
       mode: 'cors'
     })
-    .then(response => {
+    .then(function(response) {
       if (response.status !== 200)
         throw new Error('The network rejected the grand total request.');
       // else if (response.type == 'cors') throw new Error('CORS error');
@@ -305,19 +310,16 @@ AggregateTotalsBox.prototype.loadData = function(query) {
         instance.displayUpdatedData_grandTotal(data);
       });
     })
-    .catch(() => {
-      // TODO - handle error
+    .catch(function() {
+      // TODO - handle catch
     });
-  // $.getJSON(buildUrl(this.basePath, query)).done(response => {
-  //   instance.displayUpdatedData_grandTotal(response);
-  // });
 
   window
     .fetch(buildUrl(this.basePath_partyTotals, query), {
       cache: 'no-cache',
       mode: 'cors'
     })
-    .then(response => {
+    .then(function(response) {
       if (response.status !== 200)
         throw new Error('The network rejected the parties totals request.');
       // else if (response.type == 'cors') throw new Error('CORS error');
@@ -325,8 +327,8 @@ AggregateTotalsBox.prototype.loadData = function(query) {
         instance.displayUpdatedData_parties(data);
       });
     })
-    .catch(() => {
-      // TODO - handle error
+    .catch(function() {
+      // TODO - handle catch
     });
 };
 
@@ -446,6 +448,8 @@ AggregateTotalsBox.prototype.refreshYearsSelect = function() {
   } else {
     this.yearControl.fireEvent('onchange');
   }
+
+  logUsage(this.baseQuery.office, this.baseQuery.election_year);
 };
 
 /**
@@ -567,8 +571,15 @@ function buildElement(callingInstance, scriptElement) {
   ); // Random so we can have multiple on a page, if needed
 
   let theme = scriptElement.dataset.theme;
+
+  // Should we add a class for ancient browsers?
+  let browserClass = isModernBrowser ? '' : 'no-meters';
+
   // Set its class
-  toReturn.setAttribute('class', 'aggr-totals theme-' + theme);
+  toReturn.setAttribute(
+    'class',
+    'aggr-totals theme-' + theme + ' ' + browserClass
+  );
 
   // Let's build its html
   let theInnerHTML = ``;
@@ -705,6 +716,22 @@ function buildElement(callingInstance, scriptElement) {
   else scriptElement.parentElement.insertBefore(toReturn, scriptElement);
 
   return toReturn;
+}
+
+/**
+ * Handles the usage analytics for this module
+ * @todo - Decide how to gather usage insights while embedded
+ * @param {String} officeAbbrev - The user-selected election office
+ * @param {*} electionYear - String or Number, the user-selected election year
+ */
+function logUsage(officeAbbrev, electionYear) {
+  if (window.ga) {
+    window.ga('send', 'event', {
+      eventCategory: 'Widget-AggregateTotals',
+      eventAction: 'interaction',
+      eventLabel: officeAbbrev + ',' + electionYear
+    });
+  }
 }
 
 new AggregateTotalsBox();

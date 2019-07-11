@@ -1,4 +1,4 @@
-{% macro field(name='committee_type', include_ssfs = True) %}
+{% macro field(name='committee_type', include_ssfs = True, include_leadership_pac = True, include_lobbyist_pac = True) %}
 
 <div class="filter">
   <fieldset class="js-dropdown js-filter" data-filter="checkbox" data-name="hsp-committee_type">
@@ -55,14 +55,20 @@
       <button type="button" class="dropdown__button button--alt" data-name="{{ name }}">More</button>
       <div id="pac-dropdown" class="dropdown__panel" aria-hidden="true">
         <ul class="dropdown__list">
-          <li class="dropdown__item">
-            <input id="designation-checkbox-B" type="checkbox" name="designation" value="B">
-            <label class="dropdown__value" for="designation-checkbox-B">Lobbyist/Registrant PAC</label>
-          </li>
-          <li class="dropdown__item">
-            <input id="designation-checkbox-D" type="checkbox" name="designation" value="D">
-            <label class="dropdown__value" for="designation-checkbox-D">Leadership PAC</label>
-          </li>
+          {# Temporarily adding Lobbyist/Registrant PAC committee type exclusion from receipts and individual contributions until it is fixed in our data #}
+        {% if include_lobbyist_pac %}
+        <li class="dropdown__item">
+          <input id="designation-checkbox-B" type="checkbox" name="designation" value="B">
+          <label class="dropdown__value" for="designation-checkbox-B">Lobbyist/Registrant PAC</label>
+        </li>
+        {% endif %}
+        {# Temporarily adding Leadership PAC committee type exclusion from receipts and individual contributions until it is fixed in our data #}
+        {% if include_leadership_pac %}
+        <li class="dropdown__item">
+          <input id="designation-checkbox-D" type="checkbox" name="designation" value="D">
+          <label class="dropdown__value" for="designation-checkbox-D">Leadership PAC</label>
+        </li>
+        {% endif %}
           <li class="dropdown__item">
             <input id="committee-type-checkbox-N" type="checkbox" name="{{ name }}" value="N">
             <label class="dropdown__value" for="committee-type-checkbox-N">PAC - nonqualified</label>

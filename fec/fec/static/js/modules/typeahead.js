@@ -58,7 +58,7 @@ function getUrl(resource) {
     .path([window.API_VERSION, 'names', resource, ''].join('/'))
     .query({
       q: '%QUERY',
-      api_key: window.API_KEY
+      api_key: window.API_KEY_PUBLIC
     })
     .readable();
 }

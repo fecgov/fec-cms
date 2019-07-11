@@ -109,7 +109,7 @@ class LegalSearch extends React.Component {
     }
     let queryPath = URI(window.API_LOCATION)
       .path([window.API_VERSION, 'legal', 'search'].join('/'))
-      .addQuery('api_key', window.API_KEY)
+      .addQuery('api_key', window.API_KEY_PUBLIC)
       .addQuery('type', 'advisory_opinions');
 
     let queryState = this.getUserSearchCriteria(this.state);
