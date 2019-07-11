@@ -308,6 +308,7 @@ def get_candidate(candidate_id, cycle, election_full):
         'has_raw_filings': has_raw_filings,
         'min_receipt_date': raw_filing_start_date,
         'context_vars': context_vars,
+        'aggregate_cycles': aggregate_cycles,
     }
 
 
