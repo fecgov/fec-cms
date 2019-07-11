@@ -34,7 +34,7 @@ class CitationFilter extends React.Component {
             e.target.value
           ].join('/')
         )
-        .addQuery('api_key', window.API_KEY);
+        .addQuery('api_key', window.API_KEY_PUBLIC);
       $.getJSON(path.toString(), result => {
         this.setState({ citations: result.citations, dropdownVisible: true });
       });
