@@ -256,9 +256,12 @@ function formatCycleRange(year, duration) {
   return firstYear + '–' + year;
 }
 
-function cycleDates(year) {
+function cycleDates(year, duration) {
+  console.log("cycleDates duration");
+  console.log(duration);
+  console.log(year - duration + 1)
   return {
-    min: '01-01-' + (year - 1),
+    min: '01-01-' + (year - duration + 1),
     max: '12-31-' + year
   };
 }

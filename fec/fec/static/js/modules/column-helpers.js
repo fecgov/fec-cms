@@ -103,11 +103,27 @@ function buildEntityLink(data, url, category, opts) {
   return anchor.outerHTML;
 }
 
-function buildAggregateUrl(cycle, includeTransactionPeriod) {
-  var dates = helpers.cycleDates(cycle);
+function  buildAggregateUrl(cycle, includeTransactionPeriod, duration) {
+  var dates = helpers.cycleDates(cycle, duration);
+  console.log(includeTransactionPeriod);
   if (includeTransactionPeriod) {
-    return {
-      two_year_transaction_period: cycle
+    if (duration == 4) {
+      return {
+        two_year_transaction_period: cycle,
+        two_year_transaction_period: cycle - 2
+      }
+    }
+    else if (duration == 6) {
+      return {
+        two_year_transaction_period: cycle,
+        two_year_transaction_period: cycle - 2,
+        two_year_transaction_period: cycle - 4
+      }
+    }
+    else {
+      return {
+        two_year_transaction_period: cycle
+      }
     };
   } else {
     return {
@@ -132,13 +148,16 @@ function buildTotalLink(path, getParams) {
       if (path.indexOf('receipts') > -1 || path.indexOf('disbursements') > -1) {
         includeTransactionPeriod = true;
       }
+      console.log("buildTotalLink params.duration");
+      console.log(params.duration);
       var uri = helpers.buildAppUrl(
         path,
         _.extend(
           { committee_id: row.committee_id },
           buildAggregateUrl(
             _.extend({}, row, params).cycle,
-            includeTransactionPeriod
+            includeTransactionPeriod,
+            params.duration
           ),
           params
         )
@@ -170,11 +189,15 @@ function makeCommitteeColumn(opts, context, factory) {
       ) {
         row.cycle = context.election.cycle;
         var column = meta.settings.aoColumns[meta.col].data;
+        row.duration = context.election.duration;
+        console.log("makeCommitteeColumn duration");
+        console.log(row.duration);
         return _.extend(
           {
             committee_id: (context.candidates[row.candidate_id] || {})
               .committee_ids,
-            two_year_transaction_period: row.cycle
+            two_year_transaction_period: row.cycle//,
+            //duration: row.duration
           },
           factory(data, type, row, meta, column)
         );
