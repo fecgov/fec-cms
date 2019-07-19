@@ -257,13 +257,26 @@ function formatCycleRange(year, duration) {
 }
 
 function cycleDates(year, duration) {
-  console.log("cycleDates duration");
-  console.log(duration);
-  console.log(year - duration + 1)
   return {
     min: '01-01-' + (year - duration + 1),
     max: '12-31-' + year
   };
+}
+
+function multiCycles(cycle, duration, label = 'two_year_transaction_period') {
+  if (duration == 6) {
+    return {
+      [label]: [cycle, cycle - 2, cycle - 4]
+    };
+  } else if (duration == 4) {
+    return {
+      [label]: [cycle, cycle - 2]
+    };
+  } else {
+    return {
+      [label]: cycle
+    };
+  }
 }
 
 function ensureArray(value) {
@@ -532,6 +545,7 @@ module.exports = {
   buildTableQuery: buildTableQuery,
   currency: currency,
   cycleDates: cycleDates,
+  multiCycles: multiCycles,
   datetime: datetime,
   dollar: dollar,
   ensureArray: ensureArray,

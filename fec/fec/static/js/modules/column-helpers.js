@@ -103,28 +103,10 @@ function buildEntityLink(data, url, category, opts) {
   return anchor.outerHTML;
 }
 
-function  buildAggregateUrl(cycle, includeTransactionPeriod, duration) {
+function buildAggregateUrl(cycle, includeTransactionPeriod, duration = 2) {
   var dates = helpers.cycleDates(cycle, duration);
-  console.log(includeTransactionPeriod);
   if (includeTransactionPeriod) {
-    if (duration == 4) {
-      return {
-        two_year_transaction_period: cycle,
-        two_year_transaction_period: cycle - 2
-      }
-    }
-    else if (duration == 6) {
-      return {
-        two_year_transaction_period: cycle,
-        two_year_transaction_period: cycle - 2,
-        two_year_transaction_period: cycle - 4
-      }
-    }
-    else {
-      return {
-        two_year_transaction_period: cycle
-      }
-    };
+    return helpers.multiCycles(cycle, duration);
   } else {
     return {
       min_date: dates.min,
@@ -133,12 +115,16 @@ function  buildAggregateUrl(cycle, includeTransactionPeriod, duration) {
   }
 }
 
+// Used for election profile page "other spending" tables
+// As well as candidate/committee profile "Individual contributions"
+// by state and by size
 function buildTotalLink(path, getParams) {
   return function(data, type, row, meta) {
     data = data || 0;
     var params = getParams(data, type, row, meta);
     var span = document.createElement('div');
     var includeTransactionPeriod = false;
+    var electionDuration = 2;
     span.setAttribute('data-value', data);
     span.setAttribute('data-row', meta.row);
     if (params) {
@@ -148,8 +134,9 @@ function buildTotalLink(path, getParams) {
       if (path.indexOf('receipts') > -1 || path.indexOf('disbursements') > -1) {
         includeTransactionPeriod = true;
       }
-      console.log("buildTotalLink params.duration");
-      console.log(params.duration);
+      if (context.election) {
+        electionDuration = context.election.duration;
+      }
       var uri = helpers.buildAppUrl(
         path,
         _.extend(
@@ -157,7 +144,7 @@ function buildTotalLink(path, getParams) {
           buildAggregateUrl(
             _.extend({}, row, params).cycle,
             includeTransactionPeriod,
-            params.duration
+            electionDuration
           ),
           params
         )
@@ -175,6 +162,7 @@ function buildTotalLink(path, getParams) {
   };
 }
 
+// Used for election profile page "individual contributions to candidates" charts
 function makeCommitteeColumn(opts, context, factory) {
   return _.extend(
     {},
@@ -190,15 +178,12 @@ function makeCommitteeColumn(opts, context, factory) {
         row.cycle = context.election.cycle;
         var column = meta.settings.aoColumns[meta.col].data;
         row.duration = context.election.duration;
-        console.log("makeCommitteeColumn duration");
-        console.log(row.duration);
         return _.extend(
           {
             committee_id: (context.candidates[row.candidate_id] || {})
-              .committee_ids,
-            two_year_transaction_period: row.cycle//,
-            //duration: row.duration
+              .committee_ids
           },
+          helpers.multiCycles(row.cycle, row.duration),
           factory(data, type, row, meta, column)
         );
       })
