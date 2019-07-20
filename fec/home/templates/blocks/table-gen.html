@@ -1,10 +1,46 @@
 {% load wagtailcore_tags %}
+{% load states_dropdown %}
+
+<script
+  src="https://code.jquery.com/jquery-3.4.1.min.js"
+  integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+  crossorigin="anonymous"></script>
+<script>
+$(function(){
+//   var states = settings.constants.states
+//   $.each( states, function( key, value ) {
+//     opt = "<option value="+key+">"+value+"</option>"
+//   $('#states').append(opt)
+// })
+
+ $('#states').change(function(){
+
+  var state= $('#states').val()
+  console.log(state)
+  if (state != "States") {
+   var ones= $('table').find("tr."+state+", tr.table-head")
+   //var headers = $('table').find('tr.table-head', )
+   $('tr').not(ones).hide()
+   $(ones).show()
+   //$(headers).show()
+  } else
+  { $('tr').show()}
+
+
+ })
+})
+
+
+</script>
+
+{% states_dropdown request %}
+
 <table class="generated">
-  XXX
+
  <thead>
 {% for block in self.table %}
   {% if block.block_type == 'table_header' %}
-    <tr>
+    <tr class="table-head">
     {% for subblock in block.value %}
 
     <th>
@@ -16,14 +52,11 @@
      </thead>
 
 
-
-
-
    {% elif block.block_type == 'table_row' %}
-     <tr>
-     {% for subblock in block.value %}
+     <tr {% if block.value.state %} class="{{block.value.state}}"{% endif %}>
+     {% for subblock in block.value.table_cells %}
 
-      <td>
+      <td {% if subblock.bound_blocks.colspan %}colspan="{{ subblock.bound_blocks.colspan }}"{% endif %}>
        {{ subblock.bound_blocks.table_cell.render }}
       </td>
 

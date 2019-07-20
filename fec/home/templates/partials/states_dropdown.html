@@ -1,0 +1,9 @@
+{% load wagtailcore_tags %}
+{% load filters %}
+
+<select id="states" name="states" aria-label="Select a state">
+  <option selected value="States">States</option>
+  {% for value, label in states.items %}
+  <option value="{{ value }}">{{ label }}</option>
+  {% endfor %}
+</select>

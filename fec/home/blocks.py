@@ -4,6 +4,7 @@ from wagtail.images.blocks import ImageChooserBlock
 from wagtail.documents.blocks import DocumentChooserBlock
 from wagtail.contrib.table_block.blocks import TableBlock
 from wagtail.snippets.blocks import SnippetChooserBlock
+from fec import constants
 
 core_table_options = {
 
@@ -177,14 +178,19 @@ class ExampleImage(blocks.StructBlock):
         icon = 'doc-empty'
 
 class TableGeneratorBlock(blocks.StructBlock):
+    STATES=constants.states.items()
     table_title= models.CharField(max_length=255)
     table = blocks.StreamBlock([
             ('table_header', blocks.ListBlock(blocks.StructBlock([
                 ('table_cell',blocks.RichTextBlock(required=False))
             ]))),
-            ('table_row', blocks.ListBlock(blocks.StructBlock([
-                ('table_cell',blocks.RichTextBlock(required=False))
+            ('table_row',blocks.StructBlock([
+                ('state', blocks.ChoiceBlock(choices=STATES)),
+                ('table_cells',blocks.ListBlock(blocks.StructBlock([
+                    ('colspan', blocks.IntegerBlock(required=False, min_value=2, help_text='Not required. Number of columns to span this cell.')),
+                    ('table_cell',blocks.RichTextBlock(required=False))
             ]))),
+        ], blank=True))
     ])
 
     class Meta:
