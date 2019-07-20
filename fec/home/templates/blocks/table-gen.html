@@ -1,8 +1,9 @@
 {% load wagtailcore_tags %}
 <table class="generated">
+  XXX
  <thead>
 {% for block in self.table %}
-{% if block.block_type == 'table_header' %}
+  {% if block.block_type == 'table_header' %}
     <tr>
     {% for subblock in block.value %}
 
@@ -12,12 +13,13 @@
 
     {% endfor %}
      </tr>
-  {% endif %}
-   </thead>
-   {% endfor %}
-    <tbody>
-    {% for block in self.table %}
-   {% if block.block_type == 'table_row' %}
+     </thead>
+
+
+
+
+
+   {% elif block.block_type == 'table_row' %}
      <tr>
      {% for subblock in block.value %}
 
@@ -30,7 +32,7 @@
     {% endif %}
 {% endfor %}
 
-   </tbody>
+
 </table>
 
 
