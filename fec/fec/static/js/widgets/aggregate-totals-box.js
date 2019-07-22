@@ -698,8 +698,6 @@ function buildElement(callingInstance, scriptElement) {
   //     </footer>
   //   `;
   toReturn.innerHTML = theInnerHTML;
-  //let disclaimer = "<span class='t-note' style='color:#fff'>Newly filed summary data may not appear for up to 48 hours.</span>";
-  //toReturn.append(disclaimer)
 
   let disclaimer = document.createElement('span');
   disclaimer.setAttribute('class', 't-note');
