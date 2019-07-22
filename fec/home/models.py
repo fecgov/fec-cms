@@ -47,7 +47,7 @@ from home.blocks import (ThumbnailBlock, AsideLinkBlock,
                          OptionBlock, CollectionBlock, DocumentFeedBlurb,
                          ExampleParagraph, ExampleForms, ExampleImage,
                          CustomTableBlock, ReportingExampleCards, InternalButtonBlock,
-                         ExternalButtonBlock, SnippetChooserBlock, ExampleImage)
+                         ExternalButtonBlock, SnippetChooserBlock, ExampleImage, TableGeneratorBlock)
 core_table_options = {
 
     'renderer': 'html'
@@ -62,7 +62,8 @@ stream_factory = functools.partial(
         ('image', ImageChooserBlock()),
         ('table', TableBlock(table_options=core_table_options)),
         ('custom_table', CustomTableBlock()),
-        ('contact', ContactInfoBlock())
+        ('contact', ContactInfoBlock()),
+        ('table_generator', TableGeneratorBlock())
     ],
 )
 
@@ -1173,4 +1174,19 @@ class ContactPage(Page):
         FieldPanel('services_title'),
         StreamFieldPanel('services'),
     ]
+
+class FullWidthPage(ContentPage):
+    formatted_title = models.CharField(max_length=255, null=True, blank=True, default='',
+                                        help_text="Use if you need italics in the title. e.g. <em>Italicized words</em>")
+
+    template = 'home/full_width_page.html'
+    content_panels = ContentPage.content_panels
+
+    promote_panels = Page.promote_panels
+
+    search_fields =  ContentPage.search_fields
+
+    @property
+    def content_section(self):
+        return ''
 

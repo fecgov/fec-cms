@@ -187,8 +187,10 @@ class TableGeneratorBlock(blocks.StructBlock):
             ('table_row',blocks.StructBlock([
                 ('state', blocks.ChoiceBlock(choices=STATES)),
                 ('table_cells',blocks.ListBlock(blocks.StructBlock([
-                    ('colspan', blocks.IntegerBlock(required=False, min_value=2, help_text='Not required. Number of columns to span this cell.')),
-                    ('table_cell',blocks.RichTextBlock(required=False))
+                    ('colspan', blocks.IntegerBlock(required=False, min_value=2, help_text='Not required. Number of columns for this cell to span.')),
+                    ('table_cell',blocks.RichTextBlock(required=False)),
+                    ('date', blocks.DateBlock(required=False)),
+                    ('date2', blocks.DateBlock(required=False))
             ]))),
         ], blank=True))
     ])
@@ -221,7 +223,6 @@ class ResourceBlock(blocks.StructBlock):
         ('contribution_limits_table', SnippetChooserBlock('home.EmbedTableSnippet', template = 'blocks/embed-table.html', icon='table')),
         ('image', ImageChooserBlock()),
         ('example_image', ExampleImage()),
-        ('TableGenerator',TableGeneratorBlock())
     ])
 
     aside = blocks.StreamBlock([

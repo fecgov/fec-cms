@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% load wagtailcore_tags wagtailimages_tags %}
+{% load filters %}
+{% load staticfiles %}
+{% block body_class %}template-{{ self.get_verbose_name | slugify }}{% endblock %}
+
+{% block content %}
+
+{% block breadcrumbs %}
+  {% include 'partials/breadcrumbs.html' with page=self links=self.get_ancestors style=self.breadcrumb_style %}
+{% endblock %}
+
+<article class="main">
+  <section class="slab">
+
+        {% for block in self.body %}
+
+        {{ block }}
+
+        {% endfor %}
+
+    </section>
+</article>
+
+
+
+
+
+{% include 'partials/disclaimer.html' %}
+
+{% endblock %}

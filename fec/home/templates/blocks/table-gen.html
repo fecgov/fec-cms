@@ -1,11 +1,18 @@
 {% load wagtailcore_tags %}
 {% load states_dropdown %}
+<style>
+.colspan {
+
+  border:none;
+}
+</style>
 
 <script
   src="https://code.jquery.com/jquery-3.4.1.min.js"
   integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
   crossorigin="anonymous"></script>
 <script>
+
 $(function(){
 //   var states = settings.constants.states
 //   $.each( states, function( key, value ) {
@@ -53,11 +60,19 @@ $(function(){
 
 
    {% elif block.block_type == 'table_row' %}
-     <tr {% if block.value.state %} class="{{block.value.state}}"{% endif %}>
+     <tr {% if block.value.state %}class="{{block.value.state}}"{% endif %}>
      {% for subblock in block.value.table_cells %}
 
-      <td {% if subblock.bound_blocks.colspan %}colspan="{{ subblock.bound_blocks.colspan }}"{% endif %}>
-       {{ subblock.bound_blocks.table_cell.render }}
+      <td {% if subblock.bound_blocks.colspan.value %}class="colspan" colspan="{{ subblock.bound_blocks.colspan }}"{% endif %}>
+
+       {{ subblock.bound_blocks.table_cell }}
+       {% if subblock.bound_blocks.date.value %}
+        {{ subblock.bound_blocks.date.value|date:"SHORT_DATE_FORMAT" }}
+       {% endif %}
+
+       {% if subblock.bound_blocks.date2.value %}
+        - {{ subblock.bound_blocks.date2.value|date:"SHORT_DATE_FORMAT" }}
+       {% endif %}
       </td>
 
      {% endfor %}
