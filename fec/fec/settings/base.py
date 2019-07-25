@@ -18,7 +18,7 @@ USAJOBS_API_KEY = env.get_credential('USAJOBS_API_KEY')
 GOVDELIVERY_TOKEN = env.get_credential('GOVDELIVERY_TOKEN')
 FEC_APP_URL = env.get_credential('FEC_APP_URL')
 FEC_API_URL = env.get_credential('FEC_API_URL', 'http://localhost:5000')
-FEC_API_KEY = env.get_credential('FEC_WEB_API_KEY')
+FEC_API_KEY_PRIVATE = env.get_credential('FEC_WEB_API_KEY_PRIVATE')
 FEC_API_VERSION = env.get_credential('FEC_API_VERSION', 'v1')
 FEC_API_KEY_PUBLIC = env.get_credential('FEC_WEB_API_KEY_PUBLIC', '')
 FEC_DOWNLOAD_API_KEY = env.get_credential('FEC_DOWNLOAD_API_KEY', '')
@@ -138,7 +138,7 @@ TEMPLATES = [
             'constants': {
                 'constants': constants,
                 'CANONICAL_BASE': CANONICAL_BASE,
-                'FEC_API_KEY': FEC_API_KEY,
+                'FEC_API_KEY_PRIVATE': FEC_API_KEY_PRIVATE,
                 'FEC_DOWNLOAD_API_KEY': FEC_DOWNLOAD_API_KEY,
                 'FEC_API_KEY_PUBLIC': FEC_API_KEY_PUBLIC,
                 'FEC_API_URL': FEC_API_URL,

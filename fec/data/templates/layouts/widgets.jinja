@@ -25,7 +25,7 @@
     BASE_PATH = '/data';
     API_LOCATION = '{{ FEC_API_URL }}';
     API_VERSION = 'v1';
-    API_KEY = '{{ FEC_API_KEY }}';
+    API_KEY_PUBLIC = '{{ FEC_API_KEY_PUBLIC }}';
     DEFAULT_TIME_PERIOD = '{{ DEFAULT_TIME_PERIOD }}';{# see note #}
     DEFAULT_PRESIDENTIAL_YEAR = '{{ DEFAULT_PRESIDENTIAL_YEAR }}';{# see note #}
     DEFAULT_ELECTION_YEAR = '{{ DEFAULT_ELECTION_YEAR }}';{# see note #}
@@ -52,7 +52,7 @@
   <main id="main" {% if section %} data-section="{{section}}"{% endif %}>
     {% block body %}{% endblock %}
   </main>
-  
+
 {# {% csrf_token %} #}
 
 {# {% block modals %}{% endblock %} #}

@@ -9,6 +9,7 @@
 {% endblock %}
 
 {% block filters %}
+<div class="filters__inner">
   {{ legal.keyword_search(result_type, query) }}
   <div class="filter">
     <label class="label" for="case_no">Administrative fine number</label>
@@ -21,6 +22,7 @@
   <div class="filter">
     <button type="submit" class="button button--cta">Apply filters</button>
   </div>
+</div>
 {% endblock %}
 
 {% block message %}

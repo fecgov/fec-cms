@@ -24,8 +24,8 @@ session.mount('https://', http_adapter)
 
 
 def _call_api(*path_parts, **filters):
-    if settings.FEC_API_KEY:
-        filters['api_key'] = settings.FEC_API_KEY
+    if settings.FEC_API_KEY_PRIVATE:
+        filters['api_key'] = settings.FEC_API_KEY_PRIVATE
 
     path = os.path.join(
         settings.FEC_API_VERSION,

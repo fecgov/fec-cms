@@ -83,7 +83,7 @@ AnalystLookup.prototype.fetchAnalyst = function(e, opts) {
   var url = URI(window.API_LOCATION)
     .path(Array.prototype.concat(window.API_VERSION, 'rad-analyst').join('/'))
     .addQuery({
-      api_key: window.API_KEY,
+      api_key: window.API_KEY_PUBLIC,
       per_page: 1,
       committee_id: opts.id
     })

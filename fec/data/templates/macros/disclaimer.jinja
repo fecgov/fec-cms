@@ -4,3 +4,13 @@
     {# <a href="{{ url_for(type, committee_id=id, cycle=cycle) }}">access the list of itemized transactions.</a></p> #}
   </div>
 {% endmacro %}
+{% macro summary() %}
+  <div class="accordion--neutral">
+    <div class="accordion__content">
+      <div class="message message--info message--small">
+        <p class="t-sans">Newly filed summary data may not appear for up to 48 hours.</p>
+       </div>
+     </div>
+   </div>
+{% endmacro %}
+

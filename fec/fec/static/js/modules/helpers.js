@@ -1,6 +1,6 @@
 'use strict';
 
-/* global BASE_PATH, API_LOCATION, API_VERSION, API_KEY */
+/* global BASE_PATH, API_LOCATION, API_VERSION, API_KEY_PUBLIC */
 
 var URI = require('urijs');
 var $ = require('jquery');
@@ -287,7 +287,7 @@ function buildAppUrl(path, query) {
 function buildUrl(path, query) {
   var uri = URI(API_LOCATION)
     .path(Array.prototype.concat(API_VERSION, path, '').join('/'))
-    .addQuery({ api_key: API_KEY });
+    .addQuery({ api_key: API_KEY_PUBLIC });
 
   if (query.api_key) {
     // if query provides api_key, use that.
