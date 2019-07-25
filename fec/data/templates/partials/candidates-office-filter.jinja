@@ -8,6 +8,7 @@
 {% import 'macros/filters/election-filter.jinja' as election_filter %}
 {% import 'macros/filters/range.jinja' as range_filter %}
 {% import 'macros/filters/years.jinja' as years %}
+{% import 'macros/disclaimer.jinja' as disclaimer %}
 
  {% block filters %}
 <div class="js-accordion accordion--neutral" data-content-prefix="filter" data-open-first="false">
@@ -41,5 +42,7 @@
       </div>
     {% endif %}
   </div>
+
 </div>
+{{ disclaimer.summary() }}
 {% endblock %}

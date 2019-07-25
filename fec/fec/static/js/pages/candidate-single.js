@@ -29,6 +29,7 @@ var mapUrl = helpers.buildUrl(
   {
     candidate_id: $map.data('candidate-id'),
     cycle: $map.data('cycle'),
+    election_full: false,
     per_page: 99
   }
 );
@@ -501,6 +502,7 @@ function initContributionsTables() {
     query: {
       candidate_id: opts.candidate_id,
       cycle: opts.cycle,
+      election_full: false,
       sort_hide_null: false,
       per_page: 99
     },
@@ -546,6 +548,7 @@ function initContributionsTables() {
     query: {
       candidate_id: opts.candidate_id,
       cycle: opts.cycle,
+      election_full: false,
       sort: 'size'
     },
     columns: [
