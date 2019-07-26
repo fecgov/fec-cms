@@ -176,7 +176,10 @@ FilterSet.prototype.activateSwitchedFilters = function(dataType) {
   );
 
   // Set forceRemove: true to clear date filters that are usually nonremovable
-  this.$body.trigger('tag:removeAll', { forceRemove: true });
+  this.$body.trigger('tag:removeAll', {
+    forceRemove: true,
+    fromFilterSet: true
+  });
   // Go through the current panel and set loaded-once on each input
   // So that they don't show loading indicators
   _.each(this.filters, function(filter) {
