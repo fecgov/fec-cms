@@ -37,6 +37,9 @@
           </div>
         </div>
       </div>
+      <div class="content__section--ruled">
+        <p class="t-small u-negative--top--margin"><i>Newly filed summary data may not appear for up to 48 hours.</i></p>
+      </div>
     </div>
     {% endif %}
 
@@ -45,7 +48,7 @@
       <div class="heading--section heading--with-action">
         <h3 class="heading__left">Communication costs</h3>
         <a class="heading__right button--alt button--browse"
-            href="/data/communication_costs/?committee_id={{ committee_id }}&min_date={{ cycle_start(cycle) | date(fmt='%m-%d-%Y') }}&max_date={{ cycle_end(cycle) | date(fmt='%m-%d-%Y') }}">Filter this data
+            href="/data/communication-costs/?committee_id={{ committee_id }}&min_date={{ cycle_start(cycle) | date(fmt='%m-%d-%Y') }}&max_date={{ cycle_end(cycle) | date(fmt='%m-%d-%Y') }}">Filter this data
         </a>
       </div>
       <table class="data-table data-table--heading-borders data-table--entity u-margin--top" data-type="communication-cost-committee" data-committee="{{ committee_id }}" data-cycle="{{ cycle }}">
