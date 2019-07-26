@@ -322,6 +322,11 @@ function buildTableQuery(context) {
     .object()
     .value();
 
+  // remove duration from API query - only needed for JS calculations
+  if (query.duration) {
+    delete query.duration;
+  }
+
   return _.extend(query, {
     per_page: pageLength,
     sort_hide_null: true
