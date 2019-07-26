@@ -139,12 +139,12 @@ var renderCandidateColumn = function(data, type, row) {
 
 var renderCandidateCycleColumn = function(data, type, row) {
   if (data) {
-    var latest_year = row.election_years[row.election_years.length-1]
+    var latest_year = row.election_years[row.election_years.length - 1];
     return columnHelpers.buildEntityLink(
       data,
       helpers.buildAppUrl(['candidate', row.candidate_id], {
-      cycle: latest_year % 2 === 0 ? latest_year : latest_year + 1,
-      election_full: true
+        cycle: latest_year % 2 === 0 ? latest_year : latest_year + 1,
+        election_full: true
       }),
       'candidate'
     );
