@@ -1,4 +1,4 @@
-{% macro field(committee_type = 'committee_type', organization_type='organization_type', designation='designation') %}
+{% macro field(committee_type='committee_type', organization_type='organization_type', designation='designation') %}
 
 <div class="filter">
   <fieldset class="js-dropdown js-filter" data-filter="checkbox" data-name="hsp-committee_type">
@@ -48,7 +48,6 @@
 </div>
 
 <div class="filter">
-  <!-- Do I need to update this one too? -->
   <fieldset class="js-dropdown js-filter" data-filter="checkbox" data-name="organization_type">
     <legend class="label" for="committee_type">PACs</legend>
     <ul class="dropdown__selected"></ul>
@@ -112,7 +111,6 @@
 
 
 <div class="filter">
-  <!-- TODO: Update this data-name? -->
   <fieldset class="js-dropdown js-filter" data-filter="checkbox" data-name="designation">
     <legend class="label" for="committee_type">Other committees</legend>
     <ul class="dropdown__selected">
