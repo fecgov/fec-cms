@@ -58,7 +58,7 @@ Filter disbursements
   <button type="button" class="js-accordion-trigger accordion__button">Spender committee type</button>
   <div class="accordion__content">
     {% import 'macros/filters/spender-committee-types.jinja' as spender_committee_type %}
-    {{ spender_committee_type.field(name='spender_committee_type', include_ssfs = False, include_leadership_pac = False) }}
+    {{ spender_committee_type.field(name='spender_committee_type', include_ssfs = False) }}
   </div>
 </div>
 {% endblock %}
