@@ -14,7 +14,7 @@
 
 ## Campaign finance for everyone
 The Federal Election Commission (FEC) releases information to the public about
-money that’s raised and spent in federal elections — that’s elections for US
+money that’s raised and spent in federal elections—that’s elections for US
 President, Senate, and House of Representatives.
 
 Are you interested in seeing how much money a candidate raised? Or spent? How
@@ -35,7 +35,7 @@ This repository, fec-cms, houses the content management system (CMS) for FEC.gov
 - [fec-cms](https://github.com/fecgov/fec-cms): the content management system
   (CMS) for FEC.gov. This project uses [Wagtail](https://github.com/torchbox/wagtail), an open source CMS written
   in Python and built on the Django framework.
-- [fec-eregs](https://github.com/fecgov/fec-eregs): the FEC's Code of Federal Regulations explorer
+- [fec-eregs](https://github.com/fecgov/fec-eregs): the FEC’s Code of Federal Regulations explorer
 - [fec-proxy](https://github.com/fecgov/fec-proxy): the proxy application to manage and route requests coming to the FEC.gov site
 - [fec-infrastructure](https://github.com/fecgov/fec-infrastructure): manages the gov cloud RDS instances
 
@@ -66,10 +66,10 @@ run into problems please
          * Read a [Linux tutorial](https://www.postgresql.org/docs/9.5/static/installation.html)
            (or follow your OS package manager).
 
-2. Set up your Node environment — learn how to do this with 18F's
+2. Set up your Node environment — learn how to do this with 18F’s
    [Javascript Ecosystem Guide](https://github.com/18F/dev-environment-standardization/blob/18f-pages/pages/languages/javascript.md).
 
-3. Set up your Python environment — learn how to do this with 18F's
+3. Set up your Python environment — learn how to do this with 18F’s
    [Python Ecosystem Guide](https://github.com/18F/dev-environment-standardization/blob/18f-pages/pages/languages/python.md).
 
 4. Clone this repository.
@@ -193,7 +193,7 @@ To run the Python tests, run this command in the root project directory:
 pytest
 ```
 
-It's necessary to specify the Postgresql URL, which can be done on the
+It’s necessary to specify the Postgresql URL, which can be done on the
 command line, e.g.:
 
 ```bash
@@ -226,7 +226,7 @@ npm run watch
 
 first download the web app sample database dump
 
-*FEC team can download from the project's google drive folder: CMS DB Backups*
+*FEC team can download from the project’s google drive folder: CMS DB Backups*
 
 then save the file to a local drive: <path/to/backup_file>
 
@@ -240,7 +240,7 @@ run this command:
 
 ### Generating code.json
 
-Code.gov uses the code.json file located at fec.gov/code.json to inventory our repositories. The file is generated using [LLNL's scraper tool](https://github.com/LLNL/scraper). Follow the instructions in scraper's README file to generate a new code.json, or manually update as needed.
+Code.gov uses the code.json file located at fec.gov/code.json to inventory our repositories. The file is generated using [LLNL’s scraper tool](https://github.com/LLNL/scraper). Follow the instructions in scraper’s README file to generate a new code.json, or manually update as needed.
 
 Examples of code.json files: https://github.com/GSA/code-gov/blob/master/METADATA_EXAMPLES.md
 
