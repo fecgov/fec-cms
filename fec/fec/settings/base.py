@@ -19,6 +19,7 @@ GOVDELIVERY_TOKEN = env.get_credential('GOVDELIVERY_TOKEN')
 FEC_APP_URL = env.get_credential('FEC_APP_URL')
 FEC_API_URL = env.get_credential('FEC_API_URL', 'http://localhost:5000')
 FEC_API_KEY = env.get_credential('FEC_WEB_API_KEY')
+FEC_API_KEY_PRIVATE = env.get_credential('FEC_WEB_API_KEY_PRIVATE')
 FEC_API_VERSION = env.get_credential('FEC_API_VERSION', 'v1')
 FEC_API_KEY_PUBLIC = env.get_credential('FEC_WEB_API_KEY_PUBLIC', '')
 FEC_DOWNLOAD_API_KEY = env.get_credential('FEC_DOWNLOAD_API_KEY', '')
@@ -50,7 +51,7 @@ FEATURES = {
     'aggregatetotals': bool(env.get_credential('FEC_FEATURE_AGGR_TOTS', '')),
     'map': bool(env.get_credential('FEC_FEATURE_HOME_MAP', '')),
     'barcharts': bool(env.get_credential('FEC_FEATURE_HOME_BARCHARTS', '')),
-    'contributionsbystate': bool(env.get_credential('FEC_FEATURE_CONTRIBUTIONS_BY_STATE')),
+    'contributionsbystate': bool(env.get_credential('FEC_FEATURE_CONTRIBUTIONS_BY_STATE', '')),
 }
 
 ENVIRONMENTS = {
@@ -139,7 +140,7 @@ TEMPLATES = [
             'constants': {
                 'constants': constants,
                 'CANONICAL_BASE': CANONICAL_BASE,
-                'FEC_API_KEY': FEC_API_KEY,
+                'FEC_API_KEY_PRIVATE': FEC_API_KEY_PRIVATE,
                 'FEC_DOWNLOAD_API_KEY': FEC_DOWNLOAD_API_KEY,
                 'FEC_API_KEY_PUBLIC': FEC_API_KEY_PUBLIC,
                 'FEC_API_URL': FEC_API_URL,

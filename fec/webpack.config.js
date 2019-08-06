@@ -135,19 +135,19 @@ module.exports = [
         jquery: path.join(__dirname, '../node_modules/jquery/dist/jquery.js'),
         'inputmask.dependencyLib': path.join(
           __dirname,
-          '../node_modules/jquery.inputmask/dist/inputmask/inputmask.dependencyLib.js'
+          '../node_modules/inputmask/dist/inputmask/inputmask.dependencyLib.js'
         ),
-        'jquery.inputmask/dist/inputmask/inputmask.date.extensions': path.join(
+        'inputmask/dist/inputmask/inputmask.date.extensions': path.join(
           __dirname,
-          '../node_modules/jquery.inputmask/dist/inputmask/inputmask.date.extensions.js'
+          '../node_modules/inputmask/dist/inputmask/inputmask.date.extensions.js'
         ),
         inputmask: path.join(
           __dirname,
-          '../node_modules/jquery.inputmask/dist/inputmask/inputmask.js'
+          '../node_modules/inputmask/dist/inputmask/inputmask.js'
         ),
-        'jquery.inputmask': path.join(
+        'inputmask': path.join(
           __dirname,
-          '../node_modules/jquery.inputmask/dist/inputmask/jquery.inputmask.js'
+          '../node_modules/inputmask/dist/inputmask/inputmask.js'
         )
       }
     },
@@ -170,7 +170,9 @@ module.exports = [
       'aggregate-totals': './fec/static/js/widgets/aggregate-totals.js',
       'aggregate-totals-box': './fec/static/js/widgets/aggregate-totals-box.js',
       'contributions-by-state':
-        './fec/static/js/widgets/contributions-by-state.js'
+        './fec/static/js/widgets/contributions-by-state.js',
+        'contributions-by-state-box':
+        './fec/static/js/widgets/contributions-by-state-box.js'
     },
     output: {
       filename: 'widgets/[name].js',
@@ -189,6 +191,10 @@ module.exports = [
     ],
     module: {
       loaders: [
+        {
+          test: /\.hbs/,
+          use: ['handlebars-template-loader', 'cache-loader']
+        },
         {
           test: /\.js$/,
           exclude: /node_modules/,

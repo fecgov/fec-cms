@@ -68,10 +68,10 @@ def aggregate_totals(request):
 def contributions_by_state(request):
     # office = request.GET.get('office', 'P')
 
-    # election_year = int(request.GET.get('election_year', constants.DEFAULT_ELECTION_YEAR))
+    election_year = int(request.GET.get('election_year', constants.DEFAULT_ELECTION_YEAR))
 
-    # max_election_year = utils.current_cycle() + 4
-    # election_years = utils.get_cycles(max_election_year)
+    max_election_year = utils.current_cycle() + 4
+    election_years = utils.get_cycles(max_election_year)
     
     # FEATURES = settings.FEATURES
 
@@ -80,8 +80,8 @@ def contributions_by_state(request):
         'widgets/contributions-by-state.jinja',
         {
             'title': 'Contributions by State',
-            # 'election_years': election_years,
-            # 'election_year': election_year,
+            'election_years': election_years,
+            'election_year': election_year,
             # 'office': office,
             # 'FEATURES': FEATURES
         }

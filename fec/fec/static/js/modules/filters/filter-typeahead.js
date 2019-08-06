@@ -1,6 +1,6 @@
 'use strict';
 
-/* global API_LOCATION, API_VERSION, API_KEY */
+/* global API_LOCATION, API_VERSION, API_KEY_PUBLIC */
 
 var $ = require('jquery');
 var URI = require('urijs');
@@ -257,7 +257,7 @@ FilterTypeahead.prototype.getFilters = function(values) {
     values.forEach(function(value) {
       self.appendCheckbox({
         name: self.fieldName,
-        label: ID_PATTERN.test(value) ? 'Loading...' : value,
+        label: ID_PATTERN.test(value) ? 'Loading&hellip;' : value,
         value: value
       });
     });
@@ -265,7 +265,7 @@ FilterTypeahead.prototype.getFilters = function(values) {
       $.getJSON(
         URI(API_LOCATION)
           .path([API_VERSION, dataset].join('/'))
-          .addQuery('api_key', API_KEY)
+          .addQuery('api_key', API_KEY_PUBLIC)
           .addQuery(idKey, ids)
           .toString()
       ).done(this.updateFilters.bind(this));

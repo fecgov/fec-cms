@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/18F/fec-cms.git"
+    "url": "git+https://github.com/fecgov/fec-cms.git"
   },
   "scripts": {
     "build": "cd fec && webpack && gulp build-sass && gulp build-widgets-sass",
@@ -30,7 +30,7 @@
     "component-sticky": "1.0.0",
     "concat-stream": "^1.6.2",
     "d3": "3.5.5",
-    "datatables.net": "1.10.10",
+    "datatables.net": "^1.10.19",
     "datatables.net-responsive": "^2.2.3",
     "debug": "^3.2.6",
     "draft-js": "^0.10.5",
@@ -39,10 +39,11 @@
     "eventemitter2": "0.4.14",
     "fullcalendar": "3.3.1",
     "glossary-panel": "1.0.0",
+    "inputmask": "^4.0.8",
     "jquery": "^3.4.1",
-    "jquery.inputmask": "3.3.4",
     "leaflet-providers": "1.1.6",
-    "lodash": "^4.17.11",
+    "lodash": "^4.17.14",
+    "lodash.mergewith": "^4.6.2",
     "minimatch": "^3.0.4",
     "moment": "2.20.1",
     "numeral": "^1.5.3",
@@ -112,6 +113,7 @@
     "karma-mocha": "^0.2.2",
     "karma-webpack": "^3.0.5",
     "leaflet": "^1.4.0",
+    "mixin-deep": "^1.3.2",
     "mocha": "^5.2.0",
     "mockdate": "^2.0.2",
     "natives": "^1.1.6",
@@ -120,6 +122,7 @@
     "promise-polyfill": "^8.1.3",
     "puppeteer": "^1.17.0",
     "scrollmonitor": "^1.2.3",
+    "set-value": "^2.0.1",
     "sinon": "^1.17.2",
     "sinon-chai": "^2.8.0",
     "stringify": "^5.2.0",
@@ -144,7 +147,7 @@
   "browserslist": "last 2 versions, > 1%, IE 10",
   "engines": {
     "node": "10.16.0",
-    "npm": "6.10.0"
+    "npm": "6.10.2"
   },
   "license": "CC0-1.0"
 }

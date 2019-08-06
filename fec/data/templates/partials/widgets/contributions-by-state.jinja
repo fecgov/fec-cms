@@ -1,18 +1,60 @@
 {% import "macros/widgets.jinja" as widgets %}
 {% import "macros/filters/typeahead-filter.jinja" as typeahead %}
 
-<aside id="gov-fec-contribs-by-state" class="contribs-by-state">
-    <div class="controls-wrapper">
-        {{ typeahead.field('noname','Contributions received by: ', False, dataset='candidates', allow_text=True) }}
-        {{ widgets.select_election_year(election_years) }}
+<aside id="gov-fec-contribs-by-state" class="contribs-by-state is-loading w-s" data-election_year="{{ election_year }}">
+    <form class="controls-wrapper" action="" method="GET">
+        <fieldset class="select">
+            {{ typeahead.field('contribs-by-state-cand', 'Contributions received by:', 'Examples: ', dataset='candidates', allow_text=True) }}
+            <span class="field-example"></span>
+        </fieldset>
+        <fieldset class="select">
+            {{ widgets.select__election_year(election_years, election_year, 'state-contribs-years', 'P') }}
+        </fieldset>
+    </form>
+    <div class="message message--info js-error-message" role="alert" aria-hidden="true">
+        <h2>No results</h2>
+        <p>This is the error message</p>
     </div>
     <div class="state-list-wrapper">
-        {{ widgets.list_states() }}
+        <div class="states-table-timestamp"><time class="js-cycle-start-time" datetime="2017-01-01">01/01/2017</time>-<time class="js-cycle-end-time" datetime="2020-12-31">12/31/2020</time></div>
+        <div class="table-scroller">
+            <div class="overlay is-loading"></div>
+            <table class="data-table data-table--heading-borders data-table--entity u-margin--top" data-type="filings-{{ dataType }}" data-cycle="{{ election_year }}"">
+                <thead>
+                    <tr>
+                        <th scope="col">&mdash;</th>
+                        <th scope="col">State</th>
+                        <th scope="col" class="t-right-aligned">Total raised</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td colspan="3">(loading data)</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="states-total">
+            <div>All states</div>
+            <div class="t-right-aligned t-mono js-states-total">Unknown Dollars</div>
+        </div>
+        {# {{ widgets.list_states() }} #}
     </div>
     <div class="map-wrapper">
+        <div class="map-details">
+            <hgroup class="candidate-details">
+                <h1>idate, Cand [PAR]</h1>
+                <h2>Candidate for president</h2>
+                <h3>ID: P8001571</h3>
+            </hgroup>
+            <div class="map-legend">
+            By state, total amount received
+            </div>
+        </div>
         <div class="election-map"></div>
         <div class="t-italic js-map-approx-message">
             <p>District maps on this page are approximate.</p>
         </div>
     </div>
 </aside>
+<script defer src="{{ asset_for_js('widgets/contributions-by-state-box.js') }}" data-standalone="true"></script>

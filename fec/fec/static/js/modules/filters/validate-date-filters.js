@@ -5,9 +5,9 @@ var moment = require('moment');
 
 var Filter = require('./filter-base.js');
 
-require('jquery.inputmask');
-require('jquery.inputmask/dist/inputmask/inputmask.date.extensions.js');
-require('jquery.inputmask/dist/inputmask/inputmask.numeric.extensions.js');
+require('inputmask');
+require('inputmask/dist/inputmask/inputmask.date.extensions.js');
+require('inputmask/dist/inputmask/inputmask.numeric.extensions.js');
 
 /**
  * ValidateDateFilter
@@ -22,6 +22,9 @@ function ValidateDateFilter(elm) {
   this.$minDate = this.$elm.find('.js-min-date');
   this.$maxDate = this.$elm.find('.js-max-date');
   this.$submit = this.$elm.find('button');
+
+  Inputmask({mask: 'mm/dd/yyyy', oncomplete: this.validate.bind(this)}).mask(this.$maxDate);
+  Inputmask({mask: 'mm/dd/yyyy', oncomplete: this.validate.bind(this)}).mask(this.$maxDate);
 
   this.$minDate.inputmask('mm/dd/yyyy', {
     oncomplete: this.validate.bind(this)

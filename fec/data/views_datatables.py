@@ -203,3 +203,20 @@ def reports(request, form_type):
         'has_data_type_toggle': True,
         'columns': constants.table_columns['reports-' + form_type.lower()]
     })
+
+
+def contributions_by_state(request):
+    # TODO - CLEAN THIS UP
+    # office = office.lower()
+    # if office not in ['president', 'senate', 'house']:
+    #     raise Http404()
+    # only House/Senate are proper-cased
+    office_breadcrumb = 'test breadcrumb'
+    return render(request, 'datatable.jinja', {
+        'parent': 'data',
+        'result_type': 'receipts',
+        'title': 'TEST TABLE TITLE Candidates for ' + office_breadcrumb,
+        'slug': 'contributions-by-state',
+        'table_context': OrderedDict([('states')]),
+        'columns': constants.table_columns['totals-by-state-president-raised']
+    })

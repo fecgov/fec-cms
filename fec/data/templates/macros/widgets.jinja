@@ -7,19 +7,23 @@
 </select>
 {% endmacro %}
 
-{% macro select_election_year(election_years) %}
-<label for="election-year" class="breakdown__title label t-inline-block">Running in</label>
-<select id="election-year" name="cycle" class="js-election-year form-element--inline" aria-controls="top-table">
-{% for each in election_years | sort(reverse=True) %}
+{% macro select__election_year(election_years, election_year, elementID, electionType = 'H') %}
+<label for="election-year" class="breakdown__title label t-inline-block">Running in:</label>
+<select id="{{ elementID }}" name="cycle" class="js-election-year form-element--inline" aria-controls="">
+{% for eachYear in election_years | sort(reverse=True) %}
+  {% if electionType != 'P' or eachYear % 4 == 0 %}
     <option
-        value="{{ each }}"
-        {% if election_year == each %}selected{% endif %}
-    >{{ each }}</option>
+        value="{{ eachYear }}"
+        {% if election_year == eachYear %}selected{% endif %}
+    >{{ eachYear }}</option>
+  {% endif %}
 {% endfor %}
 </select>
 {% endmacro %}
 
 {% macro list_states() %}
+<script>
+</script>
 <div class="map-table">
   <table class="data-table data-table--heading-borders" data-type="contributor-state" data-cycle="{{ max_cycle }}">
     <thead>
