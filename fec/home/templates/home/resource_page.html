@@ -43,7 +43,17 @@
 
 {% block sections %}
 
+  {# opening tag to wrap all self.sections in chosen GovDelivery pagewatch tag #}
+  {% if self.govdelivery_pagewatch %}
+   <!‐‐PAGEWATCH CODE="{{ self.govdelivery_pagewatch }}"‐‐>
+  {% endif %}
+
   {{ self.sections }}
+
+  {# closing GovDelivery pagewatch tag #}
+  {% if self.govdelivery_pagewatch %}
+    <!‐‐/PAGEWATCH‐‐>
+  {% endif %}
 
 {% endblock %}
 

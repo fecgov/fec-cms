@@ -906,6 +906,13 @@ class ResourcePage(Page):
     related_pages = StreamField([
         ('related_pages', blocks.ListBlock(blocks.PageChooserBlock()))
     ], null=True, blank=True)
+    # For wrapping all sections in a chosen pagewatch topic
+    govdelivery_pagewatch = models.CharField(max_length=255,
+                                choices=constants.govdelivery_topics.items(),
+                                help_text='Pagewatch all the subsequent sections with chosen Govdelivery topic',
+                                default='',
+                                blank=True,
+                                null=True)
     sections = StreamField([
         ('sections', ResourceBlock())
     ], null=True, blank=True)
