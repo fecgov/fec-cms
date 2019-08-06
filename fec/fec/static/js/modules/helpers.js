@@ -256,11 +256,27 @@ function formatCycleRange(year, duration) {
   return firstYear + '–' + year;
 }
 
-function cycleDates(year) {
+function cycleDates(year, duration) {
   return {
-    min: '01-01-' + (year - 1),
+    min: '01-01-' + (year - duration + 1),
     max: '12-31-' + year
   };
+}
+
+function multiCycles(cycle, duration, label = 'two_year_transaction_period') {
+  if (duration == 6) {
+    return {
+      [label]: [cycle, cycle - 2, cycle - 4]
+    };
+  } else if (duration == 4) {
+    return {
+      [label]: [cycle, cycle - 2]
+    };
+  } else {
+    return {
+      [label]: cycle
+    };
+  }
 }
 
 function ensureArray(value) {
@@ -305,6 +321,11 @@ function buildTableQuery(context) {
     })
     .object()
     .value();
+
+  // remove duration from API query - only needed for JS calculations
+  if (query.duration) {
+    delete query.duration;
+  }
 
   return _.extend(query, {
     per_page: pageLength,
@@ -529,6 +550,7 @@ module.exports = {
   buildTableQuery: buildTableQuery,
   currency: currency,
   cycleDates: cycleDates,
+  multiCycles: multiCycles,
   datetime: datetime,
   dollar: dollar,
   ensureArray: ensureArray,

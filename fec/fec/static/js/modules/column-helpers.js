@@ -103,12 +103,10 @@ function buildEntityLink(data, url, category, opts) {
   return anchor.outerHTML;
 }
 
-function buildAggregateUrl(cycle, includeTransactionPeriod) {
-  var dates = helpers.cycleDates(cycle);
+function buildAggregateUrl(cycle, includeTransactionPeriod, duration = 2) {
+  var dates = helpers.cycleDates(cycle, duration);
   if (includeTransactionPeriod) {
-    return {
-      two_year_transaction_period: cycle
-    };
+    return helpers.multiCycles(cycle, duration);
   } else {
     return {
       min_date: dates.min,
@@ -117,12 +115,16 @@ function buildAggregateUrl(cycle, includeTransactionPeriod) {
   }
 }
 
+// Used for election profile page "other spending" tables
+// As well as candidate/committee profile "Individual contributions"
+// by state and by size
 function buildTotalLink(path, getParams) {
   return function(data, type, row, meta) {
     data = data || 0;
     var params = getParams(data, type, row, meta);
     var span = document.createElement('div');
     var includeTransactionPeriod = false;
+    var electionDuration = 2;
     span.setAttribute('data-value', data);
     span.setAttribute('data-row', meta.row);
     if (params) {
@@ -132,13 +134,17 @@ function buildTotalLink(path, getParams) {
       if (path.indexOf('receipts') > -1 || path.indexOf('disbursements') > -1) {
         includeTransactionPeriod = true;
       }
+      if (context.election) {
+        electionDuration = context.election.duration;
+      }
       var uri = helpers.buildAppUrl(
         path,
         _.extend(
           { committee_id: row.committee_id },
           buildAggregateUrl(
             _.extend({}, row, params).cycle,
-            includeTransactionPeriod
+            includeTransactionPeriod,
+            electionDuration
           ),
           params
         )
@@ -156,6 +162,7 @@ function buildTotalLink(path, getParams) {
   };
 }
 
+// Used for election profile page "individual contributions to candidates" charts
 function makeCommitteeColumn(opts, context, factory) {
   return _.extend(
     {},
@@ -170,12 +177,13 @@ function makeCommitteeColumn(opts, context, factory) {
       ) {
         row.cycle = context.election.cycle;
         var column = meta.settings.aoColumns[meta.col].data;
+        row.duration = context.election.duration;
         return _.extend(
           {
             committee_id: (context.candidates[row.candidate_id] || {})
-              .committee_ids,
-            two_year_transaction_period: row.cycle
+              .committee_ids
           },
+          helpers.multiCycles(row.cycle, row.duration),
           factory(data, type, row, meta, column)
         );
       })

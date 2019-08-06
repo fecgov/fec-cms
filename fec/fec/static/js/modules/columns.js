@@ -137,6 +137,22 @@ var renderCandidateColumn = function(data, type, row) {
   }
 };
 
+var renderCandidateCycleColumn = function(data, type, row) {
+  if (data) {
+    var latest_year = row.election_years[row.election_years.length - 1];
+    return columnHelpers.buildEntityLink(
+      data,
+      helpers.buildAppUrl(['candidate', row.candidate_id], {
+        cycle: latest_year % 2 === 0 ? latest_year : latest_year + 1,
+        election_full: true
+      }),
+      'candidate'
+    );
+  } else {
+    return '';
+  }
+};
+
 var renderCommitteeColumn = function(data, type, row) {
   if (data) {
     return columnHelpers.buildEntityLink(
@@ -150,7 +166,7 @@ var renderCommitteeColumn = function(data, type, row) {
 };
 
 var candidates = [
-  { data: 'name', className: 'all', render: renderCandidateColumn },
+  { data: 'name', className: 'all', render: renderCandidateCycleColumn },
   { data: 'office_full', className: 'min-tablet hide-panel-tablet' },
   {
     data: 'election_years',
