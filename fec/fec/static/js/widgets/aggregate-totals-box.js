@@ -699,6 +699,12 @@ function buildElement(callingInstance, scriptElement) {
   //   `;
   toReturn.innerHTML = theInnerHTML;
 
+  let disclaimer = document.createElement('span');
+  disclaimer.setAttribute('class', 't-note');
+  disclaimer.innerHTML =
+    'Newly filed summary data may not appear for up to 48 hours.';
+  toReturn.appendChild(disclaimer);
+
   // Add the stylesheet to the document <head>
   let head = document.head;
   let linkElement = document.createElement('link');

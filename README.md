@@ -134,7 +134,7 @@ export FEC_API_URL=https://api.open.fec.gov
 The base settings file will read this value in instead of using the default (which is `http://localhost:5000`).
 
 
-Also set API keys: `FEC_WEB_API_KEY` and `FEC_WEB_API_KEY_PUBLIC`
+Also set API keys: `FEC_WEB_API_KEY_PRIVATE` and `FEC_WEB_API_KEY_PUBLIC`
 
 ### Finish project setup
 Once all prerequisites and dependencies are installed, you can finish the

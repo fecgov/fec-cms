@@ -1,4 +1,4 @@
-{% macro summary(data, committee_id, cycle, office_or_committee) %}
+{% macro summary(data, committee_id, cycle, office_or_committee, aggregate_cycles) %}
 
 {% if office_or_committee not in ['P', 'H', 'S'] %}
   {#
@@ -20,7 +20,7 @@
         {% endif %}
       </td>
       <td class="simple-table__cell t-mono">
-{# 
+{#
 case 1: this page comes from data/candidate/<candidate_id>/ :
 The committee_id is a tuple list(the count < 9). see example below:
   a)one candidate has only one committee, committee_id=['C00580100'], count=1
@@ -35,9 +35,17 @@ not 'type' object, so use 'link' to check for 'independent-expenditures' and 'pa
 #}
 
         {% if item[1]['type'] and committee_id|count < 9 %}
-          <a href="/data/{{ item[1]['type']['link'] }}/?{% for id in committee_id -%}committee_id={{ id }}&{%- endfor %}two_year_transaction_period={{ cycle }}&cycle={{ cycle }}&line_number={{ item[1]['type'][office_or_committee] }}">
+          <a href="/data/{{ item[1]['type']['link'] }}/?
+          {%- for id in committee_id -%}
+          committee_id={{ id }}&
+          {%- endfor -%}
+          {%- for year in aggregate_cycles -%}
+          two_year_transaction_period={{year}}&
+          {%- endfor -%}
+          line_number={{ item[1]['type'][office_or_committee] }}">
             {{ item[0]|currency }}
           </a>
+
         {% elif item[1]['type'] and committee_id|count == 9 %}
           <a href="/data/{{ item[1]['type']['link'] }}/?committee_id={{ committee_id }}&two_year_transaction_period={{ cycle }}&cycle={{ cycle }}&line_number={{ item[1]['type'][office_or_committee] }}">
             {{ item[0]|currency }}
@@ -54,5 +62,6 @@ not 'type' object, so use 'link' to check for 'independent-expenditures' and 'pa
     </tr>
   {% endfor %}
 </table>
+<p class="t-small u-negative--top--margin"><i>Newly filed summary data may not appear for up to 48 hours.</i></p>
 </figure>
 {% endmacro %}

@@ -30,11 +30,9 @@
     </button>
     <div class="filters__content">
       <form id="category-filters" action="/data/legal/search/{{ result_type }}">
-        <div class="filters__inner">
-          <input id="search-type" type="hidden" name="search_type" value="{{ result_type }}">
-          {% block filters %}
-          {% endblock %}
-        </div>
+        <input id="search-type" type="hidden" name="search_type" value="{{ result_type }}">
+        {% block filters %}
+        {% endblock %}
       </form>
     </div>
   </div>

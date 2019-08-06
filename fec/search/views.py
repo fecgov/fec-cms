@@ -11,7 +11,7 @@ def search_candidates(query):
     """Searches the data API for candidates matching the query"""
     path = os.path.join(settings.FEC_API_VERSION, 'candidates', 'search')
     url = parse.urljoin(settings.FEC_API_URL, path)
-    r = requests.get(url, params={'q': query, 'sort': '-receipts', 'per_page': 3, 'api_key': settings.FEC_API_KEY_PUBLIC})
+    r = requests.get(url, params={'q': query, 'sort': '-receipts', 'per_page': 3, 'api_key': settings.FEC_API_KEY_PRIVATE})
     return r.json()
 
 
@@ -19,7 +19,7 @@ def search_committees(query):
     """Searches the data API for committees matching the query"""
     path = os.path.join(settings.FEC_API_VERSION, 'committees')
     url = parse.urljoin(settings.FEC_API_URL, path)
-    r = requests.get(url, params={'q': query, 'per_page': 3, 'sort': '-receipts', 'api_key': settings.FEC_API_KEY_PUBLIC})
+    r = requests.get(url, params={'q': query, 'per_page': 3, 'sort': '-receipts', 'api_key': settings.FEC_API_KEY_PRIVATE})
     return r.json()
 
 

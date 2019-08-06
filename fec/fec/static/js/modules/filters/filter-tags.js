@@ -10,7 +10,7 @@ var BODY_TEMPLATE = _.template(
     '<span class="js-count" aria-hidden="true"></span> ' +
     '<span class="js-result-type">filtered {{ resultType }} for:</span>' +
     '</h3>' +
-    '{{ clearFiltersButton }}' +
+    '<button type="button" class="{{ clearResetFiltersClass }} button--unstyled tags__clear" aria-hidden="true">{{ clearResetFiltersLabel }}</button>' +
     '</div>' +
     '<ul class="tags">' +
     '</ul>' +
@@ -45,27 +45,30 @@ var NONREMOVABLE_TAG_TEMPLATE = _.template(
 function TagList(opts) {
   this.opts = opts;
 
-  // As we're in the transition period between global and no two-year restrictions,
-  // let's hide the "Clear all filters" link for the Receipts and Individual contributions tables
-  var clearFiltersButton = '';
-  if (
+  // Resetting filters will re-apply two-year limitations, like when users first land on the page.
+  // Right now we're only applying the two-year filters for Receipts and Individual Contributions
+  // Otherwise, we'll leave the functionality as 'Clear all filters'
+  var shouldResetFilters =
     this.opts &&
-    (this.opts.tableTitle != 'Receipts' &&
-      this.opts.tableTitle != 'Individual contributions')
-  ) {
-    clearFiltersButton =
-      '<button type="button" class="js-filter-clear button--unstyled tags__clear" aria-hidden="true">Clear all filters</button>';
-  }
+    (this.opts.tableTitle == 'Receipts' ||
+      this.opts.tableTitle == 'Individual contributions');
 
   this.$body = $(
     BODY_TEMPLATE({
       resultType: this.opts.resultType,
-      clearFiltersButton: clearFiltersButton
+      clearResetFiltersLabel: shouldResetFilters
+        ? 'Reset filters'
+        : 'Clear all filters',
+      clearResetFiltersClass: shouldResetFilters
+        ? 'js-filter-reset'
+        : 'js-filter-clear'
     })
   );
+
   this.$list = this.$body.find('.tags');
   this.$resultType = this.$body.find('.js-result-type');
-  this.$clear = this.$body.find('.js-filter-clear');
+  // We're going to use the same handler for either clear or reset functionality:
+  this.$clear = this.$body.find('.js-filter-clear, .js-filter-reset');
 
   $(document.body)
     .on('filter:added', this.addTag.bind(this))
@@ -209,16 +212,41 @@ TagList.prototype.removeTag = function(key, emit, forceRemove) {
  * @param {} emit
  */
 TagList.prototype.removeAllTags = function(e, opts, emit) {
-  var self = this;
-  var forceRemove = opts.forceRemove || false;
-  this.$list.find('[data-removable]').each(function() {
-    self.removeTag($(this).data('id'), true, forceRemove);
-  });
+  // If the element has the reset class, we revert to the original page state by re-navigating.
+  // Do not trigger tag removal for filter reset on load
+  if (
+    $(this.$clear[0]).hasClass('js-filter-reset') &&
+    (!opts || !opts.fromFilterSet)
+  ) {
+    // Set reset link based on page url
+    var url = 'receipts/';
+    if (window.location.href.indexOf('individual-contributions') !== -1) {
+      url = url + 'individual-contributions/';
+    }
 
-  // Don't emit another event unless told to do so
-  // This way it can be triggered as an event listener without creating more
-  if (emit) {
-    $(document.body).trigger('tag:removeAll', { removeAll: false });
+    var resetLink =
+      '/data/' +
+      url +
+      '?data_type=processed&two_year_transaction_period=' +
+      window.DEFAULT_ELECTION_YEAR +
+      '&min_date=01%2F01%2F' +
+      (Number(window.DEFAULT_ELECTION_YEAR) - 1) +
+      '&max_date=12%2F31%2F' +
+      window.DEFAULT_ELECTION_YEAR;
+
+    window.location.href = resetLink;
+  } else {
+    // Clear by removing tags for all other datatables
+    var self = this;
+    var forceRemove = opts.forceRemove || false;
+    this.$list.find('[data-removable]').each(function() {
+      self.removeTag($(this).data('id'), true, forceRemove);
+    });
+    // Don't emit another event unless told to do so
+    // This way it can be triggered as an event listener without creating more
+    if (emit) {
+      $(document.body).trigger('tag:removeAll', { removeAll: false });
+    }
   }
 };
 

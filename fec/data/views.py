@@ -312,6 +312,7 @@ def get_candidate(candidate_id, cycle, election_full):
         'elections': elections,
         'candidate': candidate,
         'context_vars': context_vars,
+        'aggregate_cycles': aggregate_cycles,
     }
 
 
@@ -516,6 +517,11 @@ def elections(request, office, cycle, state=None, district=None):
     if (state is not None) and (state and state.upper() not in constants.states):
         raise Http404()
 
+    election_duration = election_durations.get(office[0].upper(), 2)
+    # Puerto Rico house/resident commissioners have 4-year cycles
+    if state and state.upper() == 'PR':
+        election_duration = 4
+
     # map/redirect legacy tab names to correct anchor
     tab = request.GET.get('tab', '').replace('/', '')
     legacy_tabs = {
@@ -548,6 +554,7 @@ def elections(request, office, cycle, state=None, district=None):
             'office_code': office[0],
             'parent': 'data',
             'cycle': cycle,
+            'election_duration': election_duration,
             'cycles': cycles,
             'state': state,
             'state_full': constants.states[state.upper()] if state else None,
