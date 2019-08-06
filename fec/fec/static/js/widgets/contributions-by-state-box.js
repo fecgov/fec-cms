@@ -41,12 +41,10 @@ import { buildUrl } from '../modules/helpers';
 // const helpers = require('../modules/helpers');
 // const ElectionForm = require('../modules/election-form').ElectionForm;
 // import ElectionForm from '../modules/election-form';
-// const ElectionMap = require('../modules/election-map').ElectionMap;
-// import ElectionMap from '../modules/election-map';
 
 import typeahead from '../modules/typeahead';
 
-const ElectionMap = require('../modules/election-map').ElectionMap;
+const DataMap = require('../modules/election-map').DataMap;
 
 
 import {
@@ -153,7 +151,7 @@ ContributionsByState.prototype.init = function() {
   this.table = document.querySelector('.state-list-wrapper table');
   this.statesTotalHolder = document.querySelector('.js-states-total');
 
-  this.map = new ElectionMap(this.map.get(0), {
+  this.map = new DataMap(this.map.get(0), {
     drawStates: true,
     handleSelect: this.handleMapSelect.bind(this)
   });
