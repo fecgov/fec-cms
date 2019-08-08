@@ -5,7 +5,6 @@ django-libsass==0.7
 gunicorn==19.7.1
 gevent==1.2.1
 lxml==4.2.5
-newrelic==2.82.0.62
 psycopg2==2.7.3.2
 requests==2.21.0
 slacker==0.8.6
