@@ -301,7 +301,6 @@ In the case of the `feature` space, there are a few things to note:
 
 * To deploy to the feature space, an automated deployer account has been set up. To trigger, go to the `tasks.py` file `DEPLOY_RULES` [here](https://github.com/fecgov/fec-cms/blob/784e6540cfcec58e6e763fa711de19cdcb475bb7/tasks.py#L74).
 * Only the CMS app is setup and configured for the `feature` space; it points to the `dev` space for all other things (e.g., the API).
-* The `feature` version of the CMS does have New Relic running against it.
 * The CMS in the `feature` space has its own database that has been loaded with data from a production backup; this data can be refreshed in the future using the same steps outlined in the Wiki.
 * The `feature` space has its own S3 bucket for content.
 
