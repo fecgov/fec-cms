@@ -11,9 +11,6 @@ services:
 env:
   DISABLE_COLLECTSTATIC: 1
   DJANGO_SETTINGS_MODULE: fec.settings.production
-  NEW_RELIC_APP_NAME: govcloud | cms | stage
-  NEW_RELIC_CONFIG_FILE: /home/vcap/app/newrelic.ini
-  NEW_RELIC_LOG: stdout
   FEC_API_URL: https://api-stage.open.fec.gov
   FEC_APP_URL: '/data'
   FEC_CMS_DEBUG: false
