@@ -4,49 +4,49 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="description" content="{% if self.search_description %}{{ self.search_description }}{% else %}{{ self.content_section | get_meta_description }}{% endif %}">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self' data: *.fec.gov; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.google.com https://www.gstatic.com https://polyfill.io https://dap.digitalgov.gov; style-src 'self' data: 'unsafe-inline'; img-src 'self' data: *.ssl.fastly.net; frame-src 'self' https://www.google.com">
+<meta http-equiv="Content-Security-Policy" content="{{ settings.CONTENT_SECURITY_POLICY|safe }}">
 
-<!-- Mobile Specific Metas
-================================================== -->
+{# Mobile Specific Metas -#}
+{#- ================================================== -#}
 <meta name="HandheldFriendly" content="True">
 <meta name="MobileOptimized" content="320">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
 
-<!-- Twitter
-================================================== -->
+{# Twitter -#}
+{#- ================================================== -#}
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="{{ self.title }} - FEC.gov">
 <meta name="twitter:description" content="{% if self.search_description %}{{ self.search_description }}{% else %}{{ self.content_section | get_meta_description }}{% endif %}">
 <meta name="twitter:image" content="{{ request.scheme }}://{{ request.get_host }}{{ self.content_section | get_social_image }}">
 
-<!-- Facebook
-================================================== -->
-<meta property="og:type" content="website" />
-<meta property="og:url" content="{{ settings.CANONICAL_BASE }}{{ request.path }}" />
-<meta property="og:title" content="{{ self.title }} - FEC.gov" />
-<meta property="og:site_name" content="FEC.gov" />
-<meta property="og:description" content="{% if self.search_description %}{{ self.search_description }}{% else %}{{ self.content_section | get_meta_description }}{% endif %}" />
-<meta property="og:image" content="{{ request.scheme }}://{{ request.get_host }}{{ self.content_section | get_social_image }}" />
+{# Facebook -#}
+{#- ================================================== -#}
+<meta property="og:type" content="website">
+<meta property="og:url" content="{{ settings.CANONICAL_BASE }}{{ request.path }}">
+<meta property="og:title" content="{{ self.title }} - FEC.gov">
+<meta property="og:site_name" content="FEC.gov">
+<meta property="og:description" content="{% if self.search_description %}{{ self.search_description }}{% else %}{{ self.content_section | get_meta_description }}{% endif %}">
+<meta property="og:image" content="{{ request.scheme }}://{{ request.get_host }}{{ self.content_section | get_social_image }}">
 
-<!-- Google
-================================================== -->
+{# Google -#}
+{#- ================================================== -#}
 <link rel="canonical" href="{{ settings.CANONICAL_BASE }}{{ request.path }}">
 
-<!-- Search console verifications
-================================================== -->
-<meta name="google-site-verification" content="rEjjZg6JSzXZCFwXo_8bNKK68jrZdqV-yhDqJluWb8k" />
-<meta name="msvalidate.01" content="A6E2BFF1CD488F37FC4A42640E760D02" />
+{# Search console verifications -#}
+{#- ================================================== -#}
+<meta name="google-site-verification" content="rEjjZg6JSzXZCFwXo_8bNKK68jrZdqV-yhDqJluWb8k">
+<meta name="msvalidate.01" content="A6E2BFF1CD488F37FC4A42640E760D02">
 
-<!-- Favicons
-================================================== -->
-<link rel="apple-touch-icon-precomposed" sizes="57x57" href="{{ self.content_section|get_touch_icon:'57x57' }}" />
-<link rel="apple-touch-icon-precomposed" sizes="57x57" href="{{ self.content_section|get_touch_icon:'72x72' }}" />
-<link rel="apple-touch-icon-precomposed" sizes="57x57" href="{{ self.content_section|get_touch_icon:'114x114' }}" />
-<link rel="apple-touch-icon-precomposed" sizes="57x57" href="{{ self.content_section|get_touch_icon:'120x120' }}" />
-<link rel="apple-touch-icon-precomposed" sizes="57x57" href="{{ self.content_section|get_touch_icon:'144x144' }}" />
-<link rel="apple-touch-icon-precomposed" sizes="57x57" href="{{ self.content_section|get_touch_icon:'152x152' }}" />
-<link rel="icon" type="image/png" href="{% static "img/favicon/favicon-32x32.png" %}" sizes="32x32" />
-<link rel="icon" type="image/png" href="{% static "img/favicon/favicon-16x16.png" %}" sizes="16x16" />
-<meta name="application-name" content="&nbsp;"/>
-<meta name="msapplication-TileColor" content="#FFFFFF" />
-<meta name="msapplication-TileImage" content="{% static "img/favicon/general/mstile-144x144.png" %}" />
+{# Favicons -#}
+{#- ================================================== -#}
+<link rel="apple-touch-icon-precomposed" sizes="57x57" href="{{ self.content_section|get_touch_icon:'57x57' }}">
+<link rel="apple-touch-icon-precomposed" sizes="57x57" href="{{ self.content_section|get_touch_icon:'72x72' }}">
+<link rel="apple-touch-icon-precomposed" sizes="57x57" href="{{ self.content_section|get_touch_icon:'114x114' }}">
+<link rel="apple-touch-icon-precomposed" sizes="57x57" href="{{ self.content_section|get_touch_icon:'120x120' }}">
+<link rel="apple-touch-icon-precomposed" sizes="57x57" href="{{ self.content_section|get_touch_icon:'144x144' }}">
+<link rel="apple-touch-icon-precomposed" sizes="57x57" href="{{ self.content_section|get_touch_icon:'152x152' }}">
+<link rel="icon" type="image/png" href="{% static "img/favicon/favicon-32x32.png" %}" sizes="32x32">
+<link rel="icon" type="image/png" href="{% static "img/favicon/favicon-16x16.png" %}" sizes="16x16">
+<meta name="application-name" content="&nbsp;">
+<meta name="msapplication-TileColor" content="#FFFFFF">
+<meta name="msapplication-TileImage" content="{% static "img/favicon/general/mstile-144x144.png" %}" >
