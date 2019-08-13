@@ -63,6 +63,22 @@ FEC_CMS_ENVIRONMENT = ENVIRONMENTS.get(env.get_credential('FEC_CMS_ENVIRONMENT')
 CONTACT_EMAIL = 'webmanager@fec.gov'
 WEBMANAGER_EMAIL = "webmanager@fec.gov"
 
+# Used for the content-security-policy meta tag
+CONTENT_SECURITY_POLICY = ''\
+    'default-src \'self\' data: *.fec.gov; '\
+    'frame-src \'self\' https://www.google.com;'\
+    'img-src \'self\' data: http://*.fastly.net; '\
+    'script-src \'self\' \'unsafe-inline\' \'unsafe-eval\' https://www.google.com https://www.gstatic.com https://polyfill.io https://dap.digitalgov.gov; '\
+    'style-src \'self\' data: \'unsafe-inline\'; '
+
+if FEC_CMS_ENVIRONMENT == ENVIRONMENTS['local']:
+    CONTENT_SECURITY_POLICY = ''\
+        'default-src \'self\' data: *.fec.gov localhost:* http://127.0.0.1:* http://*.app.cloud.gov https://*.app.cloud.gov; '\
+        'frame-src \'self\' https://www.google.com; '\
+        'img-src \'self\' data: http://*.fastly.net;'\
+        'script-src \'self\' \'unsafe-inline\' \'unsafe-eval\' https://www.google.com https://www.gstatic.com https://polyfill.io; '\
+        'style-src \'self\' data: \'unsafe-inline\'; '
+
 # Application definition
 INSTALLED_APPS = (
     'django.contrib.admin',
@@ -147,6 +163,7 @@ TEMPLATES = [
                 'CLASSIC_URL': FEC_CLASSIC_URL,
                 'FEC_CMS_ENVIRONMENT': FEC_CMS_ENVIRONMENT,
                 'FEATURES': FEATURES,
+                'CONTENT_SECURITY_POLICY': CONTENT_SECURITY_POLICY,
             },
         }
     },
