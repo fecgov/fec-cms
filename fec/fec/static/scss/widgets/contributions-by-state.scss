@@ -8,7 +8,8 @@ $fontFamilySerif: gandhi, serif;
 $fontSizeBase: 7.5pt; // (10px); Keeping this as a default so values here are as close to our main scss values as possible
 $fontWeightRegular: 500;
 $fontWeightSemibold: 600;
-$fontWeightBold: 700;
+$fontWeightBold: 700; 
+
 // Magnifying glasses
 @import "../_icon-variables.scss";
 // $inverse for u-button
@@ -271,6 +272,23 @@ aside.contribs-by-state {
     border-bottom: solid 2px $colorBorder;
     border-top: solid 2px $colorBorder;
     padding: $fontSizeBase 0;
+
+    .leaflet-popup-pane {
+      box-shadow: inset 0px 0px 1px 1px #000080;
+
+      .leaflet-popup-content-wrapper {
+        border-radius: 2px;
+        // border: solid thin black;
+        z-index: 0 !important;
+      }
+      .leaflet-popup-tip-container {
+        z-index: 1 !important;
+
+        .leaflet-popup-tip {
+          // border: solid thin black;
+        }
+      }
+    }
   }
   .map-details {
     display: flex;

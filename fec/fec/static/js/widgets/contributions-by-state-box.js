@@ -16,6 +16,7 @@
  * TODO - For v2 or whatever, convert to datatable (start with the simpliest implementation; no columns.js, etc.)
  * TODO - Stop the pull-downs from changing the URL?
  * TODO - Make Typeahead save current value and restore if user clicks outside?
+ * TODO - Make candidate selection pre-load the most recent data for that candidate - DONE?
  */
 /* global document, context */
 
@@ -44,11 +45,10 @@ import { buildUrl } from '../modules/helpers';
 
 import typeahead from '../modules/typeahead';
 
-const DataMap = require('../modules/election-map').DataMap;
-
+const DataMap = require('../modules/data-map').DataMap;
 
 import {
-  defaultElectionYear,
+  defaultElectionYear
   // electionYearsOptions,
   // officeDefs
 } from './widget-vars';
@@ -78,13 +78,35 @@ function ContributionsByState() {
   // Where to find the highest-earning candidates:
   this.basePath_highestRaising = ['candidates', 'totals'];
   // Where to find the list of states:
-  this.basePath_states = ['schedules', 'schedule_a', 'by_state', 'by_candidate'];
+  this.basePath_states = [
+    'schedules',
+    'schedule_a',
+    'by_state',
+    'by_candidate'
+  ];
   // Where to find the states list grand total:
-  this.basePath_statesTotal = ['schedules', 'schedule_a', 'by_state', 'by_candidate', 'totals'];
+  this.basePath_statesTotal = [
+    'schedules',
+    'schedule_a',
+    'by_state',
+    'by_candidate',
+    'totals'
+  ];
   // Details about the candidate. Comes from the typeahead
   this.candidateDetails = {};
   // Init the list/table of states and their totals
-  this.data_states;
+  this.data_states = {
+    results: [
+      {
+        candidate_id: 'P00000489',
+        count: 4075,
+        cycle: 1996,
+        state: 'NY',
+        state_full: 'New York',
+        total: 3056478
+      }
+    ]
+  };
   this.element = document.querySelector('#gov-fec-contribs-by-state');
   // Are we waiting for data?
   this.fetchingStates = false;
@@ -98,14 +120,16 @@ function ContributionsByState() {
   this.yearControl;
 
   // Populate the examples text because handlebars doesn't like to
-  document.querySelector('#gov-fec-contribs-by-state .typeahead-filter .filter__instructions').innerHTML = 'Examples: <em>Bush, George W</em> or <em>P00003335</em>';
+  document.querySelector(
+    '#gov-fec-contribs-by-state .typeahead-filter .filter__instructions'
+  ).innerHTML = 'Examples: <em>Bush, George W</em> or <em>P00003335</em>';
 
   // If we have the element on the page, fire it up
   if (this.element) this.init();
 }
 
 /**
- * 
+ *
  */
 ContributionsByState.prototype.init = function() {
   // Add the stylesheet to the document <head>
@@ -115,13 +139,19 @@ ContributionsByState.prototype.init = function() {
   linkElement.rel = 'stylesheet';
   linkElement.href = stylesheetPath;
   head.appendChild(linkElement);
-  
+
   // Init the typeahead
-  this.typeahead = new typeahead.Typeahead('#contribs-by-state-cand', 'candidates');
+  this.typeahead = new typeahead.Typeahead(
+    '#contribs-by-state-cand',
+    'candidates'
+  );
   // this.typeahead.$element.css({ height: 'auto' });
   // Override the default Typeahead behavior and add our own handler
   this.typeahead.$input.off('typeahead:select');
-  this.typeahead.$input.on('typeahead:select', this.handleTypeaheadSelect.bind(this));
+  this.typeahead.$input.on(
+    'typeahead:select',
+    this.handleTypeaheadSelect.bind(this)
+  );
 
   // Init the election year selector (The element ID is set in data/templates/partials/widgets/contributions-by-state.jinja)
   this.yearControl = document.querySelector('#state-contribs-years');
@@ -129,11 +159,9 @@ ContributionsByState.prototype.init = function() {
     'change',
     this.handleElectionYearChange.bind(this)
   );
-  this.baseCandidateQuery = {
-
-  };
+  this.baseCandidateQuery = {};
   this.baseStatesQuery = {
-    // candidate_id: '', // 'P60007168',// TODO - remove this
+    // candidate_id: '', // 'P60007168',
     cycle: defaultElectionYear(),
     election_full: true,
     // is_active_candidate: true,
@@ -152,14 +180,12 @@ ContributionsByState.prototype.init = function() {
   this.statesTotalHolder = document.querySelector('.js-states-total');
 
   this.map = new DataMap(this.map.get(0), {
+    colorScale: ['#f0f9e8', '#a6deb4', '#7bccc4', '#2a9291', '#216a7a'],
     drawStates: true,
-    handleSelect: this.handleMapSelect.bind(this)
+    // handleSelect: this.handleMapSelect.bind(this),
+    src: this.data_states.results,
+    srcUpdateDispatcher: this // TODO - make the map listen to this for data update events
   });
-
-  // var districtMap = new maps.DistrictMap($('#election-map').get(0), {
-  //   color: '#36BDBB'
-  // });
-  // districtMap.load(context.election);
 
   // Listen for resize events
   window.addEventListener('resize', this.handleResize.bind(this));
@@ -167,13 +193,13 @@ ContributionsByState.prototype.init = function() {
   this.handleResize();
 
   this.loadInitialData();
-}
+};
 
 /**
- * 
+ *
  */
 ContributionsByState.prototype.loadInitialData = function() {
-  console.log('loadInitialData');
+  // console.log('loadInitialData');
   let instance = this;
 
   let highestRaisingQuery = Object.assign({}, this.baseStatesQuery, {
@@ -182,7 +208,7 @@ ContributionsByState.prototype.loadInitialData = function() {
     sort_hide_null: true
   });
 
-  console.log('about to query this', highestRaisingQuery);
+  // console.log('about to query this', highestRaisingQuery);
   window
     .fetch(buildUrl(this.basePath_highestRaising, highestRaisingQuery), {
       cache: 'no-cache',
@@ -193,28 +219,26 @@ ContributionsByState.prototype.loadInitialData = function() {
       if (response.status !== 200)
         throw new Error('The network rejected the states request.');
       // else if (response.type == 'cors') throw new Error('CORS error');
-      response
-        .json()
-        .then(data => {
-          console.log('loadInitialData then() ', data);
-          instance.data_candidate = data;
-          instance.candidateDetails = data.results[0];
-          instance.baseStatesQuery.candidate_id = instance.candidateDetails.candidate_id;
-          instance.displayUpdatedData_candidate();
-          instance.loadStatesData();
-        });
+      response.json().then(data => {
+        // console.log('loadInitialData then() ', data);
+        instance.data_candidate = data;
+        instance.candidateDetails = data.results[0];
+        instance.baseStatesQuery.candidate_id =
+          instance.candidateDetails.candidate_id;
+        instance.displayUpdatedData_candidate();
+      });
     })
     .catch(function() {
       // TODO - handle catch
     });
-}
+};
 
 /**
  * Load Candidate details
  */
 ContributionsByState.prototype.loadCandidateDetails = function(cand_id) {
   let instance = this;
-  
+
   this.basePath_candidatePath[1] = cand_id;
   window
     .fetch(buildUrl(this.basePath_candidatePath, this.baseCandidateQuery), {
@@ -226,40 +250,46 @@ ContributionsByState.prototype.loadCandidateDetails = function(cand_id) {
       if (response.status !== 200)
         throw new Error('The network rejected the states request.');
       // else if (response.type == 'cors') throw new Error('CORS error');
-      response
-        .json()
-        .then(data => {
-          console.log('loadCandidateDetails then() ', data);
-          instance.data_candidate = data;
-          instance.candidateDetails = data.results[0];
-          instance.baseStatesQuery.candidate_id = instance.candidateDetails.candidate_id;
-          instance.baseStatesQuery.office = instance.candidateDetails.office;
-          instance.displayUpdatedData_candidate();
-          if (instance.validateCandidateVsElectionYear()) instance.loadStatesData();
-        });
+      response.json().then(data => {
+        // console.log('loadCandidateDetails then() ', data);
+        instance.data_candidate = data;
+        instance.candidateDetails = data.results[0];
+        instance.baseStatesQuery.candidate_id =
+          instance.candidateDetails.candidate_id;
+        instance.baseStatesQuery.office = instance.candidateDetails.office;
+        instance.displayUpdatedData_candidate();
+        // let currentQueryYear = ;
+        // if (instance.validateCandidateVsElectionYear())
+        // instance.loadStatesData();
+      });
     })
     .catch(function() {
       // TODO - handle catch
     });
-}
+};
 
 /**
  * Starts the data load, called by {@see init}
  * @param {Object} query - The data object for the query, {@see baseStatesQuery}
  */
 ContributionsByState.prototype.loadStatesData = function() {
-  console.log('loadStatesData');
+  // console.log('loadStatesData');
   let instance = this;
   // let table = this.table.DataTable();
 
-  let baseStatesQueryWithCandidate = Object.assign({}, this.baseStatesQuery, {candidate_id: this.candidateDetails.candidate_id});
+  let baseStatesQueryWithCandidate = Object.assign({}, this.baseStatesQuery, {
+    candidate_id: this.candidateDetails.candidate_id
+  });
 
   // Let's stop any currently-running states fetches
   if (this.fetchingStates) this.fetchAbortController.abort();
   // Start loading the states data
   this.fetchingStates = true;
   this.setLoadingState(true);
-  console.log('about to request states data with this: ', baseStatesQueryWithCandidate);
+  // console.log(
+  //   'about to request states data with this: ',
+  //   baseStatesQueryWithCandidate
+  // );
   window
     .fetch(buildUrl(this.basePath_states, baseStatesQueryWithCandidate), {
       cache: 'no-cache',
@@ -267,34 +297,28 @@ ContributionsByState.prototype.loadStatesData = function() {
       signal: this.fetchAbortSignal
     })
     .then(function(response) {
-      console.log('fetch.then(response): ', response);
+      // console.log('fetch.then(response): ', response);
       instance.fetchingStates = false;
       if (response.status !== 200)
         throw new Error('The network rejected the states request.');
       // else if (response.type == 'cors') throw new Error('CORS error');
       response.json().then(data => {
-        console.log('LOADED THE STATES DATA: ', data);
+        // console.log('LOADED THE STATES DATA: ', data);
 
         // Now that we have all of the values combined, let's sort them by total, descending
         data.results.sort((a, b) => {
           return b.total - a.total;
         });
 
-        // data.results = [...newResults];
-        // data.results = data.results;
         instance.data_states = data;
         instance.displayUpdatedData_states();
       });
     })
     .catch(function(e) {
       instance.fetchingStates = false;
-      // console.log('fetch.catch(e): ', e);
-      // console.log('e.code: ', e.code);
-      // console.log('e.message: ', e.message);
-      // console.log('e.name: ', e.name);
       // TODO - handle catch
     });
-  
+
   // Start loading the states total
   window
     .fetch(buildUrl(this.basePath_statesTotal, baseStatesQueryWithCandidate), {
@@ -303,7 +327,7 @@ ContributionsByState.prototype.loadStatesData = function() {
       signal: null
     })
     .then(function(response) {
-      console.log('second fetch then: ', response);
+      // console.log('states total fetch then: ', response);
       if (response.status !== 200)
         throw new Error('The network rejected the states total request.');
       // else if (response.type == 'cors') throw new Error('CORS error');
@@ -312,56 +336,91 @@ ContributionsByState.prototype.loadStatesData = function() {
       });
     })
     .catch(function(e) {
-      console.log('second fetch catch e:', e);
+      // console.log('second fetch catch e:', e);
       // TODO - handle catch
     });
 };
 
 /**
- * 
+ *
  */
 ContributionsByState.prototype.displayUpdatedData_candidate = function() {
-  console.log('displayUpdatedData_candidate()');
-  console.log('candidateDetails: ', this.candidateDetails);
-  
+  // console.log('displayUpdatedData_candidate()');
+  // console.log('candidateDetails: ', this.candidateDetails);
+
   // If this is the first load, the typeahead won't have a value; let's set it
   let theTypeahead = document.querySelector('#contribs-by-state-cand');
   if (!theTypeahead.value) theTypeahead.value = this.candidateDetails.name;
 
   // The block where the candidate details are
   // let candidateDetailsHolder = document.querySelector('.candidate-details');
-  
+
   let candidateNameElement = this.candidateDetailsHolder.querySelector('h1');
-  candidateNameElement.innerHTML = `<a href="/data/candidate/${this.candidateDetails.candidate_id}/?cycle=${this.baseStatesQuery.cycle}&election_full=true">${this.candidateDetails.name}</a> [${this.candidateDetails.party}]`;
+  candidateNameElement.innerHTML = `<a href="/data/candidate/${
+    this.candidateDetails.candidate_id
+  }/?cycle=${this.baseStatesQuery.cycle}&election_full=true">${
+    this.candidateDetails.name
+  }</a> [${this.candidateDetails.party}]`;
 
   let candidateIdHolder = this.candidateDetailsHolder.querySelector('h3');
   candidateIdHolder.innerText = 'ID: ' + this.candidateDetails.candidate_id;
 
-}
+  // Update the <select>
+  // TODO - handle if there are no years
+  // TODO - handle if there is only one year
+  // console.log('this.candidateDetails: ', this.candidateDetails);
+  let validElectionYears = this.candidateDetails.election_years;
+  validElectionYears.sort((a, b) => b - a);
+  // console.log('validElectionYears: ', validElectionYears);
+  let previousElectionYear = this.yearControl.value;
+  let nextElectionYear = validElectionYears[0];
+  let newSelectOptions = '';
+  for (let i = 0; i < validElectionYears.length; i++) {
+    newSelectOptions += `<option value="${validElectionYears[i]}"${
+      nextElectionYear == validElectionYears[i] ? ' selected' : ''
+    }>${validElectionYears[i]}</option>`;
+  }
+  // console.log('newSelectOptions:', newSelectOptions);
+  this.yearControl.innerHTML = newSelectOptions;
+
+  if (previousElectionYear != nextElectionYear) {
+    this.baseStatesQuery.cycle = nextElectionYear;
+    let newEvent = new Event('change');
+    this.yearControl.dispatchEvent(newEvent);
+
+    // this.loadStatesData();
+  }
+  this.loadStatesData();
+};
 
 /**
- * 
+ *
  */
 ContributionsByState.prototype.displayUpdatedData_states = function() {
-  console.log('displayUpdatedData_states()');
-  
+  // console.log('displayUpdatedData_states()');
+
   // console.log('this.data_states: ', this.data_states);
   let theResults = this.data_states.results;
   let theTableBody = this.table.querySelector('tbody');
   let theTbodyString = '';
-  
-  console.log('theResults: ', theResults);
+
+  // console.log('theResults: ', theResults);
 
   for (var i = 0; i < theResults.length; i++) {
-    theTbodyString += `<tr><td>${i+1}.</td><td>${theResults[i].state_full}</td><td class="t-right-aligned t-mono">${formatAsCurrency(theResults[i].total, true)}</td></tr>`;
+    theTbodyString += `<tr><td>${i + 1}.</td><td>${
+      theResults[i].state_full
+    }</td><td class="t-right-aligned t-mono">${formatAsCurrency(
+      theResults[i].total,
+      true
+    )}</td></tr>`;
   }
   theTableBody.innerHTML = theTbodyString;
 
+  this.map.handleDataRefresh(theResults);
+
   this.updateCycleTimeStamp();
   this.setLoadingState(false); // TODO - May want to move this elsewhere
-  
-  // maps.initStateMaps(this.data_states);
-}
+};
 
 /**
  * @param {Object} data
@@ -369,61 +428,63 @@ ContributionsByState.prototype.displayUpdatedData_states = function() {
 ContributionsByState.prototype.displayUpdatedData_total = function(data) {
   // console.log('displayUpdatedData_total()', data);
   this.statesTotalHolder.innerText = formatAsCurrency(data.results[0].total);
-}
+};
 
 /**
- * 
+ *
  */
 ContributionsByState.prototype.updateCycleTimeStamp = function() {
+  // console.log('updateCycleTimeStamp()');
   // TODO - account for non-presidential election cycles
   let electionYear = this.baseStatesQuery.cycle;
 
   let theStartTimeElement = document.querySelector('.js-cycle-start-time');
   let theEndTimeElement = document.querySelector('.js-cycle-end-time');
-  
-  let theStartDate = new Date((electionYear - 4), 1, 1);
-  theStartTimeElement.setAttribute('datetime', theStartDate.getFullYear() + '-01-01');
+
+  let theStartDate = new Date(electionYear - 3, 1, 1);
+  theStartTimeElement.setAttribute(
+    'datetime',
+    theStartDate.getFullYear() + '-01-01'
+  );
   theStartTimeElement.innerText = `01/01/${theStartDate.getFullYear()}`;
 
   let theEndDate = new Date(electionYear, 1, 1);
-  theEndTimeElement.setAttribute('datetime', theEndDate.getFullYear() + '-12-31');
+  theEndTimeElement.setAttribute(
+    'datetime',
+    theEndDate.getFullYear() + '-12-31'
+  );
   theEndTimeElement.innerText = `12/31/${theEndDate.getFullYear()}`;
-}
-
-/**
- * 
- */
-ContributionsByState.prototype.handleMapSelect = function(state, district) {
-  console.log('TODO handleMapSelect(state, district):', state, district);
-}
+};
 
 /**
  * Called when the typeahead element dispatches "typeahead:select"
  * @param {jQuery.Event} e - 'typeahead:select' event
  */
-ContributionsByState.prototype.handleTypeaheadSelect = function(e, abbreviatedCandidateDetails) {
-  console.log('handleTypeaheadSelect() e, abbreviatedCandidateDetails:', e, abbreviatedCandidateDetails);
-  // this.candidateDetails = abbreviatedCandidateDetails;
+ContributionsByState.prototype.handleTypeaheadSelect = function(
+  e,
+  abbreviatedCandidateDetails
+) {
+  // console.log(
+  //   'handleTypeaheadSelect() e, abbreviatedCandidateDetails:',
+  //   e,
+  //   abbreviatedCandidateDetails
+  // );
   this.baseStatesQuery.candidate_id = abbreviatedCandidateDetails.id;
   this.loadCandidateDetails(abbreviatedCandidateDetails.id);
-}
+};
 
 /**
  * Called on the election year control's change event
  * @param {Event} e
  */
 ContributionsByState.prototype.handleElectionYearChange = function(e) {
-  console.log('handleElectionYearChange()');
-  console.log('this.yearControl.value: ', this.yearControl.value);
+  // console.log('handleElectionYearChange()');
+  // console.log('this.yearControl.value: ', this.yearControl.value);
   e.preventDefault();
-  if (this.validateCandidateVsElectionYear() === true) {
-    this.baseStatesQuery.cycle = this.yearControl.value;
-    this.loadStatesData();
-  }
-}
+};
 
 /**
- * 
+ *
  */
 ContributionsByState.prototype.handleResize = function(e = null) {
   if (e) e.preventDefault();
@@ -464,14 +525,17 @@ ContributionsByState.prototype.handleResize = function(e = null) {
 };
 
 /**
- * 
+ *
  * @returns {Boolean} Whether the selected year is in the list of cycles for the selected candidate
  */
 ContributionsByState.prototype.validateCandidateVsElectionYear = function() {
-
-  let theErrorBlock = document.querySelector('#gov-fec-contribs-by-state .js-error-message');
+  let theErrorBlock = document.querySelector(
+    '#gov-fec-contribs-by-state .js-error-message'
+  );
   let errorTitle = 'No results';
-  let errorMessage = `There is no ${this.yearControl.value} financial data for this candidate. Try searching a different election year.`;
+  let errorMessage = `There is no ${
+    this.yearControl.value
+  } financial data for this candidate. Try searching a different election year.`;
 
   if (!this.data_states) errorMessage = '';
   else if (this.candidateDetails.election_years && this.yearControl.value) {
@@ -482,7 +546,7 @@ ContributionsByState.prototype.validateCandidateVsElectionYear = function() {
       }
     }
   }
-  
+
   theErrorBlock.querySelector('h2').innerText = errorTitle;
   theErrorBlock.querySelector('p').innerText = errorMessage;
 
@@ -490,22 +554,37 @@ ContributionsByState.prototype.validateCandidateVsElectionYear = function() {
     theErrorBlock.classList.remove('has-error');
     theErrorBlock.setAttribute('aria-hidden', 'true');
     return true;
-
   } else {
     theErrorBlock.classList.add('has-error');
     theErrorBlock.setAttribute('aria-hidden', 'false');
     return false;
   }
-}
+};
 
 /**
- * 
+ *
  * @param {Boolean} newState
  */
 ContributionsByState.prototype.setLoadingState = function(newState) {
-  console.log('setLoadingState(' + newState + ')');
+  // console.log('setLoadingState(' + newState + ')');
   if (newState === false) this.element.classList.remove('is-loading');
   else if (newState === true) this.element.classList.add('is-loading');
+};
+
+/**
+ * Handles the usage analytics for this module
+ * @todo - Decide how to gather usage insights while embedded
+ * @param {String} candID - The candidate ID
+ * @param {*} electionYear - String or Number, the user-selected election year
+ */
+function logUsage(candID, electionYear) {
+  if (window.ga) {
+    window.ga('send', 'event', {
+      eventCategory: 'Widget-ContribsByState',
+      eventAction: 'interaction',
+      eventLabel: candID + ',' + electionYear
+    });
+  }
 }
 
 new ContributionsByState();

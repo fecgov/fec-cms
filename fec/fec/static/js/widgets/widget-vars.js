@@ -23,19 +23,15 @@ let officeDefs = {
  * TODO - May need to expand this to default to midterms when we're away from a presidential year
  */
 let defaultElectionYear = () => {
-  console.log('defaultElectionYear()');
   let theYear = 0;
   let now = new Date();
   let thisYear = now.getFullYear();
 
-  console.log('window.ELECTION_YEAR: ',window.ELECTION_YEAR);
-  console.log('window.DEFAULT_PRESIDENTIAL_YEAR: ',window.DEFAULT_PRESIDENTIAL_YEAR);
-  console.log('thisYear: ',thisYear);
-  
   if (window.ELECTION_YEAR) theYear = window.ELECTION_YEAR;
-  else if (window.DEFAULT_PRESIDENTIAL_YEAR) theYear = window.DEFAULT_PRESIDENTIAL_YEAR;
+  else if (window.DEFAULT_PRESIDENTIAL_YEAR)
+    theYear = window.DEFAULT_PRESIDENTIAL_YEAR;
   else theYear = thisYear;
-  
+
   // If we're looking at the url-provided year,
   // let's check whether it's a presidential year
   // If not, we'll use DEFAULT_PRESIDENTIAL_YEAR
@@ -103,7 +99,10 @@ let electionYearsList = (type = 'P') => {
  * @returns A list of <option> elements
  * TODO - Should we assign a default selectedValue of defaultElectionYear()?
  */
-let electionYearsOptions = (office = 'P', selectedValue = window.DEFAULT_PRESIDENTIAL_YEAR) => {
+let electionYearsOptions = (
+  office = 'P',
+  selectedValue = window.DEFAULT_PRESIDENTIAL_YEAR
+) => {
   let toReturn = '';
   let theList = electionYearsList(office);
   let adjustedValue = selectedValue; // internal selectedValue
