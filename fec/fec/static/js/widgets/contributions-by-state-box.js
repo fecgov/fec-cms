@@ -6,7 +6,7 @@
  * TODO - Error message and state: Selected year isn't an option for selected candidate — DONE?
  * TODO - When the year is changed, double-check against current candidate before requesting data — DONE?
  * TODO - Default election_year from url on initial load (widgets macro?) — DONE?
- * TODO - If user chooses non-President, allow two-year election years
+ * TODO - If user chooses non-President, allow two-year election years (basequery's office, datestamp's math)
  * TODO - From ^^, if a senate candidate is chosen, the candidate's details will have those election cycle years included
  * TODO - Apply data to map
  * TODO - Map legend
@@ -17,6 +17,11 @@
  * TODO - Stop the pull-downs from changing the URL?
  * TODO - Make Typeahead save current value and restore if user clicks outside?
  * TODO - Make candidate selection pre-load the most recent data for that candidate - DONE?
+ * TODO - Clear default text in places like candidate details
+ * TODO - Comments/documentation throughout
+ * TODO - reviews
+ * TODO - Style: state list state names line-height is too big (see "District of Columbia")
+ * TODO - Style: controls should be on one line for medium+ widths
  */
 /* global document, context */
 
