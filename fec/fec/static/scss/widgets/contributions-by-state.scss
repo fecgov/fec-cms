@@ -273,22 +273,7 @@ aside.contribs-by-state {
     border-top: solid 2px $colorBorder;
     padding: $fontSizeBase 0;
 
-    .leaflet-popup-pane {
-      box-shadow: inset 0px 0px 1px 1px #000080;
-
-      .leaflet-popup-content-wrapper {
-        border-radius: 2px;
-        // border: solid thin black;
-        z-index: 0 !important;
-      }
-      .leaflet-popup-tip-container {
-        z-index: 1 !important;
-
-        .leaflet-popup-tip {
-          // border: solid thin black;
-        }
-      }
-    }
+    
   }
   .map-details {
     display: flex;
@@ -315,6 +300,33 @@ aside.contribs-by-state {
     }
     .map-legend {
       text-align: right;
+    }
+  }
+  
+  .tooltip {
+    border-radius: 4px;
+    border: 2px solid #112e51;
+    background-color: #fff;
+    color: #112e51;
+    font-family: karla, sans-serif;
+    padding: 1.5rem;
+    position: absolute;
+    text-align: center;
+    z-index: 400;
+    
+    &.tooltip--above {
+      min-width: 12rem;
+      left: -4rem;
+      bottom: calc(100% + 1.5rem);
+    }
+
+    .tooltip__title {
+      border-bottom: 1px solid #112e51;
+      text-transform: uppercase;
+      font-weight: 700;
+    }
+    .tooltip__value {
+
     }
   }
 

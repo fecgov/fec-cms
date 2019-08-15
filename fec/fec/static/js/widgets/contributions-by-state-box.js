@@ -65,10 +65,12 @@ import {
  * @returns {String} A string of the given value formatted with a dollar sign, commas, and (if roundToWhole === false) decimal
  */
 function formatAsCurrency(passedValue, roundToWhole = true) {
-  // Format for US dollars and cents
-  if (roundToWhole)
-    return '$' + passedValue.toFixed().replace(/\d(?=(\d{3})+$)/g, '$&,');
-  else return '$' + passedValue.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+  return (
+    '$' +
+    (roundToWhole
+      ? Math.round(passedValue).toLocaleString()
+      : passedValue.toLocaleString())
+  );
 }
 
 /**
@@ -186,10 +188,18 @@ ContributionsByState.prototype.init = function() {
 
   this.map = new DataMap(this.map.get(0), {
     colorScale: ['#f0f9e8', '#a6deb4', '#7bccc4', '#2a9291', '#216a7a'],
-    drawStates: true,
+    colorZero: '#ffffff',
+    data: '',
+    width: '300',
+    height: '300',
+    min: '',
+    max: '',
+    addLegend: true,
+    addTooltips: true
+    // drawStates: true,
     // handleSelect: this.handleMapSelect.bind(this),
-    src: this.data_states.results,
-    srcUpdateDispatcher: this // TODO - make the map listen to this for data update events
+    // src: this.data_states.results,
+    // srcUpdateDispatcher: this // TODO - make the map listen to this for data update events
   });
 
   // Listen for resize events
@@ -278,7 +288,7 @@ ContributionsByState.prototype.loadCandidateDetails = function(cand_id) {
  * @param {Object} query - The data object for the query, {@see baseStatesQuery}
  */
 ContributionsByState.prototype.loadStatesData = function() {
-  // console.log('loadStatesData');
+  console.log('loadStatesData()');
   let instance = this;
   // let table = this.table.DataTable();
 
@@ -405,7 +415,8 @@ ContributionsByState.prototype.displayUpdatedData_states = function() {
   // console.log('displayUpdatedData_states()');
 
   // console.log('this.data_states: ', this.data_states);
-  let theResults = this.data_states.results;
+  let theData = this.data_states;
+  let theResults = theData.results;
   let theTableBody = this.table.querySelector('tbody');
   let theTbodyString = '';
 
@@ -421,7 +432,7 @@ ContributionsByState.prototype.displayUpdatedData_states = function() {
   }
   theTableBody.innerHTML = theTbodyString;
 
-  this.map.handleDataRefresh(theResults);
+  this.map.handleDataRefresh(theData);
 
   this.updateCycleTimeStamp();
   this.setLoadingState(false); // TODO - May want to move this elsewhere
