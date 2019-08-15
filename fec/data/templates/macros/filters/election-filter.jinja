@@ -3,7 +3,7 @@
     {% set duration = 4 %}
     {% set years = range(constants.DEFAULT_PRESIDENTIAL_YEAR, 1976, -4) %}
     {% set default_cycle = constants.DEFAULT_PRESIDENTIAL_YEAR %}
-  {% elif office == 'senate' %}
+  {% elif office in ['house', 'senate'] %}
     {% set duration = 6 %}
     {% set years = range(constants.DEFAULT_ELECTION_YEAR + 4, 1976, -2) %}
     {% set default_cycle = constants.DEFAULT_ELECTION_YEAR %}
@@ -25,21 +25,16 @@
     {% endfor %}
   </select>
   {% if office in ['president', 'senate'] %}
-  <fieldset class="toggles toggles--vertical">
-    <legend class="label">Time period</legend>
-    <div class="js-cycles"></div>
-  </fieldset>
-  <input type="hidden" name="{{ cycle_name }}" />
-  <input type="hidden" name="{{ full_name }}" />
+    <fieldset class="toggles toggles--vertical">
+      <legend class="label">Time period</legend>
+      <div class="js-cycles"></div>
+    </fieldset>
+    <input type="hidden" name="{{ cycle_name }}" />
+    <input type="hidden" name="{{ full_name }}" />
+  {% else %}
+    <!-- House candidates should always be election_full=True -->
+    <input type="hidden" name="{{ full_name }}" value="True" />
   {% endif %}
-</div>
-{% endmacro %}
 
-{% macro single_cycle(name, title) %}
-  <label class="label" for="{{ name }}">{{ title }}</label>
-  <select id="{{name}}" name="{{ name }}" class="js-election select--full">
-    {% for year in range(2020, 1976, -2) %}
-      <option value="{{ year }}" {% if year == constants.DEFAULT_TIME_PERIOD %}selected{% endif %}>{{ year|fmt_year_range }}</option>
-    {% endfor %}
-  </select>
+</div>
 {% endmacro %}

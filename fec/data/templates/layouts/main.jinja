@@ -12,19 +12,29 @@
   {% endblock css %}
 
   {% block head_js %}
-    <script src="{{ asset_for_js('polyfills.js') }}"></script>
+    <script>
+      var canSkipPolyfills = ('fetch' in window && 'assign' in Object);
+      if (!canSkipPolyfills) {
+        var pfScriptElem = document.createElement('script');
+        pfScriptElem.async = false;
+        pfScriptElem.src = '{{ asset_for_js('polyfills.js') }}';
+        document.head.appendChild(pfScriptElem);
+      }
+    </script>
   {% endblock %}
 
   <script>
     BASE_PATH = '/data';
     API_LOCATION = '{{ FEC_API_URL }}';
     API_VERSION = 'v1';
-    API_KEY = '{{ FEC_API_KEY }}';
+    API_KEY_PUBLIC = '{{ FEC_API_KEY_PUBLIC }}';
     DOWNLOAD_API_KEY = '{{ FEC_DOWNLOAD_API_KEY }}';
-    DEFAULT_TIME_PERIOD = '2018';
-    START_YEAR = '1979';
-    END_YEAR = '2018';
-    DISTRICT_MAP_CUTOFF = '2018';
+    DEFAULT_TIME_PERIOD = '{{ constants.DEFAULT_TIME_PERIOD }}';
+    DEFAULT_PRESIDENTIAL_YEAR = '{{ constants.DEFAULT_PRESIDENTIAL_YEAR }}';
+    DEFAULT_ELECTION_YEAR = '{{ constants.DEFAULT_ELECTION_YEAR }}';
+    START_YEAR = '{{ constants.START_YEAR }}';
+    END_YEAR = '{{ constants.END_YEAR }}';
+    DISTRICT_MAP_CUTOFF = '{{ constants.DISTRICT_MAP_CUTOFF }}';
     WEBMANAGER_EMAIL = '{{ WEBMANAGER_EMAIL }}';
     CANONICAL_BASE = '{{ CANONICAL_BASE }}';
     TRANSITION_URL = '{{ TRANSITION_URL }}';
@@ -143,7 +153,7 @@
 
     ga('set', 'anonymizeIp', true);
     ga('set', 'forceSSL', true);
-    ga('create', 'UA-48605964-22', 'auto');
+    ga('create', 'UA-16134356-1', 'auto');
     ga('send', 'pageview');
   </script>
   <script id="_fed_an_ua_tag" src="https://dap.digitalgov.gov/Universal-Federated-Analytics-Min.js?agency=FEC"></script>

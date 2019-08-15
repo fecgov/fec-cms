@@ -1,7 +1,7 @@
 @font-face {
   font-family: 'gandhi';
   src: url('../fonts/gandhiserif-bold.woff2') format('woff2'),
-       url('../fonts/gandhiserif-bold.woff') format('woff');
+    url('../fonts/gandhiserif-bold.woff') format('woff');
   font-weight: bold;
   font-style: normal;
 }
@@ -9,7 +9,7 @@
 @font-face {
   font-family: 'gandhi';
   src: url('../fonts/gandhiserif-bolditalic.woff2') format('woff2'),
-       url('../fonts/gandhiserif-bolditalic.woff') format('woff');
+    url('../fonts/gandhiserif-bolditalic.woff') format('woff');
   font-weight: bold;
   font-style: italic;
 }
@@ -17,7 +17,7 @@
 @font-face {
   font-family: 'gandhi';
   src: url('../fonts/gandhiserif-italic.woff2') format('woff2'),
-       url('../fonts/gandhiserif-italic.woff') format('woff');
+    url('../fonts/gandhiserif-italic.woff') format('woff');
   font-weight: normal;
   font-style: italic;
 }
@@ -25,7 +25,7 @@
 @font-face {
   font-family: 'gandhi';
   src: url('../fonts/gandhiserif-regular.woff2') format('woff2'),
-       url('../fonts/gandhiserif-regular.woff') format('woff');
+    url('../fonts/gandhiserif-regular.woff') format('woff');
   font-weight: normal;
   font-style: normal;
 }
@@ -33,7 +33,7 @@
 @font-face {
   font-family: 'karla';
   src: url('../fonts/karla-bold.woff2') format('woff2'),
-       url('../fonts/karla-bold.woff') format('woff');
+    url('../fonts/karla-bold.woff') format('woff');
   font-weight: bold;
   font-style: normal;
 }
@@ -41,7 +41,39 @@
 @font-face {
   font-family: 'karla';
   src: url('../fonts/karla-regular.woff2') format('woff2'),
-       url('../fonts/karla-regular.woff') format('woff');
+    url('../fonts/karla-regular.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'fec_currency_mono';
+  src: url('../fonts/fec-currencymono-bold.woff2') format('woff2'),
+    url('../fonts/fec-currencymono-bold.woff') format('woff');
+  font-weight: bold;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'fec_currency_mono';
+  src: url('../fonts/fec-currencymono-bolditalic.woff2') format('woff2'),
+    url('../fonts/fec-currencymono-bolditalic.woff') format('woff');
+  font-weight: bold;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: 'fec_currency_mono';
+  src: url('../fonts/fec-currencymono-italic.woff2') format('woff2'),
+    url('../fonts/fec-currencymono-italic.woff') format('woff');
+  font-weight: normal;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: 'fec_currency_mono';
+  src: url('../fonts/fec-currencymono-regular.woff2') format('woff2'),
+    url('../fonts/fec-currencymono-regular.woff') format('woff');
   font-weight: normal;
   font-style: normal;
 }

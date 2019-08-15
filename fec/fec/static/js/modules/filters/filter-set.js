@@ -17,7 +17,8 @@ var RangeFilter = require('./range-filter').RangeFilter;
 
 function FilterSet(elm) {
   this.$body = $(elm);
-  $(document.body).on('tag:removed', this.handleTagRemove.bind(this));
+  $(document.body).on('tag:removed', this.handleTagRemoved.bind(this));
+
   this.$body.on('filters:validation', this.handleValidation.bind(this));
   this.efiling = this.$body.data('efiling-filters') || false;
 
@@ -131,14 +132,16 @@ FilterSet.prototype.clear = function() {
   });
 };
 
-FilterSet.prototype.handleTagRemove = function(e, opts) {
-  var $input = this.$body.find('#' + opts.key);
-  var type = $input.get(0).type;
+FilterSet.prototype.handleTagRemoved = function(e, opts) {
+  var $input = $(document.getElementById(opts.key));
+  if ($input.length > 0) {
+    var type = $input.get(0).type;
 
-  if (type === 'checkbox' || type === 'radio') {
-    $input.click();
-  } else if (type === 'text') {
-    $input.val('').trigger('change');
+    if (type === 'checkbox' || type === 'radio') {
+      $input.click();
+    } else if (type === 'text') {
+      $input.val('').trigger('change');
+    }
   }
 };
 
@@ -173,7 +176,10 @@ FilterSet.prototype.activateSwitchedFilters = function(dataType) {
   );
 
   // Set forceRemove: true to clear date filters that are usually nonremovable
-  this.$body.trigger('tag:removeAll', { forceRemove: true });
+  this.$body.trigger('tag:removeAll', {
+    forceRemove: true,
+    fromFilterSet: true
+  });
   // Go through the current panel and set loaded-once on each input
   // So that they don't show loading indicators
   _.each(this.filters, function(filter) {

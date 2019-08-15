@@ -10,16 +10,10 @@ const CleanWebpackPlugin = require('clean-webpack-plugin');
 const fs = require('fs');
 
 const entries = {
+  polyfills: './fec/static/js/polyfills.js',
   init: './fec/static/js/init.js',
   'data-init': './fec/static/js/data-init.js',
-  vendor: ['jquery', 'handlebars'],
-  fonts: [
-    // TODO - move these to their final home
-    './fec/static/fonts/fec-mono-regular.eot',
-    './fec/static/fonts/fec-mono-regular.ttf',
-    './fec/static/fonts/fec-mono-regular.woff',
-    './fec/static/fonts/fec-mono-regular.woff2'
-  ]
+  vendor: ['jquery', 'handlebars']
 };
 
 const datatablePages = [];
@@ -44,13 +38,10 @@ module.exports = [
     entry: entries,
     plugins: [
       // deletes old build files
-      new CleanWebpackPlugin(
-        ['./dist/fec/static/js', './dist/fec/static/fonts'],
-        {
-          verbose: true,
-          dry: false
-        }
-      ),
+      new CleanWebpackPlugin(['./dist/fec/static/js'], {
+        verbose: true,
+        dry: false
+      }),
       new webpack.optimize.CommonsChunkPlugin({
         // Contains d3, leaflet, and other shared code for maps and charts
         // Included on data landing, candidate single, committee single and election pages
@@ -101,21 +92,8 @@ module.exports = [
           exclude: /node_modules/,
           loader: 'babel-loader',
           options: {
-            presets: ['latest']
+            presets: ['es2015']
           }
-        },
-        {
-          // TODO - move these to their final home
-          test: /\.(woff(2)?|ttf|eot|svg)(\?v=\d+\.\d+\.\d+)?$/,
-          use: [
-            {
-              loader: 'file-loader',
-              options: {
-                name: '[name].[ext]',
-                outputPath: '../fonts'
-              }
-            }
-          ]
         }
       ]
     },
@@ -156,12 +134,13 @@ module.exports = [
   },
   {
     // The modules are separate because we want them in a specific place and named predictably
-    name: 'modules',
+    name: 'widgets',
     entry: {
-      'aggregate-totals': './fec/static/js/modules/aggregate-totals.js'
+      'aggregate-totals': './fec/static/js/widgets/aggregate-totals.js',
+      'aggregate-totals-box': './fec/static/js/widgets/aggregate-totals-box.js'
     },
     output: {
-      filename: 'modules/[name].js',
+      filename: 'widgets/[name].js',
       path: path.resolve(__dirname, './dist/fec/static/js')
     },
     node: {
@@ -171,18 +150,19 @@ module.exports = [
     plugins: [
       new webpack.SourceMapDevToolPlugin(),
       new ManifestPlugin({
-        fileName: 'rev-modules-manifest-js.json',
+        fileName: 'rev-widgets-manifest-js.json',
         basePath: '/static/js/'
-      })
+      }),
+      new webpack.ProvidePlugin({ _: 'lodash' })
     ],
     module: {
-      loaders: [
+      rules: [
         {
           test: /\.js$/,
           exclude: /node_modules/,
           loader: 'babel-loader',
           options: {
-            presets: ['latest', 'react']
+            presets: ['es2015', 'react']
           }
         }
       ]
@@ -217,7 +197,7 @@ module.exports = [
           exclude: /node_modules/,
           loader: 'babel-loader',
           options: {
-            presets: ['latest', 'react']
+            presets: ['es2015', 'react']
           }
         }
       ]
@@ -253,7 +233,7 @@ module.exports = [
           exclude: /node_modules/,
           loader: 'babel-loader',
           options: {
-            presets: ['latest', 'react']
+            presets: ['es2015', 'react']
           }
         }
       ]

@@ -1,6 +1,6 @@
 'use strict';
 
-/* global BASE_PATH, API_LOCATION, API_VERSION, API_KEY */
+/* global BASE_PATH, API_LOCATION, API_VERSION, API_KEY_PUBLIC */
 
 var URI = require('urijs');
 var $ = require('jquery');
@@ -256,11 +256,27 @@ function formatCycleRange(year, duration) {
   return firstYear + '–' + year;
 }
 
-function cycleDates(year) {
+function cycleDates(year, duration) {
   return {
-    min: '01-01-' + (year - 1),
+    min: '01-01-' + (year - duration + 1),
     max: '12-31-' + year
   };
+}
+
+function multiCycles(cycle, duration, label = 'two_year_transaction_period') {
+  if (duration == 6) {
+    return {
+      [label]: [cycle, cycle - 2, cycle - 4]
+    };
+  } else if (duration == 4) {
+    return {
+      [label]: [cycle, cycle - 2]
+    };
+  } else {
+    return {
+      [label]: cycle
+    };
+  }
 }
 
 function ensureArray(value) {
@@ -287,7 +303,7 @@ function buildAppUrl(path, query) {
 function buildUrl(path, query) {
   var uri = URI(API_LOCATION)
     .path(Array.prototype.concat(API_VERSION, path, '').join('/'))
-    .addQuery({ api_key: API_KEY });
+    .addQuery({ api_key: API_KEY_PUBLIC });
 
   if (query.api_key) {
     // if query provides api_key, use that.
@@ -305,6 +321,11 @@ function buildTableQuery(context) {
     })
     .object()
     .value();
+
+  // remove duration from API query - only needed for JS calculations
+  if (query.duration) {
+    delete query.duration;
+  }
 
   return _.extend(query, {
     per_page: pageLength,
@@ -443,15 +464,16 @@ function missingDataReason(dataType) {
   // Returns a string explaining why data may not be showing
   // which is then used by the noData.hbs message
   var reasons = {
-    contributions: 'The committee has not received any contributions over $200',
-    disbursements: 'The committee has not made any disbursements',
+    contributions:
+      'The committee has not received any contributions over $200.',
+    disbursements: 'The committee has not made any disbursements.',
     'independent-expenditures':
-      'No independent expenditures have been made in support or opposition of this candidate',
+      'No independent expenditures have been made in support or opposition of this candidate.',
     'communication-costs':
-      'No communication costs have been made in support or opposition of this candidate',
+      'No communication costs have been made in support or opposition of this candidate.',
     electioneering:
-      'No electioneering communications have been made that mention this candidate',
-    'ie-made': 'The committee has not made any independent expenditures'
+      'No electioneering communications have been made that mention this candidate.',
+    'ie-made': 'The committee has not made any independent expenditures.'
   };
 
   return reasons[dataType] || false;
@@ -528,6 +550,7 @@ module.exports = {
   buildTableQuery: buildTableQuery,
   currency: currency,
   cycleDates: cycleDates,
+  multiCycles: multiCycles,
   datetime: datetime,
   dollar: dollar,
   ensureArray: ensureArray,

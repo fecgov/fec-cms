@@ -43,6 +43,28 @@ def to_date(committee, cycle):
     return min(datetime.datetime.now().year, int(cycle))
 
 
+def aggregate_totals(request):
+    office = request.GET.get('office', 'P')
+
+    election_year = int(request.GET.get('election_year', constants.DEFAULT_ELECTION_YEAR))
+
+    max_election_year = utils.current_cycle() + 4
+    election_years = utils.get_cycles(max_election_year)
+
+    FEATURES = settings.FEATURES
+
+    return render(
+        request,
+        'widgets/aggregate-totals.jinja',
+        {
+            'title': 'Aggregate Totals',
+            'election_years': election_years,
+            'election_year': election_year,
+            'office': office,
+            'FEATURES': FEATURES
+        }
+    )
+
 def landing(request):
     top_candidates_raising = api_caller.load_top_candidates('-receipts', per_page=3)
 
@@ -98,6 +120,12 @@ def get_candidate(candidate_id, cycle, election_full):
     Given candidate_id, cycle, election_full, call the API and get the candidate
     and candidate financial data needed to render the candidate profile page
     """
+
+    """
+    for House, set election_full=False except State=PR to solve cms issue#2937
+    """
+    if candidate_id.startswith('H', 0, 1) and candidate_id[2:4] != 'PR':
+        election_full = False
 
     candidate, committees, cycle = api_caller.load_with_nested(
         'candidate',
@@ -237,6 +265,16 @@ def get_candidate(candidate_id, cycle, election_full):
         reverse=True,
     )
 
+    raw_filing_start_date = utils.three_days_ago()
+    raw_filings = api_caller._call_api(
+        'efile',
+        'filings',
+        cycle=cycle,
+        committee_id=candidate['candidate_id'],
+        min_receipt_date=raw_filing_start_date,
+    )
+    has_raw_filings = True if raw_filings.get('results') else False
+
     return {
         'name': candidate['name'],
         'cycle': int(cycle),
@@ -267,7 +305,10 @@ def get_candidate(candidate_id, cycle, election_full):
         'statement_of_candidacy': statement_of_candidacy,
         'elections': elections,
         'candidate': candidate,
+        'has_raw_filings': has_raw_filings,
+        'min_receipt_date': raw_filing_start_date,
         'context_vars': context_vars,
+        'aggregate_cycles': aggregate_cycles,
     }
 
 
@@ -425,8 +466,9 @@ def get_committee(committee_id, cycle):
             committee_id=committee['committee_id'],
             min_receipt_date=template_variables['min_receipt_date'],
         )
-        if len(raw_filings.get('results')) > 0:
-            template_variables['has_raw_filings'] = True
+        template_variables['has_raw_filings'] = (
+            True if raw_filings.get('results') else False
+        )
     else:
         template_variables['has_raw_filings'] = False
 
@@ -472,6 +514,11 @@ def elections(request, office, cycle, state=None, district=None):
     if (state is not None) and (state and state.upper() not in constants.states):
         raise Http404()
 
+    election_duration = election_durations.get(office[0].upper(), 2)
+    # Puerto Rico house/resident commissioners have 4-year cycles
+    if state and state.upper() == 'PR':
+        election_duration = 4
+
     # map/redirect legacy tab names to correct anchor
     tab = request.GET.get('tab', '').replace('/', '')
     legacy_tabs = {
@@ -504,6 +551,7 @@ def elections(request, office, cycle, state=None, district=None):
             'office_code': office[0],
             'parent': 'data',
             'cycle': cycle,
+            'election_duration': election_duration,
             'cycles': cycles,
             'state': state,
             'state_full': constants.states[state.upper()] if state else None,
@@ -528,7 +576,7 @@ def raising(request):
             'title': 'Raising: by the numbers',
             'election_years': election_years,
             'election_year': election_year,
-            'office': office,
+            'office': office
         },
     )
 
@@ -549,7 +597,7 @@ def spending(request):
             'title': 'Spending: by the numbers',
             'election_years': election_years,
             'election_year': election_year,
-            'office': office,
+            'office': office
         },
     )
 
