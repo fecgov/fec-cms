@@ -109,7 +109,10 @@ aside.contribs-by-state {
     select {
       // display: block;
       // TODO - Make this :down: more like the main code—not just the computed value
-      background-image: url('data:image/svg+xml;charset=utf8, %3Csvg%20%20fill%3D%27%23211e51%27%20width%3D%2210%22%20height%3D%229%22%20viewBox%3D%220%200%2010%209%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Cpath%20d%3D%22M5.706%208.013l3.685-6.234A.851.851%200%200%200%208.664.485H1.283A.852.852%200%200%200%20.55%201.769l3.69%206.244a.852.852%200%200%200%201.466%200z%22%2F%3E%3C%2Fsvg%3E');
+      background-image: url($arrow-down);
+  // $magnifying-glass-arrow:  'data:image/svg+xml;charset=utf8, %3Csvg%20width%3D%2230%22%20height%3D%2221%22%20viewBox%3D%220%200%2030%2021%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Cg%3E%3Cpath%20d%3D%22M24.24%2013.097l-3.685-6.234a.851.851%200%200%201%20.727-1.294h7.382a.852.852%200%200%201%20.733%201.284l-3.69%206.244a.852.852%200%200%201-1.467%200zM19.653%2016.78a2.03%202.03%200%201%201-2.872%202.872l-4.538-4.537a8.072%208.072%200%200%201-4.12%201.131%208.123%208.123%200%201%201%208.123-8.123%208.072%208.072%200%200%201-1.131%204.12l4.538%204.538zM8.123%202.03a6.092%206.092%200%201%200%200%2012.185%206.092%206.092%200%200%200%200-12.184z%22%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E';
+  // $magnifying-glass:        'data:image/svg+xml;charset=utf8, %3Csvg%20width%3D%2221%22%20height%3D%2221%22%20viewBox%3D%220%200%2021%2021%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Cpath%20d%3D%22M19.653%2016.78a2.03%202.03%200%201%201-2.872%202.872l-4.538-4.537a8.072%208.072%200%200%201-4.12%201.131%208.123%208.123%200%201%201%208.123-8.123%208.072%208.072%200%200%201-1.131%204.12l4.538%204.538zM8.123%202.03a6.092%206.092%200%201%200%200%2012.185%206.092%206.092%200%200%200%200-12.184z%22%2F%3E%3C%2Fsvg%3E';
+
       background-repeat: no-repeat;
       background-position: right $fontSizeBase top 50%;
       background-size: 12px;
@@ -273,7 +276,9 @@ aside.contribs-by-state {
     border-top: solid 2px $colorBorder;
     padding: $fontSizeBase 0;
 
-    
+    .election-map {
+      border: none;
+    }
   }
   .map-details {
     display: flex;
@@ -298,38 +303,15 @@ aside.contribs-by-state {
         margin: 0 0 .25em 0;
       }
     }
-    .map-legend {
+    .legend-container {
       text-align: right;
+
+      span {
+        text-align: right;
+      }
     }
   }
   
-  .tooltip {
-    border-radius: 4px;
-    border: 2px solid #112e51;
-    background-color: #fff;
-    color: #112e51;
-    font-family: karla, sans-serif;
-    padding: 1.5rem;
-    position: absolute;
-    text-align: center;
-    z-index: 400;
-    
-    &.tooltip--above {
-      min-width: 12rem;
-      left: -4rem;
-      bottom: calc(100% + 1.5rem);
-    }
-
-    .tooltip__title {
-      border-bottom: 1px solid #112e51;
-      text-transform: uppercase;
-      font-weight: 700;
-    }
-    .tooltip__value {
-
-    }
-  }
-
   // Small sizes for the light theme, which is the default
   // &.w-s {
     
@@ -371,92 +353,57 @@ aside.contribs-by-state {
       margin-left: 1rem;
       width: calc(66.66% - 1rem);
     }
-//     .total-wrapper {
-//       border-bottom: none;
-//       // border-right: solid thin $colorElementBordersOnLight;
-//       margin: 0;
-//       padding-bottom: 0;
-//       padding-right: $fontSizeBase * 4;
-//       text-align: right;
-//       width: 50%;
-
-//       .value {
-//         // margin: -5px 0 $fontSizeBase 0;
-//         order: 1;
-//         text-align: right;
-//       }
-//       .description {
-//         font-size: $fontSizeBase * 1.4;
-//         // margin: 5px 0 0;
-//         order: 2;
-//       }
-//     }
-//     .parties-wrapper {
-//       margin: 0;
-//       padding-left: $fontSizeBase * 4;
-//       width: 50%;
-
-//       .simple-table--responsive {
-//         margin: 0 0 0 auto; // (right-align the table itself)
-//         max-width: 400px;
-
-//         .simple-table__cell {
-//           &:first-child {
-//             width: 3em;
-//           }
-//           &:last-child {
-//             border-left: none;
-//             width: 25%;
-//           }
-//         }
-//       }
-//     }
-
-//     footer {
-//       margin-top: 0;
-
-//       a.gov-fec-seal {
-//         background-image: url('/static/img/wordmark.svg');
-//         background-position: right center;
-//         background-repeat: no-repeat;
-//         background-size: auto 30px;
-//         text-align: left;
-//         width: 275px;
-//       }
-//     }
   }
 //   // Large sizes for the light theme, which is the default
   &.w-l {
     @extend .w-m;
-//     .controls-wrapper {
-//       display: flex;
-//       justify-content: space-between;
-//     }
-//     .total-wrapper {
-//       margin-bottom: 0;
-//     }
-//     .parties-wrapper {
-//       margin-bottom: 0;
-
-//       .simple-table--responsive {
-//         .simple-table__cell {
-//           &:last-child {
-//             width: 33%;
-//           }
-//         }
-//       }
-//     }
   }
 
   // Classes for when a data load is occurring
+  .controls-wrapper select {
+    opacity: 1;
+    transition: opacity .25s;
+  }
   .state-list-wrapper, .map-wrapper {
     opacity: 1;
     transition: opacity .25s;
   }
   &.is-loading {
+    .controls-wrapper select {
+      opacity: .33;
+      transition: opacity .5s;
+    }
     .state-list-wrapper, .map-wrapper {
       opacity: 0.33;
       transition: opacity .5s;
     }
+  }
+}
+
+/* data-map-tooltip is outside .contribs-by-state */
+.data-map-tooltip {
+  border-radius: 4px;
+  border: 2px solid #112e51;
+  background-color: #fff;
+  color: #112e51;
+  font-family: karla, sans-serif;
+  padding: 1.5rem;
+  position: absolute;
+  text-align: center;
+  z-index: 400;
+  
+  &.tooltip--above {
+    min-width: 12rem;
+    left: -4rem;
+    bottom: calc(100% + 1.5rem);
+  }
+
+  .tooltip__title {
+    border-bottom: 1px solid #112e51;
+    text-transform: uppercase;
+    font-weight: 700;
+  }
+  .tooltip__value {
+
   }
 }

@@ -192,8 +192,6 @@ ContributionsByState.prototype.init = function() {
     data: '',
     width: '300',
     height: '300',
-    min: '',
-    max: '',
     addLegend: true,
     addTooltips: true
     // drawStates: true,
@@ -582,9 +580,17 @@ ContributionsByState.prototype.validateCandidateVsElectionYear = function() {
  * @param {Boolean} newState
  */
 ContributionsByState.prototype.setLoadingState = function(newState) {
-  // console.log('setLoadingState(' + newState + ')');
-  if (newState === false) this.element.classList.remove('is-loading');
-  else if (newState === true) this.element.classList.add('is-loading');
+  if (newState === false) {
+    this.element.classList.remove('is-loading');
+    this.element
+      .querySelector('#state-contribs-years')
+      .removeAttribute('disabled');
+  } else if (newState === true) {
+    this.element.classList.add('is-loading');
+    this.element
+      .querySelector('#state-contribs-years')
+      .setAttribute('disabled', true);
+  }
 };
 
 /**
