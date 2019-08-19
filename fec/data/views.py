@@ -115,18 +115,237 @@ def browse_data(request):
     return render(request, 'browse-data.jinja', {'title': 'Browse data', 'parent': 'data'})
 
 
+# def get_candidate(candidate_id, cycle, election_full):
+#     """
+#     this function is replaced by get_candidate_summary on 08/2019. It can be deleted later. 
+
+#     """
+
+#     """
+#     Given candidate_id, cycle, election_full, call the API and get the candidate
+#     and candidate financial data needed to render the candidate profile page
+#     """
+
+#     """
+#     for House, set election_full=False except State=PR to solve cms issue#2937
+#     """
+#     if candidate_id.startswith('H', 0, 1) and candidate_id[2:4] != 'PR':
+#         election_full = False
+
+#     candidate, committees, cycle = api_caller.load_with_nested(
+#         'candidate',
+#         candidate_id,
+#         'committees',
+#         cycle=cycle,
+#         cycle_key='two_year_period',
+#         election_full=election_full,
+#     )
+#     # cycle corresponds to the two-year period for which the committee has financial activity.
+#     # when selected election cycle is not in list of election years, get the next election cycle
+#     if election_full and cycle and cycle not in candidate['election_years']:
+
+#         next_cycle = next(
+#             (year for year in sorted(candidate['election_years']) if year > cycle),
+#             max(candidate['election_years']),
+#         )
+
+#         # If the next_cycle is odd set it to whatever the cycle value was- falls back to the cycle
+#         # and then set election_full to false
+#         # This solves issue# 1945 with odd year special elections
+#         if next_cycle % 2 > 0:
+#             next_cycle = cycle
+#             election_full = False
+#         # get the next election cycle data for this candidate
+#         candidate, committees, cycle = api_caller.load_with_nested(
+#             'candidate',
+#             candidate_id,
+#             'committees',
+#             cycle=next_cycle,
+#             cycle_key='two_year_period',
+#             election_full=election_full,
+#         )
+
+#     # Addresses issue#1644 - make any odd year special election an even year
+#     #  for displaying elections for pulldown menu in Candidate pages
+#     #  Using Set to ensure no duplicate years in final list
+#     even_election_years = list(
+#         {year + (year % 2) for year in candidate.get('election_years', [])}
+#     )
+
+#     election_year = next(
+#         (year for year in sorted(even_election_years) if year >= cycle), None
+#     )
+
+#     # If the candidate is not running in a future election,
+#     # return the most recent even eleciton year
+#     if not election_year:
+#         election_year = max(even_election_years)
+
+#     result_type = 'candidates'
+#     duration = election_durations.get(candidate['office'], 2)
+#     min_cycle = cycle - duration if election_full else cycle
+#     report_type = report_types.get(candidate['office'])
+
+#     # For JavaScript
+#     context_vars = {
+#         'cycles': candidate['cycles'],
+#         'name': candidate['name'],
+#         'cycle': cycle,
+#         'electionFull': election_full,
+#         'candidateID': candidate['candidate_id'],
+#     }
+
+#     # In the case of when a presidential or senate candidate has filed
+#     # for a future year that's beyond the current cycle,
+#     # set a max_cycle var to the current cycle we're in
+#     # and when calling the API for totals, set election_full to False.
+#     # The max_cycle value is also referenced in the templates for setting
+#     # the cycle for itemized tables. Because these are only in 2-year chunks,
+#     # the cycle should never be beyond the one we're in.
+#     cycles = [cycle for cycle in candidate['cycles'] if cycle <= utils.current_cycle()]
+#     # New transactions will appear after the Q1 of a new election year - this delays the rollover to a new cycle by 104 days
+#     max_cycle = (
+#         cycle
+#         if cycle <= utils.current_cycle(delayed_start=True)
+#         else utils.current_cycle(delayed_start=True)
+#     )
+#     show_full_election = election_full if cycle <= utils.current_cycle() else False
+
+#     # Annotate committees with most recent available cycle
+#     aggregate_cycles = (
+#         list(range(cycle, cycle - duration, -2)) if election_full else [cycle]
+#     )
+#     for committee in committees:
+#         committee['related_cycle'] = (
+#             max(cycle for cycle in aggregate_cycles if cycle in committee['cycles'])
+#             if election_full
+#             else candidate['two_year_period']
+#         )
+
+#     # Group the committees by designation
+#     committee_groups = groupby(committees, lambda each: each['designation'])
+#     committees_authorized = committee_groups.get('P', []) + committee_groups.get(
+#         'A', []
+#     )
+
+#     committee_ids = [committee['committee_id'] for committee in committees_authorized]
+
+#     # Get aggregate totals for the financial summary
+#     # And pass through the data processing utils
+#     aggregate = api_caller.load_candidate_totals(
+#         candidate['candidate_id'], cycle=cycle, election_full=election_full
+#     )
+#     if aggregate:
+#         raising_summary = utils.process_raising_data(aggregate)
+#         spending_summary = utils.process_spending_data(aggregate)
+#         cash_summary = utils.process_cash_data(aggregate)
+#     else:
+#         raising_summary = None
+#         spending_summary = None
+#         cash_summary = None
+
+#     # Get totals for the last two-year period of a cycle for showing on
+#     # raising and spending tabs
+#     two_year_totals = api_caller.load_candidate_totals(
+#         candidate['candidate_id'], cycle=max_cycle, election_full=False
+#     )
+
+#     # Get the statements of candidacy
+#     statement_of_candidacy = api_caller.load_candidate_statement_of_candidacy(
+#         candidate['candidate_id'], cycle=cycle
+#     )
+
+#     if statement_of_candidacy:
+#         for statement in statement_of_candidacy:
+#             # convert string to python datetime and parse for readable output
+#             statement['receipt_date'] = datetime.datetime.strptime(
+#                 statement['receipt_date'], '%Y-%m-%dT%H:%M:%S'
+#             )
+#             statement['receipt_date'] = statement['receipt_date'].strftime('%m/%d/%Y')
+
+#     # Get all the elections
+#     elections = sorted(
+#         zip(candidate['election_years'], candidate['election_districts']),
+#         key=lambda pair: pair[0],
+#         reverse=True,
+#     )
+
+#     raw_filing_start_date = utils.three_days_ago()
+#     raw_filings = api_caller._call_api(
+#         'efile',
+#         'filings',
+#         cycle=cycle,
+#         committee_id=candidate['candidate_id'],
+#         min_receipt_date=raw_filing_start_date,
+#     )
+#     has_raw_filings = True if raw_filings.get('results') else False
+
+#     return {
+#         'name': candidate['name'],
+#         'cycle': int(cycle),
+#         'office': candidate['office'],
+#         'office_full': candidate['office_full'],
+#         'state': candidate['state'],
+#         'district': candidate['district'],
+#         'candidate_id': candidate_id,
+#         'party_full': candidate['party_full'],
+#         'incumbent_challenge_full': candidate['incumbent_challenge_full'],
+#         'election_year': election_year,
+#         'election_years': even_election_years,
+#         'result_type': result_type,
+#         'duration': duration,
+#         'min_cycle': min_cycle,
+#         'report_type': report_type,
+#         'cycles': cycles,
+#         'max_cycle': max_cycle,
+#         'show_full_election': show_full_election,
+#         'committee_groups': committee_groups,
+#         'committees_authorized': committees_authorized,
+#         'committee_ids': committee_ids,
+#         'raising_summary': raising_summary,
+#         'spending_summary': spending_summary,
+#         'cash_summary': cash_summary,
+#         'aggregate': aggregate,
+#         'two_year_totals': two_year_totals,
+#         'statement_of_candidacy': statement_of_candidacy,
+#         'elections': elections,
+#         'candidate': candidate,
+#         'has_raw_filings': has_raw_filings,
+#         'min_receipt_date': raw_filing_start_date,
+#         'context_vars': context_vars,
+#         'aggregate_cycles': aggregate_cycles,
+#     }
+
+
 def get_candidate(candidate_id, cycle, election_full):
     """
-    Given candidate_id, cycle, election_full, call the API and get the candidate
-    and candidate financial data needed to render the candidate profile page
+    1) By passing parameter "candidate_id" to get candidate data.
+    2) "cycle" and "election_full" are optional parameters.
+       if no election_full, election_full = true.
+       if no cycle, cycle = the latest item in rounded_election_years.
+    3) totally call 5-6 endpoints.
     """
 
-    """
-    for House, set election_full=False except State=PR to solve cms issue#2937
-    """
-    if candidate_id.startswith('H', 0, 1) and candidate_id[2:4] != 'PR':
-        election_full = False
+    # (1)call candidate/{candidate_id}/history/ under tag:candidate
+    # get rounded_election_years(candidate_election_year).
+    path = '/candidate/' + candidate_id + '/history/'
+    filters = {}
+    filters['per_page'] = 1
+    candidate = api_caller.load_first_row_data(path, **filters)
 
+    # a)Build List: even_election_years for candidate election dropdown list
+    #   on candidate profile page.
+    # b)rounded_election_years round up any odd year special election_year
+    #   to even number. (ex:2017=>2018)
+    # even_election_years = candidate.get('rounded_election_years')
+
+    # if cycle = null, set cycle = the latest item in rounded_election_years.
+    if not cycle:
+        cycle = max(candidate.get('rounded_election_years'))
+
+    # (2)call candidate/{candidate_id}/history/{cycle} under tag:candidate
+    # (3)call candidate/{candidate_id}/committees/history/{cycle}
+    # under tag:committee.
     candidate, committees, cycle = api_caller.load_with_nested(
         'candidate',
         candidate_id,
@@ -135,46 +354,6 @@ def get_candidate(candidate_id, cycle, election_full):
         cycle_key='two_year_period',
         election_full=election_full,
     )
-    # cycle corresponds to the two-year period for which the committee has financial activity.
-    # when selected election cycle is not in list of election years, get the next election cycle
-    if election_full and cycle and cycle not in candidate['election_years']:
-
-        next_cycle = next(
-            (year for year in sorted(candidate['election_years']) if year > cycle),
-            max(candidate['election_years']),
-        )
-
-        # If the next_cycle is odd set it to whatever the cycle value was- falls back to the cycle
-        # and then set election_full to false
-        # This solves issue# 1945 with odd year special elections
-        if next_cycle % 2 > 0:
-            next_cycle = cycle
-            election_full = False
-        # get the next election cycle data for this candidate
-        candidate, committees, cycle = api_caller.load_with_nested(
-            'candidate',
-            candidate_id,
-            'committees',
-            cycle=next_cycle,
-            cycle_key='two_year_period',
-            election_full=election_full,
-        )
-
-    # Addresses issue#1644 - make any odd year special election an even year
-    #  for displaying elections for pulldown menu in Candidate pages
-    #  Using Set to ensure no duplicate years in final list
-    even_election_years = list(
-        {year + (year % 2) for year in candidate.get('election_years', [])}
-    )
-
-    election_year = next(
-        (year for year in sorted(even_election_years) if year >= cycle), None
-    )
-
-    # If the candidate is not running in a future election,
-    # return the most recent even eleciton year
-    if not election_year:
-        election_year = max(even_election_years)
 
     result_type = 'candidates'
     duration = election_durations.get(candidate['office'], 2)
@@ -190,46 +369,42 @@ def get_candidate(candidate_id, cycle, election_full):
         'candidateID': candidate['candidate_id'],
     }
 
-    # In the case of when a presidential or senate candidate has filed
-    # for a future year that's beyond the current cycle,
-    # set a max_cycle var to the current cycle we're in
-    # and when calling the API for totals, set election_full to False.
-    # The max_cycle value is also referenced in the templates for setting
-    # the cycle for itemized tables. Because these are only in 2-year chunks,
-    # the cycle should never be beyond the one we're in.
-    cycles = [cycle for cycle in candidate['cycles'] if cycle <= utils.current_cycle()]
-    # New transactions will appear after the Q1 of a new election year - this delays the rollover to a new cycle by 104 days
-    max_cycle = (
-        cycle
-        if cycle <= utils.current_cycle(delayed_start=True)
-        else utils.current_cycle(delayed_start=True)
-    )
-    show_full_election = election_full if cycle <= utils.current_cycle() else False
-
     # Annotate committees with most recent available cycle
     aggregate_cycles = (
         list(range(cycle, cycle - duration, -2)) if election_full else [cycle]
     )
     for committee in committees:
-        committee['related_cycle'] = (
-            max(cycle for cycle in aggregate_cycles if cycle in committee['cycles'])
-            if election_full
-            else candidate['two_year_period']
-        )
+        committee['related_cycle'] = committee['cycle']
 
     # Group the committees by designation
     committee_groups = groupby(committees, lambda each: each['designation'])
-    committees_authorized = committee_groups.get('P', []) + committee_groups.get(
+    committees_authorized = committee_groups.get(
+        'P', []
+    ) + committee_groups.get(
         'A', []
     )
 
-    committee_ids = [committee['committee_id'] for committee in committees_authorized]
+    committee_ids = [
+        committee['committee_id']for committee in committees_authorized
+    ]
 
+    # (4)call candidate/{candidate_id}/totals/{cycle} under tag:candidate
     # Get aggregate totals for the financial summary
-    # And pass through the data processing utils
-    aggregate = api_caller.load_candidate_totals(
-        candidate['candidate_id'], cycle=cycle, election_full=election_full
-    )
+    filters['election_full'] = election_full
+    filters['cycle'] = cycle
+    path = '/candidate/' + candidate_id + '/totals/'
+    aggregate = api_caller.load_first_row_data(path, **filters)
+
+    if election_full:
+        # (5)if election_full is ture, need call
+        # candidate/{candidate_id}/totals/{cycle} second time
+        # (set election_full=false) to get totals for the two-year period
+        # for showing on raising and spending tabs
+        filters['election_full'] = False
+        two_year_totals = api_caller.load_first_row_data(path, **filters)
+    else:
+        two_year_totals = aggregate
+
     if aggregate:
         raising_summary = utils.process_raising_data(aggregate)
         spending_summary = utils.process_spending_data(aggregate)
@@ -239,12 +414,7 @@ def get_candidate(candidate_id, cycle, election_full):
         spending_summary = None
         cash_summary = None
 
-    # Get totals for the last two-year period of a cycle for showing on
-    # raising and spending tabs
-    two_year_totals = api_caller.load_candidate_totals(
-        candidate['candidate_id'], cycle=max_cycle, election_full=False
-    )
-
+    # (6)Call /filings?candidate_id=P00003392&form_type=F2
     # Get the statements of candidacy
     statement_of_candidacy = api_caller.load_candidate_statement_of_candidacy(
         candidate['candidate_id'], cycle=cycle
@@ -256,7 +426,9 @@ def get_candidate(candidate_id, cycle, election_full):
             statement['receipt_date'] = datetime.datetime.strptime(
                 statement['receipt_date'], '%Y-%m-%dT%H:%M:%S'
             )
-            statement['receipt_date'] = statement['receipt_date'].strftime('%m/%d/%Y')
+            statement['receipt_date'] = statement['receipt_date'].strftime(
+                '%m/%d/%Y'
+            )
 
     # Get all the elections
     elections = sorted(
@@ -265,59 +437,47 @@ def get_candidate(candidate_id, cycle, election_full):
         reverse=True,
     )
 
-    raw_filing_start_date = utils.three_days_ago()
-    raw_filings = api_caller._call_api(
-        'efile',
-        'filings',
-        cycle=cycle,
-        committee_id=candidate['candidate_id'],
-        min_receipt_date=raw_filing_start_date,
-    )
-    has_raw_filings = True if raw_filings.get('results') else False
-
     return {
-        'name': candidate['name'],
+        'aggregate': aggregate,
+        'aggregate_cycles': aggregate_cycles,
+        'candidate': candidate,
+        'candidate_id': candidate_id,
+        'cash_summary': cash_summary,
+        'committee_groups': committee_groups,
+        'committee_ids': committee_ids,
+        'committees_authorized': committees_authorized,
+        'context_vars': context_vars,
         'cycle': int(cycle),
+        'cycles': candidate['cycles'],
+        'district': candidate['district'],
+        'duration': duration,
+        'election_year': cycle,
+        'election_years': candidate.get('rounded_election_years'),
+        'elections': elections,
+        'incumbent_challenge_full': candidate['incumbent_challenge_full'],
+        'max_cycle': cycle,
+        'min_cycle': min_cycle,
+        'name': candidate['name'],
         'office': candidate['office'],
         'office_full': candidate['office_full'],
-        'state': candidate['state'],
-        'district': candidate['district'],
-        'candidate_id': candidate_id,
         'party_full': candidate['party_full'],
-        'incumbent_challenge_full': candidate['incumbent_challenge_full'],
-        'election_year': election_year,
-        'election_years': even_election_years,
-        'result_type': result_type,
-        'duration': duration,
-        'min_cycle': min_cycle,
-        'report_type': report_type,
-        'cycles': cycles,
-        'max_cycle': max_cycle,
-        'show_full_election': show_full_election,
-        'committee_groups': committee_groups,
-        'committees_authorized': committees_authorized,
-        'committee_ids': committee_ids,
-        'raising_summary': raising_summary,
-        'spending_summary': spending_summary,
-        'cash_summary': cash_summary,
-        'aggregate': aggregate,
         'two_year_totals': two_year_totals,
+        'raising_summary': raising_summary,
+        'report_type': report_type,
+        'result_type': result_type,
+        'show_full_election': election_full,
+        'spending_summary': spending_summary,
+        'state': candidate['state'],
         'statement_of_candidacy': statement_of_candidacy,
-        'elections': elections,
-        'candidate': candidate,
-        'has_raw_filings': has_raw_filings,
-        'min_receipt_date': raw_filing_start_date,
-        'context_vars': context_vars,
-        'aggregate_cycles': aggregate_cycles,
     }
 
 
 def candidate(request, candidate_id):
     """
-    Take in the request, call get_candidate to get the required information
-    from the API, and render the candidate profile page template
+    Take in the request, call get_candidate
+    to get the required information from the API,
+    and render the candidate profile page template
     """
-
     cycle = request.GET.get('cycle', None)
     if cycle is not None:
         cycle = int(cycle)
@@ -560,6 +720,7 @@ def elections(request, office, cycle, state=None, district=None):
         },
     )
 
+
 def raising(request):
     office = request.GET.get('office', 'P')
 
@@ -671,12 +832,13 @@ def reactionFeedback(request):
                 data['g-recaptcha-response'],
                 data['userAgent'],
             ]
-        ) :
+        ):
             # the required fields were not provided, return error.
             return JsonResponse({'status': False}, status=500)
         else:
             # verify recaptcha
-            verifyRecaptcha = requests.post("https://www.google.com/recaptcha/api/siteverify", data={'secret': settings.FEC_RECAPTCHA_SECRET_KEY, 'response': data['g-recaptcha-response']})
+            verifyRecaptcha = requests.post(
+                "https://www.google.com/recaptcha/api/siteverify", data={'secret': settings.FEC_RECAPTCHA_SECRET_KEY, 'response': data['g-recaptcha-response']})
             recaptchaResponse = verifyRecaptcha.json()
             if not recaptchaResponse['success']:
                 # if captcha failed, return failure

@@ -6,9 +6,6 @@
   <h2 id="section-6-heading">Candidate filings</h2>
   <div class="slab slab--inline slab--neutral u-padding--left u-padding--right">
     <div class="content__section">
-    {% if has_raw_filings %}
-      {{ entity.raw_filings_table(cycle=None, committee_id=candidate_id, min_receipt_date=min_receipt_date, is_committee=False) }}
-    {% endif %}
       <div id="statements-of-candidacy" class="entity__figure row">
         <div class="content__section">
           <div class="heading--section heading--with-action">
