@@ -61,7 +61,7 @@ DataMap.prototype.init = function() {
   this.svg = d3
     .select(this.elm)
     .append('svg')
-    .attr('viewBox', '30 50 353 300')
+    .attr('viewBox', '30 50 353 225')
     .attr('preserveAspectRatio', 'xMidYMid meet');
 
   let projection = d3.geo

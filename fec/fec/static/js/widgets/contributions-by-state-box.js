@@ -7,7 +7,7 @@
  * TODO - When the year is changed, double-check against current candidate before requesting data — DONE?
  * TODO - Default election_year from url on initial load (widgets macro?) — DONE?
  * TODO - If user chooses non-President, allow two-year election years (basequery's office, datestamp's math) - DONE?
- * TODO - From ^^, if a senate candidate is chosen, the candidate's details will have those election cycle years included
+ * TODO - From ^^, if a senate candidate is chosen, the candidate's details will have those election cycle years included - DONE?
  * TODO - Apply data to map - DONE?
  * TODO - Map legend - DONE?
  * TODO - Make the datestamp above the state list work — DONE?
@@ -15,13 +15,17 @@
  * TODO - Figure out why Aggregate Totals Box isn't defaulting to data-year and window.ELECTION_YEAR
  * TODO - For v2 or whatever, convert to datatable (start with the simpliest implementation; no columns.js, etc.)
  * TODO - Stop the pull-downs from changing the URL?
+ * TODO - related to ^^, when the year is changed, the candidate name disappears from the typeahead
  * TODO - Make Typeahead save current value and restore if user clicks outside?
  * TODO - Make candidate selection pre-load the most recent data for that candidate - DONE?
  * TODO - Clear default text in places like candidate details - DONE
  * TODO - Comments/documentation throughout
  * TODO - reviews
  * TODO - Style: state list state names line-height is too big (see "District of Columbia") - DONE?
- * TODO - Style: controls should be on one line for medium+ widths
+ * TODO - Style: controls should be on one line for medium+ widths - DONE?
+ * TODO - change line-height for candidate details holder - DONE?
+ * TODO - change line-height for legend text - DONE?
+ * TODO - Why are we getting jQuery errors for the toc?
  */
 /* global document, context */
 
@@ -126,7 +130,7 @@ function ContributionsByState() {
   // The <select> for election years:
   this.yearControl;
 
-  // Populate the examples text because handlebars doesn't like to
+  // Populate the examples text because handlebars doesn't like to add the italics/emphasis
   document.querySelector(
     '#gov-fec-contribs-by-state .typeahead-filter .filter__instructions'
   ).innerHTML = 'Examples: <em>Bush, George W</em> or <em>P00003335</em>';
@@ -345,6 +349,7 @@ ContributionsByState.prototype.loadStatesData = function() {
         throw new Error('The network rejected the states total request.');
       // else if (response.type == 'cors') throw new Error('CORS error');
       response.json().then(data => {
+        console.log('states total data received: ', data);
         instance.displayUpdatedData_total(data);
       });
     })
@@ -404,8 +409,8 @@ ContributionsByState.prototype.displayUpdatedData_candidate = function() {
 
   if (previousElectionYear != nextElectionYear) {
     this.baseStatesQuery.cycle = nextElectionYear;
-    let newEvent = new Event('change');
-    this.yearControl.dispatchEvent(newEvent);
+    // let newEvent = new Event('change');
+    // this.yearControl.dispatchEvent(newEvent);
 
     // this.loadStatesData();
   }
@@ -424,8 +429,7 @@ ContributionsByState.prototype.displayUpdatedData_states = function() {
   let theTableBody = this.table.querySelector('tbody');
   let theTbodyString = '';
 
-  console.log('candidateDetails: ', this.candidateDetails);
-  console.log('theResults: ', theResults);
+  let TODO_remove_temp_total_var = 0;
 
   for (var i = 0; i < theResults.length; i++) {
     let theStateTotalUrl; // =
@@ -444,8 +448,14 @@ ContributionsByState.prototype.displayUpdatedData_states = function() {
         )}</a>`
       : `${formatAsCurrency(theResults[i].total, true)}`;
     theTbodyString += `</td></tr>`;
+    TODO_remove_temp_total_var += Number(theResults[i].total);
   }
   theTableBody.innerHTML = theTbodyString;
+
+  console.log(
+    'TESTING—this is the sum we get when JavaScript sums the non-rounded values of the states list: ',
+    TODO_remove_temp_total_var
+  );
 
   this.map.handleDataRefresh(theData);
 
@@ -514,9 +524,12 @@ ContributionsByState.prototype.handleTypeaheadSelect = function(
  * @param {Event} e
  */
 ContributionsByState.prototype.handleElectionYearChange = function(e) {
-  // console.log('handleElectionYearChange()');
+  console.log('handleElectionYearChange()');
   // console.log('this.yearControl.value: ', this.yearControl.value);
   e.preventDefault();
+  this.baseStatesQuery.cycle = this.yearControl.value;
+  // We don't need to load the candidate details for a year change, so we'll just jump right to loading the states data.
+  this.loadStatesData();
 };
 
 /**

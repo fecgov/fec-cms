@@ -24,8 +24,6 @@ $fontWeightBold: 700;
 @import "../vendor/bourbon/css3/animation";
 // u-button:
 @import "../mixins/_utilities.scss";
-// overlay:
-// @import "../components/overlay";
 
 
 @font-face {
@@ -81,20 +79,21 @@ aside.contribs-by-state {
 //   padding: ($fontSizeBase * 2);
   width: 100%;
 
-  .overlay {
-    display: none;
-    // TODO - Remove/move this
-  }
-
   .controls-wrapper {
     font-family: $fontFamilySansSerif;
     margin-bottom: $fontSizeBase * 2;
     width: 100%;
 
-    fieldset {
-      border: none;
-      margin-bottom: $fontSizeBase * 1.5;
-      padding: 0;
+    .typeahead-filter {
+      margin-bottom: 1rem;
+
+      .filter__typeahead {
+        max-width: 30rem;
+      }
+      .filter__instructions {
+        display: block;
+        font-size: 1.2rem;
+      }
     }
     label {
       display: block;
@@ -105,6 +104,11 @@ aside.contribs-by-state {
       text-transform: uppercase;
       -moz-osx-font-smoothing: grayscale;
       -webkit-font-smoothing: antialiased;
+    }
+    fieldset {
+      border: none;
+      margin-bottom: $fontSizeBase * 1.5;
+      padding: 0;
     }
     select {
       // display: block;
@@ -118,7 +122,7 @@ aside.contribs-by-state {
       font-family: karla, sans-serif;
       font-size: $fontSizeBase * 1.4;
       font-weight: $fontWeightBold;
-      height: $fontSizeBase * 3;
+      height: 27pt; // (36px)
       line-height: $fontSizeBase * 1.4;
       margin: 0;
       overflow: hidden;
@@ -148,7 +152,7 @@ aside.contribs-by-state {
     }
     .typeahead-filter {
       .button--search {
-        background-image: $magnifying-glass-arrow;
+        background-image: url($magnifying-glass-arrow); // TODO is this a dupe of 156?
         background-size: 2.8rem;
         background-position: 50%;
         padding: 0;
@@ -160,7 +164,7 @@ aside.contribs-by-state {
         }
     
         .button--search {
-          background-image: $magnifying-glass;
+          // background-image: $magnifying-glass-arrow;
           background-size: 2.2rem;
           background-position: 50%;
           padding: 0;
@@ -177,10 +181,10 @@ aside.contribs-by-state {
         }
       }
 
-      @media (min-width: 768px) {
-        float: left;
-        max-width: 30rem;
-      }
+      // @media (min-width: 768px) {
+      //   float: left;
+      //   max-width: 30rem;
+      // }
     }
   }
   .message, .message[aria-hidden="true"] {
@@ -233,7 +237,7 @@ aside.contribs-by-state {
       justify-content: space-between;
 
       div {
-        padding: $fontSizeBase;
+        padding: $fontSizeBase * .75;
 
         &:first-child {
           font-weight: $fontWeightBold;
@@ -249,7 +253,7 @@ aside.contribs-by-state {
 
       th {
         font-weight: $fontWeightSemibold;
-        padding: $fontSizeBase;
+        padding: $fontSizeBase * .75;
 
         &:first-child {
           width: 2em; // Make the first column smaller
@@ -262,8 +266,11 @@ aside.contribs-by-state {
       }
       td {
         line-height: 1.25em;
-        padding: $fontSizeBase;
-        
+        padding: $fontSizeBase * .5;
+
+        &:first-child {
+          // padding-right: 0;
+        }
       }
     }
   }
@@ -275,6 +282,8 @@ aside.contribs-by-state {
 
     .election-map {
       border: none;
+      height: auto;
+      min-height: 30rem;
     }
   }
   .map-details {
@@ -289,14 +298,18 @@ aside.contribs-by-state {
         font-family: $fontFamilySansSerif;
         font-size: $fontSizeBase * 2;
         font-weight: $fontWeightRegular;
-        line-height: 1em;
+        line-height: 1.25em;
         margin: 0 0 .25em 0;
+
+        a {
+          line-height: 1.25em;
+        }
       }
       h2, h3 {
         font-family: $fontFamilySansSerif;
         font-size: $fontSizeBase * 1.4;
         font-weight: $fontWeightRegular;
-        line-height: 1em;
+        line-height: 1.25em;
         margin: 0 0 .25em 0;
       }
     }
@@ -305,6 +318,8 @@ aside.contribs-by-state {
 
       span {
         text-align: right;
+        line-height: 1.25em;
+        margin-bottom: .25em;
       }
     }
   }
@@ -320,19 +335,54 @@ aside.contribs-by-state {
     flex-wrap: wrap;
 
     .controls-wrapper {
-      display: flex;
+      // display: flex;
       width: 100%;
+
+      .typeahead-filter {
+        display: inline-block;
+        float: left;
+        height: 36px;
+        margin-bottom: 2rem;
+        margin-right: 1rem;
+        max-width: none;
+        position: relative;
+        // width: 100%;
+
+        label {
+          float: left;
+          height: 36px;
+          line-height: 36px;
+          margin-right: .5em;
+          position: relative;
+        }
+        .filter__typeahead {
+          float: left;
+          height: 36px;
+          width: 23rem;
+          position: relative;
+        }
+        .filter__instructions {
+          padding-left: 21rem;
+          position: absolute;
+          top: 36px;
+        }
+      }
 
       fieldset {
         display: inline-block;
-        
-        .typeahead-filter {
-          display: inline-block;
-        }
+        float: left;
+        // width: 100%;
         
         &:first-child {
           margin-right: 7.5pt;
         }
+      }
+
+      label {
+        display: inline-block;// 
+      }
+      select {
+        
       }
     }
     .message {
@@ -345,7 +395,7 @@ aside.contribs-by-state {
 
       .table-scroller {
         height: 100%;
-        max-height: 510px;
+        max-height: 400px;
       }
     }
     .map-wrapper {

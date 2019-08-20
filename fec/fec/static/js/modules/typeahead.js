@@ -272,7 +272,6 @@ Typeahead.prototype.init = function() {
 };
 
 Typeahead.prototype.handleChangeEvent = function(data) {
-  console.log('change event!');
   this.init(data.type);
 };
 

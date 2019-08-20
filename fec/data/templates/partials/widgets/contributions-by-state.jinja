@@ -3,13 +3,10 @@
 
 <aside id="gov-fec-contribs-by-state" class="contribs-by-state is-loading w-s" data-election_year="{{ election_year }}">
     <form class="controls-wrapper" action="" method="GET">
-        <fieldset class="select">
-            {{ typeahead.field('contribs-by-state-cand', 'Contributions received by:', 'Examples: ', dataset='candidates', allow_text=True) }}
-            <span class="field-example"></span>
-        </fieldset>
-        <fieldset class="select">
-            {{ widgets.select__election_year(election_years, election_year, 'state-contribs-years', 'P') }}
-        </fieldset>
+        {{ typeahead.field('contribs-by-state-cand', 'Contributions received by: ', 'Examples: ', dataset='candidates', allow_text=True) }}
+    <fieldset class="select">
+        {{ widgets.select__election_year(election_years, election_year, 'state-contribs-years', 'P') }}
+    </fieldset>
     </form>
     <div class="message message--info js-error-message" role="alert" aria-hidden="true">
         <h2>No results</h2>
@@ -18,7 +15,6 @@
     <div class="state-list-wrapper">
         <div class="states-table-timestamp"><time class="js-cycle-start-time" datetime="">&nbsp;</time>-<time class="js-cycle-end-time" datetime="">&nbsp;</time></div>
         <div class="table-scroller">
-            <div class="overlay is-loading"></div>
             <table class="data-table data-table--heading-borders data-table--entity u-margin--top" data-type="filings-{{ dataType }}" data-cycle="{{ election_year }}"">
                 <thead>
                     <tr>
@@ -29,7 +25,7 @@
                 </thead>
                 <tbody>
                     <tr>
-                        <td colspan="3">(loading data)</td>
+                        <td colspan="3" style="text-align:center">loading&hellip;</td>
                     </tr>
                 </tbody>
             </table>
