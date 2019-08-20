@@ -60,7 +60,6 @@ ENVIRONMENTS = {
     'feature': 'FEATURE',
 }
 FEC_CMS_ENVIRONMENT = ENVIRONMENTS.get(env.get_credential('FEC_CMS_ENVIRONMENT'), 'LOCAL')
-CONTACT_EMAIL = 'webmanager@fec.gov'
 WEBMANAGER_EMAIL = "webmanager@fec.gov"
 
 # Application definition
