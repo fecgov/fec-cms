@@ -17,7 +17,6 @@ const d3 = require('d3');
 const chroma = require('chroma-js');
 const topojson = require('topojson');
 const colorbrewer = require('colorbrewer');
-// const utils = require('./election-utils');
 const states = require('../data/us-states-10m.json');
 const stateFeatures = topojson.feature(states, states.objects.states).features;
 
@@ -44,19 +43,12 @@ function DataMap(elm, opts) {
   // Data, vars
   this.data;
   this.mapData;
-  // this.maxValue;
-  // this.minValue;
   this.opts = Object.assign({}, defaultOpts, opts);
 
   // Elements
   this.elm = elm;
   this.legendSVG;
-  this.legendScale;
-  this.legendQuantize;
-  this.mapMessage = document.querySelector('.js-map-message');
-  this.mapApproxMessage = document.querySelector('.js-map-approx-message');
-  this.overlay;
-  this.popup;
+  // this.popup;
   this.svg;
 }
 
@@ -154,7 +146,6 @@ DataMap.prototype.getStateValue = function(pathID) {
  * @param {json} newData
  */
 DataMap.prototype.handleDataRefresh = function(newData) {
-  console.log('handleDataRefresh(), newData: ', newData);
   this.data = newData;
 
   if (!this.svg) this.init();
@@ -195,6 +186,9 @@ DataMap.prototype.applyNewData = function() {
   this.svg
     .selectAll('path')
     .transition()
+    .delay(function(d, i) {
+      return 20 * i;
+    })
     .attr('fill', function(d) {
       return instance.getStateValue(d.id)
         ? legendScale(instance.getStateValue(d.id))
@@ -203,25 +197,13 @@ DataMap.prototype.applyNewData = function() {
 
   // If we need to
   if (this.legendSVG) {
-    // this.legendSVG.select('g').remove();
     let theCurrentLegend = document.querySelector(
       '.map-wrapper .legend-container svg'
     );
 
-    console.log('theCurrentLegend before: ', theCurrentLegend);
     while (theCurrentLegend.hasChildNodes()) {
-      console.log('while');
       theCurrentLegend.removeChild(theCurrentLegend.lastChild);
     }
-    console.log('theCurrentLegend after: ', theCurrentLegend);
-
-    // delete this.legendSVG;
-    // console.log('legendSVG before: ', this.legendSVG);
-    // this.legendSVG = d3
-    //   .select('.legend-container svg')
-    //   .select('g')
-    //   .remove();
-    // console.log('legendSVG after: ', this.legendSVG);
 
     this.legendSVG = d3.select('.legend-container svg');
     drawStateLegend(this.legendSVG, legendScale, legendQuantize, quantiles);
@@ -236,7 +218,6 @@ DataMap.prototype.applyNewData = function() {
  * @param {Number} quantiles
  */
 function drawStateLegend(svg, scale, quantize, quantiles) {
-  console.log('drawStateLegend(svg)', svg);
   // Add legend swatches
   let legendWidth = 40;
   let legendBar = 35;
@@ -275,31 +256,13 @@ function drawStateLegend(svg, scale, quantize, quantiles) {
     .attr('font-size', '10px')
     .attr('text-anchor', 'middle')
     .text(function(d, i) {
+      // TODO - If we want to add the "<" from the comps, we'll need the i
       // let toReturn = '< $' + compactNumber(d, compactRule).toString();
       // if (i >= ticks.length - 1) toReturn += '+';
       let toReturn = compactNumber(d, compactRule).toString();
       return toReturn;
     });
 }
-
-// /**
-//  *
-//  * @param {*} scale
-//  * @param {*} min
-//  * @param {*} max
-//  */
-// function scale(scale, min, max) {
-//   return chroma.scale(scale).domain([min, max]);
-// }
-
-// /**
-//  *
-//  * @param {*} min
-//  * @param {*} max
-//  */
-// function quantize(min, max) {
-//   return d3.scale.linear().domain([min, max]);
-// }
 
 /**
  *

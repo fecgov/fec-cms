@@ -6,10 +6,10 @@
  * TODO - Error message and state: Selected year isn't an option for selected candidate — DONE?
  * TODO - When the year is changed, double-check against current candidate before requesting data — DONE?
  * TODO - Default election_year from url on initial load (widgets macro?) — DONE?
- * TODO - If user chooses non-President, allow two-year election years (basequery's office, datestamp's math)
+ * TODO - If user chooses non-President, allow two-year election years (basequery's office, datestamp's math) - DONE?
  * TODO - From ^^, if a senate candidate is chosen, the candidate's details will have those election cycle years included
- * TODO - Apply data to map
- * TODO - Map legend
+ * TODO - Apply data to map - DONE?
+ * TODO - Map legend - DONE?
  * TODO - Make the datestamp above the state list work — DONE?
  * TODO - Add analytics
  * TODO - Figure out why Aggregate Totals Box isn't defaulting to data-year and window.ELECTION_YEAR
@@ -17,10 +17,10 @@
  * TODO - Stop the pull-downs from changing the URL?
  * TODO - Make Typeahead save current value and restore if user clicks outside?
  * TODO - Make candidate selection pre-load the most recent data for that candidate - DONE?
- * TODO - Clear default text in places like candidate details
+ * TODO - Clear default text in places like candidate details - DONE
  * TODO - Comments/documentation throughout
  * TODO - reviews
- * TODO - Style: state list state names line-height is too big (see "District of Columbia")
+ * TODO - Style: state list state names line-height is too big (see "District of Columbia") - DONE?
  * TODO - Style: controls should be on one line for medium+ widths
  */
 /* global document, context */
@@ -233,11 +233,11 @@ ContributionsByState.prototype.loadInitialData = function() {
         throw new Error('The network rejected the states request.');
       // else if (response.type == 'cors') throw new Error('CORS error');
       response.json().then(data => {
-        // console.log('loadInitialData then() ', data);
         instance.data_candidate = data;
         instance.candidateDetails = data.results[0];
         instance.baseStatesQuery.candidate_id =
           instance.candidateDetails.candidate_id;
+        instance.baseStatesQuery.office = instance.candidateDetails.office;
         instance.displayUpdatedData_candidate();
       });
     })
@@ -375,6 +375,12 @@ ContributionsByState.prototype.displayUpdatedData_candidate = function() {
     this.candidateDetails.name
   }</a> [${this.candidateDetails.party}]`;
 
+  let candidateOfficeHolder = this.candidateDetailsHolder.querySelector('h2');
+  let theOfficeName = this.candidateDetails.office_full;
+  candidateOfficeHolder.innerText = `Candidate for ${
+    theOfficeName == 'President' ? theOfficeName.toLowerCase() : theOfficeName
+  }`;
+
   let candidateIdHolder = this.candidateDetailsHolder.querySelector('h3');
   candidateIdHolder.innerText = 'ID: ' + this.candidateDetails.candidate_id;
 
@@ -418,15 +424,26 @@ ContributionsByState.prototype.displayUpdatedData_states = function() {
   let theTableBody = this.table.querySelector('tbody');
   let theTbodyString = '';
 
-  // console.log('theResults: ', theResults);
+  console.log('candidateDetails: ', this.candidateDetails);
+  console.log('theResults: ', theResults);
 
   for (var i = 0; i < theResults.length; i++) {
+    let theStateTotalUrl; // =
+    // `/data/receipts/individual-contributions/` +
+    // `?candidate_id=${this.candidateDetails.candidate_id}` +
+    // `&two_year_transaction_period=${theResults[i].cycle}` +
+    // `&contributor_state=${theResults[i].state}`;
+
     theTbodyString += `<tr><td>${i + 1}.</td><td>${
       theResults[i].state_full
-    }</td><td class="t-right-aligned t-mono">${formatAsCurrency(
-      theResults[i].total,
-      true
-    )}</td></tr>`;
+    }</td><td class="t-right-aligned t-mono">`;
+    theTbodyString += theStateTotalUrl
+      ? `<a href="${theStateTotalUrl}">${formatAsCurrency(
+          theResults[i].total,
+          true
+        )}</a>`
+      : `${formatAsCurrency(theResults[i].total, true)}`;
+    theTbodyString += `</td></tr>`;
   }
   theTableBody.innerHTML = theTbodyString;
 
@@ -455,7 +472,12 @@ ContributionsByState.prototype.updateCycleTimeStamp = function() {
   let theStartTimeElement = document.querySelector('.js-cycle-start-time');
   let theEndTimeElement = document.querySelector('.js-cycle-end-time');
 
-  let theStartDate = new Date(electionYear - 3, 1, 1);
+  let theStartDate;
+  if (this.candidateDetails.office == 'P')
+    theStartDate = new Date(electionYear - 3, 1, 1);
+  else if (this.candidateDetails.office == 'S')
+    theStartDate = new Date(electionYear - 5, 1, 1);
+  else theStartDate = new Date(electionYear - 1, 1, 1);
   theStartTimeElement.setAttribute(
     'datetime',
     theStartDate.getFullYear() + '-01-01'

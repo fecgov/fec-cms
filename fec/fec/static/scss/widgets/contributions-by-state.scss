@@ -108,11 +108,7 @@ aside.contribs-by-state {
     }
     select {
       // display: block;
-      // TODO - Make this :down: more like the main code—not just the computed value
       background-image: url($arrow-down);
-  // $magnifying-glass-arrow:  'data:image/svg+xml;charset=utf8, %3Csvg%20width%3D%2230%22%20height%3D%2221%22%20viewBox%3D%220%200%2030%2021%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Cg%3E%3Cpath%20d%3D%22M24.24%2013.097l-3.685-6.234a.851.851%200%200%201%20.727-1.294h7.382a.852.852%200%200%201%20.733%201.284l-3.69%206.244a.852.852%200%200%201-1.467%200zM19.653%2016.78a2.03%202.03%200%201%201-2.872%202.872l-4.538-4.537a8.072%208.072%200%200%201-4.12%201.131%208.123%208.123%200%201%201%208.123-8.123%208.072%208.072%200%200%201-1.131%204.12l4.538%204.538zM8.123%202.03a6.092%206.092%200%201%200%200%2012.185%206.092%206.092%200%200%200%200-12.184z%22%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E';
-  // $magnifying-glass:        'data:image/svg+xml;charset=utf8, %3Csvg%20width%3D%2221%22%20height%3D%2221%22%20viewBox%3D%220%200%2021%2021%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Cpath%20d%3D%22M19.653%2016.78a2.03%202.03%200%201%201-2.872%202.872l-4.538-4.537a8.072%208.072%200%200%201-4.12%201.131%208.123%208.123%200%201%201%208.123-8.123%208.072%208.072%200%200%201-1.131%204.12l4.538%204.538zM8.123%202.03a6.092%206.092%200%201%200%200%2012.185%206.092%206.092%200%200%200%200-12.184z%22%2F%3E%3C%2Fsvg%3E';
-
       background-repeat: no-repeat;
       background-position: right $fontSizeBase top 50%;
       background-size: 12px;
@@ -152,7 +148,7 @@ aside.contribs-by-state {
     }
     .typeahead-filter {
       .button--search {
-        @include u-icon-button($magnifying-glass-arrow);
+        background-image: $magnifying-glass-arrow;
         background-size: 2.8rem;
         background-position: 50%;
         padding: 0;
@@ -164,7 +160,7 @@ aside.contribs-by-state {
         }
     
         .button--search {
-          @include u-icon-button($magnifying-glass);
+          background-image: $magnifying-glass;
           background-size: 2.2rem;
           background-position: 50%;
           padding: 0;
@@ -265,6 +261,7 @@ aside.contribs-by-state {
         border-top: thin solid $colorTableTdBorder;
       }
       td {
+        line-height: 1.25em;
         padding: $fontSizeBase;
         
       }
@@ -323,9 +320,12 @@ aside.contribs-by-state {
     flex-wrap: wrap;
 
     .controls-wrapper {
+      display: flex;
       width: 100%;
 
       fieldset {
+        display: inline-block;
+        
         .typeahead-filter {
           display: inline-block;
         }
