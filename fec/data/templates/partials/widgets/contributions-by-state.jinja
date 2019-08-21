@@ -2,12 +2,12 @@
 {% import "macros/filters/typeahead-filter.jinja" as typeahead %}
 
 <aside id="gov-fec-contribs-by-state" class="contribs-by-state is-loading w-s" data-election_year="{{ election_year }}">
-    <form class="controls-wrapper" action="" method="GET">
+    <div class="controls-wrapper">
         {{ typeahead.field('contribs-by-state-cand', 'Contributions received by: ', 'Examples: ', dataset='candidates', allow_text=True) }}
     <fieldset class="select">
         {{ widgets.select__election_year(election_years, election_year, 'state-contribs-years', 'P') }}
     </fieldset>
-    </form>
+    </div>
     <div class="message message--info js-error-message" role="alert" aria-hidden="true">
         <h2>No results</h2>
         <p>This is the error message</p>
@@ -18,7 +18,7 @@
             <table class="data-table data-table--heading-borders data-table--entity u-margin--top" data-type="filings-{{ dataType }}" data-cycle="{{ election_year }}"">
                 <thead>
                     <tr>
-                        <th scope="col">&mdash;</th>
+                        <th scope="col">&nbsp;</th>
                         <th scope="col">State</th>
                         <th scope="col" class="t-right-aligned">Total raised</th>
                     </tr>

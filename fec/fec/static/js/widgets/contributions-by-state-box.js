@@ -1,7 +1,7 @@
 'use strict';
 
 /**
- * @fileoverview  
+ * @fileoverview
  * @author        Robert, fec.gov
  * @version       0.1
  * TODO - Add an initial "loading" state?
@@ -146,7 +146,7 @@ ContributionsByState.prototype.init = function() {
     'change',
     this.handleElectionYearChange.bind(this)
   );
-  
+
   // Initialize the various queries
   this.baseCandidateQuery = {}; // Calls for candidate details
   this.baseStatesQuery = {
@@ -513,6 +513,8 @@ ContributionsByState.prototype.handleTypeaheadSelect = function(
   e,
   abbreviatedCandidateDetails
 ) {
+  e.preventDefault();
+
   // Remember the chosen candidate_id
   this.baseStatesQuery.candidate_id = abbreviatedCandidateDetails.id;
   // But we need more details (like election_years) so we need to go get those
