@@ -18,8 +18,5 @@ env:
   FEC_CMS_ENVIRONMENT: feature
   FEC_CMS_DEBUG: false
   FEC_TRANSITION_URL: https://transition.fec.gov
-  NEW_RELIC_APP_NAME: govcloud | cms | feature
-  NEW_RELIC_CONFIG_FILE: /home/vcap/app/newrelic.ini
-  NEW_RELIC_LOG: stdout
 applications:
   - name: cms
