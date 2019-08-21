@@ -15,7 +15,7 @@
  * TODO - Why are we getting jQuery errors for the toc?
  * TODO - Test on Firefox, Safari, Internet Explorer, Edge pre-Chromium, Edge post-Chromium
  */
-/* global document, context */
+/* global document */
 
 /**
  
@@ -273,7 +273,7 @@ ContributionsByState.prototype.loadCandidateDetails = function(cand_id) {
  * Starts the fetch to go get the big batch of states data, called by {@see init() }
  */
 ContributionsByState.prototype.loadStatesData = function() {
-  console.log('loadStatesData()');
+  console.log('loadStatesData()'); //eslint-disable-line no-console, no-undef
   let instance = this;
 
   let baseStatesQueryWithCandidate = Object.assign({}, this.baseStatesQuery, {
@@ -298,7 +298,7 @@ ContributionsByState.prototype.loadStatesData = function() {
         throw new Error('The network rejected the states request.');
       // else if (response.type == 'cors') throw new Error('CORS error');
       response.json().then(data => {
-        console.log('Received the states data: ', data);
+        console.log('Received the states data: ', data); //eslint-disable-line no-console, no-undef
 
         // Now that we have all of the values, let's sort them by total, descending
         data.results.sort((a, b) => {
@@ -310,7 +310,7 @@ ContributionsByState.prototype.loadStatesData = function() {
         instance.displayUpdatedData_states();
       });
     })
-    .catch(function(e) {
+    .catch(function() {
       instance.fetchingStates = false;
       // TODO - handle catch
     });
@@ -328,11 +328,11 @@ ContributionsByState.prototype.loadStatesData = function() {
         throw new Error('The network rejected the states total request.');
       // else if (response.type == 'cors') throw new Error('CORS error');
       response.json().then(data => {
-        console.log('states total data received: ', data);
+        console.log('states total data received: ', data); //eslint-disable-line no-console, no-undef
         instance.displayUpdatedData_total(data);
       });
     })
-    .catch(function(e) {
+    .catch(function() {
       // console.log('second fetch catch e:', e);
       // TODO - handle catch
     });
@@ -445,6 +445,7 @@ ContributionsByState.prototype.displayUpdatedData_states = function() {
   theTableBody.innerHTML = theTbodyString;
 
   // TODO This will go away. It's only here to compare the calculated total with the total from the API
+  //eslint-disable-next-line no-console, no-undef
   console.log(
     'TESTING—this is the sum we get when JavaScript sums the non-rounded values of the states list: ',
     TODO_remove_temp_total_var
@@ -527,7 +528,7 @@ ContributionsByState.prototype.handleTypeaheadSelect = function(
  * @param {Event} e
  */
 ContributionsByState.prototype.handleElectionYearChange = function(e) {
-  console.log('handleElectionYearChange()');
+  console.log('handleElectionYearChange()'); //eslint-disable-line no-console, no-undef
   e.preventDefault();
   this.baseStatesQuery.cycle = this.yearControl.value;
   // We don't need to load the candidate details for a year change, so we'll just jump right to loading the states data.

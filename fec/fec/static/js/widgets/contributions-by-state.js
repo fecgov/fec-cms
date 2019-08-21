@@ -3,25 +3,6 @@
 // TODO - Polish the resize functionality
 // TODO - REDO ALL OF THIS—RIGHT NOW IT'S A DIRECT COPY OF aggregate-totals.js
 /**
- * The code that runs the in-page iframe, though the same vars will apply to aggregate-totals-box.
- * These dataset values are passed from the <script> to the <iframe> and then into the <aside>.
- * Some implementation options:
- * To have the new element replace an element already on the page, give the element to replaced a class of `gov-fec-agg-tots`
- * @param {String} `data-action=` - ["raised"|"spending"] Controls whether to show money raised (default) or spent.
- * @param {String} `data-theme` - ["light"|"dark"] Default: "light"
- * @param {String} `data-office-control` - ["none"|null] Optional. Provide a query selector for an external office control.
- * Use 'none' to prevent any office control from being built. The tool will compare exactly one office.
- * If no control is specified (or prevented), one will be created.
- * @param {String} `data-year-control` - ["none"|null] Optional. Provide a query selector for an external year control.
- * Use 'none' to prevent any year control from being built. The tool will compare exactly one year.
- * If no control is specified (or prevented), one will be created.
- * @param {String} `data-election-year` - Must be set for single-year implementations.
- * If provided for multi-year views, this is the starting election year displayed.
- * @param {String} `data-office` - ["H"|"P"|"S"] Optional. (House, President, Senate) Which race to show first (or only). Default: "P"
- * If no year is provided, the internal office control will be the tabs/buttons/radios rather than the <select>
- */
-
-/**
  * @fileoverview This file runs the show for embedded Aggregate Totals
  * It's the path for Aggregate Totals on non-fec pages or for otherwise building and controlling the <iframe> where the box will live.
  * @copyright 2019 Federal Election Commission
@@ -36,19 +17,6 @@ const breakPointsAndHeights_full = [
   { widthLTE: 600, height: 377 },
   { widthLTE: 677, height: 236 },
   { widthLTE: 5000, height: 236 }
-];
-// For when we have an internal office control
-const breakPointsAndHeights_office = [
-  { widthLTE: 600, height: 340 },
-  { widthLTE: 650, height: 340 },
-  { widthLTE: 675, height: 264 },
-  { widthLTE: 5000, height: 264 }
-];
-// For when we have no internal controls
-const breakPointsAndHeights_mini = [
-  { widthLTE: 600, height: 276 },
-  { widthLTE: 800, height: 246 },
-  { widthLTE: 5000, height: 185 }
 ];
 
 // Includes
@@ -73,17 +41,6 @@ ContributionsByStateFrame.prototype.init = function() {
 
   // Build the element
   this.element = buildElement(this.scriptElement);
-
-  // Which sizes of breakpoints do we need to watch?
-  let dataset = this.scriptElement.dataset;
-//   if (
-//     (dataset['officeControl'] && dataset['yearControl']) ||
-//     (dataset['officeControl'] == 'none' && dataset['yearControl'] == 'none')
-//   ) {
-//     this.breakpoints = breakPointsAndHeights_mini;
-//   } else if (dataset['yearControl'] == 'none') {
-//     this.breakpoints = breakPointsAndHeights_office;
-//   }
 
   // Add resize listeners to that new element
   this.element.contentWindow.addEventListener(

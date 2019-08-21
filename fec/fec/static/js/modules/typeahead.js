@@ -243,7 +243,7 @@ var typeaheadOpts = {
 };
 
 /**
- * 
+ *
  * @param {String} selector - How to find the element in the page?
  * @param {*} type - Which @see dataset will be used?
  * @param {*} url

@@ -1,7 +1,7 @@
 'use strict';
 
 /**
- * @fileoverview  
+ * @fileoverview
  * @author        Robert, fec.gov
  * @version       0.1
  */
@@ -298,7 +298,8 @@ function drawStateLegend(svg, scale, quantize, quantiles) {
     .attr('height', 20)
     .attr('font-size', '10px')
     .attr('text-anchor', 'middle')
-    .text(function(d, i) {
+    .text(function(d) {
+      // function(d,i)
       // TODO - If we want to add the "<" from the comps, we'll need the i
       // let toReturn = '< $' + compactNumber(d, compactRule).toString();
       // if (i >= ticks.length - 1) toReturn += '+';
