@@ -65,8 +65,8 @@ function stateMap($elm, data, width, height, min, max, addLegend, addTooltips) {
     .filter(value => {
       return !!value;
     });
-  min = min || Math.min(totals);
-  max = max || Math.max(totals);
+  min = min || Math.min(...totals);
+  max = max || Math.max(...totals);
 
   let scale = chroma.scale(colorScale).domain([min, max]);
   let quantize = d3.scale.linear().domain([min, max]);
