@@ -26,6 +26,7 @@
  * TODO - change line-height for candidate details holder - DONE?
  * TODO - change line-height for legend text - DONE?
  * TODO - Why are we getting jQuery errors for the toc?
+ * TODO - Test on Firefox, Safari, Internet Explorer, Edge pre-Chromium, Edge post-Chromium
  */
 /* global document, context */
 
@@ -41,31 +42,19 @@ const breakpointToMedium = 675;
 const breakpointToLarge = 700;
 const breakpointToXL = 860;
 
-const $ = require('jquery');
-// const _ = require('underscore');
-
 import { buildUrl } from '../modules/helpers';
-// const maps = require('../modules/maps');
-
-// const electionUtils = require('../modules/election-utils');
-// const helpers = require('../modules/helpers');
-// const ElectionForm = require('../modules/election-form').ElectionForm;
-// import ElectionForm from '../modules/election-form';
-
 import typeahead from '../modules/typeahead';
+import { defaultElectionYear } from './widget-vars';
+import 'abortcontroller-polyfill/dist/polyfill-patch-fetch';
 
+const $ = require('jquery'); // TODO - Can we remove this? CDN? Rely on parent files?
 const DataMap = require('../modules/data-map').DataMap;
-
-import {
-  defaultElectionYear
-  // electionYearsOptions,
-  // officeDefs
-} from './widget-vars';
+const AbortController = window.AbortController;
 
 /**
  * Formats the given value and puts it into the dom element.
  * @param {Number} passedValue - The number to format and plug into the element
- * @param {Boolean} roundToWhole - Should we drop the cents or no?
+ * @param {Boolean} roundToWhole - Should we round the cents or no?
  * @returns {String} A string of the given value formatted with a dollar sign, commas, and (if roundToWhole === false) decimal
  */
 function formatAsCurrency(passedValue, roundToWhole = true) {
@@ -78,9 +67,10 @@ function formatAsCurrency(passedValue, roundToWhole = true) {
 }
 
 /**
- * @param {HTMLSelectElement} yearControl - Set with data-year-control on <script> but not required if data-election-year is set.
+ * @constructor
  */
 function ContributionsByState() {
+  // Get ready to abort a fetch if we need to
   this.fetchAbortController = new AbortController();
   this.fetchAbortSignal = this.fetchAbortController.signal;
 
@@ -105,7 +95,7 @@ function ContributionsByState() {
   ];
   // Details about the candidate. Comes from the typeahead
   this.candidateDetails = {};
-  // Init the list/table of states and their totals
+  // Init the list/table of states and their totals // TODO - empty this?
   this.data_states = {
     results: [
       {
@@ -118,17 +108,14 @@ function ContributionsByState() {
       }
     ]
   };
-  this.element = document.querySelector('#gov-fec-contribs-by-state');
-  // Are we waiting for data?
-  this.fetchingStates = false;
-  this.map;
-  this.candidateDetailsHolder;
-  this.table;
-  this.statesTotalHolder;
-  // The typeahead candidate element:
-  this.typeahead;
-  // The <select> for election years:
-  this.yearControl;
+  this.element = document.querySelector('#gov-fec-contribs-by-state'); // The visual element associated with this, this.instance
+  this.fetchingStates = false; // Are we waiting for data?
+  this.map; // Starts as the element for the map but then becomes a DataMap object
+  this.candidateDetailsHolder; // Element to hold candidate name, party, office, and ID
+  this.table; // The <table> for the list of states and their totals
+  this.statesTotalHolder; // Element at the bottom of the states list
+  this.typeahead; // The typeahead candidate element:
+  this.yearControl; // The <select> for election years:
 
   // Populate the examples text because handlebars doesn't like to add the italics/emphasis
   document.querySelector(
@@ -140,7 +127,8 @@ function ContributionsByState() {
 }
 
 /**
- *
+ * Called after construction.
+ * Identifies and initializes the various visual elements and controls, queries, and starts first data load
  */
 ContributionsByState.prototype.init = function() {
   // Add the stylesheet to the document <head>
@@ -156,7 +144,7 @@ ContributionsByState.prototype.init = function() {
     '#contribs-by-state-cand',
     'candidates'
   );
-  // this.typeahead.$element.css({ height: 'auto' });
+
   // Override the default Typeahead behavior and add our own handler
   this.typeahead.$input.off('typeahead:select');
   this.typeahead.$input.on(
@@ -165,31 +153,36 @@ ContributionsByState.prototype.init = function() {
   );
 
   // Init the election year selector (The element ID is set in data/templates/partials/widgets/contributions-by-state.jinja)
+  // TODO - Can we remove the default listener (like with the typeahead above) and not change the URL when the <select> changes?
   this.yearControl = document.querySelector('#state-contribs-years');
   this.yearControl.addEventListener(
     'change',
     this.handleElectionYearChange.bind(this)
   );
-  this.baseCandidateQuery = {};
+  
+  // Initialize the various queries
+  this.baseCandidateQuery = {}; // Calls for candidate details
   this.baseStatesQuery = {
-    // candidate_id: '', // 'P60007168',
     cycle: defaultElectionYear(),
     election_full: true,
-    // is_active_candidate: true,
     office: 'P',
     page: 1,
     per_page: 200,
     sort_hide_null: false,
     sort_null_only: false,
     sort_nulls_last: false
+    // candidate_id: '', // 'P60007168',
+    // is_active_candidate: true,
     // sort: 'total'
   };
 
-  this.map = $('.map-wrapper .election-map');
+  // Find the visual elements
+  this.map = document.querySelector('.map-wrapper .election-map');
   this.candidateDetailsHolder = document.querySelector('.candidate-details');
   this.table = document.querySelector('.state-list-wrapper table');
   this.statesTotalHolder = document.querySelector('.js-states-total');
 
+  // Fire up the map
   this.map = new DataMap(this.map.get(0), {
     colorScale: ['#f0f9e8', '#a6deb4', '#7bccc4', '#2a9291', '#216a7a'],
     colorZero: '#ffffff',
@@ -198,10 +191,6 @@ ContributionsByState.prototype.init = function() {
     height: '300',
     addLegend: true,
     addTooltips: true
-    // drawStates: true,
-    // handleSelect: this.handleMapSelect.bind(this),
-    // src: this.data_states.results,
-    // srcUpdateDispatcher: this // TODO - make the map listen to this for data update events
   });
 
   // Listen for resize events
@@ -209,14 +198,16 @@ ContributionsByState.prototype.init = function() {
   // Call for a resize on init
   this.handleResize();
 
+  // And start the first load
   this.loadInitialData();
 };
 
 /**
- *
+ * Called by {@see init() , @see handleTypeaheadSelect() }
+ * Finds the highest-earning presidential candidate of the default year
+ * Similar to {@see loadCandidateDetails() }
  */
 ContributionsByState.prototype.loadInitialData = function() {
-  // console.log('loadInitialData');
   let instance = this;
 
   let highestRaisingQuery = Object.assign({}, this.baseStatesQuery, {
@@ -225,7 +216,6 @@ ContributionsByState.prototype.loadInitialData = function() {
     sort_hide_null: true
   });
 
-  // console.log('about to query this', highestRaisingQuery);
   window
     .fetch(buildUrl(this.basePath_highestRaising, highestRaisingQuery), {
       cache: 'no-cache',
@@ -237,11 +227,16 @@ ContributionsByState.prototype.loadInitialData = function() {
         throw new Error('The network rejected the states request.');
       // else if (response.type == 'cors') throw new Error('CORS error');
       response.json().then(data => {
+        // Save the candidate query reply
         instance.data_candidate = data;
+        // and the candidate details specifically
         instance.candidateDetails = data.results[0];
+        // Update the candidate_id for the main query
         instance.baseStatesQuery.candidate_id =
           instance.candidateDetails.candidate_id;
+        // Update the office to the main query, too.
         instance.baseStatesQuery.office = instance.candidateDetails.office;
+        // Put the new candidate information on the page
         instance.displayUpdatedData_candidate();
       });
     })
@@ -251,7 +246,10 @@ ContributionsByState.prototype.loadInitialData = function() {
 };
 
 /**
- * Load Candidate details
+ * Retrieves full candidate details when the typeahead is used
+ * Called from {@see handleTypeaheadSelect() }
+ * Similar to {@see loadInitialData() }
+ * @param {String} cand_id Comes from the typeahead
  */
 ContributionsByState.prototype.loadCandidateDetails = function(cand_id) {
   let instance = this;
@@ -268,16 +266,17 @@ ContributionsByState.prototype.loadCandidateDetails = function(cand_id) {
         throw new Error('The network rejected the states request.');
       // else if (response.type == 'cors') throw new Error('CORS error');
       response.json().then(data => {
-        // console.log('loadCandidateDetails then() ', data);
+        // Save the candidate query response
         instance.data_candidate = data;
+        // Save the candidate details
         instance.candidateDetails = data.results[0];
+        // Update the base query with the new candidate ID
         instance.baseStatesQuery.candidate_id =
           instance.candidateDetails.candidate_id;
+        // Save the office to the base query, too
         instance.baseStatesQuery.office = instance.candidateDetails.office;
+        // Then put the new candidate details into the page
         instance.displayUpdatedData_candidate();
-        // let currentQueryYear = ;
-        // if (instance.validateCandidateVsElectionYear())
-        // instance.loadStatesData();
       });
     })
     .catch(function() {
@@ -286,13 +285,11 @@ ContributionsByState.prototype.loadCandidateDetails = function(cand_id) {
 };
 
 /**
- * Starts the data load, called by {@see init}
- * @param {Object} query - The data object for the query, {@see baseStatesQuery}
+ * Starts the fetch to go get the big batch of states data, called by {@see init() }
  */
 ContributionsByState.prototype.loadStatesData = function() {
   console.log('loadStatesData()');
   let instance = this;
-  // let table = this.table.DataTable();
 
   let baseStatesQueryWithCandidate = Object.assign({}, this.baseStatesQuery, {
     candidate_id: this.candidateDetails.candidate_id
@@ -303,10 +300,7 @@ ContributionsByState.prototype.loadStatesData = function() {
   // Start loading the states data
   this.fetchingStates = true;
   this.setLoadingState(true);
-  // console.log(
-  //   'about to request states data with this: ',
-  //   baseStatesQueryWithCandidate
-  // );
+
   window
     .fetch(buildUrl(this.basePath_states, baseStatesQueryWithCandidate), {
       cache: 'no-cache',
@@ -314,19 +308,19 @@ ContributionsByState.prototype.loadStatesData = function() {
       signal: this.fetchAbortSignal
     })
     .then(function(response) {
-      // console.log('fetch.then(response): ', response);
       instance.fetchingStates = false;
       if (response.status !== 200)
         throw new Error('The network rejected the states request.');
       // else if (response.type == 'cors') throw new Error('CORS error');
       response.json().then(data => {
-        // console.log('LOADED THE STATES DATA: ', data);
+        console.log('Received the states data: ', data);
 
-        // Now that we have all of the values combined, let's sort them by total, descending
+        // Now that we have all of the values, let's sort them by total, descending
         data.results.sort((a, b) => {
           return b.total - a.total;
         });
 
+        // After they're sorted, let's hang on to them
         instance.data_states = data;
         instance.displayUpdatedData_states();
       });
@@ -360,7 +354,8 @@ ContributionsByState.prototype.loadStatesData = function() {
 };
 
 /**
- *
+ * Puts the candidate details in the page,
+ * then loads the states data with {@see loadStatesData() }
  */
 ContributionsByState.prototype.displayUpdatedData_candidate = function() {
   // console.log('displayUpdatedData_candidate()');
@@ -370,9 +365,7 @@ ContributionsByState.prototype.displayUpdatedData_candidate = function() {
   let theTypeahead = document.querySelector('#contribs-by-state-cand');
   if (!theTypeahead.value) theTypeahead.value = this.candidateDetails.name;
 
-  // The block where the candidate details are
-  // let candidateDetailsHolder = document.querySelector('.candidate-details');
-
+  // Handle the candidate's name…
   let candidateNameElement = this.candidateDetailsHolder.querySelector('h1');
   candidateNameElement.innerHTML = `<a href="/data/candidate/${
     this.candidateDetails.candidate_id
@@ -380,12 +373,14 @@ ContributionsByState.prototype.displayUpdatedData_candidate = function() {
     this.candidateDetails.name
   }</a> [${this.candidateDetails.party}]`;
 
+  // …their desired office during this election…
   let candidateOfficeHolder = this.candidateDetailsHolder.querySelector('h2');
   let theOfficeName = this.candidateDetails.office_full;
   candidateOfficeHolder.innerText = `Candidate for ${
     theOfficeName == 'President' ? theOfficeName.toLowerCase() : theOfficeName
   }`;
 
+  // …and their candidate ID for this office
   let candidateIdHolder = this.candidateDetailsHolder.querySelector('h3');
   candidateIdHolder.innerText = 'ID: ' + this.candidateDetails.candidate_id;
 
@@ -393,37 +388,45 @@ ContributionsByState.prototype.displayUpdatedData_candidate = function() {
   // TODO - handle if there are no years
   // TODO - handle if there is only one year
   // console.log('this.candidateDetails: ', this.candidateDetails);
+  // Grab election_years from the candidate details
   let validElectionYears = this.candidateDetails.election_years;
+  // Sort them so the most recent is first so it'll be on top of the <select>
   validElectionYears.sort((a, b) => b - a);
-  // console.log('validElectionYears: ', validElectionYears);
+  // Remember what year's election we're currently showing (will help if we were switching between candidates of the same year)
   let previousElectionYear = this.yearControl.value;
+  // We'll show the most recent election of these options
   let nextElectionYear = validElectionYears[0];
+  // Build the <option><option> list
   let newSelectOptions = '';
   for (let i = 0; i < validElectionYears.length; i++) {
     newSelectOptions += `<option value="${validElectionYears[i]}"${
       nextElectionYear == validElectionYears[i] ? ' selected' : ''
     }>${validElectionYears[i]}</option>`;
   }
-  // console.log('newSelectOptions:', newSelectOptions);
+  // Put the new options into the <select>
   this.yearControl.innerHTML = newSelectOptions;
 
+  // If the previous election and this one are different
   if (previousElectionYear != nextElectionYear) {
+    // Save the new election year to the base query
     this.baseStatesQuery.cycle = nextElectionYear;
+    // TODO - Do we want to dispatch an event and only reload if we need to?
+    // TODO - I think this was going on direction but we changed functionality and now it's irrelevant
     // let newEvent = new Event('change');
     // this.yearControl.dispatchEvent(newEvent);
 
     // this.loadStatesData();
   }
+  // Load the new states data
   this.loadStatesData();
 };
 
 /**
- *
+ * Put the list of states and totals into the table
+ * Called by {@see loadStatesData() }
+ * TODO - This will eventually be replaced by the datatables functionality
  */
 ContributionsByState.prototype.displayUpdatedData_states = function() {
-  // console.log('displayUpdatedData_states()');
-
-  // console.log('this.data_states: ', this.data_states);
   let theData = this.data_states;
   let theResults = theData.results;
   let theTableBody = this.table.querySelector('tbody');
@@ -432,6 +435,8 @@ ContributionsByState.prototype.displayUpdatedData_states = function() {
   let TODO_remove_temp_total_var = 0;
 
   for (var i = 0; i < theResults.length; i++) {
+    // TODO - If we need to make the totals clickable, we'll do that here.
+    // TODO - Note: Couldn't find the way to query an entire election for a state-candidate combo
     let theStateTotalUrl; // =
     // `/data/receipts/individual-contributions/` +
     // `?candidate_id=${this.candidateDetails.candidate_id}` +
@@ -452,36 +457,44 @@ ContributionsByState.prototype.displayUpdatedData_states = function() {
   }
   theTableBody.innerHTML = theTbodyString;
 
+  // TODO This will go away. It's only here to compare the calculated total with the total from the API
   console.log(
     'TESTING—this is the sum we get when JavaScript sums the non-rounded values of the states list: ',
     TODO_remove_temp_total_var
   );
 
+  // Let the map know that the data has been updated // TODO - handle this with a listener?
   this.map.handleDataRefresh(theData);
 
+  // Update the time stamp above the states list
   this.updateCycleTimeStamp();
+
+  // Clear the classes and reset functionality so the tool is usable again
   this.setLoadingState(false); // TODO - May want to move this elsewhere
 };
 
 /**
- * @param {Object} data
+ * Puts the states grand total into the total field at the bottom of the table
+ * Called by its fetch inside {@see loadStatesData() }
+ * @param {Object} data The results from the fetch
  */
 ContributionsByState.prototype.displayUpdatedData_total = function(data) {
-  // console.log('displayUpdatedData_total()', data);
   this.statesTotalHolder.innerText = formatAsCurrency(data.results[0].total);
 };
 
 /**
- *
+ * Reads the date and office type and puts the correct date into the paqe, above the list of states
+ * Called from inside {@see displayUpdatedData_states() }
  */
 ContributionsByState.prototype.updateCycleTimeStamp = function() {
-  // console.log('updateCycleTimeStamp()');
-  // TODO - account for non-presidential election cycles
   let electionYear = this.baseStatesQuery.cycle;
 
+  // Remember the in-page elements
   let theStartTimeElement = document.querySelector('.js-cycle-start-time');
   let theEndTimeElement = document.querySelector('.js-cycle-end-time');
 
+  // If the election type is P, the start date is 1 January, three years previous
+  // Likewise, five years previous if S, or just one year previous for H
   let theStartDate;
   if (this.candidateDetails.office == 'P')
     theStartDate = new Date(electionYear - 3, 1, 1);
@@ -492,13 +505,16 @@ ContributionsByState.prototype.updateCycleTimeStamp = function() {
     'datetime',
     theStartDate.getFullYear() + '-01-01'
   );
+  // Put it into the start time
   theStartTimeElement.innerText = `01/01/${theStartDate.getFullYear()}`;
 
+  // And the end date is just 31 December of the election_year
   let theEndDate = new Date(electionYear, 1, 1);
   theEndTimeElement.setAttribute(
     'datetime',
     theEndDate.getFullYear() + '-12-31'
   );
+  // Finally put the ending year into the end time element
   theEndTimeElement.innerText = `12/31/${theEndDate.getFullYear()}`;
 };
 
@@ -510,22 +526,19 @@ ContributionsByState.prototype.handleTypeaheadSelect = function(
   e,
   abbreviatedCandidateDetails
 ) {
-  // console.log(
-  //   'handleTypeaheadSelect() e, abbreviatedCandidateDetails:',
-  //   e,
-  //   abbreviatedCandidateDetails
-  // );
+  // Remember the chosen candidate_id
   this.baseStatesQuery.candidate_id = abbreviatedCandidateDetails.id;
+  // But we need more details (like election_years) so we need to go get those
   this.loadCandidateDetails(abbreviatedCandidateDetails.id);
 };
 
 /**
  * Called on the election year control's change event
+ * Starts loading the new data
  * @param {Event} e
  */
 ContributionsByState.prototype.handleElectionYearChange = function(e) {
   console.log('handleElectionYearChange()');
-  // console.log('this.yearControl.value: ', this.yearControl.value);
   e.preventDefault();
   this.baseStatesQuery.cycle = this.yearControl.value;
   // We don't need to load the candidate details for a year change, so we'll just jump right to loading the states data.
@@ -533,7 +546,8 @@ ContributionsByState.prototype.handleElectionYearChange = function(e) {
 };
 
 /**
- *
+ * Listens to window resize events and adjusts the classes for the <aside> based on its width
+ * (rather than the page's width, which is problematic when trying to determine whethr there's a side nav)
  */
 ContributionsByState.prototype.handleResize = function(e = null) {
   if (e) e.preventDefault();
@@ -574,44 +588,8 @@ ContributionsByState.prototype.handleResize = function(e = null) {
 };
 
 /**
- *
- * @returns {Boolean} Whether the selected year is in the list of cycles for the selected candidate
- */
-ContributionsByState.prototype.validateCandidateVsElectionYear = function() {
-  let theErrorBlock = document.querySelector(
-    '#gov-fec-contribs-by-state .js-error-message'
-  );
-  let errorTitle = 'No results';
-  let errorMessage = `There is no ${
-    this.yearControl.value
-  } financial data for this candidate. Try searching a different election year.`;
-
-  if (!this.data_states) errorMessage = '';
-  else if (this.candidateDetails.election_years && this.yearControl.value) {
-    for (var i = 0; i < this.candidateDetails.election_years.length; i++) {
-      if (this.candidateDetails.election_years[i] == this.yearControl.value) {
-        errorMessage = '';
-        break;
-      }
-    }
-  }
-
-  theErrorBlock.querySelector('h2').innerText = errorTitle;
-  theErrorBlock.querySelector('p').innerText = errorMessage;
-
-  if (errorMessage == '') {
-    theErrorBlock.classList.remove('has-error');
-    theErrorBlock.setAttribute('aria-hidden', 'true');
-    return true;
-  } else {
-    theErrorBlock.classList.add('has-error');
-    theErrorBlock.setAttribute('aria-hidden', 'false');
-    return false;
-  }
-};
-
-/**
- *
+ * Controls class names and functionality of the widget
+ * Called when we start and complete (@see loadStatesData() )
  * @param {Boolean} newState
  */
 ContributionsByState.prototype.setLoadingState = function(newState) {

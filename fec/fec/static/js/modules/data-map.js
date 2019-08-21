@@ -282,13 +282,15 @@ function buildStateTooltips(svg, path, instance) {
   svg
     .selectAll('path')
     .on('mouseover', function(d) {
-      this.parentNode.appendChild(this);
-      let html = tooltipTemplate({
-        name: fips.fipsByCode[d.id].STATE_NAME,
-        total: '$' + instance.getStateValue(d.id).toLocaleString()
-      });
-      tooltip.style('display', 'block').html(html);
-      moveTooltip(tooltip);
+      if (instance.getStateValue(d.id)) {
+        this.parentNode.appendChild(this);
+        let html = tooltipTemplate({
+          name: fips.fipsByCode[d.id].STATE_NAME,
+          total: '$' + instance.getStateValue(d.id).toLocaleString()
+        });
+        tooltip.style('display', 'block').html(html);
+        moveTooltip(tooltip);
+      }
     })
     .on('mouseout', function() {
       tooltip.style('display', 'none');
