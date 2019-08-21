@@ -477,4 +477,3 @@ def get_all_senate_cycles(state):
     all_senate_cycles.sort(reverse=True)
 
     return all_senate_cycles
-    

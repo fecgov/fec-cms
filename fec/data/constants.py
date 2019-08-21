@@ -343,7 +343,6 @@ table_columns = OrderedDict([
     ('reports-pac-party', ['Committee', 'Report type', 'Version', 'Receipt date', 'Coverage end date', 'Total receipts', 'Total disbursements', 'Total independent expenditures']),
     ('reports-ie-only', ['Filer', 'Report type', 'Version', 'Receipt date', 'Coverage end date', 'Total contributions', 'Total independent expenditures']),
     ('audit', ['Committee name', 'Election cycle', 'Final report', 'Findings and issues', 'Candidate']),
-    ('totals-by-state-president-raised', ['State', 'Total raised']),
 ])
 
 line_numbers = {

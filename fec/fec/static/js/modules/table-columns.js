@@ -176,34 +176,10 @@ var independentExpenditureColumns = [
   }
 ];
 
-var stateTotalsColumns = [
-  columns.committeeColumn({ data: 'committee', className: 'all' }),
-  columns.candidateColumn({ data: 'candidate', className: 'all' }),
-  {
-    data: 'total',
-    className: 'all column--number t-mono',
-    orderable: true,
-    orderSequence: ['desc', 'asc'],
-    render: columnHelpers.buildTotalLink(['independent-expenditures'], function(
-      data,
-      type,
-      row
-    ) {
-      return {
-        data_type: 'processed',
-        is_notice: 'false',
-        support_oppose_indicator: row.support_oppose_indicator,
-        candidate_id: row.candidate_id
-      };
-    })
-  }
-];
-
 module.exports = {
   candidateInformationColumns: candidateInformationColumns,
   communicationCostColumns: communicationCostColumns,
   createElectionColumns: createElectionColumns,
   electioneeringColumns: electioneeringColumns,
-  independentExpenditureColumns: independentExpenditureColumns,
-  stateTotalsColumns: stateTotalsColumns
+  independentExpenditureColumns: independentExpenditureColumns
 };
