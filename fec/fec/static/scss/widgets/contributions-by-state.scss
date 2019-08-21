@@ -24,7 +24,8 @@ $fontWeightBold: 700;
 @import "../vendor/bourbon/css3/animation";
 // u-button:
 @import "../mixins/_utilities.scss";
-
+// triangle for tooltips:
+@import "../vendor/bourbon/addons/triangle";
 
 @font-face {
   font-family: 'gandhi';
@@ -430,8 +431,8 @@ aside.contribs-by-state {
   }
 }
 
-/* data-map-tooltip is outside .contribs-by-state */
-.data-map-tooltip {
+/* #map-tooltip is outside .contribs-by-state */
+#map-tooltip {
   border-radius: 4px;
   border: 2px solid #112e51;
   background-color: #fff;
@@ -442,12 +443,6 @@ aside.contribs-by-state {
   text-align: center;
   z-index: 400;
   
-  &.tooltip--above {
-    min-width: 12rem;
-    left: -4rem;
-    bottom: calc(100% + 1.5rem);
-  }
-
   .tooltip__title {
     border-bottom: 1px solid #112e51;
     text-transform: uppercase;
@@ -455,5 +450,28 @@ aside.contribs-by-state {
   }
   .tooltip__value {
 
+  }
+  
+  &.tooltip--above {
+    min-width: 12rem;
+    left: -4rem;
+    bottom: calc(100% + 1.5rem);
+  }
+  &::before {
+    @include triangle(2rem, $primary, down);
+    bottom: -1rem;
+    content: '';
+    display: block;
+    left: calc(50% - 1rem);
+    position: absolute;
+  }
+
+  &::after {
+    @include triangle(1.6rem, $inverse, down);
+    bottom: -.7rem;
+    content: '';
+    display: block;
+    left: calc(50% - .8rem);
+    position: absolute;
   }
 }

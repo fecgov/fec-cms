@@ -10,7 +10,7 @@
  * TODO - Stop the year pull-down from changing the URL?
  * TODO - related to ^^, when the year is changed, the candidate name disappears from the typeahead (and shouldn't)
  * TODO - Make Typeahead save current value and restore if user clicks outside?
- * TODO - Comments/documentation throughout
+ * TODO - Methodology functionality
  * TODO - reviews
  * TODO - Why are we getting jQuery errors for the toc?
  * TODO - Test on Firefox, Safari, Internet Explorer, Edge pre-Chromium, Edge post-Chromium
@@ -35,7 +35,6 @@ import typeahead from '../modules/typeahead';
 import { defaultElectionYear } from './widget-vars';
 import 'abortcontroller-polyfill/dist/polyfill-patch-fetch';
 
-const $ = require('jquery'); // TODO - Can we remove this? CDN? Rely on parent files?
 const DataMap = require('../modules/data-map').DataMap;
 const AbortController = window.AbortController;
 
