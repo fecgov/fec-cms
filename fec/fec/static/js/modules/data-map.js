@@ -1,14 +1,25 @@
 'use strict';
 
 /**
- * @fileoverview TODO -
- * @author TODO
- * @version 0.1
+ * @fileoverview  
+ * @author        Robert, fec.gov
+ * @version       0.1
  */
 
 /**
- * @example
- * TODO -
+ * @example creation:
+ * this.map = new DataMap(htmlDomElement, {
+ *      colorScale: ['#f0f9e8', '#a6deb4', '#7bccc4', '#2a9291', '#216a7a'],
+ *      colorZero: '#ffffff',
+ *    data: '',
+ *    width: '300',
+ *    height: '300',
+ *    addLegend: true,
+ *    addTooltips: true
+ *  });
+ *
+ * @example   data update:
+ * this.map.handleDataRefresh(theData);
  */
 
 /* global document */
@@ -33,44 +44,52 @@ let defaultOpts = {
  * @constructor
  * @param {string} elm - selector for the div to put the map in
  * @param {object} opts - Configuration options
- * @param {Boolean} opts.data
- * @param {Boolean} opts.min
- * @param {Boolean} opts.max
+ * @param {Boolean} opts.data - placeholder for this object to save its own data
  * @param {Boolean} opts.addLegend
  * @param {Boolean} opts.addTooltips
+ * @param {Array} opts.colorScale - list of hex color codes to use
+ * @param {String} opts.colorZero - hex color code to use when no value is present
  */
 function DataMap(elm, opts) {
   // Data, vars
   this.data;
-  this.mapData;
+  this.mapData; // saves results from init() and applyNewData(), formatted like {1: 123456789, 2: 6548, 4: 91835247} / {stateID: stateValue, stateID: stateValue}
   this.opts = Object.assign({}, defaultOpts, opts);
 
   // Elements
   this.elm = elm;
   this.legendSVG;
-  // this.popup;
   this.svg;
 }
 
 /**
  * Initialize the map
+ * Called from {@see handleDataRefresh() } when needed
+ * Very similar to {@see applyNewData() }—enough that changes to one should be made to the other.
+ * TODO - make init() and applyNewData() share more functionality
  */
 DataMap.prototype.init = function() {
   let instance = this;
 
+  // Initialize the D3 map
+  // viewBox is necessary for responsive scaling
+  // preserveAspectRatio tells the map how to scale
   this.svg = d3
     .select(this.elm)
     .append('svg')
     .attr('viewBox', '30 50 353 225')
     .attr('preserveAspectRatio', 'xMidYMid meet');
 
+  // Create the base-level state/country shapes
   let projection = d3.geo
     .albersUsa()
     .scale(450)
     .translate([220, 150]);
 
+  // Create the path based on those base-level shapes
   let path = d3.geo.path().projection(projection);
 
+  /** Go through our data results and pair/merge them with the fips state codes {@see this.mapData} */
   let results = this.data['results'].reduce((acc, val) => {
     let row = fips.fipsByState[val.state] || {};
     let code = row.STATE ? parseInt(row.STATE) : null;
@@ -78,24 +97,34 @@ DataMap.prototype.init = function() {
     return acc;
   }, {});
 
+  // Save the data for later
   this.mapData = results;
 
+  // Work through how to group these results for the legend
+  // For our current usage, we'll only be dealing with one map,
+  // but the functionality will work with multiple maps using the same legend
   let quantiles = this.opts.quantiles;
+  // For each item in results, look at its total but only work with the value if it's truthy
+  // Double bangs (!!value) :
+  // `!!0` = false, `!!null` = false
+  // `!!1` = true, `!!468546` = true
   let totals = this.data['results']
     .map(value => value['total'])
     .filter(value => {
       return !!value;
     });
-
+  // Of all of the values across all DataMap instances, these are the smallest and largest values:
   let minValue = minValue || Math.min(...totals);
   let maxValue = maxValue || Math.max(...totals);
 
+  // Decide the legend color scale for our values
   let legendScale = chroma
     .scale(this.opts.colorScale)
     .domain([minValue, maxValue]);
-
   let legendQuantize = d3.scale.linear().domain([minValue, maxValue]);
 
+  // Create the states SVG, color them, initialize mouseover interactivity
+  // (`selectAll()` will select elements if they exist, or will create them if they don't.)
   this.svg
     .append('g')
     .selectAll('path')
@@ -111,31 +140,32 @@ DataMap.prototype.init = function() {
       return fips.fipsByCode[d.id].STATE_NAME;
     })
     .attr('class', 'shape')
-    .attr('d', path)
-    .on('mouseover', function(d) {
-      if (instance.getStateValue(d.id)) {
-        this.parentNode.appendChild(this);
-        this.classList.add('state--hover');
-      }
-    });
+    .attr('d', path);
+  // Removing this mouseover for now since our states themselves don't change on over
+  // .on('mouseover', function(d) {
+  //   if (instance.getStateValue(d.id)) {
+  //     this.parentNode.appendChild(this);
+  //     this.classList.add('state--hover');
+  //   }
+  // });
 
+  // If we're supposed to add a legend, let's do it
   if (this.opts.addLegend || typeof this.opts.addLegend === 'undefined') {
     this.legendSVG = d3.select('.legend-container svg');
-
     drawStateLegend(this.legendSVG, legendScale, legendQuantize, quantiles);
   }
 
+  // If we're supposed to add tooltips, let's do that, too
   if (this.opts.addTooltips) {
     buildStateTooltips(this.svg, path, this);
   }
-
-  // TODO - Listen to srcUpdateDispatcher for data updates and re-draw map accordingly
-  // if (srcUpdateDispatcher)
 };
 
 /**
- *
+ * Takes an ID and finds that ID's dollar value in {@see this.mapData }
  * @param {String, Number} pathID
+ * @returns {Number} the value associated with the ID passed to it
+ * @returns {Object} else returns the full {@see this.mapData } when no pathID is included
  */
 DataMap.prototype.getStateValue = function(pathID) {
   if (pathID) return this.mapData[pathID];
@@ -143,6 +173,8 @@ DataMap.prototype.getStateValue = function(pathID) {
 };
 
 /**
+ * Called from outside this element, it handles data updates
+ * Saves the new data, then calls either {@see init() } or {@see applyNewData() } as needed
  * @param {json} newData
  */
 DataMap.prototype.handleDataRefresh = function(newData) {
@@ -153,7 +185,10 @@ DataMap.prototype.handleDataRefresh = function(newData) {
 };
 
 /**
- *
+ * Updates the map with new data
+ * Called from {@see handleDataRefresh() } as needed
+ * Very similar to {@see init() }—enough that changes to one should be made to the other.
+ * TODO - make init() and applyNewData() share more functionality
  */
 DataMap.prototype.applyNewData = function() {
   let instance = this;
@@ -183,6 +218,9 @@ DataMap.prototype.applyNewData = function() {
 
   let legendQuantize = d3.scale.linear().domain([minValue, maxValue]);
 
+  // This bit is the big difference from init() }
+  // because we're transitioning states' colors,
+  // states we know already exist, have IDs, and may have mouseover listeners, etc.
   this.svg
     .selectAll('path')
     .transition()
@@ -195,7 +233,7 @@ DataMap.prototype.applyNewData = function() {
         : instance.opts.colorZero;
     });
 
-  // If we need to
+  // The rest of applyNewData is back to the same code from init()
   if (this.legendSVG) {
     let theCurrentLegend = document.querySelector(
       '.map-wrapper .legend-container svg'
@@ -211,18 +249,22 @@ DataMap.prototype.applyNewData = function() {
 };
 
 /**
- *
- * @param {d3.svg} svg
+ * Creates (and updates) the map's legend
+ * @param {d3.svg} svg - the element created by d3.select()
  * @param {Function} scale
  * @param {*} quantize
  * @param {Number} quantiles
  */
 function drawStateLegend(svg, scale, quantize, quantiles) {
-  // Add legend swatches
   let legendWidth = 40;
   let legendBar = 35;
   let ticks = quantize.ticks(quantiles);
+  // The number of ticks is just a guide.
+  // If the data is more evenly split into one or two above this number, it will be.
+  // e.g., if our range is $1M-$3M and we ask for four ticks, we'll probably only get three: $1M, $2M, $3M
+  // instead of $750K, $1.5M, $2.25M, $3M
 
+  // Create the legend itself
   let legend = svg
     .attr('width', legendWidth * ticks.length)
     .selectAll('g.legend')
@@ -231,6 +273,7 @@ function drawStateLegend(svg, scale, quantize, quantiles) {
     .append('g')
     .attr('class', 'legend');
 
+  // then create a box for each tick, putting each one to the right of the next
   legend
     .append('rect')
     .attr('x', function(d, i) {
@@ -243,7 +286,7 @@ function drawStateLegend(svg, scale, quantize, quantiles) {
       return scale(d);
     });
 
-  // Add legend text
+  // Now add the text under each tile
   let compactRule = chooseRule(ticks[Math.ceil(ticks.length / 2)]);
   legend
     .append('text')
@@ -265,12 +308,14 @@ function drawStateLegend(svg, scale, quantize, quantiles) {
 }
 
 /**
- *
+ * Creates the tooltip element and adds mouse listeners to states
+ * Called from {@see init() } if needed
  * @param {*} svg
  * @param {*} path
  * @param {*} results
  */
 function buildStateTooltips(svg, path, instance) {
+  // Create and style the tooltip object itself
   let tooltip = d3
     .select('body')
     .append('div')
@@ -279,6 +324,9 @@ function buildStateTooltips(svg, path, instance) {
     .style('position', 'absolute')
     .style('pointer-events', 'none')
     .style('display', 'none');
+
+  // Go through our svg/map and assign the mouse listeners to each path
+  // TODO - Test on touch devices, too
   svg
     .selectAll('path')
     .on('mouseover', function(d) {
@@ -301,19 +349,25 @@ function buildStateTooltips(svg, path, instance) {
 }
 
 /**
- *
- * @param {*} tooltip
+ * Controls the tooltip position and visibility, called on each state's mouseover and mousemove
+ * @param {HTMLElement} tooltip
  */
 function moveTooltip(tooltip) {
+  // Where's the pointer / where should the tooltip appear/move
   let x = d3.event.pageX - tooltip[0][0].offsetWidth / 2;
   let y = d3.event.pageY - tooltip[0][0].offsetHeight;
-
   let bottomPointerHeight = '.8rem';
 
-  let contentHeight = $('#map-tooltip .tooltip__title').innerHeight();
-  contentHeight += $('#map-tooltip .tooltip__value').innerHeight();
+  // The dom whose height we need to measure
+  let theTooltipTitle = document.querySelector('#map-tooltip .tooltip__title');
+  let theTooltipValue = document.querySelector('#map-tooltip .tooltip__value');
+
+  // Measure those elements for our total height
+  let contentHeight = theTooltipTitle.clientHeight;
+  contentHeight += theTooltipValue.clientHeight;
   contentHeight += 30; // (padding)
 
+  // Do it
   tooltip
     .style('left', x + 'px')
     .style('top', 'calc(' + y + 'px - ' + bottomPointerHeight + ')')
@@ -321,7 +375,7 @@ function moveTooltip(tooltip) {
 }
 
 /**
- *
+ * Used when building the legend in {@see drawStateLegend() }
  * @param {*} value
  * @param {*} rule
  */
@@ -331,7 +385,7 @@ function compactNumber(value, rule) {
 }
 
 /**
- *
+ * Used when building the legend in {@see drawStateLegend() }
  * @param {*} value
  */
 function chooseRule(value) {
@@ -341,10 +395,10 @@ function chooseRule(value) {
 }
 
 /**
- *
- * @param {*} obj
- * @param {*} obj.name
- * @param {*} obj.total
+ * The html to go into the tooltips
+ * @param {Object} obj
+ * @param {String} obj.name - The state name to appear in the tooltip
+ * @param {String} obj.total - The value for that state
  */
 function tooltipTemplate(obj) {
   return `<div class="tooltip__title">${obj.name}</div>

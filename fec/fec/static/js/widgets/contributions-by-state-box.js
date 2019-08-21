@@ -1,39 +1,27 @@
 'use strict';
 
 /**
- * TODO - Loading state?
- * TODO - Error message and state: Selected candidate wasn't a candidate for selected year — DONE?
- * TODO - Error message and state: Selected year isn't an option for selected candidate — DONE?
- * TODO - When the year is changed, double-check against current candidate before requesting data — DONE?
- * TODO - Default election_year from url on initial load (widgets macro?) — DONE?
- * TODO - If user chooses non-President, allow two-year election years (basequery's office, datestamp's math) - DONE?
- * TODO - From ^^, if a senate candidate is chosen, the candidate's details will have those election cycle years included - DONE?
- * TODO - Apply data to map - DONE?
- * TODO - Map legend - DONE?
- * TODO - Make the datestamp above the state list work — DONE?
- * TODO - Add analytics
+ * @fileoverview  
+ * @author        Robert, fec.gov
+ * @version       0.1
+ * TODO - Add an initial "loading" state?
  * TODO - Figure out why Aggregate Totals Box isn't defaulting to data-year and window.ELECTION_YEAR
- * TODO - For v2 or whatever, convert to datatable (start with the simpliest implementation; no columns.js, etc.)
- * TODO - Stop the pull-downs from changing the URL?
- * TODO - related to ^^, when the year is changed, the candidate name disappears from the typeahead
+ * TODO - For v2 or whatever, convert to datatable.net (start with the simpliest implementation; no columns.js, etc.)
+ * TODO - Stop the year pull-down from changing the URL?
+ * TODO - related to ^^, when the year is changed, the candidate name disappears from the typeahead (and shouldn't)
  * TODO - Make Typeahead save current value and restore if user clicks outside?
- * TODO - Make candidate selection pre-load the most recent data for that candidate - DONE?
- * TODO - Clear default text in places like candidate details - DONE
  * TODO - Comments/documentation throughout
  * TODO - reviews
- * TODO - Style: state list state names line-height is too big (see "District of Columbia") - DONE?
- * TODO - Style: controls should be on one line for medium+ widths - DONE?
- * TODO - change line-height for candidate details holder - DONE?
- * TODO - change line-height for legend text - DONE?
  * TODO - Why are we getting jQuery errors for the toc?
  * TODO - Test on Firefox, Safari, Internet Explorer, Edge pre-Chromium, Edge post-Chromium
  */
 /* global document, context */
 
 /**
- * Based on /fec/static/js/pages/elections.js
+ 
+ * 
+ * 
  */
-
 // Editable vars
 const stylesheetPath = '/static/css/widgets/contributions-by-state.css';
 // const breakpointToXS = 0; // retaining just in case
@@ -183,12 +171,10 @@ ContributionsByState.prototype.init = function() {
   this.statesTotalHolder = document.querySelector('.js-states-total');
 
   // Fire up the map
-  this.map = new DataMap(this.map.get(0), {
+  this.map = new DataMap(this.map, {
     colorScale: ['#f0f9e8', '#a6deb4', '#7bccc4', '#2a9291', '#216a7a'],
     colorZero: '#ffffff',
     data: '',
-    width: '300',
-    height: '300',
     addLegend: true,
     addTooltips: true
   });
@@ -351,6 +337,8 @@ ContributionsByState.prototype.loadStatesData = function() {
       // console.log('second fetch catch e:', e);
       // TODO - handle catch
     });
+
+  logUsage(this.baseStatesQuery.candidate_id, this.baseStatesQuery.cycle);
 };
 
 /**
