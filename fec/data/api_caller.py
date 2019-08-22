@@ -298,6 +298,13 @@ def load_first_row_data(*path_parts, **filters):
     return response['results'][0] if response['results'] else None
 
 
+def load_endpoint_data(*path_parts, **filters):
+    return _call_api(
+        *path_parts,
+        **filters
+    )
+
+
 def load_cmte_financials(committee_id, **filters):
     filters.update({
         'is_amended': 'false',
@@ -313,18 +320,6 @@ def load_cmte_financials(committee_id, **filters):
         'reports': reports['results'],
         'totals': totals['results'],
     }
-
-
-def load_candidate_totals(candidate_id, cycle, election_full=True):
-    """This function is not used since 08/2019."""
-    response = _call_api(
-        'candidate',
-        candidate_id,
-        'totals',
-        cycle=cycle,
-        election_full=election_full,
-    )
-    return response['results'][0] if response['results'] else None
 
 
 def load_candidate_statement_of_candidacy(candidate_id, cycle):

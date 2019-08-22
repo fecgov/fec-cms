@@ -112,7 +112,10 @@
             aria-controls="panel6"
             href="#section-6">Filings</a>
             <ul>
-             <li><a href="#statements-of-candidacy">Statements of candidacy</a></li>
+            {% if has_raw_filings %}
+              <li><a href="#raw-filings">Raw electronic filings</a></li>
+            {% endif %}
+            <li><a href="#statements-of-candidacy">Statements of candidacy</a></li>
               <li><a href="#other">Other documents filed</a></li>
             </ul>
         </li>
