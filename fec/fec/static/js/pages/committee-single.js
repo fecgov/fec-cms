@@ -1,7 +1,5 @@
 'use strict';
 
-/* global document, context */
-
 var $ = require('jquery');
 var _ = require('underscore');
 var URI = require('urijs');

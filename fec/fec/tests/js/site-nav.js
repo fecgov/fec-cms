@@ -1,6 +1,6 @@
 'use strict';
 
-/* global require, describe, before, beforeEach, it */
+/* global describe, before, beforeEach, it */
 
 var chai = require('chai');
 var expect = chai.expect;

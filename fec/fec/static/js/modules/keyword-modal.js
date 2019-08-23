@@ -1,7 +1,5 @@
 'use strict';
 
-/* global ga */
-
 var $ = require('jquery');
 var URI = require('urijs');
 var A11yDialog = require('a11y-dialog');

@@ -1,6 +1,6 @@
 'use strict';
 
-/* global require, document, describe, before, beforeEach, after, afterEach, it */
+/* global document, describe, before, beforeEach, after, afterEach, it */
 
 var chai = require('chai');
 var sinon = require('sinon');

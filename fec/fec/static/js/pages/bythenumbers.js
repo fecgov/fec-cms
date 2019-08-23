@@ -1,7 +1,5 @@
 'use strict';
 
-/* global context, ga */
-
 var $ = require('jquery');
 var analytics = require('../modules/analytics');
 var TopEntities = require('../modules/top-entities').TopEntities;

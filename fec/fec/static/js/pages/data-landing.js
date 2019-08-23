@@ -1,7 +1,5 @@
 'use strict';
 
-/* global require, ga */
-
 var $ = require('jquery');
 var lookup = require('../modules/election-lookup');
 var analytics = require('../modules/analytics');
