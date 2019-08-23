@@ -15,13 +15,7 @@
  * TODO - Why are we getting jQuery errors for the toc?
  * TODO - Test on Firefox, Safari, Internet Explorer, Edge pre-Chromium, Edge post-Chromium
  */
-/* global document */
 
-/**
- 
- * 
- * 
- */
 // Editable vars
 const stylesheetPath = '/static/css/widgets/contributions-by-state.css';
 // const breakpointToXS = 0; // retaining just in case
@@ -95,14 +89,16 @@ function ContributionsByState() {
       }
     ]
   };
-  this.element = document.querySelector('#gov-fec-contribs-by-state'); // The visual element associated with this, this.instance
   this.fetchingStates = false; // Are we waiting for data?
-  this.map; // Starts as the element for the map but then becomes a DataMap object
+  this.element = document.querySelector('#gov-fec-contribs-by-state'); // The visual element associated with this, this.instance
   this.candidateDetailsHolder; // Element to hold candidate name, party, office, and ID
+  this.map; // Starts as the element for the map but then becomes a DataMap object
   this.table; // The <table> for the list of states and their totals
   this.statesTotalHolder; // Element at the bottom of the states list
   this.typeahead; // The typeahead candidate element:
   this.yearControl; // The <select> for election years:
+  this.buttonIndivContribs;
+  this.buttonMethodology;
 
   // Populate the examples text because handlebars doesn't like to add the italics/emphasis
   document.querySelector(
@@ -177,6 +173,22 @@ ContributionsByState.prototype.init = function() {
     addLegend: true,
     addTooltips: true
   });
+
+  // Listen for the Browse Individual Contributions button to be clicked
+  this.buttonIndivContribs = this.element.querySelector(
+    '.js-browse-indiv-contribs-by-state'
+  );
+  this.buttonIndivContribs.addEventListener(
+    'click',
+    this.handleBrowseIndivContribsClick.bind(this)
+  );
+
+  // Listen for the Methodology button to be clicked
+  this.buttonMethodology = this.element.querySelector('.js-methodology');
+  this.buttonMethodology.addEventListener(
+    'click',
+    this.handleMethodologyClick.bind(this)
+  );
 
   // Listen for resize events
   window.addEventListener('resize', this.handleResize.bind(this));
@@ -533,6 +545,28 @@ ContributionsByState.prototype.handleElectionYearChange = function(e) {
   this.baseStatesQuery.cycle = this.yearControl.value;
   // We don't need to load the candidate details for a year change, so we'll just jump right to loading the states data.
   this.loadStatesData();
+};
+
+/**
+ * TODO -
+ * @param {MouseEvent} e
+ */
+ContributionsByState.prototype.handleBrowseIndivContribsClick = function(e) {
+  let tranPeriod = this.baseStatesQuery.cycle;
+
+  e.target.setAttribute(
+    'href',
+    `/data/receipts/individual-contributions/?two_year_transaction_period=${tranPeriod}`
+  );
+  // e.preventDefault();
+};
+
+/**
+ * TODO -
+ * @param {MouseEvent} e
+ */
+ContributionsByState.prototype.handleMethodologyClick = function(e) {
+  e.preventDefault();
 };
 
 /**
