@@ -20,9 +20,9 @@
     {% endif %}
     <li class="side-nav__item"><a class="side-nav__link" href="#top-raisers">Who&apos;s raising the most</a></li>
     {% if FEATURES.contributionsbystate %}
-    <li class="side-nav__item"><a class="side-nav__link" href="#contributions-by-state">Where contributions come from</a></li>
+    <li class="side-nav__item"><a class="side-nav__link" href="#contributions-by-state">Where individual contributions come from</a></li>
     {% else %}
-    <li class="side-nav__item"><span class="side-nav__link is-disabled">Where contributions come from</span></li>
+    <li class="side-nav__item"><span class="side-nav__link is-disabled">Where individual contributions come from</span></li>
     {% endif %}
     <li class="side-nav__item"><span class="side-nav__link is-disabled">The size of contributions</span></li>
   </ul>
@@ -45,7 +45,7 @@
 </section>
 {% if FEATURES.contributionsbystate %}
 <section id="contributions-by-state-section">
-  <h2 class="heading--section u-padding--top">Where contributions come from</h2>
+  <h2 class="heading--section u-padding--top">Where individual contributions come from</h2>
 {# example of iframe implementation: #}
 {# <script defer id="gov_fec_contribs_by_state_script" src="{{ asset_for_js('widgets/contributions-by-state.js') }}"></script> #}
 {# <iframe src="/widgets/contributions-by-state" id="fec-gov-contribs-by-state"></iframe> #}
