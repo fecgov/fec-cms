@@ -209,7 +209,6 @@ DataMap.prototype.applyNewData = function() {
 
   let minValue = minValue || Math.min(...totals);
   let maxValue = maxValue || Math.max(...totals);
-  console.log('min, max value: ', minValue, maxValue);
 
   let legendScale = chroma
     .scale(this.opts.colorScale)
