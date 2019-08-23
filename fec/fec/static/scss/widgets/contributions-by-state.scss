@@ -324,7 +324,19 @@ aside.contribs-by-state {
       }
     }
   }
-  
+  .more-info-wrapper {
+    padding: 1rem;
+    text-align: right;
+    width: 100%;
+
+    a {
+      margin-left: 1rem;
+    }
+    a.js-methodology {
+      pointer-events: none;
+    }
+  }
+
   // Small sizes for the light theme, which is the default
   // &.w-s {
     
