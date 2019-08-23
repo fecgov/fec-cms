@@ -22,8 +22,6 @@
  * this.map.handleDataRefresh(theData);
  */
 
-/* global document */
-
 const d3 = require('d3');
 const chroma = require('chroma-js');
 const topojson = require('topojson');
@@ -211,6 +209,7 @@ DataMap.prototype.applyNewData = function() {
 
   let minValue = minValue || Math.min(...totals);
   let maxValue = maxValue || Math.max(...totals);
+  console.log('min, max value: ', minValue, maxValue);
 
   let legendScale = chroma
     .scale(this.opts.colorScale)
@@ -335,7 +334,7 @@ function buildStateTooltips(svg, path, instance) {
         this.parentNode.appendChild(this);
         let html = tooltipTemplate({
           name: fips.fipsByCode[d.id].STATE_NAME,
-          total: '$' + instance.getStateValue(d.id).toLocaleString()
+          total: '$' + Math.round(instance.getStateValue(d.id)).toLocaleString()
         });
         tooltip.style('display', 'block').html(html);
         moveTooltip(tooltip);
