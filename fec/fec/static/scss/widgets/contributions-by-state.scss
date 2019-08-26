@@ -30,6 +30,8 @@ $info-circle: 'data:image/svg+xml;charset=utf8, %3Csvg%20xmlns%3D%22http%3A%2F%2
 @import "../mixins/_utilities.scss";
 // triangle for tooltips:
 @import "../vendor/bourbon/addons/triangle";
+// overlay for loading states
+@import "../components/overlay";
 
 @font-face {
   font-family: 'gandhi';
@@ -82,6 +84,7 @@ aside.contribs-by-state {
   font-size: $fontSizeBase * 1.4;
   margin: 0 0 ($fontSizeBase * 2);
 //   padding: ($fontSizeBase * 2);
+  position: relative;
   width: 100%;
 
   .controls-wrapper {
@@ -341,11 +344,33 @@ aside.contribs-by-state {
       pointer-events: none;
     }
   }
+  .overlay__container {
+    display: none;
+    position: absolute;
+    width: 100%;
+
+    &.is-loading {
+      display: block;
+    }
+    .overlay {
+      display: none;
+      
+      &.is-loading {
+        background-image: url('../../img/loading.gif');
+        display: block;
+      }
+    }
+  }
 
   // Small sizes for the light theme, which is the default
-  // &.w-s {
-    
-  // }
+  &.w-s {
+    .overlay__container {
+  
+      .overlay {
+        
+      }
+    }
+  }
   // Medium sizes for the light theme, which is the default
   &.w-m {
     // @extend .w-s;
@@ -421,6 +446,12 @@ aside.contribs-by-state {
       margin-left: 1rem;
       width: calc(66.66% - 1rem);
     }
+    .overlay__container {
+  
+      .overlay {
+        
+      }
+    }
   }
 //   // Large sizes for the light theme, which is the default
   &.w-l {
@@ -428,24 +459,27 @@ aside.contribs-by-state {
   }
 
   // Classes for when a data load is occurring
-  .controls-wrapper select {
-    opacity: 1;
-    transition: opacity .25s;
-  }
-  .state-list-wrapper, .map-wrapper {
-    opacity: 1;
-    transition: opacity .25s;
-  }
-  &.is-loading {
-    .controls-wrapper select {
-      opacity: .33;
-      transition: opacity .5s;
-    }
-    .state-list-wrapper, .map-wrapper {
-      opacity: 0.33;
-      transition: opacity .5s;
-    }
-  }
+  // .controls-wrapper select {
+  //   opacity: 1;
+  //   transition: opacity .25s;
+  // }
+  // .state-list-wrapper, .map-wrapper {
+  //   opacity: 1;
+  //   transition: opacity .25s;
+  // }
+  // &.is-loading {
+  //   // .controls-wrapper select {
+  //   //   opacity: .33;
+  //   //   transition: opacity .5s;
+  //   // }
+  //   // .state-list-wrapper, .map-wrapper {
+  //   //   opacity: 0.33;
+  //   //   transition: opacity .5s;
+  //   // }
+  //   .overlay__container {
+  //     display: block !important;
+  //   }
+  // }
 }
 
 /* #map-tooltip is outside .contribs-by-state */

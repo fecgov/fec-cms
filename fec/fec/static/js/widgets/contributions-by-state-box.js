@@ -609,6 +609,26 @@ ContributionsByState.prototype.handleResize = function(e = null) {
     this.element.classList.remove('w-l');
     this.element.classList.add('w-xl');
   }
+
+  setTimeout(this.refreshOverlay.bind(this), 250);
+};
+
+/**
+ * Called by {@see handleResize() }, to re-position the "loading" overlay
+ */
+ContributionsByState.prototype.refreshOverlay = function() {
+  let timeStampHeight = 25;
+  let theMap = this.element.querySelector('.map-wrapper');
+  let theOverlay = this.element.querySelector('.overlay__container');
+
+  let theTopPos =
+    this.element.querySelector('.state-list-wrapper').offsetTop +
+    timeStampHeight;
+  let theBottomPos = theMap.offsetTop + theMap.offsetHeight;
+  let theHeight = theBottomPos - theTopPos;
+
+  theOverlay.style.top = `${theTopPos}px`;
+  theOverlay.style.height = `${theHeight}px`;
 };
 
 /**
@@ -618,12 +638,18 @@ ContributionsByState.prototype.handleResize = function(e = null) {
  */
 ContributionsByState.prototype.setLoadingState = function(newState) {
   if (newState === false) {
-    this.element.classList.remove('is-loading');
+    this.element
+      .querySelector('.overlay__container')
+      .classList.remove('is-loading');
+    this.element.querySelector('.overlay').classList.remove('is-loading');
     this.element
       .querySelector('#state-contribs-years')
       .removeAttribute('disabled');
   } else if (newState === true) {
-    this.element.classList.add('is-loading');
+    this.element
+      .querySelector('.overlay__container')
+      .classList.add('is-loading');
+    this.element.querySelector('.overlay').classList.add('is-loading');
     this.element
       .querySelector('#state-contribs-years')
       .setAttribute('disabled', true);
