@@ -1,0 +1,242 @@
+// Org Chart Styles
+//
+// Everything related to the org chart
+//
+
+$gutterSize: 10px;
+$lineDashed: thin dotted grey;
+$lineSolid: 2px solid grey;
+$lineSolidDark: thin solid black;
+
+#fec-orgchart {
+  display: block;
+  float: left;
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  position: relative;
+
+  li {
+    display: block;
+    float: left;
+    list-style-type: none;
+    margin-left: 0;
+    padding: $gutterSize 0 0 $gutterSize;
+    position: relative;
+    width: 100%;
+
+    & + li { // all li after another li
+      padding-top: $gutterSize;
+    }
+    &:before {
+      // top half of left-side line, including the horizontal line in the middle
+      border-left: $lineSolidDark;
+      border-bottom: $lineSolidDark;
+      content: "";
+      height: 50%;
+      left: 0;
+      position: absolute;
+      top: 0;
+      width: 10px;
+      
+    }
+    &:after {
+      // bottom half of left-side line
+      border-left: $lineSolidDark;  
+      content: "";
+      height: 50%;
+      left: 0;
+      position: absolute;
+      top: 50%;
+      width: 10px;
+    }
+    &:last-child {
+      &:after {
+        display: none;
+      }
+    }
+    
+    div {
+      border: $lineSolidDark;
+      list-style-type: none;
+      margin: 0;
+      min-height: 80px;
+      padding: 2rem;
+      position: relative;
+      text-align: center;
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-wrap: wrap;
+      flex-direction: column;
+
+      span {
+        display: block;
+        line-height: 1em;
+        
+        &:first-child {
+          font-size: 14px;
+          font-weight: bold;
+          line-height: 1em;
+        }
+        &:nth-child(2) {
+          font-family: Karla, sans-serif;
+          font-size: 12px;
+          font-weight: normal;
+        } 
+      }
+    }
+
+    &.team {
+      padding-left: $gutterSize;
+      padding-bottom: $gutterSize * 2;
+
+      &:before {
+        content: "";
+        border-bottom: none;
+        border-left: $lineSolidDark;
+        border-right: none;
+        border-top: none;
+        height: 100%;
+        left: 0;
+        position: absolute;
+        top: 0;
+        width: $gutterSize;
+      }
+
+      &:last-child {
+        &:before {
+          display: none;
+        }
+        &:after {
+          display: none;
+        }
+      }
+    }
+    // for divs that are direct descendants of the li.team, these are the team leads
+    &.team > div:before {
+      content: "";
+      position: absolute;
+      left: calc(-#{$gutterSize} - 1px);
+      border-left: $lineSolidDark;
+      border-bottom: $lineSolidDark;
+      top: -#{$gutterSize * 1.5};
+      height: calc(50% + #{$gutterSize * 1.5});
+      width: $gutterSize;
+    }
+
+    ul {
+      display: block;
+      float: left;
+      margin: 0;
+      padding: 0 0 0 $gutterSize;
+      position: relative;
+      width: 100%;
+
+      &:before {
+        border-left: $lineSolidDark;
+        content: "";
+        display: block;
+        height: 50%;
+        position: absolute;
+        left: 0;
+        bottom: 50%;
+        width: $gutterSize;
+        border-bottom: $lineSolidDark;
+      }
+      &:last-child {
+        &:before {
+          display: none;
+        }
+        &:after {
+          display: none;
+        }
+      }
+    }
+
+    &.team-comms {
+      padding: 0 $gutterSize #{$gutterSize * 2};
+  
+      &:before {
+        content: "";
+        border-bottom: none;
+        border-left: $lineSolidDark;
+        border-right: none;
+        border-top: $lineSolidDark;
+        height: calc(50% + #{$gutterSize});
+        left: 0;
+        position: absolute;
+        top: calc(50% - #{$gutterSize});
+        width: 10px;
+      }
+      &:after {
+        border-bottom: none;
+        border-left: none;
+        border-right: $lineDashed;
+        border-top: $lineDashed;
+        content: "";
+        display: block; 
+        height: calc(50% + #{$gutterSize + 1});
+        left: auto;
+        position: absolute;
+        right: 0;
+        top: calc(50% - #{$gutterSize});
+        width: $gutterSize;
+      }
+      & div:before {
+        display: none;
+      }
+      & div:after {
+        display: none;
+      }
+    }
+    &.team-ig {
+      float: right;
+      padding: $gutterSize $gutterSize #{$gutterSize * 2} #{$gutterSize * 2};
+
+      &:before {
+        border-bottom: none;
+        border-top: none;
+        bottom: auto;
+        height: 100%;
+        top: 0;
+      }
+  
+      & > div:before {
+        border-bottom: $lineDashed;
+        border-left: none;
+        border-right: $lineDashed;
+        border-top: none;
+        bottom: 50%;
+        content: "";
+        height: calc(50% + #{$gutterSize});
+        position: absolute;
+        left: auto;
+        right: calc(-#{$gutterSize} - 1px);
+        top: auto;
+        width: $gutterSize;
+      }
+      & > div:after {
+        display: none;
+      }
+
+      ul {
+        padding: 0 $gutterSize 0 0;
+
+        li {
+          padding: $gutterSize $gutterSize 0 0;
+          
+          &:before {
+            border-left: none;
+            border-right: $lineDashed;
+            border-bottom: $lineDashed;
+            left: auto;
+            right: 0;
+            width: $gutterSize;
+          }
+        }
+      }
+    }
+  }
+}
