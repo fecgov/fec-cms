@@ -3,8 +3,8 @@ cfenv==0.5.2
 dj-database-url==0.4.2
 django-libsass==0.7
 gunicorn==19.7.1
-gevent==1.2.1
-lxml==4.2.5
+gevent==1.4.0
+#lxml==4.2.5
 psycopg2==2.7.3.2
 requests==2.21.0
 slacker==0.8.6
@@ -14,8 +14,8 @@ wagtail==2.2.1
 django-audit-log
 Jinja2==2.10.1
 django_jinja==2.4.1
-CacheControl==0.11.5
-cachetools==1.0.2
+#CacheControl==0.11.5
+#cachetools==1.0.2
 github3.py==0.9.6
 
 # Development
