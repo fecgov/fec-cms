@@ -7,15 +7,16 @@ from data.views import get_candidate
 
 
 @mock.patch.object(api_caller, 'load_candidate_statement_of_candidacy')
-@mock.patch.object(api_caller, 'load_candidate_totals')
+@mock.patch.object(api_caller, 'load_first_row_data')
 @mock.patch.object(api_caller, 'load_with_nested')
 class TestCandidate(TestCase):
 
     STOCK_CANDIDATE = {
-        "candidate_id": "C001",
+        "candidate_id": "H001",
         "name": "Lady Liberty",
         "cycles": [2014, 2016, 2018],
         "election_years": [2016, 2018],
+        "rounded_election_years": [2016, 2018],
         "election_districts": ["01", "02"],
         "office": "H",
         "office_full": "House",
@@ -46,7 +47,7 @@ class TestCandidate(TestCase):
         }
     ]
 
-    def test_base_case(self, load_with_nested_mock, load_candidate_totals_mock,
+    def test_base_case(self, load_with_nested_mock, load_first_row_data_mock,
                        load_candidate_statement_of_candidacy_mock):
         cycle = 2016
         show_full_election = True
@@ -57,8 +58,7 @@ class TestCandidate(TestCase):
             self.STOCK_COMMITTEE_LIST,
             cycle
         )
-        load_candidate_totals_mock.return_value = {}
-        candidate = get_candidate('C001', 2018, show_full_election)
+        candidate = get_candidate('H001', 2018, show_full_election)
 
         assert candidate['candidate_id'] == test_candidate['candidate_id']
         assert candidate['name'] == test_candidate['name']
@@ -73,7 +73,7 @@ class TestCandidate(TestCase):
         assert candidate['district'] == test_candidate['district']
         assert candidate['party_full'] == test_candidate['party_full']
         assert candidate['incumbent_challenge_full'] == test_candidate[
-                'incumbent_challenge_full']
+            'incumbent_challenge_full']
         assert candidate['cycle'] == cycle
         assert candidate['result_type'] == 'candidates'
         assert candidate['duration'] == 2
@@ -122,78 +122,25 @@ class TestCandidate(TestCase):
             'candidateID': test_candidate["candidate_id"]
         }
 
-        assert candidate['raising_summary'] is None
-        assert candidate['spending_summary'] is None
-        assert candidate['cash_summary'] is None
+        assert len(candidate['raising_summary']) == 0
+        assert len(candidate['spending_summary']) == 0
+        assert len(candidate['cash_summary']) == 0
 
-    def test_special_election_election_years_only_rounded(
-            self, load_with_nested_mock, load_candidate_totals_mock,
+    def test_special_odd_year_return_rounded_number(
+            self, load_with_nested_mock, load_first_row_data_mock,
             load_candidate_statement_of_candidacy_mock):
 
-        # Candidate ran in 2017 and 2018. Passing 2016 as cycle.
-        # Election years should be rounded, election year should be 2017
+        # use new column rounded_election_years which round odd number in MV.
         test_candidate = copy.deepcopy(self.STOCK_CANDIDATE)
         test_candidate["cycles"] = [2016, 2018]
-        test_candidate["election_years"] = [2017, 2018, 2019]
+        test_candidate["election_years"] = [2013, 2015, 2018]
+        test_candidate["rounded_election_years"] = [2014, 2016, 2018]
 
         load_with_nested_mock.return_value = (
             test_candidate,
             mock.MagicMock(),
             2016
         )
-        candidate = get_candidate('C001', 2016, True)
-        assert candidate["election_years"] == [2018, 2020]
-        assert candidate["election_year"] == 2018
-
-    def test_past_special_returns_election_year(
-            self, load_with_nested_mock, load_candidate_totals_mock,
-            load_candidate_statement_of_candidacy_mock):
-
-        # Candidate ran in 2017 and 2018. Passing 2020 as cycle.
-        # Election years should be rounded, election year should be 2018
-        test_candidate = copy.deepcopy(self.STOCK_CANDIDATE)
-        test_candidate["cycles"] = [2016, 2018]
-        test_candidate["election_years"] = [2017, 2018]
-
-        load_with_nested_mock.return_value = (
-            test_candidate,
-            mock.MagicMock(),
-            2020
-        )
-        candidate = get_candidate('C001', 2020, True)
-        assert candidate["election_years"] == [2018]
-        assert candidate["election_year"] == 2018
-
-    def test_candidate_with_future_cycle_falls_back_to_present(
-            self, load_with_nested_mock, load_candidate_totals_mock,
-            load_candidate_statement_of_candidacy_mock):
-
-        test_candidate = copy.deepcopy(self.STOCK_CANDIDATE)
-        test_candidate["election_years"] = [2018, 2100]
-        test_candidate["cycles"] = [2018]
-        test_candidate["office"] == 'S'
-        load_with_nested_mock.return_value = (
-            test_candidate,
-            self.STOCK_COMMITTEE_LIST,
-            2018
-        )
-        candidate = get_candidate('C001', 2100, True)
-        assert candidate["cycle"] == 2018
-        assert candidate["cycles"] == [2018]
-
-    def test_election_full_returns_false_nested_returns_future_cycle(
-            self, load_with_nested_mock, load_candidate_totals_mock,
-            load_candidate_statement_of_candidacy_mock):
-
-        test_candidate = copy.deepcopy(self.STOCK_CANDIDATE)
-        test_committee = copy.deepcopy(self.STOCK_COMMITTEE_LIST[0])
-        test_candidate["election_years"] = [2018, 2100]
-        test_committee["cycles"] = [2018, 2100]
-
-        load_with_nested_mock.return_value = (
-            test_candidate,
-            [test_committee],
-            2100
-        )
-        candidate = get_candidate('C001', 2100, True)
-        assert candidate["show_full_election"] is False
+        candidate = get_candidate('H001', 2016, True)
+        assert candidate["election_years"] == [2014, 2016, 2018]
+        assert candidate["election_year"] == 2016

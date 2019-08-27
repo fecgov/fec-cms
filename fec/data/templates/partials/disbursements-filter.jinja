@@ -4,6 +4,7 @@
 {% import 'macros/filters/typeahead-filter.jinja' as typeahead %}
 {% import 'macros/filters/states.jinja' as states %}
 {% import 'macros/filters/date.jinja' as date %}
+{% import 'macros/filters/years.jinja' as years %}
 {% import 'macros/filters/range.jinja' as range %}
 {% import 'macros/filters/checkbox.jinja' as checkbox %}
 
@@ -26,7 +27,8 @@ Filter disbursements
 <div class="filters__inner">
   {{ typeahead.field('committee_id', 'Spender name or ID') }}
   {{ typeahead.field('recipient_name', 'Recipient name or ID', allow_text=True) }}
-  {{ date.partition_field('date', 'Disbursement date', dates ) }}
+  {{ years.cycles('two_year_transaction_period', 'Report time period', show_tooltip=True)  }}
+  {{ date.field('date', 'Disbursement date range' ) }}
 </div>
 <div class="js-accordion accordion--neutral" data-content-prefix="filter" data-open-first="false">
   <button type="button" class="js-accordion-trigger accordion__button">Recipient details</button>
@@ -55,7 +57,8 @@ Filter disbursements
   </div>
   <button type="button" class="js-accordion-trigger accordion__button">Spender committee type</button>
   <div class="accordion__content">
-    {% include 'partials/filters/spender-committee-types.jinja' %}
+    {% import 'macros/filters/committee-types.jinja' as committee_type %}
+    {{ committee_type.field(committee_type='spender_committee_type', organization_type='spender_committee_org_type', designation='spender_committee_designation') }}
   </div>
 </div>
 {% endblock %}

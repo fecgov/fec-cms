@@ -41,7 +41,7 @@ function init() {
     );
   }
 
-  ga('create', 'UA-48605964-22', 'auto', 'notDAP');
+  ga('create', 'UA-16134356-1', 'auto', 'notDAP');
   ga('notDAP.set', 'forceSSL', true);
   ga('notDAP.set', 'anonymizeIp', true);
 }

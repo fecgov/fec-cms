@@ -5,7 +5,7 @@ from data import utils
 
 START_YEAR = 1979
 END_YEAR = 2020
-DEFAULT_TIME_PERIOD = 2018  # Change after final YE report (1/31/19)
+DEFAULT_TIME_PERIOD = 2020  # Change after the April quarterly report (4/15/21)
 DEFAULT_ELECTION_YEAR = 2020  # Change after election day (11/3/20)
 DEFAULT_PRESIDENTIAL_YEAR = 2020
 DISTRICT_MAP_CUTOFF = 2018  # The year we show district maps for on election pages
@@ -412,7 +412,6 @@ line_numbers = {
             ('F3X-21B', 'Other federal operating expenditures (Line 21b)'),
             ('F3X-22', 'Transfers to affiliated/other party committees (Line 22)'),
             ('F3X-23', 'Contributions to federal candidates/committees and other political committees (Line 23)'),
-            ('F3X-24', 'Independent expenditures (Line 24)'),
             ('F3X-26', 'Loan repayments made (Line 26)'),
             ('F3X-27', 'Loans made (Line 27)'),
             ('F3X-28A', 'Refunds of Contributions Made to Individuals/Persons Other Than Political Committees (Line 28a)'),

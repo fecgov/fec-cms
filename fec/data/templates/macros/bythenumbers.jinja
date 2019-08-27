@@ -14,6 +14,7 @@
 {% else %}
   {% set value_field='disbursements' %}
 {% endif %}
+
 <div class="js-top-entities content__section" data-office="{{ office }}" data-election-year="{{ election_year }}">
   <form action="" method="GET">
       <label for="top-category" class="breakdown__title label t-inline-block">How much has been {{ action }} by: </label>
@@ -33,9 +34,7 @@
         {% endfor %}
       </select>
   </form>
-  {% if FEATURES.aggregatetotals %}
-  <script defer data-election-year="{{ election_year }}" data-office="{{ office }}" data-action="{{ action }}" data-year-control="#election-year" data-office-control="#top-category" src="{{ asset_for_js('modules/aggregate-totals.js') }}"></script>
-  {% endif %}
+
   <span class="t-sans js-dates"></span>
   <div class="chart-table simple-table--responsive js-top-table" id="top-table" aria-live="polite" role="grid">
     <div role="row" class="simple-table__header">
@@ -43,7 +42,7 @@
       <div role="columnheader" class="simple-table__header-cell cell--20 t-right-aligned">Total {{ action }}</div>
       <div role="columnheader" class="simple-table__header-cell cell--40"></div>
     </div>
-  
+
   </div>
   <div class="results-info">
     <button class="js-previous is-disabled button button--standard button--previous"><span class="u-visually-hidden">Previous page</span></button>
@@ -52,11 +51,16 @@
       Showing <span class="js-page-info"></span> entries
     </div>
   </div>
+
 </div>
+
 <div class="content__section row">
   <ul class="list--buttons u-float-right">
     <li><a class="button button--standard button--table" href="/data/{{ value_field }}">Browse {{value_field}}</a></li>
     <li><button class="button button--alt js-ga-event"  data-a11y-dialog-show="{{ action }}-modal" data-ga-event="{{ action }} methodology modal clicked" aria-controls="{{ action }}-modal">Methodology</button></li>
+
+
   </ul>
+<p><i>Newly filed summary data may not appear for up to 48 hours.</i></p>
 </div>
 {% endmacro %}

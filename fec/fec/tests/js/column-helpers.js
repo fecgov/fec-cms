@@ -52,6 +52,14 @@ describe('column helpers', function() {
       expect(results).to.have.all.keys('two_year_transaction_period');
       expect(results.two_year_transaction_period).to.equal(2018);
     });
+
+    it('should return multiple two year transaction periods when duration > 2', function() {
+      var results = columnHelpers.buildAggregateUrl(2018, true, 4);
+      expect(results).to.be.an('object');
+      expect(results).to.have.all.keys('two_year_transaction_period');
+      expect(results.two_year_transaction_period).to.eql([2018, 2016]); //deep equal
+    });
+
   });
 
   describe('buildEntityLink', function() {

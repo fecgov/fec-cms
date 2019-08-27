@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.http import Http404
 
 import datetime
@@ -23,15 +23,18 @@ def candidates(request):
 
 
 def candidates_office(request, office):
-    if office.lower() not in ['president', 'senate', 'house']:
+    office = office.lower()
+    if office not in ['president', 'senate', 'house']:
         raise Http404()
+    # only House/Senate are proper-cased
+    office_breadcrumb = office.title() if office in ['senate', 'house'] else office
     return render(request, 'datatable.jinja', {
         'parent': 'data',
         'result_type': 'candidates',
-        'title': 'candidates for ' + office,
+        'title': 'Candidates for ' + office_breadcrumb,
         'slug': 'candidates-office',
         'table_context': OrderedDict([('office', office)]),
-        'columns': constants.table_columns['candidates-office-' + office.lower()]
+        'columns': constants.table_columns['candidates-office-' + office]
     })
 
 
@@ -57,7 +60,15 @@ def communication_costs(request):
     })
 
 
+# Temporarily adding min and max date redirect until we can
+# handle null disbursement dates in a future implementation
 def disbursements(request):
+    if len(request.GET) == 0:
+        return redirect('/data/disbursements/?two_year_transaction_period='
+        + str(constants.DEFAULT_ELECTION_YEAR)
+        + '&min_date=' + '01/01/' + str(constants.DEFAULT_ELECTION_YEAR - 1)
+        + '&max_date=' + '12/31/' + str(constants.DEFAULT_ELECTION_YEAR))
+
     return render(request, 'datatable.jinja', {
         'parent': 'data',
         'slug': 'disbursements',
@@ -101,7 +112,15 @@ def independent_expenditures(request):
     })
 
 
+# Temporarily adding min and max date redirect until we can
+# handle null disbursement dates in a future implementation
 def individual_contributions(request):
+    if len(request.GET) == 0: 
+        return redirect('/data/receipts/individual-contributions/?two_year_transaction_period='
+        + str(constants.DEFAULT_ELECTION_YEAR)
+        + '&min_date=' + '01/01/' + str(constants.DEFAULT_ELECTION_YEAR - 1)
+        + '&max_date=' + '12/31/' + str(constants.DEFAULT_ELECTION_YEAR))
+
     return render(request, 'datatable.jinja', {
         'parent': 'data',
         'result_type': 'receipts',
@@ -141,7 +160,16 @@ def party_coordinated_expenditures(request):
     })
 
 
+# Temporarily adding min and max date redirect until we can
+# handle null disbursement dates in a future implementation
 def receipts(request):
+    if len(request.GET) == 0: 
+        return redirect('/data/receipts/?two_year_transaction_period='
+        + str(constants.DEFAULT_ELECTION_YEAR)
+        + '&min_date=' + '01/01/' + str(constants.DEFAULT_ELECTION_YEAR - 1)
+        + '&max_date=' + '12/31/' + str(constants.DEFAULT_ELECTION_YEAR))
+
+    
     return render(request, 'datatable.jinja', {
         'parent': 'data',
         'slug': 'receipts',
@@ -174,15 +202,4 @@ def reports(request, form_type):
         'dates': utils.date_ranges(),
         'has_data_type_toggle': True,
         'columns': constants.table_columns['reports-' + form_type.lower()]
-    })
-
-
-def individual_contributions(request):
-    return render(request, 'datatable.jinja', {
-        'parent': 'data',
-        'result_type': 'receipts',
-        'title': 'Individual contributions',
-        'slug': 'individual-contributions',
-        'dates': utils.date_ranges(),
-        'columns': constants.table_columns['individual-contributions']
     })

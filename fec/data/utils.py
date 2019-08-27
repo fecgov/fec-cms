@@ -207,9 +207,9 @@ def get_senate_cycles(senate_class, cycle=None):
 
 
 def three_days_ago():
-    """Find the date three days ago"""
+    """Find the date three days ago, return as mm/dd/yyyy"""
     three_days_ago = datetime.datetime.today() - datetime.timedelta(days=3)
-    return three_days_ago.strftime('%m/%d/%y')
+    return three_days_ago.strftime('%m/%d/%Y')
 
 
 def extend(*dicts):

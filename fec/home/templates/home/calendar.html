@@ -9,6 +9,18 @@
 <link rel="stylesheet" type="text/css" href="{% asset_for_css 'calendar.css' %}">
 {% endblock %}
 
+{% block head_js %}
+<script>
+    var canSkipPolyfills = ('fetch' in window && 'assign' in Object);
+    if (!canSkipPolyfills) {
+      var pfScriptElem = document.createElement('script');
+      pfScriptElem.async = false;
+      pfScriptElem.src = "{% asset_for_js 'polyfills.js' %}";
+      document.head.appendChild(pfScriptElem);
+    }
+  </script>
+{% endblock %}
+
 {% block content %}
 
 {% include 'partials/breadcrumbs.html' with page=self style='secondary' %}

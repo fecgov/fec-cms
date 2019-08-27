@@ -24,8 +24,8 @@ session.mount('https://', http_adapter)
 
 
 def _call_api(*path_parts, **filters):
-    if settings.FEC_API_KEY:
-        filters['api_key'] = settings.FEC_API_KEY
+    if settings.FEC_API_KEY_PRIVATE:
+        filters['api_key'] = settings.FEC_API_KEY_PRIVATE
 
     path = os.path.join(
         settings.FEC_API_VERSION,
@@ -210,7 +210,7 @@ def load_legal_admin_fines(admin_fine_no):
     url = '/legal/docs/admin_fines/'
     admin_fine = _call_api(url, parse.quote(admin_fine_no))
     if not admin_fine:
-       raise Http404
+        raise Http404
     admin_fine = admin_fine['docs'][0]
     admin_fine['disposition_text'] = [d['action'] for d in admin_fine['commission_votes']]
     documents_by_type = OrderedDict()
@@ -293,6 +293,18 @@ def load_with_nested(primary_type, primary_id, secondary_type, cycle=None,
     return data, nested_data['results'], cycle
 
 
+def load_first_row_data(*path_parts, **filters):
+    response = _call_api(*path_parts, **filters)
+    return response['results'][0] if response['results'] else None
+
+
+def load_endpoint_data(*path_parts, **filters):
+    return _call_api(
+        *path_parts,
+        **filters
+    )
+
+
 def load_cmte_financials(committee_id, **filters):
     filters.update({
         'is_amended': 'false',
@@ -308,17 +320,6 @@ def load_cmte_financials(committee_id, **filters):
         'reports': reports['results'],
         'totals': totals['results'],
     }
-
-
-def load_candidate_totals(candidate_id, cycle, election_full=True):
-    response = _call_api(
-        'candidate',
-        candidate_id,
-        'totals',
-        cycle=cycle,
-        full_election=election_full,
-    )
-    return response['results'][0] if response['results'] else None
 
 
 def load_candidate_statement_of_candidacy(candidate_id, cycle):
@@ -355,28 +356,6 @@ def load_top_candidates(sort, office=None, election_year=constants.DEFAULT_ELECT
         election_full=True,
         is_active_candidate=True,
         office=office,
-        sort=sort,
-        per_page=per_page,
-    )
-    return response if 'results' in response else None
-
-
-def load_top_pacs(sort, cycle=constants.DEFAULT_TIME_PERIOD, per_page=5):
-    response = _call_api(
-        'totals', 'pac',
-        sort_hide_null=True,
-        cycle=cycle,
-        sort=sort,
-        per_page=per_page,
-    )
-    return response if 'results' in response else None
-
-
-def load_top_parties(sort, cycle=constants.DEFAULT_TIME_PERIOD, per_page=5):
-    response = _call_api(
-        'totals', 'party',
-        sort_hide_null=True,
-        cycle=cycle,
         sort=sort,
         per_page=per_page,
     )
@@ -451,7 +430,6 @@ def call_senate_specials(state):
     )
 
     return special_results.get('results')
-
 
 
 def format_special_results(special_results=[]):

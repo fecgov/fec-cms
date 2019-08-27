@@ -1,0 +1,519 @@
+// TODO - There's a vertical alignment issue in .controls-wrapper but only when the <aside> is in a different page—not when it's the only thing in the iframe
+// TODO - Need color guidance for the buttons/pills/radios for the dark theme
+
+$colorBgDark: #112e51;
+$colorBgLight: #fff;
+$colorElementBordersOnLight: #aeb0b5;
+$colorTextOnDark: #fff;
+$colorTextOnLight: #212121;
+$colorBarDef: #5b616b;
+$colorBarDem: #21adf7;
+$colorBarRep: #da3c18;
+$colorBarOtherOnDark: #d6d7d9;
+$fontFamilyMonospace: 'fec_currency_mono', 'karla', sans-serif;
+$fontFamilySansSerif: 'karla', sans-serif;
+$fontFamilySerif: gandhi, serif;
+$fontSizeBase: 7.5pt; // (10px); Keeping this as a default so values here are as close to our main scss values as possible
+$fontWeightRegular: 500;
+$fontWeightBold: 700;
+
+@font-face {
+  font-family: 'gandhi';
+  font-style: normal;
+  font-weight: normal;
+  src: url('/static/fonts/gandhiserif-regular.woff2') format('woff2'),
+    url('/static/fonts/gandhiserif-regular.woff') format('woff');
+}
+@font-face {
+  font-family: 'karla';
+  font-style: normal;
+  font-weight: normal;
+  src: url('/static/fonts/karla-regular.woff2') format('woff2'),
+    url('/static/fonts/karla-regular.woff') format('woff');
+}
+@font-face {
+  font-family: 'karla';
+  src: url('/static/fonts/karla-bold.woff2') format('woff2'),
+    url('/static/fonts/karla-bold.woff') format('woff');
+  font-weight: bold;
+  font-style: normal;
+}
+@font-face {
+  font-family: fec_currency_mono;
+  font-style: normal;
+  font-weight: normal;
+  src: url('/static/fonts/fec-currencymono-regular.woff2') format('woff2'),
+    url('/static/fonts/fec-currencymono-regular.woff') format('woff'),
+    url('/static/fonts/fec-currencymono-regular.ttf') format('truetype');
+}
+
+section.aggregate-totals-section {
+  margin-bottom: 30px;
+}
+
+// The aggregate totals aside
+aside.aggr-totals[id^='gov_fec_at_'] {
+  &,
+  & * {
+    // THESE ARE PASSED DOWN TO CHILDREN
+    box-sizing: border-box;
+  }
+
+  background-color: $colorBgLight;
+  border-radius: 4px;
+  box-shadow: 0 0 0 2px $colorTextOnLight inset;
+  color: $colorTextOnLight;
+  font-family: fontFamilySerif; // TODO - complete it
+  font-feature-settings: 'kern', 'liga', 'pnum';
+  font-size: $fontSizeBase;
+  margin: 0 0 ($fontSizeBase * 2);
+  padding: ($fontSizeBase * 2);
+
+  .controls-wrapper {
+    font-family: $fontFamilySansSerif;
+    margin-bottom: $fontSizeBase * 2;
+    width: 100%;
+
+    fieldset {
+      border: none;
+      margin-bottom: $fontSizeBase * 1.5;
+      padding: 0;
+    }
+    label {
+      display: block;
+      font-weight: $fontWeightBold;
+      font-size: $fontSizeBase * 1.4;
+      line-height: 1em;
+      margin-bottom: 0.25em;
+      text-transform: uppercase;
+      -moz-osx-font-smoothing: grayscale;
+      -webkit-font-smoothing: antialiased;
+    }
+    select {
+      // display: block;
+      // TODO - Make this :down: more like the main code—not just the computed value
+      background-image: url('data:image/svg+xml;charset=utf8, %3Csvg%20%20fill%3D%27%23211e51%27%20width%3D%2210%22%20height%3D%229%22%20viewBox%3D%220%200%2010%209%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Cpath%20d%3D%22M5.706%208.013l3.685-6.234A.851.851%200%200%200%208.664.485H1.283A.852.852%200%200%200%20.55%201.769l3.69%206.244a.852.852%200%200%200%201.466%200z%22%2F%3E%3C%2Fsvg%3E');
+      background-repeat: no-repeat;
+      background-color: $colorBgLight;
+      background-position: right $fontSizeBase top 50%;
+      background-size: 12px;
+      border: 2px solid $colorElementBordersOnLight;
+      border-radius: 4px;
+      color: $colorTextOnLight;
+      font-family: karla, sans-serif;
+      font-size: $fontSizeBase * 1.4;
+      font-weight: $fontWeightBold;
+      height: $fontSizeBase * 3;
+      line-height: $fontSizeBase * 1.4;
+      margin: 0;
+      overflow: hidden;
+      padding: 0 2.5em 0 1em;
+      text-overflow: ellipsis;
+      vertical-align: inherit;
+      white-space: nowrap;
+      width: auto;
+      -moz-appearance: none;
+      -webkit-appearance: none;
+      appearance: none;
+
+      &::-ms-expand {
+        display: none;
+      }
+    }
+    option {
+      display: block;
+      font-family: $fontFamilySansSerif;
+      font-size: $fontSizeBase * 1.4;
+      font-weight: normal;
+      line-height: $fontSizeBase * 1.4;
+      min-height: $fontSizeBase * 1.2;
+      padding: 0px 2px 1px;
+      white-space: pre;
+      -webkit-rtl-ordering: logical;
+    }
+    .election-radios {
+      border: solid thin black;
+      font-size: $fontSizeBase * 1.4;
+      font-weight: $fontWeightBold;
+      padding: 1em;
+      -moz-appearance: button;
+      -webkit-appearance: button;
+      appearance: button;
+
+      &:first-child {
+        border-top-left-radius: 5px;
+        border-bottom-left-radius: 5px;
+      }
+      &:last-child {
+        border-top-right-radius: 5px;
+        border-bottom-right-radius: 5px;
+      }
+      &:disabled {
+        background-color: grey;
+        color: black;
+      }
+    }
+  }
+  .total-wrapper {
+    border-bottom: solid thin $colorElementBordersOnLight;
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-wrap: wrap;
+    flex-wrap: wrap;
+    margin-bottom: $fontSizeBase * 2;
+    padding-bottom: $fontSizeBase * 2;
+
+    .value {
+      font-family: $fontFamilyMonospace;
+      font-size: $fontSizeBase * 3;
+      line-height: 1em;
+      margin: 0 0 ($fontSizeBase * 0.75);
+      width: 100%;
+    }
+    .description {
+      font-family: $fontFamilySansSerif;
+      font-size: $fontSizeBase * 1.4;
+      line-height: 1.2em;
+      margin: 0;
+    }
+  }
+  .parties-wrapper {
+    font-family: $fontFamilySansSerif;
+    font-size: $fontSizeBase * 1.4;
+
+    .simple-table--responsive {
+      border-collapse: collapse;
+      display: table;
+      table-layout: fixed;
+      width: 100%;
+
+      .simple-table__row {
+        display: table-row;
+        border-bottom: none;
+      }
+      .simple-table__cell {
+        display: table-cell;
+        padding: ($fontSizeBase * 0.25) 0;
+        vertical-align: middle;
+
+        &:nth-child(2) {
+          padding-right: $fontSizeBase;
+          width: 8em;
+        }
+        &:last-child {
+          border-left: solid thin $colorTextOnLight;
+          width: 20%;
+        }
+      }
+    }
+
+    meter {
+      margin-left: 0;
+      background: transparent;
+      height: $fontSizeBase * 1.5;
+      width: 100%;
+
+      // note#1: * Chrome and Sass don't agree on these rules when they're combined to single entries:
+      &::-webkit-meter-bar {
+        // note#1
+        background: transparent;
+        transition: all 1s;
+      }
+      &::-moz-meter-bar {
+        // note#1
+        background: transparent;
+        transition: all 1s;
+      }
+      &::-webkit-meter-optimum-value {
+        // note#1
+        background: $colorBarDef;
+        transition: all 1s;
+      }
+      &:-moz-meter-optimum::-moz-meter-bar {
+        // note#1
+        background: $colorBarDef;
+        transition: all 1s;
+      }
+      &[data-party='DEM'] {
+        &::-webkit-meter-optimum-value {
+          // note#1
+          background: $colorBarDem;
+          transition: all 1s;
+        }
+        &:-moz-meter-optimum::-moz-meter-bar {
+          // note#1
+          background: $colorBarDem;
+          transition: all 1s;
+        }
+      }
+      &[data-party='REP'] {
+        &::-webkit-meter-optimum-value {
+          // note#1
+          background: $colorBarRep;
+          transition: all 1s;
+        }
+        &:-moz-meter-optimum::-moz-meter-bar {
+          // note#1
+          background: $colorBarRep;
+          transition: all 1s;
+        }
+      }
+    }
+    // Trying to get the widths to animate when the values change
+    meter::-webkit-meter-suboptimum-value,
+    meter::-webkit-meter-even-less-good-value {
+      transition: all 1s;
+    }
+    meter:-moz-meter-sub-optimum::-moz-meter-bar {
+      transition: all 1s;
+    }
+    meter:-moz-meter-sub-sub-optimum::-moz-meter-bar {
+      transition: all 1s;
+    }
+  }
+
+  footer {
+    -ms-flex-align: baseline;
+    align-items: baseline;
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-pack: justify;
+    justify-content: space-between;
+    margin-top: $fontSizeBase * 2;
+    width: 100%;
+
+    .timestamp {
+      color: lighten($colorTextOnLight, 50%);
+      font-family: $fontFamilySansSerif;
+      font-size: $fontSizeBase;
+    }
+    a.gov-fec-seal {
+      border: none;
+      text-decoration: none;
+
+      img {
+        height: $fontSizeBase * 3;
+        width: $fontSizeBase * 3;
+        &.theme-dark {
+          display: none;
+        }
+      }
+    }
+  }
+  // Small sizes for the light theme, which is the default
+  &.w-s {
+    .controls-wrapper {
+      fieldset {
+        display: inline-block;
+
+        &:first-child {
+          margin-right: $fontSizeBase;
+        }
+
+        label {
+          display: inline;
+          margin-right: $fontSizeBase;
+        }
+        select {
+          display: inline;
+        }
+      }
+    }
+  }
+  // Medium sizes for the light theme, which is the default
+  &.w-m {
+    @extend .w-s;
+    -ms-flex-align: center;
+    align-items: center;
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-wrap: wrap;
+    flex-wrap: wrap;
+    padding: ($fontSizeBase * 2) ($fontSizeBase * 2) $fontSizeBase;
+
+    .total-wrapper {
+      border-bottom: none;
+      // border-right: solid thin $colorElementBordersOnLight;
+      margin: 0;
+      padding-bottom: 0;
+      padding-right: $fontSizeBase * 4;
+      text-align: right;
+      width: 50%;
+
+      .value {
+        // margin: -5px 0 $fontSizeBase 0;
+        -ms-flex-order: 1;
+        order: 1;
+        text-align: right;
+      }
+      .description {
+        font-size: $fontSizeBase * 1.4;
+        // margin: 5px 0 0;
+        -ms-flex-order: 2;
+        order: 2;
+      }
+    }
+    .parties-wrapper {
+      margin: 0;
+      padding-left: $fontSizeBase * 4;
+      width: 50%;
+
+      .simple-table--responsive {
+        margin: 0 0 0 auto; // (right-align the table itself)
+        max-width: 400px;
+
+        .simple-table__cell {
+          &:first-child {
+            width: 3em;
+          }
+          &:last-child {
+            border-left: none;
+            width: 25%;
+          }
+        }
+      }
+    }
+
+    footer {
+      margin-top: 0;
+
+      a.gov-fec-seal {
+        background-image: url('/static/img/wordmark.svg');
+        background-position: right center;
+        background-repeat: no-repeat;
+        background-size: auto 30px;
+        text-align: left;
+        width: 275px;
+      }
+    }
+  }
+  // Large sizes for the light theme, which is the default
+  &.w-l {
+    @extend .w-m;
+    .controls-wrapper {
+      display: -ms-flexbox;
+      display: flex;
+      -ms-flex-pack: justify;
+      justify-content: space-between;
+    }
+    .total-wrapper {
+      margin-bottom: 0;
+    }
+    .parties-wrapper {
+      margin-bottom: 0;
+
+      .simple-table--responsive {
+        .simple-table__cell {
+          &:last-child {
+            width: 33%;
+          }
+        }
+      }
+    }
+  }
+
+  &.theme-dark {
+    background-color: $colorBgDark;
+    box-shadow: none;
+    color: $colorTextOnDark;
+
+    .controls-wrapper {
+      select {
+        // TODO - Make this :down: more like the main code—not just the computed value
+        background-image: url('data:image/svg+xml;charset=utf8, %3Csvg%20%20fill%3D%27%23ffffff%27%20width%3D%2210%22%20height%3D%229%22%20viewBox%3D%220%200%2010%209%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Cpath%20d%3D%22M5.706%208.013l3.685-6.234A.851.851%200%200%200%208.664.485H1.283A.852.852%200%200%200%20.55%201.769l3.69%206.244a.852.852%200%200%200%201.466%200z%22%2F%3E%3C%2Fsvg%3E');
+        background-color: $colorBgDark;
+        color: $colorTextOnDark;
+      }
+    }
+
+    .parties-wrapper {
+      .simple-table--responsive {
+        .simple-table__cell:last-child {
+          border-left-color: $colorTextOnDark;
+        }
+      }
+      meter {
+        &[data-party='Other'] {
+          &::-webkit-meter-optimum-value {
+            background: $colorBarOtherOnDark;
+            transition: all 1s;
+          }
+          &:-moz-meter-optimum::-moz-meter-bar {
+            background: $colorBarOtherOnDark;
+            transition: all 1s;
+          }
+        }
+      }
+    }
+
+    footer {
+      a.gov-fec-seal {
+        border: none;
+        text-decoration: none;
+
+        img {
+          display: none;
+
+          &.theme-dark {
+            display: initial;
+          }
+        }
+      }
+    }
+    // Medium sizes of the dark theme
+    &.w-m {
+      .main-content-wrapper {
+        display: -ms-flexbox;
+        display: flex;
+        -ms-flex-pack: justify;
+        justify-content: space-between;
+        margin-bottom: ($fontSizeBase * 3);
+        .total-wrapper {
+          padding: 0;
+        }
+        .visual-divider {
+          background-color: $colorElementBordersOnLight;
+          margin: 5px 30pt;
+          width: 1px;
+        }
+        .parties-wrapper {
+          padding: 0;
+        }
+      }
+      footer {
+        a.gov-fec-seal {
+          background-image: url('/static/img/wordmark--inverse.svg');
+        }
+      }
+    }
+  }
+
+  // For when we have external controls, or only the election selector
+  &.controls-none,
+  &.controls-office-only {
+    .total-wrapper {
+      .value {
+        -ms-flex-order: 2;
+        order: 2;
+      }
+      .description {
+        -ms-flex-order: 1;
+        order: 1;
+      }
+    }
+  }
+
+  // Universals
+  .t-mono-stacked-currency {
+    font-family: fec_currency_mono;
+    text-align: right;
+  }
+
+  // For when we can't use meters, let's hide those cells
+  &.no-meters {
+    .parties-wrapper .simple-table__cell:last-child {
+      display: none;
+      width: 0;
+    }
+  }
+}

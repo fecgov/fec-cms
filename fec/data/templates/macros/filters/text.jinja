@@ -1,8 +1,15 @@
-{% macro field(name, title, attrs={}, id_suffix='') %}
+{% macro field(name, title, attrs={}, id_suffix='', minor_label_text=False, helper_text=False) %}
 <div class="filter js-filter" id="{{ name }}-field{{id_suffix}}" data-filter="text">
-  <label class="label" for="{{ name }}{{id_suffix}}">{{ title }}</label>
+  {% if minor_label_text %}
+    <label for="{{ name }}{{ id_suffix }}" class="u-margin--bottom--small">{{ title }}</label>
+  {% else %}
+    <label class="label" for="{{ name }}{{ id_suffix }}">{{ title }}</label>
+  {% endif %}
+  {% if helper_text %}
+    <label class="label--help u-margin--top">{{ helper_text }}</label>
+  {% endif %}
   <div class="combo combo--filter--mini">
-    <input id="{{ name }}{{id_suffix}}" type="text" name="{{ name }}" class="combo__input"
+    <input id="{{ name }}{{ id_suffix }}" type="text" name="{{ name }}" class="combo__input"
       {% for attr, value in attrs.items() %}
         {{ attr }}="{{ value }}"
       {% endfor %}

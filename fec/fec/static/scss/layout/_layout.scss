@@ -165,6 +165,10 @@
   margin-bottom: u(1rem);
 }
 
+.u-margin--bottom--small {
+  margin-bottom: u(.5rem);
+}
+
 .u-margin--top {
   margin-top: u(1rem);
 }
@@ -175,6 +179,10 @@
 
 .u-margin--right {
   margin-right: u(1rem);
+}
+
+.u-negative--top--margin {
+margin-top: u(-1rem);
 }
 
 // horizontal rule

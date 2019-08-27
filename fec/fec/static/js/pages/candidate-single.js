@@ -29,6 +29,7 @@ var mapUrl = helpers.buildUrl(
   {
     candidate_id: $map.data('candidate-id'),
     cycle: $map.data('cycle'),
+    election_full: false,
     per_page: 99
   }
 );
@@ -135,6 +136,12 @@ var otherDocumentsColumns = [
   })
 ];
 
+var rawFilingsColumns = columnHelpers.getColumns(columns.filings, [
+  'document_type',
+  'receipt_date',
+  'beginning_image_number'
+]);
+
 var itemizedDisbursementColumns = [
   {
     data: 'committee_id',
@@ -170,7 +177,7 @@ var itemizedDisbursementColumns = [
   }),
   columns.currencyColumn({
     data: 'disbursement_amount',
-    className: 'column--number'
+    className: 'column--number t-mono'
   })
 ];
 
@@ -199,7 +206,7 @@ var individualContributionsColumns = [
   }),
   columns.currencyColumn({
     data: 'contribution_receipt_amount',
-    className: 'column--number'
+    className: 'column--number t-mono'
   })
 ];
 
@@ -495,6 +502,7 @@ function initContributionsTables() {
     query: {
       candidate_id: opts.candidate_id,
       cycle: opts.cycle,
+      election_full: false,
       sort_hide_null: false,
       per_page: 99
     },
@@ -540,6 +548,7 @@ function initContributionsTables() {
     query: {
       candidate_id: opts.candidate_id,
       cycle: opts.cycle,
+      election_full: false,
       sort: 'size'
     },
     columns: [
@@ -620,6 +629,36 @@ function initStatementsOfCandidacyTable() {
   });
 }
 
+function initRawFilingsTable() {
+  var $table = $('table[data-type="raw-filings"]');
+  var candidateId = $table.attr('data-committee');
+  var min_date = $table.attr('data-min-date');
+  var path = ['efile', 'filings'];
+  tables.DataTable.defer($table, {
+    path: path,
+    query: {
+      committee_id: candidateId,
+      min_receipt_date: min_date,
+      sort: ['-receipt_date']
+    },
+    columns: rawFilingsColumns,
+    order: [[2, 'desc']],
+    dom: tables.simpleDOM,
+    pagingType: 'simple',
+    lengthMenu: [10, 30, 50],
+    hideEmpty: false,
+    useExport: true,
+    callbacks: {
+      afterRender: filings.renderModal
+    },
+    drawCallback: function() {
+      this.dropdowns = $table.find('.dropdown').map(function(idx, elm) {
+        return new dropdown.Dropdown($(elm), { checkboxes: false });
+      });
+    }
+  });
+}
+
 $(document).ready(function() {
   var query = URI.parseQuery(window.location.search);
 
@@ -628,6 +667,7 @@ $(document).ready(function() {
   initDisbursementsTable();
   initContributionsTables();
   initStatementsOfCandidacyTable();
+  initRawFilingsTable();
 
   // If on the other spending tab, init the totals
   // Otherwise add an event listener to build them on showing the tab

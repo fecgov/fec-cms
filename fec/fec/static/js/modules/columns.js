@@ -137,6 +137,22 @@ var renderCandidateColumn = function(data, type, row) {
   }
 };
 
+var renderCandidateCycleColumn = function(data, type, row) {
+  if (data) {
+    var latest_year = row.election_years[row.election_years.length - 1];
+    return columnHelpers.buildEntityLink(
+      data,
+      helpers.buildAppUrl(['candidate', row.candidate_id], {
+        cycle: latest_year % 2 === 0 ? latest_year : latest_year + 1,
+        election_full: true
+      }),
+      'candidate'
+    );
+  } else {
+    return '';
+  }
+};
+
 var renderCommitteeColumn = function(data, type, row) {
   if (data) {
     return columnHelpers.buildEntityLink(
@@ -150,7 +166,7 @@ var renderCommitteeColumn = function(data, type, row) {
 };
 
 var candidates = [
-  { data: 'name', className: 'all', render: renderCandidateColumn },
+  { data: 'name', className: 'all', render: renderCandidateCycleColumn },
   { data: 'office_full', className: 'min-tablet hide-panel-tablet' },
   {
     data: 'election_years',
@@ -180,11 +196,11 @@ var candidateOffice = {
   },
   receipts: currencyColumn({
     data: 'receipts',
-    className: 'min-tablet hide-panel column--number'
+    className: 'min-tablet hide-panel column--number t-mono'
   }),
   disbursements: currencyColumn({
     data: 'disbursements',
-    className: 'min-tablet hide-panel column--number'
+    className: 'min-tablet hide-panel column--number t-mono'
   }),
   trigger: modalTriggerColumn
 };
@@ -238,7 +254,7 @@ var communicationCosts = [
   },
   currencyColumn({
     data: 'transaction_amount',
-    className: 'min-tablet hide-panel column--number'
+    className: 'min-tablet hide-panel column--number t-mono'
   }),
   dateColumn({
     data: 'transaction_date',
@@ -297,7 +313,7 @@ var disbursements = [
   }),
   currencyColumn({
     data: 'disbursement_amount',
-    className: 'min-tablet hide-panel column--number'
+    className: 'min-tablet hide-panel column--number t-mono'
   }),
   modalTriggerColumn
 ];
@@ -317,11 +333,11 @@ var electioneeringCommunications = [
   },
   {
     data: 'number_of_candidates',
-    className: 'min-desktop hide-panel column--small column--number'
+    className: 'min-desktop hide-panel column--small column--number t-mono'
   },
   currencyColumn({
     data: 'calculated_candidate_share',
-    className: 'min-desktop hide-panel column--number'
+    className: 'min-desktop hide-panel column--number t-mono'
   }),
   dateColumn({
     data: 'disbursement_date',
@@ -329,7 +345,7 @@ var electioneeringCommunications = [
   }),
   currencyColumn({
     data: 'disbursement_amount',
-    className: 'min-tablet hide-panel column--number'
+    className: 'min-tablet hide-panel column--number t-mono'
   }),
   modalTriggerColumn
 ];
@@ -346,6 +362,13 @@ var filings = {
           row.candidate_name,
           helpers.buildAppUrl(['candidate', row.candidate_id], cycle),
           'candidate'
+        );
+        // If committee ID is actually a candidate ID, use 'candidate' in URI
+      } else if (row.committee_id.match(/^[H, S, P]+\w+$/)) {
+        return columnHelpers.buildEntityLink(
+          row.committee_name,
+          helpers.buildAppUrl(['candidate', row.committee_id], cycle),
+          'committee'
         );
       } else if (row.committee_name) {
         return columnHelpers.buildEntityLink(
@@ -422,15 +445,15 @@ var filings = {
   }),
   total_receipts: currencyColumn({
     data: 'total_receipts',
-    className: 'min-desktop hide-panel column--number'
+    className: 'min-desktop hide-panel column--number t-mono'
   }),
   total_disbursements: currencyColumn({
     data: 'total_disbursements',
-    className: 'min-desktop hide-panel column--number'
+    className: 'min-desktop hide-panel column--number t-mono'
   }),
   total_independent_expenditures: currencyColumn({
     data: 'total_independent_expenditures',
-    className: 'min-desktop hide-panel column--number'
+    className: 'min-desktop hide-panel column--number t-mono'
   }),
   modal_trigger: {
     className: 'all column--trigger hide-efiling',
@@ -500,7 +523,7 @@ var independentExpenditures = [
   }),
   currencyColumn({
     data: 'expenditure_amount',
-    className: 'min-tablet hide-panel column--number'
+    className: 'min-tablet hide-panel column--number t-mono'
   }),
   modalTriggerColumn
 ];
@@ -557,7 +580,7 @@ var individualContributions = [
   }),
   currencyColumn({
     data: 'contribution_receipt_amount',
-    className: 'min-tablet hide-panel column--number'
+    className: 'min-tablet hide-panel column--number t-mono'
   }),
   modalTriggerColumn
 ];
@@ -606,7 +629,7 @@ var partyCoordinatedExpenditures = [
   }),
   currencyColumn({
     data: 'expenditure_amount',
-    className: 'min-tablet hide-panel column--number'
+    className: 'min-tablet hide-panel column--number t-mono'
   }),
   modalTriggerColumn
 ];
@@ -663,7 +686,7 @@ var receipts = [
   }),
   currencyColumn({
     data: 'contribution_receipt_amount',
-    className: 'min-tablet hide-panel column--number'
+    className: 'min-tablet hide-panel column--number t-mono'
   }),
   modalTriggerColumn
 ];
@@ -713,19 +736,19 @@ var reports = {
   }),
   receipts: currencyColumn({
     data: 'total_receipts_period',
-    className: 'min-desktop hide-panel column--number'
+    className: 'min-desktop hide-panel column--number t-mono'
   }),
   disbursements: currencyColumn({
     data: 'total_disbursements_period',
-    className: 'min-desktop hide-panel column--number'
+    className: 'min-desktop hide-panel column--number t-mono'
   }),
   independentExpenditures: currencyColumn({
     data: 'independent_expenditures_period',
-    className: 'min-desktop hide-panel column--number'
+    className: 'min-desktop hide-panel column--number t-mono'
   }),
   contributions: currencyColumn({
     data: 'independent_contributions_period',
-    className: 'min-desktop hide-panel column--number'
+    className: 'min-desktop hide-panel column--number t-mono'
   }),
   trigger: {
     className: 'all column--trigger',
@@ -765,11 +788,11 @@ var loans = [
   }),
   currencyColumn({
     data: 'payment_to_date',
-    className: 'min-desktop hide-panel column--number'
+    className: 'min-desktop hide-panel column--number t-mono'
   }),
   currencyColumn({
     data: 'original_loan_amount',
-    className: 'min-desktop hide-panel column--number'
+    className: 'min-desktop hide-panel column--number t-mono'
   }),
   modalTriggerColumn
 ];
