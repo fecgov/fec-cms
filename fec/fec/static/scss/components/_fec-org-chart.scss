@@ -240,3 +240,170 @@ $lineSolidDark: thin solid black;
     }
   }
 }
+
+
+@media (min-width: 768px) {
+  #fec-orgchart {
+    display: grid;
+    grid-template-areas:
+      "comms comms comms comms ig"
+      "team team team team ig";
+    grid-template-columns: repeat(5, 20%);
+    grid-template-rows: auto;
+    grid-row-gap: 0;
+    grid-column-gap: 0;
+    justify-items: center;
+
+    li {
+      padding-left: 0;
+
+      ul {
+        padding-left: 0;
+
+        li:first-child {
+          padding-top: #{$gutterSize * 2};
+        }
+      }
+      div {
+        min-height: 130px;
+      }
+
+      &:before {
+        border-bottom: $lineSolid;
+        border-left: $lineSolid;
+        left: -#{$gutterSize};
+      }
+      &:after {
+        border-left: $lineSolid;
+        left: -#{$gutterSize};
+      }
+      &.team {
+        padding: 0 $gutterSize;
+        width: 100%;
+
+        & > div {
+          &:before {
+            border-bottom: none;
+            border-left: $lineSolid;
+            border-top: $lineSolid;
+            padding-bottom: $gutterSize;
+            top: 50%;
+          }
+          // &:after {
+          //   border-left: $lineSolid;
+          // }
+        }
+        
+        &:before {
+          content: "";
+          border-bottom: none;
+          border-right: $lineSolid;
+          border-left: none;
+          border-top: $lineSolid;
+          height: $gutterSize;
+          left: 0;
+          position: absolute;
+          top: -#{$gutterSize};
+          width: 50%;
+        }
+        &:after {
+          border-left: none;
+          border-top: $lineSolid;
+          content: "";
+          height: $gutterSize;
+          left: 50%;
+          position: absolute;
+          top: -#{$gutterSize};
+          width: 50%;
+        }
+
+        &.team-comms {
+          grid-area: comms;
+          max-width: 40%;
+          padding-bottom: $gutterSize * 2;
+
+          &:before {
+            // From comms to the teams
+            content: "";
+            border-bottom: none;
+            border-right: $lineSolid;
+            border-left: none;
+            border-top: none;
+            display: block;
+            height: 10px;
+            left: 0;
+            position: absolute;
+            top: calc(100% - #{$gutterSize * 2});
+            width: 50%;
+          }
+          &:after {
+            // From comms to IG
+            border-bottom: none;
+            border-left: none;
+            border-right: none;
+            border-top: $lineDashed;
+            content: "";
+            display: block;
+            height: calc(50% - #{$gutterSize});
+            left: calc(100% - #{$gutterSize});
+            position: absolute;
+            right: auto;
+            top: $gutterSize * 4;
+            width: 80%;
+          }
+          div {
+            min-height: 60px;
+          }
+        }
+        &.team-ig {
+          grid-area: ig;
+          padding-top: $gutterSize * 5;
+
+          &:before {
+            border-right: $lineDashed;
+            border-top: $lineDashed;
+            top: $gutterSize * 4;
+          }
+          &:after {
+            display: none;
+          }
+          ul {
+            padding: 0;
+
+            li {
+              padding-right: 0;
+
+              &:before {
+                border-bottom: none;
+                border-right: $lineSolid;
+                border-top: none;
+                height: $gutterSize * 2;
+                left: 0;
+                top: 0;
+                width: 50%;
+              }
+            }
+          }
+          div:before {
+            display: none;
+          }
+        }
+      }
+    }
+    li.team.team-ig + li.team {
+      // The first .team after a .team-ig
+      &:before {
+        display: none;
+      }
+      &:after {
+        border-left: $lineSolid;
+      }
+    }
+    li.team:last-child {
+      // The last .team
+      &:before {
+        display: block;
+      }
+    }
+  } // close @media 768
+}
