@@ -1,12 +1,16 @@
 // Org Chart Styles
 //
 // Everything related to the org chart
+// Should be included inside the css of whatever page it's included
 //
 
+$colorStandard: #b2b1b6;
+$colorGreyHover: #d6d7d9;
+
 $gutterSize: 10px;
-$lineDashed: thin dotted grey;
-$lineSolid: 2px solid grey;
-$lineSolidDark: thin solid black;
+$lineDashed: thin dashed $colorStandard;
+$lineSolid: 2px solid $colorStandard; // line for the wider layout
+$lineSolidDark: thin solid $colorStandard;
 
 #fec-orgchart {
   display: block;
@@ -56,29 +60,39 @@ $lineSolidDark: thin solid black;
       }
     }
     
-    div {
+    a {
+      align-items: center;
       border: $lineSolidDark;
+      border-radius: 4px;
+      display: flex;
+      flex-direction: column;
+      flex-wrap: wrap;
+      justify-content: center;
       list-style-type: none;
       margin: 0;
       min-height: 80px;
-      padding: 2rem;
+      padding: 1rem;
       position: relative;
       text-align: center;
+      transition: border-color .1s;
 
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-wrap: wrap;
-      flex-direction: column;
+      &:hover {
+        border-color: $colorGreyHover;
+        transition: border-color .25s;
+      }
+      &:not([href*="/"]) {
+        // if the link doesn't contain a slash (e.g. if it's blank), let's remove its clicks/taps
+        pointer-events: none;
+      }
 
       span {
         display: block;
-        line-height: 1em;
+        line-height: 1.2em;
         
         &:first-child {
           font-size: 14px;
           font-weight: bold;
-          line-height: 1em;
+          margin-bottom: .1em;
         }
         &:nth-child(2) {
           font-family: Karla, sans-serif;
@@ -114,8 +128,8 @@ $lineSolidDark: thin solid black;
         }
       }
     }
-    // for divs that are direct descendants of the li.team, these are the team leads
-    &.team > div:before {
+    // for links that are direct descendants of the li.team, these are the team leads
+    &.team > a:before {
       content: "";
       position: absolute;
       left: calc(-#{$gutterSize} - 1px);
@@ -184,10 +198,10 @@ $lineSolidDark: thin solid black;
         top: calc(50% - #{$gutterSize});
         width: $gutterSize;
       }
-      & div:before {
+      & a:before {
         display: none;
       }
-      & div:after {
+      & a:after {
         display: none;
       }
     }
@@ -203,7 +217,7 @@ $lineSolidDark: thin solid black;
         top: 0;
       }
   
-      & > div:before {
+      & > a:before {
         border-bottom: $lineDashed;
         border-left: none;
         border-right: $lineDashed;
@@ -217,7 +231,7 @@ $lineSolidDark: thin solid black;
         top: auto;
         width: $gutterSize;
       }
-      & > div:after {
+      & > a:after {
         display: none;
       }
 
@@ -247,8 +261,8 @@ $lineSolidDark: thin solid black;
     display: grid;
     grid-template-areas:
       "comms comms comms comms ig"
-      "team team team team ig";
-    grid-template-columns: repeat(5, 20%);
+      "1fr 1fr 1fr 1fr ig";
+    grid-template-columns: repeat(5, 1fr);
     grid-template-rows: auto;
     grid-row-gap: 0;
     grid-column-gap: 0;
@@ -264,24 +278,25 @@ $lineSolidDark: thin solid black;
           padding-top: #{$gutterSize * 2};
         }
       }
-      div {
-        min-height: 130px;
+      a {
+        min-height: 115px;
+        border: $lineSolid;
       }
 
       &:before {
         border-bottom: $lineSolid;
         border-left: $lineSolid;
-        left: -#{$gutterSize};
+        left: -#{$gutterSize - 1};
       }
       &:after {
         border-left: $lineSolid;
-        left: -#{$gutterSize};
+        left: -#{$gutterSize - 1};
       }
       &.team {
         padding: 0 $gutterSize;
         width: 100%;
 
-        & > div {
+        & > a {
           &:before {
             border-bottom: none;
             border-left: $lineSolid;
@@ -351,8 +366,8 @@ $lineSolidDark: thin solid black;
             top: $gutterSize * 4;
             width: 80%;
           }
-          div {
-            min-height: 60px;
+          a {
+            min-height: 80px;
           }
         }
         &.team-ig {
@@ -384,7 +399,7 @@ $lineSolidDark: thin solid black;
               }
             }
           }
-          div:before {
+          a:before {
             display: none;
           }
         }
@@ -407,3 +422,168 @@ $lineSolidDark: thin solid black;
     }
   } // close @media 768
 }
+
+/**
+ * This is the HTML I've been using for the org chart.
+ * It's just a <ul> with an ID of fec-orgchart.
+ * Each of the first-level <li> have a class="team".
+ * The <a> directly inside each <li class="team"> is the team lead.
+ * Following each team lead is a <ul> with no classes.
+ * Inside each of those <ul> are <li>s, also without classes.
+ * Each person is a <a> with no classes.
+ * Each person's name is in a <span>; the job title is in a different <span>
+*/
+
+/*
+<ul id="fec-orgchart">
+  <li class="team team-comms">
+    <a href="https://www.fec.gov/about/leadership-and-structure/#commissioners">
+      <span>The Commissioners</span>
+    </a>
+  </li>
+  <li class="team team-ig">
+    <a href="https://transition.fec.gov/fecig/fecig.shtml">
+      <span>Christopher Skinner</span>
+      <span>Inspector General<sup>3</sup></span>
+    </a>
+    <ul>
+      <li>
+        <a href="https://transition.fec.gov/fecig/fecig.shtml">
+          <span>Vacant</span>
+          <span>Deputy Inspector General</span>
+        </a>
+      </li>
+    </ul>
+  </li><!-- /IG -->
+  <li class="team">
+    <a href="https://transition.fec.gov/about/offices/OGC/OGC.shtml#ogc">
+      <span>Lisa J. Stevenson</span>
+      <span>Acting General Counsel</span>
+    </a>
+    <ul>
+      <li>
+        <a href="https://transition.fec.gov/about/offices/OGC/DepGC.shtml">
+          <span>Gregory R. Baker</span>
+          <span>Deputy General Counsel - Adminstration</span>
+        </a>
+      </li>
+      <li>
+        <a href="https://transition.fec.gov/about/offices/OGC/DepGCLaw.shtml">
+          <span>Lisa J. Stevenson</span>
+          <span>Deputy General Counsel - Law</span>
+        </a>
+      </li>
+      <li>
+        <a href="https://transition.fec.gov/about/offices/OGC/AGC_enforcement.shtml#enf">
+          <span>Charles Kitcher</span>
+          <span>Acting Associate General Counsel - Enforcement</span>
+        </a>
+      </li>
+      <li>
+        <a href="https://transition.fec.gov/about/offices/OGC/AGC_litigation.shtml#lit">
+          <span>Kevin Deeley</span>
+          <span>Associate General Counsel - Litigation</span>
+        </a>
+      </li>
+      <li>
+        <a href="https://transition.fec.gov/about/offices/OGC/AGC_policy.shtml#policy">
+          <span>Neven Stipanovic</span>
+          <span>Acting Associate General Counsel - Policy</span>
+        </a>
+      </li>
+    </ul>
+  </li><!-- /team -->
+  <li class="team">
+    <a href="https://transition.fec.gov/about/offices/OSD/OSD.shtml">
+      <span>Alec Palmer</span>
+      <span>Staff Director</span>
+    </a>
+    <ul>
+      <li>
+        <a href="https://transition.fec.gov/about/offices/DSDMA/DSDMA.shtml">
+          <span>Kate Higginbothom</span>
+          <span>Deputy Staff Director Management &amp; Administration</span>
+        </a>
+      </li>
+      <li>
+        <a href="https://transition.fec.gov/about/offices/CCO/CCO.shtml">
+          <span>Patricia C. Orrock</span>
+          <span>Deputy Staff Director Chief Compliance Officer</span>
+        </a>
+      </li>
+      <li>
+        <a href="https://transition.fec.gov/about/offices/CDEAO/CDEAO.shtml">
+          <span>Vacant</span>
+          <span>Deputy Staff Director Chief Communications Officer</span>
+        </a>
+      </li>
+      <li>
+        <a href="https://transition.fec.gov/about/offices/EEO/EEO.shtml">
+          <span>Kevin Salley</span>
+          <span>
+            Director Equal Employment Opportunity &amp; Programs<sup>2</sup>
+          </span>
+        </a>
+      </li>
+    </ul>
+  </li><!-- /team -->
+  <li class="team">
+    <a href="https://transition.fec.gov/about/offices/CFO/CFO.shtml">
+      <span>John Quinlan</span>
+      <span>Chief Financial Officer</span>
+    </a>
+    <ul>
+      <li>
+        <a href="https://transition.fec.gov/about/offices/budget/budget.shtml">
+          <span>Gilbert Ford</span>
+          <span>Director of Budget</span>
+        </a>
+      </li>
+      <li>
+        <a href="https://transition.fec.gov/about/offices/finance/finance.shtml">
+          <span>Vacant</span>
+          <span>Director of Accounting</span>
+        </a>
+      </li>
+      <li>
+        <a href="https://transition.fec.gov/about/offices/finance/procurement.shtml">
+          <span>Pamela Jones</span>
+          <span>Director of Procurement</span>
+        </a>
+      </li>
+    </ul>
+  </li><!-- /team -->
+  <li class="team">
+    <a href="https://transition.fec.gov/about/offices/CIO/CIO.shtml">
+      <span>Alec Palmer</span>
+      <span>Chief Information Officer<sup>1</sup></span>
+    </a>
+    <ul>
+      <li>
+        <a href="https://transition.fec.gov/about/offices/CIO/CIO.shtml">
+          <span>Wei Luo</span>
+          <span>Deputy CIO Enterprise Architecture</span>
+        </a>
+      </li>
+      <li>
+        <a href="">
+          <span>Kimberly D. Humphries</span>
+          <span>Deputy CIO Operational Support</span>
+        </a>
+      </li>
+      <li>
+        <a href="">
+          <span>Rohan Jayasekera</span>
+          <span>Director Database Management</span>
+        </a>
+      </li>
+      <li>
+        <a href="">
+          <span>Wenchun Jiang</span>
+          <span>Chief Information Security Officer</span>
+        </a>
+      </li>
+    </ul>
+  </li><!-- /team -->
+</ul>
+*/
