@@ -50,6 +50,7 @@ FEATURES = {
     'aggregatetotals': bool(env.get_credential('FEC_FEATURE_AGGR_TOTS', '')),
     'map': bool(env.get_credential('FEC_FEATURE_HOME_MAP', '')),
     'barcharts': bool(env.get_credential('FEC_FEATURE_HOME_BARCHARTS', '')),
+    'tagmanager': bool(env.get_credential('FEC_FEATURE_USE_TAG_MANAGER', '')),
 }
 
 ENVIRONMENTS = {
