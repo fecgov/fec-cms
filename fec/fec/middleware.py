@@ -7,6 +7,10 @@ class AddSecureHeaders(MiddlewareMixin):
 
     def process_response(self, request, response):
 
+        # Report violations to the API due to CSRF issue with Django route
+        REPORT_URI = "{0}/report-csp-violation/?api_key={1}".format(
+            settings.FEC_API_URL, settings.FEC_API_KEY_PUBLIC
+        )
         content_security_policy = {
             "default-src": "'self' *.fec.gov *.app.cloud.gov https://www.google-analytics.com",
             "frame-src": "'self' https://www.google.com/recaptcha/",
@@ -14,8 +18,7 @@ class AddSecureHeaders(MiddlewareMixin):
             "script-src": "'self' 'unsafe-inline' 'unsafe-eval' https://www.google.com/recaptcha/ https://www.gstatic.com/recaptcha/ https://www.google-analytics.com https://polyfill.io https://dap.digitalgov.gov",
             "style-src": "'self' data: 'unsafe-inline'",
             "object-src": "'none'",
-            # Report to the API until we can figure out CSRF issue
-            "report-uri": "{0}report-csp-violations/?api_key={1}".format(settings.FEC_API_URL, settings.FEC_API_KEY_PUBLIC),
+            "report-uri": REPORT_URI,
         }
         if settings.FEC_CMS_ENVIRONMENT == settings.ENVIRONMENTS.get('local'):
             content_security_policy["default-src"] += " localhost:* http://127.0.0.1:*"
