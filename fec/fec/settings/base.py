@@ -123,7 +123,7 @@ MIDDLEWARE_CLASSES = (
     'audit_log.middleware.UserLoggingMiddleware',
 )
 
-CSRF_TRUSTED_ORIGINS = ["*.fec.gov", "*.app.cloud.gov"]
+CSRF_TRUSTED_ORIGINS = ["fec.gov", "app.cloud.gov"]
 if FEC_CMS_ENVIRONMENT == 'LOCAL':
     CSRF_TRUSTED_ORIGINS.extend(["127.0.0.1:5000"])
 

@@ -14,13 +14,13 @@ class AddSecureHeaders(MiddlewareMixin):
         content_security_policy = {
             "default-src": "'self' *.fec.gov *.app.cloud.gov https://www.google-analytics.com",
             "frame-src": "'self' https://www.google.com/recaptcha/",
-            "img-src": "'self' data: http://*.fastly.net https://www.google-analytics.com",
+            "img-src": "'self' data: https://*.ssl.fastly.net https://www.google-analytics.com *.app.cloud.gov",
             "script-src": "'self' 'unsafe-inline' 'unsafe-eval' https://www.google.com/recaptcha/ https://www.gstatic.com/recaptcha/ https://www.google-analytics.com https://polyfill.io https://dap.digitalgov.gov",
             "style-src": "'self' data: 'unsafe-inline'",
             "object-src": "'none'",
             "report-uri": REPORT_URI,
         }
-        if settings.FEC_CMS_ENVIRONMENT == settings.ENVIRONMENTS.get('local'):
+        if settings.FEC_CMS_ENVIRONMENT == 'LOCAL':
             content_security_policy["default-src"] += " localhost:* http://127.0.0.1:*"
 
         response["Content-Security-Policy"] = "".join(
