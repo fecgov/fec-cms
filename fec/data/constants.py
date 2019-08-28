@@ -5,8 +5,8 @@ from data import utils
 
 START_YEAR = 1979
 END_YEAR = 2020
-DEFAULT_TIME_PERIOD = 2020  # Change after the April quarterly report (4/15/21)
-DEFAULT_ELECTION_YEAR = 2020  # Change after election day (11/3/20)
+DEFAULT_TIME_PERIOD = 2020  # Change after the April quarterly report (2020-04-15)
+DEFAULT_ELECTION_YEAR = 2020  # Change after election day (2020-11-03)
 DEFAULT_PRESIDENTIAL_YEAR = 2020
 DISTRICT_MAP_CUTOFF = 2018  # The year we show district maps for on election pages
 
