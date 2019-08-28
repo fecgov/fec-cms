@@ -14,6 +14,8 @@ class AddSecureHeaders(MiddlewareMixin):
             "script-src": "'self' 'unsafe-inline' 'unsafe-eval' https://www.google.com/recaptcha/ https://www.gstatic.com/recaptcha/ https://www.google-analytics.com https://polyfill.io https://dap.digitalgov.gov",
             "style-src": "'self' data: 'unsafe-inline'",
             "object-src": "'none'",
+            # Report to the API until we can figure out CSRF issue
+            "report-uri": "{0}report-csp-violations/?api_key={1}".format(settings.FEC_API_URL, settings.FEC_API_KEY_PUBLIC),
         }
         if settings.FEC_CMS_ENVIRONMENT == settings.ENVIRONMENTS.get('local'):
             content_security_policy["default-src"] += " localhost:* http://127.0.0.1:*"
