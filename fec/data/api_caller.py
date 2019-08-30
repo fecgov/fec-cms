@@ -210,7 +210,7 @@ def load_legal_admin_fines(admin_fine_no):
     url = '/legal/docs/admin_fines/'
     admin_fine = _call_api(url, parse.quote(admin_fine_no))
     if not admin_fine:
-       raise Http404
+        raise Http404
     admin_fine = admin_fine['docs'][0]
     admin_fine['disposition_text'] = [d['action'] for d in admin_fine['commission_votes']]
     documents_by_type = OrderedDict()
@@ -293,6 +293,18 @@ def load_with_nested(primary_type, primary_id, secondary_type, cycle=None,
     return data, nested_data['results'], cycle
 
 
+def load_first_row_data(*path_parts, **filters):
+    response = _call_api(*path_parts, **filters)
+    return response['results'][0] if response['results'] else None
+
+
+def load_endpoint_data(*path_parts, **filters):
+    return _call_api(
+        *path_parts,
+        **filters
+    )
+
+
 def load_cmte_financials(committee_id, **filters):
     filters.update({
         'is_amended': 'false',
@@ -308,17 +320,6 @@ def load_cmte_financials(committee_id, **filters):
         'reports': reports['results'],
         'totals': totals['results'],
     }
-
-
-def load_candidate_totals(candidate_id, cycle, election_full=True):
-    response = _call_api(
-        'candidate',
-        candidate_id,
-        'totals',
-        cycle=cycle,
-        full_election=election_full,
-    )
-    return response['results'][0] if response['results'] else None
 
 
 def load_candidate_statement_of_candidacy(candidate_id, cycle):
@@ -429,7 +430,6 @@ def call_senate_specials(state):
     )
 
     return special_results.get('results')
-
 
 
 def format_special_results(special_results=[]):
