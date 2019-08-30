@@ -540,6 +540,7 @@ ContributionsByState.prototype.handleTypeaheadSelect = function(
 ) {
   e.preventDefault();
 
+  //eslint-disable-next-line no-console, no-undef
   console.log(
     'handleTypeaheadSelect() e, abbreviatedCandidateDetails: ',
     e,
@@ -571,16 +572,16 @@ ContributionsByState.prototype.handleElectionYearChange = function(e) {
  */
 ContributionsByState.prototype.handleErrorState = function(errorCode) {
   if (errorCode == 'NO_RESULTS_TO_DISPLAY') {
-    console.log('ERROR: NO DATA TO DISPLAY');
+    console.log('ERROR: NO DATA TO DISPLAY'); //eslint-disable-line no-console, no-undef
 
     // Empty the states totals list
-    let theTableBody = this.table.querySelector('tbody');
-    theTableBody.innerHTML = '';
+    let theStatesTableBody = this.table.querySelector('tbody');
+    theStatesTableBody.innerHTML = '';
 
     // Show error message
-    // TODO 
+    // TODO
   } else if (errorCode == 'NO_CANDIDATE_FOUND') {
-    console.log('ERROR: NO CANDIDATE FOUND');
+    console.log('ERROR: NO CANDIDATE FOUND'); //eslint-disable-line no-console, no-undef
     // You entered a candidate name or committee ID not associated with a registered candidate. Please try again.
   }
 };
