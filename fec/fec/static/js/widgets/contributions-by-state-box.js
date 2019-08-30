@@ -433,41 +433,47 @@ ContributionsByState.prototype.displayUpdatedData_states = function() {
 
   let TODO_remove_temp_total_var = 0;
 
-  for (var i = 0; i < theResults.length; i++) {
-    // TODO - If we need to make the totals clickable, we'll do that here.
-    // TODO - Note: Couldn't find the way to query an entire election for a state-candidate combo
-    let theStateTotalUrl; // =
-    // `/data/receipts/individual-contributions/` +
-    // `?candidate_id=${this.candidateDetails.candidate_id}` +
-    // `&two_year_transaction_period=${theResults[i].cycle}` +
-    // `&contributor_state=${theResults[i].state}`;
+  if (theResults.length === 0) {
+    // If there are no results to show
+    this.handleErrorState('NO_RESULTS_TO_DISPLAY');
+  } else {
+    // If there ARE results to show
+    for (var i = 0; i < theResults.length; i++) {
+      // TODO - If we need to make the totals clickable, we'll do that here.
+      // TODO - Note: Couldn't find the way to query an entire election for a state-candidate combo
+      let theStateTotalUrl; // =
+      // `/data/receipts/individual-contributions/` +
+      // `?candidate_id=${this.candidateDetails.candidate_id}` +
+      // `&two_year_transaction_period=${theResults[i].cycle}` +
+      // `&contributor_state=${theResults[i].state}`;
 
-    theTbodyString += `<tr><td>${i + 1}.</td><td>${
-      theResults[i].state_full
-    }</td><td class="t-right-aligned t-mono">`;
-    theTbodyString += theStateTotalUrl
-      ? `<a href="${theStateTotalUrl}">${formatAsCurrency(
-          theResults[i].total,
-          true
-        )}</a>`
-      : `${formatAsCurrency(theResults[i].total, true)}`;
-    theTbodyString += `</td></tr>`;
-    TODO_remove_temp_total_var += Number(theResults[i].total);
+      theTbodyString += `<tr><td>${i + 1}.</td><td>${
+        theResults[i].state_full
+      }</td><td class="t-right-aligned t-mono">`;
+      theTbodyString += theStateTotalUrl
+        ? `<a href="${theStateTotalUrl}">${formatAsCurrency(
+            theResults[i].total,
+            true
+          )}</a>`
+        : `${formatAsCurrency(theResults[i].total, true)}`;
+      theTbodyString += `</td></tr>`;
+      TODO_remove_temp_total_var += Number(theResults[i].total);
+    }
+    theTableBody.innerHTML = theTbodyString;
+
+    // TODO This will go away. It's only here to compare the calculated total with the total from the API
+    //eslint-disable-next-line no-console, no-undef
+    console.log(
+      'TESTING—this is the sum we get when JavaScript sums the non-rounded values of the states list: ',
+      TODO_remove_temp_total_var
+    );
+
+    // Update the time stamp above the states list
+    this.updateCycleTimeStamp();
   }
-  theTableBody.innerHTML = theTbodyString;
-
-  // TODO This will go away. It's only here to compare the calculated total with the total from the API
-  //eslint-disable-next-line no-console, no-undef
-  console.log(
-    'TESTING—this is the sum we get when JavaScript sums the non-rounded values of the states list: ',
-    TODO_remove_temp_total_var
-  );
 
   // Let the map know that the data has been updated // TODO - handle this with a listener?
   this.map.handleDataRefresh(theData);
-
-  // Update the time stamp above the states list
-  this.updateCycleTimeStamp();
 
   // Clear the classes and reset functionality so the tool is usable again
   this.setLoadingState(false); // TODO - May want to move this elsewhere
@@ -479,7 +485,13 @@ ContributionsByState.prototype.displayUpdatedData_states = function() {
  * @param {Object} data The results from the fetch
  */
 ContributionsByState.prototype.displayUpdatedData_total = function(data) {
-  this.statesTotalHolder.innerText = formatAsCurrency(data.results[0].total);
+  // Set the states total dollars to the number we received, or empty it if there are no results
+  this.statesTotalHolder.innerText =
+    data.results.length > 0
+      ? (this.statesTotalHolder.innerText = formatAsCurrency(
+          data.results[0].total
+        ))
+      : '';
 };
 
 /**
@@ -528,6 +540,12 @@ ContributionsByState.prototype.handleTypeaheadSelect = function(
 ) {
   e.preventDefault();
 
+  console.log(
+    'handleTypeaheadSelect() e, abbreviatedCandidateDetails: ',
+    e,
+    abbreviatedCandidateDetails
+  );
+
   // Remember the chosen candidate_id
   this.baseStatesQuery.candidate_id = abbreviatedCandidateDetails.id;
   // But we need more details (like election_years) so we need to go get those
@@ -548,15 +566,37 @@ ContributionsByState.prototype.handleElectionYearChange = function(e) {
 };
 
 /**
+ * Called from throughout the widget
+ * @param {String} errorCode
+ */
+ContributionsByState.prototype.handleErrorState = function(errorCode) {
+  if (errorCode == 'NO_RESULTS_TO_DISPLAY') {
+    console.log('ERROR: NO DATA TO DISPLAY');
+
+    // Empty the states totals list
+    let theTableBody = this.table.querySelector('tbody');
+    theTableBody.innerHTML = '';
+
+    // Show error message
+    // TODO 
+  } else if (errorCode == 'NO_CANDIDATE_FOUND') {
+    console.log('ERROR: NO CANDIDATE FOUND');
+    // You entered a candidate name or committee ID not associated with a registered candidate. Please try again.
+  }
+};
+
+/**
  * TODO -
  * @param {MouseEvent} e
  */
 ContributionsByState.prototype.handleBrowseIndivContribsClick = function(e) {
   let tranPeriod = this.baseStatesQuery.cycle;
+  let maxDate = `12-13-${this.baseStatesQuery.cycle}`;
+  let minDate = `01-01-${this.baseStatesQuery.cycle - 1}`;
 
   e.target.setAttribute(
     'href',
-    `/data/receipts/individual-contributions/?two_year_transaction_period=${tranPeriod}`
+    `/data/receipts/individual-contributions/?two_year_transaction_period=${tranPeriod}&min_date=${minDate}&max_date=${maxDate}`
   );
   // e.preventDefault();
 };
