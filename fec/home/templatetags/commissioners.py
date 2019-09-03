@@ -16,7 +16,7 @@ def current_commissioners():
         | Q(commissioner_title__startswith='Vice')) \
         .order_by('last_name')
 
-    vacant_seats = range(0, 4 - commissioners.count())
+    vacant_seats = range(0, 6 - commissioners.count() - len(CommissionerPage.objects.filter(commissioner_title__startswith='Chair')) - len(CommissionerPage.objects.filter(commissioner_title__startswith='Vice')))
 
     return {
         'chair_commissioner': chair_commissioner,
