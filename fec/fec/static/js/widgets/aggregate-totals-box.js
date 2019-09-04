@@ -119,10 +119,13 @@ AggregateTotalsBox.prototype.displayUpdatedData_parties = function(
 
   let theMeters = this.partiesHolder.querySelectorAll('meter');
   for (let i = 0; i < theMeters.length; i++) {
-    // We'll set the value to the greater of its own value or 1% of the max value
-    // So the smaller parties show up on the graph at all
-    let thisPartyTotal = Math.max(
-      theResults[i][valuesToCompare],
+    // 1) We'll grab the actual value / numbers to display
+    // 2) But we'll set the value of the meter to the greater of its own value
+    //    or 1% of the max value so the smaller parties show up on the graph at all
+    //    i.e. we want the meters to display at least a pixel for the smaller parties
+    let thisPartyTotal = theResults[i][valuesToCompare];
+    let thisPartyAdjustedTotal = Math.max(
+      thisPartyTotal,
       theResults[0][valuesToCompare] * 0.01
     );
 
@@ -143,7 +146,7 @@ AggregateTotalsBox.prototype.displayUpdatedData_parties = function(
 
     theMeters[i].min = 0;
     theMeters[i].max = theResults[0][valuesToCompare];
-    theMeters[i].value = thisPartyTotal;
+    theMeters[i].value = thisPartyAdjustedTotal;
     theMeters[i].dataset['party'] = theResults[i].party;
   }
 };
