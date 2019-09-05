@@ -97,29 +97,29 @@ module.exports = [
         }
       ]
     },
-    resolve: {
-      alias: {
-        // There's a known issue with jquery.inputmask and webpack.
-        // These aliases resolve the issues
-        // jquery: path.join(__dirname, '../node_modules/jquery/dist/jquery.js'),
-        // 'inputmask.dependencyLib': path.join(
-        //   __dirname,
-        //   '../node_modules/jquery.inputmask/dist/inputmask/inputmask.dependencyLib.js'
-        // ),
-        // 'jquery.inputmask/dist/inputmask/inputmask.date.extensions': path.join(
-        //   __dirname,
-        //   '../node_modules/jquery.inputmask/dist/inputmask/inputmask.date.extensions.js'
-        // ),
-        // inputmask: path.join(
-        //   __dirname,
-        //   '../node_modules/jquery.inputmask/dist/inputmask/inputmask.js'
-        // ),
-        // 'jquery.inputmask': path.join(
-        //   __dirname,
-        //   '../node_modules/jquery.inputmask/dist/inputmask/jquery.inputmask.js'
-        // )
-      }
-    },
+    // resolve: {
+    //   alias: {
+    //     // There's a known issue with jquery.inputmask and webpack.
+    //     // These aliases resolve the issues
+    //     jquery: path.join(__dirname, '../node_modules/jquery/dist/jquery.js'),
+    //     'inputmask.dependencyLib': path.join(
+    //       __dirname,
+    //       '../node_modules/inputmask/dist/inputmask/inputmask.dependencyLib.js'
+    //     ),
+    //     'inputmask/dist/inputmask/inputmask.date.extensions': path.join(
+    //       __dirname,
+    //       '../node_modules/inputmask/dist/inputmask/inputmask.date.extensions.js'
+    //     ),
+    //     inputmask: path.join(
+    //       __dirname,
+    //       '../node_modules/inputmask/dist/inputmask/inputmask.js'
+    //     ),
+    //     'jquery.inputmask': path.join(
+    //       __dirname,
+    //       '../node_modules/inputmask/dist/inputmask/jquery.inputmask.js'
+    //     )
+    //   }
+    // },
     node: {
       fs: 'empty'
     },

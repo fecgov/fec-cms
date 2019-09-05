@@ -3,9 +3,9 @@
 var $ = require('jquery');
 var moment = require('moment');
 
-var Filter = require('./filter-base.js');
+var Filter = require('./filter-base');
 
-require('inputmask/dist/inputmask/inputmask.date.extensions');
+var Inputmask = require('inputmask/dist/inputmask/inputmask.date.extensions');
 
 function DateFilter(elm) {
   Filter.Filter.call(this, elm);
@@ -16,12 +16,21 @@ function DateFilter(elm) {
   this.$maxDate = this.$elm.find('.js-max-date');
   this.$submit = this.$elm.find('button');
 
-  this.$minDate.inputmask('mm/dd/yyyy', {
+  // this.$minDate.mask('mm/dd/yyyy', {
+  //   oncomplete: this.validate.bind(this)
+  // });
+  // this.$maxDate.mask('mm/dd/yyyy', {
+  //   oncomplete: this.validate.bind(this)
+  // });
+  Inputmask({
+    inputformat: 'mm/dd/yyyy',
     oncomplete: this.validate.bind(this)
-  });
-  this.$maxDate.inputmask('mm/dd/yyyy', {
+  }).mask(this.$minDate);
+
+  Inputmask({
+    inputformat: 'mm/dd/yyyy',
     oncomplete: this.validate.bind(this)
-  });
+  }).mask(this.$maxDate);
 
   this.$input.on('change', this.handleInputChange.bind(this));
 
