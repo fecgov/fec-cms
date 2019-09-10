@@ -33,7 +33,7 @@
   <body class="{% block body_class %}{% endblock %}">
 
     {# Google Tag Manager (noscript) #}
-    {% if not settings.DEBUG and not settings.FEATURES.use_tag_manager %}
+    {% if not settings.DEBUG and settings.FEATURES.use_tag_manager %}
     <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-T5HPRLH" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     {% endif %}
 
