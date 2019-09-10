@@ -7,7 +7,7 @@ var expect = chai.expect;
 chai.use(sinonChai);
 
 var urls = require('../../static/js/modules/urls');
-var analytics = require('../../static/js/modules/analytics');
+var analytics = require('../../static/js/modules/analytics'); // TODO - Move this to Tag Manager?
 
 // var params = {office: ['P']};
 // var fields = ['office', 'cycle'];
