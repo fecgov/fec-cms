@@ -5,7 +5,7 @@
 var $ = require('jquery');
 var URI = require('urijs');
 var A11yDialog = require('a11y-dialog');
-var analytics = require('./analytics');
+var analytics = require('./analytics'); // TODO - move this to Tag Manager?
 
 /**
  * KeywordModal

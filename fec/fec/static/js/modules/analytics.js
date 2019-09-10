@@ -2,6 +2,8 @@
 
 /* global ga */
 
+// TODO - should this all be moved into Tag Manager?
+
 var _ = require('underscore');
 var URI = require('urijs');
 
