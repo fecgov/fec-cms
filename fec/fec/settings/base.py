@@ -110,6 +110,7 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
+    'fec.middleware.AddSecureHeaders',  # custom response headers
     'uaa_client.middleware.UaaRefreshMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
@@ -121,6 +122,10 @@ MIDDLEWARE_CLASSES = (
     # logs
     'audit_log.middleware.UserLoggingMiddleware',
 )
+
+CSRF_TRUSTED_ORIGINS = ["fec.gov", "app.cloud.gov"]
+if FEC_CMS_ENVIRONMENT == 'LOCAL':
+    CSRF_TRUSTED_ORIGINS.extend(["127.0.0.1:5000"])
 
 ROOT_URLCONF = 'fec.urls'
 
