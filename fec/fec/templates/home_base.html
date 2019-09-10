@@ -7,6 +7,17 @@
 
     <title>{% block title %}{% if self.seo_title %}{{ self.seo_title }}{% else %}{{ self.title }} | FEC {% endif %}{% endblock %}{% block title_suffix %}{% endblock %}</title>
 
+    {# Google Tag Manager #}
+    {% if settings.FEATURES.use_tag_manager %}
+      {% if not settings.DEBUG %}
+        {# Google Tag Manager for Production #}
+    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start': new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer','GTM-T5HPRLH');</script>
+      {% else %}
+        {# Google Tag Manager for NOT Production #}
+    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start': new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer','GTM-PMSLNL3');</script>
+      {% endif %}
+    {% endif %}
+    
     {% block css %}
     <link rel="stylesheet" type="text/css" href="{% asset_for_css 'base.css' %}">
     <link rel="stylesheet" type="text/css" href="{% asset_for_css 'elections.css' %}" />
@@ -20,6 +31,12 @@
       <p style="color: #ffffff; font-size: 16px;">You&apos;re using an older version of Internet Explorer. Please update or switch to another browser like Chrome, Firefox, or Edge for a better experience. <a style="color: #ffffff; text-decoration: underline" target="_blank" href="http://browsehappy.com/">Learn how to update your browser</a>.</p>
     </div>
     <![endif]-->
+
+    {# Google Tag Manager (noscript) #}
+    {% if not settings.DEBUG %}
+    <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-T5HPRLH" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+    {% endif %}
+    
     {% wagtailuserbar %}
     <a href="#main" class="skip-nav">skip navigation</a>
     {% if self.title == "Homepage" or self.title == "Home" %}
@@ -156,7 +173,8 @@
     {# Override this in templates to add extra javascript #}
     {% endblock %}
 
-    {% if not settings.DEBUG %}
+    {# Google Analytics and DAP without Tag Manager and only for production #}
+    {% if not settings.DEBUG and not settings.FEATURES.use_tag_manager %}
     <script>
       (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
       (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
