@@ -121,7 +121,7 @@ var candidateDataset = {
   templates: {
     header: '<span class="tt-suggestion__header">Select a candidate:</span>',
     pending:
-      '<span class="tt-suggestion__loading">Loading candidates...</span>',
+      '<span class="tt-suggestion__loading">Loading candidates&hellip;</span>',
     notFound: Handlebars.compile(''), // This has to be empty to not show anything
     suggestion: Handlebars.compile(
       '<span>' +
@@ -140,7 +140,7 @@ var committeeDataset = {
   templates: {
     header: '<span class="tt-suggestion__header">Select a committee:</span>',
     pending:
-      '<span class="tt-suggestion__loading">Loading committees...</span>',
+      '<span class="tt-suggestion__loading">Loading committees&hellip;</span>',
     notFound: Handlebars.compile(''), // This has to be empty to not show anything
     suggestion: Handlebars.compile(
       '<span class="tt-suggestion__name">{{ name }} ({{ id }})</span>'
@@ -156,7 +156,7 @@ var auditCommitteeDataset = {
   templates: {
     header: '<span class="tt-suggestion__header">Select a committee:</span>',
     pending:
-      '<span class="tt-suggestion__loading">Loading committees...</span>',
+      '<span class="tt-suggestion__loading">Loading committees&hellip;</span>',
     notFound: Handlebars.compile(''), // This has to be empty to not show anything
     suggestion: Handlebars.compile(
       '<span class="tt-suggestion__name">{{ name }} ({{ id }})</span>'
@@ -172,7 +172,7 @@ var auditCandidateDataset = {
   templates: {
     header: '<span class="tt-suggestion__header">Select a candidate:</span>',
     pending:
-      '<span class="tt-suggestion__loading">Loading candidates...</span>',
+      '<span class="tt-suggestion__loading">Loading candidates&hellip;</span>',
     notFound: Handlebars.compile(''), // This has to be empty to not show anything
     suggestion: Handlebars.compile(
       '<span class="tt-suggestion__name">{{ name }} ({{ id }})</span>'
