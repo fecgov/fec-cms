@@ -15,6 +15,8 @@
   <ul class="sidebar__content js-toc">
     {% if FEATURES.aggregatetotals %}
     <li class="side-nav__item"><a class="side-nav__link" href="#raising-summary">Raising summary</a></li>
+    {% else %}
+    <li class="side-nav__item"><span class="side-nav__link is-disabled">Raising summary</span></li>
     {% endif %}
     <li class="side-nav__item"><a class="side-nav__link" href="#top-raisers">Who&apos;s raising the most</a></li>
     <li class="side-nav__item"><span class="side-nav__link is-disabled">Where contributions come from</span></li>
