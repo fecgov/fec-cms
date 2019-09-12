@@ -59,12 +59,12 @@
         <tr>
           <td class="figure__label">Committee type:</td>
           <td class="figure__value">
-              {# If organizaton_type exists it's a SSF #}
-              {% if organization_type %}
-                {{ organization_type_full }} {{ committee_type_full }}
-              {% else %}
-                {{ committee_type_full }}
-              {% endif %}
+            {# If organizaton_type exists it's a SSF #}
+            {% if organization_type %}
+              {{ organization_type_full }} {{ committee_type_full }}
+            {% else %}
+              {{ committee_type_full }}
+            {% endif %}
           </td>
         </tr>
         <tr>
