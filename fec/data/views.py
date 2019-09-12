@@ -356,7 +356,7 @@ def get_committee(committee_id, cycle):
         'committee': committee,
         'committee_id': committee_id,
         'committee_type_full': committee['committee_type_full'],
-        'committee_type': committee['committee_type'],
+        'affiliated_committee_name': committee['affiliated_committee_name'],
         'organization_type': committee['organization_type'],
         'designation_full': committee['designation_full'],
         'street_1': committee['street_1'],
