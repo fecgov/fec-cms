@@ -5,8 +5,8 @@ var moment = require('moment');
 
 var Filter = require('./filter-base');
 
-require('inputmask/dist/inputmask/inputmask.date.extensions');
-var Inputmask = require('inputmask/dist/inputmask/inputmask.numeric.extensions');
+require('jquery.inputmask');
+require('jquery.inputmask/dist/inputmask/inputmask.date.extensions');
 
 /**
  * ValidateDateFilter
