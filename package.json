@@ -101,7 +101,6 @@
     "handlebars": "^4.1.2",
     "handlebars-template-loader": "^1.0.0",
     "hbsfy": "2.8.1",
-    "inputmask": "^4.0.8",
     "istanbul-instrumenter-loader": "^3.0.1",
     "karma": "^4.1.0",
     "karma-browserify": "^5.0.0",
