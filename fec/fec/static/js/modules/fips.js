@@ -1,7 +1,5 @@
 'use strict';
 
-/* global require, module */
-
 var _ = require('underscore');
 
 function byField(values, key) {

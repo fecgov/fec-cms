@@ -518,6 +518,7 @@ function sanitizeQueryParams(query) {
   var param;
 
   for (param in query) {
+    // eslint-disable-next-line no-prototype-builtins
     if (query.hasOwnProperty(param)) {
       query[param] = sanitizeValue(query[param]);
     }

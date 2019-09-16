@@ -1,6 +1,5 @@
 'use strict';
 
-/* global require, module, document */
 var $ = require('jquery');
 
 module.exports = {
