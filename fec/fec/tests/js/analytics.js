@@ -3,7 +3,7 @@
 var chai = require('chai');
 var expect = chai.expect;
 
-var analytics = require('../../static/js/modules/analytics');
+var analytics = require('../../static/js/modules/analytics'); // TODO - Move this to Tag Manager?
 
 describe('analytics', function() {
   it('sorts query parameters', function() {
