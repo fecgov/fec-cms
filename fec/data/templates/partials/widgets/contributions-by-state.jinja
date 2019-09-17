@@ -1,0 +1,84 @@
+{% import "macros/widgets.jinja" as widgets %}
+{% import "macros/filters/typeahead-filter.jinja" as typeahead %}
+
+<aside id="gov-fec-contribs-by-state" class="contribs-by-state is-loading w-s" data-election_year="{{ election_year }}">
+    <div class="controls-wrapper">
+        {{ typeahead.field('contribs-by-state-cand', 'Contributions received by: ', 'Examples: ', dataset='candidates', allow_text=True) }}
+        <span id="contribs-by-state-typeahead-error" class="error-msg js-contribs-by-state-typeahead-error">You entered a candidate name or candidate ID not associated with a registered candidate. Please try again.</span>
+        <fieldset class="select">
+            {{ widgets.select__election_year(election_years, election_year, 'state-contribs-years', 'P') }}
+        </fieldset>
+    </div>
+    <div class="message message--info js-error-message" role="alert" aria-hidden="true">
+        <h2>No results</h2>
+        <p>This is the error message</p>
+    </div>
+    <div class="container overlay__container">
+        <div class="overlay overlay--neutral is-loading"></div>
+    </div>
+    <div class="state-list-wrapper">
+        <div class="states-table-timestamp"><time class="js-cycle-start-time" datetime="">&nbsp;</time>-<time class="js-cycle-end-time" datetime="">&nbsp;</time></div>
+        <table class="remote-table-header js-remote-table-header" data-for="contribs-by-state-table">
+            <thead role="presentation">
+                <tr>
+                    <th scope="col">&nbsp;</th>
+                    <th scope="col">State</th>
+                    <th scope="col" class="t-right-aligned">Total raised</th>
+                </tr>
+            </thead>
+        </table>
+        <div class="table-scroller">
+            <div class="ps-scrollbar-y-rail"><div class="ps-scrollbar-y"></div></div>
+            <table id="contribs-by-state-table" class="data-table data-table--heading-borders data-table--entity u-margin--top" data-type="filings-{{ dataType }}" data-cycle="{{ election_year }}"">
+                <thead>
+                    <tr>
+                        <th scope="col">&nbsp;</th>
+                        <th scope="col">State</th>
+                        <th scope="col" class="t-right-aligned">Total raised</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td colspan="3" style="text-align:center">loading&hellip;</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="states-total">
+            <div>All states</div>
+            <div class="t-right-aligned t-mono js-states-total">Unknown Dollars</div>
+        </div>
+        {# {{ widgets.list_states() }} #}
+    </div>
+    <div class="map-wrapper">
+        <div class="map-details">
+            <hgroup class="candidate-details">
+                <h1>&nbsp;</h1>
+                <h2>&nbsp;</h2>
+                <h3>&nbsp;</h3>
+            </hgroup>
+            <div class="legend-container">
+                <span class="t-sans t-block">By state, total amount received</span>
+                <svg></svg>
+            </div>
+        </div>
+        <div class="election-map"></div>
+    </div>
+    <div class="more-info-wrapper">
+        <a class="button--standard button--table js-browse-indiv-contribs-by-state" href="/data/receipts/individual-contributions">Browse individual contributions</a>
+        <button class="button--alt js-methodology" data-a11y-dialog-show="fec-contribs-by-state-modal">Methodology</button>
+    </div>
+    <div class="js-modal modal" id="fec-contribs-by-state-modal" aria-hidden="true">
+        <div tabindex="-1" class="modal__overlay" data-a11y-dialog-hide=""></div>
+        <div role="dialog" class="modal__content" aria-labelledby="raised-modal-title">
+            <div role="document">
+                <button type="button" class="modal__close button--close--primary" data-a11y-dialog-hide="" title="Close this dialog window"></button>
+                <h2 id="raised-modal-title">Methodology Overview</h2>
+                <p>The state totals have been calculated by summing itemized individual contributions disclosed on Lines 11(a)(i) and 12 of Form 3 (for congressional candidates) and Lines 17(a)(i) and 18 of Form 3P (for presidential candidates) for each state or region.</p>
+                <p>The transaction types of itemized individual contributions of congressional and presidential campaign committees are “15,” “15E,” “15J,” “11” and “11J.” These contributions are usually found on Form 3 Lines 11(a)(i) and 12 or Form 3P Lines 17(a)(i) and 18.</p>
+                <p><strong>Unitemized individual contributions are not included in these totals</strong>. For contributions that do not exceed $200 when added to the contributor’s previous contributions made during the election cycle (for candidate committees), the receiving committee must report only the lump sum amounts of all unitemized contributions to the FEC. No contributor information is required to be provided to the FEC in connection with unitemized contributions.</p>
+            </div>
+        </div>
+    </div>
+</aside>
+<script defer src="{{ asset_for_js('widgets/contributions-by-state-box.js') }}" data-standalone="true"></script>
