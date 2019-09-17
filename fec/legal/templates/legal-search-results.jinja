@@ -45,7 +45,7 @@
         <h1 class="main__title">Results for &ldquo;{{ query }}&rdquo;</h1>
         {% endif %}
         {% for category in category_order %}
-          {% set category_title = "Matters Under Review" if category == "murs" else category.replace('_', ' ').capitalize() %}
+          {% set category_title = "Closed Matters Under Review" if category == "murs" else category.replace('_', ' ').capitalize() %}
           <div id="results-{{ category|replace('_', '-') }}" class="content__section">
               <div class="results-info results-info--simple">
                   <div class="results-info__left">
