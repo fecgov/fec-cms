@@ -258,14 +258,7 @@ var typeaheadOpts = {
  *
  * @event typeahead:render Inherited from typeahead.jquery.js, called any time the pulldown menu changes. Typing a character calls the event when the menu is reset _and_ when it's drawn again
  * @property {jQuery.Event}
- * @property {Object, null} - null if no results. Otherwise we get back an {Object} for every item in the menu
- *
- * @event typeahead:cursorchange Inherited from typeahead.jquery.js
- * @property
- *
- * @event typeahead:autocomplete Inherited from typeahead.jquery.js
- * @property
- *
+ * @property {Object} - null if no results. Otherwise we get back an {Object} for each item in the menu
  */
 function Typeahead(selector, type, url) {
   this.$input = $(selector);

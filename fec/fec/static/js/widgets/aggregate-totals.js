@@ -24,9 +24,9 @@
  * @fileoverview This file runs the show for embedded Aggregate Totals
  * It's the path for Aggregate Totals on non-fec pages or for otherwise building and controlling the <iframe> where the box will live.
  * @copyright 2019 Federal Election Commission
- * @license
- * @author Robert
- * @owner fec.gov
+ * @license CC0-1.0
+ * @owner  fec.gov
+ * @version 1.0
  * TODO - How should we handle things like this?
  */
 

@@ -6,10 +6,8 @@
  * in cooperation with data-map
  * @copyright 2019 Federal Election Commission
  * @license CC0-1.0
- * @author Robert
  * @owner  fec.gov
  * @version 1.0
- * TODO - How should we handle things like this?
  */
 
 // For when we have both internal controls

@@ -4,7 +4,6 @@
  * @fileoverview Interactive map based on fec/fec/static/js/modules/maps.js. Displays color-coded states based on the dataset provided
  * @copyright 2019 Federal Election Commission
  * @license CC0-1.0
- * @author Robert
  * @owner  fec.gov
  * @version 1.0
  */
