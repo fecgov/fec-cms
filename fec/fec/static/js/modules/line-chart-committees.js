@@ -1,6 +1,6 @@
 'use strict';
 
-/* global module, DEFAULT_TIME_PERIOD */
+/* global DEFAULT_TIME_PERIOD */
 var $ = require('jquery');
 var _ = require('underscore');
 var d3 = require('d3');

@@ -1,6 +1,6 @@
 'use strict';
 
-/* global require, document, context, WEBMANAGER_EMAIL */
+/* global WEBMANAGER_EMAIL */
 
 var $ = require('jquery');
 var URI = require('urijs');

@@ -12,7 +12,8 @@ var $ = require('jquery');
 
 require('./setup')();
 
-var DateFilter = require('../../static/js/modules/filters/date-filter').DateFilter;
+var DateFilter = require('../../static/js/modules/filters/date-filter')
+  .DateFilter;
 
 describe('date filter', function() {
   before(function() {
@@ -21,69 +22,70 @@ describe('date filter', function() {
   });
 
   beforeEach(function() {
-    this.$fixture.empty().append(
-    '<div id="date-filter" class="js-filter" data-filter="date" data-name="date" data-validate="true">' +
-      '<fieldset>' +
-      '<div class="range range--date js-date-range">' +
-        '<div class="range__input range__input--min" data-filter="range">' +
+    this.$fixture
+      .empty()
+      .append(
+        '<div id="date-filter" class="js-filter" data-filter="date" data-name="date" data-validate="true">' +
+          '<fieldset>' +
+          '<div class="range range--date js-date-range">' +
+          '<div class="range__input range__input--min" data-filter="range">' +
           '<label for="min_date">Beginning</label>' +
-          '<input type="text" id="min_date" name="min_date" data-range="min"'+
-            ' class="js-min-date" data-prefix="Beginning">' +
-        '</div>' +
-        '<div class="range__hyphen">-</div>' +
-        '<div class="range__input range__input--max" data-filter="range">' +
+          '<input type="text" id="min_date" name="min_date" data-range="min"' +
+          ' class="js-min-date" data-prefix="Beginning">' +
+          '</div>' +
+          '<div class="range__hyphen">-</div>' +
+          '<div class="range__input range__input--max" data-filter="range">' +
           '<label for="max_date">Ending</label>' +
           '<input type="text" id="max_date" name="max_date" data-range="max"' +
           ' class="js-max-date" data-prefix="Ending">' +
-        '</div>' +
-        '<button class="button--go button--standard" type="button">' +
+          '</div>' +
+          '<button class="button--go button--standard" type="button">' +
           '<span class="u-visually-hidden">Search</span>' +
-        '</button>' +
-      '</div>' +
-      '<div class="date-range__grid js-date-grid">' +
-        '<div class="date-range__row">' +
+          '</button>' +
+          '</div>' +
+          '<div class="date-range__grid js-date-grid">' +
+          '<div class="date-range__row">' +
           '<div class="date-range__year">' +
           '2015' +
           '</div>' +
           '<ul data-year="2015" class="date-range__months">' +
-            '<li data-month="01"><div>Jan</div></li>' +
-            '<li data-month="02"><div>Feb</div></li>' +
-            '<li data-month="03"><div>Mar</div></li>' +
-            '<li data-month="04"><div>Apr</div></li>' +
-            '<li data-month="05"><div>May</div></li>' +
-            '<li data-month="06"><div>Jun</div></li>' +
-            '<li data-month="07"><div>Jul</div></li>' +
-            '<li data-month="08"><div>Aug</div></li>' +
-            '<li data-month="09"><div>Sep</div></li>' +
-            '<li data-month="10"><div>Oct</div></li>' +
-            '<li data-month="11"><div>Nov</div></li>' +
-            '<li data-month="12"><div>Dec</div></li>' +
+          '<li data-month="01"><div>Jan</div></li>' +
+          '<li data-month="02"><div>Feb</div></li>' +
+          '<li data-month="03"><div>Mar</div></li>' +
+          '<li data-month="04"><div>Apr</div></li>' +
+          '<li data-month="05"><div>May</div></li>' +
+          '<li data-month="06"><div>Jun</div></li>' +
+          '<li data-month="07"><div>Jul</div></li>' +
+          '<li data-month="08"><div>Aug</div></li>' +
+          '<li data-month="09"><div>Sep</div></li>' +
+          '<li data-month="10"><div>Oct</div></li>' +
+          '<li data-month="11"><div>Nov</div></li>' +
+          '<li data-month="12"><div>Dec</div></li>' +
           '</ul>' +
-        '</div>' +
-        '<div class="date-range__row">' +
+          '</div>' +
+          '<div class="date-range__row">' +
           '<div class="date-range__year">' +
-            '2016' +
+          '2016' +
           '</div>' +
           '<ul data-year="2016" class="date-range__months">' +
-            '<li data-month="01"><div>Jan</div></li>' +
-            '<li data-month="02"><div>Feb</div></li>' +
-            '<li data-month="03"><div>Mar</div></li>' +
-            '<li data-month="04"><div>Apr</div></li>' +
-            '<li data-month="05"><div>May</div></li>' +
-            '<li data-month="06"><div>Jun</div></li>' +
-            '<li data-month="07"><div>Jul</div></li>' +
-            '<li data-month="08"><div>Aug</div></li>' +
-            '<li data-month="09"><div>Sep</div></li>' +
-            '<li data-month="10"><div>Oct</div></li>' +
-            '<li data-month="11"><div>Nov</div></li>' +
-            '<li data-month="12"><div>Dec</div></li>' +
+          '<li data-month="01"><div>Jan</div></li>' +
+          '<li data-month="02"><div>Feb</div></li>' +
+          '<li data-month="03"><div>Mar</div></li>' +
+          '<li data-month="04"><div>Apr</div></li>' +
+          '<li data-month="05"><div>May</div></li>' +
+          '<li data-month="06"><div>Jun</div></li>' +
+          '<li data-month="07"><div>Jul</div></li>' +
+          '<li data-month="08"><div>Aug</div></li>' +
+          '<li data-month="09"><div>Sep</div></li>' +
+          '<li data-month="10"><div>Oct</div></li>' +
+          '<li data-month="11"><div>Nov</div></li>' +
+          '<li data-month="12"><div>Dec</div></li>' +
           '</ul>' +
-        '</div>' +
-      '</div>' +
-    '</fieldset>' +
-  '</div>'
-
-    );
+          '</div>' +
+          '</div>' +
+          '</fieldset>' +
+          '</div>'
+      );
     this.filter = new DateFilter(this.$fixture.find('.js-filter'));
   });
 
@@ -106,8 +108,12 @@ describe('date filter', function() {
       min_date: '01/01/2015',
       max_date: '01/31/2016'
     });
-    expect(this.filter.$elm.find('[name="min_date"]').val()).to.equal('01/01/2015');
-    expect(this.filter.$elm.find('[name="max_date"]').val()).to.equal('01/31/2016');
+    expect(this.filter.$elm.find('[name="min_date"]').val()).to.equal(
+      '01/01/2015'
+    );
+    expect(this.filter.$elm.find('[name="max_date"]').val()).to.equal(
+      '01/31/2016'
+    );
   });
 
   describe('handleInputChange()', function() {
@@ -119,18 +125,20 @@ describe('date filter', function() {
       $.prototype.trigger.restore();
     });
 
-    it('triggers an add event with all the right properties', function(){
+    it('triggers an add event with all the right properties', function() {
       this.filter.$minDate.val('01/01/2015').change();
-      expect(this.trigger).to.have.been.calledWith('filter:added', [{
-        key: 'min_date',
-        value: '<span class="prefix">Beginning </span>01/01/2015',
-        loadedOnce: false,
-        range: 'min',
-        rangeName: 'date',
-        name: 'date',
-        nonremovable: true,
-        removeOnSwitch: true
-      }]);
+      expect(this.trigger).to.have.been.calledWith('filter:added', [
+        {
+          key: 'min_date',
+          value: '<span class="prefix">Beginning </span>01/01/2015',
+          loadedOnce: false,
+          range: 'min',
+          rangeName: 'date',
+          name: 'date',
+          nonremovable: true,
+          removeOnSwitch: true
+        }
+      ]);
     });
 
     it('triggers a remove event if the field has no value', function() {
@@ -149,7 +157,7 @@ describe('date filter', function() {
 
     it('sets up the date grid', function() {
       sinon.spy(DateFilter.prototype, 'setupDateGrid');
-      this.filter.handleInputChange({target: this.filter.$minDate});
+      this.filter.handleInputChange({ target: this.filter.$minDate });
       expect(this.filter.setupDateGrid).to.have.been.called;
       DateFilter.prototype.setupDateGrid.restore();
     });
@@ -161,10 +169,10 @@ describe('date filter', function() {
       this.today = moment(today).format('MM/DD/YYYY');
       this.thisYear = today.getFullYear();
       this.lastYear = today.getFullYear() - 1;
-      this.firstDayOfLastYear = "01/01/" + this.lastYear.valueOf()
+      this.firstDayOfLastYear = '01/01/' + this.lastYear.valueOf();
       var opts = {
         filterName: 'date',
-        filterValue: this.thisYear,
+        filterValue: this.thisYear
       };
 
       this.filter.handleModifyEvent({}, opts);
@@ -184,10 +192,13 @@ describe('date filter', function() {
     });
 
     it('sets the max date to the last of the year if not this year', function() {
-      this.filter.handleModifyEvent({}, {
-        filterName: 'date',
-        filterValue: '2014'
-      });
+      this.filter.handleModifyEvent(
+        {},
+        {
+          filterName: 'date',
+          filterValue: '2014'
+        }
+      );
 
       expect(this.filter.$maxDate.val()).to.equal('12/31/2014');
     });
@@ -213,9 +224,11 @@ describe('date filter', function() {
       this.filter.$maxDate.val('09/01/2016');
       this.filter.validate();
       expect(this.hideWarning).to.have.been.called;
-      expect(this.trigger).to.have.been.calledWith('filters:validation', [{
-        isValid: true
-      }]);
+      expect(this.trigger).to.have.been.calledWith('filters:validation', [
+        {
+          isValid: true
+        }
+      ]);
     });
 
     it('triggers an invalid event if not valid', function() {
@@ -225,9 +238,11 @@ describe('date filter', function() {
       this.filter.$maxDate.val('09/01/2016');
       this.filter.validate();
       expect(this.showWarning).to.have.been.called;
-      expect(this.trigger).to.have.been.calledWith('filters:validation', [{
-        isValid: false
-      }]);
+      expect(this.trigger).to.have.been.calledWith('filters:validation', [
+        {
+          isValid: false
+        }
+      ]);
     });
   });
 
@@ -240,15 +255,27 @@ describe('date filter', function() {
       this.filter.setupDateGrid();
 
       // Store these for checking later
-      this.$firstRange = this.filter.$elm.find('.date-range__row:first-of-type');
-      this.$secondRange = this.filter.$elm.find('.date-range__row:last-of-type');
-      this.$dateBegin = this.filter.$grid.find('ul[data-year="2013"] li[data-month="01"]');
-      this.$dateEnd = this.filter.$grid.find('ul[data-year="2014"] li[data-month="12"]');
+      this.$firstRange = this.filter.$elm.find(
+        '.date-range__row:first-of-type'
+      );
+      this.$secondRange = this.filter.$elm.find(
+        '.date-range__row:last-of-type'
+      );
+      this.$dateBegin = this.filter.$grid.find(
+        'ul[data-year="2013"] li[data-month="01"]'
+      );
+      this.$dateEnd = this.filter.$grid.find(
+        'ul[data-year="2014"] li[data-month="12"]'
+      );
     });
 
     it('sets up a date grid with the correct years', function() {
-      expect(this.$firstRange.find('.date-range__year').html()).to.equal('2013');
-      expect(this.$secondRange.find('.date-range__year').html()).to.equal('2014');
+      expect(this.$firstRange.find('.date-range__year').html()).to.equal(
+        '2013'
+      );
+      expect(this.$secondRange.find('.date-range__year').html()).to.equal(
+        '2014'
+      );
     });
 
     it('adds the right classes to all months in the range', function() {
@@ -278,7 +305,9 @@ describe('date filter', function() {
     it('adds the correct classes', function() {
       expect(this.filter.$grid.attr('class')).to.not.include('pick-max');
       expect(this.filter.$grid.attr('class')).to.include('pick-min');
-      expect(this.filter.$grid.find('.month--begin').attr('class')).to.include('is-active');
+      expect(this.filter.$grid.find('.month--begin').attr('class')).to.include(
+        'is-active'
+      );
     });
   });
 
@@ -299,7 +328,9 @@ describe('date filter', function() {
     it('adds the correct classes', function() {
       expect(this.filter.$grid.attr('class')).to.not.include('pick-min');
       expect(this.filter.$grid.attr('class')).to.include('pick-max');
-      expect(this.filter.$grid.find('.month--end').attr('class')).to.include('is-active');
+      expect(this.filter.$grid.find('.month--end').attr('class')).to.include(
+        'is-active'
+      );
     });
   });
 
@@ -310,32 +341,34 @@ describe('date filter', function() {
       this.filter.$minDate.val('01/01/2013');
       this.filter.$maxDate.val('12/31/2014');
       this.filter.setupDateGrid();
-      this.target = this.filter.$grid.find('ul[data-year="2014"] li[data-month="09"] div');
+      this.target = this.filter.$grid.find(
+        'ul[data-year="2014"] li[data-month="09"] div'
+      );
     });
 
     it('sets the date range for a min data selection', function() {
       this.filter.$grid.addClass('pick-min');
-      this.filter.handleGridItemSelect({target: this.target});
+      this.filter.handleGridItemSelect({ target: this.target });
       expect(this.filter.$minDate.val()).to.equal('09/01/2014');
       expect(this.filter.$maxDate.val()).to.equal('12/31/2014');
     });
 
     it('sets the date range for a max data selection', function() {
       this.filter.$grid.addClass('pick-max');
-      this.filter.handleGridItemSelect({target: this.target});
+      this.filter.handleGridItemSelect({ target: this.target });
       expect(this.filter.$minDate.val()).to.equal('01/01/2013');
       expect(this.filter.$maxDate.val()).to.equal('09/30/2014');
     });
 
     it('focuses on the max input after selecting a min', function() {
       this.filter.$grid.addClass('pick-min');
-      this.filter.handleGridItemSelect({target: this.target});
+      this.filter.handleGridItemSelect({ target: this.target });
       expect(this.filter.$maxDate.is(document.activeElement)).to.be.true;
     });
 
     it('focuses on the submit button after selecting a max', function() {
       this.filter.$grid.addClass('pick-max');
-      this.filter.handleGridItemSelect({target: this.target});
+      this.filter.handleGridItemSelect({ target: this.target });
       expect(this.filter.$submit.is(document.activeElement)).to.be.true;
     });
   });
