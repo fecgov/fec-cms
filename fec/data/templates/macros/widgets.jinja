@@ -1,13 +1,4 @@
-{# macro select_election_type(action, office) %}
-<label for="top-category" class="breakdown__title label t-inline-block">How much has been {{ action }} by: </label>
-<select id="top-category" name="top_category" class="js-office form-element--inline" aria-controls="top-table">
-  <option value="P" {% if office == 'P' %}selected{% endif %}>Presidential candidates</option>
-  <option value="S" {% if office == 'S' %}selected{% endif %}>Senate candidates</option>
-  <option value="H" {% if office == 'H' %}selected{% endif %}>House candidates</option>
-</select>
-{% endmacro #}
-
- {% macro select__election_year(election_years, election_year, elementID, electionType = 'H') %}
+{% macro select__election_year(election_years, election_year, elementID, electionType = 'H') %}
 <label for="election-year" class="breakdown__title label t-inline-block">Running in:</label>
 <select id="{{ elementID }}" name="cycle" class="js-election-year form-element--inline" aria-controls="">
 {% for eachYear in election_years | sort(reverse=True) %}
@@ -20,24 +11,3 @@
 {% endfor %}
 </select>
 {% endmacro %}
-
- {# macro list_states() %}
-<script>
-</script>
-<div class="map-table">
-  <table class="data-table data-table--heading-borders" data-type="contributor-state" data-cycle="{{ max_cycle }}">
-    <thead>
-      <th scope="col">State</th>
-      <th scope="col">Total contributed</th>
-    </thead>
-  </table>
-</div>
-{% endmacro #}
-
- {# macro map() %}
- <h1>Yay!</h1>
-<div class="election-map"></div>
-<div class="t-italic js-map-approx-message">
-    <p>District maps on this page are approximate.</p>
-</div>
-{% endmacro #}
