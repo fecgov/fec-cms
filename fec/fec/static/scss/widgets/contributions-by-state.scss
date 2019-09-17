@@ -175,23 +175,26 @@ aside.contribs-by-state {
         }
       }
       #contribs-by-state-typeahead-error {
+        background-color: #fff;
         color: $error;
         display: block;
         font-size: 12px;
         height: 0;
-        line-height: 1.1em;
+        line-height: 1.5em;
+        max-width: 300px;
         opacity: 0;
         overflow: hidden;
-        padding-left: 210px;
+        padding-left: 0;
         position: absolute;
-        right: 0;
-        top: 55px;
+        right: auto;
+        top: 75px;
         transition: opacity .5s .5s;
         width: 0;
       }
       &.is-error {
         #contribs-by-state-typeahead-error {
-          height: auto;
+          height: 65px;
+          max-width: 300px;
           opacity: 1;
           transition: opacity .5s .5s;
           width: 100%;
@@ -415,11 +418,8 @@ aside.contribs-by-state {
     width: 100%;
 
     a, button {
-      margin-left: 1rem;
+      margin: 0 0 1rem 1rem;
     }
-    // a.js-methodology {
-      // pointer-events: none;
-    // }
   }
   .overlay__container {
     display: none;
@@ -478,6 +478,7 @@ aside.contribs-by-state {
         margin-bottom: 2rem;
         margin-right: 1rem;
         max-width: none;
+        right: 0;
         position: relative;
 
         label {
@@ -497,6 +498,18 @@ aside.contribs-by-state {
           padding-left: 21rem;
           position: absolute;
           top: 36px;
+        }
+        #contribs-by-state-typeahead-error {
+          background-color: transparent;
+          line-height: 1.1em;
+          max-width: none;
+          padding-left: 210px;
+          top: 55px;
+        }
+        &.is-error {
+          #contribs-by-state-typeahead-error {
+            height: auto;
+          }
         }
       }
 
@@ -539,6 +552,13 @@ aside.contribs-by-state {
       margin-top: 2.5rem;
       margin-left: 1rem;
       width: calc(66.66% - 1rem);
+    }
+    .map-details {
+      .more-info-wrapper {    
+        a, button {
+          margin: 0 0 1rem 1rem;
+        }
+      }
     }
   }
   // Large sizes

@@ -4,7 +4,7 @@
 <aside id="gov-fec-contribs-by-state" class="contribs-by-state is-loading w-s" data-election_year="{{ election_year }}">
     <div class="controls-wrapper">
         {{ typeahead.field('contribs-by-state-cand', 'Contributions received by: ', 'Examples: ', dataset='candidates', allow_text=True) }}
-        <span id="contribs-by-state-typeahead-error" class="error-msg js-contribs-by-state-typeahead-error">You entered a candidate name or candidate ID not associated with a registered candidate. Please try again.</span>
+        <span id="contribs-by-state-typeahead-error" class="error-msg js-contribs-by-state-typeahead-error">You entered a candidate name or candidate ID not associated with a registered candidate. Please try&nbsp;again.</span>
         <fieldset class="select">
             {{ widgets.select__election_year(election_years, election_year, 'state-contribs-years', 'P') }}
         </fieldset>

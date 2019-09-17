@@ -31,7 +31,6 @@ import { buildUrl } from '../modules/helpers';
 import typeahead from '../modules/typeahead';
 import { defaultElectionYear } from './widget-vars';
 import 'abortcontroller-polyfill/dist/polyfill-patch-fetch';
-import { A11yDialog } from 'a11y-dialog';
 
 const DataMap = require('../modules/data-map').DataMap;
 const AbortController = window.AbortController;
@@ -100,9 +99,10 @@ function ContributionsByState() {
   this.table; // The <table> for the list of states and their totals
   this.statesTotalHolder; // Element at the bottom of the states list
   this.typeahead; // The typeahead candidate element:
+  this.typeahead_revertValue; // Temporary var saved while user is typing
   this.yearControl; // The <select> for election years:
   this.buttonIndivContribs;
-  this.buttonMethodology;
+  // this.buttonMethodology;
   this.remoteTableHeader;
   this.remoteTable;
 
@@ -146,6 +146,25 @@ ContributionsByState.prototype.init = function() {
     this.handleTypeaheadSelect.bind(this)
   );
 
+  // Find the HTML element on the page (not the jQuery typeahead element),
+  // and add the focus/tap and blur listeners
+  let theTypeaheadElement = this.element.querySelector(
+    '#contribs-by-state-cand'
+  );
+  theTypeaheadElement.addEventListener(
+    'blur',
+    this.handleTypeaheadBlur.bind(this)
+  );
+  theTypeaheadElement.addEventListener(
+    'mousedown',
+    this.handleTypeaheadFocus.bind(this)
+  );
+  theTypeaheadElement.addEventListener(
+    'touchstart',
+    this.handleTypeaheadFocus.bind(this)
+  );
+
+  // Listen for any field updates, looking for errors
   // TODO - Is there a better event to listen for when a user has entered something that returns no results?
   this.typeahead.$input.on(
     'typeahead:render',
@@ -198,13 +217,6 @@ ContributionsByState.prototype.init = function() {
   this.buttonIndivContribs.addEventListener(
     'click',
     this.handleBrowseIndivContribsClick.bind(this)
-  );
-
-  // Listen for the Methodology button to be clicked
-  this.buttonMethodology = this.element.querySelector('.js-methodology');
-  this.buttonMethodology.addEventListener(
-    'click',
-    this.handleMethodologyClick.bind(this)
   );
 
   // Initialize the remote table header
@@ -371,7 +383,6 @@ ContributionsByState.prototype.loadStatesData = function() {
       signal: null
     })
     .then(function(response) {
-      // console.log('states total fetch then: ', response);
       if (response.status !== 200)
         throw new Error('The network rejected the states total request.');
       // else if (response.type == 'cors') throw new Error('CORS error');
@@ -381,7 +392,6 @@ ContributionsByState.prototype.loadStatesData = function() {
       });
     })
     .catch(function() {
-      // console.log('second fetch catch e:', e);
       // TODO - handle catch
     });
 
@@ -393,9 +403,6 @@ ContributionsByState.prototype.loadStatesData = function() {
  * then loads the states data with {@see loadStatesData() }
  */
 ContributionsByState.prototype.displayUpdatedData_candidate = function() {
-  // console.log('displayUpdatedData_candidate()');
-  // console.log('candidateDetails: ', this.candidateDetails);
-
   // If this is the first load, the typeahead won't have a value; let's set it
   let theTypeahead = document.querySelector('#contribs-by-state-cand');
   if (!theTypeahead.value) theTypeahead.value = this.candidateDetails.name;
@@ -422,7 +429,6 @@ ContributionsByState.prototype.displayUpdatedData_candidate = function() {
   // Update the <select>
   // TODO - handle if there are no years
   // TODO - handle if there is only one year
-  // console.log('this.candidateDetails: ', this.candidateDetails);
   // Grab election_years from the candidate details
   let validElectionYears = this.candidateDetails.election_years;
   // Sort them so the most recent is first so it'll be on top of the <select>
@@ -504,8 +510,6 @@ ContributionsByState.prototype.displayUpdatedData_states = function() {
       TODO_remove_temp_total_var
     );
   }
-
-  // console.log('This is my test statement. %cBold. %s %cBlue.', 'font-weight:bold', 'Variable.', 'color: blue');
 
   // Update the time stamp above the states list
   this.updateCycleTimeStamp();
@@ -593,6 +597,9 @@ ContributionsByState.prototype.handleTypeaheadSelect = function(
   this.baseStatesQuery.candidate_id = abbreviatedCandidateDetails.id;
   // But we need more details (like election_years) so we need to go get those
   this.loadCandidateDetails(abbreviatedCandidateDetails.id);
+
+  // Because the user has made a change, erase the revert value variable
+  this.typeahead_revertValue = '';
 };
 
 /**
@@ -605,14 +612,42 @@ ContributionsByState.prototype.handleTypeaheadRender = function(
   e,
   firstResult
 ) {
-  if (firstResult)
-    document
-      .querySelector('#contribs-by-state-cand-field')
-      .classList.remove('is-error');
-  else
-    document
-      .querySelector('#contribs-by-state-cand-field')
-      .classList.add('is-error');
+  if (firstResult) this.showTypeaheadError(false);
+  else this.showTypeaheadError(true);
+};
+
+/**
+ * Shows and hides the Typeahead error message
+ * @param {Boolean} isError - Whether or not to display the message
+ */
+ContributionsByState.prototype.showTypeaheadError = function(isError) {
+  let theElement = document.querySelector('#contribs-by-state-cand-field');
+  if (isError) theElement.classList.add('is-error');
+  else theElement.classList.remove('is-error');
+};
+
+/**
+ * Restores the value from before the field received focus {@see handleTypeaheadFocus() }
+ */
+ContributionsByState.prototype.handleTypeaheadBlur = function() {
+  // If the user has left the field without making a choice (i.e., typeahead_revertValue hasn't been nullified),
+  let theTypeahead = document.querySelector('#contribs-by-state-cand');
+  if (this.typeahead_revertValue != '') {
+    // revert the value and reset the var
+    theTypeahead.value = this.typeahead_revertValue;
+    this.typeahead_revertValue = '';
+    // Since we have a legit value, let's hide the error
+    this.showTypeaheadError(false);
+  }
+};
+
+/**
+ * Finds the input field's current value and saves it for {@see handleTypeaheadBlur() }
+ */
+ContributionsByState.prototype.handleTypeaheadFocus = function() {
+  // Save the current value, in case the user leaves the field without making a selection
+  let theTypeahead = document.querySelector('#contribs-by-state-cand');
+  this.typeahead_revertValue = theTypeahead.value;
 };
 
 /**
@@ -633,7 +668,6 @@ ContributionsByState.prototype.handleElectionYearChange = function(e) {
  * @param {String} errorCode
  */
 ContributionsByState.prototype.handleErrorState = function(errorCode) {
-  console.log('handleErrorState(' + errorCode + ')');
   if (errorCode == 'NO_RESULTS_TO_DISPLAY') {
     console.log('ERROR: NO DATA TO DISPLAY'); //eslint-disable-line no-console, no-undef
 
@@ -671,15 +705,6 @@ ContributionsByState.prototype.handleBrowseIndivContribsClick = function(e) {
     `/data/receipts/individual-contributions/?two_year_transaction_period=${tranPeriod}&min_date=${minDate}&max_date=${maxDate}`
   );
   // e.preventDefault();
-};
-
-/**
- * TODO -
- * @param {MouseEvent} e
- */
-ContributionsByState.prototype.handleMethodologyClick = function(e) {
-  // e.preventDefault();
-
 };
 
 /**
