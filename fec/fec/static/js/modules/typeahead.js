@@ -1,5 +1,9 @@
 'use strict';
 
+/**
+ * @fileoverview Creates the Typeahead element, extending node_modules/typeahead.js/dist/typeahead.jquery.js
+ */
+
 var $ = require('jquery');
 var URI = require('urijs');
 var _ = require('underscore');
@@ -242,6 +246,27 @@ var typeaheadOpts = {
   hint: false
 };
 
+/**
+ * @class
+ * @param {String} selector - A string to be used to find the element in the page.
+ * @param {String} type - The kinda of data we'll be showing. e.g., 'candidates'.
+ * @param {URL} url - Optional. Where we should find the data if not the default.
+ *
+ * @event typeahead:select Triggered when a user clicks an autocomplete search result
+ * @property {jQuery.Event}
+ * @property {Object} - The data from the selected item
+ *
+ * @event typeahead:render Inherited from typeahead.jquery.js, called any time the pulldown menu changes. Typing a character calls the event when the menu is reset _and_ when it's drawn again
+ * @property {jQuery.Event}
+ * @property {Object, null} - null if no results. Otherwise we get back an {Object} for every item in the menu
+ *
+ * @event typeahead:cursorchange Inherited from typeahead.jquery.js
+ * @property
+ *
+ * @event typeahead:autocomplete Inherited from typeahead.jquery.js
+ * @property
+ *
+ */
 function Typeahead(selector, type, url) {
   this.$input = $(selector);
   this.url = url || '/';
