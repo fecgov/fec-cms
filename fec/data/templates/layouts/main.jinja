@@ -49,6 +49,7 @@
     WEBMANAGER_EMAIL = '{{ WEBMANAGER_EMAIL }}';
     CANONICAL_BASE = '{{ CANONICAL_BASE }}';
     TRANSITION_URL = '{{ TRANSITION_URL }}';
+    {% if election_year %}ELECTION_YEAR = '{{ election_year }}';{% endif %}
 
     function trackMetric(name, imagesSelector) {
       if (imagesSelector) {
