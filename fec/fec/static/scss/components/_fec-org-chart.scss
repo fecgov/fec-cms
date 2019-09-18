@@ -77,7 +77,7 @@ $orgChart_lineSolidDark: thin solid $orgChart_colorStandard;
       transition: border-color .1s;
 
       &:hover {
-        borgChart_order-color: $colorGreyHover;
+        border-color: $orgChart_colorGreyHover;
         transition: border-color .25s;
       }
       &:not([href*="/"]) {
@@ -255,8 +255,12 @@ $orgChart_lineSolidDark: thin solid $orgChart_colorStandard;
   }
 }
 
-
-@media (min-width: 768px) {
+// With the current page template (with the side nav),
+// $med (640px) is too small but $lg (860px) is way too large.
+// 768px would be ideal.
+// Until we get a full-width template, this will have to do.
+// TODO - When we get the full-width template, remove these comments and adjust the media query properly
+@include media($med) { 
   #fec-orgchart {
     display: grid;
     grid-template-areas:
