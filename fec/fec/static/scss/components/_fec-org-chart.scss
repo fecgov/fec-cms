@@ -4,13 +4,13 @@
 // Should be included inside the css of whatever page it's included
 //
 
-$colorStandard: #b2b1b6;
-$colorGreyHover: #d6d7d9;
+$orgChart_colorStandard: #b2b1b6;
+$orgChart_colorGreyHover: #d6d7d9;
 
-$gutterSize: 10px;
-$lineDashed: thin dashed $colorStandard;
-$lineSolid: 2px solid $colorStandard; // line for the wider layout
-$lineSolidDark: thin solid $colorStandard;
+$orgChart_gutterSize: 10px;
+$orgChart_lineDashed: thin dashed $orgChart_colorStandard;
+$orgChart_lineSolid: 2px solid $orgChart_colorStandard; // line for the wider layout
+$orgChart_lineSolidDark: thin solid $orgChart_colorStandard;
 
 #fec-orgchart {
   display: block;
@@ -25,17 +25,17 @@ $lineSolidDark: thin solid $colorStandard;
     float: left;
     list-style-type: none;
     margin-left: 0;
-    padding: $gutterSize 0 0 $gutterSize;
+    padding: $orgChart_gutterSize 0 0 $orgChart_gutterSize;
     position: relative;
     width: 100%;
 
     & + li { // all li after another li
-      padding-top: $gutterSize;
+      padding-top: $orgChart_gutterSize;
     }
     &:before {
       // top half of left-side line, including the horizontal line in the middle
-      border-left: $lineSolidDark;
-      border-bottom: $lineSolidDark;
+      border-left: $orgChart_lineSolidDark;
+      border-bottom: $orgChart_lineSolidDark;
       content: "";
       height: 50%;
       left: 0;
@@ -46,7 +46,7 @@ $lineSolidDark: thin solid $colorStandard;
     }
     &:after {
       // bottom half of left-side line
-      border-left: $lineSolidDark;  
+      border-left: $orgChart_lineSolidDark;  
       content: "";
       height: 50%;
       left: 0;
@@ -62,7 +62,7 @@ $lineSolidDark: thin solid $colorStandard;
     
     a {
       align-items: center;
-      border: $lineSolidDark;
+      border: $orgChart_lineSolidDark;
       border-radius: 4px;
       display: flex;
       flex-direction: column;
@@ -77,7 +77,7 @@ $lineSolidDark: thin solid $colorStandard;
       transition: border-color .1s;
 
       &:hover {
-        border-color: $colorGreyHover;
+        borgChart_order-color: $colorGreyHover;
         transition: border-color .25s;
       }
       &:not([href*="/"]) {
@@ -103,20 +103,20 @@ $lineSolidDark: thin solid $colorStandard;
     }
 
     &.team {
-      padding-left: $gutterSize;
-      padding-bottom: $gutterSize * 2;
+      padding-left: $orgChart_gutterSize;
+      padding-bottom: $orgChart_gutterSize * 2;
 
       &:before {
         content: "";
         border-bottom: none;
-        border-left: $lineSolidDark;
+        border-left: $orgChart_lineSolidDark;
         border-right: none;
         border-top: none;
         height: 100%;
         left: 0;
         position: absolute;
         top: 0;
-        width: $gutterSize;
+        width: $orgChart_gutterSize;
       }
 
       &:last-child {
@@ -132,32 +132,32 @@ $lineSolidDark: thin solid $colorStandard;
     &.team > a:before {
       content: "";
       position: absolute;
-      left: calc(-#{$gutterSize} - 1px);
-      border-left: $lineSolidDark;
-      border-bottom: $lineSolidDark;
-      top: -#{$gutterSize * 1.5};
-      height: calc(50% + #{$gutterSize * 1.5});
-      width: $gutterSize;
+      left: calc(-#{$orgChart_gutterSize} - 1px);
+      border-left: $orgChart_lineSolidDark;
+      border-bottom: $orgChart_lineSolidDark;
+      top: -#{$orgChart_gutterSize * 1.5};
+      height: calc(50% + #{$orgChart_gutterSize * 1.5});
+      width: $orgChart_gutterSize;
     }
 
     ul {
       display: block;
       float: left;
       margin: 0;
-      padding: 0 0 0 $gutterSize;
+      padding: 0 0 0 $orgChart_gutterSize;
       position: relative;
       width: 100%;
 
       &:before {
-        border-left: $lineSolidDark;
+        border-left: $orgChart_lineSolidDark;
         content: "";
         display: block;
         height: 50%;
         position: absolute;
         left: 0;
         bottom: 50%;
-        width: $gutterSize;
-        border-bottom: $lineSolidDark;
+        width: $orgChart_gutterSize;
+        border-bottom: $orgChart_lineSolidDark;
       }
       &:last-child {
         &:before {
@@ -170,33 +170,33 @@ $lineSolidDark: thin solid $colorStandard;
     }
 
     &.team-comms {
-      padding: 0 $gutterSize #{$gutterSize * 2};
+      padding: 0 $orgChart_gutterSize #{$orgChart_gutterSize * 2};
   
       &:before {
         content: "";
         border-bottom: none;
-        border-left: $lineSolidDark;
+        border-left: $orgChart_lineSolidDark;
         border-right: none;
-        border-top: $lineSolidDark;
-        height: calc(50% + #{$gutterSize});
+        border-top: $orgChart_lineSolidDark;
+        height: calc(50% + #{$orgChart_gutterSize});
         left: 0;
         position: absolute;
-        top: calc(50% - #{$gutterSize});
+        top: calc(50% - #{$orgChart_gutterSize});
         width: 10px;
       }
       &:after {
         border-bottom: none;
         border-left: none;
-        border-right: $lineDashed;
-        border-top: $lineDashed;
+        border-right: $orgChart_lineDashed;
+        border-top: $orgChart_lineDashed;
         content: "";
         display: block; 
-        height: calc(50% + #{$gutterSize + 1});
+        height: calc(50% + #{$orgChart_gutterSize + 1});
         left: auto;
         position: absolute;
         right: 0;
-        top: calc(50% - #{$gutterSize});
-        width: $gutterSize;
+        top: calc(50% - #{$orgChart_gutterSize});
+        width: $orgChart_gutterSize;
       }
       & a:before {
         display: none;
@@ -207,7 +207,7 @@ $lineSolidDark: thin solid $colorStandard;
     }
     &.team-ig {
       float: right;
-      padding: $gutterSize $gutterSize #{$gutterSize * 2} #{$gutterSize * 2};
+      padding: $orgChart_gutterSize $orgChart_gutterSize #{$orgChart_gutterSize * 2} #{$orgChart_gutterSize * 2};
 
       &:before {
         border-bottom: none;
@@ -218,36 +218,36 @@ $lineSolidDark: thin solid $colorStandard;
       }
   
       & > a:before {
-        border-bottom: $lineDashed;
+        border-bottom: $orgChart_lineDashed;
         border-left: none;
-        border-right: $lineDashed;
+        border-right: $orgChart_lineDashed;
         border-top: none;
         bottom: 50%;
         content: "";
-        height: calc(50% + #{$gutterSize});
+        height: calc(50% + #{$orgChart_gutterSize});
         position: absolute;
         left: auto;
-        right: calc(-#{$gutterSize} - 1px);
+        right: calc(-#{$orgChart_gutterSize} - 1px);
         top: auto;
-        width: $gutterSize;
+        width: $orgChart_gutterSize;
       }
       & > a:after {
         display: none;
       }
 
       ul {
-        padding: 0 $gutterSize 0 0;
+        padding: 0 $orgChart_gutterSize 0 0;
 
         li {
-          padding: $gutterSize $gutterSize 0 0;
+          padding: $orgChart_gutterSize $orgChart_gutterSize 0 0;
           
           &:before {
             border-left: none;
-            border-right: $lineDashed;
-            border-bottom: $lineDashed;
+            border-right: $orgChart_lineDashed;
+            border-bottom: $orgChart_lineDashed;
             left: auto;
             right: 0;
-            width: $gutterSize;
+            width: $orgChart_gutterSize;
           }
         }
       }
@@ -275,80 +275,80 @@ $lineSolidDark: thin solid $colorStandard;
         padding-left: 0;
 
         li:first-child {
-          padding-top: #{$gutterSize * 2};
+          padding-top: #{$orgChart_gutterSize * 2};
         }
       }
       a {
         min-height: 115px;
-        border: $lineSolid;
+        border: $orgChart_lineSolid;
       }
 
       &:before {
-        border-bottom: $lineSolid;
-        border-left: $lineSolid;
-        left: -#{$gutterSize - 1};
+        border-bottom: $orgChart_lineSolid;
+        border-left: $orgChart_lineSolid;
+        left: -#{$orgChart_gutterSize - 1};
       }
       &:after {
-        border-left: $lineSolid;
-        left: -#{$gutterSize - 1};
+        border-left: $orgChart_lineSolid;
+        left: -#{$orgChart_gutterSize - 1};
       }
       &.team {
-        padding: 0 $gutterSize;
+        padding: 0 $orgChart_gutterSize;
         width: 100%;
 
         & > a {
           &:before {
             border-bottom: none;
-            border-left: $lineSolid;
-            border-top: $lineSolid;
-            padding-bottom: $gutterSize;
+            border-left: $orgChart_lineSolid;
+            border-top: $orgChart_lineSolid;
+            padding-bottom: $orgChart_gutterSize;
             top: 50%;
           }
           // &:after {
-          //   border-left: $lineSolid;
+          //   border-left: $orgChart_lineSolid;
           // }
         }
         
         &:before {
           content: "";
           border-bottom: none;
-          border-right: $lineSolid;
+          border-right: $orgChart_lineSolid;
           border-left: none;
-          border-top: $lineSolid;
-          height: $gutterSize;
+          border-top: $orgChart_lineSolid;
+          height: $orgChart_gutterSize;
           left: 0;
           position: absolute;
-          top: -#{$gutterSize};
+          top: -#{$orgChart_gutterSize};
           width: 50%;
         }
         &:after {
           border-left: none;
-          border-top: $lineSolid;
+          border-top: $orgChart_lineSolid;
           content: "";
-          height: $gutterSize;
+          height: $orgChart_gutterSize;
           left: 50%;
           position: absolute;
-          top: -#{$gutterSize};
+          top: -#{$orgChart_gutterSize};
           width: 50%;
         }
 
         &.team-comms {
           grid-area: comms;
           max-width: 40%;
-          padding-bottom: $gutterSize * 2;
+          padding-bottom: $orgChart_gutterSize * 2;
 
           &:before {
             // From comms to the teams
             content: "";
             border-bottom: none;
-            border-right: $lineSolid;
+            border-right: $orgChart_lineSolid;
             border-left: none;
             border-top: none;
             display: block;
             height: 10px;
             left: 0;
             position: absolute;
-            top: calc(100% - #{$gutterSize * 2});
+            top: calc(100% - #{$orgChart_gutterSize * 2});
             width: 50%;
           }
           &:after {
@@ -356,14 +356,14 @@ $lineSolidDark: thin solid $colorStandard;
             border-bottom: none;
             border-left: none;
             border-right: none;
-            border-top: $lineDashed;
+            border-top: $orgChart_lineDashed;
             content: "";
             display: block;
-            height: calc(50% - #{$gutterSize});
-            left: calc(100% - #{$gutterSize});
+            height: calc(50% - #{$orgChart_gutterSize});
+            left: calc(100% - #{$orgChart_gutterSize});
             position: absolute;
             right: auto;
-            top: $gutterSize * 4;
+            top: $orgChart_gutterSize * 4;
             width: 80%;
           }
           a {
@@ -372,12 +372,12 @@ $lineSolidDark: thin solid $colorStandard;
         }
         &.team-ig {
           grid-area: ig;
-          padding-top: $gutterSize * 5;
+          padding-top: $orgChart_gutterSize * 5;
 
           &:before {
-            border-right: $lineDashed;
-            border-top: $lineDashed;
-            top: $gutterSize * 4;
+            border-right: $orgChart_lineDashed;
+            border-top: $orgChart_lineDashed;
+            top: $orgChart_gutterSize * 4;
           }
           &:after {
             display: none;
@@ -390,9 +390,9 @@ $lineSolidDark: thin solid $colorStandard;
 
               &:before {
                 border-bottom: none;
-                border-right: $lineSolid;
+                border-right: $orgChart_lineSolid;
                 border-top: none;
-                height: $gutterSize * 2;
+                height: $orgChart_gutterSize * 2;
                 left: 0;
                 top: 0;
                 width: 50%;
@@ -411,7 +411,7 @@ $lineSolidDark: thin solid $colorStandard;
         display: none;
       }
       &:after {
-        border-left: $lineSolid;
+        border-left: $orgChart_lineSolid;
       }
     }
     li.team:last-child {
