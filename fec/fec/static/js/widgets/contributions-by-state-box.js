@@ -332,7 +332,6 @@ ContributionsByState.prototype.loadCandidateDetails = function(cand_id) {
  * Starts the fetch to go get the big batch of states data, called by {@see init() }
  */
 ContributionsByState.prototype.loadStatesData = function() {
-  console.log('loadStatesData()'); //eslint-disable-line no-console, no-undef
   let instance = this;
 
   let baseStatesQueryWithCandidate = Object.assign({}, this.baseStatesQuery, {
@@ -357,8 +356,6 @@ ContributionsByState.prototype.loadStatesData = function() {
         throw new Error('The network rejected the states request.');
       // else if (response.type == 'cors') throw new Error('CORS error');
       response.json().then(data => {
-        console.log('Received the states data: ', data); //eslint-disable-line no-console, no-undef
-
         // Now that we have all of the values, let's sort them by total, descending
         data.results.sort((a, b) => {
           return b.total - a.total;
@@ -386,7 +383,6 @@ ContributionsByState.prototype.loadStatesData = function() {
         throw new Error('The network rejected the states total request.');
       // else if (response.type == 'cors') throw new Error('CORS error');
       response.json().then(data => {
-        console.log('states total data received: ', data); //eslint-disable-line no-console, no-undef
         instance.displayUpdatedData_total(data);
       });
     })
@@ -482,8 +478,6 @@ ContributionsByState.prototype.displayUpdatedData_states = function() {
   let theTableBody = this.table.querySelector('tbody');
   let theTbodyString = '';
 
-  let TODO_remove_temp_total_var = 0;
-
   if (theResults.length === 0) {
     // If there are no results to show
     this.handleErrorState('NO_RESULTS_TO_DISPLAY');
@@ -508,16 +502,8 @@ ContributionsByState.prototype.displayUpdatedData_states = function() {
           )}</a>`
         : `${formatAsCurrency(theResults[i].total, true)}`;
       theTbodyString += `</td></tr>`;
-      TODO_remove_temp_total_var += Number(theResults[i].total);
     }
     theTableBody.innerHTML = theTbodyString;
-
-    // TODO This will go away. It's only here to compare the calculated total with the total from the API
-    //eslint-disable-next-line no-console, no-undef
-    console.log(
-      'TESTING—this is the sum we get when JavaScript sums the non-rounded values of the states list: ',
-      TODO_remove_temp_total_var
-    );
   }
 
   // Update the time stamp above the states list
@@ -595,13 +581,6 @@ ContributionsByState.prototype.handleTypeaheadSelect = function(
 ) {
   e.preventDefault();
 
-  //eslint-disable-next-line no-console, no-undef
-  console.log(
-    'handleTypeaheadSelect() e, abbreviatedCandidateDetails: ',
-    e,
-    abbreviatedCandidateDetails
-  );
-
   // Remember the chosen candidate_id
   this.baseStatesQuery.candidate_id = abbreviatedCandidateDetails.id;
   // But we need more details (like election_years) so we need to go get those
@@ -665,7 +644,6 @@ ContributionsByState.prototype.handleTypeaheadFocus = function() {
  * @param {Event} e
  */
 ContributionsByState.prototype.handleElectionYearChange = function(e) {
-  console.log('handleElectionYearChange()'); //eslint-disable-line no-console, no-undef
   e.preventDefault();
   this.baseStatesQuery.cycle = this.yearControl.value;
   // We don't need to load the candidate details for a year change, so we'll just jump right to loading the states data.
@@ -678,8 +656,6 @@ ContributionsByState.prototype.handleElectionYearChange = function(e) {
  */
 ContributionsByState.prototype.handleErrorState = function(errorCode) {
   if (errorCode == 'NO_RESULTS_TO_DISPLAY') {
-    console.log('ERROR: NO DATA TO DISPLAY'); //eslint-disable-line no-console, no-undef
-
     // Empty the states totals list
     let theStatesTableBody = this.table.querySelector('tbody');
     let theDateRange = this.baseStatesQuery.cycle;
@@ -695,7 +671,6 @@ ContributionsByState.prototype.handleErrorState = function(errorCode) {
     // Show error message
     // TODO
   } else if (errorCode == 'NO_CANDIDATE_FOUND') {
-    console.log('ERROR: NO CANDIDATE FOUND'); //eslint-disable-line no-console, no-undef
     // You entered a candidate name or committee ID not associated with a registered candidate. Please try again.
   }
 };
