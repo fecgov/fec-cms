@@ -13,6 +13,7 @@ class TestCommittee(TestCase):
 
     STOCK_COMMITTEE = {
         'organization_type_full': None,
+        'affiliated_committee_name': 'SOME CONNECTED COMMITTEE',
         'zip': '37024',
         'committee_type': 'N',
         'committee_type_full': 'PAC - Nonqualified',
