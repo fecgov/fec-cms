@@ -1,7 +1,5 @@
 'use strict';
 
-/* global window */
-
 var $ = require('jquery');
 var Typeahead = require('../modules/typeahead').Typeahead;
 var URI = require('urijs');

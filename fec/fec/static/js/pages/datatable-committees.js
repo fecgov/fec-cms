@@ -1,7 +1,5 @@
 'use strict';
 
-/* global document */
-
 var $ = require('jquery');
 
 var tables = require('../modules/tables');

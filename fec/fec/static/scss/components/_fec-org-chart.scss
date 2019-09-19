@@ -1,0 +1,593 @@
+// Org Chart Styles
+//
+// Everything related to the org chart
+// Should be included inside the css of whatever page it's included
+//
+
+$orgChart_colorStandard: #b2b1b6;
+$orgChart_colorGreyHover: #d6d7d9;
+
+$orgChart_gutterSize: 10px;
+$orgChart_lineDashed: thin dashed $orgChart_colorStandard;
+$orgChart_lineSolid: 2px solid $orgChart_colorStandard; // line for the wider layout
+$orgChart_lineSolidDark: thin solid $orgChart_colorStandard;
+
+#fec-orgchart {
+  display: block;
+  float: left;
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  position: relative;
+
+  li {
+    display: block;
+    float: left;
+    list-style-type: none;
+    margin-left: 0;
+    padding: $orgChart_gutterSize 0 0 $orgChart_gutterSize;
+    position: relative;
+    width: 100%;
+
+    & + li { // all li after another li
+      padding-top: $orgChart_gutterSize;
+    }
+    &:before {
+      // top half of left-side line, including the horizontal line in the middle
+      border-left: $orgChart_lineSolidDark;
+      border-bottom: $orgChart_lineSolidDark;
+      content: "";
+      height: 50%;
+      left: 0;
+      position: absolute;
+      top: 0;
+      width: 10px;
+      
+    }
+    &:after {
+      // bottom half of left-side line
+      border-left: $orgChart_lineSolidDark;  
+      content: "";
+      height: 50%;
+      left: 0;
+      position: absolute;
+      top: 50%;
+      width: 10px;
+    }
+    &:last-child {
+      &:after {
+        display: none;
+      }
+    }
+    
+    a {
+      align-items: center;
+      border: $orgChart_lineSolidDark;
+      border-radius: 4px;
+      display: flex;
+      flex-direction: column;
+      flex-wrap: wrap;
+      justify-content: center;
+      list-style-type: none;
+      margin: 0;
+      min-height: 80px;
+      padding: 1rem;
+      position: relative;
+      text-align: center;
+      transition: border-color .1s;
+
+      &:hover {
+        border-color: $orgChart_colorGreyHover;
+        transition: border-color .25s;
+      }
+      &:not([href*="/"]) {
+        // if the link doesn't contain a slash (e.g. if it's blank), let's remove its clicks/taps
+        pointer-events: none;
+      }
+
+      span {
+        display: block;
+        line-height: 1.2em;
+        
+        &:first-child {
+          font-size: 14px;
+          font-weight: bold;
+          margin-bottom: .1em;
+        }
+        &:nth-child(2) {
+          font-family: Karla, sans-serif;
+          font-size: 12px;
+          font-weight: normal;
+        } 
+      }
+    }
+
+    &.team {
+      padding-left: $orgChart_gutterSize;
+      padding-bottom: $orgChart_gutterSize * 2;
+
+      &:before {
+        content: "";
+        border-bottom: none;
+        border-left: $orgChart_lineSolidDark;
+        border-right: none;
+        border-top: none;
+        height: 100%;
+        left: 0;
+        position: absolute;
+        top: 0;
+        width: $orgChart_gutterSize;
+      }
+
+      &:last-child {
+        &:before {
+          display: none;
+        }
+        &:after {
+          display: none;
+        }
+      }
+    }
+    // for links that are direct descendants of the li.team, these are the team leads
+    &.team > a:before {
+      content: "";
+      position: absolute;
+      left: calc(-#{$orgChart_gutterSize} - 1px);
+      border-left: $orgChart_lineSolidDark;
+      border-bottom: $orgChart_lineSolidDark;
+      top: -#{$orgChart_gutterSize * 1.5};
+      height: calc(50% + #{$orgChart_gutterSize * 1.5});
+      width: $orgChart_gutterSize;
+    }
+
+    ul {
+      display: block;
+      float: left;
+      margin: 0;
+      padding: 0 0 0 $orgChart_gutterSize;
+      position: relative;
+      width: 100%;
+
+      &:before {
+        border-left: $orgChart_lineSolidDark;
+        content: "";
+        display: block;
+        height: 50%;
+        position: absolute;
+        left: 0;
+        bottom: 50%;
+        width: $orgChart_gutterSize;
+        border-bottom: $orgChart_lineSolidDark;
+      }
+      &:last-child {
+        &:before {
+          display: none;
+        }
+        &:after {
+          display: none;
+        }
+      }
+    }
+
+    &.team-comms {
+      padding: 0 $orgChart_gutterSize #{$orgChart_gutterSize * 2};
+  
+      &:before {
+        content: "";
+        border-bottom: none;
+        border-left: $orgChart_lineSolidDark;
+        border-right: none;
+        border-top: $orgChart_lineSolidDark;
+        height: calc(50% + #{$orgChart_gutterSize});
+        left: 0;
+        position: absolute;
+        top: calc(50% - #{$orgChart_gutterSize});
+        width: 10px;
+      }
+      &:after {
+        border-bottom: none;
+        border-left: none;
+        border-right: $orgChart_lineDashed;
+        border-top: $orgChart_lineDashed;
+        content: "";
+        display: block; 
+        height: calc(50% + #{$orgChart_gutterSize + 1});
+        left: auto;
+        position: absolute;
+        right: 0;
+        top: calc(50% - #{$orgChart_gutterSize});
+        width: $orgChart_gutterSize;
+      }
+      & a:before {
+        display: none;
+      }
+      & a:after {
+        display: none;
+      }
+    }
+    &.team-ig {
+      float: right;
+      padding: $orgChart_gutterSize $orgChart_gutterSize #{$orgChart_gutterSize * 2} #{$orgChart_gutterSize * 2};
+
+      &:before {
+        border-bottom: none;
+        border-top: none;
+        bottom: auto;
+        height: 100%;
+        top: 0;
+      }
+  
+      & > a:before {
+        border-bottom: $orgChart_lineDashed;
+        border-left: none;
+        border-right: $orgChart_lineDashed;
+        border-top: none;
+        bottom: 50%;
+        content: "";
+        height: calc(50% + #{$orgChart_gutterSize});
+        position: absolute;
+        left: auto;
+        right: calc(-#{$orgChart_gutterSize} - 1px);
+        top: auto;
+        width: $orgChart_gutterSize;
+      }
+      & > a:after {
+        display: none;
+      }
+
+      ul {
+        padding: 0 $orgChart_gutterSize 0 0;
+
+        li {
+          padding: $orgChart_gutterSize $orgChart_gutterSize 0 0;
+          
+          &:before {
+            border-left: none;
+            border-right: $orgChart_lineDashed;
+            border-bottom: $orgChart_lineDashed;
+            left: auto;
+            right: 0;
+            width: $orgChart_gutterSize;
+          }
+        }
+      }
+    }
+  }
+}
+
+// With the current page template (with the side nav),
+// $med (640px) is too small but $lg (860px) is way too large.
+// 768px would be ideal.
+// Until we get a full-width template, this will have to do.
+// TODO - When we get the full-width template, remove these comments and adjust the media query properly
+@include media($med) { 
+  #fec-orgchart {
+    display: grid;
+    grid-template-areas:
+      "comms comms comms comms ig"
+      "1fr 1fr 1fr 1fr ig";
+    grid-template-columns: repeat(5, 1fr);
+    grid-template-rows: auto;
+    grid-row-gap: 0;
+    grid-column-gap: 0;
+    justify-items: center;
+
+    li {
+      padding-left: 0;
+
+      ul {
+        padding-left: 0;
+
+        li:first-child {
+          padding-top: #{$orgChart_gutterSize * 2};
+        }
+      }
+      a {
+        min-height: 115px;
+        border: $orgChart_lineSolid;
+      }
+
+      &:before {
+        border-bottom: $orgChart_lineSolid;
+        border-left: $orgChart_lineSolid;
+        left: -#{$orgChart_gutterSize - 1};
+      }
+      &:after {
+        border-left: $orgChart_lineSolid;
+        left: -#{$orgChart_gutterSize - 1};
+      }
+      &.team {
+        padding: 0 $orgChart_gutterSize;
+        width: 100%;
+
+        & > a {
+          &:before {
+            border-bottom: none;
+            border-left: $orgChart_lineSolid;
+            border-top: $orgChart_lineSolid;
+            padding-bottom: $orgChart_gutterSize;
+            top: 50%;
+          }
+          // &:after {
+          //   border-left: $orgChart_lineSolid;
+          // }
+        }
+        
+        &:before {
+          content: "";
+          border-bottom: none;
+          border-right: $orgChart_lineSolid;
+          border-left: none;
+          border-top: $orgChart_lineSolid;
+          height: $orgChart_gutterSize;
+          left: 0;
+          position: absolute;
+          top: -#{$orgChart_gutterSize};
+          width: 50%;
+        }
+        &:after {
+          border-left: none;
+          border-top: $orgChart_lineSolid;
+          content: "";
+          height: $orgChart_gutterSize;
+          left: 50%;
+          position: absolute;
+          top: -#{$orgChart_gutterSize};
+          width: 50%;
+        }
+
+        &.team-comms {
+          grid-area: comms;
+          max-width: 40%;
+          padding-bottom: $orgChart_gutterSize * 2;
+
+          &:before {
+            // From comms to the teams
+            content: "";
+            border-bottom: none;
+            border-right: $orgChart_lineSolid;
+            border-left: none;
+            border-top: none;
+            display: block;
+            height: 10px;
+            left: 0;
+            position: absolute;
+            top: calc(100% - #{$orgChart_gutterSize * 2});
+            width: 50%;
+          }
+          &:after {
+            // From comms to IG
+            border-bottom: none;
+            border-left: none;
+            border-right: none;
+            border-top: $orgChart_lineDashed;
+            content: "";
+            display: block;
+            height: calc(50% - #{$orgChart_gutterSize});
+            left: calc(100% - #{$orgChart_gutterSize});
+            position: absolute;
+            right: auto;
+            top: $orgChart_gutterSize * 4;
+            width: 80%;
+          }
+          a {
+            min-height: 80px;
+          }
+        }
+        &.team-ig {
+          grid-area: ig;
+          padding-top: $orgChart_gutterSize * 5;
+
+          &:before {
+            border-right: $orgChart_lineDashed;
+            border-top: $orgChart_lineDashed;
+            top: $orgChart_gutterSize * 4;
+          }
+          &:after {
+            display: none;
+          }
+          ul {
+            padding: 0;
+
+            li {
+              padding-right: 0;
+
+              &:before {
+                border-bottom: none;
+                border-right: $orgChart_lineSolid;
+                border-top: none;
+                height: $orgChart_gutterSize * 2;
+                left: 0;
+                top: 0;
+                width: 50%;
+              }
+            }
+          }
+          a:before {
+            display: none;
+          }
+        }
+      }
+    }
+    li.team.team-ig + li.team {
+      // The first .team after a .team-ig
+      &:before {
+        display: none;
+      }
+      &:after {
+        border-left: $orgChart_lineSolid;
+      }
+    }
+    li.team:last-child {
+      // The last .team
+      &:before {
+        display: block;
+      }
+    }
+  } // close @media 768
+}
+
+/**
+ * This is the HTML I've been using for the org chart.
+ * It's just a <ul> with an ID of fec-orgchart.
+ * Each of the first-level <li> have a class="team".
+ * The <a> directly inside each <li class="team"> is the team lead.
+ * Following each team lead is a <ul> with no classes.
+ * Inside each of those <ul> are <li>s, also without classes.
+ * Each person is a <a> with no classes.
+ * Each person's name is in a <span>; the job title is in a different <span>
+*/
+
+/*
+<ul id="fec-orgchart">
+  <li class="team team-comms">
+    <a href="https://www.fec.gov/about/leadership-and-structure/#commissioners">
+      <span>The Commissioners</span>
+    </a>
+  </li>
+  <li class="team team-ig">
+    <a href="https://transition.fec.gov/fecig/fecig.shtml">
+      <span>Christopher Skinner</span>
+      <span>Inspector General<sup>3</sup></span>
+    </a>
+    <ul>
+      <li>
+        <a href="https://transition.fec.gov/fecig/fecig.shtml">
+          <span>Vacant</span>
+          <span>Deputy Inspector General</span>
+        </a>
+      </li>
+    </ul>
+  </li><!-- /IG -->
+  <li class="team">
+    <a href="https://transition.fec.gov/about/offices/OGC/OGC.shtml#ogc">
+      <span>Lisa J. Stevenson</span>
+      <span>Acting General Counsel</span>
+    </a>
+    <ul>
+      <li>
+        <a href="https://transition.fec.gov/about/offices/OGC/DepGC.shtml">
+          <span>Gregory R. Baker</span>
+          <span>Deputy General Counsel - Adminstration</span>
+        </a>
+      </li>
+      <li>
+        <a href="https://transition.fec.gov/about/offices/OGC/DepGCLaw.shtml">
+          <span>Lisa J. Stevenson</span>
+          <span>Deputy General Counsel - Law</span>
+        </a>
+      </li>
+      <li>
+        <a href="https://transition.fec.gov/about/offices/OGC/AGC_enforcement.shtml#enf">
+          <span>Charles Kitcher</span>
+          <span>Acting Associate General Counsel - Enforcement</span>
+        </a>
+      </li>
+      <li>
+        <a href="https://transition.fec.gov/about/offices/OGC/AGC_litigation.shtml#lit">
+          <span>Kevin Deeley</span>
+          <span>Associate General Counsel - Litigation</span>
+        </a>
+      </li>
+      <li>
+        <a href="https://transition.fec.gov/about/offices/OGC/AGC_policy.shtml#policy">
+          <span>Neven Stipanovic</span>
+          <span>Acting Associate General Counsel - Policy</span>
+        </a>
+      </li>
+    </ul>
+  </li><!-- /team -->
+  <li class="team">
+    <a href="https://transition.fec.gov/about/offices/OSD/OSD.shtml">
+      <span>Alec Palmer</span>
+      <span>Staff Director</span>
+    </a>
+    <ul>
+      <li>
+        <a href="https://transition.fec.gov/about/offices/DSDMA/DSDMA.shtml">
+          <span>Kate Higginbothom</span>
+          <span>Deputy Staff Director Management &amp; Administration</span>
+        </a>
+      </li>
+      <li>
+        <a href="https://transition.fec.gov/about/offices/CCO/CCO.shtml">
+          <span>Patricia C. Orrock</span>
+          <span>Deputy Staff Director Chief Compliance Officer</span>
+        </a>
+      </li>
+      <li>
+        <a href="https://transition.fec.gov/about/offices/CDEAO/CDEAO.shtml">
+          <span>Vacant</span>
+          <span>Deputy Staff Director Chief Communications Officer</span>
+        </a>
+      </li>
+      <li>
+        <a href="https://transition.fec.gov/about/offices/EEO/EEO.shtml">
+          <span>Kevin Salley</span>
+          <span>
+            Director Equal Employment Opportunity &amp; Programs<sup>2</sup>
+          </span>
+        </a>
+      </li>
+    </ul>
+  </li><!-- /team -->
+  <li class="team">
+    <a href="https://transition.fec.gov/about/offices/CFO/CFO.shtml">
+      <span>John Quinlan</span>
+      <span>Chief Financial Officer</span>
+    </a>
+    <ul>
+      <li>
+        <a href="https://transition.fec.gov/about/offices/budget/budget.shtml">
+          <span>Gilbert Ford</span>
+          <span>Director of Budget</span>
+        </a>
+      </li>
+      <li>
+        <a href="https://transition.fec.gov/about/offices/finance/finance.shtml">
+          <span>Vacant</span>
+          <span>Director of Accounting</span>
+        </a>
+      </li>
+      <li>
+        <a href="https://transition.fec.gov/about/offices/finance/procurement.shtml">
+          <span>Pamela Jones</span>
+          <span>Director of Procurement</span>
+        </a>
+      </li>
+    </ul>
+  </li><!-- /team -->
+  <li class="team">
+    <a href="https://transition.fec.gov/about/offices/CIO/CIO.shtml">
+      <span>Alec Palmer</span>
+      <span>Chief Information Officer<sup>1</sup></span>
+    </a>
+    <ul>
+      <li>
+        <a href="https://transition.fec.gov/about/offices/CIO/CIO.shtml">
+          <span>Wei Luo</span>
+          <span>Deputy CIO Enterprise Architecture</span>
+        </a>
+      </li>
+      <li>
+        <a href="">
+          <span>Kimberly D. Humphries</span>
+          <span>Deputy CIO Operational Support</span>
+        </a>
+      </li>
+      <li>
+        <a href="">
+          <span>Rohan Jayasekera</span>
+          <span>Director Database Management</span>
+        </a>
+      </li>
+      <li>
+        <a href="">
+          <span>Wenchun Jiang</span>
+          <span>Chief Information Security Officer</span>
+        </a>
+      </li>
+    </ul>
+  </li><!-- /team -->
+</ul>
+*/
