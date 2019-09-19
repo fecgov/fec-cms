@@ -434,8 +434,18 @@ ContributionsByState.prototype.displayUpdatedData_candidate = function() {
   validElectionYears.sort((a, b) => b - a);
   // Remember what year's election we're currently showing (will help if we were switching between candidates of the same year)
   let previousElectionYear = this.yearControl.value;
-  // We'll show the most recent election of these options
+  // Otherwise we'll show the most recent election of these options
   let nextElectionYear = validElectionYears[0];
+
+  // validElectionYears.includes(previousElectionYear) wasn't working so let's go through the validElectionYears
+  // and stick with previousElectionYear if it's a valid year for this candidate
+  for (let i = 0; i < validElectionYears.length; i++) {
+    if (previousElectionYear == validElectionYears[i]) {
+      nextElectionYear = previousElectionYear;
+      break;
+    }
+  }
+
   // Build the <option><option> list
   let newSelectOptions = '';
   for (let i = 0; i < validElectionYears.length; i++) {
