@@ -307,7 +307,11 @@ def get_committee(committee_id, cycle):
 
     redirect_to_previous = False if cycle else True
     committee, all_candidates, cycle = api_caller.load_with_nested(
-        'committee', committee_id, 'candidates', cycle
+        'committee',
+        committee_id,
+        'candidates',
+        cycle,
+        election_full=False,
     )
 
     # When there are multiple candidate records of various offices (H, S, P)

@@ -1,7 +1,5 @@
 'use strict';
 
-/* global require, document, context */
-
 var $ = require('jquery');
 
 var tables = require('../modules/tables');

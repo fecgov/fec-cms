@@ -3,7 +3,7 @@
 var $ = require('jquery');
 var moment = require('moment');
 
-var Filter = require('./filter-base.js');
+var Filter = require('./filter-base');
 
 require('jquery.inputmask');
 require('jquery.inputmask/dist/inputmask/inputmask.date.extensions');
