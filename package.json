@@ -76,6 +76,7 @@
     "cache-loader": "^1.2.5",
     "chai": "^3.4.1",
     "clean-webpack-plugin": "^0.1.16",
+    "element-closest": "^3.0.1",
     "enzyme": "^3.9.0",
     "enzyme-adapter-react-16": "^1.9.1",
     "eslint": "^6.2.1",
