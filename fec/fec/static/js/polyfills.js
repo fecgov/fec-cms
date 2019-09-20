@@ -42,3 +42,9 @@ import 'whatwg-fetch';
  * TODO used for
  */
 import 'promise-polyfill/src/polyfill';
+
+/**
+ * element-closest
+ * used to find closest ancestor of element
+ */
+import 'element-closest';
