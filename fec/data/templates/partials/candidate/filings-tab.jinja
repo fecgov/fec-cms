@@ -1,4 +1,5 @@
-{% import 'macros/entity-pages.jinja' as entity %}
+{% import 'macros/entity-pages.jinja' as entity with context %}
+<!-- `with context` passes template variables to the macro -->
 {% import 'macros/missing.jinja' as missing %}
 
 <section id="section-6" role="tabpanel" aria-hidden="true" aria-labelledby="section-6-heading">
@@ -7,7 +8,7 @@
   <div class="slab slab--inline slab--neutral u-padding--left u-padding--right">
     <div class="content__section">
     {% if has_raw_filings %}
-      {{ entity.raw_filings_table(cycle=None, committee_id=candidate_id, min_receipt_date=min_receipt_date, is_committee=False) }}
+      {{ entity.raw_filings_table(is_committee=False) }}
     {% endif %}
       <div id="statements-of-candidacy" class="entity__figure row">
         <div class="content__section">

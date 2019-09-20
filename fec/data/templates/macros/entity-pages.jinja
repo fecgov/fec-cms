@@ -1,4 +1,4 @@
-{% macro filings_table(title, dataType, cycle, committee_id, showTrigger=False) %}
+{% macro filings_table(title, dataType, showTrigger=False) %}
 
 <!-- `namespace` is needed to persist `form_types` outside the loop -->
 
@@ -40,13 +40,13 @@
     </div>
 {% endmacro %}
 
-{% macro raw_filings_table(cycle, committee_id, min_receipt_date, is_committee=True) %}
+{% macro raw_filings_table(is_committee=True) %}
     <div class="entity__figure row" id="raw-filings">
       <div class="heading--section heading--with-action">
         <h3 class="heading__left">Raw electronic filings</h3>
         {% set link = "/data/filings/?data_type=efiling&committee_id=" + committee_id +
           "&min_receipt_date=" + min_receipt_date %}
-        {% if cycle %}
+        {% if is_committee %}
           {% set link = link + "&cycle=" + cycle|string %}
         {% endif %}
         <a class="heading__right button button--alt button--browse"

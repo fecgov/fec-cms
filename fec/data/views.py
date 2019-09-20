@@ -253,6 +253,8 @@ def get_candidate(candidate_id, cycle, election_full):
         'cash_summary': cash_summary,
         'committee_groups': committee_groups,
         'committee_ids': committee_ids,
+        # filings endpoint takes candidate ID value as committee ID arg
+        'committee_id': candidate['candidate_id'],
         'committees_authorized': committees_authorized,
         'context_vars': context_vars,
         'cycle': int(cycle),
