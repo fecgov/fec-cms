@@ -257,7 +257,7 @@ FilterTypeahead.prototype.getFilters = function(values) {
     values.forEach(function(value) {
       self.appendCheckbox({
         name: self.fieldName,
-        label: ID_PATTERN.test(value) ? 'Loading...' : value,
+        label: ID_PATTERN.test(value) ? 'Loading&hellip;' : value,
         value: value
       });
     });

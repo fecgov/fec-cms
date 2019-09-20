@@ -1,5 +1,9 @@
 'use strict';
 
+/**
+ * @fileoverview Creates the Typeahead element, extending node_modules/typeahead.js/dist/typeahead.jquery.js
+ */
+
 var $ = require('jquery');
 var URI = require('urijs');
 var _ = require('underscore');
@@ -121,7 +125,7 @@ var candidateDataset = {
   templates: {
     header: '<span class="tt-suggestion__header">Select a candidate:</span>',
     pending:
-      '<span class="tt-suggestion__loading">Loading candidates...</span>',
+      '<span class="tt-suggestion__loading">Loading candidates&hellip;</span>',
     notFound: Handlebars.compile(''), // This has to be empty to not show anything
     suggestion: Handlebars.compile(
       '<span>' +
@@ -140,7 +144,7 @@ var committeeDataset = {
   templates: {
     header: '<span class="tt-suggestion__header">Select a committee:</span>',
     pending:
-      '<span class="tt-suggestion__loading">Loading committees...</span>',
+      '<span class="tt-suggestion__loading">Loading committees&hellip;</span>',
     notFound: Handlebars.compile(''), // This has to be empty to not show anything
     suggestion: Handlebars.compile(
       '<span class="tt-suggestion__name">{{ name }} ({{ id }})</span>'
@@ -156,7 +160,7 @@ var auditCommitteeDataset = {
   templates: {
     header: '<span class="tt-suggestion__header">Select a committee:</span>',
     pending:
-      '<span class="tt-suggestion__loading">Loading committees...</span>',
+      '<span class="tt-suggestion__loading">Loading committees&hellip;</span>',
     notFound: Handlebars.compile(''), // This has to be empty to not show anything
     suggestion: Handlebars.compile(
       '<span class="tt-suggestion__name">{{ name }} ({{ id }})</span>'
@@ -172,7 +176,7 @@ var auditCandidateDataset = {
   templates: {
     header: '<span class="tt-suggestion__header">Select a candidate:</span>',
     pending:
-      '<span class="tt-suggestion__loading">Loading candidates...</span>',
+      '<span class="tt-suggestion__loading">Loading candidates&hellip;</span>',
     notFound: Handlebars.compile(''), // This has to be empty to not show anything
     suggestion: Handlebars.compile(
       '<span class="tt-suggestion__name">{{ name }} ({{ id }})</span>'
@@ -242,6 +246,20 @@ var typeaheadOpts = {
   hint: false
 };
 
+/**
+ * @class
+ * @param {String} selector - A string to be used to find the element in the page.
+ * @param {String} type - The kinda of data we'll be showing. e.g., 'candidates'.
+ * @param {URL} url - Optional. Where we should find the data if not the default.
+ *
+ * @event typeahead:select Triggered when a user clicks an autocomplete search result
+ * @property {jQuery.Event}
+ * @property {Object} - The data from the selected item
+ *
+ * @event typeahead:render Inherited from typeahead.jquery.js, called any time the pulldown menu changes. Typing a character calls the event when the menu is reset _and_ when it's drawn again
+ * @property {jQuery.Event}
+ * @property {Object} - null if no results. Otherwise we get back an {Object} for each item in the menu
+ */
 function Typeahead(selector, type, url) {
   this.$input = $(selector);
   this.url = url || '/';

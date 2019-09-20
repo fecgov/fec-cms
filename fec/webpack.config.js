@@ -137,7 +137,11 @@ module.exports = [
     name: 'widgets',
     entry: {
       'aggregate-totals': './fec/static/js/widgets/aggregate-totals.js',
-      'aggregate-totals-box': './fec/static/js/widgets/aggregate-totals-box.js'
+      'aggregate-totals-box': './fec/static/js/widgets/aggregate-totals-box.js',
+      'contributions-by-state':
+        './fec/static/js/widgets/contributions-by-state.js',
+      'contributions-by-state-box':
+        './fec/static/js/widgets/contributions-by-state-box.js'
     },
     output: {
       filename: 'widgets/[name].js',
