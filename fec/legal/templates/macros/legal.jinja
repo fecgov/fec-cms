@@ -79,7 +79,7 @@
 {% endif %}
 <form id="{{ location }}-search" action="/data/legal/search/" autocomplete="off" class="search__container">
   <div class="combo combo--search {{ size }}">
-    {% set document_types = (('all', 'All'),('statutes', 'Statutes'),('regulations', 'Regulations'),('advisory_opinions', 'Advisory opinions'),('murs', 'closed Matters Under Review')) %}
+    {% set document_types = (('all', 'All'),('statutes', 'Statutes'),('regulations', 'Regulations'),('advisory_opinions', 'Advisory opinions'),('murs', 'Closed Matters Under Review')) %}
     <select class="search__select {{select_class}}" name="search_type" aria-label="Select a document type">
       {% for value, name in document_types %}
       <option value="{{ value }}" {% if result_type == value %}selected{% endif %}>{{ name }}</option>
