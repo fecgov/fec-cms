@@ -446,6 +446,14 @@ def get_committee(committee_id, cycle):
     else:
         template_variables['has_raw_filings'] = False
 
+    # Needed for filings tab
+    template_variables['filings_lookup'] = {
+        'reports': ['F3', 'F3X', 'F3P', 'F3L', 'F4', 'F5', 'F7', 'F13'],
+        'notices': ['F5', 'F24', 'F6', 'F9', 'F10', 'F11'],
+        'statements': ['F1'],
+        'other': ['F1M', 'F8', 'F99', 'F12']
+    }
+
     return template_variables
 
 

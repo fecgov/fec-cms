@@ -1,5 +1,6 @@
 {% import 'macros/cycle-select.jinja' as select %}
-{% import 'macros/entity-pages.jinja' as entity %}
+{% import 'macros/entity-pages.jinja' as entity with context %}
+<!-- `with context` allows the template variables to be passed to the macro -->
 
 <section id="section-5" role="tabpanel" aria-hidden="true" aria-labelledby="section-5-heading">
   <h2 id="section-5-heading">

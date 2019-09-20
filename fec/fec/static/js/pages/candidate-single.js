@@ -324,11 +324,14 @@ function initOtherDocumentsTable() {
     query: {
       candidate_id: candidateId,
       form_type: ['F99', 'RFAI'],
-      /* Performing an include would only show RFAI form types. For this reason, excludes need to be
-         used for request_type
+      /* Performing an include would only show RFAI form types.
+      For this reason, excludes need to be used for request_type
 
       Exclude all request types except for:
-      // RQ-5: RFAI referencing Statement of Candidacy */
+        - RQ-5: RFAI referencing Statement of Candidacy
+
+      If this logic changes, update "Filter this data" button in filings-tab.jinja
+      */
       request_type: ['-1', '-2', '-3', '-4', '-5', '-6', '-7', '-8', '-9'],
       sort_hide_null: ['false']
     },

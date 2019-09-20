@@ -1,9 +1,20 @@
 {% macro filings_table(title, dataType, cycle, committee_id, showTrigger=False) %}
+
+<!-- `namespace` is needed to persist `form_types` outside the loop -->
+
+<!-- Unlike the table logic in committee-single.js, we can't currenly use excludes -->
+<!-- All form types should include all RFAIs until we can exclude request types -->
+{% set ns = namespace(form_types='form_type=RFAI') %}
+
+{% for form_type in filings_lookup[dataType] %}
+    {% set ns.form_types = ns.form_types + '&form_type=' + form_type %}
+{% endfor %}
+
     <div class="entity__figure row" id="{{dataType}}">
       <div class="heading--section heading--with-action">
         <h3 class="heading__left">{{ title }}</h3>
         <a class="heading__right button button--alt button--browse"
-           href="/data/filings/?committee_id={{ committee_id }}&cycle={{ cycle }}">
+           href="/data/filings/?committee_id={{ committee_id }}&cycle={{ cycle }}&{{ns.form_types}}">
           Filter this data
         </a>
       </div>
