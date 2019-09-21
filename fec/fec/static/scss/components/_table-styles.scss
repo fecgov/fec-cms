@@ -314,6 +314,9 @@ h3 + .simple-table {
       &.footnote_row {
         display:none !important;
       }
+      &:first-child{
+        display: none !important;
+      }
     }
 
      td {
@@ -321,26 +324,26 @@ h3 + .simple-table {
       border: none;
       border-bottom: 1px solid $gray-light !important;
       position: relative;
+      font-weight: bold;
 
       .th_append {
-        display:block !important;
         display: inline-block !important;
         font-weight: bold;
-        min-width: 16rem;
+        min-width: u(16rem);
       }
 
     }
 
-     td:before {
+     /*td:before { */
       /* Now like a table header */
       /*position: absolute; */
       /* Top/left values mimic padding */
-      top: 6px;
+      /*top: 6px;
       left: 6px;
       width: 45%;
       padding-right: 10px;
       white-space: nowrap;
-    }
+    } */
 
     /*tr:first-child th a[href^="#"],tr td:first-of-type a[href^="#"]{
       pointer-events: none;
@@ -364,11 +367,18 @@ h3 + .simple-table {
     .ftnt_append {
     display: block !important;
     padding: u(0 3rem);
+    font-weight: normal;
+      b {
+        margin-left: u(-1.5rem);
+        padding-right: u(.1rem);
+      }
 
       .ftnt-close {
         position: absolute;
-        top: 50%;
-        right:1rem;
+        top: u(4.2rem);
+        right: u(1.5rem);
+        font-size: u(1.5rem);
+        border: 1px solid #ddd;
       }
     }
   }
