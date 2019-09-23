@@ -140,3 +140,25 @@
     @include span-columns(4);
   }
 }
+
+// Rules specifically for the top-raisers chart on the data landing page
+#top-raisers .chart-table .simple-table__row {
+  &:after {
+    content: '';
+    display: block;
+    height: 1rem;
+    border-bottom: 1px solid #d6d7d9;
+    position: relative;
+  }
+  .simple-table__cell {
+    text-align: left;
+  }
+  @include media($med) {
+    &:after {
+      display: none;
+    }
+    .simple-table__cell {
+      text-align: initial;
+    }
+  }
+}
