@@ -323,7 +323,7 @@ Array.from(date_sups)
   .forEach(node => {
     const indx = node.innerText;
     const state_class = node.closest('tr').className;
-    const ftnt_colspan = node.closest('tr').cells.length -1
+    const ftnt_colspan = node.closest('tr').cells.length - 1;
 
     const ftnt_row = `<tr class='${state_class} footnote_row footnote_${indx}'>
                         <td></td>
