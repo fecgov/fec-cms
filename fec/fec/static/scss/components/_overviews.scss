@@ -158,7 +158,10 @@
       display: none;
     }
     .simple-table__cell {
-      text-align: initial;
+      text-align: left;
+      &.t-right-aligned {
+        text-align: right;
+      }
     }
   }
 }
