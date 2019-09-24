@@ -21,9 +21,17 @@
     <h1 class="entity__name content__section--narrow">{{ name }}</h1>
     <div class="heading--section">
       <span class="t-data t-bold entity__type">
-        {{ committee_type_full }}
-         - {{ designation_full }}
-         {% if organization %} - {{ organization }}{% endif %}
+        {% if is_SSF %}
+          {{ organization_type_full }} {{ committee_type_full }}
+          {% if designation %}
+          - {{ designation_full }}
+          {% endif %}
+        {% else %}
+          {{ committee_type_full }}
+            {% if designation %}
+            - {{ designation_full }}
+            {% endif %}
+         {% endif %}
       </span>
       <span class="t-data t-bold entity__type">ID: {{ committee_id }}</span>
     </div>

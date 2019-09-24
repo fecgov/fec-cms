@@ -58,17 +58,26 @@
         </tr>
         <tr>
           <td class="figure__label">Committee type:</td>
-          <td class="figure__value">{{ committee_type_full }}</td>
+          <td class="figure__value">
+            {# If organizaton_type exists it's a SSF #}
+            {% if is_SSF %}
+              {{ organization_type_full }} {{ committee_type_full }}
+            {% else %}
+              {{ committee_type_full }}
+            {% endif %}
+          </td>
         </tr>
         <tr>
-          <td class="figure__label">Committee designation:</td>
-          <td class="figure__value">{{ designation_full }}</td>
+          {% if designation %}
+            <td class="figure__label">Committee designation:</td>
+            <td class="figure__value">{{ designation_full }}</td>
+          {% endif %}
         </tr>
-        {% if organization %}
+        {% if is_SSF %}
           <tr>
-            <td class="figure__label">Organization type:</td>
+            <td class="figure__label">Connected organization:</td>
             <td class="figure__value">
-                {{ organization }}
+                {{ affiliated_committee_name }}
             </td>
           </tr>
         {% endif %}

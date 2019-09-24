@@ -351,6 +351,9 @@ def get_committee(committee_id, cycle):
     reports = financials['reports']
     totals = financials['totals']
 
+    # Check organization types to determine SSF status
+    is_SSF = committee.get('organization_type') in ['W','C','L','V','M','T']
+
     context_vars = {
         'cycle': cycle,
         'timePeriod': str(int(cycle) - 1) + '–' + str(cycle),
@@ -361,9 +364,12 @@ def get_committee(committee_id, cycle):
         'name': committee['name'],
         'committee': committee,
         'committee_id': committee_id,
-        'committee_type_full': committee['committee_type_full'],
         'committee_type': committee['committee_type'],
+        'committee_type_full': committee['committee_type_full'],
+        'affiliated_committee_name': committee['affiliated_committee_name'],
         'organization_type': committee['organization_type'],
+        'organization_type_full': committee['organization_type_full'],
+        'is_SSF': is_SSF,
         'designation_full': committee['designation_full'],
         'street_1': committee['street_1'],
         'street_2': committee['street_2'],
