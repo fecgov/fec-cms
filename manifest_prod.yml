@@ -4,6 +4,7 @@ buildpack: python_buildpack
 routes:
   - route: fec-prod-cms.app.cloud.gov
 instances: 4
+memory: 1G
 services:
   - cms-creds-prod
   - fec-creds-prod
