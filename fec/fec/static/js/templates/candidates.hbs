@@ -13,7 +13,11 @@
       <td class="panel__term">Election years</td>
       <td class="panel__data">
         {{#each election_years}}
-          <a href="{{electionUrl this parentContext=../this index=@index}}">{{this}}</a>{{#unless @last}}, {{/unless}}
+          {{#if (gte this 1980)}}
+            <a href="{{electionUrl this parentContext=../this index=@index}}">{{this}}</a>{{#unless @last}}, {{/unless}}
+          {{else}}
+            {{this}}{{#unless @last}}, {{/unless}}
+          {{/if}}
         {{/each}}
         </ul>
       </td>
