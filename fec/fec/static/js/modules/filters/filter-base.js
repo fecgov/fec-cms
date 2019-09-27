@@ -57,16 +57,17 @@ Filter.prototype.setValue = function(value) {
 };
 
 Filter.prototype.formatValue = function($input, value) {
-  var prefix = $input.data('prefix');
-  var suffix = $input.data('suffix');
+  var prefix = _.escape($input.data('prefix'));
+  var suffix = _.escape($input.data('suffix'));
+  var escapedValue = _.escape(value);
   if (prefix) {
     prefix = prefix === '$' ? prefix : prefix + ' ';
-    value = '<span class="prefix">' + prefix + '</span>' + value;
+    escapedValue = '<span class="prefix">' + prefix + '</span>' + escapedValue;
   }
   if (suffix) {
-    value = value + '<span class="suffix"> ' + suffix + '</span>';
+    escapedValue = escapedValue + '<span class="suffix"> ' + suffix + '</span>';
   }
-  return value;
+  return escapedValue;
 };
 
 Filter.prototype.handleAddEvent = function(e, opts) {
