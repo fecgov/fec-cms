@@ -665,7 +665,7 @@ ContributionsByState.prototype.handleErrorState = function(errorCode) {
       theDateRange = theDateRange - 5 + '-' + theDateRange;
     else theDateRange = theDateRange - 1 + '-' + theDateRange;
 
-    let theErrorMessageHTML = `<tr><td colspan="3" class="error-msg">We don&apos;t have individual contributions for this candidate for ${theDateRange}.</td></tr>`;
+    let theErrorMessageHTML = `<tr><td colspan="3" class="error-msg">We don&apos;t have itemized individual contributions for this candidate for ${theDateRange}.</td></tr>`;
     theStatesTableBody.innerHTML = theErrorMessageHTML;
 
     // Show error message
