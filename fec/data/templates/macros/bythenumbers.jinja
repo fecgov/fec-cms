@@ -24,7 +24,7 @@
         <option value="H" {% if office == 'H' %}selected{% endif %}>House candidates</option>
       </select>
 
-      <label for="election-year" class="breakdown__title label t-inline-block">Running in</label>
+      <label for="election-year" class="breakdown__title label t-inline-block">Running in: </label>
       <select id="election-year" name="cycle" class="js-election-year form-element--inline" aria-controls="top-table">
         {% for each in election_years | sort(reverse=True) %}
           <option

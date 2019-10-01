@@ -1,7 +1,5 @@
 'use strict';
 
-/* global ga */
-
 var _ = require('underscore');
 var URI = require('urijs');
 

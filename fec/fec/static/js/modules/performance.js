@@ -1,6 +1,6 @@
 'use strict';
 
-/* global require, module, window, perfBar */
+/* global perfBar */
 
 var _ = require('underscore');
 

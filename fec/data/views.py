@@ -253,6 +253,8 @@ def get_candidate(candidate_id, cycle, election_full):
         'cash_summary': cash_summary,
         'committee_groups': committee_groups,
         'committee_ids': committee_ids,
+        # filings endpoint takes candidate ID value as committee ID arg
+        'committee_id': candidate['candidate_id'],
         'committees_authorized': committees_authorized,
         'context_vars': context_vars,
         'cycle': int(cycle),
@@ -349,6 +351,9 @@ def get_committee(committee_id, cycle):
     reports = financials['reports']
     totals = financials['totals']
 
+    # Check organization types to determine SSF status
+    is_SSF = committee.get('organization_type') in ['W','C','L','V','M','T']
+
     context_vars = {
         'cycle': cycle,
         'timePeriod': str(int(cycle) - 1) + '–' + str(cycle),
@@ -359,9 +364,12 @@ def get_committee(committee_id, cycle):
         'name': committee['name'],
         'committee': committee,
         'committee_id': committee_id,
-        'committee_type_full': committee['committee_type_full'],
         'committee_type': committee['committee_type'],
+        'committee_type_full': committee['committee_type_full'],
+        'affiliated_committee_name': committee['affiliated_committee_name'],
         'organization_type': committee['organization_type'],
+        'organization_type_full': committee['organization_type_full'],
+        'is_SSF': is_SSF,
         'designation_full': committee['designation_full'],
         'street_1': committee['street_1'],
         'street_2': committee['street_2'],
@@ -445,6 +453,14 @@ def get_committee(committee_id, cycle):
         )
     else:
         template_variables['has_raw_filings'] = False
+
+    # Needed for filings tab
+    template_variables['filings_lookup'] = {
+        'reports': ['F3', 'F3X', 'F3P', 'F3L', 'F4', 'F5', 'F7', 'F13'],
+        'notices': ['F5', 'F24', 'F6', 'F9', 'F10', 'F11'],
+        'statements': ['F1'],
+        'other': ['F1M', 'F8', 'F99', 'F12']
+    }
 
     return template_variables
 
