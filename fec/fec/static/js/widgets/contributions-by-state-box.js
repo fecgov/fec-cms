@@ -427,6 +427,7 @@ ContributionsByState.prototype.displayUpdatedData_candidate = function() {
     }
   });
   // Take the new even election years set and make it distinct
+  // eslint-disable-next-line no-undef
   let validElectionYears = [...new Set(evenElectionYears)];
   // Sort them so the most recent is first so it'll be on top of the <select>
   validElectionYears.sort((a, b) => b - a);
@@ -649,7 +650,12 @@ ContributionsByState.prototype.handleTypeaheadFocus = function() {
 };
 
 // Set the candidate's name and link change
-ContributionsByState.prototype.setCandidateName = function(id, candidateName, party, cycle) {
+ContributionsByState.prototype.setCandidateName = function(
+  id,
+  candidateName,
+  party,
+  cycle
+) {
   let candidateNameElement = this.candidateDetailsHolder.querySelector('h1');
   candidateNameElement.innerHTML = `<a href="/data/candidate/${id}/?cycle=${cycle}&election_full=true">${candidateName}</a> [${party}]`;
 };
