@@ -419,7 +419,7 @@ ContributionsByState.prototype.displayUpdatedData_candidate = function() {
   // Grab election_years from the candidate details
   let candidateElectionYears = this.candidateDetails.election_years;
   let evenElectionYears = candidateElectionYears.map(electionYear => {
-    if (electionYear % 2 == 0) {
+    if (electionYear % 2 === 0) {
       return electionYear;
     } else {
       electionYear = electionYear + 1;

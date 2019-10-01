@@ -42,3 +42,7 @@ import 'whatwg-fetch';
  * TODO used for
  */
 import 'promise-polyfill/src/polyfill';
+
+// For ES6 Set data structure
+// eslint-disable-next-line no-unused-vars
+var Set = require('es6-set');
