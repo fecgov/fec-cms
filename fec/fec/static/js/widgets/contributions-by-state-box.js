@@ -402,14 +402,6 @@ ContributionsByState.prototype.displayUpdatedData_candidate = function() {
   let theTypeahead = document.querySelector('#contribs-by-state-cand');
   if (!theTypeahead.value) theTypeahead.value = this.candidateDetails.name;
 
-  // Handle the candidate's name…
-  let candidateNameElement = this.candidateDetailsHolder.querySelector('h1');
-  candidateNameElement.innerHTML = `<a href="/data/candidate/${
-    this.candidateDetails.candidate_id
-  }/?cycle=${this.baseStatesQuery.cycle}&election_full=true">${
-    this.candidateDetails.name
-  }</a> [${this.candidateDetails.party}]`;
-
   // …their desired office during this election…
   let candidateOfficeHolder = this.candidateDetailsHolder.querySelector('h2');
   let theOfficeName = this.candidateDetails.office_full;
@@ -425,7 +417,18 @@ ContributionsByState.prototype.displayUpdatedData_candidate = function() {
   // TODO - handle if there are no years
   // TODO - handle if there is only one year
   // Grab election_years from the candidate details
-  let validElectionYears = this.candidateDetails.election_years;
+  let candidateElectionYears = this.candidateDetails.election_years;
+  let evenElectionYears = candidateElectionYears.map(electionYear => {
+    if (electionYear % 2 === 0) {
+      return electionYear;
+    } else {
+      electionYear = electionYear + 1;
+      return electionYear;
+    }
+  });
+  // Take the new even election years set and make it distinct
+  // eslint-disable-next-line no-undef
+  let validElectionYears = [...new Set(evenElectionYears)];
   // Sort them so the most recent is first so it'll be on top of the <select>
   validElectionYears.sort((a, b) => b - a);
   // Remember what year's election we're currently showing (will help if we were switching between candidates of the same year)
@@ -463,6 +466,14 @@ ContributionsByState.prototype.displayUpdatedData_candidate = function() {
 
     // this.loadStatesData();
   }
+  // Update candidate name and link
+  this.setCandidateName(
+    this.candidateDetails.candidate_id,
+    this.candidateDetails.name,
+    this.candidateDetails.party,
+    this.baseStatesQuery.cycle
+  );
+
   // Load the new states data
   this.loadStatesData();
 };
@@ -638,6 +649,17 @@ ContributionsByState.prototype.handleTypeaheadFocus = function() {
   this.typeahead_revertValue = theTypeahead.value;
 };
 
+// Set the candidate's name and link change
+ContributionsByState.prototype.setCandidateName = function(
+  id,
+  candidateName,
+  party,
+  cycle
+) {
+  let candidateNameElement = this.candidateDetailsHolder.querySelector('h1');
+  candidateNameElement.innerHTML = `<a href="/data/candidate/${id}/?cycle=${cycle}&election_full=true">${candidateName}</a> [${party}]`;
+};
+
 /**
  * Called on the election year control's change event
  * Starts loading the new data
@@ -646,6 +668,14 @@ ContributionsByState.prototype.handleTypeaheadFocus = function() {
 ContributionsByState.prototype.handleElectionYearChange = function(e) {
   e.preventDefault();
   this.baseStatesQuery.cycle = this.yearControl.value;
+  // Update candidate name and link
+  this.setCandidateName(
+    this.candidateDetails.candidate_id,
+    this.candidateDetails.name,
+    this.candidateDetails.party,
+    this.baseStatesQuery.cycle
+  );
+
   // We don't need to load the candidate details for a year change, so we'll just jump right to loading the states data.
   this.loadStatesData();
 };
