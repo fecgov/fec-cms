@@ -417,7 +417,17 @@ ContributionsByState.prototype.displayUpdatedData_candidate = function() {
   // TODO - handle if there are no years
   // TODO - handle if there is only one year
   // Grab election_years from the candidate details
-  let validElectionYears = this.candidateDetails.election_years;
+  let candidateElectionYears = this.candidateDetails.election_years;
+  let evenElectionYears = candidateElectionYears.map(electionYear => {
+    if (electionYear % 2 == 0) {
+      return electionYear;
+    } else {
+      electionYear = electionYear + 1;
+      return electionYear;
+    }
+  });
+  // Take the new even election years set and make it distinct
+  let validElectionYears = [...new Set(evenElectionYears)];
   // Sort them so the most recent is first so it'll be on top of the <select>
   validElectionYears.sort((a, b) => b - a);
   // Remember what year's election we're currently showing (will help if we were switching between candidates of the same year)
