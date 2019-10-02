@@ -43,6 +43,26 @@ import 'whatwg-fetch';
  */
 import 'promise-polyfill/src/polyfill';
 
-// For ES6 Set data structure
-// eslint-disable-next-line no-unused-vars
-var Set = require('es6-set');
+/**
+ * element-closest
+ * used to find closest ancestor of element in IE
+ */
+import 'element-closest/browser';
+
+/**
+ * array-from-polyfill
+ * used for reporting-dates tables for Arry.from() in IE
+ */
+import 'array-from-polyfill';
+
+/**
+ * element.remove polyfill
+ * used for reporting-dates tables for remove() in IE
+ */
+import 'element-remove';
+
+/**
+ * css.escape polyfill
+ * Used for reporting-dates for non-standard css selectors in IE
+ */
+import 'css.escape';

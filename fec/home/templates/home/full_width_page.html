@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% load wagtailcore_tags wagtailimages_tags %}
+{% load filters %}
+{% load staticfiles %}
+{% block body_class %}template-{{ self.get_verbose_name | slugify }}{% endblock %}
+<script type="text/javascript" src="{% asset_for_js 'reporting-dates-tablesIE2.js' %}"></script>
+{% block content %}
+
+{% block breadcrumbs %}
+  {% include 'partials/breadcrumbs.html' with page=self links=self.get_ancestors style=self.breadcrumb_style %}
+{% endblock %}
+
+<article class="main container">
+
+        {% for block in self.body %}
+
+        {{ block }}
+
+        {% endfor %}
+
+</article>
+
+{% include 'partials/disclaimer.html' %}
+
+{% endblock %}
+
+{% block extra_js %}
+
+  <script type="text/javascript" src="{% asset_for_js 'data-init.js' %}"></script>
+  <script type="text/javascript" src="{% asset_for_js 'reporting-dates-tables.js' %}"></script>
+{% endblock %}
+
