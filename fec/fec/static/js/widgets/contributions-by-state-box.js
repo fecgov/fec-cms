@@ -9,8 +9,6 @@
  * @version 1.0
  * TODO: Figure out why Aggregate Totals Box isn't defaulting to data-year and window.ELECTION_YEAR
  * TODO: For v2 or whatever, convert to datatable.net (start with the simpliest implementation; no columns.js, etc.)
- * TODO: Stop the year pull-down from changing the URL?
- * TODO: Test on Firefox, Safari, Internet Explorer, Edge pre-Chromium, Edge post-Chromium
  */
 
 // Editable vars
@@ -20,6 +18,8 @@ const breakpointToSmall = 430;
 const breakpointToMedium = 675;
 const breakpointToLarge = 700;
 const breakpointToXL = 860;
+const rootPathToIndividualContributions =
+  '/data/receipts/individual-contributions/';
 
 import { buildUrl } from '../modules/helpers';
 import typeahead from '../modules/typeahead';
@@ -42,6 +42,52 @@ function formatAsCurrency(passedValue, roundToWhole = true) {
       ? Math.round(passedValue).toLocaleString()
       : passedValue.toLocaleString())
   );
+}
+
+/**
+ * Builds the link
+ * @param {Number} cycle
+ * @param {String} office 'H', 'P', or 'S'
+ * @param {Array} committeeIDs
+ * @param {String} stateID Optional. A null value will build the URL for the country
+ * @returns {String} URL or empty string depending on
+ */
+function buildIndividualContributionsUrl(cycle, office, committeeIDs, stateID) {
+  // If we're missing required params, just return '' and be done
+  if (!cycle || !office || !committeeIDs) return '';
+
+  let transactionPeriodsString = 'two_year_transaction_period=' + cycle;
+  // TODO: Do we need maxDate and minDate?
+  // let maxDate = `12-13-${this.baseStatesQuery.cycle}`;
+  // let minDate = `01-01-${this.baseStatesQuery.cycle - 1}`;
+  let committeesString = '';
+
+  // The API currently wants a two_year_transaction_period value for each set of two years
+  // so we'll add the previous two-year period for presidential races
+  if (office == 'P')
+    transactionPeriodsString += '&two_year_transaction_period=' + (cycle - 2);
+  // and the two earlier two-year periods for Senate races
+  else if (office == 'S') {
+    transactionPeriodsString += '&two_year_transaction_period=' + (cycle - 2);
+    transactionPeriodsString += '&two_year_transaction_period=' + (cycle - 4);
+  }
+
+  for (let i = 0; i < committeeIDs.length; i++) {
+    committeesString += '&committee_id=' + committeeIDs[i];
+  }
+
+  let stateString = stateID ? '&contributor_state=' + stateID : '';
+
+  let toReturn =
+    rootPathToIndividualContributions +
+    '?' +
+    transactionPeriodsString +
+    stateString +
+    committeesString;
+  // TODO: Do we need maxDate and minDate?
+  // `&min_date=${minDate}&max_date=${maxDate}` +
+
+  return toReturn;
 }
 
 /**
@@ -169,7 +215,6 @@ ContributionsByState.prototype.init = function() {
   );
 
   // Listen for any field updates, looking for errors
-  // TODO: Is there a better event to listen for when a user has entered something that returns no results?
   this.typeahead.$input.on(
     'typeahead:render',
     this.handleTypeaheadRender.bind(this)
@@ -324,9 +369,7 @@ ContributionsByState.prototype.loadCandidateDetails = function(cand_id) {
         instance.displayUpdatedData_candidate();
       });
     })
-    .catch(function() {
-      // TODO: handle catch
-    });
+    .catch(function() {});
 };
 
 /**
@@ -336,16 +379,8 @@ ContributionsByState.prototype.loadCandidateDetails = function(cand_id) {
 ContributionsByState.prototype.loadCandidateCommitteeDetails = function() {
   let instance = this;
 
-  console.log(
-    'pre-edited basePath_candidateCommitteesPath: ',
-    this.basePath_candidateCommitteesPath
-  );
   // Before we fetch, make sure the query path has the current candidate id
   this.basePath_candidateCommitteesPath[1] = this.candidateDetails.candidate_id;
-  console.log(
-    'edited basePath_candidateCommitteesPath: ',
-    this.basePath_candidateCommitteesPath
-  );
 
   let committeesQuery = Object.assign(
     {},
@@ -364,7 +399,6 @@ ContributionsByState.prototype.loadCandidateCommitteeDetails = function() {
   // we'll add them ourselves:
   theFetchUrl += '&designation=P&designation=A';
 
-  console.log('theFetchUrl: ', theFetchUrl);
   window
     .fetch(theFetchUrl, instance.fetchInitObj)
     .then(function(response) {
@@ -374,8 +408,6 @@ ContributionsByState.prototype.loadCandidateCommitteeDetails = function() {
       response.json().then(data => {
         // Save the candidate committees query response for when we build links later
         instance.data_candidateCommittees = data;
-        console.log('the candidate committees data: ', data);
-        console.log('the candidate committees data.results: ', data.results);
 
         // Now that we have the committee info, load the new states data
         instance.loadStatesData();
@@ -425,7 +457,6 @@ ContributionsByState.prototype.loadStatesData = function() {
     })
     .catch(function() {
       instance.fetchingStates = false;
-      // TODO: handle catch
     });
 
   // Start loading the states total
@@ -442,9 +473,7 @@ ContributionsByState.prototype.loadStatesData = function() {
         instance.displayUpdatedData_total(data);
       });
     })
-    .catch(function() {
-      // TODO: handle catch
-    });
+    .catch(function() {});
 
   logUsage(this.baseStatesQuery.candidate_id, this.baseStatesQuery.cycle);
 };
@@ -471,7 +500,7 @@ ContributionsByState.prototype.displayUpdatedData_candidate = function() {
 
   // Update the <select>
   // TODO: handle if there are no years
-  // TODO: handle if there is only one year
+  // TODO: handle if there is only one year (hide select? disable it? Not awful if it's exactly one option)
   // Grab election_years from the candidate details
   let candidateElectionYears = this.candidateDetails.election_years;
   let evenElectionYears = candidateElectionYears.map(electionYear => {
@@ -511,17 +540,11 @@ ContributionsByState.prototype.displayUpdatedData_candidate = function() {
   // Put the new options into the <select>
   this.yearControl.innerHTML = newSelectOptions;
 
-  // If the previous election and this one are different
-  if (previousElectionYear != nextElectionYear) {
-    // Save the new election year to the base query
+  // If the previous election and this one are different,
+  // save the new election year to the base query
+  if (previousElectionYear != nextElectionYear)
     this.baseStatesQuery.cycle = nextElectionYear;
-    // TODO: Do we want to dispatch an event and only reload if we need to?
-    // TODO: I think this was going on direction but we changed functionality and now it's irrelevant
-    // let newEvent = new Event('change');
-    // this.yearControl.dispatchEvent(newEvent);
 
-    // this.loadStatesData();
-  }
   // Update candidate name and link
   this.setCandidateName(
     this.candidateDetails.candidate_id,
@@ -529,9 +552,6 @@ ContributionsByState.prototype.displayUpdatedData_candidate = function() {
     this.candidateDetails.party,
     this.baseStatesQuery.cycle
   );
-
-  // Load the new states data
-  // this.loadStatesData();
 
   // Now that we have the candidate's personal details,
   // we need to get the committee data
@@ -554,24 +574,38 @@ ContributionsByState.prototype.displayUpdatedData_states = function() {
     this.handleErrorState('NO_RESULTS_TO_DISPLAY');
   } else {
     // If there ARE results to show
-    for (var i = 0; i < theResults.length; i++) {
-      // TODO: If we need to make the totals clickable, we'll do that here.
-      // TODO: Note: Couldn't find the way to query an entire election for a state-candidate combo
-      let theStateTotalUrl; // =
-      // `/data/receipts/individual-contributions/` +
-      // `?candidate_id=${this.candidateDetails.candidate_id}` +
-      // `&two_year_transaction_period=${theResults[i].cycle}` +
-      // `&contributor_state=${theResults[i].state}`;
 
-      theTbodyString += `<tr><td>${i + 1}.</td><td>${
-        theResults[i].state_full
-      }</td><td class="t-right-aligned t-mono">`;
-      theTbodyString += theStateTotalUrl
-        ? `<a href="${theStateTotalUrl}">${formatAsCurrency(
-            theResults[i].total,
-            true
-          )}</a>`
-        : `${formatAsCurrency(theResults[i].total, true)}`;
+    // We're going to need the committee IDs for the totals link
+    let theCommitteeIDs = [];
+    for (let i = 0; i < this.data_candidateCommittees.results.length; i++) {
+      theCommitteeIDs.push(
+        this.data_candidateCommittees.results[i].committee_id
+      );
+    }
+
+    for (let i = 0; i < theResults.length; i++) {
+      let theStateTotalUrl = buildIndividualContributionsUrl(
+        this.baseStatesQuery.cycle,
+        this.baseStatesQuery.office,
+        theCommitteeIDs,
+        theResults[i].state
+      );
+
+      // Number cell
+      theTbodyString += `<tr><td>${i + 1}.</td>`;
+
+      // State name cell
+      theTbodyString += `<td>${theResults[i].state_full}</td>`;
+
+      // State total cell
+      theTbodyString += `<td class="t-right-aligned t-mono">`;
+      theTbodyString +=
+        theStateTotalUrl != ''
+          ? `<a href="${theStateTotalUrl}">${formatAsCurrency(
+              theResults[i].total,
+              true
+            )}</a>`
+          : `${formatAsCurrency(theResults[i].total, true)}`;
       theTbodyString += `</td></tr>`;
     }
     theTableBody.innerHTML = theTbodyString;
@@ -580,11 +614,11 @@ ContributionsByState.prototype.displayUpdatedData_states = function() {
   // Update the time stamp above the states list
   this.updateCycleTimeStamp();
 
-  // Let the map know that the data has been updated // TODO: handle this with a listener?
+  // Let the map know that the data has been updated
   this.map.handleDataRefresh(theData);
 
   // Clear the classes and reset functionality so the tool is usable again
-  this.setLoadingState(false); // TODO: May want to move this elsewhere
+  this.setLoadingState(false);
 };
 
 /**
@@ -745,7 +779,7 @@ ContributionsByState.prototype.handleElectionYearChange = function(e) {
  */
 ContributionsByState.prototype.handleErrorState = function(errorCode) {
   if (errorCode == 'NO_RESULTS_TO_DISPLAY') {
-    // Empty the states totals list
+    // Empty the states list and update the date range
     let theStatesTableBody = this.table.querySelector('tbody');
     let theDateRange = this.baseStatesQuery.cycle;
     if (this.baseStatesQuery.office == 'P')
@@ -756,33 +790,37 @@ ContributionsByState.prototype.handleErrorState = function(errorCode) {
 
     let theErrorMessageHTML = `<tr><td colspan="3" class="error-msg">We don&apos;t have itemized individual contributions for this candidate for ${theDateRange}.</td></tr>`;
     theStatesTableBody.innerHTML = theErrorMessageHTML;
-
-    // Show error message
-    // TODO
-  } else if (errorCode == 'NO_CANDIDATE_FOUND') {
-    // You entered a candidate name or committee ID not associated with a registered candidate. Please try again.
   }
 };
 
 /**
- * TODO:
+ * Assigns the Invididual Contributions button href right before the click action happens
  * @param {MouseEvent} e
  */
 ContributionsByState.prototype.handleBrowseIndivContribsClick = function(e) {
-  let tranPeriod = this.baseStatesQuery.cycle;
-  let maxDate = `12-13-${this.baseStatesQuery.cycle}`;
-  let minDate = `01-01-${this.baseStatesQuery.cycle - 1}`;
+  // We need to go through the committee results and build an array of the committee IDs
+  // to send to {@see buildIndividualContributionsUrl() }
+  let theCommittees = this.data_candidateCommittees.results;
+  let theCommitteeIDs = [];
+  for (let i = 0; i < theCommittees.length; i++) {
+    theCommitteeIDs.push(theCommittees[i].committee_id);
+  }
 
   e.target.setAttribute(
     'href',
-    `/data/receipts/individual-contributions/?two_year_transaction_period=${tranPeriod}&min_date=${minDate}&max_date=${maxDate}`
+    buildIndividualContributionsUrl(
+      this.baseStatesQuery.cycle,
+      this.baseStatesQuery.office,
+      theCommitteeIDs
+    )
   );
-  // e.preventDefault();
+
+  // Let the normal click action happen—no reason to e.preventDefault()
 };
 
 /**
  * Listens to window resize events and adjusts the classes for the <aside> based on its width
- * (rather than the page's width, which is problematic when trying to determine whethr there's a side nav)
+ * (rather than the page's width, which is problematic when trying to determine whether there's a side nav)
  */
 ContributionsByState.prototype.handleResize = function(e = null) {
   if (e) e.preventDefault();
@@ -843,8 +881,8 @@ ContributionsByState.prototype.refreshOverlay = function() {
 };
 
 /**
- * Controls class names and functionality of the widget
- * Called when we start and complete (@see loadStatesData() )
+ * Controls class names and functionality of the widget.
+ * Called when we both start and complete (@see loadStatesData() )
  * @param {Boolean} newState
  */
 ContributionsByState.prototype.setLoadingState = function(newState) {
