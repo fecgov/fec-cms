@@ -140,7 +140,7 @@ function ReportingDates() {
 
 //create and insert states-dropdown, static footnote/header-notes-list , and dialog
 ReportingDates.prototype.buildStaticElements = function() {
-//Add states dropdown template to page
+  //Add states dropdown template to page
   const dropdown_wrapper = document.createElement('div');
   dropdown_wrapper.innerHTML = states_dropdown_template;
   const dates_table = document.getElementsByClassName(
@@ -150,7 +150,7 @@ ReportingDates.prototype.buildStaticElements = function() {
 
   table_parent.insertBefore(dropdown_wrapper, dates_table);
 
-//Create static footnote/header note list
+  //Create static footnote/header note list
 
   //build static list from header notes object
   let hdr_str = `<p><ul>`;
@@ -191,7 +191,7 @@ ReportingDates.prototype.buildStaticElements = function() {
   const det = document.querySelectorAll('#static_notes details')[0];
   det.setAttribute('open', '');
 
-//Create A11Y modal dialog for header_notes popup and add innerHTML
+  //Create A11Y modal dialog for header_notes popup and add innerHTML
   const dialog = document.createElement('div');
   //Must add these three classes separately for IE :-(
   dialog.classList.add('js-modal');
@@ -335,8 +335,8 @@ ReportingDates.prototype.mediaQueryResponse = function(mql) {
     //Iterate over non-foonote-row cells
     Array.from(all_tds).forEach(cell => {
       //get prepended header --if it exists-- and remove it
-      cell.getElementsByTagName('span')
-      const th_appended = cell.getElementsByTagName('span')//cell.getElementsByClassname('th_append');
+      cell.getElementsByTagName('span');
+      const th_appended = cell.getElementsByTagName('span'); //cell.getElementsByClassname('th_append');
       if (th_appended.length) {
         th_appended[0].remove();
       }
@@ -383,7 +383,7 @@ ReportingDates.prototype.showFootnotes = function(e) {
     td.style.borderBottom = '1px solid #ddd';
   }
 
-//Show/hide footnote and change border color under cell
+  //Show/hide footnote and change border color under cell
   if (live_note[0].style.display == 'none') {
     //remove bottom border on first TD (state cell)
     current_row.cells[0].style.borderBottom = `1px solid ${newColor}`;
@@ -403,7 +403,7 @@ ReportingDates.prototype.showFootnotes = function(e) {
     el_td.style.borderBottom = '1px solid #ddd';
   }
 
-//Dynamically add footnotes in Mobile view (under each cell, per click)
+  //Dynamically add footnotes in Mobile view (under each cell, per click)
 
   //Add footnote text in span under clicked cell(display:block) in mobile
 
@@ -454,7 +454,5 @@ ReportingDates.prototype.showFootnotes = function(e) {
     });
   }
 };
-
-
 
 new ReportingDates();
