@@ -45,11 +45,11 @@ function formatAsCurrency(passedValue, roundToWhole = true) {
 }
 
 /**
- * Builds the link
- * @param {Number} cycle
+ * Builds the link/url to a filtered Individual Contributions page/list
+ * @param {Number} cycle The candidate's election year
  * @param {String} office 'H', 'P', or 'S'
- * @param {Array} committeeIDs
- * @param {String} stateID Optional. A null value will build the URL for the country
+ * @param {Array} committeeIDs An array of strings of the candidate's committees
+ * @param {String} stateID Optional. A null value will not filter for any state but show entries for the entire country
  * @returns {String} URL or empty string depending on
  */
 function buildIndividualContributionsUrl(cycle, office, committeeIDs, stateID) {
