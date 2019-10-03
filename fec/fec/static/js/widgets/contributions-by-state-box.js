@@ -265,7 +265,7 @@ ContributionsByState.prototype.init = function() {
   );
   this.buttonIndivContribs.addEventListener(
     'click',
-    this.handleBrowseIndivContribsClick.bind(this)
+    this.updateBrowseIndivContribsButton.bind(this)
   );
 
   // Initialize the remote table header
@@ -614,6 +614,9 @@ ContributionsByState.prototype.displayUpdatedData_states = function() {
   // Update the time stamp above the states list
   this.updateCycleTimeStamp();
 
+  // Update the Individual Contributions button/link at the bottom
+  this.updateBrowseIndivContribsButton();
+
   // Let the map know that the data has been updated
   this.map.handleDataRefresh(theData);
 
@@ -795,10 +798,9 @@ ContributionsByState.prototype.handleErrorState = function(errorCode) {
 };
 
 /**
- * Assigns the Invididual Contributions button href right before the click action happens
- * @param {MouseEvent} e
+ * Updates the href of the Individual Contributions link/button at the bottom of the widget
  */
-ContributionsByState.prototype.handleBrowseIndivContribsClick = function(e) {
+ContributionsByState.prototype.updateBrowseIndivContribsButton = function() {
   // We need to go through the committee results and build an array of the committee IDs
   // to send to {@see buildIndividualContributionsUrl() }
   let theCommittees = this.data_candidateCommittees.results;
@@ -807,7 +809,10 @@ ContributionsByState.prototype.handleBrowseIndivContribsClick = function(e) {
     theCommitteeIDs.push(theCommittees[i].committee_id);
   }
 
-  e.target.setAttribute(
+  let theButton = this.element.querySelector(
+    '.js-browse-indiv-contribs-by-state'
+  );
+  theButton.setAttribute(
     'href',
     buildIndividualContributionsUrl(
       this.baseStatesQuery.cycle,
@@ -815,8 +820,6 @@ ContributionsByState.prototype.handleBrowseIndivContribsClick = function(e) {
       theCommitteeIDs
     )
   );
-
-  // Let the normal click action happen—no reason to e.preventDefault()
 };
 
 /**
