@@ -769,8 +769,9 @@ ContributionsByState.prototype.handleElectionYearChange = function(e) {
     this.baseStatesQuery.cycle
   );
 
-  // We don't need to load the candidate details for a year change, so we'll just jump right to loading the states data.
-  this.loadStatesData();
+  // We don't need to load the candidate details for a year change,
+  // so we'll just jump right to loading the committees data for the newly-chosen year.
+  this.loadCandidateCommitteeDetails();
 };
 
 /**
