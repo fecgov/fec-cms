@@ -341,7 +341,7 @@ ReportingDates.prototype.mediaQueryResponse = function(mql) {
         th_appended[0].remove();
       }
     });
-  }
+  };
 };
 
 //Show chosen footnote or append in in Mobile view
