@@ -341,13 +341,13 @@ ReportingDates.prototype.mediaQueryResponse = function(mql) {
         th_appended[0].remove();
       }
     });
-  };
+  }
 };
 
-//Show chosen footnote or append in in Mobile view
+//Show chosen footnote or append it in Mobile view
 ReportingDates.prototype.showFootnotes = function(e) {
-  //escape symbos and invalid CSS selectors in indx
-  const indx = CSS.escape(e.target.textContent); //.replace(/\*/g, "\\*");
+  //escape symbols and invalid CSS selectors in indx
+  const indx = CSS.escape(e.target.textContent);
   //get the string representaton of indx to use elsewhere
   const clean_indx = e.target.textContent;
 
@@ -405,7 +405,7 @@ ReportingDates.prototype.showFootnotes = function(e) {
 
   //Dynamically add footnotes in Mobile view (under each cell, per click)
 
-  //Add footnote text in span under clicked cell(display:block) in mobile
+  //Add footnote innerHTML in span under clicked cell(display:block) in mobile
 
   //get innerHTML from chosen footnote using the results of the nextUntil function (i.e live_note const)
   const live_note_text = live_note[0].cells[1].innerHTML;
