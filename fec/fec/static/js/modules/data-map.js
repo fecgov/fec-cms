@@ -317,7 +317,7 @@ function drawStateLegend(svg, scale, quantize, quantiles) {
       } else {
         // Otherwise, for the last element, use the penultimate value plus a plus
         toReturn += compactNumber(ticks[i - 1], compactRule).toString();
-        toReturn += '+';  
+        toReturn += '+';
       }
 
       return toReturn;
