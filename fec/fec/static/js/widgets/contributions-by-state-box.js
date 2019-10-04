@@ -252,8 +252,7 @@ ContributionsByState.prototype.init = function() {
 
   // Fire up the map
   this.map = new DataMap(this.map, {
-    colorScale: ['#f0f9e8', '#a6deb4', '#7bccc4', '#2a9291', '#216a7a'],
-    colorZero: '#ffffff',
+    color: '#36BDBB',
     data: '',
     addLegend: true,
     addTooltips: true
