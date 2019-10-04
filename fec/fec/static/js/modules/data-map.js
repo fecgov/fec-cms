@@ -310,20 +310,15 @@ function drawStateLegend(svg, scale, quantize, quantiles) {
       // d is the data; i is the increment position of the loop
       let toReturn = '';
 
-      if (i === 0) {
-        // To represent values less than this legend element's value
+      if (i < ticks.length - 1) {
+        // If we're looking at any block other than the last,
         toReturn += '<';
+        toReturn += compactNumber(d, compactRule).toString();
       } else {
-        // Otherwise, we need to start with the previous block's value (only the number)
-        let prevLabel = compactNumber(ticks[i - 1], compactRule).toString();
-        toReturn += prevLabel.substring(0, prevLabel.length - 1);
-        toReturn += '-';
+        // Otherwise, for the last element, use the penultimate value plus a plus
+        toReturn += compactNumber(ticks[i - 1], compactRule).toString();
+        toReturn += '+';  
       }
-
-      toReturn += compactNumber(d, compactRule).toString();
-
-      // Add a plus sign to cover the higher-than values
-      if (i == ticks.length - 1) toReturn += '+';
 
       return toReturn;
     });
