@@ -101,7 +101,12 @@ function ContributionsByState() {
   // Where to find individual candidate details
   this.basePath_candidatePath = ['candidate'];
   // Where to find individual candidate details
-  this.basePath_candidateCommitteesPath = ['candidate', '000', 'committees'];
+  this.basePath_candidateCommitteesPath = [
+    'candidate',
+    '000', // candidate ID
+    'committees',
+    'history'
+  ];
   // Where to find the highest-earning candidates:
   this.basePath_highestRaising = ['candidates', 'totals'];
   // Where to find the list of states:
