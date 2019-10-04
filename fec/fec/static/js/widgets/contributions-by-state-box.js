@@ -106,7 +106,7 @@ function ContributionsByState() {
     '000', // candidate ID
     'committees',
     'history',
-    2020
+    2020 // election year / cycle
   ];
   // Where to find the highest-earning candidates:
   this.basePath_highestRaising = ['candidates', 'totals'];
