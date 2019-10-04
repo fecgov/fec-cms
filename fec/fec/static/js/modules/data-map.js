@@ -11,7 +11,7 @@
 /**
  * @example creation:
  * this.map = new DataMap(htmlDomElement, {
- *      colorScale: ['#f0f9e8', '#a6deb4', '#7bccc4', '#2a9291', '#216a7a'],
+ *      colorScale: ['#e2ffff', '#278887'],
  *      colorZero: '#ffffff',
  *    data: '',
  *    width: '300',
@@ -20,23 +20,23 @@
  *    addTooltips: true
  *  });
  *
- * @example   data update:
+ * @example data update:
  * this.map.handleDataRefresh(theData);
  */
 
 const d3 = require('d3');
 const chroma = require('chroma-js');
 const topojson = require('topojson');
-const colorbrewer = require('colorbrewer');
 const states = require('../data/us-states-10m.json');
 const stateFeatures = topojson.feature(states, states.objects.states).features;
 
 const fips = require('./fips');
 
-const compactRules = [['B', 9], ['M', 6], ['k', 3], ['', 0]];
+const compactRules = [['B', 9], ['M', 6], ['K', 3], ['', 0]];
 
 let defaultOpts = {
-  colorScale: colorbrewer.Set1,
+  colorScale: ['#e2ffff', '#278887'],
+  colorZero: '#ffffff',
   quantiles: 4
 };
 
@@ -66,7 +66,7 @@ function DataMap(elm, opts) {
  * Initialize the map
  * Called from {@see handleDataRefresh() } when needed
  * Very similar to {@see applyNewData() }—enough that changes to one should be made to the other.
- * TODO - make init() and applyNewData() share more functionality
+ * TODO: make init() and applyNewData() share more functionality
  */
 DataMap.prototype.init = function() {
   let instance = this;
@@ -116,13 +116,13 @@ DataMap.prototype.init = function() {
   // Of all of the values across all DataMap instances, these are the smallest and largest values:
   let minValue = minValue || Math.min(...totals);
   let maxValue = maxValue || Math.max(...totals);
+  maxValue = trimmedMaxValue(minValue, maxValue);
 
   // Decide the legend color scale for our values
   let legendScale = chroma
     .scale(this.opts.colorScale)
     .domain([minValue, maxValue]);
   let legendQuantize = d3.scale.linear().domain([minValue, maxValue]);
-
   // Create the states SVG, color them, initialize mouseover interactivity
   // (`selectAll()` will select elements if they exist, or will create them if they don't.)
   this.svg
@@ -132,9 +132,14 @@ DataMap.prototype.init = function() {
     .enter()
     .append('path')
     .attr('fill', function(d) {
-      return instance.getStateValue(d.id)
-        ? legendScale(instance.getStateValue(d.id))
-        : instance.opts.colorZero;
+      return calculateStateFill(
+        instance.getStateValue(d.id),
+        legendScale,
+        legendQuantize,
+        instance.opts.colorZero,
+        instance.opts.addLegend,
+        quantiles
+      );
     })
     .attr('data-state', function(d) {
       return fips.fipsByCode[d.id].STATE_NAME;
@@ -181,7 +186,7 @@ DataMap.prototype.handleDataRefresh = function(newData) {
  * Updates the map with new data
  * Called from {@see handleDataRefresh() } as needed
  * Very similar to {@see init() }—enough that changes to one should be made to the other.
- * TODO - make init() and applyNewData() share more functionality
+ * TODO: make init() and applyNewData() share more functionality
  */
 DataMap.prototype.applyNewData = function() {
   let instance = this;
@@ -204,6 +209,7 @@ DataMap.prototype.applyNewData = function() {
 
   let minValue = minValue || Math.min(...totals);
   let maxValue = maxValue || Math.max(...totals);
+  maxValue = trimmedMaxValue(minValue, maxValue);
 
   let legendScale = chroma
     .scale(this.opts.colorScale)
@@ -223,9 +229,14 @@ DataMap.prototype.applyNewData = function() {
       else return 20 * i;
     })
     .attr('fill', function(d) {
-      return instance.getStateValue(d.id)
-        ? legendScale(instance.getStateValue(d.id))
-        : instance.opts.colorZero;
+      return calculateStateFill(
+        instance.getStateValue(d.id),
+        legendScale,
+        legendQuantize,
+        instance.opts.colorZero,
+        instance.opts.addLegend,
+        quantiles
+      );
     });
 
   // The rest of applyNewData is back to the same code from init()
@@ -253,9 +264,10 @@ DataMap.prototype.applyNewData = function() {
 function drawStateLegend(svg, scale, quantize, quantiles) {
   let legendWidth = 40;
   let legendBar = 35;
-  let ticks = quantize.ticks(quantiles); // TODO - WHAT DOES .ticks DO / WHAT IS IT?
-  // The number of ticks is just a guide.
-  // If the data is more evenly split into one or two above this number, it will be.
+  let ticks = quantize.ticks(quantiles);
+  // .ticks() returns an array of the values at the various breaking points
+  // The number of ticks (quantiles) is just a guide.
+  // If the data range is more evenly split into one or two above this number, it will be.
   // e.g., if our range is $1M-$3M and we ask for four ticks, we'll probably only get three: $1M, $2M, $3M
   // instead of $750K, $1.5M, $2.25M, $3M
 
@@ -294,14 +306,88 @@ function drawStateLegend(svg, scale, quantize, quantiles) {
     .attr('height', 20)
     .attr('font-size', '10px')
     .attr('text-anchor', 'middle')
-    .text(function(d) {
-      // function(d,i)
-      // TODO - If we want to add the "<" from the comps, we'll need the i
-      // let toReturn = '< $' + compactNumber(d, compactRule).toString();
-      // if (i >= ticks.length - 1) toReturn += '+';
-      let toReturn = compactNumber(d, compactRule).toString();
+    .text(function(d, i) {
+      // d is the data; i is the increment position of the loop
+      let toReturn = '';
+
+      if (i === 0) {
+        // To represent values less than this legend element's value
+        toReturn += '<';
+      } else {
+        // Otherwise, we need to start with the previous block's value (only the number)
+        let prevLabel = compactNumber(ticks[i - 1], compactRule).toString();
+        toReturn += prevLabel.substring(0, prevLabel.length - 1);
+        toReturn += '-';
+      }
+
+      toReturn += compactNumber(d, compactRule).toString();
+
+      // Add a plus sign to cover the higher-than values
+      if (i == ticks.length - 1) toReturn += '+';
+
       return toReturn;
     });
+}
+
+/**
+ * Used to determine the fill color based on the value, scale, and quantiles of the legend
+ * @param {Number} value Value to be used to determine the color.
+ * @param {Function} legendScale Determines the color scale for the current range of values.
+ * @param {d3.scale} legendQuantize Represents the range of data.
+ * @param {Number} quantiles How many bars to include in the legend.
+ * @param {*} colorZero Color code to use if the value is 0.
+ * @param {Boolean} hasLegend Default: false. If a legend is being used, will "round" colors to those in the legend. If no legend is being used, colors will not be rounded.
+ * @returns {String} 'fill' value based on the parameters provided.
+ */
+function calculateStateFill(
+  value,
+  legendScale,
+  legendQuantize,
+  colorZero,
+  hasLegend = false,
+  quantiles
+) {
+  let colorToReturn = colorZero;
+  let legendValueTicks = legendQuantize.ticks(quantiles);
+
+  if (!value || value == 0) {
+    // If the state value is zero, use the zero color (default) and be done
+    colorToReturn = colorZero;
+  } else if (!hasLegend) {
+    // If we aren't using the legend we don't have to stick to its color stops
+    colorToReturn = legendScale(value);
+  } else {
+    // Otherwise, let's figure out which legend color we should use
+    // Let's change the default to the highest color because we're checking if each value is less than each legend block
+    colorToReturn = legendScale(legendValueTicks[legendValueTicks.length - 1]);
+    // For each block in the legend
+    for (let i = 0; i < legendValueTicks.length; i++) {
+      // If this block's value is greater than this state's value, that's the color we want
+      if (value < legendValueTicks[i]) {
+        // so we'll grab the color for this block's value instead of the color for the state's value
+        colorToReturn = legendScale(legendValueTicks[i]);
+        break;
+      }
+      // Otherwise, check the next one
+    }
+  }
+
+  if (colorToReturn._rgb)
+    colorToReturn = 'rgba(' + colorToReturn._rgb.join(',') + ')';
+
+  return colorToReturn;
+}
+
+/**
+ * Used to adjust scales so the higher values don't skew the range / blow the curve,
+ * to show more variation in our map colors.
+ * @param {Number} minValue The smaller number / the starting point of the return value.
+ * @param {Number} maxValue The largest number on the scale.
+ * @returns {Number} A new maxValue about half-way between minValue and maxValue
+ * @example trimmedMaxValue(10, 100); // 55
+ */
+function trimmedMaxValue(minValue, maxValue) {
+  return minValue + (maxValue - minValue) * 0.5;
 }
 
 /**
@@ -323,7 +409,6 @@ function buildStateTooltips(svg, path, instance) {
     .style('display', 'none');
 
   // Go through our svg/map and assign the mouse listeners to each path
-  // TODO - Test on touch devices, too
   svg
     .selectAll('path')
     .on('mouseover', function(d) {
@@ -391,7 +476,6 @@ function chooseRule(value) {
   return compactRules.find(rule => {
     return value >= Math.pow(10, rule[1]);
   });
-  // [['B', 9], ['M', 6], ['k', 3], ['', 0]];
 }
 
 /**
