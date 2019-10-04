@@ -101,7 +101,13 @@ function ContributionsByState() {
   // Where to find individual candidate details
   this.basePath_candidatePath = ['candidate'];
   // Where to find individual candidate details
-  this.basePath_candidateCommitteesPath = ['candidate', '000', 'committees'];
+  this.basePath_candidateCommitteesPath = [
+    'candidate',
+    '000', // candidate ID
+    'committees',
+    'history',
+    2020 // election year / cycle
+  ];
   // Where to find the highest-earning candidates:
   this.basePath_highestRaising = ['candidates', 'totals'];
   // Where to find the list of states:
@@ -380,12 +386,13 @@ ContributionsByState.prototype.loadCandidateCommitteeDetails = function() {
 
   // Before we fetch, make sure the query path has the current candidate id
   this.basePath_candidateCommitteesPath[1] = this.candidateDetails.candidate_id;
+  // and the current election year/cycle
+  this.basePath_candidateCommitteesPath[4] = this.baseStatesQuery.cycle;
 
   let committeesQuery = Object.assign(
     {},
     {
       per_page: 100,
-      cycle: this.baseStatesQuery.cycle,
       election_full: true
     }
   );
