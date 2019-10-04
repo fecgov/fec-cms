@@ -325,7 +325,7 @@ h3 + .simple-table {
       border: none;
       border-bottom: 1px solid $gray-light !important;
       position: relative;
-      font-weight: bold;
+
 
       .th_append {
         display: inline-block !important;
@@ -336,32 +336,7 @@ h3 + .simple-table {
 
     }
 
-     /*td:before { */
-      /* Now like a table header */
-      /*position: absolute; */
-      /* Top/left values mimic padding */
-      /*top: 6px;
-      left: 6px;
-      width: 45%;
-      padding-right: 10px;
-      white-space: nowrap;
-    } */
 
-    /*tr:first-child th a[href^="#"],tr td:first-of-type a[href^="#"]{
-      pointer-events: none;
-    }*/
-
-    /*
-    Label the data with header text:;
-    Election Date Close of books+ Mailing deadline++  Filing deadline++ 48-hour notices**
-  */
-     /*tr:not(.footnote_row) td:nth-of-type(1):before { content: "State"; font-family:sans-serif; color:$gray-medium; max-width:50%}
-     tr:not(.footnote_row) td:nth-of-type(2):before { content: "Election Date";font-family:sans-serif; color:$gray-medium }
-     td:nth-of-type(3):before { content: "Close of books";font-family:sans-serif; color:$gray-medium }
-     td:nth-of-type(4):before { content: "Mailing deadline"; font-family:sans-serif; color:$gray-medium}
-     td:nth-of-type(5):before { content: "Filing deadline"; font-family:sans-serif; color:$gray-medium}
-     td:nth-of-type(6):before { content: "48-hour notices"; font-family:sans-serif; color:$gray-medium}
-*/
      tr:nth-child(even) td {
       border-bottom:1px solid #aaa
       }
