@@ -10,7 +10,10 @@
   {% include 'partials/breadcrumbs.html' with page=self links=self.get_ancestors style=self.breadcrumb_style %}
 {% endblock %}
 
+
 <article class="main container">
+
+  <h1 class="heading--main">{{ self.title }}</h1>
 
         {% for block in self.body %}
 

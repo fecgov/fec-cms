@@ -306,7 +306,8 @@ h3 + .simple-table {
     }
 
     tr {
-      border: 1px solid #ccc; padding-top:2px;
+      border: 1px solid $gray;
+       padding-top:2px;
 
       &.row_display {
       display: block !important;
