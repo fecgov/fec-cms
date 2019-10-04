@@ -443,6 +443,7 @@ ReportingDates.prototype.showFootnotes = function(e) {
   if (resp_ftnts[0]) {
     const close_btn = document.createElement('button');
     close_btn.classList.add('ftnt-close');
+    close_btn.classList.add('button--close--primary');
     close_btn.textContent = 'x';
     resp_ftnts[0].appendChild(close_btn);
     //get ftnt-close for just this row and activate it
