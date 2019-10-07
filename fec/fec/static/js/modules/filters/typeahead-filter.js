@@ -1,6 +1,7 @@
 'use strict';
 
 var $ = require('jquery');
+var _ = require('underscore');
 
 var Filter = require('./filter-base.js');
 var typeahead = require('../typeahead');
@@ -39,11 +40,11 @@ TypeaheadFilter.prototype.handleNestedChange = function(e) {
   var $label = this.$elm.find('[for="' + id + '"]');
 
   var eventName = $input.is(':checked') ? 'filter:added' : 'filter:removed';
-
+  
   $input.trigger(eventName, [
     {
       key: id,
-      value: $label.text(),
+      value: _.escape($label.text()),
       name: $input.attr('name'),
       loadedOnce: true
     }
