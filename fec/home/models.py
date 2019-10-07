@@ -1201,3 +1201,18 @@ class ContactPage(Page):
     @property
     def content_section(self):
         return 'about'
+
+class FullWidthPage(ContentPage):
+    formatted_title = models.CharField(max_length=255, null=True, blank=True, default='',
+                                        help_text="Use if you need italics in the title. e.g. <em>Italicized words</em>")
+
+    template = 'home/full_width_page.html'
+    content_panels = ContentPage.content_panels
+
+    promote_panels = Page.promote_panels
+
+    search_fields =  ContentPage.search_fields
+
+    @property
+    def content_section(self):
+        return ''
