@@ -153,7 +153,8 @@ ReportingDates.prototype.buildStaticElements = function() {
   //Create static footnote/header note list
 
   //build static list from header notes object
-  let hdr_str = `<p><ul>`;
+  let hdr_str = `<h4>Header notes</h4>
+                 <p><ul><p><ul>`;
   for (const key in header_notes) {
     hdr_str += `<li>
                 <a name="hdr${key}" id="hdr${key}"></a>
@@ -178,18 +179,12 @@ ReportingDates.prototype.buildStaticElements = function() {
   static_notes.id = 'static_notes';
 
   //add combibed header_notes, footnotes list to collapsible div
-  static_notes.innerHTML = `<details>
-                     <summary>
+  static_notes.innerHTML = `
                       <h2 class="t-inline-block u-margin--bottom--small">All footnotes</h2>
-                     </summary><h4>Header notes</h4>${hdr_str}${ftnt_str}
-                   </details>`;
+                     ${hdr_str}${ftnt_str}`;
 
   //insert it after table
   table_parent.insertBefore(static_notes, dates_table.nextSibling);
-
-  //start with footer/header notes div open
-  const det = document.querySelectorAll('#static_notes details')[0];
-  det.setAttribute('open', '');
 
   //Create A11Y modal dialog for header_notes popup and add innerHTML
   const dialog = document.createElement('div');
@@ -226,9 +221,6 @@ ReportingDates.prototype.handleStateChange = function() {
   const ftnt = document.querySelectorAll('tr.footnote_row');
 
   if (state != 'states') {
-    //collapse static notes div when a state is chosen
-    //det.removeAttribute('open');
-
     const ones = document.querySelectorAll(
       `table tr.${state}:not(.footnote_row), tr:first-child`
     );
@@ -246,9 +238,6 @@ ReportingDates.prototype.handleStateChange = function() {
       one.classList.add('row_display');
     }
   } else {
-    //open static notes div when showing all rows
-    //det.setAttribute('open', '');
-
     for (const t of tr) {
       t.style.display = 'table-row';
       t.classList.add('row_display');
