@@ -201,7 +201,7 @@ ReportingDates.prototype.buildStaticElements = function() {
   dialog_p.innerHTML = `${hdr_str}`;
 
   const header_sups = document.querySelectorAll(
-    'tr:first-child th a[href^="#"], tr td:first-of-type a[href^="#"]'
+    'tr:first-child th a[href^="#"]'
   );
 
   //add data attribute to the header sups to open AY11 dialog
