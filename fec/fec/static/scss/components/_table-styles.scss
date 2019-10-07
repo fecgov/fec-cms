@@ -202,11 +202,11 @@ h3 + .simple-table {
     border: 1px solid $gray-light;
 
       &:first-child {
-        border-left:none;
+        border-left: none;
       }
 
       &:last-child {
-        border-right:none;
+        border-right: none;
       }
   }
 
@@ -225,7 +225,6 @@ h3 + .simple-table {
 
 .election-dates-table {
   tr {
-    display: table-row ;
     &.row_display {
       display: table-row;
     }
@@ -233,7 +232,7 @@ h3 + .simple-table {
 
   td {
    .th_append {
-     display:none !important;
+     display: none !important;
    }
   }
 
@@ -262,21 +261,19 @@ h3 + .simple-table {
   }
 
   tr.footnote_row {
-    /*background: $inverse !important;*/
 
     td {
-      /*background: $inverse !important;*/
       border:none !important;
       padding-bottom: u(1rem);
       &:first-child {
         border-right: 1px solid $gray-light !important;
       }
       a {
-      border-bottom:1px dotted $gray-dark;
+      border-bottom: 1px dotted $gray-dark;
       }
       span {
        line-height: u(1.5rem);
-       font-weight:bold;
+       font-weight: bold;
       }
     }
   }
@@ -294,10 +291,6 @@ h3 + .simple-table {
 
     }
 
-    th {
-      /*visibility:collapse;*/
-    }
-
     /* Hide table headers (but not display: none;, for accessibility) */
      thead tr {
       position: absolute;
@@ -313,10 +306,13 @@ h3 + .simple-table {
       display: block !important;
       }
       &.footnote_row {
-        display:none !important;
-      }
-      &:first-child{
         display: none !important;
+      }
+      /* Hide table headers (but not display: none;, for accessibility) */
+      &:first-child{
+        position: absolute;
+        top: -9999px;
+        left: -9999px;
       }
     }
 
@@ -340,7 +336,7 @@ h3 + .simple-table {
 
 
      tr:nth-child(even) td {
-      border-bottom:1px solid #aaa
+      border-bottom: 1px solid #aaa
       }
 
     .ftnt_append {
