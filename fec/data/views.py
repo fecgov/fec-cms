@@ -160,7 +160,7 @@ def get_candidate(candidate_id, cycle, election_full):
 
     # For JavaScript
     context_vars = {
-        'cycles': candidate['cycles'],
+        'cycles': candidate['fec_cycles_in_election'],
         'name': candidate['name'],
         'cycle': cycle,
         'electionFull': election_full,
@@ -258,7 +258,7 @@ def get_candidate(candidate_id, cycle, election_full):
         'committees_authorized': committees_authorized,
         'context_vars': context_vars,
         'cycle': int(cycle),
-        'cycles': candidate['cycles'],
+        'cycles': candidate['fec_cycles_in_election'],
         'district': candidate['district'],
         'duration': duration,
         'election_year': cycle,

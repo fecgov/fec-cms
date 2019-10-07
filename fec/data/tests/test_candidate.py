@@ -14,7 +14,7 @@ class TestCandidate(TestCase):
     STOCK_CANDIDATE = {
         "candidate_id": "H001",
         "name": "Lady Liberty",
-        "cycles": [2014, 2016, 2018],
+        "fec_cycles_in_election": [2014, 2016, 2018],
         "election_years": [2016, 2018],
         "rounded_election_years": [2016, 2018],
         "election_districts": ["01", "02"],
@@ -62,7 +62,8 @@ class TestCandidate(TestCase):
 
         assert candidate['candidate_id'] == test_candidate['candidate_id']
         assert candidate['name'] == test_candidate['name']
-        assert candidate['cycles'] == test_candidate['cycles']
+        assert candidate['cycles'] == test_candidate[
+            'fec_cycles_in_election']
         assert candidate['min_cycle'] == cycle - 2
         assert candidate['max_cycle'] == cycle
         assert candidate['election_year'] == cycle
@@ -101,7 +102,7 @@ class TestCandidate(TestCase):
                 'name': 'Joint Fundraising Committee',
                 'cycle': 2016,
                 'related_cycle': 2016,
-                'committee_id': 'C003'}]
+                'committee_id': 'C003'}],
         }
 
         assert candidate['committees_authorized'] == (
@@ -132,7 +133,7 @@ class TestCandidate(TestCase):
 
         # use new column rounded_election_years which round odd number in MV.
         test_candidate = copy.deepcopy(self.STOCK_CANDIDATE)
-        test_candidate["cycles"] = [2016, 2018]
+        test_candidate["fec_cycles_in_election"] = [2016, 2018]
         test_candidate["election_years"] = [2013, 2015, 2018]
         test_candidate["rounded_election_years"] = [2014, 2016, 2018]
 
