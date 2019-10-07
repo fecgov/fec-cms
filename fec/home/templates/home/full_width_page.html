@@ -3,7 +3,7 @@
 {% load filters %}
 {% load staticfiles %}
 {% block body_class %}template-{{ self.get_verbose_name | slugify }}{% endblock %}
-<script type="text/javascript" src="{% asset_for_js 'reporting-dates-tablesIE2.js' %}"></script>
+
 {% block content %}
 
 {% block breadcrumbs %}
@@ -30,6 +30,6 @@
 {% block extra_js %}
 
   <script type="text/javascript" src="{% asset_for_js 'data-init.js' %}"></script>
-  <script type="text/javascript" src="{% asset_for_js 'reporting-dates-tables.js' %}"></script>
+  <script type="text/javascript" src="{% asset_for_js 'reporting-dates-tables_multiple.js' %}"></script>
 {% endblock %}
 

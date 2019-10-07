@@ -325,10 +325,12 @@ h3 + .simple-table {
       border: none;
       border-bottom: 1px solid $gray-light !important;
       position: relative;
+      display: inline-block;
+      width: 100%;
 
 
       .th_append {
-        display: inline-block !important;
+        display: table-cell !important;
         font-weight: bold;
         min-width: u(16rem);
         float: left;
