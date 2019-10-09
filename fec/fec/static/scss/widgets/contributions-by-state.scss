@@ -272,29 +272,6 @@ aside.contribs-by-state {
       &::-webkit-scrollbar-thumb:hover {
         background: #555;
       }
-      // overflow: -moz-scrollbars-none;
-      // -ms-overflow-style: none;
-
-
-      // .ps-scrollbar-y-rail {
-      //   background: $gray-medium;
-      //   // border-left: 1px solid $gray-dark;
-      //   height: 100%;
-      //   position: absolute;
-      //   right: 0;
-      //   width: $sizeTableScroller;
-      // }
-      
-      // .ps-scrollbar-y {
-      //   background: $gray-dark;
-      //   position: absolute;
-      //   right: 0;
-      //   width: $sizeTableScroller;
-      // }
-
-
-
-
     }
     .states-total {
       border-top: solid thin $colorBorder;
@@ -373,6 +350,11 @@ aside.contribs-by-state {
       border: none;
       height: auto;
       min-height: 30rem;
+
+      svg {
+        min-width: 425px;
+        min-height: 270px;
+      }
     }
   }
   .map-details {
@@ -439,23 +421,6 @@ aside.contribs-by-state {
       }
     }
   }
-
-  // States list scrollbars based on "../components/_downloads"
-  // .ps-scrollbar-y-rail {
-  //   background: $gray-medium;
-  //   // border-left: 1px solid $gray-dark;
-  //   height: 100%;
-  //   position: absolute;
-  //   right: 0;
-  //   width: $sizeTableScroller;
-  // }
-  
-  // .ps-scrollbar-y {
-  //   background: $gray-dark;
-  //   position: absolute;
-  //   right: 0;
-  //   width: $sizeTableScroller;
-  // }
 
   // Small sizes
   &.w-s {
@@ -552,6 +517,13 @@ aside.contribs-by-state {
       margin-top: 2.5rem;
       margin-left: 1rem;
       width: calc(66.66% - 1rem);
+
+      .election-map {  
+        svg {
+          min-width: 445px;
+          min-height: 285px;
+        }
+      }
     }
     .map-details {
       .more-info-wrapper {    
