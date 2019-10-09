@@ -90,7 +90,7 @@ DataMap.prototype.init = function() {
   let path = d3.geo.path().projection(projection);
 
   /** Go through our data results and pair/merge them with the fips state codes {@see this.mapData} */
-  let results = this.data['results'].reduce((acc, val) => {
+  let results = instance.data['results'].reduce((acc, val) => {
     let row = fips.fipsByState[val.state] || {};
     let code = row.STATE ? parseInt(row.STATE) : null;
     acc[code] = val.total;
@@ -103,12 +103,12 @@ DataMap.prototype.init = function() {
   // Work through how to group these results for the legend
   // For our current usage, we'll only be dealing with one map,
   // but the functionality will work with multiple maps using the same legend
-  let quantiles = this.opts.quantiles;
+  let quantiles = instance.opts.quantiles;
   // For each item in results, look at its total but only work with the value if it's truthy
   // Double bangs (!!value) :
   // `!!0` = false, `!!null` = false
   // `!!1` = true, `!!468546` = true
-  let totals = this.data['results']
+  let totals = instance.data['results']
     .map(value => value['total'])
     .filter(value => {
       return !!value;
@@ -120,7 +120,7 @@ DataMap.prototype.init = function() {
 
   // Decide the legend color scale for our values
   let legendScale = chroma
-    .scale(this.opts.colorScale)
+    .scale(instance.opts.colorScale)
     .domain([minValue, maxValue]);
   let legendQuantize = d3.scale.linear().domain([minValue, maxValue]);
   // Create the states SVG, color them, initialize mouseover interactivity
@@ -191,7 +191,7 @@ DataMap.prototype.handleDataRefresh = function(newData) {
 DataMap.prototype.applyNewData = function() {
   let instance = this;
 
-  let results = this.data['results'].reduce((acc, val) => {
+  let results = instance.data['results'].reduce((acc, val) => {
     let row = fips.fipsByState[val.state] || {};
     let code = row.STATE ? parseInt(row.STATE) : null;
     acc[code] = val.total;
@@ -200,8 +200,8 @@ DataMap.prototype.applyNewData = function() {
 
   this.mapData = results;
 
-  let quantiles = this.opts.quantiles;
-  let totals = this.data['results']
+  let quantiles = instance.opts.quantiles;
+  let totals = instance.data['results']
     .map(value => value['total'])
     .filter(value => {
       return !!value;
@@ -212,7 +212,7 @@ DataMap.prototype.applyNewData = function() {
   maxValue = trimmedMaxValue(minValue, maxValue);
 
   let legendScale = chroma
-    .scale(this.opts.colorScale)
+    .scale(instance.opts.colorScale)
     .domain([minValue, maxValue]);
 
   let legendQuantize = d3.scale.linear().domain([minValue, maxValue]);
@@ -366,9 +366,6 @@ function calculateStateFill(
       // Otherwise, check the next one
     }
   }
-
-  if (colorToReturn._rgb)
-    colorToReturn = 'rgba(' + colorToReturn._rgb.join(',') + ')';
 
   return colorToReturn;
 }
