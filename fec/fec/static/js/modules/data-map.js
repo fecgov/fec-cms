@@ -123,7 +123,7 @@ DataMap.prototype.init = function() {
     .scale(instance.opts.colorScale)
     .domain([minValue, maxValue]);
   let legendQuantize = d3.scale.linear().domain([minValue, maxValue]);
-  // Create the states SVG, color them, initialize mouseover interactivity
+  // Create the states SVG, color them, give them their data
   // (`selectAll()` will select elements if they exist, or will create them if they don't.)
   this.svg
     .append('g')
@@ -219,7 +219,7 @@ DataMap.prototype.applyNewData = function() {
 
   // This bit is the big difference from init() }
   // because we're transitioning states' colors,
-  // states we know already exist, have IDs, and may have mouseover listeners, etc.
+  // states we know already exist, have IDs, and may have mouseenter listeners, etc.
   this.svg
     .selectAll('path')
     .transition()
@@ -403,7 +403,7 @@ function buildStateTooltips(svg, path, instance) {
   // Go through our svg/map and assign the mouse listeners to each path
   svg
     .selectAll('path')
-    .on('mouseover', function(d) {
+    .on('mouseenter', function(d) {
       if (instance.getStateValue(d.id) && instance.getStateValue(d.id) !== 0) {
         this.parentNode.appendChild(this);
         let html = tooltipTemplate({
@@ -414,7 +414,7 @@ function buildStateTooltips(svg, path, instance) {
         moveTooltip(tooltip);
       }
     })
-    .on('mouseout', function() {
+    .on('mouseleave', function() {
       tooltip.style('display', 'none');
     })
     .on('mousemove', function() {
@@ -425,7 +425,7 @@ function buildStateTooltips(svg, path, instance) {
 }
 
 /**
- * Controls the tooltip position and visibility, called on each state's mouseover and mousemove
+ * Controls the tooltip position and visibility, called on each state's mouseenter and mousemove
  * @param {HTMLElement} tooltip
  */
 function moveTooltip(tooltip) {
