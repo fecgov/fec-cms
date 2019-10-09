@@ -100,6 +100,7 @@ function ContributionsByState() {
 
   // Where to find individual candidate details
   this.basePath_candidatePath = ['candidate'];
+
   // Where to find individual candidate details
   this.basePath_candidateCommitteesPath = [
     'candidate',
