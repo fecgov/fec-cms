@@ -407,7 +407,7 @@ aside.contribs-by-state {
     display: none;
     position: absolute;
     width: 100%;
-    z-index: 99; // The typeahead menu is at 100 and we want it to be visible above this
+    z-index: #{$z1 - 1}; // The typeahead menu is at 100 and we want it to be visible above this
 
     &.is-loading {
       display: block;
@@ -567,7 +567,7 @@ aside.contribs-by-state {
   padding: 1.5rem;
   position: absolute;
   text-align: center;
-  z-index: 400;
+  z-index: #{$z1 - 2};
   
   .tooltip__title {
     border-bottom: 1px solid #112e51;
