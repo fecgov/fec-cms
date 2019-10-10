@@ -149,7 +149,6 @@ def get_candidate(candidate_id, cycle, election_full):
         candidate_id,
         'committees',
         cycle=cycle,
-        cycle_key='two_year_period',
         election_full=election_full,
     )
 
