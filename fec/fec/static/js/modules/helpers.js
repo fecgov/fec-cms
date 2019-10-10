@@ -444,7 +444,7 @@ function amendmentVersionDescription(row) {
   // This checks for terminatino reports and if the amendment number is greater
   // than 0 or the amendment chain is longer than 1, it is an amendment
   else if (row.amendment_indicator === API.amendment_indicator_terminated) {
-    if (row.amendment_chain.length > 1) {
+    if (row.amendment_chain != null && row.amendment_chain.length > 1) {
       amendment_num = row.amendment_chain.length - 1;
       description = ' Amendment ' + amendment_num;
     } else {
