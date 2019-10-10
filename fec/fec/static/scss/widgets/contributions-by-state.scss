@@ -537,6 +537,15 @@ aside.contribs-by-state {
   &.w-l {
     @extend .w-m;
   }
+
+  // Some overrides for table.table-display *, which was added because IE doesn't like Flex
+  table.table-display {
+    display: initial;
+    
+    thead, tbody, tr, th, td {
+      display: initial;
+    }
+  }
 }
 
 /* #map-tooltip is outside .contribs-by-state */
