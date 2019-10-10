@@ -434,7 +434,10 @@ function buildStateTooltips(svg, path, instance) {
     });
   }
 
-  // Listen for resize events
+  // IE doesn't always recognize mouseout or mouseleave
+  // When the toolip is visible and the window changes size,
+  // the tooltip can jump to very different parts of the screen.
+  // So let's hide it on resize, just in case.
   window.addEventListener('resize', function() {
     tooltip.style('display', 'none');
   });
