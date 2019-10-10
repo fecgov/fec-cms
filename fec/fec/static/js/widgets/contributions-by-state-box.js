@@ -278,7 +278,6 @@ ContributionsByState.prototype.init = function() {
   let userAgent = window.navigator.userAgent;
   let is_ie = userAgent.indexOf('MSIE ');
 
-  
   // Initialize the remote table header
   // Find the remote header and save it
   this.remoteTableHeader = this.element.querySelector(
