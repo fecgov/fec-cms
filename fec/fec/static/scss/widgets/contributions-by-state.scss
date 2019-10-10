@@ -405,6 +405,7 @@ aside.contribs-by-state {
   }
   .overlay__container {
     display: none;
+    left: 0px;
     position: absolute;
     width: 100%;
     z-index: #{$z1 - 1}; // The typeahead menu is at 100 and we want it to be visible above this
