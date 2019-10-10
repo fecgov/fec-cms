@@ -414,19 +414,30 @@ function buildStateTooltips(svg, path, instance) {
         moveTooltip(tooltip);
       }
     })
-    .on('mouseout', function() {
-      if (console) console.log('mouseout'); // eslint-disable-line no-undef
-      // tooltip.style('display', 'none');
-    })
-    .on('mouseleave', function() {
-      if (console) console.log('mouseleave'); // eslint-disable-line no-undef
-      tooltip.style('display', 'none');
-    })
     .on('mousemove', function() {
       if (tooltip.style('display') != 'none') {
         moveTooltip(tooltip);
       }
     });
+
+  // Add the mouseleave listeners to the dom elements rather than relying on d3
+  // (d3 kept converting mouseleave to mouseout for IE11 and they're different for IE)
+  let theLargeMap = document.querySelector('.election-map svg');
+  let theStatesPaths = theLargeMap.querySelectorAll('path');
+
+  theLargeMap.addEventListener('mouseleave', () => {
+    tooltip.style('display', 'none');
+  });
+  for (let i = 0; i < theStatesPaths.length; i++) {
+    theStatesPaths[i].addEventListener('mouseleave', () => {
+      tooltip.style('display', 'none');
+    });
+  }
+
+  // Listen for resize events
+  window.addEventListener('resize', function() {
+    tooltip.style('display', 'none');
+  });
 }
 
 /**
