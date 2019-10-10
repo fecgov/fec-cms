@@ -415,6 +415,7 @@ function buildStateTooltips(svg, path, instance) {
       }
     })
     .on('mouseleave', function() {
+      if (console) console.log('mouseleave'); // eslint-disable-line no-undef
       tooltip.style('display', 'none');
     })
     .on('mousemove', function() {
