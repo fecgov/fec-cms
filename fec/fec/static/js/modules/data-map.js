@@ -414,6 +414,10 @@ function buildStateTooltips(svg, path, instance) {
         moveTooltip(tooltip);
       }
     })
+    .on('mouseout', function() {
+      if (console) console.log('mouseout'); // eslint-disable-line no-undef
+      // tooltip.style('display', 'none');
+    })
     .on('mouseleave', function() {
       if (console) console.log('mouseleave'); // eslint-disable-line no-undef
       tooltip.style('display', 'none');
