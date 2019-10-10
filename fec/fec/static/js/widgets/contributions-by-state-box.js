@@ -276,7 +276,10 @@ ContributionsByState.prototype.init = function() {
   // Internet Explorer doesn't like flex display
   // so we're going to keep the states table from switching to flex.
   let userAgent = window.navigator.userAgent;
+  // Test for IE
   let is_ie = userAgent.indexOf('MSIE ');
+  // Then for IE 11
+  if (!is_ie) is_ie = userAgent.indexOf('Trident/7.0');
 
   // Initialize the remote table header
   // Find the remote header and save it
