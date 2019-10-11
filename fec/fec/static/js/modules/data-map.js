@@ -404,7 +404,8 @@ function buildStateTooltips(svg, path, instance) {
   svg
     .selectAll('path')
     .on('mouseenter', function(d) {
-      if (instance.getStateValue(d.id) && instance.getStateValue(d.id) !== 0) {
+      let thisValue = instance.getStateValue(d.id);
+      if (thisValue && thisValue !== 0) {
         this.parentNode.appendChild(this);
         let html = tooltipTemplate({
           name: fips.fipsByCode[d.id].STATE_NAME,
@@ -414,9 +415,17 @@ function buildStateTooltips(svg, path, instance) {
         moveTooltip(tooltip);
       }
     })
-    .on('mousemove', function() {
-      if (tooltip.style('display') != 'none') {
+    .on('mousemove', function(d) {
+      let thisValue = instance.getStateValue(d.id);
+      if (thisValue && thisValue !== 0) {
+        let html = tooltipTemplate({
+          name: fips.fipsByCode[d.id].STATE_NAME,
+          total: '$' + Math.round(instance.getStateValue(d.id)).toLocaleString()
+        });
         moveTooltip(tooltip);
+        tooltip.style('display', 'block').html(html);
+      } else {
+        tooltip.style('display', 'none');
       }
     });
 
