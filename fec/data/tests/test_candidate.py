@@ -145,3 +145,42 @@ class TestCandidate(TestCase):
         candidate = get_candidate('H001', 2016, True)
         assert candidate["election_years"] == [2014, 2016, 2018]
         assert candidate["election_year"] == 2016
+
+    def test_future_candidate_max_cycle(
+        self,
+        load_with_nested_mock,
+        load_first_row_data_mock,
+        load_candidate_statement_of_candidacy_mock,
+    ):
+
+        test_candidate = copy.deepcopy(self.STOCK_CANDIDATE)
+        test_candidate["candidate_id"] = ["S001"]
+        test_candidate["fec_cycles_in_election"] = [2016, 2018, 2020]
+        test_candidate["election_years"] = [2018, 2024]
+        test_candidate["rounded_election_years"] = [2018, 2024]
+
+        test_committee_list = copy.deepcopy(self.STOCK_COMMITTEE_LIST)
+        test_committee_list[0] = (
+            {
+                'designation': 'P',
+                'cycles': [2016, 2014, 2012, 2018, 2020],
+                'name': 'My Primary Campaign Committee',
+                'cycle': 2018,
+                'committee_id': 'C001',
+            },
+        )
+        test_committee_list.append(
+            {
+                'designation': 'P',
+                'cycles': [2016, 2014, 2012, 2018, 2020],
+                'name': 'My Primary Campaign Committee',
+                'cycle': 2024,
+                'committee_id': 'C001',
+            }
+        )
+
+        load_with_nested_mock.return_value = (test_candidate, mock.MagicMock(), 2024)
+        candidate = get_candidate('S001', 2024, True)
+        assert candidate["election_years"] == [2018, 2024]
+        assert candidate["election_year"] == 2024
+        assert candidate["max_cycle"] == 2020
