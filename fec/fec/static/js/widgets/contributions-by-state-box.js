@@ -1,7 +1,5 @@
 'use strict';
 
-var moment = require('moment');
-
 /**
  * @fileoverview Controls all functionality inside the Where Contributions Come From widget
  * in cooperation with data-map
@@ -386,6 +384,23 @@ ContributionsByState.prototype.loadCandidateDetails = function(cand_id) {
 };
 
 /**
+ * Format the dates into MM/DD/YYYY format.
+ * Pads single digits with leading 0.
+ */
+ContributionsByState.prototype.formatDate = function(date) {
+  // Adds one since js month uses zero based index
+  let month = date.getMonth() + 1;
+  if (month < 10) {
+    month = '0' + month;
+  }
+  let day = date.getDate();
+  if (day < 10) {
+    day = '0' + day;
+  }
+  return month + '/' + day + '/' + date.getFullYear();
+};
+
+/**
  * Queries the API for the candidate's coverage dates for the currently-selected election
  * Called by {@see displayUpdatedData_candidate() } and {@see displayUpdatedData_states() }
  */
@@ -419,14 +434,12 @@ ContributionsByState.prototype.loadCandidateCoverageDates = function() {
             .querySelector('.states-table-timestamp')
             .removeAttribute('style');
           // Parse coverage date from API that is formatted like this: 2019-06-30T00:00:00+00:00
-          // into a format that can be manipulated
-          let coverage_start_date = moment(
-            data.results[0].coverage_start_date,
-            'YYYY-MM-DDTHH:mm:ss'
+          // into a string without timezone
+          let coverage_start_date = new Date(
+            data.results[0].coverage_start_date.substring(0, 19)
           );
-          let coverage_end_date = moment(
-            data.results[0].coverage_end_date,
-            'YYYY-MM-DDTHH:mm:ss'
+          let coverage_end_date = new Date(
+            data.results[0].coverage_end_date.substring(0, 19)
           );
 
           // Remember the in-page elements
@@ -435,11 +448,11 @@ ContributionsByState.prototype.loadCandidateCoverageDates = function() {
           );
           let theEndTimeElement = document.querySelector('.js-cycle-end-time');
           // Format the date and put it into the start time
-          theStartTimeElement.innerText = coverage_start_date.format(
-            'MM/DD/YYYY'
+          theStartTimeElement.innerText = instance.formatDate(
+            coverage_start_date
           );
           // Format the date and put it into the end time
-          theEndTimeElement.innerText = coverage_end_date.format('MM/DD/YYYY');
+          theEndTimeElement.innerText = instance.formatDate(coverage_end_date);
         } else {
           // Hide coverage dates display when there are zero results
           document
