@@ -123,7 +123,9 @@ DataMap.prototype.init = function() {
     .scale(instance.opts.colorScale)
     .domain([minValue, maxValue]);
   let legendQuantize = d3.scale.linear().domain([minValue, maxValue]);
-  // Create the states SVG, color them, give them their data
+
+
+  // Create the states SVG, color them, initialize mouseover interactivity
   // (`selectAll()` will select elements if they exist, or will create them if they don't.)
   this.svg
     .append('g')

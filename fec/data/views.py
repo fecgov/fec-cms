@@ -149,7 +149,6 @@ def get_candidate(candidate_id, cycle, election_full):
         candidate_id,
         'committees',
         cycle=cycle,
-        cycle_key='two_year_period',
         election_full=election_full,
     )
 
@@ -166,6 +165,12 @@ def get_candidate(candidate_id, cycle, election_full):
         'electionFull': election_full,
         'candidateID': candidate['candidate_id'],
     }
+
+    # Grab the most recent two-year period with data within this cycle
+    # Used for raising/spending tabs
+    max_cycle = max(
+        year for year in candidate['fec_cycles_in_election'] if year <= cycle
+    )
 
     # Annotate committees with most recent available cycle
     aggregate_cycles = (
@@ -194,11 +199,12 @@ def get_candidate(candidate_id, cycle, election_full):
     aggregate = api_caller.load_first_row_data(path, **filters)
 
     if election_full:
-        # (5)if election_full is ture, need call
+        # (5)if election_full is true, need call
         # candidate/{candidate_id}/totals/{cycle} second time
-        # (set election_full=false) to get totals for the two-year period
         # for showing on raising and spending tabs
+        # Get most recent 2-year period totals
         filters['election_full'] = False
+        filters['cycle'] = max_cycle
         two_year_totals = api_caller.load_first_row_data(path, **filters)
     else:
         two_year_totals = aggregate
@@ -266,7 +272,7 @@ def get_candidate(candidate_id, cycle, election_full):
         'elections': elections,
         'has_raw_filings': has_raw_filings,
         'incumbent_challenge_full': candidate['incumbent_challenge_full'],
-        'max_cycle': cycle,
+        'max_cycle': max_cycle,
         'min_cycle': min_cycle,
         'min_receipt_date': raw_filing_start_date,
         'name': candidate['name'],
