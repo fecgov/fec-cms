@@ -151,6 +151,237 @@ h3 + .simple-table {
   }
 }
 
+// Simple table cms
+// Any table added to an html block in thr CMS will automatically have this class extended
+//
+// <table>
+//   <thead>
+//     <tr>
+//       <th>Dates covered</th>
+//       <th>Due <span class="simple-table-cms__header-subtext">| Notes</span></th>
+//     </tr>
+//   </thead>
+//   <tbody>
+//     <tr>
+//       <td>January 1–March 31</td>
+//       <td>April 15</td>
+//     </tr>
+//     <tr>
+//       <td>April 1–June 30</td>
+//       <td>July 15</td>
+//     </tr>
+//   </tbody>
+// </table>
+//
+
+.simple-table-cms {
+  border-color: $primary;
+  border-style: solid;
+  border-width: 2px 0;
+  font-family: $sans-serif;
+  margin: u(2rem 0);
+
+
+  thead tr {
+    border-bottom: 1px solid $primary;
+    font-weight: 600;
+    text-align: left;
+
+    th {
+      padding: u(.5rem 0);
+
+      .simple-table-cms__header-subtext {
+        font-weight: normal;
+      }
+    }
+  }
+
+  td {
+    padding: u(1rem);
+    vertical-align: top;
+    border: 1px solid $gray-light;
+
+      &:first-child {
+        border-left: none;
+      }
+
+      &:last-child {
+        border-right: none;
+      }
+  }
+
+  tr {
+    border-bottom: 1px solid $neutral;
+
+    &:nth-child(even) {
+      background-color: rgba($gray-lightest, .5);
+    }
+
+    &:last-of-type {
+      border-bottom: none;
+    }
+  }
+}
+
+.election-dates-table {
+  tr {
+    &.row_display {
+      display: table-row;
+    }
+  }
+
+  td {
+   .th_append {
+     display: none !important;
+   }
+  }
+
+
+  tr:first-child {
+  border-top: 2.3px solid $primary;
+  border-bottom: 2.3px solid $primary;
+  font-weight: 600;
+  text-align: left;
+  }
+
+  th {
+    padding: u(1rem);
+
+  }
+
+  a sup{
+    border-bottom: 1px dotted #5b616b;
+    display: inline-block;
+    height: u(1.7rem);
+    margin-left: u(.2rem);
+  }
+
+  td a[href^='#'], th a[href^='#'] {
+    border-bottom: none;
+  }
+
+  tr.footnote_row {
+
+    td {
+      border:none !important;
+      padding-bottom: u(1rem);
+      &:first-child {
+        border-right: 1px solid $gray-light !important;
+      }
+      a {
+      border-bottom: 1px dotted $gray-dark;
+      }
+      span {
+       line-height: u(1.5rem);
+       font-weight: bold;
+      }
+    }
+  }
+  .ftnt_append {
+    display: none !important;
+  }
+
+  /* as a necessity, we depart from mobile-first(min-width only MQs) here for these tables only*/
+  @media only screen and (max-width: 650px),
+  (min-device-width: 650px) and (max-device-width: 1024px)  {
+
+    /* Force table to not be like tables anymore */
+     table,  thead,  tbody,  th,  td,  tr {
+      display: block;
+
+    }
+
+    /* Hide table headers (but not display: none;, for accessibility) */
+     thead tr {
+      position: absolute;
+      top: -9999px;
+      left: -9999px;
+    }
+
+    tr {
+      border: 1px solid $gray;
+       padding-top:2px;
+
+      &.row_display {
+      display: block !important;
+      }
+      &.footnote_row {
+        display: none !important;
+      }
+      /* Hide table headers (but not display: none;, for accessibility) */
+      &:first-child{
+        position: absolute;
+        top: -9999px;
+        left: -9999px;
+      }
+    }
+
+     td {
+      /* Behave  like a "row" */
+      border: none;
+      border-bottom: 1px solid $gray-light !important;
+      position: relative;
+      display: inline-block;
+      width: 100%;
+
+
+      .th_append {
+        display: table-cell !important;
+        font-weight: bold;
+        min-width: u(16rem);
+        float: left;
+      }
+
+    }
+
+
+     tr:nth-child(even) td {
+      border-bottom: 1px solid #aaa
+      }
+
+    .ftnt_append {
+    display: block !important;
+    padding: u(0 3rem);
+    font-weight: normal;
+      b {
+        margin-left: u(-1.5rem);
+        padding-right: u(.1rem);
+      }
+
+      .ftnt-close {
+        position: absolute;
+        background-size: u(1.5rem);
+        top: u(3.1rem);
+        right: u(0.5rem);
+      }
+    }
+  }
+
+}
+
+
+
+#header_notes_modal li {
+  margin-bottom: u(2rem);
+  padding-left: u(2rem);
+}
+
+#header_notes_modal li b:first-of-type {
+  margin-left: u(-2rem);
+}
+
+#static_notes {
+  margin-top: u(2rem);
+
+  ul {
+  list-style: none;
+  padding-left: u(2rem);
+  }
+  li {
+  text-indent: u(-2rem);
+  }
+}
+
 // Chart Table
 // Table style used on breakdown charts
 // Very similar to simple-table, but with slight differences

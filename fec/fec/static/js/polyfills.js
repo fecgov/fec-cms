@@ -42,3 +42,27 @@ import 'whatwg-fetch';
  * TODO used for
  */
 import 'promise-polyfill/src/polyfill';
+
+/**
+ * element-closest
+ * used to find closest ancestor of element in IE
+ */
+import 'element-closest/browser';
+
+/**
+ * array-from-polyfill
+ * used for reporting-dates tables for Arry.from() in IE
+ */
+import 'array-from-polyfill';
+
+/**
+ * element.remove polyfill
+ * used for reporting-dates tables for remove() in IE
+ */
+import 'element-remove';
+
+/**
+ * css.escape polyfill
+ * Used for reporting-dates for non-standard css selectors in IE
+ */
+import 'css.escape';

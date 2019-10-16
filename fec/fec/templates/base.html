@@ -17,7 +17,7 @@
     <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start': new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer','GTM-PMSLNL3');</script>
       {% endif %}
     {% endif %}
-    
+
     {% block css %}
     <link rel="stylesheet" type="text/css" href="{% asset_for_css 'base.css' %}">
     {% endblock %}
@@ -42,7 +42,7 @@
         <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-PMSLNL3" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       {% endif %}
     {% endif %}
-    
+
     {% wagtailuserbar %}
     <a href="#main" class="skip-nav">skip navigation</a>
 
@@ -173,6 +173,15 @@
     <script type="text/javascript" src="{% asset_for_js 'vendor.js' %}"></script>
     <script type="text/javascript" src="{% asset_for_js 'init.js' %}"></script>
     <script defer type="text/javascript" src='https://www.google.com/recaptcha/api.js'></script>
+    <script>
+      var canSkipPolyfills = ('fetch' in window && 'assign' in Object);
+      if (!canSkipPolyfills) {
+        var pfScriptElem = document.createElement('script');
+        pfScriptElem.async = false;
+        pfScriptElem.src = "{% asset_for_js 'polyfills.js' %}";
+        document.head.appendChild(pfScriptElem);
+      }
+    </script>
 
     {% block extra_js %}
     {# Override this in templates to add extra javascript #}

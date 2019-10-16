@@ -7,15 +7,8 @@
  * @license CC0-1.0
  * @owner  fec.gov
  * @version 1.0
- * TODO - Add an initial "loading" state?
- * TODO - Figure out why Aggregate Totals Box isn't defaulting to data-year and window.ELECTION_YEAR
- * TODO - For v2 or whatever, convert to datatable.net (start with the simpliest implementation; no columns.js, etc.)
- * TODO - Stop the year pull-down from changing the URL?
- * TODO - related to ^^, when the year is changed, the candidate name disappears from the typeahead (and shouldn't)
- * TODO - Make Typeahead save current value and restore if user clicks outside?
- * TODO - Methodology functionality
- * TODO - reviews
- * TODO - Test on Firefox, Safari, Internet Explorer, Edge pre-Chromium, Edge post-Chromium
+ * TODO: Figure out why Aggregate Totals Box isn't defaulting to data-year and window.ELECTION_YEAR
+ * TODO: For v2 or whatever, convert to datatable.net (start with the simpliest implementation; no columns.js, etc.)
  */
 
 // Editable vars
@@ -25,6 +18,8 @@ const breakpointToSmall = 430;
 const breakpointToMedium = 675;
 const breakpointToLarge = 700;
 const breakpointToXL = 860;
+const rootPathToIndividualContributions =
+  '/data/receipts/individual-contributions/';
 
 import { buildUrl } from '../modules/helpers';
 import typeahead from '../modules/typeahead';
@@ -36,8 +31,8 @@ const AbortController = window.AbortController;
 
 /**
  * Formats the given value and puts it into the dom element.
- * @param {Number} passedValue - The number to format and plug into the element
- * @param {Boolean} roundToWhole - Should we round the cents or no?
+ * @param {Number} passedValue The number to format and plug into the element
+ * @param {Boolean} roundToWhole Should we round the cents or no?
  * @returns {String} A string of the given value formatted with a dollar sign, commas, and (if roundToWhole === false) decimal
  */
 function formatAsCurrency(passedValue, roundToWhole = true) {
@@ -50,6 +45,52 @@ function formatAsCurrency(passedValue, roundToWhole = true) {
 }
 
 /**
+ * Builds the link/url to a filtered Individual Contributions page/list
+ * @param {Number} cycle The candidate's election year
+ * @param {String} office 'H', 'P', or 'S'
+ * @param {Array} committeeIDs An array of strings of the candidate's committees
+ * @param {String} stateID Optional. A null value will not filter for any state but show entries for the entire country
+ * @returns {String} URL or empty string depending on
+ */
+function buildIndividualContributionsUrl(cycle, office, committeeIDs, stateID) {
+  // If we're missing required params, just return '' and be done
+  if (!cycle || !office || !committeeIDs) return '';
+
+  let transactionPeriodsString = 'two_year_transaction_period=' + cycle;
+  // TODO: Do we need maxDate and minDate?
+  // let maxDate = `12-13-${this.baseStatesQuery.cycle}`;
+  // let minDate = `01-01-${this.baseStatesQuery.cycle - 1}`;
+  let committeesString = '';
+
+  // The API currently wants a two_year_transaction_period value for each set of two years
+  // so we'll add the previous two-year period for presidential races
+  if (office == 'P')
+    transactionPeriodsString += '&two_year_transaction_period=' + (cycle - 2);
+  // and the two earlier two-year periods for Senate races
+  else if (office == 'S') {
+    transactionPeriodsString += '&two_year_transaction_period=' + (cycle - 2);
+    transactionPeriodsString += '&two_year_transaction_period=' + (cycle - 4);
+  }
+
+  for (let i = 0; i < committeeIDs.length; i++) {
+    committeesString += '&committee_id=' + committeeIDs[i];
+  }
+
+  let stateString = stateID ? '&contributor_state=' + stateID : '';
+
+  let toReturn =
+    rootPathToIndividualContributions +
+    '?' +
+    transactionPeriodsString +
+    stateString +
+    committeesString;
+  // TODO: Do we need maxDate and minDate?
+  // `&min_date=${minDate}&max_date=${maxDate}` +
+
+  return toReturn;
+}
+
+/**
  * @constructor
  */
 function ContributionsByState() {
@@ -59,6 +100,15 @@ function ContributionsByState() {
 
   // Where to find individual candidate details
   this.basePath_candidatePath = ['candidate'];
+
+  // Where to find individual candidate details
+  this.basePath_candidateCommitteesPath = [
+    'candidate',
+    '000', // candidate ID
+    'committees',
+    'history',
+    2020 // election year / cycle
+  ];
   // Where to find the highest-earning candidates:
   this.basePath_highestRaising = ['candidates', 'totals'];
   // Where to find the list of states:
@@ -78,18 +128,26 @@ function ContributionsByState() {
   ];
   // Details about the candidate. Comes from the typeahead
   this.candidateDetails = {};
-  // Init the list/table of states and their totals // TODO - empty this?
+  // Information retruned by API candidate committees API {@see loadCandidateCommitteeDetails}
+  this.data_candidateCommittees = {};
+  // Init the list/table of states and their totals
   this.data_states = {
     results: [
       {
-        candidate_id: 'P00000489',
-        count: 4075,
-        cycle: 1996,
-        state: 'NY',
-        state_full: 'New York',
-        total: 3056478
+        candidate_id: '',
+        count: 0,
+        cycle: 2020,
+        state: '',
+        state_full: '',
+        total: 0
       }
     ]
+  };
+  // Shared settings for every fetch():
+  this.fetchInitObj = {
+    cache: 'no-cache',
+    mode: 'cors',
+    signal: null
   };
   this.fetchingStates = false; // Are we waiting for data?
   this.element = document.querySelector('#gov-fec-contribs-by-state'); // The visual element associated with this, this.instance
@@ -164,14 +222,13 @@ ContributionsByState.prototype.init = function() {
   );
 
   // Listen for any field updates, looking for errors
-  // TODO - Is there a better event to listen for when a user has entered something that returns no results?
   this.typeahead.$input.on(
     'typeahead:render',
     this.handleTypeaheadRender.bind(this)
   );
 
   // Init the election year selector (The element ID is set in data/templates/partials/widgets/contributions-by-state.jinja)
-  // TODO - Can we remove the default listener (like with the typeahead above) and not change the URL when the <select> changes?
+  // TODO: Can we remove the default listener (like with the typeahead above) and not change the URL when the <select> changes?
   this.yearControl = document.querySelector('#state-contribs-years');
   this.yearControl.addEventListener(
     'change',
@@ -202,8 +259,7 @@ ContributionsByState.prototype.init = function() {
 
   // Fire up the map
   this.map = new DataMap(this.map, {
-    colorScale: ['#f0f9e8', '#a6deb4', '#7bccc4', '#2a9291', '#216a7a'],
-    colorZero: '#ffffff',
+    color: '#36BDBB',
     data: '',
     addLegend: true,
     addTooltips: true
@@ -215,7 +271,7 @@ ContributionsByState.prototype.init = function() {
   );
   this.buttonIndivContribs.addEventListener(
     'click',
-    this.handleBrowseIndivContribsClick.bind(this)
+    this.updateBrowseIndivContribsButton.bind(this)
   );
 
   // Initialize the remote table header
@@ -261,11 +317,10 @@ ContributionsByState.prototype.loadInitialData = function() {
   });
 
   window
-    .fetch(buildUrl(this.basePath_highestRaising, highestRaisingQuery), {
-      cache: 'no-cache',
-      mode: 'cors',
-      signal: null
-    })
+    .fetch(
+      buildUrl(this.basePath_highestRaising, highestRaisingQuery),
+      this.fetchInitObj
+    )
     .then(function(response) {
       if (response.status !== 200)
         throw new Error('The network rejected the states request.');
@@ -284,9 +339,7 @@ ContributionsByState.prototype.loadInitialData = function() {
         instance.displayUpdatedData_candidate();
       });
     })
-    .catch(function() {
-      // TODO - handle catch
-    });
+    .catch(function() {});
 };
 
 /**
@@ -300,11 +353,10 @@ ContributionsByState.prototype.loadCandidateDetails = function(cand_id) {
 
   this.basePath_candidatePath[1] = cand_id;
   window
-    .fetch(buildUrl(this.basePath_candidatePath, this.baseCandidateQuery), {
-      cache: 'no-cache',
-      mode: 'cors',
-      signal: null
-    })
+    .fetch(
+      buildUrl(this.basePath_candidatePath, this.baseCandidateQuery),
+      this.fetchInitObj
+    )
     .then(function(response) {
       if (response.status !== 200)
         throw new Error('The network rejected the states request.');
@@ -323,8 +375,53 @@ ContributionsByState.prototype.loadCandidateDetails = function(cand_id) {
         instance.displayUpdatedData_candidate();
       });
     })
+    .catch(function() {});
+};
+
+/**
+ * Asks the API for the details of the candidate's committees for the currently-selected election
+ * Called by {@see displayUpdatedData_candidate() }
+ */
+ContributionsByState.prototype.loadCandidateCommitteeDetails = function() {
+  let instance = this;
+
+  // Before we fetch, make sure the query path has the current candidate id
+  this.basePath_candidateCommitteesPath[1] = this.candidateDetails.candidate_id;
+  // and the current election year/cycle
+  this.basePath_candidateCommitteesPath[4] = this.baseStatesQuery.cycle;
+
+  let committeesQuery = Object.assign(
+    {},
+    {
+      per_page: 100,
+      election_full: true
+    }
+  );
+
+  let theFetchUrl = buildUrl(
+    instance.basePath_candidateCommitteesPath,
+    committeesQuery
+  );
+  // because the API wants two `designation` values, and that's a violation of key:value law,
+  // we'll add them ourselves:
+  theFetchUrl += '&designation=P&designation=A';
+
+  window
+    .fetch(theFetchUrl, instance.fetchInitObj)
+    .then(function(response) {
+      if (response.status !== 200)
+        throw new Error('The network rejected the states request.');
+      // else if (response.type == 'cors') throw new Error('CORS error');
+      response.json().then(data => {
+        // Save the candidate committees query response for when we build links later
+        instance.data_candidateCommittees = data;
+
+        // Now that we have the committee info, load the new states data
+        instance.loadStatesData();
+      });
+    })
     .catch(function() {
-      // TODO - handle catch
+      // TODO: handle catch. Maybe we remove the links if the committee data didn't load?
     });
 };
 
@@ -345,11 +442,10 @@ ContributionsByState.prototype.loadStatesData = function() {
   this.setLoadingState(true);
 
   window
-    .fetch(buildUrl(this.basePath_states, baseStatesQueryWithCandidate), {
-      cache: 'no-cache',
-      mode: 'cors',
-      signal: this.fetchAbortSignal
-    })
+    .fetch(
+      buildUrl(this.basePath_states, baseStatesQueryWithCandidate),
+      this.fetchInitObj
+    )
     .then(function(response) {
       instance.fetchingStates = false;
       if (response.status !== 200)
@@ -368,16 +464,14 @@ ContributionsByState.prototype.loadStatesData = function() {
     })
     .catch(function() {
       instance.fetchingStates = false;
-      // TODO - handle catch
     });
 
   // Start loading the states total
   window
-    .fetch(buildUrl(this.basePath_statesTotal, baseStatesQueryWithCandidate), {
-      cache: 'no-cache',
-      mode: 'cors',
-      signal: null
-    })
+    .fetch(
+      buildUrl(this.basePath_statesTotal, baseStatesQueryWithCandidate),
+      this.fetchInitObj
+    )
     .then(function(response) {
       if (response.status !== 200)
         throw new Error('The network rejected the states total request.');
@@ -386,9 +480,7 @@ ContributionsByState.prototype.loadStatesData = function() {
         instance.displayUpdatedData_total(data);
       });
     })
-    .catch(function() {
-      // TODO - handle catch
-    });
+    .catch(function() {});
 
   logUsage(this.baseStatesQuery.candidate_id, this.baseStatesQuery.cycle);
 };
@@ -402,14 +494,6 @@ ContributionsByState.prototype.displayUpdatedData_candidate = function() {
   let theTypeahead = document.querySelector('#contribs-by-state-cand');
   if (!theTypeahead.value) theTypeahead.value = this.candidateDetails.name;
 
-  // Handle the candidate's name…
-  let candidateNameElement = this.candidateDetailsHolder.querySelector('h1');
-  candidateNameElement.innerHTML = `<a href="/data/candidate/${
-    this.candidateDetails.candidate_id
-  }/?cycle=${this.baseStatesQuery.cycle}&election_full=true">${
-    this.candidateDetails.name
-  }</a> [${this.candidateDetails.party}]`;
-
   // …their desired office during this election…
   let candidateOfficeHolder = this.candidateDetailsHolder.querySelector('h2');
   let theOfficeName = this.candidateDetails.office_full;
@@ -422,10 +506,21 @@ ContributionsByState.prototype.displayUpdatedData_candidate = function() {
   candidateIdHolder.innerText = 'ID: ' + this.candidateDetails.candidate_id;
 
   // Update the <select>
-  // TODO - handle if there are no years
-  // TODO - handle if there is only one year
+  // TODO: handle if there are no years
+  // TODO: handle if there is only one year (hide select? disable it? Not awful if it's exactly one option)
   // Grab election_years from the candidate details
-  let validElectionYears = this.candidateDetails.election_years;
+  let candidateElectionYears = this.candidateDetails.election_years;
+  let evenElectionYears = candidateElectionYears.map(electionYear => {
+    if (electionYear % 2 === 0) {
+      return electionYear;
+    } else {
+      electionYear = electionYear + 1;
+      return electionYear;
+    }
+  });
+  // Take the new even election years set and make it distinct
+  // eslint-disable-next-line no-undef
+  let validElectionYears = [...new Set(evenElectionYears)];
   // Sort them so the most recent is first so it'll be on top of the <select>
   validElectionYears.sort((a, b) => b - a);
   // Remember what year's election we're currently showing (will help if we were switching between candidates of the same year)
@@ -452,25 +547,28 @@ ContributionsByState.prototype.displayUpdatedData_candidate = function() {
   // Put the new options into the <select>
   this.yearControl.innerHTML = newSelectOptions;
 
-  // If the previous election and this one are different
-  if (previousElectionYear != nextElectionYear) {
-    // Save the new election year to the base query
+  // If the previous election and this one are different,
+  // save the new election year to the base query
+  if (previousElectionYear != nextElectionYear)
     this.baseStatesQuery.cycle = nextElectionYear;
-    // TODO - Do we want to dispatch an event and only reload if we need to?
-    // TODO - I think this was going on direction but we changed functionality and now it's irrelevant
-    // let newEvent = new Event('change');
-    // this.yearControl.dispatchEvent(newEvent);
 
-    // this.loadStatesData();
-  }
-  // Load the new states data
-  this.loadStatesData();
+  // Update candidate name and link
+  this.setCandidateName(
+    this.candidateDetails.candidate_id,
+    this.candidateDetails.name,
+    this.candidateDetails.party,
+    this.baseStatesQuery.cycle
+  );
+
+  // Now that we have the candidate's personal details,
+  // we need to get the committee data
+  this.loadCandidateCommitteeDetails();
 };
 
 /**
  * Put the list of states and totals into the table
  * Called by {@see loadStatesData() }
- * TODO - This will eventually be replaced by the datatables functionality
+ * TODO: This will eventually be replaced by the datatables functionality
  */
 ContributionsByState.prototype.displayUpdatedData_states = function() {
   let theData = this.data_states;
@@ -483,24 +581,38 @@ ContributionsByState.prototype.displayUpdatedData_states = function() {
     this.handleErrorState('NO_RESULTS_TO_DISPLAY');
   } else {
     // If there ARE results to show
-    for (var i = 0; i < theResults.length; i++) {
-      // TODO - If we need to make the totals clickable, we'll do that here.
-      // TODO - Note: Couldn't find the way to query an entire election for a state-candidate combo
-      let theStateTotalUrl; // =
-      // `/data/receipts/individual-contributions/` +
-      // `?candidate_id=${this.candidateDetails.candidate_id}` +
-      // `&two_year_transaction_period=${theResults[i].cycle}` +
-      // `&contributor_state=${theResults[i].state}`;
 
-      theTbodyString += `<tr><td>${i + 1}.</td><td>${
-        theResults[i].state_full
-      }</td><td class="t-right-aligned t-mono">`;
-      theTbodyString += theStateTotalUrl
-        ? `<a href="${theStateTotalUrl}">${formatAsCurrency(
-            theResults[i].total,
-            true
-          )}</a>`
-        : `${formatAsCurrency(theResults[i].total, true)}`;
+    // We're going to need the committee IDs for the totals link
+    let theCommitteeIDs = [];
+    for (let i = 0; i < this.data_candidateCommittees.results.length; i++) {
+      theCommitteeIDs.push(
+        this.data_candidateCommittees.results[i].committee_id
+      );
+    }
+
+    for (let i = 0; i < theResults.length; i++) {
+      let theStateTotalUrl = buildIndividualContributionsUrl(
+        this.baseStatesQuery.cycle,
+        this.baseStatesQuery.office,
+        theCommitteeIDs,
+        theResults[i].state
+      );
+
+      // Number cell
+      theTbodyString += `<tr><td>${i + 1}.</td>`;
+
+      // State name cell
+      theTbodyString += `<td>${theResults[i].state_full}</td>`;
+
+      // State total cell
+      theTbodyString += `<td class="t-right-aligned t-mono">`;
+      theTbodyString +=
+        theStateTotalUrl != ''
+          ? `<a href="${theStateTotalUrl}">${formatAsCurrency(
+              theResults[i].total,
+              true
+            )}</a>`
+          : `${formatAsCurrency(theResults[i].total, true)}`;
       theTbodyString += `</td></tr>`;
     }
     theTableBody.innerHTML = theTbodyString;
@@ -509,11 +621,14 @@ ContributionsByState.prototype.displayUpdatedData_states = function() {
   // Update the time stamp above the states list
   this.updateCycleTimeStamp();
 
-  // Let the map know that the data has been updated // TODO - handle this with a listener?
+  // Update the Individual Contributions button/link at the bottom
+  this.updateBrowseIndivContribsButton();
+
+  // Let the map know that the data has been updated
   this.map.handleDataRefresh(theData);
 
   // Clear the classes and reset functionality so the tool is usable again
-  this.setLoadingState(false); // TODO - May want to move this elsewhere
+  this.setLoadingState(false);
 };
 
 /**
@@ -573,7 +688,7 @@ ContributionsByState.prototype.updateCycleTimeStamp = function() {
 
 /**
  * Called when the typeahead element dispatches "typeahead:select"
- * @param {jQuery.Event} e - 'typeahead:select' event
+ * @param {jQuery.Event} e 'typeahead:select' event
  */
 ContributionsByState.prototype.handleTypeaheadSelect = function(
   e,
@@ -591,10 +706,9 @@ ContributionsByState.prototype.handleTypeaheadSelect = function(
 };
 
 /**
- * @method
- * @param {jQuery.Event}
- * @param {Object} - The first item in the autocomplete menu. Null if there are no results.
- * @param {Object} - The second item in the autocomplete menu. There are additional objects returned, one for each item in the autocomplete menu.
+ * @param {jQuery.Event} e jQueryEvent
+ * @param {Object} firstResult The first item in the autocomplete menu. Null if there are no results.
+ * @param {Object} various The second item in the autocomplete menu. There are additional objects returned, one for each item in the autocomplete menu.
  */
 ContributionsByState.prototype.handleTypeaheadRender = function(
   e,
@@ -638,6 +752,17 @@ ContributionsByState.prototype.handleTypeaheadFocus = function() {
   this.typeahead_revertValue = theTypeahead.value;
 };
 
+// Set the candidate's name and link change
+ContributionsByState.prototype.setCandidateName = function(
+  id,
+  candidateName,
+  party,
+  cycle
+) {
+  let candidateNameElement = this.candidateDetailsHolder.querySelector('h1');
+  candidateNameElement.innerHTML = `<a href="/data/candidate/${id}/?cycle=${cycle}&election_full=true">${candidateName}</a> [${party}]`;
+};
+
 /**
  * Called on the election year control's change event
  * Starts loading the new data
@@ -646,8 +771,17 @@ ContributionsByState.prototype.handleTypeaheadFocus = function() {
 ContributionsByState.prototype.handleElectionYearChange = function(e) {
   e.preventDefault();
   this.baseStatesQuery.cycle = this.yearControl.value;
-  // We don't need to load the candidate details for a year change, so we'll just jump right to loading the states data.
-  this.loadStatesData();
+  // Update candidate name and link
+  this.setCandidateName(
+    this.candidateDetails.candidate_id,
+    this.candidateDetails.name,
+    this.candidateDetails.party,
+    this.baseStatesQuery.cycle
+  );
+
+  // We don't need to load the candidate details for a year change,
+  // so we'll just jump right to loading the committees data for the newly-chosen year.
+  this.loadCandidateCommitteeDetails();
 };
 
 /**
@@ -656,7 +790,7 @@ ContributionsByState.prototype.handleElectionYearChange = function(e) {
  */
 ContributionsByState.prototype.handleErrorState = function(errorCode) {
   if (errorCode == 'NO_RESULTS_TO_DISPLAY') {
-    // Empty the states totals list
+    // Empty the states list and update the date range
     let theStatesTableBody = this.table.querySelector('tbody');
     let theDateRange = this.baseStatesQuery.cycle;
     if (this.baseStatesQuery.office == 'P')
@@ -665,35 +799,39 @@ ContributionsByState.prototype.handleErrorState = function(errorCode) {
       theDateRange = theDateRange - 5 + '-' + theDateRange;
     else theDateRange = theDateRange - 1 + '-' + theDateRange;
 
-    let theErrorMessageHTML = `<tr><td colspan="3" class="error-msg">We don&apos;t have individual contributions for this candidate for ${theDateRange}.</td></tr>`;
+    let theErrorMessageHTML = `<tr><td colspan="3" class="error-msg">We don&apos;t have itemized individual contributions for this candidate for ${theDateRange}.</td></tr>`;
     theStatesTableBody.innerHTML = theErrorMessageHTML;
-
-    // Show error message
-    // TODO
-  } else if (errorCode == 'NO_CANDIDATE_FOUND') {
-    // You entered a candidate name or committee ID not associated with a registered candidate. Please try again.
   }
 };
 
 /**
- * TODO -
- * @param {MouseEvent} e
+ * Updates the href of the Individual Contributions link/button at the bottom of the widget
  */
-ContributionsByState.prototype.handleBrowseIndivContribsClick = function(e) {
-  let tranPeriod = this.baseStatesQuery.cycle;
-  let maxDate = `12-13-${this.baseStatesQuery.cycle}`;
-  let minDate = `01-01-${this.baseStatesQuery.cycle - 1}`;
+ContributionsByState.prototype.updateBrowseIndivContribsButton = function() {
+  // We need to go through the committee results and build an array of the committee IDs
+  // to send to {@see buildIndividualContributionsUrl() }
+  let theCommittees = this.data_candidateCommittees.results;
+  let theCommitteeIDs = [];
+  for (let i = 0; i < theCommittees.length; i++) {
+    theCommitteeIDs.push(theCommittees[i].committee_id);
+  }
 
-  e.target.setAttribute(
-    'href',
-    `/data/receipts/individual-contributions/?two_year_transaction_period=${tranPeriod}&min_date=${minDate}&max_date=${maxDate}`
+  let theButton = this.element.querySelector(
+    '.js-browse-indiv-contribs-by-state'
   );
-  // e.preventDefault();
+  theButton.setAttribute(
+    'href',
+    buildIndividualContributionsUrl(
+      this.baseStatesQuery.cycle,
+      this.baseStatesQuery.office,
+      theCommitteeIDs
+    )
+  );
 };
 
 /**
  * Listens to window resize events and adjusts the classes for the <aside> based on its width
- * (rather than the page's width, which is problematic when trying to determine whethr there's a side nav)
+ * (rather than the page's width, which is problematic when trying to determine whether there's a side nav)
  */
 ContributionsByState.prototype.handleResize = function(e = null) {
   if (e) e.preventDefault();
@@ -754,8 +892,8 @@ ContributionsByState.prototype.refreshOverlay = function() {
 };
 
 /**
- * Controls class names and functionality of the widget
- * Called when we start and complete (@see loadStatesData() )
+ * Controls class names and functionality of the widget.
+ * Called when we both start and complete (@see loadStatesData() )
  * @param {Boolean} newState
  */
 ContributionsByState.prototype.setLoadingState = function(newState) {
@@ -782,7 +920,7 @@ ContributionsByState.prototype.setLoadingState = function(newState) {
 
 /**
  * Handles the usage analytics for this module
- * @todo - Decide how to gather usage insights while embedded
+ * @TODO: Decide how to gather usage insights while embedded
  * @param {String} candID - The candidate ID
  * @param {*} electionYear - String or Number, the user-selected election year
  */
