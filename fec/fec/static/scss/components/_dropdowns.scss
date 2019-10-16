@@ -102,7 +102,7 @@
     color: $base;
     display: block;
     margin: 0;
-    padding: u(.5rem 1rem);
+    padding: u(.5rem 1rem .5rem 1.5rem);
     max-width: 100%;
     white-space: nowrap;
 
@@ -121,7 +121,7 @@
       border: 1px solid $gray;
       display: block;
       font-size: u(1.4rem);
-      padding: u(.5rem 1rem);
+      padding: u(.5rem 1rem .5rem 1.5rem);
       text-align: left;
       width: 100%;
 
@@ -147,8 +147,11 @@
 
   // For labeling a group of options
   .dropdown__subhead {
+    border: 1px solid $gray;
+    border-bottom: 1px solid $gray-dark;
     font-size: u(1.4rem);
     font-weight: bold;
+    padding-left: u(.75rem);
 
     &:hover {
       background-color: $inverse;
@@ -214,14 +217,18 @@
 }
 
 .ps-scrollbar-y-rail {
-  position: absolute;
   background: $gray-medium;
-  width: 4px;
   border-left: 1px solid $gray-dark;
+  position: absolute;
+  left: 0;
+  right: auto;
+  width: 4px;
 }
 
 .ps-scrollbar-y {
-  position: absolute;
-  width: 4px;
   background: $gray-dark;
+  left: 0;
+  position: absolute;
+  right: auto;
+  width: 4px;
 }
