@@ -328,7 +328,7 @@ ContributionsByState.prototype.loadInitialData = function() {
     )
     .then(function(response) {
       if (response.status !== 200)
-        throw new Error('The network rejected the states request.');
+        throw new Error('The network rejected the candidate raising request.');
       // else if (response.type == 'cors') throw new Error('CORS error');
       response.json().then(data => {
         // Save the candidate query reply
@@ -364,7 +364,7 @@ ContributionsByState.prototype.loadCandidateDetails = function(cand_id) {
     )
     .then(function(response) {
       if (response.status !== 200)
-        throw new Error('The network rejected the states request.');
+        throw new Error('The network rejected the candidate details request.');
       // else if (response.type == 'cors') throw new Error('CORS error');
       response.json().then(data => {
         // Save the candidate query response
@@ -384,23 +384,6 @@ ContributionsByState.prototype.loadCandidateDetails = function(cand_id) {
 };
 
 /**
- * Format the dates into MM/DD/YYYY format.
- * Pads single digits with leading 0.
- */
-ContributionsByState.prototype.formatDate = function(date) {
-  // Adds one since js month uses zero based index
-  let month = date.getMonth() + 1;
-  if (month < 10) {
-    month = '0' + month;
-  }
-  let day = date.getDate();
-  if (day < 10) {
-    day = '0' + day;
-  }
-  return month + '/' + day + '/' + date.getFullYear();
-};
-
-/**
  * Queries the API for the candidate's coverage dates for the currently-selected election
  * Called by {@see displayUpdatedData_candidate() } and {@see displayUpdatedData_states() }
  */
@@ -417,6 +400,23 @@ ContributionsByState.prototype.loadCandidateCoverageDates = function() {
     }
   );
 
+  /**
+   * Format the dates into MM/DD/YYYY format.
+   * Pads single digits with leading 0.
+   */
+  var formatDate = function(date) {
+    // Adds one since js month uses zero based index
+    let month = date.getMonth() + 1;
+    if (month < 10) {
+      month = '0' + month;
+    }
+    let day = date.getDate();
+    if (day < 10) {
+      day = '0' + day;
+    }
+    return month + '/' + day + '/' + date.getFullYear();
+  };
+
   let theFetchUrl = buildUrl(
     instance.basePath_candidateCoverageDatesPath,
     coverageDatesQuery
@@ -426,7 +426,7 @@ ContributionsByState.prototype.loadCandidateCoverageDates = function() {
     .fetch(theFetchUrl, instance.fetchInitObj)
     .then(function(response) {
       if (response.status !== 200)
-        throw new Error('The network rejected the states request.');
+        throw new Error('The network rejected the coverage dates request.');
       // else if (response.type == 'cors') throw new Error('CORS error');
       response.json().then(data => {
         if (data.results.length === 1) {
@@ -448,11 +448,9 @@ ContributionsByState.prototype.loadCandidateCoverageDates = function() {
           );
           let theEndTimeElement = document.querySelector('.js-cycle-end-time');
           // Format the date and put it into the start time
-          theStartTimeElement.innerText = instance.formatDate(
-            coverage_start_date
-          );
+          theStartTimeElement.innerText = formatDate(coverage_start_date);
           // Format the date and put it into the end time
-          theEndTimeElement.innerText = instance.formatDate(coverage_end_date);
+          theEndTimeElement.innerText = formatDate(coverage_end_date);
         } else {
           // Hide coverage dates display when there are zero results
           document
@@ -496,7 +494,9 @@ ContributionsByState.prototype.loadCandidateCommitteeDetails = function() {
     .fetch(theFetchUrl, instance.fetchInitObj)
     .then(function(response) {
       if (response.status !== 200)
-        throw new Error('The network rejected the states request.');
+        throw new Error(
+          'The network rejected the candidate committee details request.'
+        );
       // else if (response.type == 'cors') throw new Error('CORS error');
       response.json().then(data => {
         // Save the candidate committees query response for when we build links later
