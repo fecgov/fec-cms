@@ -89,17 +89,6 @@ def splitlines(value):
     return value.splitlines()
 
 
-@register.filter(name='get_social_image')
-def get_social_image(content_section):
-    """
-    Returns a path to a social iamge for the given content section
-    """
-    if content_section in ['legal', 'help']:
-        return static('img/social/{}.png'.format(content_section))
-    else:
-        return static('img/social/general.png')
-
-
 @register.filter(name='get_touch_icon')
 def get_touch_icon(content_section, dimension):
     """
@@ -152,3 +141,27 @@ def remove_word(str, words):
     Returns a new string
     """
     return str.replace(words, '')
+
+
+@register.filter(name='get_social_image_path')
+def get_social_image_path(identifier):
+    # """
+    # Returns a path to a social image for the given content section
+    # TODO: combine with fec/data/templatetags/filters.py ?
+    # Called by meta-tags.html
+    # """
+    imageFilename = identifier
+
+    if identifier == 'advisory-opinions':
+        imageFilename = 'fec-pen'
+    elif identifier in ['commission-meetings', 'meeting-page']:
+        imageFilename = 'fec-microphones'
+    elif identifier == 'press-release':
+        imageFilename = 'fec-microphone'
+    elif identifier == 'weekly-digest':
+        imageFilename = 'fec-seal'
+    elif identifier in ['legal', 'help']:
+        imageFilename = 'fec-' + identifier
+    else:
+        imageFilename = 'fec-logo'
+    return static('https://www.fec.gov/static/img/social/{}.png'.format(imageFilename))
