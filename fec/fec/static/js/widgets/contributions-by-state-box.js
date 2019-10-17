@@ -280,6 +280,13 @@ ContributionsByState.prototype.init = function() {
     this.updateBrowseIndivContribsButton.bind(this)
   );
 
+  // Internet Explorer doesn't like flex display
+  // so we're going to keep the states table from switching to flex.
+  let userAgent = window.navigator.userAgent;
+  // Test for IE and IE 11
+  let is_ie =
+    userAgent.indexOf('MSIE ') > 0 || userAgent.indexOf('Trident/7.0') > 0;
+
   // Initialize the remote table header
   // Find the remote header and save it
   this.remoteTableHeader = this.element.querySelector(
@@ -297,6 +304,11 @@ ContributionsByState.prototype.init = function() {
   if (theRemoteTableHead && theRemotedTableHead) {
     this.remoteTableHeader.style.display = 'table';
     theRemotedTableHead.style.display = 'none';
+  }
+
+  if (is_ie) {
+    this.remoteTable.classList.add('table-display');
+    this.remoteTableHeader.classList.add('table-display');
   }
 
   // Listen for resize events
