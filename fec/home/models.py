@@ -93,16 +93,6 @@ def get_content_section(page):
         return ''
 
 
-
-    # content_sections = [
-    #     slugs.get(ancestor.slug) for ancestor in ancestors
-    #     if slugs.get(ancestor.slug) != None
-    # ]
-    # if len(content_sections):
-    #     return content_sections[0]
-    # else:
-    #     return ''
-
 class UniqueModel(models.Model):
     """Abstract base class for unique pages."""
     class Meta:
@@ -414,6 +404,10 @@ class DigestPage(ContentPage):
     def get_author_office(self):
         return 'Press Office'
 
+    @property
+    def social_image_identifier(self):
+        return 'weekly-digest'
+
 
 class PressReleasePageAuthors(Orderable, PageAuthors):
     page = ParentalKey('PressReleasePage', related_name='authors')
@@ -482,6 +476,10 @@ class PressReleasePage(ContentPage):
     @property
     def no_boilerplate(self):
         return self.date.year >= 2016
+
+    @property
+    def social_image_identifier(self):
+        return 'press-release'
 
 
 def get_previous_tips_page():
@@ -1133,9 +1131,13 @@ class MeetingPage(Page):
     def content_section(self):
         return 'about'
 
+    @property
+    def social_image_identifier(self):
+        return 'meeting-page'
+
 
 class ReportingExamplePage(Page):
-    """Page tempalte for "how to report" and "example scenario" pages
+    """Page template for "how to report" and "example scenario" pages
     Always within the Help section"""
     featured_image = models.ForeignKey('wagtailimages.Image', blank=True, null=True,
                                    on_delete=models.SET_NULL, related_name='+')

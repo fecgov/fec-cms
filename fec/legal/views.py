@@ -26,7 +26,8 @@ def advisory_opinions_landing(request):
         'result_type': 'advisory_opinions',
         'display_name': 'advisory opinions',
         'recent_aos': recent_aos['advisory_opinions'],
-        'pending_aos': pending_aos['advisory_opinions']
+        'pending_aos': pending_aos['advisory_opinions'],
+        'social_image_identifier': 'advisory-opinions',
     })
 
 
@@ -42,7 +43,8 @@ def advisory_opinion_page(request, ao_no):
     return render(request, 'legal-advisory-opinion.jinja', {
         'advisory_opinion': advisory_opinion,
         'final_opinion': final_opinion,
-        'parent': 'legal'
+        'parent': 'legal',
+        'social_image_identifier': 'advisory-opinions',
     })
 
 
@@ -50,7 +52,8 @@ def statutes_landing(request):
     return render(request, 'legal-statutes-landing.jinja', {
         'parent': 'legal',
         'result_type': 'statutes',
-        'display_name': 'statutes'
+        'display_name': 'statutes',
+        'social_image_identifier': 'legal',
     })
 
 
@@ -62,7 +65,8 @@ def mur_page(request, mur_no):
 
     return render(request, 'legal-' + mur['mur_type'] + '-mur.jinja', {
         'mur': mur,
-        'parent': 'legal'
+        'parent': 'legal',
+        'social_image_identifier': 'legal',
     })
 
 
@@ -74,7 +78,8 @@ def adr_page(request, adr_no):
 
     return render(request, 'legal' + '-adr.jinja', {
         'adr': adr,
-        'parent': 'legal'
+        'parent': 'legal',
+        'social_image_identifier': 'legal',
     })
 
 
@@ -84,7 +89,8 @@ def admin_fine_page(request, admin_fine_no):
        raise Http404()
     return render(request, 'legal' + '-admin_fine.jinja', {
        'admin_fine': admin_fine,
-       'parent': 'legal'
+       'parent': 'legal',
+       'social_image_identifier': 'legal',
     })
 
 
@@ -103,7 +109,8 @@ def legal_search(request):
         'query': query,
         'results': results,
         'result_type': result_type,
-        'category_order': get_legal_category_order(results)
+        'category_order': get_legal_category_order(results),
+        'social_image_identifier': 'legal',
     })
 
 
@@ -118,7 +125,8 @@ def legal_doc_search_ao(request):
         'parent': 'legal',
         'results': results,
         'result_type': 'advisory_opinions',
-        'query': query
+        'query': query,
+        'social_image_identifier': 'advisory-opinions'
     })
 
 
@@ -154,7 +162,8 @@ def legal_doc_search_mur(request):
         'case_max_open_date': case_max_open_date,
         'case_min_close_date': case_min_close_date,
         'case_max_close_date': case_max_close_date,
-        'query': query
+        'query': query,
+        'social_image_identifier': 'legal',
     })
 
 def legal_doc_search_adr(request):
@@ -173,7 +182,8 @@ def legal_doc_search_adr(request):
         'result_type': 'adrs',
         'case_no': case_no,
         'case_respondents': case_respondents,
-        'query': query
+        'query': query,
+        'social_image_identifier': 'legal',
     })
 
 def legal_doc_search_af(request):
@@ -192,7 +202,8 @@ def legal_doc_search_af(request):
         'result_type': 'admin_fines',
         'case_no': case_no,
         'af_name': af_name,
-        'query': query
+        'query': query,
+        'social_image_identifier': 'legal',
     })
 
 def legal_doc_search_regulations(request):
@@ -207,7 +218,8 @@ def legal_doc_search_regulations(request):
         'parent': 'legal',
         'results': results,
         'result_type': 'regulations',
-        'query': query
+        'query': query,
+        'social_image_identifier': 'legal',
     })
 
 
@@ -223,7 +235,8 @@ def legal_doc_search_statutes(request):
         'parent': 'legal',
         'results': results,
         'result_type': 'statutes',
-        'query': query
+        'query': query,
+        'social_image_identifier': 'legal',
     })
 
 
