@@ -57,7 +57,7 @@ const Modal = ({ children, handleClose, title }) => (
       pointerEvents: 'auto',
       position: 'fixed',
       top: 'calc(50% - 100px)',
-      zIndex: '100'
+      zIndex: 1100 //(see _variables.scss $z11)
     }}
   >
     <Cancel handleClose={handleClose} />

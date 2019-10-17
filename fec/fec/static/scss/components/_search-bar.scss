@@ -211,6 +211,8 @@ $search-button-width: u(5.6rem);
   text-align: left;
   top: u(3.5rem) !important;
   width: 100%;
+  // z-index is being set on the element through a node_modules JS so adding an !important to fight that:
+  z-index: $z-dropdowns !important;
 }
 
 .tt-suggestion {

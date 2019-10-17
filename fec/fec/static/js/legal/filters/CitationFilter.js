@@ -175,7 +175,7 @@ class CitationFilter extends React.Component {
               position: 'absolute',
               top: '100%',
               left: '0px',
-              zIndex: 100,
+              zIndex: 1100, //(see _variables.scss $z11)
               display: this.dropdownDisplay()
             }}
           >

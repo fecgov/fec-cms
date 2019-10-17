@@ -109,6 +109,12 @@ function ContributionsByState() {
     'history',
     2020 // election year / cycle
   ];
+  // Where to find candidate's coverage dates
+  this.basePath_candidateCoverageDatesPath = [
+    'candidate',
+    '000', //candidate ID
+    'totals'
+  ];
   // Where to find the highest-earning candidates:
   this.basePath_highestRaising = ['candidates', 'totals'];
   // Where to find the list of states:
@@ -335,7 +341,7 @@ ContributionsByState.prototype.loadInitialData = function() {
     )
     .then(function(response) {
       if (response.status !== 200)
-        throw new Error('The network rejected the states request.');
+        throw new Error('The network rejected the candidate raising request.');
       // else if (response.type == 'cors') throw new Error('CORS error');
       response.json().then(data => {
         // Save the candidate query reply
@@ -371,7 +377,7 @@ ContributionsByState.prototype.loadCandidateDetails = function(cand_id) {
     )
     .then(function(response) {
       if (response.status !== 200)
-        throw new Error('The network rejected the states request.');
+        throw new Error('The network rejected the candidate details request.');
       // else if (response.type == 'cors') throw new Error('CORS error');
       response.json().then(data => {
         // Save the candidate query response
@@ -385,6 +391,85 @@ ContributionsByState.prototype.loadCandidateDetails = function(cand_id) {
         instance.baseStatesQuery.office = instance.candidateDetails.office;
         // Then put the new candidate details into the page
         instance.displayUpdatedData_candidate();
+      });
+    })
+    .catch(function() {});
+};
+
+/**
+ * Queries the API for the candidate's coverage dates for the currently-selected election
+ * Called by {@see displayUpdatedData_candidate() } and {@see displayUpdatedData_states() }
+ */
+ContributionsByState.prototype.loadCandidateCoverageDates = function() {
+  let instance = this;
+  this.basePath_candidateCoverageDatesPath[1] = this.candidateDetails.candidate_id;
+
+  let coverageDatesQuery = Object.assign(
+    {},
+    {
+      per_page: 100,
+      cycle: this.baseStatesQuery.cycle,
+      election_full: true
+    }
+  );
+
+  /**
+   * Format the dates into MM/DD/YYYY format.
+   * Pads single digits with leading 0.
+   */
+  var formatDate = function(date) {
+    // Adds one since js month uses zero based index
+    let month = date.getMonth() + 1;
+    if (month < 10) {
+      month = '0' + month;
+    }
+    let day = date.getDate();
+    if (day < 10) {
+      day = '0' + day;
+    }
+    return month + '/' + day + '/' + date.getFullYear();
+  };
+
+  let theFetchUrl = buildUrl(
+    instance.basePath_candidateCoverageDatesPath,
+    coverageDatesQuery
+  );
+
+  window
+    .fetch(theFetchUrl, instance.fetchInitObj)
+    .then(function(response) {
+      if (response.status !== 200)
+        throw new Error('The network rejected the coverage dates request.');
+      // else if (response.type == 'cors') throw new Error('CORS error');
+      response.json().then(data => {
+        if (data.results.length === 1) {
+          document
+            .querySelector('.states-table-timestamp')
+            .removeAttribute('style');
+          // Parse coverage date from API that is formatted like this: 2019-06-30T00:00:00+00:00
+          // into a string without timezone
+          let coverage_start_date = new Date(
+            data.results[0].coverage_start_date.substring(0, 19)
+          );
+          let coverage_end_date = new Date(
+            data.results[0].coverage_end_date.substring(0, 19)
+          );
+
+          // Remember the in-page elements
+          let theStartTimeElement = document.querySelector(
+            '.js-cycle-start-time'
+          );
+          let theEndTimeElement = document.querySelector('.js-cycle-end-time');
+          // Format the date and put it into the start time
+          theStartTimeElement.innerText = formatDate(coverage_start_date);
+          // Format the date and put it into the end time
+          theEndTimeElement.innerText = formatDate(coverage_end_date);
+        } else {
+          // Hide coverage dates display when there are zero results
+          document
+            .querySelector('.states-table-timestamp')
+            .setAttribute('style', 'opacity: 0;');
+        }
       });
     })
     .catch(function() {});
@@ -422,7 +507,9 @@ ContributionsByState.prototype.loadCandidateCommitteeDetails = function() {
     .fetch(theFetchUrl, instance.fetchInitObj)
     .then(function(response) {
       if (response.status !== 200)
-        throw new Error('The network rejected the states request.');
+        throw new Error(
+          'The network rejected the candidate committee details request.'
+        );
       // else if (response.type == 'cors') throw new Error('CORS error');
       response.json().then(data => {
         // Save the candidate committees query response for when we build links later
@@ -572,6 +659,8 @@ ContributionsByState.prototype.displayUpdatedData_candidate = function() {
     this.baseStatesQuery.cycle
   );
 
+  this.loadCandidateCoverageDates();
+
   // Now that we have the candidate's personal details,
   // we need to get the committee data
   this.loadCandidateCommitteeDetails();
@@ -630,8 +719,8 @@ ContributionsByState.prototype.displayUpdatedData_states = function() {
     theTableBody.innerHTML = theTbodyString;
   }
 
-  // Update the time stamp above the states list
-  this.updateCycleTimeStamp();
+  // Update candidate's coverage dates above the states list
+  this.loadCandidateCoverageDates();
 
   // Update the Individual Contributions button/link at the bottom
   this.updateBrowseIndivContribsButton();
@@ -660,42 +749,6 @@ ContributionsByState.prototype.displayUpdatedData_total = function(data) {
   let statesHolder = this.element.querySelector('.states-total');
   if (data.results.length > 0) statesHolder.setAttribute('style', '');
   else statesHolder.setAttribute('style', 'opacity: 0;');
-};
-
-/**
- * Reads the date and office type and puts the correct date into the paqe, above the list of states
- * Called from inside {@see displayUpdatedData_states() }
- */
-ContributionsByState.prototype.updateCycleTimeStamp = function() {
-  let electionYear = this.baseStatesQuery.cycle;
-
-  // Remember the in-page elements
-  let theStartTimeElement = document.querySelector('.js-cycle-start-time');
-  let theEndTimeElement = document.querySelector('.js-cycle-end-time');
-
-  // If the election type is P, the start date is 1 January, three years previous
-  // Likewise, five years previous if S, or just one year previous for H
-  let theStartDate;
-  if (this.candidateDetails.office == 'P')
-    theStartDate = new Date(electionYear - 3, 1, 1);
-  else if (this.candidateDetails.office == 'S')
-    theStartDate = new Date(electionYear - 5, 1, 1);
-  else theStartDate = new Date(electionYear - 1, 1, 1);
-  theStartTimeElement.setAttribute(
-    'datetime',
-    theStartDate.getFullYear() + '-01-01'
-  );
-  // Put it into the start time
-  theStartTimeElement.innerText = `01/01/${theStartDate.getFullYear()}`;
-
-  // And the end date is just 31 December of the election_year
-  let theEndDate = new Date(electionYear, 1, 1);
-  theEndTimeElement.setAttribute(
-    'datetime',
-    theEndDate.getFullYear() + '-12-31'
-  );
-  // Finally put the ending year into the end time element
-  theEndTimeElement.innerText = `12/31/${theEndDate.getFullYear()}`;
 };
 
 /**
