@@ -168,3 +168,27 @@ def asset_for_js(path):
     assets = json.load(open(settings.DIST_DIR + '/fec/static/js/rev-manifest-js.json'))
     assets.update(json.load(open(settings.DIST_DIR + '/fec/static/js/rev-legal-manifest-js.json')))
     return assets[key] if key in assets else key
+
+@library.global_function
+def get_social_image_path(identifier):
+    # """
+    # Returns a path to a social image for the given content section
+    # Called by meta-tags.jinja
+    # TODO: combine with fec/home/templatetags/filters.py ?
+    # """
+    imageFilename = identifier
+    if identifier == 'advisory-opinions':
+        imageFilename = 'fec-pen'
+    elif identifier in ['commission-meetings', 'meeting-page']:
+        imageFilename = 'fec-microphones'
+    elif identifier == 'press-release':
+        imageFilename = 'fec-microphone'
+    elif identifier == 'weekly-digest':
+        imageFilename = 'fec-seal'
+    elif identifier == 'data':
+        imageFilename = 'data'
+    elif identifier in ['legal', 'help']:
+        imageFilename = 'fec-' + identifier
+    else:
+        imageFilename = 'fec-logo'
+    return 'https://www.fec.gov/static/img/social/{}.png'.format(imageFilename)
