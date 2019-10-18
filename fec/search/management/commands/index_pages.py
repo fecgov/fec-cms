@@ -23,12 +23,6 @@ class Command(BaseCommand):
             help='Path to JSON file to load'
         )
 
-        parser.add_argument(
-            '-transition',
-            action='store_true',
-            help="Add this flag to add to the transition drawer"
-        )
-
     def handle(self, *args, **options):
         self.stdout.write(self.style.WARNING('Indexing pages'))
 
