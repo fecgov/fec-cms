@@ -32,11 +32,6 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         self.stdout.write(self.style.WARNING('Indexing pages'))
 
-        # If we're putting in the transition drawer, use those creds
-        if options['transition']:
-            drawer = 'transition'
-            key = DIGITALGOV_DRAWER_KEY_TRANSITION
-
         if options['json_file_path']:
             file_name = options['json_file_path']
         else:
