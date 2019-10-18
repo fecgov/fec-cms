@@ -8,8 +8,6 @@ from django.core.management import BaseCommand
 
 from home.models import Page
 
-
-DIGITALGOV_DRAWER_KEY_TRANSITION = settings.FEC_DIGITALGOV_DRAWER_KEY_TRANSITION
 drawer = settings.DIGITALGOV_DRAWER_HANDLE
 key = settings.FEC_DIGITALGOV_DRAWER_KEY_MAIN
 
