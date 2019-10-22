@@ -1,19 +1,18 @@
 # DigitalGov search index instructions
 
-The site-wide search of fec.gov uses the General Service Administration's [DigitalGov Search tool](search.digitalgov.gov) for the search engine. We use the [i14y API](https://search.digitalgov.gov/developer/i14y.html) for maintaining the search index, which feeds into ElasticSearch.
+The site-wide search of fec.gov uses the General Service Administration's [Search.gov tool](https://search.gov/) for the search engine. We use the [i14y API](https://search.gov/developer/i14y.html) for maintaining the search index, which feeds into ElasticSearch.
 
 For more information about i14Y, you can read the [technical documentation here](http://gsa.github.io/slate/). These instructions are for explaining how to manually update the index.
 
 ## Getting set up
 The DigitalGov Search "site" we use is called `betafec_api` (though that can change). If you're trying to access the admin panel, you will need someone to add you as a contributor to that site. This is where all the admin panel controls and analytics live.
 
-The i14y search works by setting up one or more "drawers", which are basically collections of pages for the index. All drawers serve the same search. We have two drawers set up: `main`, which includes all CMS and web app pages, and `transition` which includes all transition.fec.gov pages.
+The i14y search works by setting up one or more "drawers", which are basically collections of pages for the index. All drawers serve the same search. We have one drawer set up: `main`, which includes all CMS, web app pages, and transition.fec.gov pages.
 
-Each drawer has its own key, so to push updates to them you will need to add the drawers' keys to your local env:
+The main drawer has its own key, so to push updates to it you will need to add the drawer key to your local env:
 
 ```
 export DIGITALGOV_DRAWER_KEY_MAIN=<main key>
-export DIGTIALGOV_DRAWER_KEY_TRANSITION:<transition key>
 ```
 
 i14y accepts HTTP requests (POST / PUT / DELETE) with data structured like:
@@ -33,9 +32,9 @@ i14y accepts HTTP requests (POST / PUT / DELETE) with data structured like:
 }
 ```
 
-You must pass either a `description` or `content` when adding a new document. The search engine searches the `title`, `description`, `content` and `tags`, but only matches in the `content` or `title` are actually displayed in the search results.
+It is recommended to pass `description` or `content` when adding a new document. The search engine searches the `title`, `description`, `content` and `tags`, but only matches in the `content` or `title` are actually displayed in the search results.
 
-You can push updates manually with cURL, but for convenience we've set up a few Django management commands that make things a little simpler, which are detailed below.
+You can push updates manually with `cURL`, but for convenience we've set up a few Django management commands that make things a little simpler, which are detailed below.
 
 ## Adding CMS pages to the index
 The search indexes are not automatically updated when content changes on the site, so we need to run a manual script to update the indexes.
@@ -63,7 +62,7 @@ The search indexes are not automatically updated when content changes on the sit
 
 3. **Push the indexes to i14y** Run `fec/manage.py index_pages`. This will take each item in `output.json` and attempt a POST request to i14Y. If there is not already a page in the index with the same `document_id`, it will add it. If a page with the same `document_id` is already there, it will update it with whatever data is in this version.
 
-Once `index_pages` has run, you can log in to search.digitalgov.gov and see the new pages under "Content" > "i14Y Drawers" > "Main".
+Once `index_pages` has run, you can log in to search.gov and see the new pages under "Content" > "i14Y Drawers" > click "show" for the Main drawer.
 
 Once the data is there, it will work when running a search on the site.
 
@@ -101,9 +100,16 @@ Similar to adding web app pages, transition pages need to be manually identified
 Optionally, you can add `description`, `tags`, or `promoted` fields. 
 
 2. **Scrape the content:** Run `fec/manage.py scrape_transition_pages`. This script will read `data/transition_pages.json` and call each URL and scrape the content in the `#fec_mainContent` or `#fec_mainContentWide` `<div>`s. Optionally, you could pass in a different path to a JSON file with the optional `--path_to_json` argument. This script will output the results to `output.json`. It's generally a good idea to read over this file and make sure things look right.
-3. **Index the pages:** Run `fec/manage.py index_pages -transition`. This command works the same as it does for adding CMS pages, but with the `-transition` flag it will put them in the transition drawer.  
+3. **Index the pages:** Run `fec/manage.py index_pages`. This command works the same as it does for adding CMS pages.
 
-## Additional DigitalGov configuration
-**Best bets:** of the really great features of DigitalGov Search is what's called "Best bets". These are basically search suggestions that you can manually add (or add in bulk by uploading a spreadsheet) which map a URL to a specific set of keywords. Any Best Bet will be returned at the top of the search results. 
+## Additional Search.gov configuration
+**Best bets:** of the really great features of Search.gov is what's called "Best bets". These are basically search suggestions that you can manually add (or add in bulk by uploading a spreadsheet) which map a URL to a specific set of keywords. Any Best Bet will be returned at the top of the search results. 
 
-**Deleting pages:** To remove pages from the index, you'll need to make a DELETE request with the `document_id` you want to delete. [More info in the docs](http://gsa.github.io/slate/#delete-a-document).
+**Deleting pages:** To remove pages from the index, you'll need to make a DELETE request with the `document_id` you want to delete. The `document_id` can be found within the following files: output.json, web_app_pages.json, and transition_pages.json. The IDs within each json file are unique based on type.
+
+This is done through a curl:
+
+```curl "https://i14y.usa.gov/api/v1/documents/{document_id}" -XDELETE -u main:$DIGITALGOV_DRAWER_KEY_MAIN
+```
+
+[More info in the docs](http://gsa.github.io/slate/#delete-a-document).
