@@ -61,7 +61,8 @@ def aggregate_totals(request):
             'election_years': election_years,
             'election_year': election_year,
             'office': office,
-            'FEATURES': FEATURES
+            'FEATURES': FEATURES,
+            'social_image_identifier': 'data',
         }
     )
 
@@ -84,6 +85,7 @@ def landing(request):
             'last_of_year': datetime.date(datetime.date.today().year, 12, 31).strftime(
                 '%m/%d/%Y'
             ),
+            'social_image_identifier': 'data',
         },
     )
 
@@ -112,7 +114,15 @@ def search(request):
 
 
 def browse_data(request):
-    return render(request, 'browse-data.jinja', {'title': 'Browse data', 'parent': 'data'})
+    return render(
+        request,
+        'browse-data.jinja',
+        {
+            'title': 'Browse data',
+            'parent': 'data',
+            'social_image_identifier': 'data',
+        }
+    )
 
 
 def get_candidate(candidate_id, cycle, election_full):
@@ -287,6 +297,7 @@ def get_candidate(candidate_id, cycle, election_full):
         'state': candidate['state'],
         'statement_of_candidacy': statement_of_candidacy,
         'two_year_totals': two_year_totals,
+        'social_image_identifier': 'data',
     }
 
 
@@ -395,6 +406,7 @@ def get_committee(committee_id, cycle):
         'context_vars': context_vars,
         'party_full': committee['party_full'],
         'candidates': candidates,
+        'social_image_identifier': 'data',
     }
 
     if financials['reports'] and financials['totals']:
@@ -465,7 +477,7 @@ def get_committee(committee_id, cycle):
         'reports': ['F3', 'F3X', 'F3P', 'F3L', 'F4', 'F5', 'F7', 'F13'],
         'notices': ['F5', 'F24', 'F6', 'F9', 'F10', 'F11'],
         'statements': ['F1'],
-        'other': ['F1M', 'F8', 'F99', 'F12']
+        'other': ['F1M', 'F8', 'F99', 'F12'],
     }
 
     return template_variables
@@ -490,7 +502,7 @@ def elections_lookup(request):
     return render(
         request,
         'election-lookup.jinja',
-        {'parent': 'data', 'cycles': cycles, 'cycle': cycle},
+        {'parent': 'data', 'cycles': cycles, 'cycle': cycle, 'social_image_identifier': 'data',},
     )
 
 
@@ -553,6 +565,7 @@ def elections(request, office, cycle, state=None, district=None):
             'state_full': constants.states[state.upper()] if state else None,
             'district': district,
             'title': utils.election_title(cycle, office, state, district),
+            'social_image_identifier': 'data',
         },
     )
 
@@ -573,7 +586,8 @@ def raising(request):
             'title': 'Raising: by the numbers',
             'election_years': election_years,
             'election_year': election_year,
-            'office': office
+            'office': office,
+            'social_image_identifier': 'data',
         },
     )
 
@@ -594,7 +608,8 @@ def spending(request):
             'title': 'Spending: by the numbers',
             'election_years': election_years,
             'election_year': election_year,
-            'office': office
+            'office': office,
+            'social_image_identifier': 'data',
         },
     )
 

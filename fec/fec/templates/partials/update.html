@@ -17,14 +17,14 @@
           This looks for either the first or second block to be a paragraph and then show that text.
           If it's an image or something else we ignore it.
         {% endcomment %}
-          {% if update.body.0.block_type == 'paragraph' %}
-            {{ update.body.0 | truncatewords_html:30 }}
-            <a class="js-read-more post__read-more" href="{{ update.url }}">Read more</a>
-          {% elif update.body.1.block_type == 'paragraph' %}
-            {{ update.body.1 | truncatewords_html:30 }}
-            <a class="js-read-more post__read-more" href="{{ update.url }}">Read more</a>
-          {% endif %}
-        </div>
+        {% if update.body.0.block_type == 'paragraph' %}
+          {{ update.body.0 | truncatewords_html:30 }}
+          <a class="js-read-more post__read-more" href="{{ update.url }}">Read more</a>
+        {% elif update.body.1.block_type == 'paragraph' %}
+          {{ update.body.1 | truncatewords_html:30 }}
+          <a class="js-read-more post__read-more" href="{{ update.url }}">Read more</a>
+        {% endif %}
+      </div>
       {% endif %}
       {% if update.get_update_type == 'Commission Meetings' %}
         <ul class="list--flat-bordered t-sans">

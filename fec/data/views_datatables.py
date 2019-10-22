@@ -18,7 +18,8 @@ def candidates(request):
         'slug': 'candidates',
         'title': 'Candidates',
         'data': candidates['results'],
-        'columns': constants.table_columns['candidates']
+        'columns': constants.table_columns['candidates'],
+        'social_image_identifier': 'data',
     })
 
 
@@ -34,7 +35,8 @@ def candidates_office(request, office):
         'title': 'Candidates for ' + office_breadcrumb,
         'slug': 'candidates-office',
         'table_context': OrderedDict([('office', office)]),
-        'columns': constants.table_columns['candidates-office-' + office]
+        'columns': constants.table_columns['candidates-office-' + office],
+        'social_image_identifier': 'data',
     })
 
 
@@ -46,7 +48,8 @@ def committees(request):
         'slug': 'committees',
         'title': 'Committees',
         'data': committees['results'],
-        'columns': constants.table_columns['committees']
+        'columns': constants.table_columns['committees'],
+        'social_image_identifier': 'data',
     })
 
 
@@ -56,7 +59,8 @@ def communication_costs(request):
         'slug': 'communication-costs',
         'title': 'Communication costs',
         'dates': utils.date_ranges(),
-        'columns': constants.table_columns['communication-costs']
+        'columns': constants.table_columns['communication-costs'],
+        'social_image_identifier': 'data',
     })
 
 
@@ -75,7 +79,8 @@ def disbursements(request):
         'title': 'Disbursements',
         'dates': utils.date_ranges(),
         'columns': constants.table_columns['disbursements'],
-        'has_data_type_toggle': True
+        'has_data_type_toggle': True,
+        'social_image_identifier': 'data',
     })
 
 
@@ -87,7 +92,8 @@ def filings(request):
         'dates': utils.date_ranges(),
         'result_type': 'committees',
         'has_data_type_toggle': True,
-        'columns': constants.table_columns['filings']
+        'columns': constants.table_columns['filings'],
+        'social_image_identifier': 'data',
     })
 
 
@@ -97,7 +103,8 @@ def electioneering_communications(request):
         'slug': 'electioneering-communications',
         'title': 'Electioneering communications',
         'dates': utils.date_ranges(),
-        'columns': constants.table_columns['electioneering-communications']
+        'columns': constants.table_columns['electioneering-communications'],
+        'social_image_identifier': 'data',
     })
 
 
@@ -108,7 +115,8 @@ def independent_expenditures(request):
         'title': 'Independent expenditures',
         'dates': utils.date_ranges(),
         'columns': constants.table_columns['independent-expenditures'],
-        'has_data_type_toggle': True
+        'has_data_type_toggle': True,
+        'social_image_identifier': 'data',
     })
 
 
@@ -127,7 +135,8 @@ def individual_contributions(request):
         'title': 'Individual contributions',
         'slug': 'individual-contributions',
         'dates': utils.date_ranges(),
-        'columns': constants.table_columns['individual-contributions']
+        'columns': constants.table_columns['individual-contributions'],
+        'social_image_identifier': 'data',
     })
 
 
@@ -137,7 +146,8 @@ def loans(request):
         'result_type': 'loans',
         'slug': 'loans',
         'title': 'loans',
-        'columns': constants.table_columns['loans']
+        'columns': constants.table_columns['loans'],
+        'social_image_identifier': 'data',
     })
 
 def audit(request):
@@ -147,6 +157,7 @@ def audit(request):
         'slug': 'audit',
         'title': 'Audit',
         'columns': constants.table_columns['audit'],
+        'social_image_identifier': 'data',
     })
 
 
@@ -156,7 +167,8 @@ def party_coordinated_expenditures(request):
         'slug': 'party-coordinated-expenditures',
         'title': 'Party coordinated expenditures',
         'dates': utils.date_ranges(),
-        'columns': constants.table_columns['party-coordinated-expenditures']
+        'columns': constants.table_columns['party-coordinated-expenditures'],
+        'social_image_identifier': 'data',
     })
 
 
@@ -176,7 +188,8 @@ def receipts(request):
         'title': 'Receipts',
         'dates': utils.date_ranges(),
         'columns': constants.table_columns['receipts'],
-        'has_data_type_toggle': True
+        'has_data_type_toggle': True,
+        'social_image_identifier': 'data',
     })
 
 
@@ -201,5 +214,6 @@ def reports(request, form_type):
         'table_context': context,
         'dates': utils.date_ranges(),
         'has_data_type_toggle': True,
-        'columns': constants.table_columns['reports-' + form_type.lower()]
+        'columns': constants.table_columns['reports-' + form_type.lower()],
+        'social_image_identifier': 'data',
     })
