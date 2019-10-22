@@ -73,11 +73,13 @@ const header_notes_modal_partial = `<div tabindex="-1" class="modal__overlay" da
 </div>`;
 
 function ReportingDates() {
-  //Declare globals (scoped to this function)to get past linter error/tests. For header_notes and footnotes objects declared in CMS field and CSS.escape
-  /* global header_notes, footnotes, CSS */
-
+  //Declare globals (scoped to this function)to get past linter error/tests. For header_notes and footnotes objects declared in CMS field, CSS.escape, Set()
+  /* global header_notes, footnotes, CSS, Set */
+  this.dates_table = document.getElementsByClassName(
+    'election-dates-table'
+  )[0]
   //get all acnhor links in TDs)
-  this.anchors = document.querySelectorAll("td a[href^='#']");
+  this.anchors = this.dates_table.querySelectorAll("td a[href^='#']");
 
   //disable default jump behavior for anchor links(#) but keep links for accessibility
   for (const anchor of this.anchors) {
@@ -89,6 +91,8 @@ function ReportingDates() {
   this.buildStaticElements();
 
   this.addFootnotes();
+
+  this.stripeByState();
 
   //Define media query
   const mql = window.matchMedia('screen and (max-width: 650px)');
@@ -136,6 +140,7 @@ function ReportingDates() {
 
     return siblings;
   };
+
 }
 
 //create and insert states-dropdown, static footnote/header-notes-list , and dialog
@@ -143,12 +148,10 @@ ReportingDates.prototype.buildStaticElements = function() {
   //Add states dropdown template to page
   const dropdown_wrapper = document.createElement('div');
   dropdown_wrapper.innerHTML = states_dropdown_template;
-  const dates_table = document.getElementsByClassName(
-    'election-dates-table'
-  )[0];
-  const table_parent = dates_table.parentNode;
 
-  table_parent.insertBefore(dropdown_wrapper, dates_table);
+  const table_parent = this.dates_table.parentNode;
+
+  table_parent.insertBefore(dropdown_wrapper, this.dates_table);
 
   //Create static footnote/header note list
 
@@ -184,7 +187,7 @@ ReportingDates.prototype.buildStaticElements = function() {
                      ${hdr_str}${ftnt_str}`;
 
   //insert it after table
-  table_parent.insertBefore(static_notes, dates_table.nextSibling);
+  table_parent.insertBefore(static_notes, this.dates_table.nextSibling);
 
   //Create A11Y modal dialog for header_notes popup and add innerHTML
   const dialog = document.createElement('div');
@@ -335,7 +338,7 @@ ReportingDates.prototype.mediaQueryResponse = function(mql) {
 
 //Show chosen footnote or append it in Mobile view
 ReportingDates.prototype.showFootnotes = function(e) {
-  //escape symbols and invalid CSS selectors in indx
+  //escape symbols and invalid CSS selectors in indx (ie: '*', '**', etc.)
   const indx = CSS.escape(e.target.textContent);
   //get the string representaton of indx to use elsewhere
   const clean_indx = e.target.textContent;
@@ -381,7 +384,17 @@ ReportingDates.prototype.showFootnotes = function(e) {
     //set bg color on footnote rows to match parent rows
     live_note[0].style.backgroundColor = bgColor;
     //hide bottom border under cell in which the footnote sup was clicked
-    el_td.style.borderBottom = `1px solid ${newColor}`;
+    // or left border for first-column cells
+    if (el_td.cellIndex == '0') {
+      current_row.parentNode.rows[
+        current_row.rowIndex + 1
+      ].cells[0].setAttribute(
+        'style',
+        `border-right:1px solid ${newColor} !important`
+      );
+    } else {
+      el_td.style.borderBottom = `1px solid ${newColor}`;
+    }
 
     //hide all but the footnote clicked
     for (const not of not_live_note) {
@@ -442,6 +455,22 @@ ReportingDates.prototype.showFootnotes = function(e) {
       const this_span = x.closest('span');
       this_span.remove();
     });
+  }
+};
+
+ReportingDates.prototype.stripeByState = function() {
+  const bg = 'rgba(241,241,241,.5)';
+  const state_rows = this.dates_table.getElementsByTagName('tr');
+  let state_class = [];
+  for (const tr of state_rows) {
+    state_class.push(tr.classList.item(0));
+  }
+  let unique = [...new Set(state_class)];
+  for (let x = 0; x < unique.length; x += 2) {
+    const unique_row = this.dates_table.getElementsByClassName(unique[x]);
+    for (const un of unique_row) {
+      un.style.backgroundColor = bg;
+    }
   }
 };
 

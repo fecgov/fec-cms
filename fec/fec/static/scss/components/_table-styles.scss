@@ -213,10 +213,6 @@ h3 + .simple-table {
   tr {
     border-bottom: 1px solid $neutral;
 
-    &:nth-child(even) {
-      background-color: rgba($gray-lightest, .5);
-    }
-
     &:last-of-type {
       border-bottom: none;
     }
@@ -249,7 +245,7 @@ h3 + .simple-table {
 
   }
 
-  a sup{
+  a sup {
     border-bottom: 1px dotted #5b616b;
     display: inline-block;
     height: u(1.7rem);
