@@ -1,5 +1,6 @@
 {% extends 'layouts/main.jinja' %}
 {% import 'macros/cycle-select.jinja' as select %}
+{% import 'macros/reaction-box.jinja' as reaction %}
 
 {% block title %}{{ title }}{% endblock %}
 
@@ -25,13 +26,13 @@
           {{ search.search('hero', button_color="button--standard") }}
           <span class="t-note t-sans search__example">Examples: Obama for America; C00431445; Bush, George W.; P00003335; or enter an image number for a filing.</span>
         </div>
-        <div class="example--primary">	
-          <h4 class="example__title">Top raising candidates running in {{ constants.DEFAULT_ELECTION_YEAR }}:</h4>	
-          <ul class="t-sans">	
-            {% for candidate in top_candidates_raising %}	
-              <li><a href="/data/candidate/{{ candidate.candidate_id }}">{{ candidate.name }} [{{ candidate.party }}] | {{ candidate.state }}-{{ candidate.office_full }}</a></li>	
-            {% endfor %}	
-          </ul>	
+        <div class="example--primary">
+          <h4 class="example__title">Top raising candidates running in {{ constants.DEFAULT_ELECTION_YEAR }}:</h4>
+          <ul class="t-sans">
+            {% for candidate in top_candidates_raising %}
+              <li><a href="/data/candidate/{{ candidate.candidate_id }}">{{ candidate.name }} [{{ candidate.party }}] | {{ candidate.state }}-{{ candidate.office_full }}</a></li>
+            {% endfor %}
+          </ul>
         </div>
       </div>
       <div class="grid__item card t-left-aligned">
@@ -47,13 +48,13 @@
           </div>
           <span class="t-note t-sans search__example">Examples: your name, a celebrity, someone running for office.</span>
         </form>
-        <div class="example--primary">	
-          <h4 class="example__title">Possible uses of this data:</h4>	
-          <ul class="t-sans">	
-            <li><a href="/data/receipts/individual-contributions/?two_year_transaction_period={{ constants.DEFAULT_ELECTION_YEAR }}&min_amount=2000">All contributions over $2,000</a></li>	
-            <li><a href="/data/receipts/individual-contributions/?two_year_transaction_period={{ constants.DEFAULT_ELECTION_YEAR }}&min_date={{ first_of_year }}&max_date={{ last_of_year }}">All contributions in this year</a></li>	
-            <li><a href="/data/receipts/individual-contributions/">Browse all and apply custom filters</a></li>	
-          </ul>	
+        <div class="example--primary">
+          <h4 class="example__title">Possible uses of this data:</h4>
+          <ul class="t-sans">
+            <li><a href="/data/receipts/individual-contributions/?two_year_transaction_period={{ constants.DEFAULT_ELECTION_YEAR }}&min_amount=2000">All contributions over $2,000</a></li>
+            <li><a href="/data/receipts/individual-contributions/?two_year_transaction_period={{ constants.DEFAULT_ELECTION_YEAR }}&min_date={{ first_of_year }}&max_date={{ last_of_year }}">All contributions in this year</a></li>
+            <li><a href="/data/receipts/individual-contributions/">Browse all and apply custom filters</a></li>
+          </ul>
         </div>
       </div>
     </div>
@@ -96,10 +97,13 @@
           </div>
           <div class="election-map election-map--small usa-width-one-half"></div>
         </div>
+        <p>
+        {{ reaction.reaction_box('election_map', 'landing') }}
+        </p>
       </div>
       <div class="grid__item example--primary callout-holder">
         <h2>&nbsp;</h2>
-        <div class="grid grid--2-wide">  
+        <div class="grid grid--2-wide">
           <div class="grid__item">
             <div class="card card--neutral">
               <a href="/data/raising-bythenumbers" title="Raising: by the numbers">
@@ -303,4 +307,5 @@
 {% block scripts %}
   <script src="{{ asset_for_js('dataviz-common.js') }}"></script>
   <script src="{{ asset_for_js('data-landing.js') }}"></script>
+  <script src="{{ asset_for_js('reaction-box.js') }}"></script>
 {% endblock %}
