@@ -462,6 +462,18 @@ def get_committee(committee_id, cycle):
         'other': ['F1M', 'F8', 'F99', 'F12'],
     }
 
+    # Call /filings?committee_id=C00693234&form_type=F1&cycle=2020
+    # Get the statements of organization
+    statement_of_organization = api_caller.load_committee_statement_of_organization(
+        committee_id, cycle
+    )
+
+    if statement_of_organization:
+        for statement in statement_of_organization:
+            statement["receipt_date"] = format_receipt_date(statement["receipt_date"])
+
+    template_variables["statement_of_organization"] = statement_of_organization
+
     return template_variables
 
 
