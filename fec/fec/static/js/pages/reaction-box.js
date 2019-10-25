@@ -131,10 +131,7 @@ window.reactionBoxes = {
 // window.submitReactioncontributions_by_state = function(token) {
 //   window.reactionBoxes['contributions_by_state'].handleSubmit(token);
 // };
-
-
 $(document).ready(function() {
-
   //   window.reactionBoxes['contributions_by_state'] = new ReactionBox(
   //     '[data-name="contributions_by_state"][data-location="raising-by-the-numbers"]'
   //   );
@@ -146,7 +143,7 @@ $(document).ready(function() {
 
   // $(document).ready(function() {
   //   window.reactionBoxes['election_map'] = new ReactionBox(
-  //     '[data-name="election_map"][data-location="landing"]'
+  //'[data-name="+election_map+"][data-location="landing"]';
   //   );
   // });
 
