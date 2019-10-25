@@ -4,6 +4,8 @@ var $ = require('jquery');
 var analytics = require('../modules/analytics'); // TODO - move this to Tag Manager?
 var TopEntities = require('../modules/top-entities').TopEntities;
 
+//var ReactionBox = require('../modules/reaction-box').ReactionBox;
+
 new TopEntities('.js-top-entities', context.type);
 
 $('.js-ga-event').each(function() {

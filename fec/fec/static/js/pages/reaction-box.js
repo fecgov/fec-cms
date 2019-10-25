@@ -89,6 +89,13 @@ ReactionBox.prototype.handleSubmit = function(token) {
     data: JSON.stringify(data),
     contentType: 'application/json',
     dataType: 'json'
+    // 'success' : function(data) {
+    //     console.log('Data: '+data);
+    // },
+    // 'error' : function(request,error)
+    // {
+    //     console.log("Request: "+JSON.stringify(request));
+    // }
   });
 
   promise.done(this.handleSuccess.bind(this));
@@ -125,7 +132,9 @@ window.reactionBoxes = {
 //   window.reactionBoxes['contributions_by_state'].handleSubmit(token);
 // };
 
+
 $(document).ready(function() {
+
   //   window.reactionBoxes['contributions_by_state'] = new ReactionBox(
   //     '[data-name="contributions_by_state"][data-location="raising-by-the-numbers"]'
   //   );
@@ -141,13 +150,13 @@ $(document).ready(function() {
   //   );
   // });
 
-  $.each(window.reactionBoxes, function(chart, location) {
+  $.each(window.reactionBoxes, function(chart, page) {
     window.reactionBoxes[chart] = new ReactionBox(
-      `[data-name="${chart}"][data-location="${location}"]`
+      `[data-name="${chart}"][data-location="${page}"]`
     );
 
     window['submitReaction' + chart] = function(token) {
-      window.reactionBoxes['+chart+'].handleSubmit(token);
+      window.reactionBoxes[chart].handleSubmit(token);
     };
   });
 });
