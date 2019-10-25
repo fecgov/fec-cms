@@ -322,12 +322,12 @@ def load_candidate_statement_of_candidacy(candidate_id, cycle):
     else:
         return []
 
-def load_committee_statement_of_organization(committee_id, cycle):
+
+def load_committee_statement_of_organization(committee_id):
     response = _call_api(
         'filings',
         committee_id=committee_id,
-        form_type='F1',
-        cycle=cycle
+        form_type='F1'
     )
     return response.get('results', [])
 

@@ -462,10 +462,10 @@ def get_committee(committee_id, cycle):
         'other': ['F1M', 'F8', 'F99', 'F12'],
     }
 
-    # Call /filings?committee_id=C00693234&form_type=F1&cycle=2020
+    # Call /filings?committee_id=C00693234&form_type=F1
     # Get the statements of organization
     statement_of_organization = api_caller.load_committee_statement_of_organization(
-        committee_id, cycle
+        committee_id
     )
 
     if statement_of_organization:
