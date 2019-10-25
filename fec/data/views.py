@@ -7,7 +7,7 @@ from django.conf import settings
 from distutils.util import strtobool
 
 import requests
-import datetime
+from datetime import date, datetime
 import github3
 import json
 import re
@@ -39,10 +39,11 @@ validListUrlParamValues = ['P', 'S', 'H']
 # THE list URL PARAM
 
 
+
 def to_date(committee, cycle):
     if committee['committee_type'] in ['H', 'S', 'P']:
         return None
-    return min(datetime.datetime.now().year, int(cycle))
+    return min(datetime.now().year, int(cycle))
 
 
 def aggregate_totals(request):
@@ -82,10 +83,10 @@ def landing(request):
             'top_candidates_raising': top_candidates_raising['results']
             if top_candidates_raising
             else None,
-            'first_of_year': datetime.date(datetime.date.today().year, 1, 1).strftime(
+            'first_of_year': date(date.today().year, 1, 1).strftime(
                 '%m/%d/%Y'
             ),
-            'last_of_year': datetime.date(datetime.date.today().year, 12, 31).strftime(
+            'last_of_year': date(date.today().year, 12, 31).strftime(
                 '%m/%d/%Y'
             ),
             'social_image_identifier': 'data',
@@ -126,6 +127,15 @@ def browse_data(request):
             'social_image_identifier': 'data',
         }
     )
+
+
+def format_receipt_date(receipt_date):
+    # convert string to python datetime
+    receipt_date = datetime.strptime(
+        receipt_date, '%Y-%m-%dT%H:%M:%S'
+    )
+    # parse for readable output
+    return receipt_date.strftime('%m/%d/%Y')
 
 
 def get_candidate(candidate_id, cycle, election_full):
@@ -240,13 +250,7 @@ def get_candidate(candidate_id, cycle, election_full):
 
     if statement_of_candidacy:
         for statement in statement_of_candidacy:
-            # convert string to python datetime and parse for readable output
-            statement['receipt_date'] = datetime.datetime.strptime(
-                statement['receipt_date'], '%Y-%m-%dT%H:%M:%S'
-            )
-            statement['receipt_date'] = statement['receipt_date'].strftime(
-                '%m/%d/%Y'
-            )
+            statement["receipt_date"] = format_receipt_date(statement["receipt_date"])
 
     # Get all the elections
     elections = sorted(
