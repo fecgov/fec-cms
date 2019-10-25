@@ -1,12 +1,10 @@
 'use strict';
 
-// THIS MODULE IS CURRENTLY NOT IN USE.
-//
-// This requires modifications to `/data/views.py` feedback view
-// to post as a Github issue.
-//
-// Previously implemented here (needs a port to this Django project):
-// https://github.com/18F/openFEC-web-app/blob/develop/openfecwebapp/views.py#L302
+// // This requires modifications to `/data/views.py`
+// // to post as a Github issue.
+// //
+// // Previously implemented here (ported to this Django project):
+// // https://github.com/18F/openFEC-web-app/blob/develop/openfecwebapp/views.py#L302
 
 var $ = require('jquery');
 var helpers = require('../modules/helpers');
@@ -89,13 +87,6 @@ ReactionBox.prototype.handleSubmit = function(token) {
     data: JSON.stringify(data),
     contentType: 'application/json',
     dataType: 'json'
-    // 'success' : function(data) {
-    //     console.log('Data: '+data);
-    // },
-    // 'error' : function(request,error)
-    // {
-    //     console.log("Request: "+JSON.stringify(request));
-    // }
   });
 
   promise.done(this.handleSuccess.bind(this));
@@ -118,35 +109,14 @@ ReactionBox.prototype.handleReset = function() {
   this.$textarea.val('');
 };
 
-/*To add a reaction box, put add name/location arguments of your macro
-as key/value in this object
+/*To add a reaction box, add an entry to this object with name/location arguments of your macro
+as key/value. (no dashes or spaces; underscores OK)
 */
 window.reactionBoxes = {
-  election_map: 'landing',
-  contributions_by_state: 'raising-by-the-numbers',
-  raised: 'browse-data',
-  spent: 'browse-data'
+  contributions_by_state: 'raising-by-the-numbers'
 };
 
-// window.submitReactioncontributions_by_state = function(token) {
-//   window.reactionBoxes['contributions_by_state'].handleSubmit(token);
-// };
 $(document).ready(function() {
-  //   window.reactionBoxes['contributions_by_state'] = new ReactionBox(
-  //     '[data-name="contributions_by_state"][data-location="raising-by-the-numbers"]'
-  //   );
-  // });
-
-  // window.submitReactionelection_map = function(token) {
-  //   window.reactionBoxes['election_map'].handleSubmit(token);
-  // };
-
-  // $(document).ready(function() {
-  //   window.reactionBoxes['election_map'] = new ReactionBox(
-  //'[data-name="+election_map+"][data-location="landing"]';
-  //   );
-  // });
-
   $.each(window.reactionBoxes, function(chart, page) {
     window.reactionBoxes[chart] = new ReactionBox(
       `[data-name="${chart}"][data-location="${page}"]`
@@ -158,31 +128,4 @@ $(document).ready(function() {
   });
 });
 
-// var tabs = require('../vendor/tablist');
-// window.submitReactionspent = function(token) {
-//   window.reactionBoxes['spent'].handleSubmit(token);
-// };
-
-// window.submitReactionraised = function(token) {
-//   window.reactionBoxes['raised'].handleSubmit(token);
-// };
-
-// $(document).ready(function() {
-//   tabs.onShow($('#raising'), function() {
-//     //new PlotChart('.js-raised-overview', 'raised', 1).init();
-//     window.reactionBoxes['raised'] = new ReactionBox(
-//       '[data-name="raised"][data-location="browse-data"]'
-//     );
-//   });
-
-//   tabs.onShow($('#spending'), function() {
-//     //new PlotChart('.js-spent-overview', 'spent', 2).init();
-//     window.reactionBoxes['spent'] = new ReactionBox(
-//       '[data-name="spent"][data-location="browse-data"]'
-//     );
-//   });
-// });
-
 new ReactionBox();
-
-//module.exports = { ReactionBox: ReactionBox };

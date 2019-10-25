@@ -1,6 +1,5 @@
 {% extends "layouts/main.jinja" %}
 {% import 'macros/page-header.jinja' as header %}
-{% import 'macros/reaction-box.jinja' as reaction %}
 
 {% block title %}
   {{ title }}
@@ -183,6 +182,4 @@
 {% block scripts %}
   <script src="{{ asset_for_js('dataviz-common.js') }}"></script>
   <script src="{{ asset_for_js('data-browse-data.js') }}"></script>
-  <script src="{{ asset_for_js('reaction-box.js') }}"></script>
-
 {% endblock %}

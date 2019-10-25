@@ -1,6 +1,5 @@
 {% extends 'layouts/main.jinja' %}
 {% import 'macros/cycle-select.jinja' as select %}
-{% import 'macros/reaction-box.jinja' as reaction %}
 
 {% block title %}{{ title }}{% endblock %}
 
@@ -97,9 +96,6 @@
           </div>
           <div class="election-map election-map--small usa-width-one-half"></div>
         </div>
-        <p>
-        {{ reaction.reaction_box('election_map', 'landing') }}
-        </p>
       </div>
       <div class="grid__item example--primary callout-holder">
         <h2>&nbsp;</h2>
@@ -307,5 +303,4 @@
 {% block scripts %}
   <script src="{{ asset_for_js('dataviz-common.js') }}"></script>
   <script src="{{ asset_for_js('data-landing.js') }}"></script>
-  <script src="{{ asset_for_js('reaction-box.js') }}"></script>
 {% endblock %}
