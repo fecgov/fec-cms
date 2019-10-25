@@ -35,7 +35,9 @@ report_types = {
 }
 
 validListUrlParamValues = ['P', 'S', 'H']
-# INITIALLY USED BY raising() AND spending() FOR VALIDATING URL PARAMETERS, THE list URL PARAM
+# INITIALLY USED BY raising() AND spending() FOR VALIDATING URL PARAMETERS,
+# THE list URL PARAM
+
 
 def to_date(committee, cycle):
     if committee['committee_type'] in ['H', 'S', 'P']:
@@ -66,6 +68,7 @@ def aggregate_totals(request):
         }
     )
 
+
 def landing(request):
     top_candidates_raising = api_caller.load_top_candidates('-receipts', per_page=3)
 
@@ -73,7 +76,7 @@ def landing(request):
         request,
         'landing.jinja',
         {
-            'parent':'data',
+            'parent': 'data',
             'title': 'Campaign finance data',
             'dates': utils.date_ranges(),
             'top_candidates_raising': top_candidates_raising['results']
@@ -323,19 +326,33 @@ def get_committee(committee_id, cycle):
     Given a committee_id and cycle, call the API and get the committee
     and committee financial data needed to render the committee profile page
     """
+    filters = {}
+    filters['per_page'] = 1
+    if not cycle:
+        # if no cycle parameter given,
+        # (1.1)call committee/{committee_id}/history/ under tag:committee
+        # set cycle = last_cycle_has_financial
+        path = '/committee/' + committee_id + '/history/'
+        committee = api_caller.load_first_row_data(path, **filters)
+        cycle = committee.get('last_cycle_has_financial')
+    else:
+        # (1.2)call committee/{committee_id}/history/{cycle}/
+        # under tag:committee
+        path = '/committee/' + committee_id + '/history/' + str(cycle)
+        committee = api_caller.load_first_row_data(path, **filters)
 
-    redirect_to_previous = False if cycle else True
-    committee, all_candidates, cycle = api_caller.load_with_nested(
-        'committee',
-        committee_id,
-        'candidates',
-        cycle,
-        election_full=False,
-    )
+    # (2)call committee/{committee_id}/candidates/history/{cycle}
+    # under: candidate, get all candidates associated with that commitee
+    path = '/committee/' + committee_id + '/candidates/history/' + str(cycle)
+    filters = {}
+    filters['election_full'] = 'false'
+    all_candidates = api_caller.load_endpoint_result(path, **filters)
 
     # When there are multiple candidate records of various offices (H, S, P)
     # linked to a single committee ID,
     # associate the candidate record with the matching committee type
+    # print("committee['committee_type']=" + committee['committee_type'])
+
     candidates = [
         candidate
         for candidate in all_candidates
@@ -362,42 +379,81 @@ def get_committee(committee_id, cycle):
         # relative to the selected cycle.
         candidate['related_cycle'] = cycle if election_years else None
 
-    # Load financial totals and reports for the committee
-    financials = api_caller.load_cmte_financials(committee_id, cycle=cycle)
     report_type = report_types.get(committee['committee_type'], 'pac-party')
-    reports = financials['reports']
-    totals = financials['totals']
+
+    # (3)call /filings? under tag:filings
+    # get reports from filings endpoint filter by form_category=REPORT
+    # when cycle is out of [cycles_has_financial] range.
+    # set cycle = last_cycle_has_financial to call endpoint
+    # to get reports and totals
+    cycle_out_of_range = False
+    last_cycle_has_financial = committee.get('last_cycle_has_financial')
+    min_cycle_has_financial = min(committee.get('cycles_has_financial'))
+    if int(cycle) > int(last_cycle_has_financial) or int(cycle) < int(min_cycle_has_financial):
+        cycle_out_of_range = True
+
+    # path = '/filings?'
+    path = '/filings/'
+    filters = {}
+    filters['committee_id'] = committee_id
+    if cycle_out_of_range:
+        filters['cycle'] = last_cycle_has_financial
+    else:
+        filters['cycle'] = cycle
+
+    filters['form_category'] = 'REPORT'
+    filters['most_recent'] = 'true'
+    filters['per_page'] = 1
+    filters['sort_hide_null'] = 'true'
+    reports = api_caller.load_first_row_data(path, **filters)
+
+    # (4)call committee/{committee_id}/totals? under tag:financial
+    # get financial totals
+    path = '/committee/' + committee_id + '/totals/'
+    filters = {}
+    if cycle_out_of_range:
+        filters['cycle'] = last_cycle_has_financial
+    else:
+        filters['cycle'] = cycle
+    filters['per_page'] = 1
+    filters['sort_hide_null'] = 'true'
+    totals = api_caller.load_first_row_data(path, **filters)
 
     # Check organization types to determine SSF status
-    is_SSF = committee.get('organization_type') in ['W','C','L','V','M','T']
+    is_ssf = committee.get('organization_type') in [
+        'W', 'C', 'L', 'V', 'M', 'T'
+    ]
+
+    # if cycles_has_activity's options are more than cycles_has_financial's,
+    # when clicking back to financial summary/raising/spending,
+    # reset cycle=last_cycle_has_financial and timePeriod and.
+    # to make sure missing message page show correct timePeriod.
+    time_period_js = str(int(cycle) - 1) + '–' + str(cycle),
+    cycle_js = cycle
+    if cycle_out_of_range:
+        cycle_js = last_cycle_has_financial
+        time_period_js = str(int(cycle_js) - 1) + '–' + str(cycle_js)
 
     context_vars = {
-        'cycle': cycle,
-        'timePeriod': str(int(cycle) - 1) + '–' + str(cycle),
+        'cycle': cycle_js,
+        'timePeriod': time_period_js,
         'name': committee['name'],
+        'cycle_out_of_range': cycle_out_of_range,
+        'last_cycle_has_financial': last_cycle_has_financial,
     }
 
     template_variables = {
-        'name': committee['name'],
+        'candidates': candidates,
         'committee': committee,
         'committee_id': committee_id,
         'committee_type': committee['committee_type'],
-        'committee_type_full': committee['committee_type_full'],
-        'affiliated_committee_name': committee['affiliated_committee_name'],
-        'organization_type': committee['organization_type'],
-        'organization_type_full': committee['organization_type_full'],
-        'is_SSF': is_SSF,
-        'designation_full': committee['designation_full'],
-        'street_1': committee['street_1'],
-        'street_2': committee['street_2'],
-        'city': committee['city'],
-        'state': committee['state'],
-        'zip': committee['zip'],
-        'treasurer_name': committee['treasurer_name'],
-        'parent': parent,
+        'context_vars': context_vars,
         'cycle': cycle,
-        'cycles': committee['cycles'],
-        'year': year,
+        'cycles': committee['cycles_has_financial'],
+        'is_SSF': is_ssf,
+        'min_receipt_date': utils.three_days_ago(),
+        'cycle_out_of_range': cycle_out_of_range,
+        'parent': parent,
         'result_type': result_type,
         'report_type': report_type,
         'reports': reports,
@@ -407,65 +463,55 @@ def get_committee(committee_id, cycle):
         'party_full': committee['party_full'],
         'candidates': candidates,
         'social_image_identifier': 'data',
+        'year': year,
+        'timePeriod': time_period_js,
     }
 
-    if financials['reports'] and financials['totals']:
-        # Format the current two-year-period's totals using the process utilities
+    # Format the current two-year-period's totals
+    if reports and totals:
+        # IE-only committees
         if committee['committee_type'] == 'I':
-            # IE-only committees have very little data, so they just get this one
-            template_variables['ie_summary'] = utils.process_ie_data(
-                financials['totals'][0]
-            )
+            template_variables['ie_summary'] = utils.process_ie_data(totals)
         # Inaugural Committees
         elif committee['organization_type'] == 'I':
-            template_variables['inaugural_summary'] = utils.process_inaugural_data(
-                financials['totals'][0]
+            template_variables['inaugural_summary'] = (
+                utils.process_inaugural_data(totals)
             )
         # Host Committees that file on Form 4
-        elif (
+        elif(
             committee['organization_type'] == 'H'
-            and financials['reports'][0]['report_form'] == 'Form 4'
-        ):
-            template_variables['raising_summary'] = utils.process_host_raising_data(
-                financials['totals'][0]
+        ) and (reports['form_type'] == 'F4'):
+            template_variables['raising_summary'] = (
+                utils.process_host_raising_data(totals)
             )
-            template_variables['spending_summary'] = utils.process_host_spending_data(
-                financials['totals'][0]
+            template_variables['spending_summary'] = (
+                utils.process_host_spending_data(totals)
             )
-            template_variables['cash_summary'] = utils.process_cash_data(
-                financials['totals'][0]
+            template_variables['cash_summary'] = (
+                utils.process_cash_data(totals)
             )
         else:
             # All other committees have three tables
-            template_variables['raising_summary'] = utils.process_raising_data(
-                financials['totals'][0]
+            template_variables['raising_summary'] = (
+                utils.process_raising_data(totals)
             )
-            template_variables['spending_summary'] = utils.process_spending_data(
-                financials['totals'][0]
+            template_variables['spending_summary'] = (
+                utils.process_spending_data(totals)
             )
-            template_variables['cash_summary'] = utils.process_cash_data(
-                financials['totals'][0]
+            template_variables['cash_summary'] = (
+                utils.process_cash_data(totals)
             )
 
-    # If there are no reports, find the first cycle with reports and start again
-    if redirect_to_previous and not financials['reports']:
-        for previous_cycle in sorted(committee['cycles'], reverse=True):
-            financials = api_caller.load_cmte_financials(
-                committee['committee_id'], cycle=previous_cycle
-            )
-            if financials['reports']:
-                # Start again with the given cycle
-                return get_committee(committee_id, previous_cycle)
-
-    # If we're in the current cycle, check for raw filings in the last three days
+    # If in the current cycle, check for raw filings in the last three days
     if cycle == utils.current_cycle():
-        raw_filings = api_caller._call_api(
-            'efile',
-            'filings',
-            cycle=cycle,
-            committee_id=committee['committee_id'],
-            min_receipt_date=template_variables['min_receipt_date'],
-        )
+        # (4)call efile/filings under tag: efiling
+        path = '/efile/filings/'
+        filters = {}
+        filters['cycle'] = cycle
+        filters['committee_id'] = committee['committee_id']
+        filters['min_receipt_date'] = template_variables['min_receipt_date']
+        raw_filings = api_caller.load_endpoint_data(path, **filters)
+
         template_variables['has_raw_filings'] = (
             True if raw_filings.get('results') else False
         )

@@ -370,6 +370,17 @@ var filingsReportsColumns = columnHelpers.getColumns(columns.filings, [
 
 $(document).ready(function() {
   var $mapTable;
+  // on committee profile page, when cycles_has_activity more
+  // options than cycles_has_financial, when click financial summary page,
+  // reset timePeriod in the range of cycles_has_financial
+  var cycle_out_of_range = context.cycle_out_of_range;
+  if (cycle_out_of_range == 'true') {
+    context.timePeriod =
+      Number(context.last_cycle_has_financial) -
+      1 +
+      '–' +
+      context.last_cycle_has_financial;
+  }
 
   // Set up data tables
   $('.data-table').each(function(index, table) {
@@ -396,6 +407,7 @@ $(document).ready(function() {
         });
       }
     };
+
     switch ($table.attr('data-type')) {
       case 'contribution-size':
         path = ['committee', committeeId, 'schedules', 'schedule_a', 'by_size'];
@@ -713,9 +725,10 @@ $(document).ready(function() {
           {
             columns: filingsReportsColumns,
             order: [],
-            path: ['committee', committeeId, 'filings'],
+            path: ['filings'],
             query: _.extend(
               {
+                committee_id: committeeId,
                 form_type: [
                   'F3',
                   'F3X',
@@ -764,9 +777,10 @@ $(document).ready(function() {
           {
             columns: filingsColumns,
             order: [[2, 'desc']],
-            path: ['committee', committeeId, 'filings'],
+            path: ['filings'],
             query: _.extend(
               {
+                committee_id: committeeId,
                 form_type: ['F5', 'F24', 'F6', 'F9', 'F10', 'F11', 'RFAI'],
                 report_type: ['-Q1', '-Q2', '-Q3', '-YE'],
                 /* Performing an include would only show RFAI form types.
@@ -796,9 +810,10 @@ $(document).ready(function() {
           {
             columns: filingsColumns,
             order: [[2, 'desc']],
-            path: ['committee', committeeId, 'filings'],
+            path: ['filings'],
             query: _.extend(
               {
+                committee_id: committeeId,
                 form_type: ['F1', 'RFAI'],
                 /* Performing an include would only show RFAI form types.
                 For this reason, excludes need to be used for request_type
@@ -825,9 +840,10 @@ $(document).ready(function() {
           {
             columns: filingsColumns,
             order: [[2, 'desc']],
-            path: ['committee', committeeId, 'filings'],
+            path: ['filings'],
             query: _.extend(
               {
+                committee_id: committeeId,
                 form_type: ['F1M', 'F8', 'F99', 'F12', 'RFAI'],
                 /* Performing an include would only show RFAI form types.
                 For this reason, excludes need to be used for request_type
