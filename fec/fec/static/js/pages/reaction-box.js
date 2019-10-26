@@ -1,6 +1,6 @@
 'use strict';
 
-// // This requires modifications to `/data/views.py`
+// // This required modifications to `/data/views.py`
 // // to post as a Github issue.
 // //
 // // Previously implemented here (ported to this Django project):
@@ -109,8 +109,11 @@ ReactionBox.prototype.handleReset = function() {
   this.$textarea.val('');
 };
 
-/*To add a reaction box, add an entry to this object with name/location arguments of your macro
-as key/value. (no dashes or spaces; underscores OK)
+/* To implement a reaction box:
+- Add a reaction-box jinja macro to a template
+- Add an entry to the below object with name/location arguments of your macro
+  as key/value. (no dashes or spaces; underscores OK).
+- Include a reference to this JS file in the parent template(in extra JS block, preferably)
 */
 window.reactionBoxes = {
   contributions_by_state: 'raising-by-the-numbers'
