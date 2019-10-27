@@ -27,6 +27,7 @@ function ReactionBox(selector) {
 
   this.$element.on('click', '.js-reaction', this.submitReaction.bind(this));
   this.$element.on('click', '.js-reset', this.handleReset.bind(this));
+
 }
 
 ReactionBox.prototype.submitReaction = function(e) {
@@ -111,22 +112,31 @@ ReactionBox.prototype.handleReset = function() {
 
 /* To implement a reaction box:
 - Add a reaction-box jinja macro to a template
-- Add an entry to the below object with name/location arguments of your macro
-  as key/value. (no dashes or spaces; underscores OK).
 - Include a reference to this JS file in the parent template(in extra JS block, preferably)
+- The below function will use the name/location arguments of the macro
+  to create initiate it as a new ReactionBox()
 */
-window.reactionBoxes = {
-  contributions_by_state: 'raising-by-the-numbers'
-};
+
 
 $(document).ready(function() {
-  $.each(window.reactionBoxes, function(chart, page) {
-    window.reactionBoxes[chart] = new ReactionBox(
-      `[data-name="${chart}"][data-location="${page}"]`
+  //find any reaction box(es) on the page
+  var reactionBoxes = document.querySelectorAll('.reaction-box');
+  var names = [];
+  //iterate over the reaction box(es)
+  for (const box of reactionBoxes) {
+    var name = box.getAttribute('data-name');
+    var location = box.getAttribute('data-location');
+    //push name to names array
+    names.push(name);
+    //inititailize new ReactionBox
+    window[name] = new ReactionBox(
+      `[data-name="${name}"][data-location="${location}"]`
     );
-
-    window['submitReaction' + chart] = function(token) {
-      window.reactionBoxes[chart].handleSubmit(token);
+  }
+  //use names array to define the submitReaction*() for each
+  names.forEach(function(nm) {
+    window['submitReaction' + nm] = function(token) {
+      window[nm].handleSubmit(token);
     };
   });
 });

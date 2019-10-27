@@ -1,4 +1,5 @@
 {% import 'macros/chart-committee-overviews.jinja' as chart %}
+{% import 'macros/reaction-box.jinja' as reaction %}
 
 <section class="row" id="raising" aria-hidden="false" role="tabpanel">
   <h2>Raising</h2>
@@ -87,6 +88,9 @@
             </div>
           </div>
         </div>
+      </li>
+      <li>
+      {{ reaction.reaction_box('raising', 'browse') }}
       </li>
     </ul>
   </div>
