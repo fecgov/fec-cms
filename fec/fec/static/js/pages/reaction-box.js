@@ -27,7 +27,6 @@ function ReactionBox(selector) {
 
   this.$element.on('click', '.js-reaction', this.submitReaction.bind(this));
   this.$element.on('click', '.js-reset', this.handleReset.bind(this));
-
 }
 
 ReactionBox.prototype.submitReaction = function(e) {
@@ -116,7 +115,6 @@ ReactionBox.prototype.handleReset = function() {
 - The below function will use the name/location arguments of the macro
   to create initiate it as a new ReactionBox()
 */
-
 
 $(document).ready(function() {
   //find any reaction box(es) on the page
