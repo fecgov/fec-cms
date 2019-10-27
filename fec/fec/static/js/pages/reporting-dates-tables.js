@@ -152,64 +152,74 @@ ReportingDates.prototype.buildStaticElements = function() {
 
   //Create static footnote/header note list
 
-  //build static list from header notes object
-  let hdr_str = `<h4>Header notes</h4>
-                 <p><ul><p><ul>`;
-  for (const key in header_notes) {
-    hdr_str += `<li>
-                <a name="hdr${key}" id="hdr${key}"></a>
-                <b>${key}</b>&nbsp;&nbsp;${header_notes[key]}
-              </l1>`;
+  let hdr_str = '';
+  //build static list from header notes object if it exists
+  if (typeof header_notes == 'object') {
+    hdr_str = `<h4>Header notes</h4>
+                   <p><ul><p><ul>`;
+    for (const key in header_notes) {
+      hdr_str += `<li>
+                  <a name="hdr${key}" id="hdr${key}"></a>
+                  <b>${key}</b>&nbsp;&nbsp;${header_notes[key]}
+                </l1>`;
+    }
+
+    hdr_str += `</ul></p>`;
   }
 
-  hdr_str += `</ul></p>`;
-
-  //build static list from footnotes object
-  let ftnt_str = `<h4>Footnotes</h4><p><ul>`;
-  for (const key in footnotes) {
-    ftnt_str += `<li>
-                 <a name="footnote_${key}" id="footnote_${key}"></a>
-                 <b>${key}</b>.&nbsp;${footnotes[key]}
-               </l1>`;
+  let ftnt_str = '';
+  //build static list from footnotes object if it exists
+  if (typeof footnotes == 'object') {
+    ftnt_str = `<h4>Footnotes</h4><p><ul>`;
+    for (const key in footnotes) {
+      ftnt_str += `<li>
+                   <a name="footnote_${key}" id="footnote_${key}"></a>
+                   <b>${key}</b>.&nbsp;${footnotes[key]}
+                 </l1>`;
+    }
+    ftnt_str += `</ul></p>`;
   }
-  ftnt_str += `</ul></p>`;
 
-  //create div for all notes
-  const static_notes = document.createElement('div');
-  static_notes.id = 'static_notes';
+  //create div for all notes if either foot or header notes exist
+  if (hdr_str || ftnt_str) {
+    const static_notes = document.createElement('div');
+    static_notes.id = 'static_notes';
 
-  //add combibed header_notes, footnotes list to collapsible div
-  static_notes.innerHTML = `
-                      <h2 class="t-inline-block u-margin--bottom--small">All footnotes</h2>
-                     ${hdr_str}${ftnt_str}`;
+    //add combibed header_notes, footnotes list to collapsible div
+    static_notes.innerHTML = `
+                        <h2 class="t-inline-block u-margin--bottom--small">All notes</h2>
+                       ${hdr_str}${ftnt_str}`;
 
-  //insert it after table
-  table_parent.insertBefore(static_notes, this.dates_table.nextSibling);
+    //insert it after table
+    table_parent.insertBefore(static_notes, this.dates_table.nextSibling);
+  }
 
-  //Create A11Y modal dialog for header_notes popup and add innerHTML
-  const dialog = document.createElement('div');
-  //Must add these three classes separately for IE :-(
-  dialog.classList.add('js-modal');
-  dialog.classList.add('modal');
-  dialog.classList.add('modal__content');
-  dialog.setAttribute('aria-hidden', 'true');
-  dialog.id = 'header_notes_modal';
-  document.body.appendChild(dialog);
-  dialog.innerHTML = header_notes_modal_partial;
-  //Populate dialog with all header notes
-  const dialog_p = document.querySelector('.modal p');
-  dialog_p.innerHTML = `${hdr_str}`;
+  if (typeof header_notes == 'object') {
+    //Create A11Y modal dialog for header_notes popup and add innerHTML
+    const dialog = document.createElement('div');
+    //Must add these three classes separately for IE :-(
+    dialog.classList.add('js-modal');
+    dialog.classList.add('modal');
+    dialog.classList.add('modal__content');
+    dialog.setAttribute('aria-hidden', 'true');
+    dialog.id = 'header_notes_modal';
+    document.body.appendChild(dialog);
+    dialog.innerHTML = header_notes_modal_partial;
+    //Populate dialog with all header notes
+    const dialog_p = document.querySelector('.modal p');
+    dialog_p.innerHTML = `${hdr_str}`;
 
-  const header_sups = document.querySelectorAll(
-    'tr:first-child th a[href^="#"]'
-  );
+    const header_sups = document.querySelectorAll(
+      'tr:first-child th a[href^="#"]'
+    );
 
-  //add data attribute to the header sups to open AY11 dialog
-  for (const header_sup of header_sups) {
-    header_sup.setAttribute('data-a11y-dialog-show', 'header_notes_modal');
-    header_sup.addEventListener('click', e => {
-      e.preventDefault();
-    });
+    //add data attribute to the header sups to open AY11 dialog
+    for (const header_sup of header_sups) {
+      header_sup.setAttribute('data-a11y-dialog-show', 'header_notes_modal');
+      header_sup.addEventListener('click', e => {
+        e.preventDefault();
+      });
+    }
   }
 };
 
