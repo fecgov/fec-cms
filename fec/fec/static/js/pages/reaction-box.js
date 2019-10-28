@@ -1,11 +1,10 @@
 'use strict';
 
-// // This required modifications to `/data/views.py`
-// // to post as a Github issue.
-// //
-// // Previously implemented here (ported to this Django project):
-// // https://github.com/18F/openFEC-web-app/blob/develop/openfecwebapp/views.py#L302
-
+/**
+ * This calls `reactionFeedback(request)` in `/data/views.py `to post as a Github issue.
+ * Previously implemented here (ported to this Django project):
+ * https://github.com/18F/openFEC-web-app/blob/develop/openfecwebapp/views.py#L302
+ */
 var $ = require('jquery');
 var helpers = require('../modules/helpers');
 var analytics = require('../modules/analytics'); // TODO - move this to Tag Manager?
@@ -28,6 +27,12 @@ function ReactionBox(selector) {
   this.$element.on('click', '.js-reaction', this.submitReaction.bind(this));
   this.$element.on('click', '.js-reset', this.handleReset.bind(this));
 }
+/**
+ * Submits step1 of the reaction form with the button chosen.
+ * @param {e} event
+ * captures value of button clicked as `reaction`
+ * passes `location` and `name` along
+ */
 
 ReactionBox.prototype.submitReaction = function(e) {
   this.reaction = $(e.target).data('reaction');
@@ -43,6 +48,9 @@ ReactionBox.prototype.submitReaction = function(e) {
   this.showTextarea();
 };
 
+/**
+ * Show step2 of reaction form, the textarea.
+ */
 ReactionBox.prototype.showTextarea = function() {
   this.$step1.attr('aria-hidden', true);
   this.$step2.attr('aria-hidden', false);
@@ -57,6 +65,13 @@ ReactionBox.prototype.showTextarea = function() {
   this.$step2.find('label').text(labelMap[this.reaction]);
 };
 
+/**
+ * Submits step2 of the reaction form with the recaptcha token.
+ * @param {token} csrf token
+ * passes `feedback` :textarea.val
+ * passes `reaction` : from step1
+ * captures `path` : window.location.pathname || null
+ */
 ReactionBox.prototype.handleSubmit = function(token) {
   $.ajaxSetup({
     beforeSend: function(xhr, settings) {
@@ -109,13 +124,17 @@ ReactionBox.prototype.handleReset = function() {
   this.$textarea.val('');
 };
 
-/* To implement a reaction box:
-- Add a reaction-box jinja macro to a template
-- Include a reference to this JS file in the parent template(preferably in extra JS block)
-(The below function will use the name/location values of any
-reaction box on the page to initiate it as a new ReactionBox())
-*/
+/**
+ * To implement a reaction box:
+ * Add a reaction-box jinja macro to a template
+ * Include a reference to this JS file in the parent template(preferably in extra JS block)
+ * (The below function will use the name/location values of any
+ *  reaction box on the page to initiate it as a new ReactionBox())
+ */
 
+/**
+ * Document ready function called when document is loaded
+ */
 $(document).ready(function() {
   //find any reaction box(es) on the page
   var reactionBoxes = document.querySelectorAll('.reaction-box');
