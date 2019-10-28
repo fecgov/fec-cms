@@ -32,23 +32,29 @@ class TestCandidate(TestCase):
             'name': 'My Primary Campaign Committee',
             'cycle': 2016,
             'committee_id': 'C001',
-        }, {
+        },
+        {
             'designation': 'A',
             'cycles': [2016, 2014, 2012, 2018],
             'name': 'My Authorized Campaign Committee',
             'cycle': 2016,
             'committee_id': 'C002',
-        }, {
+        },
+        {
             'designation': 'J',
             'cycles': [2016, 2014, 2012, 2018],
             'name': 'Joint Fundraising Committee',
             'cycle': 2016,
             'committee_id': 'C003',
-        }
+        },
     ]
 
-    def test_base_case(self, load_with_nested_mock, load_first_row_data_mock,
-                       load_candidate_statement_of_candidacy_mock):
+    def test_base_case(
+        self,
+        load_with_nested_mock,
+        load_first_row_data_mock,
+        load_candidate_statement_of_candidacy_mock,
+    ):
         cycle = 2016
         show_full_election = True
 
@@ -56,14 +62,13 @@ class TestCandidate(TestCase):
         load_with_nested_mock.return_value = (
             test_candidate,
             self.STOCK_COMMITTEE_LIST,
-            cycle
+            cycle,
         )
         candidate = get_candidate('H001', 2018, show_full_election)
 
         assert candidate['candidate_id'] == test_candidate['candidate_id']
         assert candidate['name'] == test_candidate['name']
-        assert candidate['cycles'] == test_candidate[
-            'fec_cycles_in_election']
+        assert candidate['cycles'] == test_candidate['fec_cycles_in_election']
         assert candidate['min_cycle'] == cycle - 2
         assert candidate['max_cycle'] == cycle
         assert candidate['election_year'] == cycle
@@ -73,8 +78,10 @@ class TestCandidate(TestCase):
         assert candidate['state'] == test_candidate['state']
         assert candidate['district'] == test_candidate['district']
         assert candidate['party_full'] == test_candidate['party_full']
-        assert candidate['incumbent_challenge_full'] == test_candidate[
-            'incumbent_challenge_full']
+        assert (
+            candidate['incumbent_challenge_full']
+            == test_candidate['incumbent_challenge_full']
+        )
         assert candidate['cycle'] == cycle
         assert candidate['result_type'] == 'candidates'
         assert candidate['duration'] == 2
@@ -82,32 +89,41 @@ class TestCandidate(TestCase):
         assert candidate['show_full_election'] == show_full_election
 
         assert candidate['committee_groups'] == {
-            'P': [{
-                'designation': 'P',
-                'cycles': [2016, 2014, 2012, 2018],
-                'name': 'My Primary Campaign Committee',
-                'cycle': 2016,
-                'related_cycle': 2016,
-                'committee_id': 'C001'}],
-            'A': [{
-                'designation': 'A',
-                'cycles': [2016, 2014, 2012, 2018],
-                'name': 'My Authorized Campaign Committee',
-                'cycle': 2016,
-                'related_cycle': 2016,
-                'committee_id': 'C002'}],
-            'J': [{
-                'designation': 'J',
-                'cycles': [2016, 2014, 2012, 2018],
-                'name': 'Joint Fundraising Committee',
-                'cycle': 2016,
-                'related_cycle': 2016,
-                'committee_id': 'C003'}],
+            'P': [
+                {
+                    'designation': 'P',
+                    'cycles': [2016, 2014, 2012, 2018],
+                    'name': 'My Primary Campaign Committee',
+                    'cycle': 2016,
+                    'related_cycle': 2016,
+                    'committee_id': 'C001',
+                }
+            ],
+            'A': [
+                {
+                    'designation': 'A',
+                    'cycles': [2016, 2014, 2012, 2018],
+                    'name': 'My Authorized Campaign Committee',
+                    'cycle': 2016,
+                    'related_cycle': 2016,
+                    'committee_id': 'C002',
+                }
+            ],
+            'J': [
+                {
+                    'designation': 'J',
+                    'cycles': [2016, 2014, 2012, 2018],
+                    'name': 'Joint Fundraising Committee',
+                    'cycle': 2016,
+                    'related_cycle': 2016,
+                    'committee_id': 'C003',
+                }
+            ],
         }
 
         assert candidate['committees_authorized'] == (
-            candidate['committee_groups']['P'] +
-            candidate['committee_groups']['A'])
+            candidate['committee_groups']['P'] + candidate['committee_groups']['A']
+        )
         assert candidate['committee_ids'] == [
             committee['committee_id']
             for committee in candidate['committees_authorized']
@@ -120,7 +136,7 @@ class TestCandidate(TestCase):
             'name': test_candidate["name"],
             'cycle': cycle,
             'electionFull': show_full_election,
-            'candidateID': test_candidate["candidate_id"]
+            'candidateID': test_candidate["candidate_id"],
         }
 
         assert len(candidate['raising_summary']) == 0
@@ -128,8 +144,11 @@ class TestCandidate(TestCase):
         assert len(candidate['cash_summary']) == 0
 
     def test_special_odd_year_return_rounded_number(
-            self, load_with_nested_mock, load_first_row_data_mock,
-            load_candidate_statement_of_candidacy_mock):
+        self,
+        load_with_nested_mock,
+        load_first_row_data_mock,
+        load_candidate_statement_of_candidacy_mock,
+    ):
 
         # use new column rounded_election_years which round odd number in MV.
         test_candidate = copy.deepcopy(self.STOCK_CANDIDATE)
@@ -137,11 +156,46 @@ class TestCandidate(TestCase):
         test_candidate["election_years"] = [2013, 2015, 2018]
         test_candidate["rounded_election_years"] = [2014, 2016, 2018]
 
-        load_with_nested_mock.return_value = (
-            test_candidate,
-            mock.MagicMock(),
-            2016
-        )
+        load_with_nested_mock.return_value = (test_candidate, mock.MagicMock(), 2016)
         candidate = get_candidate('H001', 2016, True)
         assert candidate["election_years"] == [2014, 2016, 2018]
         assert candidate["election_year"] == 2016
+
+    def test_future_candidate_max_cycle(
+        self,
+        load_with_nested_mock,
+        load_first_row_data_mock,
+        load_candidate_statement_of_candidacy_mock,
+    ):
+
+        test_candidate = copy.deepcopy(self.STOCK_CANDIDATE)
+        test_candidate["candidate_id"] = ["S001"]
+        test_candidate["fec_cycles_in_election"] = [2016, 2018, 2020]
+        test_candidate["election_years"] = [2018, 2024]
+        test_candidate["rounded_election_years"] = [2018, 2024]
+
+        test_committee_list = copy.deepcopy(self.STOCK_COMMITTEE_LIST)
+        test_committee_list[0] = (
+            {
+                'designation': 'P',
+                'cycles': [2016, 2014, 2012, 2018, 2020],
+                'name': 'My Primary Campaign Committee',
+                'cycle': 2018,
+                'committee_id': 'C001',
+            },
+        )
+        test_committee_list.append(
+            {
+                'designation': 'P',
+                'cycles': [2016, 2014, 2012, 2018, 2020],
+                'name': 'My Primary Campaign Committee',
+                'cycle': 2024,
+                'committee_id': 'C001',
+            }
+        )
+
+        load_with_nested_mock.return_value = (test_candidate, mock.MagicMock(), 2024)
+        candidate = get_candidate('S001', 2024, True)
+        assert candidate["election_years"] == [2018, 2024]
+        assert candidate["election_year"] == 2024
+        assert candidate["max_cycle"] == 2020

@@ -61,7 +61,8 @@ def aggregate_totals(request):
             'election_years': election_years,
             'election_year': election_year,
             'office': office,
-            'FEATURES': FEATURES
+            'FEATURES': FEATURES,
+            'social_image_identifier': 'data',
         }
     )
 
@@ -84,6 +85,7 @@ def landing(request):
             'last_of_year': datetime.date(datetime.date.today().year, 12, 31).strftime(
                 '%m/%d/%Y'
             ),
+            'social_image_identifier': 'data',
         },
     )
 
@@ -112,7 +114,15 @@ def search(request):
 
 
 def browse_data(request):
-    return render(request, 'browse-data.jinja', {'title': 'Browse data', 'parent': 'data'})
+    return render(
+        request,
+        'browse-data.jinja',
+        {
+            'title': 'Browse data',
+            'parent': 'data',
+            'social_image_identifier': 'data',
+        }
+    )
 
 
 def get_candidate(candidate_id, cycle, election_full):
@@ -149,7 +159,6 @@ def get_candidate(candidate_id, cycle, election_full):
         candidate_id,
         'committees',
         cycle=cycle,
-        cycle_key='two_year_period',
         election_full=election_full,
     )
 
@@ -166,6 +175,12 @@ def get_candidate(candidate_id, cycle, election_full):
         'electionFull': election_full,
         'candidateID': candidate['candidate_id'],
     }
+
+    # Grab the most recent two-year period with data within this cycle
+    # Used for raising/spending tabs
+    max_cycle = max(
+        year for year in candidate['fec_cycles_in_election'] if year <= cycle
+    )
 
     # Annotate committees with most recent available cycle
     aggregate_cycles = (
@@ -194,11 +209,12 @@ def get_candidate(candidate_id, cycle, election_full):
     aggregate = api_caller.load_first_row_data(path, **filters)
 
     if election_full:
-        # (5)if election_full is ture, need call
+        # (5)if election_full is true, need call
         # candidate/{candidate_id}/totals/{cycle} second time
-        # (set election_full=false) to get totals for the two-year period
         # for showing on raising and spending tabs
+        # Get most recent 2-year period totals
         filters['election_full'] = False
+        filters['cycle'] = max_cycle
         two_year_totals = api_caller.load_first_row_data(path, **filters)
     else:
         two_year_totals = aggregate
@@ -266,7 +282,7 @@ def get_candidate(candidate_id, cycle, election_full):
         'elections': elections,
         'has_raw_filings': has_raw_filings,
         'incumbent_challenge_full': candidate['incumbent_challenge_full'],
-        'max_cycle': cycle,
+        'max_cycle': max_cycle,
         'min_cycle': min_cycle,
         'min_receipt_date': raw_filing_start_date,
         'name': candidate['name'],
@@ -281,6 +297,7 @@ def get_candidate(candidate_id, cycle, election_full):
         'state': candidate['state'],
         'statement_of_candidacy': statement_of_candidacy,
         'two_year_totals': two_year_totals,
+        'social_image_identifier': 'data',
     }
 
 
@@ -389,6 +406,7 @@ def get_committee(committee_id, cycle):
         'context_vars': context_vars,
         'party_full': committee['party_full'],
         'candidates': candidates,
+        'social_image_identifier': 'data',
     }
 
     if financials['reports'] and financials['totals']:
@@ -459,7 +477,7 @@ def get_committee(committee_id, cycle):
         'reports': ['F3', 'F3X', 'F3P', 'F3L', 'F4', 'F5', 'F7', 'F13'],
         'notices': ['F5', 'F24', 'F6', 'F9', 'F10', 'F11'],
         'statements': ['F1'],
-        'other': ['F1M', 'F8', 'F99', 'F12']
+        'other': ['F1M', 'F8', 'F99', 'F12'],
     }
 
     return template_variables
@@ -484,7 +502,7 @@ def elections_lookup(request):
     return render(
         request,
         'election-lookup.jinja',
-        {'parent': 'data', 'cycles': cycles, 'cycle': cycle},
+        {'parent': 'data', 'cycles': cycles, 'cycle': cycle, 'social_image_identifier': 'data',},
     )
 
 
@@ -547,6 +565,7 @@ def elections(request, office, cycle, state=None, district=None):
             'state_full': constants.states[state.upper()] if state else None,
             'district': district,
             'title': utils.election_title(cycle, office, state, district),
+            'social_image_identifier': 'data',
         },
     )
 
@@ -567,7 +586,8 @@ def raising(request):
             'title': 'Raising: by the numbers',
             'election_years': election_years,
             'election_year': election_year,
-            'office': office
+            'office': office,
+            'social_image_identifier': 'data',
         },
     )
 
@@ -588,7 +608,8 @@ def spending(request):
             'title': 'Spending: by the numbers',
             'election_years': election_years,
             'election_year': election_year,
-            'office': office
+            'office': office,
+            'social_image_identifier': 'data',
         },
     )
 

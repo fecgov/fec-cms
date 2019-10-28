@@ -2,7 +2,7 @@
   {
     "document_id": "app-1",
     "title": "Campaign finance data home",
-    "path": "https://beta.fec.gov/data/",
+    "path": "https://www.fec.gov/data/",
     "created": "2017-04-01",
     "language": "en",
     "promote": true,
@@ -12,7 +12,7 @@
   {
     "document_id": "app-2",
     "title": "Advanced data",
-    "path": "https://beta.fec.gov/data/advanced/",
+    "path": "https://www.fec.gov/data/advanced/",
     "created": "2017-04-01",
     "language": "en",
     "promote": true,
@@ -22,7 +22,7 @@
   {
     "document_id": "app-3",
     "title": "Browse receipts",
-    "path": "https://beta.fec.gov/data/receipts/",
+    "path": "https://www.fec.gov/data/receipts/",
     "created": "2017-04-01",
     "language": "en",
     "promote": true,
@@ -32,7 +32,7 @@
   {
     "document_id": "app-4",
     "title": "Browse individual contributions",
-    "path": "https://beta.fec.gov/data/receipts/individual-contributions",
+    "path": "https://www.fec.gov/data/receipts/individual-contributions",
     "created": "2017-04-01",
     "language": "en",
     "promote": true,
@@ -42,7 +42,7 @@
   {
     "document_id": "app-5",
     "title": "Browse disbursements",
-    "path": "https://beta.fec.gov/data/disbursements",
+    "path": "https://www.fec.gov/data/disbursements",
     "created": "2017-04-01",
     "language": "en",
     "promote": true,
@@ -52,7 +52,7 @@
   {
     "document_id": "app-6",
     "title": "Browse independent expenditures",
-    "path": "https://beta.fec.gov/data/independent-expenditures/",
+    "path": "https://www.fec.gov/data/independent-expenditures/",
     "created": "2017-04-01",
     "language": "en",
     "promote": true,
@@ -62,7 +62,7 @@
   {
     "document_id": "app-7",
     "title": "Browse party coordinated expenditures",
-    "path": "https://beta.fec.gov/data/party-coordinated-expenditures/",
+    "path": "https://www.fec.gov/data/party-coordinated-expenditures/",
     "created": "2017-04-01",
     "language": "en",
     "promote": true,
@@ -72,7 +72,7 @@
   {
     "document_id": "app-8",
     "title": "Browse electioneering communications",
-    "path": "https://beta.fec.gov/data/electioneering-communications/",
+    "path": "https://www.fec.gov/data/electioneering-communications/",
     "created": "2017-04-01",
     "language": "en",
     "promote": true,
@@ -82,7 +82,7 @@
   {
     "document_id": "app-9",
     "title": "Browse communication costs",
-    "path": "https://beta.fec.gov/data/communication-costs/",
+    "path": "https://www.fec.gov/data/communication-costs/",
     "created": "2017-04-01",
     "language": "en",
     "promote": true,
@@ -92,7 +92,7 @@
   {
     "document_id": "app-10",
     "title": "Browse loans",
-    "path": "https://beta.fec.gov/data/loans/",
+    "path": "https://www.fec.gov/data/loans/",
     "created": "2017-04-01",
     "language": "en",
     "promote": true,
@@ -102,7 +102,7 @@
   {
     "document_id": "app-12",
     "title": "Browse all candidates",
-    "path": "https://beta.fec.gov/data/candidates/",
+    "path": "https://www.fec.gov/data/candidates/",
     "created": "2017-04-01",
     "language": "en",
     "promote": true,
@@ -112,7 +112,7 @@
   {
     "document_id": "app-13",
     "title": "Browse candidates for president",
-    "path": "https://beta.fec.gov/data/candidates/president/",
+    "path": "https://www.fec.gov/data/candidates/president/",
     "created": "2017-04-01",
     "language": "en",
     "promote": true,
@@ -122,7 +122,7 @@
   {
     "document_id": "app-14",
     "title": "Browse candidates for Senate",
-    "path": "https://beta.fec.gov/data/candidates/senate/",
+    "path": "https://www.fec.gov/data/candidates/senate/",
     "created": "2017-04-01",
     "language": "en",
     "promote": true,
@@ -132,7 +132,7 @@
   {
     "document_id": "app-15",
     "title": "Browse candidates for House of Representatives",
-    "path": "https://beta.fec.gov/data/candidates/house/",
+    "path": "https://www.fec.gov/data/candidates/house/",
     "created": "2017-04-01",
     "language": "en",
     "promote": true,
@@ -142,7 +142,7 @@
   {
     "document_id": "app-16",
     "title": "Browse all committees",
-    "path": "https://beta.fec.gov/data/committees/",
+    "path": "https://www.fec.gov/data/committees/",
     "created": "2017-04-01",
     "language": "en",
     "promote": true,
@@ -152,7 +152,7 @@
   {
     "document_id": "app-17",
     "title": "Browse all filings",
-    "path": "https://beta.fec.gov/data/filings/",
+    "path": "https://www.fec.gov/data/filings/",
     "created": "2017-04-01",
     "language": "en",
     "promote": true,
@@ -162,7 +162,7 @@
   {
     "document_id": "app-18",
     "title": "Browse presidential committee reports",
-    "path": "https://beta.fec.gov/data/reports/presidential/",
+    "path": "https://www.fec.gov/data/reports/presidential/",
     "created": "2017-04-01",
     "language": "en",
     "promote": true,
@@ -172,7 +172,7 @@
   {
     "document_id": "app-19",
     "title": "Browse House and Senate committee reports",
-    "path": "https://beta.fec.gov/data/reports/house-senate/",
+    "path": "https://www.fec.gov/data/reports/house-senate/",
     "created": "2017-04-01",
     "language": "en",
     "promote": true,
@@ -182,7 +182,7 @@
   {
     "document_id": "app-20",
     "title": "Browse PAC and Party committee reports",
-    "path": "https://beta.fec.gov/data/reports/pac-party/",
+    "path": "https://www.fec.gov/data/reports/pac-party/",
     "created": "2017-04-01",
     "language": "en",
     "promote": true,
@@ -192,7 +192,7 @@
   {
     "document_id": "app-21",
     "title": "Raising breakdown",
-    "path": "https://beta.fec.gov/data/raising/",
+    "path": "https://www.fec.gov/data/raising/",
     "created": "2017-04-01",
     "language": "en",
     "promote": true,
@@ -202,7 +202,7 @@
   {
     "document_id": "app-22",
     "title": "Spending breakdown",
-    "path": "https://beta.fec.gov/data/spending/",
+    "path": "https://www.fec.gov/data/spending/",
     "created": "2017-04-01",
     "language": "en",
     "promote": true,
@@ -212,7 +212,7 @@
   {
     "document_id": "app-23",
     "title": "Find candidates and elections by location",
-    "path": "https://beta.fec.gov/data/elections/",
+    "path": "https://www.fec.gov/data/elections/",
     "created": "2017-04-01",
     "language": "en",
     "promote": true,

@@ -8,8 +8,6 @@ from django.core.management import BaseCommand
 
 from home.models import Page
 
-
-DIGITALGOV_DRAWER_KEY_TRANSITION = settings.FEC_DIGITALGOV_DRAWER_KEY_TRANSITION
 drawer = settings.DIGITALGOV_DRAWER_HANDLE
 key = settings.FEC_DIGITALGOV_DRAWER_KEY_MAIN
 
@@ -23,19 +21,8 @@ class Command(BaseCommand):
             help='Path to JSON file to load'
         )
 
-        parser.add_argument(
-            '-transition',
-            action='store_true',
-            help="Add this flag to add to the transition drawer"
-        )
-
     def handle(self, *args, **options):
         self.stdout.write(self.style.WARNING('Indexing pages'))
-
-        # If we're putting in the transition drawer, use those creds
-        if options['transition']:
-            drawer = 'transition'
-            key = DIGITALGOV_DRAWER_KEY_TRANSITION
 
         if options['json_file_path']:
             file_name = options['json_file_path']

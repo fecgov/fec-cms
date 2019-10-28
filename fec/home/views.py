@@ -102,6 +102,8 @@ def updates(request):
     press_releases = ""
     tips = ""
 
+    social_image_identifier = ""
+
     # Get values from query
     update_types = request.GET.getlist("update_type", None)
     category_list = request.GET.getlist("category", "")
@@ -118,8 +120,10 @@ def updates(request):
             press_releases = get_press_releases(
                 category_list=category_list, year=year, search=search
             )
+            social_image_identifier = "press-release"
         if "weekly-digest" in update_types:
             digests = get_digests(year=year, search=search)
+            social_image_identifier = 'weekly-digest'
         if "tips-for-treasurers" in update_types:
             tips = get_tips(year=year, search=search)
 
@@ -185,6 +189,7 @@ def updates(request):
             "updates": updates,
             "year": year,
             "search": search,
+            'social_image_identifier': social_image_identifier
         },
     )
 
@@ -382,6 +387,7 @@ def index_meetings(request):
             "hearings": hearings,
             "executive_years": executive_years,
             "executive_sessions": executive_sessions,
+            "social_image_identifier": 'commission-meetings',
         },
     )
 

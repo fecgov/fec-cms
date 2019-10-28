@@ -213,7 +213,8 @@ for category in report_category_groups.keys():
 SEARCH_DESCENDANTS_OF = [
     '/home/legal-resources/',
     '/home/help-candidates-and-committees/',
-    '/home/press/'
+    '/home/press/',
+    '/home/introduction-campaign-finance/'
 ]
 
 # These are the parent pages for which we want *only* direct children

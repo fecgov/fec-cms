@@ -256,8 +256,7 @@ def load_nested_type(parent_type, c_id, nested_type, *path, **filters):
     )
 
 
-def load_with_nested(primary_type, primary_id, secondary_type, cycle=None,
-                     cycle_key='cycle', **query):
+def load_with_nested(primary_type, primary_id, secondary_type, cycle=None, **query):
     """ Handle Candidate or Committee endpoint
         Example: /candidate/P80003338/committees
         primary_type: "candidate"
@@ -277,8 +276,8 @@ def load_with_nested(primary_type, primary_id, secondary_type, cycle=None,
     )
 
     cycle = cycle or max(data['cycles'])
+    path = ('history', str(cycle))
 
-    path = ('history', str(data[cycle_key]))
     """ Get data for secondary_type
         Example: committee data for /candidate/P80003338/committees
     """

@@ -1,31 +1,10 @@
 [
   {
-    "document_id": "transition-1",
-    "path": "http://transition.fec.gov/pubrec/publicrecordsoffice.shtml#using",
-    "created": "04/01/2017",
-    "language": "en",
-    "title": "Public Records Office"
-  },
-  {
-    "document_id": "transition-2",
-    "path": "http://transition.fec.gov/info/hearings.shtml",
-    "created": "04/01/2017",
-    "language": "en",
-    "title": "Public Hearings"
-  },
-  {
     "document_id": "transition-3",
     "path": "http://transition.fec.gov/af/af.shtml",
     "created": "04/01/2017",
     "language": "en",
     "title": "FEC Administrative Fine Program"
-  },
-  {
-    "document_id": "transition-4",
-    "path": "http://transition.fec.gov/af/AFPRegulations.shtml",
-    "created": "04/01/2017",
-    "language": "en",
-    "title": "AFP Regulations"
   },
   {
     "document_id": "transition-5",
@@ -70,13 +49,6 @@
     "title": "Help Complying with the Federal Campaign Finance Law (FECA)"
   },
   {
-    "document_id": "transition-11",
-    "path": "http://transition.fec.gov/elecfil/electron.shtml",
-    "created": "04/01/2017",
-    "language": "en",
-    "title": "Electronic Filing"
-  },
-  {
     "document_id": "transition-12",
     "path": "http://transition.fec.gov/elecfil/electron.shtml",
     "created": "04/01/2017",
@@ -84,81 +56,11 @@
     "title": "Electronic Filing"
   },
   {
-    "document_id": "transition-13",
-    "path": "http://transition.fec.gov/info/forms.shtml",
-    "created": "04/01/2017",
-    "language": "en",
-    "title": "FEC Reporting Forms"
-  },
-  {
-    "document_id": "transition-14",
-    "path": "http://transition.fec.gov/info/ElectionDate/",
-    "created": "04/01/2017",
-    "language": "en",
-    "title": "Federal Election Compliance Information"
-  },
-  {
-    "document_id": "transition-15",
-    "path": "http://transition.fec.gov/info/publications.shtml",
-    "created": "04/01/2017",
-    "language": "en",
-    "title": "FEC Publications"
-  },
-  {
-    "document_id": "transition-16",
-    "path": "http://transition.fec.gov/info/publications.shtml",
-    "created": "04/01/2017",
-    "language": "en",
-    "title": "FEC Publications"
-  },
-  {
     "document_id": "transition-17",
     "path": "http://transition.fec.gov/pages/brochures/brochures.shtml",
     "created": "04/01/2017",
     "language": "en",
     "title": "FEC Brochures"
-  },
-  {
-    "document_id": "transition-18",
-    "path": "http://transition.fec.gov/pages/bcra/bcra_update.shtml",
-    "created": "04/01/2017",
-    "language": "en",
-    "title": "Bipartisan Campaign Reform Act of 2002"
-  },
-  {
-    "document_id": "transition-19",
-    "path": "http://transition.fec.gov/info/outreach.shtml",
-    "created": "04/01/2017",
-    "language": "en",
-    "title": "FEC Educational Outreach"
-  },
-  {
-    "document_id": "transition-20",
-    "path": "http://transition.fec.gov/info/elearning.shtml",
-    "created": "04/01/2017",
-    "language": "en",
-    "title": "FEC Educational Outreach"
-  },
-  {
-    "document_id": "transition-21",
-    "path": "http://transition.fec.gov/info/outreach.shtml#conferences",
-    "created": "04/01/2017",
-    "language": "en",
-    "title": "FEC Educational Outreach"
-  },
-  {
-    "document_id": "transition-22",
-    "path": "http://transition.fec.gov/info/outreach.shtml#roundtables",
-    "created": "04/01/2017",
-    "language": "en",
-    "title": "FEC Educational Outreach"
-  },
-  {
-    "document_id": "transition-23",
-    "path": "http://transition.fec.gov/info/outreach.shtml#appearances",
-    "created": "04/01/2017",
-    "language": "en",
-    "title": "FEC Educational Outreach"
   },
   {
     "document_id": "transition-24",
@@ -222,68 +124,5 @@
     "created": "04/01/2017",
     "language": "en",
     "title": "Federal Election Commission Home Page"
-  },
-  {
-    "document_id": "transition-33",
-    "path": "http://transition.fec.gov/ans/answers.shtml",
-    "created": "04/01/2017",
-    "language": "en",
-    "title": "Quick Answers"
-  },
-  {
-    "document_id": "transition-34",
-    "path": "http://transition.fec.gov/ans/answers_general.shtml",
-    "created": "04/01/2017",
-    "language": "en",
-    "title": "Quick Answers-General Questions"
-  },
-  {
-    "document_id": "transition-35",
-    "path": "http://transition.fec.gov/ans/answers_disclosure.shtml",
-    "created": "04/01/2017",
-    "language": "en",
-    "title": "Quick Answers - Disclosure"
-  },
-  {
-    "document_id": "transition-36",
-    "path": "http://transition.fec.gov/ans/answers_compliance.shtml",
-    "created": "04/01/2017",
-    "language": "en",
-    "title": "Quick Answers - Compliance"
-  },
-  {
-    "document_id": "transition-37",
-    "path": "http://transition.fec.gov/ans/answers_filing.shtml",
-    "created": "04/01/2017",
-    "language": "en",
-    "title": "Quick Answers - Filing"
-  },
-  {
-    "document_id": "transition-38",
-    "path": "http://transition.fec.gov/ans/answers_candidate.shtml",
-    "created": "04/01/2017",
-    "language": "en",
-    "title": "Quick Answers - Candidate"
-  },
-  {
-    "document_id": "transition-39",
-    "path": "http://transition.fec.gov/ans/answers_pac.shtml",
-    "created": "04/01/2017",
-    "language": "en",
-    "title": "Quick Answers - PAC"
-  },
-  {
-    "document_id": "transition-40",
-    "path": "http://transition.fec.gov/ans/answers_party.shtml",
-    "created": "04/01/2017",
-    "language": "en",
-    "title": "Quick Answers - Party"
-  },
-  {
-    "document_id": "transition-41",
-    "path": "http://transition.fec.gov/ans/answers_public_funding.shtml",
-    "created": "04/01/2017",
-    "language": "en",
-    "title": "Quick Answers: Public Funding"
   }
 ]

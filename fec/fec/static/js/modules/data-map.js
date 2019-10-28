@@ -90,7 +90,7 @@ DataMap.prototype.init = function() {
   let path = d3.geo.path().projection(projection);
 
   /** Go through our data results and pair/merge them with the fips state codes {@see this.mapData} */
-  let results = this.data['results'].reduce((acc, val) => {
+  let results = instance.data['results'].reduce((acc, val) => {
     let row = fips.fipsByState[val.state] || {};
     let code = row.STATE ? parseInt(row.STATE) : null;
     acc[code] = val.total;
@@ -103,12 +103,12 @@ DataMap.prototype.init = function() {
   // Work through how to group these results for the legend
   // For our current usage, we'll only be dealing with one map,
   // but the functionality will work with multiple maps using the same legend
-  let quantiles = this.opts.quantiles;
+  let quantiles = instance.opts.quantiles;
   // For each item in results, look at its total but only work with the value if it's truthy
   // Double bangs (!!value) :
   // `!!0` = false, `!!null` = false
   // `!!1` = true, `!!468546` = true
-  let totals = this.data['results']
+  let totals = instance.data['results']
     .map(value => value['total'])
     .filter(value => {
       return !!value;
@@ -120,7 +120,7 @@ DataMap.prototype.init = function() {
 
   // Decide the legend color scale for our values
   let legendScale = chroma
-    .scale(this.opts.colorScale)
+    .scale(instance.opts.colorScale)
     .domain([minValue, maxValue]);
   let legendQuantize = d3.scale.linear().domain([minValue, maxValue]);
 
@@ -192,7 +192,7 @@ DataMap.prototype.handleDataRefresh = function(newData) {
 DataMap.prototype.applyNewData = function() {
   let instance = this;
 
-  let results = this.data['results'].reduce((acc, val) => {
+  let results = instance.data['results'].reduce((acc, val) => {
     let row = fips.fipsByState[val.state] || {};
     let code = row.STATE ? parseInt(row.STATE) : null;
     acc[code] = val.total;
@@ -201,8 +201,8 @@ DataMap.prototype.applyNewData = function() {
 
   this.mapData = results;
 
-  let quantiles = this.opts.quantiles;
-  let totals = this.data['results']
+  let quantiles = instance.opts.quantiles;
+  let totals = instance.data['results']
     .map(value => value['total'])
     .filter(value => {
       return !!value;
@@ -213,14 +213,14 @@ DataMap.prototype.applyNewData = function() {
   maxValue = trimmedMaxValue(minValue, maxValue);
 
   let legendScale = chroma
-    .scale(this.opts.colorScale)
+    .scale(instance.opts.colorScale)
     .domain([minValue, maxValue]);
 
   let legendQuantize = d3.scale.linear().domain([minValue, maxValue]);
 
   // This bit is the big difference from init() }
   // because we're transitioning states' colors,
-  // states we know already exist, have IDs, and may have mouseover listeners, etc.
+  // states we know already exist, have IDs, and may have mouseenter listeners, etc.
   this.svg
     .selectAll('path')
     .transition()
@@ -368,9 +368,6 @@ function calculateStateFill(
     }
   }
 
-  if (colorToReturn._rgb)
-    colorToReturn = 'rgba(' + colorToReturn._rgb.join(',') + ')';
-
   return colorToReturn;
 }
 
@@ -407,8 +404,9 @@ function buildStateTooltips(svg, path, instance) {
   // Go through our svg/map and assign the mouse listeners to each path
   svg
     .selectAll('path')
-    .on('mouseover', function(d) {
-      if (instance.getStateValue(d.id) && instance.getStateValue(d.id) !== 0) {
+    .on('mouseenter', function(d) {
+      let thisValue = instance.getStateValue(d.id);
+      if (thisValue && thisValue !== 0) {
         this.parentNode.appendChild(this);
         let html = tooltipTemplate({
           name: fips.fipsByCode[d.id].STATE_NAME,
@@ -418,18 +416,45 @@ function buildStateTooltips(svg, path, instance) {
         moveTooltip(tooltip);
       }
     })
-    .on('mouseout', function() {
-      tooltip.style('display', 'none');
-    })
-    .on('mousemove', function() {
-      if (tooltip.style('display') != 'none') {
+    .on('mousemove', function(d) {
+      let thisValue = instance.getStateValue(d.id);
+      if (thisValue && thisValue !== 0) {
+        let html = tooltipTemplate({
+          name: fips.fipsByCode[d.id].STATE_NAME,
+          total: '$' + Math.round(instance.getStateValue(d.id)).toLocaleString()
+        });
         moveTooltip(tooltip);
+        tooltip.style('display', 'block').html(html);
+      } else {
+        tooltip.style('display', 'none');
       }
     });
+
+  // Add the mouseleave listeners to the dom elements rather than relying on d3
+  // (d3 kept converting mouseleave to mouseout for IE11 and they're different for IE)
+  let theLargeMap = document.querySelector('.election-map svg');
+  let theStatesPaths = theLargeMap.querySelectorAll('path');
+
+  theLargeMap.addEventListener('mouseleave', () => {
+    tooltip.style('display', 'none');
+  });
+  for (let i = 0; i < theStatesPaths.length; i++) {
+    theStatesPaths[i].addEventListener('mouseleave', () => {
+      tooltip.style('display', 'none');
+    });
+  }
+
+  // IE doesn't always recognize mouseout or mouseleave
+  // When the toolip is visible and the window changes size,
+  // the tooltip can jump to very different parts of the screen.
+  // So let's hide it on resize, just in case.
+  window.addEventListener('resize', function() {
+    tooltip.style('display', 'none');
+  });
 }
 
 /**
- * Controls the tooltip position and visibility, called on each state's mouseover and mousemove
+ * Controls the tooltip position and visibility, called on each state's mouseenter and mousemove
  * @param {HTMLElement} tooltip
  */
 function moveTooltip(tooltip) {

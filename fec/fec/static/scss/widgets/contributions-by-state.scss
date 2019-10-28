@@ -272,29 +272,6 @@ aside.contribs-by-state {
       &::-webkit-scrollbar-thumb:hover {
         background: #555;
       }
-      // overflow: -moz-scrollbars-none;
-      // -ms-overflow-style: none;
-
-
-      // .ps-scrollbar-y-rail {
-      //   background: $gray-medium;
-      //   // border-left: 1px solid $gray-dark;
-      //   height: 100%;
-      //   position: absolute;
-      //   right: 0;
-      //   width: $sizeTableScroller;
-      // }
-      
-      // .ps-scrollbar-y {
-      //   background: $gray-dark;
-      //   position: absolute;
-      //   right: 0;
-      //   width: $sizeTableScroller;
-      // }
-
-
-
-
     }
     .states-total {
       border-top: solid thin $colorBorder;
@@ -373,6 +350,11 @@ aside.contribs-by-state {
       border: none;
       height: auto;
       min-height: 30rem;
+
+      svg {
+        min-width: 360px;
+        min-height: 230px;
+      }
     }
   }
   .map-details {
@@ -423,9 +405,10 @@ aside.contribs-by-state {
   }
   .overlay__container {
     display: none;
+    left: 0px;
     position: absolute;
     width: 100%;
-    z-index: 99; // The typeahead menu is at 100 and we want it to be visible above this
+    z-index: #{$z1 - 1}; // The typeahead menu is at 100 and we want it to be visible above this
 
     &.is-loading {
       display: block;
@@ -439,23 +422,6 @@ aside.contribs-by-state {
       }
     }
   }
-
-  // States list scrollbars based on "../components/_downloads"
-  // .ps-scrollbar-y-rail {
-  //   background: $gray-medium;
-  //   // border-left: 1px solid $gray-dark;
-  //   height: 100%;
-  //   position: absolute;
-  //   right: 0;
-  //   width: $sizeTableScroller;
-  // }
-  
-  // .ps-scrollbar-y {
-  //   background: $gray-dark;
-  //   position: absolute;
-  //   right: 0;
-  //   width: $sizeTableScroller;
-  // }
 
   // Small sizes
   &.w-s {
@@ -552,6 +518,13 @@ aside.contribs-by-state {
       margin-top: 2.5rem;
       margin-left: 1rem;
       width: calc(66.66% - 1rem);
+
+      .election-map {  
+        svg {
+          min-width: 445px;
+          min-height: 285px;
+        }
+      }
     }
     .map-details {
       .more-info-wrapper {    
@@ -565,6 +538,24 @@ aside.contribs-by-state {
   &.w-l {
     @extend .w-m;
   }
+
+  // Some overrides for table.table-display *, which was added because IE doesn't like Flex
+  table.table-display {
+    display: table;
+    
+    thead {
+      display: table-header-group;
+    }
+    tbody {
+      display: table-row-group;
+    }
+    tr {
+      display: table-row;
+    }
+    td, th {
+      display: table-cell;
+    }
+  }
 }
 
 /* #map-tooltip is outside .contribs-by-state */
@@ -577,7 +568,7 @@ aside.contribs-by-state {
   padding: 1.5rem;
   position: absolute;
   text-align: center;
-  z-index: 400;
+  z-index: #{$z1 - 2};
   
   .tooltip__title {
     border-bottom: 1px solid #112e51;
