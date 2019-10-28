@@ -1,16 +1,14 @@
 'use strict';
 
-// THIS MODULE IS CURRENTLY NOT IN USE.
-//
-// This requires modifications to `/data/views.py` feedback view
-// to post as a Github issue.
-//
-// Previously implemented here (needs a port to this Django project):
-// https://github.com/18F/openFEC-web-app/blob/develop/openfecwebapp/views.py#L302
+// // This required modifications to `/data/views.py`
+// // to post as a Github issue.
+// //
+// // Previously implemented here (ported to this Django project):
+// // https://github.com/18F/openFEC-web-app/blob/develop/openfecwebapp/views.py#L302
 
 var $ = require('jquery');
-var helpers = require('./helpers');
-var analytics = require('./analytics'); // TODO - move this to Tag Manager?
+var helpers = require('../modules/helpers');
+var analytics = require('../modules/analytics'); // TODO - move this to Tag Manager?
 
 function ReactionBox(selector) {
   this.$element = $(selector);
@@ -111,4 +109,34 @@ ReactionBox.prototype.handleReset = function() {
   this.$textarea.val('');
 };
 
-module.exports = { ReactionBox: ReactionBox };
+/* To implement a reaction box:
+- Add a reaction-box jinja macro to a template
+- Include a reference to this JS file in the parent template(preferably in extra JS block)
+(The below function will use the name/location values of any
+reaction box on the page to initiate it as a new ReactionBox())
+*/
+
+$(document).ready(function() {
+  //find any reaction box(es) on the page
+  var reactionBoxes = document.querySelectorAll('.reaction-box');
+  var names = [];
+  //iterate over the reaction box(es)
+  for (const box of reactionBoxes) {
+    var name = box.getAttribute('data-name');
+    var location = box.getAttribute('data-location');
+    //push name to names array
+    names.push(name);
+    //inititailize new ReactionBox
+    window[name] = new ReactionBox(
+      `[data-name="${name}"][data-location="${location}"]`
+    );
+  }
+  //use names array to define the submitReaction*() for each
+  names.forEach(function(nm) {
+    window['submitReaction' + nm] = function(token) {
+      window[nm].handleSubmit(token);
+    };
+  });
+});
+
+new ReactionBox();
