@@ -1170,6 +1170,44 @@ class ReportingExamplePage(Page):
     def content_section(self):
         return 'help'
 
+class ExamplePage(Page):
+    """Page template for disclaimer examples and "example scenario" pages
+    Always within the Help section"""
+    featured_image = models.ForeignKey('wagtailimages.Image', blank=True, null=True,
+                                   on_delete=models.SET_NULL, related_name='+')
+
+    pre_title = models.CharField(blank=True, null=True, max_length=255, choices=[
+            ('how', 'How to report'),
+            ('scenario', 'Example scenario'),
+            ('example','Example')
+    ])
+
+    body = StreamField([
+        ('paragraph', blocks.RichTextBlock()),
+        ('example_image', ExampleImage()),
+        ('image', ImageChooserBlock()),
+        ('reporting_example_cards', ReportingExampleCards()),
+        ('internal_button', InternalButtonBlock()),
+        ('external_button', ExternalButtonBlock()),
+    ], null=True)
+
+    related_media_title = models.CharField(blank=True, null=True, max_length=255)
+    related_media = StreamField([
+        ('continue_learning', blocks.ListBlock(ThumbnailBlock(), icon='doc-empty', template='blocks/related-media.html')),
+    ], null=True, blank=True)
+
+    content_panels = Page.content_panels + [
+        FieldPanel('pre_title'),
+        ImageChooserPanel('featured_image'),
+        StreamFieldPanel('body'),
+        FieldPanel('related_media_title'),
+        StreamFieldPanel('related_media')
+    ]
+
+    @property
+    def content_section(self):
+        return 'help'
+
 @register_snippet
 class EmbedTableSnippet(models.Model):
     title = models.TextField()
