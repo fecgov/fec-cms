@@ -238,7 +238,9 @@ FilterTypeahead.prototype.appendCheckbox = function(opts) {
 FilterTypeahead.prototype.formatCheckboxData = function(input) {
   var output = {
     name: input.name,
-    label: input.datum ? _.escape(formatLabel(input.datum)) : stripQuotes(input.value),
+    label: input.datum
+      ? _.escape(formatLabel(input.datum))
+      : stripQuotes(input.value),
     value: _.escape(stripQuotes(input.value)),
     id: this.fieldName + '-' + formatId(input.value)
   };
