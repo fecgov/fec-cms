@@ -13,8 +13,8 @@ var helpers = require('./helpers');
 // Hack: Append jQuery to `window` for use by typeahead.js
 window.$ = window.jQuery = $;
 
-require('typeahead.js/dist/typeahead.jquery');
-var Bloodhound = require('typeahead.js/dist/bloodhound');
+require('corejs-typeahead/dist/typeahead.jquery');
+var Bloodhound = require('corejs-typeahead/dist/bloodhound');
 
 var events = require('./events');
 
@@ -241,7 +241,7 @@ var datasets = {
 };
 
 var typeaheadOpts = {
-  minLength: 3,
+  minLength: 3, // minimum characters before a search will happen
   highlight: true,
   hint: false
 };
