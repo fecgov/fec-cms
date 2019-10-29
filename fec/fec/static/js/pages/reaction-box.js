@@ -140,7 +140,7 @@ $(document).ready(function() {
   var reactionBoxes = document.querySelectorAll('.reaction-box');
   var names = [];
   //iterate over the reaction box(es)
-  for (const box of reactionBoxes) {
+  for (var box of reactionBoxes) {
     var name = box.getAttribute('data-name');
     var location = box.getAttribute('data-location');
     //push name to names array
