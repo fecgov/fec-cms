@@ -90,64 +90,7 @@
         <p>Established in 1975, the FEC is composed of six Commissioners who are appointed by the President and confirmed by the Senate. By law, no more than three can represent the same political party.</p>
         <a class="t-sans" href="/about/mission-and-history">Learn more about the FEC's history and mission »</a>
       </div>
-
-      <div class="grid grid--3-wide grid--no-border">
-        <div class="grid__item">
-          <div class="icon-heading">
-            <img class="icon-heading__image" src="{% static 'img/headshot--weintraub.jpg' %}" alt="Headshot of Ellen L. Weintraub">
-            <div class="icon-heading__content">
-              <div class="t-lead"><a href="/about/leadership-and-structure/ellen-l-weintraub">Ellen L. Weintraub</a></div>
-              <div class="t-note">Chair</div>
-              <div class="t-sans">Democrat</div>
-            </div>
-          </div>
-        </div>
-        <div class="grid__item">
-          <div class="icon-heading">
-            <img class="icon-heading__image" src="{% static 'img/headshot--hunter.jpg' %}" alt="Headshot of Caroline C. Hunter">
-            <div class="icon-heading__content">
-              <div class="t-lead"><a href="/about/leadership-and-structure/caroline-c-hunter">Caroline C. Hunter</a></div>
-              <div class="t-sans">Republican</div>
-            </div>
-          </div>
-        </div>
-        <div class="grid__item">
-          <div class="icon-heading">
-            <img class="icon-heading__image" src="{% static 'img/headshot--walther.jpg' %}" alt="Headshot of Steven T. Walther">
-            <div class="icon-heading__content">
-              <div class="t-lead"><a href="/about/leadership-and-structure/steven-t-walther">Steven T. Walther</a></div>
-              <div class="t-sans">Independent</div>
-            </div>
-          </div>
-        </div>
-        <div class="grid__item">
-          <div class="icon-heading">
-            <img class="icon-heading__image" src="{% static 'img/headshot--no-photo.jpg' %}" alt="Vacant Position">
-            <div class="icon-heading__content">
-              <div class="t-lead">Vacant seat</div>
-              <div class="t-sans"></div>
-            </div>
-          </div>
-        </div>
-        <div class="grid__item">
-          <div class="icon-heading">
-            <img class="icon-heading__image" src="{% static 'img/headshot--no-photo.jpg' %}" alt="Vacant Position">
-            <div class="icon-heading__content">
-              <div class="t-lead">Vacant seat</div>
-              <div class="t-sans"></div>
-            </div>
-          </div>
-        </div>
-        <div class="grid__item">
-          <div class="icon-heading">
-            <img class="icon-heading__image" src="{% static 'img/headshot--no-photo.jpg' %}" alt="Vacant Position">
-            <div class="icon-heading__content">
-              <div class="t-lead">Vacant seat</div>
-              <div class="t-sans"></div>
-            </div>
-          </div>
-        </div>
-      </div>
+      {% current_commissioners %}
     </div>
   </section>
 {% endblock %}

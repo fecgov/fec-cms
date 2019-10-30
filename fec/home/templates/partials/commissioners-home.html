@@ -1,12 +1,13 @@
-{% load wagtailimages_tags %}
+{% load commissioners %}
 {% load staticfiles %}
 {% comment %}
-  This partial is used by the inclusion tag in commissioners.py - current_commissioners().
-  The logic is exactly the same as in home-page.py - current_commissioners(), but includes a different template(this one)
-  Show the chair, then the vice chair, everyone else and vacant seats
+  This partial is used by the inclusion tag in home_page.py - current_commissioners().
+  The logic is exactly the same as in commissioners.py - current_commissioners(), but includes a different template(this one)
+  Show the chair, then the vice chair, everyone else and vacant seats.
 {% endcomment %}
-<div class="grid grid--2-wide">
-{% if chair_commissioner %}
+
+<div class="grid grid--3-wide u-padding--bottom">
+  {% if chair_commissioner %}
   {% include 'partials/commissioner.html' with commissioner=chair_commissioner %}
 {% endif %}
 
@@ -17,7 +18,6 @@
 {% for commissioner in commissioners %}
   {% include 'partials/commissioner.html' with commissioner=commissioner %}
 {% endfor %}
-
 {% for vacant in vacant_seats %}
   <div class="grid__item commissioner-height">
   <div class="icon-heading">
@@ -28,4 +28,4 @@
   </div>
 </div>
 {% endfor %}
-</div>
+ </div>
