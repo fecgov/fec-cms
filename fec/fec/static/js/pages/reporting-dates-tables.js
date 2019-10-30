@@ -73,11 +73,11 @@ const header_notes_modal_partial = `<div tabindex="-1" class="modal__overlay" da
 </div>`;
 
 function ReportingDates() {
-  //Declare globals (scoped to this function)to get past linter error/tests. For header_notes and footnotes objects declared in CMS field and CSS.escape
-  /* global header_notes, footnotes, CSS */
-
+  //Declare globals (scoped to this function)to get past linter error/tests. For header_notes and footnotes objects declared in CMS field, CSS.escape, Set()
+  /* global header_notes, footnotes, CSS, Set */
+  this.dates_table = document.getElementsByClassName('election-dates-table')[0];
   //get all acnhor links in TDs)
-  this.anchors = document.querySelectorAll("td a[href^='#']");
+  this.anchors = this.dates_table.querySelectorAll("td a[href^='#']");
 
   //disable default jump behavior for anchor links(#) but keep links for accessibility
   for (const anchor of this.anchors) {
@@ -89,6 +89,8 @@ function ReportingDates() {
   this.buildStaticElements();
 
   this.addFootnotes();
+
+  this.stripeByState();
 
   //Define media query
   const mql = window.matchMedia('screen and (max-width: 650px)');
@@ -143,73 +145,81 @@ ReportingDates.prototype.buildStaticElements = function() {
   //Add states dropdown template to page
   const dropdown_wrapper = document.createElement('div');
   dropdown_wrapper.innerHTML = states_dropdown_template;
-  const dates_table = document.getElementsByClassName(
-    'election-dates-table'
-  )[0];
-  const table_parent = dates_table.parentNode;
 
-  table_parent.insertBefore(dropdown_wrapper, dates_table);
+  const table_parent = this.dates_table.parentNode;
+
+  table_parent.insertBefore(dropdown_wrapper, this.dates_table);
 
   //Create static footnote/header note list
 
-  //build static list from header notes object
-  let hdr_str = `<h4>Header notes</h4>
-                 <p><ul><p><ul>`;
-  for (const key in header_notes) {
-    hdr_str += `<li>
-                <a name="hdr${key}" id="hdr${key}"></a>
-                <b>${key}</b>&nbsp;&nbsp;${header_notes[key]}
-              </l1>`;
+  let hdr_str = '';
+  //build static list from header notes object if it exists
+  if (typeof header_notes == 'object') {
+    hdr_str = `<h4>Header notes</h4>
+                   <p><ul><p><ul>`;
+    for (const key in header_notes) {
+      hdr_str += `<li>
+                  <a name="hdr${key}" id="hdr${key}"></a>
+                  <b>${key}</b>&nbsp;&nbsp;${header_notes[key]}
+                </l1>`;
+    }
+
+    hdr_str += `</ul></p>`;
   }
 
-  hdr_str += `</ul></p>`;
-
-  //build static list from footnotes object
-  let ftnt_str = `<h4>Footnotes</h4><p><ul>`;
-  for (const key in footnotes) {
-    ftnt_str += `<li>
-                 <a name="footnote_${key}" id="footnote_${key}"></a>
-                 <b>${key}</b>.&nbsp;${footnotes[key]}
-               </l1>`;
+  let ftnt_str = '';
+  //build static list from footnotes object if it exists
+  if (typeof footnotes == 'object') {
+    ftnt_str = `<h4>Footnotes</h4><p><ul>`;
+    for (const key in footnotes) {
+      ftnt_str += `<li>
+                   <a name="footnote_${key}" id="footnote_${key}"></a>
+                   <b>${key}</b>.&nbsp;${footnotes[key]}
+                 </l1>`;
+    }
+    ftnt_str += `</ul></p>`;
   }
-  ftnt_str += `</ul></p>`;
 
-  //create div for all notes
-  const static_notes = document.createElement('div');
-  static_notes.id = 'static_notes';
+  //create div for all notes if either foot or header notes exist
+  if (hdr_str || ftnt_str) {
+    const static_notes = document.createElement('div');
+    static_notes.id = 'static_notes';
 
-  //add combibed header_notes, footnotes list to collapsible div
-  static_notes.innerHTML = `
-                      <h2 class="t-inline-block u-margin--bottom--small">All footnotes</h2>
-                     ${hdr_str}${ftnt_str}`;
+    //add combibed header_notes, footnotes list to collapsible div
+    static_notes.innerHTML = `
+                        <h2 class="t-inline-block u-margin--bottom--small">All notes</h2>
+                       ${hdr_str}${ftnt_str}`;
 
-  //insert it after table
-  table_parent.insertBefore(static_notes, dates_table.nextSibling);
+    //insert it after table
+    table_parent.insertBefore(static_notes, this.dates_table.nextSibling);
+  }
 
-  //Create A11Y modal dialog for header_notes popup and add innerHTML
-  const dialog = document.createElement('div');
-  //Must add these three classes separately for IE :-(
-  dialog.classList.add('js-modal');
-  dialog.classList.add('modal');
-  dialog.classList.add('modal__content');
-  dialog.setAttribute('aria-hidden', 'true');
-  dialog.id = 'header_notes_modal';
-  document.body.appendChild(dialog);
-  dialog.innerHTML = header_notes_modal_partial;
-  //Populate dialog with all header notes
-  const dialog_p = document.querySelector('.modal p');
-  dialog_p.innerHTML = `${hdr_str}`;
+  if (typeof header_notes == 'object') {
+    //Create A11Y modal dialog for header_notes popup and add innerHTML
+    const dialog = document.createElement('div');
+    //Must add these three classes separately for IE :-(
+    dialog.classList.add('js-modal');
+    dialog.classList.add('modal');
+    dialog.classList.add('modal__content');
+    dialog.setAttribute('aria-hidden', 'true');
+    dialog.id = 'header_notes_modal';
+    document.body.appendChild(dialog);
+    dialog.innerHTML = header_notes_modal_partial;
+    //Populate dialog with all header notes
+    const dialog_p = document.querySelector('.modal p');
+    dialog_p.innerHTML = `${hdr_str}`;
 
-  const header_sups = document.querySelectorAll(
-    'tr:first-child th a[href^="#"]'
-  );
+    const header_sups = document.querySelectorAll(
+      'tr:first-child th a[href^="#"]'
+    );
 
-  //add data attribute to the header sups to open AY11 dialog
-  for (const header_sup of header_sups) {
-    header_sup.setAttribute('data-a11y-dialog-show', 'header_notes_modal');
-    header_sup.addEventListener('click', e => {
-      e.preventDefault();
-    });
+    //add data attribute to the header sups to open AY11 dialog
+    for (const header_sup of header_sups) {
+      header_sup.setAttribute('data-a11y-dialog-show', 'header_notes_modal');
+      header_sup.addEventListener('click', e => {
+        e.preventDefault();
+      });
+    }
   }
 };
 
@@ -335,7 +345,7 @@ ReportingDates.prototype.mediaQueryResponse = function(mql) {
 
 //Show chosen footnote or append it in Mobile view
 ReportingDates.prototype.showFootnotes = function(e) {
-  //escape symbols and invalid CSS selectors in indx
+  //escape symbols and invalid CSS selectors in indx (ie: '*', '**', etc.)
   const indx = CSS.escape(e.target.textContent);
   //get the string representaton of indx to use elsewhere
   const clean_indx = e.target.textContent;
@@ -381,7 +391,17 @@ ReportingDates.prototype.showFootnotes = function(e) {
     //set bg color on footnote rows to match parent rows
     live_note[0].style.backgroundColor = bgColor;
     //hide bottom border under cell in which the footnote sup was clicked
-    el_td.style.borderBottom = `1px solid ${newColor}`;
+    // or left border for first-column cells
+    if (el_td.cellIndex == '0') {
+      current_row.parentNode.rows[
+        current_row.rowIndex + 1
+      ].cells[0].setAttribute(
+        'style',
+        `border-right:1px solid ${newColor} !important`
+      );
+    } else {
+      el_td.style.borderBottom = `1px solid ${newColor}`;
+    }
 
     //hide all but the footnote clicked
     for (const not of not_live_note) {
@@ -442,6 +462,22 @@ ReportingDates.prototype.showFootnotes = function(e) {
       const this_span = x.closest('span');
       this_span.remove();
     });
+  }
+};
+
+ReportingDates.prototype.stripeByState = function() {
+  const bg = 'rgba(241,241,241,.5)';
+  const state_rows = this.dates_table.getElementsByTagName('tr');
+  let state_class = [];
+  for (const tr of state_rows) {
+    state_class.push(tr.classList.item(0));
+  }
+  let unique = [...new Set(state_class)];
+  for (let x = 0; x < unique.length; x += 2) {
+    const unique_row = this.dates_table.getElementsByClassName(unique[x]);
+    for (const un of unique_row) {
+      un.style.backgroundColor = bg;
+    }
   }
 };
 
