@@ -7,7 +7,7 @@ from django.db.models import Q
 register = template.Library()
 
 @register.inclusion_tag('partials/current-commissioners.html')
-def current_commissioners():
+def current_commissioners(grid):
     current_commissioners = CommissionerPage.objects.filter(term_expiration__isnull=True)
     chair_commissioner = current_commissioners.filter(commissioner_title__startswith='Chair') \
         .exclude(commissioner_title__contains='Vice').first()
@@ -33,4 +33,5 @@ def current_commissioners():
         'vice_commissioner': vice_commissioner,
         'commissioners': other_commissioners,
         'vacant_seats' : vacant_seats,
+        'grid': grid,
     }
