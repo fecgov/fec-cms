@@ -211,8 +211,7 @@ def legal_doc_search_regulations(request):
     query = request.GET.get('search', '')
     offset = request.GET.get('offset', 0)
 
-    if query:
-        results = api_caller.load_legal_search_results(query, 'regulations', offset=offset)
+    results = api_caller.load_legal_search_results(query, 'regulations', offset=offset)
 
     return render(request, 'legal-search-results-regulations.jinja', {
         'parent': 'legal',
@@ -228,8 +227,7 @@ def legal_doc_search_statutes(request):
     query = request.GET.get('search', '')
     offset = request.GET.get('offset', 0)
 
-    if query:
-        results = api_caller.load_legal_search_results(query, 'statutes', offset=offset)
+    results = api_caller.load_legal_search_results(query, 'statutes', offset=offset)
 
     return render(request, 'legal-search-results-statutes.jinja', {
         'parent': 'legal',
