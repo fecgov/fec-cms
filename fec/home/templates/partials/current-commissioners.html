@@ -1,10 +1,10 @@
 {% load wagtailimages_tags %}
 {% load staticfiles %}
 {% comment %}
-  This partial is used by the commissioners inclusion tag in commissioners.py
+  This partial is used by the inclusion tag in commissioners.py - current_commissioners(). Set the `grid` argument to control the layout.
   Show the chair, then the vice chair, everyone else and vacant seats
 {% endcomment %}
-<div class="grid grid--2-wide">
+<div class="grid grid--{{grid}}-wide">
 {% if chair_commissioner %}
   {% include 'partials/commissioner.html' with commissioner=chair_commissioner %}
 {% endif %}
