@@ -375,11 +375,9 @@ $(document).ready(function() {
   // reset timePeriod in the range of cycles_has_financial
   var cycle_out_of_range = context.cycle_out_of_range;
   if (cycle_out_of_range == 'true') {
-    context.timePeriod =
-      Number(context.last_cycle_has_financial) -
-      1 +
-      '–' +
-      context.last_cycle_has_financial;
+    var last_cycle = Number(context.last_cycle_has_financial);
+    var last_cycle_1 = last_cycle - 1;
+    context.timePeriod = last_cycle_1 + '–' + last_cycle;
   }
 
   // Set up data tables
