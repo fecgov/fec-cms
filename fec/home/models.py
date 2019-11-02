@@ -1136,7 +1136,7 @@ class MeetingPage(Page):
         return 'meeting-page'
 
 
-class ReportingExamplePage(Page):
+class ExamplePage(Page):
     """Page template for "how to report" and "example scenario" pages
     Always within the Help section"""
     featured_image = models.ForeignKey('wagtailimages.Image', blank=True, null=True,
@@ -1151,6 +1151,7 @@ class ReportingExamplePage(Page):
     body = StreamField([
         ('paragraph', blocks.RichTextBlock()),
         ('example_image', ExampleImage()),
+        ('reporting_example_cards', ReportingExampleCards()),
         ('reporting_example_cards', ReportingExampleCards()),
         ('internal_button', InternalButtonBlock()),
         ('external_button', ExternalButtonBlock()),
@@ -1174,7 +1175,6 @@ class ReportingExamplePage(Page):
     @property
     def content_section(self):
         return 'help'
-
 
 @register_snippet
 class EmbedTableSnippet(models.Model):
