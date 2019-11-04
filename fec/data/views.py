@@ -147,7 +147,7 @@ def get_candidate(candidate_id, cycle, election_full):
     #   to even number. (ex:2017=>2018)
     # even_election_years = candidate.get('rounded_election_years')
 
-    # if cycle = null, set cycle = the latest item in rounded_election_years.
+    # if cycle = null, set cycle = the last of rounded_election_years.
     if not cycle:
         cycle = max(candidate.get('rounded_election_years'))
 
@@ -176,11 +176,12 @@ def get_candidate(candidate_id, cycle, election_full):
         'candidateID': candidate['candidate_id'],
     }
 
-    # Grab the most recent two-year period with data within this cycle
-    # Used for raising/spending tabs
-    max_cycle = max(
-        year for year in candidate['fec_cycles_in_election'] if year <= cycle
-    )
+    # Check if cycle > latest_fec_cycles_in_election, such as:future candidate.
+    latest_fec_cycles_in_election = max(candidate['fec_cycles_in_election'])
+    if int(cycle) > latest_fec_cycles_in_election:
+        max_cycle = int(latest_fec_cycles_in_election)
+    else:
+        max_cycle = int(cycle)
 
     # Annotate committees with most recent available cycle
     aggregate_cycles = (
