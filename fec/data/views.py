@@ -336,6 +336,10 @@ def get_committee(committee_id, cycle):
         path = '/committee/' + committee_id + '/history/'
         committee = api_caller.load_first_row_data(path, **filters)
         cycle = committee.get('last_cycle_has_financial')
+        if not cycle:
+            # when committees only file F1.last_cycle_has_financial = null
+            # set cycle = last_cycle_has_activity
+            cycle = committee.get('last_cycle_has_activity')
     else:
         # (1.2)call committee/{committee_id}/history/{cycle}/
         # under tag:committee
@@ -352,8 +356,6 @@ def get_committee(committee_id, cycle):
     # When there are multiple candidate records of various offices (H, S, P)
     # linked to a single committee ID,
     # associate the candidate record with the matching committee type
-    # print("committee['committee_type']=" + committee['committee_type'])
-
     candidates = [
         candidate
         for candidate in all_candidates
@@ -387,13 +389,26 @@ def get_committee(committee_id, cycle):
     # when cycle is out of [cycles_has_financial] range.
     # set cycle = last_cycle_has_financial to call endpoint
     # to get reports and totals
+
     cycle_out_of_range = False
     last_cycle_has_financial = committee.get('last_cycle_has_financial')
-    min_cycle_has_financial = min(committee.get('cycles_has_financial'))
+    if not last_cycle_has_financial:
+        # when committees only file F1, last_cycle_has_financial = null
+        # set last_cycle_has_financial = last_cycle_has_activity
+        last_cycle_has_financial = committee.get('last_cycle_has_activity')
+
+    if committee.get('cycles_has_financial'):
+        min_cycle_has_financial = min(committee.get('cycles_has_financial'))
+        cycles = committee.get('cycles_has_financial')
+    else:
+        # when committees only file F1, cycles_has_financial = null
+        # set cycles = cycles_has_activity
+        min_cycle_has_financial = min(committee.get('cycles_has_activity'))
+        cycles = committee.get('cycles_has_activity')
+
     if int(cycle) > int(last_cycle_has_financial) or int(cycle) < int(min_cycle_has_financial):
         cycle_out_of_range = True
 
-    # path = '/filings?'
     path = '/filings/'
     filters = {}
     filters['committee_id'] = committee_id
@@ -450,7 +465,7 @@ def get_committee(committee_id, cycle):
         'committee_type': committee['committee_type'],
         'context_vars': context_vars,
         'cycle': cycle,
-        'cycles': committee['cycles_has_financial'],
+        'cycles': cycles,
         'is_SSF': is_ssf,
         'min_receipt_date': utils.three_days_ago(),
         'cycle_out_of_range': cycle_out_of_range,
