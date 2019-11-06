@@ -176,12 +176,12 @@ def get_candidate(candidate_id, cycle, election_full):
         'candidateID': candidate['candidate_id'],
     }
 
+    max_cycle = int(cycle)
     # Check if cycle > latest_fec_cycles_in_election, such as:future candidate.
-    latest_fec_cycles_in_election = max(candidate['fec_cycles_in_election'])
-    if int(cycle) > latest_fec_cycles_in_election:
-        max_cycle = int(latest_fec_cycles_in_election)
-    else:
-        max_cycle = int(cycle)
+    if candidate['fec_cycles_in_election']:
+        latest_fec_cycles_in_election = max(candidate['fec_cycles_in_election'])
+        if int(cycle) > latest_fec_cycles_in_election:
+            max_cycle = latest_fec_cycles_in_election
 
     # Annotate committees with most recent available cycle
     aggregate_cycles = (

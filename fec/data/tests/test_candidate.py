@@ -199,3 +199,83 @@ class TestCandidate(TestCase):
         assert candidate["election_years"] == [2018, 2024]
         assert candidate["election_year"] == 2024
         assert candidate["max_cycle"] == 2020
+
+    def test_candidate_not_in_election_max_cycle(
+        self,
+        load_with_nested_mock,
+        load_first_row_data_mock,
+        load_candidate_statement_of_candidacy_mock,
+    ):
+        # test candidate election year(one or more of election_years)
+        # is not exist in fec_cycles_in_election ex:P80001571/1988
+        test_candidate = copy.deepcopy(self.STOCK_CANDIDATE)
+        test_candidate["candidate_id"] = ["P001"]
+        test_candidate["fec_cycles_in_election"] = [2016, 2018, 2020]
+        test_candidate["election_years"] = [1988, 2016, 2020]
+        test_candidate["rounded_election_years"] = [1988, 2016, 2020]
+
+        test_committee_list = copy.deepcopy(self.STOCK_COMMITTEE_LIST)
+        test_committee_list[0] = (
+            {
+                'designation': 'P',
+                'cycles': [2016, 2014, 2012, 2018, 2020],
+                'name': 'My Primary Campaign Committee',
+                'cycle': 2018,
+                'committee_id': 'C001',
+            },
+        )
+        test_committee_list.append(
+            {
+                'designation': 'P',
+                'cycles': [2016, 2014, 2012, 2018, 2020],
+                'name': 'My Primary Campaign Committee',
+                'cycle': 1988,
+                'committee_id': 'C001',
+            }
+        )
+
+        load_with_nested_mock.return_value = (test_candidate, mock.MagicMock(), 1988)
+        candidate = get_candidate('P001', 1988, True)
+        assert candidate["election_years"] == [1988, 2016, 2020]
+        assert candidate["election_year"] == 1988
+        assert candidate["max_cycle"] == 1988
+
+    def test_null_fec_cycles_in_election_max_cycle(
+        self,
+        load_with_nested_mock,
+        load_first_row_data_mock,
+        load_candidate_statement_of_candidacy_mock,
+    ):
+        # test candidate only file F2. fec_cycles_in_election=null.
+        # ex:P00012799 (2020)
+        test_candidate = copy.deepcopy(self.STOCK_CANDIDATE)
+        test_candidate["candidate_id"] = ["P002"]
+        test_candidate["fec_cycles_in_election"] = None
+        test_candidate["election_years"] = [2020]
+        test_candidate["rounded_election_years"] = [2020]
+
+        test_committee_list = copy.deepcopy(self.STOCK_COMMITTEE_LIST)
+        test_committee_list[0] = (
+            {
+                'designation': 'P',
+                'cycles': [2016, 2014, 2012, 2018, 2020],
+                'name': 'My Primary Campaign Committee',
+                'cycle': 2018,
+                'committee_id': 'C001',
+            },
+        )
+        test_committee_list.append(
+            {
+                'designation': 'P',
+                'cycles': [2016, 2014, 2012, 2018, 2020],
+                'name': 'My Primary Campaign Committee',
+                'cycle': 2020,
+                'committee_id': 'C001',
+            }
+        )
+
+        load_with_nested_mock.return_value = (test_candidate, mock.MagicMock(), 2020)
+        candidate = get_candidate('P002', 2020, True)
+        assert candidate["election_years"] == [2020]
+        assert candidate["election_year"] == 2020
+        assert candidate["max_cycle"] == 2020
