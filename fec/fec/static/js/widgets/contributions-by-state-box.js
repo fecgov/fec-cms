@@ -64,10 +64,13 @@ function buildIndividualContributionsUrl(cycle, office, committeeIDs, stateID) {
 
   // The API currently wants a two_year_transaction_period value for each set of two years
   // so we'll add the previous two-year period for presidential races
-  if (office == 'P')
+  //
+  // Also, Puerto Rico's House elections are for four years so we'll need to
+  // add the previous two-year period to the query string for H + PR, too.
+  if (office == 'P' || (office == 'H' && stateID == 'PR')) {
     transactionPeriodsString += '&two_year_transaction_period=' + (cycle - 2);
-  // and the two earlier two-year periods for Senate races
-  else if (office == 'S') {
+    // and the two earlier two-year periods for Senate races
+  } else if (office == 'S') {
     transactionPeriodsString += '&two_year_transaction_period=' + (cycle - 2);
     transactionPeriodsString += '&two_year_transaction_period=' + (cycle - 4);
   }
