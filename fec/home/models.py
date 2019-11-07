@@ -1154,7 +1154,6 @@ class ExamplePage(Page):
         ('paragraph', blocks.RichTextBlock()),
         ('example_image', ExampleImage()),
         ('reporting_example_cards', ReportingExampleCards()),
-        ('reporting_example_cards', ReportingExampleCards()),
         ('internal_button', InternalButtonBlock()),
         ('external_button', ExternalButtonBlock()),
         ('image', ImageChooserBlock()),
