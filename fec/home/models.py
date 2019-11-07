@@ -64,7 +64,9 @@ stream_factory = functools.partial(
         ('image', ImageChooserBlock()),
         ('table', TableBlock(table_options=core_table_options)),
         ('custom_table', CustomTableBlock()),
-        ('contact', ContactInfoBlock())
+        ('contact', ContactInfoBlock()),
+        ('internal_button', InternalButtonBlock()),
+        ('external_button', ExternalButtonBlock()),
     ],
 )
 
