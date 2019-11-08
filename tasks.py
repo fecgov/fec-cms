@@ -75,7 +75,7 @@ DEPLOY_RULES = (
     ('stage', lambda _, branch: branch.startswith('release')),
     ('dev', lambda _, branch: branch == 'develop'),
     # Uncomment below and adjust branch name to deploy desired feature branch to the feature space
-    ('feature', lambda _, branch: branch == 'feature/2935-internal-external-link-record-and-example-templates'),
+    #('feature', lambda _, branch: branch == 'feature/the-branch-name'),
 )
 
 
