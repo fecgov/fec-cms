@@ -398,10 +398,10 @@ $(document).ready(function() {
     };
     switch ($table.attr('data-type')) {
       case 'contribution-size':
-        path = ['committee', committeeId, 'schedules', 'schedule_a', 'by_size'];
+        path = ['schedules', 'schedule_a', 'by_size'];
         tables.DataTable.defer($table, {
           path: path,
-          query: query,
+          query: _.extend({}, query, { committee_id: committeeId }),
           columns: sizeColumns,
           callbacks: aggregateCallbacks,
           dom: 't',
@@ -420,19 +420,15 @@ $(document).ready(function() {
         });
         break;
       case 'receipts-by-state':
-        path = [
-          'committee',
-          committeeId,
-          'schedules',
-          'schedule_a',
-          'by_state'
-        ];
-        query = _.extend(query, {
-          per_page: 99
-        });
+        path = ['schedules', 'schedule_a', 'by_state'];
         tables.DataTable.defer($table, {
           path: path,
-          query: query,
+          query: _.extend(
+            {},
+            query,
+            { committee_id: committeeId },
+            { per_page: 99 }
+          ),
           columns: stateColumns,
           callbacks: aggregateCallbacks,
           aggregateExport: true,
@@ -447,18 +443,12 @@ $(document).ready(function() {
 
         break;
       case 'receipts-by-employer':
-        path = [
-          'committee',
-          committeeId,
-          'schedules',
-          'schedule_a',
-          'by_employer'
-        ];
+        path = ['schedules', 'schedule_a', 'by_employer'];
         tables.DataTable.defer(
           $table,
           _.extend({}, tableOpts, {
             path: path,
-            query: query,
+            query: _.extend({}, query, { committee_id: committeeId }),
             columns: employerColumns,
             callbacks: aggregateCallbacks,
             order: [[1, 'desc']],
@@ -472,18 +462,12 @@ $(document).ready(function() {
         );
         break;
       case 'receipts-by-occupation':
-        path = [
-          'committee',
-          committeeId,
-          'schedules',
-          'schedule_a',
-          'by_occupation'
-        ];
+        path = ['schedules', 'schedule_a', 'by_occupation'];
         tables.DataTable.defer(
           $table,
           _.extend({}, tableOpts, {
             path: path,
-            query: query,
+            query: _.extend({}, query, { committee_id: committeeId }),
             columns: occupationColumns,
             callbacks: aggregateCallbacks,
             order: [[1, 'desc']],
@@ -523,18 +507,12 @@ $(document).ready(function() {
         );
         break;
       case 'disbursements-by-recipient':
-        path = [
-          'committee',
-          committeeId,
-          'schedules',
-          'schedule_b',
-          'by_recipient'
-        ];
+        path = ['schedules', 'schedule_b', 'by_recipient'];
         tables.DataTable.defer(
           $table,
           _.extend({}, tableOpts, {
             path: path,
-            query: query,
+            query: _.extend({}, query, { committee_id: committeeId }),
             columns: disbursementRecipientColumns,
             callbacks: aggregateCallbacks,
             order: [[1, 'desc']],
@@ -598,18 +576,12 @@ $(document).ready(function() {
         );
         break;
       case 'disbursements-by-recipient-id':
-        path = [
-          'committee',
-          committeeId,
-          'schedules',
-          'schedule_b',
-          'by_recipient_id'
-        ];
+        path = ['schedules', 'schedule_b', 'by_recipient_id'];
         tables.DataTable.defer(
           $table,
           _.extend({}, tableOpts, {
             path: path,
-            query: query,
+            query: _.extend({}, query, { committee_id: committeeId }),
             columns: disbursementRecipientIDColumns,
             callbacks: aggregateCallbacks,
             order: [[1, 'desc']],
@@ -623,16 +595,10 @@ $(document).ready(function() {
         );
         break;
       case 'independent-expenditure-committee':
-        path = [
-          'committee',
-          committeeId,
-          'schedules',
-          'schedule_e',
-          'by_candidate'
-        ];
+        path = ['schedules', 'schedule_e', 'by_candidate'];
         tables.DataTable.defer($table, {
           path: path,
-          query: query,
+          query: _.extend({}, query, { committee_id: committeeId }),
           columns: expendituresColumns,
           order: [[0, 'desc']],
           dom: tables.simpleDOM,
@@ -853,19 +819,11 @@ $(document).ready(function() {
 
   // Set up state map
   var $map = $('.state-map');
-  var mapUrl = helpers.buildUrl(
-    [
-      'committee',
-      $map.data('committee-id'),
-      'schedules',
-      'schedule_a',
-      'by_state'
-    ],
-    {
-      cycle: $map.data('cycle'),
-      per_page: 99
-    }
-  );
+  var mapUrl = helpers.buildUrl(['schedules', 'schedule_a', 'by_state'], {
+    committee_id: $map.data('committee-id'),
+    cycle: $map.data('cycle'),
+    per_page: 99
+  });
 
   var query = URI.parseQuery(window.location.search);
 
