@@ -182,13 +182,14 @@ h3 + .simple-table {
   margin: u(2rem 0);
 
 
-  thead tr, tr:first-child {
+  thead tr {
     border-bottom: 1px solid $primary;
     font-weight: 600;
     text-align: left;
   }
 
     th {
+      font-weight: 600;
       padding: u(1rem);
       border-bottom: 1px solid $primary;
 
