@@ -20,7 +20,7 @@
       border-radius: 2px;
     }
   }
-
+}
   .block-table {
     table {
       @extend .simple-table;
@@ -38,7 +38,7 @@
       @extend .simple-table__header;
     }
   }
-}
+
 
 // Author-list component
 // could be moved to fec-style/scss/components/_author-list.scss
