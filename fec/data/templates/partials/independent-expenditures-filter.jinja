@@ -22,7 +22,7 @@ Filter independent expenditures
 {% block efiling_filters %}
 <div class="filters__inner">
   {{ typeahead.field('committee_id', 'Spender name or ID', id_suffix='_raw') }}
-  {{ text.field('candidate_name', 'Candidate mentioned', id_suffix='_raw')}}
+  {{ text.field('candidate_search', 'Candidate mentioned', id_suffix='_raw')}}
   {{ support_oppose.checkbox('_raw') }}
   {{ date.field('expenditure_date', 'Expenditure date', id_suffix='_raw') }}
 </div>
