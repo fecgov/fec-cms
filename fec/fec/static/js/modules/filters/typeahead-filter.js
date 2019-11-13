@@ -40,7 +40,7 @@ TypeaheadFilter.prototype.handleNestedChange = function(e) {
   var $label = this.$elm.find('[for="' + id + '"]');
 
   var eventName = $input.is(':checked') ? 'filter:added' : 'filter:removed';
-  
+
   $input.trigger(eventName, [
     {
       key: id,

@@ -452,7 +452,7 @@ ContributionsByState.prototype.loadCandidateCoverageDates = function() {
             data.results[0].coverage_start_date.substring(0, 19)
           );
           let coverage_end_date = new Date(
-            data.results[0].coverage_end_date.substring(0, 19)
+            data.results[0].transaction_coverage_date.substring(0, 19)
           );
 
           // Remember the in-page elements

@@ -186,7 +186,7 @@ def get_social_image_path(identifier):
     elif identifier == 'weekly-digest':
         imageFilename = 'fec-seal'
     elif identifier == 'data':
-        imageFilename = 'data'
+        imageFilename = 'fec-data'
     elif identifier in ['legal', 'help']:
         imageFilename = 'fec-' + identifier
     else:
