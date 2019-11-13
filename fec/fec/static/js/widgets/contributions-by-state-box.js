@@ -52,7 +52,7 @@ function formatAsCurrency(passedValue, roundToWhole = true) {
  * @param {String} stateID Optional. A null value will not filter for any state but show entries for the entire country
  * @returns {String} URL or empty string depending on
  */
-function buildIndividualContributionsUrl(cycle, office, committeeIDs, stateID) {
+function buildIndividualContributionsUrl(cycle, office, committeeIDs, stateID, candidateState) {
   // If we're missing required params, just return '' and be done
   if (!cycle || !office || !committeeIDs) return '';
 
@@ -66,8 +66,8 @@ function buildIndividualContributionsUrl(cycle, office, committeeIDs, stateID) {
   // so we'll add the previous two-year period for presidential races
   //
   // Also, Puerto Rico's House elections are for four years so we'll need to
-  // add the previous two-year period to the query string for H + PR, too.
-  if (office == 'P' || (office == 'H' && stateID == 'PR')) {
+  // add the previous two-year period to the query string for House candidates from Puerto Rico
+  if (office == 'P' || (office == 'H' && candidateState == 'PR')) {
     transactionPeriodsString += '&two_year_transaction_period=' + (cycle - 2);
     // and the two earlier two-year periods for Senate races
   } else if (office == 'S') {
@@ -699,7 +699,8 @@ ContributionsByState.prototype.displayUpdatedData_states = function() {
         this.baseStatesQuery.cycle,
         this.baseStatesQuery.office,
         theCommitteeIDs,
-        theResults[i].state
+        theResults[i].state,
+        this.candidateDetails.state
       );
 
       // Number cell
