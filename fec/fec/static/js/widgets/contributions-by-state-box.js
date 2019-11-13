@@ -52,7 +52,13 @@ function formatAsCurrency(passedValue, roundToWhole = true) {
  * @param {String} stateID Optional. A null value will not filter for any state but show entries for the entire country
  * @returns {String} URL or empty string depending on
  */
-function buildIndividualContributionsUrl(cycle, office, committeeIDs, stateID, candidateState) {
+function buildIndividualContributionsUrl(
+  cycle,
+  office,
+  committeeIDs,
+  stateID,
+  candidateState
+) {
   // If we're missing required params, just return '' and be done
   if (!cycle || !office || !committeeIDs) return '';
 
