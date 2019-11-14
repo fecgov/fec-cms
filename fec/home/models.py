@@ -64,7 +64,9 @@ stream_factory = functools.partial(
         ('image', ImageChooserBlock()),
         ('table', TableBlock(table_options=core_table_options)),
         ('custom_table', CustomTableBlock()),
-        ('contact', ContactInfoBlock())
+        ('contact', ContactInfoBlock()),
+        ('internal_button', InternalButtonBlock()),
+        ('external_button', ExternalButtonBlock()),
     ],
 )
 
@@ -1136,7 +1138,7 @@ class MeetingPage(Page):
         return 'meeting-page'
 
 
-class ReportingExamplePage(Page):
+class ExamplePage(Page):
     """Page template for "how to report" and "example scenario" pages
     Always within the Help section"""
     featured_image = models.ForeignKey('wagtailimages.Image', blank=True, null=True,
@@ -1144,13 +1146,18 @@ class ReportingExamplePage(Page):
 
     pre_title = models.CharField(blank=True, null=True, max_length=255, choices=[
             ('how', 'How to report'),
-            ('scenario', 'Example scenario')
+            ('scenario', 'Example scenario'),
+            ('example','Example')
     ])
 
     body = StreamField([
         ('paragraph', blocks.RichTextBlock()),
         ('example_image', ExampleImage()),
-        ('reporting_example_cards', ReportingExampleCards())
+        ('reporting_example_cards', ReportingExampleCards()),
+        ('internal_button', InternalButtonBlock()),
+        ('external_button', ExternalButtonBlock()),
+        ('image', ImageChooserBlock()),
+        ('html', blocks.RawHTMLBlock()),
     ], null=True)
 
     related_media_title = models.CharField(blank=True, null=True, max_length=255)

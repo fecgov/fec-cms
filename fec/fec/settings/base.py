@@ -52,6 +52,7 @@ FEATURES = {
     'barcharts': bool(env.get_credential('FEC_FEATURE_HOME_BARCHARTS', '')),
     'use_tag_manager': bool(env.get_credential('FEC_FEATURE_USE_TAG_MANAGER', '')),
     'contributionsbystate': bool(env.get_credential('FEC_FEATURE_CONTRIBUTIONS_BY_STATE', '')),
+    'wccf_reaction': bool(env.get_credential('FEC_FEATURE_WCCF_REACTION', '')),
 }
 
 ENVIRONMENTS = {
