@@ -25,7 +25,7 @@ var missingTemplate = require('../templates/tables/noData.hbs');
 var simpleDOM = 't<"results-info"lpi>';
 var browseDOM = '<"panel__main"t>' + '<"results-info"lpi>';
 // Source documentation for these two ^ :
-// https://datatables.net/reference/option/pagingType
+// https://datatables.net/reference/option/dom
 
 // To change the number of items in the "Showing __ of __ entries" blocks.
 // $.fn.DataTable.ext.pager.numbers_length = 5;
@@ -445,7 +445,7 @@ var defaultOpts = {
   language: {
     lengthMenu: 'Results per page: _MENU_'
   },
-  pagingType: 'simple_numbers',
+  pagingType: 'simple_numbers', // see https://datatables.net/reference/option/pagingType
   title: null,
   dom: browseDOM,
   error400Message:
