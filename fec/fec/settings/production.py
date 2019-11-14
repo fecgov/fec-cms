@@ -16,8 +16,8 @@ CSRF_COOKIE_HTTPONLY = True
 
 # TODO(jmcarp) Update after configuring DNS
 ALLOWED_HOSTS = [
-    '*.fec.gov',
-    '*.app.cloud.gov'
+    '.fec.gov',
+    '.app.cloud.gov'
 ]
 
 try:
