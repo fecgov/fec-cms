@@ -1,5 +1,9 @@
 'use strict';
 
+/**
+ * pagingType documentation: https://datatables.net/reference/option/pagingType
+ */
+
 var $ = require('jquery');
 var _ = require('underscore');
 
@@ -445,7 +449,7 @@ var defaultOpts = {
   language: {
     lengthMenu: 'Results per page: _MENU_'
   },
-  pagingType: 'simple_numbers', // see https://datatables.net/reference/option/pagingType
+  pagingType: 'simple',
   title: null,
   dom: browseDOM,
   error400Message:

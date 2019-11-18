@@ -2,6 +2,10 @@
 
 /* global WEBMANAGER_EMAIL */
 
+/**
+ * pagingType documentation: https://datatables.net/reference/option/pagingType
+ */
+
 var $ = require('jquery');
 var URI = require('urijs');
 
@@ -386,7 +390,7 @@ function initSpendingTables() {
         columns: opts.columns,
         order: [[0, 'desc']],
         dom: tables.simpleDOM,
-        pagingType: 'simple',
+        pagingType: 'simple', 
         lengthChange: true,
         pageLength: 10,
         lengthMenu: [10, 50, 100],
