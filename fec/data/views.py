@@ -326,7 +326,7 @@ def get_committee(committee_id, cycle):
     """
 
     redirect_to_previous = False if cycle else True
-    committee, all_candidates, cycle = api_caller.load_with_nested(
+    committee, all_candidates, cycle = api_caller.get_committee_all_candidates_cycle(
         'committee',
         committee_id,
         'candidates',

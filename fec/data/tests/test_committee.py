@@ -8,7 +8,7 @@ from data.views import get_committee
 
 @mock.patch.object(api_caller, '_call_api')
 @mock.patch.object(api_caller, 'load_cmte_financials')
-@mock.patch.object(api_caller, 'load_with_nested')
+@mock.patch.object(api_caller, 'get_committee_all_candidates_cycle')
 class TestCommittee(TestCase):
 
     STOCK_COMMITTEE = {
@@ -165,12 +165,12 @@ class TestCommittee(TestCase):
     }
 
     def test_base_case(
-        self, load_with_nested_mock, load_cmte_financials_mock, _call_api_mock
+        self, get_committee_all_candidates_cycle_mock, load_cmte_financials_mock, _call_api_mock
     ):
         cycle = 2018
 
         test_committee = copy.deepcopy(self.STOCK_COMMITTEE)
-        load_with_nested_mock.return_value = (test_committee, [], cycle)
+        get_committee_all_candidates_cycle_mock.return_value = (test_committee, [], cycle)
         load_cmte_financials_mock.return_value = self.STOCK_FINANCIALS
         committee = get_committee('C001', 2018)
 
@@ -202,13 +202,13 @@ class TestCommittee(TestCase):
         assert committee['candidates'] == []
 
     def test_ie_summary(
-        self, load_with_nested_mock, load_cmte_financials_mock, _call_api_mock
+        self, get_committee_all_candidates_cycle_mock, load_cmte_financials_mock, _call_api_mock
     ):
         cycle = 2018
 
         test_committee = copy.deepcopy(self.STOCK_COMMITTEE)
         test_committee['committee_type'] = 'I'
-        load_with_nested_mock.return_value = (test_committee, [], cycle)
+        get_committee_all_candidates_cycle_mock.return_value = (test_committee, [], cycle)
         load_cmte_financials_mock.return_value = {
             'reports': [{'report_type_full': 'YEAR-END', 'report_type': 'YE'}],
             'totals': [
@@ -227,13 +227,13 @@ class TestCommittee(TestCase):
         ]
 
     def test_inaugural_summary(
-        self, load_with_nested_mock, load_cmte_financials_mock, _call_api_mock
+        self, get_committee_all_candidates_cycle_mock, load_cmte_financials_mock, _call_api_mock
     ):
         cycle = 2018
 
         test_committee = copy.deepcopy(self.STOCK_COMMITTEE)
         test_committee['organization_type'] = 'I'
-        load_with_nested_mock.return_value = (test_committee, [], cycle)
+        get_committee_all_candidates_cycle_mock.return_value = (test_committee, [], cycle)
         load_cmte_financials_mock.return_value = {
             'reports': [
                 {'report_type_full': 'POST INAUGURAL SUPPLEMENT', 'report_type': '90S'}
@@ -249,14 +249,14 @@ class TestCommittee(TestCase):
         ]
 
     def test_host_f4_summary(
-        self, load_with_nested_mock, load_cmte_financials_mock, _call_api_mock
+        self, get_committee_all_candidates_cycle_mock, load_cmte_financials_mock, _call_api_mock
     ):
 
         cycle = 2018
 
         test_committee = copy.deepcopy(self.STOCK_COMMITTEE)
         test_committee['organization_type'] = 'H'
-        load_with_nested_mock.return_value = (test_committee, [], cycle)
+        get_committee_all_candidates_cycle_mock.return_value = (test_committee, [], cycle)
         load_cmte_financials_mock.return_value = {
             'reports': [
                 {
@@ -409,13 +409,13 @@ class TestCommittee(TestCase):
         ]
 
     def test_host_f3x_summary_returns_standard_values(
-        self, load_with_nested_mock, load_cmte_financials_mock, _call_api_mock
+        self, get_committee_all_candidates_cycle_mock, load_cmte_financials_mock, _call_api_mock
     ):
         cycle = 2018
 
         test_committee = copy.deepcopy(self.STOCK_COMMITTEE)
         test_committee['organization_type'] = 'H'
-        load_with_nested_mock.return_value = (test_committee, [], cycle)
+        get_committee_all_candidates_cycle_mock.return_value = (test_committee, [], cycle)
         load_cmte_financials_mock.return_value = self.STOCK_FINANCIALS
         committee = get_committee('C001', 2018)
 

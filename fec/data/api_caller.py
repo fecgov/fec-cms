@@ -292,6 +292,36 @@ def load_with_nested(primary_type, primary_id, secondary_type, cycle=None, **que
 
     return data, nested_data['results'], cycle
 
+def get_committee_all_candidates_cycle(primary_type, primary_id, secondary_type, cycle=None, **query):
+
+    filters = {}
+    filters['per_page'] = 1
+    if not cycle:
+        # if no cycle parameter given,
+        # (1.1)call committee/{committee_id}/history/ under tag:committee
+        # set cycle = last_cycle_has_financial
+        path = '/committee/' + committee_id + '/history/'
+        committee = api_caller.load_first_row_data(path, **filters)
+        cycle = committee.get('last_cycle_has_financial')
+        if not cycle:
+            # when committees only file F1.last_cycle_has_financial = null
+            # set cycle = last_cycle_has_activity
+            cycle = committee.get('last_cycle_has_activity')
+    else:
+        # (1.2)call committee/{committee_id}/history/{cycle}/
+        # under tag:committee
+        path = '/committee/' + committee_id + '/history/' + str(cycle)
+        committee = api_caller.load_first_row_data(path, **filters)
+
+    # (2)call committee/{committee_id}/candidates/history/{cycle}
+    # under: candidate, get all candidates associated with that commitee
+    path = '/committee/' + committee_id + '/candidates/history/' + str(cycle)
+    filters = {}
+    filters['election_full'] = 'false'
+    all_candidates = api_caller.load_endpoint_result(path, **filters)
+
+    return committee, all_candidates, cycle
+
 
 def load_first_row_data(*path_parts, **filters):
     response = _call_api(*path_parts, **filters)
