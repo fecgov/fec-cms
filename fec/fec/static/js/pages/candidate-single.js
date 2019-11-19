@@ -2,6 +2,10 @@
 
 /* global WEBMANAGER_EMAIL */
 
+/**
+ * pagingType documentation: https://datatables.net/reference/option/pagingType
+ */
+
 var $ = require('jquery');
 var URI = require('urijs');
 

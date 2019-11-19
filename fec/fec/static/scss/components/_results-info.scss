@@ -55,6 +55,7 @@
     .dataTables_length {
       float: left;
       line-height: u(2rem);
+      margin-bottom: u(2rem);
 
       select {
         display: inline;
@@ -64,6 +65,7 @@
     .dataTables_info {
       padding-top: u(1rem);
       clear: both;
+      float: right;
     }
   }
 }
@@ -86,6 +88,7 @@
     .results-info {
       .dataTables_length {
         float: left;
+        margin-bottom: 0;
         margin-left: 0;
       }
 
@@ -96,7 +99,6 @@
       .dataTables_info {
         margin-left: 1.5em;
         padding-top: u(.75rem);
-        float: right;
         clear: none;
       }
     }

@@ -45,9 +45,23 @@
     text-indent: -99999px;
   }
 
+  &.disabled {
+    opacity: .5;
+    pointer-events: none;
+  }
+
   &.current {
     font-weight: 700;
     color: $inverse;
     background-color: $gray-dark;
   }
+}
+
+.paginate_button + span.ellipsis {
+  display: inline-block;
+  height: 24px;
+  line-height: 36px;
+  margin-left: .5rem;
+  padding: 0;
+  vertical-align: bottom;
 }

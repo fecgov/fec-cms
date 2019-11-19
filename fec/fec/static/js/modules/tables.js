@@ -1,5 +1,9 @@
 'use strict';
 
+/**
+ * pagingType documentation: https://datatables.net/reference/option/pagingType
+ */
+
 var $ = require('jquery');
 var _ = require('underscore');
 
@@ -23,7 +27,13 @@ var exportWidgetTemplate = require('../templates/tables/exportWidget.hbs');
 var missingTemplate = require('../templates/tables/noData.hbs');
 
 var simpleDOM = 't<"results-info"lpi>';
-var browseDOM = '<"panel__main"t>' + '<"results-info"lp>';
+var browseDOM = '<"panel__main"t>' + '<"results-info"lpi>';
+// Source documentation for these two ^ :
+// https://datatables.net/reference/option/dom
+
+// To change the number of items in the "Showing __ of __ entries" blocks.
+// $.fn.DataTable.ext.pager.numbers_length = 5;
+// Must be an odd number
 
 var DOWNLOAD_CAP = 500000;
 var downloadCapFormatted = helpers.formatNumber(DOWNLOAD_CAP);
