@@ -364,7 +364,7 @@ def get_committee(committee_id, cycle):
         candidate['related_cycle'] = cycle if election_years else None
 
     # Load financial totals and reports for the committee
-    financials = api_caller.load_cmte_financials(committee_id, cycle=cycle)
+    financials = api_caller.load_cmte_financials(committee_id, committee, cycle)
     report_type = report_types.get(committee['committee_type'], 'pac-party')
     reports = financials['reports']
     totals = financials['totals']

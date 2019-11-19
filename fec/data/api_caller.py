@@ -335,20 +335,62 @@ def load_endpoint_data(*path_parts, **filters):
     )
 
 
-def load_cmte_financials(committee_id, **filters):
-    filters.update({
-        'is_amended': 'false',
-        'per_page': MAX_FINANCIALS_COUNT,
-        'report_type': filters.get('report_type', []) + ['-TER'],
-        'sort_hide_null': 'true',
-    })
+def load_cmte_financials(committee_id, committee, cycle):
+    # (3)call /filings? under tag:filings
+    # get reports from filings endpoint filter by form_category=REPORT
+    # when cycle is out of [cycles_has_financial] range.
+    # set cycle = last_cycle_has_financial to call endpoint
+    # to get reports and totals
 
-    reports = _call_api('committee', committee_id, 'reports', **filters)
-    totals = _call_api('committee', committee_id, 'totals', **filters)
+
+    cycle_out_of_range = False
+    last_cycle_has_financial = committee.get('last_cycle_has_financial')
+    if not last_cycle_has_financial:
+        # when committees only file F1, last_cycle_has_financial = null
+        # set last_cycle_has_financial = last_cycle_has_activity
+        last_cycle_has_financial = committee.get('last_cycle_has_activity')
+
+    if committee.get('cycles_has_financial'):
+        min_cycle_has_financial = min(committee.get('cycles_has_financial'))
+        cycles = committee.get('cycles_has_financial')
+    else:
+        # when committees only file F1, cycles_has_financial = null
+        # set cycles = cycles_has_activity
+        min_cycle_has_financial = min(committee.get('cycles_has_activity'))
+        cycles = committee.get('cycles_has_activity')
+
+    if int(cycle) > int(last_cycle_has_financial) or int(cycle) < int(min_cycle_has_financial):
+        cycle_out_of_range = True
+
+    path = '/filings/'
+    filters = {}
+    filters['committee_id'] = committee_id
+    if cycle_out_of_range:
+        filters['cycle'] = last_cycle_has_financial
+    else:
+        filters['cycle'] = cycle
+
+    filters['form_category'] = 'REPORT'
+    filters['most_recent'] = 'true'
+    filters['per_page'] = 1
+    filters['sort_hide_null'] = 'true'
+    reports = load_first_row_data(path, **filters)
+
+    # (4)call committee/{committee_id}/totals? under tag:financial
+    # get financial totals
+    path = '/committee/' + committee_id + '/totals/'
+    filters = {}
+    if cycle_out_of_range:
+        filters['cycle'] = last_cycle_has_financial
+    else:
+        filters['cycle'] = cycle
+    filters['per_page'] = 1
+    filters['sort_hide_null'] = 'true'
+    totals = load_first_row_data(path, **filters)
 
     return {
-        'reports': reports['results'],
-        'totals': totals['results'],
+        'reports': reports,
+        'totals': totals,
     }
 
 
