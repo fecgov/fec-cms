@@ -293,6 +293,96 @@ def load_with_nested(primary_type, primary_id, secondary_type, cycle=None, **que
     return data, nested_data['results'], cycle
 
 
+def load_reports_and_totals(committee_id, cycle_out_of_range, cycle, last_cycle_has_financial):
+
+    path = '/filings/'
+    filters = {}
+    filters['committee_id'] = committee_id
+    if cycle_out_of_range:
+        filters['cycle'] = last_cycle_has_financial
+    else:
+        filters['cycle'] = cycle
+
+    filters['form_category'] = 'REPORT'
+    filters['most_recent'] = 'true'
+    filters['per_page'] = 1
+    filters['sort_hide_null'] = 'true'
+
+    reports = load_first_row_data(path, **filters)
+    # (4)call committee/{committee_id}/totals? under tag:financial
+    # get financial totals
+    path = '/committee/' + committee_id + '/totals/'
+    filters = {}
+    if cycle_out_of_range:
+        filters['cycle'] = last_cycle_has_financial
+    else:
+        filters['cycle'] = cycle
+    filters['per_page'] = 1
+    filters['sort_hide_null'] = 'true'
+    totals = load_first_row_data(path, **filters)
+
+    return reports, totals
+
+
+def load_committee_history(committee_id, cycle=None):
+    filters = {}
+    filters['per_page'] = 1
+    if not cycle:
+        # if no cycle parameter given,
+        # (1.1)call committee/{committee_id}/history/ under tag:committee
+        # set cycle = last_cycle_has_financial
+        path = '/committee/' + committee_id + '/history/'
+        committee = load_first_row_data(path, **filters)
+        cycle = committee.get('last_cycle_has_financial')
+        if not cycle:
+            # when committees only file F1.last_cycle_has_financial = null
+            # set cycle = last_cycle_has_activity
+            cycle = committee.get('last_cycle_has_activity')
+    else:
+        # (1.2)call committee/{committee_id}/history/{cycle}/
+        # under tag:committee
+        path = '/committee/' + committee_id + '/history/' + str(cycle)
+        committee = load_first_row_data(path, **filters)
+
+    # (2)call committee/{committee_id}/candidates/history/{cycle}
+    # under: candidate, get all candidates associated with that commitee
+    path = '/committee/' + committee_id + '/candidates/history/' + str(cycle)
+    filters = {}
+    filters['election_full'] = 'false'
+    all_candidates = load_endpoint_result(path, **filters)
+
+    return committee, all_candidates, cycle
+
+
+def load_cycle_data(committee, cycle):
+    # (3)call /filings? under tag:filings
+    # get reports from filings endpoint filter by form_category=REPORT
+    # when cycle is out of [cycles_has_financial] range.
+    # set cycle = last_cycle_has_financial to call endpoint
+    # to get reports and totals
+
+    cycle_out_of_range = False
+    last_cycle_has_financial = committee.get('last_cycle_has_financial')
+    if not last_cycle_has_financial:
+        # when committees only file F1, last_cycle_has_financial = null
+        # set last_cycle_has_financial = last_cycle_has_activity
+        last_cycle_has_financial = committee.get('last_cycle_has_activity')
+
+    if committee.get('cycles_has_financial'):
+        min_cycle_has_financial = min(committee.get('cycles_has_financial'))
+        cycles = committee.get('cycles_has_financial')
+    else:
+        # when committees only file F1, cycles_has_financial = null
+        # set cycles = cycles_has_activity
+        min_cycle_has_financial = min(committee.get('cycles_has_activity'))
+        cycles = committee.get('cycles_has_activity')
+
+    if int(cycle) > int(last_cycle_has_financial) or int(cycle) < int(min_cycle_has_financial):
+        cycle_out_of_range = True
+
+    return cycle_out_of_range, last_cycle_has_financial, cycles
+
+
 def load_first_row_data(*path_parts, **filters):
     response = _call_api(*path_parts, **filters)
     return response['results'][0] if response['results'] else None
