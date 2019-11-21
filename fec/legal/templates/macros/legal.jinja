@@ -7,11 +7,14 @@
      <p class="tooltip__content tooltip__content">Refine a keyword search by using AND, OR, “ ”, -, to expand or limit results.</p>
    </div>
   </div>
-  <div class="combo combo--search--mini">
+  <div class="combo combo--search--mini no-mar-b">
     <input id="search-input" type="text" name="search" class="combo__input"{% if query %} value="{{ query }}"{% endif %}>
     <button class="combo__button button--search button--standard" type="submit">
       <span class="u-visually-hidden">Search</span>
     </button>
+  </div>
+  <div class="combo combo--search--mini--example">
+    <span class="t-note t-sans search__example">Examples: spending; 52 U.S.C. §30123</span>
   </div>
   <button type="button" class="button--keywords" aria-controls="keyword-modal" data-a11y-dialog-show="keyword-modal">More keyword options</button>
 

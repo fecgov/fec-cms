@@ -93,6 +93,13 @@ $search-button-width: u(5.6rem);
     height: u(3.6rem);
     width: u(5.6rem);
   }
+
+  &.no-mar-b input {
+    margin-bottom: 0;
+  }
+}
+.combo--search--mini--example {
+  margin-bottom: u(2rem);
 }
 
 // BREAKPOINT: MEDIUM
