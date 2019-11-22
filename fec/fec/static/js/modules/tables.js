@@ -624,7 +624,18 @@ DataTable.prototype.fetch = function(data, callback) {
   } else if (self.filterSet && self.filterSet.isValid) {
     urls.updateQuery(self.filterSet.serialize(), self.filterSet.fields);
     self.filters = self.filterSet.serialize();
+    // Only limit to 10 committee ids for processed data
+    if (
+      self.filters &&
+      self.filters.data_type == 'processed' &&
+      self.filters.committee_id &&
+      self.filters.committee_id.length > 10
+    ) {
+      // insert error message above committee_id field
+      return;
+    }
   }
+  console.log('receipts query');
   var url = self.buildUrl(data);
   self.$processing.show();
   if (self.xhr) {
