@@ -2,14 +2,13 @@ from unittest import TestCase
 from unittest import mock
 import copy
 
-from data import api_caller
-from data.views import get_committee
+from data import views, api_caller
 
 
 @mock.patch.object(api_caller, 'load_endpoint_data')
-@mock.patch.object(api_caller, 'load_reports_and_totals')
-@mock.patch.object(api_caller, 'load_cycle_data')
-@mock.patch.object(api_caller, 'load_committee_history')
+@mock.patch.object(views, 'load_reports_and_totals')
+@mock.patch.object(views, 'load_cycle_data')
+@mock.patch.object(views, 'load_committee_history')
 class TestCommittee(TestCase):
 
     STOCK_COMMITTEE = {
@@ -185,7 +184,7 @@ class TestCommittee(TestCase):
             self.STOCK_REPORTS,
             self.STOCK_TOTALS,
         )
-        template_variables = get_committee('C001', 2018)
+        template_variables = views.get_committee('C001', 2018)
 
         committee = template_variables.get("committee")
         assert committee['name'] == test_committee['name']
@@ -240,7 +239,7 @@ class TestCommittee(TestCase):
                 'total_independent_expenditures': 4262.0,
             },
         )
-        template_variables = get_committee('C001', 2018)
+        template_variables = views.get_committee('C001', 2018)
 
         assert template_variables['ie_summary'] == [
             (11000.0, {'label': 'Contributions received', 'level': '1'}),
@@ -265,7 +264,7 @@ class TestCommittee(TestCase):
             {'receipts': 85530042.0, 'contribution_refunds': 966240.0},
         )
 
-        committee = get_committee('C001', 2018)
+        committee = views.get_committee('C001', 2018)
 
         assert committee['inaugural_summary'] == [
             (85530042.0, {'label': 'Total Donations Accepted', 'level': '1'}),
@@ -346,8 +345,8 @@ class TestCommittee(TestCase):
             },
         )
 
-        template_variables = get_committee('C001', 2018)
-        expected_raising_summary = [
+        template_variables = views.get_committee('C001', 2018)
+        assert template_variables['raising_summary'] == [
             (
                 12345.0,
                 {'label': 'Total receipts', 'level': '1', 'term': 'total receipts'},
@@ -453,7 +452,7 @@ class TestCommittee(TestCase):
             self.STOCK_TOTALS,
         )
 
-        template_variables = get_committee('C001', 2018)
+        template_variables = views.get_committee('C001', 2018)
         committee = template_variables.get("committee")
 
         assert committee['name'] == test_committee['name']

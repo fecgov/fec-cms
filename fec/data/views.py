@@ -328,7 +328,7 @@ def get_committee(committee_id, cycle):
     and committee financial data needed to render the committee profile page
     """
 
-    committee, all_candidates, cycle = api_caller.load_committee_history(
+    committee, all_candidates, cycle = load_committee_history(
         committee_id, cycle
     )
     # When there are multiple candidate records of various offices (H, S, P)
@@ -362,11 +362,11 @@ def get_committee(committee_id, cycle):
 
     report_type = report_types.get(committee['committee_type'], 'pac-party')
 
-    cycle_out_of_range, last_cycle_has_financial, cycles = api_caller.load_cycle_data(
+    cycle_out_of_range, last_cycle_has_financial, cycles = load_cycle_data(
         committee, cycle
     )
 
-    reports, totals = api_caller.load_reports_and_totals(
+    reports, totals = load_reports_and_totals(
         committee_id, cycle_out_of_range, cycle, last_cycle_has_financial
     )
 
@@ -476,6 +476,96 @@ def committee(request, committee_id):
     cycle = request.GET.get('cycle', None)
     committee = get_committee(committee_id, cycle)
     return render(request, 'committees-single.jinja', committee)
+
+
+def load_reports_and_totals(committee_id, cycle_out_of_range, cycle, last_cycle_has_financial):
+
+    path = '/filings/'
+    filters = {}
+    filters['committee_id'] = committee_id
+    if cycle_out_of_range:
+        filters['cycle'] = last_cycle_has_financial
+    else:
+        filters['cycle'] = cycle
+
+    filters['form_category'] = 'REPORT'
+    filters['most_recent'] = 'true'
+    filters['per_page'] = 1
+    filters['sort_hide_null'] = 'true'
+
+    reports = api_caller.load_first_row_data(path, **filters)
+    # (4)call committee/{committee_id}/totals? under tag:financial
+    # get financial totals
+    path = '/committee/' + committee_id + '/totals/'
+    filters = {}
+    if cycle_out_of_range:
+        filters['cycle'] = last_cycle_has_financial
+    else:
+        filters['cycle'] = cycle
+    filters['per_page'] = 1
+    filters['sort_hide_null'] = 'true'
+    totals = api_caller.load_first_row_data(path, **filters)
+
+    return reports, totals
+
+
+def load_committee_history(committee_id, cycle=None):
+    filters = {}
+    filters['per_page'] = 1
+    if not cycle:
+        # if no cycle parameter given,
+        # (1.1)call committee/{committee_id}/history/ under tag:committee
+        # set cycle = last_cycle_has_financial
+        path = '/committee/' + committee_id + '/history/'
+        committee = api_caller.load_first_row_data(path, **filters)
+        cycle = committee.get('last_cycle_has_financial')
+        if not cycle:
+            # when committees only file F1.last_cycle_has_financial = null
+            # set cycle = last_cycle_has_activity
+            cycle = committee.get('last_cycle_has_activity')
+    else:
+        # (1.2)call committee/{committee_id}/history/{cycle}/
+        # under tag:committee
+        path = '/committee/' + committee_id + '/history/' + str(cycle)
+        committee = api_caller.load_first_row_data(path, **filters)
+
+    # (2)call committee/{committee_id}/candidates/history/{cycle}
+    # under: candidate, get all candidates associated with that commitee
+    path = '/committee/' + committee_id + '/candidates/history/' + str(cycle)
+    filters = {}
+    filters['election_full'] = 'false'
+    all_candidates = api_caller.load_endpoint_result(path, **filters)
+
+    return committee, all_candidates, cycle
+
+
+def load_cycle_data(committee, cycle):
+    # (3)call /filings? under tag:filings
+    # get reports from filings endpoint filter by form_category=REPORT
+    # when cycle is out of [cycles_has_financial] range.
+    # set cycle = last_cycle_has_financial to call endpoint
+    # to get reports and totals
+
+    cycle_out_of_range = False
+    last_cycle_has_financial = committee.get('last_cycle_has_financial')
+    if not last_cycle_has_financial:
+        # when committees only file F1, last_cycle_has_financial = null
+        # set last_cycle_has_financial = last_cycle_has_activity
+        last_cycle_has_financial = committee.get('last_cycle_has_activity')
+
+    if committee.get('cycles_has_financial'):
+        min_cycle_has_financial = min(committee.get('cycles_has_financial'))
+        cycles = committee.get('cycles_has_financial')
+    else:
+        # when committees only file F1, cycles_has_financial = null
+        # set cycles = cycles_has_activity
+        min_cycle_has_financial = min(committee.get('cycles_has_activity'))
+        cycles = committee.get('cycles_has_activity')
+
+    if int(cycle) > int(last_cycle_has_financial) or int(cycle) < int(min_cycle_has_financial):
+        cycle_out_of_range = True
+
+    return cycle_out_of_range, last_cycle_has_financial, cycles
 
 
 def elections_lookup(request):
