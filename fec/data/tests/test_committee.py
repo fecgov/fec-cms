@@ -5,7 +5,7 @@ import copy
 from data import views, api_caller
 
 
-@mock.patch.object(api_caller, 'load_endpoint_data')
+@mock.patch.object(api_caller, 'load_endpoint_results')
 @mock.patch.object(views, 'load_reports_and_totals')
 @mock.patch.object(views, 'load_cycle_data')
 @mock.patch.object(views, 'load_committee_history')
@@ -172,7 +172,7 @@ class TestCommittee(TestCase):
         load_committee_history_mock,
         load_cycle_data_mock,
         load_reports_and_totals_mock,
-        load_endpoint_data_mock,
+        load_endpoint_results_mock,
     ):
         cycle = 2018
 
@@ -222,7 +222,7 @@ class TestCommittee(TestCase):
         load_committee_history_mock,
         load_cycle_data_mock,
         load_reports_and_totals_mock,
-        load_endpoint_data_mock,
+        load_endpoint_results_mock,
     ):
         cycle = 2018
 
@@ -251,7 +251,7 @@ class TestCommittee(TestCase):
         load_committee_history_mock,
         load_cycle_data_mock,
         load_reports_and_totals_mock,
-        load_endpoint_data_mock,
+        load_endpoint_results_mock,
     ):
         cycle = 2018
 
@@ -276,7 +276,7 @@ class TestCommittee(TestCase):
         load_committee_history_mock,
         load_cycle_data_mock,
         load_reports_and_totals_mock,
-        load_endpoint_data_mock,
+        load_endpoint_results_mock,
     ):
 
         cycle = 2018
@@ -439,7 +439,7 @@ class TestCommittee(TestCase):
         load_committee_history_mock,
         load_cycle_data_mock,
         load_reports_and_totals_mock,
-        load_endpoint_data_mock,
+        load_endpoint_results_mock,
     ):
         cycle = 2018
 

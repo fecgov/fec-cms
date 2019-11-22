@@ -298,16 +298,9 @@ def load_first_row_data(*path_parts, **filters):
     return response['results'][0] if response['results'] else None
 
 
-def load_endpoint_data(*path_parts, **filters):
-    return _call_api(
-        *path_parts,
-        **filters
-    )
-
-
-def load_endpoint_result(*path_parts, **filters):
+def load_endpoint_results(*path_parts, **filters):
     response = _call_api(*path_parts, **filters)
-    return response['results']
+    return response.get('results', [])
 
 
 def load_candidate_statement_of_candidacy(candidate_id, cycle):

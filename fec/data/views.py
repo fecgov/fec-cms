@@ -263,8 +263,8 @@ def get_candidate(candidate_id, cycle, election_full):
     filters['cycle'] = cycle
     filters['per_page'] = 100
     path = '/efile/' + '/filings/'
-    raw_filings = api_caller.load_endpoint_data(path, **filters)
-    has_raw_filings = True if raw_filings.get('results') else False
+    raw_filings = api_caller.load_endpoint_results(path, **filters)
+    has_raw_filings = True if raw_filings else False
     return {
         'aggregate': aggregate,
         'aggregate_cycles': aggregate_cycles,
@@ -448,10 +448,10 @@ def get_committee(committee_id, cycle):
         filters['cycle'] = cycle
         filters['committee_id'] = committee['committee_id']
         filters['min_receipt_date'] = template_variables['min_receipt_date']
-        raw_filings = api_caller.load_endpoint_data(path, **filters)
+        raw_filings = api_caller.load_endpoint_results(path, **filters)
 
         template_variables['has_raw_filings'] = (
-            True if raw_filings.get('results') else False
+            True if raw_filings else False
         )
     else:
         template_variables['has_raw_filings'] = False
@@ -534,7 +534,7 @@ def load_committee_history(committee_id, cycle=None):
     path = '/committee/' + committee_id + '/candidates/history/' + str(cycle)
     filters = {}
     filters['election_full'] = 'false'
-    all_candidates = api_caller.load_endpoint_result(path, **filters)
+    all_candidates = api_caller.load_endpoint_results(path, **filters)
 
     return committee, all_candidates, cycle
 
