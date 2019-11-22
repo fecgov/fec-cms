@@ -205,8 +205,8 @@ class TestCommittee(TestCase):
             'cycle': 2018,
             'timePeriod': '2017–2018',
             'name': 'MY JOINT FUNDRAISING COMMITTEE',
-            'cycle_out_of_range': False,
-            'last_cycle_has_financial': 2018,
+            'cycleOutOfRange': False,
+            'lastCycleHasFinancial': 2018,
         }
         assert template_variables['parent'] == 'data'
         assert template_variables['totals'] == []
@@ -477,8 +477,8 @@ class TestCommittee(TestCase):
             'cycle': 2018,
             'timePeriod': '2017–2018',
             'name': 'MY JOINT FUNDRAISING COMMITTEE',
-            'cycle_out_of_range': False,
-            'last_cycle_has_financial': 2018,
+            'cycleOutOfRange': False,
+            'lastCycleHasFinancial': 2018,
         }
         assert template_variables['totals'] == []
         assert template_variables['candidates'] == []

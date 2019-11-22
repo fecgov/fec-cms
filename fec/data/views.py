@@ -387,8 +387,8 @@ def get_committee(committee_id, cycle):
         'cycle': cycle_js,
         'timePeriod': time_period_js,
         'name': committee['name'],
-        'cycle_out_of_range': cycle_out_of_range,
-        'last_cycle_has_financial': last_cycle_has_financial,
+        'cycleOutOfRange': cycle_out_of_range,
+        'lastCycleHasFinancial': last_cycle_has_financial,
     }
 
     template_variables = {

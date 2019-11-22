@@ -377,24 +377,23 @@ $(document).ready(function() {
   // on committee profile page, when cycles_has_activity more
   // options than cycles_has_financial, when click financial summary page,
   // reset timePeriod in the range of cycles_has_financial
-  var cycle_out_of_range = context.cycle_out_of_range;
-  if (cycle_out_of_range == 'true') {
-    var last_cycle = Number(context.last_cycle_has_financial);
-    var last_cycle_1 = last_cycle - 1;
-    context.timePeriod = last_cycle_1 + '–' + last_cycle;
+  if (context.cycleOutOfRange == 'true') {
+    var lastCycle = Number(context.lastCycleHasFinancial);
+    var lastCycleOddYear = lastCycle - 1;
+    context.timePeriod = lastCycleOddYear + '–' + lastCycle;
+    context.cycle = lastCycle;
   }
 
   // Set up data tables
   $('.data-table').each(function(index, table) {
     var $table = $(table);
     var committeeId = $table.attr('data-committee');
-    var cycle = $table.attr('data-cycle');
     var query = {
-      cycle: cycle,
       election_full: false
     };
     var path;
     var opts;
+    var cycle;
     var filingsOpts = {
       autoWidth: false,
       rowCallback: filings.renderRow,
@@ -413,9 +412,14 @@ $(document).ready(function() {
     switch ($table.attr('data-type')) {
       case 'contribution-size':
         path = ['schedules', 'schedule_a', 'by_size'];
+        // For raising/spending tabs, use previous cycle if provided
+        cycle = context.cycle || $table.attr('data-cycle');
         tables.DataTable.defer($table, {
           path: path,
-          query: _.extend({}, query, { committee_id: committeeId }),
+          query: _.extend(query, {
+            committee_id: committeeId,
+            cycle: cycle,
+          }),
           columns: sizeColumns,
           callbacks: aggregateCallbacks,
           dom: 't',
@@ -435,13 +439,16 @@ $(document).ready(function() {
         break;
       case 'receipts-by-state':
         path = ['schedules', 'schedule_a', 'by_state'];
+        // For raising/spending tabs, use previous cycle if provided
+        cycle = context.cycle || $table.attr('data-cycle');
         tables.DataTable.defer($table, {
           path: path,
           query: _.extend(
             {},
             query,
-            { committee_id: committeeId },
-            { per_page: 99 }
+            committee_id: committeeId,
+            cycle: cycle,
+            per_page: 99
           ),
           columns: stateColumns,
           callbacks: aggregateCallbacks,
@@ -458,11 +465,16 @@ $(document).ready(function() {
         break;
       case 'receipts-by-employer':
         path = ['schedules', 'schedule_a', 'by_employer'];
+        // For raising/spending tabs, use previous cycle if provided
+        cycle = context.cycle || $table.attr('data-cycle');
         tables.DataTable.defer(
           $table,
           _.extend({}, tableOpts, {
             path: path,
-            query: _.extend({}, query, { committee_id: committeeId }),
+            query: _.extend(query, {
+              committee_id: committeeId,
+              cycle: cycle
+            }),
             columns: employerColumns,
             callbacks: aggregateCallbacks,
             order: [[1, 'desc']],
@@ -477,11 +489,16 @@ $(document).ready(function() {
         break;
       case 'receipts-by-occupation':
         path = ['schedules', 'schedule_a', 'by_occupation'];
+        // For raising/spending tabs, use previous cycle if provided
+        cycle = context.cycle || $table.attr('data-cycle');
         tables.DataTable.defer(
           $table,
           _.extend({}, tableOpts, {
             path: path,
-            query: _.extend({}, query, { committee_id: committeeId }),
+            query: _.extend(query, {
+              committee_id: committeeId,
+              cycle: cycle
+            }),
             columns: occupationColumns,
             callbacks: aggregateCallbacks,
             order: [[1, 'desc']],
@@ -496,6 +513,8 @@ $(document).ready(function() {
         break;
       case 'itemized-receipts':
         path = ['schedules', 'schedule_a'];
+        // For raising/spending tabs, use previous cycle if provided
+        cycle = context.cycle || $table.attr('data-cycle');
         tables.DataTable.defer(
           $table,
           _.extend({}, tableOpts, {
@@ -522,11 +541,16 @@ $(document).ready(function() {
         break;
       case 'disbursements-by-recipient':
         path = ['schedules', 'schedule_b', 'by_recipient'];
+        // For raising/spending tabs, use previous cycle if provided
+        cycle = context.cycle || $table.attr('data-cycle');
         tables.DataTable.defer(
           $table,
           _.extend({}, tableOpts, {
             path: path,
-            query: _.extend({}, query, { committee_id: committeeId }),
+            query: _.extend(query, {
+              committee_id: committeeId,
+              cycle: cycle
+            }),
             columns: disbursementRecipientColumns,
             callbacks: aggregateCallbacks,
             order: [[1, 'desc']],
@@ -541,6 +565,8 @@ $(document).ready(function() {
         break;
       case 'itemized-disbursements':
         path = ['schedules', 'schedule_b'];
+        // For raising/spending tabs, use previous cycle if provided
+        cycle = context.cycle || $table.attr('data-cycle');
         tables.DataTable.defer(
           $table,
           _.extend({}, tableOpts, {
@@ -566,6 +592,8 @@ $(document).ready(function() {
         break;
       case 'ec-itemized-disbursements':
         path = ['electioneering'];
+        // For raising/spending tabs, use previous cycle if provided
+        cycle = context.cycle || $table.attr('data-cycle');
         tables.DataTable.defer(
           $table,
           _.extend({}, tableOpts, {
@@ -591,11 +619,16 @@ $(document).ready(function() {
         break;
       case 'disbursements-by-recipient-id':
         path = ['schedules', 'schedule_b', 'by_recipient_id'];
+        // For raising/spending tabs, use previous cycle if provided
+        cycle = context.cycle || $table.attr('data-cycle');
         tables.DataTable.defer(
           $table,
           _.extend({}, tableOpts, {
             path: path,
-            query: _.extend({}, query, { committee_id: committeeId }),
+            query: _.extend(query, {
+              committee_id: committeeId,
+              cycle: cycle
+            }),
             columns: disbursementRecipientIDColumns,
             callbacks: aggregateCallbacks,
             order: [[1, 'desc']],
@@ -610,9 +643,14 @@ $(document).ready(function() {
         break;
       case 'independent-expenditure-committee':
         path = ['schedules', 'schedule_e', 'by_candidate'];
+        // For raising/spending tabs, use previous cycle if provided
+        cycle = context.cycle || $table.attr('data-cycle');
         tables.DataTable.defer($table, {
           path: path,
-          query: _.extend({}, query, { committee_id: committeeId }),
+          query: _.extend(query, {
+            committee_id: committeeId,
+            cycle: cycle
+          }),
           columns: expendituresColumns,
           order: [[0, 'desc']],
           dom: tables.simpleDOM,
@@ -628,9 +666,14 @@ $(document).ready(function() {
         break;
       case 'electioneering-committee':
         path = ['electioneering', 'aggregates'];
+        // For raising/spending tabs, use previous cycle if provided
+        cycle = context.cycle || $table.attr('data-cycle');
         tables.DataTable.defer($table, {
           path: path,
-          query: _.extend({}, query, { committee_id: committeeId }),
+          query: _.extend(query, {
+            cycle: cycle,
+            committee_id: committeeId
+          }),
           columns: electioneeringColumns,
           order: [[1, 'desc']],
           dom: tables.simpleDOM,
@@ -650,9 +693,13 @@ $(document).ready(function() {
           'communication_costs',
           'by_candidate'
         ];
+        // For raising/spending tabs, use previous cycle if provided
+        cycle = context.cycle || $table.attr('data-cycle');
         tables.DataTable.defer($table, {
           path: path,
-          query: query,
+          query: _.extend(query, {
+            cycle: cycle
+          }),
           columns: communicationCostColumns,
           order: [[0, 'desc']],
           dom: tables.simpleDOM,
@@ -667,6 +714,8 @@ $(document).ready(function() {
         break;
       case 'raw-filings':
         var min_date = $table.attr('data-min-date');
+        // Always use table cycle for filings
+        cycle = $table.attr('data-cycle');
         opts = _.extend(
           {
             columns: rawFilingsColumns,
@@ -674,6 +723,7 @@ $(document).ready(function() {
             path: ['efile', 'filings'],
             query: _.extend(
               {
+                cycle: cycle,
                 committee_id: committeeId,
                 min_receipt_date: min_date,
                 sort: ['-receipt_date']
@@ -689,6 +739,8 @@ $(document).ready(function() {
         tables.DataTable.defer($table, opts);
         break;
       case 'filings-reports':
+        // Always use table cycle for filings
+        cycle = $table.attr('data-cycle');
         opts = _.extend(
           {
             columns: filingsReportsColumns,
@@ -696,6 +748,7 @@ $(document).ready(function() {
             path: ['filings'],
             query: _.extend(
               {
+                cycle: cycle,
                 committee_id: committeeId,
                 form_type: [
                   'F3',
@@ -741,6 +794,8 @@ $(document).ready(function() {
         tables.DataTable.defer($table, opts);
         break;
       case 'filings-notices':
+        // Always use table cycle for filings
+        cycle = $table.attr('data-cycle');
         opts = _.extend(
           {
             columns: filingsColumns,
@@ -748,6 +803,7 @@ $(document).ready(function() {
             path: ['filings'],
             query: _.extend(
               {
+                cycle: cycle,
                 committee_id: committeeId,
                 form_type: ['F5', 'F24', 'F6', 'F9', 'F10', 'F11', 'RFAI'],
                 report_type: ['-Q1', '-Q2', '-Q3', '-YE'],
@@ -774,6 +830,8 @@ $(document).ready(function() {
         tables.DataTable.defer($table, opts);
         break;
       case 'filings-statements':
+        // Always use table cycle for filings
+        cycle = $table.attr('data-cycle');
         opts = _.extend(
           {
             columns: filingsColumns,
@@ -781,6 +839,7 @@ $(document).ready(function() {
             path: ['filings'],
             query: _.extend(
               {
+                cycle: cycle,
                 committee_id: committeeId,
                 form_type: ['F1', 'RFAI'],
                 /* Performing an include would only show RFAI form types.
@@ -804,6 +863,8 @@ $(document).ready(function() {
         tables.DataTable.defer($table, opts);
         break;
       case 'filings-other':
+        // Always use table cycle for filings
+        cycle = $table.attr('data-cycle');
         opts = _.extend(
           {
             columns: filingsColumns,
@@ -811,6 +872,7 @@ $(document).ready(function() {
             path: ['filings'],
             query: _.extend(
               {
+                cycle: cycle,
                 committee_id: committeeId,
                 form_type: ['F1M', 'F8', 'F99', 'F12', 'RFAI'],
                 /* Performing an include would only show RFAI form types.
