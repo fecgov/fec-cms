@@ -1,0 +1,601 @@
+$colorElementBordersOnLight: #aeb0b5;
+$colorText: #212121;
+$colorBorder: #333333;
+$colorTableTdBorder: #f1f1f1;
+$fontFamilyMonospace: 'fec_currency_mono', 'karla', sans-serif;
+$fontFamilySansSerif: 'karla', sans-serif;
+$fontFamilySerif: gandhi, serif;
+$fontSizeBase: 7.5pt; // (10px); Keeping this as a default so values here are as close to our main scss values as possible
+$fontWeightRegular: 500;
+$fontWeightSemibold: 600;
+$fontWeightBold: 700;
+$sizeTableScroller: 10px;
+
+// Borrowed from _icon-variables.scss:
+$arrow-down: 'data:image/svg+xml;charset=utf8, %3Csvg%20width%3D%2210%22%20height%3D%229%22%20viewBox%3D%220%200%2010%209%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Cpath%20d%3D%22M5.706%208.013l3.685-6.234A.851.851%200%200%200%208.664.485H1.283A.852.852%200%200%200%20.55%201.769l3.69%206.244a.852.852%200%200%200%201.466%200z%22%2F%3E%3C%2Fsvg%3E';
+$magnifying-glass-arrow: 'data:image/svg+xml;charset=utf8, %3Csvg%20width%3D%2230%22%20height%3D%2221%22%20viewBox%3D%220%200%2030%2021%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Cg%3E%3Cpath%20d%3D%22M24.24%2013.097l-3.685-6.234a.851.851%200%200%201%20.727-1.294h7.382a.852.852%200%200%201%20.733%201.284l-3.69%206.244a.852.852%200%200%201-1.467%200zM19.653%2016.78a2.03%202.03%200%201%201-2.872%202.872l-4.538-4.537a8.072%208.072%200%200%201-4.12%201.131%208.123%208.123%200%201%201%208.123-8.123%208.072%208.072%200%200%201-1.131%204.12l4.538%204.538zM8.123%202.03a6.092%206.092%200%201%200%200%2012.185%206.092%206.092%200%200%200%200-12.184z%22%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E';
+$check: 'data:image/svg+xml;charset=utf8, %3Csvg%20width%3D%2220%22%20height%3D%2220%22%20viewBox%3D%220%200%2020%2020%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Cpath%20d%3D%22M16.47%206.678l.177.177a1.233%201.233%200%201%200-1.743-1.744l-6.84%206.84h.354L4.854%208.387a1.233%201.233%200%200%200-1.743%201.744l4.259%204.258a1.23%201.23%200%200%200%201.743%200l7.534-7.534-.176-.177z%22%2F%3E%3C%2Fsvg%3E';
+$info-circle: 'data:image/svg+xml;charset=utf8, %3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2220%22%20height%3D%2220%22%20viewBox%3D%220%200%2020%2020%22%3E%3Cpath%20d%3D%22M10%200a10%2010%200%201%200%2010%2010A10%2010%200%200%200%2010%200zm1.2%2016.1a15.69%2015.69%200%200%201-2.4.3q-.9%200-.9-.6a9.32%209.32%200%200%201%20.2-1.4l.8-4.7a3.08%203.08%200%200%200%20.1-.9c0-.3-.4-.4-1.2-.4l.1-.5a14.22%2014.22%200%200%201%202.5-.3.61.61%200%200%201%20.7.6%2011.48%2011.48%200%200%201-.2%201.4l-.8%204.8a2.25%202.25%200%200%200-.1.7c0%20.4.2.5%201.2.5v.5zm-.5-10a1.15%201.15%200%200%201-1.2-1.2%201.35%201.35%200%200%201%201.3-1.4A1.22%201.22%200%200%201%2012%204.7a1.42%201.42%200%200%201-1.3%201.4z%22%2F%3E%3C%2Fsvg%3E';
+
+// $inverse for u-button, $gray-dark
+@import "../variables";
+// prefix-for-webkit for keyframes
+@import "../vendor/bourbon/settings/prefixer";
+// disable-prefix-for-all for keyframes
+@import "../vendor/bourbon/addons/prefixer";
+// keyframes for u-button
+@import "../vendor/bourbon/css3/keyframes";
+// animation for u-button
+@import "../vendor/bourbon/css3/animation";
+// u-button:
+@import "../mixins/_utilities.scss";
+// triangle for tooltips:
+@import "../vendor/bourbon/addons/triangle";
+// overlay for loading states
+@import "../components/overlay";
+
+@font-face {
+  font-family: 'gandhi';
+  font-style: normal;
+  font-weight: normal;
+  src: url('/static/fonts/gandhiserif-regular.woff2') format('woff2'),
+    url('/static/fonts/gandhiserif-regular.woff') format('woff');
+}
+@font-face {
+  font-family: 'karla';
+  font-style: normal;
+  font-weight: normal;
+  src: url('/static/fonts/karla-regular.woff2') format('woff2'),
+    url('/static/fonts/karla-regular.woff') format('woff');
+}
+@font-face {
+  font-family: 'karla';
+  src: url('/static/fonts/karla-bold.woff2') format('woff2'),
+    url('/static/fonts/karla-bold.woff') format('woff');
+  font-weight: bold;
+  font-style: normal;
+}
+@font-face {
+  font-family: fec_currency_mono;
+  font-style: normal;
+  font-weight: normal;
+  src: url('/static/fonts/fec-currencymono-regular.woff2') format('woff2'),
+    url('/static/fonts/fec-currencymono-regular.woff') format('woff'),
+    url('/static/fonts/fec-currencymono-regular.ttf') format('truetype');
+}
+
+aside.contribs-by-state {
+  &,
+  & * {
+    // THESE ARE PASSED DOWN TO CHILDREN
+    box-sizing: border-box;
+  }
+
+  font-family: $fontFamilySansSerif;
+  font-feature-settings: 'kern', 'liga', 'pnum';
+  font-size: $fontSizeBase * 1.4;
+  margin: 0 0 ($fontSizeBase * 2);
+  position: relative;
+  width: 100%;
+
+  // .error-msg {
+  //   color: $error;
+  // }
+  .controls-wrapper {
+    font-family: $fontFamilySansSerif;
+    margin-bottom: $fontSizeBase * 2;
+    width: 100%;
+
+    .typeahead-filter {
+      margin-bottom: 1rem;
+
+      .filter__typeahead {
+        max-width: 30rem;
+      }
+      .filter__instructions {
+        display: block;
+        font-size: 1.2rem;
+      }
+    }
+    label {
+      display: block;
+      font-weight: $fontWeightBold;
+      font-size: $fontSizeBase * 1.4;
+      line-height: 1em;
+      margin-bottom: 0.25em;
+      text-transform: uppercase;
+      -moz-osx-font-smoothing: grayscale;
+      -webkit-font-smoothing: antialiased;
+    }
+    fieldset {
+      border: none;
+      margin-bottom: $fontSizeBase * 1.5;
+      padding: 0;
+    }
+    select {
+      background-image: url($arrow-down);
+      background-repeat: no-repeat;
+      background-position: right $fontSizeBase top 50%;
+      background-size: 12px;
+      border: 2px solid $colorElementBordersOnLight;
+      border-radius: 4px;
+      color: $colorText;
+      font-family: karla, sans-serif;
+      font-size: $fontSizeBase * 1.4;
+      font-weight: $fontWeightBold;
+      height: 27pt; // (36px)
+      line-height: $fontSizeBase * 1.4;
+      margin: 0;
+      overflow: hidden;
+      padding: 0 2.5em 0 1em;
+      text-overflow: ellipsis;
+      vertical-align: inherit;
+      white-space: nowrap;
+      width: auto;
+      -moz-appearance: none;
+      -webkit-appearance: none;
+      appearance: none;
+
+      &::-ms-expand {
+        display: none;
+      }
+    }
+    option {
+      display: block;
+      font-family: $fontFamilySansSerif;
+      font-size: $fontSizeBase * 1.4;
+      font-weight: normal;
+      line-height: $fontSizeBase * 1.4;
+      min-height: $fontSizeBase * 1.2;
+      padding: 0px 2px 1px;
+      white-space: pre;
+      -webkit-rtl-ordering: logical;
+    }
+    .typeahead-filter {
+      .button--search {
+        background-image: url($magnifying-glass-arrow);
+        background-size: 2.8rem;
+        background-position: 50%;
+        padding: 0;
+      }
+    
+      &[data-allow-text] {
+        .tt-suggestion__missing {
+          display: none;
+        }
+    
+        button.is-loading {
+          background-image: url('../../img/loading-ellipsis-gray.gif');
+        }
+    
+        button.is-successful {
+          @include u-icon-button($check);
+          background-size: 2.8rem;
+          background-position: 50%;
+        }
+      }
+      #contribs-by-state-typeahead-error {
+        background-color: #fff;
+        color: $error;
+        display: block;
+        font-size: 12px;
+        height: 0;
+        line-height: 1.5em;
+        max-width: 300px;
+        opacity: 0;
+        overflow: hidden;
+        padding-left: 0;
+        position: absolute;
+        right: auto;
+        top: 75px;
+        transition: opacity .5s .5s;
+        width: 0;
+      }
+      &.is-error {
+        #contribs-by-state-typeahead-error {
+          height: 65px;
+          max-width: 300px;
+          opacity: 1;
+          transition: opacity .5s .5s;
+          width: 100%;
+        }
+      }
+    }
+    #contribs-by-state-typeahead-error {
+      display: none; // hide it until it's moved into .typeahead-filter
+    }
+  }
+  .message, .message[aria-hidden="true"] {
+    // .message, etc are copied from components/_messages.scss
+    background-color: $neutral;
+    border-color: $gray;
+    border-style: solid;
+    border-width: 0 0 0 3px;
+    display: block !important;
+    max-height: 0px;
+    overflow: hidden;
+    padding: 0 0 0 0;
+    transition: all 0.5s;
+    width: 100%;
+
+    &.has-error, &[aria-hidden="false"] {
+      margin: 2rem 0;
+      max-height: 150px;
+      padding: 2rem;
+      transition: all 1s;
+    }
+
+    &.message--info {
+      // borrowed from utilities mixin u-icon-bg
+      background-image: url($info-circle);
+      background-repeat: no-repeat;
+    }
+
+    h2 {
+      margin-bottom: 0.25em;
+    }
+    p:last-child {
+      margin-bottom: 0;
+    }
+  }
+  .state-list-wrapper {
+    border-bottom: solid 2px $colorBorder;
+    position: relative;
+    width: 100%;
+
+    .states-table-timestamp {
+      height: 25px;
+    }
+    .remote-table-header {
+      display: none; // We'll let JavaScript turn this on
+      margin-bottom: 0.25px; // Make sure the border is visible above the scrollbar below it
+      position: relative;
+      width: 100%;
+    }
+    .table-scroller {
+      width: 100%;
+      height: 300px;
+      max-height: 50vh;
+      overflow-x: hidden;
+      overflow-y: scroll;
+      position: relative;
+
+      &::-webkit-scrollbar {
+        width: $sizeTableScroller;
+      }
+      &::-webkit-scrollbar-track {
+        background: #f1f1f1;
+      }
+      &::-webkit-scrollbar-thumb {
+        background: #888;
+      }
+      &::-webkit-scrollbar-thumb:hover {
+        background: #555;
+      }
+    }
+    .states-total {
+      border-top: solid thin $colorBorder;
+      display: flex;
+      justify-content: space-between;
+      min-height: 41px;
+
+      div {
+        padding: $fontSizeBase * .75;
+
+        &:first-child {
+          font-weight: $fontWeightBold;
+        }
+      }
+    }
+    table {
+      // border-top: solid 2px $colorBorder;
+      display: block;
+      margin-top: 0;
+      table-layout: auto;
+      width: 100%;
+    }
+    thead {
+      border-bottom: solid thin $colorBorder;
+      border-top: solid 2px $colorBorder;
+      display: block;
+      width: 100%;
+    }
+    tbody {
+      display: block;
+      width: 100%;
+    }
+    tr {
+      border-top: thin solid $colorTableTdBorder;
+      display: flex;
+      justify-content: space-between;
+      width: 100%;
+    }
+    td, th {
+      flex-grow: 1;
+      flex-shrink: 1;
+      line-height: 1.25em;
+      padding: #{$fontSizeBase * .5};
+      
+      &:first-child {
+        flex-grow: 0;
+        flex-shrink: 0;
+        width: 2em;
+      }
+      &:last-child {
+        flex-grow: 0;
+        flex-shrink: 0;
+        width: 100px;
+      }
+      &:only-child {
+        width: 100%;
+      }
+    }
+    th {
+      font-weight: $fontWeightSemibold;
+      
+      &:last-child {
+        flex-grow: 1;
+        flex-shrink: 1;
+        padding-right: #{$fontSizeBase * 2};
+      }
+    }
+  }
+  .map-wrapper {
+    width: 100%;
+    border-bottom: solid 2px $colorBorder;
+    border-top: solid 2px $colorBorder;
+    padding: $fontSizeBase 0;
+
+    .election-map {
+      border: none;
+      height: auto;
+      min-height: 30rem;
+
+      svg {
+        min-width: 360px;
+        min-height: 230px;
+      }
+    }
+  }
+  .map-details {
+    display: flex;
+    justify-content: space-between;
+
+    .candidate-details {
+      margin-bottom: 2rem;
+      padding: 0 $fontSizeBase;
+
+      h1 {
+        font-family: $fontFamilySansSerif;
+        font-size: $fontSizeBase * 2;
+        font-weight: $fontWeightRegular;
+        line-height: 1.25em;
+        margin: 0 0 .25em 0;
+
+        a {
+          line-height: 1.25em;
+        }
+      }
+      h2, h3 {
+        font-family: $fontFamilySansSerif;
+        font-size: $fontSizeBase * 1.4;
+        font-weight: $fontWeightRegular;
+        line-height: 1.25em;
+        margin: 0 0 .25em 0;
+      }
+    }
+    .legend-container {
+      text-align: right;
+
+      span {
+        text-align: right;
+        line-height: 1.25em;
+        margin-bottom: .25em;
+      }
+    }
+  }
+  .more-info-wrapper {
+    padding: 1rem;
+    text-align: right;
+    width: 100%;
+
+    a, button {
+      margin: 0 0 1rem 1rem;
+    }
+  }
+  .overlay__container {
+    display: none;
+    left: 0px;
+    position: absolute;
+    width: 100%;
+    z-index: #{$z1 - 1}; // The typeahead menu is at 100 and we want it to be visible above this
+
+    &.is-loading {
+      display: block;
+    }
+    .overlay {
+      display: none;
+      
+      &.is-loading {
+        background-image: url('../../img/loading.gif');
+        display: block;
+      }
+    }
+  }
+
+  // Small sizes
+  &.w-s {
+    // Leaving this here and empty so others know it's an option
+    $deleteThis: true;
+  }
+  // Medium sizes
+  &.w-m {
+    @extend .w-s !optional;
+    display: flex;
+    flex-wrap: wrap;
+
+    .controls-wrapper {
+      width: 100%;
+
+      .typeahead-filter {
+        display: inline-block;
+        float: left;
+        height: 36px;
+        margin-bottom: 2rem;
+        margin-right: 1rem;
+        max-width: none;
+        right: 0;
+        position: relative;
+
+        label {
+          float: left;
+          height: 36px;
+          line-height: 36px;
+          margin-right: .5em;
+          position: relative;
+        }
+        .filter__typeahead {
+          float: left;
+          height: 36px;
+          width: 23rem;
+          position: relative;
+        }
+        .filter__instructions {
+          padding-left: 21rem;
+          position: absolute;
+          top: 36px;
+        }
+        #contribs-by-state-typeahead-error {
+          background-color: transparent;
+          line-height: 1.1em;
+          max-width: none;
+          padding-left: 210px;
+          top: 55px;
+        }
+        &.is-error {
+          #contribs-by-state-typeahead-error {
+            height: auto;
+          }
+        }
+      }
+
+      fieldset {
+        display: inline-block;
+        float: left;
+        
+        &:first-child {
+          margin-right: 7.5pt;
+        }
+      }
+
+      label {
+        display: inline-block;// 
+      }
+    }
+    .state-list-wrapper {
+      margin-right: 1rem;
+      width: calc(33.33% - 1rem);
+
+      .remote-table-header {
+        margin-bottom: 0.5px; // Make sure the border is visible above the scrollbar below it
+        width: calc(100% + 1px); // align the right side with the parent's right boundary
+      }
+      .table-scroller {
+        height: 100%;
+        max-height: 400px;
+
+        table {
+          min-height: 400px;
+        }
+      }
+      td, th {
+        &:nth-child(2) {
+          max-width: 90px;
+        }
+      }
+    }
+    .map-wrapper {
+      margin-top: 2.5rem;
+      margin-left: 1rem;
+      width: calc(66.66% - 1rem);
+
+      .election-map {  
+        svg {
+          min-width: 445px;
+          min-height: 285px;
+        }
+      }
+    }
+    .map-details {
+      .more-info-wrapper {    
+        a, button {
+          margin: 0 0 1rem 1rem;
+        }
+      }
+    }
+  }
+  // Large sizes
+  &.w-l {
+    @extend .w-m;
+  }
+
+  // Some overrides for table.table-display *, which was added because IE doesn't like Flex
+  table.table-display {
+    display: table;
+    
+    thead {
+      display: table-header-group;
+    }
+    tbody {
+      display: table-row-group;
+    }
+    tr {
+      display: table-row;
+    }
+    td, th {
+      display: table-cell;
+    }
+  }
+}
+
+/* #map-tooltip is outside .contribs-by-state */
+#map-tooltip {
+  border-radius: 4px;
+  border: 2px solid #112e51;
+  background-color: #fff;
+  color: #112e51;
+  font-family: karla, sans-serif;
+  padding: 1.5rem;
+  position: absolute;
+  text-align: center;
+  z-index: #{$z1 - 2};
+  
+  .tooltip__title {
+    border-bottom: 1px solid #112e51;
+    text-transform: uppercase;
+    font-weight: 700;
+  }
+  
+  &.tooltip--above {
+    min-width: 12rem;
+    left: -4rem;
+    bottom: calc(100% + 1.5rem);
+  }
+  &::before {
+    @include triangle(2rem, $primary, down);
+    bottom: -1rem;
+    content: '';
+    display: block;
+    left: calc(50% - 1rem);
+    position: absolute;
+  }
+
+  &::after {
+    @include triangle(1.6rem, $inverse, down);
+    bottom: -.7rem;
+    content: '';
+    display: block;
+    left: calc(50% - .8rem);
+    position: absolute;
+  }
+}
