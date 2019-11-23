@@ -66,11 +66,3 @@
     page-break-inside: avoid;
   }
 }
-
-//vertical spacing for buttons above richtext, html elements
-.block-external_button + .block-html,
-.block-external_button + .rich-text {
-
-  margin-top: u(2.4rem);
-
-   }
