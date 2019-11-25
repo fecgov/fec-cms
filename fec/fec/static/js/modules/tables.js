@@ -623,19 +623,31 @@ DataTable.prototype.fetch = function(data, callback) {
     return;
   } else if (self.filterSet && self.filterSet.isValid) {
     urls.updateQuery(self.filterSet.serialize(), self.filterSet.fields);
+    //console.log(self.filterSet);
     self.filters = self.filterSet.serialize();
-    // Only limit to 10 committee ids for processed data
+    // Only limit to 10 committee ids for processed data in specific datatables
+    // Individual contributions does not contain data_type and therefore has a separate check
+    var limitCommitteeIDCheckboxes =
+      (self.filters.data_type == 'processed' &&
+        ['Receipts', 'Disbursements', 'Independent expenditures'].indexOf(
+          self.opts.title
+        ) !== -1) ||
+      self.opts.title === 'Individual contributions';
     if (
+      limitCommitteeIDCheckboxes &&
       self.filters &&
-      self.filters.data_type == 'processed' &&
       self.filters.committee_id &&
       self.filters.committee_id.length > 10
     ) {
-      // insert error message above committee_id field
+      $('#committee_id-field ul.dropdown__selected').append(
+        '<div class="message filter__message message--error">' +
+          '<p>You&#39;re trying to search more than 10 committees. Narrow your search to 10 or fewer committees.</p>' +
+          '</div>'
+      );
       return;
     }
   }
-  console.log('receipts query');
+
   var url = self.buildUrl(data);
   self.$processing.show();
   if (self.xhr) {
