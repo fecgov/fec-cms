@@ -21,7 +21,6 @@
   padding: u(8px 2rem);
   text-align: center;
   vertical-align: middle;
-  margin-bottom: u(2.4rem);
 
   &.is-disabled {
     opacity: .5;
@@ -556,4 +555,9 @@
     height: 1em;
     left: -1.5em;
   }
+}
+
+//For internal/external button widgets in Wagtail
+.block-internal_button .button--primary, block-external_button .button--primary {
+  margin-bottom: u(2.4rem);
 }
