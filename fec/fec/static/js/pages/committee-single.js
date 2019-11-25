@@ -418,7 +418,7 @@ $(document).ready(function() {
           path: path,
           query: _.extend(query, {
             committee_id: committeeId,
-            cycle: cycle,
+            cycle: cycle
           }),
           columns: sizeColumns,
           callbacks: aggregateCallbacks,
@@ -443,13 +443,11 @@ $(document).ready(function() {
         cycle = context.cycle || $table.attr('data-cycle');
         tables.DataTable.defer($table, {
           path: path,
-          query: _.extend(
-            {},
-            query,
+          query: _.extend(query, {
             committee_id: committeeId,
             cycle: cycle,
             per_page: 99
-          ),
+          }),
           columns: stateColumns,
           callbacks: aggregateCallbacks,
           aggregateExport: true,
