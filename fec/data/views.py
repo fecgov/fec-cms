@@ -328,9 +328,7 @@ def get_committee(committee_id, cycle):
     and committee financial data needed to render the committee profile page
     """
 
-    committee, all_candidates, cycle = load_committee_history(
-        committee_id, cycle
-    )
+    committee, all_candidates, cycle = load_committee_history(committee_id, cycle)
     # When there are multiple candidate records of various offices (H, S, P)
     # linked to a single committee ID,
     # associate the candidate record with the matching committee type
@@ -362,9 +360,7 @@ def get_committee(committee_id, cycle):
 
     report_type = report_types.get(committee['committee_type'], 'pac-party')
 
-    cycle_out_of_range, fallback_cycle, cycles = load_cycle_data(
-        committee, cycle
-    )
+    cycle_out_of_range, fallback_cycle, cycles = load_cycle_data(committee, cycle)
 
     reports, totals = load_reports_and_totals(
         committee_id, cycle, cycle_out_of_range, fallback_cycle
@@ -450,9 +446,7 @@ def get_committee(committee_id, cycle):
         filters['min_receipt_date'] = template_variables['min_receipt_date']
         raw_filings = api_caller.load_endpoint_results(path, **filters)
 
-        template_variables['has_raw_filings'] = (
-            True if raw_filings else False
-        )
+        template_variables['has_raw_filings'] = True if raw_filings else False
     else:
         template_variables['has_raw_filings'] = False
 
@@ -484,13 +478,15 @@ def load_reports_and_totals(committee_id, cycle, cycle_out_of_range, fallback_cy
         'committee_id': committee_id,
         'cycle': fallback_cycle if cycle_out_of_range else cycle,
         'per_page': 1,
-        'sort_hide_null': True
+        'sort_hide_null': True,
     }
 
     # (3) call /filings? under tag:filings
     # get reports from filings endpoint filter by form_category=REPORT
     path = '/filings/'
-    reports = api_caller.load_first_row_data(path, form_category='REPORT', most_recent=True, **filters)
+    reports = api_caller.load_first_row_data(
+        path, form_category='REPORT', most_recent=True, **filters
+    )
 
     # (4)call committee/{committee_id}/totals? under tag:financial
     # get financial totals
@@ -501,9 +497,7 @@ def load_reports_and_totals(committee_id, cycle, cycle_out_of_range, fallback_cy
 
 
 def load_committee_history(committee_id, cycle=None):
-    filters = {
-        'per_page': 1
-    }
+    filters = {'per_page': 1}
     if not cycle:
         # if no cycle parameter given,
         # (1.1)call committee/{committee_id}/history/ under tag:committee

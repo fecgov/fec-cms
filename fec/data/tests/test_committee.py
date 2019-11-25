@@ -489,15 +489,39 @@ class TestCommittee(TestCase):
 @mock.patch.object(api_caller, 'load_endpoint_results')
 @mock.patch.object(api_caller, 'load_first_row_data')
 class TestCommitteeApiCalls(TestCase):
-
     def test_load_committee_history_uses_last_cycle_has_financial(
-        self,
-        load_first_row_data_mock,
-        load_endpoint_results_mock
+        self, load_first_row_data_mock, load_endpoint_results_mock
     ):
         committee_id = 'C007'
         cycle = None
-        load_first_row_data_mock.return_value = {'city': 'ELK GROVE', 'organization_type_full': None, 'committee_id': 'C007', 'zip': '95624', 'last_cycle_has_financial': 2020, 'cycle': 2020, 'candidate_ids': ['P60017852'], 'state_full': 'California', 'cycles_has_financial': [2020], 'name': 'CLIFTON ROBERTS FOR PRESIDENT', 'last_cycle_has_activity': 2020, 'organization_type': None, 'committee_type_full': 'Presidential', 'party_full': 'OTHER', 'designation_full': 'Principal campaign committee', 'cycles': [2020], 'cycles_has_activity': [2020], 'committee_type': 'P', 'party': 'OTH', 'designation': 'P', 'affiliated_committee_name': 'NONE', 'street_1': '9382 WILLOW POND CIRCLE', 'state': 'CA', 'street_2': None, 'treasurer_name': 'OWENS, STACY', 'filing_frequency': 'Q'}
+        load_first_row_data_mock.return_value = {
+            'city': 'ELK GROVE',
+            'organization_type_full': None,
+            'committee_id': 'C007',
+            'zip': '95624',
+            'last_cycle_has_financial': 2020,
+            'cycle': 2020,
+            'candidate_ids': ['P60017852'],
+            'state_full': 'California',
+            'cycles_has_financial': [2020],
+            'name': 'CLIFTON ROBERTS FOR PRESIDENT',
+            'last_cycle_has_activity': 2020,
+            'organization_type': None,
+            'committee_type_full': 'Presidential',
+            'party_full': 'OTHER',
+            'designation_full': 'Principal campaign committee',
+            'cycles': [2020],
+            'cycles_has_activity': [2020],
+            'committee_type': 'P',
+            'party': 'OTH',
+            'designation': 'P',
+            'affiliated_committee_name': 'NONE',
+            'street_1': '9382 WILLOW POND CIRCLE',
+            'state': 'CA',
+            'street_2': None,
+            'treasurer_name': 'OWENS, STACY',
+            'filing_frequency': 'Q',
+        }
         load_endpoint_results_mock.return_value = mock.MagicMock()
         committee, all_candidates, cycle = views.load_committee_history(
             committee_id, cycle
@@ -506,13 +530,38 @@ class TestCommitteeApiCalls(TestCase):
         assert cycle == 2020
 
     def test_load_committee_history_uses_last_cycle_has_activity(
-        self,
-        load_first_row_data_mock,
-        load_endpoint_results_mock
+        self, load_first_row_data_mock, load_endpoint_results_mock
     ):
         committee_id = 'C007'
         cycle = None
-        first_row_data = {'city': 'ELK GROVE', 'organization_type_full': None, 'committee_id': 'C007', 'zip': '95624', 'last_cycle_has_financial': None, 'cycle': None, 'candidate_ids': ['P60017852'], 'state_full': 'California', 'cycles_has_financial': [], 'name': 'CLIFTON ROBERTS FOR PRESIDENT', 'last_cycle_has_activity': 2018, 'organization_type': None, 'committee_type_full': 'Presidential', 'party_full': 'OTHER', 'designation_full': 'Principal campaign committee', 'cycles': [], 'cycles_has_activity': [2018], 'committee_type': 'P', 'party': 'OTH', 'designation': 'P', 'affiliated_committee_name': 'NONE', 'street_1': '9382 WILLOW POND CIRCLE', 'state': 'CA', 'street_2': None, 'treasurer_name': 'OWENS, STACY', 'filing_frequency': 'Q'}
+        first_row_data = {
+            'city': 'ELK GROVE',
+            'organization_type_full': None,
+            'committee_id': 'C007',
+            'zip': '95624',
+            'last_cycle_has_financial': None,
+            'cycle': None,
+            'candidate_ids': ['P60017852'],
+            'state_full': 'California',
+            'cycles_has_financial': [],
+            'name': 'CLIFTON ROBERTS FOR PRESIDENT',
+            'last_cycle_has_activity': 2018,
+            'organization_type': None,
+            'committee_type_full': 'Presidential',
+            'party_full': 'OTHER',
+            'designation_full': 'Principal campaign committee',
+            'cycles': [],
+            'cycles_has_activity': [2018],
+            'committee_type': 'P',
+            'party': 'OTH',
+            'designation': 'P',
+            'affiliated_committee_name': 'NONE',
+            'street_1': '9382 WILLOW POND CIRCLE',
+            'state': 'CA',
+            'street_2': None,
+            'treasurer_name': 'OWENS, STACY',
+            'filing_frequency': 'Q',
+        }
         load_first_row_data_mock.return_value = first_row_data
         load_endpoint_results_mock.return_value = []
         committee, all_candidates, cycle = views.load_committee_history(
@@ -522,20 +571,47 @@ class TestCommitteeApiCalls(TestCase):
         assert all_candidates == []
         assert committee == first_row_data
 
-        cycle_out_of_range, fallback_cycle, cycles = views.load_cycle_data(committee, cycle)
+        cycle_out_of_range, fallback_cycle, cycles = views.load_cycle_data(
+            committee, cycle
+        )
 
         assert cycle_out_of_range == False
         assert fallback_cycle == 2018
         assert cycles == [2018]
 
     def test_cycle_out_of_range(
-        self,
-        load_first_row_data_mock,
-        load_endpoint_results_mock
+        self, load_first_row_data_mock, load_endpoint_results_mock
     ):
         committee_id = 'C007'
         cycle = 2020
-        first_row_data = {'city': 'ELK GROVE', 'organization_type_full': None, 'committee_id': 'C007', 'zip': '95624', 'last_cycle_has_financial': None, 'cycle': 2018, 'candidate_ids': ['P60017852'], 'state_full': 'California', 'cycles_has_financial': [2018], 'name': 'CLIFTON ROBERTS FOR PRESIDENT', 'last_cycle_has_activity': 2018, 'organization_type': None, 'committee_type_full': 'Presidential', 'party_full': 'OTHER', 'designation_full': 'Principal campaign committee', 'cycles': [], 'cycles_has_activity': [2018], 'committee_type': 'P', 'party': 'OTH', 'designation': 'P', 'affiliated_committee_name': 'NONE', 'street_1': '9382 WILLOW POND CIRCLE', 'state': 'CA', 'street_2': None, 'treasurer_name': 'OWENS, STACY', 'filing_frequency': 'Q'}
+        first_row_data = {
+            'city': 'ELK GROVE',
+            'organization_type_full': None,
+            'committee_id': 'C007',
+            'zip': '95624',
+            'last_cycle_has_financial': None,
+            'cycle': 2018,
+            'candidate_ids': ['P60017852'],
+            'state_full': 'California',
+            'cycles_has_financial': [2018],
+            'name': 'CLIFTON ROBERTS FOR PRESIDENT',
+            'last_cycle_has_activity': 2018,
+            'organization_type': None,
+            'committee_type_full': 'Presidential',
+            'party_full': 'OTHER',
+            'designation_full': 'Principal campaign committee',
+            'cycles': [],
+            'cycles_has_activity': [2018],
+            'committee_type': 'P',
+            'party': 'OTH',
+            'designation': 'P',
+            'affiliated_committee_name': 'NONE',
+            'street_1': '9382 WILLOW POND CIRCLE',
+            'state': 'CA',
+            'street_2': None,
+            'treasurer_name': 'OWENS, STACY',
+            'filing_frequency': 'Q',
+        }
         load_first_row_data_mock.return_value = first_row_data
         load_endpoint_results_mock.return_value = []
         committee, all_candidates, cycle = views.load_committee_history(
@@ -545,7 +621,9 @@ class TestCommitteeApiCalls(TestCase):
         assert all_candidates == []
         assert committee == first_row_data
 
-        cycle_out_of_range, fallback_cycle, cycles = views.load_cycle_data(committee, cycle)
+        cycle_out_of_range, fallback_cycle, cycles = views.load_cycle_data(
+            committee, cycle
+        )
 
         assert cycle_out_of_range == True
         assert fallback_cycle == 2018
