@@ -623,7 +623,6 @@ DataTable.prototype.fetch = function(data, callback) {
     return;
   } else if (self.filterSet && self.filterSet.isValid) {
     urls.updateQuery(self.filterSet.serialize(), self.filterSet.fields);
-    //console.log(self.filterSet);
     self.filters = self.filterSet.serialize();
     // Only limit to 10 committee ids for processed data in specific datatables
     // Individual contributions does not contain data_type and therefore has a separate check
