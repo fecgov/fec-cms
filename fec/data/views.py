@@ -533,9 +533,8 @@ def load_cycle_data(committee, cycle):
         # when committees only file F1, fallback_cycle = null
         # set fallback_cycle = last_cycle_has_activity
         fallback_cycle = committee.get('last_cycle_has_activity')
-        cycles = committee.get('cycles_has_activity')
-    else:
-        cycles = committee.get('cycles_has_financial')
+
+    cycles = committee.get('cycles_has_activity')
 
     cycle_out_of_range = cycle not in cycles
 
