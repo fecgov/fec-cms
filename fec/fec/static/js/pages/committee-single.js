@@ -617,10 +617,10 @@ $(document).ready(function() {
         });
         break;
       case 'electioneering-committee':
-        path = ['committee', committeeId, 'electioneering', 'by_candidate'];
+        path = ['electioneering', 'aggregates'];
         tables.DataTable.defer($table, {
           path: path,
-          query: query,
+          query: _.extend({}, query, { committee_id: committeeId }),
           columns: electioneeringColumns,
           order: [[1, 'desc']],
           dom: tables.simpleDOM,
