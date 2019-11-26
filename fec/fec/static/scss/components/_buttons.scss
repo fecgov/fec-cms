@@ -556,3 +556,8 @@
     left: -1.5em;
   }
 }
+
+//For internal/external button widgets in Wagtail
+.block-internal_button .button--primary, .block-external_button .button--primary {
+  margin-bottom: u(2.4rem);
+}

@@ -16,7 +16,7 @@ $orgChart_lineSolidDark: thin solid $orgChart_colorStandard;
   display: block;
   float: left;
   list-style-type: none;
-  margin: 0;
+  margin: 0 0 u(2.4rem) 0;
   padding: 0;
   position: relative;
 
@@ -42,11 +42,11 @@ $orgChart_lineSolidDark: thin solid $orgChart_colorStandard;
       position: absolute;
       top: 0;
       width: 10px;
-      
+
     }
     &:after {
       // bottom half of left-side line
-      border-left: $orgChart_lineSolidDark;  
+      border-left: $orgChart_lineSolidDark;
       content: "";
       height: 50%;
       left: 0;
@@ -59,7 +59,7 @@ $orgChart_lineSolidDark: thin solid $orgChart_colorStandard;
         display: none;
       }
     }
-    
+
     a {
       align-items: center;
       border: $orgChart_lineSolidDark;
@@ -88,7 +88,7 @@ $orgChart_lineSolidDark: thin solid $orgChart_colorStandard;
       span {
         display: block;
         line-height: 1.2em;
-        
+
         &:first-child {
           font-size: 14px;
           font-weight: bold;
@@ -98,7 +98,7 @@ $orgChart_lineSolidDark: thin solid $orgChart_colorStandard;
           font-family: Karla, sans-serif;
           font-size: 12px;
           font-weight: normal;
-        } 
+        }
       }
     }
 
@@ -171,7 +171,7 @@ $orgChart_lineSolidDark: thin solid $orgChart_colorStandard;
 
     &.team-comms {
       padding: 0 $orgChart_gutterSize #{$orgChart_gutterSize * 2};
-  
+
       &:before {
         content: "";
         border-bottom: none;
@@ -190,7 +190,7 @@ $orgChart_lineSolidDark: thin solid $orgChart_colorStandard;
         border-right: $orgChart_lineDashed;
         border-top: $orgChart_lineDashed;
         content: "";
-        display: block; 
+        display: block;
         height: calc(50% + #{$orgChart_gutterSize + 1});
         left: auto;
         position: absolute;
@@ -216,7 +216,7 @@ $orgChart_lineSolidDark: thin solid $orgChart_colorStandard;
         height: 100%;
         top: 0;
       }
-  
+
       & > a:before {
         border-bottom: $orgChart_lineDashed;
         border-left: none;
@@ -240,7 +240,7 @@ $orgChart_lineSolidDark: thin solid $orgChart_colorStandard;
 
         li {
           padding: $orgChart_gutterSize $orgChart_gutterSize 0 0;
-          
+
           &:before {
             border-left: none;
             border-right: $orgChart_lineDashed;
@@ -260,7 +260,7 @@ $orgChart_lineSolidDark: thin solid $orgChart_colorStandard;
 // 768px would be ideal.
 // Until we get a full-width template, this will have to do.
 // TODO - When we get the full-width template, remove these comments and adjust the media query properly
-@include media($med) { 
+@include media($med) {
   #fec-orgchart {
     display: grid;
     grid-template-areas:
@@ -312,7 +312,7 @@ $orgChart_lineSolidDark: thin solid $orgChart_colorStandard;
           //   border-left: $orgChart_lineSolid;
           // }
         }
-        
+
         &:before {
           content: "";
           border-bottom: none;
