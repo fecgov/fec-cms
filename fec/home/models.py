@@ -64,7 +64,9 @@ stream_factory = functools.partial(
         ('image', ImageChooserBlock()),
         ('table', TableBlock(table_options=core_table_options)),
         ('custom_table', CustomTableBlock()),
-        ('contact', ContactInfoBlock())
+        ('contact', ContactInfoBlock()),
+        ('internal_button', InternalButtonBlock()),
+        ('external_button', ExternalButtonBlock()),
     ],
 )
 
@@ -1151,7 +1153,6 @@ class ExamplePage(Page):
     body = StreamField([
         ('paragraph', blocks.RichTextBlock()),
         ('example_image', ExampleImage()),
-        ('reporting_example_cards', ReportingExampleCards()),
         ('reporting_example_cards', ReportingExampleCards()),
         ('internal_button', InternalButtonBlock()),
         ('external_button', ExternalButtonBlock()),

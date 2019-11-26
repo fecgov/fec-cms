@@ -20,25 +20,13 @@
       border-radius: 2px;
     }
   }
-
+}
   .block-table {
     table {
-      @extend .simple-table;
-    }
-
-    tr {
-      @extend .simple-table__row;
-    }
-
-    td {
-      @extend .simple-table__cell;
-    }
-
-    thead {
-      @extend .simple-table__header;
+      @extend .simple-table-cms;
     }
   }
-}
+
 
 // Author-list component
 // could be moved to fec-style/scss/components/_author-list.scss

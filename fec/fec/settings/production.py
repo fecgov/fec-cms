@@ -14,8 +14,10 @@ SESSION_COOKIE_HTTPONLY = True
 CSRF_COOKIE_SECURE = True
 CSRF_COOKIE_HTTPONLY = True
 
-# TODO(jmcarp) Update after configuring DNS
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = [
+    '.fec.gov',
+    '.app.cloud.gov'
+]
 
 try:
     from .local import *  # noqa
