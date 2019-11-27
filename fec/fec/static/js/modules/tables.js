@@ -638,8 +638,9 @@ DataTable.prototype.fetch = function(data, callback) {
       self.filters.committee_id &&
       self.filters.committee_id.length > 10
     ) {
+      $('#exceeded_id_limit').remove();
       $('#committee_id-field ul.dropdown__selected').append(
-        '<div class="message filter__message message--error">' +
+        '<div id="exceeded_id_limit" class="message filter__message message--error">' +
           '<p>You&#39;re trying to search more than 10 committees. Narrow your search to 10 or fewer committees.</p>' +
           '</div>'
       );
