@@ -374,9 +374,7 @@ var filingsReportsColumns = columnHelpers.getColumns(columns.filings, [
 
 $(document).ready(function() {
   var $mapTable;
-  // on committee profile page, when cycles_has_activity more
-  // options than cycles_has_financial, when click financial summary page,
-  // reset timePeriod in the range of cycles_has_financial
+  // Reset time period to the fallback_cycle, which is the LAST_CYCLE_HAS_FINANCIAL.
   if (context.cycleOutOfRange == 'true') {
     var lastCycle = Number(context.lastCycleHasFinancial);
     var lastCycleOddYear = lastCycle - 1;
