@@ -11,18 +11,18 @@
         <div class="entity__figure">
           <div class="row">
             <div class="tag__category">
-              <div class="tag__item">Coverage dates: {{totals.0.coverage_start_date|date}} to {{totals.0.coverage_end_date|date}}</div>
+              <div class="tag__item">Coverage dates: {{totals.coverage_start_date|date}} to {{totals.coverage_end_date|date}}</div>
             </div>
           </div>
           {{ tables.summary(ie_summary) }}
           <p class="t-note">Newly filed summary data may not appear for up to 48 hours.</p>
         </div>
       <!-- Inaugural Committees -->
-      {% elif organization_type == 'I' %}
+      {% elif committee.organization_type == 'I' %}
         <div class="entity__figure">
           <div class="row">
             <div class="tag__category">
-              <div class="tag__item">Coverage dates: {{totals.0.coverage_start_date|date}} to {{totals.0.coverage_end_date|date}}</div>
+              <div class="tag__item">Coverage dates: {{totals.coverage_start_date|date}} to {{totals.coverage_end_date|date}}</div>
             </div>
           </div>
           {{ tables.summary(inaugural_summary) }}
@@ -36,7 +36,7 @@
             </a>
           </div>
           <div class="tag__category">
-            <div class="tag__item">Coverage dates: {{totals.0.coverage_start_date|date}} to {{totals.0.coverage_end_date|date}}</div>
+            <div class="tag__item">Coverage dates: {{totals.coverage_start_date|date}} to {{totals.coverage_end_date|date}}</div>
           </div>
           {{ tables.summary(raising_summary, committee_id, cycle, committee_type) }}
         </div>
@@ -48,7 +48,7 @@
             </a>
           </div>
           <div class="tag__category u-no-margin">
-            <div class="tag__item">Coverage dates: {{totals.0.coverage_start_date|date}} to {{totals.0.coverage_end_date|date}}</div>
+            <div class="tag__item">Coverage dates: {{totals.coverage_start_date|date}} to {{totals.coverage_end_date|date}}</div>
           </div>
           {{ tables.summary(spending_summary, committee_id, cycle, committee_type) }}
         </div>
@@ -57,13 +57,20 @@
             <h3 class="heading__left">Cash summary</h3>
           </div>
           <div class="tag__category u-no-margin">
-            <div class="tag__item">Coverage dates: {{totals.0.coverage_start_date|date}} to {{totals.0.coverage_end_date|date}}</div>
+            <div class="tag__item">Coverage dates: {{totals.coverage_start_date|date}} to {{totals.coverage_end_date|date}}</div>
           </div>
           {{ tables.summary(cash_summary, committee_id) }}
         </div>
       {% endif %}
     {% else %}
-      {{ missing.missing_financials(name, cycle) }}
+      {# on committee profile page, when cycles_has_activity has more options
+      than cycles_has_financial, cycle_out_of_range = true. when go back to financial summery page, missing message show last_cycle_has_financial 
+      #}
+      {% if cycle_out_of_range %}
+        {{ missing.missing_financials(committee.name, committee.last_cycle_has_financial) }}
+      {% else %}
+         {{ missing.missing_financials(committee.name, cycle) }}
+      {% endif %}      
     {% endif %}
   </div>
 </section>

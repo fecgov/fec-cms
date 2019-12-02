@@ -4,7 +4,7 @@
 {% import 'macros/page-header.jinja' as header %}
 
 {% block title %}
-    {{ name }} - committee overview
+    {{ committee.name }} - committee overview
 {% endblock %}
 
 {% block css %}
@@ -15,21 +15,21 @@
 
 {% block body %}
 
-{{ header.header(name, breadcrumbs) }}
+{{ header.header(committee.name, breadcrumbs) }}
 <div class="u-padding--left u-padding--right tab-interface">
   <header class="main">
-    <h1 class="entity__name content__section--narrow">{{ name }}</h1>
+    <h1 class="entity__name content__section--narrow">{{ committee.name }}</h1>
     <div class="heading--section">
       <span class="t-data t-bold entity__type">
         {% if is_SSF %}
-          {{ organization_type_full }} {{ committee_type_full }}
+          {{ committee.organization_type_full }} {{ committee.committee_type_full }}
           {% if designation %}
-          - {{ designation_full }}
+          - {{ committee.designation_full }}
           {% endif %}
         {% else %}
-          {{ committee_type_full }}
+          {{ committee.committee_type_full }}
             {% if designation %}
-            - {{ designation_full }}
+            - {{ committee.designation_full }}
             {% endif %}
          {% endif %}
       </span>
@@ -177,6 +177,7 @@
 
     {% include 'partials/loading-tab.jinja' %}
     {% include 'partials/committee/about-committee.jinja' %}
+ 
     {% if committee_type not in ['C', 'E'] %}
       {% include 'partials/committee/financial-summary.jinja' %}
     {% endif %}
