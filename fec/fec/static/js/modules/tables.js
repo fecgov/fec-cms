@@ -295,6 +295,9 @@ function filterSuccessUpdates(changeCount) {
       .removeClass('is-disabled-filter')
       .addClass('is-active-filter');
 
+    // Reenable committee ID typeahead input
+    $('#committee_id').removeClass('is-disabled-filter');
+
     if (type === 'checkbox') {
       $label = $('label[for="' + updateChangedEl.id + '"]');
 
@@ -638,7 +641,9 @@ DataTable.prototype.fetch = function(data, callback) {
       self.filters.committee_id &&
       self.filters.committee_id.length > 10
     ) {
-      $('#exceeded_id_limit').remove();
+      // Adds committee id error message and disables filter
+      $('#exceeded_id_limit').remove(); 
+      $('#committee_id').addClass('is-disabled-filter');
       $('#committee_id-field ul.dropdown__selected').append(
         '<div id="exceeded_id_limit" class="message filter__message message--error">' +
           '<p>You&#39;re trying to search more than 10 committees. Narrow your search to 10 or fewer committees.</p>' +
