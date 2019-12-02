@@ -34,7 +34,7 @@
 {% block sections %}
 {% if FEATURES.aggregatetotals %}
 <section id="raising-summary" class="aggregate-totals-section">
-  <h2 class="u-padding--top">Raising summary</h2>
+  <h2>Raising summary</h2>
   <script defer id="gov_fec_agg_tots_script" data-theme="dark" data-office="{{ office }}" data-year="{{ election_year }}" data-action="raised" src="{{ asset_for_js('widgets/aggregate-totals-box.js') }}"></script>
 </section>
 {% endif %}
