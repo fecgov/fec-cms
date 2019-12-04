@@ -24,9 +24,13 @@
  * this.map.handleDataRefresh(theData);
  */
 
-const d3 = require('d3');
-const chroma = require('chroma-js');
-const topojson = require('topojson');
+// const d3 = require('d3');
+const d3 = {};
+d3.geo = require(/* webpackChunkName: "vendor-widgets" */ 'd3-geo');
+d3.scale = require(/* webpackChunkName: "vendor-widgets" */ 'd3-scale');
+d3.selection = require(/* webpackChunkName: "vendor-widgets" */ 'd3-selection');
+const chroma = require(/* webpackChunkName: "chroma" */ 'chroma-js');
+const topojson = require(/* webpackChunkName: "topojson" */ 'topojson');
 const states = require('../data/us-states-10m.json');
 const stateFeatures = topojson.feature(states, states.objects.states).features;
 

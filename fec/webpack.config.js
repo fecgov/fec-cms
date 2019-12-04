@@ -12,9 +12,11 @@ const ManifestPlugin = require('webpack-manifest-plugin');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
 // var BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin
 const fs = require('fs');
+const polyfillBrowsers = ['last 1 version', '> 1%', 'IE 10'];
 
 const entries = {
-  vendor: ['jquery', 'handlebars'],
+  polyfills: ['@babel/polyfill', './fec/static/js/polyfills.js'],
+  vendor: ['@babel/polyfill', 'jquery', 'handlebars'],
   init: './fec/static/js/init.js',
   'data-init': './fec/static/js/data-init.js',
   'dataviz-common': [
@@ -83,8 +85,8 @@ module.exports = [
             // Included on every page
             filename: 'vendor.js',
             name: 'vendor',
-            reuseExistingChunk: true,
-            chunks: 'all'
+            reuseExistingChunk: true
+            // chunks: 'all'
           },
           'dataviz-common': {
             // Contains d3, leaflet, and other shared code for maps and charts
@@ -117,7 +119,10 @@ module.exports = [
             loader: 'babel-loader',
             options: {
               presets: [
-                ['@babel/preset-env', { useBuiltIns: 'usage', corejs: 3 }]
+                [
+                  '@babel/preset-env',
+                  { targets: polyfillBrowsers, useBuiltIns: 'entry', corejs: 3 }
+                ]
               ]
             }
           }
@@ -176,7 +181,10 @@ module.exports = [
     name: 'widgets',
     entry: {
       'aggregate-totals': './fec/static/js/widgets/aggregate-totals.js',
-      'aggregate-totals-box': './fec/static/js/widgets/aggregate-totals-box.js'
+      'aggregate-totals-box': './fec/static/js/widgets/aggregate-totals-box.js',
+      'contributions-by-state-box':
+        './fec/static/js/widgets/contributions-by-state-box.js'
+      // polyfills: './fec/static/js/polyfills.js'
     },
     output: {
       filename: 'widgets/[name].js',
@@ -186,33 +194,51 @@ module.exports = [
       fs: 'empty',
       path: true
     },
+    optimization: {
+      minimize: false,
+      splitChunks: {
+        chunks: 'initial',
+        cacheGroups: {
+          vendor: {
+            // Contains jquery and handlebars
+            // Included on every page
+            filename: 'vendor-widgets.js',
+            name: 'vendor-widgets',
+            reuseExistingChunk: true
+          }
+        }
+      }
+    },
     plugins: [
-      new webpack.SourceMapDevToolPlugin(),
+      // new webpack.SourceMapDevToolPlugin(),
       new ManifestPlugin({
         fileName: 'rev-widgets-manifest-js.json',
         basePath: '/static/js/'
       })
     ],
-    module: {
-      rules: [
-        {
-          test: /\.js$/,
-          exclude: /node_modules/,
-          use: {
-            loader: 'babel-loader',
-            options: {
-              presets: [
-                ['@babel/preset-env', { useBuiltIns: 'usage', corejs: 3 }]
-              ]
-            }
-          }
-        }
-      ]
-    },
+    // module: {
+    //   rules: [
+    //     {
+    //       test: /\.js$/,
+    //       exclude: /node_modules/,
+    //       use: {
+    //         loader: 'babel-loader',
+    //         options: {
+    //           presets: [
+    //             [
+    //               '@babel/preset-env',
+    //               { targets: polyfillBrowsers, useBuiltIns: 'entry', corejs: 3 }
+    //             ]
+    //           ]
+    //         }
+    //       }
+    //     }
+    //   ]
+    // },
     stats: {
       assetsSort: 'field',
       modules: false,
-      warnings: false
+      warnings: true
     }
   },
   {
