@@ -506,14 +506,17 @@ describe('data table', function() {
       var callback = sinon.stub();
       this.table.fetch({}, callback);
       expect(this.table.filters).to.deep.equal(serialized);
-      expect(this.table.filters.committee_id.length).to.be.above(10);
+      expect(
+        this.table.filters.committee_id.length,
+        'Expected greater than 10 committee ids'
+      ).to.be.above(10);
       expect(
         $('#committee_id-field').length,
         'Expected committee_id-field to exist'
       ).to.be.above(0);
       expect(
         $('#exceeded_id_limit').length,
-        'Expected error message to show'
+        'Expected error message to exist'
       ).to.be.above(0);
     });
 
@@ -533,14 +536,17 @@ describe('data table', function() {
       var callback = sinon.stub();
       this.table.fetch({}, callback);
       expect(this.table.filters).to.deep.equal(serialized);
-      expect(this.table.filters.committee_id.length).to.be.above(10);
+      expect(
+        this.table.filters.committee_id.length,
+        'Expected greater than 10 committee ids'
+      ).to.be.above(10);
       expect(
         $('#committee_id-field').length,
         'Expected committee_id-field to exist'
       ).to.be.above(0);
       expect(
         $('#exceeded_id_limit').length,
-        'Expected error message to show'
+        'Expected error message to exist'
       ).to.be.above(0);
     });
   });
