@@ -41,6 +41,15 @@
       <div class="data-container__head">
         <h1 class="data-container__title">{{ document_type_display_name }}</h1>
       </div>
+      {% if document_type_display_name == 'Statutes' %}
+      <div class="u-padding--left u-padding--right">
+        <div class="message message--info">
+          <p>
+            The statutes search feature includes the Federal Election Campaign Act (52 U.S.C. §§ 30101 to 30146), the Presidential Election Campaign Fund Act (26 U.S.C. §§ 9001 to 9013) and the Presidential Primary Matching Payment Account Act (26 U.S.C. §§ 9031 to 9042). You can search statutes using keywords and/or statutory citations (full or partial).
+          </p>
+        </div>
+      </div>
+      {% endif %}
       <div class="u-padding--left u-padding--right">
         {% block message %}{% endblock %}
       </div>

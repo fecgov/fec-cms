@@ -298,28 +298,9 @@ def load_first_row_data(*path_parts, **filters):
     return response['results'][0] if response['results'] else None
 
 
-def load_endpoint_data(*path_parts, **filters):
-    return _call_api(
-        *path_parts,
-        **filters
-    )
-
-
-def load_cmte_financials(committee_id, **filters):
-    filters.update({
-        'is_amended': 'false',
-        'per_page': MAX_FINANCIALS_COUNT,
-        'report_type': filters.get('report_type', []) + ['-TER'],
-        'sort_hide_null': 'true',
-    })
-
-    reports = _call_api('committee', committee_id, 'reports', **filters)
-    totals = _call_api('committee', committee_id, 'totals', **filters)
-
-    return {
-        'reports': reports['results'],
-        'totals': totals['results'],
-    }
+def load_endpoint_results(*path_parts, **filters):
+    response = _call_api(*path_parts, **filters)
+    return response.get('results', [])
 
 
 def load_candidate_statement_of_candidacy(candidate_id, cycle):
