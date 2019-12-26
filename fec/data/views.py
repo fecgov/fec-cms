@@ -518,7 +518,12 @@ def load_committee_history(committee_id, cycle=None):
     # (2)call committee/{committee_id}/candidates/history/{cycle}
     # under: candidate, get all candidates associated with that commitee
     path = '/committee/' + committee_id + '/candidates/history/' + str(cycle)
-    all_candidates = api_caller.load_endpoint_results(path, election_full=False)
+    all_candidates = api_caller.load_endpoint_results(
+        path, election_full=False)
+
+    # clean cycles_has_activity, remove 'None' value in cycles_has_activity
+    committee['cycles_has_activity'] = list(
+        filter(None, committee.get('cycles_has_activity')))
 
     return committee, all_candidates, cycle
 
