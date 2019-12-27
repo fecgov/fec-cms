@@ -189,12 +189,14 @@ DownloadItem.prototype.handleServerError = function(xhr) {
     this.$body.html(
       '<div class="message message--alert message--mini">' +
         'Sorry, you have exceeded your maximum downloads for the hour. Please try again later.' +
+        '<button class="js-close button--cancel download__cancel"><span class="u-visually-hidden">Remove</span></button>' +
         '</div>'
     );
   } else {
     this.$body.html(
       '<div class="message message--alert message--mini">' +
         'Sorry, you have either exceeded your maximum downloads for the hour or encountered a server error. Please try again later.' +
+        '<button class="js-close button--cancel download__cancel"><span class="u-visually-hidden">Remove</span></button>' +
         '</div>'
     );
   }
@@ -209,6 +211,14 @@ DownloadItem.prototype.handleServerError = function(xhr) {
   // Tell the container to subtract an item, but preserve the DOM itself
   // so that the message stays visible
   this.container.subtract(true);
+
+  // Add error close button functionality
+  $(this.$body)
+    .find('.js-close')
+    .on('click', this.handleCloseErrorClick.bind(this));
+};
+DownloadItem.prototype.handleCloseErrorClick = function() {
+  this.container.destroy();
 };
 
 function DownloadContainer(parent) {
