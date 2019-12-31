@@ -551,7 +551,8 @@ class TestCommitteeApiCalls(TestCase):
             'party_full': 'OTHER',
             'designation_full': 'Principal campaign committee',
             'cycles': [],
-            'cycles_has_activity': [2018],
+            # make sure we clean 'None' value in cycles_has_activity correctly
+            'cycles_has_activity': [2018, None],
             'committee_type': 'P',
             'party': 'OTH',
             'designation': 'P',
@@ -571,11 +572,16 @@ class TestCommitteeApiCalls(TestCase):
         assert all_candidates == []
         assert committee == first_row_data
 
+        # check if cycles_has_activity include 'None' item
+        # in function load_committee_history() in views.py (line 524)
+        # we remove 'None' value in cycles_has_activity
+        # so make sure cycles_has_activity not include 'None' value anymore,
+        assert None not in committee['cycles_has_activity']
         cycle_out_of_range, fallback_cycle, cycles = views.load_cycle_data(
             committee, cycle
         )
 
-        assert cycle_out_of_range == False
+        assert cycle_out_of_range is False
         assert fallback_cycle == 2018
         assert cycles == [2018]
 
@@ -624,7 +630,6 @@ class TestCommitteeApiCalls(TestCase):
         cycle_out_of_range, fallback_cycle, cycles = views.load_cycle_data(
             committee, cycle
         )
-
-        assert cycle_out_of_range == True
+        assert cycle_out_of_range is True
         assert fallback_cycle == 2018
         assert cycles == [2018]

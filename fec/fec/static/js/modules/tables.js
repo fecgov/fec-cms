@@ -295,6 +295,9 @@ function filterSuccessUpdates(changeCount) {
       .removeClass('is-disabled-filter')
       .addClass('is-active-filter');
 
+    // Reenable committee ID typeahead input
+    $('#committee_id').removeClass('is-disabled-filter');
+
     if (type === 'checkbox') {
       $label = $('label[for="' + updateChangedEl.id + '"]');
 
@@ -624,7 +627,32 @@ DataTable.prototype.fetch = function(data, callback) {
   } else if (self.filterSet && self.filterSet.isValid) {
     urls.updateQuery(self.filterSet.serialize(), self.filterSet.fields);
     self.filters = self.filterSet.serialize();
+    // Only limit to 10 committee ids for processed data in specific datatables
+    // Individual contributions does not contain data_type and therefore has a separate check
+    var limitCommitteeIDCheckboxes =
+      (self.filters.data_type == 'processed' &&
+        ['Receipts', 'Disbursements', 'Independent expenditures'].indexOf(
+          self.opts.title
+        ) !== -1) ||
+      self.opts.title === 'Individual contributions';
+    if (
+      limitCommitteeIDCheckboxes &&
+      self.filters &&
+      self.filters.committee_id &&
+      self.filters.committee_id.length > 10
+    ) {
+      // Adds committee id error message and disables filter
+      $('#exceeded_id_limit').remove();
+      $('#committee_id').addClass('is-disabled-filter');
+      $('#committee_id-field ul.dropdown__selected').append(
+        '<div id="exceeded_id_limit" class="message filter__message message--error">' +
+          '<p>You&#39;re trying to search more than 10 committees. Narrow your search to 10 or fewer committees.</p>' +
+          '</div>'
+      );
+      return;
+    }
   }
+
   var url = self.buildUrl(data);
   self.$processing.show();
   if (self.xhr) {

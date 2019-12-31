@@ -482,4 +482,72 @@ describe('data table', function() {
       expect(results).to.deep.equal(expected);
     });
   });
+
+  describe('limit committee ids', function() {
+    beforeEach(function() {
+      this.table.xhr = null;
+      $('body').append(
+        '<div id="committee_id-field"><ul class="dropdown__selected"></ul><input id="committee_id" /></div>'
+      );
+    });
+
+    it('test committee id errors with individual contributions', function() {
+      var serialized = {
+        committee_id: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]
+      };
+      this.table.opts.title = 'Individual contributions';
+      this.table.filterSet = {
+        serialize: function() {
+          return serialized;
+        },
+        fields: ['committee_id']
+      };
+      this.table.filterSet.isValid = true;
+      var callback = sinon.stub();
+      this.table.fetch({}, callback);
+      expect(this.table.filters).to.deep.equal(serialized);
+      expect(
+        this.table.filters.committee_id.length,
+        'Expected greater than 10 committee ids'
+      ).to.be.above(10);
+      expect(
+        $('#committee_id-field').length,
+        'Expected committee_id-field to exist'
+      ).to.be.above(0);
+      expect(
+        $('#exceeded_id_limit').length,
+        'Expected error message to exist'
+      ).to.be.above(0);
+    });
+
+    it('test committee id errors with processed data type', function() {
+      var serialized = {
+        committee_id: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11],
+        data_type: 'processed'
+      };
+      this.table.opts.title = 'Disbursements';
+      this.table.filterSet = {
+        serialize: function() {
+          return serialized;
+        },
+        fields: ['committee_id', 'data_type']
+      };
+      this.table.filterSet.isValid = true;
+      var callback = sinon.stub();
+      this.table.fetch({}, callback);
+      expect(this.table.filters).to.deep.equal(serialized);
+      expect(
+        this.table.filters.committee_id.length,
+        'Expected greater than 10 committee ids'
+      ).to.be.above(10);
+      expect(
+        $('#committee_id-field').length,
+        'Expected committee_id-field to exist'
+      ).to.be.above(0);
+      expect(
+        $('#exceeded_id_limit').length,
+        'Expected error message to exist'
+      ).to.be.above(0);
+    });
+  });
 });
