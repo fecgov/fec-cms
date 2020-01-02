@@ -36,6 +36,20 @@ Filter independent expenditures
           <li>
             <input id="most_recent_true" name="most_recent" type="checkbox" value="true">
             <label for="most_recent_true">Current version</label>
+            
+            <button class="button--keywords js-methodology" data-a11y-dialog-show="version-methodology-modal">Version methodology</button>
+            <div class="js-modal modal" id="version-methodology-modal" aria-hidden="true">
+                <div tabindex="-1" class="modal__overlay" data-a11y-dialog-hide=""></div>
+                <div role="dialog" class="modal__content" aria-labelledby="version-methodology-modal-title">
+                    <div role="document">
+                        <button type="button" class="modal__close button--close--primary" data-a11y-dialog-hide="" title="Close this dialog window"></button>
+                        <h2 id="version-methodology-modal-title">Methodology</h2>
+                        <p>Methodology body content placeholder</p>
+                    </div>
+                </div>
+            </div>
+
+
           </li>
         </ul>
       </fieldset>
