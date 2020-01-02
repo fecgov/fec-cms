@@ -24,8 +24,21 @@ Filter independent expenditures
   <div class="filters__inner">
     {{ typeahead.field('committee_id', 'Spender name or ID', id_suffix='_raw') }}
     {{ reports.type(id_suffix='_raw') }}
-    {{ reports.form(id_suffix='_raw')}}
     {{ text.field('candidate_search', 'Candidate mentioned', id_suffix='_raw')}}
+    {# Current version filter is copied from version-status.jinja.
+    The template could not be reused as it includes other version
+    status filters that are not needed. TODO: Consolidate version template #}
+    <div class="filter">
+      <fieldset class="js-filter" data-filter="checkbox">
+        <legend class="label">Version</legend>
+        <ul>
+          <li>
+            <input id="most_recent_true" name="most_recent" type="checkbox" value="true">
+            <label for="most_recent_true">Current version</label>
+          </li>
+        </ul>
+      </fieldset>
+    </div>
   </div>
   <button type="button" class="js-accordion-trigger accordion__button">Candidate mentioned</button>
   <div class="accordion__content">
