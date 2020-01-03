@@ -245,7 +245,7 @@ def get_candidate(candidate_id, cycle, election_full):
     # (6)Call /filings?candidate_id=P00003392&form_type=F2
     # Get the statements of candidacy
     statement_of_candidacy = api_caller.load_candidate_statement_of_candidacy(
-        candidate['candidate_id'], cycle=cycle
+        candidate['candidate_id']
     )
 
     if statement_of_candidacy:

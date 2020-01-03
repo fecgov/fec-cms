@@ -303,24 +303,13 @@ def load_endpoint_results(*path_parts, **filters):
     return response.get('results', [])
 
 
-def load_candidate_statement_of_candidacy(candidate_id, cycle):
+def load_candidate_statement_of_candidacy(candidate_id):
     response = _call_api(
         'filings',
         candidate_id=candidate_id,
         form_type='F2',
     )
-
-    # Cycle is always the even year; so to include odd year statements,
-    # check for greater than or equal to the odd year
-    year = cycle - 1
-
-    if 'results' in response:
-        return [
-            statement for statement in response['results']
-            if statement['election_year'] >= year
-        ]
-    else:
-        return []
+    return response.get('results', [])
 
 
 def load_committee_statement_of_organization(committee_id):

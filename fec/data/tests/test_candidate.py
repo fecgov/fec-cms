@@ -64,7 +64,14 @@ class TestCandidate(TestCase):
             self.STOCK_COMMITTEE_LIST,
             cycle,
         )
-        candidate = get_candidate('H001', 2018, show_full_election)
+        load_first_row_data_mock.return_value = mock.MagicMock()
+        load_candidate_statement_of_candidacy_mock.return_value = [
+            {"receipt_date": "2019-11-30T00:00:00"},
+            {"receipt_date": "2017-11-30T00:00:00"},
+            {"receipt_date": "2016-11-30T00:00:00"},
+        ]
+
+        candidate = get_candidate("H001", 2018, show_full_election)
 
         assert candidate['candidate_id'] == test_candidate['candidate_id']
         assert candidate['name'] == test_candidate['name']
@@ -143,6 +150,8 @@ class TestCandidate(TestCase):
         assert len(candidate['spending_summary']) == 0
         assert len(candidate['cash_summary']) == 0
 
+        assert candidate["statement_of_candidacy"] == [{'receipt_date': '11/30/2019'}, {'receipt_date': '11/30/2017'}, {'receipt_date': '11/30/2016'}]
+
     def test_special_odd_year_return_rounded_number(
         self,
         load_with_nested_mock,
@@ -157,9 +166,14 @@ class TestCandidate(TestCase):
         test_candidate["rounded_election_years"] = [2014, 2016, 2018]
 
         load_with_nested_mock.return_value = (test_candidate, mock.MagicMock(), 2016)
-        candidate = get_candidate('H001', 2016, True)
+        load_first_row_data_mock.return_value = mock.MagicMock()
+        load_candidate_statement_of_candidacy_mock.return_value = []
+
+        candidate = get_candidate("H001", 2016, True)
         assert candidate["election_years"] == [2014, 2016, 2018]
         assert candidate["election_year"] == 2016
+
+        assert candidate["statement_of_candidacy"] == []
 
     def test_future_candidate_max_cycle(
         self,

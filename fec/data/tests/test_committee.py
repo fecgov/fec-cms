@@ -5,6 +5,7 @@ import copy
 from data import views, api_caller
 
 
+@mock.patch.object(api_caller, 'load_committee_statement_of_organization')
 @mock.patch.object(api_caller, 'load_endpoint_results')
 @mock.patch.object(views, 'load_reports_and_totals')
 @mock.patch.object(views, 'load_cycle_data')
@@ -173,6 +174,7 @@ class TestCommittee(TestCase):
         load_cycle_data_mock,
         load_reports_and_totals_mock,
         load_endpoint_results_mock,
+        load_committee_statement_of_organization_mock,
     ):
         cycle = 2018
 
@@ -184,6 +186,12 @@ class TestCommittee(TestCase):
             self.STOCK_REPORTS,
             self.STOCK_TOTALS,
         )
+        load_endpoint_results_mock.return_value = mock.MagicMock()
+        load_committee_statement_of_organization_mock.return_value = [
+            {'receipt_date': '2019-11-30T00:00:00'},
+            {'receipt_date': '2017-11-30T00:00:00'},
+            {'receipt_date': '2016-11-30T00:00:00'},
+        ]
         template_variables = views.get_committee('C001', 2018)
 
         committee = template_variables.get("committee")
@@ -216,6 +224,11 @@ class TestCommittee(TestCase):
         assert template_variables['result_type'] == 'committees'
         assert template_variables['report_type'] == 'pac-party'
         assert template_variables['reports'] == self.STOCK_REPORTS
+        assert template_variables['statement_of_organization'] == [
+            {'receipt_date': '11/30/2019'},
+            {'receipt_date': '11/30/2017'},
+            {'receipt_date': '11/30/2016'},
+        ]
 
     def test_ie_summary(
         self,
@@ -223,6 +236,7 @@ class TestCommittee(TestCase):
         load_cycle_data_mock,
         load_reports_and_totals_mock,
         load_endpoint_results_mock,
+        load_committee_statement_of_organization_mock,
     ):
         cycle = 2018
 
@@ -252,6 +266,7 @@ class TestCommittee(TestCase):
         load_cycle_data_mock,
         load_reports_and_totals_mock,
         load_endpoint_results_mock,
+        load_committee_statement_of_organization_mock,
     ):
         cycle = 2018
 
@@ -277,6 +292,7 @@ class TestCommittee(TestCase):
         load_cycle_data_mock,
         load_reports_and_totals_mock,
         load_endpoint_results_mock,
+        load_committee_statement_of_organization_mock,
     ):
 
         cycle = 2018
@@ -440,6 +456,7 @@ class TestCommittee(TestCase):
         load_cycle_data_mock,
         load_reports_and_totals_mock,
         load_endpoint_results_mock,
+        load_committee_statement_of_organization_mock,
     ):
         cycle = 2018
 
