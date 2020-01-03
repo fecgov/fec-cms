@@ -304,21 +304,23 @@ def load_endpoint_results(*path_parts, **filters):
 
 
 def load_candidate_statement_of_candidacy(candidate_id):
+    """Get most recent F2 - default sort is `-receipt_date`"""
     response = _call_api(
         'filings',
         candidate_id=candidate_id,
         form_type='F2',
     )
-    return response.get('results', [])
+    return response['results'][0] if response['results'] else None
 
 
 def load_committee_statement_of_organization(committee_id):
+    """Get most recent F1 - default sort is `-receipt_date`"""
     response = _call_api(
         'filings',
         committee_id=committee_id,
         form_type='F1'
     )
-    return response.get('results', [])
+    return response['results'][0] if response['results'] else None
 
 
 def result_or_404(data):

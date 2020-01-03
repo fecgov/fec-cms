@@ -249,8 +249,7 @@ def get_candidate(candidate_id, cycle, election_full):
     )
 
     if statement_of_candidacy:
-        for statement in statement_of_candidacy:
-            statement["receipt_date"] = format_receipt_date(statement["receipt_date"])
+        statement_of_candidacy["receipt_date"] = format_receipt_date(statement_of_candidacy["receipt_date"])
 
     # Get all the elections
     elections = sorted(
@@ -469,8 +468,7 @@ def get_committee(committee_id, cycle):
     )
 
     if statement_of_organization:
-        for statement in statement_of_organization:
-            statement["receipt_date"] = format_receipt_date(statement["receipt_date"])
+        statement_of_organization["receipt_date"] = format_receipt_date(statement_of_organization["receipt_date"])
 
     template_variables["statement_of_organization"] = statement_of_organization
 

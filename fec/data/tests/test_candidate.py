@@ -6,7 +6,7 @@ from data import api_caller
 from data.views import get_candidate
 
 
-@mock.patch.object(api_caller, 'load_candidate_statement_of_candidacy')
+@mock.patch.object(api_caller, 'load_candidate_statement_of_candidacy', return_value=None)
 @mock.patch.object(api_caller, 'load_first_row_data')
 @mock.patch.object(api_caller, 'load_with_nested')
 class TestCandidate(TestCase):
@@ -65,11 +65,7 @@ class TestCandidate(TestCase):
             cycle,
         )
         load_first_row_data_mock.return_value = mock.MagicMock()
-        load_candidate_statement_of_candidacy_mock.return_value = [
-            {"receipt_date": "2019-11-30T00:00:00"},
-            {"receipt_date": "2017-11-30T00:00:00"},
-            {"receipt_date": "2016-11-30T00:00:00"},
-        ]
+        load_candidate_statement_of_candidacy_mock.return_value = {"receipt_date": "2019-11-30T00:00:00"}
 
         candidate = get_candidate("H001", 2018, show_full_election)
 
@@ -150,7 +146,7 @@ class TestCandidate(TestCase):
         assert len(candidate['spending_summary']) == 0
         assert len(candidate['cash_summary']) == 0
 
-        assert candidate["statement_of_candidacy"] == [{'receipt_date': '11/30/2019'}, {'receipt_date': '11/30/2017'}, {'receipt_date': '11/30/2016'}]
+        assert candidate["statement_of_candidacy"] == {'receipt_date': '11/30/2019'}
 
     def test_special_odd_year_return_rounded_number(
         self,
@@ -167,13 +163,12 @@ class TestCandidate(TestCase):
 
         load_with_nested_mock.return_value = (test_candidate, mock.MagicMock(), 2016)
         load_first_row_data_mock.return_value = mock.MagicMock()
-        load_candidate_statement_of_candidacy_mock.return_value = []
 
         candidate = get_candidate("H001", 2016, True)
         assert candidate["election_years"] == [2014, 2016, 2018]
         assert candidate["election_year"] == 2016
 
-        assert candidate["statement_of_candidacy"] == []
+        assert candidate["statement_of_candidacy"] is None
 
     def test_future_candidate_max_cycle(
         self,
