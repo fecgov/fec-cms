@@ -53,7 +53,7 @@
   },
   {
     "term": "Cash-on-hand",
-    "definition": "Cash on hand includes funds held in checking and savings accounts, certificates of deposit, petty cash funds, traveler’s checks, treasury bills and other investments valued at cost. <a href=\"https://www.fec.gov/regulations/104-3/CURRENT#104-3-a-1\">11 CFR 104.3(a)(1)</a>."
+    "definition": "Cash-on-hand includes funds held in checking and savings accounts, certificates of deposit, petty cash funds, traveler’s checks, treasury bills and other investments valued at cost. <a href=\"https://www.fec.gov/regulations/104-3/CURRENT#104-3-a-1\">11 CFR 104.3(a)(1)</a>."
   },
   {
     "term": "CFR",
@@ -65,7 +65,7 @@
   },
   {
     "term": "Collecting agent",
-    "definition": "A collecting agent is an organization or committee that collects and transmits contributions to one or more separate segregated funds to which the collecting agent is related. A collecting agent may be either:<ul><li>\nA committee, whether or not it is a political committee as defined in 11 CFR <a href=\"https://www.fec.gov/regulations/100-5/CURRENT#100-5\">100.5</a>, affiliated with the separated segregated fund under 11 CFR <a href=\"https://www.fec.gov/regulations/110-3/CURRENT#110-3\">110.3</a>.</li><li>The connected organization of the separated segregated fund as defined in 11 CFR <a href=\"https://www.fec.gov/regulations/100-6/CURRENT#100-6\">100.6</a>. A parent, subsidiary, branch, division, department, or local unit of the connected organization of the separate segregated fund.</li><li>A local national or international union collecting contributions on behalf of the separate segregated fund of any federation with which the local, national or international union is affiliated.</li></ul> See 11 CFR <a href=\"https://www.fec.gov/regulations/114-1/CURRENT#114-1-e\">114.1(e)</A> and <a href=\"https://www.fec.gov/regulations/102-6/CURRENT#102-6-b\">102.6(b)(1)</a>."
+    "definition": "A collecting agent is an organization or committee that collects and transmits contributions to one or more separate segregated funds to which the collecting agent is related. A collecting agent may be either:<ul><li>A committee, whether or not it is a political committee as defined in 11 CFR <a href=\"https://www.fec.gov/regulations/100-5/CURRENT#100-5\">100.5</a>, affiliated with the separated segregated fund under 11 CFR <a href=\"https://www.fec.gov/regulations/110-3/CURRENT#110-3\">110.3</a>.</li><li>The connected organization of the separated segregated fund as defined in 11 CFR <a href=\"https://www.fec.gov/regulations/100-6/CURRENT#100-6\">100.6</a>. A parent, subsidiary, branch, division, department, or local unit of the connected organization of the separate segregated fund.</li><li>A local national or international union collecting contributions on behalf of the separate segregated fund of any federation with which the local, national or international union is affiliated.</li></ul> See 11 CFR <a href=\"https://www.fec.gov/regulations/114-1/CURRENT#114-1-e\">114.1(e)</A> and <a href=\"https://www.fec.gov/regulations/102-6/CURRENT#102-6-b\">102.6(b)(1)</a>."
   },
   {
     "term": "Commercial vendor",
@@ -221,7 +221,7 @@
   },
   {
     "term": "Family",
-    "definition": "<ul><li>For purposes of candidate travel rules, \"immediate family\" means the father, mother, son, daughter, brother, sister, spouse (see separate definition), father-in-law or mother-in-law of the candidate. See 11 CFR <a href=\"https://www.fec.gov/regulations/100-93/CURRENT#100-93-g-4\">100.93(g)(4)</a>.</li><li>For purposes of rules governing SSF solicitations and corporate/labor communications, “families” includes spouses (see separate definition), mothers, fathers, sons and daughters who live in the same household. See <a href=\"https://www.fec.gov/data/legal/advisory-opinions/2013-06\">AOs 2013-06</a> and <a href=\"https://www.fec.gov/data/legal/advisory-opinions/1980-102\">1980-102</a>.</li><li>For purposes of public funding, the term “immediate family” means a candidate’s spouse (see separate definition), and any child, parent, grandparent, brother, half-brother, sister, or half-sister of the candidate and the spouses of such persons. 11 CFR <a href=\"https://www.fec.gov/regulations/9003-2/CURRENT#9003-2-c-1\">9003.2(c)(1)</a> and <a href=\"https://www.fec.gov/regulations/9035-2/CURRENT#9035-2-b\">9035.2(b)</a>.</li></ul>"
+    "definition": "<ul><li>For purposes of candidate travel rules, \"immediate family\" means the father, mother, son, daughter, brother, sister, spouse (see separate definition), father-in-law or mother-in-law of the candidate. See 11 CFR <a href=\"https://www.fec.gov/regulations/100-93/CURRENT#100-93-g-4\">100.93(g)(4)</a>.</li><li>For purposes of rules governing SSF solicitations and corporate/labor communications, \"families\" includes spouses (see separate definition), mothers, fathers, sons and daughters who live in the same household. See <a href=\"https://www.fec.gov/data/legal/advisory-opinions/2013-06\">AOs 2013-06</a> and <a href=\"https://www.fec.gov/data/legal/advisory-opinions/1980-102\">1980-102</a>.</li><li>For purposes of public funding, the term \"immediate family\" means a candidate’s spouse (see separate definition), and any child, parent, grandparent, brother, half-brother, sister, or half-sister of the candidate and the spouses of such persons. 11 CFR <a href=\"https://www.fec.gov/regulations/9003-2/CURRENT#9003-2-c-1\">9003.2(c)(1)</a> and <a href=\"https://www.fec.gov/regulations/9035-2/CURRENT#9035-2-b\">9035.2(b)</a>.</li></ul>"
   },
   {
     "term": "Federal Election Activity (FEA)",
@@ -405,7 +405,7 @@
   },
   {
     "term": "New party",
-    "definition": "For purposes of public funding, the term “new party” means a political party which is neither a major party nor a minor party. 11 CFR <a href=\"https://www.fec.gov/regulations/9002-8/CURRENT#9002-8\">9002.8</a>."
+    "definition": "For purposes of public funding, the term \"new party\" means a political party which is neither a major party nor a minor party. 11 CFR <a href=\"https://www.fec.gov/regulations/9002-8/CURRENT#9002-8\">9002.8</a>."
   },
   {
     "term": "Non-contribution account",
@@ -557,7 +557,7 @@
   },
   {
     "term": "Spouse",
-    "definition": "Couples married under state law, including same-sex couples, are “spouses” for the purpose of Commission regulations. AOs <a href=\"https://www.fec.gov/data/legal/advisory-opinions/2013-07/\">2013-07</a> and <a href=\"https://www.fec.gov/data/legal/advisory-opinions/2013-06/\">2013-06</a>."
+    "definition": "Couples married under state law, including same-sex couples, are \"spouses\" for the purpose of Commission regulations. AOs <a href=\"https://www.fec.gov/data/legal/advisory-opinions/2013-07/\">2013-07</a> and <a href=\"https://www.fec.gov/data/legal/advisory-opinions/2013-06/\">2013-06</a>."
   },
   {
     "term": "State party committee",
