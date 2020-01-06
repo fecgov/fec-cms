@@ -23,8 +23,6 @@ Filter independent expenditures
 <div class="js-accordion accordion--neutral" data-content-prefix="filter" data-open-first="false">
   <div class="filters__inner">
     {{ typeahead.field('committee_id', 'Spender name or ID', id_suffix='_raw') }}
-    {{ reports.type(id_suffix='_raw') }}
-    {{ reports.form(id_suffix='_raw')}}
     {{ text.field('candidate_search', 'Candidate mentioned', id_suffix='_raw')}}
     {# Current version filter is copied from version-status.jinja.
     The template could not be reused as it includes other version
