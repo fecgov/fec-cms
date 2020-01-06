@@ -32,20 +32,16 @@
           <td class="figure__label">Statement of candidacy:</td>
           <td class="figure__value">
             <ul>
-            {% for statement in statement_of_candidacy %}
               <li>
-                {% if loop.index == 1 %}
                 <div class="t-block">
                   <i class="icon-circle--check-outline--inline--left"></i>
-                  <a href="{{ statement.pdf_url }}">Current version (PDF)</a>
+                  <a href="{{ statement_of_candidacy.pdf_url }}">Current version (PDF)</a>
                 </div>
-                {% if statement.fec_file_id %}
-                  <div class="t-small u-small-icon-padding--left"> {{ statement.fec_file_id }}</div>
+                {% if statement_of_candidacy.fec_file_id %}
+                  <div class="t-small u-small-icon-padding--left"> {{ statement_of_candidacy.fec_file_id }}</div>
                 {% endif %}
-                <div class="u-small-icon-padding--left"> Filed {{ statement.receipt_date }}</div>
+                <div class="u-small-icon-padding--left"> Filed {{ statement_of_candidacy.receipt_date }}</div>
               </li>
-              {% endif %}
-            {% endfor %}
             </ul>
           </td>
         </tr>
