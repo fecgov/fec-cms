@@ -1,4 +1,4 @@
-{% macro dropdown(name='district') %}
+{% macro dropdown(id_suffix='', name='district') %}
 
 <div class="filter">
   <fieldset class="js-dropdown js-filter" data-filter="checkbox">
@@ -6,13 +6,13 @@
     <ul class="dropdown__selected"></ul>
     <div class="dropdown">
       <button type="button" class="dropdown__button button--alt" data-name="{{ name }}">More</button>
-      <div id="district-dropdown" class="dropdown__panel" aria-hidden="true">
+      <div id="district-dropdown{{id_suffix}}" class="dropdown__panel" aria-hidden="true">
         <ul class="dropdown__list">
             {% for district in range(100) %}
             {% with formatted = '{0:02d}'.format(district) %}
               <li class="dropdown__item">
-                <input id="district-checkbox-{{ formatted }}" name={{ name }} type="checkbox" value="{{ formatted }}">
-                <label class="dropdown__value" for="district-checkbox-{{ formatted }}">{{ formatted }}</label>
+                <input id="district-checkbox-{{ formatted }}{{id_suffix}}" name="{{ name }}" type="checkbox" value="{{ formatted }}">
+                <label class="dropdown__value" for="district-checkbox-{{ formatted }}{{id_suffix}}">{{ formatted }}</label>
               </li>
             {% endwith %}
             {% endfor %}

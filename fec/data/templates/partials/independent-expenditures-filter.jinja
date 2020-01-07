@@ -46,24 +46,16 @@ Filter independent expenditures
                     </div>
                 </div>
             </div>
-
-
           </li>
         </ul>
       </fieldset>
     </div>
-  </div>
-  <button type="button" class="js-accordion-trigger accordion__button">Candidate mentioned</button>
-  <div class="accordion__content">
     {{ typeahead.field('candidate_id', 'Candidate name or ID', dataset='candidates') }}
-    {{ support_oppose.checkbox('_raw') }}
-    {{ office.checkbox(name='candidate_office') }}
-    {{ parties.checkbox(name='candidate_party') }}
-    {{ states.field(name='candidate_office_state') }}
-    {{ districts.dropdown(name='candidate_office_district') }}
-  </div>
-  <button type="button" class="js-accordion-trigger accordion__button">Transaction information</button>
-  <div class="accordion__content">
+    {{ support_oppose.checkbox(id_suffix='_raw') }}
+    {{ office.checkbox(id_suffix='_raw', name='candidate_office') }}
+    {{ parties.checkbox(id_suffix='_raw', name='candidate_party') }}
+    {{ states.field(id_suffix='_raw', name='candidate_office_state') }}
+    {{ districts.dropdown(id_suffix='_raw', name='candidate_office_district') }}
     {{ date.field('expenditure_date', 'Expenditure date', id_suffix='_raw') }}
   </div>
 </div>
@@ -76,15 +68,41 @@ Filter independent expenditures
     {{ years.cycles('cycle', 'Years', show_tooltip=False) }}
     {{ reports.type() }}
     {{ reports.form()}}
+    {# Current version filter is copied from version-status.jinja.
+    The template could not be reused as it includes other version
+    status filters that are not needed. TODO: Consolidate version template #}
+    <div class="filter">
+      <fieldset class="js-filter" data-filter="checkbox">
+        <legend class="label">Version</legend>
+        <ul>
+          <li>
+            <input id="most_recent_true" name="most_recent" type="checkbox" value="true">
+            <label for="most_recent_true">Current version</label>
+            
+            <button class="button--keywords js-methodology" data-a11y-dialog-show="version-methodology-modal">Version methodology</button>
+            <div class="js-modal modal" id="version-methodology-modal" aria-hidden="true">
+                <div tabindex="-1" class="modal__overlay" data-a11y-dialog-hide=""></div>
+                <div role="dialog" class="modal__content" aria-labelledby="version-methodology-modal-title">
+                    <div role="document">
+                        <button type="button" class="modal__close button--close--primary" data-a11y-dialog-hide="" title="Close this dialog window"></button>
+                        <h2 id="version-methodology-modal-title">Methodology</h2>
+                        <p>Methodology body content placeholder</p>
+                    </div>
+                </div>
+            </div>
+          </li>
+        </ul>
+      </fieldset>
+    </div>
   </div>
   <button type="button" class="js-accordion-trigger accordion__button">Candidate mentioned</button>
   <div class="accordion__content">
     {{ typeahead.field('candidate_id', 'Candidate name or ID', dataset='candidates') }}
-    {{ support_oppose.checkbox('_processed') }}
-    {{ office.checkbox(name='candidate_office') }}
-    {{ parties.checkbox(name='candidate_party') }}
-    {{ states.field(name='candidate_office_state') }}
-    {{ districts.dropdown(name='candidate_office_district') }}
+    {{ support_oppose.checkbox(id_suffix='_processed') }}
+    {{ office.checkbox(id_suffix='_processed', name='candidate_office') }}
+    {{ parties.checkbox(id_suffix='_processed', name='candidate_party') }}
+    {{ states.field(id_suffix='_processed', name='candidate_office_state') }}
+    {{ districts.dropdown(id_suffix='_processed', name='candidate_office_district') }}
   </div>
   <button type="button" class="js-accordion-trigger accordion__button">Transaction information</button>
   <div class="accordion__content">
