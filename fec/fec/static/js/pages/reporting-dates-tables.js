@@ -186,9 +186,7 @@ ReportingDates.prototype.buildStaticElements = function() {
     static_notes.id = 'static_notes';
 
     //add combibed header_notes, footnotes list to collapsible div
-    static_notes.innerHTML = `
-                        <h2 class="t-inline-block u-margin--bottom--small">All notes</h2>
-                       ${hdr_str}${ftnt_str}`;
+    static_notes.innerHTML = `${hdr_str}${ftnt_str}`;
 
     //insert it after table
     table_parent.insertBefore(static_notes, this.dates_table.nextSibling);
