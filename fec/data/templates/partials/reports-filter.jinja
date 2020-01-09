@@ -44,7 +44,7 @@ Filter reports
       </ul>
     </fieldset>
     {% elif table_context['form_type'] == 'pac-party' %}
-      {{ checkbox.checkbox_dropdown('type', 'Committee type', options=constants.pac_party_types) }}
+      {{ checkbox.checkbox_dropdown('_processed', 'type', 'Committee type', options=constants.pac_party_types) }}
     </fieldset>
     {% endif %}
   </div>
