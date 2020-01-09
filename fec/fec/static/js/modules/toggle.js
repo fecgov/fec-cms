@@ -16,6 +16,9 @@ module.exports = {
           $('#' + $input.attr('value')).attr('aria-hidden', 'true');
         });
         $('#' + $elm.attr('value')).attr('aria-hidden', 'false');
+        // Since we're toggling content that may not have been visible yet,
+        // let's trigger a resize so the page can adapt to it having a non-zero width:
+        $(document).trigger('resize');
       });
     });
   }
