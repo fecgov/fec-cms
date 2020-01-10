@@ -17,6 +17,24 @@
 
     {{ self.body }}
 
+    {% if self.citations %}
+      <div id="legal-citations" class="sidebar--secondary t-sans">
+        <h4 class="sidebar__title">Legal citations</h4>
+        <div class="sidebar__content">
+          <div class="grid grid--2-wide">
+          {% for citation in self.citations %}
+            {% for block in citation.value %}
+              <div class="grid__item">
+                <p class="t-bold">{{ block.label }}</p>
+                {{ block.content }}
+              </div>
+            {% endfor %}
+          {% endfor %}
+          </div>
+        </div>
+      </div>
+    {% endif %}
+
 </article>
 
 {% include 'partials/disclaimer.html' %}

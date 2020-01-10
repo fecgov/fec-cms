@@ -155,8 +155,7 @@ ReportingDates.prototype.buildStaticElements = function() {
   let hdr_str = '';
   //build static list from header notes object if it exists
   if (typeof header_notes == 'object') {
-    hdr_str = `<h4>Header notes</h4>
-                   <p><ul><p><ul>`;
+    hdr_str = `<h4>Header notes</h4><ul>`;
     for (const key in header_notes) {
       hdr_str += `<li>
                   <a name="hdr${key}" id="hdr${key}"></a>
@@ -164,20 +163,21 @@ ReportingDates.prototype.buildStaticElements = function() {
                 </l1>`;
     }
 
-    hdr_str += `</ul></p>`;
+    hdr_str += `</ul>`;
   }
 
   let ftnt_str = '';
   //build static list from footnotes object if it exists
   if (typeof footnotes == 'object') {
-    ftnt_str = `<h4>Footnotes</h4><p><ul>`;
+    ftnt_str = `<h4>Footnotes</h4><ul>`;
     for (const key in footnotes) {
+      const dot = /^\d+$/.test(key) ? '.' : '';
       ftnt_str += `<li>
                    <a name="footnote_${key}" id="footnote_${key}"></a>
-                   <b>${key}</b>.&nbsp;${footnotes[key]}
+                   <b>${key}</b>${dot}&nbsp;${footnotes[key]}
                  </l1>`;
     }
-    ftnt_str += `</ul></p>`;
+    ftnt_str += `</ul>`;
   }
 
   //create div for all notes if either foot or header notes exist
@@ -186,9 +186,7 @@ ReportingDates.prototype.buildStaticElements = function() {
     static_notes.id = 'static_notes';
 
     //add combibed header_notes, footnotes list to collapsible div
-    static_notes.innerHTML = `
-                        <h2 class="t-inline-block u-margin--bottom--small">All notes</h2>
-                       ${hdr_str}${ftnt_str}`;
+    static_notes.innerHTML = `${hdr_str}${ftnt_str}`;
 
     //insert it after table
     table_parent.insertBefore(static_notes, this.dates_table.nextSibling);
