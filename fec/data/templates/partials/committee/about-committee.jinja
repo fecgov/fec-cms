@@ -81,6 +81,25 @@
             </td>
           </tr>
         {% endif %}
+        {% if statement_of_organization %}
+        <tr>
+          <td class="figure__label">Statement of organization:</td>
+          <td class="figure__value">
+            <ul>
+              <li>
+                <div class="t-block">
+                  <i class="icon-circle--check-outline--inline--left"></i>
+                  <a href="{{ statement_of_organization.pdf_url }}">Current version (PDF)</a>
+                </div>
+                {% if statement_of_organization.fec_file_id %}
+                  <div class="t-small u-small-icon-padding--left"> {{ statement_of_organization.fec_file_id }}</div>
+                {% endif %}
+                <div class="u-small-icon-padding--left"> Filed {{ statement_of_organization.receipt_date }}</div>
+              </li>
+            </ul>
+          </td>
+        </tr>
+        {% endif %}
         {% if candidates %}
           <tr>
             <td class="figure__label">Authorizing candidate:</td>

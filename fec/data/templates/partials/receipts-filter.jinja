@@ -19,7 +19,7 @@ Filter receipts
 
 {% block efiling_filters %}
 <div class="filters__inner">
-  {{ typeahead.field('committee_id', 'Contributor name or ID', id_suffix='_raw') }}
+  {{ typeahead.field('committee_id', 'Recipient name or ID', id_suffix='_raw') }}
   {{ text.field('contributor_name', 'Contributor name', id_suffix='_raw') }}
   {{ text.field('contributor_city', 'Contributor city', id_suffix='_raw') }}
   {{ states.field('contributor_state', id_suffix='_raw') }}

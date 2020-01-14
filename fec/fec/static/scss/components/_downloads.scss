@@ -23,6 +23,13 @@
   position: fixed;
   width: 100%;
   z-index: $z-downloads;
+
+  .message--alert {
+    .button--cancel {
+      margin-left: u(2rem);
+      position: static;
+    }
+  }
 }
 
 .downloads__title {
