@@ -58,6 +58,13 @@ $(document).ready(function() {
     }
   );
 
+  // Until we can re-configure the modal windows used with the filters panel,
+  // let's re-parent #version-methodology-modal_processed to <body> so its position
+  // isn't stuck inside the rules for .filters__content (position: relative, top: 0, left: 0)
+  $('#version-methodology-modal_processed')
+    .detach()
+    .appendTo('body');
+
   // initialize a feedbackWidget which will be set after document is loaded.
   var feedbackWidget = null;
   // expose a global function for Recaptcha to invoke after the challenge is complete.
