@@ -59,9 +59,10 @@ $(document).ready(function() {
   );
 
   // Until we can re-configure the modal windows used with the filters panel,
-  // let's re-parent #version-methodology-modal_processed to <body> so its position
+  // let's re-parent #version-methodology-modal_processed and
+  // #version-methodology-modal_raw to <body> so its position
   // isn't stuck inside the rules for .filters__content (position: relative, top: 0, left: 0)
-  $('#version-methodology-modal_processed')
+  $('#version-methodology-modal_processed, #version-methodology-modal_raw')
     .detach()
     .appendTo('body');
 
