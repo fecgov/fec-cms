@@ -2,6 +2,7 @@
 
 {% import 'macros/filters/text.jinja' as text %}
 {% import 'macros/filters/typeahead-filter.jinja' as typeahead %}
+{% import 'macros/filters/version-status.jinja' as version_status %}
 {% import 'macros/filters/states.jinja' as states %}
 {% import 'macros/filters/office-sought.jinja' as office %}
 {% import 'macros/filters/parties.jinja' as parties %}
@@ -43,7 +44,8 @@ Filter reports
 
   <button type="button" class="js-accordion-trigger accordion__button">Filing information</button>
   <div class="accordion__content">
-    {% include 'partials/filters/version-status.jinja' %}
+    {{ version_status.version(id_suffix='_processed') }}
+    {{ version_status.status(id_suffix='_processed') }}
     {% include 'partials/filters/form-type.jinja' %}
     {{ text.field('beginning_image_number', 'Beginning image number')}}
   </div>

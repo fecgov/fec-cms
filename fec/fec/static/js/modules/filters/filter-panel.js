@@ -94,7 +94,7 @@ FilterPanel.prototype.handleAddEvent = function(e, opts) {
   if (filterCount.html()) {
     filterCount.html(parseInt(filterCount.html(), 10) + 1);
   } else {
-    this.$filterHeader.append(' <span class="filter-count">1</span>');
+    this.$filterHeader.append('<span class="filter-count">1</span>');
   }
 };
 

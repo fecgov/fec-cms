@@ -2,6 +2,7 @@
 
 {% import 'macros/filters/text.jinja' as text %}
 {% import 'macros/filters/typeahead-filter.jinja' as typeahead %}
+{% import 'macros/filters/version-status.jinja' as version_status %}
 {% import 'macros/filters/states.jinja' as states %}
 {% import 'macros/filters/years.jinja' as years %}
 {% import 'macros/filters/date.jinja' as date %}
@@ -44,13 +45,14 @@ Filter reports
       </ul>
     </fieldset>
     {% elif table_context['form_type'] == 'pac-party' %}
-      {{ checkbox.checkbox_dropdown('type', 'Committee type', options=constants.pac_party_types) }}
+      {{ checkbox.checkbox_dropdown('_processed', 'type', 'Committee type', options=constants.pac_party_types) }}
     </fieldset>
     {% endif %}
   </div>
   <button type="button" class="js-accordion-trigger accordion__button">Version</button>
   <div class="accordion__content">
-    {% include 'partials/filters/version-status.jinja' %}
+    {{ version_status.version(id_suffix='_processed') }}
+    {{ version_status.status(id_suffix='_processed') }}
   </div>
   <button type="button" class="js-accordion-trigger accordion__button">Totals</button>
   <div class="accordion__content">
