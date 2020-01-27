@@ -323,6 +323,144 @@ def load_top_candidates(
     return response if "results" in response else None
 
 
+# Builds new data object with candidate id, name, and states by election year
+#
+# Example:
+#
+#  { 
+#      P00001234: {
+#          id: P80001234
+#          name : "SMITH, JOHN S.",
+#          states_by_election_year {
+#               2020: ['AL', 'AR', 'AZ']
+#          }
+#      }
+#      P00001234: {
+#          id: P80001234
+#          name : "DOE, JANE L.",
+#          states_by_election_year {
+#               2020: ['AL', 'AR', 'AZ'],
+#               2016: ['CA', 'CO', 'CT'],
+#          }
+#      }
+#  }
+
+
+def load_presidential_map_candidate_data(cycle):
+
+    # List of presidential candidates
+    #
+    # TO DO: 
+    # Multiple API calls are needed as there is no single API call to display this data.
+    # Candidate IDs need to be supplied by the API with some kind of sort functionality.
+    # Candidate IDs is being set here temporarily since this information is manually
+    # calculated per presidential election year from 2008 - present.
+
+
+    candidate_ids = [
+        "P00011833",
+        "P80000722",
+        "P00009795",
+        "P00011999",
+        "P00010298",
+        "P00009092",
+        "P00012054",
+        "P00006213",
+        "P00009183",
+        "P00009290",
+        "P00011254",
+        "P00009423",
+        "P00010520",
+        "P00010454",
+        "P80006117",
+        "P00011866",
+        "P00010793",
+        "P00008763",
+        "P00011338",
+        "P60007168",
+        "P00012567",
+        "P00012716",
+        "P00011312",
+        "P80001571",
+        "P00013276",
+        "P00009621",
+        "P00011239",
+        "P00009910",
+        "P00006486",
+    ]
+
+    candidate_data = {}
+
+    for candidate_id in candidate_ids:
+        # Build candidate data for each supplied candidate id.
+        # {
+        #   [ candidate_id ] : { candidate_data }
+        # }
+        # candidate_data has states_by_election_year which is a dictionary of election year to list of states
+        candidate_data[candidate_id] = {"id": candidate_id, "name": None, "states_by_election_year": {}}
+        
+        # Call candidate history to get the candidate's name and election years
+        candidate_history_response = _call_api(
+            "candidate",
+            candidate_id,
+            "history",
+            per_page=1,
+        )
+
+        if candidate_history_response['results']:
+            for candidate_result in candidate_history_response['results']:
+                candidate = candidate_data[candidate_id]
+                
+                # Populate the candidate's name in the candidate's data
+                candidate['name'] = candidate_result['name']
+
+                # Populate the candidate's election years with states that had contributions
+                # Ex: [2020, 2016]
+                for year in candidate_result['rounded_election_years']:
+
+                    # Only use presidential eleciton years up to 2008. That's all the data we have.
+                    if( year < 2008):
+                        continue
+
+                    # Make a dictionary of election year to list of states that had contributions.
+                    # List of states will remain empty until we get it in the state_response.
+                    # {
+                    #   2020: []
+                    #   2016: []
+                    # }
+                    candidate['states_by_election_year'][year] = []
+                    
+                    # Get candidate's states that had contributions
+                    state_response = _call_api(
+                        "schedules",
+                        "schedule_a",
+                        "by_state",
+                        "by_candidate",
+                        election_full=True,
+                        office="P",
+                        sort_hide_null=False,
+                        candidate_id=candidate_id,
+                        cycle=year,
+                        per_page=100,
+                    )
+
+                    if state_response['results']:
+                        for state_result in state_response['results']:
+                            # excluded_states = [
+                            #     'AF',
+                            #     'ZZ',
+                            # ]
+                                
+                            # if state in excluded_states:
+                            #     candidate_name_states[candidate_id]['states'].remove(['ZZ','AF'])
+
+                            # Walk each candidate's election year and get the states for that year.
+                            # Append each state result to the list of states.
+                            candidate['states_by_election_year'][year].append(state_result['state'])
+
+    return candidate_data
+
+
 def _get_sorted_participants_by_type(mur):
     """
     Returns the participants in a MUR sorted in the order
