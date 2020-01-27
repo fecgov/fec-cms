@@ -346,7 +346,7 @@ def load_top_candidates(
 #  }
 
 
-def load_presidential_map_candidate_data(cycle):
+def load_presidential_map_candidate_data():
 
     # List of presidential candidates
     #

@@ -115,7 +115,7 @@ def search(request):
 
 
 def browse_data(request):
-    load_presidential_map_candidate_data = api_caller.load_presidential_map_candidate_data(2020)
+    load_presidential_map_candidate_data = api_caller.load_presidential_map_candidate_data()
     print(load_presidential_map_candidate_data)
     return render(
         request,
