@@ -418,8 +418,8 @@ def load_presidential_map_candidate_data():
                 # Ex: [2020, 2016]
                 for year in candidate_result['rounded_election_years']:
 
-                    # Only use presidential eleciton years up to 2008. That's all the data we have.
-                    if( year < 2008):
+                    # Only use presidential eleciton years up to 2020 for now. That's all the data we have.
+                    if( year < 2020):
                         continue
 
                     # Make a dictionary of election year to list of states that had contributions.
