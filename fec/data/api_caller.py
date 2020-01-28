@@ -380,14 +380,6 @@ def load_presidential_map_candidate_data(cycle):
 
     for candidate_id, name in candidate_ids.items():
         candidate_name_states[candidate_id] = { "name": name, "states": []}
-
-    # excluded_states = [
-    #     'AF',
-    #     'ZZ',
-    # ]
-        
-    # if state in excluded_states:
-    #     candidate_name_states[candidate_id]['states'].remove(['ZZ','AF'])
         
         # Get candidate's states that had contributions
         response = _call_api(
@@ -404,8 +396,12 @@ def load_presidential_map_candidate_data(cycle):
         )
 
         if response['results']:
+            # There are no presidential map files for the excluded states list.
+            excluded_states = ['AA','AE','AP','ZZ',]
             for result in response['results']:
-                candidate_name_states[candidate_id]['states'].append(result['state'])
+                # Don't append excluded states to the state list
+                if result['state'] not in excluded_states:
+                    candidate_name_states[candidate_id]['states'].append(result['state'])
 
     return candidate_name_states
 
