@@ -397,7 +397,7 @@ def load_presidential_map_candidate_data(cycle):
 
         if response['results']:
             # There are no presidential map files for the excluded states list.
-            excluded_states = ['AA','AE','AP','ZZ',]
+            excluded_states = ['AA','AE','AP','AS','GU','MP','PR','VI','ZZ',]
             for result in response['results']:
                 # Don't append excluded states to the state list
                 if result['state'] not in excluded_states:
