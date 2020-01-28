@@ -321,38 +321,29 @@
               {% for candidate_id, candidate in load_presidential_map_candidate_data.items() %}
               <h4><a href="/data/candidate/{{ candidate_id }}/">{{ candidate.name }}</a></h4>
               <h6 class="t-no-rules">All contributions</h6>
-              {% for year, states in candidate.states_by_election_year.items() %}
-              <i class="icon i-download icon--absolute--left"></i>
-
-              <div class="content__section--indent-left">
-                <ul class="list--flat-bordered u-no-margin">
-                  <li><a href="/files/bulk-downloads/Presidential_Map/{{year}}/{{ candidate_id }}/{{ candidate_id }}-ALL.zip">{{year}}</a></li>
-                </ul>
-              </div>
-              {% endfor %}
-
-              <h6 class="t-no-rules">Contribution totals by state</h6>
-              {% for year, states in candidate.states_by_election_year.items() %}
-              <div class="content__section--indent-left">
-                <i class="icon i-download icon--absolute--left"></i>
-                <div class="content__section--indent-left">
-                  <ul class="list--flat-bordered u-no-margin">
-                    <li>{{year}}: <a href="/files/bulk-downloads/Presidential_Map/{{year}}/{{ candidate_id }}/{{ candidate_id }}-ALL.zip">All states</a></li>
-                  </ul>
-                </div>
-                <ul class="list--flat-bordered u-no-margin">
-                  {% for state in states %}
-                  <li><a href="/files/bulk-downloads/Presidential_Map/{{year}}/{{ candidate_id }}/{{ candidate_id }}-{{state}}.zip">{{state}}</a></li>
-                  {% endfor %}
-                </ul>
-              </div>
-              {% endfor %}
-
-              <h6 class="t-no-rules u-margin--top">All expenditures</h6>
               <i class="icon i-download icon--absolute--left"></i>
               <div class="content__section--indent-left">
                 <ul class="list--flat-bordered u-no-margin">
                   <li><a href="/files/bulk-downloads/Presidential_Map/2020/{{ candidate_id }}/{{ candidate_id }}-ALL.zip">2020</a></li>
+                </ul>
+              </div>
+              <h6 class="t-no-rules">Contribution totals by state</h6>
+              <div class="content__section--indent-left">
+                <i class="icon i-download icon--absolute--left"></i>
+                <div class="content__section--indent-left">
+                  <p>2020: <a href="/files/bulk-downloads/Presidential_Map/2020/{{ candidate_id }}/{{ candidate_id }}-ALL.zip">All states</a></p>
+                </div>
+                <ul class="list--flat-bordered u-no-margin">
+                  {% for state in candidate['states'] %}
+                  <li><a href="/files/bulk-downloads/Presidential_Map/2020/{{ candidate_id }}/{{ candidate_id }}-{{state}}.zip">{{state}}</a></li>
+                  {% endfor %}
+                </ul>
+              </div>
+              <h6 class="t-no-rules">All expenditures</h6>
+              <i class="icon i-download icon--absolute--left"></i>
+              <div class="content__section--indent-left">
+                <ul class="list--flat-bordered u-no-margin">
+                  <li><a href="/files/bulk-downloads/2020/candidate_summary_2020.csv">2020</a></li>
                 </ul>
               </div>
               {% endfor %}

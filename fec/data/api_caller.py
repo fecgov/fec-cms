@@ -322,143 +322,92 @@ def load_top_candidates(
     )
     return response if "results" in response else None
 
-
-# Builds new data object with candidate id, name, and states by election year
+# Builds data object with candidate name and list of states for a given candidate ID
 #
-# Example:
-#
-#  { 
+# { 
 #      P00001234: {
-#          id: P80001234
-#          name : "SMITH, JOHN S.",
-#          states_by_election_year {
-#               2020: ['AL', 'AR', 'AZ']
-#          }
-#      }
-#      P00001234: {
-#          id: P80001234
-#          name : "DOE, JANE L.",
-#          states_by_election_year {
-#               2020: ['AL', 'AR', 'AZ'],
-#               2016: ['CA', 'CO', 'CT'],
-#          }
-#      }
+#      name : "John Smith",
+#         states: ['AL', 'AR', 'AZ'],
+#        }
+#      P00001235: {
+#      name : "Jane Doe",
+#         states: ['CA', 'CO', 'CT'],
+#        }
 #  }
 
-
-def load_presidential_map_candidate_data():
-
+def load_presidential_map_candidate_data(cycle):
+    
     # List of presidential candidates
     #
     # TO DO: 
-    # Multiple API calls are needed as there is no single API call to display this data.
-    # Candidate IDs need to be supplied by the API with some kind of sort functionality.
-    # Candidate IDs is being set here temporarily since this information is manually
-    # calculated per presidential election year from 2008 - present.
+    # One API call is needed to display this data.
+    # Candidate IDs and name need to be supplied by the API with some kind of sort functionality.
+    # Candidate IDs and names are being set here temporarily since this information is manually
+    # calculated per presidential election year. We will only show 2020 data for now.
+    candidate_ids = {
+        "P00011833":"BENNET, MICHAEL F.",
+        "P80000722":"BIDEN, JOSEPH R JR",
+        "P00009795":"BOOKER, CORY A.",
+        "P00011999":"BULLOCK, STEVE",
+        "P00010298":"BUTTIGIEG, PETE",
+        "P00009092":"CASTRO, JULIÁN",
+        "P00012054":"DE BLASIO, BILL",
+        "P00006213":"DELANEY, JOHN K.",
+        "P00009183":"GABBARD, TULSI",
+        "P00009290":"GILLIBRAND, KIRSTEN ",
+        "P00011254":"GRAVEL, MAURICE ROBERT",
+        "P00009423":"HARRIS, KAMALA D.",
+        "P00010520":"HICKENLOOPER, JOHN W.",
+        "P00010454":"INSLEE, JAY R",
+        "P80006117":"KLOBUCHAR, AMY J.",
+        "P00011866":"MOULTON, SETH",
+        "P00010793":"O’ROURKE, ROBERT BETO",
+        "P00008763":"OJEDA, RICHARD NEECE II",
+        "P00011338":"RYAN, TIMOTHY J.",
+        "P60007168":"SANDERS, BERNARD",
+        "P00012567":"SESTAK, JOSEPH A. JR.",
+        "P00012716":"STEYER, TOM",
+        "P00011312":"SWALWELL, ERIC MICHAEL",
+        "P80001571":"TRUMP, DONALD J.",
+        "P00013276":"WALSH, JOE",
+        "P00009621":"WARREN, ELIZABETH ",
+        "P00011239":"WELD, WILLIAM FLOYD (BILL)",
+        "P00009910":"WILLIAMSON, MARIANNE ",
+        "P00006486":"YANG, ANDREW",
+    }
 
+    candidate_name_states = {}
 
-    candidate_ids = [
-        "P00011833",
-        "P80000722",
-        "P00009795",
-        "P00011999",
-        "P00010298",
-        "P00009092",
-        "P00012054",
-        "P00006213",
-        "P00009183",
-        "P00009290",
-        "P00011254",
-        "P00009423",
-        "P00010520",
-        "P00010454",
-        "P80006117",
-        "P00011866",
-        "P00010793",
-        "P00008763",
-        "P00011338",
-        "P60007168",
-        "P00012567",
-        "P00012716",
-        "P00011312",
-        "P80001571",
-        "P00013276",
-        "P00009621",
-        "P00011239",
-        "P00009910",
-        "P00006486",
-    ]
+    for candidate_id, name in candidate_ids.items():
+        candidate_name_states[candidate_id] = { "name": name, "states": []}
 
-    candidate_data = {}
-
-    for candidate_id in candidate_ids:
-        # Build candidate data for each supplied candidate id.
-        # {
-        #   [ candidate_id ] : { candidate_data }
-        # }
-        # candidate_data has states_by_election_year which is a dictionary of election year to list of states
-        candidate_data[candidate_id] = {"id": candidate_id, "name": None, "states_by_election_year": {}}
+    # excluded_states = [
+    #     'AF',
+    #     'ZZ',
+    # ]
         
-        # Call candidate history to get the candidate's name and election years
-        candidate_history_response = _call_api(
-            "candidate",
-            candidate_id,
-            "history",
-            per_page=1,
+    # if state in excluded_states:
+    #     candidate_name_states[candidate_id]['states'].remove(['ZZ','AF'])
+        
+        # Get candidate's states that had contributions
+        response = _call_api(
+            "schedules",
+            "schedule_a",
+            "by_state",
+            "by_candidate",
+            election_full=True,
+            office="P",
+            sort_hide_null=False,
+            candidate_id=candidate_id,
+            cycle=2020,
+            per_page=100,
         )
 
-        if candidate_history_response['results']:
-            for candidate_result in candidate_history_response['results']:
-                candidate = candidate_data[candidate_id]
-                
-                # Populate the candidate's name in the candidate's data
-                candidate['name'] = candidate_result['name']
+        if response['results']:
+            for result in response['results']:
+                candidate_name_states[candidate_id]['states'].append(result['state'])
 
-                # Populate the candidate's election years with states that had contributions
-                # Ex: [2020, 2016]
-                for year in candidate_result['rounded_election_years']:
-
-                    # Only use presidential eleciton years up to 2020 for now. That's all the data we have.
-                    if( year < 2020):
-                        continue
-
-                    # Make a dictionary of election year to list of states that had contributions.
-                    # List of states will remain empty until we get it in the state_response.
-                    # {
-                    #   2020: []
-                    #   2016: []
-                    # }
-                    candidate['states_by_election_year'][year] = []
-                    
-                    # Get candidate's states that had contributions
-                    state_response = _call_api(
-                        "schedules",
-                        "schedule_a",
-                        "by_state",
-                        "by_candidate",
-                        election_full=True,
-                        office="P",
-                        sort_hide_null=False,
-                        candidate_id=candidate_id,
-                        cycle=year,
-                        per_page=100,
-                    )
-
-                    if state_response['results']:
-                        for state_result in state_response['results']:
-                            # excluded_states = [
-                            #     'AF',
-                            #     'ZZ',
-                            # ]
-                                
-                            # if state in excluded_states:
-                            #     candidate_name_states[candidate_id]['states'].remove(['ZZ','AF'])
-
-                            # Walk each candidate's election year and get the states for that year.
-                            # Append each state result to the list of states.
-                            candidate['states_by_election_year'][year].append(state_result['state'])
-
-    return candidate_data
+    return candidate_name_states
 
 
 def _get_sorted_participants_by_type(mur):
