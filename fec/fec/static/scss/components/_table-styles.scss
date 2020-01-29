@@ -374,6 +374,8 @@ h3 + .simple-table {
   ul {
   list-style: none;
   padding-left: u(2rem);
+  max-width: u(80rem);
+  width:100%;
   }
   li {
   text-indent: u(-2rem);

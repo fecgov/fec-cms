@@ -1,6 +1,9 @@
 <div class="panel__row">
   <h4 class="panel__title">Expenditure information</h4>
   <table>
+    {{#panelRow "Version"}}
+      {{{amendment_version}}}
+    {{/panelRow}}
     {{#panelRow "Amount"}}
       {{currency expenditure_amount}}
     {{/panelRow}}
