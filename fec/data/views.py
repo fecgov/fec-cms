@@ -115,10 +115,12 @@ def search(request):
 
 
 def browse_data(request):
+    load_presidential_map_candidate_data = api_caller.load_presidential_map_candidate_data(2020)
     return render(
         request,
         "browse-data.jinja",
-        {"title": "Browse data", "parent": "data", "social_image_identifier": "data"},
+        {"title": "Browse data", "parent": "data", "social_image_identifier": "data",
+         'load_presidential_map_candidate_data': load_presidential_map_candidate_data},
     )
 
 
@@ -654,7 +656,6 @@ def raising(request):
             "social_image_identifier": "data",
         },
     )
-
 
 def spending(request):
     office = request.GET.get("office", "P")
