@@ -1,6 +1,5 @@
 {% extends "layouts/sidebar-page.jinja" %}
 {% import "macros/bythenumbers.jinja" as breakdowns %}
-{% import 'macros/reaction-box.jinja' as reaction %}
 
 {% block css %}
 <link rel="stylesheet" type="text/css" href="{{ asset_for_css('data-landing.css') }}" />
@@ -51,9 +50,6 @@
 {# <script defer id="gov_fec_contribs_by_state_script" src="{{ asset_for_js('widgets/contributions-by-state.js') }}"></script> #}
 {# <iframe src="/widgets/contributions-by-state" id="fec-gov-contribs-by-state"></iframe> #}
 {% include 'partials/widgets/contributions-by-state.jinja' %}
-{% if FEATURES.wccf_reaction %}
-{{ reaction.reaction_box('contributions_by_state', 'raising-by-the-numbers') }}
-{% endif %}
 </section>
 {% endif %}
 {% endblock %}
@@ -86,5 +82,4 @@
   }
   </script>
   <script src="{{ asset_for_js('bythenumbers.js') }}"></script>
-  <script src="{{ asset_for_js('reaction-box.js') }}"></script>
 {% endblock %}
