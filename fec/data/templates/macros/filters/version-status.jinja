@@ -1,0 +1,47 @@
+{% macro version(id_suffix, methodology) %}
+<div class="filter">
+  <fieldset class="js-filter" data-filter="checkbox">
+    <legend class="label">Version</legend>
+    <ul>
+      <li>
+        <input id="most_recent_true{{ id_suffix }}" name="most_recent" type="checkbox" checked value="true">
+        <label for="most_recent_true{{ id_suffix }}">Current version</label>
+      </li>
+      {% if methodology %}
+        <button class="button--keywords js-methodology" data-a11y-dialog-show="version-methodology-modal{{ id_suffix }}">Version methodology</button>
+        <div class="js-modal modal" id="version-methodology-modal{{ id_suffix }}" aria-hidden="true">
+          <div tabindex="-1" class="modal__overlay" data-a11y-dialog-hide=""></div>
+          <div role="dialog" class="modal__content" aria-labelledby="version-methodology-modal-title{{ id_suffix }}">
+            <div role="document">
+                <button type="button" class="modal__close button--close--primary" data-a11y-dialog-hide="" title="Close this dialog window"></button>
+                <h2 id="version-methodology-modal-title">Version methodology</h2>
+                <p>When you check "current version," the website will display "current version" and "unknown version" transactions.</p>
+                <p>Current version transactions are those transactions disclosed on the most-recently filed amendment. A report amendment might include the original (new) report and several amendments.</p>
+                <p>Unknown version transactions are those transactions disclosed on reports where the API could not determine the version because an amendment might not have been associated with previous versions of the report.</p>
+                <p>Past version transactions are those transactions disclosed on reports that are not the most-recently filed amendment.</p>
+            </div>
+          </div>
+        </div>
+      {% endif %}
+    </ul>
+  </fieldset>
+</div>
+{% endmacro %}
+
+{% macro status(id_suffix) %}
+<div class="filter">
+  <fieldset class="js-filter" data-filter="checkbox">
+    <legend class="label">Document status</legend>
+    <ul>
+      <li>
+        <input id="amendment_indicator_original{{ id_suffix }}" name="amendment_indicator" type="checkbox" value="N">
+        <label for="amendment_indicator_original{{ id_suffix }}">Original</label>
+      </li>
+      <li>
+        <input id="amendment_indicator_amendment{{ id_suffix }}" name="amendment_indicator" type="checkbox" value="A">
+        <label for="amendment_indicator_amendment{{ id_suffix }}">Amendment</label>
+      </li>
+    </ul>
+  </fieldset>
+</div>
+{% endmacro %}

@@ -2,11 +2,19 @@
 
 var $ = require('jquery');
 
+var helpers = require('../modules/helpers');
 var tables = require('../modules/tables');
 var columns = require('../modules/columns');
 var TableSwitcher = require('../modules/table-switcher').TableSwitcher;
 
 var expenditureTemplate = require('../templates/independent-expenditures.hbs');
+
+var fetchReportDetails = function(row) {
+  var amendment_version = Object.assign({}, row, {
+    amendment_version: helpers.amendmentVersion(row.most_recent)
+  });
+  return amendment_version;
+};
 
 $(document).ready(function() {
   var $table = $('#results');
@@ -21,7 +29,10 @@ $(document).ready(function() {
     order: [[5, 'desc']],
     useFilters: true,
     callbacks: {
-      afterRender: tables.modalRenderFactory(expenditureTemplate)
+      afterRender: tables.modalRenderFactory(
+        expenditureTemplate,
+        fetchReportDetails
+      )
     }
   });
 
