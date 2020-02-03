@@ -105,7 +105,6 @@ states_excl_territories = OrderedDict([
     ('NY', 'New York'),
     ('NC', 'North Carolina'),
     ('ND', 'North Dakota'),
-    ('MP', 'Northern Mariana Islands'),
     ('OH', 'Ohio'),
     ('OK', 'Oklahoma'),
     ('OR', 'Oregon'),
