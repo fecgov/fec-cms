@@ -381,34 +381,12 @@ def load_presidential_map_candidate_data(cycle):
         "P00006486":"YANG, ANDREW",
     }
 
-    candidate_name_states = {}
+    candidate_names = {}
 
     for candidate_id, name in candidate_ids.items():
-        candidate_name_states[candidate_id] = { "name": name, "states": []}
-        
-        # Get candidate's states that had contributions
-        response = _call_api(
-            "schedules",
-            "schedule_a",
-            "by_state",
-            "by_candidate",
-            election_full=True,
-            office="P",
-            sort_hide_null=False,
-            candidate_id=candidate_id,
-            cycle=2020,
-            per_page=100,
-        )
+        candidate_names[candidate_id] = { "name": name }
 
-        if response['results']:
-            # There are no presidential map files for the excluded states list.
-            excluded_states = ['AA','AE','AP','AS','GU','MP','PR','VI','ZZ',]
-            for result in response['results']:
-                # Don't append excluded states to the state list
-                if result['state'] not in excluded_states:
-                    candidate_name_states[candidate_id]['states'].append(result['state'])
-
-    return candidate_name_states
+    return candidate_names
 
 
 def _get_sorted_participants_by_type(mur):
