@@ -102,7 +102,7 @@
     "gulp-sourcemaps": "^2.6.5",
     "gulp-svgmin": "^2.1.0",
     "gulp-uglify": "3.0.1",
-    "handlebars": "^4.3.0",
+    "handlebars": "^4.7.2",
     "handlebars-template-loader": "^1.0.0",
     "hbsfy": "2.8.1",
     "istanbul-instrumenter-loader": "^3.0.1",
