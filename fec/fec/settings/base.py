@@ -107,23 +107,36 @@ INSTALLED_APPS = (
     'extend_admin',
 )
 
-MIDDLEWARE_CLASSES = (
+# MIDDLEWARE_CLASSES = (
+#     'django.contrib.sessions.middleware.SessionMiddleware',
+#     'django.middleware.common.CommonMiddleware',
+#     'django.middleware.csrf.CsrfViewMiddleware',
+#     'django.contrib.auth.middleware.AuthenticationMiddleware',
+#     'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
+#     'fec.middleware.AddSecureHeaders',  # custom response headers
+#     'uaa_client.middleware.UaaRefreshMiddleware',
+#     'django.contrib.messages.middleware.MessageMiddleware',
+#     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+#     'django.middleware.security.SecurityMiddleware',
+
+#     'wagtail.core.middleware.SiteMiddleware',
+#     'wagtail.contrib.redirects.middleware.RedirectMiddleware',
+
+#     # logs
+#     'audit_log.middleware.UserLoggingMiddleware',
+# )
+
+MIDDLEWARE = (
+    'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
-    'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
-    'fec.middleware.AddSecureHeaders',  # custom response headers
-    'uaa_client.middleware.UaaRefreshMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'django.middleware.security.SecurityMiddleware',
-
+    'fec.middleware.AddSecureHeaders',  # custom response headers
     'wagtail.core.middleware.SiteMiddleware',
     'wagtail.contrib.redirects.middleware.RedirectMiddleware',
-
-    # logs
-    'audit_log.middleware.UserLoggingMiddleware',
 )
 
 CSRF_TRUSTED_ORIGINS = ["fec.gov", "app.cloud.gov"]
