@@ -297,7 +297,7 @@ class RecordPage(ContentPage):
         blank=True,
         null=True,
         default=get_previous_record_page,
-        on_delete=models.SET_DEFAULT
+        on_delete=models.SET_NULL
     )
     related_section_title = models.CharField(
         max_length=255,
