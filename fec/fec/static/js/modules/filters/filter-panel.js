@@ -92,7 +92,7 @@ FilterPanel.prototype.handleAddEvent = function(e, opts) {
   var filterCount = this.$filterHeader.find('.filter-count');
 
   if (filterCount.html()) {
-    filterCount.html(parseInt(filterCount.html(), 10) + 1);
+    filterCount.html($('.js-filter-tags .tag__item').length);
   } else {
     this.$filterHeader.append('<span class="filter-count">1</span>');
   }
