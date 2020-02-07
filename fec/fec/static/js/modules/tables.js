@@ -651,7 +651,7 @@ DataTable.prototype.fetch = function(data, callback) {
       );
       return;
     }
-    //console.log(self.filterSet);
+
     // If 24- and 48-Hour report is selected, set the filing form to F24.
     // Otherwise, it's a regularly scheduled report, keep the filing
     // form as F3X
