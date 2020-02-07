@@ -1,7 +1,7 @@
 {% macro checkbox(id_suffix='', name='office') %}
 
 <div class="filter">
-    <fieldset class="js-filter" data-filter="checkbox">
+    <fieldset class="js-filter" data-name="{{ name }}{{ id_suffix }}" data-filter="checkbox">
       <legend class="label" for="{{ name }}">Office Sought</legend>
       <ul>
         <li>

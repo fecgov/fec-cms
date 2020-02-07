@@ -1,5 +1,5 @@
 {% macro checkbox(id_suffix='', name='support_oppose_indicator') %}
-<div class="filter js-filter" data-filter="checkbox">
+<div class="filter js-filter" data-name="{{ name }}{{ id_suffix }}" data-filter="checkbox">
   <fieldset>
     <legend class="label" for="{{ name }}">Support/Oppose a candidate</legend>
     <ul>

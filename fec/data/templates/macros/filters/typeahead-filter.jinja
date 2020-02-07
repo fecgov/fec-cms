@@ -2,13 +2,13 @@
 <div
   class="filter js-filter typeahead-filter"
   data-filter="typeahead"
-  data-name="{{ name }}"
+  data-name="{{ name }}{{ id_suffix }}"
   id="{{ name }}-field{{id_suffix}}"
   data-dataset="{{ dataset }}" {% if allow_text %}data-allow-text{% endif %}>
   {% if minor_label_text %}
     <label for="{{ name }}{{id_suffix}}">{{ title }}</label>
   {% else %}
-    <label class="label" for="{{ name }}{{id_suffix}}">{{ title }}</label>
+    <label class="label" for="{{ name }}{{ id_suffix }}">{{ title }}</label>
   {% endif %}
   <div class="combo combo--search--mini filter__typeahead">
     <ul class="dropdown__selected"></ul>

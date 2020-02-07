@@ -1,11 +1,11 @@
 {% macro dropdown(id_suffix='', name='district') %}
 
 <div class="filter">
-  <fieldset class="js-dropdown js-filter" data-filter="checkbox">
+  <fieldset class="js-dropdown js-filter" data-name="{{ name }}{{ id_suffix }}" data-filter="checkbox">
     <legend class="label" for={{ name }}><span class="term" data-term="District">District</span></legend>
     <ul class="dropdown__selected"></ul>
     <div class="dropdown">
-      <button type="button" class="dropdown__button button--alt" data-name="{{ name }}">More</button>
+      <button type="button" class="dropdown__button button--alt">More</button>
       <div id="district-dropdown{{id_suffix}}" class="dropdown__panel" aria-hidden="true">
         <ul class="dropdown__list">
             {% for district in range(100) %}
