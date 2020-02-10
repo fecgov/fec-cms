@@ -16,6 +16,8 @@ urlpatterns = [
     url(r'^data/raising-bythenumbers/$', views.raising),
     url(r'^data/spending-bythenumbers/$', views.spending),
 
+    # Presidential Campaign Finance Map
+    url(r'^data/candidates/president/presidential-map/$', views.pres_finance_map),
 
     # Feedback Tool
     url(r'^data/issue/reaction/$', views.reactionFeedback),

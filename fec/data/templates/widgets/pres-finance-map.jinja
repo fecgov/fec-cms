@@ -1,0 +1,64 @@
+{% import "macros/widgets.jinja" as widgets %}
+
+ <div id="gov-fec-pres-finance" class="pres-finance-map is-loading w-s" data-election_year="{{ election_year }}">
+    <div class="TODO-SEPARATE-TOP-SECTION">
+      <div id="filter-year" class="filters is-open" style="border: none; padding: 20px;">
+        <fieldset class="filter toggles js-filter js-table-switcher" style="border: none;">
+          <legend class="label t-inline-block">Candidates running in:</legend>
+        </fieldset>
+      </div>
+      <div id="filter-map-type" class="filters is-open" style="border: none; padding: 20px;">
+        <fieldset class="filter toggles js-filter js-map-switcher" style="border: none;">
+          <legend class="label t-inline-block">View as:</legend>
+          <label class="toggle" for="switcher-map-type-bubbles">
+            <input type="radio" class="toggle" value="bubbles" id="switcher-map-type-bubbles" name="map-type-selector" aria-controls="bubbles-message" tabindex="0" checked><span class="button--alt">Bubbles</span>
+          </label>
+          <label class="toggle" for="switcher-map-type-gradient">
+            <input type="radio" class="toggle" value="gradient" id="switcher-map-type-gradient" name="map-type-selector" aria-controls="gradient-message" tabindex="0"><span class="button--alt">Gradient</span>
+          </label>
+        </fieldset>
+      </div>
+    </div>
+    <div class="candidate-list-wrapper">
+      <div class="table-scroller">
+        <div class="ps-scrollbar-y-rail"><div class="ps-scrollbar-y"></div></div>
+        <table id="pres-fin-map-candidates-table" class="data-table data-table--heading-borders data-table--entity u-margin--top" data-type="filings-{{ dataType }}" data-cycle="{{ election_year }}">
+          <thead>
+            <tr>
+              <th scope="col">Candidate</th>
+              <th scope="col" class="t-right-aligned">Total raised</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td colspan="3" style="text-align:center">loading&hellip;</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="map-wrapper">
+      <div id="breadcrumb-wrapper">
+        <nav class="breadcrumb-nav">
+          <a href="">Nationwide: All candidates</a><span> &raquo; </span><a href=""></a>
+        </nav>
+      </div>
+      <div class="map-details">
+        <hgroup class="candidate-details">
+          <h1>&nbsp;</h1>
+          <h2>&nbsp;</h2>
+          <h3>&nbsp;</h3>
+        </hgroup>
+        <div class="legend-container">
+          <span class="t-sans t-block">By state, total amount received</span>
+          <svg></svg>
+        </div>
+      </div>
+      <div class="election-map">The map</div>
+    </div>
+    <div class="right-column-wrapper">
+        <a class="button--standard button--table js-browse-pres-finance-map" href="TODO-/data/receipts/individual-contributions">Browse TODO stuff</a>
+        <a class="button--alt js-methodology">Methodology</a>
+    </div>
+</div>
+<script defer src="{{ asset_for_js('widgets/pres-finance-map-box.js') }}" data-standalone="true"></script>

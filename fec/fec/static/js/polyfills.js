@@ -66,3 +66,26 @@ import 'element-remove';
  * Used for reporting-dates for non-standard css selectors in IE
  */
 import 'css.escape';
+
+/**
+ * Adds CustomEvent capabilities to IE < 11
+ */
+(function() {
+  if (typeof window.CustomEvent === 'function') return false;
+
+  function CustomEvent(event, params) {
+    params = params || { bubbles: false, cancelable: false, detail: undefined };
+    var evt = document.createEvent('CustomEvent');
+    evt.initCustomEvent(
+      event,
+      params.bubbles,
+      params.cancelable,
+      params.detail
+    );
+    return evt;
+  }
+
+  CustomEvent.prototype = window.Event.prototype;
+
+  window.CustomEvent = CustomEvent;
+})();
