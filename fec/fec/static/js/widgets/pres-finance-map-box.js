@@ -47,9 +47,20 @@ const CHANGE_CANDIDATE = EVENT_APP_ID + '_candidate_change';
  */
 function formatAsCurrency(passedValue, abbreviateMillions) {
   let toReturn = passedValue;
-  if (abbreviateMillions) toReturn = (passedValue / 1000000).toFixed(1);
-  else toReturn = Math.round(passedValue.round);
-  return '$' + toReturn.toLocaleString();
+
+  if (abbreviateMillions) {
+    // There's an issue when adding commas to the currency when there's a decimal
+    // So we're going to break it apart, add commas, then put it back together
+    toReturn = (passedValue / 1000000).toFixed(1);
+    let commaPos = toReturn.indexOf('.');
+    let firstHalf = toReturn.substr(0, commaPos);
+    let secondHalf = toReturn.substr(commaPos); // grabs the decimal, too
+    toReturn = firstHalf.replace(/\d(?=(\d{3})+$)/g, '$&,') + secondHalf;
+  } else {
+    toReturn = Math.round(passedValue.round).replace(/\d(?=(\d{3})+$)/g, '$&,');
+  }
+
+  return '$' + toReturn;
 }
 
 /**
