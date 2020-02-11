@@ -109,7 +109,9 @@ Optionally, you can add `description`, `tags`, or `promoted` fields.
 
 This is done through a curl:
 
-```curl "https://i14y.usa.gov/api/v1/documents/{document_id}" -XDELETE -u main:$DIGITALGOV_DRAWER_KEY_MAIN
+```
+curl "https://i14y.usa.gov/api/v1/documents/{document_id}" -XDELETE -u main:$DIGITALGOV_DRAWER_KEY_MAIN
+
 ```
 
 [More info in the docs](http://gsa.github.io/slate/#delete-a-document).
