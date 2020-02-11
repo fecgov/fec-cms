@@ -18,6 +18,10 @@
           </label>
         </fieldset>
       </div>
+      <div class="TODO-buttons-holder">
+        <button class="button--cta button--export">Export report summary data</button>
+        <button class="button--alt js-methodology">Methodology</button>
+      </div>
     </div>
     <div class="candidate-list-wrapper">
       <div class="table-scroller">
@@ -45,7 +49,7 @@
       </div>
       <div class="map-details">
         <hgroup class="candidate-details">
-          <h1>&nbsp;</h1>
+          <h1>Candidate Name&nbsp;</h1>
           <h2>&nbsp;</h2>
           <h3>&nbsp;</h3>
         </hgroup>
@@ -57,8 +61,9 @@
       <div class="election-map">The map</div>
     </div>
     <div class="right-column-wrapper">
-        <a class="button--standard button--table js-browse-pres-finance-map" href="TODO-/data/receipts/individual-contributions">Browse TODO stuff</a>
-        <a class="button--alt js-methodology">Methodology</a>
+      <div class="accordion-holder">
+        <a class="TODO-button--standard button--table js-browse-pres-finance-map" href="TODO-/data/receipts/individual-contributions">Browse TODO stuff</a>
+        
     </div>
 </div>
 <script defer src="{{ asset_for_js('widgets/pres-finance-map-box.js') }}" data-standalone="true"></script>

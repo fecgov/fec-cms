@@ -3,18 +3,16 @@
 /* global CustomEvent */
 
 /**
- * @fileoverview Controls all functionality inside the Where Contributions Come From widget
- * in cooperation with data-map
- * @copyright 2019 Federal Election Commission
+ * TODO - @fileoverview
+ * @copyright 2020 Federal Election Commission
  * @license CC0-1.0
  * @owner  fec.gov
  * @version 1.0
- * TODO: For v2 or whatever, convert to datatable.net (start with the simpliest implementation; no columns.js, etc.)
  */
 
 // Editable vars
 const stylesheetPath = '/static/css/widgets/pres-finance-map.css';
-// // const breakpointToXS = 0; // retaining just in case
+// const breakpointToXS = 0; // retaining just in case
 const breakpointToSmall = 430;
 const breakpointToMedium = 675;
 const breakpointToLarge = 700;
@@ -38,6 +36,7 @@ const ENTER_LOADING_EVENT = EVENT_APP_ID + '_loading';
 const FINISH_LOADING_EVENT = EVENT_APP_ID + '_loaded';
 const CHANGE_CANDIDATES_DATA = EVENT_APP_ID + '_candidates_change';
 const CHANGE_CANDIDATE = EVENT_APP_ID + '_candidate_change';
+const CANDIDATE_DETAILS_LOADED = EVENT_APP_ID + '_cand_detail_loaded';
 
 /**
  * Formats the given value and puts it into the dom element.
@@ -120,12 +119,15 @@ function PresidentialFundsMap() {
   this.fetchAbortController = new AbortController();
   this.fetchAbortSignal = this.fetchAbortController.signal;
 
-  // // Where to find individual candidate details
-  this.basePath_candidatesPath = [
+  // Where to find the list of candidates
+  this.basePath_candidatesList = [
     'presidential',
     'contributions',
     'by_candidate'
   ];
+
+  // Where to find individual candidate details
+  this.basePath_candidateDetails = ['candidate'];
 
   // // Where to find individual candidate details
   // this.basePath_candidateCommitteesPath = [
@@ -160,7 +162,7 @@ function PresidentialFundsMap() {
   // ];
   this.data_candidates;
   // // Details about the candidate. Comes from the typeahead
-  // this.candidateDetails = {};
+  this.data_candidate;
   // // Information retruned by API candidate committees API {@see loadCandidateCommitteeDetails}
   // this.data_candidateCommittees = {};
   // // Init the list/table of states and their totals
@@ -176,7 +178,7 @@ function PresidentialFundsMap() {
   //     }
   //   ]
   // };
-  // // Shared settings for every fetch():
+  // Shared settings for every fetch():
   this.fetchInitObj = {
     cache: 'no-cache',
     mode: 'cors',
@@ -184,10 +186,13 @@ function PresidentialFundsMap() {
   };
   // this.fetchingStates = false; // Are we waiting for data?
   this.element = document.querySelector('#gov-fec-pres-finance'); // The visual element associated with this, this.instance
-  // this.candidateDetailsHolder; // Element to hold candidate name, party, office, and ID
+  this.candidateDetailsHolder; // Element to hold candidate name, party, office, and ID
   this.current_electionYear = availElectionYears[0];
   this.current_electionState = 'US';
+  this.current_electionState_name = 'United States';
   this.current_candidate_id = '';
+  this.current_candidate_name = '';
+  this.current_candidate_last_name = '';
   // this.map; // Starts as the element for the map but then becomes a DataMap object
   // this.table; // The <table> for the list of states and their totals
   // this.statesTotalHolder; // Element at the bottom of the states list
@@ -245,11 +250,16 @@ PresidentialFundsMap.prototype.init = function() {
   );
 
   this.element.addEventListener(
-    PresidentialFundsMap.YEAR_CHANGE_EVENT,
+    YEAR_CHANGE_EVENT,
     this.handleYearChange.bind(this)
   );
+
+  this.element.addEventListener(
+    CANDIDATE_DETAILS_LOADED,
+    this.handleCandidateDetailsLoaded.bind(this)
+  );
   // // Initialize the various queries
-  // this.baseCandidateQuery = {}; // Calls for candidate details
+  this.baseCandidateQuery = { office: 'P' }; // Calls for candidate details
   this.baseCandidatesQuery = {
     // cycle: defaultElectionYear(),
     // election_full: true,
@@ -266,7 +276,7 @@ PresidentialFundsMap.prototype.init = function() {
 
   // // Find the visual elements
   // this.map = document.querySelector('.map-wrapper .election-map');
-  // this.candidateDetailsHolder = document.querySelector('.candidate-details');
+  this.candidateDetailsHolder = document.querySelector('.candidate-details');
   this.table = document.querySelector('#pres-fin-map-candidates-table');
   // this.statesTotalHolder = document.querySelector('.js-states-total');
 
@@ -337,20 +347,12 @@ PresidentialFundsMap.prototype.init = function() {
 };
 
 /**
- * Called by {@see init() , @see handleTypeaheadSelect() }
+ * Called by {@see init() }
  * Finds the highest-earning presidential candidate of the default year
  * Similar to {@see loadCandidateDetails() }
  */
 PresidentialFundsMap.prototype.loadCandidatesList = function() {
-  let newEvent = new CustomEvent(PresidentialFundsMap.ENTER_LOADING_EVENT);
-  document.dispatchEvent(newEvent);
-
-  // sort_hide_null=false
-  // &page=1
-  // &sort_nulls_last=false
-  // &sort_null_only=false
-  // &election_year=2020
-  // &per_page=20
+  document.dispatchEvent(new CustomEvent(ENTER_LOADING_EVENT));
 
   let instance = this;
   let candidatesListQuery = Object.assign({}, this.baseCandidatesQuery, {
@@ -358,11 +360,10 @@ PresidentialFundsMap.prototype.loadCandidatesList = function() {
     per_page: 100,
     election_year: this.current_electionYear,
     contributor_state: this.current_electionState
-    // sort_hide_null: false
   });
   window
     .fetch(
-      buildUrl(this.basePath_candidatesPath, candidatesListQuery),
+      buildUrl(this.basePath_candidatesList, candidatesListQuery),
       this.fetchInitObj
     )
     .then(function(response) {
@@ -370,19 +371,9 @@ PresidentialFundsMap.prototype.loadCandidatesList = function() {
         throw new Error('The network rejected the candidate raising request.');
       // else if (response.type == 'cors') throw new Error('CORS error');
       response.json().then(data => {
-        // Save the candidate query reply
-        // and the candidate details specifically
-        // instance.candidateDetails = data.results[0];
-        // Update the candidate_id for the main query
-        // instance.baseStatesQuery.candidate_id =
-        //   instance.candidateDetails.candidate_id;
-        // Update the office to the main query, too.
-        // instance.baseStatesQuery.office = instance.candidateDetails.office;
-        // Put the new candidate information on the page
         instance.element.dispatchEvent(
           new CustomEvent(CHANGE_CANDIDATES_DATA, { detail: data })
         );
-        // instance.displayUpdatedData_candidate();
       });
     })
     .catch(function() {});
@@ -393,42 +384,70 @@ PresidentialFundsMap.prototype.loadCandidatesList = function() {
  */
 PresidentialFundsMap.prototype.handleCandidatesDataLoad = function(e) {
   this.data_candidates = e.detail;
+
+  this.element.dispatchEvent(new CustomEvent(FINISH_LOADING_EVENT));
+
   this.displayUpdatedData_candidates(this.data_candidates.results);
 };
 
 /**
+ *
+ */
+PresidentialFundsMap.prototype.handleCandidateDetailsLoaded = function(e) {
+  console.log('handleCandidateDetailsLoaded(): ', e);
+
+  let dataObj = {
+    candidate_id: e.detail.candidate_id,
+    name: e.detail.name,
+    party: e.detail.party,
+    year: this.current_electionYear,
+    currentState: this.current_electionState, // for breadcrumbs
+    currentStateName: this.current_electionState_name, // for breadcrumbs
+    candidateLastName: this.current_candidate_last_name // for breadcrumbs
+  };
+
+  this.displayUpdatedData_candidate(dataObj);
+  this.updateBreadcrumbs(dataObj);
+};
+
+/**
  * Retrieves full candidate details when the typeahead is used
- * Called from {@see handleTypeaheadSelect() }
+ * Called from
  * Similar to {@see loadCandidatesList() }
  * @param {String} cand_id Comes from the typeahead
  */
 PresidentialFundsMap.prototype.loadCandidateDetails = function(cand_id) {
-  // let instance = this;
-  // this.basePath_candidatePath[1] = cand_id;
-  // window
-  //   .fetch(
-  //     buildUrl(this.basePath_candidatePath, this.baseCandidateQuery),
-  //     this.fetchInitObj
-  //   )
-  //   .then(function(response) {
-  //     if (response.status !== 200)
-  //       throw new Error('The network rejected the candidate details request.');
-  //     // else if (response.type == 'cors') throw new Error('CORS error');
-  //     response.json().then(data => {
-  //       // Save the candidate query response
-  //       instance.data_candidate = data;
-  //       // Save the candidate details
-  //       instance.candidateDetails = data.results[0];
-  //       // Update the base query with the new candidate ID
-  //       instance.baseStatesQuery.candidate_id =
-  //         instance.candidateDetails.candidate_id;
-  //       // Save the office to the base query, too
-  //       instance.baseStatesQuery.office = instance.candidateDetails.office;
-  //       // Then put the new candidate details into the page
-  //       instance.displayUpdatedData_candidate();
-  //     });
-  //   })
-  //   .catch(function() {});
+  console.log('loadCandidateDetails(): ', cand_id);
+  let instance = this;
+  this.basePath_candidateDetails[1] = cand_id;
+  window
+    .fetch(
+      buildUrl(this.basePath_candidateDetails, this.baseCandidateQuery),
+      this.fetchInitObj
+    )
+    .then(function(response) {
+      if (response.status !== 200)
+        throw new Error('The network rejected the candidate details request.');
+      // else if (response.type == 'cors') throw new Error('CORS error');
+      response.json().then(data => {
+        // Save the candidate query response
+        instance.data_candidate = data;
+        console.log('candidate details loaded: ', data);
+        // Save the candidate details
+        // instance.candidateDetails = data.results[0];
+        // Update the base query with the new candidate ID
+        // instance.baseStatesQuery.candidate_id =
+        // instance.candidateDetails.candidate_id;
+        // Save the office to the base query, too
+        // instance.baseStatesQuery.office = instance.candidateDetails.office;
+        // Then put the new candidate details into the page
+        // instance.displayUpdatedData_candidate();
+        instance.element.dispatchEvent(
+          new CustomEvent(CANDIDATE_DETAILS_LOADED, { detail: data.results[0] })
+        );
+      });
+    })
+    .catch(function() {});
 };
 
 /**
@@ -605,75 +624,29 @@ PresidentialFundsMap.prototype.loadStatesData = function() {
 
 /**
  * Puts the candidate details in the page,
- * then loads the states data with {@see loadStatesData() }
  */
-PresidentialFundsMap.prototype.displayUpdatedData_candidate = function() {
-  // If this is the first load, the typeahead won't have a value; let's set it
-  // let theTypeahead = document.querySelector('#contribs-by-state-cand');
-  // if (!theTypeahead.value) theTypeahead.value = this.candidateDetails.name;
-  // // …their desired office during this election…
-  // let candidateOfficeHolder = this.candidateDetailsHolder.querySelector('h2');
-  // let theOfficeName = this.candidateDetails.office_full;
-  // candidateOfficeHolder.innerText = `Candidate for ${
-  //   theOfficeName == 'President' ? theOfficeName.toLowerCase() : theOfficeName
-  // }`;
-  // // …and their candidate ID for this office
-  // let candidateIdHolder = this.candidateDetailsHolder.querySelector('h3');
-  // candidateIdHolder.innerText = 'ID: ' + this.candidateDetails.candidate_id;
-  // // Update the <select>
-  // // TODO: handle if there are no years
-  // // TODO: handle if there is only one year (hide select? disable it? Not awful if it's exactly one option)
-  // // Grab election_years from the candidate details
-  // let candidateElectionYears = this.candidateDetails.election_years;
-  // let evenElectionYears = candidateElectionYears.map(electionYear => {
-  //   if (electionYear % 2 === 0) {
-  //     return electionYear;
-  //   } else {
-  //     electionYear = electionYear + 1;
-  //     return electionYear;
-  //   }
-  // });
-  // // Take the new even election years set and make it distinct
-  // // eslint-disable-next-line no-undef
-  // let validElectionYears = [...new Set(evenElectionYears)];
-  // // Sort them so the most recent is first so it'll be on top of the <select>
-  // validElectionYears.sort((a, b) => b - a);
-  // // Remember what year's election we're currently showing (will help if we were switching between candidates of the same year)
-  // let previousElectionYear = this.yearControl.value;
-  // // Otherwise we'll show the most recent election of these options
-  // let nextElectionYear = validElectionYears[0];
-  // // validElectionYears.includes(previousElectionYear) wasn't working so let's go through the validElectionYears
-  // // and stick with previousElectionYear if it's a valid year for this candidate
-  // for (let i = 0; i < validElectionYears.length; i++) {
-  //   if (previousElectionYear == validElectionYears[i]) {
-  //     nextElectionYear = previousElectionYear;
-  //     break;
-  //   }
-  // }
-  // // Build the <option><option> list
-  // let newSelectOptions = '';
-  // for (let i = 0; i < validElectionYears.length; i++) {
-  //   newSelectOptions += `<option value="${validElectionYears[i]}"${
-  //     nextElectionYear == validElectionYears[i] ? ' selected' : ''
-  //   }>${validElectionYears[i]}</option>`;
-  // }
-  // // Put the new options into the <select>
-  // this.yearControl.innerHTML = newSelectOptions;
-  // // If the previous election and this one are different,
-  // // save the new election year to the base query
-  // if (previousElectionYear != nextElectionYear)
-  //   this.baseStatesQuery.cycle = nextElectionYear;
-  // // Update candidate name and link
-  // this.setCandidateName(
-  //   this.candidateDetails.candidate_id,
-  //   this.candidateDetails.name,
-  //   this.candidateDetails.party,
-  //   this.baseStatesQuery.cycle
-  // );
-  // this.loadCandidateCoverageDates();
-  // // Now that we have the candidate's personal details,
-  // // we need to get the committee data
-  // this.loadCandidateCommitteeDetails();
+PresidentialFundsMap.prototype.displayUpdatedData_candidate = function(detail) {
+  console.log('displayUpdatedData_candidate(): ', detail);
+
+  let theNameField = this.candidateDetailsHolder.querySelector('h1');
+  let theOfficeField = this.candidateDetailsHolder.querySelector('h2');
+  let theIDField = this.candidateDetailsHolder.querySelector('h3');
+
+  let theNameString = '';
+  let theOfficeString = '';
+  let theIDString = '';
+
+  if (specialCandidateIDs.includes(detail.candidate_id)) {
+    theNameString = detail.name;
+    theOfficeString = 'for president';
+  } else {
+    theNameString = `<a href="/data/candidate/${detail.candidate_id}/?cycle=${this.current_electionYear}&election_full=true">${detail.name}</a> [${detail.party}]`;
+    theOfficeString = 'Candidate for president';
+    theIDString = `ID: ${detail.candidate_id}`;
+  }
+  theNameField.innerHTML = theNameString;
+  theOfficeField.innerHTML = theOfficeString;
+  theIDField.innerHTML = theIDString;
 };
 
 /**
@@ -709,8 +682,13 @@ PresidentialFundsMap.prototype.displayUpdatedData_candidates = function(
       //   this.candidateDetails.state
       // );
       // Candidate name cell
+      let rowClasses = 'TODO-myRowClass';
+      if (results[i].candidate_id == this.current_candidate_id)
+        rowClasses += ' selected';
+
       let theNewRow = document.createElement('tr');
       theNewRow.setAttribute('data-candidate_id', results[i].candidate_id);
+      theNewRow.setAttribute('class', rowClasses);
       let newRowContent = '';
       newRowContent += `<td>${results[i].candidate_last_name}`;
       if (!specialCandidateIDs.includes(results[i].candidate_id)) {
@@ -764,7 +742,7 @@ PresidentialFundsMap.prototype.displayUpdatedData_total = function(data) {
 /**
  *
  */
-PresidentialFundsMap.prototype.updateBreadcrumbs = function() {
+PresidentialFundsMap.prototype.updateBreadcrumbs = function(dataObj) {
   console.log('updateBreadcrumbs()');
   let theHolder = this.element.querySelector('.breadcrumb-nav');
   let theSeparator = theHolder.querySelector('span');
@@ -772,29 +750,29 @@ PresidentialFundsMap.prototype.updateBreadcrumbs = function() {
   let theSecondLabel = '';
 
   if (
-    this.current_candidate_id == specialCandidateIDs[0] &&
-    this.current_electionState == 'US'
+    dataObj.candidate_id == specialCandidateIDs[0] &&
+    dataObj.currentState == 'US'
   ) {
     // If we're showing the US map and 'All' candidates,
     // TODO - done, let's hide the span and the second element
-  } else if (this.current_electionState == 'US') {
+  } else if (dataObj.currentState == 'US') {
     // Or if we're showing the US map and not-'All' candidates
     theSecondLabel = 'Nationwide: ';
   } else {
     // Otherwise, we're showing a state so we need a state lookup
     // TODO: theSecondLabel = (lookup the state name for this.current_electionState)
-    theSecondLabel = 'State: ';
+    theSecondLabel = `${dataObj.current_candidate_name}: `;
   }
 
   if (theSecondLabel != '') {
-    if (specialCandidateIDs.includes(this.current_candidate_id)) {
+    if (specialCandidateIDs.includes(dataObj.candidate_id)) {
       // If we're looking at a special candidate (Dems, Reps ('all' is hidden from above))
       // TODO: theSecondLabel += this.candidate_last_name?
-      theSecondLabel += 'party name here';
+      theSecondLabel += dataObj.name;
     } else {
       // We're dealing with a real candidate so we need to get the name from somewhere else
       // TODO: theSecondLabel += this.find the last name
-      theSecondLabel += 'candidate name here';
+      theSecondLabel += dataObj.candidateLastName;
     }
   }
   theSecondItem.style.display = theSecondLabel != '' ? 'block' : 'none';
@@ -816,52 +794,64 @@ PresidentialFundsMap.prototype.handleYearChange = function(e) {
  */
 PresidentialFundsMap.prototype.handleCandidateListClick = function(e) {
   console.log('handleCandidateListClick(): ', e);
-  let newCandidateId = e.target.dataset.candidate_id;
-  if (newCandidateId != this.current_candidate_id) {
-    this.current_candidate_id = newCandidateId;
+  let newCandidateID = e.target.dataset.candidate_id;
+  let name = e.target.cells[0].innerText;
+  if (newCandidateID != this.current_candidate_id) {
+    this.current_candidate_id = newCandidateID;
+    this.current_candidate_last_name = name.substr(0, name.indexOf(' ['));
     this.element.dispatchEvent(
-      new CustomEvent(CHANGE_CANDIDATE, { detail: newCandidateId })
+      new CustomEvent(CHANGE_CANDIDATE, {
+        detail: { candidate_id: newCandidateID, name: name }
+      })
     );
   }
 };
 
 PresidentialFundsMap.prototype.handleCandidateChange = function(e) {
   console.log('handleCandidateChange(): ', e);
-  this.updateBreadcrumbs();
-  // TODO: this should trigger the map to load change to the candidate's data (or, 'US')
+
+  // We only need to load candidate details if our new candidate_id is an individual
+  if (specialCandidateIDs.includes(e.detail.candidate_id)) {
+    // Otherwise, dispatch the event now
+
+    this.element.dispatchEvent(
+      new CustomEvent(CANDIDATE_DETAILS_LOADED, {
+        detail: {
+          candidate_id: e.detail.candidate_id,
+          name: e.detail.name // Sending this as name because that's how the candidate details query returns it
+        }
+      })
+    );
+  } else {
+    this.loadCandidateDetails(e.detail.candidate_id);
+  }
+
+  // TODO: this should trigger the map to change to the candidate's data (or, 'US')
 };
 
-// Set the candidate's name and link change
-PresidentialFundsMap.prototype.setCandidateName = function(
-  id,
-  candidateName,
-  party,
-  cycle
-) {
-  // let candidateNameElement = this.candidateDetailsHolder.querySelector('h1');
-  // candidateNameElement.innerHTML = `<a href="/data/candidate/${id}/?cycle=${cycle}&election_full=true">${candidateName}</a> [${party}]`;
-};
+// // Set the candidate's name and link change
+// PresidentialFundsMap.prototype.setCandidateName = function(
+//   id,
+//   candidateName,
+//   party,
+//   cycle
+// ) {
+//   let candidateNameElement = this.candidateDetailsHolder.querySelector('h1');
+//   // candidateNameElement.innerHTML = `<a href="/data/candidate/${id}/?cycle=${cycle}&election_full=true">${candidateName}</a> [${party}]`;
+// };
 
 /**
  * Called on the election year control's change event
  * Starts loading the new data
- * @param {Event} e
+ * @param {MouseEvent} e
  */
 PresidentialFundsMap.prototype.handleElectionYearChange = function(e) {
   console.log('handleElectionYearChange() e: ', e);
-  // this.baseStatesQuery.cycle = this.yearControl.value;
-  // // Update candidate name and link
-  // this.setCandidateName(
-  //   this.candidateDetails.candidate_id,
-  //   this.candidateDetails.name,
-  //   this.candidateDetails.party,
-  //   this.baseStatesQuery.cycle
-  // );
-  let yearChangeEvent = new CustomEvent(
-    PresidentialFundsMap.YEAR_CHANGE_EVENT,
-    { detail: e.target.value }
+  this.element.dispatchEvent(
+    new CustomEvent(YEAR_CHANGE_EVENT, {
+      detail: e.target.value
+    })
   );
-  this.element.dispatchEvent(yearChangeEvent);
 
   // // We don't need to load the candidate details for a year change,
   // // so we'll just jump right to loading the committees data for the newly-chosen year.
