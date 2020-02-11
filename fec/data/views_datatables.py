@@ -109,6 +109,9 @@ def electioneering_communications(request):
 
 
 def independent_expenditures(request):
+    if len(request.GET) == 0:
+        return redirect('/data/independent-expenditures/?most_recent=true')
+
     return render(request, 'datatable.jinja', {
         'parent': 'data',
         'slug': 'independent-expenditures',
