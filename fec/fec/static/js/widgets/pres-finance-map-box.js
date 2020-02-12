@@ -2,8 +2,6 @@
 
 /* global CustomEvent */
 
-ROBERT, NEXT UP IS THE VARIOUS EXPORT BUTTONS
-
 /**
  * TODO - @fileoverview
  * @copyright 2020 Federal Election Commission
@@ -21,8 +19,16 @@ const breakpointToLarge = 700;
 const breakpointToXL = 860;
 const availElectionYears = [2020, 2016]; // defaults to [0]
 const specialCandidateIDs = ['P00000001', 'P00000002', 'P00000003'];
-// const rootPathToIndividualContributions =
-//   '/data/receipts/individual-contributions/';
+
+const pathFormat_download_contribs =
+  '/files/bulk-downloads/Presidential_Map/{election_year}/{candidate_id}/{candidate_id}-{state}.zip';
+// {state} can be the two-letter abbreviation, ALL, or OTHER
+const pathFormat_download_expends =
+  '/files/bulk-downloads/Presidential_Map/{election_year}/{candidate_id}/{candidate_id}-ALL.zip';
+const pathFormat_download_summary =
+  '/files/bulk-downloads/Presidential_Map/{election_year}/report_summaries_form_3p.zip';
+const pathFormat_download_state =
+  '/files/bulk-downloads/Presidential_Map/{election_year}/{candidate_id}/{candidate_id}-{state}.zip';
 
 import { buildUrl } from '../modules/helpers';
 // import { defaultElectionYear } from './widget-vars';
@@ -42,6 +48,7 @@ const CANDIDATE_DETAILS_LOADED = EVENT_APP_ID + '_cand_detail_loaded';
 const MAP_DATA_LOADED = EVENT_APP_ID + '_map_data_loaded';
 const FINANCIAL_SUMMARY_LOADED = EVENT_APP_ID + '_cand_summary_loaded';
 const CONTRIBUTION_SIZES_LOADED = EVENT_APP_ID + '_cand_sizes_loaded';
+const COVERAGE_DATES_LOADED = EVENT_APP_ID + '_coverage_dates_loaded';
 
 // Element selectors
 // TODO: Update so we're using IDs everywhere?
@@ -54,11 +61,19 @@ const selector_candidatesTable = '#pres-fin-map-candidates-table';
 const selector_breadcrumbNav = '.breadcrumb-nav';
 const selector_summariesHolder = '#financial-summaries';
 const selector_candidateNamePartyAndLink = '.js-cand-name-par-a';
+const selector_downloadsWrapper = '#downloads-wrapper';
+const selector_coverageDates = '.js-coverage-date';
+const selector_exportRaisingButton = '.js-export-raising-data';
+const selector_exportSpending = '.js-export-spending-data';
+const selector_exportSummary = '.js-export-report-summary';
+const selector_stateDownloadLinks =
+  selector_downloadsWrapper + ' [data-stateID]';
+const selector_exportStateData = '.js-export-state-data';
 
 /**
  * Formats the given value and puts it into the dom element.
  * @param {Number} passedValue The number to format and plug into the element
- * @param {Boolean} roundToWhole Should we round the cents or no?
+ * @param {Boolean} abbreviateMillions Should we abbreviate the millions? (1,100,000 to 1.1)
  * @returns {String} A string of the given value formatted with a dollar sign, commas, and (if roundToWhole === false) decimal
  */
 function formatAsCurrency(passedValue, abbreviateMillions) {
@@ -118,50 +133,26 @@ function PresidentialFundsMap() {
   // Where to find
   this.basePath_financialSummary = ['presidential', 'financial_summary'];
 
+  //
   this.basePath_contributionSizes = [
     'presidential',
     'contributions',
     'by_size'
   ];
-  // // Where to find candidate's coverage dates
-  // this.basePath_candidateCoverageDatesPath = [
-  //   'candidate',
-  //   '000', //candidate ID
-  //   'totals'
-  // ];
-  // // Where to find the highest-earning candidates:
-  // this.basePath_highestRaising = ['candidates', 'totals'];
+
+  //
+  this.basePath_coverageDates = ['presidential', 'coverage_end_date'];
+
   // Where to find the data for the map
   this.basePath_mapData = ['presidential', 'contributions', 'by_state'];
-  // // Where to find the states list grand total:
-  // this.basePath_statesTotal = [
-  //   'schedules',
-  //   'schedule_a',
-  //   'by_state',
-  //   'by_candidate',
-  //   'totals'
-  // ];
+
   this.data_candidates;
-  // // Details about the candidate. Comes from the typeahead
   this.data_candidate;
   this.data_summary;
   this.data_sizes;
+  this.data_coverage;
   this.data_map;
-  // // Information retruned by API candidate committees API {@see loadCandidateCommitteeDetails}
-  // this.data_candidateCommittees = {};
-  // // Init the list/table of states and their totals
-  // this.data_states = {
-  //   results: [
-  //     {
-  //       candidate_id: '',
-  //       count: 0,
-  //       cycle: 2020,
-  //       state: '',
-  //       state_full: '',
-  //       total: 0
-  //     }
-  //   ]
-  // };
+
   // Shared settings for every fetch():
   this.fetchInitObj = {
     cache: 'no-cache',
@@ -178,27 +169,8 @@ function PresidentialFundsMap() {
   this.current_candidateName = 'All candidates';
   this.current_candidateLastName = '';
   this.map; // Starts as the element for the map but then becomes a DataMap object
-  // this.table; // The <table> for the list of states and their totals
-  // this.statesTotalHolder; // Element at the bottom of the states list
-  // this.typeahead; // The typeahead candidate element:
-  // this.typeahead_revertValue; // Temporary var saved while user is typing
-  // this.yearControl; // The <select> for election years:
-  // this.buttonIndivContribs;
-  // // this.buttonMethodology;
-  // this.remoteTableHeader;
-  // this.remoteTable;
 
-  // // Populate the examples text because handlebars doesn't like to add the italics/emphasis
-  // document.querySelector(
-  //   '#gov-fec-contribs-by-state .typeahead-filter .filter__instructions'
-  // ).innerHTML = 'Examples: <em>Bush, George W</em> or <em>P00003335</em>';
-
-  // // Move the typeahead message into the typeahead object so its content lines up properly
-  // document
-  //   .querySelector('#contribs-by-state-cand-field')
-  //   .appendChild(document.querySelector('#contribs-by-state-typeahead-error'));
-
-  // // If we have the element on the page, fire it up
+  // If we have the element on the page, fire it up
   if (this.element) this.init();
 }
 
@@ -258,6 +230,11 @@ PresidentialFundsMap.prototype.init = function() {
     this.handleContributionSizesLoaded.bind(this)
   );
 
+  this.element.addEventListener(
+    COVERAGE_DATES_LOADED,
+    this.handleCoverageDatesLoaded.bind(this)
+  );
+
   this.element
     .querySelector(selector_resetApp)
     .addEventListener('click', this.handleResetClick.bind(this));
@@ -267,6 +244,10 @@ PresidentialFundsMap.prototype.init = function() {
     this.handleStateClick.bind(this)
   );
 
+  this.element
+    .querySelector(selector_exportRaisingButton)
+    .addEventListener('click', this.handleExportRaisingClick.bind(this));
+
   // Initialize the various queries
   this.baseCandidateQuery = { office: 'P' }; // Calls for candidate details
   this.baseCandidatesQuery = { per_page: 100, sort: '-net_receipts' };
@@ -274,6 +255,7 @@ PresidentialFundsMap.prototype.init = function() {
   this.baseMapQuery = { per_page: 100 };
   this.baseSummaryQuery = { per_page: 100 }; // just in case
   this.baseSizesQuery = { per_page: 100 }; // just in case
+  this.baseCoverageQuery = { per_page: 100 }; // just in case
 
   // Find the visual elements
   this.map = document.querySelector(selector_map);
@@ -369,6 +351,7 @@ PresidentialFundsMap.prototype.loadCandidatesList = function() {
   });
   window
     .fetch(buildUrl(this.basePath_candidatesList, thisQuery), this.fetchInitObj)
+    // .fetch('/static/temp-data/api_thing-state-year.json')
     .then(function(response) {
       if (response.status !== 200)
         throw new Error('The network rejected the candidate raising request.');
@@ -482,7 +465,25 @@ PresidentialFundsMap.prototype.handleContributionSizesLoaded = function(e) {
   this.displaySizesSummary(e.detail.results);
 
   // Now that we have all the numbers out of the way, let's load the map
+  this.loadCoverageDates();
+
+  // TODO: We need to load the coverage dates for candidates and put that information in the accordions, between name and data (for now)
+};
+
+/**
+ *
+ */
+PresidentialFundsMap.prototype.handleCoverageDatesLoaded = function(e) {
+  console.log('handleCoverageDatesLoaded(): ', e);
+
+  this.data_coverage = e.detail;
+
+  this.displayCoverageDates(e.detail.results);
+
+  // Now that we have all the numbers out of the way, let's load the map
   this.loadMapData();
+
+  // TODO: We need to load the coverage dates for candidates and put that information in the accordions, between name and data (for now)
 };
 
 /**
@@ -633,6 +634,42 @@ PresidentialFundsMap.prototype.loadContributionSizes = function() {
 };
 
 /**
+ * Starts the fetch to go get the coverage dates
+ */
+PresidentialFundsMap.prototype.loadCoverageDates = function() {
+  document.dispatchEvent(new CustomEvent(ENTER_LOADING_EVENT));
+
+  let instance = this;
+  let thisQuery = Object.assign({}, this.baseCoverageQuery, {
+    candidate_id: this.current_candidateID,
+    election_year: this.current_electionYear
+  });
+  // Let's stop any currently-running map data fetches
+  if (this.fetchingData) this.fetchAbortController.abort();
+  // Start loading the map data
+  this.fetchingData = true;
+  window
+    .fetch(buildUrl(this.basePath_coverageDates, thisQuery), this.fetchInitObj)
+    .then(function(response) {
+      // instance.fetchingStates = false;
+      if (response.status !== 200)
+        throw new Error('The network rejected the sizes request.');
+      // else if (response.type == 'cors') throw new Error('CORS error');
+      response.json().then(data => {
+        // Let the audience know the load is complete
+        instance.element.dispatchEvent(
+          new CustomEvent(COVERAGE_DATES_LOADED, {
+            detail: data
+          })
+        );
+      });
+    })
+    .catch(function() {
+      instance.fetchingData = false;
+    });
+};
+
+/**
  * Puts the candidate details in the page,
  */
 PresidentialFundsMap.prototype.displayUpdatedData_candidate = function(detail) {
@@ -680,29 +717,21 @@ PresidentialFundsMap.prototype.displayUpdatedData_candidates = function(
   console.log('displayUpdatedData_candidates(): ', results);
   let theTableBody = this.table.querySelector('tbody');
   theTableBody.innerHTML = '';
-  // let theTbodyString = '';
   if (results.length === 0) {
     // If there are no results to show
     this.handleErrorState('NO_RESULTS_TO_DISPLAY');
   } else {
-    // If there ARE results to show
-    // We're going to need the committee IDs for the totals link
-    // let theCommitteeIDs = [];
-    // for (let i = 0; i < this.data_candidateCommittees.results.length; i++) {
-    //   theCommitteeIDs.push(
-    //     this.data_candidateCommittees.results[i].committee_id
-    //   );
-    // }
+    // If the current candidate is in the new list, we'll need to decorate them
+    // If not, we should change the default candidate to 'US'
+    let currentCandInNewList = results.find(
+      result => result.candidate_id == this.current_candidateID
+    );
+    if (!currentCandInNewList)
+      this.current_candidateID = specialCandidateIDs[0];
+    // Build each required row
     for (let i = 0; i < results.length; i++) {
-      // let theStateTotalUrl = buildCandidateNameAndPartyLink(
-      //   this.baseStatesQuery.cycle,
-      //   this.baseStatesQuery.office,
-      //   theCommitteeIDs,
-      //   results[i].state,
-      //   this.candidateDetails.state
-      // );
-      // Candidate name cell
       let rowClasses = 'TODO-myRowClass';
+      // If this row is for the currently-selected candidate, add the selected class (whatever it is)
       if (results[i].candidate_id == this.current_candidateID)
         rowClasses += ' selected';
 
@@ -742,24 +771,6 @@ PresidentialFundsMap.prototype.displayUpdatedData_candidates = function(
 };
 
 /**
- * Puts the states grand total into the total field at the bottom of the table
- * Called by its fetch inside {@see loadMapData() }
- * @param {Object} data The results from the fetch
- */
-PresidentialFundsMap.prototype.displayUpdatedData_total = function(data) {
-  // Set the states total dollars to the number we received, or empty it if there are no results
-  // this.statesTotalHolder.innerText =
-  //   data.results.length > 0
-  //     ? (this.statesTotalHolder.innerText = formatAsCurrency(
-  //         data.results[0].total
-  //       ))
-  //     : '';
-  // let statesHolder = this.element.querySelector('.states-total');
-  // if (data.results.length > 0) statesHolder.setAttribute('style', '');
-  // else statesHolder.setAttribute('style', 'opacity: 0;');
-};
-
-/**
  *
  */
 PresidentialFundsMap.prototype.displayFinancialSummary = function(data) {
@@ -776,6 +787,69 @@ PresidentialFundsMap.prototype.displayFinancialSummary = function(data) {
         ? data[prop]
         : formatAsCurrency(data[prop]);
   }
+
+  this.updateDownloadButtons();
+};
+
+/**
+ *
+ */
+PresidentialFundsMap.prototype.updateDownloadButtons = function() {
+  console.log('updateDownloadButtons()');
+
+  // The state-only download button:
+  let stateDownloadUrl = pathFormat_download_state;
+  stateDownloadUrl = stateDownloadUrl.replace(
+    /\{election_year\}/g,
+    this.current_electionYear
+  );
+  stateDownloadUrl = stateDownloadUrl.replace(
+    /\{candidate_id\}/g,
+    this.current_candidateID
+  );
+  stateDownloadUrl = stateDownloadUrl.replace(
+    /\{state\}/g,
+    this.current_electionState
+  );
+  let stateDownloadButton = this.element.querySelector(
+    selector_exportStateData
+  );
+  stateDownloadButton.setAttribute('href', stateDownloadUrl);
+  stateDownloadButton.innerText = `Export ${this.current_electionState} raising data`;
+
+  // Summary download state buttons:
+  let stateLinks = this.element.querySelectorAll(selector_stateDownloadLinks);
+  stateLinks.forEach(link => {
+    let newUrl = pathFormat_download_contribs;
+    newUrl = newUrl.replace(/\{election_year\}/g, this.current_electionYear);
+    newUrl = newUrl.replace(/\{candidate_id\}/g, this.current_candidateID);
+    newUrl = newUrl.replace(/\{state\}/g, link.getAttribute('data-stateID'));
+    link.setAttribute('href', newUrl);
+  });
+
+  // The button in the spending accordion
+  let spendingDownloadURL = pathFormat_download_expends;
+  spendingDownloadURL = spendingDownloadURL.replace(
+    /\{election_year\}/g,
+    this.current_electionYear
+  );
+  spendingDownloadURL = spendingDownloadURL.replace(
+    /\{candidate_id\}/g,
+    this.current_candidateID
+  );
+  this.element
+    .querySelector(selector_exportSpending)
+    .setAttribute('href', spendingDownloadURL);
+
+  // Button in the upper right:
+  let reportSummaryUrl = pathFormat_download_summary;
+  reportSummaryUrl = reportSummaryUrl.replace(
+    '{election_year}',
+    this.current_electionYear
+  );
+  this.element
+    .querySelector(selector_exportSummary)
+    .setAttribute('href', reportSummaryUrl);
 };
 
 /**
@@ -793,6 +867,24 @@ PresidentialFundsMap.prototype.displaySizesSummary = function(data) {
     // format it as currency and put it into the field
     if (field)
       field.innerText = formatAsCurrency(item.contribution_receipt_amount);
+  });
+};
+
+/**
+ *
+ */
+PresidentialFundsMap.prototype.displayCoverageDates = function(data) {
+  let theHolders = this.element.querySelectorAll(selector_coverageDates);
+  // Start with an empty coverage date
+  let theCoverageString = '';
+  if (data[0] && data[0].coverage_end_date) {
+    theCoverageString = new Date(data[0].coverage_end_date).toLocaleDateString('en-US');
+    theCoverageString = `through ${theCoverageString}`;
+  }
+
+  // for each result in the data object we receive,
+  theHolders.forEach(item => {
+    item.innerHTML = theCoverageString;
   });
 };
 
@@ -862,6 +954,8 @@ PresidentialFundsMap.prototype.handleCandidateListClick = function(e) {
       })
     );
   }
+
+  // TODO: re-decorate the candidate rows here
 };
 
 PresidentialFundsMap.prototype.handleCandidateChange = function(e) {
@@ -907,6 +1001,12 @@ PresidentialFundsMap.prototype.handleElectionYearChange = function(e) {
  */
 PresidentialFundsMap.prototype.handleStateClick = function(e) {
   console.log('A STATE WAS CLICKED! ', e);
+  e.stopImmediatePropagation(); // Keep it from bubbling outside of this app
+  // maybe this.current_electionState = e.detail;
+  // maybe this.loadCandidatesList();
+  // tell the breadcrumbs to update—or maybe that should be a different listener?
+  // then focus the map?
+  // Simply clicking a state shouldn't change that state's color or value
 };
 
 /**
@@ -986,6 +1086,35 @@ PresidentialFundsMap.prototype.refreshOverlay = function() {
   // let theHeight = theBottomPos - theTopPos;
   // theOverlay.style.top = `${theTopPos}px`;
   // theOverlay.style.height = `${theHeight}px`;
+};
+
+/**
+ *
+ * @param {MouseEvent} e
+ */
+PresidentialFundsMap.prototype.handleExportRaisingClick = function(e) {
+  console.log('handleExportRaisingClick(): ', e);
+  e.preventDefault();
+  // TODO: show {selector_downloadsWrapper}
+  // TODO then: Hide {selector_downloadsWrapper} when we're no longer interested in the raising downloads
+};
+
+/**
+ *
+ * @param {MouseEvent} e
+ */
+PresidentialFundsMap.prototype.handleExportSpendingClick = function(e) {
+  console.log('handleExportSpendingClick(): ', e);
+  e.preventDefault();
+};
+
+/**
+ *
+ * @param {MouseEvent} e
+ */
+PresidentialFundsMap.prototype.handleExportSummaryClick = function(e) {
+  console.log('handleExportSummaryClick(): ', e);
+  e.preventDefault();
 };
 
 /**
