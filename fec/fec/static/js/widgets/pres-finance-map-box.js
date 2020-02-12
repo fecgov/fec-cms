@@ -35,8 +35,11 @@ const YEAR_CHANGE_EVENT = EVENT_APP_ID + '_yearChange';
 const ENTER_LOADING_EVENT = EVENT_APP_ID + '_loading';
 const FINISH_LOADING_EVENT = EVENT_APP_ID + '_loaded';
 const CHANGE_CANDIDATES_DATA = EVENT_APP_ID + '_candidates_change';
-const CHANGE_CANDIDATE = EVENT_APP_ID + '_candidate_change';
+const CHANGE_CANDIDATE = EVENT_APP_ID + '_cand_change';
 const CANDIDATE_DETAILS_LOADED = EVENT_APP_ID + '_cand_detail_loaded';
+const MAP_DATA_LOADED = EVENT_APP_ID + '_map_data_loaded';
+const FINANCIAL_SUMMARY_LOADED = EVENT_APP_ID + '_cand_summary_loaded';
+const CONTRIBUTION_SIZES_LOADED = EVENT_APP_ID + '_cand_sizes_loaded';
 
 /**
  * Formats the given value and puts it into the dom element.
@@ -51,9 +54,9 @@ function formatAsCurrency(passedValue, abbreviateMillions) {
     // There's an issue when adding commas to the currency when there's a decimal
     // So we're going to break it apart, add commas, then put it back together
     toReturn = (passedValue / 1000000).toFixed(1);
-    let commaPos = toReturn.indexOf('.');
-    let firstHalf = toReturn.substr(0, commaPos);
-    let secondHalf = toReturn.substr(commaPos); // grabs the decimal, too
+    let decimalPos = toReturn.indexOf('.');
+    let firstHalf = toReturn.substr(0, decimalPos);
+    let secondHalf = toReturn.substr(decimalPos); // grabs the decimal, too
     toReturn = firstHalf.replace(/\d(?=(\d{3})+$)/g, '$&,') + secondHalf;
   } else {
     toReturn = Math.round(passedValue.round).replace(/\d(?=(\d{3})+$)/g, '$&,');
@@ -70,45 +73,13 @@ function formatAsCurrency(passedValue, abbreviateMillions) {
  * @param {String} stateID Optional. A null value will not filter for any state but show entries for the entire country
  * @returns {String} URL or empty string depending on
  */
-function buildIndividualContributionsUrl(
-  cycle,
-  office,
-  committeeIDs,
-  stateID,
-  candidateState
+function buildCandidateNameAndPartyLink(
+  candidateID,
+  candidateName,
+  electionYear,
+  party
 ) {
-  // If we're missing required params, just return '' and be done
-  // if (!cycle || !office || !committeeIDs) return '';
-  // let transactionPeriodsString = 'two_year_transaction_period=' + cycle;
-  // // TODO: Do we need maxDate and minDate?
-  // // let maxDate = `12-13-${this.baseStatesQuery.cycle}`;
-  // // let minDate = `01-01-${this.baseStatesQuery.cycle - 1}`;
-  // let committeesString = '';
-  // // The API currently wants a two_year_transaction_period value for each set of two years
-  // // so we'll add the previous two-year period for presidential races
-  // //
-  // // Also, Puerto Rico's House elections are for four years so we'll need to
-  // // add the previous two-year period to the query string for House candidates from Puerto Rico
-  // if (office == 'P' || (office == 'H' && candidateState == 'PR')) {
-  //   transactionPeriodsString += '&two_year_transaction_period=' + (cycle - 2);
-  //   // and the two earlier two-year periods for Senate races
-  // } else if (office == 'S') {
-  //   transactionPeriodsString += '&two_year_transaction_period=' + (cycle - 2);
-  //   transactionPeriodsString += '&two_year_transaction_period=' + (cycle - 4);
-  // }
-  // for (let i = 0; i < committeeIDs.length; i++) {
-  //   committeesString += '&committee_id=' + committeeIDs[i];
-  // }
-  // let stateString = stateID ? '&contributor_state=' + stateID : '';
-  // let toReturn =
-  //   rootPathToIndividualContributions +
-  //   '?' +
-  //   transactionPeriodsString +
-  //   stateString +
-  //   committeesString;
-  // // TODO: Do we need maxDate and minDate?
-  // // `&min_date=${minDate}&max_date=${maxDate}` +
-  // return toReturn;
+  return `<a href="/data/candidate/${candidateID}/?cycle=${electionYear}&election_full=true">${candidateName}</a> [${party}]`;
 }
 
 /**
@@ -129,14 +100,9 @@ function PresidentialFundsMap() {
   // Where to find individual candidate details
   this.basePath_candidateDetails = ['candidate'];
 
-  // // Where to find individual candidate details
-  // this.basePath_candidateCommitteesPath = [
-  //   'candidate',
-  //   '000', // candidate ID
-  //   'committees',
-  //   'history',
-  //   2020 // election year / cycle
-  // ];
+  // Where to find
+  this.basePath_financialSummary = ['presidential', 'financial_summary'];
+
   // // Where to find candidate's coverage dates
   // this.basePath_candidateCoverageDatesPath = [
   //   'candidate',
@@ -145,13 +111,8 @@ function PresidentialFundsMap() {
   // ];
   // // Where to find the highest-earning candidates:
   // this.basePath_highestRaising = ['candidates', 'totals'];
-  // // Where to find the list of states:
-  // this.basePath_states = [
-  //   'schedules',
-  //   'schedule_a',
-  //   'by_state',
-  //   'by_candidate'
-  // ];
+  // Where to find the data for the map
+  this.basePath_mapData = ['presidential', 'contributions', 'by_state'];
   // // Where to find the states list grand total:
   // this.basePath_statesTotal = [
   //   'schedules',
@@ -163,6 +124,7 @@ function PresidentialFundsMap() {
   this.data_candidates;
   // // Details about the candidate. Comes from the typeahead
   this.data_candidate;
+  this.data_map;
   // // Information retruned by API candidate committees API {@see loadCandidateCommitteeDetails}
   // this.data_candidateCommittees = {};
   // // Init the list/table of states and their totals
@@ -184,16 +146,16 @@ function PresidentialFundsMap() {
     mode: 'cors',
     signal: null
   };
-  // this.fetchingStates = false; // Are we waiting for data?
+  this.fetchingData = false; // Are we waiting for data?
   this.element = document.querySelector('#gov-fec-pres-finance'); // The visual element associated with this, this.instance
   this.candidateDetailsHolder; // Element to hold candidate name, party, office, and ID
   this.current_electionYear = availElectionYears[0];
   this.current_electionState = 'US';
-  this.current_electionState_name = 'United States';
-  this.current_candidate_id = '';
-  this.current_candidate_name = '';
-  this.current_candidate_last_name = '';
-  // this.map; // Starts as the element for the map but then becomes a DataMap object
+  this.current_electionStateName = 'United States';
+  this.current_candidateID = specialCandidateIDs[0];
+  this.current_candidateName = '';
+  this.current_candidateLastName = '';
+  this.map; // Starts as the element for the map but then becomes a DataMap object
   // this.table; // The <table> for the list of states and their totals
   // this.statesTotalHolder; // Element at the bottom of the states list
   // this.typeahead; // The typeahead candidate element:
@@ -258,35 +220,52 @@ PresidentialFundsMap.prototype.init = function() {
     CANDIDATE_DETAILS_LOADED,
     this.handleCandidateDetailsLoaded.bind(this)
   );
-  // // Initialize the various queries
-  this.baseCandidateQuery = { office: 'P' }; // Calls for candidate details
-  this.baseCandidatesQuery = {
-    // cycle: defaultElectionYear(),
-    // election_full: true,
-    // office: 'P',
-    // page: 1,
-    // per_page: 200,
-    // sort_hide_null: false,
-    // sort_null_only: false,
-    // sort_nulls_last: false
-    // candidate_id: '', // 'P60007168',
-    // is_active_candidate: true,
-    // sort: 'total'
-  };
 
-  // // Find the visual elements
-  // this.map = document.querySelector('.map-wrapper .election-map');
+  this.element.addEventListener(
+    MAP_DATA_LOADED,
+    this.handleMapDataLoaded.bind(this)
+  );
+
+  this.element.addEventListener(
+    FINANCIAL_SUMMARY_LOADED,
+    this.handleFinancialSummaryLoaded.bind(this)
+  );
+
+  this.element.addEventListener(
+    CONTRIBUTION_SIZES_LOADED,
+    this.handleContributionSizesLoaded.bind(this)
+  );
+
+  this.element
+    .querySelector('.js-reset-app')
+    .addEventListener('click', this.handleResetClick.bind(this));
+
+  this.element.addEventListener(
+    'STATE_CLICKED',
+    this.handleStateClick.bind(this)
+  );
+
+  // Initialize the various queries
+  this.baseCandidateQuery = { office: 'P' }; // Calls for candidate details
+  this.baseCandidatesQuery = { per_page: 100, sort: '-net_receipts' };
+  this.baseStatesQuery = { per_page: 100 };
+  this.baseMapQuery = { per_page: 100 };
+  this.baseSummaryQuery = { per_page: 100 }; // just in case
+  this.baseSizesQuery = { per_page: 100 }; // just in case
+
+  // Find the visual elements
+  this.map = document.querySelector('.map-wrapper .election-map');
   this.candidateDetailsHolder = document.querySelector('.candidate-details');
   this.table = document.querySelector('#pres-fin-map-candidates-table');
-  // this.statesTotalHolder = document.querySelector('.js-states-total');
 
-  // // Fire up the map
-  // this.map = new DataMap(this.map, {
-  //   color: '#36BDBB',
-  //   data: '',
-  //   addLegend: true,
-  //   addTooltips: true
-  // });
+  // Fire up the map
+  this.map = new DataMap(this.map, {
+    color: '#36BDBB',
+    data: '',
+    addLegend: true,
+    addTooltips: true,
+    eventAppID: EVENT_APP_ID
+  });
 
   // // Listen for the Browse Individual Contributions button to be clicked
   // this.buttonIndivContribs = this.element.querySelector(
@@ -330,7 +309,7 @@ PresidentialFundsMap.prototype.init = function() {
 
   this.element.addEventListener(
     CHANGE_CANDIDATES_DATA,
-    this.handleCandidatesDataLoad.bind(this)
+    this.handleCandidatesDataLoaded.bind(this)
   );
   this.element.addEventListener(
     CHANGE_CANDIDATE,
@@ -354,18 +333,18 @@ PresidentialFundsMap.prototype.init = function() {
 PresidentialFundsMap.prototype.loadCandidatesList = function() {
   document.dispatchEvent(new CustomEvent(ENTER_LOADING_EVENT));
 
+  // Let's stop any currently-running candidates fetches
+  if (this.fetchingData) this.fetchAbortController.abort();
+  // Start loading the candidates
+  this.fetchingData = true;
+
   let instance = this;
-  let candidatesListQuery = Object.assign({}, this.baseCandidatesQuery, {
-    sort: '-net_receipts',
-    per_page: 100,
+  let thisQuery = Object.assign({}, this.baseCandidatesQuery, {
     election_year: this.current_electionYear,
     contributor_state: this.current_electionState
   });
   window
-    .fetch(
-      buildUrl(this.basePath_candidatesList, candidatesListQuery),
-      this.fetchInitObj
-    )
+    .fetch(buildUrl(this.basePath_candidatesList, thisQuery), this.fetchInitObj)
     .then(function(response) {
       if (response.status !== 200)
         throw new Error('The network rejected the candidate raising request.');
@@ -376,18 +355,47 @@ PresidentialFundsMap.prototype.loadCandidatesList = function() {
         );
       });
     })
-    .catch(function() {});
+    .catch(function() {
+      instance.fetchingData = false;
+    });
 };
 
 /**
  * TODO -
  */
-PresidentialFundsMap.prototype.handleCandidatesDataLoad = function(e) {
+PresidentialFundsMap.prototype.handleCandidatesDataLoaded = function(e) {
   this.data_candidates = e.detail;
 
-  this.element.dispatchEvent(new CustomEvent(FINISH_LOADING_EVENT));
+  this.fetchingData = false; // clear the abort controller
+
+  // Not going to remove the loading state until we've updated the map data, too
+  // this.element.dispatchEvent(new CustomEvent(FINISH_LOADING_EVENT));
 
   this.displayUpdatedData_candidates(this.data_candidates.results);
+
+  // Now that we have a new list of candidates, we need to get new numbers for the states
+  this.loadMapData();
+};
+
+/**
+ *
+ * TODO: Would like to make this into an event for the map to hear, rather than send the data into the map
+ */
+PresidentialFundsMap.prototype.handleMapDataLoaded = function(e) {
+  this.fetchingData = false; // clear the abort controller
+
+  // The map will map 'value' attributes but we have 'net_receipts'
+  // We also need to change 'contribution_state' to 'state'
+  // So let's fix that
+  let dataForMap = Object.assign({}, e.detail);
+  dataForMap.results.forEach(item => {
+    item.total = item.contribution_receipt_amount;
+    item.state = item.contribution_state;
+  });
+
+  this.map.handleDataRefresh(dataForMap);
+
+  document.dispatchEvent(new CustomEvent(FINISH_LOADING_EVENT));
 };
 
 /**
@@ -402,13 +410,56 @@ PresidentialFundsMap.prototype.handleCandidateDetailsLoaded = function(e) {
     party: e.detail.party,
     year: this.current_electionYear,
     currentState: this.current_electionState, // for breadcrumbs
-    currentStateName: this.current_electionState_name, // for breadcrumbs
-    candidateLastName: this.current_candidate_last_name // for breadcrumbs
+    currentStateName: this.current_electionStateName, // for breadcrumbs
+    candidateLastName: this.current_candidateLastName // for breadcrumbs
   };
 
   this.displayUpdatedData_candidate(dataObj);
   this.updateBreadcrumbs(dataObj);
 };
+
+ROBERT, DO THESE
+/**
+ *
+ */
+PresidentialFundsMap.prototype.handleFinancialSummaryLoaded = function(e) {
+  console.log('handleFinancialSummaryLoaded(): ', e);
+
+  // let dataObj = {
+  //   candidate_id: e.detail.candidate_id,
+  //   name: e.detail.name,
+  //   party: e.detail.party,
+  //   year: this.current_electionYear,
+  //   currentState: this.current_electionState, // for breadcrumbs
+  //   currentStateName: this.current_electionStateName, // for breadcrumbs
+  //   candidateLastName: this.current_candidateLastName // for breadcrumbs
+  // };
+
+  // this.displayUpdatedData_candidate(dataObj);
+  // this.updateBreadcrumbs(dataObj);
+};
+
+/**
+ *
+ */
+PresidentialFundsMap.prototype.handleContributionSizesLoaded = function(e) {
+  console.log('handleFinancialSummaryLoaded(): ', e);
+
+  // let dataObj = {
+  //   candidate_id: e.detail.candidate_id,
+  //   name: e.detail.name,
+  //   party: e.detail.party,
+  //   year: this.current_electionYear,
+  //   currentState: this.current_electionState, // for breadcrumbs
+  //   currentStateName: this.current_electionStateName, // for breadcrumbs
+  //   candidateLastName: this.current_candidateLastName // for breadcrumbs
+  // };
+
+  // this.displayUpdatedData_candidate(dataObj);
+  // this.updateBreadcrumbs(dataObj);
+};
+
+/ ROBERT, DO THESE
 
 /**
  * Retrieves full candidate details when the typeahead is used
@@ -418,6 +469,8 @@ PresidentialFundsMap.prototype.handleCandidateDetailsLoaded = function(e) {
  */
 PresidentialFundsMap.prototype.loadCandidateDetails = function(cand_id) {
   console.log('loadCandidateDetails(): ', cand_id);
+  document.dispatchEvent(new CustomEvent(ENTER_LOADING_EVENT));
+
   let instance = this;
   this.basePath_candidateDetails[1] = cand_id;
   window
@@ -447,179 +500,120 @@ PresidentialFundsMap.prototype.loadCandidateDetails = function(cand_id) {
         );
       });
     })
-    .catch(function() {});
+    .catch(function() {
+      instance.fetchingData = false;
+    });
 };
 
 /**
- * Queries the API for the candidate's coverage dates for the currently-selected election
- * Called by {@see displayUpdatedData_candidate() } and {@see displayUpdatedData_candidates() }
+ * Starts the fetch to go get the values for the states
  */
-PresidentialFundsMap.prototype.loadCandidateCoverageDates = function() {
-  // let instance = this;
-  // this.basePath_candidateCoverageDatesPath[1] = this.candidateDetails.candidate_id;
-  // let coverageDatesQuery = Object.assign(
-  //   {},
-  //   {
-  //     per_page: 100,
-  //     cycle: this.baseStatesQuery.cycle,
-  //     election_full: true
-  //   }
-  // );
-  // /**
-  //  * Format the dates into MM/DD/YYYY format.
-  //  * Pads single digits with leading 0.
-  //  */
-  // var formatDate = function(date) {
-  //   // Adds one since js month uses zero based index
-  //   let month = date.getMonth() + 1;
-  //   if (month < 10) {
-  //     month = '0' + month;
-  //   }
-  //   let day = date.getDate();
-  //   if (day < 10) {
-  //     day = '0' + day;
-  //   }
-  //   return month + '/' + day + '/' + date.getFullYear();
-  // };
-  // let theFetchUrl = buildUrl(
-  //   instance.basePath_candidateCoverageDatesPath,
-  //   coverageDatesQuery
-  // );
-  // window
-  //   .fetch(theFetchUrl, instance.fetchInitObj)
-  //   .then(function(response) {
-  //     if (response.status !== 200)
-  //       throw new Error('The network rejected the coverage dates request.');
-  //     // else if (response.type == 'cors') throw new Error('CORS error');
-  //     response.json().then(data => {
-  //       if (data.results.length === 1) {
-  //         document
-  //           .querySelector('.states-table-timestamp')
-  //           .removeAttribute('style');
-  //         // Parse coverage date from API that is formatted like this: 2019-06-30T00:00:00+00:00
-  //         // into a string without timezone
-  //         let coverage_start_date = new Date(
-  //           data.results[0].coverage_start_date.substring(0, 19)
-  //         );
-  //         let coverage_end_date = new Date(
-  //           data.results[0].transaction_coverage_date.substring(0, 19)
-  //         );
-  //         // Remember the in-page elements
-  //         let theStartTimeElement = document.querySelector(
-  //           '.js-cycle-start-time'
-  //         );
-  //         let theEndTimeElement = document.querySelector('.js-cycle-end-time');
-  //         // Format the date and put it into the start time
-  //         theStartTimeElement.innerText = formatDate(coverage_start_date);
-  //         // Format the date and put it into the end time
-  //         theEndTimeElement.innerText = formatDate(coverage_end_date);
-  //       } else {
-  //         // Hide coverage dates display when there are zero results
-  //         document
-  //           .querySelector('.states-table-timestamp')
-  //           .setAttribute('style', 'opacity: 0;');
-  //       }
-  //     });
-  //   })
-  //   .catch(function() {});
+PresidentialFundsMap.prototype.loadMapData = function() {
+  document.dispatchEvent(new CustomEvent(ENTER_LOADING_EVENT));
+
+  let instance = this;
+  let thisQuery = Object.assign({}, this.baseMapQuery, {
+    candidate_id: this.current_candidateID,
+    election_year: this.current_electionYear
+  });
+  // Let's stop any currently-running map data fetches
+  if (this.fetchingData) this.fetchAbortController.abort();
+  // Start loading the map data
+  this.fetchingData = true;
+  window
+    .fetch(buildUrl(this.basePath_mapData, thisQuery), this.fetchInitObj)
+    .then(function(response) {
+      // instance.fetchingStates = false;
+      if (response.status !== 200)
+        throw new Error('The network rejected the states request.');
+      // else if (response.type == 'cors') throw new Error('CORS error');
+      response.json().then(data => {
+        console.log('map data loaded: ', data);
+        instance.data_map = data;
+        instance.element.dispatchEvent(
+          new CustomEvent(MAP_DATA_LOADED, {
+            detail: data
+          })
+        );
+      });
+    })
+    .catch(function() {
+      instance.fetchingData = false;
+    });
 };
 
 /**
- * Asks the API for the details of the candidate's committees for the currently-selected election
- * Called by {@see displayUpdatedData_candidate() }
+ * Starts the fetch to go get the values for the candidate's financial summary
  */
-PresidentialFundsMap.prototype.loadCandidateCommitteeDetails = function() {
-  // let instance = this;
-  // // Before we fetch, make sure the query path has the current candidate id
-  // this.basePath_candidateCommitteesPath[1] = this.candidateDetails.candidate_id;
-  // // and the current election year/cycle
-  // this.basePath_candidateCommitteesPath[4] = this.baseStatesQuery.cycle;
-  // let committeesQuery = Object.assign(
-  //   {},
-  //   {
-  //     per_page: 100,
-  //     election_full: true
-  //   }
-  // );
-  // let theFetchUrl = buildUrl(
-  //   instance.basePath_candidateCommitteesPath,
-  //   committeesQuery
-  // );
-  // // because the API wants two `designation` values, and that's a violation of key:value law,
-  // // we'll add them ourselves:
-  // theFetchUrl += '&designation=P&designation=A';
-  // window
-  //   .fetch(theFetchUrl, instance.fetchInitObj)
-  //   .then(function(response) {
-  //     if (response.status !== 200)
-  //       throw new Error(
-  //         'The network rejected the candidate committee details request.'
-  //       );
-  //     // else if (response.type == 'cors') throw new Error('CORS error');
-  //     response.json().then(data => {
-  //       // Save the candidate committees query response for when we build links later
-  //       instance.data_candidateCommittees = data;
-  //       // Now that we have the committee info, load the new states data
-  //       instance.loadStatesData();
-  //     });
-  //   })
-  //   .catch(function() {
-  //     // TODO: handle catch. Maybe we remove the links if the committee data didn't load?
-  //   });
+PresidentialFundsMap.prototype.loadFinancialSummary = function() {
+  document.dispatchEvent(new CustomEvent(ENTER_LOADING_EVENT));
+
+  let instance = this;
+  let thisQuery = Object.assign({}, this.baseSummaryQuery, {
+    candidate_id: this.current_candidateID,
+    election_year: this.current_electionYear
+  });
+  // Let's stop any currently-running map data fetches
+  if (this.fetchingData) this.fetchAbortController.abort();
+  // Start loading the map data
+  this.fetchingData = true;
+  window
+    .fetch(buildUrl(this.basePath_mapData, thisQuery), this.fetchInitObj)
+    .then(function(response) {
+      // instance.fetchingStates = false;
+      if (response.status !== 200)
+        throw new Error('The network rejected the states request.');
+      // else if (response.type == 'cors') throw new Error('CORS error');
+      response.json().then(data => {
+        console.log('financial summary loaded: ', data);
+        instance.data_summary = data;
+        instance.element.dispatchEvent(
+          new CustomEvent(FINANCIAL_SUMMARY_LOADED, {
+            detail: data
+          })
+        );
+      });
+    })
+    .catch(function() {
+      instance.fetchingData = false;
+    });
 };
 
 /**
- * Starts the fetch to go get the big batch of states data, called by {@see init() }
+ * Starts the fetch to go get the values for the contributions by size
  */
-PresidentialFundsMap.prototype.loadStatesData = function() {
-  // let instance = this;
-  // let baseStatesQueryWithCandidate = Object.assign({}, this.baseStatesQuery, {
-  //   candidate_id: this.candidateDetails.candidate_id
-  // });
-  // // Let's stop any currently-running states fetches
-  // if (this.fetchingStates) this.fetchAbortController.abort();
-  // // Start loading the states data
-  // this.fetchingStates = true;
-  // this.setLoadingState(true);
-  // window
-  //   .fetch(
-  //     buildUrl(this.basePath_states, baseStatesQueryWithCandidate),
-  //     this.fetchInitObj
-  //   )
-  //   .then(function(response) {
-  //     instance.fetchingStates = false;
-  //     if (response.status !== 200)
-  //       throw new Error('The network rejected the states request.');
-  //     // else if (response.type == 'cors') throw new Error('CORS error');
-  //     response.json().then(data => {
-  //       // Now that we have all of the values, let's sort them by total, descending
-  //       data.results.sort((a, b) => {
-  //         return b.total - a.total;
-  //       });
-  //       // After they're sorted, let's hang on to them
-  //       instance.data_states = data;
-  //       instance.displayUpdatedData_candidates();
-  //     });
-  //   })
-  //   .catch(function() {
-  //     instance.fetchingStates = false;
-  //   });
-  // // Start loading the states total
-  // window
-  //   .fetch(
-  //     buildUrl(this.basePath_statesTotal, baseStatesQueryWithCandidate),
-  //     this.fetchInitObj
-  //   )
-  //   .then(function(response) {
-  //     if (response.status !== 200)
-  //       throw new Error('The network rejected the states total request.');
-  //     // else if (response.type == 'cors') throw new Error('CORS error');
-  //     response.json().then(data => {
-  //       instance.displayUpdatedData_total(data);
-  //     });
-  //   })
-  //   .catch(function() {});
-  // logUsage(this.baseStatesQuery.candidate_id, this.baseStatesQuery.cycle);
+PresidentialFundsMap.prototype.loadContributionSizes = function() {
+  document.dispatchEvent(new CustomEvent(ENTER_LOADING_EVENT));
+
+  let instance = this;
+  let thisQuery = Object.assign({}, this.baseSizesQuery, {
+    candidate_id: this.current_candidateID,
+    election_year: this.current_electionYear
+  });
+  // Let's stop any currently-running map data fetches
+  if (this.fetchingData) this.fetchAbortController.abort();
+  // Start loading the map data
+  this.fetchingData = true;
+  window
+    .fetch(buildUrl(this.basePath_mapData, thisQuery), this.fetchInitObj)
+    .then(function(response) {
+      // instance.fetchingStates = false;
+      if (response.status !== 200)
+        throw new Error('The network rejected the sizes request.');
+      // else if (response.type == 'cors') throw new Error('CORS error');
+      response.json().then(data => {
+        console.log('sizes loaded: ', data);
+        instance.data_sizes = data;
+        instance.element.dispatchEvent(
+          new CustomEvent(CONTRIBUTION_SIZES_LOADED, {
+            detail: data
+          })
+        );
+      });
+    })
+    .catch(function() {
+      instance.fetchingData = false;
+    });
 };
 
 /**
@@ -640,7 +634,12 @@ PresidentialFundsMap.prototype.displayUpdatedData_candidate = function(detail) {
     theNameString = detail.name;
     theOfficeString = 'for president';
   } else {
-    theNameString = `<a href="/data/candidate/${detail.candidate_id}/?cycle=${this.current_electionYear}&election_full=true">${detail.name}</a> [${detail.party}]`;
+    theNameString = buildCandidateNameAndPartyLink(
+      detail.candidate_id,
+      detail.name,
+      this.current_electionYear,
+      detail.party
+    );
     theOfficeString = 'Candidate for president';
     theIDString = `ID: ${detail.candidate_id}`;
   }
@@ -651,8 +650,7 @@ PresidentialFundsMap.prototype.displayUpdatedData_candidate = function(detail) {
 
 /**
  * Put the list of states and totals into the table
- * Called by {@see loadStatesData() }
- * TODO: This will eventually be replaced by the datatables functionality
+ * Called by {@see loadMapData() }
  */
 PresidentialFundsMap.prototype.displayUpdatedData_candidates = function(
   results
@@ -674,7 +672,7 @@ PresidentialFundsMap.prototype.displayUpdatedData_candidates = function(
     //   );
     // }
     for (let i = 0; i < results.length; i++) {
-      // let theStateTotalUrl = buildIndividualContributionsUrl(
+      // let theStateTotalUrl = buildCandidateNameAndPartyLink(
       //   this.baseStatesQuery.cycle,
       //   this.baseStatesQuery.office,
       //   theCommitteeIDs,
@@ -683,7 +681,7 @@ PresidentialFundsMap.prototype.displayUpdatedData_candidates = function(
       // );
       // Candidate name cell
       let rowClasses = 'TODO-myRowClass';
-      if (results[i].candidate_id == this.current_candidate_id)
+      if (results[i].candidate_id == this.current_candidateID)
         rowClasses += ' selected';
 
       let theNewRow = document.createElement('tr');
@@ -723,7 +721,7 @@ PresidentialFundsMap.prototype.displayUpdatedData_candidates = function(
 
 /**
  * Puts the states grand total into the total field at the bottom of the table
- * Called by its fetch inside {@see loadStatesData() }
+ * Called by its fetch inside {@see loadMapData() }
  * @param {Object} data The results from the fetch
  */
 PresidentialFundsMap.prototype.displayUpdatedData_total = function(data) {
@@ -761,7 +759,7 @@ PresidentialFundsMap.prototype.updateBreadcrumbs = function(dataObj) {
   } else {
     // Otherwise, we're showing a state so we need a state lookup
     // TODO: theSecondLabel = (lookup the state name for this.current_electionState)
-    theSecondLabel = `${dataObj.current_candidate_name}: `;
+    theSecondLabel = `${dataObj.current_candidateName}: `;
   }
 
   if (theSecondLabel != '') {
@@ -796,9 +794,9 @@ PresidentialFundsMap.prototype.handleCandidateListClick = function(e) {
   console.log('handleCandidateListClick(): ', e);
   let newCandidateID = e.target.dataset.candidate_id;
   let name = e.target.cells[0].innerText;
-  if (newCandidateID != this.current_candidate_id) {
-    this.current_candidate_id = newCandidateID;
-    this.current_candidate_last_name = name.substr(0, name.indexOf(' ['));
+  if (newCandidateID != this.current_candidateID) {
+    this.current_candidateID = newCandidateID;
+    this.current_candidateLastName = name.substr(0, name.indexOf(' ['));
     this.element.dispatchEvent(
       new CustomEvent(CHANGE_CANDIDATE, {
         detail: { candidate_id: newCandidateID, name: name }
@@ -826,7 +824,8 @@ PresidentialFundsMap.prototype.handleCandidateChange = function(e) {
     this.loadCandidateDetails(e.detail.candidate_id);
   }
 
-  // TODO: this should trigger the map to change to the candidate's data (or, 'US')
+  // Start the map refresh, too
+  this.loadMapData();
 };
 
 // // Set the candidate's name and link change
@@ -859,6 +858,13 @@ PresidentialFundsMap.prototype.handleElectionYearChange = function(e) {
 };
 
 /**
+ *
+ */
+PresidentialFundsMap.prototype.handleStateClick = function(e) {
+  console.log('A STATE WAS CLICKED! ', e);
+};
+
+/**
  * Called from throughout the widget
  * @param {String} errorCode
  */
@@ -882,7 +888,7 @@ PresidentialFundsMap.prototype.handleErrorState = function(errorCode) {
  */
 PresidentialFundsMap.prototype.updateBrowseIndivContribsButton = function() {
   // We need to go through the committee results and build an array of the committee IDs
-  // to send to {@see buildIndividualContributionsUrl() }
+  // to send to {@see buildCandidateNameAndPartyLink() }
   // let theCommittees = this.data_candidateCommittees.results;
   // let theCommitteeIDs = [];
   // for (let i = 0; i < theCommittees.length; i++) {
@@ -893,7 +899,7 @@ PresidentialFundsMap.prototype.updateBrowseIndivContribsButton = function() {
   // );
   // theButton.setAttribute(
   //   'href',
-  //   buildIndividualContributionsUrl(
+  //   buildCandidateNameAndPartyLink(
   //     this.baseStatesQuery.cycle,
   //     this.baseStatesQuery.office,
   //     theCommitteeIDs
@@ -961,9 +967,34 @@ PresidentialFundsMap.prototype.refreshOverlay = function() {
   // theOverlay.style.height = `${theHeight}px`;
 };
 
+PresidentialFundsMap.prototype.handleResetClick = function(e) {
+  if (e) e.preventDefault();
+
+  this.current_candidateID = specialCandidateIDs[0];
+  this.current_electionState = 'US';
+  this.current_electionStateName = '';
+  this.current_candidateLastName = '';
+  this.current_candidateName = 'All candidates';
+
+  this.loadCandidatesList();
+
+  let dataObj = {
+    candidate_id: this.current_candidateID,
+    name: this.current_candidateName,
+    party: '',
+    year: this.current_electionYear,
+    currentState: this.current_electionState, // for breadcrumbs
+    currentStateName: this.current_electionStateName, // for breadcrumbs
+    candidateLastName: this.current_candidateLastName // for breadcrumbs
+  };
+
+  this.displayUpdatedData_candidate(dataObj);
+  this.updateBreadcrumbs(dataObj);
+};
+
 /**
  * Controls class names and functionality of the widget.
- * Called when we both start and complete (@see loadStatesData() )
+ * Called when we both start and complete (@see loadMapData() )
  * @param {Boolean} newState
  */
 PresidentialFundsMap.prototype.setLoadingState = function(newState) {

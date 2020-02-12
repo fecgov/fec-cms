@@ -37,7 +37,8 @@ const compactRules = [['B', 9], ['M', 6], ['K', 3], ['', 0]];
 let defaultOpts = {
   colorScale: ['#e2ffff', '#278887'],
   colorZero: '#ffffff',
-  quantiles: 4
+  quantiles: 4,
+  eventAppID: ''
 };
 
 /**
@@ -51,10 +52,12 @@ let defaultOpts = {
  * @param {String} opts.colorZero - hex color code to use when no value is present
  */
 function DataMap(elm, opts) {
+  console.log('new DataMap(): ', elm, opts);
   // Data, vars
   this.data;
   this.mapData; // saves results from init() and applyNewData(), formatted like {1: 123456789, 2: 6548, 4: 91835247} / {stateID: stateValue, stateID: stateValue}
   this.opts = Object.assign({}, defaultOpts, opts);
+  this.eventAppID = this.opts.eventAppID;
 
   // Elements
   this.elm = elm;
@@ -158,6 +161,20 @@ DataMap.prototype.init = function() {
   if (this.opts.addTooltips) {
     buildStateTooltips(this.svg, path, this);
   }
+
+  console.log('map this: ', this);
+  console.log('  this.parent: ', this.parent);
+  document.addEventListener(
+    'START_MAP_REFRESH',
+    this.handleParentRefreshEvent.bind(this)
+  );
+};
+
+/**
+ *
+ */
+DataMap.prototype.handleParentRefreshEvent = function(e) {
+  console.log('THE MAP HEARD ITS PARENT!:', e);
 };
 
 /**
@@ -177,6 +194,7 @@ DataMap.prototype.getStateValue = function(pathID) {
  * @param {json} newData
  */
 DataMap.prototype.handleDataRefresh = function(newData) {
+  console.log('handleDataRefresh(): ', newData);
   this.data = newData;
 
   if (!this.svg) this.init();
@@ -428,6 +446,15 @@ function buildStateTooltips(svg, path, instance) {
       } else {
         tooltip.style('display', 'none');
       }
+    })
+    .on('click', function(d) {
+      this.dispatchEvent(
+        new CustomEvent('STATE_CLICKED', {
+          detail: fips.fipsByCode[d.id].STUSAB,
+          bubbles: true
+        })
+      );
+      console.log('clicked a state!');
     });
 
   // Add the mouseleave listeners to the dom elements rather than relying on d3
