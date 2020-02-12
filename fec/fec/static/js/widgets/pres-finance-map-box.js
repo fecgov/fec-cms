@@ -11,7 +11,6 @@
  */
 
 // Editable vars
-const stylesheetPath = '/static/css/widgets/pres-finance-map.css';
 // const breakpointToXS = 0; // retaining just in case
 const breakpointToSmall = 430;
 const breakpointToMedium = 675;
@@ -179,16 +178,7 @@ function PresidentialFundsMap() {
  * Identifies and initializes the various visual elements and controls, queries, and starts first data load
  */
 PresidentialFundsMap.prototype.init = function() {
-  // // Add the stylesheet to the document <head>
-  // let head = document.head;
-  // let linkElement = document.createElement('link');
-  // linkElement.type = 'text/css';
-  // linkElement.rel = 'stylesheet';
-  // linkElement.href = stylesheetPath;
-  // head.appendChild(linkElement);
-
-  // // Init the election year selector (The element ID is set in data/templates/partials/widgets/contributions-by-state.jinja)
-  // // TODO: Can we remove the default listener (like with the typeahead above) and not change the URL when the <select> changes?
+  // Init the election year selector (The element ID is set in data/templates/partials/widgets/pres-finance-map.jinja)
   this.yearControl = this.element.querySelector(selector_yearControl);
   let theFieldset = this.yearControl.querySelector('fieldset');
   for (let i = 0; i < availElectionYears.length; i++) {
@@ -273,15 +263,6 @@ PresidentialFundsMap.prototype.init = function() {
     eventAppID: EVENT_APP_ID
   });
 
-  // // Listen for the Browse Individual Contributions button to be clicked
-  // this.buttonIndivContribs = this.element.querySelector(
-  //   '.js-browse-indiv-contribs-by-state'
-  // );
-  // this.buttonIndivContribs.addEventListener(
-  //   'click',
-  //   this.updateBrowseIndivContribsButton.bind(this)
-  // );
-
   // Internet Explorer doesn't like flex display
   // so we're going to keep the states table from switching to flex.
   let userAgent = window.navigator.userAgent;
@@ -289,20 +270,21 @@ PresidentialFundsMap.prototype.init = function() {
   let is_ie =
     userAgent.indexOf('MSIE ') > 0 || userAgent.indexOf('Trident/7.0') > 0;
 
-  // // Initialize the remote table header
-  // // Find the remote header and save it
+  // TODO: Activate the remote table header
+  // Initialize the remote table header
+  // Find the remote header and save it
   // this.remoteTableHeader = this.element.querySelector(
   //   '.js-remote-table-header'
   // );
-  // // Save its <thead> for a few lines
+  // Save its <thead> for a few lines
   // let theRemoteTableHead = this.remoteTableHeader.querySelector('thead');
-  // // Look at the data-for attribute of remoteTableHeader and save that element
+  // Look at the data-for attribute of remoteTableHeader and save that element
   // this.remoteTable = this.element.querySelector(
   //   '#' + this.remoteTableHeader.getAttribute('data-for')
   // );
-  // // Remember the <thead> in remoteTable for few lines
+  // Remember the <thead> in remoteTable for few lines
   // let theRemotedTableHead = this.remoteTable.querySelector('thead');
-  // // If we have both <thead> elements, we're ready to manipulate them
+  // If we have both <thead> elements, we're ready to manipulate them
   // if (theRemoteTableHead && theRemotedTableHead) {
   //   this.remoteTableHeader.style.display = 'table';
   //   theRemotedTableHead.style.display = 'none';
@@ -388,8 +370,6 @@ PresidentialFundsMap.prototype.handleCandidatesDataLoaded = function(e) {
       }
     })
   );
-
-  // this.loadCandidateDetails(this.current_candidateID);
 };
 
 /**
@@ -709,7 +689,6 @@ PresidentialFundsMap.prototype.displayUpdatedData_candidate = function(detail) {
 
 /**
  * Put the list of states and totals into the table
- * Called by {@see loadMapData() }
  */
 PresidentialFundsMap.prototype.displayUpdatedData_candidates = function(
   results
@@ -758,16 +737,7 @@ PresidentialFundsMap.prototype.displayUpdatedData_candidates = function(
         this.handleCandidateListClick.bind(this)
       );
     }
-    // theTableBody.innerHTML = theTbodyString;
   }
-  // Update candidate's coverage dates above the states list
-  // this.loadCandidateCoverageDates();
-  // Update the Individual Contributions button/link at the bottom
-  // this.updateBrowseIndivContribsButton();
-  // Let the map know that the data has been updated
-  // this.map.handleDataRefresh(theData);
-  // Clear the classes and reset functionality so the tool is usable again
-  // this.setLoadingState(false);
 };
 
 /**
@@ -955,7 +925,7 @@ PresidentialFundsMap.prototype.handleCandidateListClick = function(e) {
     );
   }
 
-  // TODO: re-decorate the candidate rows here
+  // TODO: re-decorate the candidate rows here?
 };
 
 PresidentialFundsMap.prototype.handleCandidateChange = function(e) {
@@ -990,10 +960,6 @@ PresidentialFundsMap.prototype.handleElectionYearChange = function(e) {
       detail: e.target.value
     })
   );
-
-  // // We don't need to load the candidate details for a year change,
-  // // so we'll just jump right to loading the committees data for the newly-chosen year.
-  // this.loadCandidateCommitteeDetails();
 };
 
 /**
@@ -1011,6 +977,7 @@ PresidentialFundsMap.prototype.handleStateClick = function(e) {
 
 /**
  * Called from throughout the widget
+ * TODO: Do we still need this?
  * @param {String} errorCode
  */
 PresidentialFundsMap.prototype.handleErrorState = function(errorCode) {
@@ -1031,6 +998,7 @@ PresidentialFundsMap.prototype.handleErrorState = function(errorCode) {
 /**
  * Listens to window resize events and adjusts the classes for the <aside> based on its width
  * (rather than the page's width, which is problematic when trying to determine whether there's a side nav)
+ * TODO: needs attention
  */
 PresidentialFundsMap.prototype.handleResize = function(e = null) {
   if (e) e.preventDefault();
@@ -1074,6 +1042,7 @@ PresidentialFundsMap.prototype.handleResize = function(e = null) {
 
 /**
  * Called by {@see handleResize() }, to re-position the "loading" overlay
+ * TODO: do we need this?
  */
 PresidentialFundsMap.prototype.refreshOverlay = function() {
   // let timeStampHeight = 25;
@@ -1146,6 +1115,7 @@ PresidentialFundsMap.prototype.handleResetClick = function(e) {
 };
 
 /**
+ * TODO: this
  * Controls class names and functionality of the widget.
  * Called when we both start and complete (@see loadMapData() )
  * @param {Boolean} newState
@@ -1173,6 +1143,7 @@ PresidentialFundsMap.prototype.setLoadingState = function(newState) {
 };
 
 /**
+ * TODO: integrate this
  * Handles the usage analytics for this module
  * @TODO: Decide how to gather usage insights while embedded
  * @param {String} candID - The candidate ID
