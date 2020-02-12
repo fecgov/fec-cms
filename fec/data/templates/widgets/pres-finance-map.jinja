@@ -49,7 +49,7 @@
       </div>
       <div class="map-details">
         <hgroup class="candidate-details">
-          <h1>Candidate Name&nbsp;</h1>
+          <h1 class="js-cand-name-par-a">Candidate Name&nbsp;</h1>
           <h2>&nbsp;</h2>
           <h3>&nbsp;</h3>
         </hgroup>
@@ -61,10 +61,10 @@
       <div class="election-map">The map</div>
     </div>
     <div class="right-column-wrapper">
-      <ul class="js-accordion" data-content-prefix="first">
+      <ul id="financial-summaries" class="js-accordion" data-content-prefix="first">
         <li>
           <button class="accordion__button">Summary</button>
-            <a href="">NAME, CANDIDATE [PAR]</a>
+          <h5 class="js-cand-name-par-a">NAME, CANDIDATE [PAR]</h5>
           <div class="accordion__content">
             <table class="simple-table">
               <tbody>
@@ -79,7 +79,7 @@
         <li>
           <button class="accordion__button">Raising</button>
           <div class="accordion__content">
-            <a href="">NAME, CANDIDATE [PAR]</a>
+            <h5 class="js-cand-name-par-a">NAME, CANDIDATE [PAR]</h5>
             <table>
               <tbody>
                 <tr><td colspan="2">Contributions from</td></tr>
@@ -103,6 +103,7 @@
         <li>
           <button class="accordion__button">Spending</button>
           <div class="accordion__content">
+            <h5 class="js-cand-name-par-a">NAME, CANDIDATE [PAR]</h5>
             <table>
               <tbody>
                 <tr><td>Operating Expenditures</td><td class="t-right-aligned t-mono" data-sum-id="operating_expenditures">$000</td></tr>
