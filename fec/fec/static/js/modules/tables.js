@@ -652,13 +652,6 @@ DataTable.prototype.fetch = function(data, callback) {
       return;
     }
 
-    // Filter by current and unknown versions when current version is checked
-    // API does not allow for null values for most_recent now
-    if (self.filters && self.filters.most_recent) {
-      self.filters.most_recent = 'true';
-      self.filters.most_recent = 'null';
-    }
-
     // If 24- and 48-Hour report is selected, set the filing form to F24.
     // Otherwise, it's a regularly scheduled report, keep the filing
     // form as F3X
