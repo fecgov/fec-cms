@@ -432,7 +432,8 @@ PresidentialFundsMap.prototype.handleCandidateDetailsLoaded = function(e) {
     year: this.current_electionYear,
     currentState: this.current_electionState, // for breadcrumbs
     currentStateName: this.current_electionStateName, // for breadcrumbs
-    candidateLastName: this.current_candidateLastName // for breadcrumbs
+    //candidateLastName: this.current_candidateLastName // for breadcrumbs
+    candidateLastName: e.detail.name // for breadcrumbs
   };
 
   this.displayUpdatedData_candidate(dataObj);
@@ -941,7 +942,7 @@ PresidentialFundsMap.prototype.updateBreadcrumbs = function(dataObj) {
   console.log('updateBreadcrumbs()');
   let theHolder = this.element.querySelector(selector_breadcrumbNav);
   let theSeparator = theHolder.querySelector('span');
-  let theSecondItem = theHolder.querySelectorAll('a')[1];
+  let theSecondItem = theHolder.querySelectorAll('span')[1];
   let theSecondLabel = '';
 
   if (
