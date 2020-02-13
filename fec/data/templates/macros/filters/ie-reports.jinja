@@ -1,5 +1,5 @@
 {% macro type(id_suffix) %}
-<fieldset class="filter toggles toggles--vertical js-filter" data-filter="toggle" data-remove-on-switch="true" id="is_notice-toggle{{id_suffix}}">
+<fieldset class="toggles toggles--vertical js-filter" data-filter="toggle" data-remove-on-switch="true" id="is_notice-toggle{{id_suffix}}">
   <legend class="label t-inline-block u-float-left">Report type</legend>
   <div class="tooltip__container">
     <button class="tooltip__trigger" type="button" aria-controls="data-type-tooltip"><span class="u-visually-hidden">Learn more</span></button>
@@ -24,7 +24,7 @@
 {% macro form(id_suffix) %}
 <div class="filter">
   <fieldset class="filter js-filter" data-filter="checkbox">
-    <legend class="label">Regularly scheduled report form</legend>
+    <legend class="label">Report form</legend>
     <ul>
       <li>
         <input id="filing-form-f3x{{id_suffix}}" name="filing_form" type="checkbox" value="F3X">
