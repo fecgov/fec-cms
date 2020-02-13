@@ -2,9 +2,6 @@
 
 /* global CustomEvent */
 
-
-/* ROBERT, NEXT UP IS THE VARIOUS EXPORT BUTTONS */
-
 /**
  * TODO - @fileoverview
  * @copyright 2020 Federal Election Commission
@@ -32,13 +29,6 @@ const pathFormat_download_summary =
 const pathFormat_download_state =
   '/files/bulk-downloads/Presidential_Map/{election_year}/{candidate_id}/{candidate_id}-{state}.zip';
 
-import { buildUrl } from '../modules/helpers';
-// import { defaultElectionYear } from './widget-vars';
-import 'abortcontroller-polyfill/dist/polyfill-patch-fetch';
-
-const DataMap = require('../modules/data-map').DataMap;
-const AbortController = window.AbortController;
-
 // Custom event names
 const EVENT_APP_ID = 'gov.fec.presFinMap';
 const YEAR_CHANGE_EVENT = EVENT_APP_ID + '_yearChange';
@@ -56,6 +46,7 @@ const COVERAGE_DATES_LOADED = EVENT_APP_ID + '_coverage_dates_loaded';
 // TODO: Update so we're using IDs everywhere?
 const selector_mainElement = '#gov-fec-pres-finance';
 const selector_yearControl = '#filter-year';
+const selector_mapStyleControl = '.js-map-switcher';
 const selector_resetApp = '.js-reset-app';
 const selector_map = '.map-wrapper .election-map';
 const selector_candidateDetails = '.candidate-details';
@@ -72,11 +63,19 @@ const selector_stateDownloadLinks =
   selector_downloadsWrapper + ' [data-stateID]';
 const selector_exportStateData = '.js-export-state-data';
 
+// Imports, etc
+import { buildUrl } from '../modules/helpers';
+// import { defaultElectionYear } from './widget-vars';
+import 'abortcontroller-polyfill/dist/polyfill-patch-fetch';
+
+const DataMap = require('../modules/data-map').DataMap;
+const AbortController = window.AbortController;
+
 /**
  * Formats the given value and puts it into the dom element.
  * @param {Number} passedValue The number to format and plug into the element
- * @param {Boolean} abbreviateMillions Should we abbreviate the millions? (1,100,000 to 1.1)
- * @returns {String} A string of the given value formatted with a dollar sign, commas, and (if roundToWhole === false) decimal
+ * @param {Boolean} abbreviateMillions Should we abbreviate the millions? (1100000 to 1.1)
+ * @returns {String} A string of the given value formatted with a dollar sign, commas, and (if abbreviateMillions == true) decimal
  */
 function formatAsCurrency(passedValue, abbreviateMillions) {
   let toReturn = passedValue;
@@ -98,12 +97,12 @@ function formatAsCurrency(passedValue, abbreviateMillions) {
 }
 
 /**
- * Builds the link/url to a filtered Individual Contributions page/list
- * @param {Number} cycle The candidate's election year
- * @param {String} office 'H', 'P', or 'S'
- * @param {Array} committeeIDs An array of strings of the candidate's committees
- * @param {String} stateID Optional. A null value will not filter for any state but show entries for the entire country
- * @returns {String} URL or empty string depending on
+ * Builds the link/url the candidate's 
+ * @param {String} candidateID The requested candidate's ID
+ * @param {String} candidateName The name that will be displayed in the link
+ * @param {Number}   electionYear The currently-selected election year
+ * @param {String} party Typically 'DEM' or 'REP'
+ * @returns {String} An anchor tag with the correct URL and text for the input values
  */
 function buildCandidateNameAndPartyLink(
   candidateID,
@@ -312,14 +311,18 @@ PresidentialFundsMap.prototype.init = function() {
   // Call for a resize on init
   this.handleResize();
 
+  // Only show the parts we're supposed to show by default
+  this.toggleUSOrStateDisplay();
+
   // And start the first load
   this.loadCandidatesList();
 };
 
 /**
  * Called by {@see init() }
- * Finds the highest-earning presidential candidate of the default year
- * Similar to {@see loadCandidateDetails() }
+ * Gets a list of candidates for the left column
+ * If successful, fires CHANGE_CANDIDATES_DATA custom event with its loaded data as the detail
+ * @example event detail: {"api_version": "1.0", "results": […]…}
  */
 PresidentialFundsMap.prototype.loadCandidatesList = function() {
   document.dispatchEvent(new CustomEvent(ENTER_LOADING_EVENT));
@@ -335,8 +338,8 @@ PresidentialFundsMap.prototype.loadCandidatesList = function() {
     contributor_state: this.current_electionState
   });
   window
-    .fetch(buildUrl(this.basePath_candidatesList, thisQuery), this.fetchInitObj)
-    // .fetch('/static/temp-data/api_thing-state-year.json')
+    // .fetch(buildUrl(this.basePath_candidatesList, thisQuery), this.fetchInitObj)
+    .fetch(`/static/temp-data/by_candidate-${this.current_electionState}-${this.current_electionYear}.json`)
     .then(function(response) {
       if (response.status !== 200)
         throw new Error('The network rejected the candidate raising request.');
@@ -354,9 +357,14 @@ PresidentialFundsMap.prototype.loadCandidatesList = function() {
 };
 
 /**
- * TODO -
+ * Called by a successful {@see loadCandidatesList() }
+ * @param {CustomEvent} e
+ * @param {JSON} e.detail Holds the results from the successful API response
+ * Calls displayUpdatedData_candidates
+ * Fires CHANGE_CANDIDATE custom event with current_candidateID and current_candidateName in the detail
  */
 PresidentialFundsMap.prototype.handleCandidatesDataLoaded = function(e) {
+  console.log('handleCandidatesDataLoaded()');
   this.data_candidates = e.detail;
 
   this.fetchingData = false; // clear the abort controller
@@ -376,7 +384,12 @@ PresidentialFundsMap.prototype.handleCandidatesDataLoaded = function(e) {
 };
 
 /**
- *
+ * Is called when the map data has loaded.
+ * @param {CustomEvent} e
+ * @param {JSON} e.detail the JSON object returned by the API
+ * Converts the data from this endpoint into the format required for MapData,
+ * and sends that data to the map with handleMapRefresh.
+ * Since this is the final data load in the chain, fires FINISH_LOADING_EVENT
  * TODO: Would like to make this into an event for the map to hear, rather than send the data into the map
  */
 PresidentialFundsMap.prototype.handleMapDataLoaded = function(e) {
@@ -399,12 +412,18 @@ PresidentialFundsMap.prototype.handleMapDataLoaded = function(e) {
 };
 
 /**
- *
+ * Is called when the individual candidate's details have loaded
+ * @param {CustomEvent} e
+ * @param {JSON} e.detail the JSON object returned by the API
+ * Collects details to send to displayUpdatedData_candidate and updateBreadcrumbs,
+ * and calls both of them.
+ * Continues to @see loadFinancialSummary() }
  */
 PresidentialFundsMap.prototype.handleCandidateDetailsLoaded = function(e) {
   console.log('handleCandidateDetailsLoaded(): ', e);
-
   this.data_candidate = e.detail;
+
+  this.fetchingData = false; // clear the abort controller
 
   let dataObj = {
     candidate_id: e.detail.candidate_id,
@@ -424,12 +443,17 @@ PresidentialFundsMap.prototype.handleCandidateDetailsLoaded = function(e) {
 };
 
 /**
- *
+ * Is called when the candidate's (or party's) financial summary (right column) data has loaded.
+ * @param {CustomEvent} e
+ * @param {JSON} e.detail the JSON object returned by the API
+ * Sends the first result (should only be one) to {@see displayFinancialSummary() }
+ * Continues to {@see loadContributionSizes() }
  */
 PresidentialFundsMap.prototype.handleFinancialSummaryLoaded = function(e) {
   console.log('handleFinancialSummaryLoaded(): ', e.detail);
-
   this.data_summary = e.detail;
+
+  this.fetchingData = false; // clear the abort controller
 
   this.displayFinancialSummary(e.detail.results[0]);
 
@@ -438,72 +462,98 @@ PresidentialFundsMap.prototype.handleFinancialSummaryLoaded = function(e) {
 };
 
 /**
- *
+ * Is called when the candidate's (or party's) contributions by size has finished loading
+ * @param {CustomEvent} e
+ * @param {JSON} e.detail the JSON object returned by the API
+ * Sends e.detail.results to displaySizesSummary.
+ * Continues to {@see loadCoverageDates() }
  */
 PresidentialFundsMap.prototype.handleContributionSizesLoaded = function(e) {
   console.log('handleContributionSizesLoaded(): ', e);
-
   this.data_sizes = e.detail;
+
+  this.fetchingData = false; // clear the abort controller
 
   this.displaySizesSummary(e.detail.results);
 
   // Now that we have all the numbers out of the way, let's load the map
   this.loadCoverageDates();
-
-  // TODO: We need to load the coverage dates for candidates and put that information in the accordions, between name and data (for now)
 };
 
 /**
- *
+ * Is called when the coverage dates have successfully loaded
+ * @param {CustomEvent} e
+ * @param {JSON} e.detail the JSON object returned by the API
+ * Sends e.detail.results to displayCoverageDates.
+ * Continues on to loadMapData
  */
 PresidentialFundsMap.prototype.handleCoverageDatesLoaded = function(e) {
   console.log('handleCoverageDatesLoaded(): ', e);
 
   this.data_coverage = e.detail;
+  this.fetchingData = false; // clear the abort controller
 
   this.displayCoverageDates(e.detail.results);
 
   // Now that we have all the numbers out of the way, let's load the map
   this.loadMapData();
-
-  // TODO: We need to load the coverage dates for candidates and put that information in the accordions, between name and data (for now)
 };
 
 /**
- * Retrieves full candidate details when the typeahead is used
- * Called from
- * Similar to {@see loadCandidatesList() }
- * @param {String} cand_id Comes from the typeahead
+ * Retrieves details about an individual canidate, if needed
+ * If the cand_id is part of specialCandidateIDs,
+ * fires a CANDIDATE_DETAILS_LOADED event right away rather than load data we already know
+ * @param {String} cand_id Which candidate to load
+ * @param {String} cand_name [Optional] The name of the candidate to be passed on to the breadcrumbs
  */
-PresidentialFundsMap.prototype.loadCandidateDetails = function(cand_id) {
+PresidentialFundsMap.prototype.loadCandidateDetails = function(
+  cand_id,
+  cand_name
+) {
   console.log('loadCandidateDetails(): ', cand_id);
   document.dispatchEvent(new CustomEvent(ENTER_LOADING_EVENT));
-
   let instance = this;
-  this.basePath_candidateDetails[1] = cand_id;
-  window
-    .fetch(
-      buildUrl(this.basePath_candidateDetails, this.baseCandidateQuery),
-      this.fetchInitObj
-    )
-    .then(function(response) {
-      if (response.status !== 200)
-        throw new Error('The network rejected the candidate details request.');
-      // else if (response.type == 'cors') throw new Error('CORS error');
-      response.json().then(data => {
-        // Let the audience know the load is complete
-        instance.element.dispatchEvent(
-          new CustomEvent(CANDIDATE_DETAILS_LOADED, { detail: data.results[0] })
-        );
+
+  // If we're looking at a special ID, let's skip the details load and dispatch the event now
+  if (specialCandidateIDs.includes(cand_id)) {
+    this.element.dispatchEvent(
+      new CustomEvent(CANDIDATE_DETAILS_LOADED, {
+        detail: {
+          candidate_id: cand_id,
+          name: cand_name // Sending this as name because that's how the candidate details endpoint returns it
+        }
+      })
+    );
+  } else {
+    this.basePath_candidateDetails[1] = cand_id;
+    window
+      // .fetch(
+      //   buildUrl(this.basePath_candidateDetails, this.baseCandidateQuery),
+      //   this.fetchInitObj
+      // )
+      .fetch(`/static/temp-data/candidate-${this.current_candidateID}.json`)
+      .then(function(response) {
+        if (response.status !== 200)
+          throw new Error('The network rejected the candidate details request.');
+        // else if (response.type == 'cors') throw new Error('CORS error');
+        response.json().then(data => {
+          // Let the audience know the load is complete
+          instance.element.dispatchEvent(
+            new CustomEvent(CANDIDATE_DETAILS_LOADED, {
+              detail: data.results[0]
+            })
+          );
+        });
+      })
+      .catch(function() {
+        instance.fetchingData = false;
       });
-    })
-    .catch(function() {
-      instance.fetchingData = false;
-    });
+  }
 };
 
 /**
- * Starts the fetch to go get the values for the states
+ * Starts the fetch to go get the values for the states/map
+ * Fires MAP_DATA_LOADED when successful
  */
 PresidentialFundsMap.prototype.loadMapData = function() {
   document.dispatchEvent(new CustomEvent(ENTER_LOADING_EVENT));
@@ -518,7 +568,8 @@ PresidentialFundsMap.prototype.loadMapData = function() {
   // Start loading the map data
   this.fetchingData = true;
   window
-    .fetch(buildUrl(this.basePath_mapData, thisQuery), this.fetchInitObj)
+    // .fetch(buildUrl(this.basePath_mapData, thisQuery), this.fetchInitObj)
+    .fetch(`/static/temp-data/by_state-${this.current_candidateID}-${this.current_electionYear}.json`)
     .then(function(response) {
       // instance.fetchingStates = false;
       if (response.status !== 200)
@@ -540,6 +591,7 @@ PresidentialFundsMap.prototype.loadMapData = function() {
 
 /**
  * Starts the fetch to go get the values for the candidate's financial summary
+ * Fires FINANCIAL_SUMMARY_LOADED when successful
  */
 PresidentialFundsMap.prototype.loadFinancialSummary = function() {
   document.dispatchEvent(new CustomEvent(ENTER_LOADING_EVENT));
@@ -554,10 +606,11 @@ PresidentialFundsMap.prototype.loadFinancialSummary = function() {
   // Start loading the map data
   this.fetchingData = true;
   window
-    .fetch(
-      buildUrl(this.basePath_financialSummary, thisQuery),
-      this.fetchInitObj
-    )
+    // .fetch(
+    //   buildUrl(this.basePath_financialSummary, thisQuery),
+    //   this.fetchInitObj
+    // )
+    .fetch(`/static/temp-data/financial_summary-${this.current_candidateID}-${this.current_electionYear}.json`)
     .then(function(response) {
       // instance.fetchingStates = false;
       if (response.status !== 200)
@@ -579,6 +632,7 @@ PresidentialFundsMap.prototype.loadFinancialSummary = function() {
 
 /**
  * Starts the fetch to go get the values for the contributions by size
+ * Fires CONTRIBUTION_SIZES_LOADED when successful
  */
 PresidentialFundsMap.prototype.loadContributionSizes = function() {
   document.dispatchEvent(new CustomEvent(ENTER_LOADING_EVENT));
@@ -593,10 +647,11 @@ PresidentialFundsMap.prototype.loadContributionSizes = function() {
   // Start loading the map data
   this.fetchingData = true;
   window
-    .fetch(
-      buildUrl(this.basePath_contributionSizes, thisQuery),
-      this.fetchInitObj
-    )
+    // .fetch(
+    //   buildUrl(this.basePath_contributionSizes, thisQuery),
+    //   this.fetchInitObj
+    // )
+    .fetch(`/static/temp-data/by_size-${this.current_candidateID}-${this.current_electionYear}.json`)
     .then(function(response) {
       // instance.fetchingStates = false;
       if (response.status !== 200)
@@ -618,6 +673,7 @@ PresidentialFundsMap.prototype.loadContributionSizes = function() {
 
 /**
  * Starts the fetch to go get the coverage dates
+ * Fires COVERAGE_DATES_LOADED when successful
  */
 PresidentialFundsMap.prototype.loadCoverageDates = function() {
   document.dispatchEvent(new CustomEvent(ENTER_LOADING_EVENT));
@@ -632,7 +688,8 @@ PresidentialFundsMap.prototype.loadCoverageDates = function() {
   // Start loading the map data
   this.fetchingData = true;
   window
-    .fetch(buildUrl(this.basePath_coverageDates, thisQuery), this.fetchInitObj)
+    // .fetch(buildUrl(this.basePath_coverageDates, thisQuery), this.fetchInitObj)
+    .fetch(`/static/temp-data/coverage_end_date-${this.current_candidateID}-${this.current_electionYear}.json`)
     .then(function(response) {
       // instance.fetchingStates = false;
       if (response.status !== 200)
@@ -653,7 +710,8 @@ PresidentialFundsMap.prototype.loadCoverageDates = function() {
 };
 
 /**
- * Puts the candidate details in the page,
+ * Puts the candidate details in the page—right above the map but also the name and party links in the accordions
+ * @param {JSON} detail
  */
 PresidentialFundsMap.prototype.displayUpdatedData_candidate = function(detail) {
   console.log('displayUpdatedData_candidate(): ', detail);
@@ -691,7 +749,8 @@ PresidentialFundsMap.prototype.displayUpdatedData_candidate = function(detail) {
 };
 
 /**
- * Put the list of states and totals into the table
+ * Put the list of states and totals into the table on the left
+ * @param {JSON} results the results from loadCandidatesList
  */
 PresidentialFundsMap.prototype.displayUpdatedData_candidates = function(
   results
@@ -708,8 +767,14 @@ PresidentialFundsMap.prototype.displayUpdatedData_candidates = function(
     let currentCandInNewList = results.find(
       result => result.candidate_id == this.current_candidateID
     );
-    if (!currentCandInNewList)
+    if (!currentCandInNewList) {
       this.current_candidateID = specialCandidateIDs[0];
+      // We also need to tell the breadcrumbs to update since we've just changed the candidate
+      this.updateBreadcrumbs({
+        candidate_id: specialCandidateIDs[0],
+        currentState: 'US'
+      });
+    }
     // Build each required row
     for (let i = 0; i < results.length; i++) {
       let rowClasses = 'TODO-myRowClass';
@@ -744,7 +809,9 @@ PresidentialFundsMap.prototype.displayUpdatedData_candidates = function(
 };
 
 /**
- *
+ * Puts the financial summary info into the accordions
+ * @param {JSON} data results from handleFinancialSummaryLoaded
+ * Since we're updating the accordions, we also call {@see updateDownloadButtons() }
  */
 PresidentialFundsMap.prototype.displayFinancialSummary = function(data) {
   let theHolder = this.element.querySelector(selector_summariesHolder);
@@ -765,7 +832,7 @@ PresidentialFundsMap.prototype.displayFinancialSummary = function(data) {
 };
 
 /**
- *
+ * Goes through each of the various downlinks & buttons and updates their href values
  */
 PresidentialFundsMap.prototype.updateDownloadButtons = function() {
   console.log('updateDownloadButtons()');
@@ -826,7 +893,8 @@ PresidentialFundsMap.prototype.updateDownloadButtons = function() {
 };
 
 /**
- *
+ * Puts into the page, the content loaded with loadContributionSizes
+ * @param {JSON} data results from the API
  */
 PresidentialFundsMap.prototype.displaySizesSummary = function(data) {
   let theHolder = this.element.querySelector(selector_summariesHolder);
@@ -844,7 +912,8 @@ PresidentialFundsMap.prototype.displaySizesSummary = function(data) {
 };
 
 /**
- *
+ * Puts the coverage date into the various fields across the page
+ * @param {JSON} data The result from the API
  */
 PresidentialFundsMap.prototype.displayCoverageDates = function(data) {
   let theHolders = this.element.querySelectorAll(selector_coverageDates);
@@ -862,7 +931,11 @@ PresidentialFundsMap.prototype.displayCoverageDates = function(data) {
 };
 
 /**
- *
+ * Updates the text in the breadcrumb nav
+ * @param {JSON} dataObj
+ * @param {String} dataObj.currentState
+ * @param {String} dataObj.candidateLastName
+ * @param {String} dataObj.candidate_id
  */
 PresidentialFundsMap.prototype.updateBreadcrumbs = function(dataObj) {
   console.log('updateBreadcrumbs()');
@@ -902,7 +975,11 @@ PresidentialFundsMap.prototype.updateBreadcrumbs = function(dataObj) {
 };
 
 /**
- *
+ * Triggered by YEAR_CHANGE_EVENT (after the user click has been processed and 'approved')
+ * Saves the new election year and calls {@see loadCandidatesList() }
+ * TODO: Is this overkill? Any reason not to combine it with handleElectionYearChange?
+ * @param {CustomEvent} e
+ * @param {JSON} e.detail
  */
 PresidentialFundsMap.prototype.handleYearChange = function(e) {
   console.log('handleYearChange(): ', e);
@@ -911,12 +988,23 @@ PresidentialFundsMap.prototype.handleYearChange = function(e) {
 };
 
 /**
- *
+ * Triggered when the user clicks a candidate in the left list
+ * @param {MouseEvent} e
  */
 PresidentialFundsMap.prototype.handleCandidateListClick = function(e) {
   console.log('handleCandidateListClick(): ', e);
   let newCandidateID = e.target.dataset.candidate_id;
   let name = e.target.cells[0].innerText;
+
+  let allCandidateItems = this.element.querySelectorAll(
+    '#pres-fin-map-candidates-table tr'
+  );
+  for (var i = 0; i < allCandidateItems.length; i++) {
+    allCandidateItems[i].classList.remove('selected');
+  }
+
+  e.target.classList.add('selected');
+
   if (newCandidateID != this.current_candidateID) {
     this.current_candidateID = newCandidateID;
     this.current_candidateLastName = name.substr(0, name.indexOf(' ['));
@@ -926,34 +1014,26 @@ PresidentialFundsMap.prototype.handleCandidateListClick = function(e) {
       })
     );
   }
-
-  // TODO: re-decorate the candidate rows here?
 };
 
+/**
+ * Triggered by CHANGE_CANDIDATE after loadCandidatesList and handleCandidatesListClick
+ * starts a new loading chain, starting with loading the candidate details
+ * TODO: overkill?
+ * @param {CustomEvent} e
+ * @param {String} e.detail.candidate_id
+ * @param {String} e.detail.name
+ */
 PresidentialFundsMap.prototype.handleCandidateChange = function(e) {
   console.log('handleCandidateChange(): ', e);
 
-  // We only need to load candidate details if our new candidate_id is an individual
-  if (specialCandidateIDs.includes(e.detail.candidate_id)) {
-    // Otherwise, dispatch the event now
-
-    this.element.dispatchEvent(
-      new CustomEvent(CANDIDATE_DETAILS_LOADED, {
-        detail: {
-          candidate_id: e.detail.candidate_id,
-          name: e.detail.name // Sending this as name because that's how the candidate details query returns it
-        }
-      })
-    );
-  } else {
-    this.loadCandidateDetails(e.detail.candidate_id);
-  }
+  this.loadCandidateDetails(e.detail.candidate_id, e.detail.name);
 };
 
 /**
  * Called on the election year control's change event
  * Starts loading the new data
- * @param {MouseEvent} e
+ * @param {Event} e
  */
 PresidentialFundsMap.prototype.handleElectionYearChange = function(e) {
   console.log('handleElectionYearChange() e: ', e);
@@ -965,21 +1045,24 @@ PresidentialFundsMap.prototype.handleElectionYearChange = function(e) {
 };
 
 /**
- *
+ * Triggered when the user clicks a state inside the map and the event bubbles up to here
+ * Calls for loadCandidatesList
+ * @param {CustomEvent} e
  */
-
 PresidentialFundsMap.prototype.handleStateClick = function(e) {
   console.log('A STATE WAS CLICKED! ', e);
+  e.stopImmediatePropagation(); // Keep it from bubbling outside of this app
+
   this.current_electionState = e.detail.abbr;
   this.current_electionStateName = e.detail.name;
+
   this.loadCandidatesList();
-  console.log(e.detail.abb);
-  e.stopImmediatePropagation(); // Keep it from bubbling outside of this app
-  // maybe this.current_electionState = e.detail;
-  // maybe this.loadCandidatesList();
-  // tell the breadcrumbs to update—or maybe that should be a different listener?
-  // then focus the map?
+
+  // TODO: tell the breadcrumbs to update—or maybe that should be a different listener?
+  // TODO: tell the map to focus on the state? Maybe it should handle it internally?
   // Simply clicking a state shouldn't change that state's color or value
+
+  this.toggleUSOrStateDisplay();
 };
 
 /**
@@ -1065,38 +1148,25 @@ PresidentialFundsMap.prototype.refreshOverlay = function() {
 };
 
 /**
- *
+ * Opens the section for the multiple state downloads, slides the page scroll to that section
+ * Triggered when the user clicks to export the raising data
  * @param {MouseEvent} e
  */
 PresidentialFundsMap.prototype.handleExportRaisingClick = function(e) {
   console.log('handleExportRaisingClick(): ', e);
   e.preventDefault();
   // TODO: show {selector_downloadsWrapper}
+  // TODO: animate the page scroll to the downloads section
   // TODO then: Hide {selector_downloadsWrapper} when we're no longer interested in the raising downloads
 };
 
 /**
- *
- * @param {MouseEvent} e
- */
-PresidentialFundsMap.prototype.handleExportSpendingClick = function(e) {
-  console.log('handleExportSpendingClick(): ', e);
-  e.preventDefault();
-};
-
-/**
- *
- * @param {MouseEvent} e
- */
-PresidentialFundsMap.prototype.handleExportSummaryClick = function(e) {
-  console.log('handleExportSummaryClick(): ', e);
-  e.preventDefault();
-};
-
-/**
- *
+ * Triggered any time a user asks to reset the app (i.e. return to "Nationwide: All candidates")
+ * Resets vars and calls loadCandidatesList, displayUpdatedData_candidate, updateBreadcrumbs, and others
+ * @param {MouseEvent} e [Optional]
  */
 PresidentialFundsMap.prototype.handleResetClick = function(e) {
+  console.log('handleResetClick()');
   if (e) e.preventDefault();
 
   this.current_candidateID = specialCandidateIDs[0];
@@ -1119,6 +1189,31 @@ PresidentialFundsMap.prototype.handleResetClick = function(e) {
 
   this.displayUpdatedData_candidate(dataObj);
   this.updateBreadcrumbs(dataObj);
+
+  this.toggleUSOrStateDisplay();
+};
+
+/**
+ * Hides and shows the various components required for state/national view
+ */
+PresidentialFundsMap.prototype.toggleUSOrStateDisplay = function() {
+  let nationalDisplay = this.current_electionState == 'US' ? 'block' : 'none';
+  let stateDisplay = this.current_electionState == 'US' ? 'none' : 'block';
+  // Show for only national view:
+  this.element.querySelector(
+    selector_summariesHolder
+  ).style.display = nationalDisplay;
+  this.element.querySelector(
+    selector_mapStyleControl
+  ).style.display = nationalDisplay;
+
+  // Show for only state view:
+  this.element.querySelector(
+    selector_exportStateData
+  ).style.display = stateDisplay;
+
+  // If we're resetting anything, close the downloads section
+  this.element.querySelector(selector_exportStateData).style.display = 'none';
 };
 
 /**
