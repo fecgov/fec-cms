@@ -161,20 +161,6 @@ DataMap.prototype.init = function() {
   if (this.opts.addTooltips) {
     buildStateTooltips(this.svg, path, this);
   }
-
-  console.log('map this: ', this);
-  console.log('  this.parent: ', this.parent);
-  document.addEventListener(
-    'START_MAP_REFRESH',
-    this.handleParentRefreshEvent.bind(this)
-  );
-};
-
-/**
- *
- */
-DataMap.prototype.handleParentRefreshEvent = function(e) {
-  console.log('THE MAP HEARD ITS PARENT!:', e);
 };
 
 /**
@@ -199,6 +185,14 @@ DataMap.prototype.handleDataRefresh = function(newData) {
 
   if (!this.svg) this.init();
   else this.applyNewData();
+};
+
+/**
+ * Called from outside this element, it handles zooming out to show the rest of the US instead of just one state
+ */
+DataMap.prototype.handleZoomReset = function() {
+  // TODO: zoom out to the full US
+  // Show bubbles if they need to be shown
 };
 
 /**
