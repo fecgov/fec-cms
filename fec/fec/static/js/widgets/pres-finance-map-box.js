@@ -338,8 +338,8 @@ PresidentialFundsMap.prototype.loadCandidatesList = function() {
     contributor_state: this.current_electionState
   });
   window
-    // .fetch(buildUrl(this.basePath_candidatesList, thisQuery), this.fetchInitObj)
-    .fetch(`/static/temp-data/by_candidate-${this.current_electionState}-${this.current_electionYear}.json`)
+    .fetch(buildUrl(this.basePath_candidatesList, thisQuery), this.fetchInitObj)
+    // .fetch(`/static/temp-data/by_candidate-${this.current_electionState}-${this.current_electionYear}.json`)
     .then(function(response) {
       if (response.status !== 200)
         throw new Error('The network rejected the candidate raising request.');
@@ -528,11 +528,11 @@ PresidentialFundsMap.prototype.loadCandidateDetails = function(
   } else {
     this.basePath_candidateDetails[1] = cand_id;
     window
-      // .fetch(
-      //   buildUrl(this.basePath_candidateDetails, this.baseCandidateQuery),
-      //   this.fetchInitObj
-      // )
-      .fetch(`/static/temp-data/candidate-${this.current_candidateID}.json`)
+      .fetch(
+        buildUrl(this.basePath_candidateDetails, this.baseCandidateQuery),
+        this.fetchInitObj
+      )
+      // .fetch(`/static/temp-data/candidate-${this.current_candidateID}.json`)
       .then(function(response) {
         if (response.status !== 200)
           throw new Error('The network rejected the candidate details request.');
@@ -569,8 +569,8 @@ PresidentialFundsMap.prototype.loadMapData = function() {
   // Start loading the map data
   this.fetchingData = true;
   window
-    // .fetch(buildUrl(this.basePath_mapData, thisQuery), this.fetchInitObj)
-    .fetch(`/static/temp-data/by_state-${this.current_candidateID}-${this.current_electionYear}.json`)
+    .fetch(buildUrl(this.basePath_mapData, thisQuery), this.fetchInitObj)
+    // .fetch(`/static/temp-data/by_state-${this.current_candidateID}-${this.current_electionYear}.json`)
     .then(function(response) {
       // instance.fetchingStates = false;
       if (response.status !== 200)
@@ -607,11 +607,11 @@ PresidentialFundsMap.prototype.loadFinancialSummary = function() {
   // Start loading the map data
   this.fetchingData = true;
   window
-    // .fetch(
-    //   buildUrl(this.basePath_financialSummary, thisQuery),
-    //   this.fetchInitObj
-    // )
-    .fetch(`/static/temp-data/financial_summary-${this.current_candidateID}-${this.current_electionYear}.json`)
+    .fetch(
+      buildUrl(this.basePath_financialSummary, thisQuery),
+      this.fetchInitObj
+    )
+    // .fetch(`/static/temp-data/financial_summary-${this.current_candidateID}-${this.current_electionYear}.json`)
     .then(function(response) {
       // instance.fetchingStates = false;
       if (response.status !== 200)
@@ -648,11 +648,11 @@ PresidentialFundsMap.prototype.loadContributionSizes = function() {
   // Start loading the map data
   this.fetchingData = true;
   window
-    // .fetch(
-    //   buildUrl(this.basePath_contributionSizes, thisQuery),
-    //   this.fetchInitObj
-    // )
-    .fetch(`/static/temp-data/by_size-${this.current_candidateID}-${this.current_electionYear}.json`)
+    .fetch(
+      buildUrl(this.basePath_contributionSizes, thisQuery),
+      this.fetchInitObj
+    )
+    // .fetch(`/static/temp-data/by_size-${this.current_candidateID}-${this.current_electionYear}.json`)
     .then(function(response) {
       // instance.fetchingStates = false;
       if (response.status !== 200)
@@ -689,8 +689,8 @@ PresidentialFundsMap.prototype.loadCoverageDates = function() {
   // Start loading the map data
   this.fetchingData = true;
   window
-    // .fetch(buildUrl(this.basePath_coverageDates, thisQuery), this.fetchInitObj)
-    .fetch(`/static/temp-data/coverage_end_date-${this.current_candidateID}-${this.current_electionYear}.json`)
+    .fetch(buildUrl(this.basePath_coverageDates, thisQuery), this.fetchInitObj)
+    // .fetch(`/static/temp-data/coverage_end_date-${this.current_candidateID}-${this.current_electionYear}.json`)
     .then(function(response) {
       // instance.fetchingStates = false;
       if (response.status !== 200)
