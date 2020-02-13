@@ -413,7 +413,8 @@ PresidentialFundsMap.prototype.handleCandidateDetailsLoaded = function(e) {
     year: this.current_electionYear,
     currentState: this.current_electionState, // for breadcrumbs
     currentStateName: this.current_electionStateName, // for breadcrumbs
-    candidateLastName: this.current_candidateLastName // for breadcrumbs
+    //candidateLastName: this.current_candidateLastName // for breadcrumbs
+    candidateLastName: e.detail.name // for breadcrumbs
   };
 
   this.displayUpdatedData_candidate(dataObj);
