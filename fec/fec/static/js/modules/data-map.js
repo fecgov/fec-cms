@@ -450,7 +450,10 @@ function buildStateTooltips(svg, path, instance) {
     .on('click', function(d) {
       this.dispatchEvent(
         new CustomEvent('STATE_CLICKED', {
-          detail: fips.fipsByCode[d.id].STUSAB,
+          detail: {
+            abbr: fips.fipsByCode[d.id].STUSAB,
+            name: fips.fipsByCode[d.id].STATE_NAME
+          },
           bubbles: true
         })
       );

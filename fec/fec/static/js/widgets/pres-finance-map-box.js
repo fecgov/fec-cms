@@ -2,7 +2,7 @@
 
 /* global CustomEvent */
 
-ROBERT, NEXT UP IS THE VARIOUS EXPORT BUTTONS
+/*ROBERT, NEXT UP IS THE VARIOUS EXPORT BUTTONS*/
 
 /**
  * TODO - @fileoverview
@@ -817,8 +817,7 @@ PresidentialFundsMap.prototype.updateBreadcrumbs = function(dataObj) {
     theSecondLabel = 'Nationwide: ';
   } else {
     // Otherwise, we're showing a state so we need a state lookup
-    // TODO: theSecondLabel = (lookup the state name for this.current_electionState)
-    theSecondLabel = `${dataObj.current_candidateName}: `;
+    theSecondLabel = `${dataObj.currentStateName}: `;
   }
 
   if (theSecondLabel != '') {
@@ -905,8 +904,13 @@ PresidentialFundsMap.prototype.handleElectionYearChange = function(e) {
 /**
  *
  */
+
 PresidentialFundsMap.prototype.handleStateClick = function(e) {
   console.log('A STATE WAS CLICKED! ', e);
+  this.current_electionState = e.detail.abbr;
+  this.current_electionStateName = e.detail.name;
+  this.loadCandidatesList();
+  console.log(e.detail.abb);
 };
 
 /**
