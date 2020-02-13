@@ -869,7 +869,7 @@ PresidentialFundsMap.prototype.updateBreadcrumbs = function(dataObj) {
   console.log('updateBreadcrumbs()');
   let theHolder = this.element.querySelector(selector_breadcrumbNav);
   let theSeparator = theHolder.querySelector('span');
-  let theSecondItem = theHolder.querySelectorAll('a')[1];
+  let theSecondItem = theHolder.querySelectorAll('span')[1];
   let theSecondLabel = '';
 
   if (
