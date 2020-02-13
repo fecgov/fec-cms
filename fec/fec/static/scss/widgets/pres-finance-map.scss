@@ -64,7 +64,7 @@ $info-circle: 'data:image/svg+xml;charset=utf8, %3Csvg%20xmlns%3D%22http%3A%2F%2
     url('/static/fonts/fec-currencymono-regular.ttf') format('truetype');
 }
 
-div.pres-finance-map {
+#gov-fec-pres-finance {
   &,
   & * {
     // THESE ARE PASSED DOWN TO CHILDREN
@@ -78,6 +78,10 @@ div.pres-finance-map {
   position: relative;
   width: 100%;
 
+  .filters {
+    background: none;
+    border: none;
+  }
   .message, .message[aria-hidden="true"] {
     // .message, etc are copied from components/_messages.scss
     background-color: $neutral;
@@ -162,9 +166,18 @@ div.pres-finance-map {
     }
     tr {
       border-top: thin solid $colorTableTdBorder;
+      border-left: solid thick #fff;
       display: flex;
       justify-content: space-between;
       width: 100%;
+
+      &.selected {
+        background-color: $colorTableTdBorder;
+        border-left-color: $colorBorder;
+      }
+      &:hover {
+        background-color: $colorTableTdBorder;
+      }
     }
     td, th {
       flex-grow: 1;
@@ -258,6 +271,11 @@ div.pres-finance-map {
 
     a, button {
       margin: 0 0 1rem 1rem;
+    }
+  }
+  #financial-summaries {
+    table {
+      text-align: left;
     }
   }
   .overlay__container {
@@ -468,3 +486,43 @@ div.pres-finance-map {
     position: absolute;
   }
 }
+
+
+#gov-fec-pres-finance {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  
+  .TODO-SEPARATE-TOP-SECTION {
+    display: flex;
+    width: 100%;
+
+    div#filter-year {
+      width: 20rem;
+    }
+    div#filter-map-type {
+      width: 22rem;
+    }
+    .TODO-buttons-holder {
+      margin-left: auto;
+    }
+  }
+
+  .candidate-list-wrapper {
+    width: 25%;
+  }
+  .map-wrapper {
+    width: 50%;
+  }
+  .right-column-wrapper {
+    width: 25%;
+  }
+  #downloads-wrapper {
+    margin-left: 25%;
+    width: 50%;
+  }
+
+}
+
+
+
