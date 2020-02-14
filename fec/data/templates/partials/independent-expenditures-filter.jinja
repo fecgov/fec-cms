@@ -25,6 +25,8 @@ Filter independent expenditures
   <div class="filters__inner">
     {{ typeahead.field('committee_id', 'Spender name or ID', id_suffix='_raw') }}
     {{ text.field('candidate_search', 'Candidate mentioned', id_suffix='_raw') }}
+    {{ reports.type(id_suffix='_raw') }}
+    {{ reports.form(id_suffix='_raw') }}
     {{ version_status.version(id_suffix='_raw', methodology='True') }}
   </div>
 {# Removing these filters for now until the filter count bug can be fixed #}

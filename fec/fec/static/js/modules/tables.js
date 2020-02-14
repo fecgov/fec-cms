@@ -661,6 +661,31 @@ DataTable.prototype.fetch = function(data, callback) {
         self.filters.filing_form[F3X_index] = 'F24';
       }
     }
+
+    // Regularly scheduled reports only have current versions
+    // Therefore, we need to check current version by default
+    // and disable changes.
+    if (
+      self.filters &&
+      self.filters.data_type == 'processed' &&
+      self.filters.is_notice == 'false'
+    ) {
+      self.filters.most_recent = 'true';
+      $('#most_recent_true_processed').prop('checked', true);
+      $(
+        '#version_processed legend, #version_processed li, #version_processed label'
+      )
+        .removeClass('is-active-filter')
+        .addClass('is-disabled-filter');
+    } else if (
+      self.filters &&
+      self.filters.data_type == 'processed' &&
+      self.filters.is_notice == 'true'
+    ) {
+      $(
+        '#version_processed legend, #version_processed li, #version_processed label'
+      ).removeClass('is-disabled-filter');
+    }
   }
 
   var url = self.buildUrl(data);
