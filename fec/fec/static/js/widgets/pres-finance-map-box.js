@@ -171,6 +171,9 @@ function PresidentialFundsMap() {
   this.current_candidateLastName = '';
   this.map; // Starts as the element for the map but then becomes a DataMap object
 
+  this.downloadsWrapper = document.querySelector(selector_downloadsWrapper);
+  this.downloadsWrapper.style.display='none';
+
   // If we have the element on the page, fire it up
   if (this.element) this.init();
 }
@@ -1156,6 +1159,8 @@ PresidentialFundsMap.prototype.refreshOverlay = function() {
 PresidentialFundsMap.prototype.handleExportRaisingClick = function(e) {
   console.log('handleExportRaisingClick(): ', e);
   e.preventDefault();
+     $(this.downloadsWrapper).slideDown();
+     this.downloadsWrapper.scrollIntoView()
   // TODO: show {selector_downloadsWrapper}
   // TODO: animate the page scroll to the downloads section
   // TODO then: Hide {selector_downloadsWrapper} when we're no longer interested in the raising downloads
