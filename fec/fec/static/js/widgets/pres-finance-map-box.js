@@ -55,6 +55,7 @@ const selector_breadcrumbNav = '.breadcrumb-nav';
 const selector_summariesHolder = '#financial-summaries';
 const selector_candidateNamePartyAndLink = '.js-cand-name-par-a';
 const selector_downloadsWrapper = '#downloads-wrapper';
+//const selector_downloadsContent = '#downloads-wrapper div';
 const selector_coverageDates = '.js-coverage-date';
 const selector_exportRaisingButton = '.js-export-raising-data';
 const selector_exportSpending = '.js-export-spending-data';
@@ -97,7 +98,7 @@ function formatAsCurrency(passedValue, abbreviateMillions) {
 }
 
 /**
- * Builds the link/url the candidate's 
+ * Builds the link/url the candidate's
  * @param {String} candidateID The requested candidate's ID
  * @param {String} candidateName The name that will be displayed in the link
  * @param {Number}   electionYear The currently-selected election year
@@ -172,7 +173,8 @@ function PresidentialFundsMap() {
   this.map; // Starts as the element for the map but then becomes a DataMap object
 
   this.downloadsWrapper = document.querySelector(selector_downloadsWrapper);
-  this.downloadsWrapper.style.display='none';
+  this.downloadsWrapper.style.height = 0;
+  this.downloadsWrapper.style.overflow = 'hidden';
 
   // If we have the element on the page, fire it up
   if (this.element) this.init();
@@ -538,7 +540,9 @@ PresidentialFundsMap.prototype.loadCandidateDetails = function(
       // .fetch(`/static/temp-data/candidate-${this.current_candidateID}.json`)
       .then(function(response) {
         if (response.status !== 200)
-          throw new Error('The network rejected the candidate details request.');
+          throw new Error(
+            'The network rejected the candidate details request.'
+          );
         // else if (response.type == 'cors') throw new Error('CORS error');
         response.json().then(data => {
           // Let the audience know the load is complete
@@ -924,7 +928,9 @@ PresidentialFundsMap.prototype.displayCoverageDates = function(data) {
   // Start with an empty coverage date
   let theCoverageString = '';
   if (data[0] && data[0].coverage_end_date) {
-    theCoverageString = new Date(data[0].coverage_end_date).toLocaleDateString('en-US');
+    theCoverageString = new Date(data[0].coverage_end_date).toLocaleDateString(
+      'en-US'
+    );
     theCoverageString = `through ${theCoverageString}`;
   }
 
@@ -1159,8 +1165,23 @@ PresidentialFundsMap.prototype.refreshOverlay = function() {
 PresidentialFundsMap.prototype.handleExportRaisingClick = function(e) {
   console.log('handleExportRaisingClick(): ', e);
   e.preventDefault();
-     $(this.downloadsWrapper).slideDown();
-     this.downloadsWrapper.scrollIntoView()
+
+  this.downloadsWrapper.scrollIntoView({
+    behavior: 'smooth',
+    block: 'center',
+    inline: 'nearest'
+  });
+
+  $(this.downloadsWrapper).animate(
+    {
+      height: $(this.downloadsWrapper).get(0).scrollHeight
+    },
+    1000,
+    function() {
+      $(this).height('auto');
+    }
+  );
+
   // TODO: show {selector_downloadsWrapper}
   // TODO: animate the page scroll to the downloads section
   // TODO then: Hide {selector_downloadsWrapper} when we're no longer interested in the raising downloads
