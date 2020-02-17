@@ -518,9 +518,29 @@ $info-circle: 'data:image/svg+xml;charset=utf8, %3Csvg%20xmlns%3D%22http%3A%2F%2
     width: 25%;
   }
   #downloads-wrapper {
-    margin-left: 25%;
     width: 50%;
+    margin-left:25%;
   }
+
+  .downloads-links {
+    display:grid;
+    grid-template-columns: repeat(auto-fill, minmax(8rem, 1fr));
+    grid-auto-rows: 1fr;
+    border-top: 1px solid $gray-dark;
+    border-bottom: 1px solid $gray-dark;
+
+      a {
+        padding: 1rem;
+        border: 1px solid $gray-light;
+        text-align: center;
+
+        &:hover {
+          background:$gray-light;
+        };
+      }
+
+  }
+
 
 }
 

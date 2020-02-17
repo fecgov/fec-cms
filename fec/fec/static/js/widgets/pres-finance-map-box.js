@@ -1165,25 +1165,45 @@ PresidentialFundsMap.prototype.refreshOverlay = function() {
 PresidentialFundsMap.prototype.handleExportRaisingClick = function(e) {
   console.log('handleExportRaisingClick(): ', e);
   e.preventDefault();
+  let instance = this;
 
+  /* Robert: Does it matter if this a const or a named function?
+  eg: function openDownloads() VS. const openDownloads = function()
+  */
+
+  const openDownloads = function(){
+    console.log('callback')
+    
+    $(instance.downloadsWrapper).animate(
+    {
+      height: $(instance.downloadsWrapper).get(0).scrollHeight
+    },
+    1000,
+     function() {
+      $(this).height('auto');
+     })
+    }
+
+  // Wait until the export area is in view before opening
+  window.onscroll = function() {
+    var wS = this.scrollY,
+       hT = instance.downloadsWrapper.getBoundingClientRect().top + wS,
+       hH = instance.downloadsWrapper.offsetHeight,
+       wH = window.innerHeight;
+    if (wS > (hT+hH-wH)){
+     openDownloads()
+    }
+  };
+  //scroll to export area
   this.downloadsWrapper.scrollIntoView({
     behavior: 'smooth',
     block: 'center',
     inline: 'nearest'
-  });
+    });
+  
 
-  $(this.downloadsWrapper).animate(
-    {
-      height: $(this.downloadsWrapper).get(0).scrollHeight
-    },
-    1000,
-    function() {
-      $(this).height('auto');
-    }
-  );
-
-  // TODO: show {selector_downloadsWrapper}
-  // TODO: animate the page scroll to the downloads section
+  // TODO-done: show {selector_downloadsWrapper}
+  // TODO-done: animate the page scroll to the downloads section
   // TODO then: Hide {selector_downloadsWrapper} when we're no longer interested in the raising downloads
 };
 
