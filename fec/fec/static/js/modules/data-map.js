@@ -86,8 +86,8 @@ DataMap.prototype.init = function() {
   // Create the base-level state/country shapes
   let projection = d3.geo
     .albersUsa()
-    .scale(450)
-    .translate([220, 150]);
+    .scale(450) // lower numbers make the map smaller
+    .translate([220, 150]); // lower numbers move the map up and to the left
 
   // Create the path based on those base-level shapes
   let path = d3.geo.path().projection(projection);
@@ -149,7 +149,12 @@ DataMap.prototype.init = function() {
       return fips.fipsByCode[d.id].STATE_NAME;
     })
     .attr('class', 'shape')
-    .attr('d', path);
+    .attr('d', path)
+    .append('circle')
+    .attr('cx', -106.661513)
+    .attr('cy', 35.05917399)
+    .attr('r', '10px')
+    .style('fill', 'red');
 
   // If we're supposed to add a legend, let's do it
   if (this.opts.addLegend || typeof this.opts.addLegend === 'undefined') {
@@ -451,6 +456,9 @@ function buildStateTooltips(svg, path, instance) {
           bubbles: true
         })
       );
+      d3.transition()
+        .scale(500)
+        .translate([120, 50]);
       console.log('clicked a state!');
     });
 

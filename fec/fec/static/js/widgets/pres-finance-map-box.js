@@ -160,6 +160,7 @@ function PresidentialFundsMap() {
     mode: 'cors',
     signal: null
   };
+  console.log('(change no-cors to cors ');
   this.fetchingData = false; // Are we waiting for data?
   this.element = document.querySelector(selector_mainElement); // The visual element associated with this, this.instance
   this.candidateDetailsHolder; // Element to hold candidate name, party, office, and ID
