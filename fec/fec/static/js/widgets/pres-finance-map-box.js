@@ -55,6 +55,7 @@ const selector_breadcrumbNav = '.breadcrumb-nav';
 const selector_summariesHolder = '#financial-summaries';
 const selector_candidateNamePartyAndLink = '.js-cand-name-par-a';
 const selector_downloadsWrapper = '#downloads-wrapper';
+//const selector_downloadsContent = '#downloads-wrapper div';
 const selector_coverageDates = '.js-coverage-date';
 const selector_exportRaisingButton = '.js-export-raising-data';
 const selector_exportSpending = '.js-export-spending-data';
@@ -97,7 +98,7 @@ function formatAsCurrency(passedValue, abbreviateMillions) {
 }
 
 /**
- * Builds the link/url the candidate's 
+ * Builds the link/url the candidate's
  * @param {String} candidateID The requested candidate's ID
  * @param {String} candidateName The name that will be displayed in the link
  * @param {Number}   electionYear The currently-selected election year
@@ -171,6 +172,10 @@ function PresidentialFundsMap() {
   this.current_candidateName = 'All candidates';
   this.current_candidateLastName = '';
   this.map; // Starts as the element for the map but then becomes a DataMap object
+
+  this.downloadsWrapper = document.querySelector(selector_downloadsWrapper);
+  this.downloadsWrapper.style.height = 0;
+  this.downloadsWrapper.style.overflow = 'hidden';
 
   // If we have the element on the page, fire it up
   if (this.element) this.init();
@@ -536,7 +541,9 @@ PresidentialFundsMap.prototype.loadCandidateDetails = function(
       // .fetch(`/static/temp-data/candidate-${this.current_candidateID}.json`)
       .then(function(response) {
         if (response.status !== 200)
-          throw new Error('The network rejected the candidate details request.');
+          throw new Error(
+            'The network rejected the candidate details request.'
+          );
         // else if (response.type == 'cors') throw new Error('CORS error');
         response.json().then(data => {
           // Let the audience know the load is complete
@@ -922,7 +929,9 @@ PresidentialFundsMap.prototype.displayCoverageDates = function(data) {
   // Start with an empty coverage date
   let theCoverageString = '';
   if (data[0] && data[0].coverage_end_date) {
-    theCoverageString = new Date(data[0].coverage_end_date).toLocaleDateString('en-US');
+    theCoverageString = new Date(data[0].coverage_end_date).toLocaleDateString(
+      'en-US'
+    );
     theCoverageString = `through ${theCoverageString}`;
   }
 
@@ -1157,8 +1166,45 @@ PresidentialFundsMap.prototype.refreshOverlay = function() {
 PresidentialFundsMap.prototype.handleExportRaisingClick = function(e) {
   console.log('handleExportRaisingClick(): ', e);
   e.preventDefault();
-  // TODO: show {selector_downloadsWrapper}
-  // TODO: animate the page scroll to the downloads section
+  let instance = this;
+
+  /* Robert: Does it matter if this a const or a named function?
+  eg: function openDownloads() VS. const openDownloads = function()
+  */
+
+  const openDownloads = function(){
+    console.log('callback')
+    
+    $(instance.downloadsWrapper).animate(
+    {
+      height: $(instance.downloadsWrapper).get(0).scrollHeight
+    },
+    1000,
+     function() {
+      $(this).height('auto');
+     })
+    }
+
+  // Wait until the export area is in view before opening
+  window.onscroll = function() {
+    var wS = this.scrollY,
+       hT = instance.downloadsWrapper.getBoundingClientRect().top + wS,
+       hH = instance.downloadsWrapper.offsetHeight,
+       wH = window.innerHeight;
+    if (wS > (hT+hH-wH)){
+     openDownloads()
+    }
+  };
+  //scroll to export area
+  this.downloadsWrapper.scrollIntoView({
+    behavior: 'smooth',
+    block: 'center',
+    inline: 'nearest'
+    });
+  
+
+  // TODO-done: show {selector_downloadsWrapper}
+  // TODO-done: animate the page scroll to the downloads section
   // TODO then: Hide {selector_downloadsWrapper} when we're no longer interested in the raising downloads
 };
 
