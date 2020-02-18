@@ -27,7 +27,7 @@ Filter independent expenditures
     {{ text.field('candidate_search', 'Candidate mentioned', id_suffix='_raw') }}
     {{ reports.type(id_suffix='_raw') }}
     {{ reports.form(id_suffix='_raw') }}
-    {{ version_status.version(id_suffix='_raw', methodology='True') }}
+    {{ version_status.version(id_suffix='_raw', methodology='True', checkbox_label='Current and unknown versions') }}
   </div>
 {# Removing these filters for now until the filter count bug can be fixed #}
 {% if FEATURES.ierawfilters %}
@@ -55,7 +55,7 @@ Filter independent expenditures
     {{ years.cycles('cycle', 'Years', show_tooltip=False) }}
     {{ reports.type(id_suffix='_processed') }}
     {{ reports.form(id_suffix='_processed') }}
-    {{ version_status.version(id_suffix='_processed', methodology='True', helper_text = 'Version cannot be determined for all transactions. Unknown versions are included when filtering by current and unknown versions.') }}
+    {{ version_status.version(id_suffix='_processed', methodology='True', checkbox_label='Current and unknown versions') }}
   </div>
   <button type="button" class="js-accordion-trigger accordion__button"  data-content-prefix="candidate_mentioned_processed">Candidate mentioned</button>
   <div class="accordion__content" id="candidate_mentioned_processed_0" aria-controls="candidate_mentioned_processed_0">

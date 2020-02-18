@@ -1,4 +1,4 @@
-{% macro version(id_suffix, methodology, helper_text=False) %}
+{% macro version(id_suffix, methodology, checkbox_label, helper_text=False) %}
 <div class="filter">
   <fieldset class="js-filter" id="version{{ id_suffix }}" data-filter="checkbox">
     <legend class="label">Version</legend>
@@ -8,7 +8,7 @@
     <ul>
       <li>
         <input id="most_recent_true{{ id_suffix }}" name="most_recent" type="checkbox" value="true">
-        <label for="most_recent_true{{ id_suffix }}">Current version</label>
+        <label for="most_recent_true{{ id_suffix }}">{{ checkbox_label }}</label>
       </li>
       {% if methodology %}
         <button class="button--keywords js-methodology" data-a11y-dialog-show="version-methodology-modal{{ id_suffix }}">Version methodology</button>
