@@ -1,3 +1,6 @@
+/* eslint-disable no-undef */
+/* eslint-disable no-unused-vars */
+
 'use strict';
 
 /* global CustomEvent */
@@ -1172,27 +1175,28 @@ PresidentialFundsMap.prototype.handleExportRaisingClick = function(e) {
   eg: function openDownloads() VS. const openDownloads = function()
   */
 
-  const openDownloads = function(){
-    console.log('callback')
-    
+  const openDownloads = function() {
+    console.log('callback');
+
     $(instance.downloadsWrapper).animate(
-    {
-      height: $(instance.downloadsWrapper).get(0).scrollHeight
-    },
-    1000,
-     function() {
-      $(this).height('auto');
-     })
-    }
+      {
+        height: $(instance.downloadsWrapper).get(0).scrollHeight
+      },
+      1000,
+      function() {
+        $(this).height('auto');
+      }
+    );
+  };
 
   // Wait until the export area is in view before opening
   window.onscroll = function() {
     var wS = this.scrollY,
-       hT = instance.downloadsWrapper.getBoundingClientRect().top + wS,
-       hH = instance.downloadsWrapper.offsetHeight,
-       wH = window.innerHeight;
-    if (wS > (hT+hH-wH)){
-     openDownloads()
+      hT = instance.downloadsWrapper.getBoundingClientRect().top + wS,
+      hH = instance.downloadsWrapper.offsetHeight,
+      wH = window.innerHeight;
+    if (wS > hT + hH - wH) {
+      openDownloads();
     }
   };
   //scroll to export area
@@ -1200,8 +1204,7 @@ PresidentialFundsMap.prototype.handleExportRaisingClick = function(e) {
     behavior: 'smooth',
     block: 'center',
     inline: 'nearest'
-    });
-  
+  });
 
   // TODO-done: show {selector_downloadsWrapper}
   // TODO-done: animate the page scroll to the downloads section
@@ -1310,3 +1313,6 @@ function logUsage(candID, electionYear) {
 }
 
 new PresidentialFundsMap();
+
+/* eslint-enable no-undef */
+/* eslint-enable no-unused-vars */

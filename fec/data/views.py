@@ -682,14 +682,10 @@ def spending(request):
 
 
 def pres_finance_map(request):
-    # office = request.GET.get("office", "P")
 
     election_year = int(
-        request.GET.get("election_year", constants.DEFAULT_ELECTION_YEAR)
+        request.GET.get("election_year", constants.DEFAULT_PRESIDENTIAL_YEAR)
     )
-
-    # max_election_year = utils.current_cycle() + 4
-    # election_years = utils.get_cycles(max_election_year)
 
     return render(
         request,
@@ -697,15 +693,13 @@ def pres_finance_map(request):
         {
             "parent": "data",
             "title": "Presidential Campaign Finance Map",
-            # "election_years": election_years,
             "election_year": election_year,
-            # "office": "P",
             "social_image_identifier": "data",
             "page_specific_css": "/static/css/widgets/pres-finance-map.css",
-            
+
         },
     )
-    
+
 def feedback(request):
     if request.method == "POST":
 

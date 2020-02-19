@@ -137,57 +137,9 @@
       </header>
       <div class="u-margin--bottom"><a href="" data-stateID="ALL">All states</a></div>
       <div class=downloads-links>
-        <a href="" data-stateID="AL">AL</a>
-        <a href="" data-stateID="AK">AK</a>
-        <a href="" data-stateID="AZ">AZ</a>
-        <a href="" data-stateID="AR">AR</a>
-        <a href="" data-stateID="CA">CA</a>
-        <a href="" data-stateID="CO">CO</a>
-        <a href="" data-stateID="CT">CT</a>
-        <a href="" data-stateID="DE">DE</a>
-        <a href="" data-stateID="DC">DC</a>
-        <a href="" data-stateID="FL">FL</a>
-        <a href="" data-stateID="GA">GA</a>
-        <a href="" data-stateID="HI">HI</a>
-        <a href="" data-stateID="ID">ID</a>
-        <a href="" data-stateID="IL">IL</a>
-        <a href="" data-stateID="IN">IN</a>
-        <a href="" data-stateID="IA">IA</a>
-        <a href="" data-stateID="KS">KS</a>
-        <a href="" data-stateID="KY">KY</a>
-        <a href="" data-stateID="LA">LA</a>
-        <a href="" data-stateID="ME">ME</a>
-        <a href="" data-stateID="MD">MD</a>
-        <a href="" data-stateID="MA">MA</a>
-        <a href="" data-stateID="MI">MI</a>
-        <a href="" data-stateID="MN">MN</a>
-        <a href="" data-stateID="MS">MS</a>
-        <a href="" data-stateID="MO">MO</a>
-        <a href="" data-stateID="MT">MT</a>
-        <a href="" data-stateID="NE">NE</a>
-        <a href="" data-stateID="NV">NV</a>
-        <a href="" data-stateID="NH">NH</a>
-        <a href="" data-stateID="NJ">NJ</a>
-        <a href="" data-stateID="NM">NM</a>
-        <a href="" data-stateID="NY">NY</a>
-        <a href="" data-stateID="NC">NC</a>
-        <a href="" data-stateID="ND">ND</a>
-        <a href="" data-stateID="OH">OH</a>
-        <a href="" data-stateID="OK">OK</a>
-        <a href="" data-stateID="OR">OR</a>
-        <a href="" data-stateID="PA">PA</a>
-        <a href="" data-stateID="RI">RI</a>
-        <a href="" data-stateID="SC">SC</a>
-        <a href="" data-stateID="SD">SD</a>
-        <a href="" data-stateID="TN">TN</a>
-        <a href="" data-stateID="TX">TX</a>
-        <a href="" data-stateID="UT">UT</a>
-        <a href="" data-stateID="VT">VT</a>
-        <a href="" data-stateID="VA">VA</a>
-        <a href="" data-stateID="WA">WA</a>
-        <a href="" data-stateID="WV">WV</a>
-        <a href="" data-stateID="WI">WI</a>
-        <a href="" data-stateID="WY">WY</a>
+        {% for value in constants.states_excl_territories %}
+           <a href="" data-stateID="{{ value }}">{{ value }}</a>
+        {% endfor %}
         <a href="" data-stateID="OTHER">Other</a>
       </div>
     </div>
