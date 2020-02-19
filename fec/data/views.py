@@ -633,7 +633,6 @@ def elections(request, office, cycle, state=None, district=None):
         },
     )
 
-
 def raising(request):
     office = request.GET.get("office", "P")
 
@@ -680,6 +679,26 @@ def spending(request):
         },
     )
 
+
+
+def pres_finance_map(request):
+
+    election_year = int(
+        request.GET.get("election_year", constants.DEFAULT_PRESIDENTIAL_YEAR)
+    )
+
+    return render(
+        request,
+        "pres-finance-map.jinja",
+        {
+            "parent": "data",
+            "title": "Presidential Campaign Finance Map",
+            "election_year": election_year,
+            "social_image_identifier": "data",
+            "page_specific_css": "/static/css/widgets/pres-finance-map.css",
+
+        },
+    )
 
 def feedback(request):
     if request.method == "POST":

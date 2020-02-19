@@ -1,3 +1,5 @@
+/* eslint-disable no-undef */
+
 'use strict';
 
 /**
@@ -37,7 +39,8 @@ const compactRules = [['B', 9], ['M', 6], ['K', 3], ['', 0]];
 let defaultOpts = {
   colorScale: ['#e2ffff', '#278887'],
   colorZero: '#ffffff',
-  quantiles: 4
+  quantiles: 4,
+  eventAppID: ''
 };
 
 /**
@@ -51,10 +54,12 @@ let defaultOpts = {
  * @param {String} opts.colorZero - hex color code to use when no value is present
  */
 function DataMap(elm, opts) {
+  console.log('new DataMap(): ', elm, opts);
   // Data, vars
   this.data;
   this.mapData; // saves results from init() and applyNewData(), formatted like {1: 123456789, 2: 6548, 4: 91835247} / {stateID: stateValue, stateID: stateValue}
   this.opts = Object.assign({}, defaultOpts, opts);
+  this.eventAppID = this.opts.eventAppID;
 
   // Elements
   this.elm = elm;
@@ -83,8 +88,8 @@ DataMap.prototype.init = function() {
   // Create the base-level state/country shapes
   let projection = d3.geo
     .albersUsa()
-    .scale(450)
-    .translate([220, 150]);
+    .scale(450) // lower numbers make the map smaller
+    .translate([220, 150]); // lower numbers move the map up and to the left
 
   // Create the path based on those base-level shapes
   let path = d3.geo.path().projection(projection);
@@ -146,7 +151,12 @@ DataMap.prototype.init = function() {
       return fips.fipsByCode[d.id].STATE_NAME;
     })
     .attr('class', 'shape')
-    .attr('d', path);
+    .attr('d', path)
+    .append('circle')
+    .attr('cx', -106.661513)
+    .attr('cy', 35.05917399)
+    .attr('r', '10px')
+    .style('fill', 'red');
 
   // If we're supposed to add a legend, let's do it
   if (this.opts.addLegend || typeof this.opts.addLegend === 'undefined') {
@@ -177,10 +187,19 @@ DataMap.prototype.getStateValue = function(pathID) {
  * @param {json} newData
  */
 DataMap.prototype.handleDataRefresh = function(newData) {
+  console.log('handleDataRefresh(): ', newData);
   this.data = newData;
 
   if (!this.svg) this.init();
   else this.applyNewData();
+};
+
+/**
+ * Called from outside this element, it handles zooming out to show the rest of the US instead of just one state
+ */
+DataMap.prototype.handleZoomReset = function() {
+  // TODO: zoom out to the full US
+  // Show bubbles if they need to be shown
 };
 
 /**
@@ -428,6 +447,21 @@ function buildStateTooltips(svg, path, instance) {
       } else {
         tooltip.style('display', 'none');
       }
+    })
+    .on('click', function(d) {
+      this.dispatchEvent(
+        new CustomEvent('STATE_CLICKED', {
+          detail: {
+            abbr: fips.fipsByCode[d.id].STUSAB,
+            name: fips.fipsByCode[d.id].STATE_NAME
+          },
+          bubbles: true
+        })
+      );
+      d3.transition()
+        .scale(500)
+        .translate([120, 50]);
+      console.log('clicked a state!');
     });
 
   // Add the mouseleave listeners to the dom elements rather than relying on d3
@@ -513,3 +547,5 @@ function tooltipTemplate(obj) {
 module.exports = {
   DataMap
 };
+
+/* eslint-enable no-undef */
