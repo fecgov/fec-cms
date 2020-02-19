@@ -5,7 +5,7 @@ from django.db import migrations, models
 import wagtail.core.fields
 import wagtail.core.blocks
 import wagtail.images.blocks
-
+import django.db.models.deletion
 
 class Migration(migrations.Migration):
 
@@ -18,7 +18,7 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='NonconnectedChecklistPage',
             fields=[
-                ('page_ptr', models.OneToOneField(auto_created=True, parent_link=True, primary_key=True, to='wagtailcore.Page', serialize=False)),
+                ('page_ptr', models.OneToOneField(auto_created=True, parent_link=True, primary_key=True, to='wagtailcore.Page', serialize=False, on_delete=django.db.models.deletion.SET_NULL)),
                 ('body', wagtail.core.fields.StreamField((('heading', wagtail.core.blocks.CharBlock(classname='full title')), ('paragraph', wagtail.core.blocks.RichTextBlock()), ('html', wagtail.core.blocks.RawHTMLBlock()), ('image', wagtail.images.blocks.ImageChooserBlock())), blank=True, null=True)),
             ],
             options={

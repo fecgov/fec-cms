@@ -5,15 +5,12 @@ import logging
 from django.db import models
 from django.core.exceptions import ValidationError
 from django.http import HttpResponseRedirect
-
 from django.dispatch import receiver
 from django.db.models.signals import post_save, pre_delete
 from django.contrib.auth.models import User
 from django.contrib.auth import get_user_model
-
-from audit_log.models.fields import LastUserField
-from audit_log.models.managers import AuditLog
-
+# from audit_log.models.fields import LastUserField
+# from audit_log.models.managers import AuditLog
 from modelcluster.fields import ParentalKey
 from modelcluster.contrib.taggit import ClusterTaggableManager
 from taggit.models import TaggedItemBase
@@ -21,23 +18,17 @@ from wagtail.core.models import Page, Orderable, PageRevision
 from wagtail.core.fields import StreamField
 from wagtail.core import blocks
 from wagtail.admin.edit_handlers import (FieldPanel, StreamFieldPanel,
-                                                PageChooserPanel, InlinePanel, MultiFieldPanel)
+    PageChooserPanel, InlinePanel, MultiFieldPanel)
 from wagtail.images.blocks import ImageChooserBlock
 from wagtail.images.edit_handlers import ImageChooserPanel
-
 from wagtail.documents.blocks import DocumentChooserBlock
 from wagtail.documents.edit_handlers import DocumentChooserPanel
 from wagtail.documents.models import Document
-
 from django.utils.encoding import python_2_unicode_compatible
 from wagtail.snippets.models import register_snippet
-
 from wagtail.search import index
-
 from django.db.models.signals import m2m_changed
-
 from wagtail.contrib.table_block.blocks import TableBlock
-
 from fec import constants
 
 logger = logging.getLogger(__name__)
@@ -79,9 +70,9 @@ def get_content_section(page):
     slugs = {
         'help-candidates-and-committees': 'help',
         'legal-resources': 'legal',
-        'about':'about',
+        'about': 'about',
         'campaign-finance-data': 'data',
-        'data':'data',
+        'data': 'data',
     }
 
     ancestors = page.get_ancestors()
@@ -125,7 +116,7 @@ class ContentPage(Page):
         ImageChooserPanel('feed_image'),
     ]
 
-    search_fields =  Page.search_fields + [
+    search_fields = Page.search_fields + [
         index.SearchField('body')
     ]
 
@@ -179,7 +170,7 @@ def log_user_save(sender, **kwargs):
     else:
         logger.info("User change: username {0} by instance {1}".format(kwargs.get('instance').get_username(),
                                                                        kwargs.get('instance')))
-    audit_log = AuditLog() #currently not used, will attempt to use for future PR adding admin logging
+    # audit_log = AuditLog() #currently not used, will attempt to use for future PR adding admin logging
 
 
 @receiver(pre_delete, sender=PageRevision)
@@ -196,8 +187,6 @@ def log_revisions(sender, **kwargs):
         username
     ))
 
-
-
 def user_groups_changed(sender, **kwargs):
     group_map = {1: 'Moderators', 2: 'Editors'}
     action_map = {'post_add': 'added', 'post_remove': 'removed'}
@@ -205,9 +194,8 @@ def user_groups_changed(sender, **kwargs):
         for index in kwargs.get('pk_set'):
             action = 'to' if kwargs.get('action').split('_')[1] == 'add' else 'from'
             logger.info("User change: User {0} was {1} {2} group {3}".format(kwargs.get('instance').get_username(),
-                                                                    action_map[kwargs.get('action')],
-                                                                    action,
-                                                                    group_map[index]))
+                        action_map[kwargs.get('action')],
+                        action, group_map[index]))
 
 m2m_changed.connect(user_groups_changed, sender=User.groups.through)
 
@@ -255,7 +243,7 @@ class PageAuthors(models.Model):
     This is made concrete by mixing into a model with a ParentalKey, see
     RecordPageAuthors below.
     """
-    author = models.ForeignKey(Author, related_name='+')
+    author = models.ForeignKey(Author, related_name='+', null=True, on_delete=models.SET_NULL)
     role = models.CharField(max_length=255,
                             choices=constants.author_roles.items(),
                             default='author')
