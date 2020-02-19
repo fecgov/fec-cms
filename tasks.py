@@ -74,7 +74,6 @@ DEPLOY_RULES = (
     ('prod', _detect_prod),
     ('stage', lambda _, branch: branch.startswith('release')),
     ('dev', lambda _, branch: branch == 'develop'),
-    ('dev', lambda _, branch: branch == 'feature/3466-update-gunicorn'),
     # Uncomment below and adjust branch name to deploy desired feature branch to the feature space
     #('feature', lambda _, branch: branch == 'feature/add-legal-citations-to-full-width-template'),
 )
