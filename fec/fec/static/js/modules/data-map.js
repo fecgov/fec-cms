@@ -1,3 +1,5 @@
+/* eslint-disable no-undef */
+
 'use strict';
 
 /**
@@ -537,3 +539,5 @@ function tooltipTemplate(obj) {
 module.exports = {
   DataMap
 };
+
+/* eslint-enable no-undef */
