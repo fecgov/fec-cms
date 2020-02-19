@@ -54,7 +54,7 @@ let defaultOpts = {
  * @param {String} opts.colorZero - hex color code to use when no value is present
  */
 function DataMap(elm, opts) {
-  console.log('new DataMap(): ', elm, opts);
+  // console.log('new DataMap(): ', elm, opts);
   // Data, vars
   this.data;
   this.mapData; // saves results from init() and applyNewData(), formatted like {1: 123456789, 2: 6548, 4: 91835247} / {stateID: stateValue, stateID: stateValue}
@@ -131,13 +131,16 @@ DataMap.prototype.init = function() {
 
   // Create the states SVG, color them, initialize mouseover interactivity
   // (`selectAll()` will select elements if they exist, or will create them if they don't.)
-  this.svg
+  let paths = this.svg
     .append('g')
     .selectAll('path')
     .data(stateFeatures)
-    .enter()
+    .enter();
+
+  let states = paths
     .append('path')
     .attr('fill', function(d) {
+      console.log('d: ', d);
       return calculateStateFill(
         instance.getStateValue(d.id),
         legendScale,
@@ -151,12 +154,46 @@ DataMap.prototype.init = function() {
       return fips.fipsByCode[d.id].STATE_NAME;
     })
     .attr('class', 'shape')
-    .attr('d', path)
+    .attr('d', path);
+
+  let circles = states
     .append('circle')
-    .attr('cx', -106.661513)
-    .attr('cy', 35.05917399)
-    .attr('r', '10px')
-    .style('fill', 'red');
+    .attr('cx', function(d) {
+      let toReturn = 0;
+      let flatCoords = d.geometry.coordinates;
+      while (Array.isArray(flatCoords)) {
+        flatCoords = Object.assign({}, flatCoords);
+      }
+      console.log('flatCoords: ', flatCoords);
+
+      let maxVal = -999999;
+      let minVal = 999999;
+      for (let i = 0; i < flatCoords.length; i++) {
+        maxVal = Math.max(maxVal, flatCoords[0]);
+        minVal = Math.min(minVal, flatCoords[0]);
+      }
+
+      toReturn = minVal + (maxVal - minVal) / 2;
+      return toReturn;
+    })
+    // .attr('cx', function(d) {
+    //   console.log('cxes: ', d.geometry.coordinates.flat());
+    //   return -91.41932119922117;
+    //   // d.geometry.coordinates[0][0][0][0];
+    // })
+    // .attr('cy', function(d) {
+    //   console.log('cyes: ', );
+    //   return 40.37827400036207;
+    //   // return d.geometry.coordinates[0][0][0][1];
+    // })
+    .attr('r', function(d) {
+      // console.log('calculating radius: ', d);
+      return '20px';
+    })
+    .attr('fill', function(d) {
+      // console.log('calculating circle fill: ', d);
+      return 'red';
+    });
 
   // If we're supposed to add a legend, let's do it
   if (this.opts.addLegend || typeof this.opts.addLegend === 'undefined') {
@@ -458,9 +495,9 @@ function buildStateTooltips(svg, path, instance) {
           bubbles: true
         })
       );
-      d3.transition()
-        .scale(500)
-        .translate([120, 50]);
+      // d3.transition()
+      //   .scale(500)
+      //   .translate([120, 50]);
       console.log('clicked a state!');
     });
 
