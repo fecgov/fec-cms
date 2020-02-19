@@ -9,8 +9,6 @@ from django.dispatch import receiver
 from django.db.models.signals import post_save, pre_delete
 from django.contrib.auth.models import User
 from django.contrib.auth import get_user_model
-# from audit_log.models.fields import LastUserField
-# from audit_log.models.managers import AuditLog
 from modelcluster.fields import ParentalKey
 from modelcluster.contrib.taggit import ClusterTaggableManager
 from taggit.models import TaggedItemBase
@@ -170,8 +168,6 @@ def log_user_save(sender, **kwargs):
     else:
         logger.info("User change: username {0} by instance {1}".format(kwargs.get('instance').get_username(),
                                                                        kwargs.get('instance')))
-    # audit_log = AuditLog() #currently not used, will attempt to use for future PR adding admin logging
-
 
 @receiver(pre_delete, sender=PageRevision)
 @receiver(post_save, sender=PageRevision)
