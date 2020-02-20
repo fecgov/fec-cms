@@ -225,7 +225,31 @@ $info-circle: 'data:image/svg+xml;charset=utf8, %3Csvg%20xmlns%3D%22http%3A%2F%2
         min-width: 360px;
         min-height: 230px;
       }
+
+      path {
+        // fill: #fff;
+        transition: fill 1s;
+      }
+      circle {
+        opacity: 0;
+        transition: opacity .5s;
+        pointer-events: none;
+      }
+      &[data-map_type="bubble"] {
+        path {
+          fill: $colorTableTdBorder;
+          transition: fill 1s;
+          pointer-events: none;
+        }
+        circle {
+          opacity: 1;
+          transition: .5s;
+          pointer-events: initial;
+        }
+      }
     }
+
+
   }
   .map-details {
     display: flex;

@@ -11,11 +11,11 @@
       <div id="filter-map-type" class="filters is-open">
         <fieldset class="filter toggles js-filter js-map-switcher" style="border: none;">
           <legend class="label t-inline-block">View as:</legend>
-          <label class="toggle" for="switcher-map-type-bubbles">
-            <input type="radio" class="toggle" value="bubbles" id="switcher-map-type-bubbles" name="map-type-selector" aria-controls="bubbles-message" tabindex="0" checked><span class="button--alt">Bubbles</span>
-          </label>
           <label class="toggle" for="switcher-map-type-gradient">
-            <input type="radio" class="toggle" value="gradient" id="switcher-map-type-gradient" name="map-type-selector" aria-controls="gradient-message" tabindex="0"><span class="button--alt">Gradient</span>
+            <input type="radio" class="toggle" value="gradient" id="switcher-map-type-gradient" name="map-type-selector" aria-controls="gradient-message" tabindex="0" checked><span class="button--alt">Gradient</span>
+          </label>
+          <label class="toggle" for="switcher-map-type-bubbles">
+            <input type="radio" class="toggle" value="bubble" id="switcher-map-type-bubbles" name="map-type-selector" aria-controls="bubbles-message" tabindex="0"><span class="button--alt">Bubbles</span>
           </label>
         </fieldset>
       </div>
@@ -59,7 +59,7 @@
           <svg></svg>
         </div>
       </div>
-      <div class="election-map"></div>
+      <div class="election-map" data-map_type=""></div>
     </div>
     <div class="right-column-wrapper">
       <a class="button--cta button--export js-export-state-data" href="">Export ST raising data</a>
