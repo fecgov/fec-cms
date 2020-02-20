@@ -65,6 +65,11 @@ function DataMap(elm, opts) {
   this.elm = elm;
   this.legendSVG;
   this.svg;
+
+  // d3 selections
+  this.paths;
+  this.states_fills;
+  this.states_circles;
 }
 
 /**
@@ -75,6 +80,9 @@ function DataMap(elm, opts) {
  */
 DataMap.prototype.init = function() {
   let instance = this;
+
+  console.log('states: ', states);
+  console.log('stateFeatures: ', stateFeatures);
 
   // Initialize the D3 map
   // viewBox is necessary for responsive scaling
@@ -131,16 +139,17 @@ DataMap.prototype.init = function() {
 
   // Create the states SVG, color them, initialize mouseover interactivity
   // (`selectAll()` will select elements if they exist, or will create them if they don't.)
-  let paths = this.svg
+  this.paths = this.svg
     .append('g')
     .selectAll('path')
     .data(stateFeatures)
     .enter();
 
-  let states = paths
+  this.states_fills = this.paths
     .append('path')
     .attr('fill', function(d) {
       console.log('d: ', d);
+      d.statePath = this; // Linking this state/path/fill to this element in the data
       return calculateStateFill(
         instance.getStateValue(d.id),
         legendScale,
@@ -156,25 +165,21 @@ DataMap.prototype.init = function() {
     .attr('class', 'shape')
     .attr('d', path);
 
-  let circles = states
+  this.states_circles = this.paths
     .append('circle')
     .attr('cx', function(d) {
-      let toReturn = 0;
-      let flatCoords = d.geometry.coordinates;
-      while (Array.isArray(flatCoords)) {
-        flatCoords = Object.assign({}, flatCoords);
-      }
-      console.log('flatCoords: ', flatCoords);
+      let stateBounds = d3
+        .select(d.statePath)
+        .node()
+        .getBBox();
 
-      let maxVal = -999999;
-      let minVal = 999999;
-      for (let i = 0; i < flatCoords.length; i++) {
-        maxVal = Math.max(maxVal, flatCoords[0]);
-        minVal = Math.min(minVal, flatCoords[0]);
-      }
+      d.cx = stateBounds.x + stateBounds.width / 2;
+      d.cy = stateBounds.y + stateBounds.height / 2;
 
-      toReturn = minVal + (maxVal - minVal) / 2;
-      return toReturn;
+      return d.cx;
+    })
+    .attr('cy', function(d) {
+      return d.cy;
     })
     // .attr('cx', function(d) {
     //   console.log('cxes: ', d.geometry.coordinates.flat());
@@ -277,8 +282,9 @@ DataMap.prototype.applyNewData = function() {
   // This bit is the big difference from init() }
   // because we're transitioning states' colors,
   // states we know already exist, have IDs, and may have mouseenter listeners, etc.
-  this.svg
-    .selectAll('path')
+  // this.svg
+  //   .selectAll('path')
+  this.states_fills
     .transition()
     .delay(function(d, i) {
       //

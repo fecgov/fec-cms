@@ -49,7 +49,7 @@ const COVERAGE_DATES_LOADED = EVENT_APP_ID + '_coverage_dates_loaded';
 // TODO: Update so we're using IDs everywhere?
 const selector_mainElement = '#gov-fec-pres-finance';
 const selector_yearControl = '#filter-year';
-const selector_mapStyleControl = '.js-map-switcher';
+const selector_mapTypeControl = '.js-map-switcher';
 const selector_resetApp = '.js-reset-app';
 const selector_map = '.map-wrapper .election-map';
 const selector_candidateDetails = '.candidate-details';
@@ -204,6 +204,13 @@ PresidentialFundsMap.prototype.init = function() {
   this.yearControl.addEventListener(
     'change',
     this.handleElectionYearChange.bind(this)
+  );
+
+  // Init the map type listener
+  this.mapTypeControl = this.element.querySelector(selector_mapTypeControl);
+  this.mapTypeControl.addEventListener(
+    'change',
+    this.handleMapTypeChange.bind(this)
   );
 
   this.element.addEventListener(
@@ -1059,6 +1066,20 @@ PresidentialFundsMap.prototype.handleElectionYearChange = function(e) {
 };
 
 /**
+ * TODO -
+ */
+PresidentialFundsMap.prototype.handleMapTypeChange = function(e) {
+  console.log('handleMapTypeChange() e: ', e);
+  console.log('  this.map: ', this.map);
+  let theMapElement = false;
+  if (this.map.setAttribute) theMapElement = this.map;
+  else if (this.map.elm.setAttribute) theMapElement = this.map.elm;
+
+  if (theMapElement)
+    theMapElement.setAttribute('data-map_type', e.target.value);
+};
+
+/**
  * Triggered when the user clicks a state inside the map and the event bubbles up to here
  * Calls for loadCandidatesList
  * @param {CustomEvent} e
@@ -1255,7 +1276,7 @@ PresidentialFundsMap.prototype.toggleUSOrStateDisplay = function() {
     selector_summariesHolder
   ).style.display = nationalDisplay;
   this.element.querySelector(
-    selector_mapStyleControl
+    selector_mapTypeControl
   ).style.display = nationalDisplay;
 
   // Show for only state view:
