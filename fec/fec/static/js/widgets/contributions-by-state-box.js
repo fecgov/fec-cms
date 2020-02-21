@@ -36,7 +36,7 @@ const AbortController = window.AbortController;
  * @returns {String} A string of the given value formatted with a dollar sign, commas, and (if roundToWhole === false) decimal
  */
 function formatAsCurrency(passedValue, roundToWhole = true) {
-  return ( 
+  return (
     '$' +
     (roundToWhole
       ? Math.round(passedValue).toLocaleString()
