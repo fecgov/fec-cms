@@ -178,8 +178,12 @@ function PresidentialFundsMap() {
   this.map; // Starts as the element for the map but then becomes a DataMap object
 
   this.downloadsWrapper = document.querySelector(selector_downloadsWrapper);
-  this.downloadsLinksWrapper = document.querySelector(selector_downloadsLinksWrapper);
-  this.toggleRaisingExports = document.querySelector(selector_toggleRaisingExports);
+  this.downloadsLinksWrapper = document.querySelector(
+    selector_downloadsLinksWrapper
+  );
+  this.toggleRaisingExports = document.querySelector(
+    selector_toggleRaisingExports
+  );
 
   // If we have the element on the page, fire it up
   if (this.element) this.init();
@@ -1193,18 +1197,18 @@ PresidentialFundsMap.prototype.refreshOverlay = function() {
  * @param {MouseEvent} e
  */
 PresidentialFundsMap.prototype.openDownloads = function() {
-    let instance = this
-    $(instance.downloadsLinksWrapper).animate(
-      {
-        height: $(instance.downloadsLinksWrapper).get(0).scrollHeight
-      },
-      1000,
-      function() {
-        $(this).height('auto');
-      }
-    );
-    $(instance.toggleRaisingExports).toggleClass('button--open', false)
-  };
+  let instance = this;
+  $(instance.downloadsLinksWrapper).animate(
+    {
+      height: $(instance.downloadsLinksWrapper).get(0).scrollHeight
+    },
+    1000,
+    function() {
+      $(this).height('auto');
+    }
+  );
+  $(instance.toggleRaisingExports).toggleClass('button--open', false);
+};
 
 PresidentialFundsMap.prototype.handleExportRaisingClick = function(e) {
   console.log('handleExportRaisingClick(): ', e);
@@ -1226,7 +1230,7 @@ PresidentialFundsMap.prototype.handleExportRaisingClick = function(e) {
       wH = window.innerHeight;
     if (wS > hT + hH - wH) {
       instance.openDownloads();
-      window.onscroll = null // remove listener
+      window.onscroll = null; // remove listener
     }
   };
 
@@ -1242,17 +1246,15 @@ PresidentialFundsMap.prototype.handleToggleRaisingExports = function(e) {
 
   //toggle export area
   if (instance.downloadsLinksWrapper.style.height > '0px') {
-  $(instance.toggleRaisingExports).toggleClass('button--open', true)
-  this.downloadsLinksWrapper.style.height = 0
-  window.onscroll = null // remove listener
-  } 
-  else {
-  $(instance.toggleRaisingExports).toggleClass('button--open', false)
-  this.openDownloads();
+    $(instance.toggleRaisingExports).toggleClass('button--open', true);
+    this.downloadsLinksWrapper.style.height = 0;
+    window.onscroll = null; // remove listener
+  } else {
+    $(instance.toggleRaisingExports).toggleClass('button--open', false);
+    this.openDownloads();
   }
-  
-  }
-  // TODO-better styling on exports area
+};
+// TODO-better styling on exports area
 
 /**
  * Triggered any time a user asks to reset the app (i.e. return to "Nationwide: All candidates")
