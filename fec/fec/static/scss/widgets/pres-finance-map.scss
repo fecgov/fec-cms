@@ -544,6 +544,12 @@ $info-circle: 'data:image/svg+xml;charset=utf8, %3Csvg%20xmlns%3D%22http%3A%2F%2
   #downloads-wrapper {
     width: 50%;
     margin-left:25%;
+    overflow: hidden;
+  }
+
+  #downloads-links-wrapper {
+    height: 0;
+    overflow: hidden;
   }
 
   .downloads-links {
@@ -558,15 +564,11 @@ $info-circle: 'data:image/svg+xml;charset=utf8, %3Csvg%20xmlns%3D%22http%3A%2F%2
         border: 1px solid $gray-light;
         text-align: center;
 
-        &:hover {
-          background:$gray-light;
-        };
+          &:hover {
+            background:$gray-light;
+          }
       }
-
   }
 
-
 }
-
-
 
