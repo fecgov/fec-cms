@@ -58,13 +58,14 @@ const selector_breadcrumbNav = '.breadcrumb-nav';
 const selector_summariesHolder = '#financial-summaries';
 const selector_candidateNamePartyAndLink = '.js-cand-name-par-a';
 const selector_downloadsWrapper = '#downloads-wrapper';
-//const selector_downloadsContent = '#downloads-wrapper div';
+const selector_downloadsLinksWrapper = '#downloads-links-wrapper';
 const selector_coverageDates = '.js-coverage-date';
 const selector_exportRaisingButton = '.js-export-raising-data';
+const selector_toggleRaisingExports = '.js-toggle-riasing-exports';
 const selector_exportSpending = '.js-export-spending-data';
 const selector_exportSummary = '.js-export-report-summary';
 const selector_stateDownloadLinks =
-  selector_downloadsWrapper + ' [data-stateID]';
+  selector_downloadsLinksWrapper + ' [data-stateID]';
 const selector_exportStateData = '.js-export-state-data';
 
 // Imports, etc
@@ -177,8 +178,8 @@ function PresidentialFundsMap() {
   this.map; // Starts as the element for the map but then becomes a DataMap object
 
   this.downloadsWrapper = document.querySelector(selector_downloadsWrapper);
-  this.downloadsWrapper.style.height = 0;
-  this.downloadsWrapper.style.overflow = 'hidden';
+  this.downloadsLinksWrapper = document.querySelector(selector_downloadsLinksWrapper);
+  this.toggleRaisingExports = document.querySelector(selector_toggleRaisingExports);
 
   // If we have the element on the page, fire it up
   if (this.element) this.init();
@@ -255,6 +256,10 @@ PresidentialFundsMap.prototype.init = function() {
   this.element
     .querySelector(selector_exportRaisingButton)
     .addEventListener('click', this.handleExportRaisingClick.bind(this));
+
+  this.element
+    .querySelector(selector_toggleRaisingExports)
+    .addEventListener('click', this.handleToggleRaisingExports.bind(this));
 
   // Initialize the various queries
   this.baseCandidateQuery = { office: 'P' }; // Calls for candidate details
@@ -1187,28 +1192,31 @@ PresidentialFundsMap.prototype.refreshOverlay = function() {
  * Triggered when the user clicks to export the raising data
  * @param {MouseEvent} e
  */
-PresidentialFundsMap.prototype.handleExportRaisingClick = function(e) {
-  console.log('handleExportRaisingClick(): ', e);
-  e.preventDefault();
-  let instance = this;
-
-  /* Robert: Does it matter if this a const or a named function?
-  eg: function openDownloads() VS. const openDownloads = function()
-  */
-
-  const openDownloads = function() {
-    console.log('callback');
-
-    $(instance.downloadsWrapper).animate(
+PresidentialFundsMap.prototype.openDownloads = function() {
+    let instance = this
+    $(instance.downloadsLinksWrapper).animate(
       {
-        height: $(instance.downloadsWrapper).get(0).scrollHeight
+        height: $(instance.downloadsLinksWrapper).get(0).scrollHeight
       },
       1000,
       function() {
         $(this).height('auto');
       }
     );
+    $(instance.toggleRaisingExports).toggleClass('button--open', false)
   };
+
+PresidentialFundsMap.prototype.handleExportRaisingClick = function(e) {
+  console.log('handleExportRaisingClick(): ', e);
+  e.preventDefault();
+  let instance = this;
+
+  //scroll to export area
+  this.downloadsWrapper.scrollIntoView({
+    behavior: 'smooth',
+    block: 'center',
+    inline: 'nearest'
+  });
 
   // Wait until the export area is in view before opening
   window.onscroll = function() {
@@ -1217,20 +1225,34 @@ PresidentialFundsMap.prototype.handleExportRaisingClick = function(e) {
       hH = instance.downloadsWrapper.offsetHeight,
       wH = window.innerHeight;
     if (wS > hT + hH - wH) {
-      openDownloads();
+      instance.openDownloads();
+      window.onscroll = null // remove listener
     }
   };
-  //scroll to export area
-  this.downloadsWrapper.scrollIntoView({
-    behavior: 'smooth',
-    block: 'center',
-    inline: 'nearest'
-  });
 
   // TODO-done: show {selector_downloadsWrapper}
   // TODO-done: animate the page scroll to the downloads section
-  // TODO then: Hide {selector_downloadsWrapper} when we're no longer interested in the raising downloads
+  // TODO done  -then: Hide {selector_downloadsLinksWrapper} when we're no longer interested in the raising downloads
 };
+
+PresidentialFundsMap.prototype.handleToggleRaisingExports = function(e) {
+  console.log('handleToggleRaisingExports(): ', e);
+  e.preventDefault();
+  let instance = this;
+
+  //toggle export area
+  if (instance.downloadsLinksWrapper.style.height > '0px') {
+  $(instance.toggleRaisingExports).toggleClass('button--open', true)
+  this.downloadsLinksWrapper.style.height = 0
+  window.onscroll = null // remove listener
+  } 
+  else {
+  $(instance.toggleRaisingExports).toggleClass('button--open', false)
+  this.openDownloads();
+  }
+  
+  }
+  // TODO-better styling on exports area
 
 /**
  * Triggered any time a user asks to reset the app (i.e. return to "Nationwide: All candidates")
