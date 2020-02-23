@@ -562,8 +562,8 @@
   margin-bottom: u(2.4rem);
 
 }
-.button--close {
-  @include u-icon-bg($minus-circle, $primary);
+.button--open {
+  @include u-icon-bg($plus-circle, $primary);
   background-size: u(2rem);
   background-position: 95% 50%;
   border-bottom: 1px solid $base;
@@ -576,19 +576,10 @@
   text-align: left;
   width: 100%;
   border-bottom: none;
-}
-.button--open {
-  @include u-icon-bg($plus-circle, $primary);
-  background-size: u(2rem);
-  background-position: 95% 50%;
-  border-bottom: none;
-  margin: -21px 0 -1px 0;
-  color: $base;
-  font-size: u(1.4rem);
-  font-weight: bold;
-  letter-spacing: -.3px;
-  padding: u(1rem 4rem 1rem 2rem);
-  text-align: left;
-  width: 100%;
+
+   &.button--close {
+    @include u-icon-bg($minus-circle, $primary);
+    border-bottom: none;
+  }
 }
 

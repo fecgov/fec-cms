@@ -1207,33 +1207,47 @@ PresidentialFundsMap.prototype.openDownloads = function() {
       $(this).height('auto');
     }
   );
-  $(instance.toggleRaisingExports).toggleClass('button--open', false);
+  $(instance.toggleRaisingExports).toggleClass('button--close', true);
 };
 
 PresidentialFundsMap.prototype.handleExportRaisingClick = function(e) {
   console.log('handleExportRaisingClick(): ', e);
   e.preventDefault();
+
+  var windowScroll = window.scrollY,
+    downloadsScrollPosition =
+      this.downloadsWrapper.getBoundingClientRect().top + windowScroll,
+    downloadsHeight = this.downloadsWrapper.offsetHeight,
+    windowHeight = window.innerHeight;
+  //if downloadsWrapper is alrady in view, show it
+  if (windowScroll > downloadsScrollPosition + downloadsHeight - windowHeight) {
+    this.openDownloads();
+  }
+  //if downloadsWrapper is not alrady in view, scroll to it
+  else {
+    this.downloadsWrapper.scrollIntoView({
+      behavior: 'smooth',
+      block: 'center',
+      inline: 'nearest'
+    });
+  }
+  // Wait until the downloadsWrapper is in view before opening
+  //'this' refers to the main protoype here
   let instance = this;
-
-  //scroll to export area
-  this.downloadsWrapper.scrollIntoView({
-    behavior: 'smooth',
-    block: 'center',
-    inline: 'nearest'
-  });
-
-  // Wait until the export area is in view before opening
   window.onscroll = function() {
-    var wS = this.scrollY,
-      hT = instance.downloadsWrapper.getBoundingClientRect().top + wS,
-      hH = instance.downloadsWrapper.offsetHeight,
-      wH = window.innerHeight;
-    if (wS > hT + hH - wH) {
-      instance.openDownloads();
-      window.onscroll = null; // remove listener
+    //'this' is window inside the context of this function
+    let theWindow = this;
+    var windowScrollNow = theWindow.scrollY;
+    if (
+      windowScrollNow >
+      downloadsScrollPosition + downloadsHeight - windowHeight
+    ) {
+      {
+        instance.openDownloads();
+        window.onscroll = null; // remove listener
+      }
     }
   };
-
   // TODO-done: show {selector_downloadsWrapper}
   // TODO-done: animate the page scroll to the downloads section
   // TODO done  -then: Hide {selector_downloadsLinksWrapper} when we're no longer interested in the raising downloads
@@ -1242,15 +1256,13 @@ PresidentialFundsMap.prototype.handleExportRaisingClick = function(e) {
 PresidentialFundsMap.prototype.handleToggleRaisingExports = function(e) {
   console.log('handleToggleRaisingExports(): ', e);
   e.preventDefault();
-  let instance = this;
-
+  //let instance = this
   //toggle export area
-  if (instance.downloadsLinksWrapper.style.height > '0px') {
-    $(instance.toggleRaisingExports).toggleClass('button--open', true);
+  if (this.downloadsLinksWrapper.style.height > '0px') {
+    this.toggleRaisingExports.classList.toggle('button--close', false);
     this.downloadsLinksWrapper.style.height = 0;
-    window.onscroll = null; // remove listener
   } else {
-    $(instance.toggleRaisingExports).toggleClass('button--open', false);
+    this.toggleRaisingExports.classList.toggle('button--close', true);
     this.openDownloads();
   }
 };
@@ -1308,8 +1320,20 @@ PresidentialFundsMap.prototype.toggleUSOrStateDisplay = function() {
     selector_exportStateData
   ).style.display = stateDisplay;
 
-  // If we're resetting anything, close the downloads section
-  this.element.querySelector(selector_exportStateData).style.display = 'none';
+  // Show for only US view:
+  this.element.querySelector(
+    selector_downloadsWrapper
+  ).style.display = nationalDisplay;
+
+  // Only close all-state download area if switching to state view. Leave as-is (open or closed) when clicking reset in national view.
+  //Or do we want to just hide/show  as user switches between views, bur perisit its state --(open or closed)?
+  if (stateDisplay == 'block') {
+    console.log('STATE DISPLAY');
+    this.element.querySelector(selector_downloadsLinksWrapper).style.height = 0;
+    this.element
+      .querySelector(selector_toggleRaisingExports)
+      .classList.toggle('button--close', false);
+  }
 };
 
 /**
