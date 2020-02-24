@@ -1106,6 +1106,7 @@ PresidentialFundsMap.prototype.handleStateClick = function(e) {
   // TODO: tell the map to focus on the state? Maybe it should handle it internally?
   // Simply clicking a state shouldn't change that state's color or value
 
+  this.map.zoomToState(this.current_electionState);
   this.toggleUSOrStateDisplay();
 };
 
