@@ -651,6 +651,41 @@ DataTable.prototype.fetch = function(data, callback) {
       );
       return;
     }
+
+    // If 24- and 48-Hour report is selected, set the filing form to F24.
+    // Otherwise, it's a regularly scheduled report, keep the filing
+    // form as F3X
+    if (self.filters && self.filters.filing_form) {
+      var F3X_index = self.filters.filing_form.indexOf('F3X');
+      if (self.filters.is_notice == 'true' && F3X_index > -1) {
+        self.filters.filing_form[F3X_index] = 'F24';
+      }
+    }
+
+    // Regularly scheduled reports only have current versions
+    // Therefore, we need to check current version by default
+    // and disable changes.
+    if (
+      self.filters &&
+      self.filters.data_type == 'processed' &&
+      self.filters.is_notice == 'false'
+    ) {
+      self.filters.most_recent = 'true';
+      $('#most_recent_true_processed').prop('checked', true);
+      $(
+        '#version_processed legend, #version_processed li, #version_processed label'
+      )
+        .removeClass('is-active-filter')
+        .addClass('is-disabled-filter');
+    } else if (
+      self.filters &&
+      self.filters.data_type == 'processed' &&
+      self.filters.is_notice == 'true'
+    ) {
+      $(
+        '#version_processed legend, #version_processed li, #version_processed label'
+      ).removeClass('is-disabled-filter');
+    }
   }
 
   var url = self.buildUrl(data);

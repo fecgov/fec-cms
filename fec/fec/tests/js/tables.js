@@ -550,4 +550,34 @@ describe('data table', function() {
       ).to.be.above(0);
     });
   });
+
+  describe('Update to F24', function() {
+    beforeEach(function() {
+      this.table.xhr = null;
+      $('body').append(
+        '<div id="is_notice-toggle_processed"><ul class="dropdown__selected"></ul><input id="filing-form-f3x_processed" /></div>'
+      );
+    });
+
+    it('filing form updates to F24 when is_notice is true', function() {
+      var serialized = {
+        is_notice: 'true',
+        filing_form: ['F3X']
+      };
+      this.table.filterSet = {
+        serialize: function() {
+          return serialized;
+        },
+        fields: ['is_notice', 'filing_form']
+      };
+      this.table.filterSet.isValid = true;
+      var callback = sinon.stub();
+      this.table.fetch({}, callback);
+      expect(this.table.filters).to.deep.equal(serialized);
+      expect(
+        this.table.filters.filing_form,
+        'Expected filing form to be F24'
+      ).to.deep.equal(['F24']);
+    });
+  });
 });
