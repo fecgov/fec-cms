@@ -1256,14 +1256,14 @@ PresidentialFundsMap.prototype.handleExportRaisingClick = function(e) {
 PresidentialFundsMap.prototype.handleToggleRaisingExports = function(e) {
   console.log('handleToggleRaisingExports(): ', e);
   e.preventDefault();
-  //let instance = this
+
   //toggle export area
   if (this.downloadsLinksWrapper.style.height > '0px') {
-    this.toggleRaisingExports.classList.toggle('button--close', false);
-    this.downloadsLinksWrapper.style.height = 0;
+       this.toggleRaisingExports.classList.toggle('button--close', false);
+       this.downloadsLinksWrapper.style.height = 0;
   } else {
-    this.toggleRaisingExports.classList.toggle('button--close', true);
-    this.openDownloads();
+      this.toggleRaisingExports.classList.toggle('button--close', true);
+      this.downloadsLinksWrapper.style.height = 'auto';
   }
 };
 // TODO-better styling on exports area
