@@ -21,7 +21,7 @@
       </div>
       <div class="TODO-buttons-holder">
         <a class="button--cta button--export js-export-report-summary">Export report summary data</a>
-        <button class="button--alt js-methodology">Methodology</button>
+        <button class="button--alt js-methodology" data-a11y-dialog-show="gov-fec-pres-finance-modal">Methodology</button>
       </div>
     </div>
     <div class="candidate-list-wrapper">
@@ -145,6 +145,16 @@
           <a href="" data-stateID="OTHER">Other</a>
         </div>
        </div>
+    </div>
+    <div class="js-modal modal" id="gov-fec-pres-finance-modal" aria-hidden="true">
+        <div tabindex="-1" class="modal__overlay" data-a11y-dialog-hide=""></div>
+        <div role="dialog" class="modal__content" aria-labelledby="gov-fec-pres-finance-modal-title">
+            <div role="document">
+                <button type="button" class="modal__close button--close--primary" data-a11y-dialog-hide="" title="Close this dialog window"></button>
+                <h2 id="gov-fec-pres-finance-modal-title">Methodology Overview</h2>
+                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+            </div>
+        </div>
     </div>
 </div>
 <script defer src="{{ asset_for_js('widgets/pres-finance-map-box.js') }}" data-standalone="true"></script>
