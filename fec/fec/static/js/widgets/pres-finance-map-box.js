@@ -49,7 +49,7 @@ const COVERAGE_DATES_LOADED = EVENT_APP_ID + '_coverage_dates_loaded';
 // TODO: Update so we're using IDs everywhere?
 const selector_mainElement = '#gov-fec-pres-finance';
 const selector_yearControl = '#filter-year';
-const selector_mapStyleControl = '.js-map-switcher';
+const selector_mapTypeControl = '.js-map-switcher';
 const selector_resetApp = '.js-reset-app';
 const selector_map = '.map-wrapper .election-map';
 const selector_candidateDetails = '.candidate-details';
@@ -58,13 +58,14 @@ const selector_breadcrumbNav = '.breadcrumb-nav';
 const selector_summariesHolder = '#financial-summaries';
 const selector_candidateNamePartyAndLink = '.js-cand-name-par-a';
 const selector_downloadsWrapper = '#downloads-wrapper';
-//const selector_downloadsContent = '#downloads-wrapper div';
+const selector_downloadsLinksWrapper = '#downloads-links-wrapper';
 const selector_coverageDates = '.js-coverage-date';
 const selector_exportRaisingButton = '.js-export-raising-data';
+const selector_toggleRaisingExports = '.js-toggle-riasing-exports';
 const selector_exportSpending = '.js-export-spending-data';
 const selector_exportSummary = '.js-export-report-summary';
 const selector_stateDownloadLinks =
-  selector_downloadsWrapper + ' [data-stateID]';
+  selector_downloadsLinksWrapper + ' [data-stateID]';
 const selector_exportStateData = '.js-export-state-data';
 
 // Imports, etc
@@ -177,8 +178,12 @@ function PresidentialFundsMap() {
   this.map; // Starts as the element for the map but then becomes a DataMap object
 
   this.downloadsWrapper = document.querySelector(selector_downloadsWrapper);
-  this.downloadsWrapper.style.height = 0;
-  this.downloadsWrapper.style.overflow = 'hidden';
+  this.downloadsLinksWrapper = document.querySelector(
+    selector_downloadsLinksWrapper
+  );
+  this.toggleRaisingExports = document.querySelector(
+    selector_toggleRaisingExports
+  );
 
   // If we have the element on the page, fire it up
   if (this.element) this.init();
@@ -204,6 +209,13 @@ PresidentialFundsMap.prototype.init = function() {
   this.yearControl.addEventListener(
     'change',
     this.handleElectionYearChange.bind(this)
+  );
+
+  // Init the map type listener
+  this.mapTypeControl = this.element.querySelector(selector_mapTypeControl);
+  this.mapTypeControl.addEventListener(
+    'change',
+    this.handleMapTypeChange.bind(this)
   );
 
   this.element.addEventListener(
@@ -248,6 +260,10 @@ PresidentialFundsMap.prototype.init = function() {
   this.element
     .querySelector(selector_exportRaisingButton)
     .addEventListener('click', this.handleExportRaisingClick.bind(this));
+
+  this.element
+    .querySelector(selector_toggleRaisingExports)
+    .addEventListener('click', this.handleToggleRaisingExports.bind(this));
 
   // Initialize the various queries
   this.baseCandidateQuery = { office: 'P' }; // Calls for candidate details
@@ -1059,6 +1075,20 @@ PresidentialFundsMap.prototype.handleElectionYearChange = function(e) {
 };
 
 /**
+ * TODO -
+ */
+PresidentialFundsMap.prototype.handleMapTypeChange = function(e) {
+  console.log('handleMapTypeChange() e: ', e);
+  console.log('  this.map: ', this.map);
+  let theMapElement = false;
+  if (this.map.setAttribute) theMapElement = this.map;
+  else if (this.map.elm.setAttribute) theMapElement = this.map.elm;
+
+  if (theMapElement)
+    theMapElement.setAttribute('data-map_type', e.target.value);
+};
+
+/**
  * Triggered when the user clicks a state inside the map and the event bubbles up to here
  * Calls for loadCandidatesList
  * @param {CustomEvent} e
@@ -1076,6 +1106,7 @@ PresidentialFundsMap.prototype.handleStateClick = function(e) {
   // TODO: tell the map to focus on the state? Maybe it should handle it internally?
   // Simply clicking a state shouldn't change that state's color or value
 
+  this.map.zoomToState(this.current_electionState);
   this.toggleUSOrStateDisplay();
 };
 
@@ -1166,50 +1197,77 @@ PresidentialFundsMap.prototype.refreshOverlay = function() {
  * Triggered when the user clicks to export the raising data
  * @param {MouseEvent} e
  */
+PresidentialFundsMap.prototype.openDownloads = function() {
+  let instance = this;
+  $(instance.downloadsLinksWrapper).animate(
+    {
+      height: $(instance.downloadsLinksWrapper).get(0).scrollHeight
+    },
+    1000,
+    function() {
+      $(this).height('auto');
+    }
+  );
+  $(instance.toggleRaisingExports).toggleClass('button--close', true);
+};
+
 PresidentialFundsMap.prototype.handleExportRaisingClick = function(e) {
   console.log('handleExportRaisingClick(): ', e);
   e.preventDefault();
+
+  var windowScroll = window.scrollY,
+    downloadsScrollPosition =
+      this.downloadsWrapper.getBoundingClientRect().top + windowScroll,
+    downloadsHeight = this.downloadsWrapper.offsetHeight,
+    windowHeight = window.innerHeight;
+  //if downloadsWrapper is alrady in view, show it
+  if (windowScroll > downloadsScrollPosition + downloadsHeight - windowHeight) {
+    this.openDownloads();
+  }
+  //if downloadsWrapper is not alrady in view, scroll to it
+  else {
+    this.downloadsWrapper.scrollIntoView({
+      behavior: 'smooth',
+      block: 'center',
+      inline: 'nearest'
+    });
+  }
+  // Wait until the downloadsWrapper is in view before opening
+  //'this' refers to the main protoype here
   let instance = this;
-
-  /* Robert: Does it matter if this a const or a named function?
-  eg: function openDownloads() VS. const openDownloads = function()
-  */
-
-  const openDownloads = function() {
-    console.log('callback');
-
-    $(instance.downloadsWrapper).animate(
-      {
-        height: $(instance.downloadsWrapper).get(0).scrollHeight
-      },
-      1000,
-      function() {
-        $(this).height('auto');
-      }
-    );
-  };
-
-  // Wait until the export area is in view before opening
   window.onscroll = function() {
-    var wS = this.scrollY,
-      hT = instance.downloadsWrapper.getBoundingClientRect().top + wS,
-      hH = instance.downloadsWrapper.offsetHeight,
-      wH = window.innerHeight;
-    if (wS > hT + hH - wH) {
-      openDownloads();
+    //'this' is window inside the context of this function
+    let theWindow = this;
+    var windowScrollNow = theWindow.scrollY;
+    if (
+      windowScrollNow >
+      downloadsScrollPosition + downloadsHeight - windowHeight
+    ) {
+      {
+        instance.openDownloads();
+        window.onscroll = null; // remove listener
+      }
     }
   };
-  //scroll to export area
-  this.downloadsWrapper.scrollIntoView({
-    behavior: 'smooth',
-    block: 'center',
-    inline: 'nearest'
-  });
-
   // TODO-done: show {selector_downloadsWrapper}
   // TODO-done: animate the page scroll to the downloads section
-  // TODO then: Hide {selector_downloadsWrapper} when we're no longer interested in the raising downloads
+  // TODO done  -then: Hide {selector_downloadsLinksWrapper} when we're no longer interested in the raising downloads
 };
+
+PresidentialFundsMap.prototype.handleToggleRaisingExports = function(e) {
+  console.log('handleToggleRaisingExports(): ', e);
+  e.preventDefault();
+
+  //toggle export area
+  if (this.downloadsLinksWrapper.style.height > '0px') {
+       this.toggleRaisingExports.classList.toggle('button--close', false);
+       this.downloadsLinksWrapper.style.height = 0;
+  } else {
+      this.toggleRaisingExports.classList.toggle('button--close', true);
+      this.downloadsLinksWrapper.style.height = 'auto';
+  }
+};
+// TODO-better styling on exports area
 
 /**
  * Triggered any time a user asks to reset the app (i.e. return to "Nationwide: All candidates")
@@ -1255,7 +1313,7 @@ PresidentialFundsMap.prototype.toggleUSOrStateDisplay = function() {
     selector_summariesHolder
   ).style.display = nationalDisplay;
   this.element.querySelector(
-    selector_mapStyleControl
+    selector_mapTypeControl
   ).style.display = nationalDisplay;
 
   // Show for only state view:
@@ -1263,8 +1321,20 @@ PresidentialFundsMap.prototype.toggleUSOrStateDisplay = function() {
     selector_exportStateData
   ).style.display = stateDisplay;
 
-  // If we're resetting anything, close the downloads section
-  this.element.querySelector(selector_exportStateData).style.display = 'none';
+  // Show for only US view:
+  this.element.querySelector(
+    selector_downloadsWrapper
+  ).style.display = nationalDisplay;
+
+  // Only close all-state download area if switching to state view. Leave as-is (open or closed) when clicking reset in national view.
+  //Or do we want to just hide/show  as user switches between views, bur perisit its state --(open or closed)?
+  if (stateDisplay == 'block') {
+    console.log('STATE DISPLAY');
+    this.element.querySelector(selector_downloadsLinksWrapper).style.height = 0;
+    this.element
+      .querySelector(selector_toggleRaisingExports)
+      .classList.toggle('button--close', false);
+  }
 };
 
 /**

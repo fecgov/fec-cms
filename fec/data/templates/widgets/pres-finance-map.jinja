@@ -11,17 +11,17 @@
       <div id="filter-map-type" class="filters is-open">
         <fieldset class="filter toggles js-filter js-map-switcher" style="border: none;">
           <legend class="label t-inline-block">View as:</legend>
-          <label class="toggle" for="switcher-map-type-bubbles">
-            <input type="radio" class="toggle" value="bubbles" id="switcher-map-type-bubbles" name="map-type-selector" aria-controls="bubbles-message" tabindex="0" checked><span class="button--alt">Bubbles</span>
-          </label>
           <label class="toggle" for="switcher-map-type-gradient">
-            <input type="radio" class="toggle" value="gradient" id="switcher-map-type-gradient" name="map-type-selector" aria-controls="gradient-message" tabindex="0"><span class="button--alt">Gradient</span>
+            <input type="radio" class="toggle" value="gradient" id="switcher-map-type-gradient" name="map-type-selector" aria-controls="gradient-message" tabindex="0" checked><span class="button--alt">Gradient</span>
+          </label>
+          <label class="toggle" for="switcher-map-type-bubbles">
+            <input type="radio" class="toggle" value="bubble" id="switcher-map-type-bubbles" name="map-type-selector" aria-controls="bubbles-message" tabindex="0"><span class="button--alt">Bubbles</span>
           </label>
         </fieldset>
       </div>
       <div class="TODO-buttons-holder">
         <a class="button--cta button--export js-export-report-summary">Export report summary data</a>
-        <button class="button--alt js-methodology">Methodology</button>
+        <button class="button--alt js-methodology" data-a11y-dialog-show="gov-fec-pres-finance-modal">Methodology</button>
       </div>
     </div>
     <div class="candidate-list-wrapper">
@@ -59,28 +59,28 @@
           <svg></svg>
         </div>
       </div>
-      <div class="election-map"></div>
+      <div class="election-map" data-map_type=""></div>
     </div>
     <div class="right-column-wrapper">
       <a class="button--cta button--export js-export-state-data" href="">Export ST raising data</a>
-      <ul id="financial-summaries" class="js-accordion" data-content-prefix="first">
+      <ul id="financial-summaries" class="js-accordion" data-content-prefix="first" data-open-first="true">
         <li>
-          <button class="accordion__button">Summary</button>
-          <h5 class="js-cand-name-par-a">NAME, CANDIDATE [PAR]</h5>
-          <div class="js-coverage-date">coverage date</div>
+          <button class="accordion__button js-accordion-trigger">Summary</button>
           <div class="accordion__content">
-            <table class="simple-table">
-              <tbody>
-                <tr><td class="simple-table__cell">Receipts</td><td class="t-right-aligned t-mono" data-sum-id="net_receipts">$000</td></tr>
-                <tr><td>Disbursements</td><td class="t-right-aligned t-mono" data-sum-id="disbursements_less_offsets">$000</td></tr>
-                <tr><td>Cash-on-hand</td><td class="t-right-aligned t-mono" data-sum-id="cash_on_hand_end">CHECK THIS $000</td></tr>
-                <tr><td>Debts owed by committee</td><td class="t-right-aligned t-mono" data-sum-id="debts_owed_by_committee">$000</td></tr>
-              </tbody>
-            </table>
+            <h5 class="js-cand-name-par-a">NAME, CANDIDATE [PAR]</h5>
+            <div class="js-coverage-date">coverage date</div>          
+              <table>
+                <tbody>
+                  <tr><td>Receipts</td><td class="t-right-aligned t-mono" data-sum-id="net_receipts">$000</td></tr>
+                  <tr><td>Disbursements</td><td class="t-right-aligned t-mono" data-sum-id="disbursements_less_offsets">$000</td></tr>
+                  <tr><td>Cash-on-hand</td><td class="t-right-aligned t-mono" data-sum-id="cash_on_hand_end">CHECK THIS $000</td></tr>
+                  <tr><td>Debts owed by committee</td><td class="t-right-aligned t-mono" data-sum-id="debts_owed_by_committee">$000</td></tr>
+                </tbody>
+              </table>
           </div>
         </li>
         <li>
-          <button class="accordion__button">Raising</button>
+          <button class="accordion__button js-accordion-trigger">Raising</button>
           <div class="accordion__content">
             <h5 class="js-cand-name-par-a">NAME, CANDIDATE [PAR]</h5>
             <div class="js-coverage-date">coverage date</div>
@@ -105,7 +105,7 @@
           </div>
         </li>
         <li>
-          <button class="accordion__button">Spending</button>
+          <button class="accordion__button js-accordion-trigger">Spending</button>
           <div class="accordion__content">
             <h5 class="js-cand-name-par-a">NAME, CANDIDATE [PAR]</h5>
             <div class="js-coverage-date">coverage date</div>
@@ -131,17 +131,30 @@
     </div>
     <div id="downloads-wrapper">
       <header class="heading--main content__section--extra">
-        <h2>
+         <h2>
          Export raising data
-        </h2>
+         <button class="button--open js-toggle-riasing-exports u-float-right"><span class="u-visually-hidden">Toggle raising-data downloads area</span></button> 
+        </h2> 
       </header>
-      <div class="u-margin--bottom"><a href="" data-stateID="ALL">All states</a></div>
-      <div class=downloads-links>
-        {% for value in constants.states_excl_territories %}
-           <a href="" data-stateID="{{ value }}">{{ value }}</a>
-        {% endfor %}
-        <a href="" data-stateID="OTHER">Other</a>
-      </div>
+        <div id="downloads-links-wrapper">
+        <div class="u-margin--bottom"><a href="" data-stateID="ALL">All states</a></div>
+        <div class=downloads-links>
+          {% for value in constants.states_excl_territories %}
+             <a href="" data-stateID="{{ value }}">{{ value }}</a>
+          {% endfor %}
+          <a href="" data-stateID="OTHER">Other</a>
+        </div>
+       </div>
+    </div>
+    <div class="js-modal modal" id="gov-fec-pres-finance-modal" aria-hidden="true">
+        <div tabindex="-1" class="modal__overlay" data-a11y-dialog-hide=""></div>
+        <div role="dialog" class="modal__content" aria-labelledby="gov-fec-pres-finance-modal-title">
+            <div role="document">
+                <button type="button" class="modal__close button--close--primary" data-a11y-dialog-hide="" title="Close this dialog window"></button>
+                <h2 id="gov-fec-pres-finance-modal-title">Methodology Overview</h2>
+                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+            </div>
+        </div>
     </div>
 </div>
 <script defer src="{{ asset_for_js('widgets/pres-finance-map-box.js') }}" data-standalone="true"></script>
