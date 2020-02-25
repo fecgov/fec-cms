@@ -564,6 +564,7 @@
 }
 .button--open {
   @include u-icon-bg($plus-circle, $primary);
+  /*background-color: $gray-lightest;*/
   background-size: u(2rem);
   background-position: 95% 50%;
   border-bottom: 1px solid $base;

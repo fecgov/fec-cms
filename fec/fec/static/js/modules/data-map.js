@@ -522,12 +522,12 @@ function calculateStateFill(
 }
 
 /**
- * 
- * @param {Number} value 
- * @param {Array} valueRange 
- * @param {int} quantiles 
- * @param {Array} circleSizeRange 
- * @param {Boolean} hasLegend 
+ *
+ * @param {Number} value
+ * @param {Array} valueRange
+ * @param {int} quantiles
+ * @param {Array} circleSizeRange
+ * @param {Boolean} hasLegend
  */
 function calculateCircleSize(
   value,

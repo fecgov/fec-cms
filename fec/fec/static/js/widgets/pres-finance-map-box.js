@@ -1199,6 +1199,7 @@ PresidentialFundsMap.prototype.refreshOverlay = function() {
  */
 PresidentialFundsMap.prototype.openDownloads = function() {
   let instance = this;
+  instance.downloadsWrapper.style.height = 'auto';
   $(instance.downloadsLinksWrapper).animate(
     {
       height: $(instance.downloadsLinksWrapper).get(0).scrollHeight
@@ -1220,19 +1221,15 @@ PresidentialFundsMap.prototype.handleExportRaisingClick = function(e) {
       this.downloadsWrapper.getBoundingClientRect().top + windowScroll,
     downloadsHeight = this.downloadsWrapper.offsetHeight,
     windowHeight = window.innerHeight;
-  //if downloadsWrapper is alrady in view, show it
-  if (windowScroll > downloadsScrollPosition + downloadsHeight - windowHeight) {
-    this.openDownloads();
-  }
-  //if downloadsWrapper is not alrady in view, scroll to it
-  else {
-    this.downloadsWrapper.scrollIntoView({
-      behavior: 'smooth',
-      block: 'center',
-      inline: 'nearest'
-    });
-  }
-  // Wait until the downloadsWrapper is in view before opening
+
+  //scroll to downloadsWrapper
+  this.downloadsWrapper.scrollIntoView({
+    behavior: 'smooth',
+    block: 'center',
+    inline: 'nearest'
+  });
+  // }
+  // Wait until the downloadsWrapper is in view before opening (if not already open)
   //'this' refers to the main protoype here
   let instance = this;
   window.onscroll = function() {
@@ -1260,11 +1257,11 @@ PresidentialFundsMap.prototype.handleToggleRaisingExports = function(e) {
 
   //toggle export area
   if (this.downloadsLinksWrapper.style.height > '0px') {
-       this.toggleRaisingExports.classList.toggle('button--close', false);
-       this.downloadsLinksWrapper.style.height = 0;
+    this.toggleRaisingExports.classList.toggle('button--close', false);
+    this.downloadsLinksWrapper.style.height = 0;
   } else {
-      this.toggleRaisingExports.classList.toggle('button--close', true);
-      this.downloadsLinksWrapper.style.height = 'auto';
+    this.toggleRaisingExports.classList.toggle('button--close', true);
+    this.downloadsLinksWrapper.style.height = 'auto';
   }
 };
 // TODO-better styling on exports area

@@ -555,11 +555,13 @@ $info-circle: 'data:image/svg+xml;charset=utf8, %3Csvg%20xmlns%3D%22http%3A%2F%2
     width: 50%;
     margin-left:25%;
     overflow: hidden;
+    height:0;
   }
 
   #downloads-links-wrapper {
     height: 0;
     overflow: hidden;
+
   }
 
   .downloads-links {
