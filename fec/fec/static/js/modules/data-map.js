@@ -393,8 +393,8 @@ DataMap.prototype.zoomToState = function(stateID) {
     let stateBBox = stateToFocus.node().getBBox();
     console.log('stateBBox: ', stateBBox);
     this.projection
-      .transition()
-      .duration(1000)
+      // .transition()
+      // .duration(1000)
       // .call(zoom.translate(translate).scale(scale).event);
       // .scale(450) // lower numbers make the map smaller
       .translate([stateBBox.x, stateBBox.y]);
@@ -536,15 +536,6 @@ function calculateCircleSize(
   quantiles,
   hasLegend = false
 ) {
-  console.log(
-    'calculateCircleSize()',
-    value,
-    valueRange,
-    sizeRange,
-    quantiles,
-    hasLegend
-  );
-
   let sizeToReturn = 0;
   // let legendValueTicks = legendQuantize_sizes.ticks(quantiles);
 
