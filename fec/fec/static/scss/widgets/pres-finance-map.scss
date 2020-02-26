@@ -261,8 +261,12 @@ $info-circle: 'data:image/svg+xml;charset=utf8, %3Csvg%20xmlns%3D%22http%3A%2F%2
       }
     }
 
-
+    .breadcrumb-nav {
+      padding: 0 7.5pt;
+      margin-bottom: 2rem;
+    }
   }
+  
   .map-details {
     display: flex;
     justify-content: space-between;
@@ -270,6 +274,7 @@ $info-circle: 'data:image/svg+xml;charset=utf8, %3Csvg%20xmlns%3D%22http%3A%2F%2
     .candidate-details {
       margin-bottom: 2rem;
       padding: 0 $fontSizeBase;
+      min-height: 9.6rem;
 
       h1 {
         font-family: $fontFamilySansSerif;
@@ -302,7 +307,7 @@ $info-circle: 'data:image/svg+xml;charset=utf8, %3Csvg%20xmlns%3D%22http%3A%2F%2
   }
   .right-column-wrapper {
     padding: 1rem;
-    text-align: right;
+    text-align: left;
     width: 100%;
 
     a, button {
@@ -310,11 +315,15 @@ $info-circle: 'data:image/svg+xml;charset=utf8, %3Csvg%20xmlns%3D%22http%3A%2F%2
     }
     
     .accordion__button { 
-    background-color: $colorTableTdBorder;
+      background-color: $colorTableTdBorder;
     }
 
     .accordion__content {
-    padding:0;
+      padding:0;
+
+      h5{
+        font-family: inherit;
+      }
     }  
   }
   #financial-summaries {
@@ -565,6 +574,7 @@ $info-circle: 'data:image/svg+xml;charset=utf8, %3Csvg%20xmlns%3D%22http%3A%2F%2
 
   #downloads-wrapper {
     width: 50%;
+    height: 0;
     margin-left:25%;
     overflow: hidden;
   }

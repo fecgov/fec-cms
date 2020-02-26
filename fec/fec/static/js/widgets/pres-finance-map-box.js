@@ -999,8 +999,8 @@ PresidentialFundsMap.prototype.updateBreadcrumbs = function(dataObj) {
       theSecondLabel += dataObj.candidateLastName;
     }
   }
-  theSecondItem.style.display = theSecondLabel != '' ? 'block' : 'none';
-  theSeparator.style.display = theSecondLabel != '' ? 'block' : 'none';
+  theSecondItem.style.display = theSecondLabel != '' ? 'inline-block' : 'none';
+  theSeparator.style.display = theSecondLabel != '' ? 'inline-block' : 'none';
   theSecondItem.innerHTML = theSecondLabel;
 };
 
@@ -1200,9 +1200,13 @@ PresidentialFundsMap.prototype.refreshOverlay = function() {
  */
 PresidentialFundsMap.prototype.openDownloads = function() {
   let instance = this;
-  $(instance.downloadsLinksWrapper).animate(
+  
+  //show downloads area on initial click (leave shown after that)
+  this.downloadsWrapper.style.height = 'auto';
+
+  $(this.downloadsLinksWrapper).animate(
     {
-      height: $(instance.downloadsLinksWrapper).get(0).scrollHeight
+      height: $(this.downloadsLinksWrapper).get(0).scrollHeight
     },
     1000,
     function() {
@@ -1216,32 +1220,25 @@ PresidentialFundsMap.prototype.handleExportRaisingClick = function(e) {
   console.log('handleExportRaisingClick(): ', e);
   e.preventDefault();
 
-  var windowScroll = window.scrollY,
-    downloadsScrollPosition =
-      this.downloadsWrapper.getBoundingClientRect().top + windowScroll,
-    downloadsHeight = this.downloadsWrapper.offsetHeight,
-    windowHeight = window.innerHeight;
-  //if downloadsWrapper is alrady in view, show it
-  if (windowScroll > downloadsScrollPosition + downloadsHeight - windowHeight) {
-    this.openDownloads();
-  }
-  //if downloadsWrapper is not alrady in view, scroll to it
-  else {
+  //scroll downloads area into view
     this.downloadsWrapper.scrollIntoView({
       behavior: 'smooth',
       block: 'center',
       inline: 'nearest'
     });
-  }
-  // Wait until the downloadsWrapper is in view before opening
-  //'this' refers to the main protoype here
+  // Wait until the downloadsWrapper is in view before opening (if not already open)  
   let instance = this;
+  //'this' refers to the main protoype here
   window.onscroll = function() {
     //'this' is window inside the context of this function
     let theWindow = this;
-    var windowScrollNow = theWindow.scrollY;
+    var windowScroll = theWindow.scrollY,
+    downloadsScrollPosition =
+      instance.downloadsWrapper.getBoundingClientRect().top + windowScroll,
+    downloadsHeight = instance.downloadsWrapper.offsetHeight,
+    windowHeight = window.innerHeight;
     if (
-      windowScrollNow >
+      windowScroll >
       downloadsScrollPosition + downloadsHeight - windowHeight
     ) {
       {
