@@ -229,6 +229,9 @@ $info-circle: 'data:image/svg+xml;charset=utf8, %3Csvg%20xmlns%3D%22http%3A%2F%2
       path {
         // fill: #fff;
         transition: fill 1s;
+        &.blur {
+          opacity: .5;
+        }
       }
       circle {
         opacity: 0;
@@ -237,14 +240,23 @@ $info-circle: 'data:image/svg+xml;charset=utf8, %3Csvg%20xmlns%3D%22http%3A%2F%2
       }
       &[data-map_type="bubble"] {
         path {
-          fill: $colorTableTdBorder;
-          transition: fill 1s;
           pointer-events: none;
+
+          &:not(.zoomed) {
+            fill: $colorTableTdBorder;
+            transition: fill 1s;
+          }
         }
+        
         circle {
           opacity: 1;
-          transition: .5s;
           pointer-events: initial;
+          z-index: 100;
+
+          &.blur {
+            opacity: 0;
+          }
+          transition: .5s;
         }
       }
     }
