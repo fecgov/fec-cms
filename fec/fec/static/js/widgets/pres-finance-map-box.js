@@ -999,8 +999,8 @@ PresidentialFundsMap.prototype.updateBreadcrumbs = function(dataObj) {
       theSecondLabel += dataObj.candidateLastName;
     }
   }
-  theSecondItem.style.display = theSecondLabel != '' ? 'block' : 'none';
-  theSeparator.style.display = theSecondLabel != '' ? 'block' : 'none';
+  theSecondItem.style.display = theSecondLabel != '' ? 'inline-block' : 'none';
+  theSeparator.style.display = theSecondLabel != '' ? 'inline-block' : 'none';
   theSecondItem.innerHTML = theSecondLabel;
 };
 
