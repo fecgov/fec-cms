@@ -29,8 +29,9 @@
 const d3 = require('d3');
 const chroma = require('chroma-js');
 const topojson = require('topojson');
-const states = require('../data/us-states-10m.json');
-const stateFeatures = topojson.feature(states, states.objects.states).features;
+const statesJSON = require('../data/us-states-10m.json');
+const stateFeatures = topojson.feature(statesJSON, statesJSON.objects.states)
+  .features;
 
 const fips = require('./fips');
 
@@ -62,6 +63,7 @@ function DataMap(elm, opts) {
   this.mapData; // saves results from init() and applyNewData(), formatted like {1: 123456789, 2: 6548, 4: 91835247} / {stateID: stateValue, stateID: stateValue}
   this.opts = Object.assign({}, defaultOpts, opts);
   this.eventAppID = this.opts.eventAppID;
+  this.focusedState = 'US';
 
   // Elements
   this.elm = elm;
@@ -71,9 +73,10 @@ function DataMap(elm, opts) {
   // d3 selections
   this.projection;
   this.path;
-  this.paths;
+  this.pathDataEnter;
   this.states_fills;
   this.states_circles;
+  this.states_fillsAndCircles;
 }
 
 /**
@@ -85,15 +88,14 @@ function DataMap(elm, opts) {
 DataMap.prototype.init = function() {
   let instance = this;
 
-  console.log('states: ', states);
+  console.log('statesJSON: ', statesJSON);
   console.log('stateFeatures: ', stateFeatures);
 
   // Initialize the D3 map
   // viewBox is necessary for responsive scaling
   // preserveAspectRatio tells the map how to scale
-  this.svg = d3
-    .select(this.elm)
-    .append('svg')
+  this.svg = d3.select(this.elm).append('svg');
+  this.svg
     .attr('viewBox', '30 50 353 225')
     .attr('preserveAspectRatio', 'xMidYMid meet');
 
@@ -144,16 +146,15 @@ DataMap.prototype.init = function() {
 
   // Create the states SVG, color them, initialize mouseover interactivity
   // (`selectAll()` will select elements if they exist, or will create them if they don't.)
-  this.paths = this.svg
+  this.pathDataEnter = this.svg
     .append('g')
     .selectAll('path')
     .data(stateFeatures)
     .enter();
 
-  this.states_fills = this.paths
+  let temp = this.pathDataEnter
     .append('path')
     .attr('fill', function(d) {
-      console.log('d: ', d);
       d.statePath = this; // Linking this state/path/fill to this element in the data
       return calculateStateFill(
         instance.getStateValue(d.id),
@@ -164,16 +165,19 @@ DataMap.prototype.init = function() {
         quantiles
       );
     })
-    .attr('data-state', function(d) {
+    .attr('data-state', d => {
       return fips.fipsByCode[d.id].STATE_NAME;
     })
-    .attr('data-stateID', function(d) {
+    .attr('data-stateID', d => {
       return fips.fipsByCode[d.id].STUSAB;
     })
-    .attr('class', 'shape')
+    .attr('class', d => {
+      return this.chooseStateClasses(d, 'shape');
+    })
     .attr('d', this.path);
+  this.states_fills = temp.selectAll('path');
 
-  this.states_circles = this.paths
+  temp = this.pathDataEnter
     .append('circle')
     .attr('cx', function(d) {
       let stateBounds = d3
@@ -205,11 +209,27 @@ DataMap.prototype.init = function() {
     .attr('data-stateID', function(d) {
       return fips.fipsByCode[d.id].STUSAB;
     })
+    .attr('class', d => {
+      return this.chooseStateClasses(d, 'circle');
+    })
     .attr('fill', function(d) {
       // console.log('calculating circle fill: ', d);
-      return '#e2ffff';
+      // TODO - handle this with css?
+      return '#b8e4e4';
     })
-    .attr('d', this.path);
+    .attr('stroke', function(d) {
+      // console.log('calculating circle fill: ', d);
+      // TODO - handle this with css?
+      return '#34908f';
+    });
+  // .attr('d', this.path);
+  this.states_circles = temp.selectAll('circle');
+
+  this.states_fillsAndCircles = this.svg.selectAll('path, circle')[0];
+
+  console.log('this.states_fills: ', this.states_fills);
+  console.log('this.states_circles: ', this.states_circles);
+  console.log('this.states_fillsAndCircles: ', this.states_fillsAndCircles);
 
   // If we're supposed to add a legend, let's do it
   if (this.opts.addLegend || typeof this.opts.addLegend === 'undefined') {
@@ -258,6 +278,7 @@ DataMap.prototype.handleDataRefresh = function(newData) {
  */
 DataMap.prototype.handleZoomReset = function() {
   // TODO: zoom out to the full US
+  this.zoomToState('US');
   // Show bubbles if they need to be shown
 };
 
@@ -268,6 +289,8 @@ DataMap.prototype.handleZoomReset = function() {
  * TODO: make init() and applyNewData() share more functionality
  */
 DataMap.prototype.applyNewData = function() {
+  console.log('applyNewData();');
+
   let instance = this;
 
   let results = instance.data['results'].reduce((acc, val) => {
@@ -299,9 +322,9 @@ DataMap.prototype.applyNewData = function() {
   // This bit is the big difference from init() }
   // because we're transitioning states' colors,
   // states we know already exist, have IDs, and may have mouseenter listeners, etc.
-  // this.svg
-  //   .selectAll('path')
-  this.states_fills
+  this.svg
+    .selectAll('path')
+    // this.states_fills
     .transition()
     .delay(function(d, i) {
       //
@@ -362,45 +385,46 @@ DataMap.prototype.applyNewData = function() {
  */
 DataMap.prototype.zoomToState = function(stateID) {
   console.log('zoomToState(): ', stateID);
-  console.log('this.svg: ', this.svg);
-  console.log('this.paths: ', this.paths);
-  console.log('this.states_fills: ', this.states_fills);
-  // for (var i = 0; i < this.states_fills.length; i++) {
-  //   console.log('fill ', i, ': ', this.states_fills[i]);
-  // }
-  let stateToFocus = this.svg.select(`.shape[data-stateID=${stateID}]`);
-  console.log('stateToFocus: ', stateToFocus);
-  // d3.transition()
-  //   .scale(500)
-  //   .translate([120, 50]);
+  this.focusedState = stateID;
 
-  // var zoom = d3.behavior
-  //   .zoom()
-  //   .translate([0, 0])
-  //   .scale(1)
-  //   .scaleExtent([1, 8])
-  //   .on('zoom', zoomed);
+  this.svg.selectAll('path').attr('class', d => {
+    return this.chooseStateClasses(d, 'shape');
+  });
+  this.svg.selectAll('circle').attr('class', d => {
+    return this.chooseStateClasses(d, 'circle');
+  });
+  // console.log('  this.svg: ', this.svg);
+  // console.log('  this.projection: ', this.projection);
+  // console.log('  this.path: ', this.path);
+  // console.log('  this.pathDataEnter: ', this.pathDataEnter);
+  // console.log('  this.states_fills: ', this.states_fills);
+  // console.log('  this.states_circles: ', this.states_circles);
+  // console.log('  this.states_fillsAndCircles: ', this.states_fillsAndCircles);
 
-  // var zoomed = function() {
-  //   g.style('stroke-width', 1.5 / d3.event.scale + 'px');
-  //   g.attr(
-  //     'transform',
-  //     'translate(' + d3.event.translate + ')scale(' + d3.event.scale + ')'
-  //   );
-  // };
+  // console.log('this.states_fillsAndCircles: ', this.states_fillsAndCircles);
+  // console.log('this.elm: ', this.elm);
+  // console.log('this.svg: ', this.svg);
 
-  if (stateToFocus) {
-    let stateBBox = stateToFocus.node().getBBox();
-    console.log('stateBBox: ', stateBBox);
-    this.projection
-      // .transition()
-      // .duration(1000)
-      // .call(zoom.translate(translate).scale(scale).event);
-      // .scale(450) // lower numbers make the map smaller
-      .translate([stateBBox.x, stateBBox.y]);
+  // // this.states_fillsAndCircles = this.svg.selectAll('path, circle');
+  // console.log('this.states_fillsAndCircles: ', this.states_fillsAndCircles);
 
-    return true;
-  } else return false;
+  // this.states_fillsAndCircles.forEach((d, i) => {
+  //   // console.log('d, i: ', d, i);
+  //   let theItem = d3.select(d);
+  //   if (stateID == 'US') {
+  //     theItem.classed('zoomed', false);
+  //     theItem.classed('blur', false);
+  //   } else if (
+  //     theItem.attr('data-stateID') == stateID &&
+  //     theItem.classed('shape')
+  //   ) {
+  //     theItem.classed('zoomed', true);
+  //     theItem.classed('blur', false);
+  //   } else {
+  //     theItem.classed('zoomed', false);
+  //     theItem.classed('blur', true);
+  //   }
+  // });
 };
 
 /**
@@ -522,12 +546,12 @@ function calculateStateFill(
 }
 
 /**
- * 
- * @param {Number} value 
- * @param {Array} valueRange 
- * @param {int} quantiles 
- * @param {Array} circleSizeRange 
- * @param {Boolean} hasLegend 
+ *
+ * @param {Number} value
+ * @param {Array} valueRange
+ * @param {int} quantiles
+ * @param {Array} circleSizeRange
+ * @param {Boolean} hasLegend
  */
 function calculateCircleSize(
   value,
@@ -545,8 +569,7 @@ function calculateCircleSize(
   } else if (!hasLegend) {
     // If we aren't using the legend we don't have to stick to its color stops
     // sizeToReturn = legendScale_sizes(value);
-    // TODO -
-    console.log('elif sizeToReturn: ', sizeToReturn);
+    // TODO - this
   } else {
     // How much is each step in the value range?
     let valueStepValue = (valueRange[1] - valueRange[0]) / quantiles;
@@ -565,7 +588,7 @@ function calculateCircleSize(
 
     // Let's change the default to the largest size because we're checking if each value is less than each legend block
     sizeToReturn = sizeRange[1];
-    console.log('el sizeToReturn: ', sizeToReturn);
+
     // For each block in the legend
     for (let i = 0; i < valueSteps.length; i++) {
       // If this block's value is greater than this state's value, that's the size we want
@@ -573,7 +596,6 @@ function calculateCircleSize(
         // so we'll grab the size for this block's value instead of the size for the state's value
         // (if this state falls into the second value, we'll use the second size)
         sizeToReturn = sizeSteps[i];
-        console.log('el for if sizeToReturn: ', sizeToReturn);
         break;
       }
       // Otherwise, check the next one
@@ -677,6 +699,22 @@ function buildStateTooltips(svg, path, instance) {
     tooltip.style('display', 'none');
   });
 }
+
+/**
+ *
+ */
+DataMap.prototype.chooseStateClasses = function(d, shapeType) {
+  console.log('chooseStateClasses(): ', d, shapeType);
+  let toReturn = shapeType;
+
+  if (
+    this.focusedState == fips.fipsByCode[d.id].STUSAB &&
+    shapeType != 'circle'
+  )
+    toReturn += ' zoomed';
+  else if (this.focusedState != 'US') toReturn += ' blur';
+  return toReturn;
+};
 
 /**
  * Controls the tooltip position and visibility, called on each state's mouseenter and mousemove

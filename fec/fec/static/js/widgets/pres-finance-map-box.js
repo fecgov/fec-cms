@@ -1100,7 +1100,8 @@ PresidentialFundsMap.prototype.handleStateClick = function(e) {
   this.current_electionState = e.detail.abbr;
   this.current_electionStateName = e.detail.name;
 
-  this.loadCandidatesList();
+  // TODO: turn this back on
+  // this.loadCandidatesList();
 
   // TODO: tell the breadcrumbs to update—or maybe that should be a different listener?
   // TODO: tell the map to focus on the state? Maybe it should handle it internally?
@@ -1300,6 +1301,8 @@ PresidentialFundsMap.prototype.handleResetClick = function(e) {
   this.updateBreadcrumbs(dataObj);
 
   this.toggleUSOrStateDisplay();
+
+  this.map.handleZoomReset();
 };
 
 /**
