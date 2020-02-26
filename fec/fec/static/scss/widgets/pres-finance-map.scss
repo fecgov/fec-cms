@@ -263,6 +263,7 @@ $info-circle: 'data:image/svg+xml;charset=utf8, %3Csvg%20xmlns%3D%22http%3A%2F%2
     .candidate-details {
       margin-bottom: 2rem;
       padding: 0 $fontSizeBase;
+      min-height: 9.6rem;
 
       h1 {
         font-family: $fontFamilySansSerif;
