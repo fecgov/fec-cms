@@ -21,7 +21,7 @@ _What should have happened?_
 
 _Is this the first time it's happened,_
 _an ongoing issue,_
-_seem to happen randomly, or_
+_seems to happen randomly, or_
 _some other frequency?_
 
 ### How to Reproduce
