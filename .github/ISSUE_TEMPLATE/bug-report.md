@@ -39,7 +39,8 @@ _Tell us everything you can about:_
 - _your device (e.g. laptop, tablet, phone),_
 - _its operating system (e.g. Windows, iOS, Android),_
 - _your browser (e.g. Chrome, Internet Explorer, Safari, "Internet"),_
-- _your screen or browser window size (for mobile is it portrait or landscape?)_
+- _your screen or browser window size (for mobile, is it portrait or landscape?),_
+- _your Internet connection (e.g. home, mobile, VPN),_
 
 ### Screenshots
 
