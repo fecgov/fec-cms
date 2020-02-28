@@ -1,4 +1,4 @@
-Django==1.11.27
+Django==2.2.10
 cfenv==0.5.2
 dj-database-url==0.4.2
 django-libsass==0.7
@@ -9,9 +9,8 @@ psycopg2==2.7.3.2
 requests==2.21.0
 slacker==0.8.6
 whitenoise==2.0.3
-wagtail==2.2.1
+wagtail==2.7
 # TODO: pin version
-django-audit-log
 Jinja2==2.10.1
 django_jinja==2.4.1
 CacheControl==0.11.5
@@ -34,7 +33,7 @@ beautifulsoup4==4.5.1
 django-storages==1.7.1
 boto3==1.7.21
 
-cg-django-uaa==1.3.0
+cg-django-uaa==2.0.0
 
 # Testing
 coverage==4.5.1

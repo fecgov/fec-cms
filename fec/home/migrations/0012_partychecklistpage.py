@@ -5,6 +5,7 @@ from django.db import migrations, models
 import wagtail.core.fields
 import wagtail.core.blocks
 import wagtail.images.blocks
+import django.db.models.deletion
 
 
 class Migration(migrations.Migration):
@@ -18,7 +19,7 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='PartyChecklistPage',
             fields=[
-                ('page_ptr', models.OneToOneField(primary_key=True, auto_created=True, to='wagtailcore.Page', serialize=False, parent_link=True)),
+                ('page_ptr', models.OneToOneField(primary_key=True, auto_created=True, to='wagtailcore.Page', serialize=False, parent_link=True, on_delete=django.db.models.deletion.SET_NULL)),
                 ('body', wagtail.core.fields.StreamField((('heading', wagtail.core.blocks.CharBlock(classname='full title')), ('paragraph', wagtail.core.blocks.RichTextBlock()), ('html', wagtail.core.blocks.RawHTMLBlock()), ('image', wagtail.images.blocks.ImageChooserBlock())), blank=True, null=True)),
             ],
             options={

@@ -1,7 +1,7 @@
 import sys
 from django.test import TestCase
 from django.conf import settings
-from django.core.urlresolvers import clear_url_caches
+from django.urls import clear_url_caches
 from importlib import reload, import_module
 
 
