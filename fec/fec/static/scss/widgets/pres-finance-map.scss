@@ -78,9 +78,20 @@ $info-circle: 'data:image/svg+xml;charset=utf8, %3Csvg%20xmlns%3D%22http%3A%2F%2
   position: relative;
   width: 100%;
 
+  // Overrides for the filters
   .filters {
     background: none;
     border: none;
+    width: 100%;
+    // display: flex;
+
+    .filter {
+      label {
+        float: left;
+        max-width: 33%;
+      }
+    }
+
   }
   .message, .message[aria-hidden="true"] {
     // .message, etc are copied from components/_messages.scss
@@ -118,7 +129,8 @@ $info-circle: 'data:image/svg+xml;charset=utf8, %3Csvg%20xmlns%3D%22http%3A%2F%2
   .candidate-list-wrapper {
     border-bottom: solid 2px $colorBorder;
     position: relative;
-    width: 100%;
+    width: 100%; //25%
+    order: 10;
 
     .remote-table-header {
       display: none; // We'll let JavaScript turn this on
@@ -237,6 +249,8 @@ $info-circle: 'data:image/svg+xml;charset=utf8, %3Csvg%20xmlns%3D%22http%3A%2F%2
         opacity: 0;
         transition: opacity .5s;
         pointer-events: none;
+        fill: rgb(144, 202, 202);
+        stroke: rgb(59, 149, 148);
       }
       &[data-map_type="bubble"] {
         path {
@@ -264,6 +278,12 @@ $info-circle: 'data:image/svg+xml;charset=utf8, %3Csvg%20xmlns%3D%22http%3A%2F%2
     .breadcrumb-nav {
       padding: 0 7.5pt;
       margin-bottom: 2rem;
+
+      &.view-us {
+        span {
+          display: none;
+        }
+      }
     }
   }
   
@@ -306,25 +326,36 @@ $info-circle: 'data:image/svg+xml;charset=utf8, %3Csvg%20xmlns%3D%22http%3A%2F%2
     }
   }
   .right-column-wrapper {
-    padding: 1rem;
+    padding: 0; // 1rem responsive
     text-align: left;
     width: 100%;
 
     a, button {
       margin: 0 0 1rem 0rem;
     }
-    
+   
     .accordion__button { 
       background-color: $colorTableTdBorder;
+      max-height: none;
+      margin-bottom: 0;
+
+      &[aria-expanded=true] + .accordion__content {
+        max-height: 1000px;
+        transition: max-height 5s;
+      }
+      &[aria-expanded=false] + .accordion__content {
+        max-height: 0px;
+        transition: max-height 5s;
+      }
     }
 
     .accordion__content {
-      padding:0;
+      padding: 0 1rem 2rem;
 
-      h5{
+      h5 {
         font-family: inherit;
       }
-    }  
+    }
   }
   #financial-summaries {
     table {
@@ -362,67 +393,30 @@ $info-circle: 'data:image/svg+xml;charset=utf8, %3Csvg%20xmlns%3D%22http%3A%2F%2
     display: flex;
     flex-wrap: wrap;
 
-    .controls-wrapper {
-      width: 100%;
-
-      .typeahead-filter {
-        display: inline-block;
-        float: left;
-        height: 36px;
-        margin-bottom: 2rem;
-        margin-right: 1rem;
-        max-width: none;
-        right: 0;
-        position: relative;
-
+    .filters {
+      .filter {
+        max-width: none; // override base
         label {
-          float: left;
-          height: 36px;
-          line-height: 36px;
-          margin-right: .5em;
-          position: relative;
-        }
-        .filter__typeahead {
-          float: left;
-          height: 36px;
-          width: 23rem;
-          position: relative;
-        }
-        .filter__instructions {
-          padding-left: 21rem;
-          position: absolute;
-          top: 36px;
-        }
-        #contribs-by-state-typeahead-error {
-          background-color: transparent;
-          line-height: 1.1em;
           max-width: none;
-          padding-left: 210px;
-          top: 55px;
         }
-        &.is-error {
-          #contribs-by-state-typeahead-error {
-            height: auto;
-          }
-        }
-      }
-
-      fieldset {
-        display: inline-block;
-        float: left;
-        
-        &:first-child {
-          margin-right: 7.5pt;
-        }
-      }
-
-      label {
-        display: inline-block;// 
       }
     }
+    #filter-year {
+      width: calc(33.3% - 1rem);//20rem;
+      order: 5; // responsive
+      margin-right: 1rem;
+    }
+    #filter-map-type {
+      width: calc(66.6% - 1rem);
+      padding-left: 1rem;
+      order: 10;
+      margin-left: 1rem;
+    }
+
     .candidate-list-wrapper {
       margin-right: 1rem;
       width: calc(33.33% - 1rem);
+      order: 15;
 
       .remote-table-header {
         margin-bottom: 0.5px; // Make sure the border is visible above the scrollbar below it
@@ -455,7 +449,7 @@ $info-circle: 'data:image/svg+xml;charset=utf8, %3Csvg%20xmlns%3D%22http%3A%2F%2
       }
     }
     .map-wrapper {
-      margin-top: 2.5rem;
+      // margin-top: 2.5rem;
       margin-left: 1rem;
       width: calc(66.66% - 1rem);
 
@@ -465,6 +459,20 @@ $info-circle: 'data:image/svg+xml;charset=utf8, %3Csvg%20xmlns%3D%22http%3A%2F%2
           min-height: 285px;
         }
       }
+    }
+    .export-methodology-buttons-holder {
+      padding-top: 1rem;
+      text-align: right;
+    }
+    .right-column-wrapper {
+      width: calc(50% - 1rem);
+      margin-left: 1rem;
+      order: 35;
+    }  
+    #downloads-wrapper {
+      width: calc(50% - 1rem);
+      margin-right: 1rem;
+      order: 30;
     }
     .map-details {
       .more-info-wrapper {    
@@ -477,6 +485,34 @@ $info-circle: 'data:image/svg+xml;charset=utf8, %3Csvg%20xmlns%3D%22http%3A%2F%2
   // Large sizes
   &.w-l {
     @extend .w-m;
+
+    #filter-year {
+      width: calc(30% - 1rem);//20rem;
+    }
+    #filter-map-type {
+      width: calc(25% - 1rem);
+      // order: 10;
+    }
+
+    .candidate-list-wrapper {
+      width: calc(30% - 1rem);
+      order: 20;
+    }
+    .right-column-wrapper {
+      width: calc(30% - 1rem);
+      order: 30;
+    }
+    .map-wrapper {
+      width: calc(40% - 1rem);
+      order: 25;
+    }
+    .export-methodology-buttons-holder {
+      width: calc(45% - 1rem);
+      order: 15;
+    }
+    #downloads-wrapper {
+      order: 35;
+    }
   }
 
   // Some overrides for table.table-display *, which was added because IE doesn't like Flex
@@ -546,37 +582,37 @@ $info-circle: 'data:image/svg+xml;charset=utf8, %3Csvg%20xmlns%3D%22http%3A%2F%2
   flex-direction: row;
   flex-wrap: wrap;
   
-  .TODO-SEPARATE-TOP-SECTION {
-    display: flex;
+  #filter-year {
+    width: 100%;//20rem;
+    order: 5; // responsive
+  }
+  #filter-map-type {
+    width: 100%;//22rem;
+    order: 15;
+  }
+  .export-methodology-buttons-holder {
+    margin-left: auto;
     width: 100%;
-
-    div#filter-year {
-      width: 20rem;
-    }
-    div#filter-map-type {
-      width: 22rem;
-    }
-    .TODO-buttons-holder {
-      margin-left: auto;
-    }
+    order: 25;
+    margin-bottom: 1rem;
   }
 
-  .candidate-list-wrapper {
-    width: 25%;
-  }
+
   .map-wrapper {
-    width: 50%;
+    width: 100%;//50%;
+    order: 20;
   }
   .right-column-wrapper {
-    width: 25%;
+    width: 100%;//25%;
+    order: 30;
   }
-  
 
   #downloads-wrapper {
-    width: 50%;
+    width: 100%;//50%;
     height: 0;
-    margin-left:25%;
+    margin-left: 0;//25%;
     overflow: hidden;
+    order: 35;
   }
 
   #downloads-links-wrapper {
@@ -601,6 +637,4 @@ $info-circle: 'data:image/svg+xml;charset=utf8, %3Csvg%20xmlns%3D%22http%3A%2F%2
           }
       }
   }
-
 }
-

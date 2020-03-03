@@ -40,7 +40,7 @@ const compactRules = [['B', 9], ['M', 6], ['K', 3], ['', 0]];
 let defaultOpts = {
   colorScale: ['#e2ffff', '#278887'],
   colorZero: '#ffffff',
-  circleSizeScale: [10, 40],
+  circleSizeScale: [5, 20], // Smallest and largest circle sizes
   quantiles: 4,
   eventAppID: ''
 };
@@ -156,8 +156,9 @@ DataMap.prototype.init = function() {
     .append('path')
     .attr('fill', function(d) {
       d.statePath = this; // Linking this state/path/fill to this element in the data
+      d.value = instance.getStateValue(d.id);
       return calculateStateFill(
-        instance.getStateValue(d.id),
+        d.value,
         legendScale_colors,
         legendQuantize_colors,
         instance.opts.colorZero,
@@ -195,8 +196,9 @@ DataMap.prototype.init = function() {
     })
     .attr('r', function(d) {
       // console.log('calculating radius: ', d);
+      d.value = instance.getStateValue(d.id); // TODO - COPY THIS TO applyNewData()?
       return calculateCircleSize(
-        instance.getStateValue(d.id),
+        d.value, // TODO - COPY THIS TO applyNewData()?
         [minValue, maxValue],
         instance.opts.circleSizeScale,
         quantiles,
@@ -212,18 +214,18 @@ DataMap.prototype.init = function() {
     .attr('class', d => {
       return this.chooseStateClasses(d, 'circle');
     })
-    .attr('fill', function(d) {
-      // console.log('calculating circle fill: ', d);
-      // TODO - handle this with css?
-      return '#b8e4e4';
-    })
-    .attr('stroke', function(d) {
-      // console.log('calculating circle fill: ', d);
-      // TODO - handle this with css?
-      return '#34908f';
-    });
+    .attr('d', this.path);
   // .attr('d', this.path);
   this.states_circles = temp.selectAll('circle');
+  // console.log('states_circles: ', this.states_circles);
+
+
+
+  this.svg.selectAll('circle').sort((a, b) => {
+    console.log('sort():', a, b);
+    console.log('  a.value, b.value: ', a.value, b.value);
+    d3.ascending(a.value, b.value);
+  });
 
   this.states_fillsAndCircles = this.svg.selectAll('path, circle')[0];
 
@@ -385,7 +387,7 @@ DataMap.prototype.applyNewData = function() {
  */
 DataMap.prototype.zoomToState = function(stateID) {
   console.log('zoomToState(): ', stateID);
-  this.focusedState = stateID;
+  // this.focusedState = stateID;
 
   this.svg.selectAll('path').attr('class', d => {
     return this.chooseStateClasses(d, 'shape');
@@ -642,7 +644,7 @@ function buildStateTooltips(svg, path, instance) {
     .on('mouseenter', function(d) {
       let thisValue = instance.getStateValue(d.id);
       if (thisValue && thisValue !== 0) {
-        this.parentNode.appendChild(this);
+        // this.parentNode.appendChild(this);
         let html = tooltipTemplate({
           name: fips.fipsByCode[d.id].STATE_NAME,
           total: '$' + Math.round(instance.getStateValue(d.id)).toLocaleString()
@@ -670,7 +672,6 @@ function buildStateTooltips(svg, path, instance) {
           detail: {
             abbr: fips.fipsByCode[d.id].STUSAB,
             name: fips.fipsByCode[d.id].STATE_NAME
-            // d3Obj: this
           },
           bubbles: true
         })
