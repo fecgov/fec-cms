@@ -805,7 +805,7 @@ PresidentialFundsMap.prototype.displayUpdatedData_candidates = function(
     }
     // Build each required row
     for (let i = 0; i < results.length; i++) {
-      let rowClasses = 'TODO-myRowClass';
+      let rowClasses = '';
       // If this row is for the currently-selected candidate, add the selected class (whatever it is)
       if (results[i].candidate_id == this.current_candidateID)
         rowClasses += ' selected';
