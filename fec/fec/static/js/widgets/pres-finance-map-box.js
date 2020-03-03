@@ -17,8 +17,8 @@
 // const breakpointToXS = 0; // retaining just in case
 const breakpointToSmall = 430;
 const breakpointToMedium = 675;
-const breakpointToLarge = 700;
-const breakpointToXL = 860;
+const breakpointToLarge = 900;
+const breakpointToXL = 1200;
 const availElectionYears = [2020, 2016]; // defaults to [0]
 const specialCandidateIDs = ['P00000001', 'P00000002', 'P00000003'];
 
@@ -999,9 +999,14 @@ PresidentialFundsMap.prototype.updateBreadcrumbs = function(dataObj) {
       theSecondLabel += dataObj.candidateLastName;
     }
   }
-  theSecondItem.style.display = theSecondLabel != '' ? 'inline-block' : 'none';
-  theSeparator.style.display = theSecondLabel != '' ? 'inline-block' : 'none';
   theSecondItem.innerHTML = theSecondLabel;
+  if (theSecondLabel == '') {
+    theHolder.classList.add('view-us');
+    theHolder.classList.remove('view-state');
+  } else {
+    theHolder.classList.remove('view-us');
+    theHolder.classList.add('view-state');
+  }
 };
 
 /**
@@ -1101,7 +1106,7 @@ PresidentialFundsMap.prototype.handleStateClick = function(e) {
   this.current_electionStateName = e.detail.name;
 
   // TODO: turn this back on
-  // this.loadCandidatesList();
+  this.loadCandidatesList();
 
   // TODO: tell the breadcrumbs to update—or maybe that should be a different listener?
   // TODO: tell the map to focus on the state? Maybe it should handle it internally?
@@ -1200,7 +1205,7 @@ PresidentialFundsMap.prototype.refreshOverlay = function() {
  */
 PresidentialFundsMap.prototype.openDownloads = function() {
   let instance = this;
-  
+
   //show downloads area on initial click (leave shown after that)
   this.downloadsWrapper.style.height = 'auto';
 
@@ -1221,22 +1226,22 @@ PresidentialFundsMap.prototype.handleExportRaisingClick = function(e) {
   e.preventDefault();
 
   //scroll downloads area into view
-    this.downloadsWrapper.scrollIntoView({
-      behavior: 'smooth',
-      block: 'center',
-      inline: 'nearest'
-    });
-  // Wait until the downloadsWrapper is in view before opening (if not already open)  
+  this.downloadsWrapper.scrollIntoView({
+    behavior: 'smooth',
+    block: 'center',
+    inline: 'nearest'
+  });
+  // Wait until the downloadsWrapper is in view before opening (if not already open)
   let instance = this;
   //'this' refers to the main protoype here
   window.onscroll = function() {
     //'this' is window inside the context of this function
     let theWindow = this;
-    var windowScroll = theWindow.scrollY,
-    downloadsScrollPosition =
-      instance.downloadsWrapper.getBoundingClientRect().top + windowScroll,
-    downloadsHeight = instance.downloadsWrapper.offsetHeight,
-    windowHeight = window.innerHeight;
+    let windowScroll = theWindow.scrollY,
+      downloadsScrollPosition =
+        instance.downloadsWrapper.getBoundingClientRect().top + windowScroll,
+      downloadsHeight = instance.downloadsWrapper.offsetHeight,
+      windowHeight = window.innerHeight;
     if (
       windowScroll >
       downloadsScrollPosition + downloadsHeight - windowHeight
@@ -1258,11 +1263,11 @@ PresidentialFundsMap.prototype.handleToggleRaisingExports = function(e) {
 
   //toggle export area
   if (this.downloadsLinksWrapper.style.height > '0px') {
-       this.toggleRaisingExports.classList.toggle('button--close', false);
-       this.downloadsLinksWrapper.style.height = 0;
+    this.toggleRaisingExports.classList.toggle('button--close', false);
+    this.downloadsLinksWrapper.style.height = 0;
   } else {
-      this.toggleRaisingExports.classList.toggle('button--close', true);
-      this.downloadsLinksWrapper.style.height = 'auto';
+    this.toggleRaisingExports.classList.toggle('button--close', true);
+    this.downloadsLinksWrapper.style.height = 'auto';
   }
 };
 // TODO-better styling on exports area
@@ -1312,9 +1317,8 @@ PresidentialFundsMap.prototype.toggleUSOrStateDisplay = function() {
   this.element.querySelector(
     selector_summariesHolder
   ).style.display = nationalDisplay;
-  this.element.querySelector(
-    selector_mapTypeControl
-  ).style.display = nationalDisplay;
+  this.element.querySelector(selector_mapTypeControl).style.display =
+    nationalDisplay == nationalDisplay; // 'block' ? 'flex' : nationalDisplay;
 
   // Show for only state view:
   this.element.querySelector(
@@ -1361,7 +1365,7 @@ PresidentialFundsMap.prototype.setLoadingState = function(newState) {
   //     .querySelector('#state-contribs-years')
   //     .setAttribute('disabled', true);
   //   // trigger resize:
-  //   this.handleResize();
+  this.handleResize();
   // }
 };
 
