@@ -218,7 +218,7 @@ $info-circle: 'data:image/svg+xml;charset=utf8, %3Csvg%20xmlns%3D%22http%3A%2F%2
       &:last-child {
         flex-grow: 1;
         flex-shrink: 1;
-        padding-right: #{$fontSizeBase * 2};
+        padding-right: $fontSizeBase;
       }
     }
   }
@@ -240,9 +240,10 @@ $info-circle: 'data:image/svg+xml;charset=utf8, %3Csvg%20xmlns%3D%22http%3A%2F%2
 
       path {
         // fill: #fff;
-        transition: fill 1s;
+        transition: fill 1s, opacity .5s;
         &.blur {
-          opacity: .5;
+          opacity: .33;
+          transition: opacity .5s;
         }
       }
       circle {
@@ -355,6 +356,11 @@ $info-circle: 'data:image/svg+xml;charset=utf8, %3Csvg%20xmlns%3D%22http%3A%2F%2
       h5 {
         font-family: inherit;
       }
+      td {
+        line-height: 1.33em;
+        padding: .5em;
+        vertical-align: top;
+      }
     }
   }
   #financial-summaries {
@@ -402,20 +408,21 @@ $info-circle: 'data:image/svg+xml;charset=utf8, %3Csvg%20xmlns%3D%22http%3A%2F%2
       }
     }
     #filter-year {
-      width: calc(33.3% - 1rem);//20rem;
+      width: calc(33.3% - .5rem);//20rem;
       order: 5; // responsive
-      margin-right: 1rem;
+      margin-right: .5rem;
     }
     #filter-map-type {
       width: calc(66.6% - 1rem);
       padding-left: 1rem;
       order: 10;
-      margin-left: 1rem;
+      margin-left: .5rem;
+      margin-right: .5rem;
     }
 
     .candidate-list-wrapper {
-      margin-right: 1rem;
-      width: calc(33.33% - 1rem);
+      margin-right: .5rem;
+      width: calc(33.33% - .5rem);
       order: 15;
 
       .remote-table-header {
@@ -432,14 +439,14 @@ $info-circle: 'data:image/svg+xml;charset=utf8, %3Csvg%20xmlns%3D%22http%3A%2F%2
       }
       td, th {
         &:nth-child(2) {
-          max-width: 90px;
+          max-width: 100px;
         }
       }
       tr {
 
         &.selected {
           background: $colorTableTdBorder;
-          border-left: 4px;
+          // border-left: thick;
           font-weight: $fontWeightBold;
           
         }
@@ -450,7 +457,8 @@ $info-circle: 'data:image/svg+xml;charset=utf8, %3Csvg%20xmlns%3D%22http%3A%2F%2
     }
     .map-wrapper {
       // margin-top: 2.5rem;
-      margin-left: 1rem;
+      margin-left: .5rem;
+      margin-right: .5rem;
       width: calc(66.66% - 1rem);
 
       .election-map {  
@@ -465,13 +473,13 @@ $info-circle: 'data:image/svg+xml;charset=utf8, %3Csvg%20xmlns%3D%22http%3A%2F%2
       text-align: right;
     }
     .right-column-wrapper {
-      width: calc(50% - 1rem);
-      margin-left: 1rem;
+      width: 50%;
+      // margin-left: 1rem;
       order: 35;
     }  
     #downloads-wrapper {
-      width: calc(50% - 1rem);
-      margin-right: 1rem;
+      width: calc(50% - .5rem);
+      margin-right: .5rem;
       order: 30;
     }
     .map-details {
@@ -487,27 +495,38 @@ $info-circle: 'data:image/svg+xml;charset=utf8, %3Csvg%20xmlns%3D%22http%3A%2F%2
     @extend .w-m;
 
     #filter-year {
-      width: calc(30% - 1rem);//20rem;
+      width: calc(25% - .5rem);//20rem;
+      margin-right: .5rem;
     }
     #filter-map-type {
       width: calc(25% - 1rem);
-      // order: 10;
+      margin-left: .5rem;
+      margin-right: .5rem;
     }
 
     .candidate-list-wrapper {
-      width: calc(30% - 1rem);
+      width: calc(25% - .5rem);
       order: 20;
     }
     .right-column-wrapper {
-      width: calc(30% - 1rem);
+      width: calc(28% - .5rem);
+      margin-left: .5rem;
       order: 30;
     }
     .map-wrapper {
-      width: calc(40% - 1rem);
+      width: calc(42% - 1rem);
       order: 25;
+
+      .election-map {  
+        svg {
+          min-width: 360px;
+          min-height: 230px;
+        }
+      }
     }
     .export-methodology-buttons-holder {
-      width: calc(45% - 1rem);
+      width: calc(45% - .5rem);
+      margin-left: .5rem;
       order: 15;
     }
     #downloads-wrapper {

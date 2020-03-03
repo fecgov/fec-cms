@@ -42,6 +42,7 @@ let defaultOpts = {
   colorZero: '#ffffff',
   circleSizeScale: [5, 20], // Smallest and largest circle sizes
   quantiles: 4,
+  viewBox: '30 50 353 225', // min-x, min-y, width, height
   eventAppID: ''
 };
 
@@ -55,6 +56,8 @@ let defaultOpts = {
  * @param {Array} opts.colorScale - list of hex color codes to use
  * @param {String} opts.colorZero - hex color code to use when no value is present
  * @param {Array} opts.circleSizeScale -
+ * @param {Array} opts.viewBox -
+ * @param {Array} opts.eventAppID -
  */
 function DataMap(elm, opts) {
   // console.log('new DataMap(): ', elm, opts);
@@ -219,8 +222,6 @@ DataMap.prototype.init = function() {
   this.states_circles = temp.selectAll('circle');
   // console.log('states_circles: ', this.states_circles);
 
-
-
   this.svg.selectAll('circle').sort((a, b) => {
     console.log('sort():', a, b);
     console.log('  a.value, b.value: ', a.value, b.value);
@@ -326,16 +327,17 @@ DataMap.prototype.applyNewData = function() {
   // states we know already exist, have IDs, and may have mouseenter listeners, etc.
   this.svg
     .selectAll('path')
-    // this.states_fills
     .transition()
     .delay(function(d, i) {
       //
-      if (!instance.getStateValue(d.id)) return 0;
+      d.value = instance.getStateValue(d.id);
+
+      if (!d.value) return 0;
       else return 20 * i;
     })
     .attr('fill', function(d) {
       return calculateStateFill(
-        instance.getStateValue(d.id),
+        d.value,
         legendScale_colors,
         legendQuantize_colors,
         instance.opts.colorZero,
@@ -344,16 +346,18 @@ DataMap.prototype.applyNewData = function() {
       );
     });
 
-  this.states_circles
+  this.svg
+    .selectAll('circle')
     .transition()
     .delay(function(d, i) {
-      if (!instance.getStateValue(d.id)) return 0;
+      d.value = instance.getStateValue(d.id);
+      if (!d.value) return 0;
       else return 20 * i;
     })
     .attr('r', function(d) {
       // console.log('calculating radius: ', d);
       return calculateCircleSize(
-        instance.getStateValue(d.id),
+        d.value,
         [minValue, maxValue],
         instance.opts.circleSizeScale,
         quantiles,
@@ -386,8 +390,8 @@ DataMap.prototype.applyNewData = function() {
  * @param {Event}
  */
 DataMap.prototype.zoomToState = function(stateID) {
-  console.log('zoomToState(): ', stateID);
-  // this.focusedState = stateID;
+  // console.log('zoomToState(): ', stateID);
+  this.focusedState = stateID;
 
   this.svg.selectAll('path').attr('class', d => {
     return this.chooseStateClasses(d, 'shape');
@@ -395,38 +399,6 @@ DataMap.prototype.zoomToState = function(stateID) {
   this.svg.selectAll('circle').attr('class', d => {
     return this.chooseStateClasses(d, 'circle');
   });
-  // console.log('  this.svg: ', this.svg);
-  // console.log('  this.projection: ', this.projection);
-  // console.log('  this.path: ', this.path);
-  // console.log('  this.pathDataEnter: ', this.pathDataEnter);
-  // console.log('  this.states_fills: ', this.states_fills);
-  // console.log('  this.states_circles: ', this.states_circles);
-  // console.log('  this.states_fillsAndCircles: ', this.states_fillsAndCircles);
-
-  // console.log('this.states_fillsAndCircles: ', this.states_fillsAndCircles);
-  // console.log('this.elm: ', this.elm);
-  // console.log('this.svg: ', this.svg);
-
-  // // this.states_fillsAndCircles = this.svg.selectAll('path, circle');
-  // console.log('this.states_fillsAndCircles: ', this.states_fillsAndCircles);
-
-  // this.states_fillsAndCircles.forEach((d, i) => {
-  //   // console.log('d, i: ', d, i);
-  //   let theItem = d3.select(d);
-  //   if (stateID == 'US') {
-  //     theItem.classed('zoomed', false);
-  //     theItem.classed('blur', false);
-  //   } else if (
-  //     theItem.attr('data-stateID') == stateID &&
-  //     theItem.classed('shape')
-  //   ) {
-  //     theItem.classed('zoomed', true);
-  //     theItem.classed('blur', false);
-  //   } else {
-  //     theItem.classed('zoomed', false);
-  //     theItem.classed('blur', true);
-  //   }
-  // });
 };
 
 /**
@@ -708,12 +680,15 @@ DataMap.prototype.chooseStateClasses = function(d, shapeType) {
   console.log('chooseStateClasses(): ', d, shapeType);
   let toReturn = shapeType;
 
+  console.log('  this.focusedState: ', this.focusedState);
+
   if (
     this.focusedState == fips.fipsByCode[d.id].STUSAB &&
     shapeType != 'circle'
   )
     toReturn += ' zoomed';
   else if (this.focusedState != 'US') toReturn += ' blur';
+
   return toReturn;
 };
 
