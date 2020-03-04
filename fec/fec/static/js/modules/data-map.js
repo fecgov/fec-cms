@@ -218,21 +218,11 @@ DataMap.prototype.init = function() {
       return this.chooseStateClasses(d, 'circle');
     })
     .attr('d', this.path);
-  // .attr('d', this.path);
   this.states_circles = temp.selectAll('circle');
-  // console.log('states_circles: ', this.states_circles);
 
-  this.svg.selectAll('circle').sort((a, b) => {
-    console.log('sort():', a, b);
-    console.log('  a.value, b.value: ', a.value, b.value);
-    d3.ascending(a.value, b.value);
-  });
+  this.sortCircles();
 
   this.states_fillsAndCircles = this.svg.selectAll('path, circle')[0];
-
-  console.log('this.states_fills: ', this.states_fills);
-  console.log('this.states_circles: ', this.states_circles);
-  console.log('this.states_fillsAndCircles: ', this.states_fillsAndCircles);
 
   // If we're supposed to add a legend, let's do it
   if (this.opts.addLegend || typeof this.opts.addLegend === 'undefined') {
@@ -365,6 +355,8 @@ DataMap.prototype.applyNewData = function() {
       );
     });
 
+  this.sortCircles();
+
   // The rest of applyNewData is back to the same code from init()
   if (this.legendSVG) {
     let theCurrentLegend = document.querySelector(
@@ -398,6 +390,15 @@ DataMap.prototype.zoomToState = function(stateID) {
   });
   this.svg.selectAll('circle').attr('class', d => {
     return this.chooseStateClasses(d, 'circle');
+  });
+};
+
+/**
+ *
+ */
+DataMap.prototype.sortCircles = function() {
+  this.svg.selectAll('circle').sort((a, b) => {
+    return d3.descending(a.value, b.value);
   });
 };
 
