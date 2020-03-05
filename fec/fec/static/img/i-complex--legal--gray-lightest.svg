@@ -13,7 +13,7 @@
                     <mask id="mask-2" fill="white">
                         <use xlink:href="#path-1"></use>
                     </mask>
-                    <use id="Mask" fill="#F1F1F1" xlink:href="#path-1"></use>
+                    <use id="Mask" stroke="#D6D7D9" stroke-width="2" stroke-opacity="50%" fill="#F1F1F1" xlink:href="#path-1"></use>
                     <g id="Group" mask="url(#mask-2)">
                         <g transform="translate(21.000000, 17.000000)">
                             <rect id="Rectangle-76-Copy-29" fill="#D6D7D9" x="0" y="0" width="83" height="90.5199966" rx="2"></rect>
