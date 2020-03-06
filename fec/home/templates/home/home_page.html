@@ -16,26 +16,13 @@
   </section>
 
   {% home_page_banner_announcement %}
-
+  
   <section class="slab">
-      <div class="container">
-     <ul class="grid grid--3-wide grid--flex">
-      <li class="grid__item grid__item--with-icon icon--large grid__icon--white text-centered">
-        <img src="{% static 'img/map-chart-icon.svg' %}" alt="icon representing Presidential candidate map">
-        <h2 class="u-margin--top"><a href="/data/candidates/president/presidential-map/">Presidential candidate map</a></h2>
-        <p>Search presidential data such as money raised, money spent, cash on hand and debt.</p>
-      </li>
-      <li class="grid__item grid__item--with-icon icon--large grid__icon--white text-centered">
-        <img src="{% static 'img/i-complex--regreport--gray-lightest.svg' %}" alt=" icon representing help for candidates and committees">
-        <h2 class="u-margin--top"><a href="/help-candidates-and-committees/">Help for candidates and committees</a></h2>
-        <p>Help for individuals and groups who are active in federal elections.</p>
-      </li>
-      <li class="grid__item grid__item--with-icon icon--large grid__icon--white text-centered">
-        <img src="{% static 'img/i-complex--legal--gray-lightest.svg' %}" alt="icon representing legal resources search">
-        <h2 class="u-margin--top"><a href="/legal-resources/">Research legal resources</a></h2>
-        <p>Explore relevant statutes, regulations, Commission actions and court cases.</p>
-      </li>
-    </ul>
+    <div class="container">
+      {% for block in self.body %}
+      {{block.value}}
+      {% endfor %}
+     
   </div>
     <ul class="container">
       <div class="heading--section heading--with-action">
