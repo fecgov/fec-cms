@@ -66,7 +66,7 @@ function DataMap(elm, opts) {
   this.mapData; // saves results from init() and applyNewData(), formatted like {1: 123456789, 2: 6548, 4: 91835247} / {stateID: stateValue, stateID: stateValue}
   this.opts = Object.assign({}, defaultOpts, opts);
   this.eventAppID = this.opts.eventAppID;
-  this.focusedState = 'US';
+  this.focusedStateID = 'US';
 
   // Elements
   this.elm = elm;
@@ -75,11 +75,11 @@ function DataMap(elm, opts) {
 
   // d3 selections
   this.projection;
-  this.path;
+  this.pathProjection;
   this.pathDataEnter;
-  this.states_fills;
-  this.states_circles;
-  this.states_fillsAndCircles;
+  // this.states_fills;
+  // this.states_circles;
+  // this.states_fillsAndCircles;
 }
 
 /**
@@ -103,14 +103,13 @@ DataMap.prototype.init = function() {
     .attr('preserveAspectRatio', 'xMidYMid meet');
 
   // Create the base-level state/country shapes
-  this.projection = d3.geo.albersUsa();
-
-  this.projection
+  this.projection = d3.geo
+    .albersUsa()
     .scale(450) // lower numbers make the map smaller
     .translate([220, 150]); // lower numbers move the map up and to the left
 
   // Create the path based on those base-level shapes
-  this.path = d3.geo.path().projection(this.projection);
+  this.pathProjection = d3.geo.path().projection(this.projection);
 
   /** Go through our data results and pair/merge them with the fips state codes {@see this.mapData} */
   let results = instance.data['results'].reduce((acc, val) => {
@@ -149,13 +148,14 @@ DataMap.prototype.init = function() {
 
   // Create the states SVG, color them, initialize mouseover interactivity
   // (`selectAll()` will select elements if they exist, or will create them if they don't.)
-  this.pathDataEnter = this.svg
-    .append('g')
+  this.g = this.svg.append('g');
+
+  this.pathDataEnter = this.g
     .selectAll('path')
     .data(stateFeatures)
     .enter();
 
-  let temp = this.pathDataEnter
+  this.pathDataEnter
     .append('path')
     .attr('fill', function(d) {
       d.statePath = this; // Linking this state/path/fill to this element in the data
@@ -178,10 +178,9 @@ DataMap.prototype.init = function() {
     .attr('class', d => {
       return this.chooseStateClasses(d, 'shape');
     })
-    .attr('d', this.path);
-  this.states_fills = temp.selectAll('path');
+    .attr('d', this.pathProjection);
 
-  temp = this.pathDataEnter
+  this.pathDataEnter
     .append('circle')
     .attr('cx', function(d) {
       let stateBounds = d3
@@ -217,12 +216,12 @@ DataMap.prototype.init = function() {
     .attr('class', d => {
       return this.chooseStateClasses(d, 'circle');
     })
-    .attr('d', this.path);
-  this.states_circles = temp.selectAll('circle');
+    .attr('d', this.pathProjection);
+  // this.states_circles = temp.selectAll('circle');
 
   this.sortCircles();
 
-  this.states_fillsAndCircles = this.svg.selectAll('path, circle')[0];
+  // this.states_fillsAndCircles = this.svg.selectAll('path, circle')[0];
 
   // If we're supposed to add a legend, let's do it
   if (this.opts.addLegend || typeof this.opts.addLegend === 'undefined') {
@@ -237,7 +236,7 @@ DataMap.prototype.init = function() {
 
   // If we're supposed to add tooltips, let's do that, too
   if (this.opts.addTooltips) {
-    buildStateTooltips(this.svg, this.path, this);
+    buildStateTooltips(this.svg, this.pathProjection, this);
   }
 };
 
@@ -381,16 +380,66 @@ DataMap.prototype.applyNewData = function() {
  *
  * @param {Event}
  */
-DataMap.prototype.zoomToState = function(stateID) {
-  // console.log('zoomToState(): ', stateID);
-  this.focusedState = stateID;
+DataMap.prototype.zoomToState = function(stateID, d) {
+  console.log('zoomToState(): ', stateID);
 
+  // Save the ID
+  this.focusedStateID = stateID;
+
+  // Assign classes to paths and circles
   this.svg.selectAll('path').attr('class', d => {
     return this.chooseStateClasses(d, 'shape');
   });
   this.svg.selectAll('circle').attr('class', d => {
     return this.chooseStateClasses(d, 'circle');
   });
+
+  // If we're zooming out,
+  if (this.focusedStateID == 'US') {
+    this.g
+      .transition()
+      .duration(750)
+      .attr('transform', '');
+  } else {
+    let featuredStatePath = this.svg.select('path.zoomed');
+    console.log('featuredStatePath: ' + featuredStatePath);
+
+    let featuredStateFeature = d3.select(featuredStatePath);
+    console.log('featuredStateFeature: ' + featuredStateFeature);
+
+    let width = 706;
+    let height = 450;
+    let bounds = this.pathProjection.bounds(d),
+      dx = bounds[1][0] - bounds[0][0],
+      dy = bounds[1][1] - bounds[0][1],
+      x = (bounds[0][0] + bounds[1][0]);// / 2,
+      y = (bounds[0][1] + bounds[1][1]);// / 2;
+
+    // x += 15;
+    // y += 25;
+    // .attr('viewBox', '30 50 353 225')
+    
+    let scale = 0.9 / Math.max(dx / width, dy / height);
+    // scale -= 10;
+
+    let translate = [width / 2 - scale * x, height / 2 - scale * y];
+  
+    console.log('  width: ', width);
+    console.log('  height: ', height);
+    console.log('  bounds: ', bounds);
+    console.log('  dx: ', dx);
+    console.log('  dy: ', dy);
+    console.log('  x: ', x);
+    console.log('  y: ', y);
+    console.log('  scale: ', scale);
+    console.log('  translate: ', translate);
+  
+    this.g
+      .transition()
+      .duration(750)
+      .attr('transform', 'translate(' + translate + ')scale(' + scale + ')');
+
+  }
 };
 
 /**
@@ -644,7 +693,8 @@ function buildStateTooltips(svg, path, instance) {
         new CustomEvent('STATE_CLICKED', {
           detail: {
             abbr: fips.fipsByCode[d.id].STUSAB,
-            name: fips.fipsByCode[d.id].STATE_NAME
+            name: fips.fipsByCode[d.id].STATE_NAME,
+            d: d
           },
           bubbles: true
         })
@@ -678,17 +728,14 @@ function buildStateTooltips(svg, path, instance) {
  *
  */
 DataMap.prototype.chooseStateClasses = function(d, shapeType) {
-  console.log('chooseStateClasses(): ', d, shapeType);
   let toReturn = shapeType;
 
-  console.log('  this.focusedState: ', this.focusedState);
-
   if (
-    this.focusedState == fips.fipsByCode[d.id].STUSAB &&
+    this.focusedStateID == fips.fipsByCode[d.id].STUSAB &&
     shapeType != 'circle'
   )
     toReturn += ' zoomed';
-  else if (this.focusedState != 'US') toReturn += ' blur';
+  else if (this.focusedStateID != 'US') toReturn += ' blur';
 
   return toReturn;
 };

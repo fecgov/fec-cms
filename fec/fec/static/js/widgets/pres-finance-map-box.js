@@ -1102,18 +1102,24 @@ PresidentialFundsMap.prototype.handleStateClick = function(e) {
   console.log('A STATE WAS CLICKED! ', e);
   e.stopImmediatePropagation(); // Keep it from bubbling outside of this app
 
-  this.current_electionState = e.detail.abbr;
-  this.current_electionStateName = e.detail.name;
+  if (this.current_electionState == e.detail.abbr) {
+    // The user has clicked the state we're already viewing, so let's do a reset
+    this.handleResetClick();
 
-  // TODO: turn this back on
-  this.loadCandidatesList();
+  } else {
+    this.current_electionState = e.detail.abbr;
+    this.current_electionStateName = e.detail.name;
 
-  // TODO: tell the breadcrumbs to update—or maybe that should be a different listener?
-  // TODO: tell the map to focus on the state? Maybe it should handle it internally?
-  // Simply clicking a state shouldn't change that state's color or value
+    // TODO: turn this back on
+    this.loadCandidatesList();
 
-  this.map.zoomToState(this.current_electionState);
-  this.toggleUSOrStateDisplay();
+    // TODO: tell the breadcrumbs to update—or maybe that should be a different listener?
+    // TODO: tell the map to focus on the state? Maybe it should handle it internally?
+    // Simply clicking a state shouldn't change that state's color or value
+
+    this.map.zoomToState(this.current_electionState, e.detail.d);
+    this.toggleUSOrStateDisplay();
+  }
 };
 
 /**
@@ -1317,8 +1323,9 @@ PresidentialFundsMap.prototype.toggleUSOrStateDisplay = function() {
   this.element.querySelector(
     selector_summariesHolder
   ).style.display = nationalDisplay;
-  this.element.querySelector(selector_mapTypeControl).style.display =
-    nationalDisplay == nationalDisplay; // 'block' ? 'flex' : nationalDisplay;
+  this.element.querySelector(
+    selector_mapTypeControl
+  ).style.display = nationalDisplay;
 
   // Show for only state view:
   this.element.querySelector(
