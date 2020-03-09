@@ -18,14 +18,16 @@
   {% home_page_banner_announcement %}
   
   <section class="slab">
-    <div class="container">
-      {% comment %} Below is for homepage featured icon+links in Wagtail html block only, for now {% endcomment %}
-      {% for block in self.body %}
-        {% if block.block_type == "html" %}
-          {{ block.value }}
-        {% endif %}
-      {% endfor %}
-    </div>
+    {% comment %} 
+    Below is for featured icon+links in Wagtail html block only...for now. 
+    {% endcomment %}
+    {% for block in self.body %}
+      {% if block.block_type == "html" %}
+        <div class="container">
+         {{ block.value }}
+        </div>
+      {% endif %}
+    {% endfor %}
     <ul class="container">
       <div class="heading--section heading--with-action">
         <h2 class="heading__left">News and announcements</h2>
