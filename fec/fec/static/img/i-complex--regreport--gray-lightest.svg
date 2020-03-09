@@ -4,11 +4,10 @@
     <title>i-complex--regreport</title>
     <desc>Created with Sketch.</desc>
     <defs>
-        <ellipse id="path-1" cx="51.8352652" cy="51.9546774" rx="51.1906381" ry="51.1906381"></ellipse>
-
-         <clipPath id="clip-border">
-    <ellipse id="path-x" cx="51.8352652" cy="51.5" rx="50.5" ry="50.6"></ellipse>
-    </clipPath>
+      <ellipse id="path-1" cx="51.8352652" cy="51.9546774" rx="51.1906381" ry="51.1906381"></ellipse>
+      <clipPath id="clip-border">
+        <ellipse id="path-x" cx="51.8352652" cy="51.5" rx="50.5" ry="50.6"></ellipse>
+      </clipPath>
     </defs>
     <g id="CMS-Pages" stroke="none" stroke-width="1" fill="none" fill-rule="nonzero">
         <g id="Beta-Home-2-Copy-11" transform="translate(-340.000000, -524.000000)">

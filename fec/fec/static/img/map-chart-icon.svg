@@ -23,7 +23,7 @@
       <path d="M69,65.29a.73.73,0,0,1,.73.72V69a.73.73,0,0,1-.73.73H59.07a.73.73,0,0,1-.73-.73V66a.73.73,0,0,1,.73-.72Z" style="fill: none"/>
     </clipPath>
   </defs>
-  <title>Map_chart_iconQ</title>
+  <title>Map_chart_icon</title>
   <circle cx="52" cy="52" r="51" stroke="#EAEBEC" stroke-width="2" stroke-opacity="100%" style="fill: #f1f1f1"/>
   <g style="clip-path: url(#a)">
     <g style="clip-path: url(#b)">
