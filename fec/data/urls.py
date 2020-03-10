@@ -2,6 +2,7 @@ from django.conf.urls import url
 
 from data import views
 from data import views_datatables
+from fec import settings
 
 urlpatterns = [
     url(r'^data/$', views.landing),
@@ -15,7 +16,6 @@ urlpatterns = [
     url(r'^data/elections/$', views.elections_lookup),
     url(r'^data/raising-bythenumbers/$', views.raising),
     url(r'^data/spending-bythenumbers/$', views.spending),
-
 
     # Feedback Tool
     url(r'^data/issue/reaction/$', views.reactionFeedback),
@@ -47,3 +47,9 @@ urlpatterns = [
 
     url(r'^widgets/aggregate-totals/$', views.aggregate_totals),
 ]
+
+if settings.FEATURES.get('presidential_map'):
+    # Presidential Campaign Finance Map
+    urlpatterns.append(
+        url(r'^data/candidates/president/presidential-map/$', views.pres_finance_map)
+    )

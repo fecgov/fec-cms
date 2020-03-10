@@ -13,54 +13,34 @@ Below, you'll find questions to help us more quickly identify, prioritize, and t
 
 ### Summary
 
-_Briefly describe what happened._
+_What happened?_
 
-### Expected Behavior
-
-_What were you expecting to happen?_
-
-### Actual Behavior
-
-_What actually happened?_
+_What should have happened?_
 
 ### Frequency
 
-- [ ] This is the first time it's happened
-- [ ] This is an ongoing, predictable issue
-- [ ] It seems to be random
-- [ ] Other: …
+_Is this the first time it's happened,_
+_an ongoing issue,_
+_seems to happen randomly, or_
+_some other frequency?_
 
 ### How to Reproduce
 
-_List any steps you took for this issue to happen. Be sure to include the URL and what you clicked or entered._
+_List any steps you took for this issue to happen. Be sure to include the URL and what you clicked or entered. More details are better._
 URL: https://www.fec.gov/…
 
 1. …
 1. …
 
-### Browser
+### Device, browser, etc
 
-_Which version of which browser are you using? Does this issue occur with other browsers or with other browser sizes?_
+_Tell us everything you can about:_
 
-- [ ] Chrome, version: …
-- [ ] Firefox, version: …
-- [ ] Safari, version: …
-- [ ] Edge, version: …
-- [ ] Internet Explorer, version: …
-- [ ] Other: …
-
-### Device
-
-_Tell us what you can about your device and its operating system._
-
-- [ ] Laptop/desktop
-- [ ] Tablet
-- [ ] Phone
-
-Manufacturer: …
-Model: …
-Operating system: …
-Screen orientation: …
+- _your device (e.g. laptop, tablet, phone),_
+- _its operating system (e.g. Windows, iOS, Android),_
+- _your browser (e.g. Chrome, Internet Explorer, Safari, "Internet"),_
+- _your screen or browser window size (for mobile, is it portrait or landscape?),_
+- _your Internet connection (e.g. home, mobile, VPN),_
 
 ### Screenshots
 

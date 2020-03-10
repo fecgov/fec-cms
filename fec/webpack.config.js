@@ -141,7 +141,8 @@ module.exports = [
       'contributions-by-state':
         './fec/static/js/widgets/contributions-by-state.js',
       'contributions-by-state-box':
-        './fec/static/js/widgets/contributions-by-state-box.js'
+        './fec/static/js/widgets/contributions-by-state-box.js',
+      'pres-finance-map-box': './fec/static/js/widgets/pres-finance-map-box.js'
     },
     output: {
       filename: 'widgets/[name].js',

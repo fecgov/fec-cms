@@ -13,15 +13,11 @@ Below, you'll find questions to help us visualize your request.
 
 ### Summary
 
-_Briefly describe what you'd like to see changed._
-
-### Proposed Behavior / Feature
-
-_What were you expecting to happen?_
+_Briefly describe what you'd like to see changed and why._
 
 ### Current Situation
 
-_What actually happened?_
+_What happens now?_
 
 ### Use Case
 
