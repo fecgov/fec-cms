@@ -40,6 +40,10 @@
   &.commissioner-height {
     min-height: u(10rem);
   }
+  
+  &.text-centered {
+    text-align: center;
+  }
 }
 
 // homepage grid items
@@ -86,6 +90,22 @@
     padding: u(2rem);
     width: 100%;
     }
+
+    &.icon--large {
+      img {
+      height: u(20rem);
+      }
+
+      h2 {
+      width: 75%;
+      margin: 1rem auto;
+      }
+
+      p {
+      width: 85%;
+      margin: 1rem auto 2rem auto;
+      }
+    }
   }
 
 .grid__icon--deep-red {
@@ -97,6 +117,11 @@
 .grid__icon--navy {
   img {
     background-color: $navy;
+  }
+}
+  .grid__icon--white {
+  img {
+    background-color: $inverse;
   }
 }
 
