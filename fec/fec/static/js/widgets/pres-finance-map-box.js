@@ -182,8 +182,10 @@ function PresidentialFundsMap() {
   this.downloadsLinksWrapper = this.element.querySelector(
     selector_downloadsLinksWrapper
   );
-  this.downloadsLinks = this.element.querySelector(selector_downloadsLinks)
-  this.toggleRaisingExports = document.querySelector(selector_toggleRaisingExports);
+  this.downloadsLinks = this.element.querySelector(selector_downloadsLinks);
+  this.toggleRaisingExports = document.querySelector(
+    selector_toggleRaisingExports
+  );
 
   // If we have the element on the page, fire it up
   if (this.element) this.init();
@@ -321,19 +323,16 @@ PresidentialFundsMap.prototype.init = function() {
   //   this.remoteTable.className +=' table-display';
   //   //this.remoteTableHeader.classList.add('table-display');
   //   this.remoteTableHeader.className +=' table-display';
-   
+
   // // }
   if (is_ie) {
-  //this.downloadsWrapper = this.element.querySelector(selector_downloadsWrapper)
-  //this.downloadsLinksWrapper = this.element.querySelector(selector_downloadsLinksWrapper)
-  //this.toggleRaisingExports = this.element.querySelector(selector_toggleRaisingExports)//selector_toggleRaisingExports
+    //this.downloadsWrapper = this.element.querySelector(selector_downloadsWrapper)
+    //this.downloadsLinksWrapper = this.element.querySelector(selector_downloadsLinksWrapper)
+    //this.toggleRaisingExports = this.element.querySelector(selector_toggleRaisingExports)//selector_toggleRaisingExports
 
-
-  $(this.toggleRaisingExports).toggleClass('button--close', true);
-  this.downloadsWrapper.style.height = '100%';
-  this.downloadsLinksWrapper.style.height = '100%';
-
-
+    $(this.toggleRaisingExports).toggleClass('button--close', true);
+    this.downloadsWrapper.style.height = '100%';
+    this.downloadsLinksWrapper.style.height = '100%';
   }
   this.element.addEventListener(
     CHANGE_CANDIDATES_DATA,
@@ -1239,7 +1238,7 @@ PresidentialFundsMap.prototype.handleExportRaisingClick = function(e) {
   e.preventDefault();
 
   //scroll downloads area into view
-  this.downloadsWrapper.scrollIntoView()
+  this.downloadsWrapper.scrollIntoView();
   // Wait until the downloadsWrapper is in view before opening (if not already open)
   let instance = this;
   //'this' refers to the main protoype here
