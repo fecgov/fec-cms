@@ -60,7 +60,8 @@
     "topojson": "^3.0.2",
     "tough-cookie": "^2.5.0",
     "tunnel-agent": "^0.6.0",
-    "underscore": "^1.8.3"
+    "underscore": "^1.8.3",
+    "uswds": "^2.5.1"
   },
   "devDependencies": {
     "@babel/core": "^7.0.0",
