@@ -90,7 +90,7 @@
                 <tr><td>&nbsp;&nbsp;PACs</td><td class="t-right-aligned t-mono" data-sum-id="pac_contributions_less_refunds">$000</td></tr>
                 <tr><td>&nbsp;&nbsp;Parties</td><td class="t-right-aligned t-mono" data-sum-id="party_contributions_less_refunds">$000</td></tr>
                 <tr><td>&nbsp;&nbsp;Candidates</td><td class="t-right-aligned t-mono" data-sum-id="candidate_contributions_less_repayments">$000</td></tr>
-                <tr><td>Federal funds</td><td class="t-right-aligned t-mono" data-sum-id="federal_funds">CHECK THIS $000</td></tr>
+                <tr><td>Public funds</td><td class="t-right-aligned t-mono" data-sum-id="federal_funds">CHECK THIS $000</td></tr>
                 <tr><td>Transfers-in</td><td class="t-right-aligned t-mono" data-sum-id="transfers_from_affiliated_committees">$000</td></tr>
                 <tr><td colspan="2">Contributions by size</td></tr>
                 <tr><td>&nbsp;&nbsp;$200 and under</td><td class="t-right-aligned t-mono" data-size_range_id="1">$000</td></tr>
@@ -143,5 +143,27 @@
         </div>
        </div>
     </div>
+    <form id="zoom-debugger">
+      <label>width (437)<input value="437" min="0" max="800" id="zoom-w" type="range"><input value="" type="number"></label><br>
+      <label>height (300)<input value="300" min="0" max="600" id="zoom-h" type="range"><input value="" type="number"></label><br>
+      <label>bounds x multiplier (2)<input value="2" min="0" max="5" id="zoom-bx" type="range"><input value="" type="number"></label><br>
+      <label>bounds y multiplier (2)<input value="2" min="0" max="5" id="zoom-by" type="range"><input value="" type="number"></label><br>
+      <label>scale divisor (.9)<input value="0.9" min="-5" max="5" step=".1" id="zoom-s" type="range"><input value="" type="number"></label><br>
+      <label>viewbox min-x (30)<input value="30" min="0" max="1000" id="zoom-vx" type="range"><input value="" type="number"></label><br>
+      <label>viewbox min-y (50)<input value="50" min="0" max="500" id="zoom-vy" type="range"><input value="" type="number"></label><br>
+      <label>viewbox width (353)<input value="353" min="0" max="1000" id="zoom-vw" type="range"><input value="" type="number"></label><br>
+      <label>viewbox height (225)<input value="225" min="0" max="500" id="zoom-vh" type="range"><input value="" type="number"></label>
+    </form>
+    <style>
+      form#zoom-debugger {
+        width: 100%;
+        display: flex;
+        flex-wrap: wrap;
+      }
+      form#zoom-debugger label {
+        max-width: 200px;
+        padding: 0 .5rem;
+      }
+    </style>
 </div>
 <script defer src="{{ asset_for_js('widgets/pres-finance-map-box.js') }}" data-standalone="true"></script>

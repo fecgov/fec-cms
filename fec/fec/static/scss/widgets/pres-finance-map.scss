@@ -229,7 +229,7 @@ $info-circle: 'data:image/svg+xml;charset=utf8, %3Csvg%20xmlns%3D%22http%3A%2F%2
     padding: $fontSizeBase 0;
 
     .election-map {
-      border: none;
+      border: solid thin grey; // none;
       height: auto;
       min-height: 30rem;
 
@@ -481,8 +481,6 @@ $info-circle: 'data:image/svg+xml;charset=utf8, %3Csvg%20xmlns%3D%22http%3A%2F%2
       width: calc(50% - .5rem);
       margin-right: .5rem;
       order: 30;
-
-
     }
     .map-details {
       .more-info-wrapper {    

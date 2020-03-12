@@ -174,7 +174,7 @@ function PresidentialFundsMap() {
   this.current_electionState = 'US';
   this.current_electionStateName = 'United States';
   this.current_candidateID = specialCandidateIDs[0];
-  this.current_candidateName = 'All candidates';
+  this.current_candidateName = 'All Candidates';
   this.current_candidateLastName = '';
   this.map; // Starts as the element for the map but then becomes a DataMap object
 
@@ -353,6 +353,10 @@ PresidentialFundsMap.prototype.init = function() {
 
   // And start the first load
   this.loadCandidatesList();
+
+  document
+    .querySelector('#zoom-debugger')
+    .addEventListener('input', this.handleDebuggerChange.bind(this));
 };
 
 /**
@@ -1114,18 +1118,23 @@ PresidentialFundsMap.prototype.handleStateClick = function(e) {
   console.log('A STATE WAS CLICKED! ', e);
   e.stopImmediatePropagation(); // Keep it from bubbling outside of this app
 
-  this.current_electionState = e.detail.abbr;
-  this.current_electionStateName = e.detail.name;
+  if (this.current_electionState == e.detail.abbr) {
+    // The user has clicked the state we're already viewing, so let's do a reset
+    this.handleResetClick();
+  } else {
+    this.current_electionState = e.detail.abbr;
+    this.current_electionStateName = e.detail.name;
 
-  // TODO: turn this back on
-  this.loadCandidatesList();
+    // TODO: turn this back on
+    this.loadCandidatesList();
 
-  // TODO: tell the breadcrumbs to update—or maybe that should be a different listener?
-  // TODO: tell the map to focus on the state? Maybe it should handle it internally?
-  // Simply clicking a state shouldn't change that state's color or value
+    // TODO: tell the breadcrumbs to update—or maybe that should be a different listener?
+    // TODO: tell the map to focus on the state? Maybe it should handle it internally?
+    // Simply clicking a state shouldn't change that state's color or value
 
-  this.map.zoomToState(this.current_electionState);
-  this.toggleUSOrStateDisplay();
+    this.map.zoomToState(this.current_electionState, e.detail.d);
+    this.toggleUSOrStateDisplay();
+  }
 };
 
 /**
@@ -1280,8 +1289,23 @@ PresidentialFundsMap.prototype.handleToggleRaisingExports = function(e) {
 };
 // TODO-better styling on exports area
 
+PresidentialFundsMap.prototype.handleToggleRaisingExports = function(e) {
+  console.log('handleToggleRaisingExports(): ', e);
+  e.preventDefault();
+
+  //toggle export area
+  if (this.downloadsLinksWrapper.style.height > '0px') {
+    this.toggleRaisingExports.classList.toggle('button--close', false);
+    this.downloadsLinksWrapper.style.height = 0;
+  } else {
+    this.toggleRaisingExports.classList.toggle('button--close', true);
+    this.downloadsLinksWrapper.style.height = 'auto';
+  }
+};
+// TODO-better styling on exports area
+
 /**
- * Triggered any time a user asks to reset the app (i.e. return to "Nationwide: All candidates")
+ * Triggered any time a user asks to reset the app (i.e. return to "Nationwide: All Candidates")
  * Resets vars and calls loadCandidatesList, displayUpdatedData_candidate, updateBreadcrumbs, and others
  * @param {MouseEvent} e [Optional]
  */
@@ -1293,7 +1317,7 @@ PresidentialFundsMap.prototype.handleResetClick = function(e) {
   this.current_electionState = 'US';
   this.current_electionStateName = '';
   this.current_candidateLastName = '';
-  this.current_candidateName = 'All candidates';
+  this.current_candidateName = 'All Candidates';
 
   this.loadCandidatesList();
 
@@ -1325,13 +1349,15 @@ PresidentialFundsMap.prototype.toggleUSOrStateDisplay = function() {
   this.element.querySelector(
     selector_summariesHolder
   ).style.display = nationalDisplay;
-  this.element.querySelector(selector_mapTypeControl).style.display =
-    nationalDisplay == nationalDisplay; // 'block' ? 'flex' : nationalDisplay;
+  this.element.querySelector(
+    selector_mapTypeControl
+  ).style.display = nationalDisplay;
 
   // Show for only state view:
   this.element.querySelector(
     selector_exportStateData
   ).style.display = stateDisplay;
+  document.querySelector('#zoom-debugger').style.display = stateDisplay == 'block' ? 'flex' : 'none';
 
   // Show for only US view:
   this.element.querySelector(
@@ -1393,6 +1419,25 @@ function logUsage(candID, electionYear) {
   //   });
   // }
 }
+
+/**
+ *
+ */
+PresidentialFundsMap.prototype.handleDebuggerChange = function(e) {
+  // put value into next field:
+  e.target.nextSibling.value = e.target.value;
+  this.map.tweakZoom({
+    width: document.querySelector('#zoom-w').value,
+    height: document.querySelector('#zoom-h').value,
+    boundsXmulti: document.querySelector('#zoom-bx').value,
+    boundsYmulti: document.querySelector('#zoom-by').value,
+    scaleDivisor: document.querySelector('#zoom-s').value,
+    viewBoxX: document.querySelector('#zoom-vx').value,
+    viewBoxY: document.querySelector('#zoom-vy').value,
+    viewBoxWidth: document.querySelector('#zoom-vw').value,
+    viewBoxHeight: document.querySelector('#zoom-vh').value
+  });
+};
 
 new PresidentialFundsMap();
 
