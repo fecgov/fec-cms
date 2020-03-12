@@ -5,6 +5,7 @@ from django.db import models, migrations
 import wagtail.images.blocks
 import wagtail.core.fields
 import wagtail.core.blocks
+import django.db.models.deletion
 
 
 class Migration(migrations.Migration):
@@ -18,7 +19,7 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='CustomPage',
             fields=[
-                ('page_ptr', models.OneToOneField(serialize=False, primary_key=True, auto_created=True, parent_link=True, to='wagtailcore.Page')),
+                ('page_ptr', models.OneToOneField(serialize=False, primary_key=True, auto_created=True, parent_link=True, to='wagtailcore.Page', on_delete=django.db.models.deletion.SET_NULL)),
                 ('author', models.CharField(max_length=255)),
                 ('date', models.DateField(verbose_name='Post date')),
                 ('body', wagtail.core.fields.StreamField((('heading', wagtail.core.blocks.CharBlock(classname='full title')), ('paragraph', wagtail.core.blocks.RichTextBlock()), ('image', wagtail.images.blocks.ImageChooserBlock())))),
@@ -31,7 +32,7 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='LandingPage',
             fields=[
-                ('page_ptr', models.OneToOneField(serialize=False, primary_key=True, auto_created=True, parent_link=True, to='wagtailcore.Page')),
+                ('page_ptr', models.OneToOneField(serialize=False, primary_key=True, auto_created=True, parent_link=True, to='wagtailcore.Page', on_delete=django.db.models.deletion.SET_NULL)),
                 ('body', wagtail.core.fields.StreamField((('heading', wagtail.core.blocks.CharBlock(classname='full title')), ('paragraph', wagtail.core.blocks.RichTextBlock()), ('image', wagtail.images.blocks.ImageChooserBlock())))),
             ],
             options={

@@ -59,6 +59,7 @@ const selector_summariesHolder = '#financial-summaries';
 const selector_candidateNamePartyAndLink = '.js-cand-name-par-a';
 const selector_downloadsWrapper = '#downloads-wrapper';
 const selector_downloadsLinksWrapper = '#downloads-links-wrapper';
+const selector_downloadsLinks = '#downloads-links';
 const selector_coverageDates = '.js-coverage-date';
 const selector_exportRaisingButton = '.js-export-raising-data';
 const selector_toggleRaisingExports = '.js-toggle-riasing-exports';
@@ -165,7 +166,7 @@ function PresidentialFundsMap() {
     mode: 'cors',
     signal: null
   };
-  console.log('(change no-cors to cors ');
+  console.log('(change no-cors to cors) ');
   this.fetchingData = false; // Are we waiting for data?
   this.element = document.querySelector(selector_mainElement); // The visual element associated with this, this.instance
   this.candidateDetailsHolder; // Element to hold candidate name, party, office, and ID
@@ -177,10 +178,11 @@ function PresidentialFundsMap() {
   this.current_candidateLastName = '';
   this.map; // Starts as the element for the map but then becomes a DataMap object
 
-  this.downloadsWrapper = document.querySelector(selector_downloadsWrapper);
-  this.downloadsLinksWrapper = document.querySelector(
+  this.downloadsWrapper = this.element.querySelector(selector_downloadsWrapper);
+  this.downloadsLinksWrapper = this.element.querySelector(
     selector_downloadsLinksWrapper
   );
+  this.downloadsLinks = this.element.querySelector(selector_downloadsLinks);
   this.toggleRaisingExports = document.querySelector(
     selector_toggleRaisingExports
   );
@@ -317,11 +319,21 @@ PresidentialFundsMap.prototype.init = function() {
   //   theRemotedTableHead.style.display = 'none';
   // }
 
-  if (is_ie) {
-    this.remoteTable.classList.add('table-display');
-    this.remoteTableHeader.classList.add('table-display');
-  }
+  // if (is_ie) {
+  //   this.remoteTable.className +=' table-display';
+  //   //this.remoteTableHeader.classList.add('table-display');
+  //   this.remoteTableHeader.className +=' table-display';
 
+  // // }
+  if (is_ie) {
+    //this.downloadsWrapper = this.element.querySelector(selector_downloadsWrapper)
+    //this.downloadsLinksWrapper = this.element.querySelector(selector_downloadsLinksWrapper)
+    //this.toggleRaisingExports = this.element.querySelector(selector_toggleRaisingExports)//selector_toggleRaisingExports
+
+    $(this.toggleRaisingExports).toggleClass('button--close', true);
+    this.downloadsWrapper.style.height = '100%';
+    this.downloadsLinksWrapper.style.height = '100%';
+  }
   this.element.addEventListener(
     CHANGE_CANDIDATES_DATA,
     this.handleCandidatesDataLoaded.bind(this)
@@ -1235,11 +1247,7 @@ PresidentialFundsMap.prototype.handleExportRaisingClick = function(e) {
   e.preventDefault();
 
   //scroll downloads area into view
-  this.downloadsWrapper.scrollIntoView({
-    behavior: 'smooth',
-    block: 'center',
-    inline: 'nearest'
-  });
+  this.downloadsWrapper.scrollIntoView();
   // Wait until the downloadsWrapper is in view before opening (if not already open)
   let instance = this;
   //'this' refers to the main protoype here
@@ -1265,6 +1273,21 @@ PresidentialFundsMap.prototype.handleExportRaisingClick = function(e) {
   // TODO-done: animate the page scroll to the downloads section
   // TODO done  -then: Hide {selector_downloadsLinksWrapper} when we're no longer interested in the raising downloads
 };
+
+PresidentialFundsMap.prototype.handleToggleRaisingExports = function(e) {
+  console.log('handleToggleRaisingExports(): ', e);
+  e.preventDefault();
+
+  //toggle export area
+  if (this.downloadsLinksWrapper.style.height > '0px') {
+    this.toggleRaisingExports.classList.toggle('button--close', false);
+    this.downloadsLinksWrapper.style.height = 0;
+  } else {
+    this.toggleRaisingExports.classList.toggle('button--close', true);
+    this.downloadsLinksWrapper.style.height = 'auto';
+  }
+};
+// TODO-better styling on exports area
 
 PresidentialFundsMap.prototype.handleToggleRaisingExports = function(e) {
   console.log('handleToggleRaisingExports(): ', e);
