@@ -51,6 +51,8 @@ let defaultOpts = {
     ${maxUSbounds.north} \
     ${maxUSbounds.east - maxUSbounds.west} \
     ${maxUSbounds.south - maxUSbounds.north}`, // min-x, min-y, width, height
+  mapStyle: 'gradients',
+  clickableFeatures: false,
   eventAppID: ''
 };
 
@@ -64,8 +66,9 @@ let defaultOpts = {
  * @param {Array} opts.colorScale - list of hex color codes to use
  * @param {String} opts.colorZero - hex color code to use when no value is present
  * @param {Array} opts.circleSizeScale -
- * @param {Array} opts.viewBox -
- * @param {Array} opts.eventAppID -
+ * @param {String} opts.viewBox -
+ * @param {String} opts.mapStyle -
+ * @param {String} opts.eventAppID -
  */
 function DataMap(elm, opts) {
   // console.log('new DataMap(): ', elm, opts);
@@ -165,71 +168,74 @@ DataMap.prototype.init = function() {
     .data(stateFeatures)
     .enter();
 
-  this.pathDataEnter
-    .append('path')
-    .attr('fill', function(d) {
-      d.statePath = this; // Linking this state/path/fill to this element in the data
-      d.value = instance.getStateValue(d.id);
-      return calculateStateFill(
-        d.value,
-        legendScale_colors,
-        legendQuantize_colors,
-        instance.opts.colorZero,
-        instance.opts.addLegend,
-        quantiles
-      );
-    })
-    .attr('data-state', d => {
-      return fips.fipsByCode[d.id].STATE_NAME;
-    })
-    .attr('data-stateID', d => {
-      return fips.fipsByCode[d.id].STUSAB;
-    })
-    .attr('class', d => {
-      return this.chooseStateClasses(d, 'shape');
-    })
-    .attr('d', this.pathProjection);
+  if (this.opts.mapStyle.indexOf('gradients') !== -1) {
+    this.pathDataEnter
+      .append('path')
+      .attr('fill', function(d) {
+        d.statePath = this; // Linking this state/path/fill to this element in the data
+        d.value = instance.getStateValue(d.id);
+        return calculateStateFill(
+          d.value,
+          legendScale_colors,
+          legendQuantize_colors,
+          instance.opts.colorZero,
+          instance.opts.addLegend,
+          quantiles
+        );
+      })
+      .attr('data-state', d => {
+        return fips.fipsByCode[d.id].STATE_NAME;
+      })
+      .attr('data-stateID', d => {
+        return fips.fipsByCode[d.id].STUSAB;
+      })
+      .attr('class', d => {
+        return this.chooseStateClasses(d, 'shape');
+      })
+      .attr('d', this.pathProjection);
+  }
 
-  this.pathDataEnter
-    .append('circle')
-    .attr('cx', function(d) {
-      let stateBounds = d3
-        .select(d.statePath)
-        .node()
-        .getBBox();
+  if (this.opts.mapStyle.indexOf('bubbles') !== -1) {
+    this.pathDataEnter
+      .append('circle')
+      .attr('cx', function(d) {
+        let stateBounds = d3
+          .select(d.statePath)
+          .node()
+          .getBBox();
 
-      d.cx = stateBounds.x + stateBounds.width / 2;
-      d.cy = stateBounds.y + stateBounds.height / 2;
+        d.cx = stateBounds.x + stateBounds.width / 2;
+        d.cy = stateBounds.y + stateBounds.height / 2;
 
-      return d.cx;
-    })
-    .attr('cy', function(d) {
-      return d.cy;
-    })
-    .attr('r', function(d) {
-      // console.log('calculating radius: ', d);
-      d.value = instance.getStateValue(d.id); // TODO - COPY THIS TO applyNewData()?
-      return calculateCircleSize(
-        d.value, // TODO - COPY THIS TO applyNewData()?
-        [minValue, maxValue],
-        instance.opts.circleSizeScale,
-        quantiles,
-        instance.opts.addLegend
-      );
-    })
-    .attr('data-state', function(d) {
-      return fips.fipsByCode[d.id].STATE_NAME;
-    })
-    .attr('data-stateID', function(d) {
-      return fips.fipsByCode[d.id].STUSAB;
-    })
-    .attr('class', d => {
-      return this.chooseStateClasses(d, 'circle');
-    })
-    .attr('d', this.pathProjection);
-  // this.states_circles = temp.selectAll('circle');
+        return d.cx;
+      })
+      .attr('cy', function(d) {
+        return d.cy;
+      })
+      .attr('r', function(d) {
+        // console.log('calculating radius: ', d);
+        d.value = instance.getStateValue(d.id); // TODO - COPY THIS TO applyNewData()?
+        return calculateCircleSize(
+          d.value, // TODO - COPY THIS TO applyNewData()?
+          [minValue, maxValue],
+          instance.opts.circleSizeScale,
+          quantiles,
+          instance.opts.addLegend
+        );
+      })
+      .attr('data-state', function(d) {
+        return fips.fipsByCode[d.id].STATE_NAME;
+      })
+      .attr('data-stateID', function(d) {
+        return fips.fipsByCode[d.id].STUSAB;
+      })
+      .attr('class', d => {
+        return this.chooseStateClasses(d, 'circle');
+      })
+      .attr('d', this.pathProjection);
 
-  this.sortCircles();
+    this.sortCircles();
+  }
 
   // If we're supposed to add a legend, let's do it
   if (this.opts.addLegend || typeof this.opts.addLegend === 'undefined') {
@@ -322,47 +328,52 @@ DataMap.prototype.applyNewData = function() {
   // This bit is the big difference from init() }
   // because we're transitioning states' colors,
   // states we know already exist, have IDs, and may have mouseenter listeners, etc.
-  this.svg
-    .selectAll('path')
-    .transition()
-    .delay(function(d, i) {
-      //
-      d.value = instance.getStateValue(d.id);
+  if (this.opts.mapStyle.indexOf('gradients') !== -1) {
+    this.svg
+      .selectAll('path')
+      .transition()
+      .delay(function(d, i) {
+        //
+        d.value = instance.getStateValue(d.id);
 
-      if (!d.value) return 0;
-      else return 20 * i;
-    })
-    .attr('fill', function(d) {
-      return calculateStateFill(
-        d.value,
-        legendScale_colors,
-        legendQuantize_colors,
-        instance.opts.colorZero,
-        instance.opts.addLegend,
-        quantiles
-      );
-    });
+        if (!d.value) return 0;
+        else return 20 * i;
+      })
+      .attr('fill', function(d) {
+        return calculateStateFill(
+          d.value,
+          legendScale_colors,
+          legendQuantize_colors,
+          instance.opts.colorZero,
+          instance.opts.addLegend,
+          quantiles
+        );
+      });
+  }
 
-  this.svg
-    .selectAll('circle')
-    .transition()
-    .delay(function(d, i) {
-      d.value = instance.getStateValue(d.id);
-      if (!d.value) return 0;
-      else return 20 * i;
-    })
-    .attr('r', function(d) {
-      // console.log('calculating radius: ', d);
-      return calculateCircleSize(
-        d.value,
-        [minValue, maxValue],
-        instance.opts.circleSizeScale,
-        quantiles,
-        instance.opts.addLegend
-      );
-    });
+  if (this.opts.mapStyle.indexOf('bubbles') !== -1) {
+    console.log('bubbles else: ', this.opts.mapStyle.indexOf('bubbles'));
+    this.svg
+      .selectAll('circle')
+      .transition()
+      .delay(function(d, i) {
+        d.value = instance.getStateValue(d.id);
+        if (!d.value) return 0;
+        else return 20 * i;
+      })
+      .attr('r', function(d) {
+        // console.log('calculating radius: ', d);
+        return calculateCircleSize(
+          d.value,
+          [minValue, maxValue],
+          instance.opts.circleSizeScale,
+          quantiles,
+          instance.opts.addLegend
+        );
+      });
 
-  this.sortCircles();
+    this.sortCircles();
+  }
 
   // The rest of applyNewData is back to the same code from init()
   if (this.legendSVG) {
@@ -693,16 +704,21 @@ function buildStateTooltips(svg, path, instance) {
       }
     })
     .on('click', function(d) {
-      this.dispatchEvent(
-        new CustomEvent('STATE_CLICKED', {
-          detail: {
-            abbr: fips.fipsByCode[d.id].STUSAB,
-            name: fips.fipsByCode[d.id].STATE_NAME,
-            d: d
-          },
-          bubbles: true
-        })
-      );
+      let shouldClick = instance.opts.clickableFeatures;
+      if (!shouldClick) {
+        return null;
+      } else {
+        this.dispatchEvent(
+          new CustomEvent('STATE_CLICKED', {
+            detail: {
+              abbr: fips.fipsByCode[d.id].STUSAB,
+              name: fips.fipsByCode[d.id].STATE_NAME,
+              d: d
+            },
+            bubbles: true
+          })
+        );
+      }
     });
 
   // Add the mouseleave listeners to the dom elements rather than relying on d3

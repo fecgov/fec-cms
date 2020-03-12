@@ -289,6 +289,8 @@ PresidentialFundsMap.prototype.init = function() {
     data: '',
     addLegend: true,
     addTooltips: true,
+    mapStyle: 'gradients-bubbles',
+    clickableFeatures: true,
     eventAppID: EVENT_APP_ID
   });
 

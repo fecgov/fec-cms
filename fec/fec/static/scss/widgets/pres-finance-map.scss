@@ -261,6 +261,9 @@ $info-circle: 'data:image/svg+xml;charset=utf8, %3Csvg%20xmlns%3D%22http%3A%2F%2
             fill: $colorTableTdBorder;
             transition: fill 1s;
           }
+          &.zoomed {
+            pointer-events: initial;
+          }
         }
         
         circle {
