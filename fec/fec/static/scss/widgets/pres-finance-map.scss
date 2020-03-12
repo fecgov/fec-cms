@@ -84,7 +84,7 @@ $info-circle: 'data:image/svg+xml;charset=utf8, %3Csvg%20xmlns%3D%22http%3A%2F%2
     border: none;
     width: 100%;
     // display: flex;
-
+    
     .filter {
       label {
         float: left;
@@ -499,11 +499,14 @@ $info-circle: 'data:image/svg+xml;charset=utf8, %3Csvg%20xmlns%3D%22http%3A%2F%2
     #filter-year {
       width: calc(25% - .5rem);//20rem;
       margin-right: .5rem;
+      display: inline-block //for IE11;
     }
+
     #filter-map-type {
       width: calc(25% - 1rem);
       margin-left: .5rem;
       margin-right: .5rem;
+      display: inline-block //for IE11;
     }
 
     .candidate-list-wrapper {
@@ -644,7 +647,7 @@ $info-circle: 'data:image/svg+xml;charset=utf8, %3Csvg%20xmlns%3D%22http%3A%2F%2
   #downloads-links {
     display:flex;
     -ms-flex-wrap: wrap;
-    flex-wrap:wrap;
+    flex-wrap: wrap;
 
       a {
         width:9rem;
