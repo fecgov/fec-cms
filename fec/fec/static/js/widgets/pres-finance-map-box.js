@@ -353,10 +353,6 @@ PresidentialFundsMap.prototype.init = function() {
 
   // And start the first load
   this.loadCandidatesList();
-
-  document
-    .querySelector('#zoom-debugger')
-    .addEventListener('input', this.handleDebuggerChange.bind(this));
 };
 
 /**
@@ -1139,7 +1135,7 @@ PresidentialFundsMap.prototype.handleStateClick = function(e) {
 
 /**
  * Called from throughout the widget
- * TODO: Do we still need this?
+ * TODO: yes, we should activate this
  * @param {String} errorCode
  */
 PresidentialFundsMap.prototype.handleErrorState = function(errorCode) {
@@ -1204,7 +1200,7 @@ PresidentialFundsMap.prototype.handleResize = function(e = null) {
 
 /**
  * Called by {@see handleResize() }, to re-position the "loading" overlay
- * TODO: do we need this?
+ * TODO: yes, we should activate this
  */
 PresidentialFundsMap.prototype.refreshOverlay = function() {
   // let timeStampHeight = 25;
@@ -1242,6 +1238,9 @@ PresidentialFundsMap.prototype.openDownloads = function() {
   $(instance.toggleRaisingExports).toggleClass('button--close', true);
 };
 
+/**
+ * TODO -
+ */
 PresidentialFundsMap.prototype.handleExportRaisingClick = function(e) {
   console.log('handleExportRaisingClick(): ', e);
   e.preventDefault();
@@ -1274,6 +1273,9 @@ PresidentialFundsMap.prototype.handleExportRaisingClick = function(e) {
   // TODO done  -then: Hide {selector_downloadsLinksWrapper} when we're no longer interested in the raising downloads
 };
 
+/**
+ * TODO -
+ */
 PresidentialFundsMap.prototype.handleToggleRaisingExports = function(e) {
   console.log('handleToggleRaisingExports(): ', e);
   e.preventDefault();
@@ -1289,6 +1291,9 @@ PresidentialFundsMap.prototype.handleToggleRaisingExports = function(e) {
 };
 // TODO-better styling on exports area
 
+/**
+ * TODO -
+ */
 PresidentialFundsMap.prototype.handleToggleRaisingExports = function(e) {
   console.log('handleToggleRaisingExports(): ', e);
   e.preventDefault();
@@ -1353,12 +1358,6 @@ PresidentialFundsMap.prototype.toggleUSOrStateDisplay = function() {
     selector_mapTypeControl
   ).style.display = nationalDisplay;
 
-  // Show for only state view:
-  this.element.querySelector(
-    selector_exportStateData
-  ).style.display = stateDisplay;
-  document.querySelector('#zoom-debugger').style.display = stateDisplay == 'block' ? 'flex' : 'none';
-
   // Show for only US view:
   this.element.querySelector(
     selector_downloadsWrapper
@@ -1419,25 +1418,6 @@ function logUsage(candID, electionYear) {
   //   });
   // }
 }
-
-/**
- *
- */
-PresidentialFundsMap.prototype.handleDebuggerChange = function(e) {
-  // put value into next field:
-  e.target.nextSibling.value = e.target.value;
-  this.map.tweakZoom({
-    width: document.querySelector('#zoom-w').value,
-    height: document.querySelector('#zoom-h').value,
-    boundsXmulti: document.querySelector('#zoom-bx').value,
-    boundsYmulti: document.querySelector('#zoom-by').value,
-    scaleDivisor: document.querySelector('#zoom-s').value,
-    viewBoxX: document.querySelector('#zoom-vx').value,
-    viewBoxY: document.querySelector('#zoom-vy').value,
-    viewBoxWidth: document.querySelector('#zoom-vw').value,
-    viewBoxHeight: document.querySelector('#zoom-vh').value
-  });
-};
 
 new PresidentialFundsMap();
 

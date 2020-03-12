@@ -86,9 +86,6 @@ function DataMap(elm, opts) {
   this.projection;
   this.pathProjection;
   this.pathDataEnter;
-  // this.states_fills;
-  // this.states_circles;
-  // this.states_fillsAndCircles;
 }
 
 /**
@@ -163,11 +160,6 @@ DataMap.prototype.init = function() {
   // (`selectAll()` will select elements if they exist, or will create them if they don't.)
   this.g = this.svg.append('g');
 
-  this.g
-    .append('rect')
-    .attr('id', 'debugger-bg')
-    .attr('fill', 'beige');
-
   this.pathDataEnter = this.g
     .selectAll('path')
     .data(stateFeatures)
@@ -239,8 +231,6 @@ DataMap.prototype.init = function() {
 
   this.sortCircles();
 
-  // this.states_fillsAndCircles = this.svg.selectAll('path, circle')[0];
-
   // If we're supposed to add a legend, let's do it
   if (this.opts.addLegend || typeof this.opts.addLegend === 'undefined') {
     this.legendSVG = d3.select('.legend-container svg');
@@ -256,13 +246,6 @@ DataMap.prototype.init = function() {
   if (this.opts.addTooltips) {
     buildStateTooltips(this.svg, this.pathProjection, this);
   }
-
-  this.g
-    .select('#debugger-bg')
-    .attr('x', maxUSbounds.west)
-    .attr('y', maxUSbounds.north)
-    .attr('width', maxUSbounds.width)
-    .attr('height', maxUSbounds.height);
 };
 
 /**
@@ -426,163 +409,40 @@ DataMap.prototype.zoomToState = function(stateID, d) {
       .transition()
       .duration(750)
       .attr('transform', '');
-      // this.svg.attr('viewBox', this.opts.viewBox);
   } else {
-    // let featuredStatePath = this.svg.select('path.zoomed');
-    // console.log('featuredStatePath: ' + featuredStatePath);
+    let gutter = maxUSbounds.height * 0.05; // map "pixels" between edge of state and edge of svg stage
 
-    // let featuredStateFeature = d;
-
-    // let width = this.elm.offsetWidth;
-    // let height = this.elm.offsetHeight;
-    let width = maxUSbounds.width;
-    let height = maxUSbounds.height;
-
+    let viewboxWidth = maxUSbounds.width;
+    let viewboxHeight = maxUSbounds.height;
 
     let featBounds = this.pathProjection.bounds(d);
-    let featWest = featBounds[0][0]; // + maxUSbounds.west;
-    let featNorth = featBounds[0][1]; // + maxUSbounds.north;
-    
-    let featEast = featBounds[1][0];
-    let featSouth = featBounds[1][1];
+    let featWest = featBounds[0][0] - gutter;
+    let featNorth = featBounds[0][1] - gutter;
+
+    let featEast = Number(featBounds[1][0] + gutter);
+    let featSouth = Number(featBounds[1][1] + gutter);
     let featWidth = featEast - featWest;
     let featHeight = featSouth - featNorth;
-    let newScale = Math.min(width / featWidth, height / featHeight);
-    // featWest -= maxUSbounds.west * newScale;
-    // featNorth -= maxUSbounds.north * newScale;
+    let newScale = Math.min(
+      viewboxWidth / featWidth,
+      viewboxHeight / featHeight
+    );
 
-    let featCenterHoriz = featWest + featWidth / 2;
-    let featCenterVert = featNorth + featHeight / 2;
-
-    // let newX = this.elm.offsetWidth / 2 - featCenterHoriz;
-    // let newY = this.elm.offsetHeight / 2 - featCenterVert;
     let translateX = (featWest * newScale - maxUSbounds.west) * -1;
     let translateY = (featNorth * newScale - maxUSbounds.north) * -1;
-    // newY = 0;
 
-    console.log('  width: ', width);
-    console.log('  height: ', height);
-    console.log('  featBounds: ', featBounds);
-    console.log('  featWest: ', featWest);
-    console.log('  featEast: ', featEast);
-    console.log('  featNorth: ', featNorth);
-    console.log('  featSouth: ', featSouth);
-    console.log('  featWidth: ', featWidth);
-    console.log('  featHeight: ', featHeight);
-    console.log('  featCenterHoriz: ', featCenterHoriz);
-    console.log('  featCenterVert: ', featCenterVert);
-    console.log('  newScale: ', newScale);
-    console.log('  translateX: ', translateX);
-    console.log('  translateY: ', translateY);
+    translateX += (viewboxWidth - featWidth * newScale) / 2;
+    translateY += (viewboxHeight - featHeight * newScale) / 2;
 
-    console.log('  ');
-    // let dx = bounds[1][0] - bounds[0][0], // bounds width - bounds x
-    //   dy = bounds[1][1] - bounds[0][1], // bounds height - bounds y
-    //   x = (bounds[0][0] + bounds[1][0]) / 2,
-    //   y = (bounds[0][1] + bounds[1][1]) / 2;
+    let scale = newScale;
 
-    // dx += 700; // 353;
-    // x += 15;
-    // y += 25;
-    // .attr('viewBox', '30 50 353 225')
-
-    // let scale = 0.9 / Math.max(dx / width, dy / height);
-    // scale -= 10;
-
-    // let selectedBounds = featuredStateFeature.node().getBBox();
-    // console.log('  selectedBounds: ', selectedBounds);
-
-    let scale = newScale; // 0.9 / Math.max(featWidth / width, featHeight / height);
-    // let selHorizCenter = selectedBounds.x - this.opts.viewBoxX + featWidth / 2;
-    // let selVertCenter = selectedBounds.y - this.opts.viewBoxY + featHeight / 2;
-    // selHorizCenter *= scale;
-    // selVertCenter *= scale;
-
-    let translate = [translateX, translateY]; // [width / 2 - scale * x, height / 2 - scale * y];
-
-    
-    // console.log('  scale: ', scale);
-    // console.log('  translate: ', translate);
-    // console.log('  g.transform: ', this.g.attr('transform'));
-
-    console.log('this.svg: ' + this.svg);
-    
-    // this.svg.attr('viewBox', `${featX} ${featY} ${featWidth * 1.5} ${maxUSbounds.south - maxUSbounds.north}`);
+    let translate = [translateX, translateY];
 
     this.g
       .transition()
       .delay(500) // time for the states to animate before zooming in
       .duration(750)
       .attr('transform', 'translate(' + translate + ')scale(' + scale + ')');
-  }
-};
-
-/**
- *
- * @param {Event}
- */
-DataMap.prototype.tweakZoom = function(passedObj) {
-  console.log('tweakZoom(): ');
-
-  let obj = Object.assign(
-    {
-      width: this.elm.offsetWidth,
-      height: this.elm.offsetHeight,
-      boundsXmulti: 2,
-      boundsYmulti: 2,
-      scaleDivisor: 0.9,
-      viewBoxX: 30,
-      viewBoxY: 50,
-      viewBoxWidth: 353,
-      viewBoxHeight: 225
-    },
-    passedObj
-  );
-
-  if (this.focusedStateID && this.TEST_savedD) {
-    // let featuredStatePath = this.svg.select('path.zoomed');
-    // console.log('featuredStatePath: ' + featuredStatePath);
-
-    // let width = obj.width - obj.viewBoxX; //706;
-    // let height = obj.height - obj.viewBoxY; //450;
-
-    // // width = this.elm.offsetWidth;
-    // // height = this.elm.offsetHeight;
-
-    // let bounds = this.pathProjection.bounds(this.TEST_savedD),
-    //   dx = bounds[1][0] - bounds[0][0],
-    //   dy = bounds[1][1] - bounds[0][1],
-    //   x = (bounds[0][0] + bounds[1][0]) / obj.boundsXmulti, // 2,
-    //   y = (bounds[0][1] + bounds[1][1]) / obj.boundsYmulti; // 2
-
-    // // dx += 700; // 353;
-    // // x += 15;
-    // // y += 25;
-    // // .attr('viewBox', '30 50 353 225')
-
-    // let scale = obj.scaleDivisor / Math.max(dx / width, dy / height);
-    // let translate = [width / 2 - scale * x, height / 2 - scale * y];
-
-    // GETTING CLOSER
-    // let selectedBounds = featuredStatePath.node().getBBox();
-    // let selHorizCenter = selectedBounds.x - 30 + selectedBounds.width / 2;
-    // let selVertCenter = selectedBounds.y - 50 + selectedBounds.height / 2;
-    // selHorizCenter *= -scale;
-    // selVertCenter *= -scale;
-    // let translate = [selHorizCenter, selVertCenter];
-    // /GETTING CLOSER
-
-    // this.g.attr(
-    //   'transform',
-    //   'translate(' + translate + ')scale(' + scale + ')'
-    // );
-    this.svg.attr(
-      'viewBox',
-      `${Number(obj.viewBoxX)}\
-      ${Number(obj.viewBoxY)}\
-      ${obj.width - obj.viewBoxWidth}\
-      ${obj.viewBoxHeight}`
-    );
   }
 };
 
