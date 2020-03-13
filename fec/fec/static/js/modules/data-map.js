@@ -39,7 +39,7 @@ const maxUSbounds = {
   east: Math.ceil(382.5599341), // (Maine)
   north: Math.floor(49.3991582), // (Washington)
   south: Math.ceil(253.5421288) // (Alaska)
-};
+}; // used to set the viewBox for the main SVG
 const compactRules = [['B', 9], ['M', 6], ['K', 3], ['', 0]];
 
 let defaultOpts = {

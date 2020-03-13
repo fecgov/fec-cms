@@ -171,7 +171,7 @@ function PresidentialFundsMap() {
   this.current_electionState = 'US';
   this.current_electionStateName = 'United States';
   this.current_candidateID = specialCandidateIDs[0];
-  this.current_candidateName = 'All Candidates';
+  this.current_candidateName = 'All candidates';
   this.current_candidateLastName = '';
   this.map; // Starts as the element for the map but then becomes a DataMap object
 
@@ -1251,9 +1251,6 @@ PresidentialFundsMap.prototype.handleExportRaisingClick = function(e) {
       }
     }
   };
-  // TODO-done: show {selector_downloadsWrapper}
-  // TODO-done: animate the page scroll to the downloads section
-  // TODO done  -then: Hide {selector_downloadsLinksWrapper} when we're no longer interested in the raising downloads
 };
 
 /**
@@ -1271,7 +1268,6 @@ PresidentialFundsMap.prototype.handleToggleRaisingExports = function(e) {
     this.downloadsLinksWrapper.style.height = 'auto';
   }
 };
-// TODO-better styling on exports area
 
 /**
  * TODO -
@@ -1288,10 +1284,9 @@ PresidentialFundsMap.prototype.handleToggleRaisingExports = function(e) {
     this.downloadsLinksWrapper.style.height = 'auto';
   }
 };
-// TODO-better styling on exports area
 
 /**
- * Triggered any time a user asks to reset the app (i.e. return to "Nationwide: All Candidates")
+ * Triggered any time a user asks to reset the app (i.e. return to "Nationwide: All candidates")
  * Resets vars and calls loadCandidatesList, displayUpdatedData_candidate, updateBreadcrumbs, and others
  * @param {MouseEvent} e [Optional]
  */
@@ -1308,7 +1303,7 @@ PresidentialFundsMap.prototype.handleResetClick = function(
   if (opts.resetCandidate) {
     this.current_candidateID = specialCandidateIDs[0];
     this.current_candidateLastName = '';
-    this.current_candidateName = 'All Candidates';
+    this.current_candidateName = 'All candidates';
     this.loadCandidatesList();
   }
 
