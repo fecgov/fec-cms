@@ -1344,6 +1344,11 @@ PresidentialFundsMap.prototype.toggleUSOrStateDisplay = function() {
     selector_downloadsWrapper
   ).style.display = nationalDisplay;
 
+  // Show only for states view:
+  this.element.querySelector(
+    selector_exportStateData
+  ).style.display = stateDisplay;
+
   // Only close all-state download area if switching to state view. Leave as-is (open or closed) when clicking reset in national view.
   //Or do we want to just hide/show  as user switches between views, bur perisit its state --(open or closed)?
   if (stateDisplay == 'block') {
