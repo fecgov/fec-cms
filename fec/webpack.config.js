@@ -158,7 +158,7 @@ module.exports = [
         fileName: 'rev-widgets-manifest-js.json',
         basePath: '/static/js/'
       }),
-      new webpack.ProvidePlugin({ _: 'lodash' })
+      new webpack.ProvidePlugin({ _: 'lodash', $: 'jquery', jQuery: 'jquery' })
     ],
     module: {
       rules: [

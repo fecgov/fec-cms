@@ -1,6 +1,6 @@
-/* eslint-disable no-undef */
-
 'use strict';
+
+/* global CustomEvent */
 
 /**
  * @fileoverview Interactive map based on fec/fec/static/js/modules/maps.js. Displays color-coded states based on the dataset provided
@@ -71,14 +71,12 @@ let defaultOpts = {
  * @param {String} opts.eventAppID -
  */
 function DataMap(elm, opts) {
-  // console.log('new DataMap(): ', elm, opts);
   // Data, vars
   this.data;
   this.mapData; // saves results from init() and applyNewData(), formatted like {1: 123456789, 2: 6548, 4: 91835247} / {stateID: stateValue, stateID: stateValue}
   this.opts = Object.assign({}, defaultOpts, opts);
   this.eventAppID = this.opts.eventAppID;
   this.focusedStateID = 'US';
-  this.TEST_savedD;
 
   // Elements
   this.elm = elm;
@@ -99,9 +97,6 @@ function DataMap(elm, opts) {
  */
 DataMap.prototype.init = function() {
   let instance = this;
-
-  // console.log('statesJSON: ', statesJSON);
-  // console.log('stateFeatures: ', stateFeatures);
 
   maxUSbounds.width = maxUSbounds.east - maxUSbounds.west;
   maxUSbounds.height = maxUSbounds.south - maxUSbounds.north;
@@ -213,7 +208,6 @@ DataMap.prototype.init = function() {
         return d.cy;
       })
       .attr('r', function(d) {
-        // console.log('calculating radius: ', d);
         d.value = instance.getStateValue(d.id); // TODO - COPY THIS TO applyNewData()?
         return calculateCircleSize(
           d.value, // TODO - COPY THIS TO applyNewData()?
@@ -271,7 +265,6 @@ DataMap.prototype.getStateValue = function(pathID) {
  * @param {json} newData
  */
 DataMap.prototype.handleDataRefresh = function(newData) {
-  console.log('handleDataRefresh(): ', newData);
   this.data = newData;
   this.data.results.sort((a, b) => a.value - b.value);
 
@@ -295,8 +288,6 @@ DataMap.prototype.handleZoomReset = function() {
  * TODO: make init() and applyNewData() share more functionality
  */
 DataMap.prototype.applyNewData = function() {
-  console.log('applyNewData();');
-
   let instance = this;
 
   let results = instance.data['results'].reduce((acc, val) => {
@@ -352,7 +343,6 @@ DataMap.prototype.applyNewData = function() {
   }
 
   if (this.opts.mapStyle.indexOf('bubbles') !== -1) {
-    console.log('bubbles else: ', this.opts.mapStyle.indexOf('bubbles'));
     this.svg
       .selectAll('circle')
       .transition()
@@ -362,7 +352,6 @@ DataMap.prototype.applyNewData = function() {
         else return 20 * i;
       })
       .attr('r', function(d) {
-        // console.log('calculating radius: ', d);
         return calculateCircleSize(
           d.value,
           [minValue, maxValue],
@@ -400,11 +389,8 @@ DataMap.prototype.applyNewData = function() {
  * @param {Event}
  */
 DataMap.prototype.zoomToState = function(stateID, d) {
-  console.log('zoomToState(): ', stateID);
-
   // Save the ID
   this.focusedStateID = stateID;
-  this.TEST_savedD = d;
 
   // Assign classes to paths and circles
   this.svg.selectAll('path').attr('class', d => {
@@ -820,5 +806,3 @@ function tooltipTemplate(obj) {
 module.exports = {
   DataMap
 };
-
-/* eslint-enable no-undef */
