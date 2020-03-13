@@ -392,6 +392,9 @@ DataMap.prototype.zoomToState = function(stateID, d) {
   // Save the ID
   this.focusedStateID = stateID;
 
+  // hide the tooltip when we start a zoom change
+  d3.select('body #map-tooltip').style.display = 'none';
+
   // Assign classes to paths and circles
   this.svg.selectAll('path').attr('class', d => {
     return this.chooseStateClasses(d, 'shape');
