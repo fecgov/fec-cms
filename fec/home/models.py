@@ -1198,13 +1198,9 @@ class ContactPage(Page):
 class FullWidthPage(ContentPage):
     formatted_title = models.CharField(max_length=255, null=True, blank=True, default='',
                                         help_text="Use if you need italics in the title. e.g. <em>Italicized words</em>")
-    citations = StreamField([('citations', blocks.ListBlock(CitationsBlock()))],
-                    null=True, blank=True)
 
     template = 'home/full_width_page.html'
-    content_panels = ContentPage.content_panels + [
-        StreamFieldPanel('citations')
-    ]
+    content_panels = ContentPage.content_panels
 
     promote_panels = Page.promote_panels
 
