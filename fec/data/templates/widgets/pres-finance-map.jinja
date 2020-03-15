@@ -23,9 +23,17 @@
       <a class="button--alt" href="/campaign-finance-data/presidential-map-help/">Methodology</a>
     </div>
     <div class="candidate-list-wrapper">
+      <table class="remote-table-header js-remote-table-header" data-for="pres-fin-map-candidates-table">
+        <thead role="presentation">
+          <tr>
+            <th scope="col">Candidate</th>
+            <th scope="col" class="t-right-aligned">Total raised</th>
+          </tr>
+        </thead>
+      </table>
       <div class="table-scroller">
         <div class="ps-scrollbar-y-rail"><div class="ps-scrollbar-y"></div></div>
-        <table id="pres-fin-map-candidates-table" class="data-table data-table--heading-borders data-table--entity u-margin--top" data-type="filings-{{ dataType }}" data-cycle="{{ election_year }}">
+        <table id="pres-fin-map-candidates-table" class="data-table data-table--heading-borders data-table--entity u-margin--top"">
           <thead>
             <tr>
               <th scope="col">Candidate</th>

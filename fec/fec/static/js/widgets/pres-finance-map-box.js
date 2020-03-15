@@ -298,33 +298,30 @@ PresidentialFundsMap.prototype.init = function() {
   let is_ie =
     userAgent.indexOf('MSIE ') > 0 || userAgent.indexOf('Trident/7.0') > 0;
 
-  // TODO: Activate the remote table header
   // Initialize the remote table header
   // Find the remote header and save it
-  // this.remoteTableHeader = this.element.querySelector(
-  //   '.js-remote-table-header'
-  // );
+  this.remoteTableHeader = this.element.querySelector(
+    '.js-remote-table-header'
+  );
   // Save its <thead> for a few lines
-  // let theRemoteTableHead = this.remoteTableHeader.querySelector('thead');
+  let theRemoteTableHead = this.remoteTableHeader.querySelector('thead');
   // Look at the data-for attribute of remoteTableHeader and save that element
-  // this.remoteTable = this.element.querySelector(
-  //   '#' + this.remoteTableHeader.getAttribute('data-for')
-  // );
+  this.remoteTable = this.element.querySelector(
+    '#' + this.remoteTableHeader.getAttribute('data-for')
+  );
   // Remember the <thead> in remoteTable for few lines
-  // let theRemotedTableHead = this.remoteTable.querySelector('thead');
+  let theRemotedTableHead = this.remoteTable.querySelector('thead');
   // If we have both <thead> elements, we're ready to manipulate them
-  // if (theRemoteTableHead && theRemotedTableHead) {
-  //   this.remoteTableHeader.style.display = 'table';
-  //   theRemotedTableHead.style.display = 'none';
-  // }
+  if (theRemoteTableHead && theRemotedTableHead) {
+    this.remoteTableHeader.style.display = 'table';
+    theRemotedTableHead.style.display = 'none';
+  }
 
-  // if (is_ie) {
-  //   this.remoteTable.className +=' table-display';
-  //   //this.remoteTableHeader.classList.add('table-display');
-  //   this.remoteTableHeader.className +=' table-display';
-
-  // // }
   if (is_ie) {
+    this.remoteTable.className +=' table-display';
+    //this.remoteTableHeader.classList.add('table-display');
+    this.remoteTableHeader.className +=' table-display';
+
     // $(this.raisingExportsToggle).toggleClass('button--close', true);
     // Trying it this way so we're not adding jQuery for only one minor use case
     // and since we're setting a class and not toggling it
@@ -790,6 +787,21 @@ PresidentialFundsMap.prototype.displayUpdatedData_candidates = function(
     // If there are no results to show
     this.handleErrorState('NO_RESULTS_TO_DISPLAY');
   } else {
+    // Let's re-sort the results so the first three are the special IDs
+    // Filter results down to special "candidate" results
+    console.log('results: ', results);
+    let specialResults = results.filter(result => {
+      return specialCandidateIDs.includes(result.candidate_id);
+    });
+    console.log('specialResults: ', specialResults);
+    // And filter it to non-special "candidates"
+    let otherResults = results.filter(result => {
+      return !specialCandidateIDs.includes(result.candidate_id);
+    });
+    console.log('otherResults: ', otherResults);
+    results = specialResults.concat(otherResults);
+    console.log('results: ', results);
+
     // If the current candidate is in the new list, we'll need to decorate them
     // If not, we should change the default candidate to 'US'
     let currentCandInNewList = results.find(
@@ -968,8 +980,11 @@ PresidentialFundsMap.prototype.displayCoverageDates = function(data) {
  */
 PresidentialFundsMap.prototype.updateBreadcrumbs = function(dataObj) {
   let theHolder = this.element.querySelector(selector_breadcrumbNav);
+  let theFirstItem = theHolder.querySelectorAll('a')[0];
   let theSecondItem = theHolder.querySelectorAll('span')[1];
   let theSecondLabel = '';
+
+  let theFirstLabel = `Nationwide: All ${this.current_electionYear} candidates`;
 
   if (
     dataObj.candidate_id == specialCandidateIDs[0] &&
@@ -996,6 +1011,7 @@ PresidentialFundsMap.prototype.updateBreadcrumbs = function(dataObj) {
       theSecondLabel += dataObj.candidateLastName;
     }
   }
+  theFirstItem.innerHTML = theFirstLabel;
   theSecondItem.innerHTML = theSecondLabel;
   if (theSecondLabel == '') {
     theHolder.classList.add('view-us');
