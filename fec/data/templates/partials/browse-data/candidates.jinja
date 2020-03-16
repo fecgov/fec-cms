@@ -43,7 +43,7 @@
 	  <p><a href="/introduction-campaign-finance/understanding-ways-support-federal-candidates/presidential-elections/public-funding-presidential-elections/#reports-and-resources">Find which candidates have applied for presidential public
 	      funding</a> &#187;</p>
     <div class="row grid--2-wide">
-
+    {% if FEATURES.presidential_map %}
       <div class="grid__item">
         <a href="/data/candidates/president/presidential-map/">
           <div class="card card--horizontal card--alternating-bg">
@@ -59,6 +59,7 @@
           </div>
         </a>
       </div>
+     {% endif %}
       <div class="grid__item">
         <a href="/data/elections/president/2020/">
           <div class="card card--horizontal card--alternating-bg">
