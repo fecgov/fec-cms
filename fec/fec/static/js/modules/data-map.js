@@ -764,8 +764,13 @@ function moveTooltip(tooltip) {
   let theTooltipValue = document.querySelector('#map-tooltip .tooltip__value');
 
   // Measure those elements for our total height
-  let contentHeight = theTooltipTitle.clientHeight;
-  contentHeight += theTooltipValue.clientHeight;
+  // IE doesn't handle mouseleave well so we'll set a value for it,
+  // update for modern browsers, then continue
+  let contentHeight = 50;
+  if (theTooltipTitle) {
+    contentHeight = theTooltipTitle.clientHeight;
+    contentHeight += theTooltipValue.clientHeight;
+  }
   contentHeight += 30; // (padding)
 
   // Do it
