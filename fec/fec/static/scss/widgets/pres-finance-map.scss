@@ -78,9 +78,20 @@ $info-circle: 'data:image/svg+xml;charset=utf8, %3Csvg%20xmlns%3D%22http%3A%2F%2
   position: relative;
   width: 100%;
 
+  // Overrides for the filters
   .filters {
     background: none;
     border: none;
+    width: 100%;
+    // display: flex;
+    
+    .filter {
+      label {
+        float: left;
+        max-width: 33%;
+      }
+    }
+
   }
   .message, .message[aria-hidden="true"] {
     // .message, etc are copied from components/_messages.scss
@@ -118,7 +129,8 @@ $info-circle: 'data:image/svg+xml;charset=utf8, %3Csvg%20xmlns%3D%22http%3A%2F%2
   .candidate-list-wrapper {
     border-bottom: solid 2px $colorBorder;
     position: relative;
-    width: 100%;
+    width: 100%; //25%
+    order: 10;
 
     .remote-table-header {
       display: none; // We'll let JavaScript turn this on
@@ -206,7 +218,7 @@ $info-circle: 'data:image/svg+xml;charset=utf8, %3Csvg%20xmlns%3D%22http%3A%2F%2
       &:last-child {
         flex-grow: 1;
         flex-shrink: 1;
-        padding-right: #{$fontSizeBase * 2};
+        padding-right: $fontSizeBase;
       }
     }
   }
@@ -225,8 +237,60 @@ $info-circle: 'data:image/svg+xml;charset=utf8, %3Csvg%20xmlns%3D%22http%3A%2F%2
         min-width: 360px;
         min-height: 230px;
       }
+
+      path {
+        // fill: #fff;
+        transition: fill 1s, opacity .5s;
+        &.blur {
+          opacity: .33;
+          transition: opacity .5s;
+        }
+      }
+      circle {
+        opacity: 0;
+        transition: opacity .5s;
+        pointer-events: none;
+        fill: rgb(144, 202, 202);
+        stroke: rgb(59, 149, 148);
+      }
+      &[data-map_type="bubble"] {
+        path {
+          pointer-events: none;
+
+          &:not(.zoomed) {
+            fill: $colorTableTdBorder;
+            transition: fill 1s;
+          }
+          &.zoomed {
+            pointer-events: initial;
+          }
+        }
+        
+        circle {
+          opacity: 1;
+          pointer-events: initial;
+          z-index: 100;
+
+          &.blur {
+            opacity: 0;
+          }
+          transition: .5s;
+        }
+      }
+    }
+
+    .breadcrumb-nav {
+      padding: 0 7.5pt;
+      margin-bottom: 2rem;
+
+      &.view-us {
+        span {
+          display: none;
+        }
+      }
     }
   }
+  
   .map-details {
     display: flex;
     justify-content: space-between;
@@ -234,6 +298,7 @@ $info-circle: 'data:image/svg+xml;charset=utf8, %3Csvg%20xmlns%3D%22http%3A%2F%2
     .candidate-details {
       margin-bottom: 2rem;
       padding: 0 $fontSizeBase;
+      min-height: 9.6rem;
 
       h1 {
         font-family: $fontFamilySansSerif;
@@ -265,12 +330,40 @@ $info-circle: 'data:image/svg+xml;charset=utf8, %3Csvg%20xmlns%3D%22http%3A%2F%2
     }
   }
   .right-column-wrapper {
-    padding: 1rem;
-    text-align: right;
+    padding: 0; // 1rem responsive
+    text-align: left;
     width: 100%;
 
     a, button {
-      margin: 0 0 1rem 1rem;
+      margin: 0 0 1rem 0rem;
+    }
+   
+    .accordion__button { 
+      background-color: $colorTableTdBorder;
+      max-height: none;
+      margin-bottom: 0;
+
+      &[aria-expanded=true] + .accordion__content {
+        max-height: 1000px;
+        transition: max-height 5s;
+      }
+      &[aria-expanded=false] + .accordion__content {
+        max-height: 0px;
+        transition: max-height 5s;
+      }
+    }
+
+    .accordion__content {
+      padding: 0 1rem 2rem;
+
+      h5 {
+        font-family: inherit;
+      }
+      td {
+        line-height: 1.33em;
+        padding: .5em;
+        vertical-align: top;
+      }
     }
   }
   #financial-summaries {
@@ -309,67 +402,31 @@ $info-circle: 'data:image/svg+xml;charset=utf8, %3Csvg%20xmlns%3D%22http%3A%2F%2
     display: flex;
     flex-wrap: wrap;
 
-    .controls-wrapper {
-      width: 100%;
-
-      .typeahead-filter {
-        display: inline-block;
-        float: left;
-        height: 36px;
-        margin-bottom: 2rem;
-        margin-right: 1rem;
-        max-width: none;
-        right: 0;
-        position: relative;
-
+    .filters {
+      .filter {
+        max-width: none; // override base
         label {
-          float: left;
-          height: 36px;
-          line-height: 36px;
-          margin-right: .5em;
-          position: relative;
-        }
-        .filter__typeahead {
-          float: left;
-          height: 36px;
-          width: 23rem;
-          position: relative;
-        }
-        .filter__instructions {
-          padding-left: 21rem;
-          position: absolute;
-          top: 36px;
-        }
-        #contribs-by-state-typeahead-error {
-          background-color: transparent;
-          line-height: 1.1em;
           max-width: none;
-          padding-left: 210px;
-          top: 55px;
         }
-        &.is-error {
-          #contribs-by-state-typeahead-error {
-            height: auto;
-          }
-        }
-      }
-
-      fieldset {
-        display: inline-block;
-        float: left;
-        
-        &:first-child {
-          margin-right: 7.5pt;
-        }
-      }
-
-      label {
-        display: inline-block;// 
       }
     }
+    #filter-year {
+      width: calc(33.3% - .5rem);//20rem;
+      order: 5; // responsive
+      margin-right: .5rem;
+    }
+    #filter-map-type {
+      width: calc(66.6% - 1rem);
+      padding-left: 1rem;
+      order: 10;
+      margin-left: .5rem;
+      margin-right: .5rem;
+    }
+
     .candidate-list-wrapper {
-      margin-right: 1rem;
-      width: calc(33.33% - 1rem);
+      margin-right: .5rem;
+      width: calc(33.33% - .5rem);
+      order: 15;
 
       .remote-table-header {
         margin-bottom: 0.5px; // Make sure the border is visible above the scrollbar below it
@@ -385,14 +442,14 @@ $info-circle: 'data:image/svg+xml;charset=utf8, %3Csvg%20xmlns%3D%22http%3A%2F%2
       }
       td, th {
         &:nth-child(2) {
-          max-width: 90px;
+          max-width: 100px;
         }
       }
       tr {
 
         &.selected {
           background: $colorTableTdBorder;
-          border-left: 4px;
+          // border-left: thick;
           font-weight: $fontWeightBold;
           
         }
@@ -402,8 +459,9 @@ $info-circle: 'data:image/svg+xml;charset=utf8, %3Csvg%20xmlns%3D%22http%3A%2F%2
       }
     }
     .map-wrapper {
-      margin-top: 2.5rem;
-      margin-left: 1rem;
+      // margin-top: 2.5rem;
+      margin-left: .5rem;
+      margin-right: .5rem;
       width: calc(66.66% - 1rem);
 
       .election-map {  
@@ -412,6 +470,20 @@ $info-circle: 'data:image/svg+xml;charset=utf8, %3Csvg%20xmlns%3D%22http%3A%2F%2
           min-height: 285px;
         }
       }
+    }
+    .export-methodology-buttons-holder {
+      padding-top: 1rem;
+      text-align: right;
+    }
+    .right-column-wrapper {
+      width: 50%;
+      // margin-left: 1rem;
+      order: 35;
+    }  
+    #downloads-wrapper {
+      width: calc(50% - .5rem);
+      margin-right: .5rem;
+      order: 30;
     }
     .map-details {
       .more-info-wrapper {    
@@ -424,6 +496,48 @@ $info-circle: 'data:image/svg+xml;charset=utf8, %3Csvg%20xmlns%3D%22http%3A%2F%2
   // Large sizes
   &.w-l {
     @extend .w-m;
+
+    #filter-year {
+      width: calc(25% - .5rem);//20rem;
+      margin-right: .5rem;
+      display: inline-block //for IE11;
+    }
+
+    #filter-map-type {
+      width: calc(25% - 1rem);
+      margin-left: .5rem;
+      margin-right: .5rem;
+      display: inline-block //for IE11;
+    }
+
+    .candidate-list-wrapper {
+      width: calc(25% - .5rem);
+      order: 20;
+    }
+    .right-column-wrapper {
+      width: calc(28% - .5rem);
+      margin-left: .5rem;
+      order: 30;
+    }
+    .map-wrapper {
+      width: calc(47% - 1rem);
+      order: 25;
+
+      .election-map {  
+        svg {
+          min-width: 360px;
+          min-height: 230px;
+        }
+      }
+    }
+    .export-methodology-buttons-holder {
+      width: calc(50% - .5rem);
+      margin-left: .5rem;
+      order: 15;
+    }
+    #downloads-wrapper {
+      order: 35;
+    }
   }
 
   // Some overrides for table.table-display *, which was added because IE doesn't like Flex
@@ -493,56 +607,58 @@ $info-circle: 'data:image/svg+xml;charset=utf8, %3Csvg%20xmlns%3D%22http%3A%2F%2
   flex-direction: row;
   flex-wrap: wrap;
   
-  .TODO-SEPARATE-TOP-SECTION {
-    display: flex;
+  #filter-year {
+    width: 100%;//20rem;
+    order: 5; // responsive
+  }
+  #filter-map-type {
+    width: 100%;//22rem;
+    order: 15;
+  }
+  .export-methodology-buttons-holder {
+    margin-left: auto;
     width: 100%;
-
-    div#filter-year {
-      width: 20rem;
-    }
-    div#filter-map-type {
-      width: 22rem;
-    }
-    .TODO-buttons-holder {
-      margin-left: auto;
-    }
+    order: 25;
+    margin-bottom: 1rem;
   }
 
-  .candidate-list-wrapper {
-    width: 25%;
-  }
+
   .map-wrapper {
-    width: 50%;
+    width: 100%;//50%;
+    order: 20;
   }
   .right-column-wrapper {
-    width: 25%;
-  }
-  #downloads-wrapper {
-    width: 50%;
-    margin-left:25%;
+    width: 100%;//25%;
+    order: 30;
   }
 
-  .downloads-links {
-    display:grid;
-    grid-template-columns: repeat(auto-fill, minmax(8rem, 1fr));
-    grid-auto-rows: 1fr;
-    border-top: 1px solid $gray-dark;
-    border-bottom: 1px solid $gray-dark;
+  #downloads-wrapper {
+    width: 100%;//50%;
+    height: 0;
+    margin-left: 0;//25%;
+    overflow: hidden;
+    order: 35;
+  }
+
+  #downloads-links-wrapper {
+    height: 0;
+    overflow: hidden;
+  }
+
+  #downloads-links {
+    display:flex;
+    -ms-flex-wrap: wrap;
+    flex-wrap: wrap;
 
       a {
+        width:9rem;
         padding: 1rem;
         border: 1px solid $gray-light;
         text-align: center;
 
-        &:hover {
-          background:$gray-light;
-        };
+          &:hover {
+            background:$gray-lightest;
+          }
       }
-
   }
-
-
 }
-
-
-
