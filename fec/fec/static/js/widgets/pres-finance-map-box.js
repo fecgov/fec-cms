@@ -318,9 +318,9 @@ PresidentialFundsMap.prototype.init = function() {
   }
 
   if (is_ie) {
-    this.remoteTable.className +=' table-display';
+    this.remoteTable.className += ' table-display';
     //this.remoteTableHeader.classList.add('table-display');
-    this.remoteTableHeader.className +=' table-display';
+    this.remoteTableHeader.className += ' table-display';
 
     // $(this.raisingExportsToggle).toggleClass('button--close', true);
     // Trying it this way so we're not adding jQuery for only one minor use case
@@ -789,18 +789,15 @@ PresidentialFundsMap.prototype.displayUpdatedData_candidates = function(
   } else {
     // Let's re-sort the results so the first three are the special IDs
     // Filter results down to special "candidate" results
-    console.log('results: ', results);
     let specialResults = results.filter(result => {
       return specialCandidateIDs.includes(result.candidate_id);
     });
-    console.log('specialResults: ', specialResults);
-    // And filter it to non-special "candidates"
+
+    // And filter results to non-special "candidates"
     let otherResults = results.filter(result => {
       return !specialCandidateIDs.includes(result.candidate_id);
     });
-    console.log('otherResults: ', otherResults);
     results = specialResults.concat(otherResults);
-    console.log('results: ', results);
 
     // If the current candidate is in the new list, we'll need to decorate them
     // If not, we should change the default candidate to 'US'
