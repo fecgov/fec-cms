@@ -250,8 +250,6 @@ def get_presidential_coverage_date(filing_frequency):
 
     This function gets coverage end dates for presidential filers, depending on filing frequency.
     For a date after a filing deadline, get the next closest coverage end date.
-
-
     """
 
     # using OrderedDict because regular dictionaries don't keep their order
