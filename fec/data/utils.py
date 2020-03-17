@@ -1,6 +1,7 @@
 import math
 import calendar
 import datetime
+import collections
 
 from data import constants
 
@@ -210,6 +211,76 @@ def three_days_ago():
     """Find the date three days ago, return as mm/dd/yyyy"""
     three_days_ago = datetime.datetime.today() - datetime.timedelta(days=3)
     return three_days_ago.strftime('%m/%d/%Y')
+
+# Source: https://www.fec.gov/help-candidates-and-committees/dates-and-deadlines/2020-reporting-dates/2020-monthly-filers/
+
+MONTHLY_DATES = [
+    # due date  : coverage end
+    ("01/31/2020", "12/31/2019"),
+    ("02/20/2020", "01/31/2020"),
+    ("03/20/2020", "02/29/2020"),
+    ("04/20/2020", "03/31/2020"),
+    ("05/20/2020", "04/30/2020"),
+    ("06/20/2020", "05/31/2020"),
+    ("07/20/2020", "06/30/2020"),
+    ("08/20/2020", "07/31/2020"),
+    ("09/20/2020", "08/31/2020"),
+    ("10/20/2020", "09/30/2020"),
+    ("10/22/2020", "10/14/2020"),
+    ("12/03/2020", "11/23/2020"),
+    ("01/31/2021", "12/31/2020"),
+]
+
+# Source: https://www.fec.gov/help-candidates-and-committees/dates-and-deadlines/2020-reporting-dates/2020-quarterly-filers/
+QUARTERLY_DATES = [
+    # due date  : coverage end
+    ("01/31/2020", "12/31/2019"),
+    ("04/15/2020", "03/31/2020"),
+    ("07/15/2020", "06/30/2020"),
+    ("10/15/2020", "09/30/2020"),
+    ("10/22/2020", "10/14/2020"),
+    ("12/03/2020", "11/23/2020"),
+    ("01/31/2021", "12/31/2020"),
+]
+
+
+def get_presidential_coverage_date(filing_frequency):
+    """
+    Presidential bulk data files are updated the day after an election.
+
+    This function gets coverage end dates for presidential filers, depending on filing frequency.
+    For a date after a filing deadline, get the next closest coverage end date.
+
+
+    """
+
+    # using OrderedDict because regular dictionaries don't keep their order
+    if filing_frequency == "M":
+        date_lookup = collections.OrderedDict(MONTHLY_DATES)
+    else:
+        date_lookup = collections.OrderedDict(QUARTERLY_DATES)
+
+    tomorrow = get_tomorrow()
+
+    for due_date in date_lookup:
+        if tomorrow > datetime.datetime.strptime(due_date, '%m/%d/%Y'):
+            coverage_end_date = format_date_longform(date_lookup[due_date])
+        # don't keep looping after you've found the most recent due date
+        if tomorrow <= datetime.datetime.strptime(due_date, '%m/%d/%Y'):
+            break
+
+    return coverage_end_date
+
+
+def get_tomorrow():
+    return datetime.datetime.today() + datetime.timedelta(days=1)
+
+
+def format_date_longform(date):
+    """
+    "12/31/2019" -> "January 31, 2019"
+    """
+    return datetime.datetime.strptime(date, '%m/%d/%Y').strftime('%B %d, %Y')
 
 
 def extend(*dicts):
