@@ -46,6 +46,7 @@ const COVERAGE_DATES_LOADED = EVENT_APP_ID + '_coverage_dates_loaded';
 // TODO: Update so we're using IDs everywhere?
 const selector_mainElement = '#gov-fec-pres-finance';
 const selector_yearControl = '#filter-year';
+const selector_map_form = '#filter-map-type';
 const selector_mapTypeControl = '.js-map-switcher';
 const selector_resetApp = '.js-reset-app';
 const selector_map = '.map-wrapper .election-map';
@@ -169,6 +170,7 @@ function PresidentialFundsMap() {
   this.fetchingData = false; // Are we waiting for data?
   this.element = document.querySelector(selector_mainElement); // The visual element associated with this, this.instance
   this.candidateDetailsHolder; // Element to hold candidate name, party, office, and ID
+  this.yearControl = this.element.querySelector(selector_yearControl);
   this.current_electionYear = availElectionYears[0];
   this.current_electionState = 'US';
   this.current_electionStateName = 'United States';
@@ -196,15 +198,16 @@ function PresidentialFundsMap() {
  */
 PresidentialFundsMap.prototype.init = function() {
   // Init the election year selector (The element ID is set in data/templates/partials/widgets/pres-finance-map.jinja)
-  this.yearControl = this.element.querySelector(selector_yearControl);
   let theFieldset = this.yearControl.querySelector('fieldset');
+
   for (let i = 0; i < availElectionYears.length; i++) {
     let thisYear = availElectionYears[i];
     let newElem = document.createElement('label');
+    // TODO try to find the form field's value; restore it if possible (checked and this.current_electionYear)?
     let switched = i == 0 ? ' checked' : '';
     newElem.setAttribute('class', `toggle`);
     newElem.setAttribute('for', `switcher-${thisYear}`);
-    newElem.innerHTML = `<input type="radio" class="toggle" value="${thisYear}" id="switcher-${thisYear}" name="year_selector-TODO" data-prefix="TODO:" data-tag-value="${thisYear}" aria-controls="${thisYear}-message" tabindex="0"${switched}><span class="button--alt">${thisYear}</span>`;
+    newElem.innerHTML = `<input type="radio" class="toggle" value="${thisYear}" id="switcher-${thisYear}" name="year_selector" aria-controls="${thisYear}-message" tabindex="0"${switched}><span class="button--alt">${thisYear}</span>`;
     theFieldset.appendChild(newElem);
   }
   this.yearControl.addEventListener(
@@ -350,6 +353,8 @@ PresidentialFundsMap.prototype.init = function() {
 
   // And start the first load
   this.loadCandidatesList();
+
+  window.addEventListener('pageshow', this.handlePageShow.bind(this));
 };
 
 /**
@@ -540,6 +545,7 @@ PresidentialFundsMap.prototype.loadCandidateDetails = function(
   cand_name
 ) {
   document.dispatchEvent(new CustomEvent(ENTER_LOADING_EVENT));
+
   let instance = this;
 
   // If we're looking at a special ID, let's skip the details load and dispatch the event now
@@ -1029,7 +1035,9 @@ PresidentialFundsMap.prototype.updateBreadcrumbs = function(dataObj) {
  * @param {JSON} e.detail
  */
 PresidentialFundsMap.prototype.handleYearChange = function(e) {
+  // Save the newly-chosen year
   this.current_electionYear = e.detail;
+
   this.loadCandidatesList();
   logUsage('yearChange', this.current_electionYear);
 };
@@ -1342,6 +1350,16 @@ PresidentialFundsMap.prototype.handleResetClick = function(
     this.toggleUSOrStateDisplay();
     this.map.handleZoomReset();
   }
+};
+
+/**
+ *
+ */
+PresidentialFundsMap.prototype.handlePageShow = function() {
+  // For when a user navigates back to this page and has a cached form value,
+  // reset the toggles
+  this.yearControl.reset();
+  this.element.querySelector(selector_map_form).reset();
 };
 
 /**
