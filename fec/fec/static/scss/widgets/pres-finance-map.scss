@@ -219,6 +219,14 @@ $info-circle: 'data:image/svg+xml;charset=utf8, %3Csvg%20xmlns%3D%22http%3A%2F%2
     .t-note {
       line-height: 1.5em;
       margin: .5em 0;
+      user-select: none;
+      opacity: 1;
+      transition: opacity .5s;
+
+      &.hidden {
+        opacity: 0;
+        transition: opacity .5s;
+      }
     }
   }
   .map-wrapper {

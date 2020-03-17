@@ -66,6 +66,7 @@ const selector_stateDownloadLinks =
   selector_downloadsLinksWrapper + ' [data-stateID]';
 const selector_exportStateData = '.js-export-state-data';
 const selector_mapLegend = '.legend-container';
+const selector_candidateListDisclaimer = '.js-cand-list-note';
 
 // Imports, etc
 // const $ = jquery;
@@ -1356,6 +1357,15 @@ PresidentialFundsMap.prototype.toggleUSOrStateDisplay = function() {
   this.element.querySelector(
     selector_mapTypeControl
   ).style.display = nationalDisplay;
+  // For the candidate list disclaimer, we want to hold open the vertical space so we'll toggle its opacity
+  if (nationalDisplay == 'block')
+    this.element
+      .querySelector(selector_candidateListDisclaimer)
+      .classList.remove('hidden');
+  else
+    this.element
+      .querySelector(selector_candidateListDisclaimer)
+      .classList.add('hidden');
 
   // Show for only US view:
   this.element.querySelector(
