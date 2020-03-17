@@ -115,10 +115,6 @@ def search(request):
 
 
 def browse_data(request):
-    # TODO: load_presidential_map_candidate_data is unused, remove
-    load_presidential_map_candidate_data = api_caller.load_presidential_map_candidate_data(
-        2020
-    )
     monthly_coverage_date = utils.get_presidential_coverage_date("M")
     quarterly_coverage_date = utils.get_presidential_coverage_date("Q")
     return render(
@@ -128,7 +124,6 @@ def browse_data(request):
             "title": "Browse data",
             "parent": "data",
             "social_image_identifier": "data",
-            "load_presidential_map_candidate_data": load_presidential_map_candidate_data,
             "monthly_coverage_date": monthly_coverage_date,
             "quarterly_coverage_date": quarterly_coverage_date,
         },
