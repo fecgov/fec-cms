@@ -198,11 +198,6 @@ $info-circle: 'data:image/svg+xml;charset=utf8, %3Csvg%20xmlns%3D%22http%3A%2F%2
       padding: #{$fontSizeBase * .5};
       pointer-events: none; // removing mouse events here in favor of the <tr> handling them
       
-      // &:first-child {
-      //   flex-grow: 0;
-      //   flex-shrink: 0;
-      //   width: 2em;
-      // }
       &:last-child {
         flex-grow: 0;
         flex-shrink: 0;
@@ -221,12 +216,16 @@ $info-circle: 'data:image/svg+xml;charset=utf8, %3Csvg%20xmlns%3D%22http%3A%2F%2
         padding-right: $fontSizeBase;
       }
     }
+    .t-note {
+      line-height: 1.5em;
+      margin: .5em 0;
+    }
   }
   .map-wrapper {
     width: 100%;
     border-bottom: solid 2px $colorBorder;
     border-top: solid 2px $colorBorder;
-    padding: $fontSizeBase 0;
+    padding: 0 0 $fontSizeBase;
 
     .election-map {
       border: none;
@@ -261,7 +260,7 @@ $info-circle: 'data:image/svg+xml;charset=utf8, %3Csvg%20xmlns%3D%22http%3A%2F%2
             fill: $colorTableTdBorder;
             transition: fill 1s;
           }
-          &.zoomed {
+          &.zoomed, &.blur { // turn on pointer events for all paths when we're zoomed in, if they're featured or not
             pointer-events: initial;
           }
         }
@@ -272,6 +271,7 @@ $info-circle: 'data:image/svg+xml;charset=utf8, %3Csvg%20xmlns%3D%22http%3A%2F%2
           z-index: 100;
 
           &.blur {
+            pointer-events: initial;
             opacity: 0;
           }
           transition: .5s;
@@ -280,7 +280,7 @@ $info-circle: 'data:image/svg+xml;charset=utf8, %3Csvg%20xmlns%3D%22http%3A%2F%2
     }
 
     .breadcrumb-nav {
-      padding: 0 7.5pt;
+      padding: 3.25pt 7.5pt 0;
       margin-bottom: 2rem;
 
       &.view-us {
@@ -329,6 +329,9 @@ $info-circle: 'data:image/svg+xml;charset=utf8, %3Csvg%20xmlns%3D%22http%3A%2F%2
       }
     }
   }
+  .export-methodology-buttons-holder {
+    padding-top: 1rem;
+  }
   .right-column-wrapper {
     padding: 0; // 1rem responsive
     text-align: left;
@@ -344,16 +347,19 @@ $info-circle: 'data:image/svg+xml;charset=utf8, %3Csvg%20xmlns%3D%22http%3A%2F%2
       margin-bottom: 0;
 
       &[aria-expanded=true] + .accordion__content {
-        max-height: 1000px;
-        transition: max-height 5s;
+        max-height: 700px;
+        transition: all .5s;
       }
       &[aria-expanded=false] + .accordion__content {
+        display: block !important; // Check to see if this interferes with A11Y
         max-height: 0px;
-        transition: max-height 5s;
+        padding-bottom: 0px;
+        transition: all .5s;
       }
     }
 
     .accordion__content {
+      overflow: hidden;
       padding: 0 1rem 2rem;
 
       h5 {
@@ -472,7 +478,6 @@ $info-circle: 'data:image/svg+xml;charset=utf8, %3Csvg%20xmlns%3D%22http%3A%2F%2
       }
     }
     .export-methodology-buttons-holder {
-      padding-top: 1rem;
       text-align: right;
     }
     .right-column-wrapper {
@@ -517,6 +522,7 @@ $info-circle: 'data:image/svg+xml;charset=utf8, %3Csvg%20xmlns%3D%22http%3A%2F%2
     .right-column-wrapper {
       width: calc(28% - .5rem);
       margin-left: .5rem;
+      max-height: 490px;
       order: 30;
     }
     .map-wrapper {
@@ -534,8 +540,11 @@ $info-circle: 'data:image/svg+xml;charset=utf8, %3Csvg%20xmlns%3D%22http%3A%2F%2
       width: calc(50% - .5rem);
       margin-left: .5rem;
       order: 15;
+      padding-top: 3rem;
     }
     #downloads-wrapper {
+      width: 75%;
+      margin-left: calc(25% + .5rem);
       order: 35;
     }
   }
@@ -630,6 +639,10 @@ $info-circle: 'data:image/svg+xml;charset=utf8, %3Csvg%20xmlns%3D%22http%3A%2F%2
   .right-column-wrapper {
     width: 100%;//25%;
     order: 30;
+    border-bottom: solid 2px #333;
+    border-top: solid 2px #333;
+    overflow-x: hidden;
+    overflow-y: scroll;
   }
 
   #downloads-wrapper {
