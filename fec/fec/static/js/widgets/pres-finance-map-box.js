@@ -65,6 +65,7 @@ const selector_exportSummary = '.js-export-report-summary';
 const selector_stateDownloadLinks =
   selector_downloadsLinksWrapper + ' [data-stateID]';
 const selector_exportStateData = '.js-export-state-data';
+const selector_mapLegend = '.legend-container';
 
 // Imports, etc
 // const $ = jquery;
@@ -1096,6 +1097,10 @@ PresidentialFundsMap.prototype.handleMapTypeChange = function(e) {
 
   if (theMapElement)
     theMapElement.setAttribute('data-map_type', e.target.value);
+
+  // Hide the legend for the bubbles view
+  this.element.querySelector(selector_mapLegend).style.display =
+    e.target.value == 'bubble' ? 'none' : 'block';
 
   logUsage('mapTypeChange', e.target.value);
 };
