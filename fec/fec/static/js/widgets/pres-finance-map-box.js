@@ -763,7 +763,7 @@ PresidentialFundsMap.prototype.displayUpdatedData_candidate = function(detail) {
 
   if (specialCandidateIDs.includes(detail.candidate_id)) {
     theNameString = detail.name;
-    theOfficeString = 'for president';
+    theOfficeString = 'for President';
   } else {
     theNameString = buildCandidateNameAndPartyLink(
       detail.candidate_id,
@@ -771,7 +771,7 @@ PresidentialFundsMap.prototype.displayUpdatedData_candidate = function(detail) {
       this.current_electionYear,
       detail.party
     );
-    theOfficeString = 'Candidate for president';
+    theOfficeString = 'Candidate for President';
     theIDString = `ID: ${detail.candidate_id}`;
   }
   theOfficeField.innerHTML = theOfficeString;
@@ -1384,6 +1384,16 @@ PresidentialFundsMap.prototype.toggleUSOrStateDisplay = function() {
     this.element
       .querySelector(selector_candidateListDisclaimer)
       .classList.add('hidden');
+
+  // For the breadcrumb reset link, turn off its bottom border and pointer events if we're zoomed out
+  this.element
+    .querySelector(selector_resetApp)
+    .setAttribute(
+      'style',
+      this.current_electionState == 'US'
+        ? 'border-bottom:none; pointer-events:none'
+        : ''
+    );
 
   // Show for only US view:
   this.element.querySelector(
