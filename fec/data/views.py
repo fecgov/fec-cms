@@ -698,7 +698,7 @@ def pres_finance_map(request):
         "pres-finance-map.jinja",
         {
             "parent": "data",
-            "title": "Presidential Campaign Finance Map",
+            "title": "Presidential Candidate Map",
             "election_year": election_year,
             "social_image_identifier": "data",
             "page_specific_css": "/static/css/widgets/pres-finance-map.css",
