@@ -303,29 +303,32 @@ PresidentialFundsMap.prototype.init = function() {
   let is_ie =
     userAgent.indexOf('MSIE ') > 0 || userAgent.indexOf('Trident/7.0') > 0;
 
-  // Initialize the remote table header
-  // Find the remote header and save it
-  this.remoteTableHeader = this.element.querySelector(
-    '.js-remote-table-header'
-  );
-  // Save its <thead> for a few lines
-  let theRemoteTableHead = this.remoteTableHeader.querySelector('thead');
-  // Look at the data-for attribute of remoteTableHeader and save that element
-  this.remoteTable = this.element.querySelector(
-    '#' + this.remoteTableHeader.getAttribute('data-for')
-  );
-  // Remember the <thead> in remoteTable for few lines
-  let theRemotedTableHead = this.remoteTable.querySelector('thead');
-  // If we have both <thead> elements, we're ready to manipulate them
-  if (theRemoteTableHead && theRemotedTableHead) {
-    this.remoteTableHeader.style.display = 'table';
-    theRemotedTableHead.style.display = 'none';
+  // TODO - come back to the remote header for IE?
+  if (!is_ie) {
+    // Initialize the remote table header
+    // Find the remote header and save it
+    this.remoteTableHeader = this.element.querySelector(
+      '.js-remote-table-header'
+    );
+    // Save its <thead> for a few lines
+    let theRemoteTableHead = this.remoteTableHeader.querySelector('thead');
+    // Look at the data-for attribute of remoteTableHeader and save that element
+    this.remoteTable = this.element.querySelector(
+      '#' + this.remoteTableHeader.getAttribute('data-for')
+    );
+    // Remember the <thead> in remoteTable for few lines
+    let theRemotedTableHead = this.remoteTable.querySelector('thead');
+    // If we have both <thead> elements, we're ready to manipulate them
+    if (theRemoteTableHead && theRemotedTableHead) {
+      this.remoteTableHeader.style.display = 'table';
+      theRemotedTableHead.style.display = 'none';
+    }
   }
 
   if (is_ie) {
-    this.remoteTable.className += ' table-display';
+    // this.remoteTable.className += ' table-display'; // TODO come back to this
     //this.remoteTableHeader.classList.add('table-display');
-    this.remoteTableHeader.className += ' table-display';
+    // this.remoteTableHeader.className += ' table-display'; // TODO come back to this
 
     // $(this.raisingExportsToggle).toggleClass('button--close', true);
     // Trying it this way so we're not adding jQuery for only one minor use case
