@@ -287,7 +287,7 @@ $info-circle: 'data:image/svg+xml;charset=utf8, %3Csvg%20xmlns%3D%22http%3A%2F%2
         }
       }
       path.zero-value, circle.zero-value {
-        pointer-events: none;
+        pointer-events: none !important;
       }
     }
 
@@ -378,9 +378,31 @@ $info-circle: 'data:image/svg+xml;charset=utf8, %3Csvg%20xmlns%3D%22http%3A%2F%2
         font-family: inherit;
       }
       td {
-        line-height: 1.33em;
-        padding: .5em;
+        line-height: 1.33rem;
+        padding: 1rem;
         vertical-align: top;
+
+        &:first-child {
+          padding-left: 0;
+        }
+        &.indent {
+          padding-left: .75rem;
+        }
+        // &:last-child { // leave the right padding for last-child to make room for scrollbars
+        // padding-right: 0; // Don't add this since 
+        // }
+      }
+      .border-top {
+        border-top: thin solid #f1f1f1;
+      }
+      tr.close-b td {
+        padding-bottom: .75rem;
+      }
+      tr.close-t td {
+        padding-top: .75rem;
+      }
+      th {
+        padding-top: 1.5rem;
       }
     }
   }
