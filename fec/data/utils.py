@@ -258,20 +258,31 @@ def get_presidential_coverage_date(filing_frequency):
     else:
         date_lookup = collections.OrderedDict(QUARTERLY_DATES)
 
-    tomorrow = get_tomorrow()
+    today = get_today()
 
     for due_date in date_lookup:
-        if tomorrow > datetime.datetime.strptime(due_date, '%m/%d/%Y'):
+        if today > string_to_date(due_date):
             coverage_end_date = format_date_longform(date_lookup[due_date])
         # don't keep looping after you've found the most recent due date
-        if tomorrow <= datetime.datetime.strptime(due_date, '%m/%d/%Y'):
+        if today < string_to_date(due_date):
             break
 
     return coverage_end_date
 
 
-def get_tomorrow():
-    return datetime.datetime.today() + datetime.timedelta(days=1)
+def get_today():
+    """
+    Make this a separate function for testing. No timestamp
+    """
+    return datetime.date.today()
+
+
+def string_to_date(string_date):
+    """
+    Convert "12/31/2019" to `datetime.date`
+    `strptime` is only a property of `datetime` but we don't want timestamps
+    """
+    return datetime.datetime.strptime(string_date, '%m/%d/%Y').date()
 
 
 def format_date_longform(date):
