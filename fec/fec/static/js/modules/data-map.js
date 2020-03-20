@@ -339,6 +339,9 @@ DataMap.prototype.applyNewData = function() {
           instance.opts.addLegend,
           quantiles
         );
+      })
+      .attr('class', d => {
+        return this.chooseStateClasses(d, 'shape');
       });
   }
 
@@ -359,6 +362,9 @@ DataMap.prototype.applyNewData = function() {
           quantiles,
           instance.opts.addLegend
         );
+      })
+      .attr('class', d => {
+        return this.chooseStateClasses(d, 'circle');
       });
 
     this.sortCircles();
@@ -670,10 +676,14 @@ function buildStateTooltips(svg, path, instance) {
     .on('mouseenter', function(d) {
       let thisValue = instance.getStateValue(d.id);
       if (thisValue && thisValue !== 0) {
-        // this.parentNode.appendChild(this);
+        // If the value is <$0, we want to move the negative sign to in front of the dollar sign
+        let valueString =
+          thisValue > 0
+            ? '$' + Math.round(thisValue).toLocaleString()
+            : '-$' + Math.abs(Math.round(thisValue).toLocaleString());
         let html = tooltipTemplate({
           name: fips.fipsByCode[d.id].STATE_NAME,
-          total: '$' + Math.round(instance.getStateValue(d.id)).toLocaleString()
+          total: valueString
         });
         tooltip.style('display', 'block').html(html);
         moveTooltip(tooltip);
@@ -682,9 +692,13 @@ function buildStateTooltips(svg, path, instance) {
     .on('mousemove', function(d) {
       let thisValue = instance.getStateValue(d.id);
       if (thisValue && thisValue !== 0) {
+        let valueString =
+          thisValue > 0
+            ? '$' + Math.round(thisValue).toLocaleString()
+            : '-$' + Math.abs(Math.round(thisValue).toLocaleString());
         let html = tooltipTemplate({
           name: fips.fipsByCode[d.id].STATE_NAME,
-          total: '$' + Math.round(instance.getStateValue(d.id)).toLocaleString()
+          total: valueString
         });
         moveTooltip(tooltip);
         tooltip.style('display', 'block').html(html);
@@ -709,6 +723,12 @@ function buildStateTooltips(svg, path, instance) {
         );
       }
     });
+  // Toggling the tooltip between states causes a flicker
+  // but we don't want to leave it in place when the cursor is over the map but between circles
+  svg.selectAll('circle').on('mouseleave', function() {
+    moveTooltip(tooltip);
+    tooltip.style('display', 'none');
+  });
 
   // Add the mouseleave listeners to the dom elements rather than relying on d3
   // (d3 kept converting mouseleave to mouseout for IE11 and they're different for IE)
@@ -739,12 +759,17 @@ function buildStateTooltips(svg, path, instance) {
 DataMap.prototype.chooseStateClasses = function(d, shapeType) {
   let toReturn = shapeType;
 
+  // For fills, if we're looking at the zoomed state, add 'zoomed',
+  // Otherwise 'blur' it
   if (
     this.focusedStateID == fips.fipsByCode[d.id].STUSAB &&
     shapeType != 'circle'
   )
     toReturn += ' zoomed';
   else if (this.focusedStateID != 'US') toReturn += ' blur';
+
+  // Add zero-value to turn off pointer events
+  if (!d.value) toReturn += ' zero-value';
 
   return toReturn;
 };
@@ -764,8 +789,13 @@ function moveTooltip(tooltip) {
   let theTooltipValue = document.querySelector('#map-tooltip .tooltip__value');
 
   // Measure those elements for our total height
-  let contentHeight = theTooltipTitle.clientHeight;
-  contentHeight += theTooltipValue.clientHeight;
+  // IE doesn't handle mouseleave well so we'll set a value for it,
+  // update for modern browsers, then continue
+  let contentHeight = 50;
+  if (theTooltipTitle) {
+    contentHeight = theTooltipTitle.clientHeight;
+    contentHeight += theTooltipValue.clientHeight;
+  }
   contentHeight += 30; // (padding)
 
   // Do it

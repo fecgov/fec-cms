@@ -91,7 +91,15 @@ $(document).ready(function() {
     };
     var opts = {
       contentPrefix: contentPrefix,
-      openFirst: openFirst
+      openFirst: openFirst,
+      collapseOthers:
+        window.location.href.indexOf('president/presidential-map') > 0
+          ? true
+          : false,
+      customHiding:
+        window.location.href.indexOf('president/presidential-map') > 0
+          ? true
+          : false
     };
     new Accordion(this, selectors, opts);
   });

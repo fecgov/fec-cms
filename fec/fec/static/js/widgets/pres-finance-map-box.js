@@ -46,6 +46,7 @@ const COVERAGE_DATES_LOADED = EVENT_APP_ID + '_coverage_dates_loaded';
 // TODO: Update so we're using IDs everywhere?
 const selector_mainElement = '#gov-fec-pres-finance';
 const selector_yearControl = '#filter-year';
+const selector_map_form = '#filter-map-type';
 const selector_mapTypeControl = '.js-map-switcher';
 const selector_resetApp = '.js-reset-app';
 const selector_map = '.map-wrapper .election-map';
@@ -65,6 +66,8 @@ const selector_exportSummary = '.js-export-report-summary';
 const selector_stateDownloadLinks =
   selector_downloadsLinksWrapper + ' [data-stateID]';
 const selector_exportStateData = '.js-export-state-data';
+const selector_mapLegend = '.legend-container';
+const selector_candidateListDisclaimer = '.js-cand-list-note';
 
 // Imports, etc
 // const $ = jquery;
@@ -167,6 +170,7 @@ function PresidentialFundsMap() {
   this.fetchingData = false; // Are we waiting for data?
   this.element = document.querySelector(selector_mainElement); // The visual element associated with this, this.instance
   this.candidateDetailsHolder; // Element to hold candidate name, party, office, and ID
+  this.yearControl = this.element.querySelector(selector_yearControl);
   this.current_electionYear = availElectionYears[0];
   this.current_electionState = 'US';
   this.current_electionStateName = 'United States';
@@ -194,15 +198,16 @@ function PresidentialFundsMap() {
  */
 PresidentialFundsMap.prototype.init = function() {
   // Init the election year selector (The element ID is set in data/templates/partials/widgets/pres-finance-map.jinja)
-  this.yearControl = this.element.querySelector(selector_yearControl);
   let theFieldset = this.yearControl.querySelector('fieldset');
+
   for (let i = 0; i < availElectionYears.length; i++) {
     let thisYear = availElectionYears[i];
     let newElem = document.createElement('label');
+    // TODO try to find the form field's value; restore it if possible (checked and this.current_electionYear)?
     let switched = i == 0 ? ' checked' : '';
     newElem.setAttribute('class', `toggle`);
     newElem.setAttribute('for', `switcher-${thisYear}`);
-    newElem.innerHTML = `<input type="radio" class="toggle" value="${thisYear}" id="switcher-${thisYear}" name="year_selector-TODO" data-prefix="TODO:" data-tag-value="${thisYear}" aria-controls="${thisYear}-message" tabindex="0"${switched}><span class="button--alt">${thisYear}</span>`;
+    newElem.innerHTML = `<input type="radio" class="toggle" value="${thisYear}" id="switcher-${thisYear}" name="year_selector" aria-controls="${thisYear}-message" tabindex="0"${switched}><span class="button--alt">${thisYear}</span>`;
     theFieldset.appendChild(newElem);
   }
   this.yearControl.addEventListener(
@@ -298,33 +303,33 @@ PresidentialFundsMap.prototype.init = function() {
   let is_ie =
     userAgent.indexOf('MSIE ') > 0 || userAgent.indexOf('Trident/7.0') > 0;
 
-  // TODO: Activate the remote table header
-  // Initialize the remote table header
-  // Find the remote header and save it
-  // this.remoteTableHeader = this.element.querySelector(
-  //   '.js-remote-table-header'
-  // );
-  // Save its <thead> for a few lines
-  // let theRemoteTableHead = this.remoteTableHeader.querySelector('thead');
-  // Look at the data-for attribute of remoteTableHeader and save that element
-  // this.remoteTable = this.element.querySelector(
-  //   '#' + this.remoteTableHeader.getAttribute('data-for')
-  // );
-  // Remember the <thead> in remoteTable for few lines
-  // let theRemotedTableHead = this.remoteTable.querySelector('thead');
-  // If we have both <thead> elements, we're ready to manipulate them
-  // if (theRemoteTableHead && theRemotedTableHead) {
-  //   this.remoteTableHeader.style.display = 'table';
-  //   theRemotedTableHead.style.display = 'none';
-  // }
+  // TODO - come back to the remote header for IE?
+  if (!is_ie) {
+    // Initialize the remote table header
+    // Find the remote header and save it
+    this.remoteTableHeader = this.element.querySelector(
+      '.js-remote-table-header'
+    );
+    // Save its <thead> for a few lines
+    let theRemoteTableHead = this.remoteTableHeader.querySelector('thead');
+    // Look at the data-for attribute of remoteTableHeader and save that element
+    this.remoteTable = this.element.querySelector(
+      '#' + this.remoteTableHeader.getAttribute('data-for')
+    );
+    // Remember the <thead> in remoteTable for few lines
+    let theRemotedTableHead = this.remoteTable.querySelector('thead');
+    // If we have both <thead> elements, we're ready to manipulate them
+    if (theRemoteTableHead && theRemotedTableHead) {
+      this.remoteTableHeader.style.display = 'table';
+      theRemotedTableHead.style.display = 'none';
+    }
+  }
 
-  // if (is_ie) {
-  //   this.remoteTable.className +=' table-display';
-  //   //this.remoteTableHeader.classList.add('table-display');
-  //   this.remoteTableHeader.className +=' table-display';
-
-  // // }
   if (is_ie) {
+    // this.remoteTable.className += ' table-display'; // TODO come back to this
+    //this.remoteTableHeader.classList.add('table-display');
+    // this.remoteTableHeader.className += ' table-display'; // TODO come back to this
+
     // $(this.raisingExportsToggle).toggleClass('button--close', true);
     // Trying it this way so we're not adding jQuery for only one minor use case
     // and since we're setting a class and not toggling it
@@ -351,6 +356,8 @@ PresidentialFundsMap.prototype.init = function() {
 
   // And start the first load
   this.loadCandidatesList();
+
+  window.addEventListener('pageshow', this.handlePageShow.bind(this));
 };
 
 /**
@@ -541,6 +548,7 @@ PresidentialFundsMap.prototype.loadCandidateDetails = function(
   cand_name
 ) {
   document.dispatchEvent(new CustomEvent(ENTER_LOADING_EVENT));
+
   let instance = this;
 
   // If we're looking at a special ID, let's skip the details load and dispatch the event now
@@ -758,7 +766,7 @@ PresidentialFundsMap.prototype.displayUpdatedData_candidate = function(detail) {
 
   if (specialCandidateIDs.includes(detail.candidate_id)) {
     theNameString = detail.name;
-    theOfficeString = 'for president';
+    theOfficeString = 'for President';
   } else {
     theNameString = buildCandidateNameAndPartyLink(
       detail.candidate_id,
@@ -766,7 +774,7 @@ PresidentialFundsMap.prototype.displayUpdatedData_candidate = function(detail) {
       this.current_electionYear,
       detail.party
     );
-    theOfficeString = 'Candidate for president';
+    theOfficeString = 'Candidate for President';
     theIDString = `ID: ${detail.candidate_id}`;
   }
   theOfficeField.innerHTML = theOfficeString;
@@ -790,6 +798,18 @@ PresidentialFundsMap.prototype.displayUpdatedData_candidates = function(
     // If there are no results to show
     this.handleErrorState('NO_RESULTS_TO_DISPLAY');
   } else {
+    // Let's re-sort the results so the first three are the special IDs
+    // Filter results down to special "candidate" results
+    let specialResults = results.filter(result => {
+      return specialCandidateIDs.includes(result.candidate_id);
+    });
+
+    // And filter results to non-special "candidates"
+    let otherResults = results.filter(result => {
+      return !specialCandidateIDs.includes(result.candidate_id);
+    });
+    results = specialResults.concat(otherResults);
+
     // If the current candidate is in the new list, we'll need to decorate them
     // If not, we should change the default candidate to 'US'
     let currentCandInNewList = results.find(
@@ -968,8 +988,11 @@ PresidentialFundsMap.prototype.displayCoverageDates = function(data) {
  */
 PresidentialFundsMap.prototype.updateBreadcrumbs = function(dataObj) {
   let theHolder = this.element.querySelector(selector_breadcrumbNav);
+  let theFirstItem = theHolder.querySelectorAll('a')[0];
   let theSecondItem = theHolder.querySelectorAll('span')[1];
   let theSecondLabel = '';
+
+  let theFirstLabel = `Nationwide: All ${this.current_electionYear} candidates`;
 
   if (
     dataObj.candidate_id == specialCandidateIDs[0] &&
@@ -996,6 +1019,7 @@ PresidentialFundsMap.prototype.updateBreadcrumbs = function(dataObj) {
       theSecondLabel += dataObj.candidateLastName;
     }
   }
+  theFirstItem.innerHTML = theFirstLabel;
   theSecondItem.innerHTML = theSecondLabel;
   if (theSecondLabel == '') {
     theHolder.classList.add('view-us');
@@ -1014,7 +1038,9 @@ PresidentialFundsMap.prototype.updateBreadcrumbs = function(dataObj) {
  * @param {JSON} e.detail
  */
 PresidentialFundsMap.prototype.handleYearChange = function(e) {
+  // Save the newly-chosen year
   this.current_electionYear = e.detail;
+
   this.loadCandidatesList();
   logUsage('yearChange', this.current_electionYear);
 };
@@ -1083,6 +1109,10 @@ PresidentialFundsMap.prototype.handleMapTypeChange = function(e) {
 
   if (theMapElement)
     theMapElement.setAttribute('data-map_type', e.target.value);
+
+  // Hide the legend for the bubbles view
+  this.element.querySelector(selector_mapLegend).style.display =
+    e.target.value == 'bubble' ? 'none' : 'block';
 
   logUsage('mapTypeChange', e.target.value);
 };
@@ -1326,6 +1356,16 @@ PresidentialFundsMap.prototype.handleResetClick = function(
 };
 
 /**
+ *
+ */
+PresidentialFundsMap.prototype.handlePageShow = function() {
+  // For when a user navigates back to this page and has a cached form value,
+  // reset the toggles
+  this.yearControl.reset();
+  this.element.querySelector(selector_map_form).reset();
+};
+
+/**
  * Hides and shows the various components required for state/national view
  */
 PresidentialFundsMap.prototype.toggleUSOrStateDisplay = function() {
@@ -1338,6 +1378,25 @@ PresidentialFundsMap.prototype.toggleUSOrStateDisplay = function() {
   this.element.querySelector(
     selector_mapTypeControl
   ).style.display = nationalDisplay;
+  // For the candidate list disclaimer, we want to hold open the vertical space so we'll toggle its opacity
+  if (nationalDisplay == 'block')
+    this.element
+      .querySelector(selector_candidateListDisclaimer)
+      .classList.remove('hidden');
+  else
+    this.element
+      .querySelector(selector_candidateListDisclaimer)
+      .classList.add('hidden');
+
+  // For the breadcrumb reset link, turn off its bottom border and pointer events if we're zoomed out
+  this.element
+    .querySelector(selector_resetApp)
+    .setAttribute(
+      'style',
+      this.current_electionState == 'US'
+        ? 'border-bottom:none; pointer-events:none'
+        : ''
+    );
 
   // Show for only US view:
   this.element.querySelector(

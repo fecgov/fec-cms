@@ -115,12 +115,18 @@ def search(request):
 
 
 def browse_data(request):
-    load_presidential_map_candidate_data = api_caller.load_presidential_map_candidate_data(2020)
+    monthly_coverage_date = utils.get_presidential_coverage_date("M")
+    quarterly_coverage_date = utils.get_presidential_coverage_date("Q")
     return render(
         request,
         "browse-data.jinja",
-        {"title": "Browse data", "parent": "data", "social_image_identifier": "data",
-         'load_presidential_map_candidate_data': load_presidential_map_candidate_data},
+        {
+            "title": "Browse data",
+            "parent": "data",
+            "social_image_identifier": "data",
+            "monthly_coverage_date": monthly_coverage_date,
+            "quarterly_coverage_date": quarterly_coverage_date,
+        },
     )
 
 
@@ -692,7 +698,7 @@ def pres_finance_map(request):
         "pres-finance-map.jinja",
         {
             "parent": "data",
-            "title": "Presidential Campaign Finance Map",
+            "title": "Presidential candidate map",
             "election_year": election_year,
             "social_image_identifier": "data",
             "page_specific_css": "/static/css/widgets/pres-finance-map.css",
