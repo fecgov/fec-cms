@@ -1,33 +1,39 @@
 {% import "macros/widgets.jinja" as widgets %}
 
  <div id="gov-fec-pres-finance" class="pres-finance-map is-loading w-s" data-election_year="{{ election_year }}">
-    <div class="TODO-SEPARATE-TOP-SECTION">
-      <div id="filter-year" class="filters is-open">
-        <fieldset class="filter toggles js-filter js-table-switcher" style="border: none;">
-          <legend class="label t-inline-block">Candidates running in:</legend>
-          <!-- The radio buttons are added here by the code -->
-        </fieldset>
-      </div>
-      <div id="filter-map-type" class="filters is-open">
-        <fieldset class="filter toggles js-filter js-map-switcher" style="border: none;">
-          <legend class="label t-inline-block">View as:</legend>
-          <label class="toggle" for="switcher-map-type-bubbles">
-            <input type="radio" class="toggle" value="bubbles" id="switcher-map-type-bubbles" name="map-type-selector" aria-controls="bubbles-message" tabindex="0" checked><span class="button--alt">Bubbles</span>
-          </label>
-          <label class="toggle" for="switcher-map-type-gradient">
-            <input type="radio" class="toggle" value="gradient" id="switcher-map-type-gradient" name="map-type-selector" aria-controls="gradient-message" tabindex="0"><span class="button--alt">Gradient</span>
-          </label>
-        </fieldset>
-      </div>
-      <div class="TODO-buttons-holder">
-        <a class="button--cta button--export js-export-report-summary">Export report summary data</a>
-        <button class="button--alt js-methodology">Methodology</button>
-      </div>
+    <form id="filter-year" class="filters is-open">
+      <fieldset class="filter toggles js-filter js-table-switcher" style="border: none;">
+        <legend class="label">Candidates running in:</legend>
+        <!-- The radio buttons are added here by the code -->
+      </fieldset>
+    </form>
+    <form id="filter-map-type" class="filters is-open">
+      <fieldset class="filter toggles js-filter js-map-switcher" style="border: none;">
+        <legend class="label">View as:</legend>
+        <label class="toggle" for="switcher-map-type-gradient">
+          <input type="radio" class="toggle" value="gradient" id="switcher-map-type-gradient" name="map-type-selector" aria-controls="gradient-message" tabindex="0" checked><span class="button--alt">Gradient</span>
+        </label>
+        <label class="toggle" for="switcher-map-type-bubbles">
+          <input type="radio" class="toggle" value="bubble" id="switcher-map-type-bubbles" name="map-type-selector" aria-controls="bubbles-message" tabindex="0"><span class="button--alt">Bubbles</span>
+        </label>
+      </fieldset>
+    </form>
+    <div class="export-methodology-buttons-holder">
+      <a class="button--cta button--export js-export-report-summary">Export report summary data</a>
+      <a class="button--alt" href="/campaign-finance-data/presidential-map-data/">Methodology</a>
     </div>
     <div class="candidate-list-wrapper">
+      <table class="remote-table-header js-remote-table-header" data-for="pres-fin-map-candidates-table">
+        <thead role="presentation">
+          <tr>
+            <th scope="col">Candidate</th>
+            <th scope="col" class="t-right-aligned">Total raised</th>
+          </tr>
+        </thead>
+      </table>
       <div class="table-scroller">
         <div class="ps-scrollbar-y-rail"><div class="ps-scrollbar-y"></div></div>
-        <table id="pres-fin-map-candidates-table" class="data-table data-table--heading-borders data-table--entity u-margin--top" data-type="filings-{{ dataType }}" data-cycle="{{ election_year }}">
+        <table id="pres-fin-map-candidates-table" class="data-table data-table--heading-borders data-table--entity u-margin--top"">
           <thead>
             <tr>
               <th scope="col">Candidate</th>
@@ -41,11 +47,12 @@
           </tbody>
         </table>
       </div>
+      <span class="t-note js-cand-list-note" unselectable="on">Total raised is shown in millions of dollars.</span>
     </div>
     <div class="map-wrapper">
       <div id="breadcrumb-wrapper">
         <nav class="breadcrumb-nav">
-          <a class="js-reset-app" href="" data-stateID="">Nationwide: All candidates</a><span> &raquo; </span><span></span>
+          <a class="js-reset-app" href="" data-stateID="">Nationwide: All candidates</a><span> &nbsp;&raquo;&nbsp; </span><span></span>
         </nav>
       </div>
       <div class="map-details">
@@ -63,85 +70,85 @@
     </div>
     <div class="right-column-wrapper">
       <a class="button--cta button--export js-export-state-data" href="">Export ST raising data</a>
-      <ul id="financial-summaries" class="js-accordion" data-content-prefix="first">
+      <ul id="financial-summaries" class="js-accordion" data-content-prefix="first" data-open-first="true">
         <li>
-          <button class="accordion__button">Summary</button>
-          <h5 class="js-cand-name-par-a">NAME, CANDIDATE [PAR]</h5>
-          <div class="js-coverage-date">coverage date</div>
+          <button class="accordion__button js-accordion-trigger" aria-expanded="true">Summary</button>
           <div class="accordion__content">
-            <table class="simple-table">
-              <tbody>
-                <tr><td class="simple-table__cell">Receipts</td><td class="t-right-aligned t-mono" data-sum-id="net_receipts">$000</td></tr>
-                <tr><td>Disbursements</td><td class="t-right-aligned t-mono" data-sum-id="disbursements_less_offsets">$000</td></tr>
-                <tr><td>Cash-on-hand</td><td class="t-right-aligned t-mono" data-sum-id="cash_on_hand_end">CHECK THIS $000</td></tr>
-                <tr><td>Debts owed by committee</td><td class="t-right-aligned t-mono" data-sum-id="debts_owed_by_committee">$000</td></tr>
-              </tbody>
-            </table>
+            <h5 class="js-cand-name-par-a"><!--NAME, CANDIDATE [PAR]--></h5>
+            <div class="js-coverage-date"><!--coverage date--></div>
+              <table>
+                <tbody>
+                  <tr><td>Receipts</td><td class="t-right-aligned t-mono" data-sum-id="net_receipts">$000</td></tr>
+                  <tr class="border-top"><td>Disbursements</td><td class="t-right-aligned t-mono" data-sum-id="disbursements_less_offsets">$000</td></tr>
+                  <tr class="border-top"><td>Cash-on-hand</td><td class="t-right-aligned t-mono" data-sum-id="cash_on_hand_end">CHECK THIS $000</td></tr>
+                  <tr class="border-top"><td>Debts owed by committee</td><td class="t-right-aligned t-mono" data-sum-id="debts_owed_by_committee">$000</td></tr>
+                </tbody>
+              </table>
           </div>
         </li>
         <li>
-          <button class="accordion__button">Raising</button>
+          <button class="accordion__button js-accordion-trigger">Raising</button>
           <div class="accordion__content">
             <h5 class="js-cand-name-par-a">NAME, CANDIDATE [PAR]</h5>
             <div class="js-coverage-date">coverage date</div>
             <table>
               <tbody>
-                <tr><td colspan="2">Contributions from</td></tr>
-                <tr><td>&nbsp;&nbsp;Individuals</td><td class="t-right-aligned t-mono" data-sum-id="individual_contributions_less_refunds">$000</td></tr>
-                <tr><td>&nbsp;&nbsp;PACs</td><td class="t-right-aligned t-mono" data-sum-id="pac_contributions_less_refunds">$000</td></tr>
-                <tr><td>&nbsp;&nbsp;Parties</td><td class="t-right-aligned t-mono" data-sum-id="party_contributions_less_refunds">$000</td></tr>
-                <tr><td>&nbsp;&nbsp;Candidates</td><td class="t-right-aligned t-mono" data-sum-id="candidate_contributions_less_repayments">$000</td></tr>
-                <tr><td>Federal funds</td><td class="t-right-aligned t-mono" data-sum-id="federal_funds">CHECK THIS $000</td></tr>
-                <tr><td>Transfers-in</td><td class="t-right-aligned t-mono" data-sum-id="transfers_from_affiliated_committees">$000</td></tr>
-                <tr><td colspan="2">Contributions by size</td></tr>
-                <tr><td>$200 and under</td><td class="t-right-aligned t-mono" data-size_range_id="1">$000</td></tr>
-                <tr><td>$200.01-$499</td><td class="t-right-aligned t-mono" data-size_range_id="2">$000</td></tr>
-                <tr><td>$500-$999</td><td class="t-right-aligned t-mono" data-size_range_id="3">$000</td></tr>
-                <tr><td>$1000-$1,999</td><td class="t-right-aligned t-mono" data-size_range_id="4">$000</td></tr>
-                <tr><td>$2000 and over</td><td class="t-right-aligned t-mono" data-size_range_id="5">$000</td></tr>
+                <tr><th colspan="2">Contributions from</th></tr>
+                <tr class="close-b close-t"><td class="indent">Individuals</td><td class="t-right-aligned t-mono" data-sum-id="individual_contributions_less_refunds">$000</td></tr>
+                <tr class="close-b close-t"><td class="indent">PACs</td><td class="t-right-aligned t-mono" data-sum-id="pac_contributions_less_refunds">$000</td></tr>
+                <tr class="close-b close-t"><td class="indent">Parties</td><td class="t-right-aligned t-mono" data-sum-id="party_contributions_less_refunds">$000</td></tr>
+                <tr class="close-t"><td class="indent">Candidate</td><td class="t-right-aligned t-mono" data-sum-id="candidate_contributions_less_repayments">$000</td></tr>
+                <tr class="border-top"><td>Public funds</td><td class="t-right-aligned t-mono" data-sum-id="federal_funds">CHECK THIS $000</td></tr>
+                <tr class="border-top"><td>Transfers-in</td><td class="t-right-aligned t-mono" data-sum-id="transfers_from_affiliated_committees">$000</td></tr>
+                <tr><th colspan="2">Contributions by size</th></tr>
+                <tr class="close-b close-t"><td>$200 and under</td><td class="t-right-aligned t-mono" data-size_range_id="1">$000</td></tr>
+                <tr class="border-top close-b close-t"><td>$200.01-$499</td><td class="t-right-aligned t-mono" data-size_range_id="2">$000</td></tr>
+                <tr class="border-top close-b close-t"><td>$500-$999</td><td class="t-right-aligned t-mono" data-size_range_id="3">$000</td></tr>
+                <tr class="border-top close-b close-t"><td>$1000-$1,999</td><td class="t-right-aligned t-mono" data-size_range_id="4">$000</td></tr>
+                <tr class="border-top close-t"><td>$2000 and over</td><td class="t-right-aligned t-mono" data-size_range_id="5">$000</td></tr>
               </tbody>
             </table>
             <a href="" class="button--cta button--export js-export-raising-data">Export raising data</a>
           </div>
         </li>
         <li>
-          <button class="accordion__button">Spending</button>
+          <button class="accordion__button js-accordion-trigger">Spending</button>
           <div class="accordion__content">
             <h5 class="js-cand-name-par-a">NAME, CANDIDATE [PAR]</h5>
             <div class="js-coverage-date">coverage date</div>
             <table>
               <tbody>
-                <tr><td>Operating Expenditures</td><td class="t-right-aligned t-mono" data-sum-id="operating_expenditures">$000</td></tr>
-                <tr><td>Transfers to other authorized</td><td class="t-right-aligned t-mono" data-sum-id="transfers_to_other_authorized_committees">$000</td></tr>
-                <tr><td>Fundraising expenditures</td><td class="t-right-aligned t-mono" data-sum-id="fundraising_disbursements">$000</td></tr>
-                <tr><td>Exempt legal and accounting disbursements</td><td class="t-right-aligned t-mono" data-sum-id="exempt_legal_accounting_disbursement">$000</td></tr>
-                <tr><td colspan="2">Loan repayments</td></tr>
-                <tr><td>&nbsp;&nbsp;Candidate</td><td class="t-right-aligned t-mono" data-sum-id="repayments_loans_made_by_candidate">$000</td></tr>
-                <tr><td>&nbsp;&nbsp;Other</td><td class="t-right-aligned t-mono" data-sum-id="repayments_other_loans">$000</td></tr>
-                <tr><td>Other disbursements</td><td class="t-right-aligned t-mono" data-sum-id="other_disbursements">$000</td></tr>
-                <tr><td>Offsets to expenditures</td><td class="t-right-aligned t-mono" data-sum-id="offsets_to_operating_expenditures">$000</td></tr>
-                <tr><td>Contribution refunds</td><td class="t-right-aligned t-mono" data-sum-id="total_contribution_refunds">$000</td></tr>
+                <tr><td>Operating expenditures</td><td class="t-right-aligned t-mono" data-sum-id="operating_expenditures">$000</td></tr>
+                <tr class="border-top"><td>Transfers to other authorized</td><td class="t-right-aligned t-mono" data-sum-id="transfers_to_other_authorized_committees">$000</td></tr>
+                <tr class="border-top"><td>Fundraising expenditures</td><td class="t-right-aligned t-mono" data-sum-id="fundraising_disbursements">$000</td></tr>
+                <tr class="border-top"><td>Exempt legal and accounting disbursements</td><td class="t-right-aligned t-mono" data-sum-id="exempt_legal_accounting_disbursement">$000</td></tr>
+                <tr class="border-top"><td colspan="2">Loan repayments</td></tr>
+                <tr class="close-b close-t"><td class="indent">Candidate</td><td class="t-right-aligned t-mono" data-sum-id="repayments_loans_made_by_candidate">$000</td></tr>
+                <tr class="close-b close-t"><td class="indent">Other</td><td class="t-right-aligned t-mono" data-sum-id="repayments_other_loans">$000</td></tr>
+                <tr class="border-top"><td>Other disbursements</td><td class="t-right-aligned t-mono" data-sum-id="other_disbursements">$000</td></tr>
+                <tr class="border-top"><td>Offsets to expenditures</td><td class="t-right-aligned t-mono" data-sum-id="offsets_to_operating_expenditures">$000</td></tr>
+                <tr class="border-top"><td>Contribution refunds</td><td class="t-right-aligned t-mono" data-sum-id="total_contribution_refunds">$000</td></tr>
               </tbody>
             </table>
             <a href="" class="button--cta button--export js-export-spending-data">Export spending data</a>
           </div>
         </li>
       </ul>
-        {# <a class="TODO-button--standard button--table js-browse-pres-finance-map" href="TODO-/data/receipts/individual-contributions">Browse TODO stuff</a> #}
     </div>
     <div id="downloads-wrapper">
-      <header class="heading--main content__section--extra">
-        <h2>
-         Export raising data
-        </h2>
+      <header class="heading--main content__section--extra">   
+         <button class="button--open js-toggle-raising-exports u-float-right"> <h2>
+         Export raising data</h2><span class="u-visually-hidden">Toggle raising-data downloads area</span></button> 
       </header>
-      <div class="u-margin--bottom"><a href="" data-stateID="ALL">All states</a></div>
-      <div class=downloads-links>
-        {% for value in constants.states_excl_territories %}
-           <a href="" data-stateID="{{ value }}">{{ value }}</a>
-        {% endfor %}
-        <a href="" data-stateID="OTHER">Other</a>
-      </div>
+        <div id="downloads-links-wrapper">
+        <div class="u-margin--bottom"><a href="" data-stateID="ALL">All states</a></div>
+        <div id="downloads-links">
+          {% for value in constants.states_excl_territories %}
+             <a href="" data-stateID="{{ value }}">{{ value }}</a>
+          {% endfor %}
+          <a href="" data-stateID="OTHER">Other</a>
+        </div>
+       </div>
     </div>
 </div>
 <script defer src="{{ asset_for_js('widgets/pres-finance-map-box.js') }}" data-standalone="true"></script>

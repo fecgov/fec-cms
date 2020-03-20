@@ -1,4 +1,5 @@
 import unittest
+import datetime
 
 from collections import OrderedDict
 from django.test import TestCase
@@ -140,3 +141,28 @@ class TestCycles(unittest.TestCase):
         wisconsin = api_caller.get_regular_senate_cycles('wi')
         assert 2016 in wisconsin
         assert 2014 not in wisconsin
+
+
+class TestPresidentialCoverageDate(unittest.TestCase):
+    @mock.patch('data.utils.get_tomorrow')
+    def test_get_presidential_coverage_date(self, get_tomorrow):
+
+        get_tomorrow.return_value = datetime.datetime(2020, 3, 18)
+        assert utils.get_presidential_coverage_date("M") == "January 31, 2020"
+        assert utils.get_presidential_coverage_date("Q") == "December 31, 2019"
+
+        get_tomorrow.return_value = datetime.datetime(2020, 3, 22)
+        assert utils.get_presidential_coverage_date("M") == "February 29, 2020"
+        assert utils.get_presidential_coverage_date("Q") == "December 31, 2019"
+
+        get_tomorrow.return_value = datetime.datetime(2020, 4, 17)
+        assert utils.get_presidential_coverage_date("M") == "February 29, 2020"
+        assert utils.get_presidential_coverage_date("Q") == "March 31, 2020"
+
+        get_tomorrow.return_value = datetime.datetime(2020, 4, 22)
+        assert utils.get_presidential_coverage_date("M") == "March 31, 2020"
+        assert utils.get_presidential_coverage_date("Q") == "March 31, 2020"
+
+        get_tomorrow.return_value = datetime.datetime(2022, 2, 22)
+        assert utils.get_presidential_coverage_date("M") == "December 31, 2020"
+        assert utils.get_presidential_coverage_date("Q") == "December 31, 2020"

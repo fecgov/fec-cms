@@ -683,18 +683,14 @@ $(document).ready(function() {
         });
         break;
       case 'communication-cost-committee':
-        path = [
-          'committee',
-          committeeId,
-          'communication_costs',
-          'by_candidate'
-        ];
+        path = ['communication_costs', 'aggregates'];
         // For raising/spending tabs, use previous cycle if provided
         cycle = context.cycle || $table.attr('data-cycle');
         tables.DataTable.defer($table, {
           path: path,
           query: _.extend(query, {
-            cycle: cycle
+            cycle: cycle,
+            committee_id: committeeId
           }),
           columns: communicationCostColumns,
           order: [[0, 'desc']],
