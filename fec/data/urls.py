@@ -49,7 +49,7 @@ urlpatterns = [
 ]
 
 if settings.FEATURES.get('presidential_map'):
-    # Presidential Campaign Finance Map
+    # Presidential candidate map
     urlpatterns.append(
         url(r'^data/candidates/president/presidential-map/$', views.pres_finance_map)
     )
