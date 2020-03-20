@@ -135,8 +135,9 @@ def search(request):
 
 # Policy and guidance search
 
+# Search.gov API call
 def policy_guidance_search_site(query, limit=0, offset=0):
-    """Calls the Search.gov search and then processes the results if successful"""
+    """Calls the Search.gov policy and guidance search and then processes the results if successful"""
     params = {
         'affiliate': 'fec_content_s3',
         'access_key': settings.SEARCH_GOV_POLICY_GUIDANCE_KEY,
@@ -146,7 +147,7 @@ def policy_guidance_search_site(query, limit=0, offset=0):
     }
     print ('got params')
     r = requests.get('https://search.usa.gov/api/v2/search/i14y', params=params)
-    print (r)
+    
     if r.status_code == 200:
         return process_site_results(r.json(), limit=limit, offset=offset)
 
@@ -162,11 +163,10 @@ def policy_guidance_search(request):
     offset = request.GET.get('offset', 0)
 
     results = policy_guidance_search_site(search_query, limit=limit, offset=offset)
-    print(results)
-    # results['count'] += len(results['results'])
+    
+    resultset = {}
+    resultset['search_query'] = search_query
+    resultset['results'] = results
+    resultset['self'] = {'title': 'Policy and Guidance search'}
 
-    return render(request, 'search/policy_guidance_search_page.html', {
-        'search_query': search_query,
-        'results': results,
-        'self': {'title': 'Policy and Guidance search results'}
-    })
+    return render(request, 'search/policy_guidance_search_page.html', resultset)

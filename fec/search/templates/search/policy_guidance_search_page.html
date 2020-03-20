@@ -24,53 +24,40 @@
 {% block feed %}
   <div class="row" id="results-container">
     <div class="main">
-      {% if results.count > 0 %}
-        {% if results.best_bets.results %}
-          <section class="option" id="suggestions">
-            <h2>Suggestions</h2>
-            <ul>
-            {% for result in results.best_bets.results %}
+      {% if results.results %}
+        <section class="option" id="site">
+          <div class="row">
+            <h2 class="u-float-left u-no-margin">Results</h2>
+            <div class="u-float-right">
+              <span class="t-sans">{{ results.meta.count }} total results</span>
+            </div>
+          </div>
+          <ul>
+            {% for result in results.results %}
               <li class="post post--icon">
-                <h3><i class="icon icon--inline--left i-star"></i><a href="{{ result.url }}">{{ result.title | highlight_matches }}</a></h3>
+                <div class="post__pre">
+                    <div class="post__date">{{ result.publication_date }}</div>
+                  </div>
+                <h3>
+                  <i class="icon icon--inline--left {% if result.icon == 'page' %}i-document{% else %}i-table{% endif %}"></i><a href="{{ result.url }}">{{ result.title | highlight_matches }}</a>
+                </h3>
                 <div class="post__path t-small t-sans">{{ result.url }}</div>
-                <div class="t-sans post__preview">{{ result.description | highlight_matches }}</div>
+                <p class="post__preview t-note">{{ result.snippet | highlight_matches }}</p>
               </li>
             {% endfor %}
-            </ul>
-          </section>
-        {% endif %}
-        {% if results %}
-          <section class="option" id="site">
-            <div class="row">
-              <h2 class="u-float-left u-no-margin">Results</h2>
-              <div class="u-float-right">
-                <span class="t-sans">{{ results.meta.count }} total results</span>
-              </div>
+          </ul>
+          <div class="results-info">
+            <span class="t-sans">{{ results.meta.count }} results</span>
+            <div class="u-float-right">
+              {% if results.meta.prev_offset %}
+                <a class="button button--standard button--previous" href="{% url 'policy-guidance-search' %}?query={{ search_query|urlencode }}&amp;offset={{ results.meta.prev_offset }}"><span class="u-visually-hidden">Previous</span></a>
+              {% endif %}
+              {% if results.meta.next_offset %}
+                <a class="button button--standard button--next" href="{% url 'policy-guidance-search' %}?query={{ search_query|urlencode }}&amp;offset={{ results.meta.next_offset }}"><span class="u-visually-hidden">Next</span></a>
+              {% endif %}
             </div>
-            <ul>
-              {% for result in results %}
-                <li class="post post--icon">
-                  <h3>
-                    <i class="icon icon--inline--left {% if result.icon == 'page' %}i-document{% else %}i-table{% endif %}"></i><a href="{{ result.url }}">{{ result.title | highlight_matches }}</a>
-                  </h3>
-                  <div class="post__path t-small t-sans">{{ result.url }}</div>
-                  <p class="post__preview t-note">{{ result.snippet | highlight_matches }}</p>
-                </li>
-              {% endfor %}
-            </ul>
-            <div class="results-info">
-              <span class="t-sans">{{ results.meta.count }} results</span>
-              <div class="u-float-right">
-                {% if results.meta.prev_offset %}
-                  <a class="button button--standard button--previous" href="{% url 'search' %}?query={{ search_query|urlencode }}&amp;offset={{ results.meta.prev_offset }}"><span class="u-visually-hidden">Previous</span></a>
-                {% endif %}
-                {% if results.meta.next_offset %}
-                  <a class="button button--standard button--next" href="{% url 'search' %}?query={{ search_query|urlencode }}&amp;offset={{ results.meta.next_offset }}"><span class="u-visually-hidden">Next</span></a>
-                {% endif %}
-              </div>
-            </div>
-          </section>
-        {% endif %}
+          </div>
+        </section>
       {% else %}
         <div class="message message--info">
           <h2>No results</h2>
