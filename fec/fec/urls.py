@@ -29,7 +29,7 @@ urlpatterns = [
     url(r'^meetings/$', home_views.index_meetings, name="meetings_page"),
     url(r'^search/$', search_views.search, name='search'),
     url(r'^updates/$', home_views.updates),
-    url(r'^legal-resources/policy-guidance-search/$', search_views.policy_guidance_search, name='policy-guidance-search'),
+    url(r'^legal-resources/policy-and-other-guidance/guidance-documents/$', search_views.policy_guidance_search, name='policy-guidance-search'),
     url(r'', include('data.urls')),  # URLs for /data
     url(r'', include('legal.urls')),  # URLs for legal pages
     url(r'', include(wagtail_urls)),

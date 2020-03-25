@@ -1,22 +1,19 @@
 {% extends "home/feed_base.html" %}
-<!-- {% load wagtailcore_tags %}
-{% load staticfiles %}
-{% load filters %} -->
+{% load filters %}
 
 {% block intro %}
   <p class="t-lead">Search or browse the latest information about the Commission and federal campaign finance law.</p>
+  <p>Guidance documents lack the force and effect of law, unless expressly authorized by statute or incorporated into a contract. The agency may not cite, use, or rely on any guidance that is not posted on the website existing under Executive Order 13892, except to establish historical facts.</p>
 {% endblock %}
 
 {% block filters %}
-  <form action="{% url 'policy-guidance-search' %}" method="get">
-    <div class="container">
-      <div class="combo combo--search content__section">
+  <form class="container" action="{% url 'policy-guidance-search' %}" method="get">
+    <div class="combo combo--search content__section">
       <label for="search" class="label">Search all documents</label>
       <input id="search" type="text" class="combo__input" name="query"{% if search_query %} value="{{ search_query }}"{% endif %}>
       <button type="submit" class="button--cta combo__button button--search">
         <span class="u-visually-hidden">Search</span>
       </button>
-      </div>
     </div>
   </form>
 {% endblock %}
@@ -35,9 +32,6 @@
           <ul>
             {% for result in results.results %}
               <li class="post post--icon">
-                <div class="post__pre">
-                    <div class="post__date">{{ result.publication_date }}</div>
-                  </div>
                 <h3>
                   <i class="icon icon--inline--left {% if result.icon == 'page' %}i-document{% else %}i-table{% endif %}"></i><a href="{{ result.url }}">{{ result.title | highlight_matches }}</a>
                 </h3>

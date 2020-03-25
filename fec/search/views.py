@@ -147,7 +147,7 @@ def policy_guidance_search_site(query, limit=0, offset=0):
     }
     print ('got params')
     r = requests.get('https://search.usa.gov/api/v2/search/i14y', params=params)
-    
+    print (r)
     if r.status_code == 200:
         return process_site_results(r.json(), limit=limit, offset=offset)
 
@@ -163,10 +163,11 @@ def policy_guidance_search(request):
     offset = request.GET.get('offset', 0)
 
     results = policy_guidance_search_site(search_query, limit=limit, offset=offset)
+    print(results)
     
     resultset = {}
     resultset['search_query'] = search_query
     resultset['results'] = results
-    resultset['self'] = {'title': 'Policy and Guidance search'}
+    resultset['self'] = {'title': 'Guidance documents'}
 
     return render(request, 'search/policy_guidance_search_page.html', resultset)
