@@ -1235,7 +1235,6 @@ PresidentialFundsMap.prototype.refreshOverlay = function() {
  * @param {MouseEvent} e
  */
 PresidentialFundsMap.prototype.openDownloads = function() {
-  let instance = this;
 
   //show downloads area on initial click (leave shown after that)
   this.downloadsWrapper.style.height = 'auto';
@@ -1249,7 +1248,7 @@ PresidentialFundsMap.prototype.openDownloads = function() {
       $(this).height('auto');
     }
   );
-  $(instance.toggleRaisingExports).toggleClass('button--close', true);
+  $(this.raisingExportsToggle).toggleClass('button--close', true);
 };
 
 /**
