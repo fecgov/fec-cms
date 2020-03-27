@@ -1235,7 +1235,6 @@ PresidentialFundsMap.prototype.refreshOverlay = function() {
  * @param {MouseEvent} e
  */
 PresidentialFundsMap.prototype.openDownloads = function() {
-
   //show downloads area on initial click (leave shown after that)
   this.downloadsWrapper.style.height = 'auto';
 
