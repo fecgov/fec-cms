@@ -3,8 +3,6 @@
 
 {% block intro %}
   <p>Search or browse guidance documents issued by the Federal Election Commission on this page. The guidance documents search includes all Commission documents that set forth a policy on a statutory, regulatory or technical issue. Such documents include <a href="https://transition.fec.gov/law/policy.shtml#policy">Statements of Policy</a>, <a href="https://transition.fec.gov/law/policy.shtml#interpretative">interpretive rules</a>, <a href="https://www.fec.gov/help-candidates-and-committees/forms/">FEC forms</a>, <a href="https://www.fec.gov/help-candidates-and-committees/guides/">Campaign Guides</a>, certain press releases and other various Commission publications.</p>
-  <p>Guidance documents lack the force and effect of law, unless expressly authorized by statute or incorporated into a contract. The agency may not cite, use, or rely on any guidance that is not posted on the website existing under <a href="https://www.federalregister.gov/documents/2019/10/15/2019-22624/promoting-the-rule-of-law-through-transparency-and-fairness-in-civil-administrative-enforcement-and">Executive Order 13892</a>, except to establish historical facts.</p>
-  <p>To search for a guidance document, enter a keyword in the box. Note: This search does not include advisory opinions, regulations or statutes. Access the <a href="https://www.fec.gov/legal-resources/">legal resources search engine</a> to search those items.</p>
 {% endblock %}
 
 {% block filters %}
@@ -46,7 +44,7 @@
             {% if results.meta.prev_offset is not None and current_page > 1 %}
               <a class="button button--standard button--previous" href="{% url 'policy-guidance-search' %}?query={{ search_query|urlencode }}&amp;offset={{ results.meta.prev_offset }}"><span class="u-visually-hidden">Previous</span></a>
             {% endif %}
-            {% if results.meta.next_offset is not None %}
+            {% if current_page < num_pages %}
               <a class="button button--standard button--next" href="{% url 'policy-guidance-search' %}?query={{ search_query|urlencode }}&amp;offset={{ results.meta.next_offset }}"><span class="u-visually-hidden">Next</span></a>
             {% endif %}
           </div>
@@ -60,4 +58,17 @@
       {% endif %}
     </div>
   </div>
+{% endblock %}
+
+{% block disclaimer %}
+<div class="slab slab--neutral footer-disclaimer">
+  <div class="container">
+    <div class="usa-width-one-half">
+      <p class="t-sans">Guidance documents lack the force and effect of law, unless expressly authorized by statute or incorporated into a contract. The agency may not cite, use, or rely on any guidance that is not posted on the website existing under <a href="https://www.federalregister.gov/documents/2019/10/15/2019-22624/promoting-the-rule-of-law-through-transparency-and-fairness-in-civil-administrative-enforcement-and">Executive Order 13892</a>, except to establish historical facts.</p>
+    </div>
+    <div class="usa-width-one-half">
+      <p class="t-sans u-no-margin">Note: This search does not include advisory opinions, regulations, or statutes. For those items, use the <a href="https://www.fec.gov/legal-resources/">legal resources search</a>.</p>
+    </div>
+  </div>
+</div>
 {% endblock %}
