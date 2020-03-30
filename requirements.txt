@@ -10,7 +10,6 @@ requests==2.21.0
 slacker==0.8.6
 whitenoise==2.0.3
 wagtail==2.7
-# TODO: pin version
 Jinja2==2.10.1
 django_jinja==2.4.1
 CacheControl==0.11.5
@@ -41,3 +40,4 @@ pytest==3.7.4
 Faker==0.8.6
 pytest-django==3.4.2
 pytest-cov==2.5.1
+pytest-flake8==1.0.4
