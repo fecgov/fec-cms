@@ -102,7 +102,7 @@ def search(request):
     """
     query = request.GET.get("search", "")
 
-    if re.match("\d{16}", query) or re.match("\d{11}", query):
+    if re.match(r"\d{16}", query) or re.match(r"\d{11}", query):
         url = "http://docquery.fec.gov/cgi-bin/fecimg/?" + query
         return redirect(url)
     else:
@@ -403,7 +403,6 @@ def get_committee(committee_id, cycle):
         "report_type": report_type,
         "reports": reports,
         "totals": totals,
-        "min_receipt_date": utils.three_days_ago(),
         "context_vars": context_vars,
         "party_full": committee["party_full"],
         "candidates": candidates,
@@ -639,6 +638,7 @@ def elections(request, office, cycle, state=None, district=None):
         },
     )
 
+
 def raising(request):
     office = request.GET.get("office", "P")
 
@@ -661,6 +661,7 @@ def raising(request):
             "social_image_identifier": "data",
         },
     )
+
 
 def spending(request):
     office = request.GET.get("office", "P")
@@ -686,7 +687,6 @@ def spending(request):
     )
 
 
-
 def pres_finance_map(request):
 
     election_year = int(
@@ -706,6 +706,7 @@ def pres_finance_map(request):
         },
     )
 
+
 def feedback(request):
     if request.method == "POST":
 
@@ -724,15 +725,15 @@ def feedback(request):
             return JsonResponse({"status": False}, status=500)
         else:
             # verify recaptcha
-            verifyRecaptcha = requests.post(
+            verify_recaptcha = requests.post(
                 "https://www.google.com/recaptcha/api/siteverify",
                 data={
                     "secret": settings.FEC_RECAPTCHA_SECRET_KEY,
                     "response": data["g-recaptcha-response"],
                 },
             )
-            recaptchaResponse = verifyRecaptcha.json()
-            if not recaptchaResponse["success"]:
+            recaptcha_response = verify_recaptcha.json()
+            if not recaptcha_response["success"]:
                 # if captcha failed, return failure
                 return JsonResponse({"status": False}, status=500)
             else:

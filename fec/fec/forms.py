@@ -9,24 +9,42 @@ username = settings.FEC_SERVICE_NOW_USERNAME
 password = settings.FEC_SERVICE_NOW_PASSWORD
 base_url = settings.FEC_SERVICE_NOW_API
 
+
 class ContactRAD(forms.Form):
     """
     Generates a contact form for submitting questions to RAD
     """
+
     def __init__(self, *args, **kwargs):
         category_options = [('', 'Choose a subject')] + form_categories()
         super().__init__(*args, **kwargs)
 
-        self.fields['u_contact_first_name'] = forms.CharField(label='First name', required=True)
-        self.fields['u_contact_last_name'] = forms.CharField(label='Last name', required=True)
+        self.fields['u_contact_first_name'] = forms.CharField(
+            label='First name', required=True
+        )
+        self.fields['u_contact_last_name'] = forms.CharField(
+            label='Last name', required=True
+        )
         self.fields['u_contact_email'] = forms.EmailField(label='Email', required=True)
-        self.fields['committee_name'] = forms.CharField(label='Committee name or ID', required=True, widget=forms.TextInput(attrs={'class': 'js-contact-typeahead'}))
+        self.fields['committee_name'] = forms.CharField(
+            label='Committee name or ID',
+            required=True,
+            widget=forms.TextInput(attrs={'class': 'js-contact-typeahead'}),
+        )
         self.fields['u_committee'] = forms.CharField(widget=forms.HiddenInput())
-        self.fields['u_contact_title'] = forms.CharField(label='Your position or title', required=False)
-        self.fields['u_category'] = forms.ChoiceField(label='Subject', choices=category_options, required=True)
+        self.fields['u_contact_title'] = forms.CharField(
+            label='Your position or title', required=False
+        )
+        self.fields['u_category'] = forms.ChoiceField(
+            label='Subject', choices=category_options, required=True
+        )
         self.fields['u_other_reason'] = forms.CharField(label='Subject', required=False)
-        self.fields['u_description'] = forms.CharField(label='Question', widget=forms.Textarea, required=True)
-        self.fields['u_committee_member_certification'] = forms.BooleanField(label='I agree', required=True)
+        self.fields['u_description'] = forms.CharField(
+            label='Question', widget=forms.Textarea, required=True
+        )
+        self.fields['u_committee_member_certification'] = forms.BooleanField(
+            label='I agree', required=True
+        )
 
     def post_to_service_now(self):
         """
@@ -41,7 +59,9 @@ class ContactRAD(forms.Form):
 
             # Post to ServiceNow
             post_url = base_url + 'u_imp_rad_response'
-            post = requests.post(post_url, data=json.dumps(data), auth=(username, password))
+            post = requests.post(
+                post_url, data=json.dumps(data), auth=(username, password)
+            )
             return post.status_code
 
 
@@ -69,6 +89,6 @@ def form_categories():
     raw_categories = fetch_categories()
     categories = []
     for cat in raw_categories:
-      if 'value' in cat:
-        categories.append((cat['value'], cat['label']))
+        if 'value' in cat:
+            categories.append((cat['value'], cat['label']))
     return categories

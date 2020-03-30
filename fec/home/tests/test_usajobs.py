@@ -4,7 +4,6 @@ from unittest import mock
 
 from home.templatetags.open_jobs import (
     get_jobs,
-    USAJOB_SEARCH_ERROR,
     JOB_URL,
     CODES_URL,
 )

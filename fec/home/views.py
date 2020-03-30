@@ -9,10 +9,9 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404, render
 from wagtail.documents.models import Document
 
-from fec.forms import ContactRAD, form_categories
+from fec.forms import ContactRAD
 from home.models import (CommissionerPage, DigestPage, MeetingPage,
                          PressReleasePage, RecordPage, TipsForTreasurersPage)
-
 
 
 def replace_dash(string):
@@ -175,7 +174,7 @@ def updates(request):
     except EmptyPage:
         updates = paginator.page(paginator.num_pages)
 
-    page_context = {"title": "Latest updates", "content_section" : "about"}
+    page_context = {"title": "Latest updates", "content_section": "about"}
 
     category_list = list(map(replace_space, category_list))
 
@@ -370,7 +369,7 @@ def index_meetings(request):
     except EmptyPage:
         executive_sessions = executive_paginator.page(executive_paginator.num_pages)
 
-    page_context = {"content_section": "about","title": "Commission meetings"}
+    page_context = {"content_section": "about", "title": "Commission meetings"}
 
     return render(
         request,

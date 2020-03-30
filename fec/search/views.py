@@ -1,17 +1,25 @@
 import os
 import requests
-import json
 
 from urllib import parse
 
 from django.shortcuts import render
 from django.conf import settings
 
+
 def search_candidates(query):
     """Searches the data API for candidates matching the query"""
     path = os.path.join(settings.FEC_API_VERSION, 'candidates', 'search')
     url = parse.urljoin(settings.FEC_API_URL, path)
-    r = requests.get(url, params={'q': query, 'sort': '-receipts', 'per_page': 3, 'api_key': settings.FEC_API_KEY_PRIVATE})
+    r = requests.get(
+        url,
+        params={
+            'q': query,
+            'sort': '-receipts',
+            'per_page': 3,
+            'api_key': settings.FEC_API_KEY_PRIVATE,
+        },
+    )
     return r.json()
 
 
@@ -19,7 +27,15 @@ def search_committees(query):
     """Searches the data API for committees matching the query"""
     path = os.path.join(settings.FEC_API_VERSION, 'committees')
     url = parse.urljoin(settings.FEC_API_URL, path)
-    r = requests.get(url, params={'q': query, 'per_page': 3, 'sort': '-receipts', 'api_key': settings.FEC_API_KEY_PRIVATE})
+    r = requests.get(
+        url,
+        params={
+            'q': query,
+            'per_page': 3,
+            'sort': '-receipts',
+            'api_key': settings.FEC_API_KEY_PRIVATE,
+        },
+    )
     return r.json()
 
 
@@ -46,6 +62,7 @@ def parse_icon(path):
     else:
         return 'page'
 
+
 def replace_url(url):
     """
     Replace the base part of the URL with the canonical URL from settings
@@ -58,6 +75,7 @@ def replace_url(url):
     else:
         return url
 
+
 def process_site_results(results, limit=0, offset=0):
     """Organizes the results from DigitalGov search into a better format"""
     web_results = results['web']
@@ -65,13 +83,13 @@ def process_site_results(results, limit=0, offset=0):
         'results': web_results['results'],
         'best_bets': {
             'results': results['text_best_bets'],
-            'count': len(results['text_best_bets'])
+            'count': len(results['text_best_bets']),
         },
         'meta': {
             'count': web_results['total'],
             'next_offset': web_results['next_offset'],
-            'prev_offset': prev_offset(limit, int(offset))
-        }
+            'prev_offset': prev_offset(limit, int(offset)),
+        },
     }
 
     # Parse the icons and replace the URLs
@@ -89,7 +107,7 @@ def search_site(query, limit=0, offset=0):
         'access_key': settings.FEC_DIGITALGOV_KEY,
         'query': query,
         'limit': limit,
-        'offset': offset
+        'offset': offset,
     }
     r = requests.get('https://search.usa.gov/api/v2/search/i14y', params=params)
 
@@ -125,9 +143,13 @@ def search(request):
         if results['site']:
             results['count'] += len(results['site']['results'])
 
-    return render(request, 'search/search.html', {
-        'search_query': search_query,
-        'results': results,
-        'type': search_type,
-        'self': {'title': 'Search results'}
-    })
+    return render(
+        request,
+        'search/search.html',
+        {
+            'search_query': search_query,
+            'results': results,
+            'type': search_type,
+            'self': {'title': 'Search results'},
+        },
+    )

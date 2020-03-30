@@ -1,10 +1,12 @@
 import os
-
 import dj_database_url
 
 from django.utils.crypto import get_random_string
 
 from .env import env
+from data import constants as data_constants
+# Custom settings
+from fec import constants as fec_constants
 
 PROJECT_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 BASE_DIR = os.path.dirname(PROJECT_DIR)
@@ -129,9 +131,6 @@ if FEC_CMS_ENVIRONMENT == 'LOCAL':
 
 ROOT_URLCONF = 'fec.urls'
 
-from data import constants
-
-
 TEMPLATES = [
     {
         'BACKEND': 'django_jinja.backend.Jinja2',
@@ -140,7 +139,7 @@ TEMPLATES = [
             'environment': 'data.jinja2.environment',
             'match_extension': '.jinja',
             'constants': {
-                'constants': constants,
+                'constants': data_constants,
                 'CANONICAL_BASE': CANONICAL_BASE,
                 'FEC_API_KEY_PRIVATE': FEC_API_KEY_PRIVATE,
                 'FEC_DOWNLOAD_API_KEY': FEC_DOWNLOAD_API_KEY,
@@ -185,20 +184,15 @@ DATABASES = {
     'default': dj_database_url.config()
 }
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/1.8/topics/i18n/
 
 LANGUAGE_CODE = 'en-us'
-
 TIME_ZONE = 'America/New_York'
 
 USE_I18N = True
-
 USE_L10N = True
-
 USE_TZ = True
-
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.8/howto/static-files/
@@ -233,15 +227,9 @@ COMPRESS_PRECOMPILERS = (
 USE_X_FORWARDED_HOST = True
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
-
 # Wagtail settings
 WAGTAIL_SITE_NAME = "fec"
-
-# Custom settings
-from fec import constants
-
-CONSTANTS = constants
-
+CONSTANTS = fec_constants
 
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -276,11 +264,11 @@ if FEC_CMS_ENVIRONMENT != 'LOCAL':
 
 UAA_CLIENT_ID = env.get_credential('CMS_LOGIN_CLIENT_ID', 'my-client-id')
 UAA_CLIENT_SECRET = env.get_credential('CMS_LOGIN_CLIENT_SECRET', 'my-client-secret')
-#fake uaa server deploys locally on port 8080.  Will be needed to login for local use
-#TODO: These will have to have a explicit reference until we can figure out how
-#to silence django warnings about the url being http (it expects https).
-#UAA_AUTH_URL = env.get_credential('CMS_LOGIN_AUTH_URL', 'http://localhost:8080/oauth/authorize')
-#UAA_TOKEN_URL = env.get_credential('CMS_LOGIN_TOKEN_URL','http://localhost:8080/oauth/token')
+# fake uaa server deploys locally on port 8080.  Will be needed to login for local use
+# TODO: These will have to have a explicit reference until we can figure out how
+# to silence django warnings about the url being http (it expects https).
+# UAA_AUTH_URL = env.get_credential('CMS_LOGIN_AUTH_URL', 'http://localhost:8080/oauth/authorize')
+# UAA_TOKEN_URL = env.get_credential('CMS_LOGIN_TOKEN_URL','http://localhost:8080/oauth/token')
 UAA_AUTH_URL = 'https://login.fr.cloud.gov/oauth/authorize'
 UAA_TOKEN_URL = 'https://login.fr.cloud.gov/oauth/token'
 WAGTAIL_FRONTEND_LOGIN_URL = 'uaa_client:login'
@@ -289,7 +277,7 @@ AUTHENTICATION_BACKENDS = \
     ['django.contrib.auth.backends.ModelBackend',
      'uaa_client.authentication.UaaBackend']
 
-DEFAULT_AUTHENTICATION_CLASSES = ['rest_framework_jwt.authentication.JSONWebTokenAuthentication',]
+DEFAULT_AUTHENTICATION_CLASSES = ['rest_framework_jwt.authentication.JSONWebTokenAuthentication', ]
 
 LOGGING = {
     'version': 1,

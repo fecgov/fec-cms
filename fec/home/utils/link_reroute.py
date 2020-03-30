@@ -14,8 +14,9 @@ def new_press_link(l):
     else:
         return(l)
 
-# using this one on staging for now
+
 def make_absolute_links(orig_href, body):
+    """using this one on staging for now"""
     soup = bs(body, "html5lib")
     links = soup.find_all('a')
     for link in links:
@@ -27,8 +28,9 @@ def make_absolute_links(orig_href, body):
             link['href'] = urljoin(orig_href, link['href'])
     return str(soup)
 
-# this can be the function the remake all the links
+
 def remake_links(body):
+    """this can be the function the remake all the links"""
     # find relative links
     soup = bs(body, "html5lib")
     links = soup.find_all('a', href=True)
@@ -53,6 +55,7 @@ def remake_links(body):
 
     return str(soup)
 
+
 def fix_pdf_imports_old(body):
     # find relative links
     soup = bs(body, "html5lib")
@@ -68,7 +71,7 @@ def fix_pdf_imports_old(body):
         for old in path_replacements:
             re_string = '^' + old + '*'
             if re.match(re_string, link['href']):
-                link['href'] = re.sub('\/archive\/[0-9]+', '', link['href'], count=1)
+                link['href'] = re.sub(r'\/archive\/[0-9]+', '', link['href'], count=1)
 
     return str(soup)
 

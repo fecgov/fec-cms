@@ -1,11 +1,10 @@
 import json
-import os
 import re
 
 from django import template
 from django.conf import settings
 from django.templatetags.static import static
-from django.utils.html import conditional_escape, format_html
+from django.utils.html import format_html
 from django.utils.safestring import mark_safe
 from wagtail.core.models import Page
 
@@ -54,7 +53,7 @@ def remove_digits(string):
     Useful in combination with built-in slugify in order to create strings
     that can be used as HTML IDs, which cannot begin with digits
     """
-    return re.sub('\d+', '', string)
+    return re.sub(r'\d+', '', string)
 
 
 @register.filter()
@@ -77,7 +76,9 @@ def classic_url(path):
 @register.filter()
 def highlight_matches(text):
     """Replaces the highlight markers with span tags for digitalgov search results"""
-    highlighted_text = text.replace('\ue000', '<span class="t-highlight">').replace('\ue001', '</span>')
+    highlighted_text = text.replace('\ue000', '<span class="t-highlight">').replace(
+        '\ue001', '</span>'
+    )
     return mark_safe(highlighted_text)
 
 
@@ -95,7 +96,9 @@ def get_touch_icon(content_section, dimension):
     Returns a path to a touch icon for the given dimension and content_section
     """
     if content_section in ['legal', 'help']:
-        return static('img/favicon/{}/apple-touch-icon-{}.png'.format(content_section, dimension))
+        return static(
+            'img/favicon/{}/apple-touch-icon-{}.png'.format(content_section, dimension)
+        )
     else:
         return static('img/favicon/general/apple-touch-icon-{}.png'.format(dimension))
 
@@ -105,7 +108,9 @@ def get_meta_description(content_section):
     """
     Returns a meta description for social media
     """
-    return 'Find what you need to know about the federal campaign finance process. Explore legal resources, campaign finance data, help for candidates and committees, and more.'
+    return 'Find what you need to know about the federal campaign finance process. \
+        Explore legal resources, campaign finance data, help for candidates \
+        and committees, and more.'
 
 
 @register.simple_tag
@@ -126,7 +131,9 @@ def asset_for_css(key):
     If the key doesn't exist there, then just return the key to the static file
     without a hash"""
 
-    assets = json.load(open(settings.DIST_DIR + '/fec/static/css/rev-manifest-css.json'))
+    assets = json.load(
+        open(settings.DIST_DIR + '/fec/static/css/rev-manifest-css.json')
+    )
 
     if key in assets:
         return '/static/css/' + assets[key]
@@ -150,20 +157,18 @@ def get_social_image_path(identifier):
     # TODO: combine with fec/data/templatetags/filters.py ?
     # Called by meta-tags.html
     # """
-    imageFilename = identifier
+    image_filename = identifier
 
     if identifier == 'advisory-opinions':
-        imageFilename = 'fec-pen'
-    elif identifier in ['commission-meetings', 'meeting-page']:
-        imageFilename = 'fec-microphones'
-    elif identifier == 'press-release':
-        imageFilename = 'fec-microphone'
+        image_filename = 'fec-pen'
+    elif identifier in ['commission-meetings', 'meeting-page', 'press-release']:
+        image_filename = 'fec-microphones'
     elif identifier == 'weekly-digest':
-        imageFilename = 'fec-seal'
+        image_filename = 'fec-seal'
     elif identifier == 'data':
-        imageFilename = 'fec-data'
+        image_filename = 'fec-data'
     elif identifier in ['legal', 'help']:
-        imageFilename = 'fec-' + identifier
+        image_filename = 'fec-' + identifier
     else:
-        imageFilename = 'fec-logo'
-    return 'https://www.fec.gov/static/img/social/{}.png'.format(imageFilename)
+        image_filename = 'fec-logo'
+    return 'https://www.fec.gov/static/img/social/{}.png'.format(image_filename)

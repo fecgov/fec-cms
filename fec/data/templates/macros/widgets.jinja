@@ -1,4 +1,4 @@
-{% macro select__election_year(election_years, election_year, elementID, electionType = 'H') %}
+{% macro select_election_year(election_years, election_year, elementID, electionType = 'H') %}
 <label for="election-year" class="breakdown__title label t-inline-block">Running in:</label>
 <select id="{{ elementID }}" name="cycle" class="js-widget-election-year form-element--inline" aria-controls="">
 {% for eachYear in election_years | sort(reverse=True) %}

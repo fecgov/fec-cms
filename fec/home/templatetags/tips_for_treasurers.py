@@ -1,7 +1,4 @@
-import re
-
 from django import template
-from django.conf import settings
 from home.models import TipsForTreasurersPage
 
 register = template.Library()
@@ -13,7 +10,4 @@ def tips_for_treasurers_feed():
 
     tips_for_treasurers = TipsForTreasurersPage.objects.live().order_by('-date')[:4]
 
-    return {
-        'tips_for_treasurers': tips_for_treasurers
-    }
-    
+    return {'tips_for_treasurers': tips_for_treasurers}

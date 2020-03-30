@@ -1,13 +1,9 @@
 import datetime
 import json
 import locale
-import os
 import re
 
-import jinja2
-
 from dateutil.parser import parse as parse_date
-
 from django.conf import settings
 from django_jinja import library
 
@@ -145,6 +141,7 @@ def filesize(value):
 
     return '%d %s' % (value, units[unit])
 
+
 @library.global_function
 def asset_for_css(key):
     """Looks up the hashed asset key in rev-manifest-css.json
@@ -168,6 +165,7 @@ def asset_for_js(path):
     assets = json.load(open(settings.DIST_DIR + '/fec/static/js/rev-manifest-js.json'))
     assets.update(json.load(open(settings.DIST_DIR + '/fec/static/js/rev-legal-manifest-js.json')))
     return assets[key] if key in assets else key
+
 
 @library.global_function
 def get_social_image_path(identifier):

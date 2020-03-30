@@ -2,22 +2,14 @@ import json
 import os
 import requests
 from bs4 import BeautifulSoup
-
 from django.core.management import BaseCommand
 from django.conf import settings
 
 from home.models import Page
-from home.models import (
-    CommissionerPage,
-    DigestPage,
-    PressReleasePage,
-    RecordPage,
-    TipsForTreasurersPage
-)
-
 from fec import constants
 
 BASE_URL = settings.CANONICAL_BASE
+
 
 class Command(BaseCommand):
     help = 'Scrapes pages from the CMS into JSON for indexing on DigitalGov Search'
@@ -26,28 +18,25 @@ class Command(BaseCommand):
         parser.add_argument(
             '--descendants_of',
             type=str,
-            help='Path of the parent page whose descendents to get, ex. /home/legal-resources/'
+            help='Path of the parent page whose descendents to get, ex. /home/legal-resources/',
         )
 
         parser.add_argument(
             '--child_of',
             type=str,
-            help='Path of the parent page whose children to get, ex. /home/legal-resources/'
+            help='Path of the parent page whose children to get, ex. /home/legal-resources/',
         )
 
         parser.add_argument(
-            '--page',
-            type=str,
-            help='Specific path to get, ex. /home/legal-resources/'
+            '--page', type=str, help='Specific path to get, ex. /home/legal-resources/'
         )
 
         parser.add_argument(
             '-no-content',
             type=bool,
             default=False,
-            help='Don\'t scrape the content of the page'
+            help='Don\'t scrape the content of the page',
         )
-
 
     def handle(self, *args, **options):
         self.stdout.write(self.style.WARNING('Getting pages...'))
@@ -56,7 +45,9 @@ class Command(BaseCommand):
             # Hack so the loop below works
             pages = [page]
         elif options['descendants_of']:
-            parent = Page.objects.live().public().get(url_path=options['descendants_of'])
+            parent = (
+                Page.objects.live().public().get(url_path=options['descendants_of'])
+            )
             pages = Page.objects.descendant_of(parent).live().public()
         elif options['child_of']:
             parent = Page.objects.live().public().get(url_path=options['child_of'])
@@ -77,18 +68,18 @@ class Command(BaseCommand):
 
         for page in pages:
             p = {
-              "document_id": page.id,
-              "title": page.title,
-              "path": BASE_URL + page.url,
-              "created": page.first_published_at.strftime("%Y-%m-%d-%H%M%S"),
-              "promote": "false",
-              "language": "en",
+                "document_id": page.id,
+                "title": page.title,
+                "path": BASE_URL + page.url,
+                "created": page.first_published_at.strftime("%Y-%m-%d-%H%M%S"),
+                "promote": "false",
+                "language": "en",
             }
 
             if 'no-content' not in options:
-              content = self.get_content(page.url)
-              if content:
-                  p["content"] = content
+                content = self.get_content(page.url)
+                if content:
+                    p["content"] = content
 
             extracted.append(p)
 
@@ -96,7 +87,7 @@ class Command(BaseCommand):
 
     def get_content(self, url):
         url = BASE_URL + url
-        r  = requests.get(url)
+        r = requests.get(url)
         self.stdout.write('Getting content for ' + url)
         data = r.text
         soup = BeautifulSoup(data, 'lxml')
@@ -116,6 +107,8 @@ class Command(BaseCommand):
 
     def write_articles(self, pages, **options):
         self.stdout.write('Writing to file')
-        fname = os.path.join(settings.REPO_DIR, 'fec/search/management/data/output.json')
+        fname = os.path.join(
+            settings.REPO_DIR, 'fec/search/management/data/output.json'
+        )
         with open(fname, "w+") as f:
             json.dump(pages, f, indent=4)

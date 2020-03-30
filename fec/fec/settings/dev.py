@@ -4,7 +4,7 @@ from .base import *  # noqa
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
-for t in TEMPLATES:
+for t in TEMPLATES:  # noqa: from .base
     t.setdefault('OPTIONS', {})
     t['OPTIONS']['debug'] = True
 

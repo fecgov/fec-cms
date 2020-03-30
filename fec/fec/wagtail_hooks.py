@@ -1,9 +1,7 @@
 import json
 import wagtail.admin.rich_text.editors.draftail.features as draftail_features
-from wagtail.admin.rich_text.converters.html_to_contentstate import InlineStyleElementHandler, BlockElementHandler
-from wagtail.admin.rich_text.converters.editor_html import WhitelistRule
+from wagtail.admin.rich_text.converters.html_to_contentstate import BlockElementHandler
 from wagtail.core import hooks
-from wagtail.core.whitelist import attribute_rule, check_url, allow_without_attributes
 from django.conf import settings
 from django.utils.html import format_html
 from fec.draftail import glossary, sansserif, anchor
@@ -64,6 +62,7 @@ def register_anchor_feature(features):
         'from_database_format': {'span[data-anchor]': anchor.AnchorEntityElementHandler(type_)},
         'to_database_format': {'entity_decorators': {type_: anchor.anchor_entity_decorator}},
     })
+
 
 @hooks.register('register_rich_text_features')
 def register_glossary_feature(features):
@@ -127,6 +126,7 @@ def draftail_js():
     assets = json.load(open(settings.DIST_DIR + '/fec/static/js/rev-draftail-manifest-js.json'))
     return assets[key] if key in assets else key
 
+
 def polyfills_js():
     """Looks up the hashed asset path in rev-draftail-manifest-js.json
     If the path doesn't exist there, then just return the path to the static file
@@ -135,9 +135,10 @@ def polyfills_js():
     assets = json.load(open(settings.DIST_DIR + '/fec/static/js/rev-legal-manifest-js.json'))
     return assets[key] if key in assets else key
 
-# Inserts custom editor js
+
 @hooks.register('insert_editor_js')
 def editor_js():
+    """Inserts custom editor js"""
     transpiled = draftail_js()
     polyfills = polyfills_js()
     scripts = [
@@ -148,6 +149,7 @@ def editor_js():
 
     html = '\n'.join(str(s) for s in scripts)
     return format_html(html)
+
 
 @hooks.register('insert_editor_css')
 def editor_css():

@@ -10,13 +10,12 @@ urlpatterns = [
     url(r'^data/legal/matter-under-review/(?P<mur_no>[\w-]+)/$',
         views.mur_page),
     url(r'^data/legal/alternative-dispute-resolution/(?P<adr_no>[\w-]+)/$',
-        views.adr_page),   
+        views.adr_page),
     url(r'^data/legal/administrative-fine/(?P<admin_fine_no>[\w-]+)/$',
-        views.admin_fine_page), 
+        views.admin_fine_page),
     url(r'^data/legal/statutes/$', views.statutes_landing),
     # Legal search results
     url(r'^data/legal/search/$', views.legal_search),
-
     url(r'^data/legal/search/advisory-opinions/$', views.legal_doc_search_ao),
     url(r'^data/legal/search/enforcement/$', views.legal_doc_search_mur),
     url(r'^data/legal/search/murs/$', views.legal_doc_search_mur),
@@ -34,4 +33,3 @@ if settings.FEATURES['afs']:
     urlpatterns += url(
         r'^data/legal/search/admin_fines/$', views.legal_doc_search_af
     ),
-

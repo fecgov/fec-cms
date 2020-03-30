@@ -212,7 +212,8 @@ def three_days_ago():
     three_days_ago = datetime.datetime.today() - datetime.timedelta(days=3)
     return three_days_ago.strftime('%m/%d/%Y')
 
-# Source: https://www.fec.gov/help-candidates-and-committees/dates-and-deadlines/2020-reporting-dates/2020-monthly-filers/
+
+# Source: https://www.fec.gov/help-candidates-and-committees/dates-and-deadlines/2020-reporting-dates/2020-monthly-filers/. # noqa
 
 MONTHLY_DATES = [
     # due date  : coverage end
@@ -231,7 +232,7 @@ MONTHLY_DATES = [
     ("01/31/2021", "12/31/2020"),
 ]
 
-# Source: https://www.fec.gov/help-candidates-and-committees/dates-and-deadlines/2020-reporting-dates/2020-quarterly-filers/
+# Source: https://www.fec.gov/help-candidates-and-committees/dates-and-deadlines/2020-reporting-dates/2020-quarterly-filers/. # noqa
 QUARTERLY_DATES = [
     # due date  : coverage end
     ("01/31/2020", "12/31/2019"),
@@ -248,7 +249,8 @@ def get_presidential_coverage_date(filing_frequency):
     """
     Presidential bulk data files are updated the day after an election.
 
-    This function gets coverage end dates for presidential filers, depending on filing frequency.
+    This function gets coverage end dates for presidential filers,
+    depending on filing frequency.
     For a date after a filing deadline, get the next closest coverage end date.
     """
 

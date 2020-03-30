@@ -5,7 +5,7 @@
     <div class="controls-wrapper">
         {{ typeahead.field('contribs-by-state-cand', 'Contributions received by: ', 'Examples: ', dataset='candidates', allow_text=True) }}
     <fieldset class="select">
-        {{ widgets.select__election_year(election_years, election_year, 'state-conwidtribs-years', 'P') }}
+        {{ widgets.select_election_year(election_years, election_year, 'state-conwidtribs-years', 'P') }}
     </fieldset>
     </div>
     <div class="message message--info js-error-message" role="alert" aria-hidden="true">
