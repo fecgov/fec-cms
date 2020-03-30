@@ -53,7 +53,7 @@
             </div>
           </div>
         </section>
-      {% else %}
+      {% elif results.meta.count == 0 %}
         <div class="message message--info">
           <h2>No results</h2>
           <p>We didn’t find any pages matching <strong>&ldquo;{{search_query}}&rdquo;</strong>.</p>
