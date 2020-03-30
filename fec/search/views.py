@@ -1,6 +1,7 @@
 import os
 import requests
 import json
+import math
 
 from urllib import parse
 
@@ -163,11 +164,18 @@ def policy_guidance_search(request):
     offset = request.GET.get('offset', 0)
 
     results = policy_guidance_search_site(search_query, limit=limit, offset=offset)
+
+    current_page = int(int(offset) / limit) + 1
+    num_pages = math.ceil(int(results['meta']['count']) / limit)
+
     print(results)
     
     resultset = {}
     resultset['search_query'] = search_query
     resultset['results'] = results
     resultset['self'] = {'title': 'Guidance documents'}
+    resultset['offset'] = offset
+    resultset['num_pages'] = num_pages
+    resultset['current_page'] = current_page
 
     return render(request, 'search/policy_guidance_search_page.html', resultset)

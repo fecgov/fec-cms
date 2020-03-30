@@ -42,15 +42,13 @@
             {% endfor %}
           </ul>
           <div class="results-info">
-            <span class="t-sans">{{ results.meta.count }} results</span>
-            <div class="u-float-right">
-              {% if results.meta.prev_offset %}
-                <a class="button button--standard button--previous" href="{% url 'policy-guidance-search' %}?query={{ search_query|urlencode }}&amp;offset={{ results.meta.prev_offset }}"><span class="u-visually-hidden">Previous</span></a>
-              {% endif %}
-              {% if results.meta.next_offset %}
-                <a class="button button--standard button--next" href="{% url 'policy-guidance-search' %}?query={{ search_query|urlencode }}&amp;offset={{ results.meta.next_offset }}"><span class="u-visually-hidden">Next</span></a>
-              {% endif %}
-            </div>
+            <span class="t-sans">Page {{ current_page }} of {{ num_pages }}</span>
+            {% if results.meta.prev_offset is not None and current_page > 1 %}
+              <a class="button button--standard button--previous" href="{% url 'policy-guidance-search' %}?query={{ search_query|urlencode }}&amp;offset={{ results.meta.prev_offset }}"><span class="u-visually-hidden">Previous</span></a>
+            {% endif %}
+            {% if results.meta.next_offset is not None %}
+              <a class="button button--standard button--next" href="{% url 'policy-guidance-search' %}?query={{ search_query|urlencode }}&amp;offset={{ results.meta.next_offset }}"><span class="u-visually-hidden">Next</span></a>
+            {% endif %}
           </div>
         </section>
       {% elif results.meta.count == 0 %}
