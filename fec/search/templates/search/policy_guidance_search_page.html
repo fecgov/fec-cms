@@ -2,7 +2,7 @@
 {% load filters %}
 
 {% block intro %}
-  <p>Search or browse guidance documents issued by the Federal Election Commission on this page. The guidance documents search includes all Commission documents that set forth a policy on a statutory, regulatory or technical issue. Such documents include <a href="https://transition.fec.gov/law/policy.shtml#policy">Statements of Policy</a>, <a href="https://transition.fec.gov/law/policy.shtml#interpretative">interpretive rules</a>, <a href="https://www.fec.gov/help-candidates-and-committees/forms/">FEC forms</a>, <a href="https://www.fec.gov/help-candidates-and-committees/guides/">Campaign Guides</a>, certain press releases and other various Commission publications.</p>
+  <p>Search or browse guidance documents issued by the Federal Election Commission on this page. This search includes all Commission documents that set forth a policy on a statutory, regulatory or technical issue. Such documents include <a href="https://transition.fec.gov/law/policy.shtml#policy">Statements of Policy</a>, <a href="https://transition.fec.gov/law/policy.shtml#interpretative">interpretive rules</a>, <a href="https://www.fec.gov/help-candidates-and-committees/forms/">FEC forms</a>, <a href="https://www.fec.gov/help-candidates-and-committees/guides/">Campaign Guides</a>, certain press releases and other various Commission publications.</p>
 {% endblock %}
 
 {% block filters %}
@@ -10,7 +10,7 @@
     <div class="combo combo--search content__section">
       <label for="search" class="label">Search all documents</label>
       <input id="search" type="text" class="combo__input" name="query"{% if search_query %} value="{{ search_query }}"{% endif %}>
-      <button type="submit" class="button--cta combo__button button--search">
+      <button type="submit" class="button--standard combo__button button--search">
         <span class="u-visually-hidden">Search</span>
       </button>
     </div>
@@ -21,8 +21,8 @@
   <div class="row" id="results-container">
     <div class="main">
       {% if results.results %}
-        <section class="option" id="site">
-          <div class="row">
+        <section id="site">
+          <div class="heading--section" class="row">
             <h2 class="u-float-left u-no-margin">Results</h2>
             <div class="u-float-right">
               <span class="t-sans">{{ results.meta.count }} total results</span>
@@ -52,7 +52,7 @@
       {% elif results.meta.count == 0 %}
         <div class="message message--info">
           <h2>No results</h2>
-          <p>We didn’t find any pages matching <strong>&ldquo;{{search_query}}&rdquo;</strong>.</p>
+          <p>We didn’t find any results matching <strong>&ldquo;{{search_query}}&rdquo;</strong>.</p>
           <p>Try changing your search term.</p>
         </div>
       {% endif %}
