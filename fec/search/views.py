@@ -146,9 +146,8 @@ def policy_guidance_search_site(query, limit=0, offset=0):
         'limit': limit,
         'offset': offset
     }
-    print ('got params')
+
     r = requests.get('https://search.usa.gov/api/v2/search/i14y', params=params)
-    print (r)
     if r.status_code == 200:
         return process_site_results(r.json(), limit=limit, offset=offset)
 
@@ -164,13 +163,10 @@ def policy_guidance_search(request):
     offset = request.GET.get('offset', 0)
 
     results = policy_guidance_search_site(search_query, limit=limit, offset=offset)
-    print(results)
     current_page = int(int(offset) / limit) + 1
     num_pages = 1
     if results:
         num_pages = math.ceil(int(results['meta']['count']) / limit)
-
-    
     
     resultset = {}
     resultset['search_query'] = search_query
