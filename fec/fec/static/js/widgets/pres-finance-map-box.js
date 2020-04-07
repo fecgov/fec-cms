@@ -716,7 +716,7 @@ PresidentialFundsMap.prototype.loadContributionSizes = function() {
  */
 PresidentialFundsMap.prototype.loadCoverageDates = function() {
   document.dispatchEvent(new CustomEvent(ENTER_LOADING_EVENT));
-
+  //Needed for promises and nested functions
   let instance = this;
   let thisQuery = Object.assign({}, this.baseCoverageQuery, {
     candidate_id: this.current_candidateID,
