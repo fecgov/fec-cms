@@ -167,6 +167,8 @@ def policy_guidance_search(request):
     num_pages = 1
     if results:
         num_pages = math.ceil(int(results['meta']['count']) / limit)
+
+    total_count = results['meta']['count'] + results['best_bets']['count']
     
     resultset = {}
     resultset['search_query'] = search_query
@@ -175,5 +177,6 @@ def policy_guidance_search(request):
     resultset['offset'] = offset
     resultset['num_pages'] = num_pages
     resultset['current_page'] = current_page
+    resultset['total_count'] = total_count
 
     return render(request, 'search/policy_guidance_search_page.html', resultset)
