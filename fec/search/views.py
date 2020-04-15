@@ -1,7 +1,6 @@
 import os
 import requests
 import json
-import math
 
 from urllib import parse
 
@@ -84,7 +83,7 @@ def process_site_results(results, limit=0, offset=0):
 
 
 def search_site(query, limit=0, offset=0):
-    """Calls the Search.gov search and then processes the results if successful"""
+    """Calls the DigitalGov search and then processes the results if successful"""
     params = {
         'affiliate': 'betafec_api',
         'access_key': settings.FEC_DIGITALGOV_KEY,
@@ -132,51 +131,3 @@ def search(request):
         'type': search_type,
         'self': {'title': 'Search results'}
     })
-
-
-# Policy and guidance search
-
-# Search.gov API call
-def policy_guidance_search_site(query, limit=0, offset=0):
-    """Calls the Search.gov policy and guidance search and then processes the results if successful"""
-    params = {
-        'affiliate': 'fec_content_s3',
-        'access_key': settings.SEARCH_GOV_POLICY_GUIDANCE_KEY,
-        'query': query,
-        'limit': limit,
-        'offset': offset
-    }
-
-    r = requests.get('https://search.usa.gov/api/v2/search/i14y', params=params)
-    if r.status_code == 200:
-        return process_site_results(r.json(), limit=limit, offset=offset)
-
-
-def policy_guidance_search(request):
-    """
-    Takes a page request and calls the appropriate searches
-    depending on the type requested
-    """
-
-    limit = 10
-    search_query = request.GET.get('query', None)
-    offset = request.GET.get('offset', 0)
-
-    results = policy_guidance_search_site(search_query, limit=limit, offset=offset)
-    current_page = int(int(offset) / limit) + 1
-    num_pages = 1
-    total_count = 0
-    if results:
-        num_pages = math.ceil(int(results['meta']['count']) / limit)
-        total_count = results['meta']['count'] + results['best_bets']['count']
-    
-    resultset = {}
-    resultset['search_query'] = search_query
-    resultset['results'] = results
-    resultset['self'] = {'title': 'Guidance documents'}
-    resultset['offset'] = offset
-    resultset['num_pages'] = num_pages
-    resultset['current_page'] = current_page
-    resultset['total_count'] = total_count
-
-    return render(request, 'search/policy_guidance_search_page.html', resultset)
