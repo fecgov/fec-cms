@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/18F/fec-cms.git"
+    "url": "git+https://github.com/fecgov/fec-cms.git"
   },
   "scripts": {
     "build": "cd fec && webpack && gulp build-sass && gulp build-widgets-sass",
@@ -23,7 +23,7 @@
     "a11y-dialog": "4.0.0",
     "accessible-mega-menu": "git+https://github.com/noahmanger/Accessible-Mega-Menu.git",
     "ace-builds": "1.2.2",
-    "acorn": "^6.1.0",
+    "acorn": "^6.4.1",
     "aria-accordion": "1.0.0",
     "chroma-js": "1.0.1",
     "colorbrewer": "0.0.2",

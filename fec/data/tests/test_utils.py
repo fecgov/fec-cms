@@ -1,4 +1,5 @@
 import unittest
+import datetime
 
 from collections import OrderedDict
 from django.test import TestCase
@@ -140,3 +141,33 @@ class TestCycles(unittest.TestCase):
         wisconsin = api_caller.get_regular_senate_cycles('wi')
         assert 2016 in wisconsin
         assert 2014 not in wisconsin
+
+
+class TestPresidentialCoverageDate(unittest.TestCase):
+    @mock.patch('data.utils.get_today')
+    def test_get_presidential_coverage_date(self, get_today):
+
+        # Day of the M2 deadline - M2's aren't ready yet
+        get_today.return_value = datetime.date(2020, 3, 20)
+        assert utils.get_presidential_coverage_date("M") == "January 31, 2020"
+        assert utils.get_presidential_coverage_date("Q") == "December 31, 2019"
+
+        # Day after M2, should reflect the ending coverage date of M2
+        get_today.return_value = datetime.date(2020, 3, 21)
+        assert utils.get_presidential_coverage_date("M") == "February 29, 2020"
+        assert utils.get_presidential_coverage_date("Q") == "December 31, 2019"
+
+        # Day of the Q1, Q1's aren't ready yet
+        get_today.return_value = datetime.date(2020, 4, 15)
+        assert utils.get_presidential_coverage_date("M") == "February 29, 2020"
+        assert utils.get_presidential_coverage_date("Q") == "December 31, 2019"
+
+        # Day after the Q1 deadline, should reflect ending coverage for Q1
+        get_today.return_value = datetime.date(2020, 4, 16)
+        assert utils.get_presidential_coverage_date("M") == "February 29, 2020"
+        assert utils.get_presidential_coverage_date("Q") == "March 31, 2020"
+
+        # Future date gets most recent coverage dates available
+        get_today.return_value = datetime.date(2022, 2, 25)
+        assert utils.get_presidential_coverage_date("M") == "December 31, 2020"
+        assert utils.get_presidential_coverage_date("Q") == "December 31, 2020"

@@ -1,9 +1,6 @@
-/* eslint-disable no-undef */
-/* eslint-disable no-unused-vars */
-
 'use strict';
 
-/* global CustomEvent */
+/* global CustomEvent, $ */
 
 /**
  * TODO - @fileoverview
@@ -17,8 +14,8 @@
 // const breakpointToXS = 0; // retaining just in case
 const breakpointToSmall = 430;
 const breakpointToMedium = 675;
-const breakpointToLarge = 700;
-const breakpointToXL = 860;
+const breakpointToLarge = 900;
+const breakpointToXL = 1200;
 const availElectionYears = [2020, 2016]; // defaults to [0]
 const specialCandidateIDs = ['P00000001', 'P00000002', 'P00000003'];
 
@@ -49,7 +46,8 @@ const COVERAGE_DATES_LOADED = EVENT_APP_ID + '_coverage_dates_loaded';
 // TODO: Update so we're using IDs everywhere?
 const selector_mainElement = '#gov-fec-pres-finance';
 const selector_yearControl = '#filter-year';
-const selector_mapStyleControl = '.js-map-switcher';
+const selector_map_form = '#filter-map-type';
+const selector_mapTypeControl = '.js-map-switcher';
 const selector_resetApp = '.js-reset-app';
 const selector_map = '.map-wrapper .election-map';
 const selector_candidateDetails = '.candidate-details';
@@ -58,16 +56,21 @@ const selector_breadcrumbNav = '.breadcrumb-nav';
 const selector_summariesHolder = '#financial-summaries';
 const selector_candidateNamePartyAndLink = '.js-cand-name-par-a';
 const selector_downloadsWrapper = '#downloads-wrapper';
-//const selector_downloadsContent = '#downloads-wrapper div';
+const selector_downloadsLinksWrapper = '#downloads-links-wrapper';
+const selector_downloadsLinks = '#downloads-links';
 const selector_coverageDates = '.js-coverage-date';
 const selector_exportRaisingButton = '.js-export-raising-data';
+const selector_raisingExportsToggle = '.js-toggle-raising-exports';
 const selector_exportSpending = '.js-export-spending-data';
 const selector_exportSummary = '.js-export-report-summary';
 const selector_stateDownloadLinks =
-  selector_downloadsWrapper + ' [data-stateID]';
+  selector_downloadsLinksWrapper + ' [data-stateID]';
 const selector_exportStateData = '.js-export-state-data';
+const selector_mapLegend = '.legend-container';
+const selector_candidateListDisclaimer = '.js-cand-list-note';
 
 // Imports, etc
+// const $ = jquery;
 import { buildUrl } from '../modules/helpers';
 // import { defaultElectionYear } from './widget-vars';
 import 'abortcontroller-polyfill/dist/polyfill-patch-fetch';
@@ -164,10 +167,10 @@ function PresidentialFundsMap() {
     mode: 'cors',
     signal: null
   };
-  console.log('(change no-cors to cors ');
   this.fetchingData = false; // Are we waiting for data?
   this.element = document.querySelector(selector_mainElement); // The visual element associated with this, this.instance
   this.candidateDetailsHolder; // Element to hold candidate name, party, office, and ID
+  this.yearControl = this.element.querySelector(selector_yearControl);
   this.current_electionYear = availElectionYears[0];
   this.current_electionState = 'US';
   this.current_electionStateName = 'United States';
@@ -176,9 +179,14 @@ function PresidentialFundsMap() {
   this.current_candidateLastName = '';
   this.map; // Starts as the element for the map but then becomes a DataMap object
 
-  this.downloadsWrapper = document.querySelector(selector_downloadsWrapper);
-  this.downloadsWrapper.style.height = 0;
-  this.downloadsWrapper.style.overflow = 'hidden';
+  this.downloadsWrapper = this.element.querySelector(selector_downloadsWrapper);
+  this.downloadsLinksWrapper = this.element.querySelector(
+    selector_downloadsLinksWrapper
+  );
+  this.downloadsLinks = this.element.querySelector(selector_downloadsLinks);
+  this.raisingExportsToggle = document.querySelector(
+    selector_raisingExportsToggle
+  );
 
   // If we have the element on the page, fire it up
   if (this.element) this.init();
@@ -190,20 +198,28 @@ function PresidentialFundsMap() {
  */
 PresidentialFundsMap.prototype.init = function() {
   // Init the election year selector (The element ID is set in data/templates/partials/widgets/pres-finance-map.jinja)
-  this.yearControl = this.element.querySelector(selector_yearControl);
   let theFieldset = this.yearControl.querySelector('fieldset');
+
   for (let i = 0; i < availElectionYears.length; i++) {
     let thisYear = availElectionYears[i];
     let newElem = document.createElement('label');
+    // TODO try to find the form field's value; restore it if possible (checked and this.current_electionYear)?
     let switched = i == 0 ? ' checked' : '';
     newElem.setAttribute('class', `toggle`);
     newElem.setAttribute('for', `switcher-${thisYear}`);
-    newElem.innerHTML = `<input type="radio" class="toggle" value="${thisYear}" id="switcher-${thisYear}" name="year_selector-TODO" data-prefix="TODO:" data-tag-value="${thisYear}" aria-controls="${thisYear}-message" tabindex="0"${switched}><span class="button--alt">${thisYear}</span>`;
+    newElem.innerHTML = `<input type="radio" class="toggle" value="${thisYear}" id="switcher-${thisYear}" name="year_selector" aria-controls="${thisYear}-message" tabindex="0"${switched}><span class="button--alt">${thisYear}</span>`;
     theFieldset.appendChild(newElem);
   }
   this.yearControl.addEventListener(
     'change',
     this.handleElectionYearChange.bind(this)
+  );
+
+  // Init the map type listener
+  this.mapTypeControl = this.element.querySelector(selector_mapTypeControl);
+  this.mapTypeControl.addEventListener(
+    'change',
+    this.handleMapTypeChange.bind(this)
   );
 
   this.element.addEventListener(
@@ -249,6 +265,10 @@ PresidentialFundsMap.prototype.init = function() {
     .querySelector(selector_exportRaisingButton)
     .addEventListener('click', this.handleExportRaisingClick.bind(this));
 
+  this.element
+    .querySelector(selector_raisingExportsToggle)
+    .addEventListener('click', this.handleToggleRaisingExports.bind(this));
+
   // Initialize the various queries
   this.baseCandidateQuery = { office: 'P' }; // Calls for candidate details
   this.baseCandidatesQuery = { per_page: 100, sort: '-net_receipts' };
@@ -271,6 +291,8 @@ PresidentialFundsMap.prototype.init = function() {
     data: '',
     addLegend: true,
     addTooltips: true,
+    mapStyle: 'gradients-bubbles',
+    clickableFeatures: true,
     eventAppID: EVENT_APP_ID
   });
 
@@ -281,31 +303,40 @@ PresidentialFundsMap.prototype.init = function() {
   let is_ie =
     userAgent.indexOf('MSIE ') > 0 || userAgent.indexOf('Trident/7.0') > 0;
 
-  // TODO: Activate the remote table header
-  // Initialize the remote table header
-  // Find the remote header and save it
-  // this.remoteTableHeader = this.element.querySelector(
-  //   '.js-remote-table-header'
-  // );
-  // Save its <thead> for a few lines
-  // let theRemoteTableHead = this.remoteTableHeader.querySelector('thead');
-  // Look at the data-for attribute of remoteTableHeader and save that element
-  // this.remoteTable = this.element.querySelector(
-  //   '#' + this.remoteTableHeader.getAttribute('data-for')
-  // );
-  // Remember the <thead> in remoteTable for few lines
-  // let theRemotedTableHead = this.remoteTable.querySelector('thead');
-  // If we have both <thead> elements, we're ready to manipulate them
-  // if (theRemoteTableHead && theRemotedTableHead) {
-  //   this.remoteTableHeader.style.display = 'table';
-  //   theRemotedTableHead.style.display = 'none';
-  // }
-
-  if (is_ie) {
-    this.remoteTable.classList.add('table-display');
-    this.remoteTableHeader.classList.add('table-display');
+  // TODO - come back to the remote header for IE?
+  if (!is_ie) {
+    // Initialize the remote table header
+    // Find the remote header and save it
+    this.remoteTableHeader = this.element.querySelector(
+      '.js-remote-table-header'
+    );
+    // Save its <thead> for a few lines
+    let theRemoteTableHead = this.remoteTableHeader.querySelector('thead');
+    // Look at the data-for attribute of remoteTableHeader and save that element
+    this.remoteTable = this.element.querySelector(
+      '#' + this.remoteTableHeader.getAttribute('data-for')
+    );
+    // Remember the <thead> in remoteTable for few lines
+    let theRemotedTableHead = this.remoteTable.querySelector('thead');
+    // If we have both <thead> elements, we're ready to manipulate them
+    if (theRemoteTableHead && theRemotedTableHead) {
+      this.remoteTableHeader.style.display = 'table';
+      theRemotedTableHead.style.display = 'none';
+    }
   }
 
+  if (is_ie) {
+    // this.remoteTable.className += ' table-display'; // TODO come back to this
+    //this.remoteTableHeader.classList.add('table-display');
+    // this.remoteTableHeader.className += ' table-display'; // TODO come back to this
+
+    // $(this.raisingExportsToggle).toggleClass('button--close', true);
+    // Trying it this way so we're not adding jQuery for only one minor use case
+    // and since we're setting a class and not toggling it
+    this.raisingExportsToggle.classList.add('button--close');
+    this.downloadsWrapper.style.height = '100%';
+    this.downloadsLinksWrapper.style.height = '100%';
+  }
   this.element.addEventListener(
     CHANGE_CANDIDATES_DATA,
     this.handleCandidatesDataLoaded.bind(this)
@@ -325,6 +356,8 @@ PresidentialFundsMap.prototype.init = function() {
 
   // And start the first load
   this.loadCandidatesList();
+
+  window.addEventListener('pageshow', this.handlePageShow.bind(this));
 };
 
 /**
@@ -373,7 +406,6 @@ PresidentialFundsMap.prototype.loadCandidatesList = function() {
  * Fires CHANGE_CANDIDATE custom event with current_candidateID and current_candidateName in the detail
  */
 PresidentialFundsMap.prototype.handleCandidatesDataLoaded = function(e) {
-  console.log('handleCandidatesDataLoaded()');
   this.data_candidates = e.detail;
 
   this.fetchingData = false; // clear the abort controller
@@ -429,7 +461,6 @@ PresidentialFundsMap.prototype.handleMapDataLoaded = function(e) {
  * Continues to @see loadFinancialSummary() }
  */
 PresidentialFundsMap.prototype.handleCandidateDetailsLoaded = function(e) {
-  console.log('handleCandidateDetailsLoaded(): ', e);
   this.data_candidate = e.detail;
 
   this.fetchingData = false; // clear the abort controller
@@ -460,7 +491,6 @@ PresidentialFundsMap.prototype.handleCandidateDetailsLoaded = function(e) {
  * Continues to {@see loadContributionSizes() }
  */
 PresidentialFundsMap.prototype.handleFinancialSummaryLoaded = function(e) {
-  console.log('handleFinancialSummaryLoaded(): ', e.detail);
   this.data_summary = e.detail;
 
   this.fetchingData = false; // clear the abort controller
@@ -479,7 +509,6 @@ PresidentialFundsMap.prototype.handleFinancialSummaryLoaded = function(e) {
  * Continues to {@see loadCoverageDates() }
  */
 PresidentialFundsMap.prototype.handleContributionSizesLoaded = function(e) {
-  console.log('handleContributionSizesLoaded(): ', e);
   this.data_sizes = e.detail;
 
   this.fetchingData = false; // clear the abort controller
@@ -498,8 +527,6 @@ PresidentialFundsMap.prototype.handleContributionSizesLoaded = function(e) {
  * Continues on to loadMapData
  */
 PresidentialFundsMap.prototype.handleCoverageDatesLoaded = function(e) {
-  console.log('handleCoverageDatesLoaded(): ', e);
-
   this.data_coverage = e.detail;
   this.fetchingData = false; // clear the abort controller
 
@@ -520,8 +547,8 @@ PresidentialFundsMap.prototype.loadCandidateDetails = function(
   cand_id,
   cand_name
 ) {
-  console.log('loadCandidateDetails(): ', cand_id);
   document.dispatchEvent(new CustomEvent(ENTER_LOADING_EVENT));
+
   let instance = this;
 
   // If we're looking at a special ID, let's skip the details load and dispatch the event now
@@ -726,8 +753,6 @@ PresidentialFundsMap.prototype.loadCoverageDates = function() {
  * @param {JSON} detail
  */
 PresidentialFundsMap.prototype.displayUpdatedData_candidate = function(detail) {
-  console.log('displayUpdatedData_candidate(): ', detail);
-
   // The name fields are in the candidate details above the map, but also in the summary accordion items
   let theNameFields = this.element.querySelectorAll(
     selector_candidateNamePartyAndLink
@@ -741,7 +766,7 @@ PresidentialFundsMap.prototype.displayUpdatedData_candidate = function(detail) {
 
   if (specialCandidateIDs.includes(detail.candidate_id)) {
     theNameString = detail.name;
-    theOfficeString = 'for president';
+    theOfficeString = 'for President';
   } else {
     theNameString = buildCandidateNameAndPartyLink(
       detail.candidate_id,
@@ -749,7 +774,7 @@ PresidentialFundsMap.prototype.displayUpdatedData_candidate = function(detail) {
       this.current_electionYear,
       detail.party
     );
-    theOfficeString = 'Candidate for president';
+    theOfficeString = 'Candidate for President';
     theIDString = `ID: ${detail.candidate_id}`;
   }
   theOfficeField.innerHTML = theOfficeString;
@@ -767,13 +792,24 @@ PresidentialFundsMap.prototype.displayUpdatedData_candidate = function(detail) {
 PresidentialFundsMap.prototype.displayUpdatedData_candidates = function(
   results
 ) {
-  console.log('displayUpdatedData_candidates(): ', results);
   let theTableBody = this.table.querySelector('tbody');
   theTableBody.innerHTML = '';
   if (results.length === 0) {
     // If there are no results to show
     this.handleErrorState('NO_RESULTS_TO_DISPLAY');
   } else {
+    // Let's re-sort the results so the first three are the special IDs
+    // Filter results down to special "candidate" results
+    let specialResults = results.filter(result => {
+      return specialCandidateIDs.includes(result.candidate_id);
+    });
+
+    // And filter results to non-special "candidates"
+    let otherResults = results.filter(result => {
+      return !specialCandidateIDs.includes(result.candidate_id);
+    });
+    results = specialResults.concat(otherResults);
+
     // If the current candidate is in the new list, we'll need to decorate them
     // If not, we should change the default candidate to 'US'
     let currentCandInNewList = results.find(
@@ -789,7 +825,7 @@ PresidentialFundsMap.prototype.displayUpdatedData_candidates = function(
     }
     // Build each required row
     for (let i = 0; i < results.length; i++) {
-      let rowClasses = 'TODO-myRowClass';
+      let rowClasses = '';
       // If this row is for the currently-selected candidate, add the selected class (whatever it is)
       if (results[i].candidate_id == this.current_candidateID)
         rowClasses += ' selected';
@@ -847,8 +883,6 @@ PresidentialFundsMap.prototype.displayFinancialSummary = function(data) {
  * Goes through each of the various downlinks & buttons and updates their href values
  */
 PresidentialFundsMap.prototype.updateDownloadButtons = function() {
-  console.log('updateDownloadButtons()');
-
   // The state-only download button:
   let stateDownloadUrl = pathFormat_download_state;
   stateDownloadUrl = stateDownloadUrl.replace(
@@ -932,10 +966,11 @@ PresidentialFundsMap.prototype.displayCoverageDates = function(data) {
   // Start with an empty coverage date
   let theCoverageString = '';
   if (data[0] && data[0].coverage_end_date) {
-    theCoverageString = new Date(data[0].coverage_end_date).toLocaleDateString(
-      'en-US'
-    );
-    theCoverageString = `through ${theCoverageString}`;
+    // Doing it old-school instead of using toLocaleDateString
+    // because the API sometimes returns GMT, sometimes EDT, sometimes EST
+    let dateStr = data[0].coverage_end_date;
+    theCoverageString = `through ${dateStr.substr(5, 2)}`;
+    theCoverageString += `/${dateStr.substr(8, 2)}/${dateStr.substr(0, 4)}`;
   }
 
   // for each result in the data object we receive,
@@ -952,11 +987,12 @@ PresidentialFundsMap.prototype.displayCoverageDates = function(data) {
  * @param {String} dataObj.candidate_id
  */
 PresidentialFundsMap.prototype.updateBreadcrumbs = function(dataObj) {
-  console.log('updateBreadcrumbs()');
   let theHolder = this.element.querySelector(selector_breadcrumbNav);
-  let theSeparator = theHolder.querySelector('span');
+  let theFirstItem = theHolder.querySelectorAll('a')[0];
   let theSecondItem = theHolder.querySelectorAll('span')[1];
   let theSecondLabel = '';
+
+  let theFirstLabel = `Nationwide: All ${this.current_electionYear} candidates`;
 
   if (
     dataObj.candidate_id == specialCandidateIDs[0] &&
@@ -983,9 +1019,15 @@ PresidentialFundsMap.prototype.updateBreadcrumbs = function(dataObj) {
       theSecondLabel += dataObj.candidateLastName;
     }
   }
-  theSecondItem.style.display = theSecondLabel != '' ? 'block' : 'none';
-  theSeparator.style.display = theSecondLabel != '' ? 'block' : 'none';
+  theFirstItem.innerHTML = theFirstLabel;
   theSecondItem.innerHTML = theSecondLabel;
+  if (theSecondLabel == '') {
+    theHolder.classList.add('view-us');
+    theHolder.classList.remove('view-state');
+  } else {
+    theHolder.classList.remove('view-us');
+    theHolder.classList.add('view-state');
+  }
 };
 
 /**
@@ -996,9 +1038,11 @@ PresidentialFundsMap.prototype.updateBreadcrumbs = function(dataObj) {
  * @param {JSON} e.detail
  */
 PresidentialFundsMap.prototype.handleYearChange = function(e) {
-  console.log('handleYearChange(): ', e);
+  // Save the newly-chosen year
   this.current_electionYear = e.detail;
+
   this.loadCandidatesList();
+  logUsage('yearChange', this.current_electionYear);
 };
 
 /**
@@ -1006,7 +1050,6 @@ PresidentialFundsMap.prototype.handleYearChange = function(e) {
  * @param {MouseEvent} e
  */
 PresidentialFundsMap.prototype.handleCandidateListClick = function(e) {
-  console.log('handleCandidateListClick(): ', e);
   let newCandidateID = e.target.dataset.candidate_id;
   let name = e.target.cells[0].innerText;
 
@@ -1028,6 +1071,7 @@ PresidentialFundsMap.prototype.handleCandidateListClick = function(e) {
       })
     );
   }
+  logUsage('candidateClick', newCandidateID);
 };
 
 /**
@@ -1039,8 +1083,6 @@ PresidentialFundsMap.prototype.handleCandidateListClick = function(e) {
  * @param {String} e.detail.name
  */
 PresidentialFundsMap.prototype.handleCandidateChange = function(e) {
-  console.log('handleCandidateChange(): ', e);
-
   this.loadCandidateDetails(e.detail.candidate_id, e.detail.name);
 };
 
@@ -1050,7 +1092,6 @@ PresidentialFundsMap.prototype.handleCandidateChange = function(e) {
  * @param {Event} e
  */
 PresidentialFundsMap.prototype.handleElectionYearChange = function(e) {
-  console.log('handleElectionYearChange() e: ', e);
   this.element.dispatchEvent(
     new CustomEvent(YEAR_CHANGE_EVENT, {
       detail: e.target.value
@@ -1059,44 +1100,71 @@ PresidentialFundsMap.prototype.handleElectionYearChange = function(e) {
 };
 
 /**
+ * TODO -
+ */
+PresidentialFundsMap.prototype.handleMapTypeChange = function(e) {
+  let theMapElement = false;
+  if (this.map.setAttribute) theMapElement = this.map;
+  else if (this.map.elm.setAttribute) theMapElement = this.map.elm;
+
+  if (theMapElement)
+    theMapElement.setAttribute('data-map_type', e.target.value);
+
+  // Hide the legend for the bubbles view
+  this.element.querySelector(selector_mapLegend).style.display =
+    e.target.value == 'bubble' ? 'none' : 'block';
+
+  logUsage('mapTypeChange', e.target.value);
+};
+
+/**
  * Triggered when the user clicks a state inside the map and the event bubbles up to here
  * Calls for loadCandidatesList
  * @param {CustomEvent} e
  */
 PresidentialFundsMap.prototype.handleStateClick = function(e) {
-  console.log('A STATE WAS CLICKED! ', e);
   e.stopImmediatePropagation(); // Keep it from bubbling outside of this app
 
-  this.current_electionState = e.detail.abbr;
-  this.current_electionStateName = e.detail.name;
+  if (this.current_electionState == e.detail.abbr) {
+    // The user has clicked the state we're already viewing, so let's do a reset
+    this.handleResetClick(null, { resetMap: true, resetCandidate: false });
+    logUsage('stateClick-slide', e.detail.abbr);
+  } else {
+    this.current_electionState = e.detail.abbr;
+    this.current_electionStateName = e.detail.name;
 
-  this.loadCandidatesList();
+    // TODO: turn this back on
+    this.loadCandidatesList();
 
-  // TODO: tell the breadcrumbs to update—or maybe that should be a different listener?
-  // TODO: tell the map to focus on the state? Maybe it should handle it internally?
-  // Simply clicking a state shouldn't change that state's color or value
+    // TODO: tell the breadcrumbs to update—or maybe that should be a different listener?
+    // TODO: tell the map to focus on the state? Maybe it should handle it internally?
+    // Simply clicking a state shouldn't change that state's color or value
 
-  this.toggleUSOrStateDisplay();
+    this.map.zoomToState(this.current_electionState, e.detail.d);
+    this.toggleUSOrStateDisplay();
+
+    logUsage('stateClick-zoom', e.detail.abbr);
+  }
 };
 
 /**
  * Called from throughout the widget
- * TODO: Do we still need this?
+ * TODO: yes, we should activate this
  * @param {String} errorCode
  */
 PresidentialFundsMap.prototype.handleErrorState = function(errorCode) {
-  // if (errorCode == 'NO_RESULTS_TO_DISPLAY') {
-  //   // Empty the states list and update the date range
-  //   let theStatesTableBody = this.table.querySelector('tbody');
-  //   let theDateRange = this.baseStatesQuery.cycle;
-  //   if (this.baseStatesQuery.office == 'P')
-  //     theDateRange = theDateRange - 3 + '-' + theDateRange;
-  //   else if (this.baseStatesQuery.office == 'S')
-  //     theDateRange = theDateRange - 5 + '-' + theDateRange;
-  //   else theDateRange = theDateRange - 1 + '-' + theDateRange;
-  //   let theErrorMessageHTML = `<tr><td colspan="3" class="error-msg">We don&apos;t have itemized individual contributions for this candidate for ${theDateRange}.</td></tr>`;
-  //   theStatesTableBody.innerHTML = theErrorMessageHTML;
-  // }
+  if (errorCode == 'NO_RESULTS_TO_DISPLAY') {
+    //   // Empty the states list and update the date range
+    //   let theStatesTableBody = this.table.querySelector('tbody');
+    //   let theDateRange = this.baseStatesQuery.cycle;
+    //   if (this.baseStatesQuery.office == 'P')
+    //     theDateRange = theDateRange - 3 + '-' + theDateRange;
+    //   else if (this.baseStatesQuery.office == 'S')
+    //     theDateRange = theDateRange - 5 + '-' + theDateRange;
+    //   else theDateRange = theDateRange - 1 + '-' + theDateRange;
+    //   let theErrorMessageHTML = `<tr><td colspan="3" class="error-msg">We don&apos;t have itemized individual contributions for this candidate for ${theDateRange}.</td></tr>`;
+    //   theStatesTableBody.innerHTML = theErrorMessageHTML;
+  }
 };
 
 /**
@@ -1146,7 +1214,7 @@ PresidentialFundsMap.prototype.handleResize = function(e = null) {
 
 /**
  * Called by {@see handleResize() }, to re-position the "loading" overlay
- * TODO: do we need this?
+ * TODO: yes, we should activate this
  */
 PresidentialFundsMap.prototype.refreshOverlay = function() {
   // let timeStampHeight = 25;
@@ -1166,49 +1234,83 @@ PresidentialFundsMap.prototype.refreshOverlay = function() {
  * Triggered when the user clicks to export the raising data
  * @param {MouseEvent} e
  */
+PresidentialFundsMap.prototype.openDownloads = function() {
+  //show downloads area on initial click (leave shown after that)
+  this.downloadsWrapper.style.height = 'auto';
+
+  $(this.downloadsLinksWrapper).animate(
+    {
+      height: $(this.downloadsLinksWrapper).get(0).scrollHeight
+    },
+    1000,
+    function() {
+      $(this).height('auto');
+    }
+  );
+  $(this.raisingExportsToggle).toggleClass('button--close', true);
+};
+
+/**
+ * TODO -
+ */
 PresidentialFundsMap.prototype.handleExportRaisingClick = function(e) {
-  console.log('handleExportRaisingClick(): ', e);
   e.preventDefault();
+
+  //scroll downloads area into view
+  this.downloadsWrapper.scrollIntoView();
+  // Wait until the downloadsWrapper is in view before opening (if not already open)
   let instance = this;
-
-  /* Robert: Does it matter if this a const or a named function?
-  eg: function openDownloads() VS. const openDownloads = function()
-  */
-
-  const openDownloads = function() {
-    console.log('callback');
-
-    $(instance.downloadsWrapper).animate(
-      {
-        height: $(instance.downloadsWrapper).get(0).scrollHeight
-      },
-      1000,
-      function() {
-        $(this).height('auto');
-      }
-    );
-  };
-
-  // Wait until the export area is in view before opening
+  //'this' refers to the main protoype here
   window.onscroll = function() {
-    var wS = this.scrollY,
-      hT = instance.downloadsWrapper.getBoundingClientRect().top + wS,
-      hH = instance.downloadsWrapper.offsetHeight,
-      wH = window.innerHeight;
-    if (wS > hT + hH - wH) {
-      openDownloads();
+    //'this' is window inside the context of this function
+    let theWindow = this;
+    let windowScroll = theWindow.scrollY,
+      downloadsScrollPosition =
+        instance.downloadsWrapper.getBoundingClientRect().top + windowScroll,
+      downloadsHeight = instance.downloadsWrapper.offsetHeight,
+      windowHeight = window.innerHeight;
+    if (
+      windowScroll >
+      downloadsScrollPosition + downloadsHeight - windowHeight
+    ) {
+      {
+        instance.openDownloads();
+        window.onscroll = null; // remove listener
+      }
     }
   };
-  //scroll to export area
-  this.downloadsWrapper.scrollIntoView({
-    behavior: 'smooth',
-    block: 'center',
-    inline: 'nearest'
-  });
+};
 
-  // TODO-done: show {selector_downloadsWrapper}
-  // TODO-done: animate the page scroll to the downloads section
-  // TODO then: Hide {selector_downloadsWrapper} when we're no longer interested in the raising downloads
+/**
+ * TODO -
+ */
+PresidentialFundsMap.prototype.handleToggleRaisingExports = function(e) {
+  e.preventDefault();
+
+  //toggle export area
+  if (this.downloadsLinksWrapper.style.height > '0px') {
+    this.raisingExportsToggle.classList.toggle('button--close', false);
+    this.downloadsLinksWrapper.style.height = 0;
+  } else {
+    this.raisingExportsToggle.classList.toggle('button--close', true);
+    this.downloadsLinksWrapper.style.height = 'auto';
+  }
+};
+
+/**
+ * TODO -
+ */
+PresidentialFundsMap.prototype.handleToggleRaisingExports = function(e) {
+  e.preventDefault();
+
+  //toggle export area
+  if (this.downloadsLinksWrapper.style.height > '0px') {
+    this.raisingExportsToggle.classList.toggle('button--close', false);
+    this.downloadsLinksWrapper.style.height = 0;
+  } else {
+    this.raisingExportsToggle.classList.toggle('button--close', true);
+    this.downloadsLinksWrapper.style.height = 'auto';
+  }
 };
 
 /**
@@ -1216,17 +1318,22 @@ PresidentialFundsMap.prototype.handleExportRaisingClick = function(e) {
  * Resets vars and calls loadCandidatesList, displayUpdatedData_candidate, updateBreadcrumbs, and others
  * @param {MouseEvent} e [Optional]
  */
-PresidentialFundsMap.prototype.handleResetClick = function(e) {
-  console.log('handleResetClick()');
+PresidentialFundsMap.prototype.handleResetClick = function(
+  e,
+  opts = { resetMap: true, resetCandidate: true }
+) {
   if (e) e.preventDefault();
 
-  this.current_candidateID = specialCandidateIDs[0];
-  this.current_electionState = 'US';
-  this.current_electionStateName = '';
-  this.current_candidateLastName = '';
-  this.current_candidateName = 'All candidates';
-
-  this.loadCandidatesList();
+  if (opts.resetMap) {
+    this.current_electionState = 'US';
+    this.current_electionStateName = '';
+  }
+  if (opts.resetCandidate) {
+    this.current_candidateID = specialCandidateIDs[0];
+    this.current_candidateLastName = '';
+    this.current_candidateName = 'All candidates';
+    this.loadCandidatesList();
+  }
 
   let dataObj = {
     candidate_id: this.current_candidateID,
@@ -1238,10 +1345,22 @@ PresidentialFundsMap.prototype.handleResetClick = function(e) {
     candidateLastName: this.current_candidateLastName // for breadcrumbs
   };
 
-  this.displayUpdatedData_candidate(dataObj);
-  this.updateBreadcrumbs(dataObj);
+  if (opts.resetCandidate) this.displayUpdatedData_candidate(dataObj);
+  if (opts.resetMap) {
+    this.updateBreadcrumbs(dataObj);
+    this.toggleUSOrStateDisplay();
+    this.map.handleZoomReset();
+  }
+};
 
-  this.toggleUSOrStateDisplay();
+/**
+ *
+ */
+PresidentialFundsMap.prototype.handlePageShow = function() {
+  // For when a user navigates back to this page and has a cached form value,
+  // reset the toggles
+  this.yearControl.reset();
+  this.element.querySelector(selector_map_form).reset();
 };
 
 /**
@@ -1255,16 +1374,46 @@ PresidentialFundsMap.prototype.toggleUSOrStateDisplay = function() {
     selector_summariesHolder
   ).style.display = nationalDisplay;
   this.element.querySelector(
-    selector_mapStyleControl
+    selector_mapTypeControl
+  ).style.display = nationalDisplay;
+  // For the candidate list disclaimer, we want to hold open the vertical space so we'll toggle its opacity
+  if (nationalDisplay == 'block')
+    this.element
+      .querySelector(selector_candidateListDisclaimer)
+      .classList.remove('hidden');
+  else
+    this.element
+      .querySelector(selector_candidateListDisclaimer)
+      .classList.add('hidden');
+
+  // For the breadcrumb reset link, turn off its bottom border and pointer events if we're zoomed out
+  this.element
+    .querySelector(selector_resetApp)
+    .setAttribute(
+      'style',
+      this.current_electionState == 'US'
+        ? 'border-bottom:none; pointer-events:none'
+        : ''
+    );
+
+  // Show for only US view:
+  this.element.querySelector(
+    selector_downloadsWrapper
   ).style.display = nationalDisplay;
 
-  // Show for only state view:
+  // Show only for states view:
   this.element.querySelector(
     selector_exportStateData
   ).style.display = stateDisplay;
 
-  // If we're resetting anything, close the downloads section
-  this.element.querySelector(selector_exportStateData).style.display = 'none';
+  // Only close all-state download area if switching to state view. Leave as-is (open or closed) when clicking reset in national view.
+  //Or do we want to just hide/show  as user switches between views, bur perisit its state --(open or closed)?
+  if (stateDisplay == 'block') {
+    this.element.querySelector(selector_downloadsLinksWrapper).style.height = 0;
+    this.element
+      .querySelector(selector_raisingExportsToggle)
+      .classList.toggle('button--close', false);
+  }
 };
 
 /**
@@ -1274,15 +1423,15 @@ PresidentialFundsMap.prototype.toggleUSOrStateDisplay = function() {
  * @param {Boolean} newState
  */
 PresidentialFundsMap.prototype.setLoadingState = function(newState) {
-  // if (newState === false) {
-  //   this.element
-  //     .querySelector('.overlay__container')
-  //     .classList.remove('is-loading');
-  //   this.element.querySelector('.overlay').classList.remove('is-loading');
-  //   this.element
-  //     .querySelector('#state-contribs-years')
-  //     .removeAttribute('disabled');
-  // } else if (newState === true) {
+  if (newState === false) {
+    //   this.element
+    //     .querySelector('.overlay__container')
+    //     .classList.remove('is-loading');
+    //   this.element.querySelector('.overlay').classList.remove('is-loading');
+    //   this.element
+    //     .querySelector('#state-contribs-years')
+    //     .removeAttribute('disabled');
+  } // else if (newState === true) {
   //   this.element
   //     .querySelector('.overlay__container')
   //     .classList.add('is-loading');
@@ -1291,7 +1440,7 @@ PresidentialFundsMap.prototype.setLoadingState = function(newState) {
   //     .querySelector('#state-contribs-years')
   //     .setAttribute('disabled', true);
   //   // trigger resize:
-  //   this.handleResize();
+  this.handleResize();
   // }
 };
 
@@ -1302,17 +1451,14 @@ PresidentialFundsMap.prototype.setLoadingState = function(newState) {
  * @param {String} candID - The candidate ID
  * @param {*} electionYear - String or Number, the user-selected election year
  */
-function logUsage(candID, electionYear) {
-  // if (window.ga) {
-  //   window.ga('send', 'event', {
-  //     eventCategory: 'Widget-PresFinMap',
-  //     eventAction: 'interaction',
-  //     eventLabel: candID + ',' + electionYear
-  //   });
-  // }
+function logUsage(eventType, detail) {
+  if (window.ga) {
+    window.ga('send', 'event', {
+      eventCategory: 'Widget-PresFinMap',
+      eventAction: 'interaction',
+      eventLabel: eventType + ',' + detail
+    });
+  }
 }
 
 new PresidentialFundsMap();
-
-/* eslint-enable no-undef */
-/* eslint-enable no-unused-vars */
