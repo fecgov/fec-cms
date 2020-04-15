@@ -3,7 +3,7 @@ cfenv==0.5.2
 dj-database-url==0.4.2
 django-libsass==0.7
 gunicorn==19.10.0
-gevent==1.4.0
+gevent==1.2.1
 lxml==4.2.5
 psycopg2==2.7.3.2
 requests==2.21.0

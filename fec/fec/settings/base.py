@@ -31,7 +31,6 @@ FEC_SERVICE_NOW_API = env.get_credential('FEC_SERVICE_NOW_API')
 FEC_SERVICE_NOW_USERNAME = env.get_credential('FEC_SERVICE_NOW_USERNAME')
 FEC_SERVICE_NOW_PASSWORD = env.get_credential('FEC_SERVICE_NOW_PASSWORD')
 FEC_DIGITALGOV_KEY = env.get_credential('FEC_DIGITALGOV_KEY')
-SEARCH_GOV_POLICY_GUIDANCE_KEY = env.get_credential('SEARCH_GOV_POLICY_GUIDANCE_KEY')
 FEC_DIGITALGOV_DRAWER_KEY_MAIN = env.get_credential('DIGITALGOV_DRAWER_KEY_MAIN', '')
 FEC_DIGITALGOV_DRAWER_KEY_TRANSITION = env.get_credential('DIGITALGOV_DRAWER_KEY_TRANSITION', '')
 DIGITALGOV_BASE_API_URL = 'https://i14y.usa.gov/api/v1'
@@ -55,7 +54,6 @@ FEATURES = {
     'contributionsbystate': bool(env.get_credential('FEC_FEATURE_CONTRIBUTIONS_BY_STATE', '')),
     'ierawfilters': bool(env.get_credential('FEC_FEATURE_IE_RAW_FILTERS', '')),
     'presidential_map': bool(env.get_credential('FEC_FEATURE_PRESIDENTIAL_MAP', '')),
-    'guidance_search': bool(env.get_credential('FEC_FEATURE_GUIDANCE_SEARCH', '')),
 }
 
 ENVIRONMENTS = {

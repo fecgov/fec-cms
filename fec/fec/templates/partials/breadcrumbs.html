@@ -15,19 +15,6 @@
       </li>
       {% endif %}
     {% endfor %}
-
-    {# Custom breadcrumbs needed for guidance search #}
-    {% if "/guidance-documents/" in request.path %}
-    <li class="breadcrumbs__item">
-      <span class="breadcrumbs__separator">&rsaquo;</span>
-      <a class="breadcrumbs__link" href="/legal-resources/">Legal resources</a>
-    </li>
-    <li class="breadcrumbs__item">
-        <span class="breadcrumbs__separator">&rsaquo;</span>
-        <a class="breadcrumbs__link" href="https://transition.fec.gov/law/policy.shtml">Policy and other guidance</a>
-      </li>
-    {% endif %}
-
     <li class="breadcrumbs__item breadcrumbs__item--current">
       <span class="breadcrumbs__separator">›</span>
       <span>{{ page.title }}</span>
