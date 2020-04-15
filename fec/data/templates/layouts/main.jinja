@@ -81,8 +81,16 @@
 {% import 'macros/search.jinja' as search %}
 {% include 'partials/warnings.jinja' %}
 
-<a href="#main" class="skip-nav" tabindex="0">skip navigation</a>
-
+ <a href="#main" class="skip-nav" tabindex="0">skip navigation</a>
+  {% if FEC_CMS_ENVIRONMENT != 'PRODUCTION' %}   
+    <div class="banner ">
+      <p class="t-sans t-small">{{FEC_CMS_ENVIRONMENT}}<br>
+      This site is for testing ideas and code. View the most accurate data on the <a href="http://www.fec.gov">live site</a>.</p>
+    </div>
+     {% endif %}
+    <!-- Gov banner BEGIN -->
+     {% include 'partials/data-usa-banner.jinja' %}
+    <!-- Gov banner END -->
   <header class="site-header">
     <div class="masthead">
       <div class="disclaimer">

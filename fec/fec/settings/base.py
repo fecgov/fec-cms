@@ -63,7 +63,10 @@ ENVIRONMENTS = {
     'prod': 'PRODUCTION',
     'feature': 'FEATURE',
 }
+
+#FEC_TEST_ENVIRONMENT = os.environ.get('FEC_TEST_ENVIRONMENT', '')
 FEC_CMS_ENVIRONMENT = ENVIRONMENTS.get(env.get_credential('FEC_CMS_ENVIRONMENT'), 'LOCAL')
+
 WEBMANAGER_EMAIL = "webmanager@fec.gov"
 
 # Application definition
