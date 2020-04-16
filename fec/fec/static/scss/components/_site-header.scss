@@ -13,8 +13,8 @@
 
   p {
     color: $inverse;
-    line-height: 2rem;
-    margin: .3rem 0;
+    line-height: u(2rem);
+    margin: u(.3rem 0);
     max-width: 100%;
 
   }
@@ -61,7 +61,7 @@
   font-family: $sans-serif;
   font-size: u(1.2rem);
   line-height: 1;
-  padding: u(5px 2rem);
+  padding: 5px u(2rem);
   text-align: center;
 }
 
@@ -84,31 +84,31 @@
 // US Bar 2.0 //
 
 .usa-banner-content {
-  padding-right: 1.5rem;
+  padding-right: u(1.5rem);
   padding-bottom: 3px;
-  padding-left: 1.5rem;
+  padding-left: u(1.5rem);
   background-color: transparent;
-  font-size: 1.5rem;
-  padding-top: 2rem;
+  font-size: u(1.5rem);
+  padding-top: u(2rem);
   width: 100%;
 }
 
 @media screen and (min-width: 600px) {
   .usa-banner-content {
-    padding-bottom: 2.3rem;
-    padding-top: 4rem;
+    padding-bottom: u(2.3rem);
+    padding-top: u(4rem);
   }
 }
 
 @media screen and (min-width: 951px) {
   .usa-banner-content {
-    padding-right: 3rem;
-    padding-left: 3rem;
+    padding-right: u(3rem);
+    padding-left: u(3rem);
   }
 }
 
 .usa-banner-content p:first-child {
-  margin-top: 1rem;
+  margin-top: u(1rem);
 }
 
 @media screen and (min-width: 600px) {
@@ -120,7 +120,7 @@
 .usa-banner-header {
   padding-top: 0;
   padding-bottom: 0;
-  font-size: 1.2rem;
+  font-size: u(1.2rem);
   font-weight: 400;
 }
 
@@ -129,7 +129,7 @@
   &.accordion__button {
   background-image: none;
   border:none !important;
-  padding: .75rem 1rem;
+  padding: u(.75rem 1rem);
   
   }
 
@@ -151,7 +151,7 @@
 
   &.t-inline-block {
     width: auto;
-    font-size: 1.4rem;
+    font-size: u(1.4rem);
     font-family: karla,sans-serif;
     letter-spacing: -.3px;
   }
@@ -165,10 +165,10 @@
     background-size: 100%;
     content: '';
     display: inline-block;
-    height: 1rem;
-    width: 1rem;
+    height: u(1rem);
+    width: u(1rem);
     /* stylelint-disable block-closing-brace-newline-after, at-rule-empty-line-before */
-    margin-left: .3rem;
+    margin-left: u(.3rem);
     /* stylelint-enable */
   }
 }
@@ -180,10 +180,10 @@
     background-size: 100%;
     content: '';
     display: inline-block;
-    height: 1rem;
-    width: 1rem;
+    height: u(1rem);
+    width: u(1rem);
     /* stylelint-disable block-closing-brace-newline-after, at-rule-empty-line-before */
-    margin-left: .3rem;
+    margin-left: u(.3rem);
     /* stylelint-enable */
   }
 }
@@ -198,8 +198,8 @@
 
 .usa-banner-header img {
   float: left;
-  margin: .0 .7rem 0 1rem;
-  width: 2rem;
+  margin: u(.0 .7rem 0 1rem);
+  width: u(2rem);
 }
 
 
@@ -213,12 +213,12 @@
   padding: 0;
   text-align: left;
   -webkit-font-smoothing: auto;
-  padding-left: 4.8rem;
+  padding-left: u(4.8rem);
   background-position-x: right;
   color: #0071bc;
   display: block;
-  font-size: 1.2rem;
-  height: 4.3rem;
+  font-size: u(1.2rem);
+  height: u(4.3rem);
   left: 0;
   position: absolute;
   text-decoration: underline;
@@ -251,13 +251,13 @@
 }
 
 .usa-banner-icon {
-  width: 3.8rem;
+  width: u(3.8rem);
 }
 
 .usa-accordion-content {
   background-color: #ffffff;
   overflow: auto;
-  padding: 3rem;
+  padding: u(3rem);
 }
 
 .usa-accordion-content > *:first-child {
@@ -270,7 +270,7 @@
 
 .usa-accordion-content:not([aria-hidden]) {
   position: absolute;
-  left: -999em;
+  left: u(-999em);
 }
 
 .usa-accordion-content[aria-hidden=true] {
@@ -294,14 +294,14 @@
 }
 
 .usa-grid {
-  padding-right: 1.5rem;
-  padding-left: 1.5rem;
+  padding-right: u(1.5rem);
+  padding-left: u(1.5rem);
 }
 
 @media screen and (min-width: 600px) {
   .usa-grid {
-    padding-right: 3rem;
-    padding-left: 3rem;
+    padding-right: u(3rem);
+    padding-left: u(3rem);
   }
 }
 
@@ -311,7 +311,7 @@
 
 .usa-media_block-img {
   float: left;
-  margin-right: 1rem;
+  margin-right: u(1rem);
 }
 
 .usa-media_block-body {
@@ -337,6 +337,7 @@
 //
 
 .masthead {
+  padding-top: u(2.5rem);
   @include clearfix();
 }
 
