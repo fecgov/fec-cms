@@ -1,0 +1,178 @@
+body {
+    font-family: sans-serif;
+    background-color: darkgray;
+}
+body * {
+    box-sizing: border-box;
+}
+#vue-component {
+    width: 100%;
+    max-width: 1024px;
+}
+.topnav li {
+    display: inline-block;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity .1s;
+}
+.topnav li.viewed {
+    color: purple;
+    cursor: pointer;
+    display: inline-block;
+    opacity: 1;
+    pointer-events: visible;
+    transition: opacity 1s, color .5s;
+}
+.topnav li.current {
+    color: blue;
+    cursor: default;
+    display: inline-block;
+    opacity: 1;
+    transition: opacity 1s, color .5s;
+}
+.topnav li:before {
+    content: " » ";
+    color: purple;
+    display: inline;
+    padding: .5rem .8rem;
+}
+.topnav li.breadcrumbs__item {
+    display: inline;
+    max-width: none;
+}
+.topnav li a.breadcrumbs__link {
+    color: darkgray;
+    border: none;
+}
+.topnav li.hidden {
+    display: none !important;
+}
+.topnav li.hide-before:before {
+    content: "";
+    padding: 0
+}
+
+.frames {
+    background-color: #fff;
+    border-left: solid thin grey;
+    border-right: solid thin grey;
+    border-top: solid thin grey;
+    height: 400px;
+    display: block;
+    overflow: hidden;
+    position: relative;
+    width: 100%;
+}
+.frame {
+    display: block;
+    float: left;
+    height: 400px;
+    left: 100%;
+    padding: 2em;
+    pointer-events: none;
+    position: absolute;
+    top: 0;
+    width: 100% !important;
+    transition: left .25s;
+}
+.frame.previous {
+    left: -100%;
+    transition: left .25s;
+}
+.frame.current {
+    left: 0;
+    pointer-events: all;
+    transition: left .5s;
+}
+label {
+    /* clear: both;
+    float: left;
+    position: relative; */
+}
+button.is-disabled {
+    pointer-events: none;
+    cursor: default;
+}
+button.button--back.button--alt {
+    background-image: url("data:image/svg+xml;charset=utf8, %3Csvg%20%20fill%3D%27%23212121%27%20width%3D%2212%22%20height%3D%2210%22%20viewBox%3D%220%200%2012%2010%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Cpath%20d%3D%22M.418%203.809L6.652.124a.851.851%200%200%201%201.294.727v7.382a.852.852%200%200%201-1.284.733L.418%205.276a.852.852%200%200%201%200-1.467z%22%2F%3E%3C%2Fsvg%3E");
+}
+button.tooltip__trigger {
+    margin-top: .5em;
+    position: relative;
+}
+button.tooltip__trigger + p {
+    float: left;
+    display: inline-block;
+    width: auto;
+}
+button.hidden {
+    display: none !important;
+}
+
+
+.question-type-block {
+    position: relative;
+    display: inline-block;
+    float: left;
+    clear: both;
+}
+
+[type=radio]+label {
+    background-color: transparent;
+    border-color: #fff;
+    float: left;
+    transition: border-color .5s;
+}
+[type=radio]+label:hover {
+    background-color: transparent;
+    border-color: #aeb0b5;
+    transition: border-color .5s;
+}
+[type=radio]:checked+label {
+    background-color: transparent;
+    border: 1px solid #aeb0b5;
+    transition: border-color .5s;
+}
+[type=number] {
+    display: inline-block;
+    float: left;
+    margin: 0 0 1rem .25rem;
+    width: 10rem;
+}
+[type=number]+label {
+    display:inline-block;
+    padding: .4rem .8rem .4rem 1rem;
+    position: relative;
+}
+[type=number].indented {
+    margin-left: 3.5rem;
+}
+span.clear {
+    clear: both;
+    display: block;
+    height: 0px;
+    width: 100%;
+}
+
+p.indented {
+    padding-left: 3.5rem;
+}
+
+
+#help {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 33%;
+    height: 100%;
+    border-left: thin solid navy;
+    z-index: 100;
+    padding: 1rem;
+}
+#help .pointer {
+    position: absolute;
+    left: -20px;
+    top: 100px;
+    transition: top 3s;
+}
+
