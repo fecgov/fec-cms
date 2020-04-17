@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/18F/fec-cms.git"
+    "url": "git+https://github.com/fecgov/fec-cms.git"
   },
   "scripts": {
     "build": "cd fec && webpack && gulp build-sass && gulp build-widgets-sass",
