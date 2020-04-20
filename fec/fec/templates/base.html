@@ -45,15 +45,10 @@
 
     {% wagtailuserbar %}
     <a href="#main" class="skip-nav">skip navigation</a>
-    {% if settings.FEC_CMS_ENVIRONMENT != 'PRODUCTION' %}   
-    <div class="banner ">
-      <p class="t-sans t-small">{{settings.FEC_CMS_ENVIRONMENT}}<br>
-      This site is for testing ideas and code. View the most accurate data on the <a href="http://www.fec.gov">live site</a>.</p>
-    </div>
-     {% endif %}
-    <!-- Gov banner BEGIN -->
+    {# USA banner #} 
+    {% include 'partials/env-banner.html' %}
+    {# .gov banner #}
     {% include 'partials/usa-banner.html' %}
-    <!-- Gov banner END -->
     {% if self.title == "Homepage" or self.title == "Home" %}
     <header class="site-header site-header--homepage">
       <div class="masthead">
