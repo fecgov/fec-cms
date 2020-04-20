@@ -64,7 +64,7 @@ def prepend_non_digit(string):
     Useful in combination with built-in slugify in order to create strings
     that can be used as HTML IDs but would remain invalid after simply
     removing digits. (Example: '2017-2018' would become the invalid '#-'). 
-    Also see 'prepend_non_digit' filter.
+    Also see 'remove_digits' filter.
     """
     #if string[0] == re('/d')
     if string[:1].isdigit():
