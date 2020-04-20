@@ -52,9 +52,24 @@ def remove_digits(string):
     """
     Strips digits from a string
     Useful in combination with built-in slugify in order to create strings
-    that can be used as HTML IDs, which cannot begin with digits
+    that can be used as HTML IDs, which cannot begin with digits. 
+    Also see 'prepend_non_digit' filter. 
     """
     return re.sub('\d+', '', string)
+
+@register.filter()
+def prepend_non_digit(string):
+    """
+    Prepends non-digit-containing string.
+    Useful in combination with built-in slugify in order to create strings
+    that can be used as HTML IDs but would remain invalid after simply
+    removing digits. (Example: '2017-2018' would become the invalid '#-'). 
+    Also see 'prepend_non_digit' filter.
+    """
+    #if string[0] == re('/d')
+    if string[:1].isdigit():
+       string = "go-to-{0}".format(string)
+    return string
 
 
 @register.filter()
