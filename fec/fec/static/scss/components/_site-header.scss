@@ -135,6 +135,22 @@
 
 }
 
+.usa-banner-header p {
+  margin-top: 0;
+  margin-bottom: 0;
+  display: block;
+  height: auto;
+  overflow: hidden;
+  vertical-align: middle;
+
+  &.t-inline-block {
+    width: auto;
+    font-size: u(1.4rem);
+    font-family: karla,sans-serif;
+    letter-spacing: -.3px;
+  }
+}
+
 @media screen and (min-width: 481px) {
   .usa-banner-header {
     padding-top: 0;
@@ -145,7 +161,6 @@
 .usa-banner-header p {
   margin-top: 0;
   margin-bottom: 0;
-  display: inline;
   overflow: hidden;
   vertical-align: middle;
 
@@ -171,7 +186,9 @@
     margin-left: u(.3rem);
     /* stylelint-enable */
   }
+
 }
+
     .usa-banner-header[aria-expanded=true] {
 
     .usa-banner-button::after {
@@ -213,14 +230,13 @@
   padding: 0;
   text-align: left;
   -webkit-font-smoothing: auto;
-  padding-left: u(4.8rem);
+  padding-left: u(3.8rem);
   background-position-x: right;
   color: #0071bc;
   display: block;
   font-size: u(1.2rem);
   height: u(4.3rem);
-  left: 0;
-  position: absolute;
+  left: u(3.5rem);
   text-decoration: underline;
   top: 0;
   width: 100%;
@@ -230,7 +246,7 @@
   background-color: transparent;
 }
 
-@media screen and (min-width: 481px) {
+@media screen and (min-width: 515px) {
   .usa-banner-button {
     padding-top: 0;
     padding-left: 0;
@@ -241,6 +257,7 @@
     position: relative;
     vertical-align: middle;
     width: initial;
+    left: 0;
     // stylelint-enable 
   }
 }

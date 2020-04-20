@@ -57,7 +57,6 @@ FEATURES = {
     'presidential_map': bool(env.get_credential('FEC_FEATURE_PRESIDENTIAL_MAP', '')),
     'guidance_search': bool(env.get_credential('FEC_FEATURE_GUIDANCE_SEARCH', '')),
 }
-
 ENVIRONMENTS = {
     'local': 'LOCAL',
     'dev': 'DEVELOPMENT',
@@ -66,9 +65,7 @@ ENVIRONMENTS = {
     'feature': 'FEATURE',
 }
 
-#FEC_TEST_ENVIRONMENT = os.environ.get('FEC_TEST_ENVIRONMENT', '')
 FEC_CMS_ENVIRONMENT = ENVIRONMENTS.get(env.get_credential('FEC_CMS_ENVIRONMENT'), 'LOCAL')
-
 WEBMANAGER_EMAIL = "webmanager@fec.gov"
 
 # Application definition
