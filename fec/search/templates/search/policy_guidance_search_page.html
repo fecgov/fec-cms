@@ -8,12 +8,20 @@
 {% block filters %}
   <form class="container" action="{% url 'policy-guidance-search' %}" method="get">
     <div class="combo combo--search content__section">
-      <label for="search" class="label">Search all documents</label>
+      <label for="search" class="label t-inline-block">Search all documents</label>
+      <div class="tooltip__container">
+        <button class="tooltip__trigger" type="button"><span class="u-visually-hidden">Learn more</span></button>
+        <div id="year-tooltip" role="tooltip" class="tooltip tooltip--under tooltip--left">
+          <p class="tooltip__content">Refine a keyword search for phrases, statutes, or regulations by using “ ” to limit results.</p>
+        </div>
+      </div>
       <input id="search" type="text" class="combo__input" name="query"{% if search_query %} value="{{ search_query }}"{% endif %}>
       <button type="submit" class="button--standard combo__button button--search">
         <span class="u-visually-hidden">Search</span>
       </button>
-      <span class="t-note t-sans search__example">Examples: instructions, "interpretive rule", "52 U.S.C. 30104", "11 CFR 109.10"</span>
+      <div class="container">
+        <span class="t-note t-sans search__example">Examples: instructions, "interpretive rule", "52 U.S.C. 30104", "11 CFR 109.10"</span>
+      </div>
     </div>
   </form>
 {% endblock %}
