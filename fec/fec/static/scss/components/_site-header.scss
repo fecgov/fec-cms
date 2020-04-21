@@ -82,6 +82,9 @@
 }
 
 // US Bar 2.0 //
+.usa-banner {
+ background-color: $gray-light;
+}
 
 .usa-banner-content {
   padding-right: u(1.5rem);
@@ -272,7 +275,7 @@
 }
 
 .usa-accordion-content {
-  background-color: #ffffff;
+  background-color: transparent;
   overflow: auto;
   padding: u(3rem);
 }
