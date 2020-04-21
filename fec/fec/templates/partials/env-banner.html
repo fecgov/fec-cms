@@ -1,4 +1,4 @@
-{% if settings  != indefined %}
+{% if settings  != undefined %}
 	  {% if settings.FEC_CMS_ENVIRONMENT != 'PRODUCTION' %}   
 	      <div class="banner ">
 	        <p class="t-sans t-small">{{settings.FEC_CMS_ENVIRONMENT}}<br>
@@ -8,7 +8,7 @@
      {% else %}  
      {% if FEC_CMS_ENVIRONMENT != 'PRODUCTION' %}  
       <div class="banner ">
-        <p class="t-sans t-small">{{FEC_CMS_ENVIRONMENT}}<br>
+        <p class="t-sans t-small">{{FEC_CMS_ENVIRONMENT}}X<br>
         This site is for testing ideas and code. View the most accurate data on the <a href="http://www.fec.gov">live site</a>.</p>
       </div>
       {% endif %}
