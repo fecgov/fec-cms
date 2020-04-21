@@ -163,6 +163,7 @@ def policy_guidance_search(request):
     offset = request.GET.get('offset', 0)
 
     results = policy_guidance_search_site(search_query, limit=limit, offset=offset)
+    print(results)
     current_page = int(int(offset) / limit) + 1
     num_pages = 1
     total_count = 0
