@@ -23,7 +23,7 @@ const pathFormat_download_contribs =
   '/files/bulk-downloads/Presidential_Map/{election_year}/{candidate_id}/{candidate_id}-{state}.zip';
 // {state} can be the two-letter abbreviation, ALL, or OTHER
 const pathFormat_download_expends =
-  '/files/bulk-downloads/Presidential_Map/{election_year}/{candidate_id}/{candidate_id}-ALL.zip';
+  '/files/bulk-downloads/Presidential_Map/{election_year}/{candidate_id}/{candidate_id}D-ALL.zip';
 const pathFormat_download_summary =
   '/files/bulk-downloads/Presidential_Map/{election_year}/report_summaries_form_3p.zip';
 const pathFormat_download_state =
