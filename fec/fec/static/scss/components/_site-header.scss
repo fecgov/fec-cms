@@ -6,10 +6,18 @@
   background-color: $navy;
   color: $inverse;
   font-family: $sans-serif;
-  padding: u(1rem 0);
+  padding: u(.5rem 0);
   position: relative;
   text-align: center;
   width: 100%;
+
+  p {
+    color: $inverse;
+    line-height: u(2rem);
+    margin: u(.3rem 0);
+    max-width: 100%;
+
+  }
 
   a {
     border-bottom-color: $inverse;
@@ -53,7 +61,7 @@
   font-family: $sans-serif;
   font-size: u(1.2rem);
   line-height: 1;
-  padding: u(5px 2rem);
+  padding: 5px u(2rem);
   text-align: center;
 }
 
@@ -73,6 +81,266 @@
   }
 }
 
+// US Bar 2.0 //
+.usa-banner {
+ background-color: $gray-light;
+}
+
+.usa-banner-content {
+  padding-right: u(1.5rem);
+  padding-bottom: 3px;
+  padding-left: u(1.5rem);
+  background-color: transparent;
+  font-size: u(1.5rem);
+  padding-top: u(2rem);
+  width: 100%;
+}
+
+@media screen and (min-width: 600px) {
+  .usa-banner-content {
+    padding-bottom: u(2.3rem);
+    padding-top: u(4rem);
+  }
+}
+
+@media screen and (min-width: 951px) {
+  .usa-banner-content {
+    padding-right: u(3rem);
+    padding-left: u(3rem);
+  }
+}
+
+.usa-banner-content p:first-child {
+  margin-top: u(1rem);
+}
+
+@media screen and (min-width: 600px) {
+  .usa-banner-content p:first-child {
+    margin-top: 0;
+  }
+}
+
+.usa-banner-header {
+  padding-top: 0;
+  padding-bottom: 0;
+  font-size: u(1.2rem);
+  font-weight: 400;
+}
+
+.usa-banner-header {
+
+  &.accordion__button {
+  background-image: none;
+  border:none !important;
+  padding: u(.75rem 1rem);
+  
+  }
+
+}
+
+.usa-banner-header p {
+  margin-top: 0;
+  margin-bottom: 0;
+  display: block;
+  height: auto;
+  overflow: hidden;
+  vertical-align: middle;
+
+  &.t-inline-block {
+    width: auto;
+    font-size: u(1.4rem);
+    font-family: karla,sans-serif;
+    letter-spacing: -.3px;
+  }
+}
+
+@media screen and (min-width: 481px) {
+  .usa-banner-header {
+    padding-top: 0;
+    padding-bottom: 0;
+  }
+}
+
+.usa-banner-header p {
+  margin-top: 0;
+  margin-bottom: 0;
+  overflow: hidden;
+  vertical-align: middle;
+
+  &.t-inline-block {
+    width: auto;
+    font-size: u(1.4rem);
+    font-family: karla,sans-serif;
+    letter-spacing: -.3px;
+  }
+}
+
+.usa-banner-header[aria-expanded=false] {
+
+    .usa-banner-button::after {
+    background-image: url(../img/angle-arrow-down-primary.png);
+    background-image: url(../img/angle-arrow-down-primary.svg);
+    background-size: 100%;
+    content: '';
+    display: inline-block;
+    height: u(1rem);
+    width: u(1rem);
+    /* stylelint-disable block-closing-brace-newline-after, at-rule-empty-line-before */
+    margin-left: u(.3rem);
+    /* stylelint-enable */
+  }
+
+}
+
+    .usa-banner-header[aria-expanded=true] {
+
+    .usa-banner-button::after {
+    background-image: url(../img/angle-arrow-up-primary.png);
+    background-image: url(../img/angle-arrow-up-primary.svg);
+    background-size: 100%;
+    content: '';
+    display: inline-block;
+    height: u(1rem);
+    width: u(1rem);
+    /* stylelint-disable block-closing-brace-newline-after, at-rule-empty-line-before */
+    margin-left: u(.3rem);
+    /* stylelint-enable */
+  }
+}
+
+@media screen and (min-width: 481px) {
+  .usa-banner-header p {
+    margin-top: 0;
+    margin-bottom: 0;
+    display: inline-block;
+  }
+}
+
+.usa-banner-header img {
+  float: left;
+  margin: u(.0 .7rem 0 1rem);
+  width: u(2rem);
+}
+
+
+.usa-banner-button {
+  background-color: transparent;
+  border: 0;
+  border-radius: 0;
+  font-weight: 400;
+  margin: 0;
+  outline: 0;
+  padding: 0;
+  text-align: left;
+  -webkit-font-smoothing: auto;
+  padding-left: u(3.8rem);
+  background-position-x: right;
+  color: #0071bc;
+  display: block;
+  font-size: u(1.2rem);
+  height: u(4.3rem);
+  left: u(3.5rem);
+  text-decoration: underline;
+  top: 0;
+  width: 100%;
+}
+
+.usa-banner-button:hover {
+  background-color: transparent;
+}
+
+@media screen and (min-width: 515px) {
+  .usa-banner-button {
+    padding-top: 0;
+    padding-left: 0;
+    // stylelint-disable declaration-block-no-ignored-properties 
+    display: inline;
+    height: initial;
+    margin-left: 3px;
+    position: relative;
+    vertical-align: middle;
+    width: initial;
+    left: 0;
+    // stylelint-enable 
+  }
+}
+
+.usa-banner-button:hover {
+  color: #205493;
+  text-decoration: underline;
+}
+
+.usa-banner-icon {
+  width: u(3.8rem);
+}
+
+.usa-accordion-content {
+  background-color: transparent;
+  overflow: auto;
+  padding: u(3rem);
+}
+
+.usa-accordion-content > *:first-child {
+  margin-top: 0;
+}
+
+.usa-accordion-content > *:last-child {
+  margin-bottom: 0;
+}
+
+.usa-accordion-content:not([aria-hidden]) {
+  position: absolute;
+  left: u(-999em);
+}
+
+.usa-accordion-content[aria-hidden=true] {
+  display: none;
+}
+
+
+.usa-grid,
+.usa-grid-full {
+  max-width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
+  max-width: 1040px;
+}
+
+.usa-grid::after,
+.usa-grid-full::after {
+  clear: both;
+  content: "";
+  display: block;
+}
+
+.usa-grid {
+  padding-right: u(1.5rem);
+  padding-left: u(1.5rem);
+}
+
+@media screen and (min-width: 600px) {
+  .usa-grid {
+    padding-right: u(3rem);
+    padding-left: u(3rem);
+  }
+}
+
+.usa-grid-full {
+  padding: 0;
+}
+
+.usa-media_block-img {
+  float: left;
+  margin-right: u(1rem);
+}
+
+.usa-media_block-body {
+  overflow: hidden;
+}
+
+
+// End US Bar 2.0
+
 // Masthead
 //
 // The combination of the logo, site title and utility nav
@@ -89,6 +357,7 @@
 //
 
 .masthead {
+  padding-top: u(2.5rem);
   @include clearfix();
 }
 

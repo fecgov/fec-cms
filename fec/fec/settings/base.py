@@ -56,7 +56,6 @@ FEATURES = {
     'ierawfilters': bool(env.get_credential('FEC_FEATURE_IE_RAW_FILTERS', '')),
     'presidential_map': bool(env.get_credential('FEC_FEATURE_PRESIDENTIAL_MAP', '')),
 }
-
 ENVIRONMENTS = {
     'local': 'LOCAL',
     'dev': 'DEVELOPMENT',
