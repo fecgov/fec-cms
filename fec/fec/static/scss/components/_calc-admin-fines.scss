@@ -2,14 +2,49 @@
   width: 100%;
   max-width: 1024px;
 }
+
 // Vue strips the attributes from its DOM element
 #gov-fec-calc-af {
-  border-top: 3px solid black;
+  border-top: 2px solid $base;
   position: relative;
   
   .topnav {
-    padding-right: 33%;
+    min-height: 7.5rem;
+    padding-right: calc(33% + 3rem);
     width: 100%;
+
+    meter {
+      background: transparent;
+      height: 1rem;
+      margin-top: 1rem;
+      width: 100%;
+
+      // note#1: * Chrome and Sass don't agree on these rules when they're combined to single entries:
+      &::-webkit-meter-bar {
+        // note#1
+        background: $gray-lightest;
+        border-radius: .5rem;
+        transition: all 1s;
+      }
+      &::-moz-meter-bar {
+        // note#1
+        background: $gray-lightest;
+        border-radius: .5rem;
+        transition: all 1s;
+      }
+      &::-webkit-meter-optimum-value {
+        // note#1
+        background: $green-light;
+        border-radius: .5rem;
+        transition: all 1s;
+      }
+      &:-moz-meter-optimum::-moz-meter-bar {
+        // note#1
+        background: $green-light;
+        border-radius: .5rem;
+        transition: all 1s;
+      }
+    }
 
     li {
       display: inline-block;
@@ -40,12 +75,16 @@
       }
       &.breadcrumbs__item {
         display: inline;
+        font-size: 1.4rem;
+        line-height: 1.6rem;
         max-width: none;
         padding: 0;
       }
       a.breadcrumbs__link {
-        color: darkgray;
         border: none;
+        color: darkgray;
+        font-size: 1.4rem;
+        line-height: 1.6rem;
       }
       &.hidden {
         display: none !important;
@@ -73,7 +112,7 @@
     float: left;
     height: 400px;
     left: 100%;
-    padding: 2em 33% 2em 2em; // 33% to give room for the help content
+    padding: 2em calc(33% + 3rem) 2em 0; // 33% to give room for the help content
     pointer-events: none;
     position: absolute;
     top: 0;
@@ -88,6 +127,20 @@
       left: 0;
       pointer-events: all;
       transition: left .5s;
+    }
+    &.intro {
+      padding-right: 2em;
+      text-align: center;
+
+      div {
+        max-width: 66%;
+        margin: 0 auto;
+      }
+    }
+    &.outro {
+      p {
+        font-family: $sans-serif;
+      }
     }
   } // end .frame
   label {
@@ -154,6 +207,10 @@
   }
   [type=number].indented {
     margin-left: 3.5rem;
+
+    &.search__example {
+      clear: none;
+    }
   }
 
   span.clear {
@@ -183,18 +240,24 @@
   label {
     &.indented {
       float: left;
+
+      &.search__example {
+        clear: none;
+        padding-top: 1rem;
+      }
     }
     &.label-headline {
-      font-size: 1.5rem;
-      text-transform: uppercase;
-      font-weight: bold;
       float: left;
+      font-size: 1.4rem;
+      font-weight: bold;
+      letter-spacing: -0.3px;
       margin-top: .2rem;
+      text-transform: uppercase;
     }
   }
   p {
-    font-family: karla, sans-serif;
-    font-size: 1.3rem;
+    font-size: 1.4rem;
+    line-height: 1.25em;
     width: 100%;
 
     &.indented {
@@ -205,18 +268,22 @@
     &.summary {
       clear: both;
       display: block;
-      font-size: 1.5rem;
+      font-family: $sans-serif;
+      font-size: 1.4rem;
       font-weight: 700;
+      letter-spacing: -0.3px;
       line-height: 1.8em;
       margin-top: .2rem;
       text-transform: uppercase;
-       
+
+     
       span {
         display: block;
-        font-size: 2em;
+        font-size: 2.4rem;
+        letter-spacing: -0.51px;
       }
       &.total-fine span {
-        color: red;
+        color: $error;
       }
     }
   }
@@ -240,7 +307,7 @@
     z-index: 100;
     
     .help_content {
-      font-family: karla, sans-serif;
+      font-family: $sans-serif;
       font-size: 1.25rem;
       max-height: 100%;
       overflow-y: scroll;

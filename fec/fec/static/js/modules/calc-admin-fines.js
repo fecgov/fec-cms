@@ -9,6 +9,10 @@ Vue.config.devtools = true;
 
 Vue.component('topnav', {
   props: {
+    currentFrameNum: {
+      type: Number,
+      required: true
+    },
     frames: {
       type: Array,
       required: true
@@ -19,6 +23,11 @@ Vue.component('topnav', {
   // },
   template: `
   <nav class="topnav">
+    <meter
+      v-bind:value="this.currentFrameNum"
+      v-bind:max="frames.length"
+      v-if="this.currentFrameNum > 0"
+      min="0"></meter>
     <ul class="breadcrumbs">
       <li
         v-for="(frame, index) in frames"
@@ -206,10 +215,10 @@ Vue.component('frames', {
               previous: frame_index < currentFrameNum,
               current: frame_index == currentFrameNum,
               next: frame_index > currentFrameNum
-            }
+            }, frame.class
           ]"
           >
-          <h4>{{ frame.title }}</h4>
+          <h4 v-if="frame.title">{{ frame.title }}</h4>
           <template
             v-if="frame.questions"
             v-for="(question, question_index) in frame.questions"
@@ -293,9 +302,7 @@ Vue.component('frames', {
             <div v-for="(item, index) in frame.content">
               <p
                 v-if="item.type == 'p'"
-                v-bind:class="item.class">
-                {{ item.content }}
-              </p>
+                v-bind:class="item.class">{{ item.content }}</p>
               <button 
                 v-if="item.type == 'button'"
                 v-bind:class="item.class"
@@ -359,6 +366,7 @@ var app = new Vue({
   template: `
     <div>
       <topnav
+        :current-frame-num="currentFrameNum"
         :frames="frames"
         @handle-click="handleTopNavClick"
       ></topnav>
@@ -420,6 +428,7 @@ var app = new Vue({
       {
         navLabel: '',
         title: '',
+        class: 'intro',
         autoAdvance: false,
         content: [
           {
@@ -490,11 +499,10 @@ var app = new Vue({
             vModel: 'sensitiveReport',
             value: 'true',
             breadCrumbText: 'Election-sensitive',
-            helpTitle: 'Election-sensitive',
+            helpTitle: 'What is an election sensitive report?',
             help: `<p><b>Pre-election report</b> for a primary, general or special election.<br><em>Examples: 2019 Pre-special general; 2020 Pre-primary report; 2020 Pre-general report</em></p>
             <p><b>October Quarterly</b> report due in a year in which there is a regularly scheduled general election and is filed by an unauthorized committee or the committee for a candidate who is participating in the general election.<br><em>Example: 2020 October quarterly</em></p>
-            <p><b>October Monthly</b> report due in a year in which there is a regularly scheduled general election and is filed by an unauthorized committee or the committee for a candidate who is participating in the general election.<br><em>NEED THE EXAMPLE</em></p>
-            <p><b>Pre-election report</b> for a primary, general or special election.</p>
+            <p><b>October Monthly</b> report due in a year in which there is a regularly scheduled general election and is filed by an unauthorized committee or the committee for a candidate who is participating in the general election.<br><em>Example: 2020 October monthly</em></p>
             <p>All other reports are not election sensitive.</p>`
           },
           {
@@ -503,11 +511,11 @@ var app = new Vue({
             vModel: 'sensitiveReport',
             value: 'false',
             breadCrumbText: 'Not election-sensitive',
-            helpTitle: 'Non-election-sensitive',
+            helpTitle: 'What is no an election sensitive report?',
             help: `<p><b>All reports other than:</b></p>
             <p><b>Pre-election report</b> for a primary, general or special election.<br><em>Examples: 2019 Pre-special general; 2020 Pre-primary report; 2020 Pre-general report</em></p>
             <p><b>October Quarterly</b> report due in a year in which there is a regularly scheduled general election and is filed by an unauthorized committee or the committee for a candidate who is participating in the general election.<br><em>Example: 2020 October quarterly</em></p>
-            <p><b>October Monthly</b> report due in a year in which there is a regularly scheduled general election and is filed by an unauthorized committee or the committee for a candidate who is participating in the general election.<br><em>NEED THE EXAMPLE</em></p>`
+            <p><b>October Monthly</b> report due in a year in which there is a regularly scheduled general election and is filed by an unauthorized committee or the committee for a candidate who is participating in the general election.<br><em>Example: 2020 October monthly</em></p>`
           },
           {
             label: 'Not sure',
@@ -557,7 +565,7 @@ var app = new Vue({
             type: 'integer',
             min: 0,
             vModel: 'numberOfDaysLate',
-            class: 'indented',
+            class: 'indented t-note t-sans search__example',
             showIfVar: 'lateOrNonFiler',
             showIfVarExpectedValue: 'late',
             breadCrumbText: 'Late filer: ${} day(s)',
@@ -595,7 +603,7 @@ var app = new Vue({
             min: 0,
             vModel: 'numberOfPrevViolations',
             example: 'Example: 0-99',
-            breadCrumbText: '${} prior violation(s))',
+            breadCrumbText: '${} prior violation(s)',
             helpTitle: 'Number of previous violations',
             help: `<p>The number of previous adminstrative fines assessed at final determination during the current and most recently completed two-year election cycle.</p>
             <p>Enter "0" if none were assessed.</p>`
@@ -646,6 +654,7 @@ var app = new Vue({
       {
         navLabel: '',
         title: '',
+        class: 'outro',
         autoAdvance: false,
         feedback: [
           {
@@ -683,22 +692,18 @@ var app = new Vue({
       let toReturn = 0;
       if (this.totalReceipts) toReturn += Number(this.totalReceipts);
       if (this.totalDisbursements) toReturn += Number(this.totalDisbursements);
-      console.log('totalReceiptsAndDisbursements(): ', toReturn);
       return toReturn;
     },
     totalReceiptsAndDisbursementsString: function() {
       let toReturn = this.convertToCurrency(this.totalReceiptsAndDisbursements);
-      console.log('totalReceiptsAndDisbursementsString(): ', toReturn);
       return toReturn;
     },
     totalFine: function() {
       let theVal = 12345678.9;
-      console.log('totalFine(): ', theVal);
       return theVal;
     },
     totalFineString: function() {
       let toReturn = this.convertToCurrency(this.totalFine);
-      console.log('totalFineString(): ', toReturn);
       return toReturn;
     }
   },
@@ -710,7 +715,6 @@ var app = new Vue({
     },
     getTotalString: function(varName) {
       let theVar = this[varName];
-      console.log('getTotalString()', varName, theVar);
       return theVar ? this.convertToCurrency(this[varName]) : '';
     },
     handleButtonClick: function(buttonType, e) {
@@ -719,7 +723,8 @@ var app = new Vue({
       else if (buttonType == 'next')
         this.handleTopNavClick(this.currentFrameNum + 1);
       else if (buttonType == 'back') this.currentFrameNum--;
-      else if (buttonType == 'restart') console.log('TODO: handle estart click');
+      else if (buttonType == 'restart')
+        console.log('TODO: handle restart click');
       this.toggleHelp(); // toggling help with no content will hide it
     },
     handleTopNavClick: function(navIndex) {
@@ -727,7 +732,6 @@ var app = new Vue({
       this.currentFrameNum = navIndex;
     },
     handleQuestionInput: function(frameNum, qNum, q, e) {
-      console.log('handleQuestionInput(): ', frameNum, qNum, q, e);
       let affectedVmodel = q.vModel;
       let newValue = q.value ? q.value : e.target.value;
       let frameShouldAutoAdvance = qNum.autoAdvance;
@@ -765,10 +769,12 @@ var app = new Vue({
         // Handle singular and plural
         // If we're dealing with a singular value, remove the '(s)' from the string
         // Otherwise, if we're dealing with a non-singular value, change the '(s)' to 's'
-        if (theVal == 1 && theBreadCrumbText.indexOf('(s)') > 0)
-          theBreadCrumbText = theBreadCrumbText.replace('(s)', '');
-        else if (theVal > 1 && theBreadCrumbText.indexOf('(s)') == 0)
-          theBreadCrumbText = theBreadCrumbText.replace('(s)', 's');
+        if (theBreadCrumbText.indexOf('(s)') > 0) {
+          theBreadCrumbText = theBreadCrumbText.replace(
+            '(s)',
+            theVal == 1 ? '' : 's'
+          );
+        }
       }
       if (frameNum > 0 && q && q.breadCrumbText)
         this.frames[frameNum].navLabel = theBreadCrumbText;
