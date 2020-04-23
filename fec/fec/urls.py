@@ -46,6 +46,10 @@ urlpatterns = [
     ),
 ]
 
+if settings.FEATURES.get('guidance_search'):
+    # Guidance search page
+    urlpatterns.insert(1, url(r'^legal-resources/policy-and-other-guidance/guidance-documents/$', search_views.policy_guidance_search, name='policy-guidance-search'))
+
 if settings.FEC_CMS_ENVIRONMENT != 'LOCAL':
     # admin/login always must come before admin/, so place at beginning of list
     urlpatterns.insert(0, url(r'^admin/login', uaa_views.login, name='login'))
