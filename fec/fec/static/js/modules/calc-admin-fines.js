@@ -1,7 +1,10 @@
 /* global Vue */
-/*
-DURING TESTING AND EXPERIMENTAL DEVELOPMENT, MOVE THIS "TEMP-" FILES INTO fec/dist/fec/static
-*/
+
+/**
+ * TODO: breadcrumbs nav is only picking up total receipts OR total disbursements—should include both
+ * TODO: help pointer doesn't move until something _else_ is clicked. Could be that the top values aren't calculated while the elements are hidden
+ */
+
 Vue.config.devtools = true;
 
 Vue.component('topnav', {
@@ -24,12 +27,15 @@ Vue.component('topnav', {
         >
         <a
           class="breadcrumbs__link"
-          v-on:click="handleTopNavClick(index)"
-          >{{frame.navLabel}}</a>
+          v-on:click="handleClick(index)"
+          >{{ frame.navLabel }}</a>
       </li>
     </ul>
   </nav>`,
   methods: {
+    handleClick: function(i) {
+      this.$emit('handle-click', i);
+    },
     topNavClass: function(navIndex) {
       return [
         {
@@ -45,10 +51,6 @@ Vue.component('topnav', {
 
 Vue.component('bottomnav', {
   props: {
-    handleButtonClick: {
-      type: Function,
-      required: true
-    },
     currentFrameNum: {
       type: Number,
       required: true
@@ -60,10 +62,10 @@ Vue.component('bottomnav', {
   },
   template: `
   <div v-show="this.currentFrameNum > 0">
-    <button v-bind:class="bottomNavClass('prev')" v-on:click="handleButtonClick('back', $event)">Back</button>
-    <button v-bind:class="bottomNavClass('next')" v-on:click="handleButtonClick('next', $event)">Next</button>
-    <button v-bind:class="bottomNavClass('close')" v-on:click="handleButtonClick('close', $event)">Close</button>
-    <button v-bind:class="bottomNavClass('restart')" v-on:click="handleButtonClick('restart', $event)">Start over</button>
+    <button v-bind:class="bottomNavClass('prev')" v-on:click="handleClick('back', $event)">Back</button>
+    <button v-bind:class="bottomNavClass('next')" v-on:click="handleClick('next', $event)">Next</button>
+    <button v-bind:class="bottomNavClass('close')" v-on:click="handleClick('close', $event)">Close</button>
+    <button v-bind:class="bottomNavClass('restart')" v-on:click="handleClick('restart', $event)">Start over</button>
   </div>`,
   methods: {
     bottomNavClass: function(buttonID) {
@@ -86,6 +88,9 @@ Vue.component('bottomnav', {
           (isLastFrame && buttonID == 'next') ||
           (isNotLastFrame && (buttonID == 'close' || buttonID == 'restart'))
       };
+    },
+    handleClick: function(id, e) {
+      this.$emit('handle-click', id, e);
     }
   }
 });
@@ -96,6 +101,10 @@ Vue.component('help', {
       type: Array,
       required: true
     },
+    helpClass: {
+      type: String,
+      required: false
+    },
     helpContent: {
       type: String,
       required: false
@@ -105,12 +114,8 @@ Vue.component('help', {
       required: false
     },
     helpPointerY: {
-      type: String,
+      type: Number,
       required: false
-    },
-    showHelp: {
-      type: Boolean,
-      required: true
     }
   },
   template: `
@@ -124,42 +129,70 @@ Vue.component('help', {
       height="40"
       width="20"
       viewBox="-20 -40 20 40">
-      <path d="M 0 -40 l -20 20 l 20 20" stroke="navy" fill="white"></path>
+      <path d="M 0 -40 l -20 20 l 20 20" stroke="#112e51" fill="white"></path>
     </svg>
-    <h3>{{ helpTitle }}</h3>
-    <div v-html="helpContent"></div>
-  </div>`,
-  methods: {
-    helpClass: function() {
-      return this.showHelp == false ? 'hidden' : 'show';
-    }
-  }
+    <h3 v-show="helpTitle">{{ helpTitle }}</h3>
+    <div class="help_content" v-html="helpContent"></div>
+  </div>`
+});
+
+Vue.component('debuglog', {
+  props: [
+    'currentFrameNum',
+    'penaltyAssessedDate',
+    'sensitiveReport',
+    'lateOrNonFiler',
+    'numberOfDaysLate',
+    'numberOfPrevViolations',
+    'totalReceipts',
+    'totalDisbursements',
+    'totalReceiptsAndDisbursements',
+    'totalReceiptsAndDisbursementsString',
+    'totalFine',
+    'totalFineString'
+  ],
+  template: `
+  <div class="debug-feedback">
+    Debugging:
+    <ul>
+      <li>currentFrameNum: {{ currentFrameNum }}</li>
+      <li>penaltyAssessedDate: {{ penaltyAssessedDate }}</li>
+      <li>sensitiveReport: {{ sensitiveReport }}</li>
+      <li>lateOrNonFiler: {{ lateOrNonFiler }}</li>
+      <li>numberOfDaysLate: {{ numberOfDaysLate }}</li>
+      <li>numberOfPrevViolations: {{ numberOfPrevViolations }}</li>
+      <li>totalReceipts: {{ totalReceipts }}</li>
+      <li>totalDisbursements: {{ totalDisbursements }}</li>
+      <li>totalReceiptsAndDisbursements: {{ totalReceiptsAndDisbursements }}</li>
+      <li>totalReceiptsAndDisbursementsString: {{ totalReceiptsAndDisbursementsString }}</li>
+      <li>totalFine: {{ totalFine }}</li>
+      <li>totalFineString: {{ totalFineString }}</li>
+      <li>this.$props.totalReceiptsAndDisbursementsString: {{ this.$props['totalReceiptsAndDisbursementsString'] }}</li>
+      <li>this.$props.totalFineString: {{ this.$props['totalFineString'] }}</li>
+    </ul>
+  </div>`
 });
 
 Vue.component('frames', {
   props: {
-    frames: {
-      type: Array,
-      required: true
-    },
     currentFrameNum: {
       type: Number,
       required: true
     },
-    handleButtonClick: {
-      type: Function,
+    frames: {
+      type: Array,
       required: true
     },
-    handleQuestionInput: {
-      type: Function,
+    lateOrNonFiler: {
+      type: String,
+      required: false
+    },
+    totalReceiptsAndDisbursementsString: {
+      type: String,
       required: true
     },
-    showHelp: {
-      type: Boolean,
-      required: true
-    },
-    handleHelpClick: {
-      type: Function,
+    totalFineString: {
+      type: String,
       required: true
     }
   },
@@ -167,7 +200,6 @@ Vue.component('frames', {
     <form class="frames">
       <template v-for="(frame, frame_index) in frames">
         <div
-          xxx-key="frame_index"
           v-bind:class="[
             'frame',
             {
@@ -186,18 +218,18 @@ Vue.component('frames', {
               <button
                 v-if="question.help && question.type"
                 v-show="evalFieldShowRule(question)"
-                v-on:click="handleHelpClick('', question.help, $event)"
+                v-on:click="handleHelpClick(question.helpTitle, question.help, $event)"
                 class="tooltip__trigger"
                 type="button"
                 tabindex="0">
                 <span class="u-visually-hidden">Learn more</span>
               </button>
-              <p
+              <h4
                 v-if="question.fieldH"
                 v-show="evalFieldShowRule(question)"
                 v-bind:class="question.class"
                 ><strong>{{ question.fieldH }}</strong>
-              </h6>
+              </h4>
               <p
                 v-if="question.fieldP"
                 v-show="evalFieldShowRule(question)"
@@ -220,6 +252,13 @@ Vue.component('frames', {
                 v-bind:class="question.class"
                 >{{ question.label }}</label>
               <!-- number form elements -->
+              <!-- first label only appears if the label is a headline -->
+              <label
+                v-if="(question.type == 'integer' || question.type == 'currency') && question.class == 'label-headline'"
+                v-show="evalFieldShowRule(question)"
+                v-bind:for="'elem_' + question.vModel"
+                v-bind:class="question.class"
+                >{{ question.label }}</label>
               <input
                 v-if="question.type == 'integer' || question.type == 'currency'"
                 v-show="evalFieldShowRule(question)"
@@ -232,14 +271,14 @@ Vue.component('frames', {
                 type="number"
                 ></input>
               <label
-                v-if="question.type == 'integer' || question.type == 'currency'"
+                v-if="(question.type == 'integer' || question.type == 'currency') && question.class != 'label-headline'"
                 v-show="evalFieldShowRule(question)"
                 v-bind:for="'elem_' + question.vModel"
                 v-bind:class="question.class"
                 >{{ question.label }}</label>
               <span
                 v-if="question.example"
-                class="t-note t-sans search__example">{{question.example}}</span>
+                class="t-note t-sans search__example">{{ question.example }}</span>
               <!-- html elements -->
               <div
                 v-if="question.type == 'html'"
@@ -252,38 +291,32 @@ Vue.component('frames', {
             v-if="frame.content"
             >
             <div v-for="(item, index) in frame.content">
-              
               <p
                 v-if="item.type == 'p'"
                 v-bind:class="item.class">
-                {{item.content}}
+                {{ item.content }}
               </p>
               <button 
                 v-if="item.type == 'button'"
                 v-bind:class="item.class"
                 v-on:click="handleButtonClick(item.actionId, $event)"
                 >
-                {{item.label}}
+                {{ item.label }}
               </button>
             </div>
           </template>
           <template
-            v-if="frame.feedback"
-            >
+            v-if="frame.feedback">
             <div
-              v-for="(item, index) in frame.feedback"
-              >
-              <div
+              v-for="(item, index) in frame.feedback">
+              <p
                 v-if="item.type == 'value'"
-              >
-                <h4 v-if="item.label">{{ item.label }}</h4>
-                <p v-if="item.vModel">{{ getTotal(item.vModel) }}</p>
-              </div>
+                v-bind:class="item.class"
+              >{{ item.label }} <span>{{ getVarVal(item.vModel) }}</span></p>
               <p v-if="item.type == 'p'">{{ item.content }}</p>
             </div>
           </template>
         </div>
-        <help :frames="frames" :show-help="showHelp"></help>
       </template>
     </form>`,
   methods: {
@@ -295,43 +328,90 @@ Vue.component('frames', {
         return this[q.showIfVar] == q.showIfVarExpectedValue;
       }
     },
-    getTotal: function(valName) {
+    getVarVal: function(valName) {
       return this[valName];
+    },
+    handleButtonClick: function(id, e) {
+      this.$emit('button-click', id, e);
+    },
+    handleQuestionInput: function(
+      frame_index,
+      question_index,
+      question,
+      $event
+    ) {
+      this.$emit(
+        'question-input',
+        frame_index,
+        question_index,
+        question,
+        $event
+      );
+    },
+    handleHelpClick: function(title, questionHelp, e) {
+      this.$emit('help-i-click', title, questionHelp, e);
     }
   }
 });
 
 var app = new Vue({
-  el: '#gov-fec-calc-af',
+  el: '#gov-fec-calc-af div',
   template: `
     <div>
       <topnav
         :frames="frames"
+        @handle-click="handleTopNavClick"
       ></topnav>
       <frames
         :frames="frames"
         :current-frame-num="currentFrameNum"
-        :show-help="showHelp"
-        :handle-button-click="handleButtonClick"
-        :handle-question-input="handleQuestionInput"
-        :handle-help-click="toggleHelp"
+        :get-total-string="getTotalString"
+        :late-or-non-filer="lateOrNonFiler"
+        :total-receipts="totalReceipts"
+        :total-disbursements="totalDisbursements"
+        :total-receipts-and-disbursements-string="totalReceiptsAndDisbursementsString"
+        :total-fine-string="totalFineString"
+        @button-click="handleButtonClick"
+        @question-input="handleQuestionInput"
+        @help-i-click="toggleHelp"
       ></frames>
+      <help
+        :frames="frames"
+        :help-class="helpClass"
+        :help-pointer-y="helpPointerY"
+        :help-content="helpContent"
+        :help-title="helpTitle"
+      ></help>
       <bottomnav
         :frames="frames"
         :current-frame-num="currentFrameNum"
-        :handle-button-click="handleButtonClick"
+        @handle-click="handleButtonClick"
       ></bottomnav>
+      <debuglog
+        :current-frame-num="currentFrameNum"
+        :penalty-assessed-date="penaltyAssessedDate"
+        :sensitive-report="sensitiveReport"
+        :late-or-non-filer="lateOrNonFiler"
+        :number-of-days-late="numberOfDaysLate"
+        :number-of-prev-violations="numberOfPrevViolations"
+        :total-receipts="totalReceipts"
+        :total-disbursements="totalDisbursements"
+        :total-receipts-and-disbursements="totalReceiptsAndDisbursements"
+        :total-receipts-and-disbursements-string="totalReceiptsAndDisbursementsString"
+        :total-fine="totalFine"
+        :total-fine-string="totalFineString"
+      ></debuglog>
     </div>
   `,
   data: {
     currentFrameNum: 0, //int
-    penaltyAssessedDate: undefined, // int
+    penaltyAssessedDate: undefined, // string (a year or 'latest')
     sensitiveReport: undefined, // bool
     lateOrNonFiler: undefined, // string
     numberOfDaysLate: undefined, // int
     numberOfPrevViolations: undefined, // int
-    totalReceipts: undefined, // int
-    totalDisbursements: undefined, // int,
+    totalReceipts: undefined, // number
+    totalDisbursements: undefined, // number,
     helpTitle: '',
     helpContent: '',
     helpPointerY: 0,
@@ -410,7 +490,12 @@ var app = new Vue({
             vModel: 'sensitiveReport',
             value: 'true',
             breadCrumbText: 'Election-sensitive',
-            help: 'This is the help text for election-sensitive reports'
+            helpTitle: 'Election-sensitive',
+            help: `<p><b>Pre-election report</b> for a primary, general or special election.<br><em>Examples: 2019 Pre-special general; 2020 Pre-primary report; 2020 Pre-general report</em></p>
+            <p><b>October Quarterly</b> report due in a year in which there is a regularly scheduled general election and is filed by an unauthorized committee or the committee for a candidate who is participating in the general election.<br><em>Example: 2020 October quarterly</em></p>
+            <p><b>October Monthly</b> report due in a year in which there is a regularly scheduled general election and is filed by an unauthorized committee or the committee for a candidate who is participating in the general election.<br><em>NEED THE EXAMPLE</em></p>
+            <p><b>Pre-election report</b> for a primary, general or special election.</p>
+            <p>All other reports are not election sensitive.</p>`
           },
           {
             label: 'Not Election-Sensitive Report',
@@ -418,7 +503,11 @@ var app = new Vue({
             vModel: 'sensitiveReport',
             value: 'false',
             breadCrumbText: 'Not election-sensitive',
-            help: 'This is the help text for non-election-sensitive reports'
+            helpTitle: 'Non-election-sensitive',
+            help: `<p><b>All reports other than:</b></p>
+            <p><b>Pre-election report</b> for a primary, general or special election.<br><em>Examples: 2019 Pre-special general; 2020 Pre-primary report; 2020 Pre-general report</em></p>
+            <p><b>October Quarterly</b> report due in a year in which there is a regularly scheduled general election and is filed by an unauthorized committee or the committee for a candidate who is participating in the general election.<br><em>Example: 2020 October quarterly</em></p>
+            <p><b>October Monthly</b> report due in a year in which there is a regularly scheduled general election and is filed by an unauthorized committee or the committee for a candidate who is participating in the general election.<br><em>NEED THE EXAMPLE</em></p>`
           },
           {
             label: 'Not sure',
@@ -457,10 +546,14 @@ var app = new Vue({
             vModel: 'lateOrNonFiler',
             value: 'late',
             breadCrumbText: 'Late filer',
-            help: 'This is the help text for late-filer'
+            helpTitle: 'Who is a late filer?',
+            help: `<p>For election-sensitive reports, a committee is a late filer if it files the report after the due date, but more than four days before the date of the applicable election.</p>
+            <p>A committee is a non-filer if it files after this point or does not file at all.</p>
+            <p>For non-election sensitive reports, a committee will be considered a late filer if it files its report within 30 days after the due date.</p>
+            <p>A committee is a non-filer if it files its report later than that or not at all.</p>`
           },
           {
-            label: 'Number of Days Late',
+            label: 'days late',
             type: 'integer',
             min: 0,
             vModel: 'numberOfDaysLate',
@@ -471,7 +564,10 @@ var app = new Vue({
             fieldH: 'How many calendar days late was the report?',
             fieldP:
               'Election sensitive reports are considered late if they are filed after their due dates but prior to four days before the applicable election.',
-            help: 'This is the help text for number of days late'
+            helpTitle: 'Number of days late',
+            help: `<p>The number of days past the filing deadline that the report was filed.</p>
+            <p>If the report is more than thirty days late then it would be considered not filed rather than late.</p>
+            <p>In the case of an election sensitive report not filed by four days before the applicable election is considered not filed rather than late. If either of these situations applies then change your selection above to Non-Filer.</p>`
           },
           {
             label: 'Non-Filer',
@@ -479,7 +575,11 @@ var app = new Vue({
             vModel: 'lateOrNonFiler',
             value: 'non',
             breadCrumbText: 'Non-filer',
-            help: 'This is the help text for non-filer'
+            helpTitle: 'Who is a non-filer?',
+            help: `<p>For election sensitive reports, a committee is a non-filer if it files after this point or doesn't file at all.</p>
+            <p>A committee is a late filer if it files the report after the due date, but more than four days before the date of the applicable election.</p>
+            <p>For non-election sensitive reports, a committee is a non-filer if it files its report later than that or not at all.</p>
+            <p>A committee will be considerered a late filer if it files its report within 30 days after the due date.</p>`
           }
         ],
         viewed: false
@@ -490,60 +590,77 @@ var app = new Vue({
         autoAdvance: false,
         questions: [
           {
-            label: 'Number of Previous Violations',
+            label: '',
             type: 'integer',
             min: 0,
             vModel: 'numberOfPrevViolations',
             example: 'Example: 0-99',
             breadCrumbText: '${} prior violation(s))',
-            help: 'This is the help text for previous violations'
+            helpTitle: 'Number of previous violations',
+            help: `<p>The number of previous adminstrative fines assessed at final determination during the current and most recently completed two-year election cycle.</p>
+            <p>Enter "0" if none were assessed.</p>`
           }
         ],
         viewed: false
       },
       {
         navLabel: '',
-        title:
-          'How many much in total receipts and total disbursements in this report?',
+        title: 'How much in total receipts and disbursements in this report?',
         autoAdvance: false,
         questions: [
           {
-            label: 'TOTAL RECEIPTS',
+            label: 'Total receipts',
             type: 'currency',
             min: 0,
             vModel: 'totalReceipts',
-            fieldH: 'TOTAL RECEIPTS',
+            class: 'label-headline',
+            // fieldH: 'TOTAL RECEIPTS',
             example: 'Example: 9000.99',
-            breadCrumbText: '${} total receipts',
-            help: 'This is the help text for total receipts'
+            breadCrumbVar: 'totalReceiptsAndDisbursements',
+            breadCrumbText: '${} total receipts and disbursements',
+            helpTitle: 'Total receipts',
+            help: `<p>A candidate committee enters the total receipts from</p>
+            <ul><li>Line 16 on the Detailed Summary Page of Form 3,</li><li>Line 22 on the Detailed Summary Page of Form 3P</li></ul>
+            <p>An unauthorized committee that allocates its expenses between its federal and nonfederal accounts calculates total receipts this way:</p>
+            <ul><li>Line 19 on the Detailed Summary Page of Form 3X minus the total transfers from Line 18(a) on the Detailed Summary Page of Form 3X.</li></ul>
+            <p>An unauthorized committee that does not allocate its expenses between its federal and nonfederal accounts enters the receipts from Line 19 of the Detailed Summary Page of Form 3X.</p>`
           },
           {
-            label: 'TOTAL DISBURSEMENTS',
+            label: 'Total disbursements',
             type: 'currency',
             min: 0,
             vModel: 'totalDisbursements',
-            fieldH: 'TOTAL DISBURSEMENTS',
+            class: 'label-headline',
+            // fieldH: 'TOTAL DISBURSEMENTS',
             example: 'Example: 9000.99',
-            breadCrumbText: '${} total disbursements',
-            help: 'This is the help for total disbursements'
+            breadCrumbVar: 'totalReceiptsAndDisbursements',
+            breadCrumbText: '${} total receipts and disbursements',
+            helpTitle: 'Total disbursements',
+            help: `<p>A candidate committee enters the total disbursements from Line 22 on the Detailed Summary Page of Form 3 or from Line 30 on the Detailed Summary Page of Form 3P.</p>
+            <p>An unauthorized committee that allocates its expenses between its federal and nonfederal accounts calculates total disbursements this way: total disbursements from Line 31 on the Detailed Summary Page of Form 3X minus the total nonfederal share of allocated activity from Line 21(a)(ii) on the Detailed Summary Page of Form 3X. Enter the balance in the calculator.</p>
+            <p>An unauthorized committee that does not allocate its expenses between its federal and nonfederal accounts enters the total disbursements from Line 31 on the Detailed Summary Page of Form 3X.</p>`
           }
         ],
         viewed: false
       },
       {
         navLabel: '',
-        title: 'Finish',
+        title: '',
         autoAdvance: false,
         feedback: [
           {
             type: 'value',
             label: 'Total Receipts and Disbursements',
-            vModel: 'totalReceiptsAndDisbursements'
+            class: 'summary',
+            vModel: 'totalReceiptsAndDisbursementsString',
+            content: ``
           },
           {
             type: 'value',
             label: 'Total Estimated Fine',
-            vModel: 'totalFine'
+            class: 'summary total-fine',
+            vModel: 'totalFineString',
+            content: ``
           },
           {
             type: 'p',
@@ -555,30 +672,62 @@ var app = new Vue({
       }
     ]
   },
+  mounted: function() {
+    // this.id = this.$el.getAttribute('data-id');
+  },
   computed: {
+    helpClass: function() {
+      return this.showHelp == false ? 'hidden' : 'show';
+    },
     totalReceiptsAndDisbursements: function() {
-      return this.penaltyAssessedDate; // totalReceipts + totalDisbursements
+      let toReturn = 0;
+      if (this.totalReceipts) toReturn += Number(this.totalReceipts);
+      if (this.totalDisbursements) toReturn += Number(this.totalDisbursements);
+      console.log('totalReceiptsAndDisbursements(): ', toReturn);
+      return toReturn;
+    },
+    totalReceiptsAndDisbursementsString: function() {
+      let toReturn = this.convertToCurrency(this.totalReceiptsAndDisbursements);
+      console.log('totalReceiptsAndDisbursementsString(): ', toReturn);
+      return toReturn;
     },
     totalFine: function() {
-      return this.sensitiveReport; // undefined
+      let theVal = 12345678.9;
+      console.log('totalFine(): ', theVal);
+      return theVal;
+    },
+    totalFineString: function() {
+      let toReturn = this.convertToCurrency(this.totalFine);
+      console.log('totalFineString(): ', toReturn);
+      return toReturn;
     }
   },
   methods: {
+    convertToCurrency: function(val) {
+      let theVal = Number(val);
+      if (!theVal) theVal = 0;
+      return '$' + theVal.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+    },
+    getTotalString: function(varName) {
+      let theVar = this[varName];
+      console.log('getTotalString()', varName, theVar);
+      return theVar ? this.convertToCurrency(this[varName]) : '';
+    },
     handleButtonClick: function(buttonType, e) {
       e.preventDefault();
-      console.log('handleButtonClick() buttonType, e: ', buttonType, e);
       if (buttonType == 'start') this.handleTopNavClick(1);
       else if (buttonType == 'next')
         this.handleTopNavClick(this.currentFrameNum + 1);
       else if (buttonType == 'back') this.currentFrameNum--;
+      else if (buttonType == 'restart') console.log('TODO: handle estart click');
+      this.toggleHelp(); // toggling help with no content will hide it
     },
     handleTopNavClick: function(navIndex) {
       // this.frames[navIndex].viewed = true;
       this.currentFrameNum = navIndex;
     },
     handleQuestionInput: function(frameNum, qNum, q, e) {
-      console.log('handleQuestionInput(): ', qNum, q, e);
-      console.log('     ', qNum, q, e);
+      console.log('handleQuestionInput(): ', frameNum, qNum, q, e);
       let affectedVmodel = q.vModel;
       let newValue = q.value ? q.value : e.target.value;
       let frameShouldAutoAdvance = qNum.autoAdvance;
@@ -595,31 +744,8 @@ var app = new Vue({
       //
       if (autoStep) this.handleTopNavClick(this.currentFrameNum + 1);
     },
-    showHelp_temp: function(e) {
-      e.preventDefault();
-      let theDataObj = e.target.attributes;
-      console.log('showHelp_temp(): ', e);
-      console.log('     theTarget: ', e.target);
-      console.log('     theDataObj: ', theDataObj);
-    },
     setBreadCrumbText: function(frameNum, qNum, q) {
-      console.log('setBreadCrumbText() TEMP: ', frameNum, qNum, q);
-      // console.log('     i: ', i);
-      // console.log('     q: ', q);
-      // console.log('     this.frames: ', this.frames);
-      // console.log('     this.frames[frameNum]: ', this.frames[frameNum]);
-
       let theBreadCrumbText = String(q.breadCrumbText);
-
-      // console.log('     q.type: ', q.type);
-      // console.log(
-      //   '     theBreadCrumbText.indexOf(${}): ',
-      //   theBreadCrumbText.indexOf('${}')
-      // );
-      // console.log('     q.vModel: ', q.vModel);
-      // console.log('     this[q.vModel]: ', this[q.vModel]);
-      // console.log('     typeof: ', typeof this[q.vModel]);
-
       if (
         (q.type == 'integer' || q.type == 'currency') &&
         theBreadCrumbText.indexOf('${}') >= 0 &&
@@ -627,9 +753,12 @@ var app = new Vue({
       ) {
         // Grab the value
         let theVal = Number(this[q.vModel]);
+        // If there's a breadCrumbVar, use that
+        if (q.breadCrumbVar) theVal = Number(this[q.breadCrumbVar]);
+
         // Format the value for US dollars
         if (q.type == 'currency') {
-          theVal = '$' + theVal.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+          theVal = this.convertToCurrency(theVal);
         }
         // Put the currency in the text, replacing the '${}'
         theBreadCrumbText = theBreadCrumbText.replace('${}', theVal);
@@ -645,11 +774,22 @@ var app = new Vue({
         this.frames[frameNum].navLabel = theBreadCrumbText;
     },
     toggleHelp: function(title, html, e) {
-      e.preventDefault();
-      console.log('toggleHelp()', title, html, e);
-      // this.helpPointerY = e.target.;
-      this.helpContent = html;
-      // if (helpClass)
+      if (e) e.preventDefault();
+      if ((this.showHelp && html == this.helpContent) || (!title && !html))
+        this.showHelp = false;
+      else {
+        this.showHelp = true;
+        this.helpContent = html;
+        this.helpTitle = title;
+        // set the help pointer to
+        // (the top of the circled i icon), minus
+        // (the top of the help section), minus
+        // (half of the difference between the heights of the circled i and the help pointer itself)
+        this.helpPointerY =
+          e.target.getBoundingClientRect().top -
+          this.$el.querySelector('#help').getBoundingClientRect().top -
+          10;
+      }
     }
   }
 });

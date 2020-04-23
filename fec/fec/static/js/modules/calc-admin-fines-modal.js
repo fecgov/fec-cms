@@ -7,18 +7,18 @@ if ($('.js-admin-fines-calc-modal').length > 0) {
   // Add the modal to the page
 
   // console.log('CalculatorAdminFinesModal.addModalToPage()');
-  let modalElementID = 'modal-gov-fec-calc-af';
+  let calcElementID = 'gov-fec-calc-af';
   let newModal = document.createElement('div');
-  newModal.setAttribute('id', modalElementID);
+  newModal.setAttribute('id', `modal-${calcElementID}`);
   newModal.setAttribute('class', 'js-modal modal');
   newModal.setAttribute('aria-hidden', 'true');
   newModal.innerHTML = `
-    <div tabindex="-1" class="modal__overlay" data-a11y-dialog-hide="${modalElementID}"></div>
+    <div tabindex="-1" class="modal__overlay" data-a11y-dialog-hide="modal-${calcElementID}"></div>
     <div role="dialog" class="modal__content" aria-labelledby="calc-af-modal-title">
       <div role="document">
-        <button type="button" class="modal__close button--close--primary" data-a11y-dialog-hide="${modalElementID}" title="Close this dialog window"></button>
+        <button type="button" class="modal__close button--close--primary" data-a11y-dialog-hide="modal-${calcElementID}" title="Close this dialog window"></button>
         <h2 id="calc-af-modal-title">Administrative Fine Calculator</h2>
-        <div id="gov-fec-calc-af"></div>
+        <div id="${calcElementID}"><div></div></div>
       </div>
     </div>`;
   document.body.appendChild(newModal);
@@ -53,10 +53,10 @@ if ($('.js-admin-fines-calc-modal').length > 0) {
     'js-admin-fines-calc-modal'
   );
   for (let i = 0; i < theLinkElements.length; i++) {
-    theLinkElements[i].setAttribute('aria-controls', 'modal-gov-fec-calc-af');
+    theLinkElements[i].setAttribute('aria-controls', `modal-${calcElementID}`);
     theLinkElements[i].setAttribute(
       'data-a11y-dialog-show',
-      'modal-gov-fec-calc-af'
+      `modal-${calcElementID}`
     );
     theLinkElements[i].addEventListener('click', handleTempOpenLinkClick);
   }
