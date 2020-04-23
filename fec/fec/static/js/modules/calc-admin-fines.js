@@ -28,7 +28,10 @@ Vue.component('topnav', {
       v-bind:max="frames.length"
       v-if="this.currentFrameNum > 0"
       min="0"></meter>
-    <ul class="breadcrumbs">
+    <ul
+      class="breadcrumbs"
+      v-if="this.currentFrameNum > 0"
+      >
       <li
         v-for="(frame, index) in frames"
         v-bind:class="['breadcrumbs__item', topNavClass(index)]"
@@ -50,8 +53,8 @@ Vue.component('topnav', {
         {
           viewed: this.frames[navIndex].viewed || navIndex == 0,
           current: navIndex == this.currentFrameNum,
-          hidden: navIndex == 0,
-          'hide-before': navIndex < 2
+          hidden: navIndex == 0 || navIndex == this.frames.length - 1,
+          'hide-before': navIndex < 2 || navIndex >= this.frames.length - 1
         }
       ];
     }
@@ -145,42 +148,42 @@ Vue.component('help', {
   </div>`
 });
 
-Vue.component('debuglog', {
-  props: [
-    'currentFrameNum',
-    'penaltyAssessedDate',
-    'sensitiveReport',
-    'lateOrNonFiler',
-    'numberOfDaysLate',
-    'numberOfPrevViolations',
-    'totalReceipts',
-    'totalDisbursements',
-    'totalReceiptsAndDisbursements',
-    'totalReceiptsAndDisbursementsString',
-    'totalFine',
-    'totalFineString'
-  ],
-  template: `
-  <div class="debug-feedback">
-    Debugging:
-    <ul>
-      <li>currentFrameNum: {{ currentFrameNum }}</li>
-      <li>penaltyAssessedDate: {{ penaltyAssessedDate }}</li>
-      <li>sensitiveReport: {{ sensitiveReport }}</li>
-      <li>lateOrNonFiler: {{ lateOrNonFiler }}</li>
-      <li>numberOfDaysLate: {{ numberOfDaysLate }}</li>
-      <li>numberOfPrevViolations: {{ numberOfPrevViolations }}</li>
-      <li>totalReceipts: {{ totalReceipts }}</li>
-      <li>totalDisbursements: {{ totalDisbursements }}</li>
-      <li>totalReceiptsAndDisbursements: {{ totalReceiptsAndDisbursements }}</li>
-      <li>totalReceiptsAndDisbursementsString: {{ totalReceiptsAndDisbursementsString }}</li>
-      <li>totalFine: {{ totalFine }}</li>
-      <li>totalFineString: {{ totalFineString }}</li>
-      <li>this.$props.totalReceiptsAndDisbursementsString: {{ this.$props['totalReceiptsAndDisbursementsString'] }}</li>
-      <li>this.$props.totalFineString: {{ this.$props['totalFineString'] }}</li>
-    </ul>
-  </div>`
-});
+// Vue.component('debuglog', {
+//   props: [
+//     'currentFrameNum',
+//     'penaltyAssessedDate',
+//     'sensitiveReport',
+//     'lateOrNonFiler',
+//     'numberOfDaysLate',
+//     'numberOfPrevViolations',
+//     'totalReceipts',
+//     'totalDisbursements',
+//     'totalReceiptsAndDisbursements',
+//     'totalReceiptsAndDisbursementsString',
+//     'totalFine',
+//     'totalFineString'
+//   ],
+//   template: `
+//   <div class="debug-feedback">
+//     Debugging:
+//     <ul>
+//       <li>currentFrameNum: {{ currentFrameNum }}</li>
+//       <li>penaltyAssessedDate: {{ penaltyAssessedDate }}</li>
+//       <li>sensitiveReport: {{ sensitiveReport }}</li>
+//       <li>lateOrNonFiler: {{ lateOrNonFiler }}</li>
+//       <li>numberOfDaysLate: {{ numberOfDaysLate }}</li>
+//       <li>numberOfPrevViolations: {{ numberOfPrevViolations }}</li>
+//       <li>totalReceipts: {{ totalReceipts }}</li>
+//       <li>totalDisbursements: {{ totalDisbursements }}</li>
+//       <li>totalReceiptsAndDisbursements: {{ totalReceiptsAndDisbursements }}</li>
+//       <li>totalReceiptsAndDisbursementsString: {{ totalReceiptsAndDisbursementsString }}</li>
+//       <li>totalFine: {{ totalFine }}</li>
+//       <li>totalFineString: {{ totalFineString }}</li>
+//       <li>this.$props.totalReceiptsAndDisbursementsString: {{ this.$props['totalReceiptsAndDisbursementsString'] }}</li>
+//       <li>this.$props.totalFineString: {{ this.$props['totalFineString'] }}</li>
+//     </ul>
+//   </div>`
+// });
 
 Vue.component('frames', {
   props: {
@@ -395,20 +398,6 @@ var app = new Vue({
         :current-frame-num="currentFrameNum"
         @handle-click="handleButtonClick"
       ></bottomnav>
-      <debuglog
-        :current-frame-num="currentFrameNum"
-        :penalty-assessed-date="penaltyAssessedDate"
-        :sensitive-report="sensitiveReport"
-        :late-or-non-filer="lateOrNonFiler"
-        :number-of-days-late="numberOfDaysLate"
-        :number-of-prev-violations="numberOfPrevViolations"
-        :total-receipts="totalReceipts"
-        :total-disbursements="totalDisbursements"
-        :total-receipts-and-disbursements="totalReceiptsAndDisbursements"
-        :total-receipts-and-disbursements-string="totalReceiptsAndDisbursementsString"
-        :total-fine="totalFine"
-        :total-fine-string="totalFineString"
-      ></debuglog>
     </div>
   `,
   data: {
@@ -796,6 +785,23 @@ var app = new Vue({
           this.$el.querySelector('#help').getBoundingClientRect().top -
           10;
       }
+    },
+    tempDebugLogTemplate: function() {
+      //just saving this here
+      //  <debuglog
+      //    :current-frame-num="currentFrameNum"
+      //    :penalty-assessed-date="penaltyAssessedDate"
+      //    :sensitive-report="sensitiveReport"
+      //    :late-or-non-filer="lateOrNonFiler"
+      //    :number-of-days-late="numberOfDaysLate"
+      //    :number-of-prev-violations="numberOfPrevViolations"
+      //    :total-receipts="totalReceipts"
+      //    :total-disbursements="totalDisbursements"
+      //    :total-receipts-and-disbursements="totalReceiptsAndDisbursements"
+      //    :total-receipts-and-disbursements-string="totalReceiptsAndDisbursementsString"
+      //    :total-fine="totalFine"
+      //    :total-fine-string="totalFineString"
+      //  ></debuglog>
     }
   }
 });
