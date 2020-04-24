@@ -1,11 +1,22 @@
 /* global Vue */
 
 /**
- * TODO: breadcrumbs nav is only picking up total receipts OR total disbursements—should include both
- * TODO: help pointer doesn't move until something _else_ is clicked. Could be that the top values aren't calculated while the elements are hidden
  */
+import { availableDates, getTotalAdminFine } from './calc-admin-fine-logic';
 
-Vue.config.devtools = true;
+// For each of the availableDates from the logic file,
+// take the availableDates[i] object and add the parameters we need for our Vue layout
+const penaltyAssessedDates = availableDates.map(el =>
+  Object.assign({}, el, {
+    type: 'radio',
+    vModel: 'penaltyAssessedDate',
+    breadCrumbText: el.summary
+  })
+);
+
+getTotalAdminFine({ test: true, nope: false });
+
+Vue.config.devtools = true; // TODO: remove this
 
 Vue.component('topnav', {
   props: {
@@ -18,14 +29,11 @@ Vue.component('topnav', {
       required: true
     }
   },
-  // data() {
-  //   return '';
-  // },
   template: `
   <nav class="topnav">
     <meter
       v-bind:value="this.currentFrameNum"
-      v-bind:max="frames.length"
+      v-bind:max="frames.length - 1"
       v-if="this.currentFrameNum > 0"
       min="0"></meter>
     <ul
@@ -409,6 +417,7 @@ new Vue({
     numberOfPrevViolations: undefined, // int
     totalReceipts: undefined, // number
     totalDisbursements: undefined, // number,
+    totalFine: 0, // number
     helpTitle: '',
     helpContent: '',
     helpPointerY: 0,
@@ -445,36 +454,7 @@ new Vue({
         navLabel: '',
         title: 'When was the committee’s adminstrative fine assessed?',
         autoAdvance: true,
-        questions: [
-          {
-            label: 'I haven’t been assessed a fine',
-            type: 'radio',
-            vModel: 'penaltyAssessedDate',
-            value: 'latest',
-            breadCrumbText: 'No fine yet—using latest value'
-          },
-          {
-            label: 'on or after January 1, 2019',
-            type: 'radio',
-            vModel: 'penaltyAssessedDate',
-            value: '2019',
-            breadCrumbText: 'Assessed on or after January 1, 2019'
-          },
-          {
-            label: 'December 28, 2017 through December 31, 2018',
-            type: 'radio',
-            vModel: 'penaltyAssessedDate',
-            value: '2018',
-            breadCrumbText: 'Assessed between Dec 28 2017 and Dec 31 2018'
-          },
-          {
-            label: 'February 3, 2017 through December 17, 2017',
-            type: 'radio',
-            vModel: 'penaltyAssessedDate',
-            value: '2017',
-            breadCrumbText: 'Assessed between Feb 3 2017 and Dec 17 2018'
-          }
-        ],
+        questions: penaltyAssessedDates,
         viewed: false
       },
       {
@@ -687,10 +667,6 @@ new Vue({
       let toReturn = this.convertToCurrency(this.totalReceiptsAndDisbursements);
       return toReturn;
     },
-    totalFine: function() {
-      let theVal = 12345678.9;
-      return theVal;
-    },
     totalFineString: function() {
       let toReturn = this.convertToCurrency(this.totalFine);
       return toReturn;
@@ -736,6 +712,8 @@ new Vue({
       this.frames[this.currentFrameNum].viewed = true;
       //
       if (autoStep) this.handleTopNavClick(this.currentFrameNum + 1);
+      //
+      this.updateTotalFine();
     },
     setBreadCrumbText: function(frameNum, qNum, q) {
       let theBreadCrumbText = String(q.breadCrumbText);
@@ -785,6 +763,34 @@ new Vue({
           this.$el.querySelector('#help').getBoundingClientRect().top -
           10;
       }
+    },
+    updateTotalFine: function() {
+      // console.log('updateTotalFine()');
+      // console.log('lateOrNonFiler: ', this.lateOrNonFiler);
+      // console.log('numberOfDaysLate: ', this.numberOfDaysLate);
+      // console.log('numberOfPrevViolations: ', this.numberOfPrevViolations);
+      // console.log('penaltyAssessedDate: ', this.penaltyAssessedDate);
+      // console.log('sensitiveReport: ', this.sensitiveReport);
+      // console.log('totalDisbursements: ', this.totalDisbursements);
+      // console.log('totalReceipts: ', this.totalReceipts);
+
+      if (
+        (this.lateOrNonFiler == 'non' ||
+          (this.lateOrNonFiler == 'late' && this.numberOfDaysLate)) &&
+        this.numberOfDaysLate &&
+        this.numberOfPrevViolations &&
+        this.penaltyAssessedDate &&
+        this.sensitiveReport
+      ) {
+        this.totalFine = getTotalAdminFine({
+          lateOrNonFiler: this.lateOrNonFiler,
+          numberOfDaysLate: this.numberOfDaysLate,
+          numberOfPrevViolations: this.numberOfPrevViolations,
+          penaltyAssessedDate: this.penaltyAssessedDate,
+          sensitiveReport: this.sensitiveReport,
+          totalReceiptsAndDisbursements: this.totalReceiptsAndDisbursements
+        });
+      } else this.totalFine = 0.01;
     },
     tempDebugLogTemplate: function() {
       //just saving this here
