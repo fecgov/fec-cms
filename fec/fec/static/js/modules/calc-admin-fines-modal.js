@@ -1,5 +1,5 @@
 /* global $ */
-/* global calcAdminFineJsPath, calcAdminFineCssPath */
+/* global calcAdminFineJsPath */
 
 // {# If the page has a link to the admin fines calculator in it, load its JS #}
 if ($('.js-admin-fines-calc-modal').length > 0) {
@@ -27,8 +27,8 @@ if ($('.js-admin-fines-calc-modal').length > 0) {
   let vueScriptElem = document.createElement('script');
   vueScriptElem.async = false;
   vueScriptElem.src = 'https://cdn.jsdelivr.net/npm/vue/dist/vue.js';
-//   vueScriptElem.src = 'https://cdn.jsdelivr.net/npm/vue@2.6.11';
-//   import Vue from 'https://cdn.jsdelivr.net/npm/vue@2.6.11/dist/vue.esm.browser.js'
+  //  vueScriptElem.src = 'https://cdn.jsdelivr.net/npm/vue@2.6.11';
+  //  import Vue from 'https://cdn.jsdelivr.net/npm/vue@2.6.11/dist/vue.esm.browser.js'
   document.head.appendChild(vueScriptElem);
 
   // Add the admin fines script to the page
@@ -37,15 +37,6 @@ if ($('.js-admin-fines-calc-modal').length > 0) {
     calcAFScriptElem.async = false;
     calcAFScriptElem.src = calcAdminFineJsPath;
     document.head.appendChild(calcAFScriptElem);
-  }
-
-  // Add the AF styles
-  if (calcAdminFineCssPath != undefined) {
-    // let calcAFCssElem = document.createElement('link');
-    // calcAFCssElem.rel = 'stylesheet';
-    // calcAFCssElem.type = 'text/css';
-    // calcAFCssElem.href = calcAdminFineCssPath;
-    // document.getElementsByTagName('head')[0].appendChild(calcAFCssElem);
   }
 
   // Set the link(s) to open the modal

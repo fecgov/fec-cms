@@ -364,7 +364,7 @@ Vue.component('frames', {
   }
 });
 
-var app = new Vue({
+new Vue({
   el: '#gov-fec-calc-af div',
   template: `
     <div>
@@ -712,8 +712,8 @@ var app = new Vue({
       else if (buttonType == 'next')
         this.handleTopNavClick(this.currentFrameNum + 1);
       else if (buttonType == 'back') this.currentFrameNum--;
-      else if (buttonType == 'restart')
-        console.log('TODO: handle restart click');
+      // TODO: else if (buttonType == 'restart')
+      // TODO: handle close click
       this.toggleHelp(); // toggling help with no content will hide it
     },
     handleTopNavClick: function(navIndex) {
