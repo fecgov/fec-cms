@@ -14,8 +14,6 @@ const penaltyAssessedDates = availableDates.map(el =>
   })
 );
 
-getTotalAdminFine({ test: true, nope: false });
-
 Vue.config.devtools = true; // TODO: remove this
 
 Vue.component('topnav', {
@@ -765,22 +763,24 @@ new Vue({
       }
     },
     updateTotalFine: function() {
-      // console.log('updateTotalFine()');
-      // console.log('lateOrNonFiler: ', this.lateOrNonFiler);
-      // console.log('numberOfDaysLate: ', this.numberOfDaysLate);
-      // console.log('numberOfPrevViolations: ', this.numberOfPrevViolations);
-      // console.log('penaltyAssessedDate: ', this.penaltyAssessedDate);
-      // console.log('sensitiveReport: ', this.sensitiveReport);
-      // console.log('totalDisbursements: ', this.totalDisbursements);
-      // console.log('totalReceipts: ', this.totalReceipts);
+      console.log('updateTotalFine()');
+      console.log('lateOrNonFiler: ', this.lateOrNonFiler);
+      console.log('numberOfDaysLate: ', this.numberOfDaysLate);
+      console.log('numberOfPrevViolations: ', this.numberOfPrevViolations);
+      console.log('penaltyAssessedDate: ', this.penaltyAssessedDate);
+      console.log('sensitiveReport: ', this.sensitiveReport);
+      console.log(
+        'totalReceiptsAndDisbursements: ',
+        this.totalReceiptsAndDisbursements
+      );
 
       if (
         (this.lateOrNonFiler == 'non' ||
-          (this.lateOrNonFiler == 'late' && this.numberOfDaysLate)) &&
-        this.numberOfDaysLate &&
+          (this.lateOrNonFiler == 'late' && this.numberOfDaysLate >= 0)) &&
         this.numberOfPrevViolations &&
         this.penaltyAssessedDate &&
-        this.sensitiveReport
+        this.sensitiveReport != undefined &&
+        this.totalReceiptsAndDisbursements
       ) {
         this.totalFine = getTotalAdminFine({
           lateOrNonFiler: this.lateOrNonFiler,

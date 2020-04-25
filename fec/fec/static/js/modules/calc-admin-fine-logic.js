@@ -831,36 +831,24 @@ const availableDates = [
  *
  */
 function CalcAdminFineLogic() {
-  console.log('new CalcAdminFineLogic()');
+  // Add a 'latest' set of values and set it to its chosen year
+  CalcAdminFineLogic.values['latest'] = CalcAdminFineLogic.values['2019'];
 }
-
-/**
- *
- */
-CalcAdminFineLogic.prototype.init = function() {
-  // document.NetFine
-  //
-  // FilerTypeVar
-  // ReportTypeVar
-  //
-  // checktr()
-  // checktd()
-  //
-  // calculateFines() ?
-};
 
 /**
  * @param {Object} d Data object
  * @param {String} d.lateOrNonFiler
  * @param {Number} d.numberOfDaysLate
  * @param {Number} d.numberOfPrevViolations
- * @param {String} d.penaltyAssessedDate The id of the date/year of the fine e.g. '2019', '2018', 'latest'
+ * @param {String} d.penaltyAssessedDate The id of the date/year of the fine e.g. '2019', '2018', '2017', 'latest'
  * @param {Boolean} d.sensitiveReport
  * @param {Number} d.totalReceiptsAndDisbursements
  */
 CalcAdminFineLogic.prototype.getTotalAdminFine = function(d) {
-  console.log('got this fine request: ', d);
+  console.log('getTotalAdminFine() d: ', d);
   let toReturn = 98765432.1;
+
+  console.log('toReturn: ', toReturn);
 
   // TODO: handle 24 & 48-hour requests
   // original source
@@ -868,20 +856,22 @@ CalcAdminFineLogic.prototype.getTotalAdminFine = function(d) {
   //   // TODO: can probably lose this:
   //   // CalcAdminFineLogic.calcNotice();
   // } else {
-    if (d.lateOrNonFiler == 'late' && d.sensitiveReport == false) {
-      toReturn = CalcAdminFineLogic.prototype.calcLateRegular(d);
-    }
-    if (d.lateOrNonFiler == 'late' && d.sensitiveReport == true) {
+  if (d.lateOrNonFiler == 'late') {
+    console.log('if()');
+    if (d.sensitiveReport == true || d.sensitiveReport == 'true')
       toReturn = CalcAdminFineLogic.prototype.calcLateSensitive(d);
-    }
-    if (d.lateOrNonFiler == 'non' && d.sensitiveReport == false) {
-      toReturn = CalcAdminFineLogic.prototype.calcNonFilerRegular(d);
-    }
-    if (d.lateOrNonFiler == 'non' && d.sensitiveReport == true) {
+    else toReturn = CalcAdminFineLogic.prototype.calcLateRegular(d);
+  } else if (d.lateOrNonFiler == 'non') {
+    console.log('else if()');
+    if (d.sensitiveReport == true || d.sensitiveReport == 'true')
       toReturn = CalcAdminFineLogic.prototype.calcNonFilerSensitive(d);
-    }
+    else toReturn = CalcAdminFineLogic.prototype.calcNonFilerRegular(d);
+  }
 
+  console.log('toReturn: ', toReturn);
+  if (d.numberOfPrevViolations > 0)
     toReturn = CalcAdminFineLogic.prototype.applyViolations(toReturn, d);
+  console.log('toReturn: ', toReturn);
   // }
 
   return toReturn;
@@ -893,21 +883,18 @@ CalcAdminFineLogic.prototype.getTotalAdminFine = function(d) {
 CalcAdminFineLogic.prototype.calcLateRegular = function(d) {
   console.log('calcLateRegular()');
   let rdVal = d.totalReceiptsAndDisbursements;
-  let daysLate = d.numberOfDaysLate;
+  let daysLate = parseInt(d.numberOfDaysLate);
   let toReturn = 0;
 
-  let steps = CalcAdminFineLogic.values;
-  console.log('steps: ', steps);
+  let steps = CalcAdminFineLogic.values[d.penaltyAssessedDate];
   // Go through the array until we find our maxRD
   for (let i = 0; i < steps.length; i++) {
-    console.log('for()');
     if (rdVal < steps[i].maxRD) {
-      console.log('  if')
       let baseVal = steps[i].late_val;
       let multiplier = steps[i].late_multi;
-      toReturn = baseVal + multiplier * parseFloat(daysLate);
+      toReturn = baseVal + multiplier * daysLate;
       break;
-    } else console.log('else');
+    }
   }
   // if (Calc.trtdText.value >= 0) {
   //   fixfine(Calc.trtdText.value);
@@ -918,17 +905,16 @@ CalcAdminFineLogic.prototype.calcLateRegular = function(d) {
 CalcAdminFineLogic.prototype.calcLateSensitive = function(d) {
   console.log('calcLateSensitive()');
   let rdVal = d.totalReceiptsAndDisbursements;
-  let daysLate = d.numberOfDaysLate;
+  let daysLate = parseInt(d.numberOfDaysLate);
   let toReturn = 0;
 
-  let steps = CalcAdminFineLogic.values;
-  console.log('steps: ', steps);
+  let steps = CalcAdminFineLogic.values[d.penaltyAssessedDate];
   // Go through the array until we find our maxRD
   for (let i = 0; i < steps.length; i++) {
     if (rdVal < steps[i].maxRD) {
       let baseVal = steps[i].lateSens_val;
       let multiplier = steps[i].lateSens_multi;
-      toReturn = baseVal + multiplier * parseFloat(daysLate);
+      toReturn = baseVal + multiplier * daysLate;
       break;
     }
   }
@@ -943,13 +929,11 @@ CalcAdminFineLogic.prototype.calcNonFilerRegular = function(d) {
   let rdVal = d.totalReceiptsAndDisbursements;
   let toReturn = 0;
 
-  let steps = CalcAdminFineLogic.values;
-  console.log('steps: ', steps);
+  let steps = CalcAdminFineLogic.values[d.penaltyAssessedDate];
   // Go through the array until we find our maxRD
   for (let i = 0; i < steps.length; i++) {
     if (rdVal < steps[i].maxRD) {
-      let baseVal = steps[i].nonfiler_val;
-      toReturn = baseVal;
+      toReturn = steps[i].nonfiler_val;
       break;
     }
   }
@@ -964,13 +948,13 @@ CalcAdminFineLogic.prototype.calcNonFilerSensitive = function(d) {
   let rdVal = d.totalReceiptsAndDisbursements;
   let toReturn = 0;
 
-  let steps = CalcAdminFineLogic.values;
-  console.log('steps: ', steps);
+  let steps = CalcAdminFineLogic.values[d.penaltyAssessedDate];
   // Go through the array until we find our maxRD
   for (let i = 0; i < steps.length; i++) {
+    console.log('for');
     if (rdVal < steps[i].maxRD) {
-      let baseVal = steps[i].nonfilerSens_val;
-      toReturn = baseVal;
+      console.log('if');
+      toReturn = steps[i].nonfilerSens_val;
       break;
     }
   }
@@ -989,174 +973,547 @@ CalcAdminFineLogic.prototype.calcNonFilerSensitive = function(d) {
  *
  */
 CalcAdminFineLogic.prototype.applyViolations = function(fine, d) {
-  console.log('applyViolations(): ', fine);
-  let toReturn = fine;
+  console.log('applyViolations()', fine, d);
 
-  toReturn *= 1 + 0.25 * parseFloat(d.numberOfPrevViolations);
+  let toReturn = fine + 0.25 * d.numberOfPrevViolations;
+  console.log('toReturn: ', toReturn);
 
   return toReturn;
 };
 
 /**
  *
+ */
+// CalcAdminFineLogic.prototype.fixfine = function(totalReceipts) {
+//   // THIS FUNCTION DISPLAYS CORRECT RESULT
+//   var Calc = document.NetFine;
+//   if ((totalFines > parseFloat(totalReceipts)) & (Calc.nviol.value < 1)) {
+//     totalFines = '' + parseFloat(totalReceipts);
+//   }
+//   if (totalFines < 1) {
+//     totalFines = '0.00';
+//   }
+//   dec = totalFines.indexOf('.');
+//   if (dec < 0) {
+//     totalFines = totalFines + '.00';
+//     dec = totalFines.indexOf('.');
+//   }
+//   if (
+//     (parseFloat(Calc.dlate.value) < 1) &
+//     (ReportTypeVar != 'notice') &
+//     (FilerTypeVar == 'late')
+//   ) {
+//     totalFines = 0 + '.00';
+//     dec = totalFines.indexOf('.');
+//   }
+//   if (totalFines.substring(dec + 3, dec + 4) >= 5) {
+//     // JWC - 48 HOUR REPORT: IF THIRD SIG DIG IS >=5, USE MATH.ROUND AND MULTIPLY AND DIVIDE BY 100 TO FIX THE TRUNCATED CENT.
+//     totalFines = '' + Math.round(parseFloat(totalFines) * 100) / 100;
+//   }
+//   if (
+//     Calc.trtdDisplay.value.indexOf('$0.') != -1 ||
+//     Calc.trtdDisplay.value.indexOf('$.') != -1
+//   ) {
+//     // RBL--4/29/2003-- TEST FOR LESS THAN $1 OF ACTIVITY BY LOOKING AT THE TEXT FIELD FOR TOTAL RECEIPTS AND DISBURSEMENTS. IF THERE IS LESS THAN $1 OF ACTIVITY THEN THE FINE IS ZERO.
+//     Calc.totfineText.value = '$0.00';
+//   } else {
+//     Calc.totfineText.value = '$' + Math.floor(fixdec(totalFines)) + '.00';
+//   }
+// }
+
+/**
+ *
+ */
+// CalcAdminFineLogic.prototype.fixdec = function(dollaramt) { // CONVERTS ENTRY TO DOLLARS AND CENTS
+// 	var Calc = document.NetFine;
+// 	if (dollaramt =="") {
+// 		return dollaramt;
+// 	}
+// 	dollaramt="" + Math.round(parseFloat(dollaramt)*100)/100;
+// 	dec = dollaramt.indexOf(".");
+// 	if (dec < 0 ) {
+// 		return dollaramt+".00";
+// 	}
+// 	dollars = dollaramt.substring(0,dec); 
+// 	cents = dollaramt.substring(dec+1,dec+3);
+// 	cents = (cents.length < 2) ? cents + "0" : cents;
+// 	cents = (cents.length < 1) ? cents + "00" : cents;
+// 	correctamt = dollars + "." + cents;
+// 	return correctamt;
+// }
+ 
+/**
+ *
  * maxRD is really the min value for the next step. calc should be `< maxRD`, not `<=`
  */
-CalcAdminFineLogic.values = [
-  {
-    maxRD: 5000,
-    late_val: 35,
-    late_multi: 6,
-    lateSen_val: 68,
-    lateSen_multi: 13,
-    nonfiler_val: 341,
-    nonfilerSens_val: 684
-  },
-  {
-    maxRD: 10000,
-    late_val: 68,
-    late_multi: 6,
-    lateSen_val: 137,
-    lateSen_multi: 13,
-    nonfiler_val: 410,
-    nonfilerSens_val: 820
-  },
-  {
-    maxRD: 25000,
-    late_val: 146,
-    late_multi: 6,
-    lateSen_val: 208,
-    lateSen_multi: 13,
-    nonfiler_val: 684,
-    nonfilerSens_val: 1230
-  },
-  {
-    maxRD: 50000,
-    late_val: 290,
-    late_multi: 28,
-    lateSen_val: 437,
-    lateSen_multi: 35,
-    nonfiler_val: 1230,
-    nonfilerSens_val: 1913
-  },
-  {
-    maxRD: 75000,
-    late_val: 437,
-    late_multi: 110,
-    lateSen_val: 654,
-    lateSen_multi: 110,
-    nonfiler_val: 3925,
-    nonfilerSens_val: 4360
-  },
-  {
-    maxRD: 100000,
-    late_val: 581,
-    late_multi: 146,
-    lateSen_val: 871,
-    lateSen_multi: 146,
-    nonfiler_val: 5086,
-    nonfilerSens_val: 5813
-  },
-  {
-    maxRD: 150000,
-    late_val: 871,
-    late_multi: 182,
-    lateSen_val: 1308,
-    lateSen_multi: 182,
-    nonfiler_val: 6541,
-    nonfilerSens_val: 7267
-  },
-  {
-    maxRD: 200000,
-    late_val: 1164,
-    late_multi: 217,
-    lateSen_val: 1744,
-    lateSen_multi: 217,
-    nonfiler_val: 7994,
-    nonfilerSens_val: 8719
-  },
-  {
-    maxRD: 250000,
-    late_val: 1453,
-    late_multi: 254,
-    lateSen_val: 2181,
-    lateSen_multi: 254,
-    nonfiler_val: 9446,
-    nonfilerSens_val: 10901
-  },
+CalcAdminFineLogic.values = {
+  '2019': [
+    {
+      maxRD: 5000,
+      late_val: 35,
+      late_multi: 6,
+      lateSen_val: 68,
+      lateSen_multi: 13,
+      nonfiler_val: 341,
+      nonfilerSens_val: 684
+    },
+    {
+      maxRD: 10000,
+      late_val: 68,
+      late_multi: 6,
+      lateSen_val: 137,
+      lateSen_multi: 13,
+      nonfiler_val: 410,
+      nonfilerSens_val: 820
+    },
+    {
+      maxRD: 25000,
+      late_val: 146,
+      late_multi: 6,
+      lateSen_val: 208,
+      lateSen_multi: 13,
+      nonfiler_val: 684,
+      nonfilerSens_val: 1230
+    },
+    {
+      maxRD: 50000,
+      late_val: 290,
+      late_multi: 28,
+      lateSen_val: 437,
+      lateSen_multi: 35,
+      nonfiler_val: 1230,
+      nonfilerSens_val: 1913
+    },
+    {
+      maxRD: 75000,
+      late_val: 437,
+      late_multi: 110,
+      lateSen_val: 654,
+      lateSen_multi: 110,
+      nonfiler_val: 3925,
+      nonfilerSens_val: 4360
+    },
+    {
+      maxRD: 100000,
+      late_val: 581,
+      late_multi: 146,
+      lateSen_val: 871,
+      lateSen_multi: 146,
+      nonfiler_val: 5086,
+      nonfilerSens_val: 5813
+    },
+    {
+      maxRD: 150000,
+      late_val: 871,
+      late_multi: 182,
+      lateSen_val: 1308,
+      lateSen_multi: 182,
+      nonfiler_val: 6541,
+      nonfilerSens_val: 7267
+    },
+    {
+      maxRD: 200000,
+      late_val: 1164,
+      late_multi: 217,
+      lateSen_val: 1744,
+      lateSen_multi: 217,
+      nonfiler_val: 7994,
+      nonfilerSens_val: 8719
+    },
+    {
+      maxRD: 250000,
+      late_val: 1453,
+      late_multi: 254,
+      lateSen_val: 2181,
+      lateSen_multi: 254,
+      nonfiler_val: 9446,
+      nonfilerSens_val: 10901
+    },
 
-  {
-    maxRD: 350000,
-    late_val: 2181,
-    late_multi: 290,
-    lateSen_val: 3270,
-    lateSen_multi: 290,
-    nonfiler_val: 11627,
-    nonfilerSens_val: 13080
-  },
-  {
-    maxRD: 450000,
-    late_val: 2908,
-    late_multi: 290,
-    lateSen_val: 4360,
-    lateSen_multi: 290,
-    nonfiler_val: 13080,
-    nonfilerSens_val: 14535
-  },
-  {
-    maxRD: 550000,
-    late_val: 3633,
-    late_multi: 290,
-    lateSen_val: 5450,
-    lateSen_multi: 290,
-    nonfiler_val: 13806,
-    nonfilerSens_val: 15987
-  },
-  {
-    maxRD: 650000,
-    late_val: 4360,
-    late_multi: 290,
-    lateSen_val: 6541,
-    lateSen_multi: 290,
-    nonfiler_val: 14535,
-    nonfilerSens_val: 17440
-  },
-  {
-    maxRD: 750000,
-    late_val: 5086,
-    late_multi: 290,
-    lateSen_val: 7630,
-    lateSen_multi: 290,
-    nonfiler_val: 15260,
-    nonfilerSens_val: 18895
-  },
-  {
-    maxRD: 850000,
-    late_val: 5813,
-    late_multi: 290,
-    lateSen_val: 8719,
-    lateSen_multi: 290,
-    nonfiler_val: 15987,
-    nonfilerSens_val: 20347
-  },
-  {
-    maxRD: 950000,
-    late_val: 6541,
-    late_multi: 290,
-    lateSen_val: 9810,
-    lateSen_multi: 290,
-    nonfiler_val: 16713,
-    nonfilerSens_val: 21799
-  },
-  {
-    maxRD: Number.MAX_SAFE_INTEGER, // (just over 9 quadrillion)
-    late_val: 7267,
-    late_multi: 290,
-    lateSen_val: 10901,
-    lateSen_multi: 290,
-    nonfiler_val: 17440,
-    nonfilerSens_val: 23254
-  }
-];
+    {
+      maxRD: 350000,
+      late_val: 2181,
+      late_multi: 290,
+      lateSen_val: 3270,
+      lateSen_multi: 290,
+      nonfiler_val: 11627,
+      nonfilerSens_val: 13080
+    },
+    {
+      maxRD: 450000,
+      late_val: 2908,
+      late_multi: 290,
+      lateSen_val: 4360,
+      lateSen_multi: 290,
+      nonfiler_val: 13080,
+      nonfilerSens_val: 14535
+    },
+    {
+      maxRD: 550000,
+      late_val: 3633,
+      late_multi: 290,
+      lateSen_val: 5450,
+      lateSen_multi: 290,
+      nonfiler_val: 13806,
+      nonfilerSens_val: 15987
+    },
+    {
+      maxRD: 650000,
+      late_val: 4360,
+      late_multi: 290,
+      lateSen_val: 6541,
+      lateSen_multi: 290,
+      nonfiler_val: 14535,
+      nonfilerSens_val: 17440
+    },
+    {
+      maxRD: 750000,
+      late_val: 5086,
+      late_multi: 290,
+      lateSen_val: 7630,
+      lateSen_multi: 290,
+      nonfiler_val: 15260,
+      nonfilerSens_val: 18895
+    },
+    {
+      maxRD: 850000,
+      late_val: 5813,
+      late_multi: 290,
+      lateSen_val: 8719,
+      lateSen_multi: 290,
+      nonfiler_val: 15987,
+      nonfilerSens_val: 20347
+    },
+    {
+      maxRD: 950000,
+      late_val: 6541,
+      late_multi: 290,
+      lateSen_val: 9810,
+      lateSen_multi: 290,
+      nonfiler_val: 16713,
+      nonfilerSens_val: 21799
+    },
+    {
+      maxRD: Number.MAX_SAFE_INTEGER, // (just over 9 quadrillion)
+      late_val: 7267,
+      late_multi: 290,
+      lateSen_val: 10901,
+      lateSen_multi: 290,
+      nonfiler_val: 17440,
+      nonfilerSens_val: 23254
+    }
+  ],
+  '2018': [
+    {
+      maxRD: 5000,
+      late_val: 34,
+      late_multi: 6,
+      lateSen_val: 66,
+      lateSen_multi: 13,
+      nonfiler_val: 333,
+      nonfilerSens_val: 667
+    },
+    {
+      maxRD: 10000,
+      late_val: 66,
+      late_multi: 6,
+      lateSen_val: 134,
+      lateSen_multi: 13,
+      nonfiler_val: 400,
+      nonfilerSens_val: 800
+    },
+    {
+      maxRD: 25000,
+      late_val: 142,
+      late_multi: 6,
+      lateSen_val: 200,
+      lateSen_multi: 13,
+      nonfiler_val: 667,
+      nonfilerSens_val: 1200
+    },
+    {
+      maxRD: 50000,
+      late_val: 283,
+      late_multi: 27,
+      lateSen_val: 426,
+      lateSen_multi: 34,
+      nonfiler_val: 1200,
+      nonfilerSens_val: 1866
+    },
+    {
+      maxRD: 75000,
+      late_val: 426,
+      late_multi: 107,
+      lateSen_val: 638,
+      lateSen_multi: 107,
+      nonfiler_val: 3828,
+      nonfilerSens_val: 4253
+    },
+    {
+      maxRD: 100000,
+      late_val: 567,
+      late_multi: 142,
+      lateSen_val: 850,
+      lateSen_multi: 142,
+      nonfiler_val: 4961,
+      nonfilerSens_val: 5670
+    },
+    {
+      maxRD: 150000,
+      late_val: 850,
+      late_multi: 178,
+      lateSen_val: 1276,
+      lateSen_multi: 178,
+      nonfiler_val: 6380,
+      nonfilerSens_val: 7088
+    },
+    {
+      maxRD: 200000,
+      late_val: 1135,
+      late_multi: 212,
+      lateSen_val: 1701,
+      lateSen_multi: 212,
+      nonfiler_val: 7797,
+      nonfilerSens_val: 8505
+    },
+    {
+      maxRD: 250000,
+      late_val: 1417,
+      late_multi: 248,
+      lateSen_val: 2127,
+      lateSen_multi: 248,
+      nonfiler_val: 9214,
+      nonfilerSens_val: 10633
+    },
+    {
+      maxRD: 350000,
+      late_val: 2127,
+      late_multi: 283,
+      lateSen_val: 3190,
+      lateSen_multi: 283,
+      nonfiler_val: 11341,
+      nonfilerSens_val: 12758
+    },
+    {
+      maxRD: 450000,
+      late_val: 2836,
+      late_multi: 283,
+      lateSen_val: 4253,
+      lateSen_multi: 283,
+      nonfiler_val: 12758,
+      nonfilerSens_val: 14177
+    },
+    {
+      maxRD: 550000,
+      late_val: 3544,
+      late_multi: 283,
+      lateSen_val: 5316,
+      lateSen_multi: 283,
+      nonfiler_val: 13466,
+      nonfilerSens_val: 15594
+    },
+    {
+      maxRD: 650000,
+      late_val: 4253,
+      late_multi: 283,
+      lateSen_val: 6380,
+      lateSen_multi: 283,
+      nonfiler_val: 14177,
+      nonfilerSens_val: 17011
+    },
+    {
+      maxRD: 750000,
+      late_val: 4961,
+      late_multi: 283,
+      lateSen_val: 7442,
+      lateSen_multi: 283,
+      nonfiler_val: 14885,
+      nonfilerSens_val: 18430
+    },
+    {
+      maxRD: 850000,
+      late_val: 5670,
+      late_multi: 283,
+      lateSen_val: 8505,
+      lateSen_multi: 283,
+      nonfiler_val: 15594,
+      nonfilerSens_val: 19846
+    },
+    {
+      maxRD: 950000,
+      late_val: 6380,
+      late_multi: 283,
+      lateSen_val: 9569,
+      lateSen_multi: 283,
+      nonfiler_val: 16302,
+      nonfilerSens_val: 21263
+    },
+    {
+      maxRD: Number.MAX_SAFE_INTEGER, // (just over 9 quadrillion)
+      late_val: 7088,
+      late_multi: 283,
+      lateSen_val: 10633,
+      lateSen_multi: 283,
+      nonfiler_val: 17011,
+      nonfilerSens_val: 22682
+    }
+  ],
+  '2017': [
+    {
+      maxRD: 5000,
+      late_val: 33,
+      late_multi: 6,
+      lateSen_val: 65,
+      lateSen_multi: 13,
+      nonfiler_val: 326,
+      nonfilerSens_val: 654
+    },
+    {
+      maxRD: 10000,
+      late_val: 65,
+      late_multi: 6,
+      lateSen_val: 131,
+      lateSen_multi: 13,
+      nonfiler_val: 392,
+      nonfilerSens_val: 784
+    },
+    {
+      maxRD: 25000,
+      late_val: 139,
+      late_multi: 6,
+      lateSen_val: 196,
+      lateSen_multi: 13,
+      nonfiler_val: 654,
+      nonfilerSens_val: 1176
+    },
+    {
+      maxRD: 50000,
+      late_val: 277,
+      late_multi: 26,
+      lateSen_val: 417,
+      lateSen_multi: 33,
+      nonfiler_val: 1176,
+      nonfilerSens_val: 1829
+    },
+    {
+      maxRD: 75000,
+      late_val: 417,
+      late_multi: 105,
+      lateSen_val: 625,
+      lateSen_multi: 105,
+      nonfiler_val: 3751,
+      nonfilerSens_val: 4168
+    },
+    {
+      maxRD: 100000,
+      late_val: 556,
+      late_multi: 139,
+      lateSen_val: 833,
+      lateSen_multi: 139,
+      nonfiler_val: 4862,
+      nonfilerSens_val: 5557
+    },
+    {
+      maxRD: 150000,
+      late_val: 833,
+      late_multi: 174,
+      lateSen_val: 1250,
+      lateSen_multi: 174,
+      nonfiler_val: 6252,
+      nonfilerSens_val: 6946
+    },
+    {
+      maxRD: 200000,
+      late_val: 1112,
+      late_multi: 208,
+      lateSen_val: 1667,
+      lateSen_multi: 208,
+      nonfiler_val: 7641,
+      nonfilerSens_val: 8335
+    },
+    {
+      maxRD: 250000,
+      late_val: 1389,
+      late_multi: 243,
+      lateSen_val: 2084,
+      lateSen_multi: 243,
+      nonfiler_val: 9030,
+      nonfilerSens_val: 10420
+    },
+    {
+      maxRD: 350000,
+      late_val: 2084,
+      late_multi: 277,
+      lateSen_val: 3126,
+      lateSen_multi: 277,
+      nonfiler_val: 11114,
+      nonfilerSens_val: 12503
+    },
+    {
+      maxRD: 450000,
+      late_val: 2779,
+      late_multi: 277,
+      lateSen_val: 4168,
+      lateSen_multi: 277,
+      nonfiler_val: 12503,
+      nonfilerSens_val: 13893
+    },
+    {
+      maxRD: 550000,
+      late_val: 3473,
+      late_multi: 277,
+      lateSen_val: 5210,
+      lateSen_multi: 277,
+      nonfiler_val: 13197,
+      nonfilerSens_val: 15282
+    },
+    {
+      maxRD: 650000,
+      late_val: 4168,
+      late_multi: 277,
+      lateSen_val: 6252,
+      lateSen_multi: 277,
+      nonfiler_val: 13893,
+      nonfilerSens_val: 16671
+    },
+    {
+      maxRD: 750000,
+      late_val: 4862,
+      late_multi: 277,
+      lateSen_val: 7293,
+      lateSen_multi: 277,
+      nonfiler_val: 14587,
+      nonfilerSens_val: 18061
+    },
+    {
+      maxRD: 850000,
+      late_val: 5557,
+      late_multi: 277,
+      lateSen_val: 8335,
+      lateSen_multi: 277,
+      nonfiler_val: 15282,
+      nonfilerSens_val: 19449
+    },
+    {
+      maxRD: 950000,
+      late_val: 6252,
+      late_multi: 277,
+      lateSen_val: 9378,
+      lateSen_multi: 277,
+      nonfiler_val: 15976,
+      nonfilerSens_val: 20838
+    },
+    {
+      maxRD: Number.MAX_SAFE_INTEGER, // (just over 9 quadrillion)
+      late_val: 6946,
+      late_multi: 277,
+      lateSen_val: 10420,
+      lateSen_multi: 277,
+      nonfiler_val: 16671,
+      nonfilerSens_val: 22228
+    }
+  ]
+};
 
 module.exports = {
   getTotalAdminFine: CalcAdminFineLogic.prototype.getTotalAdminFine,
