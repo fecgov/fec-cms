@@ -845,10 +845,10 @@ function CalcAdminFineLogic() {
  * @param {Number} d.totalReceiptsAndDisbursements
  */
 CalcAdminFineLogic.prototype.getTotalAdminFine = function(d) {
-  console.log('getTotalAdminFine() d: ', d);
+  console.log('getTotalAdminFine() d: ', d); // eslint-disable-line no-undef
   let toReturn = 98765432.1;
 
-  console.log('toReturn: ', toReturn);
+  console.log('toReturn: ', toReturn); // eslint-disable-line no-undef
 
   // TODO: handle 24 & 48-hour requests
   // original source
@@ -857,21 +857,21 @@ CalcAdminFineLogic.prototype.getTotalAdminFine = function(d) {
   //   // CalcAdminFineLogic.calcNotice();
   // } else {
   if (d.lateOrNonFiler == 'late') {
-    console.log('if()');
+    console.log('if()'); // eslint-disable-line no-undef
     if (d.sensitiveReport == true || d.sensitiveReport == 'true')
       toReturn = CalcAdminFineLogic.prototype.calcLateSensitive(d);
     else toReturn = CalcAdminFineLogic.prototype.calcLateRegular(d);
   } else if (d.lateOrNonFiler == 'non') {
-    console.log('else if()');
+    console.log('else if()'); // eslint-disable-line no-undef
     if (d.sensitiveReport == true || d.sensitiveReport == 'true')
       toReturn = CalcAdminFineLogic.prototype.calcNonFilerSensitive(d);
     else toReturn = CalcAdminFineLogic.prototype.calcNonFilerRegular(d);
   }
 
-  console.log('toReturn: ', toReturn);
+  console.log('toReturn: ', toReturn); // eslint-disable-line no-undef
   if (d.numberOfPrevViolations > 0)
     toReturn = CalcAdminFineLogic.prototype.applyViolations(toReturn, d);
-  console.log('toReturn: ', toReturn);
+  console.log('toReturn: ', toReturn); // eslint-disable-line no-undef
   // }
 
   return toReturn;
@@ -881,7 +881,7 @@ CalcAdminFineLogic.prototype.getTotalAdminFine = function(d) {
  * @param {Number} d.totalReceiptsAndDisbursements
  */
 CalcAdminFineLogic.prototype.calcLateRegular = function(d) {
-  console.log('calcLateRegular()');
+  console.log('calcLateRegular()'); // eslint-disable-line no-undef
   let rdVal = d.totalReceiptsAndDisbursements;
   let daysLate = parseInt(d.numberOfDaysLate);
   let toReturn = 0;
@@ -903,7 +903,7 @@ CalcAdminFineLogic.prototype.calcLateRegular = function(d) {
   return toReturn;
 };
 CalcAdminFineLogic.prototype.calcLateSensitive = function(d) {
-  console.log('calcLateSensitive()');
+  console.log('calcLateSensitive()'); // eslint-disable-line no-undef
   let rdVal = d.totalReceiptsAndDisbursements;
   let daysLate = parseInt(d.numberOfDaysLate);
   let toReturn = 0;
@@ -925,7 +925,7 @@ CalcAdminFineLogic.prototype.calcLateSensitive = function(d) {
   return toReturn;
 };
 CalcAdminFineLogic.prototype.calcNonFilerRegular = function(d) {
-  console.log('calcNonFilerRegular()');
+  console.log('calcNonFilerRegular()'); // eslint-disable-line no-undef
   let rdVal = d.totalReceiptsAndDisbursements;
   let toReturn = 0;
 
@@ -944,16 +944,16 @@ CalcAdminFineLogic.prototype.calcNonFilerRegular = function(d) {
   return toReturn;
 };
 CalcAdminFineLogic.prototype.calcNonFilerSensitive = function(d) {
-  console.log('calcNonFilerSensitive()');
+  console.log('calcNonFilerSensitive()'); // eslint-disable-line no-undef
   let rdVal = d.totalReceiptsAndDisbursements;
   let toReturn = 0;
 
   let steps = CalcAdminFineLogic.values[d.penaltyAssessedDate];
   // Go through the array until we find our maxRD
   for (let i = 0; i < steps.length; i++) {
-    console.log('for');
+    console.log('for'); // eslint-disable-line no-undef
     if (rdVal < steps[i].maxRD) {
-      console.log('if');
+      console.log('if'); // eslint-disable-line no-undef
       toReturn = steps[i].nonfilerSens_val;
       break;
     }
@@ -973,10 +973,10 @@ CalcAdminFineLogic.prototype.calcNonFilerSensitive = function(d) {
  *
  */
 CalcAdminFineLogic.prototype.applyViolations = function(fine, d) {
-  console.log('applyViolations()', fine, d);
+  console.log('applyViolations()', fine, d); // eslint-disable-line no-undef
 
   let toReturn = fine + 0.25 * d.numberOfPrevViolations;
-  console.log('toReturn: ', toReturn);
+  console.log('toReturn: ', toReturn); // eslint-disable-line no-undef
 
   return toReturn;
 };
@@ -1034,14 +1034,14 @@ CalcAdminFineLogic.prototype.applyViolations = function(fine, d) {
 // 	if (dec < 0 ) {
 // 		return dollaramt+".00";
 // 	}
-// 	dollars = dollaramt.substring(0,dec); 
+// 	dollars = dollaramt.substring(0,dec);
 // 	cents = dollaramt.substring(dec+1,dec+3);
 // 	cents = (cents.length < 2) ? cents + "0" : cents;
 // 	cents = (cents.length < 1) ? cents + "00" : cents;
 // 	correctamt = dollars + "." + cents;
 // 	return correctamt;
 // }
- 
+
 /**
  *
  * maxRD is really the min value for the next step. calc should be `< maxRD`, not `<=`

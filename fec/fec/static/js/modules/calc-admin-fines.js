@@ -763,12 +763,13 @@ new Vue({
       }
     },
     updateTotalFine: function() {
-      console.log('updateTotalFine()');
-      console.log('lateOrNonFiler: ', this.lateOrNonFiler);
-      console.log('numberOfDaysLate: ', this.numberOfDaysLate);
-      console.log('numberOfPrevViolations: ', this.numberOfPrevViolations);
-      console.log('penaltyAssessedDate: ', this.penaltyAssessedDate);
-      console.log('sensitiveReport: ', this.sensitiveReport);
+      console.log('updateTotalFine()'); // eslint-disable-line no-undef
+      console.log('lateOrNonFiler: ', this.lateOrNonFiler); // eslint-disable-line no-undef
+      console.log('numberOfDaysLate: ', this.numberOfDaysLate); // eslint-disable-line no-undef
+      console.log('numberOfPrevViolations: ', this.numberOfPrevViolations); // eslint-disable-line no-undef
+      console.log('penaltyAssessedDate: ', this.penaltyAssessedDate); // eslint-disable-line no-undef
+      console.log('sensitiveReport: ', this.sensitiveReport); // eslint-disable-line no-undef
+      // eslint-disable-next-line no-undef
       console.log(
         'totalReceiptsAndDisbursements: ',
         this.totalReceiptsAndDisbursements
