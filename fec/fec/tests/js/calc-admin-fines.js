@@ -7,137 +7,86 @@ var expect = chai.expect;
 var CalcLogic = require('../../static/js/modules/calc-admin-fine-logic');
 var getTotalAdminFine = CalcLogic.getTotalAdminFine;
 
-describe('admin fines calc', function() {
-  it('Non-sensitive | 2018 | $154,404 | Not filed | 4 violations', function() {
-    let query = {
-      lateOrNonFiler: 'late',
-      numberOfDaysLate: 5,
-      numberOfPrevViolations: 0,
-      penaltyAssessedDate: '2018',
-      sensitiveReport: false,
-      totalReceiptsAndDisbursements: 154404
-    };
-    expect(getTotalAdminFine(query)).to.equal(15594);
-  });
-  it('Non-sensitive | 2018 | $65,356 | 23 days late | 0 violations', function() {
-    let query = {
-      lateOrNonFiler: 'late',
-      numberOfDaysLate: 23,
-      numberOfPrevViolations: 0,
-      penaltyAssessedDate: '2018',
-      sensitiveReport: false,
-      totalReceiptsAndDisbursements: 65356
-    };
-    expect(getTotalAdminFine(query)).to.equal(2887);
-  });
-  it('Non-sensitive | 2018 | $4,692 | 12 days late | 0 violations', function() {
-    let query = {
-      lateOrNonFiler: 'late',
-      numberOfDaysLate: 12,
-      numberOfPrevViolations: 0,
-      penaltyAssessedDate: '2018',
-      sensitiveReport: false,
-      totalReceiptsAndDisbursements: 4692
-    };
-    expect(getTotalAdminFine(query)).to.equal(106);
-  });
-  it('Non-sensitive | 2018 | $119,588 | Not filed | 3 violations', function() {
-    let query = {
-      lateOrNonFiler: 'non',
-      numberOfDaysLate: 0,
-      numberOfPrevViolations: 3,
-      penaltyAssessedDate: '2018',
-      sensitiveReport: false,
-      totalReceiptsAndDisbursements: 119588
-    };
-    expect(getTotalAdminFine(query)).to.equal(11165);
-  });
-  it('Sensitive | 2018 | $9,993 | Not filed | 1 violations', function() {
-    let query = {
-      lateOrNonFiler: 'non',
-      numberOfDaysLate: 0,
-      numberOfPrevViolations: 1,
-      penaltyAssessedDate: '2018',
-      sensitiveReport: true,
-      totalReceiptsAndDisbursements: 9993
-    };
-    expect(getTotalAdminFine(query)).to.equal(1000);
-  });
-  it('Sensitive | 2018 | $12,825 | 7 days late | 0 violations', function() {
-    let query = {
-      lateOrNonFiler: 'late',
-      numberOfDaysLate: 7,
-      numberOfPrevViolations: 0,
-      penaltyAssessedDate: '2018',
-      sensitiveReport: true,
-      totalReceiptsAndDisbursements: 12825
-    };
-    expect(getTotalAdminFine(query)).to.equal(291);
-  });
-  it('Sensitive | 2018 | $37,358 | 6 days late | 0 violations', function() {
-    let query = {
-      lateOrNonFiler: 'late',
-      numberOfDaysLate: 6,
-      numberOfPrevViolations: 0,
-      penaltyAssessedDate: '2018',
-      sensitiveReport: true,
-      totalReceiptsAndDisbursements: 37358
-    };
-    expect(getTotalAdminFine(query)).to.equal(630);
-  });
-  it('Sensitive | 2018 | $9,061 | Not filed | 0 violations', function() {
-    let query = {
-      lateOrNonFiler: 'non',
-      numberOfDaysLate: 0,
-      numberOfPrevViolations: 0,
-      penaltyAssessedDate: '2018',
-      sensitiveReport: true,
-      totalReceiptsAndDisbursements: 9061
-    };
-    expect(getTotalAdminFine(query)).to.equal(800);
-  });
-  it('Sensitive | 2018 | $5,001 | Not filed | 0 violations', function() {
-    let query = {
-      lateOrNonFiler: 'non',
-      numberOfDaysLate: 0,
-      numberOfPrevViolations: 0,
-      penaltyAssessedDate: '2018',
-      sensitiveReport: true,
-      totalReceiptsAndDisbursements: 5001
-    };
-    expect(getTotalAdminFine(query)).to.equal(820);
-  });
-  it('Non-sensitive | 2018 | $10,921 | 6 days late | 0 violations', function() {
-    let query = {
-      lateOrNonFiler: 'late',
-      numberOfDaysLate: 6,
-      numberOfPrevViolations: 0,
-      penaltyAssessedDate: '2018',
-      sensitiveReport: false,
-      totalReceiptsAndDisbursements: 10921
-    };
-    expect(getTotalAdminFine(query)).to.equal(182);
-  });
-  it('Non-sensitive | 2018 | $119,609 | 57 days late | 0 violations', function() {
-    let query = {
-      lateOrNonFiler: 'late',
-      numberOfDaysLate: 57,
-      numberOfPrevViolations: 0,
-      penaltyAssessedDate: '2018',
-      sensitiveReport: false,
-      totalReceiptsAndDisbursements: 119609
-    };
-    expect(getTotalAdminFine(query)).to.equal(6541);
-  });
-  it('Non-sensitive | 2018 | $3,423 | 11 days late | 0 violations', function() {
-    let query = {
-      lateOrNonFiler: 'late',
-      numberOfDaysLate: 11,
-      numberOfPrevViolations: 0,
-      penaltyAssessedDate: '2018',
-      sensitiveReport: false,
-      totalReceiptsAndDisbursements: 3423
-    };
-    expect(getTotalAdminFine(query)).to.equal(101);
+/**
+ * The parameters for tests are abbreviated so 'var tests = […]' is easier to read
+ * @param {Number,String='latest'} y - Year the fine was assessed (penaltyAssessedDate)
+ * @param {Boolean} s - Whether it's an election-sensitive report (sensitiveReport)
+ * @param {Number} c - Cash / total receipts + disbursements (totalReceiptsAndDisbursements)
+ * @param {String='late','non'} l - Whether the report was filed late or not filed (lateOrNonFiler)
+ * @param {Number} t - Number of days late (numberOfDaysLate)
+ * @param {Number} v - Number of previous violations (numberOfPrevViolations)
+ * @param {Number} e - Expected fine for these values
+ */
+describe('Admin fines calc', function() {
+  // Define the tests (see var reference above)
+  var tests = [
+    { y: 'latest', s: true, c: 0, l: 'late', t: 6, v: 10, e: 0 },
+    { y: '2017', s: false, c: 1, l: 'non', t: 3, v: 10, e: 1141 },
+    { y: '2018', s: false, c: 4999.99, l: 'late', t: 1, v: 1, e: 50 },
+    { y: '2017', s: true, c: 5000, l: 'non', t: 3, v: 2, e: 1176 },
+    { y: '2017', s: false, c: 9000, l: 'non', t: 1, v: 0, e: 392 },
+    { y: '2019', s: false, c: 24000, l: 'late', t: 5, v: 3, e: 308 },
+    { y: 'latest', s: true, c: 49000, l: 'late', t: 30, v: 10, e: 5204 },
+    { y: '2018', s: false, c: 74000, l: 'late', t: 4, v: 4, e: 1708 },
+    { y: '2019', s: true, c: 99000, l: 'non', t: 50, v: 5, e: 13079 },
+    { y: 'latest', s: true, c: 149000, l: 'late', t: 20, v: 1, e: 6185 },
+    { y: '2017', s: true, c: 199000, l: 'late', t: 50, v: 2, e: 18100 },
+    { y: '2018', s: true, c: 249000, l: 'late', t: 20, v: 5, e: 15945 },
+    { y: '2018', s: false, c: 349000, l: 'non', t: 2, v: 0, e: 11341 },
+    { y: '2018', s: false, c: 440000, l: 'non', t: 15, v: 0, e: 12758 },
+    { y: 'latest', s: false, c: 549000, l: 'late', t: 10, v: 3, e: 11432 },
+    { y: '2019', s: true, c: 649000, l: 'non', t: 5, v: 5, e: 39240 },
+    { y: '2019', s: true, c: 749000, l: 'non', t: 6, v: 2, e: 28342 },
+    { y: 'latest', s: true, c: 849000, l: 'late', t: 2, v: 3, e: 16273 },
+    { y: '2018', s: true, c: 949000, l: 'non', t: 15, v: 1, e: 26578 },
+    { y: '2017', s: false, c: 1000000, l: 'late', t: 2, v: 4, e: 15000 },
+    { y: '2019', s: false, c: 2000000, l: 'late', t: 10, v: 4, e: 20334 },
+    // Errors:
+    {
+      y: 2018,
+      s: false,
+      c: 65356,
+      l: 'late',
+      t: undefined,
+      v: 0,
+      e: 'ERROR'
+    }, // late but with no days late
+    {
+      y: 2018,
+      s: false,
+      c: 65356,
+      l: 'TEST',
+      t: 100,
+      v: 0,
+      e: 'ERROR'
+    }, // invalid late/notfiled
+    { y: 1776, s: false, c: 3423, l: 'late', t: 11, v: 0, e: 'ERROR' }, // invalid year
+    {
+      // no vars
+      y: undefined,
+      s: undefined,
+      c: undefined,
+      l: undefined,
+      t: undefined,
+      v: undefined,
+      e: 'ERROR'
+    }
+  ];
+  // For each test we want to run,
+  tests.forEach(function(test, i) {
+    // Name it ('test0', 'test1', etc)
+    it('test ' + i, function() {
+      // Create the data object for the getTotalAdminFine function
+      let query = {
+        lateOrNonFiler: test.l,
+        numberOfDaysLate: test.t,
+        numberOfPrevViolations: test.v,
+        penaltyAssessedDate: test.y,
+        sensitiveReport: test.s,
+        totalReceiptsAndDisbursements: test.c
+      };
+      // Set expectations and evaluate results
+      expect(getTotalAdminFine(query).toString()).to.equal(test.e.toString());
+    });
   });
 });

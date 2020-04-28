@@ -14,8 +14,11 @@ const penaltyAssessedDates = availableDates.map(el =>
   })
 );
 
-Vue.config.devtools = true; // TODO: remove this
+// Vue.config.devtools = true; // TODO: remove this
 
+/**
+ * The <topnav> Vue component
+ */
 Vue.component('topnav', {
   props: {
     currentFrameNum: {
@@ -67,6 +70,9 @@ Vue.component('topnav', {
   }
 });
 
+/**
+ * The <bottomnav> Vue component
+ */
 Vue.component('bottomnav', {
   props: {
     currentFrameNum: {
@@ -113,6 +119,9 @@ Vue.component('bottomnav', {
   }
 });
 
+/**
+ * The <help> Vue component
+ */
 Vue.component('help', {
   props: {
     frames: {
@@ -154,6 +163,9 @@ Vue.component('help', {
   </div>`
 });
 
+/**
+ * The <debuglog> Vue component
+ */
 // Vue.component('debuglog', {
 //   props: [
 //     'currentFrameNum',
@@ -191,6 +203,9 @@ Vue.component('help', {
 //   </div>`
 // });
 
+/**
+ * The <frames> Vue component
+ */
 Vue.component('frames', {
   props: {
     currentFrameNum: {
@@ -370,6 +385,9 @@ Vue.component('frames', {
   }
 });
 
+/**
+ * The main data for the admin fines calculator
+ */
 new Vue({
   el: '#gov-fec-calc-af div',
   template: `
@@ -666,7 +684,12 @@ new Vue({
       return toReturn;
     },
     totalFineString: function() {
-      let toReturn = this.convertToCurrency(this.totalFine);
+      let toReturn = this.totalFine;
+
+      // If the totalFine isn't a number (like 'ERROR'), just change it to a question mark
+      if (isNaN(this.totalFine)) toReturn = '?';
+      else toReturn = this.convertToCurrency(toReturn);
+
       return toReturn;
     }
   },
