@@ -28,6 +28,7 @@ urlpatterns = [
     url(r'^help-candidates-and-committees/guides/$', home_views.guides),
     url(r'^meetings/$', home_views.index_meetings, name="meetings_page"),
     url(r'^search/$', search_views.search, name='search'),
+    url(r'^legal-resources/policy-and-other-guidance/guidance-documents/$', search_views.policy_guidance_search, name='policy-guidance-search'),
     url(r'^updates/$', home_views.updates),
     url(r'', include('data.urls')),  # URLs for /data
     url(r'', include('legal.urls')),  # URLs for legal pages
@@ -46,9 +47,6 @@ urlpatterns = [
     ),
 ]
 
-if settings.FEATURES.get('guidance_search'):
-    # Guidance search page
-    urlpatterns.insert(1, url(r'^legal-resources/policy-and-other-guidance/guidance-documents/$', search_views.policy_guidance_search, name='policy-guidance-search'))
 
 if settings.FEC_CMS_ENVIRONMENT != 'LOCAL':
     # admin/login always must come before admin/, so place at beginning of list

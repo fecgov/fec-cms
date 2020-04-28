@@ -48,13 +48,15 @@ def child_page_count(page):
 
 
 @register.filter()
-def remove_digits(string):
+def prepend_non_digit(string):
     """
-    Strips digits from a string
+    Prepends non-digit-containing string.
     Useful in combination with built-in slugify in order to create strings
-    that can be used as HTML IDs, which cannot begin with digits
+    from titles that can be used as HTML IDs, which cannot begin with digits.
     """
-    return re.sub('\d+', '', string)
+    if string[:1].isdigit():
+       string = "go-to-{0}".format(string)
+    return string
 
 
 @register.filter()
