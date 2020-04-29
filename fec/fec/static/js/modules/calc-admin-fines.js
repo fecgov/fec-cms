@@ -2,7 +2,7 @@
 
 /**
  */
-import { availableDates, getTotalAdminFine } from './calc-admin-fine-logic';
+import { availableDates, getTotalAdminFine } from './calc-admin-fines-logic';
 
 // For each of the availableDates from the logic file,
 // take the availableDates[i] object and add the parameters we need for our Vue layout
