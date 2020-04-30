@@ -11,7 +11,7 @@ class AddSecureHeaders(MiddlewareMixin):
             "default-src": "'self' *.fec.gov *.app.cloud.gov https://www.google-analytics.com",
             "frame-src": "'self' https://www.google.com/recaptcha/ https://www.youtube.com/",
             "img-src": "'self' *.fec.gov *.app.cloud.gov data: https://*.ssl.fastly.net https://www.google-analytics.com https://www.googletagmanager.com",
-            "script-src": "'self' 'unsafe-inline' 'unsafe-eval' https://www.google.com/recaptcha/ https://www.gstatic.com/recaptcha/ https://www.google-analytics.com https://www.googletagmanager.com https://polyfill.io https://dap.digitalgov.gov https://cdn.jsdelivr.net",
+            "script-src": "'self' 'unsafe-inline' 'unsafe-eval' https://www.google.com/recaptcha/ https://www.gstatic.com/recaptcha/ https://www.google-analytics.com https://www.googletagmanager.com https://polyfill.io https://dap.digitalgov.gov",
             "style-src": "'self' data: 'unsafe-inline'",
             "object-src": "'none'",
         }
