@@ -124,16 +124,16 @@ function SearchResults(props) {
         <div className="message message--no-icon">
           <h2 className="message__title">No results</h2>
           <p>
-            Sorry, we didn&rsquo;t find any documents matching {props.query}.
+            Sorry, we didn&rsquo;t find any documents matching your search {props.q}.
           </p>
           <div className="message--alert__bottom">
             <p>Think this was a mistake?</p>
             <ul className="list--buttons">
-              {props.query && (
+              {props.q && (
                 <li>
                   <a
                     className="button button--standard"
-                    href="http://search04.fec.gov/vivisimo/cgi-bin/query-meta?v%3Asources=Administrative_Fine%2CAdvisory_Opinion%2CAlternative_Dispute_Resolution%2CAudit_Reports%2CMatters_Under_Review%2CMatters_Under_Review_Archived%2CRulemaster%2CCandidate_Summary%2CCommittee_Summary%2Cfec.gov&query={{ query }}&x=0&y=0&v%3aproject=fec_search_02_prj&v%3aframe=form&form=advanced-fec&"
+                    href={'/search/?query='+ props.q}
                   >
                     Try FEC.gov
                   </a>
@@ -165,8 +165,8 @@ function SearchResults(props) {
 
 SearchResults.propTypes = {
   advisory_opinion: PropTypes.array,
-  loading: PropTypes.string,
-  query: PropTypes.string
+  loading: PropTypes.bool,
+  query: PropTypes.object
 };
 
 module.exports = SearchResults;
