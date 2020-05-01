@@ -124,8 +124,7 @@ function SearchResults(props) {
         <div className="message message--no-icon">
           <h2 className="message__title">No results</h2>
           <p>
-            Sorry, we didn&rsquo;t find any documents matching your search{' '}
-            {props.q}.
+            Sorry, we didn&rsquo;t find any documents matching your search.
           </p>
           <div className="message--alert__bottom">
             <p>Think this was a mistake?</p>
