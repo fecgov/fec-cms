@@ -29,7 +29,10 @@ def _call_api(*path_parts, **filters):
 
     path = os.path.join(settings.FEC_API_VERSION, *[x.strip("/") for x in path_parts])
     url = parse.urljoin(settings.FEC_API_URL, path)
-    results = session.get(url, params=filters)
+    # Timeout is set in seconds 
+    timeout = 90 
+    
+    results = session.get(url, params=filters, timeout=timeout)
 
     # Log the caller function and API endpoint
     current_frame = inspect.currentframe()
