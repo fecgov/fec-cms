@@ -15,11 +15,11 @@ const availableDates = [
     label: 'I haven’t been assessed a fine',
     summary: 'No fine yet—using latest value'
   },
-  {
-    value: '2020',
-    label: 'TBD+',
-    summary: 'After TBD 2020'
-  },
+  // {
+  //   value: '2020',
+  //   label: '2020',
+  //   summary: '2020 (2019 values)'
+  // },
   {
     value: '2019',
     label: 'on or after January 1, 2019',
