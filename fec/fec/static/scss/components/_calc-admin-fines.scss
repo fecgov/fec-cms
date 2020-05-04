@@ -10,8 +10,11 @@
   
   .topnav {
     min-height: 7.5rem;
-    padding-right: calc(33% + 3rem);
     width: 100%;
+    
+    @include media($med) {
+      padding-right: calc(33% + 3rem);
+    }
 
     meter {
       background: transparent;
@@ -122,8 +125,19 @@
     &.previous {
       left: -100%;
       transition: left .25s;
+      * {
+        pointer-events: none;
+        user-select: none;
+      }
+    }
+    &.next {
+      * {
+        pointer-events: none;
+        user-select: none;
+      }
     }
     &.current {
+      display: block; // (only need to define this because .next.off-screen will jump to transition complete before animation can start)
       left: 0;
       pointer-events: all;
       transition: left .5s;
@@ -142,6 +156,9 @@
         font-family: $sans-serif;
       }
     }
+    // &.off-screen {
+    //   display: none;
+    // }
   } // end .frame
   label {
     /* clear: both;
@@ -297,7 +314,6 @@
     border-left: thin solid #112e51;
     color: #112e51;
     height: 100%;
-    line-height: 1.3em;
     padding: 1rem;
     position: absolute;
     right: 0;
@@ -305,15 +321,21 @@
     transition: right .5s;
     width: 33%;
     z-index: 100;
+
+    h3 {
+      line-height: 1.4em;
+    }
     
     .help_content {
       font-family: $sans-serif;
       font-size: 1.25rem;
+      line-height: 1.4em;
       max-height: 100%;
       overflow-y: scroll;
 
       p {
-        font-size: 1.25rem;
+        font-size: 1.4rem;
+        line-height: 1.4em;
       }
       ul {
         list-style-type: disc;

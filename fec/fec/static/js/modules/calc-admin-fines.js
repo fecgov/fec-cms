@@ -164,46 +164,6 @@ Vue.component('help', {
 });
 
 /**
- * The <debuglog> Vue component
- */
-// Vue.component('debuglog', {
-//   props: [
-//     'currentFrameNum',
-//     'penaltyAssessedDate',
-//     'sensitiveReport',
-//     'lateOrNonFiler',
-//     'numberOfDaysLate',
-//     'numberOfPrevViolations',
-//     'totalReceipts',
-//     'totalDisbursements',
-//     'totalReceiptsAndDisbursements',
-//     'totalReceiptsAndDisbursementsString',
-//     'totalFine',
-//     'totalFineString'
-//   ],
-//   template: `
-//   <div class="debug-feedback">
-//     Debugging:
-//     <ul>
-//       <li>currentFrameNum: {{ currentFrameNum }}</li>
-//       <li>penaltyAssessedDate: {{ penaltyAssessedDate }}</li>
-//       <li>sensitiveReport: {{ sensitiveReport }}</li>
-//       <li>lateOrNonFiler: {{ lateOrNonFiler }}</li>
-//       <li>numberOfDaysLate: {{ numberOfDaysLate }}</li>
-//       <li>numberOfPrevViolations: {{ numberOfPrevViolations }}</li>
-//       <li>totalReceipts: {{ totalReceipts }}</li>
-//       <li>totalDisbursements: {{ totalDisbursements }}</li>
-//       <li>totalReceiptsAndDisbursements: {{ totalReceiptsAndDisbursements }}</li>
-//       <li>totalReceiptsAndDisbursementsString: {{ totalReceiptsAndDisbursementsString }}</li>
-//       <li>totalFine: {{ totalFine }}</li>
-//       <li>totalFineString: {{ totalFineString }}</li>
-//       <li>this.$props.totalReceiptsAndDisbursementsString: {{ this.$props['totalReceiptsAndDisbursementsString'] }}</li>
-//       <li>this.$props.totalFineString: {{ this.$props['totalFineString'] }}</li>
-//     </ul>
-//   </div>`
-// });
-
-/**
  * The <frames> Vue component
  */
 Vue.component('frames', {
@@ -233,14 +193,7 @@ Vue.component('frames', {
     <form class="frames">
       <template v-for="(frame, frame_index) in frames">
         <div
-          v-bind:class="[
-            'frame',
-            {
-              previous: frame_index < currentFrameNum,
-              current: frame_index == currentFrameNum,
-              next: frame_index > currentFrameNum
-            }, frame.class
-          ]"
+          v-bind:class="frameClass(frame_index, frame.class)"
           >
           <h4 v-if="frame.title">{{ frame.title }}</h4>
           <template
@@ -358,6 +311,23 @@ Vue.component('frames', {
         // expect the showIfVar to be on this level / root
         return this[q.showIfVar] == q.showIfVarExpectedValue;
       }
+    },
+    frameClass: function(frameIndex, addtionalClasses) {
+      return [
+        'frame',
+        {
+          previous: frameIndex < this.currentFrameNum,
+          current: frameIndex == this.currentFrameNum,
+          'next off-screen': frameIndex > this.currentFrameNum
+        },
+        addtionalClasses
+        // {
+        //   viewed: this.frames[navIndex].viewed || navIndex == 0,
+        //   current: navIndex == this.currentFrameNum,
+        //   hidden: navIndex == 0 || navIndex == this.frames.length - 1,
+        //   'hide-before': navIndex < 2 || navIndex >= this.frames.length - 1
+        // }
+      ];
     },
     getVarVal: function(valName) {
       return this[valName];
@@ -668,6 +638,8 @@ new Vue({
   },
   mounted: function() {
     // this.id = this.$el.getAttribute('data-id');
+    // Add the transition listeners so frames disappear while out of sight
+    this.startWatchingTransitions();
   },
   computed: {
     helpClass: function() {
@@ -767,6 +739,39 @@ new Vue({
       if (frameNum > 0 && q && q.breadCrumbText)
         this.frames[frameNum].navLabel = theBreadCrumbText;
     },
+    startWatchingTransitions: function() {
+      const frames = document.querySelectorAll('.frame');
+
+      // Add off-screen to all non-intro frames
+      for (let i = 0; i < frames.length; i++) {
+        //
+        if (!frames[i].classList.contains('intro')) {
+          frames[i].classList.add('off-screen');
+        }
+
+        frames[i].addEventListener('transitionstart', function(e) {
+          if (e.target.classList.contains('frame')) {
+            e.target.classList.remove('off-screen');
+          }
+        });
+        // frames.addEventListener('transitionrun', function(e) {
+        //   if (e.target.classList.contains('frame')) {
+        //     if (!e.target.classList.contains('current')) {
+        //       console.log('transitionrun() .frame .current', e);
+        //       e.target.classList.add('off-screen');
+        //     }
+        //   }
+        // });
+        frames[i].addEventListener('transitionend', function(e) {
+          if (e.target.classList.contains('frame')) {
+            if (!e.target.classList.contains('current')) {
+              console.log('transitionend() .frame .current', e);
+              e.target.classList.add('off-screen');
+            }
+          }
+        });
+      }
+    },
     toggleHelp: function(title, html, e) {
       if (e) e.preventDefault();
       if ((this.showHelp && html == this.helpContent) || (!title && !html))
@@ -786,18 +791,6 @@ new Vue({
       }
     },
     updateTotalFine: function() {
-      console.log('updateTotalFine()'); // eslint-disable-line no-undef
-      console.log('lateOrNonFiler: ', this.lateOrNonFiler); // eslint-disable-line no-undef
-      console.log('numberOfDaysLate: ', this.numberOfDaysLate); // eslint-disable-line no-undef
-      console.log('numberOfPrevViolations: ', this.numberOfPrevViolations); // eslint-disable-line no-undef
-      console.log('penaltyAssessedDate: ', this.penaltyAssessedDate); // eslint-disable-line no-undef
-      console.log('sensitiveReport: ', this.sensitiveReport); // eslint-disable-line no-undef
-      // eslint-disable-next-line no-undef
-      console.log(
-        'totalReceiptsAndDisbursements: ',
-        this.totalReceiptsAndDisbursements
-      );
-
       if (
         (this.lateOrNonFiler == 'non' ||
           (this.lateOrNonFiler == 'late' && this.numberOfDaysLate >= 0)) &&
@@ -815,23 +808,6 @@ new Vue({
           totalReceiptsAndDisbursements: this.totalReceiptsAndDisbursements
         });
       } else this.totalFine = 0.01;
-    },
-    tempDebugLogTemplate: function() {
-      //just saving this here
-      //  <debuglog
-      //    :current-frame-num="currentFrameNum"
-      //    :penalty-assessed-date="penaltyAssessedDate"
-      //    :sensitive-report="sensitiveReport"
-      //    :late-or-non-filer="lateOrNonFiler"
-      //    :number-of-days-late="numberOfDaysLate"
-      //    :number-of-prev-violations="numberOfPrevViolations"
-      //    :total-receipts="totalReceipts"
-      //    :total-disbursements="totalDisbursements"
-      //    :total-receipts-and-disbursements="totalReceiptsAndDisbursements"
-      //    :total-receipts-and-disbursements-string="totalReceiptsAndDisbursementsString"
-      //    :total-fine="totalFine"
-      //    :total-fine-string="totalFineString"
-      //  ></debuglog>
     }
   }
 });
