@@ -9,9 +9,7 @@ class TooltipHelp extends React.Component {
           <span className="u-visually-hidden">Learn more</span>
         </button>
         <div
-          className={`tooltip tooltip--${
-            this.props.verticalPosition
-          } tooltip--${this.props.horizontalPosition}`}
+          className={`tooltip tooltip--${this.props.verticalPosition} tooltip--${this.props.horizontalPosition}`}
         >
           <p className="tooltip__content tooltip__content">
             {this.props.message}
