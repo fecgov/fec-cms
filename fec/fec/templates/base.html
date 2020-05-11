@@ -133,7 +133,7 @@
     {% endif %}
 
     <main id="main">
-      {% if settings.FEATURES.website_status %}
+      {% if settings.FEATURES.website_status and status=500 %}
       <div class="container" style="padding-top: 15rem;">
           <ul class="grid grid--flex">
               <li class="grid__item text-centered">
