@@ -57,6 +57,9 @@
         </div>
         <div class="site-title--print"></div>
         <a title="Home" href="/" class="site-title" rel="home"><span class="u-visually-hidden">Federal Election Commission | United States of America</span></a>
+        {% if settings.FEATURES.website_status %}
+          {# Don't show the utility nav if we are showing website status message #}
+        {% else %}
         <ul class="utility-nav list--flat">
           <li class="utility-nav__item"><a href="/calendar/">Calendar</a></li>
           <li class="utility-nav__item">
@@ -81,14 +84,22 @@
             </form>
           </li>
         </ul>
+        {% endif %}
       </div>
-      {% include 'partials/navigation/navigation.html' %}
+      {% if settings.FEATURES.website_status %}
+        {# Don't show the site nav if we are showing website status message #}
+      {% else %}
+        {% include 'partials/navigation/navigation.html' %}
+      {% endif %}
     </header>
     {% else %}
     <header class="site-header">
       <div class="masthead">
         <div class="site-title--print"></div>
         <a title="Home" href="/" class="site-title" rel="home"><span class="u-visually-hidden">Federal Election Commission | United States of America</span></a>
+        {% if settings.FEATURES.website_status %}
+          {# Don't show the utility nav if we are showing website status message #}
+        {% else %}
         <ul class="utility-nav list--flat">
           <li class="utility-nav__item{% if self.content_section == 'calendar' %} is-active{% endif %}"><a href="/calendar/">Calendar</a></li>
           <li class="utility-nav__item"><a class="js-glossary-toggle glossary__toggle">Glossary</a></li>
@@ -111,15 +122,34 @@
             </form>
           </li>
         </ul>
+        {% endif %}
       </div>
-      {% include 'partials/navigation/navigation.html' %}
+      {% if settings.FEATURES.website_status %}
+        {# Don't show the site nav if we are showing website status message #}
+      {% else %}
+        {% include 'partials/navigation/navigation.html' %}
+      {% endif %}
     </header>
     {% endif %}
 
     <main id="main">
-      {% block content %}{% endblock %}
+      {% if settings.FEATURES.website_status %}
+      <div class="container" style="padding-top: 15rem;">
+          <ul class="grid grid--flex">
+              <li class="grid__item text-centered">
+                  <p>We are experiencing technical difficulties. We know this may interrupt your work and are working hard to restore FEC.gov to normal. Please check the <a href="https://secure-stats.pingdom.com/x0blqgj29ogg">FEC.gov status page</a> for current system status availability.</p>
+                  <p>If you have any questions or feedback about the website, please contact us at <a href="mailto:webmanager@fec.gov">webmanager@fec.gov</a>. For assistance with questions about the FEC or the federal campaign finance law, please email <a href="mailto:info@fec.gov">info@fec.gov</a> or call 800-424-9530.</p>
+              </li>
+          </ul>
+      </div>
+      {% else %}
+          {% block content %}{% endblock %}
+      {% endif %}
     </main>
 
+    {% if settings.FEATURES.website_status %}
+      {# Don't show the footer if we are showing website status message #}
+    {% else %}
     {% include 'partials/footer-navigation.html' %}
     <footer class="footer">
       <div class="container">
@@ -151,6 +181,7 @@
         </div>
       </div>
     </footer>
+    {% endif %}
 
     {% include './partials/glossary.html' %}
 
