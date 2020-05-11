@@ -73,7 +73,7 @@ def _detect_space(repo, branch=None, yes=False):
 DEPLOY_RULES = (
     ('prod', _detect_prod),
     ('stage', lambda _, branch: branch.startswith('release')),
-    ('dev', lambda _, branch: branch == 'develop'),
+    ('dev', lambda _, branch: branch == 'test/3742-static-status-page'),
     # Uncomment below and adjust branch name to deploy desired feature branch to the feature space
     #('feature', lambda _, branch: branch == '[BRANCH NAME]'),
 )
