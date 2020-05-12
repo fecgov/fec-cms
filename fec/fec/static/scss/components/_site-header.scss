@@ -133,9 +133,11 @@
   background-image: none;
   border:none !important;
   padding: u(.75rem 1rem);
-  
-  }
 
+   &[aria-expanded=true] {
+    background-image: none;
+   }
+  }
 }
 
 .usa-banner-header p {
