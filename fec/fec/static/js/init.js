@@ -79,8 +79,11 @@ $(document).ready(function() {
     new dropdown.Dropdown(this);
   });
 
-  // Initialize feedback widget
-  feedbackWidget = new feedback.Feedback('/data/issue/');
+  // Don't show the feedback box on the 500 status page
+  if (!$('body').hasClass('status-mode')) {
+    // Initialize feedback widget
+    feedbackWidget = new feedback.Feedback('/data/issue/');
+  }
 
   $('.js-form-nav').each(function() {
     new FormNav(this);
