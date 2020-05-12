@@ -1,12 +1,14 @@
 from datetime import datetime
 from itertools import chain
 from operator import attrgetter
+from django.http import HttpResponse
 
 from django.conf import settings
 from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
 from django.db.models import Q
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404, render
+from django.views.defaults import server_error
 from wagtail.documents.models import Document
 
 from fec.forms import ContactRAD, form_categories
@@ -399,3 +401,10 @@ def guides(request):
         "home/candidate-and-committee-services/guides.html",
         {"self": page_context},
     )
+
+# Custom handle 500 error for website status
+def error(request, template_name="500.html"):
+    if settings.FEATURES.get('website_status'):
+        return server_error(request, '500-status.html')
+
+    return server_error(request, template_name)
