@@ -35,8 +35,10 @@ Vue.component('topnav', {
     <meter
       v-bind:value="this.currentFrameNum"
       v-bind:max="frames.length - 1"
+      v-bind:class="{'complete': this.currentFrameNum == frames.length - 1}"
       v-if="this.currentFrameNum > 0"
       min="0"></meter>
+    <i class="i i-check"></i>
     <ul
       class="breadcrumbs"
       v-if="this.currentFrameNum > 0"
@@ -107,7 +109,7 @@ Vue.component('bottomnav', {
         // behavior classes:
         'is-disabled':
           (isFirstFrame && buttonID == 'prev') ||
-          (currentFrameNeedsAnswer && buttonID == 'XXXnext'),
+          (currentFrameNeedsAnswer && buttonID == 'next'),
         hidden:
           (isLastFrame && buttonID == 'next') ||
           (isNotLastFrame && (buttonID == 'close' || buttonID == 'restart'))
@@ -159,8 +161,20 @@ Vue.component('help', {
       <path d="M 0 -40 l -20 20 l 20 20" stroke="#112e51" fill="white"></path>
     </svg>
     <h3 v-show="helpTitle">{{ helpTitle }}</h3>
-    <div class="help_content" v-html="helpContent"></div>
-  </div>`
+    <button
+      class="filters__toggle"
+      v-on:click="handleCloseClick">
+    </button>
+    <div class="help_scroller">
+      <div class="ps-scrollbar-y-rail"><div class="ps-scrollbar-y"></div></div>
+      <div class="help_content" v-html="helpContent"></div>
+    </div>
+  </div>`,
+  methods: {
+    handleCloseClick: function() {
+      this.$emit('close-click');
+    }
+  }
 });
 
 /**
@@ -177,6 +191,10 @@ Vue.component('frames', {
       required: true
     },
     lateOrNonFiler: {
+      type: String,
+      required: false
+    },
+    sensitiveReport: {
       type: String,
       required: false
     },
@@ -198,79 +216,84 @@ Vue.component('frames', {
           <h4 v-if="frame.title">{{ frame.title }}</h4>
           <template
             v-if="frame.questions"
-            v-for="(question, question_index) in frame.questions"
+            v-for="(q, question_index) in frame.questions"
               >
-              <span class="clear"></span>
+              <span
+                v-if="q.type == 'clear'"
+                v-show="evalFieldShowRule(q)"
+                class="clear"></span>
               <button
-                v-if="question.help && question.type"
-                v-show="evalFieldShowRule(question)"
-                v-on:click="handleHelpClick(question.helpTitle, question.help, $event)"
+                v-if="q.help && q.type"
+                v-show="evalFieldShowRule(q)"
+                v-on:click="handleHelpClick(q.helpTitle, q.help, $event)"
                 class="tooltip__trigger"
                 type="button"
                 tabindex="0">
                 <span class="u-visually-hidden">Learn more</span>
               </button>
               <h4
-                v-if="question.fieldH"
-                v-show="evalFieldShowRule(question)"
-                v-bind:class="question.class"
-                ><strong>{{ question.fieldH }}</strong>
+                v-if="q.fieldH"
+                v-show="evalFieldShowRule(q)"
+                v-bind:class="q.class"
+                ><strong>{{ q.fieldH }}</strong>
               </h4>
               <p
-                v-if="question.fieldP"
-                v-show="evalFieldShowRule(question)"
-                v-bind:class="question.class"
-                >{{ question.fieldP }}</p>
+                v-if="q.fieldP"
+                v-show="evalFieldShowRule(q)"
+                v-bind:class="q.class"
+                >{{ q.fieldP }}</p>
               <!-- radio form elements -->
               <input
-                v-if="question.type == 'radio'"
-                v-show="evalFieldShowRule(question)"
-                v-on:input="handleQuestionInput(frame_index, question_index, question, $event)"
-                v-bind:id="'elem_' + question.vModel + '_' + question.value"
-                v-bind:name="'elem_' + question.vModel"
-                v-bind:class="question.class"
+                v-if="q.type == 'radio'"
+                v-show="evalFieldShowRule(q)"
+                v-on:input="handleQuestionInput(frame_index, question_index, q, $event)"
+                v-bind:id="'elem_' + q.vModel + '_' + q.value"
+                v-bind:name="'elem_' + q.vModel"
+                v-bind:class="q.class"
                 type="radio"
                 ></input>
               <label
-                v-if="question.type == 'radio'"
-                v-show="evalFieldShowRule(question)"
-                v-bind:for="'elem_' + question.vModel + '_' + question.value"
-                v-bind:class="question.class"
-                >{{ question.label }}</label>
+                v-if="q.type == 'radio'"
+                v-show="evalFieldShowRule(q)"
+                v-bind:for="'elem_' + q.vModel + '_' + q.value"
+                v-bind:class="q.class"
+                >{{ q.label }}</label>
               <!-- number form elements -->
               <!-- first label only appears if the label is a headline -->
               <label
-                v-if="(question.type == 'integer' || question.type == 'currency') && question.class == 'label-headline'"
-                v-show="evalFieldShowRule(question)"
-                v-bind:for="'elem_' + question.vModel"
-                v-bind:class="question.class"
-                >{{ question.label }}</label>
+                v-if="(q.type == 'integer' || q.type == 'currency') && q.class == 'label-headline'"
+                v-show="evalFieldShowRule(q)"
+                v-bind:for="'elem_' + q.vModel"
+                v-bind:class="q.class"
+                >{{ q.label }}</label>
               <input
-                v-if="question.type == 'integer' || question.type == 'currency'"
-                v-show="evalFieldShowRule(question)"
-                v-on:input="handleQuestionInput(frame_index, question_index, question, $event)"
-                v-bind:id="'elem_' + question.vModel"
-                v-bind:max="question.max"
-                v-bind:min="question.min"
-                v-bind:name="'elem_' + question.vModel"
-                v-bind:class="question.class"
+                v-if="q.type == 'integer' || q.type == 'currency'"
+                v-show="evalFieldShowRule(q)"
+                v-on:input="handleQuestionInput(frame_index, question_index, q, $event)"
+                v-bind:class="q.class"
+                v-bind:id="'elem_' + q.vModel"
+                v-bind:max="q.max"
+                v-bind:min="q.min"
+                v-bind:name="'elem_' + q.vModel"
                 type="number"
+                v-bind:data-onkeypress="q.type == 'integer' ? 'return event.charCode >= 48 && event.charCode <= 57' : false"
+                v-bind:onchange="q.type == 'currency' ? 'event.target.value = Number(event.target.value).toFixed(2)' : false"
                 ></input>
               <label
-                v-if="(question.type == 'integer' || question.type == 'currency') && question.class != 'label-headline'"
-                v-show="evalFieldShowRule(question)"
-                v-bind:for="'elem_' + question.vModel"
-                v-bind:class="question.class"
-                >{{ question.label }}</label>
+                v-if="(q.type == 'integer' || q.type == 'currency') && q.class != 'label-headline'"
+                v-show="evalFieldShowRule(q)"
+                v-bind:for="'elem_' + q.vModel"
+                v-bind:class="q.class"
+                >{{ q.label }}</label>
               <span
-                v-if="question.example"
-                class="t-note t-sans search__example">{{ question.example }}</span>
+                v-if="q.example"
+                class="t-note t-sans search__example">{{ q.example }}</span>
               <!-- html elements -->
               <div
-                v-if="question.type == 'html'"
-                v-show="evalFieldShowRule(question)"
-                v-html="question.html"
-                v-bind:class="question.class"
+                v-if="q.type == 'html'"
+                v-show="evalFieldShowRule(q)"
+                v-html="q.html"
+                v-bind:class="q.class"
               ></div>
           </template>
           <template
@@ -305,11 +328,23 @@ Vue.component('frames', {
     </form>`,
   methods: {
     evalFieldShowRule: function(q) {
-      // If there's no rule, default to showing the field
-      if (!q || !q.showIfVar || !q.showIfVarExpectedValue) return true;
-      else {
-        // expect the showIfVar to be on this level / root
-        return this[q.showIfVar] == q.showIfVarExpectedValue;
+      // If there's no rule 1, default to showing the field
+      if (!q || !q.showIfVar1 || !q.showIfVar1ExpectedValue) return true;
+      // else if we have a match for var 1 AND var 2, eval them both
+      // comparing as string, just in case
+      else if (
+        q.showIfVar2 &&
+        q.showIfVar2ExpectedValue &&
+        this[q.showIfVar1] &&
+        this[q.showIfVar2]
+      ) {
+        return (
+          this[q.showIfVar1] === q.showIfVar1ExpectedValue &&
+          this[q.showIfVar2] === q.showIfVar2ExpectedValue
+        );
+      } else if (this[q.showIfVar1]) {
+        // Otherwise, just compare var 1
+        return this[q.showIfVar1] === q.showIfVar1ExpectedValue;
       }
     },
     frameClass: function(frameIndex, addtionalClasses) {
@@ -357,6 +392,7 @@ Vue.component('frames', {
 
 /**
  * The main data for the admin fines calculator
+ * \xa0 is the JavaScript escape for &nbsp;
  */
 new Vue({
   el: '#gov-fec-calc-af div',
@@ -372,6 +408,7 @@ new Vue({
         :current-frame-num="currentFrameNum"
         :get-total-string="getTotalString"
         :late-or-non-filer="lateOrNonFiler"
+        :sensitive-report="sensitiveReport"
         :total-receipts="totalReceipts"
         :total-disbursements="totalDisbursements"
         :total-receipts-and-disbursements-string="totalReceiptsAndDisbursementsString"
@@ -386,6 +423,7 @@ new Vue({
         :help-pointer-y="helpPointerY"
         :help-content="helpContent"
         :help-title="helpTitle"
+        @close-click="toggleHelp"
       ></help>
       <bottomnav
         :frames="frames"
@@ -419,13 +457,13 @@ new Vue({
             type: 'p',
             class: '',
             content:
-              'This calculator is for estimating an adminstrative fine for late or not filed reports. If you have not yet filed your report submit it as soon as possible.'
+              'This calculator is for estimating an adminstrative fine for late or not filed reports. If you have not yet filed your report submit it as soon as\xa0possible.'
           },
           {
             type: 'p',
             class: '',
             content:
-              'Information on filing requirements and due dates of reports can be found at the Reporting Dates page. More information on administrative fines can be found at the Administrative Fine Program page.'
+              'Information on filing requirements and due dates of reports can be found at the Reporting Dates page. More information on administrative fines can be found at the Administrative Fine Program\xa0page.'
           },
           {
             type: 'button',
@@ -448,30 +486,33 @@ new Vue({
         title: 'What type of report was filed late, or not filed?',
         autoAdvance: true,
         questions: [
+          { type: 'clear' },
           {
-            label: 'Election-Sensitive Report',
+            label: 'Election sensitive report',
             type: 'radio',
             vModel: 'sensitiveReport',
             value: 'true',
-            breadCrumbText: 'Election-sensitive',
+            breadCrumbText: 'Election sensitive',
             helpTitle: 'What is an election sensitive report?',
             help: `<p><b>Pre-election report</b> for a primary, general or special election.<br><em>Examples: 2019 Pre-special general; 2020 Pre-primary report; 2020 Pre-general report</em></p>
             <p><b>October Quarterly</b> report due in a year in which there is a regularly scheduled general election and is filed by an unauthorized committee or the committee for a candidate who is participating in the general election.<br><em>Example: 2020 October quarterly</em></p>
             <p><b>October Monthly</b> report due in a year in which there is a regularly scheduled general election and is filed by an unauthorized committee or the committee for a candidate who is participating in the general election.<br><em>Example: 2020 October monthly</em></p>
             <p>All other reports are not election sensitive.</p>`
           },
+          { type: 'clear' },
           {
             label: 'Not Election-Sensitive Report',
             type: 'radio',
             vModel: 'sensitiveReport',
             value: 'false',
             breadCrumbText: 'Not election-sensitive',
-            helpTitle: 'What is no an election sensitive report?',
+            helpTitle: 'What is not an election sensitive report?',
             help: `<p><b>All reports other than:</b></p>
             <p><b>Pre-election report</b> for a primary, general or special election.<br><em>Examples: 2019 Pre-special general; 2020 Pre-primary report; 2020 Pre-general report</em></p>
             <p><b>October Quarterly</b> report due in a year in which there is a regularly scheduled general election and is filed by an unauthorized committee or the committee for a candidate who is participating in the general election.<br><em>Example: 2020 October quarterly</em></p>
             <p><b>October Monthly</b> report due in a year in which there is a regularly scheduled general election and is filed by an unauthorized committee or the committee for a candidate who is participating in the general election.<br><em>Example: 2020 October monthly</em></p>`
           },
+          { type: 'clear' },
           {
             label: 'Not sure',
             type: 'radio',
@@ -482,9 +523,9 @@ new Vue({
           {
             label: '',
             type: 'html',
-            showIfVar: 'sensitiveReport',
             class: 'question-type-block indented',
-            showIfVarExpectedValue: 'not_sure',
+            showIfVar1: 'sensitiveReport',
+            showIfVar1ExpectedValue: 'not_sure',
             html: `
               <div class="contact-item contact-item--phone">
                   <div class="contact-item__content">
@@ -503,8 +544,9 @@ new Vue({
         title: 'Is the committee a late filer or non-filer?',
         autoAdvance: true,
         questions: [
+          { type: 'clear' },
           {
-            label: 'Late-Filer',
+            label: 'Late filer',
             type: 'radio',
             vModel: 'lateOrNonFiler',
             value: 'late',
@@ -516,24 +558,62 @@ new Vue({
             <p>A committee is a non-filer if it files its report later than that or not at all.</p>`
           },
           {
-            label: 'days late',
-            type: 'integer',
-            min: 0,
-            vModel: 'numberOfDaysLate',
+            type: 'clear',
+            showIfVar1: 'lateOrNonFiler',
+            showIfVar1ExpectedValue: 'late'
+          },
+          {
+            type: 'h4',
             class: 'indented t-note t-sans search__example',
-            showIfVar: 'lateOrNonFiler',
-            showIfVarExpectedValue: 'late',
-            breadCrumbText: 'Late filer: ${} day(s)',
-            fieldH: 'How many calendar days late was the report?',
-            fieldP:
-              'Election sensitive reports are considered late if they are filed after their due dates but prior to four days before the applicable election.',
+            showIfVar1: 'lateOrNonFiler',
+            showIfVar1ExpectedValue: 'late',
+            fieldH: 'How many calendar days late was the SENSITIVE report?',
             helpTitle: 'Number of days late',
             help: `<p>The number of days past the filing deadline that the report was filed.</p>
             <p>If the report is more than thirty days late then it would be considered not filed rather than late.</p>
             <p>In the case of an election sensitive report not filed by four days before the applicable election is considered not filed rather than late. If either of these situations applies then change your selection above to Non-Filer.</p>`
           },
           {
-            label: 'Non-Filer',
+            type: 'p',
+            class: 'indented t-note t-sans search__example',
+            showIfVar1: 'lateOrNonFiler',
+            showIfVar1ExpectedValue: 'late',
+            showIfVar2: 'sensitiveReport',
+            showIfVar2ExpectedValue: 'true',
+            fieldP:
+              'Election sensitive reports are considered late if they are filed after their due dates but prior to four days before the applicable election.'
+          },
+          {
+            type: 'p',
+            class: 'indented t-note t-sans search__example',
+            showIfVar1: 'lateOrNonFiler',
+            showIfVar1ExpectedValue: 'late',
+            showIfVar2: 'sensitiveReport',
+            showIfVar2ExpectedValue: 'false',
+            fieldP:
+              'Non-election sensitive reports are considered late if they are filed within 30 days of their due dates.'
+          },
+          {
+            label: 'days late',
+            type: 'integer',
+            min: 0,
+            max: 365,
+            vModel: 'numberOfDaysLate',
+            class: 'indented t-note t-sans search__example',
+            showIfVar1: 'lateOrNonFiler',
+            showIfVar1ExpectedValue: 'late',
+            breadCrumbText: 'Late filer: ${} day(s)'
+            // fieldH: 'How many calendar days late  was the NONSENSITIVE report?',
+            // fieldP:
+            // 'Non-election sensitive reports are considered late if they are filed within 30 days of their due dates.',
+            // helpTitle: 'Number of days late',
+            // help: `<p>The number of days past the filing deadline that the report was filed.</p>
+            // <p>If the report is more than thirty days late then it would be considered not filed rather than late.</p>
+            // <p>In the case of an election sensitive report not filed by four days before the applicable election is considered not filed rather than late. If either of these situations applies then change your selection above to Non-Filer.</p>`
+          },
+          { type: 'clear' },
+          {
+            label: 'Non-filer',
             type: 'radio',
             vModel: 'lateOrNonFiler',
             value: 'non',
@@ -552,10 +632,12 @@ new Vue({
         title: 'How many previous violations?',
         autoAdvance: false,
         questions: [
+          { type: 'clear' },
           {
             label: '',
             type: 'integer',
             min: 0,
+            max: 99,
             vModel: 'numberOfPrevViolations',
             example: 'Example: 0-99',
             breadCrumbText: '${} prior violation(s)',
@@ -588,6 +670,7 @@ new Vue({
             <ul><li>Line 19 on the Detailed Summary Page of Form 3X minus the total transfers from Line 18(a) on the Detailed Summary Page of Form 3X.</li></ul>
             <p>An unauthorized committee that does not allocate its expenses between its federal and nonfederal accounts enters the receipts from Line 19 of the Detailed Summary Page of Form 3X.</p>`
           },
+          { type: 'clear' },
           {
             label: 'Total disbursements',
             type: 'currency',
@@ -629,7 +712,7 @@ new Vue({
           {
             type: 'p',
             content:
-              'This is an estimated administrative fine based on the information you provided and may not refelect the actual fine amount assessed by the Commission. Your committee will be notified if the Commission assesses a fine for a late or non-filed report.'
+              'This is an estimated administrative fine based on the information you provided and may not refelect the actual fine amount assessed by the Commission. Your committee will be notified if the Commission assesses a fine for a late or non-filed\xa0report.'
           }
         ],
         viewed: false
@@ -640,6 +723,8 @@ new Vue({
     // this.id = this.$el.getAttribute('data-id');
     // Add the transition listeners so frames disappear while out of sight
     this.startWatchingTransitions();
+    // Listen for the modal to tell us that we've been closed and should reset
+    document.addEventListener('MODAL_CLOSED', this.restart);
   },
   computed: {
     helpClass: function() {
@@ -667,8 +752,7 @@ new Vue({
   },
   methods: {
     convertToCurrency: function(val) {
-      let theVal = Number(val);
-      if (!theVal) theVal = 0;
+      let theVal = Number(val) ? Number(val) : 0;
       return '$' + theVal.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
     },
     getTotalString: function(varName) {
@@ -681,8 +765,14 @@ new Vue({
       else if (buttonType == 'next')
         this.handleTopNavClick(this.currentFrameNum + 1);
       else if (buttonType == 'back') this.currentFrameNum--;
-      // TODO: else if (buttonType == 'restart')
-      // TODO: handle close click
+      else if (buttonType == 'restart') this.restart();
+      else if (buttonType == 'close') {
+        document.dispatchEvent(new CustomEvent('CLOSE_MODAL'), {
+          detail: {
+            'data-a11y-dialog-hide': 'gov-fec-calc-af'
+          }
+        });
+      }
       this.toggleHelp(); // toggling help with no content will hide it
     },
     handleTopNavClick: function(navIndex) {
@@ -695,7 +785,7 @@ new Vue({
       let frameShouldAutoAdvance = qNum.autoAdvance;
       // If the value is undefined, this is the first time it's being set so let's advance
       let autoStep = this[affectedVmodel] == undefined ? true : false;
-      // …unless we specifially shoudn't autoadvance
+      // …unless we specifially shouldn't autoadvance
       autoStep = frameShouldAutoAdvance;
       // Set the value
       this[affectedVmodel] = newValue;
@@ -708,7 +798,45 @@ new Vue({
       //
       this.updateTotalFine();
     },
+    restart: function() {
+      // reset vars
+      this.currentFrameNum = 0;
+      this.penaltyAssessedDate = undefined;
+      this.sensitiveReport = undefined;
+      this.lateOrNonFiler = undefined;
+      this.numberOfDaysLate = undefined;
+      this.numberOfPrevViolations = undefined;
+      this.totalReceipts = undefined;
+      this.totalDisbursements = undefined;
+      this.totalFine = 0;
+      this.showHelp = false;
+      // Set all the frames to not viewed (for breadcrumbs and Next button)
+      for (let i = 0; i < this.frames.length; i++) {
+        this.frames[i].viewed = false;
+      }
+      // TODO - clear autoAdvance?
+      //
+      // clear breadcrumbs
+      this.setBreadCrumbText('reset');
+      //
+      // TODO - a better way to reset all the form values?
+      let theForm = document.querySelector('form.frames');
+      theForm.reset();
+    },
     setBreadCrumbText: function(frameNum, qNum, q) {
+      // If we're setting a blank frameNum, we're trying to reset
+      if (frameNum == 'reset') {
+        for (let i = 0; i < this.frames.length; i++) {
+          this.frames[i].navLabel = '';
+        }
+        return;
+      }
+      // if (!frameNum) {
+      //   for (let i = 0; i < this.frames.length; i++) {
+      //     this.frames[frameNum].navLabel = '';
+      //   }
+      //   return;
+      // }
       let theBreadCrumbText = String(q.breadCrumbText);
       if (
         (q.type == 'integer' || q.type == 'currency') &&
@@ -754,21 +882,13 @@ new Vue({
             e.target.classList.remove('off-screen');
           }
         });
-        // frames.addEventListener('transitionrun', function(e) {
-        //   if (e.target.classList.contains('frame')) {
-        //     if (!e.target.classList.contains('current')) {
-        //       console.log('transitionrun() .frame .current', e);
-        //       e.target.classList.add('off-screen');
-        //     }
-        //   }
-        // });
+
         frames[i].addEventListener('transitionend', function(e) {
-          if (e.target.classList.contains('frame')) {
-            if (!e.target.classList.contains('current')) {
-              console.log('transitionend() .frame .current', e);
-              e.target.classList.add('off-screen');
-            }
-          }
+          if (
+            e.target.classList.contains('frame') &&
+            !e.target.classList.contains('current')
+          )
+            e.target.classList.add('off-screen');
         });
       }
     },

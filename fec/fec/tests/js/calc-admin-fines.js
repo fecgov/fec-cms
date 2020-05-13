@@ -72,6 +72,8 @@ describe('Admin fines calc', function() {
       e: 'ERROR'
     }
   ];
+  // TODO:
+  need to add a test for fractions of days and fractions of previous violations to make sure they both round correctly
   // For each test we want to run,
   tests.forEach(function(test, i) {
     // Name it ('test0', 'test1', etc)
