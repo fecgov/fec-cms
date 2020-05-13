@@ -1,7 +1,8 @@
-/* global Vue */
-
 /**
  */
+import Vue from 'vue/dist/vue.min.js';
+window.Vue = Vue;
+
 import { availableDates, getTotalAdminFine } from './calc-admin-fines-logic';
 
 // For each of the availableDates from the logic file,
@@ -13,8 +14,6 @@ const penaltyAssessedDates = availableDates.map(el =>
     breadCrumbText: el.summary
   })
 );
-
-// Vue.config.devtools = true; // TODO: remove this
 
 /**
  * The <topnav> Vue component
@@ -592,6 +591,11 @@ new Vue({
             showIfVar2ExpectedValue: 'false',
             fieldP:
               'Non-election sensitive reports are considered late if they are filed within 30 days of their due dates.'
+          },
+          {
+            type: 'clear',
+            showIfVar1: 'lateOrNonFiler',
+            showIfVar1ExpectedValue: 'late'
           },
           {
             label: 'days late',
