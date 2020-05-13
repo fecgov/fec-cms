@@ -5,7 +5,6 @@ if ($('.js-admin-fines-calc-modal').length > 0) {
   // TEMP
   // Add the modal to the page
 
-  // console.log('CalculatorAdminFinesModal.addModalToPage()');
   let calcElementID = 'gov-fec-calc-af';
   let newModal = document.createElement('div');
   newModal.setAttribute('id', `modal-${calcElementID}`);
@@ -21,14 +20,6 @@ if ($('.js-admin-fines-calc-modal').length > 0) {
       </div>
     </div>`;
   document.body.appendChild(newModal);
-
-  // Add Vue to the page
-  let vueScriptElem = document.createElement('script');
-  vueScriptElem.async = false;
-  vueScriptElem.src = 'https://cdn.jsdelivr.net/npm/vue/dist/vue.js';
-  //  vueScriptElem.src = 'https://cdn.jsdelivr.net/npm/vue@2.6.11';
-  //  import Vue from 'https://cdn.jsdelivr.net/npm/vue@2.6.11/dist/vue.esm.browser.js'
-  document.head.appendChild(vueScriptElem);
 
   // Add the admin fines script to the page
   if (calcAdminFineJsPath) {
@@ -72,7 +63,6 @@ if ($('.js-admin-fines-calc-modal').length > 0) {
   }
   // eslint-disable-next-line no-inner-declarations
   function handleFinesCalcCloseClick(e) {
-    console.log('handleFinesCalcCloseClick(): ', e);
     e.preventDefault();
     // If it's a custom event (inside the modal content), use the modal div id from e.detail.
     // othewise, use the attribute from the html element that was clicked
