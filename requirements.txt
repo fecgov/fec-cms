@@ -9,7 +9,7 @@ psycopg2==2.8.5
 requests==2.21.0
 slacker==0.8.6
 whitenoise==2.0.3
-wagtail==2.7.2
+wagtail==2.7.3
 Jinja2==2.10.1
 django_jinja==2.4.1
 CacheControl==0.11.5
