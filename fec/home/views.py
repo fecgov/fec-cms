@@ -3,10 +3,12 @@ from itertools import chain
 from operator import attrgetter
 
 from django.conf import settings
+from django.http import HttpResponse
 from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
 from django.db.models import Q
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404, render
+from django.views.defaults import server_error
 from wagtail.documents.models import Document
 
 from fec.forms import ContactRAD, form_categories
@@ -399,3 +401,11 @@ def guides(request):
         "home/candidate-and-committee-services/guides.html",
         {"self": page_context},
     )
+
+def error_500(request, template_name="500.html"):
+    cms_env = request.GET.get("FEC_CMS_ENVIRONMENT", "")
+    return render(
+        request,
+        template_name,
+        {'FEC_CMS_ENVIRONMENT' : cms_env })
+        

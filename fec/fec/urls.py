@@ -72,3 +72,5 @@ if settings.DEBUG:
 
     # hide django-admin unless DEBUG=True
     urlpatterns.insert(1, url(r'^django-admin/', admin.site.urls))
+
+handler500 = 'home.views.error_500'
