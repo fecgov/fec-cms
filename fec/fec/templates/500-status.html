@@ -48,7 +48,6 @@
     {% include 'partials/env-banner.html' %}
     {# .gov banner #}
     {% include 'partials/usa-banner.html' %}
-    {% if self.title == "Homepage" or self.title == "Home" %}
     <header class="site-header site-header--homepage">
       <div class="masthead">
         <div class="homepage-seal">
@@ -58,14 +57,6 @@
         <a title="Home" href="/" class="site-title" rel="home"><span class="u-visually-hidden">Federal Election Commission | United States of America</span></a>
       </div>
     </header>
-    {% else %}
-    <header class="site-header">
-      <div class="masthead">
-        <div class="site-title--print"></div>
-        <a title="Home" href="/" class="site-title" rel="home"><span class="u-visually-hidden">Federal Election Commission | United States of America</span></a>
-      </div>
-    </header>
-    {% endif %}
 
     <main id="main">
       {% block content %}
