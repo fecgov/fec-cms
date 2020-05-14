@@ -4,6 +4,7 @@ from operator import attrgetter
 from django.http import HttpResponse
 
 from django.conf import settings
+from django.http import HttpResponse
 from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
 from django.db.models import Q
 from django.http import HttpResponseRedirect
@@ -403,7 +404,7 @@ def guides(request):
     )
 
 # Custom handle 500 error for website status
-def error(request, template_name="500.html"):
+def error_500(request, template_name="500.html"):
     FEC_CMS_ENVIRONMENT = request.GET.get("FEC_CMS_ENVIRONMENT", "")
     if settings.FEATURES.get('website_status'):
         return render(
