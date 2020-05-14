@@ -1,3 +1,5 @@
+/* global CustomEvent */
+
 /**
  */
 import Vue from 'vue/dist/vue.min.js';
@@ -484,6 +486,7 @@ new Vue({
         navLabel: '',
         title: 'What type of report was filed late, or not filed?',
         autoAdvance: true,
+        checkRule: 'not-not_sure',
         questions: [
           { type: 'clear' },
           {
@@ -542,6 +545,7 @@ new Vue({
         navLabel: '',
         title: 'Is the committee a late filer or non-filer?',
         autoAdvance: true,
+        checkRule: 'lateDaysNot',
         questions: [
           { type: 'clear' },
           {
@@ -607,13 +611,6 @@ new Vue({
             showIfVar1: 'lateOrNonFiler',
             showIfVar1ExpectedValue: 'late',
             breadCrumbText: 'Late filer: ${} day(s)'
-            // fieldH: 'How many calendar days late  was the NONSENSITIVE report?',
-            // fieldP:
-            // 'Non-election sensitive reports are considered late if they are filed within 30 days of their due dates.',
-            // helpTitle: 'Number of days late',
-            // help: `<p>The number of days past the filing deadline that the report was filed.</p>
-            // <p>If the report is more than thirty days late then it would be considered not filed rather than late.</p>
-            // <p>In the case of an election sensitive report not filed by four days before the applicable election is considered not filed rather than late. If either of these situations applies then change your selection above to Non-Filer.</p>`
           },
           { type: 'clear' },
           {
@@ -635,6 +632,7 @@ new Vue({
         navLabel: '',
         title: 'How many previous violations?',
         autoAdvance: false,
+        checkRule: '0-99',
         questions: [
           { type: 'clear' },
           {
@@ -784,9 +782,12 @@ new Vue({
       this.currentFrameNum = navIndex;
     },
     handleQuestionInput: function(frameNum, qNum, q, e) {
+      // console.log('handleQuestionInput', frameNum, qNum, q, e);
       let affectedVmodel = q.vModel;
       let newValue = q.value ? q.value : e.target.value;
       let frameShouldAutoAdvance = qNum.autoAdvance;
+      //
+      // console.log('ROBERT need this to check checkRule values');
       // If the value is undefined, this is the first time it's being set so let's advance
       let autoStep = this[affectedVmodel] == undefined ? true : false;
       // …unless we specifially shouldn't autoadvance
