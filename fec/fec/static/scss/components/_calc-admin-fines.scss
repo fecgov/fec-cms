@@ -117,8 +117,8 @@ body.scroll-locked-for-modal {
         opacity: 1;
         transition: opacity 1s, color .5s;
       }
-      &:before {
-        content: " » ";
+      &:after {
+        content: " › ";
         color: purple;
         display: inline;
         padding: .5rem .8rem;
@@ -144,7 +144,7 @@ body.scroll-locked-for-modal {
       &.hidden {
         display: none !important;
       }
-      &.hide-before:before {
+      &.hide-after:after {
         content: "";
         padding: 0
       }

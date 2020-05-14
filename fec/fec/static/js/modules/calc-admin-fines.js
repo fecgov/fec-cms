@@ -46,7 +46,7 @@ Vue.component('topnav', {
       >
       <li
         v-for="(frame, index) in frames"
-        v-bind:class="['breadcrumbs__item', topNavClass(index)]"
+        v-bind:class="['breadcrumbs__item', topNavClass(index, frame)]"
         v-bind:key="index"
         >
         <a
@@ -60,13 +60,16 @@ Vue.component('topnav', {
     handleClick: function(i) {
       this.$emit('handle-click', i);
     },
-    topNavClass: function(navIndex) {
+    topNavClass: function(navIndex, frame) {
       return [
         {
           viewed: this.frames[navIndex].viewed || navIndex == 0,
           current: navIndex == this.currentFrameNum,
           hidden: navIndex == 0 || navIndex == this.frames.length - 1,
-          'hide-before': navIndex < 2 || navIndex >= this.frames.length - 1
+          'hide-after':
+            navIndex < 1 ||
+            navIndex == this.currentFrameNum ||
+            navIndex >= this.frames.length - 2
         }
       ];
     }
@@ -458,13 +461,13 @@ new Vue({
             type: 'p',
             class: '',
             content:
-              'This calculator is for estimating an adminstrative fine for late or not filed reports. If you have not yet filed your report submit it as soon as\xa0possible.'
+              'This calculator is for estimating an adminstrative fine for late or not filed reports. If you have not yet filed your report, submit it as soon as\xa0possible.'
           },
           {
             type: 'p',
             class: '',
             content:
-              'Information on filing requirements and due dates of reports can be found at the Reporting Dates page. More information on administrative fines can be found at the Administrative Fine Program\xa0page.'
+              'Information on filing requirements and due dates of reports can be found at the Dates and deadlines page. More information on administrative fines can be found at the Administrative Fine Program\xa0page.'
           },
           {
             type: 'button',
@@ -570,7 +573,7 @@ new Vue({
             class: 'indented t-note t-sans search__example',
             showIfVar1: 'lateOrNonFiler',
             showIfVar1ExpectedValue: 'late',
-            fieldH: 'How many calendar days late was the SENSITIVE report?',
+            fieldH: 'How many calendar days late was the report?',
             helpTitle: 'Number of days late',
             help: `<p>The number of days past the filing deadline that the report was filed.</p>
             <p>If the report is more than thirty days late then it would be considered not filed rather than late.</p>
@@ -630,10 +633,18 @@ new Vue({
       },
       {
         navLabel: '',
-        title: 'How many previous violations?',
+        title: '',
         autoAdvance: false,
         checkRule: '0-99',
         questions: [
+          {
+            type: 'h4',
+            class: '',
+            fieldH: 'How many previous violations?',
+            helpTitle: 'Number of previous violations',
+            help: `<p>The number of previous adminstrative fines assessed at final determination during the current and most recently completed two-year election cycle.</p>
+            <p>Enter "0" if none were assessed.</p>`
+          },
           { type: 'clear' },
           {
             label: '',
@@ -642,10 +653,7 @@ new Vue({
             max: 99,
             vModel: 'numberOfPrevViolations',
             example: 'Example: 0-99',
-            breadCrumbText: '${} prior violation(s)',
-            helpTitle: 'Number of previous violations',
-            help: `<p>The number of previous adminstrative fines assessed at final determination during the current and most recently completed two-year election cycle.</p>
-            <p>Enter "0" if none were assessed.</p>`
+            breadCrumbText: '${} prior violation(s)'
           }
         ],
         viewed: false
