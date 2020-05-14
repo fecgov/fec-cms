@@ -46,7 +46,7 @@ Vue.component('topnav', {
       >
       <li
         v-for="(frame, index) in frames"
-        v-bind:class="['breadcrumbs__item', topNavClass(index, frame)]"
+        v-bind:class="['breadcrumbs__item', topNavClass(index)]"
         v-bind:key="index"
         >
         <a
@@ -60,7 +60,7 @@ Vue.component('topnav', {
     handleClick: function(i) {
       this.$emit('handle-click', i);
     },
-    topNavClass: function(navIndex, frame) {
+    topNavClass: function(navIndex) {
       return [
         {
           viewed: this.frames[navIndex].viewed || navIndex == 0,
