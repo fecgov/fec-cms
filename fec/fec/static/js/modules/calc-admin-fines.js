@@ -284,6 +284,7 @@ Vue.component('frames', {
                 type="number"
                 v-bind:data-onkeypress="q.type == 'integer' ? 'return event.charCode >= 48 && event.charCode <= 57' : false"
                 v-bind:onchange="q.type == 'currency' ? 'event.target.value = Number(event.target.value).toFixed(2)' : false"
+                v-bind:placeholder="q.placeholder"
                 ></input>
               <label
                 v-if="(q.type == 'integer' || q.type == 'currency') && q.class != 'label-headline'"
@@ -483,14 +484,14 @@ new Vue({
       },
       {
         navLabel: '',
-        title: 'When was the committee’s adminstrative fine assessed?',
+        title: 'When was the committee’s adminstrative fine\xa0assessed?',
         autoAdvance: true,
         questions: penaltyAssessedDates,
         viewed: false
       },
       {
         navLabel: '',
-        title: 'What type of report was filed late, or not filed?',
+        title: 'What type of report was filed late, or not\xa0filed?',
         autoAdvance: true,
         validationRule: 'not-not_sure',
         questions: [
@@ -509,11 +510,11 @@ new Vue({
           },
           { type: 'clear' },
           {
-            label: 'Not Election-Sensitive Report',
+            label: 'Not election sensitive report',
             type: 'radio',
             vModel: 'sensitiveReport',
             value: 'false',
-            breadCrumbText: 'Not election-sensitive',
+            breadCrumbText: 'Not election sensitive',
             helpTitle: 'What is not an election sensitive report?',
             help: `<p><b>All reports other than:</b></p>
             <p><b>Pre-election report</b> for a primary, general or special election.<br><em>Examples: 2019 Pre-special general; 2020 Pre-primary report; 2020 Pre-general report</em></p>
@@ -538,8 +539,22 @@ new Vue({
               <div class="contact-item contact-item--phone">
                   <div class="contact-item__content">
                       <div class="rich-text">
-                          <p><strong>For general questions</strong><br>1-800-424-9530, menu option 6, or 202-694-1100</p>
-                          <p><strong>For registered committees, speak to an analyst</strong><br>1-800-424-9530, menu option 5, or 202-694-1130</p>
+                          <p><strong>For general questions</strong><br><span class="nonbreaking">1-800-424-9530</span>, menu option 6, or <span class="nonbreaking">202-694-1100<span></p>
+                      </div>
+                  </div>
+              </div>`
+          },
+          {
+            label: '',
+            type: 'html',
+            class: 'question-type-block indented',
+            showIfVar1: 'sensitiveReport',
+            showIfVar1ExpectedValue: 'not_sure',
+            html: `
+              <div class="contact-item contact-item--phone">
+                  <div class="contact-item__content">
+                      <div class="rich-text">
+                          <p><strong>For registered committees, speak to an analyst</strong><br><span class="nonbreaking">1-800-424-9530</span>, menu option 5, or <span class="nonbreaking">202-694-1130</span></p>
                       </div>
                   </div>
               </div>`
@@ -573,10 +588,10 @@ new Vue({
           },
           {
             type: 'h4',
-            class: 'indented t-note t-sans search__example',
+            class: 'indented t-sans search__example',
             showIfVar1: 'lateOrNonFiler',
             showIfVar1ExpectedValue: 'late',
-            fieldH: 'How many calendar days late was the report?',
+            fieldH: 'How many calendar days late was the\xa0report?',
             helpTitle: 'Number of days late',
             help: `<p>The number of days past the filing deadline that the report was filed.</p>
             <p>If the report is more than thirty days late then it would be considered not filed rather than late.</p>
@@ -613,7 +628,7 @@ new Vue({
             min: 0,
             max: 365,
             vModel: 'numberOfDaysLate',
-            class: 'indented t-note t-sans search__example',
+            class: 'indented t-sans search__example',
             showIfVar1: 'lateOrNonFiler',
             showIfVar1ExpectedValue: 'late',
             breadCrumbText: 'Late filer: ${} day(s)'
@@ -643,7 +658,7 @@ new Vue({
           {
             type: 'h4',
             class: '',
-            fieldH: 'How many previous violations?',
+            fieldH: 'How many previous\xa0violations?',
             helpTitle: 'Number of previous violations',
             help: `<p>The number of previous adminstrative fines assessed at final determination during the current and most recently completed two-year election cycle.</p>
             <p>Enter "0" if none were assessed.</p>`
@@ -656,6 +671,7 @@ new Vue({
             max: 99,
             vModel: 'numberOfPrevViolations',
             example: 'Example: 0-99',
+            placeholder: '0',
             breadCrumbText: '${} prior violation(s)'
           }
         ],
@@ -663,7 +679,8 @@ new Vue({
       },
       {
         navLabel: '',
-        title: 'How much in total receipts and disbursements in this report?',
+        title:
+          'How much in total receipts and disbursements in this\xa0report?',
         autoAdvance: false,
         questions: [
           {
@@ -672,7 +689,6 @@ new Vue({
             min: 0,
             vModel: 'totalReceipts',
             class: 'label-headline',
-            // fieldH: 'TOTAL RECEIPTS',
             example: 'Example: 9000.99',
             breadCrumbVar: 'totalReceiptsAndDisbursements',
             breadCrumbText: '${} total receipts and disbursements',
@@ -690,7 +706,6 @@ new Vue({
             min: 0,
             vModel: 'totalDisbursements',
             class: 'label-headline',
-            // fieldH: 'TOTAL DISBURSEMENTS',
             example: 'Example: 9000.99',
             breadCrumbVar: 'totalReceiptsAndDisbursements',
             breadCrumbText: '${} total receipts and disbursements',

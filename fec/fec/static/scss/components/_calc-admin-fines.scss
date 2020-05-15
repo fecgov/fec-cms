@@ -10,8 +10,14 @@ body.scroll-locked-for-modal {
 
 // To let the help section left line touch the bottom of the area
 @include media($med) {
-  #modal-gov-fec-calc-af .modal__content {
-    padding-bottom: 0;
+  #modal-gov-fec-calc-af {
+    .modal__content {
+      padding-bottom: 0;
+
+      & > div[role="document"] {
+        height: 100%;
+      }
+    }
   }
 }
 
@@ -84,6 +90,10 @@ body.scroll-locked-for-modal {
       top: 0;
       width: 15px;
       clip-path: inset(0 15px 0 0);
+
+      @include media($med) {
+        right: calc(33% + 3rem);
+      }
     }
     meter.complete + .i-check {
       background-size: 100%;
@@ -132,7 +142,7 @@ body.scroll-locked-for-modal {
       }
       a.breadcrumbs__link {
         border: none;
-        color: darkgray;
+        color: $gray-dark;
         font-size: 1.4rem;
         line-height: 1.6rem;
         border-bottom: 1px dotted $inverse;
@@ -382,6 +392,17 @@ body.scroll-locked-for-modal {
       }
     }
   }
+  .contact-item {
+    margin-bottom: 0;
+    padding-left: 3.5rem;
+
+    &:before {
+      margin-right: 1rem;
+    }
+  }
+  .nonbreaking {
+    display: inline-block;
+  }
   .search__example {
     clear: both;
     float: left;
@@ -389,20 +410,20 @@ body.scroll-locked-for-modal {
   }
 
   #help {
-    background: url("data:image/svg+xml;charset=utf8, %3Csvg%20%20fill%3D%27%23112e51%27%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2220%22%20height%3D%2220%22%20viewBox%3D%220%200%2020%2020%22%3E%3Cpath%20d%3D%22M10%200a10%2010%200%201%200%2010%2010A10%2010%200%200%200%2010%200zm1.2%2016.1a15.69%2015.69%200%200%201-2.4.3q-.9%200-.9-.6a9.32%209.32%200%200%201%20.2-1.4l.8-4.7a3.08%203.08%200%200%200%20.1-.9c0-.3-.4-.4-1.2-.4l.1-.5a14.22%2014.22%200%200%201%202.5-.3.61.61%200%200%201%20.7.6%2011.48%2011.48%200%200%201-.2%201.4l-.8%204.8a2.25%202.25%200%200%200-.1.7c0%20.4.2.5%201.2.5v.5zm-.5-10a1.15%201.15%200%200%201-1.2-1.2%201.35%201.35%200%200%201%201.3-1.4A1.22%201.22%200%200%201%2012%204.7a1.42%201.42%200%200%201-1.3%201.4z%22%2F%3E%3C%2Fsvg%3E"); // TODO - experiment
-    background-repeat: no-repeat; // TODO - experiment
-    background-position: 1rem 1rem; // TODO - experiment
+    background: url("data:image/svg+xml;charset=utf8, %3Csvg%20%20fill%3D%27%23112e51%27%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2220%22%20height%3D%2220%22%20viewBox%3D%220%200%2020%2020%22%3E%3Cpath%20d%3D%22M10%200a10%2010%200%201%200%2010%2010A10%2010%200%200%200%2010%200zm1.2%2016.1a15.69%2015.69%200%200%201-2.4.3q-.9%200-.9-.6a9.32%209.32%200%200%201%20.2-1.4l.8-4.7a3.08%203.08%200%200%200%20.1-.9c0-.3-.4-.4-1.2-.4l.1-.5a14.22%2014.22%200%200%201%202.5-.3.61.61%200%200%201%20.7.6%2011.48%2011.48%200%200%201-.2%201.4l-.8%204.8a2.25%202.25%200%200%200-.1.7c0%20.4.2.5%201.2.5v.5zm-.5-10a1.15%201.15%200%200%201-1.2-1.2%201.35%201.35%200%200%201%201.3-1.4A1.22%201.22%200%200%201%2012%204.7a1.42%201.42%200%200%201-1.3%201.4z%22%2F%3E%3C%2Fsvg%3E");
+    background-repeat: no-repeat;
+    background-position: 1rem 1rem;
 
     background-color: $inverse;
-    background-size: 3rem; // TODO - experiment
-    border-bottom: thin solid $federal-blue; // TODO - experiment
-    border-bottom-left-radius: 1rem; // TODO - experiment
+    background-size: 3rem;
+    border-bottom: thin solid $federal-blue;
+    border-bottom-left-radius: 1rem;
     border-left: thin solid $federal-blue;
     color: $federal-blue;
     height: 100%;
     padding: 1rem;
     position: absolute;
-    left: 1rem; // TODO - experiment
+    left: 1rem;
     top: 0;
     transition: left .5s;
     z-index: 100;
@@ -415,7 +436,8 @@ body.scroll-locked-for-modal {
       display: flex;
       flex-direction: column;
       left: initial;
-      max-height: 100vh;
+      // max-height: 100vh;
+      height: calc(100vh - 114px);
       padding: 1rem 0 0 calc(1rem + 20px);
       right: 0;
       transition: right .5s;
@@ -440,7 +462,7 @@ body.scroll-locked-for-modal {
     }
     
     & > svg {
-      display: none; // TODO - experiment
+      display: none;
 
       @include media($med) {
         display: block;
@@ -449,8 +471,8 @@ body.scroll-locked-for-modal {
     
     h3 {
       line-height: 1.4em;
-      padding-left: 4rem; // TODO - experiment
-      padding-right: 30px; // TODO - experiment
+      padding-left: 4rem;
+      padding-right: 30px;
 
       @include media($med) {
         padding-left: 0;
@@ -480,7 +502,7 @@ body.scroll-locked-for-modal {
     
     .help_content {
       font-family: $sans-serif;
-      font-size: 1.25rem;
+      font-size: 1.4rem;
       line-height: 1.4em;
 
       @include media($med) {
@@ -489,7 +511,6 @@ body.scroll-locked-for-modal {
       }
 
       p {
-        font-size: 1.4rem;
         line-height: 1.4em;
       }
       ul {
@@ -525,11 +546,11 @@ body.scroll-locked-for-modal {
     }
 
     &.hidden {
-      left: 120%; // TODO - experiment
-      transition: left .5s; // TODO - experiment
+      left: 120%;
+      transition: left .5s;
       
       @include media($med) {
-        left: initial; // TODO - experiment
+        left: initial;
         right: -40%;
         transition: right .5s;
       }

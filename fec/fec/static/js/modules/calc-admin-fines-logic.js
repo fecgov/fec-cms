@@ -13,7 +13,7 @@ const availableDates = [
   {
     value: 'latest',
     label: 'I haven’t been assessed a fine',
-    summary: 'No fine yet—using latest value'
+    summary: 'I haven’t been assessed: using latest fine amounts'
   },
   // {
   //   value: '2020',
@@ -23,16 +23,16 @@ const availableDates = [
   {
     value: '2019',
     label: 'On or after January 1, 2019',
-    summary: 'I haven’t been assessed: using latest fine amounts'
+    summary: 'Assessed on or after January 1, 2019'
   },
   {
     value: '2018',
-    label: 'Assessed from December 28, 2017 to December 31, 2018',
+    label: 'December 28, 2017 to December 31, 2018',
     summary: 'Assessed from December 28, 2017 to December 31, 2018'
   },
   {
     value: '2017',
-    label: 'February 3, 2017 through December 17, 2017',
+    label: 'February 3, 2017 to December 17, 2017',
     summary: 'Assessed from February 3, 2017 to December 17, 2018'
   }
 ];
