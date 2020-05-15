@@ -320,9 +320,10 @@ body.scroll-locked-for-modal {
     padding-right: .5rem;
 
     &.indented {
+      font-size: 1.4rem;
+      max-width: 70%;
       padding-left: 3.5rem;
       padding-top: .5rem;
-      max-width: 70%;
     }
     &.subhead {
       text-transform: uppercase;
