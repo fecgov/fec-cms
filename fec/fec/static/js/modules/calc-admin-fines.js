@@ -68,9 +68,14 @@ Vue.component('topnav', {
           hidden: navIndex == 0 || navIndex == this.frames.length - 1,
           'hide-after':
             navIndex < 1 ||
-            navIndex == this.currentFrameNum ||
-            navIndex >= this.frames.length - 2
+            navIndex >= this.frames.length - 2 ||
+            (navIndex == this.currentFrameNum &&
+              !this.frames[navIndex + 1].viewed === true)
         }
+        // hide-after should be included for nav elements that
+        // - aren't the first (intro frame)
+        // - aren't the last (outro/total frame)
+        // - don't have a value BUT only when the next frame hasn't been viewed
       ];
     }
   }
@@ -246,11 +251,10 @@ Vue.component('frames', {
                 v-show="evalFieldShowRule(q)"
                 v-bind:class="q.class"
                 >{{ q.fieldP }}</p>
-              <!-- radio form elements -->
               <input
                 v-if="q.type == 'radio'"
                 v-show="evalFieldShowRule(q)"
-                v-on:input="handleQuestionInput(frame_index, question_index, q, $event)"
+                v-on:input="handleQuestionInput(frame_index, question_index, q, frame.validationRule, $event)"
                 v-bind:id="'elem_' + q.vModel + '_' + q.value"
                 v-bind:name="'elem_' + q.vModel"
                 v-bind:class="q.class"
@@ -262,8 +266,6 @@ Vue.component('frames', {
                 v-bind:for="'elem_' + q.vModel + '_' + q.value"
                 v-bind:class="q.class"
                 >{{ q.label }}</label>
-              <!-- number form elements -->
-              <!-- first label only appears if the label is a headline -->
               <label
                 v-if="(q.type == 'integer' || q.type == 'currency') && q.class == 'label-headline'"
                 v-show="evalFieldShowRule(q)"
@@ -273,7 +275,7 @@ Vue.component('frames', {
               <input
                 v-if="q.type == 'integer' || q.type == 'currency'"
                 v-show="evalFieldShowRule(q)"
-                v-on:input="handleQuestionInput(frame_index, question_index, q, $event)"
+                v-on:input="handleQuestionInput(frame_index, question_index, q, frame.validationRule, $event)"
                 v-bind:class="q.class"
                 v-bind:id="'elem_' + q.vModel"
                 v-bind:max="q.max"
@@ -292,7 +294,6 @@ Vue.component('frames', {
               <span
                 v-if="q.example"
                 class="t-note t-sans search__example">{{ q.example }}</span>
-              <!-- html elements -->
               <div
                 v-if="q.type == 'html'"
                 v-show="evalFieldShowRule(q)"
@@ -378,6 +379,7 @@ Vue.component('frames', {
       frame_index,
       question_index,
       question,
+      validationRule,
       $event
     ) {
       this.$emit(
@@ -385,6 +387,7 @@ Vue.component('frames', {
         frame_index,
         question_index,
         question,
+        validationRule,
         $event
       );
     },
@@ -489,7 +492,7 @@ new Vue({
         navLabel: '',
         title: 'What type of report was filed late, or not filed?',
         autoAdvance: true,
-        checkRule: 'not-not_sure',
+        validationRule: 'not-not_sure',
         questions: [
           { type: 'clear' },
           {
@@ -548,7 +551,7 @@ new Vue({
         navLabel: '',
         title: 'Is the committee a late filer or non-filer?',
         autoAdvance: true,
-        checkRule: 'lateDaysNot',
+        validationRule: 'lateDaysNot',
         questions: [
           { type: 'clear' },
           {
@@ -635,7 +638,7 @@ new Vue({
         navLabel: '',
         title: '',
         autoAdvance: false,
-        checkRule: '0-99',
+        validationRule: '0-99',
         questions: [
           {
             type: 'h4',
@@ -789,27 +792,70 @@ new Vue({
       // this.frames[navIndex].viewed = true;
       this.currentFrameNum = navIndex;
     },
-    handleQuestionInput: function(frameNum, qNum, q, e) {
-      // console.log('handleQuestionInput', frameNum, qNum, q, e);
+    handleQuestionInput: function(frameNum, qNum, q, validationRule, e) {
       let affectedVmodel = q.vModel;
       let newValue = q.value ? q.value : e.target.value;
       let frameShouldAutoAdvance = qNum.autoAdvance;
+      let passedTests = false;
       //
-      // console.log('ROBERT need this to check checkRule values');
-      // If the value is undefined, this is the first time it's being set so let's advance
-      let autoStep = this[affectedVmodel] == undefined ? true : false;
-      // …unless we specifially shouldn't autoadvance
-      autoStep = frameShouldAutoAdvance;
       // Set the value
       this[affectedVmodel] = newValue;
-      //
-      this.setBreadCrumbText(frameNum, qNum, q);
-      // Set the frame as viewed
-      this.frames[this.currentFrameNum].viewed = true;
-      //
-      if (autoStep) this.handleTopNavClick(this.currentFrameNum + 1);
-      //
-      this.updateTotalFine();
+
+      // If this question has a special validationRule, let's check it
+      if (!validationRule) passedTests = true;
+      else if (validationRule == 'not-not_sure') {
+        // Don't advance if user isn't sure about whether it's a sensitive report
+        if (this.sensitiveReport == 'true' || this.sensitiveReport == 'false')
+          passedTests = true;
+      } else if (validationRule == 'lateDaysNot') {
+        // If a late filer, require a number of days
+        if (this.lateOrNonFiler == 'late' && this.numberOfDaysLate > 0) {
+          passedTests = true;
+        } else if (this.lateOrNonFiler == 'non') {
+          passedTests = true;
+          // otherwise non-filer is fine but let's also reset the days late
+          // and reset the text displayed in the field
+          this.numberOfDaysLate = undefined;
+          document.querySelector('#elem_numberOfDaysLate').value = '';
+        }
+      } else if (validationRule == '0-99') {
+        // Keep previous violations between 0 and 99
+        if (isNaN(this.numberOfPrevViolations)) {
+          // If it's not a number for some reason, just leave passedTests as false
+        } else {
+          if (this.numberOfPrevViolations < 0) this.numberOfPrevViolations = 0;
+          if (this.numberOfPrevViolations > 99)
+            this.numberOfPrevViolations = 99;
+          // Put a corrected value into the field
+          document.querySelector(
+            '#elem_numberOfPrevViolations'
+          ).value = this.numberOfPrevViolations;
+          // and move on
+          passedTests = true;
+        }
+      }
+
+      // If a test failed, don't let the frame advance.
+      // The "=== false" bit is redundancy for when a user changes an answer,
+      //   say from correct to incorrect (e.g., 'non' to 'not_sure').
+      // If the tests passed, cool, do the other things.
+      if (passedTests === false) {
+        this.frames[this.currentFrameNum].viewed = false;
+        this.setBreadCrumbText(frameNum, qNum, '');
+      } else if (passedTests === true) {
+        // If the value is undefined, this is the first time it's being set so let's advance
+        let autoStep = this[affectedVmodel] == undefined ? true : false;
+        // …unless we specifially shouldn't autoadvance
+        autoStep = frameShouldAutoAdvance;
+        //
+        this.setBreadCrumbText(frameNum, qNum, q);
+        // Set the frame as viewed
+        this.frames[this.currentFrameNum].viewed = true;
+        //
+        if (autoStep) this.handleTopNavClick(this.currentFrameNum + 1);
+        //
+        this.updateTotalFine();
+      }
     },
     restart: function() {
       // reset vars
@@ -843,13 +889,12 @@ new Vue({
           this.frames[i].navLabel = '';
         }
         return;
+      } else if (q == '') {
+        // If we're setting a q of '', we're trying to clear the text for the current nav (like on frame error)
+        this.frames[frameNum].navLabel = '';
+        return;
       }
-      // if (!frameNum) {
-      //   for (let i = 0; i < this.frames.length; i++) {
-      //     this.frames[frameNum].navLabel = '';
-      //   }
-      //   return;
-      // }
+
       let theBreadCrumbText = String(q.breadCrumbText);
       if (
         (q.type == 'integer' || q.type == 'currency') &&
