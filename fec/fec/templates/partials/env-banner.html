@@ -1,16 +1,18 @@
 {% if settings  != undefined %}
     {% if settings.FEC_CMS_ENVIRONMENT != 'PRODUCTION' %}   
       <div class="banner ">
+        {# Uses settings.FEC_CMS_ENVIRONMENT for HTML templates #}
         <p class="t-sans t-small">{{settings.FEC_CMS_ENVIRONMENT}}<br>
-        This site is for testing ideas and code. View the most accurate data on the <a href="http://www.fec.gov">live site</a>.
+        HTML This site is for testing ideas and code. View the most accurate data on the <a href="http://www.fec.gov">live site</a>.
         </p>
       </div>
     {% endif %}
   {% else %}  
     {% if FEC_CMS_ENVIRONMENT != 'PRODUCTION' %}  
       <div class="banner ">
-       <p class="t-sans t-small">{{FEC_CMS_ENVIRONMENT}}<br>
-        This site is for testing ideas and code. View the most accurate data on the <a href="http://www.fec.gov">live site</a>.
+        {# Uses FEC_CMS_ENVIRONMENT for Jinja templates #}
+        <p class="t-sans t-small">{{FEC_CMS_ENVIRONMENT}}<br>
+        JINJA This site is for testing ideas and code. View the most accurate data on the <a href="http://www.fec.gov">live site</a>.
        </p>
       </div>
     {% endif %}
