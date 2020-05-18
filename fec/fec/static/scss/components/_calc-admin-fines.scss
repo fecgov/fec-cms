@@ -25,7 +25,12 @@ body.scroll-locked-for-modal {
 // Vue strips the attributes from its DOM element
 #gov-fec-calc-af {
   border-top: 2px solid $base;
+  overflow: hidden;
   position: relative;
+
+  @include media($med) {
+    min-height: calc(100% - 5rem);
+  }
   
   .topnav {
     margin-bottom: 1rem;
@@ -437,8 +442,7 @@ body.scroll-locked-for-modal {
       display: flex;
       flex-direction: column;
       left: initial;
-      // max-height: 100vh;
-      height: calc(100vh - 114px);
+      min-height: calc(100vh - 114px);
       padding: 1rem 0 0 calc(1rem + 20px);
       right: 0;
       transition: right .5s;
