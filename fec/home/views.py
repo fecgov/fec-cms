@@ -1,7 +1,6 @@
 from datetime import datetime
 from itertools import chain
 from operator import attrgetter
-from django.http import HttpResponse
 
 from django.conf import settings
 from django.http import HttpResponse
