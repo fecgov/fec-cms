@@ -622,21 +622,24 @@ DataTable.prototype.enableExport = function() {
 DataTable.prototype.fetch = function(data, callback) {
   var self = this;
   self.ensureWidgets();
+  console.log(self.filters);
+  //console.log(self.filters.committee_id);
   if (self.filterSet && !self.filterSet.isValid) {
     return;
   } else if (self.filterSet && self.filterSet.isValid) {
     urls.updateQuery(self.filterSet.serialize(), self.filterSet.fields);
     self.filters = self.filterSet.serialize();
-    // Only limit to 10 committee ids for processed data in specific datatables
+    // Only limit for processed data in specific datatables
     // Individual contributions does not contain data_type and therefore has a separate check
-    var limitCommitteeIDCheckboxes =
+    var limitOnPage =
       (self.filters.data_type == 'processed' &&
         ['Receipts', 'Disbursements', 'Independent expenditures'].indexOf(
           self.opts.title
         ) !== -1) ||
       self.opts.title === 'Individual contributions';
+    // limit 10 committee ids
     if (
-      limitCommitteeIDCheckboxes &&
+      limitOnPage &&
       self.filters &&
       self.filters.committee_id &&
       self.filters.committee_id.length > 10
@@ -647,6 +650,91 @@ DataTable.prototype.fetch = function(data, callback) {
       $('#committee_id-field ul.dropdown__selected').append(
         '<div id="exceeded_id_limit" class="message filter__message message--error">' +
           '<p>You&#39;re trying to search more than 10 committees. Narrow your search to 10 or fewer committees.</p>' +
+          '</div>'
+      );
+      return;
+    }
+    // limit 10 contributor names
+    else if (
+      limitOnPage &&
+      self.filters &&
+      self.filters.contributor_name &&
+      self.filters.contributor_name.length > 10
+    ) {
+      // Adds contributor name error message and disables filter
+      $('#exceeded_name_limit').remove();
+      $('#contributor_name').addClass('is-disabled-filter');
+      $('#contributor_name-field ul.dropdown__selected').append(
+        '<div id="exceeded_name_limit" class="message filter__message message--error">' +
+          '<p>You&#39;re trying to search more than 10 contributor names. Narrow your search to 10 or fewer names.</p>' +
+          '</div>'
+      );
+      return;
+    }
+    // limit 10 contributor cities
+    else if (
+      limitOnPage &&
+      self.filters &&
+      self.filters.contributor_city &&
+      self.filters.contributor_city.length > 10
+    ) {
+      // Adds contributor city error message and disables filter
+      $('#exceeded_city_limit').remove();
+      $('#contributor_city').addClass('is-disabled-filter');
+      $('#contributor_city-field ul.dropdown__selected').append(
+        '<div id="exceeded_city_limit" class="message filter__message message--error">' +
+          '<p>You&#39;re trying to search more than 10 contributor cities. Narrow your search to 10 or fewer cities.</p>' +
+          '</div>'
+      );
+      return;
+    }
+    // limit 10 contributor zip codes
+    else if (
+      limitOnPage &&
+      self.filters &&
+      self.filters.contributor_zip &&
+      self.filters.contributor_zip.length > 10
+    ) {
+      // Adds contributor zip code error message and disables filter
+      $('#exceeded_zip_limit').remove();
+      $('#contributor_zip').addClass('is-disabled-filter');
+      $('#contributor_zip-field ul.dropdown__selected').append(
+        '<div id="exceeded_zip_limit" class="message filter__message message--error">' +
+          '<p>You&#39;re trying to search more than 10 contributor zip codes. Narrow your search to 10 or fewer zip codes.</p>' +
+          '</div>'
+      );
+      return;
+    }
+    // limit 10 occupations
+    else if (
+      limitOnPage &&
+      self.filters &&
+      self.filters.contributor_occupation &&
+      self.filters.contributor_occupation.length > 10
+    ) {
+      // Adds contributor occupation error message and disables filter
+      $('#exceeded_occupation_limit').remove();
+      $('#contributor_occupation').addClass('is-disabled-filter');
+      $('#contributor_occupation-field ul.dropdown__selected').append(
+        '<div id="exceeded_occupation_limit" class="message filter__message message--error">' +
+          '<p>You&#39;re trying to search more than 10 contributor occupations. Narrow your search to 10 or fewer occupations.</p>' +
+          '</div>'
+      );
+      return;
+    }
+    // limit 10 employers
+    else if (
+      limitOnPage &&
+      self.filters &&
+      self.filters.contributor_employer &&
+      self.filters.contributor_employer.length > 10
+    ) {
+      // Adds contributor employer error message and disables filter
+      $('#exceeded_employer_limit').remove();
+      $('#contributor_employer').addClass('is-disabled-filter');
+      $('#contributor_employer-field ul.dropdown__selected').append(
+        '<div id="exceeded_employer_limit" class="message filter__message message--error">' +
+          '<p>You&#39;re trying to search more than 10 contributor employers. Narrow your search to 10 or fewer employers.</p>' +
           '</div>'
       );
       return;
