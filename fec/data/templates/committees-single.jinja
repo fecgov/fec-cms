@@ -21,6 +21,14 @@
     <h1 class="entity__name content__section--narrow">{{ committee.name }}</h1>
     <div class="heading--section">
       <span class="t-data t-bold entity__type">
+        {% if committee.is_active %}
+          <span class="is-incumbent t-sans t-note" style="padding-right: 1em">ACTIVE
+          </span>      
+        {% else %}
+          TERMINATED
+        {% endif %}
+      </span>      
+      <span class="t-data t-bold entity__type">
         {% if is_SSF %}
           {{ committee.organization_type_full }} {{ committee.committee_type_full }}
           {% if designation %}
