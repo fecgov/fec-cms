@@ -631,6 +631,7 @@ new Vue({
             class: 'indented t-sans search__example',
             showIfVar1: 'lateOrNonFiler',
             showIfVar1ExpectedValue: 'late',
+            example: 'Example: 1-30',
             breadCrumbText: 'Late filer: ${} day(s)'
           },
           { type: 'clear' },
