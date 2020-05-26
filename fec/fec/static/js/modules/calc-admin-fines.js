@@ -294,7 +294,8 @@ Vue.component('frames', {
                 >{{ q.label }}</label>
               <span
                 v-if="q.example"
-                class="t-note t-sans search__example">{{ q.example }}</span>
+                v-bind:class="[q.class, 't-note t-sans search__example']"
+                v-show="evalFieldShowRule(q)">{{ q.example }}</span>
               <div
                 v-if="q.type == 'html'"
                 v-show="evalFieldShowRule(q)"
@@ -307,7 +308,11 @@ Vue.component('frames', {
             >
             <div v-for="(item, index) in frame.content">
               <p
-                v-if="item.type == 'p'"
+                v-if="item.type == 'p' && item.html"
+                v-bind:class="item.class"
+                v-html="item.html"></p>
+              <p
+                v-if="item.type == 'p' && !item.html"
                 v-bind:class="item.class">{{ item.content }}</p>
               <button 
                 v-if="item.type == 'button'"
@@ -465,13 +470,18 @@ new Vue({
             type: 'p',
             class: '',
             content:
-              'This calculator is for estimating an adminstrative fine for late or not filed reports. If you have not yet filed your report, submit it as soon as\xa0possible.'
+              'This calculator is for estimating an adminstrative fine for late or not filed reports.\
+              If you have not yet filed your report, submit it as soon as\xa0possible.'
           },
           {
             type: 'p',
             class: '',
-            content:
-              'Information on filing requirements and due dates of reports can be found at the <a href="https://www.fec.gov/help-candidates-and-committees/dates-and-deadlines/">Dates and deadlines</a> page. More information on administrative fines can be found at the <a href="https://www.fec.gov/legal-resources/enforcement/administrative-fines/">Administrative Fine Program</a>\xa0page.'
+            html:
+              'Information on filing requirements and due dates of reports can be found at the\
+              <a href="https://www.fec.gov/help-candidates-and-committees/dates-and-deadlines/">Dates and deadlines</a>\
+              page.\
+              More information on administrative fines can be found at the\
+              <a href="https://www.fec.gov/legal-resources/enforcement/administrative-fines/">Administrative Fine Program</a>\xa0page.'
           },
           {
             type: 'button',
@@ -826,7 +836,11 @@ new Vue({
           passedTests = true;
       } else if (validationRule == 'lateDaysNot') {
         // If a late filer, require a number of days
-        if (this.lateOrNonFiler == 'late' && this.numberOfDaysLate > 0) {
+        if (
+          this.lateOrNonFiler == 'late' &&
+          this.numberOfDaysLate > 0 &&
+          this.numberOfDaysLate <= 30
+        ) {
           passedTests = true;
         } else if (this.lateOrNonFiler == 'non') {
           passedTests = true;
