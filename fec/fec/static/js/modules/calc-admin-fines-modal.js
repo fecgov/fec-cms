@@ -1,7 +1,10 @@
-/* global $ calcAdminFineJsPath CustomEvent */
+/* global calcAdminFineJsPath CustomEvent */
 
 // {# If the page has a link to the admin fines calculator in it, load its JS #}
-if ($('.js-admin-fines-calc-modal').length > 0) {
+let elementsWithAdminFinesCalcClass = document.querySelectorAll(
+  '.js-admin-fines-calc-modal'
+);
+if (elementsWithAdminFinesCalcClass.length > 0) {
   // TEMP
   // Add the modal to the page
 
