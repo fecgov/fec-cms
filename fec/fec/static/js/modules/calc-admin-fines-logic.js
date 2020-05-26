@@ -102,6 +102,13 @@ CalcAdminFineLogic.prototype.getTotalAdminFine = function(d) {
         // else if it wasn't filed (and is NOT sensitive)
         toReturn = steps[i].nonfiler_val;
       }
+
+      // If we're in the first level,
+      // and there are no previous violations,
+      // limit fines to the total receipts and disbursements
+      if (i == 0 && d.numberOfPrevViolations === 0)
+        toReturn = Math.min(toReturn, d.totalReceiptsAndDisbursements);
+
       // When we find the value step we need, no reason to loop again
       break;
     }
