@@ -55,6 +55,7 @@ FEATURES = {
     'contributionsbystate': bool(env.get_credential('FEC_FEATURE_CONTRIBUTIONS_BY_STATE', '')),
     'ierawfilters': bool(env.get_credential('FEC_FEATURE_IE_RAW_FILTERS', '')),
     'presidential_map': bool(env.get_credential('FEC_FEATURE_PRESIDENTIAL_MAP', '')),
+    'website_status': bool(env.get_credential('FEC_FEATURE_WEBSITE_STATUS', '')),
 }
 ENVIRONMENTS = {
     'local': 'LOCAL',
