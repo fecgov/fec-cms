@@ -225,6 +225,9 @@ body.scroll-locked-for-modal {
           max-width: 66%;
         }
       }
+      .button--cta {
+        margin-top: 1.2rem; // Little extra space above the button
+      }
     }
     &.outro {
       p {
@@ -413,6 +416,9 @@ body.scroll-locked-for-modal {
     clear: both;
     float: left;
     margin-top: 0;
+  }
+  span.t-note.indented {
+    margin-left: 3.5rem;
   }
 
   #help {
