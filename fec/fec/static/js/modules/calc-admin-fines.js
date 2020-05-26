@@ -471,7 +471,7 @@ new Vue({
             type: 'p',
             class: '',
             content:
-              'Information on filing requirements and due dates of reports can be found at the Dates and deadlines page. More information on administrative fines can be found at the Administrative Fine Program\xa0page.'
+              'Information on filing requirements and due dates of reports can be found at the <a href="https://www.fec.gov/help-candidates-and-committees/dates-and-deadlines/">Dates and deadlines</a> page. More information on administrative fines can be found at the <a href="https://www.fec.gov/legal-resources/enforcement/administrative-fines/">Administrative Fine Program</a>\xa0page.'
           },
           {
             type: 'button',
