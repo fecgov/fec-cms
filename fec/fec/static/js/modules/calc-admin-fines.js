@@ -285,6 +285,7 @@ Vue.component('frames', {
                 v-bind:data-onkeypress="q.type == 'integer' ? 'return event.charCode >= 48 && event.charCode <= 57' : false"
                 v-bind:onchange="q.type == 'currency' ? 'event.target.value = Number(event.target.value).toFixed(2)' : false"
                 v-bind:placeholder="q.placeholder"
+                v-bind:size="v.size"
                 ></input>
               <label
                 v-if="(q.type == 'integer' || q.type == 'currency') && q.class != 'label-headline'"
