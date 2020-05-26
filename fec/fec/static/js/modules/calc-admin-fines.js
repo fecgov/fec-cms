@@ -284,7 +284,6 @@ Vue.component('frames', {
                 type="number"
                 v-bind:data-onkeypress="q.type == 'integer' ? 'return event.charCode >= 48 && event.charCode <= 57' : false"
                 v-bind:onchange="q.type == 'currency' ? 'event.target.value = Number(event.target.value).toFixed(2)' : false"
-                v-bind:placeholder="q.placeholder"
                 v-bind:size="v.size"
                 ></input>
               <label
@@ -673,7 +672,6 @@ new Vue({
             max: 99,
             vModel: 'numberOfPrevViolations',
             example: 'Example: 0-99',
-            placeholder: '0',
             breadCrumbText: '${} prior violation(s)'
           }
         ],
