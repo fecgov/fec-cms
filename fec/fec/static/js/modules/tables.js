@@ -622,7 +622,7 @@ DataTable.prototype.enableExport = function() {
 DataTable.prototype.fetch = function(data, callback) {
   var self = this;
   self.ensureWidgets();
-  console.log(self.filters);
+
   if (self.filterSet && !self.filterSet.isValid) {
     return;
   } else if (self.filterSet && self.filterSet.isValid) {
@@ -630,114 +630,61 @@ DataTable.prototype.fetch = function(data, callback) {
     self.filters = self.filterSet.serialize();
     // Only limit for processed data in specific datatables
     // Individual contributions does not contain data_type and therefore has a separate check
-    // var limitOnPage =
-    //   (self.filters.data_type == 'processed' &&
-    //     ['Receipts', 'Disbursements', 'Independent expenditures'].indexOf(
-    //       self.opts.title
-    //     ) !== -1) ||
-    //   self.opts.title === 'Individual contributions';
-    // // limit 10 committee ids
-    // if (
-    //   limitOnPage &&
-    //   self.filters &&
-    //   self.filters.committee_id &&
-    //   self.filters.committee_id.length > 10
-    // ) {
-    //   // Adds committee id error message and disables filter
-    //   $('#exceeded_id_limit').remove();
-    //   $('#committee_id').addClass('is-disabled-filter');
-    //   $('#committee_id-field ul.dropdown__selected').append(
-    //     '<div id="exceeded_id_limit" class="message filter__message message--error">' +
-    //       '<p>You&#39;re trying to search more than 10 committees. Narrow your search to 10 or fewer committees.</p>' +
-    //       '</div>'
-    //   );
-    //   return;
-    // }
-    // // limit 10 contributor names
-    // else if (
-    //   limitOnPage &&
-    //   self.filters &&
-    //   self.filters.contributor_name &&
-    //   self.filters.contributor_name.length > 10
-    // ) {
-    //   // Adds contributor name error message and disables filter
-    //   $('#exceeded_name_limit').remove();
-    //   $('#contributor_name').addClass('is-disabled-filter');
-    //   $('#contributor_name-field ul.dropdown__selected').append(
-    //     '<div id="exceeded_name_limit" class="message filter__message message--error">' +
-    //       '<p>You&#39;re trying to search more than 10 contributor names. Narrow your search to 10 or fewer names.</p>' +
-    //       '</div>'
-    //   );
-    //   return;
-    // }
-    // // limit 10 contributor cities
-    // else if (
-    //   limitOnPage &&
-    //   self.filters &&
-    //   self.filters.contributor_city &&
-    //   self.filters.contributor_city.length > 10
-    // ) {
-    //   // Adds contributor city error message and disables filter
-    //   $('#exceeded_city_limit').remove();
-    //   $('#contributor_city').addClass('is-disabled-filter');
-    //   $('#contributor_city-field ul.dropdown__selected').append(
-    //     '<div id="exceeded_city_limit" class="message filter__message message--error">' +
-    //       '<p>You&#39;re trying to search more than 10 contributor cities. Narrow your search to 10 or fewer cities.</p>' +
-    //       '</div>'
-    //   );
-    //   return;
-    // }
-    // // limit 10 contributor zip codes
-    // else if (
-    //   limitOnPage &&
-    //   self.filters &&
-    //   self.filters.contributor_zip &&
-    //   self.filters.contributor_zip.length > 10
-    // ) {
-    //   // Adds contributor zip code error message and disables filter
-    //   $('#exceeded_zip_limit').remove();
-    //   $('#contributor_zip').addClass('is-disabled-filter');
-    //   $('#contributor_zip-field ul.dropdown__selected').append(
-    //     '<div id="exceeded_zip_limit" class="message filter__message message--error">' +
-    //       '<p>You&#39;re trying to search more than 10 contributor zip codes. Narrow your search to 10 or fewer zip codes.</p>' +
-    //       '</div>'
-    //   );
-    //   return;
-    // }
-    // // limit 10 occupations
-    // else if (
-    //   limitOnPage &&
-    //   self.filters &&
-    //   self.filters.contributor_occupation &&
-    //   self.filters.contributor_occupation.length > 10
-    // ) {
-    //   // Adds contributor occupation error message and disables filter
-    //   $('#exceeded_occupation_limit').remove();
-    //   $('#contributor_occupation').addClass('is-disabled-filter');
-    //   $('#contributor_occupation-field ul.dropdown__selected').append(
-    //     '<div id="exceeded_occupation_limit" class="message filter__message message--error">' +
-    //       '<p>You&#39;re trying to search more than 10 contributor occupations. Narrow your search to 10 or fewer occupations.</p>' +
-    //       '</div>'
-    //   );
-    //   return;
-    // }
-    // // limit 10 employers
-    // else if (
-    //   limitOnPage &&
-    //   self.filters &&
-    //   self.filters.contributor_employer &&
-    //   self.filters.contributor_employer.length > 10
-    // ) {
-    //   // Adds contributor employer error message and disables filter
-    //   $('#exceeded_employer_limit').remove();
-    //   $('#contributor_employer').addClass('is-disabled-filter');
-    //   $('#contributor_employer-field ul.dropdown__selected').append(
-    //     '<div id="exceeded_employer_limit" class="message filter__message message--error">' +
-    //       '<p>You&#39;re trying to search more than 10 contributor employers. Narrow your search to 10 or fewer employers.</p>' +
-    //       '</div>'
-    //   );
-    //   return;
-    // }
+    var limitOnPage =
+      (self.filters.data_type == 'processed' &&
+        ['Receipts', 'Disbursements', 'Independent expenditures'].indexOf(
+          self.opts.title
+        ) !== -1) ||
+      self.opts.title === 'Individual contributions';
+
+    // Number of allowed filters per field that is limited
+    const MAX_FILTERS = 10;
+    // Fields to limit
+    var limitFields = {
+      committee_id: `You&#39;re trying to search more than ${MAX_FILTERS} committees. Narrow your search to ${MAX_FILTERS} or fewer committees.`,
+      candidate_id: `You&#39;re trying to search more than ${MAX_FILTERS} candidates. Narrow your search to ${MAX_FILTERS} or fewer candidates.`,
+      contributor_name: `You&#39;re trying to search more than ${MAX_FILTERS} contributors. Narrow your search to ${MAX_FILTERS} or fewer contributors.`,
+      recipient_name: `You&#39;re trying to search more than ${MAX_FILTERS} recipients. Narrow your search to ${MAX_FILTERS} or fewer recipients.`,
+      contributor_zip: `You&#39;re trying to search more than ${MAX_FILTERS} zip codes. Narrow your search to ${MAX_FILTERS} or fewer zip codes.`,
+      contributor_city: `You&#39;re trying to search more than ${MAX_FILTERS} cities. Narrow your search to ${MAX_FILTERS} or fewer cities.`,
+      recipient_city: `You&#39;re trying to search more than ${MAX_FILTERS} cities. Narrow your search to ${MAX_FILTERS} or fewer cities.`,
+      contributor_employer: `You&#39;re trying to search more than ${MAX_FILTERS} employers. Narrow your search to ${MAX_FILTERS} or fewer employers.`,
+      contributor_occupation: `You&#39;re trying to search more than ${MAX_FILTERS} occupations. Narrow your search to ${MAX_FILTERS} or fewer occupations.`
+    };
+    // By default, filter limit is not hit
+    var hitFilterLimit = false;
+    var limitFieldKeys = Object.keys(limitFields);
+    limitFieldKeys.forEach(function(limitFieldKey) {
+      // Assign unique id to each field's error messages
+      var error_id = 'exceeded_' + limitFieldKey + '_limit';
+      // Ensure fields are not disabled and all errors removed
+      $('#' + limitFieldKey).removeClass('is-disabled-filter');
+      $('#' + error_id).remove();
+      // Datatables that should have limits and reached the maxiumum
+      // filter limit should display the field's error message
+      // and disable that field's filter
+      if (
+        limitOnPage &&
+        self.filters &&
+        self.filters[limitFieldKey] &&
+        self.filters[limitFieldKey].length > MAX_FILTERS
+      ) {
+        hitFilterLimit = true;
+        $('#' + limitFieldKey).addClass('is-disabled-filter');
+        $('#' + limitFieldKey + '-field ul.dropdown__selected').append(
+          '<div id="' +
+            error_id +
+            '" class="message filter__message message--error">' +
+            '<p>' +
+            limitFields[limitFieldKey] +
+            '</p>' +
+            '</div>'
+        );
+      }
+    });
+    if (hitFilterLimit) {
+      return;
+    }
 
     // If 24- and 48-Hour report is selected, set the filing form to F24.
     // Otherwise, it's a regularly scheduled report, keep the filing
@@ -886,22 +833,6 @@ DataTable.prototype.fetchError = function(jqXHR, textStatus) {
       )
         .removeClass('is-active-filter')
         .addClass('is-disabled-filter');
-    } else if (jqXHR.status == 422) {
-      $(
-        '#committee_id, #contributor_name, #contributor_city, #contributor_zip, #contributor_occupation, #contributor_employer'
-      ).removeClass(
-        'is-active'
-      );
-      // Disable limit 10 fields on 422 error
-      $(
-        '#committee_id, #contributor_name, #contributor_city, #contributor_zip, #contributor_occupation, #contributor_employer'
-      )
-        .removeClass('is-active-filter')
-        .addClass('is-disabled-filter');
-      console.log(jqXHR.responseJSON.message);
-      var apiResponseMessage = jqXHR.responseJSON.message;
-      errorMessage =
-        '<div class="filter__message filter__message--delayed"><strong>' + apiResponseMessage + '</strong></div>';
     }
   }
   $('.filter__message').remove();
