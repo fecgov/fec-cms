@@ -8,6 +8,7 @@
 command, then open localhost:8089 to run tests.
 """
 
+import os
 import random
 import resource
 import locust
@@ -17,12 +18,17 @@ from locust_log_queries import log_queries
 # Avoid "Too many open files" error
 resource.setrlimit(resource.RLIMIT_NOFILE, (9999, 999999))
 
+API_KEY = os.environ["FEC_API_KEY"]
+
 
 class Tasks(locust.TaskSet):
 
     @locust.task
     def load_big_queries(self, term=None):
         url = random.choice(list(log_queries.keys()))
+        if log_queries[url]:
+            params = random.choice(log_queries[url])
+            params["api_key"] = API_KEY
         self.client.get(url, name="load_big_queries")
 
 

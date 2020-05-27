@@ -3,5593 +3,3496 @@ log_queries = {
   {
    "q": [
     "gor"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "gorof"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "michael%20j.%20lombardo"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "georgia%20action"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "michael%20j.%20loma"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "michael%20j.%20lom"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "michael%20j.%20lomab"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "michael%20j"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "goroff"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "karen%20handel"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "BRETTPAC"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "siouxland"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "cardenas"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "western%20dubuque"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "western%20dubuq"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "western%20dubu"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "western%20"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "nadler%20for%20congress"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "c00290825"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "c0029082"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "c00290"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "c00"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "nadler"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "david%20sullivan%20for%20congress"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "fec"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "david%20sullivan%20"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "david%20sulli"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "david%20"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "david"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "davi"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "dav"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "C00744219"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "depasquale"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "depasw"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "depa"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "brier"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "bir"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "buckner%2C%20dwayne"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "madison"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "buckner%2C%20dwa"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "buckner%2C%20"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "amash"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Xochitl"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "doug%20lamborn"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "tom%20tiffany"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "tom%20i"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "pelosi"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "sullivan"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Bill%20cassidy"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "sulli"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Bill%20c"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Bill%20"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "mike%20marsicano"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "mike%20"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "obernolte"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "obe"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "ober"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "The%20Climate%20Group"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "The%20Climate%20Grou"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "import"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Kris%27s%20"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "lar"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "blue%20america%20pac"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Bob%20hamilton"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "tina"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "blue%20america%20a"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "blue%20america%20"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "tin"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "bowman"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "kevin%20brady"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "ultimate%20payee"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "kevin%20"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "ultimate%20pay"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "uli"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Sum"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Summary%20"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "unterman%20"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "unter"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "untenr"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "we%20are%20great%20again"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "kirkpatrick%5D"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "kirkpatrick"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "kirkpa"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "kirk"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "marsicano"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "marsica"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "mari"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "walorski"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "rounds%20for%20senate"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "walor"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "rounds%20for%20"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "rounds%20f"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "rounds%20fro%3D%3Dor"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "rounds%20fro"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "rounds"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "sonny%20goyal"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "sonny%20"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "luetkemeyer"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Hoad"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "huddle"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "bob%20ham"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "bob%20"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "print"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "tina%20ramirez"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "tiffany"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "to%20"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "carlos%20gimenez"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "tina%20ram"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "tina%20rim"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "tina%20ri"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "tiun"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "lucy%20mcbatht"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Peanut%20Federation%20"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "federal%20matching%20funds%27"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "katherine%20porter%20"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Peanut%20"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "federal%20matching%20"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "federal%20matchin"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "federal%20match"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "katherine%20orter%20"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "katherinorter%20"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "katherorter%20"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "katheorter%20"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "kathorter%20"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "katorter%20"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "lucy%20mcbath"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "katiorter%20"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "katieorter%20"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "lucy%20mcbat"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "katie%20orter%20"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "lucy%20mcb"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "lucy%20mc"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "katie%20p"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Freshman%20agri"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Freh"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Fre"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "katie%20porter%20"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "katie%20porter"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "katie%20port"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "katie%20po"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "katie%20"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Florida%20Peanut%20Federation"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "kati"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Florida%20Peanut%20"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "kat"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "sharice%20for%20congress"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Florida"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "sharice%20"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Florida%20"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "sharice"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "sanford%20bishop"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "sanford%20bis"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "sanford"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "san"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "C00736132"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "carmelita%20"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "carmelita"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "carme"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "carm"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "planned%20parenthood%20"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "car"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "planned%20parenthood"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "planned%20parenthodd"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "planned%20pare"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "planned%20paretn"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "planned%20pa"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "winred"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "matching%20funds"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "spanberger"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "spang"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "AMERICA"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "christy%20smith"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Sharice%20Davids"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Sharice%20Da"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "christy"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Sharice"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Sharic"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "america"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "janet%20baresi"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "janet%20bar"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "janet"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "linda%20landau"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "charles%20"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "charles"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "char"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "league%20of%20"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "league%20"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "the%20s%20corporation"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "the%20s"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "the%20so"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "league"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "leagu"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Ned%20Harris"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "citizens%20for%20a%20stronger"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "citizens%20for%20a%20strong"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "kris%20kobach"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "citizens%20for%20a%20"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "tim%20bishop"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "tim%20bish"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "roger%20marshall"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "tim%20"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "take%20back%20az"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "spezakis"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "take%20back%20a"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "take%20back"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "spe"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "take%20ba"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "az-01"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Doug%20Collins%20for%20Sente"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Doug%20Collins%20for%20Sen"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Doug%20Collins%20for%20Se"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Doug%20Collins%20for%20"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Doug%20Collins%20for"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Accountable.US%20Action"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Doug%20Collins%20fo"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Doug%20Collins%20f"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Doug%20Collins%20"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Mckayla%20wilkes"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "spezaki"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Mck"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Doug%20Collins"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Doug%20Collin"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Doug%20Colli"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Doug%20C"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Doug%20V"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Doug%20"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Dou"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "murray"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "thomas%20crowley"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "thomas%20cro"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "thomas%20"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "marsha%20for%20senate"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "stephanie%20"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "marsha%20"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "stephani"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "stepha"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "marsha"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "steph"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "mar"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "steo"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "ste"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "richard%20uihlein"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "liuna"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "richard%20uihelin"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "alex%20morse"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Doug%20Collins%20for%20Senate"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "alex%20mor"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "ale"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Doug%20Coll"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Doug%20Collli"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Doug%20Colll"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "nav"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "navrro"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "navra"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "nar"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Bognet%20for%20congress"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "smp"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Bog"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "thom"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Tony%20Strickland"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "TonyStrickland"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "unterman"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "unterma"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Bognet%20For%20Congress"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Bognet%20For%20Congres"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Frank%20Guinta"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Marsicano"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Mike%20Marsicano"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Mike%20Marsicano%20"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Mike%20Marsicano%20FEC"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "stephanie%20bice"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "stephanie%20bic"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Clarkson"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Clark"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Clar"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Cla"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Clat"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Alan%20Khazei"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Alan%20Khaze"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Alan%20Khaz"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Alan%20Kha"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Alan%20"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Ala"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "ice"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "importing%20data"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "bice"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Gavin%20clarkson"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Gavin%20clarks"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Gavin%20"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "wall"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Aha"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "eshoo"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Aha%20"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "din"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "dingel"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "dingell"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "ding"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "inadequate%20category"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "inadequate%20"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "inade"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "steve%20daines"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "steve%20daince"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "C0073613"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "C00736"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "C007"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "C00"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "adequate%20description"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "adequate%20de"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "adequate%20e"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "adequate%20cate"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "adequate%20d"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "thomas%20wright"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "thomas%20wrig"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Luke%20Woods"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "thomas%20writ"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "c00736132"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "c00736"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "c0073"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "adequate%20"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "ade"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "nra%20"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "scott%20taylor"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "scott%20tayl"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "scott%20"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "C0073614"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "C00736142"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "C007361"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "C0073"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "C00690735"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "gavin%20rollins"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "flo"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "florida's"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "florida's%20"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "william%20barron"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "hagedorn"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "hagedor"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "haged"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "orthodontists"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "orthodontiss"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "orthodontis"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "orthodon"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "ortho"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "C00001313"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "C0000"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "tom%20reed"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "tom%20ree"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "tom%20re"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "servant%20leadership%20fund"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "tom%20r"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "servant%20leader"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "tj%20cox%20vic"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "%20C00252940"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "C00501643"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "denise%20urena"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "washburn"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "washb"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "wash"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "league%20of%20conservation"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "league%20of%20conservati"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "league%20of%20conservatin"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "league%20of%20conser"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "league%20of%20co"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "league%20of%20c"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "mikie%20sherrill"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "lea"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Har"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "mike%20levin"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "pea"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Hart"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Rit"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Rita"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Rits"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "tom%20crowley"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "tom%20crowl"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "tom%20"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "tom"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "aao%20pac"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "aao"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Laura%20lombard"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Laura%20lombar"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Laura%20lomba"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Michelle"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Laura%20lom"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Laura%20l"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Laura%20"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Laura"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "purchasing"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "mccaul%2C%20m"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "oberweis"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "%5Bir"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Michelle%20steel"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "mccaul"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "C00618371"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "jim"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "tom%20toi"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Michelle%20stee"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "jim%20oberwei"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "tom%20ton"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Michelle%20st"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Michelle%20s"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "jim%20oberweis"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "aaopac"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "mccau"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "jim%20ober"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "jim%20ob"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Michelle%20m"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Michelle%20"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Michellje"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Michellj"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Miche"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Mic"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "ahl"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "ahlers"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "ahler"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "dfl%20house"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "dfl%20hou"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "dfl"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "susan%20wagle"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "chuck%20dietzen"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "chuck%20diet"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "yarmuth"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "mucua"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "mucu"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "mua"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "muc"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "roger"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "amy%20kennedy"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Bullock"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "healthcare%20supply%20chain"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "healthcare%20supp"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "healthcare"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "heal"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "her"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "heralt"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Steve%20bullock"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Steve%20"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "C00411330"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "C0041133"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "C00411"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "C004"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Coo"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "congressional%20leadership%20fund"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "congressional%20led"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "congressional%20le"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "congre"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "mur"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "murra"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "murr"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "contributions"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Wornack"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Worna"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "claire%20chad"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "claire"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "abigail"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "abi"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "avi"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "avigai"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Steel%2C%20Mic"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Stee"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Ste"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "marshall%20r"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "marshall"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Michelle%20Ste"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Michelle%20Stee"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Michelle%20Steel"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "covert"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "claire%20chase"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "navarro"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "navar"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "nava"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "navr"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Steve%20Watkins"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Steve%20Wat"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "bac-pac"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "bac-"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "bac"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "C00160838"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Watkins"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "import%20transactions"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "import%20transa"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "import%20tran"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "import%20tr"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "import%20t"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "planned%20parent"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "planned%20"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "planned"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "yvette%20herrell"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "yvette%20herrel"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "yvette%20her"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "yvette"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "stop%20republicans"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "stop%20repub"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "robert%20good"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "robert%20goo"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "robert%20g"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "robert%20gg"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "robert%20"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "robert"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "bob"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "alex"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Yvette%20herr"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Yvette%20"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "bloomberg"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "blanco%20for%20congress"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "blanco%20for%20con"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "blanco%20for%20"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "blanco%20"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "figlesthaler"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "fig"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "C00741546"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "brie"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "josh%20hicks"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Ann%20wagner"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Ann%20wa"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "zunker"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "ocasio-corte"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "ocasio-cor"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "ocasio-co"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "ocasio-c"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "ocasio"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "depasqual"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "depas"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Missouri%20demo"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "micheal%20boggus"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Mark%20Perry"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Mark%20P"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Mar%20"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "micheal%20bo"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Mar"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Mary"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "micheal%20b"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "micheal%20"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "micheal"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "new%20mexico%20republican%20party"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "new%20mexico%20republi"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "new%20mexico%20repub"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "new%20mexico%20"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "new%20mexico"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "new%20mexic"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "new%20mexi"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "new%20me"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "scott%20tayloe"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Nikki%20Snyder"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "new%20"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "scott%20taylo"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "mucarsel-powell"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "scott%20t"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "mucarsel-powe"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "mucarsel-po"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Republican%20Federal%20Committee%20of%20Pennsylvania"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "mucarsel-"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "mucarsel"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "mucarse"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "mucar"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "muca"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "pacific%20campaign%20house"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "pacif"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "pennsylvania%20republican%20party"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "pennsylvai"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "pennsyl"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "penns"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "penn"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "democratic%20"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Missouri%20D"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Missouri%20Dem"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "law%20%26%20justice%20pac"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Missouri%20Demo"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "law%20amp%20justice%20pac"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "tedrah"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "blumenauer"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "blumenau"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "blum"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "wild"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "scheller"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "super%20pac%20reporting"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "super%20pac"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "super%20pa"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "elaine%20luria"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "elaine%20lur"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "unterman%20%5C"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "ben%20bullock%20for%20congress"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "hank%20linderman"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "ben%20bullockf"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "han"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "ben%20bullock"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "reporting%20estimates"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "bullock%20for%20cong"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "bullo"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "bull"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "rob%20jones"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Judson%20sapp"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Judson%20"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Sap"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Sapp%20"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "betsy%20"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "bets"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Sapp"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "bet"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "justin%20amash"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "justin"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "william%20olson"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "josh%20harder"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "josh%20h"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "bill%20olson"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "josh%20"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "jos"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "tedra"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "rita%20hart"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "rita%20har"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "rita%20"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Rosen"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "burr"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "massie"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "emigrant%20bank"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "emr"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "rodney%20"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "rodn"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "courage%20to%20change"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "rod"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "courage%20to%20"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "roden"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "courage%20"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "mike%20le"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "kitchen%20table"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "amy%20"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "emigrant"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "emir"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "asco"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "i%20po"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "i%20p"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Durbin"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "joe%20biden"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "thomas%20speciale"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "joe%20bide"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "thomas"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "thoma"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "joe%20b"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "tho"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Mike%20Levin"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Mike%20Levi"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Mike%20"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "mike%20levin%20"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Dick%20Durbin"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "AT%26"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Warnock"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "AT%26T"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Raphael%20Warnock"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "gade%20for%20virginia"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "gade%20for%20virgini"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "obam"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "oba"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "trump"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "METRO%20DC%20DEMOCRATIC%20SOCIALISTS%20OF%20AMERICA"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "committee%20to%20elect%20jared%20golden"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "committee%20to%20elect%20jaredn"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "committee%20to%20elect%20jaredngo"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "committee%20to%20elect%20jared"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "committee%20to%20elect%20j"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "committee%20to%20elect%20jra"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "committee%20to%20elect%20"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "gol"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "golden"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "friends%20of%20glenn"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "jeanne%20shaheen"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Jim%20bognet"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "gary%20peters"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Jim%20bogne"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Jim%20bogn"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "gary%20pet"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Jim%20bog"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Jim%20bo"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Jim%20b"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Jim"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "stephanie%20murphy"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "alan%20c"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Don"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "alan%20"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Donna%20"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "alan"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Donna%20s"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "ala"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "stephanie%20m"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Donna%20shalal"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "stephanue"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Donna%20shalala"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Donna%20shala"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "murph"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "carole%20baskin"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "carole%20"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "murphy"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "S6MT00162"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "S6MT00162%2F"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Elisa"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Elis"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Eli"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "ellen%20marks"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "peter%20lewis"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "peter%20lews"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "peter%20"
-   ],
-   "api_key": [
-    ""
    ]
   }
  ],
@@ -5597,5657 +3500,3536 @@ log_queries = {
   {
    "q": [
     "gor"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "gorof"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "michael%20j.%20lombardo"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "georgia%20action"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "michael%20j.%20loma"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "michael%20j.%20lom"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "michael%20j.%20lomab"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "michael%20j"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "michael"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "goroff"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "karen%20handel"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "BRETTPAC"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "siouxland"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "cardenas"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "western%20dubuque"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "western%20dubuq"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "western%20dubu"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "western%20"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "western"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "nadler%20for%20congress"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "c00290825"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "c0029082"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "c00290"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "c00"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "nadler"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "david%20sullivan%20for%20congress"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "fec"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "david%20sullivan%20"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "david%20sulli"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "david%20"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "david"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "davi"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "dav"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "C00744219"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "depasquale"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "depasw"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "depa"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "brier"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "bir"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "buckner%2C%20dwayne"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "madison"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "buckner%2C%20dwa"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "buckner%2C%20"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "amash"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Xochitl"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "doug%20lamborn"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "tom%20tiffany"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "tom%20i"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "pelosi"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "sullivan"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Bill%20cassidy"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "sulli"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Bill%20c"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Bill%20"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "mike%20marsicano"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "mike%20"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "obernolte"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "obe"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "ober"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "The%20Climate%20Group"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "The%20Climate%20Grou"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "import"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Kris%27s%20"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "lar"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "blue%20america%20pac"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Bob%20hamilton"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "tina"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "blue%20america%20a"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "blue%20america%20"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "tin"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "bowman"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "kevin%20brady"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "ultimate%20payee"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "kevin%20"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "ultimate%20pay"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "uli"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Sum"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Summary%20"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "unterman%20"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "unter"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "untenr"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "we%20are%20great%20again"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "kirkpatrick%5D"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "kirkpatrick"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "kirkpa"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "kirk"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "marsicano"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "marsica"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "mari"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "walorski"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "rounds%20for%20senate"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "walor"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "rounds%20for%20"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "rounds%20f"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "rounds%20fro%3D%3Dor"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "rounds%20fro"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "rounds"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "sonny%20goyal"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "sonny%20"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "luetkemeyer"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Hoad"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "huddle"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "bob%20ham"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "bob%20"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "print"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "tina%20ramirez"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "tiffany"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "to%20"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "carlos%20gimenez"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "tina%20ram"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "tina%20rim"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "tina%20ri"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "tiun"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "lucy%20mcbatht"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Peanut%20Federation%20"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "federal%20matching%20funds%27"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "katherine%20porter%20"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Peanut%20"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "federal%20matching%20"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "federal%20matchin"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "federal%20match"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "katherine%20orter%20"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "katherineorter%20"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "katherinorter%20"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "katherorter%20"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "katheorter%20"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "kathorter%20"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "katorter%20"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "lucy%20mcbath"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "katiorter%20"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "katieorter%20"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "lucy%20mcbat"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "katie%20orter%20"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "lucy%20mcb"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "lucy%20mc"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "katie%20p"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Freshman%20agri"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Freh"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Fre"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "katie%20porter%20"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "katie%20porter"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "katie%20port"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "katie%20po"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "katie%20"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Florida%20Peanut%20Federation"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "kati"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Florida%20Peanut%20"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "kat"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "sharice%20for%20congress"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Florida"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "sharice%20"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Florida%20"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "sharice"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "sanford%20bishop"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "sanford%20bis"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "sanford"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "san"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "C00736132"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "carmelita%20"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "carmelita"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "carme"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "carm"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "planned%20parenthood%20"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "car"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "planned%20parenthood"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "planned%20parenthodd"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "planned%20pare"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "planned%20paretn"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "planned%20pa"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "winred"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "matching%20funds"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "spanberger"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "spang"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "AMERICA"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "christy%20smith"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Sharice%20Davids"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Sharice%20Da"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "christy"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Sharice"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Sharic"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "america"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "janet%20baresi"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "janet%20bar"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "janet"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "linda%20landau"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "charles%20"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "charles"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "char"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "league%20of%20"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "league%20"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "the%20s%20corporation"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "the%20s"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "the%20so"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "league"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "leagu"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Ned%20Harris"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "citizens%20for%20a%20stronger"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "citizens%20for%20a%20strong"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "citizens%20for%20a%20"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "kris%20kobach"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "tim%20bishop"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "tim%20bish"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "tim%20"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "roger%20marshall"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "take%20back%20az"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "spezakis"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "take%20back%20a"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "take%20back"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "spe"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "take%20ba"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "az-01"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Doug%20Collins%20for%20Sente"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Doug%20Collins%20for%20Sen"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Doug%20Collins%20for%20Se"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Doug%20Collins%20for%20"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Doug%20Collins%20for"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Accountable.US%20Action"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Doug%20Collins%20fo"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Doug%20Collins%20f"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Doug%20Collins%20"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Mckayla%20wilkes"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "spezaki"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Mck"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Doug%20Collins"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Doug%20Collin"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Doug%20Colli"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Doug%20C"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Doug%20V"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Doug%20"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Dou"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "murray"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "thomas%20crowley"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "thomas%20cro"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "thomas%20"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "marsha%20for%20senate"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "stephanie%20"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "marsha%20"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "stephani"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "stepha"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "marsha"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "steph"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "mar"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "steo"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "ste"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "richard%20uihlein"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "liuna"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "richard%20uihelin"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "alex%20morse"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Doug%20Collins%20for%20Senate"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "alex%20mor"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "ale"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Doug%20Coll"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Doug%20Collli"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Doug%20Colll"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "nav"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "navrro"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "navra"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "nar"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Bognet%20for%20congress"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "smp"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Bog"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "thom"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Tony%20Strickland"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "TonyStrickland"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "unterman"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "unterma"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Bognet%20For%20Congress"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Bognet%20For%20Congres"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Frank%20Guinta"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Marsicano"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Mike%20Marsicano"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Mike%20Marsicano%20"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Mike%20Marsicano%20FEC"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "stephanie%20bice"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "stephanie%20bic"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Clarkson"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Clark"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Clar"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Cla"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Clat"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Alan%20Khazei"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Alan%20Khaze"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Alan%20Kha"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Alan%20Khaz"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Alan%20"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Ala"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "ice"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "importing%20data"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "bice"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Gavin%20clarkson"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Gavin%20clarks"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Gavin%20"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "wall"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Aha"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "eshoo"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Aha%20"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "din"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "dingel"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "dingell"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "ding"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "inadequate%20category"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "inadequate%20"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "inade"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "steve%20daines"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "steve%20daince"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "C0073613"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "C00736"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "C0073"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "C007"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "C00"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "adequate%20description"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "adequate%20de"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "adequate%20e"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "adequate%20cate"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "adequate%20d"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "thomas%20wright"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "thomas%20wrig"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Luke%20Woods"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "thomas%20writ"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "c00736132"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "c00736"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "c0073"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "adequate%20"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "ade"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "nra%20"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "scott%20taylor"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "scott%20tayl"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "scott%20"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "C0073614"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "C00736142"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "C007361"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "C00690735"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "gavin%20rollins"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "flo"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "florida's"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "florida's%20"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "hagedorn"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "william%20barron"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "florida"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "hagedor"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "haged"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "orthodontists"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "orthodontiss"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "orthodontis"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "orthodon"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "ortho"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "C00001313"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "C0000"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "tom%20reed"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "tom%20ree"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "tom%20re"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "servant%20leadership%20fund"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "tom%20r"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "servant%20leader"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "tj%20cox%20vic"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "%20C00252940"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "C00501643"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "denise%20urena"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "washburn"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "washb"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "wash"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "league%20of%20conservation"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "league%20of%20conservatin"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "league%20of%20conservati"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "league%20of%20conser"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "league%20of%20co"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "league%20of%20c"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "mikie%20sherrill"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "lea"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Har"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "mike%20levin"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "pea"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Hart"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Rita"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Rit"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Rits"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "tom%20crowley"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "tom%20crowl"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "tom%20"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "tom"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "aao%20pac"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "aao"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Laura%20lombard"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Laura%20lombar"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Laura%20lomba"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Michelle"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Laura%20lom"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Laura%20l"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Laura%20"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Laura"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Lau"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "purchasing"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "mccaul%2C%20m"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "oberweis"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "%5Bir"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Michelle%20steel"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "mccaul"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "jim"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "C00618371"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "tom%20toi"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Michelle%20stee"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "tom%20ton"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "jim%20oberwei"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Michelle%20st"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Michelle%20s"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "jim%20oberweis"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "aaopac"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "mccau"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "jim%20ober"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "jim%20ob"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Michelle%20m"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Michelle%20"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Michellje"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Michellj"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Miche"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Mic"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "ahl"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "ahlers"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "ahler"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "dfl%20house"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "dfl%20hou"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "dfl"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "susan%20wagle"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "chuck%20dietzen"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "chuck%20diet"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "yarmuth"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "mucua"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "mucu"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "mua"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "muc"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "roger"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "amy%20kennedy"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Bullock"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "healthcare%20supply%20chain"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "healthcare%20supp"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "healthcare"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "heal"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "her"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "heralt"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Steve%20bullock"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Steve%20"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "C00411330"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "C0041133"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "C00411"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "C004"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Coo"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "congressional%20leadership%20fund"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "congressional%20led"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "congressional%20le"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "congre"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "mur"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "murra"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "murr"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "contributions"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Wornack"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "claire%20chad"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Worna"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "claire"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "abigail"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "abi"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "avi"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "avigai"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Steel%2C%20Mic"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Stee"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Ste"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "marshall%20r"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "marshall"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Michelle%20Ste"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Michelle%20Stee"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Michelle%20Steel"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "covert"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "claire%20chase"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "navarro"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "navar"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "nava"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "navr"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Steve%20Watkins"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Steve%20Wat"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "bac-pac"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "bac-"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "bac"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "C00160838"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Watkins"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "import%20transactions"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "import%20transa"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "import%20tran"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "import%20tr"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "import%20t"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "planned%20parent"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "planned%20"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "planned"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "yvette%20herrell"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "yvette%20herrel"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "yvette%20her"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "yvette"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "stop%20republicans"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "stop%20repub"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "robert%20good"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "robert%20goo"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "robert%20g"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "robert%20gg"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "robert%20"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "robert"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "bob"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "alex"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Yvette%20herr"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Yvette%20"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "bloomberg"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "blanco%20for%20congress"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "blanco%20for%20con"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "blanco%20for%20"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "blanco%20"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "figlesthaler"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "fig"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "C00741546"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "brie"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "josh%20hicks"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Ann%20wagner"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Ann%20wa"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "zunker"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "ocasio-corte"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "ocasio-cor"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "ocasio-co"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "ocasio-c"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "ocasio"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "depasqual"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "depas"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Missouri%20demo"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "micheal%20boggus"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Mark%20Perry"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Mark%20P"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Mar%20"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "micheal%20bo"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Mar"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "micheal%20b"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Mary"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "micheal%20"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "micheal"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "new%20mexico%20republican%20party"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "new%20mexico%20republi"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "new%20mexico%20repub"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "new%20mexico%20"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "new%20mexico"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "new%20mexic"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "new%20mexi"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "new%20me"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "scott%20tayloe"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Nikki%20Snyder"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "new%20"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "scott%20taylo"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "mucarsel-powell"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "scott%20t"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "mucarsel-powe"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "mucarsel-po"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Republican%20Federal%20Committee%20of%20Pennsylvania"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "mucarsel-"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "mucarsel"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "mucarse"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "mucar"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "muca"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "pacific%20campaign%20house"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "pacif"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "pennsylvania%20republican%20party"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "pennsylvai"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "pennsyl"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "penns"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "penn"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "democratic%20"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Missouri%20D"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Missouri%20Dem"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "law%20%26%20justice%20pac"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Missouri%20Demo"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "law%20amp%20justice%20pac"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "tedrah"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "blumenauer"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "blumenau"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "blumena"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "blumen"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "blum"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "wild"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "scheller"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "super%20pac%20reporting"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "super%20pac"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "super%20pa"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "elaine%20luria"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "elaine%20lur"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "unterman%20%5C"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "ben%20bullock%20for%20congress"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "hank%20linderman"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "ben%20bullockf"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "han"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "ben%20bullock"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "reporting%20estimates"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "bullock%20for%20cong"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "bullo"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "bull"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "rob%20jones"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Judson%20sapp"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Judson%20"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Sap"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Sapp%20"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "betsy%20"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "bets"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Sapp"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "bet"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "justin%20amash"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "justin"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "william%20olson"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "josh%20harder"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "josh%20h"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "bill%20olson"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "josh%20"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "jos"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "tedra"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "rita%20hart"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "rita%20har"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "rita%20h"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "rita%20"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Rosen"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "burr"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "massie"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "emigrant%20bank"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "emr"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "rodney%20"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "rodn"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "courage%20to%20change"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "rod"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "courage%20to%20"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "roden"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "courage%20"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "mike%20le"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "kitchen%20table"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "amy%20"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "emigrant"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "emir"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "asco"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "i%20po"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "i%20p"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Durbin"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "joe%20biden"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "thomas%20speciale"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "joe%20bide"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "thomas"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "thoma"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "joe%20b"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "tho"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Mike%20Levin"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Mike%20Levi"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Mike%20"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "mike%20levin%20"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Dick%20Durbin"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "AT%26"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Warnock"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "AT%26T"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Raphael%20Warnock"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "gade%20for%20virginia"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "gade%20for%20virgini"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "obam"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "oba"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "trump"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "METRO%20DC%20DEMOCRATIC%20SOCIALISTS%20OF%20AMERICA"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "committee%20to%20elect%20jared%20golden"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "committee%20to%20elect%20jaredn"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "committee%20to%20elect%20jaredngo"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "committee%20to%20elect%20jared"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "committee%20to%20elect%20j"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "committee%20to%20elect%20jra"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "committee%20to%20elect%20"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "gol"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "golden"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "friends%20of%20glenn"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "jeanne%20shaheen"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Jim%20bognet"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "gary%20peters"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Jim%20bogne"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Jim%20bogn"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "gary%20pet"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Jim%20bog"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Jim%20bo"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Jim%20b"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Jim"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "stephanie%20murphy"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "alan%20c"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Don"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "alan%20"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Donna%20"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "alan"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Donna%20s"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "ala"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "stephanie%20m"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Donna%20shalal"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "stephanue"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Donna%20shalala"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Donna%20shala"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "murph"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "carole%20baskin"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "carole%20"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "murphy"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "S6MT00162"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "S6MT00162%2F"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Elisa"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Elis"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "Eli"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "ellen%20marks"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "peter%20lewis"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "peter%20lews"
-   ],
-   "api_key": [
-    ""
    ]
   },
   {
    "q": [
     "peter%20"
-   ],
-   "api_key": [
-    ""
    ]
   }
  ],
