@@ -35,5 +35,5 @@ class Tasks(locust.TaskSet):
 
 class Swarm(locust.HttpLocust):
     task_set = Tasks
-    min_wait = 5000
-    max_wait = 50000
+    min_wait = 0
+    max_wait = 0
