@@ -109,7 +109,6 @@ CalcAdminFineLogic.prototype.getTotalAdminFine = function(d) {
       // limit fines to the total receipts and disbursements
       if (
         i == 0 &&
-        d.lateOrNonFiler == 'late' &&
         (d.numberOfPrevViolations === 0 || d.numberOfPrevViolations == '0')
       )
         toReturn = Math.min(toReturn, d.totalReceiptsAndDisbursements);
