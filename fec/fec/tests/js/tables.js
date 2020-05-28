@@ -545,7 +545,7 @@ describe('data table', function() {
         ).to.be.above(0);
         expect(
           $('#exceeded_' + field + '_limit').length,
-          'Expected error message to exist for' + field
+          'Expected error message to exist for ' + field
         ).to.be.above(0);
       });
     });

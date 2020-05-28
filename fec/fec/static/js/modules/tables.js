@@ -671,17 +671,17 @@ DataTable.prototype.fetch = function(data, callback) {
       ) {
         hitFilterLimit = true;
         $('#' + limitFieldKey).addClass('is-disabled-filter');
-        $(
-          '#' + limitFieldKey + '-field ul.dropdown__selected li:last-child'
-        ).append(
-          '<div id="' +
-            error_id +
-            '" class="message filter__message message--error">' +
-            '<p>' +
-            limitFields[limitFieldKey] +
-            '</p>' +
-            '</div>'
-        );
+        $('#' + limitFieldKey + '-field ul.dropdown__selected')
+          .last()
+          .append(
+            '<div id="' +
+              error_id +
+              '" class="message filter__message message--error">' +
+              '<p>' +
+              limitFields[limitFieldKey] +
+              '</p>' +
+              '</div>'
+          );
       }
     });
     if (hitFilterLimit) {
