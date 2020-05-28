@@ -645,7 +645,7 @@ DataTable.prototype.fetch = function(data, callback) {
       candidate_id: `You&#39;re trying to search more than ${MAX_FILTERS} candidates. Narrow your search to ${MAX_FILTERS} or fewer candidates.`,
       contributor_name: `You&#39;re trying to search more than ${MAX_FILTERS} contributors. Narrow your search to ${MAX_FILTERS} or fewer contributors.`,
       recipient_name: `You&#39;re trying to search more than ${MAX_FILTERS} recipients. Narrow your search to ${MAX_FILTERS} or fewer recipients.`,
-      contributor_zip: `You&#39;re trying to search more than ${MAX_FILTERS} zip codes. Narrow your search to ${MAX_FILTERS} or fewer zip codes.`,
+      contributor_zip: `You&#39;re trying to search more than ${MAX_FILTERS} ZIP codes. Narrow your search to ${MAX_FILTERS} or fewer ZIP codes.`,
       contributor_city: `You&#39;re trying to search more than ${MAX_FILTERS} cities. Narrow your search to ${MAX_FILTERS} or fewer cities.`,
       recipient_city: `You&#39;re trying to search more than ${MAX_FILTERS} cities. Narrow your search to ${MAX_FILTERS} or fewer cities.`,
       contributor_employer: `You&#39;re trying to search more than ${MAX_FILTERS} employers. Narrow your search to ${MAX_FILTERS} or fewer employers.`,
