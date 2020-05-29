@@ -253,7 +253,7 @@ Vue.component('frames', {
               <input
                 v-if="q.type == 'radio'"
                 v-show="evalFieldShowRule(q)"
-                v-on:input="handleQuestionInput(frame_index, question_index, q, frame.validationRule, $event)"
+                v-on:change="handleQuestionInput(frame_index, question_index, q, frame.validationRule, $event)"
                 v-bind:id="'elem_' + q.vModel + '_' + q.value"
                 v-bind:name="'elem_' + q.vModel"
                 v-bind:class="q.class"
