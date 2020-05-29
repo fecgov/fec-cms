@@ -94,7 +94,11 @@ body.scroll-locked-for-modal {
       right: 0;
       top: 0;
       width: 15px;
+      clip: rect(0 15px 0 0);
       clip-path: inset(0 15px 0 0);
+      
+      
+
 
       @include media($med) {
         right: calc(33% + 3rem);
@@ -102,7 +106,8 @@ body.scroll-locked-for-modal {
     }
     meter.complete + .i-check {
       background-size: 100%;
-      clip-path: inset(0);
+      clip: unset;
+      clip-path: inset(0);     
       transition: clip-path .5s;
       transition-delay: .5s;
     }
