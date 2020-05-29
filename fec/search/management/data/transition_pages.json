@@ -1,26 +1,5 @@
 [
   {
-    "document_id": "transition-3",
-    "path": "http://transition.fec.gov/af/af.shtml",
-    "created": "04/01/2017",
-    "language": "en",
-    "title": "FEC Administrative Fine Program"
-  },
-  {
-    "document_id": "transition-5",
-    "path": "http://transition.fec.gov/af/af_calc.shtml",
-    "created": "04/01/2017",
-    "language": "en",
-    "title": "Administrative Fine Calculator"
-  },
-  {
-    "document_id": "transition-6",
-    "path": "http://transition.fec.gov/audits/audit_reports.shtml",
-    "created": "04/01/2017",
-    "language": "en",
-    "title": "FEC Audit Reports"
-  },
-  {
     "document_id": "transition-7",
     "path": "http://transition.fec.gov/audits/audit_reports_auth.shtml",
     "created": "04/01/2017",
@@ -40,41 +19,6 @@
     "created": "04/01/2017",
     "language": "en",
     "title": "Audit Reports for Publicly Financed Committees and Host Committees"
-  },
-  {
-    "document_id": "transition-10",
-    "path": "http://transition.fec.gov/info/compliance.shtml",
-    "created": "04/01/2017",
-    "language": "en",
-    "title": "Help Complying with the Federal Campaign Finance Law (FECA)"
-  },
-  {
-    "document_id": "transition-12",
-    "path": "http://transition.fec.gov/elecfil/electron.shtml",
-    "created": "04/01/2017",
-    "language": "en",
-    "title": "Electronic Filing"
-  },
-  {
-    "document_id": "transition-17",
-    "path": "http://transition.fec.gov/pages/brochures/brochures.shtml",
-    "created": "04/01/2017",
-    "language": "en",
-    "title": "FEC Brochures"
-  },
-  {
-    "document_id": "transition-24",
-    "path": "http://transition.fec.gov/rad/index.shtml",
-    "created": "04/01/2017",
-    "language": "en",
-    "title": "Federal Election Commission - Reports Analysis Division"
-  },
-  {
-    "document_id": "transition-25",
-    "path": "http://transition.fec.gov/pages/bcra/bcra_update.shtml",
-    "created": "04/01/2017",
-    "language": "en",
-    "title": "Bipartisan Campaign Reform Act of 2002"
   },
   {
     "document_id": "transition-26",
@@ -124,5 +68,12 @@
     "created": "04/01/2017",
     "language": "en",
     "title": "Federal Election Commission Home Page"
+  },
+  {
+    "document_id": "transition-33",
+    "path": "http://transition.fec.gov/law/legalconsideration.shtml",
+    "created": "05/28/20",
+    "language": "en",
+    "title": "Requests for legal consideration"
   }
 ]
