@@ -541,7 +541,7 @@ describe('data table', function() {
         ).to.be.above(10);
         expect(
           $('#' + field + '-field').length,
-          'Expected ' + field + 'field to exist'
+          'Expected ' + field + ' field to exist'
         ).to.be.above(0);
         expect(
           $('#exceeded_' + field + '_limit').length,

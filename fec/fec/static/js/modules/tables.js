@@ -683,6 +683,19 @@ DataTable.prototype.fetch = function(data, callback) {
               '</p>' +
               '</div>'
           );
+        // Expand any accordions with an error message
+        if ($('.message--error').length > 0) {
+          $('.message.message--error')
+            .closest('.accordion__content')
+            .prev()
+            .attr('aria-expanded', 'true');
+          $('.message.message--error')
+            .closest('.accordion__content')
+            .attr('aria-hidden', 'false');
+          $('.message.message--error')
+            .closest('.accordion__content')
+            .css('display', 'block');
+        }
       }
     });
     if (hitFilterLimit) {
