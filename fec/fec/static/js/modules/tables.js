@@ -672,6 +672,7 @@ DataTable.prototype.fetch = function(data, callback) {
       ) {
         hitFilterLimit = true;
         $('#' + limitFieldKey).addClass('is-disabled-filter');
+        $('ul.dropdown__selected li label').addClass('is-unsuccessful');
         $('#' + limitFieldKey + '-field ul.dropdown__selected')
           .last()
           .append(
