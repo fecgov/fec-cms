@@ -500,16 +500,18 @@ describe('data table', function() {
     });
 
     it('test filter errors with individual contributions', function() {
+      var ids = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11];
+      var names = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k'];
       var serialized = {
-        committee_id: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11],
-        candidate_id: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11],
-        contributor_name: ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k'],
-        recipient_name: ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k'],
-        contributor_zip: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11],
-        contributor_city: ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k'],
-        recipient_city: ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k'],
-        contributor_employer: ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k'],
-        contributor_occupation: ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k'],
+        committee_id: ids,
+        candidate_id: ids,
+        contributor_name: names,
+        recipient_name: names,
+        contributor_zip: ids,
+        contributor_city: names,
+        recipient_city: names,
+        contributor_employer: names,
+        contributor_occupation: names
       };
       this.table.opts.title = 'Individual contributions';
       this.table.filterSet = {
@@ -551,10 +553,12 @@ describe('data table', function() {
     });
 
     it('test filters where data type is not processed', function() {
+      var ids = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11];
+      var names = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k'];
       var serialized = {
-        committee_id: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11],
-        recipient_name: ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k'],
-        recipient_city: ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k'],
+        committee_id: ids,
+        recipient_name: names,
+        recipient_city: names,
         data_type: 'raw'
       };
       this.table.opts.title = 'Disbursements';
