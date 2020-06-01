@@ -660,6 +660,7 @@ DataTable.prototype.fetch = function(data, callback) {
       // Ensure fields are not disabled and all errors removed
       $('#' + limitFieldKey).removeClass('is-disabled-filter');
       $('#' + error_id).remove();
+      $('#two_year_filter_error').remove();
       // Datatables that should have limits and reached the maxiumum
       // filter limit should display the field's error message
       // and disable that field's filter
@@ -815,7 +816,7 @@ DataTable.prototype.fetchError = function(jqXHR, textStatus) {
   var self = this;
   // Default error message that occurs most likely due to timeout
   var errorMessage =
-    '<div class="message filter__message message--error">' +
+    '<div id="two_year_filter_error" class="message filter__message message--error">' +
     self.opts.error400Message +
     '</div>';
   if (textStatus == 'abort') {
