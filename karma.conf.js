@@ -6,7 +6,7 @@ process.env.CHROME_BIN = require('puppeteer').executablePath();
 module.exports = function(config) {
   const browserify = {
     debug: true,
-    transform: ['hbsfy']
+    transform: ['hbsfy', ['babelify', { presets: ['es2015'] }]]
   };
 
   let reporters = ['progress', 'coverage-istanbul'];
