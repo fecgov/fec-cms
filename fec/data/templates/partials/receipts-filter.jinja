@@ -28,13 +28,13 @@ Filter receipts
 
 {% block filters %}
 <div class="filters__inner">
-  {{ typeahead.field('committee_id', 'Recipient name or ID', helper_text='Limit 10 recipient names or IDs') }}
+  {{ typeahead.field('committee_id', 'Recipient name or ID', helper_text = 'Limit 10 recipient names or IDs') }}
   <legend class="label u-margin--top">Contributor details</legend>
-  {{ typeahead.field(name = 'contributor_name', title = 'Name or ID', dataset='committees', allow_text=True, minor_label_text = True, helper_text='Limit 10 contributor names or IDs') }}
-  {{ text.field(name = 'contributor_city', title = 'City', minor_label_text = True, helper_text='Limit 10 cities') }}
-  {{ text.field(name = 'contributor_zip', title = 'ZIP code', attrs = {'maxlength':5}, minor_label_text = True, helper_text='Limit 10 ZIP codes') }}
+  {{ typeahead.field(name = 'contributor_name', title = 'Name or ID', dataset='committees', allow_text=True, minor_label_text = True, helper_text = 'Limit 10 contributor names or IDs') }}
+  {{ text.field(name = 'contributor_city', title = 'City', minor_label_text = True, helper_text = 'Limit 10 cities') }}
+  {{ text.field(name = 'contributor_zip', title = 'ZIP code', attrs = {'maxlength':5}, minor_label_text = True, helper_text = 'Limit 10 ZIP codes') }}
   {{ text.field(name = 'contributor_occupation', title = 'Occupation', minor_label_text = True, helper_text = 'Use the employer field to search by occupation in reports filed before 2003. Limit 10 occupations') }}
-  {{ text.field(name = 'contributor_employer', title = 'Employer', minor_label_text = True, helper_text='Limit 10 employers') }}
+  {{ text.field(name = 'contributor_employer', title = 'Employer', minor_label_text = True, helper_text = 'Limit 10 employers') }}
   {{ text.field('image_number', 'Image number') }}
 </div>
 <div class="js-accordion accordion--neutral restricted-fields" data-content-prefix="filter" data-open-first="true">

@@ -25,15 +25,15 @@ Filter disbursements
 
 {% block filters %}
 <div class="filters__inner">
-  {{ typeahead.field('committee_id', 'Spender name or ID', helper_text='Limit 10 spender names or IDs') }}
-  {{ typeahead.field('recipient_name', 'Recipient name or ID', allow_text=True, helper_text='Limit 10 recipient names or IDs') }}
+  {{ typeahead.field('committee_id', 'Spender name or ID', helper_text = 'Limit 10 spender names or IDs') }}
+  {{ typeahead.field('recipient_name', 'Recipient name or ID', allow_text=True, helper_text = 'Limit 10 recipient names or IDs') }}
   {{ years.cycles('two_year_transaction_period', 'Report time period', show_tooltip=True)  }}
   {{ date.field('date', 'Disbursement date range' ) }}
 </div>
 <div class="js-accordion accordion--neutral" data-content-prefix="filter" data-open-first="false">
   <button type="button" class="js-accordion-trigger accordion__button">Recipient details</button>
   <div class="accordion__content">
-    {{ text.field('recipient_city', 'City', helper_text='Limit 10 cities') }}
+    {{ text.field('recipient_city', 'City', helper_text = 'Limit 10 cities') }}
     {{ states.field('recipient_state')}}
   </div>
 
