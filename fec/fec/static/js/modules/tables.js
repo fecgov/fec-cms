@@ -654,13 +654,22 @@ DataTable.prototype.fetch = function(data, callback) {
     // By default, filter limit is not hit
     var hitFilterLimit = false;
     var limitFieldKeys = Object.keys(limitFields);
+    // By default, remove all errors icons on labels
+    $('ul.dropdown__selected li label').removeClass('is-unsuccessful');
     limitFieldKeys.forEach(function(limitFieldKey) {
       // Assign unique id to each field's error messages
       var error_id = 'exceeded_' + limitFieldKey + '_limit';
       // Ensure fields are not disabled and all errors removed
       $('#' + limitFieldKey).removeClass('is-disabled-filter');
       $('#' + error_id).remove();
+      // Enable restricted fields on 400 error
       $('#two_year_filter_error').remove();
+      $(
+        '.restricted-fields input, .restricted-fields button, .restricted-fields legend'
+      )
+        .addClass('is-active-filter')
+        .removeClass('is-disabled-filter');
+
       // Datatables that should have limits and reached the maxiumum
       // filter limit should display the field's error message
       // and disable that field's filter
@@ -672,7 +681,6 @@ DataTable.prototype.fetch = function(data, callback) {
       ) {
         hitFilterLimit = true;
         $('#' + limitFieldKey).addClass('is-disabled-filter');
-        $('ul.dropdown__selected li label').addClass('is-unsuccessful');
         $('#' + limitFieldKey + '-field ul.dropdown__selected')
           .last()
           .append(
@@ -685,6 +693,7 @@ DataTable.prototype.fetch = function(data, callback) {
               '</div>'
           );
         // Expand any accordions with an error message
+        // For fields that have the error, add an error icon next to checkbox labels
         if ($('.message--error').length > 0) {
           $('.message.message--error')
             .closest('.accordion__content')
@@ -696,6 +705,10 @@ DataTable.prototype.fetch = function(data, callback) {
           $('.message.message--error')
             .closest('.accordion__content')
             .css('display', 'block');
+          $('.message.message--error')
+            .siblings()
+            .children('label')
+            .addClass('is-unsuccessful');
         }
       }
     });
