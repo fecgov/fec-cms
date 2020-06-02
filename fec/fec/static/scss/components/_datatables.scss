@@ -286,7 +286,7 @@
   }
 }
 
-.is-active, .is-terminated  {
+.is-active-status, .is-terminated-status {
   margin-left: u(1.5rem);
   position: relative;
   
@@ -303,10 +303,10 @@
   }
 }
 
-.is-active:before{
+.is-active-status:before{
   background-color: $green-light;
 }
-.is-terminated:before{
+.is-terminated-status:before{
   background-color: $gray;
 }
 
