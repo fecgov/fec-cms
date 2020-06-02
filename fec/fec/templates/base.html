@@ -179,6 +179,10 @@
         document.head.appendChild(pfScriptElem);
       }
     </script>
+    <script>
+      var calcAdminFineJsPath = '{% asset_for_js "calc-admin-fines.js" %}';
+    </script>
+    <script type="text/javascript" src="{% asset_for_js 'calc-admin-fines-modal.js' %}"></script>
 
     {% block extra_js %}
     {# Override this in templates to add extra javascript #}
