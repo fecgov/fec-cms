@@ -661,7 +661,8 @@ DataTable.prototype.fetch = function(data, callback) {
       var error_id = 'exceeded_' + limitFieldKey + '_limit';
       // Ensure fields are not disabled and all errors removed
       $('#' + limitFieldKey).removeClass('is-disabled-filter');
-      $('#' + error_id).remove();
+      var errorDiv = $('#' + error_id);
+      errorDiv.remove();
       // Enable restricted fields on 400 error
       $('#two_year_filter_error').remove();
       $(
@@ -694,18 +695,15 @@ DataTable.prototype.fetch = function(data, callback) {
           );
         // Expand any accordions with an error message
         // For fields that have the error, add an error icon next to checkbox labels
-        if ($('.message--error').length > 0) {
-          $('.message.message--error')
+        errorDiv = $('#' + error_id);
+        if (errorDiv.length > 0) {
+          errorDiv
             .closest('.accordion__content')
             .prev()
             .attr('aria-expanded', 'true');
-          $('.message.message--error')
-            .closest('.accordion__content')
-            .attr('aria-hidden', 'false');
-          $('.message.message--error')
-            .closest('.accordion__content')
-            .css('display', 'block');
-          $('.message.message--error')
+          errorDiv.closest('.accordion__content').attr('aria-hidden', 'false');
+          errorDiv.closest('.accordion__content').css('display', 'block');
+          errorDiv
             .siblings()
             .children('label')
             .addClass('is-unsuccessful');
