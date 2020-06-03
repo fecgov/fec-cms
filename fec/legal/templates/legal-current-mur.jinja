@@ -143,6 +143,10 @@
               </tr>
             {% endfor %}
           {% endfor %}
+          {% else %}
+              <tr>
+                <td colspan="3">There was a problem loading documents.</td>
+              </tr>
         {% endif %}
       </tbody>
     </table>
