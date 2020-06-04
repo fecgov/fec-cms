@@ -7,7 +7,7 @@
 # from data import utils
 
 # register = template.Library()
-def election_years = 2008
+# def election_years = 2008
 
 
 # @register.inclusion_tag('partials/raising-spending.html')

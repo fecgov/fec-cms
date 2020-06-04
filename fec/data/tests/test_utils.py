@@ -53,7 +53,7 @@ class TestUtils(TestCase):
 
     def test_election_title(self):
         assert election_title(2016, 'President') == (
-                '2016 Election United States President')
+            '2016 Election United States President')
         assert election_title(2016, 'Senate', state='CA') == (
             '2016 Election United States Senate - California')
         assert election_title(2016, 'House', state='CA', district='08') == (
@@ -70,7 +70,7 @@ class TestUtils(TestCase):
         ])
         assert utils.financial_summary_processor(totals, formatter) == [
             (200, ('Total receipts', '1')), (100, ('Total disbursements', '1'))
-            ]
+        ]
 
     def current_cycle(self):
         return 2016

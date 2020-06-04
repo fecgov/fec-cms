@@ -19,6 +19,7 @@ def search_update(request, page):
 def remove_page(request, page):
     handle_page_delete(page.id)
 
+
 class AuthorAdmin(ModelAdmin):
     model = Author
     menu_icon = 'user'
@@ -62,6 +63,7 @@ class NewsAndUpdatesAdmin(ModelAdminGroup):
     menu_icon = 'folder-open-inverse'
     menu_order = 200
     items = (PressReleaseModelAdmin, DigestPageModelAdmin, TipsForTreasurersPageModelAdmin, RecordPageModelAdmin)
+
 
 modeladmin_register(AuthorAdmin)
 modeladmin_register(NewsAndUpdatesAdmin)
