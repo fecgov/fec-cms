@@ -1,15 +1,16 @@
 import json
 import os
 import requests
-from bs4 import BeautifulSoup
+# from bs4 import BeautifulSoup
 
 from django.conf import settings
 from django.core.management import BaseCommand
 
-from home.models import Page
+# from home.models import Page
 
 drawer = settings.DIGITALGOV_DRAWER_HANDLE
 key = settings.FEC_DIGITALGOV_DRAWER_KEY_MAIN
+
 
 class Command(BaseCommand):
     help = 'Indexes pages'

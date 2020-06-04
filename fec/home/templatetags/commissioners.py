@@ -1,10 +1,11 @@
-import re
+# import re
 
 from django import template
 from home.models import CommissionerPage
 from django.db.models import Q
 
 register = template.Library()
+
 
 @register.inclusion_tag('partials/current-commissioners.html')
 def current_commissioners(grid):
@@ -13,15 +14,14 @@ def current_commissioners(grid):
         .exclude(commissioner_title__contains='Vice').first()
     vice_commissioner = current_commissioners.filter(commissioner_title__startswith='Vice').first()
     other_commissioners = current_commissioners \
-        .exclude(Q(commissioner_title__startswith='Chair') \
-        | Q(commissioner_title__startswith='Vice')) \
+        .exclude(Q(commissioner_title__startswith='Chair') | Q(commissioner_title__startswith='Vice')) \
         .order_by('last_name')
 
     # Checks if there are any current commissioners
     if current_commissioners:
         try:
             current_commissioners_count = len(current_commissioners)
-        except:
+        except Exception:
             current_commissioners_count = 1
     else:
         current_commissioners_count = 0
@@ -32,6 +32,6 @@ def current_commissioners(grid):
         'chair_commissioner': chair_commissioner,
         'vice_commissioner': vice_commissioner,
         'commissioners': other_commissioners,
-        'vacant_seats' : vacant_seats,
+        'vacant_seats': vacant_seats,
         'grid': grid,
     }

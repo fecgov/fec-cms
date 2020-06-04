@@ -86,11 +86,11 @@ def adr_page(request, adr_no):
 def admin_fine_page(request, admin_fine_no):
     admin_fine = api_caller.load_legal_admin_fines(admin_fine_no)
     if not admin_fine:
-       raise Http404()
+        raise Http404()
     return render(request, 'legal' + '-admin_fine.jinja', {
-       'admin_fine': admin_fine,
-       'parent': 'legal',
-       'social_image_identifier': 'legal',
+        'admin_fine': admin_fine,
+        'parent': 'legal',
+        'social_image_identifier': 'legal',
     })
 
 
@@ -142,9 +142,9 @@ def legal_doc_search_mur(request):
     case_max_close_date = request.GET.get('case_max_close_date', '')
 
     results = api_caller.load_legal_search_results(
-        query, 'murs', 
-        offset=offset, 
-        case_no=case_no, 
+        query, 'murs',
+        offset=offset,
+        case_no=case_no,
         case_respondents=case_respondents,
         case_min_open_date=case_min_open_date,
         case_max_open_date=case_max_open_date,
@@ -166,15 +166,17 @@ def legal_doc_search_mur(request):
         'social_image_identifier': 'legal',
     })
 
+
 def legal_doc_search_adr(request):
     results = {}
     query = request.GET.get('search', '')
     offset = request.GET.get('offset', 0)
     case_no = request.GET.get('case_no', '')
     case_respondents = request.GET.get('case_respondents', '')
-    adr_election_cycles = request.GET.get('adr_election_cycles', '')
+    adr_election_cycles = request.GET.get('adr_election_cycles', '')  # noqa F841
 
-    results = api_caller.load_legal_search_results(query, 'adrs', offset=offset, case_no=case_no, case_respondents=case_respondents)
+    results = api_caller.load_legal_search_results(
+        query, 'adrs', offset=offset, case_no=case_no, case_respondents=case_respondents)
 
     return render(request, 'legal-search-results-adrs.jinja', {
         'parent': 'legal',
@@ -186,15 +188,17 @@ def legal_doc_search_adr(request):
         'social_image_identifier': 'legal',
     })
 
+
 def legal_doc_search_af(request):
     results = {}
     query = request.GET.get('search', '')
     offset = request.GET.get('offset', 0)
     case_no = request.GET.get('case_no', '')
     af_name = request.GET.get('af_name', '')
-    af_election_cycles = request.GET.get('af_election_cycles', '')
+    af_election_cycles = request.GET.get('af_election_cycles', '')  # noqa F841
 
-    results = api_caller.load_legal_search_results(query, 'admin_fines', offset=offset, case_no=case_no, af_name=af_name)
+    results = api_caller.load_legal_search_results(
+        query, 'admin_fines', offset=offset, case_no=case_no, af_name=af_name)
 
     return render(request, 'legal-search-results-afs.jinja', {
         'parent': 'legal',
@@ -205,6 +209,7 @@ def legal_doc_search_af(request):
         'query': query,
         'social_image_identifier': 'legal',
     })
+
 
 def legal_doc_search_regulations(request):
     results = {}
@@ -244,5 +249,5 @@ def get_legal_category_order(results):
     """
     categories = ["advisory_opinions", "murs", "regulations", "statutes"]
     category_order = [x for x in categories if results.get("total_" + x, 0) > 0] +\
-                    [x for x in categories if results.get("total_" + x, 0) == 0]
+        [x for x in categories if results.get("total_" + x, 0) == 0]
     return category_order

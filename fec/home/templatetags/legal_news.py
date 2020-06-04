@@ -1,7 +1,7 @@
-import re
+# import re
 
 from django import template
-from django.conf import settings
+# from django.conf import settings
 from home.models import RecordPage
 
 register = template.Library()

@@ -1,7 +1,7 @@
-import re
+# import re
 
 from django import template
-from django.conf import settings
+# from django.conf import settings
 from home.models import TipsForTreasurersPage
 
 register = template.Library()
@@ -16,4 +16,3 @@ def tips_for_treasurers_feed():
     return {
         'tips_for_treasurers': tips_for_treasurers
     }
-    

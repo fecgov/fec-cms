@@ -2,12 +2,7 @@ import unittest
 import json
 from unittest import mock
 
-from home.templatetags.open_jobs import (
-    get_jobs,
-    USAJOB_SEARCH_ERROR,
-    JOB_URL,
-    CODES_URL,
-)
+from home.templatetags.open_jobs import (get_jobs, JOB_URL, CODES_URL)  # USAJOB_SEARCH_ERROR,
 from fec.constants import USAJOBS_CODE_LIST
 
 

@@ -1,11 +1,11 @@
 import json
-import os
+import os  # noqa F401
 import re
 
 from django import template
 from django.conf import settings
 from django.templatetags.static import static
-from django.utils.html import conditional_escape, format_html
+from django.utils.html import format_html  # conditional_escape
 from django.utils.safestring import mark_safe
 from wagtail.core.models import Page
 
@@ -55,7 +55,7 @@ def prepend_non_digit(string):
     from titles that can be used as HTML IDs, which cannot begin with digits.
     """
     if string[:1].isdigit():
-       string = "go-to-{0}".format(string)
+        string = "go-to-{0}".format(string)
     return string
 
 
@@ -107,7 +107,8 @@ def get_meta_description(content_section):
     """
     Returns a meta description for social media
     """
-    return 'Find what you need to know about the federal campaign finance process. Explore legal resources, campaign finance data, help for candidates and committees, and more.'
+    return 'Find what you need to know about the federal campaign finance process. \
+        Explore legal resources, campaign finance data, help for candidates and committees, and more.'
 
 
 @register.simple_tag
