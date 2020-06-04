@@ -75,3 +75,4 @@ fec/search/management/data/output.json
 
 fec/rev-manifest.json
 fec/.cache-loader
+.vscode/settings.json
