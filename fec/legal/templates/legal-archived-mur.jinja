@@ -81,23 +81,25 @@
       {% endif %}
     </section>
     <section id="documents" class="content__section">
-      <h2 class="t-ruled--bold t-ruled--bottom">Documents</h2>
       {% if 'documents' not in mur %}
-      <!-- Current MURs don't have nested documents. MUR URL is the PDF link -->
-        <div class="content__section">
-          <a class="legal-mur__document-button button button--cta button--document button--lg" href="{{ mur.url }}" target="_blank">Case documents</a>
-          (<a class="t-sans" href="{{ mur.url }}" target="_blank">{{ mur.pdf_size | filesize }}</a>)
-        </div>
+        <!-- Current MURs don't have nested documents. MUR URL is the PDF link -->
+        <h2 class="t-ruled--bold t-ruled--bottom">Documents</h2>
+          <div class="content__section">
+            <a class="legal-mur__document-button button button--cta button--document button--lg" href="{{ mur.url }}" target="_blank">Case documents</a>
+            (<a class="t-sans" href="{{ mur.url }}" target="_blank">{{ mur.pdf_size | filesize }}</a>)
+          </div>
       {% else %}
       <!-- Archived MURs have nested documents and no MUR-level URL. See issue #2157 -->
         {% if mur.get('documents', {}) | length == 1 %}
-        <!-- Show one 'case documents' button if there's only one PDF -->
+          <!-- Show one 'case documents' button if there's only one PDF -->
+          <h2 class="t-ruled--bold t-ruled--bottom">Documents</h2>
           <div class="content__section">
             <a class="legal-mur__document-button button button--cta button--document button--lg" href="{{ mur.documents[0].url }}" target="_blank">Case documents</a>
             (<a class="t-sans" href="{{ mur.documents[0].url }}" target="_blank">{{ mur.documents[0].length | filesize }}</a>)
           </div>
         {% elif mur.get('documents', {}) | length > 1 %}
-        <!-- Make a case documents table -->
+          <!-- Make a case documents table -->
+          <h2 class="t-ruled--bold t-ruled--bottom u-no-margin">Documents</h2>
           <table class="data-table data-table--text data-table--heading-borders">
           <tbody>
             {% for document in mur.documents %}
@@ -105,12 +107,13 @@
               </tr>
             {% endfor %}
         {% elif mur.get('documents', {}) | length == 0 %}
-          <div class="content__section">
+          <!-- Show error when there are no documents loaded -->
+          <h2 class="t-ruled--bold t-ruled--bottom u-no-margin">Documents</h2>
+          <table class="data-table data-table--text data-table--heading-borders">
             <tbody>
               <tr>
                 <td>Sorry, there was a problem loading these documents. Please try again later.</td>
               </tr>
-          </div>
         {% endif %}
       {% endif %}
       </tbody>
