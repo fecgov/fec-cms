@@ -152,6 +152,8 @@ def get_candidate(candidate_id, cycle, election_full):
     filters = {}
     filters["per_page"] = 1
     candidate = api_caller.load_first_row_data(path, **filters)
+    if candidate is None:
+        raise Http404()
 
     # a)Build List: even_election_years for candidate election dropdown list
     #   on candidate profile page.
@@ -517,6 +519,8 @@ def load_committee_history(committee_id, cycle=None):
         # set cycle = fallback_cycle
         path = "/committee/" + committee_id + "/history/"
         committee = api_caller.load_first_row_data(path, **filters)
+        if committee is None:
+            raise Http404()
         cycle = committee.get("last_cycle_has_financial")
         if not cycle:
             # when committees only file F1.fallback_cycle = null
@@ -527,6 +531,8 @@ def load_committee_history(committee_id, cycle=None):
         # under tag:committee
         path = "/committee/" + committee_id + "/history/" + str(cycle)
         committee = api_caller.load_first_row_data(path, **filters)
+        if committee is None:
+            raise Http404()
 
     # (2)call committee/{committee_id}/candidates/history/{cycle}
     # under: candidate, get all candidates associated with that commitee
