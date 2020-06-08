@@ -96,7 +96,7 @@
             <a class="legal-mur__document-button button button--cta button--document button--lg" href="{{ mur.documents[0].url }}" target="_blank">Case documents</a>
             (<a class="t-sans" href="{{ mur.documents[0].url }}" target="_blank">{{ mur.documents[0].length | filesize }}</a>)
           </div>
-        {% else %}
+        {% elif mur.get('documents', {}) | length > 1 %}
         <!-- Make a case documents table -->
           <table class="data-table data-table--text data-table--heading-borders">
           <tbody>
@@ -104,6 +104,13 @@
               <td><a href="{{ document.url }}">Case documents, part {{ document.document_id }}</a> {{ document.length | filesize }}</td>
               </tr>
             {% endfor %}
+        {% elif mur.get('documents', {}) | length == 0 %}
+          <div class="content__section">
+            <tbody>
+              <tr>
+                <td>Sorry, there was a problem loading these documents. Please try again later.</td>
+              </tr>
+          </div>
         {% endif %}
       {% endif %}
       </tbody>
