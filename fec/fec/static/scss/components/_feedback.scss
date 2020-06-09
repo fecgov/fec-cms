@@ -21,16 +21,16 @@
   }
 
   label {
-    margin-bottom: u(-0.5rem);
+    line-height: 1.2em;
     
     & > .label--help {
       display: inline-block;
       font-weight: normal;
+      margin-bottom: 0;
       text-transform: none;
     }
-
-    &.label + textarea {
-      margin-top: u(0.5rem); // to counter the -0.5 for <label>
+    & + .label--help {
+      margin-top: u(-0.5rem);
     }
   }
 
