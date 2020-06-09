@@ -483,71 +483,111 @@ describe('data table', function() {
     });
   });
 
-  describe('limit committee ids', function() {
+  describe('limit multiple filters for schedules A, B, and E', function() {
     beforeEach(function() {
       this.table.xhr = null;
       $('body').append(
-        '<div id="committee_id-field"><ul class="dropdown__selected"></ul><input id="committee_id" /></div>'
+        '<div id="committee_id-field"><ul class="dropdown__selected"></ul><input id="committee_id" /></div>',
+        '<div id="candidate_id-field"><ul class="dropdown__selected"></ul><input id="candidate_id" /></div>',
+        '<div id="contributor_name-field"><ul class="dropdown__selected"></ul><input id="contributor_name" /></div>',
+        '<div id="recipient_name-field"><ul class="dropdown__selected"></ul><input id="recipient_name" /></div>',
+        '<div id="contributor_zip-field"><ul class="dropdown__selected"></ul><input id="contributor_zip" /></div>',
+        '<div id="contributor_city-field"><ul class="dropdown__selected"></ul><input id="contributor_city" /></div>',
+        '<div id="recipient_city-field"><ul class="dropdown__selected"></ul><input id="recipient_city" /></div>',
+        '<div id="contributor_employer-field"><ul class="dropdown__selected"></ul><input id="contributor_employer" /></div>',
+        '<div id="contributor_occupation-field"><ul class="dropdown__selected"></ul><input id="contributor_occupation" /></div>'
       );
     });
 
-    it('test committee id errors with individual contributions', function() {
+    it('test filter errors with individual contributions', function() {
+      var ids = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11];
+      var names = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k'];
       var serialized = {
-        committee_id: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]
+        committee_id: ids,
+        candidate_id: ids,
+        contributor_name: names,
+        recipient_name: names,
+        contributor_zip: ids,
+        contributor_city: names,
+        recipient_city: names,
+        contributor_employer: names,
+        contributor_occupation: names
       };
       this.table.opts.title = 'Individual contributions';
       this.table.filterSet = {
         serialize: function() {
           return serialized;
         },
-        fields: ['committee_id']
+        fields: [
+          'committee_id',
+          'candidate_id',
+          'contributor_name',
+          'recipient_name',
+          'contributor_zip',
+          'contributor_city',
+          'recipient_city',
+          'contributor_employer',
+          'contributor_occupation'
+        ]
       };
       this.table.filterSet.isValid = true;
       var callback = sinon.stub();
       this.table.fetch({}, callback);
       expect(this.table.filters).to.deep.equal(serialized);
-      expect(
-        this.table.filters.committee_id.length,
-        'Expected greater than 10 committee ids'
-      ).to.be.above(10);
-      expect(
-        $('#committee_id-field').length,
-        'Expected committee_id-field to exist'
-      ).to.be.above(0);
-      expect(
-        $('#exceeded_id_limit').length,
-        'Expected error message to exist'
-      ).to.be.above(0);
+      var self = this;
+      var fields = Object.keys(serialized);
+      fields.forEach(function(field) {
+        expect(
+          self.table.filters[field].length,
+          'Expected greater than 10 items for ' + field
+        ).to.be.above(10);
+        expect(
+          $('#' + field + '-field').length,
+          'Expected ' + field + ' field to exist'
+        ).to.be.above(0);
+        expect(
+          $('#exceeded_' + field + '_limit').length,
+          'Expected error message to exist for ' + field
+        ).to.be.above(0);
+      });
     });
 
-    it('test committee id errors with processed data type', function() {
+    it('test filters where data type is not processed', function() {
+      var ids = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11];
+      var names = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k'];
       var serialized = {
-        committee_id: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11],
-        data_type: 'processed'
+        committee_id: ids,
+        recipient_name: names,
+        recipient_city: names,
+        data_type: 'raw'
       };
       this.table.opts.title = 'Disbursements';
       this.table.filterSet = {
         serialize: function() {
           return serialized;
         },
-        fields: ['committee_id', 'data_type']
+        fields: ['committee_id', 'recipient_name', 'recipient_city']
       };
       this.table.filterSet.isValid = true;
       var callback = sinon.stub();
       this.table.fetch({}, callback);
       expect(this.table.filters).to.deep.equal(serialized);
-      expect(
-        this.table.filters.committee_id.length,
-        'Expected greater than 10 committee ids'
-      ).to.be.above(10);
-      expect(
-        $('#committee_id-field').length,
-        'Expected committee_id-field to exist'
-      ).to.be.above(0);
-      expect(
-        $('#exceeded_id_limit').length,
-        'Expected error message to exist'
-      ).to.be.above(0);
+      expect(this.table.filters.data_type, 'Expected raw data type').to.equal('raw');
+      var self = this;
+      this.table.filterSet.fields.forEach(function(field) {
+        expect(
+          self.table.filters[field].length,
+          'Expected field to be greater than 10: ' + field
+        ).to.be.above(10);
+        expect(
+          $('#' + field + '-field').length,
+          'Expected field to exist: ' + field
+        ).to.be.above(0);
+        expect(
+          $('#exceeded_' + field + '_limit').length,
+          'Expected error message to not exist: ' + field
+        ).to.equal(0);
+      });
     });
   });
 
