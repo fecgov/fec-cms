@@ -22,6 +22,16 @@
 
   label {
     margin-bottom: u(-0.5rem);
+    
+    & > .label--help {
+      display: inline-block;
+      font-weight: normal;
+      text-transform: none;
+    }
+
+    &.label + textarea {
+      margin-top: u(0.5rem); // to counter the -0.5 for <label>
+    }
   }
 
   hr {
@@ -78,18 +88,18 @@
 }
 
 .signup__row {
-  clear:both;
+  clear: both;
   display: table;
 
   .signup__button {
     float: left;
-    display:block;
+    display: block;
     margin-top: u(0.3rem);
   }
 
   .signup__note {
     float: left;
-    display:block;
+    display: block;
     width: u(30rem);
     margin-left: u(1rem);
   }
