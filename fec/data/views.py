@@ -265,7 +265,27 @@ def get_candidate(candidate_id, cycle, election_full):
     path = "/efile/" + "/filings/"
     raw_filings = api_caller.load_endpoint_results(path, **filters)
     has_raw_filings = True if raw_filings else False
+
+    converted_candidate_committees = {
+        "H0CA08069": "C00698894", 
+        "H0IL01178": "C00697128", 
+        "P00010298": "C00697441", 
+        "P00009092": "C00693044", 
+        "H8CA25074": "C00634212", 
+        "H0CA04167": "C00691790",
+    }
+
+    converted_committee_name = None
+    if cycle == 2020 and converted_candidate_committees.get(candidate_id):
+        # Call committee/{committee_id}/history/{cycle}/
+        filters = {"per_page": 1}
+        path = "/committee/" + converted_candidate_committees.get(candidate_id) + "/history/" + str(cycle)
+        committee = api_caller.load_first_row_data(path, **filters)
+        # Get the converted committee's name
+        converted_committee_name = committee.get('name')
+
     return {
+        "converted_committee_name": converted_committee_name,
         "aggregate": aggregate,
         "aggregate_cycles": aggregate_cycles,
         "candidate": candidate,

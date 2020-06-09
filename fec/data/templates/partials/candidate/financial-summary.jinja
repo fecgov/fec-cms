@@ -62,8 +62,8 @@
       </div>
     {% else %}
     <div class="entity__figure entity__figure--narrow">
-      {% if candidate_id == 'P00010298' %}
-        {{ missing_transferred.missing(name, cycle) }}
+      {% if converted_committee_name %}
+        {{ missing_transferred.missing(name, cycle, converted_committee_name) }}
       {% else %}
         {{ missing.missing_financials(name, cycle) }}
       {% endif %}
