@@ -26,6 +26,12 @@
     </ul>
     {% endif %}
 
+    {% if converted_committee_name %}
+      <div class="entity__figure entity__figure--narrow">
+        {{ missing_transferred.missing(name, cycle, converted_committee_name, converted_committee_id, former_committee_name) }}
+      </div>
+    {% endif %}
+
     {% if raising_summary %}
       <div class="entity__figure entity__figure--narrow" id="total-raised">
         <div class="heading--section heading--with-action">
@@ -61,13 +67,11 @@
         {{ tables.summary(cash_summary) }}
       </div>
     {% else %}
-    <div class="entity__figure entity__figure--narrow">
-      {% if converted_committee_name %}
-        {{ missing_transferred.missing(name, cycle, converted_committee_name) }}
-      {% else %}
+    {% if not converted_committee_name %}
+      <div class="entity__figure entity__figure--narrow">
         {{ missing.missing_financials(name, cycle) }}
-      {% endif %}
-    </div>
+      </div>
+    {% endif %}
     {% endif %}
   </div>
 

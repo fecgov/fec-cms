@@ -275,17 +275,33 @@ def get_candidate(candidate_id, cycle, election_full):
         "H0CA04167": "C00691790",
     }
 
-    converted_committee_name = None
+    former_committee_names = {
+        "C00698894": "JOHN DENNIS FOR CONGRESS", 
+        "C00697128": "FRIENDS TO ELECT ROBERT EMMONS JR.", 
+        "C00697441": "PETE FOR AMERICA, INC.", 
+        "C00693044": "JULIAN FOR THE FUTURE PRESIDENTIAL EXPLORATORY COMMITTEE", 
+        "C00634212": "KATIE HILL FOR CONGRESS", 
+        "C00691790": "SEAN FRAME FOR CONGRESS",
+    }
+
+    current_committee_name = None
+    converted_committee_id = None
+    former_committee_name = None
+
     if cycle == 2020 and converted_candidate_committees.get(candidate_id):
         # Call committee/{committee_id}/history/{cycle}/
         filters = {"per_page": 1}
         path = "/committee/" + converted_candidate_committees.get(candidate_id) + "/history/" + str(cycle)
         committee = api_caller.load_first_row_data(path, **filters)
-        # Get the converted committee's name
-        converted_committee_name = committee.get('name')
+        # Get the converted committee's name, committee ID, and former committee name
+        current_committee_name = committee.get('name')
+        converted_committee_id = committee.get('committee_id')
+        former_committee_name = former_committee_names.get(converted_committee_id)
 
     return {
-        "converted_committee_name": converted_committee_name,
+        "converted_committee_name": current_committee_name,
+        "converted_committee_id": converted_committee_id,
+        "former_committee_name": former_committee_name,
         "aggregate": aggregate,
         "aggregate_cycles": aggregate_cycles,
         "candidate": candidate,
