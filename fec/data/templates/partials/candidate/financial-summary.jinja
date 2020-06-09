@@ -28,7 +28,7 @@
 
     {% if converted_committee_name %}
       <div class="entity__figure entity__figure--narrow">
-        {{ missing_transferred.missing(name, cycle, converted_committee_name, converted_committee_id, former_committee_name) }}
+        {{ missing_transferred.missing_transferred_candidate_message(name, cycle, converted_committee_name, converted_committee_id, former_committee_name) }}
       </div>
     {% endif %}
 
