@@ -622,33 +622,95 @@ DataTable.prototype.enableExport = function() {
 DataTable.prototype.fetch = function(data, callback) {
   var self = this;
   self.ensureWidgets();
+
   if (self.filterSet && !self.filterSet.isValid) {
     return;
   } else if (self.filterSet && self.filterSet.isValid) {
     urls.updateQuery(self.filterSet.serialize(), self.filterSet.fields);
     self.filters = self.filterSet.serialize();
-    // Only limit to 10 committee ids for processed data in specific datatables
+    // Only limit for processed data in specific datatables
     // Individual contributions does not contain data_type and therefore has a separate check
-    var limitCommitteeIDCheckboxes =
+    var limitOnPage =
       (self.filters.data_type == 'processed' &&
         ['Receipts', 'Disbursements', 'Independent expenditures'].indexOf(
           self.opts.title
         ) !== -1) ||
       self.opts.title === 'Individual contributions';
-    if (
-      limitCommitteeIDCheckboxes &&
-      self.filters &&
-      self.filters.committee_id &&
-      self.filters.committee_id.length > 10
-    ) {
-      // Adds committee id error message and disables filter
-      $('#exceeded_id_limit').remove();
-      $('#committee_id').addClass('is-disabled-filter');
-      $('#committee_id-field ul.dropdown__selected').append(
-        '<div id="exceeded_id_limit" class="message filter__message message--error">' +
-          '<p>You&#39;re trying to search more than 10 committees. Narrow your search to 10 or fewer committees.</p>' +
-          '</div>'
-      );
+
+    // Number of allowed filters per field that is limited
+    const MAX_FILTERS = 10;
+    // Fields to limit
+    var limitFields = {
+      committee_id: `You&#39;re trying to search more than ${MAX_FILTERS} committees. Narrow your search to ${MAX_FILTERS} or fewer committees.`,
+      candidate_id: `You&#39;re trying to search more than ${MAX_FILTERS} candidates. Narrow your search to ${MAX_FILTERS} or fewer candidates.`,
+      contributor_name: `You&#39;re trying to search more than ${MAX_FILTERS} contributors. Narrow your search to ${MAX_FILTERS} or fewer contributors.`,
+      recipient_name: `You&#39;re trying to search more than ${MAX_FILTERS} recipients. Narrow your search to ${MAX_FILTERS} or fewer recipients.`,
+      contributor_zip: `You&#39;re trying to search more than ${MAX_FILTERS} ZIP codes. Narrow your search to ${MAX_FILTERS} or fewer ZIP codes.`,
+      contributor_city: `You&#39;re trying to search more than ${MAX_FILTERS} cities. Narrow your search to ${MAX_FILTERS} or fewer cities.`,
+      recipient_city: `You&#39;re trying to search more than ${MAX_FILTERS} cities. Narrow your search to ${MAX_FILTERS} or fewer cities.`,
+      contributor_employer: `You&#39;re trying to search more than ${MAX_FILTERS} employers. Narrow your search to ${MAX_FILTERS} or fewer employers.`,
+      contributor_occupation: `You&#39;re trying to search more than ${MAX_FILTERS} occupations. Narrow your search to ${MAX_FILTERS} or fewer occupations.`
+    };
+    // By default, filter limit is not hit
+    var hitFilterLimit = false;
+    var limitFieldKeys = Object.keys(limitFields);
+    // By default, remove all errors icons on labels
+    $('ul.dropdown__selected li label').removeClass('is-unsuccessful');
+    limitFieldKeys.forEach(function(limitFieldKey) {
+      // Assign unique id to each field's error messages
+      var error_id = 'exceeded_' + limitFieldKey + '_limit';
+      // Ensure fields are not disabled and all errors removed
+      $('#' + limitFieldKey).removeClass('is-disabled-filter');
+      var errorDiv = $('#' + error_id);
+      errorDiv.remove();
+      // Enable restricted fields on 400 error
+      $('#two_year_filter_error').remove();
+      $(
+        '.restricted-fields input, .restricted-fields button, .restricted-fields legend'
+      )
+        .addClass('is-active-filter')
+        .removeClass('is-disabled-filter');
+
+      // Datatables that should have limits and reached the maxiumum
+      // filter limit should display the field's error message
+      // and disable that field's filter
+      if (
+        limitOnPage &&
+        self.filters &&
+        self.filters[limitFieldKey] &&
+        self.filters[limitFieldKey].length > MAX_FILTERS
+      ) {
+        hitFilterLimit = true;
+        $('#' + limitFieldKey).addClass('is-disabled-filter');
+        $('#' + limitFieldKey + '-field ul.dropdown__selected')
+          .last()
+          .append(
+            '<div id="' +
+              error_id +
+              '" class="message filter__message message--error">' +
+              '<p>' +
+              limitFields[limitFieldKey] +
+              '</p>' +
+              '</div>'
+          );
+        // Expand any accordions with an error message
+        // For fields that have the error, add an error icon next to checkbox labels
+        errorDiv = $('#' + error_id);
+        if (errorDiv.length > 0) {
+          errorDiv
+            .closest('.accordion__content')
+            .prev()
+            .attr('aria-expanded', 'true');
+          errorDiv.closest('.accordion__content').attr('aria-hidden', 'false');
+          errorDiv.closest('.accordion__content').css('display', 'block');
+          errorDiv
+            .siblings()
+            .children('label')
+            .addClass('is-unsuccessful');
+        }
+      }
+    });
+    if (hitFilterLimit) {
       return;
     }
 
@@ -779,7 +841,7 @@ DataTable.prototype.fetchError = function(jqXHR, textStatus) {
   var self = this;
   // Default error message that occurs most likely due to timeout
   var errorMessage =
-    '<div class="message filter__message message--error">' +
+    '<div id="two_year_filter_error" class="message filter__message message--error">' +
     self.opts.error400Message +
     '</div>';
   if (textStatus == 'abort') {
@@ -787,17 +849,19 @@ DataTable.prototype.fetchError = function(jqXHR, textStatus) {
     // the user adding or removing filters
     errorMessage =
       '<div class="filter__message filter__message--delayed"><strong>Just a moment while we process your new request. You are searching a large dataset.</strong></div>';
-  } else if (jqXHR && jqXHR.status == 400) {
-    $('#two_year_transaction_period-dropdown').attr('aria-hidden', 'true');
-    $('.restricted-fields .dropdown .dropdown__button ').removeClass(
-      'is-active'
-    );
-    // Disable restricted fields on 400 error
-    $(
-      '.restricted-fields input, .restricted-fields button, .restricted-fields legend'
-    )
-      .removeClass('is-active-filter')
-      .addClass('is-disabled-filter');
+  } else if (jqXHR) {
+    if (jqXHR.status == 400) {
+      $('#two_year_transaction_period-dropdown').attr('aria-hidden', 'true');
+      $('.restricted-fields .dropdown .dropdown__button ').removeClass(
+        'is-active'
+      );
+      // Disable restricted fields on 400 error
+      $(
+        '.restricted-fields input, .restricted-fields button, .restricted-fields legend'
+      )
+        .removeClass('is-active-filter')
+        .addClass('is-disabled-filter');
+    }
   }
   $('.filter__message').remove();
 
