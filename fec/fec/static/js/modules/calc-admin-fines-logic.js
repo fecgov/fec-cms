@@ -15,26 +15,26 @@ const availableDates = [
     label: 'I haven’t been assessed a fine',
     summary: 'I haven’t been assessed: using latest fine amounts'
   },
-  // {
-  //   value: '2020',
-  //   label: '2020',
-  //   summary: '2020 (2019 values)'
-  // },
+  {
+    value: '2020',
+    label: 'On or after [TBD], 2020',
+    summary: 'Assessed on or after [TBD] 2020'
+  },
   {
     value: '2019',
-    label: 'On or after January 1, 2019',
-    summary: 'Assessed on or after January 1, 2019'
+    label: 'January 1, 2019 to [TBD] 2020',
+    summary: 'Assessed from January 1, 2019 to [TBD] 2020'
   },
   {
     value: '2018',
     label: 'December 28, 2017 to December 31, 2018',
     summary: 'Assessed from December 28, 2017 to December 31, 2018'
-  },
-  {
-    value: '2017',
-    label: 'February 3, 2017 to December 17, 2017',
-    summary: 'Assessed from February 3, 2017 to December 17, 2018'
   }
+  // {
+  //   value: '2017',
+  //   label: 'February 3, 2017 to December 17, 2017',
+  //   summary: 'Assessed from February 3, 2017 to December 17, 2018'
+  // }
 ];
 
 /**
@@ -157,156 +157,156 @@ CalcAdminFineLogic.values = {
   '2020': [
     {
       maxRD: 5000,
-      late_val: 35,
+      late_val: 36,
       late_multi: 6,
-      lateSens_val: 68,
+      lateSens_val: 69,
       lateSens_multi: 13,
-      nonfiler_val: 341,
-      nonfilerSens_val: 684
+      nonfiler_val: 347,
+      nonfilerSens_val: 696
     },
     {
       maxRD: 10000,
-      late_val: 68,
+      late_val: 69,
       late_multi: 6,
-      lateSens_val: 137,
+      lateSens_val: 139,
       lateSens_multi: 13,
-      nonfiler_val: 410,
-      nonfilerSens_val: 820
+      nonfiler_val: 417,
+      nonfilerSens_val: 834
     },
     {
       maxRD: 25000,
-      late_val: 146,
+      late_val: 149,
       late_multi: 6,
-      lateSens_val: 205,
+      lateSens_val: 209,
       lateSens_multi: 13,
-      nonfiler_val: 684,
-      nonfilerSens_val: 1230
+      nonfiler_val: 696,
+      nonfilerSens_val: 1252
     },
     {
       maxRD: 50000,
-      late_val: 290,
+      late_val: 295,
       late_multi: 28,
-      lateSens_val: 437,
-      lateSens_multi: 35,
-      nonfiler_val: 1230,
-      nonfilerSens_val: 1913
+      lateSens_val: 445,
+      lateSens_multi: 36,
+      nonfiler_val: 1252,
+      nonfilerSens_val: 1947
     },
     {
       maxRD: 75000,
-      late_val: 437,
-      late_multi: 110,
-      lateSens_val: 654,
-      lateSens_multi: 110,
-      nonfiler_val: 3925,
-      nonfilerSens_val: 4360
+      late_val: 445,
+      late_multi: 112,
+      lateSens_val: 666,
+      lateSens_multi: 112,
+      nonfiler_val: 3994,
+      nonfilerSens_val: 4437
     },
     {
       maxRD: 100000,
-      late_val: 581,
-      late_multi: 146,
-      lateSens_val: 871,
-      lateSens_multi: 146,
-      nonfiler_val: 5086,
-      nonfilerSens_val: 5813
+      late_val: 591,
+      late_multi: 149,
+      lateSens_val: 886,
+      lateSens_multi: 149,
+      nonfiler_val: 5176,
+      nonfilerSens_val: 5916
     },
     {
       maxRD: 150000,
-      late_val: 871,
-      late_multi: 182,
-      lateSens_val: 1308,
-      lateSens_multi: 182,
-      nonfiler_val: 6541,
-      nonfilerSens_val: 7267
+      late_val: 886,
+      late_multi: 185,
+      lateSens_val: 1331,
+      lateSens_multi: 185,
+      nonfiler_val: 6656,
+      nonfilerSens_val: 7395
     },
     {
       maxRD: 200000,
-      late_val: 1164,
-      late_multi: 217,
-      lateSens_val: 1744,
-      lateSens_multi: 217,
-      nonfiler_val: 7994,
-      nonfilerSens_val: 8719
+      late_val: 1185,
+      late_multi: 221,
+      lateSens_val: 1775,
+      lateSens_multi: 221,
+      nonfiler_val: 8135,
+      nonfilerSens_val: 8873
     },
     {
       maxRD: 250000,
-      late_val: 1453,
-      late_multi: 254,
-      lateSens_val: 2181,
-      lateSens_multi: 254,
-      nonfiler_val: 9446,
-      nonfilerSens_val: 10901
+      late_val: 1479,
+      late_multi: 258,
+      lateSens_val: 2219,
+      lateSens_multi: 258,
+      nonfiler_val: 9613,
+      nonfilerSens_val: 11093
     },
     {
       maxRD: 350000,
-      late_val: 2181,
-      late_multi: 290,
-      lateSens_val: 3270,
-      lateSens_multi: 290,
-      nonfiler_val: 11627,
-      nonfilerSens_val: 13080
+      late_val: 2219,
+      late_multi: 295,
+      lateSens_val: 3328,
+      lateSens_multi: 295,
+      nonfiler_val: 11832,
+      nonfilerSens_val: 13311
     },
     {
       maxRD: 450000,
-      late_val: 2908,
-      late_multi: 290,
-      lateSens_val: 4360,
-      lateSens_multi: 290,
-      nonfiler_val: 13080,
-      nonfilerSens_val: 14535
+      late_val: 2959,
+      late_multi: 295,
+      lateSens_val: 4437,
+      lateSens_multi: 295,
+      nonfiler_val: 13311,
+      nonfilerSens_val: 14791
     },
     {
       maxRD: 550000,
-      late_val: 3633,
-      late_multi: 290,
-      lateSens_val: 5450,
-      lateSens_multi: 290,
-      nonfiler_val: 13806,
-      nonfilerSens_val: 15987
+      late_val: 3697,
+      late_multi: 295,
+      lateSens_val: 5546,
+      lateSens_multi: 295,
+      nonfiler_val: 14050,
+      nonfilerSens_val: 16269
     },
     {
       maxRD: 650000,
-      late_val: 4360,
-      late_multi: 290,
-      lateSens_val: 6541,
-      lateSens_multi: 290,
-      nonfiler_val: 14535,
-      nonfilerSens_val: 17440
+      late_val: 4437,
+      late_multi: 295,
+      lateSens_val: 6656,
+      lateSens_multi: 295,
+      nonfiler_val: 14791,
+      nonfilerSens_val: 17748
     },
     {
       maxRD: 750000,
-      late_val: 5086,
-      late_multi: 290,
-      lateSens_val: 7630,
-      lateSens_multi: 290,
-      nonfiler_val: 15260,
-      nonfilerSens_val: 18895
+      late_val: 5476,
+      late_multi: 295,
+      lateSens_val: 7765,
+      lateSens_multi: 295,
+      nonfiler_val: 15529,
+      nonfilerSens_val: 19228
     },
     {
       maxRD: 850000,
-      late_val: 5813,
-      late_multi: 290,
-      lateSens_val: 8719,
-      lateSens_multi: 290,
-      nonfiler_val: 15987,
-      nonfilerSens_val: 20347
+      late_val: 5916,
+      late_multi: 295,
+      lateSens_val: 8873,
+      lateSens_multi: 295,
+      nonfiler_val: 16269,
+      nonfilerSens_val: 20706
     },
     {
       maxRD: 950000,
-      late_val: 6541,
-      late_multi: 290,
-      lateSens_val: 9810,
-      lateSens_multi: 290,
-      nonfiler_val: 16713,
-      nonfilerSens_val: 21799
+      late_val: 6656,
+      late_multi: 295,
+      lateSens_val: 9983,
+      lateSens_multi: 295,
+      nonfiler_val: 17008,
+      nonfilerSens_val: 22184
     },
     {
       maxRD: Number.MAX_SAFE_INTEGER,
-      late_val: 7267,
-      late_multi: 290,
-      lateSens_val: 10901,
-      lateSens_multi: 290,
-      nonfiler_val: 17440,
-      nonfilerSens_val: 23254
+      late_val: 7395,
+      late_multi: 295,
+      lateSens_val: 11093,
+      lateSens_multi: 295,
+      nonfiler_val: 17748,
+      nonfilerSens_val: 23664
     }
   ],
   '2019': [
