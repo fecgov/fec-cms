@@ -1,9 +1,3 @@
-# import manage
-# from tests import common
-# from webservices import rest
-
-# import pytest
-# import subprocess
 import logging
 
 
