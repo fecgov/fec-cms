@@ -2,7 +2,6 @@ from django import template
 from data import constants
 
 from django.conf import settings
-from data import constants  # noqa F401
 from data import utils
 
 register = template.Library()

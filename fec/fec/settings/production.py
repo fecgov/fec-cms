@@ -1,4 +1,4 @@
-from .base import *  # noqa
+from .base import *  # noqa F401, F403
 from .env import env
 
 SECRET_KEY = env.get_credential('DJANGO_SECRET_KEY')
@@ -20,6 +20,6 @@ ALLOWED_HOSTS = [
 ]
 
 try:
-    from .local import *  # noqa
+    from .local import *  # noqa F401, F403
 except ImportError:
     pass

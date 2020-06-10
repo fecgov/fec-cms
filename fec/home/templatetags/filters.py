@@ -1,11 +1,10 @@
 import json
-import os  # noqa F401
 import re
 
 from django import template
 from django.conf import settings
 from django.templatetags.static import static
-from django.utils.html import format_html  # conditional_escape
+from django.utils.html import format_html
 from django.utils.safestring import mark_safe
 from wagtail.core.models import Page
 

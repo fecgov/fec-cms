@@ -1,9 +1,7 @@
 from django import template
 from data import constants
 
-# import datetime
 from django.conf import settings
-# from data import constants
 from data import utils
 
 register = template.Library()

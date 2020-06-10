@@ -1,5 +1,3 @@
-# import re
-
 from django import template
 from home.models import CommissionerPage
 from django.db.models import Q

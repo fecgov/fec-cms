@@ -7,13 +7,6 @@ from django.core.management import BaseCommand
 from django.conf import settings
 
 from home.models import Page
-# from home.models import (
-#     CommissionerPage,
-#     DigestPage,
-#     PressReleasePage,
-#     RecordPage,
-#     TipsForTreasurersPage
-# )
 
 from fec import constants
 

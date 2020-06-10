@@ -173,7 +173,6 @@ def legal_doc_search_adr(request):
     offset = request.GET.get('offset', 0)
     case_no = request.GET.get('case_no', '')
     case_respondents = request.GET.get('case_respondents', '')
-    adr_election_cycles = request.GET.get('adr_election_cycles', '')  # noqa F841
 
     results = api_caller.load_legal_search_results(
         query, 'adrs', offset=offset, case_no=case_no, case_respondents=case_respondents)
@@ -195,7 +194,6 @@ def legal_doc_search_af(request):
     offset = request.GET.get('offset', 0)
     case_no = request.GET.get('case_no', '')
     af_name = request.GET.get('af_name', '')
-    af_election_cycles = request.GET.get('af_election_cycles', '')  # noqa F841
 
     results = api_caller.load_legal_search_results(
         query, 'admin_fines', offset=offset, case_no=case_no, af_name=af_name)

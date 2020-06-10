@@ -1,4 +1,3 @@
-from django.db import models  # noqa F401
 from wagtail.core import blocks
 from wagtail.images.blocks import ImageChooserBlock
 from wagtail.documents.blocks import DocumentChooserBlock

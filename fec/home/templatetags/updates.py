@@ -1,7 +1,4 @@
-# import re
-
 from django import template
-# from django.conf import settings
 from home.models import DigestPage
 from home.models import PressReleasePage
 

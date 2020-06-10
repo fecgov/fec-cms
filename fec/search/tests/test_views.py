@@ -1,5 +1,3 @@
-# import unittest
-# import requests
 import requests_mock
 import re
 import search.views as views

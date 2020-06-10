@@ -4,11 +4,9 @@ import logging
 
 from django.db import models
 from django.core.exceptions import ValidationError
-# from django.http import HttpResponseRedirect
 from django.dispatch import receiver
 from django.db.models.signals import post_save, pre_delete
 from django.contrib.auth.models import User
-# from django.contrib.auth import get_user_model
 from modelcluster.fields import ParentalKey
 from modelcluster.contrib.taggit import ClusterTaggableManager
 from taggit.models import TaggedItemBase
@@ -24,9 +22,6 @@ from wagtail.admin.edit_handlers import (
 from wagtail.images.blocks import ImageChooserBlock
 from wagtail.images.edit_handlers import ImageChooserPanel
 from wagtail.documents.blocks import DocumentChooserBlock
-# from wagtail.documents.edit_handlers import DocumentChooserPanel
-# from wagtail.documents.models import Document
-# from django.utils.encoding import python_2_unicode_compatible
 from wagtail.snippets.models import register_snippet
 from wagtail.search import index
 from django.db.models.signals import m2m_changed

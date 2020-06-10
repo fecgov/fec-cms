@@ -2,9 +2,7 @@ from django import template
 from itertools import chain
 from operator import attrgetter
 
-from django.conf import settings  # noqa F401
 from home.models import DocumentPage, ResourcePage
-# from wagtail.core.models import Page, Orderable
 
 register = template.Library()
 

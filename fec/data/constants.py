@@ -786,9 +786,12 @@ HOST_SPENDING_FORMATTER = OrderedDict([
 ])
 
 CASH_FORMATTER = OrderedDict([
-    ('cash_on_hand_beginning_period', {'label': 'Beginning cash on hand', 'level': '2'}),  # F3, F3P, #F3X
-    ('last_cash_on_hand_end_period', {'label': 'Ending cash on hand', 'term': 'ending cash on hand', 'level': '2'}),  # F3, F3P, #F3X # noqa: E501
-    ('last_debts_owed_to_committee', {'label': 'Debts/loans owed to committee', 'level': '2'}),  # F3, F3P, F3X
+    ('cash_on_hand_beginning_period',
+        {'label': 'Beginning cash on hand', 'level': '2'}),  # F3, F3P, #F3X
+    ('last_cash_on_hand_end_period',
+        {'label': 'Ending cash on hand', 'term': 'ending cash on hand', 'level': '2'}),  # F3, F3P, #F3X
+    ('last_debts_owed_to_committee',
+        {'label': 'Debts/loans owed to committee', 'level': '2'}),  # F3, F3P, F3X
     ('last_debts_owed_by_committee', {'label': 'Debts/loans owed by committee', 'level': '2'}),  # F3, F3P, F3X
     # Commenting out net numbers because the underlying logic is incorrect
     # ('net_contributions', {'label': 'Net contributions', 'level': '2'}), #F3, F3X
@@ -796,7 +799,7 @@ CASH_FORMATTER = OrderedDict([
     # ('contribution_refunds', {'label': '(Total contribution refunds)', 'level': '3'}), #F3, F3P, F3X
     # ('net_operating_expenditures', {'label': 'Net operating expenditures', 'level': '2'}), #F3, F3X
     # ('operating_expenditures', {'label': 'Operating expenditures', 'level': '3'}), #F3, F3P, F3X
-    # ('offsets_to_operating_expenditures', {'label': '(Offsets to operating expenditures)', 'level': '3'}), #F3, F3P, F3X # noqa: E501
+    # ('offsets_to_operating_expenditures', {'label': '(Offsets to operating expenditures)', 'level': '3'}), #F3, F3P, F3X  # noqa: E501
     # ('subtotal_offsets_to_operating_expenditures', {'label': 'Offsets to operating expenditures', 'level': '3'}), #F3P
 ])
 

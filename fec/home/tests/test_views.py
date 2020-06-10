@@ -1,5 +1,3 @@
-# import unittest
-# import home.views as views
 from django.test import Client, TestCase
 
 

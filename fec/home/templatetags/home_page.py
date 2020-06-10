@@ -1,16 +1,11 @@
 import datetime
-# import pytz
-
-# import re
 
 from django import template
-# from django.conf import settings
-# from operator import attrgetter
 from itertools import chain, islice
 from datetime import date
 from pytz import timezone
 from home.models import (HomePageBannerAnnouncement, AlertForEmergencyUseOnly, DigestPage, RecordPage,
-                         PressReleasePage, TipsForTreasurersPage)  # ServicesLandingPage
+                         PressReleasePage, TipsForTreasurersPage)
 
 register = template.Library()
 

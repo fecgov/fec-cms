@@ -1,6 +1,5 @@
 import os
 import requests
-# import json
 import math
 
 from urllib import parse

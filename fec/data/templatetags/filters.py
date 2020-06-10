@@ -1,10 +1,7 @@
 import datetime
 import json
 import locale
-import os  # noqa F401
 import re
-
-import jinja2  # noqa F401
 
 from dateutil.parser import parse as parse_date
 

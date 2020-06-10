@@ -1,4 +1,3 @@
-import unittest  # noqa F401
 import fec.forms
 import requests
 
