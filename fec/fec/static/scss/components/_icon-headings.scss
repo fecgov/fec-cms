@@ -274,24 +274,6 @@
   }
 }
 
-.icon-heading--example-document {
-  &::before {
-    $size: u(4rem);
-    @include u-icon-circle($example-document, $inverse, $secondary-contrast, $size);
-    background-size: 100%;
-    content: '';
-    float: left;
-    margin-right: u(1.5rem);
-  }
-
-  &.primary{
-    &::before {
-      @include u-icon-circle($example-document, $primary, $inverse, 4.5rem);
-      background-size: 40%;
-      }
-  }
-}
-
 .icon-heading--election-circle {
   &::before {
     $size: u(4rem);
@@ -310,6 +292,42 @@
   }
 }
 
+.icon-heading--example-document {
+  &::before {
+    $size: u(4rem);
+    @include u-icon-circle($example-document, $inverse, $secondary-contrast, $size);
+    background-size: 100%;
+    content: '';
+    float: left;
+    margin-right: u(1.5rem);
+  }
+
+  &.primary{
+    &::before {
+      @include u-icon-circle($example-document, $primary, $inverse, 4.5rem);
+      background-size: 40%;
+      }
+  }
+}
+
+.icon-heading--financial-document {
+  &::before {
+    $size: u(4rem);
+    @include u-icon-circle($financial-document, $inverse, $secondary-contrast, $size);
+    background-size: 50%;
+    content: '';
+    float: left;
+    margin-right: u(1.5rem);
+  }
+
+  &.primary{
+    &::before {
+      @include u-icon-circle($financial-document, $primary, $inverse, 4.5rem);
+      background-size: 40%;
+      }
+  }
+}
+
 .icon-heading--graph-circle,
 .icon-heading--graph-unordered-circle,
 .icon-heading--map-circle,
@@ -321,8 +339,9 @@
 .icon-heading--individual-contributions-circle,
 .icon-heading--person-location-circle,
 .icon-heading--direction-sign-circle,
+.icon-heading--election-circle,
 .icon-heading--example-document,
-.icon-heading--election-circle
+.icon-heading--financial-document
  {
   border-bottom: none;
   display: table;
