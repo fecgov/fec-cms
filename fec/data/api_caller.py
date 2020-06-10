@@ -154,7 +154,7 @@ def load_legal_mur(mur_no):
 
         documents_by_type = OrderedDict()
         try:
-            mur_docs = mur["documents"]
+            mur_docs = mur["document"]
             if len(mur_docs) > 0:
                 for doc in mur["documents"]:
                     if doc["category"] in documents_by_type:
@@ -163,7 +163,7 @@ def load_legal_mur(mur_no):
                         documents_by_type[doc["category"]] = [doc]
                 mur["documents_by_type"] = documents_by_type
         except KeyError:
-            logger.error("There are no MUR documents loaded")
+            logger.error("MUR " + str(mur_no) + ": There are no MUR documents loaded")
 
 
     return mur
