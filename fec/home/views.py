@@ -11,7 +11,7 @@ from django.shortcuts import get_object_or_404, render
 # from django.views.defaults import server_error
 from wagtail.documents.models import Document
 
-# from fec.forms import ContactRAD, form_categories
+from fec.forms import ContactRAD  # form_categories
 from home.models import (CommissionerPage, DigestPage, MeetingPage,
                          PressReleasePage, RecordPage, TipsForTreasurersPage)
 
@@ -251,7 +251,7 @@ def contact_rad(request):
     if settings.FEATURES["radform"]:
         # If it's a POST, post to the ServiceNow API
         if request.method == "POST":
-            form = ContactRAD(request.POST)  # noqa F821
+            form = ContactRAD(request.POST)
             response = form.post_to_service_now()
             if response == 201:
                 return render(
@@ -266,7 +266,7 @@ def contact_rad(request):
                     {"self": page_context, "form": form, "server_error": True},
                 )
         else:
-            form = ContactRAD()  # noqa F821
+            form = ContactRAD()
     else:
         form = False
 
