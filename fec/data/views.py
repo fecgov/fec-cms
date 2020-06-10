@@ -38,7 +38,8 @@ validListUrlParamValues = ["P", "S", "H"]
 # INITIALLY USED BY raising() AND spending() FOR VALIDATING URL PARAMETERS,
 # THE list URL PARAM
 
-
+# List of candidates who have changed their candidate committees during a 
+# recent two year time period
 candidate_to_committee_linkage = {
     "H0CA08069": "C00698894", 
     "H0IL01178": "C00697128", 
@@ -52,6 +53,7 @@ committee_to_candidate_linkage = {
     v: k for k, v in candidate_to_committee_linkage.items()
     }
 
+# List of names for former candidate committees
 former_committee_names = {
     "C00698894": "JOHN DENNIS FOR CONGRESS", 
     "C00697128": "FRIENDS TO ELECT ROBERT EMMONS JR.", 
