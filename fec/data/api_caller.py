@@ -153,12 +153,19 @@ def load_legal_mur(mur_no):
         mur["participants_by_type"] = _get_sorted_participants_by_type(mur)
 
         documents_by_type = OrderedDict()
-        for doc in mur["documents"]:
-            if doc["category"] in documents_by_type:
-                documents_by_type[doc["category"]].append(doc)
-            else:
-                documents_by_type[doc["category"]] = [doc]
-        mur["documents_by_type"] = documents_by_type
+        try:
+            mur_docs = mur["document"]
+            if len(mur_docs) > 0:
+                for doc in mur["documents"]:
+                    if doc["category"] in documents_by_type:
+                        documents_by_type[doc["category"]].append(doc)
+                    else:
+                        documents_by_type[doc["category"]] = [doc]
+                mur["documents_by_type"] = documents_by_type
+        except KeyError:
+            logger.error("MUR " + str(mur_no) + ": There are no MUR documents loaded")
+
+
     return mur
 
 
