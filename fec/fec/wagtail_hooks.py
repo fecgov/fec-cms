@@ -1,9 +1,7 @@
 import json
 import wagtail.admin.rich_text.editors.draftail.features as draftail_features
-from wagtail.admin.rich_text.converters.html_to_contentstate import BlockElementHandler  # InlineStyleElementHandler
-# from wagtail.admin.rich_text.converters.editor_html import WhitelistRule
+from wagtail.admin.rich_text.converters.html_to_contentstate import BlockElementHandler
 from wagtail.core import hooks
-# from wagtail.core.whitelist import attribute_rule, check_url, allow_without_attributes
 from django.conf import settings
 from django.utils.html import format_html
 from fec.draftail import glossary, sansserif, anchor
