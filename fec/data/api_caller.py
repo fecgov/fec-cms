@@ -164,8 +164,6 @@ def load_legal_mur(mur_no):
                 mur["documents_by_type"] = documents_by_type
         except KeyError:
             logger.error("MUR " + str(mur_no) + ": There are no MUR documents loaded")
-
-
     return mur
 
 
