@@ -85,4 +85,3 @@ class TestDatatablesRender(TestCase):
     def test_pac_party_reports(self):
         response = client.get('/data/reports/pac-party/', follow=True)
         assert response.status_code == 200
-

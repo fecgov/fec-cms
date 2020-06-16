@@ -102,7 +102,7 @@ def search(request):
     """
     query = request.GET.get("search", "")
 
-    if re.match("\d{16}", query) or re.match("\d{11}", query):
+    if re.match(r"\d{16}", query) or re.match(r"\d{11}", query):
         url = "http://docquery.fec.gov/cgi-bin/fecimg/?" + query
         return redirect(url)
     else:
@@ -398,7 +398,6 @@ def get_committee(committee_id, cycle):
         "cycle": cycle,
         "cycles": cycles,
         "is_SSF": is_ssf,
-        "min_receipt_date": utils.three_days_ago(),
         "cycle_out_of_range": cycle_out_of_range,
         "parent": parent,
         "result_type": result_type,
@@ -614,13 +613,11 @@ def elections(request, office, cycle, state=None, district=None):
     if tab in legacy_tabs:
         if office == "house":
             return redirect(
-                reverse("elections-house", args=(office, state, district, cycle))
-                + legacy_tabs[tab]
+                reverse("elections-house", args=(office, state, district, cycle)) + legacy_tabs[tab]
             )
         elif office == "senate":
             return redirect(
-                reverse("elections-senate", args=(office, state, cycle))
-                + legacy_tabs[tab]
+                reverse("elections-senate", args=(office, state, cycle)) + legacy_tabs[tab]
             )
         elif office == "president":
             return redirect(
@@ -645,6 +642,7 @@ def elections(request, office, cycle, state=None, district=None):
         },
     )
 
+
 def raising(request):
     office = request.GET.get("office", "P")
 
@@ -667,6 +665,7 @@ def raising(request):
             "social_image_identifier": "data",
         },
     )
+
 
 def spending(request):
     office = request.GET.get("office", "P")
@@ -692,7 +691,6 @@ def spending(request):
     )
 
 
-
 def pres_finance_map(request):
 
     election_year = int(
@@ -711,6 +709,7 @@ def pres_finance_map(request):
 
         },
     )
+
 
 def feedback(request):
     if request.method == "POST":
@@ -811,10 +810,7 @@ def reactionFeedback(request):
                     "* URL: %s \n"
                     "* User Agent: %s"
                 ) % (
-                    "\nChart Name: "
-                    + data["name"]
-                    + "\nChart Location: "
-                    + data["location"],
+                    "\nChart Name: " + data["name"] + "\nChart Location: " + data["location"],
                     data["feedback"],
                     "\nThe reaction to the chart is: " + data["reaction"],
                     request.META.get("HTTP_REFERER"),

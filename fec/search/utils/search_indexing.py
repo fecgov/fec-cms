@@ -24,7 +24,7 @@ def scrape_page_content(url):
     :arg str url: The url (in production) of the page to scrape_page_content
     :returns str : Returns the content scraped from that page
     """
-    r  = requests.get(url)
+    r = requests.get(url)
     data = r.text
     soup = BeautifulSoup(data, 'lxml')
     text = ''
@@ -55,12 +55,12 @@ def create_search_index_doc(page):
         url_base = 'http://localhost:8000'
     live_url = page.url_path.replace('/home', url_base)
     doc = {
-      "document_id": page.id,
-      "title": page.title,
-      "path": live_url,
-      "created": page.first_published_at.strftime("%Y-%m-%d-%H%M%S"),
-      "promote": "false",
-      "language": "en",
+        "document_id": page.id,
+        "title": page.title,
+        "path": live_url,
+        "created": page.first_published_at.strftime("%Y-%m-%d-%H%M%S"),
+        "promote": "false",
+        "language": "en",
     }
 
     # Go scrape the content
@@ -131,7 +131,7 @@ def handle_page_edit_or_create(page, method):
         # Make sure the page is live and public
         try:
             queried_page = Page.objects.live().public().get(id=page.id)
-        except:
+        except Exception:
             queried_page = None
 
         # Make sure the page is nested in a section we index

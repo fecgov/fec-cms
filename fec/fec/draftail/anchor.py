@@ -1,6 +1,7 @@
 from draftjs_exporter.dom import DOM
 from wagtail.admin.rich_text.converters.html_to_contentstate import InlineEntityElementHandler
 
+
 def anchor_entity_decorator(props):
 
     return DOM.create_element('span', {

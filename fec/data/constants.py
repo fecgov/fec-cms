@@ -336,8 +336,7 @@ audit_primary_categories_options = [
     },
     {
         "primary_category_id": '14',
-        "primary_category_name": 'Net Outstanding Campaign/Convention ' +
-        'Expenditures/Obligations'
+        "primary_category_name": 'Net Outstanding Campaign/Convention ' + 'Expenditures/Obligations'
     },
     {
         "primary_category_id": '16',
@@ -385,17 +384,28 @@ table_columns = OrderedDict([
     ('committees', ['Name', 'Committee ID', 'Treasurer', 'Type', 'Designation', 'First filing date']),
     ('communication-costs', ['Committee', 'Support/Oppose', 'Candidate', 'Amount', 'Date']),
     ('disbursements', ['Spender', 'Recipient', 'State', 'Description', 'Disbursement date', 'Amount']),
-    ('electioneering-communications', ['Spender', 'Candidate mentioned','Number of candidates', 'Amount per candidate', 'Date', 'Disbursement amount' ]),
+    ('electioneering-communications',
+        ['Spender', 'Candidate mentioned', 'Number of candidates', 'Amount per candidate', 'Date',
+            'Disbursement amount']),
     ('filings', ['Filer name', 'Document', 'Version', 'Receipt date', 'Beginning image number']),
-    ('independent-expenditures', ['Spender', 'Support/Oppose', 'Candidate', 'Description', 'Payee', 'Expenditure date', 'Amount']),
+    ('independent-expenditures',
+        ['Spender', 'Support/Oppose', 'Candidate', 'Description', 'Payee', 'Expenditure date', 'Amount']),
     ('individual-contributions', ['Contributor name', 'Recipient', 'State', 'Employer', 'Receipt date', 'Amount']),
     ('loans', ['Committee Name', 'Loaner name', 'Incurred date', 'Payment to date', 'Original loan amount']),
     ('party-coordinated-expenditures', ['Spender', 'Candidate', 'Payee name', 'Expenditure date', 'Amount']),
     ('receipts', ['Contributor name', 'Recipient', 'Election', 'State', 'Receipt date', 'Amount']),
-    ('reports-presidential', ['Committee', 'Report type', 'Version', 'Receipt date', 'Coverage end date', 'Total receipts', 'Total disbursements']),
-    ('reports-house-senate', ['Committee', 'Report type', 'Version', 'Receipt date', 'Coverage end date', 'Total receipts', 'Total disbursements']),
-    ('reports-pac-party', ['Committee', 'Report type', 'Version', 'Receipt date', 'Coverage end date', 'Total receipts', 'Total disbursements', 'Total independent expenditures']),
-    ('reports-ie-only', ['Filer', 'Report type', 'Version', 'Receipt date', 'Coverage end date', 'Total contributions', 'Total independent expenditures']),
+    ('reports-presidential',
+        ['Committee', 'Report type', 'Version', 'Receipt date', 'Coverage end date', 'Total receipts',
+            'Total disbursements']),
+    ('reports-house-senate',
+        ['Committee', 'Report type', 'Version', 'Receipt date', 'Coverage end date', 'Total receipts',
+            'Total disbursements']),
+    ('reports-pac-party',
+        ['Committee', 'Report type', 'Version', 'Receipt date', 'Coverage end date', 'Total receipts',
+            'Total disbursements', 'Total independent expenditures']),
+    ('reports-ie-only',
+        ['Filer', 'Report type', 'Version', 'Receipt date', 'Coverage end date', 'Total contributions',
+            'Total independent expenditures']),
     ('audit', ['Committee name', 'Election cycle', 'Final report', 'Findings and issues', 'Candidate']),
 ])
 
@@ -468,7 +478,8 @@ line_numbers = {
             ('F3X-23', 'Contributions to federal candidates/committees and other political committees (Line 23)'),
             ('F3X-26', 'Loan repayments made (Line 26)'),
             ('F3X-27', 'Loans made (Line 27)'),
-            ('F3X-28A', 'Refunds of Contributions Made to Individuals/Persons Other Than Political Committees (Line 28a)'),
+            ('F3X-28A',
+                'Refunds of Contributions Made to Individuals/Persons Other Than Political Committees (Line 28a)'),
             ('F3X-28B', 'Refunds of contributions to political party committees (Line 28b)'),
             ('F3X-28C', 'Refunds of contributions to other political committees (Line 28c)'),
             ('F3X-28D', 'Total contributions refunds (Line 28d)'),
@@ -600,8 +611,7 @@ SPENDING_FORMATTER = OrderedDict([
             'term': 'total disbursements'}),
     ('operating_expenditures',  # F3, F3P
         {'label': 'Operating expenditures', 'term': 'operating expenditures',
-            'level': '2', 'type': {'link': 'disbursements',
-                'P': 'F3P-23', 'H': 'F3-17', 'S': 'F3-17'}}),
+            'level': '2', 'type': {'link': 'disbursements', 'P': 'F3P-23', 'H': 'F3-17', 'S': 'F3-17'}}),
     ('total_operating_expenditures',  # F3X - renamed app-side
         {'label': 'Operating expenditures', 'term': 'operating expenditures',
             'level': '2'}),
@@ -709,8 +719,7 @@ HOST_RAISING_FORMATTER = OrderedDict([
     ('individual_contributions',  # Line 14a
         {'label': 'Itemized Contributions to Defray Convention Expenses', 'level': '3'}),
     ('individual_unitemized_contributions',  # Line 14b
-        {'label': 'Unitemized Contributions to Defray Convention Expenses', 'level': '3',
-    }),
+        {'label': 'Unitemized Contributions to Defray Convention Expenses', 'level': '3'}),
     ('transfers_from_affiliated_party',  # Line 15
         {'label': 'Transfers from affiliated committees', 'level': '2'}),
     ('loans_and_loan_repayments',  # Line 16
@@ -718,30 +727,25 @@ HOST_RAISING_FORMATTER = OrderedDict([
     ('all_loans_received',  # Line 16a
         {'label': 'Loans Received', 'level': '3'}),
     ('loan_repayments_received',  # Line 16b
-        {'label': 'Loan Repayments Received', 'level': '3',
-        }),
+        {'label': 'Loan Repayments Received', 'level': '3'}),
     ('refunds_relating_convention_exp',  # Line 17
         {'label': 'Refunds, Rebates, Returns of Deposits Relating to Convention Expenditures', 'level': '2'}),
     ('itemized_refunds_relating_convention_exp',  # Line 17a
         {'label': ' Itemized Refunds, Rebates, Returns of Deposits Relating to Convention', 'level': '3'}),
     ('unitemized_refunds_relating_convention_exp',  # Line 17b
-        {'label': 'Unitemized Refunds, Rebates, Returns of Deposits Relating to Convention', 'level': '3',
-        }),
+        {'label': 'Unitemized Refunds, Rebates, Returns of Deposits Relating to Convention', 'level': '3'}),
     ('refunds_relating_convention_exp',  # Line 18
         {'label': 'Other Refunds, Rebates, Returns of Deposits', 'level': '2'}),
     ('itemized_refunds_relating_convention_exp',  # Line 18a
         {'label': ' Itemized Other Refunds, Rebates, Returns of Deposits', 'level': '3'}),
     ('unitemized_refunds_relating_convention_exp',  # Line 18b
-        {'label': 'Unitemized Other Refunds, Rebates, Returns of Deposits', 'level': '3',
-        }),
+        {'label': 'Unitemized Other Refunds, Rebates, Returns of Deposits', 'level': '3'}),
     ('other_fed_receipts',  # Line 19
         {'label': ' Other Income', 'level': '2'}),
     ('itemized_other_income',  # Line 19a
         {'label': 'Itemized Other Income', 'level': '3'}),
     ('unitemized_other_income',  # Line 19b
-        {'label': 'Unitemized Other Income', 'level': '3',
-        }),
-
+        {'label': 'Unitemized Other Income', 'level': '3'}),
 ])
 
 HOST_SPENDING_FORMATTER = OrderedDict([
@@ -782,20 +786,22 @@ HOST_SPENDING_FORMATTER = OrderedDict([
 ])
 
 CASH_FORMATTER = OrderedDict([
-    ('cash_on_hand_beginning_period', {'label': 'Beginning cash on hand', 'level': '2'}), #F3, F3P, #F3X
-    ('last_cash_on_hand_end_period', {'label': 'Ending cash on hand', 'term': 'ending cash on hand', 'level': '2'}), #F3, F3P, #F3X
-    ('last_debts_owed_to_committee', {'label': 'Debts/loans owed to committee', 'level': '2'}), #F3, F3P, F3X
-    ('last_debts_owed_by_committee', {'label': 'Debts/loans owed by committee', 'level': '2'}), #F3, F3P, F3X
+    ('cash_on_hand_beginning_period',
+        {'label': 'Beginning cash on hand', 'level': '2'}),  # F3, F3P, #F3X
+    ('last_cash_on_hand_end_period',
+        {'label': 'Ending cash on hand', 'term': 'ending cash on hand', 'level': '2'}),  # F3, F3P, #F3X
+    ('last_debts_owed_to_committee',
+        {'label': 'Debts/loans owed to committee', 'level': '2'}),  # F3, F3P, F3X
+    ('last_debts_owed_by_committee', {'label': 'Debts/loans owed by committee', 'level': '2'}),  # F3, F3P, F3X
     # Commenting out net numbers because the underlying logic is incorrect
     # ('net_contributions', {'label': 'Net contributions', 'level': '2'}), #F3, F3X
     # ('contributions', {'label': 'Total contributions', 'level': '3'}), #F3, #F3P, F3X
     # ('contribution_refunds', {'label': '(Total contribution refunds)', 'level': '3'}), #F3, F3P, F3X
     # ('net_operating_expenditures', {'label': 'Net operating expenditures', 'level': '2'}), #F3, F3X
     # ('operating_expenditures', {'label': 'Operating expenditures', 'level': '3'}), #F3, F3P, F3X
-    # ('offsets_to_operating_expenditures', {'label': '(Offsets to operating expenditures)', 'level': '3'}), #F3, F3P, F3X
+    # ('offsets_to_operating_expenditures', {'label': '(Offsets to operating expenditures)', 'level': '3'}), #F3, F3P, F3X  # noqa: E501
     # ('subtotal_offsets_to_operating_expenditures', {'label': 'Offsets to operating expenditures', 'level': '3'}), #F3P
 ])
-
 
 
 IE_FORMATTER = OrderedDict([
@@ -810,7 +816,13 @@ INAUGURAL_FORMATTER = OrderedDict([
 
 
 SENATE_CLASSES = {
-    '1': ['AZ', 'CA', 'CT', 'DE', 'FL', 'HI', 'IN', 'ME', 'MD', 'MA', 'MI', 'MN', 'MS', 'MO', 'MT', 'NE', 'NV', 'NJ', 'NM', 'NY', 'ND', 'OH', 'PA', 'RI', 'TN', 'TX', 'UT', 'VT', 'VA', 'WA', 'WV', 'WI', 'WY'],
-    '2': ['AL', 'AK', 'AR', 'CO', 'DE', 'GA', 'ID', 'IL', 'IA', 'KS', 'KY', 'LA', 'ME', 'MA', 'MI', 'MN', 'MS', 'MT', 'NE', 'NH', 'NJ', 'NM', 'NC', 'OK', 'OR', 'RI', 'SC', 'SD', 'TN', 'TX', 'VA', 'WV', 'WY'],
-    '3': ['AL', 'AK', 'AZ', 'AR', 'CA', 'CO', 'CT', 'FL', 'GA', 'HI', 'ID', 'IL', 'IN', 'IA', 'KS', 'KY', 'LA', 'MD', 'MO', 'NV', 'NH', 'NY', 'NC', 'ND', 'OH', 'OK', 'OR', 'PA', 'SC', 'SD', 'UT', 'VT', 'WA', 'WI']
+    '1':
+        ['AZ', 'CA', 'CT', 'DE', 'FL', 'HI', 'IN', 'ME', 'MD', 'MA', 'MI', 'MN', 'MS', 'MO', 'MT', 'NE', 'NV', 'NJ',
+            'NM', 'NY', 'ND', 'OH', 'PA', 'RI', 'TN', 'TX', 'UT', 'VT', 'VA', 'WA', 'WV', 'WI', 'WY'],
+    '2':
+        ['AL', 'AK', 'AR', 'CO', 'DE', 'GA', 'ID', 'IL', 'IA', 'KS', 'KY', 'LA', 'ME', 'MA', 'MI', 'MN', 'MS', 'MT',
+            'NE', 'NH', 'NJ', 'NM', 'NC', 'OK', 'OR', 'RI', 'SC', 'SD', 'TN', 'TX', 'VA', 'WV', 'WY'],
+    '3':
+        ['AL', 'AK', 'AZ', 'AR', 'CA', 'CO', 'CT', 'FL', 'GA', 'HI', 'ID', 'IL', 'IN', 'IA', 'KS', 'KY', 'LA', 'MD',
+            'MO', 'NV', 'NH', 'NY', 'NC', 'ND', 'OH', 'OK', 'OR', 'PA', 'SC', 'SD', 'UT', 'VT', 'WA', 'WI']
 }

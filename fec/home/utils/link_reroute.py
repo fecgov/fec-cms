@@ -7,12 +7,13 @@ from urllib.parse import urljoin
 bucket_url = 'https://cg-26646295-a781-431c-ab40-895616b7ea28.s3.amazonaws.com'
 
 
-def new_press_link(l):
-    if len(re.findall(r'\d+', l)) > 0:
-        new_url = bucket_url + '/fecgov-assets/news_releases/{0}/'.format(re.findall(r'\d+', l)[0])
+def new_press_link(link):
+    if len(re.findall(r'\d+', link)) > 0:
+        new_url = bucket_url + '/fecgov-assets/news_releases/{0}/'.format(re.findall(r'\d+', link)[0])
         return(new_url)
     else:
-        return(l)
+        return(link)
+
 
 # using this one on staging for now
 def make_absolute_links(orig_href, body):
@@ -26,6 +27,7 @@ def make_absolute_links(orig_href, body):
             # re-save links as absolute links
             link['href'] = urljoin(orig_href, link['href'])
     return str(soup)
+
 
 # this can be the function the remake all the links
 def remake_links(body):
@@ -53,6 +55,7 @@ def remake_links(body):
 
     return str(soup)
 
+
 def fix_pdf_imports_old(body):
     # find relative links
     soup = bs(body, "html5lib")
@@ -68,7 +71,7 @@ def fix_pdf_imports_old(body):
         for old in path_replacements:
             re_string = '^' + old + '*'
             if re.match(re_string, link['href']):
-                link['href'] = re.sub('\/archive\/[0-9]+', '', link['href'], count=1)
+                link['href'] = re.sub(r'\/archive\/[0-9]+', '', link['href'], count=1)
 
     return str(soup)
 

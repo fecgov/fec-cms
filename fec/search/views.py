@@ -1,6 +1,5 @@
 import os
 import requests
-import json
 import math
 
 from urllib import parse
@@ -8,11 +7,14 @@ from urllib import parse
 from django.shortcuts import render
 from django.conf import settings
 
+
 def search_candidates(query):
     """Searches the data API for candidates matching the query"""
     path = os.path.join(settings.FEC_API_VERSION, 'candidates', 'search')
     url = parse.urljoin(settings.FEC_API_URL, path)
-    r = requests.get(url, params={'q': query, 'sort': '-receipts', 'per_page': 3, 'api_key': settings.FEC_API_KEY_PRIVATE})
+    r = requests.get(url, params={
+        'q': query, 'sort': '-receipts', 'per_page': 3, 'api_key': settings.FEC_API_KEY_PRIVATE
+    })
     return r.json()
 
 
@@ -20,7 +22,9 @@ def search_committees(query):
     """Searches the data API for committees matching the query"""
     path = os.path.join(settings.FEC_API_VERSION, 'committees')
     url = parse.urljoin(settings.FEC_API_URL, path)
-    r = requests.get(url, params={'q': query, 'per_page': 3, 'sort': '-receipts', 'api_key': settings.FEC_API_KEY_PRIVATE})
+    r = requests.get(url, params={
+        'q': query, 'per_page': 3, 'sort': '-receipts', 'api_key': settings.FEC_API_KEY_PRIVATE
+    })
     return r.json()
 
 
@@ -47,6 +51,7 @@ def parse_icon(path):
     else:
         return 'page'
 
+
 def replace_url(url):
     """
     Replace the base part of the URL with the canonical URL from settings
@@ -58,6 +63,7 @@ def replace_url(url):
         return parse.urljoin(settings.CANONICAL_BASE, parsed.path)
     else:
         return url
+
 
 def process_site_results(results, limit=0, offset=0):
     """Organizes the results from DigitalGov search into a better format"""
@@ -169,7 +175,7 @@ def policy_guidance_search(request):
     if results:
         num_pages = math.ceil(int(results['meta']['count']) / limit)
         total_count = results['meta']['count'] + results['best_bets']['count']
-    
+
     resultset = {}
     resultset['search_query'] = search_query
     resultset['results'] = results
