@@ -38,6 +38,30 @@ validListUrlParamValues = ["P", "S", "H"]
 # INITIALLY USED BY raising() AND spending() FOR VALIDATING URL PARAMETERS,
 # THE list URL PARAM
 
+# List of candidates who have changed their candidate committees during a 
+# recent two year time period
+candidate_to_committee_linkage = {
+    "H0CA08069": "C00698894", 
+    "H0IL01178": "C00697128", 
+    "P00010298": "C00697441", 
+    "P00009092": "C00693044", 
+    "H8CA25074": "C00634212", 
+    "H0CA04167": "C00691790",
+}
+
+committee_to_candidate_linkage = {
+    v: k for k, v in candidate_to_committee_linkage.items()
+    }
+
+# List of names for former candidate committees
+former_committee_names = {
+    "C00698894": "JOHN DENNIS FOR CONGRESS", 
+    "C00697128": "FRIENDS TO ELECT ROBERT EMMONS JR.", 
+    "C00697441": "PETE FOR AMERICA, INC.", 
+    "C00693044": "JULIAN FOR THE FUTURE PRESIDENTIAL EXPLORATORY COMMITTEE", 
+    "C00634212": "KATIE HILL FOR CONGRESS", 
+    "C00691790": "SEAN FRAME FOR CONGRESS",
+}
 
 def to_date(committee, cycle):
     if committee["committee_type"] in ["H", "S", "P"]:
@@ -267,7 +291,26 @@ def get_candidate(candidate_id, cycle, election_full):
     path = "/efile/" + "/filings/"
     raw_filings = api_caller.load_endpoint_results(path, **filters)
     has_raw_filings = True if raw_filings else False
+
+    # Add message for when a candidate converts their candidate committee to an unauthorized committee
+    current_committee_name = None
+    converted_committee_id = None
+    former_committee_name = None
+
+    if cycle == 2020 and candidate_to_committee_linkage.get(candidate_id):
+        # Call committee/{committee_id}/history/{cycle}/
+        filters = {"per_page": 1}
+        path = "/committee/" + candidate_to_committee_linkage.get(candidate_id) + "/history/" + str(cycle)
+        committee = api_caller.load_first_row_data(path, **filters)
+        # Get the converted committee's name, committee ID, and former committee name
+        current_committee_name = committee.get('name')
+        converted_committee_id = committee.get('committee_id')
+        former_committee_name = former_committee_names.get(converted_committee_id)
+
     return {
+        "converted_committee_name": current_committee_name,
+        "converted_committee_id": converted_committee_id,
+        "former_committee_name": former_committee_name,
         "aggregate": aggregate,
         "aggregate_cycles": aggregate_cycles,
         "candidate": candidate,
@@ -471,6 +514,29 @@ def get_committee(committee_id, cycle):
         )
 
     template_variables["statement_of_organization"] = statement_of_organization
+
+    # Add message for a committee that was formerly an authorized candidate committee.
+    # These committees are now unauthorized committees.
+    converted_committee_id = None
+    former_committee_name = None
+    former_authorized_candidate_id = None
+    former_authorized_candidate_name = None
+
+    if cycle == 2020 and committee_to_candidate_linkage.get(committee_id):
+        # Call /candidate/{candidate_id}/history/
+        converted_committee_id = committee.get('committee_id')
+        former_authorized_candidate_id = committee_to_candidate_linkage.get(converted_committee_id)
+        path = "/candidate/" + str(former_authorized_candidate_id) + "/history/"
+        filters = {}
+        filters["per_page"] = 1
+        candidate = api_caller.load_first_row_data(path, **filters)
+        # Get the converted committee's former name and candidate name
+        former_committee_name = former_committee_names.get(converted_committee_id)
+        former_authorized_candidate_name = candidate.get('name')
+
+    template_variables["former_committee_name"] = former_committee_name
+    template_variables["former_authorized_candidate_name"] = former_authorized_candidate_name
+    template_variables["former_authorized_candidate_id"] = former_authorized_candidate_id
 
     return template_variables
 
