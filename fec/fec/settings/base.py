@@ -35,7 +35,7 @@ SEARCH_GOV_POLICY_GUIDANCE_KEY = env.get_credential('SEARCH_GOV_POLICY_GUIDANCE_
 FEC_DIGITALGOV_DRAWER_KEY_MAIN = env.get_credential('DIGITALGOV_DRAWER_KEY_MAIN', '')
 FEC_DIGITALGOV_DRAWER_KEY_TRANSITION = env.get_credential('DIGITALGOV_DRAWER_KEY_TRANSITION', '')
 DIGITALGOV_BASE_API_URL = 'https://i14y.usa.gov/api/v1'
-DIGITALGOV_DRAWER_HANDLE = env.get_credential('DIGITALGOV_DRAWER_HANDLE ', '')
+DIGITALGOV_DRAWER_HANDLE = env.get_credential('DIGITALGOV_DRAWER_HANDLE', '')
 
 FEC_TRANSITION_URL = env.get_credential('FEC_TRANSITION_URL', 'https://transition.fec.gov')
 FEC_CLASSIC_URL = env.get_credential('FEC_CLASSIC_URL', 'http://classic.fec.gov')
