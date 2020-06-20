@@ -7,12 +7,14 @@ For more information about i14Y, you can read the [technical documentation here]
 ## Getting set up
 The DigitalGov Search "site" we use is called `betafec_api` (though that can change). If you're trying to access the admin panel, you will need someone to add you as a contributor to that site. This is where all the admin panel controls and analytics live.
 
-The i14y search works by setting up one or more "drawers", which are basically collections of pages for the index. All drawers serve the same search. We have one drawer set up: `main`, which includes all CMS, web app pages, and transition.fec.gov pages.
+The i14y search works by setting up one or more "drawers", which are basically collections of pages for the index. All drawers serve the same search. We have one drawer set up,  which includes all CMS, web app pages, and transition.fec.gov pages.
 
-The main drawer has its own key, so to push updates to it you will need to add the drawer key to your local env:
+The main drawer has its own handle and key, so to push updates to it you will need to add the drawer key to your local env:
 
 ```
+export DIGITALGOV_DRAWER_HANDLE=<drawer handle>
 export DIGITALGOV_DRAWER_KEY_MAIN=<main key>
+
 ```
 
 i14y accepts HTTP requests (POST / PUT / DELETE) with data structured like:
