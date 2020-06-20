@@ -9,7 +9,7 @@ The DigitalGov Search "site" we use is called `betafec_api` (though that can cha
 
 The i14y search works by setting up one or more "drawers", which are basically collections of pages for the index. All drawers serve the same search. We have one drawer set up,  which includes all CMS, web app pages, and transition.fec.gov pages.
 
-The main drawer has its own handle and key, so to push updates to it you will need to add the drawer key to your local env:
+The main drawer has its own handle and key, so to push updates to it you will need to add the drawer handle and key to your local env:
 
 ```
 export DIGITALGOV_DRAWER_HANDLE=<drawer handle>
