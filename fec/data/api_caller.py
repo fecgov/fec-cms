@@ -30,7 +30,7 @@ def _call_api(*path_parts, **filters):
     path = os.path.join(settings.FEC_API_VERSION, *[x.strip("/") for x in path_parts])
     url = parse.urljoin(settings.FEC_API_URL, path)
     # Timeout is set in seconds
-    timeout = 90
+    timeout = 15
 
     results = session.get(url, params=filters, timeout=timeout)
 
