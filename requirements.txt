@@ -1,4 +1,4 @@
-Django==2.2.11
+Django==2.2.13
 cfenv==0.5.2
 dj-database-url==0.4.2
 django-libsass==0.7
@@ -40,3 +40,4 @@ pytest==3.7.4
 Faker==0.8.6
 pytest-django==3.4.2
 pytest-cov==2.5.1
+pytest-flake8==1.0.6

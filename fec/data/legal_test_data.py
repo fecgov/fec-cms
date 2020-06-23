@@ -13,6 +13,7 @@ def factory(f):
 
     return decorator
 
+
 def ao_no():
     return '2014-%00d' % faker.random_int(max=100)
 
@@ -30,6 +31,7 @@ def statute():
         ],
     }
 
+
 @factory
 def statutes_search_results():
     return {
@@ -40,6 +42,7 @@ def statutes_search_results():
             statute(),
         ]
     }
+
 
 @factory
 def regulations_search_results():
@@ -104,6 +107,7 @@ def advisory_opinions_search_results():
             ]
         }
     }
+
 
 @factory
 def legal_universal_search_results():

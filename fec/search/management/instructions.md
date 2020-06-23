@@ -97,9 +97,12 @@ Similar to adding web app pages, transition pages need to be manually identified
   }
 ```
 
-Optionally, you can add `description`, `tags`, or `promoted` fields. 
+You can add `description`, `tags`, or `promoted` fields.* 
 
-2. **Scrape the content:** Run `fec/manage.py scrape_transition_pages`. This script will read `data/transition_pages.json` and call each URL and scrape the content in the `#fec_mainContent` or `#fec_mainContentWide` `<div>`s. Optionally, you could pass in a different path to a JSON file with the optional `--path_to_json` argument. This script will output the results to `output.json`. It's generally a good idea to read over this file and make sure things look right.
+2. **Scrape the content:** Run `fec/manage.py scrape_transition_pages`. This script will read `data/transition_pages.json` and call each URL and scrape the content in the `#fec_mainContent` or `#fec_mainContentWide` `<div>`s. Optionally, you could pass in a different path to a JSON file with the optional `--path_to_json` argument. This script will output the results to `output.json`. It's generally a good idea to read over this file and make sure things look right. 
+
+***Note:** According to search.gov support, each page enttry must have either `content` or `description`, and these fields cannot be blank. Since the `scrape_transition_pages` management command uses the same structure as the old `fec/manage.py scrape_web_app_pages`, scraping new pages may create blank description, content and tag fields. Edit the output file to remove uneeded tag fields and make sure there is either a content or a description field.  
+
 3. **Index the pages:** Run `fec/manage.py index_pages`. This command works the same as it does for adding CMS pages.
 
 ## Additional Search.gov configuration

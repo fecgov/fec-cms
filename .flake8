@@ -1,0 +1,6 @@
+# flake8 rules here should mimic those in /pytest.ini
+# /pytest.ini is used by pytest
+# while IDEs like Visual Studio Code and Cornflakes read this file
+[flake8]
+ignore = E127,E128,W503
+max-line-length = 120

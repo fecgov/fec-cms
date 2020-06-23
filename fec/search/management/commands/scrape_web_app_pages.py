@@ -10,7 +10,8 @@ BASE_URL = settings.CANONICAL_BASE
 
 
 class Command(BaseCommand):
-    help = 'Takes a JSON list of web app pages and scrapes content from the live site. Saves JSON for indexing on DigitalGov Search'
+    help = 'Takes a JSON list of web app pages and scrapes content from the live site. \
+        Saves JSON for indexing on DigitalGov Search'
 
     def add_arguments(self, parser):
         parser.add_argument(
@@ -36,7 +37,8 @@ class Command(BaseCommand):
                 "created": "2017-04-01",
                 "language": "en",
                 "promote": "true",
-                "description": "See how candidates and committees raise and spend money in federal elections. This financial data helps voters make informed decisions.",
+                "description": "See how candidates and committees raise and spend money in federal elections. \
+                    This financial data helps voters make informed decisions.",
                 "tags": "data, finance data, contributions, candidates, committees, pacs, super pacs, disclosure",
                 "content": "",
                 "scrape_content": ""
@@ -46,21 +48,21 @@ class Command(BaseCommand):
             # Populate meta data
             for page in pages:
                 p = {
-                  'document_id': page.get('document_id'),
-                  'title': page.get('title'),
-                  'path': page.get('path'),
-                  'created': page.get('created'),
-                  'promote': page.get('promote', 'false'),
-                  'description': page.get('description', ''),
-                  'tags': page.get('tags', ''),
-                  'language': 'en'
+                    'document_id': page.get('document_id'),
+                    'title': page.get('title'),
+                    'path': page.get('path'),
+                    'created': page.get('created'),
+                    'promote': page.get('promote', 'false'),
+                    'description': page.get('description', ''),
+                    'tags': page.get('tags', ''),
+                    'language': 'en'
                 }
 
                 # Scrape the content of the live page if the page explicitly asks for it
                 if page.get('scrape_content'):
                     content = self.get_content(p['path'])
                     if content:
-                      p['content'] = content
+                        p['content'] = content
 
                 extracted.append(p)
 
@@ -71,7 +73,7 @@ class Command(BaseCommand):
         Scrapes the text content from a given URL.
         Looks specifically for #main
         """
-        r  = requests.get(url)
+        r = requests.get(url)
         self.stdout.write('Getting content for ' + url)
         data = r.text
         soup = BeautifulSoup(data, 'lxml')

@@ -1,12 +1,11 @@
 from django import template
 from data import constants
 
-import datetime
 from django.conf import settings
-from data import constants
 from data import utils
 
 register = template.Library()
+
 
 @register.inclusion_tag('partials/raising-spending.html')
 def raising_spending(request):
@@ -20,13 +19,13 @@ def raising_spending(request):
     FEATURES = settings.FEATURES
 
     return {
-    'name_field':'name',
-    'id_field:' :'candidate_id',
-    'candidate' :'candidate_id',
-    'action': 'raised',
-    'title': 'Raising: by the numbers',
-    'election_years': election_years,
-    'election_year': election_year,
-    'office': office,
-    'FEATURES':FEATURES
+        'name_field': 'name',
+        'id_field:': 'candidate_id',
+        'candidate': 'candidate_id',
+        'action': 'raised',
+        'title': 'Raising: by the numbers',
+        'election_years': election_years,
+        'election_year': election_year,
+        'office': office,
+        'FEATURES': FEATURES
     }

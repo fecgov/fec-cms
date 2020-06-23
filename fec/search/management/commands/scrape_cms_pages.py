@@ -7,17 +7,11 @@ from django.core.management import BaseCommand
 from django.conf import settings
 
 from home.models import Page
-from home.models import (
-    CommissionerPage,
-    DigestPage,
-    PressReleasePage,
-    RecordPage,
-    TipsForTreasurersPage
-)
 
 from fec import constants
 
 BASE_URL = settings.CANONICAL_BASE
+
 
 class Command(BaseCommand):
     help = 'Scrapes pages from the CMS into JSON for indexing on DigitalGov Search'
@@ -48,7 +42,6 @@ class Command(BaseCommand):
             help='Don\'t scrape the content of the page'
         )
 
-
     def handle(self, *args, **options):
         self.stdout.write(self.style.WARNING('Getting pages...'))
         if options['page']:
@@ -77,18 +70,18 @@ class Command(BaseCommand):
 
         for page in pages:
             p = {
-              "document_id": page.id,
-              "title": page.title,
-              "path": BASE_URL + page.url,
-              "created": page.first_published_at.strftime("%Y-%m-%d-%H%M%S"),
-              "promote": "false",
-              "language": "en",
+                "document_id": page.id,
+                "title": page.title,
+                "path": BASE_URL + page.url,
+                "created": page.first_published_at.strftime("%Y-%m-%d-%H%M%S"),
+                "promote": "false",
+                "language": "en",
             }
 
             if 'no-content' not in options:
-              content = self.get_content(page.url)
-              if content:
-                  p["content"] = content
+                content = self.get_content(page.url)
+                if content:
+                    p["content"] = content
 
             extracted.append(p)
 
@@ -96,7 +89,7 @@ class Command(BaseCommand):
 
     def get_content(self, url):
         url = BASE_URL + url
-        r  = requests.get(url)
+        r = requests.get(url)
         self.stdout.write('Getting content for ' + url)
         data = r.text
         soup = BeautifulSoup(data, 'lxml')

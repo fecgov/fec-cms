@@ -7,3 +7,38 @@
 		width: 100% !important;
 	}
 }
+
+
+//TV Ad example:
+
+// <div class="video-frame">
+//   <div class="iframe-container">
+//     <iframe src="YouTube embed URL" rel=0 frameborder="0" allowfullscreen></iframe>
+//   </div>
+// </div>
+
+
+.video-frame {
+  width: 85%;
+  background: url(/static/img/TV-Gray-Wall-Only-850.png) no-repeat;
+  background-size: cover;
+  margin-bottom: u(2rem);
+
+  .iframe-container {
+    overflow: hidden;
+    padding-top: 56.25%;
+	position: relative;
+
+    iframe {
+	  height: 62%;
+	  left: 7.5%;
+	  position: absolute;
+      top: 14%;
+	  width: 62%;
+	  border: 10px solid #333;
+	  border-radius: 10px;
+	  box-shadow: 5px 11px 16px 4px #444;
+	  border-bottom: 27px solid #333;
+	}
+  }
+}

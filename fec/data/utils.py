@@ -212,7 +212,9 @@ def three_days_ago():
     three_days_ago = datetime.datetime.today() - datetime.timedelta(days=3)
     return three_days_ago.strftime('%m/%d/%Y')
 
-# Source: https://www.fec.gov/help-candidates-and-committees/dates-and-deadlines/2020-reporting-dates/2020-monthly-filers/
+# Source:
+# https://www.fec.gov/help-candidates-and-committees/dates-and-deadlines/2020-reporting-dates/2020-monthly-filers/
+
 
 MONTHLY_DATES = [
     # due date  : coverage end
@@ -231,7 +233,9 @@ MONTHLY_DATES = [
     ("01/31/2021", "12/31/2020"),
 ]
 
-# Source: https://www.fec.gov/help-candidates-and-committees/dates-and-deadlines/2020-reporting-dates/2020-quarterly-filers/
+
+# Source:
+# https://www.fec.gov/help-candidates-and-committees/dates-and-deadlines/2020-reporting-dates/2020-quarterly-filers/
 QUARTERLY_DATES = [
     # due date  : coverage end
     ("01/31/2020", "12/31/2019"),
