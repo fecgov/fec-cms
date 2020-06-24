@@ -154,7 +154,7 @@ def load_legal_mur(mur_no):
 
         documents_by_type = OrderedDict()
         try:
-            mur_docs = mur["document"]
+            mur_docs = mur["documents"]
             if len(mur_docs) > 0:
                 for doc in mur["documents"]:
                     if doc["category"] in documents_by_type:
