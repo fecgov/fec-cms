@@ -3,6 +3,7 @@ from django.urls import reverse
 from django.http import Http404
 from django.http import JsonResponse
 from django.conf import settings
+from django.db import transaction
 
 from distutils.util import strtobool
 
@@ -162,6 +163,7 @@ def format_receipt_date(receipt_date):
     return receipt_date.strftime("%m/%d/%Y")
 
 
+@transaction.non_atomic_requests
 def get_candidate(candidate_id, cycle, election_full):
     """
     1) By passing parameter "candidate_id" to get candidate data.
@@ -368,6 +370,7 @@ def candidate(request, candidate_id):
     return render(request, "candidates-single.jinja", candidate)
 
 
+@transaction.non_atomic_requests
 def get_committee(committee_id, cycle):
     """
     Given a committee_id and cycle, call the API and get the committee

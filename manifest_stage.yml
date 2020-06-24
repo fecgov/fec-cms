@@ -3,6 +3,8 @@ stack: cflinuxfs3
 buildpack: python_buildpack
 routes:
   - route: fec-stage-cms.app.cloud.gov
+instances: 4
+memory: 1G
 services:
   - cms-creds-stage
   - fec-creds-stage
