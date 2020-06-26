@@ -41,3 +41,5 @@ Faker==0.8.6
 pytest-django==3.4.2
 pytest-cov==2.5.1
 pytest-flake8==1.0.6
+
+pillow>=6.2.3 # not directly required, pinned by Snyk to avoid a vulnerability
