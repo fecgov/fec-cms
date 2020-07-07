@@ -47,6 +47,7 @@ candidate_to_committee_linkage = {
     "P00009092": "C00693044",
     "H8CA25074": "C00634212",
     "H0CA04167": "C00691790",
+    "H2NC11080": "C00503094",
 }
 
 committee_to_candidate_linkage = {
@@ -61,6 +62,7 @@ former_committee_names = {
     "C00693044": "JULIAN FOR THE FUTURE PRESIDENTIAL EXPLORATORY COMMITTEE",
     "C00634212": "KATIE HILL FOR CONGRESS",
     "C00691790": "SEAN FRAME FOR CONGRESS",
+    "C00503094": "MEADOWS FOR CONGRESS",
 }
 
 
