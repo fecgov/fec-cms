@@ -150,6 +150,32 @@
   }
 }
 
+// The list--#-#-#-#-columns classes are for multiple widths outside of the standard sm-med / lg-xl switch
+// Numbers represent columns at sm-med-lg-xl
+// These 'columns' are css columns, not to be confused with a design's 12-column grid kind of columns
+.list--1-1-2-3-columns {
+  @include media($lg) {
+    @include columns(2)
+  }
+
+  @include media($xl) {
+    @include columns(3)
+  }
+}
+.list--1-2-2-2-columns {
+  @include media($med) {
+    @include columns(2)
+  }
+}
+.list--1-2-2-3-columns {
+  @include media($med) {
+    @include columns(2)
+  }
+  @include media($xl) {
+    @include columns(3)
+  }
+}
+
 .list--spacious {
   ul {
     padding-top: u(1rem);
