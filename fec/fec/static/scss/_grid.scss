@@ -54,6 +54,11 @@ $xl: new-breakpoint(min-width $x-large-screen 12);
     @include omega();
   }
 }
+@include media(xl) {
+  .usa-width-xl-two-thirds {
+    @include span-columns(8);
+  }
+}
 
 // Utilities for hiding things at certain breakpoints
 //
@@ -69,6 +74,14 @@ $xl: new-breakpoint(min-width $x-large-screen 12);
   display: none !important;
 
   @include media($lg) {
+    display: inherit !important;
+  }
+}
+
+.u-xl-only {
+  display: none !important;
+
+  @include media($xl) {
     display: inherit !important;
   }
 }
