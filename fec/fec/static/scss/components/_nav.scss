@@ -257,21 +257,63 @@
 .mobile-search.utility-nav__search {
   width: u(30rem);
   padding: u(1rem);
-  display:block;
-
-  .twitter-typeahead input{
-
-  }
+  display: block;
  }
 
 
 @include media($lg) {
   .mobile-search.utility-nav__search {
-    display:none;
+    display: none;
   }
 }
 
 
+// Grid overhaul, using _grid.scss breakpoints but Bootstrap naming as inspiration,
+// making it pretty specific to avoid unintended side effects elsewhere
+.site-nav .mega-container .mega__inner .row {
+  // These column definitions should apply to larger sizes as well
+  // e.g., if it's 1 column for med, it'll be 1 column for lg and xl, too.
+  // if it's 1 column for med but 2 for lg, it'll be 2 for xl, too.
+  // "columns" are 1/12 of the page width (a 12-column grid)
+  .col-lg-1 { // 1-column definitions probably aren't necessary, but including for the display/float/margin that comes with span-columns()
+    @include media($lg) {
+      @include span-columns(1);
+    }
+  }
+  .col-lg-4 {
+    @include media($lg) {
+      @include span-columns(4);
+    }
+  }
+  .col-lg-5 {
+    @include media($lg) {
+      @include span-columns(5);
+    }
+  }
+  .col-lg-6 {
+    @include media($lg) {
+      @include span-columns(6);
+    }
+  }
+  .col-lg-10 {
+    @include media($lg) {
+      @include span-columns(10);
+    }
+  }
 
-
-
+  // Hiding elements at specific widths
+  .d-sm-none {
+    display: none;
+    @include media($med) {
+      display: block;
+    }
+  }
+  .d-md-none {
+    @include media($med) {
+      display: none;
+    }
+    @include media($lg) {
+      display: block;
+    }
+  } 
+}
