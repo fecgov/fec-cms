@@ -49,9 +49,9 @@ var candidateInformationColumns = [
 ];
 
 var communicationCostColumns = [
-  columns.committeeColumn({ data: 'committee', className: 'all' }),
+  columns.committeeColumn({ data: 'committee_name', className: 'all' }),
   columns.supportOpposeColumn,
-  columns.candidateColumn({ data: 'candidate', className: 'all' }),
+  columns.candidateColumn({ data: 'candidate_name', className: 'all' }),
   {
     data: 'total',
     className: 'all column--number t-mono',
@@ -134,8 +134,8 @@ function createElectionColumns(context) {
 }
 
 var electioneeringColumns = [
-  columns.committeeColumn({ data: 'committee', className: 'all' }),
-  columns.candidateColumn({ data: 'candidate', className: 'all' }),
+  columns.committeeColumn({ data: 'committee_name', className: 'all' }),
+  columns.candidateColumn({ data: 'candidate_name', className: 'all' }),
   {
     data: 'total',
     className: 'all column--number t-mono',
@@ -153,9 +153,9 @@ var electioneeringColumns = [
 ];
 
 var independentExpenditureColumns = [
-  columns.committeeColumn({ data: 'committee', className: 'all' }),
+  columns.committeeColumn({ data: 'committee_name', className: 'all' }),
   columns.supportOpposeColumn,
-  columns.candidateColumn({ data: 'candidate', className: 'all' }),
+  columns.candidateColumn({ data: 'candidate_name', className: 'all' }),
   {
     data: 'total',
     className: 'all column--number t-mono',
