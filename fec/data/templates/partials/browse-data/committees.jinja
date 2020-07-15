@@ -1,37 +1,114 @@
 <section id="committees" class="row" aria-hidden="true" role="tabpanel">
   <h2>Committees</h2>
   <p>The term <span class="term" data-term="political committee">committee</span> encompasses several different political groups that receive and spend money in federal elections.</p>
-  <h3>Search or browse data</h3>
   <div class="content__section--ruled t-sans" >
     <div id="pac-comparator">
       <h3>PAC Comparator</h3>
     </div>
     <style>
-      .committees-holder {
-        display: flex;
-        flex-direction: row;
-        justify-content: space-between;
-      }
-      .committee-details {
+      #pac-comparator .top-left {
+        float: left;
+        padding-right: 2rem;
+        position: relative;
+        width: 25%;
 
+        /* from Sketch */
+        border-right: 1px solid #979797;
       }
-      .committee-details h4 {
-        margin-top: 0;
+      #pac-comparator .top-right {
+        float: left;
+        padding-left: 2rem;
+        position: relative;
+        width: 75%;
       }
-      .controls {
+      #pac-comparator .controls-holder {
+        display: flex;
+        position: relative;
+      }
+      .typeaheads-holder {
         display: flex;
         justify-content: space-between;
+        position: relative;
       }
-      .committee-details:first-child .btn-lft {
-        pointer-events: none;
-        opacity: .5;
+      .typeaheads-holder .ta {
+        margin-bottom: 1rem;
+        position: relative;
+        padding: 0 2.5rem;
+        width: 50%;
       }
-      .committee-details:last-child .btn-rgt {
-        pointer-events: none;
-        opacity: .5;
+      .typeaheads-holder .ta:first-child {
+        padding-left: 0;
       }
+      .typeaheads-holder .ta:last-child {
+        padding-right: 0;
+      }
+      .typeaheads-holder:after {
+        content: "with";
+        display: block;
+        float: left;
+        left: 50%;
+        margin-left: -2rem;
+        padding-top: 4rem;
+        position: absolute;
+        text-align: center;
+        text-transform: uppercase;
+        top: 0;
+        width: 4rem;
+
+        /* from Sketch */
+        font-size: 14px;
+        color: #212121;
+        letter-spacing: -0.3px;
+        line-height: 16px;
+      }
+      .committees-holder .committee-details {
+        float: left;
+        min-height: 100px;
+        padding: 0 2.5rem;
+        width: 50%;
+      }
+      .committees-holder .committee-details:first-child {
+        padding-left: 0;
+      }
+      .committees-holder .committee-details:last-child {
+        padding-right: 0;
+      }
+      .committee-details h1 {
+        font-family: karla;
+
+        /* from Sketch */
+        font-size: 14px;
+        color: #212121;
+        letter-spacing: -0.3px;
+      }
+      .committee-details h2 {
+        font-family: karla;
+        margin-bottom: 0;
+
+        /* from Sketch */
+        font-size: 18px;
+        color: #212121;
+        letter-spacing: -0.38px;
+      }
+      .committee-details h3 {
+        font-family: karla;
+
+        /* from Sketch */
+        font-size: 10px;
+        color: #5B616B;
+        letter-spacing: -0.22px;
+      }
+      .message__error {
+        /* from Sketch */
+        color: #CD2026;
+        font-family: Helvetica;
+        font-size: 12px;
+        letter-spacing: -0.25px;
+      }
+
     </style>
   </div>
+  <h3>Search or browse data</h3>
   <div class="content__section--ruled t-sans">
     <ul>
       <li>
