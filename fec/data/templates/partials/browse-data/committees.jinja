@@ -25,6 +25,9 @@
         display: flex;
         position: relative;
       }
+      #pac-comparator .overlay__container {
+        min-height: 100px;
+      }
       .typeaheads-holder {
         display: flex;
         justify-content: space-between;
@@ -74,7 +77,8 @@
         padding-right: 0;
       }
       .committee-details h1 {
-        font-family: karla;
+        font-family: karla,sans-serif;
+        padding-left: 1.5rem;
 
         /* from Sketch */
         font-size: 14px;
@@ -84,6 +88,8 @@
       .committee-details h2 {
         font-family: karla;
         margin-bottom: 0;
+        padding-left: 1.5rem;
+        position: relative;
 
         /* from Sketch */
         font-size: 18px;
@@ -91,7 +97,8 @@
         letter-spacing: -0.38px;
       }
       .committee-details h3 {
-        font-family: karla;
+        font-family: karla,sans-serif;
+        padding-left: 1.5rem;
 
         /* from Sketch */
         font-size: 10px;
@@ -104,6 +111,139 @@
         font-family: Helvetica;
         font-size: 12px;
         letter-spacing: -0.25px;
+      }
+      .icon-pac {
+        border-radius: 50%;
+        display: inline-block;
+        height: 1rem;
+        position: absolute;
+        width: 1rem;
+      }
+      .icon-pac.pac-0 {
+        /* Sketch */
+        background-color: #F77B42;
+      }
+      .icon-pac.pac-1 {
+        /* Sketch */
+        background-color: #36BDBB;
+      }
+      h2 .icon-pac {
+        left: 0;
+        top: 5px;
+      }
+      th .icon-pac {
+        position: relative;
+      }
+      table.sliders {
+        display: block;
+        font-family: karla,sans-serif;
+        width: 100%;
+      }
+      table.sliders th {
+        /* Sketch */
+        color: #212121;
+        font-size: 16px;
+        font-weight: bold;
+        letter-spacing: -0.34px;
+        line-height: 16px;
+        text-align: center;
+      }
+      table.sliders td, table.sliders th {
+        padding: 1rem;
+      }
+      table.sliders td.meters {
+        padding-left: 0;
+        padding-right: 0;
+      }
+      table.sliders th.t-right-aligned {
+        text-align: right;
+      }
+      table.sliders thead tr:first-child th {
+        border-bottom: solid thin #112E51;
+        padding: .5em;
+      }
+      table.sliders thead tr:first-child th {
+        border-left: solid 1rem white;
+        border-right: solid 1rem white;
+      }
+      table.sliders thead th:first-child {
+        border-left: none;
+      }
+      table.sliders thead th:last-child {
+        border-right: none;
+      }
+      table.sliders tbody th {
+        font-weight: normal;
+
+        /* Sketch */
+        color: #000000;
+        font-size: 14px;
+        letter-spacing: -0.31px;
+        line-height: 13px;
+        text-align: right;
+      }
+      table.sliders tbody td:last-child, table.sliders thead tr:last-child th:last-child {
+        border-left: solid thin #979797;
+      }
+      table.sliders .slider {
+        position: relative;
+
+        /* Sketch */
+        height: 2px;
+        background-color: #E8E8E8;
+      }
+      table.sliders .slider .icon-pac {
+        top: calc(-.5rem + 1px);
+        transition: left 1s;
+      }
+      table.sliders .t-right-aligned span {
+        display: block;
+        line-height: 1.1em;
+      }
+
+      table.sliders .ticks {
+        display: flex;
+        justify-content: space-between;
+        padding-left: 0;
+        padding-right: 0;
+        margin-right: -2rem;
+        margin-left: -1.5rem;
+        position: relative;
+      }
+      table.sliders .ticks .tick {
+        width: 4rem;
+        text-align: center;
+        position: relative;
+        display: inline-block;
+
+        /* Sketch */
+        color: #4A4A4A;
+        font-size: 12px;
+        letter-spacing: -0.29px;
+      }
+      table.sliders .ticks .tick:before {
+        background-color: #E8E8E8;
+        bottom: 100%;
+        content: "";
+        display: block;
+        height: 1rem;
+        left: 50%;
+        position: absolute;
+        width: 2px;
+      }
+      table.sliders .ticks .rule {
+        background-color: #E8E8E8;
+        height: 1px;
+        left: 2rem;
+        position: absolute;
+        top: .5rem;
+        width: calc(100% - 4rem);
+      }
+      table.sliders thead tr:last-child th {
+        padding-bottom: 0;
+      }
+      table.sliders tbody tr:first-child > * {
+        padding-top: 0;
       }
 
     </style>

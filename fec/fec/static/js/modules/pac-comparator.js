@@ -93,19 +93,17 @@ Vue.component('pac-details', {
     data: {
       type: Object,
       required: true
+    },
+    index: {
+      type: Number,
+      required: true
     }
   },
-  data: function() {
-    return {
-      //
-    };
-  },
-  template: `<div
-    class="committee-details">
+  template: `<div class="committee-details">
     <h1 v-if="data.dataSummary.name">{{ data.dataSummary.name }} <span v-if="data.calc.pacType">({{ data.calc.pacType }})</span></h1>
-    <h2 v-if="data.calc.totDisburseStr != ''">{{ data.calc.totDisburseStr }}</h2>
-    <h3 v-if="data.calc.coverageDatesStatement != ''">{{ data.calc.coverageDatesStatement }}</h3>
-    <div v-if="data.errorMessage != ''">{{ data.errorMessage }}</div>
+    <h2 v-if="data.calc.totDisburseStr"><i :class="['icon-pac', 'pac-' + index]"></i>{{ data.calc.totDisburseStr }}</h2>
+    <h3 v-if="data.calc.coverageDatesStatement">{{ data.calc.coverageDatesStatement }}</h3>
+    <div v-if="data.errorMessage != ''" class="message__error">{{ data.errorMessage }}</div>
     <div v-else-if="data.isLoading == true">
       <div colspan="2" class="overlay__container">
         <div class="overlay is-loading">&nbsp;</div>
@@ -122,66 +120,134 @@ Vue.component('pac-details', {
   } // /methods
 });
 
+Vue.component('slider', {
+  props: {
+    data: {
+      type: Object,
+      required: true
+    }
+  },
+  template: `
+    <div
+      :style="'width:' + data.width + 'px'"
+      class="slider"
+    >
+      <i
+        :style="'left: ' + data.v0 + '%'"
+        class="icon-pac pac-0">&nbsp;</i>
+      <i
+        :style="'left: ' + data.v1 + '%'"
+        class="icon-pac pac-1">&nbsp;</i>
+      &nbsp;
+  </div>
+  `
+});
+
 Vue.component('sliders', {
   props: {
     pacs: {
       type: Array,
       required: true
+    },
+    sliderWidth: {
+      type: Number,
+      required: true
     }
   },
   template: `
-  <table>
+  <table class="sliders">
     <thead>
       <tr>
-        <th scope="col">Expenditure type</th>
-        <th scope="col">Percentage of total expenditures</th>
-        <th scope="col" colspan="2">Totals</th>
+        <th>Expenditure type</th>
+        <th>Percentage of total expenditures</th>
+        <th colspan="2">Totals</th>
       </tr>
       <tr>
-        <td></td>
-        <td></td>
-        <th scope="col">(orange)</th>
-        <th scope="col">(teal)</th>
+        <th>&nbsp;</th>
+        <th>&nbsp;</th>
+        <th class="t-right-aligned"><i class="icon-pac pac-0">&nbsp;</i></th>
+        <th class="t-right-aligned"><i class="icon-pac pac-1">&nbsp;</i></th>
       </tr>
     </thead>
     <tbody>
       <tr>
-        <th scope="row">Operating expenditures</th>
-        <td></td>
-        <td class="t-right-aligned t-mono">{{ pacs[0].calc.operExpendPctStr }}<br>{{ pacs[0].calc.operExpendStr }}</td>
-        <td class="t-right-aligned t-mono">{{ pacs[1].calc.operExpendPctStr }}<br>{{ pacs[1].calc.operExpendStr }}</td>
+        <th>Operating expenditures</th>
+        <td class="meters" role="graphics-dataline">
+          <slider
+            :data="{'v0': pacs[0].calc.operExpendPct * 100, 'v1': pacs[1].calc.operExpendPct * 100, 'width': sliderWidth}"
+          ></slider>
+        </td>
+        <td class="t-right-aligned t-mono">
+          <span>{{ pacs[0].calc.operExpendPctStr }}</span>
+          <span>{{ pacs[0].calc.operExpendStr }}</span>
+        </td>
+        <td class="t-right-aligned t-mono">
+          <span>{{ pacs[1].calc.operExpendPctStr }}</span>
+          <span>{{ pacs[1].calc.operExpendStr }}</span>
+        </td>
       </tr>
       <tr>
-        <th scope="row">Contributions to federal candidates / committees</th>
-        <td></td>
-        <td class="t-right-aligned t-mono">{{ pacs[0].calc.contribsPctStr }}<br>{{ pacs[0].calc.contribsStr }}</td>
-        <td class="t-right-aligned t-mono">{{ pacs[1].calc.contribsPctStr }}<br>{{ pacs[1].calc.contribsStr }}</td>
+        <th>Contributions to federal candidates / committees</th>
+        <td class="meters" role="graphics-dataline">
+          <slider
+            :data="{'v0': pacs[0].calc.contribsPct * 100, 'v1': pacs[1].calc.contribsPct * 100, 'width': sliderWidth}"
+          ></slider>
+        </td>
+        <td class="t-right-aligned t-mono">
+          <span>{{ pacs[0].calc.contribsPctStr }}</span>
+          <span>{{ pacs[0].calc.contribsStr }}</span>
+        </td>
+        <td class="t-right-aligned t-mono">
+          <span>{{ pacs[1].calc.contribsPctStr }}</span>
+          <span>{{ pacs[1].calc.contribsStr }}</span>
+        </td>
       </tr>
       <tr>
-        <th scope="row">Independent expenditures</th>
-        <td></td>
-        <td class="t-right-aligned t-mono">{{ pacs[0].calc.indExpendPctStr }}<br>{{ pacs[0].calc.indExpendStr }}</td>
-        <td class="t-right-aligned t-mono">{{ pacs[1].calc.indExpendPctStr }}<br>{{ pacs[1].calc.indExpendStr }}</td>
+        <th>Independent expenditures</th>
+        <td class="meters" role="graphics-dataline">
+          <slider
+            :data="{'v0': pacs[0].calc.indExpendPct * 100, 'v1': pacs[1].calc.indExpendPct * 100, 'width': sliderWidth}"
+          ></slider>
+        </td>
+        <td class="t-right-aligned t-mono">
+          <span>{{ pacs[0].calc.indExpendPctStr }}</span>
+          <span>{{ pacs[0].calc.indExpendStr }}</span>
+        </td>
+        <td class="t-right-aligned t-mono">
+          <span>{{ pacs[1].calc.indExpendPctStr }}</span>
+          <span>{{ pacs[1].calc.indExpendStr }}</span>
+        </td>
       </tr>
       <tr>
-        <th scope="row">All other spending</th>
-        <td></td>
-        <td class="t-right-aligned t-mono">{{ pacs[0].calc.otherSpendingPctStr }}<br>{{ pacs[0].calc.otherSpendingStr }}</td>
-        <td class="t-right-aligned t-mono">{{ pacs[1].calc.otherSpendingPctStr }}<br>{{ pacs[1].calc.otherSpendingStr }}</td>
+        <th>All other spending</th>
+        <td class="meters" role="graphics-dataline">
+          <slider
+            :data="{'val0': pacs[0].calc.otherSpendingPct * 100, 'val1': pacs[1].calc.otherSpendingPct * 100, 'width': sliderWidth}"
+          ></slider>
+        </td>
+        <td class="t-right-aligned t-mono">
+          <span>{{ pacs[0].calc.otherSpendingPctStr }}</span>
+          <span>{{ pacs[0].calc.otherSpendingStr }}</span>
+        </td>
+        <td class="t-right-aligned t-mono">
+          <span>{{ pacs[1].calc.otherSpendingPctStr }}</span>
+          <span>{{ pacs[1].calc.otherSpendingStr }}</span>
+        </td>
       </tr>
     </tbody>
     <tfoot>
       <tr>
-        <td></td>
-        <th scope="col" class="markers">
-          <span class="marker">0%</span>
-          <span class="marker">25%</span>
-          <span class="marker">50%</span>
-          <span class="marker">75%</span>
-          <span class="marker">100%</span>
+        <th>&nbsp;</th>
+        <th class="ticks">
+          <span class="rule" role="display-only">&nbsp;</span>
+          <span class="tick" role="graphics-tick">0%</span>
+          <span class="tick" role="graphics-tick">25%</span>
+          <span class="tick" role="graphics-tick">50%</span>
+          <span class="tick" role="graphics-tick">75%</span>
+          <span class="tick" role="graphics-tick">100%</span>
         </th>
-        <td></td>
-        <td></td>
+        <th>&nbsp;</th>
+        <th>&nbsp;</th>
       </tr>
     </tfoot>
   </table>
@@ -193,11 +259,12 @@ new Vue({
   data: {
     election_cycle: 2020, // Used for queries
     electionCycles: [], // Values for the <select>
+    sliderWidth: 100,
     typeaheads: [{ key: 'taSlot0' }, { key: 'taSlot1' }],
     pacs: [
       {
         key: 'pacSlot0',
-        calc: {}, // Calculated values
+        calc: { contribs: 0, indExpend: 0, operExpend: 0, otherSpend: 0 }, // Calculated values (derived from dataDetails when they're loaded)
         cmteDetails: {}, // Details about the committee org
         dataDetails: {}, // Committee's financial query results
         dataSummary: { id: '', name: '' }, // Typeahead results
@@ -206,7 +273,7 @@ new Vue({
       },
       {
         key: 'pacSlot1',
-        calc: {},
+        calc: { contribs: 0, indExpend: 0, operExpend: 0, otherSpend: 0 },
         cmteDetails: {},
         dataDetails: {},
         dataSummary: { id: '', name: '' },
@@ -239,6 +306,7 @@ new Vue({
           <pac-details
             v-for="(item, index) in pacs"
             :data="item"
+            :index="index"
             :key="item.key"
           ></pac-details>
         </div>
@@ -246,7 +314,8 @@ new Vue({
     </div>
     <div class="charts-holder">
       <sliders
-        :pacs="pacs">
+        :pacs="pacs"
+        :slider-width="sliderWidth">
       </sliders>
     </div>
   </div>`,
@@ -255,20 +324,31 @@ new Vue({
     for (let i = 2020; i >= 1980; i -= 2) {
       this.electionCycles.push({ value: i, label: `${i - 1}-${i}` });
     }
+
+    // Listen to window resize to determine internet component sizes
+    window.addEventListener('resize', this.handleWindowResize);
+    // And grab the width now
+    this.sliderWidth = this.$el.offsetWidth * 0.45;
   },
   methods: {
     handleElectionYearChange: function(newValue) {
       this.election_cycle = parseInt(newValue);
       // Check the pacs that are currently loaded and load either that need it
       for (let i = 0; i < this.pacs.length; i++) {
-        if (this.pacs[i].dataSummary.id != '') this.startLoadingCommitteeData(i);
+        if (this.pacs[i].dataSummary.id != '')
+          this.startLoadingCommitteeData(i);
       }
     },
     handleTypeaheadSelect: function(typeaheadResults, vueComponent) {
       this.pacs[vueComponent.id].dataSummary = typeaheadResults;
       this.pacs[vueComponent.id].cmteDetails = {}; // reset committee details
       this.pacs[vueComponent.id].dataDetails = {}; // reset committee data
-      this.pacs[vueComponent.id].calc = {}; // reset calculated fields
+      this.pacs[vueComponent.id].calc = {
+        contribs: 0,
+        indExpend: 0,
+        operExpend: 0,
+        otherSpend: 0
+      }; // reset calculated fields
       this.startLoadingCommitteeData(vueComponent.id);
     },
     handleCommitteeHeaderClick: function(
@@ -375,8 +455,6 @@ new Vue({
               this.pacs[i].errorMessage =
                 'You entered a committee that is not a nonconnected PAC. Please enter an active nonconnected PAC name or ID.';
             }
-
-            // this.pacs[i].isLoading = false;
             break; // no reason to check another
           }
         }
@@ -387,9 +465,8 @@ new Vue({
       requestedPacID,
       requestedElectionCycle
     ) {
-      console.log('handleCommitteeRequestRejected(): ', error, requestedPacID, requestedElectionCycle);
-      // Since we had a requested rejected, let's check to make sure it's still a legit request
-      // (e.g., if we requested on pac-cycle combo but the user has changed the year since then, this rejection is outdated)
+      // Since we had a request rejected, let's check to make sure it's still a legit request
+      // (e.g., if we requested a pac-cycle combo but the user has changed the year since then, this rejection is outdated)
       if (
         requestedElectionCycle &&
         requestedElectionCycle == this.election_cycle
@@ -397,10 +474,15 @@ new Vue({
         for (let i = 0; i < this.pacs.length; i++) {
           if (this.pacs[i].dataSummary.id == requestedPacID) {
             if (error.message == 'ERROR:REJECTED_DATA_REQUEST') {
-              this.pacs[i].errorMessage =
-                'You entered a committee that was not active during 2017-2018 period. Please enter a nonconnected PAC name or ID active during 2017-2018.';
+              let yearSpanStr = requestedElectionCycle - 1;
+              yearSpanStr += `-${requestedElectionCycle}`;
+
+              let message = `You entered a committee that was not active during the ${yearSpanStr} period. \
+                Please enter a nonconnected PAC name or ID active during ${yearSpanStr}.`;
+              this.pacs[i].errorMessage = message;
             } else {
               this.pacs[i].errorMessage = 'HANDLE THIS';
+              // TODO
             }
             this.pacs[i].isLoading = false;
             // re-enable the typeahead
@@ -480,18 +562,22 @@ new Vue({
         }
       }
     },
+    handleWindowResize: function() {
+      this.sliderWidth = this.$el.offsetWidth / 2;
+    },
+    /**
+     * The rules are complicated for whether a committee is nonconnected so they're their own function
+     * @returns {(Boolean|String)} Boolean if a committee IS or is NOT a nonconnected committee, 'maybe' if more data is needed (i.e., organization_type)
+     * TODO: move this to calcPacValues when the API returns a is_nonconnected value
+     */
     isNonconnectedPac: function(pacSlotPos) {
       /* Valid rules to find nonconnected committees:
-
         1. committee type in            [O, U, V, W]
         2. committee designation NOT in [A, J, P]
-
         OR
-
         1. committee type in            [N, Q]
         2. committee designation NOT in [A, J, P]
         3. org type NOT in              [C, L, M, T, W]
-
       */
       let cType = this.pacs[pacSlotPos].dataDetails.committee_type;
       let cDesig = this.pacs[pacSlotPos].dataDetails.committee_designation;
@@ -502,10 +588,6 @@ new Vue({
       )
         oType = String(this.pacs[pacSlotPos].cmteDetails.organization_type);
 
-      console.log('cmteDetails: ', this.pacs[pacSlotPos].cmteDetails);
-      console.log('organization_type: ', this.pacs[pacSlotPos].cmteDetails.organization_type);
-      console.log('cType, cDesig, oType: ', cType, cDesig, oType);
-
       let validCmteTypesWithOrgType = ['O', 'U', 'V', 'W'];
       let validCmteTypesWithoutOrgType = ['N', 'Q'];
       let invalidOrgTypes = ['C', 'L', 'M', 'T', 'W'];
@@ -514,7 +596,7 @@ new Vue({
       let toReturn = false;
 
       if (invalidDesigs.includes(cDesig)) {
-        // If we have an invalid designation, its not nonconnected
+        // If we have an invalid designation, it's not nonconnected
         // We'll let toReturn stay false
       } else if (validCmteTypesWithoutOrgType.includes(cType)) {
         // If the committee type doesn't need an org type, we're safe to return
@@ -532,10 +614,12 @@ new Vue({
         toReturn = true;
       }
 
-      console.log('isNonConnectedPac: ', toReturn);
-
       return toReturn;
     },
+    /**
+     *
+     * @param {number} pacSlotPos {integer}
+     */
     calcPacValues: function(pacSlotPos) {
       let toReturn = {};
       let d = this.pacs[pacSlotPos].dataDetails;
@@ -554,7 +638,7 @@ new Vue({
           day: '2-digit',
           month: '2-digit',
           year: '2-digit',
-          timeZone: 'America/New_York'
+          timeZone: 'GMT'
         };
         let startDate = new Date(d.coverage_start_date).toLocaleDateString(
           'us-EN',
@@ -632,10 +716,8 @@ new Vue({
         'refunds_relating_convention_exp'
       ];
       otherSpend.forEach(value => {
-        console.log('otherSpend.forEach(): ', value, d[value]);
         if (d[value]) toReturn.otherSpending += d[value];
       });
-      console.log('toReturn.otherSpending: ', toReturn.otherSpending);
       toReturn.otherSpendingStr = this.formatAsCurrency(toReturn.otherSpending);
       toReturn.otherSpendingPct = toReturn.otherSpending / toReturn.totDisburse;
       toReturn.otherSpendingPctStr = this.percentString(
@@ -656,7 +738,8 @@ new Vue({
     },
     percentString: function(val) {
       let v = val * 100;
-      return v < 1 ? '<1%' : `${Math.round(v)}%`;
+      if (val === 0) return '0%';
+      else return v < 1 ? '<1%' : `${Math.round(v)}%`;
     }
   }
 });
