@@ -119,6 +119,12 @@
         position: absolute;
         width: 1rem;
       }
+      .icon-bar {
+        border-radius: 0;
+        height: .5rem;
+        min-width: 1px;
+        width: 1px;
+      }
       .icon-pac.pac-0 {
         /* Sketch */
         background-color: #F77B42;
@@ -192,9 +198,20 @@
         height: 2px;
         background-color: #E8E8E8;
       }
+      table.sliders .slider.bars {
+        height: 1rem;
+      }
       table.sliders .slider .icon-pac {
         top: calc(-.5rem + 1px);
         transition: left 1s;
+      }
+      table.sliders .slider .icon-bar.pac-0 {
+        top: 0;
+        transition: width 1s;
+      }
+      table.sliders .slider .icon-bar.pac-1 {
+        top: .5rem;
+        transition: width 1s;
       }
       table.sliders .t-right-aligned span {
         display: block;
@@ -211,10 +228,11 @@
         position: relative;
       }
       table.sliders .ticks .tick {
-        width: 4rem;
-        text-align: center;
-        position: relative;
         display: inline-block;
+        font-weight: normal;
+        position: relative;
+        text-align: center;
+        width: 4rem;
 
         /* Sketch */
         color: #4A4A4A;
@@ -246,6 +264,61 @@
         padding-top: 0;
       }
 
+      .barsV {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+      }
+      .barsV figure {
+        width: 25%;
+        text-align: center;
+      }
+      .barsV figure figcaption {
+        line-height: 1.25em;
+      }
+      .bar-v-group {
+        height: 100px;
+        display: flex;
+        justify-content: center;
+        align-items: flex-end;
+      }
+      .bar-v-group .icon-pac {
+        position: relative;
+      }
+      .icon-bar-v {
+        border-radius: 0;
+        height: 1px;
+        min-height: 1px;
+        width: 4rem;
+      }
+      .icon-bar-v label {
+        line-height: 1.1em;
+        padding-top: .25rem;
+        position: absolute;
+        top: .5rem;
+      }
+      .icon-bar-v.pac-0 label {
+        right: .5rem;
+        text-align: right;
+      }
+      .icon-bar-v.pac-1 label {
+        left: .5rem;
+        text-align: left;
+      }
+      .icon-bar-v label span {
+        display: block;
+        font-style: normal;
+      }
+      .icon-bar-v label span:first-child {
+        font-weight: bold;
+        font-size: 1.5rem;
+      }
+      .icon-bar-v label span:last-child {
+        font-size: 1.1rem;
+      }
+      .icon-bar-v label.above {
+        top: -35px;
+      }
     </style>
   </div>
   <h3>Search or browse data</h3>

@@ -129,14 +129,13 @@ Vue.component('slider', {
   },
   template: `
     <div
-      :style="'width:' + data.width + 'px'"
       class="slider"
     >
       <i
-        :style="'left: ' + data.v0 + '%'"
+        :style="'left: ' + Math.min(data.v0, 100) + '%'"
         class="icon-pac pac-0">&nbsp;</i>
       <i
-        :style="'left: ' + data.v1 + '%'"
+        :style="'left: ' + Math.min(data.v1, 100) + '%'"
         class="icon-pac pac-1">&nbsp;</i>
       &nbsp;
   </div>
@@ -170,69 +169,22 @@ Vue.component('sliders', {
       </tr>
     </thead>
     <tbody>
-      <tr>
-        <th>Operating expenditures</th>
+      <tr v-for="root in ['operExpend', 'contribs', 'indExpend', 'otherSpending']">
+        <th>{{ pacs[0].calc[root + 'Label'] }}</th>
         <td class="meters" role="graphics-dataline">
           <slider
-            :data="{'v0': pacs[0].calc.operExpendPct * 100, 'v1': pacs[1].calc.operExpendPct * 100, 'width': sliderWidth}"
+            :data="{'v0': pacs[0].calc[root + 'Pct'] * 100, 'v1': pacs[1].calc[root + 'Pct'] * 100, 'width': sliderWidth}"
           ></slider>
         </td>
         <td class="t-right-aligned t-mono">
-          <span>{{ pacs[0].calc.operExpendPctStr }}</span>
-          <span>{{ pacs[0].calc.operExpendStr }}</span>
+          <span>{{ pacs[0].calc[root + 'PctStr'] }}</span>
+          <span>{{ pacs[0].calc[root + 'Str'] }}</span>
         </td>
         <td class="t-right-aligned t-mono">
-          <span>{{ pacs[1].calc.operExpendPctStr }}</span>
-          <span>{{ pacs[1].calc.operExpendStr }}</span>
+          <span>{{ pacs[1].calc[root + 'PctStr'] }}</span>
+          <span>{{ pacs[1].calc[root + 'Str'] }}</span>
         </td>
       </tr>
-      <tr>
-        <th>Contributions to federal candidates / committees</th>
-        <td class="meters" role="graphics-dataline">
-          <slider
-            :data="{'v0': pacs[0].calc.contribsPct * 100, 'v1': pacs[1].calc.contribsPct * 100, 'width': sliderWidth}"
-          ></slider>
-        </td>
-        <td class="t-right-aligned t-mono">
-          <span>{{ pacs[0].calc.contribsPctStr }}</span>
-          <span>{{ pacs[0].calc.contribsStr }}</span>
-        </td>
-        <td class="t-right-aligned t-mono">
-          <span>{{ pacs[1].calc.contribsPctStr }}</span>
-          <span>{{ pacs[1].calc.contribsStr }}</span>
-        </td>
-      </tr>
-      <tr>
-        <th>Independent expenditures</th>
-        <td class="meters" role="graphics-dataline">
-          <slider
-            :data="{'v0': pacs[0].calc.indExpendPct * 100, 'v1': pacs[1].calc.indExpendPct * 100, 'width': sliderWidth}"
-          ></slider>
-        </td>
-        <td class="t-right-aligned t-mono">
-          <span>{{ pacs[0].calc.indExpendPctStr }}</span>
-          <span>{{ pacs[0].calc.indExpendStr }}</span>
-        </td>
-        <td class="t-right-aligned t-mono">
-          <span>{{ pacs[1].calc.indExpendPctStr }}</span>
-          <span>{{ pacs[1].calc.indExpendStr }}</span>
-        </td>
-      </tr>
-      <tr>
-        <th>All other spending</th>
-        <td class="meters" role="graphics-dataline">
-          <slider
-            :data="{'val0': pacs[0].calc.otherSpendingPct * 100, 'val1': pacs[1].calc.otherSpendingPct * 100, 'width': sliderWidth}"
-          ></slider>
-        </td>
-        <td class="t-right-aligned t-mono">
-          <span>{{ pacs[0].calc.otherSpendingPctStr }}</span>
-          <span>{{ pacs[0].calc.otherSpendingStr }}</span>
-        </td>
-        <td class="t-right-aligned t-mono">
-          <span>{{ pacs[1].calc.otherSpendingPctStr }}</span>
-          <span>{{ pacs[1].calc.otherSpendingStr }}</span>
-        </td>
       </tr>
     </tbody>
     <tfoot>
@@ -254,6 +206,149 @@ Vue.component('sliders', {
   `
 });
 
+Vue.component('sliderBar', {
+  props: {
+    data: {
+      type: Object,
+      required: true
+    }
+  },
+  template: `
+    <div
+      class="slider bars"
+    >
+      <i
+        :style="'width: ' + Math.min(data.v0, 100) + '%'"
+        class="icon-pac icon-bar pac-0">&nbsp;</i>
+      <i
+        :style="'width: ' + Math.min(data.v1, 100) + '%'"
+        class="icon-pac icon-bar pac-1 ">&nbsp;</i>
+      &nbsp;
+  </div>
+  `
+});
+
+Vue.component('barsH', {
+  props: {
+    pacs: {
+      type: Array,
+      required: true
+    },
+    sliderWidth: {
+      type: Number,
+      required: true
+    }
+  },
+  template: `
+  <table class="sliders">
+    <thead>
+      <tr>
+        <th>Expenditure type</th>
+        <th>Percentage of total expenditures</th>
+        <th colspan="2">Totals</th>
+      </tr>
+      <tr>
+        <th>&nbsp;</th>
+        <th>&nbsp;</th>
+        <th class="t-right-aligned"><i class="icon-pac pac-0">&nbsp;</i></th>
+        <th class="t-right-aligned"><i class="icon-pac pac-1">&nbsp;</i></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr v-for="root in ['operExpend', 'contribs', 'indExpend', 'otherSpending']">
+        <th>{{ pacs[0].calc[root + 'Label'] }}</th>
+        <td class="meters" role="graphics-dataline">
+          <sliderBar
+            :data="{'v0': pacs[0].calc[root + 'Pct'] * 100, 'v1': pacs[1].calc[root + 'Pct'] * 100, 'width': sliderWidth}"
+          ></sliderBar>
+        </td>
+        <td class="t-right-aligned t-mono">
+          <span>{{ pacs[0].calc[root + 'PctStr'] }}</span>
+          <span>{{ pacs[0].calc[root + 'Str'] }}</span>
+        </td>
+        <td class="t-right-aligned t-mono">
+          <span>{{ pacs[1].calc[root + 'PctStr'] }}</span>
+          <span>{{ pacs[1].calc[root + 'Str'] }}</span>
+        </td>
+      </tr>
+      </tr>
+    </tbody>
+    <tfoot>
+      <tr>
+        <th>&nbsp;</th>
+        <th class="ticks">
+          <span class="rule" role="display-only">&nbsp;</span>
+          <span class="tick" role="graphics-tick">0%</span>
+          <span class="tick" role="graphics-tick">25%</span>
+          <span class="tick" role="graphics-tick">50%</span>
+          <span class="tick" role="graphics-tick">75%</span>
+          <span class="tick" role="graphics-tick">100%</span>
+        </th>
+        <th>&nbsp;</th>
+        <th>&nbsp;</th>
+      </tr>
+    </tfoot>
+  </table>
+  `
+});
+
+Vue.component('barV', {
+  props: {
+    data: {
+      type: Object,
+      required: true
+    }
+  },
+  data: function() {
+    return {
+      labelPos: { top: '0px;' }
+    };
+  },
+  template: `
+  <i
+    :style="'height: ' + Math.min(data.pct * 100, 100) + '%'"
+    :class="data.barClasses"
+    >
+    <label :class="{above: data.pct < 0.5}"><span>{{ data.pctStr }}</span><span>{{ data.vStr }}</span></label>
+  </i>
+  `
+});
+
+Vue.component('barsV', {
+  props: {
+    pacs: {
+      type: Array,
+      required: true
+    }
+  },
+  template: `
+  <div class="barsV">
+    <figure
+      v-for="root in ['operExpend', 'contribs', 'indExpend', 'otherSpending']">
+      <div class="bar-v-group">
+        <barV
+          :data="{
+            'pct': pacs[0].calc[root + 'Pct'],
+            'pctStr': pacs[0].calc[root + 'PctStr'],
+            'vStr': pacs[0].calc[root + 'Str'],
+            'barClasses': 'icon-pac icon-bar-v pac-0'
+          }"
+        ></barV>
+        <barV
+          :data="{
+            'pct': pacs[1].calc[root + 'Pct'],
+            'pctStr': pacs[1].calc[root + 'PctStr'],
+            'vStr': pacs[1].calc[root + 'Str'],
+            'barClasses': 'icon-pac icon-bar-v pac-1'
+          }"
+        ></barV>
+      </div>
+      <figcaption>{{ pacs[0].calc[root + 'Label'] }}</figcaption>
+    </figure>
+  </div>
+  `
+});
+
 new Vue({
   el: '#pac-comparator',
   data: {
@@ -264,7 +359,7 @@ new Vue({
     pacs: [
       {
         key: 'pacSlot0',
-        calc: { contribs: 0, indExpend: 0, operExpend: 0, otherSpend: 0 }, // Calculated values (derived from dataDetails when they're loaded)
+        calc: { contribs: 0, indExpend: 0, operExpend: 0, otherSpending: 0 }, // Calculated values (derived from dataDetails when they're loaded)
         cmteDetails: {}, // Details about the committee org
         dataDetails: {}, // Committee's financial query results
         dataSummary: { id: '', name: '' }, // Typeahead results
@@ -273,7 +368,7 @@ new Vue({
       },
       {
         key: 'pacSlot1',
-        calc: { contribs: 0, indExpend: 0, operExpend: 0, otherSpend: 0 },
+        calc: { contribs: 0, indExpend: 0, operExpend: 0, otherSpending: 0 },
         cmteDetails: {},
         dataDetails: {},
         dataSummary: { id: '', name: '' },
@@ -317,6 +412,13 @@ new Vue({
         :pacs="pacs"
         :slider-width="sliderWidth">
       </sliders>
+      <barsH
+        :pacs="pacs"
+        :slider-width="sliderWidth">
+      </barsH>
+      <barsV
+        :pacs="pacs">
+      </barsV>
     </div>
   </div>`,
   beforeMount: function() {
@@ -324,6 +426,9 @@ new Vue({
     for (let i = 2020; i >= 1980; i -= 2) {
       this.electionCycles.push({ value: i, label: `${i - 1}-${i}` });
     }
+
+    // Init (reset) pac values
+    this.calcPacValues(null, { reset: true });
 
     // Listen to window resize to determine internet component sizes
     window.addEventListener('resize', this.handleWindowResize);
@@ -343,12 +448,7 @@ new Vue({
       this.pacs[vueComponent.id].dataSummary = typeaheadResults;
       this.pacs[vueComponent.id].cmteDetails = {}; // reset committee details
       this.pacs[vueComponent.id].dataDetails = {}; // reset committee data
-      this.pacs[vueComponent.id].calc = {
-        contribs: 0,
-        indExpend: 0,
-        operExpend: 0,
-        otherSpend: 0
-      }; // reset calculated fields
+      this.calcPacValues(vueComponent.id, { reset: true }); // reset calculated fields
       this.startLoadingCommitteeData(vueComponent.id);
     },
     handleCommitteeHeaderClick: function(
@@ -454,6 +554,8 @@ new Vue({
             } else {
               this.pacs[i].errorMessage =
                 'You entered a committee that is not a nonconnected PAC. Please enter an active nonconnected PAC name or ID.';
+              this.calcPacValues(i, { reset: true });
+              this.pacs[i].isLoading = false;
             }
             break; // no reason to check another
           }
@@ -618,12 +720,56 @@ new Vue({
     },
     /**
      *
-     * @param {number} pacSlotPos {integer}
+     * @param {(number|null)} pacSlotPos Indicates which this.pacs to save. A null value will reset all of them regardless of options.reset
+     * @param {Object} options Object
+     * @param {Boolean} options.reset Used to reset an item in this.pacs
      */
-    calcPacValues: function(pacSlotPos) {
-      let toReturn = {};
-      let d = this.pacs[pacSlotPos].dataDetails;
+    calcPacValues: function(pacSlotPos, options = { reset: false }) {
+      let d = this.pacs[pacSlotPos] ? this.pacs[pacSlotPos].dataDetails : {};
 
+      let toReturn = {
+        // Default, universal
+        contribsLabel: 'Contributions to federal candidates / committees',
+        indExpendLabel: 'Independent expenditures',
+        operExpendLabel: 'Operating expenditures',
+        otherSpendingLabel: 'Other spending'
+      };
+
+      // If we need to reset, let's just do that and jump out
+      if (options.reset === true) {
+        toReturn = Object.assign(toReturn, {
+          pacType: '',
+          coverageDatesStatement: '',
+          totDisburse: 0,
+          totDisburseStr: '',
+          contribs: 0,
+          contribsStr: '',
+          contribsPct: 0,
+          contribsPctStr: '',
+          indExpend: 0,
+          indExpendStr: '',
+          indExpendPct: 0,
+          indExpendPctStr: '',
+          operExpend: 0,
+          operExpendStr: '',
+          operExpendPct: 0,
+          operExpendPctStr: '',
+          otherSpending: 0,
+          otherSpendingStr: '',
+          otherSpendingPct: 0,
+          otherSpendingPctStr: ''
+        });
+
+        if (options.reset === true && pacSlotPos === null) {
+          // If there's no slot provided, let's hit them all
+          for (let i = 0; i < this.pacs.length; i++) {
+            this.pacs[i].calc = toReturn;
+          }
+        } else if (options.reset === true && this.pacs[pacSlotPos]) {
+          this.pacs[pacSlotPos].calc = toReturn;
+        }
+        return;
+      }
       // Total disbursements
       toReturn.totDisburse = d.disbursements;
       toReturn.totDisburseStr = this.formatAsCurrency(d.disbursements);
