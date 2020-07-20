@@ -802,14 +802,16 @@ new Vue({
       toReturn.operExpendStr = '';
       toReturn.operExpendPct = 0;
       toReturn.operExpendPctStr = '';
-      if (d.operating_expenditures || d.operating_expenditures === 0) {
-        toReturn.operExpend = d.operating_expenditures;
+      if (
+        d.other_fed_operating_expenditures ||
+        d.other_fed_operating_expenditures === 0
+      ) {
+        toReturn.operExpend = d.other_fed_operating_expenditures;
         toReturn.operExpendStr = this.formatAsCurrency(
-          d.operating_expenditures,
+          d.other_fed_operating_expenditures,
           true
         );
-        toReturn.operExpendPct =
-          d.operating_expenditures / toReturn.totDisburse;
+        toReturn.operExpendPct = toReturn.operExpend / toReturn.totDisburse;
         toReturn.operExpendPctStr = this.percentString(toReturn.operExpendPct);
       }
 
@@ -819,10 +821,10 @@ new Vue({
       toReturn.contribsPct = 0;
       toReturn.contribsPctStr = '';
       if (
-        (d.contributions && d.contribution_refunds) ||
-        (d.contributions === 0 && d.contribution_refunds === 0)
+        d.fed_candidate_committee_contributions ||
+        d.fed_candidate_committee_contributions === 0
       ) {
-        toReturn.contribs = d.contributions - d.contribution_refunds;
+        toReturn.contribs = d.fed_candidate_committee_contributions;
         toReturn.contribsStr = this.formatAsCurrency(toReturn.contribs, true);
         toReturn.contribsPct = toReturn.contribs / toReturn.totDisburse;
         toReturn.contribsPctStr = this.percentString(toReturn.contribsPct);
@@ -847,19 +849,13 @@ new Vue({
       toReturn.otherSpendingPctStr = '';
       // To make the code shorter, here's a list of var names included with otherSpending
       let otherSpend = [
+        'contribution_refunds',
         'coordinated_expenditures_by_party_committee',
         'fed_election_activity',
-        'other_disbursements',
-        'total_transfers',
-        'loan_repayments_made',
-        'loan_repayments_received',
-        'loans_and_loan_repayments_made',
-        'loans_and_loan_repayments_received',
+        'loan_repayments',
         'loans_made',
-        'refunded_individual_contributions',
-        'refunded_other_political_committee_contributions',
-        'refunded_political_party_committee_contributions',
-        'refunds_relating_convention_exp'
+        'other_disbursements',
+        'transfers_to_affiliated_committee'
       ];
       otherSpend.forEach(value => {
         if (d[value]) toReturn.otherSpending += d[value];
