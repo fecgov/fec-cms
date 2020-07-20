@@ -209,7 +209,7 @@ var expendituresColumns = [
   },
   columns.supportOpposeColumn,
   columns.candidateColumn({
-    data: 'candidate',
+    data: 'candidate_name',
     className: 'all'
   })
 ];
