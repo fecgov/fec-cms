@@ -9,7 +9,7 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404, render
 from wagtail.documents.models import Document
 
-from fec.forms import ContactRAD  # form_categories
+from fec.forms import ContactRAD, fetch_categories  # form_categories
 from home.models import (CommissionerPage, DigestPage, MeetingPage,
                          PressReleasePage, RecordPage, TipsForTreasurersPage)
 
@@ -246,7 +246,8 @@ def contact_rad(request):
         "content_section": "help",
     }
 
-    if settings.FEATURES["radform"]:
+    # The feature is on, and can we get categories from ServiceNow
+    if settings.FEATURES["radform"] and fetch_categories():
         # If it's a POST, post to the ServiceNow API
         if request.method == "POST":
             form = ContactRAD(request.POST)
