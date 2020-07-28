@@ -246,8 +246,8 @@ def contact_rad(request):
         "content_section": "help",
     }
 
-    # The feature is on, and can we get categories from ServiceNow
-    if settings.FEATURES["radform"] and fetch_categories():
+    # Only show contact form if we can contact ServiceNow
+    if fetch_categories():
         # If it's a POST, post to the ServiceNow API
         if request.method == "POST":
             form = ContactRAD(request.POST)
