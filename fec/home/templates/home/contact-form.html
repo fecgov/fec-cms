@@ -81,6 +81,14 @@
             <h2 class="message__title">Error</h2>
             <p>Something went wrong. Please try again.</p>
           </div>
+        {% elif not form %}
+        <!-- Unable to contact ServiceNow -->
+           <div class="js-accordion accordion--neutral" data-content-prefix="contact">
+              <button class="accordion__button js-accordion-trigger is-disabled-filter">Submit a question</button>
+           </div>
+          <div class="message message--alt message--alert">
+           The question submission form is currently unavailable; please contact the committee's assigned RAD analyst directly or check back soon.
+          </div>
         {% elif form %}
       <div class="js-accordion accordion--neutral" data-content-prefix="contact" data-open-first="true">
         <button class="accordion__button js-accordion-trigger">Submit a question</button>
