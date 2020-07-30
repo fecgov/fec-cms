@@ -56,7 +56,7 @@ var expenditureColumns = [
     })
   },
   columns.committeeColumn({
-    data: 'committee',
+    data: 'committee_name',
     className: 'all'
   }),
   columns.supportOpposeColumn
@@ -80,7 +80,7 @@ var communicationCostColumns = [
     })
   },
   columns.committeeColumn({
-    data: 'committee',
+    data: 'committee_name',
     className: 'all'
   }),
   columns.supportOpposeColumn
@@ -102,7 +102,7 @@ var electioneeringColumns = [
     )
   },
   columns.committeeColumn({
-    data: 'committee',
+    data: 'committee_name',
     className: 'all'
   })
 ];
