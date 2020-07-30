@@ -216,7 +216,7 @@ var expendituresColumns = [
 
 var electioneeringColumns = [
   columns.candidateColumn({
-    data: 'candidate',
+    data: 'candidate_name',
     className: 'all'
   }),
   {
@@ -255,7 +255,7 @@ var communicationCostColumns = [
   },
   columns.supportOpposeColumn,
   columns.candidateColumn({
-    data: 'candidate',
+    data: 'candidate_name',
     className: 'all'
   })
 ];
