@@ -10,7 +10,8 @@ BASE_URL = 'https://transition.fec.gov'
 
 
 class Command(BaseCommand):
-    help = 'Takes a JSON list of transition pages and scrapes content from the live site. Saves JSON for indexing on DigitalGov Search'
+    help = 'Takes a JSON list of transition pages and scrapes content from the live site. \
+        Saves JSON for indexing on DigitalGov Search'
 
     def add_arguments(self, parser):
         parser.add_argument(
@@ -43,20 +44,20 @@ class Command(BaseCommand):
             # Populate meta data
             for page in pages:
                 p = {
-                  'document_id': page.get('document_id'),
-                  'title': page.get('title'),
-                  'path': page.get('path'),
-                  'created': page.get('created'),
-                  'promote': page.get('promote', 'false'),
-                  'description': page.get('description', ''),
-                  'tags': page.get('tags', ''),
-                  'language': 'en'
+                    'document_id': page.get('document_id'),
+                    'title': page.get('title'),
+                    'path': page.get('path'),
+                    'created': page.get('created'),
+                    'promote': page.get('promote', 'false'),
+                    'description': page.get('description', ''),
+                    'tags': page.get('tags', ''),
+                    'language': 'en'
                 }
 
                 # Scrape the content of the live page
                 content = self.get_content(p['path'])
                 if content:
-                  p['content'] = content
+                    p['content'] = content
 
                 extracted.append(p)
 
@@ -68,7 +69,7 @@ class Command(BaseCommand):
         Looks specifically for #fec_mainContentWide or #fec_mainContent,
         the main IDs of the body content areas on these pages.
         """
-        r  = requests.get(url)
+        r = requests.get(url)
         self.stdout.write('Getting content for ' + url)
         data = r.text
         soup = BeautifulSoup(data, 'lxml')

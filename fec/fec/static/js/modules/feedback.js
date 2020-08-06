@@ -114,7 +114,7 @@ Feedback.prototype.submit = function(token) {
 
 Feedback.prototype.handleSuccess = function(response) {
   var message =
-    '<h2 class="feedback__title">Thanks for helping us improve</h2>' +
+    '<h2 class="feedback__title">Thanks for helping us improve FEC.gov</h2>' +
     "<p>This information has been reported on GitHub, where it's publicly visible. " +
     '<a href="' +
     response.html_url +

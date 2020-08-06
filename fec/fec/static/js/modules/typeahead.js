@@ -37,6 +37,7 @@ function formatCommittee(result) {
   return {
     name: result.name,
     id: result.id,
+    is_active: result.is_active,
     type: 'committee'
   };
 }
@@ -147,7 +148,9 @@ var committeeDataset = {
       '<span class="tt-suggestion__loading">Loading committees&hellip;</span>',
     notFound: Handlebars.compile(''), // This has to be empty to not show anything
     suggestion: Handlebars.compile(
-      '<span class="tt-suggestion__name">{{ name }} ({{ id }})</span>'
+      '<span class="tt-suggestion__name">{{ name }} ({{ id }})&nbsp;' +
+        '<span class="{{#if is_active}}is-active-status' +
+        '{{else}}is-terminated-status{{/if}}"></span></span>'
     )
   }
 };

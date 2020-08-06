@@ -1,4 +1,5 @@
 {% import 'macros/missing.jinja' as missing %}
+{% import 'macros/missing-transferred.jinja' as missing_transferred %}
 {% import 'macros/cycle-select.jinja' as select %}
 {% import 'macros/tables.jinja' as tables %}
 
@@ -28,6 +29,11 @@
           {{ tables.summary(inaugural_summary) }}
         </div>
       {% else %}
+        {% if former_committee_name %}
+          <div class="entity__figure entity__figure--narrow">
+            {{ missing_transferred.missing_transferred_committee_message(former_committee_name, former_authorized_candidate_name, former_authorized_candidate_id) }}
+          </div>
+        {% endif %}
         <div class="entity__figure entity__figure--narrow" id="total-raised">
           <div class="heading--section heading--with-action">
             <h3 class="heading__left">Total raised</h3>

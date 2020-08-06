@@ -40,28 +40,25 @@ class TestLegalSearch(TestCase):
     # Test3 : OK
     @mock.patch.object(api_caller, 'load_legal_search_results')
     def test_search_universal(self, load_legal_search_results):
-        load_legal_search_results.return_value =\
-                legal_test_data.legal_universal_search_results()
-        response = client.get('/data/legal/search/',
-                              data={
-                                  'search': 'in kind donation',
-                                  'search_type': 'all'})
+        load_legal_search_results.return_value = legal_test_data.legal_universal_search_results()
+        response = client.get(
+            '/data/legal/search/',
+            data={'search': 'in kind donation', 'search_type': 'all'}
+        )
         assert response.status_code == 200
-        load_legal_search_results.assert_called_once_with(
-            'in kind donation', 'all', limit=3)
+        load_legal_search_results.assert_called_once_with('in kind donation', 'all', limit=3)
 
     # Test4 : This test is checking against the static data on legal_test_data.py.
     # offset value is 3 and not 0. revisit the test
     # AssertionError: Expected call: load_legal_search_results('in kind donation', 'regulations', offset=0)
-    # Actual call: load_legal_search_results('in kind donation', 'regulations', limit=3)  
+    # Actual call: load_legal_search_results('in kind donation', 'regulations', limit=3)
     @mock.patch.object(api_caller, 'load_legal_search_results')
     def test_search_regulations(self, load_legal_search_results):
-        load_legal_search_results.return_value =\
-                legal_test_data.regulations_search_results()
-        response = client.get('/data/legal/search/regulations/',
-                              data={
-                                  'search': 'in kind donation',
-                                  'search_type': 'regulations'})
+        load_legal_search_results.return_value = legal_test_data.regulations_search_results()
+        response = client.get(
+            '/data/legal/search/regulations/',
+            data={'search': 'in kind donation', 'search_type': 'regulations'}
+        )
         assert response.status_code == 200
         load_legal_search_results.assert_called_once_with(
             'in kind donation', 'regulations', offset=0)
@@ -71,13 +68,12 @@ class TestLegalSearch(TestCase):
     @mock.patch.object(api_caller, 'load_legal_search_results')
     def test_search_pagination(self, load_legal_search_results):
         load_legal_search_results.return_value =\
-                legal_test_data.regulations_search_results()
+            legal_test_data.regulations_search_results()
 
-        response = client.get('/data/legal/search/regulations/',
-                              data={
-                                  'search': 'in kind donation',
-                                  'search_type': 'regulations',
-                                  'offset': 20})
+        response = client.get(
+            '/data/legal/search/regulations/',
+            data={'search': 'in kind donation', 'search_type': 'regulations', 'offset': 20}
+        )
         assert response.status_code == 200
         load_legal_search_results.assert_called_once_with(
             'in kind donation', 'regulations', offset='20')
@@ -85,15 +81,13 @@ class TestLegalSearch(TestCase):
     # Test 6 : OK
     @mock.patch.object(api_caller, 'load_legal_search_results')
     def test_search_statutes(self, load_legal_search_results):
-        load_legal_search_results.return_value =\
-                legal_test_data.statutes_search_results()
-        response = client.get('/data/legal/search/statutes/',
-                              data={
-                                  'search': 'in kind donation',
-                                  'search_type': 'statutes'})
+        load_legal_search_results.return_value = legal_test_data.statutes_search_results()
+        response = client.get(
+            '/data/legal/search/statutes/',
+            data={'search': 'in kind donation', 'search_type': 'statutes'}
+        )
         assert response.status_code == 200
-        load_legal_search_results.assert_called_once_with('in kind donation',
-                                                          'statutes', offset=0)
+        load_legal_search_results.assert_called_once_with('in kind donation', 'statutes', offset=0)
 
     # # Test 7: OK
     @mock.patch.object(api_caller, '_call_api')
@@ -121,9 +115,17 @@ class TestLegalSearch(TestCase):
         # so this mocks the two different calls and then we assert they happend
         # http://stackoverflow.com/questions/7242433/asserting-successive-calls-to-a-mock-method
         calls = [
-            mock.call(query='', query_type='advisory_opinions',
-                      ao_min_issue_date=ao_min_date, ao_category=['F', 'W']),
-            mock.call(query='', query_type='advisory_opinions',
-                      ao_status='Pending', ao_category='R')
+            mock.call(
+                query='',
+                query_type='advisory_opinions',
+                ao_min_issue_date=ao_min_date,
+                ao_category=['F', 'W']
+            ),
+            mock.call(
+                query='',
+                query_type='advisory_opinions',
+                ao_status='Pending',
+                ao_category='R'
+            )
         ]
         load_legal_search_results.assert_has_calls(calls, any_order=True)

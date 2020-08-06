@@ -33,9 +33,8 @@ FEC_SERVICE_NOW_PASSWORD = env.get_credential('FEC_SERVICE_NOW_PASSWORD')
 FEC_DIGITALGOV_KEY = env.get_credential('FEC_DIGITALGOV_KEY')
 SEARCH_GOV_POLICY_GUIDANCE_KEY = env.get_credential('SEARCH_GOV_POLICY_GUIDANCE_KEY')
 FEC_DIGITALGOV_DRAWER_KEY_MAIN = env.get_credential('DIGITALGOV_DRAWER_KEY_MAIN', '')
-FEC_DIGITALGOV_DRAWER_KEY_TRANSITION = env.get_credential('DIGITALGOV_DRAWER_KEY_TRANSITION', '')
 DIGITALGOV_BASE_API_URL = 'https://i14y.usa.gov/api/v1'
-DIGITALGOV_DRAWER_HANDLE = 'main'
+DIGITALGOV_DRAWER_HANDLE = env.get_credential('DIGITALGOV_DRAWER_HANDLE', '')
 
 FEC_TRANSITION_URL = env.get_credential('FEC_TRANSITION_URL', 'https://transition.fec.gov')
 FEC_CLASSIC_URL = env.get_credential('FEC_CLASSIC_URL', 'http://classic.fec.gov')
@@ -45,7 +44,6 @@ FEATURES = {
     'about': bool(env.get_credential('FEC_FEATURE_ABOUT', '')),
     'agendas': bool(env.get_credential('FEC_FEATURE_AGENDAS', '')),
     'tips': bool(env.get_credential('FEC_FEATURE_TIPS', '')),
-    'radform': bool(env.get_credential('FEC_FEATURE_RADFORM', '')),
     'adrs': bool(env.get_credential('FEC_FEATURE_ADRS', '')),
     'afs': bool(env.get_credential('FEC_FEATURE_AFS', '')),
     'aggregatetotals': bool(env.get_credential('FEC_FEATURE_AGGR_TOTS', '')),
@@ -130,7 +128,7 @@ if FEC_CMS_ENVIRONMENT == 'LOCAL':
 
 ROOT_URLCONF = 'fec.urls'
 
-from data import constants
+from data import constants # noqa E402
 
 
 TEMPLATES = [
@@ -239,7 +237,7 @@ SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 WAGTAIL_SITE_NAME = "fec"
 
 # Custom settings
-from fec import constants
+from fec import constants # noqa E402
 
 CONSTANTS = constants
 
@@ -277,11 +275,11 @@ if FEC_CMS_ENVIRONMENT != 'LOCAL':
 
 UAA_CLIENT_ID = env.get_credential('CMS_LOGIN_CLIENT_ID', 'my-client-id')
 UAA_CLIENT_SECRET = env.get_credential('CMS_LOGIN_CLIENT_SECRET', 'my-client-secret')
-#fake uaa server deploys locally on port 8080.  Will be needed to login for local use
-#TODO: These will have to have a explicit reference until we can figure out how
-#to silence django warnings about the url being http (it expects https).
-#UAA_AUTH_URL = env.get_credential('CMS_LOGIN_AUTH_URL', 'http://localhost:8080/oauth/authorize')
-#UAA_TOKEN_URL = env.get_credential('CMS_LOGIN_TOKEN_URL','http://localhost:8080/oauth/token')
+# fake uaa server deploys locally on port 8080.  Will be needed to login for local use
+# TODO: These will have to have a explicit reference until we can figure out how
+# to silence django warnings about the url being http (it expects https).
+# UAA_AUTH_URL = env.get_credential('CMS_LOGIN_AUTH_URL', 'http://localhost:8080/oauth/authorize')
+# UAA_TOKEN_URL = env.get_credential('CMS_LOGIN_TOKEN_URL','http://localhost:8080/oauth/token')
 UAA_AUTH_URL = 'https://login.fr.cloud.gov/oauth/authorize'
 UAA_TOKEN_URL = 'https://login.fr.cloud.gov/oauth/token'
 WAGTAIL_FRONTEND_LOGIN_URL = 'uaa_client:login'
@@ -290,7 +288,7 @@ AUTHENTICATION_BACKENDS = \
     ['django.contrib.auth.backends.ModelBackend',
      'uaa_client.authentication.UaaBackend']
 
-DEFAULT_AUTHENTICATION_CLASSES = ['rest_framework_jwt.authentication.JSONWebTokenAuthentication',]
+DEFAULT_AUTHENTICATION_CLASSES = ['rest_framework_jwt.authentication.JSONWebTokenAuthentication']
 
 LOGGING = {
     'version': 1,

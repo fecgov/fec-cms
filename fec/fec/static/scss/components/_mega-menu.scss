@@ -25,12 +25,8 @@
   padding: u(1rem);
   margin: u(1rem 0 0 0);
 
-  .icon-heading{
-    margin-left: u(1.2rem);
-
-    &::before{
-      margin-right: u(1rem);
-    }
+  .icon-heading::before{
+    margin-right: u(1rem);
   }
 }
 
@@ -95,11 +91,14 @@
 
 .mega__item {
   margin-bottom: u(1.5rem);
-  padding-left: u(2rem);
   line-height:1.2;
   break-inside: avoid;
 
-  &:first-of-type {
+  a:after {
+    // Adding the double right-angle quote (») here since it's only decorative and not actually a closing quote
+    // (for accessibility and SEO)
+    content: " »";
+    line-height: 1em;
   }
 }
 

@@ -4,39 +4,38 @@ import logging
 
 from django.db import models
 from django.core.exceptions import ValidationError
-from django.http import HttpResponseRedirect
 from django.dispatch import receiver
 from django.db.models.signals import post_save, pre_delete
 from django.contrib.auth.models import User
-from django.contrib.auth import get_user_model
 from modelcluster.fields import ParentalKey
 from modelcluster.contrib.taggit import ClusterTaggableManager
 from taggit.models import TaggedItemBase
 from wagtail.core.models import Page, Orderable, PageRevision
 from wagtail.core.fields import StreamField
 from wagtail.core import blocks
-from wagtail.admin.edit_handlers import (FieldPanel, StreamFieldPanel,
-    PageChooserPanel, InlinePanel, MultiFieldPanel)
+from wagtail.admin.edit_handlers import (
+    FieldPanel,
+    StreamFieldPanel,
+    PageChooserPanel,
+    InlinePanel,
+    MultiFieldPanel)
 from wagtail.images.blocks import ImageChooserBlock
 from wagtail.images.edit_handlers import ImageChooserPanel
 from wagtail.documents.blocks import DocumentChooserBlock
-from wagtail.documents.edit_handlers import DocumentChooserPanel
-from wagtail.documents.models import Document
-from django.utils.encoding import python_2_unicode_compatible
 from wagtail.snippets.models import register_snippet
 from wagtail.search import index
 from django.db.models.signals import m2m_changed
 from wagtail.contrib.table_block.blocks import TableBlock
 from fec import constants
 
-logger = logging.getLogger(__name__)
-
-from home.blocks import (ThumbnailBlock, AsideLinkBlock,
+from home.blocks import (ThumbnailBlock,  # AsideLinkBlock,
                          ContactInfoBlock, CitationsBlock, ResourceBlock,
                          OptionBlock, CollectionBlock, DocumentFeedBlurb,
                          ExampleParagraph, ExampleForms, ExampleImage,
                          CustomTableBlock, ReportingExampleCards, InternalButtonBlock,
-                         ExternalButtonBlock, SnippetChooserBlock, ExampleImage)
+                         ExternalButtonBlock, SnippetChooserBlock)
+
+logger = logging.getLogger(__name__)
 
 """options for wagtail default table_block """
 core_table_options = {
@@ -59,6 +58,7 @@ stream_factory = functools.partial(
     ],
 )
 
+
 def get_content_section(page):
     """
     Find the top-level parent in order to highlight
@@ -76,7 +76,7 @@ def get_content_section(page):
     ancestors = page.get_ancestors()
     content_sections = [
         slugs.get(ancestor.slug) for ancestor in ancestors
-        if slugs.get(ancestor.slug) != None
+        if slugs.get(ancestor.slug) is not None
     ]
     if len(content_sections):
         return content_sections[0]
@@ -122,7 +122,8 @@ class ContentPage(Page):
     that extends the ContentPage model """
     @property
     def content_section(self):
-       return ''
+        return ''
+
 
 '''
 class Person(User):
@@ -169,6 +170,7 @@ def log_user_save(sender, **kwargs):
         logger.info("User change: username {0} by instance {1}".format(kwargs.get('instance').get_username(),
                                                                        kwargs.get('instance')))
 
+
 @receiver(pre_delete, sender=PageRevision)
 @receiver(post_save, sender=PageRevision)
 def log_revisions(sender, **kwargs):
@@ -183,15 +185,17 @@ def log_revisions(sender, **kwargs):
         username
     ))
 
+
 def user_groups_changed(sender, **kwargs):
     group_map = {1: 'Moderators', 2: 'Editors'}
     action_map = {'post_add': 'added', 'post_remove': 'removed'}
     if kwargs.get('action').split('_')[0] == 'post':
-        for index in kwargs.get('pk_set'):
+        for kwarg in kwargs.get('pk_set'):
             action = 'to' if kwargs.get('action').split('_')[1] == 'add' else 'from'
             logger.info("User change: User {0} was {1} {2} group {3}".format(kwargs.get('instance').get_username(),
                         action_map[kwargs.get('action')],
-                        action, group_map[index]))
+                        action, group_map[kwarg]))
+
 
 m2m_changed.connect(user_groups_changed, sender=User.groups.through)
 
@@ -211,10 +215,11 @@ class Author(models.Model):
                               on_delete=models.SET_NULL, related_name='+')
     phone = models.CharField(max_length=255, blank=True)
     bio = models.TextField(blank=True)
-    author_group = models.CharField(max_length=255,
-                            choices=constants.author_groups.items(),
-                            blank=True, help_text="Not required: Only choose this if you \
-                            want this author to show up as part an official author group")
+    author_group = models.CharField(
+        max_length=255,
+        choices=constants.author_groups.items(),
+        blank=True,
+        help_text="Not required: Only choose this if you want this author to show up as part an official author group")
 
     panels = [
         FieldPanel('name'),
@@ -269,8 +274,9 @@ class RecordPageTag(TaggedItemBase):
 
 
 class RecordPage(ContentPage):
-    formatted_title = models.CharField(max_length=255, null=True, blank=True, default='',
-                                        help_text="Use if you need italics in the title. e.g. <em>Italicized words</em>")
+    formatted_title = models.CharField(
+        max_length=255, null=True, blank=True, default='',
+        help_text="Use if you need italics in the title. e.g. <em>Italicized words</em>")
     date = models.DateField(default=datetime.date.today)
     category = models.CharField(
         max_length=255,
@@ -334,7 +340,7 @@ class RecordPage(ContentPage):
         )
     ]
 
-    search_fields =  ContentPage.search_fields + [
+    search_fields = ContentPage.search_fields + [
         index.FilterField('category'),
         index.FilterField('date')
     ]
@@ -374,7 +380,7 @@ class DigestPage(ContentPage):
 
     template = 'home/updates/digest_page.html'
 
-    search_fields =  ContentPage.search_fields + [
+    search_fields = ContentPage.search_fields + [
         index.FilterField('date')
     ]
 
@@ -405,13 +411,14 @@ def get_previous_press_release_page():
 
 class PressReleasePage(ContentPage):
     date = models.DateField(default=datetime.date.today)
-    formatted_title = models.CharField(max_length=255, null=True, blank=True, default='',
-                                        help_text="Use if you need italics in the title. e.g. <em>Italicized words</em>")
-    category = models.CharField(max_length=255,
-                                choices=constants.press_release_page_categories.items())
-    read_next = models.ForeignKey('PressReleasePage', blank=True, null=True,
-                                  default=get_previous_press_release_page,
-                                  on_delete=models.SET_NULL)
+    formatted_title = models.CharField(
+        max_length=255, null=True, blank=True, default='',
+        help_text="Use if you need italics in the title. e.g. <em>Italicized words</em>")
+    category = models.CharField(
+        max_length=255, choices=constants.press_release_page_categories.items())
+    read_next = models.ForeignKey(
+        'PressReleasePage', blank=True, null=True,
+        default=get_previous_press_release_page, on_delete=models.SET_NULL)
 
     homepage_pin = models.BooleanField(default=False)
     homepage_pin_expiration = models.DateField(blank=True, null=True)
@@ -438,7 +445,7 @@ class PressReleasePage(ContentPage):
         )
     ]
 
-    search_fields =  ContentPage.search_fields + [
+    search_fields = ContentPage.search_fields + [
         index.FilterField('category'),
         index.FilterField('date')
     ]
@@ -501,9 +508,9 @@ class TipsForTreasurersPage(ContentPage):
     content_panels = ContentPage.content_panels + [
         FieldPanel('date'),
         PageChooserPanel('read_next')
-        ]
+    ]
 
-    search_fields =  ContentPage.search_fields + [
+    search_fields = ContentPage.search_fields + [
         index.FilterField('date')
     ]
 
@@ -543,7 +550,7 @@ class HomePageBannerAnnouncement(Page):
             FieldPanel('date_active'),
             FieldPanel('date_inactive'),
             FieldPanel('active'),
-            ],
+        ],
             heading="Home page banner announcement"
         )
     ]
@@ -558,7 +565,9 @@ class AlertForEmergencyUseOnly(Page):
         leave Go-Live and Expiry fields blank in the Settings-Tab above.')
     alert_date_inactive = models.DateTimeField(null=True, blank=False, help_text='Set date-inactive here and \
         leave Go-Live and Expiry fields blank in the Settings-Tab above.')
-    alert_active = models.BooleanField(default=False, help_text='Requires approval by Amy Kort or Wei Luo prior to deployment.')
+    alert_active = models.BooleanField(
+        default=False,
+        help_text='Requires approval by Amy Kort or Wei Luo prior to deployment.')
 
     content_panels = Page.content_panels + [
         MultiFieldPanel([
@@ -568,7 +577,7 @@ class AlertForEmergencyUseOnly(Page):
             FieldPanel('alert_date_active'),
             FieldPanel('alert_date_inactive'),
             FieldPanel('alert_active'),
-            ],
+        ],
             heading="This 'alert for emergency use only' feature \
             is used exclusively for an agency shutdown, or emergency \
             event in which the agency as a whole cannot assist the \
@@ -595,7 +604,9 @@ class CustomPage(Page):
         ('contact_info', ContactInfoBlock()),
         ('internal_button', InternalButtonBlock()),
         ('external_button', ExternalButtonBlock()),
-        ('contribution_limits_table', SnippetChooserBlock('home.EmbedTableSnippet', template = 'blocks/embed-table.html', icon='table')),
+        ('contribution_limits_table', SnippetChooserBlock(
+            'home.EmbedTableSnippet',
+            template='blocks/embed-table.html', icon='table')),
     ], null=True)
     sidebar = stream_factory(null=True, blank=True)
     related_topics = StreamField([
@@ -603,8 +614,7 @@ class CustomPage(Page):
             blocks.PageChooserBlock(label="Related topic")
         ))
     ], null=True, blank=True)
-    citations = StreamField([('citations', blocks.ListBlock(CitationsBlock()))],
-                    null=True, blank=True)
+    citations = StreamField([('citations', blocks.ListBlock(CitationsBlock()))], null=True, blank=True)
     record_articles = StreamField([
         ('record_articles', blocks.ListBlock(
             blocks.PageChooserBlock(target_model=RecordPage)
@@ -614,12 +624,11 @@ class CustomPage(Page):
         ('continue_learning', blocks.ListBlock(ThumbnailBlock(), icon='doc-empty')),
     ], null=True, blank=True)
     show_contact_link = models.BooleanField(
-                                    max_length=255, default=True,
-                                    null=False, blank=False,
-                                    choices=[
-                                        (True, 'Show contact link'),
-                                        (False, 'Do not show contact link')
-                                    ])
+        max_length=255, default=True, null=False, blank=False,
+        choices=[
+            (True, 'Show contact link'),
+            (False, 'Do not show contact link')
+        ])
 
     content_panels = Page.content_panels + [
         FieldPanel('author'),
@@ -629,10 +638,10 @@ class CustomPage(Page):
         StreamFieldPanel('citations'),
         StreamFieldPanel('continue_learning'),
         MultiFieldPanel([
-                StreamFieldPanel('sidebar'),
-                StreamFieldPanel('record_articles'),
-                FieldPanel('show_contact_link'),
-            ],
+            StreamFieldPanel('sidebar'),
+            StreamFieldPanel('record_articles'),
+            FieldPanel('show_contact_link'),
+        ],
             heading="Sidebar",
             classname="collapsible"
         )
@@ -701,6 +710,7 @@ class DocumentPage(ContentPage):
         # Return the file extension of file_url
         return self.file_url.rsplit('.', 1)[1].upper()
 
+
 class DocumentFeedPage(ContentPage):
     subpage_types = ['DocumentPage', 'ResourcePage']
     intro = StreamField([
@@ -754,9 +764,11 @@ class AboutLandingPage(Page):
         StreamFieldPanel('hero'),
         StreamFieldPanel('sections')
     ]
+
     @property
     def content_section(self):
         return 'about'
+
 
 class CommissionerPage(Page):
     first_name = models.CharField(max_length=255, default='', blank=False)
@@ -844,19 +856,17 @@ class CollectionPage(Page):
     ], null=True, blank=True)
 
     show_search = models.BooleanField(
-                                    max_length=255, default=False,
-                                    null=False, blank=False,
-                                    choices=[
-                                        (True, 'Show committee search box'),
-                                        (False, 'Do not show committee search box')
-                                    ])
+        max_length=255, default=False, null=False, blank=False,
+        choices=[
+            (True, 'Show committee search box'),
+            (False, 'Do not show committee search box')
+        ])
     show_contact_card = models.BooleanField(
-                                    max_length=255, default=True,
-                                    null=False, blank=False,
-                                    choices=[
-                                        (True, 'Show contact card'),
-                                        (False, 'Do not show contact card')
-                                    ])
+        max_length=255, default=True, null=False, blank=False,
+        choices=[
+            (True, 'Show contact card'),
+            (False, 'Do not show contact card')
+        ])
     content_panels = Page.content_panels + [
         StreamFieldPanel('body'),
         FieldPanel('sidebar_title'),
@@ -880,6 +890,7 @@ class CollectionPage(Page):
     def content_section(self):
         return get_content_section(self)
 
+
 class ResourcePage(Page):
     # Class for pages that include a side nav, multiple sections and citations
     date = models.DateField(default=datetime.date.today)
@@ -901,22 +912,18 @@ class ResourcePage(Page):
             blocks.PageChooserBlock(label="Related topic")
         ))
     ], null=True, blank=True)
-    category = models.CharField(max_length=255,
-                                choices=constants.report_child_categories.items(),
-                                help_text='If this is a report, add a category',
-                                blank=True,
-                                null=True)
-    #breadcrumb_style removed from promote-panel in favor of controlling breadcrumbs by parent section
-    breadcrumb_style = models.CharField(max_length=255,
-        choices=[('primary', 'Blue'), ('secondary', 'Red')],
-        default='primary')
+    category = models.CharField(
+        max_length=255, choices=constants.report_child_categories.items(),
+        help_text='If this is a report, add a category', blank=True, null=True)
+    # breadcrumb_style removed from promote-panel in favor of controlling breadcrumbs by parent section
+    breadcrumb_style = models.CharField(
+        max_length=255, choices=[('primary', 'Blue'), ('secondary', 'Red')], default='primary')
     show_contact_card = models.BooleanField(
-                                    max_length=255, default=False,
-                                    null=False, blank=False,
-                                    choices=[
-                                        (True, 'Show contact card'),
-                                        (False, 'Do not show contact card')
-                                    ])
+        max_length=255, default=False, null=False, blank=False,
+        choices=[
+            (True, 'Show contact card'),
+            (False, 'Do not show contact card')
+        ])
 
     content_panels = Page.content_panels + [
         StreamFieldPanel('intro'),
@@ -1015,9 +1022,8 @@ class MeetingPage(Page):
     approved_minutes_link = models.URLField(blank=True)
     sunshine_act_links = models.TextField(
         blank=True, help_text='URLs separated by a newline')
-    live_video_embed = models.CharField(blank=True, max_length=255,\
-        help_text='Youtube video ID of the live-stream of the meeting')
-
+    live_video_embed = models.CharField(
+        blank=True, max_length=255, help_text='Youtube video ID of the live-stream of the meeting')
 
     imported_html = StreamField(
         [('html_block', blocks.RawHTMLBlock())],
@@ -1063,7 +1069,7 @@ class MeetingPage(Page):
         ),
         MultiFieldPanel(
             [
-                #FieldPanel('sunshine_act_links'),
+                # FieldPanel('sunshine_act_links'),
                 StreamFieldPanel('sunshine_act_doc_upld'),
             ],
             heading='Sunshine notices',
@@ -1101,7 +1107,7 @@ class MeetingPage(Page):
         FieldPanel('homepage_hide')
     ]
 
-    search_fields =  Page.search_fields + [
+    search_fields = Page.search_fields + [
         index.FilterField('title'),
         index.FilterField('meeting_type'),
         index.FilterField('date'),
@@ -1125,13 +1131,13 @@ class MeetingPage(Page):
 class ExamplePage(Page):
     """Page template for "how to report" and "example scenario" pages
     Always within the Help section"""
-    featured_image = models.ForeignKey('wagtailimages.Image', blank=True, null=True,
-                                   on_delete=models.SET_NULL, related_name='+')
+    featured_image = models.ForeignKey(
+        'wagtailimages.Image', blank=True, null=True, on_delete=models.SET_NULL, related_name='+')
 
     pre_title = models.CharField(blank=True, null=True, max_length=255, choices=[
-            ('how', 'How to report'),
-            ('scenario', 'Example scenario'),
-            ('example','Example')
+        ('how', 'How to report'),
+        ('scenario', 'Example scenario'),
+        ('example', 'Example')
     ])
 
     body = StreamField([
@@ -1146,7 +1152,8 @@ class ExamplePage(Page):
 
     related_media_title = models.CharField(blank=True, null=True, max_length=255)
     related_media = StreamField([
-        ('continue_learning', blocks.ListBlock(ThumbnailBlock(), icon='doc-empty', template='blocks/related-media.html')),
+        ('continue_learning', blocks.ListBlock(ThumbnailBlock(),
+         icon='doc-empty', template='blocks/related-media.html')),
     ], null=True, blank=True)
 
     content_panels = Page.content_panels + [
@@ -1160,6 +1167,7 @@ class ExamplePage(Page):
     @property
     def content_section(self):
         return 'help'
+
 
 @register_snippet
 class EmbedTableSnippet(models.Model):
@@ -1175,6 +1183,7 @@ class EmbedTableSnippet(models.Model):
 
     def __str__(self):
         return '{} ({})'.format(self.title, self.description)
+
 
 class ContactPage(Page):
     contact_items = StreamField([
@@ -1195,11 +1204,12 @@ class ContactPage(Page):
     def content_section(self):
         return 'about'
 
+
 class FullWidthPage(ContentPage):
-    formatted_title = models.CharField(max_length=255, null=True, blank=True, default='',
-                                        help_text="Use if you need italics in the title. e.g. <em>Italicized words</em>")
-    citations = StreamField([('citations', blocks.ListBlock(CitationsBlock()))],
-                    null=True, blank=True)
+    formatted_title = models.CharField(
+        max_length=255, null=True, blank=True, default='',
+        help_text="Use if you need italics in the title. e.g. <em>Italicized words</em>")
+    citations = StreamField([('citations', blocks.ListBlock(CitationsBlock()))], null=True, blank=True)
 
     template = 'home/full_width_page.html'
     content_panels = ContentPage.content_panels + [
@@ -1208,7 +1218,7 @@ class FullWidthPage(ContentPage):
 
     promote_panels = Page.promote_panels
 
-    search_fields =  ContentPage.search_fields
+    search_fields = ContentPage.search_fields
 
     @property
     def content_section(self):

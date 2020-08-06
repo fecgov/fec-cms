@@ -29,9 +29,9 @@ def _call_api(*path_parts, **filters):
 
     path = os.path.join(settings.FEC_API_VERSION, *[x.strip("/") for x in path_parts])
     url = parse.urljoin(settings.FEC_API_URL, path)
-    # Timeout is set in seconds 
-    timeout = 90 
-    
+    # Timeout is set in seconds
+    timeout = 90
+
     results = session.get(url, params=filters, timeout=timeout)
 
     # Log the caller function and API endpoint
@@ -153,12 +153,17 @@ def load_legal_mur(mur_no):
         mur["participants_by_type"] = _get_sorted_participants_by_type(mur)
 
         documents_by_type = OrderedDict()
-        for doc in mur["documents"]:
-            if doc["category"] in documents_by_type:
-                documents_by_type[doc["category"]].append(doc)
-            else:
-                documents_by_type[doc["category"]] = [doc]
-        mur["documents_by_type"] = documents_by_type
+        try:
+            mur_docs = mur["documents"]
+            if len(mur_docs) > 0:
+                for doc in mur["documents"]:
+                    if doc["category"] in documents_by_type:
+                        documents_by_type[doc["category"]].append(doc)
+                    else:
+                        documents_by_type[doc["category"]] = [doc]
+                mur["documents_by_type"] = documents_by_type
+        except KeyError:
+            logger.error("MUR " + str(mur_no) + ": There are no MUR documents loaded")
     return mur
 
 

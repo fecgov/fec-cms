@@ -3,18 +3,15 @@ from itertools import chain
 from operator import attrgetter
 
 from django.conf import settings
-from django.http import HttpResponse
 from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
 from django.db.models import Q
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404, render
-from django.views.defaults import server_error
 from wagtail.documents.models import Document
 
-from fec.forms import ContactRAD, form_categories
+from fec.forms import ContactRAD, fetch_categories  # form_categories
 from home.models import (CommissionerPage, DigestPage, MeetingPage,
                          PressReleasePage, RecordPage, TipsForTreasurersPage)
-
 
 
 def replace_dash(string):
@@ -177,7 +174,7 @@ def updates(request):
     except EmptyPage:
         updates = paginator.page(paginator.num_pages)
 
-    page_context = {"title": "Latest updates", "content_section" : "about"}
+    page_context = {"title": "Latest updates", "content_section": "about"}
 
     category_list = list(map(replace_space, category_list))
 
@@ -249,7 +246,8 @@ def contact_rad(request):
         "content_section": "help",
     }
 
-    if settings.FEATURES["radform"]:
+    # Only show contact form if we can contact ServiceNow
+    if fetch_categories():
         # If it's a POST, post to the ServiceNow API
         if request.method == "POST":
             form = ContactRAD(request.POST)
@@ -372,7 +370,7 @@ def index_meetings(request):
     except EmptyPage:
         executive_sessions = executive_paginator.page(executive_paginator.num_pages)
 
-    page_context = {"content_section": "about","title": "Commission meetings"}
+    page_context = {"content_section": "about", "title": "Commission meetings"}
 
     return render(
         request,
@@ -402,6 +400,7 @@ def guides(request):
         {"self": page_context},
     )
 
+
 # Custom handle 500 error for website status
 def error_500(request, template_name="500.html"):
     cms_env = request.GET.get("FEC_CMS_ENVIRONMENT", "")
@@ -409,9 +408,9 @@ def error_500(request, template_name="500.html"):
         return render(
             request,
             '500-status.html',
-            {'FEC_CMS_ENVIRONMENT' : cms_env })
+            {'FEC_CMS_ENVIRONMENT': cms_env})
 
     return render(
         request,
         template_name,
-        {'FEC_CMS_ENVIRONMENT' : cms_env })
+        {'FEC_CMS_ENVIRONMENT': cms_env})

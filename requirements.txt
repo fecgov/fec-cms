@@ -1,4 +1,4 @@
-Django==2.2.11
+Django==2.2.13
 cfenv==0.5.2
 dj-database-url==0.4.2
 django-libsass==0.7
@@ -9,7 +9,7 @@ psycopg2==2.8.5
 requests==2.21.0
 slacker==0.8.6
 whitenoise==2.0.3
-wagtail==2.7.2
+wagtail==2.7.3
 Jinja2==2.10.1
 django_jinja==2.4.1
 CacheControl==0.11.5
@@ -40,3 +40,4 @@ pytest==3.7.4
 Faker==0.8.6
 pytest-django==3.4.2
 pytest-cov==2.5.1
+pytest-flake8==1.0.6

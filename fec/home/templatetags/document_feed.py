@@ -2,11 +2,10 @@ from django import template
 from itertools import chain
 from operator import attrgetter
 
-from django.conf import settings
 from home.models import DocumentPage, ResourcePage
-from wagtail.core.models import Page, Orderable
 
 register = template.Library()
+
 
 def get_documents(page, year='', category=''):
     documents = DocumentPage.objects.child_of(page).live().order_by('-date')
@@ -19,10 +18,12 @@ def get_documents(page, year='', category=''):
 
     return documents
 
+
 def get_resource_pages(page, year='', category=''):
     resource_pages = ResourcePage.objects.child_of(page).live()
 
     return resource_pages
+
 
 @register.inclusion_tag('partials/document-feed.html')
 def document_feed(page, request):
@@ -36,11 +37,11 @@ def document_feed(page, request):
     documents = get_documents(page, year=year, category=category)
     resource_pages = get_resource_pages(page, year=year, category=category)
     all_documents = sorted(
-      chain(documents, resource_pages),
-      key=attrgetter('date'),
-      reverse=True
+        chain(documents, resource_pages),
+        key=attrgetter('date'),
+        reverse=True
     )
 
     return {
-      'documents': all_documents
+        'documents': all_documents
     }

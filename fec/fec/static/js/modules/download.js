@@ -195,7 +195,7 @@ DownloadItem.prototype.handleServerError = function(xhr) {
   } else {
     this.$body.html(
       '<div class="message message--alert message--mini">' +
-        'Sorry, you have either exceeded your maximum downloads for the hour or encountered a server error. Please try again later.' +
+        'Sorry, this data failed to download due to a server error. Please try again later.' +
         '<button class="js-close button--cancel download__cancel"><span class="u-visually-hidden">Remove</span></button>' +
         '</div>'
     );
