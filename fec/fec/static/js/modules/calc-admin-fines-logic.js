@@ -17,24 +17,19 @@ const availableDates = [
   },
   {
     value: '2020',
-    label: 'On or after [TBD], 2020',
-    summary: 'Assessed on or after [TBD] 2020'
+    label: 'On or after August 7, 2020',
+    summary: 'Assessed on or after August 7, 2020'
   },
   {
     value: '2019',
-    label: 'January 1, 2019 to [TBD] 2020',
-    summary: 'Assessed from January 1, 2019 to [TBD] 2020'
+    label: 'January 1, 2019 to August 6, 2020',
+    summary: 'Assessed from January 1, 2019 to August 6, 2020'
   },
   {
     value: '2018',
     label: 'December 28, 2017 to December 31, 2018',
     summary: 'Assessed from December 28, 2017 to December 31, 2018'
   }
-  // {
-  //   value: '2017',
-  //   label: 'February 3, 2017 to December 17, 2017',
-  //   summary: 'Assessed from February 3, 2017 to December 17, 2018'
-  // }
 ];
 
 /**
@@ -83,7 +78,7 @@ CalcAdminFineLogic.prototype.getTotalAdminFine = function(d) {
         d.lateOrNonFiler == 'late' &&
         (d.sensitiveReport == true || d.sensitiveReport == 'true')
       ) {
-        // if it's late and sensitive
+        // if it's late and IS sensitive
         toReturn =
           steps[i].lateSens_val +
           steps[i].lateSens_multi * parseInt(d.numberOfDaysLate);
@@ -93,7 +88,7 @@ CalcAdminFineLogic.prototype.getTotalAdminFine = function(d) {
           steps[i].late_val +
           steps[i].late_multi * parseInt(d.numberOfDaysLate);
       } else if (
-        // else if it wasn't filed and is sensitive
+        // else if it wasn't filed and IS sensitive
         d.lateOrNonFiler == 'non' &&
         (d.sensitiveReport == true || d.sensitiveReport == 'true')
       ) {
