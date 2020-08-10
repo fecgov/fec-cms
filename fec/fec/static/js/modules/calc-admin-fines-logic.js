@@ -269,7 +269,7 @@ CalcAdminFineLogic.values = {
     },
     {
       maxRD: 750000,
-      late_val: 5476,
+      late_val: 5176,
       late_multi: 295,
       lateSens_val: 7765,
       lateSens_multi: 295,
