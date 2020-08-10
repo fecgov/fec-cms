@@ -145,7 +145,6 @@ CalcAdminFineLogic.prototype.getTotalAdminFine = function(d) {
  * }
  * @description
  * maxRD is really the min value for the next step. calc should be `< maxRD`, not `<=`
- * As of this writing (April 2020), the 2020 values used here are the same as those for 2019
  * The yearnumber values here should reflect those in {@see availableDates }
  */
 CalcAdminFineLogic.values = {
