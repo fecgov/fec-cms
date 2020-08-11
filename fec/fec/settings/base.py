@@ -44,7 +44,6 @@ FEATURES = {
     'about': bool(env.get_credential('FEC_FEATURE_ABOUT', '')),
     'agendas': bool(env.get_credential('FEC_FEATURE_AGENDAS', '')),
     'tips': bool(env.get_credential('FEC_FEATURE_TIPS', '')),
-    'radform': bool(env.get_credential('FEC_FEATURE_RADFORM', '')),
     'adrs': bool(env.get_credential('FEC_FEATURE_ADRS', '')),
     'afs': bool(env.get_credential('FEC_FEATURE_AFS', '')),
     'aggregatetotals': bool(env.get_credential('FEC_FEATURE_AGGR_TOTS', '')),
