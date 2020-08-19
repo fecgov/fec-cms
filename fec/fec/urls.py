@@ -1,6 +1,7 @@
-from django.conf.urls import include, url
+from django.conf.urls import include, url, re_path
 from django.conf import settings
 from django.contrib import admin
+
 from django.views.generic.base import TemplateView
 
 from wagtail.admin import urls as wagtailadmin_urls
@@ -22,6 +23,10 @@ urlpatterns = [
     url(r'^auth/', include(uaa_urls)),
     url(r'^admin/', include(wagtailadmin_urls)),
     url(r'^calendar/$', home_views.calendar),
+    re_path(
+        r'^about/leadership-and-structure/(?P<commissioner_slug>[a-z0-9]+-[a-z0-9]+[a-z0-9-]*)/statements-and-opinions/$',
+        home_views.commissioner_statements_and_opinions
+    ),
     url(r'^about/leadership-and-structure/commissioners/$', home_views.commissioners),
     url(r'^documents/', include(wagtaildocs_urls)),
     url(r'^help-candidates-and-committees/question-rad/$', home_views.contact_rad),

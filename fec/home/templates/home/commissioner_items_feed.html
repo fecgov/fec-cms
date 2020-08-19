@@ -1,0 +1,67 @@
+{# USAGE: Template for the single commissioner pages, #}
+{# /about/leadership-and-structure/[commissioner-name-slug]/ #}
+
+{% extends "home/feed_base.html" %}
+{% load wagtailcore_tags %}
+{% load staticfiles %}
+{% load filters %}
+
+
+{% block intro %}
+  <p class="t-lead">Search or browse the statements and opinions made by Commissioner {{ self.commissioner_name }}.</p>
+  <p>category: {{ self.category }}</p>
+  <p>subject: {{ self.subject }}</p>
+  <p>year: {{ self.year }}</p>
+{% endblock %}
+
+{% block filters %}
+<form action="/about/leadership-and-structure/{{ self.commissioner_slug }}/statements-and-opinions/" class="js-form-nav container">
+    <div class="filter">
+      <label class="label" for="publication-type">Category (Type)</label>
+      <select id="commissioner-item-category" name="category">
+        <option value="">All</option>
+        <option value="opinion" {% if 'opinion' == self.category %}selected{% endif %}>Opinion</option>
+        <option value="report" {% if 'report' == self.category %}selected{% endif %}>Report</option>
+        <option value="testimony" {% if 'testimony' == self.category %}selected{% endif %}>Testimony</option>
+      </select>
+    </div>
+    <div class="filter">
+      <label class="label" for="publication-type">Subject</label>
+      <select id="commissioner-item-category" name="subject">
+        <option value="">All</option>
+        <option value="comm_subj_0" {% if 'comm_subj_0' == self.subject %}selected{% endif %}>Subject 0</option>
+        <option value="comm_subj_1" {% if 'comm_subj_1' == self.subject %}selected{% endif %}>Subject 1</option>
+        <option value="comm_subj_2" {% if 'comm_subj_2' == self.subject %}selected{% endif %}>Subject 2</option>
+      </select>
+    </div>
+    <div class="filter">
+      <div class="combo combo--filter--mini">
+        <label for="year" class="label">Year</label>
+        <input id="year" class="combo__input" name="year" type="text" value="{{ self.year }}" placeholder="YYYY">
+        <button type="submit" class="combo__button button button--standard button--go"><span class="u-visually-hidden">Filter</span></button>
+      </div>
+    </div>
+</form>
+{% endblock %}
+
+{% block feed %}
+  {% if self.items %}
+    {% for item in self.items %}
+      {% include 'partials/commissioner-item.html' with update=update show_tag=True %}
+    {% endfor %}
+    <div class="results-info">
+      <span>Page {{ self.items.number }} of {{ self.items.paginator.num_pages }}</span>
+      {% if self.items.has_previous %}
+          <a class="button button--standard button--previous" href="?page={{ items.previous_page_number }}{% for key,value in request.GET.items %}{% ifnotequal key 'page' %}&amp;{{ key }}={{ value }}{% endifnotequal %}{% endfor %}"><span class="u-visually-hidden">Previous</span></a>
+      {% endif %}
+      {% if self.items.has_next %}
+          <a class="button button--standard button--next" href="?page={{ items.next_page_number }}{% for key,value in request.GET.items %}{% ifnotequal key 'page' %}&amp;{{ key }}={{ value }}{% endifnotequal %}{% endfor %}"><span class="u-visually-hidden">Next</span></a>
+      {% endif %}
+    </div>
+  {% else %}
+  <div class="message message--info">
+    <h2>No results</h2>
+    <p>We didn’t find any statements or opinions by {{ self.commissioner_name }} matching the requested filters.</p>
+  </div>
+  {% endif %}
+{% endblock %}

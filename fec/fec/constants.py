@@ -207,6 +207,21 @@ report_child_categories = OrderedDict()
 for category in report_category_groups.keys():
     report_child_categories.update(report_category_groups[category])
 
+# TODO
+# commissioner_item_categories = record_page_categories = OrderedDict((x.lower(), x) for x in [
+commissioner_item_categories = OrderedDict([
+    ('opinion', 'Opinion'),
+    ('report', 'Report'),
+    ('testimony', 'Testimony'),
+])
+
+# TODO
+# commissioner_item_categories = record_page_categories = OrderedDict((x.lower(), x) for x in [
+commissioner_item_subjects = OrderedDict([
+    ('comm_subj_0', 'Commissioner Item Subject 0'),
+    ('comm_subj_1', 'Commissioner Item Subject 1'),
+    ('comm_subj_2', 'Commissioner Item Subject 2'),
+])
 
 # Search index constants
 # These are the parent pages for which we want *all* descendants of, not just direct children

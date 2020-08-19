@@ -1,0 +1,43 @@
+{# Template based on /fec/fec/templates/partials/update.html #}
+
+<!-- {% load wagtailimages_tags %} -->
+{% load filters %}
+
+<article class="post">
+  <div class="post__pre">
+    {{ item.display_date }}
+  </div>
+  <div class="row">
+    <div class="usa-width-three-fourths">
+        <h3>
+            item.url: {{ item.link_doc }}<br>
+            <!-- item.related_document: {{ item.related_document }}<br> -->
+            <!-- item.related_document.url: {{ item.related_document.url }}<br> -->
+            <!-- item.url: {{ item.url }}<br> -->
+            {% if item.url is not "" %}
+        <a href="{{ item.url }}">{{ item.title }}</a> (PDF)
+            {% else %}
+                {{ item.title }}
+                {% if item.link_html %}
+                <a href="{{ item.link_html }}">(HTML)</a>
+                {% endif %}
+                {% if item.link_pdf %}
+                <a href="{{ item.link_pdf }}">(PDF)</a>
+                {% endif %}
+                {% if item.link_video %}
+                <a href="{{ item.link_video }}">(video)</a>
+                {% endif %}
+            {% endif %}
+
+        </h3>
+      {% if item.category %}
+        <div class="post__meta t-sans">
+          <a class="tag tag--secondary" href="./?category={{item.category|slugify}}">{{item.category}}</a>
+          {% if item.subject %}
+            in: <a href="./?subject={{item.subject|slugify}}">{{ item.subject|capfirst }}</a>
+          {% endif %}
+        </div>
+      {% endif %}
+    </div>
+  </div>
+</article>

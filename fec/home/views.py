@@ -10,7 +10,7 @@ from django.shortcuts import get_object_or_404, render
 from wagtail.documents.models import Document
 
 from fec.forms import ContactRAD  # form_categories
-from home.models import (CommissionerPage, DigestPage, MeetingPage,
+from home.models import (CommissionerItem, CommissionerPage, DigestPage, MeetingPage,
                          PressReleasePage, RecordPage, TipsForTreasurersPage)
 
 
@@ -95,6 +95,42 @@ def get_tips(year=None, search=None):
     return tips
 
 
+def get_commissioner(slug=None):
+    """
+    Returns either a full or filtered QuerySet of every CommissionerPage object, the commssioners themselves
+    """
+    commissioners = CommissionerPage.objects.live()
+    if slug:
+        commissioners = commissioners.filter(slug=slug).first()
+
+    return commissioners
+
+
+def get_commissioner_items(commissioner_slug=None, category=None, subject=None, year=None):
+    items = CommissionerItem.objects.live()
+
+    if category:
+        items = items.filter(category__contains=category)
+
+    if subject:
+        items = items.filter(subject__contains=subject)
+
+    if year:
+        year = int(year)
+        items = items.filter(display_date__gte=datetime(year, 1, 1)).filter(
+            display_date__lte=datetime(year, 12, 31)
+        )
+
+    # Finally, remove any without the requested slug in its commissioners list
+    if commissioner_slug:  # If we're filtering to one commissioner,
+        for item in items:  # For each commissioner item,
+            # for comm_item in item.commissioners: # Check its commissioners
+            if (commissioner_slug not in str(item.commissioners)):
+                items = items.not_page(item)
+
+    return items
+
+
 def updates(request):
     digests = ""
     records = ""
@@ -149,6 +185,7 @@ def updates(request):
             tips = tips.filter(date__gte=datetime(year, 1, 1)).filter(
                 date__lte=datetime(year, 12, 31)
             )
+            # Not going to filter commissioner items by year here
 
         if search:
             press_releases = press_releases.search(search)
@@ -199,6 +236,9 @@ def calendar(request):
 
 
 def commissioners(request):
+    """
+    For the list of all commissioners
+    """
     chair_commissioner = (
         CommissionerPage.objects.filter(commissioner_title__contains="Chair")
         .exclude(commissioner_title__contains="Vice")
@@ -232,6 +272,58 @@ def commissioners(request):
     }
 
     return render(request, "home/commissioners.html", {"self": page_context})
+
+
+def commissioner_statements_and_opinions(request, commissioner_slug):
+    """
+    TODO
+    """
+    # We're only going to look at one requested category, subject, or year
+    req_category = request.GET.get("category", "")
+    req_subject = request.GET.get("subject", "")
+    req_year = request.GET.get("year", "")
+
+    commissioner = get_commissioner(slug=commissioner_slug)
+    commissioner_name = commissioner.title
+
+    commissioner_items = get_commissioner_items(
+        commissioner_slug=commissioner_slug,
+        category=req_category,
+        subject=req_subject,
+        year=req_year,
+    )
+
+    page_context = {
+        "category": req_category,
+        "subject": req_subject,
+        "year": req_year,
+        "title": "Commissioner %s statements and opinions" % (commissioner_name),
+        "content_section": "about",
+        "commissioner_slug": commissioner_slug,
+        "commissioner_name": commissioner_name,
+        "items": commissioner_items,
+        "ancestors": [
+            {"title": "About the FEC", "url": "/about/"},
+            {
+                "title": "Leadership and structure",
+                "url": "/about/leadership-and-structure",
+            },
+            {
+                "title": "All Commissioners",
+                "url": "/about/leadership-and-structure/commissioners",
+            },
+            {
+                "title": commissioner_name,
+                "url": "/about/leadership-and-structure/commissioners/%s/" % (commissioner_slug),
+            },
+            {
+                "title": "Statements and Opinions",
+                "url": "/about/leadership-and-structure/commissioners/%s/statements-and-opinions" % (commissioner_slug),
+            },
+        ],
+    }
+
+    return render(request, "home/commissioner_items_feed.html", {"self": page_context})
 
 
 def contact_rad(request):

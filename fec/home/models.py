@@ -15,25 +15,38 @@ from wagtail.core.fields import StreamField
 from wagtail.core import blocks
 from wagtail.admin.edit_handlers import (
     FieldPanel,
-    StreamFieldPanel,
-    PageChooserPanel,
+    HelpPanel,
     InlinePanel,
-    MultiFieldPanel)
+    MultiFieldPanel,
+    PageChooserPanel,
+    StreamFieldPanel,
+)
 from wagtail.images.blocks import ImageChooserBlock
 from wagtail.images.edit_handlers import ImageChooserPanel
-from wagtail.documents.blocks import DocumentChooserBlock
-from wagtail.snippets.models import register_snippet
 from wagtail.search import index
+from wagtail.snippets.models import register_snippet
 from django.db.models.signals import m2m_changed
 from wagtail.contrib.table_block.blocks import TableBlock
 from fec import constants
 
-from home.blocks import (ThumbnailBlock,  # AsideLinkBlock,
-                         ContactInfoBlock, CitationsBlock, ResourceBlock,
-                         OptionBlock, CollectionBlock, DocumentFeedBlurb,
-                         ExampleParagraph, ExampleForms, ExampleImage,
-                         CustomTableBlock, ReportingExampleCards, InternalButtonBlock,
-                         ExternalButtonBlock, SnippetChooserBlock)
+from home.blocks import (
+    CitationsBlock,
+    CollectionBlock,
+    ContactInfoBlock,
+    CustomTableBlock,
+    DocumentChooserBlock,
+    DocumentFeedBlurb,
+    ExampleForms,
+    ExampleImage,
+    ExampleParagraph,
+    ExternalButtonBlock,
+    InternalButtonBlock,
+    OptionBlock,
+    ReportingExampleCards,
+    ResourceBlock,
+    SnippetChooserBlock,
+    ThumbnailBlock,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -838,6 +851,97 @@ class CommissionerPage(Page):
         ]
 
         return context
+
+
+# TODO
+# We aren't planning to show individual commissioner items,
+# only showing them in the list in commissioner_items_feed.html
+class CommissionerItem(ContentPage):
+    related_document = StreamField([
+        ('related_document', DocumentChooserBlock(
+            required=False,
+            null=True,
+            verbose_name='Linked document',
+        )
+        )],
+        blank=True,
+    )
+    display_date = models.DateField(default=datetime.date.today)
+    link_html = models.URLField(
+        max_length=255,
+        null=True,
+        verbose_name='HTML link',
+        blank=True,
+    )
+    link_pdf = models.URLField(
+        max_length=255,
+        # help_text='If linking to a Document, use the selector, not this field.',
+        null=True,
+        verbose_name='PDF link',
+        blank=True,
+    )
+    link_video = models.URLField(
+        max_length=255, null=True, verbose_name='Video link', blank=True,
+    )
+    category = models.CharField(
+        choices=constants.commissioner_item_categories.items(),
+        max_length=255,
+        null=True
+    )
+    subject = models.CharField(
+        choices=constants.commissioner_item_subjects.items(),
+        max_length=255,
+        null=True
+    )
+    commissioners = StreamField([
+        ('commissioner', blocks.PageChooserBlock(
+            page_type=CommissionerPage, required=False, null=True, verbose_name='Connected commissioner(s)'
+        )),
+    ])
+
+    content_panels = Page.content_panels + [
+        HelpPanel(
+            content='<p>This item will automatically be shown under the "Statements and Opinions" list of any linked Commissioners.</p>\
+            <p>If you choose a related document for this item, the title text will link to that document.</p>\
+            <p>If you specify HTML content, only that field will be used for title and link.</p>',
+            heading='ITEM HELP',
+        ),
+        MultiFieldPanel(
+            [
+                StreamFieldPanel('related_document'),
+                FieldPanel('link_html'),
+                FieldPanel('link_pdf'),
+                FieldPanel('link_video'),
+            ],
+            heading='Content'
+        ),
+        FieldPanel('display_date'),
+        FieldPanel('category'),
+        FieldPanel('subject'),
+        StreamFieldPanel('commissioners', help_text='Not required, but choose as many as needed.'),
+    ]
+
+    @property
+    def link_doc(self):
+        # Check whether the StreamValue has a related document
+        rel_doc_url = False
+        for block in self.related_document:
+            rel_doc_url = block.value.url
+
+        return rel_doc_url
+
+
+    # @property
+    # def content_section(self):
+    #     return get_content_section(self)
+
+    # @property
+    # def get_category(self):
+    #     return 'commissioner-item'
+
+    # @property
+    # def get_update_type(self):
+    #     return 'commissioner-item'
 
 
 class CollectionPage(Page):
