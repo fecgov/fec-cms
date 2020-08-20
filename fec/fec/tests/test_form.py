@@ -3,11 +3,16 @@ import requests
 
 from unittest import mock
 from django.test import TestCase
-from fec.forms import ContactRAD
+from fec.forms import ContactRAD, fetch_categories
 
 
-def mock_get():
-    requests.patch()
+class MockResponse:
+    def __init__(self, json_data, status_code):
+        self.json_data = json_data
+        self.status_code = status_code
+
+    def json(self):
+        return self.json_data
 
 
 class TestContactForm(TestCase):
@@ -32,6 +37,13 @@ class TestContactForm(TestCase):
     def test_empty_submission(self):
         form = ContactRAD({})
         self.assertFalse(form.is_valid())
+
+    @mock.patch.object(requests, 'get')
+    def test_fetch_categories(self, get):
+        """Make sure we return an empty list if we can't connect to ServiceNow"""
+        get.return_value = MockResponse({}, 500)
+        categories = fetch_categories()
+        self.assertTrue(categories == [])
 
     @mock.patch.object(fec.forms, 'form_categories')
     @mock.patch.object(fec.forms.requests, 'post')

@@ -58,7 +58,7 @@ def fetch_categories():
     if base_url:
         category_url = base_url + 'sys_choice?table=u_rad_response&element=u_category'
         r = requests.get(category_url, auth=(username, password))
-        return r.json()['result']
+        return r.json().get('result', [])
     else:
         return []
 

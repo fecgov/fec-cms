@@ -1,6 +1,8 @@
 from datetime import datetime
 from itertools import chain
 from operator import attrgetter
+import requests
+import logging
 
 from django.conf import settings
 from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
@@ -9,9 +11,13 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404, render
 from wagtail.documents.models import Document
 
-from fec.forms import ContactRAD  # form_categories
+from fec.forms import ContactRAD, fetch_categories  # form_categories
 from home.models import (CommissionerPage, DigestPage, MeetingPage,
                          PressReleasePage, RecordPage, TipsForTreasurersPage)
+
+
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 
 def replace_dash(string):
@@ -246,23 +252,46 @@ def contact_rad(request):
         "content_section": "help",
     }
 
-    if settings.FEATURES["radform"]:
+    # Only show contact form if we can contact ServiceNow
+    if fetch_categories():
         # If it's a POST, post to the ServiceNow API
         if request.method == "POST":
             form = ContactRAD(request.POST)
-            response = form.post_to_service_now()
-            if response == 201:
-                return render(
-                    request,
-                    "home/contact-form.html",
-                    {"self": page_context, "success": True},
-                )
-            else:
+            # Get the captcha response from the post request and perform server-side verification
+            capchaResponse = request.POST.get('g-recaptcha-response')
+            verifyRecaptcha = requests.post(
+                "https://www.google.com/recaptcha/api/siteverify",
+                data={
+                    "secret": settings.FEC_RECAPTCHA_SECRET_KEY,
+                    "response": capchaResponse,
+                },
+            )
+            recaptchaResponse = verifyRecaptcha.json()
+            if not recaptchaResponse["success"]:
+                # if captcha failed, return and log failure
+                logger.error("Recaptcha failed - possible spam")
                 return render(
                     request,
                     "home/contact-form.html",
                     {"self": page_context, "form": form, "server_error": True},
                 )
+            else:
+                # If the captcha is good, go ahead and post it
+                response = form.post_to_service_now()
+                if response == 201:
+                    return render(
+                        request,
+                        "home/contact-form.html",
+                        {"self": page_context, "success": True},
+                    )
+                else:
+                    # This gets triggered when all the required fields are not entered into the POST request
+                    logger.error("Error submitting RAD question")
+                    return render(
+                        request,
+                        "home/contact-form.html",
+                        {"self": page_context, "form": form, "server_error": True},
+                    )
         else:
             form = ContactRAD()
     else:
