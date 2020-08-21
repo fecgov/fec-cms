@@ -899,7 +899,8 @@ class ResourcePage(Page):
     ], null=True, blank=True)
     sidebar_title = models.CharField(max_length=255, null=True, blank=True)
     related_pages = StreamField([
-        ('related_pages', blocks.ListBlock(blocks.PageChooserBlock()))
+        ('related_pages', blocks.ListBlock(blocks.PageChooserBlock())),
+        ('external_page', blocks.RichTextBlock()),
     ], null=True, blank=True)
     sections = StreamField([
         ('sections', ResourceBlock())
