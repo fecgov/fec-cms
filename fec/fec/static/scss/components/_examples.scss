@@ -58,8 +58,19 @@
   height: auto;
 }
 
+
+
+
 .example__caption {
-  @include span-columns(4);
+  width:100%;
   font-family: $serif;
   font-style: italic;
+  display: inline-block;
+  margin-top: u(2rem);
+  
+  @include media($med) {
+    @include span-columns(4);
+    margin-top: 0;
+
+  }
 }

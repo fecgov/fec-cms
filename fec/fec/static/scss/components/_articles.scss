@@ -20,12 +20,19 @@
       border-radius: 2px;
     }
   }
+
+  .block-paragraph + .block-table {
+     margin-top: u(-4rem);
+    }
+
 }
   .block-table {
     table {
       @extend .simple-table-cms;
     }
   }
+
+
 
 
 // Author-list component
