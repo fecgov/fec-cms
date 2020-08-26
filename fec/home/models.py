@@ -917,27 +917,27 @@ class CommissionerItem(ContentPage):
 
     @property
     def slug_category(self):
-        categorySlug = ''
-        categorySlug = self.category.split('/')[0]
-        return categorySlug
+        cat_slug = ''
+        cat_slug = self.category.split('/')[0]
+        return cat_slug
 
     @property
     def slug_subject(self):
-        subjectSlug = ''
-        subjectSlug = self.category.split('/')[1]
-        return subjectSlug
+        subj_slug = ''
+        subj_slug = self.category.split('/')[1]
+        return subj_slug
 
     @property
     def pretty_category(self):
-        parentCat = ''
-        parentCat = self.category.split('/')[0]
+        parent_category = ''
+        parent_category = self.category.split('/')[0]
 
-        prettyName = str(constants.commissioner_item_categories[parentCat])
-        return prettyName
+        pretty_cat = str(constants.commissioner_item_categories[parent_category])
+        return pretty_cat
 
     @property
     def pretty_subject(self):
-        prettyName = str(constants.commissioner_item_categories[self.category])
+        pretty_subj = str(constants.commissioner_item_categories[self.category])
         # If there's no slash in the category, we're dealing with a category and not a subject
         # so return nothing
         #
@@ -945,11 +945,11 @@ class CommissionerItem(ContentPage):
         # so they display correctly in the admin pull-downs.
         # We're going to pull them off for the pretty label
         if len(self.category.split('/')) == 1:
-            prettyName = ''
-        elif prettyName.find('↳ ') == 0:
-            prettyName = prettyName[2:]
+            pretty_subj = ''
+        elif pretty_subj.find('↳ ') == 0:
+            pretty_subj = pretty_subj[2:]
 
-        return prettyName
+        return pretty_subj
 
     @property
     def link_doc(self):
@@ -959,6 +959,42 @@ class CommissionerItem(ContentPage):
             rel_doc_url = block.value.url
 
         return rel_doc_url
+
+    @property
+    def links_count(self):
+        count = 0
+        count = count + 1 if self.link_doc else count
+        count = count + 1 if self.link_html else count
+        count = count + 1 if self.link_pdf else count
+        count = count + 1 if self.link_video else count
+        return count
+
+    @property
+    def links_string(self):
+        links = []
+
+        if self.link_doc:
+            links.append(
+                '<i class="icon icon--inline--right icon--inline--left i-document"></i>\
+                <a href="<a href="' + self.link_doc + ' class="t-sans t-normal">PDF</a>'
+            )
+        if self.link_pdf:
+            links.append(
+                '<i class="icon icon--inline--right icon--inline--left i-share"></i>\
+                <a href="<a href="' + self.link_pdf + ' class="t-sans t-normal">PDF</a>'
+            )
+        if self.link_html:
+            links.append(
+                '<i class="icon icon--inline--right icon--inline--left i-share"></i>\
+                <a href="<a href="' + self.link_html + ' class="t-sans t-normal">HTML</a>'
+            )
+        if self.link_video:
+            links.append(
+                '<i class="icon icon--inline--right icon--inline--left i-share"></i>\
+                <a href="<a href="' + self.link_video + ' class="t-sans t-normal">VIDEO</a>'
+            )
+
+        return ' | '.join(links)
 
 
 class CollectionPage(Page):

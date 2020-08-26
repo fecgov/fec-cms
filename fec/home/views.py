@@ -107,7 +107,7 @@ def get_commissioner(slug=None):
 
 
 def get_commissioner_items(commissioner_slug=None, category=None, subject=None, year=None, request=None):
-    items = CommissionerItem.objects.live()
+    items = CommissionerItem.objects.live().order_by('-display_date')  # live objects, most recent first
 
     if category:
         items = items.filter(category__contains=category)
@@ -286,7 +286,7 @@ def commissioners(request):
 
 def commissioner_statements_and_opinions(request, commissioner_slug):
     """
-    TODO
+    TODO: DOCUMENTATION
     """
     # We're only going to look at one requested category, subject, or year
     req_category = request.GET.get("category", "")

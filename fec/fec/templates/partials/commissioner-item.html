@@ -10,25 +10,19 @@
   <div class="row">
     <div class="usa-width-three-fourths">
         <h3>
-            item.url: {{ item.link_doc }}<br>
-            <!-- item.related_document: {{ item.related_document }}<br> -->
-            <!-- item.related_document.url: {{ item.related_document.url }}<br> -->
-            <!-- item.url: {{ item.url }}<br> -->
-            {% if item.url is not "" %}
-        <a href="{{ item.url }}">{{ item.title }}</a> (PDF)
-            {% else %}
-                {{ item.title }}
-                {% if item.link_html %}
-                <a href="{{ item.link_html }}">(HTML)</a>
-                {% endif %}
-                {% if item.link_pdf %}
-                <a href="{{ item.link_pdf }}">(PDF)</a>
-                {% endif %}
-                {% if item.link_video %}
-                <a href="{{ item.link_video }}">(video)</a>
-                {% endif %}
+          {% if item.links_count == 1 %}
+            {% if item.link_doc %}
+          <a href="{{ item.link_doc }}">{{ item.title }}</a> <i class="icon icon--inline--right icon--inline--left i-document"></i> (PDF)
+            {% elif item.link_html %}
+          <a href="{{ item.link_html }}">{{ item.title }}</a> <i class="icon icon--inline--right icon--inline--left i-share"></i> (HTML)
+            {% elif item.link_pdf %}
+          <a href="{{ item.link_pdf }}">{{ item.title }}</a> <i class="icon icon--inline--right icon--inline--left i-document"></i> (PDF)
+            {% elif item.link_video %}
+          <a href="{{ item.link_video }}">{{ item.title }}</a> <i class="icon icon--inline--right icon--inline--left i-share"></i> (HTML)
             {% endif %}
-
+          {% else %}
+              {{ item.title }} {{ item.links_string|safe }}
+          {% endif %}
         </h3>
       {% if item.category %}
         <div class="post__meta t-sans">
