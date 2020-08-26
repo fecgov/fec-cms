@@ -32,9 +32,9 @@
         </h3>
       {% if item.category %}
         <div class="post__meta t-sans">
-          <a class="tag tag--secondary" href="./?category={{item.category|slugify}}">{{item.category}}</a>
-          {% if item.subject %}
-            in: <a href="./?subject={{item.subject|slugify}}">{{ item.subject|capfirst }}</a>
+          <a class="tag tag--secondary" href="./?category={{item.slug_category}}">{{item.pretty_category}}</a>
+          {% if item.pretty_subject %}
+            in: <a href="./?category={{item.slug_category}}&subject={{item.slug_subject}}">{{ item.pretty_subject|capfirst }}</a>
           {% endif %}
         </div>
       {% endif %}

@@ -208,20 +208,72 @@ for category in report_category_groups.keys():
     report_child_categories.update(report_category_groups[category])
 
 # TODO
-# commissioner_item_categories = record_page_categories = OrderedDict((x.lower(), x) for x in [
+# commissioner_item_categories are a single taxonomy with a faked hierarchy
 commissioner_item_categories = OrderedDict([
-    ('opinion', 'Opinion'),
-    ('report', 'Report'),
-    ('testimony', 'Testimony'),
+    ('ballot-measures', 'Ballot Measures'),
+    ('best-efforts', '"Best Efforts"'),
+    ('contention-language', 'Contention Language'),
+    ('family-member-contributions', 'Family Member Contributions'),
+    ('coordination', 'Coordination'),
+    ('coordination/super-pacs', '↳ Super PACs'),
+    ('coordination/leadership-pac', '↳ Leadership PAC'),
+    ('coordination/hybrid-pacs', '↳ Hybrid PACs'),
+    ('coordination/corporations', '↳ Corporations'),
+    ('coordination/dark-money-groups-501c4', '↳ Dark Money Groups/501(c)(4)'),
+    ('coordination/state-political-party', '↳ State Political Party'),
+    ('coordination/membership-organization-pacs', '↳ Membership Organization PACs'),
+    ('contract-dispute', 'Contract Dispute'),
+    ('corporate-spending', 'Corporate Spending'),
+    ('corporate-spending/employee-coercion-threats-of-reprisal', '↳ Employee Coercion/Threats of Reprisal'),
+    ('corporate-spending/in-kind-contributions', '↳ In-Kind Contributions'),
+    ('corporate-spending/extending-credit', '↳ Extending Credit'),
+    ('corporate-spending/preparing-mailers', '↳ Preparing Mailers'),
+    ('corporate-spending/business-associations', '↳ Business Associations'),
+    ('corporate-spending/lobbyists-delivering-funds-on-behalf-of-corporation',
+      '↳ Lobbyists Delivering Funds on Behalf of Corporation'),
+    ('corporate-spending/nonprofit-corporation', '↳ Nonprofit Corporation'),
+    ('corporate-spending/salary-payments', '↳ Salary Payments'),
+    ('corporate-spending/improper-refund', '↳ Improper Refund'),
+    ('corporate-spending/express-advocacy', '↳ Express Advocacy'),
+    ('dark-money-501c4-groups', 'Dark Money/501(c)(4) groups'),
+    ('dark-money-501c4-groups/political-committee-status', '↳ Political Committee Status'),
+    ('dark-money-501c4-groups/failing-to-disclose-independent-expenditure',
+      '↳ Failing to Disclose Independent Expenditure'),
+    ('disclaimers', 'Disclaimers'),
+    ('disclaimers/brochure', '↳ Brochure'),
+    ('disclaimers/printed-box-requirement', '↳ Printed Box Requirement'),
+    ('disclaimers/internet', '↳ Internet'),
+    ('disclaimers/newspaper', '↳ Newspaper'),
+    ('disclaimers/mailer', '↳ Mailer'),
+    ('disclaimers/robocall', '↳ Robocall'),
+    ('disclaimers/radio', '↳ Radio'),
+    ('disclaimers/signs', '↳ Signs'),
+    ('disclaimers/television', '↳ Television'),
+    ('electioneering-communications', 'Electioneering Communications'),
+    ('express-advocacy', 'Express Advocacy'),
+    ('failing-to-disclose-independent-expenditure', 'Failing to Disclose Independent Expenditure'),
+    ('foreign-spending', 'Foreign Spending'),
+    ('hloga-air-travel', 'HLOGA/Air Travel'),
+    ('hosting-debates', 'Hosting Debates'),
+    ('increased-activity', 'Increased Activity'),
+    ('lobbyist-activity', 'Lobbyist Activity'),
+    ('membership-communications-exception', 'Membership Communications Exception'),
+    ('mischaracterization-of-party-in-court-filing', 'Mischaracterization of Party in Court Filing'),
+    ('payroll-deduction', 'Payroll Deduction'),
+    ('personal-use', 'Personal Use'),
+    ('press-exemption', 'Press Exemption'),
+    ('soft-money-use-of-non-federal-money-on-federal-expenses',
+      'Soft Money/Use of Non-Federal Money on Federal Expenses'),
+    ('sale-use', 'Sale & Use'),
+    ('straw-donors-conduit-contributions', 'Straw Donors/Conduit Contributions'),
+    ('super-pac-not-disclosing-till-after-election', 'Super PAC not disclosing till after election'),
+    ('testing-the-waters-candidate-status', 'Testing the Waters/Candidate Status'),
+    ('unions', 'Unions'),
+    ('use-of-opponents-name-without-permission', 'Use of Opponent’s Name Without Permission'),
+    ('volunteer-exemption', 'Volunteer Exemption'),
+    ('volunteer-mailers-exemption', 'Volunteer Mailers Exemption'),
 ])
 
-# TODO
-# commissioner_item_categories = record_page_categories = OrderedDict((x.lower(), x) for x in [
-commissioner_item_subjects = OrderedDict([
-    ('comm_subj_0', 'Commissioner Item Subject 0'),
-    ('comm_subj_1', 'Commissioner Item Subject 1'),
-    ('comm_subj_2', 'Commissioner Item Subject 2'),
-])
 
 # Search index constants
 # These are the parent pages for which we want *all* descendants of, not just direct children

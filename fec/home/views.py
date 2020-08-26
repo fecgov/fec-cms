@@ -106,14 +106,15 @@ def get_commissioner(slug=None):
     return commissioners
 
 
-def get_commissioner_items(commissioner_slug=None, category=None, subject=None, year=None):
+def get_commissioner_items(commissioner_slug=None, category=None, subject=None, year=None, request=None):
     items = CommissionerItem.objects.live()
 
     if category:
         items = items.filter(category__contains=category)
 
-    if subject:
-        items = items.filter(subject__contains=subject)
+    if subject and category:
+        categorySubjectCombo = category + "/" + subject
+        items = items.filter(category__contains=categorySubjectCombo)
 
     if year:
         year = int(year)
@@ -127,6 +128,15 @@ def get_commissioner_items(commissioner_slug=None, category=None, subject=None, 
             # for comm_item in item.commissioners: # Check its commissioners
             if (commissioner_slug not in str(item.commissioners)):
                 items = items.not_page(item)
+
+    page_num = request.GET.get("page", 1)
+    paginator = Paginator(items, 20)
+    try:
+        items = paginator.page(page_num)
+    except PageNotAnInteger:
+        items = paginator.page(1)
+    except EmptyPage:
+        items = paginator.page(paginator.num_pages)
 
     return items
 
@@ -291,6 +301,7 @@ def commissioner_statements_and_opinions(request, commissioner_slug):
         category=req_category,
         subject=req_subject,
         year=req_year,
+        request=request
     )
 
     page_context = {

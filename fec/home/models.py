@@ -888,11 +888,6 @@ class CommissionerItem(ContentPage):
         max_length=255,
         null=True
     )
-    subject = models.CharField(
-        choices=constants.commissioner_item_subjects.items(),
-        max_length=255,
-        null=True
-    )
     commissioners = StreamField([
         ('commissioner', blocks.PageChooserBlock(
             page_type=CommissionerPage, required=False, null=True, verbose_name='Connected commissioner(s)'
@@ -908,18 +903,53 @@ class CommissionerItem(ContentPage):
         ),
         MultiFieldPanel(
             [
-                StreamFieldPanel('related_document'),
                 FieldPanel('link_html'),
                 FieldPanel('link_pdf'),
                 FieldPanel('link_video'),
+                StreamFieldPanel('related_document'),
             ],
             heading='Content'
         ),
         FieldPanel('display_date'),
         FieldPanel('category'),
-        FieldPanel('subject'),
         StreamFieldPanel('commissioners', help_text='Not required, but choose as many as needed.'),
     ]
+
+    @property
+    def slug_category(self):
+        categorySlug = ''
+        categorySlug = self.category.split('/')[0]
+        return categorySlug
+
+    @property
+    def slug_subject(self):
+        subjectSlug = ''
+        subjectSlug = self.category.split('/')[1]
+        return subjectSlug
+
+    @property
+    def pretty_category(self):
+        parentCat = ''
+        parentCat = self.category.split('/')[0]
+
+        prettyName = str(constants.commissioner_item_categories[parentCat])
+        return prettyName
+
+    @property
+    def pretty_subject(self):
+        prettyName = str(constants.commissioner_item_categories[self.category])
+        # If there's no slash in the category, we're dealing with a category and not a subject
+        # so return nothing
+        #
+        # The 'secondary' category / taxonomy label starts with two special characters
+        # so they display correctly in the admin pull-downs.
+        # We're going to pull them off for the pretty label
+        if len(self.category.split('/')) == 1:
+            prettyName = ''
+        elif prettyName.find('↳ ') == 0:
+            prettyName = prettyName[2:]
+
+        return prettyName
 
     @property
     def link_doc(self):
@@ -929,19 +959,6 @@ class CommissionerItem(ContentPage):
             rel_doc_url = block.value.url
 
         return rel_doc_url
-
-
-    # @property
-    # def content_section(self):
-    #     return get_content_section(self)
-
-    # @property
-    # def get_category(self):
-    #     return 'commissioner-item'
-
-    # @property
-    # def get_update_type(self):
-    #     return 'commissioner-item'
 
 
 class CollectionPage(Page):

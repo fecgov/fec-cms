@@ -9,30 +9,100 @@
 
 {% block intro %}
   <p class="t-lead">Search or browse the statements and opinions made by Commissioner {{ self.commissioner_name }}.</p>
-  <p>category: {{ self.category }}</p>
-  <p>subject: {{ self.subject }}</p>
-  <p>year: {{ self.year }}</p>
 {% endblock %}
 
 {% block filters %}
 <form action="/about/leadership-and-structure/{{ self.commissioner_slug }}/statements-and-opinions/" class="js-form-nav container">
     <div class="filter">
-      <label class="label" for="publication-type">Category (Type)</label>
+      <label class="label" for="commissioner-item-category">Category (Type)</label>
       <select id="commissioner-item-category" name="category">
         <option value="">All</option>
-        <option value="opinion" {% if 'opinion' == self.category %}selected{% endif %}>Opinion</option>
-        <option value="report" {% if 'report' == self.category %}selected{% endif %}>Report</option>
-        <option value="testimony" {% if 'testimony' == self.category %}selected{% endif %}>Testimony</option>
+        <option value='ballot-measures' {% if 'ballot-measures' == self.category %}selected{% endif %}>Ballot Measures</option>
+        <option value='best-efforts' {% if 'best-efforts' == self.category %}selected{% endif %}>"Best Efforts"</option>
+        <option value='contention-language' {% if 'contention-language' == self.category %}selected{% endif %}>Contention Language</option>
+        <option value='family-member-contributions' {% if 'family-member-contributions' == self.category %}selected{% endif %}>Family Member Contributions</option>
+        <option value='coordination' {% if 'coordination' == self.category %}selected{% endif %}>Coordination</option>
+        <option value='contract-dispute' {% if 'contract-dispute' == self.category %}selected{% endif %}>Contract Dispute</option>
+        <option value='corporate-spending' {% if 'corporate-spending' == self.category %}selected{% endif %}>Corporate Spending</option>
+        <option value='dark-money-501c4-groups' {% if 'dark-money-501c4-groups' == self.category %}selected{% endif %}>Dark Money/ 501(c)(4) groups</option>
+        <option value='disclaimers' {% if 'disclaimers' == self.category %}selected{% endif %}>Disclaimers</option>
+        <option value='electioneering-communications' {% if 'electioneering-communications' == self.category %}selected{% endif %}>Electioneering Communications</option>
+        <option value='express-advocacy' {% if 'express-advocacy' == self.category %}selected{% endif %}>Express Advocacy</option>
+        <option value='failing-to-disclose-independent-expenditure' {% if 'failing-to-disclose-independent-expenditure' == self.category %}selected{% endif %}>Failing to Disclose Independent Expenditure</option>
+        <option value='foreign-spending' {% if 'foreign-spending' == self.category %}selected{% endif %}>Foreign Spending</option>
+        <option value='hlogaair-travel' {% if 'hlogaair-travel' == self.category %}selected{% endif %}>HLOGA/Air Travel</option>
+        <option value='hosting-debates' {% if 'hosting-debates' == self.category %}selected{% endif %}>Hosting Debates</option>
+        <option value='increased-activity' {% if 'increased-activity' == self.category %}selected{% endif %}>Increased Activity</option>
+        <option value='lobbyist-activity' {% if 'lobbyist-activity' == self.category %}selected{% endif %}>Lobbyist Activity</option>
+        <option value='membership-communications-exception' {% if 'membership-communications-exception' == self.category %}selected{% endif %}>Membership Communications Exception</option>
+        <option value='mischaracterization-of-party-in-court-filing' {% if 'mischaracterization-of-party-in-court-filing' == self.category %}selected{% endif %}>Mischaracterization of Party in Court Filing</option>
+        <option value='payroll-deduction' {% if 'payroll-deduction' == self.category %}selected{% endif %}>Payroll Deduction</option>
+        <option value='personal-use' {% if 'personal-use' == self.category %}selected{% endif %}>Personal Use</option>
+        <option value='press-exemption' {% if 'press-exemption' == self.category %}selected{% endif %}>Press Exemption</option>
+        <option value='soft-money-use-of-non-federal-money-on-federal-expenses' {% if 'soft-money-use-of-non-federal-money-on-federal-expenses' == self.category %}selected{% endif %}>Soft Money/ Use of Non-Federal Money on Federal Expenses</option>
+        <option value='sale--use' {% if 'sale--use' == self.category %}selected{% endif %}>Sale & Use</option>
+        <option value='straw-donors-conduit-contributions' {% if 'straw-donors-conduit-contributions' == self.category %}selected{% endif %}>Straw Donors/ Conduit Contributions</option>
+        <option value='super-pac-not-disclosing-till-after-election' {% if 'super-pac-not-disclosing-till-after-election' == self.category %}selected{% endif %}>Super PAC not disclosing till after election</option>
+        <option value='testing-the-waters-candidate-status' {% if 'testing-the-waters-candidate-status' == self.category %}selected{% endif %}>Testing the Waters/ Candidate Status</option>
+        <option value='unions' {% if 'unions' == self.category %}selected{% endif %}>Unions</option>
+        <option value='use-of-opponents-name-without-permission' {% if 'use-of-opponents-name-without-permission' == self.category %}selected{% endif %}>Use of Opponent’s Name Without Permission</option>
+        <option value='volunteer-exemption' {% if 'volunteer-exemption' == self.category %}selected{% endif %}>Volunteer Exemption</option>
+        <option value='volunteer-mailers-exemption' {% if 'volunteer-mailers-exemption' == self.category %}selected{% endif %}>Volunteer Mailers Exemption</option>
       </select>
     </div>
     <div class="filter">
-      <label class="label" for="publication-type">Subject</label>
-      <select id="commissioner-item-category" name="subject">
+    {% if 'coordination' == self.category %}
+      <label class="label" for="commissioner-item-subject-coordination">Subject</label>
+      <select id="commissioner-item-subject-coordination" name="subject">
         <option value="">All</option>
-        <option value="comm_subj_0" {% if 'comm_subj_0' == self.subject %}selected{% endif %}>Subject 0</option>
-        <option value="comm_subj_1" {% if 'comm_subj_1' == self.subject %}selected{% endif %}>Subject 1</option>
-        <option value="comm_subj_2" {% if 'comm_subj_2' == self.subject %}selected{% endif %}>Subject 2</option>
+        <option value='coordination-super-pacs' {% if 'coordination-super-pacs' == self.category %}selected{% endif %}>Super PACs</option>
+        <option value='coordination-leadership-pac' {% if 'coordination-leadership-pac' == self.category %}selected{% endif %}>Leadership PAC</option>
+        <option value='coordination-hybrid-pacs' {% if 'coordination-hybrid-pacs' == self.category %}selected{% endif %}>Hybrid PACs</option>
+        <option value='coordination-corporations' {% if 'coordination-corporations' == self.category %}selected{% endif %}>Corporations</option>
+        <option value='coordination-dark-money-groups-501c4' {% if 'coordination-dark-money-groups-501c4' == self.category %}selected{% endif %}>Dark Money Groups/ 501(c)(4)</option>
+        <option value='coordination-state-political-party' {% if 'coordination-state-political-party' == self.category %}selected{% endif %}>State Political Party</option>
+        <option value='coordination-membership-organization-pacs' {% if 'coordination-membership-organization-pacs' == self.category %}selected{% endif %}>Membership Organization PACs</option>
       </select>
+    {% elif 'corporate-spending' == self.category %}
+      <label class="label" for="commissioner-item-subject-corporate-spending">Subject</label>
+      <select id="commissioner-item-subject-corporate-spending" name="subject">
+        <option value="">All</option>
+        <option value='corporate-spending-employee-coercion-threats-of-reprisal' {% if 'corporate-spending-employee-coercion-threats-of-reprisal' == self.category %}selected{% endif %}>Employee Coercion/ Threats of Reprisal</option>
+        <option value='corporate-spending-in-kind-contributions' {% if 'corporate-spending-in-kind-contributions' == self.category %}selected{% endif %}>In-Kind Contributions</option>
+        <option value='corporate-spending-extending-credit' {% if 'corporate-spending-extending-credit' == self.category %}selected{% endif %}>Extending Credit</option>
+        <option value='corporate-spending-preparing-mailers' {% if 'corporate-spending-preparing-mailers' == self.category %}selected{% endif %}>Preparing Mailers</option>
+        <option value='corporate-spending-business-associations' {% if 'corporate-spending-business-associations' == self.category %}selected{% endif %}>Business Associations</option>
+        <option value='corporate-spending-lobbyists-delivering-funds-on-behalf-of-corporation' {% if 'corporate-spending-lobbyists-delivering-funds-on-behalf-of-corporation' == self.category %}selected{% endif %}>Lobbyists Delivering Funds on Behalf of Corporation</option>
+        <option value='corporate-spending-nonprofit-corporation' {% if 'corporate-spending-nonprofit-corporation' == self.category %}selected{% endif %}>Nonprofit Corporation</option>
+        <option value='corporate-spending-salary-payments' {% if 'corporate-spending-salary-payments' == self.category %}selected{% endif %}>Salary Payments</option>
+        <option value='corporate-spending-improper-refund' {% if 'corporate-spending-improper-refund' == self.category %}selected{% endif %}>Improper Refund</option>
+        <option value='corporate-spending-express-advocacy' {% if 'corporate-spending-express-advocacy' == self.category %}selected{% endif %}>Express Advocacy</option>
+    {% elif 'dark-money-501c4-groups' == self.category %}
+      <label class="label" for="commissioner-item-subject-dark-money">Subject</label>
+      <select id="commissioner-item-subject-dark-money" name="subject">
+        <option value="">All</option>
+        <option value='dark-money-501c4-groups-political-committee-status' {% if 'dark-money-501c4-groups-political-committee-status' == self.category %}selected{% endif %}>Political Committee Status</option>
+        <option value='dark-money-501c4-groups-failing-to-disclose-independent-expenditure' {% if 'dark-money-501c4-groups-failing-to-disclose-independent-expenditure' == self.category %}selected{% endif %}>Failing to Disclose Independent Expenditure</option>
+    {% elif 'disclaimers' == self.category %}
+      <label class="label" for="commissioner-item-subject-disclaimers">Subject</label>
+      <select id="commissioner-item-subject-disclaimers" name="subject">
+        <option value="">All</option>
+        <option value='disclaimers-brochure' {% if 'disclaimers-brochure' == self.category %}selected{% endif %}>Brochure</option>
+        <option value='disclaimers-printed-box-requirement' {% if 'disclaimers-printed-box-requirement' == self.category %}selected{% endif %}>Printed Box Requirement</option>
+        <option value='disclaimers-internet' {% if 'disclaimers-internet' == self.category %}selected{% endif %}>Internet</option>
+        <option value='disclaimers-newspaper' {% if 'disclaimers-newspaper' == self.category %}selected{% endif %}>Newspaper</option>
+        <option value='disclaimers-mailer' {% if 'disclaimers-mailer' == self.category %}selected{% endif %}>Mailer</option>
+        <option value='disclaimers-robocall' {% if 'disclaimers-robocall' == self.category %}selected{% endif %}>Robocall</option>
+        <option value='disclaimers-radio' {% if 'disclaimers-radio' == self.category %}selected{% endif %}>Radio</option>
+        <option value='disclaimers-signs' {% if 'disclaimers-signs' == self.category %}selected{% endif %}>Signs</option>
+        <option value='disclaimers-television' {% if 'disclaimers-television' == self.category %}selected{% endif %}>Television</option>
+      </select>
+    {% else %}
+      <label class="label" for="commissioner-item-subject">Subject</label>
+      <select id="commissioner-item-subject" name="subject" disabled="disabled">
+        <option value="">All</option>
+      </select>
+    {% endif %}
     </div>
     <div class="filter">
       <div class="combo combo--filter--mini">
