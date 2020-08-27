@@ -896,9 +896,8 @@ class CommissionerItem(ContentPage):
 
     content_panels = Page.content_panels + [
         HelpPanel(
-            content='<p>This item will automatically be shown under the "Statements and Opinions" list of any linked Commissioners.</p>\
-            <p>If you choose a related document for this item, the title text will link to that document.</p>\
-            <p>If you specify HTML content, only that field will be used for title and link.</p>',
+            content='<p>This item will automatically be included in the "Statements and Opinions"\
+            list of any linked Commissioners.</p>',
             heading='ITEM HELP',
         ),
         MultiFieldPanel(
@@ -976,22 +975,22 @@ class CommissionerItem(ContentPage):
         if self.link_doc:
             links.append(
                 '<i class="icon icon--inline--right icon--inline--left i-document"></i>\
-                <a href="<a href="' + self.link_doc + ' class="t-sans t-normal">PDF</a>'
+                <a href="{}" class="t-sans t-normal">PDF</a>'.format(self.link_doc)
             )
         if self.link_pdf:
             links.append(
                 '<i class="icon icon--inline--right icon--inline--left i-share"></i>\
-                <a href="<a href="' + self.link_pdf + ' class="t-sans t-normal">PDF</a>'
+                <a href="{}" class="t-sans t-normal" target="_blank">PDF</a>'.format(self.link_pdf)
             )
         if self.link_html:
             links.append(
                 '<i class="icon icon--inline--right icon--inline--left i-share"></i>\
-                <a href="<a href="' + self.link_html + ' class="t-sans t-normal">HTML</a>'
+                <a href="{}" class="t-sans t-normal" target="_blank">HTML</a>'.format(self.link_html)
             )
         if self.link_video:
             links.append(
                 '<i class="icon icon--inline--right icon--inline--left i-share"></i>\
-                <a href="<a href="' + self.link_video + ' class="t-sans t-normal">VIDEO</a>'
+                <a href="{}" class="t-sans t-normal" target="_blank">VIDEO</a>'.format(self.link_video)
             )
 
         return ' | '.join(links)

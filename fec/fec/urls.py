@@ -24,7 +24,7 @@ urlpatterns = [
     url(r'^admin/', include(wagtailadmin_urls)),
     url(r'^calendar/$', home_views.calendar),
     re_path(
-        r'^about/leadership-and-structure/(?P<commissioner_slug>[a-z0-9]+-[a-z0-9]+[a-z0-9-]*)/statements-and-opinions/$',
+        r'^about/leadership-and-structure/(?P<commissioner_slug>[a-z0-9]+-[a-z0-9]+[a-z0-9-]*)/statements-and-opinions/$',  # noqa: E501
         home_views.commissioner_statements_and_opinions
     ),
     url(r'^about/leadership-and-structure/commissioners/$', home_views.commissioners),
