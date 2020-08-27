@@ -67,7 +67,7 @@
   <section class="slab slab--home slab--neutral">
     <div class="container">
 
-    {% elections_lookup request %}
+  
 
       <div class="grid grid--3-wide grid--no-border slab--spacious-margin slab--ruled u-padding--top">
         <div class="grid__item">
@@ -87,7 +87,7 @@
         </div>
       </div>
 
-    {% raising_spending request %}
+
 
     </div>
   </section>
@@ -110,26 +110,6 @@
   }
 </script>
 <script src="{% asset_for_js 'home.js' %}"></script>
-<script src="{% asset_for_js 'bythenumbers.js' %}"></script>
-<script src="{% asset_for_js 'dataviz-common.js' %}"></script>
-<script src="{% asset_for_js 'election-lookup.js' %}"></script>
 <script>
-  //remove competing/confusing querystrings on homepage
-  $(function(){
-    cleanURI()
-    function cleanURI(){
-      const uri = window.location.toString();
-      if (uri.indexOf('?') > 0) {
-        window.history.replaceState({}, document.title, location.href.split('?')[0]);
-      }
-    }
-    $('#main').on('change ', 'input, select', function(){
-      cleanURI();
-    })
-    //handle Chrome insconsistency with History API
-    $('.js-office').val('P');
-    $('.js-election-year').val('2020')
-    $('.js-chart-toggle').filter('[value=receipts]').prop('checked', true)
-  });
-</script>
+ 
 {% endblock %}
