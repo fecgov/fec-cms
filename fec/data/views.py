@@ -54,6 +54,7 @@ candidate_to_committee_linkage = {
     "H0GA07265": "C00706564",
     "P00010793": "C00699090",
     "P00014407": "C00727156",
+    "H0CO03157": "C00723338",
 }
 
 committee_to_candidate_linkage = {
@@ -75,6 +76,7 @@ former_committee_names = {
     "C00706564": "LERAH LEE FOR CONGRESS",
     "C00699090": "BETO FOR AMERICA",
     "C00727156": "DEVAL FOR ALL",
+    "C00723338": "JAMES FOR COLORADO",
 }
 
 
