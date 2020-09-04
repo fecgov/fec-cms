@@ -1,0 +1,88 @@
+  <form action="javascript:void(0);" class="js-form-nav container">
+    <div class="filter">
+      <label class="label" for="filter-type" class="breakdown__title label t-inline-block">Document type</label>
+      <select id="filter-type" name="category" class="form-element--inline"></select>
+    </div>
+    <div class="filter">
+      <label class="label" for="filter-subject" class="breakdown__title label t-inline-block">Subject</label>
+      <select id="filter-subject" name="subject" class="form-element--inline"></select>
+    </div>
+    <div class="filter">
+      <label class="label" for="filter-focus" class="breakdown__title label t-inline-block">Focus</label>
+      <select id="filter-focus" name="subject" class="form-element--inline"></select>
+    </div>
+    <div class="filter">
+        <!-- <div class="combo combo--filter--mini"> -->
+          <label for="filter-year" class="label" class="breakdown__title label t-inline-block">Year</label>
+          <select id="filter-year" name="subject" class="form-element--inline"></select>
+          <!-- <button type="submit" class="combo__button button button--standard button--go"><span class="u-visually-hidden">Filter</span></button> -->
+        <!-- </div> -->
+    </div>
+    <div class="filter">
+      <!-- <div class="combo combo--filter--mini"> -->
+        <label for="filter-text" class="label" class="breakdown__title label t-inline-block">Text</label>
+        <input id="filter-text" class="combo__input" name="text" type="text" value="">
+        <!-- <button type="submit" class="combo__button button button--standard button--go"><span class="u-visually-hidden">Filter</span></button> -->
+      <!-- </div> -->
+    </div>
+    <style>
+      select {
+        background-color: #fff;
+        border-color: #aeb0b5;
+        border-width: 2px;
+        border-style: solid;
+        border-radius: 4px;
+        font-family: karla,sans-serif;
+        font-size: 1.4rem;
+        height: 3.6rem;
+        line-height: 1.4rem;
+        margin: 0;
+        padding: 1rem;
+        transition: border-color;
+        width: 100%;
+      }
+      select {
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        -ms-appearance: none;
+        -o-appearance: none;
+        appearance: none;
+        background-image: url('data:image/svg+xml;charset=utf8, %3Csvg%20%20fill%3D%27%23112e51%27%20width%3D%2210%22%20height%3D%229%22%20viewBox%3D%220%200%2010%209%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Cpath%20d%3D%22M5.706%208.013l3.685-6.234A.851.851%200%200%200%208.664.485H1.283A.852.852%200%200%200%20.55%201.769l3.69%206.244a.852.852%200%200%200%201.466%200z%22%2F%3E%3C%2Fsvg%3E');
+        background-repeat: no-repeat;
+        width: auto;
+        background-color: transparent;
+        background-repeat: no-repeat;
+        background-position: right 2rem top 50%;
+        background-size: 12px;
+        color: #212121;
+        border: 2px solid #aeb0b5;
+        padding: .6rem 3em .6rem 1rem;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+      .label {
+        color: inherit;
+        display: block;
+        font-family: karla,sans-serif;
+        font-size: 1.4rem;
+        font-weight: 700;
+        margin-bottom: .5rem;
+        padding: 0;
+        text-transform: uppercase;
+      }
+      .breakdown__title {
+        line-height: 3.4rem;
+        margin: 0;
+      }
+      .t-inline-block {
+        display: inline-block;
+      }
+      .filtered li:not(.matched) {
+        display: none;
+      }
+      .filtered li.filtered-empty-notice {
+        display: list-item;
+      }
+    </style>
+  </form>

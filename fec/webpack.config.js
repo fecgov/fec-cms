@@ -15,7 +15,9 @@ const entries = {
   'data-init': './fec/static/js/data-init.js',
   vendor: ['jquery', 'handlebars'],
   'calc-admin-fines-modal': './fec/static/js/modules/calc-admin-fines-modal.js', // Used inside base.html
-  'calc-admin-fines': './fec/static/js/modules/calc-admin-fines.js'
+  'calc-admin-fines': './fec/static/js/modules/calc-admin-fines.js',
+  'commissioner-page-filterable-content':
+    './fec/static/js/modules/commissioner-page-filterable-content.js'
 };
 
 const datatablePages = [];

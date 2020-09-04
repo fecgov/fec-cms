@@ -1,7 +1,7 @@
 {% extends "base.html" %}
-{% load wagtailcore_tags %}
-{% load wagtailimages_tags %}
+{% load static wagtailcore_tags wagtailimages_tags %}
 {% load staticfiles %}
+{% load filters %}
 
 {% block content %}
 {% include 'partials/breadcrumbs.html' with page=self links=ancestors style='secondary' %}
@@ -81,6 +81,14 @@
     </div>
     <div class="main__content">
       {{ self.commissioner_bio }}
+      {% if self.filterable_content %}
+        {% include 'partials/commissioner-page-filterable-content.html' %}
+        <div id="filterable-content" class="rich-text">
+        {{ self.filterable_content }}
+        <!-- <script src="{-{ asset_for_js('static/js/commissioner-page-filterable-content.js') }}"></script> -->
+        </div>
+        <script src="{% asset_for_js 'commissioner-page-filterable-content.js' %}" defer></script>
+      {% endif %}
     </div>
   </div>
 </article>

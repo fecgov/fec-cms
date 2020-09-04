@@ -798,6 +798,15 @@ class CommissionerPage(Page):
         ('paragraph', blocks.RichTextBlock())
     ], null=True, blank=True)
 
+    # TODO: VALIDATOR TO REMOVE /<\s+/
+    # TODO: BLOCK OTHER TAG COMBINATIONS? (e.g., <code>)
+    filterable_content = StreamField([
+        ('filterable_content', blocks.RawHTMLBlock(
+            required=False,
+            # validators=[min_length]
+        )),
+    ], null=True, blank=True)
+
     commissioner_email = models.CharField(max_length=255, blank=True)
     commissioner_phone = models.CharField(max_length=255, null=True, blank=True)
     commissioner_twitter = models.CharField(max_length=255, null=True, blank=True)
@@ -813,6 +822,7 @@ class CommissionerPage(Page):
         FieldPanel('party_affiliation'),
         FieldPanel('commissioner_title'),
         StreamFieldPanel('commissioner_bio'),
+        StreamFieldPanel('filterable_content'),
         FieldPanel('commissioner_email'),
         FieldPanel('commissioner_phone'),
         FieldPanel('commissioner_twitter'),
