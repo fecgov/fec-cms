@@ -190,6 +190,20 @@ class ExampleImage(blocks.StructBlock):
         template = 'blocks/example-image.html'
         icon = 'doc-empty'
 
+class SummarySegment(blocks.StructBlock):
+    """A lockup of an icon and blurb of contact info"""
+    latest_available_segment = blocks.ChoiceBlock(choices=[
+        ('6', '6 Month'),
+        ('12', '12 Month'),
+        ('15', '15 Month'),
+        ('18', '18 Month'),
+        ('21', '21 Month'),
+        ('24', '24 Month'),
+    ], required=True, help_text='Choose latest available segment')
+
+    class Meta:
+        template = 'blocks/summary-segment.html'
+        icon = 'date'
 
 class ResourceBlock(blocks.StructBlock):
     """A section of a ResourcePage"""
@@ -221,7 +235,8 @@ class ResourceBlock(blocks.StructBlock):
             'home.EmbedTableSnippet',
             template='blocks/embed-table.html', icon='table')),
         ('image', ImageChooserBlock()),
-        ('example_image', ExampleImage())
+        ('example_image', ExampleImage()),
+        ('summary_segment',SummarySegment()),
     ])
 
     aside = blocks.StreamBlock([
