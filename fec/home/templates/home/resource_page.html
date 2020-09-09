@@ -18,10 +18,14 @@
     <aside class="sidebar sidebar--secondary">
       <h4 class="sidebar__title">{{ self.sidebar_title }}</h4>
       <ul class="sidebar__content">
-        {% for related_pages in self.related_pages %}
-          {% for related_page in related_pages.value %}
-          <li class="u-padding--bottom"><a href="{{ related_page.url }}">{{ related_page.title }}</a></li>
-          {% endfor %}
+        {% for related_page in self.related_pages %}
+          {% if related_page.block_type == "related_pages" %}
+            {% for related in related_page.value %}
+             <li class="u-padding--bottom"><a href="{{ related.url }}">{{ related.title }}</a></li>
+            {% endfor %}
+          {% else %}
+            <li class="u-padding--bottom">{{ related_page.value}}</li>
+          {% endif %}
         {% endfor %}
       </ul>
       {% if self.show_search %}
