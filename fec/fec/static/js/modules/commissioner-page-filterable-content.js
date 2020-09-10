@@ -84,6 +84,17 @@ let optsFocus = {
 
 if ($) {
   // (Must have jQuery)
+  // Let's extend jQuery's :contains so it's case-insensitive
+  $.expr[':'].contains_ci = $.expr.createPseudo(function(arg) {
+    return function(elem) {
+      return (
+        $(elem)
+          .text()
+          .toUpperCase()
+          .indexOf(arg.toUpperCase()) >= 0
+      );
+    };
+  });
   // Build the document types list based on optsType
   $('#filter-type').append($('<option>', { value: '', text: 'All' }));
   for (let elem in optsType) {
@@ -122,9 +133,11 @@ if ($) {
     if (thisItemsYear != '' && !years.includes(thisItemsYear))
       years.push(thisItemsYear);
   });
+
   years = years.sort((a, b) => {
-    return b > a;
+    return b - a;
   });
+
   $('#filter-year').append($('<option>', { value: '', text: 'All' }));
   for (let year in years) {
     $('#filter-year').append(
@@ -144,7 +157,7 @@ if ($) {
     let filteredYear = $('#filter-year').val();
     let filterRule = '';
     if (filteredType) filterRule += '[data-type="' + filteredType + '"]';
-    if (filteredSubj) filterRule += '[data-subject="' + filteredSubj + '"]';
+    if (filteredSubj) filterRule += '[data-subj="' + filteredSubj + '"]';
     if (filteredFocu) filterRule += '[data-focus="' + filteredFocu + '"]';
     if (filteredYear) filterRule += '[data-year="' + filteredYear + '"]';
 
@@ -152,7 +165,7 @@ if ($) {
     // remove any previous filtered states
     filterableContentBlocks.removeClass('filtered');
     filterableContentBlocks.find('.matched').removeClass('matched');
-    filterableContentBlocks.find('li.filtered-empty-notice').remove();
+    filterableContentBlocks.children().removeClass('filtered-empty');
     // Filter if we need to
 
     if (filterRule != '') {
@@ -161,20 +174,17 @@ if ($) {
       // Apply 'filtered' to all of the filterable blocks
       filterableContentBlocks.addClass('filtered');
       // We can't reliably find cousin headlines, so
-      // for any lists that have been completely filtered away, let's add a 'no results' item
-      // for (let block in filterableContentBlocks) {
-      // if there are no children with the 'matched' class, add
-      // TODO documentation
+      //
+      // if there are no children with the 'matched' class, add a filtered-empty class to the ul
       $('.block-filterable_content ul').each(function() {
         if ($(this).find('li.matched').length === 0) {
-          $(this).append('<li class="filtered-empty-notice">(no results)</li>');
+          $(this).addClass('filtered-empty');
         }
       });
     }
   };
 
   let handleTextFilterChange = function(e) {
-    // console.log('handleTextFilterChange(e): ', e);
     let filterableContent = $('.block-filterable_content li');
     let field = $(e.target);
     let prevVal = field.data('prev');
@@ -185,26 +195,53 @@ if ($) {
       '<span class="filtered-highlight" style="background-color: yellow">';
     let spanCloser = '</span>';
     let newMarkup = '';
-    if (newVal && !prevVal) {
-      // first search (newVal but no prevVal)
-      newMarkup = spanOpener + newVal + spanCloser;
-    } else if (newVal && prevVal) {
-      // next search (newval and prevVal)
-      newMarkup = spanOpener + newVal + spanCloser;
-    } else if (!newVal && prevVal) {
-      // reset search (prevVal but no newVal)
-      newMarkup = newVal;
-    }
+
+    // Replace any highlight spans with their text content instead
     $(filterableContent)
       .find('span.filtered-highlight')
-      .replaceWith(prevVal);
+      .each((i, elem) => {
+        $(elem).replaceWith($(elem).text());
+      });
 
     $(filterableContent)
-      .find(':contains("' + newVal + '")')
-      .html(function() {
-        return $(this)
+      // Do a case-insensitive search of content
+      .find(':contains_ci(' + newVal + ')')
+      // .children()
+      // .filter(function() {
+      //   console.log('filtering this.nodeType, this.text: ', this.nodeType, $(this).text())
+      //   return this.nodeType === 3;
+      // })
+      .each((i, elem) => {
+        // console.log('each() nodeType, textContent: ', elem.nodeType, elem.textContent);
+        // console.log('elem.text(): ', $(elem).text());
+        // if (elem.childNodes.length > 0) console.log('    has child nodes');
+        // else console.log('    NO child nodes');
+        // Compare lower strings to find where we've matched
+        let termLocation = $(elem)
           .text()
-          .replace(newVal, newMarkup);
+          .toLowerCase()
+          .indexOf(newVal.toLowerCase());
+        // Remember the case of our matched term (if searching for 'the', we don't want to change matched 'The' to lowercase)
+        let matchedTerm = $(elem)
+          .text()
+          .substr(termLocation, newVal.length);
+
+        if (newVal && !prevVal) {
+          // first search (newVal but no prevVal)
+          newMarkup = spanOpener + matchedTerm + spanCloser;
+        } else if (newVal && prevVal) {
+          // next search (newval and prevVal)
+          newMarkup = spanOpener + matchedTerm + spanCloser;
+        } else if (!newVal && prevVal) {
+          // reset search (prevVal but no newVal)
+          newMarkup = matchedTerm;
+        }
+        // Do a search & replace for every match, changing from text to html
+        $(elem).html(function() {
+          return $(elem)
+            .text()
+            .replace(new RegExp(matchedTerm, 'g'), newMarkup);
+        });
       });
 
     $(e.target).data('prev', newVal);
@@ -212,7 +249,7 @@ if ($) {
   };
 
   $('#filter-text').bind('keyup', handleTextFilterChange);
-  $('#filter-type, #filter-subj, #filter-focu, #filter-year').bind(
+  $('#filter-type, #filter-subject, #filter-focus, #filter-year').bind(
     'change',
     applyFilters
   );
