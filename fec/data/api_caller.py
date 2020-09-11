@@ -151,13 +151,11 @@ def load_legal_mur(mur_no):
         for each index in mur["commission_votes"], if there is an empty action then log the mur and the
         particular index
         '''
-        i = 0
-        for d in mur["commission_votes"]:
+        for i, d in enumerate(mur["commission_votes"]):
             if not d["action"]:
-                logger.warning(
+                logger.error(
                     "MUR " + str(mur_no) + ": There were no data for commission_votes action at index " + str(i)
                 )
-            i += 1
         mur["collated_dispositions"] = collate_dispositions(mur["dispositions"])
         mur["complainants"] = complainants
         mur["participants_by_type"] = _get_sorted_participants_by_type(mur)
