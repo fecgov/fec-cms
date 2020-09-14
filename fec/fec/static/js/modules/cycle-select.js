@@ -41,10 +41,11 @@ CycleSelect.prototype.initCyclesMulti = function(selected) {
       max: cycle,
       electionFull: false,
       cycleId: cycleId,
+      // Two year period buttons are only active if there are fec_cycles_in_election
       active:
         typeof context !== 'undefined' && context.cycles
           ? context.cycles.indexOf(cycle) !== -1
-          : true,
+          : false,
       checked:
         cycle.toString() === params.cycle && params.electionFull === 'false'
     };
@@ -64,7 +65,13 @@ CycleSelect.prototype.initCyclesMulti = function(selected) {
     return bin.checked === true;
   });
 
-  this.setTimePeriod(selectedCycle[0].min, selectedCycle[0].max);
+  if (
+    selectedCycle.length > 0 &&
+    selectedCycle[0].min &&
+    selectedCycle[0].max
+  ) {
+    this.setTimePeriod(selectedCycle[0].min, selectedCycle[0].max);
+  }
 };
 
 CycleSelect.prototype.initCyclesSingle = function(selected) {
