@@ -1,4 +1,3 @@
-
 function StatisticalSummary() {
   //Declare globals (scoped to this function)to get past linter error/tests.
   /* global history console */
@@ -8,8 +7,9 @@ function StatisticalSummary() {
   this.tables = document.querySelectorAll('[data-category]');
   //this.tables = document.getElementsByTagName('table');
   this.selects = document.getElementsByTagName('select');
-  this.latest_segment_alert = document.getElementById("js-latest-segment-alert")
-
+  this.latest_segment_alert = document.getElementById(
+    'js-latest-segment-alert'
+  );
 
   Array.from(this.selects).forEach(select => {
     Array.from(select.options).forEach(option => {
@@ -28,7 +28,6 @@ function StatisticalSummary() {
 
   this.showTable();
   this.handlePushState();
- 
 }
 
 //////POPSTATE EVENT ////////
@@ -127,8 +126,17 @@ StatisticalSummary.prototype.handleLatestAvailableOption = function() {
     //If segment after latesAvailable is chosen, then user chooses this year
     if (this.chosenSegment > parseInt(latestAvailable)) {
       console.log('2020 later than available');
-      this.latest_segment_alert.textContent = latestAvailableOption.text+" is the latest available option for " + this.chosenYear;
-      this.latest_segment_alert.classList.add('message--mini', 'message', 'message--inline', 'message--alert',  'message--alert')
+      this.latest_segment_alert.textContent =
+        latestAvailableOption.text +
+        ' is the latest available option for ' +
+        this.chosenYear;
+      this.latest_segment_alert.classList.add(
+        'message--mini',
+        'message',
+        'message--inline',
+        'message--alert',
+        'message--alert'
+      );
       latestAvailableOption.selected = 'selected';
       this.chosenSegment = latestAvailable;
       this.displaySegment = latestAvailableOption.text;
@@ -146,16 +154,14 @@ StatisticalSummary.prototype.handleLatestAvailableOption = function() {
 
 //SHOWTABLE SHOULD RUN WITH ARGUMENTS. BEKLOW VAR ASSIGNMENTS SHOULD BE MOVED OUT OF showTable() TO MAIN FUNCTION (??)
 StatisticalSummary.prototype.showTable = function() {
-
-const end_periods = {
+  const end_periods = {
     '24': '12-31-',
     '21': '9-30-',
     '18': '6-30-',
     '15': '3-31-',
     '12': '12-31-',
-    '6' : '6-30-'
-}
-
+    '6': '6-30-'
+  };
 
   this.chooseYear = document.getElementById('year');
   this.chosenYear = this.chooseYear.value;
@@ -169,15 +175,19 @@ const end_periods = {
     this.chooseSegment.selectedIndex
   ].text;
 
-  this.endPeriod = end_periods[this.chosenSegment]
-  
+  this.endPeriod = end_periods[this.chosenSegment];
+
   this.actualYear =
     this.chosenSegment > 12 ? this.chosenYear : this.chosenYear - 1;
   this.startYear = this.chosenYear - 1;
 
-  
-  this.latest_segment_alert.textContent = ""
-  this.latest_segment_alert.classList.remove('message--mini', 'message', 'message--inline', 'message--alert')
+  this.latest_segment_alert.textContent = '';
+  this.latest_segment_alert.classList.remove(
+    'message--mini',
+    'message',
+    'message--inline',
+    'message--alert'
+  );
   const today = new Date();
 
   this.presidential_segment_template = `
@@ -186,8 +196,7 @@ const end_periods = {
   <option value="18">18 Month - through 6/30/${this.chosenYear}</option>
   <option selected value="15">15 Month - through 3/31/${this.chosenYear}</option>
   <option value="12">12 Month - through 12/31/${this.actualYear}</option>
-  <option value="6">6 Month - Through 6/30/${this.actualYear}</option>`
-
+  <option value="6">6 Month - Through 6/30/${this.actualYear}</option>`;
 
   //const mm = today.getMonth(); //set to '6', 12' or '15' to test (January is 0!)
   const thisYear = today.getFullYear(); // set to '2019' to test
@@ -198,10 +207,7 @@ const end_periods = {
       this.chooseSegment.options[i].removeAttribute('disabled');
     }
   }
-  
 
-
-  
   ///PUSH STATE 2////
   // const data = {'year': this.chosenYear, 'segment': this.chosenSegment }
   // const title = ''
@@ -213,7 +219,7 @@ const end_periods = {
   Array.from(this.tables).forEach(table => {
     for (const row of Array.from(table.rows)) {
       //row.style.display = 'table-row'
-      //row.style.backgroundColor = '#fff';
+      row.style.backgroundColor = '#fff';
     }
     //////SWITCH/////
 
@@ -232,25 +238,25 @@ const end_periods = {
         switch (true) {
           case this.chosenYear >= 2012:
             liveTable = document.getElementById('type_1');
-          break;
+            break;
           case this.chosenYear <= 2010:
             liveTable = document.getElementById('type_2');
-          break;
-          }
-      break;
-      case ('presidential'):
+            break;
+        }
+        break;
+      case 'presidential':
         //this.chooseSegment.innerHTML = this.presidential_segment_template
         switch (true) {
           case this.chosenYear >= 2018:
-            liveTable = document.getElementById("type_1")
+            liveTable = document.getElementById('type_1');
             //this.chooseSegment.innerHTML = presidential_new_segment_template
-           break;
+            break;
           case this.chosenYear <= 2016:
-           liveTable = document.getElementById("type_2")
-           //this.chooseSegment.innerHTML = presidential_segment_template
-          break;
-          } 
-      break;
+            liveTable = document.getElementById('type_2');
+            //this.chooseSegment.innerHTML = presidential_segment_template
+            break;
+        }
+        break;
       case 'party-committee':
         switch (true) {
           case this.chosenYear >= 2016:
@@ -261,27 +267,28 @@ const end_periods = {
           case this.chosenYear == 2014:
             liveTable = document.getElementById('type_2');
 
-          break;
+            break;
           case this.chosenYear == 2012:
             liveTable = document.getElementById('type_2');
             liveTable.rows[4].style.backgroundColor = '#f90';
             liveTable.rows[6].style.backgroundColor = '#f90';
             liveTable.rows[12].style.backgroundColor = '#f90';
 
-          break;
+            break;
 
           case this.chosenYear <= 2010 && this.chosenYear >= 2004:
             liveTable = document.getElementById('type_3');
             liveTable.rows[5].style.backgroundColor = '#f90';
 
-          break;
+            break;
           case this.chosenYear <= 2002 && this.chosenYear >= 1992:
             liveTable = document.getElementById('type_3');
 
             break;
           //default://PROBABLY JUST MOVE 1989 T0 ARCHIVE!
           case this.chosenYear == 1990:
-            { //wrap in extra curly braces for this because of extra logic
+            {
+              //wrap in extra curly braces for this because of extra logic
               liveTable = document.getElementById('type_4');
 
               //REMEBER THIS P.O.C IS ONLY GETTING SECOND ROW, WOULD NEED TO ITERATE ROWS OR CELLS, ASK TO MOVE 1990 TO ARCHIVE !!!!
@@ -297,11 +304,11 @@ const end_periods = {
                 linx.setAttribute('href', newHrex);
                 console.log('newHrex:' + newHrex);
               }
-            }  //end - wrap in extra curly braces for this because of extra logic
-            
-          break;
-          }
-      break;
+            } //end - wrap in extra curly braces for this because of extra logic
+
+            break;
+        }
+        break;
       case 'communication-costs':
         switch (true) {
           case this.chosenYear >= 2016:
@@ -320,7 +327,7 @@ const end_periods = {
             liveTable = document.getElementById('type_4');
             liveTable.rows[4].style.backgroundColor = '#f90';
             liveTable.rows[5].style.backgroundColor = '#f90';
-          break;
+            break;
         }
 
         break; //LAST BREAK FOR CATEGORY SWITCH
@@ -335,7 +342,7 @@ const end_periods = {
     for (const row of Array.from(rows)) {
       if (row.cells[2] && row.cells[3]) {
         const excel = row.cells[2];
-        excel.classList.add('brdr')
+        excel.classList.add('brdr');
         const pdf = row.cells[3];
         let linksArray = [excel, pdf];
         //console.log("linksArray[1]:"+ linksArray[1])
@@ -359,7 +366,4 @@ const end_periods = {
   }); //////END forEach((table)/////
 }; //END showTable()
 
-
 new StatisticalSummary();
-
-
