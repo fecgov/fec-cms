@@ -1,6 +1,8 @@
 {% extends "base.html" %}
 {% load wagtailcore_tags %}
 {% load wagtailimages_tags %}
+{% load filters %}
+{% load staticfiles %}
 
 {% block body_class %}template-{{ self.get_verbose_name | slugify }}{% endblock %}
 
@@ -111,3 +113,14 @@
 {% include 'partials/disclaimer.html' %}
 
 {% endblock %}
+
+
+{% block extra_js %}
+{% if self.conditional_js == 'statistical_summary' %}
+<script type="text/javascript" src="{% asset_for_js 'statistical-summary.js' %}"></script>
+{% endif %}
+{% endblock %}
+
+
+
+
