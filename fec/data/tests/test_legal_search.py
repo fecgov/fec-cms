@@ -1,5 +1,7 @@
 import datetime
 from unittest import mock
+import io
+import logging
 
 from django.test import Client
 from django.test import TestCase
@@ -129,3 +131,38 @@ class TestLegalSearch(TestCase):
             )
         ]
         load_legal_search_results.assert_has_calls(calls, any_order=True)
+
+    # Test 9:
+    @mock.patch.object(api_caller, '_call_api')
+    def test_missing_action_mur(self, _call_api_mock):
+        log_capture_string = io.StringIO()
+        ch = logging.StreamHandler(log_capture_string)
+        api_caller.logger.addHandler(ch)
+        _call_api_mock.return_value = {
+            'docs': [
+                {
+                    'no': 1,
+                    'mur_docs': [],
+                    'documents': [],
+                    'commission_votes': [
+                        {
+                            'action': None
+                        },
+                        {
+                            'action': 'test'
+                        },
+                        {
+                            'action': ''
+                        },
+                    ],
+                    'mur_type': 'current',
+                    'participants': [],
+                    'dispositions': [],
+                }
+            ]
+        }
+        api_caller.load_legal_mur('1')
+        log_contents = log_capture_string.getvalue()
+        assert "MUR 1: There were no data for commission_votes action at index 0" in log_contents
+        assert "MUR 1: There were no data for commission_votes action at index 2" in log_contents
+        assert "MUR 1: There were no data for commission_votes action at index 1" not in log_contents

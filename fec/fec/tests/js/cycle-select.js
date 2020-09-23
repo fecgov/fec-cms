@@ -107,6 +107,15 @@ describe('cycle select', function() {
       expectDisabled(labels.eq(1), true);
       expectDisabled(labels.eq(2), false);
     });
+
+    it('disables all two year periods if context cycles is null', function() {
+      window.context = {cycles: null};
+      this.cycleSelect.initCyclesMulti(null);
+      var labels = this.cycleSelect.$cycles.find('label');
+      expectDisabled(labels.eq(0), false);
+      expectDisabled(labels.eq(1), true);
+      expectDisabled(labels.eq(2), true);
+    });
   });
 
   describe('path cycle select', function() {

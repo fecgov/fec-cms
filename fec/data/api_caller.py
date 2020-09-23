@@ -146,8 +146,16 @@ def load_legal_mur(mur_no):
             if "complainant" in participant["role"].lower():
                 complainants.append(participant["name"])
 
-        mur["disposition_text"] = [d["action"] for d in mur["commission_votes"]]
-
+        mur["disposition_text"] = [d["action"] if d['action'] else '' for d in mur["commission_votes"]]
+        '''
+        for each index in mur["commission_votes"], if there is an empty action then log the mur and the
+        particular index
+        '''
+        for i, d in enumerate(mur["commission_votes"]):
+            if not d["action"]:
+                logger.error(
+                    "MUR " + str(mur_no) + ": There were no data for commission_votes action at index " + str(i)
+                )
         mur["collated_dispositions"] = collate_dispositions(mur["dispositions"])
         mur["complainants"] = complainants
         mur["participants_by_type"] = _get_sorted_participants_by_type(mur)
