@@ -12,7 +12,7 @@ $(document).ready(function() {
   new tables.DataTable($table, {
     autoWidth: false,
     title: 'Communication costs',
-    path: ['communication-costs'],
+    path: ['communication_costs'],
     columns: columns.communicationCosts,
     rowCallback: tables.modalRenderRow,
     useExport: true,
