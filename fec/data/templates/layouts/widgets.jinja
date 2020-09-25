@@ -93,6 +93,9 @@
     ga('create', 'UA-16134356-1', 'auto');
     ga('send', 'pageview');
   </script>
+{% endif %}
+
+{% if (FEC_CMS_ENVIRONMENT == 'PRODUCTION') %}
   <script id="_fed_an_ua_tag" src="https://dap.digitalgov.gov/Universal-Federated-Analytics-Min.js?agency=FEC"></script>
 {% endif %}
 
