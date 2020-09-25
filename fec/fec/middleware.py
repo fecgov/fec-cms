@@ -17,6 +17,9 @@ class AddSecureHeaders(MiddlewareMixin):
             "connect-src": "\
                 https://www.google-analytics.com \
             ",
+            "font-src": "\
+                'self' \
+            ",
             "frame-src": "\
                 'self' \
                 https://www.google.com/recaptcha/ \
