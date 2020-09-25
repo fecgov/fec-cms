@@ -8,15 +8,64 @@ class AddSecureHeaders(MiddlewareMixin):
     def process_response(self, request, response):
 
         content_security_policy = {
-            "default-src": "'self' *.fec.gov *.app.cloud.gov https://www.google-analytics.com",
-            "frame-src": "'self' https://www.google.com/recaptcha/ https://www.youtube.com/",
-            "img-src": "'self' *.fec.gov *.app.cloud.gov data: https://*.ssl.fastly.net https://www.google-analytics.com https://www.googletagmanager.com", # noqa E501
-            "script-src": "'self' 'unsafe-inline' 'unsafe-eval' https://www.google.com/recaptcha/ https://www.gstatic.com/recaptcha/ https://www.google-analytics.com https://www.googletagmanager.com https://polyfill.io https://dap.digitalgov.gov", # noqa E501
-            "style-src": "'self' data: 'unsafe-inline'",
-            "object-src": "'none'",
+            # 'data:' is like 'http:'
+            "default-src": "\
+                'self' \
+                *.fec.gov \
+                *.app.cloud.gov \
+            ",
+            "connect-src": "\
+                https://www.google-analytics.com \
+            ",
+            "frame-src": "\
+                'self' \
+                https://www.google.com/recaptcha/ \
+                https://www.youtube.com/ \
+            ",
+            "img-src": "\
+                'self' \
+                *.fec.gov \
+                *.app.cloud.gov \
+                data: \
+                https://*.ssl.fastly.net \
+                https://www.google-analytics.com \
+            ",
+            "script-src": "\
+                'self' \
+                'unsafe-inline' \
+                'unsafe-eval' \
+                https://www.google.com/recaptcha/ \
+                https://ssl.google-analytics.com \
+                https://www.google-analytics.com \
+                https://www.googletagmanager.com \
+                https://www.gstatic.com/recaptcha/ \
+                https://polyfill.io \
+                https://dap.digitalgov.gov \
+            ",  # do we need unsafe-eval? (Doesn't it only allow 'eval()'?)
+            "style-src": "\
+                'self' \
+                'unsafe-inline' \
+                data: \
+            ",
+            "object-src": "\
+                'none' \
+            "
+            # Google's requirements found at https://developers.google.com/tag-manager/web/csp
+            # TODO: Do we have a way to handle reporting CSP violations,
+            # TODO: like this https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP#Enabling_reporting
+            #
+            # TODO: To get away from unsafe-inline, we could look into hashing our inline script elements:
+            # TODO: like this https://content-security-policy.com/hash/
         }
         if settings.FEC_CMS_ENVIRONMENT == 'LOCAL':
-            content_security_policy["default-src"] += " localhost:* http://127.0.0.1:*"
+            content_security_policy["default-src"] += " localhost:* http://127.0.0.1:*"  # TODO: add filesystem?
+
+        if settings.FEC_CMS_ENVIRONMENT != 'PRODUCTION':  # pre-prod environments
+            content_security_policy["script-src"] += " https://tagmanager.google.com"
+            content_security_policy["style-src"] += " https://tagmanager.google.com https://fonts.googleapis.com"
+            content_security_policy["img-src"] += " https://ssl.gstatic.com https://www.gstatic.com"
+            content_security_policy["font-src"] += " https://fonts.gstatic.com data:"
+
         # Skip CSP reporting in production so we don't clutter up the logs
         if settings.FEC_CMS_ENVIRONMENT != 'PRODUCTION':
             # Report violations to the API
