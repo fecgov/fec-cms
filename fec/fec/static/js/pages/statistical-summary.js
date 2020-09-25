@@ -247,11 +247,11 @@ StatisticalSummary.prototype.showTable = function() {
       case 'presidential':
         //this.chooseSegment.innerHTML = this.presidential_segment_template
         switch (true) {
-          case this.chosenYear >= 2018:
+          case this.chosenYear >= 2016:
             liveTable = document.getElementById('type_1');
             //this.chooseSegment.innerHTML = presidential_new_segment_template
             break;
-          case this.chosenYear <= 2016:
+          case this.chosenYear <= 2012:
             liveTable = document.getElementById('type_2');
             //this.chooseSegment.innerHTML = presidential_segment_template
             break;
