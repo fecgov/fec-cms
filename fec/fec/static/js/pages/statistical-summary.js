@@ -1,3 +1,5 @@
+'use strict';
+
 function StatisticalSummary() {
   //Declare globals (scoped to this function)to get past linter error/tests.
   /* global history console */
@@ -5,17 +7,15 @@ function StatisticalSummary() {
   window.addEventListener('popstate', this.handlePopState.bind(this));
 
   this.tables = document.querySelectorAll('[data-category]');
-  //this.tables = document.getElementsByTagName('table');
   this.selects = document.getElementsByTagName('select');
   this.latest_segment_alert = document.getElementById(
     'js-latest-segment-alert'
   );
 
+  //Bind showTable() to change event on any select
   Array.from(this.selects).forEach(select => {
     Array.from(select.options).forEach(option => {
-      //THIS IS FOR UPDATING SELECTED OPTIONS UPON PASTING IN A URL WITH QUERYSTRING
-      //COULD THIS JUST use  history.replaceState() ?
-      //OR CAN THIS BE REMOVED, WILL PUSHSTATE HANDLE IT NOW ?
+      //For updating selected options based on  querystring parameters
       if (option.value == this.getUrlVars()[select.id]) {
         option.selected = 'selected';
       }
@@ -23,18 +23,14 @@ function StatisticalSummary() {
 
     select.addEventListener('change', this.showTable.bind(this));
     select.addEventListener('change', this.handlePushState.bind(this));
-    //select.addEventListener('change', this.handleLatestAvailableOption.bind(this));
   });
 
   this.showTable();
   this.handlePushState();
 }
 
-//////POPSTATE EVENT ////////
+//Update state upon back or forward button click
 StatisticalSummary.prototype.handlePopState = function(e) {
-  //window.addEventListener('popstate', (e) => {
-  //alert('popped')
-  //LAST BACK BUTTON ACTION NOT WORKIN WITH THE window.location.reload() , MAYBE NEED TO CHANGE showTable() TO showTable(arguments), then can ca, it here OR FORCE A selected CHANGE here.
   const params = e.state;
   console.log('params:' + params.year);
   console.log(
@@ -43,15 +39,6 @@ StatisticalSummary.prototype.handlePopState = function(e) {
   this.chosenYear = params.year;
   this.chosenSegment = params.segment;
 
-  //window.location.reload()   //console.log('options[2]:'+document.getElementById("year").options[2].value)
-
-  //setTimeout( window.location.reload() , 0);
-  //this.showTable()
-  //updateContent(event.state)
-  //history.pushState('' ,'', `?year=${ params.year}&segment=${ params.segment}`)
-
-  //CAN THIS BE REMOVED, WILL PUSHSTATE HANDLE IT NOW?- BUT DONT FORGET, YOU CANT COMBINE OR RUN push and pop state FUNCTION IN THE SAME FUNCTION!
-  //--OR--COULD THIS JUST use  history.replaceState() ?
   Array.from(this.selects).forEach(select => {
     Array.from(select.options).forEach(option => {
       if (option.value == this.getUrlVars()[select.id]) {
@@ -60,13 +47,9 @@ StatisticalSummary.prototype.handlePopState = function(e) {
     });
   });
   this.showTable();
-  //setTimeout( this.showTable() , 1);
 };
 
-//////END POPSTATE EVENT ////////
-
-//////PUSHSTATE//////////
-
+//Parse paremeters out of querystring
 StatisticalSummary.prototype.getUrlVars = function() {
   var vars = [],
     hash;
@@ -81,6 +64,7 @@ StatisticalSummary.prototype.getUrlVars = function() {
   return vars;
 };
 
+//Update history upon changes to parameters
 StatisticalSummary.prototype.handlePushState = function() {
   ///PUSH STATE 2////
   const data = { year: this.chosenYear, segment: this.chosenSegment };
@@ -89,21 +73,16 @@ StatisticalSummary.prototype.handlePushState = function() {
 
   history.pushState(data, '', querystring);
 };
-////////END PUSHSTATE  2 ////
-////////END PUSHSTATE ////
 
+//Deternine which time-period select options are not yet available for current year and disable them.
 StatisticalSummary.prototype.handleLatestAvailableOption = function() {
-  //segmentOption.removeAttribute("disabled");
-
   let latestAvailable;
   let latestAvailableOption;
   const segmentOptions = this.chooseSegment.options;
 
-  //if (this.chosenYear == thisYear || this.chosenYear - 1 == thisYear) {
   console.log('2020 chosenSegment:' + this.chosenSegment);
   Array.from(segmentOptions).forEach(segmentOption => {
-    //FOR CURRENT YEAR latestAvailable segments--MAYBE MOVE THIS CONDITONAL TO forEach(select.options) ABOVE AS A CALL TO A handleWhatever() FUNCTION ??
-
+    //Disable segment options not available yet for this year
     if (segmentOption.hasAttribute('selected')) {
       latestAvailable = segmentOption.value;
       latestAvailableOption = segmentOption;
@@ -114,16 +93,8 @@ StatisticalSummary.prototype.handleLatestAvailableOption = function() {
     if (segmentOption.value > parseInt(latestAvailable)) {
       segmentOption.setAttribute('disabled', 'disabled');
     }
-    //FOR  'this year' - later than available. BOTH OF THE BELOW CONDITIONALS WORK, FOR later than available, WHICH IS BETTER?
-    //If segment after latesAvailable is chosen, then user chooses this year
-    // SHOULD THIS BE segmentOptions[this.segmentOptions.selectedIndex] ? CHANGED
-    if (
-      segmentOptions[this.chooseSegment.selectedIndex].hasAttribute('disabled')
-    ) {
-      //latestAvailableOption.selected = 'selected'
-      console.log('FIRST 2020 later than available');
-    }
-    //If segment after latesAvailable is chosen, then user chooses this year
+
+    //If user selects a this year while a segment option greater than latest-available is selected
     if (this.chosenSegment > parseInt(latestAvailable)) {
       console.log('2020 later than available');
       this.latest_segment_alert.textContent =
@@ -146,13 +117,10 @@ StatisticalSummary.prototype.handleLatestAvailableOption = function() {
         `?year=${this.chosenYear}&segment=${this.chosenSegment}`
       );
     }
-    //END FOR 'this year' - later than availableX
   });
-
-  //}
 };
 
-//SHOWTABLE SHOULD RUN WITH ARGUMENTS. BEKLOW VAR ASSIGNMENTS SHOULD BE MOVED OUT OF showTable() TO MAIN FUNCTION (??)
+//Main function that runs on page load and upon any interaction with selects
 StatisticalSummary.prototype.showTable = function() {
   const end_periods = {
     '24': '12-31-',
@@ -177,6 +145,7 @@ StatisticalSummary.prototype.showTable = function() {
 
   this.endPeriod = end_periods[this.chosenSegment];
 
+  //actual year is deternined by wether the chosen times-period is in the first or second year of the two-year period
   this.actualYear =
     this.chosenSegment > 12 ? this.chosenYear : this.chosenYear - 1;
   this.startYear = this.chosenYear - 1;
@@ -189,17 +158,12 @@ StatisticalSummary.prototype.showTable = function() {
     'message--alert'
   );
   const today = new Date();
-
-  this.presidential_segment_template = `
-  <option value="24">24 Month - through 12/31/${this.chosenYear}</option>
-  <option value="21">21 Month - through 9/30/${this.chosenYear}</option>
-  <option value="18">18 Month - through 6/30/${this.chosenYear}</option>
-  <option selected value="15">15 Month - through 3/31/${this.chosenYear}</option>
-  <option value="12">12 Month - through 12/31/${this.actualYear}</option>
-  <option value="6">6 Month - Through 6/30/${this.actualYear}</option>`;
-
   //const mm = today.getMonth(); //set to '6', 12' or '15' to test (January is 0!)
   const thisYear = today.getFullYear(); // set to '2019' to test
+
+  //Fire handleLatestAvailableOption() if user selects this year's select option or a URL has this year in querysting year parameter
+
+  //apply latestAvailableOption to both the first and second year of the latest two-year period
   if (this.chosenYear == thisYear || this.chosenYear - 1 == thisYear) {
     this.handleLatestAvailableOption();
   } else {
@@ -208,25 +172,14 @@ StatisticalSummary.prototype.showTable = function() {
     }
   }
 
-  ///PUSH STATE 2////
-  // const data = {'year': this.chosenYear, 'segment': this.chosenSegment }
-  // const title = ''
-  // var querystring = `?year=${this.chosenYear}&segment=${this.chosenSegment}`
-
-  // history.pushState(data ,'', querystring)
-  ////////END PUSHSTATE  2 ////
-
+  //Iterate all tables to start with display of none
   Array.from(this.tables).forEach(table => {
-    for (const row of Array.from(table.rows)) {
-      //row.style.display = 'table-row'
-      row.style.backgroundColor = '#fff';
-    }
-    //////SWITCH/////
-
-    let liveTable;
-    let tableTitle;
-    //const tableId = table.id;
+    //for (const row of Array.from(table.rows)) {
+    //. row.style.display = 'table-row'
+    //  row.style.backgroundColor = '#fff';
+    //}
     table.style.display = 'none';
+  });
 
     const category = document
       .getElementById('type_1')
@@ -324,46 +277,162 @@ StatisticalSummary.prototype.showTable = function() {
             liveTable = document.getElementById('type_4');
             break;
           case this.chosenYear <= 2003 && this.chosenYear >= 1990:
+
+  //Nested switch statements that first establishes the category of the current page(from the data-category attribute of the first table),
+  //...then establishes which table to show based on chosen year. Some also decide which rows to hide/show for tables re-used in more than
+  //... one time-period segment.
+  let liveTable;
+  let tableTitle;
+
+  //Establish the category of the current page from the data-category attribute of the first table
+  const category = document
+    .getElementById('type_1')
+    .getAttribute('data-category');
+  console.log(category);
+
+  switch (category) {
+    case 'congressional':
+      switch (true) {
+        case this.chosenYear >= 2012:
+          liveTable = document.getElementById('type_1');
+          break;
+        case this.chosenYear <= 2010:
+          liveTable = document.getElementById('type_2');
+          break;
+      }
+      break;
+
+    case 'presidential':
+      switch (true) {
+        case this.chosenYear >= 2016:
+          liveTable = document.getElementById('type_1');
+          break;
+        case this.chosenYear <= 2012:
+          liveTable = document.getElementById('type_2');
+          break;
+      }
+      break;
+
+    case 'party-committee':
+      switch (true) {
+        case this.chosenYear >= 2016:
+          liveTable = document.getElementById('type_1');
+          break;
+        case this.chosenYear == 2014:
+          liveTable = document.getElementById('type_2');
+          //Show all rows of type_2 for this time period
+          [...liveTable.rows].map(x => (x.style.display = 'table-row'));
+
+          break;
+        case this.chosenYear == 2012:
+          liveTable = document.getElementById('type_2');
+          //Hide rows at these indexes for type_2 for this time period
+          [4, 6, 12].map(x => (liveTable.rows[x].style.display = 'none'));
+          break;
+        case this.chosenYear <= 2010 && this.chosenYear >= 2004:
+          liveTable = document.getElementById('type_3');
+          //Hide rows at thise index for type_3 for this time period
+          [5].map(x => (liveTable.rows[x].style.display = 'none'));
+          break;
+        case this.chosenYear <= 2002 && this.chosenYear >= 1992:
+          liveTable = document.getElementById('type_3');
+          //Show all rows of type_3 for this time period
+          [...liveTable.rows].map(x => (x.style.display = 'table-row'));
+          break;
+        //default://PROBABLY JUST MOVE 1989 T0 ARCHIVE!
+        case this.chosenYear == 1990:
+          {
+            //wrap in extra curly braces for this because of extra logic
+>>>>>>> a7608089... use js map method to hide/show rows, help-comments, use strict, optimization/cleanup
             liveTable = document.getElementById('type_4');
-            liveTable.rows[4].style.backgroundColor = '#f90';
-            liveTable.rows[5].style.backgroundColor = '#f90';
-            break;
-        }
 
-        break; //LAST BREAK FOR CATEGORY SWITCH
-    } //END SWITCH FOR CATEGORY
-    //////END SWITCH/////
-    liveTable.style.display = 'block';
-    tableTitle = liveTable.getElementsByClassName('tableTitle')[0];
-    tableTitle.textContent = `${this.displayYear} ${this.chosenSegment}-month data covering 01-01-${this.startYear} through ${this.endPeriod}${this.actualYear}`;
+            //REMEBER THIS P.O.C IS ONLY GETTING SECOND ROW, WOULD NEED TO ITERATE ROWS OR CELLS, ASK TO MOVE 1990 TO ARCHIVE !!!!
+            const linx = liveTable.rows[2].getElementsByTagName('a')[0];
+            console.log('linx:' + linx);
+            if (linx) {
+              const hrex = linx.getAttribute('href');
+              const newHrex = hrex.replace(
+                /(.*)(\d{4})(\/)(\d{4})(\d{4})(\w*)(-)(\d{1,2})(.*)/,
+                `$12020$32020$5$6$7${this.chosenSegment}$9`
+              );
 
-    const rows = liveTable.rows;
-    console.log('rows:' + rows);
-    for (const row of Array.from(rows)) {
-      if (row.cells[2] && row.cells[3]) {
-        const excel = row.cells[2];
-        excel.classList.add('brdr');
-        const pdf = row.cells[3];
-        let linksArray = [excel, pdf];
-        //console.log("linksArray[1]:"+ linksArray[1])
-        for (let docLink of linksArray) {
-          const link = docLink.getElementsByTagName('a')[0];
-          if (link) {
-            const href = link.getAttribute('href');
+              linx.setAttribute('href', newHrex);
+              console.log('newHrex:' + newHrex);
+            }
+          } //end - wrap in extra curly braces for this because of extra logic
 
-            //CAN THIS REGEX BE REFINED/STRENGTHENED?
-            //STRING EXAMPLE: https://transition.fec.gov/press/summaries/2020/tables/congressional/ConCand3_2020_15m.xlsx
-            const newHref = href.replace(
-              /(.*)(\d{4})(.*)(\d{4})(_\d{1,2}m)(.*)/,
-              `$1${this.chosenYear}$3${this.actualYear}_${this.chosenSegment}m$6`
-            );
+          break;
+      }
+      break;
 
-            link.setAttribute('href', newHref);
-          }
+    case 'pac':
+      switch (true) {
+        case this.chosenYear >= 2012:
+          liveTable = document.getElementById('type_1');
+          break;
+        case this.chosenYear <= 2010:
+          liveTable = document.getElementById('type_2');
+          break;
+      }
+      break;
+
+    case 'communication-costs':
+      switch (true) {
+        case this.chosenYear >= 2016:
+          liveTable = document.getElementById('type_1');
+          break;
+        case this.chosenYear == 2014:
+          liveTable = document.getElementById('type_2');
+          break;
+        case this.chosenYear == 2012:
+          liveTable = document.getElementById('type_3');
+          break;
+        case this.chosenYear <= 2010 && this.chosenYear >= 2004:
+          liveTable = document.getElementById('type_4');
+          //Show all rows of type_4 for this time period
+          [...liveTable.rows].map(x => (x.style.display = 'table-row'));
+          break;
+        case this.chosenYear <= 2003 && this.chosenYear >= 1990:
+          liveTable = document.getElementById('type_4');
+          //Hide rows at these indexes for type_4 for this time period
+          [4, 5].map(x => (liveTable.rows[x].style.display = 'none'));
+          break;
+      }
+      break; //LAST BREAK FOR CATEGORY SWITCH
+  } //END SWITCH STATEMENTS
+
+  liveTable.style.display = 'block';
+  tableTitle = liveTable.getElementsByClassName('tableTitle')[0];
+  tableTitle.textContent = `${this.displayYear} ${this.chosenSegment}-month data covering 01-01-${this.startYear} through ${this.endPeriod}${this.actualYear}`;
+
+  //Iterate rows of liveTable and perform regex/replace on links to reflect chosen year/time-period
+  const rows = liveTable.rows;
+  console.log('rows:' + rows);
+  for (const row of Array.from(rows)) {
+    if (row.cells[2] && row.cells[3]) {
+      const excel = row.cells[2];
+      excel.classList.add('brdr');
+      const pdf = row.cells[3];
+      let linksArray = [excel, pdf];
+
+      for (let docLink of linksArray) {
+        const link = docLink.getElementsByTagName('a')[0];
+        if (link) {
+          const href = link.getAttribute('href');
+
+          //CAN THIS REGEX BE REFINED/STRENGTHENED?
+          //STRING EXAMPLE: https://transition.fec.gov/press/summaries/2020/tables/congressional/ConCand3_2020_15m.xlsx
+          const newHref = href.replace(
+            /(.*)(\d{4})(.*)(\d{4})(_\d{1,2}m)(.*)/,
+            `$1${this.chosenYear}$3${this.actualYear}_${this.chosenSegment}m$6`
+          );
+
+          link.setAttribute('href', newHref);
         }
       }
     }
-  }); //////END forEach((table)/////
+  }
+  // }); //////END forEach((table)/////
 }; //END showTable()
 
 new StatisticalSummary();
