@@ -242,27 +242,10 @@ StatisticalSummary.prototype.showTable = function() {
           //Show all rows of type_3 for this time period
           [...liveTable.rows].map(x => (x.style.display = 'table-row'));
           break;
-        //default://PROBABLY JUST MOVE 1989 T0 ARCHIVE!
         case this.chosenYear == 1990:
-          {
-            //wrap in extra curly braces for this because of extra logic
-            liveTable = document.getElementById('type_4');
-
-            //REMEBER THIS P.O.C IS ONLY GETTING SECOND ROW, WOULD NEED TO ITERATE ROWS OR CELLS, ASK TO MOVE 1990 TO ARCHIVE !!!!
-            const linx = liveTable.rows[2].getElementsByTagName('a')[0];
-            console.log('linx:' + linx);
-            if (linx) {
-              const hrex = linx.getAttribute('href');
-              const newHrex = hrex.replace(
-                /(.*)(\d{4})(\/)(\d{4})(\d{4})(\w*)(-)(\d{1,2})(.*)/,
-                `$12020$32020$5$6$7${this.chosenSegment}$9`
-              );
-
-              linx.setAttribute('href', newHrex);
-              console.log('newHrex:' + newHrex);
-            }
-          } //end - wrap in extra curly braces for this because of extra logic
-
+          //this table has a different structure than the rest so the title is not changed and
+          //...no REGEX logic is applied to it
+          liveTable = document.getElementById('type_4');
           break;
       }
       break;
@@ -305,8 +288,9 @@ StatisticalSummary.prototype.showTable = function() {
 
   liveTable.style.display = 'block';
   tableTitle = liveTable.getElementsByClassName('tableTitle')[0];
-  tableTitle.textContent = `${this.displayYear} ${this.chosenSegment}-month data covering 01-01-${this.startYear} through ${this.endPeriod}${this.actualYear}`;
-
+  if (tableTitle) {
+    tableTitle.textContent = `${this.displayYear} ${this.chosenSegment}-month data covering 01-01-${this.startYear} through ${this.endPeriod}${this.actualYear}`;
+  }
   //Iterate rows of liveTable and perform regex/replace on links to reflect chosen year/time-period
   const rows = liveTable.rows;
   console.log('rows:' + rows);
