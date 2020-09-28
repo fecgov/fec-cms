@@ -297,7 +297,7 @@ StatisticalSummary.prototype.showTable = function() {
         case this.chosenYear <= 2003 && this.chosenYear >= 1990:
           liveTable = document.getElementById('type_4');
           //Hide rows at these indexes for type_4 for this time period
-          [4, 5].map(x => (liveTable.rows[x].style.display = 'none'));
+          [4].map(x => (liveTable.rows[x].style.display = 'none'));
           break;
       }
       break; //LAST BREAK FOR CATEGORY SWITCH
