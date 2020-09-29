@@ -81,42 +81,44 @@ StatisticalSummary.prototype.handleLatestAvailableOption = function() {
   const segmentOptions = this.chooseSegment.options;
 
   console.log('2020 chosenSegment:' + this.chosenSegment);
-  Array.from(segmentOptions).forEach(segmentOption => {
+  Array.from(segmentOptions)
+    .reverse()
+    .forEach(segmentOption => {
     //Disable segment options not available yet for this year
-    if (segmentOption.hasAttribute('selected')) {
-      latestAvailable = segmentOption.value;
-      latestAvailableOption = segmentOption;
-      console.log('latestAvailable:' + latestAvailable);
-      console.log('latestAvailableOption:' + latestAvailableOption.selected);
-    }
+      if (segmentOption.hasAttribute('selected')) {
+        latestAvailable = segmentOption.value;
+        latestAvailableOption = segmentOption;
+        console.log('latestAvailable:' + latestAvailable);
+        console.log('latestAvailableOption:' + latestAvailableOption.selected);
+      }
 
-    if (segmentOption.value > parseInt(latestAvailable)) {
-      segmentOption.setAttribute('disabled', 'disabled');
-    }
+      if (segmentOption.value > parseInt(latestAvailable)) {
+        segmentOption.setAttribute('disabled', 'disabled');
+      }
 
-    //If user selects a this year while a segment option greater than latest-available is selected
-    if (this.chosenSegment > parseInt(latestAvailable)) {
-      console.log('2020 later than available');
-      this.latest_segment_alert.textContent =
-        latestAvailableOption.text +
-        ' is the latest available option for ' +
-        this.chosenYear;
-      this.latest_segment_alert.classList.add(
-        'message--mini',
-        'message',
-        'message--inline',
-        'message--alert',
-        'message--alert'
-      );
-      latestAvailableOption.selected = 'selected';
-      this.chosenSegment = latestAvailable;
-      this.displaySegment = latestAvailableOption.text;
-      history.pushState(
-        '',
-        '',
-        `?year=${this.chosenYear}&segment=${this.chosenSegment}`
-      );
-    }
+      //If user selects a this year while a segment option greater than latest-available is selected
+      if (this.chosenSegment > parseInt(latestAvailable)) {
+        console.log('2020 later than available');
+        this.latest_segment_alert.textContent =
+          latestAvailableOption.text +
+          ' is the latest available option for ' +
+          this.chosenYear;
+        this.latest_segment_alert.classList.add(
+          'message--mini',
+          'message',
+          'message--inline',
+          'message--alert',
+          'message--alert'
+        );
+        latestAvailableOption.selected = 'selected';
+        this.chosenSegment = latestAvailable;
+        this.displaySegment = latestAvailableOption.text;
+        history.pushState(
+          '',
+          '',
+          `?year=${this.chosenYear}&segment=${this.chosenSegment}`
+        );
+      }
   });
 };
 
