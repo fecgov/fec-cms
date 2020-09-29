@@ -6,7 +6,7 @@ function StatisticalSummary() {
 
   window.addEventListener('popstate', this.handlePopState.bind(this));
 
-  this.tables = document.querySelectorAll('[data-category]');
+  this.tables = document.querySelectorAll('[data-summary]');
   this.selects = document.getElementsByTagName('select');
   this.latest_segment_alert = document.getElementById(
     'js-latest-segment-alert'
@@ -181,113 +181,16 @@ StatisticalSummary.prototype.showTable = function() {
     table.style.display = 'none';
   });
 
-    const category = document
-      .getElementById('type_1')
-      .getAttribute('data-category');
-    console.log(category);
-    //MOVE THIS ABOVE rows loop
-    switch (category) {
-      case 'congressional':
-        switch (true) {
-          case this.chosenYear >= 2012:
-            liveTable = document.getElementById('type_1');
-            break;
-          case this.chosenYear <= 2010:
-            liveTable = document.getElementById('type_2');
-            break;
-        }
-        break;
-      case 'presidential':
-        //this.chooseSegment.innerHTML = this.presidential_segment_template
-        switch (true) {
-          case this.chosenYear >= 2018:
-            liveTable = document.getElementById('type_1');
-            //this.chooseSegment.innerHTML = presidential_new_segment_template
-            break;
-          case this.chosenYear <= 2016:
-            liveTable = document.getElementById('type_2');
-            //this.chooseSegment.innerHTML = presidential_segment_template
-            break;
-        }
-        break;
-      case 'party-committee':
-        switch (true) {
-          case this.chosenYear >= 2016:
-            liveTable = document.getElementById('type_1');
-            //table.rows[9].style.display  = 'none'
-
-            break;
-          case this.chosenYear == 2014:
-            liveTable = document.getElementById('type_2');
-
-            break;
-          case this.chosenYear == 2012:
-            liveTable = document.getElementById('type_2');
-            liveTable.rows[4].style.backgroundColor = '#f90';
-            liveTable.rows[6].style.backgroundColor = '#f90';
-            liveTable.rows[12].style.backgroundColor = '#f90';
-
-            break;
-
-          case this.chosenYear <= 2010 && this.chosenYear >= 2004:
-            liveTable = document.getElementById('type_3');
-            liveTable.rows[5].style.backgroundColor = '#f90';
-
-            break;
-          case this.chosenYear <= 2002 && this.chosenYear >= 1992:
-            liveTable = document.getElementById('type_3');
-
-            break;
-          //default://PROBABLY JUST MOVE 1989 T0 ARCHIVE!
-          case this.chosenYear == 1990:
-            {
-              //wrap in extra curly braces for this because of extra logic
-              liveTable = document.getElementById('type_4');
-
-              //REMEBER THIS P.O.C IS ONLY GETTING SECOND ROW, WOULD NEED TO ITERATE ROWS OR CELLS, ASK TO MOVE 1990 TO ARCHIVE !!!!
-              const linx = liveTable.rows[2].getElementsByTagName('a')[0];
-              console.log('linx:' + linx);
-              if (linx) {
-                const hrex = linx.getAttribute('href');
-                const newHrex = hrex.replace(
-                  /(.*)(\d{4})(\/)(\d{4})(\d{4})(\w*)(-)(\d{1,2})(.*)/,
-                  `$12020$32020$5$6$7${this.chosenSegment}$9`
-                );
-
-                linx.setAttribute('href', newHrex);
-                console.log('newHrex:' + newHrex);
-              }
-            } //end - wrap in extra curly braces for this because of extra logic
-
-            break;
-        }
-        break;
-      case 'communication-costs':
-        switch (true) {
-          case this.chosenYear >= 2016:
-            liveTable = document.getElementById('type_1');
-            break;
-          case this.chosenYear == 2014:
-            liveTable = document.getElementById('type_2');
-            break;
-          case this.chosenYear == 2012:
-            liveTable = document.getElementById('type_3');
-            break;
-          case this.chosenYear <= 2010 && this.chosenYear >= 2004:
-            liveTable = document.getElementById('type_4');
-            break;
-          case this.chosenYear <= 2003 && this.chosenYear >= 1990:
-
-  //Nested switch statements that first establishes the category of the current page(from the data-category attribute of the first table),
+  //Nested switch statements that first establishes the category of the current page(from the data-summary attribute of the first table),
   //...then establishes which table to show based on chosen year. Some also decide which rows to hide/show for tables re-used in more than
   //... one time-period segment.
   let liveTable;
   let tableTitle;
 
-  //Establish the category of the current page from the data-category attribute of the first table
+  //Establish the category of the current page from the data-summary attribute of the first table
   const category = document
     .getElementById('type_1')
-    .getAttribute('data-category');
+    .getAttribute('data-summary');
   console.log(category);
 
   switch (category) {
@@ -343,7 +246,6 @@ StatisticalSummary.prototype.showTable = function() {
         case this.chosenYear == 1990:
           {
             //wrap in extra curly braces for this because of extra logic
->>>>>>> a7608089... use js map method to hide/show rows, help-comments, use strict, optimization/cleanup
             liveTable = document.getElementById('type_4');
 
             //REMEBER THIS P.O.C IS ONLY GETTING SECOND ROW, WOULD NEED TO ITERATE ROWS OR CELLS, ASK TO MOVE 1990 TO ARCHIVE !!!!
