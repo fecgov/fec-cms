@@ -15,6 +15,9 @@ class AddSecureHeaders(MiddlewareMixin):
                 *.app.cloud.gov \
             ",
             "connect-src": "\
+                'self' \
+                *.fec.gov \
+                *.app.cloud.gov \
                 https://www.google-analytics.com \
             ",
             "font-src": "\
