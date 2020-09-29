@@ -4,10 +4,8 @@
     {% set gtm_url_params = 'gtm_auth=EDR0yhH3jo_lEfiev6nbSQ&gtm_preview=env-17&gtm_cookies_win=x' %}
     {% set gtm_container_id = 'GTM-T5HPRLH' %}
 
-    {% if FEC_CMS_ENVIRONMENT == 'STAGE' %}
-      {% set gtm_url_params = 'gtm_auth=ZYJODko0wNc0p1iWNPgvFw&gtm_preview=env-20&gtm_cookies_win=x' %}
   
-    {% elif FEC_CMS_ENVIRONMENT == 'DEV' %}
+    {% if FEC_CMS_ENVIRONMENT == 'DEV' %}
       {% set gtm_url_params = 'gtm_auth=_vM9qqeervv47SONwk4KRg&gtm_preview=env-19&gtm_cookies_win=x' %}
 
     {% elif FEC_CMS_ENVIRONMENT == 'FEATURE' %}
@@ -15,6 +13,9 @@
     
     {% elif FEC_CMS_ENVIRONMENT == 'LOCAL' %}
       {% set gtm_url_params = 'gtm_auth=sMyHATF1O8P6Wp9TLbF5sA&gtm_preview=env-21&gtm_cookies_win=x' %}
+
+    {% elif FEC_CMS_ENVIRONMENT == 'STAGE' %}
+      {% set gtm_url_params = 'gtm_auth=ZYJODko0wNc0p1iWNPgvFw&gtm_preview=env-20&gtm_cookies_win=x' %}
 
     {% endif %}
     <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl+ '&{{ gtm_url_params|safe }}';f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer','{{ gtm_container_id }}');</script>
