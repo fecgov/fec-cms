@@ -84,7 +84,7 @@ StatisticalSummary.prototype.handleLatestAvailableOption = function() {
   Array.from(segmentOptions)
     .reverse()
     .forEach(segmentOption => {
-    //Disable segment options not available yet for this year
+      //Disable segment options not available yet for this year
       if (segmentOption.hasAttribute('selected')) {
         latestAvailable = segmentOption.value;
         latestAvailableOption = segmentOption;
@@ -119,7 +119,7 @@ StatisticalSummary.prototype.handleLatestAvailableOption = function() {
           `?year=${this.chosenYear}&segment=${this.chosenSegment}`
         );
       }
-  });
+    });
 };
 
 //Main function that runs on page load and upon any interaction with selects
