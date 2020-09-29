@@ -6,7 +6,7 @@ function StatisticalSummary() {
 
   window.addEventListener('popstate', this.handlePopState.bind(this));
 
-  this.tables = document.querySelectorAll('[data-category]');
+  this.tables = document.querySelectorAll('[data-summary]');
   this.selects = document.getElementsByTagName('select');
   this.latest_segment_alert = document.getElementById(
     'js-latest-segment-alert'
@@ -181,16 +181,16 @@ StatisticalSummary.prototype.showTable = function() {
     table.style.display = 'none';
   });
 
-  //Nested switch statements that first establishes the category of the current page(from the data-category attribute of the first table),
+  //Nested switch statements that first establishes the category of the current page(from the data-summary attribute of the first table),
   //...then establishes which table to show based on chosen year. Some also decide which rows to hide/show for tables re-used in more than
   //... one time-period segment.
   let liveTable;
   let tableTitle;
 
-  //Establish the category of the current page from the data-category attribute of the first table
+  //Establish the category of the current page from the data-summary attribute of the first table
   const category = document
     .getElementById('type_1')
-    .getAttribute('data-category');
+    .getAttribute('data-summary');
   console.log(category);
 
   switch (category) {
