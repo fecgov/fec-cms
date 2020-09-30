@@ -649,7 +649,7 @@ class CustomPage(Page):
 
 # Adds a settings choice-field for conditionally adding a JS script to a CustomPage
     conditional_js = models.CharField(max_length=255,
-        choices=[('statistical_summary', 'statistical-summary.js'), ], blank=True, null=True,
+        choices=[('statistical_summary.js', 'statistical-summary'), ], blank=True, null=True,
         help_text='Choose a JS script to add only to this page')
     # Adds a settings field for making a custom title that displays in the Wagtail page explorer
     menu_title = models.CharField(max_length=255, null=True)
