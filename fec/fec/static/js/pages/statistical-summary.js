@@ -2,7 +2,7 @@
 
 function StatisticalSummary() {
   //Declare globals (scoped to this function)to get past linter error/tests.
-  /* global history  decodeURI console */
+  /* global history console */
 
   window.addEventListener('popstate', this.handlePopState.bind(this));
 
@@ -293,29 +293,32 @@ StatisticalSummary.prototype.showTable = function() {
   if (tableTitle) {
     tableTitle.textContent = `${this.displayYear} ${this.chosenSegment}-month data covering 01-01-${this.startYear} through ${this.endPeriod}${this.actualYear}`;
   }
-  
+
   //Press release links
-  const pressRelease = liveTable.getElementsByClassName('press-link')[0]
-  let pressSegment =  this.chosenSegment > 6 ? this.chosenSegment : 'six'
-  const pressReleaseLink = `https://www.fec.gov/updates/?update_type=press-release&category=campaign-finance-data-summaries&search=${this.displayYear}+${pressSegment}-month`
-  const pressReleaseLinks = `https://www.fec.gov/updates/?update_type=press-release&category=campaign-finance-data-summaries&year=${this.actualYear}`
-  let pressReleaseLinkClean
-  
+  const pressRelease = liveTable.getElementsByClassName('press-link')[0];
+  let pressSegment = this.chosenSegment > 6 ? this.chosenSegment : 'six';
+  const pressReleaseLink = `https://www.fec.gov/updates/?update_type=press-release&category=campaign-finance-data-summaries&search=${this.displayYear}+${pressSegment}-month`;
+  const pressReleaseLinks = `https://www.fec.gov/updates/?update_type=press-release&category=campaign-finance-data-summaries&year=${this.actualYear}`;
+  let pressReleaseLinkClean;
+
   //Ugly but necessary conditionals for the inconsistent/incomplete press-release history
   if (this.chosenYear >= 2018 || this.chosenYear == 2014) {
-    pressReleaseLinkClean =  decodeURI(pressReleaseLink) 
-  }
-  else if (this.chosenYear == 2016 ) {
-    pressReleaseLinkClean = this.chosenSegment != 18 ? decodeURI(pressReleaseLink) : decodeURI(pressReleaseLinks)
-  }
-  else if (this.chosenYear == 2012 ) {
-    pressReleaseLinkClean = this.chosenSegment != 12 ? decodeURI(pressReleaseLink) : decodeURI(pressReleaseLinks)
-  }
-  else {
-     pressReleaseLinkClean =  decodeURI(pressReleaseLinks) 
+    pressReleaseLinkClean = decodeURI(pressReleaseLink);
+  } else if (this.chosenYear == 2016) {
+    pressReleaseLinkClean =
+      this.chosenSegment != 18
+        ? decodeURI(pressReleaseLink)
+        : decodeURI(pressReleaseLinks);
+  } else if (this.chosenYear == 2012) {
+    pressReleaseLinkClean =
+      this.chosenSegment != 12
+        ? decodeURI(pressReleaseLink)
+        : decodeURI(pressReleaseLinks);
+  } else {
+    pressReleaseLinkClean = decodeURI(pressReleaseLinks);
   }
 
-  pressRelease.innerHTML = `<a href="${pressReleaseLinkClean}">Statistical summary press release(s)</a> &#187;`
+  pressRelease.innerHTML = `<a href="${pressReleaseLinkClean}">Statistical summary press release(s)</a> &#187;`;
 
   //Iterate rows of liveTable and perform regex/replace on links to reflect chosen year/time-period
   const rows = liveTable.rows;
