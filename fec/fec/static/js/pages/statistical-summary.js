@@ -215,9 +215,8 @@ StatisticalSummary.prototype.showTable = function() {
           } else {
             liveTable = document.getElementById('type_3');
           }
-          //Show all rows of type_2 for this time period
+          //Show all rows of type_2 or type_3 for this time period
           [...liveTable.rows].map(x => (x.style.display = 'table-row'));
-
           break;
         case this.chosenYear == 2012:
           liveTable = document.getElementById('type_2');
@@ -234,7 +233,6 @@ StatisticalSummary.prototype.showTable = function() {
           //Show all rows of type_3 for this time period
           [...liveTable.rows].map(x => (x.style.display = 'table-row'));
           break;
-        //default://PROBABLY JUST MOVE 1989 T0 ARCHIVE!
         case this.chosenYear == 1990:
           liveTable = document.getElementById('type_4');
           break;
@@ -307,7 +305,7 @@ StatisticalSummary.prototype.showTable = function() {
     pressReleaseLinkClean = decodeURI(pressReleaseLinks);
   }
 
-  pressRelease.innerHTML = `<a href="${pressReleaseLinkClean}">Statistical summary press release(s)</a> &#187;`;
+  pressRelease.innerHTML = `<a href="${pressReleaseLinkClean}">Statistical summary press release(s)</a>`;
 
   //Iterate rows of liveTable and perform regex/replace on links to reflect chosen year/time-period
   const rows = liveTable.rows;
