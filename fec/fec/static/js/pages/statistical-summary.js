@@ -2,7 +2,7 @@
 
 function StatisticalSummary() {
   //Declare globals (scoped to this function)to get past linter error/tests.
-  /* global history console */
+  /* global history */
 
   window.addEventListener('popstate', this.handlePopState.bind(this));
 
@@ -32,10 +32,6 @@ function StatisticalSummary() {
 //Update state upon back or forward button click
 StatisticalSummary.prototype.handlePopState = function(e) {
   const params = e.state;
-  console.log('params:' + params.year);
-  console.log(
-    'location: ' + document.location + ', state: ' + JSON.stringify(e.state)
-  );
   this.chosenYear = params.year;
   this.chosenSegment = params.segment;
 
@@ -80,7 +76,6 @@ StatisticalSummary.prototype.handleLatestAvailableOption = function() {
   let latestAvailableOption;
   const segmentOptions = this.chooseSegment.options;
 
-  console.log('2020 chosenSegment:' + this.chosenSegment);
   Array.from(segmentOptions)
     .reverse()
     .forEach(segmentOption => {
@@ -88,8 +83,6 @@ StatisticalSummary.prototype.handleLatestAvailableOption = function() {
       if (segmentOption.hasAttribute('selected')) {
         latestAvailable = segmentOption.value;
         latestAvailableOption = segmentOption;
-        console.log('latestAvailable:' + latestAvailable);
-        console.log('latestAvailableOption:' + latestAvailableOption.selected);
       }
 
       if (segmentOption.value > parseInt(latestAvailable)) {
@@ -98,7 +91,6 @@ StatisticalSummary.prototype.handleLatestAvailableOption = function() {
 
       //If user selects a this year while a segment option greater than latest-available is selected
       if (this.chosenSegment > parseInt(latestAvailable)) {
-        console.log('2020 later than available');
         this.latest_segment_alert.textContent =
           latestAvailableOption.text +
           ' is the latest available option for ' +
@@ -160,8 +152,7 @@ StatisticalSummary.prototype.showTable = function() {
     'message--alert'
   );
   const today = new Date();
-  //const mm = today.getMonth(); //set to '6', 12' or '15' to test (January is 0!)
-  const thisYear = today.getFullYear(); // set to '2019' to test
+  const thisYear = today.getFullYear();
 
   //Fire handleLatestAvailableOption() if user selects this year's select option or a URL has this year in querysting year parameter
 
@@ -176,10 +167,6 @@ StatisticalSummary.prototype.showTable = function() {
 
   //Iterate all tables to start with display of none
   Array.from(this.tables).forEach(table => {
-    //for (const row of Array.from(table.rows)) {
-    //. row.style.display = 'table-row'
-    //  row.style.backgroundColor = '#fff';
-    //}
     table.style.display = 'none';
   });
 
@@ -193,7 +180,6 @@ StatisticalSummary.prototype.showTable = function() {
   const category = document
     .getElementById('type_1')
     .getAttribute('data-summary');
-  console.log(category);
 
   switch (category) {
     case 'congressional':
@@ -224,10 +210,13 @@ StatisticalSummary.prototype.showTable = function() {
           liveTable = document.getElementById('type_1');
           break;
         case this.chosenYear == 2014:
-          liveTable = document.getElementById('type_2');
-          //Show all rows of type_2 for this time period
+          if (this.chosenSegment != 6) {
+            liveTable = document.getElementById('type_2');
+          } else {
+            liveTable = document.getElementById('type_3');
+          }
+          //Show all rows of type_2 or type_3 for this time period
           [...liveTable.rows].map(x => (x.style.display = 'table-row'));
-
           break;
         case this.chosenYear == 2012:
           liveTable = document.getElementById('type_2');
@@ -245,8 +234,6 @@ StatisticalSummary.prototype.showTable = function() {
           [...liveTable.rows].map(x => (x.style.display = 'table-row'));
           break;
         case this.chosenYear == 1990:
-          //this table has a different structure than the rest so the title is not changed and
-          //...no REGEX logic is applied to it
           liveTable = document.getElementById('type_4');
           break;
       }
@@ -282,7 +269,7 @@ StatisticalSummary.prototype.showTable = function() {
         case this.chosenYear <= 2003 && this.chosenYear >= 1990:
           liveTable = document.getElementById('type_4');
           //Hide rows at these indexes for type_4 for this time period
-          [4].map(x => (liveTable.rows[x].style.display = 'none'));
+          [4, 5].map(x => (liveTable.rows[x].style.display = 'none'));
           break;
       }
       break; //LAST BREAK FOR CATEGORY SWITCH
@@ -318,11 +305,10 @@ StatisticalSummary.prototype.showTable = function() {
     pressReleaseLinkClean = decodeURI(pressReleaseLinks);
   }
 
-  pressRelease.innerHTML = `<a href="${pressReleaseLinkClean}">Statistical summary press release(s)</a> &#187;`;
+  pressRelease.innerHTML = `<a href="${pressReleaseLinkClean}">Statistical summary press release(s)</a>`;
 
   //Iterate rows of liveTable and perform regex/replace on links to reflect chosen year/time-period
   const rows = liveTable.rows;
-  console.log('rows:' + rows);
   for (const row of Array.from(rows)) {
     if (row.cells[2] && row.cells[3]) {
       const excel = row.cells[2];
