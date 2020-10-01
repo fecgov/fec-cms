@@ -2,7 +2,7 @@
 
 function StatisticalSummary() {
   //Declare globals (scoped to this function)to get past linter error/tests.
-  /* global history console */
+  /* global history */
 
   window.addEventListener('popstate', this.handlePopState.bind(this));
 
@@ -32,10 +32,6 @@ function StatisticalSummary() {
 //Update state upon back or forward button click
 StatisticalSummary.prototype.handlePopState = function(e) {
   const params = e.state;
-  console.log('params:' + params.year);
-  console.log(
-    'location: ' + document.location + ', state: ' + JSON.stringify(e.state)
-  );
   this.chosenYear = params.year;
   this.chosenSegment = params.segment;
 
@@ -80,7 +76,6 @@ StatisticalSummary.prototype.handleLatestAvailableOption = function() {
   let latestAvailableOption;
   const segmentOptions = this.chooseSegment.options;
 
-  console.log('2020 chosenSegment:' + this.chosenSegment);
   Array.from(segmentOptions)
     .reverse()
     .forEach(segmentOption => {
@@ -88,8 +83,6 @@ StatisticalSummary.prototype.handleLatestAvailableOption = function() {
       if (segmentOption.hasAttribute('selected')) {
         latestAvailable = segmentOption.value;
         latestAvailableOption = segmentOption;
-        console.log('latestAvailable:' + latestAvailable);
-        console.log('latestAvailableOption:' + latestAvailableOption.selected);
       }
 
       if (segmentOption.value > parseInt(latestAvailable)) {
@@ -98,7 +91,6 @@ StatisticalSummary.prototype.handleLatestAvailableOption = function() {
 
       //If user selects a this year while a segment option greater than latest-available is selected
       if (this.chosenSegment > parseInt(latestAvailable)) {
-        console.log('2020 later than available');
         this.latest_segment_alert.textContent =
           latestAvailableOption.text +
           ' is the latest available option for ' +
@@ -160,8 +152,7 @@ StatisticalSummary.prototype.showTable = function() {
     'message--alert'
   );
   const today = new Date();
-  //const mm = today.getMonth(); //set to '6', 12' or '15' to test (January is 0!)
-  const thisYear = today.getFullYear(); // set to '2019' to test
+  const thisYear = today.getFullYear();
 
   //Fire handleLatestAvailableOption() if user selects this year's select option or a URL has this year in querysting year parameter
 
@@ -176,10 +167,6 @@ StatisticalSummary.prototype.showTable = function() {
 
   //Iterate all tables to start with display of none
   Array.from(this.tables).forEach(table => {
-    //for (const row of Array.from(table.rows)) {
-    //. row.style.display = 'table-row'
-    //  row.style.backgroundColor = '#fff';
-    //}
     table.style.display = 'none';
   });
 
@@ -193,7 +180,6 @@ StatisticalSummary.prototype.showTable = function() {
   const category = document
     .getElementById('type_1')
     .getAttribute('data-summary');
-  console.log(category);
 
   switch (category) {
     case 'congressional':
@@ -250,25 +236,7 @@ StatisticalSummary.prototype.showTable = function() {
           break;
         //default://PROBABLY JUST MOVE 1989 T0 ARCHIVE!
         case this.chosenYear == 1990:
-          {
-            //wrap in extra curly braces for this because of extra logic
-            liveTable = document.getElementById('type_4');
-
-            //REMEBER THIS P.O.C IS ONLY GETTING SECOND ROW, WOULD NEED TO ITERATE ROWS OR CELLS, ASK TO MOVE 1990 TO ARCHIVE !!!!
-            const linx = liveTable.rows[2].getElementsByTagName('a')[0];
-            console.log('linx:' + linx);
-            if (linx) {
-              const hrex = linx.getAttribute('href');
-              const newHrex = hrex.replace(
-                /(.*)(\d{4})(\/)(\d{4})(\d{4})(\w*)(-)(\d{1,2})(.*)/,
-                `$12020$32020$5$6$7${this.chosenSegment}$9`
-              );
-
-              linx.setAttribute('href', newHrex);
-              console.log('newHrex:' + newHrex);
-            }
-          } //end - wrap in extra curly braces for this because of extra logic
-
+          liveTable = document.getElementById('type_4');
           break;
       }
       break;
@@ -343,7 +311,6 @@ StatisticalSummary.prototype.showTable = function() {
 
   //Iterate rows of liveTable and perform regex/replace on links to reflect chosen year/time-period
   const rows = liveTable.rows;
-  console.log('rows:' + rows);
   for (const row of Array.from(rows)) {
     if (row.cells[2] && row.cells[3]) {
       const excel = row.cells[2];
