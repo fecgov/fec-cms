@@ -39,6 +39,9 @@ DIGITALGOV_DRAWER_HANDLE = env.get_credential('DIGITALGOV_DRAWER_HANDLE', '')
 FEC_TRANSITION_URL = env.get_credential('FEC_TRANSITION_URL', 'https://transition.fec.gov')
 FEC_CLASSIC_URL = env.get_credential('FEC_CLASSIC_URL', 'http://classic.fec.gov')
 
+# Save blocked IPs as a long string, ex. "1.1.1.1, 2.2.2.2, 3.3.3.3"
+BLOCKED_IPS = env.get_credential('FEC_CMS_BLOCKED_IPS', '')
+
 FEATURES = {
     'record': bool(env.get_credential('FEC_FEATURE_RECORD', '')),
     'about': bool(env.get_credential('FEC_FEATURE_ABOUT', '')),
@@ -114,6 +117,8 @@ MIDDLEWARE = (
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     # custom response headers
     'fec.middleware.AddSecureHeaders',
+    # custom IP blocking
+    'fec.middleware.BlockIpAddress',
     'uaa_client.middleware.UaaRefreshMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',

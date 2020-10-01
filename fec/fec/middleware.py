@@ -1,5 +1,6 @@
 from django.utils.deprecation import MiddlewareMixin
 from django.conf import settings
+from django import http
 
 
 class AddSecureHeaders(MiddlewareMixin):
@@ -83,3 +84,16 @@ class AddSecureHeaders(MiddlewareMixin):
         )
         response["cache-control"] = "max-age=600"
         return response
+
+
+class BlockIpAddress(MiddlewareMixin):
+    """
+    middlware to block IP addresses via settings
+    variable BLOCKED_IPS
+    """
+
+    def process_request(self, request):
+        print(request.META['REMOTE_ADDR'])
+        if request.META.get('REMOTE_ADDR') in settings.BLOCKED_IPS:
+            return http.HttpResponseForbidden('<h1>Forbidden</h1>')
+        return None
