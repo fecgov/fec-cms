@@ -33,7 +33,7 @@
     "corejs-typeahead": "^1.2.1",
     "css.escape": "^1.5.1",
     "d3": "3.5.5",
-    "datatables.net": "1.10.10",
+    "datatables.net": "1.10.22",
     "datatables.net-responsive": "^2.2.3",
     "debug": "^3.2.6",
     "draft-js": "^0.10.5",
