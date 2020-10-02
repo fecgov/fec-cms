@@ -64,7 +64,6 @@ StatisticalSummary.prototype.getUrlVars = function() {
 StatisticalSummary.prototype.handlePushState = function() {
   ///PUSH STATE 2////
   const data = { year: this.chosenYear, segment: this.chosenSegment };
-  //const title = '';
   var querystring = `?year=${this.chosenYear}&segment=${this.chosenSegment}`;
 
   history.pushState(data, '', querystring);

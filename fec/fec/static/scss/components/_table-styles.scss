@@ -659,30 +659,40 @@ h3 + .simple-table {
   }
 }
 
+
 //for home barchart-full width on mobile
 .breakdowns-home {
    width: 100%;
-  }
+}
 
 //For data summary tables
 .filter-controls {
   display: flex;
   flex-wrap: wrap;
-  }
+}
 
 .filter-controls div {
   margin-right: u(1.5rem);
-  }
+}
 
 .filter-controls select {
   width: 15rem;
-  }
+}
 
 table[data-summary] {
+
+  .tableTitle {
+   margin-bottom: 0; 
+  }
 
   td.brdr {
   position:  relative;
   border-right: 1px solid transparent;
+  }
+
+  thead td {
+    border-width: 0 0;
+    border-color: transparent !important;
   }
 
   td.brdr:after {
