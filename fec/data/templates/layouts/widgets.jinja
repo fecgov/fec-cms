@@ -21,16 +21,7 @@
     </script>
   {% endblock %}
 
-  {# Google Tag Manager #}
-  {% if FEATURES.use_tag_manager %}
-    {% if FEC_CMS_ENVIRONMENT == 'PRODUCTION' %}
-      {# Google Tag Manager for Production #}
-  <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start': new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer','GTM-T5HPRLH');</script>
-    {% else %}
-      {# Google Tag Manager for not-Production: #}
-  <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start': new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer','GTM-PMSLNL3');</script>
-    {% endif %}
-  {% endif %}
+{% include 'partials/google-tag-manager-script.jinja' %}
   
   <script>
     BASE_PATH = '/data';
@@ -60,16 +51,8 @@
   </script>
 </head>
 <body>
-  {# Google Tag Manager (noscript) #}
-  {% if FEATURES.use_tag_manager %}
-    {% if FEC_CMS_ENVIRONMENT == 'PRODUCTION' %}
-      {# Google Tag Manager for Production #}
-      <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-T5HPRLH" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
-    {% else %}
-      {# Google Tag Manager for NOT Production #}
-      <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-PMSLNL3" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
-    {% endif %}
-  {% endif %}
+
+  {% include 'partials/google-tag-manager-noscript.jinja' %}
 
   <main id="main" {% if section %} data-section="{{section}}"{% endif %}>
     {% block body %}{% endblock %}
@@ -80,7 +63,7 @@
 {# {% block modals %}{% endblock %} #}
 {% block scripts %}{% endblock %}
 
-{# Google Analytics and DAP without Tag Manager and only for production #}
+{# Google Analytics without Tag Manager and only for Production #}
 {% if (FEC_CMS_ENVIRONMENT == 'PRODUCTION' and not FEATURES.use_tag_manager) %}
   <script>
     (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
@@ -95,6 +78,7 @@
   </script>
 {% endif %}
 
+{# DAP for Production #}
 {% if (FEC_CMS_ENVIRONMENT == 'PRODUCTION') %}
   <script id="_fed_an_ua_tag" src="https://dap.digitalgov.gov/Universal-Federated-Analytics-Min.js?agency=FEC"></script>
 {% endif %}
