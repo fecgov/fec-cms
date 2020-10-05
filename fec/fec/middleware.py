@@ -73,7 +73,7 @@ class AddSecureHeaders(MiddlewareMixin):
 
         # Add specific rules/permissions for users who are logged in (and not for the general site visitor)
         if request.user.is_authenticated:
-            content_security_policy["img-src"] += " https://www.gravatar.com/avatar/"
+            content_security_policy["img-src"] += " http://www.gravatar.com/avatar/dd9a1a05d5c70a0ce8317f4172745459"
             content_security_policy["connect-src"] += " https://releases.wagtail.io/latest.txt"
 
         # Skip CSP reporting in production so we don't clutter up the logs
