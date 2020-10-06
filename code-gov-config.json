@@ -1,0 +1,30 @@
+{
+    "agency": "FEC",
+    "organization": "Federal Election Commission",
+    "contact_email": "opensource@fec.gov",
+    "permissions": {
+                    "usageType": "openSource",
+                    "licenses": [
+                        {
+                            "URL": "https://github.com/fecgov/FEC/blob/master/LICENSE.md",
+                            "name": "CC0"
+                        }
+                    ]
+    },
+    "GitHub": [
+        {
+            "url": "https://github.com",
+            "token": null,
+            "public_only": true,
+            "repos": [
+                "fecgov/FEC",
+                "fecgov/openFEC",
+                "fecgov/fec-cms",
+                "fecgov/fec-proxy",
+                "fecgov/fec-eregs",
+                "fecgov/fec-pattern-library",
+                "fecgov/fec-infrastructure"
+            ]
+        }
+    ]
+}
