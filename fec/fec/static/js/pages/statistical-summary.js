@@ -69,6 +69,20 @@ StatisticalSummary.prototype.handlePushState = function() {
   history.pushState(data, '', querystring);
 };
 
+StatisticalSummary.prototype.zebraStripeVisible = function(table) {
+  var k = 0;
+  for (var j = 0, row; (row = table.tBodies[0].rows[j]); j++) {
+    if (!(row.style.display === 'none')) {
+      if (k % 2) {
+        row.style.backgroundColor = '(241,241,241,.5)';
+      } else {
+        row.style.backgroundColor = 'rgb(255, 255, 255)';
+      }
+      k++;
+    }
+  }
+};
+
 //Deternine which time-period select options are not yet available for current year and disable them.
 StatisticalSummary.prototype.handleLatestAvailableOption = function() {
   let latestAvailable;
@@ -304,7 +318,7 @@ StatisticalSummary.prototype.showTable = function() {
     pressReleaseLinkClean = decodeURI(pressReleaseLinks);
   }
 
-  pressRelease.innerHTML = `<a href="${pressReleaseLinkClean}">Statistical summary press release(s)</a>`;
+  pressRelease.innerHTML = `<a href="${pressReleaseLinkClean}">Statistical summary press release</a>`;
 
   //Iterate rows of liveTable and perform regex/replace on links to reflect chosen year/time-period
   const rows = liveTable.rows;
@@ -332,7 +346,9 @@ StatisticalSummary.prototype.showTable = function() {
       }
     }
   }
-  // }); //////END forEach((table)/////
+
+  //zebra strip rows after everyting else is done
+  this.zebraStripeVisible(liveTable);
 }; //END showTable()
 
 new StatisticalSummary();
