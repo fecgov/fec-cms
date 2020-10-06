@@ -74,9 +74,9 @@ StatisticalSummary.prototype.zebraStripeVisible = function(table) {
   for (var j = 0, row; (row = table.tBodies[0].rows[j]); j++) {
     if (!(row.style.display === 'none')) {
       if (k % 2) {
-        row.style.backgroundColor = '(241,241,241,.5)';
-      } else {
         row.style.backgroundColor = 'rgb(255, 255, 255)';
+      } else {
+        row.style.backgroundColor = 'rgba(241,241,241,.5)';
       }
       k++;
     }
