@@ -1,5 +1,7 @@
 'use strict';
 
+TODO: go through the site and update all references to this file so it works with GTM?
+
 var _ = require('underscore');
 var URI = require('urijs');
 
