@@ -681,6 +681,9 @@ h3 + .simple-table {
 
 table[data-summary] {
 
+  border-width: 0 0;
+  margin: u(1rem) 0; 
+
   .tableTitle {
    margin-bottom: 0; 
   }
@@ -706,10 +709,6 @@ table[data-summary] {
   }
 
   tr.column-headers td:nth-child(3) strong {
-  margin-left: 2.5rem
-  }
-
-  tbody tr:nth-child(odd) {
-  background-color: #f1f1f1;
+  margin-left: u(2.5rem)
   }
 }
