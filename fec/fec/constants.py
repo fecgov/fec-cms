@@ -364,3 +364,7 @@ USAJOBS_CODE_LIST = """
   "DateGenerated": "2018-10-24T14:45:06.2321547-04:00"
 }
 """
+
+conditional_js = OrderedDict([
+    ('statistical_summary', 'statistical-summary.js')
+])
