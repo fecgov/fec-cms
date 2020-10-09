@@ -14,8 +14,8 @@ describe('helpers', function() {
     it('should create a query object from context and per page length', function() {
       var context = {};
       var perPage = 20;
-      var results = helpers.buildTableQuery(context, perPage);
-      var expected = {per_page: 0, sort_hide_null: true};
+      var results = helpers.buildTableQuery(context, {per_page: perPage});
+      var expected = {per_page: perPage, sort_hide_null: true};
 
       expect(results).to.be.a('object');
       expect(results).to.deep.equal(expected);
