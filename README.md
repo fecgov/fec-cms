@@ -241,6 +241,12 @@ run this command:
 
 Code.gov uses the code.json file located at fec.gov/code.json to inventory our repositories. The file is generated using [LLNL’s scraper tool](https://github.com/LLNL/scraper). Follow the instructions in scraper’s README file to generate a new code.json, or manually update as needed.
 
+Scraper config file is in the root directory.
+
+```
+scraper --config code-gov-config.json
+```
+
 Examples of code.json files: https://github.com/GSA/code-gov/blob/master/METADATA_EXAMPLES.md
 
 ## Deploy

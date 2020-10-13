@@ -12,14 +12,14 @@
                 "email": "opensource@fec.gov"
             },
             "date": {
-                "created": "2018-08-03T12:50:00+00:00",
-                "lastModified": "2018-08-03T12:49:57+00:00",
-                "metadataLastUpdated": "2018-08-03T12:49:57+00:00"
+                "created": "2014-07-23",
+                "lastModified": "2020-09-28",
+                "metadataLastUpdated": "2020-10-06"
             },
             "description": "A general discussion forum for FEC.gov. This is the best place to submit general feedback.",
             "downloadURL": "https://api.github.com/repos/fecgov/FEC/downloads",
             "homepageURL": "https://github.com/fecgov/FEC",
-            "laborHours": 1092.0,
+            "laborHours": 5806,
             "languages": [],
             "name": "FEC",
             "permissions": {
@@ -48,20 +48,19 @@
                 "email": "opensource@fec.gov"
             },
             "date": {
-                "created": "2018-08-07T14:55:33+00:00",
-                "lastModified": "2018-08-06T20:48:06+00:00",
-                "metadataLastUpdated": "2018-08-03T12:49:57+00:00"
+                "created": "2014-08-19",
+                "lastModified": "2020-10-05",
+                "metadataLastUpdated": "2020-10-06"
             },
             "description": "The first RESTful API for the Federal Election Commission. We're aiming to make campaign finance more accessible for journalists, academics, developers, and other transparency seekers.",
             "downloadURL": "https://api.github.com/repos/fecgov/openFEC/downloads",
             "homepageURL": "https://api.open.fec.gov/developers/",
-            "laborHours": 204966.6666666667,
+            "laborHours": 205853.6,
             "languages": [
                 "Python",
                 "PLpgSQL",
                 "JavaScript",
                 "HTML",
-                "SQLPL",
                 "Shell",
                 "CSS"
             ],
@@ -92,9 +91,9 @@
                 "email": "opensource@fec.gov"
             },
             "date": {
-                "created": "2018-08-08T04:21:05+00:00",
-                "lastModified": "2018-08-06T16:12:26+00:00",
-                "metadataLastUpdated": "2018-08-03T12:49:57+00:00"
+                "created": "2015-08-16",
+                "lastModified": "2020-10-06",
+                "metadataLastUpdated": "2020-10-06"
             },
             "description": "The content management system (CMS) for the new Federal Election Commission website.",
             "downloadURL": "https://api.github.com/repos/fecgov/fec-cms/downloads",
@@ -140,14 +139,14 @@
                 "email": "opensource@fec.gov"
             },
             "date": {
-                "created": "2018-07-12T15:14:41+00:00",
-                "lastModified": "2018-07-12T15:14:38+00:00",
-                "metadataLastUpdated": "2018-08-03T12:49:57+00:00"
+                "created": "2015-09-24",
+                "lastModified": "2020-09-29",
+                "metadataLastUpdated": "2020-10-06"
             },
             "description": "Reverse proxy app to combine multiple applications.",
             "downloadURL": "https://api.github.com/repos/fecgov/fec-proxy/downloads",
             "homepageURL": "https://github.com/fecgov/fec-proxy",
-            "laborHours": 52.0,
+            "laborHours": 30.4,
             "languages": [],
             "name": "fec-proxy",
             "permissions": {
@@ -175,19 +174,19 @@
                 "email": "opensource@fec.gov"
             },
             "date": {
-                "created": "2018-07-17T17:12:41+00:00",
-                "lastModified": "2018-07-17T14:46:12+00:00",
-                "metadataLastUpdated": "2018-08-03T12:49:57+00:00"
-
+                "created": "2015-12-10",
+                "lastModified": "2020-09-29",
+                "metadataLastUpdated": "2020-10-06"
             },
             "description": "The Federal Election Commission's web-based application that makes regulations easier to find, read and understand.",
             "downloadURL": "https://api.github.com/repos/fecgov/fec-eregs/downloads",
             "homepageURL": "https://www.fec.gov/regulations",
-            "laborHours": 8406.666666666668,
+            "laborHours": 8406.6,
             "languages": [
-                "CSS",
-                "HTML",
+                "SCSS",
                 "Python",
+                "HTML",
+                "Handlebars",
                 "JavaScript"
             ],
             "name": "fec-eregs",
@@ -233,18 +232,18 @@
                 "email": "opensource@fec.gov"
             },
             "date": {
-                "created": "2018-07-02T22:12:06+00:00",
-                "lastModified": "2018-06-13T23:12:32+00:00",
-                "metadataLastUpdated": "2018-08-03T12:49:57+00:00"
+                "created": "2016-10-29",
+                "lastModified": "2020-09-29",
+                "metadataLastUpdated": "2020-10-06"
             },
-            "description": "Pattern Library for the new FEC.gov",
+            "description": "Pattern Library for FEC.gov",
             "downloadURL": "https://api.github.com/repos/fecgov/fec-pattern-library/downloads",
             "homepageURL": "https://fec-pattern-library.app.cloud.gov/",
-            "laborHours": 11110.666666666666,
+            "laborHours": 11110.6,
             "languages": [
                 "HTML",
                 "JavaScript",
-                "CSS",
+                "SCSS",
                 "Shell"
             ],
             "name": "fec-pattern-library",
@@ -280,14 +279,14 @@
                 "email": "opensource@fec.gov"
             },
             "date": {
-                "created": "2018-05-29T23:58:34+00:00",
-                "lastModified": "2018-05-29T23:58:31+00:00",
-                "metadataLastUpdated": "2018-08-03T12:49:57+00:00"
+                "created": "2017-02-11",
+                "lastModified": "2020-05-31",
+                "metadataLastUpdated": "2020-10-06"
             },
             "description": "Terraform configuration and CircleCI for managing custom FEC infrastructure in AWS.",
             "downloadURL": "https://api.github.com/repos/fecgov/fec-infrastructure/downloads",
             "homepageURL": "https://github.com/fecgov/fec-infrastructure",
-            "laborHours": 17.333333333333336,
+            "laborHours": 121.6,
             "languages": [
                 "HCL"
             ],
