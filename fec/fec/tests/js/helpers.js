@@ -13,9 +13,20 @@ describe('helpers', function() {
   describe('buildTableQuery', function() {
     it('should create a query object from context and per page length', function() {
       var context = {};
-      var perPage = 20;
+      var perPage = 99;
       var results = helpers.buildTableQuery(context, {per_page: perPage});
       var expected = {per_page: perPage, sort_hide_null: true};
+
+      expect(results).to.be.a('object');
+      expect(results).to.deep.equal(expected);
+    });
+  });
+
+  describe('buildTableQuery', function() {
+    it('should create a query object from context use default page length', function() {
+      var context = {};
+      var results = helpers.buildTableQuery(context);
+      var expected = {per_page: 100, sort_hide_null: true};
 
       expect(results).to.be.a('object');
       expect(results).to.deep.equal(expected);

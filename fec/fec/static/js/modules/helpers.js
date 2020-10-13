@@ -328,8 +328,7 @@ function buildUrl(path, query) {
   return uri.addQuery(query).toString();
 }
 
-function buildTableQuery(context, params) {
-  var pageLength = params.per_page || 100;
+function buildTableQuery(context, params = { per_page: 100 }) {
   var query = _.chain(context)
     .pairs()
     .filter(function(pair) {
@@ -344,7 +343,7 @@ function buildTableQuery(context, params) {
   }
 
   return _.extend(query, {
-    per_page: pageLength,
+    per_page: params.per_page,
     sort_hide_null: true
   });
 }
