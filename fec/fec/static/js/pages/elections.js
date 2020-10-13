@@ -43,7 +43,7 @@ $(document).ready(function() {
       order: [[3, 'desc']]
     }
   };
-  var query = helpers.buildTableQuery(context.election, { per_page: 20 });
+  var query = helpers.buildTableQuery(context.election);
   var url = helpers.buildUrl(['elections'], query);
 
   $.getJSON(url).done(function(response) {
