@@ -659,7 +659,56 @@ h3 + .simple-table {
   }
 }
 
+
 //for home barchart-full width on mobile
 .breakdowns-home {
    width: 100%;
+}
+
+//For data summary tables
+.filter-controls {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.filter-controls div {
+  margin-right: u(1.5rem);
+}
+
+.filter-controls select {
+  width: 15rem;
+}
+
+table[data-summary] {
+
+  border-width: 0 0;
+  margin: u(1rem) 0; 
+
+  .tableTitle {
+   margin-bottom: 0; 
   }
+
+  td.brdr {
+  position:  relative;
+  border-right: 1px solid transparent;
+  }
+
+  thead td {
+    border-width: 0 0;
+    border-color: transparent !important;
+  }
+
+  td.brdr:after {
+    content: '|';
+    position: absolute;
+    right: -2px;
+  }
+
+  td.brdr, td.brdr + td {
+    text-transform: uppercase;
+  }
+
+  tr.column-headers td:nth-child(3) strong {
+  margin-left: u(2.5rem)
+  }
+}
