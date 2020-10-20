@@ -1,11 +1,12 @@
 import os
 import json
 import git
+import sys
+import cfenv
+
 from invoke import run
 from invoke import task
 from slacker import Slacker
-
-import cfenv
 
 env = cfenv.AppEnv()
 
@@ -76,7 +77,7 @@ DEPLOY_RULES = (
     ('dev', lambda _, branch: branch == 'develop'),
     # Uncomment below and adjust branch name to deploy desired feature branch to the feature space
     # ('feature', lambda _, branch: branch == '[BRANCH NAME]'),
-) 
+)
 
 
 @task
@@ -102,13 +103,14 @@ def deploy(ctx, space=None, branch=None, login=None, yes=False):
         echo=True
     )
 
-    # Set api
-    api = 'https://api.fr.cloud.gov'
-    ctx.run('cf api {0}'.format(api), echo=True)
-
-    # Log in if necessary
     if login == 'True':
-        ctx.run('cf auth "$FEC_CF_USERNAME_{0}" "$FEC_CF_PASSWORD_{0}"'.format(space.upper()), echo=True)
+        # Set api
+        api = 'https://api.fr.cloud.gov'
+        ctx.run('cf api {0}'.format(api), echo=True)
+        # Authenticate
+        ctx.run('cf auth "$FEC_CF_USERNAME_{0}" "$FEC_CF_PASSWORD_{0}"'.format(
+            space.upper()), echo=True
+        )
 
     # Target space
     ctx.run('cf target -o fec-beta-fec -s {0}'.format(space), echo=True)
@@ -122,6 +124,8 @@ def deploy(ctx, space=None, branch=None, login=None, yes=False):
     cmd = 'zero-downtime-push' if deployed.ok else 'push'
     ctx.run('cf {0} cms -f manifest_{1}.yml'.format(cmd, space), echo=True)
 
+    # Needed by CircleCI
+    return sys.exit(0)
 
 @task
 def notify(ctx):
