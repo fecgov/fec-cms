@@ -41,7 +41,7 @@ You can push updates manually with `cURL`, but for convenience we've set up a fe
 ## Adding CMS pages to the index
 The search indexes are not automatically updated when content changes on the site, so we need to run a manual script to update the indexes.
 
-1. **Update your CMS database:** Make sure that your local database is up-to-date with the production database. The management script references the local database in order to determine which pages to scrape. [Follow these instructions](https://github.com/fecgov/fec-cms#restoring-your-local-database-from-a-backup) to restore your local database from a backup.
+1. **Update your CMS database:** Make sure that your local database is up-to-date with the production database. The management script references the local database in order to determine which pages to scrape. [Follow these instructions](https://github.com/fecgov/fec-cms#restoring-your-local-database-from-a-backup) to restore your local database from a backup. The backup should be accessed over virtual private network (VPN).
 
 2. **Scrape the pages:** Run `fec/manage.py scrape_cms_pages`. By default, this script will:
 - Find all pages that are *direct children* of: Home, About, and About > Leadership and Structure
@@ -52,7 +52,7 @@ The search indexes are not automatically updated when content changes on the sit
 
 ```json
     {
-        "path": "https://beta.fec.gov/legal-resources/advisory-opinions-process/",
+        "path": "https://www.fec.gov/legal-resources/advisory-opinions-process/",
         "title": "The advisory opinion process",
         "created": "2017-01-19-214642",
         "document_id": 6059,
