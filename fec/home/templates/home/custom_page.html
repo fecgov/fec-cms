@@ -1,6 +1,8 @@
 {% extends "base.html" %}
 {% load wagtailcore_tags %}
 {% load wagtailimages_tags %}
+{% load staticfiles %}
+{% load filters %}
 
 {% block body_class %}template-{{ self.get_verbose_name | slugify }}{% endblock %}
 
@@ -110,4 +112,10 @@
 
 {% include 'partials/disclaimer.html' %}
 
+{% endblock %}
+
+{% block extra_js %}
+{% if self.conditional_js %}
+<script type="text/javascript" src="{% asset_for_js self.get_conditional_js_display %}"></script>
+{% endif %}
 {% endblock %}

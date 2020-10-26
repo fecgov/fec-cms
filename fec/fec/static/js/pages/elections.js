@@ -11,7 +11,6 @@ var ElectionForm = require('../modules/election-form').ElectionForm;
 var tableColumns = require('../modules/table-columns');
 
 $(document).ready(function() {
-  var query = helpers.buildTableQuery(context.election);
   var spendingTableOpts = {
     'independent-expenditures': {
       path: ['schedules', 'schedule_e', 'by_candidate'],
@@ -44,7 +43,7 @@ $(document).ready(function() {
       order: [[3, 'desc']]
     }
   };
-
+  var query = helpers.buildTableQuery(context.election);
   var url = helpers.buildUrl(['elections'], query);
 
   $.getJSON(url).done(function(response) {
