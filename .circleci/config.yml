@@ -63,6 +63,7 @@ jobs:
             nvm alias default 14.13.0
             sudo npm install -g npm
             npm install
+            npm rebuild node-sass
             npm run build
 
       - save_cache:
