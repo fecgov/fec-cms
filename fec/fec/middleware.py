@@ -59,6 +59,7 @@ class AddSecureHeaders(MiddlewareMixin):
         }
         if settings.FEC_CMS_ENVIRONMENT == 'LOCAL':
             content_security_policy["default-src"].append("localhost:* http://127.0.0.1:*")  # TODO: add filesystem?
+            content_security_policy["connect-src"].append("localhost:* http://127.0.0.1:*")
 
         if settings.FEC_CMS_ENVIRONMENT != 'PRODUCTION':  # pre-prod environments
             content_security_policy["font-src"].append("https://fonts.gstatic.com/ data:")

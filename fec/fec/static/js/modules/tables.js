@@ -1067,10 +1067,12 @@ function drawContributionsBySizeTable(selected, context) {
       return [result.candidate_id, result];
     })
   );
+  // There are 5 "size" categories. No per_page cap on endpoint
+  var perPage = 5 * selected.length;
   var query = {
     cycle: context.election.cycle,
     candidate_id: _.pluck(selected, 'candidate_id'), // eslint-disable-line camelcase
-    per_page: 0, // eslint-disable-line camelcase
+    per_page: perPage, // eslint-disable-line camelcase
     election_full: true // eslint-disable-line camelcase
   };
   var url = helpers.buildUrl(
@@ -1104,10 +1106,12 @@ function drawContributionsByStateTable(selected, context) {
       return [result.candidate_id, result];
     })
   );
+  // There are 61 "state" options. No per_page cap on endpoint
+  var perPage = 61 * selected.length;
   var query = {
     cycle: context.election.cycle,
     candidate_id: _.pluck(selected, 'candidate_id'), // eslint-disable-line camelcase
-    per_page: 0, // eslint-disable-line camelcase
+    per_page: perPage, // eslint-disable-line camelcase
     election_full: true // eslint-disable-line camelcase
   };
   var url = helpers.buildUrl(
@@ -1118,6 +1122,7 @@ function drawContributionsByStateTable(selected, context) {
     var data = mapState(response, primary);
     // Populate headers with correct text
     var headerLabels = ['State'].concat(_.pluck(selected, 'candidate_name'));
+    destroyTable($table);
     $table
       .find('thead tr')
       .empty()
@@ -1126,7 +1131,6 @@ function drawContributionsByStateTable(selected, context) {
           return $('<th>').text(label);
         })
       );
-    destroyTable($table);
     $table.dataTable(
       _.extend(
         {
