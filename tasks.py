@@ -120,9 +120,33 @@ def deploy(ctx, space=None, branch=None, login=None, yes=False):
         json.dump({'user': os.getenv('USER'), 'branch': branch}, fp)
 
     # Deploy cms
-    deployed = run('cf app cms', echo=True, warn=True)
-    cmd = 'zero-downtime-push' if deployed.ok else 'push'
-    ctx.run('cf {0} cms -f manifest_{1}.yml'.format(cmd, space), echo=True)
+    existing_deploy = ctx.run('cf app cms', echo=True, warn=True)
+    cmd = 'push --strategy rolling' if existing_deploy.ok else 'push'
+    new_deploy = ctx.run('cf {0} cms -f manifest_{1}.yml'.format(cmd, space),
+        echo=True,
+        warn=True
+    )
+
+    if not new_deploy.ok:
+        print("Build failed!")
+        # Check if there are active deployments
+        app_guid = ctx.run('cf app cms --guid', hide=True, warn=True)
+        app_guid_formatted = app_guid.stdout.strip()
+        status = ctx.run('cf curl "/v3/deployments?app_guids={}&status_values=ACTIVE"'.format(app_guid_formatted), hide=True, warn=True)
+        active_deployments = json.loads(status.stdout).get("pagination").get("total_results")
+        # Try to roll back
+        if active_deployments > 0:
+            print("Attempting to roll back any deployment in progress...")
+            # Show the in-between state
+            ctx.run('cf app cms', echo=True, warn=True)
+            cancel_deploy = ctx.run('cf cancel-deployment cms', echo=True, warn=True)
+            if cancel_deploy.ok:
+                print("Successfully cancelled deploy. Check logs.")
+                ctx.run('cf app cms', echo=True, warn=True)
+            else:
+                print("Unable to cancel deploy. Check logs.")
+
+        return sys.exit(1)
 
     # Needed by CircleCI
     return sys.exit(0)
