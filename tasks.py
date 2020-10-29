@@ -147,6 +147,15 @@ def deploy(ctx, space=None, branch=None, login=None, yes=False):
 
         return sys.exit(1)
 
+    # Allow proxy to connect to internal route
+    add_network_policy = ctx.run('cf add-network-policy proxy cms'.format(cmd, space),
+        echo=True,
+        warn=True
+    )
+    if not add_network_policy.ok:
+        print("Unable to add network policy. Both cms and proxy apps need to exist.")
+        print("For more information, check logs.")
+
     # Needed by CircleCI
     return sys.exit(0)
 
