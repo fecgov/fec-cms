@@ -57,6 +57,7 @@ candidate_to_committee_linkage = {
     "H0CO03157": "C00723338",
     "S0KY00420": "C00733261",
     "P00009183": "C00693713",
+    "H0NM03110": "C00705483",
 }
 
 committee_to_candidate_linkage = {
@@ -81,6 +82,7 @@ former_committee_names = {
     "C00723338": "JAMES FOR COLORADO",
     "C00733261": "BOOKER FOR KENTUCKY, LTD.",
     "C00693713": "TULSI NOW",
+    "C00705483": "VALERIE PLAME FOR CONGRESS",
 }
 
 
