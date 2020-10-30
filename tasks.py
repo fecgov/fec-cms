@@ -153,7 +153,7 @@ def deploy(ctx, space=None, branch=None, login=None, yes=False):
         warn=True
     )
     if not add_network_policy.ok:
-        print("Unable to add network policy. Both cms and proxy apps need to exist.")
+        print("Unable to add network policy. Deploy the proxy to enable public access.")
         print("For more information, check logs.")
 
     # Needed by CircleCI
