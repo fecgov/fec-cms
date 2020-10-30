@@ -145,6 +145,21 @@ def deploy(ctx, space=None, branch=None, login=None, yes=False):
             else:
                 print("Unable to cancel deploy. Check logs.")
 
+        # Fail the build
+        return sys.exit(1)
+
+    # Allow proxy to connect to CMS via internal route
+    add_network_policy = ctx.run('cf add-network-policy proxy cms'.format(cmd, space),
+        echo=True,
+        warn=True
+    )
+    if not add_network_policy.ok:
+        print(
+            "Unable to add network policy. Make sure the proxy app is deployed.\n"
+            "For more information, check logs."
+        )
+
+        # Fail the build because the CMS will be down until the proxy is can connect
         return sys.exit(1)
 
     # Needed by CircleCI
