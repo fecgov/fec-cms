@@ -121,6 +121,7 @@ def deploy(ctx, space=None, branch=None, login=None, yes=False):
 
     # Deploy cms
     existing_deploy = ctx.run('cf app cms', echo=True, warn=True)
+    print("\n")
     cmd = 'push --strategy rolling' if existing_deploy.ok else 'push'
     new_deploy = ctx.run('cf {0} cms -f manifest_{1}.yml'.format(cmd, space),
         echo=True,
@@ -146,6 +147,9 @@ def deploy(ctx, space=None, branch=None, login=None, yes=False):
                 print("Unable to cancel deploy. Check logs.")
 
         return sys.exit(1)
+
+    print("\nA new version of your application 'cms' has been successfully pushed!")
+    ctx.run('cf apps', echo=True, warn=True)
 
     # Needed by CircleCI
     return sys.exit(0)
