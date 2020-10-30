@@ -74,7 +74,7 @@ def _detect_space(repo, branch=None, yes=False):
 DEPLOY_RULES = (
     ('prod', _detect_prod),
     ('stage', lambda _, branch: branch.startswith('release')),
-    ('dev', lambda _, branch: branch == 'develop'),
+    ('dev', lambda _, branch: branch == 'feature/316-add-private-route'),
     # Uncomment below and adjust branch name to deploy desired feature branch to the feature space
     # ('feature', lambda _, branch: branch == '[BRANCH NAME]'),
 )
@@ -145,6 +145,7 @@ def deploy(ctx, space=None, branch=None, login=None, yes=False):
             else:
                 print("Unable to cancel deploy. Check logs.")
 
+        # Fail the build
         return sys.exit(1)
 
     # Allow proxy to connect to internal route
@@ -153,8 +154,11 @@ def deploy(ctx, space=None, branch=None, login=None, yes=False):
         warn=True
     )
     if not add_network_policy.ok:
-        print("Unable to add network policy. Deploy the proxy to enable public access.")
-        print("For more information, check logs.")
+        print("Unable to add network policy. Make sure the proxy app is deployed. \
+               For more information, check logs.")
+
+        # Fail the build because the CMS will be down until the proxy is can connect
+        return sys.exit(1)
 
     # Needed by CircleCI
     return sys.exit(0)
