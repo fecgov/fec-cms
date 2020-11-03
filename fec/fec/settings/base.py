@@ -225,6 +225,7 @@ MEDIA_URL = '/media/'
 
 COMPRESS_PRECOMPILERS = (
     ('text/x-scss', 'fec.utils.PatchedSCSSCompiler'),
+    
 )
 
 # Proxy settings
