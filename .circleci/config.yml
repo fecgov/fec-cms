@@ -102,8 +102,6 @@ jobs:
             mkdir -p $HOME/bin
             export PATH=$HOME/bin:$PATH
             curl -L "https://cli.run.pivotal.io/stable?release=linux64-binary&version=7.1.0" | tar xzv -C $HOME/bin
-            cf install-plugin autopilot -f -r CF-Community
-
 
       - deploy:
           name: Deploy CMS
