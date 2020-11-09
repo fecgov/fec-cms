@@ -1,63 +1,63 @@
 'use strict';
 
-TODO: go through the site and update all references to this file so it works with GTM?
+// TODO
+// TODO
+// TODO: go through the site and update all references to this file so it works with GTM?
+// TODO
+// TODO
+// TODO REMOVE THESE
+// TODO
+// TODO
 
 var _ = require('underscore');
-var URI = require('urijs');
 
-var helpers = require('./helpers');
+var dataLayer = window.dataLayer;
 
-function trackerExists() {
-  if (typeof ga !== 'undefined') {
-    return true;
-  }
-}
-
-/* Initialize a non Digital Analytics Program GA tracker
- * This tracker's name is "nonDAP", so all commands will need to be prefixed
+/**
+ * Create the window.dataLayer object (Array) for GTM if it doesn't already exist
  */
 function init() {
-  if (!trackerExists()) {
-    (function(i, s, o, g, r, a, m) {
-      i['GoogleAnalyticsObject'] = r;
-      (i[r] =
-        i[r] ||
-        function() {
-          (i[r].q = i[r].q || []).push(arguments);
-        }),
-        (i[r].l = 1 * new Date());
-      (a = s.createElement(o)), (m = s.getElementsByTagName(o)[0]);
-      a.async = 1;
-      a.src = g;
-      m.parentNode.insertBefore(a, m);
-    })(
-      window,
-      document,
-      'script',
-      'https://www.google-analytics.com/analytics.js',
-      'ga'
-    );
-  }
-
-  ga('create', 'UA-16134356-1', 'auto', 'notDAP');
-  ga('notDAP.set', 'forceSSL', true);
-  ga('notDAP.set', 'anonymizeIp', true);
+  if (!window.dataLayer) window.dataLayer = [];
+  dataLayer = window.dataLayer || [];
 }
 
+/**
+ * Common place to trigger analytics custom events
+ * @param {Object} eventObj The data object
+ * @param {String} eventObj.event The name of the event. This serves as the trigger inside Google Tag Manager
+ * @param {String} eventObj.eventCategory Passed to GTM (and forwarded to Google Analytics)
+ * @param {String} eventObj.eventAction Passed to GTM (and forwarded to Google Analytics)
+ * @param {String} eventObj.eventLabel Passed to GTM (and forwarded to Google Analytics)
+ * @param {Number} eventObj.eventValue Passed to GTM (and forwarded to Google Analytics)
+ */
+function customEvent(eventObj) {
+  init();
+  dataLayer.push({
+    event: eventObj.event || '',
+    eventCategory: eventObj.eventCategory || '',
+    eventAction: eventObj.eventAction || '',
+    eventLabel: eventObj.eventLabel || '',
+    eventValue: eventObj.eventValue || null
+  });
+}
+
+/**
+ * Common place for interactive elements to trigger a pageview event (that isn't an actual page load)
+ */
 function pageView() {
-  if (typeof ga === 'undefined') {
-    return;
-  }
-  var path = document.location.pathname;
-  if (document.location.search) {
-    var query = helpers.sanitizeQueryParams(
-      URI.parseQuery(document.location.search)
-    );
-    path += '?' + sortQuery(query);
-  }
-  ga('notDAP.send', 'pageview', path);
+  init();
+  dataLayer.push({ event: 'pageview' });
+  // TODO
+  // TODO
+  // TODO: double-check the pageview trigger in GTM
+  // TODO
+  // TODO
 }
 
+/**
+ * As of November 2020, this is only being used inside a test
+ * @param {*} query
+ */
 function sortQuery(query) {
   return _.chain(query)
     .pairs()
@@ -81,7 +81,7 @@ function sortQuery(query) {
 
 module.exports = {
   init: init,
+  customEvent: customEvent,
   pageView: pageView,
-  sortQuery: sortQuery,
-  trackerExists: trackerExists
+  sortQuery: sortQuery
 };
