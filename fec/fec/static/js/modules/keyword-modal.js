@@ -3,7 +3,7 @@
 var $ = require('jquery');
 var URI = require('urijs');
 var A11yDialog = require('a11y-dialog');
-var analytics = require('./analytics'); // TODO - move this to Tag Manager?
+var analytics = require('./analytics');
 
 /**
  * KeywordModal
@@ -109,19 +109,17 @@ KeywordModal.prototype.parseValue = function($input) {
 };
 
 /**
- * Fire an event to Google analytics
- * If the non-DAP GA tracker exists, it fires an event to that account
- * @param {string} action - Name of the action to register with GA
+ * Fire an event to GTM
+ * @param {String} actionLabel - Name of the action to register with GA
  */
-KeywordModal.prototype.fireEvent = function(action) {
-  if (analytics.trackerExists()) {
-    var gaEventData = {
-      eventCategory: 'Legal interactions',
-      eventAction: action,
-      eventValue: 1
-    };
-    ga('notDAP.send', 'event', gaEventData);
-  }
+KeywordModal.prototype.fireEvent = function(actionLabel) {
+  // Updating this to use DataLayer for GTM
+  analytics.customEvent({
+    eventName: 'fecCustomEvent',
+    eventCategory: 'Legal interactions',
+    eventAction: actionLabel,
+    eventValue: 1
+  });
 };
 
 module.exports = { KeywordModal: KeywordModal };

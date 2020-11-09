@@ -14,7 +14,8 @@ const breakpointToXL = 860;
 const isModernBrowser = 'fetch' in window && 'assign' in Object;
 
 // Includes
-import { buildUrl } from '../modules/helpers';
+import analytics from '../modules/analytics';
+import buildUrl from '../modules/helpers';
 import {
   defaultElectionYear,
   electionYearsOptions,
@@ -734,13 +735,12 @@ function buildElement(callingInstance, scriptElement) {
  * @param {*} electionYear - String or Number, the user-selected election year
  */
 function logUsage(officeAbbrev, electionYear) {
-  if (window.ga) {
-    window.ga('send', 'event', {
-      eventCategory: 'Widget-AggregateTotals',
-      eventAction: 'interaction',
-      eventLabel: officeAbbrev + ',' + electionYear
-    });
-  }
+  analytics.customEvent({
+    eventName: `widgetInteraction`,
+    eventCategory: 'Widget-AggregateTotals',
+    eventAction: 'interaction',
+    eventLabel: officeAbbrev + ',' + electionYear
+  });
 }
 
 new AggregateTotalsBox();
