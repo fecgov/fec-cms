@@ -9,6 +9,7 @@ applications:
       - python_buildpack
     routes:
       - route: fec-stage-cms.app.cloud.gov
+      - route: fec-stage-cms.apps.internal
     services:
       - cms-creds-stage
       - fec-creds-stage
