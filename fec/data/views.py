@@ -273,10 +273,12 @@ def get_candidate(candidate_id, cycle, election_full):
     converted_committee_id = None
     former_committee_name = None
 
-    # Get the current committee name, former authorized committee name, and committee ID
-    current_committee_name = committee.get('name')
-    converted_committee_id = committee.get('committee_id')
-    former_committee_name = committee.get('former_committee_name')
+    # Get the most current committee name, former authorized committee name, and committee ID.
+    # This will be the first item returned in the committees list
+    if committee.get('former_candidate_id'):
+        current_committee_name = committees[0].get('name')
+        converted_committee_id = committees[0].get('committee_id')
+        former_committee_name = committees[0].get('former_committee_name')
 
     return {
         "converted_committee_name": current_committee_name,
