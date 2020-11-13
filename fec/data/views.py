@@ -455,6 +455,25 @@ def get_committee(committee_id, cycle):
         "lastCycleHasFinancial": fallback_cycle,
     }
 
+    # Sponsors come in as a list of IDs, but we need names
+    # Create a list and string, get the candidate names,
+    # and join that list with semicolons since names are returned as "LAST, FIRST"
+    sponsors_candidate_ids = committee.get("sponsor_candidate_ids")
+    sponsors_names = []
+    sponsors_str = ""
+    if sponsors_candidate_ids:
+        for sponsor_id in sponsors_candidate_ids:
+            sponsor_candidate_data = get_candidate(sponsor_id, cycle, False)
+            sponsors_names.append(sponsor_candidate_data["name"])
+
+        sponsors_str = "; ".join([str(elem) for elem in sponsors_names])
+
+    else:
+        sponsors_str = ""
+        # Do we want to set this ^^ to something specific if there's no sponsor, or just leave it blank?
+        # (if blank, we could omit this else)
+        # Another option: we could set the no-value text inside the template
+
     template_variables = {
         "candidates": candidates,
         "committee": committee,
@@ -477,6 +496,7 @@ def get_committee(committee_id, cycle):
         "social_image_identifier": "data",
         "year": year,
         "timePeriod": time_period_js,
+        "leadership_sponsors_names": sponsors_str,
     }
     # Format the current two-year-period's totals
     if reports and totals:
