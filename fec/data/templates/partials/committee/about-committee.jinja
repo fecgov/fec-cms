@@ -1,3 +1,5 @@
+{# Imported by committees-single.jinja #}
+
 {% import 'macros/cycle-select.jinja' as select %}
 
 <section id="section-2" role="tabpanel" aria-hidden="true" aria-labelledby="section-2-heading">
@@ -73,6 +75,10 @@
             <td class="figure__value">{{ committee.designation_full }}</td>
           {% endif %}
         </tr>
+        <tr>
+            <td class="figure__label">Leadership PAC sponsor:</td>
+            <td class="figure__value">{{ leadership_sponsors_names }}</td>
+        </tr>
         {% if is_SSF %}
           <tr>
             <td class="figure__label">Connected organization:</td>
@@ -108,18 +114,18 @@
                 <h5 class="callout__title t-sans">
                   {% for c in candidates %}
                     {% if c.related_cycle is not none %}
-                      <a href="/data/candidate/{{ c.candidate_id }}/?cycle={{ c.related_cycle }}&election_full=false">{{ c.name }}</a>
+                  <a href="/data/candidate/{{ c.candidate_id }}/?cycle={{ c.related_cycle }}&election_full=false">{{ c.name }}</a>
                     {% else %}
-                      <a href="/data/candidate/{{ c.candidate_id }}/">{{ c.name }}</a>
+                  <a href="/data/candidate/{{ c.candidate_id }}/">{{ c.name }}</a>
                     {% endif %}
                   {% endfor %}
                 </h5>
-                  <span class="entity__type">{{ committee.committee_type_full }} candidate</span>
+                <span class="entity__type">{{ committee.committee_type_full }} candidate</span>
 
                   {% if candidates[0].office == 'S' %}
-                    <span class="entity__type">{{ candidates[0].state|fmt_state_full }}</span>
+                <span class="entity__type">{{ candidates[0].state|fmt_state_full }}</span>
                   {% elif candidates[0].office == 'H' %}
-                      <span class="entity__type">{{ candidates[0].state|fmt_state_full }} - {{ candidates[0].district }}</span>
+                <span class="entity__type">{{ candidates[0].state|fmt_state_full }} - {{ candidates[0].district }}</span>
                   {% endif %}
 
                   {{ candidates[0].party_full|lower|title }}
