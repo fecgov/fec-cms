@@ -38,53 +38,6 @@ validListUrlParamValues = ["P", "S", "H"]
 # INITIALLY USED BY raising() AND spending() FOR VALIDATING URL PARAMETERS,
 # THE list URL PARAM
 
-# List of candidates who have changed their candidate committees during a
-# recent two year time period
-candidate_to_committee_linkage = {
-    "H0CA08069": "C00698894",
-    "H0IL01178": "C00697128",
-    "P00010298": "C00697441",
-    "P00009092": "C00693044",
-    "H8CA25074": "C00634212",
-    "H0CA04167": "C00691790",
-    "H2NC11080": "C00503094",
-    "P00016063": "C00745752",
-    "H0CA25170": "C00727008",
-    "H0OH04085": "C00712224",
-    "H0GA07265": "C00706564",
-    "P00010793": "C00699090",
-    "P00014407": "C00727156",
-    "H0CO03157": "C00723338",
-    "S0KY00420": "C00733261",
-    "P00009183": "C00693713",
-    "H0NM03110": "C00705483",
-}
-
-committee_to_candidate_linkage = {
-    v: k for k, v in candidate_to_committee_linkage.items()
-}
-
-# List of names for former candidate committees
-former_committee_names = {
-    "C00698894": "JOHN DENNIS FOR CONGRESS",
-    "C00697128": "FRIENDS TO ELECT ROBERT EMMONS JR.",
-    "C00697441": "PETE FOR AMERICA, INC.",
-    "C00693044": "JULIAN FOR THE FUTURE PRESIDENTIAL EXPLORATORY COMMITTEE",
-    "C00634212": "KATIE HILL FOR CONGRESS",
-    "C00691790": "SEAN FRAME FOR CONGRESS",
-    "C00503094": "MEADOWS FOR CONGRESS",
-    "C00745752": "AMASH FOR AMERICA EXPLORATORY COMMITTEE",
-    "C00727008": "CENK FOR CONGRESS",
-    "C00712224": "JEFFREY A. SITES FOR CONGRESS",
-    "C00706564": "LERAH LEE FOR CONGRESS",
-    "C00699090": "BETO FOR AMERICA",
-    "C00727156": "DEVAL FOR ALL",
-    "C00723338": "JAMES FOR COLORADO",
-    "C00733261": "BOOKER FOR KENTUCKY, LTD.",
-    "C00693713": "TULSI NOW",
-    "C00705483": "VALERIE PLAME FOR CONGRESS",
-}
-
 
 def to_date(committee, cycle):
     if committee["committee_type"] in ["H", "S", "P"]:
@@ -320,15 +273,12 @@ def get_candidate(candidate_id, cycle, election_full):
     converted_committee_id = None
     former_committee_name = None
 
-    if cycle == 2020 and candidate_to_committee_linkage.get(candidate_id):
-        # Call committee/{committee_id}/history/{cycle}/
-        filters = {"per_page": 1}
-        path = "/committee/" + candidate_to_committee_linkage.get(candidate_id) + "/history/" + str(cycle)
-        committee = api_caller.load_first_row_data(path, **filters)
-        # Get the converted committee's name, committee ID, and former committee name
-        current_committee_name = committee.get('name')
-        converted_committee_id = committee.get('committee_id')
-        former_committee_name = former_committee_names.get(converted_committee_id)
+    # Get the latest committee name, former authorized committee name, and committee ID.
+    # This will be the first item returned in the committees list
+    if committees[0].get('former_candidate_id'):
+        current_committee_name = committees[0].get('name')
+        converted_committee_id = committees[0].get('committee_id')
+        former_committee_name = committees[0].get('former_committee_name')
 
     return {
         "converted_committee_name": current_committee_name,
@@ -473,7 +423,6 @@ def get_committee(committee_id, cycle):
         "min_receipt_date": utils.three_days_ago(),
         "context_vars": context_vars,
         "party_full": committee["party_full"],
-        "candidates": candidates,
         "social_image_identifier": "data",
         "year": year,
         "timePeriod": time_period_js,
@@ -540,26 +489,10 @@ def get_committee(committee_id, cycle):
 
     # Add message for a committee that was formerly an authorized candidate committee.
     # These committees are now unauthorized committees.
-    converted_committee_id = None
-    former_committee_name = None
-    former_authorized_candidate_id = None
-    former_authorized_candidate_name = None
-
-    if cycle == 2020 and committee_to_candidate_linkage.get(committee_id):
-        # Call /candidate/{candidate_id}/history/
-        converted_committee_id = committee.get('committee_id')
-        former_authorized_candidate_id = committee_to_candidate_linkage.get(converted_committee_id)
-        path = "/candidate/" + str(former_authorized_candidate_id) + "/history/"
-        filters = {}
-        filters["per_page"] = 1
-        candidate = api_caller.load_first_row_data(path, **filters)
-        # Get the converted committee's former name and candidate name
-        former_committee_name = former_committee_names.get(converted_committee_id)
-        former_authorized_candidate_name = candidate.get('name')
-
-    template_variables["former_committee_name"] = former_committee_name
-    template_variables["former_authorized_candidate_name"] = former_authorized_candidate_name
-    template_variables["former_authorized_candidate_id"] = former_authorized_candidate_id
+    if committee['former_candidate_id']:
+        template_variables["former_committee_name"] = committee['former_committee_name']
+        template_variables["former_authorized_candidate_name"] = committee['former_candidate_name']
+        template_variables["former_authorized_candidate_id"] = committee['former_candidate_id']
 
     return template_variables
 

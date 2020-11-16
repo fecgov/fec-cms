@@ -41,6 +41,9 @@ class TestCommittee(TestCase):
         "last_cycle_has_financial": 2018,
         "cycles_has_activity": [2018],
         "last_cycle_has_activity": 2018,
+        "former_candidate_id": "P001",
+        "former_committee_name": "Friends of President",
+        "former_candidate_name": "Optimus Prime",
     }
 
     STOCK_REPORTS = [
@@ -207,6 +210,10 @@ class TestCommittee(TestCase):
         assert committee["zip"] == test_committee["zip"]
         assert committee["treasurer_name"] == test_committee["treasurer_name"]
         assert committee["party_full"] == test_committee["party_full"]
+        assert committee["former_candidate_id"] is not None
+        assert committee["former_candidate_id"] == test_committee["former_candidate_id"]
+        assert committee["former_committee_name"] == test_committee["former_committee_name"]
+        assert committee["former_candidate_name"] == test_committee["former_candidate_name"]
 
         assert template_variables["context_vars"] == {
             "cycle": 2018,
