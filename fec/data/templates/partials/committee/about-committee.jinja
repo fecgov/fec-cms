@@ -75,10 +75,12 @@
             <td class="figure__value">{{ committee.designation_full }}</td>
           {% endif %}
         </tr>
+        {% if leadership_sponsors_names %}
         <tr>
             <td class="figure__label">Leadership PAC sponsor:</td>
             <td class="figure__value">{{ leadership_sponsors_names }}</td>
         </tr>
+        {% endif %}
         {% if is_SSF %}
           <tr>
             <td class="figure__label">Connected organization:</td>

@@ -468,12 +468,6 @@ def get_committee(committee_id, cycle):
 
         sponsors_str = "; ".join([str(elem) for elem in sponsors_names])
 
-    else:
-        sponsors_str = ""
-        # Do we want to set this ^^ to something specific if there's no sponsor, or just leave it blank?
-        # (if blank, we could omit this else)
-        # Another option: we could set the no-value text inside the template
-
     template_variables = {
         "candidates": candidates,
         "committee": committee,
