@@ -1,6 +1,9 @@
 {% macro missing_transferred_candidate_message(entity, cycle, converted_committee_name, converted_committee_id, former_committee_name) %}
     <div class="message message--info">
-        <p><span class="t-bold">{{ cycle | fmt_year_range }}</span> financial data for <strong><span class="t-bold">{{ entity }}</span></strong> now appears under the committee name <strong><a href="/data/committee/{{ converted_committee_id }}">{{ converted_committee_name }}</a></strong>, following the committee's conversion to a <span class="term" data-term="political action committee (pac)">PAC</span> from a <span class="term" data-term="principal campaign committee">principal campaign committee</span>. Prior to its conversion to a PAC the candidate's principal campaign committee was named <strong>{{ former_committee_name }}</strong>.</p>
+        <p><span class="t-bold">{{ cycle | fmt_year_range }}</span> financial data for <strong><span class="t-bold">{{ entity }}</span></strong> now appears under the committee name <strong><a href="/data/committee/{{ converted_committee_id }}">{{ converted_committee_name }}</a></strong>. The <span class="term" data-term="principal campaign committee">principal campaign committee</span> for this candidate was converted to a <span class="term" data-term="political action committee (pac)">PAC</span>. 
+        {% if former_committee_name != converted_committee_name %}
+            The previous name for the principal campaign committee was <strong>{{ former_committee_name }}</strong>.</p>
+        {% endif %}
         <div class="message--alert__bottom">
         <p>Think this result is a mistake or have questions?</p>
         <p>

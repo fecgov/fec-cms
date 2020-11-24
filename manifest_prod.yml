@@ -8,7 +8,7 @@ applications:
     buildpacks:
       - python_buildpack
     routes:
-      - route: fec-prod-cms.app.cloud.gov
+      - route: fec-prod-cms.apps.internal
     services:
       - cms-creds-prod
       - fec-creds-prod
