@@ -18,9 +18,10 @@
 // div that contains the ul and all panels
 .site-nav__container {
   $top: u(6.3rem);
+  $adjustment: 40px;
   @include transform(translateX(-100%));
   @include transition(left, .2s, ease-out);
-  height: calc(100vh - #{$top});
+  height: calc(100vh - #{$top} - #{$adjustment});
   position: absolute;
   left: 0;
   right: 0;
