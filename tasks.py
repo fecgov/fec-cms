@@ -160,7 +160,7 @@ def deploy(ctx, space=None, branch=None, login=None, yes=False):
             "For more information, check logs."
         )
 
-        # Fail the build because the CMS will be down until the proxy is can connect
+        # Fail the build because the CMS will be down until the proxy can connect
         return sys.exit(1)
 
     print("\nA new version of your application 'cms' has been successfully pushed!")
