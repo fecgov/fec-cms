@@ -359,6 +359,7 @@
 //
 
 .masthead {
+  display: none;
   padding-top: u(2.5rem);
   @include clearfix();
 }
@@ -397,7 +398,8 @@
     background-size: contain;
     display: block;
     height: u(3rem);
-    margin: u(.5rem 1rem);
+    // margin: u(.5rem 1rem);
+    margin: u(.75rem 1rem .25rem);
     width: calc(100% - 15rem);
     max-width: u(40rem);
   }

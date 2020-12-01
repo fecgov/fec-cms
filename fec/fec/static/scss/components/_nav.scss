@@ -18,14 +18,13 @@
 // div that contains the ul and all panels
 .site-nav__container {
   $top: u(6.3rem);
-  $adjustment: 40px;
   @include transform(translateX(-100%));
   @include transition(left, .2s, ease-out);
-  height: calc(100vh - #{$top} - #{$adjustment});
+  height: calc(100vh - #{$top});
   position: absolute;
   left: 0;
   right: 0;
-  top: $top;
+  top: 4rem;
   overflow-x: hidden;
   z-index: $z-navigation;
 
@@ -33,6 +32,13 @@
   &[aria-hidden='true'] {
     display: block !important; // It's hidden by the transform, so this keeps it visible when it slides in
   }
+}
+
+// If we have the dev banner, we'll need to adjust #site-menu
+.banner-dev + .usa-banner + .site-header nav #site-menu {
+  $devBannerTop: 4rem;
+  top: u($devBannerTop);
+  height: calc(100vh - $devBannerTop);
 }
 
 // Styles for each panel on mobile
