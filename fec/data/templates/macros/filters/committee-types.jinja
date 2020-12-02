@@ -1,3 +1,5 @@
+{% import 'macros/filters/typeahead-filter.jinja' as typeahead %}
+
 {% macro field(committee_type='committee_type', organization_type='organization_type', designation='designation') %}
 
 <div class="filter">
@@ -106,6 +108,11 @@
         </li>
       </ul>
     </div>
+    {% if committee_type == 'sponsor_candidate_type' %}
+      <div class="filter sub--filter--indent">
+        {{ typeahead.field('sponsor_candidate_id', 'Leadership PAC sponsor', False, dataset='candidates', allow_text=False) }}
+      </div>
+    {% endif %}
   </fieldset>
 </div>
 

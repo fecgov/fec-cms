@@ -23,7 +23,7 @@
   <button type="button" class="js-accordion-trigger accordion__button">Committee type</button>
   <div class="accordion__content">
     {% import 'macros/filters/committee-types.jinja' as committee_type %}
-    {{ committee_type.field() }}
+    {{ committee_type.field(committee_type='sponsor_candidate_type') }}
   </div>
 </div>
 {% endblock %}
