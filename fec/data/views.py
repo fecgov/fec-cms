@@ -414,8 +414,12 @@ def get_committee(committee_id, cycle):
     sponsors_names = []
     sponsors_str = ""
     if sponsors_candidate_ids:
+        path = "/candidate/{}/history/"
+        filters = {"per_page": 1}
         for sponsor_id in sponsors_candidate_ids:
-            sponsor_candidate_data = get_candidate(sponsor_id, cycle, False)
+            sponsor_candidate_data = api_caller.load_first_row_data(
+                path.format(sponsor_id), **filters
+            )
             sponsors_names.append(sponsor_candidate_data["name"])
 
         sponsors_str = "; ".join([str(elem) for elem in sponsors_names])
