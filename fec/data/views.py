@@ -412,7 +412,9 @@ def get_committee(committee_id, cycle):
         filters = {"per_page": 1}
         for sponsor_id in sponsors_candidate_ids:
             sponsor_candidate = load_most_recent_candidate(sponsor_id)
-            sponsors_names.append(sponsor_candidate["name"])
+            # Handle API returning no results
+            if sponsor_candidate:
+                sponsors_names.append(sponsor_candidate.get("name"))
 
         sponsors_str = "; ".join([str(elem) for elem in sponsors_names])
 
