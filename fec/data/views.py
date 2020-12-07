@@ -148,10 +148,7 @@ def get_candidate(candidate_id, cycle, election_full):
 
     # (1)call candidate/{candidate_id}/history/ under tag:candidate
     # get rounded_election_years(candidate_election_year).
-    path = "/candidate/" + candidate_id + "/history/"
-    filters = {}
-    filters["per_page"] = 1
-    candidate = api_caller.load_first_row_data(path, **filters)
+    candidate = load_most_recent_candidate(candidate_id)
     if candidate is None:
         raise Http404()
 
@@ -214,6 +211,7 @@ def get_candidate(candidate_id, cycle, election_full):
 
     # (4)call candidate/{candidate_id}/totals/{cycle} under tag:candidate
     # Get aggregate totals for the financial summary
+    filters = {}
     filters["election_full"] = election_full
     filters["cycle"] = cycle
     path = "/candidate/" + candidate_id + "/totals/"
@@ -417,10 +415,8 @@ def get_committee(committee_id, cycle):
         path = "/candidate/{}/history/"
         filters = {"per_page": 1}
         for sponsor_id in sponsors_candidate_ids:
-            sponsor_candidate_data = api_caller.load_first_row_data(
-                path.format(sponsor_id), **filters
-            )
-            sponsors_names.append(sponsor_candidate_data["name"])
+            sponsor_candidate = load_most_recent_candidate(sponsor_id)
+            sponsors_names.append(sponsor_candidate["name"])
 
         sponsors_str = "; ".join([str(elem) for elem in sponsors_names])
 
@@ -526,6 +522,15 @@ def committee(request, committee_id):
     cycle = request.GET.get("cycle", None)
     committee = get_committee(committee_id, cycle)
     return render(request, "committees-single.jinja", committee)
+
+
+def load_most_recent_candidate(candidate_id):
+    """
+    Get most recent candidate information
+    """
+    path = "/candidate/" + candidate_id + "/history/"
+    filters = {"per_page": 1}
+    return api_caller.load_first_row_data(path, **filters)
 
 
 def load_reports_and_totals(committee_id, cycle, cycle_out_of_range, fallback_cycle):
