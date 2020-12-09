@@ -1,6 +1,6 @@
 {% import 'macros/filters/typeahead-filter.jinja' as typeahead %}
 
-{% macro field(committee_type='committee_type', organization_type='organization_type', designation='designation') %}
+{% macro field(committee_type='committee_type', organization_type='organization_type', designation='designation', display_sponsor_candidate_filter=False) %}
 
 <div class="filter">
   <fieldset class="js-dropdown js-filter" data-filter="checkbox" data-name="hsp-committee_type">
@@ -108,12 +108,12 @@
         </li>
       </ul>
     </div>
-    {% if committee_type == 'sponsor_candidate_type' %}
-      <div class="filter sub--filter--indent">
-        {{ typeahead.field('sponsor_candidate_id', 'Leadership PAC sponsor', False, dataset='candidates', allow_text=False) }}
-      </div>
-    {% endif %}
   </fieldset>
+  {% if display_sponsor_candidate_filter %}
+    <div class="filter sub--filter--indent">
+      {{ typeahead.field('sponsor_candidate_id', 'Leadership PAC sponsor', False, dataset='candidates', allow_text=False) }}
+    </div>
+  {% endif %}
 </div>
 
 
