@@ -1,17 +1,14 @@
+import requests
+import github3
+import json
+import re
+from distutils.util import strtobool
+from datetime import date, datetime
 from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.http import Http404
 from django.http import JsonResponse
 from django.conf import settings
-
-from distutils.util import strtobool
-
-import requests
-from datetime import date, datetime
-import github3
-import json
-import re
-
 from data import api_caller
 from data import constants
 from data import utils
@@ -146,27 +143,18 @@ def get_candidate(candidate_id, cycle, election_full):
     3) totally call 5-6 endpoints.
     """
 
-    # (1)call candidate/{candidate_id}/history/ under tag:candidate
+    # (1) Call candidate/{candidate_id}/history/ under tag:candidate
     # get rounded_election_years(candidate_election_year).
-    path = "/candidate/" + candidate_id + "/history/"
-    filters = {}
-    filters["per_page"] = 1
-    candidate = api_caller.load_first_row_data(path, **filters)
+    candidate = load_most_recent_candidate(candidate_id)
     if candidate is None:
         raise Http404()
-
-    # a)Build List: even_election_years for candidate election dropdown list
-    #   on candidate profile page.
-    # b)rounded_election_years round up any odd year special election_year
-    #   to even number. (ex:2017=>2018)
-    # even_election_years = candidate.get('rounded_election_years')
 
     # if cycle = null, set cycle = the last of rounded_election_years.
     if not cycle:
         cycle = max(candidate.get("rounded_election_years"))
 
-    # (2)call candidate/{candidate_id}/history/{cycle} under tag:candidate
-    # (3)call candidate/{candidate_id}/committees/history/{cycle}
+    # (2) Call candidate/{candidate_id}/history/{cycle} under tag:candidate
+    # (3) Call candidate/{candidate_id}/committees/history/{cycle}
     # under tag:committee.
     candidate, committees, cycle = api_caller.load_with_nested(
         "candidate",
@@ -212,20 +200,24 @@ def get_candidate(candidate_id, cycle, election_full):
 
     committee_ids = [committee["committee_id"] for committee in committees_authorized]
 
-    # (4)call candidate/{candidate_id}/totals/{cycle} under tag:candidate
+    # (4) Call candidate/{candidate_id}/totals/{cycle} under tag:candidate
     # Get aggregate totals for the financial summary
-    filters["election_full"] = election_full
-    filters["cycle"] = cycle
+    filters = {
+        "election_full": election_full,
+        "cycle": cycle
+    }
     path = "/candidate/" + candidate_id + "/totals/"
     aggregate = api_caller.load_first_row_data(path, **filters)
 
     if election_full:
-        # (5)if election_full is true, need call
+        # (5) if election_full is true, need call
         # candidate/{candidate_id}/totals/{cycle} second time
         # for showing on raising and spending tabs
         # Get most recent 2-year period totals
-        filters["election_full"] = False
-        filters["cycle"] = max_cycle
+        filters = {
+            "election_full": False,
+            "cycle": max_cycle
+        }
         two_year_totals = api_caller.load_first_row_data(path, **filters)
     else:
         two_year_totals = aggregate
@@ -239,7 +231,7 @@ def get_candidate(candidate_id, cycle, election_full):
         spending_summary = None
         cash_summary = None
 
-    # (6)Call /filings?candidate_id=P00003392&form_type=F2
+    # (6) Call /filings?candidate_id=P00003392&form_type=F2
     # Get the statements of candidacy
     statement_of_candidacy = api_caller.load_candidate_statement_of_candidacy(
         candidate["candidate_id"]
@@ -257,13 +249,15 @@ def get_candidate(candidate_id, cycle, election_full):
         reverse=True,
     )
 
-    # (7)call efile/filings/ under tag:efiling
+    # (7) Call efile/filings/ under tag:efiling
     # Check if there are raw_filings for this candidate
     raw_filing_start_date = utils.three_days_ago()
-    filters["min_receipt_date"] = raw_filing_start_date
-    filters["committee_id"] = candidate["candidate_id"]
-    filters["cycle"] = cycle
-    filters["per_page"] = 100
+    filters = {
+        "min_receipt_date": raw_filing_start_date,
+        "committee_id": candidate["candidate_id"],
+        "cycle": cycle,
+        "per_page": 100,
+    }
     path = "/efile/" + "/filings/"
     raw_filings = api_caller.load_endpoint_results(path, **filters)
     has_raw_filings = True if raw_filings else False
@@ -275,10 +269,12 @@ def get_candidate(candidate_id, cycle, election_full):
 
     # Get the latest committee name, former authorized committee name, and committee ID.
     # This will be the first item returned in the committees list
-    if committees[0].get('former_candidate_id'):
-        current_committee_name = committees[0].get('name')
-        converted_committee_id = committees[0].get('committee_id')
-        former_committee_name = committees[0].get('former_committee_name')
+    # If there are no committees, return the normal no results message
+    if len(committees) > 0:
+        if committees[0].get('former_candidate_id'):
+            current_committee_name = committees[0].get('name')
+            converted_committee_id = committees[0].get('committee_id')
+            former_committee_name = committees[0].get('former_committee_name')
 
     return {
         "converted_committee_name": current_committee_name,
@@ -412,9 +408,13 @@ def get_committee(committee_id, cycle):
     sponsors_names = []
     sponsors_str = ""
     if sponsors_candidate_ids:
+        path = "/candidate/{}/history/"
+        filters = {"per_page": 1}
         for sponsor_id in sponsors_candidate_ids:
-            sponsor_candidate_data = get_candidate(sponsor_id, cycle, False)
-            sponsors_names.append(sponsor_candidate_data["name"])
+            sponsor_candidate = load_most_recent_candidate(sponsor_id)
+            # Handle API returning no results
+            if sponsor_candidate:
+                sponsors_names.append(sponsor_candidate.get("name"))
 
         sponsors_str = "; ".join([str(elem) for elem in sponsors_names])
 
@@ -470,10 +470,11 @@ def get_committee(committee_id, cycle):
     if cycle == utils.current_cycle():
         # (4)call efile/filings under tag: efiling
         path = "/efile/filings/"
-        filters = {}
-        filters["cycle"] = cycle
-        filters["committee_id"] = committee["committee_id"]
-        filters["min_receipt_date"] = template_variables["min_receipt_date"]
+        filters = {
+            "cycle": cycle,
+            "committee_id": committee["committee_id"],
+            "min_receipt_date": template_variables["min_receipt_date"]
+        }
         raw_filings = api_caller.load_endpoint_results(path, **filters)
 
         template_variables["has_raw_filings"] = True if raw_filings else False
@@ -522,6 +523,15 @@ def committee(request, committee_id):
     return render(request, "committees-single.jinja", committee)
 
 
+def load_most_recent_candidate(candidate_id):
+    """
+    Get most recent candidate information
+    """
+    path = "/candidate/" + candidate_id + "/history/"
+    filters = {"per_page": 1}
+    return api_caller.load_first_row_data(path, **filters)
+
+
 def load_reports_and_totals(committee_id, cycle, cycle_out_of_range, fallback_cycle):
 
     filters = {
@@ -531,7 +541,7 @@ def load_reports_and_totals(committee_id, cycle, cycle_out_of_range, fallback_cy
         "sort_hide_null": True,
     }
 
-    # (3) call /filings? under tag:filings
+    # (3) Call /filings? under tag:filings
     # get reports from filings endpoint filter by form_category=REPORT
     path = "/filings/"
     reports = api_caller.load_first_row_data(
