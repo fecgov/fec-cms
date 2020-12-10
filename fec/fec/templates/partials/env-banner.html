@@ -1,6 +1,6 @@
 {% if settings  != undefined %}
     {% if settings.FEC_CMS_ENVIRONMENT != 'PRODUCTION' %}   
-      <div class="banner ">
+      <div class="banner-dev">
         {# Uses settings.FEC_CMS_ENVIRONMENT for HTML templates #}
         <p class="t-sans t-small">{{settings.FEC_CMS_ENVIRONMENT}}<br>
         This site is for testing ideas and code. View the most accurate data on the <a href="http://www.fec.gov">live site</a>.
@@ -9,7 +9,7 @@
     {% endif %}
   {% else %}  
     {% if FEC_CMS_ENVIRONMENT != 'PRODUCTION' %}  
-      <div class="banner ">
+      <div class="banner-dev">
         {# Uses FEC_CMS_ENVIRONMENT for Jinja templates #}
         <p class="t-sans t-small">{{FEC_CMS_ENVIRONMENT}}<br>
         This site is for testing ideas and code. View the most accurate data on the <a href="http://www.fec.gov">live site</a>.
