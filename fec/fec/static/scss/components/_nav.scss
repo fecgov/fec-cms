@@ -35,10 +35,15 @@
 }
 
 // If we have the dev banner, we'll need to adjust #site-menu
-.banner-dev + .usa-banner + .site-header nav #site-menu {
+.banner-dev + .usa-banner + .site-header .site-nav .site-nav__container {
   $devBannerTop: 4rem;
-  top: u($devBannerTop);
-  height: calc(100vh - $devBannerTop);
+  height: calc(100vh - 12rem);
+  top: 4rem;
+
+  @include media($lg) {
+    height: auto;
+    top: 0;
+  }
 }
 
 // Styles for each panel on mobile
