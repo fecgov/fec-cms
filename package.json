@@ -61,7 +61,7 @@
     "topojson": "^3.0.2",
     "tough-cookie": "^2.5.0",
     "tunnel-agent": "^0.6.0",
-    "ua-parser-js": "^0.7.22",
+    "ua-parser-js": "^0.7.23",
     "underscore": "^1.8.3",
     "whatwg-fetch": "^3.5.0"
   },
