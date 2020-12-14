@@ -9,15 +9,16 @@ jobs:
       # use `-browsers` prefix for selenium tests, e.g. `<image_name>-browsers`
 
       # Python
-      - image: circleci/python:3.7.4-stretch-node-browsers
+      - image: circleci/python:3.7.9-stretch-node-browsers
         environment:
           TZ: America/New_York
           DATABASE_URL: postgres://postgres@0.0.0.0/cfdm_cms_test
 
       # PostgreSQL
-      - image: circleci/postgres:9.6.8
+      - image: circleci/postgres:11.9
         environment:
           POSTGRES_USER: postgres
+          POSTGRES_HOST_AUTH_METHOD: "trust"
           POSTGRES_DB: cfdm_cms_test
 
     working_directory: ~/repo
@@ -31,7 +32,7 @@ jobs:
           # https://circleci.com/docs/2.0/postgres-config/#postgresql-circleci-configuration-example
           command: |
             sudo apt-get update -qq && sudo apt-get install -y build-essential postgresql-client
-            echo 'export PATH=/usr/lib/postgresql/9.6/bin/:$PATH' >> $BASH_ENV
+            echo 'export PATH=/usr/lib/postgresql/10.11/bin/:$PATH' >> $BASH_ENV
             echo "en_US.UTF-8 UTF-8" | sudo tee /etc/locale.gen
             sudo locale-gen en_US.UTF-8
 
@@ -50,11 +51,19 @@ jobs:
             pip install -r requirements.txt
 
       - run:
-          name: Install Node.js dependencies
+          name: Install node and build web assets
           command: |
+            curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.33.6/install.sh | bash
+            echo ". ~/.nvm/nvm.sh" >> $BASH_ENV
+            export NVM_DIR="$HOME/.nvm"
+            [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+            [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+            nvm install 14.13.0
+            nvm use 14.13.0
+            nvm alias default 14.13.0
             sudo npm install -g npm
-            npm install webpack
             npm install
+            npm rebuild node-sass
             npm run build
 
       - save_cache:
@@ -92,9 +101,7 @@ jobs:
           command: |
             mkdir -p $HOME/bin
             export PATH=$HOME/bin:$PATH
-            curl -L "https://cli.run.pivotal.io/stable?release=linux64-binary&version=6.34.0" | tar xzv -C $HOME/bin
-            cf install-plugin autopilot -f -r CF-Community
-
+            curl -L "https://cli.run.pivotal.io/stable?release=linux64-binary&version=7.1.0" | tar xzv -C $HOME/bin
 
       - deploy:
           name: Deploy CMS

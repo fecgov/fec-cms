@@ -1,20 +1,24 @@
 ---
-stack: cflinuxfs3
-buildpack: python_buildpack
-routes:
-  - route: fec-stage-cms.app.cloud.gov
-services:
-  - cms-creds-stage
-  - fec-creds-stage
-  - fec-stage-cms
-  - content-s3
-env:
-  DISABLE_COLLECTSTATIC: 1
-  DJANGO_SETTINGS_MODULE: fec.settings.production
-  FEC_API_URL: https://api-stage.open.fec.gov
-  FEC_APP_URL: '/data'
-  FEC_CMS_DEBUG: false
-  FEC_CMS_ENVIRONMENT: stage
-  FEC_TRANSITION_URL: https://transition.fec.gov
 applications:
   - name: cms
+    instances: 1
+    memory: 512M
+    disk_quota: 1G
+    stack: cflinuxfs3
+    buildpacks:
+      - python_buildpack
+    routes:
+      - route: fec-stage-cms.apps.internal
+    services:
+      - cms-creds-stage
+      - fec-creds-stage
+      - fec-stage-cms
+      - content-s3
+    env:
+      DISABLE_COLLECTSTATIC: 1
+      DJANGO_SETTINGS_MODULE: fec.settings.production
+      FEC_API_URL: https://api-stage.open.fec.gov
+      FEC_APP_URL: '/data'
+      FEC_CMS_DEBUG: false
+      FEC_CMS_ENVIRONMENT: stage
+      FEC_TRANSITION_URL: https://transition.fec.gov

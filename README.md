@@ -241,6 +241,12 @@ run this command:
 
 Code.gov uses the code.json file located at fec.gov/code.json to inventory our repositories. The file is generated using [LLNL’s scraper tool](https://github.com/LLNL/scraper). Follow the instructions in scraper’s README file to generate a new code.json, or manually update as needed.
 
+Scraper config file is in the root directory.
+
+```
+scraper --config code-gov-config.json
+```
+
 Examples of code.json files: https://github.com/GSA/code-gov/blob/master/METADATA_EXAMPLES.md
 
 ## Deploy
@@ -250,13 +256,8 @@ We use CircleCI for automated deploys after tests pass. If you want to deploy so
 
 If there is a problem with CircleCI and something needs to be deployed, you can do so with the following commands. Though, you will need to pull the environment variables from the space you are deploying to and remake your static assets. That will ensure things like the links are correct. You will also want to clear your dist/ directory. That way, you will not exceed the alloted space.
 
-Before deploying, install the
-[Cloud Foundry CLI](https://docs.cloudfoundry.org/devguide/cf-cli/install-go-cli.html)
-and the [autopilot plugin](https://github.com/concourse/autopilot):
-
-```bash
-cf install-plugin autopilot -r CF-Community
-```
+Before deploying, install version 7 of the
+[Cloud Foundry CLI](https://docs.cloudfoundry.org/devguide/cf-cli/install-go-cli.html):
 
 Provision development database:
 

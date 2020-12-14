@@ -24,13 +24,25 @@
   position: absolute;
   left: 0;
   right: 0;
-  top: $top;
+  top: 4rem;
   overflow-x: hidden;
   z-index: $z-navigation;
 
   // scss-lint:disable ImportantRule
   &[aria-hidden='true'] {
     display: block !important; // It's hidden by the transform, so this keeps it visible when it slides in
+  }
+}
+
+// If we have the dev banner, we'll need to adjust #site-menu
+.banner-dev + .usa-banner + .site-header .site-nav .site-nav__container {
+  $devBannerTop: 4rem;
+  height: calc(100vh - 12rem);
+  top: 4rem;
+
+  @include media($lg) {
+    height: auto;
+    top: 0;
   }
 }
 

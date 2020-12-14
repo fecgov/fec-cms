@@ -35,6 +35,23 @@ function HomepageEvents() {
       var event = events.results[0];
       var startDate = '';
 
+      if (events.results.length > 1) {
+        event = events.results[0];
+        var min_date = event.start_date;
+
+        // Filters events by location 'FEC'
+        // and checks if the minimum date is equal to the returned start date
+        var filtered = events.results.filter(function(event) {
+          return event.location == 'FEC' && event.start_date == min_date;
+        });
+
+        // Display the location 'FEC' events first,
+        // Otherwise, there's no FEC events and get the first one in the list
+        if (filtered.length > 0) {
+          event = filtered[0];
+        }
+      }
+
       if (typeof event !== 'undefined') {
         startDate = moment(event.start_date).format('MMMM D');
       } else {
