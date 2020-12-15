@@ -33,7 +33,7 @@ function init() {
 function customEvent(eventObj) {
   init();
   dataLayer.push({
-    event: eventObj.event || '',
+    event: eventObj.event || 'Custom Event',
     eventCategory: eventObj.eventCategory || '',
     eventAction: eventObj.eventAction || '',
     eventLabel: eventObj.eventLabel || '',
@@ -47,11 +47,6 @@ function customEvent(eventObj) {
 function pageView() {
   init();
   dataLayer.push({ event: 'pageview' });
-  // TODO
-  // TODO
-  // TODO: double-check the pageview trigger in GTM
-  // TODO
-  // TODO
 }
 
 /**
@@ -75,7 +70,7 @@ function sortQuery(query) {
     .map(function(pair) {
       return pair.join('=');
     })
-    .join('&')
+    .join('&') 
     .value();
 }
 
