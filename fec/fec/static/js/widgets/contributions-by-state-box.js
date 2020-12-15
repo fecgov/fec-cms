@@ -1002,6 +1002,7 @@ ContributionsByState.prototype.setLoadingState = function(newState) {
  */
 function logUsage(candID, electionYear) {
   analytics.customEvent({
+    event: 'Widget Interaction',
     eventName: `widgetInteraction`,
     eventCategory: 'Widget-ContribsByState',
     eventAction: 'interaction',

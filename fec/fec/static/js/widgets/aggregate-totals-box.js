@@ -736,6 +736,7 @@ function buildElement(callingInstance, scriptElement) {
  */
 function logUsage(officeAbbrev, electionYear) {
   analytics.customEvent({
+    event: 'Widget Interaction',
     eventName: `widgetInteraction`,
     eventCategory: 'Widget-AggregateTotals',
     eventAction: 'interaction',

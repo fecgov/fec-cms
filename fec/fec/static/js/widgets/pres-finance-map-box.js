@@ -1453,6 +1453,7 @@ PresidentialFundsMap.prototype.setLoadingState = function(newState) {
  */
 function logUsage(eventType, detail) {
   analytics.customEvent({
+    event: 'Widget Interaction',
     eventName: 'widgetInteraction',
     eventCategory: 'Widget-PresFinMap',
     eventAction: 'interaction',

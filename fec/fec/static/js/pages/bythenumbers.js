@@ -10,6 +10,7 @@ $('.js-ga-event').each(function() {
   var eventName = $(this).data('ga-event');
   $(this).on('click', function() {
     analytics.customEvent({
+      event: 'Widget Interaction',
       eventName: 'fecCustomEvent',
       eventCategory: 'Misc. events',
       eventAction: eventName,
