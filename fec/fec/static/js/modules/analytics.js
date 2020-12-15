@@ -70,7 +70,7 @@ function sortQuery(query) {
     .map(function(pair) {
       return pair.join('=');
     })
-    .join('&') 
+    .join('&')
     .value();
 }
 
