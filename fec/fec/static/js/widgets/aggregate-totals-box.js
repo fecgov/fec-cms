@@ -15,7 +15,7 @@ const isModernBrowser = 'fetch' in window && 'assign' in Object;
 
 // Includes
 import analytics from '../modules/analytics';
-import buildUrl from '../modules/helpers';
+import { buildUrl } from '../modules/helpers';
 import {
   defaultElectionYear,
   electionYearsOptions,
