@@ -1,9 +1,11 @@
 'use strict';
 
+// TODO: Do we still need this test if we aren't calling sortQuery from anywhere else in the repo?
+
 var chai = require('chai');
 var expect = chai.expect;
 
-var analytics = require('../../static/js/modules/analytics'); // TODO - Move this to Tag Manager?
+var analytics = require('../../static/js/modules/analytics');
 
 describe('analytics', function() {
   it('sorts query parameters', function() {

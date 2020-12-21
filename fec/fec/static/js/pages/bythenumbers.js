@@ -1,7 +1,7 @@
 'use strict';
 
 var $ = require('jquery');
-var analytics = require('../modules/analytics'); // TODO - move this to Tag Manager?
+var analytics = require('../modules/analytics');
 var TopEntities = require('../modules/top-entities').TopEntities;
 
 new TopEntities('.js-top-entities', context.type);
@@ -9,13 +9,12 @@ new TopEntities('.js-top-entities', context.type);
 $('.js-ga-event').each(function() {
   var eventName = $(this).data('ga-event');
   $(this).on('click', function() {
-    if (analytics.trackerExists()) {
-      var gaEventData = {
-        eventCategory: 'Misc. events',
-        eventAction: eventName,
-        eventValue: 1
-      };
-      ga('nonDAP.send', 'event', gaEventData);
-    }
+    analytics.customEvent({
+      event: 'Widget Interaction',
+      eventName: 'fecCustomEvent',
+      eventCategory: 'Misc. events',
+      eventAction: eventName,
+      eventValue: 1
+    });
   });
 });

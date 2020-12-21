@@ -3,7 +3,7 @@
 var _ = require('underscore');
 var URI = require('urijs');
 
-var analytics = require('./analytics'); // TODO - move this to Tag Manager?
+var analytics = require('./analytics');
 var helpers = require('./helpers');
 
 function updateQuery(params, fields) {
