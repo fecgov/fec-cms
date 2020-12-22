@@ -86,7 +86,15 @@ class AddSecureHeaders(MiddlewareMixin):
             "{0} {1}; ".format(directive, " ".join(value))
             for directive, value in content_security_policy.items()
         )
-        response["cache-control"] = "max-age=600"
+
+        if request.path.startswith('/admin'):
+            # Do not cache cms admin
+            response['cache-control'] = 'no-cache, no-store, must-revalidate'
+            response['Pragma'] = 'no-cache'
+            response['Expires'] = '0'
+        else:
+            # Cache everything else
+            response["cache-control"] = "max-age=600"
 
         # Expect-CT header
         expect_ct_max_age = 60 * 60 * 24  # 1 day
