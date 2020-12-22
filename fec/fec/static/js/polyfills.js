@@ -5,7 +5,7 @@ import 'babel-polyfill';
  * used in calendars
  * filter-panel, top-entities,
  */
-import 'core-js/library/fn/object/assign';
+import 'core-js/es/object/assign';
 
 /**
  * NodeList.forEach
@@ -39,7 +39,6 @@ import 'whatwg-fetch';
 
 /**
  * Promise
- * TODO used for
  */
 import 'promise-polyfill/src/polyfill';
 

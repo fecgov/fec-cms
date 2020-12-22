@@ -17,7 +17,7 @@ applications:
     env:
       DISABLE_COLLECTSTATIC: 1
       DJANGO_SETTINGS_MODULE: fec.settings.production
-      # We are not setting up the API in feature, so we are pointing to the dev
+      # We are not setting up the API in feature, so we are pointing to the stage
       # API instead.
       FEC_API_URL: https://api-stage.open.fec.gov
       FEC_APP_URL: '/data'
