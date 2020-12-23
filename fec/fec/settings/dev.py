@@ -5,9 +5,6 @@ from .base import *  # noqa F403
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-CSRF_COOKIE_SECURE = True
-CSRF_COOKIE_HTTPONLY = True
-
 for t in TEMPLATES: # noqa F405
     t.setdefault('OPTIONS', {})
     t['OPTIONS']['debug'] = True
