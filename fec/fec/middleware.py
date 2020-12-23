@@ -92,9 +92,6 @@ class AddSecureHeaders(MiddlewareMixin):
             response['cache-control'] = 'no-cache, no-store, must-revalidate'
             response['Pragma'] = 'no-cache'
             response['Expires'] = '0'
-        else:
-            # Cache everything else
-            response["cache-control"] = "max-age=600"
 
         # Expect-CT header
         expect_ct_max_age = 60 * 60 * 24  # 1 day
