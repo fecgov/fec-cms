@@ -403,6 +403,46 @@
       background-size: 75%;
     }
 
+    &.i-shield-scales {
+      @include u-icon-bg($shield-scales, $primary-contrast);
+      background-size: 75%;
+    }
+
+    &.i-exclamation-bubble {
+      @include u-icon-bg($exclamation-bubble, $primary-contrast);
+      background-size: 65%;
+    }
+
+    &.i-shield-star {
+      @include u-icon-bg($shield-star, $primary-contrast);
+      background-size: 75%;
+    }
+
+    &.i-arrow-target {
+      @include u-icon-bg($arrow-target, $primary-contrast);
+      background-size: 75%;
+    }
+
+    &.i-org-chart {
+      @include u-icon-bg($org-chart, $primary-contrast);
+      background-size: 75%;
+    }
+
+    &.i-clipboard-checklist {
+      @include u-icon-bg($clipboard-checklist, $primary-contrast);
+      background-size: 65%;
+    }
+
+    &.i-magnifying-glass {
+      @include u-icon-bg($magnifying-glass, $primary-contrast);
+      background-size: 60%;
+    }
+
+    &.i-decree {
+      @include u-icon-bg($decree, $primary-contrast);
+      background-size: 65%;
+    }
+
     &.i-direction-sign {
       @include u-icon-bg($direction-sign, $primary-contrast);
       background-size: 75%;
