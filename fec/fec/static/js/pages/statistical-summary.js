@@ -164,8 +164,8 @@ StatisticalSummary.prototype.showTable = function() {
     'message--inline',
     'message--alert'
   );
-  const today = new Date();
-  const thisYear = today.getFullYear();
+
+  const thisYear = this.chooseYear.options[0].value;
 
   //Fire handleLatestAvailableOption() if user selects this year's select option or a URL has this year in querysting year parameter
 
