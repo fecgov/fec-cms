@@ -280,3 +280,12 @@ class ExampleForms(blocks.StructBlock):
     class Meta:
         template = 'blocks/example-forms.html'
         icon = 'doc-empty'
+
+
+class LinkBlock(blocks.StructBlock):
+    """For links, with text and url"""
+    text = blocks.CharBlock()
+    url = blocks.URLBlock()
+
+    class Meta:
+        icon = 'link'
