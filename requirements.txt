@@ -5,7 +5,6 @@ django-libsass==0.7
 gunicorn==19.10.0
 gevent==1.4.0
 greenlet==0.4.16 # pinned 2020-09-22 to fix build problem (parent gevent)
-lxml==4.2.5
 psycopg2==2.8.5
 requests==2.24.0
 urllib3==1.25.9 # pinned 2020-11-01 (parent requests)
@@ -24,6 +23,7 @@ invoke==0.15.0
 GitPython==3.1.0
 requests-mock==1.3.0
 pdbpp==0.9.1
+lxml==4.6.2
 
 
 # Data import
@@ -36,6 +36,7 @@ django-storages==1.7.1
 boto3==1.7.21
 
 cg-django-uaa==2.0.0
+PyJWT==1.7.1 # Pinning this version as version 2.0.0 is breaking cg-django-uaa
 
 # Testing
 coverage==4.5.1

@@ -7,7 +7,7 @@ var expect = chai.expect;
 chai.use(sinonChai);
 
 var urls = require('../../static/js/modules/urls');
-var analytics = require('../../static/js/modules/analytics'); // TODO - Move this to Tag Manager?
+var analytics = require('../../static/js/modules/analytics');
 
 // var params = {office: ['P']};
 // var fields = ['office', 'cycle'];
@@ -15,8 +15,8 @@ var analytics = require('../../static/js/modules/analytics'); // TODO - Move thi
 function cleanUri() {
   var uri = window.location.toString();
   if (uri.indexOf('?') > 0) {
-      var clean_uri = uri.substring(0, uri.indexOf('?'));
-      window.history.replaceState({}, document.title, clean_uri);
+    var clean_uri = uri.substring(0, uri.indexOf('?'));
+    window.history.replaceState({}, document.title, clean_uri);
   }
 }
 
@@ -27,13 +27,13 @@ describe('urls.js', function() {
 
   describe('updateQuery()', function() {
     it('updates the url when a new query is made', function() {
-      urls.updateQuery({office: 'P', cycle: 2020});
+      urls.updateQuery({ office: 'P', cycle: 2020 });
       expect(window.location.search).to.equal('?office=P&cycle=2020');
     });
 
     it('calls pageView()', function() {
       var pageView = sinon.spy(analytics, 'pageView');
-      urls.updateQuery({office: 'P', cycle: 2020});
+      urls.updateQuery({ office: 'P', cycle: 2020 });
       expect(pageView).to.have.been.called;
       pageView.restore();
     });
@@ -41,7 +41,10 @@ describe('urls.js', function() {
 
   describe('nextUrl()', function() {
     it('returns a new URL when given a new query', function() {
-      var nextUrl = urls.nextUrl({office: ['H'], cycle: 2018}, ['office', 'cycle']);
+      var nextUrl = urls.nextUrl({ office: ['H'], cycle: 2018 }, [
+        'office',
+        'cycle'
+      ]);
       expect(nextUrl).to.equal('?office=H&cycle=2018');
     });
 
@@ -55,13 +58,13 @@ describe('urls.js', function() {
 
   describe('pushQuery()', function() {
     it('updates the url when a new query is made', function() {
-      urls.updateQuery({office: 'P', cycle: 2020});
+      urls.updateQuery({ office: 'P', cycle: 2020 });
       expect(window.location.search).to.equal('?office=P&cycle=2020');
     });
 
     it('calls pageView()', function() {
       var pageView = sinon.spy(analytics, 'pageView');
-      urls.updateQuery({office: 'P', cycle: 2020});
+      urls.updateQuery({ office: 'P', cycle: 2020 });
       expect(pageView).to.have.been.called;
       pageView.restore();
     });
@@ -69,12 +72,12 @@ describe('urls.js', function() {
 
   describe('compareQuery()', function() {
     it('returns true for identifcal queries', function() {
-      var identical = urls.compareQuery({office: ['P']}, {office: ['P']});
+      var identical = urls.compareQuery({ office: ['P'] }, { office: ['P'] });
       expect(identical).to.be.true;
     });
 
     it('returns false for different queries', function() {
-      var identical = urls.compareQuery({office: ['P']}, {office: ['S']});
+      var identical = urls.compareQuery({ office: ['P'] }, { office: ['S'] });
       expect(identical).to.be.false;
     });
   });

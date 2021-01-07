@@ -74,6 +74,7 @@ const selector_candidateListDisclaimer = '.js-cand-list-note';
 import { buildUrl } from '../modules/helpers';
 // import { defaultElectionYear } from './widget-vars';
 import 'abortcontroller-polyfill/dist/polyfill-patch-fetch';
+import analytics from '../modules/analytics';
 
 const DataMap = require('../modules/data-map').DataMap;
 const AbortController = window.AbortController;
@@ -1445,20 +1446,19 @@ PresidentialFundsMap.prototype.setLoadingState = function(newState) {
 };
 
 /**
- * TODO: integrate this
  * Handles the usage analytics for this module
  * @TODO: Decide how to gather usage insights while embedded
  * @param {String} candID - The candidate ID
  * @param {*} electionYear - String or Number, the user-selected election year
  */
 function logUsage(eventType, detail) {
-  if (window.ga) {
-    window.ga('send', 'event', {
-      eventCategory: 'Widget-PresFinMap',
-      eventAction: 'interaction',
-      eventLabel: eventType + ',' + detail
-    });
-  }
+  analytics.customEvent({
+    event: 'Widget Interaction',
+    eventName: 'widgetInteraction',
+    eventCategory: 'Widget-PresFinMap',
+    eventAction: 'interaction',
+    eventLabel: eventType + ',' + detail
+  });
 }
 
 new PresidentialFundsMap();

@@ -7,7 +7,7 @@
  */
 var $ = require('jquery');
 var helpers = require('../modules/helpers');
-var analytics = require('../modules/analytics'); // TODO - move this to Tag Manager?
+var analytics = require('../modules/analytics');
 
 function ReactionBox(selector) {
   this.$element = $(selector);
@@ -36,15 +36,12 @@ function ReactionBox(selector) {
 
 ReactionBox.prototype.submitReaction = function(e) {
   this.reaction = $(e.target).data('reaction');
-  if (analytics.trackerExists()) {
-    var gaEventData = {
-      eventCategory: 'Reactions',
-      eventAction: this.location + '-' + this.name + ': ' + this.reaction,
-      eventValue: 1
-    };
-    ga('notDAP.send', 'event', gaEventData);
-  }
-
+  analytics.customEvent({
+    eventName: 'fecCustomEvent',
+    eventCategory: 'Reactions',
+    eventAction: this.location + '-' + this.name + ': ' + this.reaction,
+    eventValue: 1
+  });
   this.showTextarea();
 };
 

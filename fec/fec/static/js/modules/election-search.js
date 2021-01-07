@@ -5,7 +5,7 @@ var URI = require('urijs');
 var _ = require('underscore');
 var moment = require('moment');
 
-var analytics = require('./analytics'); // TODO - move this to Tag Manager?
+var analytics = require('./analytics');
 
 var ElectionForm = require('./election-form').ElectionForm;
 var ElectionMap = require('./election-map').ElectionMap;

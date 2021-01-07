@@ -25,6 +25,7 @@ import { buildUrl } from '../modules/helpers';
 import typeahead from '../modules/typeahead';
 import { defaultElectionYear } from './widget-vars';
 import 'abortcontroller-polyfill/dist/polyfill-patch-fetch';
+import analytics from '../modules/analytics';
 
 const DataMap = require('../modules/data-map').DataMap;
 const AbortController = window.AbortController;
@@ -1000,13 +1001,13 @@ ContributionsByState.prototype.setLoadingState = function(newState) {
  * @param {*} electionYear - String or Number, the user-selected election year
  */
 function logUsage(candID, electionYear) {
-  if (window.ga) {
-    window.ga('send', 'event', {
-      eventCategory: 'Widget-ContribsByState',
-      eventAction: 'interaction',
-      eventLabel: candID + ',' + electionYear
-    });
-  }
+  analytics.customEvent({
+    event: 'Widget Interaction',
+    eventName: `widgetInteraction`,
+    eventCategory: 'Widget-ContribsByState',
+    eventAction: 'interaction',
+    eventLabel: candID + ',' + electionYear
+  });
 }
 
 new ContributionsByState();
