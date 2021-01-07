@@ -102,6 +102,50 @@
   }
 }
 
+// Hero panel for the OIG landing page.
+.hero--oig {
+  .hero__image {
+    background-image: url('../img/hero-oig.png');
+  }
+  .container a {
+    // TODO: Should we make this available outside of only OIG? (add to pattern library?)
+    border-bottom: none;
+    color: $federal-blue;
+  }
+  & + .container {
+    margin-top: 2rem;
+  } // TODO: I don't like this one-off and am open to suggestions to get the margins correct
+
+  @include media($lg) {
+    .container {
+      position: relative;
+
+      a {
+        position: absolute;
+        right: 0;
+        top: 4.5rem;
+      }
+    }
+    .grid--2-wide .grid__item {
+      margin-bottom: 0;
+    } // TODO: I don't like this one-off and am open to suggestions to get the margins correct
+  }
+}
+.placeholder-oig-logo {
+  background-image: url('../img/logo-oig-color.svg');
+  background-size: 33%;
+  background-repeat: no-repeat;
+  background-position: center center;
+}
+.grid--flex .placeholder-oig-logo {
+  display: none !important;
+
+  @include media($med) {
+    display: flex !important;
+  }
+}
+
+
 // Hero panel for the press section.
 .hero--press {
   .hero__image {
