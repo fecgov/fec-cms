@@ -17,13 +17,13 @@ const availableDates = [
   },
   {
     value: '2021',
-    label: 'On or after [TBD] [tbd], 2021',
-    summary: 'Assessed on or after [TBD] [tbd], 2021'
+    label: 'On or after January 11, 2021',
+    summary: 'Assessed on or after January 11, 2021'
   },
   {
     value: '2020',
-    label: 'August 7, 2020 to [TBD] [tbd], 2021',
-    summary: 'Assessed on or after August 7, 2020 to [TBD] [tbd], 2021'
+    label: 'August 7, 2020 to January 10, 2021',
+    summary: 'Assessed on or after August 7, 2020 to January 10, 2021'
   },
   {
     value: '2019',
