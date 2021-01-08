@@ -30,12 +30,15 @@ describe('statistical-summary-archive', function() {
     $('body').append(this.$fixture);
   });
 
-  // before(function() {
-  //   sinon.stub(map.ElectionMap.prototype, 'init');
-  //   sinon.stub(map.ElectionMap.prototype, 'drawDistricts');
-});
+ before(function() {
+    sinon.stub(search.StatisticalSummaryArchive.prototype, 'showTable');
+    //sinon.stub(map.ElectionMap.prototype, 'drawDistricts');
+  });
+
 
   beforeEach(function() {
+  console.log('beforeEach RAN')
+  console.log('this.$fixture:', this.$fixture)
     this.$fixture
       .empty()
       .append(
@@ -65,9 +68,10 @@ describe('statistical-summary-archive', function() {
 '</div>'+
 '<h3 class="js-table-title u-padding--top"></h3>'
 );
-
+console.log('this.$fixture2:', this.$fixture)
 //window.history.pushState({}, null, '/');
- this.el = new search.statisticalSummaryArchive('.filter-controls');
+ //this.el = new search.StatisticalSummaryArchive('.filter-controls');
+ this.el = new search(this.$fixture.find('.filter-controls'));
 });
 
   // it('should memorize its selector', function() {
@@ -138,11 +142,36 @@ describe('statistical-summary-archive', function() {
   //   });
   // });
 
-  it('disable non-presidential years when presidential is chosen', function() {
-    this.el.serialized = { year: '1982', filer: 'presidential' };
-    //expect(this.chooseYear.options[this.chooseYear.selectedIndex].textContent).to.equal("1984");
-    expect(this.chosenYear).to.equal("1984");
+
+  describe('call showTable function', function() {
+    beforeEach(function() {
+      this.callShowTable = sinon.spy(search.ElectionSearch.prototype, 'handlePopState');
+      
+
+    it('should call showTable', function() {
+      this.el.handlePopState();
+      expect(this.showTable).to.have.been.called;
+    });
   });
+
+ });
+
+});
+
+ 
+
+//   it('disable non-presidential years when presidential is chosen', function() {
+//     //this.el.serialized = { year: '1982', filer: 'presidential' };
+//     this.el.chooseYear.value = '1982'
+//     this.el.chooseFiler.value = 'presidential'
+//     //expect(this.chooseYear.options[this.chooseYear.selectedIndex].textContent).to.equal("1984");
+//     expect(this.el.chosenYear).to.equal('1984');
+//   });
+// });
+
+
+
+
 
 //   it('should show no results warning on no results by state', function() {
 //     this.el.serialized = { cycle: '2016', state: 'VI' };
