@@ -405,12 +405,12 @@
 
     &.i-shield-scales {
       @include u-icon-bg($shield-scales, $primary-contrast);
-      background-size: 75%;
+      background-size: 60%;
     }
 
     &.i-exclamation-bubble {
       @include u-icon-bg($exclamation-bubble, $primary-contrast);
-      background-size: 65%;
+      background-size: 60%;
     }
 
     &.i-shield-star {
@@ -420,7 +420,7 @@
 
     &.i-arrow-target {
       @include u-icon-bg($arrow-target, $primary-contrast);
-      background-size: 75%;
+      background-size: 70%;
     }
 
     &.i-org-chart {
@@ -430,7 +430,7 @@
 
     &.i-clipboard-checklist {
       @include u-icon-bg($clipboard-checklist, $primary-contrast);
-      background-size: 65%;
+      background-size: 60%;
     }
 
     &.i-magnifying-glass {
