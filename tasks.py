@@ -75,7 +75,6 @@ DEPLOY_RULES = (
     ('prod', _detect_prod),
     ('stage', lambda _, branch: branch.startswith('release')),
     ('dev', lambda _, branch: branch == 'develop'),
-    ('feature', lambda _, branch: branch == 'test/4099-oig-landing-page'),
     # Uncomment below and adjust branch name to deploy desired feature branch to the feature space
     # ('feature', lambda _, branch: branch == '[BRANCH NAME]'),
 )
