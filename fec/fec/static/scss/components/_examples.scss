@@ -47,6 +47,24 @@
   }
 }
 
+.example--secondary {
+  font-size: u(1.6rem);
+  padding: u(0 1.5rem);
+
+  li:first-child {
+    padding-top: 0;
+  }
+  li:last-child {
+    padding-bottom: 0;
+  }
+}
+@include media($med) {
+  .example--secondary {
+    border-left: 2px solid $primary;
+    padding-right: 0;
+  }
+}
+
 .example__title {
   margin-top: 0;
   margin-bottom: 2rem;

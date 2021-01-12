@@ -10,15 +10,15 @@ from django.contrib.auth.models import User
 from modelcluster.fields import ParentalKey
 from modelcluster.contrib.taggit import ClusterTaggableManager
 from taggit.models import TaggedItemBase
-from wagtail.core.models import Page, Orderable, PageRevision
-from wagtail.core.fields import StreamField
+from wagtail.core.models import Orderable, Page, PageRevision
+from wagtail.core.fields import RichTextField, StreamField
 from wagtail.core import blocks
 from wagtail.admin.edit_handlers import (
     FieldPanel,
-    StreamFieldPanel,
-    PageChooserPanel,
     InlinePanel,
-    MultiFieldPanel)
+    MultiFieldPanel,
+    PageChooserPanel,
+    StreamFieldPanel)
 from wagtail.images.blocks import ImageChooserBlock
 from wagtail.images.edit_handlers import ImageChooserPanel
 from wagtail.documents.blocks import DocumentChooserBlock
@@ -28,12 +28,13 @@ from django.db.models.signals import m2m_changed
 from wagtail.contrib.table_block.blocks import TableBlock
 from fec import constants
 
-from home.blocks import (ThumbnailBlock,  # AsideLinkBlock,
-                         ContactInfoBlock, CitationsBlock, ResourceBlock,
-                         OptionBlock, CollectionBlock, DocumentFeedBlurb,
-                         ExampleParagraph, ExampleForms, ExampleImage,
-                         CustomTableBlock, ReportingExampleCards, InternalButtonBlock,
-                         ExternalButtonBlock, SnippetChooserBlock)
+from home.blocks import (
+    CitationsBlock, CollectionBlock, ContactInfoBlock, CustomTableBlock,
+    DocumentFeedBlurb, ExampleForms, ExampleImage, ExampleParagraph,
+    ExternalButtonBlock, InternalButtonBlock, LinkBlock, OptionBlock,
+    ReportingExampleCards, ResourceBlock, SnippetChooserBlock,
+    ThumbnailBlock,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -46,7 +47,7 @@ core_table_options = {
 stream_factory = functools.partial(
     StreamField,
     [
-        ('heading', blocks.CharBlock(classname='full title')),
+        ('heading', blocks.CharBlock(classname='full title', icon='title')),
         ('paragraph', blocks.RichTextBlock()),
         ('html', blocks.RawHTMLBlock()),
         ('image', ImageChooserBlock()),
@@ -592,7 +593,7 @@ class CustomPage(Page):
     author = models.CharField(max_length=255)
     date = models.DateField('Creation date')
     body = StreamField([
-        ('heading', blocks.CharBlock(classname='full title')),
+        ('heading', blocks.CharBlock(classname='full title', icon='title')),
         ('paragraph', blocks.RichTextBlock()),
         ('html', blocks.RawHTMLBlock()),
         ('example_image', ExampleImage()),
@@ -1229,3 +1230,64 @@ class FullWidthPage(ContentPage):
     @property
     def content_section(self):
         return ''
+
+
+class OigLandingPage(Page):
+    """OIG's landing page"""
+    intro_message = RichTextField(features=['bold', 'italic', 'link'], null=True)
+    complaint_url = models.URLField(max_length=255, blank=True, verbose_name='Complaint URL')
+    show_info_message = models.BooleanField(help_text='☑︎ display informational message | ☐ hide message')
+    info_message = RichTextField(features=['bold', 'italic', 'link'], null=True, blank=True)
+    stats_content = StreamField(
+        [
+            ('heading', blocks.CharBlock(classname='full title', icon='title')),
+            ('paragraph', blocks.RichTextBlock()),
+            ('html', blocks.RawHTMLBlock(label='HTML')),
+            ('image', ImageChooserBlock()),
+            ('table', TableBlock(table_options=core_table_options)),
+            ('custom_table', CustomTableBlock()),
+        ],
+        null=True, blank=True,
+        help_text='If this section is empty, the logo will be shown (for screens larger than phones)'
+    )
+
+    recent_reports_url = models.URLField(max_length=255, blank=True, verbose_name='All reports URL')
+    resources = StreamField(
+        [('html', blocks.RawHTMLBlock(label='OIG resources'))],
+        null=True,
+        blank=True,
+    )
+    you_might_also_like = StreamField(
+        blocks.StreamBlock([
+            ('group', blocks.ListBlock(LinkBlock(), icon='list-ul', label='Group/column'))
+        ],
+            max_num=3,
+            required=False
+        ),
+        null=True,
+        blank=True,
+        help_text='Expects three groups/columns but will accept fewer'
+    )
+
+    content_panels = Page.content_panels + [
+        MultiFieldPanel([
+            FieldPanel('intro_message'),
+            FieldPanel('complaint_url', help_text='Where should the button in the header link?'),
+        ],
+            heading='Header'
+        ),
+        MultiFieldPanel([
+            FieldPanel('show_info_message'),
+            FieldPanel('info_message'),
+        ],
+            heading='Alert / informational message'
+        ),
+        FieldPanel('recent_reports_url'),
+        StreamFieldPanel('stats_content'),
+        StreamFieldPanel('resources', heading='OIG resources'),
+        StreamFieldPanel('you_might_also_like'),
+    ]
+
+    @property
+    def category_filters(self):
+        return constants.report_category_groups['oig']

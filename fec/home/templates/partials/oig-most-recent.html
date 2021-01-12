@@ -1,0 +1,10 @@
+{% load filters %}
+{# List to display the most recent OIG report items #}
+<ul class="list--spacious">
+   {% for item in oig_most_recent %}
+  <li>
+    <a class="t-bold" href="{{ item.url  }}">{% formatted_title item %}</a>
+    <time class="t-sans u-margin--left feed--list__date" datetime="{{ item.date|date:'Y-mm' }}">{{ item.date|date:'F Y' }}</time>
+  </li>
+  {% endfor %}
+</ul>
