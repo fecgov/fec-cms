@@ -1,5 +1,8 @@
 'use strict';
 
+// Tell linter not to highlight 'describe' and 'it' as wrong:
+/* global describe it */
+
 var chai = require('chai');
 var expect = chai.expect;
 
@@ -22,23 +25,23 @@ describe('Admin fines calc', function() {
   var tests = [
     { y: 'latest', s: true, c: 0, l: 'late', t: 6, v: 10, e: 0 },
     { y: '2020', s: false, c: 1, l: 'non', t: 3, v: 10, e: 1214 },
-    { y: '2018', s: false, c: 4999.99, l: 'late', t: 1, v: 1, e: 50 },
+    { y: '2021', s: false, c: 4999.99, l: 'late', t: 1, v: 1, e: 52 },
     { y: '2020', s: true, c: 5000, l: 'non', t: 3, v: 2, e: 1251 },
     { y: '2020', s: false, c: 9000, l: 'non', t: 1, v: 0, e: 417 },
     { y: '2019', s: false, c: 24000, l: 'late', t: 5, v: 3, e: 308 },
-    { y: 'latest', s: true, c: 49000, l: 'late', t: 30, v: 10, e: 5337 },
-    { y: '2018', s: false, c: 74000, l: 'late', t: 4, v: 4, e: 1708 },
+    { y: 'latest', s: true, c: 49000, l: 'late', t: 30, v: 10, e: 5355 },
+    { y: '2021', s: false, c: 74000, l: 'late', t: 4, v: 4, e: 1804 },
     { y: '2019', s: true, c: 99000, l: 'non', t: 50, v: 5, e: 13079 },
-    { y: 'latest', s: true, c: 149000, l: 'late', t: 20, v: 1, e: 6288 },
+    { y: 'latest', s: true, c: 149000, l: 'late', t: 20, v: 1, e: 6358 },
     { y: '2020', s: true, c: 199000, l: 'late', t: 50, v: 2, e: 19237 },
-    { y: '2018', s: true, c: 249000, l: 'late', t: 20, v: 5, e: 15945 },
-    { y: '2018', s: false, c: 349000, l: 'non', t: 2, v: 0, e: 11341 },
-    { y: '2018', s: false, c: 440000, l: 'non', t: 15, v: 0, e: 12758 },
-    { y: 'latest', s: false, c: 549000, l: 'late', t: 10, v: 3, e: 11632 },
+    { y: '2021', s: true, c: 249000, l: 'late', t: 20, v: 5, e: 16796 },
+    { y: '2021', s: false, c: 349000, l: 'non', t: 2, v: 0, e: 11972 },
+    { y: '2021', s: false, c: 440000, l: 'non', t: 15, v: 0, e: 13468 },
+    { y: 'latest', s: false, c: 549000, l: 'late', t: 10, v: 3, e: 11761 },
     { y: '2019', s: true, c: 649000, l: 'non', t: 5, v: 5, e: 39240 },
     { y: '2019', s: true, c: 749000, l: 'non', t: 6, v: 2, e: 28342 },
-    { y: 'latest', s: true, c: 849000, l: 'late', t: 2, v: 3, e: 16560 },
-    { y: '2018', s: true, c: 949000, l: 'non', t: 15, v: 1, e: 26578 },
+    { y: 'latest', s: true, c: 849000, l: 'late', t: 2, v: 3, e: 16754 },
+    { y: '2021', s: true, c: 949000, l: 'non', t: 15, v: 1, e: 28057 },
     { y: '2020', s: false, c: 1000000, l: 'late', t: 2, v: 4, e: 15970 },
     { y: '2019', s: false, c: 2000000, l: 'late', t: 10, v: 4, e: 20334 },
     // Errors:
@@ -72,8 +75,6 @@ describe('Admin fines calc', function() {
       e: 'ERROR'
     }
   ];
-  // TODO:
-  // need to add a test for fractions of days and fractions of previous violations to make sure they both round correctly
   // For each test we want to run,
   tests.forEach(function(test, i) {
     // Name it ('test0', 'test1', etc)
