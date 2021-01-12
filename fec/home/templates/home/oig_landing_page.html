@@ -26,7 +26,7 @@
   <div class="container">
     <div class="grid--2-wide grid--flex">
       {% if self.stats_content %}
-      <div class="grid__item card t-left-aligned">
+      <div class="grid__item card body-blocks">
         {{ self.stats_content|safe }}
       </div>
       {% else %}
@@ -55,7 +55,7 @@
       <div class="container">
         <h2>You might also like</h2>
         <h4 class="example__title">Additional resources and useful links</h4>
-        <div class="grid grid--3-wide grid-flex">
+        <div class="grid grid--{{ self.you_might_also_like|length }}-wide grid-flex">
           {% for group in self.you_might_also_like %}
           <div class="grid__item example--secondary">
             <ul class="t-sans list--spacious">
