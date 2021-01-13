@@ -3,6 +3,7 @@
 var chai = require('chai');
 var sinon = require('sinon');
 var sinonChai = require('sinon-chai');
+var spy = sinon.spy();
 var expect = chai.expect;
 chai.use(sinonChai);
 
@@ -21,24 +22,27 @@ require('./setup')();
 //   }
 // });
 
-var search = require('../../static/js/pages/statistical-summary-archive');
-// var map = require('../../static/js/modules/election-map');
 
-describe('statistical-summary-archive', function() {
+
+//We can call a spy like a function
+spy('Hello', 'World');
+
+
+//var chooseYear = '<option selected value="1988">1987-1988</option>'
+//Now we can get information about the call
+console.log(spy.firstCall.args); //output: ['Hello', 'World']
+
+
+var Search = require('../../static/js/pages/statistical-summary-archive')//.StatisticalSummaryArchive;
+// // var map = require('../../static/js/modules/election-map');
+
+describe('statistical summary archive', function() {
   before(function() {
     this.$fixture = $('<div id="fixtures"></div>');
     $('body').append(this.$fixture);
   });
 
- before(function() {
-    sinon.stub(search.StatisticalSummaryArchive.prototype, 'showTable');
-    //sinon.stub(map.ElectionMap.prototype, 'drawDistricts');
-  });
-
-
-  beforeEach(function() {
-  console.log('beforeEach RAN')
-  console.log('this.$fixture:', this.$fixture)
+beforeEach(function() {
     this.$fixture
       .empty()
       .append(
@@ -68,11 +72,66 @@ describe('statistical-summary-archive', function() {
 '</div>'+
 '<h3 class="js-table-title u-padding--top"></h3>'
 );
-console.log('this.$fixture2:', this.$fixture)
-//window.history.pushState({}, null, '/');
- //this.el = new search.StatisticalSummaryArchive('.filter-controls');
- this.el = new search(this.$fixture.find('.filter-controls'));
+//this.el = new Search(this.$fixture.find('.filter-controls'));
+window.history.pushState({year:'1988', filer: 'congressional'}, null, '?year=1988&filer=congressional');
+
+//this.el = new Search.StatisticalSummaryArchive('.filter-controls');
+//this.el = new Search.StatisticalSummaryArchive(this.$fixture.find('.filter-controls'));
+this.el = new Search.StatisticalSummaryArchive();
+
+//sinon.stub(Search.StatisticalSummaryArchive.prototype, 'showTable');
 });
+
+
+
+  //  beforeEach(function() {
+  //   this.$fixture.empty().append(DOM);
+  //   this.showTable = sinon.spy(Search.prototype, 'showTable');
+
+  //   //window.history.pushState({}, null, '/');
+  //   this.el = new Search(this.$fixture.find('.filter-controls'));
+  //   console.log('this.$fixture2:', this.$fixture)
+  //  });
+
+  //  afterEach(function() {
+  //   Search.prototype.showTable.restore();
+  // });
+
+
+    it('calls showTable() on initial load', function() {
+    expect(this.el.showTable).to.have.been.called;
+  });
+
+  })
+
+//https://rollout.io/blog/mocha-js-chai-sinon-frontend-javascript-code-testing-tutorial/
+// var sandbox;
+//   beforeEach(function() {
+//     // create a sandbox
+//     sandbox = sinon.sandbox.create();
+//     // stub some console methods
+//     sandbox.stub(window.console, "log");
+//     sandbox.stub(window.console, "error");
+//   });
+
+// var sandbox;
+//  before(function() {
+//     sinon.stub(search.StatisticalSummaryArchive.prototype, 'showTable');
+//     //sinon.stub(map.ElectionMap.prototype, 'drawDistricts');
+//     sandbox = sinon.sandbox.create();
+//     // stub some console methods
+//     sandbox.stub(window.console, "log");
+//   });
+
+
+
+
+
+//window.history.pushState({}, null, '/');
+
+
+//this.el = new Search('.filter-controls');
+ 
 
   // it('should memorize its selector', function() {
   //   expect(this.el.$elm.is($('#election-lookup'))).to.be.true;
@@ -143,34 +202,39 @@ console.log('this.$fixture2:', this.$fixture)
   // });
 
 
-  describe('call showTable function', function() {
-    beforeEach(function() {
-      this.callShowTable = sinon.spy(search.ElectionSearch.prototype, 'handlePopState');
+//   describe('call showTable function', function() {
+
+//     //beforeEach(function() {
+//     after(function() {
+//       this.callShowTable = sinon.spy(search.ElectionSearch.prototype, 'handlePopState');
       
+//       sinon.assert.notCalled(console.log)
 
-    it('should call showTable', function() {
-      this.el.handlePopState();
-      expect(this.showTable).to.have.been.called;
-    });
-  });
+//     it('should call showTable', function() {
+//       this.el.handlePopState();
+//       expect(this.showTable).to.have.been.called;
+//     });
+//   });
 
- });
+//  });
 
-});
+// });
 
  
 
-//   it('disable non-presidential years when presidential is chosen', function() {
-//     //this.el.serialized = { year: '1982', filer: 'presidential' };
-//     this.el.chooseYear.value = '1982'
-//     this.el.chooseFiler.value = 'presidential'
-//     //expect(this.chooseYear.options[this.chooseYear.selectedIndex].textContent).to.equal("1984");
-//     expect(this.el.chosenYear).to.equal('1984');
-//   });
-// });
+  // it('disable non-presidential years when presidential is chosen', function() {
+  //   //this.el.serialized = { year: '1982', filer: 'presidential' };
+  //   this.el.chooseYear.value = '1982'
+  //   console.log('this.el.chooseYear.value:'+this.el.chooseYear.value)
+  //   this.el.chooseFiler.value = 'presidential'
+  //   //expect(this.chooseYear.options[this.chooseYear.selectedIndex].textContent).to.equal("1984");
+  //   console.log('this.el.choosenYear:'+this.el.choosenYear)
+  //   expect(this.el.chosenYear).to.equal('1984');
+  // });
 
 
 
+//
 
 
 //   it('should show no results warning on no results by state', function() {

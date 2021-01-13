@@ -14,11 +14,15 @@ function StatisticalSummaryArchive() {
     '1975-1976'
   ];
   this.presidentialArchiveYears = ['1976', '1980', '1984', '1988'];
-  //let chosenYear;
-  //let chosenFiler;
+
+  // this.chooseYear = document.getElementById('year');
+  // this.chosenYear = this.chooseYear.value;
+  // this.chooseFiler = document.getElementById('filer');
+  // this.chosenFiler = this.chooseFiler.value;
+
   //let actualYear;
-  window.addEventListener('popstate', e => {
-    this.handlePopState(e);
+  window.addEventListener('popstate', () => {
+    this.handlePopState();
   });
 
   this.selects = document.getElementsByTagName('select');
@@ -38,10 +42,10 @@ function StatisticalSummaryArchive() {
 }
 
 //Update state upon back or forward button click
-StatisticalSummaryArchive.prototype.handlePopState = function(e) {
-  const params = e.state;
-  this.chosenYear = params.year;
-  this.chosenFiler = params.filer;
+StatisticalSummaryArchive.prototype.handlePopState = function() {
+  //const params = e.state;
+  //this.chosenYear = params.year;
+  //this.chosenFiler = params.filer;
   Array.from(this.selects).forEach(select => {
     Array.from(select.options).forEach(option => {
       if (option.value == this.getUrlVars()[select.id]) {
@@ -119,9 +123,15 @@ StatisticalSummaryArchive.prototype.showTable = function() {
     //set 'data-summary' attr on all tables so existinng CSS can be used
     table.setAttribute('data-summary', 'archive');
   });
+
+  // this.chooseYear = document.querySelector('#year');
+  // console.log('chooseYearX:' + this.chooseYear);
+
   this.chooseYear = document.getElementById('year');
+  console.log('chooseYearX:' + this.chooseYear);
   this.chosenYear = this.chooseYear.value;
   this.chooseFiler = document.getElementById('filer');
+  console.log('chooseFiler', this.chooseFiler);
   this.chosenFiler = this.chooseFiler.value;
 
   //handle if presidential is chosen
