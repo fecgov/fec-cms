@@ -13,6 +13,7 @@ module.exports = function() {
     API_LOCATION: '',
     API_VERSION: '/v1',
     API_KEY_PUBLIC: '12345',
+    API_KEY_PUBLIC_CALENDAR: '67890',
     DEFAULT_TIME_PERIOD: '2016'
   });
 };
