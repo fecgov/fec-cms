@@ -40,7 +40,12 @@ const maxUSbounds = {
   north: Math.floor(49.3991582), // (Washington)
   south: Math.ceil(253.5421288) // (Alaska)
 }; // used to set the viewBox for the main SVG
-const compactRules = [['B', 9], ['M', 6], ['K', 3], ['', 0]];
+const compactRules = [
+  ['B', 9],
+  ['M', 6],
+  ['K', 3],
+  ['', 0]
+];
 
 let defaultOpts = {
   colorScale: ['#e2ffff', '#278887'],

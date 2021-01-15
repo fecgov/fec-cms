@@ -109,7 +109,7 @@
     if (
       (options.wrap_line_length === undefined ||
         parseInt(options.wrap_line_length, 10) === 0) &&
-      (options.max_char !== undefined && parseInt(options.max_char, 10) !== 0)
+      options.max_char !== undefined && parseInt(options.max_char, 10) !== 0
     ) {
       options.wrap_line_length = options.max_char;
     }

@@ -27,7 +27,12 @@ var stateFeatureMap = _.chain(stateFeatures)
 
 var colorZero = '#ffffff';
 var colorScale = ['#e2ffff', '#278887'];
-var compactRules = [['B', 9], ['M', 6], ['k', 3], ['', 0]];
+var compactRules = [
+  ['B', 9],
+  ['M', 6],
+  ['k', 3],
+  ['', 0]
+];
 var MAX_MAPS = 2;
 
 _.templateSettings = {
