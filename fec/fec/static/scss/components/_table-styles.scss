@@ -676,7 +676,12 @@ h3 + .simple-table {
 }
 
 .filter-controls select {
-  width: 15rem;
+  width: u(15rem);
+
+  &.archive {
+    width: auto;
+    min-width: u(15rem);
+  }
 }
 
 table[data-summary] {
