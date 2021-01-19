@@ -282,7 +282,7 @@ describe('helpers', function() {
   describe('calendarHelpers.getUrl()', function() {
     it('builds the correct url', function() {
       var url = calendarHelpers.getUrl('calendar', {category: 'election'});
-      expect(url).to.equal('/v1/calendar/?api_key=12345&per_page=500&category=election');
+      expect(url).to.equal('/v1/calendar/?api_key=67890&per_page=500&category=election');
     });
   });
 
