@@ -33,7 +33,7 @@
     "corejs-typeahead": "^1.2.1",
     "css.escape": "^1.5.1",
     "d3": "3.5.5",
-    "datatables.net": "1.10.22",
+    "datatables.net": "1.10.23",
     "datatables.net-responsive": "^2.2.3",
     "debug": "^3.2.6",
     "draft-js": "^0.11.7",
@@ -61,7 +61,6 @@
     "topojson": "^3.0.2",
     "tough-cookie": "^2.5.0",
     "tunnel-agent": "^0.6.0",
-    "ua-parser-js": "^0.7.22",
     "underscore": "^1.8.3",
     "whatwg-fetch": "^3.5.0"
   },

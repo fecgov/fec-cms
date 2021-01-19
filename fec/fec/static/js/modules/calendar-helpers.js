@@ -32,7 +32,7 @@ function getUrl(path, params) {
   var url = URI(window.API_LOCATION)
     .path(Array.prototype.concat(window.API_VERSION, path || [], '').join('/'))
     .addQuery({
-      api_key: window.API_KEY_PUBLIC,
+      api_key: window.API_KEY_PUBLIC_CALENDAR,
       per_page: 500
     })
     .addQuery(params || {})

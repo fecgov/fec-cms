@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="20px" height="20px" viewBox="0 0 20 20" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 63.1 (92452) - https://sketch.com -->
+    <title>icon / authority</title>
+    <desc>Created with Sketch.</desc>
+    <g id="icon-/-authority" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <path d="M15.220484,3.87090643 L17.9430521,3.87090643 C17.8290767,2.3571945 17.3854889,1.47080812 16.6122885,1.21174731 C15.8390882,0.952686503 15.3751534,1.16247605 15.220484,1.84111595 L15.220484,19 L2,19 L2,2.36010303 C2.23395075,1.51964591 2.66460146,1.09941735 3.29195213,1.09941735 C3.91930279,1.09941735 8.1649725,1.09941735 16.0289613,1.09941735" id="Path-7" stroke="#000000" stroke-linecap="round" stroke-linejoin="round"></path>
+        <rect id="Rectangle" fill="#000000" x="4" y="5" width="9" height="2" rx="1"></rect>
+        <rect id="Rectangle" fill="#000000" x="4" y="8" width="9" height="2" rx="1"></rect>
+        <rect id="Rectangle" fill="#000000" x="4" y="11" width="6" height="2" rx="1"></rect>
+        <rect id="Rectangle" fill="#000000" x="10" y="15" width="4" height="2" rx="1"></rect>
+    </g>
+</svg>

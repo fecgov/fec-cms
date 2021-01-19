@@ -168,14 +168,15 @@ class CustomTableBlock(blocks.StructBlock):
     }
 
     custom_table = blocks.StreamBlock([
-        ('title', blocks.CharBlock(required=False)),
+        ('title', blocks.CharBlock(required=False, icon='title')),
         ('table_intro', blocks.RichTextBlock(required=False)),
         ('table', TableBlock(table_options=custom_table_options)),
-        ('footnote', blocks.CharBlock(required=False))
+        ('footnote', blocks.CharBlock(required=False, icon='superscript'))
     ])
 
     class Meta:
         template = 'blocks/custom_table.html'
+        icon = 'table'
 
 
 class ExampleImage(blocks.StructBlock):
@@ -280,3 +281,12 @@ class ExampleForms(blocks.StructBlock):
     class Meta:
         template = 'blocks/example-forms.html'
         icon = 'doc-empty'
+
+
+class LinkBlock(blocks.StructBlock):
+    """For links, with text and url"""
+    text = blocks.CharBlock()
+    url = blocks.URLBlock()
+
+    class Meta:
+        icon = 'link'

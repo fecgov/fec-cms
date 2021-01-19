@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+{% load wagtailcore_tags %}
+{% load staticfiles %}
+{% load oig_most_recent %}
+{% block title %}{{ self.title }}{% endblock %}
+{% block body_class %}template-{{ self.get_verbose_name | slugify }}{% endblock %}
+
+{% block content %}
+  <section class="hero hero--primary hero--oig" aria-labelledby="hero-heading">
+    <div class="hero__image"></div>
+    <div class="container">
+      <h1 id="hero-heading">{{ self.title }}</h1>
+      <div class="hero__content">{{ self.intro_message|safe }}</div>
+      {% if self.complaint_url is not null %}<a href="{{ self.complaint_url }}" class="button--cta-primary button--go">Submit a complaint</a>{% endif %}
+    </div>
+  </section>
+  {% if self.show_info_message is True and self.info_message is not '' %}
+  <section>
+    <div class="container">
+      <div class="message message--info">
+        {{ self.info_message|safe }}
+      </div>
+    </div>
+  </section>
+  {% endif %}
+  <div class="container">
+    <div class="grid--2-wide grid--flex">
+      {% if self.stats_content %}
+      <div class="grid__item card body-blocks">
+        {{ self.stats_content|safe }}
+      </div>
+      {% else %}
+      <div class="grid__item card t-left-aligned placeholder-oig-logo" aria-hidden="true">&nbsp;</div>
+      {% endif %}
+      <div class="grid__item">
+        <div class="heading--section heading--with-action">
+          <h3 class="heading__left">Most recent reports</h3>
+          {% if self.recent_reports_url is not '' %}
+          <a class="button--alt button--updates heading__right" href="{{ self.recent_reports_url }}">All reports</a>
+          {% endif %}
+        </div>
+        {% oig_most_recent %}
+      </div>
+    </div>
+  </div>
+  <section>
+    <div class="container content__section--ruled">
+      <h3>OIG resources</h3>
+      {{ self.resources|safe }}
+    </div>
+  </section>
+  {% if self.you_might_also_like is not null %}
+  <section>
+    <div class="slab slab--neutral">
+      <div class="container">
+        <h2>You might also like</h2>
+        <h4 class="example__title">Additional resources and useful links</h4>
+        <div class="grid grid--{{ self.you_might_also_like|length }}-wide grid-flex">
+          {% for group in self.you_might_also_like %}
+          <div class="grid__item example--secondary">
+            <ul class="t-sans list--spacious">
+              {% for link in group.value %}
+              <li><a href="{{ link.url }}">{{ link.text }}</a></li>
+              {% endfor %}
+            </ul>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+  </section>
+  {% endif %}
+{% endblock %}
