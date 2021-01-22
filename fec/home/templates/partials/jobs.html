@@ -3,7 +3,7 @@
 <section>
   <div class="message message--alt message--alert">
     <h2 class="message__title">Oops!</h2>
-    <p>{% autoescape off %}{{ error}}{% endautoescape %}</p>
+    <p>{{ error|safe }}</p>
   </div>
 </section>
 {% else %}
@@ -12,7 +12,7 @@
       <ul>
     {% for j in jobData %}
         <li>
-          <h3><a href="{{ j.position_uri }}">{{ j.position_id }} , {{ j.position_title}}</a></h3>
+          <h3><a href="{{ j.position_uri }}">{{ j.position_id }} , {{ j.position_title }}</a></h3>
           <ul class="u-padding--bottom">
             <li class='t-sans'><strong>Open Period:</strong> {{ j.position_start_date }} - {{ j.position_end_date }}</li>
             <li class='t-sans'><strong>Open To:</strong> {{ j.open_to }}</li>
