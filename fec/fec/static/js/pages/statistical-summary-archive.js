@@ -141,8 +141,11 @@ StatisticalSummaryArchive.prototype.showTable = function() {
   //show tabke title
   const tableTitle = document.getElementsByClassName('js-table-title')[0];
   tableTitle.textContent =
-    this.chooseYear.options[this.chooseYear.selectedIndex].text + ' ' +
-    this.chooseFiler.options[this.chooseFiler.selectedIndex].text + ' ' + 'data summaries';
+    this.chooseYear.options[this.chooseYear.selectedIndex].text +
+    ' ' +
+    this.chooseFiler.options[this.chooseFiler.selectedIndex].text +
+    ' ' +
+    'data summaries';
 
   //set class for liveTable based on selected params
   let chosenYearFilerClass = '._' + this.chosenYear + '.' + this.chosenFiler;
