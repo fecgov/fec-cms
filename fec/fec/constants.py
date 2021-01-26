@@ -366,5 +366,6 @@ USAJOBS_CODE_LIST = """
 """
 
 conditional_js = OrderedDict([
-    ('statistical_summary', 'statistical-summary.js')
+    ('statistical_summary', 'statistical-summary.js'),
+    ('statistical_summary-archive', 'statistical-summary-archive.js')
 ])
