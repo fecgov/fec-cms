@@ -2,7 +2,6 @@
 
 function StatisticalSummaryArchive() {
   //Declare globals (scoped to this function)to get past linter error/tests.
-  /* global history */
 
   this.twoYearPeriods = [
     '1987-1988',
@@ -72,7 +71,7 @@ StatisticalSummaryArchive.prototype.handlePushState = function() {
     filer: this.chosenFiler
   };
   var querystring = `?year=${this.chosenYear}&filer=${this.chosenFiler}`;
-  history.pushState(data, '', querystring);
+  window.history.pushState(data, '', querystring);
 };
 
 StatisticalSummaryArchive.prototype.zebraStripeVisible = function(table) {
