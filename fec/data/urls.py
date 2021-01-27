@@ -39,6 +39,7 @@ urlpatterns = [
     url(r'^data/individual-contributions/$',
         views_datatables.individual_contributions),
     url(r'^data/loans/$', views_datatables.loans),
+    url(r'^data/debts/$', views_datatables.debts),
     url(r'^data/party-coordinated-expenditures/$',
         views_datatables.party_coordinated_expenditures),
     url(r'^data/receipts/individual-contributions/$',
