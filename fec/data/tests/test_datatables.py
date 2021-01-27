@@ -40,11 +40,13 @@ class TestDatatablesRender(TestCase):
         assert response.status_code == 200
 
     # Loans
+
     def test_loans(self):
         response = client.get('/data/loans/', follow=True)
         assert response.status_code == 200
 
     # Debts
+
     def test_debts(self):
         response = client.get('/data/debts/', follow=True)
         assert response.status_code == 200
