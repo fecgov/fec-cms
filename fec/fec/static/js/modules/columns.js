@@ -797,6 +797,39 @@ var loans = [
   modalTriggerColumn
 ];
 
+var debts = [
+  {
+    data: 'committee',
+    orderable: false,
+    className: 'all',
+    render: function(data) {
+      if (data) {
+        return columnHelpers.buildEntityLink(
+          data.name,
+          helpers.buildAppUrl(['committee', data.committee_id]),
+          'committee'
+        );
+      } else {
+        return '';
+      }
+    }
+  },
+  {
+    data: 'creditor_debtor_name',
+    // orderable: false,
+    className: 'all'
+  },
+  currencyColumn({
+    data: 'outstanding_balance_beginning_of_period',
+    className: 'min-desktop hide-panel column--number t-mono'
+  }),
+  currencyColumn({
+    data: 'outstanding_balance_close_of_period',
+    className: 'min-desktop hide-panel column--number t-mono'
+  }),
+  modalTriggerColumn
+];
+
 var audit = [
   columnHelpers.urlColumn('link_to_report', {
     data: 'committee_name',
@@ -872,5 +905,6 @@ module.exports = {
   receipts: receipts,
   reports: reports,
   loans: loans,
+  debts: debts,
   audit: audit
 };
