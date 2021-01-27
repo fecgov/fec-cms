@@ -10,6 +10,7 @@
   <div class="filters__inner">
     {{ typeahead.field('committee_id', 'Committee Name or ID') }}
     {{ typeahead.field('creditor_debtor_name', 'Creditor/debtor Name or ID') }}
+    {{ date.field('date', 'Date') }}
     {{ range.amount('outstanding_balance_beginning_of_period', 'Beginning balance') }}
     {{ range.amount('outstanding_balance_close_of_period', 'Ending balance') }}
  </div>

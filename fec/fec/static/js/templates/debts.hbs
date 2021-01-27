@@ -36,16 +36,19 @@ This shows fields available on the Schedule D form.
     {{#panelRow "Nature of Debt"}}
       {{{nature_of_debt}}}
     {{/panelRow}}
-    {{#panelRow "Balance Outstanding at Close of This Period"}}
+    {{#panelRow "Date"}}
+      {{{datetime load_date format="pretty"}}}
+    {{/panelRow}}
+    {{#panelRow "Balance at Beginning of Period"}}
         {{{currency outstanding_balance_beginning_of_period}}}
     {{/panelRow}}
-    {{#panelRow "Amount Incurred This Period"}}
+    {{#panelRow "Incurred This Period"}}
       {{{currency amount_incurred_period}}}
     {{/panelRow}}
     {{#panelRow "Payments This Period"}}
       {{{currency payment_period}}}
     {{/panelRow}}
-    {{#panelRow "Balance Outstanding at Close of This Period"}}
+    {{#panelRow "Balance at Close of Period"}}
       {{{currency outstanding_balance_close_of_period}}}
     {{/panelRow}}
   </table>
