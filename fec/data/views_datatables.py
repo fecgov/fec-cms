@@ -152,6 +152,17 @@ def loans(request):
     })
 
 
+def debts(request):
+    return render(request, 'datatable.jinja', {
+        'parent': 'data',
+        'result_type': 'debts',
+        'slug': 'debts',
+        'title': 'debts',
+        'columns': constants.table_columns['debts'],
+        'social_image_identifier': 'data',
+    })
+
+
 def audit(request):
     return render(request, 'datatable.jinja', {
         'parent': 'data',
