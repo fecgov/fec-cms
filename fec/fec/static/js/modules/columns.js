@@ -816,7 +816,6 @@ var debts = [
   },
   {
     data: 'creditor_debtor_name',
-    // orderable: false,
     className: 'all'
   },
   currencyColumn({

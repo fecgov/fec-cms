@@ -3,8 +3,8 @@
 /**
  * Debts datatable page
  * ---------------------
- * Schedule C shows loans to
- * the committee that are required to be disclosed.
+ * Schedule D shows debts
+ * to/from the committee that are required to be disclosed.
  *
  */
 
