@@ -146,7 +146,7 @@ def loans(request):
         'parent': 'data',
         'result_type': 'loans',
         'slug': 'loans',
-        'title': 'loans',
+        'title': 'Loans',
         'columns': constants.table_columns['loans'],
         'social_image_identifier': 'data',
     })
@@ -157,7 +157,7 @@ def debts(request):
         'parent': 'data',
         'result_type': 'debts',
         'slug': 'debts',
-        'title': 'debts',
+        'title': 'Debts',
         'columns': constants.table_columns['debts'],
         'social_image_identifier': 'data',
     })
