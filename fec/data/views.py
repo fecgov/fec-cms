@@ -208,11 +208,10 @@ def get_candidate(candidate_id, cycle, election_full):
         # remove the duplicate committees with same committees_id.
         # example api call:
         # https://fec-dev-api.app.cloud.gov/v1/candidate/P00009183/committees/history/2020/
-        length_d_committee = len(committees_d)
-        # print(length_d_committee)
+        len_d_cmte = len(committees_d)
         committees_leadership_pac.append(committees_d[0])
-        for i in range(length_d_committee):
-            if (i + 1) < length_d_committee and committees_d[i].get("committee_id") != committees_d[i + 1].get("committee_id"):
+        for i in range(len_d_cmte):
+            if (i + 1) < len_d_cmte and committees_d[i].get("committee_id") != committees_d[i + 1].get("committee_id"):
                 committees_leadership_pac.append(committees_d[i + 1])
 
     # (4) Call candidate/{candidate_id}/totals/{cycle} under tag:candidate
