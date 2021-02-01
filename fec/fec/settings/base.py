@@ -66,6 +66,14 @@ FEATURES = {
     'presidential_map': bool(env.get_credential('FEC_FEATURE_PRESIDENTIAL_MAP', '')),
 }
 
+# Set feature flags to True for local
+if FEC_CMS_ENVIRONMENT == ENVIRONMENTS['local']:
+    FEATURES['aggregatetotals'] = True
+    FEATURES['barcharts'] = True
+    FEATURES['contributionsbystate'] = True
+    FEATURES['map'] = True
+    FEATURES['presidential_map'] = True
+
 # Application definition
 INSTALLED_APPS = (
     'django.contrib.admin',
