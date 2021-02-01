@@ -197,8 +197,23 @@ def get_candidate(candidate_id, cycle, election_full):
     committees_authorized = committee_groups.get("P", []) + committee_groups.get(
         "A", []
     )
-
     committee_ids = [committee["committee_id"] for committee in committees_authorized]
+
+    # Group the committees by leadership pac (designation=D)
+    committees_d = committee_groups.get("D", [])
+    committees_leadership_pac = []
+    if committees_d:
+        # The candidate(id=P00009183) returns two rows from api result,
+        # one is pcc converted to D, another is leadership pac committee,
+        # remove the duplicate committees with same committees_id.
+        # example api call:
+        # https://fec-dev-api.app.cloud.gov/v1/candidate/P00009183/committees/history/2020/
+        length_d_committee = len(committees_d)
+        # print(length_d_committee)
+        committees_leadership_pac.append(committees_d[0])
+        for i in range(length_d_committee):
+            if (i + 1) < length_d_committee and committees_d[i].get("committee_id") != committees_d[i + 1].get("committee_id"):
+                committees_leadership_pac.append(committees_d[i + 1])
 
     # (4) Call candidate/{candidate_id}/totals/{cycle} under tag:candidate
     # Get aggregate totals for the financial summary
@@ -290,6 +305,7 @@ def get_candidate(candidate_id, cycle, election_full):
         # filings endpoint takes candidate ID value as committee ID arg
         "committee_id": candidate["candidate_id"],
         "committees_authorized": committees_authorized,
+        "committees_leadership_pac": committees_leadership_pac,
         "context_vars": context_vars,
         "cycle": int(cycle),
         "cycles": candidate["fec_cycles_in_election"],

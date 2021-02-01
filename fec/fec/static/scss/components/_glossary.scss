@@ -95,6 +95,9 @@
   margin-right: 2px;
   padding-right: .9em;
 
+  &.term-inline {
+      display: inline-block;
+    }
 
   &:focus,
   &:hover {
