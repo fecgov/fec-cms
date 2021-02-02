@@ -95,7 +95,6 @@
   margin-right: 2px;
   padding-right: .9em;
 
-
   &:focus,
   &:hover {
     box-shadow: 0 0 0 4px rgba($gray, .7);
@@ -108,6 +107,12 @@
 .term--p {
   margin-right: u(.5rem);
   box-shadow: none;
+}
+
+// Used when the term is in next to a heading tag or other block-level tag, makes icon inline
+.term--inline {
+  display: inline-block;
+  margin-bottom: u(1rem) !important;
 }
 
 @media print {
