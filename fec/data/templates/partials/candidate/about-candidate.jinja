@@ -68,7 +68,7 @@
     <div class="entity__figure entity__figure--narrow row" id="committees">
       <h3 class="heading--section">Committees</h3>
       {% if committee_groups['P']|length > 0 %}
-      <h4 class="callout__title term term-inline" data-term="Authorized committee">Authorized campaign committees:</h4>
+      <h4 class="callout__title term term--inline" data-term="Authorized committee">Authorized campaign committees:</h4>
 
       {% for committee in committee_groups['P'] | reverse %}
       <div class='grid'>
@@ -100,7 +100,7 @@
 
       {% if committee_groups['J'] %}
       <hr class="hr--lighter">
-      <h4 class="callout__title term term-inline" data-term="Joint fundraising committee">Joint fundraising committees:</h4>
+      <h4 class="callout__title term term--inline" data-term="Joint fundraising committee">Joint fundraising committees:</h4>
       <ul class="list--bulleted">
       {% for committee in committee_groups['J'] | reverse %}
         <li>
@@ -115,7 +115,7 @@
       {% endif %}
       
       {% if committees_leadership_pac %}    
-      <h4 class="callout__title term term-inline" data-term="Leadership PAC">Sponsored Leadership PACs:</h4>
+      <h4 class="callout__title term term--inline" data-term="Leadership PAC">Sponsored leadership PACs:</h4>
       <ul class="list--bulleted">
       {% for committee in committees_leadership_pac | reverse %}
         <li>
