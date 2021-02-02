@@ -30,13 +30,13 @@
         {% spaceless %}{# for inline blocks #}
         <h1 class="heading__left">{% formatted_title self %}</h1>
         <div class="heading__right">
-          <span class="t-sans">{{ self.date|date:'F j, Y' }}{% if self.end_date %} - {{self.end_date|date:'F j, Y' }}{% endif %}</span><br>
+          <span class="t-sans">{{ self.date|date:'F j, Y' }}{% if self.end_date %} - {{ self.end_date|date:'F j, Y' }}{% endif %}</span><br>
         </div>
         {% endspaceless %}
       </div>
     </header>
     {% if self.additional_information %}
-       <p class="t-bold">{% autoescape off %}{{ self.additional_information}}{% endautoescape %}</p>
+       <p class="t-bold">{{ self.additional_information|safe }}</p>
     {% endif %}
     {% if self.meeting_type == 'O' %}
       <p>The Commission considers new regulations, advisory opinions and other public matters at open meetings, which are typically held at FEC headquarters on Thursdays at 10:00am.</p>
@@ -66,7 +66,7 @@
       {% if self.agenda %}
       <div class="agenda__heading">
         <h2 class="u-padding--top u-no-margin">Agenda</h2>
-        <p>{{ self.date|date:'l, F j, Y' }} {% if self.end_date %}through {{self.end_date|date:'l, F j, Y' }}{% endif %}
+        <p>{{ self.date|date:'l, F j, Y' }} {% if self.end_date %}through {{ self.end_date|date:'l, F j, Y' }}{% endif %}
         &nbsp;|&nbsp; {% if self.time %}{{ self.time|date:'h:i A' }}{% else %}10:00 AM{% endif %}</p>
       </div>
       <ol class="agenda">

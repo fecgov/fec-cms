@@ -676,10 +676,15 @@ h3 + .simple-table {
 }
 
 .filter-controls select {
-  width: 15rem;
+  width: u(15rem);
+
+  &.archive {
+    width: auto;
+    min-width: u(15rem);
+  }
 }
 
-table[data-summary] {
+table[data-summary]  {
 
   border-width: 0 0;
   margin: u(1rem) 0; 
@@ -696,6 +701,7 @@ table[data-summary] {
   thead td {
     border-width: 0 0;
     border-color: transparent !important;
+    line-height: 1.3
   }
 
   td.brdr:after {

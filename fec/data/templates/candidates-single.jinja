@@ -58,7 +58,9 @@
             href="#section-2">About this candidate</a>
             <ul>
               <li><a href="#information">Candidate information</a></li>
-              <li><a href="#committees">Committees</a></li>
+              {% if committee_groups['P'] or committee_groups['A'] or committee_groups['J'] %}
+                <li><a href="#committees">Committees</a></li>
+              {% endif %}
             </ul>
         </li>
         {% if two_year_totals %}
