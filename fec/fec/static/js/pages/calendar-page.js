@@ -31,4 +31,3 @@ new Calendar({
   ),
   filterPanel: filterPanel
 });
-
