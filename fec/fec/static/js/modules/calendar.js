@@ -189,7 +189,7 @@ Calendar.prototype.success = function(response) {
     };
     _.extend(processed, {
       google: calendarHelpers.getGoogleUrl(processed),
-      download: self.exportUrl
+      download: self.subscribeUrl
         .clone()
         .addQuery({ event_id: event.event_id })
         .toString()
