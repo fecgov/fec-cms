@@ -294,6 +294,19 @@ describe('helpers', function() {
 
   });
 
+  describe('calendar.updateLinks()', function() {
+      it('builds the correct, decooded googlerSubscribe url', function() {
+      var subscribeUrl = calendarHelpers.getUrl('calendar-dates/export', {category: 'election'}, 'sub').toString();
+       var googleSubscribe =
+      'https://calendar.google.com/calendar/render?cid=' + 
+      encodeURIComponent(
+        subscribeUrl
+          .toString()
+      );  
+      expect(googleSubscribe).to.equal('https://calendar.google.com/calendar/render?cid=%2Fv1%2Fcalendar-dates%2Fexport%2F%3Fapi_key%3D67890%26per_page%3D500%26category%3Delection')
+     });
+   });
+
   describe('calendarHelpers.className()', function() {
     it('adds a multi-day class for multi-day events', function() {
       var multiEvent = {
