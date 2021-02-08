@@ -75,20 +75,7 @@
             <td class="figure__value">{{ committee.designation_full }}</td>
           {% endif %}
         </tr>
-        {% if leadership_sponsors_names %}
-        <tr>
-            <td class="figure__label">Leadership PAC sponsor:</td>
-            <td class="figure__value">{{ leadership_sponsors_names }}</td>
-        </tr>
-        {% endif %}
-        {% if is_SSF %}
-          <tr>
-            <td class="figure__label">Connected organization:</td>
-            <td class="figure__value">
-                {{ committee.affiliated_committee_name }}
-            </td>
-          </tr>
-        {% endif %}
+    <!-- For Statement of organization: -->
         {% if statement_of_organization %}
         <tr>
           <td class="figure__label">Statement of organization:</td>
@@ -108,33 +95,57 @@
           </td>
         </tr>
         {% endif %}
+    <!-- For Authorizing candidaten: -->
         {% if candidates %}
-          <tr>
-            <td class="figure__label">Authorizing candidate:</td>
-            <td class="figure__value">
-              <div class="callout callout--primary">
-                <h5 class="callout__title t-sans">
-                  {% for c in candidates %}
-                    {% if c.related_cycle is not none %}
-                  <a href="/data/candidate/{{ c.candidate_id }}/?cycle={{ c.related_cycle }}&election_full=false">{{ c.name }}</a>
-                    {% else %}
-                  <a href="/data/candidate/{{ c.candidate_id }}/">{{ c.name }}</a>
-                    {% endif %}
-                  {% endfor %}
-                </h5>
-                <span class="entity__type">{{ committee.committee_type_full }} candidate</span>
-
-                  {% if candidates[0].office == 'S' %}
-                <span class="entity__type">{{ candidates[0].state|fmt_state_full }}</span>
-                  {% elif candidates[0].office == 'H' %}
-                <span class="entity__type">{{ candidates[0].state|fmt_state_full }} - {{ candidates[0].district }}</span>
+        <tr>
+          <td class="figure__label">Authorizing candidate:</td>
+          <td class="figure__value">
+            <div class="callout callout--primary">
+              <h5 class="callout__title t-sans">
+                {% for c in candidates %}
+                  {% if c.related_cycle is not none %}
+                <a href="/data/candidate/{{ c.candidate_id }}/?cycle={{ c.related_cycle }}&election_full=false">{{ c.name }}</a>
+                  {% else %}
+                <a href="/data/candidate/{{ c.candidate_id }}/">{{ c.name }}</a>
                   {% endif %}
+                {% endfor %}
+              </h5>
+              <span class="entity__type">{{ committee.committee_type_full }} candidate</span>
 
-                  {{ candidates[0].party_full|lower|title }}
-              </div>
-            </td>
-          </tr>
+                {% if candidates[0].office == 'S' %}
+              <span class="entity__type">{{ candidates[0].state|fmt_state_full }}</span>
+                {% elif candidates[0].office == 'H' %}
+              <span class="entity__type">{{ candidates[0].state|fmt_state_full }} - {{ candidates[0].district }}</span>
+                {% endif %}
+
+                {{ candidates[0].party_full|lower|title }}
+            </div>
+          </td>
+        </tr>
         {% endif %}
+    <!-- For Committee sponsor: -->
+        <tr>
+            <td class="figure__label">Committee sponsor:</td>
+            <td class="figure__value">
+              {% for candidate in sponsor_candidates | reverse %}
+              <div class='grid'>
+                <div class="grid__item u-no-margin">
+                  <div class="callout callout--primary{% if loop.last %} u-no-margin{% endif %}" style="width: 100%; max-width: 300px">
+                    <h5 class="callout__title t-sans">
+                      <a href="/data/candidate/{{ candidate.candidate_id }}/?cycle={{ candidate.related_cycle }}&election_full=false">{{ candidate.name }}</a>
+                    </h5>
+                {% if candidate.office == 'P' %}
+                    <p class="callout__subtitle u-no-margin">Presidential candidate | {{ candidate.party_full |capitalize}}</p>
+                {% elif candidate.office == 'S' or candidate.office == 'H' %}
+                    <p class="callout__subtitle u-no-margin">Candidate for {{ constants.house_senate_types[candidate.office] }} |</p>
+                    <p class="callout__subtitle u-no-margin">{{ constants.states[candidate.state] }} | {{ candidate.party_full |capitalize}}</p>
+                {% endif %}
+                  </div>
+                </div>
+              </div>
+              {% endfor %}
+          </td>
+        </tr>
       </table>
     </div>
     {% endif %}
