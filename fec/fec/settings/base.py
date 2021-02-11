@@ -62,6 +62,7 @@ FEATURES = {
     'aggregatetotals': bool(env.get_credential('FEC_FEATURE_AGGR_TOTS', '')),
     'barcharts': bool(env.get_credential('FEC_FEATURE_HOME_BARCHARTS', '')),
     'contributionsbystate': bool(env.get_credential('FEC_FEATURE_CONTRIBUTIONS_BY_STATE', '')),
+    'debts': bool(env.get_credential('FEC_FEATURE_DEBTS', '')),  # (until debts date ranges are clarified)
     'map': bool(env.get_credential('FEC_FEATURE_HOME_MAP', '')),
     'presidential_map': bool(env.get_credential('FEC_FEATURE_PRESIDENTIAL_MAP', '')),
 }
@@ -71,6 +72,7 @@ if FEC_CMS_ENVIRONMENT == ENVIRONMENTS['local']:
     FEATURES['aggregatetotals'] = True
     FEATURES['barcharts'] = True
     FEATURES['contributionsbystate'] = True
+    FEATURES['debts'] = True
     FEATURES['map'] = True
     FEATURES['presidential_map'] = True
 
