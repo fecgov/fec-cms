@@ -39,7 +39,6 @@ urlpatterns = [
     url(r'^data/individual-contributions/$',
         views_datatables.individual_contributions),
     url(r'^data/loans/$', views_datatables.loans),
-    url(r'^data/debts/$', views_datatables.debts),
     url(r'^data/party-coordinated-expenditures/$',
         views_datatables.party_coordinated_expenditures),
     url(r'^data/receipts/individual-contributions/$',
@@ -50,6 +49,10 @@ urlpatterns = [
 
     url(r'^widgets/aggregate-totals/$', views.aggregate_totals),
 ]
+
+if settings.FEATURES.get('debts'):
+    # Debts section TODO: debts dates
+    url(r'^data/debts/$', views_datatables.debts),
 
 if settings.FEATURES.get('presidential_map'):
     # Presidential candidate map
