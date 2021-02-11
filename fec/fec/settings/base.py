@@ -62,7 +62,7 @@ FEATURES = {
     'aggregatetotals': bool(env.get_credential('FEC_FEATURE_AGGR_TOTS', '')),
     'barcharts': bool(env.get_credential('FEC_FEATURE_HOME_BARCHARTS', '')),
     'contributionsbystate': bool(env.get_credential('FEC_FEATURE_CONTRIBUTIONS_BY_STATE', '')),
-    'debts': bool(env.get_credential('FEC_FEATURE_DEBTS', '')),  # (until debts date ranges are clarified)
+    'debts': bool(env.get_credential('FEC_FEATURE_DEBTS', '')),  # TODO: debts dates
     'map': bool(env.get_credential('FEC_FEATURE_HOME_MAP', '')),
     'presidential_map': bool(env.get_credential('FEC_FEATURE_PRESIDENTIAL_MAP', '')),
 }
