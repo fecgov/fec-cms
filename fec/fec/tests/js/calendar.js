@@ -295,7 +295,7 @@ describe('helpers', function() {
   });
 
   describe('calendar.updateLinks()', function() {
-      it('builds the correct, encoded googlerSubscribe url', function() {
+      it('builds the correct, encoded googleSubscribe url', function() {
       var subscribeUrl = calendarHelpers.getUrl('calendar-dates/export', {category: 'election'}, 'sub').toString();
        var googleSubscribe =
       'https://calendar.google.com/calendar/render?cid=' + 
