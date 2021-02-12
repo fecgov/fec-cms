@@ -24,5 +24,8 @@ new Calendar({
   subscribe: '#calendar-subscribe',
   url: calendarHelpers.getUrl(['calendar-dates']),
   exportUrl: calendarHelpers.getUrl(['calendar-dates', 'export']),
+  subscribeUrl: calendarHelpers.getUrl(['calendar-dates', 'export'], '', [
+    'sub'
+  ]),
   filterPanel: filterPanel
 });
