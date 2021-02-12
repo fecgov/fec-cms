@@ -124,6 +124,7 @@
         </tr>
         {% endif %}
     <!-- For Committee sponsor: -->
+        {% if sponsor_candidates %}
         <tr>
             <td class="figure__label">Committee sponsor:</td>
             <td class="figure__value">
@@ -146,6 +147,7 @@
               {% endfor %}
           </td>
         </tr>
+        {% endif %}
       </table>
     </div>
     {% endif %}
