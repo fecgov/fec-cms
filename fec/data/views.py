@@ -416,22 +416,29 @@ def get_committee(committee_id, cycle):
         "lastCycleHasFinancial": fallback_cycle,
     }
 
-    # Sponsors come in as a list of IDs, but we need names
-    # Create a list and string, get the candidate names,
-    # and join that list with semicolons since names are returned as "LAST, FIRST"
+    # sponsor_candidates saves a sponsor candidate list.
     sponsors_candidate_ids = committee.get("sponsor_candidate_ids")
-    sponsors_names = []
-    sponsors_str = ""
+    sponsor_candidates = []
     if sponsors_candidate_ids:
         path = "/candidate/{}/history/"
         filters = {"per_page": 1}
         for sponsor_id in sponsors_candidate_ids:
+            election_years = []
             sponsor_candidate = load_most_recent_candidate(sponsor_id)
             # Handle API returning no results
             if sponsor_candidate:
-                sponsors_names.append(sponsor_candidate.get("name"))
+                for election_year in sponsor_candidate["election_years"]:
+                    start_of_election_period = (
+                        election_year - election_durations[sponsor_candidate["office"]]
+                    )
+                    if start_of_election_period < cycle and cycle <= election_year:
+                        election_years.append(election_year)
 
-        sponsors_str = "; ".join([str(elem) for elem in sponsors_names])
+                # For each sponsor_candidate, set related_cycle
+                # to the candidate's time period
+                # relative to the selected cycle.
+                sponsor_candidate["related_cycle"] = cycle if election_years else None
+                sponsor_candidates.append(sponsor_candidate)
 
     template_variables = {
         "candidates": candidates,
@@ -454,7 +461,7 @@ def get_committee(committee_id, cycle):
         "social_image_identifier": "data",
         "year": year,
         "timePeriod": time_period_js,
-        "leadership_sponsors_names": sponsors_str,
+        "sponsor_candidates": sponsor_candidates,
     }
     # Format the current two-year-period's totals
     if reports and totals:
