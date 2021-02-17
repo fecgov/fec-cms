@@ -68,14 +68,6 @@ def web_app_url(path):
 
 
 @register.filter()
-def classic_url(path):
-    """
-    Appends a path to the classic FEC.gov url as defined in the settings
-    """
-    return "{}{}".format(settings.FEC_CLASSIC_URL, path)
-
-
-@register.filter()
 def highlight_matches(text):
     """Replaces the highlight markers with span tags for digitalgov search results"""
     highlighted_text = text.replace('\ue000', '<span class="t-highlight">').replace('\ue001', '</span>')
