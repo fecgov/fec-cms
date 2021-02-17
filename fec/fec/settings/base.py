@@ -38,7 +38,6 @@ DIGITALGOV_BASE_API_URL = 'https://i14y.usa.gov/api/v1'
 DIGITALGOV_DRAWER_HANDLE = env.get_credential('DIGITALGOV_DRAWER_HANDLE', '')
 
 FEC_TRANSITION_URL = env.get_credential('FEC_TRANSITION_URL', 'https://transition.fec.gov')
-FEC_CLASSIC_URL = env.get_credential('FEC_CLASSIC_URL', 'http://classic.fec.gov')
 
 FEATURES = {
     'record': bool(env.get_credential('FEC_FEATURE_RECORD', '')),
@@ -147,7 +146,6 @@ TEMPLATES = [
                 'FEC_API_URL': FEC_API_URL,
                 'WEBMANAGER_EMAIL': WEBMANAGER_EMAIL,
                 'TRANSITION_URL': FEC_TRANSITION_URL,
-                'CLASSIC_URL': FEC_CLASSIC_URL,
                 'FEC_CMS_ENVIRONMENT': FEC_CMS_ENVIRONMENT,
                 'FEATURES': FEATURES,
             },
