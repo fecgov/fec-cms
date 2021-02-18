@@ -1,6 +1,7 @@
 from django.test import Client
 from django.test import TestCase
 
+from fec import settings  # TODO: debts dates (remove the import with the flag)
 
 client = Client()
 
@@ -39,10 +40,18 @@ class TestDatatablesRender(TestCase):
         response = client.get('/data/communication-costs/', follow=True)
         assert response.status_code == 200
 
-    # Loans and Debts
+    # Loans
+
     def test_loans(self):
         response = client.get('/data/loans/', follow=True)
         assert response.status_code == 200
+
+    # Debts
+    # TODO: debts dates (remove the conditional with the flag)
+    if settings.FEATURES.get('debts'):
+        def test_debts(self):
+            response = client.get('/data/debts/', follow=True)
+            assert response.status_code == 200
 
     # Candidates
 
