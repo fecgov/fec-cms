@@ -39,22 +39,8 @@ DIGITALGOV_DRAWER_HANDLE = env.get_credential('DIGITALGOV_DRAWER_HANDLE', '')
 
 FEC_TRANSITION_URL = env.get_credential('FEC_TRANSITION_URL', 'https://transition.fec.gov')
 FEC_CLASSIC_URL = env.get_credential('FEC_CLASSIC_URL', 'http://classic.fec.gov')
+WEBMANAGER_EMAIL = "webmanager@fec.gov"
 
-FEATURES = {
-    'record': bool(env.get_credential('FEC_FEATURE_RECORD', '')),
-    'about': bool(env.get_credential('FEC_FEATURE_ABOUT', '')),
-    'agendas': bool(env.get_credential('FEC_FEATURE_AGENDAS', '')),
-    'tips': bool(env.get_credential('FEC_FEATURE_TIPS', '')),
-    'adrs': bool(env.get_credential('FEC_FEATURE_ADRS', '')),
-    'afs': bool(env.get_credential('FEC_FEATURE_AFS', '')),
-    'aggregatetotals': bool(env.get_credential('FEC_FEATURE_AGGR_TOTS', '')),
-    'map': bool(env.get_credential('FEC_FEATURE_HOME_MAP', '')),
-    'barcharts': bool(env.get_credential('FEC_FEATURE_HOME_BARCHARTS', '')),
-    'contributionsbystate': bool(env.get_credential('FEC_FEATURE_CONTRIBUTIONS_BY_STATE', '')),
-    'ierawfilters': bool(env.get_credential('FEC_FEATURE_IE_RAW_FILTERS', '')),
-    'presidential_map': bool(env.get_credential('FEC_FEATURE_PRESIDENTIAL_MAP', '')),
-    'website_status': bool(env.get_credential('FEC_FEATURE_WEBSITE_STATUS', '')),
-}
 ENVIRONMENTS = {
     'local': 'LOCAL',
     'dev': 'DEVELOPMENT',
@@ -62,8 +48,35 @@ ENVIRONMENTS = {
     'prod': 'PRODUCTION',
     'feature': 'FEATURE',
 }
-FEC_CMS_ENVIRONMENT = ENVIRONMENTS.get(env.get_credential('FEC_CMS_ENVIRONMENT'), 'LOCAL')
-WEBMANAGER_EMAIL = "webmanager@fec.gov"
+FEC_CMS_ENVIRONMENT = ENVIRONMENTS.get(env.get_credential('FEC_CMS_ENVIRONMENT'), ENVIRONMENTS['local'])
+
+FEATURES = {
+    'ierawfilters': bool(env.get_credential('FEC_FEATURE_IE_RAW_FILTERS', '')),
+
+    # Functionality
+    'website_status': bool(env.get_credential('FEC_FEATURE_WEBSITE_STATUS', '')),
+
+    # Feature flags (hiding or displaying components)
+    'adrs': bool(env.get_credential('FEC_FEATURE_ADRS', '')),
+    'afs': bool(env.get_credential('FEC_FEATURE_AFS', '')),  # Admin fines search
+    'aggregatetotals': bool(env.get_credential('FEC_FEATURE_AGGR_TOTS', '')),
+    'barcharts': bool(env.get_credential('FEC_FEATURE_HOME_BARCHARTS', '')),
+    'contributionsbystate': bool(env.get_credential('FEC_FEATURE_CONTRIBUTIONS_BY_STATE', '')),
+    'debts': bool(env.get_credential('FEC_FEATURE_DEBTS', '')),  # TODO: debts dates
+    'map': bool(env.get_credential('FEC_FEATURE_HOME_MAP', '')),
+    'presidential_map': bool(env.get_credential('FEC_FEATURE_PRESIDENTIAL_MAP', '')),
+}
+
+# Set feature flags to True for local
+if FEC_CMS_ENVIRONMENT == ENVIRONMENTS['local']:
+    FEATURES['adrs'] = True
+    FEATURES['afs'] = True
+    FEATURES['aggregatetotals'] = True
+    FEATURES['barcharts'] = True
+    FEATURES['contributionsbystate'] = True
+    FEATURES['debts'] = True
+    FEATURES['map'] = True
+    FEATURES['presidential_map'] = True
 
 # Application definition
 INSTALLED_APPS = (
@@ -123,7 +136,7 @@ MIDDLEWARE = (
 )
 
 CSRF_TRUSTED_ORIGINS = ["fec.gov", "app.cloud.gov"]
-if FEC_CMS_ENVIRONMENT == 'LOCAL':
+if FEC_CMS_ENVIRONMENT == ENVIRONMENTS['local']:
     CSRF_TRUSTED_ORIGINS.extend(["127.0.0.1:5000"])
 
 ROOT_URLCONF = 'fec.urls'
@@ -260,8 +273,7 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
-if FEC_CMS_ENVIRONMENT != 'LOCAL':
+if FEC_CMS_ENVIRONMENT != ENVIRONMENTS['local']:
     AWS_QUERYSTRING_AUTH = False
     AWS_ACCESS_KEY_ID = env.get_credential('access_key_id')
     AWS_SECRET_ACCESS_KEY = env.get_credential('secret_access_key')
@@ -276,8 +288,8 @@ if FEC_CMS_ENVIRONMENT != 'LOCAL':
 UAA_CLIENT_ID = env.get_credential('CMS_LOGIN_CLIENT_ID', 'my-client-id')
 UAA_CLIENT_SECRET = env.get_credential('CMS_LOGIN_CLIENT_SECRET', 'my-client-secret')
 # fake uaa server deploys locally on port 8080.  Will be needed to login for local use
-# TODO: These will have to have a explicit reference until we can figure out how
-# to silence django warnings about the url being http (it expects https).
+# TODO: These will have to have an explicit reference until we can figure out how
+# to silence Django warnings about the url being http (it expects https).
 # UAA_AUTH_URL = env.get_credential('CMS_LOGIN_AUTH_URL', 'http://localhost:8080/oauth/authorize')
 # UAA_TOKEN_URL = env.get_credential('CMS_LOGIN_TOKEN_URL','http://localhost:8080/oauth/token')
 UAA_AUTH_URL = 'https://login.fr.cloud.gov/oauth/authorize'
