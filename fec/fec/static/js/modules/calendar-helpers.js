@@ -28,20 +28,20 @@ function getGoogleUrl(event) {
     .toString();
 }
 
-function getUrl(path, params) {
+function getUrl(path, params, type) {
+  //if 'type' arg is present and set to 'sub', use API_KEY_PUBLIC_CALENDAR as api_key, otherwise use API_KEY_PUBLIC;
+  var apiKey =
+    type == 'sub' ? window.API_KEY_PUBLIC_CALENDAR : window.API_KEY_PUBLIC;
   var url = URI(window.API_LOCATION)
     .path(Array.prototype.concat(window.API_VERSION, path || [], '').join('/'))
     .addQuery({
-      api_key: window.API_KEY_PUBLIC_CALENDAR,
+      api_key: apiKey,
       per_page: 500
     })
     .addQuery(params || {})
     .toString();
-
-  // Decode in order to preserve + signs
   return URI.decode(url);
 }
-
 function className(event) {
   var start = event.start_date ? moment(event.start_date).format('M D') : null;
   var end = event.end_date ? moment(event.end_date).format('M D') : null;

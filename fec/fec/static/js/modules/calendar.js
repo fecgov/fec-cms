@@ -47,6 +47,7 @@ function Calendar(opts) {
   this.$head = $('.data-container__head');
   this.$calendar.fullCalendar(this.opts.calendarOpts);
   this.url = URI(this.opts.url);
+  this.subscribeUrl = URI(this.opts.subscribeUrl);
   this.exportUrl = URI(this.opts.exportUrl);
   this.filterPanel = this.opts.filterPanel;
   this.filterSet = this.filterPanel.filterSet;
@@ -188,7 +189,7 @@ Calendar.prototype.success = function(response) {
     };
     _.extend(processed, {
       google: calendarHelpers.getGoogleUrl(processed),
-      download: self.exportUrl
+      download: self.subscribeUrl
         .clone()
         .addQuery({ event_id: event.event_id })
         .toString()
@@ -199,6 +200,7 @@ Calendar.prototype.success = function(response) {
 
 Calendar.prototype.updateLinks = function(params) {
   var url = this.exportUrl.clone().addQuery(params || {});
+  var subscribeURL = this.subscribeUrl.clone().addQuery(params || {});
   var urls = {
     ics: url.toString(),
     csv: url
@@ -215,7 +217,17 @@ Calendar.prototype.updateLinks = function(params) {
           .protocol('http')
           .toString()
       ),
-    calendar: url.protocol('webcal').toString()
+    calendar: url.protocol('webcal').toString(),
+
+    googleSubscribe:
+      'https://calendar.google.com/calendar/render?cid=' +
+      encodeURIComponent(
+        subscribeURL
+          .clone()
+          .protocol('http')
+          .toString()
+      ),
+    calendarSubscribe: subscribeURL.protocol('webcal').toString()
   };
   this.$download.html(templates.download(urls));
   this.$subscribe.html(templates.subscribe(urls));

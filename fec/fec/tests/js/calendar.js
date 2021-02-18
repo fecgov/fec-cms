@@ -44,6 +44,7 @@ describe('calendar', function() {
       subscribe: '#subscribe',
       url: 'http://test.calendar',
       exportUrl: 'http://test.calendar/export',
+      subscribeUrl: 'http://test.calendar/export',
       filterPanel: {
         $form: {on: function() {}},
         filterSet: {
@@ -282,9 +283,29 @@ describe('helpers', function() {
   describe('calendarHelpers.getUrl()', function() {
     it('builds the correct url', function() {
       var url = calendarHelpers.getUrl('calendar', {category: 'election'});
-      expect(url).to.equal('/v1/calendar/?api_key=67890&per_page=500&category=election');
+      expect(url).to.equal('/v1/calendar/?api_key=12345&per_page=500&category=election');
     });
+
+    it('builds the correct subscribe url', function() {
+      var subscribeUrl = calendarHelpers.getUrl('calendar', {category: 'election'}, 'sub');
+      expect(subscribeUrl).to.equal('/v1/calendar/?api_key=67890&per_page=500&category=election');
+    
+    });
+
   });
+
+  describe('calendar.updateLinks()', function() {
+      it('builds the correct, encoded googleSubscribe url', function() {
+      var subscribeUrl = calendarHelpers.getUrl('calendar-dates/export', {category: 'election'}, 'sub').toString();
+       var googleSubscribe =
+      'https://calendar.google.com/calendar/render?cid=' + 
+      encodeURIComponent(
+        subscribeUrl
+          .toString()
+      );  
+      expect(googleSubscribe).to.equal('https://calendar.google.com/calendar/render?cid=%2Fv1%2Fcalendar-dates%2Fexport%2F%3Fapi_key%3D67890%26per_page%3D500%26category%3Delection')
+     });
+   });
 
   describe('calendarHelpers.className()', function() {
     it('adds a multi-day class for multi-day events', function() {

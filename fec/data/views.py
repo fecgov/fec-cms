@@ -197,8 +197,22 @@ def get_candidate(candidate_id, cycle, election_full):
     committees_authorized = committee_groups.get("P", []) + committee_groups.get(
         "A", []
     )
-
     committee_ids = [committee["committee_id"] for committee in committees_authorized]
+
+    # Group the committees by leadership pac (designation=D)
+    committees_d = committee_groups.get("D", [])
+    committees_leadership_pac = []
+    if committees_d:
+        # The candidate(id=P00009183) returns two rows from api result,
+        # one is pcc converted to D, another is leadership pac committee,
+        # remove the duplicate committees with same committees_id.
+        # example api call:
+        # https://fec-dev-api.app.cloud.gov/v1/candidate/P00009183/committees/history/2020/
+        len_d_cmte = len(committees_d)
+        committees_leadership_pac.append(committees_d[0])
+        for i in range(len_d_cmte):
+            if (i + 1) < len_d_cmte and committees_d[i].get("committee_id") != committees_d[i + 1].get("committee_id"):
+                committees_leadership_pac.append(committees_d[i + 1])
 
     # (4) Call candidate/{candidate_id}/totals/{cycle} under tag:candidate
     # Get aggregate totals for the financial summary
@@ -290,6 +304,7 @@ def get_candidate(candidate_id, cycle, election_full):
         # filings endpoint takes candidate ID value as committee ID arg
         "committee_id": candidate["candidate_id"],
         "committees_authorized": committees_authorized,
+        "committees_leadership_pac": committees_leadership_pac,
         "context_vars": context_vars,
         "cycle": int(cycle),
         "cycles": candidate["fec_cycles_in_election"],
@@ -401,22 +416,29 @@ def get_committee(committee_id, cycle):
         "lastCycleHasFinancial": fallback_cycle,
     }
 
-    # Sponsors come in as a list of IDs, but we need names
-    # Create a list and string, get the candidate names,
-    # and join that list with semicolons since names are returned as "LAST, FIRST"
+    # sponsor_candidates saves a sponsor candidate list.
     sponsors_candidate_ids = committee.get("sponsor_candidate_ids")
-    sponsors_names = []
-    sponsors_str = ""
+    sponsor_candidates = []
     if sponsors_candidate_ids:
         path = "/candidate/{}/history/"
         filters = {"per_page": 1}
         for sponsor_id in sponsors_candidate_ids:
+            election_years = []
             sponsor_candidate = load_most_recent_candidate(sponsor_id)
             # Handle API returning no results
             if sponsor_candidate:
-                sponsors_names.append(sponsor_candidate.get("name"))
+                for election_year in sponsor_candidate["election_years"]:
+                    start_of_election_period = (
+                        election_year - election_durations[sponsor_candidate["office"]]
+                    )
+                    if start_of_election_period < cycle and cycle <= election_year:
+                        election_years.append(election_year)
 
-        sponsors_str = "; ".join([str(elem) for elem in sponsors_names])
+                # For each sponsor_candidate, set related_cycle
+                # to the candidate's time period
+                # relative to the selected cycle.
+                sponsor_candidate["related_cycle"] = cycle if election_years else None
+                sponsor_candidates.append(sponsor_candidate)
 
     template_variables = {
         "candidates": candidates,
@@ -439,7 +461,7 @@ def get_committee(committee_id, cycle):
         "social_image_identifier": "data",
         "year": year,
         "timePeriod": time_period_js,
-        "leadership_sponsors_names": sponsors_str,
+        "sponsor_candidates": sponsor_candidates,
     }
     # Format the current two-year-period's totals
     if reports and totals:
