@@ -4,9 +4,9 @@ import operator
 from data import utils
 
 START_YEAR = 1979
-END_YEAR = 2020
+END_YEAR = 2022
 DEFAULT_TIME_PERIOD = 2020  # Change after the April quarterly report (4/15/21)
-DEFAULT_ELECTION_YEAR = 2020  # Change after election day (11/3/20)
+DEFAULT_ELECTION_YEAR = 2022  # Change after election day (11/8/22)
 DEFAULT_PRESIDENTIAL_YEAR = 2020
 DISTRICT_MAP_CUTOFF = 2018  # The year we show district maps for on election pages
 
@@ -392,6 +392,7 @@ table_columns = OrderedDict([
         ['Spender', 'Support/Oppose', 'Candidate', 'Description', 'Payee', 'Expenditure date', 'Amount']),
     ('individual-contributions', ['Contributor name', 'Recipient', 'State', 'Employer', 'Receipt date', 'Amount']),
     ('loans', ['Committee Name', 'Loaner name', 'Incurred date', 'Payment to date', 'Original loan amount']),
+    ('debts', ['Committee Name', 'Creditor/Debtor Name', 'Beginning Balance', 'Ending Balance']),
     ('party-coordinated-expenditures', ['Spender', 'Candidate', 'Payee name', 'Expenditure date', 'Amount']),
     ('receipts', ['Contributor name', 'Recipient', 'Election', 'State', 'Receipt date', 'Amount']),
     ('reports-presidential',
