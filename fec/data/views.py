@@ -43,7 +43,7 @@ def to_date(committee, cycle):
 
 
 def aggregate_totals(request):
-    office = request.GET.get("office", "P")
+    office = request.GET.get("office", "S")
 
     election_year = int(
         request.GET.get("election_year", constants.DEFAULT_ELECTION_YEAR)
@@ -690,7 +690,7 @@ def elections(request, office, cycle, state=None, district=None):
 
 
 def raising(request):
-    office = request.GET.get("office", "P")
+    office = request.GET.get("office", "S")
 
     election_year = int(
         request.GET.get("election_year", constants.DEFAULT_ELECTION_YEAR)
@@ -714,7 +714,7 @@ def raising(request):
 
 
 def spending(request):
-    office = request.GET.get("office", "P")
+    office = request.GET.get("office", "S")
 
     election_year = int(
         request.GET.get("election_year", constants.DEFAULT_ELECTION_YEAR)

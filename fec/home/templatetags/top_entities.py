@@ -9,7 +9,7 @@ register = template.Library()
 
 @register.inclusion_tag('partials/raising-spending.html')
 def raising_spending(request):
-    office = request.GET.get('office', 'P')
+    office = request.GET.get('office', 'S')
 
     election_year = int(request.GET.get('election_year', constants.DEFAULT_ELECTION_YEAR))
 
