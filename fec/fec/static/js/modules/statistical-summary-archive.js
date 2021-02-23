@@ -1,12 +1,9 @@
 'use strict';
 
 function StatisticalSummaryArchive() {
-  //Declare globals (scoped to this function)to get past linter error/tests.
-
   this.chooseYear = document.getElementById('year');
-  this.chosenYear = this.chooseYear.value;
+
   this.chooseFiler = document.getElementById('filer');
-  this.chosenFiler = this.chooseFiler.value;
 
   this.tableTitle = document.getElementsByClassName('js-table-title')[0];
 
@@ -20,10 +17,6 @@ function StatisticalSummaryArchive() {
     '1975-1976'
   ];
   this.presidentialArchiveYears = ['1976', '1980', '1984', '1988'];
-
-  // window.addEventListener('popstate', () => {
-  //   this.handlePopState();
-  // });
 
   window.addEventListener('popstate', this.handleArchivePopState.bind(this));
 
@@ -99,31 +92,23 @@ StatisticalSummaryArchive.prototype.zebraStripeVisible = function(table) {
 
 StatisticalSummaryArchive.prototype.disableNonPresYears = function() {
   const yearOptions = document.getElementById('year').options;
-  //var self = this;
-  //const yearOptions = this.chooseYear.options;
   const presidentialArchiveYears = this.presidentialArchiveYears; //['1976', '1980', '1984', '1988'];
-  Array.from(yearOptions)
-    //.reverse()
-    .forEach(yearOption => {
-      //disable non-presidential years
-      if (presidentialArchiveYears.indexOf(yearOption.value) == -1) {
-        yearOption.setAttribute('disabled', 'disabled');
-        //yearOption.style.display ='none';
-      } else {
-        //display single years for presidential
-        yearOption.textContent = yearOption.value;
-      }
-      if (yearOption.value == this.chosenYear) {
-        yearOption.selected = 'selected';
-      }
-      // console.log(
-      //   'yearOption.selected:' + yearOption.text + yearOption.selected
-      // );
-    });
+  Array.from(yearOptions).forEach(yearOption => {
+    //disable non-presidential years
+    if (presidentialArchiveYears.indexOf(yearOption.value) == -1) {
+      yearOption.setAttribute('disabled', 'disabled');
+      //yearOption.style.display ='none';
+    } else {
+      //display single years for presidential
+      yearOption.textContent = yearOption.value;
+    }
+    if (yearOption.value == this.chosenYear) {
+      yearOption.selected = 'selected';
+    }
+  });
 };
 
 StatisticalSummaryArchive.prototype.showTable = function() {
-  var self = this;
   const tables = document.getElementsByTagName('table');
   //Iterate all tables to start with display of none
   Array.from(tables).forEach(table => {
@@ -132,56 +117,52 @@ StatisticalSummaryArchive.prototype.showTable = function() {
     table.setAttribute('data-summary', 'archive');
   });
 
-  // this.chooseYear = $('#year');
-  // console.log('this.chooseYear in script:', this.chooseYear);
-  // this.chosenYear = this.chooseYear.value;
-  // this.chooseFiler = $('#filer');
-  // this.chosenFiler = this.chooseFiler.value;
+  this.chosenYear = this.chooseYear.value;
 
-  //self.chooseYear = document.getElementById('year');
-  self.chosenYear = self.chooseYear.value;
-  //self.chooseFiler = document.getElementById('filer');
-  self.chosenFiler = self.chooseFiler.value;
+  this.chosenFiler = this.chooseFiler.value;
 
   //handle if presidential is chosen
-  if (self.chosenFiler == 'presidential') {
-    self.chosenYear =
-      self.presidentialArchiveYears.indexOf(self.chosenYear) == -1
-        ? parseInt(self.chosenYear) + 2
-        : self.chosenYear;
+  if (this.chosenFiler == 'presidential') {
+    this.chosenYear =
+      this.presidentialArchiveYears.indexOf(this.chosenYear) == -1
+        ? parseInt(this.chosenYear) + 2
+        : this.chosenYear;
 
     this.disableNonPresYears();
   } else {
-    for (let i = 0; i < self.chooseYear.options.length; i++) {
-      self.chooseYear.options[i].removeAttribute('disabled');
-      //self.chooseYear.options[i].style.display = "block"
-      self.chooseYear.options[i].textContent = self.twoYearPeriods[i]; //chooseYear.options[i].value-1+'-'+chooseYear.options[i].value
+    for (let i = 0; i < this.chooseYear.options.length; i++) {
+      this.chooseYear.options[i].removeAttribute('disabled');
+      //this.chooseYear.options[i].style.display = "block"
+      this.chooseYear.options[i].textContent = this.twoYearPeriods[i]; //chooseYear.options[i].value-1+'-'+chooseYear.options[i].value
     }
   }
 
   //show table title
   //const tableTitle = document.getElementsByClassName('js-table-title')[0];
-  self.tableTitle.textContent =
-    //self.chooseYear.options[self.chooseYear.selectedIndex].text +
-    self.chooseYear.options[self.chooseYear.selectedIndex].text +
+  this.tableTitle.textContent =
+    //this.chooseYear.options[this.chooseYear.selectedIndex].text +
+    this.chooseYear.options[this.chooseYear.selectedIndex].text +
     ' ' +
-    //self.chooseFiler.options[self.chooseFiler.selectedIndex].text +
-    self.chooseFiler.options[self.chooseFiler.selectedIndex].text +
+    //this.chooseFiler.options[this.chooseFiler.selectedIndex].text +
+    this.chooseFiler.options[this.chooseFiler.selectedIndex].text +
     ' ' +
     'data summaries';
 
   //set class for liveTable based on selected params
-  let chosenYearFilerClass = '._' + self.chosenYear + '.' + self.chosenFiler;
+  let chosenYearFilerClass = '._' + this.chosenYear + '.' + this.chosenFiler;
   //find all tables with 'chosenYearFilerClass' (expenditures has two for some years)
   for (let liveTable of document.querySelectorAll(chosenYearFilerClass)) {
     liveTable.style.display = 'block';
     //zebra stripe  liveTable  rows after everyting else is done
-    self.zebraStripeVisible(liveTable);
+    this.zebraStripeVisible(liveTable);
   }
 }; //end showTable()
 
-module.exports = { StatisticalSummaryArchive: StatisticalSummaryArchive };
+module.exports = {
+  StatisticalSummaryArchive: StatisticalSummaryArchive
+};
 
 //temporarily leave these two comments here to handle Istanbul error
 
 //temporarily leave these two comments here to handle Istanbul error
+

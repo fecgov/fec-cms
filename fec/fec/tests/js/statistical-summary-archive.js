@@ -52,15 +52,15 @@ describe('Tablefilter', function() {
     beforeEach(function() {
         this.$fixture.empty().append(dom);
 
-        this.chooseYear = this.$fixture.find("#year"); // "
+        this.chooseYear = this.$fixture.find("#year"); 
  
-        this.chooseFiler = this.$fixture.find("#filer"); // "
+        this.chooseFiler = this.$fixture.find("#filer");
 
-        this.tableTitle = this.$fixture.find(".js-table-title"); // "
+        this.tableTitle = this.$fixture.find(".js-table-title");
 
         this.showTable = sinon.spy(Tablefilter.prototype, 'showTable');
 
-        this.filter = new Tablefilter()
+        this.filter = new Tablefilter();
 
     });
 
@@ -89,7 +89,7 @@ describe('Tablefilter', function() {
             this.disableNonPresYears = sinon.spy(Tablefilter.prototype, 'disableNonPresYears');
             this.chooseYear.val('1982').change();
             this.chooseFiler.val('presidential').change();
-            this.filter.showTable()
+            this.filter.showTable();
 
         });
 
@@ -99,17 +99,17 @@ describe('Tablefilter', function() {
 
         it('calls disableNonPresYears() based on filer=presidential', function() {
             expect(this.filter.disableNonPresYears).to.have.been.called;
-        })
+        });
 
         it('disables non-presidential years', function() {
             //target 1978 -- a non pres year
-            var year = this.filter.chooseYear.options[5]
+            var year = this.filter.chooseYear.options[5];
             expect(year.getAttribute('disabled', '')).to.equal('disabled');
-        })
+        });
 
         it('it bumps selected-option to next single presidential year', function() {
             //target 1984 to test against
-            var next_pres_year = this.filter.chooseYear.options[2]
+            var next_pres_year = this.filter.chooseYear.options[2];
             //test that is selects the next two year period when non pres year is chosen
             expect(next_pres_year.selected).to.equal(true);
             //test that the text displayed for the enabbled selects is just one year (four digits only)

@@ -1,5 +1,6 @@
 'use strict';
 
-var statisticalSummaryArchive = require('../modules/statistical-summary-archive');
+var statisticalSummaryArchive = require('../modules/statistical-summary-archive')
+  .StatisticalSummaryArchive;
 
-new statisticalSummaryArchive.StatisticalSummaryArchive();
+new statisticalSummaryArchive();
