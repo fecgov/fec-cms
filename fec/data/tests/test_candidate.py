@@ -52,7 +52,7 @@ class TestCandidate(TestCase):
         {
             "designation": "D",
             "cycles": [2016, 2014, 2012, 2018],
-            "name": "Leadership pac Committee",
+            "name": "Leadership Pac Committee",
             "cycle": 2016,
             "related_cycle": 2016,
             "committee_id": "C004",
@@ -138,7 +138,7 @@ class TestCandidate(TestCase):
                 {
                     "designation": "D",
                     "cycles": [2016, 2014, 2012, 2018],
-                    "name": "Leadership pac Committee",
+                    "name": "Leadership Pac Committee",
                     "cycle": 2016,
                     "related_cycle": 2016,
                     "committee_id": "C004",
