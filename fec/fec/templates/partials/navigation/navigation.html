@@ -28,7 +28,7 @@
         </a>
       </li>
       <li class="site-nav__item" data-submenu="data">
-        <a class="site-nav__link {% if self.content_section == 'data' or parent == 'data' %}is-parent{% endif %}" href="/data" tabindex="0">
+        <a class="site-nav__link {% if self.content_section == 'data' or parent == 'data' %}is-parent{% endif %}" href="/data/" tabindex="0">
           <span class="site-nav__link__title">
           Campaign finance data</span>
         </a>
@@ -41,13 +41,13 @@
         {% include 'partials/navigation/nav-help.html' %}
       </li>
       <li class="site-nav__item" data-submenu="legal">
-        <a href="/legal-resources" tabindex="0" class="site-nav__link {% if self.content_section == 'legal' or parent == 'legal' %}is-parent{% endif %}">
+        <a href="/legal-resources/" tabindex="0" class="site-nav__link {% if self.content_section == 'legal' or parent == 'legal' %}is-parent{% endif %}">
           <span class="site-nav__link__title">Legal resources</span>
         </a>
         {% include 'partials/navigation/nav-legal.html' %}
       </li>
       <li class="site-nav__item site-nav__item--secondary" data-submenu="about">
-        <a href="/about" tabindex="0" class="site-nav__link {% if self.content_section == 'about' %}is-parent{% endif %}">
+        <a href="/about/" tabindex="0" class="site-nav__link {% if self.content_section == 'about' %}is-parent{% endif %}">
           <span class="site-nav__link__title">About</span>
         </a>
         {% include 'partials/navigation/nav-about.html' %}

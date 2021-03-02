@@ -64,10 +64,12 @@
       </div>
     </div>
 
-{% if committee_groups['P'] or committee_groups['A']or committee_groups['J'] %}
+    {% if committee_groups['P'] or committee_groups['A'] or committee_groups['J'] or committee_groups['D']%}
     <div class="entity__figure entity__figure--narrow row" id="committees">
-        <h3 class="heading--section">Committees</h3>
-        <h4>Authorized campaign committees:</h4>
+      <h3 class="heading--section">Committees</h3>
+      {% if committee_groups['P']|length > 0 %}
+      <h4 class="callout__title term term--inline" data-term="Authorized committee">Authorized campaign committees:</h4>
+
       {% for committee in committee_groups['P'] | reverse %}
       <div class='grid'>
         <div class="grid__item u-no-margin">
@@ -80,6 +82,7 @@
         </div>
       </div>
       {% endfor %}
+      {% endif %}
 
       {% if committee_groups['A']|length > 0 %}
       <div class='grid'>
@@ -97,12 +100,7 @@
 
       {% if committee_groups['J'] %}
       <hr class="hr--lighter">
-      {% endif %}
-
-      {% if committee_groups['J'] %}
-
-      <h4>Joint fundraising committees:</h4>
-
+      <h4 class="callout__title term term--inline" data-term="Joint fundraising committee">Joint fundraising committees:</h4>
       <ul class="list--bulleted">
       {% for committee in committee_groups['J'] | reverse %}
         <li>
@@ -111,8 +109,23 @@
       {% endfor %}
       </ul>
       {% endif %}
+
+      {% if committee_groups['P'] and committee_groups['D'] %}
+      <hr class="hr--lighter">
+      {% endif %}
+      
+      {% if committees_leadership_pac %}    
+      <h4 class="callout__title term term--inline" data-term="Leadership PAC">Sponsored leadership PACs:</h4>
+      <ul class="list--bulleted">
+      {% for committee in committees_leadership_pac | reverse %}
+        <li>
+          <a class="t-sans" href="/data/committee/{{ committee.committee_id }}/?cycle={{ committee.related_cycle }}">{{ committee.name }}</a>
+        </li>
+      {% endfor %}
+      </ul>
+      {% endif %}
+
     </div>
     {% endif %}
   </div>
-
 </section>

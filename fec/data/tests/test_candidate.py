@@ -49,6 +49,14 @@ class TestCandidate(TestCase):
             "cycle": 2016,
             "committee_id": "C003",
         },
+        {
+            "designation": "D",
+            "cycles": [2016, 2014, 2012, 2018],
+            "name": "Leadership Pac Committee",
+            "cycle": 2016,
+            "related_cycle": 2016,
+            "committee_id": "C004",
+        },
     ]
 
     def test_base_case(
@@ -124,6 +132,16 @@ class TestCandidate(TestCase):
                     "cycle": 2016,
                     "related_cycle": 2016,
                     "committee_id": "C003",
+                }
+            ],
+            "D": [
+                {
+                    "designation": "D",
+                    "cycles": [2016, 2014, 2012, 2018],
+                    "name": "Leadership Pac Committee",
+                    "cycle": 2016,
+                    "related_cycle": 2016,
+                    "committee_id": "C004",
                 }
             ],
         }

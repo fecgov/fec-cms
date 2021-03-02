@@ -1,0 +1,55 @@
+{{!--
+Template for Debts datatable details panel
+---------------------
+This shows fields available on the Schedule D form.
+--}}
+
+<div class="panel__row">
+  <h4 class="panel__title">Committee information</h4>
+  <table>
+    {{#panelRow "Name"}}
+      <a href="{{basePath}}/committee/{{committee_id}}">{{committee.name}}</a>
+    {{/panelRow}}
+    {{#panelRow "Committee city and state"}}
+      {{committee.city}}, {{committee.state}}, {{committee.zip}}
+    {{/panelRow}}
+  </table>
+</div>
+
+<div class="panel__row">
+  <h4 class="panel__title">Creditor/debtor</h4>
+  <table>
+    {{#panelRow "Name"}}
+      {{#if creditor_debtor_name}}
+        {{creditor_debtor_name}}
+      {{/if}}
+    {{/panelRow}}
+    {{#panelRow "City and state"}}
+      {{creditor_debtor_city}}, {{creditor_debtor_state}}
+    {{/panelRow}}
+  </table>
+</div>
+
+<div class="panel__row">
+  <h4 class="panel__title">Debt information</h4>
+  <table>
+    {{#panelRow "Nature of Debt"}}
+      {{{nature_of_debt}}}
+    {{/panelRow}}
+    {{#panelRow "Date"}}
+      {{{datetime load_date format="pretty"}}}
+    {{/panelRow}}
+    {{#panelRow "Balance at Beginning of Period"}}
+        {{{currency outstanding_balance_beginning_of_period}}}
+    {{/panelRow}}
+    {{#panelRow "Incurred This Period"}}
+      {{{currency amount_incurred_period}}}
+    {{/panelRow}}
+    {{#panelRow "Payments This Period"}}
+      {{{currency payment_period}}}
+    {{/panelRow}}
+    {{#panelRow "Balance at Close of Period"}}
+      {{{currency outstanding_balance_close_of_period}}}
+    {{/panelRow}}
+  </table>
+</div>
