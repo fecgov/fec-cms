@@ -607,8 +607,8 @@ def load_committee_history(committee_id, cycle=None):
     all_candidates = api_caller.load_endpoint_results(path, election_full=False)
 
     # clean cycles_has_activity, remove 'None' value in cycles_has_activity
-    committee["cycles_has_activity"] = list(
-        filter(None, committee.get("cycles_has_activity"))
+    committee["cycles"] = list(
+        filter(None, committee.get("cycles"))
     )
 
     return committee, all_candidates, cycle
@@ -625,7 +625,7 @@ def load_cycle_data(committee, cycle):
         # set fallback_cycle = last_cycle_has_activity
         fallback_cycle = committee.get("last_cycle_has_activity")
 
-    cycles = committee.get("cycles_has_activity")
+    cycles = committee.get("cycles")
 
     cycle_out_of_range = cycle not in cycles
 
