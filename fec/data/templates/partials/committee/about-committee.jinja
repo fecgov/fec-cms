@@ -10,7 +10,7 @@
   <h2 id="section-2-heading">About this committee</h2>
    {% endif %}
   <div class="slab slab--inline slab--neutral u-padding--left u-padding--right">
-    {{ select.committee_cycle_select(committee.cycles_has_activity, cycle, 'about')}}
+    {{ select.committee_cycle_select(committee.cycles, cycle, 'about')}}
     {% if committee_type == 'E' %}
     <div class="entity__figure row">
       <h3 class="heading--section">Filer information</h3>
