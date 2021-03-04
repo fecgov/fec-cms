@@ -4,7 +4,10 @@
   <!DOCTYPE html>
 <html lang="en">
   <head>
-    {% include './partials/meta-tags.html' %}
+    {% include 'partials/meta-tags.html' %}
+    {% if settings.FEC_CMS_ENVIRONMENT == 'PRODUCTION' %}
+    {% include 'partials/meta-tags-preconnects.html' %}
+    {% endif %}
 
     <title>{% block title %}{% if self.seo_title %}{{ self.seo_title }}{% else %}{{ self.title }} | FEC {% endif %}{% endblock %}{% block title_suffix %}{% endblock %}</title>
 
