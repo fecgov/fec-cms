@@ -5,7 +5,6 @@ from django import template
 from django.conf import settings
 from django.templatetags.static import static
 from django.utils.html import format_html
-from django.utils.safestring import mark_safe
 from wagtail.core.models import Page
 
 register = template.Library()
@@ -71,7 +70,7 @@ def web_app_url(path):
 def highlight_matches(text):
     """Replaces the highlight markers with span tags for digitalgov search results"""
     highlighted_text = text.replace('\ue000', '<span class="t-highlight">').replace('\ue001', '</span>')
-    return mark_safe(highlighted_text)
+    return format_html(highlighted_text)
 
 
 @register.filter(name='splitlines')
