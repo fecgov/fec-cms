@@ -53,7 +53,13 @@
         <div class="post__meta t-sans">
           <a class="tag tag--secondary" href="/updates?update_type={{update.get_update_type|slugify}}#feed">{{update.get_update_type}}</a>
           {% if update.category %}
-            in: <a href="/updates?update_type={{update.get_update_type|slugify}}&category={{update.category|slugify}}">{{ update.category|capfirst }}</a>
+            {% if update.category == 'Audit Reports' %}
+              in: <a href="/updates?update_type={{update.get_update_type|slugify}}&category={{update.category|slugify}}">{{ update.category|title }}</a>
+              }
+            {% else %}
+              in: <a href="/updates?update_type={{update.get_update_type|slugify}}&category={{update.category|slugify}}">{{ update.category|capfirst }}</a>
+              }
+            {% endif %}
           {% endif %}
           {% if update.get_update_type == 'Commission Meetings' %}
             in:
