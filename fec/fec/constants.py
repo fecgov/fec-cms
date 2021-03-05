@@ -116,7 +116,7 @@ record_page_categories = OrderedDict((x.lower(), x) for x in [
 ])
 
 press_release_page_categories = OrderedDict((x.lower(), x) for x in [
-    "Audit reports",
+    "Audit Reports",
     "Campaign finance data summaries",
     "Commission appointments",
     "Disclosure initiatives",
