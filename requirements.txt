@@ -1,4 +1,4 @@
-Django==2.2.16
+Django==2.2.18
 cfenv==0.5.2
 dj-database-url==0.4.2
 django-libsass==0.7
@@ -11,7 +11,7 @@ urllib3==1.25.9 # pinned 2020-11-01 (parent requests)
 slacker==0.8.6
 whitenoise==2.0.3
 wagtail==2.7.4
-Jinja2==2.10.1
+Jinja2==2.11.3
 django_jinja==2.4.1
 pillow==7.1.0
 CacheControl==0.11.5
