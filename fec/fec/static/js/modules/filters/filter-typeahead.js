@@ -88,6 +88,8 @@ FilterTypeahead.prototype.typeaheadInit = function() {
   }
 
   this.$elm.find('.tt-menu').attr('aria-live', 'polite');
+  this.$elm.find('.tt-input').removeAttr('aria-readonly');
+  this.$elm.find('.tt-input').attr('aria-expanded', 'false');
 };
 
 FilterTypeahead.prototype.setFirstItem = function() {
@@ -191,6 +193,7 @@ FilterTypeahead.prototype.clearInput = function() {
 };
 
 FilterTypeahead.prototype.enableButton = function() {
+  this.$field.attr('aria-expanded', 'true');
   this.searchEnabled = true;
   this.$button
     .removeClass('is-disabled')
@@ -199,6 +202,7 @@ FilterTypeahead.prototype.enableButton = function() {
 };
 
 FilterTypeahead.prototype.disableButton = function() {
+  this.$field.attr('aria-expanded', 'false');
   this.searchEnabled = false;
   this.$button
     .addClass('is-disabled')

@@ -2,6 +2,7 @@
 
 var $ = require('jquery');
 var helpers = require('./helpers');
+const accessibility = require('./accessibility');
 
 window.$ = window.jQuery = $;
 
@@ -20,6 +21,7 @@ function SiteNav(selector) {
   this.$element = $(selector);
   this.$menu = this.$element.find('#site-menu');
   this.$toggle = this.$element.find('.js-nav-toggle');
+  this.$searchbox = this.$body.find('.utility-nav__search');
 
   this.assignAria();
 
@@ -27,6 +29,7 @@ function SiteNav(selector) {
 
   // Open and close the menu on mobile
   this.$toggle.on('click', this.toggleMenu.bind(this));
+  //$(window).on('resize', this.hideMenu.bind(this));
 }
 
 SiteNav.prototype.initMenu = function() {
@@ -66,6 +69,7 @@ SiteNav.prototype.assignAria = function() {
   if (helpers.getWindowWidth() < helpers.BREAKPOINTS.LARGE) {
     this.$toggle.attr('aria-haspopup', true);
     this.$menu.attr('aria-hidden', true);
+    accessibility.removeTabindex(this.$menu);
   }
 };
 
@@ -80,7 +84,9 @@ SiteNav.prototype.showMenu = function() {
   });
   this.$element.addClass('is-open');
   this.$toggle.addClass('active');
+  $('.site-nav__panel').prepend(this.$searchbox);
   this.$menu.attr('aria-hidden', false);
+  accessibility.restoreTabindex(this.$menu);
   this.isOpen = true;
 };
 
@@ -91,6 +97,9 @@ SiteNav.prototype.hideMenu = function() {
   this.$element.removeClass('is-open');
   this.$toggle.removeClass('active');
   this.$menu.attr('aria-hidden', true);
+  accessibility.removeTabindex(this.$menu);
+  $('.utility-nav.list--flat').append(this.$searchbox);
+
   this.isOpen = false;
   if (this.isMobile) {
     this.$element.find('[aria-hidden=false]').attr('aria-hidden', true);
