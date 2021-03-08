@@ -28,7 +28,7 @@ $(document).ready(function() {
   var $table = $('#results');
   new tables.DataTable($table, {
     autoWidth: false,
-    title: 'Audit reports',
+    title: 'Audit Reports',
     path: ['audit-case'],
     columns: columns.audit,
     order: [1, 'desc'],
