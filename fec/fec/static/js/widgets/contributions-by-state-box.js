@@ -29,6 +29,7 @@ import analytics from '../modules/analytics';
 
 const DataMap = require('../modules/data-map').DataMap;
 const AbortController = window.AbortController;
+let passiveListenersSupported = false;
 
 /**
  * Formats the given value and puts it into the dom element.
@@ -43,6 +44,32 @@ function formatAsCurrency(passedValue, roundToWhole = true) {
       ? Math.round(passedValue).toLocaleString()
       : passedValue.toLocaleString())
   );
+}
+
+/**
+ * Let's check whether the browser supports passive event listeners
+ */
+try {
+  let options = {
+    get passive() {
+      passiveListenersSupported = true;
+      return false;
+    }
+  };
+  window.addEventListener('test', null, options);
+  window.removeEventListener('test', null, options);
+} catch (err) {
+  passiveListenersSupported = false;
+}
+
+/**
+ * Passive listeners improve page performance but non-supportive browsers could crash
+ * @returns Object or false depending on whether the browser supports passive listeners
+ */
+function passiveListenerIfSupported() {
+  // return false;
+  console.log('passiveListenerIfSupported()');
+  return passiveListenersSupported ? { passive: true } : false;
 }
 
 /**
@@ -230,11 +257,13 @@ ContributionsByState.prototype.init = function() {
   );
   theTypeaheadElement.addEventListener(
     'mousedown',
-    this.handleTypeaheadFocus.bind(this)
+    this.handleTypeaheadFocus.bind(this),
+    passiveListenerIfSupported()
   );
   theTypeaheadElement.addEventListener(
     'touchstart',
-    this.handleTypeaheadFocus.bind(this)
+    this.handleTypeaheadFocus.bind(this),
+    passiveListenerIfSupported()
   );
 
   // Listen for any field updates, looking for errors
