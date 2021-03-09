@@ -6,6 +6,9 @@
   {% set title = self.title() %}
 
   {% include 'partials/meta-tags.jinja' %}
+  {% if (FEC_CMS_ENVIRONMENT == 'PRODUCTION') %}
+  {% include 'partials/meta-tags-preconnects.jinja' %}
+  {% endif %}
 
   {% block css %}
   <link rel="stylesheet" type="text/css" href="{{ asset_for_css('base.css') }}" />

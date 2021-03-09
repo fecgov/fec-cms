@@ -1,14 +1,17 @@
 {% load static compress wagtailuserbar %}
 {% load filters %}
-
-  <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
   <head>
-    {% include './partials/meta-tags.html' %}
-    {% include './partials/meta-tags-preloads.html %}
+    {% include 'partials/meta-tags.html' %}
+    {% include 'partials/meta-tags-preloads.html %}
+    {% if settings.FEC_CMS_ENVIRONMENT == 'PRODUCTION' %}
+    {% include 'partials/meta-tags-preconnects.html' %}
+    {% endif %}
+
     <title>{% block title %}{% if self.seo_title %}{{ self.seo_title }}{% else %}{{ self.title }} | FEC {% endif %}{% endblock %}{% block title_suffix %}{% endblock %}</title>
 
-    {% include './partials/google-tag-manager-script.html' %}
+    {% include 'partials/google-tag-manager-script.html' %}
     {% block css %}
     <link rel="stylesheet" type="text/css" href="{% asset_for_css 'elections.css' %}">
     {% endblock %}
@@ -133,7 +136,7 @@
       </div>
     </footer>
 
-    {% include './partials/glossary.html' %}
+    {% include 'partials/glossary.html' %}
 
     {% csrf_token %}
 
