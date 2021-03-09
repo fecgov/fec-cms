@@ -29,7 +29,16 @@ function SiteNav(selector) {
 
   // Open and close the menu on mobile
   this.$toggle.on('click', this.toggleMenu.bind(this));
-  //$(window).on('resize', this.hideMenu.bind(this));
+
+  /*matchMedia is used belowto ensure searchbox is appended to correct location when 
+  user resizes screen while mobile menu is open */
+
+  //Define min-width media query that matches our med('mobile') breakpoint
+  const mql = window.matchMedia('screen and (min-width: 860px)');
+  // call listener function explicitly at run time
+  this.mediaQueryResponse(mql);
+  // attach listener function to listen for change in mediaQuery list
+  mql.addListener(this.mediaQueryResponse);
 }
 
 SiteNav.prototype.initMenu = function() {
@@ -73,6 +82,27 @@ SiteNav.prototype.assignAria = function() {
   }
 };
 
+//Append searchbox to correct location uponn user screen resize
+SiteNav.prototype.mediaQueryResponse = function(mql) {
+  //If large
+  if (mql.matches) {
+    $('body')
+      .find('.utility-nav__search')
+      .appendTo('.utility-nav.list--flat');
+  }
+  //if mobile
+  else {
+    $('body')
+      .find('.utility-nav__search')
+      .prependTo('.site-nav__panel');
+    if ($('.js-site-nav').hasClass('is-open')) {
+      accessibility.restoreTabindex($('.utility-nav__search'));
+    } else {
+      accessibility.removeTabindex($('.utility-nav__search'));
+    }
+  }
+};
+
 SiteNav.prototype.toggleMenu = function() {
   var method = this.isOpen ? this.hideMenu : this.showMenu;
   method.apply(this);
@@ -84,9 +114,11 @@ SiteNav.prototype.showMenu = function() {
   });
   this.$element.addClass('is-open');
   this.$toggle.addClass('active');
-  $('.site-nav__panel').prepend(this.$searchbox);
   this.$menu.attr('aria-hidden', false);
+  //append seacrh to mobile menu uponn opening
+  $('.site-nav__panel').prepend(this.$searchbox);
   accessibility.restoreTabindex(this.$menu);
+
   this.isOpen = true;
 };
 
@@ -97,8 +129,9 @@ SiteNav.prototype.hideMenu = function() {
   this.$element.removeClass('is-open');
   this.$toggle.removeClass('active');
   this.$menu.attr('aria-hidden', true);
+  //append search to header
+  $('.utility-nav.list--flat').prepend(this.$searchbox);
   accessibility.removeTabindex(this.$menu);
-  $('.utility-nav.list--flat').append(this.$searchbox);
 
   this.isOpen = false;
   if (this.isMobile) {

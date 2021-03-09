@@ -122,6 +122,12 @@ FilterTypeahead.prototype.handleAutocomplete = function(e, datum) {
 };
 
 FilterTypeahead.prototype.handleKeypress = function(e) {
+  if (this.$elm.find('.tt-suggestion').length > 0) {
+    this.$field.attr('aria-expanded', 'true');
+  } else {
+    this.$field.attr('aria-expanded', 'false');
+  }
+
   this.handleChange();
 
   if (e.keyCode === 13) {
@@ -193,7 +199,6 @@ FilterTypeahead.prototype.clearInput = function() {
 };
 
 FilterTypeahead.prototype.enableButton = function() {
-  this.$field.attr('aria-expanded', 'true');
   this.searchEnabled = true;
   this.$button
     .removeClass('is-disabled')
@@ -202,7 +207,6 @@ FilterTypeahead.prototype.enableButton = function() {
 };
 
 FilterTypeahead.prototype.disableButton = function() {
-  this.$field.attr('aria-expanded', 'false');
   this.searchEnabled = false;
   this.$button
     .addClass('is-disabled')
