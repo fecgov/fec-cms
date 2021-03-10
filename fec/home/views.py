@@ -317,9 +317,7 @@ def index_meetings(request):
     Serve 'commission meetings' page under 'about'
     """
     meetings = MeetingPage.objects.live().order_by("-date")
-    open_meetings = meetings.filter(
-        Q(meeting_type="O") | Q(title__icontains="Hearing") | Q(meeting_type="H")
-    )
+    open_meetings = meetings.filter(meeting_type="O").exclude(title__icontains="Hearing")
     executive_sessions = meetings.filter(meeting_type="E")
     hearings = meetings.filter(Q(title__icontains="Hearing") | Q(meeting_type="H"))
     year = request.GET.get("year", "")
