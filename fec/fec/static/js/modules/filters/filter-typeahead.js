@@ -100,6 +100,7 @@ FilterTypeahead.prototype.setFirstItem = function() {
   $(this.$elm.find('.tt-suggestion')[0]).addClass('tt-cursor');
   if (this.$elm.find('.tt-suggestion').length > 0) {
     this.enableButton();
+    this.$field.attr('aria-expanded', 'true');
   }
 };
 
@@ -122,13 +123,13 @@ FilterTypeahead.prototype.handleAutocomplete = function(e, datum) {
 };
 
 FilterTypeahead.prototype.handleKeypress = function(e) {
+  this.handleChange();
+
   if (this.$elm.find('.tt-suggestion').length > 0) {
     this.$field.attr('aria-expanded', 'true');
   } else {
     this.$field.attr('aria-expanded', 'false');
   }
-
-  this.handleChange();
 
   if (e.keyCode === 13) {
     this.handleSubmit(e);
