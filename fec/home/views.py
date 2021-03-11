@@ -361,7 +361,7 @@ def index_meetings(request):
     if search:
         if active == "open-meetings":
             meetings_query = search
-            meetings = meetings.search(meetings_query)
+            open_meetings = open_meetings.search(meetings_query)
         if active == "hearings":
             hearings_query = search
             hearings = hearings.search(hearings_query)
