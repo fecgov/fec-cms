@@ -40,7 +40,8 @@ module.exports = function(config) {
     coverageReporter: {
       subdir: '.',
       reporters: [
-        { type: 'html' },
+        //comenting out html since it causes errors on coverage reporting currently and we do not really use it
+        //{ type: 'html'},
         { type: 'text' },
         { type: 'json', file: 'coverage.json' }
       ]

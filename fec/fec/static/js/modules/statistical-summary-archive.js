@@ -161,8 +161,3 @@ StatisticalSummaryArchive.prototype.showTable = function() {
 module.exports = {
   StatisticalSummaryArchive: StatisticalSummaryArchive
 };
-
-//temporarily leave these two comments here to handle Istanbul error
-
-//temporarily leave these two comments here to handle Istanbul error
-
