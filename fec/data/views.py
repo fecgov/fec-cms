@@ -356,7 +356,6 @@ def get_committee(committee_id, cycle):
     Given a committee_id and cycle, call the API and get the committee
     and committee financial data needed to render the committee profile page
     """
-
     committee, all_candidates, cycle = load_committee_history(committee_id, cycle)
     # When there are multiple candidate records of various offices (H, S, P)
     # linked to a single committee ID,
@@ -581,28 +580,28 @@ def load_reports_and_totals(committee_id, cycle, cycle_out_of_range, fallback_cy
 def load_committee_history(committee_id, cycle=None):
     filters = {"per_page": 1}
     if not cycle:
-        # if no cycle parameter given,
-        # (1.1)call committee/{committee_id}/history/ under tag:committee
-        # set cycle = fallback_cycle
+        # if no cycle parameter passed, use current fec cycle to call
+        # (1)endpoint: committee/{committee_id}/history/ --under tag:committee
         path = "/committee/" + committee_id + "/history/"
         committee = api_caller.load_first_row_data(path, **filters)
         if committee is None:
             raise Http404()
         cycle = committee.get("last_cycle_has_financial")
         if not cycle:
-            # when committees only file F1.fallback_cycle = null
+            # when committees only file F1. fallback_cycle = null
             # set cycle = last_cycle_has_activity
             cycle = committee.get("last_cycle_has_activity")
-    else:
-        # (1.2)call committee/{committee_id}/history/{cycle}/
-        # under tag:committee
-        path = "/committee/" + committee_id + "/history/" + str(cycle)
-        committee = api_caller.load_first_row_data(path, **filters)
-        if committee is None:
-            raise Http404()
 
-    # (2)call committee/{committee_id}/candidates/history/{cycle}
-    # under: candidate, get all candidates associated with that commitee
+    # To get correct committee history, use related cycle value to call
+    # (2)endpoint: committee/{committee_id}/history/{cycle}/
+    # --under tag:committee
+    path = "/committee/" + committee_id + "/history/" + str(cycle)
+    committee = api_caller.load_first_row_data(path, **filters)
+    if committee is None:
+        raise Http404()
+
+    # (3)call endpoint: committee/{committee_id}/candidates/history/{cycle}
+    # --under tag: candidate, get all candidates associated with that commitee
     path = "/committee/" + committee_id + "/candidates/history/" + str(cycle)
     all_candidates = api_caller.load_endpoint_results(path, election_full=False)
 
