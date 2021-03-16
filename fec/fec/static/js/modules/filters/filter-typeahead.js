@@ -88,6 +88,8 @@ FilterTypeahead.prototype.typeaheadInit = function() {
   }
 
   this.$elm.find('.tt-menu').attr('aria-live', 'polite');
+  this.$elm.find('.tt-input').removeAttr('aria-readonly');
+  this.$elm.find('.tt-input').attr('aria-expanded', 'false');
 };
 
 FilterTypeahead.prototype.setFirstItem = function() {
@@ -98,6 +100,7 @@ FilterTypeahead.prototype.setFirstItem = function() {
   $(this.$elm.find('.tt-suggestion')[0]).addClass('tt-cursor');
   if (this.$elm.find('.tt-suggestion').length > 0) {
     this.enableButton();
+    this.$field.attr('aria-expanded', 'true');
   }
 };
 
@@ -121,6 +124,12 @@ FilterTypeahead.prototype.handleAutocomplete = function(e, datum) {
 
 FilterTypeahead.prototype.handleKeypress = function(e) {
   this.handleChange();
+
+  if (this.$elm.find('.tt-suggestion').length > 0) {
+    this.$field.attr('aria-expanded', 'true');
+  } else {
+    this.$field.attr('aria-expanded', 'false');
+  }
 
   if (e.keyCode === 13) {
     this.handleSubmit(e);
