@@ -1,17 +1,19 @@
 {% load static compress wagtailuserbar %}
 {% load filters %}
-
-  <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
   <head>
-    {% include './partials/meta-tags.html' %}
+    {% include 'partials/meta-tags.html' %}
+    {% include 'partials/meta-tags-preloads.html' %}
+    {% if settings.FEC_CMS_ENVIRONMENT == 'PRODUCTION' %}
+    {% include 'partials/meta-tags-preconnects.html' %}
+    {% endif %}
 
     <title>{% block title %}{% if self.seo_title %}{{ self.seo_title }}{% else %}{{ self.title }} | FEC {% endif %}{% endblock %}{% block title_suffix %}{% endblock %}</title>
 
     {% include 'partials/google-tag-manager-script.html' %}
-
     {% block css %}
-    <link rel="stylesheet" type="text/css" href="{% asset_for_css 'elections.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% asset_for_css 'elections.css' %}">
     {% endblock %}
   </head>
 
@@ -50,16 +52,19 @@
               <input type="hidden" name="type" value="committees">
               <input type="hidden" name="type" value="site">
               <label class="u-visually-hidden" for="query">Search</label>
-              <input
-                class="js-site-search combo__input"
-                autocomplete="off"
-                id="query"
-                name="query"
-                type="text"
-                aria-label="Search FEC.gov">
-              <button type="submit" class="button--standard combo__button button--search">
-                <span class="u-visually-hidden">Search</span>
-              </button>
+              <div class="combo combo--search">
+                <input
+                  class="js-site-search combo__input"
+                  autocomplete="off"
+                  aria-controls="query_listbox"
+                  id="query"
+                  name="query"
+                  type="text"
+                  aria-label="Search FEC.gov">
+                <button type="submit" class="button--standard combo__button button--search">
+                  <span class="u-visually-hidden">Search</span>
+                </button>
+              </div>
             </form>
           </li>
         </ul>
@@ -80,6 +85,7 @@
               <input type="hidden" name="type" value="committees">
               <input type="hidden" name="type" value="site">
               <label class="u-visually-hidden" for="query">Search</label>
+              <div class="combo combo--search">
               <input
                 class="js-site-search combo__input"
                 autocomplete="off"
@@ -90,11 +96,12 @@
               <button type="submit" class="button--standard combo__button button--search">
                 <span class="u-visually-hidden">Search</span>
               </button>
-            </form>
+            </div>
+           </form>
           </li>
         </ul>
       </div>
-      {% include 'partials/navigation/navigation.html' %
+      {% include 'partials/navigation/navigation.html' %}
     </header>
     {% endif %}
 
@@ -134,7 +141,7 @@
       </div>
     </footer>
 
-    {% include './partials/glossary.html' %}
+    {% include 'partials/glossary.html' %}
 
     {% csrf_token %}
 

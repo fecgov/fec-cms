@@ -1,0 +1,20 @@
+{% spaceless %}
+{% comment %}
+
+Preloading fonts / letting the browser know we're going to request them later in the page
+
+All fonts are listed here but we're only preloading those we're using on the homepage at this time,
+with the goal of simplifying preloading another font as needed (as of 2021-03)
+
+{% endcomment %}
+<link rel="preload" as="font" href="/static/fonts/gandhiserif-bold.woff2" type="font/woff2" crossorigin>
+{# <!-- <link rel="preload" as="font" href="/static/fonts/gandhiserif-bolditalic.woff2" type="font/woff2" crossorigin> --> #}
+<link rel="preload" as="font" href="/static/fonts/gandhiserif-italic.woff2" type="font/woff2" crossorigin>
+<link rel="preload" as="font" href="/static/fonts/gandhiserif-regular.woff2" type="font/woff2" crossorigin>
+<link rel="preload" as="font" href="/static/fonts/karla-bold.woff2" type="font/woff2" crossorigin>
+<link rel="preload" as="font" href="/static/fonts/karla-regular.woff2" type="font/woff2" crossorigin>
+{# <!-- <link rel="preload" as="font" href="/static/fonts/fec-currencymono-bold.woff2" type="font/woff2" crossorigin> --> #}
+{# <!-- <link rel="preload" as="font" href="/static/fonts/fec-currencymono-bolditalic.woff2" type="font/woff2" crossorigin> --> #}
+{# <!-- <link rel="preload" as="font" href="/static/fonts/fec-currencymono-italic.woff2" type="font/woff2" crossorigin> --> #}
+<link rel="preload" as="font" href="/static/fonts/fec-currencymono-regular.woff2" type="font/woff2" crossorigin>
+{% endspaceless %}

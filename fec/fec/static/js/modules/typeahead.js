@@ -273,6 +273,8 @@ function Typeahead(selector, type, url) {
   this.init();
 
   events.on('searchTypeChanged', this.handleChangeEvent.bind(this));
+
+  this.$input.on('keyup', this.setAria.bind(this));
 }
 
 Typeahead.prototype.init = function() {
@@ -283,11 +285,22 @@ Typeahead.prototype.init = function() {
   this.$element = this.$input.parent('.twitter-typeahead');
   this.$element.css('display', 'block');
   this.$element.find('.tt-menu').attr('aria-live', 'polite');
+  this.$element.find('.tt-input').removeAttr('aria-readonly');
+  this.$element.find('.tt-input').attr('aria-expanded', 'false');
   this.$input.on('typeahead:select', this.select.bind(this));
 };
 
 Typeahead.prototype.handleChangeEvent = function(data) {
   this.init(data.type);
+};
+
+Typeahead.prototype.setAria = function() {
+  if (this.$element.find('.tt-menu').attr('aria-expanded') == 'false') {
+    this.$element.find('.tt-input').attr('aria-expanded', 'false');
+  } else {
+    this.$element.find('.tt-input').attr('aria-expanded', 'true');
+  }
+  //alert('closed')
 };
 
 Typeahead.prototype.select = function(event, datum) {

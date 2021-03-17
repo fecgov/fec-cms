@@ -43,7 +43,7 @@ def to_date(committee, cycle):
 
 
 def aggregate_totals(request):
-    office = request.GET.get("office", "P")
+    office = request.GET.get("office", "S")
 
     election_year = int(
         request.GET.get("election_year", constants.DEFAULT_ELECTION_YEAR)
@@ -590,7 +590,7 @@ def load_committee_history(committee_id, cycle=None):
             raise Http404()
         cycle = committee.get("last_cycle_has_financial")
         if not cycle:
-            # when committees only file F1.fallback_cycle = null
+            # when committees only file F1. fallback_cycle = null
             # set cycle = last_cycle_has_activity
             cycle = committee.get("last_cycle_has_activity")
     else:
@@ -712,7 +712,7 @@ def elections(request, office, cycle, state=None, district=None):
 
 
 def raising(request):
-    office = request.GET.get("office", "P")
+    office = request.GET.get("office", "S")
 
     election_year = int(
         request.GET.get("election_year", constants.DEFAULT_ELECTION_YEAR)
@@ -736,7 +736,7 @@ def raising(request):
 
 
 def spending(request):
-    office = request.GET.get("office", "P")
+    office = request.GET.get("office", "S")
 
     election_year = int(
         request.GET.get("election_year", constants.DEFAULT_ELECTION_YEAR)

@@ -6,6 +6,9 @@
   {% set title = self.title() %}
 
   {% include 'partials/meta-tags.jinja' %}
+  {% if (FEC_CMS_ENVIRONMENT == 'PRODUCTION') %}
+  {% include 'partials/meta-tags-preconnects.jinja' %}
+  {% endif %}
 
   {% block css %}
   <link rel="stylesheet" type="text/css" href="{{ asset_for_css('base.css') }}" />
@@ -83,6 +86,7 @@
             <input type="hidden" name="type" value="committees">
             <input type="hidden" name="type" value="site">
             <label class="u-visually-hidden" for="query">Search</label>
+             <div class="combo combo--search">
             <input
               class="js-site-search combo__input"
               autocomplete="off"
@@ -93,6 +97,7 @@
             <button type="submit" class="button--standard combo__button button--search">
               <span class="u-visually-hidden">Search</span>
             </button>
+           </div>
           </form>
         </li>
       </ul>

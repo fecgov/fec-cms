@@ -1,0 +1,25 @@
+{% comment %}
+==================================================
+preconnect and dns-prefetch tags are included for Production.
+
+If there's a new third-party service, add a preconnect here,
+but try to make it conditional so we aren't asking for connections we won't use.
+
+A preconnect is disconnected if isn't used in 10 seconds;
+if a page generally takes longer than 10 seconds, don't waste a preconnect.
+Save preconnects for blockers and higher-priority sources.
+
+dns-prefetch only does the lookup but is currently more widely supported (as of 2021-03).
+==================================================
+{% endcomment %}
+{# Google Tag Manager #}
+<link rel="preconnect" href="https://www.googletagmanager.com/" crossorigin>
+<link rel="dns-prefetch" href="https://www.googletagmanager.com/">
+{#- Google Analytics -#}
+<link rel="dns-prefetch" href="https://www.google-analytics.com/">
+{#- GSA/DAP -#}
+<link rel="preconnect" href="https://dap.digitalgov.gov/" crossorigin>
+<link rel="dns-prefetch" href="https://dap.digitalgov.gov/">
+{#~ Recaptcha ~#}
+<link rel="dns-prefetch" href="https://www.google.com/recaptcha/">
+<link rel="dns-prefetch" href="https://www.gstatic.com/recaptcha/">
