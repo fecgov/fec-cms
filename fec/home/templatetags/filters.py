@@ -68,15 +68,22 @@ def web_app_url(path):
 
 @register.filter()
 def highlight_matches(text):
-    """Replaces the highlight markers with span tags for digitalgov search results"""
-    highlighted_text = text.replace('\ue000', '<span class="t-highlight">').replace('\ue001', '</span>')
+    """
+    Replaces the highlight markers with span tags for digitalgov search results.
+    Because format_html uses str.format, remove { and } because they are special characters.
+    """
+    cleaned_text = text.replace("{", "").replace("}", "")
+    highlighted_text = cleaned_text.replace(
+        "\ue000", '<span class="t-highlight">'
+    ).replace("\ue001", "</span>")
+
     return format_html(highlighted_text)
 
 
 @register.filter(name='splitlines')
 def splitlines(value):
     """
-        Returns the value turned into a list.
+    Returns the value turned into a list.
     """
     return value.splitlines()
 
