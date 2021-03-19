@@ -2,14 +2,14 @@
 
 /* global BASE_PATH, API_LOCATION, API_VERSION, API_KEY_PUBLIC */
 
+import DOMPurify from 'dompurify';
+
 var URI = require('urijs');
 var $ = require('jquery');
 var _ = require('underscore');
 var moment = require('moment');
 var decoders = require('./decoders');
 var Handlebars = require('hbsfy/runtime');
-// var sanitize = require('sanitize-html');
-var DOMPurify = require('dompurify');
 var numeral = require('numeral');
 
 // set parameters from the API
