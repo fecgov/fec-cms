@@ -518,14 +518,13 @@ function sanitizeValue(value) {
     if (Array.isArray(value)) {
       for (var i = 0; i < value.length; i++) {
         if (value[i] !== null && value[i] !== undefined) {
-          value[i] = DOMPurify.sanitize(value[i]).replace(
-            validCharactersRegEx,
-            ''
-          );
+          value[i] = DOMPurify.sanitize(value[i])
+            .replace(validCharactersRegEx, '');
         }
       }
     } else {
-      value = DOMPurify.sanitize(value).replace(validCharactersRegEx, '');
+      value = DOMPurify.sanitize(value)
+        .replace(validCharactersRegEx, '');
     }
   }
 
