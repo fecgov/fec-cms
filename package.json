@@ -57,7 +57,6 @@
     "react-dom": "^16.8.2",
     "react-input-mask": "^2.0.3",
     "request": "^2.88.0",
-    "sanitize-html": "2.3.2",
     "sprintf-js": "^1.1.2",
     "topojson": "^3.0.2",
     "tough-cookie": "^2.5.0",
