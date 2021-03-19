@@ -297,7 +297,7 @@ function multiCycles(cycle, duration, label = 'two_year_transaction_period') {
 }
 
 function ensureArray(value) {
-  return _.isArray(value) ? value : [value];
+  return Array.isArray(value) ? value : [value];
 }
 
 function filterNull(params) {
@@ -515,7 +515,7 @@ function sanitizeValue(value) {
   var validCharactersRegEx = /[^a-z0-9-',.()\s]/gi;
 
   if (value !== null && value !== undefined) {
-    if (_.isArray(value)) {
+    if (Array.isArray(value)) {
       for (var i = 0; i < value.length; i++) {
         if (value[i] !== null && value[i] !== undefined) {
           value[i] = DOMPurify.sanitize(value[i]).replace(
