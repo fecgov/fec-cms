@@ -590,7 +590,7 @@ def load_committee_history(committee_id, cycle=None):
             raise Http404()
         cycle = committee.get("last_cycle_has_financial")
         if not cycle:
-            # when committees only file F1.fallback_cycle = null
+            # when committees only file F1. fallback_cycle = null
             # set cycle = last_cycle_has_activity
             cycle = committee.get("last_cycle_has_activity")
     else:

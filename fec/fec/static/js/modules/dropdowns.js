@@ -2,6 +2,7 @@
 
 var $ = require('jquery');
 require('perfect-scrollbar/jquery')($);
+const accessibility = require('./accessibility');
 
 var listeners = require('./listeners');
 
@@ -84,6 +85,7 @@ Dropdown.prototype.toggle = function(e) {
 };
 
 Dropdown.prototype.show = function() {
+  accessibility.restoreTabindex(this.$panel);
   this.$panel.attr('aria-hidden', 'false');
   this.$panel.perfectScrollbar({ suppressScrollX: true });
   this.$panel.find('input[type="checkbox"]:first').focus();
@@ -92,6 +94,7 @@ Dropdown.prototype.show = function() {
 };
 
 Dropdown.prototype.hide = function() {
+  accessibility.removeTabindex(this.$panel);
   this.$panel.attr('aria-hidden', 'true');
   this.$button.removeClass('is-active');
   this.isOpen = false;
