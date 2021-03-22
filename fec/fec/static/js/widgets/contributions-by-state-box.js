@@ -67,8 +67,6 @@ try {
  * @returns Object or false depending on whether the browser supports passive listeners
  */
 function passiveListenerIfSupported() {
-  // return false;
-  console.log('passiveListenerIfSupported()');
   return passiveListenersSupported ? { passive: true } : false;
 }
 
