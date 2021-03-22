@@ -1,21 +1,26 @@
 ## Summary (required)
 
-- Resolves #[_Issue number_]
-_Include a summary of proposed changes._
+- Resolves #issue_number
+
+(Include a summary of proposed changes and connect issue below)
+
+### Required reviewers
+
+(Include who is required to review prior to merge. For example: One designer and two front end developer reviews are required prior to merge)
 
 ## Impacted areas of the application
 
-List general components of the application that this PR will affect:
+General components of the application that this PR will affect:
 
 -  
 
 ## Screenshots
 
-- _Include a screenshot of the new/updated features in context (“in the wild”). If it is an interface or front-end change, include both Before and After screenshots._
+(Include a screenshot of the new/updated features in context (“in the wild”). If it is an interface change, include both before and after screenshots)
 
 ## Related PRs
 
-List related PRs against other branches:
+Related PRs against other branches:
 
 branch | PR
 ------ | ------
@@ -24,10 +29,10 @@ feature/other_pr | [link]()
 
 ## How to test
 
-Include any information that may be helpful to the reviewer(s).
-_This might include:_
+(Include any information that may be helpful to the reviewer(s). This might include links to sample pages to test or any local environmental setup that is unusual such as environment variable (never credentials), API version to point to, etc)
 
-- links to sample pages to test
-- Any local environmental setup that is unusual (env vars, API version to point to, etc)
+- 
 
-____
+## System architecture updates (if applicable)
+
+(If this pull request changes our [current system diagram](https://github.com/fecgov/FEC/wiki/2.-FEC-system-diagram), include a description of those changes here and create a new ticket to update the system diagram)
