@@ -38,9 +38,6 @@ function StatisticalSummaryArchive() {
 
 //Update state upon back or forward button click
 StatisticalSummaryArchive.prototype.handleArchivePopState = function() {
-  //const params = e.state;
-  //this.chosenYear = params.year;
-  //this.chosenFiler = params.filer;
   Array.from(this.selects).forEach(select => {
     Array.from(select.options).forEach(option => {
       if (option.value == this.getUrlVars()[select.id]) {
@@ -97,7 +94,6 @@ StatisticalSummaryArchive.prototype.disableNonPresYears = function() {
     //disable non-presidential years
     if (presidentialArchiveYears.indexOf(yearOption.value) == -1) {
       yearOption.setAttribute('disabled', 'disabled');
-      //yearOption.style.display ='none';
     } else {
       //display single years for presidential
       yearOption.textContent = yearOption.value;
@@ -132,18 +128,14 @@ StatisticalSummaryArchive.prototype.showTable = function() {
   } else {
     for (let i = 0; i < this.chooseYear.options.length; i++) {
       this.chooseYear.options[i].removeAttribute('disabled');
-      //this.chooseYear.options[i].style.display = "block"
-      this.chooseYear.options[i].textContent = this.twoYearPeriods[i]; //chooseYear.options[i].value-1+'-'+chooseYear.options[i].value
+      this.chooseYear.options[i].textContent = this.twoYearPeriods[i];
     }
   }
 
   //show table title
-  //const tableTitle = document.getElementsByClassName('js-table-title')[0];
   this.tableTitle.textContent =
-    //this.chooseYear.options[this.chooseYear.selectedIndex].text +
     this.chooseYear.options[this.chooseYear.selectedIndex].text +
     ' ' +
-    //this.chooseFiler.options[this.chooseFiler.selectedIndex].text +
     this.chooseFiler.options[this.chooseFiler.selectedIndex].text +
     ' ' +
     'data summaries';
