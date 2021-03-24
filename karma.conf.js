@@ -40,7 +40,8 @@ module.exports = function(config) {
     coverageReporter: {
       subdir: '.',
       reporters: [
-        { type: 'html' },
+        //uncomenting to generate coverage/index.html, but this will result in Instanbul error: Cannot read property 'text' of undefined
+        //{ type: 'html'},
         { type: 'text' },
         { type: 'json', file: 'coverage.json' }
       ]
