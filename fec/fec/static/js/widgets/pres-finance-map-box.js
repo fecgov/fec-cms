@@ -1271,10 +1271,9 @@ PresidentialFundsMap.prototype.handleExportRaisingClick = function(e) {
 
 /**
  *
- * @param {*} e
+ * @param {UiEvent} e
  */
-PresidentialFundsMap.prototype.handleDocumentScroll = function(e) {
-  console.log('handleDocumentScroll() e: ', e);
+PresidentialFundsMap.prototype.handleDocumentScroll = function() {
   let windowScroll = window.scrollY;
   let downloadsScrollPosition =
     this.instance.downloadsWrapper.getBoundingClientRect().top + windowScroll;
