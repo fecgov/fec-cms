@@ -558,6 +558,34 @@ function getCookie(name) {
   return cookieValue;
 }
 
+/**
+ * Passive listeners on touchstart and scroll events improve page performance
+ * but could crash non-supportive browsers.
+ * This function will return either an object to be used in addEventListener,
+ * or will return null if the browser doesn't support `passive()`
+ * @returns Object or false depending on whether the browser supports passive listeners
+ */
+function passiveListenerIfSupported() {
+  var supported = false;
+  /**
+   * Let's check whether the browser supports passive event listeners
+   */
+  try {
+    let options = {
+      get passive() {
+        supported = true;
+        return false;
+      }
+    };
+    window.addEventListener('test', null, options);
+    window.removeEventListener('test', null, options);
+  } catch (err) {
+    supported = false;
+  }
+
+  return supported ? { passive: true } : false;
+}
+
 module.exports = {
   anchorify: anchorify,
   scrollAnchor: scrollAnchor,
@@ -589,5 +617,6 @@ module.exports = {
   getWindowWidth: getWindowWidth,
   sanitizeValue: sanitizeValue,
   sanitizeQueryParams: sanitizeQueryParams,
-  getCookie: getCookie
+  getCookie: getCookie,
+  passiveListener: passiveListenerIfSupported
 };
