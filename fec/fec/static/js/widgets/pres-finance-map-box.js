@@ -71,7 +71,7 @@ const selector_candidateListDisclaimer = '.js-cand-list-note';
 
 // Imports, etc
 // const $ = jquery;
-import { buildUrl } from '../modules/helpers';
+import { buildUrl, passiveListener } from '../modules/helpers';
 // import { defaultElectionYear } from './widget-vars';
 import 'abortcontroller-polyfill/dist/polyfill-patch-fetch';
 import analytics from '../modules/analytics';
@@ -1260,26 +1260,37 @@ PresidentialFundsMap.prototype.handleExportRaisingClick = function(e) {
   //scroll downloads area into view
   this.downloadsWrapper.scrollIntoView();
   // Wait until the downloadsWrapper is in view before opening (if not already open)
-  let instance = this;
+  // let this.instance = this;
   //'this' refers to the main protoype here
-  window.onscroll = function() {
-    //'this' is window inside the context of this function
-    let theWindow = this;
-    let windowScroll = theWindow.scrollY,
-      downloadsScrollPosition =
-        instance.downloadsWrapper.getBoundingClientRect().top + windowScroll,
-      downloadsHeight = instance.downloadsWrapper.offsetHeight,
-      windowHeight = window.innerHeight;
-    if (
-      windowScroll >
-      downloadsScrollPosition + downloadsHeight - windowHeight
-    ) {
-      {
-        instance.openDownloads();
-        window.onscroll = null; // remove listener
-      }
+  document.addEventListener(
+    'scroll',
+    this.handleDocumentScroll.bind(this),
+    passiveListener()
+  );
+};
+
+/**
+ *
+ * @param {*} e
+ */
+PresidentialFundsMap.prototype.handleDocumentScroll = function(e) {
+  console.log('handleDocumentScroll() e: ', e);
+  let windowScroll = window.scrollY;
+  let downloadsScrollPosition =
+    this.instance.downloadsWrapper.getBoundingClientRect().top + windowScroll;
+  let downloadsHeight = this.instance.downloadsWrapper.offsetHeight;
+  let windowHeight = window.innerHeight;
+
+  if (windowScroll > downloadsScrollPosition + downloadsHeight - windowHeight) {
+    {
+      this.instance.openDownloads();
+      window.removeEventListener(
+        'scroll',
+        this.handleDocumentScroll.bind(this)
+      );
+      // window.onscroll = null; // remove listener
     }
-  };
+  }
 };
 
 /**
