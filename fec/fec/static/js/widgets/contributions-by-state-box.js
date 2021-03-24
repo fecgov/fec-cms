@@ -21,7 +21,7 @@ const breakpointToXL = 860;
 const rootPathToIndividualContributions =
   '/data/receipts/individual-contributions/';
 
-import { buildUrl } from '../modules/helpers';
+import { buildUrl, passiveListener } from '../modules/helpers';
 import typeahead from '../modules/typeahead';
 import { defaultElectionYear } from './widget-vars';
 import 'abortcontroller-polyfill/dist/polyfill-patch-fetch';
@@ -29,7 +29,6 @@ import analytics from '../modules/analytics';
 
 const DataMap = require('../modules/data-map').DataMap;
 const AbortController = window.AbortController;
-let passiveListenersSupported = false;
 
 /**
  * Formats the given value and puts it into the dom element.
@@ -44,30 +43,6 @@ function formatAsCurrency(passedValue, roundToWhole = true) {
       ? Math.round(passedValue).toLocaleString()
       : passedValue.toLocaleString())
   );
-}
-
-/**
- * Let's check whether the browser supports passive event listeners
- */
-try {
-  let options = {
-    get passive() {
-      passiveListenersSupported = true;
-      return false;
-    }
-  };
-  window.addEventListener('test', null, options);
-  window.removeEventListener('test', null, options);
-} catch (err) {
-  passiveListenersSupported = false;
-}
-
-/**
- * Passive listeners improve page performance but non-supportive browsers could crash
- * @returns Object or false depending on whether the browser supports passive listeners
- */
-function passiveListenerIfSupported() {
-  return passiveListenersSupported ? { passive: true } : false;
 }
 
 /**
@@ -256,12 +231,12 @@ ContributionsByState.prototype.init = function() {
   theTypeaheadElement.addEventListener(
     'mousedown',
     this.handleTypeaheadFocus.bind(this),
-    passiveListenerIfSupported()
+    passiveListener()
   );
   theTypeaheadElement.addEventListener(
     'touchstart',
     this.handleTypeaheadFocus.bind(this),
-    passiveListenerIfSupported()
+    passiveListener()
   );
 
   // Listen for any field updates, looking for errors
