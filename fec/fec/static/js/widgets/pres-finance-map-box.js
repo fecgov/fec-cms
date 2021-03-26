@@ -1257,59 +1257,39 @@ PresidentialFundsMap.prototype.openDownloads = function() {
 PresidentialFundsMap.prototype.handleExportRaisingClick = function(e) {
   e.preventDefault();
 
-  //scroll downloads area into view
+  // scroll downloads area into view
   this.downloadsWrapper.scrollIntoView();
+
   // Wait until the downloadsWrapper is in view before opening (if not already open)
-  // let this.instance = this;
-  //'this' refers to the main protoype here
   document.addEventListener(
     'scroll',
-    this.handleDocumentScroll.bind(this),
+    this.handleDocScrolling.bind(this),
     passiveListener()
   );
 };
 
 /**
- *
+ * Fired on each tick/update of the scroll position. Removes its own listener when scroll is complete
  * @param {UiEvent} e
  */
-PresidentialFundsMap.prototype.handleDocumentScroll = function() {
+PresidentialFundsMap.prototype.handleDocScrolling = function() {
   let windowScroll = window.scrollY;
   let downloadsScrollPosition =
-    this.instance.downloadsWrapper.getBoundingClientRect().top + windowScroll;
-  let downloadsHeight = this.instance.downloadsWrapper.offsetHeight;
+    this.downloadsWrapper.getBoundingClientRect().top + windowScroll;
+  let downloadsHeight = this.downloadsWrapper.offsetHeight;
   let windowHeight = window.innerHeight;
 
   if (windowScroll > downloadsScrollPosition + downloadsHeight - windowHeight) {
     {
-      this.instance.openDownloads();
-      window.removeEventListener(
-        'scroll',
-        this.handleDocumentScroll.bind(this)
-      );
-      // window.onscroll = null; // remove listener
+      this.openDownloads();
+      window.removeEventListener('scroll', this.handleDocScrolling.bind(this));
     }
   }
 };
 
 /**
- * TODO -
- */
-PresidentialFundsMap.prototype.handleToggleRaisingExports = function(e) {
-  e.preventDefault();
-
-  //toggle export area
-  if (this.downloadsLinksWrapper.style.height > '0px') {
-    this.raisingExportsToggle.classList.toggle('button--close', false);
-    this.downloadsLinksWrapper.style.height = 0;
-  } else {
-    this.raisingExportsToggle.classList.toggle('button--close', true);
-    this.downloadsLinksWrapper.style.height = 'auto';
-  }
-};
-
-/**
- * TODO -
+ * Handles when 'Export raising data' is clicked, toggles the list of state abbreviations
+ * @param {MouseEvent} e
  */
 PresidentialFundsMap.prototype.handleToggleRaisingExports = function(e) {
   e.preventDefault();
