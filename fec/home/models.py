@@ -47,7 +47,7 @@ core_table_options = {
 stream_factory = functools.partial(
     StreamField,
     [
-        ('heading', blocks.CharBlock(classname='full title', icon='title')),
+        ('heading', blocks.CharBlock(form_classname='full title', icon='title')),
         ('paragraph', blocks.RichTextBlock()),
         ('html', blocks.RawHTMLBlock()),
         ('image', ImageChooserBlock()),
@@ -593,7 +593,7 @@ class CustomPage(Page):
     author = models.CharField(max_length=255)
     date = models.DateField('Creation date')
     body = StreamField([
-        ('heading', blocks.CharBlock(classname='full title', icon='title')),
+        ('heading', blocks.CharBlock(form_classname='full title', icon='title')),
         ('paragraph', blocks.RichTextBlock()),
         ('html', blocks.RawHTMLBlock()),
         ('example_image', ExampleImage()),
@@ -1240,7 +1240,7 @@ class OigLandingPage(Page):
     info_message = RichTextField(features=['bold', 'italic', 'link'], null=True, blank=True)
     stats_content = StreamField(
         [
-            ('heading', blocks.CharBlock(classname='full title', icon='title')),
+            ('heading', blocks.CharBlock(form_classname='full title', icon='title')),
             ('paragraph', blocks.RichTextBlock()),
             ('html', blocks.RawHTMLBlock(label='HTML')),
             ('image', ImageChooserBlock()),

@@ -57,6 +57,7 @@ class TestDatatablesRender(TestCase):
 
     def test_all_candidates(self):
         response = client.get('/data/candidates/', follow=True)
+        print('RESPONSE: ' + response.status_code)
         assert response.status_code == 200
 
     def test_presidential_candidates(self):

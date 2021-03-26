@@ -1,4 +1,4 @@
-Django==2.2.19 # cg-django-uaa doesn't like Django > 2.2.x
+Django==2.2.19
 cfenv==0.5.2
 dj-database-url==0.4.2
 django-libsass==0.7
@@ -11,7 +11,7 @@ urllib3==1.25.9 # pinned 2020-11-01 (parent requests)
 slacker==0.8.6
 whitenoise==2.0.3
 wagtail==2.11.6
-Jinja2==2.10.1
+Jinja2==2.11.3
 django_jinja==2.4.1
 pillow==7.1.0
 CacheControl==0.11.5
@@ -35,7 +35,7 @@ beautifulsoup4==4.8.2
 django-storages==1.7.1
 boto3==1.7.21
 
-cg-django-uaa==2.0.0
+cg-django-uaa==2.1.0
 PyJWT==1.7.1 # Pinning this version as version 2.0.0 is breaking cg-django-uaa
 
 # Testing

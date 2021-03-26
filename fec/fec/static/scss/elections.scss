@@ -10,7 +10,7 @@
 @import "components/filters";
 @import "components/entity-header";
 @import "components/maps";
-@import "components/responsive-object";
+@import "components/responsive-object"; // TODO - remove this? Wagtail 2.8 did away with the responsive-object class
 @import "components/results-info";
 @import "components/richtext";
 

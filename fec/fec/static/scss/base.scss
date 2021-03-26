@@ -21,7 +21,7 @@
 @import "components/overlay";
 @import "components/pagination";
 @import "components/posts";
-@import "components/responsive-object";
+@import "components/responsive-object"; // TODO - remove this? Wagtail 2.8 did away with the responsive-object class
 @import "components/reaction-boxes";
 @import "components/search-bar";
 @import "components/search-results";

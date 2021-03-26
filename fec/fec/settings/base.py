@@ -104,6 +104,7 @@ INSTALLED_APPS = (
     'wagtail.embeds',
     'wagtail.contrib.redirects',
     'wagtail.contrib.forms',
+    # 'wagtail.locales',  # Safe to remove this?
 
     'wagtail.contrib.modeladmin',
     'wagtail.contrib.search_promotions',
@@ -131,6 +132,7 @@ MIDDLEWARE = (
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'wagtail.contrib.redirects.middleware.RedirectMiddleware',
+    'wagtail.contrib.legacy.sitemiddleware.SiteMiddleware',  # This is updated for Wagtail 11.0, but can it be removed?
 )
 
 CSRF_TRUSTED_ORIGINS = ["fec.gov", "app.cloud.gov"]
@@ -199,13 +201,12 @@ DATABASES = {
 # https://docs.djangoproject.com/en/1.8/topics/i18n/
 
 LANGUAGE_CODE = 'en-us'
-
+LANGUAGES = (
+    ('en', 'English'),
+)
 TIME_ZONE = 'America/New_York'
-
 USE_I18N = True
-
 USE_L10N = True
-
 USE_TZ = True
 
 

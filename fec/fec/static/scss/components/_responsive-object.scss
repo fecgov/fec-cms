@@ -1,3 +1,5 @@
+// TODO - remove this? Wagtail 2.8 did away with the responsive-object class
+// TODO - https://docs.wagtail.io/en/stable/releases/2.8.html#responsive-html-for-embeds-no-longer-added-by-default
 .responsive-object {
 	width: 100% !important;
 	height: auto !important;
@@ -7,7 +9,7 @@
 		width: 100% !important;
 	}
 }
-
+// TODO - remove this? Wagtail 2.8 did away with the responsive-object class
 
 //TV Ad example:
 
