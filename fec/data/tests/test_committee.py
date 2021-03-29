@@ -507,6 +507,34 @@ class TestCommittee(TestCase):
         assert template_variables["report_type"] == "pac-party"
         assert template_variables["reports"] == self.STOCK_REPORTS
 
+    def test_fallback_cycle(
+        self,
+        load_committee_history_mock,
+        load_cycle_data_mock,
+        load_reports_and_totals_mock,
+        load_endpoint_results_mock,
+        load_committee_statement_of_organization_mock,
+    ):
+        cycle = 2020
+
+        test_committee = copy.deepcopy(self.STOCK_COMMITTEE)
+        load_committee_history_mock.return_value = (test_committee, [], cycle)
+        # cycle_out_of_range, last_cycle_has_financial, cycles
+        load_cycle_data_mock.return_value = (True, 2018, [2018])
+        load_reports_and_totals_mock.return_value = (
+            self.STOCK_REPORTS,
+            self.STOCK_TOTALS,
+        )
+        load_endpoint_results_mock.return_value = mock.MagicMock()
+        load_committee_statement_of_organization_mock.return_value = {
+            "receipt_date": "2019-11-30T00:00:00"
+        }
+        template_variables = views.get_committee("C001", cycle)
+
+        # JS and Python cycle should equal fallback cycle
+        assert template_variables["context_vars"]["cycle"] == 2018
+        assert template_variables["cycle"] == 2018
+
 
 @mock.patch.object(api_caller, "load_endpoint_results")
 @mock.patch.object(api_caller, "load_first_row_data")
