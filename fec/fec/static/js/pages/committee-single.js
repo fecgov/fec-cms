@@ -706,8 +706,8 @@ $(document).ready(function() {
         break;
       case 'raw-filings':
         var min_date = $table.attr('data-min-date');
-        // Always use table cycle for filings
-        cycle = $table.attr('data-cycle');
+        // For raw-filings, use previous cycle if provided
+        cycle = context.cycle || $table.attr('data-cycle');
         opts = _.extend(
           {
             columns: rawFilingsColumns,
@@ -731,8 +731,8 @@ $(document).ready(function() {
         tables.DataTable.defer($table, opts);
         break;
       case 'filings-reports':
-        // Always use table cycle for filings
-        cycle = $table.attr('data-cycle');
+        // For filings-reports, use previous cycle if provided
+        cycle = context.cycle || $table.attr('data-cycle');
         opts = _.extend(
           {
             columns: filingsReportsColumns,
@@ -786,8 +786,8 @@ $(document).ready(function() {
         tables.DataTable.defer($table, opts);
         break;
       case 'filings-notices':
-        // Always use table cycle for filings
-        cycle = $table.attr('data-cycle');
+        // For filings-notices, use previous cycle if provided
+        cycle = context.cycle || $table.attr('data-cycle');
         opts = _.extend(
           {
             columns: filingsColumns,
@@ -822,8 +822,8 @@ $(document).ready(function() {
         tables.DataTable.defer($table, opts);
         break;
       case 'filings-statements':
-        // Always use table cycle for filings
-        cycle = $table.attr('data-cycle');
+        // For filings-statements, use previous cycle if provided
+        cycle = context.cycle || $table.attr('data-cycle');
         opts = _.extend(
           {
             columns: filingsColumns,
@@ -855,8 +855,8 @@ $(document).ready(function() {
         tables.DataTable.defer($table, opts);
         break;
       case 'filings-other':
-        // Always use table cycle for filings
-        cycle = $table.attr('data-cycle');
+        // For filings-other, use previous cycle if provided
+        cycle = context.cycle || $table.attr('data-cycle');
         opts = _.extend(
           {
             columns: filingsColumns,
