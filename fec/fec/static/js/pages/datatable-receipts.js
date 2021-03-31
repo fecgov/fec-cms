@@ -16,7 +16,12 @@ $(document).ready(function() {
     title: 'Receipts',
     path: ['schedules', 'schedule_a'],
     columns: columns.receipts,
-    query: { sort_nulls_last: false },
+    query: {
+      sort_nulls_last: false,
+      two_year_transaction_period: window.DEFAULT_ELECTION_YEAR,
+      min_date: '01/01/' + (Number(window.DEFAULT_ELECTION_YEAR) - 1),
+      max_date: '12/31/' + window.DEFAULT_ELECTION_YEAR
+    },
     paginator: tables.SeekPaginator,
     order: [[4, 'desc']],
     useFilters: true,
