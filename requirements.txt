@@ -5,9 +5,9 @@ django-libsass==0.7
 gunicorn==19.10.0
 gevent==1.4.0
 greenlet==0.4.16 # pinned 2020-09-22 to fix build problem (parent gevent)
-psycopg2==2.8.5
-requests==2.24.0
-urllib3==1.25.9 # pinned 2020-11-01 (parent requests)
+psycopg2==2.8.6
+requests==2.25.1
+urllib3==1.26.4
 slacker==0.8.6
 whitenoise==5.2.0
 wagtail==2.11.6
