@@ -2,13 +2,14 @@
 
 /* global BASE_PATH, API_LOCATION, API_VERSION, API_KEY_PUBLIC */
 
+import DOMPurify from 'dompurify';
+
 var URI = require('urijs');
 var $ = require('jquery');
 var _ = require('underscore');
 var moment = require('moment');
 var decoders = require('./decoders');
 var Handlebars = require('hbsfy/runtime');
-var sanitize = require('sanitize-html');
 var numeral = require('numeral');
 
 // set parameters from the API
@@ -514,14 +515,18 @@ function sanitizeValue(value) {
   var validCharactersRegEx = /[^a-z0-9-',.()\s]/gi;
 
   if (value !== null && value !== undefined) {
-    if (_.isArray(value)) {
+    if (Array.isArray(value)) {
       for (var i = 0; i < value.length; i++) {
         if (value[i] !== null && value[i] !== undefined) {
-          value[i] = sanitize(value[i]).replace(validCharactersRegEx, '');
+          value[i] = DOMPurify.sanitize(value[i])
+            .replace('"', `&quot;`)
+            .replace(validCharactersRegEx, '');
         }
       }
     } else {
-      value = sanitize(value).replace(validCharactersRegEx, '');
+      value = DOMPurify.sanitize(value)
+        .replace('"', `&quot;`)
+        .replace(validCharactersRegEx, '');
     }
   }
 
