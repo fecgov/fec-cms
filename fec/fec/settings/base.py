@@ -132,7 +132,7 @@ MIDDLEWARE = (
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'wagtail.contrib.redirects.middleware.RedirectMiddleware',
-    'wagtail.contrib.legacy.sitemiddleware.SiteMiddleware',  # This is updated for Wagtail 11.0, but can it be removed?
+    'whitenoise.middleware.WhiteNoiseMiddleware',
 )
 
 CSRF_TRUSTED_ORIGINS = ["fec.gov", "app.cloud.gov"]
