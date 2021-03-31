@@ -39,9 +39,9 @@ cg-django-uaa==2.1.1
 PyJWT==1.7.1 # Pinning this version as version 2.0.0 is breaking cg-django-uaa
 
 # Testing
-coverage==4.5.1
-pytest==3.7.4
+coverage==5.5
+pytest==6.2.2
 Faker==0.8.6
-pytest-django==3.4.2
-pytest-cov==2.5.1
-pytest-flake8==1.0.6
+pytest-django==4.1.0
+pytest-cov==2.11.1
+pytest-flake8==1.0.7
