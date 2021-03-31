@@ -397,6 +397,17 @@ def get_committee(committee_id, cycle):
     # Check organization types to determine SSF status
     is_ssf = committee.get("organization_type") in ["W", "C", "L", "V", "M", "T"]
 
+    # Check committee's status (active, terminated, or administratively terminated)
+    is_active = committee.get("is_active")
+    filing_frequency = committee.get("filing_frequency")
+
+    if is_active:
+        current_committee_status = "active"
+    elif not is_active and filing_frequency == "A":
+        current_committee_status = "admin_terminated"
+    else:
+        current_committee_status = "terminated"
+
     # if cycles_has_activity's options are more than cycles_has_financial's,
     # when clicking back to financial summary/raising/spending,
     # reset cycle=fallback_cycle and timePeriod and.
@@ -448,6 +459,7 @@ def get_committee(committee_id, cycle):
         "cycle": cycle,
         "cycles": cycles,
         "is_SSF": is_ssf,
+        "current_committee_status": current_committee_status,
         "cycle_out_of_range": cycle_out_of_range,
         "parent": parent,
         "result_type": result_type,
