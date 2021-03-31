@@ -104,7 +104,7 @@ INSTALLED_APPS = (
     'wagtail.embeds',
     'wagtail.contrib.redirects',
     'wagtail.contrib.forms',
-    # 'wagtail.locales',  # Safe to remove this?
+    'wagtail.locales',
 
     'wagtail.contrib.modeladmin',
     'wagtail.contrib.search_promotions',
@@ -133,6 +133,8 @@ MIDDLEWARE = (
     'django.middleware.security.SecurityMiddleware',
     'wagtail.contrib.redirects.middleware.RedirectMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',
+    # 'wagtail.contrib.legacy.sitemiddleware.SiteMiddleware',
+    # :up: SiteMiddleware :up: was removed for Wagtail 2.11. Safe to lose it altogether?
 )
 
 CSRF_TRUSTED_ORIGINS = ["fec.gov", "app.cloud.gov"]
