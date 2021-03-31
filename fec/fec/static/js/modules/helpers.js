@@ -297,7 +297,7 @@ function multiCycles(cycle, duration, label = 'two_year_transaction_period') {
 }
 
 function ensureArray(value) {
-  return _.isArray(value) ? value : [value];
+  return Array.isArray(value) ? value : [value];
 }
 
 function filterNull(params) {
