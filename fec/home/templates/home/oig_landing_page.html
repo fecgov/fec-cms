@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 {% load wagtailcore_tags %}
-{% load staticfiles %}
+{% load static %}
 {% load oig_most_recent %}
 {% block title %}{{ self.title }}{% endblock %}
 {% block body_class %}template-{{ self.get_verbose_name | slugify }}{% endblock %}
