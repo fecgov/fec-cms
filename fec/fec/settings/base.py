@@ -163,6 +163,9 @@ TEMPLATES = [
                 'FEC_CMS_ENVIRONMENT': FEC_CMS_ENVIRONMENT,
                 'FEATURES': FEATURES,
             },
+            'context_processors': [
+                'django.template.context_processors.request'
+            ]
         }
     },
     {
