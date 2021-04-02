@@ -38,7 +38,6 @@ django-storages==1.7.1
 boto3==1.7.21
 
 cg-django-uaa==2.1.1
-PyJWT==1.7.1 # Pinning this version as version 2.0.0 is breaking cg-django-uaa
 
 # Testing
 coverage==5.5
