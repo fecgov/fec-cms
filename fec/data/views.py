@@ -390,6 +390,12 @@ def get_committee(committee_id, cycle):
 
     cycle_out_of_range, fallback_cycle, cycles = load_cycle_data(committee, cycle)
 
+    # (fec-cms #4366) at the beginning of every new 2-year period,
+    # before we receive the Q1 reports, passed parameter 'cycle' is not in
+    # `cycles_has_activity` yet. cycle_out_of_range = true.
+    # we set cycle = fallback_cycle
+    cycle = fallback_cycle if cycle_out_of_range else cycle
+
     reports, totals = load_reports_and_totals(
         committee_id, cycle, cycle_out_of_range, fallback_cycle
     )
