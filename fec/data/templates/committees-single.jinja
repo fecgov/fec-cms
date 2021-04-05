@@ -23,8 +23,10 @@
     <h1 class="entity__name content__section--narrow">{{ committee.name }}</h1>
     <div class="heading--section">
       <span class="t-data t-bold entity__type">
-        {% if committee.is_active %}
-          <span class="is-active-status">Active</span>      
+        {% if current_committee_status == "active" %}
+          <span class="is-active-status">Active</span>
+        {% elif current_committee_status == "admin_terminated" %}
+          <span class="is-terminated-status">Administratively terminated</span>
         {% else %}
           <span class="is-terminated-status">Terminated</span>         
         {% endif %}
