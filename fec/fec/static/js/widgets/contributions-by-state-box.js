@@ -21,7 +21,7 @@ const breakpointToXL = 860;
 const rootPathToIndividualContributions =
   '/data/receipts/individual-contributions/';
 
-import { buildUrl } from '../modules/helpers';
+import { buildUrl, passiveListener } from '../modules/helpers';
 import typeahead from '../modules/typeahead';
 import { defaultElectionYear } from './widget-vars';
 import 'abortcontroller-polyfill/dist/polyfill-patch-fetch';
@@ -230,11 +230,13 @@ ContributionsByState.prototype.init = function() {
   );
   theTypeaheadElement.addEventListener(
     'mousedown',
-    this.handleTypeaheadFocus.bind(this)
+    this.handleTypeaheadFocus.bind(this),
+    passiveListener()
   );
   theTypeaheadElement.addEventListener(
     'touchstart',
-    this.handleTypeaheadFocus.bind(this)
+    this.handleTypeaheadFocus.bind(this),
+    passiveListener()
   );
 
   // Listen for any field updates, looking for errors
