@@ -118,7 +118,7 @@
     "karma-coverage-istanbul-reporter": "^2.0.5",
     "karma-mocha": "^0.2.2",
     "karma-webpack": "^3.0.5",
-    "leaflet": "^1.4.0",
+    "leaflet": "^1.7.1",
     "mocha": "^5.2.0",
     "mockdate": "^2.0.2",
     "natives": "^1.1.6",

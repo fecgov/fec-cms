@@ -71,7 +71,7 @@ const selector_candidateListDisclaimer = '.js-cand-list-note';
 
 // Imports, etc
 // const $ = jquery;
-import { buildUrl } from '../modules/helpers';
+import { buildUrl, passiveListener } from '../modules/helpers';
 // import { defaultElectionYear } from './widget-vars';
 import 'abortcontroller-polyfill/dist/polyfill-patch-fetch';
 import analytics from '../modules/analytics';
@@ -1257,49 +1257,39 @@ PresidentialFundsMap.prototype.openDownloads = function() {
 PresidentialFundsMap.prototype.handleExportRaisingClick = function(e) {
   e.preventDefault();
 
-  //scroll downloads area into view
+  // scroll downloads area into view
   this.downloadsWrapper.scrollIntoView();
+
   // Wait until the downloadsWrapper is in view before opening (if not already open)
-  let instance = this;
-  //'this' refers to the main protoype here
-  window.onscroll = function() {
-    //'this' is window inside the context of this function
-    let theWindow = this;
-    let windowScroll = theWindow.scrollY,
-      downloadsScrollPosition =
-        instance.downloadsWrapper.getBoundingClientRect().top + windowScroll,
-      downloadsHeight = instance.downloadsWrapper.offsetHeight,
-      windowHeight = window.innerHeight;
-    if (
-      windowScroll >
-      downloadsScrollPosition + downloadsHeight - windowHeight
-    ) {
-      {
-        instance.openDownloads();
-        window.onscroll = null; // remove listener
-      }
-    }
-  };
+  document.addEventListener(
+    'scroll',
+    this.handleDocScrolling.bind(this),
+    passiveListener()
+  );
 };
 
 /**
- * TODO -
+ * Fired on each tick/update of the scroll position. Removes its own listener when scroll is complete
+ * @param {UiEvent} e
  */
-PresidentialFundsMap.prototype.handleToggleRaisingExports = function(e) {
-  e.preventDefault();
+PresidentialFundsMap.prototype.handleDocScrolling = function() {
+  let windowScroll = window.scrollY;
+  let downloadsScrollPosition =
+    this.downloadsWrapper.getBoundingClientRect().top + windowScroll;
+  let downloadsHeight = this.downloadsWrapper.offsetHeight;
+  let windowHeight = window.innerHeight;
 
-  //toggle export area
-  if (this.downloadsLinksWrapper.style.height > '0px') {
-    this.raisingExportsToggle.classList.toggle('button--close', false);
-    this.downloadsLinksWrapper.style.height = 0;
-  } else {
-    this.raisingExportsToggle.classList.toggle('button--close', true);
-    this.downloadsLinksWrapper.style.height = 'auto';
+  if (windowScroll > downloadsScrollPosition + downloadsHeight - windowHeight) {
+    {
+      this.openDownloads();
+      window.removeEventListener('scroll', this.handleDocScrolling.bind(this));
+    }
   }
 };
 
 /**
- * TODO -
+ * Handles when 'Export raising data' is clicked, toggles the list of state abbreviations
+ * @param {MouseEvent} e
  */
 PresidentialFundsMap.prototype.handleToggleRaisingExports = function(e) {
   e.preventDefault();
