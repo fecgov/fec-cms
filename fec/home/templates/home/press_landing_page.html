@@ -9,7 +9,7 @@
   <div class="hero__image"></div>
   <div class="container">
     <h1 id="hero-heading">{{ self.title }}</h1>
-    <div class="hero__content">{{ self.hero }}</div>
+    <div class="hero__content">{{ self.hero }}</div><!-- TODO: [rich-text] do we need the rich-text wrapper here? -->
   </div>
 </section>
 
@@ -33,7 +33,7 @@
       <div id="press-releases" class="option">
         <h2><a href="/updates?update_type=press-release">Press releases</a></h2>
         <div class="content__section">
-          {{ self.release_intro }}
+          {{ self.release_intro }}<!-- TODO: [rich-text] do we need the rich-text wrapper here? -->
           <a class="button button--standard button--go" href="/updates?update_type=press-release">All press releases</a>
         </div>
         <div class="post-feed">
@@ -44,7 +44,7 @@
       <div id="weekly-digest" class="option">
         <h2><a href="/updates?update_type=weekly-digest">Weekly Digests</a></h2>
         <div class="content__section">
-          {{ self.digest_intro }}
+          {{ self.digest_intro }}<!-- TODO: [rich-text] do we need the rich-text wrapper here? -->
           <a class="button button--standard button--go" href="/updates?update_type=weekly-digest">All Weekly Digests</a>
         </div>
         <div class="post-feed">
@@ -62,7 +62,7 @@
 
       <div id="contact" class="option">
         <h2>Contact</h2>
-        {{ self.contact_intro }}
+        {{ self.contact_intro }}<!-- TODO: [rich-text] do we need the rich-text wrapper here? -->
       </div>
     </section>
   </div>

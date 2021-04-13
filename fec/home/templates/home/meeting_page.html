@@ -86,7 +86,11 @@
           </ul>
         {% endif %}
           <div class="agenda__text">
-            {{ block.value.item_text }}
+            <!-- TODO: [rich-text] do we need this rich-text wrapper?
+                 TODO: [rich-text] It's a RichTextBlock but we should skip the wrapper if we can -->
+            <div class="rich-text">
+              {{ block.value.item_text }}
+            </div>
           </div>
          </li>
       {% endfor %}

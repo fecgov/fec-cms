@@ -104,7 +104,9 @@ class ContentPage(Page):
         abstract = True
 
     # TODO: [rich-text] need to find where this (body stream_factory) might be used
+    # TODO: and make sure the templates get the rich-text wrapper if needed
     body = stream_factory(null=True, blank=True)
+
     feed_image = models.ForeignKey('wagtailimages.Image', blank=True, null=True,
                                    on_delete=models.SET_NULL, related_name='+')
 
@@ -987,7 +989,7 @@ class ServicesLandingPage(ContentPage, UniqueModel):
 
     intro = StreamField([
         ('paragraph', blocks.RichTextBlock())
-    ], null=True)
+    ], null=True)  # TODO: [rich-text] is this being used anywhere?
 
     content_panels = Page.content_panels + [
         StreamFieldPanel('hero'),

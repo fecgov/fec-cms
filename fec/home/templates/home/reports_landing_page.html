@@ -11,7 +11,8 @@
   <div class="container" id="sections">
     <h1 class="heading--main">{{ self.title }}</h1>
     <div class="content__section">
-      {{ self.intro }}
+      <!-- TODO: [rich-text] do we need the rich-text wrapper here? -->
+      <div class="rich-text">{{ self.intro }}</div>
     </div>
     <div class="grid grid--3-wide">
       {% for blurb in self.document_feeds %}

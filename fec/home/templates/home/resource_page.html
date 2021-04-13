@@ -11,7 +11,8 @@
 {% block intro %}
 <div class="row">
   <div class="main__content">
-    <div class="t-lead">{{ self.intro }}</div>
+    <!-- TODO: [rich-text] do we need the rich-text wrapper here? -->
+    <div class="t-lead"><div class="rich-text">{{ self.intro }}</div></div>
   </div>
   {% if self.sidebar_title %}
   <div class="sidebar-container">
@@ -23,8 +24,9 @@
             {% for related in related_page.value %}
              <li class="u-padding--bottom"><a href="{{ related.url }}">{{ related.title }}</a></li>
             {% endfor %}
-          {% else %}
-            <li class="u-padding--bottom">{{ related_page.value}}</li>
+          {% else %} {# else it's an external_page block #}
+          <!-- TODO: [rich-text] do we need this rich-text wrapper here? -->
+            <li class="u-padding--bottom"><div class="rich-text">{{ related_page.value}}</li></div>
           {% endif %}
         {% endfor %}
       </ul>
