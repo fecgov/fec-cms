@@ -103,6 +103,7 @@ class ContentPage(Page):
     class Meta:
         abstract = True
 
+    # TODO: [rich-text] need to find where this (body stream_factory) might be used
     body = stream_factory(null=True, blank=True)
     feed_image = models.ForeignKey('wagtailimages.Image', blank=True, null=True,
                                    on_delete=models.SET_NULL, related_name='+')

@@ -26,7 +26,22 @@
       </div>
     </header>
     <div class="content__section">
-      {{ self.body }}
+      {% comment %}
+        Wagtail did away with the .rich-text wrapper
+        but we still have some style rules that rely on it
+        so we're adding it back for blocks defined in models.py as RichTextBlock
+      {% endcomment %}
+      {% spaceless %}
+      {% for block in self.body %}
+      <div class="block-{{ block.block_type }}">
+        {% if block.block_type == 'paragraph' %}
+        <div class="rich-text">{{ block }}</div>
+        {% else %}
+        {{ block }}
+        {% endif %}
+      </div>
+      {% endfor %}
+      {% endspaceless %}
     </div>
     {% if self.related_media %}
     <div class="content__section--ruled content__section">
