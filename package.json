@@ -61,6 +61,7 @@
     "topojson": "^3.0.2",
     "tough-cookie": "^2.5.0",
     "tunnel-agent": "^0.6.0",
+    "ua-parser-js": "^0.7.24",
     "underscore": "^1.8.3",
     "whatwg-fetch": "^3.5.0"
   },
@@ -117,7 +118,7 @@
     "karma-coverage-istanbul-reporter": "^2.0.5",
     "karma-mocha": "^0.2.2",
     "karma-webpack": "^3.0.5",
-    "leaflet": "^1.4.0",
+    "leaflet": "^1.7.1",
     "mocha": "^5.2.0",
     "mockdate": "^2.0.2",
     "natives": "^1.1.6",
