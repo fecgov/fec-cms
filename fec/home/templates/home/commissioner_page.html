@@ -80,7 +80,11 @@
 
     </div>
     <div class="main__content">
-      <div class="rich-text">{{ self.commissioner_bio }}</div>
+      {% for block in self.commissioner_bio %}
+      <div class="block-paragraph">
+        <div class="rich-text">{{ block }}</div>
+      </div>
+      {% endfor %}
     </div>
   </div>
 </article>

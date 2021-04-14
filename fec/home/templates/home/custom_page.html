@@ -17,11 +17,6 @@
     </header>
     <div class="row">
       <div class="main__content">
-        {% comment %}
-          Wagtail did away with the .rich-text wrapper
-          but we still have some style rules that rely on it
-          so we're adding it back for blocks defined in models.py as RichTextBlock
-        {% endcomment %}
         {% spaceless %}
         {% for block in self.body %}
         <div class="block-{{ block.block_type }}">
@@ -118,7 +113,7 @@
             {% for block in citation.value %}
               <div class="grid__item">
                 <p class="t-bold">{{ block.label }}</p>
-                {{ block.content }}
+                <div class="rich-text">{{ block.content }}</div>
               </div>
             {% endfor %}
           {% endfor %}

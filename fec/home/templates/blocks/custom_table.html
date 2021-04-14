@@ -1,12 +1,12 @@
 {% load wagtailcore_tags %}
 
-{% for block in self.custom_table %}
+{% for block in self.custom_table %}  
 
    {% if block.block_type == "title" %}
     <h4>{{ block }}</h4>
     
    {% elif block.block_type == "table_intro" %}
-    {{ block }} 
+    <div class="rich-text">{{ block }}</div>
   
    {% elif block.block_type == "table" %}
     <div class="custom-table">{{ block }}</div>

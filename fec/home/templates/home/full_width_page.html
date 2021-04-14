@@ -41,7 +41,7 @@
             {% for block in citation.value %}
               <div class="grid__item">
                 <p class="t-bold">{{ block.label }}</p>
-                {{ block.content }}
+                <div class="rich-text">{{ block.content }}</div>
               </div>
             {% endfor %}
           {% endfor %}

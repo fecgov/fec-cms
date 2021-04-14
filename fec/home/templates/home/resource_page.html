@@ -24,7 +24,7 @@
              <li class="u-padding--bottom"><a href="{{ related.url }}">{{ related.title }}</a></li>
             {% endfor %}
           {% else %} {# else it's an external_page block #}
-            <li class="u-padding--bottom"><div class="rich-text">{{ related_page.value}}</li></div>
+            <li class="u-padding--bottom">{{ related_page.value }}</li>
           {% endif %}
         {% endfor %}
       </ul>
@@ -46,9 +46,7 @@
 {% endblock %}
 
 {% block sections %}
-
   {{ self.sections }}
-
 {% endblock %}
 
 {% if self.citations %}
@@ -58,7 +56,7 @@
     {% for block in citation.value %}
       <div class="grid__item">
         <p class="t-bold">{{ block.label }}</p>
-        {{ block.content }}
+        <div class="rich-text">{{ block.content }}</div>
       </div>
     {% endfor %}
   {% endfor %}
