@@ -197,7 +197,7 @@ class ResourceBlock(blocks.StructBlock):
     title = blocks.CharBlock(required=True)
     hide_title = blocks.BooleanBlock(required=False, help_text='Should the section title be displayed?')
     content = blocks.StreamBlock([
-        ('text', blocks.RichTextBlock(blank=False, null=False, required=False, icon='pilcrow')),
+        ('text', blocks.RichTextBlock(blank=False, null=False, required=False, icon='pilcrow')),  # TODO: [rich-text]
         ('documents', blocks.ListBlock(ThumbnailBlock(), template='blocks/section-documents.html', icon='doc-empty')),
         ('contact_info', ContactInfoBlock()),
         ('internal_button', InternalButtonBlock()),
@@ -215,7 +215,7 @@ class ResourceBlock(blocks.StructBlock):
         ('mur_search', MURSearchBlock()),
         ('audit_search', AuditSearchBlock()),
         ('table', TableBlock(table_options=core_table_options)),
-        ('custom_table', CustomTableBlock()),
+        ('custom_table', CustomTableBlock()),  # TODO: [rich-text]
         ('html', blocks.RawHTMLBlock()),
         ('reporting_example_cards', ReportingExampleCards()),
         ('contribution_limits_table', SnippetChooserBlock(
@@ -254,8 +254,8 @@ class CollectionBlock(blocks.StructBlock):
     ])
     title = blocks.CharBlock(required=True)
     style = blocks.ChoiceBlock(default=BULLET, choices=STYLE_CHOICES)
-    intro = blocks.RichTextBlock(blank=False, null=False, required=False)
-    items = blocks.ListBlock(blocks.RichTextBlock(form_classname="nothing"))
+    intro = blocks.RichTextBlock(blank=False, null=False, required=False)  # TODO: [rich-text]
+    items = blocks.ListBlock(blocks.RichTextBlock(form_classname="nothing"))  # TODO: [rich-text]
 
 
 class DocumentFeedBlurb(blocks.StructBlock):

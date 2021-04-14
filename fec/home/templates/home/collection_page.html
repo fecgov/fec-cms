@@ -59,7 +59,7 @@
             class="option">
       <div class="option__content">
         <h2>{{ block.value.title }}</h2>
-        {{ block.value.intro }}
+        <div class="rich-text">{{ block.value.intro }}</div>
         <ul class="{% if block.value.style == 'check' %}list--checks list--checks--secondary{% else %}list--bulleted--alt{% endif %} t-sans">
         {% for item in block.value.items %}
            <li>{{ item }}</li>

@@ -913,7 +913,7 @@ class ResourcePage(Page):
     ], null=True, blank=True)
     sections = StreamField([
         ('sections', ResourceBlock())
-    ], null=True, blank=True)
+    ], null=True, blank=True)  # TODO: [rich-text]
     citations = StreamField([
         ('citations', blocks.ListBlock(CitationsBlock()))
     ], null=True, blank=True)
@@ -989,7 +989,7 @@ class ServicesLandingPage(ContentPage, UniqueModel):
 
     intro = StreamField([
         ('paragraph', blocks.RichTextBlock())
-    ], null=True)  # TODO: [rich-text] is this being used anywhere?
+    ], null=True)
 
     content_panels = Page.content_panels + [
         StreamFieldPanel('hero'),
@@ -1058,7 +1058,7 @@ class MeetingPage(Page):
             ('item_title', blocks.TextBlock(required=True)),
             ('item_text', blocks.RichTextBlock(required=False)),
             ('item_audio', DocumentChooserBlock(required=False)),
-            ('item_video', blocks.URLBlock(required=False, help_text='Add a Youtube URL to a specific\
+            ('item_video', blocks.URLBlock(required=False, help_text='Add a YouTube URL to a specific\
                 time in a video for this agenda item')),
 
         ]))
