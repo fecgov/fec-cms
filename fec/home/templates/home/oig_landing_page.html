@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 {% load wagtailcore_tags %}
-{% load staticfiles %}
+{% load static %}
 {% load oig_most_recent %}
 {% block title %}{{ self.title }}{% endblock %}
 {% block body_class %}template-{{ self.get_verbose_name | slugify }}{% endblock %}
@@ -27,7 +27,22 @@
     <div class="grid--2-wide grid--flex">
       {% if self.stats_content %}
       <div class="grid__item card body-blocks">
-        {{ self.stats_content|safe }}
+        {% comment %}
+        Wagtail did away with the .rich-text wrapper
+        but we still have some style rules that rely on it
+        so we're adding it back for blocks defined in models.py as RichTextBlock
+        {% endcomment %}
+        {% spaceless %}
+        {% for block in self.stats_content %}
+        <div class="block-{{ block.block_type }}">
+        {% if block.block_type == 'paragraph' %}
+        <div class="rich-text">{{ block|safe }}</div>
+        {% else %}
+        {{ block|safe }}
+        {% endif %}
+        </div>
+        {% endfor %}
+        {% endspaceless %}
       </div>
       {% else %}
       <div class="grid__item card t-left-aligned placeholder-oig-logo" aria-hidden="true">&nbsp;</div>

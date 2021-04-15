@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 {% load wagtailcore_tags %}
-{% load staticfiles %}
+{% load static %}
 {% block body_class %}template-{{ self.get_verbose_name | slugify }}{% endblock %}
 
 {% block content %}
@@ -21,10 +21,17 @@
     </div>
     <div class="usa-width-two-thirds u-padding--left"">
       <h2>{{ self.services_title }}</h2>
+      {% spaceless %}
       {% for block in self.services %}
-      {{ block.value }}
+      <div class="block-{{ block.block_type }}">
+        {% if block.block_type == 'paragraph' %}
+        <div class="rich-text">{{ block }}</div>
+        {% else %}
+        {{ block }}
+        {% endif %}
+      </div>
       {% endfor %}
-
+      {% endspaceless %}
     </div>
   </div>
 </div>

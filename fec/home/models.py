@@ -47,7 +47,7 @@ core_table_options = {
 stream_factory = functools.partial(
     StreamField,
     [
-        ('heading', blocks.CharBlock(classname='full title', icon='title')),
+        ('heading', blocks.CharBlock(form_classname='full title', icon='title')),
         ('paragraph', blocks.RichTextBlock()),
         ('html', blocks.RawHTMLBlock()),
         ('image', ImageChooserBlock()),
@@ -104,6 +104,7 @@ class ContentPage(Page):
         abstract = True
 
     body = stream_factory(null=True, blank=True)
+
     feed_image = models.ForeignKey('wagtailimages.Image', blank=True, null=True,
                                    on_delete=models.SET_NULL, related_name='+')
 
@@ -593,7 +594,7 @@ class CustomPage(Page):
     author = models.CharField(max_length=255)
     date = models.DateField('Creation date')
     body = StreamField([
-        ('heading', blocks.CharBlock(classname='full title', icon='title')),
+        ('heading', blocks.CharBlock(form_classname='full title', icon='title')),
         ('paragraph', blocks.RichTextBlock()),
         ('html', blocks.RawHTMLBlock()),
         ('example_image', ExampleImage()),
@@ -1055,7 +1056,7 @@ class MeetingPage(Page):
             ('item_title', blocks.TextBlock(required=True)),
             ('item_text', blocks.RichTextBlock(required=False)),
             ('item_audio', DocumentChooserBlock(required=False)),
-            ('item_video', blocks.URLBlock(required=False, help_text='Add a Youtube URL to a specific\
+            ('item_video', blocks.URLBlock(required=False, help_text='Add a YouTube URL to a specific\
                 time in a video for this agenda item')),
 
         ]))
@@ -1240,7 +1241,7 @@ class OigLandingPage(Page):
     info_message = RichTextField(features=['bold', 'italic', 'link'], null=True, blank=True)
     stats_content = StreamField(
         [
-            ('heading', blocks.CharBlock(classname='full title', icon='title')),
+            ('heading', blocks.CharBlock(form_classname='full title', icon='title')),
             ('paragraph', blocks.RichTextBlock()),
             ('html', blocks.RawHTMLBlock(label='HTML')),
             ('image', ImageChooserBlock()),

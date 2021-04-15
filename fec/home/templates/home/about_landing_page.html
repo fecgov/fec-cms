@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 {% load wagtailcore_tags %}
-{% load staticfiles %}
+{% load static %}
 {% load updates %}
 {% block body_class %}template-{{ self.get_verbose_name | slugify }}{% endblock %}
 
@@ -36,7 +36,7 @@
           <h2>{{ section.value.title }}</h2>
         {% endif %}
 
-        {{ section.value.intro }}
+        <div class="rich-text">{{ section.value.intro }}</div>
 
         {% if section.value.button_text %}
           {% if section.value.related_page %}

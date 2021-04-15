@@ -54,7 +54,14 @@ def register_anchor_feature(features):
     }
 
     features.register_editor_plugin(
-        'draftail', feature_name, draftail_features.EntityFeature(control)
+        'draftail', feature_name, draftail_features.EntityFeature(
+            control,
+            js=[
+                polyfills_js(),
+                '/static/wagtailadmin/js/draftail.js',
+                draftail_js(),
+            ]
+        )
     )
 
     features.register_converter_rule('contentstate', feature_name, {
@@ -134,21 +141,6 @@ def polyfills_js():
     key = '/static/js/polyfills.js'
     assets = json.load(open(settings.DIST_DIR + '/fec/static/js/rev-legal-manifest-js.json'))
     return assets[key] if key in assets else key
-
-
-# Inserts custom editor js
-@hooks.register('insert_editor_js')
-def editor_js():
-    transpiled = draftail_js()
-    polyfills = polyfills_js()
-    scripts = [
-        '<script src="{}"></script>'.format(polyfills),
-        '<script src="/static/wagtailadmin/js/draftail.js"></script>',
-        '<script src="{}"></script>'.format(transpiled)
-    ]
-
-    html = '\n'.join(str(s) for s in scripts)
-    return format_html(html)
 
 
 @hooks.register('insert_editor_css')
