@@ -1,15 +1,18 @@
-// TODO - remove this? Wagtail 2.8 did away with the responsive-object class
-// TODO - https://docs.wagtail.io/en/stable/releases/2.8.html#responsive-html-for-embeds-no-longer-added-by-default
-.responsive-object {
-	width: 100% !important;
-	height: auto !important;
-	padding: 0 !important;
+//Responsive video embeds for RTE with intrinsic sizing technnique
 
-	iframe {
-		width: 100% !important;
-	}
+.responsive-object { 
+	position: relative; 
+	width: 100% !important; 
+	height: auto !important; 
+
+	iframe, object, embed { 
+		position: absolute; 
+		top: 0; 
+		left: 0; 
+		width: 100%; 
+		height: 100%; 
+	} 
 }
-// TODO - remove this? Wagtail 2.8 did away with the responsive-object class
 
 //TV Ad example:
 
