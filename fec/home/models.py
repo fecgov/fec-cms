@@ -103,8 +103,6 @@ class ContentPage(Page):
     class Meta:
         abstract = True
 
-    # TODO: [rich-text] need to find where this (body stream_factory) might be used
-    # TODO: and make sure the templates get the rich-text wrapper if needed
     body = stream_factory(null=True, blank=True)
 
     feed_image = models.ForeignKey('wagtailimages.Image', blank=True, null=True,
@@ -913,7 +911,7 @@ class ResourcePage(Page):
     ], null=True, blank=True)
     sections = StreamField([
         ('sections', ResourceBlock())
-    ], null=True, blank=True)  # TODO: [rich-text]
+    ], null=True, blank=True)
     citations = StreamField([
         ('citations', blocks.ListBlock(CitationsBlock()))
     ], null=True, blank=True)
