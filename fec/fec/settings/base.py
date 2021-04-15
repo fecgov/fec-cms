@@ -251,6 +251,7 @@ SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
 # Wagtail settings
 WAGTAIL_SITE_NAME = "fec"
+WAGTAILEMBEDS_RESPONSIVE_HTML = True
 
 # Custom settings
 from fec import constants # noqa E402
