@@ -167,3 +167,11 @@ def get_social_image_path(identifier):
     else:
         imageFilename = 'fec-logo'
     return 'https://www.fec.gov/static/img/social/{}.png'.format(imageFilename)
+
+@register.filter(name='get_file_type')
+def get_file_type(value):
+    file_extension = value.rsplit('.', 1)[1].upper()
+    xl = (file_extension == 'XLS') or (file_extension  == 'XLSX')
+    file_type = "EXCEL" if xl else file_extension
+
+    return file_type
