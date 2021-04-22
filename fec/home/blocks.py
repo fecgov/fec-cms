@@ -291,6 +291,7 @@ class LinkBlock(blocks.StructBlock):
     class Meta:
         icon = 'link'
 
+
 class SimpleDocumentList(blocks.StructBlock):
     """For list of linked documents, with document icon and file-type"""
     document_name = blocks.CharBlock(required=True)
