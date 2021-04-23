@@ -33,7 +33,7 @@ from home.blocks import (
     DocumentFeedBlurb, ExampleForms, ExampleImage, ExampleParagraph,
     ExternalButtonBlock, InternalButtonBlock, LinkBlock, OptionBlock,
     ReportingExampleCards, ResourceBlock, SnippetChooserBlock,
-    ThumbnailBlock,
+    ThumbnailBlock, FeedDocumentBlock
 )
 
 logger = logging.getLogger(__name__)
@@ -609,6 +609,10 @@ class CustomPage(Page):
         ('contribution_limits_table', SnippetChooserBlock(
             'home.EmbedTableSnippet',
             template='blocks/embed-table.html', icon='table')),
+        ('simple_document_list', blocks.ListBlock(
+            FeedDocumentBlock(),
+            template='blocks/simple-document-list.html',
+            icon='doc-empty')),
     ], null=True)
     sidebar = stream_factory(null=True, blank=True)
     related_topics = StreamField([
