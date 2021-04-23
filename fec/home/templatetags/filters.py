@@ -176,4 +176,3 @@ def get_file_type(value):
     file_type = "EXCEL" if xl else file_extension
 
     return file_type
-
