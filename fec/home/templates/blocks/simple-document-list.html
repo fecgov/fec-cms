@@ -1,6 +1,6 @@
 {% load wagtailcore_tags %}
 {% load filters %}
 
-<span class="t-sans post__doc row">
+<span class="t-sans post__doc">
   <a href="{{ value.document.url }}">{{ value.document_name }}</a> | {{ value.document.url | get_file_type}}
 </span>

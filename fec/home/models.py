@@ -609,7 +609,7 @@ class CustomPage(Page):
         ('contribution_limits_table', SnippetChooserBlock(
             'home.EmbedTableSnippet',
             template='blocks/embed-table.html', icon='table')),
-        ('simple_document_list', SimpleDocumentList(icon='doc-empty'))
+        ('simple_document_list', blocks.ListBlock(SimpleDocumentList(), icon='doc-empty'))
     ], null=True)
     sidebar = stream_factory(null=True, blank=True)
     related_topics = StreamField([
