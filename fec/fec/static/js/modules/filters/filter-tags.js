@@ -1,39 +1,27 @@
 'use strict';
 
 var $ = require('jquery');
-var _ = require('underscore');
 
-var BODY_TEMPLATE = _.template(
-  '<div>' +
-    '<div class="row">' +
-    '<h3 class="tags__title">Viewing ' +
-    '<span class="js-count" aria-hidden="true"></span> ' +
-    '<span class="js-result-type">filtered {{ resultType }} for:</span>' +
-    '</h3>' +
-    '<button type="button" class="{{ clearResetFiltersClass }} button--unstyled tags__clear" aria-hidden="true">{{ clearResetFiltersLabel }}</button>' +
-    '</div>' +
-    '<ul class="tags">' +
-    '</ul>' +
-    '</div>',
-  { interpolate: /\{\{(.+?)\}\}/g }
-);
+const template_body = value => `
+<div>
+  <div class="row">
+    <h3 class="tags__title">Viewing 
+      <span class="js-count" aria-hidden="true"></span>
+      <span class="js-result-type">filtered ${value.resultType} for:</span>
+    </h3>
+    <button type="button" class="${value.clearResetFiltersClass} button--unstyled tags__clear" aria-hidden="true">${value.clearResetFiltersLabel}</button>
+  </div>
+  <ul class="tags">
+  </ul>
+</div>`;
 
-var TAG_TEMPLATE = _.template(
-  '<div data-id="{{ key }}" data-removable="true" class="tag__item">' +
-    '{{ value }}' +
-    '<button class="button js-close tag__remove">' +
-    '<span class="u-visually-hidden">Remove</span>' +
-    '</button>' +
-    '</div>',
-  { interpolate: /\{\{(.+?)\}\}/g }
-);
+const template_tag = value => `<div data-id="${value.key}" data-removable="true" class="tag__item">${value.value}
+  <button class="button js-close tag__remove"><span class="u-visually-hidden">Remove</span></button>
+</div>`;
 
-var NONREMOVABLE_TAG_TEMPLATE = _.template(
-  '<div data-id="{{ key }}" data-removable="false" data-remove-on-switch="{{ removeOnSwitch }}" class="tag__item">' +
-    '{{ value }}' +
-    '</div>',
-  { interpolate: /\{\{(.+?)\}\}/g }
-);
+const template_nonremoveableTag = value => `<div data-id="${value.key}" data-removable="false" data-remove-on-switch="${value.removeOnSwitch}" class="tag__item">
+    ${value.value}
+</div>`;
 
 /**
  * TagLists are created by modules/tables.js and calendar-page.js
@@ -54,7 +42,7 @@ function TagList(opts) {
       this.opts.tableTitle == 'Individual contributions');
 
   this.$body = $(
-    BODY_TEMPLATE({
+    template_body({
       resultType: this.opts.resultType,
       clearResetFiltersLabel: shouldResetFilters
         ? 'Reset filters'
@@ -97,8 +85,8 @@ function TagList(opts) {
  */
 TagList.prototype.addTag = function(e, opts) {
   var tag = opts.nonremovable
-    ? NONREMOVABLE_TAG_TEMPLATE(opts)
-    : TAG_TEMPLATE(opts);
+    ? template_nonremoveableTag(opts)
+    : template_tag(opts);
   var name = opts.range ? opts.rangeName : opts.name;
   var $tagCategory = this.$list.find('[data-tag-category="' + name + '"]');
   this.removeTag(opts.key, false);
@@ -305,8 +293,8 @@ TagList.prototype.removeTagDom = function(e) {
  */
 TagList.prototype.renameTag = function(e, opts) {
   var tag = opts.nonremovable
-    ? NONREMOVABLE_TAG_TEMPLATE(opts)
-    : TAG_TEMPLATE(opts);
+    ? template_nonremoveableTag(opts)
+    : template_tag(opts);
   var $tag = this.$list.find('[data-id="' + opts.key + '"]');
   if ($tag.length) {
     $tag.replaceWith(tag);

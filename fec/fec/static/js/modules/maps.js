@@ -30,9 +30,10 @@ var colorScale = ['#e2ffff', '#278887'];
 var compactRules = [['B', 9], ['M', 6], ['k', 3], ['', 0]];
 var MAX_MAPS = 2;
 
-_.templateSettings = {
-  interpolate: /\{\{(.+?)\}\}/g
-};
+const template_tooltip = value => `
+  <div class="tooltip__title">${value.name}</div>
+  <div class="tooltip__value">${value.total}</div>
+`;
 
 function chooseRule(value) {
   return _.find(compactRules, function(rule) {
@@ -149,11 +150,6 @@ function stateLegend(svg, scale, quantize, quantiles) {
     });
 }
 
-var tooltipTemplate = _.template(
-  '<div class="tooltip__title">{{ name }}</div>' +
-    '<div class="tooltip__value">{{ total }}</div>'
-);
-
 function stateTooltips(svg, path, results) {
   var tooltip = d3
     .select('body')
@@ -167,7 +163,7 @@ function stateTooltips(svg, path, results) {
     .selectAll('path')
     .on('mouseover', function(d) {
       this.parentNode.appendChild(this);
-      var html = tooltipTemplate({
+      var html = template_tooltip({
         name: fips.fipsByCode[d.id].STATE_NAME,
         total: helpers.currency(results[d.id] || 0)
       });
