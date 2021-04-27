@@ -104,6 +104,7 @@ INSTALLED_APPS = (
     'wagtail.embeds',
     'wagtail.contrib.redirects',
     'wagtail.contrib.forms',
+    'wagtail.locales',
 
     'wagtail.contrib.modeladmin',
     'wagtail.contrib.search_promotions',
@@ -130,8 +131,10 @@ MIDDLEWARE = (
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django.middleware.security.SecurityMiddleware',
-    'wagtail.core.middleware.SiteMiddleware',
     'wagtail.contrib.redirects.middleware.RedirectMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
+    # 'wagtail.contrib.legacy.sitemiddleware.SiteMiddleware',
+    # :up: SiteMiddleware :up: was removed for Wagtail 2.11. Safe to lose it altogether?
 )
 
 CSRF_TRUSTED_ORIGINS = ["fec.gov", "app.cloud.gov"]
@@ -162,6 +165,9 @@ TEMPLATES = [
                 'FEC_CMS_ENVIRONMENT': FEC_CMS_ENVIRONMENT,
                 'FEATURES': FEATURES,
             },
+            'context_processors': [
+                'django.template.context_processors.request'
+            ]
         }
     },
     {
@@ -200,13 +206,12 @@ DATABASES = {
 # https://docs.djangoproject.com/en/1.8/topics/i18n/
 
 LANGUAGE_CODE = 'en-us'
-
+LANGUAGES = (
+    ('en', 'English'),
+)
 TIME_ZONE = 'America/New_York'
-
 USE_I18N = True
-
 USE_L10N = True
-
 USE_TZ = True
 
 
@@ -246,6 +251,7 @@ SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
 # Wagtail settings
 WAGTAIL_SITE_NAME = "fec"
+WAGTAILEMBEDS_RESPONSIVE_HTML = True
 
 # Custom settings
 from fec import constants # noqa E402

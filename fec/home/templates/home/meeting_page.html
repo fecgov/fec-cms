@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 {% load wagtailcore_tags %}
-{% load staticfiles %}
+{% load static %}
 {% load filters %}
 {% load updates %}
 {% block body_class %}template-{{ self.get_verbose_name | slugify }}{% endblock %}
@@ -86,7 +86,9 @@
           </ul>
         {% endif %}
           <div class="agenda__text">
-            {{ block.value.item_text }}
+            <div class="rich-text">
+              {{ block.value.item_text }}
+            </div>
           </div>
          </li>
       {% endfor %}

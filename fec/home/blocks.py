@@ -255,7 +255,7 @@ class CollectionBlock(blocks.StructBlock):
     title = blocks.CharBlock(required=True)
     style = blocks.ChoiceBlock(default=BULLET, choices=STYLE_CHOICES)
     intro = blocks.RichTextBlock(blank=False, null=False, required=False)
-    items = blocks.ListBlock(blocks.RichTextBlock(classname="nothing"))
+    items = blocks.ListBlock(blocks.RichTextBlock(form_classname="nothing"))
 
 
 class DocumentFeedBlurb(blocks.StructBlock):

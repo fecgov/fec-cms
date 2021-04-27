@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 {% load wagtailcore_tags %}
-{% load staticfiles %}
+{% load static %}
 {% load filters %}
 
 {% block content %}
@@ -11,7 +11,7 @@
   <div class="container" id="sections">
     <h1 class="heading--main">{{ self.title }}</h1>
     <div class="content__section">
-      {{ self.intro }}
+      <div class="rich-text">{{ self.intro }}</div>
     </div>
     <div class="grid grid--3-wide">
       {% for blurb in self.document_feeds %}

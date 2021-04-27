@@ -1,16 +1,33 @@
+{# this is the html template for ResourceBlock() #}
 {% load wagtailcore_tags %}
 {% load filters %}
 
 <section id="{{ value.title | prepend_non_digit | slugify}}" class="option {% if value.hide_title %}option--no-top-border{% endif %}">
   {% if not value.hide_title %}<h2>{{ value.title }}</h2>{% endif %}
+
+  {# open a div with a different class based on whether there's an aside #}
   {% if value.aside %}
     <div class="option__content">
-      {% include_block value.content with blocks=value.content %}
-    </div>
-    {% include_block value.aside with aside=value.aside %}
   {% else %}
     <div class="row">
-      {% include_block value.content with blocks=value.content %}
-    </div>
   {% endif %}
+
+      {% for content_block in value.content %}
+      <div class="block-{{ content_block.block_type }}">
+        {% if content_block.block_type == 'text' %}
+        <div class="rich-text">{% include_block content_block with blocks=content_block %}</div>
+        {% else %}
+        {% include_block content_block with blocks=content_block %}
+        {% endif %}
+      </div>
+      {% endfor %}
+
+    {# close the div we opened based on whether there's an aside #}
+    </div>
+
+  {# add the aside if needed #}
+  {% if value.aside %}
+      {% include_block value.aside with aside=value.aside %}
+  {% endif %}
+
 </section>

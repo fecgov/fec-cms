@@ -1,6 +1,6 @@
 {% extends "long_page.html" %}
 {% load wagtailcore_tags %}
-{% load staticfiles %}
+{% load static %}
 {% block title %}{{ self.title }}{% endblock %}
 {% block body_class %}template-{{ self.get_verbose_name | slugify }}{% endblock %}
 
@@ -11,7 +11,7 @@
 {% block intro %}
 <div class="row">
   <div class="main__content">
-    <div class="t-lead">{{ self.intro }}</div>
+    <div class="t-lead"><div class="rich-text">{{ self.intro }}</div></div>
   </div>
   {% if self.sidebar_title %}
   <div class="sidebar-container">
@@ -23,8 +23,8 @@
             {% for related in related_page.value %}
              <li class="u-padding--bottom"><a href="{{ related.url }}">{{ related.title }}</a></li>
             {% endfor %}
-          {% else %}
-            <li class="u-padding--bottom">{{ related_page.value}}</li>
+          {% else %} {# else it's an external_page block #}
+            <li class="u-padding--bottom">{{ related_page.value }}</li>
           {% endif %}
         {% endfor %}
       </ul>
@@ -46,9 +46,7 @@
 {% endblock %}
 
 {% block sections %}
-
   {{ self.sections }}
-
 {% endblock %}
 
 {% if self.citations %}
@@ -58,7 +56,7 @@
     {% for block in citation.value %}
       <div class="grid__item">
         <p class="t-bold">{{ block.label }}</p>
-        {{ block.content }}
+        <div class="rich-text">{{ block.content }}</div>
       </div>
     {% endfor %}
   {% endfor %}
@@ -77,7 +75,7 @@
               <span class="card__icon i-question-bubble"><span class="u-visually-hidden">Icon representing a question</span></span>
           </div>
           <div class="card__content">
-            Get help from the FEC by  phone or email
+            Get help from the FEC by phone or email
           </div>
         </aside>
       </a>

@@ -1,5 +1,5 @@
 {% load wagtailimages_tags %}
-{% load staticfiles %}
+{% load static %}
 {% comment %}
   This partial is used by the inclusion tag in commissioners.py - current_commissioners(). Set the `grid` argument to control the layout.
   Show the chair, then the vice chair, everyone else and vacant seats
@@ -20,7 +20,7 @@
 {% for vacant in vacant_seats %}
   <div class="grid__item commissioner-height">
   <div class="icon-heading">
-    <img class="icon-heading__image" src="{% static "img/headshot--no-photo.jpg" %}" alt="Headshot of vacant seat">
+    <img class="icon-heading__image" src="{% static "img/headshot--no-photo.jpg" %}" alt="Headshot of vacant seat" width="160" height="160">
     <div class="icon-heading__content">
       <div class="t-lead">Vacant seat</div>
     </div>

@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 {% load wagtailcore_tags %}
-{% load staticfiles %}
+{% load static %}
 {% load updates %}
 {% block body_class %}template-{{ self.get_verbose_name | slugify }}{% endblock %}
 
@@ -33,7 +33,17 @@
       <div id="press-releases" class="option">
         <h2><a href="/updates?update_type=press-release">Press releases</a></h2>
         <div class="content__section">
-          {{ self.release_intro }}
+          {% spaceless %}
+          {% for block in self.release_intro %}
+          <div class="block-{{ block.block_type }}">
+            {% if block.block_type == 'paragraph' %}
+            <div class="rich-text">{{ block }}</div>
+            {% else %}
+            {{ block }}
+            {% endif %}
+          </div>
+          {% endfor %}
+          {% endspaceless %}
           <a class="button button--standard button--go" href="/updates?update_type=press-release">All press releases</a>
         </div>
         <div class="post-feed">
@@ -44,7 +54,17 @@
       <div id="weekly-digest" class="option">
         <h2><a href="/updates?update_type=weekly-digest">Weekly Digests</a></h2>
         <div class="content__section">
-          {{ self.digest_intro }}
+          {% spaceless %}
+          {% for block in self.digest_intro %}
+          <div class="block-{{ block.block_type }}">
+            {% if block.block_type == 'paragraph' %}
+            <div class="rich-text">{{ block }}</div>
+            {% else %}
+            {{ block }}
+            {% endif %}
+          </div>
+          {% endfor %}
+          {% endspaceless %}
           <a class="button button--standard button--go" href="/updates?update_type=weekly-digest">All Weekly Digests</a>
         </div>
         <div class="post-feed">
@@ -55,14 +75,24 @@
       {% for option in self.option_blocks %}
       <div id="{{ option.value.title | slugify }}" class="option">
         <h2><a href="{{ option.value.related_page.url }}">{{ option.value.title }}</a></h2>
-        {{ option.value.intro }}
+        <div class="rich-text">{{ option.value.intro }}</div>
         <a href="{{ option.value.related_page.url }}" class="button button--cta">{{ option.value.button_text }}</a>
       </div>
       {% endfor %}
 
       <div id="contact" class="option">
         <h2>Contact</h2>
-        {{ self.contact_intro }}
+        {% spaceless %}
+        {% for block in self.contact_intro %}
+        <div class="block-{{ block.block_type }}">
+          {% if block.block_type == 'paragraph' %}
+          <div class="rich-text">{{ block }}</div>
+          {% else %}
+          {{ block }}
+          {% endif %}
+        </div>
+        {% endfor %}
+        {% endspaceless %}
       </div>
     </section>
   </div>
