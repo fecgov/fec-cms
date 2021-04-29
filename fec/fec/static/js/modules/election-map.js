@@ -203,7 +203,7 @@ ElectionMap.prototype.onEachDistrict = function(feature, layer, opts) {
 };
 
 ElectionMap.prototype.onEachBackgroundDistrict = function(feature, layer) {
-  layer.setStyle({ color: "#bbbbbb" });
+  layer.setStyle({ color: '#bbbbbb' });
   layer.on('click', this.handleDistrictClick.bind(this));
 };
 
