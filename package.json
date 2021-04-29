@@ -62,7 +62,6 @@
     "tough-cookie": "^2.5.0",
     "tunnel-agent": "^0.6.0",
     "ua-parser-js": "^0.7.24",
-    "underscore": "^1.13.1",
     "whatwg-fetch": "^3.5.0"
   },
   "devDependencies": {
@@ -130,6 +129,7 @@
     "sinon": "^1.17.2",
     "sinon-chai": "^2.8.0",
     "stringify": "^5.2.0",
+    "underscore": "^1.13.1",
     "urijs": "^1.19.1",
     "vinyl-buffer": "^1.0.1",
     "vue": "^2.6.11",

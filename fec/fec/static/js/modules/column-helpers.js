@@ -1,7 +1,6 @@
 'use strict';
 
-var _ = require('underscore');
-
+// var _ = require('underscore');
 var helpers = require('./helpers');
 
 var sizeInfo = {
@@ -11,6 +10,13 @@ var sizeInfo = {
   1000: { limits: [1000, 1999.99], label: '$1,000—$1,999' },
   2000: { limits: [2000, null], label: '$2,000 and over' }
 };
+
+let shouldTrace = true;
+function trace(data, ...args) {
+  // if (data && data.candidate_name)
+  //   shouldTrace = data.candidate_name.indexOf('HERMAN');
+  // if (shouldTrace) console.log(...args);
+}
 
 function getSizeParams(size) {
   var limits = sizeInfo[size].limits;
@@ -25,7 +31,8 @@ function getSizeParams(size) {
 }
 
 function getColumns(columns, keys) {
-  return _.map(keys, function(key) {
+  trace('getColumns(columns, keys): ', columns, keys);
+  return keys.map(function(key) {
     return columns[key];
   });
 }
@@ -33,7 +40,7 @@ function getColumns(columns, keys) {
 function formattedColumn(formatter, defaultOpts) {
   defaultOpts = defaultOpts || {};
   return function(opts) {
-    return _.extend(
+    return Object.assign(
       {},
       defaultOpts,
       {
@@ -53,12 +60,12 @@ function barColumn(formatter) {
       return value;
     };
   return function(opts) {
-    return _.extend(
+    return Object.assign(
       {
         orderSequence: ['desc', 'asc'],
         render: function(data, type, row, meta) {
           var span = document.createElement('div');
-          span.textContent = formatter(_.max([data, 0]));
+          span.textContent = formatter(Math.max(data, 0));
           span.setAttribute('data-value', data || 0);
           span.setAttribute('data-row', meta.row);
           return span.outerHTML;
@@ -70,7 +77,7 @@ function barColumn(formatter) {
 }
 
 function urlColumn(attr, opts) {
-  return _.extend(
+  return Object.assign(
     {
       render: function(data, type, row) {
         if (row[attr]) {
@@ -119,6 +126,7 @@ function buildAggregateUrl(cycle, includeTransactionPeriod, duration = 2) {
 // As well as candidate/committee profile "Individual contributions"
 // by state and by size
 function buildTotalLink(path, getParams) {
+  trace(null, 'buildTotalLink(path, getParams): ', path, getParams);
   return function(data, type, row, meta) {
     data = data || 0;
     var params = getParams(data, type, row, meta);
@@ -139,10 +147,10 @@ function buildTotalLink(path, getParams) {
       }
       var uri = helpers.buildAppUrl(
         path,
-        _.extend(
+        Object.assign(
           { committee_id: row.committee_id },
           buildAggregateUrl(
-            _.extend({}, row, params).cycle,
+            Object.assign({}, row, params).cycle,
             includeTransactionPeriod,
             electionDuration
           ),
@@ -164,7 +172,14 @@ function buildTotalLink(path, getParams) {
 
 // Used for election profile page "individual contributions to candidates" charts
 function makeCommitteeColumn(opts, context, factory) {
-  return _.extend(
+  trace(
+    context.election,
+    'makeCommitteeColumn(opts, context, factory): ',
+    opts,
+    context,
+    factory
+  );
+  return Object.assign(
     {},
     {
       orderSequence: ['desc', 'asc'],
@@ -178,7 +193,7 @@ function makeCommitteeColumn(opts, context, factory) {
         row.cycle = context.election.cycle;
         var column = meta.settings.aoColumns[meta.col].data;
         row.duration = context.election.duration;
-        return _.extend(
+        return Object.assign(
           {
             committee_id: (context.candidates[row.candidate_id] || {})
               .committee_ids
@@ -191,18 +206,28 @@ function makeCommitteeColumn(opts, context, factory) {
     opts
   );
 }
+const partial = (func, ...boundArgs) => (...remainingArgs) =>
+  func(...boundArgs, ...remainingArgs);
 
-var makeSizeColumn = _.partial(makeCommitteeColumn, _, _, function(
+var makeSizeColumn = partial(makeCommitteeColumn, _, _, function(
   data,
   type,
   row,
   meta,
   column
 ) {
-  return getSizeParams(column);
-});
+    trace(row, 'makeSizeColumn - partial - makeCommitteeColumn(): ');
+    trace(row, '    data: ', data);
+    trace(row, '    type: ', type);
+    trace(row, '    row: ', row);
+    trace(row, '    meta: ', meta);
+    trace(row, '    column: ', column);
+    return getSizeParams(column);
+  }
+);
 
 function sizeColumns(context) {
+  trace(context, 'sizeColumns(context): ', context);
   return [
     {
       data: 'candidate_name',
@@ -225,8 +250,9 @@ function sizeColumns(context) {
 }
 
 function stateColumns(results, context) {
+  trace(context, 'stateColumns(context): ', results, context);
   var stateColumn = { data: 'state' };
-  var columns = _.map(results, function(result) {
+  var columns = results.map(function(result) {
     return makeCommitteeColumn({ data: result.candidate_id }, context, function(
       data,
       type,
