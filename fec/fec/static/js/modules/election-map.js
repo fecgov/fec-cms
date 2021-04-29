@@ -165,9 +165,7 @@ ElectionMap.prototype.drawBackgroundDistricts = function(districts) {
     );
   });
   L.geoJson(stateDistricts, {
-    onEachFeature: _.partial(this.onEachDistrict.bind(this), _, _, {
-      color: '#bbbbbb'
-    })
+    onEachFeature: this.onEachBackgroundDistrict.bind(this)
   }).addTo(this.overlay);
 };
 
@@ -201,6 +199,11 @@ ElectionMap.prototype.onEachDistrict = function(feature, layer, opts) {
   var palette = this.districtPalette[decoded.state];
   var color = palette[decoded.district % palette.length];
   layer.setStyle({ color: opts.color || color });
+  layer.on('click', this.handleDistrictClick.bind(this));
+};
+
+ElectionMap.prototype.onEachBackgroundDistrict = function(feature, layer) {
+  layer.setStyle({ color: '#bbbbbb' });
   layer.on('click', this.handleDistrictClick.bind(this));
 };
 
