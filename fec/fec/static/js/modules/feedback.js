@@ -4,8 +4,9 @@ var $ = require('jquery');
 var _ = require('underscore');
 
 var accessibility = require('./accessibility');
-
 var feedback = require('../templates/feedback.hbs');
+
+const loadRecaptcha = require('./load-recaptcha').loadRecaptcha;
 
 var statusClasses = {
   success: 'message--success',
@@ -43,6 +44,8 @@ function Feedback(url, parent) {
 Feedback.prototype.toggle = function() {
   var method = this.isOpen ? this.hide : this.show;
   method.apply(this);
+
+  loadRecaptcha();
 };
 
 Feedback.prototype.show = function() {
