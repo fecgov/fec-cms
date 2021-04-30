@@ -609,6 +609,10 @@ class CustomPage(Page):
         ('contribution_limits_table', SnippetChooserBlock(
             'home.EmbedTableSnippet',
             template='blocks/embed-table.html', icon='table')),
+        ('document_list', blocks.ListBlock(
+            FeedDocumentBlock(),
+            template='blocks/document-list.html',
+            icon='doc-empty')),
         ('simple_document_list', blocks.ListBlock(
             FeedDocumentBlock(),
             template='blocks/simple-document-list.html',
