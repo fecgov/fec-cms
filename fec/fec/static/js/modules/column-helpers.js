@@ -209,25 +209,11 @@ function makeCommitteeColumn(opts, context, factory) {
 const partial = (func, ...boundArgs) => (...remainingArgs) =>
   func(...boundArgs, ...remainingArgs);
 
-var makeSizeColumn = partial(makeCommitteeColumn, _, _, function(
-  data,
-  type,
-  row,
-  meta,
-  column
-) {
-    trace(row, 'makeSizeColumn - partial - makeCommitteeColumn(): ');
-    trace(row, '    data: ', data);
-    trace(row, '    type: ', type);
-    trace(row, '    row: ', row);
-    trace(row, '    meta: ', meta);
-    trace(row, '    column: ', column);
-    return getSizeParams(column);
-  }
-);
-
 function sizeColumns(context) {
-  trace(context, 'sizeColumns(context): ', context);
+  var factory = function(data, type, row, meta, column) {
+    return getSizeParams(column);
+  };
+
   return [
     {
       data: 'candidate_name',
@@ -241,11 +227,11 @@ function sizeColumns(context) {
         );
       }
     },
-    makeSizeColumn({ data: '0' }, context),
-    makeSizeColumn({ data: '200' }, context),
-    makeSizeColumn({ data: '500' }, context),
-    makeSizeColumn({ data: '1000' }, context),
-    makeSizeColumn({ data: '2000' }, context)
+    makeCommitteeColumn({ data: '0' }, context, factory),
+    makeCommitteeColumn({ data: '200' }, context, factory),
+    makeCommitteeColumn({ data: '500' }, context, factory),
+    makeCommitteeColumn({ data: '1000' }, context, factory),
+    makeCommitteeColumn({ data: '2000' }, context, factory)
   ];
 }
 
