@@ -11,13 +11,6 @@ var sizeInfo = {
   2000: { limits: [2000, null], label: '$2,000 and over' }
 };
 
-let shouldTrace = true;
-function trace(data, ...args) {
-  // if (data && data.candidate_name)
-  //   shouldTrace = data.candidate_name.indexOf('HERMAN');
-  // if (shouldTrace) console.log(...args);
-}
-
 function getSizeParams(size) {
   var limits = sizeInfo[size].limits;
   var params = {};
@@ -31,7 +24,6 @@ function getSizeParams(size) {
 }
 
 function getColumns(columns, keys) {
-  trace('getColumns(columns, keys): ', columns, keys);
   return keys.map(function(key) {
     return columns[key];
   });
@@ -126,7 +118,6 @@ function buildAggregateUrl(cycle, includeTransactionPeriod, duration = 2) {
 // As well as candidate/committee profile "Individual contributions"
 // by state and by size
 function buildTotalLink(path, getParams) {
-  trace(null, 'buildTotalLink(path, getParams): ', path, getParams);
   return function(data, type, row, meta) {
     data = data || 0;
     var params = getParams(data, type, row, meta);
@@ -172,13 +163,6 @@ function buildTotalLink(path, getParams) {
 
 // Used for election profile page "individual contributions to candidates" charts
 function makeCommitteeColumn(opts, context, factory) {
-  trace(
-    context.election,
-    'makeCommitteeColumn(opts, context, factory): ',
-    opts,
-    context,
-    factory
-  );
   return Object.assign(
     {},
     {
@@ -206,8 +190,6 @@ function makeCommitteeColumn(opts, context, factory) {
     opts
   );
 }
-const partial = (func, ...boundArgs) => (...remainingArgs) =>
-  func(...boundArgs, ...remainingArgs);
 
 function sizeColumns(context) {
   var factory = function(data, type, row, meta, column) {
@@ -236,7 +218,6 @@ function sizeColumns(context) {
 }
 
 function stateColumns(results, context) {
-  trace(context, 'stateColumns(context): ', results, context);
   var stateColumn = { data: 'state' };
   var columns = results.map(function(result) {
     return makeCommitteeColumn({ data: result.candidate_id }, context, function(

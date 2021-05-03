@@ -35,7 +35,6 @@ var sizeColumns = [
     className: 'all',
     orderable: false,
     render: function(data) {
-      console.log('committee-single.sizeColumns[0] render (data): ', data);
       return columnHelpers.sizeInfo[data].label;
     }
   },
@@ -48,7 +47,6 @@ var sizeColumns = [
     render: columnHelpers.buildTotalLink(
       ['receipts', 'individual-contributions'],
       function(data, type, row) {
-        console.log('committee-single.sizeColumns[1] render (data, type, row): ', data, type, row);
         return columnHelpers.getSizeParams(row.size);
       }
     )
@@ -61,7 +59,6 @@ var stateColumns = [
     width: '50%',
     className: 'all',
     render: function(data, type, row, meta) {
-      console.log('committee-single.stateColumns[0] render (data, type, row, meta): ', data, type, row, meta);
       var span = document.createElement('span');
       span.textContent = data;
       span.setAttribute('data-state', data);
@@ -77,7 +74,6 @@ var stateColumns = [
     render: columnHelpers.buildTotalLink(
       ['receipts', 'individual-contributions'],
       function(data, type, row) {
-        console.log('committee-single.stateColumns[1] render (data, type, row): ', data, type, row);
         return {
           contributor_state: row.state
         };
@@ -101,7 +97,6 @@ var employerColumns = [
     render: columnHelpers.buildTotalLink(
       ['receipts', 'individual-contributions'],
       function(data, type, row) {
-        console.log('committee-single.employerColumns render (data, type, row): ', data, type, row);
         if (row.employer) {
           return {
             contributor_employer: row.employer
@@ -129,7 +124,6 @@ var occupationColumns = [
     render: columnHelpers.buildTotalLink(
       ['receipts', 'individual-contributions'],
       function(data, type, row) {
-        console.log('committee-single.occupationColumns render (data, type, row): ', data, type, row);
         if (row.occupation) {
           return {
             contributor_occupation: row.occupation
@@ -158,7 +152,6 @@ var disbursementRecipientColumns = [
       type,
       row
     ) {
-      console.log('committee-single.disbursementReceiptColumns render (data, type, row): ', data, type, row);
       return {
         recipient_name: row.recipient_name
       };
@@ -172,7 +165,6 @@ var disbursementRecipientIDColumns = [
     className: 'all',
     orderable: false,
     render: function(data, type, row) {
-      console.log('committee-single.disbursementRecipientIDColumn[0] render (data, type, row): ', data, type, row);
       return columnHelpers.buildEntityLink(
         data,
         helpers.buildAppUrl(['committee', row.recipient_id]),
@@ -190,7 +182,6 @@ var disbursementRecipientIDColumns = [
       type,
       row
     ) {
-      console.log('committee-single.disbursementRecipientIDColumn[1] render (data, type, row): ', data, type, row);
       return {
         recipient_name: row.recipient_id
       };
@@ -209,7 +200,6 @@ var expendituresColumns = [
       type,
       row
     ) {
-      console.log('committee-single.expendituresColumns render (data, type, row): ', data, type, row);
       return {
         support_oppose_indicator: row.support_oppose_indicator,
         candidate_id: row.candidate_id
@@ -237,7 +227,6 @@ var electioneeringColumns = [
     render: columnHelpers.buildTotalLink(
       ['electioneering-communications'],
       function(data, type, row) {
-        console.log('committee-single.electioneeringColumns render (data, type, row): ', data, type, row);
         return {
           support_oppose_indicator: row.support_oppose_indicator,
           candidate_id: row.candidate_id
@@ -258,7 +247,6 @@ var communicationCostColumns = [
       type,
       row
     ) {
-      console.log('committee-single.communicationCostColumns render (data, type, row): ', data, type, row);
       return {
         support_oppose_indicator: row.support_oppose_indicator,
         candidate_id: row.candidate_id
