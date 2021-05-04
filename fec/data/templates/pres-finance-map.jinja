@@ -1,6 +1,7 @@
 {% extends 'layouts/main.jinja' %}
 {# {% import 'macros/cycle-select.jinja' as select %} #}
 {% import 'macros/page-header.jinja' as header %}
+{% import 'macros/reaction-box.jinja' as reaction %}
 
 {% block title %}{{ title }}{% endblock %}
 
@@ -22,6 +23,7 @@
     <div class="content__section--extra">
       <div class="usa-width-one-whole">
         {% include './widgets/pres-finance-map.jinja' %}
+        {{ reaction.reaction_box('presidential_map', 'presidential-map') }}
       </div>
     </div>
   </div>
@@ -73,4 +75,5 @@
 {% endblock %}
 
 {% block scripts %}
+  <script src="{{ asset_for_js('reaction-box.js') }}"></script>
 {% endblock %}
