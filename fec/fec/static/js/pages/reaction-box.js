@@ -9,6 +9,8 @@ var $ = require('jquery');
 var helpers = require('../modules/helpers');
 var analytics = require('../modules/analytics');
 
+const loadRecaptcha = require('../modules/load-recaptcha').loadRecaptcha;
+
 function ReactionBox(selector) {
   this.$element = $(selector);
   this.$form = this.$element.find('form');
@@ -26,6 +28,8 @@ function ReactionBox(selector) {
 
   this.$element.on('click', '.js-reaction', this.submitReaction.bind(this));
   this.$element.on('click', '.js-reset', this.handleReset.bind(this));
+
+  loadRecaptcha();
 }
 /**
  * Submits step1 of the reaction form with the button chosen.
