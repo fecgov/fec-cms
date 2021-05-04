@@ -43,6 +43,22 @@ var textDataset = {
   }
 };
 
+const template_checkbox = value => `
+  <li>
+    <input 
+      id="${value.id}"
+      name="${value.name}"
+      value="${value.value}"
+      type="checkbox"
+      checked
+    />
+    <label for="${value.id}">${value.label}</label>
+    <button class="dropdown__remove">
+    <span class="u-visually-hidden">Remove</span>
+    </button>
+  </li>
+`;
+
 var FilterTypeahead = function(selector, dataset, allowText) {
   this.$elm = $(selector);
   this.dataset = dataset;
@@ -215,30 +231,13 @@ FilterTypeahead.prototype.disableButton = function() {
     .attr('disabled', false);
 };
 
-FilterTypeahead.prototype.checkboxTemplate = _.template(
-  '<li>' +
-    '<input ' +
-    'id="{{id}}" ' +
-    'name="{{name}}" ' +
-    'value="{{value}}" ' +
-    'type="checkbox" ' +
-    'checked' +
-    '/>' +
-    '<label for="{{id}}">{{label}}</label>' +
-    '<button class="dropdown__remove">' +
-    '<span class="u-visually-hidden">Remove</span>' +
-    '</button>' +
-    '</li>',
-  { interpolate: /\{\{(.+?)\}\}/g }
-);
-
 FilterTypeahead.prototype.appendCheckbox = function(opts) {
   var data = this.formatCheckboxData(opts);
 
   if (this.$elm.find('#' + data.id).length) {
     return;
   }
-  var checkbox = $(this.checkboxTemplate(data));
+  var checkbox = $(template_checkbox(data));
   checkbox.appendTo(this.$selected);
   checkbox.find('input').change();
   this.clearInput();
