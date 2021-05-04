@@ -21,6 +21,7 @@
       <nav class="sidebar sidebar--neutral sidebar--left side-nav js-toc">
         <ul class="sidebar__content">
           <li class="side-nav__item"><a class="side-nav__link" href="#summary">Summary</a></li>
+          <li class="side-nav__item"><a class="side-nav__link" href="#disposition">Disposition</a></li>
           <li class="side-nav__item"><a class="side-nav__link" href="#documents">Documents</a></li>
         </ul>
       </nav>
@@ -28,7 +29,7 @@
   <div class="main__content--right">
     <section id="summary" class="content__section">
     <div>
-      <h2 class="t-ruled--bold t-ruled--bottom">Summary</h2>
+      <h2 class="t-ruled--bold">Summary</h2>
       <div class="legal-admin_fine__property">
         <p>
           <strong>REPORT:</strong> {{ admin_fine.report_type }}, {{ admin_fine.report_year }}
@@ -41,11 +42,6 @@
       </div>
       <div class="legal-admin_fine__property">
         <p>
-          <strong>INITIAL FINDING AND PROPOSED FINE:</strong> {{ admin_fine.reason_to_believe_action_date | date(fmt='%m/%d/%Y') }}, {{ admin_fine.reason_to_believe_fine_amount | currency or '' }}
-        </p>
-      </div>
-      <div class="legal-admin_fine__property">
-        <p>
           <strong>CHALLENGE RECEIVED:</strong> {{ admin_fine.challenge_receipt_date | date(fmt='%m/%d/%Y') }}
         </p>
       </div>
@@ -54,12 +50,20 @@
           <strong>CLOSING DATE:</strong> {{ admin_fine.final_determination_date | date(fmt='%m/%d/%Y') }}
         </p>
       </div>
+    </section>
+    <section id="disposition" class="content__section">
+      <h2 class="t-ruled--bold">Disposition</h2>
       <div class="legal-admin_fine__property">
         <p>
-          <strong>DISPOSITION:</strong> {{ '<br>'.join(admin_fine['disposition_text']) | safe }}
+          {{ '<br>'.join(admin_fine['disposition_text']) | safe }}
         </p>
       </div>
-      <table class="data-table data-table--text data-table--heading-borders">
+      <div class="legal-admin_fine__property">
+        <p>
+          <strong>INITIAL FINDING AND PROPOSED FINE:</strong> {{ admin_fine.reason_to_believe_action_date | date(fmt='%m/%d/%Y') }}, {{ admin_fine.reason_to_believe_fine_amount | currency or '' }}
+        </p>
+      </div>
+      <table class="data-table simple-table">
         <thead>
           <tr>
             <th>Committee name</th>
@@ -86,8 +90,8 @@
       </table>
     </section>
     <section id="documents" class="content__section">
-      <h2 class="t-ruled--bold t-ruled--bottom u-no-margin">Documents</h2>
-      <table class="data-table data-table--text data-table--heading-borders">
+      <h2 class="t-ruled--bold u-no-margin">Documents</h2>
+      <table class="data-table simple-table">
         <thead>
           <tr>
             <th>Date</th>
