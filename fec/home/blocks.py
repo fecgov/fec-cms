@@ -210,6 +210,10 @@ class ResourceBlock(blocks.StructBlock):
             FeedDocumentBlock(),
             template='blocks/document-list.html',
             icon='doc-empty')),
+        ('simple_document_list', blocks.ListBlock(
+            FeedDocumentBlock(),
+            template='blocks/simple-document-list.html',
+            icon='doc-empty')),
         ('current_commissioners', CurrentCommissionersBlock()),
         ('fec_jobs', CareersBlock()),
         ('mur_search', MURSearchBlock()),

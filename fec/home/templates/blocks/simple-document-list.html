@@ -1,0 +1,8 @@
+{% load wagtailcore_tags %}
+{% load filters %}
+
+{% for block in self %}
+<span class="t-sans post__doc row">
+  <a href="{{ block.document.url }}">{{ block.title}}</a> | {{ block.document.url | get_file_type}}
+</span>
+{% endfor %}
