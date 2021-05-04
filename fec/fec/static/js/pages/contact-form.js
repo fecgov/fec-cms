@@ -4,6 +4,8 @@ var $ = require('jquery');
 var Typeahead = require('../modules/typeahead').Typeahead;
 var URI = require('urijs');
 
+const loadRecaptcha = require('../modules/load-recaptcha').loadRecaptcha;
+
 /* ServiceNow contact form */
 function ContactForm($elm) {
   this.$elm = $elm;
@@ -20,6 +22,8 @@ function ContactForm($elm) {
   this.initOtherReason();
   this.category.on('change', this.toggleOtherReason.bind(this));
   this.$cancel.on('click', this.clearForm.bind(this));
+
+  loadRecaptcha();
 }
 
 ContactForm.prototype.initTypeahead = function() {
@@ -68,6 +72,8 @@ function AnalystLookup($elm) {
   this.initTypeahead();
 
   this.$input.on('change, blur', this.handleChange.bind(this));
+
+  loadRecaptcha();
 }
 
 AnalystLookup.prototype.initTypeahead = function() {
