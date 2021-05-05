@@ -42,12 +42,17 @@
       </div>
       <div class="legal-admin_fine__property">
         <p>
-          <strong>CHALLENGE RECEIVED:</strong> {{ admin_fine.challenge_receipt_date | date(fmt='%m/%d/%Y') }}
+          <strong>CLOSING DATE:</strong> {{ admin_fine.final_determination_date | date(fmt='%m/%d/%Y') }}
         </p>
       </div>
       <div class="legal-admin_fine__property">
         <p>
-          <strong>CLOSING DATE:</strong> {{ admin_fine.final_determination_date | date(fmt='%m/%d/%Y') }}
+          <strong>ASSESSED CIVIL PENALTY:</strong> {{ admin_fine.final_determination_amount | currency or '' }}
+        </p>
+      </div>
+      <div class="legal-admin_fine__property">
+        <p>
+          <strong>CIVIL PENALTY DUE DATE:</strong> {# TODO: This will be added when we get the data. 00/00/0000, not yet paid / paid / partially paid #}
         </p>
       </div>
     </section>
@@ -55,37 +60,46 @@
       <h2 class="t-ruled--bold">Disposition</h2>
       <div class="legal-admin_fine__property">
         <p>
-          {{ '<br>'.join(admin_fine['disposition_text']) | safe }}
-        </p>
-      </div>
-      <div class="legal-admin_fine__property">
-        <p>
-          <strong>INITIAL FINDING AND PROPOSED FINE:</strong> {{ admin_fine.reason_to_believe_action_date | date(fmt='%m/%d/%Y') }}, {{ admin_fine.reason_to_believe_fine_amount | currency or '' }}
+          {{ '<br>'.join(admin_fine['disposition_text']) | safe | replace('RTB', 'reason to believe') }}
         </p>
       </div>
       <table class="data-table simple-table">
         <thead>
           <tr>
-            <th>Committee name</th>
             <th>Disposition</th>
-            <th>Final civil penalty or fine</th>
-            <th>Referred to Treasury Department</th>
+            <th>Amount</th>
+            <th>Date</th>
           </tr>
         </thead>
         <tbody>
+          <tr>
+            <td>Initial finding and proposed fine</td>
+            <td>{{ admin_fine.reason_to_believe_fine_amount | currency or '' }}</td>
+            <td>{{ admin_fine.reason_to_believe_action_date | date(fmt='%m/%d/%Y') }}</td>
+          </tr>
+          <tr>
           {% if 'documents' in admin_fine and admin_fine.documents_by_type %}
             {% for category in admin_fine.documents_by_type %}
               {% set categoryloop = loop %}
               {% for document in admin_fine.documents_by_type[category] %}
                 <tr class="{{ categoryloop.cycle('row-color-normal', 'row-color-contrast') }}">
-                  <td><a href="/data/committee/{{ admin_fine.committee_id }}">{{ admin_fine.name }} ({{ admin_fine.committee_id }})</a></td>
-                  <td>{{ admin_fine.challenge_outcome }}</td>
+                  <td>{{ admin_fine.challenge_outcome | replace('RTB', 'reason to believe') | capitalize }}</td>
                   <td>{{ admin_fine.final_determination_amount | currency or '' }}</td>
-                  <td>{{ admin_fine.treasury_referral_date | date(fmt='%m/%d/%Y') or 'None' }}, {{ admin_fine.treasury_referral_amount | currency or 'none' }}</td>
+                  <td>{{ admin_fine.final_determination_date | date(fmt='%m/%d/%Y') or 'None' }}</td>
                 </tr>
               {% endfor %}
             {% endfor %}
           {% endif %}
+          <tr>
+            <td>Challenge received</td>
+            <td>No amount</td>
+            <td>{{ admin_fine.challenge_receipt_date | date(fmt='%m/%d/%Y') }}</td>
+          </tr>
+          <tr>
+            <td>Referred to the Department of the Treasury for collection</td>
+            <td>{{ admin_fine.treasury_referral_amount | currency or 'None' }}</td>
+            <td>{{ admin_fine.treasury_referral_date | date(fmt='%m/%d/%Y') or 'None' }}</td>
+          </tr>
         </tbody>
       </table>
     </section>
