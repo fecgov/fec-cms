@@ -99,8 +99,8 @@
           </tr>
           <tr>
             <td>Referred to the Department of the Treasury for collection</td>
-            <td>{{ admin_fine.treasury_referral_amount | currency or 'None' }}</td>
-            <td>{{ admin_fine.treasury_referral_date | date(fmt='%m/%d/%Y') or 'None' }}</td>
+            <td>{{ admin_fine.treasury_referral_amount | currency or 'No amount' }}</td>
+            <td>{{ admin_fine.treasury_referral_date | date(fmt='%m/%d/%Y') or 'No date' }}</td>
           </tr>
         </tbody>
       </table>
