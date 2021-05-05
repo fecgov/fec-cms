@@ -1,6 +1,6 @@
 {% macro thumbnail(title, url, img="", size='', type="PDF") %}
   <div class="grid__item document-thumbnail">
-    <a class="document-thumbnail__img" href="{{ url }}" target="_blank">
+    <a class="document-thumbnail__img" href="{{ url }}" target="_blank" rel="[NOREFERRER,NOOPENER?]">
       <img src="{{ img }}" alt="{{ title }}">
     </a>
     <span class="document-thumbnail__description">
