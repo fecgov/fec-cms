@@ -52,7 +52,9 @@
       </div>
       <div class="legal-admin_fine__property">
         <p>
-          <strong>CIVIL PENALTY DUE DATE:</strong> {# TODO: This will be added when we get the data. 00/00/0000, not yet paid / paid / partially paid #}
+          <strong>CIVIL PENALTY DUE DATE:</strong> 
+          {# TODO: This will be added when we get the data. 00/00/0000, not yet paid / paid in full / partially paid {{ admin_fine.check_amount }} #}
+          {# Payment status key for API: Yes = paid in full, No = not paid, Pending = partially paid {{ admin_fine.check_amount }} #}
         </p>
       </div>
     </section>
