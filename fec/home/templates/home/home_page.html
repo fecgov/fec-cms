@@ -109,12 +109,11 @@
     document.head.appendChild(pfScriptElem);
   }
 </script>
-<script src="{% asset_for_js 'home.js' %}"></script>
-<script src="{% asset_for_js 'bythenumbers.js' %}"></script>
-<script src="{% asset_for_js 'dataviz-common.js' %}"></script>
-<script src="{% asset_for_js 'election-lookup.js' %}"></script>
+<script defer src="{% asset_for_js 'home.js' %}"></script>
+<script defer src="{% asset_for_js 'bythenumbers.js' %}"></script>
+<!-- <script defer src="{% asset_for_js 'dataviz-common.js' %}"></script> -->
+<script defer src="{% asset_for_js 'election-lookup.js' %}"></script>
 <script>
-  //remove competing/confusing querystrings on homepage
   $(function(){
     cleanURI()
     function cleanURI(){
