@@ -1,3 +1,6 @@
+/*
+    duped from elections.scss:
+*/
 @import "../../../../node_modules/leaflet/dist/leaflet";
 
 @import "common";
@@ -13,3 +16,6 @@
 @import "components/responsive-object";
 @import "components/results-info";
 @import "components/richtext";
+/*
+    end dupe from elections.scss
+*/
