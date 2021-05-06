@@ -79,19 +79,6 @@
             <td>{{ admin_fine.reason_to_believe_fine_amount | currency or '' }}</td>
             <td>{{ admin_fine.reason_to_believe_action_date | date(fmt='%m/%d/%Y') }}</td>
           </tr>
-          <tr>
-          {% if 'documents' in admin_fine and admin_fine.documents_by_type %}
-            {% for category in admin_fine.documents_by_type %}
-              {% set categoryloop = loop %}
-              {% for document in admin_fine.documents_by_type[category] %}
-                <tr class="{{ categoryloop.cycle('row-color-normal', 'row-color-contrast') }}">
-                  <td>{{ admin_fine.challenge_outcome | replace('RTB', 'reason to believe') | capitalize }}</td>
-                  <td>{{ admin_fine.final_determination_amount | currency or '' }}</td>
-                  <td>{{ admin_fine.final_determination_date | date(fmt='%m/%d/%Y') or 'None' }}</td>
-                </tr>
-              {% endfor %}
-            {% endfor %}
-          {% endif %}
           {% if admin_fine.challenge_receipt_date != none %}
             <tr>
               <td>Challenge received</td>
@@ -99,6 +86,12 @@
               <td>{{ admin_fine.challenge_receipt_date | date(fmt='%m/%d/%Y') }}</td>
             </tr>
           {% endif %}
+          <tr>
+            {# TODO: Figure out what to do when a case is not challenged, the challenge_outcome will be null. Presumably payment was received and paid in full based on check_amount #}
+            <td>{{ admin_fine.challenge_outcome | replace('RTB', 'reason to believe') | capitalize }}</td>
+            <td>{{ admin_fine.final_determination_amount | currency or '' }}</td>
+            <td>{{ admin_fine.final_determination_date | date(fmt='%m/%d/%Y') or 'None' }}</td>
+          </tr>
           {% if admin_fine.treasury_referral_amount != none and admin_fine.treasury_referral_date != none %}
             <tr>
               <td>Referred to the Department of the Treasury for collection</td>
