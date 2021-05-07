@@ -20,7 +20,8 @@ def get_documents(page, year='', category=''):
 
 
 def get_resource_pages(page, year='', category=''):
-    resource_pages = ResourcePage.objects.child_of(page).live()
+    resource_pages = ResourcePage.objects.child_of(page).filter(
+        category=category).live()
 
     return resource_pages
 
