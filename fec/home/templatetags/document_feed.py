@@ -23,8 +23,7 @@ def get_resource_pages(page, year='', category=''):
     if category == '':
         resource_pages = ResourcePage.objects.child_of(page).live()
     else:
-        resource_pages = ResourcePage.objects.child_of(page).filter(
-        category=category).live()
+        resource_pages = ResourcePage.objects.child_of(page).filter(category=category).live()
     return resource_pages
 
 
@@ -34,8 +33,6 @@ def document_feed(page, request):
     Queries for all DocumentPages that are childern of the current page
     and optionally filters by year if it was passed in the request
     """
-
-
     year = request.GET.get('year', '')
     category = request.GET.get('category', '')
     documents = get_documents(page, year=year, category=category)
