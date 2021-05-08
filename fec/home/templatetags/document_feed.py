@@ -20,10 +20,14 @@ def get_documents(page, year='', category=''):
 
 
 def get_resource_pages(page, year='', category=''):
-    if category == '':
-        resource_pages = ResourcePage.objects.child_of(page).live()
-    else:
-        resource_pages = ResourcePage.objects.child_of(page).filter(category=category).live()
+    resource_pages = ResourcePage.objects.child_of(page).live()
+
+    if year:
+        resource_pages = resource_pages.filter(date__year=year)
+
+    if category:
+        resource_pages = resource_pages.filter(category=category)
+
     return resource_pages
 
 
