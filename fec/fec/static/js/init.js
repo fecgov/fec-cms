@@ -109,6 +109,7 @@ $(document).ready(function() {
   // Move the read more links to be inline with the snippet from the post
   $('.js-post-content').each(function() {
     var $p = $(this).find('p:first-of-type');
+    $p.nextAll().remove()
     var $link = $(this).find('.js-read-more');
     if ($p.text() !== 'PDF') {
       $p.append($link);
