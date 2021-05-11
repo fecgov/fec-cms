@@ -72,22 +72,22 @@ TextFilter.prototype.handleBlur = function() {
   }
 };
 
-TextFilter.prototype.checkboxTemplate = _.template(
-  '<li>' +
-    '<input ' +
-    'id="{{id}}" ' +
-    'name="{{name}}" ' +
-    'value="{{value}}" ' +
-    'type="checkbox" ' +
-    'checked' +
-    '/>' +
-    '<label for="{{id}}">"{{value}}"</label>' +
-    '<button class="dropdown__remove js-remove">' +
-    '<span class="u-visually-hidden">Remove</span>' +
-    '</button>' +
-    '</li>',
-  { interpolate: /\{\{(.+?)\}\}/g }
-);
+const template_checkbox = value => `
+  <li>
+    <input
+      id="${value.id}"
+      name="${value.name}"
+      value="${value.value}"
+      type="checkbox"
+      checked
+    />
+    <label for="${value.id}">"${value.value}"</label>
+    <button class="dropdown__remove js-remove">
+    <span class="u-visually-hidden">Remove</span>
+    </button>
+  </li>
+`;
+
 
 // Remove the event handlers for adding and removing tags
 // So the filter count doesn't count double for the text filter and checkbox
@@ -103,7 +103,7 @@ TextFilter.prototype.appendCheckbox = function(value) {
     name: this.name,
     value: _.escape(value.replace(/["]+/g, ''))
   };
-  var checkbox = $(this.checkboxTemplate(opts));
+  var checkbox = $(template_checkbox(opts));
   checkbox.appendTo(this.checkboxList.$elm);
   checkbox.find('input').change();
   this.$input.val('');
