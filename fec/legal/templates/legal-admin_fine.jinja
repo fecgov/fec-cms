@@ -53,7 +53,7 @@
       <div class="legal-admin_fine__property">
         <p>
           <strong>CIVIL PENALTY DUE DATE:</strong> 
-          {# TODO: This will be added when we get the data. 00/00/0000, not yet paid / paid in full / partially paid {{ admin_fine.check_amount }} #}
+          {# TODO: This will be added when we get the data civil_penalty_date, civil_penalty_payment_status. 00/00/0000, not yet paid / paid in full / partially paid {{ admin_fine.check_amount }} #}
           {# Payment status key for API: Yes = paid in full, No = not paid, Pending = partially paid {{ admin_fine.check_amount }} #}
         </p>
       </div>
@@ -87,10 +87,10 @@
             </tr>
           {% endif %}
           <tr>
-            {# TODO: Figure out what to do when a case is not challenged, the challenge_outcome will be null. Presumably payment was received and paid in full based on check_amount #}
+          {# TODO: Will use final_determination_disposition instead of challenge_outcome. Waiting for data.  #}
             <td>{{ admin_fine.challenge_outcome | replace('RTB', 'reason to believe') | capitalize }}</td>
-            <td>{{ admin_fine.final_determination_amount | currency or '' }}</td>
-            <td>{{ admin_fine.final_determination_date | date(fmt='%m/%d/%Y') or 'None' }}</td>
+            <td>{{ admin_fine.final_determination_amount | currency or 'No amount' }}</td>
+            <td>{{ admin_fine.final_determination_date | date(fmt='%m/%d/%Y') or 'No date' }}</td>
           </tr>
           {% if admin_fine.treasury_referral_amount != none and admin_fine.treasury_referral_date != none %}
             <tr>
@@ -129,3 +129,6 @@
   </div>
 </div>
 {% endblock %}
+
+2 weeks for the civil penalty
+Wait on LOE for final_dtermination_disposition 
