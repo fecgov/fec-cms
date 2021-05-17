@@ -76,7 +76,7 @@ DEPLOY_RULES = (
     ('stage', lambda _, branch: branch.startswith('release')),
     ('dev', lambda _, branch: branch == 'develop'),
     # Uncomment below and adjust branch name to deploy desired feature branch to the feature space
-     ('feature', lambda _, branch: branch == 'feature/4610-fix-read-more-links'),
+     ('feature', lambda _, branch: branch == 'feature-deploy-only-of-fix-read-more-links'),
 )
 
 
