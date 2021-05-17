@@ -53,7 +53,7 @@
                   </div>
               {% if results["total_" + category] %}
                   <div class="results-info__right">
-                  <span class="results-info__details">1&ndash;{{ results[category + "_returned"] }} of <a href="/data/legal/search/enforcement/?search={{ query }}&search_type={{ category}}"><strong>{{ results["total_" + category] }}</strong> results</a></span>
+                  <span class="results-info__details">1&ndash;{{ results[category + "_returned"] }} of <a href="/data/legal/search/{{ category }}/?search={{ query }}&search_type={{ category}}"><strong>{{ results["total_" + category] }}</strong> results</a></span>
                   </div>
               {% endif %}
               </div>
