@@ -112,22 +112,4 @@
 <script defer src="{% asset_for_js 'home.js' %}"></script>
 <script defer src="{% asset_for_js 'bythenumbers.js' %}"></script>
 <script defer src="{% asset_for_js 'election-lookup.js' %}"></script>
-<script>
-  $(function(){
-    cleanURI()
-    function cleanURI(){
-      const uri = window.location.toString();
-      if (uri.indexOf('?') > 0) {
-        window.history.replaceState({}, document.title, location.href.split('?')[0]);
-      }
-    }
-    $('#main').on('change ', 'input, select', function(){
-      cleanURI();
-    })
-    //handle Chrome insconsistency with History API
-    $('.js-office').val('S');
-    $('.js-election-year').val('2022')
-    $('.js-chart-toggle').filter('[value=receipts]').prop('checked', true)
-  });
-</script>
 {% endblock %}
