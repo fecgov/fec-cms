@@ -8,10 +8,11 @@ require('../vendor/tablist').init();
 // Home Page: Events and deadlines
 new homepageEvents.HomepageEvents();
 
-//remove competing/confusing querystrings on homepage
-function cleanURI() {
-  const uri = window.location.toString();
+// We don't want the homepage to have any query parameters
+function scrubURI() {
+  const uri = window.location.href.toString();
   if (uri.indexOf('?') > 0) {
+    stopWatchingHref(); // Stop the automatic check after we've found one
     window.history.replaceState(
       {},
       document.title,
@@ -20,14 +21,27 @@ function cleanURI() {
   }
 }
 
-cleanURI();
+// Start a timer to watch until we have a query parameter to remove
+// (election-search.html will add them when it loads)
+let hrefInterval = null;
+function startWatchingHref() {
+  hrefInterval = window.setInterval(scrubURI, 100);
+}
+function stopWatchingHref() {
+  if (hrefInterval) {
+    window.clearInterval(hrefInterval);
+    hrefInterval = null;
+  }
+}
+startWatchingHref();
 
+// For any elements who want to add query parameters to the URL, remove 'em
 let inputs = document.querySelectorAll('#main input, #main select');
 inputs.forEach(element => {
-  element.addEventListener('change', cleanURI);
+  element.addEventListener('change', scrubURI);
 });
 
-//handle Chrome inconsistency with History API
+//
 let offices = document.querySelectorAll('.js-office');
 offices.forEach(element => {
   element.value = 'S';
