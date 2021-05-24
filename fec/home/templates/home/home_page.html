@@ -18,7 +18,7 @@
   {% home_page_banner_announcement %}
   
   <section class="slab">
-    {% comment %} 
+    {% comment %}
     Below is for featured icon+links in Wagtail html block only...for now. 
     {% endcomment %}
     {% for block in self.body %}
@@ -105,6 +105,7 @@
   if (!canSkipPolyfills) {
     var pfScriptElem = document.createElement('script');
     pfScriptElem.async = false;
+    pfScriptElem.defer = false;
     pfScriptElem.src = "{% asset_for_js 'polyfills.js' %}";
     document.head.appendChild(pfScriptElem);
   }
@@ -112,4 +113,61 @@
 <script defer src="{% asset_for_js 'home.js' %}"></script>
 <script defer src="{% asset_for_js 'bythenumbers.js' %}"></script>
 <script defer src="{% asset_for_js 'election-lookup.js' %}"></script>
+<script>
+  {% comment %}
+  // We don't want the homepage to have any query parameters #}
+  // but election-search wants to add them
+  {% endcomment %}
+function scrubURI() {
+  const uri = window.location.href.toString();
+  if (uri.indexOf('?') > 0) {
+    window.history.replaceState(
+      {},
+      document.title,
+      window.location.href.split('?')[0]
+    );
+  }
+}
+{% comment %}
+// After all the files are loaded and ready,
+{% endcomment %}
+window.addEventListener('load', () => {
+  {% comment %}
+  // Let's remove any query params after the page
+  {% endcomment %}
+  scrubURI();
+
+  {% comment %}
+  // and make sure no interactive elements add a query param
+  {% endcomment %}
+  let inputs = document.querySelectorAll('#main input, #main select');
+  inputs.forEach(element => {
+    element.addEventListener('change', scrubURI);
+  });
+
+  {% comment %}
+  // Set the default office value
+  {% endcomment %} 
+  let offices = document.querySelectorAll('.js-office');
+  offices.forEach(element => {
+    element.value = 'S';
+  });
+
+  {% comment %}
+  // Set the default election cycle
+  {% endcomment %}
+  let years = document.querySelectorAll('.js-election-year');
+  years.forEach(element => {
+    element.value = window.DEFAULT_ELECTION_YEAR;
+  });
+
+  {% comment %}
+  // Set the chart toggle to receipts
+  {% endcomment %}
+  let toggles = document.querySelectorAll('.js-chart-toggle[value=receipts]');
+  toggles.forEach(element => {
+    element.checked = true;
+  });
+});
+</script>
 {% endblock %}
