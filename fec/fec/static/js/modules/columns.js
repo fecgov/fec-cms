@@ -829,6 +829,41 @@ var debts = [
   modalTriggerColumn
 ];
 
+var pac_party = [
+  {
+    data: 'committee_name',
+    orderable: true,
+    className: 'all',
+    render: function(data, type, row) {
+      if (data) {
+        return columnHelpers.buildEntityLink(
+          data,
+          helpers.buildAppUrl(['committee', row.committee_id])
+        );
+      } else {
+        return '';
+      }
+    }
+  },
+  {
+    data: 'committee_type_full',
+    className: 'all'
+  },
+  currencyColumn({
+    data: 'disbursements',
+    className: 'min-desktop hide-panel column--number t-mono'
+  }),
+  currencyColumn({
+    data: 'receipts',
+    className: 'min-desktop hide-panel column--number t-mono'
+  }),
+  currencyColumn({
+    data: 'last_cash_on_hand_end_period',
+    className: 'min-desktop hide-panel column--number t-mono'
+  }),
+  modalTriggerColumn
+];
+
 var audit = [
   columnHelpers.urlColumn('link_to_report', {
     data: 'committee_name',
@@ -905,5 +940,6 @@ module.exports = {
   reports: reports,
   loans: loans,
   debts: debts,
+  pac_party: pac_party,
   audit: audit
 };

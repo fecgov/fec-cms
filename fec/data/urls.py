@@ -50,6 +50,11 @@ urlpatterns = [
     url(r'^widgets/aggregate-totals/$', views.aggregate_totals),
 ]
 
+if settings.FEATURES.get('pac_party'):
+    urlpatterns.append(
+        url(r'^data/committees/pac-party/$', views_datatables.pac_party)
+    )
+
 if settings.FEATURES.get('debts'):
     # Debts section TODO: debts dates
     urlpatterns.append(
