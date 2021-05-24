@@ -405,7 +405,7 @@
   },
   {
     "term": "Net outstanding campaign obligations (NOCO)",
-    "definition": "The total of all outstanding obligations for qualified campaign expenses as of a publicly funded presidential candidate's date of ineligibility, plus estimated necessary winding down costs less the total of: <ul><li>Cash-on-hand as of the close of business on the last day of eligibility;</li><li>The fair market value of capital assets and other assets on hand; and</li><li>Amounts owed to the committee in the form of credits, refunds of deposits, returns, receivables, or rebates of qualified campaign expenses; or a commercially reasonable amount based on the collectibility of those credits, returns, receivables or rebates.</li></ul> See 11 CFR <a href=\"https://www.fec.gov/regulations/9034-5/CURRENT#9034-5\">9034.5</a>."
+    "definition": "The total of all outstanding obligations for qualified campaign expenses as of a publicly funded presidential candidate's date of ineligibility, plus estimated necessary winding down costs less the total of: <ul><li>Cash on hand as of the close of business on the last day of eligibility;</li><li>The fair market value of capital assets and other assets on hand; and</li><li>Amounts owed to the committee in the form of credits, refunds of deposits, returns, receivables, or rebates of qualified campaign expenses; or a commercially reasonable amount based on the collectibility of those credits, returns, receivables or rebates.</li></ul> See 11 CFR <a href=\"https://www.fec.gov/regulations/9034-5/CURRENT#9034-5\">9034.5</a>."
   },
   {
     "term": "New party",
