@@ -56,8 +56,8 @@
     "definition": "A unique identifier assigned to each candidate registered with the FEC. The initial character indicates the office sought. (H)ouse, (S)enate, (P)resident. If a person runs for several offices, they will have separate IDs for each office."
   },
   {
-    "term": "Cash-on-hand",
-    "definition": "Cash-on-hand includes funds held in checking and savings accounts, certificates of deposit, petty cash funds, traveler’s checks, treasury bills and other investments valued at cost. <a href=\"https://www.fec.gov/regulations/104-3/CURRENT#104-3-a-1\">11 CFR 104.3(a)(1)</a>."
+    "term": "Cash on hand",
+    "definition": "Cash on hand includes funds held in checking and savings accounts, certificates of deposit, petty cash funds, traveler’s checks, treasury bills and other investments valued at cost. <a href=\"https://www.fec.gov/regulations/104-3/CURRENT#104-3-a-1\">11 CFR 104.3(a)(1)</a>."
   },
   {
     "term": "CFR",
@@ -196,8 +196,8 @@
     "definition": "The organization or person by whom an individual is employed, and not the name of his or her supervisor. <a href=\"https://www.fec.gov/regulations/100-21/CURRENT#100-21\">11 CFR 100.21</a>."
   },
   {
-    "term": "Ending cash-on-hand",
-    "definition": "The total amount of cash on hand that remains after the amount of cash-on-hand at the beginning of the reporting period is adjusted to add the total receipts for the reporting period and subtract the total disbursements for the reporting period."
+    "term": "Ending cash on hand",
+    "definition": "The total amount of cash on hand that remains after the amount of cash on hand at the beginning of the reporting period is adjusted to add the total receipts for the reporting period and subtract the total disbursements for the reporting period."
   },
   {
     "term": "Executive and administrative personnel",
