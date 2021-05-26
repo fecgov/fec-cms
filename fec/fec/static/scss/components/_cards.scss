@@ -359,6 +359,10 @@
       @include u-icon-bg($person-location, $primary-contrast);
     }
 
+    &.i-election {
+      @include u-icon-bg($election, $primary-contrast);
+    }
+
     &.i-individual-contributions {
       @include u-icon-bg($individual-contributions, $primary-contrast);
     }

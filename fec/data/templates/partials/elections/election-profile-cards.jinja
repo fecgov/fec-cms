@@ -13,25 +13,16 @@
     </a>
   </div>
   {% if office == 'president' %}
-    <div class="grid__item is-disabled" style="display: none;">
-        <aside class="card card--horizontal card--neutral-base">
-          <div class="card__image__container">
-            <span class="card__icon i-election"><span class="u-visually-hidden">Icon of elections</span></span>
-          </div>
-          <div class="card__content">
-            All {% if state %} - {{ state|fmt_state_full }} {% endif %}state elections
-          </div>
-        </aside>
-    </div>
+    {# Don't display state election card for presidential election profile page #}
   {% else %}
     <div class="grid__item">
       <a href="/data/elections/?cycle={{ cycle }}&state={{ state }}">
-        <aside class="card card--horizontal card--neutral-base">
+        <aside class="card card--horizontal card--primary">
           <div class="card__image__container">
             <span class="card__icon i-election"><span class="u-visually-hidden">Icon of elections</span></span>
           </div>
           <div class="card__content">
-            All {% if state %} - {{ state|fmt_state_full }} {% endif %}state elections
+            All {% if state %} {{ state|fmt_state_full }} {% endif %}state elections
           </div>
         </aside>
       </a>
