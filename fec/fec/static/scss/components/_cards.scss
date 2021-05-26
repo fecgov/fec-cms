@@ -32,7 +32,6 @@
   .card__icon {
     &.i-election {
       @include u-icon-bg($election, $primary);
-      background-size: 65%;
     }
   }
 }
