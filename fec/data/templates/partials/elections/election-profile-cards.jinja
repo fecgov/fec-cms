@@ -22,7 +22,7 @@
             <span class="card__icon i-election"><span class="u-visually-hidden">Icon of elections</span></span>
           </div>
           <div class="card__content">
-            All {% if state %} {{ state|fmt_state_full }} {% endif %}state elections
+            All federal {% if state %} {{ state|fmt_state_full }} {% endif %} elections
           </div>
         </aside>
       </a>
@@ -34,7 +34,7 @@
         <span class="card__icon i-election"><span class="u-visually-hidden">Icon of elections</span></span>
       </div>
       <div class="card__content">
-        All {{ office|title }} elections
+        All federal {{ office|title }} elections
       </div>
     </aside>
   </div>
