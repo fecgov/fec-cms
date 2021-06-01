@@ -170,6 +170,7 @@ function modalRenderFactory(template, fetch) {
           $.when(fetch(response.results[index])).done(function(fetched) {
             $modal.find('.js-panel-content').html(template(fetched));
             $modal.attr('aria-hidden', 'false');
+            $modal.trigger('show');
             $row.siblings().toggleClass('row-active', false);
             $row.toggleClass('row-active', true);
             $('body').toggleClass('panel-active', true);
@@ -214,6 +215,7 @@ function hidePanel(api, $modal) {
   $('.js-panel-toggle tr').toggleClass('row-active', false);
   $('body').toggleClass('panel-active', false);
   $modal.attr('aria-hidden', 'true');
+  $modal.trigger('hide');
 
   if ($(document).width() > 640) {
     api.columns('.hide-panel-tablet').visible(true);
