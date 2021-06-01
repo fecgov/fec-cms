@@ -114,23 +114,33 @@
 <script defer src="{% asset_for_js 'bythenumbers.js' %}"></script>
 <script defer src="{% asset_for_js 'election-lookup.js' %}"></script>
 <script>
-window.onload = function () {
-  $(function() {
-    cleanURI()
-      function cleanURI(){
-        const uri = window.location.toString();
-        if (uri.indexOf('?') > 0) {
-          window.history.replaceState({}, document.title, location.href.split('?')[0]);
-        }
-      }
-      $('#main').on('change ', 'input, select', function(){
-        cleanURI();
-      })
-      //handle Chrome insconsistency with History API
-      $('.js-office').val('S');
-      $('.js-election-year').val('2022')
-      $('.js-chart-toggle').filter('[value=receipts]').prop('checked', true)
-  })
+function removeQueryParams() {
+  let uri = window.location.toString();
+  if (uri.indexOf('?') > 0) {
+    window.history.replaceState({}, document.title, location.href.split('?')[0]);
+  }
 }
+
+window.addEventListener('pageshow', () => {
+  removeQueryParams()
+  // Handle Chrome insconsistency with History API
+  document.querySelectorAll('#main input, #main select').forEach(element => {
+    element.addEventListener('change', e => {
+      removeQueryParams();
+    });
+  });
+  
+  document.querySelectorAll('.js-office').forEach(element => {
+    element.value = 'S';
+  });
+  
+  document.querySelectorAll('.js-election-year').forEach(element => {
+    element.value = '2022';
+  });
+
+  document.querySelectorAll('.js-chart-toggle[value="receipts"]').forEach(element => {
+    element.checked = true;
+  });
+});
 </script>
 {% endblock %}
