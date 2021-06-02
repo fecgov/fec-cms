@@ -16,12 +16,10 @@
   </head>
 
   <body class="status-mode {% block body_class %}{% endblock %}">
-    <!--[if lte IE 11]>
-    <div style="background-color: #212121; padding: 10px">
+    <div id="ie_warning" style="display:none; background-color: #212121; padding: 10px">
       <h2 style="color: #ffffff">Your web browser is not supported</h2>
       <p style="color: #ffffff; font-size: 16px;">You&apos;re using Internet Explorer, some features might not work. Please switch to another browser like Chrome, Firefox, or Edge for a better experience.</p>
     </div>
-    <![endif]-->
 
     {% include 'partials/google-tag-manager-noscript.html' %}
 
@@ -73,6 +71,16 @@
         pfScriptElem.async = false;
         pfScriptElem.src = "{% asset_for_js 'polyfills.js' %}";
         document.head.appendChild(pfScriptElem);
+      }
+
+      // Internet explorer not supported warning
+      function isIE () {
+        var myNav = navigator.userAgent.toLowerCase();
+        return (myNav.indexOf('msie') != -1 || myNav.indexOf('trident') != -1) ? true : false;
+      }
+      
+      if(isIE()){
+        document.getElementById('ie_warning').style.display='block'
       }
     </script>
 
