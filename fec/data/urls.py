@@ -5,7 +5,7 @@ from data import views_datatables
 from fec import settings
 
 urlpatterns = [
-    url(r'^data/$', views.landing),
+    url(r'^data/$', views.landing, name='data-landing'),
     url(r'^data/search/$', views.search),
     url(r'^data/browse-data/$', views.browse_data, name='browse-data'),
     url(r'^data/candidate/(?P<candidate_id>\w+)/$', views.candidate),
