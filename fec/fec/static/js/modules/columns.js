@@ -850,11 +850,11 @@ var pac_party = [
     className: 'all'
   },
   currencyColumn({
-    data: 'disbursements',
+    data: 'receipts',
     className: 'min-desktop hide-panel column--number t-mono'
   }),
   currencyColumn({
-    data: 'receipts',
+    data: 'disbursements',
     className: 'min-desktop hide-panel column--number t-mono'
   }),
   currencyColumn({
