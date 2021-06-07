@@ -10,6 +10,7 @@ function SelectFilter(elm) {
   this.name = this.$input.attr('name');
   this.requiredDefault = this.$elm.data('required-default') || null; // If a default is required
   this.loadedOnce = false;
+  this.$input.on('change', this.handleChange.bind(this));
 
   this.setRequiredDefault();
 }
@@ -33,6 +34,36 @@ SelectFilter.prototype.setValue = function(value) {
   this.$input.find('option[selected]').prop('selected', false);
   this.$input.find('option[value="' + value + '"]').prop('selected', true);
   this.$input.change();
+};
+
+SelectFilter.prototype.handleChange = function(e) {
+  var $input = $(e.target);
+  var value = $input.val();
+  var $optElement = $input.find("option[value='" + value + "']");
+  var loadedOnce = $input.data('loaded-once') || false;
+  var eventName;
+
+  if ($input.data('had-value') && value.length > 0) {
+    eventName = 'filter:renamed';
+  } else if (value.length > 0) {
+    eventName = 'filter:added';
+    $input.data('had-value', true);
+  } else {
+    eventName = 'filter:removed';
+    $input.data('had-value', false);
+  }
+
+  $input.trigger(eventName, [
+    {
+      key: $input.attr('id'),
+      value: this.formatValue($input, $optElement.text()),
+      loadedOnce: loadedOnce,
+      name: this.name,
+      nonremovable: true
+    }
+  ]);
+
+  $input.data('loaded-once', true);
 };
 
 module.exports = { SelectFilter: SelectFilter };

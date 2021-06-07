@@ -51,6 +51,20 @@
 {% endmacro %}
 
 
+{% macro singleElectionYear(name, label) %}
+<div class="filter">
+  <fieldset data-name="{{name}}" class="js-filter" data-filter="select" data-required-default="{{constants.DEFAULT_ELECTION_YEAR}}">
+    <label class="label" for="{{ name }}">{{ label }}</label>
+    <select id="{{ name }}-select" name="{{ name }}" class="select--full">
+    {% for year in range(constants.END_YEAR, constants.START_YEAR, -2) %}
+      <option value="{{ year }}">{{ year | fmt_year_range }}</option>
+    {% endfor %}
+    </select>
+  </fieldset>
+</div>
+{% endmacro %}
+
+
 {% macro cycleRange(name, label) %}
 <fieldset class="filter" id="{{name}}-field">
   <legend class="label">{{ label }}</legend>
