@@ -63,15 +63,15 @@ This template is for previewing the home page banner announcement on Wagtail
       <h2 class="heading--section u-margin--bottom">Introduction to campaign finance and elections</h2>
 
       <div class="sidebar-container sidebar-container--left u-padding--top">
-        <a class="u-no-border" href="https://youtu.be/yIH_kBQdmdQ" target="_blank">
+        <a class="u-no-border" href="https://youtu.be/yIH_kBQdmdQ" target="_blank" rel="noreferrer>
         <img class="billboard__image" src={% static 'img/thumbnail--video.png' %} alt="Video icon"></a>
         <div class="document-thumbnail__description">
-          <a href="https://youtu.be/yIH_kBQdmdQ" target="_blank">A citizen's guide to<br>
+          <a href="https://youtu.be/yIH_kBQdmdQ" target="_blank" rel="noreferrer">A citizen's guide to<br>
           supporting candidates</a>
         </div>
       </div>
 
-      <div class="main__content--right-full u-padding--top  u-padding--bottom">
+      <div class="main__content--right-full u-padding--top u-padding--bottom">
         <h3>The FEC maintains financial data for past and current elections and the candidates in those races</h3>
           <form action="{{ settings.FEC_APP_URL }}/elections" method="GET">
              <div class="search-controls__row">
