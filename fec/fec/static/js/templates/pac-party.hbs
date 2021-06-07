@@ -1,0 +1,41 @@
+{{!--
+Template for PAC and party committee datatable details panel
+--}}
+
+<div class="panel__row">
+  <h4 class="panel__title">
+    <a href="{{basePath}}/committee/{{committee_id}}">{{committee_name}}</a>
+  </h4>
+</div>
+<div class="panel__row">
+  <table>
+    {{#panelRow "Committee type"}}
+      {{committee_type_full}}
+    {{/panelRow}}
+    {{#panelRow "Designation"}}
+      {{committee_designation_full}}
+    {{/panelRow}}
+    {{#panelRow "Most recent treasurer"}}
+    {{!-- TODO: Fill this when available --}}
+      {{ TBD }}
+    {{/panelRow}}
+    {{#panelRow "State"}}
+    {{!-- TODO: Fill this when available --}}
+      {{ TBD }}
+    {{/panelRow}}
+    {{#panelRow "Total individual contributions"}}
+      {{{currency individual_contributions}}}
+    {{/panelRow}}
+    {{#panelRow "Filing frequency"}}
+    {{!-- TODO: Fill this when available --}}
+      {{ TBD }}
+    {{/panelRow}}
+    {{#panelRow "Coverage end date"}}
+      {{datetime coverage_end_date format="pretty"}}
+    {{/panelRow}}
+    {{#panelRow "First filing date"}}
+    {{!-- TODO: Fill this when available --}}
+      {{datetime TBD format="pretty"}}
+    {{/panelRow}}
+  </table>
+</div>
