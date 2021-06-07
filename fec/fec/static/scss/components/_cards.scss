@@ -32,7 +32,6 @@
   .card__icon {
     &.i-election {
       @include u-icon-bg($election, $primary);
-      background-size: 65%;
     }
   }
 }
@@ -357,6 +356,10 @@
 
     &.i-elections {
       @include u-icon-bg($person-location, $primary-contrast);
+    }
+
+    &.i-election {
+      @include u-icon-bg($election, $primary-contrast);
     }
 
     &.i-individual-contributions {

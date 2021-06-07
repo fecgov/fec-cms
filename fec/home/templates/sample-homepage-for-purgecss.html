@@ -1,0 +1,987 @@
+<!--
+    This file exists for purgecss.
+    
+    WHY
+    We use this sample structure to avoid loading the huge elections_*.css in the homepage.
+    Ideally, purgecss would load something like localhost:8000 but it won't. It will load the various templates,
+    but that doesn't account for the JavaScript-powered pieces.
+    TODO: give the JS-powered components their own css and have purge look at template components?
+    
+    This file won't be served to users so its filesize doesn't really matter—it's only used by purgecss
+    during the build process.
+
+    HOW
+    Rather than include all of elections-*.css for the homepage,
+    home.scss is a direct copy of elections.scss.
+
+    Then the Gulp process purgecss takes home-*.css, looks at this file,
+    removes the unused styles in home-*.css, and re-saves it.
+
+    TO UPDATE
+    To update this file (and the css loaded into the homepage),
+    1. Load the homepage, go into Inspector's Elements tab, and copy the <html> tag.
+       Note: it's important to copy the compiled code and not the source code directly
+       as the source won't have elements that have been changed/added by JavaScript
+    2. Paste the <html> tag in this document.
+    3. Remove everything in the <head>.
+    4. Remove any <script> or <style> tags.
+    5. Remove any text content that is the lowest level of its structure (e.g. remove the text inside a <p> but leave
+       the <p> and leave any elements inside the <p>.
+       Having something like <div></div><div><p><a><i><em></em></i></a></p><p></p></div> is totally fine.)
+    6. Feel free to remove any   rules.
+    7. Add any elements/structures that aren't already here.
+       e.g. dev banner, announcement banners, features that are off but may be activated
+    8. Safe to remove non-unique <li> from lists
+       (as long as we keep a first, a last, an even, an odd, an nth, and we don't lose otherwise-unique descendents)
+
+    Safe to remove:
+        <head>
+        <script>
+        <style>
+         
+        rel=""
+        width=""
+        height=""
+        for=""
+        on*=""
+        repeated elements
+        blank lines
+        line breaks
+        comments
+    
+    Preserve:
+        elements
+        aria*=""
+        class=""
+        id=""
+        name=""
+        role=""
+-->
+<html lang="en">
+    <head></head>
+    
+      <body class="template-home-page">
+        <!-- IE note -->
+        <div>
+          <h2>Your browser is outdated</h2>
+          <p>You&apos;re using an older version of Internet Explorer. Please update or switch to another browser like Chrome, Firefox, or Edge for a better experience. <a target="_blank" href="http://browsehappy.com/" rel="noreferrer">Learn how to update your browser</a>.</p>
+        </div>
+        <!-- /IE note -->
+        
+        <a href="#main" class="skip-nav">skip navigation</a>
+          <div class="banner-dev">
+            <p class="t-sans t-small">LOCAL<br>
+            This site  <a href="http://www.fec.gov">live site</a>.
+            </p>
+          </div>
+    <header class="usa-banner">
+      <div class="js-accordion accordion--neutral" data-content-prefix="gov-banner">
+        <div type="button" class="usa-banner-header js-accordion-trigger accordion__button" aria-controls="gov-banner" aria-expanded="false"><span class="u-visually-hidden">Here's how you know</span>
+          <img class="flag" src="/static/img/us_flag_small.png" alt="US flag signifying that this is a United States Federal Government website" width="16" height="11">
+          <p class="t-inline-block">An official website of the United States government</p>
+          <p class="t-inline-block usa-banner-button">Here's how you know</p>
+        </div>
+        <div class="usa-banner-content usa-grid usa-accordion-content accordion-content" id="gov-banner" aria-hidden="true" >
+          <div class="usa-banner-guidance-gov usa-width-one-half">
+            <img class="usa-banner-icon usa-media_block-img" src="/static/img/icon-dot-gov.svg" alt="Dot gov" width="38" height="38">
+            <div class="usa-media_block-body">
+              <p>
+                <strong>Official websites use .gov</strong>
+                <br>
+                A <strong>.gov</strong> website belongs to an official government organization in the United States.
+              </p>
+            </div>
+          </div>
+          <div class="usa-banner-guidance-ssl usa-width-one-half">
+            <img class="usa-banner-icon usa-media_block-img" src="/static/img/icon-https.svg" alt="SSL" width="38" height="38">
+            <div class="usa-media_block-body">
+              <p>
+                <strong>Secure .gov websites use HTTPS</strong>
+                <br>
+                A <strong>lock</strong> ( <svg xmlns="http://www.w3.org/2000/svg" width="10" height="15" viewBox="0 0 52 64" class="usa-banner__lock-image" role="img" aria-labelledby="banner-lock-title-default banner-lock-description-default"><title id="banner-lock-title-default">Lock</title><desc id="banner-lock-description-default">A locked padlock</desc><path     ></path></svg> ) or <strong>https://</strong> means you've safely connected to the .gov website. Share sensitive information only on official, secure websites.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </header>
+    
+        
+        <header class="site-header site-header--homepage" role="banner">
+          <div class="masthead">
+            <div class="homepage-seal">
+              <img src="/static/img/seal.svg" alt="FEC logo" width="160" height="160">
+            </div>
+            <div class="site-title--print"></div>
+            <a title="Home" href="/" class="site-title" rel="home"><span class="u-visually-hidden">Federal Election Commission | United States of America</span></a>
+            <ul class="utility-nav list--flat">
+              <li class="utility-nav__item"><a href="/calendar/">Calendar</a></li>
+              <li class="utility-nav__item">
+                <a class="js-glossary-toggle glossary__toggle">Glossary</a>
+              </li>
+              
+            <li class="utility-nav__search">
+                <form accept-charset="UTF-8" action="/search" class="combo" method="get" role="search">
+  <input type="hidden" name="type" value="candidates">
+  <input type="hidden" name="type" value="committees">
+  <input type="hidden" name="type" value="site">
+  <label class="u-visually-hidden" for="query">Search</label>
+  <div class="combo combo--search">
+    <span class="twitter-typeahead" ><input class="js-site-search combo__input tt-input" autocomplete="off" aria-controls="query_listbox" id="query" name="query" type="text" aria-label="Search FEC.gov" spellcheck="false" dir="auto" aria-activedescendant="" aria-owns="query_listbox" role="combobox" aria-autocomplete="list"  aria-expanded="false"><span role="status" aria-live="polite" ></span><pre aria-hidden="true" ></pre><div role="listbox" class="tt-menu" aria-live="polite" ><div role="presentation" class="tt-dataset tt-dataset-candidate"></div><div role="presentation" class="tt-dataset tt-dataset-committee"></div><div role="presentation" class="tt-dataset tt-dataset-0"></div><div role="presentation" class="tt-dataset tt-dataset-1"></div></div></span>
+    <button type="submit" class="button--standard combo__button button--search">
+      <span class="u-visually-hidden">Search</span>
+    </button>
+  </div>
+                </form>
+              </li></ul>
+          </div>
+          <nav class="site-nav js-site-nav">
+     <button class="js-nav-toggle site-nav__button" aria-controls="site-menu">Menu</button>
+      <div id="site-menu" class="site-nav__container" aria-label="Site-wide navigation" role="navigation">
+        <ul class="site-nav__panel site-nav__panel--main">
+          <li><h2 class="site-nav__title u-under-lg-only">Menu</h2></li>
+          <li class="site-nav__item u-under-lg-only">
+            <a class="site-nav__link" href="/" rel="home">
+              <span class="site-nav__link__title">Home</span>
+            </a>
+          </li>
+          <li class="site-nav__item" data-submenu="data">
+            <a class="site-nav__link" href="#0"   id="mega-menu-1620314819143-1" aria-haspopup="true" aria-controls="mega-menu-1620314819143-2" aria-expanded="false">
+              <span class="site-nav__link__title">
+              Campaign finance data</span>
+            </a>
+            <div class="mega-container" id="mega-menu-1620314819143-2" role="group" aria-expanded="false" aria-hidden="true" aria-labelledby="mega-menu-1620314819143-1">
+      <div class="mega">
+        <div class="mega__inner">
+          <div class="row">
+            <div class="u-padding-left d-sm-none d-md-none col-lg-1">&nbsp;</div>
+            <div class="u-padding--left col-lg-6">
+              <ul class="t-sans list--1-2-2-3-columns u-padding--top">
+                <li class="mega__item"><a href="/data/">All data</a></li>
+                <li class="mega__item"><a href="/data/browse-data/?tab=raising">Raising</a></li>
+                <li class="mega__item"><a href="/data/browse-data/?tab=statistics">Campaign finance statistics</a></li>
+              </ul>
+            </div>
+            <div class="u-padding--left col-lg-4">
+              <div class="icon-heading icon-heading--person-location-circle">
+                <p class="t-sans t-small icon-heading__text"><a href="/data/elections/">Find elections. Search by state or ZIP code</a></p>
+              </div>
+              <div class="icon-heading icon-heading--individual-contributions-circle">
+                <p class="t-sans t-small icon-heading__text"> <a href="/data/receipts/individual-contributions/">Look up contributions from specific individuals</a></p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+          </li>
+          <li class="site-nav__item site-nav__item--secondary" data-submenu="help">
+            <a href="#0" class="site-nav__link"   id="mega-menu-1620314819145-3" aria-haspopup="true" aria-controls="mega-menu-1620314819145-4" aria-expanded="false">
+              <span class="site-nav__link__title">Help for candidates and committees</span>
+            </a>
+            <div class="mega-container" id="mega-menu-1620314819145-4" role="group" aria-expanded="false" aria-hidden="true" aria-labelledby="mega-menu-1620314819145-3">
+      <div class="mega mega--secondary">
+        <div class="mega__inner">
+          <div class="row">
+            <div class="d-sm-none d-md-none col-lg-1">&nbsp;</div>
+            <div class="u-padding--left col-lg-6">
+              <ul class="t-sans list--2-columns u-padding--top">
+                <li class="mega__item"><a href="/help-candidates-and-committees/">All compliance resources</a></li>
+                <li class="mega__item"><a href="/help-candidates-and-committees/trainings/">Trainings</a></li>
+              </ul>
+            </div>
+            <div class="u-padding--left col-lg-5">
+              <div class="icon-heading icon-heading--checklist-circle">
+                <p class="t-sans t-small icon-heading__text"><a href="/help-candidates-and-committees/filing-reports/electronic-filing/">Learn about electronic filing</a></p>
+              </div>
+              <div class="icon-heading icon-heading--question-bubble-circle">
+                <p class="t-sans t-small icon-heading__text"> <a href="/help-candidates-and-committees/question-rad/">Find and contact your committee's analyst</a></p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+          </li>
+          <li class="site-nav__item" data-submenu="legal">
+            <a href="#0" class="site-nav__link "   id="mega-menu-1620314819146-5" aria-haspopup="true" aria-controls="mega-menu-1620314819146-6" aria-expanded="false">
+              <span class="site-nav__link__title">Legal resources</span>
+            </a>
+            <div class="mega-container" id="mega-menu-1620314819146-6" role="group" aria-expanded="false" aria-hidden="true" aria-labelledby="mega-menu-1620314819146-5">
+      <div class="mega">
+        <div class="mega__inner">
+          <div class="row">
+            <div class="d-sm-none d-md-none col-lg-1">&nbsp;</div>
+            <div class="u-padding--left col-md-4 col-lg-6">
+              <ul class="t-sans list--1-2-2-2-columns u-padding--top">
+                <li class="mega__item"><a href="/legal-resources/">All legal resources</a></li>
+                <li class="mega__item"><a href="/legal-resources/policy-other-guidance/">Policy and other guidance</a></li>
+              </ul>
+            </div>
+            <div class="u-padding--left col-md-3 col-lg-4">
+              <div class="icon-heading icon-heading--magnifying-glass-circle">
+                <p class="t-sans t-small icon-heading__text"><a href="/legal-resources/">Search across all legal resources</a></p>
+              </div>
+              <div class="icon-heading icon-heading--magnifying-glass-circle">
+                <p class="t-sans t-small icon-heading__text"><a href="/legal-resources/policy-and-other-guidance/guidance-documents/">Search guidance documents</a></p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+          </li>
+          <li class="site-nav__item site-nav__item--secondary" data-submenu="about">
+            <a href="#0" class="site-nav__link "   id="mega-menu-1620314819148-7" aria-haspopup="true" aria-controls="mega-menu-1620314819148-8" aria-expanded="false">
+              <span class="site-nav__link__title">About</span>
+            </a>
+            <div class="mega-container" id="mega-menu-1620314819148-8" role="group" aria-expanded="false" aria-hidden="true" aria-labelledby="mega-menu-1620314819148-7">
+      <div class="mega mega--secondary">
+        <div class="mega__inner">
+          <div class="row">
+            <div class="u-padding--left d-sm-none d-md-none col-lg-1">&nbsp;</div>
+            <div class="u-padding--left col-lg-10">
+              <ul class="t-sans list--1-2-2-3-columns u-padding--top">
+                <li class="mega__item"><a href="/about/">All about the FEC</a></li>
+                <li class="mega__item"><a href="/contact/">Contact</a></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+          </li>
+    
+        </ul>
+      </div>
+      <a title="Home" href="/" class="site-title"><span class="u-visually-hidden">Federal Election Commission | United States of America</span></a>
+    </nav>
+    
+        </header>
+        
+    
+        <main id="main">
+          
+      <section class="hero hero--home" aria-labelledby="hero-heading">
+        <div class="container">
+          <div class="hero__content">
+            <h2 id="hero-heading">Protecting the integrity of the campaign finance process</h2>
+            <a class="button button--thin-border" href="/about">More about the FEC</a>
+          </div>
+        </div>
+      </section>
+    
+      
+    
+    
+      <section class="slab slab--secondary">
+        <div class="container">
+        
+          <div>
+            <div class="message message--vivid message--mini message--info message--inline u-no-margin-top u-no-margin-bottom">
+              <span class="t-bold">Rulemaking petition now open for public comment: </span> Candidate salaries (REG 2021-01)
+            </div>
+            <a href="https://www.fec.gov/legal-resources/regulations/pending-rulemaking-matters-comment/" class="t-sans">Read Federal Register notice &amp; comment now</a> »
+            
+          </div>
+        
+          <div class="u-margin--top">
+            <div class="message message--vivid message--mini message--info message--inline u-no-margin-top u-no-margin-bottom">
+              <span class="t-bold">FEC-related COVID-19 information: </span> Offices remain closed to visitors
+            </div>
+            <a href="https://www.fec.gov/resources/cms-content/documents/status-of-fec-operations.pdf" class="t-sans">Get the latest information on FEC operations</a> »
+            
+            &nbsp; | &nbsp; <a href="https://www.fec.gov/resources/cms-content/documents/FEC-COVID-19-workplace-safety-plan.pdf" class="t-sans">Workplace safety plan</a> »
+            
+          </div>
+        
+      </div>
+      </section>
+    
+      
+      <section class="slab">
+        
+        
+          
+            <div class="container">
+             <ul class="grid grid--3-wide grid--flex u-padding--bottom">
+      <li class="grid__item grid__item--with-icon icon--large grid__icon--white text-centered">
+        <img src="/static/img/map-chart-icon.svg" alt="icon representing Presidential candidate map">
+        <h2 class="u-margin--top"><a href="/data/candidates/president/presidential-map/">Presidential candidate map</a></h2>
+        <p>Search presidential data such as money raised, money spent, cash on hand and debt.</p>
+      </li>
+      <li class="grid__item grid__item--with-icon icon--large grid__icon--white text-centered">
+        <img src="/static/img/i-complex--regreport--gray-lightest.svg" alt="icon representing help for candidates and committees">
+        <h2 class="u-margin--top"><a href="/help-candidates-and-committees/">Help for candidates and committees</a></h2>
+        <p>Help for individuals and groups who are active in federal elections.</p>
+      </li>
+      <li class="grid__item grid__item--with-icon icon--large grid__icon--white text-centered">
+        <img src="/static/img/i-complex--legal--gray-lightest.svg" alt="icon representing legal resources search">
+        <h2 class="u-margin--top"><a href="/legal-resources/">Research legal resources</a></h2>
+        <p>Explore relevant statutes, regulations, Commission actions and court cases.</p>
+      </li>
+    </ul>
+            </div>
+          
+        
+        <div class="container">
+          <div class="heading--section heading--with-action">
+            <h2 class="heading__left">News and announcements</h2>
+            <a class="button--cta button--updates heading__right" href="/updates">All news</a>
+          </div>
+    
+          
+    <ul class="grid grid--4-wide t-sans">
+      
+      <li class="grid__item grid__item--home">
+        
+        <div class="t-bold t-upper">
+          FEC Record
+        </div>
+        <a href="/updates/april-reporting-reminder-2021/">April reporting reminder (2021)</a>
+      </li>
+      
+      <li class="grid__item grid__item--home">
+        
+        <div class="t-bold t-upper">
+          Tips for Treasurers
+        </div>
+        <a href="/updates/tip-2021-22-regional-conference-schedule-announced/">2021-22 regional conference schedule announced</a>
+      </li>
+      
+      <li class="grid__item grid__item--home">
+        
+        <div class="t-bold t-upper">
+          Press release
+        </div>
+        <a href="/updates/district-court-issues-opinion-public-citizen-et-al-v-fec/">District Court issues opinion in <em>Public Citizen, et al. v FEC</em></a>
+      </li>
+      
+      <li class="grid__item grid__item--home">
+        
+        <div class="t-bold t-upper">
+          Weekly Digest
+        </div>
+        <a href="/updates/week-march-15-19-2021/">Week of March 15-19, 2021</a>
+      </li>
+      
+    </ul>
+    
+    
+          <div class="heading--section heading--with-action">
+            <h2 class="heading__left">Events and deadlines</h2>
+            <a class="button--cta heading__right button--calendar" href="/calendar">Full calendar</a>
+          </div>
+          <ul class="grid grid--4-wide grid--flex t-sans">
+            <li class="grid__item grid__item--with-button">
+              <div class="t-bold">Next open commission meeting:</div>
+              <div class="js-next-commission-meeting">  <span class="t-bold">May 6</span> |
+      <a href="https://www.fec.gov/updates/may-06-2021-open-meeting/">Open Meeting</a>
+    </div>
+              <a class="button button--alt button--updates" href="/meetings">All meetings</a>
+            </li><li class="grid__item grid__item--with-button">
+              <div class="t-sans t-bold">Next filing deadline:</div>
+              <div class="js-next-filing-deadline">  <span class="t-bold">May 20</span> |
+      <a href="https://www.fec.gov/help-candidates-and-committees/dates-and-deadlines/2021-reporting-dates/2021-monthly-filers/">May Monthly Report due</a>
+    </div>
+              <a class="button button--alt button--calendar" href="/calendar/?calendar_category_id=25&amp;calendar_category_id=26&amp;calendar_category_id=27">All filing deadlines</a>
+            </li>
+            <li class="grid__item grid__item--with-button">
+              <div class="t-sans t-bold">Next training or conference:</div>
+              <div class="js-next-training-or-conference">  <span class="t-bold">May 26</span> |
+      <a href="https://www.fec.gov/updates/fec-host-may-26-webinar-political-party-committees-2021/">Party Committee Webinar</a>
+    </div>
+              <a class="button button--alt button--calendar" href="/calendar/?calendar_category_id=33&amp;calendar_category_id=34">All outreach</a>
+            </li>
+            <li class="grid__item grid__item--with-button">
+              <div class="t-sans t-bold">Next public comment deadline:</div>
+              <div class="js-next-public-comment-deadline">  <span class="t-bold">May 6</span> |
+      <a href="https://www.fec.gov/files/legal/aos/2021-05/202105.pdf">Draft AO 2021-05</a>
+    </div>
+              <a class="button button--alt button--calendar" href="/calendar/?calendar_category_id=23">All legal events</a>
+            </li>
+          </ul>
+        </div>
+      </section>
+    
+      <section class="slab slab--home slab--neutral">
+        <div class="container">
+    
+        
+    
+    
+    
+    <h2 class="heading--section u-padding--top">Compare candidates in an election</h2>
+    <div class="grid grid--2-wide grid--flex u-padding--top" id="election-lookup">
+      <div class="grid__item u-margin--bottom">
+        <div class="election-map election-map--home leaflet-container leaflet-touch leaflet-fade-anim leaflet-grab leaflet-touch-drag"   >
+          <!--map renders here -->
+        <div class="leaflet-pane leaflet-map-pane" >
+            <div class="leaflet-pane leaflet-tile-pane">
+                <div class="leaflet-layer ">
+    <div class="leaflet-tile-container leaflet-zoom-animated">
+        <img alt="Map tile image" role="presentation" src="https://stamen-tiles-d.a.ssl.fastly.net/toner-lite/3/1/2.png" class="leaflet-tile leaflet-tile-loaded">
+        <img alt="Map tile image" role="presentation" src="https://stamen-tiles-a.a.ssl.fastly.net/toner-lite/3/1/3.png" class="leaflet-tile leaflet-tile-loaded">
+        <img alt="Map tile image" role="presentation" src="https://stamen-tiles-c.a.ssl.fastly.net/toner-lite/3/0/2.png" class="leaflet-tile leaflet-tile-loaded">
+        <img alt="Map tile image" role="presentation" src="https://stamen-tiles-a.a.ssl.fastly.net/toner-lite/3/2/2.png" class="leaflet-tile leaflet-tile-loaded">
+        <img alt="Map tile image" role="presentation" src="https://stamen-tiles-d.a.ssl.fastly.net/toner-lite/3/0/3.png" class="leaflet-tile leaflet-tile-loaded">
+        <img alt="Map tile image" role="presentation" src="https://stamen-tiles-b.a.ssl.fastly.net/toner-lite/3/2/3.png" class="leaflet-tile leaflet-tile-loaded">
+    </div>
+                </div>
+            </div>
+            <div class="leaflet-pane leaflet-shadow-pane"></div>
+            <div class="leaflet-pane leaflet-overlay-pane">
+                <svg pointer-events="none" class="leaflet-zoom-animated" width="556" height="310" viewBox="-46 -26 556 310">
+    <g><path class="leaflet-interactive" ></path></g>
+                </svg>
+            </div>
+            <div class="leaflet-pane leaflet-marker-pane"></div>
+            <div class="leaflet-pane leaflet-tooltip-pane"></div>
+            <div class="leaflet-pane leaflet-popup-pane"></div>
+            <div class="leaflet-proxy leaflet-zoom-animated"></div>
+        </div>
+        <div class="leaflet-control-container">
+            <div class="leaflet-top leaflet-left">
+                <div class="leaflet-control-zoom leaflet-bar leaflet-control"><a class="leaflet-control-zoom-in" href="#" title="Zoom in" role="button" aria-label="Zoom in">+</a><a class="leaflet-control-zoom-out" href="#" title="Zoom out" role="button" aria-label="Zoom out">−</a></div>
+            </div>
+            <div class="leaflet-top leaflet-right"></div>
+            <div class="leaflet-bottom leaflet-left"></div>
+            <div class="leaflet-bottom leaflet-right">
+                <div class="leaflet-control-attribution leaflet-control"><a href="https://leafletjs.com" title="A JS library for interactive maps">Leaflet</a> | Map tiles by <a href="http://stamen.com">Stamen Design</a>, <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a> — Map data © <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors</div>
+            </div>
+        </div>
+    </div>
+      </div>
+      <div class="grid__item example--primary u-margin--bottom search-controls election-search-home">
+        <p class="t-bold">Learn about candidates running in a particular state or district for past or upcoming elections.</p>
+        <form action="/data/elections">
+          <div class="row u-margin--bottom">
+            <div class="search-controls__zip">
+              <label for="zip" class="label input__label-home">Find by ZIP code</label>
+              <input type="text" inputmode="numeric" id="zip" name="zip" class="combo__input">
+            </div>
+            <div class="search-controls__submit search-controls__no-label">
+              <button type="submit" class="button--search--text button--standard">Search</button>
+            </div>
+          </div>
+          <div class="row">
+            <div class="search-controls__state">
+              <label for="state" class="label input__label-home">State</label>
+              <select id="state" name="state" aria-label="Select a state">
+                <option value="">Select state</option>
+                <option value="WY">Wyoming</option>
+              </select>
+            </div>
+            <div class="search-controls__district">
+              <label for="District" class="label input__label-home">District <span class="label__optional">(optional)</span></label>
+              <select id="district" name="district" aria-label="Select a district" class="select--alt" disabled="">
+                <option value="">Select district</option>
+                <option value="S">Senate</option>
+                <optgroup label="House">
+                </optgroup>
+              </select>
+            </div>
+            <div class="search-controls__submit search-controls__no-label">
+             <button type="submit" class="button--search--text button--standard">Search</button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+    
+    
+    
+    
+    
+    
+          <div class="grid grid--3-wide grid--no-border slab--spacious-margin slab--ruled u-padding--top">
+            <div class="grid__item">
+              <div class="icon-heading icon-heading--direction-sign-circle primary">
+                <p class="t-sans t-small icon-heading__text"><a href="/introduction-campaign-finance/understanding-ways-support-federal-candidates/">Understand ways to support federal candidates</a></p>
+              </div>
+            </div>
+            <div class="grid__item">
+              <div class="icon-heading icon-heading--financial-document primary">
+                <p class="t-sans t-small icon-heading__text"><a href="/introduction-campaign-finance/how-to-research-public-records/">Learn more about using the FEC's campaign finance data</a></p>
+              </div>
+            </div>
+            <div class="grid__item">
+              <div class="icon-heading icon-heading--election-circle primary">
+                <p class="t-sans t-small icon-heading__text"><a href="/introduction-campaign-finance/election-and-voting-information/">Find election results and voting information</a></p>
+              </div>
+            </div>
+          </div>
+    
+        
+    
+    
+    
+    <h2 class="heading--section">Who is raising and spending the most</h2>
+    <section class="usa-grid-full">
+      <p class="t-bold u-padding--top">Learn how much individual candidates have raised and spent for presidential, Senate and House elections.</p>
+      <div class="usa-width-two-thirds grid--flex">
+        <section id="raising-breakdowns" class="breakdowns-home">
+           <div class="js-top-entities" data-office="S" data-election-year="2022" data-perpage="3">
+          <div class="chart-table chart-table-home simple-table--responsive js-top-table" id="top-table" aria-live="polite" role="grid">
+            <div role="row" class="simple-table__header">
+              <div role="columnheader" class="simple-table__header-cell cell--40">Candidate</div>
+              <div role="columnheader" class="simple-table__header-cell cell--20 t-right-aligned js-type-label">Total <span>raised</span></div>
+              <div role="columnheader" class="simple-table__header-cell cell--40"></div>
+            </div>
+          <div role="row" class="simple-table__row js-top-row">
+      <div role="gridcell" class="simple-table__cell"> <a href="/data/candidate/S0GA00559/?cycle=2022&amp;election_full=true">WARNOCK, RAPHAEL</a>
+        [DEM]
+      </div>
+      <div role="gridcell" class="simple-table__cell t-right-aligned t-mono">$27,517,877.85</div>
+      <div role="gridcell" class="simple-table__cell">
+        <div class="bar-container">
+          <div class="value-bar" data-value="27517877.85" data-party="DEM" ></div>
+        </div>
+      </div></div><div role="row" class="simple-table__row js-top-row">
+      <div role="gridcell" class="simple-table__cell"> <a href="/data/candidate/S4SC00240/?cycle=2022&amp;election_full=true">SCOTT, TIMOTHY E.</a>
+        [REP]
+      </div>
+      <div role="gridcell" class="simple-table__cell t-right-aligned t-mono">$13,002,898.63</div>
+      <div role="gridcell" class="simple-table__cell">
+        <div class="bar-container">
+          <div class="value-bar" data-value="13002898.63" data-party="REP" ></div>
+        </div>
+      </div></div><div role="row" class="simple-table__row js-top-row">
+      <div role="gridcell" class="simple-table__cell"> <a href="/data/candidate/S8NY00082/?cycle=2022&amp;election_full=true">SCHUMER, CHARLES E.</a>
+        [DEM]
+      </div>
+      <div role="gridcell" class="simple-table__cell t-right-aligned t-mono">$12,310,209.11</div>
+      <div role="gridcell" class="simple-table__cell">
+        <div class="bar-container">
+          <div class="value-bar" data-value="12310209.11" data-party="DEM"></div>
+        </div>
+      </div></div></div>
+          <div class="content__section row u-margin--top">
+            <ul class="list--buttons u-float-right">
+              <li class="u-padding--top--small"><a class="button button--cta button--go js-browse" href="/data/raising-bythenumbers/">Browse top <span>raising</span> candidates</a></li>
+            </ul>
+          </div>
+         </div>
+        </section>
+      </div>
+      <div class="usa-width-one-third example--primary u-padding--top--small">
+        <fieldset class="toggles u-margin--bottom" data-toggle="home-barcharts" data-filter-ignore-count="true">
+          <legend class="label input__label-home t-inline-block">Data type</legend>
+          <div class="row">
+            <label for="switcher-receipts" class="toggle">
+              <input type="radio" class="js-chart-toggle" value="receipts" id="switcher-receipts" checked="" name="data_type" data-prefix="raising" aria-controls="top-table">
+              <span class="button--alt button-first">Money raised</span>
+            </label>
+            <label for="switcher-disbursements" class="toggle">
+              <input type="radio" class="js-chart-toggle" value="disbursements" id="switcher-disbursements" name="data_type" data-prefix="spending" aria-controls="top-table">
+              <span class="button--alt button-last">Money spent</span>
+            </label>
+          </div>
+        </fieldset>
+    
+        <div class="js-top-entities raising-spending-controls content__section" data-office="S" data-election-year="2022">
+          <form action="" method="GET" class="u-margin--bottom">
+            <div class="office-select u-margin--bottom">
+            <label for="top-category" class="js-type-label input__label-home label t-inline-block">How much has been <span>raised</span> by </label>
+              <select id="top-category" name="top_category" class="js-office" aria-controls="top-table">
+                <option value="P">Presidential candidates</option>
+                <option value="S" selected="">Senate candidates</option>
+                <option value="H">House candidates</option>
+              </select>
+            </div>
+              <noscript>
+                <button type="submit" class="button button--cta">Submit</button>
+              </noscript>
+          </form>
+          <form action="" method="get">
+            <div class="row">
+              <div class="cycle-select">
+                <label for="election-year" class="label input__label-home">Running in</label>
+                <select id="election-year" class="js-election-year" name="cycle">
+ 
+    <option value="2022" selected="">2022</option>
+
+                </select>
+              </div>
+            </div>
+            <noscript>
+              <button type="submit" class="button button--cta">Submit</button>
+            </noscript>
+          </form>
+        </div>
+      </div>
+    </section>
+    
+    
+    
+    
+        </div>
+      </section>
+      <section class="slab">
+        <div class="container">
+          <h1>Commissioners</h1>
+          
+    
+    
+    <div class="grid grid--3-wide">
+    
+      
+    
+    
+    <div class="grid__item commissioner-height">
+      <div class="icon-heading">
+        
+        
+        <img class="icon-heading__image" src="/media/images/Broussard_S.original.png" alt="Headshot of Shana M. Broussard" width="70" height="70">
+        
+        <div class="icon-heading__content">
+          <div class="t-lead"><a href="/about/leadership-and-structure/shana-m-broussard/">Shana M. Broussard</a></div>
+          
+          <div class="t-lead t-note">Chair</div>
+          
+          <div class="t-sans">Democrat</div>
+          <div class="t-italic">
+          
+          
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    
+    
+    
+      
+    
+    
+    <div class="grid__item commissioner-height">
+      <div class="icon-heading">
+        
+        
+        <img class="icon-heading__image" src="/media/images/Dickerson.original.png" alt="Headshot of Allen Dickerson" width="70" height="70">
+        
+        <div class="icon-heading__content">
+          <div class="t-lead"><a href="/about/leadership-and-structure/allen-dickerson/">Allen Dickerson</a></div>
+          
+          <div class="t-lead t-note">Vice Chair</div>
+          
+          <div class="t-sans">Republican</div>
+          <div class="t-italic">
+          
+          
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    
+    
+    
+      
+    
+    
+    <div class="grid__item commissioner-height">
+      <div class="icon-heading">
+        
+        
+        <img class="icon-heading__image" src="/media/images/Cooksey.original.png" alt="Headshot of Sean J. Cooksey" width="70" height="70">
+        
+        <div class="icon-heading__content">
+          <div class="t-lead"><a href="/about/leadership-and-structure/sean-j-cooksey/">Sean J. Cooksey</a></div>
+          
+          <div class="t-sans">Republican</div>
+          <div class="t-italic">
+          
+          
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    
+      
+    
+    
+    <div class="grid__item commissioner-height">
+      <div class="icon-heading">
+        
+        
+        <img class="icon-heading__image" src="/media/images/headshot--trainor.original.png" alt="Headshot of James E. &quot;Trey&quot; Trainor III" width="70" height="70">
+        
+        <div class="icon-heading__content">
+          <div class="t-lead"><a href="/about/leadership-and-structure/james-e-trainor-iii/">James E. "Trey" Trainor III</a></div>
+          
+          <div class="t-sans">Republican</div>
+          <div class="t-italic">
+          
+          
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    
+      
+    
+    
+    <div class="grid__item commissioner-height">
+      <div class="icon-heading">
+        
+        
+        <img class="icon-heading__image" src="/media/images/headshot--walther.original.png" alt="Headshot of Steven T. Walther" width="70" height="70">
+        
+        <div class="icon-heading__content">
+          <div class="t-lead"><a href="/about/leadership-and-structure/steven-t-walther/">Steven T. Walther</a></div>
+          
+          <div class="t-sans">Independent</div>
+          <div class="t-italic">
+          
+          
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    
+      
+    
+    
+    <div class="grid__item commissioner-height">
+      <div class="icon-heading">
+        
+        
+        <img class="icon-heading__image" src="/media/images/headshot--weintraub_GmIreiA.original.png" alt="Headshot of Ellen L. Weintraub" width="70" height="70">
+        
+        <div class="icon-heading__content">
+          <div class="t-lead"><a href="/about/leadership-and-structure/ellen-l-weintraub/">Ellen L. Weintraub</a></div>
+          
+          <div class="t-sans">Democrat</div>
+          <div class="t-italic">
+          
+          
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    
+    
+    
+    </div>
+    
+        </div>
+      </section>
+    
+        </main>
+    
+        <nav class="footer-links">
+      <div class="container">
+    
+        <div class="grid grid--6-wide">
+    
+          <div class="grid__item">
+            <ul>
+              <li>
+                <a href="/about/">About</a>
+              </li>
+              <li>
+                <a href="/about/careers/">Careers</a>
+              </li>
+              <li>
+                <a href="/press/">Press</a>
+              </li>
+              <li>
+                <a href="/contact/">Contact</a>
+              </li>
+            </ul>
+          </div>
+    
+          <div class="grid__item"></div>
+    
+          <div class="grid__item"></div>
+    
+          <div class="grid__item">
+            <ul>
+              <li>
+                <a href="/about/privacy-and-security-policy">Privacy and security policy</a>
+              </li>
+              <li>
+                <a href="/about/plain-language/">Plain language</a>
+              </li>
+              <li>
+                <a href="/about/no-fear-act/">No FEAR Act</a>
+              </li>
+              <li>
+                <a href="/about/reports-about-fec/strategy-budget-and-performance/">Strategy, budget and performance</a>
+              </li>
+            </ul>
+          </div>
+    
+          <div class="grid__item">
+            <ul>
+              <li>
+                <a href="/open/">Open government</a>
+              </li>
+              <li>
+                <a href="https://www.fbi.gov/protectedvoices">Protected Voices</a>
+              </li>
+              <li>
+                <a href="https://www.usa.gov/">USA.gov</a>
+              </li>
+              <li>
+                <a href="/office-inspector-general/">Inspector General</a>
+              </li>
+              <li>
+                <a href="/freedom-information-act/">FOIA</a>
+              </li>
+            </ul>
+          </div>
+    
+          <div class="grid__item">
+            <ul>
+              <li>
+                <a href="https://api.open.fec.gov">OpenFEC API</a>
+              </li>
+              <li>
+                <a href="https://github.com/fecgov/fec">GitHub repository</a>
+              </li>
+              <li>
+                <a href="https://github.com/fecgov/FEC/blob/master/release_notes/release_notes.md">Release notes</a>
+              </li>
+              <li>
+                <a href="https://fecgov.statuspage.io/">FEC.gov status</a>
+              </li>
+            </ul>
+          </div>
+    
+        </div>
+      </div>
+    </nav>
+    
+        <footer class="footer">
+          <div class="container">
+            <div class="seal">
+              <img class="seal__img" width="140" height="140" src="/static/img/seal--inverse.svg" alt="Seal of the Federal Election Commission | United States of America">
+              <p class="address__title">Federal Election Commission</p>
+            </div>
+    
+            <div class="address">
+              <ul class="social-media">
+                <li>
+  <div class="i icon--twitter">
+    <a href="https://twitter.com/fec"><span class="u-visually-hidden">The FEC's Twitter page</span></a>
+  </div>
+                </li>
+                <li>
+  <div class="i icon--youtube">
+    <a href="https://www.youtube.com/user/FECTube"><span class="u-visually-hidden">The FEC's YouTube page</span></a>
+  </div>
+                </li>
+              </ul>
+    
+              <p>1050 First Street, NE<br>
+              Washington, DC 20463</p>
+    
+              <a href="https://public.govdelivery.com/accounts/USFEC/subscriber/topics?qsp=CODE_RED" target="_blank" rel="noopener">
+                <button class="button--standard button--envelope">Sign up for FECMail</button>
+              </a>
+            </div>
+          </div>
+        </footer>
+    
+        <div id="glossary" class="glossary" aria-describedby="glossary-result" aria-hidden="true">
+      <button title="Close glossary" class="button button--close--inverse toggle js-glossary-close" tabindex="-1"><span class="u-visually-hidden">Hide glossary</span>
+      </button>
+      <h2>Glossary</h2>
+      <label for="glossary-search" class="label">Search terms</label>
+      <input id="glossary-search" class="glossary__search js-glossary-search" type="search" tabindex="-1">
+      <span class="t-note t-sans search__example">Examples: receipt; Hybrid PAC</span>
+      <div class="glossary__content" id="glossary-result">
+        <ul class="glossary__list js-glossary-list accordion--inverse">
+            <li class="glossary__item">
+                <button class="data-glossary-term glossary__term accordion__button" tabindex="-1" aria-controls="glossary-content-0" aria-expanded="false">Act</button>
+                <div class="glossary__definition accordion__content" id="glossary-content-0" aria-hidden="true" >The Federal Election Campaign Act of 1971, as amended (<a href="https://www.fec.gov/data/legal/statutes/" tabindex="-1">52 U.S.C. §§30101-30146</a>). 11 CFR <a href="https://www.fec.gov/regulations/100-18/CURRENT#100-18" tabindex="-1">100.18</a>. Prior to September 1, 2014, the Act appeared in Title 2 of the U.S. Code. Sometimes abbreviated FECA.</div>
+            </li>
+            <li class="glossary__item">
+                <button class="data-glossary-term glossary__term accordion__button" tabindex="-1" aria-controls="glossary-content-1" aria-expanded="false">Administrative expense</button>
+                <div class="glossary__definition accordion__content" id="glossary-content-1" aria-hidden="true" >For party committees, rent, utilities, office equipment, office supplies, routine building maintenance and other operating costs not attributable to a specific candidate.</div>
+            </li>
+            <li class="glossary__item">
+                <button class="data-glossary-term glossary__term accordion__button" tabindex="-1" aria-controls="glossary-content-2" aria-expanded="false">Administrative termination</button>
+                <div class="glossary__definition accordion__content" id="glossary-content-2" aria-hidden="true">Administrative termination is the action taken by the Commission to terminate the reporting obligations of political committees that appear to be inactive in accordance with 52 U.S.C. <a href="https://www.govinfo.gov/link/uscode/52/30103" tabindex="-1">30103(d)(2)</a> and <a href="https://www.fec.gov/regulations/102-4/CURRENT#102-4" tabindex="-1">11 CFR 102.4</a>. Administrative termination does not relieve a committee of any legal responsibility for the payment of any outstanding debt or obligations.</div>
+            </li>
+            <li class="glossary__item">
+                <button class="data-glossary-term glossary__term accordion__button" tabindex="-1" aria-controls="glossary-content-3" aria-expanded="false">Advance</button>
+                <div class="glossary__definition accordion__content" id="glossary-content-3" aria-hidden="true" >The payment by an individual from his or her personal funds, including a personal credit card, for the costs incurred in providing goods or services to, or obtaining goods or services that are used by or on behalf of, a candidate or a political committee.  See <a href="https://www.fec.gov/regulations/116-5/CURRENT#116-5" tabindex="-1">11 CFR 116.5</a>.</div>
+            </li>
+            <li class="glossary__item">
+                <button class="data-glossary-term glossary__term accordion__button" tabindex="-1" aria-controls="glossary-content-4" aria-expanded="false">Advisory opinion (AO)</button>
+                <div class="glossary__definition accordion__content" id="glossary-content-4" aria-hidden="true">A formal response from the Commission regarding the legality of a specific activity proposed in an advisory opinion request (AOR). 11 CFR Part <a href="https://www.fec.gov/regulations/112" tabindex="-1">112</a>.</div>
+            </li>
+            <li class="glossary__item">
+                <button class="data-glossary-term glossary__term accordion__button" tabindex="-1" aria-controls="glossary-content-5" aria-expanded="false">Affiliated committees</button>
+                <div class="glossary__definition accordion__content" id="glossary-content-5" aria-hidden="true">Committees and organizations that are considered one committee for purposes of the contribution limits. <a href="https://www.fec.gov/regulations/110-3/CURRENT#110-3" tabindex="-1">11 CFR 110.3(a)(1)</a>. Affiliated committees include (1) All committees established or authorized by a candidate as part of his or her campaign for federal or nonfederal office; and (2) All committees established, financed, maintained or controlled by the same person, group or organization. 11 CFR <a href="https://www.fec.gov/regulations/100-5/CURRENT#100-5-g" tabindex="-1">100.5(g)(1) and (2)</a>; <a href="https://www.fec.gov/regulations/110-3/CURRENT#110-3" tabindex="-1">11 CFR 110.3(a)(1)</a>.</div>
+            </li>
+            <li class="glossary__item"><button class="data-glossary-term glossary__term accordion__button" tabindex="-1" aria-controls="glossary-content-6" aria-expanded="false">Agent (of a candidate)</button>
+                <div class="glossary__definition accordion__content" id="glossary-content-6" aria-hidden="true">An agent of a federal candidate or officeholder is any person who has actual authority, either express or implied, to engage in any of the following activities on behalf of the candidate or officeholder: 
+                    <ul class="list-bulleted">
+                        <li>To solicit, receive, direct, transfer or spend funds in connection with any election.</li>
+                        <li>To request or suggest that a communication be created, produced or distributed; </li>
+                        <li>To make or authorize a communication that meets one or more of the “content standards” for coordination;</li>
+                        <li>To request or suggest that any other person create, produce, or distribute any communication;</li>
+                        <li>To be materially involved in decisions regarding the content, intended audience, means, media outlet, timing, frequency, size, prominence or duration of a communication;</li>
+                        <li>To provide material or information to assist another person in the creation, production or distribution of any communication; or</li>
+                        <li>To make or direct a communication that is created, produced or distributed with the use of material or information derived from a substantial discussion about the communication with a different candidate;</li>
+                    </ul>
+                11 CFR <a href="https://www.fec.gov/regulations/109-3/CURRENT#109-3-b" tabindex="-1">109.3(b)</a> and <a href="https://www.fec.gov/regulations/300-2/CURRENT#300-2-b-3" tabindex="-1">300.2(b)(3)</a>.</div>
+            </li>
+        </ul>
+      </div>
+    </div>
+    
+    
+        <input type="hidden" name="csrfmiddlewaretoken" value="LcocbFneYSNzDuh0bhv6goceJc7UW5skEks4Hk9vAxUFKXSAJpetVqzXzVNEwfIX">
+    <div>
+      <button class="js-feedback feedback__toggle button--cta-secondary" aria-controls="feedback" aria-expanded="false" type="button">Feedback</button>
+      <div id="feedback" class="js-feedback-box feedback" aria-hidden="true">
+        <button class="js-feedback button--down feedback__close" tabindex="-1"><span class="u-visually-hidden">Close</span></button>
+        <div class="js-status" aria-hidden="true">
+          <div class="message js-message">
+          </div>
+          <ul class="list--buttons">
+            <li><button class="js-reset button--cta-primary feedback__button" type="button" tabindex="-1">Submit another issue</button></li>
+          </ul>
+        </div>
+        <form id="feedback-form" class="container">
+          <fieldset>
+            <legend class="feedback__title">Help us improve FEC.gov</legend>
+            <h3 class="t-sans">Test new website features with our design team</h3>
+            <div class="signup__row">
+              <div class="signup__button">
+              <a class="button--cta" href="https://ethn.io/12085" tabindex="-1">Sign up</a>
+              </div>
+              <div class="signup__note">
+                <p class="t-sans t-note">Sign up for a 30-minute video call to  help us test new website features.</p>
+              </div>
+            </div>
+            <hr>
+            <h3 class="t-sans">Or post public feedback about the FEC.gov website anonymously</h3>
+            <p class="t-sans t-note">How can we improve FEC.gov? Your feedback, browser information and the URL of the page you were viewing at the time of submission will be posted publicly - so don't include sensitive information like your name, contact information or Social Security number.</p>
+            <label for="feedback-1" class="label">What were you trying to do on fec.gov, and how can we improve it? <span class="label--help">(required)</span></label>
+            <textarea id="feedback-1" name="action" tabindex="-1"></textarea>
+            <label for="feedback-2" class="label">General website feedback</label>
+            <textarea id="feedback-2" name="feedback" tabindex="-1"></textarea>
+            <label for="feedback-3" class="label">Tell us about yourself</label>
+            <span class="label--help">I'm a <span class="u-blank-space"></span> interested in <span class="u-blank-space"></span>.</span>
+            <textarea id="feedback-3" name="about" tabindex="-1"></textarea>
+            <button class="g-recaptcha button--cta feedback__button u-no-margin" data-sitekey="6Lc0uGwUAAAAALGRGXt3mTteJeb_lbse2frNdWjv" data-callback="submitFeedback" data-badge="inline" tabindex="-1">Post</button>
+            <p class="t-sans t-note u-margin--top"><a href="https://github.com/FECgov/FEC/issues" tabindex="-1">Review all reported feedback</a>  |  <a href="/contact/" tabindex="-1">Contact the FEC about a specific question</a>  |  <a href="/use-recaptcha/" tabindex="-1">Use of reCAPTCHA</a></p>
+          </fieldset>
+        </form>
+      </div>
+    </div></body></html>
+    

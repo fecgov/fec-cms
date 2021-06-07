@@ -22,6 +22,7 @@
 
 .icon-heading__image {
   @include span-columns(1);
+  height: auto;
 }
 
 .icon-heading__content {
@@ -41,6 +42,7 @@
 .grid--3-wide {
   .icon-heading__image {
     @include span-columns(3);
+    height: auto;
   }
 
   .icon-heading__content {

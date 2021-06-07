@@ -1,3 +1,7 @@
+/*
+    duped from elections.scss:
+    If you add any new rules here, make sure there's a corresponding component in sample-homepage-for-purgecss.html
+*/
 @import "../../../../node_modules/leaflet/dist/leaflet";
 
 @import "common";
@@ -13,3 +17,6 @@
 @import "components/responsive-object";
 @import "components/results-info";
 @import "components/richtext";
+/*
+    end dupe from elections.scss
+*/

@@ -5,7 +5,7 @@ from data import views_datatables
 from fec import settings
 
 urlpatterns = [
-    url(r'^data/$', views.landing),
+    url(r'^data/$', views.landing, name='data-landing'),
     url(r'^data/search/$', views.search),
     url(r'^data/browse-data/$', views.browse_data, name='browse-data'),
     url(r'^data/candidate/(?P<candidate_id>\w+)/$', views.candidate),
@@ -49,6 +49,11 @@ urlpatterns = [
 
     url(r'^widgets/aggregate-totals/$', views.aggregate_totals),
 ]
+
+if settings.FEATURES.get('pac_party'):
+    urlpatterns.append(
+        url(r'^data/committees/pac-party/$', views_datatables.pac_party)
+    )
 
 if settings.FEATURES.get('debts'):
     # Debts section TODO: debts dates
