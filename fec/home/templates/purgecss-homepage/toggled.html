@@ -58,11 +58,11 @@
       <button class="js-feedback feedback__toggle button--cta-secondary" aria-controls="feedback" aria-expanded="false" type="button">Feedback</button>
       <div id="feedback" class="js-feedback-box feedback" aria-hidden="true">
         <button class="js-feedback button--down feedback__close" tabindex="-1"><span class="u-visually-hidden">Close</span></button>
-        <div class="js-status" aria-hidden="true">
-          <div class="message js-message">
-          </div>
+        <div class="js-status" aria-hidden="false">
+          <div class="message js-message message--error"><h2 class="feedback__title">Input required</h2><p>Please fill out the required field.</p></div>
+          <div class="message js-message message--success"><h2 class="feedback__title">Input required</h2><p>Please fill out the required field.</p></div>
           <ul class="list--buttons">
-            <li><button class="js-reset button--cta-primary feedback__button" type="button" tabindex="-1">Submit another issue</button></li>
+            <li><button class="js-reset button--cta-primary feedback__button" type="button" tabindex="0">Try again</button></li>
           </ul>
         </div>
         <form id="feedback-form" class="container">
