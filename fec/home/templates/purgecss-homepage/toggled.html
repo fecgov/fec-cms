@@ -85,9 +85,21 @@
             <label for="feedback-2" class="label">General website feedback</label>
             <textarea id="feedback-2" name="feedback" tabindex="-1"></textarea>
             <label for="feedback-3" class="label">Tell us about yourself</label>
+            
+            <div>
+              <div class="grecaptcha-badge" data-style="inline" style="">
+                <div class="grecaptcha-logo">
+                  <iframe title="reCAPTCHA" src="" width="256" height="60" role="presentation" name="" frameborder="0" scrolling="no" sandbox=""></iframe>
+                </div>
+                <div class="grecaptcha-error"></div>
+                <textarea id="g-recaptcha-response" name="g-recaptcha-response" class="g-recaptcha-response" style=""></textarea>
+              </div>
+              <iframe style="display: none;"></iframe>
+            </div>
+
             <span class="label--help">I'm a <span class="u-blank-space"></span> interested in <span class="u-blank-space"></span>.</span>
             <textarea id="feedback-3" name="about" tabindex="-1"></textarea>
-            <button class="g-recaptcha button--cta feedback__button u-no-margin" data-sitekey="6Lc0uGwUAAAAALGRGXt3mTteJeb_lbse2frNdWjv" data-callback="submitFeedback" data-badge="inline" tabindex="-1">Post</button>
+            <button class="g-recaptcha button--cta feedback__button u-no-margin" data-sitekey="" data-callback="submitFeedback" data-badge="inline" tabindex="-1">Post</button>
             <p class="t-sans t-note u-margin--top"><a href="https://github.com/FECgov/FEC/issues" tabindex="-1">Review all reported feedback</a>  |  <a href="/contact/" tabindex="-1">Contact the FEC about a specific question</a>  |  <a href="/use-recaptcha/" tabindex="-1">Use of reCAPTCHA</a></p>
           </fieldset>
         </form>
