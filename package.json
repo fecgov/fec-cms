@@ -6,9 +6,9 @@
     "url": "git+https://github.com/fecgov/fec-cms.git"
   },
   "scripts": {
-    "build": "cd fec && webpack && gulp build-sass && gulp build-widgets-sass",
+    "build": "cd fec && webpack && gulp build-sass && gulp build-widgets-sass && gulp purgecss",
     "build-icons": "cd fec && gulp minify-icons && gulp consolidate-icons",
-    "build-sass": "cd fec && gulp build-sass && gulp build-widgets-sass",
+    "build-sass": "cd fec && gulp build-sass && gulp build-widgets-sass && gulp purgecss",
     "build-widgets-sass": "cd fec && gulp build-widgets-sass",
     "build-homepage-css": "cd fec && gulp purgecss",
     "build-js": "cd fec && webpack",
