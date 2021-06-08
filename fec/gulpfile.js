@@ -51,7 +51,14 @@ gulp.task('purgecss', () => {
     .src('./dist/fec/static/css/home-*.css')
     .pipe(
       purgecss({
-        content: ['./home/templates/sample-homepage-for-purgecss.html']
+        content: [
+          './home/templates/purgecss-homepage/navs.html',
+          './home/templates/purgecss-homepage/banners.html',
+          './home/templates/purgecss-homepage/hero.html',
+          './home/templates/purgecss-homepage/comissioners.html',
+          './home/templates/purgecss-homepage/toggled.html',
+          './home/templates/purgecss-homepage/full.html'
+        ]
       })
     )
     .pipe(gulp.dest('./dist/fec/static/css'));
