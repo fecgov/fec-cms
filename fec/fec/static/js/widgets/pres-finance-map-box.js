@@ -72,7 +72,6 @@ const selector_candidateListDisclaimer = '.js-cand-list-note';
 // Imports, etc
 // const $ = jquery;
 import { buildUrl, passiveListener } from '../modules/helpers';
-// import { defaultElectionYear } from './widget-vars';
 import 'abortcontroller-polyfill/dist/polyfill-patch-fetch';
 import analytics from '../modules/analytics';
 
