@@ -3,11 +3,12 @@ Template for PAC and party committee datatable details panel
 --}}
 
 <div class="panel__row">
-  <h4 class="panel__title">
+  <h4 class="panel__title u-padding--bottom">
     <a href="{{basePath}}/committee/{{committee_id}}">{{committee_name}}</a>
   </h4>
-</div>
-<div class="panel__row">
+  <h4 class="panel__title">
+    Committee information
+  </h4>
   <table>
     {{#panelRow "Committee type"}}
       {{committee_type_full}}
@@ -15,6 +16,14 @@ Template for PAC and party committee datatable details panel
     {{#panelRow "Designation"}}
       {{committee_designation_full}}
     {{/panelRow}}
+    {{!-- TODO: Update the API field names for leadership PAC sponsor when it's ready in the API --}}
+    {{!-- {{#if sponsor_candidate_ids}}
+      {{#panelRow "Leadership PAC sponsor"}}
+        {{#each sponsor_candidate_ids}}
+          <a href="{{ basePath }}/candidate/{{ sponsor_candidate_ids }}/"><span class="leadership_pac_sponsor_name">{{ sponsor_candidate_name }}</span> ({{ sponsor_candidate_ids }})</a>;<br />
+        {{/each}}
+      {{/panelRow}}
+    {{/if}} --}}
     {{#panelRow "Most recent treasurer"}}
     {{!-- TODO: Fill this when available --}}
       {{ TBD }}
@@ -23,19 +32,60 @@ Template for PAC and party committee datatable details panel
     {{!-- TODO: Fill this when available --}}
       {{ TBD }}
     {{/panelRow}}
-    {{#panelRow "Total individual contributions"}}
-      {{{currency individual_contributions}}}
-    {{/panelRow}}
     {{#panelRow "Filing frequency"}}
     {{!-- TODO: Fill this when available --}}
       {{ TBD }}
     {{/panelRow}}
-    {{#panelRow "Coverage end date"}}
-      {{datetime coverage_end_date format="pretty"}}
-    {{/panelRow}}
     {{#panelRow "First filing date"}}
-    {{!-- TODO: Fill this when available --}}
+      {{!-- TODO: Fill this when available --}}
       {{datetime TBD format="pretty"}}
+    {{/panelRow}}
+  </table>
+</div>
+
+<div class="panel__row">
+  <h4 class="panel__title">
+    Financial totals for {{ format_range cycle }}
+  </h4>
+  <table>
+    {{#panelRow "Receipts"}}
+      {{ currency receipts }}
+    {{/panelRow}}
+    <tr>
+      <td class="panel__term">
+        <span>Individual contributions</span>
+        <div class="tooltip__container">
+          <button class="tooltip__trigger" type="button"><span class="u-visually-hidden">Learn more</span></button>
+          <div id="unique-tooltip" role="tooltip" class="tooltip tooltip--under tooltip--left">
+            {{!-- TODO: Add final tooltip language --}}
+            <p class="tooltip__content">A gift, subscription, loan, advance or deposit of money or anything of value given to influence a federal election; or the payment by any person of compensation for the personal services of another person if those services are rendered without charge to a political committee for any purpose. 11 CFR 100.52(a) and 100.54.</p>
+          </div>
+        </div>
+      </td>
+      <td class="panel__data">
+        {{ currency individual_contributions }}
+      </td>
+    </tr>
+    {{#panelRow "Disbursements"}}
+      {{ currency disbursements }}
+    {{/panelRow}}
+    <tr>
+      <td class="panel__term">
+        Ending cash on hand
+        <div class="tooltip__container">
+          <button class="tooltip__trigger" type="button"><span class="u-visually-hidden">Learn more</span></button>
+          <div id="unique-tooltip" role="tooltip" class="tooltip tooltip--under tooltip--left">
+            {{!-- TODO: Add final tooltip language --}}
+            <p class="tooltip__content">The total amount of cash on hand that remains after the amount of cash on hand at the beginning of the reporting period is adjusted to add the total receipts for the reporting period and subtract the total disbursements for the reporting period.</p>
+          </div>
+        </div>
+      </td>
+      <td class="panel__data">
+        {{ currency last_cash_on_hand_end_period }}
+      </td>
+    </tr>
+    {{#panelRow "Debts owed by committee"}}
+      {{ currency last_debts_owed_by_committee }}
     {{/panelRow}}
   </table>
 </div>
