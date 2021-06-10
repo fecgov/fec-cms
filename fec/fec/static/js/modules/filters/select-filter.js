@@ -40,9 +40,9 @@ SelectFilter.prototype.handleChange = function(e) {
   var $input = $(e.target);
   var value = $input.val();
   var $optElement = $input.find("option[value='" + value + "']");
-  var loadedOnce = $input.data('loaded-once') || false;
   var eventName;
 
+  // Handles change for select box filter tags when data-filter-change="true" is present
   if ($input.data('had-value') && value.length > 0) {
     eventName = 'filter:renamed';
   } else if (value.length > 0) {
@@ -52,18 +52,17 @@ SelectFilter.prototype.handleChange = function(e) {
     eventName = 'filter:removed';
     $input.data('had-value', false);
   }
-
-  $input.trigger(eventName, [
-    {
-      key: $input.attr('id'),
-      value: this.formatValue($input, $optElement.text()),
-      loadedOnce: loadedOnce,
-      name: this.name,
-      nonremovable: true
-    }
-  ]);
-
-  $input.data('loaded-once', true);
+  var fireTrigger = $input.data('filter-change');
+  if (fireTrigger) {
+    $input.trigger(eventName, [
+      {
+        key: $input.attr('id'),
+        value: this.formatValue($input, $optElement.text()),
+        name: this.name,
+        nonremovable: true
+      }
+    ]);
+  }
 };
 
 module.exports = { SelectFilter: SelectFilter };

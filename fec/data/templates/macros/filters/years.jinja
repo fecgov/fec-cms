@@ -55,7 +55,7 @@
 <div class="filter">
   <fieldset data-name="{{name}}" class="js-filter" data-filter="select" data-required-default="{{constants.DEFAULT_ELECTION_YEAR}}">
     <label class="label" for="{{ name }}">{{ label }}</label>
-    <select id="{{ name }}-select" name="{{ name }}" class="select--full">
+    <select id="{{ name }}-select" name="{{ name }}" class="select--full" data-filter-change="true">
     {% for year in range(constants.END_YEAR, constants.START_YEAR, -2) %}
       <option value="{{ year }}">{{ year | fmt_year_range }}</option>
     {% endfor %}
