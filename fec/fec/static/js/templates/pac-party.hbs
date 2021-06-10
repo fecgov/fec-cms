@@ -4,7 +4,7 @@ Template for PAC and party committee datatable details panel
 
 <div class="panel__row">
   <h4 class="panel__title u-padding--bottom">
-    <a href="{{basePath}}/committee/{{committee_id}}">{{committee_name}}</a>
+    <a href="{{basePath}}/committee/{{committee_id}}/">{{committee_name}}</a>
   </h4>
   <h4 class="panel__title">
     Committee information
@@ -25,20 +25,17 @@ Template for PAC and party committee datatable details panel
       {{/panelRow}}
     {{/if}} --}}
     {{#panelRow "Most recent treasurer"}}
-    {{!-- TODO: Fill this when available --}}
-      {{ TBD }}
+      {{ treasurer_name }}
     {{/panelRow}}
     {{#panelRow "State"}}
-    {{!-- TODO: Fill this when available --}}
-      {{ TBD }}
+      {{ committee_state }}
     {{/panelRow}}
     {{#panelRow "Filing frequency"}}
-    {{!-- TODO: Fill this when available --}}
-      {{ TBD }}
+    {{!-- TODO: Update to show the full filing frequency name --}}
+      {{ filing_frequency }}
     {{/panelRow}}
     {{#panelRow "First filing date"}}
-      {{!-- TODO: Fill this when available --}}
-      {{datetime TBD format="pretty"}}
+      {{datetime first_file_date format="pretty"}}
     {{/panelRow}}
   </table>
 </div>
