@@ -21,6 +21,7 @@
       <nav class="sidebar sidebar--neutral sidebar--left side-nav js-toc">
         <ul class="sidebar__content">
           <li class="side-nav__item"><a class="side-nav__link" href="#summary">Summary</a></li>
+          <li class="side-nav__item"><a class="side-nav__link" href="#disposition">Disposition</a></li>
           <li class="side-nav__item"><a class="side-nav__link" href="#documents">Documents</a></li>
         </ul>
       </nav>
@@ -28,7 +29,7 @@
   <div class="main__content--right">
     <section id="summary" class="content__section">
     <div>
-      <h2 class="t-ruled--bold t-ruled--bottom">Summary</h2>
+      <h2 class="t-ruled--bold">Summary</h2>
       <div class="legal-admin_fine__property">
         <p>
           <strong>REPORT:</strong> {{ admin_fine.report_type }}, {{ admin_fine.report_year }}
@@ -41,53 +42,69 @@
       </div>
       <div class="legal-admin_fine__property">
         <p>
-          <strong>INITIAL FINDING AND PROPOSED FINE:</strong> {{ admin_fine.reason_to_believe_action_date | date(fmt='%m/%d/%Y') }}, {{ admin_fine.reason_to_believe_fine_amount | currency or '' }}
-        </p>
-      </div>
-      <div class="legal-admin_fine__property">
-        <p>
-          <strong>CHALLENGE RECEIVED:</strong> {{ admin_fine.challenge_receipt_date | date(fmt='%m/%d/%Y') }}
-        </p>
-      </div>
-      <div class="legal-admin_fine__property">
-        <p>
           <strong>CLOSING DATE:</strong> {{ admin_fine.final_determination_date | date(fmt='%m/%d/%Y') }}
         </p>
       </div>
       <div class="legal-admin_fine__property">
         <p>
-          <strong>DISPOSITION:</strong> {{ '<br>'.join(admin_fine['disposition_text']) | safe }}
+          <strong>ASSESSED CIVIL PENALTY:</strong> {{ admin_fine.final_determination_amount | currency or '' }}
         </p>
       </div>
-      <table class="data-table data-table--text data-table--heading-borders">
+      <div class="legal-admin_fine__property">
+        <p>
+          <strong>CIVIL PENALTY DUE DATE:</strong> 
+          {# TODO: This will be added when we get the data civil_penalty_date, civil_penalty_payment_status. 00/00/0000, not yet paid / paid in full / partially paid {{ admin_fine.check_amount }} #}
+          {# Payment status key for API: Yes = paid in full, No = not paid, Pending = partially paid {{ admin_fine.check_amount }} #}
+        </p>
+      </div>
+    </section>
+    <section id="disposition" class="content__section">
+      <h2 class="t-ruled--bold">Disposition</h2>
+      <div class="legal-admin_fine__property">
+        <p>
+          {{ '<br>'.join(admin_fine['disposition_text']) | safe | replace('RTB', 'reason to believe') }}
+        </p>
+      </div>
+      <table class="data-table simple-table">
         <thead>
           <tr>
-            <th>Committee name</th>
             <th>Disposition</th>
-            <th>Final civil penalty or fine</th>
-            <th>Referred to Treasury Department</th>
+            <th>Amount</th>
+            <th>Date</th>
           </tr>
         </thead>
         <tbody>
-          {% if 'documents' in admin_fine and admin_fine.documents_by_type %}
-            {% for category in admin_fine.documents_by_type %}
-              {% set categoryloop = loop %}
-              {% for document in admin_fine.documents_by_type[category] %}
-                <tr class="{{ categoryloop.cycle('row-color-normal', 'row-color-contrast') }}">
-                  <td><a href="/data/committee/{{ admin_fine.committee_id }}">{{ admin_fine.name }} ({{ admin_fine.committee_id }})</a></td>
-                  <td>{{ admin_fine.challenge_outcome }}</td>
-                  <td>{{ admin_fine.final_determination_amount | currency or '' }}</td>
-                  <td>{{ admin_fine.treasury_referral_date | date(fmt='%m/%d/%Y') or 'None' }}, {{ admin_fine.treasury_referral_amount | currency or 'none' }}</td>
-                </tr>
-              {% endfor %}
-            {% endfor %}
+          <tr>
+            <td>Initial finding and proposed fine</td>
+            <td>{{ admin_fine.reason_to_believe_fine_amount | currency or '' }}</td>
+            <td>{{ admin_fine.reason_to_believe_action_date | date(fmt='%m/%d/%Y') }}</td>
+          </tr>
+          {% if admin_fine.challenge_receipt_date != none %}
+            <tr>
+              <td>Challenge received</td>
+              <td>No amount</td>
+              <td>{{ admin_fine.challenge_receipt_date | date(fmt='%m/%d/%Y') }}</td>
+            </tr>
+          {% endif %}
+          <tr>
+          {# TODO: Will use final_determination_disposition instead of challenge_outcome. Waiting for data.  #}
+            <td>{{ admin_fine.challenge_outcome | replace('RTB', 'reason to believe') | capitalize }}</td>
+            <td>{{ admin_fine.final_determination_amount | currency or 'No amount' }}</td>
+            <td>{{ admin_fine.final_determination_date | date(fmt='%m/%d/%Y') or 'No date' }}</td>
+          </tr>
+          {% if admin_fine.treasury_referral_amount != none and admin_fine.treasury_referral_date != none %}
+            <tr>
+              <td>Referred to the Department of the Treasury for collection</td>
+              <td>{{ admin_fine.treasury_referral_amount | currency or 'No amount' }}</td>
+              <td>{{ admin_fine.treasury_referral_date | date(fmt='%m/%d/%Y') or 'No date' }}</td>
+            </tr>
           {% endif %}
         </tbody>
       </table>
     </section>
     <section id="documents" class="content__section">
-      <h2 class="t-ruled--bold t-ruled--bottom u-no-margin">Documents</h2>
-      <table class="data-table data-table--text data-table--heading-borders">
+      <h2 class="t-ruled--bold u-no-margin">Documents</h2>
+      <table class="data-table simple-table">
         <thead>
           <tr>
             <th>Date</th>
@@ -112,3 +129,6 @@
   </div>
 </div>
 {% endblock %}
+
+2 weeks for the civil penalty
+Wait on LOE for final_dtermination_disposition 
