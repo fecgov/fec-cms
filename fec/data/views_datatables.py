@@ -51,6 +51,20 @@ def committees(request):
     })
 
 
+def pac_party(request):
+    if len(request.GET) == 0:
+        return redirect('/data/committees/pac-party/?cycle=' + str(constants.DEFAULT_TIME_PERIOD))
+
+    return render(request, 'datatable.jinja', {
+        'parent': 'data',
+        'result_type': 'pac_party',
+        'slug': 'pac-party',
+        'title': 'Political action and party committees',
+        'columns': constants.table_columns['pac-party'],
+        'social_image_identifier': 'data',
+    })
+
+
 def communication_costs(request):
     return render(request, 'datatable.jinja', {
         'parent': 'data',

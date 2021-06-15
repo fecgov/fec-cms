@@ -5,6 +5,7 @@
   <head>
     {% include 'partials/meta-tags.html' %}
     {% include 'partials/meta-tags-preloads.html' %}
+    <link rel="preload" as="style" href="{% asset_for_css 'home.css' %}">
     {% if settings.FEC_CMS_ENVIRONMENT == 'PRODUCTION' %}
     {% include 'partials/meta-tags-preconnects.html' %}
     {% endif %}
@@ -13,17 +14,15 @@
 
     {% include 'partials/google-tag-manager-script.html' %}
     {% block css %}
-    <link rel="stylesheet" type="text/css" href="{% asset_for_css 'elections.css' %}">
+    <link defer rel="stylesheet" type="text/css" href="{% asset_for_css 'home.css' %}">
     {% endblock %}
   </head>
 
   <body class="{% block body_class %}{% endblock %}">
-    <!--[if lte IE 10]>
-    <div style="background-color: #212121; padding: 10px">
-      <h2 style="color: #ffffff">Your browser is outdated</h2>
-      <p style="color: #ffffff; font-size: 16px;">You&apos;re using an older version of Internet Explorer. Please update or switch to another browser like Chrome, Firefox, or Edge for a better experience. <a style="color: #ffffff; text-decoration: underline" target="_blank" href="http://browsehappy.com/">Learn how to update your browser</a>.</p>
+    <div id="ie_warning" style="display: none;">
+      <h2>Your web browser is not supported</h2>
+      <p>You&apos;re using Internet Explorer, some features might not work. Please switch to another browser like Chrome, Firefox, or Edge for a better experience.</p>
     </div>
-    <![endif]-->
 
     {% include 'partials/google-tag-manager-noscript.html' %}
 
@@ -134,7 +133,7 @@
           <p>1050 First Street, NE<br>
           Washington, DC 20463</p>
 
-          <a href="https://public.govdelivery.com/accounts/USFEC/subscriber/topics?qsp=CODE_RED" target="_blank">
+          <a href="https://public.govdelivery.com/accounts/USFEC/subscriber/topics?qsp=CODE_RED" target="_blank" rel="noopener">
             <button class="button--standard button--envelope">Sign up for FECMail</button>
           </a>
         </div>
@@ -156,14 +155,12 @@
       window.CANONICAL_BASE = '{{ settings.CANONICAL_BASE }}'
     </script>
 
-
     {# Global javascript #}
     <script type="text/javascript" src="{% asset_for_js 'vendor.js' %}"></script>
     <script type="text/javascript" src="{% asset_for_js 'init.js' %}"></script>
 
 
     {% block extra_js %}
-    {# Override this in templates to add extra javascript #}
     {% endblock %}
 
     {# GSA DAP for Production #}

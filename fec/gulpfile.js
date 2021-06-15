@@ -14,6 +14,7 @@ const cleanCSS = require('gulp-clean-css');
 const clean = require('gulp-clean');
 const rev = require('gulp-rev');
 //var sourcemaps = require('gulp-sourcemaps');
+const purgecss = require('gulp-purgecss');
 
 // Consider using gulp-rev-delete-original later
 gulp.task('clear-css-dir', function() {
@@ -44,6 +45,24 @@ gulp.task(
     //.pipe(gulpif(!production, sourcemaps.write()))
   })
 );
+
+gulp.task('purgecss', () => {
+  return gulp
+    .src('./dist/fec/static/css/home-*.css')
+    .pipe(
+      purgecss({
+        content: [
+          './home/templates/purgecss-homepage/navs.html',
+          './home/templates/purgecss-homepage/banners.html',
+          './home/templates/purgecss-homepage/hero.html',
+          './home/templates/purgecss-homepage/comissioners.html',
+          './home/templates/purgecss-homepage/toggled.html',
+          './home/templates/purgecss-homepage/full.html'
+        ]
+      })
+    )
+    .pipe(gulp.dest('./dist/fec/static/css'));
+});
 
 // The widgets are separate because we want them in a specific place with a predictable naming convention
 gulp.task('clear-widgets-css-dir', function() {
