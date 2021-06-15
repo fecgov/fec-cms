@@ -1,7 +1,8 @@
 {% import 'macros/filters/typeahead-filter.jinja' as typeahead %}
 
-{% macro field(committee_type='committee_type', organization_type='organization_type', designation='designation', display_sponsor_candidate_filter=False) %}
+{% macro field(committee_type='committee_type', organization_type='organization_type', designation='designation', display_sponsor_candidate_filter=False, display_authorized_committee_filter=True) %}
 
+{% if display_authorized_committee_filter %}
 <div class="filter">
   <fieldset class="js-dropdown js-filter" data-filter="checkbox" data-name="hsp-committee_type">
     <legend class="label" for="committee_type">Authorized committees</legend>
@@ -21,6 +22,7 @@
     </ul>
   </fieldset>
 </div>
+{% endif %}
 
 <div class="filter">
   <fieldset class="js-dropdown js-filter" data-filter="checkbox" data-name="committee_type">

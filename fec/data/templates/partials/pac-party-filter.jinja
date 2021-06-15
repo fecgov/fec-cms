@@ -2,17 +2,34 @@
 
 {% import 'macros/filters/typeahead-filter.jinja' as typeahead %}
 {% import 'macros/filters/years.jinja' as years %}
+{% import 'macros/filters/range.jinja' as range %}
 {% import 'macros/filters/text.jinja' as text %}
 {% import 'macros/filters/states.jinja' as states %}
+{% import 'macros/filters/committee-types.jinja' as committee_type %}
+{# {% import 'macros/filters/frequency.jinja' as frequency %} #}
 
 {% block filters %}
   <div class="filters__inner">
     {{ typeahead.field('committee_id', 'Committee Name or ID') }}
     {{ years.cycles('cycle', 'Time period')  }}
-    {% import 'macros/filters/committee-types.jinja' as committee_type %} {# TODO: Need to adjust macro to remove authorized committee filter #}
-    {{ committee_type.field(display_sponsor_candidate_filter=True) }} {# TODO: Not currently filterable in API #}
-    {{ text.field('treasurer_name', 'Most recent treasurer') }} {# TODO: Not currently in API #}
-    {{ states.field('state') }} {# TODO: Not currently in API #}
-    {# TODO: Add filing frequency accordion when available #}
+  </div>
+  <div class="js-accordion accordion--neutral" data-content-prefix="filter">
+    <button type="button" class="js-accordion-trigger accordion__button">Committee type</button>
+    <div class="accordion__content">
+      {{ committee_type.field(display_sponsor_candidate_filter=True, display_authorized_committee_filter=False) }} {# TODO: Not currently filterable in API, test when available #}
+    </div>
+    <button type="button" class="js-accordion-trigger accordion__button">Committee details</button>
+    <div class="accordion__content">
+      {{ text.field('treasurer_name', 'Most recent treasurer') }} {# TODO: Not currently filterable in API, test when available #}
+      {{ states.field('state') }} {# TODO: Not currently filterable in API, test when available #}
+      {# TODO: Add filing frequency to accordion when available #}
+    </div>
+    <button type="button" class="js-accordion-trigger accordion__button">Committee financials</button>
+    <div class="accordion__content">
+      {{ range.amount('receipts', 'Total receipts') }} {# TODO: Not currently filterable in API, test when available #}
+      {{ range.amount('disbursements', 'Total disbursements') }} {# TODO: Not currently filterable in API, test when available #}
+      {{ range.amount('last_cash_on_hand_end_period', 'Cash on hand') }} {# TODO: Not currently filterable in API, test when available #}
+      {{ range.amount('last_debts_owed_by_committee', 'Debts owed by committee') }} {# TODO: Not currently filterable in API, test when available #}
+    </div>
   </div>
 {% endblock %}
