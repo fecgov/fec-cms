@@ -16,45 +16,6 @@ let officeDefs = {
 };
 
 /**
- * If the constants value of DEFAULT_PRESIDENTIAL_YEAR is set, return that.
- * Otherwise return the next election year with the goal of not displaying data when there is none.
- * If next year is an election year, but today is before 15 April, returns the previous election year.
- * @returns {Number} Four-digit year
- * TODO - May need to expand this to default to midterms when we're away from a presidential year
- */
-let defaultElectionYear = () => {
-  let theYear = 0;
-  let now = new Date();
-  let thisYear = now.getFullYear();
-  if (window.ELECTION_YEAR) theYear = window.ELECTION_YEAR;
-  else if (window.DEFAULT_PRESIDENTIAL_YEAR)
-    theYear = window.DEFAULT_PRESIDENTIAL_YEAR;
-  else theYear = thisYear;
-
-  // If we're looking at the url-provided year,
-  // let's check whether it's a presidential year
-  // If not, we'll use DEFAULT_PRESIDENTIAL_YEAR
-  if (theYear == window.ELECTION_YEAR && theYear % 4 > 0) {
-    return window.DEFAULT_PRESIDENTIAL_YEAR;
-  }
-
-  // If we're using this year,
-  if (theYear == thisYear) {
-    // If the next year is a presidential election year
-    // and today's after April 15
-    // let's use next year
-    if ((theYear + 1) % 4 == 0 && now.getMonth() >= 3 && now.getDate() > 15) {
-      return theYear + 1;
-    } else {
-      // Otherwise, let's find the most recent presidential election
-      return theYear % 4 == 0 ? theYear : theYear + (4 - (theYear % 4));
-    }
-  }
-  // Otherwise we're cool to use theYear
-  return theYear;
-};
-
-/**
  * Calculates the next presidential election year, including this year if applicable
  * @returns {Number} The four-digit year of the next presidential year
  */
@@ -95,11 +56,10 @@ let electionYearsList = (type = 'P') => {
  * @param {String} office - What kind of years? (P are every four years, H and S are two years) {@default: 'P'}
  * @param {String, Number} selectedValue - (optional) Which value should be `selected`?
  * @returns A list of <option> elements
- * TODO - Should we assign a default selectedValue of defaultElectionYear()?
  */
 let electionYearsOptions = (
   office = 'P',
-  selectedValue = window.DEFAULT_PRESIDENTIAL_YEAR
+  selectedValue = window.DEFAULT_ELECTION_YEAR
 ) => {
   let toReturn = '';
   let theList = electionYearsList(office);
@@ -129,7 +89,6 @@ let electionYearsOptions = (
 
 // Make them available for import
 module.exports = {
-  defaultElectionYear,
   electionYearsList,
   electionYearsOptions,
   officeDefs
