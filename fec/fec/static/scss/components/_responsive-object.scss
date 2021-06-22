@@ -14,7 +14,7 @@
 	} 
 }
 
-//TV Ad example:
+//TV Ad example 1:
 
 // <div class="video-frame">
 //   <div class="iframe-container">
@@ -49,14 +49,14 @@
 }
 
 
-//New TV Ad example:
-// <div id="new-tv-ad-example">
+//TV Ad example 2:
+// <div class="tv-ad-example">
 //   <div>
 //     <iframe src="YOUTUBE-EMBED-URL?rel=0" frameborder="0" allowfullscreen></iframe>
 //   </div>
 // </div>
 
-#new-tv-ad-example {
+.tv-ad-example {
   width: 100%;
   height: 100%;
   max-width: 1034px;
