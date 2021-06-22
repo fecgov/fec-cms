@@ -52,8 +52,6 @@ def committees(request):
 
 
 def pac_party(request):
-    if len(request.GET) == 0:
-        return redirect('/data/committees/pac-party/?cycle=' + str(constants.DEFAULT_TIME_PERIOD))
 
     return render(request, 'datatable.jinja', {
         'parent': 'data',
