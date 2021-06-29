@@ -8,7 +8,7 @@
 {% block filters %}
   <div class="filters__inner">
     {{ typeahead.field('committee_id', 'Committee Name or ID') }}
-    {{ years.cycles('cycle', 'Time period')  }}
+    {{ years.singleElectionYear('cycle', 'Time period')  }}
     {% import 'macros/filters/committee-types.jinja' as committee_type %} {# TODO: Need to adjust macro to remove authorized committee filter #}
     {{ committee_type.field(display_sponsor_candidate_filter=True) }} {# TODO: Not currently filterable in API #}
     {{ text.field('treasurer_name', 'Most recent treasurer') }} {# TODO: Not currently in API #}
