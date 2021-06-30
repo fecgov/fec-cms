@@ -3,12 +3,11 @@
 /**
  * @fileoverview Controls all functionality inside the Where Contributions Come From widget
  * in cooperation with data-map
- * @copyright 2019 Federal Election Commission
+ * @copyright 2021 Federal Election Commission
  * @license CC0-1.0
  * @owner  fec.gov
- * @version 1.0
- * TODO: Figure out why Aggregate Totals Box isn't defaulting to data-year and window.ELECTION_YEAR
- * TODO: For v2 or whatever, convert to datatable.net (start with the simpliest implementation; no columns.js, etc.)
+ * @version 1.1
+ * TODO: Figure out why Aggregate Totals Box isn't defaulting to data-year and window.DEFAULT_ELECTION_YEAR
  */
 
 // Editable vars
@@ -23,7 +22,6 @@ const rootPathToIndividualContributions =
 
 import { buildUrl, passiveListener } from '../modules/helpers';
 import typeahead from '../modules/typeahead';
-import { defaultElectionYear } from './widget-vars';
 import 'abortcontroller-polyfill/dist/polyfill-patch-fetch';
 import analytics from '../modules/analytics';
 
@@ -117,7 +115,7 @@ function ContributionsByState() {
     '000', // candidate ID
     'committees',
     'history',
-    2020 // election year / cycle
+    window.DEFAULT_ELECTION_YEAR // election year / cycle
   ];
   // Where to find candidate's coverage dates
   this.basePath_candidateCoverageDatesPath = [
@@ -152,7 +150,7 @@ function ContributionsByState() {
       {
         candidate_id: '',
         count: 0,
-        cycle: 2020,
+        cycle: window.DEFAULT_ELECTION_YEAR,
         state: '',
         state_full: '',
         total: 0
@@ -256,9 +254,9 @@ ContributionsByState.prototype.init = function() {
   // Initialize the various queries
   this.baseCandidateQuery = {}; // Calls for candidate details
   this.baseStatesQuery = {
-    cycle: defaultElectionYear(),
+    cycle: window.DEFAULT_ELECTION_YEAR,
     election_full: true,
-    office: 'P',
+    // office: 'P',
     page: 1,
     per_page: 200,
     sort_hide_null: false,
@@ -382,6 +380,7 @@ ContributionsByState.prototype.loadCandidateDetails = function(cand_id) {
   let instance = this;
 
   this.basePath_candidatePath[1] = cand_id;
+
   window
     .fetch(
       buildUrl(this.basePath_candidatePath, this.baseCandidateQuery),

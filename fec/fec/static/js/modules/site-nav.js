@@ -30,7 +30,7 @@ function SiteNav(selector) {
   // Open and close the menu on mobile
   this.$toggle.on('click', this.toggleMenu.bind(this));
 
-  /*matchMedia is used belowto ensure searchbox is appended to correct location when 
+  /*matchMedia is used below to ensure searchbox is appended to correct location when 
   user resizes screen while mobile menu is open */
 
   //Define min-width media query that matches our med('mobile') breakpoint
@@ -82,13 +82,21 @@ SiteNav.prototype.assignAria = function() {
   }
 };
 
-//Append searchbox to correct location uponn user screen resize
+/**
+ * Append searchbox to correct location upon user screen resize
+ * @param {Object} mql
+ * @param {Boolean} mql.matches - true if large; false if less than large
+ */
 SiteNav.prototype.mediaQueryResponse = function(mql) {
   //If large
   if (mql.matches) {
     $('body')
       .find('.utility-nav__search')
       .appendTo('.utility-nav.list--flat');
+
+    // If the nav is open when the window is resized to large,
+    // we need to allow scrolling again
+    document.querySelector('body').style.overflow = 'auto';
   }
   //if mobile
   else {
@@ -115,7 +123,7 @@ SiteNav.prototype.showMenu = function() {
   this.$element.addClass('is-open');
   this.$toggle.addClass('active');
   this.$menu.attr('aria-hidden', false);
-  //append seacrh to mobile menu uponn opening
+  //append search to mobile menu upon opening
   $('.site-nav__panel').prepend(this.$searchbox);
   accessibility.restoreTabindex(this.$menu);
 

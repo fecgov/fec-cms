@@ -11,7 +11,7 @@
 {% block filters %}
   <div class="filters__inner">
     {{ typeahead.field('committee_id', 'Committee Name or ID') }}
-    {{ years.cycles('cycle', 'Time period')  }}
+    {{ years.singleElectionYear('cycle', 'Time period')  }}
   </div>
   <div class="js-accordion accordion--neutral" data-content-prefix="filter">
     <button type="button" class="js-accordion-trigger accordion__button">Committee type</button>
