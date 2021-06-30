@@ -6,7 +6,7 @@
 {% import 'macros/filters/text.jinja' as text %}
 {% import 'macros/filters/states.jinja' as states %}
 {% import 'macros/filters/committee-types.jinja' as committee_type %}
-{# {% import 'macros/filters/frequency.jinja' as frequency %} #}
+{% import 'macros/filters/filing-frequency.jinja' as frequency %}
 
 {% block filters %}
   <div class="filters__inner">
@@ -16,20 +16,21 @@
   <div class="js-accordion accordion--neutral" data-content-prefix="filter">
     <button type="button" class="js-accordion-trigger accordion__button">Committee type</button>
     <div class="accordion__content">
-      {{ committee_type.field(display_sponsor_candidate_filter=True, display_authorized_committee_filter=False) }} {# TODO: Not currently filterable in API, test when available #}
+      {{ committee_type.field(display_sponsor_candidate_filter=True, display_authorized_committee_filter=False,designation='committee_designation') }}
+      {# TODO: API needs `organization_type` and leadership pac sponsor filter#}
     </div>
     <button type="button" class="js-accordion-trigger accordion__button">Committee details</button>
     <div class="accordion__content">
-      {{ text.field('treasurer_name', 'Most recent treasurer') }} {# TODO: Not currently filterable in API, test when available #}
-      {{ states.field('state') }} {# TODO: Not currently filterable in API, test when available #}
-      {# TODO: Add filing frequency to accordion when available #}
+      {{ text.field('treasurer_name', 'Most recent treasurer') }}
+      {{ states.field('committee_state') }}
+      {{ frequency.field() }}
     </div>
     <button type="button" class="js-accordion-trigger accordion__button">Committee financials</button>
     <div class="accordion__content">
-      {{ range.amount('receipts', 'Total receipts') }} {# TODO: Not currently filterable in API, test when available #}
-      {{ range.amount('disbursements', 'Total disbursements') }} {# TODO: Not currently filterable in API, test when available #}
-      {{ range.amount('last_cash_on_hand_end_period', 'Cash on hand') }} {# TODO: Not currently filterable in API, test when available #}
-      {{ range.amount('last_debts_owed_by_committee', 'Debts owed by committee') }} {# TODO: Not currently filterable in API, test when available #}
+      {{ range.amount('receipts', 'Total receipts') }}
+      {{ range.amount('disbursements', 'Total disbursements') }}
+      {{ range.amount('last_cash_on_hand_end_period', 'Cash on hand') }}
+      {{ range.amount('last_debts_owed_by_committee', 'Debts owed by committee') }}
     </div>
   </div>
 {% endblock %}
