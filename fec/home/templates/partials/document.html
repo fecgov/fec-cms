@@ -16,15 +16,17 @@
         <a class="js-read-more post__read-more" href="{{ document.url }}">Read more</a>
     </div>
   {% else %}
-    {% if document.fec_url and document.extension %}
     <h3>
+      {% if document.file_url %}
       <a href="{{ document.file_url }}">{{ document.title }}</a>
+      {% else %}
+      {{ document.title }}
+      {% endif %}
+      {% if document.extension is not '' %}
       <i class="icon icon--inline--right icon--inline--left i-document"></i>
       <span class="t-sans t-normal">({{ document.extension }}){% if document.size %} | ({{ document.size }}){% endif %}</span>
+      {% endif %}
     </h3>
-    {% else %}
-    <h3>{{ document.title }}</h3>
-    {% endif %}
   {% endif %}
     <div class="post__meta">
       <a class="tag tag--secondary" href="">{{ document.category }}</a>
