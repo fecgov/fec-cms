@@ -31,32 +31,34 @@
     <div>
       <h2 class="t-ruled--bold">Summary</h2>
       <div class="legal-admin_fine__property">
-        <p>
-          <strong>REPORT:</strong> {{ admin_fine.report_type }}, {{ admin_fine.report_year }}
-        </p>
-      </div>
-      <div class="legal-admin_fine__property">
-        <p>
-          <strong>COMMITTEE NAME:</strong> {{ admin_fine.name }}
-        </p>
-      </div>
-      <div class="legal-admin_fine__property">
-        <p>
-          <strong>CLOSING DATE:</strong> {{ admin_fine.final_determination_date | date(fmt='%m/%d/%Y') }}
-        </p>
-      </div>
-      <div class="legal-admin_fine__property">
-        <p>
-          <strong>ASSESSED CIVIL PENALTY:</strong> {{ admin_fine.final_determination_amount | currency or '' }}
-        </p>
-      </div>
-      <div class="legal-admin_fine__property">
-        <p>
-          <strong>CIVIL PENALTY DUE DATE:</strong> {{ admin_fine.civil_penalty_due_date | date(fmt='%m/%d/%Y') }}, {{ admin_fine.civil_penalty_payment_status }} 
-          {% if admin_fine.payment_amount != none %}
-            {{ admin_fine.payment_amount | currency or '' }}
-          {% endif %}
-        </p>
+        <table>
+          <tbody>
+            <tr>
+              <td><p><strong>Report:</strong></p></td>
+              <td><p>{{ admin_fine.report_type }}, {{ admin_fine.report_year }}</p></td>
+            </tr>
+            <tr>
+              <td><p><strong>Committee name:</strong></p></td>
+              <td><p>{{ admin_fine.name }}</p></td>
+            </tr>
+            <tr>
+              <td><p><strong>Closing date:</strong></p></td>
+              <td><p>{{ admin_fine.final_determination_date | date(fmt='%m/%d/%Y') }}</p></td>
+            </tr>
+            <tr>
+              <td><p><strong>Assessed civil penalty:</strong></p></td>
+              <td><p>{{ admin_fine.final_determination_amount | currency or '' }}</p></td>
+            </tr>
+            <tr>
+              <td><p><strong>Civil penalty due date:</strong></p></td>
+              <td><p> {{ admin_fine.civil_penalty_due_date | date(fmt='%m/%d/%Y') or 'No date available' }}, {{ admin_fine.civil_penalty_payment_status or 'No status available' }}, 
+                {% if admin_fine.payment_amount != none %}
+                  {{ admin_fine.payment_amount | currency or '' }}
+                {% endif %}</p>
+              </td>
+            </tr>
+          </tbody>
+        </table>
       </div>
     </section>
     <section id="disposition" class="content__section">
