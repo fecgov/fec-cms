@@ -445,7 +445,7 @@ line_numbers = {
             ('F3X-12', 'Transfers from affiliated committees (Line 12)'),
             ('F3X-13', 'Loans received (Line 13)'),
             ('F3X-14', 'Loan repayments received (Line 14)'),
-            ('F3X-15', 'Offets to operating expenditures (Line 15)'),
+            ('F3X-15', 'Offsets to operating expenditures (Line 15)'),
             ('F3X-16', 'Refunds of contributions made to federal candidates and other political committees (Line 16)'),
             ('F3X-17', 'Other federal receipts (Line 17)'),
         ])

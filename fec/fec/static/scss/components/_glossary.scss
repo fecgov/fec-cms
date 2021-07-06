@@ -87,7 +87,7 @@
   @include u-icon-bg($book, $primary);
   @include transition(background-color, .2s, box-shadow, .2s, color, .2s);
   background-size: .6em;
-  background-position: 100% 50%;
+  background-position: 99% 50%;
   background-color: transparent;
   box-shadow: 0 0 0 4px transparent;
   border-bottom: none;
@@ -113,6 +113,11 @@
 .term--inline {
   display: inline-block;
   margin-bottom: u(1rem) !important;
+}
+
+// Correct spacing when term is used after certain tags
+a + .term, i + .term, b + .term, .t-sans + .term  {
+margin-left: .4rem;
 }
 
 @media print {
