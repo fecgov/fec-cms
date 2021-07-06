@@ -51,9 +51,7 @@
             </tr>
             <tr>
               <td><p><strong>Civil penalty due date:</strong></p></td>
-              <td><p> {{ admin_fine.civil_penalty_due_date | date(fmt='%m/%d/%Y') or 'No date available' }}, {{ admin_fine.civil_penalty_payment_status or 'No status available' }}, 
-                {% if admin_fine.payment_amount != none %}
-                  {{ admin_fine.payment_amount | currency or '' }}
+              <td><p> {{ admin_fine.civil_penalty_due_date | date(fmt='%m/%d/%Y') or 'No date available' }}, {{ admin_fine.civil_penalty_payment_status or 'No status available' }}{% if admin_fine.payment_amount != none %}, {{ admin_fine.payment_amount | currency or '' }}
                 {% endif %}</p>
               </td>
             </tr>
@@ -77,30 +75,21 @@
           </tr>
         </thead>
         <tbody>
-          <tr>
-            <td>Initial finding and proposed fine</td>
-            <td>{{ admin_fine.reason_to_believe_fine_amount | currency or '' }}</td>
-            <td>{{ admin_fine.reason_to_believe_action_date | date(fmt='%m/%d/%Y') }}</td>
-          </tr>
-          {% if admin_fine.challenge_receipt_date != none %}
-            <tr>
-              <td>Challenge received</td>
-              <td>No amount</td>
-              <td>{{ admin_fine.challenge_receipt_date | date(fmt='%m/%d/%Y') }}</td>
-            </tr>
-          {% endif %}
-          <tr>
-          {# TODO: Will use final_determination_disposition instead of challenge_outcome. Waiting for data.  #}
-            <td>{{ admin_fine.challenge_outcome | replace('RTB', 'reason to believe') | capitalize }}</td>
-            <td>{{ admin_fine.final_determination_amount | currency or 'No amount' }}</td>
-            <td>{{ admin_fine.final_determination_date | date(fmt='%m/%d/%Y') or 'No date' }}</td>
-          </tr>
-          {% if admin_fine.treasury_referral_amount != none and admin_fine.treasury_referral_date != none %}
-            <tr>
-              <td>Referred to the Department of the Treasury for collection</td>
-              <td>{{ admin_fine.treasury_referral_amount | currency or 'No amount' }}</td>
-              <td>{{ admin_fine.treasury_referral_date | date(fmt='%m/%d/%Y') or 'No date' }}</td>
-            </tr>
+          {% if 'af_dispositions' in admin_fine and admin_fine.disposition_items %}
+            {% for item in admin_fine.disposition_items %}
+              {% set itemloop = loop %}
+              {% for item in admin_fine.disposition_items[item] %}
+                <tr class="{{ itemloop.cycle('row-color-normal', 'row-color-contrast') }}">
+                  <td>{{ item.disposition_description | replace('RTB', 'Reason to believe')}}</td>
+                  <td>{{ item.amount  | currency or 'No amount' }}</td>
+                  <td>{{ item.disposition_date | date(fmt='%m/%d/%Y') }}</td>
+                </tr>
+              {% endfor %}
+            {% endfor %}
+            {% else %}
+              <tr>
+                <td colspan="3">No data available in table</td>
+              </tr>
           {% endif %}
         </tbody>
       </table>
