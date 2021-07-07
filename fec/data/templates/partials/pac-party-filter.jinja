@@ -16,7 +16,7 @@
   <div class="js-accordion accordion--neutral" data-content-prefix="filter">
     <button type="button" class="js-accordion-trigger accordion__button">Committee type</button>
     <div class="accordion__content">
-      {{ committee_type.field(display_sponsor_candidate_filter=True, display_authorized_committee_filter=False,designation='committee_designation') }}
+      {{ committee_type.field(display_sponsor_candidate_filter=True, display_authorized_committee_filter=False, display_parties_only_filter=True, display_default_other_committees_filter=False, display_alt_other_committees_filter=True, designation='committee_designation') }}
       {# TODO: API needs `organization_type` and leadership pac sponsor filter#}
     </div>
     <button type="button" class="js-accordion-trigger accordion__button">Committee details</button>
