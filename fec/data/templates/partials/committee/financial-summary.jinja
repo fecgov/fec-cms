@@ -34,6 +34,136 @@
             {{ missing_transferred.missing_transferred_committee_message(former_committee_name, former_authorized_candidate_name, former_authorized_candidate_id) }}
           </div>
         {% endif %}
+        <style>
+          #committee-snapshot .tag__category {
+            border-bottom-color: #112e51;
+            border-bottom-style: solid;
+            border-bottom-width: 2px 0;
+          }
+          #committee-snapshot .donut text {
+            font-family: 'karla';
+            font-size: 1rem;
+            font-weight: bold;
+          }
+
+          #committee-snapshot .donut.raising .segment {
+            stroke: #F77B42;
+          }
+          #committee-snapshot .donut.raising text {
+            fill: #F77B42;
+          }
+
+          #committee-snapshot .donut.spending .segment {
+            stroke: #35BDBB;
+          }
+          #committee-snapshot .donut.spending text {
+            fill: #35BDBB;
+          }
+        </style>
+        <div class="entity__figure entity__figure--narrow" id="committee-snapshot">
+          <div class="heading--section heading--with-action">
+            <h3>Committee snapshot</h3>
+          </div>
+          <p>Learn more about hybrid PACs like ACTBLUE.</p>
+          <div class="tag__category">
+            <div class="tag__item">Coverage dates: {{totals.coverage_start_date|date}} to {{totals.coverage_end_date|date}}</div>
+          </div>
+          <div>Total receipts: $ <div></div>| Total disbursements: $ <div></div>| Cash on hand: $<div></div></div>
+          <div class="grid grid--2-wide">
+            <div class="grid__item">
+              <h4 class="t-centered">Money raised</h4>
+              <div class="grid grid--2-wide">
+                <div class="grid__item">
+                  <figure>
+                    <svg width="100%" height="100%" viewBox="0 0 42 42" class="donut raising" role="img" aria-labelledby="snap-raise-ind-t snap-raise-ind-d">
+                      <title id="snap-raise-ind-t">Percent raised from individual conributions during 2019-2020</title>
+                      <desc id="snap-raise-ind-d">98% of money raised came from individual contributions</desc>
+                      <circle class="center" cx="21" cy="21" r="15.91549430918954" fill="#fff"></circle>
+                      <circle class="ring" cx="21" cy="21" r="15.91549430918954" fill="transparent" stroke="#F1F1F1" stroke-width="3"></circle>
+                      <circle class="segment" cx="21" cy="21" r="15.91549430918954" fill="transparent" stroke-width="3" stroke-dasharray="98 2" stroke-dashoffset="25"></circle>
+                      <g class="chart-text">
+                        <text x="50%" y="57%" text-anchor="middle">98%</text>
+                      </g>
+                    </svg>
+                    <figcaption class="t-centered">Percent raised in invididual contributions</figcaption>
+                  </figure>
+                </div>
+                <div class="grid__item">
+                  <figure>
+                    <svg width="100%" height="100%" viewBox="0 0 42 42" class="donut raising" aria-labelledby="snap-raise-com-t snap-raise-com-d">
+                      <title id="snap-raise-com-t">Percent raised from other federal political committees during 2019-2020</title>
+                      <desc id="snap-raise-com-d">0% of money raised came from other federal political committees during 2019-2020</desc>
+                      <circle class="center" cx="21" cy="21" r="15.91549430918954" fill="#fff"></circle>
+                      <circle class="ring" cx="21" cy="21" r="15.91549430918954" fill="transparent" stroke="#F1F1F1" stroke-width="3"></circle>
+                      <!-- The stroke-dashoffset should add up to 100, with the first value being the color -->
+                      <circle class="segment" cx="21" cy="21" r="15.91549430918954" fill="transparent" stroke="#F77B42" stroke-width="3" stroke-dasharray="0.1 99.9" stroke-dashoffset="25"></circle>
+                      <text x="50%" y="57%" text-anchor="middle">0%</text>
+                    </svg>
+                    <figcaption class="t-centered">Percent raised in contributions from other federal political committees</figcaption>
+                  </figure>
+                </div>
+              </div>
+            </div>
+            <div class="grid__item">
+              <h4 class="t-centered">Money spent</h4>
+              <div class="grid grid--2-wide">
+                <div class="grid__item">
+                  <figure>
+                    <svg width="100%" height="100%" viewBox="0 0 42 42" class="donut spending" role="img" aria-labelledby="snap-spend-com-t snap-spend-com-d">
+                      <title id="snap-spend-com-t">Percent spent on contributions to other federal political committees during 2019-2020</title>
+                      <desc id="snap-spend-com-d">96% of money spent went to other federal political committees during 2019-2020</desc>
+                      <circle class="center" cx="21" cy="21" r="15.91549430918954" fill="#fff"></circle>
+                      <circle class="ring" cx="21" cy="21" r="15.91549430918954" fill="transparent" stroke="#F1F1F1" stroke-width="3"></circle>
+                      <circle class="segment" cx="21" cy="21" r="15.91549430918954" fill="transparent" stroke-width="3" stroke-dasharray="96 4" stroke-dashoffset="25"></circle>
+                      <g class="chart-text">
+                        <text x="50%" y="57%" text-anchor="middle">96%</text>
+                      </g>
+                    </svg>
+                    <figcaption class="t-centered">Percent spent on contributions to other federal committees</figcaption>
+                  </figure>
+                </div>
+                <div class="grid__item">
+                  <figure>
+                    <svg width="100%" height="100%" viewBox="0 0 42 42" class="donut spending" role="img" aria-labelledby="snap-spend-ox-t snap-spend-ox-d">
+                      <title id="snap-spend-ox-t">Percent spent on operating expenditures during 2019-2020</title>
+                      <desc id="snap-spend-ox-d">96% of money spent on operating expenditures during 2019-2020</desc>
+                      <circle class="center" cx="21" cy="21" r="15.91549430918954" fill="#fff"></circle>
+                      <circle class="ring" cx="21" cy="21" r="15.91549430918954" fill="transparent" stroke="#F1F1F1" stroke-width="3"></circle>
+                      <!-- The stroke-dashoffset should add up to 100, with the first value being the color -->
+                      <circle class="segment" cx="21" cy="21" r="15.91549430918954" fill="transparent" stroke="#F77B42" stroke-width="3" stroke-dasharray="0.1 99.9" stroke-dashoffset="25"></circle>
+                      <text x="50%" y="57%" text-anchor="middle">&lt;1%</text>
+                    </svg>
+                    <figcaption class="t-centered">Percent spent on operating expenditures</figcaption>
+                  </figure>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="heading--with-action">
+            <p class="heading__left t-note">The percentages shown do not represent 100% of this committee's activity. Refer to the tables that follow for a complete breakdown of raising and spending.</p>
+            <button class="heading__right button--alt js-methodology" data-a11y-dialog-show="methodology-committee-snapshot">Methodology</button>
+          </div>
+          <div class="js-modal modal" id="methodology-committee-snapshot" aria-hidden="true">
+            <div tabindex="-1" class="modal__overlay" data-a11y-dialog-hide=""></div>
+            <div role="dialog" class="modal__content" aria-labelledby="raised-modal-title">
+              <div role="document">
+                <button type="button" class="modal__close button--close--primary" data-a11y-dialog-hide="" title="Close this dialog window"></button>
+                <h2 id="raised-modal-title">Methodology</h2>
+                <strong>Receipts</strong>
+                <p>Percentage contributions from individuals</p>
+                <ul><li>Total individual contributions divided by total receipts (Form 3X Line 11(a)(iii) divided by Line 19)</li></ul>
+
+                <p>Contributions from party committees plus contributions from other federal committees divided by total receipts (Form 3X Line 11(b) + Line 11(c) divided by Line 19)</p>
+                <ul><li><strong>The language under the doughnut could be something like, "percent raised from contrbutions from PACS and party committees."</strong></li></ul>
+                <strong>Disbursements</strong>
+                <p>Percentage IEs, federal candidate contributions and party coordinated expenditures</p>
+                <ul><li>Contributions to federal candidates plus independent expenditures plus party coordinated expenditures divided by total disbursements (Form 3X Line 23 + 24 + 25 divided by Line 31)</li></ul>
+                <p>Percentage operating expenditures</p>
+                <ul><li>Total operating expenditures divided by total disbursements (Form 3X Line 21(c) divided by Line 31)</li></ul>
+              </div>
+            </div>
+          </div>
+        </div>
         <div class="entity__figure entity__figure--narrow" id="total-raised">
           <div class="heading--section heading--with-action">
             <h3 class="heading__left">Total raised</h3>
