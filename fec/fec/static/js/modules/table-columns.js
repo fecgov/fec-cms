@@ -89,11 +89,11 @@ function createElectionColumns(context) {
     },
     {
       data: 'party_full',
-      className: 'all'
+      className: 'min-desktop'
     },
     columns.currencyColumn({
       data: 'total_receipts',
-      className: 'column--number t-mono',
+      className: 'column--number t-mono all',
       orderSequence: ['desc', 'asc']
     }),
     columns.currencyColumn({
