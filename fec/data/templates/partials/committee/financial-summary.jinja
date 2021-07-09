@@ -40,6 +40,10 @@
             border-bottom-style: solid;
             border-bottom-width: 2px 0;
           }
+          #committee-snapshot figcaption {
+            text-align: center;
+          }
+
           #committee-snapshot .donut text {
             font-family: 'karla';
             font-size: 1rem;
@@ -59,47 +63,146 @@
           #committee-snapshot .donut.spending text {
             fill: #35BDBB;
           }
+
+          @media(max-width:648px) {
+            #committee-snapshot figure {
+              display: flex;
+              align-items: center;
+            }
+            #committee-snapshot figure svg {
+              width: 33.3%;
+            }
+            #committee-snapshot figcaption {
+              text-align: left;
+              width: 66.6%;
+            }
+          }
         </style>
         <div class="entity__figure entity__figure--narrow" id="committee-snapshot">
           <div class="heading--section heading--with-action">
             <h3>Committee snapshot</h3>
           </div>
-          <p>Learn more about hybrid PACs like ACTBLUE.</p>
+          {% set coverage_str = totals.coverage_start_date|date ~' to ' ~totals.coverage_end_date|date %}
+
+          {% if totals.individual_contributions_percent %}
+            {% set rec_ind = totals.individual_contributions_percent|round|int %}
+            {% set rec_ind_class = 'raising' %}
+            {% set rec_ind_ring = '0 100' %}
+            {% set rec_ind_l = rec_ind ~'%' %}
+            {% if rec_ind > 100 %}
+            {% set rec_ind_l = '>100%' %}
+            {% set rec_ind_ring = '100 0' %}
+            {% elif rec_ind > 0 and rec_ind < 1 %}
+            {% set rec_ind_l = '<1%' %}
+            {% else %}
+            {% set rec_ind_ring = rec_ind ~ ' ' ~ (100 - rec_ind) %}
+            {% endif %}
+          {% else %}
+            {% set rec_ind_l = '!' %}
+            {% set rec_ind_ring = '0 100' %}
+            {% set rec_ind_class = '' %}
+          {% endif %}
+
+          {% if totals.party_and_other_committee_contributions_percent %}
+            {% set rec_com = totals.party_and_other_committee_contributions_percent|round|int %}
+            {% set rec_com_class = 'raising' %}
+            {% set rec_com_ring = '0 100' %}
+            {% set rec_com_l = rec_com ~'%' %}
+            {% if rec_com > 100 %}
+            {% set rec_com_l = '>100%' %}
+            {% set rec_com_ring = '100 0' %}
+            {% elif rec_com > 0 and rec_com < 1 %}
+            {% set rec_com_l = '<1%' %}
+            {% else %}
+            {% set rec_com_ring = rec_com ~ ' ' ~ (100 - rec_com) %}
+            {% endif %}
+          {% else %}
+            {% set rec_com_l = '!' %}
+            {% set rec_com_ring = '0 100' %}
+            {% set rec_com_class = '' %}
+          {% endif %}
+
+          {% if totals.contributions_ie_and_party_expenditures_made_percent %}
+            {% set dis_com = totals.contributions_ie_and_party_expenditures_made_percent|round|int %}
+            {% set dis_com_class = 'spending' %}
+            {% set dis_com_ring = '0 100' %}
+            {% set dis_com_l = dis_com ~'%' %}
+            {% if dis_com > 100 %}
+            {% set dis_com_l = '>100%' %}
+            {% set dis_com_ring = '100 0' %}
+            {% elif dis_com > 0 and dis_com < 1 %}
+            {% set dis_com_l = '<1%' %}
+            {% else %}
+            {% set dis_com_ring = dis_com ~ ' ' ~ (100 - dis_com) %}
+            {% endif %}
+          {% else %}
+            {% set dis_com_l = '!' %}
+            {% set dis_com_ring = '0 100' %}
+            {% set dis_com_class = '' %}
+          {% endif %}
+
+          {% if totals.operating_expenditures_percent %}
+            {% set dis_oe = totals.operating_expenditures_percent|round|int %}
+            {% set dis_oe_class = 'spending' %}
+            {% set dis_oe_ring = '0 100' %}
+            {% set dis_oe_l = dis_oe ~'%' %}
+            {% if dis_oe > 100 %}
+            {% set dis_oe_l = '>100%' %}
+            {% set dis_oe_ring = '100 0' %}
+            {% elif dis_oe > 0 and dis_oe < 1 %}
+            {% set dis_oe_l = '<1%' %}
+            {% else %}
+            {% set dis_oe_ring = dis_oe ~ ' ' ~ (100 - dis_oe) %}
+            {% endif %}
+          {% else %}
+            {% set dis_oe_l = '!' %}
+            {% set dis_oe_ring = '0 100' %}
+            {% set dis_oe_class = '' %}
+          {% endif %}
+
+
+          <p>Learn more about <span class="term" data-term="hybrid pac" title="Click to define" tabindex="0">hybrid PACs</span> like ACTBLUE.</p>
           <div class="tag__category">
-            <div class="tag__item">Coverage dates: {{totals.coverage_start_date|date}} to {{totals.coverage_end_date|date}}</div>
+            <div class="tag__item">Coverage dates: {{ coverage_str }}</div>
           </div>
-          <div>Total receipts: $ <div></div>| Total disbursements: $ <div></div>| Cash on hand: $<div></div></div>
+          <div>
+            <div>Total receipts: <strong>{{ totals.fed_receipts|currency }}</strong></div>
+            <div>|</div>
+            <div>Total disbursements: <strong>{{ totals.fed_disbursements|currency }}</strong></div>
+            <div>|</div>
+            <div>Cash on hand: <strong>{{ totals.last_cash_on_hand_end_period|currency }}</strong></div>
+          </div>
           <div class="grid grid--2-wide">
             <div class="grid__item">
               <h4 class="t-centered">Money raised</h4>
               <div class="grid grid--2-wide">
                 <div class="grid__item">
                   <figure>
-                    <svg width="100%" height="100%" viewBox="0 0 42 42" class="donut raising" role="img" aria-labelledby="snap-raise-ind-t snap-raise-ind-d">
-                      <title id="snap-raise-ind-t">Percent raised from individual conributions during 2019-2020</title>
+                    <svg width="100%" height="100%" viewBox="0 0 42 42" class="donut {{ rec_ind_class }}" role="img" aria-labelledby="snap-raise-ind-t snap-raise-ind-d">
+                      <title id="snap-raise-ind-t">Percent raised from individual conributions {{ coverage_str }}</title>
                       <desc id="snap-raise-ind-d">98% of money raised came from individual contributions</desc>
                       <circle class="center" cx="21" cy="21" r="15.91549430918954" fill="#fff"></circle>
                       <circle class="ring" cx="21" cy="21" r="15.91549430918954" fill="transparent" stroke="#F1F1F1" stroke-width="3"></circle>
-                      <circle class="segment" cx="21" cy="21" r="15.91549430918954" fill="transparent" stroke-width="3" stroke-dasharray="98 2" stroke-dashoffset="25"></circle>
+                      <circle class="segment" cx="21" cy="21" r="15.91549430918954" fill="transparent" stroke-width="3" stroke-dasharray="{{ rec_ind_ring }}" stroke-dashoffset="25"></circle>
                       <g class="chart-text">
-                        <text x="50%" y="57%" text-anchor="middle">98%</text>
+                        <text x="50%" y="57%" text-anchor="middle">{{ rec_ind_l }}</text>
                       </g>
                     </svg>
-                    <figcaption class="t-centered">Percent raised in invididual contributions</figcaption>
+                    <figcaption>Percent raised in individual <span class="term" data-term="contribution" title="Click to define" tabindex="0">contributions</span></figcaption>
                   </figure>
                 </div>
                 <div class="grid__item">
                   <figure>
-                    <svg width="100%" height="100%" viewBox="0 0 42 42" class="donut raising" aria-labelledby="snap-raise-com-t snap-raise-com-d">
-                      <title id="snap-raise-com-t">Percent raised from other federal political committees during 2019-2020</title>
-                      <desc id="snap-raise-com-d">0% of money raised came from other federal political committees during 2019-2020</desc>
+                    <svg width="100%" height="100%" viewBox="0 0 42 42" class="donut {{ rec_com_class }}" aria-labelledby="snap-raise-com-t snap-raise-com-d">
+                      <title id="snap-raise-com-t">Percent raised from other federal political committees {{ coverage_str }}</title>
+                      <desc id="snap-raise-com-d">0% of money raised came from other federal political committees</desc>
                       <circle class="center" cx="21" cy="21" r="15.91549430918954" fill="#fff"></circle>
                       <circle class="ring" cx="21" cy="21" r="15.91549430918954" fill="transparent" stroke="#F1F1F1" stroke-width="3"></circle>
                       <!-- The stroke-dashoffset should add up to 100, with the first value being the color -->
-                      <circle class="segment" cx="21" cy="21" r="15.91549430918954" fill="transparent" stroke="#F77B42" stroke-width="3" stroke-dasharray="0.1 99.9" stroke-dashoffset="25"></circle>
-                      <text x="50%" y="57%" text-anchor="middle">0%</text>
+                      <circle class="segment" cx="21" cy="21" r="15.91549430918954" fill="transparent" stroke="#F77B42" stroke-width="3" stroke-dasharray="{{ rec_com_ring }}" stroke-dashoffset="25"></circle>
+                      <text x="50%" y="57%" text-anchor="middle">{{ rec_com_l }}</text>
                     </svg>
-                    <figcaption class="t-centered">Percent raised in contributions from other federal political committees</figcaption>
+                    <figcaption>Percent raised in contributions from other federal <span class="term" data-term="political committee" title="Click to define" tabindex="0">political committees</span></figcaption>
                   </figure>
                 </div>
               </div>
@@ -109,31 +212,31 @@
               <div class="grid grid--2-wide">
                 <div class="grid__item">
                   <figure>
-                    <svg width="100%" height="100%" viewBox="0 0 42 42" class="donut spending" role="img" aria-labelledby="snap-spend-com-t snap-spend-com-d">
-                      <title id="snap-spend-com-t">Percent spent on contributions to other federal political committees during 2019-2020</title>
-                      <desc id="snap-spend-com-d">96% of money spent went to other federal political committees during 2019-2020</desc>
+                    <svg width="100%" height="100%" viewBox="0 0 42 42" class="donut {{ dis_com_class }}" role="img" aria-labelledby="snap-spend-com-t snap-spend-com-d">
+                      <title id="snap-spend-com-t">Percent spent on contributions to other federal political committees {{ coverage_str }}</title>
+                      <desc id="snap-spend-com-d">96% of money spent went to other federal political committees</desc>
                       <circle class="center" cx="21" cy="21" r="15.91549430918954" fill="#fff"></circle>
                       <circle class="ring" cx="21" cy="21" r="15.91549430918954" fill="transparent" stroke="#F1F1F1" stroke-width="3"></circle>
-                      <circle class="segment" cx="21" cy="21" r="15.91549430918954" fill="transparent" stroke-width="3" stroke-dasharray="96 4" stroke-dashoffset="25"></circle>
+                      <circle class="segment" cx="21" cy="21" r="15.91549430918954" fill="transparent" stroke-width="3" stroke-dasharray="{{ dis_com_ring }}" stroke-dashoffset="25"></circle>
                       <g class="chart-text">
-                        <text x="50%" y="57%" text-anchor="middle">96%</text>
+                        <text x="50%" y="57%" text-anchor="middle">{{ dis_com_l }}</text>
                       </g>
                     </svg>
-                    <figcaption class="t-centered">Percent spent on contributions to other federal committees</figcaption>
+                    <figcaption>Percent spent on contributions to other <span class="term" data-term="national committee" title="Click to define" tabindex="0">federal committees</span></figcaption>
                   </figure>
                 </div>
                 <div class="grid__item">
                   <figure>
-                    <svg width="100%" height="100%" viewBox="0 0 42 42" class="donut spending" role="img" aria-labelledby="snap-spend-ox-t snap-spend-ox-d">
-                      <title id="snap-spend-ox-t">Percent spent on operating expenditures during 2019-2020</title>
-                      <desc id="snap-spend-ox-d">96% of money spent on operating expenditures during 2019-2020</desc>
+                    <svg width="100%" height="100%" viewBox="0 0 42 42" class="donut {{ dis_oe_class }}" role="img" aria-labelledby="snap-spend-ox-t snap-spend-ox-d">
+                      <title id="snap-spend-ox-t">Percent spent on operating expenditures {{ coverage_str }}</title>
+                      <desc id="snap-spend-ox-d">96% of money spent on operating expenditures</desc>
                       <circle class="center" cx="21" cy="21" r="15.91549430918954" fill="#fff"></circle>
                       <circle class="ring" cx="21" cy="21" r="15.91549430918954" fill="transparent" stroke="#F1F1F1" stroke-width="3"></circle>
                       <!-- The stroke-dashoffset should add up to 100, with the first value being the color -->
-                      <circle class="segment" cx="21" cy="21" r="15.91549430918954" fill="transparent" stroke="#F77B42" stroke-width="3" stroke-dasharray="0.1 99.9" stroke-dashoffset="25"></circle>
-                      <text x="50%" y="57%" text-anchor="middle">&lt;1%</text>
+                      <circle class="segment" cx="21" cy="21" r="15.91549430918954" fill="transparent" stroke="#F77B42" stroke-width="3" stroke-dasharray="{{ dis_oe_ring }}" stroke-dashoffset="25"></circle>
+                      <text x="50%" y="57%" text-anchor="middle">{{ dis_oe_l }}</text>
                     </svg>
-                    <figcaption class="t-centered">Percent spent on operating expenditures</figcaption>
+                    <figcaption>Percent spent on <span class="term" data-term="operating expenditures" title="Click to define" tabindex="0">operating expenditures</span></figcaption>
                   </figure>
                 </div>
               </div>
