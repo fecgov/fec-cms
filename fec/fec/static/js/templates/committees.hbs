@@ -26,5 +26,12 @@
         {{organization_type_full}}
       {{/panelRow}}
     {{/if}}
+    {{#if sponsor_candidate_list}}
+      {{#panelRow "Leadership PAC sponsor"}}
+        {{#each sponsor_candidate_list}}
+          <a href="{{basePath}}/candidate/{{ sponsor_candidate_id }}/"><span class="leadership_pac_sponsor_name">{{ sponsor_candidate_name }}</span> ({{ sponsor_candidate_id }})</a>;<br />
+        {{/each}}
+      {{/panelRow}}
+    {{/if}}
   </table>
 </div>
