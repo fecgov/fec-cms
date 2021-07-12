@@ -162,3 +162,15 @@
     }
   }
 }
+
+
+//Responsive behavior for datatables in tab pannels on profile pages (committee, candidate, election)
+@media screen and (max-width: 940px) {
+  .data-container__wrapper .main__content--right-full {
+    display: block;
+   }
+
+  .data-container__wrapper .side-nav-alt {
+    display: block;
+  }
+}
