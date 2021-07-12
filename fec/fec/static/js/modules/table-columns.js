@@ -89,7 +89,7 @@ function createElectionColumns(context) {
     },
     {
       data: 'party_full',
-      className: 'min-tablet-l'
+      className:  'min-desktop'
     },
     columns.currencyColumn({
       data: 'total_receipts',
@@ -127,6 +127,7 @@ function createElectionColumns(context) {
           url: url
         });
       },
+      className: 'min-desktop',
       orderable: false
     }
   ];
