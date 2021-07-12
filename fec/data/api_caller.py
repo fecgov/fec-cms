@@ -236,6 +236,14 @@ def load_legal_admin_fines(admin_fine_no):
         else:
             documents_by_type[doc["category"]] = [doc]
     admin_fine["documents_by_type"] = documents_by_type
+    disposition_items = OrderedDict()
+    for item in admin_fine["af_dispositions"]:
+        if item["disposition_description"] in disposition_items:
+            disposition_items[item["disposition_description"]].append(item)
+        else:
+            disposition_items[item["disposition_description"]] = [item]
+    admin_fine["disposition_items"] = disposition_items
+
     return admin_fine
 
 
