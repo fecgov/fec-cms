@@ -89,7 +89,7 @@ function createElectionColumns(context) {
     },
     {
       data: 'party_full',
-      className:  'min-desktop'
+      className: 'min-desktop'
     },
     columns.currencyColumn({
       data: 'total_receipts',
