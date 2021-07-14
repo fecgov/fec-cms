@@ -456,11 +456,91 @@ def get_committee(committee_id, cycle):
                 sponsor_candidate["related_cycle"] = cycle if election_years else None
                 sponsor_candidates.append(sponsor_candidate)
 
+    # Human-friendly text and glossary links for the front-end
+    com_org_type = committee.get('organization_type')
+    com_com_type = committee.get('committee_type')
+    com_desig = committee.get('designation')
+    # The big "can't be" tests for the others
+    if com_org_type == 'C':
+        com_type_text = 'corporate'
+        com_type_glossary = 'Corporation'
+    elif com_org_type == 'W':
+        com_type_text = 'corporations without capital stock'
+        com_type_glossary = ''
+    elif com_org_type == 'L':
+        com_type_text = 'labor organization'
+        com_type_glossary = 'Labor organization'
+    elif com_org_type == 'M':
+        com_type_text = 'membership organization'
+        com_type_glossary = 'Membership organization'
+    elif com_org_type == 'T':
+        com_type_text = 'trade association'
+        com_type_glossary = 'Trade association'
+    elif com_org_type == 'V':
+        com_type_text = 'cooperatives'
+        com_type_glossary = ''
+    elif com_org_type == 'D':
+        com_type_text = 'leadership PACs'
+        com_type_glossary = ''
+    elif com_com_type == 'H':
+        com_type_text = '=====NO LINE IN SPREADSHEET====='
+        com_type_glossary = ''
+    elif com_com_type == 'S':
+        com_type_text = '=====NO LINE IN SPREADSHEET====='
+        com_type_glossary = ''
+    elif com_com_type == 'P':
+        com_type_text = '=====NO LINE IN SPREADSHEET====='
+        com_type_glossary = ''
+    elif com_desig == 'B':
+        com_type_text = 'lobbyist-registrant PACs'
+        com_type_glossary = 'Lobbyist/Registrant PAC'
+    elif com_desig == 'D':
+        com_type_text = 'leadership PACs'
+        com_type_glossary = 'Leadership PAC'
+    elif com_desig == 'J':
+        com_type_text = 'joint fundraising committees'
+        com_type_glossary = 'Joint fundraising committee'
+    elif com_desig == 'A':
+        com_type_text = '=====NO LINE IN SPREADSHEET====='
+        com_type_glossary = ''
+    elif com_desig == 'P':
+        com_type_text = '=====NO LINE IN SPREADSHEET====='
+        com_type_glossary = ''
+    elif com_com_type == 'O':
+        com_type_text = 'super PACs'
+        com_type_glossary = 'Super PAC'
+    elif com_com_type == 'W':
+        com_type_text = 'hybrid PACs'
+        com_type_glossary = 'Hybrid PAC'
+    elif com_com_type == 'V':
+        com_type_text = 'hybrid PACs'
+        com_type_glossary = 'Hybrid PAC'
+    elif com_com_type == 'N':
+        com_type_text = 'political action committees'
+        com_type_glossary = 'Political Action Committee (PAC)'
+    elif com_com_type == 'Q':
+        com_type_text = 'political action committees'
+        com_type_glossary = 'Political Action Committee (PAC)'
+    elif com_com_type == 'U':
+        com_type_text = '=====TBD====='
+        com_type_glossary = ''
+    elif com_com_type == 'I':
+        com_type_text = '=====TBD====='
+        com_type_glossary = ''
+    elif com_com_type == 'Y':
+        com_type_text = 'party committees'
+        com_type_glossary = 'Party committee'
+    elif com_com_type == 'X':
+        com_type_text = 'party committees'
+        com_type_glossary = 'Party committee'
+
     template_variables = {
         "candidates": candidates,
         "committee": committee,
         "committee_id": committee_id,
         "committee_type": committee["committee_type"],
+        "com_type_text": com_type_text,
+        "com_type_glossary": com_type_glossary,
         "context_vars": context_vars,
         "cycle": cycle,
         "cycles": cycles,
@@ -559,6 +639,10 @@ def committee(request, committee_id):
 
     cycle = request.GET.get("cycle", None)
     committee = get_committee(committee_id, cycle)
+
+    com_type_text = ''
+    com_type_glossary = ''
+
     return render(request, "committees-single.jinja", committee)
 
 
