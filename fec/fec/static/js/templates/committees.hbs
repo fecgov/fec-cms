@@ -29,7 +29,7 @@
     {{#if sponsor_candidate_list}}
       {{#panelRow "Leadership PAC sponsor"}}
         {{#each sponsor_candidate_list}}
-          <a href="{{basePath}}/candidate/{{ sponsor_candidate_id }}/"><span class="leadership_pac_sponsor_name">{{ sponsor_candidate_name }}</span> ({{ sponsor_candidate_id }})</a>;<br />
+          <a href="{{basePath}}/candidate/{{ sponsor_candidate_id }}/"><span class="leadership_pac_sponsor_name">{{ sponsor_candidate_name }}</span> ({{ sponsor_candidate_id }})</a>{{#unless @last}};<br />{{/unless}}
         {{/each}}
       {{/panelRow}}
     {{/if}}
