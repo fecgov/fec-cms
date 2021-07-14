@@ -483,13 +483,13 @@ def get_committee(committee_id, cycle):
         com_type_text = 'leadership PACs'
         com_type_glossary = ''
     elif com_com_type == 'H':
-        com_type_text = '=====NO LINE IN SPREADSHEET====='
+        com_type_text = '[H committee_type]'
         com_type_glossary = ''
     elif com_com_type == 'S':
-        com_type_text = '=====NO LINE IN SPREADSHEET====='
+        com_type_text = '[S committee_type]'
         com_type_glossary = ''
     elif com_com_type == 'P':
-        com_type_text = '=====NO LINE IN SPREADSHEET====='
+        com_type_text = '[P committee_type]'
         com_type_glossary = ''
     elif com_desig == 'B':
         com_type_text = 'lobbyist-registrant PACs'
@@ -501,10 +501,10 @@ def get_committee(committee_id, cycle):
         com_type_text = 'joint fundraising committees'
         com_type_glossary = 'Joint fundraising committee'
     elif com_desig == 'A':
-        com_type_text = '=====NO LINE IN SPREADSHEET====='
+        com_type_text = '[A designation]'
         com_type_glossary = ''
     elif com_desig == 'P':
-        com_type_text = '=====NO LINE IN SPREADSHEET====='
+        com_type_text = '[P designation]'
         com_type_glossary = ''
     elif com_com_type == 'O':
         com_type_text = 'super PACs'
@@ -522,10 +522,10 @@ def get_committee(committee_id, cycle):
         com_type_text = 'political action committees'
         com_type_glossary = 'Political Action Committee (PAC)'
     elif com_com_type == 'U':
-        com_type_text = '=====TBD====='
+        com_type_text = '[U committee_type]'
         com_type_glossary = ''
     elif com_com_type == 'I':
-        com_type_text = '=====TBD====='
+        com_type_text = '[I committee_type]'
         com_type_glossary = ''
     elif com_com_type == 'Y':
         com_type_text = 'party committees'
@@ -639,9 +639,6 @@ def committee(request, committee_id):
 
     cycle = request.GET.get("cycle", None)
     committee = get_committee(committee_id, cycle)
-
-    com_type_text = ''
-    com_type_glossary = ''
 
     return render(request, "committees-single.jinja", committee)
 
