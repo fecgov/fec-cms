@@ -34,54 +34,13 @@
             {{ missing_transferred.missing_transferred_committee_message(former_committee_name, former_authorized_candidate_name, former_authorized_candidate_id) }}
           </div>
         {% endif %}
-        <style>
-          #committee-snapshot .tag__category {
-            border-bottom-color: #112e51;
-            border-bottom-style: solid;
-            border-bottom-width: 2px 0;
-          }
-          #committee-snapshot figcaption {
-            text-align: center;
-          }
-
-          #committee-snapshot .donut text {
-            font-family: 'karla';
-            font-size: 1rem;
-            font-weight: bold;
-          }
-
-          #committee-snapshot .donut.raising .segment {
-            stroke: #F77B42;
-          }
-          #committee-snapshot .donut.raising text {
-            fill: #F77B42;
-          }
-
-          #committee-snapshot .donut.spending .segment {
-            stroke: #35BDBB;
-          }
-          #committee-snapshot .donut.spending text {
-            fill: #35BDBB;
-          }
-
-          @media(max-width:648px) {
-            #committee-snapshot figure {
-              display: flex;
-              align-items: center;
-            }
-            #committee-snapshot figure svg {
-              width: 33.3%;
-            }
-            #committee-snapshot figcaption {
-              text-align: left;
-              width: 66.6%;
-            }
-          }
-        </style>
         <div class="entity__figure entity__figure--narrow" id="committee-snapshot">
-          <div class="heading--section heading--with-action">
+          <div class="heading--section">
             <h3>Committee snapshot</h3>
           </div>
+
+          {% set shared_circle_props = 'cx=21 cy=21 r=15.91549430918954' %}
+          {% set shared_text_props = 'x=50% y=57%' %}
           {% set coverage_str = totals.coverage_start_date|date ~' to ' ~totals.coverage_end_date|date %}
 
           {% if totals.individual_contributions_percent %}
@@ -160,17 +119,30 @@
             {% set dis_oe_class = '' %}
           {% endif %}
 
+          {# set the meters' max value to the greater of receipts or disbursements #}
+          {% if totals.fed_receipts and totals.fed_disbursements and totals.last_cash_on_hand_end_period %}
+            {% if totals.fed_receipts >= totals.fed_disbursements %}
+              {% set meters_max = totals.fed_receipts %}
+            {% else %}
+              {% set meters_max = totals.fed_disbursements %}
+            {% endif %}
+            {# but override both if COH is larger for some reason #}
+            {% if totals.last_cash_on_hand_end_period > meters_max %}
+              {% set meters_max = totals.last_cash_on_hand_end_period %}
+            {% endif %}
+          {% endif %}
 
-          <p>Learn more about <span class="term" data-term="hybrid pac" title="Click to define" tabindex="0">hybrid PACs</span> like ACTBLUE.</p>
+          <p>Learn more about <span class="term" data-term="{{ com_type_glossary }}" title="Click to define" tabindex="0">{{ com_type_text }}</span> like {{ committee.name }}.</p>
           <div class="tag__category">
             <div class="tag__item">Coverage dates: {{ coverage_str }}</div>
           </div>
-          <div>
-            <div>Total receipts: <strong>{{ totals.fed_receipts|currency }}</strong></div>
-            <div>|</div>
-            <div>Total disbursements: <strong>{{ totals.fed_disbursements|currency }}</strong></div>
-            <div>|</div>
-            <div>Cash on hand: <strong>{{ totals.last_cash_on_hand_end_period|currency }}</strong></div>
+          <div class="snapshot-summary">
+            <span class="t-data t-bold">Total receipts: <span class="t-normal">{{ totals.fed_receipts|currency }}</span></span>
+            <meter min="0" max="{{ meters_max }}" value="{{ totals.fed_receipts }}" title="US Dollars" data-cat="raising"></meter>
+            <span class="t-data t-bold">Total disbursements: <span class="t-normal">{{ totals.fed_disbursements|currency }}</span></span>
+            <meter min="0" max="{{ meters_max }}" value="{{ totals.fed_disbursements }}" title="US Dollars" data-cat="spending"></meter>
+            <span class="t-data t-bold">Cash on hand: <span class="t-normal">{{ totals.last_cash_on_hand_end_period|currency }}</span></span>
+            <meter min="0" max="{{ meters_max }}" value="{{ totals.last_cash_on_hand_end_period }}" title="US Dollars" data-cat="cash"></meter>
           </div>
           <div class="grid grid--2-wide">
             <div class="grid__item">
@@ -178,14 +150,14 @@
               <div class="grid grid--2-wide">
                 <div class="grid__item">
                   <figure>
-                    <svg width="100%" height="100%" viewBox="0 0 42 42" class="donut {{ rec_ind_class }}" role="img" aria-labelledby="snap-raise-ind-t snap-raise-ind-d">
+                    <svg viewBox="0 0 42 42" class="donut {{ rec_ind_class }}" role="img" aria-labelledby="snap-raise-ind-t snap-raise-ind-d">
                       <title id="snap-raise-ind-t">Percent raised from individual conributions {{ coverage_str }}</title>
                       <desc id="snap-raise-ind-d">98% of money raised came from individual contributions</desc>
-                      <circle class="center" cx="21" cy="21" r="15.91549430918954" fill="#fff"></circle>
-                      <circle class="ring" cx="21" cy="21" r="15.91549430918954" fill="transparent" stroke="#F1F1F1" stroke-width="3"></circle>
-                      <circle class="segment" cx="21" cy="21" r="15.91549430918954" fill="transparent" stroke-width="3" stroke-dasharray="{{ rec_ind_ring }}" stroke-dashoffset="25"></circle>
+                      <circle class="center" {{ shared_circle_props }}></circle>
+                      <circle class="ring" {{ shared_circle_props }}></circle>
+                      <circle class="segment" {{ shared_circle_props }} stroke-dasharray="{{ rec_ind_ring }}"></circle>
                       <g class="chart-text">
-                        <text x="50%" y="57%" text-anchor="middle">{{ rec_ind_l }}</text>
+                        <text {{ shared_text_props }}>{{ rec_ind_l }}</text>
                       </g>
                     </svg>
                     <figcaption>Percent raised in individual <span class="term" data-term="contribution" title="Click to define" tabindex="0">contributions</span></figcaption>
@@ -193,14 +165,14 @@
                 </div>
                 <div class="grid__item">
                   <figure>
-                    <svg width="100%" height="100%" viewBox="0 0 42 42" class="donut {{ rec_com_class }}" aria-labelledby="snap-raise-com-t snap-raise-com-d">
+                    <svg viewBox="0 0 42 42" class="donut {{ rec_com_class }}" aria-labelledby="snap-raise-com-t snap-raise-com-d">
                       <title id="snap-raise-com-t">Percent raised from other federal political committees {{ coverage_str }}</title>
                       <desc id="snap-raise-com-d">0% of money raised came from other federal political committees</desc>
-                      <circle class="center" cx="21" cy="21" r="15.91549430918954" fill="#fff"></circle>
-                      <circle class="ring" cx="21" cy="21" r="15.91549430918954" fill="transparent" stroke="#F1F1F1" stroke-width="3"></circle>
+                      <circle class="center" {{ shared_circle_props }}></circle>
+                      <circle class="ring" {{ shared_circle_props }}></circle>
                       <!-- The stroke-dashoffset should add up to 100, with the first value being the color -->
-                      <circle class="segment" cx="21" cy="21" r="15.91549430918954" fill="transparent" stroke="#F77B42" stroke-width="3" stroke-dasharray="{{ rec_com_ring }}" stroke-dashoffset="25"></circle>
-                      <text x="50%" y="57%" text-anchor="middle">{{ rec_com_l }}</text>
+                      <circle class="segment" {{ shared_circle_props }} stroke-dasharray="{{ rec_com_ring }}"></circle>
+                      <text {{ shared_text_props }}>{{ rec_com_l }}</text>
                     </svg>
                     <figcaption>Percent raised in contributions from other federal <span class="term" data-term="political committee" title="Click to define" tabindex="0">political committees</span></figcaption>
                   </figure>
@@ -212,14 +184,14 @@
               <div class="grid grid--2-wide">
                 <div class="grid__item">
                   <figure>
-                    <svg width="100%" height="100%" viewBox="0 0 42 42" class="donut {{ dis_com_class }}" role="img" aria-labelledby="snap-spend-com-t snap-spend-com-d">
+                    <svg viewBox="0 0 42 42" class="donut {{ dis_com_class }}" role="img" aria-labelledby="snap-spend-com-t snap-spend-com-d">
                       <title id="snap-spend-com-t">Percent spent on contributions to other federal political committees {{ coverage_str }}</title>
                       <desc id="snap-spend-com-d">96% of money spent went to other federal political committees</desc>
-                      <circle class="center" cx="21" cy="21" r="15.91549430918954" fill="#fff"></circle>
-                      <circle class="ring" cx="21" cy="21" r="15.91549430918954" fill="transparent" stroke="#F1F1F1" stroke-width="3"></circle>
-                      <circle class="segment" cx="21" cy="21" r="15.91549430918954" fill="transparent" stroke-width="3" stroke-dasharray="{{ dis_com_ring }}" stroke-dashoffset="25"></circle>
+                      <circle class="center"{{ shared_circle_props }}></circle>
+                      <circle class="ring"{{ shared_circle_props }}></circle>
+                      <circle class="segment" {{ shared_circle_props }} stroke-dasharray="{{ dis_com_ring }}"></circle>
                       <g class="chart-text">
-                        <text x="50%" y="57%" text-anchor="middle">{{ dis_com_l }}</text>
+                        <text {{ shared_text_props }}>{{ dis_com_l }}</text>
                       </g>
                     </svg>
                     <figcaption>Percent spent on contributions to other <span class="term" data-term="national committee" title="Click to define" tabindex="0">federal committees</span></figcaption>
@@ -227,14 +199,14 @@
                 </div>
                 <div class="grid__item">
                   <figure>
-                    <svg width="100%" height="100%" viewBox="0 0 42 42" class="donut {{ dis_oe_class }}" role="img" aria-labelledby="snap-spend-ox-t snap-spend-ox-d">
+                    <svg viewBox="0 0 42 42" class="donut {{ dis_oe_class }}" role="img" aria-labelledby="snap-spend-ox-t snap-spend-ox-d">
                       <title id="snap-spend-ox-t">Percent spent on operating expenditures {{ coverage_str }}</title>
                       <desc id="snap-spend-ox-d">96% of money spent on operating expenditures</desc>
-                      <circle class="center" cx="21" cy="21" r="15.91549430918954" fill="#fff"></circle>
-                      <circle class="ring" cx="21" cy="21" r="15.91549430918954" fill="transparent" stroke="#F1F1F1" stroke-width="3"></circle>
+                      <circle class="center" {{ shared_circle_props }}></circle>
+                      <circle class="ring" {{ shared_circle_props }}></circle>
                       <!-- The stroke-dashoffset should add up to 100, with the first value being the color -->
-                      <circle class="segment" cx="21" cy="21" r="15.91549430918954" fill="transparent" stroke="#F77B42" stroke-width="3" stroke-dasharray="{{ dis_oe_ring }}" stroke-dashoffset="25"></circle>
-                      <text x="50%" y="57%" text-anchor="middle">{{ dis_oe_l }}</text>
+                      <circle class="segment" {{ shared_circle_props }} stroke-dasharray="{{ dis_oe_ring }}"></circle>
+                      <text {{ shared_text_props }}>{{ dis_oe_l }}</text>
                     </svg>
                     <figcaption>Percent spent on <span class="term" data-term="operating expenditures" title="Click to define" tabindex="0">operating expenditures</span></figcaption>
                   </figure>
@@ -242,9 +214,13 @@
               </div>
             </div>
           </div>
-          <div class="heading--with-action">
-            <p class="heading__left t-note">The percentages shown do not represent 100% of this committee's activity. Refer to the tables that follow for a complete breakdown of raising and spending.</p>
-            <button class="heading__right button--alt js-methodology" data-a11y-dialog-show="methodology-committee-snapshot">Methodology</button>
+          <div class="footer-methodology">
+            <p class="t-note">
+              The percentages shown do not represent 100% of this committee's activity. Refer to the tables that follow for a complete breakdown of raising and spending.
+            </p>
+            <div>
+              <button class="button--alt js-methodology" data-a11y-dialog-show="methodology-committee-snapshot">Methodology</button>
+            </div>
           </div>
           <div class="js-modal modal" id="methodology-committee-snapshot" aria-hidden="true">
             <div tabindex="-1" class="modal__overlay" data-a11y-dialog-hide=""></div>
