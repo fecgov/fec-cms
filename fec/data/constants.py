@@ -481,12 +481,12 @@ line_numbers = {
             ('F3X-26', 'Loan repayments made (Line 26)'),
             ('F3X-27', 'Loans made (Line 27)'),
             ('F3X-28A',
-                'Refunds of Contributions Made to Individuals/Persons Other Than Political Committees (Line 28a)'),
+                'Refunds of contributions made to individuals/persons other than political committees (Line 28a)'),
             ('F3X-28B', 'Refunds of contributions to political party committees (Line 28b)'),
             ('F3X-28C', 'Refunds of contributions to other political committees (Line 28c)'),
             ('F3X-28D', 'Total contributions refunds (Line 28d)'),
             ('F3X-29', 'Other disbursements (Line 29)'),
-            ('F3X-30B', 'Party - Types 3 & 4 Federal Election Activity (FEA) (Line 30(b))'),
+            ('F3X-30B', 'Party - Types 3 & 4 Federal Election Activity (FEA) (Line 30b)'),
         ])
     }
 }
