@@ -118,7 +118,7 @@
   }
 
   .data-container__action {
-    @include span-columns(7);
+    @include span-columns(5);
     float: right;
     text-align: right;
   }
