@@ -34,6 +34,7 @@
             {{ missing_transferred.missing_transferred_committee_message(former_committee_name, former_authorized_candidate_name, former_authorized_candidate_id) }}
           </div>
         {% endif %}
+        {% if FEATURES.pac_snapshot %}
         <div class="entity__figure entity__figure--narrow" id="committee-snapshot">
           <div class="heading--section">
             <h3>Committee snapshot</h3>
@@ -243,6 +244,8 @@
             </div>
           </div>
         </div>
+        {# end pac_snapshot (next line) #}
+        {% endif %}
         <div class="entity__figure entity__figure--narrow" id="total-raised">
           <div class="heading--section heading--with-action">
             <h3 class="heading__left">Total raised</h3>
