@@ -89,21 +89,21 @@ function createElectionColumns(context) {
     },
     {
       data: 'party_full',
-      className: 'all'
+      className: 'min-desktop'
     },
     columns.currencyColumn({
       data: 'total_receipts',
-      className: 'column--number t-mono',
+      className: 'column--number t-mono all',
       orderSequence: ['desc', 'asc']
     }),
     columns.currencyColumn({
       data: 'total_disbursements',
-      className: 'column--number t-mono',
+      className: 'column--number t-mono all',
       orderSequence: ['desc', 'asc']
     }),
     columns.barCurrencyColumn({
       data: 'cash_on_hand_end_period',
-      className: 'column--number t-mono'
+      className: 'column--number t-mono all'
     }),
     {
       render: function(data, type, row) {
@@ -127,7 +127,7 @@ function createElectionColumns(context) {
           url: url
         });
       },
-      className: 'all',
+      className: 'min-desktop',
       orderable: false
     }
   ];
