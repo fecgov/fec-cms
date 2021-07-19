@@ -133,7 +133,9 @@
             {% endif %}
           {% endif %}
 
+          {% if com_type_glossary && com_type_text %}
           <p>Learn more about <span class="term" data-term="{{ com_type_glossary }}" title="Click to define" tabindex="0">{{ com_type_text }}</span> like {{ committee.name }}.</p>
+          {% endif %}
           <div class="tag__category">
             <div class="tag__item">Coverage dates: {{ coverage_str }}</div>
           </div>
