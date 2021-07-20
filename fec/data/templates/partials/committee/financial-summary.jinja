@@ -40,8 +40,8 @@
             <h3>Committee snapshot</h3>
           </div>
 
-          {% set shared_circle_props = 'cx=21 cy=21 r=15.91549430918954' %}
-          {% set shared_text_props = 'x=50% y=57%' %}
+          {% set shared_circle_props = 'cx="21" cy="21" r="15.91549430918954"' %}
+          {% set shared_text_props = 'x="50%" y="57%"' %}
           {% set coverage_str = totals.coverage_start_date|date ~' to ' ~totals.coverage_end_date|date %}
 
           {% if totals.individual_contributions_percent %}
@@ -156,11 +156,11 @@
                     <svg viewBox="0 0 42 42" class="donut {{ rec_ind_class }}" role="img" aria-labelledby="snap-raise-ind-t snap-raise-ind-d">
                       <title id="snap-raise-ind-t">Percent raised from individual conributions {{ coverage_str }}</title>
                       <desc id="snap-raise-ind-d">98% of money raised came from individual contributions</desc>
-                      <circle class="center" {{ shared_circle_props }}></circle>
-                      <circle class="ring" {{ shared_circle_props }}></circle>
-                      <circle class="segment" {{ shared_circle_props }} stroke-dasharray="{{ rec_ind_ring }}"></circle>
+                      <circle class="center" {{ shared_circle_props|safe }}></circle>
+                      <circle class="ring" {{ shared_circle_props|safe }}></circle>
+                      <circle class="segment" {{ shared_circle_props|safe }} stroke-dasharray="{{ rec_ind_ring }}"></circle>
                       <g class="chart-text">
-                        <text {{ shared_text_props }}>{{ rec_ind_l }}</text>
+                        <text {{ shared_text_props|safe }}>{{ rec_ind_l }}</text>
                       </g>
                     </svg>
                     <figcaption>Percent raised in individual <span class="term" data-term="contribution" title="Click to define" tabindex="0">contributions</span></figcaption>
@@ -171,11 +171,11 @@
                     <svg viewBox="0 0 42 42" class="donut {{ rec_com_class }}" aria-labelledby="snap-raise-com-t snap-raise-com-d">
                       <title id="snap-raise-com-t">Percent raised from other federal political committees {{ coverage_str }}</title>
                       <desc id="snap-raise-com-d">0% of money raised came from other federal political committees</desc>
-                      <circle class="center" {{ shared_circle_props }}></circle>
-                      <circle class="ring" {{ shared_circle_props }}></circle>
+                      <circle class="center" {{ shared_circle_props|safe }}></circle>
+                      <circle class="ring" {{ shared_circle_props|safe }}></circle>
                       <!-- The stroke-dashoffset should add up to 100, with the first value being the color -->
-                      <circle class="segment" {{ shared_circle_props }} stroke-dasharray="{{ rec_com_ring }}"></circle>
-                      <text {{ shared_text_props }}>{{ rec_com_l }}</text>
+                      <circle class="segment" {{ shared_circle_props|safe }} stroke-dasharray="{{ rec_com_ring }}"></circle>
+                      <text {{ shared_text_props|safe }}>{{ rec_com_l }}</text>
                     </svg>
                     <figcaption>Percent raised in contributions from other federal <span class="term" data-term="political committee" title="Click to define" tabindex="0">political committees</span></figcaption>
                   </figure>
@@ -190,11 +190,11 @@
                     <svg viewBox="0 0 42 42" class="donut {{ dis_com_class }}" role="img" aria-labelledby="snap-spend-com-t snap-spend-com-d">
                       <title id="snap-spend-com-t">Percent spent on contributions to other federal political committees {{ coverage_str }}</title>
                       <desc id="snap-spend-com-d">96% of money spent went to other federal political committees</desc>
-                      <circle class="center"{{ shared_circle_props }}></circle>
-                      <circle class="ring"{{ shared_circle_props }}></circle>
-                      <circle class="segment" {{ shared_circle_props }} stroke-dasharray="{{ dis_com_ring }}"></circle>
+                      <circle class="center"{{ shared_circle_props|safe }}></circle>
+                      <circle class="ring"{{ shared_circle_props|safe }}></circle>
+                      <circle class="segment" {{ shared_circle_props|safe }} stroke-dasharray="{{ dis_com_ring }}"></circle>
                       <g class="chart-text">
-                        <text {{ shared_text_props }}>{{ dis_com_l }}</text>
+                        <text {{ shared_text_props|safe }}>{{ dis_com_l }}</text>
                       </g>
                     </svg>
                     <figcaption>Percent spent on contributions to other <span class="term" data-term="national committee" title="Click to define" tabindex="0">federal committees</span></figcaption>
@@ -205,11 +205,11 @@
                     <svg viewBox="0 0 42 42" class="donut {{ dis_oe_class }}" role="img" aria-labelledby="snap-spend-ox-t snap-spend-ox-d">
                       <title id="snap-spend-ox-t">Percent spent on operating expenditures {{ coverage_str }}</title>
                       <desc id="snap-spend-ox-d">96% of money spent on operating expenditures</desc>
-                      <circle class="center" {{ shared_circle_props }}></circle>
-                      <circle class="ring" {{ shared_circle_props }}></circle>
+                      <circle class="center" {{ shared_circle_props|safe }}></circle>
+                      <circle class="ring" {{ shared_circle_props|safe }}></circle>
                       <!-- The stroke-dashoffset should add up to 100, with the first value being the color -->
-                      <circle class="segment" {{ shared_circle_props }} stroke-dasharray="{{ dis_oe_ring }}"></circle>
-                      <text {{ shared_text_props }}>{{ dis_oe_l }}</text>
+                      <circle class="segment" {{ shared_circle_props|safe }} stroke-dasharray="{{ dis_oe_ring }}"></circle>
+                      <text {{ shared_text_props|safe }}>{{ dis_oe_l }}</text>
                     </svg>
                     <figcaption>Percent spent on <span class="term" data-term="operating expenditures" title="Click to define" tabindex="0">operating expenditures</span></figcaption>
                   </figure>
