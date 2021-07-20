@@ -16,35 +16,22 @@ Template for PAC and party committee datatable details panel
     {{#panelRow "Designation"}}
       {{committee_designation_full}}
     {{/panelRow}}
-    {{!-- TODO: Update the API field names for leadership PAC sponsor when it's ready in the API --}}
-    {{!-- {{#if sponsor_candidate_ids}}
+    {{#if sponsor_candidate_list}}
       {{#panelRow "Leadership PAC sponsor"}}
-        {{#each sponsor_candidate_ids}}
-          <a href="{{ basePath }}/candidate/{{ sponsor_candidate_ids }}/"><span class="leadership_pac_sponsor_name">{{ sponsor_candidate_name }}</span> ({{ sponsor_candidate_ids }})</a>;<br />
+        {{#each sponsor_candidate_list}}
+          <a href="{{basePath}}/candidate/{{ sponsor_candidate_id }}/"><span class="leadership_pac_sponsor_name">{{ sponsor_candidate_name }}</span> ({{ sponsor_candidate_id }})</a>{{#unless @last}};<br />{{/unless}}
         {{/each}}
       {{/panelRow}}
-    {{/if}} --}}
+    {{/if}}
     {{#panelRow "Most recent treasurer"}}
       {{ treasurer_name }}
     {{/panelRow}}
     {{#panelRow "State"}}
       {{ committee_state }}
     {{/panelRow}}
-    <tr>
-      <td class="panel__term">
-        <span>Filing frequency</span>
-        <div class="tooltip__container">
-          <button class="tooltip__trigger" type="button"><span class="u-visually-hidden">Learn more</span></button>
-          <div id="unique-tooltip" role="tooltip" class="tooltip tooltip--under tooltip--left">
-            {{!-- TODO: Add final tooltip language --}}
-            <p class="tooltip__content">Filing freqency description goes here.</p>
-          </div>
-        </div>
-      </td>
-      <td class="panel__data">
-        {{ filing_frequency_full }}
-      </td>
-    </tr>
+    {{#panelRow "Filing frequency"}}
+      {{ filing_frequency_full }}
+    {{/panelRow}}
     {{#panelRow "First filing date"}}
       {{ datetime first_file_date format="pretty" }}
     {{/panelRow}}
@@ -62,21 +49,9 @@ Template for PAC and party committee datatable details panel
     {{#panelRow "Receipts"}}
       {{ currency receipts }}
     {{/panelRow}}
-    <tr>
-      <td class="panel__term">
-        <span>Individual contributions</span>
-        <div class="tooltip__container">
-          <button class="tooltip__trigger" type="button"><span class="u-visually-hidden">Learn more</span></button>
-          <div id="unique-tooltip" role="tooltip" class="tooltip tooltip--under tooltip--left">
-            {{!-- TODO: Add final tooltip language --}}
-            <p class="tooltip__content">A gift, subscription, loan, advance or deposit of money or anything of value given to influence a federal election; or the payment by any person of compensation for the personal services of another person if those services are rendered without charge to a political committee for any purpose. 11 CFR 100.52(a) and 100.54.</p>
-          </div>
-        </div>
-      </td>
-      <td class="panel__data">
-        {{ currency individual_contributions }}
-      </td>
-    </tr>
+    {{#panelRow "Individual contributions"}}
+      {{ currency individual_contributions }}
+    {{/panelRow}}
     {{#panelRow "Disbursements"}}
       {{ currency disbursements }}
     {{/panelRow}}
@@ -86,7 +61,6 @@ Template for PAC and party committee datatable details panel
         <div class="tooltip__container">
           <button class="tooltip__trigger" type="button"><span class="u-visually-hidden">Learn more</span></button>
           <div id="unique-tooltip" role="tooltip" class="tooltip tooltip--under tooltip--left">
-            {{!-- TODO: Add final tooltip language --}}
             <p class="tooltip__content">The total amount of cash on hand that remains after the amount of cash on hand at the beginning of the reporting period is adjusted to add the total receipts for the reporting period and subtract the total disbursements for the reporting period.</p>
           </div>
         </div>
