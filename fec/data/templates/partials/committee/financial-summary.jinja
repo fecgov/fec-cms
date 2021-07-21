@@ -44,18 +44,20 @@
           {% set shared_text_props = 'x="50%" y="57%"' %}
           {% set coverage_str = totals.coverage_start_date|date ~' to ' ~totals.coverage_end_date|date %}
 
-          {% if totals.individual_contributions_percent %}
-            {% set rec_ind = totals.individual_contributions_percent|round|int %}
+          {% if totals.individual_contributions_percent or totals.individual_contributions_percent == 0 %}
+            {% set rec_ind = totals.individual_contributions_percent %}
             {% set rec_ind_class = 'raising' %}
             {% set rec_ind_ring = '0 100' %}
-            {% set rec_ind_l = rec_ind ~'%' %}
-            {% if rec_ind > 100 %}
-            {% set rec_ind_l = '>100%' %}
-            {% set rec_ind_ring = '100 0' %}
+            {% set rec_ind_l = rec_ind|round|int ~'%' %}
+            {% if rec_ind == 0 %}
+              {% set rec_ind_l = '0%' %}
+            {% elif rec_ind > 100 %}
+              {% set rec_ind_l = '>100%' %}
+              {% set rec_ind_ring = '100 0' %}
             {% elif rec_ind > 0 and rec_ind < 1 %}
-            {% set rec_ind_l = '<1%' %}
+              {% set rec_ind_l = '<1%' %}
             {% else %}
-            {% set rec_ind_ring = rec_ind ~ ' ' ~ (100 - rec_ind) %}
+              {% set rec_ind_ring = rec_ind|round|int ~ ' ' ~ (100 - rec_ind|round|int) %}
             {% endif %}
           {% else %}
             {% set rec_ind_l = '!' %}
@@ -63,18 +65,20 @@
             {% set rec_ind_class = '' %}
           {% endif %}
 
-          {% if totals.party_and_other_committee_contributions_percent %}
+          {% if totals.party_and_other_committee_contributions_percent or totals.party_and_other_committee_contributions_percent == 0 %}
             {% set rec_com = totals.party_and_other_committee_contributions_percent|round|int %}
             {% set rec_com_class = 'raising' %}
             {% set rec_com_ring = '0 100' %}
             {% set rec_com_l = rec_com ~'%' %}
-            {% if rec_com > 100 %}
-            {% set rec_com_l = '>100%' %}
-            {% set rec_com_ring = '100 0' %}
+            {% if rec_com == 0 %}
+              {% set rec_com_l = '0%' %}
+            {% elif rec_com > 100 %}
+              {% set rec_com = '>100%' %}
+              {% set rec_com_ring = '100 0' %}
             {% elif rec_com > 0 and rec_com < 1 %}
-            {% set rec_com_l = '<1%' %}
+              {% set rec_com_l = '<1%' %}
             {% else %}
-            {% set rec_com_ring = rec_com ~ ' ' ~ (100 - rec_com) %}
+              {% set rec_com_ring = rec_com ~ ' ' ~ (100 - rec_com) %}
             {% endif %}
           {% else %}
             {% set rec_com_l = '!' %}
@@ -82,18 +86,20 @@
             {% set rec_com_class = '' %}
           {% endif %}
 
-          {% if totals.contributions_ie_and_party_expenditures_made_percent %}
+          {% if totals.contributions_ie_and_party_expenditures_made_percent or totals.contributions_ie_and_party_expenditures_made_percent == 0 %}
             {% set dis_com = totals.contributions_ie_and_party_expenditures_made_percent|round|int %}
             {% set dis_com_class = 'spending' %}
             {% set dis_com_ring = '0 100' %}
             {% set dis_com_l = dis_com ~'%' %}
-            {% if dis_com > 100 %}
-            {% set dis_com_l = '>100%' %}
-            {% set dis_com_ring = '100 0' %}
+            {% if dis_com == 0 %}
+              {% set dis_com_l = '0%' %}
+            {% elif dis_com > 100 %}
+              {% set dis_com_l = '>100%' %}
+              {% set dis_com_ring = '100 0' %}
             {% elif dis_com > 0 and dis_com < 1 %}
-            {% set dis_com_l = '<1%' %}
+              {% set dis_com_l = '<1%' %}
             {% else %}
-            {% set dis_com_ring = dis_com ~ ' ' ~ (100 - dis_com) %}
+              {% set dis_com_ring = dis_com ~ ' ' ~ (100 - dis_com) %}
             {% endif %}
           {% else %}
             {% set dis_com_l = '!' %}
@@ -101,18 +107,20 @@
             {% set dis_com_class = '' %}
           {% endif %}
 
-          {% if totals.operating_expenditures_percent %}
+          {% if totals.operating_expenditures_percent or totals.operating_expenditures_percent == 0 %}
             {% set dis_oe = totals.operating_expenditures_percent|round|int %}
             {% set dis_oe_class = 'spending' %}
             {% set dis_oe_ring = '0 100' %}
             {% set dis_oe_l = dis_oe ~'%' %}
-            {% if dis_oe > 100 %}
-            {% set dis_oe_l = '>100%' %}
-            {% set dis_oe_ring = '100 0' %}
+            {% if dis_oe == 0 %}
+              {% set dis_oe_l = '0%' %}
+            {% elif dis_oe > 100 %}
+              {% set dis_oe_l = '>100%' %}
+              {% set dis_oe_ring = '100 0' %}
             {% elif dis_oe > 0 and dis_oe < 1 %}
-            {% set dis_oe_l = '<1%' %}
+              {% set dis_oe_l = '<1%' %}
             {% else %}
-            {% set dis_oe_ring = dis_oe ~ ' ' ~ (100 - dis_oe) %}
+              {% set dis_oe_ring = dis_oe ~ ' ' ~ (100 - dis_oe) %}
             {% endif %}
           {% else %}
             {% set dis_oe_l = '!' %}
