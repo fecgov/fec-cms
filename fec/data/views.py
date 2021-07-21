@@ -460,7 +460,7 @@ def get_committee(committee_id, cycle):
     com_org_type = committee.get('organization_type')
     com_com_type = committee.get('committee_type')
     com_desig = committee.get('designation')
-    # The big "can't be" tests for the others
+    # The big "can't be" tests for organization_types
     if com_org_type == 'C':
         com_type_text = 'corporate'
         com_type_glossary = 'Corporation'
@@ -479,9 +479,7 @@ def get_committee(committee_id, cycle):
     elif com_org_type == 'V':
         com_type_text = 'cooperatives'
         com_type_glossary = ''
-    elif com_org_type == 'D':
-        com_type_text = 'leadership PACs'
-        com_type_glossary = ''
+    # The three biggies which are also 'not' rules for committee_type
     elif com_com_type == 'H':
         com_type_text = '[H committee_type]'
         com_type_glossary = ''
@@ -491,12 +489,14 @@ def get_committee(committee_id, cycle):
     elif com_com_type == 'P':
         com_type_text = '[P committee_type]'
         com_type_glossary = ''
+    # regular designation with no other rules
     elif com_desig == 'B':
         com_type_text = 'lobbyist-registrant PACs'
         com_type_glossary = 'Lobbyist/Registrant PAC'
     elif com_desig == 'D':
         com_type_text = 'leadership PACs'
         com_type_glossary = 'Leadership PAC'
+    # 'not' rules for designation
     elif com_desig == 'J':
         com_type_text = 'joint fundraising committees'
         com_type_glossary = 'Joint fundraising committee'
@@ -506,6 +506,7 @@ def get_committee(committee_id, cycle):
     elif com_desig == 'P':
         com_type_text = '[P designation]'
         com_type_glossary = ''
+    # all the others that were restricted by the 'not' rules above
     elif com_com_type == 'O':
         com_type_text = 'super PACs'
         com_type_glossary = 'Super PAC'
