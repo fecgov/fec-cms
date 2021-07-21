@@ -21,6 +21,11 @@
   }
 
   .snapshot-summary {
+    border-bottom: 1px solid $gray-light;
+    border-top: 1px solid $federal-blue;
+    margin-bottom: 1rem;
+    margin-top: 1rem;
+    padding-bottom: 1rem;
     padding-top: 1rem;
 
     .divider {
@@ -36,10 +41,10 @@
       @include media($med) {
         &:not(:last-of-type) {
           border-right: 1px solid;
-          margin-right: 1em;
-          padding-right: 1em;
-        }
-      } 
+          margin-right: 10px;
+          padding-right: 10px;
+        } 
+      }
     }
     > span {
       display: block;
@@ -109,12 +114,60 @@
   }
 
   figcaption {
+    font-family: $sans-serif;
+    line-height: 1.25em;
     text-align: left;
     width: 66.6%;
-
+    
     @include media($med) {
+      margin-bottom: 1em;
+      padding: 0 1em;
       text-align: center;
       width: initial;
+    }
+  }
+
+  .donuts-all {
+    margin-bottom: 1rem;
+
+    .donuts-head {
+      margin-bottom: 0;
+    }
+
+    @include media($med) {
+      display: flex;
+      position: relative;
+
+      .donuts-pair {
+        position: relative;
+        width: 50%;
+
+        .donuts-head {
+          width: 100%;
+          margin-bottom: 1rem;
+        }
+        .donut-cell {
+          float: left;
+          margin-left: 0;
+          margin-right: 0;
+          width: 50%;
+          
+          &:first-child {
+            border-right: 1px solid $gray-light;
+          }
+        }
+      }
+
+      &:after {
+        content: "";
+        display: block;
+        position: absolute;
+        background: $gray-light;
+        height: 90%;
+        width: 1px;
+        top: 5%;
+        left: 50%;
+      }
     }
   }
 
