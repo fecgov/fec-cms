@@ -176,8 +176,9 @@ Calendar.prototype.success = function(response) {
     var processed = {
       category: event.category,
       location: event.location,
-      title: event.description || 'Event title',
-      summary: event.description || 'Event summary',
+      title: event.summary || 'Event title',
+      summary: event.summary || 'Event summary',
+      description: event.description || 'Event description',
       state: event.state ? event.state.join(', ') : null,
       start: event.start_date ? moment(event.start_date) : null,
       hasStartTime: calendarHelpers.checkStartTime(event),

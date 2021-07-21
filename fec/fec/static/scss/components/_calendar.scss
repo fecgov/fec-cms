@@ -296,8 +296,7 @@
 
 .cal-details__date {
   display: block;
-  font-weight: bold;
-  padding-bottom: u(1rem);
+  padding-bottom: u(.5rem);
 }
 
 .cal-details__title {
@@ -308,6 +307,13 @@
 }
 
 .cal-details__summary {
+  display: block;
+  font-weight: bold;
+  line-height: 1.2;
+  padding-bottom: u(1rem);
+}
+
+.cal-details__description {
   display: block;
   line-height: 1.2;
   padding-bottom: u(.5rem);
