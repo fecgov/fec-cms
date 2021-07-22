@@ -19,10 +19,11 @@
               &nbsp;
             {{/if}}
           </div>
-          <div class="cal-list__description" id="cal-description-{{@index}}">
-            <p>{{summary}}</p>
+          <div class="cal-list__info" id="cal-info-{{@index}}">
+            <p class="cal-list__summary" id="cal-summary-{{@index}}">{{summary}}</p>
+            <p id="cal-description-{{@index}}"> {{description}}</p>
             {{#if location}}
-              <span class="cal-list__location">&ndash; {{location}}</span>
+              <span class="cal-list__location">Location: {{location}}</span>
             {{/if}}
             {{#if detailUrl}}
               <span class="cal-list__details"><a class="t-bold" href="{{detailUrl}}" aria-describedby="cal-description-{{@index}}">Learn more</a></span>
