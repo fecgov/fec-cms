@@ -159,6 +159,10 @@ font-family: $serif
   color: $gray-dark;
 }
 
+.t-low-height {
+  line-height: u(2rem);
+}
+
 .h1 {
   @include heading(h1);
 }

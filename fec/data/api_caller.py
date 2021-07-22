@@ -226,9 +226,6 @@ def load_legal_admin_fines(admin_fine_no):
     if not admin_fine:
         raise Http404
     admin_fine = admin_fine["docs"][0]
-    admin_fine["disposition_text"] = [
-        d["action"] for d in admin_fine["commission_votes"]
-    ]
     documents_by_type = OrderedDict()
     for doc in admin_fine["documents"]:
         if doc["category"] in documents_by_type:

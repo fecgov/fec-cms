@@ -34,25 +34,25 @@
         <table class="usa-width-two-thirds">
           <tbody>
             <tr>
-              <td class="u-padding--right"><p class="u-margin--bottom"><strong>Report:</strong></p></td>
-              <td><p class="u-margin--bottom">{{ admin_fine.report_type }}, {{ admin_fine.report_year }}</p></td>
+              <td class="u-padding--right"><p class="u-margin--bottom t-bold t-low-height">Report:</p></td>
+              <td><p class="u-margin--bottom t-low-height">{{ admin_fine.report_type }}, {{ admin_fine.report_year }}</p></td>
             </tr>
             <tr>
-              <td class="u-padding--right"><p class="u-margin--bottom"><strong>Committee name:</strong></p></td>
-              <td><p class="u-margin--bottom">{{ admin_fine.name }}</p></td>
+              <td class="u-padding--right"><p class="u-margin--bottom t-bold t-low-height">Committee name:</p></td>
+              <td><p class="u-margin--bottom t-low-height">{{ admin_fine.name }}</p></td>
             </tr>
             <tr>
-              <td class="u-padding--right"><p class="u-margin--bottom"><strong>Closing date:</strong></p></td>
-              <td><p class="u-margin--bottom">{{ admin_fine.final_determination_date | date(fmt='%m/%d/%Y') }}</p></td>
+              <td class="u-padding--right"><p class="u-margin--bottom t-bold t-low-height">Closing date:</p></td>
+              <td><p class="u-margin--bottom t-low-height">{{ admin_fine.final_determination_date | date(fmt='%m/%d/%Y') }}</p></td>
             </tr>
             <tr>
-              <td class="u-padding--right"><p class="u-margin--bottom"><strong>Assessed civil penalty:</strong></p></td>
-              <td><p class="u-margin--bottom">{{ admin_fine.final_determination_amount | currency or '' }}</p></td>
+              <td class="u-padding--right"><p class="u-margin--bottom t-bold t-low-height">Assessed civil penalty:</p></td>
+              <td><p class="u-margin--bottom t-low-height">{{ admin_fine.final_determination_amount | currency or '' }}</p></td>
             </tr>
             {% if admin_fine.final_determination_amount != 0 %}
               <tr>
-                <td class="u-padding--right"><p class="u-margin--bottom"><strong>Civil penalty due date:</strong></p></td>
-                <td><p class="u-margin--bottom">{{ admin_fine.civil_penalty_due_date | date(fmt='%m/%d/%Y') or 'No date available' }}, {{ admin_fine.civil_penalty_payment_status or 'No status available' }}{% if admin_fine.payment_amount != none %}, {{ admin_fine.payment_amount | currency or '' }}{% endif %}</p>
+                <td class="u-padding--right"><p class="u-margin--bottom t-bold t-low-height">Civil penalty due date:</p></td>
+                <td><p class="u-margin--bottom t-low-height">{{ admin_fine.civil_penalty_due_date | date(fmt='%m/%d/%Y') or 'No date available' }}, {{ admin_fine.civil_penalty_payment_status or 'No status available' }}{% if admin_fine.payment_amount != none %}, {{ admin_fine.payment_amount | currency or '' }}{% endif %}</p>
                 </td>
               </tr>
             {% endif %}
@@ -62,11 +62,6 @@
     </section>
     <section id="disposition" class="content__section">
       <h2 class="t-ruled--bold">Disposition</h2>
-      <div class="legal-admin_fine__property">
-        <p>
-          {{ '<br>'.join(admin_fine['disposition_text']) | safe | replace('RTB', 'reason to believe') }}
-        </p>
-      </div>
       <table class="data-table simple-table">
         <thead>
           <tr>
@@ -82,7 +77,7 @@
               {% for item in admin_fine.disposition_items[item] %}
                 <tr class="{{ itemloop.cycle('row-color-normal', 'row-color-contrast') }}">
                   <td>{{ item.disposition_description | replace('RTB', 'Reason to believe')}}</td>
-                  <td>{{ item.amount  | currency or 'No amount' }}</td>
+                  <td>{{ item.amount  | currency or 'Not applicable' }}</td>
                   <td>{{ item.disposition_date | date(fmt='%m/%d/%Y') }}</td>
                 </tr>
               {% endfor %}
