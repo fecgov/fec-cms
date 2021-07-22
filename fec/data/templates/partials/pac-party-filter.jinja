@@ -29,7 +29,7 @@
     <div class="accordion__content">
       {{ range.amount('receipts', 'Total receipts') }}
       {{ range.amount('disbursements', 'Total disbursements') }}
-      {{ range.amount('last_cash_on_hand_end_period', 'Ending cash on hand') }}
+      {{ range.amount('last_cash_on_hand_end_period', 'Ending cash on hand', tooltip = 'The total amount of cash on hand that remains after the amount of cash on hand at the beginning of the reporting period is adjusted to add the total receipts for the reporting period and subtract the total disbursements for the reporting period.') }}
       {{ range.amount('last_debts_owed_by_committee', 'Debts owed by committee') }}
     </div>
   </div>
