@@ -193,10 +193,10 @@ ElectionSearch.prototype.search = function(e, opts) {
             .toString()
         );
         analytics.pageView();
-        self.$resultsHeading.show()
+        self.$resultsHeading.show();
       }
     } else if (self.results) {
-      self.$resultsHeading.show()
+      self.$resultsHeading.show();
       // Requested options match saved options; redraw cached results. This
       // ensures that clicking on a state or district will highlight it when
       // the search options don't match the state of the map, e.g. after the
@@ -219,16 +219,6 @@ ElectionSearch.prototype.handlePopState = function() {
   this.$cycle.val(params.cycle || this.$cycle.val());
   this.performSearch(null, { pushState: false });
 };
-
-//Update history upon changes to parameters
-ElectionSearch.prototype.handlePushState = function() {
-  var params = URI.parseQuery(window.location.search);
-  var urlParams = new URLSearchParams(params);
-  var isState = urlParams.get('state');
-  if (isState) {
-    this.$resultsHeading.show()
-  }
-}
 
 //search presidential elections only if no other parameters (zip, state, district) are present
 ElectionSearch.prototype.getPresidentialElections = function() {
