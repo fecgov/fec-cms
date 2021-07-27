@@ -118,7 +118,7 @@
   }
 
   .data-container__action {
-    @include span-columns(7);
+    @include span-columns(5);
     float: right;
     text-align: right;
   }
@@ -160,5 +160,18 @@
       float: right;
       width: 100%;
     }
+  }
+}
+
+
+//Responsive behavior for datatables in tab pannels on profile pages (committee, candidate, election)
+@media screen and (max-width: 940px) {
+  .data-container__wrapper .main__content--right-full {
+    display: block
+   }
+
+  .data-container__wrapper .side-nav-alt {
+    display: block;
+    width:auto;
   }
 }

@@ -183,7 +183,7 @@
   }
 
   &::after {
-    @include linear-gradient(90deg, rgba($inverse, 0), $inverse);
+    @include linear-gradient(90deg, rgba($gray-lightest, 0), $gray-lightest);
     content: '';
     display: block;
     position: absolute;
@@ -521,7 +521,6 @@
     padding: u(3px .5rem);
 
     .fc-title {
-      float: left;
       font-weight: bold;
       height: auto;
       line-height: u(2rem);

@@ -139,7 +139,6 @@
 
 .tooltip--under {
   $top: u(1.5rem);
-  width: u(12rem);
   left: u(-14rem);
   top: calc(100% + #{$top});
 
@@ -259,9 +258,17 @@
     @include clearfix();
     background: $primary;
     color: $inverse;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
 
+    .tooltip__title {
+      flex-grow: 2;
+      text-align: left;
+    }
     .button {
       float: right;
+      flex-grow: 0;
     }
   }
 

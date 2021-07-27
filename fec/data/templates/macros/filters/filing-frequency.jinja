@@ -1,0 +1,25 @@
+{% macro field(name='filing_frequency') %}
+  <div class="filter">
+    <fieldset class="js-filter" data-filter="checkbox">
+      <label class="label t-inline-block" for="filing-frequency">Filing frequency</label>
+      <ul>
+        <li>
+          <input id="filing-frequency-quarterly" name={{ name }} type="checkbox" value="Q">
+          <label for="filing-frequency-quarterly">Quarterly (election years)</label>
+        </li>
+        <li>
+          <input id="filing-frequency-monthly" name={{ name }} type="checkbox" value="M">
+          <label for="filing-frequency-monthly">Monthly</label>
+        </li>
+        <li>
+          <input id="filing-frequency-terminated" name={{ name }} type="checkbox" value="T">
+          <label for="filing-frequency-terminated">Terminated</label>
+        </li>
+        <li>
+          <input id="filing-frequency-admin-terminated" name={{ name }} type="checkbox" value="A">
+          <label for="filing-frequency-admin-terminated">Administratively terminated</label>
+        </li>
+      </ul>
+    </fieldset>
+  </div>
+{% endmacro %}

@@ -17,9 +17,15 @@
     </div>
   {% else %}
     <h3>
+      {% if document.file_url %}
       <a href="{{ document.file_url }}">{{ document.title }}</a>
+      {% else %}
+      {{ document.title }}
+      {% endif %}
+      {% if document.extension is not '' %}
       <i class="icon icon--inline--right icon--inline--left i-document"></i>
       <span class="t-sans t-normal">({{ document.extension }}){% if document.size %} | ({{ document.size }}){% endif %}</span>
+      {% endif %}
     </h3>
   {% endif %}
     <div class="post__meta">
