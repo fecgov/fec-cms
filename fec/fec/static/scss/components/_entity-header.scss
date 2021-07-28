@@ -141,8 +141,12 @@
   @include u-bg--neutral();
 
   .entity__info,
-  .entity__type  {
+  .entity__type {
     border-color: $primary;
+    
+    &:last-of-type {
+      border-right: none;
+    }
   }
 }
 
