@@ -669,7 +669,7 @@ class CustomPage(Page):
     ]
 
     def get_admin_display_title(self):
-        return self.menu_title if self.menu_title else self.title
+        return self.draft_title or self.menu_title or self.title
 
     @property
     def content_section(self):
@@ -899,7 +899,7 @@ class CollectionPage(Page):
     ]
 
     def get_admin_display_title(self):
-        return self.menu_title if self.menu_title else self.title
+        return self.draft_title or self.menu_title or self.title
 
     @property
     def content_section(self):
@@ -963,7 +963,7 @@ class ResourcePage(Page):
     ]
 
     def get_admin_display_title(self):
-        return self.menu_title if self.menu_title else self.title
+        return self.draft_title or self.menu_title or self.title
 
     @property
     def display_date(self):
