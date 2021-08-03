@@ -193,6 +193,7 @@ ElectionSearch.prototype.search = function(e, opts) {
             .toString()
         );
         analytics.pageView();
+        self.$resultsHeading.show();
       }
     } else if (self.results) {
       self.$resultsHeading.show();
