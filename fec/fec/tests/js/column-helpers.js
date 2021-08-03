@@ -217,9 +217,9 @@ describe('column helpers', function() {
 
   describe('stateColumns', function() {
     it('should build a stateColumns from context and results', function() {
-      var results = columnHelpers.stateColumns(houseResults, context);
+      var results = columnHelpers.stateColumns($(houseResults), context);
       expect(results).to.be.an('array');
-      expect(results.length).to.equal(houseResults.length+1);
+      expect(results.length).to.equal(houseResults.length + 1);
     });
   });
 

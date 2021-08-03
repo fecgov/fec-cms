@@ -1,0 +1,76 @@
+{{!--
+Template for PAC and party committee datatable details panel
+--}}
+
+<div class="panel__row">
+  <h4 class="panel__title u-padding--bottom">
+    <a href="{{basePath}}/committee/{{committee_id}}/">{{committee_name}}</a>
+  </h4>
+  <h4 class="panel__title">
+    Committee information
+  </h4>
+  <table>
+    {{#panelRow "Committee type"}}
+      {{committee_type_full}}
+    {{/panelRow}}
+    {{#panelRow "Designation"}}
+      {{committee_designation_full}}
+    {{/panelRow}}
+    {{#if sponsor_candidate_list}}
+      {{#panelRow "Leadership PAC sponsor"}}
+        {{#each sponsor_candidate_list}}
+          <a href="{{basePath}}/candidate/{{ sponsor_candidate_id }}/"><span class="leadership_pac_sponsor_name">{{ sponsor_candidate_name }}</span> ({{ sponsor_candidate_id }})</a>{{#unless @last}};<br />{{/unless}}
+        {{/each}}
+      {{/panelRow}}
+    {{/if}}
+    {{#panelRow "Most recent treasurer"}}
+      {{ treasurer_name }}
+    {{/panelRow}}
+    {{#panelRow "State"}}
+      {{ committee_state }}
+    {{/panelRow}}
+    {{#panelRow "Filing frequency"}}
+      {{ filing_frequency_full }}
+    {{/panelRow}}
+    {{#panelRow "First filing date"}}
+      {{ datetime first_file_date format="pretty" }}
+    {{/panelRow}}
+  </table>
+</div>
+
+<div class="panel__row">
+  <h4 class="panel__title">
+    Financial totals for {{ format_range cycle }}
+  </h4>
+  <table>
+    {{#panelRow "Coverage end date"}}
+      {{ datetime coverage_end_date format="pretty" }}
+    {{/panelRow}}
+    {{#panelRow "Receipts"}}
+      {{ currency receipts }}
+    {{/panelRow}}
+    {{#panelRow "Individual contributions"}}
+      {{ currency individual_contributions }}
+    {{/panelRow}}
+    {{#panelRow "Disbursements"}}
+      {{ currency disbursements }}
+    {{/panelRow}}
+    <tr>
+      <td class="panel__term">
+        Ending cash on hand
+        <div class="tooltip__container">
+          <button class="tooltip__trigger" type="button"><span class="u-visually-hidden">Learn more</span></button>
+          <div id="unique-tooltip" role="tooltip" class="tooltip tooltip--under tooltip--left">
+            <p class="tooltip__content">The total amount of cash on hand that remains after the amount of cash on hand at the beginning of the reporting period is adjusted to add the total receipts for the reporting period and subtract the total disbursements for the reporting period.</p>
+          </div>
+        </div>
+      </td>
+      <td class="panel__data">
+        {{ currency last_cash_on_hand_end_period }}
+      </td>
+    </tr>
+    {{#panelRow "Debts owed by committee"}}
+      {{ currency last_debts_owed_by_committee }}
+    {{/panelRow}}
+  </table>
+</div>

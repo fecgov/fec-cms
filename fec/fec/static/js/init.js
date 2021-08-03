@@ -115,5 +115,6 @@ $(document).ready(function() {
     } else {
       $link.remove();
     }
+    $p.nextAll().remove()
   });
 });

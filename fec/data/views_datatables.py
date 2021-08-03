@@ -51,6 +51,18 @@ def committees(request):
     })
 
 
+def pac_party(request):
+
+    return render(request, 'datatable.jinja', {
+        'parent': 'data',
+        'result_type': 'pac_party',
+        'slug': 'pac-party',
+        'title': 'Political action and party committees',
+        'columns': constants.table_columns['pac-party'],
+        'social_image_identifier': 'data',
+    })
+
+
 def communication_costs(request):
     return render(request, 'datatable.jinja', {
         'parent': 'data',
