@@ -52,7 +52,8 @@
             {% if admin_fine.final_determination_amount != 0 %}
               <tr>
                 <td class="u-padding--right"><p class="u-margin--bottom t-bold t-low-height">Civil penalty due date:</p></td>
-                <td><p class="u-margin--bottom t-low-height">{{ admin_fine.civil_penalty_due_date | date(fmt='%m/%d/%Y') or 'No date available' }}, {{ admin_fine.civil_penalty_payment_status or 'No status available' }}{% if admin_fine.payment_amount != none %}, {{ admin_fine.payment_amount | currency or '' }}{% endif %}</p>
+                <td><p class="u-margin--bottom t-low-height">{{ admin_fine.civil_penalty_due_date | date(fmt='%m/%d/%Y') or 'No date available' }}, {{ admin_fine.civil_penalty_payment_status or 'No status available' }}
+                {% if admin_fine.civil_penalty_payment_status == 'Partially Paid' %} {{ admin_fine.payment_amount | currency or '' }}{% endif %}</p>
                 </td>
               </tr>
             {% endif %}
