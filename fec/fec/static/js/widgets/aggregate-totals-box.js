@@ -16,11 +16,7 @@ const isModernBrowser = 'fetch' in window && 'assign' in Object;
 // Includes
 import analytics from '../modules/analytics';
 import { buildUrl } from '../modules/helpers';
-import {
-  defaultElectionYear,
-  electionYearsOptions,
-  officeDefs
-} from './widget-vars';
+import { electionYearsOptions, officeDefs } from './widget-vars';
 
 /**
  * Handles the functionality for the aggregate totals box(es).
@@ -49,7 +45,7 @@ function AggregateTotalsBox() {
   this.basePath_partyTotals = ['candidates', 'totals', 'by_office', 'by_party'];
   this.baseQuery = {
     office: 'P',
-    election_year: defaultElectionYear(),
+    election_year: window.DEFAULT_ELECTION_YEAR,
     is_active_candidate: true,
     per_page: 20,
     sort_null_only: false,

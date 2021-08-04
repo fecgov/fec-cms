@@ -524,6 +524,27 @@
   }
 }
 
+#ie_warning {
+  display:none;
+  background-color: #000;
+  padding: 15px;
+}
+
+#ie_warning p {
+  color:#fff;
+  font-size: 16px;
+}
+
+#ie_warning h2 {
+  color:#fff;
+}
+
+@media screen and (-ms-high-contrast: none) {
+  #ie_warning {
+    display:block !important;
+  }
+}
+
 @media print {
   .disclaimer {
     display: none;

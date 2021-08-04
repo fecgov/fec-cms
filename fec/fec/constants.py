@@ -182,7 +182,8 @@ annual_anniversary_reports = OrderedDict((x.lower(), x) for x in [
 agency_operations_reports = OrderedDict((x.lower(), x) for x in [
     "Gift report",
     "Shutdown plan",
-    "Study"
+    "Study",
+    "Other reports and plans"
 ])
 
 # This maps each group to a key for reference later on

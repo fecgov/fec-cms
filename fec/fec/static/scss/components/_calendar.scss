@@ -183,7 +183,7 @@
   }
 
   &::after {
-    @include linear-gradient(90deg, rgba($inverse, 0), $inverse);
+    @include linear-gradient(90deg, rgba($gray-lightest, 0), $gray-lightest);
     content: '';
     display: block;
     position: absolute;
@@ -296,8 +296,7 @@
 
 .cal-details__date {
   display: block;
-  font-weight: bold;
-  padding-bottom: u(1rem);
+  padding-bottom: u(.5rem);
 }
 
 .cal-details__title {
@@ -308,6 +307,13 @@
 }
 
 .cal-details__summary {
+  display: block;
+  font-weight: bold;
+  line-height: 1.2;
+  padding-bottom: u(1rem);
+}
+
+.cal-details__description {
   display: block;
   line-height: 1.2;
   padding-bottom: u(.5rem);
@@ -449,6 +455,13 @@
   }
 }
 
+.cal-list__summary {
+  display: block;
+  font-weight: bold;
+  line-height: 1.2;
+  margin: 0 0 .5rem 0;
+}
+
 .cal-list__date {
   @include span-columns(4 of 8);
   font-weight: bold;
@@ -459,7 +472,7 @@
   @include omega();
 }
 
-.cal-list__description {
+.cal-list__info {
   @include span-columns(8 of 8);
   padding-top: u(2rem);
 
@@ -521,7 +534,6 @@
     padding: u(3px .5rem);
 
     .fc-title {
-      float: left;
       font-weight: bold;
       height: auto;
       line-height: u(2rem);
@@ -636,7 +648,7 @@
     @include span-columns(1 of 10);
   }
 
-  .cal-list__description {
+  .cal-list__info {
     @include span-columns(6 of 10);
     padding-top: 0;
   }

@@ -219,7 +219,7 @@ function sizeColumns(context) {
 
 function stateColumns(results, context) {
   var stateColumn = { data: 'state' };
-  var columns = results.map(function(result) {
+  var columns = results.toArray().map(function(result) {
     return makeCommitteeColumn({ data: result.candidate_id }, context, function(
       data,
       type,

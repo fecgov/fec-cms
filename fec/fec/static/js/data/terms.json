@@ -56,8 +56,8 @@
     "definition": "A unique identifier assigned to each candidate registered with the FEC. The initial character indicates the office sought. (H)ouse, (S)enate, (P)resident. If a person runs for several offices, they will have separate IDs for each office."
   },
   {
-    "term": "Cash-on-hand",
-    "definition": "Cash-on-hand includes funds held in checking and savings accounts, certificates of deposit, petty cash funds, traveler’s checks, treasury bills and other investments valued at cost. <a href=\"https://www.fec.gov/regulations/104-3/CURRENT#104-3-a-1\">11 CFR 104.3(a)(1)</a>."
+    "term": "Cash on hand",
+    "definition": "Cash on hand includes funds held in checking and savings accounts, certificates of deposit, petty cash funds, traveler’s checks, treasury bills and other investments valued at cost. <a href=\"https://www.fec.gov/regulations/104-3/CURRENT#104-3-a-1\">11 CFR 104.3(a)(1)</a>."
   },
   {
     "term": "CFR",
@@ -196,8 +196,8 @@
     "definition": "The organization or person by whom an individual is employed, and not the name of his or her supervisor. <a href=\"https://www.fec.gov/regulations/100-21/CURRENT#100-21\">11 CFR 100.21</a>."
   },
   {
-    "term": "Ending cash-on-hand",
-    "definition": "The total amount of cash on hand that remains after the amount of cash-on-hand at the beginning of the reporting period is adjusted to add the total receipts for the reporting period and subtract the total disbursements for the reporting period."
+    "term": "Ending cash on hand",
+    "definition": "The total amount of cash on hand that remains after the amount of cash on hand at the beginning of the reporting period is adjusted to add the total receipts for the reporting period and subtract the total disbursements for the reporting period."
   },
   {
     "term": "Executive and administrative personnel",
@@ -405,7 +405,7 @@
   },
   {
     "term": "Net outstanding campaign obligations (NOCO)",
-    "definition": "The total of all outstanding obligations for qualified campaign expenses as of a publicly funded presidential candidate's date of ineligibility, plus estimated necessary winding down costs less the total of: <ul><li>Cash-on-hand as of the close of business on the last day of eligibility;</li><li>The fair market value of capital assets and other assets on hand; and</li><li>Amounts owed to the committee in the form of credits, refunds of deposits, returns, receivables, or rebates of qualified campaign expenses; or a commercially reasonable amount based on the collectibility of those credits, returns, receivables or rebates.</li></ul> See 11 CFR <a href=\"https://www.fec.gov/regulations/9034-5/CURRENT#9034-5\">9034.5</a>."
+    "definition": "The total of all outstanding obligations for qualified campaign expenses as of a publicly funded presidential candidate's date of ineligibility, plus estimated necessary winding down costs less the total of: <ul><li>Cash on hand as of the close of business on the last day of eligibility;</li><li>The fair market value of capital assets and other assets on hand; and</li><li>Amounts owed to the committee in the form of credits, refunds of deposits, returns, receivables, or rebates of qualified campaign expenses; or a commercially reasonable amount based on the collectibility of those credits, returns, receivables or rebates.</li></ul> See 11 CFR <a href=\"https://www.fec.gov/regulations/9034-5/CURRENT#9034-5\">9034.5</a>."
   },
   {
     "term": "New party",
