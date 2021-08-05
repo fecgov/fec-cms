@@ -249,17 +249,39 @@
               <div role="document">
                 <button type="button" class="modal__close button--close--primary" data-a11y-dialog-hide="" title="Close this dialog window"></button>
                 <h2 id="raised-modal-title">Methodology</h2>
-                <strong>Receipts</strong>
-                <p>Percentage contributions from individuals</p>
-                <ul><li>Total individual contributions divided by total receipts (Form 3X Line 11(a)(iii) divided by Line 19)</li></ul>
+                <p>The committee snapshot presents data depending on the committee type and the committee’s activity during the covered period. For each of the percentages that are displayed, the calculations and the accompanying descriptions are presented based on transaction types made or received by the committee. Financial total for the selected committee are included in each methodology section.</p>
 
-                <p>Contributions from party committees plus contributions from other federal committees divided by total receipts (Form 3X Line 11(b) + Line 11(c) divided by Line 19)</p>
-                <ul><li><strong>The language under the doughnut could be something like, "percent raised from contrbutions from PACS and party committees."</strong></li></ul>
-                <strong>Disbursements</strong>
-                <p>Percentage IEs, federal candidate contributions and party coordinated expenditures</p>
-                <ul><li>Contributions to federal candidates plus independent expenditures plus party coordinated expenditures divided by total disbursements (Form 3X Line 23 + 24 + 25 divided by Line 31)</li></ul>
-                <p>Percentage operating expenditures</p>
-                <ul><li>Total operating expenditures divided by total disbursements (Form 3X Line 21(c) divided by Line 31)</li></ul>
+                <h3>Money raised or Receipts</h3>
+
+                <p id="snap-method-raise-ind">Percentage raised in individual contributions:</p>
+                <ul aria-labeledby="snap-method-raise-ind">
+                  <li>Total individual contributions divided by total receipts</li>
+                  <li>Form 3X Line 11(a)(iii) divided by Line 19</li>
+                  <li>{Line 11(a)(iii)} / {Line 19} = {calculated percentage}</li>
+                </ul>
+                  
+                <p id="snap-method-raise-com">Percentage contributions from party committees, PACs, and other political committees:</p>
+                <ul aria-labeledby="snap-method-raise-ind">
+                  <li>Total contributions from party committees plus contributions from other committees (including PACs) divided by total receipts</li>
+                  <li>( Form 3X Line 11(b) plus Line 11(c) ) divided by Line 19</li>
+                  <li>( {Line 11(b)} + ({Line 11(c)} ) / {Line 19} = {calculated percentage}</li>
+                </ul>
+
+                <h3>Money spent or Disbursements</h3>
+
+                <p id="snap-method-spend-ind">Percentage contributions to federal candidates and other federal political committees (including PACs and parties), independent expenditures, and coordinated party expenditures divided by total disbursements:</p>
+                <ul aria-labeledby="snap-method-spend-ind">
+                  <li>Total contributions to federal candidates and other federal political committees plus independent expenditures plus coordinated party expenditures divided by total disbursements</li>
+                  <li>( Form 3X Line 23 plus Line 24 plus Line 25 ) divided by Line 31)</li>
+                  <li>( {Line 23} + {Line 24} + {Line 25} ) / {Line 31} = {calculated percentage}</li>
+                </ul>
+
+                <p id="snap-method-spend-com">Percentage operating expenditures:</p>
+                <ul aria-labeledby="snap-method-spend-com">
+                  <li>Total operating expenditures divided by total disbursements</li>
+                  <li>Form 3X Line 21(c) divided by Line 31</li>
+                  <li>{Line 21(c)} / {Line 31} = {calculated percentage}</li>
+                </ul>
               </div>
             </div>
           </div>
