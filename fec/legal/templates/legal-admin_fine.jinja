@@ -1,14 +1,14 @@
 {% extends "layouts/main.jinja" %}
 {% import 'macros/breadcrumbs.jinja' as breadcrumb %}
 {% import 'macros/legal.jinja' as legal %}
- {% set breadcrumb_links=[('/legal-resources', 'Legal resources'), ('/legal-resources/enforcement', 'Enforcement'), ('/data/legal/search/admin_fines', 'Administrative Fine')] %}
+ {% set breadcrumb_links=[('/legal-resources', 'Legal resources'), ('/data/legal/search/admin_fines', 'Administrative fines search')] %}
  {% block title %}Administrative Fine #{{ admin_fine.no }}{% endblock %}
  {% block css %}
 <link rel="stylesheet" type="text/css" href="{{ asset_for_css('legal-common.css') }}" />
 {% endblock %}
 {% block body %}
 <header class="page-header slab slab--primary">
-  {{ breadcrumb.breadcrumbs('Admin Fine #%s' % (admin_fine.no,), breadcrumb_links) }}
+  {{ breadcrumb.breadcrumbs('AF #%s' % (admin_fine.no,), breadcrumb_links) }}
 </header>
 <div class="container main legal-admin_fine">
   <div class="content__section">
@@ -36,7 +36,7 @@
           <tbody>
             <tr>
               <td class="u-padding--right"><p class="u-margin--bottom t-bold t-low-height">Report:</p></td>
-              <td><p class="u-margin--bottom t-low-height">{{ admin_fine.report_type }}, {{ admin_fine.report_year }}</p></td>
+              <td><p class="u-margin--bottom t-low-height">{{ admin_fine.report_year }}, {{ admin_fine.report_type }}</p></td>
             </tr>
             <tr>
               <td class="u-padding--right"><p class="u-margin--bottom t-bold t-low-height">Committee name:</p></td>
