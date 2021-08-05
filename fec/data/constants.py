@@ -395,7 +395,7 @@ table_columns = OrderedDict([
     ('loans', ['Committee Name', 'Loaner name', 'Incurred date', 'Payment to date', 'Original loan amount']),
     ('debts', ['Committee Name', 'Creditor/Debtor Name', 'Beginning Balance', 'Ending Balance']),
     ('party-coordinated-expenditures', ['Spender', 'Candidate', 'Payee name', 'Expenditure date', 'Amount']),
-    ('receipts', ['Contributor name', 'Recipient', 'Election', 'State', 'Receipt date', 'Amount']),
+    ('receipts', ['Source name', 'Recipient', 'Election', 'State', 'Receipt date', 'Amount']),
     ('reports-presidential',
         ['Committee', 'Report type', 'Version', 'Receipt date', 'Coverage end date', 'Total receipts',
             'Total disbursements']),
