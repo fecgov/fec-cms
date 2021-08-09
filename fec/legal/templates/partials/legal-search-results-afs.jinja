@@ -2,7 +2,7 @@
   <thead>
     <tr class="simple-table__header">
       <th class="simple-table__header-cell cell--50">Case</th>
-      <th class="simple-table__header-cell">Report year, type</th>
+      <th class="simple-table__header-cell">Report</th>
       <th class="simple-table__header-cell">Closed date</th>
       <th class="simple-table__header-cell">Final civil penalty or fine</th>
     </tr>
@@ -29,7 +29,7 @@
       </td>
       <td class="simple-table__cell">
         <div class="t-sans">
-            {{ admin_fine.report_year }}, {{ admin_fine.report_type }}
+            {{ admin_fine.report_year }} {{ admin_fine.report_type }}
         </div>
       </td>
       <td class="simple-table__cell">
