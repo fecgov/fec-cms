@@ -164,6 +164,11 @@
     border-right: 1px solid;
   }
 
+  // Specific to admin fine pages for now. In the future, we should refine the entity type last of type dividers for other pages.
+  .legal-admin_fine .entity__type:last-of-type {
+    border-right: none;
+  }
+
   .entity__election {
     @include span-columns(6);
   }
