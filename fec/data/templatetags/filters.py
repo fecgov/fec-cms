@@ -21,6 +21,17 @@ def currency(num, grouping=True):
     return None
 
 
+@library.filter
+def currency_rounded(num, grouping=True):
+    # set locale for currency filter
+    locale.setlocale(locale.LC_ALL, 'en_US.UTF-8')
+    to_return = None
+    if isinstance(num, (int, float)):
+        to_return = locale.currency(round(num), grouping=grouping)
+        return to_return[:-3]
+    return to_return
+
+
 def ensure_date(value):
     if isinstance(value, (datetime.date, datetime.datetime)):
         return value

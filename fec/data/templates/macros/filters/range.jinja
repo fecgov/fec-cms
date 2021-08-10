@@ -1,6 +1,14 @@
-{% macro amount(name, label) %}
+{% macro amount(name, label, tooltip=False) %}
 <fieldset class="filter" id="{{name}}-field">
-  <legend class="label">{{ label }}</legend>
+  <label class="label t-inline-block">{{ label }}</label>
+  {% if tooltip %}
+    <div class="tooltip__container">
+      <button class="tooltip__trigger" type="button"><span class="u-visually-hidden">Learn more</span></button>
+      <div id="unique-tooltip" role="tooltip" class="tooltip tooltip--under tooltip--left">
+        <p class="tooltip__content">{{ tooltip }}</p>
+      </div>
+    </div>
+  {% endif %}
   <div class="range range--currency">
     <div class="range__input range__input--min js-filter" data-filter="range">
       <label for="min_{{name}}">From</label>

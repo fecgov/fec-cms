@@ -34,6 +34,238 @@
             {{ missing_transferred.missing_transferred_committee_message(former_committee_name, former_authorized_candidate_name, former_authorized_candidate_id) }}
           </div>
         {% endif %}
+        {% if FEATURES.pac_snapshot %}
+        <div class="entity__figure entity__figure--narrow" id="committee-snapshot">
+          <div class="heading--section">
+            <h3>Committee snapshot</h3>
+          </div>
+
+          {% set shared_circle_props = 'cx="21" cy="21" r="15.91549430918954"' %}
+          {% set shared_text_props = 'x="50%" y="57%"' %}
+          {% set coverage_str = totals.coverage_start_date|date ~' to ' ~totals.coverage_end_date|date %}
+
+          {% if totals.individual_contributions_percent or totals.individual_contributions_percent == 0 %}
+            {% set rec_ind = totals.individual_contributions_percent %}
+            {% set rec_ind_class = 'raising' %}
+            {% set rec_ind_ring = '0 100' %}
+            {% set rec_ind_l = rec_ind|round|int ~'%' %}
+            {% if rec_ind == 0 %}
+              {% set rec_ind_l = '0%' %}
+            {% elif rec_ind > 100 %}
+              {% set rec_ind_l = '>100%' %}
+              {% set rec_ind_ring = '100 0' %}
+            {% elif rec_ind > 0 and rec_ind < 1 %}
+              {% set rec_ind_l = '<1%' %}
+            {% else %}
+              {% set rec_ind_ring = rec_ind|round|int ~ ' ' ~ (100 - rec_ind|round|int) %}
+            {% endif %}
+          {% else %}
+            {% set rec_ind_l = '!' %}
+            {% set rec_ind_ring = '0 100' %}
+            {% set rec_ind_class = '' %}
+          {% endif %}
+
+          {% if totals.party_and_other_committee_contributions_percent or totals.party_and_other_committee_contributions_percent == 0 %}
+            {% set rec_com = totals.party_and_other_committee_contributions_percent|round|int %}
+            {% set rec_com_class = 'raising' %}
+            {% set rec_com_ring = '0 100' %}
+            {% set rec_com_l = rec_com ~'%' %}
+            {% if rec_com == 0 %}
+              {% set rec_com_l = '0%' %}
+            {% elif rec_com > 100 %}
+              {% set rec_com = '>100%' %}
+              {% set rec_com_ring = '100 0' %}
+            {% elif rec_com > 0 and rec_com < 1 %}
+              {% set rec_com_l = '<1%' %}
+            {% else %}
+              {% set rec_com_ring = rec_com ~ ' ' ~ (100 - rec_com) %}
+            {% endif %}
+          {% else %}
+            {% set rec_com_l = '!' %}
+            {% set rec_com_ring = '0 100' %}
+            {% set rec_com_class = '' %}
+          {% endif %}
+
+          {% if totals.contributions_ie_and_party_expenditures_made_percent or totals.contributions_ie_and_party_expenditures_made_percent == 0 %}
+            {% set dis_com = totals.contributions_ie_and_party_expenditures_made_percent|round|int %}
+            {% set dis_com_class = 'spending' %}
+            {% set dis_com_ring = '0 100' %}
+            {% set dis_com_l = dis_com ~'%' %}
+            {% if dis_com == 0 %}
+              {% set dis_com_l = '0%' %}
+            {% elif dis_com > 100 %}
+              {% set dis_com_l = '>100%' %}
+              {% set dis_com_ring = '100 0' %}
+            {% elif dis_com > 0 and dis_com < 1 %}
+              {% set dis_com_l = '<1%' %}
+            {% else %}
+              {% set dis_com_ring = dis_com ~ ' ' ~ (100 - dis_com) %}
+            {% endif %}
+          {% else %}
+            {% set dis_com_l = '!' %}
+            {% set dis_com_ring = '0 100' %}
+            {% set dis_com_class = '' %}
+          {% endif %}
+
+          {% if totals.operating_expenditures_percent or totals.operating_expenditures_percent == 0 %}
+            {% set dis_oe = totals.operating_expenditures_percent|round|int %}
+            {% set dis_oe_class = 'spending' %}
+            {% set dis_oe_ring = '0 100' %}
+            {% set dis_oe_l = dis_oe ~'%' %}
+            {% if dis_oe == 0 %}
+              {% set dis_oe_l = '0%' %}
+            {% elif dis_oe > 100 %}
+              {% set dis_oe_l = '>100%' %}
+              {% set dis_oe_ring = '100 0' %}
+            {% elif dis_oe > 0 and dis_oe < 1 %}
+              {% set dis_oe_l = '<1%' %}
+            {% else %}
+              {% set dis_oe_ring = dis_oe ~ ' ' ~ (100 - dis_oe) %}
+            {% endif %}
+          {% else %}
+            {% set dis_oe_l = '!' %}
+            {% set dis_oe_ring = '0 100' %}
+            {% set dis_oe_class = '' %}
+          {% endif %}
+
+          {# set the meters' max value to the greater of receipts or disbursements #}
+          {% if totals.fed_receipts and totals.fed_disbursements and totals.last_cash_on_hand_end_period %}
+            {% if totals.fed_receipts >= totals.fed_disbursements %}
+              {% set meters_max = totals.fed_receipts %}
+            {% else %}
+              {% set meters_max = totals.fed_disbursements %}
+            {% endif %}
+            {# but override both if COH is larger for some reason #}
+            {% if totals.last_cash_on_hand_end_period > meters_max %}
+              {% set meters_max = totals.last_cash_on_hand_end_period %}
+            {% endif %}
+          {% endif %}
+
+          {% if com_type_glossary and com_type_text %}
+          <p>Learn more about <span class="term" data-term="{{ com_type_glossary }}" title="Click to define" tabindex="0">{{ com_type_text }}</span> like {{ committee.name }}.</p>
+          {% endif %}
+          <div class="tag__category">
+            <div class="tag__item">Coverage dates: {{ coverage_str }}</div>
+          </div>
+          <div class="snapshot-summary">
+            <span class="t-data t-bold">Total receipts: <span class="t-normal">{{ totals.fed_receipts|currency_rounded }}</span></span>
+            <meter min="0" max="{{ meters_max }}" value="{{ totals.fed_receipts }}" title="US Dollars" data-cat="raising"></meter>
+            <span class="t-data t-bold">Total disbursements: <span class="t-normal">{{ totals.fed_disbursements|currency_rounded }}</span></span>
+            <meter min="0" max="{{ meters_max }}" value="{{ totals.fed_disbursements }}" title="US Dollars" data-cat="spending"></meter>
+            <span class="t-data t-bold">Cash on hand: <span class="t-normal">{{ totals.last_cash_on_hand_end_period|currency_rounded }}</span></span>
+            <meter min="0" max="{{ meters_max }}" value="{{ totals.last_cash_on_hand_end_period }}" title="US Dollars" data-cat="cash"></meter>
+          </div>
+          <div class="donuts-all">
+            <div class="donuts-pair">
+              <h4 class="donuts-head t-centered">Money raised</h4>
+              <div class="donut-cell">
+                <figure>
+                  <svg viewBox="0 0 42 42" class="donut {{ rec_ind_class }}" role="img" aria-labelledby="snap-raise-ind-t snap-raise-ind-d">
+                    <title id="snap-raise-ind-t">Percent raised from individual contributions {{ coverage_str }}</title>
+                    <desc id="snap-raise-ind-d">{% if rec_ind_l != '!' %}{{ rec_ind_l }} of money raised came from individual contributions{% endif %}</desc>
+                    <circle class="center" {{ shared_circle_props|safe }}></circle>
+                    <circle class="ring" {{ shared_circle_props|safe }}></circle>
+                    <circle class="segment" {{ shared_circle_props|safe }} stroke-dasharray="{{ rec_ind_ring }}"></circle>
+                    <g class="chart-text">
+                      <text {{ shared_text_props|safe }}>{{ rec_ind_l }}</text>
+                    </g>
+                  </svg>
+                  <figcaption>
+                    {% if rec_ind_class == '' %}Could not calculate a percent based on available data
+                    {% else %}Percent raised in individual <span class="term" data-term="contribution" title="Click to define" tabindex="0">contributions</span>
+                    {% endif %}
+                  </figcaption>
+                </figure>
+              </div>
+              <div class="donut-cell">
+                <figure>
+                  <svg viewBox="0 0 42 42" class="donut {{ rec_com_class }}" aria-labelledby="snap-raise-com-t snap-raise-com-d">
+                    <title id="snap-raise-com-t">Percent raised from other federal political committees {{ coverage_str }}</title>
+                    <desc id="snap-raise-com-d">{% if rec_com_l != '!' %}{{ rec_com_l }} of money raised came from other federal political committees{% endif %}</desc>
+                    <circle class="center" {{ shared_circle_props|safe }}></circle>
+                    <circle class="ring" {{ shared_circle_props|safe }}></circle>
+                    <circle class="segment" {{ shared_circle_props|safe }} stroke-dasharray="{{ rec_com_ring }}"></circle>
+                    <text {{ shared_text_props|safe }}>{{ rec_com_l }}</text>
+                  </svg>
+                  <figcaption>
+                    {%- if rec_com_class == '' %}Could not calculate a percent based on available data
+                    {%- else %}Percent raised in contributions from other federal <span class="term" data-term="political committee" title="Click to define" tabindex="0">political committees</span>
+                    {%- endif -%}
+                  </figcaption>
+                </figure>
+              </div>
+            </div>
+            <div class="donuts-pair">
+              <h4 class="donuts-head t-centered">Money spent</h4>
+              <div class="donut-cell">
+                <figure>
+                  <svg viewBox="0 0 42 42" class="donut {{ dis_com_class }}" role="img" aria-labelledby="snap-spend-com-t snap-spend-com-d">
+                    <title id="snap-spend-com-t">Percent spent on contributions to other federal political committees {{ coverage_str }}</title>
+                    <desc id="snap-spend-com-d">{% if dis_com_l != '!' %}{{ dis_com_l }} of money spent went to other federal political committees{% endif %}</desc>
+                    <circle class="center"{{ shared_circle_props|safe }}></circle>
+                    <circle class="ring"{{ shared_circle_props|safe }}></circle>
+                    <circle class="segment" {{ shared_circle_props|safe }} stroke-dasharray="{{ dis_com_ring }}"></circle>
+                    <g class="chart-text">
+                      <text {{ shared_text_props|safe }}>{{ dis_com_l }}</text>
+                    </g>
+                  </svg>
+                  <figcaption>
+                    {% if dis_com_class == '' %}Could not calculate a percent based on available data
+                    {% else %}Percent spent on contributions to other <span class="term" data-term="national committee" title="Click to define" tabindex="0">federal committees</span>
+                    {% endif %}
+                  </figcaption>
+                </figure>
+              </div>
+              <div class="donut-cell">
+                <figure>
+                  <svg viewBox="0 0 42 42" class="donut {{ dis_oe_class }}" role="img" aria-labelledby="snap-spend-ox-t snap-spend-ox-d">
+                    <title id="snap-spend-ox-t">Percent spent on operating expenditures {{ coverage_str }}</title>
+                    <desc id="snap-spend-ox-d">{% if dis_oe_l != '!' %}{{ dis_oe_l }} of money spent on operating expenditures{% endif %}</desc>
+                    <circle class="center" {{ shared_circle_props|safe }}></circle>
+                    <circle class="ring" {{ shared_circle_props|safe }}></circle>
+                    <circle class="segment" {{ shared_circle_props|safe }} stroke-dasharray="{{ dis_oe_ring }}"></circle>
+                    <text {{ shared_text_props|safe }}>{{ dis_oe_l }}</text>
+                  </svg>
+                  <figcaption>
+                    {% if dis_oe_class == '' %}Could not calculate a percent based on available data
+                    {% else %}Percent spent on <span class="term" data-term="operating expenditures" title="Click to define" tabindex="0">operating expenditures</span>
+                    {% endif %}
+                  </figcaption>
+                </figure>
+              </div>
+            </div>
+          </div>
+          <div class="footer-methodology">
+            <p class="t-note">
+              The percentages shown do not represent 100% of this committee's activity. Refer to the tables that follow for a complete breakdown of raising and spending.
+            </p>
+            <div>
+              <button class="button--alt js-methodology" data-a11y-dialog-show="methodology-committee-snapshot">Methodology</button>
+            </div>
+          </div>
+          <div class="js-modal modal" id="methodology-committee-snapshot" aria-hidden="true">
+            <div tabindex="-1" class="modal__overlay" data-a11y-dialog-hide=""></div>
+            <div role="dialog" class="modal__content" aria-labelledby="raised-modal-title">
+              <div role="document">
+                <button type="button" class="modal__close button--close--primary" data-a11y-dialog-hide="" title="Close this dialog window"></button>
+                <h2 id="raised-modal-title">Methodology</h2>
+                <strong>Receipts</strong>
+                <p>Percentage contributions from individuals</p>
+                <ul><li>Total individual contributions divided by total receipts (Form 3X Line 11(a)(iii) divided by Line 19)</li></ul>
+
+                <p>Contributions from party committees plus contributions from other federal committees divided by total receipts (Form 3X Line 11(b) + Line 11(c) divided by Line 19)</p>
+                <ul><li><strong>The language under the doughnut could be something like, "percent raised from contrbutions from PACS and party committees."</strong></li></ul>
+                <strong>Disbursements</strong>
+                <p>Percentage IEs, federal candidate contributions and party coordinated expenditures</p>
+                <ul><li>Contributions to federal candidates plus independent expenditures plus party coordinated expenditures divided by total disbursements (Form 3X Line 23 + 24 + 25 divided by Line 31)</li></ul>
+                <p>Percentage operating expenditures</p>
+                <ul><li>Total operating expenditures divided by total disbursements (Form 3X Line 21(c) divided by Line 31)</li></ul>
+              </div>
+            </div>
+          </div>
+        </div>
+        {# end pac_snapshot (next line) #}
+        {% endif %}
         <div class="entity__figure entity__figure--narrow" id="total-raised">
           <div class="heading--section heading--with-action">
             <h3 class="heading__left">Total raised</h3>

@@ -64,6 +64,7 @@ FEATURES = {
     'debts': bool(env.get_credential('FEC_FEATURE_DEBTS', '')),  # TODO: debts dates
     'map': bool(env.get_credential('FEC_FEATURE_HOME_MAP', '')),
     'pac_party': bool(env.get_credential('FEC_FEATURE_PAC_PARTY', '')),
+    'pac_snapshot': bool(env.get_credential('FEC_FEATURE_PAC_SNAPSHOT', '')),
     'presidential_map': bool(env.get_credential('FEC_FEATURE_PRESIDENTIAL_MAP', '')),
 }
 
@@ -77,6 +78,7 @@ if FEC_CMS_ENVIRONMENT == ENVIRONMENTS['local']:
     FEATURES['debts'] = True
     FEATURES['map'] = True
     FEATURES['pac_party'] = True
+    FEATURES['pac_snapshot'] = True
     FEATURES['presidential_map'] = True
 
 # Application definition

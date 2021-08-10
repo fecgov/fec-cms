@@ -1,0 +1,221 @@
+#committee-snapshot {
+//   .tag__category {
+//     border-bottom-color: #112e51;
+//     border-bottom-style: solid;
+//     border-bottom-width: 2px 0;
+//   }
+  .footer-methodology {
+    border-top: 1px solid;
+    padding-top: 1em;
+
+    @include media($med) {
+      display: flex;
+    }
+    p {
+      margin-bottom: 1em;
+      
+      @include media($med) {
+        margin-bottom: 0;
+      }
+    }
+  }
+
+  .snapshot-summary {
+    border-bottom: 1px solid $gray-light;
+    border-top: 1px solid $federal-blue;
+    margin-bottom: 1rem;
+    margin-top: 1rem;
+    padding-bottom: 1rem;
+    padding-top: 1rem;
+
+    .divider {
+      display: none;
+
+      @include media($med) {
+        display: initial;
+      }
+    }
+    span {
+      white-space: nowrap;
+
+      @include media($med) {
+        &:not(:last-of-type) {
+          border-right: 1px solid;
+          margin-right: 10px;
+          padding-right: 10px;
+        } 
+      }
+    }
+    > span {
+      display: block;
+
+      @include media($med) {
+        display: initial;
+      }
+    }
+
+    meter {
+      margin-left: 0;
+      background: transparent;
+      height: 1.5em;
+      width: 100%;
+
+      @include media($med) {
+        display: none;
+      }
+
+      &::-webkit-meter-bar {
+        background: transparent;
+        border: none;
+        border-radius: 0;
+      }
+      &::-moz-meter-bar {
+        background: transparent;
+        border: none;
+        border-radius: 0;
+      }
+      &::-webkit-meter-optimum-value {
+        background: $gray-dark;
+        border-radius: 0;
+      }
+      &:-moz-meter-optimum::-moz-meter-bar {
+        background: $gray-dark;
+        border-radius: 0;
+      }
+      &[data-cat='raising'] {
+        &::-webkit-meter-optimum-value {
+          background: $orange;
+        }
+        &:-moz-meter-optimum::-moz-meter-bar {
+          background: $orange;
+        }
+      }
+      &[data-cat='spending'] {
+        &::-webkit-meter-optimum-value {
+          background: $aqua;
+          transition: all 1s;
+        }
+        &:-moz-meter-optimum::-moz-meter-bar {
+          background: $aqua;
+          transition: all 1s;
+        }
+      }
+    }
+  }
+
+  figure {
+    display: flex;
+    align-items: center;
+
+    @include media($med) {
+      display: initial;
+      align-items: unset;
+    }
+  }
+
+  figcaption {
+    font-family: $sans-serif;
+    line-height: 1.25em;
+    text-align: left;
+    width: 66.6%;
+    
+    @include media($med) {
+      margin-bottom: 1em;
+      padding: 0 1em;
+      text-align: center;
+      width: initial;
+    }
+  }
+
+  .donuts-all {
+    margin-bottom: 1rem;
+
+    .donuts-head {
+      margin-bottom: 0;
+    }
+
+    @include media($med) {
+      display: flex;
+      position: relative;
+
+      .donuts-pair {
+        position: relative;
+        width: 50%;
+
+        .donuts-head {
+          width: 100%;
+          margin-bottom: 1rem;
+        }
+        .donut-cell {
+          float: left;
+          margin-left: 0;
+          margin-right: 0;
+          width: 50%;
+          
+          &:first-child {
+            border-right: 1px solid $gray-light;
+          }
+        }
+      }
+
+      &:after {
+        content: "";
+        display: block;
+        position: absolute;
+        background: $gray-light;
+        height: 90%;
+        width: 1px;
+        top: 5%;
+        left: 50%;
+      }
+    }
+  }
+
+  .donut {
+    width: 33%;
+    height: 100%;
+
+    @include media($med) {
+      width: 100%
+    }
+
+    .center {
+      fill: $inverse
+    }
+    .ring {
+      fill: transparent;
+      stroke: $gray-light;
+      stroke-width: 3;
+    }
+    .segment {
+      fill: transparent;
+      stroke-dashoffset: 25;
+      stroke-width: 3;
+    }
+    text {
+      fill: $gray-light;
+      font-family: $sans-serif;
+      font-size: 1rem;
+      font-weight: bold;
+      text-anchor: middle;
+    }
+
+    &.raising {
+      .segment {
+        stroke: $orange;
+      }
+      text {
+        fill: $orange;
+      }
+    }
+
+    &.spending {
+      .segment {
+        stroke: $aqua;
+      }
+      text {
+        fill: $aqua;
+      }
+    }
+  }
+}
