@@ -468,7 +468,7 @@ new Vue({
             type: 'p',
             class: '',
             content:
-              'This calculator is for estimating an adminstrative fine for late or not filed reports.\
+              'This calculator is for estimating an administrative fine for late or not filed reports.\
               If you have not yet filed your report, submit it as soon as\xa0possible.'
           },
           {
@@ -492,7 +492,7 @@ new Vue({
       },
       {
         navLabel: '',
-        title: 'When was the committee’s adminstrative fine\xa0assessed?',
+        title: 'When was the committee’s administrative fine\xa0assessed?',
         autoAdvance: true,
         questions: penaltyAssessedDates,
         viewed: false
@@ -669,7 +669,7 @@ new Vue({
             class: '',
             fieldH: 'How many previous\xa0violations?',
             helpTitle: 'Number of previous violations',
-            help: `<p>The number of previous adminstrative fines assessed at final determination during the current and most recently completed two-year election cycle.</p>
+            help: `<p>The number of previous administrative fines assessed at final determination during the current and most recently completed two-year election cycle.</p>
             <p>Enter "0" if none were assessed.</p>`
           },
           { type: 'clear' },
@@ -748,7 +748,7 @@ new Vue({
           {
             type: 'p',
             content:
-              'This is an estimated administrative fine based on the information you provided and may not refelect the actual fine amount assessed by the Commission. Your committee will be notified if the Commission assesses a fine for a late or non-filed\xa0report.'
+              'This is an estimated administrative fine based on the information you provided and may not reflect the actual fine amount assessed by the Commission. Your committee will be notified if the Commission assesses a fine for a late or non-filed\xa0report.'
           }
         ],
         viewed: false
