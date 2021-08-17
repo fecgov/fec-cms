@@ -523,8 +523,8 @@ def get_committee(committee_id, cycle):
         com_type_text = 'political action committees'
         com_type_glossary = 'Political Action Committee (PAC)'
     elif com_com_type == 'U':
-        com_type_text = 'single candidate independent expenditure committees'
-        com_type_glossary = 'Single candidate independent expenditure filer'
+        com_type_text = '[U committee_type]'
+        com_type_glossary = ''
     elif com_com_type == 'I':
         com_type_text = '[I committee_type]'
         com_type_glossary = ''
