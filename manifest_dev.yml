@@ -21,4 +21,3 @@ applications:
       FEC_APP_URL: "/data"
       FEC_CMS_DEBUG: false
       FEC_CMS_ENVIRONMENT: dev
-      FEC_TRANSITION_URL: https://transition.fec.gov
