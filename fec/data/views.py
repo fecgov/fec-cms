@@ -478,7 +478,7 @@ def get_committee(committee_id, cycle):
         com_type_glossary = 'Trade association'
     elif com_org_type == 'V':
         com_type_text = 'cooperatives'
-        com_type_glossary = ''
+        com_type_glossary = 'Cooperative'
     # The three biggies which are also 'not' rules for committee_type
     elif com_com_type == 'H':
         com_type_text = '[H committee_type]'

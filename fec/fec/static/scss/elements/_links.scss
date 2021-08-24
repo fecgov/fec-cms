@@ -16,4 +16,9 @@ a {
   img {
     border: none;
   }
+
+  &.no-decoration {
+    border: none !important;
+    padding: 0;
+  }
 }
