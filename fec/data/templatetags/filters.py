@@ -203,7 +203,3 @@ def get_social_image_path(identifier):
         imageFilename = 'fec-logo'
     return 'https://www.fec.gov/static/img/social/{}.png'.format(imageFilename)
 
-@library.global_function
-def format_first_file_date(first_file_date):
-    first_file_date = datetime.datetime.strptime(first_file_date,"%Y-%m-%d")
-    return first_file_date.strftime("%B %-d, %Y")

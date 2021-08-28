@@ -5,6 +5,9 @@ import collections
 
 from data import constants
 
+from django.conf import settings
+from django_jinja import library
+
 
 def current_cycle(delayed_start=False):
     """
@@ -288,7 +291,7 @@ def string_to_date(string_date):
     """
     return datetime.datetime.strptime(string_date, '%m/%d/%Y').date()
 
-
+@library.global_function
 def format_date_longform(date):
     """
     "12/31/2019" -> "January 31, 2019"
@@ -296,8 +299,10 @@ def format_date_longform(date):
     """
     if date.find('/') != -1:
         return datetime.datetime.strptime(date, '%m/%d/%Y').strftime('%B %d, %Y')
+    if date.find('-') != -1 and len(date) == 10:
+        return datetime.datetime.strptime(date,'%Y-%m-%d').strftime('%B %-d, %Y')
     else:
-        return datetime.datetime.strptime(date,"%Y-%m-%d").strftime("%B %-d, %Y")
+        return date
 
 def extend(*dicts):
     """Create a new dictionary from multiple existing dictionaries
