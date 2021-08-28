@@ -5,9 +5,6 @@ import collections
 
 from data import constants
 
-from django.conf import settings
-from django_jinja import library
-
 
 def current_cycle(delayed_start=False):
     """
@@ -291,7 +288,7 @@ def string_to_date(string_date):
     """
     return datetime.datetime.strptime(string_date, '%m/%d/%Y').date()
 
-@library.global_function
+
 def format_date_longform(date):
     """
     "12/31/2019" -> "January 31, 2019"
