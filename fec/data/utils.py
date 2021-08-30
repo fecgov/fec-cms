@@ -5,8 +5,6 @@ import collections
 
 from data import constants
 
-from django_jinja import library
-
 
 def current_cycle(delayed_start=False):
     """
@@ -296,12 +294,6 @@ def format_date_longform(date):
     "12/31/2019" -> "January 31, 2019"
     """
     return datetime.datetime.strptime(date, '%m/%d/%Y').strftime('%B %d, %Y')
-
-
-@library.global_function
-def format_first_file_date(first_file_date):
-    first_file_date = datetime.datetime.strptime(first_file_date, '%Y-%m-%d')
-    return first_file_date.strftime('%B %-d, %Y')
 
 
 def extend(*dicts):
