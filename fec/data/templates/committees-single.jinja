@@ -27,8 +27,7 @@
           <span class="is-active-status">Active
           {% if committee.filing_frequency == "M" %}
           - Monthly </span>
-          {% endif %}
-          {% if committee.filing_frequency == "Q" %}
+          {% else %}
           - Quarterly </span>
           {% endif %}
         {% elif current_committee_status == "admin_terminated" %}
@@ -52,7 +51,7 @@
       </span>
       <span class="t-data t-bold entity__type">ID: {{ committee_id }}</span>
       {% if committee_type not in ['C', 'E', 'I'] %}
-      <span class="t-data t-bold entity__type">Registration Date: {{ committee.first_file_date|date_full }}</span>
+      <span class="t-data t-bold entity__type">Registration date: {{ committee.first_file_date|date_full }}</span>
       {% endif %}
     </div>
   </header>
