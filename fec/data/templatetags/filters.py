@@ -202,3 +202,4 @@ def get_social_image_path(identifier):
     else:
         imageFilename = 'fec-logo'
     return 'https://www.fec.gov/static/img/social/{}.png'.format(imageFilename)
+    
