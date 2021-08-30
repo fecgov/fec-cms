@@ -24,7 +24,13 @@
     <div class="heading--section">
       <span class="t-data t-bold entity__type">
         {% if current_committee_status == "active" %}
-          <span class="is-active-status">Active</span>
+          <span class="is-active-status">Active
+          {% if committee.filing_frequency == "M" %}
+          - Monthly </span>
+          {% endif %}
+          {% if committee.filing_frequency == "Q" %}
+          - Quarterly </span>
+          {% endif %}
         {% elif current_committee_status == "admin_terminated" %}
           <span class="is-terminated-status">Administratively terminated</span>
         {% else %}
@@ -45,6 +51,9 @@
          {% endif %}
       </span>
       <span class="t-data t-bold entity__type">ID: {{ committee_id }}</span>
+      {% if committee_type not in ['C', 'E', 'I'] %}
+      <span class="t-data t-bold entity__type">Registration Date: {{ format_first_file_date(committee.first_file_date) }}</span>
+      {% endif %}
     </div>
   </header>
 
