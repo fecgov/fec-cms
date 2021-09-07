@@ -145,8 +145,10 @@ update_types = OrderedDict([
 oig_reports = OrderedDict((x.lower(), x) for x in [
     "Audit report",
     "Inspection or special review report",
+    "Investigations",
+    "Other reports and plans",
     "Semiannual report",
-    "Strategic plan",
+    "Strategic plan - OIG",
     "Work plan",
 ])
 

@@ -534,6 +534,9 @@ def get_committee(committee_id, cycle):
     elif com_com_type == 'X':
         com_type_text = 'party committees'
         com_type_glossary = 'Party committee'
+    else:
+        com_type_text = ''
+        com_type_glossary = ''
 
     template_variables = {
         "candidates": candidates,
