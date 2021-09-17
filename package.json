@@ -154,7 +154,7 @@
   "browserslist": "last 2 versions, > 1%, IE 10",
   "engines": {
     "node": "14.13.0",
-    "npm": "7.23.0"
+    "npm": "7.24.0"
   },
   "license": "CC0-1.0"
 }
