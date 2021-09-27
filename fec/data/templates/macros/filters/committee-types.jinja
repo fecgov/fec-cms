@@ -1,6 +1,6 @@
 {% import 'macros/filters/typeahead-filter.jinja' as typeahead %}
 
-{% macro field(committee_type='committee_type', organization_type='organization_type', designation='designation', display_sponsor_candidate_filter=False, display_authorized_committee_filter=True, display_parties_only_filter=False, display_default_other_committees_filter=True, display_alt_other_committees_filter=False) %}
+{% macro field(committee_type='committee_type', organization_type='organization_type', designation='designation', display_sponsor_candidate_filter=False, display_authorized_committee_filter=True, display_parties_only_filter=False, display_default_other_committees_filter=True, display_alt_other_committees_filter=False, display_default_ie_committees_filter=True, display_alt_ie_committees_filter=False) %}
 
 {% if display_authorized_committee_filter %}
 <div class="filter">
@@ -24,32 +24,48 @@
 </div>
 {% endif %}
 
-<div class="filter">
-  <fieldset class="js-dropdown js-filter" data-filter="checkbox" data-name="committee_type">
-    <label class="label t-inline-block" for="committee_type">Independent expenditure committees</label>
-    <ul class="dropdown__selected">
-      <li>
-        <input id="committee-type-checkbox-O" type="checkbox" name="{{ committee_type }}" value="O">
-        <label class="dropdown__value" for="committee-type-checkbox-O">Super PAC (independent expenditure only)</label>
-      </li>
-    </ul>
-    <div class="dropdown">
-      <button type="button" class="dropdown__button button--alt" data-name="{{ committee_type }}">More</button>
-      <div id="ie-dropdown" class="dropdown__panel" aria-hidden="true">
-        <ul class="dropdown__list">
-          <li class="dropdown__item">
-            <input id="committee-type-checkbox-U" type="checkbox" name="{{ committee_type }}" value="U">
-            <label class="dropdown__value" for="committee-type-checkbox-U">Single candidate independent expenditure</label>
-          </li>
-          <li class="dropdown__item">
-            <input id="committee-type-checkbox-I" type="checkbox" name="{{ committee_type }}" value="I">
-            <label class="dropdown__value" for="committee-type-checkbox-I">Independent expenditure filer (not a committee)</label>
-          </li>
-        </ul>
+{% if display_default_ie_committees_filter %}
+  <div class="filter">
+    <fieldset class="js-dropdown js-filter" data-filter="checkbox" data-name="committee_type">
+      <label class="label t-inline-block" for="committee_type">Independent expenditure committees</label>
+      <ul class="dropdown__selected">
+        <li>
+          <input id="committee-type-checkbox-O" type="checkbox" name="{{ committee_type }}" value="O">
+          <label class="dropdown__value" for="committee-type-checkbox-O">Super PAC (independent expenditure only)</label>
+        </li>
+      </ul>
+      <div class="dropdown">
+        <button type="button" class="dropdown__button button--alt" data-name="{{ committee_type }}">More</button>
+        <div id="ie-dropdown" class="dropdown__panel" aria-hidden="true">
+          <ul class="dropdown__list">
+            <li class="dropdown__item">
+              <input id="committee-type-checkbox-U" type="checkbox" name="{{ committee_type }}" value="U">
+              <label class="dropdown__value" for="committee-type-checkbox-U">Single candidate independent expenditure</label>
+            </li>
+            <li class="dropdown__item">
+              <input id="committee-type-checkbox-I" type="checkbox" name="{{ committee_type }}" value="I">
+              <label class="dropdown__value" for="committee-type-checkbox-I">Independent expenditure filer (not a committee)</label>
+            </li>
+          </ul>
+        </div>
       </div>
-    </div>
-  </fieldset>
-</div>
+    </fieldset>
+  </div>
+{% endif %}
+
+{% if display_alt_ie_committees_filter %}
+  <div class="filter">
+    <fieldset class="js-dropdown js-filter" data-filter="checkbox" data-name="committee_type">
+      <label class="label t-inline-block" for="committee_type">Independent expenditure committees</label>
+      <ul class="dropdown__selected">
+        <li>
+          <input id="committee-type-checkbox-O" type="checkbox" name="{{ committee_type }}" value="O">
+          <label class="dropdown__value" for="committee-type-checkbox-O">Super PAC (independent expenditure only)</label>
+        </li>
+      </ul>
+    </fieldset>
+  </div>
+{% endif %}
 
 <div class="filter">
   <fieldset class="js-dropdown js-filter" data-filter="checkbox" data-name="organization_type">

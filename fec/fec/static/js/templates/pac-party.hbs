@@ -16,6 +16,11 @@ Template for PAC and party committee datatable details panel
     {{#panelRow "Designation"}}
       {{committee_designation_full}}
     {{/panelRow}}
+    {{#if party_full}}
+      {{#panelRow "Political party"}}
+        {{party_full}}
+      {{/panelRow}}
+    {{/if}}
     {{#if sponsor_candidate_list}}
       {{#panelRow "Leadership PAC sponsor"}}
         {{#each sponsor_candidate_list}}
