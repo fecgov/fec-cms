@@ -24,8 +24,34 @@
     "navigator": true
   },
   "rules": {
+    "array-bracket-spacing": ["error", "never", { "objectsInArrays": false }],
     "comma-dangle": ["error", "never"],
+    "eol-last": ["error", "always"],
+    // "eqeqeq": ["warn", "smart"],
+    "jsx-quotes": ["error", "prefer-double"],
+    "key-spacing": [2, {
+      "singleLine": { "beforeColon": false },
+      "multiLine": { "beforeColon": false }
+    }],
+    "max-len": ["error", {
+      "code": 200,
+      "comments": 250,
+      "ignoreStrings": true,
+      "ignoreTemplateLiterals": true
+    }],
+    "no-console": "error",
+    "no-empty-function": "error",
+    "no-lone-blocks": "error",
     "no-useless-escape": [0],
+    "no-multi-spaces": "error",
+    "no-multiple-empty-lines": ["error", { "max": 1, "maxEOF": 1 }],
+    "no-tabs": "error",
+    "no-trailing-spaces": "error",
+    // "no-unreachable-loop": "error",
+    "no-whitespace-before-property": "error",
+    "object-curly-spacing": ["error", "always", { "arraysInObjects": true, "objectsInObjects": false } ],
+    "quote-props": ["error", "as-needed"],
+    "quotes": ["error", "single", { "allowTemplateLiterals": true }],
     "react/jsx-uses-react": "error",
     "react/jsx-uses-vars": "error",
     "react/prop-types": "off",
