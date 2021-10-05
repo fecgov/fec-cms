@@ -462,6 +462,7 @@ var defaultOpts = {
 };
 
 var defaultCallbacks = {
+  afterRender: function() {} //eslint-disable-line no-empty-function
 };
 
 function DataTable(selector, opts) {
