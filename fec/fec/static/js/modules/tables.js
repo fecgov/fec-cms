@@ -52,7 +52,7 @@ var DOWNLOAD_MESSAGES = {
     ' exports at a time. This helps us keep things running smoothly.',
   empty: 'This table has no data to export.',
   comingSoon: 'Data exports for this page are coming soon.',
-  pending: "You're already exporting this data set."
+  pending: 'You\'re already exporting this data set.'
 };
 
 var DATA_WIDGETS = '.js-data-widgets';

@@ -1279,10 +1279,8 @@ PresidentialFundsMap.prototype.handleDocScrolling = function() {
   let windowHeight = window.innerHeight;
 
   if (windowScroll > downloadsScrollPosition + downloadsHeight - windowHeight) {
-    {
-      this.openDownloads();
-      window.removeEventListener('scroll', this.handleDocScrolling.bind(this));
-    }
+    this.openDownloads();
+    window.removeEventListener('scroll', this.handleDocScrolling.bind(this));
   }
 };
 

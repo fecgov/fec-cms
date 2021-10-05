@@ -140,8 +140,8 @@ var parties = {
   AIC: 'American Independent Conservative',
   AIP: 'American Independent Party',
   AMP: 'American Party',
-  APF: "American People's Freedom Party",
-  CIT: "Citizens' Party",
+  APF: 'American People\'s Freedom Party',
+  CIT: 'Citizens\' Party',
   CMP: 'Commonwealth Party of the US',
   COM: 'Communist Party',
   CRV: 'Conservative Party',
@@ -170,7 +170,7 @@ var parties = {
   PFD: 'Peace Freedom Party',
   POP: 'People Over Politics',
   PPD: 'Protest, Progress, Dignity',
-  PPY: "People's Party",
+  PPY: 'People\'s Party',
   REF: 'Reform Party',
   RTL: 'Right to Life',
   SLP: 'Socialist Labor Party',
@@ -179,7 +179,7 @@ var parties = {
   THD: 'Theo-Dem',
   TWR: 'Taxpayers Without Representation',
   TX: 'Taxpayers',
-  USP: "US People's Party"
+  USP: 'US People\'s Party'
 };
 
 module.exports = {

@@ -30,7 +30,7 @@ function SiteNav(selector) {
   // Open and close the menu on mobile
   this.$toggle.on('click', this.toggleMenu.bind(this));
 
-  /*matchMedia is used below to ensure searchbox is appended to correct location when 
+  /*matchMedia is used below to ensure searchbox is appended to correct location when
   user resizes screen while mobile menu is open */
 
   //Define min-width media query that matches our med('mobile') breakpoint

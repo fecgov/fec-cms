@@ -77,7 +77,7 @@ function ReportingDates() {
   /* global header_notes, footnotes */
   this.dates_table = document.getElementsByClassName('election-dates-table')[0];
   //get all acnhor links in TDs)
-  this.anchors = this.dates_table.querySelectorAll("td a[href^='#']");
+  this.anchors = this.dates_table.querySelectorAll('td a[href^=\'#\']');
 
   //disable default jump behavior for anchor links(#) but keep links for accessibility
   for (const anchor of this.anchors) {
