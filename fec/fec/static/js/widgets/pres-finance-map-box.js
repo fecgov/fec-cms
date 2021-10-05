@@ -1,6 +1,6 @@
 'use strict';
 
-/* global CustomEvent, $ */
+/* global $ */
 
 /**
  * TODO - @fileoverview

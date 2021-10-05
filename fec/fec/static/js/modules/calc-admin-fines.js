@@ -1,7 +1,6 @@
-/* global CustomEvent */
-
 /**
- */
+//
+*/
 import Vue from 'vue/dist/vue.esm.js';
 
 import { availableDates, getTotalAdminFine } from './calc-admin-fines-logic';

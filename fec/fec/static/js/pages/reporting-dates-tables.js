@@ -73,8 +73,8 @@ const header_notes_modal_partial = `<div tabindex="-1" class="modal__overlay" da
 </div>`;
 
 function ReportingDates() {
-  //Declare globals (scoped to this function)to get past linter error/tests. For header_notes and footnotes objects declared in CMS field, CSS.escape, Set()
-  /* global header_notes, footnotes, CSS, Set */
+  //Declare globals (scoped to this function) to get past linter error/tests. For header_notes and footnotes objects declared in CMS field, CSS.escape, Set()
+  /* global header_notes, footnotes */
   this.dates_table = document.getElementsByClassName('election-dates-table')[0];
   //get all acnhor links in TDs)
   this.anchors = this.dates_table.querySelectorAll("td a[href^='#']");
