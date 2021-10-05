@@ -387,7 +387,7 @@ function filterSuccessUpdates(changeCount) {
   }
 }
 
-function OffsetPaginator() {}
+function OffsetPaginator() {} //eslint-disable-line no-empty-function
 
 OffsetPaginator.prototype.mapQuery = function(data) {
   return {
@@ -396,7 +396,7 @@ OffsetPaginator.prototype.mapQuery = function(data) {
   };
 };
 
-OffsetPaginator.prototype.handleResponse = function() {};
+OffsetPaginator.prototype.handleResponse = function() {}; //eslint-disable-line no-empty-function
 
 function SeekPaginator() {
   this.indexes = {};
@@ -462,7 +462,6 @@ var defaultOpts = {
 };
 
 var defaultCallbacks = {
-  afterRender: function() {}
 };
 
 function DataTable(selector, opts) {

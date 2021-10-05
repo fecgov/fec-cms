@@ -148,8 +148,8 @@ function Filters(props) {
 }
 
 Filters.propTypes = {
-  getResults: function() {},
-  instantQuery: function() {},
+  getResults: function() {}, //eslint-disable-line no-empty-function
+  instantQuery: function() {}, //eslint-disable-line no-empty-function
   query: {
     resultCount: 0,
     lastResultCount: 0,
@@ -169,7 +169,7 @@ Filters.propTypes = {
     ao_max_request_date: new Date(),
     ao_entity_name: ''
   },
-  setQuery: function() {}
+  setQuery: function() {} //eslint-disable-line no-empty-function
 };
 
 Filters.propTypes = {
