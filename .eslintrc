@@ -1,4 +1,16 @@
 {
+  /**
+  // There's another .eslintrc file that extends this one specifically for tests.
+  // It's at /fec/fec/tests/.eslintrc
+  */
+  "env": {
+    "browser": true,
+    "es6": true
+  },
+  "extends": [
+    "eslint:recommended",
+    "plugin:react/recommended"
+  ],
   "globals": {
     "document": true,
     "window": true,
@@ -11,17 +23,13 @@
     "grecaptcha": true,
     "navigator": true
   },
-  "extends": [
-    "plugin:prettier/recommended",
-    "eslint:recommended",
-    "plugin:react/recommended"
-  ],
   "rules": {
     "comma-dangle": ["error", "never"],
     "no-useless-escape": [0],
-    "prettier/prettier": "error",
     "react/jsx-uses-react": "error",
-    "react/jsx-uses-vars": "error"
+    "react/jsx-uses-vars": "error",
+    "react/prop-types": "off",
+    "semi": [ "error", "always" ]
   },
   "parser": "babel-eslint",
   "parserOptions": {
@@ -32,7 +40,6 @@
       }
   },
   "plugins": [
-    "prettier",
     "react"
   ],
   "settings": {
