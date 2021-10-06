@@ -10,6 +10,7 @@ const loadRecaptcha = require('../modules/load-recaptcha').loadRecaptcha;
 function ContactForm($elm) {
   this.$elm = $elm;
   this.committeeId = $elm.find('#id_u_committee');
+  this.committeeName = $elm.find('#id_committee_name');
   this.category = $elm.find('#id_u_category');
   this.otherReason = $elm.find('#id_u_other_reason').closest('div');
   this.typeahead = new Typeahead(
@@ -34,7 +35,22 @@ ContactForm.prototype.initTypeahead = function() {
   this.typeahead.$input.off('typeahead:select');
   this.typeahead.$input.on('typeahead:select', function(e, opts) {
     self.committeeId.val(opts.id);
+    setTimeout(function() {
+      $(self.committeeName).val(opts.name + ' (' + opts.id + ')');
+    }, 100);
+    //console.log(opts.name)
+    //opts.name = opts.id
+    //console.log(opts.name)
+    //const id_committee_name = document.getElementById('id_committee_name')
+    //$(self.committeeName).val(opts.name+'('+opts.id+')')
+    // self.committeeName.val(function() {
+    //     opts.name += '('+opts.id+')'
+    //     return this.value + '('+opts.id+')';
+    // })
   });
+  // css('background','#f90')//val(opts.name+'('+opts.id+')')
+  // self.committeeId.removeAttr('type')
+  // self.committeeId.prop('type','')
 };
 
 ContactForm.prototype.initOtherReason = function() {

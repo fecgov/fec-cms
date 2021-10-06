@@ -4,7 +4,43 @@
 {% load filters %}
 
 {% block content %}
+<style>
+input.invalid_border, select.invalid_border, textarea.invalid_border, checkbox.invalid_border, label.invalid_border{
+  border-color: red !important;
+  
+}
 
+input:invalid:required {
+
+
+}
+input:focus:invalid, select:focus:invalid, textarea:focus:invalid, label:focus:invalid{
+  outline: none;
+}
+
+span.error {
+  display:inline-block;
+  color: red;
+}
+
+#checkbox_error {
+  display: block;
+}
+
+/*label[for=id_u_committee_member_certification]::before {
+    background: #fff;
+    border: 2px solid #5b616b;
+    content: '';
+    display: inline-block;
+    height: 1.6rem;
+    margin-right: .6em;
+    margin-left: -2.4rem;
+    text-indent: .15em;
+    width: 1.6rem;
+    vertical-align: -4px;
+}*/
+
+</style>
 {% include 'partials/breadcrumbs.html' with page=self links=self.ancestors style='secondary' %}
 
 <article class="main">
@@ -72,11 +108,11 @@
         {% if success %}
           <div class="message message--success">
             <h2 class="message__title">Success</h2>
-            <p>Thanks for reaching out to the FEC. A RAD analyst will contact you by email, usually within 3 business days.</p>
+            <p>Thanks for reaching out to the FEC. You should receive a confirmation email shortly  and a RAD analyst will contact you by email, usually within 3 business days.</p>
             <p><a href="/help-candidates-and-committees" class="button button--cta">Return to Help for candidates and committees</a></p>
             <p><a href="" class="button button--alt">Submit another question</a></p>
           </div>
-        {% elif form and form.errors %}
+        {% elif form and form.errors %
           <div class="message message--error">
             <h2 class="message__title">Error</h2>
             <p>Something went wrong. Please try again.</p>
@@ -93,7 +129,7 @@
       <div class="js-accordion accordion--neutral" data-content-prefix="contact" data-open-first="true">
         <button class="accordion__button js-accordion-trigger">Submit a question</button>
         <div class="accordion__content row">
-          <form class="js-contact-form contact-form" action="" method="post">
+          <form class="js-contact-form contact-form" action="" method="post" novalidate>
             {% csrf_token %}
             {% if server_error %}
             <div class="message message--error">
@@ -105,6 +141,22 @@
             <div class="contact-form__element">
               <h2>Your contact information</h2>
             </div>
+            <!-- {% if form.errors %}
+       {% for field in form %}
+           {% for error in field.errors %} 
+              <div class="alert alert-danger">
+                   <strong>{{ error|escape }}</strong>
+              </div>
+           {% endfor %}
+       {% endfor %}
+    {% endif %} -->
+
+
+<!--     <div class="fieldWrapper">
+    {{ form.lastname.errors }}
+    <label for="{{ form.subject.u_contact_last_name }}">Last name</label>
+    {{ form.lastname }}
+    </div> -->
 
             {% for field in form %}
               {% if field.is_hidden %}
@@ -154,7 +206,7 @@
             {% endfor %}
             <div class="g-recaptcha" data-sitekey="6Lc0uGwUAAAAALGRGXt3mTteJeb_lbse2frNdWjv"></div>
             <div class="contact-form__element">
-              <button class="js-submit button button--cta">Submit</button>
+              <button class="js-submit button button--cta">Submit your question</button>
               <span class="contact-form__reset t-sans">Or <button type="button" class="js-cancel button--unstyled">cancel submission and clear form</button></span>
             </div>
           </form>
@@ -166,5 +218,11 @@
 {% endblock %}
 
 {% block extra_js %}
+<script>
+if ( window.history.replaceState ) {
+  window.history.replaceState( null, null, window.location.href );
+}
+</script>
   <script type="text/javascript" src="{% asset_for_js 'contact-form.js' %}"></script>
+  <script type="text/javascript" src="{% asset_for_js 'radform-validate.js' %}"></script>
 {% endblock %}
