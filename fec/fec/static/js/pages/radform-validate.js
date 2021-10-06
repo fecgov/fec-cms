@@ -21,7 +21,6 @@ if (radform && radform.length) {
   const id_committee_name = document.getElementById('id_committee_name');
   id_committee_name.setAttribute('autocomplete', 'off');
 
-
   req_fields.forEach(function(req_field) {
     if (req_field.id !== 'id_u_committee_member_certification') {
       req_field.insertAdjacentHTML(
@@ -41,35 +40,26 @@ if (radform && radform.length) {
       //rem_border)
       showError(req_field);
     });
-
   });
 
-
-
   radform.addEventListener('submit', function(event) {
-
     validate_committee_id();
 
-  var invalid_array = [];
-  for (let req_field of req_fields) {
-
-
+    var invalid_array = [];
+    for (let req_field of req_fields) {
       if (!req_field.validity.valid) {
         // If it isn't, we display an appropriate error message
-        
 
         showError(req_field);
-        
-        invalid_array.push(req_field)
+
+        invalid_array.push(req_field);
         invalid_array[0].scrollIntoView();
-        
+
         // Then we prevent the form from being sent by canceling the event
         event.preventDefault();
         //break;
-        
       } else {
         req_field.nextElementSibling.textContent = '';
-       
       }
     }
   });
@@ -92,10 +82,7 @@ if (radform && radform.length) {
   };
 }
 
-
-
 function showError(req) {
-
   const field_id = req.getAttribute('id');
   const error_field = '#' + field_id + ' ~ span.error';
   const req_fieldError = document.querySelector(error_field);
