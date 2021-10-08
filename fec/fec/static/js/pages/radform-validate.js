@@ -5,7 +5,7 @@ const messages = {
   id_committee_name: 'Please choose a valid committee',
   id_u_category: 'Please choose a category',
   id_u_description: 'Please include a detailed question',
-  id_u_committee_member_certification: 'You must aree before submitting'
+  id_u_committee_member_certification: 'Please agree before submitting'
 };
 
 const radform = document.querySelector('.js-contact-form.contact-form');
@@ -25,14 +25,14 @@ if (radform && radform.length) {
     if (req_field.id !== 'id_u_committee_member_certification') {
       req_field.insertAdjacentHTML(
         'afterend',
-        '<span class="error t-sans t-bold" aria-live="polite"></span>'
+        '<span class="error t-sans t-bold '+req_field.id +'" aria-live="polite"></span>'
       );
     } else {
       document
         .querySelector('label[for=id_u_committee_member_certification]')
         .insertAdjacentHTML(
           'afterend',
-          '<span class="error" id="checkbox_error" aria-live="polite"></span>'
+          '<span class="error '+req_field.id +'" id="checkbox_error" aria-live="polite"></span>'
         );
     }
 
@@ -41,6 +41,12 @@ if (radform && radform.length) {
       showError(req_field);
     });
   });
+
+ id_committee_name.addEventListener('blur', function() {
+      //rem_border)
+      validate_committee_id();
+      showError(id_committee_name)
+    });
 
   radform.addEventListener('submit', function(event) {
     validate_committee_id();
@@ -76,15 +82,20 @@ if (radform && radform.length) {
 
     if (!id_u_committee.value) {
       id_committee_name.value = '';
+
     } else {
+      // document
+      //   .querySelector('span.id_committee_name').textContent = ''
       //id_u_committee.setCustomValidity(" ")
     }
   };
 }
 
+
 function showError(req) {
   const field_id = req.getAttribute('id');
-  const error_field = '#' + field_id + ' ~ span.error';
+  //const error_field = '#' + field_id + ' ~ span.error';
+  const error_field = 'span.' + field_id;
   const req_fieldError = document.querySelector(error_field);
   const msg = messages[field_id];
 
