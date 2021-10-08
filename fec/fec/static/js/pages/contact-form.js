@@ -37,9 +37,9 @@ ContactForm.prototype.initTypeahead = function() {
   this.typeahead.$input.off('typeahead:select');
   this.typeahead.$input.on('typeahead:select', function(e, opts) {
     self.committeeId.val(opts.id);
-    console.log( "X: "+self.committeeNameError.textContent)
+
     //self.committeeNameError.remove();
-    $('span.id_committee_name').textContent = 'THIS';
+    //$('span.id_committee_name').textContent = '';
     // setTimeout(function() {
     //   $(self.committeeName).val(opts.name + ' (' + opts.id + ')');
     // }, 100);
@@ -47,8 +47,8 @@ ContactForm.prototype.initTypeahead = function() {
 };
 
 ContactForm.prototype.clearHidden = function() {
-    this.committeeId.val('');
-  }
+  this.committeeId.val('');
+};
 
 ContactForm.prototype.initOtherReason = function() {
   this.otherReason.addClass('conditional-field');

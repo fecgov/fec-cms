@@ -25,14 +25,18 @@ if (radform && radform.length) {
     if (req_field.id !== 'id_u_committee_member_certification') {
       req_field.insertAdjacentHTML(
         'afterend',
-        '<span class="error t-sans t-bold '+req_field.id +'" aria-live="polite"></span>'
+        '<span class="error t-sans t-bold ' +
+          req_field.id +
+          '" aria-live="polite"></span>'
       );
     } else {
       document
         .querySelector('label[for=id_u_committee_member_certification]')
         .insertAdjacentHTML(
           'afterend',
-          '<span class="error '+req_field.id +'" id="checkbox_error" aria-live="polite"></span>'
+          '<span class="error ' +
+            req_field.id +
+            '" id="checkbox_error" aria-live="polite"></span>'
         );
     }
 
@@ -42,11 +46,11 @@ if (radform && radform.length) {
     });
   });
 
- id_committee_name.addEventListener('blur', function() {
-      //rem_border)
-      validate_committee_id();
-      showError(id_committee_name)
-    });
+  id_committee_name.addEventListener('blur', function() {
+    //rem_border)
+    validate_committee_id();
+    showError(id_committee_name);
+  });
 
   radform.addEventListener('submit', function(event) {
     validate_committee_id();
@@ -82,7 +86,6 @@ if (radform && radform.length) {
 
     if (!id_u_committee.value) {
       id_committee_name.value = '';
-
     } else {
       // document
       //   .querySelector('span.id_committee_name').textContent = ''
@@ -90,7 +93,6 @@ if (radform && radform.length) {
     }
   };
 }
-
 
 function showError(req) {
   const field_id = req.getAttribute('id');

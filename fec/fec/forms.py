@@ -14,7 +14,6 @@ class ContactRAD(forms.Form):
     """
     Generates a contact form for submitting questions to RAD
     """
-    #lastname = forms.CharField(max_length=100)
     def __init__(self, *args, **kwargs):
         category_options = [('', 'Choose a subject')] + form_categories()
         super().__init__(*args, **kwargs)
