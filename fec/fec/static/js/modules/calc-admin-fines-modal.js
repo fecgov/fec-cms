@@ -1,4 +1,4 @@
-/* global calcAdminFineJsPath CustomEvent */
+/* global calcAdminFineJsPath */
 
 // {# If the page has a link to the admin fines calculator in it, load its JS #}
 let elementsWithAdminFinesCalcClass = document.querySelectorAll(

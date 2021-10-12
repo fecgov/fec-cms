@@ -1,8 +1,5 @@
 'use strict';
 
-// Tell linter not to highlight 'describe' and 'it' as wrong:
-/* global describe it */
-
 var chai = require('chai');
 var expect = chai.expect;
 
