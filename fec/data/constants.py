@@ -286,8 +286,8 @@ pac_party = OrderedDict([
 pac_party_types = OrderedDict([
     ('N', 'PAC - nonqualified'),
     ('Q', 'PAC - qualified'),
-    ('V', 'PAC with non-contribution account - nonqualified'),
-    ('W', 'PAC with non-contribution account - qualified'),
+    ('V', 'Hybrid PAC - nonqualified'),
+    ('W', 'Hybrid PAC - qualified'),
     ('P', 'Party - nonqualified'),
     ('Y', 'Party - qualified'),
     ('Z', 'National party nonfederal account'),
