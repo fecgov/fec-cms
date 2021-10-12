@@ -16,8 +16,11 @@ var skipNav = require('./modules/skip-nav');
 var siteNav = require('./modules/site-nav');
 var dropdown = require('./modules/dropdowns');
 var toc = require('./modules/toc');
-var typeahead = require('./modules/typeahead');
+// var typeahead = require('./modules/typeahead');
 var helpers = require('./modules/helpers');
+
+import filterTypeahead from './modules/filters/filter-typeahead';
+import { AutoComplete } from './modules/typeahead';
 
 // Hack: Append jQuery to `window` for use by legacy libraries
 window.$ = window.jQuery = $;
@@ -92,6 +95,12 @@ $(document).ready(function() {
   // Initialize header typeaheads (mobile and desktop)
   $('.js-site-search').each(function() {
     new typeahead.Typeahead($(this), 'all', '/data/');
+  });
+
+  let siteSearchObjects = document.querySelectorAll('.js-site-search-new');
+  siteSearchObjects.forEach((val, key) => {
+    // console.log('forEach val, key: ', val, key);
+    new AutoComplete(val, 'all', '/data/');
   });
 
   // For any link that should scroll to a section on the page apply .js-scroll to <a>

@@ -6,19 +6,23 @@
 
 var $ = require('jquery');
 var URI = require('urijs');
-var _ = require('underscore');
-var Handlebars = require('handlebars');
-var helpers = require('./helpers');
+// var _ = require('underscore');
+let Handlebars = require('handlebars');
+import { sanitizeValue } from './helpers';
 
 // Hack: Append jQuery to `window` for use by typeahead.js
 window.$ = window.jQuery = $;
 
-require('corejs-typeahead/dist/typeahead.jquery');
+// require('corejs-typeahead/dist/typeahead.jquery');
 var Bloodhound = require('corejs-typeahead/dist/bloodhound');
 
-var events = require('./events');
+import autoComplete from '@tarekraafat/autocomplete.js';
+import events from './events';
 
-var officeMap = {
+
+// var events = require('./events');
+
+const officeMap = {
   H: 'House',
   S: 'Senate',
   P: 'President'
@@ -68,17 +72,17 @@ function getUrl(resource) {
     .readable();
 }
 
-var engineOpts = {
+const engineOpts = {
   datumTokenizer: Bloodhound.tokenizers.obj.whitespace('value'),
   queryTokenizer: Bloodhound.tokenizers.whitespace,
   limit: 10
 };
 
 function createEngine(opts) {
-  return new Bloodhound(_.extend({}, engineOpts, opts));
+  return new Bloodhound(Object.assign({}, engineOpts, opts));
 }
 
-var candidateEngine = createEngine({
+const candidateEngine = createEngine({
   remote: {
     url: getUrl('candidates'),
     wildcard: '%QUERY',
@@ -88,7 +92,7 @@ var candidateEngine = createEngine({
   }
 });
 
-var committeeEngine = createEngine({
+const committeeEngine = createEngine({
   remote: {
     url: getUrl('committees'),
     wildcard: '%QUERY',
@@ -98,7 +102,7 @@ var committeeEngine = createEngine({
   }
 });
 
-var auditCommitteeEngine = createEngine({
+const auditCommitteeEngine = createEngine({
   remote: {
     url: getUrl('audit_committees'),
     wildcard: '%QUERY',
@@ -108,7 +112,7 @@ var auditCommitteeEngine = createEngine({
   }
 });
 
-var auditCandidateEngine = createEngine({
+const auditCandidateEngine = createEngine({
   remote: {
     url: getUrl('audit_candidates'),
     wildcard: '%QUERY',
@@ -118,7 +122,7 @@ var auditCandidateEngine = createEngine({
   }
 });
 
-var candidateDataset = {
+const candidateDataset = {
   name: 'candidate',
   display: 'name',
   limit: 5,
@@ -137,7 +141,7 @@ var candidateDataset = {
   }
 };
 
-var committeeDataset = {
+const committeeDataset = {
   name: 'committee',
   display: 'name',
   limit: 10,
@@ -155,7 +159,7 @@ var committeeDataset = {
   }
 };
 
-var auditCommitteeDataset = {
+const auditCommitteeDataset = {
   name: 'auditCommittees',
   display: 'name',
   limit: 10,
@@ -171,7 +175,7 @@ var auditCommitteeDataset = {
   }
 };
 
-var auditCandidateDataset = {
+const auditCandidateDataset = {
   name: 'auditCandidates',
   display: 'name',
   limit: 10,
@@ -196,7 +200,7 @@ var individualDataset = {
   source: function(query, syncResults) {
     syncResults([
       {
-        id: helpers.sanitizeValue(query),
+        id: sanitizeValue(query),
         type: 'individual'
       }
     ]);
@@ -220,7 +224,7 @@ var siteDataset = {
   source: function(query, syncResults) {
     syncResults([
       {
-        id: helpers.sanitizeValue(query),
+        id: sanitizeValue(query),
         type: 'site'
       }
     ]);
@@ -249,6 +253,35 @@ var typeaheadOpts = {
   hint: false
 };
 
+let autoCompleteOpts = {
+  selector: ".js-site-search-new",
+  placeHolder: "The opts worked!",
+  data: {
+    src: ["Sauce - Thousand Island", "Wild Boar - Tenderloin", "Goat - Whole Cut"],
+    cache: true,
+  },
+  resultsList: {
+    element: (list, data) => {
+      if (!data.results.length) {
+        // Create "No Results" message element
+        const message = document.createElement("div");
+        // Add class to the created element
+        message.setAttribute("class", "no_result");
+        // Add message text content
+        message.innerHTML = `<span>Found No Results for "${data.query}"</span>`;
+        // Append message element to the results list
+        list.prepend(message);
+      }
+    },
+    noResults: true,
+  },
+  resultItem: {
+    highlight: {
+      render: true
+    }
+  }
+};
+
 /**
  * @class
  * @param {String} selector - A string to be used to find the element in the page.
@@ -264,17 +297,32 @@ var typeaheadOpts = {
  * @property {Object} - null if no results. Otherwise we get back an {Object} for each item in the menu
  */
 function Typeahead(selector, type, url) {
-  this.$input = $(selector);
+  // this.$input = $(selector);
+  // this.url = url || '/';
+  // this.typeahead = null;
+
+  // this.dataset = datasets[type];
+
+  // this.init();
+
+  // events.on('searchTypeChanged', this.handleChangeEvent.bind(this));
+
+  // this.$input.on('keyup', this.setAria.bind(this));
+}
+function AutoComplete(element, type, url) {
+  events.on('searchTypeChanged', this.handleChangeEvent.bind(this));
+
+  this.$input = element;
   this.url = url || '/';
-  this.typeahead = null;
+  this.autoComplete = null;
 
   this.dataset = datasets[type];
 
   this.init();
 
-  events.on('searchTypeChanged', this.handleChangeEvent.bind(this));
+  console.log('new AutoComplete!');
 
-  this.$input.on('keyup', this.setAria.bind(this));
+  this.$input.addEventListener('keyup', this.setAria.bind(this));
 }
 
 Typeahead.prototype.init = function() {
@@ -290,9 +338,27 @@ Typeahead.prototype.init = function() {
   this.$input.on('typeahead:select', this.select.bind(this));
 };
 
+AutoComplete.prototype.init = function() {
+  console.log('AutoComplete.init()');
+  // if (this.autoComplete) this.$input.typeahead('destroy');
+
+  // this.autoComplete = this.$input.typeahead(typeaheadOpts, this.dataset);
+  // this.$element = this.$input.parent('.twitter-typeahead');
+  // this.$element.css('display', 'block');
+  // this.$element.find('.tt-menu').attr('aria-live', 'polite');
+  // this.$element.find('.tt-input').removeAttr('aria-readonly');
+  // this.$element.find('.tt-input').attr('aria-expanded', 'false');
+  // this.$input.on('typeahead:select', this.select.bind(this));
+};
+
 Typeahead.prototype.handleChangeEvent = function(data) {
   this.init(data.type);
 };
+
+AutoComplete.prototype.handleChangeEvent = function(data) {
+  console.log('AutoComplete.handleChangeEvent');
+  this.init(data.type);
+}
 
 Typeahead.prototype.setAria = function() {
   if (this.$element.find('.tt-menu').attr('aria-expanded') == 'false') {
@@ -301,6 +367,18 @@ Typeahead.prototype.setAria = function() {
     this.$element.find('.tt-input').attr('aria-expanded', 'true');
   }
   //alert('closed')
+};
+
+AutoComplete.prototype.setAria = function() {
+  console.log('AutoComplete.setAria()');
+
+  let thisMenu = this.$input.querySelector('.tt-menu[aria-expanded]');
+  let thisInput = this.$input.querySelector('.tt-input');
+  console.log('  thisMenu: ', thisMenu);
+  console.log('  thisInput: ', thisInput);
+  console.log('  this.$input: ', this.$input);
+  console.log('  !!thisMenu: ', !!thisMenu);
+  if (thisInput && thisMenu) thisInput.setAttribute('aria-expanded', !!thisMenu);
 };
 
 Typeahead.prototype.select = function(event, datum) {
@@ -329,6 +407,7 @@ Typeahead.prototype.searchSite = function(query) {
 };
 
 module.exports = {
+  AutoComplete: AutoComplete,
   Typeahead: Typeahead,
   datasets: datasets
 };
