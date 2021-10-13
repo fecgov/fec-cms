@@ -9,9 +9,11 @@
     {{#panelRow "State"}}
       {{state}}
     {{/panelRow}}
-    {{#panelRow "Political party"}}
-      {{party_full}}
-    {{/panelRow}}
+    {{#if party_full}}
+      {{#panelRow "Political party"}}
+        {{party_full}}
+      {{/panelRow}}
+    {{/if}}
     {{#panelRow "First file date"}}
       {{datetime first_file_date format="pretty"}}
     {{/panelRow}}
