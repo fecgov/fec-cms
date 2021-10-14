@@ -11,7 +11,7 @@ function ContactForm($elm) {
   this.$elm = $elm;
   this.committeeId = $elm.find('#id_u_committee');
   this.committeeName = $elm.find('#id_committee_name');
-  this.committeeNameError = $elm.find('span.id_committee_name');
+  this.committeeNameError = $elm.find('.id_committee_name');
   this.category = $elm.find('#id_u_category');
   this.otherReason = $elm.find('#id_u_other_reason').closest('div');
   this.typeahead = new Typeahead(
@@ -37,12 +37,15 @@ ContactForm.prototype.initTypeahead = function() {
   this.typeahead.$input.off('typeahead:select');
   this.typeahead.$input.on('typeahead:select', function(e, opts) {
     self.committeeId.val(opts.id);
+    $('#id_u_contact_title').focus();
+    //$(self.committeeId).focus()
 
     //self.committeeNameError.remove();
     //$('span.id_committee_name').textContent = '';
-    // setTimeout(function() {
-    //   $(self.committeeName).val(opts.name + ' (' + opts.id + ')');
-    // }, 100);
+    //   setTimeout(function() {
+
+    //     $('body').trigger('click')//textContent = '';//val(opts.name + ' (' + opts.id + ')');
+    //   }, 100);
   });
 };
 

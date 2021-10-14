@@ -124,7 +124,7 @@ span.error {
       <div class="js-accordion accordion--neutral" data-content-prefix="contact" data-open-first="true">
          <button class="accordion__button js-accordion-trigger">Submit a question</button>
          <div class="accordion__content row">
-            <form class="js-contact-form contact-form" action="" method="post" novalidate>
+            <form class="js-contact-form contact-form" id="radform_id" action="" method="post" novalidate>
                {% csrf_token %}
             {% if server_error %}
             <div class="message message--error">
@@ -132,6 +132,7 @@ span.error {
               {{ form.non_field_errors }}
               <p>Something went wrong with the form. Please try again.
               <br>
+              {% if field.errors %}
               The following fields have an error:</p>
               {% for field in form %}
                 <ul>
@@ -140,6 +141,7 @@ span.error {
                 {% endfor %}
                 </ul>
                {% endfor %}
+              {% endif %}
              </div>
             {% endif %}
                <div class="contact-form__element">
