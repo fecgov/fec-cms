@@ -6,7 +6,7 @@
 
 var $ = require('jquery');
 var URI = require('urijs');
-// var _ = require('underscore');
+var _ = require('underscore');
 let Handlebars = require('handlebars');
 import { sanitizeValue } from './helpers';
 
@@ -18,7 +18,6 @@ var Bloodhound = require('corejs-typeahead/dist/bloodhound');
 
 import autoComplete from '@tarekraafat/autocomplete.js';
 import events from './events';
-
 
 // var events = require('./events');
 
@@ -63,13 +62,30 @@ function formatAuditCandidate(result) {
 }
 
 function getUrl(resource) {
-  return URI(window.API_LOCATION)
+  console.log('getURL(resource): ', resource);
+
+  let toReturn = URI(window.API_LOCATION)
     .path([window.API_VERSION, 'names', resource, ''].join('/'))
     .query({
       q: '%QUERY',
       api_key: window.API_KEY_PUBLIC
     })
     .readable();
+
+  let toReturn2 = [
+    window.API_LOCATION,
+    window.API_VERSION,
+    'names',
+    resource,
+    ''
+  ].join('/');
+  toReturn2 += `?=%QUERY&api_key=${window.API_KEY_PUBLIC}`;
+
+  console.log('getURL()');
+  console.log('  toReturn: ', toReturn);
+  console.log('  toReturn2: ', toReturn2);
+  console.log('  toReturn2.href: ', toReturn2.href);
+  return toReturn;
 }
 
 const engineOpts = {
@@ -87,7 +103,12 @@ const candidateEngine = createEngine({
     url: getUrl('candidates'),
     wildcard: '%QUERY',
     transform: function(response) {
-      return _.map(response.results, formatCandidate);
+      console.log('committeeEngine');
+      let toReturn = _.map(response.results, formatCandidate);
+      // return _.map(response.results, formatCommittee);
+      let toReturn2 = response['results'].map(n => formatCandidate(n));
+      console.log('  toReturn: ', toReturn);
+      console.log('  toReturn2: ', toReturn2);
     }
   }
 });
@@ -97,7 +118,13 @@ const committeeEngine = createEngine({
     url: getUrl('committees'),
     wildcard: '%QUERY',
     transform: function(response) {
-      return _.map(response.results, formatCommittee);
+      console.log('committeeEngine');
+      let toReturn = _.map(response.results, formatCommittee);
+      // return _.map(response.results, formatCommittee);
+      let toReturn2 = response['results'].map(n => formatCommittee(n));
+      console.log('  toReturn: ', toReturn);
+      console.log('  toReturn2: ', toReturn2);
+      return toReturn;
     }
   }
 });
@@ -107,7 +134,12 @@ const auditCommitteeEngine = createEngine({
     url: getUrl('audit_committees'),
     wildcard: '%QUERY',
     transform: function(response) {
-      return _.map(response.results, formatAuditCommittee);
+      console.log('auditCommitteeEngine');
+      let toReturn = _.map(response.results, formatAuditCommittee);
+      // return _.map(response.results, formatCommittee);
+      let toReturn2 = response['results'].map(n => formatAuditCommittee(n));
+      console.log('  toReturn: ', toReturn);
+      console.log('  toReturn2: ', toReturn2);
     }
   }
 });
@@ -117,7 +149,12 @@ const auditCandidateEngine = createEngine({
     url: getUrl('audit_candidates'),
     wildcard: '%QUERY',
     transform: function(response) {
-      return _.map(response.results, formatAuditCandidate);
+      console.log('auditCandidateEngine');
+      let toReturn = _.map(response.results, formatAuditCandidate);
+      // return _.map(response.results, formatCommittee);
+      let toReturn2 = response['results'].map(n => formatAuditCandidate(n));
+      console.log('  toReturn: ', toReturn);
+      console.log('  toReturn2: ', toReturn2);
     }
   }
 });
@@ -254,26 +291,31 @@ var typeaheadOpts = {
 };
 
 let autoCompleteOpts = {
-  selector: ".js-site-search-new",
-  placeHolder: "The opts worked!",
+  selector: '.js-site-search-new',
+  placeHolder: 'The opts worked!',
   data: {
-    src: ["Sauce - Thousand Island", "Wild Boar - Tenderloin", "Goat - Whole Cut"],
-    cache: true,
+    // src: [
+    //   'Sauce - Thousand Island',
+    //   'Wild Boar - Tenderloin',
+    //   'Goat - Whole Cut'
+    // ],
+    src: '',
+    cache: true
   },
   resultsList: {
     element: (list, data) => {
       if (!data.results.length) {
         // Create "No Results" message element
-        const message = document.createElement("div");
+        const message = document.createElement('div');
         // Add class to the created element
-        message.setAttribute("class", "no_result");
+        message.setAttribute('class', 'no_result');
         // Add message text content
         message.innerHTML = `<span>Found No Results for "${data.query}"</span>`;
         // Append message element to the results list
         list.prepend(message);
       }
     },
-    noResults: true,
+    noResults: true
   },
   resultItem: {
     highlight: {
@@ -300,13 +342,9 @@ function Typeahead(selector, type, url) {
   // this.$input = $(selector);
   // this.url = url || '/';
   // this.typeahead = null;
-
   // this.dataset = datasets[type];
-
   // this.init();
-
   // events.on('searchTypeChanged', this.handleChangeEvent.bind(this));
-
   // this.$input.on('keyup', this.setAria.bind(this));
 }
 function AutoComplete(element, type, url) {
@@ -340,15 +378,68 @@ Typeahead.prototype.init = function() {
 
 AutoComplete.prototype.init = function() {
   console.log('AutoComplete.init()');
+  // TODO: do we need to destroy/reset one if it already exists?
   // if (this.autoComplete) this.$input.typeahead('destroy');
+  let theseOpts = autoCompleteOpts;
+  theseOpts.data = Object.assign(theseOpts.data, { src: getUrl() });
 
-  // this.autoComplete = this.$input.typeahead(typeaheadOpts, this.dataset);
-  // this.$element = this.$input.parent('.twitter-typeahead');
-  // this.$element.css('display', 'block');
-  // this.$element.find('.tt-menu').attr('aria-live', 'polite');
-  // this.$element.find('.tt-input').removeAttr('aria-readonly');
-  // this.$element.find('.tt-input').attr('aria-expanded', 'false');
-  // this.$input.on('typeahead:select', this.select.bind(this));
+  this.autoComplete = new autoComplete(autoCompleteOpts, this.dataset);
+
+  // Create a new span to wrap the input,
+  // add the span to the page before the input
+  // and move the input into it
+  this.$element = document.createElement('span');
+  this.$element.setAttribute('class', 'twitter-typeahead');
+  this.$element.setAttribute('style', 'position: relative; display: block');
+  this.$element.innerHTML = `\
+    <span\
+      role="status"\
+      aria-live="polite"\
+      style="position: absolute; padding: 0px; border: 0px; height: 1px; width: 1px; margin-bottom: -1px; margin-right: -1px; overflow: hidden; clip: rect(0px, 0px, 0px, 0px); white-space: nowrap;">\
+    </span>\
+    <pre\
+      aria-hidden="true"\
+      style="position: absolute; visibility: hidden; white-space: pre; font-family: karla, sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 400; word-spacing: 0px; letter-spacing: 0px; text-indent: 0px; text-rendering: auto; text-transform: none;">\
+    </pre>\
+    <div\
+      role="listbox"\
+      class="tt-menu"\
+      aria-live="polite"\
+      style="position: absolute; top: 100%; left: 0px; z-index: 100; display: none;"\
+      aria-expanded="false">\
+      <div role="presentation" class="tt-dataset tt-dataset-candidate"></div>\
+      <div role="presentation" class="tt-dataset tt-dataset-committee"></div>\
+      <div role="presentation" class="tt-dataset tt-dataset-0"></div>\
+      <div role="presentation" class="tt-dataset tt-dataset-1"></div>\
+    </div>`;
+  this.$input.parentNode.insertBefore(this.$element, this.$input);
+  this.$element.prepend(this.$input);
+
+  /* FINAL LOOK:
+    <span class="twitter-typeahead" style="position: relative; display: block;">
+      <input class="js-site-search combo__input tt-input" autocomplete="off" aria-controls="query_listbox" id="query" name="query" type="text" aria-label="Search FEC.gov" spellcheck="false" dir="auto" aria-activedescendant="" aria-owns="query_listbox" role="combobox" aria-autocomplete="list" style="position: relative; vertical-align: top;" aria-expanded="false">
+      <span role="status" aria-live="polite" style="position: absolute; padding: 0px; border: 0px; height: 1px; width: 1px; margin-bottom: -1px; margin-right: -1px; overflow: hidden; clip: rect(0px, 0px, 0px, 0px); white-space: nowrap;"></span>
+      <pre aria-hidden="true" style="position: absolute; visibility: hidden; white-space: pre; font-family: karla, sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 400; word-spacing: 0px; letter-spacing: 0px; text-indent: 0px; text-rendering: auto; text-transform: none;"></pre>
+      <div role="listbox" class="tt-menu" aria-live="polite" style="position: absolute; top: 100%; left: 0px; z-index: 100; display: none;" aria-expanded="false">
+        <div role="presentation" class="tt-dataset tt-dataset-candidate"></div>
+        <div role="presentation" class="tt-dataset tt-dataset-committee"></div>
+        <div role="presentation" class="tt-dataset tt-dataset-0"></div>
+        <div role="presentation" class="tt-dataset tt-dataset-1"></div>
+      </div>
+    </span>
+  */
+
+  let theMenus = this.$element.querySelectorAll('.tt-menu');
+  theMenus.forEach(el => {
+    el.setAttribute('aria-live', 'polite');
+  });
+
+  let theInputs = this.$element.querySelectorAll('.tt-input');
+  theInputs.forEach(el => {
+    el.setAttribute('aria-expanded', 'false').removeAttribute('aria-readonly');
+  });
+
+  this.$input.addEventListener('typeahead:select', this.select.bind(this));
 };
 
 Typeahead.prototype.handleChangeEvent = function(data) {
@@ -358,7 +449,7 @@ Typeahead.prototype.handleChangeEvent = function(data) {
 AutoComplete.prototype.handleChangeEvent = function(data) {
   console.log('AutoComplete.handleChangeEvent');
   this.init(data.type);
-}
+};
 
 Typeahead.prototype.setAria = function() {
   if (this.$element.find('.tt-menu').attr('aria-expanded') == 'false') {
@@ -378,7 +469,8 @@ AutoComplete.prototype.setAria = function() {
   console.log('  thisInput: ', thisInput);
   console.log('  this.$input: ', this.$input);
   console.log('  !!thisMenu: ', !!thisMenu);
-  if (thisInput && thisMenu) thisInput.setAttribute('aria-expanded', !!thisMenu);
+  if (thisInput && thisMenu)
+    thisInput.setAttribute('aria-expanded', !!thisMenu);
 };
 
 Typeahead.prototype.select = function(event, datum) {
@@ -392,6 +484,19 @@ Typeahead.prototype.select = function(event, datum) {
   } else {
     window.location = this.url + datum.type + '/' + datum.id;
   }
+};
+AutoComplete.prototype.select = function(event, datum) {
+  console.log('AutoComplete.select(event, datum): ', event, datum);
+  // if (datum.type === 'individual') {
+  //   window.location =
+  //     this.url +
+  //     'receipts/individual-contributions/?contributor_name=' +
+  //     datum.id;
+  // } else if (datum.type === 'site') {
+  //   this.searchSite(datum.id);
+  // } else {
+  //   window.location = this.url + datum.type + '/' + datum.id;
+  // }
 };
 
 Typeahead.prototype.searchSite = function(query) {
