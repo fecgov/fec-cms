@@ -1,14 +1,6 @@
 'use strict';
 
-var chai = require('chai');
-var sinon = require('sinon');
-var sinonChai = require('sinon-chai');
-var expect = chai.expect;
-chai.use(sinonChai);
-
-var $ = require('jquery');
-
-require('./setup')();
+ 
 
 var ContactForm = require('../../static/js/pages/contact-form').ContactForm;
 
@@ -91,4 +83,12 @@ describe('Contact form', function() {
     expect($('select').val()).to.equal(null);
     expect($('#id_u_other_reason').val()).to.equal('');
   });
+  
+  it('clears the ID on keyup of comm typahead field', function() {
+    $('#id_u_committee').val('12345');
+    //$('#id_committee_name').val('ACTBLUE')
+    $(this.form.typeahead.$input).keyup();
+    expect(this.form.committeeId.val()).to.equal('');
+  });
+
 });

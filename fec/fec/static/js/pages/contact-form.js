@@ -3,6 +3,7 @@
 var $ = require('jquery');
 var Typeahead = require('../modules/typeahead').Typeahead;
 var URI = require('urijs');
+//require('../pages/radform-validate');
 
 const loadRecaptcha = require('../modules/load-recaptcha').loadRecaptcha;
 
@@ -37,18 +38,12 @@ ContactForm.prototype.initTypeahead = function() {
   this.typeahead.$input.off('typeahead:select');
   this.typeahead.$input.on('typeahead:select', function(e, opts) {
     self.committeeId.val(opts.id);
+    //focus away to prompt removal of error state, if present.
     $('#id_u_contact_title').focus();
-    //$(self.committeeId).focus()
-
-    //self.committeeNameError.remove();
-    //$('span.id_committee_name').textContent = '';
-    //   setTimeout(function() {
-
-    //     $('body').trigger('click')//textContent = '';//val(opts.name + ' (' + opts.id + ')');
-    //   }, 100);
   });
 };
 
+//Clear comm_id field when keyup is registered on comm name field.
 ContactForm.prototype.clearHidden = function() {
   this.committeeId.val('');
 };
@@ -145,8 +140,140 @@ AnalystLookup.prototype.handleChange = function(e) {
 new ContactForm($('.js-contact-form'));
 new AnalystLookup($('.js-analyst-lookup'));
 
+function RadFormValidate(radform) {
+  this.messages = {
+    id_u_contact_first_name: 'Please provide your first name',
+    id_u_contact_last_name: 'Please provide your last name',
+    id_u_contact_email: 'Please include a valid email address',
+    id_committee_name: 'Please choose a valid committee',
+    id_u_category: 'Please choose a category',
+    id_u_description: 'Please include a detailed question',
+    id_u_committee_member_certification: 'Please agree before submitting'
+  };
+
+  this.radform = document.getElementById(radform);
+  //if radform is renndered to the page
+  if (this.radform && this.radform.length) {
+    this.id_u_committee = this.radform.querySelector('#id_u_committee');
+    this.id_u_committee.removeAttribute('type');
+
+    //grt all required fields
+    this.req_fields = this.radform.querySelectorAll('[required]');
+
+    this.id_committee_name = this.radform.querySelector('#id_committee_name');
+    this.id_committee_name.setAttribute('autocomplete', 'off');
+
+    var self = this;
+
+    //Iterate the required fields to add error span and event listeners
+    this.req_fields.forEach(function(req_field) {
+      //if the required field is not the committee_member_certification checkbox
+      if (req_field.id !== 'id_u_committee_member_certification') {
+        req_field.insertAdjacentHTML(
+          'afterend',
+          '<span class="error t-sans t-bold ' +
+            req_field.id +
+            '" aria-live="polite"></span>'
+        );
+      } else {
+        //This checkbox needs to put the error after or else it breaks its formatting onn the page
+        document
+          .querySelector('label[for=id_u_committee_member_certification]')
+          .insertAdjacentHTML(
+            'afterend',
+            '<span class="error ' +
+              req_field.id +
+              '" id="checkbox_error" aria-live="polite"></span>'
+          );
+      }
+
+      //bind showError() to input event on required fields
+      req_field.addEventListener('input', function() {
+        self.showError(req_field);
+      });
+    });
+
+    //bind to submit event for the form
+    this.radform.addEventListener('submit', this.handleSubmit.bind(this));
+    //bind to blur event for id_committee name field only
+    this.id_committee_name.addEventListener('blur', this.handleBlur.bind(this));
+  } //end if(radform)
+}
+
+RadFormValidate.prototype.handleBlur = function() {
+  this.validateCommitteeId();
+  this.showError(this.id_committee_name);
+};
+
+RadFormValidate.prototype.handleSubmit = function(event) {
+  this.validateCommitteeId();
+
+  //iterate invalid required fields to scroll to first invalid field
+  var invalid_array = [];
+  for (let req_field of this.req_fields) {
+    if (!req_field.validity.valid) {
+      event.preventDefault();
+      invalid_array.push(req_field);
+      invalid_array[0].scrollIntoView();
+
+      //break; //if we only want to show first invalid field
+    }
+    this.showError(req_field);
+  }
+};
+
+//validation specific to committee name and ID field
+RadFormValidate.prototype.validateCommitteeId = function() {
+  if (!this.id_u_committee.value) {
+    var self = this;
+    self.id_committee_name.value = '';
+    //need a set timeout to wait for typeahead to finish whatever it is doing on the field
+    setTimeout(function() {
+      self.id_committee_name.value = '';
+      //self.showError(self.id_committee_name);
+    }, 100);
+  }
+};
+
+//main showError funcrtion
+RadFormValidate.prototype.showError = function(req) {
+  //var showError = function(req) {
+  const field_id = req.getAttribute('id');
+  //const error_field = '#' + field_id + ' ~ span.error';
+  const error_field = 'span.' + field_id;
+  const req_fieldError = document.querySelector(error_field);
+  const msg = this.messages[field_id];
+
+  if (!req.validity.valid) {
+    //This chexkbox needs to put red border on label due to its formatting
+    if (req.id == 'id_u_committee_member_certification') {
+      document
+        .querySelector('label[for=id_u_committee_member_certification]')
+        .classList.add('invalid_border');
+    } else {
+      req.classList.add('invalid_border');
+    }
+
+    // display the following error message.
+    req_fieldError.textContent = msg;
+  } else {
+    //This chexkbox needs to put remove red border from label due to its formatting
+    if (req.id == 'id_u_committee_member_certification') {
+      document
+        .querySelector('label[for=id_u_committee_member_certification]')
+        .classList.remove('invalid_border');
+    } else {
+      req.classList.remove('invalid_border');
+    }
+    req_fieldError.textContent = '';
+  }
+};
+
+new RadFormValidate('id_contact_form');
+
 // Even though we initialize above, export so it can be tested
 module.exports = {
   AnalystLookup: AnalystLookup,
-  ContactForm: ContactForm
+  ContactForm: ContactForm,
+  RadFormValidate: RadFormValidate
 };

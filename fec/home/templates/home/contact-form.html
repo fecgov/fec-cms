@@ -3,43 +3,7 @@
 {% load static %}
 {% load filters %}
 {% block content %}
-<style>
-input.invalid_border, select.invalid_border, textarea.invalid_border, checkbox.invalid_border, label.invalid_border{
-  border-color: red !important;
-  
-}
 
-input:invalid:required {
-
-
-}
-input:focus:invalid, select:focus:invalid, textarea:focus:invalid, label:focus:invalid{
-  outline: none;
-}
-
-span.error {
-  display:inline-block;
-  color: red;
-}
-
-#checkbox_error {
-  display: block;
-}
-
-/*label[for=id_u_committee_member_certification]::before {
-    background: #fff;
-    border: 2px solid #5b616b;
-    content: '';
-    display: inline-block;
-    height: 1.6rem;
-    margin-right: .6em;
-    margin-left: -2.4rem;
-    text-indent: .15em;
-    width: 1.6rem;
-    vertical-align: -4px;
-}*/
-
-</style>
 {% include 'partials/breadcrumbs.html' with page=self links=self.ancestors style='secondary' %}
 <article class="main">
    <div class="container">
@@ -124,7 +88,7 @@ span.error {
       <div class="js-accordion accordion--neutral" data-content-prefix="contact" data-open-first="true">
          <button class="accordion__button js-accordion-trigger">Submit a question</button>
          <div class="accordion__content row">
-            <form class="js-contact-form contact-form" id="radform_id" action="" method="post" novalidate>
+            <form class="js-contact-form contact-form" id="id_contact_form" action="" method="post" novalidate>
                {% csrf_token %}
             {% if server_error %}
             <div class="message message--error">
@@ -210,5 +174,5 @@ if ( window.history.replaceState ) {
 }
 </script>
 <script type="text/javascript" src="{% asset_for_js 'contact-form.js' %}"></script>
-<script type="text/javascript" src="{% asset_for_js 'radform-validate.js' %}"></script>
+
 {% endblock %}
