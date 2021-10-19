@@ -60,7 +60,7 @@ function Pagination(props) {
 
 Pagination.defaultProps = {
   advisory_opinions: [],
-  handleChange: function() {},
+  handleChange: function() {}, //eslint-disable-line no-empty-function
   from_hit: 0,
   resultCoun: 0
 };

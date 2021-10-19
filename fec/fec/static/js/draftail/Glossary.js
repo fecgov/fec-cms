@@ -31,7 +31,7 @@ GlossarySelect.propTypes = {
 };
 
 GlossarySelect.defaultProps = {
-  handleChange: function() {},
+  handleChange: function() {}, //eslint-disable-line no-empty-function
   terms: terms
 };
 
@@ -48,8 +48,8 @@ GlossaryEntity.propTypes = {
 };
 
 GlossaryEntity.defaultProps = {
-  handleChange: function() {},
-  handleClose: function() {},
+  handleChange: function() {}, //eslint-disable-line no-empty-function
+  handleClose: function() {}, //eslint-disable-line no-empty-function
   title: 'Select a glossary term!'
 };
 

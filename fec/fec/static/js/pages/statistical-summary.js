@@ -1,9 +1,6 @@
 'use strict';
 
 function StatisticalSummary() {
-  //Declare globals (scoped to this function)to get past linter error/tests.
-  /* global history */
-
   window.addEventListener('popstate', this.handlePopState.bind(this));
 
   this.tables = document.querySelectorAll('[data-summary]');
@@ -15,7 +12,7 @@ function StatisticalSummary() {
   //Bind showTable() to change event on any select
   Array.from(this.selects).forEach(select => {
     Array.from(select.options).forEach(option => {
-      //For updating selected options based on  querystring parameters
+      //For updating selected options based on querystring parameters
       if (option.value == this.getUrlVars()[select.id]) {
         option.selected = 'selected';
       }

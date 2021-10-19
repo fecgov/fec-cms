@@ -20,7 +20,7 @@ var defaultOpts = {
 };
 
 var boundsOverrides = {
-  200: { coords: [64.06, -152.23], zoom: 3 }
+  200: { coords: [64.06, -152.23], zoom: 3 } // eslint-disable-line quote-props
 };
 
 function getStatePalette(scale) {

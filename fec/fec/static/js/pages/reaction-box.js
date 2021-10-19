@@ -58,7 +58,7 @@ ReactionBox.prototype.showTextarea = function() {
 
   var labelMap = {
     informative: 'Great! \n What did you learn?',
-    confusing: "We’re sorry to hear that. What didn't make sense?",
+    confusing: 'We’re sorry to hear that. What didn\'t make sense?',
     'not-interested': 'We’re sorry to hear that. What would you like to see?',
     none: 'How we can make this better?'
   };

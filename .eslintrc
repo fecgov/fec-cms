@@ -1,4 +1,16 @@
 {
+  /**
+  // There's another .eslintrc file that extends this one specifically for tests.
+  // It's at /fec/fec/tests/.eslintrc
+  */
+  "env": {
+    "browser": true,
+    "es6": true
+  },
+  "extends": [
+    "eslint:recommended",
+    "plugin:react/recommended"
+  ],
   "globals": {
     "document": true,
     "window": true,
@@ -11,17 +23,39 @@
     "grecaptcha": true,
     "navigator": true
   },
-  "extends": [
-    "plugin:prettier/recommended",
-    "eslint:recommended",
-    "plugin:react/recommended"
-  ],
   "rules": {
+    "array-bracket-spacing": ["error", "never", { "objectsInArrays": false }],
     "comma-dangle": ["error", "never"],
+    "eol-last": ["error", "always"],
+    // "eqeqeq": ["warn", "smart"],
+    "jsx-quotes": ["error", "prefer-double"],
+    "key-spacing": [2, {
+      "singleLine": { "beforeColon": false },
+      "multiLine": { "beforeColon": false }
+    }],
+    "max-len": ["error", {
+      "code": 200,
+      "comments": 250,
+      "ignoreStrings": true,
+      "ignoreTemplateLiterals": true
+    }],
+    "no-console": "error",
+    "no-empty-function": "error",
+    "no-lone-blocks": "error",
     "no-useless-escape": [0],
-    "prettier/prettier": "error",
+    "no-multi-spaces": "error",
+    "no-multiple-empty-lines": ["error", { "max": 1, "maxEOF": 1 }],
+    "no-tabs": "error",
+    "no-trailing-spaces": "error",
+    // "no-unreachable-loop": "error",
+    "no-whitespace-before-property": "error",
+    "object-curly-spacing": ["error", "always", { "arraysInObjects": true, "objectsInObjects": true } ],
+    "quote-props": ["error", "as-needed", { "numbers": true }],
+    "quotes": ["error", "single", { "allowTemplateLiterals": true }],
     "react/jsx-uses-react": "error",
-    "react/jsx-uses-vars": "error"
+    "react/jsx-uses-vars": "error",
+    "react/prop-types": "off",
+    "semi": [ "error", "always" ]
   },
   "parser": "babel-eslint",
   "parserOptions": {
@@ -32,7 +66,6 @@
       }
   },
   "plugins": [
-    "prettier",
     "react"
   ],
   "settings": {

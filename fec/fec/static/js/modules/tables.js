@@ -52,7 +52,7 @@ var DOWNLOAD_MESSAGES = {
     ' exports at a time. This helps us keep things running smoothly.',
   empty: 'This table has no data to export.',
   comingSoon: 'Data exports for this page are coming soon.',
-  pending: "You're already exporting this data set."
+  pending: 'You\'re already exporting this data set.'
 };
 
 var DATA_WIDGETS = '.js-data-widgets';
@@ -387,7 +387,7 @@ function filterSuccessUpdates(changeCount) {
   }
 }
 
-function OffsetPaginator() {}
+function OffsetPaginator() {} //eslint-disable-line no-empty-function
 
 OffsetPaginator.prototype.mapQuery = function(data) {
   return {
@@ -396,7 +396,7 @@ OffsetPaginator.prototype.mapQuery = function(data) {
   };
 };
 
-OffsetPaginator.prototype.handleResponse = function() {};
+OffsetPaginator.prototype.handleResponse = function() {}; //eslint-disable-line no-empty-function
 
 function SeekPaginator() {
   this.indexes = {};
@@ -462,7 +462,7 @@ var defaultOpts = {
 };
 
 var defaultCallbacks = {
-  afterRender: function() {}
+  afterRender: function() {} //eslint-disable-line no-empty-function
 };
 
 function DataTable(selector, opts) {

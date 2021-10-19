@@ -146,7 +146,7 @@ oig_reports = OrderedDict((x.lower(), x) for x in [
     "Audit report",
     "Inspection or special review report",
     "Investigations",
-    "Other reports and plans",
+    "Other reports and plans - OIG",
     "Semiannual report",
     "Strategic plan - OIG",
     "Work plan",

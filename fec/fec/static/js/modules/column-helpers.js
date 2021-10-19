@@ -4,11 +4,11 @@
 var helpers = require('./helpers');
 
 var sizeInfo = {
-  0: { limits: [0, 200], label: '$200 and under' },
-  200: { limits: [200.01, 499.99], label: '$200.01—$499' },
-  500: { limits: [500, 999.99], label: '$500—$999' },
-  1000: { limits: [1000, 1999.99], label: '$1,000—$1,999' },
-  2000: { limits: [2000, null], label: '$2,000 and over' }
+  0: { limits: [0, 200], label: '$200 and under' }, // eslint-disable-line quote-props
+  200: { limits: [200.01, 499.99], label: '$200.01—$499' }, // eslint-disable-line quote-props
+  500: { limits: [500, 999.99], label: '$500—$999' }, // eslint-disable-line quote-props
+  1000: { limits: [1000, 1999.99], label: '$1,000—$1,999' }, // eslint-disable-line quote-props
+  2000: { limits: [2000, null], label: '$2,000 and over' } // eslint-disable-line quote-props
 };
 
 function getSizeParams(size) {
