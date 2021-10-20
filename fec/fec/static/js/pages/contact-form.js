@@ -3,7 +3,6 @@
 var $ = require('jquery');
 var Typeahead = require('../modules/typeahead').Typeahead;
 var URI = require('urijs');
-//require('../pages/radform-validate');
 
 const loadRecaptcha = require('../modules/load-recaptcha').loadRecaptcha;
 
@@ -137,9 +136,6 @@ AnalystLookup.prototype.handleChange = function(e) {
   }
 };
 
-new ContactForm($('.js-contact-form'));
-new AnalystLookup($('.js-analyst-lookup'));
-
 function RadFormValidate(radform) {
   this.messages = {
     id_u_contact_first_name: 'Please provide your first name',
@@ -151,7 +147,7 @@ function RadFormValidate(radform) {
     id_u_committee_member_certification: 'Please agree before submitting'
   };
 
-  this.radform = document.getElementById(radform);
+  this.radform = document.querySelector(radform);
   //if radform is renndered to the page
   if (this.radform && this.radform.length) {
     this.id_u_committee = this.radform.querySelector('#id_u_committee');
@@ -269,7 +265,9 @@ RadFormValidate.prototype.showError = function(req) {
   }
 };
 
-new RadFormValidate('id_contact_form');
+new ContactForm($('.js-contact-form'));
+new AnalystLookup($('.js-analyst-lookup'));
+new RadFormValidate('#id_contact_form');
 
 // Even though we initialize above, export so it can be tested
 module.exports = {

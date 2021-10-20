@@ -90,21 +90,24 @@
          <div class="accordion__content row">
             <form class="js-contact-form contact-form" id="id_contact_form" action="" method="post" novalidate>
                {% csrf_token %}
-            {% if server_error %}
+            {% if server_error or form.errors  %}
             <div class="message message--error">
-              <h2 class="message__title">Error</h2>
-              {{ form.non_field_errors }}
-              <p>Something went wrong with the form. Please try again.
-              <br>
-              {% if field.errors %}
-              The following fields have an error:</p>
-              {% for field in form %}
-                <ul>
-                {% for error in field.errors %} 
-                <li>{{ field.label }}</li>
-                {% endfor %}
-                </ul>
-               {% endfor %}
+              <h2 class="message__title">Error</h2>  
+              <p>Something went wrong. Please try again.
+                   {% if recaptcha_error %}
+                     </br>You may have not passed for human.
+                   {% endif %}
+              {% if not form.errors  %}
+               </p>
+              {% elif form.errors %}    
+                <br>The following fields have an error:</p>
+                 <ul>
+                 {% for field in form %}  
+                   {% for error in field.errors %} 
+                   <li>{{ field.label }}</li>
+                   {% endfor %} 
+                 {% endfor %}
+                 </ul>
               {% endif %}
              </div>
             {% endif %}

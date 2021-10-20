@@ -73,7 +73,7 @@ describe('RadFormValidate', function() {
 
         this.validateCommitteeId = sinon.spy(RadFormValidate.prototype, 'validateCommitteeId');
 
-        this.validate = new RadFormValidate('id_contact_form');
+        this.validate = new RadFormValidate('#id_contact_form');
 
     });
 
@@ -168,4 +168,11 @@ describe('RadFormValidate', function() {
             expect($('.id_u_contact_first_name').text()).to.have.string('')
         })
     });
+
+    it('submits', function() {
+            this.id_u_contact_first_name.val('Me')
+            this.validate.handleSubmit({ preventDefault: sinon.spy()});
+
+            expect($('.id_u_contact_first_name').text()).to.have.string('')
+        })
 })

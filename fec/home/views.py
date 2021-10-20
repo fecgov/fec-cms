@@ -273,7 +273,7 @@ def contact_rad(request):
                 return render(
                     request,
                     "home/contact-form.html",
-                    {"self": page_context, "form": form, "server_error": True},
+                    {"self": page_context, "form": form, "server_error": True, "recaptcha_error": True },
                 )
             else:
                 # If the captcha is good, go ahead and post it
@@ -298,7 +298,7 @@ def contact_rad(request):
         form = False
 
     return render(
-        request, "home/contact-form.html", {"self": page_context, "form": form}
+        request, "home/contact-form.html", {"self": page_context, "form": form }
     )
 
 
