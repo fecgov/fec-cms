@@ -151,7 +151,7 @@ function RadFormValidate(radform) {
   //if radform is renndered to the page
   if (this.radform && this.radform.length) {
     this.id_u_committee = this.radform.querySelector('#id_u_committee');
-    this.id_u_committee.removeAttribute('type');
+    //this.id_u_committee.removeAttribute('type');
 
     //grt all required fields
     this.req_fields = this.radform.querySelectorAll('[required]');
