@@ -367,7 +367,7 @@ ContributionsByState.prototype.loadInitialData = function() {
         instance.displayUpdatedData_candidate();
       });
     })
-    .catch(function() {});
+    .catch(function() {}); //eslint-disable-line no-empty-function
 };
 
 /**
@@ -404,7 +404,7 @@ ContributionsByState.prototype.loadCandidateDetails = function(cand_id) {
         instance.displayUpdatedData_candidate();
       });
     })
-    .catch(function() {});
+    .catch(function() {}); //eslint-disable-line no-empty-function
 };
 
 /**
@@ -483,7 +483,7 @@ ContributionsByState.prototype.loadCandidateCoverageDates = function() {
         }
       });
     })
-    .catch(function() {});
+    .catch(function() {}); //eslint-disable-line no-empty-function
 };
 
 /**
@@ -590,7 +590,7 @@ ContributionsByState.prototype.loadStatesData = function() {
         instance.displayUpdatedData_total(data);
       });
     })
-    .catch(function() {});
+    .catch(function() {}); //eslint-disable-line no-empty-function
 
   logUsage(this.baseStatesQuery.candidate_id, this.baseStatesQuery.cycle);
 };
