@@ -191,7 +191,6 @@ function RadFormValidate(radform) {
       req_field.addEventListener('input', function() {
         self.clearError(req_field);
       });
-
     });
 
     //bind to submit event for the form
@@ -237,14 +236,13 @@ RadFormValidate.prototype.validateCommitteeId = function() {
 };
 
 RadFormValidate.prototype.clearError = function(req) {
-      req.classList.remove('invalid_border')
-      const field_id = req.getAttribute('id');
-      //const error_field = '#' + field_id + ' ~ span.error';
-      const error_field = 'span.' + field_id;
-      const req_fieldError = document.querySelector(error_field);
-      req_fieldError.textContent = '';
-
-  }
+  req.classList.remove('invalid_border');
+  const field_id = req.getAttribute('id');
+  //const error_field = '#' + field_id + ' ~ span.error';
+  const error_field = 'span.' + field_id;
+  const req_fieldError = document.querySelector(error_field);
+  req_fieldError.textContent = '';
+};
 
 //main showError funcrtion
 RadFormValidate.prototype.showError = function(req) {
