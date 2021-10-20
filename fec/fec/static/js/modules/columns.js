@@ -179,7 +179,7 @@ var candidates = [
   { data: 'state', className: 'min-desktop hide-panel column--state' },
   { data: 'district', className: 'min-desktop hide-panel column--small' },
   {
-    data: 'first_file_date',
+    data: 'first_f1_date',
     orderable: true,
     className: 'min-desktop hide-panel column--small'
   },
@@ -229,7 +229,7 @@ var committees = [
   { data: 'committee_type_full', className: 'min-tablet hide-panel' },
   { data: 'designation_full', className: 'min-tablet hide-panel' },
   {
-    data: 'first_file_date',
+    data: 'first_f1_date',
     orderable: true,
     className: 'min-desktop hide-panel column--small'
   },
