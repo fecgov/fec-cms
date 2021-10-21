@@ -152,7 +152,7 @@ function RadFormValidate(radform) {
   if (this.radform && this.radform.length) {
     this.id_u_committee = this.radform.querySelector('#id_u_committee');
 
-    //grt all required fields
+    //get all required fields
     this.req_fields = this.radform.querySelectorAll('[required]');
 
     this.id_committee_name = this.radform.querySelector('#id_committee_name');
@@ -207,15 +207,11 @@ RadFormValidate.prototype.handleSubmit = function(event) {
   this.validateCommitteeId();
 
   //iterate invalid required fields to scroll to first invalid field
-  var invalid_array = [];
   var errored_list = [];
   //var self = this;
   for (let req_field of this.req_fields) {
     if (!req_field.validity.valid) {
       event.preventDefault();
-      invalid_array.push(req_field);
-      invalid_array[0].scrollIntoView();
-      //var req_field_id = req_field.id;
       var req_field_id = req_field.getAttribute('id');
       var error_label = document.querySelector(
         "label[for='" + req_field_id + "']"
@@ -231,10 +227,15 @@ RadFormValidate.prototype.handleSubmit = function(event) {
 
     this.showError(req_field);
   }
+  var recaptcha_msg = '';
+  if (!this.validateRecaptcha()) {
+    recaptcha_msg = `<br>reCaptcha thinks you’re a robot. Please try again.`;
+  }
 
-  var error_fields = `<div class="message message--error js-error-list">
+  var error_msg = `<div class="message message--error js-error-list">
                 <h2 class="message__title">Error</h2>
-                <p>Something went wrong. Please try again.
+                <p>Oops, you’re missing some information. We’ve highlighted the areas you need to fix:
+                  ${recaptcha_msg}
                   <br>The following fields have an error:</p>
                    <ul>
                      ${errored_list.join('')}
@@ -248,9 +249,11 @@ RadFormValidate.prototype.handleSubmit = function(event) {
   if (errored_list.length) {
     document
       .querySelectorAll('.contact-form__element')[0]
-      .insertAdjacentHTML('afterend', error_fields);
-  } else {
-    document.querySelector('#error_list').innerHTML = '';
+      .insertAdjacentHTML('afterend', error_msg);
+
+    document
+      .querySelectorAll('.contact-form__element')[0]
+      .scrollIntoView({ behavior: 'smooth' });
   }
 };
 
@@ -262,7 +265,6 @@ RadFormValidate.prototype.validateCommitteeId = function() {
     //need a set timeout to wait for typeahead to finish whatever it is doing on the field
     setTimeout(function() {
       self.id_committee_name.value = '';
-      //self.showError(self.id_committee_name);
     }, 100);
   }
 };
@@ -276,9 +278,18 @@ RadFormValidate.prototype.clearError = function(req) {
   req_fieldError.textContent = '';
 };
 
+//Validate recaptcha only when there are still invalid fields,
+//otherwise its validated server-side
+RadFormValidate.prototype.validateRecaptcha = function() {
+  if (grecaptcha.getResponse() == '') {
+    return false;
+  } else {
+    return true;
+  }
+};
+
 //main showError funcrtion
 RadFormValidate.prototype.showError = function(req) {
-  //var showError = function(req) {
   const field_id = req.getAttribute('id');
   //const error_field = '#' + field_id + ' ~ span.error';
   const error_field = 'span.' + field_id;
