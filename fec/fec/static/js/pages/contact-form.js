@@ -151,7 +151,6 @@ function RadFormValidate(radform) {
   //if radform is renndered to the page
   if (this.radform && this.radform.length) {
     this.id_u_committee = this.radform.querySelector('#id_u_committee');
-    //this.id_u_committee.removeAttribute('type');
 
     //grt all required fields
     this.req_fields = this.radform.querySelectorAll('[required]');
@@ -167,7 +166,7 @@ function RadFormValidate(radform) {
       if (req_field.id !== 'id_u_committee_member_certification') {
         req_field.insertAdjacentHTML(
           'afterend',
-          '<span class="error t-sans t-bold ' +
+          '<span class="error ' +
             req_field.id +
             '" aria-live="polite"></span>'
         );
@@ -186,6 +185,7 @@ function RadFormValidate(radform) {
       //bind showError() to input event on required fields
       req_field.addEventListener('blur', function() {
         self.showError(req_field);
+        //self.validateCommitteeId();
       });
 
       req_field.addEventListener('input', function() {
@@ -210,15 +210,49 @@ RadFormValidate.prototype.handleSubmit = function(event) {
 
   //iterate invalid required fields to scroll to first invalid field
   var invalid_array = [];
+  var errored_list = [];
+  //var self = this;
   for (let req_field of this.req_fields) {
     if (!req_field.validity.valid) {
       event.preventDefault();
       invalid_array.push(req_field);
       invalid_array[0].scrollIntoView();
+      //var req_field_id = req_field.id;
+      var req_field_id = req_field.getAttribute('id');
+      var error_label = document.querySelector(
+        "label[for='" + req_field_id + "']"
+      );
+      //This ridiculousness is becuase Chai test refuses recognize this perfectly valid querySelector expression above
+      if (error_label) {
+        var txt = error_label.textContent;
+      }
+      var errored_list_item = `<li>${txt}</li>`;
 
-      //break; //if we only want to show first invalid field
+      errored_list.push(errored_list_item);
     }
+
     this.showError(req_field);
+  }
+
+  var error_fields = `<div class="message message--error js-error-list">
+                <h2 class="message__title">Error</h2>
+                <p>Something went wrong. Please try again.
+                  <br>The following fields have an error:</p>
+                   <ul>
+                     ${errored_list.join('')}
+                   </ul>
+               </div>`;
+
+  var error_message_box = document.querySelector('.js-error-list');
+  if (error_message_box) {
+    error_message_box.parentNode.removeChild(error_message_box);
+  }
+  if (errored_list.length) {
+    document
+      .querySelectorAll('.contact-form__element')[0]
+      .insertAdjacentHTML('afterend', error_fields);
+  } else {
+    document.querySelector('#error_list').innerHTML = '';
   }
 };
 
@@ -266,7 +300,7 @@ RadFormValidate.prototype.showError = function(req) {
     // display the following error message.
     req_fieldError.textContent = msg;
   } else {
-    //This chexkbox needs to put remove red border from label due to its formatting
+    //This checkbox needs to put remove red border from label due to its formatting
     if (req.id == 'id_u_committee_member_certification') {
       document
         .querySelector('label[for=id_u_committee_member_certification]')
