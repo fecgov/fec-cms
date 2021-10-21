@@ -1,5 +1,13 @@
 'use strict';
+var chai = require('chai');
+var sinon = require('sinon');
+var sinonChai = require('sinon-chai');
+var expect = chai.expect;
+chai.use(sinonChai);
 
+var $ = require('jquery');
+
+require('./setup')();
  
 
 var ContactForm = require('../../static/js/pages/contact-form').ContactForm;
