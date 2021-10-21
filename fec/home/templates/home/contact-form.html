@@ -95,7 +95,7 @@
               <h2 class="message__title">Error</h2>  
               <p>Something went wrong. Please try again.
                    {% if recaptcha_error %}
-                     </br>You may have not passed for human.
+                     </br>Oops, reCaptcha thinks you’re a robot. Please try again.
                    {% endif %}
               {% if not form.errors  %}
                </p>
