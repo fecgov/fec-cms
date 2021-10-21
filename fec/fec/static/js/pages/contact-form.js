@@ -166,9 +166,7 @@ function RadFormValidate(radform) {
       if (req_field.id !== 'id_u_committee_member_certification') {
         req_field.insertAdjacentHTML(
           'afterend',
-          '<span class="error ' +
-            req_field.id +
-            '" aria-live="polite"></span>'
+          '<span class="error ' + req_field.id + '" aria-live="polite"></span>'
         );
       } else {
         //This checkbox needs to put the error after or else it breaks its formatting onn the page
