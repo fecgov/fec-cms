@@ -1,3 +1,4 @@
+
 <table class="simple-table simple-table--display">
   <thead>
     <tr class="simple-table__header">
@@ -29,7 +30,7 @@
       </td>
       <td class="simple-table__cell">
         <div class="t-sans">
-            {{ admin_fine.report_year }} {{ admin_fine.report_type }}
+            {{ admin_fine.report_year }} {{constants.report_type_full[admin_fine.report_type] }}
         </div>
       </td>
       <td class="simple-table__cell">
