@@ -30,7 +30,8 @@
       </td>
       <td class="simple-table__cell">
         <div class="t-sans">
-            {{ admin_fine.report_year }} {{constants.report_type_full[admin_fine.report_type] }}
+            {{ admin_fine.report_year }} {%if constants.report_type_full[admin_fine.report_type] %}{{ constants.report_type_full[admin_fine.report_type] }} {% else %} {{ admin_fine.report_type }}
+            {% endif %}
         </div>
       </td>
       <td class="simple-table__cell">
