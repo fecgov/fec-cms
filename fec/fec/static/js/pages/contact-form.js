@@ -214,7 +214,7 @@ RadFormValidate.prototype.handleSubmit = function(event) {
       event.preventDefault();
       var req_field_id = req_field.getAttribute('id');
       var error_label = document.querySelector(
-        "label[for='" + req_field_id + "']"
+        'label[for=\'' + req_field_id + '\']'
       );
       //This ridiculousness is becuase Chai test refuses recognize this perfectly valid querySelector expression above
       if (error_label) {
