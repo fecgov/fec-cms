@@ -4,6 +4,7 @@ from django.http import Http404
 import datetime
 
 from data import api_caller
+from data import constants
 
 
 def advisory_opinions_landing(request):
@@ -85,12 +86,17 @@ def adr_page(request, adr_no):
 
 def admin_fine_page(request, admin_fine_no):
     admin_fine = api_caller.load_legal_admin_fines(admin_fine_no)
+    # If report code not found in report_type_full dict, then use report code
+    report_type_full = constants.report_type_full[admin_fine['report_type']] if \
+     admin_fine['report_type'] in constants.report_type_full else admin_fine['report_type']
+
     if not admin_fine:
         raise Http404()
     return render(request, 'legal' + '-admin_fine.jinja', {
         'admin_fine': admin_fine,
         'parent': 'legal',
         'social_image_identifier': 'legal',
+        'report_type_full': report_type_full,
     })
 
 
