@@ -134,6 +134,14 @@ class AuditSearchBlock(blocks.StaticBlock):
         template = 'blocks/audit.html'
 
 
+class AFSearchBlock(blocks.StaticBlock):
+    """A block that displays the AF search box"""
+    class Meta:
+        icon = 'search'
+        admin_text = 'Show the AF search field. No configuration needed.'
+        template = 'blocks/af_search.html'
+
+
 class ReportingExampleCards(blocks.StructBlock):
     """Create links to reporting example pages that display as cards
     card_width is used in the template to set the grid class. On reporting example pages,
@@ -218,6 +226,7 @@ class ResourceBlock(blocks.StructBlock):
         ('fec_jobs', CareersBlock()),
         ('mur_search', MURSearchBlock()),
         ('audit_search', AuditSearchBlock()),
+        ('af_search', AFSearchBlock()),
         ('table', TableBlock(table_options=core_table_options)),
         ('custom_table', CustomTableBlock()),
         ('html', blocks.RawHTMLBlock()),

@@ -13,7 +13,7 @@
     "build-homepage-css": "cd fec && gulp purgecss",
     "build-js": "cd fec && webpack",
     "build-production": "cd fec && webpack -p && gulp build-sass && gulp build-widgets-sass && gulp purgecss",
-    "format": "prettier --write ' ./fec/fec/static/js/**/*.js'",
+    "format": "eslint --fix ./fec/fec/static/js/**/*.js",
     "lint": "eslint --quiet ./fec/fec/static/js/**/*.js",
     "format-lint": "npm run format && npm run lint",
     "test": "karma start",
@@ -86,12 +86,10 @@
     "element-remove": "^1.0.4",
     "enzyme": "^3.9.0",
     "enzyme-adapter-react-16": "^1.9.1",
-    "eslint": "^6.2.1",
-    "eslint-config-prettier": "^4.0.0",
+    "eslint": "^6.8.0",
     "eslint-loader": "^2.2.1",
-    "eslint-plugin-import": "^2.18.2",
-    "eslint-plugin-prettier": "^3.0.1",
-    "eslint-plugin-react": "^7.14.3",
+    "eslint-plugin-import": "^2.24.2",
+    "eslint-plugin-react": "^7.26.1",
     "fs": "0.0.1-security",
     "gulp": "^4.0.0",
     "gulp-clean": "^0.4.0",
@@ -124,7 +122,6 @@
     "mockdate": "^2.0.2",
     "natives": "^1.1.6",
     "nswatch": "0.2.0",
-    "prettier": "^1.16.4",
     "promise-polyfill": "^8.1.3",
     "puppeteer": "^1.17.0",
     "scrollmonitor": "^1.2.3",
@@ -154,7 +151,7 @@
   "browserslist": "last 2 versions, > 1%, IE 10",
   "engines": {
     "node": "14.13.0",
-    "npm": "6.14.8"
+    "npm": "7.24.0"
   },
   "license": "CC0-1.0"
 }

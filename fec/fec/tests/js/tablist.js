@@ -1,4 +1,3 @@
-/* jshint strict:true */
 'use strict';
 
 var chai = require('chai');
