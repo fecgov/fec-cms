@@ -205,7 +205,7 @@ RadFormValidate.prototype.handleBlur = function() {
 
 RadFormValidate.prototype.handleSubmit = function(event) {
   this.validateCommitteeId();
-
+  var self = this;
   //iterate invalid required fields to scroll to first invalid field
   var errored_list = [];
   //var self = this;
@@ -219,8 +219,9 @@ RadFormValidate.prototype.handleSubmit = function(event) {
       //This ridiculousness is becuase Chai test refuses recognize this perfectly valid querySelector expression above
       if (error_label) {
         var txt = error_label.textContent;
+        var txt_msg = self.messages[req_field_id];
       }
-      var errored_list_item = `<li>${txt}</li>`;
+      var errored_list_item = `<li>${txt}: ${txt_msg}.</li>`;
 
       errored_list.push(errored_list_item);
     }

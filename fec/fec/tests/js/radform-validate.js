@@ -31,7 +31,8 @@ var dom =
     '</div>' +
     '</div>' +
     '<input name="u_committee" id="id_u_committee">' +
-    '</form>'
+    '<button class="js-submit button button--cta">Submit</button>' +
+    '</form>';
 
 describe('RadFormValidate', function() {
     before(function() {
@@ -86,6 +87,7 @@ describe('RadFormValidate', function() {
     });
 
     it('locates DOM elements', function() {
+        
         expect(this.committeeName.is('#fixtures #id_committee_name')).to.be.true;
         expect(this.committeeId.is('#fixtures #id_u_committee')).to.be.true;
 
@@ -101,13 +103,13 @@ describe('RadFormValidate', function() {
 
 
         it('it calls validateCommitteeId on blur', function() {
-
+            
             expect(this.validateCommitteeId).to.have.been.called;
         });
 
 
         it('it clears committeeName field if committeeId is empty', function() {
-
+            
             expect(this.committeeName.val()).to.equal('');
         });
     });
@@ -115,33 +117,26 @@ describe('RadFormValidate', function() {
     describe('handelBlur function', function() {
 
         beforeEach(function() {
-            console.log('CLASS b4' + this.committeeName.attr('class'))
-            console.log(this.committeeId.val())
             this.committeeId.val('');
-            console.log('NEW' + this.committeeId.val())
             this.committeeName.val('ACTBLUE') //.trigger('keyup')
-            console.log('b4 val' + this.committeeName.val())
             this.validate.handleBlur()
 
         });
 
         it('calls showError on blur', function() {
-
+            
             expect(this.showError).to.have.been.called;
         })
 
         it('clears committeeName if committeeId is left blank on blur', function() {
+            
             expect(this.committeeName.val()).to.equal('')
             expect(this.validateCommitteeId).to.have.been.called;
         })
 
 
         it('puts red border around empty(invalid) field', function() {
-            console.log('CLASS AFTER' + this.committeeName.attr('class'))
-            console.log(this.committeeName.attr('id'))
-            console.log('after val' + this.committeeName.val())
-            console.log($('#id_u_committee').val())
-
+            
             expect(this.committeeName.attr('class')).to.equal('invalid_border')
         })
     })
@@ -150,18 +145,18 @@ describe('RadFormValidate', function() {
 
         it('calls show error on submit ', function() {
             this.validate.handleSubmit({ preventDefault: sinon.spy()});
-
+            
             expect(this.validate.showError).to.have.been.called;
         })
 
         it('renders error message/red border for invalid field', function() {
             //this.id_u_contact_first_name.val('')
             this.validate.handleSubmit({ preventDefault: sinon.spy()});
-
+            
             expect($('.id_u_contact_first_name').text()).to.have.string('Please provide your first name')
         })
 
-        it('does not render error message for valid field', function() {
+        it('does not render error message for valid field', function() {         
             this.id_u_contact_first_name.val('Me')
             this.validate.handleSubmit({ preventDefault: sinon.spy()});
 
@@ -169,10 +164,4 @@ describe('RadFormValidate', function() {
         })
     });
 
-    it('submits', function() {
-            this.id_u_contact_first_name.val('Me')
-            this.validate.handleSubmit({ preventDefault: sinon.spy()});
-
-            expect($('.id_u_contact_first_name').text()).to.have.string('')
-        })
 })
