@@ -147,6 +147,16 @@ function RadFormValidate(radform) {
     id_u_committee_member_certification: 'Please agree before submitting'
   };
 
+  this.box_messages = {
+    id_u_contact_first_name: 'First name',
+    id_u_contact_last_name: 'Last name',
+    id_u_contact_email: 'Valid email',
+    id_committee_name: 'Valid committee name or ID',
+    id_u_category: 'Subject',
+    id_u_description: 'Question',
+    id_u_committee_member_certification: 'I agree/agreement confirmation'
+  };
+
   this.radform = document.querySelector(radform);
   //if radform is renndered to the page
   if (this.radform && this.radform.length) {
@@ -213,15 +223,9 @@ RadFormValidate.prototype.handleSubmit = function(event) {
     if (!req_field.validity.valid) {
       event.preventDefault();
       var req_field_id = req_field.getAttribute('id');
-      var error_label = document.querySelector(
-        "label[for='" + req_field_id + "']"
-      );
-      //This ridiculousness is becuase Chai test refuses recognize this perfectly valid querySelector expression above
-      if (error_label) {
-        var txt = error_label.textContent;
-        var txt_msg = self.messages[req_field_id];
-      }
-      var errored_list_item = `<li>${txt}: ${txt_msg}.</li>`;
+      var box_msg = self.box_messages[req_field_id];
+
+      var errored_list_item = `<li>${box_msg}.</li>`;
 
       errored_list.push(errored_list_item);
     }
@@ -230,17 +234,17 @@ RadFormValidate.prototype.handleSubmit = function(event) {
   }
   var recaptcha_msg = '';
   if (!this.validateRecaptcha()) {
-    recaptcha_msg = `<br>reCaptcha thinks you’re a robot. Please try again.`;
+    recaptcha_msg = `Also, reCAPTCHA thinks you’re a robot: Please try again.`;
   }
 
   var error_msg = `<div class="message message--error js-error-list">
                 <h2 class="message__title">Error</h2>
                 <p>Oops, you’re missing some information. We’ve highlighted the areas you need to fix:
-                  ${recaptcha_msg}
-                  <br>The following fields have an error:</p>
                    <ul>
                      ${errored_list.join('')}
                    </ul>
+                   <br>
+                  ${recaptcha_msg}
                </div>`;
 
   var error_message_box = document.querySelector('.js-error-list');

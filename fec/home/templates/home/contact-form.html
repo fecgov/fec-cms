@@ -91,24 +91,27 @@
             <form class="js-contact-form contact-form" id="id_contact_form" action="" method="post" novalidate>
                {% csrf_token %}
             {% if server_error or form.errors  %}
-            <div class="message message--error">
-              <h2 class="message__title">Error</h2>  
-              <p>Something went wrong. Please try again.
-                   {% if recaptcha_error %}
-                     </br>Oops, reCaptcha thinks you’re a robot. Please try again.
-                   {% endif %}
-              {% if not form.errors  %}
-               </p>
-              {% elif form.errors %}    
-                <br>The following fields have an error:</p>
-                 <ul>
-                 {% for field in form %}  
-                   {% for error in field.errors %} 
-                   <li>{{ field.label }}</li>
-                   {% endfor %} 
-                 {% endfor %}
-                 </ul>
-              {% endif %}
+              <div class="message message--error">
+                <h2 class="message__title">Error</h2>
+                <p>
+                {% if not recaptcha_error %}  
+                  Oops, something went wrong. Please try again.
+                {% elif recaptcha_error %}
+                  reCAPTCHA thinks you’re a robot: Please try again.
+                {% endif %}
+                </p>
+                {% if form.errors %}    
+                </p>
+                <ul>
+                  {% for field in form %}  
+                    {% if not field.is_hidden %}
+                      {% for error in field.errors %} 
+                        <li>{{ field.label }}</li>
+                      {% endfor %} 
+                    {% endif %}
+                  {% endfor %}
+                </ul>
+                {% endif %}
              </div>
             {% endif %}
                <div class="contact-form__element">
