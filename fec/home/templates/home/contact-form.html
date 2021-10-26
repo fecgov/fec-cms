@@ -91,7 +91,7 @@
             <form class="js-contact-form contact-form" id="id_contact_form" action="" method="post" novalidate>
                {% csrf_token %}
             {% if server_error or form.errors  %}
-              <div class="message message--error">
+              <div class="message message--error message--alt message--alert error_box">
                 <h2 class="message__title">Error</h2>
                 <p>
                 {% if not recaptcha_error %}  

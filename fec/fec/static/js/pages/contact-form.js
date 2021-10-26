@@ -225,7 +225,7 @@ RadFormValidate.prototype.handleSubmit = function(event) {
       var req_field_id = req_field.getAttribute('id');
       var box_msg = self.box_messages[req_field_id];
 
-      var errored_list_item = `<li>${box_msg}.</li>`;
+      var errored_list_item = `<li>${box_msg}</li>`;
 
       errored_list.push(errored_list_item);
     }
@@ -237,7 +237,7 @@ RadFormValidate.prototype.handleSubmit = function(event) {
     recaptcha_msg = `Also, reCAPTCHA thinks you’re a robot: Please try again.`;
   }
 
-  var error_msg = `<div class="message message--error js-error-list">
+  var error_msg = `<div class="message message--error error_box" js-error-list">
                 <h2 class="message__title">Error</h2>
                 <p>Oops, you’re missing some information. We’ve highlighted the areas you need to fix:
                    <ul>
