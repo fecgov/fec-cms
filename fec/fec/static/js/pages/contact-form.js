@@ -193,7 +193,6 @@ function RadFormValidate(radform) {
       //bind showError() to input event on required fields
       req_field.addEventListener('blur', function() {
         self.showError(req_field);
-        //self.validateCommitteeId();
       });
 
       req_field.addEventListener('input', function() {
@@ -205,11 +204,12 @@ function RadFormValidate(radform) {
     this.radform.addEventListener('submit', this.handleSubmit.bind(this));
     //bind to blur event for id_committee name field only
     this.id_committee_name.addEventListener('blur', this.handleBlur.bind(this));
-  } //end if(radform)
+  }
 }
 
 RadFormValidate.prototype.handleBlur = function() {
   this.validateCommitteeId();
+  //id_committee_name will not show as blank, on blur, until validateCommitteeId() runs
   this.showError(this.id_committee_name);
 };
 
@@ -277,7 +277,6 @@ RadFormValidate.prototype.validateCommitteeId = function() {
 RadFormValidate.prototype.clearError = function(req) {
   req.classList.remove('invalid_border');
   const field_id = req.getAttribute('id');
-  //const error_field = '#' + field_id + ' ~ span.error';
   const error_field = 'span.' + field_id;
   const req_fieldError = document.querySelector(error_field);
   req_fieldError.textContent = '';
