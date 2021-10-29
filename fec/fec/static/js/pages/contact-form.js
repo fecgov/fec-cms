@@ -37,8 +37,11 @@ ContactForm.prototype.initTypeahead = function() {
   this.typeahead.$input.off('typeahead:select');
   this.typeahead.$input.on('typeahead:select', function(e, opts) {
     self.committeeId.val(opts.id);
-    //focus away to prompt removal of error state, if present.
-    $('#id_u_contact_title').focus();
+    //focus away to prompt removal of error state, if present. Could only focus into...
+    //...another field, Attempts to focusout, or focus onto body, did not work.
+    $('#id_u_contact_title')
+      .focus()
+      .blur();
   });
 };
 
