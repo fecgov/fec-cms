@@ -212,8 +212,6 @@ function RadFormValidate(radform) {
 
 RadFormValidate.prototype.handleBlur = function() {
   this.validateCommitteeId();
-  //id_committee_name will not show as blank, on blur, until validateCommitteeId() runs
-  this.showError(this.id_committee_name);
 };
 
 RadFormValidate.prototype.handleSubmit = function(event) {
@@ -237,23 +235,23 @@ RadFormValidate.prototype.handleSubmit = function(event) {
   }
   var recaptcha_msg = '';
   if (!this.validateRecaptcha()) {
-    recaptcha_msg = `Also, reCAPTCHA thinks you’re a robot: Please try again.`;
+    recaptcha_msg = `<p>Also, reCAPTCHA thinks you’re a robot: Please try again.</p>`;
   }
 
-  var error_msg = `<div class="message message--error error_box" js-error-list">
+  var error_msg = `<div class="message message--error error_box js-error-box">
                 <h2 class="message__title">Error</h2>
-                <p>Oops, you’re missing some information. We’ve highlighted the areas you need to fix:
+                <p>Oops, you’re missing some information. We’ve highlighted the areas you need to fix:</p>
                    <ul>
                      ${errored_list.join('')}
                    </ul>
-                   <br>
                   ${recaptcha_msg}
                </div>`;
 
-  var error_message_box = document.querySelector('.js-error-list');
+  var error_message_box = document.querySelector('.js-error-box');
   if (error_message_box) {
     error_message_box.parentNode.removeChild(error_message_box);
   }
+
   if (errored_list.length) {
     document
       .querySelectorAll('.contact-form__element')[0]
@@ -275,6 +273,8 @@ RadFormValidate.prototype.validateCommitteeId = function() {
       self.id_committee_name.value = '';
     }, 100);
   }
+  //id_committee_name will not validate on blur, until validateCommitteeId() runs
+  this.showError(this.id_committee_name);
 };
 
 RadFormValidate.prototype.clearError = function(req) {

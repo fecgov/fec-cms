@@ -74,6 +74,11 @@
   
   .error_box {
     font-family: $serif;
+    
+    ul {
+      text-indent: u(1.6rem);
+      margin-bottom: u(1rem);
+    }
   }
 
 }
