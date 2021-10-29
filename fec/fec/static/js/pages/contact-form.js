@@ -139,7 +139,7 @@ AnalystLookup.prototype.handleChange = function(e) {
   }
 };
 
-function RadFormValidate(radform) {
+function RadFormValidate(radformSelector) {
   this.messages = {
     id_u_contact_first_name: 'Please provide your first name',
     id_u_contact_last_name: 'Please provide your last name',
@@ -160,15 +160,16 @@ function RadFormValidate(radform) {
     id_u_committee_member_certification: 'I agree/agreement confirmation'
   };
 
-  this.radform = document.querySelector(radform);
+  //this.radform = document.querySelector(radform);
+  const radform = document.querySelector(radformSelector);
   //if radform is renndered to the page
-  if (this.radform && this.radform.length) {
-    this.id_u_committee = this.radform.querySelector('#id_u_committee');
+  if (radform && radform.length) {
+    this.id_u_committee = radform.querySelector('#id_u_committee');
 
     //get all required fields
-    this.req_fields = this.radform.querySelectorAll('[required]');
+    this.req_fields = radform.querySelectorAll('[required]');
 
-    this.id_committee_name = this.radform.querySelector('#id_committee_name');
+    this.id_committee_name = radform.querySelector('#id_committee_name');
     this.id_committee_name.setAttribute('autocomplete', 'off');
 
     var self = this;
@@ -204,7 +205,7 @@ function RadFormValidate(radform) {
     });
 
     //bind to submit event for the form
-    this.radform.addEventListener('submit', this.handleSubmit.bind(this));
+    radform.addEventListener('submit', this.handleSubmit.bind(this));
     //bind to blur event for id_committee name field only
     this.id_committee_name.addEventListener('blur', this.handleBlur.bind(this));
   }
@@ -219,7 +220,6 @@ RadFormValidate.prototype.handleSubmit = function(event) {
   var self = this;
   //iterate invalid required fields to scroll to first invalid field
   var errored_list = [];
-  //var self = this;
   for (let req_field of this.req_fields) {
     if (!req_field.validity.valid) {
       event.preventDefault();
