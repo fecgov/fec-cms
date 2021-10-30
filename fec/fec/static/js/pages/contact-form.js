@@ -164,6 +164,9 @@ function RadFormValidate(radformSelector) {
   const radform = document.querySelector(radformSelector);
   //if radform is renndered to the page
   if (radform && radform.length) {
+    // //////////NEW
+    this.id_u_contact_email = radform.querySelector('#id_u_contact_email');
+    // //////////ENDNEW
     this.id_u_committee = radform.querySelector('#id_u_committee');
 
     //get all required fields
@@ -208,6 +211,12 @@ function RadFormValidate(radformSelector) {
     radform.addEventListener('submit', this.handleSubmit.bind(this));
     //bind to blur event for id_committee name field only
     this.id_committee_name.addEventListener('blur', this.handleBlur.bind(this));
+    // //////////NEW
+    this.id_u_contact_email.addEventListener(
+      'blur',
+      this.validateEmail.bind(this)
+    );
+    // //////////ENDNEW
   }
 }
 
@@ -263,6 +272,25 @@ RadFormValidate.prototype.handleSubmit = function(event) {
   }
 };
 
+RadFormValidate.prototype.validateEmail = function() {
+  const email_value = this.id_u_contact_email.value;
+  //email validation regex, we also have server side Django email validation if this fails somehow
+  const re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+  var self = this;
+  if (re.test(email_value)) {
+    //setCustomValidity allows us to overrride this req_field's WC3 default email validation which...
+    ///... contradicts Dango's server side validation and seems to confuse everyone.
+    self.id_u_contact_email.setCustomValidity('');
+  } else {
+    //this message does not actually get rendered from here, its just needs to be...
+    //... anything other than an empty string to set the set the read-only validity state as valid.
+    self.id_u_contact_email.setCustomValidity(
+      'Please include a valid email address'
+    );
+  }
+  this.showError(this.id_u_contact_email);
+};
+
 //validation specific to committee name and ID field
 RadFormValidate.prototype.validateCommitteeId = function() {
   if (!this.id_u_committee.value) {
@@ -295,10 +323,9 @@ RadFormValidate.prototype.validateRecaptcha = function() {
   }
 };
 
-//main showError funcrtion
+//main showError function
 RadFormValidate.prototype.showError = function(req) {
   const field_id = req.getAttribute('id');
-  //const error_field = '#' + field_id + ' ~ span.error';
   const error_field = 'span.' + field_id;
   const req_fieldError = document.querySelector(error_field);
   const msg = this.messages[field_id];
@@ -313,7 +340,7 @@ RadFormValidate.prototype.showError = function(req) {
       req.classList.add('invalid_border');
     }
 
-    // display the following error message.
+    // display the error message.
     req_fieldError.textContent = msg;
   } else {
     //This checkbox needs to put remove red border from label due to its formatting
