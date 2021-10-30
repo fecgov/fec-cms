@@ -23,6 +23,11 @@ var dom =
     '<input type="text" name="u_contact_last_name" required="" id="id_u_contact_last_name">' +
     '<span class="error t-sans t-bold id_u_contact_last_name" aria-live="polite"></span>' +
     '</div>' +
+    '<div class="row">. ' +
+    '<label class="label" for="id_u_contact_email">Email</label>' +
+    '<input type="email" name="u_contact_email" required="" id="id_u_contact_email" class="">' +
+    '<span class="error id_u_contact_email" aria-live="polite"></span> ' +
+    '</div>' +
     '<div class="contact-form__element">' +
     '<hr class="hr--light">' +
     '<div class="row">' +
@@ -58,13 +63,14 @@ describe('RadFormValidate', function() {
         this.radform = this.$fixture.find('#id_contact_form');
 
         this.committeeName = this.$fixture.find('#id_committee_name');
-        console.log('this.committeeName' + this.committeeName)
 
         this.committeeId = this.$fixture.find("#id_u_committee");
 
         this.id_u_contact_first_name = this.$fixture.find("#id_u_contact_first_name");
 
         this.first_name_error = this.$fixture.find(".error.t-sans.t-bold.id_u_contact_first_name");
+
+        this.id_u_contact_email = this.$fixture.find('#id_u_contact_email');
 
         this.handleSubmit = sinon.spy(RadFormValidate.prototype, 'handleSubmit', );
 
@@ -73,6 +79,8 @@ describe('RadFormValidate', function() {
         this.handleBlur = sinon.spy(RadFormValidate.prototype, 'handleBlur');
 
         this.validateCommitteeId = sinon.spy(RadFormValidate.prototype, 'validateCommitteeId');
+
+        this.validateEmail = sinon.spy(RadFormValidate.prototype, 'validateEmail');
 
         this.validate = new RadFormValidate('#id_contact_form');
 
@@ -83,7 +91,7 @@ describe('RadFormValidate', function() {
         this.validateCommitteeId.restore()
         this.handleBlur.restore();
         this.handleSubmit.restore();
-        //this.submit.restore();
+        this.validateEmail.restore();
     });
 
     it('locates DOM elements', function() {
@@ -114,11 +122,40 @@ describe('RadFormValidate', function() {
         });
     });
 
+    describe('validateEmail', function() {
+        beforeEach(function() {
+            this.validate.validateEmail()
+            
+        });
+
+        it('it calls showError on email field', function() {
+            
+            expect(this.showError).to.have.been.called;
+        });
+
+
+        it('shows invalid state for invalid email field', function() {
+            this.id_u_contact_email.val('bsmith@oas')
+
+            expect(this.id_u_contact_email.attr('class')).to.equal('invalid_border')
+            expect($('.id_u_contact_email').text()).to.have.string('Please include a valid email address')
+        })
+        
+        it('does not show valid state for valid email field', function() {
+            this.id_u_contact_email.val('bsmith@oas.gov')
+            this.validate.validateEmail()
+                  
+            expect(this.id_u_contact_email.attr('class')).to.equal('')
+            expect($('.id_u_contact_email').text()).to.have.string('')
+        })
+
+    });
+
     describe('handelBlur function', function() {
 
         beforeEach(function() {
             this.committeeId.val('');
-            this.committeeName.val('ACTBLUE') //.trigger('keyup')
+            this.committeeName.val('ACTBLUE')
             this.validate.handleBlur()
 
         });
