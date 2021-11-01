@@ -90,28 +90,33 @@
          <div class="accordion__content row">
             <form class="js-contact-form contact-form" id="id_contact_form" action="" method="post" novalidate>
                {% csrf_token %}
-            {% if server_error or form.errors  %}
+            {% if server_error  %}
               <div class="message message--error message--alt message--alert error_box">
                 <h2 class="message__title">Error</h2>
                 <p>
                 {% if not recaptcha_error %}  
                   Oops, something went wrong. Please try again.
-                {% elif recaptcha_error %}
+                {% elif recaptcha_error and not form.errors %}
                   reCAPTCHA thinks you’re a robot: Please try again.
                 {% endif %}
                 </p>
-                {% if form.errors %}    
-                <ul>
-                  {% for field in form %}  
-                    {% if not field.is_hidden %}
-                      {% for error in field.errors %} 
-                        <li>{{ field.label }}</li>
-                      {% endfor %} 
-                    {% endif %}
-                  {% endfor %}
-                </ul>
+                {% if form.errors %} 
+                  You’re missing some information. We’ve highlighted the areas you need to fix:
+                  <br>
+                  <ul>
+                    {% for field in form %}  
+                      {% if not field.is_hidden %}
+                        {% for error in field.errors %} 
+                          <li>{{ field.label }}</li>
+                        {% endfor %} 
+                      {% endif %}
+                    {% endfor %}
+                  </ul>
+                   {% if recaptcha_error %}
+                      Also reCAPTCHA thinks you’re a robot: Please try again.
+                   {% endif %}
                 {% endif %}
-             </div>
+              </div>
             {% endif %}
                <div class="contact-form__element">
                   <h2>Your contact information</h2>
