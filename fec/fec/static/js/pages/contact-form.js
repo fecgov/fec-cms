@@ -186,7 +186,7 @@ function RadFormValidate(radformSelector) {
           '<span class="error ' + req_field.id + '" aria-live="polite"></span>'
         );
       } else {
-        //This checkbox needs to put the error after or else it breaks its formatting onn the page
+        //This checkbox needs to put the error after its label or else it breaks its formatting on the page
         document
           .querySelector('label[for=id_u_committee_member_certification]')
           .insertAdjacentHTML(
@@ -216,7 +216,6 @@ function RadFormValidate(radformSelector) {
       'blur',
       this.validateEmail.bind(this)
     );
-    // //////////ENDNEW
   }
 }
 
@@ -238,15 +237,15 @@ RadFormValidate.prototype.handleSubmit = function(event) {
       var errored_list_item = `<li>${box_msg}</li>`;
 
       errored_list.push(errored_list_item);
-    }
-
-    this.showError(req_field);
+    }   
+      this. showError(req_field); 
   }
+  
   var recaptcha_msg = '';
   if (!this.validateRecaptcha()) {
     recaptcha_msg = `<p>Also, reCAPTCHA thinks you’re a robot: Please try again.</p>`;
   }
-
+  
   var error_msg = `<div class="message message--error error_box js-error-box">
                 <h2 class="message__title">Error</h2>
                 <p>Oops, you’re missing some information. We’ve highlighted the areas you need to fix:</p>
@@ -274,7 +273,7 @@ RadFormValidate.prototype.handleSubmit = function(event) {
 
 RadFormValidate.prototype.validateEmail = function() {
   const email_value = this.id_u_contact_email.value;
-  //email validation regex, we also have server side Django email validation if this fails somehow
+  //email validation regex, email is also validated server-side by Django
   const re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
   var self = this;
   if (re.test(email_value)) {
@@ -293,8 +292,8 @@ RadFormValidate.prototype.validateEmail = function() {
 
 //validation specific to committee name and ID field
 RadFormValidate.prototype.validateCommitteeId = function() {
+  var self = this;
   if (!this.id_u_committee.value) {
-    var self = this;
     self.id_committee_name.value = '';
     //need a set timeout to wait for typeahead to finish whatever it is doing on the field
     setTimeout(function() {
