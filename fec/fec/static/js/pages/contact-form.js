@@ -237,15 +237,15 @@ RadFormValidate.prototype.handleSubmit = function(event) {
       var errored_list_item = `<li>${box_msg}</li>`;
 
       errored_list.push(errored_list_item);
-    }   
-      this. showError(req_field); 
+    }
+      this.showError(req_field);
   }
-  
+
   var recaptcha_msg = '';
   if (!this.validateRecaptcha()) {
     recaptcha_msg = `<p>Also, reCAPTCHA thinks you’re a robot: Please try again.</p>`;
   }
-  
+
   var error_msg = `<div class="message message--error error_box js-error-box">
                 <h2 class="message__title">Error</h2>
                 <p>Oops, you’re missing some information. We’ve highlighted the areas you need to fix:</p>
