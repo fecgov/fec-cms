@@ -76,8 +76,6 @@ describe('RadFormValidate', function() {
 
         this.showError = sinon.spy(RadFormValidate.prototype, 'showError');
 
-        this.handleBlur = sinon.spy(RadFormValidate.prototype, 'handleBlur');
-
         this.validateCommitteeId = sinon.spy(RadFormValidate.prototype, 'validateCommitteeId');
 
         this.validateEmail = sinon.spy(RadFormValidate.prototype, 'validateEmail');
@@ -89,7 +87,6 @@ describe('RadFormValidate', function() {
     afterEach(function() {
         this.showError.restore();
         this.validateCommitteeId.restore()
-        this.handleBlur.restore();
         this.handleSubmit.restore();
         this.validateEmail.restore();
     });
@@ -99,27 +96,6 @@ describe('RadFormValidate', function() {
         expect(this.committeeName.is('#fixtures #id_committee_name')).to.be.true;
         expect(this.committeeId.is('#fixtures #id_u_committee')).to.be.true;
 
-    });
-
-    describe('validateCommitteeId', function() {
-        beforeEach(function() {
-            ;
-            this.committeeName.val('ACTBLUE')
-            this.committeeId.val('');
-            this.validate.handleBlur()
-        });
-
-
-        it('it calls validateCommitteeId on blur', function() {
-            
-            expect(this.validateCommitteeId).to.have.been.called;
-        });
-
-
-        it('it clears committeeName field if committeeId is empty', function() {
-            
-            expect(this.committeeName.val()).to.equal('');
-        });
     });
 
     describe('validateEmail', function() {
@@ -151,16 +127,16 @@ describe('RadFormValidate', function() {
 
     });
 
-    describe('handelBlur function', function() {
+    describe('validateCommitteeId function', function() {
 
         beforeEach(function() {
             this.committeeId.val('');
             this.committeeName.val('ACTBLUE')
-            this.validate.handleBlur()
+            this.validate.validateCommitteeId()
 
         });
 
-        it('calls showError on blur', function() {
+        it('calls showError on Committee name or id field', function() {
             
             expect(this.showError).to.have.been.called;
         })

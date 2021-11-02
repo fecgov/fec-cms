@@ -160,22 +160,16 @@ function RadFormValidate(radformSelector) {
     id_u_committee_member_certification: 'I agree/agreement confirmation'
   };
 
-  //this.radform = document.querySelector(radform);
   const radform = document.querySelector(radformSelector);
-  //if radform is renndered to the page
+  //if radform is rendered to the page
   if (radform && radform.length) {
-    // //////////NEW
     this.id_u_contact_email = radform.querySelector('#id_u_contact_email');
-    // //////////ENDNEW
     this.id_u_committee = radform.querySelector('#id_u_committee');
-
-    //get all required fields
     this.req_fields = radform.querySelectorAll('[required]');
-
     this.id_committee_name = radform.querySelector('#id_committee_name');
     this.id_committee_name.setAttribute('autocomplete', 'off');
 
-    var self = this;
+    let self = this;
 
     //Iterate the required fields to add error span and event listeners
     this.req_fields.forEach(function(req_field) {
@@ -197,11 +191,11 @@ function RadFormValidate(radformSelector) {
           );
       }
 
-      //bind showError() to input event on required fields
+      //bind showError() to blur event on required fields
       req_field.addEventListener('blur', function() {
         self.showError(req_field);
       });
-
+      //clear. error once user starts typing
       req_field.addEventListener('input', function() {
         self.clearError(req_field);
       });
@@ -209,9 +203,12 @@ function RadFormValidate(radformSelector) {
 
     //bind to submit event for the form
     radform.addEventListener('submit', this.handleSubmit.bind(this));
-    //bind to blur event for id_committee name field only
-    this.id_committee_name.addEventListener('blur', this.handleBlur.bind(this));
-    // //////////NEW
+    //bind to blur event for committee name or id field only
+    this.id_committee_name.addEventListener(
+      'blur',
+      this.validateCommitteeId.bind(this)
+    );
+    //bind to blur event for email field only
     this.id_u_contact_email.addEventListener(
       'blur',
       this.validateEmail.bind(this)
@@ -219,34 +216,32 @@ function RadFormValidate(radformSelector) {
   }
 }
 
-RadFormValidate.prototype.handleBlur = function() {
-  this.validateCommitteeId();
-};
-
 RadFormValidate.prototype.handleSubmit = function(event) {
   this.validateCommitteeId();
-  var self = this;
+  let self = this;
   //iterate invalid required fields to scroll to first invalid field
-  var errored_list = [];
+  let errored_list = [];
   for (let req_field of this.req_fields) {
     if (!req_field.validity.valid) {
       event.preventDefault();
-      var req_field_id = req_field.getAttribute('id');
-      var box_msg = self.box_messages[req_field_id];
+      let req_field_id = req_field.getAttribute('id');
+      let box_msg = self.box_messages[req_field_id];
 
-      var errored_list_item = `<li>${box_msg}</li>`;
+      let errored_list_item = `<li>${box_msg}</li>`;
 
       errored_list.push(errored_list_item);
     }
     this.showError(req_field);
   }
 
+  //only shows recaptcha error if submit is prevented due to invalid fields, otherwise...
+  //...recaptcha gets. validated server-side
   var recaptcha_msg = '';
   if (!this.validateRecaptcha()) {
     recaptcha_msg = `<p>Also, reCAPTCHA thinks you’re a robot: Please try again.</p>`;
   }
 
-  var error_msg = `<div class="message message--error error_box js-error-box">
+  const error_msg = `<div class="message message--error error_box js-error-box">
                 <h2 class="message__title">Error</h2>
                 <p>Oops, you’re missing some information. We’ve highlighted the areas you need to fix:</p>
                    <ul>
@@ -255,7 +250,7 @@ RadFormValidate.prototype.handleSubmit = function(event) {
                   ${recaptcha_msg}
                </div>`;
 
-  var error_message_box = document.querySelector('.js-error-box');
+  const error_message_box = document.querySelector('.js-error-box');
   if (error_message_box) {
     error_message_box.parentNode.removeChild(error_message_box);
   }
@@ -275,14 +270,14 @@ RadFormValidate.prototype.validateEmail = function() {
   const email_value = this.id_u_contact_email.value;
   //email validation regex, email is also validated server-side by Django
   const re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-  var self = this;
+  let self = this;
   if (re.test(email_value)) {
     //setCustomValidity allows us to overrride this req_field's WC3 default email validation which...
     ///... contradicts Dango's server side validation and seems to confuse everyone.
     self.id_u_contact_email.setCustomValidity('');
   } else {
     //this message does not actually get rendered from here, its just needs to be...
-    //... anything other than an empty string to set the set the read-only validity state as valid.
+    //... anything other than an empty string to set the set the read-only validity state as invalid.
     self.id_u_contact_email.setCustomValidity(
       'Please include a valid email address'
     );
@@ -292,7 +287,7 @@ RadFormValidate.prototype.validateEmail = function() {
 
 //validation specific to committee name and ID field
 RadFormValidate.prototype.validateCommitteeId = function() {
-  var self = this;
+  let self = this;
   if (!this.id_u_committee.value) {
     self.id_committee_name.value = '';
     //need a set timeout to wait for typeahead to finish whatever it is doing on the field
@@ -300,7 +295,7 @@ RadFormValidate.prototype.validateCommitteeId = function() {
       self.id_committee_name.value = '';
     }, 100);
   }
-  //id_committee_name will not validate on blur, until validateCommitteeId() runs
+  //id_committee_name will not validate on blur, unless above validation code has run first
   this.showError(this.id_committee_name);
 };
 
@@ -312,8 +307,8 @@ RadFormValidate.prototype.clearError = function(req) {
   req_fieldError.textContent = '';
 };
 
-//Validate recaptcha only when there are still invalid fields,
-//otherwise its validated server-side
+//only runs if submit is prevented due to invalid fields, otherwise...
+//...recaptcha gets validated server-side
 RadFormValidate.prototype.validateRecaptcha = function() {
   if (grecaptcha.getResponse() == '') {
     return false;
