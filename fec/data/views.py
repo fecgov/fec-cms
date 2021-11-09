@@ -403,6 +403,9 @@ def get_committee(committee_id, cycle):
     # Check organization types to determine SSF status
     is_ssf = committee.get("organization_type") in ["W", "C", "L", "V", "M", "T"]
 
+    # Check if it's an inaugural organization type
+    is_inaugural = committee.get("organization_type") in ["I"]
+
     # Check committee's status (active, terminated, or administratively terminated)
     is_active = committee.get("is_active")
     filing_frequency = committee.get("filing_frequency")
@@ -549,6 +552,7 @@ def get_committee(committee_id, cycle):
         "cycle": cycle,
         "cycles": cycles,
         "is_SSF": is_ssf,
+        "is_inaugural": is_inaugural,
         "current_committee_status": current_committee_status,
         "cycle_out_of_range": cycle_out_of_range,
         "parent": parent,
