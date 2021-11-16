@@ -14,7 +14,6 @@
       but we still have some style rules that rely on it
       so we're adding it back for blocks defined in models.py as RichTextBlock
     {% endcomment %}
-    {% spaceless %}
     {% for block in self.body %}
     <div class="block-{{ block.block_type }}">
       {% if block.block_type == 'paragraph' %}
@@ -24,7 +23,6 @@
       {% endif %}
     </div>
     {% endfor %}
-    {% endspaceless %}
   </div>
   {% if self.sidebar_title %}
   <div class="sidebar-container">
@@ -59,7 +57,7 @@
             class="option">
       <div class="option__content">
         <h2>{{ block.value.title }}</h2>
-        <div class="rich-text">{{ block.value.intro }}</div>
+        {{ block.value.intro }}</div>
         <ul class="{% if block.value.style == 'check' %}list--checks list--checks--secondary{% else %}list--bulleted--alt{% endif %} t-sans">
         {% for item in block.value.items %}
            <li><div class="rich-text">{{ item }}</div></li>

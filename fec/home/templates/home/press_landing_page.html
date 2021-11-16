@@ -33,7 +33,6 @@
       <div id="press-releases" class="option">
         <h2><a href="/updates?update_type=press-release">Press releases</a></h2>
         <div class="content__section">
-          {% spaceless %}
           {% for block in self.release_intro %}
           <div class="block-{{ block.block_type }}">
             {% if block.block_type == 'paragraph' %}
@@ -43,7 +42,6 @@
             {% endif %}
           </div>
           {% endfor %}
-          {% endspaceless %}
           <a class="button button--standard button--go" href="/updates?update_type=press-release">All press releases</a>
         </div>
         <div class="post-feed">
@@ -54,7 +52,6 @@
       <div id="weekly-digest" class="option">
         <h2><a href="/updates?update_type=weekly-digest">Weekly Digests</a></h2>
         <div class="content__section">
-          {% spaceless %}
           {% for block in self.digest_intro %}
           <div class="block-{{ block.block_type }}">
             {% if block.block_type == 'paragraph' %}
@@ -64,7 +61,6 @@
             {% endif %}
           </div>
           {% endfor %}
-          {% endspaceless %}
           <a class="button button--standard button--go" href="/updates?update_type=weekly-digest">All Weekly Digests</a>
         </div>
         <div class="post-feed">
