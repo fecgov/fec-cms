@@ -5,7 +5,7 @@
  */
 
 var $ = require('jquery');
-var URI = require('urijs');
+// var URI = require('urijs');
 var _ = require('underscore');
 let Handlebars = require('handlebars');
 import { sanitizeValue } from './helpers';
@@ -28,6 +28,7 @@ const officeMap = {
 };
 
 function formatCandidate(result) {
+  console.log('formatCandidate(result): ', result);
   return {
     name: result.name,
     id: result.id,
@@ -37,6 +38,7 @@ function formatCandidate(result) {
 }
 
 function formatCommittee(result) {
+  console.log('formatCommittee(result): ', result);
   return {
     name: result.name,
     id: result.id,
@@ -46,6 +48,7 @@ function formatCommittee(result) {
 }
 
 function formatAuditCommittee(result) {
+  console.log('formatAuditCommittee(result): ', result);
   return {
     name: result.name,
     id: result.id,
@@ -54,6 +57,7 @@ function formatAuditCommittee(result) {
 }
 
 function formatAuditCandidate(result) {
+  console.log('formatAuditCandidate(result): ', result);
   return {
     name: result.name,
     id: result.id,
@@ -64,27 +68,14 @@ function formatAuditCandidate(result) {
 function getUrl(resource) {
   console.log('getURL(resource): ', resource);
 
-  let toReturn = URI(window.API_LOCATION)
-    .path([window.API_VERSION, 'names', resource, ''].join('/'))
-    .query({
-      q: '%QUERY',
-      api_key: window.API_KEY_PUBLIC
-    })
-    .readable();
-
-  let toReturn2 = [
+  let toReturn = [
     window.API_LOCATION,
     window.API_VERSION,
     'names',
     resource,
     ''
   ].join('/');
-  toReturn2 += `?=%QUERY&api_key=${window.API_KEY_PUBLIC}`;
-
-  console.log('getURL()');
-  console.log('  toReturn: ', toReturn);
-  console.log('  toReturn2: ', toReturn2);
-  console.log('  toReturn2.href: ', toReturn2.href);
+  toReturn += `?q=%QUERY&api_key=${window.API_KEY_PUBLIC}`;
   return toReturn;
 }
 
@@ -103,7 +94,7 @@ const candidateEngine = createEngine({
     url: getUrl('candidates'),
     wildcard: '%QUERY',
     transform: function(response) {
-      console.log('committeeEngine');
+      console.log('committeeEngine transform');
       let toReturn = _.map(response.results, formatCandidate);
       // return _.map(response.results, formatCommittee);
       let toReturn2 = response['results'].map(n => formatCandidate(n));
@@ -290,39 +281,31 @@ var typeaheadOpts = {
   hint: false
 };
 
-let autoCompleteOpts = {
-  selector: '.js-site-search-new',
-  placeHolder: 'The opts worked!',
+let autoCompleteOpts = window.tempOpts;
+/*{
+  selector: '.js-site-search',
+  // placeHolder: 'The opts worked!',
   data: {
-    // src: [
-    //   'Sauce - Thousand Island',
-    //   'Wild Boar - Tenderloin',
-    //   'Goat - Whole Cut'
-    // ],
-    src: '',
-    cache: true
-  },
-  resultsList: {
-    element: (list, data) => {
-      if (!data.results.length) {
-        // Create "No Results" message element
-        const message = document.createElement('div');
-        // Add class to the created element
-        message.setAttribute('class', 'no_result');
-        // Add message text content
-        message.innerHTML = `<span>Found No Results for "${data.query}"</span>`;
-        // Append message element to the results list
-        list.prepend(message);
-      }
+    src: async q => {
+      // console.log('src! q: ', q);
+      let toReturn;
+      toReturn = [
+        { food: 'Sauce - Thousand Island', cities: 'Soanindrariny', animals: 'Common boubou shrike' },
+        { food: 'Wild Boar - Tenderloin', cities: 'Luthu', animals: 'Eastern diamondback rattlesnake' },
+        { food: 'Goat - Whole Cut', cities: 'Kargowa', animals: 'Sheep, red' }
+      ];
+      console.log('typeof toReturn: ', typeof toReturn);
+      return toReturn;
+      // src: [{ name: 'OBAMA, BARACK \/ JOSEPH R. BIDEN', office_sought: 'P', id: 'P80003338' }, { name: 'BIDEN, JOSEPH R JR', office_sought: 'P', id: 'P80000722' }, { name: 'BIDEN, JOSEPH R JR', office_sought: 'S', id: 'S8DE00012' }, { name: 'BIDEN, JOE R', office_sought: 'P', id: 'P60012143' }, { name: 'BIDEN, JOSEPH ROBINETTEE', office_sought: 'P', id: 'P60012135' }, { name: 'BIDEN, JR., JOSEPH R.', office_sought: 'P', id: 'P60012465' }],
+      // keys: ['name', 'id'],
     },
-    noResults: true
-  },
-  resultItem: {
-    highlight: {
-      render: true
+    keys: ['food', 'cities', 'animals']
+    },
+    resultsList: {
+      tag: 'div',
+      id: '',
     }
-  }
-};
+};*/
 
 /**
  * @class
@@ -364,16 +347,16 @@ function AutoComplete(element, type, url) {
 }
 
 Typeahead.prototype.init = function() {
-  if (this.typeahead) {
-    this.$input.typeahead('destroy');
-  }
-  this.typeahead = this.$input.typeahead(typeaheadOpts, this.dataset);
-  this.$element = this.$input.parent('.twitter-typeahead');
-  this.$element.css('display', 'block');
-  this.$element.find('.tt-menu').attr('aria-live', 'polite');
-  this.$element.find('.tt-input').removeAttr('aria-readonly');
-  this.$element.find('.tt-input').attr('aria-expanded', 'false');
-  this.$input.on('typeahead:select', this.select.bind(this));
+  // if (this.typeahead) {
+  //   this.$input.typeahead('destroy');
+  // }
+  // this.typeahead = this.$input.typeahead(typeaheadOpts, this.dataset);
+  // this.$element = this.$input.parent('.twitter-typeahead');
+  // this.$element.css('display', 'block');
+  // this.$element.find('.tt-menu').attr('aria-live', 'polite');
+  // this.$element.find('.tt-input').removeAttr('aria-readonly');
+  // this.$element.find('.tt-input').attr('aria-expanded', 'false');
+  // this.$input.on('typeahead:select', this.select.bind(this));
 };
 
 AutoComplete.prototype.init = function() {
@@ -381,9 +364,7 @@ AutoComplete.prototype.init = function() {
   // TODO: do we need to destroy/reset one if it already exists?
   // if (this.autoComplete) this.$input.typeahead('destroy');
   let theseOpts = autoCompleteOpts;
-  theseOpts.data = Object.assign(theseOpts.data, { src: getUrl() });
-
-  this.autoComplete = new autoComplete(autoCompleteOpts, this.dataset);
+  theseOpts.data = Object.assign(theseOpts.data, theseOpts );
 
   // Create a new span to wrap the input,
   // add the span to the page before the input
@@ -405,15 +386,14 @@ AutoComplete.prototype.init = function() {
       role="listbox"\
       class="tt-menu"\
       aria-live="polite"\
-      style="position: absolute; top: 100%; left: 0px; z-index: 100; display: none;"\
+      style="position: absolute; top: 100%; left: 0px; z-index: 100;"\
       aria-expanded="false">\
-      <div role="presentation" class="tt-dataset tt-dataset-candidate"></div>\
-      <div role="presentation" class="tt-dataset tt-dataset-committee"></div>\
-      <div role="presentation" class="tt-dataset tt-dataset-0"></div>\
-      <div role="presentation" class="tt-dataset tt-dataset-1"></div>\
+      <span />\
     </div>`;
   this.$input.parentNode.insertBefore(this.$element, this.$input);
   this.$element.prepend(this.$input);
+
+  this.autoComplete = new autoComplete(autoCompleteOpts);
 
   /* FINAL LOOK:
     <span class="twitter-typeahead" style="position: relative; display: block;">
@@ -440,10 +420,24 @@ AutoComplete.prototype.init = function() {
   });
 
   this.$input.addEventListener('typeahead:select', this.select.bind(this));
+
+  this.$input.addEventListener('results', this.handleResultsEvent.bind(this));
+  this.$input.addEventListener('open', this.handleOpenEvent.bind(this));
 };
 
+AutoComplete.prototype.handleResultsEvent = function(e) {
+  console.log('handleResultsEvent e: ', e);
+  console.log('  target next sibling: ', e.srcElement.nextElementSibling);
+  let resultsHolder = e.srcElement.parentElement.querySelector('.tt-dataset');
+  console.log('  resultsHolder: ', resultsHolder);
+};
+
+AutoComplete.prototype.handleOpenEvent = function(e) {
+  //<span class="tt-suggestion__header">Select a candidate:</span>
+  console.log('handleOpenEvent e: ', e);
+};
 Typeahead.prototype.handleChangeEvent = function(data) {
-  this.init(data.type);
+  // this.init(data.type);
 };
 
 AutoComplete.prototype.handleChangeEvent = function(data) {
@@ -452,11 +446,11 @@ AutoComplete.prototype.handleChangeEvent = function(data) {
 };
 
 Typeahead.prototype.setAria = function() {
-  if (this.$element.find('.tt-menu').attr('aria-expanded') == 'false') {
-    this.$element.find('.tt-input').attr('aria-expanded', 'false');
-  } else {
-    this.$element.find('.tt-input').attr('aria-expanded', 'true');
-  }
+  // if (this.$element.find('.tt-menu').attr('aria-expanded') == 'false') {
+  //   this.$element.find('.tt-input').attr('aria-expanded', 'false');
+  // } else {
+  //   this.$element.find('.tt-input').attr('aria-expanded', 'true');
+  // }
   //alert('closed')
 };
 
@@ -474,16 +468,16 @@ AutoComplete.prototype.setAria = function() {
 };
 
 Typeahead.prototype.select = function(event, datum) {
-  if (datum.type === 'individual') {
-    window.location =
-      this.url +
-      'receipts/individual-contributions/?contributor_name=' +
-      datum.id;
-  } else if (datum.type === 'site') {
-    this.searchSite(datum.id);
-  } else {
-    window.location = this.url + datum.type + '/' + datum.id;
-  }
+  // if (datum.type === 'individual') {
+  //   window.location =
+  //     this.url +
+  //     'receipts/individual-contributions/?contributor_name=' +
+  //     datum.id;
+  // } else if (datum.type === 'site') {
+  //   this.searchSite(datum.id);
+  // } else {
+  //   window.location = this.url + datum.type + '/' + datum.id;
+  // }
 };
 AutoComplete.prototype.select = function(event, datum) {
   console.log('AutoComplete.select(event, datum): ', event, datum);
@@ -504,11 +498,11 @@ Typeahead.prototype.searchSite = function(query) {
    * a new search on /search
    */
 
-  var $form = this.$input.closest('form');
-  var action = $form.attr('action');
-  this.$input.val(query);
-  $form.attr('action', action);
-  $form.submit();
+  // var $form = this.$input.closest('form');
+  // var action = $form.attr('action');
+  // this.$input.val(query);
+  // $form.attr('action', action);
+  // $form.submit();
 };
 
 module.exports = {

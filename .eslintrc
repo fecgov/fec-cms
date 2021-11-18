@@ -24,7 +24,15 @@
     "navigator": true
   },
   "rules": {
+    "array-bracket-newline": ["error", "consistent"],
     "array-bracket-spacing": ["error", "never", { "objectsInArrays": false }],
+    // "array-element-newline": ["error",
+    //   {
+    //     "multiline": true,
+    //     "minItems": 2
+    //   }
+    // ],
+    "comma-spacing": ["error", { "before": false, "after": true }],
     "comma-dangle": ["error", "never"],
     "eol-last": ["error", "always"],
     // "eqeqeq": ["warn", "smart"],
@@ -36,8 +44,9 @@
     "max-len": ["error", {
       "code": 200,
       "comments": 250,
-      "ignoreStrings": true,
+      // "ignoreStrings": true,
       "ignoreTemplateLiterals": true
+      // "ignorePattern": false
     }],
     "no-console": "error",
     "no-empty-function": "error",

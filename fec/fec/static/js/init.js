@@ -19,7 +19,7 @@ var toc = require('./modules/toc');
 // var typeahead = require('./modules/typeahead');
 var helpers = require('./modules/helpers');
 
-import filterTypeahead from './modules/filters/filter-typeahead';
+// import filterTypeahead from './modules/filters/filter-typeahead';
 import { AutoComplete } from './modules/typeahead';
 
 // Hack: Append jQuery to `window` for use by legacy libraries
@@ -94,10 +94,10 @@ $(document).ready(function() {
 
   // Initialize header typeaheads (mobile and desktop)
   $('.js-site-search').each(function() {
-    new typeahead.Typeahead($(this), 'all', '/data/');
+    // new typeahead.Typeahead($(this), 'all', '/data/');
   });
 
-  let siteSearchObjects = document.querySelectorAll('.js-site-search-new');
+  let siteSearchObjects = document.querySelectorAll('.js-site-search');
   siteSearchObjects.forEach((val, key) => {
     // console.log('forEach val, key: ', val, key);
     new AutoComplete(val, 'all', '/data/');
@@ -124,6 +124,6 @@ $(document).ready(function() {
     } else {
       $link.remove();
     }
-    $p.nextAll().remove()
+    $p.nextAll().remove();
   });
 });
