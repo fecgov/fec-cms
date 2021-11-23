@@ -17,7 +17,6 @@
     </header>
     <div class="row">
       <div class="main__content">
-        {% spaceless %}
         {% for block in self.body %}
         <div class="block-{{ block.block_type }}">
           {% if block.block_type == 'paragraph' %}
@@ -27,7 +26,6 @@
           {% endif %}
         </div>
         {% endfor %}
-        {% endspaceless %}
       </div>
       <div class="sidebar-container">
         {% if self.sidebar %}
