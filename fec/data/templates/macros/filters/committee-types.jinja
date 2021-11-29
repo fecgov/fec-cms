@@ -1,11 +1,27 @@
 {% import 'macros/filters/typeahead-filter.jinja' as typeahead %}
 
-{% macro field(committee_type='committee_type', organization_type='organization_type', designation='designation', display_sponsor_candidate_filter=False, display_authorized_committee_filter=True, display_parties_only_filter=False, display_default_other_committees_filter=True, display_alt_other_committees_filter=False, display_default_ie_committees_filter=True, display_alt_ie_committees_filter=False) %}
+{% macro field(
+  committee_type='committee_type', 
+  organization_type='organization_type', 
+  designation='designation', 
+  display_sponsor_candidate_filter=False, 
+  display_authorized_committee_filter=True, 
+  display_parties_only_filter=False, 
+  display_default_other_committees_filter=True, 
+  display_alt_other_committees_filter=False, 
+  display_default_ie_committees_filter=True, 
+  display_alt_ie_committees_filter=False) %}
 
 {% if display_authorized_committee_filter %}
 <div class="filter">
   <fieldset class="js-dropdown js-filter" data-filter="checkbox" data-name="hsp-committee_type">
-    <legend class="label" for="committee_type">Authorized committees</legend>
+    <label class="label t-inline-block" for="committee_type">Authorized committees</label>
+    <div class="tooltip__container">
+      <button class="tooltip__trigger" type="button"><span class="u-visually-hidden">Learn more</span></button>
+      <div role="tooltip" class="tooltip tooltip--under tooltip--left">
+        <p class="tooltip__content">A political committee that has been authorized by a candidate to accept contributions or make expenditures on his or her behalf, or one that accepts contributions or makes expenditures on behalf of a candidate and has not been disavowed by the candidate.</p>
+      </div>
+    </div>
     <ul class="dropdown__selected">
       <li>
         <input id="committee-type-checkbox-P" type="checkbox" name="{{ committee_type }}" value="P">
@@ -27,7 +43,13 @@
 {% if display_default_ie_committees_filter %}
   <div class="filter">
     <fieldset class="js-dropdown js-filter" data-filter="checkbox" data-name="committee_type">
-      <label class="label t-inline-block" for="committee_type">Independent expenditure committees</label>
+      <label class="label t-inline" for="committee_type">Independent expenditure committees</label>
+      <div class="tooltip__container">
+        <button class="tooltip__trigger" type="button"><span class="u-visually-hidden">Learn more</span></button>
+        <div role="tooltip" class="tooltip tooltip--under tooltip--left">
+          <p class="tooltip__content">A political committee that makes only independent expenditures that may solicit and accept unlimited contributions from individuals, corporations, labor organizations and other political committees. It may not accept contributions from foreign nationals, federal contractors, national banks or federally chartered corporations. See AO 2010-11. Such committees, popularly known as Super PACs, must register with the Commission and comply with all applicable reporting requirements of the Act.</p>
+        </div>
+      </div>
       <ul class="dropdown__selected">
         <li>
           <input id="committee-type-checkbox-O" type="checkbox" name="{{ committee_type }}" value="O">
@@ -70,6 +92,12 @@
 <div class="filter">
   <fieldset class="js-dropdown js-filter" data-filter="checkbox" data-name="organization_type">
     <label class="label t-inline-block" for="committee_type">PACs</label>
+    <div class="tooltip__container">
+      <button class="tooltip__trigger" type="button"><span class="u-visually-hidden">Learn more</span></button>
+      <div role="tooltip" class="tooltip tooltip--under tooltip--left">
+        <p class="tooltip__content">Popular term for a political committee that is neither a party committee nor an authorized committee of a candidate. PACs directly or indirectly established, administered or financially supported by a corporation or labor organization are called separate segregated funds (SSFs). PACs without such a corporate or labor sponsor are called nonconnected PACs.</p>
+      </div>
+    </div>
     <ul class="dropdown__selected"></ul>
     <div class="dropdown">
       <button type="button" class="dropdown__button button--alt" data-name="{{ committee_type }}">More</button>
