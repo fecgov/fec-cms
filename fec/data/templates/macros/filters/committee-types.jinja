@@ -78,7 +78,13 @@
 {% if display_alt_ie_committees_filter %}
   <div class="filter">
     <fieldset class="js-dropdown js-filter" data-filter="checkbox" data-name="committee_type">
-      <label class="label t-inline-block" for="committee_type">Independent expenditure committees</label>
+      <label class="label t-inline" for="committee_type">Independent expenditure committees</label>
+      <div class="tooltip__container">
+        <button class="tooltip__trigger" type="button"><span class="u-visually-hidden">Learn more</span></button>
+        <div role="tooltip" class="tooltip tooltip--under tooltip--left">
+          <p class="tooltip__content">A political committee that makes only independent expenditures that may solicit and accept unlimited contributions from individuals, corporations, labor organizations and other political committees. It may not accept contributions from foreign nationals, federal contractors, national banks or federally chartered corporations. See AO 2010-11. Such committees, popularly known as Super PACs, must register with the Commission and comply with all applicable reporting requirements of the Act.</p>
+        </div>
+      </div>
       <ul class="dropdown__selected">
         <li>
           <input id="committee-type-checkbox-O" type="checkbox" name="{{ committee_type }}" value="O">
