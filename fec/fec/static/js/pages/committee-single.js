@@ -143,6 +143,18 @@ var disbursementRecipientColumns = [
     orderable: false
   },
   {
+    data: 'recipient_disbursement_percent',
+    className: 'all',
+    orderable: false,
+    render: function ( data ) {
+      if(data) {
+        return data + '%';
+      } else{
+        return 'Could not calculate';
+      }
+    }
+  },
+  {
     data: 'total',
     className: 'all',
     orderable: false,
@@ -549,7 +561,7 @@ $(document).ready(function() {
             }),
             columns: disbursementRecipientColumns,
             callbacks: aggregateCallbacks,
-            order: [[1, 'desc']],
+            order: [[2, 'desc']],
             hideEmptyOpts: {
               dataType: 'disbursements',
               name: context.name,
