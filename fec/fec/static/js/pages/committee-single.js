@@ -157,7 +157,7 @@ var disbursementRecipientColumns = [
   {
     data: 'total',
     className: 'all',
-    orderable: false,
+    orderable: true,
     orderSequence: ['desc', 'asc'],
     render: columnHelpers.buildTotalLink(['disbursements'], function(
       data,
