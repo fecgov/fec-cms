@@ -244,7 +244,7 @@ var individualDataset = {
   }
 };
 
-/* This is a fake dataset for showing an empty option with the query
+/** This is a fake dataset for showing an empty option with the query
  * when clicked, this will submit the form to the DigitalGov search site
  */
 var siteDataset = {
@@ -331,19 +331,21 @@ function Typeahead(selector, type, url) {
   // this.$input.on('keyup', this.setAria.bind(this));
 }
 function AutoComplete(element, type, url) {
-  events.on('searchTypeChanged', this.handleChangeEvent.bind(this));
+  console.log('new AutoComplete!');
 
   this.$input = element;
   this.url = url || '/';
   this.autoComplete = null;
+  this.formerSelectionIndex;
 
   this.dataset = datasets[type];
 
   this.init();
 
-  console.log('new AutoComplete!');
+  events.on('searchTypeChanged', this.handleChangeEvent.bind(this));
 
   this.$input.addEventListener('keyup', this.setAria.bind(this));
+  this.$input.addEventListener('focus', this.handleFocus.bind(this));
 }
 
 Typeahead.prototype.init = function() {
@@ -363,6 +365,8 @@ AutoComplete.prototype.init = function() {
   console.log('AutoComplete.init()');
   // TODO: do we need to destroy/reset one if it already exists?
   // if (this.autoComplete) this.$input.typeahead('destroy');
+  this.$input.value = '';
+
   let theseOpts = autoCompleteOpts;
   theseOpts.data = Object.assign(theseOpts.data, theseOpts );
 
@@ -382,32 +386,21 @@ AutoComplete.prototype.init = function() {
       aria-hidden="true"\
       style="position: absolute; visibility: hidden; white-space: pre; font-family: karla, sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 400; word-spacing: 0px; letter-spacing: 0px; text-indent: 0px; text-rendering: auto; text-transform: none;">\
     </pre>\
-    <div\
-      role="listbox"\
-      class="tt-menu"\
-      aria-live="polite"\
-      style="position: absolute; top: 100%; left: 0px; z-index: 100;"\
-      aria-expanded="false">\
-      <span />\
     </div>`;
+  // Create an element to hold the results
+  this.resultsHolder = document.createElement('div');
+  this.resultsHolder.setAttribute('role', 'listbox');
+  this.resultsHolder.setAttribute('class', 'tt-menu');
+  this.resultsHolder.setAttribute('aria-live', 'polite');
+  this.resultsHolder.setAttribute('style', 'position: absolute; top: 100%; left: 0px; z-index: 100;');
+  this.resultsHolder.setAttribute('aria-expanded', 'false');
+  this.resultsHolder.innerHTML = '<span />';
+  this.$element.appendChild(this.resultsHolder);
+
   this.$input.parentNode.insertBefore(this.$element, this.$input);
   this.$element.prepend(this.$input);
 
   this.autoComplete = new autoComplete(autoCompleteOpts);
-
-  /* FINAL LOOK:
-    <span class="twitter-typeahead" style="position: relative; display: block;">
-      <input class="js-site-search combo__input tt-input" autocomplete="off" aria-controls="query_listbox" id="query" name="query" type="text" aria-label="Search FEC.gov" spellcheck="false" dir="auto" aria-activedescendant="" aria-owns="query_listbox" role="combobox" aria-autocomplete="list" style="position: relative; vertical-align: top;" aria-expanded="false">
-      <span role="status" aria-live="polite" style="position: absolute; padding: 0px; border: 0px; height: 1px; width: 1px; margin-bottom: -1px; margin-right: -1px; overflow: hidden; clip: rect(0px, 0px, 0px, 0px); white-space: nowrap;"></span>
-      <pre aria-hidden="true" style="position: absolute; visibility: hidden; white-space: pre; font-family: karla, sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 400; word-spacing: 0px; letter-spacing: 0px; text-indent: 0px; text-rendering: auto; text-transform: none;"></pre>
-      <div role="listbox" class="tt-menu" aria-live="polite" style="position: absolute; top: 100%; left: 0px; z-index: 100; display: none;" aria-expanded="false">
-        <div role="presentation" class="tt-dataset tt-dataset-candidate"></div>
-        <div role="presentation" class="tt-dataset tt-dataset-committee"></div>
-        <div role="presentation" class="tt-dataset tt-dataset-0"></div>
-        <div role="presentation" class="tt-dataset tt-dataset-1"></div>
-      </div>
-    </span>
-  */
 
   let theMenus = this.$element.querySelectorAll('.tt-menu');
   theMenus.forEach(el => {
@@ -419,23 +412,16 @@ AutoComplete.prototype.init = function() {
     el.setAttribute('aria-expanded', 'false').removeAttribute('aria-readonly');
   });
 
-  this.$input.addEventListener('typeahead:select', this.select.bind(this));
-
-  this.$input.addEventListener('results', this.handleResultsEvent.bind(this));
-  this.$input.addEventListener('open', this.handleOpenEvent.bind(this));
+  this.$input.addEventListener('results', this.handleResults.bind(this));
+  this.$input.addEventListener('selection', this.handleSelect.bind(this));
+  this.$input.addEventListener('navigate', this.handleNavigate.bind(this));
 };
 
-AutoComplete.prototype.handleResultsEvent = function(e) {
-  console.log('handleResultsEvent e: ', e);
-  console.log('  target next sibling: ', e.srcElement.nextElementSibling);
-  let resultsHolder = e.srcElement.parentElement.querySelector('.tt-dataset');
-  console.log('  resultsHolder: ', resultsHolder);
+AutoComplete.prototype.handleFocus = function(e) {
+  // Only opens if the resultsList is not empty
+  this.autoComplete.open();
 };
 
-AutoComplete.prototype.handleOpenEvent = function(e) {
-  //<span class="tt-suggestion__header">Select a candidate:</span>
-  console.log('handleOpenEvent e: ', e);
-};
 Typeahead.prototype.handleChangeEvent = function(data) {
   // this.init(data.type);
 };
@@ -467,34 +453,57 @@ AutoComplete.prototype.setAria = function() {
     thisInput.setAttribute('aria-expanded', !!thisMenu);
 };
 
-Typeahead.prototype.select = function(event, datum) {
-  // if (datum.type === 'individual') {
-  //   window.location =
-  //     this.url +
-  //     'receipts/individual-contributions/?contributor_name=' +
-  //     datum.id;
-  // } else if (datum.type === 'site') {
-  //   this.searchSite(datum.id);
-  // } else {
-  //   window.location = this.url + datum.type + '/' + datum.id;
-  // }
+AutoComplete.prototype.handleResults = function(e) {
+  console.log('handleResults()');
+  // Reset the 'last selected' marker for arrow/keyboard navigation
+  this.formerSelectionIndex = 0;
 };
-AutoComplete.prototype.select = function(event, datum) {
-  console.log('AutoComplete.select(event, datum): ', event, datum);
-  // if (datum.type === 'individual') {
-  //   window.location =
-  //     this.url +
-  //     'receipts/individual-contributions/?contributor_name=' +
-  //     datum.id;
-  // } else if (datum.type === 'site') {
-  //   this.searchSite(datum.id);
-  // } else {
-  //   window.location = this.url + datum.type + '/' + datum.id;
-  // }
+
+AutoComplete.prototype.handleSelect = function(e) {
+  console.log('handleSelect(e): ', e);
+  let val = e.detail.selection.value;
+
+  // If it's a header, ignore the selection/click/tap
+  if (val.is_header) return;
+
+  // Find the element
+  if (val.type == 'individual') {
+    window.location = `${this.url}receipts/individual-contributions/?contributor_name=${val.id}`;
+
+  } else if (val.type == 'candidate' || val.type == 'committee') {
+    window.location = `${this.url}${val.type}/${val.id}`;
+
+  } else if (val.type == 'site') {
+    this.searchSite(e.detail.selection.match);
+  }
+
+  // if (theURL) window.location = theURL;
+};
+
+AutoComplete.prototype.handleNavigate = function(e) {
+  console.log('handleNavigate(e): ', e);
+  // If we've just focused on a header object, we want to nav off of it
+  if (e.detail.selection.value.is_header === true) {
+    // If we were previously higher on the list, let's go to the next
+    if (this.formerSelectionIndex <= e.detail.selection.index) this.autoComplete.next();
+    // If we were previously lower on the list, let's jump up another
+    else this.autoComplete.previous();
+
+    // Save the former selection for next time
+    this.formerSelectionIndex = e.detail.selection.index;
+
+  } else if (this.formerSelectionIndex == e.detail.selection.index && this.formerSelectionIndex >= e.detail.results.length - 1) {
+    this.formerSelectionIndex = -1;
+    this.autoComplete.goTo(0);
+
+  } else {
+    this.formerSelectionIndex = e.detail.selection.index;
+    this.$input.value = e.detail.selection.match;
+  }
 };
 
 Typeahead.prototype.searchSite = function(query) {
-  /* If the site search option is selected, this function handles submitting
+  /** If the site search option is selected, this function handles submitting
    * a new search on /search
    */
 
@@ -503,6 +512,18 @@ Typeahead.prototype.searchSite = function(query) {
   // this.$input.val(query);
   // $form.attr('action', action);
   // $form.submit();
+};
+
+AutoComplete.prototype.searchSite = function(q) {
+  console.log('searchSite(q): ', q);
+  /** If the site search option is selected, this function handles submitting
+   * a new search on /search
+   */
+  let form = this.$input.closest('form');
+  let action = form.getAttribute('action');
+  this.$input.value = q;
+  form.setAttribute('action', action);
+  form.submit();
 };
 
 module.exports = {

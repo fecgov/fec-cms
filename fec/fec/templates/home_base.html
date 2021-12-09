@@ -161,6 +161,8 @@
       window.API_KEY_PUBLIC_CALENDAR = '{{ settings.FEC_API_KEY_PUBLIC_CALENDAR }}';
       window.CANONICAL_BASE = '{{ settings.CANONICAL_BASE }}';
 
+      if (window.FEC_APP_URL == 'None') window.FEC_APP_URL = 'http://127.0.0.1:8000/';
+
       const officeMap = {
         H: 'House',
         S: 'Senate',
@@ -188,40 +190,56 @@
         // placeHolder: 'The opts worked!',
         data: {
           src: async q => {
-            let fetchedResults;
+            let fetchedResults = [];
             window.queryText = q;
-            await fetch(`https://fec-dev-api.app.cloud.gov/v1/names/candidates/?q=${q}&api_key=${window.API_KEY_PUBLIC}`, 
+            await fetch(
+              `https://fec-dev-api.app.cloud.gov/v1/names/candidates/?q=${q}&api_key=${window.API_KEY_PUBLIC}`, 
               fetchInit
             )
             .then(response => response.json())
             .then(data => {
-              console.log('yay! first fetch data: ', data);
-              if (data.results.length > 0) fetchedResults = [{is_header: true, name: 'Select a candidate:', id: window.queryText}];
+              let results = data.results;
+
+              if (results.length > 0) fetchedResults.push({is_header: true, id: window.queryText, name: 'Select a candidate:', type: 'none'});
               // console.log('data.results.length: ', data.results.length);
               // if (data.results.length > 0) console.log('  first data.results: ', data.results[0]);
-              fetchedResults.push(...data.results.slice(0, 5));
+              results.forEach(element => {
+                element.type = 'candidate';
+              });
+              fetchedResults.push(...results.slice(0, 5));
               // if (response.status !== 200) throw new Error('The network rejected the grand total request.');
               // else if (response.type == 'cors') throw new Error('CORS error');
               // response.json().then(data => {
                 // instance.displayUpdatedData_grandTotal(data);
               // });
-              return fetch(`https://fec-dev-api.app.cloud.gov/v1/names/committees/?q=${q}&api_key=${window.API_KEY_PUBLIC}`, 
-              fetchInit
-            )
+              return fetch(
+                `https://fec-dev-api.app.cloud.gov/v1/names/committees/?q=${q}&api_key=${window.API_KEY_PUBLIC}`, 
+                fetchInit
+              )
             })
             .then(response => response.json())
             .then(data => {
-              console.log('second fetch data: ', data);
-              if (data.results.length > 0) fetchedResults.push({is_header: true, name: 'Select a committee:', id: window.queryText});
-              fetchedResults.push(...data.results.slice(0, 10));
+              let results = data.results;
+
+              if (!fetchedResults) fetchedResults = [];
+              if (results.length > 0) fetchedResults.push({is_header: true, id: window.queryText, name: 'Select a committee:', type: 'none'});
+
+              results.forEach(element => {
+                element.type = 'committee';
+              });
+              fetchedResults.push(...results.slice(0, 10));
+            })
+            .then((data) => {
+              fetchedResults.push({is_suggestion: true, id: window.queryText, name: 'Search individual contributions from:', type: 'individual'});
+              fetchedResults.push({is_suggestion: true, id: window.queryText, name: 'Search other pages:', type: 'site'});
+              // suggestion for individual contribs
             });
-            console.log('big fetchedResults: ', fetchedResults);
             return fetchedResults;
           },
           keys: searchedAttribs()
         },
         resultsList: {
-          tag: 'div',
+          // tag: 'div',
           class: 'tt-dataset tt-dataset-candidate',
           maxResults: 20,
           tabSelect: true,
@@ -239,13 +257,23 @@
           // Need header: <span class="tt-suggestion__header">Select a candidate:</span>
         },
         resultItem: {
-          tag: 'span',
+          // tag: 'span',
           class: 'tt-suggestion tt-selectable',
+          selected: 'tt-cursor',
           element: (item, data) => {
-            console.log('resultItem.element() data: ', item, data);
+            // console.log('resultItem.element() data: ', item, data);
+
             if (data.value.is_header) {
               item.setAttribute('class', 'tt-suggestion__header');
+              item.setAttribute('tabindex', '-1');
               item.innerHTML = data.value.name;
+            } else if (data.value.is_suggestion) {
+              item.setAttribute('class', 'tt-suggestion tt-select');
+              item.setAttribute('tabindex', '-1');
+              item.innerHTML = `<strong>${data.value.name}</strong> "<strong class="tt-highlight">${data.value.id}</strong>"`;
+              // <span class="tt-suggestion tt-selectable"><strong>Search individual contributions from:</strong> "window.queryText"</span>
+              // <span class="tt-suggestion tt-selectable"><strong>Search other pages:</strong> "<strong class="tt-highlight">john</strong>"</span>
+
             } else {
               // console.log('q: ', q);
               let dName = data.value.name;
@@ -267,13 +295,15 @@
                 dID = `${baseStr.slice(0, startPos)}<strong class="tt-highlight">${baseStr.slice(startPos, endPos)}</strong>${baseStr.slice(endPos)}`;
               }
 
-              item.innerHTML = `<span class="tt-suggestion__name">${dName} (${dID})</span>`;
+              item.innerHTML = `<span class="tt-suggestion__name" tabindex="-1">${dName} (${dID})</span>`;
 
-              if (dOffice) item.innerHTML += `<span class="tt-suggestion__office">${dOffice}</span>`;
+              if (dOffice) item.innerHTML += `<span class="tt-suggestion__office" tabindex="-1">${dOffice}</span>`;
 
               if (data.value.is_active === true) item.innerHTML += '<span class="is-active-status"></span>';
               else if (data.value.is_active === false) item.innerHTML += '<span class="is-terminated-status"></span>';
             }
+
+            //
           }
           //  <span class="tt-suggestion tt-selectable">
           //    <span class="tt-suggestion__name"><strong class="tt-highlight">TEST</strong>ER, R. JON (S6MT00162)</span>
