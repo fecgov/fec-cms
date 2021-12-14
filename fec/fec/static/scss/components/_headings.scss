@@ -80,6 +80,11 @@
     line-height: u(3.4rem); // Setting explicit value to height of the action button for vertical alignment
   }
 
+  .data-disclaimer {
+    display: inline-block;
+    margin-bottom: u(1rem);
+  }
+
   @include media($med) {
     .heading__left {
       float: left;

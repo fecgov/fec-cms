@@ -1,11 +1,28 @@
 {% import 'macros/filters/typeahead-filter.jinja' as typeahead %}
 
-{% macro field(committee_type='committee_type', organization_type='organization_type', designation='designation', display_sponsor_candidate_filter=False, display_authorized_committee_filter=True, display_parties_only_filter=False, display_default_other_committees_filter=True, display_alt_other_committees_filter=False, display_default_ie_committees_filter=True, display_alt_ie_committees_filter=False) %}
+{% macro field(
+  committee_type='committee_type', 
+  organization_type='organization_type', 
+  designation='designation', 
+  display_sponsor_candidate_filter=False, 
+  display_authorized_committee_filter=True, 
+  display_parties_only_filter=False, 
+  display_default_other_committees_filter=True, 
+  display_alt_other_committees_filter=False, 
+  display_default_ie_committees_filter=True, 
+  display_alt_ie_committees_filter=False)
+%}
 
 {% if display_authorized_committee_filter %}
 <div class="filter">
   <fieldset class="js-dropdown js-filter" data-filter="checkbox" data-name="hsp-committee_type">
-    <legend class="label" for="committee_type">Authorized committees</legend>
+    <label class="label t-inline-block" for="committee_type">Authorized committees</label>
+    <div class="tooltip__container">
+      <button class="tooltip__trigger" type="button"><span class="u-visually-hidden">Learn more</span></button>
+      <div role="tooltip" class="tooltip tooltip--under tooltip--left">
+        <p class="tooltip__content">A political committee authorized by a candidate to accept contributions or make expenditures on behalf of that candidate. Also known as a campaign committee.</p>
+      </div>
+    </div>
     <ul class="dropdown__selected">
       <li>
         <input id="committee-type-checkbox-P" type="checkbox" name="{{ committee_type }}" value="P">
@@ -27,7 +44,13 @@
 {% if display_default_ie_committees_filter %}
   <div class="filter">
     <fieldset class="js-dropdown js-filter" data-filter="checkbox" data-name="committee_type">
-      <label class="label t-inline-block" for="committee_type">Independent expenditure committees</label>
+      <label class="label t-inline" for="committee_type">Independent expenditure committees</label>
+      <div class="tooltip__container">
+        <button class="tooltip__trigger" type="button"><span class="u-visually-hidden">Learn more</span></button>
+        <div role="tooltip" class="tooltip tooltip--under tooltip--left">
+          <p class="tooltip__content">A political committee that makes only independent expenditures and does not make contributions to candidates, parties or other political committees unless they are also independent expenditure committees. These committees may solicit and accept unlimited contributions from individuals, corporations, labor organizations and others.</p>
+        </div>
+      </div>
       <ul class="dropdown__selected">
         <li>
           <input id="committee-type-checkbox-O" type="checkbox" name="{{ committee_type }}" value="O">
@@ -56,7 +79,13 @@
 {% if display_alt_ie_committees_filter %}
   <div class="filter">
     <fieldset class="js-dropdown js-filter" data-filter="checkbox" data-name="committee_type">
-      <label class="label t-inline-block" for="committee_type">Independent expenditure committees</label>
+      <label class="label t-inline" for="committee_type">Independent expenditure committees</label>
+      <div class="tooltip__container">
+        <button class="tooltip__trigger" type="button"><span class="u-visually-hidden">Learn more</span></button>
+        <div role="tooltip" class="tooltip tooltip--under tooltip--left">
+          <p class="tooltip__content">A political committee that makes only independent expenditures and does not make contributions to candidates, parties or other political committees unless they are also independent expenditure committees. These committees may solicit and accept unlimited contributions from individuals, corporations, labor organizations and others.</p>
+        </div>
+      </div>
       <ul class="dropdown__selected">
         <li>
           <input id="committee-type-checkbox-O" type="checkbox" name="{{ committee_type }}" value="O">
@@ -70,6 +99,12 @@
 <div class="filter">
   <fieldset class="js-dropdown js-filter" data-filter="checkbox" data-name="organization_type">
     <label class="label t-inline-block" for="committee_type">PACs</label>
+    <div class="tooltip__container">
+      <button class="tooltip__trigger" type="button"><span class="u-visually-hidden">Learn more</span></button>
+      <div role="tooltip" class="tooltip tooltip--under tooltip--left">
+        <p class="tooltip__content">Popular term for a political committee that is neither a candidate’s authorized committee nor a party committee.</p>
+      </div>
+    </div>
     <ul class="dropdown__selected"></ul>
     <div class="dropdown">
       <button type="button" class="dropdown__button button--alt" data-name="{{ committee_type }}">More</button>
