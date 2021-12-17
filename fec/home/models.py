@@ -662,14 +662,14 @@ class CustomPage(Page):
         choices=constants.conditional_js.items(), blank=True, null=True,
         help_text='Choose a JS script to add only to this page')
     # Adds a settings field for making a custom title that displays in the Wagtail page explorer
-    menu_title = models.CharField(max_length=255, null=True)
+    menu_title = models.CharField(max_length=255, blank=True)
     settings_panels = Page.settings_panels + [
         FieldPanel('menu_title'),
         FieldPanel('conditional_js')
     ]
 
     def get_admin_display_title(self):
-        return self.draft_title or self.menu_title or self.title
+        return self.menu_title if self.menu_title else self.title
 
     @property
     def content_section(self):
@@ -893,13 +893,13 @@ class CollectionPage(Page):
     ]
 
     # Adds a settings field for making a custom title that displays in the Wagtail page explorer
-    menu_title = models.CharField(max_length=255, null=True)
+    menu_title = models.CharField(max_length=255, blank=True)
     settings_panels = Page.settings_panels + [
         FieldPanel('menu_title')
     ]
 
     def get_admin_display_title(self):
-        return self.draft_title or self.menu_title or self.title
+        return self.menu_title if self.menu_title else self.title
 
     @property
     def content_section(self):
@@ -957,13 +957,13 @@ class ResourcePage(Page):
     ]
 
     # Adds a settings field for making a custom title that displays in the Wagtail page explorer
-    menu_title = models.CharField(max_length=255, null=True)
+    menu_title = models.CharField(max_length=255, blank=True)
     settings_panels = Page.settings_panels + [
         FieldPanel('menu_title')
     ]
 
     def get_admin_display_title(self):
-        return self.draft_title or self.menu_title or self.title
+        return self.menu_title if self.menu_title else self.title
 
     @property
     def display_date(self):
