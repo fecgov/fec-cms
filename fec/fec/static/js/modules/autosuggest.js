@@ -2,8 +2,8 @@
 
 /**
  * @fileoverview Wrapper for @tarekraafat/autocomplete.js
- * `autosuggest` is used to refer to this class' element and functionality
- * `autocomplete` is used to refer to elements created by @tarekraafat/autocomplete.js
+ * 'autosuggest' is used to refer to this class' element and functionality
+ * 'autocomplete' is used to refer to elements created by @tarekraafat/autocomplete.js
  */
 
 import autoComplete from '@tarekraafat/autocomplete.js';
@@ -108,6 +108,7 @@ let siteSearchOpts = {
   },
   data: {
     src: async q => {
+      console.log('siteSearchOpts.data.src this: ', this);
       let fetchedResults = [];
       window.queryText = q;
       await fetch(getUrl('candidates', q), fetchInit)
@@ -163,40 +164,34 @@ let siteSearchOpts = {
     class: 'as-suggestion as-selectable',
     selected: 'as-cursor',
     submit: true,
+    highlight: 'as-highlight',
     element: (item, data) => {
+      console.log('element(item, data): ', item, data);
+
+      // For headers (e.g. "Select a candidate"), no tabbing, data.value.name only
       if (data.value.is_header) {
         item.setAttribute('class', 'as-suggestion__header');
         item.setAttribute('tabindex', '-1');
         item.innerHTML = data.value.name;
 
+      // For suggestions (e.g. "Search other pages"), no tabbing, data.value.name + the searched text
       } else if (data.value.is_suggestion) {
         item.setAttribute('class', 'as-suggestion as-select');
         item.setAttribute('tabindex', '-1');
         item.innerHTML = `<strong>${data.value.name}</strong> "<strong class="as-highlight">${data.value.id}</strong>"`;
 
+      // For other entries, we want to include the name, id, and office if applicable, also highlight the matched data
       } else {
-        let dName = data.value.name;
-        let dID = data.value.id;
-        let dActive= data.value.active;
-        let dOffice = officeMap[data.value.office_sought] || null;
-        let match = item.match;
+        item.innerHTML = `<span class="as-suggestion__name" tabindex="-1">`;
+        item.innerHTML += data.key == 'name' ? data.match : data.value.name;
+        item.innerHTML += ' (';
+        item.innerHTML += data.key == 'id' ? data.match : data.value.id;
+        item.innerHTML += `)</span>`;
 
-        if (dName.toLowerCase().indexOf(window.queryText.toLowerCase()) >= 0) {
-          let baseStr = data.value.name;
-          let startPos = baseStr.toLowerCase().indexOf(window.queryText.toLowerCase());
-          let endPos = startPos + window.queryText.length;
-          dName = `${baseStr.slice(0, startPos)}<strong class="as-highlight">${baseStr.slice(startPos, endPos)}</strong>${baseStr.slice(endPos)}`;
+        if (data.value.office_sought) {
+          let officeLabel = officeMap[data.value.office_sought];
+          `<span class="as-suggestion__office" tabindex="-1">${officeLabel}</span>`;
         }
-        if (dID.indexOf(window.queryText) >= 0) {
-          let baseStr = dID.toString();
-          let startPos = baseStr.indexOf(window.queryText);
-          let endPos = startPos + window.queryText.length;
-          dID = `${baseStr.slice(0, startPos)}<strong class="as-highlight">${baseStr.slice(startPos, endPos)}</strong>${baseStr.slice(endPos)}`;
-        }
-
-        item.innerHTML = `<span class="as-suggestion__name" tabindex="-1">${dName} (${dID})</span>`;
-
-        if (dOffice) item.innerHTML += `<span class="as-suggestion__office" tabindex="-1">${dOffice}</span>`;
 
         if (data.value.is_active === true) item.innerHTML += '<span class="is-active-status"></span>';
         else if (data.value.is_active === false) item.innerHTML += '<span class="is-terminated-status"></span>';
