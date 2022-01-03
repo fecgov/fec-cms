@@ -148,7 +148,161 @@ CalcAdminFineLogic.prototype.getTotalAdminFine = function(d) {
  * The yearnumber values here should reflect those in {@see availableDates }
  */
 CalcAdminFineLogic.values = {
-  '2022': [{ maxRD: 5000, late_val: 38, late_multi: 6, lateSens_val: 74, lateSens_multi: 14, nonfiler_val: 373, nonfilerSens_val: 748 },{ maxRD: 10000, late_val: 74, late_multi: 6, lateSens_val: 150, lateSens_multi: 14, nonfiler_val: 448, nonfilerSens_val: 897 },{ maxRD: 25000, late_val: 160, late_multi: 6, lateSens_val: 224, lateSens_multi: 14, nonfiler_val: 748, nonfilerSens_val: 1346 },{ maxRD: 50000, late_val: 317, late_multi: 30, lateSens_val: 478, lateSens_multi: 38, nonfiler_val: 1346, nonfilerSens_val: 2093 },{ maxRD: 75000, late_val: 478, late_multi: 120, lateSens_val: 716, lateSens_multi: 120, nonfiler_val: 4292, nonfilerSens_val: 4768 },{ maxRD: 100000, late_val: 635, late_multi: 160, lateSens_val: 952, lateSens_multi: 160, nonfiler_val: 5563, nonfilerSens_val: 6358 },{ maxRD: 150000, late_val: 952, late_multi: 199, lateSens_val: 1431, lateSens_multi: 199, nonfiler_val: 7154, nonfilerSens_val: 7948 },{ maxRD: 200000, late_val: 1274, late_multi: 238, lateSens_val: 1908, lateSens_multi: 238, nonfiler_val: 8743, nonfilerSens_val: 9537 },{ maxRD: 250000, late_val: 1589, late_multi: 277, lateSens_val: 2385, lateSens_multi: 277, nonfiler_val: 10332, nonfilerSens_val: 11922 },{ maxRD: 350000, late_val: 2385, late_multi: 317, lateSens_val: 3576, lateSens_multi: 317, nonfiler_val: 12717, nonfilerSens_val: 14306 },{ maxRD: 450000, late_val: 3180, late_multi: 317, lateSens_val: 4768, lateSens_multi: 317, nonfiler_val: 14306, nonfilerSens_val: 15897 },{ maxRD: 550000, late_val: 3974, late_multi: 317, lateSens_val: 5961, lateSens_multi: 317, nonfiler_val: 15101, nonfilerSens_val: 17485 },{ maxRD: 650000, late_val: 4768, late_multi: 317, lateSens_val: 7154, lateSens_multi: 317, nonfiler_val: 15897, nonfilerSens_val: 19075 },{ maxRD: 750000, late_val: 5563, late_multi: 317, lateSens_val: 8346, lateSens_multi: 317, nonfiler_val: 16691, nonfilerSens_val: 20665 },{ maxRD: 850000, late_val: 6358, late_multi: 317, lateSens_val: 9537, lateSens_multi: 317, nonfiler_val: 17485, nonfilerSens_val: 22255 },{ maxRD: 950000, late_val: 7154, late_multi: 317, lateSens_val: 10729, lateSens_multi: 317, nonfiler_val: 18280, nonfilerSens_val: 23843 },{ maxRD: Number.MAX_SAFE_INTEGER, late_val: 7948, late_multi: 317, lateSens_val: 11922, lateSens_multi: 317, nonfiler_val: 19075, nonfilerSens_val: 25434 }],
+  '2022': [
+    {
+      maxRD: 5000,
+      late_val: 38,
+      late_multi: 6,
+      lateSens_val: 74,
+      lateSens_multi: 14,
+      nonfiler_val: 373,
+      nonfilerSens_val: 748
+    },
+    {
+      maxRD: 10000,
+      late_val: 74,
+      late_multi: 6,
+      lateSens_val: 150,
+      lateSens_multi: 14,
+      nonfiler_val: 448,
+      nonfilerSens_val: 897
+    },
+    {
+      maxRD: 25000,
+      late_val: 160,
+      late_multi: 6,
+      lateSens_val: 224,
+      lateSens_multi: 14,
+      nonfiler_val: 748,
+      nonfilerSens_val: 1346
+    },
+    {
+      maxRD: 50000,
+      late_val: 317,
+      late_multi: 30,
+      lateSens_val: 478,
+      lateSens_multi: 38,
+      nonfiler_val: 1346,
+      nonfilerSens_val: 2093
+    },
+    {
+      maxRD: 75000,
+      late_val: 478,
+      late_multi: 120,
+      lateSens_val: 716,
+      lateSens_multi: 120,
+      nonfiler_val: 4292,
+      nonfilerSens_val: 4768
+    },
+    {
+      maxRD: 100000,
+      late_val: 635,
+      late_multi: 160,
+      lateSens_val: 952,
+      lateSens_multi: 160,
+      nonfiler_val: 5563,
+      nonfilerSens_val: 6358
+    },
+    {
+      maxRD: 150000,
+      late_val: 952,
+      late_multi: 199,
+      lateSens_val: 1431,
+      lateSens_multi: 199,
+      nonfiler_val: 7154,
+      nonfilerSens_val: 7948
+    },
+    {
+      maxRD: 200000,
+      late_val: 1274,
+      late_multi: 238,
+      lateSens_val: 1908,
+      lateSens_multi: 238,
+      nonfiler_val: 8743,
+      nonfilerSens_val: 9537
+    },
+    {
+      maxRD: 250000,
+      late_val: 1589,
+      late_multi: 277,
+      lateSens_val: 2385,
+      lateSens_multi: 277,
+      nonfiler_val: 10332,
+      nonfilerSens_val: 11922
+    },
+    {
+      maxRD: 350000,
+      late_val: 2385,
+      late_multi: 317,
+      lateSens_val: 3576,
+      lateSens_multi: 317,
+      nonfiler_val: 12717,
+      nonfilerSens_val: 14306
+    },
+    {
+      maxRD: 450000,
+      late_val: 3180,
+      late_multi: 317,
+      lateSens_val: 4768,
+      lateSens_multi: 317,
+      nonfiler_val: 14306,
+      nonfilerSens_val: 15897
+    },
+    {
+      maxRD: 550000,
+      late_val: 3974,
+      late_multi: 317,
+      lateSens_val: 5961,
+      lateSens_multi: 317,
+      nonfiler_val: 15101,
+      nonfilerSens_val: 17485
+    },
+    {
+      maxRD: 650000,
+      late_val: 4768,
+      late_multi: 317,
+      lateSens_val: 7154,
+      lateSens_multi: 317,
+      nonfiler_val: 15897,
+      nonfilerSens_val: 19075
+    },
+    {
+      maxRD: 750000,
+      late_val: 5563,
+      late_multi: 317,
+      lateSens_val: 8346,
+      lateSens_multi: 317,
+      nonfiler_val: 16691,
+      nonfilerSens_val: 20665
+    },
+    {
+      maxRD: 850000,
+      late_val: 6358,
+      late_multi: 317,
+      lateSens_val: 9537,
+      lateSens_multi: 317,
+      nonfiler_val: 17485,
+      nonfilerSens_val: 22255
+    },
+    {
+      maxRD: 950000,
+      late_val: 7154,
+      late_multi: 317,
+      lateSens_val: 10729,
+      lateSens_multi: 317,
+      nonfiler_val: 18280,
+      nonfilerSens_val: 23843
+    },
+    {
+      maxRD: Number.MAX_SAFE_INTEGER,
+      late_val: 7948,
+      late_multi: 317,
+      lateSens_val: 11922,
+      lateSens_multi: 317,
+      nonfiler_val: 19075,
+      nonfilerSens_val: 25434
+    }
+  ],
   '2021': [
     {
       maxRD: 5000,
