@@ -318,8 +318,8 @@ function filterSuccessUpdates(changeCount) {
         filterAction = 'Filter removed.';
       }
     } else if (type === 'text') {
-      // typeahead
-      if ($elm.hasClass('tt-input')) {
+      // autosuggest
+      if ($elm.hasClass('as-input')) {
         // show message after generated checkbox (last item in list)
         $label = $('[data-filter="autosuggest"] li').last();
         filterAction = 'Filter added';
@@ -875,7 +875,7 @@ DataTable.prototype.fetchError = function(jqXHR, textStatus) {
       .after($(errorMessage));
   } else if (
     $(updateChangedEl).attr('type') === 'text' &&
-    $(updateChangedEl).hasClass('tt-input') === false
+    $(updateChangedEl).hasClass('as-input') === false
   ) {
     $(updateChangedEl)
       .parent()

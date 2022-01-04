@@ -186,7 +186,7 @@ function ContributionsByState() {
   // Move the autosuggest message into the autosuggest object so its content lines up properly
   document
     .querySelector('#contribs-by-state-cand-field')
-    .appendChild(document.querySelector('#contribs-by-state-typeahead-error'));
+    .appendChild(document.querySelector('#contribs-by-state-as-error'));
 
   // If we have the element on the page, fire it up
   if (this.element) this.init();
