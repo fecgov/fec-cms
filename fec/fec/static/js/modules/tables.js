@@ -295,7 +295,7 @@ function filterSuccessUpdates(changeCount) {
       .removeClass('is-disabled-filter')
       .addClass('is-active-filter');
 
-    // Reenable committee ID typeahead input
+    // Reenable committee ID autosuggest input
     $('#committee_id').removeClass('is-disabled-filter');
 
     if (type === 'checkbox') {
@@ -321,7 +321,7 @@ function filterSuccessUpdates(changeCount) {
       // typeahead
       if ($elm.hasClass('tt-input')) {
         // show message after generated checkbox (last item in list)
-        $label = $('[data-filter="typeahead"] li').last();
+        $label = $('[data-filter="autosuggest"] li').last();
         filterAction = 'Filter added';
       } else if ($elm.closest('.range').hasClass('range--currency')) {
         $label = $elm.closest('.range');

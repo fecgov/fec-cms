@@ -8,13 +8,13 @@ var helpers = require('../helpers');
 var TextFilter = require('./text-filter').TextFilter;
 var CheckboxFilter = require('./checkbox-filter').CheckboxFilter;
 var MultiFilter = require('./multi-filter').MultiFilter;
-var TypeaheadFilter = require('./typeahead-filter').TypeaheadFilter;
 var SelectFilter = require('./select-filter').SelectFilter;
 var DateFilter = require('./date-filter').DateFilter;
 var ElectionFilter = require('./election-filter').ElectionFilter;
 var ToggleFilter = require('./toggle-filter').ToggleFilter;
 var RangeFilter = require('./range-filter').RangeFilter;
 
+import AutoSuggestFilter from './autosuggest-filter';
 function FilterSet(elm) {
   this.$body = $(elm);
   $(document.body).on('tag:removed', this.handleTagRemoved.bind(this));
@@ -34,7 +34,7 @@ var filterMap = {
   text: TextFilter,
   checkbox: CheckboxFilter,
   date: DateFilter,
-  typeahead: TypeaheadFilter,
+  autosuggest: AutoSuggestFilter,
   election: ElectionFilter,
   multi: MultiFilter,
   select: SelectFilter,

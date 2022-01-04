@@ -21,7 +21,8 @@ const rootPathToIndividualContributions =
   '/data/receipts/individual-contributions/';
 
 import { buildUrl, passiveListener } from '../modules/helpers';
-import typeahead from '../modules/typeahead';
+// import autosuggest from '../modules/autosuggest';
+import AutoSuggest from '../modules/autosuggest';
 import 'abortcontroller-polyfill/dist/polyfill-patch-fetch';
 import analytics from '../modules/analytics';
 
@@ -140,7 +141,7 @@ function ContributionsByState() {
     'by_candidate',
     'totals'
   ];
-  // Details about the candidate. Comes from the typeahead
+  // Details about the candidate. Comes from the autosuggest
   this.candidateDetails = {};
   // Information retruned by API candidate committees API {@see loadCandidateCommitteeDetails}
   this.data_candidateCommittees = {};
@@ -169,8 +170,8 @@ function ContributionsByState() {
   this.map; // Starts as the element for the map but then becomes a DataMap object
   this.table; // The <table> for the list of states and their totals
   this.statesTotalHolder; // Element at the bottom of the states list
-  this.typeahead; // The typeahead candidate element:
-  this.typeahead_revertValue; // Temporary var saved while user is typing
+  this.autosuggest; // The autosuggest candidate element:
+  this.autosuggest_revertValue; // Temporary var saved while user is typing
   this.yearControl; // The <select> for election years:
   this.buttonIndivContribs;
   // this.buttonMethodology;
@@ -179,10 +180,10 @@ function ContributionsByState() {
 
   // Populate the examples text because handlebars doesn't like to add the italics/emphasis
   document.querySelector(
-    '#gov-fec-contribs-by-state .typeahead-filter .filter__instructions'
+    '#gov-fec-contribs-by-state .autosuggest-filter .filter__instructions'
   ).innerHTML = 'Examples: <em>Bush, George W</em> or <em>P00003335</em>';
 
-  // Move the typeahead message into the typeahead object so its content lines up properly
+  // Move the autosuggest message into the autosuggest object so its content lines up properly
   document
     .querySelector('#contribs-by-state-cand-field')
     .appendChild(document.querySelector('#contribs-by-state-typeahead-error'));
@@ -204,8 +205,8 @@ ContributionsByState.prototype.init = function() {
   linkElement.href = stylesheetPath;
   head.appendChild(linkElement);
 
-  // Init the typeahead
-  this.typeahead = new typeahead.Typeahead(
+  // Init the autosuggest
+  this.autosuggest = new AutoSuggest(
     '#contribs-by-state-cand',
     'candidates'
   );
@@ -779,7 +780,7 @@ ContributionsByState.prototype.handleTypeaheadSelect = function(
   this.loadCandidateDetails(abbreviatedCandidateDetails.id);
 
   // Because the user has made a change, erase the revert value variable
-  this.typeahead_revertValue = '';
+  this.autosuggest_revertValue = '';
 };
 
 /**

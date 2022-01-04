@@ -1,9 +1,9 @@
 {% import "macros/widgets.jinja" as widgets %}
-{% import "macros/filters/typeahead-filter.jinja" as typeahead %}
+{% import "macros/filters/autosuggest-filter.jinja" as autosuggest %}
 
  <aside id="gov-fec-contribs-by-state" class="contribs-by-state is-loading w-s" data-election_year="{{ election_year }}">
     <div class="controls-wrapper">
-        {{ typeahead.field('contribs-by-state-cand', 'Contributions received by: ', 'Examples: ', dataset='candidates', allow_text=True) }}
+        {{ autosuggest.field('contribs-by-state-cand', 'Contributions received by: ', 'Examples: ', dataset='candidates', allow_text=True) }}
     <fieldset class="select">
         {{ widgets.select__election_year(election_years, election_year, 'state-conwidtribs-years', 'P') }}
     </fieldset>

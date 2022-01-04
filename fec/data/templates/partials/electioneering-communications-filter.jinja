@@ -1,7 +1,7 @@
 {% extends 'partials/filters.jinja' %}
 
 {% import 'macros/filters/text.jinja' as text %}
-{% import 'macros/filters/typeahead-filter.jinja' as typeahead %}
+{% import 'macros/filters/autosuggest-filter.jinja' as autosuggest %}
 {% import 'macros/filters/states.jinja' as states %}
 {% import 'macros/filters/date.jinja' as date %}
 {% import 'macros/filters/years.jinja' as years %}
@@ -14,8 +14,8 @@ Filter independent expenditures
 {% block filters %}
 <div class="js-accordion accordion--neutral" data-content-prefix="filter" data-open-first="false">
   <div class="filters__inner">
-    {{ typeahead.field('committee_id', 'Spender name or ID') }}
-    {{ typeahead.field('candidate_id', 'Candidate mentioned', dataset='candidates') }}
+    {{ autosuggest.field('committee_id', 'Spender name or ID') }}
+    {{ autosuggest.field('candidate_id', 'Candidate mentioned', dataset='candidates') }}
   </div>
   <button type="button" class="js-accordion-trigger accordion__button">Transaction information</button>
   <div class="accordion__content">

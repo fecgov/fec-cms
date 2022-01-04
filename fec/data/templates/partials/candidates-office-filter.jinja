@@ -4,7 +4,7 @@
 {% import 'macros/filters/parties.jinja' as parties %}
 {% import 'macros/filters/states.jinja' as states %}
 {% import 'macros/filters/districts.jinja' as districts %}
-{% import 'macros/filters/typeahead-filter.jinja' as typeahead %}
+{% import 'macros/filters/autosuggest-filter.jinja' as autosuggest %}
 {% import 'macros/filters/election-filter.jinja' as election_filter %}
 {% import 'macros/filters/range.jinja' as range_filter %}
 {% import 'macros/filters/years.jinja' as years %}
@@ -13,7 +13,7 @@
  {% block filters %}
 <div class="js-accordion accordion--neutral" data-content-prefix="filter" data-open-first="false">
   <div class="filters__inner">
-    {{ typeahead.field('q', 'Candidate name or ID', '', dataset='candidates', allow_text=True) }}
+    {{ autosuggest.field('q', 'Candidate name or ID', '', dataset='candidates', allow_text=True) }}
     {{ election_filter.full_cycle('election_year', 'Election year', 'cycle', 'election_full', table_context['office']) }}
   </div>
   <button type="button" class="js-accordion-trigger accordion__button">Candidate information</button>
