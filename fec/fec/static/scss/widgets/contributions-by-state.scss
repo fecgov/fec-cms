@@ -86,10 +86,10 @@ aside.contribs-by-state {
     margin-bottom: $fontSizeBase * 2;
     width: 100%;
 
-    .typeahead-filter {
+    .autosuggest-filter {
       margin-bottom: 1rem;
 
-      .filter__typeahead {
+      .filter__autosuggest {
         max-width: 30rem;
       }
       .filter__instructions {
@@ -151,7 +151,7 @@ aside.contribs-by-state {
       white-space: pre;
       -webkit-rtl-ordering: logical;
     }
-    .typeahead-filter {
+    .autosuggest-filter {
       .button--search {
         background-image: url($magnifying-glass-arrow);
         background-size: 2.8rem;
@@ -160,7 +160,7 @@ aside.contribs-by-state {
       }
     
       &[data-allow-text] {
-        .tt-suggestion__missing {
+        .as-suggestion__missing {
           display: none;
         }
     
@@ -174,7 +174,7 @@ aside.contribs-by-state {
           background-position: 50%;
         }
       }
-      #contribs-by-state-typeahead-error {
+      #contribs-by-state-as-error {
         background-color: #fff;
         color: $error;
         display: block;
@@ -192,7 +192,7 @@ aside.contribs-by-state {
         width: 0;
       }
       &.is-error {
-        #contribs-by-state-typeahead-error {
+        #contribs-by-state-as-error {
           height: 65px;
           max-width: 300px;
           opacity: 1;
@@ -201,8 +201,8 @@ aside.contribs-by-state {
         }
       }
     }
-    #contribs-by-state-typeahead-error {
-      display: none; // hide it until it's moved into .typeahead-filter
+    #contribs-by-state-as-error {
+      display: none; // hide it until it's moved into .autosuggest-filter
     }
   }
   .message, .message[aria-hidden="true"] {
@@ -408,7 +408,7 @@ aside.contribs-by-state {
     left: 0px;
     position: absolute;
     width: 100%;
-    z-index: #{$z1 - 1}; // The typeahead menu is at 100 and we want it to be visible above this
+    z-index: #{$z1 - 1}; // The autosuggest menu is at 100 and we want it to be visible above this
 
     &.is-loading {
       display: block;
@@ -437,7 +437,7 @@ aside.contribs-by-state {
     .controls-wrapper {
       width: 100%;
 
-      .typeahead-filter {
+      .autosuggest-filter {
         display: inline-block;
         float: left;
         height: 36px;
@@ -454,7 +454,7 @@ aside.contribs-by-state {
           margin-right: .5em;
           position: relative;
         }
-        .filter__typeahead {
+        .filter__autosuggest {
           float: left;
           height: 36px;
           width: 23rem;
@@ -465,7 +465,7 @@ aside.contribs-by-state {
           position: absolute;
           top: 36px;
         }
-        #contribs-by-state-typeahead-error {
+        #contribs-by-state-as-error {
           background-color: transparent;
           line-height: 1.1em;
           max-width: none;
@@ -473,7 +473,7 @@ aside.contribs-by-state {
           top: 55px;
         }
         &.is-error {
-          #contribs-by-state-typeahead-error {
+          #contribs-by-state-as-error {
             height: auto;
           }
         }
