@@ -6,6 +6,8 @@
  * 'autocomplete' is used to refer to elements created by @tarekraafat/autocomplete.js
  */
 
+// TODO: double check that the autosuggest filters handle a generic user returnkey appropriately (type + returnkey without clicking)
+
 import autoComplete from '@tarekraafat/autocomplete.js';
 // import events from './events';
 
@@ -45,7 +47,7 @@ let resultItemOptions = {
     // For suggestions (e.g. "Search other pages"), no tabbing, data.value.name + the searched text
     } else if (data.value.is_suggestion) {
       item.setAttribute('class', 'as-suggestion as-select');
-      item.setAttribute('tabindex', '-1');
+      item.setAttribute('tabindex', '-1'); // TODO: should suggestions be tabbable
       item.innerHTML = `<strong>${data.value.name}</strong> "<strong class="as-highlight">${data.value.id}</strong>"`;
 
     // For other entries, we want to include the name, id, and office if applicable, also highlight the matched data
@@ -119,6 +121,7 @@ function searchedAttribs() {
  * @returns {string} like https://api.open.fec.gov/v1/names/candidates/?q=${queryString}&api_key=${window.API_KEY_PUBLIC}
  */
 function getUrl(resource, queryString) {
+  console.log('getUrl(): ', resource, queryString);
   let toReturn = [
     window.API_LOCATION,
     window.API_VERSION,
@@ -206,20 +209,28 @@ function handleResults(type, data) {
   let results = data.results;
   let resultsLimit = 5;
 
-  if (type == 'candidates' && results.length > 0)
+  if ((type == 'candidates' || type == 'audit_candidates' ) && results.length > 0)
     toReturn.push({ is_header: true, id: window.queryText, name: 'Select a candidate:', type: 'none' });
 
-  else if (type == 'committees' && results.length > 0)
+  else if ((type == 'committees' || type == 'audit_committees') && results.length > 0)
     toReturn.push({ is_header: true, id: window.queryText, name: 'Select a committee:', type: 'none' });
 
   results.forEach(element => {
     element.type = type;
   });
+  // TODO: handle the audit_* types in the click handler
 
-  toReturn.push(...results.slice(0, resultsLimit));
+  // Take the results array, shave it to fit within resultsLimit, then add it to toReturn
+  toReturn = toReturn.concat(results.slice(0, resultsLimit));
 
   return toReturn;
 }
+
+/**
+ *
+ * @param {*} type
+ * @returns
+ */
 function getSuggestions(type) {
   console.log('getSuggestions(type): ', type);
   let toReturn = [];
@@ -227,42 +238,82 @@ function getSuggestions(type) {
     toReturn.push({ is_suggestion: true, id: window.queryText, name: 'Search individual contributions from:', type: 'individual' });
     toReturn.push({ is_suggestion: true, id: window.queryText, name: 'Search other pages:', type: 'site' });
   }
+  console.log('  going to return ', toReturn);
   return toReturn;
 }
 
+/**
+ *
+ * @param {*} q
+ * @param {*} qType
+ * @returns
+ */
 async function getData(q, qType) {
-    console.log('get_datas()', q, qType);
-    // return var1 => {
-    let fetchedResults = [];
-    // fetchedResults.push({ is_header: true, id: window.queryText, name: 'TESTING', type: 'none' });
-    window.queryText = q;
-    // fetchedResults = await getData(q);
-    if (qType == 'all') {
-      console.log('would have got all data');
-      fetch(getUrl('candidates', q), fetchInit)
-        .then(response => response.json())
-        .then(data => {
-          fetchedResults.push(handleResults('candidates', data));
-          return fetch(getUrl('committees', q), fetchInit);
-        })
-        .then(response => response.json())
-        .then(data => {
-          fetchedResults.push(handleResults('committees', data));
-        })
-        .then(() => {
-          fetchedResults.push(getSuggestions(qType));
-          // return fetchedResults;
-        });
-    }
+  console.log('src()', q, qType);
+  // return var1 => {
+  // let qType = this.queryType;
+  let fetchedResults = [];
+  // fetchedResults.push({ is_header: true, id: window.queryText, name: 'TESTING', type: 'none' });
+  window.queryText = q;
+  // fetchedResults = await getData(q);
+  if (qType == 'candidates') {
+    // Any changes here should also be made inside `== 'all'`
+    await fetch(getUrl('candidates', q), fetchInit)
+      .then(response => response.json())
+      .then(data => {
+        fetchedResults.push(...handleResults('candidates', data));
+      });
 
-    if (fetchedResults.length === 0) {
-      fetchedResults.push({ is_suggestion: true, id: window.queryText, name: 'No results found:', type: 'none' });
-    }
-    return fetchedResults;
-    Promise.resolve();
-  };
+  } else if (qType == 'committees') {
+    // Any changes here should also be made inside `== 'all'`
+    await fetch(getUrl('committees', q), fetchInit)
+      .then(response => response.json())
+      .then(data => {
+        fetchedResults.push(...handleResults('committees', data));
+      });
+
+  } else if (qType == 'all') {
+    console.log('would have got all data');
+    await fetch(getUrl('candidates', q), fetchInit)
+      .then(response => response.json())
+      .then(data => {
+        fetchedResults.push(...handleResults('candidates', data));
+        return fetch(getUrl('committees', q), fetchInit);
+      })
+      .then(response => response.json())
+      .then(data => {
+        fetchedResults.push(...handleResults('committees', data));
+      })
+      .then(() => {
+        fetchedResults.push(...getSuggestions(qType));
+      });
+
+  } else if (qType == 'auditCandidates') {
+    await fetch(getUrl('audit_candidates', q), fetchInit)
+      .then(response => response.json())
+      .then(data => {
+        fetchedResults.push(...handleResults('audit_candidates', data));
+      });
+
+  } else if (qType == 'auditCommittees') {
+    await fetch(getUrl('audit_committees', q), fetchInit)
+      .then(response => response.json())
+      .then(data => {
+        fetchedResults.push(...handleResults('audit_committees', data));
+      });
+
+  } else {
+    console.log(`  qType was '${qType}' so didn't do anything`);
+  }
+
+  if (fetchedResults.length === 0) {
+    fetchedResults.push({ is_suggestion: true, id: window.queryText, name: 'No results found:', type: 'none' });
+  }
+  console.log('going to return fetchedResults: ', fetchedResults);
+  return fetchedResults;
   // };
-  // let promises = [fetchCandidates, handleResponse, handleCandidatesResponses];
+  // };
+  // let promises = [fetchCandidates, handleResponse, fetchCommittees, handleResponse];
   // fetchedResults = promises.reduce((prev, curr) => {
   //     return prev.then(curr);
   //   },
@@ -297,7 +348,7 @@ let siteSearchOpts = {
     '.js-site-search';
   },
   data: {
-    src: async q => {
+    src: async () => {
       // console.log('siteSearchOpts.data.src this: ', this);
       // let fetchedResults = [];
       // window.queryText = q;
@@ -340,7 +391,7 @@ let siteSearchOpts = {
       // });
       // return fetchedResults;
     },
-    keys: searchedAttribs(),
+    keys: searchedAttribs()
   },
   resultsList: resultsListOptions,
   resultItem: resultItemOptions
@@ -611,8 +662,15 @@ function AutoSuggest(elementSelector, type, url) {
     return this.element.querySelector('.as-menu span');
   };
   // theseOpts.data['keys'] = searchedAttribs();
-  theseOpts.data.src = q => {
-    return getData(q, this.queryType);
+  theseOpts.data.src = async q => {
+    try {
+      console.log('try q, this.queryType: ', q, this.queryType);
+      let results = await getData(q, this.queryType);
+      console.log('got results of ', results);
+      return results;
+    } catch(e) {
+      return e;
+    }
   };
 
   this.autocomplete = new autoComplete(theseOpts);
