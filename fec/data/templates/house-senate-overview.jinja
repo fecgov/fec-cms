@@ -1,0 +1,56 @@
+{% extends 'layouts/main.jinja' %}
+{% import 'macros/page-header.jinja' as header %}
+{% if office == 'house' %}
+  {% set crumb = office|title  %}
+{% elif office == 'senate' %}
+  {% set crumb = office|title %}
+{% else %}
+  {% set crumb = office|title %}
+{% endif %}
+
+
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block css %}
+  <link rel="stylesheet" type="text/css" href="{{ asset_for_css('elections.css') }}" />
+{% endblock %}
+{% block body %}
+  {{ header.header(title, crumb) }}
+  <div class="u-padding--left u-padding--right tab-interface">
+    <header class="main">
+      <div class="heading--section">
+        <h1 class="entity__name">
+          {{ office|title }} elections
+        </h1>
+      </div>
+    </header>
+    <div class="data-container__wrapper">
+      {% include 'partials/house-senate-overview/sidebar-nav.jinja' %}
+      {% include 'partials/house-senate-overview/election-data.jinja' %}
+      <div class="main__content--right-full">
+
+      </div>
+    </div>
+  </div>
+{% endblock %}
+{% block scripts %}
+<script>
+var context = {
+  election: {
+    cycle: '{{ cycle }}',
+    election_full: true,
+    duration: '{{ election_duration }}',
+    office: '{{ office }}',
+    state: '{{ state or '' }}',
+    stateFull: '{{ state_full or '' }}',
+    district: '{{ district or '' }}'
+  }
+};
+
+</script>
+<script src="{{ asset_for_js('dataviz-common.js') }}"></script>
+<script src="{{ asset_for_js('elections.js') }}"></script>
+<script src="{{ asset_for_js('committee-single.js') }}"></script>
+{% endblock %}
+

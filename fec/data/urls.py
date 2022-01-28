@@ -18,6 +18,8 @@ urlpatterns = [
     url(r'^data/elections/$', views.elections_lookup),
     url(r'^data/raising-bythenumbers/$', views.raising),
     url(r'^data/spending-bythenumbers/$', views.spending),
+    url(r'^data/house-senate-overview/$', views.house_senate_overview),
+    url(r'^data/house-senate-overview/(?P<office>\w+)/$', views.house_senate_overview, name=''),
 
     # Feedback Tool
     url(r'^data/issue/reaction/$', views.reactionFeedback),

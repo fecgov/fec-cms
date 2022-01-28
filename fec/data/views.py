@@ -816,6 +816,42 @@ def elections(request, office, cycle, state=None, district=None):
     )
 
 
+def house_senate_overview(request, office='senate'):
+    # cycle = int(cycle)
+    # office = request.GET.get("office", "S")
+    cycle = constants.DEFAULT_ELECTION_YEAR
+    max_cycle = utils.current_cycle() + 4
+    cycles = utils.get_cycles(max_cycle)
+
+    # if office.lower() == "president":
+    #     cycles = [each for each in cycles if each % 4 == 0]
+    # elif office.lower() == "senate":
+    #     cycles = api_caller.get_all_senate_cycles(state)
+
+    if office.lower() not in ["president", "senate", "house"]:
+        raise Http404()
+    # if (state is not None) and (state and state.upper() not in constants.states):
+    #    raise Http404()
+
+    return render(
+        request,
+        "house-senate-overview.jinja",
+        {
+            "office": office,
+            "office_code": office[0],
+            "parent": "data",
+            "cycle": cycle,
+            # "election_duration": election_duration,
+            "cycles": cycles,
+            # "state": state,
+            # "state_full": constants.states[state.upper()] if state else None,
+            # "district": district,
+            # "title": utils.election_title(cycle, office, state, district),
+            "social_image_identifier": "data",
+        },
+    )
+
+
 def raising(request):
     office = request.GET.get("office", "S")
 
