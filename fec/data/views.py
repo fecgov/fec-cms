@@ -815,21 +815,21 @@ def elections(request, office, cycle, state=None, district=None):
         },
     )
 
+
 # **** TODO ***, Are we sure we want cycle to be a positional argument and not a KWARG?
 def house_senate_overview(request, office=None, cycle=None):
 
     if cycle is not None:
         cycle = int(cycle)
     else:
-        cycle = constants.DEFAULT_ELECTION_YEAR 
+        cycle = constants.DEFAULT_ELECTION_YEAR
 
     # cycle = request.GET.get("cycle", None)
-    
+
     office = office if office else "senate"
 
     max_cycle = utils.current_cycle() + 4
     cycles = utils.get_cycles(max_cycle)
-
 
     # elif office.lower() == "senate":
     #     cycles = api_caller.get_all_senate_cycles(state)
@@ -838,14 +838,14 @@ def house_senate_overview(request, office=None, cycle=None):
         raise Http404()
     # if (state is not None) and (state and state.upper() not in constants.states):
     #    raise Http404()
-    
-    #TO-DD redirect Broken when we have cycle as a positional arggument above.
-    #Redirect to latest presidential election since we don't have presidential overview yet
+
+    # TO-DD redirect Broken when we have cycle as a positional arggument above.
+    # Redirect to latest presidential election since we don't have presidential overview yet
     if office.lower() == "president":
-        cycle =  utils.current_cycle() if utils.current_cycle() % 4 == 0 else utils.current_cycle() + 2
+        cycle = utils.current_cycle() if utils.current_cycle() % 4 == 0 else utils.current_cycle() + 2
         return redirect(
-                reverse("elections-president", args=(office, cycle))
-            )
+            reverse("elections-president", args=(office, cycle))
+        )
 
     return render(
         request,
