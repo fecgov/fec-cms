@@ -14,7 +14,7 @@ urlpatterns = [
         views.elections, name='elections-house'),
     url(r'^data/elections/(?P<office>\w+)/(?P<state>\w+)/(?P<cycle>[0-9]+)/$', views.elections,
         name='elections-senate'),
-    url(r'^data/elections/(?P<office>\w+)/(?P<cycle>[0-9]+)/$', views.elections, name='elections-president'),
+    url(r'^data/elections/president/(?P<cycle>[0-9]+)/$', views.elections_president, name='elections-president'),
     url(r'^data/elections/$', views.elections_lookup),
     url(r'^data/raising-bythenumbers/$', views.raising),
     url(r'^data/spending-bythenumbers/$', views.spending),
@@ -69,11 +69,8 @@ if settings.FEATURES.get('presidential_map'):
 
 if settings.FEATURES.get('house_senate_overview'):
     """
-    This first pattern `(<office>/<cycle>)` only works for `president` because
-    it redirects to the above view named:'elections-president'.
-    Comment out that view @line 17 locally to use this pattern to test house-senate-overview view with cycle.
-    However, `president/<cycle>` will now be broken when we use `cycle` here as a
-    positional argument. We need to resolve this conflict.
+    There is a new pattern above (data/elections/president) and new view(`views.elections_president`) to resolve
+    the issue of 'data/elections<office/cycle>' now pointing to `views.house_senate_overview`
 
     """
     urlpatterns.append(

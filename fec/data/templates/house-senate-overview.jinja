@@ -10,7 +10,7 @@
 
 {{ cycle }} Election - US {{ office|title }} {% if state %} - {{ state|fmt_state_full }} {% if district %} - District {{ district }} {% endif %} {% endif %}
 
-{% block title %}{{ office|title }} elections{% endblock %}
+{% block title %}{{ cycle }} Election - US {{ office|title }} {% endblock %}
 
 {% block css %}
   <link rel="stylesheet" type="text/css" href="{{ asset_for_css('elections.css') }}" />
