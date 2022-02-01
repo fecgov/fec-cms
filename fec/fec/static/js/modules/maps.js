@@ -158,7 +158,7 @@ function stateTooltips(svg, path, results) {
     .attr('class', 'tooltip tooltip--above tooltip--mouse')
     .style('position', 'absolute')
     .style('pointer-events', 'none')
-    .style('display', 'none');
+    .style('visibility', 'hidden');
   svg
     .selectAll('path')
     .on('mouseover', function(d) {
@@ -167,11 +167,11 @@ function stateTooltips(svg, path, results) {
         name: fips.fipsByCode[d.id].STATE_NAME,
         total: helpers.currency(results[d.id] || 0)
       });
-      tooltip.style('display', 'block').html(html);
+      tooltip.style('visibility', 'visible').html(html);
       moveTooltip(tooltip);
     })
     .on('mouseout', function() {
-      tooltip.style('display', 'none');
+      tooltip.style('visibility', 'hidden');
     })
     .on('mousemove', function() {
       moveTooltip(tooltip);
