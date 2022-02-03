@@ -360,7 +360,7 @@ pac_party_types = OrderedDict([
     ('Z', 'National party nonfederal account'),
     ('U', 'Single candidate independent expenditure'),
     ('O', 'Super PAC (independent expenditure only'),
-    ('I', 'Independent expenditor (person or group)')
+    ('I', 'Independent expenditure filer (not a committee)')
 ])
 
 house_senate_types = OrderedDict([
