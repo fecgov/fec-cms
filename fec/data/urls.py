@@ -14,7 +14,7 @@ urlpatterns = [
         views.elections, name='elections-house'),
     url(r'^data/elections/(?P<office>\w+)/(?P<state>\w+)/(?P<cycle>[0-9]+)/$', views.elections,
         name='elections-senate'),
-    url(r'^data/elections/(?P<office>\w+)/(?P<cycle>[0-9]+)/$', views.elections, name='elections-president'),
+    url(r'^data/elections/president/(?P<cycle>[0-9]+)/$', views.elections_president, name='elections-president'),
     url(r'^data/elections/$', views.elections_lookup),
     url(r'^data/raising-bythenumbers/$', views.raising),
     url(r'^data/spending-bythenumbers/$', views.spending),
@@ -65,4 +65,18 @@ if settings.FEATURES.get('presidential_map'):
     # Presidential candidate map
     urlpatterns.append(
         url(r'^data/candidates/president/presidential-map/$', views.pres_finance_map)
+    )
+
+if settings.FEATURES.get('house_senate_overview'):
+    """
+    There is a new pattern above (data/elections/president) and new view(`views.elections_president`) to resolve
+    the issue of 'data/elections<office/cycle>' now pointing to `views.house_senate_overview`
+
+    """
+    urlpatterns.append(
+        url(r'^data/elections/(?P<office>\w+)/(?P<cycle>[0-9]+)/$', views.house_senate_overview,
+            name='elections-overview')
+    )
+    urlpatterns.append(
+        url(r'^data/elections/(?P<office>\w+)/$', views.house_senate_overview)
     )

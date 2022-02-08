@@ -1,0 +1,158 @@
+{% import 'macros/null.jinja' as null %}
+{% import 'macros/disclaimer.jinja' as disclaimer %}
+{% import 'macros/cycle-select.jinja' as select %}
+
+<!-- TODO: if we end up using these patterns, move styles to `components/_cycle-select.scss` or wherever appropriate -->
+<style>
+.range__select {
+    width: auto;
+    display: inline-block;
+}
+.range__select .cycle-select select {
+    width: auto;
+}
+</style>
+
+
+<section id="section-1" role="tabpanel" aria-hidden="true" aria-labelledby="section-1-heading">
+
+  <!-- TODO : The design mockup does not have this `h2#section-1-heading`, but it matches the tablist title pattern used for other pages and removing it breaks alignment. If we do keep it, the h2's below should probably become h3's.  However they look like h2's on mockup  -->
+  <h2 id="section-1-heading">{{ office | title }} election data</h2>
+
+  <div class="slab slab--inline slab--neutral u-padding--left u-padding--right">
+  <!-- TODO: For narrower rows, add class: "entity__figure--narrow" -->
+    <div id="election-summary" class="entity__figure row"> 
+      <h2 class="heading__left">{{ office | title }} election summary</h2>
+      <p class="t-sans t-bold t-low-height">Comparing total money spent by party. Also comparing total money spent in <span class="term" data-term="independent expenditure" title="Click to define" tabindex="0">independent expenditures</span> by support and opposition.</p>
+  
+
+        <!-- TODO: We might not use these macros at all for the selects, but here if they help -->
+        {{ select.two_year_select(cycles, cycle, id="cycle-4") }}
+
+      <div class="content__section--ruled-responsive t-serif">
+          <div class="heading--with-action t-small u-negative--top--margin t-serif"><i class="data-disclaimer">Some kind of disclaimer text that clarifies something high-level that users need to know right away to put the data in context.</i>
+            <div class="heading__right">
+              <a class="button button--alt js-ga-event" data-a11y-dialog-show="election-summary-modal" data-ga-event="Election summary methodology modal clicked" aria-controls="election-summary-modal">Methodology</a>
+            </div>
+          </div>
+          <div class="js-modal modal" id="election-summary-modal" aria-hidden="true">
+           <div tabindex="-1" class="modal__overlay" data-a11y-dialog-hide=""></div>
+             <div role="dialog" class="modal__content" aria-labelledby="election-summary-modal-title">
+              <div role="document">
+                <button type="button" class="modal__close button--close--primary" data-a11y-dialog-hide="" title="Close this dialog window"></button>
+                <h2>Methodology Overview</h2>
+                <p class="t-note"></p>
+                <p></p>
+              </div>
+             </div>
+           </div>
+        </div>
+    </div>
+
+    <!-- TODO: For narrower rows, add class: "entity__figure--narrow" -->
+    <div id="contributions-over-time" class="entity__figure row"> 
+      <h2 class="heading__left">{{ office | title }} candidate contributions over time</h2>
+      <p class="t-sans t-bold t-low-height">Comparing current candidate <span class="term" data-term="contribution" title="Click to define" tabindex="0">contributions</span> to contributions received in previous two-year periods. </p>
+        
+        <!-- TODO: We might not use these macros at all for the selects, but here if they help -->
+        {{ select.cycle_range_select(cycles, cycle=cycle, id='')}}
+
+      <div class="content__section--ruled-responsive t-serif">
+          <div class="heading--with-action t-small u-negative--top--margin t-serif"><i class="data-disclaimer">Some kind of disclaimer text that clarifies something high-level that users need to know right away to put the data in context.</i>
+            <div class="heading__right">
+              <a class="button button--alt js-ga-event" data-a11y-dialog-show="contributions-over-time-modal" data-ga-event="Contributions over time methodology modal clicked" aria-controls="contributions-over-time-modal">Methodology</a>
+            </div>
+          </div>
+          <div class="js-modal modal" id="contributions-over-time-modal" aria-hidden="true">
+           <div tabindex="-1" class="modal__overlay" data-a11y-dialog-hide=""></div>
+             <div role="dialog" class="modal__content" aria-labelledby="contributions-over-time-modal-title">
+              <div role="document">
+                <button type="button" class="modal__close button--close--primary" data-a11y-dialog-hide="" title="Close this dialog window"></button>
+                <h2>Methodology Overview</h2>
+                <p class="t-note"></p>
+                <p></p>
+              </div>
+             </div>
+           </div>
+        </div>
+    </div>
+    
+    <!-- TODO: For narrower rows, add class: "entity__figure--narrow" -->
+    <div id="money-raised-accross-elections" class="entity__figure row">
+      <h2 class="heading__left">Money raised accross {{ office | title }} elections</h2>
+      <p class="t-sans t-bold t-low-height">Compare the money raised in all {{ office | title }} elections by state </p>
+
+      <!-- TODO: We might not use these macros at all for the selects, but here if they help -->
+      {{ select.two_year_select(cycles, cycle, id="cycle-4") }}
+      
+      <div class="content__section--ruled-responsive t-serif">
+          <div class="heading--with-action t-small u-negative--top--margin t-serif"><i class="data-disclaimer">Some kind of disclaimer text that clarifies something high-level that users need to know right away to put the data in context.</i>
+            <div class="heading__right">
+              <a class="button button--alt js-ga-event" data-a11y-dialog-show="money-raised-accross-elections-modal" data-ga-event="Money raised accross elections methodology modal clicked" aria-controls="money-raised-accross-elections-modal">Methodology</a>
+            </div>
+          </div>
+          <div class="js-modal modal" id="money-raised-accross-elections-modal" aria-hidden="true">
+           <div tabindex="-1" class="modal__overlay" data-a11y-dialog-hide=""></div>
+             <div role="dialog" class="modal__content" aria-labelledby="money-raised-accross-elections-modal-title">
+              <div role="document">
+                <button type="button" class="modal__close button--close--primary" data-a11y-dialog-hide="" title="Close this dialog window"></button>
+                <h2>Methodology Overview</h2>
+                <p class="t-note"></p>
+                <p></p>
+              </div>
+             </div>
+           </div>
+        </div>
+      </div>
+ 
+      <!-- TODO: For narrower rows, add class: "entity__figure--narrow" -->
+      <div id="totals-for-all-elections" class="entity__figure row">
+      <h2 class="heading__left">Totals for all {{ office | title }} elections</h2>
+      <p class="t-sans t-bold t-low-height">Compare the money raised, spent, cash on hand and debts by {{ office | title }} election</p>
+
+
+       <!-- TODO: We might not use these macros at all for the selects, but here if they help -->
+       {{ select.two_year_select(cycles, cycle, id="cycle-4") }}
+
+
+      <!-- TODO: Just a placehholder table for example of similar datatable elsewhere,
+           see artials/elections/election-data-and-compliance-tab.jinja -->
+      <div id="candidate-financial-totals" class="entity__figure row">
+
+        <table
+          class="data-table data-table--heading-borders scrollX"
+          data-type="candidate-financial-totals">
+          <thead>
+            <th role="col">Total receipts</th>
+            <th role="col">Total disbursements</th>
+            <th role="col">Cash on hand</th>
+          </thead>
+        </table>
+        <div class="datatable__note">
+          <p class="t-note" style="margin-bottom: 1em">
+            This table only shows candidates who have registered and filed a financial report. Information in this table may not include the most recently submitted filings.
+          </p>
+        </div> 
+      </div>
+
+      <div class="content__section--ruled-responsive t-serif">
+          <div class="heading--with-action t-small u-negative--top--margin t-serif"><i class="data-disclaimer">Some kind of disclaimer text that clarifies something high-level that users need to know right away to put the data in context.</i>
+            <div class="heading__right">
+              <a class="button button--alt js-ga-event" data-a11y-dialog-show="totals-for-all-elections-modal" data-ga-event="Totals for all elections methodology modal clicked" aria-controls="totals-for-all-elections-modal">Methodology</a>
+            </div>
+          </div>
+          <div class="js-modal modal" id="totals-for-all-elections-modal" aria-hidden="true">
+           <div tabindex="-1" class="modal__overlay" data-a11y-dialog-hide=""></div>
+             <div role="dialog" class="modal__content" aria-labelledby="totals-for-all-elections-modal-title">
+              <div role="document">
+                <button type="button" class="modal__close button--close--primary" data-a11y-dialog-hide="" title="Close this dialog window"></button>
+                <h2>Methodology Overview</h2>
+                <p class="t-note"></p>
+                <p></p>
+              </div>
+             </div>
+           </div>
+        </div>
+    </div>
+  </div>
+</section>
