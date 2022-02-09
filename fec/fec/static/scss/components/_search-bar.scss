@@ -277,7 +277,7 @@ $search-button-width: u(5.6rem);
   color: $base;
   // display: inline-block;
   position: relative;
-  padding: u(1rem);
+  padding: u(1rem) u(1rem) u(1rem) calc(1rem - 4px);
   margin-bottom: 0;
   line-height: 1;
   border-top: 1px solid $gray-lightest;

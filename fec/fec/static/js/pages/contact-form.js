@@ -1,7 +1,7 @@
 'use strict';
 
 var $ = require('jquery');
-var Typeahead = require('../modules/typeahead').Typeahead;
+import AutoSuggest from '../modules/autosuggest';
 var URI = require('urijs');
 
 const loadRecaptcha = require('../modules/load-recaptcha').loadRecaptcha;
@@ -12,13 +12,14 @@ function ContactForm($elm) {
   this.committeeId = $elm.find('#id_u_committee');
   this.category = $elm.find('#id_u_category');
   this.otherReason = $elm.find('#id_u_other_reason').closest('div');
-  this.typeahead = new Typeahead(
-    $elm.find('.js-contact-typeahead'),
+  this.autosuggest = new AutoSuggest(
+    $elm.find('.js-contact-autosuggest'),
     'committees',
     ''
   );
+  this.autosuggest = new AutoSuggest(document.querySelector('.js-contact-autosuggest'), 'committees', '');
   this.$cancel = $elm.find('.js-cancel');
-  this.initTypeahead();
+  this.initAutoSuggest();
   this.initOtherReason();
   this.category.on('change', this.toggleOtherReason.bind(this));
   this.$cancel.on('click', this.clearForm.bind(this));
@@ -26,13 +27,13 @@ function ContactForm($elm) {
   loadRecaptcha();
 }
 
-ContactForm.prototype.initTypeahead = function() {
-  // Overriding default typeahead behavior
-  // This will set the value of a hidden input when selecting a value from typeahead
+ContactForm.prototype.initAutoSuggest = function() {
+  // Overriding default autosuggest behavior
+  // This will set the value of a hidden input when selecting a value from autosuggest
   var self = this;
-  this.typeahead.$element.css({ height: 'auto' });
-  this.typeahead.$input.off('typeahead:select');
-  this.typeahead.$input.on('typeahead:select', function(e, opts) {
+  this.autosuggest.$element.css({ height: 'auto' });
+  this.autosuggest.$input.off('selection');
+  this.autosuggest.$input.on('selection', function(e, opts) {
     self.committeeId.val(opts.id);
   });
 };
@@ -68,19 +69,19 @@ function AnalystLookup($elm) {
   this.$analystDetails = this.$elm.find('.js-yes-analyst');
   this.$analystNoResults = this.$elm.find('.js-no-analyst');
 
-  this.typeahead = new Typeahead(this.$input, 'committees', '');
-  this.initTypeahead();
+  this.autosuggest = new AutoSuggest(this.$input, 'committees', '');
+  this.initAutoSuggest();
 
   this.$input.on('change, blur', this.handleChange.bind(this));
 
   loadRecaptcha();
 }
 
-AnalystLookup.prototype.initTypeahead = function() {
-  // Overriding default typeahead behavior
-  this.typeahead.$element.css({ height: 'auto' });
-  this.typeahead.$input.off('typeahead:select');
-  this.typeahead.$input.on('typeahead:select', this.fetchAnalyst.bind(this));
+AnalystLookup.prototype.initAutoSuggest = function() {
+  // Overriding default autosuggest behavior
+  this.autosuggest.$element.css({ height: 'auto' });
+  this.autosuggest.$input.off('selection');
+  this.autosuggest.$input.on('selection', this.fetchAnalyst.bind(this));
 };
 
 AnalystLookup.prototype.fetchAnalyst = function(e, opts) {

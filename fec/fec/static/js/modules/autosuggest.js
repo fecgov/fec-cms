@@ -7,6 +7,7 @@
  */
 
 // TODO: double check that the autosuggest filters handle a generic user returnkey appropriately (type + returnkey without clicking)
+// TODO: rename (and standardize) title cases like `autoComplete` `autoSuggest:open` (autocomplete, autoComplete, AutoComplete?)
 
 import autoComplete from '@tarekraafat/autocomplete.js';
 import officeNames from './utils';
@@ -15,6 +16,7 @@ import officeNames from './utils';
 // var events = require('./events');
 
 /**
+ * Used inside autocomplete for the results list
  */
 let resultsListOptions = {
   class: 'as-dataset as-dataset-candidate',
@@ -25,13 +27,15 @@ let resultsListOptions = {
   }
 };
 
+/**
+ * Used inside autocomplete for the results list's items
+ */
 let resultItemOptions = {
   class: 'as-suggestion as-selectable',
   selected: 'as-cursor',
   submit: true,
   highlight: 'as-highlight',
   element: (item, data) => {
-
     // For headers (e.g. "Select a candidate"), no tabbing, data.value.name only
     if (data.value.is_header) {
       item.setAttribute('class', 'as-suggestion__header');
@@ -46,17 +50,19 @@ let resultItemOptions = {
 
     // For other entries, we want to include the name, id, and office if applicable, also highlight the matched data
     } else {
-      item.innerHTML = `<span class="as-suggestion__name" tabindex="-1">`;
-      item.innerHTML += data['key'] == 'name' ? data.match : data.value.name;
-      item.innerHTML += ' (';
-      item.innerHTML += data['key'] == 'id' ? data.match : data.value.id;
-      item.innerHTML += `)</span>`;
+      // If the match was in the name, display data.match, otherwise show the default of data.value.name
+      // Likewise for the ID: if ID is the match, show data.match instead of data.value.id
+      let theName = data['key'] == 'name' ? data.match : data.value.name;
+      let theID = data['key'] == 'id' ? data.match : data.value.id;
+      item.innerHTML = `<span class="as-suggestion__name" tabindex="-1">${theName} (${theID})</span>`;
 
+      // Include the office sought if it exists
       if (data.value.office_sought) {
-        let officeLabel = officeMap[data.value.office_sought];
-        `<span class="as-suggestion__office" tabindex="-1">${officeLabel}</span>`;
+        let officeLabel = officeNames[data.value.office_sought];
+        item.innerHTML += ` <span class="as-suggestion__office" tabindex="-1">${officeLabel}</span>`;
       }
 
+      // For committees, include the icon for whether it's still active
       if (data.value.is_active === true) item.innerHTML += '<span class="is-active-status"></span>';
       else if (data.value.is_active === false) item.innerHTML += '<span class="is-terminated-status"></span>';
     }
@@ -73,48 +79,16 @@ function searchedAttribs() {
   return ['name', 'id'];
 }
 
-// function formatCandidate(result) {
-//   console.log('formatCandidate(result): ', result);
-//   return {
-//     name: result.name,
-//     id: result.id,
-//     type: 'candidate',
-//     office: officeMap[result.office_sought]
-//   };
-// }
-
-// function formatCommittee(result) {
-//   return {
-//     name: result.name,
-//     id: result.id,
-//     is_active: result.is_active,
-//     type: 'committee'
-//   };
-// }
-
-// function formatAuditCommittee(result) {
-//   return {
-//     name: result.name,
-//     id: result.id,
-//     type: 'auditCommittee'
-//   };
-// }
-
-// function formatAuditCandidate(result) {
-//   return {
-//     name: result.name,
-//     id: result.id,
-//     type: 'auditCandidate'
-//   };
-// }
-
 /**
  *
- * @param {string} resource
- * @param {string} queryString
- * @returns {string} like https://api.open.fec.gov/v1/names/candidates/?q=${queryString}&api_key=${window.API_KEY_PUBLIC}
+ * @param {String} resource
+ * @param {String} queryString
+ * @returns {String} like https://api.open.fec.gov/v1/names/candidates/?q=${queryString}&api_key=${window.API_KEY_PUBLIC}
  */
 function getUrl(resource, queryString) {
+
+  window.API_LOCATION = 'https://fec-dev-api.app.cloud.gov'; // TODO: remove this
+
   console.log('getUrl(): ', resource, queryString);
   let toReturn = [
     window.API_LOCATION,
@@ -124,81 +98,18 @@ function getUrl(resource, queryString) {
     ''
   ].join('/');
   toReturn += `?q=${queryString}&api_key=${window.API_KEY_PUBLIC}`;
+  console.log('getUrl toReturn: ', toReturn);
   return toReturn;
 }
 
-// let dataSteps = [
-//   {
-//   console.log('siteSearchOpts.data.src this: ', this);
-//   let fetchedResults = [];
-//   window.queryText = q;
-//   await fetch(getUrl('candidates', q), fetchInit)
-//     .then(response => response.json())
-//     .then(data => {
-//       let results = data.results;
-
-//       if (results.length > 0) fetchedResults.push({ is_header: true, id: window.queryText, name: 'Select a candidate:', type: 'none' });
-//       // console.log('data.results.length: ', data.results.length);
-//       // if (data.results.length > 0) console.log('  first data.results: ', data.results[0]);
-//       results.forEach(element => {
-//         element.type = 'candidate';
-//       });
-//       fetchedResults.push(...results.slice(0, 5));
-//       // if (response.status !== 200) throw new Error('The network rejected the grand total request.');
-//       // else if (response.type == 'cors') throw new Error('CORS error');
-//       // response.json().then(data => {
-//         // instance.displayUpdatedData_grandTotal(data);
-//       // });
-//       return fetch(getUrl('committees', q), fetchInit);
-//   })
-//   .then(response => response.json())
-//   .then(data => {
-//     let results = data.results;
-
-//     if (!fetchedResults) fetchedResults = [];
-//     if (results.length > 0) fetchedResults.push({ is_header: true, id: window.queryText, name: 'Select a committee:', type: 'none' });
-
-//     results.forEach(element => {
-//       element.type = 'committee';
-//     });
-//     fetchedResults.push(...results.slice(0, 10));
-//   })
-//   .then(data => {
-//     fetchedResults.push({ is_suggestion: true, id: window.queryText, name: 'Search individual contributions from:', type: 'individual' });
-//     fetchedResults.push({ is_suggestion: true, id: window.queryText, name: 'Search other pages:', type: 'site' });
-//     // suggestion for individual contribs
-//   });
-//   return fetchedResults;
-// ]
-
-async function fetchCommittees(q) {
-  return fetch(getUrl('committees', q), fetchInit);
-}
-
-// ROBERT: Trying to queue up the fetches, handle the responses, edit the items, then do the other fetch and handle its responses, too.
-// Currently stuck saving data from one query to the next
-// Like:
-// main results, fetch, add to main results, next fetch, add to main results
-
-// Option: nesting fetches so we do one fetch if we need to,
-//   if we have results, yay, maybe do the next fetch
-//   else do the next fetch anyway
-
-//   Like:
-//     should we get candidates?
-//       yes: do it, handle results
-//       no: should we get committees?
-//         yes: do it, handle results
-//         no: anything else? Legal searches?
-
-// function handleResponse(response) {
-//   console.log('handleResponse(): ', response);
-//   // return Promise.resolve(response => response.json());
-//   return response.json();
-// }
-
-function handleResults(type, data) {
-  console.log('handleResults(): ', type, data);
+/**
+ * 
+ * @param {*} type 
+ * @param {*} data 
+ * @returns {Array} of objects structured like { is_header: true, id: window.queryText, name: 'Select a committee:', type: 'none' }
+ */
+function formatResults(type, data) {
+  console.log('formatResults(): ', type, data);
   let toReturn = [];
   let results = data.results;
   let resultsLimit = 5;
@@ -240,43 +151,43 @@ function getSuggestions(type) {
  *
  * @param {*} q
  * @param {*} qType
- * @returns
+ * @returns {Array} of results formatted like [{ id: C123456789, name: 'Candidate Name', type: 'candidate' }]
  */
 async function getData(q, qType) {
-  console.log('src()', q, qType);
-  // return var1 => {
-  // let qType = this.queryType;
+  // TODO: Would like to come back and make this more adaptable, remove the repeated code
+  console.log('src.getData()');
+  console.log('  q: ', q);
+  console.log('  qType: ', qType);
   let fetchedResults = [];
-  // fetchedResults.push({ is_header: true, id: window.queryText, name: 'TESTING', type: 'none' });
   window.queryText = q;
-  // fetchedResults = await getData(q);
-  if (qType == 'candidates') {
+  if (qType == 'candidate') {
     // Any changes here should also be made inside `== 'all'`
     await fetch(getUrl('candidates', q), fetchInit)
       .then(response => response.json())
       .then(data => {
-        fetchedResults.push(...handleResults('candidates', data));
+        fetchedResults.push(...formatResults('candidates', data));
       });
 
-  } else if (qType == 'committees') {
+  } else if (qType == 'committee_id') {
     // Any changes here should also be made inside `== 'all'`
     await fetch(getUrl('committees', q), fetchInit)
       .then(response => response.json())
       .then(data => {
-        fetchedResults.push(...handleResults('committees', data));
+        fetchedResults.push(...formatResults('committees', data));
       });
 
-  } else if (qType == 'all') {
+  } else if (qType == 'all' || qType == 'allData') { /** 'all' will include suggestions; 'allData' won't @see getSuggestions */
+    // Any changes here should be made inside `== 'candidate'` and `== 'committee'`, too
     console.log('would have got all data');
     await fetch(getUrl('candidates', q), fetchInit)
       .then(response => response.json())
       .then(data => {
-        fetchedResults.push(...handleResults('candidates', data));
+        fetchedResults.push(...formatResults('candidates', data));
         return fetch(getUrl('committees', q), fetchInit);
       })
       .then(response => response.json())
       .then(data => {
-        fetchedResults.push(...handleResults('committees', data));
+        fetchedResults.push(...formatResults('committees', data));
       })
       .then(() => {
         fetchedResults.push(...getSuggestions(qType));
@@ -286,14 +197,14 @@ async function getData(q, qType) {
     await fetch(getUrl('audit_candidates', q), fetchInit)
       .then(response => response.json())
       .then(data => {
-        fetchedResults.push(...handleResults('audit_candidates', data));
+        fetchedResults.push(...formatResults('audit_candidates', data));
       });
 
   } else if (qType == 'auditCommittees') {
     await fetch(getUrl('audit_committees', q), fetchInit)
       .then(response => response.json())
       .then(data => {
-        fetchedResults.push(...handleResults('audit_committees', data));
+        fetchedResults.push(...formatResults('audit_committees', data));
       });
 
   } else {
@@ -305,132 +216,26 @@ async function getData(q, qType) {
   }
   console.log('going to return fetchedResults: ', fetchedResults);
   return fetchedResults;
-  // };
-  // };
-  // let promises = [fetchCandidates, handleResponse, fetchCommittees, handleResponse];
-  // fetchedResults = promises.reduce((prev, curr) => {
-  //     return prev.then(curr);
-  //   },
-  //   Promise.resolve(q)
-  //   )
-  //   .then(result => {
-  //     console.log("result!: ", result);
-  //     return [{ is_header: true, id: window.queryText, name: 'Select a candidate:', type: 'none' }];
-  //   });
-  // await fetch(getUrl('candidates', q), fetchInit)
-  //   .then(response => response.json())
-  //   .then(data => {
-  //     let results = data.results;
-
-  //     if (results.length > 0) fetchedResults.push({ is_header: true, id: window.queryText, name: 'Select a candidate:', type: 'none' });
-  //     // console.log('data.results.length: ', data.results.length);
-  //     // if (data.results.length > 0) console.log('  first data.results: ', data.results[0]);
-  //     results.forEach(element => {
-  //       element.type = 'candidate';
-  //     });
-  //     fetchedResults.push(...results.slice(0, 5));
-  //   });
-  
-  // return [{ is_header: true, id: window.queryText, name: 'Select a candidate:', type: 'none' }];
 }
 
 /**
- *
+ * Default options for autocomplete
+ * Of note, 'selector and data.src are basically always replaced.
  */
-let siteSearchOpts = {
+let defaultAutocompleteOptions = {
   selector: () => {
     '.js-site-search';
   },
   data: {
     src: async () => {
-      // console.log('siteSearchOpts.data.src this: ', this);
-      // let fetchedResults = [];
-      // window.queryText = q;
-      // fetchedResults = await getData(q);
-      // fetch(getUrl('candidates', q), fetchInit)
-      //   .then(response => response.json())
-      //   .then(data => {
-      //     let results = data.results;
-
-      //     if (results.length > 0) fetchedResults.push({ is_header: true, id: window.queryText, name: 'Select a candidate:', type: 'none' });
-      //     // console.log('data.results.length: ', data.results.length);
-      //     // if (data.results.length > 0) console.log('  first data.results: ', data.results[0]);
-      //     results.forEach(element => {
-      //       element.type = 'candidate';
-      //     });
-      //     fetchedResults.push(...results.slice(0, 5));
-      //     // if (response.status !== 200) throw new Error('The network rejected the grand total request.');
-      //     // else if (response.type == 'cors') throw new Error('CORS error');
-      //     // response.json().then(data => {
-      //       // instance.displayUpdatedData_grandTotal(data);
-      //     // });
-      //     return fetch(getUrl('committees', q), fetchInit);
-      // })
-      // .then(response => response.json())
-      // .then(data => {
-      //   let results = data.results;
-
-      //   if (!fetchedResults) fetchedResults = [];
-      //   if (results.length > 0) fetchedResults.push({ is_header: true, id: window.queryText, name: 'Select a committee:', type: 'none' });
-
-      //   results.forEach(element => {
-      //     element.type = 'committee';
-      //   });
-      //   fetchedResults.push(...results.slice(0, 10));
-      // })
-      // .then(data => {
-      //   fetchedResults.push({ is_suggestion: true, id: window.queryText, name: 'Search individual contributions from:', type: 'individual' });
-      //   fetchedResults.push({ is_suggestion: true, id: window.queryText, name: 'Search other pages:', type: 'site' });
-      //   // suggestion for individual contribs
-      // });
-      // return fetchedResults;
+      /** Default function will be replaced when we have an instance type, etc. @see AutoSuggest.prototype.init */
+      return [];
     },
     keys: searchedAttribs()
   },
   resultsList: resultsListOptions,
   resultItem: resultItemOptions
 };
-
-// const engineOpts = {
-//   datumTokenizer: Bloodhound.tokenizers.obj.whitespace('value'),
-//   queryTokenizer: Bloodhound.tokenizers.whitespace,
-//   limit: 10
-// };
-
-// function createEngine(opts) {
-//   return new Bloodhound(Object.assign({}, engineOpts, opts));
-// }
-
-// const candidateEngine = createEngine({
-//   remote: {
-//     url: getUrl('candidates'),
-//     wildcard: '%QUERY',
-//     transform: function(response) {
-//       console.log('committeeEngine transform');
-//       let toReturn = _.map(response.results, formatCandidate);
-//       // return _.map(response.results, formatCommittee);
-//       let toReturn2 = response['results'].map(n => formatCandidate(n));
-//       console.log('  toReturn: ', toReturn);
-//       console.log('  toReturn2: ', toReturn2);
-//     }
-//   }
-// });
-
-// const committeeEngine = createEngine({
-//   remote: {
-//     url: getUrl('committees'),
-//     wildcard: '%QUERY',
-//     transform: function(response) {
-//       console.log('committeeEngine');
-//       let toReturn = _.map(response.results, formatCommittee);
-//       // return _.map(response.results, formatCommittee);
-//       let toReturn2 = response['results'].map(n => formatCommittee(n));
-//       console.log('  toReturn: ', toReturn);
-//       console.log('  toReturn2: ', toReturn2);
-//       return toReturn;
-//     }
-//   }
-// });
 
 // const auditCommitteeEngine = createEngine({
 //   remote: {
@@ -461,43 +266,6 @@ let siteSearchOpts = {
 //     }
 //   }
 // });
-
-// const candidateDataset = {
-//   name: 'candidate',
-//   display: 'name',
-//   limit: 5,
-//   source: candidateEngine,
-//   templates: {
-//     header: '<span class="as-suggestion__header">Select a candidate:</span>',
-//     pending:
-//       '<span class="as-suggestion__loading">Loading candidates&hellip;</span>',
-//     notFound: Handlebars.compile(''), // This has to be empty to not show anything
-//     suggestion: Handlebars.compile(
-//       '<span>' +
-//         '<span class="as-suggestion__name">{{ name }} ({{ id }})</span>' +
-//         '<span class="as-suggestion__office">{{ office }}</span>' +
-//         '</span>'
-//     )
-//   }
-// };
-
-// const committeeDataset = {
-//   name: 'committee',
-//   display: 'name',
-//   limit: 10,
-//   source: committeeEngine,
-//   templates: {
-//     header: '<span class="as-suggestion__header">Select a committee:</span>',
-//     pending:
-//       '<span class="as-suggestion__loading">Loading committees&hellip;</span>',
-//     notFound: Handlebars.compile(''), // This has to be empty to not show anything
-//     suggestion: Handlebars.compile(
-//       '<span class="as-suggestion__name">{{ name }} ({{ id }})&nbsp;' +
-//         '<span class="{{#if is_active}}is-active-status' +
-//         '{{else}}is-terminated-status{{/if}}"></span></span>'
-//     )
-//   }
-// };
 
 // const auditCommitteeDataset = {
 //   name: 'auditCommittees',
@@ -531,86 +299,33 @@ let siteSearchOpts = {
 //   }
 // };
 
-/* This is a fake dataset for showing an empty option with the query
- * when clicked, this will load the receipts page,
- * filtered to contributions from this person
- */
-// var individualDataset = {
-//   display: 'id',
-//   source: function(query, syncResults) {
-//     syncResults([
-//       {
-//         id: sanitizeValue(query),
-//         type: 'individual'
-//       }
-//     ]);
-//   },
-//   templates: {
-//     suggestion: function(datum) {
-//       return (
-//         '<span><strong>Search individual contributions from:</strong> "' +
-//         datum.id +
-//         '"</span>'
-//       );
-//     }
-//   }
-// };
-
-/** This is a fake dataset for showing an empty option with the query
- * when clicked, this will submit the form to the DigitalGov search site
- */
-// var siteDataset = {
-//   display: 'id',
-//   source: function(query, syncResults) {
-//     syncResults([
-//       {
-//         id: sanitizeValue(query),
-//         type: 'site'
-//       }
-//     ]);
-//   },
-//   templates: {
-//     suggestion: function(datum) {
-//       return (
-//         '<span><strong>Search other pages:</strong> "' + datum.id + '"</span>'
-//       );
-//     }
-//   }
-// };
-
-// var datasets = {
-//   candidates: candidateDataset,
-//   committees: committeeDataset,
-//   auditCandidates: auditCandidateDataset,
-//   auditCommittees: auditCommitteeDataset,
-//   allData: [candidateDataset, committeeDataset],
-//   all: [candidateDataset, committeeDataset, individualDataset, siteDataset]
-// };
-
 /**
- * @param {string|HTMLInputElement} elementSelector
- * @param {string} type
- * @param {string} url
+ * The main AutoSuggest element
+ * @constructor
+ * @param {String|HTMLInputElement} elementSelector
+ * @param {String="all","allData","candidates","committees"} queryType Used to decide which APIs to search // TODO: list the rest of the options
+ * @param {String} url
+ * @param {Object} opts
  *
- * @property {HTMLElement|string} elementSelector
  * @property {autoComplete} autocomplete
- * @property {number} formerSelectionIndex an integer used for tracking hover/selected states with arrows, especially for ⬆︎/⬇︎ onto a non-selectable element
+ * @property {Number} formerSelectionIndex an integer used for tracking hover/selected states with arrows, especially for ⬆︎/⬇︎ onto a non-selectable element
  * @property {HTMLInputElement} input the <input> for this instance of AutoSuggest
- * @property {HTMLElement} element the element created to wrap the <input> and the results
+ * @property {String} queryType
  * @property {HTMLElement} resultsHolder
- * @property {string} queryType
- * @property {string} url
+ * @property {String} url
+ * @property {String|Number} value
+ * @property {HTMLElement} wrapper the element created to wrap the <input> and the results
  */
-function AutoSuggest(elementSelector, type, url) {
+function AutoSuggest(elementSelector, queryType, url, opts) {
+  console.log('AutoSuggest(elementSelector, type, url): ', elementSelector, queryType, url);
   // if elementSelector is a string, use that string to find the dom element and set that to this.input
   // else if elementSelector is an element, just save it
   this.input = typeof elementSelector == 'string' ? document.querySelector(elementSelector) : elementSelector;
-  this.queryType = type;
+  this.queryType = queryType;
   this.url = url || '/';
   this.autoComplete = null;
   this.formerSelectionIndex;
-
-//   this.dataset = datasets[type];
+  this.value = '';
 
   this.init();
 }
@@ -624,17 +339,16 @@ function AutoSuggest(elementSelector, type, url) {
   // if (this.typeahead) this.input.typeahead('destroy');
   this.input.value = '';
 
-  let theseOpts = siteSearchOpts;
-
+  let theseOpts = defaultAutocompleteOptions;
 
   // Create a new span to wrap the input,
   // add the span to the page before the input
   // and move the input into it
-  this.element = document.createElement('span');
-  this.element.setAttribute('class', 'autosuggest');
-  this.element.setAttribute('aria-expanded', 'false');
-  // this.element.setAttribute('aria-expanded', 'false');
-  this.element.innerHTML = `<span role="status" aria-live="polite"></span><pre aria-hidden="true"></pre>`;
+  this.wrapper = document.createElement('span');
+  this.wrapper.setAttribute('class', 'autosuggest');
+  this.wrapper.setAttribute('aria-expanded', 'false');
+  // this.wrapper.setAttribute('aria-expanded', 'false');
+  this.wrapper.innerHTML = `<span role="status" aria-live="polite"></span><pre aria-hidden="true"></pre>`;
   // Create an element to hold the results
   this.resultsHolder = document.createElement('div');
   this.resultsHolder.setAttribute('role', 'listbox');
@@ -642,10 +356,10 @@ function AutoSuggest(elementSelector, type, url) {
   this.resultsHolder.setAttribute('aria-live', 'polite');
   // this.resultsHolder.setAttribute('aria-expanded', 'false');
   this.resultsHolder.innerHTML = '<span />';
-  this.element.appendChild(this.resultsHolder);
+  this.wrapper.appendChild(this.resultsHolder);
 
-  this.input.parentNode.insertBefore(this.element, this.input);
-  this.element.prepend(this.input);
+  this.input.parentNode.insertBefore(this.wrapper, this.input);
+  this.wrapper.prepend(this.input);
 
   // Now to set the options for creating the autocomplete
   // The selector gets tricky if we're only using classes when there are multiple fields on the page (like /search)
@@ -653,28 +367,31 @@ function AutoSuggest(elementSelector, type, url) {
   theseOpts.selector = `#${this.input.getAttribute('id')}`;
   theseOpts.resultsList.destination = () => {
     // return `#${this.input.getAttribute('aria-controls')} span`;
-    return this.element.querySelector('.as-menu span');
+    return this.wrapper.querySelector('.as-menu span');
   };
   // theseOpts.data['keys'] = searchedAttribs();
   theseOpts.data.src = async q => {
     try {
-      console.log('try q, this.queryType: ', q, this.queryType);
+      // console.log('try');
+      // console.log('  this.queryType: ', this.queryType);
+      // console.log('  q: ', q);
       let results = await getData(q, this.queryType);
-      console.log('got results of ', results);
+      // console.log('got results of ', results);
       return results;
     } catch(e) {
+      // console.log('catch e: ', e);
       return e;
     }
   };
 
   this.autocomplete = new autoComplete(theseOpts);
 
-  let theMenus = this.element.querySelectorAll('.as-menu');
+  let theMenus = this.wrapper.querySelectorAll('.as-menu');
   theMenus.forEach(el => {
     el.setAttribute('aria-live', 'polite');
   });
 
-  let theInputs = this.element.querySelectorAll('.as-input');
+  let theInputs = this.wrapper.querySelectorAll('.as-input');
   theInputs.forEach(el => {
     el.setAttribute('aria-expanded', 'false').removeAttribute('aria-readonly');
   });
@@ -705,61 +422,103 @@ function AutoSuggest(elementSelector, type, url) {
 
 /**
  *
- * @param {Event} e
+ * @param {CustomEvent} e from autocomplete
+ *
+ * @fires autoSuggest:focus
  */
 AutoSuggest.prototype.handleFocus = function(e) {
   // Only opens if the resultsList is not empty
   this.autocomplete.open();
+  /**
+   * AutoSuggest focus event
+   *
+   * @event autoSuggest:focus
+   * @type {Object}
+   * @property {Event} e - an event? // TODO: add these
+   */
+  this.input.dispatchEvent(new Event('autoSuggest:focus', e));
 };
 
 /**
  *
- * @param {Object} e
+ * @param {CustomEvent} e from autocomplete
  * @param {Object} e.detail carries the autoComplete.js "feedback" object
+ *
+ * @fires autoSuggest:open
  */
 AutoSuggest.prototype.handleOpen = function(e) {
   this.matchAriaExpandeds();
+  /**
+   * AutoSuggest open event
+   *
+   * @event autoSuggest:open
+   * @type {Object}
+   * @property {Event} e - an event? // TODO: add these
+   */
+   this.input.dispatchEvent(new Event('autoSuggest:open', e));
 };
 
 /**
  * Fires after "resultsList" is closed
- * @param {Object} e
+ * @param {CustomEvent} e from autocomplete
  * @param {Object} e.detail carries the autoComplete.js "feedback" object
+ *
+ * @fires autoSuggest:close
  */
 AutoSuggest.prototype.handleClose = function(e) {
   this.matchAriaExpandeds();
+  /**
+   * AutoSuggest close event
+   *
+   * @event autoSuggest:close
+   * @type {Object}
+   * @property {Event} e - an event? // TODO: add these
+   */
+   this.input.dispatchEvent(new Event('autoSuggest:close', e));
 };
 
 /**
  * Called to copy the aria-expanded state from the autocomplete element up to the <input>'s wrapper for css selectors
  */
 AutoSuggest.prototype.matchAriaExpandeds = function() {
-  let theACwrapper = this.element.querySelector('.autoComplete_wrapper');
+  let theACwrapper = this.wrapper.querySelector('.autoComplete_wrapper');
 
-  this.element.setAttribute(
+  this.wrapper.setAttribute(
     'aria-expanded',
     theACwrapper.getAttribute('aria-expanded')
   );
 };
 
 /**
- * 
- * @param {Object} e
+ * Called when Autocomplete gets results
+ * @param {CustomEvent} e from autocomplete
  * @param {Object} e.detail carries the matching results values
+ * @fires autoSuggest:results
  */
 AutoSuggest.prototype.handleResults = function(e) {
   // Reset the 'last selected' marker for arrow/keyboard navigation
   this.formerSelectionIndex = 0;
+  /**
+   * AutoSuggest results event
+   *
+   * @event autoSuggest:results
+   * @type {Object}
+   * @property {Event} e - an event? // TODO: add these
+   */
+   this.input.dispatchEvent(new Event('autoSuggest:results', e));
 };
 
 /**
  * Handles when a results item is clicked, tapped, or selected with the keyboard
- * @param {Object} e
+ * @param {CustomEvent} e from autocomplete
  * @param {Object} e.detail carries the autoComplete.js "feedback" object
  * @returns {null} if (e.detail.selection.value.is_header)
+ * @fires autoSuggest:close
  */
 AutoSuggest.prototype.handleSelect = function(e) {
-  let val = e.detail.selection.value;
+  console.log('AutoSuggest.handleSelect(e): ', e);
+
+  const val = e.detail.selection.value;
 
   // If it's a header, ignore the selection/click/tap
   if (val.is_header) return;
@@ -768,39 +527,54 @@ AutoSuggest.prototype.handleSelect = function(e) {
   if (val.type == 'individual') {
     window.location = `${this.url}receipts/individual-contributions/?contributor_name=${val.id}`;
 
-  } else if (val.type == 'candidate' || val.type == 'committee') {
+  } else if (val.type == 'candidate_id' || val.type == 'committee_id') {
     window.location = `${this.url}${val.type}/${val.id}`;
 
   } else if (val.type == 'site') {
     this.searchSite(e.detail.selection.match);
   }
+
+  // let eventObj = Object.assign
+  /**
+   * Broadcast the autoSuggest:select event
+   * @event autoSuggest:select
+   * @type {Object}
+   * @property {CustomEvent} e - the CustomEvent that came in from autocomplete
+   */
+   this.input.dispatchEvent(new CustomEvent('autoSuggest:select', e));
 };
 
 /**
  * Mostly called after keyboard navigation, this function checks if the user would now be on a header (nonselectable) element
  * and then moves them upward, downward, or to the other end of the results list based on which direction they want to go
  * and which item was 'hovered' last (based on this.formerSelectionIndex)
- * @param {Object} e
+ * @param {CustomEvent} e from autocomplete
  * @param {Object} e.detail carries the autoComplete.js "feedback" object
  */
 AutoSuggest.prototype.handleNavigate = function(e) {
+  console.log('handleNavigate(e): ', e);
   // If we've just focused on a header object, we want to nav off of it
-  if (e.detail.selection.value.is_header === true) {
+  let sel = e.detail.selection;
+  if (sel.value.is_header === true) {
     // If we were previously higher on the list, let's go to the next
-    if (this.formerSelectionIndex <= e.detail.selection.index) this.autocomplete.next();
+    if (this.formerSelectionIndex <= sel.index) this.autocomplete.next();
     // If we were previously lower on the list, let's jump up another
     else this.autocomplete.previous();
 
     // Save the former selection for next time
-    this.formerSelectionIndex = e.detail.selection.index;
+    this.formerSelectionIndex = sel.index;
 
-  } else if (this.formerSelectionIndex == e.detail.selection.index && this.formerSelectionIndex >= e.detail.results.length - 1) {
-    this.formerSelectionIndex = -1;
-    this.autocomplete.goTo(0);
+  } else if (
+    this.formerSelectionIndex == sel.index &&
+    this.formerSelectionIndex >= e.detail.results.length - 1
+    ) {
+      this.formerSelectionIndex = -1;
+      this.autocomplete.goTo(0);
 
   } else {
-    this.formerSelectionIndex = e.detail.selection.index;
-    this.input.value = e.detail.selection.match;
+    this.formerSelectionIndex = sel.index;
+    this.input.value = sel.value.name;
+    this.value = sel.value.name;
   }
 };
 
@@ -816,6 +590,7 @@ AutoSuggest.prototype.searchSite = function(q) {
   let form = this.input.closest('form');
   let action = form.getAttribute('action');
   this.input.value = q;
+  this.value = q;
   form.setAttribute('action', action);
   form.submit();
 };
