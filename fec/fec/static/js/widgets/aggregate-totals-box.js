@@ -16,7 +16,8 @@ const isModernBrowser = 'fetch' in window && 'assign' in Object;
 // Includes
 import analytics from '../modules/analytics';
 import { buildUrl } from '../modules/helpers';
-import { electionYearsOptions, officeDefs } from './widget-vars';
+import { electionYearsOptions } from './widget-vars';
+import { officeNames } from '../modules/utils';
 
 /**
  * Handles the functionality for the aggregate totals box(es).
@@ -87,7 +88,7 @@ AggregateTotalsBox.prototype.displayUpdatedData_grandTotal = function(
   this.descriptionField.innerHTML = `Total ${this.action} by all ${
     this.baseQuery.office == 'P'
       ? 'presidential'
-      : officeDefs[this.baseQuery.office] // lowercase for President but keep the others capped
+      : officeNames[this.baseQuery.office] // lowercase for President but keep the others capped
   } candidates running in&nbsp;${this.baseQuery.election_year}`;
 
   // Start the opening animation
@@ -592,7 +593,7 @@ function buildElement(callingInstance, scriptElement) {
       if (callingInstance.yearControl == 'none') {
         // Let's only build the tabbed content, not the pull-down
         let theRadiosString = '';
-        for (var def in officeDefs) {
+        for (var def in officeNames) {
           if (def == 'P' && callingInstance.baseQuery.election_year % 4 > 0) {
             // Skip the President button if we're looking at a non-presidential year
           } else {
@@ -604,7 +605,7 @@ function buildElement(callingInstance, scriptElement) {
                 ? 'disabled="disabled" '
                 : '') +
               'class="election-radios js-election-radios">' +
-              officeDefs[def] +
+              officeNames[def] +
               '</button>';
           }
         }
@@ -612,10 +613,10 @@ function buildElement(callingInstance, scriptElement) {
       } else {
         // Otherwise, build the <select>
         let theOptionsString = '';
-        for (def in officeDefs) {
+        for (def in officeNames) {
           theOptionsString += `<option value="${def}"${
             def == callingInstance.baseQuery.office ? ' selected' : ''
-          }>${officeDefs[def]} candidates</option>`;
+          }>${officeNames[def]} candidates</option>`;
         }
         theInnerHTML += `<fieldset class="select">
             <label for="top-category" class="breakdown__title label t-inline-block">How much has been ${

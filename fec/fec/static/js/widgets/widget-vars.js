@@ -6,16 +6,6 @@
 const electionYearsCount = 42; // Display election years back this many years
 
 /**
- * Simple list of election letter codes with their adjectives
- * TODO - set this through constants?
- */
-let officeDefs = {
-  P: 'Presidential',
-  S: 'Senate',
-  H: 'House'
-};
-
-/**
  * Calculates the next presidential election year, including this year if applicable
  * @returns {Number} The four-digit year of the next presidential year
  */
@@ -90,6 +80,5 @@ let electionYearsOptions = (
 // Make them available for import
 module.exports = {
   electionYearsList,
-  electionYearsOptions,
-  officeDefs
+  electionYearsOptions
 };

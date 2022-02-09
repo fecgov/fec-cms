@@ -9,19 +9,13 @@
 // TODO: double check that the autosuggest filters handle a generic user returnkey appropriately (type + returnkey without clicking)
 
 import autoComplete from '@tarekraafat/autocomplete.js';
+import officeNames from './utils';
 // import events from './events';
 
 // var events = require('./events');
 
 /**
- * used to translate 'H', 'S', and 'P' into their full office names
  */
-const officeMap = {
-  H: 'House',
-  S: 'Senate',
-  P: 'President'
-};
-
 let resultsListOptions = {
   class: 'as-dataset as-dataset-candidate',
   maxResults: 20,
