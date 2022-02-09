@@ -16,11 +16,9 @@ var skipNav = require('./modules/skip-nav');
 var siteNav = require('./modules/site-nav');
 var dropdown = require('./modules/dropdowns');
 var toc = require('./modules/toc');
-// var typeahead = require('./modules/typeahead');
 var helpers = require('./modules/helpers');
 
-// import filterTypeahead from './modules/filters/filter-typeahead';
-import { AutoComplete } from './modules/typeahead';
+import { AutoSuggest } from './modules/autosuggest';
 
 // Hack: Append jQuery to `window` for use by legacy libraries
 window.$ = window.jQuery = $;
@@ -35,7 +33,8 @@ window.submitFeedback = function(token) {
   feedbackWidget.submit(token);
 };
 
-$(document).ready(function() {
+// This is the jQuery.ready(), which has been deprecated
+$(function() {
   // Initialize glossary
   new Glossary(
     terms,
@@ -92,16 +91,8 @@ $(document).ready(function() {
     new FormNav(this);
   });
 
-  // Initialize header typeaheads (mobile and desktop)
-  $('.js-site-search').each(function() {
-    // new typeahead.Typeahead($(this), 'all', '/data/');
-  });
-
-  let siteSearchObjects = document.querySelectorAll('.js-site-search');
-  siteSearchObjects.forEach((val, key) => {
-    // console.log('forEach val, key: ', val, key);
-    new AutoComplete(val, 'all', '/data/');
-  });
+  let siteSearchElement = document.querySelector('.js-site-search');
+  if (siteSearchElement) new AutoSuggest(siteSearchElement, 'all', '/data/');
 
   // For any link that should scroll to a section on the page apply .js-scroll to <a>
   $('.js-scroll').on('click', function(e) {

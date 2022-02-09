@@ -18,7 +18,7 @@ var dropdown = require('./modules/dropdowns');
 var siteNav = require('./modules/site-nav');
 var skipNav = require('./modules/skip-nav');
 var feedback = require('./modules/feedback');
-var typeahead = require('./modules/typeahead');
+import { AutoSuggest } from './modules/autosuggest';
 var toc = require('./modules/toc');
 var Search = require('./modules/search');
 
@@ -30,7 +30,8 @@ var helpers = require('./modules/helpers');
 var download = require('./modules/download');
 var CycleSelect = require('./modules/cycle-select').CycleSelect;
 
-$(document).ready(function() {
+// This is the jQuery.ready(), which has been deprecated
+$(function() {
   $('.js-dropdown').each(function() {
     new dropdown.Dropdown(this);
   });
@@ -73,11 +74,14 @@ $(document).ready(function() {
     feedbackWidget.submit(token);
   };
 
-  // Initialize main search typeahead
-  new typeahead.Typeahead('.js-search-input', 'allData', '/data/');
+  // Initialize main search autosearch
+  let mainSearchElement = document.querySelector('.js-search-input');
+  console.log('mainSearchElement: ', mainSearchElement);
+  if (mainSearchElement) new AutoSuggest(mainSearchElement, 'allData', '/data/');
 
-  // Initialize header typeahead
-  new typeahead.Typeahead($('.js-site-search'), 'all', '/data/');
+  // Initialize header autosearch
+  let siteSearchElement = document.querySelector('.js-site-search');
+  if (siteSearchElement) new AutoSuggest(siteSearchElement, 'all', '/data/');
 
   // Initialize feedback
   feedbackWidget = new feedback.Feedback(helpers.buildAppUrl(['issue']));
