@@ -1,20 +1,21 @@
 'use strict';
 
-var $ = require('jquery');
-var _ = require('underscore');
-var URI = require('urijs');
+const $ = require('jquery');
+const _ = require('underscore');
+const URI = require('urijs');
 
-var helpers = require('../helpers');
-var TextFilter = require('./text-filter').TextFilter;
-var CheckboxFilter = require('./checkbox-filter').CheckboxFilter;
-var MultiFilter = require('./multi-filter').MultiFilter;
-var SelectFilter = require('./select-filter').SelectFilter;
-var DateFilter = require('./date-filter').DateFilter;
-var ElectionFilter = require('./election-filter').ElectionFilter;
-var ToggleFilter = require('./toggle-filter').ToggleFilter;
-var RangeFilter = require('./range-filter').RangeFilter;
+const helpers = require('../helpers');
+const TextFilter = require('./text-filter').TextFilter;
+const CheckboxFilter = require('./checkbox-filter').CheckboxFilter;
+const MultiFilter = require('./multi-filter').MultiFilter;
+const SelectFilter = require('./select-filter').SelectFilter;
+const DateFilter = require('./date-filter').DateFilter;
+const ElectionFilter = require('./election-filter').ElectionFilter;
+const ToggleFilter = require('./toggle-filter').ToggleFilter;
+const RangeFilter = require('./range-filter').RangeFilter;
 
-import AutoSuggestFilter from './autosuggest-filter';
+import { AutoSuggestFilter } from './autosuggest-filter';
+
 function FilterSet(elm) {
   this.$body = $(elm);
   $(document.body).on('tag:removed', this.handleTagRemoved.bind(this));
@@ -43,30 +44,38 @@ var filterMap = {
 };
 
 FilterSet.prototype.buildFilter = function($elm) {
-  var filterType = $elm.attr('data-filter');
-  var F = filterMap[filterType].constructor;
+  const filterType = $elm.attr('data-filter');
+  const F = filterMap[filterType].constructor;
   return new F($elm);
 };
 
-FilterSet.prototype.activate = function($selector) {
-  var self = this;
-  var query = helpers.sanitizeQueryParams(
+FilterSet.prototype.activate = function($selector, elementList) {
+  // console.log('FilterSet.activate($selector): ', $selector, elementList);
+  const self = this;
+  // console.log('  self: ', self);
+  const query = helpers.sanitizeQueryParams(
     URI.parseQuery(window.location.search)
   );
-  var filters = _.chain($selector)
+  // console.log('  query: ', query);
+
+  const filters = _.chain($selector)
     .map(function(elm) {
-      var filter = self.buildFilter($(elm)); // .fromQuery(query);
+      const filter = self.buildFilter($(elm)); // .fromQuery(query);
       return [filter.name, filter];
     })
     .object()
     .value();
-  var fields = _.chain(filters)
+
+  const fields = _.chain(filters)
     .pluck('fields')
     .flatten()
     .value();
 
+  // console.log('fields: ', fields);
+
   // Activate each filter
   _.each(filters, function(filter) {
+    // console.log('_.each');
     filter.fromQuery(query);
   });
 
@@ -78,7 +87,8 @@ FilterSet.prototype.activate = function($selector) {
 FilterSet.prototype.activateProcessed = function() {
   if (_.isEmpty(this.processedFilters)) {
     var $filters = this.$body.find('.js-processed-filters .js-filter');
-    this.processedFilters = this.activate($filters);
+    const filterElements = document.querySelectorAll('.js-processed-filters .js-filter');
+    this.processedFilters = this.activate($filters, filterElements);
     // Store the processed filters in this.filters for later reference
     this.filters = this.processedFilters;
   }
@@ -87,7 +97,8 @@ FilterSet.prototype.activateProcessed = function() {
 FilterSet.prototype.activateEfiling = function() {
   if (_.isEmpty(this.efilingFilters)) {
     var $filters = this.$body.find('.js-efiling-filters .js-filter');
-    this.efilingFilters = this.activate($filters);
+    const filterElements = document.querySelectorAll('.js-processed-filters .js-filter');
+    this.efilingFilters = this.activate($filters, filterElements);
     // Store the efiling filters in this.filters for later reference
     this.filters = this.efilingFilters;
   }
@@ -95,7 +106,8 @@ FilterSet.prototype.activateEfiling = function() {
 
 FilterSet.prototype.activateDataType = function() {
   var $filter = this.$body.find('#data-type-toggle .js-filter');
-  this.activate($filter);
+  const filterElements = document.querySelectorAll('#data-type-toggle .js-filter');
+  this.activate($filter, filterElements);
 };
 
 FilterSet.prototype.activateAll = function() {
@@ -103,8 +115,10 @@ FilterSet.prototype.activateAll = function() {
   // and activate the others when necessary
   if (this.efiling) {
     this.activateDataType();
+
   } else {
-    this.filters = this.activate(this.$body.find('.js-filter'));
+    const filterElements = document.querySelectorAll('.js-filter');
+    this.filters = this.activate(this.$body.find('.js-filter'), filterElements);
   }
   return this;
 };
@@ -133,6 +147,7 @@ FilterSet.prototype.clear = function() {
 };
 
 FilterSet.prototype.handleTagRemoved = function(e, opts) {
+  console.log('FilterSet.handleTagRemoved(e, opts): ', e, opts);
   var $input = $(document.getElementById(opts.key));
   if ($input.length > 0) {
     var type = $input.get(0).type;
@@ -146,6 +161,7 @@ FilterSet.prototype.handleTagRemoved = function(e, opts) {
 };
 
 FilterSet.prototype.handleValidation = function(e, opts) {
+  console.log('FilterSet.handleValidation(e, opts): ', e, opts);
   this.isValid = opts.isValid;
 };
 
