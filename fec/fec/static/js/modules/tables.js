@@ -465,19 +465,19 @@ var defaultCallbacks = {
   afterRender: function() {} //eslint-disable-line no-empty-function
 };
 
+/* eslint-disable no-console */
 
 function getVars() {
 
-  var initialParams = window.location.search
-  console.log("initialParams;:"+initialParams)
-  console.log("initialParams;:",initialParams)
+  var initialParams = window.location.search;
+  console.log('initialParams;:'+initialParams);
+  console.log('initialParams;:',initialParams);
   return initialParams.toString();
 }
 
-console.log('GETVARS:', getVars())
+console.log('GETVARS:', getVars());
 
-
-var parseParams = (querystring) => { 
+var parseParams = (querystring) => {
     // parse query string
     const params = new URLSearchParams(querystring);
     const obj = {};
@@ -514,53 +514,51 @@ function DataTable(selector, opts) {
   if (this.opts.useExport) {
     $(document.body).on('download:countChanged', this.refreshExport.bind(this));
   }
-  
+
   $(document.body).on('table:switch', this.handleSwitch.bind(this));
 }
 
-DataTable.prototype.checkFromQuery  = function(){
+DataTable.prototype.checkFromQuery = function(){
 
     var queryBoxes = parseParams(getVars());
-    console.log('queryBoxesNEW:',queryBoxes)
+    console.log('queryBoxesNEW:',queryBoxes);
       var livebox;
-      var liveboxes = []
+      var liveboxes = [];
 
     $.each(queryBoxes, function(key, val){
-      if  ($.isArray(val)){
-          val.forEach(i =>  {
-            console.log('iiiiii:',i)
-        livebox = $('input:checkbox[name="'+ key +'"][value="' + i + '"]')
-        liveboxes.push(livebox)
-          })
+      if ($.isArray(val)){
+          val.forEach(i => {
+            console.log('iiiiii:',i);
+        livebox = $('input:checkbox[name="'+ key +'"][value="' + i + '"]');
+        liveboxes.push(livebox);
+          });
         }
         else {
-          livebox = $('input:checkbox[name="'+ key +'"][value="' + val + '"]')
-          liveboxes.push(livebox)
-          console.log('NOT_ARRAY')
+          livebox = $('input:checkbox[name="'+ key +'"][value="' + val + '"]');
+          liveboxes.push(livebox);
+          console.log('NOT_ARRAY');
          }
 
-         })
+         });
 
       setTimeout(function() {
        $.each(liveboxes, function(){
         if (!($(this).is(':checked'))) {
              $(this).prop('checked', true).css('background','#f90').change();
-             $(this).siblings( "label" ).css('background','#f90')
+             $(this).siblings( 'label' ).css('background','#f90');
 
          }
          else{
-             console.log('ALREADY CHECKED')
+             console.log('ALREADY CHECKED');
          }
-       })
-     }, 0)
+       });
+     }, 0);
 
-      console.log('LIVEBOX:',livebox)
-      console.log('LIVEBOXES:',liveboxes)
+      console.log('LIVEBOX:',livebox);
+      console.log('LIVEBOXES:',liveboxes);
 
   $('button.is-loading, label.is-loading').removeClass('is-loading');
-}  
-
-
+};
 
 DataTable.prototype.initTable = function() {
   this.api = this.$body.DataTable(this.opts);
@@ -595,8 +593,8 @@ DataTable.prototype.initFilters = function() {
     this.$widgets.find('.js-filter-tags').prepend(tagList.$body);
     this.filterPanel = new FilterPanel();
     this.filterSet = this.filterPanel.filterSet;
-    
-    this.checkFromQuery()
+
+    this.checkFromQuery();
 
     $(window).on('popstate', this.handlePopState.bind(this));
   }
