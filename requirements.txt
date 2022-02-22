@@ -11,7 +11,7 @@ urllib3==1.26.7
 slacker==0.8.6
 whitenoise==5.2.0
 wagtail==2.11.8
-Jinja2==2.11.3
+Jinja2==3.0.0
 django_jinja==2.7.0
 pillow==8.3.2
 CacheControl==0.11.5
