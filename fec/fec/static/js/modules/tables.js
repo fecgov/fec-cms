@@ -467,7 +467,6 @@ var defaultCallbacks = {
 
 /* eslint-disable no-console */
 
-
 function DataTable(selector, opts) {
   opts = opts || {};
   this.$body = $(selector);
@@ -494,15 +493,13 @@ function DataTable(selector, opts) {
   $(document.body).on('table:switch', this.handleSwitch.bind(this));
 }
 
-
 DataTable.prototype.getVars = function () {
 
   var initialParams = window.location.search;
   console.log('initialParams;:'+initialParams);
   console.log('initialParams;:',initialParams);
   return initialParams.toString();
-}
-
+};
 
 DataTable.prototype.parseParams = function(querystring){
     // parse query string
@@ -520,8 +517,6 @@ DataTable.prototype.parseParams = function(querystring){
 };
 
 DataTable.prototype.checkFromQuery = function(){
-    var self = this
-    //self.$body.before(self.$processing);
     var queryBoxes = this.parseParams(this.getVars());
     console.log('queryBoxesNEW:',queryBoxes);
       var livebox;
