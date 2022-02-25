@@ -467,30 +467,6 @@ var defaultCallbacks = {
 
 /* eslint-disable no-console */
 
-function getVars() {
-
-  var initialParams = window.location.search;
-  console.log('initialParams;:'+initialParams);
-  console.log('initialParams;:',initialParams);
-  return initialParams.toString();
-}
-
-console.log('GETVARS:', getVars());
-
-var parseParams = (querystring) => {
-    // parse query string
-    const params = new URLSearchParams(querystring);
-    const obj = {};
-    // iterate over all keys
-    for (const key of params.keys()) {
-        if (params.getAll(key).length > 1) {
-         obj[key] = params.getAll(key);
-        } else {
-            obj[key] = params.get(key);
-        }
-     }
-    return obj;
-};
 
 function DataTable(selector, opts) {
   opts = opts || {};
@@ -518,14 +494,41 @@ function DataTable(selector, opts) {
   $(document.body).on('table:switch', this.handleSwitch.bind(this));
 }
 
-DataTable.prototype.checkFromQuery = function(){
 
-    var queryBoxes = parseParams(getVars());
+DataTable.prototype.getVars = function () {
+
+  var initialParams = window.location.search;
+  console.log('initialParams;:'+initialParams);
+  console.log('initialParams;:',initialParams);
+  return initialParams.toString();
+}
+
+
+DataTable.prototype.parseParams = function(querystring){
+    // parse query string
+    const params = new URLSearchParams(querystring);
+    const obj = {};
+    // iterate over all keys
+    for (const key of params.keys()) {
+        if (params.getAll(key).length > 1) {
+         obj[key] = params.getAll(key);
+        } else {
+            obj[key] = params.get(key);
+        }
+     }
+    return obj;
+};
+
+DataTable.prototype.checkFromQuery = function(){
+    var self = this
+    //self.$body.before(self.$processing);
+    var queryBoxes = this.parseParams(this.getVars());
     console.log('queryBoxesNEW:',queryBoxes);
       var livebox;
       var liveboxes = [];
 
     $.each(queryBoxes, function(key, val){
+
       if ($.isArray(val)){
           val.forEach(i => {
             console.log('iiiiii:',i);
