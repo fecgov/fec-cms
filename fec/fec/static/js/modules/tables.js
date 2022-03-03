@@ -465,8 +465,6 @@ var defaultCallbacks = {
   afterRender: function() {} //eslint-disable-line no-empty-function
 };
 
-/* eslint-disable no-console */
-
 function DataTable(selector, opts) {
   opts = opts || {};
   this.$body = $(selector);
@@ -493,6 +491,8 @@ function DataTable(selector, opts) {
   $(document.body).on('table:switch', this.handleSwitch.bind(this));
 }
 
+/* eslint-disable no-console */
+
 DataTable.prototype.getVars = function () {
 
   var initialParams = window.location.search;
@@ -517,43 +517,93 @@ DataTable.prototype.parseParams = function(querystring){
 };
 
 DataTable.prototype.checkFromQuery = function(){
-    var queryBoxes = this.parseParams(this.getVars());
-    console.log('queryBoxesNEW:',queryBoxes);
-      var livebox;
-      var liveboxes = [];
 
-    $.each(queryBoxes, function(key, val){
+    var queryFields = this.parseParams(this.getVars());
+
+    console.log('queryFieldsNEW:',queryFields);
+      var queryBox;
+      var queryBoxes = [];
+
+    $.each(queryFields, function(key, val){
+      console.log('KEY',key);
 
       if ($.isArray(val)){
+        console.log('VAL',val);
           val.forEach(i => {
             console.log('iiiiii:',i);
-        livebox = $('input:checkbox[name="'+ key +'"][value="' + i + '"]');
-        liveboxes.push(livebox);
+            //queryBox = $('input:checkbox[name="'+ key +'"][value="' + i + '"]');
+            queryBox = $(`input:checkbox[name="${key}"][value="${i}"]`);
+            queryBoxes.push(queryBox);
+
           });
         }
         else {
-          livebox = $('input:checkbox[name="'+ key +'"][value="' + val + '"]');
-          liveboxes.push(livebox);
+          console.log('KEY',key);
+          //queryBox = $('input:checkbox[name="'+ key +'"][value="' + val + '"]');
+          queryBox = $(`input:checkbox[name="${key}"][value="${val}"]`);
+          queryBoxes.push(queryBox);
           console.log('NOT_ARRAY');
+
          }
 
          });
 
-      setTimeout(function() {
-       $.each(liveboxes, function(){
-        if (!($(this).is(':checked'))) {
-             $(this).prop('checked', true).css('background','#f90').change();
-             $(this).siblings( 'label' ).css('background','#f90');
+    //   if ('data_type' in queryFields){
+    //   setTimeout(function() {
 
-         }
-         else{
-             console.log('ALREADY CHECKED');
-         }
-       });
-     }, 0);
+    //    $.each(queryBoxes, function(i, box){
+    //       if (!($(box).is(':checked'))) {
+    //            $(box).prop('checked', true).change();
+    //            $(box).siblings( 'label' ).css('background','#f90');
 
-      console.log('LIVEBOX:',livebox);
-      console.log('LIVEBOXES:',liveboxes);
+    //        }
+    //        else{
+    //            console.log('ALREADY CHECKED');
+    //        }
+    //      });
+    //    }, 0);
+    // } else {
+
+    //   $.each(queryBoxes, function(i, box){
+    //       if (!($(box).is(':checked'))) {
+    //            $(box).prop('checked', true).change();
+    //            $(box).siblings( 'label' ).css('background','#f90');
+
+    //        }
+    //        else{
+    //            console.log('ALREADY CHECKED');
+    //        }
+    //      });
+
+    //   }
+     if ('data_type' in queryFields){
+    setTimeout(function() {
+      for (const box of queryBoxes) {
+          if (!($(box).is(':checked'))) {
+              $(box).prop('checked', true).change();
+              $(box).siblings('label').css('background','#f90');
+
+           }
+           else{
+               console.log('ALREADY CHECKED');
+           }
+        }
+      }, 0);
+     } else {
+      for (const box of queryBoxes) {
+          if (!($(box).is(':checked'))) {
+              $(box).prop('checked', true).change();
+              $(box).siblings('label').css('background','#f90');
+
+           }
+           else{
+               console.log('ALREADY CHECKED');
+           }
+       }
+      }
+
+      console.log('queryBox:',queryBox);
+      console.log('queryBoxES:',queryBoxes);
 
   $('button.is-loading, label.is-loading').removeClass('is-loading');
 };
@@ -565,6 +615,10 @@ DataTable.prototype.initTable = function() {
   if (!_.isEmpty(this.filterPanel)) {
     updateOnChange(this.filterSet.$body, this.api);
     urls.updateQuery(this.filterSet.serialize(), this.filterSet.fields);
+
+    console.log('this.filterSet.serialize()',this.filterSet.serialize());
+    console.log('this.filterSet.fields', this.filterSet.fields);
+
   }
 
   this.$body.css('width', '100%');
@@ -579,6 +633,7 @@ DataTable.prototype.initTable = function() {
 DataTable.prototype.initFilters = function() {
   // Set `this.filterSet` before instantiating the nested `DataTable` so that
   // filters are available on fetching initial data
+
   if (this.opts.useFilters) {
     var tagList = new filterTags.TagList({
       resultType: 'results',

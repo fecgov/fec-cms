@@ -13,11 +13,41 @@
   display_alt_ie_committees_filter=False)
 %}
 
+PAC-PARTY
+        display_sponsor_candidate_filter=True, <br>
+
+        display_parties_only_filter=True, <br>
+  
+        display_alt_other_committees_filter=True, <br>
+
+        display_alt_ie_committees_filter=True, <br>
+
+        and the default that shows on all comm filters  <br>
+
+        DUPLICATE VALS: 
+        OK: D, O, C, X, Y, Z, J <br>
+        BUSTED IN OTRG TYPE: W, V <br>
+        (changed to 3 hidden  fieldsets of data-name= 'organization_type', 'committee_type ', 'designation '<br>
+<div class="filter u-visually-hidden">
+  <fieldset class="js-dropdown js-filter" data-filter="checkbox" data-name="{{ organization_type }}" >
+  </fieldset>
+</div>
+
+<div class="filter u-visually-hidden">
+  <fieldset class="js-dropdown js-filter" data-filter="checkbox" data-name="{{ committee_type }}" >
+  </fieldset>
+</div>
+
+<div class="filter u-visually-hidden">
+  <fieldset class="js-dropdown js-filter" data-filter="checkbox" data-name="{{ designation }}" >
+  </fieldset>
+</div>
+
    
 
 {% if display_authorized_committee_filter %}
 <div class="filter">
-  <fieldset class="js-dropdown js-filter" data-filter="checkbox" data-name="hsp-committee_type">
+  <fieldset class="js-dropdown js-filter" data-filter="checkbox" data-name="hsp_committee_types">
     <label class="label t-inline-block" for="committee_type">Authorized committees</label>
     <div class="tooltip__container">
       <button class="tooltip__trigger" type="button"><span class="u-visually-hidden">Learn more</span></button>
@@ -45,7 +75,7 @@
 
 {% if display_default_ie_committees_filter %}
   <div class="filter">
-    <fieldset class="js-dropdown js-filter" data-filter="checkbox" data-name="{{ committee_type }}">
+    <fieldset class="js-dropdown js-filter" data-filter="checkbox" data-name="committee_types">
       <label class="label t-inline" for="committee_type">Independent expenditure committees</label>
       <div class="tooltip__container">
         <button class="tooltip__trigger" type="button"><span class="u-visually-hidden">Learn more</span></button>
@@ -80,7 +110,7 @@
 
 {% if display_alt_ie_committees_filter %}
   <div class="filter">
-    <fieldset class="js-dropdown js-filter" data-filter="checkbox" data-name="{{ committee_type }}">
+    <fieldset class="js-dropdown js-filter" data-filter="checkbox" data-name="committee_types">
       <label class="label t-inline" for="committee_type">Independent expenditure committees</label>
       <div class="tooltip__container">
         <button class="tooltip__trigger" type="button"><span class="u-visually-hidden">Learn more</span></button>
@@ -98,8 +128,10 @@
   </div>
 {% endif %}
 
+
+
 <div class="filter">
-  <fieldset class="js-dropdown js-filter" data-filter="checkbox" data-name="{{ organization_type }}" >
+  <fieldset class="js-dropdown js-filter" data-filter="checkbox" data-name="organization_types" >
     <label class="label t-inline-block" for="committee_type">PACs</label>
     <div class="tooltip__container">
       <button class="tooltip__trigger" type="button"><span class="u-visually-hidden">Learn more</span></button>
@@ -200,7 +232,7 @@
 
 {% if display_alt_other_committees_filter %}
 <div class="filter">
-  <fieldset class="js-dropdown js-filter" data-filter="checkbox" data-name="{{ designation }}">
+  <fieldset class="js-dropdown js-filter" data-filter="checkbox" data-name="designations">
     <legend class="label" for="committee_type">Other committees</legend>
     <ul class="dropdown__selected">
       <li>
@@ -224,7 +256,7 @@
 
 {% if display_default_other_committees_filter %}
 <div class="filter">
-  <fieldset class="js-dropdown js-filter" data-filter="checkbox" data-name="{{ designation }}">
+  <fieldset class="js-dropdown js-filter" data-filter="checkbox" data-name="designations">
     <legend class="label" for="committee_type">Other committees and filers</legend>
     <ul class="dropdown__selected">
       <li>
