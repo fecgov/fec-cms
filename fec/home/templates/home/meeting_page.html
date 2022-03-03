@@ -35,6 +35,7 @@
         {% endspaceless %}
       </div>
     </header>
+    {{ self.info_message }}
     {% if self.additional_information %}
        <p class="t-bold">{{ self.additional_information|safe }}</p>
     {% endif %}

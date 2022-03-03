@@ -19,7 +19,8 @@
       {% endfor %}
 
     </div>
-    <div class="usa-width-two-thirds u-padding--left"">
+    <div class="usa-width-two-thirds u-padding--left">
+      {{ self.info_message }}
       <h2>{{ self.services_title }}</h2>
       {% for block in self.services %}
       <div class="block-{{ block.block_type }}">
