@@ -13,9 +13,29 @@
   display_alt_ie_committees_filter=False)
 %}
 
+{# On this filter, the  differring `name` attriutes inside of fieldsets would confuse the filterSet logic that expects all the `name `attributes of children of a fieldset to match its `data-name`. The two comments below explain how we solve this  #}
+
+{# Start with three empty hidden fieldsets with `data-name` of the three needed variables to satisfy filterSet logic. #}
+<div class="filter u-visually-hidden">
+  <fieldset class="js-dropdown js-filter" data-filter="checkbox" data-name="{{ organization_type }}" >
+  </fieldset>
+</div>
+
+<div class="filter u-visually-hidden">
+  <fieldset class="js-dropdown js-filter" data-filter="checkbox" data-name="{{ committee_type }}" >
+  </fieldset>
+</div>
+
+<div class="filter u-visually-hidden">
+  <fieldset class="js-dropdown js-filter" data-filter="checkbox" data-name="{{ designation }}" >
+  </fieldset>
+</div>
+
+{# Give the rest of the fieldsets a unique descriptive `data-name` for grouping purpooses but not a `data-name` that resolves to a variable to avoid confusing the filterSet logic. The JS function, checkFromQuery, will handle finding and checking any checkbox filters in a querystring passed on-load.  
+
 {% if display_authorized_committee_filter %}
 <div class="filter">
-  <fieldset class="js-dropdown js-filter" data-filter="checkbox" data-name="hsp-committee_type">
+  <fieldset class="js-dropdown js-filter" data-filter="checkbox" data-name="hsp_committee_types">
     <label class="label t-inline-block" for="committee_type">Authorized committees</label>
     <div class="tooltip__container">
       <button class="tooltip__trigger" type="button"><span class="u-visually-hidden">Learn more</span></button>
@@ -43,7 +63,7 @@
 
 {% if display_default_ie_committees_filter %}
   <div class="filter">
-    <fieldset class="js-dropdown js-filter" data-filter="checkbox" data-name="committee_type">
+    <fieldset class="js-dropdown js-filter" data-filter="checkbox" data-name="ie_committee_types">
       <label class="label t-inline" for="committee_type">Independent expenditure committees</label>
       <div class="tooltip__container">
         <button class="tooltip__trigger" type="button"><span class="u-visually-hidden">Learn more</span></button>
@@ -78,7 +98,7 @@
 
 {% if display_alt_ie_committees_filter %}
   <div class="filter">
-    <fieldset class="js-dropdown js-filter" data-filter="checkbox" data-name="committee_type">
+    <fieldset class="js-dropdown js-filter" data-filter="checkbox" data-name="alt_ie_committee_types">
       <label class="label t-inline" for="committee_type">Independent expenditure committees</label>
       <div class="tooltip__container">
         <button class="tooltip__trigger" type="button"><span class="u-visually-hidden">Learn more</span></button>
@@ -96,8 +116,10 @@
   </div>
 {% endif %}
 
+
+
 <div class="filter">
-  <fieldset class="js-dropdown js-filter" data-filter="checkbox" data-name="organization_type">
+  <fieldset class="js-dropdown js-filter" data-filter="checkbox" data-name="committee_organization_types">
     <label class="label t-inline-block" for="committee_type">PACs</label>
     <div class="tooltip__container">
       <button class="tooltip__trigger" type="button"><span class="u-visually-hidden">Learn more</span></button>
@@ -136,27 +158,27 @@
         </li>
         <li class="dropdown__subhead">Separate segregated funds</li>
         <li class="dropdown__item">
-          <input id="org-type-checkbox-C" name={{ organization_type }} type="checkbox" value="C">
+          <input id="org-type-checkbox-C" name="{{ organization_type }}" type="checkbox" value="C">
           <label class="dropdown__value" for="org-type-checkbox-C">Corporation</label>
         </li>
         <li class="dropdown__item">
-          <input id="org-type-checkbox-L" name={{ organization_type }} type="checkbox" value="L">
+          <input id="org-type-checkbox-L" name="{{ organization_type }}" type="checkbox" value="L">
           <label class="dropdown__value" for="org-type-checkbox-L">Labor organization</label>
         </li>
         <li class="dropdown__item">
-          <input id="org-type-checkbox-M" name={{ organization_type }} type="checkbox" value="M">
+          <input id="org-type-checkbox-M" name="{{ organization_type }}"  type="checkbox" value="M">
           <label class="dropdown__value" for="org-type-checkbox-M">Membership organization</label>
         </li>
         <li class="dropdown__item">
-          <input id="org-type-checkbox-T" name={{ organization_type }} type="checkbox" value="T">
+          <input id="org-type-checkbox-T" name="{{ organization_type }}"  type="checkbox" value="T">
           <label class="dropdown__value" for="org-type-checkbox-T">Trade association</label>
         </li>
         <li class="dropdown__item">
-          <input id="org-type-checkbox-V" name={{ organization_type }} type="checkbox" value="V">
+          <input id="org-type-checkbox-V" name="{{ organization_type }}"  type="checkbox" value="V">
           <label class="dropdown__value" for="org-type-checkbox-V">Cooperative</label>
         </li>
         <li class="dropdown__item">
-          <input id="org-type-checkbox-W" name={{ organization_type }} type="checkbox" value="W">
+          <input id="org-type-checkbox-W" name="{{ organization_type }}"  type="checkbox" value="W">
           <label class="dropdown__value" for="org-type-checkbox-W">Corporation without capital stock</label>
         </li>
       </ul>
@@ -198,7 +220,7 @@
 
 {% if display_alt_other_committees_filter %}
 <div class="filter">
-  <fieldset class="js-dropdown js-filter" data-filter="checkbox" data-name="designation">
+  <fieldset class="js-dropdown js-filter" data-filter="checkbox" data-name="alt_other_committees">
     <legend class="label" for="committee_type">Other committees</legend>
     <ul class="dropdown__selected">
       <li>
@@ -222,7 +244,7 @@
 
 {% if display_default_other_committees_filter %}
 <div class="filter">
-  <fieldset class="js-dropdown js-filter" data-filter="checkbox" data-name="designation">
+  <fieldset class="js-dropdown js-filter" data-filter="checkbox" data-name="other_committees">
     <legend class="label" for="committee_type">Other committees and filers</legend>
     <ul class="dropdown__selected">
       <li>
