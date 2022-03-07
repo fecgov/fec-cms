@@ -13,7 +13,7 @@
   display_alt_ie_committees_filter=False)
 %}
 
-{# On this filter, the  differring `name` attriutes inside of fieldsets would confuse the filterSet logic that expects all the `name `attributes of children of a fieldset to match its `data-name`. The two comments below explain how we solve this  #}
+{# On this filter, the  differring `name` attriutes inside of fieldsets would confuse the filterSet.js logic that expects all the `name `attributes of children of a fieldset to match its `data-name`. The two comments below explain how we solve this  #}
 
 {# Start with three empty hidden fieldsets with `data-name` of the three needed variables to satisfy filterSet logic. #}
 <div class="filter u-visually-hidden">
@@ -31,7 +31,7 @@
   </fieldset>
 </div>
 
-{# Give the rest of the fieldsets a unique descriptive `data-name` for grouping purpooses but not a `data-name` that resolves to a variable to avoid confusing the filterSet logic. The JS function, checkFromQuery, will handle finding and checking any checkbox filters in a querystring passed on-load.  
+{# Give the rest of the fieldsets a unique descriptive `data-name` for grouping purpooses but not a `data-name` that resolves to a variable to avoid confusing the filterSet.js logic. The JS function, checkFromQuery(), will handle finding and checking any checkbox filters in a querystring passed on-load. #} 
 
 {% if display_authorized_committee_filter %}
 <div class="filter">
