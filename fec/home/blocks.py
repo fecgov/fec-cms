@@ -241,8 +241,11 @@ class ResourceBlock(blocks.StructBlock):
         ('html', blocks.RawHTMLBlock()),
         ('reporting_example_cards', ReportingExampleCards()),
         ('contribution_limits_table', SnippetChooserBlock(
-            'home.EmbedTableSnippet',
+            'home.EmbedSnippet',
             template='blocks/embed-table.html', icon='table')),
+        ('informational_message', SnippetChooserBlock(
+            'home.EmbedSnippet',
+            template='blocks/embed-info-message.html', icon='warning')),
         ('image', ImageChooserBlock()),
         ('example_image', ExampleImage()),
         ('example_paragraph', ExampleParagraph()),
