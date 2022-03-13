@@ -18,7 +18,6 @@
 
   <!-- TODO : The design mockup does not have this `h2#section-1-heading`, but it matches the tablist title pattern used for other pages and removing it breaks alignment. If we do keep it, the h2's below should probably become h3's.  However they look like h2's on mockup  -->
   <h2 id="section-1-heading">{{ office | title }} election data</h2>
-
   <div class="slab slab--inline slab--neutral u-padding--left u-padding--right">
   <!-- TODO: For narrower rows, add class: "entity__figure--narrow" -->
     <div id="election-summary" class="entity__figure row"> 
@@ -56,6 +55,52 @@
         
         <!-- TODO: We might not use these macros at all for the selects, but here if they help -->
         {{ select.cycle_range_select(cycles, cycle=cycle, id='')}}
+      <section>
+         <aside>
+
+    <div class="main-content-wrapper">
+
+      <div class="visual-divider" role="presentation"></div>
+      <div class="parties-wrapper">
+        <div class="simple-table--responsive js-parties-holder" role="grid">
+          <div class="simple-table__row" role="row">
+            <div role="cell" class="simple-table__cell js-total-period"></div>
+            <div role="cell" class="simple-table__cell js-total-value t-mono-stacked-currency">$538,905,912</div>
+            <div role="cell" class="simple-table__cell">
+              <meter min="0" max="" value="" title="US Dollars"></meter>
+              <!-- DO WE NEED THIS FOR IE?
+              <div class="bar-container">
+                <div class="value-bar" data-value="64701975.35" data-party="REP" style="width: 100%;"></div>
+              </div> //-->
+            </div>
+          </div>
+          <div class="simple-table__row" role="row">
+            <div role="cell" class="simple-table__cell js-total-period"></div>
+            <div role="cell" class="simple-table__cell js-total-value  t-mono-stacked-currency">$377,879,927</div>
+            <div role="cell" class="simple-table__cell">
+              <meter min="0" max="" value="" title="US Dollars"></meter>
+              <!-- DO WE NEED THIS FOR IE?
+              <div class="bar-container">
+                <div class="value-bar" data-value="64701975.35" data-party="DEM" style="width: 90%;"></div>
+              </div> //-->
+            </div>
+          </div>
+          <div class="simple-table__row" role="row">
+            <div role="cell" class="simple-table__cell js-total-period"></div>
+            <div role="cell" class="simple-table__cell js-total-value  t-mono-stacked-currency">$8,036,472</div>
+            <div role="cell" class="simple-table__cell">
+              <meter min="0" max="" value="" title="US Dollars"></meter>
+              <!-- DO WE NEED THIS FOR IE?
+              <div class="bar-container">
+                <div class="value-bar" data-value="64701975.35" data-party="Other" style="width: 20%;"></div>
+              </div> //-->
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </aside>
+     </section>
 
       <div class="content__section--ruled-responsive t-serif">
           <div class="heading--with-action t-small u-negative--top--margin t-serif"><i class="data-disclaimer">Some kind of disclaimer text that clarifies something high-level that users need to know right away to put the data in context.</i>

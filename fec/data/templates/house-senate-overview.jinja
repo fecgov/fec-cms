@@ -36,21 +36,22 @@
 {% endblock %}
 {% block scripts %}
 <script>
-var context = {
-  election: {
-    cycle: '{{ cycle }}',
-    election_full: true,
-    duration: '{{ election_duration }}',
-    office: '{{ office }}',
-    state: '{{ state or '' }}',
-    stateFull: '{{ state_full or '' }}',
-    district: '{{ district or '' }}'
-  }
-};
+var context = {{ context_vars | to_json | safe }};
+
+// var context = {
+//   election: {
+//     cycle: '{{ cycle }}',
+//     election_full: true,
+//     duration: '{{ election_duration }}',
+//     office: '{{ office }}',
+//     state: '{{ state or '' }}',
+//     stateFull: '{{ state_full or '' }}',
+//     district: '{{ district or '' }}'
+//   }
+//};
 
 </script>
 <script src="{{ asset_for_js('dataviz-common.js') }}"></script>
-<script src="{{ asset_for_js('elections.js') }}"></script>
-<script src="{{ asset_for_js('committee-single.js') }}"></script>
+<script src="{{ asset_for_js('contributions_across_time.js') }}"></script>
 {% endblock %}
 

@@ -878,15 +878,34 @@ def house_senate_overview(request, office, cycle=None):
             reverse("elections-president", args=(cycle, ))
         )
 
+    office_codes = {
+      "senate": 'S',
+      "house": 'H'
+    }
+
+    office_code = office_codes[office]
+
+    # For JavaScript
+    context_vars = {
+        "office" : office,
+        "office_code": office_code,
+        # "cycles": candidate["fec_cycles_in_election"],
+        # "name": candidate["name"],
+        # "cycle": cycle,
+        # "electionFull": election_full,
+        # "candidateID": candidate["candidate_id"],
+    }
+
     return render(
         request,
         "house-senate-overview.jinja",
         {
             "office": office,
-            "office_code": office[0],
+            "office_code": office_code,
             "parent": "data",
             "cycle": cycle,
             "cycles": cycles,
+            "context_vars": context_vars,
             # "state": state,
             # "state_full": constants.states[state.upper()] if state else None,
             "social_image_identifier": "data",
