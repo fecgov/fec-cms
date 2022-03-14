@@ -516,7 +516,7 @@ DataTable.prototype.getVars = function () {
   return initialParams.toString();
 };
 
-// Parse a querystring's parameters and return an object
+// Parse querystring's parameters and return an object
 DataTable.prototype.parseParams = function(querystring){
     // Parse query string
     const params = new URLSearchParams(querystring);
@@ -561,11 +561,12 @@ DataTable.prototype.checkFromQuery = function(){
          }
       });
 
-    // Put 0-secopnd, set-timeout on receipts/disbursements datatales so checkoxes are availale to check...
-    // ...after the two folter panels are loaded
+    // Put 0-second, set-timeout on receipts/disbursements datatables so checkoxes are availale to check...
+    // ...after the two filter panels are loaded
     if ('data_type' in queryFields){
     setTimeout(function() {
-      // Iterate the array of matching checkboxes(queryBoxes), check them and fire change()
+      // Iterate the array of matching checkboxes(queryBoxes), check them and fire change()...
+      // ...if they are not already checked
       for (let box of queryBoxes) {
         if (!($(box).is(':checked'))) {
               $(box).prop('checked', true).change();
@@ -573,10 +574,11 @@ DataTable.prototype.checkFromQuery = function(){
        }
       }, 0);
 
-     // No Set-timrouot needed on pages without two filter panels...
-     // ... Also it causes a noticeable intermittent lag in populating table on these pages
+     // No Set-timeout needed on datatables without two filter panels...
+     // ... Also it causes a noticeable intermittent time-lag while populating table on these pages
      } else {
-      // Iterate the array of matching checkboxes(queryBoxes), check them and fire change()
+      // Iterate the array of matching checkboxes(queryBoxes), check them and fire change()...
+      // ...if they are not already checked
       for (let box of queryBoxes) {
         if (!($(box).is(':checked'))) {
               $(box).prop('checked', true).change();
