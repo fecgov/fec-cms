@@ -320,12 +320,16 @@ AcrossTime.prototype.init = function() {
 
 AcrossTime.prototype.handleYearChange = function(e) {
 
+     e.preventDefault();
+     this.baseQuery.min_election_cycle = e.target.value; // Save the updated value
+     console.log('e.target.value', e.target.value)
 
-     this.baseQuery.min_election_year = this.minYearControl.value;
-     this.baseQuery.max_election_year = this.maxYearControl.value;
+
+     //this.baseQuery.min_election_year = this.minYearControl.value;
+     this.baseQuery.max_election_cycle = this.maxYearControl.value;
 
 
-     this.baseQuery.office = office
+     this.baseQuery.office = context.office_code
 
      this.loadData(this.baseQuery)
 
@@ -383,6 +387,7 @@ AcrossTime.prototype.handleYearChange = function(e) {
  */
 AcrossTime.prototype.loadData = function(query) {
   let instance = this;
+  console.log('LOAD DATA')
 
   window
     .fetch(buildUrl(this.basePath_officeTotal, query), {
