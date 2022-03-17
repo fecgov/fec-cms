@@ -46,7 +46,7 @@
     "glossary-panel": "1.0.0",
     "jquery": "^3.5.1",
     "jquery.inputmask": "^3.3.4",
-    "leaflet-providers": "1.8.0 ",
+    "leaflet-providers": "1.13.0",
     "lodash": "^4.17.21",
     "minimatch": "^3.0.4",
     "moment": "2.20.1",
