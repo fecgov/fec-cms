@@ -11,6 +11,42 @@
 .range__select .cycle-select select {
     width: auto;
 }
+
+#contributions-over-time h3 {
+ display: inline;
+ margin-right: 5px;
+}
+
+#contributions-over-time span.js-direction {
+  font-style: italic
+
+}
+
+/* TODO: DONT USE JS- PREFIXED CLASSES IN CSS */
+.js-across-time {
+  margin: 5px 0  15px 0;
+}
+
+.simple-table--responsive {
+  display: flex;
+
+}
+
+.simple-table--responsive .simple-table__cell {
+    display: inline;
+    margin-right: 25px;
+    vertical-align: baseline;
+    height: 4rem;
+}
+
+meter {
+    height: 4rem;
+    vertical-align: middle;
+    width: 200px;
+    /* border-radius: 0px; */
+}
+
+
 </style>
 
 
@@ -54,50 +90,90 @@
       <p class="t-sans t-bold t-low-height">Comparing current candidate <span class="term" data-term="contribution" title="Click to define" tabindex="0">contributions</span> to contributions received in previous two-year periods. </p>
         
         <!-- TODO: We might not use these macros at all for the selects, but here if they help -->
-        {{ select.cycle_range_select(cycles, cycle=cycle, id='')}}
+        <!--{{ select.cycle_range_select(cycles, cycle=cycle, id='')}} -->
+        <fieldset id="two-year-period-date-range" name="two-year-period-date-range">
+    <div class="range range--date js-date-range">
+      <div class="range__select range__select--min" data-filter="range">
+        <div class="cycle-select">
+          <label for="-cycle">Beginning</label>
+          <select id="-cycle" class="js-min-period-select" name="cycle" data-cycle-location="query" data-period="min">     
+            
+              <option value="2022" selected="">2021–2022</option>
+            
+              <option value="2020">2019–2020</option>
+            
+              <option value="2018">2017–2018</option>
+            
+              <option value="2016">2015–2016</option>
+            
+              <option value="2014">2013–2014</option>
+            
+              <option value="2012">2011–2012</option>
+
+              <option value="2010">2009–2010</option>
+            
+              <option value="2008">2007–2008</option>
+            
+              <option value="2006">2005–2006</option>
+              
+          </select>
+
+        </div>
+      </div>
+      <div class="range__hyphen">-</div>
+      <div class="range__select range__select--max" data-filter="range">
+        <div class="cycle-select">
+          <label for="-cycle">Ending</label>
+          <select id="-cycle" class="js-max-period-select" name="cycle" data-cycle-location="query" data-period="max">
+                   
+              <option value="2022" selected="">2021–2022</option>
+            
+              <option value="2020">2019–2020</option>
+            
+              <option value="2018">2017–2018</option>
+            
+              <option value="2016">2015–2016</option>
+            
+              <option value="2014">2013–2014</option>
+            
+              <option value="2012">2011–2012</option>
+              
+              <option value="2010">2009–2010</option>
+            
+              <option value="2008">2007–2008</option>
+            
+              <option value="2006">2005–2006</option>
+
+          </select>
+        </div>
+      </div>
+    </div>
+  </fieldset>
       <section>
          <aside>
 
     <div class="main-content-wrapper">
 
       <div class="visual-divider" role="presentation"></div>
-      <div class="parties-wrapper">
-        <div class="simple-table--responsive js-parties-holder" role="grid">
-          <div class="simple-table__row" role="row">
-            <div role="cell" class="simple-table__cell js-total-period"></div>
-            <div role="cell" class="simple-table__cell js-total-value t-mono-stacked-currency">$538,905,912</div>
-            <div role="cell" class="simple-table__cell">
-              <meter min="0" max="" value="" title="US Dollars"></meter>
-              <!-- DO WE NEED THIS FOR IE?
-              <div class="bar-container">
-                <div class="value-bar" data-value="64701975.35" data-party="REP" style="width: 100%;"></div>
-              </div> //-->
-            </div>
-          </div>
-          <div class="simple-table__row" role="row">
-            <div role="cell" class="simple-table__cell js-total-period"></div>
-            <div role="cell" class="simple-table__cell js-total-value  t-mono-stacked-currency">$377,879,927</div>
-            <div role="cell" class="simple-table__cell">
-              <meter min="0" max="" value="" title="US Dollars"></meter>
-              <!-- DO WE NEED THIS FOR IE?
-              <div class="bar-container">
-                <div class="value-bar" data-value="64701975.35" data-party="DEM" style="width: 90%;"></div>
-              </div> //-->
-            </div>
-          </div>
-          <div class="simple-table__row" role="row">
-            <div role="cell" class="simple-table__cell js-total-period"></div>
-            <div role="cell" class="simple-table__cell js-total-value  t-mono-stacked-currency">$8,036,472</div>
-            <div role="cell" class="simple-table__cell">
-              <meter min="0" max="" value="" title="US Dollars"></meter>
-              <!-- DO WE NEED THIS FOR IE?
-              <div class="bar-container">
-                <div class="value-bar" data-value="64701975.35" data-party="Other" style="width: 20%;"></div>
-              </div> //-->
-            </div>
-          </div>
-        </div>
+
+      <h3>Individual contributions</h3><span class="js-direction"></span>
+      <div class="js-across-time" data-total-type="total_individual_itemized_contributions">
+        
       </div>
+
+      <h3 class="u-padding--top">Transfers from other authorized committees</h3><span class="js-direction"></span>
+      <div class="js-across-time" data-total-type="total_transfers_from_other_authorized_committee"/>
+      
+
+      </div>
+      
+      <h3 class="u-padding--top">Other committee contributions</h3><span class="js-direction"></span>
+      <div class="js-across-time" data-total-type="total_other_political_committee_contributions"/>
+       
+
+      </div>
+
+
     </div>
   </aside>
      </section>

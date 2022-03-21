@@ -108,7 +108,8 @@
       <div class="range__select range__select--min" data-filter="range">
         <div class="cycle-select">
           <label for="{{id}}-cycle">Beginning</label>
-          <select id="{{id}}-cycle" class="js-min-period-select" name="cycle" data-cycle-location="query">
+          <select id="{{id}}-cycle" class="js-min-period-select" name="cycle" data-cycle-location="query" data-period=
+          "min">
             {% for each in cycles | sort(reverse=True) %}
               <option
                   value="{{ each }}"
@@ -122,7 +123,8 @@
       <div class="range__select range__select--max" data-filter="range">
         <div class="cycle-select">
           <label for="{{id}}-cycle">Ending</label>
-          <select id="{{id}}-cycle" class="js-max-period-select" name="cycle" data-cycle-location="query">
+          <select id="{{id}}-cycle" class="js-max-period-select" name="cycle" data-cycle-location="query" data-period=
+          "max">
             {% for each in cycles | sort(reverse=True) %}
               <option
                   value="{{ each }}"

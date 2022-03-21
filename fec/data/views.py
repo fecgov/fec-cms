@@ -879,15 +879,15 @@ def house_senate_overview(request, office, cycle=None):
         )
 
     office_codes = {
-      "senate": 'S',
-      "house": 'H'
+        "senate": 'S',
+        "house": 'H'
     }
 
     office_code = office_codes[office]
 
     # For JavaScript
     context_vars = {
-        "office" : office,
+        "office": office,
         "office_code": office_code,
         # "cycles": candidate["fec_cycles_in_election"],
         # "name": candidate["name"],
