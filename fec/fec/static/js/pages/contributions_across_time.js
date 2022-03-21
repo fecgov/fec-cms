@@ -1,10 +1,6 @@
 'use strict';
 
-// TODO - add a loading animation of some kind? Something to tell users that it's official but still loading?
-// TODO - When adding the small implementations (i.e., with no controls), reference #2803 for designs
-
 // Editable vars
-// const stylesheetPath = '/static/css/widgets/aggregate-totals.css';
 // // const breakpointToXS = 0; // retaining just in case
 // const breakpointToSmall = 430;
 // const breakpointToMedium = 675;
@@ -68,9 +64,9 @@ AcrossTime.prototype.displayUpdatedData = function(queryResponse) {
   let directionSpans = this.element.querySelectorAll('.js-direction');
 
   const lineNumbers = {
-    'total_individual_itemized_contributions': 'F3-11AI',
-    'total_transfers_from_other': 'F3-12',
-    'total_other_political_committee_contributions': 'F3-11C'
+    total_individual_itemized_contributions: 'F3-11AI',
+    total_transfers_from_other: 'F3-12',
+    total_other_political_committee_contributions: 'F3-11C'
     };
 
   dataSections.forEach(function(dataSection) {
@@ -296,7 +292,6 @@ function buildQueryString (data) {
 //     this.element.classList.add('w-xl');
 //   }
 // };
-
 
 // /**
 //  * Starts the timers to update the displayed value from one to the next (not part of the initial display)
