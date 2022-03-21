@@ -64,10 +64,12 @@ AcrossTime.prototype.displayUpdatedData = function(queryResponse) {
   let directionSpans = this.element.querySelectorAll('.js-direction');
 
   const lineNumbers = {
-    total_individual_itemized_contributions: 'F3-11AI',
-    total_transfers_from_other: 'F3-12',
-    total_other_political_committee_contributions: 'F3-11C'
+    'total_individual_itemized_contributions': 'F3-11AI',
+    'total_transfers_from_other': 'F3-12',
+    'total_other_political_committee_contributions': 'F3-11C'
     };
+
+    theResults = instance.futurePast == 'forward' ? theResults.reverse() : theResults;
 
   dataSections.forEach(function(dataSection) {
      dataSection.innerHTML = '';
@@ -92,7 +94,7 @@ AcrossTime.prototype.displayUpdatedData = function(queryResponse) {
 
     let maxValue = theResultsSort()[0][dataTotalType];
 
-    theResults = instance.futurePast == 'forward' ? theResults.reverse() : theResults;
+    //theResults = instance.futurePast == 'forward' ? theResults.reverse() : theResults;
 
     //TODO: PROBABLY DON'T NEED futurePast AND forwardBack, CAN HAVE  JUST ONE AND USE THE TEXT VALUE
     //let forwardBack = '(Going ' + (self.futurePast == 'future' ? 'forward' : 'back') + ' in time)';
@@ -164,20 +166,20 @@ AcrossTime.prototype.init = function() {
   this.minYearControl = this.element.querySelector('.js-min-period-select');
 
   console.log('instance.baseQuery.min_election_cycle:', instance.baseQuery.min_election_cycle);
-  const options = Array.from(this.minYearControl.options);
-  options.forEach((option) => {
-     if (option.value == instance.baseQuery.min_election_cycle) {
-      //instance.minYearControl.selectedIndex = i;
-      option.selected = 'selected';
-     }
-    });
+  // const options = Array.from(this.minYearControl.options);
+  // options.forEach((option) => {
+  //    if (option.value == instance.baseQuery.min_election_cycle) {
+  //     //instance.minYearControl.selectedIndex = i;
+  //     option.selected = 'selected';
+  //    }
+  //   });
 
   this.maxYearControl = this.element.querySelector('.js-max-period-select');
 
   this.minYearControl.addEventListener('change', this.handleYearChange.bind(this));
   this.maxYearControl.addEventListener('change', this.handleYearChange.bind(this));
 
-  this.futurePast = 'forward';
+  this.futurePast = 'back';
 
   this.loadData(this.baseQuery);
 
