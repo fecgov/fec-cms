@@ -64,9 +64,9 @@ AcrossTime.prototype.displayUpdatedData = function(queryResponse) {
   let directionSpans = this.element.querySelectorAll('.js-direction');
 
   const lineNumbers = {
-    'total_individual_itemized_contributions': 'F3-11AI',
-    'total_transfers_from_other': 'F3-12',
-    'total_other_political_committee_contributions': 'F3-11C'
+    total_individual_itemized_contributions: 'F3-11AI',
+    total_transfers_from_other: 'F3-12',
+    total_other_political_committee_contributions: 'F3-11C'
     };
 
     theResults = instance.futurePast == 'forward' ? theResults.reverse() : theResults;
