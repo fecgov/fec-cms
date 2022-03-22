@@ -16,6 +16,7 @@ import { currency } from '../modules/helpers';
 
 function AcrossTime() {
   this.element; // The HTML element of this feature
+  this.dataSections;
   this.minYearControl; // The HTML element to change beginning year
   this.maxYearControl; // The HTML element to change ending year
   this.futurePast;
@@ -60,39 +61,75 @@ AcrossTime.prototype.displayUpdatedData = function(queryResponse) {
 
   let theResults = queryResponse.results;
 
-  let dataSections = this.element.querySelectorAll('.js-across-time');
+  //make a copy of results array so we are not sorting in-place
+  //let theResultsTemp = Array.from(theResults);
+
+  let largestValuesArray = [];
+
+  //MOVE TO OWN SEPARATE FUMCTION???
+    //sort to get the  max value
+  this.dataSections.forEach(function(dataSection) {
+   //make a copy of results array so we are not sorting in-place
+  let theResultsTemp = Array.from(theResults);
+  let dataType = dataSection.dataset.totalType;
+
+    theResultsTemp.sort((obj1, obj2) => {
+      // We want the larger values first
+      if (obj1[dataType] < obj2[dataType]) return 1;
+      else if (obj1[dataType] > obj2[dataType]) return -1;
+      else return 0;
+    });
+    largestValuesArray.push(theResultsTemp[0][dataType]);
+
+   });
+
+  const theResultsSort = function() {
+
+    largestValuesArray.sort((obj1, obj2) => {
+      // We want the larger values first
+      if (obj1 < obj2) return 1;
+      else if (obj1 > obj2) return -1;
+      else return 0;
+    });
+         return largestValuesArray;
+     };
+
+    let maxValue = theResultsSort()[0];
+    console.log('maxValue: ', maxValue);
+
+  //let dataSections = this.element.querySelectorAll('.js-across-time');
   let directionSpans = this.element.querySelectorAll('.js-direction');
 
   const lineNumbers = {
     total_individual_itemized_contributions: 'F3-11AI',
-    total_transfers_from_other: 'F3-12',
+    total_transfers_from_other_: 'F3-12',
     total_other_political_committee_contributions: 'F3-11C'
     };
 
     theResults = instance.futurePast == 'forward' ? theResults.reverse() : theResults;
 
-  dataSections.forEach(function(dataSection) {
+  this.dataSections.forEach(function(dataSection) {
      dataSection.innerHTML = '';
 
     console.log('dataSection', dataSection);
     let dataTotalType = dataSection.dataset.totalType;
     console.log('dataTotalType', dataTotalType);
 
-    //make a copy of results array so we are not sorting in-place
-    let theResultsTemp = Array.from(theResults);
+    // //make a copy of results array so we are not sorting in-place
+    // let theResultsTemp = Array.from(theResults);
 
-    //sort to get the  max value
-    const theResultsSort = function() {
-    theResultsTemp.sort((obj1, obj2) => {
-      // We want the larger values first
-      if (obj1[dataTotalType] < obj2[dataTotalType]) return 1;
-      else if (obj1[dataTotalType] > obj2[dataTotalType]) return -1;
-      else return 0;
-    });
-    return theResultsTemp;
-    };
+    // //sort to get the  max value
+    // const theResultsSort = function() {
+    // theResultsTemp.sort((obj1, obj2) => {
+    //   // We want the larger values first
+    //   if (obj1[dataTotalType] < obj2[dataTotalType]) return 1;
+    //   else if (obj1[dataTotalType] > obj2[dataTotalType]) return -1;
+    //   else return 0;
+    // });
+    // return theResultsTemp;
+    // };
 
-    let maxValue = theResultsSort()[0][dataTotalType];
+    // let maxValue = theResultsSort()[0][dataTotalType];
 
     //theResults = instance.futurePast == 'forward' ? theResults.reverse() : theResults;
 
@@ -124,19 +161,23 @@ AcrossTime.prototype.displayUpdatedData = function(queryResponse) {
 //EXAMPLE QUERYSTRING: ?recipient_committee_type=S&two_year_transaction_period=2022&line_number=F3-11AI&line_number=F3-12&line_number=F3-11C
 
 ////NEW
+
+let sub = 'au';
+let subConcnat = `${sub}thorized_committee`;
+let splitString= dataTotalType.toString().split(subConcnat).join('');
+
+let line = dataTotalType.indexOf('transfers') !== -1 ? splitString : dataTotalType;
+
 let searchFilters = {
   two_year_transaction_period: electionYear,
   recipient_committee_type: context.office_code,
-  line_number: lineNumbers[dataTotalType]
+  line_number: lineNumbers[line]
 };
 
 let totalUrl = buildAppUrl(['receipts'])
     + `?${buildQueryString(searchFilters)}`;
 
 console.log('totalUrl: ', totalUrl);
-
-let dataTotalTypeString = dataTotalType.toString();
-console.log('dataTotalTypeString: ', dataTotalTypeString);
 
       let theInnerHTML =
           `<div class="simple-table__row" role="row">
@@ -163,6 +204,7 @@ AcrossTime.prototype.init = function() {
   // Save self
   let instance = this;
   this.element = document.getElementById('contributions-over-time');
+  this.dataSections = this.element.querySelectorAll('.js-across-time');
   this.minYearControl = this.element.querySelector('.js-min-period-select');
 
   console.log('instance.baseQuery.min_election_cycle:', instance.baseQuery.min_election_cycle);
