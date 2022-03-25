@@ -6,6 +6,8 @@ var URI = require('urijs');
 
 const loadRecaptcha = require('../modules/load-recaptcha').loadRecaptcha;
 
+import customEvent from '../modules/analytics';
+
 /* ServiceNow contact form */
 function ContactForm($elm) {
   this.$elm = $elm;
@@ -312,6 +314,12 @@ RadFormValidate.prototype.clearError = function(req) {
 //...recaptcha gets validated server-side
 RadFormValidate.prototype.validateRecaptcha = function() {
   if (grecaptcha.getResponse() == '') {
+    customEvent({
+      event: 'fecCustomEvent',
+      eventCategory: 'Error',
+      eventAction: 'RAD form validation',
+      eventLabel: 'recaptcha'
+    });
     return false;
   } else {
     return true;
@@ -348,6 +356,12 @@ RadFormValidate.prototype.showError = function(req) {
     }
     req_fieldError.textContent = '';
   }
+  customEvent({
+    event: 'fecCustomEvent',
+    eventCategory: 'Error',
+    eventAction: 'RAD form validation',
+    eventLabel: req.id
+  });
 };
 
 new ContactForm($('.js-contact-form'));
