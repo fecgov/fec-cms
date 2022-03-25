@@ -227,7 +227,7 @@ RadFormValidate.prototype.handleSubmit = function(event) {
       const req_field_id = req_field.getAttribute('id');
       const box_msg = self.box_messages[req_field_id];
 
-      let errored_list_item = `<li>${box_msg}</li>`;
+      const errored_list_item = `<li>${box_msg}</li>`;
 
       errored_list.push(errored_list_item);
     }
