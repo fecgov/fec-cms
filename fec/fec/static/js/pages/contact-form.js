@@ -241,14 +241,15 @@ RadFormValidate.prototype.handleSubmit = function(event) {
     recaptcha_msg = `<p>Also, reCAPTCHA thinks you’re a robot: Please try again.</p>`;
   }
 
-  const error_msg = `<div class="message message--error error_box js-error-box">
+  const error_msg = `
+              <div class="message message--error error_box js-error-box">
                 <h2 class="message__title">Error</h2>
                 <p>Oops, you’re missing some information. We’ve highlighted the areas you need to fix:</p>
-                   <ul>
-                     ${errored_list.join('')}
-                   </ul>
+                  <ul>
+                    ${errored_list.join('')}
+                  </ul>
                   ${recaptcha_msg}
-               </div>`;
+              </div>`;
 
   const error_message_box = document.querySelector('.js-error-box');
   if (error_message_box) {
