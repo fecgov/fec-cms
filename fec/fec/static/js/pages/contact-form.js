@@ -6,7 +6,7 @@ var URI = require('urijs');
 
 const loadRecaptcha = require('../modules/load-recaptcha').loadRecaptcha;
 
-import customEvent from '../modules/analytics';
+const analytics = require('../modules/analytics');
 
 /* ServiceNow contact form */
 function ContactForm($elm) {
@@ -314,7 +314,7 @@ RadFormValidate.prototype.clearError = function(req) {
 //...recaptcha gets validated server-side
 RadFormValidate.prototype.validateRecaptcha = function() {
   if (grecaptcha.getResponse() == '') {
-    customEvent({
+    analytics.customEvent({
       event: 'fecCustomEvent',
       eventCategory: 'Error',
       eventAction: 'RAD form validation',
@@ -356,7 +356,7 @@ RadFormValidate.prototype.showError = function(req) {
     }
     req_fieldError.textContent = '';
   }
-  customEvent({
+  analytics.customEvent({
     event: 'fecCustomEvent',
     eventCategory: 'Error',
     eventAction: 'RAD form validation',
