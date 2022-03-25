@@ -169,7 +169,7 @@ function RadFormValidate(radformSelector) {
     this.id_committee_name = radform.querySelector('#id_committee_name');
     this.id_committee_name.setAttribute('autocomplete', 'off');
 
-    let self = this;
+    const self = this;
 
     //Iterate the required fields to add error span and event listeners
     this.req_fields.forEach(function(req_field) {
@@ -218,14 +218,14 @@ function RadFormValidate(radformSelector) {
 
 RadFormValidate.prototype.handleSubmit = function(event) {
   this.validateCommitteeId();
-  let self = this;
+  const self = this;
   //iterate invalid required fields to scroll to first invalid field
   let errored_list = [];
-  for (let req_field of this.req_fields) {
+  for (const req_field of this.req_fields) {
     if (!req_field.validity.valid) {
       event.preventDefault();
-      let req_field_id = req_field.getAttribute('id');
-      let box_msg = self.box_messages[req_field_id];
+      const req_field_id = req_field.getAttribute('id');
+      const box_msg = self.box_messages[req_field_id];
 
       let errored_list_item = `<li>${box_msg}</li>`;
 
@@ -236,7 +236,7 @@ RadFormValidate.prototype.handleSubmit = function(event) {
 
   //only shows recaptcha error if submit is prevented due to invalid fields, otherwise...
   //...recaptcha gets. validated server-side
-  var recaptcha_msg = '';
+  let recaptcha_msg = '';
   if (!this.validateRecaptcha()) {
     recaptcha_msg = `<p>Also, reCAPTCHA thinks you’re a robot: Please try again.</p>`;
   }
@@ -270,7 +270,7 @@ RadFormValidate.prototype.validateEmail = function() {
   const email_value = this.id_u_contact_email.value;
   //email validation regex, email is also validated server-side by Django
   const re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-  let self = this;
+  const self = this;
   if (re.test(email_value)) {
     //setCustomValidity allows us to overrride this req_field's WC3 default email validation which...
     ///... contradicts Dango's server side validation and seems to confuse everyone.
@@ -287,7 +287,7 @@ RadFormValidate.prototype.validateEmail = function() {
 
 //validation specific to committee name and ID field
 RadFormValidate.prototype.validateCommitteeId = function() {
-  let self = this;
+  const self = this;
   if (!this.id_u_committee.value) {
     self.id_committee_name.value = '';
     //need a set timeout to wait for typeahead to finish whatever it is doing on the field
