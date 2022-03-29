@@ -174,8 +174,8 @@ function modalRenderFactory(template, fetch) {
             $row.toggleClass('row-active', true);
             $('body').toggleClass('panel-active', true);
             accessibility.restoreTabindex($modal);
-            var hideColumns = api.columns('.hide-panel');
-            hideColumns.visible(false);
+            // var hideColumns = api.columns('.hide-panel');
+            // hideColumns.visible(false);
 
             // Populate the pdf button if there is one
             if (fetched.pdf_url) {
@@ -189,9 +189,9 @@ function modalRenderFactory(template, fetch) {
 
             // When under $large-screen
             // TODO figure way to share these values with CSS.
-            if ($(document).width() < 980) {
-              api.columns('.hide-panel-tablet').visible(false);
-            }
+            // if ($(document).width() < 980) {
+            //   api.columns('.hide-panel-tablet').visible(false);
+            // }
           });
         }
       }
@@ -215,14 +215,14 @@ function hidePanel(api, $modal) {
   $('body').toggleClass('panel-active', false);
   $modal.attr('aria-hidden', 'true');
 
-  if ($(document).width() > 640) {
-    api.columns('.hide-panel-tablet').visible(true);
-    api.columns('.hide-panel.min-tablet').visible(true);
-  }
+  // if ($(document).width() > 640) {
+  //   api.columns('.hide-panel-tablet').visible(true);
+  //   api.columns('.hide-panel.min-tablet').visible(true);
+  // }
 
-  if ($(document).width() > 980) {
-    api.columns('.hide-panel').visible(true);
-  }
+  // if ($(document).width() > 980) {
+  //   api.columns('.hide-panel').visible(true);
+  // }
 
   accessibility.removeTabindex($modal);
 }
