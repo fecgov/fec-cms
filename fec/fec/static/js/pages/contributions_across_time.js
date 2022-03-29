@@ -26,7 +26,7 @@ function AcrossTime() {
     office: context.office_code,
     //election_year: window.DEFAULT_ELECTION_YEAR,
     //The min/max vals shouold probably be strings
-    min_election_cycle: 2018,  
+    min_election_cycle: 2018,
     max_election_cycle: 2022, //window.DEFAULT_ELECTION_YEAR (?)
     is_active_candidate: true,
     per_page: 20,
@@ -35,12 +35,12 @@ function AcrossTime() {
     sort_nulls_last: false,
     page: 1
   }; // Vars for data load
-  this.animVars = {
-    valueTotal: 0, // This instance's current value, only used for animation
-    valueTemp: 0,
-    stepCount: 0,
-    interval: null
-  };
+  // this.animVars = {
+  //   valueTotal: 0, // This instance's current value, only used for animation
+  //   valueTemp: 0,
+  //   stepCount: 0,
+  //   interval: null
+  // };
 
   this.init();
 }
@@ -83,14 +83,13 @@ AcrossTime.prototype.displayUpdatedData = function(queryResponse) {
     largestValuesArray.push(theResultsTemp[0][dataType]);
 
    });
-  
 
     //sort largestValuesArray, descending, in-place
     largestValuesArray.sort(function(a, b) {
       return b - a;
     });
 
-    let maxValue =  largestValuesArray[0]
+    let maxValue = largestValuesArray[0];
     //let maxValue = theResultsSort()[0];
     console.log('maxValue: ', maxValue);
 
@@ -105,8 +104,8 @@ AcrossTime.prototype.displayUpdatedData = function(queryResponse) {
 
     theResults = instance.futurePast == 'forward' ? theResults.reverse() : theResults;
 
-  let  adjustedTotalArray = []
-  let meterElements = []
+  let adjustedTotalArray = [];
+  let meterElements = [];
 
   this.dataSections.forEach(function(dataSection) {
     dataSection.innerHTML = '';
@@ -140,7 +139,6 @@ AcrossTime.prototype.displayUpdatedData = function(queryResponse) {
     for (let directionSpan of directionSpans) {
       directionSpan.textContent = forwardBack;
     }
-    
 
    for (let i = 0; i < theResults.length; i++) {
 
@@ -179,7 +177,6 @@ AcrossTime.prototype.displayUpdatedData = function(queryResponse) {
       let totalUrl = buildAppUrl(['receipts'])
       + `?${buildQueryString(searchFilters)}`;
 
-
   console.log('totalUrl: ', totalUrl);
 
       let theInnerHTML =
@@ -205,25 +202,21 @@ AcrossTime.prototype.displayUpdatedData = function(queryResponse) {
 
     //dataSection.appendChild(theMeter);
 
-    adjustedTotalArray.push(adjustedTotal)
+    adjustedTotalArray.push(adjustedTotal);
 
-    let meterElement = periodWrapper.getElementsByTagName('meter')//querySelectorAll('meter')
-    console.log('meterElement: ', meterElement)
-    meterElements.push(meterElement)
-    
+    let meterElement = periodWrapper.getElementsByTagName('meter');//querySelectorAll('meter')
+    console.log('meterElement: ', meterElement);
+    meterElements.push(meterElement);
 
     }
 
-
   });
-  
-  console.log('METERELEMENTS:', meterElements)
-  console.log('adjustedTotalArray', adjustedTotalArray)
 
-  
-  
+  console.log('METERELEMENTS:', meterElements);
+  console.log('adjustedTotalArray', adjustedTotalArray);
+
   for (let j = 0; j < meterElements.length; j++) {
-    console.log('meterElements[j]: ', meterElements[j])
+    console.log('meterElements[j]: ', meterElements[j]);
 
     //meterElements[j].item(0).value = instance.animVars.valueTotal
 
@@ -246,19 +239,18 @@ AcrossTime.prototype.displayUpdatedData = function(queryResponse) {
   //      // nIntervId = null;
   //      // //clearInterval(nIntervId)
   //      // window.clearInterval(nIntervId)
-      
+
   //      // }
   //     }
 
-    
   //   let animVar = adjustedTotalArray[j]/500
-  //    function anim() { 
-      
+  //    function anim() {
+
   //     if (animVar < adjustedTotalArray[j]) {
-  //        meterElements[j].item(0).value = animVar 
+  //        meterElements[j].item(0).value = animVar
   //        console.log('LESS')
   //        animVar = animVar + adjustedTotalArray[j]/500
-         
+
   //     }
   //     else  {
   //       meterElements[j].item(0).value = adjustedTotalArray[j]
@@ -266,62 +258,54 @@ AcrossTime.prototype.displayUpdatedData = function(queryResponse) {
   //       //clearInterval(nIntervId)
   //       window.clearInterval(nIntervId)
   //       console.log('SAME')
-        
 
   //     }
-        
+
   //   }
-   
+
   //   grow()
 ////END SET INTERVAL ////
 
+////2 SET INTERVAL  2 WORKS . LIKE SETTIMEOUT BELOW, SMALLER NUMBERS END AT SAME TIME AS BIGGEST////
 
-////2 SET INTERVAL  2 WORKS BUT DOES NOT CLEAR INTERVAL WHEN DONE -CAN FIGURE THAT OUT. LIKE SETTIMEOUT BELOW, SMALLER NUMBERS END AT SAME TIME AS BIGGEST////
+  //   let nIntervId;
 
-    let nIntervId;
+  //   function grow() {
+  // // check if already an interval has been set up
+  //    if (!nIntervId) {
+  //     nIntervId = window.setInterval(anim, 0);
+  //      }
+  //      else{
 
-    function grow() {
-  // check if already an interval has been set up
-     if (!nIntervId) {
-      nIntervId = window.setInterval(anim, 0);
-       }
-       else{
-       
-       //clearInterval(nIntervId)
-       nIntervId = null;
-       window.clearInterval(nIntervId)
-        }
-      }
-     
-    
-    let animVar = adjustedTotalArray[j]/500
-     function anim() { 
-     
-     if (animVar < adjustedTotalArray[j]) {
-         meterElements[j].item(0).value = animVar 
-         console.log('LESS')
-         animVar = animVar + adjustedTotalArray[j]/500
-      }
-     
-      // else  {
-      //   meterElements[j].item(0).value = adjustedTotalArray[j]
-      //   nIntervId = null;
-      //   console.log('SAME')
-        
+  //      //clearInterval(nIntervId)
+  //      nIntervId = null;
+  //      window.clearInterval(nIntervId)
+  //       }
+  //     }
 
-      // }
-        
-    }
-   
-    grow()
+  //   let animVar = adjustedTotalArray[j]/500
+  //    function anim() {
+
+  //    if (animVar < adjustedTotalArray[j]) {
+  //        meterElements[j].item(0).value = animVar
+  //        console.log('LESS')
+  //        animVar = animVar + adjustedTotalArray[j]/500
+  //     }
+
+  //     // else  {
+  //     //   meterElements[j].item(0).value = adjustedTotalArray[j]
+  //     //   nIntervId = null;
+  //     //   console.log('SAME')
+
+  //     // }
+
+  //   }
+
+  //   grow()
 
 //// 2 END SET INTERVAL 2 ////
 
-
-
-
 ///REQUEST ANMIM FRAME - WORKS FINE, BUT MORE COMPLICATED TO GET SMOOTH ANIM ON SMALLER NUMBERS AND DONT ENND AT SAME TIME///
-
 
 // var start = null;
 // var animVar = adjustedTotalArray[j]/500//100000
@@ -332,7 +316,7 @@ AcrossTime.prototype.displayUpdatedData = function(queryResponse) {
 //     console.log('timestamp:', timestamp)
 //   }
 //   var progress = timestamp - start;
- 
+
 //   if (animVar < adjustedTotalArray[j]) {
 //     meterElements[j].item(0).value = animVar
 //     //animVar = animVar + 10000000.00
@@ -347,38 +331,35 @@ AcrossTime.prototype.displayUpdatedData = function(queryResponse) {
 
 // window.requestAnimationFrame(step);
 
-
-
-
 ////////END REQUEST ANMIM FRAME ///
 
 ///////SELF-INVOKING LOOP W/SETTIMEOUT  - WORKS AND SMALLER NUMBERS END AT SAME TIME AS BIGGEST, BUT IS NOT SO SMOOT. IS SIMPLEIST OF ALL THREE!///
 
-// let animVar = 100000;
-//    (function loop(){
-//    setTimeout(function() {
-//       if (animVar < adjustedTotalArray[j]) {
-//     meterElements[j].item(0).value = animVar
-//     //animVar = animVar + 10000000.00
-//    animVar = animVar + adjustedTotalArray[j]/500
-//    loop();
+let animVar = 100000;
+   (function loop(){
+   setTimeout(function() {
+      if (animVar < adjustedTotalArray[j]) {
+    meterElements[j].item(0).value = animVar;
+    //animVar = animVar + 10000000.00
+   animVar = animVar + adjustedTotalArray[j]/500;
+   loop();
 
-//     }
-//   else {
-//     meterElements[j].item(0).value = adjustedTotalArray[j]
+    }
+  else {
+    meterElements[j].item(0).value = adjustedTotalArray[j];
 
-//     }
-//    // if (meterElements[j].item(0).value != adjustedTotalArray[j]){
-//    //    loop();
-//    //  }
-//   }, 0);
+    }
+   // if (meterElements[j].item(0).value != adjustedTotalArray[j]){
+   //    loop();
+   //  }
+  }, 0);
 
-// })();
+})();
 
 ///////SELF-INVOKING LOOP W/SETTIMEOUT ///
 
    }
- 
+
 };
 
 AcrossTime.prototype.init = function() {
@@ -522,27 +503,27 @@ function buildQueryString (data) {
  * Starts the timers to update the displayed value from one to the next (not part of the initial display)
  * Called by {@see displayUpdatedData_grandTotal} when the displayed value should changed.
  */
-AcrossTime.prototype.startAnimation = function() {
-  let instance = this;
-  // If there's an existing interval, clear it
-  if (instance.animVars.interval) {
-    window.clearInterval(instance.animVars.interval);
-  }
-  instance.animVars.interval = window.setInterval(function() {
-    let nextVal = getNextValue(
-      instance.animVars.valueTemp,
-      instance.animVars.valueTotal
-    );
-    instance.animVars.valueTemp = nextVal; // Save for next loop
-    //instance.valueField.innerHTML = formatAsCurrency(nextVal); // Update the element
-    // instance.formatAsCurrency(nextVal); // Update the element
+// AcrossTime.prototype.startAnimation = function() {
+//   let instance = this;
+//   // If there's an existing interval, clear it
+//   if (instance.animVars.interval) {
+//     window.clearInterval(instance.animVars.interval);
+//   }
+//   instance.animVars.interval = window.setInterval(function() {
+//     let nextVal = getNextValue(
+//       instance.animVars.valueTemp,
+//       instance.animVars.valueTotal
+//     );
+//     instance.animVars.valueTemp = nextVal; // Save for next loop
+//     //instance.valueField.innerHTML = formatAsCurrency(nextVal); // Update the element
+//     // instance.formatAsCurrency(nextVal); // Update the element
 
-    // If our values match, we can stop the animations
-    if (instance.animVars.valueTemp == instance.animVars.valueTotal) {
-      window.clearInterval(instance.animVars.interval);
-    }
-  }, 25);
-};
+//     // If our values match, we can stop the animations
+//     if (instance.animVars.valueTemp == instance.animVars.valueTotal) {
+//       window.clearInterval(instance.animVars.interval);
+//     }
+//   }, 25);
+// };
 
 // *
 //  * Formats the given value and puts it into the dom element.
@@ -564,56 +545,56 @@ AcrossTime.prototype.startAnimation = function() {
  * @param {*} goalValue
  * @returns {Number} - The next value, one step more from currentValue toward goalValue
  */
-function getNextValue(currentValue, goalValue) {
-  // Convert the values to strings to split them apart into arrays
-  // Multiplying by 100 to get rid of the decimal
-  let currentValArr = Math.round(currentValue * 100)
-    .toString()
-    .split('');
-  let goalValArr = Math.round(goalValue * 100)
-    .toString()
-    .split('');
+// function getNextValue(currentValue, goalValue) {
+//   // Convert the values to strings to split them apart into arrays
+//   // Multiplying by 100 to get rid of the decimal
+//   let currentValArr = Math.round(currentValue * 100)
+//     .toString()
+//     .split('');
+//   let goalValArr = Math.round(goalValue * 100)
+//     .toString()
+//     .split('');
 
-  // Reversing them will make it easier for us to loop starting with 1-cents, then 10-cents, then 1-dollars, 10-dollars, etc.
-  currentValArr.reverse();
-  goalValArr.reverse();
+//   // Reversing them will make it easier for us to loop starting with 1-cents, then 10-cents, then 1-dollars, 10-dollars, etc.
+//   currentValArr.reverse();
+//   goalValArr.reverse();
 
-  // Let's add leading zeroes so the lengths are the same
-  while (goalValArr.length < currentValArr.length) {
-    goalValArr.push('0');
-  }
-  while (currentValArr.length < goalValArr.length) {
-    currentValArr.push('0');
-  }
+//   // Let's add leading zeroes so the lengths are the same
+//   while (goalValArr.length < currentValArr.length) {
+//     goalValArr.push('0');
+//   }
+//   while (currentValArr.length < goalValArr.length) {
+//     currentValArr.push('0');
+//   }
 
-  for (let i = 0; i < goalValArr.length; i++) {
-    let currentDigitVal = parseInt(currentValArr[i], 10);
-    let goalDigitVal = parseInt(goalValArr[i], 10);
+//   for (let i = 0; i < goalValArr.length; i++) {
+//     let currentDigitVal = parseInt(currentValArr[i], 10);
+//     let goalDigitVal = parseInt(goalValArr[i], 10);
 
-    if (currentDigitVal == goalDigitVal) {
-      // do nothing, just loop
-    } else {
-      // The new digit is one lower than the current one if the goal is lower, but one higher if the goal is higher
-      if (currentDigitVal > goalDigitVal) currentDigitVal--;
-      else if (currentDigitVal < goalDigitVal) currentDigitVal++;
+//     if (currentDigitVal == goalDigitVal) {
+//       // do nothing, just loop
+//     } else {
+//       // The new digit is one lower than the current one if the goal is lower, but one higher if the goal is higher
+//       if (currentDigitVal > goalDigitVal) currentDigitVal--;
+//       else if (currentDigitVal < goalDigitVal) currentDigitVal++;
 
-      currentValArr[i] = currentDigitVal.toString();
+//       currentValArr[i] = currentDigitVal.toString();
 
-      // Reverse the array back to normal (no longer need goalValArr)
-      currentValArr.reverse();
+//       // Reverse the array back to normal (no longer need goalValArr)
+//       currentValArr.reverse();
 
-      // Make it back into a number
-      // Dividing by 100 to add the decimal back
-      let newTempVal = parseInt(currentValArr.join(''), 10) / 100;
-      newTempVal = Number(newTempVal.toFixed(2));
-      return newTempVal;
-    }
-  }
-  // If there's some kind of error, just return the goal
-  return goalValue;
-}
+//       // Make it back into a number
+//       // Dividing by 100 to add the decimal back
+//       let newTempVal = parseInt(currentValArr.join(''), 10) / 100;
+//       newTempVal = Number(newTempVal.toFixed(2));
+//       return newTempVal;
+//     }
+//   }
+//   // If there's some kind of error, just return the goal
+//   return goalValue;
+// }
 
-/**
+ /**
  * Handles the usage analytics for this module
  * @todo - Decide how to gather usage insights while embedded
  * @param {String} officeAbbrev - The user-selected election office
