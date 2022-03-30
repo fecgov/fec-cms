@@ -437,7 +437,7 @@ AutoSuggest.prototype.handleFocus = function(e) {
    * @type {Object}
    * @property {Event} e - an event? // TODO: add these
    */
-  this.input.dispatchEvent(new Event('autoSuggest:focus', e));
+  this.input.dispatchEvent(new CustomEvent('autoSuggest:focus', e));
 };
 
 /**
@@ -456,7 +456,7 @@ AutoSuggest.prototype.handleOpen = function(e) {
    * @type {Object}
    * @property {Event} e - an event? // TODO: add these
    */
-   this.input.dispatchEvent(new Event('autoSuggest:open', e));
+   this.input.dispatchEvent(new CustomEvent('autoSuggest:open', e));
 };
 
 /**
@@ -475,7 +475,7 @@ AutoSuggest.prototype.handleClose = function(e) {
    * @type {Object}
    * @property {Event} e - an event? // TODO: add these
    */
-   this.input.dispatchEvent(new Event('autoSuggest:close', e));
+   this.input.dispatchEvent(new CustomEvent('autoSuggest:close', e));
 };
 
 /**
@@ -507,7 +507,7 @@ AutoSuggest.prototype.handleResults = function(e) {
    * @type {Object}
    * @property {Event} e - an event? // TODO: add these
    */
-   this.input.dispatchEvent(new Event('autoSuggest:results', e));
+   this.input.dispatchEvent(new CustomEvent('autoSuggest:results', e));
 };
 
 /**
