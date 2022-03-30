@@ -317,13 +317,13 @@ let defaultAutocompleteOptions = {
  * @property {String|Number} value
  * @property {HTMLElement} wrapper the element created to wrap the <input> and the results
  */
-function AutoSuggest(elementSelector, queryType, url, opts) {
+function AutoSuggest(elementSelector, opts) {
   console.log('AutoSuggest(elementSelector, opts): ', elementSelector, opts);
   // if elementSelector is a string, use that string to find the dom element and set that to this.input
   // else if elementSelector is an element, just save it
   this.input = typeof elementSelector == 'string' ? document.querySelector(elementSelector) : elementSelector;
-  this.queryType = queryType;
-  this.url = url || '/';
+  this.queryType = opts.queryType;
+  this.url = opts.url || '/';
   this.autoComplete = null;
   this.formerSelectionIndex;
   this.value = '';
