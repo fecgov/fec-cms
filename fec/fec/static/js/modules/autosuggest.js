@@ -8,6 +8,7 @@
 
 // TODO: double check that the autosuggest filters handle a generic user returnkey appropriately (type + returnkey without clicking)
 // TODO: rename (and standardize) title cases like `autoComplete` `autoSuggest:open` (autocomplete, autoComplete, AutoComplete?)
+// TODO: better solution for window.queryText
 
 import autoComplete from '@tarekraafat/autocomplete.js';
 import officeNames from './utils';
@@ -89,7 +90,7 @@ function getUrl(resource, queryString) {
 
   window.API_LOCATION = 'https://fec-dev-api.app.cloud.gov'; // TODO: remove this
 
-  console.log('getUrl(): ', resource, queryString);
+  // console.log('getUrl(): ', resource, queryString);
   let toReturn = [
     window.API_LOCATION,
     window.API_VERSION,
@@ -98,7 +99,7 @@ function getUrl(resource, queryString) {
     ''
   ].join('/');
   toReturn += `?q=${queryString}&api_key=${window.API_KEY_PUBLIC}`;
-  console.log('getUrl toReturn: ', toReturn);
+  // console.log('getUrl toReturn: ', toReturn);
   return toReturn;
 }
 
@@ -109,7 +110,7 @@ function getUrl(resource, queryString) {
  * @returns {Array} of objects structured like { is_header: true, id: window.queryText, name: 'Select a committee:', type: 'none' }
  */
 function formatResults(type, data) {
-  console.log('formatResults(): ', type, data);
+  // console.log('formatResults(): ', type, data);
   let toReturn = [];
   let results = data.results;
   let resultsLimit = 5;
@@ -137,13 +138,13 @@ function formatResults(type, data) {
  * @returns
  */
 function getSuggestions(type) {
-  console.log('getSuggestions(type): ', type);
+  // console.log('getSuggestions(type): ', type);
   let toReturn = [];
   if (type == 'all') {
     toReturn.push({ is_suggestion: true, id: window.queryText, name: 'Search individual contributions from:', type: 'individual' });
     toReturn.push({ is_suggestion: true, id: window.queryText, name: 'Search other pages:', type: 'site' });
   }
-  console.log('  going to return ', toReturn);
+  // console.log('  going to return ', toReturn);
   return toReturn;
 }
 
@@ -155,9 +156,9 @@ function getSuggestions(type) {
  */
 async function getData(q, qType) {
   // TODO: Would like to come back and make this more adaptable, remove the repeated code
-  console.log('src.getData()');
-  console.log('  q: ', q);
-  console.log('  qType: ', qType);
+  // console.log('src.getData()');
+  // console.log('  q: ', q);
+  // console.log('  qType: ', qType);
   let fetchedResults = [];
   window.queryText = q;
   if (qType == 'candidate') {
@@ -178,7 +179,7 @@ async function getData(q, qType) {
 
   } else if (qType == 'all' || qType == 'allData') { /** 'all' will include suggestions; 'allData' won't @see getSuggestions */
     // Any changes here should be made inside `== 'candidate'` and `== 'committee'`, too
-    console.log('would have got all data');
+    // console.log('would have got all data');
     await fetch(getUrl('candidates', q), fetchInit)
       .then(response => response.json())
       .then(data => {
@@ -214,7 +215,7 @@ async function getData(q, qType) {
   if (fetchedResults.length === 0) {
     fetchedResults.push({ is_suggestion: true, id: window.queryText, name: 'No results found:', type: 'none' });
   }
-  console.log('going to return fetchedResults: ', fetchedResults);
+  // console.log('going to return fetchedResults: ', fetchedResults);
   return fetchedResults;
 }
 
@@ -334,7 +335,7 @@ function AutoSuggest(elementSelector, queryType, url, opts) {
  * @prop
  */
  AutoSuggest.prototype.init = function() {
-  console.log('AutoSuggest.init()');
+  // console.log('AutoSuggest.init()');
   // TODO: do we need to destroy/reset one if it already exists?
   // if (this.typeahead) this.input.typeahead('destroy');
   this.input.value = '';
@@ -498,6 +499,7 @@ AutoSuggest.prototype.matchAriaExpandeds = function() {
 AutoSuggest.prototype.handleResults = function(e) {
   // Reset the 'last selected' marker for arrow/keyboard navigation
   this.formerSelectionIndex = 0;
+
   /**
    * AutoSuggest results event
    *
