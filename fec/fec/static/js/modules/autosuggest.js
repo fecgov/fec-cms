@@ -581,6 +581,15 @@ AutoSuggest.prototype.handleNavigate = function(e) {
 };
 
 /**
+ *
+ */
+AutoSuggest.prototype.highlightFirstResult = function() {
+  // TODO: do we still care about doing this?
+  // this.formerSelectionIndex = -1;
+  // this.autocomplete.goTo(0);
+};
+
+/**
  * Called by @see handleSelect 
  * @param {Object} q
  * q is the same as e.detail.selection.match from @see AutoSuggest.prototype.handleSelect
