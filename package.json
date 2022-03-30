@@ -22,7 +22,6 @@
   },
   "dependencies": {
     "@tarekraafat/autocomplete.js": "^10.2.6",
-    "@trevoreyre/autocomplete": "^2.2.0",
     "a11y-dialog": "4.0.0",
     "accessible-mega-menu": "git+https://github.com/noahmanger/Accessible-Mega-Menu.git",
     "ace-builds": "1.2.2",
