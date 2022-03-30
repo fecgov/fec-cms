@@ -45,7 +45,14 @@ meter {
     width: 200px;
     /* border-radius: 0px; */
 }
-
+meter::-webkit-meter-bar {
+ background: #eee;
+  /* box-shadow: 0 2px 3px rgba(0,0,0,0.2) inset;*/
+  border-radius: 3px;
+}
+meter::-webkit-meter-optimum-value {
+  background: #36bdbb;
+}
 
 </style>
 
