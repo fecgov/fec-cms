@@ -73,6 +73,7 @@ const header_notes_modal_partial = `<div tabindex="-1" class="modal__overlay" da
 </div>`;
 
 function ReportingDates() {
+  
   //Declare globals (scoped to this function) to get past linter error/tests. For header_notes and footnotes objects declared in CMS field, CSS.escape, Set()
   /* global header_notes, footnotes */
   this.dates_table = document.getElementsByClassName('election-dates-table')[0];
@@ -84,7 +85,7 @@ function ReportingDates() {
 
   TODO: Make this script be included via a wagtail field ala CustomPage's 1conditional_js1  field. And make that
   fieldd a reusable block instead of specific to the CustomPage. Could define it at top of models.py (like streamfactory)
-  or in blocks.py. I think the former makes sense.
+  or in blocks.py. I think the former makes sense. Aftter this, move BASE_PATH declaration to template.
   */
 
   //only run this logic if the page has an `.election-dates-table` onn it
@@ -153,8 +154,6 @@ function ReportingDates() {
     };
   }
 
-  //Set basepath to /data to override base.html's setting it to '/',  so feedback can submmit properly
-  window.BASE_PATH = '/data';
 }
 
 //create and insert states-dropdown, static footnote/header-notes-list , and dialog
