@@ -862,6 +862,8 @@ def house_senate_overview(request, office, cycle=None):
         cycle = constants.DEFAULT_ELECTION_YEAR
 
     # cycle = request.GET.get("cycle", None)
+    default_election_year = constants.DEFAULT_ELECTION_YEAR
+    beginning_default_election_year = default_election_year - 1
 
     max_cycle = utils.current_cycle() + 4
     cycles = utils.get_cycles(max_cycle)
@@ -905,6 +907,8 @@ def house_senate_overview(request, office, cycle=None):
             "parent": "data",
             "cycle": cycle,
             "cycles": cycles,
+            "default_election_year": default_election_year,
+            "beginning_default_election_year": beginning_default_election_year,
             "context_vars": context_vars,
             # "state": state,
             # "state_full": constants.states[state.upper()] if state else None,

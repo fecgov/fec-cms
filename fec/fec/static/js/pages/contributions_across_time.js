@@ -19,15 +19,15 @@ function AcrossTime() {
   this.dataSections;
   this.minYearControl; // The HTML element to change beginning year
   this.maxYearControl; // The HTML element to change ending year
-  this.futurePast;
+  this.futurePast;6
   // Where to find the totals:
   this.basePath_officeTotal = ['candidates', 'totals', 'by_office'];
   this.baseQuery = {
     office: context.office_code,
     //election_year: window.DEFAULT_ELECTION_YEAR,
     //The min/max vals shouold probably be strings
-    min_election_cycle: 2018,
-    max_election_cycle: 2022, //window.DEFAULT_ELECTION_YEAR (?)
+    min_election_cycle: window.DEFAULT_ELECTION_YEAR - 4,
+    max_election_cycle: window.DEFAULT_ELECTION_YEAR,
     is_active_candidate: true,
     per_page: 20,
     sort_null_only: false,
@@ -335,7 +335,7 @@ AcrossTime.prototype.displayUpdatedData = function(queryResponse) {
 
 ///////SELF-INVOKING LOOP W/SETTIMEOUT  - WORKS AND SMALLER NUMBERS END AT SAME TIME AS BIGGEST, BUT IS NOT SO SMOOT. IS SIMPLEIST OF ALL THREE!///
 
-let animVar = 100000;
+let animVar = adjustedTotalArray[j]/500;//100000;
    (function loop(){
    setTimeout(function() {
       if (animVar < adjustedTotalArray[j]) {
@@ -387,6 +387,8 @@ AcrossTime.prototype.init = function() {
 
   this.loadData(this.baseQuery);
 
+  this.buildSelects()
+
 };
 
 AcrossTime.prototype.handleYearChange = function(e) {
@@ -416,6 +418,66 @@ AcrossTime.prototype.handleYearChange = function(e) {
      this.loadData(this.baseQuery);
 
 };
+
+
+
+///////NEW BUILD SELECTS ///////
+
+
+//Buile  the max select(the second one) going back 9 periods from DEFAULT_ELECTION_YEAR
+//AcrossTime.prototype.buildSelects = function() {
+
+//     let finalElectionYear = window.DEFAULT_ELECTION_YEAR - 9
+//     const theSelect =  this.maxYearControl
+
+//     for (let i = 0; i < 18; i+=2) {
+
+//      let year = window.DEFAULT_ELECTION_YEAR - i
+//      let startYear = year - 1
+
+//      //srart with 6 years back selected
+//      let selected = i == 4 ? ' selected' : '';
+
+//      let option = `<option value="${year}"${selected}>${startYear} - ${year}</option>`
+//      theSelect.innerHTML += option
+
+//     }
+
+
+// }
+
+////Buile  both selects (min/max) going back 9 periods from DEFAULT_ELECTION_YEAR
+AcrossTime.prototype.buildSelects = function() {
+    var theSelects = this.element.querySelectorAll( 'select[data-period]' )
+
+    let finalElectionYear = window.DEFAULT_ELECTION_YEAR - 9
+    const theSelect =  this.maxYearControl
+  theSelects.forEach(function(theSelect) {
+    for (let i = 0; i < 18; i+=2) {
+
+     let year = window.DEFAULT_ELECTION_YEAR - i 
+     let startYear = year - 1
+     
+     //srart with 6 years back selected
+     let selected
+     if (theSelect.dataset.period == 'max') {
+     selected = i == 4  ? ' selected' : '';
+     }
+
+     let option = `<option value="${year}"${selected}>${startYear} - ${year}</option>`
+     theSelect.innerHTML += option
+
+    }
+
+  })
+
+}
+
+////// END NEW BUILD SELECTS ////
+
+
+
+
 
   // Listen for resize events
   //window.addEventListener('resize', this.handleResize.bind(this));
