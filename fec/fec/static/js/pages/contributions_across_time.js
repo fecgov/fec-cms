@@ -93,8 +93,6 @@ AcrossTime.prototype.displayUpdatedData = function(queryResponse) {
     //let maxValue = theResultsSort()[0];
     console.log('maxValue: ', maxValue);
 
-  //let dataSections = this.element.querySelectorAll('.js-across-time');
-  let directionSpans = this.element.querySelectorAll('.js-direction');
 
   const lineNumbers = {
     total_individual_itemized_contributions: 'F3-11AI',
@@ -102,7 +100,7 @@ AcrossTime.prototype.displayUpdatedData = function(queryResponse) {
     total_other_political_committee_contributions: 'F3-11C'
     };
 
-    theResults = instance.futurePast == 'forward' ? theResults.reverse() : theResults;
+    //theResults = instance.futurePast == 'forward' ? theResults.reverse() : theResults;
 
   let adjustedTotalArray = [];
   let meterElements = [];
@@ -134,13 +132,10 @@ AcrossTime.prototype.displayUpdatedData = function(queryResponse) {
 
     //TODO: PROBABLY DON'T NEED futurePast AND forwardBack, CAN HAVE  JUST ONE AND USE THE TEXT VALUE
     //let forwardBack = '(Going ' + (self.futurePast == 'future' ? 'forward' : 'back') + ' in time)';
-    let forwardBack = `(Going ${instance.futurePast} in time)`;
-    console.log('forwardBack: ', forwardBack);
-    for (let directionSpan of directionSpans) {
-      directionSpan.textContent = forwardBack;
-    }
 
-   for (let i = 0; i < theResults.length; i++) {
+   
+   for (let i = 0 ; i < theResults.length; i++) {
+    //theResults.forEach((item, i) => {
 
     //let theMeters = dataSection.querySelectorAll('meter');
     //for (let i = 0; i < theMeters.length; i++) {
@@ -163,8 +158,13 @@ AcrossTime.prototype.displayUpdatedData = function(queryResponse) {
 
     //Trick gitleaks for false-positive for "----"orized
       let sub = 'au';
-      let subConcnat = `${sub}thorized_committee`;
-      let splitString= dataTotalType.toString().split(subConcnat).join('');
+      let subConcat = `${sub}thorized_committee`;
+      let splitString= dataTotalType.toString().split(subConcat).join('');
+
+      // OR...
+      //let aut0 = dataTotalType.substring(27)
+      //let aut1 = dataTotalType.replace('aut0','authorizedCommittee')
+
 
       let line = dataTotalType.indexOf('transfers') !== -1 ? splitString : dataTotalType;
 

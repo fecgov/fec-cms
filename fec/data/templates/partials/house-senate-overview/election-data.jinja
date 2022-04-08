@@ -2,7 +2,7 @@
 {% import 'macros/disclaimer.jinja' as disclaimer %}
 {% import 'macros/cycle-select.jinja' as select %}
 
-<!-- TODO: if we end up using these patterns, move styles to `components/_cycle-select.scss` or wherever appropriate -->
+
 <style>
 .range__select {
     width: auto;
@@ -32,6 +32,10 @@
 
 }
 
+.simple-table--responsive .simple-table__row {
+  margin-bottom: 1rem;
+}
+
 .simple-table--responsive .simple-table__cell {
     display: inline;
     margin-right: 25px;
@@ -39,16 +43,18 @@
     height: 4rem;
 }
 
+/* OLD
+
 meter {
     height: 4rem;
     vertical-align: middle;
     width: 200px;
     background: transparent;
-    /* border-radius: 0px; */
+    
 }
 meter::-webkit-meter-bar {
  background: #eee;
-  /* box-shadow: 0 2px 3px rgba(0,0,0,0.2) inset;*/
+ 
   border-radius: 3px;
 }
 meter::-webkit-meter-optimum-value  {
@@ -71,14 +77,68 @@ meter::-webkit-meter-optimum-value  {
   background: #36bdbb;
   height: 2rem;
 }
-/*
+
 *::-moz-meter-bar {
-/*meter::-moz-meter-bar {
+
   background: #36bdbb;
   height: 2rem;
 
 }
-*/
+END OLD */
+
+
+
+
+
+
+meter {
+  /* Reset the default appearance */
+  
+  -moz-appearance: none;
+ 
+  height: 20px;
+ 
+  
+  width: 200px;
+  background: #EEE;
+  
+  /* For Firefox */
+
+  border-radius: 3px;
+
+}
+
+/* WebKit */
+meter::-webkit-meter-bar {
+  background: #EEE;
+  border-radius:3px;
+  height: 20px;
+  border: none;
+}
+
+
+
+
+ meter::-webkit-meter-optimum-value  {
+  background: #36bdbb;
+ 
+}
+
+/* Firefox */
+ meter::-moz-meter-bar {
+
+  border-radius: 3px;
+  height: 20px;
+
+}
+
+meter:-moz-meter-optimum::-moz-meter-bar {
+  background: #36bdbb;
+}
+
+
+
+
 
 
 </style>
@@ -86,16 +146,16 @@ meter::-webkit-meter-optimum-value  {
 
 <section id="section-1" role="tabpanel" aria-hidden="true" aria-labelledby="section-1-heading">
 
-  <!-- TODO : The design mockup does not have this `h2#section-1-heading`, but it matches the tablist title pattern used for other pages and removing it breaks alignment. If we do keep it, the h2's below should probably become h3's.  However they look like h2's on mockup  -->
+
   <h2 id="section-1-heading">{{ office | title }} election data</h2>
   <div class="slab slab--inline slab--neutral u-padding--left u-padding--right">
-  <!-- TODO: For narrower rows, add class: "entity__figure--narrow" -->
+
     <div id="election-summary" class="entity__figure row"> 
       <h2 class="heading__left">{{ office | title }} election summary</h2>
       <p class="t-sans t-bold t-low-height">Comparing total money spent by party. Also comparing total money spent in <span class="term" data-term="independent expenditure" title="Click to define" tabindex="0">independent expenditures</span> by support and opposition.</p>
   
 
-        <!-- TODO: We might not use these macros at all for the selects, but here if they help -->
+       
         {{ select.two_year_select(cycles, cycle, id="cycle-4") }}
 
       <div class="content__section--ruled-responsive t-serif">
@@ -118,34 +178,17 @@ meter::-webkit-meter-optimum-value  {
         </div>
     </div>
 
-    <!-- TODO: For narrower rows, add class: "entity__figure--narrow" -->
     <div id="contributions-over-time" class="entity__figure row"> 
       <h2 class="heading__left">{{ office | title }} candidate contributions over time</h2>
       <p class="t-sans t-low-height">Comparing individual contributions, other committee contributions and transfers from other authorized committees across multiple two-year periods.</p>
         
-        <!-- TODO: We might not use these macros at all for the selects, but here if they help -->
-        <!--{{ select.cycle_range_select(cycles, cycle=cycle, id='')}} -->
+      
+       
   <label class="label t-inline-block">Two-year period date range</label>
   <fieldset id="two-year-period-date-range" name="two-year-period-date-range">
     <div class="range range--date js-date-range">
        
-<!--   <div style="
-    display: inline-block;
-    vertical-align: top;
-    /* padding-bottom: 25px; */
-    /* font-weight: bold; */
-    font-family: sans-serif;
-    border: 2px solid #ccc;
-    padding: .4rem 3rem;
-    border-radius: 4px;
-">  {{ beginning_default_election_year }} - {{ default_election_year }}
-      </div> 
 
-    <select id="-cycle" class="js-min-period-select u-visually-hidden" name="cycle" data-cycle-location="query" data-period="min">     
-            
-              <option value="{{ default_election_year }}" selected="selected">{{ beginning_default_election_year }} - {{ default_election_year }}</option>
-
-          </select> -->
 
    
       <div class="range__select range__select--min" data-filter="range">
@@ -200,7 +243,7 @@ meter::-webkit-meter-optimum-value  {
       </div>
 
 
-      <div class="js-across-time" data-total-type="total_other_political_committee_contributions"/>
+      <div class="js-across-time" data-total-type="total_other_political_committee_contributions">
        
       </div>
 
@@ -212,7 +255,7 @@ meter::-webkit-meter-optimum-value  {
         </div>
       </div>
 
-      <div class="js-across-time" data-total-type="total_transfers_from_other_authorized_committee"/>   
+      <div class="js-across-time" data-total-type="total_transfers_from_other_authorized_committee">   
 
       </div>
 
@@ -240,12 +283,12 @@ meter::-webkit-meter-optimum-value  {
         </div>
     </div>
     
-    <!-- TODO: For narrower rows, add class: "entity__figure--narrow" -->
+
     <div id="money-raised-accross-elections" class="entity__figure row">
       <h2 class="heading__left">Money raised accross {{ office | title }} elections</h2>
       <p class="t-sans t-bold t-low-height">Compare the money raised in all {{ office | title }} elections by state </p>
 
-      <!-- TODO: We might not use these macros at all for the selects, but here if they help -->
+    
       {{ select.two_year_select(cycles, cycle, id="cycle-4") }}
       
       <div class="content__section--ruled-responsive t-serif">
@@ -268,35 +311,17 @@ meter::-webkit-meter-optimum-value  {
         </div>
       </div>
  
-      <!-- TODO: For narrower rows, add class: "entity__figure--narrow" -->
+
       <div id="totals-for-all-elections" class="entity__figure row">
       <h2 class="heading__left">Totals for all {{ office | title }} elections</h2>
       <p class="t-sans t-bold t-low-height">Compare the money raised, spent, cash on hand and debts by {{ office | title }} election</p>
 
 
-       <!-- TODO: We might not use these macros at all for the selects, but here if they help -->
+      
        {{ select.two_year_select(cycles, cycle, id="cycle-4") }}
 
 
-      <!-- TODO: Just a placehholder table for example of similar datatable elsewhere,
-           see artials/elections/election-data-and-compliance-tab.jinja -->
-      <div id="candidate-financial-totals" class="entity__figure row">
 
-        <table
-          class="data-table data-table--heading-borders scrollX"
-          data-type="candidate-financial-totals">
-          <thead>
-            <th role="col">Total receipts</th>
-            <th role="col">Total disbursements</th>
-            <th role="col">Cash on hand</th>
-          </thead>
-        </table>
-        <div class="datatable__note">
-          <p class="t-note" style="margin-bottom: 1em">
-            This table only shows candidates who have registered and filed a financial report. Information in this table may not include the most recently submitted filings.
-          </p>
-        </div> 
-      </div>
 
       <div class="content__section--ruled-responsive t-serif">
           <div class="heading--with-action t-small u-negative--top--margin t-serif"><i class="data-disclaimer">Some kind of disclaimer text that clarifies something high-level that users need to know right away to put the data in context.</i>
