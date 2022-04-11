@@ -1121,7 +1121,7 @@ class MeetingPage(Page):
         ),
         MultiFieldPanel(
             [
-                FieldPanel('imported_html'),
+                StreamFieldPanel('imported_html'),
             ],
             heading='Imported meeting content',
             classname='collapsible collapsed'
