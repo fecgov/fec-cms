@@ -11,22 +11,22 @@
 
 // Includes
 //import analytics from '../modules/analytics';
-import { buildUrl, buildAppUrl } from '../modules/helpers';
-import { currency } from '../modules/helpers';
+import { buildUrl,  buildAppUrl, dollar } from '../modules/helpers';
+// import { buildAppUrl } from '../modules/helpers';
+// import { currency } from '../modules/helpers';
 
 function AcrossTime() {
   this.element; // The HTML element of this feature
   this.dataSections;
   this.minYearControl; // The HTML element to change beginning year
   this.maxYearControl; // The HTML element to change ending year
-  this.futurePast;6
   // Where to find the totals:
   this.basePath_officeTotal = ['candidates', 'totals', 'by_office'];
   this.baseQuery = {
     office: context.office_code,
     //election_year: window.DEFAULT_ELECTION_YEAR,
     //The min/max vals shouold probably be strings
-    min_election_cycle: window.DEFAULT_ELECTION_YEAR - 4,
+    min_election_cycle: window.DEFAULT_ELECTION_YEAR - 4 ,
     max_election_cycle: window.DEFAULT_ELECTION_YEAR,
     is_active_candidate: true,
     per_page: 20,
@@ -34,13 +34,7 @@ function AcrossTime() {
     sort_hide_null: false,
     sort_nulls_last: false,
     page: 1
-  }; // Vars for data load
-  // this.animVars = {
-  //   valueTotal: 0, // This instance's current value, only used for animation
-  //   valueTemp: 0,
-  //   stepCount: 0,
-  //   interval: null
-  // };
+  }; 
 
   this.init();
 }
@@ -52,28 +46,21 @@ function AcrossTime() {
  * @param {Response} queryResponse - The successful API reply
  */
 AcrossTime.prototype.displayUpdatedData = function(queryResponse) {
-  let instance = this;
-  //DO I NEED  THIS?
-  //let office_code = this.baseQuery.office_code;
-
-  //NOT USING THIS RIGHT NOW
-  // Get the office value from the <script>
-  //this.baseQuery.office = queryResponse.results[0].office;
-
+ 
   let theResults = queryResponse.results;
 
-  //make a copy of results array so we are not sorting in-place
-  //let theResultsTemp = Array.from(theResults);
-
+  //create array to hold largest of each dataType
   let largestValuesArray = [];
 
-  //MOVE TO OWN SEPARATE FUMCTION???
-    //sort to get the  max value
+  // Iterate each section to get the three dataTypes
   this.dataSections.forEach(function(dataSection) {
    //make a copy of results array so we are not sorting resilts in-place
   let theResultsTemp = Array.from(theResults);
+
+  // Get the dataType from the data-total-type attribute of thr html sectoions
   let dataType = dataSection.dataset.totalType;
 
+    // Sort  values for dataType each year and push the largest to largestValuesArray
     theResultsTemp.sort((obj1, obj2) => {
       // We want the larger values first
       if (obj1[dataType] < obj2[dataType]) return 1;
@@ -88,124 +75,110 @@ AcrossTime.prototype.displayUpdatedData = function(queryResponse) {
     largestValuesArray.sort(function(a, b) {
       return b - a;
     });
-
+    
+    // maxvalue is the first item in sorted array
     let maxValue = largestValuesArray[0];
-    //let maxValue = theResultsSort()[0];
+
     console.log('maxValue: ', maxValue);
 
-
+  // Object to map line numbers to dataTotalTypes
   const lineNumbers = {
     total_individual_itemized_contributions: 'F3-11AI',
     total_transfers_from_other_: 'F3-12',
     total_other_political_committee_contributions: 'F3-11C'
     };
 
-    //theResults = instance.futurePast == 'forward' ? theResults.reverse() : theResults;
-
+  // create arrays to hold adjusteddValues and meterElements for use later
   let adjustedTotalArray = [];
   let meterElements = [];
 
+  // Iterate each section again to populate with results
   this.dataSections.forEach(function(dataSection) {
+
+    //clear contents of sections each time
     dataSection.innerHTML = '';
+    
 
-    console.log('dataSection', dataSection);
+    // Get the dataTotalType from the data-total-type attribute of thr html sectoions
     let dataTotalType = dataSection.dataset.totalType;
-    console.log('dataTotalType', dataTotalType);
 
-    // //make a copy of results array so we are not sorting in-place
-    // let theResultsTemp = Array.from(theResults);
-
-    // //sort to get the  max value
-    // const theResultsSort = function() {
-    // theResultsTemp.sort((obj1, obj2) => {
-    //   // We want the larger values first
-    //   if (obj1[dataTotalType] < obj2[dataTotalType]) return 1;
-    //   else if (obj1[dataTotalType] > obj2[dataTotalType]) return -1;
-    //   else return 0;
-    // });
-    // return theResultsTemp;
-    // };
-
-    // let maxValue = theResultsSort()[0][dataTotalType];
-
-    //theResults = instance.futurePast == 'forward' ? theResults.reverse() : theResults;
-
-    //TODO: PROBABLY DON'T NEED futurePast AND forwardBack, CAN HAVE  JUST ONE AND USE THE TEXT VALUE
-    //let forwardBack = '(Going ' + (self.futurePast == 'future' ? 'forward' : 'back') + ' in time)';
-
-   
-   for (let i = 0 ; i < theResults.length; i++) {
-    //theResults.forEach((item, i) => {
-
-    //let theMeters = dataSection.querySelectorAll('meter');
-    //for (let i = 0; i < theMeters.length; i++) {
+    // Iterate the results json
+    for (let i = 0 ; i < theResults.length; i++) {
+      
 
       let total = theResults[i][dataTotalType];
+
+      // adjust the value 
       let adjustedTotal = Math.max(
         total,
         maxValue * 0.01
       );
-      let textValue = currency(total);
-
+       
+      // Convert value for display pn page 
+      let textValue = dollar(total);
+      
+      // Get start/end years for display pn page
       let electionYear = theResults[i].election_year;
       let starYear = electionYear - 1;
       let end_year = electionYear;
       let twoYearPeriod = `${starYear} - ${end_year}`;
 
-//EXAMPLE QUERYSTRING: ?recipient_committee_type=S&two_year_transaction_period=2022&line_number=F3-11AI&line_number=F3-12&line_number=F3-11C
-
-////NEW
-
-    //Trick gitleaks for false-positive for "----"orized
+      // Trick gitleaks for false-positive for "----"orized
       let sub = 'au';
       let subConcat = `${sub}thorized_committee`;
       let splitString= dataTotalType.toString().split(subConcat).join('');
 
-      // OR...
-      //let aut0 = dataTotalType.substring(27)
-      //let aut1 = dataTotalType.replace('aut0','authorizedCommittee')
-
-
+      // Use the concatenated string  if transers is in dataTotalType
       let line = dataTotalType.indexOf('transfers') !== -1 ? splitString : dataTotalType;
 
+      // Create object for creating querystring on link for each value
       let searchFilters = {
         two_year_transaction_period: electionYear,
         recipient_committee_type: context.office_code,
         line_number: lineNumbers[line]
       };
 
-      let totalUrl = buildAppUrl(['receipts'])
-      + `?${buildQueryString(searchFilters)}`;
+      // Generate the querystring for link from the searcFilters object
+      // Could be done more efficiently with URLSearchParams(), but since MS Edge-legacy does not support, we'll do this for now
+      let queryString = Object.keys(searchFilters).map(function(key) {
+      return key + '=' + searchFilters[key]
+     }).join('&');
+      console.log('queryString:', queryString)
 
-  console.log('totalUrl: ', totalUrl);
+      //  Build the link for each value on displayed on page
+      let totalUrl = buildAppUrl(['receipts']) + `?${queryString}`;
 
+
+      console.log('totalUrl: ', totalUrl);
+
+      // HTML for each result row
       let theInnerHTML =
           `<div class="simple-table__row" role="row">
             <div role="cell" class="simple-table__cell js-total-period">${twoYearPeriod}</div>
             <div role="cell" class="simple-table__cell">
               <meter min="0" max="${maxValue}" value="0" title="US Dollars"></meter>
             </div>
-            <div role="cell" class="simple-table__cell js-total-value  t-mono-stacked-currency"><a href=${totalUrl}>${textValue}</a></div>
+            <div role="cell" class="simple-table__cell js-total-value t-mono-stacked-currency"><a href=${totalUrl}>${textValue}</a></div>
           </div>`;
 
+    // Create an HTML node to put the rows in 
     let periodWrapper = document.createElement('div');
     periodWrapper.classList.add('simple-table--responsive');
     periodWrapper.setAttribute('role', 'grid');
     periodWrapper.innerHTML = theInnerHTML;
-
+    
+    // Append each row to the section on the page
     dataSection.appendChild(periodWrapper);
 
-    // let theMeter =  document.createElement('meter');
-    // theMeter.setAttribute('min', '0');
-    // theMeter.setAttribute('max', maxValue);
-    // theMeter.setAttribute('value', '0');
 
-    //dataSection.appendChild(theMeter);
-
+    // Push  each adjustedTotal to  adjustedTotals array for animating later
     adjustedTotalArray.push(adjustedTotal);
 
+    // Now find each meter that was created above in theInnerHTML
     let meterElement = periodWrapper.getElementsByTagName('meter');//querySelectorAll('meter')
     console.log('meterElement: ', meterElement);
+
+    // Push each meterElement to meterElements array
     meterElements.push(meterElement);
 
     }
@@ -215,175 +188,45 @@ AcrossTime.prototype.displayUpdatedData = function(queryResponse) {
   console.log('METERELEMENTS:', meterElements);
   console.log('adjustedTotalArray', adjustedTotalArray);
 
+  // Iterate each meter element and animate the value from 0
   for (let j = 0; j < meterElements.length; j++) {
     console.log('meterElements[j]: ', meterElements[j]);
 
-    //meterElements[j].item(0).value = instance.animVars.valueTotal
+   
 
-    // instance.animVars.startingValue = instance.animVars.valueTotal;
+// Self invoking timeoput that starts  animationn and stops calling itself when total is reached (setInterval and requestAnimationFromen also work but this was simpllest and smothest animation)
+  let animVar = adjustedTotalArray[j]/500;//100000;
+     (function loop(){
+       setTimeout(function() {
+          if (animVar < adjustedTotalArray[j]) { 
+        meterElements[j].item(0).value = animVar;
+        //animVar = animVar + 10000000.00
+       animVar = animVar + adjustedTotalArray[j]/500;
+       loop();
 
-    //instance.animVars.valueTotal = adjustedTotalArray[j]
+        }
+      else {
+        meterElements[j].item(0).value = adjustedTotalArray[j];
 
-    //instance.startAnimation();
+        }
+      }, 0);
 
-////SET INTERVAL WORKS BUT DOES NOT CLEAR INTERVAL WHEN DONE -CAN FIGURE THAT OUT. LIKE SETTIMEOUT BELOW, SMALLER NUMBERS END AT SAME TIME AS BIGGEST////
-
-  //   let nIntervId;
-
-  //   function grow() {
-  // // check if already an interval has been set up
-  //    if (!nIntervId) {
-  //     nIntervId = setInterval(anim, 1);
-  //      }
-  //      // else{
-  //      // nIntervId = null;
-  //      // //clearInterval(nIntervId)
-  //      // window.clearInterval(nIntervId)
-
-  //      // }
-  //     }
-
-  //   let animVar = adjustedTotalArray[j]/500
-  //    function anim() {
-
-  //     if (animVar < adjustedTotalArray[j]) {
-  //        meterElements[j].item(0).value = animVar
-  //        console.log('LESS')
-  //        animVar = animVar + adjustedTotalArray[j]/500
-
-  //     }
-  //     else  {
-  //       meterElements[j].item(0).value = adjustedTotalArray[j]
-  //       nIntervId = null;
-  //       //clearInterval(nIntervId)
-  //       window.clearInterval(nIntervId)
-  //       console.log('SAME')
-
-  //     }
-
-  //   }
-
-  //   grow()
-////END SET INTERVAL ////
-
-////2 SET INTERVAL  2 WORKS . LIKE SETTIMEOUT BELOW, SMALLER NUMBERS END AT SAME TIME AS BIGGEST////
-
-  //   let nIntervId;
-
-  //   function grow() {
-  // // check if already an interval has been set up
-  //    if (!nIntervId) {
-  //     nIntervId = window.setInterval(anim, 0);
-  //      }
-  //      else{
-
-  //      //clearInterval(nIntervId)
-  //      nIntervId = null;
-  //      window.clearInterval(nIntervId)
-  //       }
-  //     }
-
-  //   let animVar = adjustedTotalArray[j]/500
-  //    function anim() {
-
-  //    if (animVar < adjustedTotalArray[j]) {
-  //        meterElements[j].item(0).value = animVar
-  //        console.log('LESS')
-  //        animVar = animVar + adjustedTotalArray[j]/500
-  //     }
-
-  //     // else  {
-  //     //   meterElements[j].item(0).value = adjustedTotalArray[j]
-  //     //   nIntervId = null;
-  //     //   console.log('SAME')
-
-  //     // }
-
-  //   }
-
-  //   grow()
-
-//// 2 END SET INTERVAL 2 ////
-
-///REQUEST ANMIM FRAME - WORKS FINE, BUT MORE COMPLICATED TO GET SMOOTH ANIM ON SMALLER NUMBERS AND DONT ENND AT SAME TIME///
-
-// var start = null;
-// var animVar = adjustedTotalArray[j]/500//100000
-
-// function step(timestamp) {
-//   if (!start) {
-//     start = timestamp;
-//     console.log('timestamp:', timestamp)
-//   }
-//   var progress = timestamp - start;
-
-//   if (animVar < adjustedTotalArray[j]) {
-//     meterElements[j].item(0).value = animVar
-//     //animVar = animVar + 10000000.00
-//    animVar = animVar + adjustedTotalArray[j]/500
-//     window.requestAnimationFrame(step);
-//   }
-//   else {
-//     meterElements[j].item(0).value = adjustedTotalArray[j]
-
-//   }
-// }
-
-// window.requestAnimationFrame(step);
-
-////////END REQUEST ANMIM FRAME ///
-
-///////SELF-INVOKING LOOP W/SETTIMEOUT  - WORKS AND SMALLER NUMBERS END AT SAME TIME AS BIGGEST, BUT IS NOT SO SMOOT. IS SIMPLEIST OF ALL THREE!///
-
-let animVar = adjustedTotalArray[j]/500;//100000;
-   (function loop(){
-   setTimeout(function() {
-      if (animVar < adjustedTotalArray[j]) {
-    meterElements[j].item(0).value = animVar;
-    //animVar = animVar + 10000000.00
-   animVar = animVar + adjustedTotalArray[j]/500;
-   loop();
-
-    }
-  else {
-    meterElements[j].item(0).value = adjustedTotalArray[j];
-
-    }
-   // if (meterElements[j].item(0).value != adjustedTotalArray[j]){
-   //    loop();
-   //  }
-  }, 0);
-
-})();
-
-///////SELF-INVOKING LOOP W/SETTIMEOUT ///
+     })();
 
    }
 
 };
 
 AcrossTime.prototype.init = function() {
-  // Save self
-  let instance = this;
+
   this.element = document.getElementById('contributions-over-time');
   this.dataSections = this.element.querySelectorAll('.js-across-time');
   this.minYearControl = this.element.querySelector('.js-min-period-select');
-
-  console.log('instance.baseQuery.min_election_cycle:', instance.baseQuery.min_election_cycle);
-  // const options = Array.from(this.minYearControl.options);
-  // options.forEach((option) => {
-  //    if (option.value == instance.baseQuery.min_election_cycle) {
-  //     //instance.minYearControl.selectedIndex = i;
-  //     option.selected = 'selected';
-  //    }
-  //   });
 
   this.maxYearControl = this.element.querySelector('.js-max-period-select');
 
   this.minYearControl.addEventListener('change', this.handleYearChange.bind(this));
   this.maxYearControl.addEventListener('change', this.handleYearChange.bind(this));
-
-  this.futurePast = 'back';
 
   this.loadData(this.baseQuery);
 
@@ -394,99 +237,64 @@ AcrossTime.prototype.init = function() {
 AcrossTime.prototype.handleYearChange = function(e) {
 
      e.preventDefault();
+
+     // Set action (min or max) based on which select was changed.
      let action = e.target.dataset.period;
      console.log('e.target.dataset.period', e.target.dataset.period);
      //this.baseQuery.min_election_cycle = e.target.value; // Save the updated value
      console.log('e.target.value', e.target.value);
+    
 
+     // Determins which select was changed 
      let beginning = action == 'min' ? e.target.value : this.minYearControl.value;
      let ending = action == 'max' ? e.target.value : this.maxYearControl.value;
 
-     //trsanspose begining and ending if begining > ending
+     // Trsanspose min/max innn call to data if value of min select is  > value of max select
+     // API will not return data is `min_election_cycle is > than max_election_cycle
      this.baseQuery.min_election_cycle = Math.min(beginning, ending);
      this.baseQuery.max_election_cycle = Math.max(beginning, ending);
 
-     this.futurePast = beginning > ending ? 'back' : 'forward';
-
-     //this.baseQuery.min_election_cycle = action == 'min' ? e.target.value : this.minYearControl.value;
-     //this.baseQuery.max_election_cycle = action == 'max' ? e.target.value :this.maxYearControl.value;
      console.log('this.baseQuery.min_election_cycle' , this.baseQuery.min_election_cycle );
      console.log('this.baseQuery.max_election_cycle' , this.baseQuery.max_election_cycle );
 
+     // Get the  officce from the URL passed from view
      this.baseQuery.office = context.office_code;
 
+     // Load data based on baseQuery
      this.loadData(this.baseQuery);
 
 };
 
 
-
-///////NEW BUILD SELECTS ///////
-
-
-//Buile  the max select(the second one) going back 9 periods from DEFAULT_ELECTION_YEAR
-//AcrossTime.prototype.buildSelects = function() {
-
-//     let finalElectionYear = window.DEFAULT_ELECTION_YEAR - 9
-//     const theSelect =  this.maxYearControl
-
-//     for (let i = 0; i < 18; i+=2) {
-
-//      let year = window.DEFAULT_ELECTION_YEAR - i
-//      let startYear = year - 1
-
-//      //srart with 6 years back selected
-//      let selected = i == 4 ? ' selected' : '';
-
-//      let option = `<option value="${year}"${selected}>${startYear} - ${year}</option>`
-//      theSelect.innerHTML += option
-
-//     }
-
-
-// }
-
-////Buile  both selects (min/max) going back 9 periods from DEFAULT_ELECTION_YEAR
+////Buile  both selects (min/max) going back 9 two-year-periods from DEFAULT_ELECTION_YEAR
 AcrossTime.prototype.buildSelects = function() {
     var theSelects = this.element.querySelectorAll( 'select[data-period]' )
-
+    
+    //  Set last select option 9 years  back
     let finalElectionYear = window.DEFAULT_ELECTION_YEAR - 9
     const theSelect =  this.maxYearControl
-  theSelects.forEach(function(theSelect) {
-    for (let i = 0; i < 18; i+=2) {
+    theSelects.forEach(function(theSelect) {
+      // Iterate 18 (9 two year periods)
+      for (let i = 0; i < 18; i+=2) {
 
-     let year = window.DEFAULT_ELECTION_YEAR - i 
-     let startYear = year - 1
-     
-     //srart with 6 years back selected
-     let selected
-     if (theSelect.dataset.period == 'max') {
-     selected = i == 4  ? ' selected' : '';
-     }
+       let year = window.DEFAULT_ELECTION_YEAR - i 
+       let startYear = year - 1
+       
+       //srart with 6 years back selected( i = 4 because the iteration is 0, 2, 4...)
+       let selected
+       if (theSelect.dataset.period == 'max') {
+         selected = i == 4  ? ' selected' : '';
+         }
+       
+       //  Populate the select options
+       let option = `<option value="${year}"${selected}>${startYear} - ${year}</option>`
+       theSelect.innerHTML += option
 
-     let option = `<option value="${year}"${selected}>${startYear} - ${year}</option>`
-     theSelect.innerHTML += option
+      }
 
-    }
-
-  })
+    })
 
 }
-
-////// END NEW BUILD SELECTS ////
-
-
-
-
-
-  // Listen for resize events
-  //window.addEventListener('resize', this.handleResize.bind(this));
-  // Call for a resize on init
-  //this.handleResize();
-
-  // Start the initial data load
-  //this.loadData(this.baseQuery);
-//};
 
 /**
  * Starts the data load, called by {@see init}
@@ -515,161 +323,6 @@ AcrossTime.prototype.loadData = function(query) {
 
 };
 
-function buildQueryString (data) {
-  return new URLSearchParams(data).toString();
-}
-
-/**
- * Handles when the window changes size, but only looks at the relevant element's size.
- * Toggles classes for the element based on {@see breakpointToSmall, @see breakpointToMedium, @see breakpointToLarge, @see breakpointToXL}
- */
-// AggregateTotalsBox.prototype.handleResize = function(e = null) {
-//   if (e) e.preventDefault();
-
-//   let newWidth = this.element.offsetWidth;
-
-//   if (newWidth < breakpointToSmall) {
-//     // It's XS
-//     this.element.classList.remove('w-s');
-//     this.element.classList.remove('w-m');
-//     this.element.classList.remove('w-l');
-//     this.element.classList.remove('w-xl');
-//   } else if (newWidth < breakpointToMedium) {
-//     // It's small
-//     this.element.classList.add('w-s');
-//     this.element.classList.remove('w-m');
-//     this.element.classList.remove('w-l');
-//     this.element.classList.remove('w-xl');
-//   } else if (newWidth < breakpointToLarge) {
-//     // It's medium
-//     this.element.classList.remove('w-s');
-//     this.element.classList.add('w-m');
-//     this.element.classList.remove('w-l');
-//     this.element.classList.remove('w-xl');
-//   } else if (newWidth < breakpointToXL) {
-//     // It's large
-//     this.element.classList.remove('w-s');
-//     this.element.classList.remove('w-m');
-//     this.element.classList.add('w-l');
-//     this.element.classList.remove('w-xl');
-//   } else {
-//     // It's XL
-//     this.element.classList.remove('w-s');
-//     this.element.classList.remove('w-m');
-//     this.element.classList.remove('w-l');
-//     this.element.classList.add('w-xl');
-//   }
-// };
-
-/**
- * Starts the timers to update the displayed value from one to the next (not part of the initial display)
- * Called by {@see displayUpdatedData_grandTotal} when the displayed value should changed.
- */
-// AcrossTime.prototype.startAnimation = function() {
-//   let instance = this;
-//   // If there's an existing interval, clear it
-//   if (instance.animVars.interval) {
-//     window.clearInterval(instance.animVars.interval);
-//   }
-//   instance.animVars.interval = window.setInterval(function() {
-//     let nextVal = getNextValue(
-//       instance.animVars.valueTemp,
-//       instance.animVars.valueTotal
-//     );
-//     instance.animVars.valueTemp = nextVal; // Save for next loop
-//     //instance.valueField.innerHTML = formatAsCurrency(nextVal); // Update the element
-//     // instance.formatAsCurrency(nextVal); // Update the element
-
-//     // If our values match, we can stop the animations
-//     if (instance.animVars.valueTemp == instance.animVars.valueTotal) {
-//       window.clearInterval(instance.animVars.interval);
-//     }
-//   }, 25);
-// };
-
-// *
-//  * Formats the given value and puts it into the dom element.
-//  * @param {Number} passedValue - The number to format and plug into the element
-//  * @param {Boolean} roundToWhole - Should we drop the cents or no?
-//  * @returns {String} A string of the given value formatted with a dollar sign, commas, and (if roundToWhole === false) decimal
-
-// function formatAsCurrency(passedValue, roundToWhole = true) {
-//   // Format for US dollars and cents
-//   if (roundToWhole)
-//     return '$' + passedValue.toFixed().replace(/\d(?=(\d{3})+$)/g, '$&,');
-//   else return '$' + passedValue.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
-// }
-
-/**
- * Returns the next value to step from `currentValue` to `goalValue`, when animating each place from current to goal.
- * e.g. changes the ones position from current toward goal, then changes the tens position value from current toward goal, then hundreds, thousands, etc.
- * @param {*} currentValue
- * @param {*} goalValue
- * @returns {Number} - The next value, one step more from currentValue toward goalValue
- */
-// function getNextValue(currentValue, goalValue) {
-//   // Convert the values to strings to split them apart into arrays
-//   // Multiplying by 100 to get rid of the decimal
-//   let currentValArr = Math.round(currentValue * 100)
-//     .toString()
-//     .split('');
-//   let goalValArr = Math.round(goalValue * 100)
-//     .toString()
-//     .split('');
-
-//   // Reversing them will make it easier for us to loop starting with 1-cents, then 10-cents, then 1-dollars, 10-dollars, etc.
-//   currentValArr.reverse();
-//   goalValArr.reverse();
-
-//   // Let's add leading zeroes so the lengths are the same
-//   while (goalValArr.length < currentValArr.length) {
-//     goalValArr.push('0');
-//   }
-//   while (currentValArr.length < goalValArr.length) {
-//     currentValArr.push('0');
-//   }
-
-//   for (let i = 0; i < goalValArr.length; i++) {
-//     let currentDigitVal = parseInt(currentValArr[i], 10);
-//     let goalDigitVal = parseInt(goalValArr[i], 10);
-
-//     if (currentDigitVal == goalDigitVal) {
-//       // do nothing, just loop
-//     } else {
-//       // The new digit is one lower than the current one if the goal is lower, but one higher if the goal is higher
-//       if (currentDigitVal > goalDigitVal) currentDigitVal--;
-//       else if (currentDigitVal < goalDigitVal) currentDigitVal++;
-
-//       currentValArr[i] = currentDigitVal.toString();
-
-//       // Reverse the array back to normal (no longer need goalValArr)
-//       currentValArr.reverse();
-
-//       // Make it back into a number
-//       // Dividing by 100 to add the decimal back
-//       let newTempVal = parseInt(currentValArr.join(''), 10) / 100;
-//       newTempVal = Number(newTempVal.toFixed(2));
-//       return newTempVal;
-//     }
-//   }
-//   // If there's some kind of error, just return the goal
-//   return goalValue;
-// }
-
- /**
- * Handles the usage analytics for this module
- * @todo - Decide how to gather usage insights while embedded
- * @param {String} officeAbbrev - The user-selected election office
- * @param {*} electionYear - String or Number, the user-selected election year
- */
-// function logUsage(officeAbbrev, electionYear) {
-//   analytics.customEvent({
-//     event: 'Widget Interaction',
-//     eventName: `widgetInteraction`,
-//     eventCategory: 'Widget-AggregateTotals',
-//     eventAction: 'interaction',
-//     eventLabel: officeAbbrev + ',' + electionYear
-//   });
-// }
+ 
 
 new AcrossTime();

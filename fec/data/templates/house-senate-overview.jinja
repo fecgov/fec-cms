@@ -1,12 +1,6 @@
 {% extends 'layouts/main.jinja' %}
 {% import 'macros/page-header.jinja' as header %}
-{% if office == 'house' %}
-  {% set crumb = office|title  %}
-{% elif office == 'senate' %}
-  {% set crumb = office|title %}
-{% else %}
-  {% set crumb = office|title %}
-{% endif %}
+
 
 {{ cycle }} Election - US {{ office|title }} {% if state %} - {{ state|fmt_state_full }} {% if district %} - District {{ district }} {% endif %} {% endif %}
 
@@ -14,6 +8,7 @@
 
 {% block css %}
   <link rel="stylesheet" type="text/css" href="{{ asset_for_css('elections.css') }}" />
+  <link rel="stylesheet" type="text/css" href="/static/css/widgets/house-senate-overview.css" />
 {% endblock %}
 {% block body %}
   {{ header.header(title, crumb) }}

@@ -3,145 +3,6 @@
 {% import 'macros/cycle-select.jinja' as select %}
 
 
-<style>
-.range__select {
-    width: auto;
-    display: inline-block;
-}
-.range__select .cycle-select select {
-    width: auto;
-}
-
-#contributions-over-time h3 {
- display: inline;
-
-}
-
-#contributions-over-time span.js-direction {
-  font-style: italic
-
-}
-
-/* TODO: DONT USE JS- PREFIXED CLASSES IN CSS */
-.js-across-time {
-  margin: 5px 0  15px 0;
-}
-
-.simple-table--responsive {
-  display: flex;
-
-}
-
-.simple-table--responsive .simple-table__row {
-  margin-bottom: 1rem;
-}
-
-.simple-table--responsive .simple-table__cell {
-    display: inline;
-    margin-right: 25px;
-    vertical-align: baseline;
-    height: 4rem;
-}
-
-/* OLD
-
-meter {
-    height: 4rem;
-    vertical-align: middle;
-    width: 200px;
-    background: transparent;
-    
-}
-meter::-webkit-meter-bar {
- background: #eee;
- 
-  border-radius: 3px;
-}
-meter::-webkit-meter-optimum-value  {
-  background: #36bdbb;
-}
-
-::-moz-meter-bar {
-
-  background: #eee;
-  height: 2rem;
-  display: inline-block;
-  background: #eee;
-  overflow: clip;
-  margin-bottom: 1rem;
-  
-
-}
-
-:-moz-meter-optimum::-moz-meter-bar {
-  background: #36bdbb;
-  height: 2rem;
-}
-
-*::-moz-meter-bar {
-
-  background: #36bdbb;
-  height: 2rem;
-
-}
-END OLD */
-
-
-
-
-
-
-meter {
-  /* Reset the default appearance */
-  
-  -moz-appearance: none;
- 
-  height: 20px;
- 
-  
-  width: 200px;
-  background: #EEE;
-  
-  /* For Firefox */
-
-  border-radius: 3px;
-
-}
-
-/* WebKit */
-meter::-webkit-meter-bar {
-  background: #EEE;
-  border-radius:3px;
-  height: 20px;
-  border: none;
-}
-
-
-
-
- meter::-webkit-meter-optimum-value  {
-  background: #36bdbb;
- 
-}
-
-/* Firefox */
- meter::-moz-meter-bar {
-
-  border-radius: 3px;
-  height: 20px;
-
-}
-
-meter:-moz-meter-optimum::-moz-meter-bar {
-  background: #36bdbb;
-}
-
-
-
-
-
-
-</style>
 
 
 <section id="section-1" role="tabpanel" aria-hidden="true" aria-labelledby="section-1-heading">
@@ -150,6 +11,7 @@ meter:-moz-meter-optimum::-moz-meter-bar {
   <h2 id="section-1-heading">{{ office | title }} election data</h2>
   <div class="slab slab--inline slab--neutral u-padding--left u-padding--right">
 
+{# 
     <div id="election-summary" class="entity__figure row"> 
       <h2 class="heading__left">{{ office | title }} election summary</h2>
       <p class="t-sans t-bold t-low-height">Comparing total money spent by party. Also comparing total money spent in <span class="term" data-term="independent expenditure" title="Click to define" tabindex="0">independent expenditures</span> by support and opposition.</p>
@@ -177,7 +39,7 @@ meter:-moz-meter-optimum::-moz-meter-bar {
            </div>
         </div>
     </div>
-
+#}
     <div id="contributions-over-time" class="entity__figure row"> 
       <h2 class="heading__left">{{ office | title }} candidate contributions over time</h2>
       <p class="t-sans t-low-height">Comparing individual contributions, other committee contributions and transfers from other authorized committees across multiple two-year periods.</p>
@@ -222,7 +84,7 @@ meter:-moz-meter-optimum::-moz-meter-bar {
       
 
 
-      <h3>Individual contributions</h3>
+      <h3 class="label">Individual contributions</h3>
       <div class="tooltip__container">
         <button class="tooltip__trigger" type="button"><span class="u-visually-hidden">Learn more</span></button>
         <div id="" role="tooltip" class="tooltip tooltip--under tooltip--left">
@@ -234,7 +96,7 @@ meter:-moz-meter-optimum::-moz-meter-bar {
         
       </div>
 
-      <h3 class="u-padding--top">PACs and other committee contributions</h3>
+      <h3 class="label u-padding--top">PACs and other committee contributions</h3>
       <div class="tooltip__container">
         <button class="tooltip__trigger" type="button"><span class="u-visually-hidden">Learn more</span></button>
         <div id="" role="tooltip" class="tooltip tooltip--under tooltip--left">
@@ -247,7 +109,7 @@ meter:-moz-meter-optimum::-moz-meter-bar {
        
       </div>
 
-      <h3 class="u-padding--top">Transfers from other authorized committees</h3>
+      <h3 class="label u-padding--top">Transfers from other authorized committees</h3>
       <div class="tooltip__container">
         <button class="tooltip__trigger" type="button"><span class="u-visually-hidden">Learn more</span></button>
         <div id="" role="tooltip" class="tooltip tooltip--under tooltip--left">
@@ -283,7 +145,7 @@ meter:-moz-meter-optimum::-moz-meter-bar {
         </div>
     </div>
     
-
+{# 
     <div id="money-raised-accross-elections" class="entity__figure row">
       <h2 class="heading__left">Money raised accross {{ office | title }} elections</h2>
       <p class="t-sans t-bold t-low-height">Compare the money raised in all {{ office | title }} elections by state </p>
@@ -342,5 +204,6 @@ meter:-moz-meter-optimum::-moz-meter-bar {
            </div>
         </div>
     </div>
+#}
   </div>
 </section>
