@@ -870,8 +870,6 @@ def house_senate_overview(request, office, cycle=None):
 
     if office.lower() not in ["president", "senate", "house"]:
         raise Http404()
-    # if (state is not None) and (state and state.upper() not in constants.states):
-    #    raise Http404()
 
     # Redirect to latest presidential election since we don't have presidential overview yet
     if office.lower() == "president":
@@ -891,11 +889,6 @@ def house_senate_overview(request, office, cycle=None):
     context_vars = {
         "office": office,
         "office_code": office_code,
-        # "cycles": candidate["fec_cycles_in_election"],
-        # "name": candidate["name"],
-        # "cycle": cycle,
-        # "electionFull": election_full,
-        # "candidateID": candidate["candidate_id"],
     }
 
     return render(
@@ -910,8 +903,6 @@ def house_senate_overview(request, office, cycle=None):
             "default_election_year": default_election_year,
             "beginning_default_election_year": beginning_default_election_year,
             "context_vars": context_vars,
-            # "state": state,
-            # "state_full": constants.states[state.upper()] if state else None,
             "social_image_identifier": "data",
         },
     )
