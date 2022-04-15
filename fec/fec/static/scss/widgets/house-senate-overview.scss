@@ -107,9 +107,11 @@ meter:-moz-meter-optimum::-moz-meter-bar {
 @media screen and (max-width: 400px) {
   meter {
     display: block;
+    width: 80%
   }
 
-  .simple-table__cell:nth-child(3) {
+  .simple-table__cell {
     margin-left: 0 !important;
+    margin-right: 0 !important;
   }
 }
