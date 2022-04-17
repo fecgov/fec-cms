@@ -2,6 +2,7 @@ from wagtail.core import blocks
 from wagtail.images.blocks import ImageChooserBlock
 from wagtail.documents.blocks import DocumentChooserBlock
 from wagtail.contrib.table_block.blocks import TableBlock
+from wagtail.contrib.typed_table_block.blocks import TypedTableBlock
 from wagtail.snippets.blocks import SnippetChooserBlock
 
 """options for wagtail default table_block """
@@ -186,6 +187,24 @@ class CustomTableBlock(blocks.StructBlock):
         template = 'blocks/custom_table.html'
         icon = 'table'
 
+class CustomTypedTableBlock(blocks.StructBlock):
+
+    table_layout = blocks.ChoiceBlock(choices=[
+         ('fixed', 'Fixed'),
+         ('auto', 'Auto'),
+    ])
+
+    table = TypedTableBlock([
+        ('text', blocks.CharBlock()),
+        ('numeric', blocks.FloatBlock()),
+        ('rich_text', blocks.RichTextBlock()),
+        ('image', ImageChooserBlock()),
+        ('ten_percent_width', blocks.RichTextBlock(cssClass='ten-percent-width')),
+        ('twenty_percent_width', blocks.RichTextBlock(cssClass='twenty-percent-width')),
+        ('thirty_percent_width', blocks.RichTextBlock(cssClass='thirty-percent-width')),
+        ('forty_percent_width', blocks.RichTextBlock(cssClass='forty-percent-width')),
+   
+    ])
 
 class ExampleImage(blocks.StructBlock):
     """Creates an example module with an image and a caption, side-by-side
@@ -238,6 +257,7 @@ class ResourceBlock(blocks.StructBlock):
         ('af_search', AFSearchBlock()),
         ('table', TableBlock(table_options=core_table_options)),
         ('custom_table', CustomTableBlock()),
+        ('typed_table', CustomTypedTableBlock(template = 'blocks/typed_table_block.html')),
         ('html', blocks.RawHTMLBlock()),
         ('reporting_example_cards', ReportingExampleCards()),
         ('contribution_limits_table', SnippetChooserBlock(

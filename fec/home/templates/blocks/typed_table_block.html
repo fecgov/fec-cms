@@ -1,0 +1,92 @@
+{% load wagtailcore_tags %}
+{% load filters  %}
+
+
+{% for block in self.typed_table %}
+  
+
+   {% for subblock in block.value.columns %}
+  
+  {{ subblock.block }}
+
+
+ {% endfor %}
+
+
+
+{% endfor %}
+ 
+
+
+
+
+<br>
+<style>
+
+  .block-typed_table table td{
+    border: 1px solid #777;
+    padding: 1rem;
+
+  }
+  .ten_percent_width {
+    width: 10%;
+  }
+ .twenty_percent_width {
+    width: 20%;
+  }
+ .thirty_percent_width {
+    width: 30%;
+  }
+  .forty_percent_width {
+    width: 40%;
+  }
+
+
+
+</style>
+<br>
+
+{% for block in self.value %} 
+   
+   {% if block.block_type == "title" %}
+    <h4>{{ block }}</h4>
+    
+   {% elif block.block_type == "paragraph" %}
+    <div class="rich-text">{{ block }}</div>
+
+   {% elif block.block_type == "table_layout" %}
+   <div class="">
+    
+       <table style="table-layout:  {{ block }}">
+
+   
+   {% elif block.block_type == "table" %} 
+  
+    
+    <thead>
+        <tr>
+            {% for col in block.value.columns %}
+             
+                <th scope="col" class="{{ col.block.meta.cssClass }}">{{ col.heading }}</th>
+            {% endfor %}
+        </tr>
+    </thead>
+    <tbody>
+       {% for row in block.value.rows %}
+        <tr>
+            {% for block in row %}
+           <td>{% include_block block %}</td>
+
+
+
+            {% endfor %}
+        </tr>
+        {% endfor %}
+    </tbody>
+   </table>
+
+    </div>
+     
+  {% endif %}
+ 
+{% endfor %}  
