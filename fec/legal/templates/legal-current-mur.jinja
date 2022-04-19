@@ -71,6 +71,11 @@
       </div>
       <div class="legal-mur__property">
         <p>
+          <strong>ELECTION CYCLE(S):</strong> {{ '; '.join(mur['election_cycles'] | map('string') | sort) }}
+        </p>
+      </div>
+      <div class="legal-mur__property">
+        <p>
           <strong>DISPOSITION:</strong> {{ '<br>'.join(mur['disposition_text']) | safe }}
         </p>
       </div>
