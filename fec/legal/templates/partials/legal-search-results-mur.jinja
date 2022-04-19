@@ -19,9 +19,11 @@
       </div>
       <div class="simple-table__cell">
         <div class="t-serif legal-search-result__hit">
-          &hellip;
-          {% for highlight in mur.highlights %}
-            {{ highlight|safe }} &hellip;
+          {% for document in mur.documents %}
+            {% set query_highlight = mur.document_highlights[loop.index0 | string]%}
+            {% if(query_highlight) %}
+              <p><strong>{{ document.category }} (<a href="{{document.url}}">{{ document.description }}</a>)</strong> - {{ '... '.join(query_highlight) | safe}}</p>
+            {% endif %}
           {% endfor %}
         </div>
         <div><strong>Date opened:</strong> {{ mur.open_date | date('%m/%d/%Y') | default('Unknown', True) }}</div>
