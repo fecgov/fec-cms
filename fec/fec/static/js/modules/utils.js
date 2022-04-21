@@ -37,7 +37,7 @@ function slugify(val, retainCase = false) {
  * @param {String} value - A string whose doublequote characters should be removed
  * @returns {String} A string with any " characters removed
  */
- function stripDoubleQuotes(value) {
+function stripDoubleQuotes(value) {
   return value.replace(/["]+/g, '');
 }
 
