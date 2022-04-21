@@ -11,7 +11,7 @@
 // TODO: better solution for window.queryText
 
 import autoComplete from '@tarekraafat/autocomplete.js';
-import officeNames from './utils';
+import { officeNames } from './utils';
 // import events from './events';
 
 // var events = require('./events');
@@ -19,11 +19,11 @@ import officeNames from './utils';
 /**
  * Used inside autocomplete for the results list
  */
-let resultsListOptions = {
+const resultsListOptions = {
   class: 'as-dataset as-dataset-candidate',
   maxResults: 20,
   tabSelect: true,
-  element: (item, data) => {
+  element: (item) => {
     item.setAttribute('role', 'presentation');
   }
 };
@@ -31,12 +31,13 @@ let resultsListOptions = {
 /**
  * Used inside autocomplete for the results list's items
  */
-let resultItemOptions = {
+const resultItemOptions = {
   class: 'as-suggestion as-selectable',
   selected: 'as-cursor',
   submit: true,
   highlight: 'as-highlight',
   element: (item, data) => {
+    // console.log('resultItemOptions element(item, data): ', item, data);
     // For headers (e.g. "Select a candidate"), no tabbing, data.value.name only
     if (data.value.is_header) {
       item.setAttribute('class', 'as-suggestion__header');
@@ -53,8 +54,8 @@ let resultItemOptions = {
     } else {
       // If the match was in the name, display data.match, otherwise show the default of data.value.name
       // Likewise for the ID: if ID is the match, show data.match instead of data.value.id
-      let theName = data['key'] == 'name' ? data.match : data.value.name;
-      let theID = data['key'] == 'id' ? data.match : data.value.id;
+      const theName = data['key'] == 'name' ? data.match : data.value.name;
+      const theID = data['key'] == 'id' ? data.match : data.value.id;
       item.innerHTML = `<span class="as-suggestion__name" tabindex="-1">${theName} (${theID})</span>`;
 
       // Include the office sought if it exists
@@ -104,16 +105,16 @@ function getUrl(resource, queryString) {
 }
 
 /**
- * 
- * @param {*} type 
- * @param {*} data 
+ *
+ * @param {*} type
+ * @param {*} data
  * @returns {Array} of objects structured like { is_header: true, id: window.queryText, name: 'Select a committee:', type: 'none' }
  */
 function formatResults(type, data) {
   // console.log('formatResults(): ', type, data);
   let toReturn = [];
-  let results = data.results;
-  let resultsLimit = 5;
+  const results = data.results;
+  const resultsLimit = 5;
 
   if ((type == 'candidates' || type == 'audit_candidates' ) && results.length > 0)
     toReturn.push({ is_header: true, id: window.queryText, name: 'Select a candidate:', type: 'none' });
@@ -156,10 +157,7 @@ function getSuggestions(type) {
  */
 async function getData(q, qType) {
   // TODO: Would like to come back and make this more adaptable, remove the repeated code
-  // console.log('src.getData()');
-  // console.log('  q: ', q);
-  // console.log('  qType: ', qType);
-  let fetchedResults = [];
+  const fetchedResults = [];
   window.queryText = q;
   if (qType == 'candidate') {
     // Any changes here should also be made inside `== 'all'`
@@ -208,8 +206,8 @@ async function getData(q, qType) {
         fetchedResults.push(...formatResults('audit_committees', data));
       });
 
-  } else {
-    console.log(`  qType was '${qType}' so didn't do anything`);
+  // } else {
+    // console.log(`  qType was '${qType}' so didn't do anything`);
   }
 
   if (fetchedResults.length === 0) {
@@ -223,7 +221,7 @@ async function getData(q, qType) {
  * Default options for autocomplete
  * Of note, 'selector and data.src are basically always replaced.
  */
-let defaultAutocompleteOptions = {
+const defaultAutocompleteOptions = {
   selector: () => {
     '.js-site-search';
   },
@@ -318,7 +316,7 @@ let defaultAutocompleteOptions = {
  * @property {HTMLElement} wrapper the element created to wrap the <input> and the results
  */
 function AutoSuggest(elementSelector, opts) {
-  console.log('AutoSuggest(elementSelector, opts): ', elementSelector, opts);
+  // console.log('AutoSuggest(elementSelector, opts): ', elementSelector, opts);
   // if elementSelector is a string, use that string to find the dom element and set that to this.input
   // else if elementSelector is an element, just save it
   this.input = typeof elementSelector == 'string' ? document.querySelector(elementSelector) : elementSelector;
@@ -340,7 +338,7 @@ function AutoSuggest(elementSelector, opts) {
   // if (this.typeahead) this.input.typeahead('destroy');
   this.input.value = '';
 
-  let theseOpts = defaultAutocompleteOptions;
+  const theseOpts = defaultAutocompleteOptions;
 
   // Create a new span to wrap the input,
   // add the span to the page before the input
@@ -376,7 +374,7 @@ function AutoSuggest(elementSelector, opts) {
       // console.log('try');
       // console.log('  this.queryType: ', this.queryType);
       // console.log('  q: ', q);
-      let results = await getData(q, this.queryType);
+      const results = getData(q, this.queryType);
       // console.log('got results of ', results);
       return results;
     } catch(e) {
@@ -387,12 +385,12 @@ function AutoSuggest(elementSelector, opts) {
 
   this.autocomplete = new autoComplete(theseOpts);
 
-  let theMenus = this.wrapper.querySelectorAll('.as-menu');
+  const theMenus = this.wrapper.querySelectorAll('.as-menu');
   theMenus.forEach(el => {
     el.setAttribute('aria-live', 'polite');
   });
 
-  let theInputs = this.wrapper.querySelectorAll('.as-input');
+  const theInputs = this.wrapper.querySelectorAll('.as-input');
   theInputs.forEach(el => {
     el.setAttribute('aria-expanded', 'false').removeAttribute('aria-readonly');
   });
@@ -482,7 +480,7 @@ AutoSuggest.prototype.handleClose = function(e) {
  * Called to copy the aria-expanded state from the autocomplete element up to the <input>'s wrapper for css selectors
  */
 AutoSuggest.prototype.matchAriaExpandeds = function() {
-  let theACwrapper = this.wrapper.querySelector('.autoComplete_wrapper');
+  const theACwrapper = this.wrapper.querySelector('.autoComplete_wrapper');
 
   this.wrapper.setAttribute(
     'aria-expanded',
@@ -518,7 +516,7 @@ AutoSuggest.prototype.handleResults = function(e) {
  * @fires autoSuggest:close
  */
 AutoSuggest.prototype.handleSelect = function(e) {
-  console.log('AutoSuggest.handleSelect(e): ', e);
+  // console.log('AutoSuggest.handleSelect(e): ', e);
 
   const val = e.detail.selection.value;
 
@@ -536,7 +534,7 @@ AutoSuggest.prototype.handleSelect = function(e) {
     this.searchSite(e.detail.selection.match);
   }
 
-  // let eventObj = Object.assign
+  // const eventObj = Object.assign
   /**
    * Broadcast the autoSuggest:select event
    * @event autoSuggest:select
@@ -554,9 +552,9 @@ AutoSuggest.prototype.handleSelect = function(e) {
  * @param {Object} e.detail carries the autoComplete.js "feedback" object
  */
 AutoSuggest.prototype.handleNavigate = function(e) {
-  console.log('handleNavigate(e): ', e);
+  // console.log('handleNavigate(e): ', e);
   // If we've just focused on a header object, we want to nav off of it
-  let sel = e.detail.selection;
+  const sel = e.detail.selection;
   if (sel.value.is_header === true) {
     // If we were previously higher on the list, let's go to the next
     if (this.formerSelectionIndex <= sel.index) this.autocomplete.next();
@@ -590,7 +588,7 @@ AutoSuggest.prototype.highlightFirstResult = function() {
 };
 
 /**
- * Called by @see handleSelect 
+ * Called by @see handleSelect
  * @param {Object} q
  * q is the same as e.detail.selection.match from @see AutoSuggest.prototype.handleSelect
  */
@@ -598,19 +596,18 @@ AutoSuggest.prototype.searchSite = function(q) {
   /** If the site search option is selected, this function handles submitting
    * a new search on /search
    */
-  let form = this.input.closest('form');
-  let action = form.getAttribute('action');
+  const form = this.input.closest('form');
+  const action = form.getAttribute('action');
   this.input.value = q;
   this.value = q;
   form.setAttribute('action', action);
   form.submit();
 };
 
-
 /**
  *
  */
- let fetchInit = {
+ const fetchInit = {
   headers: {
     accept: 'application/json, text/javascript, */*; q=0.01',
     'accept-language': 'en-US,en;q=0.9',

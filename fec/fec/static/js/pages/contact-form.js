@@ -1,7 +1,7 @@
 'use strict';
 
 var $ = require('jquery');
-import AutoSuggest from '../modules/autosuggest';
+var Typeahead = require('../modules/typeahead').Typeahead;
 var URI = require('urijs');
 
 const loadRecaptcha = require('../modules/load-recaptcha').loadRecaptcha;
@@ -10,32 +10,44 @@ const loadRecaptcha = require('../modules/load-recaptcha').loadRecaptcha;
 function ContactForm($elm) {
   this.$elm = $elm;
   this.committeeId = $elm.find('#id_u_committee');
+  this.committeeName = $elm.find('#id_committee_name');
+  this.committeeNameError = $elm.find('.id_committee_name');
   this.category = $elm.find('#id_u_category');
   this.otherReason = $elm.find('#id_u_other_reason').closest('div');
-  this.autosuggest = new AutoSuggest(
-    $elm.find('.js-contact-autosuggest'),
+  this.typeahead = new Typeahead(
+    $elm.find('.js-contact-typeahead'),
     'committees',
     ''
   );
-  this.autosuggest = new AutoSuggest(document.querySelector('.js-contact-autosuggest'), 'committees', '');
   this.$cancel = $elm.find('.js-cancel');
-  this.initAutoSuggest();
+  this.initTypeahead();
   this.initOtherReason();
   this.category.on('change', this.toggleOtherReason.bind(this));
   this.$cancel.on('click', this.clearForm.bind(this));
+  this.typeahead.$input.on('keyup', this.clearHidden.bind(this));
 
   loadRecaptcha();
 }
 
-ContactForm.prototype.initAutoSuggest = function() {
-  // Overriding default autosuggest behavior
-  // This will set the value of a hidden input when selecting a value from autosuggest
+ContactForm.prototype.initTypeahead = function() {
+  // Overriding default typeahead behavior
+  // This will set the value of a hidden input when selecting a value from typeahead
   var self = this;
-  this.autosuggest.$element.css({ height: 'auto' });
-  this.autosuggest.$input.off('selection');
-  this.autosuggest.$input.on('selection', function(e, opts) {
+  this.typeahead.$element.css({ height: 'auto' });
+  this.typeahead.$input.off('typeahead:select');
+  this.typeahead.$input.on('typeahead:select', function(e, opts) {
     self.committeeId.val(opts.id);
+    //focus away to prompt removal of error state, if present. Could only focus into...
+    //...another field, Attempts to focusout, or focus onto body, did not work.
+    $('#id_u_contact_title')
+      .focus()
+      .blur();
   });
+};
+
+//Clear comm_id field when keyup is registered on comm name field.
+ContactForm.prototype.clearHidden = function() {
+  this.committeeId.val('');
 };
 
 ContactForm.prototype.initOtherReason = function() {
@@ -69,19 +81,19 @@ function AnalystLookup($elm) {
   this.$analystDetails = this.$elm.find('.js-yes-analyst');
   this.$analystNoResults = this.$elm.find('.js-no-analyst');
 
-  this.autosuggest = new AutoSuggest(this.$input, 'committees', '');
-  this.initAutoSuggest();
+  this.typeahead = new Typeahead(this.$input, 'committees', '');
+  this.initTypeahead();
 
   this.$input.on('change, blur', this.handleChange.bind(this));
 
   loadRecaptcha();
 }
 
-AnalystLookup.prototype.initAutoSuggest = function() {
-  // Overriding default autosuggest behavior
-  this.autosuggest.$element.css({ height: 'auto' });
-  this.autosuggest.$input.off('selection');
-  this.autosuggest.$input.on('selection', this.fetchAnalyst.bind(this));
+AnalystLookup.prototype.initTypeahead = function() {
+  // Overriding default typeahead behavior
+  this.typeahead.$element.css({ height: 'auto' });
+  this.typeahead.$input.off('typeahead:select');
+  this.typeahead.$input.on('typeahead:select', this.fetchAnalyst.bind(this));
 };
 
 AnalystLookup.prototype.fetchAnalyst = function(e, opts) {
@@ -127,11 +139,223 @@ AnalystLookup.prototype.handleChange = function(e) {
   }
 };
 
+function RadFormValidate(radformSelector) {
+  this.messages = {
+    id_u_contact_first_name: 'Please provide your first name',
+    id_u_contact_last_name: 'Please provide your last name',
+    id_u_contact_email: 'Please include a valid email address',
+    id_committee_name: 'Please choose a valid committee',
+    id_u_category: 'Please choose a category',
+    id_u_description: 'Please include a detailed question',
+    id_u_committee_member_certification: 'Please agree before submitting'
+  };
+
+  this.box_messages = {
+    id_u_contact_first_name: 'First name',
+    id_u_contact_last_name: 'Last name',
+    id_u_contact_email: 'Valid email',
+    id_committee_name: 'Valid committee name or ID',
+    id_u_category: 'Subject',
+    id_u_description: 'Question',
+    id_u_committee_member_certification: 'I agree/agreement confirmation'
+  };
+
+  const radform = document.querySelector(radformSelector);
+  //if radform is rendered to the page
+  if (radform && radform.length) {
+    this.id_u_contact_email = radform.querySelector('#id_u_contact_email');
+    this.id_u_committee = radform.querySelector('#id_u_committee');
+    this.req_fields = radform.querySelectorAll('[required]');
+    this.id_committee_name = radform.querySelector('#id_committee_name');
+    this.id_committee_name.setAttribute('autocomplete', 'off');
+
+    let self = this;
+
+    //Iterate the required fields to add error span and event listeners
+    this.req_fields.forEach(function(req_field) {
+      //if the required field is not the committee_member_certification checkbox
+      if (req_field.id !== 'id_u_committee_member_certification') {
+        req_field.insertAdjacentHTML(
+          'afterend',
+          '<span class="error ' + req_field.id + '" aria-live="polite"></span>'
+        );
+      } else {
+        //This checkbox needs to put the error after its label or else it breaks its formatting on the page
+        document
+          .querySelector('label[for=id_u_committee_member_certification]')
+          .insertAdjacentHTML(
+            'afterend',
+            '<span class="error ' +
+              req_field.id +
+              '" id="checkbox_error" aria-live="polite"></span>'
+          );
+      }
+
+      //bind showError() to blur event on required fields
+      req_field.addEventListener('blur', function() {
+        self.showError(req_field);
+      });
+      //clear. error once user starts typing
+      req_field.addEventListener('input', function() {
+        self.clearError(req_field);
+      });
+    });
+
+    //bind to submit event for the form
+    radform.addEventListener('submit', this.handleSubmit.bind(this));
+    //bind to blur event for committee name or id field only
+    this.id_committee_name.addEventListener(
+      'blur',
+      this.validateCommitteeId.bind(this)
+    );
+    //bind to blur event for email field only
+    this.id_u_contact_email.addEventListener(
+      'blur',
+      this.validateEmail.bind(this)
+    );
+  }
+}
+
+RadFormValidate.prototype.handleSubmit = function(event) {
+  this.validateCommitteeId();
+  let self = this;
+  //iterate invalid required fields to scroll to first invalid field
+  let errored_list = [];
+  for (let req_field of this.req_fields) {
+    if (!req_field.validity.valid) {
+      event.preventDefault();
+      let req_field_id = req_field.getAttribute('id');
+      let box_msg = self.box_messages[req_field_id];
+
+      let errored_list_item = `<li>${box_msg}</li>`;
+
+      errored_list.push(errored_list_item);
+    }
+    this.showError(req_field);
+  }
+
+  //only shows recaptcha error if submit is prevented due to invalid fields, otherwise...
+  //...recaptcha gets. validated server-side
+  var recaptcha_msg = '';
+  if (!this.validateRecaptcha()) {
+    recaptcha_msg = `<p>Also, reCAPTCHA thinks you’re a robot: Please try again.</p>`;
+  }
+
+  const error_msg = `<div class="message message--error error_box js-error-box">
+                <h2 class="message__title">Error</h2>
+                <p>Oops, you’re missing some information. We’ve highlighted the areas you need to fix:</p>
+                   <ul>
+                     ${errored_list.join('')}
+                   </ul>
+                  ${recaptcha_msg}
+               </div>`;
+
+  const error_message_box = document.querySelector('.js-error-box');
+  if (error_message_box) {
+    error_message_box.parentNode.removeChild(error_message_box);
+  }
+
+  if (errored_list.length) {
+    document
+      .querySelectorAll('.contact-form__element')[0]
+      .insertAdjacentHTML('afterend', error_msg);
+
+    document
+      .querySelectorAll('.contact-form__element')[0]
+      .scrollIntoView({ behavior: 'smooth' });
+  }
+};
+
+RadFormValidate.prototype.validateEmail = function() {
+  const email_value = this.id_u_contact_email.value;
+  //email validation regex, email is also validated server-side by Django
+  const re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+  let self = this;
+  if (re.test(email_value)) {
+    //setCustomValidity allows us to overrride this req_field's WC3 default email validation which...
+    ///... contradicts Dango's server side validation and seems to confuse everyone.
+    self.id_u_contact_email.setCustomValidity('');
+  } else {
+    //this message does not actually get rendered from here, its just needs to be...
+    //... anything other than an empty string to set the set the read-only validity state as invalid.
+    self.id_u_contact_email.setCustomValidity(
+      'Please include a valid email address'
+    );
+  }
+  this.showError(this.id_u_contact_email);
+};
+
+//validation specific to committee name and ID field
+RadFormValidate.prototype.validateCommitteeId = function() {
+  let self = this;
+  if (!this.id_u_committee.value) {
+    self.id_committee_name.value = '';
+    //need a set timeout to wait for typeahead to finish whatever it is doing on the field
+    setTimeout(function() {
+      self.id_committee_name.value = '';
+    }, 100);
+  }
+  //id_committee_name will not validate on blur, unless above validation code has run first
+  this.showError(this.id_committee_name);
+};
+
+RadFormValidate.prototype.clearError = function(req) {
+  req.classList.remove('invalid_border');
+  const field_id = req.getAttribute('id');
+  const error_field = 'span.' + field_id;
+  const req_fieldError = document.querySelector(error_field);
+  req_fieldError.textContent = '';
+};
+
+//only runs if submit is prevented due to invalid fields, otherwise...
+//...recaptcha gets validated server-side
+RadFormValidate.prototype.validateRecaptcha = function() {
+  if (grecaptcha.getResponse() == '') {
+    return false;
+  } else {
+    return true;
+  }
+};
+
+//main showError function
+RadFormValidate.prototype.showError = function(req) {
+  const field_id = req.getAttribute('id');
+  const error_field = 'span.' + field_id;
+  const req_fieldError = document.querySelector(error_field);
+  const msg = this.messages[field_id];
+
+  if (!req.validity.valid) {
+    //This chexkbox needs to put red border on label due to its formatting
+    if (req.id == 'id_u_committee_member_certification') {
+      document
+        .querySelector('label[for=id_u_committee_member_certification]')
+        .classList.add('invalid_border');
+    } else {
+      req.classList.add('invalid_border');
+    }
+
+    // display the error message.
+    req_fieldError.textContent = msg;
+  } else {
+    //This checkbox needs to put remove red border from label due to its formatting
+    if (req.id == 'id_u_committee_member_certification') {
+      document
+        .querySelector('label[for=id_u_committee_member_certification]')
+        .classList.remove('invalid_border');
+    } else {
+      req.classList.remove('invalid_border');
+    }
+    req_fieldError.textContent = '';
+  }
+};
+
 new ContactForm($('.js-contact-form'));
 new AnalystLookup($('.js-analyst-lookup'));
+new RadFormValidate('#id_contact_form');
 
 // Even though we initialize above, export so it can be tested
 module.exports = {
   AnalystLookup: AnalystLookup,
-  ContactForm: ContactForm
+  ContactForm: ContactForm,
+  RadFormValidate: RadFormValidate
 };

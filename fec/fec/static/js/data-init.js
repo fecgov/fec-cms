@@ -77,11 +77,11 @@ $(function() {
   // Initialize main search autosearch
   let mainSearchElement = document.querySelector('.js-search-input');
   console.log('mainSearchElement: ', mainSearchElement);
-  if (mainSearchElement) new AutoSuggest(mainSearchElement, 'allData', '/data/');
+  if (mainSearchElement) new AutoSuggest(mainSearchElement, { queryType: 'allData' });
 
   // Initialize header autosearch
   let siteSearchElement = document.querySelector('.js-site-search');
-  if (siteSearchElement) new AutoSuggest(siteSearchElement, 'all', '/data/');
+  if (siteSearchElement) new AutoSuggest(siteSearchElement, { queryType: 'all' });
 
   // Initialize feedback
   feedbackWidget = new feedback.Feedback(helpers.buildAppUrl(['issue']));

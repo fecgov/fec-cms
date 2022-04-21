@@ -92,7 +92,7 @@ $(function() {
   });
 
   let siteSearchElement = document.querySelector('.js-site-search');
-  if (siteSearchElement) new AutoSuggest(siteSearchElement, 'all', '/data/');
+  if (siteSearchElement) new AutoSuggest(siteSearchElement, { queryType: 'all' });
 
   // For any link that should scroll to a section on the page apply .js-scroll to <a>
   $('.js-scroll').on('click', function(e) {

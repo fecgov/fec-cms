@@ -34,6 +34,7 @@
     "colorbrewer": "0.0.2",
     "component-sticky": "1.0.0",
     "concat-stream": "^1.6.2",
+    "corejs-typeahead": "^1.2.1",
     "css.escape": "^1.5.1",
     "d3": "3.5.5",
     "datatables.net": "^1.10.23",

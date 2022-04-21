@@ -747,7 +747,7 @@ new Vue({
           {
             type: 'p',
             content:
-              'This is an estimated administrative fine based on the information you provided and may not reflect the actual fine amount assessed by the Commission. Your committee will be notified if the Commission assesses a fine for a late or non-filed\xa0report.'
+              `This is an estimated administrative fine based on the information you provided and may not reflect the actual fine amount assessed by the Commission. Your committee will be notified if the Commission assesses a fine for a late or non-filed\xa0report.`
           }
         ],
         viewed: false
