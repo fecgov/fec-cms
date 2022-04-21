@@ -8,7 +8,6 @@ chai.use(sinonChai);
 var $ = require('jquery');
 
 require('./setup')();
- 
 
 var ContactForm = require('../../static/js/pages/contact-form').ContactForm;
 
@@ -21,7 +20,7 @@ describe('Contact form', function() {
   beforeEach(function() {
     this.$fixture.empty().append(
       '<form id="form">' +
-        '<input class="js-contact-autosuggest">' +
+        '<input class="js-contact-typeahead">' +
         '<input id="id_u_committee">' +
         '<select id="id_u_category">' +
           '<option value="option-1">Option 1</option>' +

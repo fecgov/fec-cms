@@ -295,7 +295,7 @@ function filterSuccessUpdates(changeCount) {
       .removeClass('is-disabled-filter')
       .addClass('is-active-filter');
 
-    // Reenable committee ID autosuggest input
+    // Reenable committee ID typeahead input
     $('#committee_id').removeClass('is-disabled-filter');
 
     if (type === 'checkbox') {
@@ -318,10 +318,10 @@ function filterSuccessUpdates(changeCount) {
         filterAction = 'Filter removed.';
       }
     } else if (type === 'text') {
-      // autosuggest
-      if ($elm.hasClass('as-input')) {
+      // typeahead
+      if ($elm.hasClass('tt-input')) {
         // show message after generated checkbox (last item in list)
-        $label = $('[data-filter="autosuggest"] li').last();
+        $label = $('[data-filter="typeahead"] li').last();
         filterAction = 'Filter added';
       } else if ($elm.closest('.range').hasClass('range--currency')) {
         $label = $elm.closest('.range');
@@ -960,7 +960,7 @@ DataTable.prototype.fetchError = function(jqXHR, textStatus) {
       .after($(errorMessage));
   } else if (
     $(updateChangedEl).attr('type') === 'text' &&
-    $(updateChangedEl).hasClass('as-input') === false
+    $(updateChangedEl).hasClass('tt-input') === false
   ) {
     $(updateChangedEl)
       .parent()

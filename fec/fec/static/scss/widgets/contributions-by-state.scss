@@ -174,7 +174,7 @@ aside.contribs-by-state {
           background-position: 50%;
         }
       }
-      #contribs-by-state-as-error {
+      #contribs-by-state-typeahead-error {
         background-color: #fff;
         color: $error;
         display: block;
@@ -192,7 +192,7 @@ aside.contribs-by-state {
         width: 0;
       }
       &.is-error {
-        #contribs-by-state-as-error {
+        #contribs-by-state-typeahead-error {
           height: 65px;
           max-width: 300px;
           opacity: 1;
@@ -201,7 +201,7 @@ aside.contribs-by-state {
         }
       }
     }
-    #contribs-by-state-as-error {
+    #contribs-by-state-typeahead-error {
       display: none; // hide it until it's moved into .autosuggest-filter
     }
   }
@@ -465,7 +465,7 @@ aside.contribs-by-state {
           position: absolute;
           top: 36px;
         }
-        #contribs-by-state-as-error {
+        #contribs-by-state-typeahead-error {
           background-color: transparent;
           line-height: 1.1em;
           max-width: none;
@@ -473,7 +473,7 @@ aside.contribs-by-state {
           top: 55px;
         }
         &.is-error {
-          #contribs-by-state-as-error {
+          #contribs-by-state-typeahead-error {
             height: auto;
           }
         }

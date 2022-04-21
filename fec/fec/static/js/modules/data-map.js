@@ -56,8 +56,8 @@ let defaultOpts = {
 
 /**
  * @constructor
- * @param {String} elm - selector for the div to put the map in
- * @param {Object} opts - configuration options
+ * @param {string} elm - selector for the div to put the map in
+ * @param {object} opts - configuration options
  * @param {Boolean} opts.data - placeholder for this object to save its own data
  * @param {Boolean} opts.addLegend - whether to add a legend
  * @param {Boolean} opts.addTooltips - whether to add the tooltip functionality

@@ -14,7 +14,6 @@ function prepareValue($elm, value) {
 }
 
 function Filter(elm) {
-  console.log('Filter(elm): ', elm);
   this.$elm = $(elm);
   this.$input = this.$elm.find('input:not([name^="_"])');
   this.$filterLabel = this.$elm.closest('.accordion__content').prev();
@@ -72,7 +71,6 @@ Filter.prototype.formatValue = function($input, value) {
 };
 
 Filter.prototype.handleAddEvent = function(e, opts) {
-  console.log('Filter.handleAddEvent(e, opts): ', e, opts);
   if (opts.name !== this.name) {
     return;
   }
@@ -87,14 +85,7 @@ Filter.prototype.handleAddEvent = function(e, opts) {
   this.setLastAction(e, opts);
 };
 
-/**
- *
- * @param {jQuery.Event} e
- * @param {Object} opts
- * @returns 
- */
 Filter.prototype.handleRemoveEvent = function(e, opts) {
-  // console.log('Filter.handleRemoveEvent(e, opts): ', e, opts);
   // Don't decrement on initial page load
   if (opts.name !== this.name || opts.loadedOnce !== true) {
     return;
@@ -114,7 +105,6 @@ Filter.prototype.increment = function($filterLabel) {
 };
 
 Filter.prototype.decrement = function($filterLabel) {
-  console.log('Filter.decrement($filterLabel): ', $filterLabel);
   var filterCount = $filterLabel.find('.filter-count');
   if (filterCount.html() === '1') {
     filterCount.remove();
@@ -124,7 +114,6 @@ Filter.prototype.decrement = function($filterLabel) {
 };
 
 Filter.prototype.setLastAction = function(e, opts) {
-  console.log('Filter.setLastAction(e, opts): ', e, opts);
   if (opts.name !== this.name) {
     return;
   }

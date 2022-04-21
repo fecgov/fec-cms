@@ -57,7 +57,7 @@ describe('AnalystLookup', function() {
       expect(this.lookup.$prompt.is('.js-analyst-prompt')).to.be.true;
     });
 
-    it('initializes autosuggest', function() {
+    it('initializes typeahead', function() {
       expect(this.initTypeahead).to.have.been.called;
     });
   });
