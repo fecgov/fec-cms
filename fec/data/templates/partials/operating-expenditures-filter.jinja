@@ -1,7 +1,7 @@
 {% extends 'partials/filters.jinja' %}
 
 {% import 'macros/filters/text.jinja' as text %}
-{% import 'macros/filters/autosuggest-filter.jinja' as autosuggest %}
+{% import 'macros/filters/typeahead-filter.jinja' as typeahead %}
 {% import 'macros/filters/states.jinja' as states %}
 {% import 'macros/filters/date.jinja' as date %}
 {% block heading %}
@@ -20,11 +20,11 @@ Filter operating expenditures
 <div class="js-accordion accordion--neutral" data-content-prefix="filter" data-open-first="true">
   <button type="button" class="js-accordion-trigger accordion__button">Spender information</button>
   <div class="accordion__content">
-    {{ autosuggest.field('committee_id', 'Committee name or ID') }}
+    {{ typeahead.field('committee_id', 'Committee name or ID') }}
   </div>
   <button type="button" class="js-accordion-trigger accordion__button">Recipient information</button>
   <div class="accordion__content">
-    {{ autosuggest.field('recipient_name', 'Recipient name or ID', allow_text=True) }}
+    {{ typeahead.field('recipient_name', 'Recipient name or ID', allow_text=True) }}
     {{ text.field('recipient_city', 'City') }}
     {{ states.field('recipient_state')}}
   </div>

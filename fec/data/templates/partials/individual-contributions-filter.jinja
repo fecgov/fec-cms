@@ -1,7 +1,7 @@
 {% extends 'partials/filters.jinja' %}
 
 {% import 'macros/filters/text.jinja' as text %}
-{% import 'macros/filters/autosuggest-filter.jinja' as autosuggest %}
+{% import 'macros/filters/typeahead-filter.jinja' as typeahead %}
 
 {% import 'macros/filters/contributor-states.jinja' as states %}
 {% import 'macros/filters/date.jinja' as date %}
@@ -14,7 +14,7 @@ Filter individual contributions
 
 {% block filters %}
 <div class="filters__inner">
-  {{ autosuggest.field('committee_id', 'Recipient Name or ID', helper_text = 'Limit 10 recipient names or IDs') }}
+  {{ typeahead.field('committee_id', 'Recipient Name or ID', helper_text = 'Limit 10 recipient names or IDs') }}
   <legend class="label  u-margin--top">Contributor details</legend>
   {{ text.field(name = 'contributor_name', title = 'Name', minor_label_text = True, helper_text = 'Limit 10 contributor names or IDs') }}
   {{ text.field(name = 'contributor_zip', title = 'ZIP code', attrs = {'maxlength':5}, minor_label_text = True, helper_text = 'Limit 10 ZIP codes') }}

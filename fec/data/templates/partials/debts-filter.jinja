@@ -3,11 +3,11 @@
 {% import 'macros/filters/date.jinja' as date %}
 {% import 'macros/filters/range.jinja' as range %}
 {% import 'macros/filters/text.jinja' as text %}
-{% import 'macros/filters/autosuggest-filter.jinja' as autosuggest %}
+{% import 'macros/filters/typeahead-filter.jinja' as typeahead %}
 
 {% block filters %}
   <div class="filters__inner">
-    {{ autosuggest.field('committee_id', 'Committee Name or ID') }}
+    {{ typeahead.field('committee_id', 'Committee Name or ID') }}
     {{ text.field('creditor_debtor_name', 'Creditor/debtor Name') }}
     {# removing date filter for now, waiting for determination of its usefulness #}
     {# {{ date.field('date', 'Date') }} #}

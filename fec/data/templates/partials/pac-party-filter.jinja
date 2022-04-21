@@ -1,6 +1,6 @@
 {% extends 'partials/filters.jinja' %}
 
-{% import 'macros/filters/autosuggest-filter.jinja' as autosuggest %}
+{% import 'macros/filters/typeahead-filter.jinja' as typeahead %}
 {% import 'macros/filters/years.jinja' as years %}
 {% import 'macros/filters/range.jinja' as range %}
 {% import 'macros/filters/text.jinja' as text %}
@@ -10,7 +10,7 @@
 
 {% block filters %}
   <div class="filters__inner">
-    {{ autosuggest.field('committee_id', 'Committee Name or ID') }}
+    {{ typeahead.field('committee_id', 'Committee Name or ID') }}
     {{ years.singleElectionYear('cycle', 'Time period')  }}
   </div>
   <div class="js-accordion accordion--neutral" data-content-prefix="filter">

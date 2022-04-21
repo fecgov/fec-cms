@@ -1,7 +1,7 @@
 {% extends 'partials/filters.jinja' %}
 
 {% import 'macros/filters/dropdown-json.jinja' as dropdown %}
-{% import 'macros/filters/autosuggest-filter.jinja' as autosuggest %}
+{% import 'macros/filters/typeahead-filter.jinja' as typeahead %}
 {% import 'macros/filters/years.jinja' as years %}
 
 {% block filters %}
@@ -28,8 +28,8 @@
     }}
 
 {# committee/candidate name/id filter #}
-    {{ autosuggest.field('q', 'Committee name or ID', '', dataset='auditCommittees', allow_text=True) }}
-    {{ autosuggest.field('qq', 'Authorized candidate name or ID', '', dataset='auditCandidates', allow_text=True) }}
+    {{ typeahead.field('q', 'Committee name or ID', '', dataset='auditCommittees', allow_text=True) }}
+    {{ typeahead.field('qq', 'Authorized candidate name or ID', '', dataset='auditCandidates', allow_text=True) }}
 
 {# election cycle range filter #}
   {{ years.cycleRange('cycle', 'Election cycles covered by audit' ) }}
