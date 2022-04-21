@@ -188,23 +188,43 @@ class CustomTableBlock(blocks.StructBlock):
         icon = 'table'
 
 class CustomTypedTableBlock(blocks.StructBlock):
+    typed_table = blocks.StreamBlock([
+        ('table_layout',  blocks.ChoiceBlock(choices=[
+            ('fixed', 'Fixed'),
+            ('auto', 'Auto'),
+    ])),
 
-    table_layout = blocks.ChoiceBlock(choices=[
-         ('fixed', 'Fixed'),
-         ('auto', 'Auto'),
+        ('table', TypedTableBlock([
+            ('text', blocks.CharBlock()),
+            ('numeric', blocks.FloatBlock()),
+            ('rich_text', blocks.RichTextBlock()),
+            ('image', ImageChooserBlock()),
+            #('column_header', blocks.RichTextBlock(attr='column')),
+            ('ten_percent_width', blocks.RichTextBlock(cssClass='ten-percent-width')),
+            ('twenty_percent_width', blocks.RichTextBlock(cssClass='twenty-percent-width')),
+            ('thirty_percent_width', blocks.RichTextBlock(cssClass='thirty-percent-width')),
+            ('forty_percent_width', blocks.RichTextBlock(cssClass='forty-percent-width')),
+     ]))
     ])
 
-    table = TypedTableBlock([
-        ('text', blocks.CharBlock()),
-        ('numeric', blocks.FloatBlock()),
-        ('rich_text', blocks.RichTextBlock()),
-        ('image', ImageChooserBlock()),
-        ('ten_percent_width', blocks.RichTextBlock(cssClass='ten-percent-width')),
-        ('twenty_percent_width', blocks.RichTextBlock(cssClass='twenty-percent-width')),
-        ('thirty_percent_width', blocks.RichTextBlock(cssClass='thirty-percent-width')),
-        ('forty_percent_width', blocks.RichTextBlock(cssClass='forty-percent-width')),
+# class CustomTypedTableBlock(blocks.StructBlock):
+
+#     table_layout = blocks.ChoiceBlock(choices=[
+#          ('fixed', 'Fixed'),
+#          ('auto', 'Auto'),
+#     ])
+
+#     typed_table = TypedTableBlock([
+#         ('text', blocks.CharBlock()),
+#         ('numeric', blocks.FloatBlock()),
+#         ('rich_text', blocks.RichTextBlock()),
+#         ('image', ImageChooserBlock()),
+#         ('ten_percent_width', blocks.RichTextBlock(cssClass='ten-percent-width')),
+#         ('twenty_percent_width', blocks.RichTextBlock(cssClass='twenty-percent-width')),
+#         ('thirty_percent_width', blocks.RichTextBlock(cssClass='thirty-percent-width')),
+#         ('forty_percent_width', blocks.RichTextBlock(cssClass='forty-percent-width')),
    
-    ])
+#     ])
 
 class ExampleImage(blocks.StructBlock):
     """Creates an example module with an image and a caption, side-by-side

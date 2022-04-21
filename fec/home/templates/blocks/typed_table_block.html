@@ -11,6 +11,22 @@
 
 
  {% endfor %}
+<p>-------------END COLUMNS-----------------</p>
+
+
+
+ {% for subblock in block.value.row_data %}
+ 
+<p>-------------NEW ROWS----------------</p>
+
+  {{ subblock.value}}
+  {{ subblock.values.0}}
+<p>------------------------------</p>
+
+  
+
+
+ {% endfor %}
 
 
 
@@ -28,16 +44,16 @@
     padding: 1rem;
 
   }
-  .ten_percent_width {
+  .ten-percent-width {
     width: 10%;
   }
- .twenty_percent_width {
+ .twenty-percent-width {
     width: 20%;
   }
- .thirty_percent_width {
+ .thirty-percent-width {
     width: 30%;
   }
-  .forty_percent_width {
+  .forty-percent-width {
     width: 40%;
   }
 
@@ -46,18 +62,12 @@
 </style>
 <br>
 
-{% for block in self.value %} 
-   
-   {% if block.block_type == "title" %}
-    <h4>{{ block }}</h4>
-    
-   {% elif block.block_type == "paragraph" %}
-    <div class="rich-text">{{ block }}</div>
+{% for block in self.typed_table %} 
 
-   {% elif block.block_type == "table_layout" %}
+   {% if block.block_type == "table_layout" %}
    <div class="">
     
-       <table style="table-layout:  {{ block }}">
+       <table class="simple-table-cms" style="table-layout:  {{ block }}">
 
    
    {% elif block.block_type == "table" %} 
@@ -66,16 +76,20 @@
     <thead>
         <tr>
             {% for col in block.value.columns %}
-             
                 <th scope="col" class="{{ col.block.meta.cssClass }}">{{ col.heading }}</th>
             {% endfor %}
         </tr>
     </thead>
     <tbody>
+
        {% for row in block.value.rows %}
+          
+        
         <tr>
             {% for block in row %}
-           <td>{% include_block block %}</td>
+              
+             
+           <td>{{ block.value | striptags  }}</td> <!--{% include_block block %} or just {{ block }} or {{ block.value }}  -->
 
 
 
