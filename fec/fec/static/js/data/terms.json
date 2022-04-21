@@ -319,6 +319,10 @@
     "term": "Labor organization",
     "definition": "An organization, agency or employee representative committee or plan, in which employees participate and which exists for the purpose of dealing with employers on grievances, labor disputes, wages, hours of employment or working conditions. 11 CFR <a href=\"https://www.fec.gov/regulations/114-1/CURRENT#114-1-d\">114.1(d)</a>."
   },
+    {
+    "term": "Lawfully admitted for permanent residence",
+    "definition": "An individual lawfully admitted for permanent residence is someone who has been granted authorization to live and work in the United States on a permanent basis. As proof of that status, U.S. Citizenship and Immigration Services (USCIS) grants a person a permanent resident card, commonly called a \"Green Card.\""
+  },
   {
     "term": "Leadership PAC",
     "definition": "A political committee that is directly or indirectly established, financed, maintained or controlled by a candidate or an individual holding federal office, but is not an authorized committee of the candidate or officeholder and is not affiliated with an authorized committee of a candidate or officeholder."
@@ -626,6 +630,10 @@
   {
     "term": "U.S.C.",
     "definition": "The United States Code (U.S.C.) contains the federal statutory laws of the United States, arranged into 54 broad titles according to subject matter. The FEC administers the <a href=\"https://www.fec.gov/data/legal/statutes/\">campaign finance laws</a> found in Title 52 and the portions of Title 26 of the United States Code concerning public financing of presidential election campaigns."
+  },
+      {
+    "term": "U.S. National",
+    "definition": "The term U.S. National means an individual who is a U.S. citizen or an individual who, although not a U.S. citizen, owes permanent allegiance to the United States. 31 CFR <a href=\"https://www.ecfr.gov/current/title-31/subtitle-B/chapter-VIII/part-800/subpart-B/section-800.253\">§ 800.253</a>. For example, certain persons born in outlying possessions of the United States are U.S. Nationals but not U.S. citizens. 8 U.S.C.<a href=\"https://www.govinfo.gov/link/uscode/8/1408/\">1408</a>."
   },
   {
     "term": "Usual and normal charge",

@@ -39,6 +39,7 @@
       </div>
       </div>
     {% endif %}
+    {% if not is_inaugural %}
     <div class="entity__figure" id="individual-contribution-transactions">
       <div class="heading--section heading--with-action">
         <h3 class="heading__left">Individual contributions</h3>
@@ -195,5 +196,6 @@
         </div>
       </div>
     </div>
+    {% endif %}
   </div>
 </section>

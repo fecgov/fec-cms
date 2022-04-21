@@ -509,6 +509,87 @@ DataTable.prototype.initTable = function() {
   }
 };
 
+// Get the full querystring on-load
+DataTable.prototype.getVars = function () {
+
+  var initialParams = window.location.search;
+  return initialParams.toString();
+};
+
+// Parse querystring's parameters and return an object
+DataTable.prototype.parseParams = function(querystring){
+    // Parse query string
+    const params = new URLSearchParams(querystring);
+    const obj = {};
+    // Iterate over all keys
+    for (const key of params.keys()) {
+        if (params.getAll(key).length > 1) {
+         obj[key] = params.getAll(key);
+        } else {
+            obj[key] = params.get(key);
+        }
+     }
+    return obj;
+};
+
+// Activate checkbox filter fields that filterSet.js cannot find to activate (see commitee_types.jinja)
+DataTable.prototype.checkFromQuery = function(){
+    // Create a variable representing the querysring key/vals as an object
+    var queryFields = this.parseParams(this.getVars());
+    // Create an array to hold checkbox html elements
+      var queryBoxes = [];
+    // Iterate the key/vals of queryFields
+    $.each(queryFields, function(key, val){
+      // Create a variable for matching checkbox
+      let queryBox;
+      // Handle val as array
+      if ($.isArray(val)){
+          // iterate the val array
+          val.forEach(i => {
+            // Find matching checkboxes
+            queryBox = $(`input:checkbox[name="${key}"][value="${i}"]`);
+            // Push matching checkboxes to the  array
+            queryBoxes.push(queryBox);
+          });
+        }
+        // Handle singular val
+        else {
+          // find matching checkbox
+          queryBox = $(`input:checkbox[name="${key}"][value="${val}"]`);
+          // Push matching checkbox to the array
+          queryBoxes.push(queryBox);
+         }
+      });
+
+    // Put 0-second, set-timeout on receipts/disbursements datatables so checkoxes are availale to check...
+    // ...after the two filter panels are loaded
+    if ('data_type' in queryFields){
+    setTimeout(function() {
+      // Iterate the array of matching checkboxes(queryBoxes), check them and fire change()...
+      // ...if they are not already checked
+      for (let box of queryBoxes) {
+        if (!($(box).is(':checked'))) {
+              $(box).prop('checked', true).change();
+        }
+       }
+      }, 0);
+
+     // No Set-timeout needed on datatables without two filter panels...
+     // ... Also it causes a noticeable intermittent time-lag while populating table on these pages
+     } else {
+      // Iterate the array of matching checkboxes(queryBoxes), check them and fire change()...
+      // ...if they are not already checked
+      for (let box of queryBoxes) {
+        if (!($(box).is(':checked'))) {
+              $(box).prop('checked', true).change();
+        }
+       }
+      }
+
+  // Remove the loading label GIF on the filter panel
+  $('button.is-loading, label.is-loading').removeClass('is-loading');
+};
+
 DataTable.prototype.initFilters = function() {
   // Set `this.filterSet` before instantiating the nested `DataTable` so that
   // filters are available on fetching initial data
@@ -524,6 +605,10 @@ DataTable.prototype.initFilters = function() {
     this.$widgets.find('.js-filter-tags').prepend(tagList.$body);
     this.filterPanel = new FilterPanel();
     this.filterSet = this.filterPanel.filterSet;
+
+    // Activate checkbox filters missed by above logic (specifically committee checkbox filters)
+    this.checkFromQuery();
+
     $(window).on('popstate', this.handlePopState.bind(this));
   }
 };

@@ -19,9 +19,9 @@
       {% endfor %}
 
     </div>
-    <div class="usa-width-two-thirds u-padding--left"">
+    <div class="usa-width-two-thirds u-padding--left">
+      {{ self.info_message }}
       <h2>{{ self.services_title }}</h2>
-      {% spaceless %}
       {% for block in self.services %}
       <div class="block-{{ block.block_type }}">
         {% if block.block_type == 'paragraph' %}
@@ -31,7 +31,6 @@
         {% endif %}
       </div>
       {% endfor %}
-      {% endspaceless %}
     </div>
   </div>
 </div>

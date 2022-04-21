@@ -52,4 +52,32 @@
       width: 100%;
     }
   }
+
+
+  input.invalid_border, select.invalid_border, textarea.invalid_border, checkbox.invalid_border, label.invalid_border {
+    border-color: $error !important; 
+  }
+
+
+  input:focus:invalid, select:focus:invalid, textarea:focus:invalid, label:focus:invalid {
+    outline: none;
+  }
+
+  span.error {
+    display:inline-block;
+    color: $error;
+  }
+
+  #checkbox_error {
+    display: block;
+  }
+  
+  .error_box {
+    font-family: $serif;
+    
+    ul {
+      text-indent: u(1.6rem);
+      margin-bottom: u(1rem);
+    }
+  }
 }

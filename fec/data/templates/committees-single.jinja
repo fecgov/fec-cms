@@ -51,7 +51,7 @@
       </span>
       <span class="t-data t-bold entity__type">ID: {{ committee_id }}</span>
       {% if committee_type not in ['C', 'E', 'I'] %}
-      <span class="t-data t-bold entity__type">Registration date: {{ committee.first_file_date|date_full }}</span>
+      <span class="t-data t-bold entity__type">Registration date: {{ committee.first_f1_date|date_full }}</span>
       {% endif %}
     </div>
   </header>
@@ -120,7 +120,9 @@
               {% if committee_type not in ['C', 'E', 'I'] %}
               <ul>
                 <li><a href="#total-receipts">Total receipts</a></li>
+                {% if not is_inaugural %}
                 <li><a href="#individual-contribution-transactions">Individual contribution transactions</a></li>
+                {% endif %}
               </ul>
               {% endif %}
           </li>

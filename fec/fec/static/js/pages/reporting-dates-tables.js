@@ -73,71 +73,87 @@ const header_notes_modal_partial = `<div tabindex="-1" class="modal__overlay" da
 </div>`;
 
 function ReportingDates() {
+
   //Declare globals (scoped to this function) to get past linter error/tests. For header_notes and footnotes objects declared in CMS field, CSS.escape, Set()
   /* global header_notes, footnotes */
   this.dates_table = document.getElementsByClassName('election-dates-table')[0];
+
+  /*
+  Currenly a referencce to this script is hardcoded onto FullWidth template. If an editor chooses to uae that template
+  for a page witout an  `.election-dates-table` on it, we don't want to run this logic to avoid undefined errors, hence the
+  conditional statement below `if (this.dates_table)`.
+
+  TODO: Make this script be included via a wagtail field ala CustomPage's `conditional_js`  field. And make that
+  fieldd a reusable block instead of specific to the CustomPage. Could define it at top of models.py (like streamfactory)
+  or in blocks.py. I think the former makes sense.
+  */
+
+  //only run this logic if the page has an `.election-dates-table` onn it
+  if (this.dates_table) {
   //get all acnhor links in TDs)
-  this.anchors = this.dates_table.querySelectorAll('td a[href^=\'#\']');
+    this.anchors = this.dates_table.querySelectorAll('td a[href^=\'#\']');
 
-  //disable default jump behavior for anchor links(#) but keep links for accessibility
-  for (const anchor of this.anchors) {
-    anchor.addEventListener('click', e => {
-      e.preventDefault();
-    });
-  }
+    //disable default jump behavior for anchor links(#) but keep links for accessibility
+    for (const anchor of this.anchors) {
+      anchor.addEventListener('click', e => {
+        e.preventDefault();
+      });
+    }
 
-  this.buildStaticElements();
+    this.buildStaticElements();
 
-  this.addFootnotes();
+    this.addFootnotes();
 
-  this.stripeByState();
+    this.stripeByState();
 
-  //Define media query
-  const mql = window.matchMedia('screen and (max-width: 650px)');
+    //Define media query
+    const mql = window.matchMedia('screen and (max-width: 650px)');
 
-  // call listener function explicitly at run time
-  this.mediaQueryResponse(mql);
+    // call listener function explicitly at run time
+    this.mediaQueryResponse(mql);
 
-  // attach listener function to listen in on state changes
-  mql.addListener(this.mediaQueryResponse);
+    // attach listener function to listen in on state changes
+    mql.addListener(this.mediaQueryResponse);
 
-  //show footnotes on click of a link that wraps the superscripts in cells
-  for (const anchor of this.anchors) {
-    anchor.addEventListener('click', this.showFootnotes.bind(this));
-  }
+    //show footnotes on click of a link that wraps the superscripts in cells
+    for (const anchor of this.anchors) {
+      anchor.addEventListener('click', this.showFootnotes.bind(this));
+    }
 
-  //handle changes on states dropdown
-  this.states = document.getElementById('states');
-  this.states.addEventListener('change', this.handleStateChange.bind(this));
+    //handle changes on states dropdown
+    this.states = document.getElementById('states');
+    this.states.addEventListener('change', this.handleStateChange.bind(this));
 
-  //Define nexUntil() function for use in ShowFootnotes()
-  this.nextUntil = function(elem, selector, filter) {
-    // Setup siblings array
-    const siblings = [];
-
-    // Get the next sibling element
-    elem = elem.nextElementSibling;
-
-    // As long as a sibling exists
-    while (elem) {
-      // If we've reached our match, bail
-      if (elem.matches(selector)) break;
-
-      // If filtering by a selector, check if the sibling matches
-      if (filter && !elem.matches(filter)) {
-        elem = elem.nextElementSibling;
-        continue;
-      }
-
-      // Otherwise, push it to the siblings array
-      siblings.push(elem);
+    //Define nexUntil() function for use in ShowFootnotes()
+    this.nextUntil = function(elem, selector, filter) {
+      // Setup siblings array
+      const siblings = [];
 
       // Get the next sibling element
       elem = elem.nextElementSibling;
-    }
 
-    return siblings;
-  };
+      // As long as a sibling exists
+      while (elem) {
+        // If we've reached our match, bail
+        if (elem.matches(selector)) break;
+
+        // If filtering by a selector, check if the sibling matches
+        if (filter && !elem.matches(filter)) {
+          elem = elem.nextElementSibling;
+          continue;
+        }
+
+        // Otherwise, push it to the siblings array
+        siblings.push(elem);
+
+        // Get the next sibling element
+        elem = elem.nextElementSibling;
+      }
+
+      return siblings;
+    };
+  }
+
 }
 
 //create and insert states-dropdown, static footnote/header-notes-list , and dialog

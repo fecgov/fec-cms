@@ -115,11 +115,6 @@
   margin-bottom: u(1rem) !important;
 }
 
-// Correct spacing when term is used after certain tags
-a + .term, i + .term, b + .term, .t-sans + .term  {
-margin-left: .4rem;
-}
-
 @media print {
   .term {
     background-image: none;

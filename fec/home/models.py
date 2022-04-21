@@ -607,8 +607,11 @@ class CustomPage(Page):
         ('internal_button', InternalButtonBlock()),
         ('external_button', ExternalButtonBlock()),
         ('contribution_limits_table', SnippetChooserBlock(
-            'home.EmbedTableSnippet',
+            'home.EmbedSnippet',
             template='blocks/embed-table.html', icon='table')),
+        ('informational_message', SnippetChooserBlock(
+            'home.EmbedSnippet',
+            template='blocks/embed-info-message.html', icon='warning')),
         ('document_list', blocks.ListBlock(
             FeedDocumentBlock(),
             template='blocks/document-list.html',
@@ -662,14 +665,14 @@ class CustomPage(Page):
         choices=constants.conditional_js.items(), blank=True, null=True,
         help_text='Choose a JS script to add only to this page')
     # Adds a settings field for making a custom title that displays in the Wagtail page explorer
-    menu_title = models.CharField(max_length=255, null=True)
+    menu_title = models.CharField(max_length=255, blank=True)
     settings_panels = Page.settings_panels + [
         FieldPanel('menu_title'),
         FieldPanel('conditional_js')
     ]
 
     def get_admin_display_title(self):
-        return self.draft_title or self.menu_title or self.title
+        return self.menu_title if self.menu_title else self.title
 
     @property
     def content_section(self):
@@ -893,13 +896,13 @@ class CollectionPage(Page):
     ]
 
     # Adds a settings field for making a custom title that displays in the Wagtail page explorer
-    menu_title = models.CharField(max_length=255, null=True)
+    menu_title = models.CharField(max_length=255, blank=True)
     settings_panels = Page.settings_panels + [
         FieldPanel('menu_title')
     ]
 
     def get_admin_display_title(self):
-        return self.draft_title or self.menu_title or self.title
+        return self.menu_title if self.menu_title else self.title
 
     @property
     def content_section(self):
@@ -957,13 +960,13 @@ class ResourcePage(Page):
     ]
 
     # Adds a settings field for making a custom title that displays in the Wagtail page explorer
-    menu_title = models.CharField(max_length=255, null=True)
+    menu_title = models.CharField(max_length=255, blank=True)
     settings_panels = Page.settings_panels + [
         FieldPanel('menu_title')
     ]
 
     def get_admin_display_title(self):
-        return self.draft_title or self.menu_title or self.title
+        return self.menu_title if self.menu_title else self.title
 
     @property
     def display_date(self):
@@ -1032,6 +1035,11 @@ class MeetingPage(Page):
     )
     additional_information = models.TextField(blank=True, help_text='This field\
         accepts html')
+    info_message = StreamField([
+        ('informational_message', SnippetChooserBlock(
+            'home.EmbedSnippet',
+            required=False, template='blocks/embed-info-message.html', icon='warning')),
+    ], null=True, blank=True)
     draft_minutes_links = models.TextField(
         blank=True, help_text='URLs separated by a newline')
     approved_minutes_date = models.DateField(null=True, blank=True)
@@ -1071,6 +1079,7 @@ class MeetingPage(Page):
     ], blank=True, null=True)
 
     content_panels = Page.content_panels + [
+        StreamFieldPanel('info_message', heading='Informational message'),
         FieldPanel('additional_information'),
         StreamFieldPanel('agenda'),
         MultiFieldPanel(
@@ -1112,7 +1121,7 @@ class MeetingPage(Page):
         ),
         MultiFieldPanel(
             [
-                FieldPanel('imported_html'),
+                StreamFieldPanel('imported_html'),
             ],
             heading='Imported meeting content',
             classname='collapsible collapsed'
@@ -1186,7 +1195,7 @@ class ExamplePage(Page):
 
 
 @register_snippet
-class EmbedTableSnippet(models.Model):
+class EmbedSnippet(models.Model):
     title = models.TextField()
     description = models.TextField()
     text = models.TextField()
@@ -1205,6 +1214,11 @@ class ContactPage(Page):
     contact_items = StreamField([
         ('contact_items', ContactInfoBlock())
     ])
+    info_message = StreamField([
+        ('informational_message', SnippetChooserBlock(
+            'home.EmbedSnippet',
+            required=False, template='blocks/embed-info-message.html', icon='warning')),
+    ], null=True, blank=True)
     services_title = models.TextField()
     services = StreamField([
         ('services', blocks.RichTextBlock())
@@ -1212,6 +1226,7 @@ class ContactPage(Page):
 
     content_panels = Page.content_panels + [
         StreamFieldPanel('contact_items'),
+        StreamFieldPanel('info_message', heading='Informational message'),
         FieldPanel('services_title'),
         StreamFieldPanel('services'),
     ]
