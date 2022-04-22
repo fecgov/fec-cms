@@ -8,7 +8,7 @@ function AcrossTime() {
   this.minYearControl; // the first select (left)
   this.maxYearControl; // the second select (right)
   // Where to find the totals:
-  this.basePath_officeTotal = ['candidates', 'totals', 'by_office'];
+  this.basePath_officeTotal = ['candidates', 'totals', 'aggregates'];
   this.baseQuery = {
     office: context.office_code,
     min_election_cycle: window.DEFAULT_ELECTION_YEAR - 4 ,
@@ -24,8 +24,6 @@ function AcrossTime() {
   this.init();
 }
 
-/* eslint-disable no-console */
-
 /**
  * Called by {@see loadData} to parse and display the data
  * @param {Response} queryResponse - The successful API reply
@@ -39,13 +37,13 @@ AcrossTime.prototype.displayUpdatedData = function(queryResponse) {
 
   // Iterate each section to get the three dataTypes
   this.dataSections.forEach(function(dataSection) {
-   //make a copy of results array so we are not sorting resilts in-place
+   //make a copy of results array so we are not sorting results in-place
   let theResultsTemp = Array.from(theResults);
 
-  // Get the dataType from the data-total-type attribute of thr html sectoions
+  // Get the dataType from the data-total-type attribute of the html sections
   let dataType = dataSection.dataset.totalType;
 
-    // Sort  values for dataType each year and push the largest to largestValuesArray
+    // Sort  values for each dataType, for each year and push the largest to largestValuesArray
     theResultsTemp.sort((obj1, obj2) => {
       // We want the larger values first
       if (obj1[dataType] < obj2[dataType]) return 1;
@@ -64,8 +62,6 @@ AcrossTime.prototype.displayUpdatedData = function(queryResponse) {
     // maxvalue is the first item in sorted array
     let maxValue = largestValuesArray[0];
 
-    console.log('maxValue: ', maxValue);
-
   // Object to map line numbers to dataTotalTypes
   const lineNumbers = {
     total_individual_itemized_contributions: 'F3-11AI',
@@ -83,12 +79,13 @@ AcrossTime.prototype.displayUpdatedData = function(queryResponse) {
     //clear contents of sections each time
     dataSection.innerHTML = '';
 
-    // Get the dataTotalType from the data-total-type attribute of thr html sectoions
+    // Get the dataTotalType from the data-total-type attribute of thr html sections
     let dataTotalType = dataSection.dataset.totalType;
 
     // Iterate the results json
     for (let i = 0 ; i < theResults.length; i++) {
 
+      //get the value for the current dataTotalType the current iteration of data results
       let total = theResults[i][dataTotalType];
 
       // adjust the value
@@ -97,10 +94,10 @@ AcrossTime.prototype.displayUpdatedData = function(queryResponse) {
         maxValue * 0.01
       );
 
-      // Convert value for display pn page
+      // Convert value for display on page
       let textValue = dollar(total);
 
-      // Get start/end years for display pn page
+      // Create start/end years for display on page
       let electionYear = theResults[i].election_year;
       let starYear = electionYear - 1;
       let end_year = electionYear;
@@ -114,7 +111,7 @@ AcrossTime.prototype.displayUpdatedData = function(queryResponse) {
       // Use the concatenated string  if transers is in dataTotalType
       let line = dataTotalType.indexOf('transfers') !== -1 ? splitString : dataTotalType;
 
-      // Create object for creating querystring on link for each value
+      // Create object for creating querystring for the link for each value
       let searchFilters = {
         two_year_transaction_period: electionYear,
         recipient_committee_type: context.office_code,
@@ -126,12 +123,9 @@ AcrossTime.prototype.displayUpdatedData = function(queryResponse) {
       let queryString = Object.keys(searchFilters).map(function(key) {
       return key + '=' + searchFilters[key];
      }).join('&');
-      console.log('queryString:', queryString);
 
       //  Build the link for each value on displayed on page
       let totalUrl = buildAppUrl(['receipts']) + `?${queryString}`;
-
-      console.log('totalUrl: ', totalUrl);
 
       // HTML for each result row
       let theInnerHTML =
@@ -143,7 +137,7 @@ AcrossTime.prototype.displayUpdatedData = function(queryResponse) {
             <div role="cell" class="simple-table__cell js-total-value t-mono-stacked-currency"><a href=${totalUrl}>${textValue}</a></div>
           </div>`;
 
-    // Create an HTML node to put the rows in
+    // Create an HTML node to put the row in
     let periodWrapper = document.createElement('div');
     periodWrapper.classList.add('simple-table--responsive');
     periodWrapper.setAttribute('role', 'grid');
@@ -156,8 +150,7 @@ AcrossTime.prototype.displayUpdatedData = function(queryResponse) {
     adjustedTotalArray.push(adjustedTotal);
 
     // Now find each meter that was created above in theInnerHTML
-    let meterElement = periodWrapper.getElementsByTagName('meter');//querySelectorAll('meter')
-    console.log('meterElement: ', meterElement);
+    let meterElement = periodWrapper.getElementsByTagName('meter');
 
     // Push each meterElement to meterElements array
     meterElements.push(meterElement);
@@ -166,15 +159,11 @@ AcrossTime.prototype.displayUpdatedData = function(queryResponse) {
 
   });
 
-  console.log('METERELEMENTS:', meterElements);
-  console.log('adjustedTotalArray', adjustedTotalArray);
-
   // Iterate each meter element and animate the value from 0
   for (let j = 0; j < meterElements.length; j++) {
-    console.log('meterElements[j]: ', meterElements[j]);
 
-// Self invoking timeoput that starts  animationn and stops calling itself when total is reached (setInterval and requestAnimationFromen also work but this was simpllest and smothest animation)
-  let animVar = adjustedTotalArray[j]/500;//100000;
+// Self invoking set-timeout that starts  animationn and stops calling itself when total is reached (setInterval and requestAnimationFromen also work but this was simpllest and makes all animations end at the same time)
+  let animVar = adjustedTotalArray[j]/500;//This is an arbirtary value that seemed to work well. Could be something else.
      (function loop(){
        setTimeout(function() {
           if (animVar < adjustedTotalArray[j]) {
@@ -219,21 +208,15 @@ AcrossTime.prototype.handleYearChange = function(e) {
 
      // Set action (min or max) based on which select was changed.
      let action = e.target.dataset.period;
-     console.log('e.target.dataset.period', e.target.dataset.period);
-     //this.baseQuery.min_election_cycle = e.target.value; // Save the updated value
-     console.log('e.target.value', e.target.value);
 
      // Determins which select was changed
      let beginning = action == 'min' ? e.target.value : this.minYearControl.value;
      let ending = action == 'max' ? e.target.value : this.maxYearControl.value;
 
-     // Trsanspose min/max innn call to data if value of min select is  > value of max select
+     // Trsanspose min/max in call to data if value of min select is  > value of max select
      // API will not return data is `min_election_cycle is > than max_election_cycle
      this.baseQuery.min_election_cycle = Math.min(beginning, ending);
      this.baseQuery.max_election_cycle = Math.max(beginning, ending);
-
-     console.log('this.baseQuery.min_election_cycle' , this.baseQuery.min_election_cycle );
-     console.log('this.baseQuery.max_election_cycle' , this.baseQuery.max_election_cycle );
 
      // Get the  officce from the URL passed from view
      this.baseQuery.office = context.office_code;
@@ -243,7 +226,7 @@ AcrossTime.prototype.handleYearChange = function(e) {
 
 };
 
-////Buile  both selects (min/max) going back 9 two-year-periods from DEFAULT_ELECTION_YEAR
+////Build  both selects (min/max) going back 9 two-year-periods from DEFAULT_ELECTION_YEAR
 AcrossTime.prototype.buildSelects = function() {
     var theSelects = this.element.querySelectorAll( 'select[data-period]' );
 
@@ -255,7 +238,7 @@ AcrossTime.prototype.buildSelects = function() {
        let year = window.DEFAULT_ELECTION_YEAR - i;
        let startYear = year - 1;
 
-       //srart with 6 years back selected( i = 4 because the iteration is 0, 2, 4...)
+       //srart with 6 years back selected( i = 4 because the +=2 iteration is 0, 2, 4...)
        let selected;
        if (theSelect.dataset.period == 'max') {
          selected = i == 4 ? ' selected' : '';
@@ -277,7 +260,6 @@ AcrossTime.prototype.buildSelects = function() {
  */
 AcrossTime.prototype.loadData = function(query) {
   let instance = this;
-  console.log('LOAD DATA');
 
   window
     .fetch(buildUrl(this.basePath_officeTotal, query), {
