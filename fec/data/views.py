@@ -853,8 +853,16 @@ def elections_president(request, cycle):
     )
 
 
-# **** TODO ***, Are we sure we want cycle to be a positional argument and not a KWARG?
 def house_senate_overview(request, office, cycle=None):
+
+    """
+    *** TODO: ***, Cycle is a KWARG instead of a positional(required in URL) argument. Do we even want the cycle arg?
+     It might be wanted for the upcoming features on the page that have only one select for year,
+     so one could load page with all features set to a certain election year. Example: /data/elections/senate/2018/
+     But probably  want exclude the across-time feature from using this argument for its cycle,
+     because we always want that to be current election year or (constants.DEFAULT_ELECTION_YEAR)
+
+     """
 
     if cycle is not None:
         cycle = int(cycle)
