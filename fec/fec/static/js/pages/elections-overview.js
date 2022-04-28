@@ -127,11 +127,13 @@ AcrossTime.prototype.displayUpdatedData = function(queryResponse) {
       //  Build the link for each value on displayed on page
       let totalUrl = buildAppUrl(['receipts']) + `?${queryString}`;
 
+      const stripeClass = i == 0 ? `diagonal_stripe` : '';
+
       // HTML for each result row
       let theInnerHTML =
           `<div class="simple-table__row" role="row">
             <div role="cell" class="simple-table__cell js-total-period">${twoYearPeriod}</div>
-            <div role="cell" class="simple-table__cell">
+            <div role="cell" class="simple-table__cell ${stripeClass}">
               <meter min="0" max="${maxValue}" value="0" title="US Dollars"></meter>
             </div>
             <div role="cell" class="simple-table__cell js-total-value t-mono-stacked-currency"><a href=${totalUrl}>${textValue}</a></div>
@@ -163,13 +165,13 @@ AcrossTime.prototype.displayUpdatedData = function(queryResponse) {
   for (let j = 0; j < meterElements.length; j++) {
 
 // Self invoking set-timeout that starts  animationn and stops calling itself when total is reached (setInterval and requestAnimationFromen also work but this was simpllest and makes all animations end at the same time)
-  let animVar = adjustedTotalArray[j]/500;//This is an arbirtary value that seemed to work well. Could be something else.
+  let animVar = 0;
      (function loop(){
        setTimeout(function() {
           if (animVar < adjustedTotalArray[j]) {
         meterElements[j].item(0).value = animVar;
         //animVar = animVar + 10000000.00
-       animVar = animVar + adjustedTotalArray[j]/500;
+       animVar = animVar + adjustedTotalArray[j]/200; //This is an arbirtary value that seemed to get the desired speed. But coulld be changed to something else.
        loop();
 
         }
