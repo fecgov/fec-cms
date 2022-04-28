@@ -19,48 +19,6 @@
 <div class="main container js-accordion accordion--neutral" data-content-prefix="about">
   <section class="content__section">
     <div class="grid--2-wide grid--flex">
-      <div class="grid__item card t-left-aligned">
-        <h2>Look up candidate and <br> committee profiles</h2>
-        <div class="content__section">
-          {{ search.search('hero', button_color="button--standard") }}
-          <span class="t-note t-sans search__example">Examples: Obama for America; C00431445; Bush, George W.; P00003335; or enter an image number for a filing.</span>
-        </div>
-        <div class="example--primary">	
-          <h4 class="example__title">Top raising candidates running in {{ constants.DEFAULT_ELECTION_YEAR }}:</h4>	
-          <ul class="t-sans">	
-            {% for candidate in top_candidates_raising %}	
-              <li><a href="/data/candidate/{{ candidate.candidate_id }}">{{ candidate.name }} [{{ candidate.party }}] | {{ candidate.state }}-{{ candidate.office_full }}</a></li>	
-            {% endfor %}	
-          </ul>	
-        </div>
-      </div>
-      <div class="grid__item card t-left-aligned">
-        <h2>Find contributions from <br> specific individuals</h2>
-        <form action="/data/receipts/individual-contributions/" autocomplete="off" class="search__container content__section">
-          <div class="combo combo--search combo--search--medium">
-            <label for="contributor-search" class="label">Individual contributor name</label>
-            <input id="contributor-search" class="combo__input" type="text" name="contributor_name"
-            autocorrect="off" autocapitalize="off" spellcheck="false">
-            <button type="submit" class="combo__button button--search button--standard">
-              <span class="u-visually-hidden">Search</span>
-            </button>
-          </div>
-          <span class="t-note t-sans search__example">Examples: the name of someone you want to look up; Jane Doe or "Doe, John"</span>
-        </form>
-        <div class="example--primary">	
-          <h4 class="example__title">Possible uses of this data:</h4>	
-          <ul class="t-sans">	
-            <li><a href="/data/receipts/individual-contributions/?two_year_transaction_period={{ constants.DEFAULT_ELECTION_YEAR }}&min_amount=2000">All contributions over $2,000</a></li>	
-            <li><a href="/data/receipts/individual-contributions/?two_year_transaction_period={{ constants.DEFAULT_ELECTION_YEAR }}&min_date={{ first_of_year }}&max_date={{ last_of_year }}">All contributions in this year</a></li>	
-            <li><a href="/data/receipts/individual-contributions/">Browse all and apply custom filters</a></li>	
-          </ul>	
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section class="content__section">
-    <div class="grid--2-wide grid--flex">
       <div class="grid__item">
         <h2>Compare candidates</h2>
         <div id="election-lookup" class="search--election-mini">
@@ -126,6 +84,48 @@
               </a>
             </div>
           </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="content__section">
+    <div class="grid--2-wide grid--flex">
+      <div class="grid__item card t-left-aligned">
+        <h2>Look up candidate and <br> committee profiles</h2>
+        <div class="content__section">
+          {{ search.search('hero', button_color="button--standard") }}
+          <span class="t-note t-sans search__example">Examples: Obama for America; C00431445; Bush, George W.; P00003335; or enter an image number for a filing.</span>
+        </div>
+        <div class="example--primary">	
+          <h4 class="example__title">Top raising candidates running in {{ constants.DEFAULT_ELECTION_YEAR }}:</h4>	
+          <ul class="t-sans">	
+            {% for candidate in top_candidates_raising %}	
+              <li><a href="/data/candidate/{{ candidate.candidate_id }}">{{ candidate.name }} [{{ candidate.party }}] | {{ candidate.state }}-{{ candidate.office_full }}</a></li>	
+            {% endfor %}	
+          </ul>	
+        </div>
+      </div>
+      <div class="grid__item card t-left-aligned">
+        <h2>Find contributions from <br> specific individuals</h2>
+        <form action="/data/receipts/individual-contributions/" autocomplete="off" class="search__container content__section">
+          <div class="combo combo--search combo--search--medium">
+            <label for="contributor-search" class="label">Individual contributor name</label>
+            <input id="contributor-search" class="combo__input" type="text" name="contributor_name"
+            autocorrect="off" autocapitalize="off" spellcheck="false">
+            <button type="submit" class="combo__button button--search button--standard">
+              <span class="u-visually-hidden">Search</span>
+            </button>
+          </div>
+          <span class="t-note t-sans search__example">Examples: the name of someone you want to look up; Jane Doe or "Doe, John"</span>
+        </form>
+        <div class="example--primary">	
+          <h4 class="example__title">Possible uses of this data:</h4>	
+          <ul class="t-sans">	
+            <li><a href="/data/receipts/individual-contributions/?two_year_transaction_period={{ constants.DEFAULT_ELECTION_YEAR }}&min_amount=2000">All contributions over $2,000</a></li>	
+            <li><a href="/data/receipts/individual-contributions/?two_year_transaction_period={{ constants.DEFAULT_ELECTION_YEAR }}&min_date={{ first_of_year }}&max_date={{ last_of_year }}">All contributions in this year</a></li>	
+            <li><a href="/data/receipts/individual-contributions/">Browse all and apply custom filters</a></li>	
+          </ul>	
         </div>
       </div>
     </div>
