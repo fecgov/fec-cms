@@ -127,7 +127,8 @@ AcrossTime.prototype.displayUpdatedData = function(queryResponse) {
       //  Build the link for each value on displayed on page
       let totalUrl = buildAppUrl(['receipts']) + `?${queryString}`;
 
-      const stripeClass = i == 0 ? `diagonal_stripe` : '';
+      //Put stripes on meter to denote in-proress contribution totsl for current cycle
+      const stripeClass = electionYear == window.DEFAULT_ELECTION_YEAR ? `diagonal_stripe` : '';
 
       // HTML for each result row
       let theInnerHTML =
