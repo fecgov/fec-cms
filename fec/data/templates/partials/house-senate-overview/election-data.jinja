@@ -152,10 +152,25 @@
             </div>
          </div>
       </div>
+      #}
       <div id="totals-for-all-elections" class="entity__figure row">
          <h2 class="heading__left">Totals for all {{ office | title }} elections</h2>
          <p class="t-sans t-bold t-low-height">Compare the money raised, spent, cash on hand and debts by {{ office | title }} election</p>
-         {{ select.two_year_select(cycles, cycle, id="cycle-4") }}
+         {{ select.two_year_select(cycles, cycle, id="all-elections-totals") }}
+
+         
+         <table id="election-totals-results"
+           class="data-table data-table--heading-borders scrollX"
+           data-type="totals-for-all-elections"
+         >
+           <thead>
+             <th role="col">State</th>
+             <th role="col">Receipts</th>
+             <th role="col">Disbursements</th>
+             <th role="col">Cash on hand</th>
+             <th role="col">Debts</th>
+           </thead>
+         </table>
          <div class="content__section--ruled-responsive t-serif">
             <div class="heading--with-action t-small u-negative--top--margin t-serif">
                <i class="data-disclaimer">Some kind of disclaimer text that clarifies something high-level that users need to know right away to put the data in context.</i>
@@ -176,6 +191,5 @@
             </div>
          </div>
       </div>
-      #}
    </div>
 </section>
