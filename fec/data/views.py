@@ -853,8 +853,16 @@ def elections_president(request, cycle):
     )
 
 
-# **** TODO ***, Are we sure we want cycle to be a positional argument and not a KWARG?
 def house_senate_overview(request, office, cycle=None):
+
+    """
+    *** TODO: ***, Cycle is a KWARG instead of a positional(required in URL) argument. Do we even want the cycle arg?
+     It might be wanted for the upcoming features on the page that have only one select for year,
+     so one could load page with all features set to a certain election year. Example: /data/elections/senate/2018/
+     But probably  want exclude the across-time feature from using this argument for its cycle,
+     because we always want that to be current election year or (constants.DEFAULT_ELECTION_YEAR)
+
+     """
 
     if cycle is not None:
         cycle = int(cycle)
@@ -862,14 +870,14 @@ def house_senate_overview(request, office, cycle=None):
         cycle = constants.DEFAULT_ELECTION_YEAR
 
     # cycle = request.GET.get("cycle", None)
+    default_election_year = constants.DEFAULT_ELECTION_YEAR
+    beginning_default_election_year = default_election_year - 1
 
     max_cycle = utils.current_cycle() + 4
     cycles = utils.get_cycles(max_cycle)
 
     if office.lower() not in ["president", "senate", "house"]:
         raise Http404()
-    # if (state is not None) and (state and state.upper() not in constants.states):
-    #    raise Http404()
 
     # Redirect to latest presidential election since we don't have presidential overview yet
     if office.lower() == "president":
@@ -878,17 +886,31 @@ def house_senate_overview(request, office, cycle=None):
             reverse("elections-president", args=(cycle, ))
         )
 
+    office_codes = {
+        "senate": 'S',
+        "house": 'H'
+    }
+
+    office_code = office_codes[office]
+
+    # For JavaScript
+    context_vars = {
+        "office": office,
+        "office_code": office_code,
+    }
+
     return render(
         request,
         "house-senate-overview.jinja",
         {
             "office": office,
-            "office_code": office[0],
+            "office_code": office_code,
             "parent": "data",
             "cycle": cycle,
             "cycles": cycles,
-            # "state": state,
-            # "state_full": constants.states[state.upper()] if state else None,
+            "default_election_year": default_election_year,
+            "beginning_default_election_year": beginning_default_election_year,
+            "context_vars": context_vars,
             "social_image_identifier": "data",
         },
     )

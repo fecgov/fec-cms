@@ -98,45 +98,6 @@
 {% endmacro %}
 
 
-{# range of two year periods.Select's class is "js-period-select". Unlike class="js-cycle-select", these do not auto-reload page upon change to a new window.locatio with query params. #}
- {% macro cycle_range_select(cycles, cycle=none, id='') %}
- {% set cycle = cycle | int %}
-  <div class="row content__section">
-  <label class="label t-inline-block">Two-year period date range</label>
-  <fieldset id="two-year-period-date-range" name="two-year-period-date-range">
-    <div class="range range--date js-date-range">
-      <div class="range__select range__select--min" data-filter="range">
-        <div class="cycle-select">
-          <label for="{{id}}-cycle">Beginning</label>
-          <select id="{{id}}-cycle" class="js-period-select" name="cycle" data-cycle-location="query">
-            {% for each in cycles | sort(reverse=True) %}
-              <option
-                  value="{{ each }}"
-                  {% if cycle and cycle <= each and cycle > (each - 2) %}selected{% endif %}
-                >{{ each|fmt_year_range }}</option>
-            {% endfor %}
-          </select>
-        </div>
-      </div>
-      <div class="range__hyphen">-</div>
-      <div class="range__select range__select--max" data-filter="range">
-        <div class="cycle-select">
-          <label for="{{id}}-cycle">Ending</label>
-          <select id="{{id}}-cycle" class="js-period-select" name="cycle" data-cycle-location="query">
-            {% for each in cycles | sort(reverse=True) %}
-              <option
-                  value="{{ each }}"
-                  {% if cycle and cycle <= each and cycle > (each - 2) %}selected{% endif %}
-                >{{ each|fmt_year_range }}</option>
-            {% endfor %}
-          </select>
-        </div>
-      </div>
-    </div>
-  </fieldset>
-  </div>
-{% endmacro %}
-
 {% macro two_year_select(cycles, cycle=none, id='') %}
 {% set cycle = cycle | int %}
   <div class="content__section">
