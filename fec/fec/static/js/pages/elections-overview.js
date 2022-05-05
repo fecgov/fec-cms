@@ -343,7 +343,8 @@ function initElectionTotalTable(election_year) {
     columns: column_definitions,
     order: [[0, 'asc']],
     useFilters: true,
-    useExport: false
+    useExport: false,
+    lengthMenu: [10, 30, 50]
   });
   return $table;
 }
