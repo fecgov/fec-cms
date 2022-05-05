@@ -1,6 +1,10 @@
 'use strict';
 
 import { buildUrl, buildAppUrl, dollar } from '../modules/helpers';
+var $ = require('jquery');
+var tables = require('../modules/tables');
+var columns = require('../modules/columns');
+var decoders = require('../modules/decoders');
 
 function AcrossTime() {
   this.element; // The HTML element of this feature
@@ -283,4 +287,82 @@ AcrossTime.prototype.loadData = function(query) {
 
 };
 
-new AcrossTime();
+/**** Election Totals - Election Overview ****/
+
+// Election house totals for election overview pages
+var election_house_totals = [
+  { data: 'state', render: function(data, type, row) {
+    // Concatenate the state full state name and the district number together for display.
+    return (decoders.states[row.state] + ' DISTRICT ' + row.district).toUpperCase();
+    },
+  orderable: true, className: 'column-state' },
+  columns.currencyColumn({ data: 'total_receipts', orderable: true, className: 'column--number t-mono' }),
+  columns.currencyColumn({ data: 'total_disbursements', orderable: true, className: 'column--number t-mono' }),
+  columns.currencyColumn({ data: 'total_cash_on_hand_end_period', orderable: true, className: 'column--number t-mono' }),
+  columns.currencyColumn({ data: 'total_debts_owed_by_committee', orderable: true, className: 'column--number t-mono' })
+];
+
+// election senate totals for election overview pages
+var election_senate_totals = [
+  { data: 'state', render: function(data, type, row) {
+    // Display full state name in upper case
+    return decoders.states[row.state].toUpperCase();
+    },
+  orderable: true, className: 'column--state' },
+  columns.currencyColumn({ data: 'total_receipts', orderable: true, className: 'column--number t-mono' }),
+  columns.currencyColumn({ data: 'total_disbursements', orderable: true, className: 'column--number t-mono' }),
+  columns.currencyColumn({ data: 'total_cash_on_hand_end_period', orderable: true, className: 'column--number t-mono' }),
+  columns.currencyColumn({ data: 'total_debts_owed_by_committee', orderable: true, className: 'column--number t-mono' })
+];
+
+function initElectionTotalTable(election_year) {
+  var $table = $('#election-totals-results');
+  var column_definitions = null;
+  var aggregate_by = null;
+
+  if(context.office_code ==='H') {
+    // set house specific query attributes
+    column_definitions = election_house_totals;
+    aggregate_by = 'office-state-district';
+  } else {
+    // set senate specific query attributes
+    column_definitions = election_senate_totals;
+    aggregate_by = 'office-state';
+  }
+
+  new tables.DataTable($table, {
+    autoWidth: true,
+    path: ['candidates', 'totals', 'aggregates'],
+    query: {
+      aggregate_by: aggregate_by,
+      election_year: election_year,
+      office: context.office_code,
+      election_full: true,
+      is_active_candidate: true
+    },
+    columns: column_definitions,
+    order: [[0, 'asc']],
+    useFilters: true,
+    useExport: false
+  });
+  return $table;
+}
+
+$(function() {
+  new AcrossTime(); // setup across time display
+
+  var cycle_selector = $('#all-elections-totals-cycle'); // cycle selector for election totals
+  var election_year = cycle_selector.val();
+
+  // initialize the election total table with the default cycle
+  var $table = initElectionTotalTable(election_year);
+  cycle_selector.on('change', function() {
+    // if the cycle selector is changed,
+    // destroy the current table and re-initialize it with the new selected cycle
+    var datatable = $table.DataTable();
+    datatable.clear();
+    datatable.destroy();
+    var new_election_year = $(this).val();
+    initElectionTotalTable(new_election_year);
+  });
+});
