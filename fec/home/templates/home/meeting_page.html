@@ -35,10 +35,7 @@
         {% endspaceless %}
       </div>
     </header>
-    {{ self.info_message }}
-    {% if self.additional_information %}
-       <p class="t-bold">{{ self.additional_information|safe }}</p>
-    {% endif %}
+
     {% if self.meeting_type == 'O' %}
       <p>The Commission considers new regulations, advisory opinions and other public matters at open meetings, which are typically held at FEC headquarters on Thursdays at 10:00am.</p>
       <p>Members of the public can attend any open meeting or hearing in person. Open meetings are also streamed live online. To attend in person, please bring a photo ID and be prepared to go through a security check. After security, attendees are escorted to the Commission's hearing room.</p>
@@ -47,6 +44,12 @@
     {% elif self.meeting_type == 'H' %}
        <p>The Commission considers new regulations and other public matters at public hearings. Members of the public can attend public hearings in person. Public hearings are also streamed live online. To attend in person, please bring a photo ID and be prepared to go through a security check. After security, attendees are escorted to the Commission's hearing room.</p>
     {% endif %}
+
+    {% if self.additional_information %}
+      <p class="t-bold">{{ self.additional_information|safe }}</p>
+    {% endif %}
+
+    {{ self.info_message }}
 
     {% if self.live_video_embed %}
     <div class="row">
