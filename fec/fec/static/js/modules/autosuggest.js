@@ -37,7 +37,6 @@ const resultItemOptions = {
   submit: true,
   highlight: 'as-highlight',
   element: (item, data) => {
-    // console.log('resultItemOptions element(item, data): ', item, data);
     // For headers (e.g. "Select a candidate"), no tabbing, data.value.name only
     if (data.value.is_header) {
       item.setAttribute('class', 'as-suggestion__header');
@@ -91,7 +90,6 @@ function getUrl(resource, queryString) {
 
   window.API_LOCATION = 'https://fec-dev-api.app.cloud.gov'; // TODO: remove this
 
-  // console.log('getUrl(): ', resource, queryString);
   let toReturn = [
     window.API_LOCATION,
     window.API_VERSION,
@@ -100,7 +98,6 @@ function getUrl(resource, queryString) {
     ''
   ].join('/');
   toReturn += `?q=${queryString}&api_key=${window.API_KEY_PUBLIC}`;
-  // console.log('getUrl toReturn: ', toReturn);
   return toReturn;
 }
 
@@ -111,7 +108,6 @@ function getUrl(resource, queryString) {
  * @returns {Array} of objects structured like { is_header: true, id: window.queryText, name: 'Select a committee:', type: 'none' }
  */
 function formatResults(type, data) {
-  // console.log('formatResults(): ', type, data);
   let toReturn = [];
   const results = data.results;
   const resultsLimit = 5;
@@ -139,13 +135,11 @@ function formatResults(type, data) {
  * @returns
  */
 function getSuggestions(type) {
-  // console.log('getSuggestions(type): ', type);
   let toReturn = [];
   if (type == 'all') {
     toReturn.push({ is_suggestion: true, id: window.queryText, name: 'Search individual contributions from:', type: 'individual' });
     toReturn.push({ is_suggestion: true, id: window.queryText, name: 'Search other pages:', type: 'site' });
   }
-  // console.log('  going to return ', toReturn);
   return toReturn;
 }
 
@@ -177,7 +171,6 @@ async function getData(q, qType) {
 
   } else if (qType == 'all' || qType == 'allData') { /** 'all' will include suggestions; 'allData' won't @see getSuggestions */
     // Any changes here should be made inside `== 'candidate'` and `== 'committee'`, too
-    // console.log('would have got all data');
     await fetch(getUrl('candidates', q), fetchInit)
       .then(response => response.json())
       .then(data => {
@@ -205,15 +198,11 @@ async function getData(q, qType) {
       .then(data => {
         fetchedResults.push(...formatResults('audit_committees', data));
       });
-
-  // } else {
-    // console.log(`  qType was '${qType}' so didn't do anything`);
   }
 
   if (fetchedResults.length === 0) {
     fetchedResults.push({ is_suggestion: true, id: window.queryText, name: 'No results found:', type: 'none' });
   }
-  // console.log('going to return fetchedResults: ', fetchedResults);
   return fetchedResults;
 }
 
@@ -333,7 +322,6 @@ function AutoSuggest(elementSelector, opts) {
  * @prop
  */
  AutoSuggest.prototype.init = function() {
-  // console.log('AutoSuggest.init()');
   // TODO: do we need to destroy/reset one if it already exists?
   // if (this.typeahead) this.input.typeahead('destroy');
   this.input.value = '';
@@ -371,14 +359,9 @@ function AutoSuggest(elementSelector, opts) {
   // theseOpts.data['keys'] = searchedAttribs();
   theseOpts.data.src = async q => {
     try {
-      // console.log('try');
-      // console.log('  this.queryType: ', this.queryType);
-      // console.log('  q: ', q);
       const results = getData(q, this.queryType);
-      // console.log('got results of ', results);
       return results;
     } catch(e) {
-      // console.log('catch e: ', e);
       return e;
     }
   };
@@ -516,8 +499,6 @@ AutoSuggest.prototype.handleResults = function(e) {
  * @fires autoSuggest:close
  */
 AutoSuggest.prototype.handleSelect = function(e) {
-  console.log('AutoSuggest.handleSelect(e): ', e);
-
   const val = e.detail.selection.value;
 
   // If it's a header, ignore the selection/click/tap
@@ -552,7 +533,6 @@ AutoSuggest.prototype.handleSelect = function(e) {
  * @param {Object} e.detail carries the autoComplete.js "feedback" object
  */
 AutoSuggest.prototype.handleNavigate = function(e) {
-  // console.log('handleNavigate(e): ', e);
   // If we've just focused on a header object, we want to nav off of it
   const sel = e.detail.selection;
   if (sel.value.is_header === true) {
