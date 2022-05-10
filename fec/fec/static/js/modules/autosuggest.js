@@ -164,7 +164,7 @@ async function getData(q, qType) {
     await fetch(getUrl('candidates', q), fetchInit)
       .then(response => response.json())
       .then(data => {
-        fetchedResults.push(...formatResults('candidates', data));
+        fetchedResults.push(...formatResults('candidate', data));
       });
 
   } else if (qType == 'committee_id') {
@@ -172,7 +172,7 @@ async function getData(q, qType) {
     await fetch(getUrl('committees', q), fetchInit)
       .then(response => response.json())
       .then(data => {
-        fetchedResults.push(...formatResults('committees', data));
+        fetchedResults.push(...formatResults('committee', data));
       });
 
   } else if (qType == 'all' || qType == 'allData') { /** 'all' will include suggestions; 'allData' won't @see getSuggestions */
@@ -181,7 +181,7 @@ async function getData(q, qType) {
     await fetch(getUrl('candidates', q), fetchInit)
       .then(response => response.json())
       .then(data => {
-        fetchedResults.push(...formatResults('candidates', data));
+        fetchedResults.push(...formatResults('candidate', data));
         return fetch(getUrl('committees', q), fetchInit);
       })
       .then(response => response.json())
@@ -525,13 +525,13 @@ AutoSuggest.prototype.handleSelect = function(e) {
 
   // Find the element
   if (val.type == 'individual') {
-    window.location = `${this.url}receipts/individual-contributions/?contributor_name=${val.id}`;
+    window.location = `${this.url}data/receipts/individual-contributions/?contributor_name=${val.id}`;
 
-  } else if (val.type == 'candidate_id' || val.type == 'committee_id') {
-    window.location = `${this.url}${val.type}/${val.id}`;
+  } else if (val.type == 'candidate' || val.type == 'committee') {
+    window.location = `${this.url}data/${val.type}/${val.id}`;
 
   } else if (val.type == 'site') {
-    this.searchSite(e.detail.selection.match);
+    this.searchSite(e.detail.selection.value.id);
   }
 
   // const eventObj = Object.assign
