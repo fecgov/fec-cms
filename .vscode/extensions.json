@@ -1,0 +1,8 @@
+{
+    "recommendations": [
+        "aaron-bond.better-comments",
+        "dbaeumer.vscode-eslint",
+        "eamodio.gitlens",
+        "DavidAnson.vscode-markdownlint"
+    ]
+}
