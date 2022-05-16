@@ -87,50 +87,51 @@
                </div>
             </aside>
          </section>
-         <div class="content__section--ruled-responsive t-serif">
-            <div class="heading--with-action t-small u-negative--top--margin t-serif">
-               <i class="data-disclaimer">Coverage dates for each two-year period cover January 1 of the first year through December 31 of the second year. Newly filed summary data may not appear for up to 48 hours.</i>
-               <div class="heading__right">
-                  <a class="button button--alt js-ga-event" data-a11y-dialog-show="contributions-over-time-modal" data-ga-event="Contributions over time methodology modal clicked" aria-controls="contributions-over-time-modal">Methodology</a>
+
+         <div class="content__section--ruled-responsive u-margin--top t-serif">
+            <div class="row">
+               <ul class="list--buttons u-float-right">
+                  <li><a class="button button--alt js-ga-event" data-a11y-dialog-show="contributions-over-time-modal" data-ga-event="Totals for all elections methodology modal clicked" aria-controls="totals-for-all-elections-modal">Methodology</a></li>
+               </ul>
+               <p class="u-no-margin"><i class="data-disclaimer">Coverage dates for each two-year period cover January 1 of the first year through December 31 of the second year. Newly filed summary data may not appear for up to 48 hours.</i></p>
                </div>
-            </div>
-            <div class="js-modal modal" id="contributions-over-time-modal" aria-hidden="true">
-               <div tabindex="-1" class="modal__overlay" data-a11y-dialog-hide=""></div>
-               <div role="dialog" class="modal__content" aria-labelledby="contributions-over-time-modal-title">
-                  <div role="document">
-                     <button type="button" class="modal__close button--close--primary" data-a11y-dialog-hide="" title="Close this dialog window"></button>
-                     <h2>Methodology Overview</h2>
-                     <p class="t-note"></p>
-                     <p>This chart includes data up to and including the most recent reports filed. It displays an overall total for the selected office by two-year periods for Individual <span class="term" data-term="contribution" title="Click to define" tabindex="0">contribution</span>, Other committee contributions and Transfers from other authorized committees.
-                     </p>
-                     <p>This data is generated from <a href="https://www.fec.gov/resources/cms-content/documents/fecfrm3.pdf" rel="nofollow">FEC Form 3-REPORT OF RECEIPTS AND DISBURSEMENTS</a>
-                     </p>
-                     <p>Line by line breakdown for contribtions:</p>
-                     <ul class="list--bulleted">
-                        <li>Individual contributions:
-                           <b>Form 3, Line 11(a)(i)</b>
-                        </li>
-                        <li>PACs and other committee contributions:
-                           <b>Form 3, Line 11(c).</b> 
-                           <br><i>All itemized contributions from PACs and other political committees, including state PACs and other federal candidate committees. Party committee and Super PAC contributions are not included.</i>
-                        </li>
-                        <li>Transfers:
-                           <b>Form 3, Line 12</b>
-                        </li>
-                     </ul>
-                     <p>General methodology language additions:
-                        Include link to archived contribution limits page.
-                        <a href="https://www.fec.gov/help-candidates-and-committees/candidate-taking-receipts/archived-contribution-limits/">Archived contribution limits</a>
-                     </p>
+               <div class="js-modal modal" id="contributions-over-time-modal" aria-hidden="true">
+                  <div tabindex="-1" class="modal__overlay" data-a11y-dialog-hide=""></div>
+                  <div role="dialog" class="modal__content" aria-labelledby="contributions-over-time-modal-title">
+                     <div role="document">
+                        <button type="button" class="modal__close button--close--primary" data-a11y-dialog-hide="" title="Close this dialog window"></button>
+                        <h2>Methodology Overview</h2>
+                        <p class="t-note"></p>
+                        <p>This chart includes data up to and including the most recent reports filed. It displays an overall total for the selected office by two-year periods for Individual <span class="term" data-term="contribution" title="Click to define" tabindex="0">contribution</span>, Other committee contributions and Transfers from other authorized committees.
+                        </p>
+                        <p>This data is generated from <a href="https://www.fec.gov/resources/cms-content/documents/fecfrm3.pdf" rel="nofollow">FEC Form 3-REPORT OF RECEIPTS AND DISBURSEMENTS</a>
+                        </p>
+                        <p>Line by line breakdown for contribtions:</p>
+                        <ul class="list--bulleted">
+                           <li>Individual contributions:
+                              <b>Form 3, Line 11(a)(i)</b>
+                           </li>
+                           <li>PACs and other committee contributions:
+                              <b>Form 3, Line 11(c).</b> 
+                              <br><i>All itemized contributions from PACs and other political committees, including state PACs and other federal candidate committees. Party committee and Super PAC contributions are not included.</i>
+                           </li>
+                           <li>Transfers:
+                              <b>Form 3, Line 12</b>
+                           </li>
+                        </ul>
+                        <p>General methodology language additions:
+                           Include link to archived contribution limits page.
+                           <a href="https://www.fec.gov/help-candidates-and-committees/candidate-taking-receipts/archived-contribution-limits/">Archived contribution limits</a>
+                        </p>
+                     </div>
                   </div>
                </div>
             </div>
          </div>
-      </div>
       {# 
       <div id="money-raised-accross-elections" class="entity__figure row">
          <h2 class="heading__left">Money raised accross {{ office | title }} elections</h2>
-         <p class="t-sans t-bold t-low-height">Compare the money raised in all {{ office | title }} elections by state </p>
+         <p class="t-sans t-low-height">Comparing the money raised in all {{ office | title }} elections by state </p>
          {{ select.two_year_select(cycles, cycle, id="cycle-4") }}
          <div class="content__section--ruled-responsive t-serif">
             <div class="heading--with-action t-small u-negative--top--margin t-serif">
@@ -152,30 +153,42 @@
             </div>
          </div>
       </div>
+      #}
       <div id="totals-for-all-elections" class="entity__figure row">
          <h2 class="heading__left">Totals for all {{ office | title }} elections</h2>
-         <p class="t-sans t-bold t-low-height">Compare the money raised, spent, cash on hand and debts by {{ office | title }} election</p>
-         {{ select.two_year_select(cycles, cycle, id="cycle-4") }}
-         <div class="content__section--ruled-responsive t-serif">
-            <div class="heading--with-action t-small u-negative--top--margin t-serif">
-               <i class="data-disclaimer">Some kind of disclaimer text that clarifies something high-level that users need to know right away to put the data in context.</i>
-               <div class="heading__right">
-                  <a class="button button--alt js-ga-event" data-a11y-dialog-show="totals-for-all-elections-modal" data-ga-event="Totals for all elections methodology modal clicked" aria-controls="totals-for-all-elections-modal">Methodology</a>
+         <p class="t-sans t-low-height">Comparing the money raised, spent, cash on hand and debts by {{ office | title }} election</p>
+         {{ select.two_year_select(cycles, cycle, id="all-elections-totals") }}
+         <table id="election-totals-results"
+           class="data-table data-table--heading-borders scrollX simple-table u-no-border"
+           data-type="totals-for-all-elections"
+         >
+           <thead>
+             <th role="col">State</th>
+             <th role="col">Receipts</th>
+             <th role="col">Disbursements</th>
+             <th role="col">Cash on hand</th>
+             <th role="col">Debts</th>
+           </thead>
+         </table>
+         <div class="content__section u-margin--top t-serif">
+            <div class="row">
+               <ul class="list--buttons u-float-right">
+                  <li><a class="button button--alt js-ga-event" data-a11y-dialog-show="totals-for-all-elections-modal" data-ga-event="Totals for all elections methodology modal clicked" aria-controls="totals-for-all-elections-modal">Methodology</a></li>
+               </ul>
+               <p class="u-no-margin"><i class="data-disclaimer">Some kind of disclaimer text that clarifies something high-level that users need to know right away to put the data in context.</i></p>
                </div>
-            </div>
-            <div class="js-modal modal" id="totals-for-all-elections-modal" aria-hidden="true">
-               <div tabindex="-1" class="modal__overlay" data-a11y-dialog-hide=""></div>
-               <div role="dialog" class="modal__content" aria-labelledby="totals-for-all-elections-modal-title">
-                  <div role="document">
-                     <button type="button" class="modal__close button--close--primary" data-a11y-dialog-hide="" title="Close this dialog window"></button>
-                     <h2>Methodology Overview</h2>
-                     <p class="t-note"></p>
-                     <p></p>
+               <div class="js-modal modal" id="totals-for-all-elections-modal" aria-hidden="true">
+                  <div tabindex="-1" class="modal__overlay" data-a11y-dialog-hide=""></div>
+                  <div role="dialog" class="modal__content" aria-labelledby="totals-for-all-elections-modal-title">
+                     <div role="document">
+                        <button type="button" class="modal__close button--close--primary" data-a11y-dialog-hide="" title="Close this dialog window"></button>
+                        <h2>Methodology Overview</h2>
+                        <p class="t-note"></p>
+                        <p></p>
+                     </div>
                   </div>
                </div>
             </div>
          </div>
       </div>
-      #}
-   </div>
 </section>
