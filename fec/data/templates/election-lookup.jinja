@@ -78,6 +78,15 @@
         </div>
         <div class="heading--section js-results-heading">
           <h2>Results</h2>
+        {% if FEATURES.house_senate_overview %}
+        </div>
+        <div class="u-padding--top">
+         <span class="heading__subtitle">All Elections</span>
+           <h3  class="u-no-margin-bottom u-margin--top"><span class="icon i-star icon--inline--left"></span><a href="/data/elections/senate/">All Senate elections</a></h3>
+           <h3><span class="icon i-star icon--inline--left"></span><a href="/data/elections/house/">All House elections</a></h3>
+        </div>
+        <div class="result u-padding--bottom--small u-negative--bottom--margin">
+        {% endif %}
           <span class="heading__subtitle js-results-title"></span>
         </div>
         <div class="results__count">
