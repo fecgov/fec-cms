@@ -82,12 +82,21 @@ var stateColumns = [
   }
 ];
 
+var renderNullStringText = function(data) {
+  if (data == 'NULL') {
+    return data = '(BLANK)';
+  } else {
+    return data;
+  }
+};
+
 var employerColumns = [
   {
     data: 'employer',
     className: 'all',
     orderable: false,
-    defaultContent: 'NOT REPORTED'
+    defaultContent: 'NOT REPORTED',
+    render: renderNullStringText
   },
   {
     data: 'total',
@@ -114,7 +123,8 @@ var occupationColumns = [
     data: 'occupation',
     className: 'all',
     orderable: false,
-    defaultContent: 'NOT REPORTED'
+    defaultContent: 'NOT REPORTED',
+    render: renderNullStringText
   },
   {
     data: 'total',
@@ -140,7 +150,8 @@ var disbursementRecipientColumns = [
   {
     data: 'recipient_name',
     className: 'all',
-    orderable: false
+    orderable: false,
+    render: renderNullStringText
   },
   {
     data: 'recipient_disbursement_percent',
