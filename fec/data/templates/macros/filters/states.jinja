@@ -1,7 +1,7 @@
 {% macro field(name='name', id_suffix='', type='') %}
 <div class="filter">
   <fieldset class="js-dropdown js-filter" data-filter="checkbox">
-    <legend class="label" for="state">{{ type }} State or Territory</legend>
+    <legend class="label" for="state">{% if type %}{{ type }} {% endif %}State or Territory</legend>
     <ul class="dropdown__selected"></ul>
     <div class="dropdown">
       <button type="button" class="dropdown__button button--alt" data-name="{{ name }}">More</button>
