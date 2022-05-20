@@ -39,12 +39,12 @@
       <span class="t-data t-bold entity__type">
         {% if is_SSF %}
           {{ committee.organization_type_full }} {{ committee.committee_type_full }}
-          {% if designation %}
+          {% if committee.designation %}
           - {{ committee.designation_full }}
           {% endif %}
         {% else %}
           {{ committee.committee_type_full }}
-            {% if designation %}
+            {% if committee.designation %}
             - {{ committee.designation_full }}
             {% endif %}
          {% endif %}
