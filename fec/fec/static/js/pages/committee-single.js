@@ -82,9 +82,9 @@ var stateColumns = [
   }
 ];
 
-var renderNullStringText = function(data) {
+var renderNullStringText = function(data, columnName) {
   if (data == 'NULL') {
-    return data = '(BLANK)';
+    return data = '(COMMITTEE DID NOT PROVIDE ' + columnName + ')';
   } else {
     return data;
   }
@@ -96,7 +96,9 @@ var employerColumns = [
     className: 'all',
     orderable: false,
     defaultContent: 'NOT REPORTED',
-    render: renderNullStringText
+    render: function(data){
+      return renderNullStringText(data, 'AN EMPLOYER');
+    }
   },
   {
     data: 'total',
@@ -124,7 +126,9 @@ var occupationColumns = [
     className: 'all',
     orderable: false,
     defaultContent: 'NOT REPORTED',
-    render: renderNullStringText
+    render: function(data){
+      return renderNullStringText(data, 'AN OCCUPATION');
+    }
   },
   {
     data: 'total',
@@ -151,7 +155,9 @@ var disbursementRecipientColumns = [
     data: 'recipient_name',
     className: 'all',
     orderable: false,
-    render: renderNullStringText
+    render: function(data){
+      return renderNullStringText(data, 'A RECIPIENT');
+    }
   },
   {
     data: 'recipient_disbursement_percent',
