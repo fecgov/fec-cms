@@ -66,6 +66,7 @@ FEATURES = {
     'pac_snapshot': bool(env.get_credential('FEC_FEATURE_PAC_SNAPSHOT', '')),
     'presidential_map': bool(env.get_credential('FEC_FEATURE_PRESIDENTIAL_MAP', '')),
     'house_senate_overview': bool(env.get_credential('FEC_FEATURE_HOUSE_SENATE_OVERVIEW', '')),
+    'house_senate_overview_methodology': bool(env.get_credential('FEC_FEATURE_HOUSE_SENATE_OVERVIEW_METHODOLOGY', '')),
 }
 
 # Set feature flags to True for local
@@ -81,6 +82,7 @@ if FEC_CMS_ENVIRONMENT == ENVIRONMENTS['local']:
     FEATURES['pac_snapshot'] = True
     FEATURES['presidential_map'] = True
     FEATURES['house_senate_overview'] = True
+    FEATURES['house_senate_overview_methodology'] = True
 
 # Application definition
 INSTALLED_APPS = (
