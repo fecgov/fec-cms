@@ -62,7 +62,7 @@
     "tough-cookie": "^2.5.0",
     "tunnel-agent": "^0.6.0",
     "ua-parser-js": "^0.7.24",
-    "whatwg-fetch": "^3.5.0"
+    "whatwg-fetch": "^3.6.2"
   },
   "devDependencies": {
     "@babel/core": "^7.0.0",
