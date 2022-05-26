@@ -95,7 +95,6 @@ var employerColumns = [
     data: 'employer',
     className: 'all',
     orderable: false,
-    defaultContent: 'NOT REPORTED',
     render: function(data){
       return renderNullStringText(data, 'AN EMPLOYER');
     }
@@ -125,7 +124,6 @@ var occupationColumns = [
     data: 'occupation',
     className: 'all',
     orderable: false,
-    defaultContent: 'NOT REPORTED',
     render: function(data){
       return renderNullStringText(data, 'AN OCCUPATION');
     }
