@@ -26,7 +26,7 @@
     "ace-builds": "1.2.2",
     "acorn": "^6.4.1",
     "ajv": "^6.12.3",
-    "aria-accordion": "1.0.0",
+    "aria-accordion": "1.1.0",
     "chroma-js": "1.0.1",
     "colorbrewer": "0.0.2",
     "component-sticky": "1.0.0",
