@@ -36,7 +36,7 @@
     "d3": "3.5.5",
     "datatables.net": "^1.11.3",
     "datatables.net-responsive": "^2.2.7",
-    "debug": "^3.2.6",
+    "debug": "^3.2.7",
     "dompurify": "^2.2.7",
     "draft-js": "^0.11.7",
     "draftail": "^1.4.1",
