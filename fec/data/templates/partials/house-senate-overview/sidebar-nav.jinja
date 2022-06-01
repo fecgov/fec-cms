@@ -19,7 +19,9 @@
             {#  
             <li><a href="#money-raised-accross-elections">Money raised accross {{ office | title }} elections</a></li>
             #}
+          {% if FEATURES.house_senate_overview_totals %}  
             <li><a href="#totals-for-all-elections">Totals for all {{ office | title }} elections</a></li>
+          {% endif %}
         </ul>
       </li>
     </ul>

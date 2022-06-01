@@ -158,6 +158,7 @@
          </div>
       </div>
       #}
+  {% if FEATURES.house_senate_overview_totals %}     
       <div id="totals-for-all-elections" class="entity__figure row">
          <h2 class="heading__left">Totals for all {{ office | title }} elections</h2>
          <p class="t-sans t-low-height">Comparing the money raised, spent, cash on hand and debts by {{ office | title }} election</p>
@@ -198,5 +199,6 @@
                {% endif %}
             </div>
          </div>
+   {% endif %}
       </div>
 </section>
