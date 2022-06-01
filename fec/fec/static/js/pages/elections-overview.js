@@ -117,6 +117,7 @@ AcrossTime.prototype.displayUpdatedData = function(queryResponse) {
 
       // Create object for creating querystring for the link for each value
       let searchFilters = {
+        data_type: 'processed',
         two_year_transaction_period: electionYear,
         recipient_committee_type: context.office_code,
         line_number: lineNumbers[line]
