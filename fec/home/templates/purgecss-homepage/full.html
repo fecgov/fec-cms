@@ -439,8 +439,9 @@
         <form action="/data/elections">
           <div class="row u-margin--bottom">
             <div class="search-controls__zip">
-              <label for="zip" class="label input__label-home">Find by ZIP code</label>
-              <input type="text" inputmode="numeric" id="zip" name="zip" class="combo__input">
+              <label for="zip" class="label input__label-home is-disabled">Find by ZIP code</label>
+              <input type="text" inputmode="numeric" id="zip" name="zip" class="combo__input is-disabled" disabled>
+              <label class="t-note t-sans">Temporarily unavailable</label>
             </div>
             <div class="search-controls__submit search-controls__no-label">
               <button type="submit" class="button--search--text button--standard">Search</button>
