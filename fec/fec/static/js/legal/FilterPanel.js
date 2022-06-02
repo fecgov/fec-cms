@@ -24,7 +24,7 @@ class FilterPanel extends React.Component {
           {this.props.header}
         </button>
         <div
-          className="accordion__content filters-inner"
+          className="accordion__content"
           id={this.props.id}
           hidden={!this.state.expanded}
         >
