@@ -5,7 +5,9 @@ var lookup = require('../modules/election-lookup');
 var analytics = require('../modules/analytics');
 
 $(document).ready(function() {
-  new lookup.ElectionLookup('#election-lookup', false);
+  // If #election-lookup doesn't also have the na-map class, init it
+  if (document.querySelector('#election-lookup:not(.na-map)'))
+    new lookup.ElectionLookup('#election-lookup', false);
 });
 
 $('.js-ga-event').each(function() {
