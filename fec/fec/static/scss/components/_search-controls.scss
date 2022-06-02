@@ -287,6 +287,33 @@
       width: 100%;
     }
   }
+  #election-lookup.na-map {
+    .message {
+      @include clearfix();
+      background-size: u(2rem);
+      background-position: u(2rem 2rem);
+      background-color: $gray-lightest;
+      border-color: $gray;
+      border-style: solid;
+      border-width: 0 0 0 3px;
+      margin: u(2rem 0);
+      padding: u(5rem 2rem 2rem 2rem);
+    
+      @include media($med) {
+        background-position: u(2rem 2rem);
+        background-size: u(3rem);
+        min-height: u(8rem);
+        padding: u(2rem 2rem 2rem 6rem);
+      }
+
+      p:last-child {
+        margin-bottom: 0;
+      }
+    }
+    .message--info {
+      @include u-icon-bg($info-circle, $primary);
+    }
+  }
   
   .callout-holder {
     border: none;
