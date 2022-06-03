@@ -26,3 +26,19 @@
 @import "components/search-controls";
 @import "components/data-landing-callouts";
 
+#election-lookup.na-map {
+  flex-wrap: wrap;
+}
+#election-lookup.na-map > .usa-width-one-half {
+  width: 100% !important;
+  &:first-child {
+    order: initial;
+  }
+  &:last-child {
+    order: initial;
+  }
+}
+#election-lookup.na-map .message {
+  margin-top: 0;
+  margin-bottom: 0;
+}
