@@ -24,7 +24,6 @@
                   <div role="document">
                      <button type="button" class="modal__close button--close--primary" data-a11y-dialog-hide="" title="Close this dialog window"></button>
                      <h2>Methodology Overview</h2>
-                     <p class="t-note"></p>
                      <p></p>
                   </div>
                </div>
@@ -90,46 +89,30 @@
 
          <div class="content__section--ruled-responsive u-margin--top t-serif">
             <div class="row">
-               {% if FEATURES.house_senate_overview_methodology %}
                <ul class="list--buttons u-float-right">
                   <li><a class="button button--alt js-ga-event" data-a11y-dialog-show="contributions-over-time-modal" data-ga-event="Totals for all elections methodology modal clicked" aria-controls="totals-for-all-elections-modal">Methodology</a></li>
                </ul>
-               {% endif %}
                <p class="u-no-margin"><i class="data-disclaimer">Each two-year period includes financial activity from January 1 of the nonelection year through December 31 of the election year. Newly filed summary data may not appear for up to 48 hours.</i></p>
                </div>
-               {% if FEATURES.house_senate_overview_methodology %}
                <div class="js-modal modal" id="contributions-over-time-modal" aria-hidden="true">
                   <div tabindex="-1" class="modal__overlay" data-a11y-dialog-hide=""></div>
                   <div role="dialog" class="modal__content" aria-labelledby="contributions-over-time-modal-title">
                      <div role="document">
                         <button type="button" class="modal__close button--close--primary" data-a11y-dialog-hide="" title="Close this dialog window"></button>
                         <h2>Methodology Overview</h2>
-                        <p class="t-note"></p>
-                        <p>This chart includes data up to and including the most recent reports filed. It displays an overall total for the selected office by two-year periods for Individual <span class="term" data-term="contribution" title="Click to define" tabindex="0">contribution</span>, Other committee contributions and Transfers from other authorized committees.
-                        </p>
-                        <p>This data is generated from <a href="https://www.fec.gov/resources/cms-content/documents/fecfrm3.pdf" rel="nofollow">FEC Form 3-REPORT OF RECEIPTS AND DISBURSEMENTS</a>
-                        </p>
-                        <p>Line by line breakdown for contribtions:</p>
+                        <p>The totals presented in the chart are calculated using data submitted by principal campaign and authorized committees on <a href="https://www.fec.gov/resources/cms-content/documents/fecfrm3.pdf">Form 3</a> (Report of Receipts and Disbursements) for the selected office by two-year periods. Financial summary data for this chart are available from 2005 to present.</p>
+                        <p>These totals do not include data from Form 6 (48-Hour Notice of Contributions/Loans Received) or Form 3L (Report of Contributions Bundled by Lobbyists/Registrants and Lobbyist/Registrant PACs).</p>
+                        <p>For contributions across time, data are calculated as:</p>
                         <ul class="list--bulleted">
-                           <li>Individual contributions:
-                              <b>Form 3, Line 11(a)(i)</b>
-                           </li>
-                           <li>PACs and other committee contributions:
-                              <b>Form 3, Line 11(c).</b> 
-                              <br><i>All itemized contributions from PACs and other political committees, including state PACs and other federal candidate committees. Party committee and Super PAC contributions are not included.</i>
-                           </li>
-                           <li>Transfers:
-                              <b>Form 3, Line 12</b>
-                           </li>
+                          <li>Individual contributions: the sum of Form 3, Line 11(a)(i) by two-year period</li>
+                          <li>PAC and other committee contributions: the sum of Form 3, Line 11(c) by two-year period. Party committee and Super PAC contributions are not included in this total.</li>
+                          <li>Transfers from other authorized committees: the sum of Form 3, Line 12 by two-year period.</li>
                         </ul>
-                        <p>General methodology language additions:
-                           Include link to archived contribution limits page.
-                           <a href="https://www.fec.gov/help-candidates-and-committees/candidate-taking-receipts/archived-contribution-limits/">Archived contribution limits</a>
-                        </p>
+                        <h3>Contribution limits</h3>
+                        <p><a href="/help-candidates-and-committees/candidate-taking-receipts/contribution-limits/">Contribution limits</a> have changed over time. Historical contribution limits are available on our Archive of contribution limits <a href="/help-candidates-and-committees/candidate-taking-receipts/archived-contribution-limits/">page</a>.</p>
                      </div>
                   </div>
                </div>
-               {% endif %}
             </div>
          </div>
       {# 
@@ -177,26 +160,33 @@
          </table>
          <div class="content__section u-margin--top t-serif">
             <div class="row">
-               {% if FEATURES.house_senate_overview_methodology %}
                <ul class="list--buttons u-float-right">
                   <li><a class="button button--alt js-ga-event" data-a11y-dialog-show="totals-for-all-elections-modal" data-ga-event="Totals for all elections methodology modal clicked" aria-controls="totals-for-all-elections-modal">Methodology</a></li>
-               </ul>
-               {% endif %}
+               </ul
                <p class="u-no-margin"><i class="data-disclaimer">Each two-year period includes financial activity from January 1 of the nonelection year through December 31 of the election year. Newly filed summary data may not appear for up to 48 hours.</i></p>
                </div>
-               {% if FEATURES.house_senate_overview_methodology %}
                <div class="js-modal modal" id="totals-for-all-elections-modal" aria-hidden="true">
                   <div tabindex="-1" class="modal__overlay" data-a11y-dialog-hide=""></div>
                   <div role="dialog" class="modal__content" aria-labelledby="totals-for-all-elections-modal-title">
                      <div role="document">
                         <button type="button" class="modal__close button--close--primary" data-a11y-dialog-hide="" title="Close this dialog window"></button>
                         <h2>Methodology Overview</h2>
-                        <p class="t-note"></p>
-                        <p></p>
+                        <p>The totals presented in the table are calculated using a two-step process. In step one, financial data reported within a two-year period are aggregated by candidate campaign committees creating totals by candidate by two-year period. In step two, 
+                        candidates are grouped by state and two-year period creating totals by state and two-year period. Financial summary data are available from 1979 to present.</p>
+                        <h3>Candidate campaign committee aggregation</h3>
+                        <p>Candidate campaign committee totals are calculated from data submitted by principal campaign and authorized committees on <a href="https://www.fec.gov/resources/cms-content/documents/fecfrm3.pdf">Form 3</a> (Report of Receipts and Disbursements). These totals do not include data from Form 6 (48-Hour Notice of Contributions/Loans Received) or Form 3L (Report of Contributions Bundled by Lobbyists/Registrants and Lobbyist/Registrant PACs).</p>
+                        <p>For each candidate during a two-year period, the candidate's totals are calculated as:</p>
+                        <ul class="list--bulleted">
+                           <li>Receipts: Sum of total receipts (Form 3, Line 16) of all reports filed by the committee of that two-year period</li>
+                           <li>Disbursements: Sum of total disbursements (Form 3, Line 22) of all reports filed by the committee of that two-year period</li>
+                           <li>Cash on hand: Ending cash on hand (Form 3, Line 8) reported on last filing decided by coverage end date for each two-year period</li>
+                           <li>Debt: Debt owed by committee (Form 3, Line 10) on last filing decided by coverage end date for each two-year period.</li>
+                        </ul>
+                        <h3>State aggregation</h3>
+                        <p>State totals are calculated from the candidate campaign committee aggregations previously described. Candidates are grouped by two-year period and state, then the financial data are summed producing totals for receipts, disbursements, cash on hand and debt.</p>
                      </div>
                   </div>
                </div>
-               {% endif %}
             </div>
          </div>
    {% endif %}
