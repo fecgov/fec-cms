@@ -31,7 +31,7 @@ Filter reports
   <div class="accordion__content">
     {{ typeahead.field('committee_id', 'Committee name or ID', '') }}
     {{ typeahead.field('candidate_id', 'Candidate name or ID', '', dataset='candidates') }}
-    {{ states.field('state') }}
+    {{ states.field('state', type='Candidate') }}
     {{ office.checkbox() }}
     {{ parties.checkbox() }}
   </div>
