@@ -61,11 +61,12 @@ FEATURES = {
     'barcharts': bool(env.get_credential('FEC_FEATURE_HOME_BARCHARTS', '')),
     'contributionsbystate': bool(env.get_credential('FEC_FEATURE_CONTRIBUTIONS_BY_STATE', '')),
     'debts': bool(env.get_credential('FEC_FEATURE_DEBTS', '')),  # TODO: debts dates
+    'house_senate_overview': bool(env.get_credential('FEC_FEATURE_HOUSE_SENATE_OVERVIEW', '')),
     'map': bool(env.get_credential('FEC_FEATURE_HOME_MAP', '')),
     'pac_party': bool(env.get_credential('FEC_FEATURE_PAC_PARTY', '')),
     'pac_snapshot': bool(env.get_credential('FEC_FEATURE_PAC_SNAPSHOT', '')),
     'presidential_map': bool(env.get_credential('FEC_FEATURE_PRESIDENTIAL_MAP', '')),
-    'house_senate_overview': bool(env.get_credential('FEC_FEATURE_HOUSE_SENATE_OVERVIEW', '')),
+    'shouldUseAutoSuggestSearch': bool(env.get_credential('FEC_FEATURE_PRESIDENTIAL_MAP', '')),
 }
 
 # Set feature flags to True for local
