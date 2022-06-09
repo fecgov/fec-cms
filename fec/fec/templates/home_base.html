@@ -16,6 +16,16 @@
     {% block css %}
     <link defer rel="stylesheet" type="text/css" href="{% asset_for_css 'home.css' %}">
     {% endblock %}
+
+    <script>
+      BASE_PATH = '/data';
+      FEC_APP_URL = '{{ settings.FEC_APP_URL }}';
+      API_LOCATION = '{{ settings.FEC_API_URL }}';
+      API_VERSION = '{{ settings.FEC_API_VERSION }}';
+      API_KEY_PUBLIC = '{{ settings.FEC_API_KEY_PUBLIC }}';
+      API_KEY_PUBLIC_CALENDAR = '{{ settings.FEC_API_KEY_PUBLIC_CALENDAR }}';
+      CANONICAL_BASE = '{{ settings.CANONICAL_BASE }}';
+    </script>
   </head>
 
   <body class="{% block body_class %}{% endblock %}">
@@ -143,16 +153,6 @@
     {% include 'partials/glossary.html' %}
 
     {% csrf_token %}
-
-    <script>
-      window.BASE_PATH = '/data';
-      window.FEC_APP_URL = '{{ settings.FEC_APP_URL }}';
-      window.API_LOCATION = '{{ settings.FEC_API_URL }}';
-      window.API_VERSION = '{{ settings.FEC_API_VERSION }}';
-      window.API_KEY_PUBLIC = '{{ settings.FEC_API_KEY_PUBLIC }}';
-      window.API_KEY_PUBLIC_CALENDAR = '{{ settings.FEC_API_KEY_PUBLIC_CALENDAR }}';
-      window.CANONICAL_BASE = '{{ settings.CANONICAL_BASE }}';
-    </script>
 
     {# Global javascript #}
     <script type="text/javascript" src="{% asset_for_js 'vendor.js' %}"></script>
