@@ -518,6 +518,10 @@
 .utility-nav__search {
   padding-right: u(2rem);
   width: u(30rem);
+
+  .tt-menu { // TODO: remove this when the typeahead filters are removed
+    z-index: $z-max;
+  }
 }
 
 #ie_warning {

@@ -66,6 +66,7 @@ $search-button-width: u(5.6rem);
 }
 
 .combo--search--mini {
+  .twitter-typeahead, // TODO: remove twitter-typeahead when typeahead is removed from filters
   .autosuggest,
   .combo__input {
     border-radius: 4px 0 0 4px;
@@ -109,6 +110,9 @@ $search-button-width: u(5.6rem);
       width: $search-button-width;
     }
 
+    .tt-menu { // TODO: remove tt-* when typeahead is removed from filters
+      width: calc(100% - #{$search-button-width});
+    }
 
     .search__select {
       width: u(15rem);
@@ -200,25 +204,45 @@ $search-button-width: u(5.6rem);
 }
 
 // Typeahead styles
-.autosuggest {
+.twitter-typeahead, .autosuggest { // TODO: remove twitter-typeahead when typeahead is removed from filters
   height: 0;
   width: 100%;
 }
 
+[aria-expanded=false] .tt-menu { // TODO: remove tt-* when typeahead is removed from filters
+  display: none;
+}
 
+.tt-menu { // TODO: remove tt-* when typeahead is removed from filters
+  background-color: $inverse;
+  border: 1px solid $primary;
+  font-family: $sans-serif;
+  font-size: u(1.2rem);
+  left: 0;
+  position: absolute;
+  text-align: left;
+  top: u(3.5rem) !important;
+  width: 100%;
+  // z-index is being set on the element through a node_modules JS so adding an !important to fight that:
+  z-index: $z-dropdowns !important;
 
+}
 
+.tt-input { // TODO: remove tt-* when typeahead is removed from filters
+  position: relative;
+  vertical-align: top;
+}
 
 .autosuggest {
   display: block;
   position: relative;
 
-  .as-input, .tt-input { // TODO: remove tt-* when typeahead is removed from filters
+  .as-input { // TODO: remove tt-* when typeahead is removed from filters
     position: relative;
     vertical-align: top;
   }
 
-  .as-menu, .tt-menu { // TODO: remove tt-* when typeahead is removed from filters
+  .as-menu { // TODO: remove tt-* when typeahead is removed from filters
     background-color: $inverse;
     border: 1px solid $primary;
     font-family: $sans-serif;
@@ -232,8 +256,7 @@ $search-button-width: u(5.6rem);
     z-index: $z-dropdowns !important;
   }
   
-  &[aria-expanded=false] .as-menu,
-  &[aria-expanded=false] .tt-menu { // TODO: remove tt-* when typeahead is removed from filters
+  &[aria-expanded=false] .as-menu { // TODO: remove tt-* when typeahead is removed from filters
     display: none;
   }
 
@@ -269,12 +292,7 @@ $search-button-width: u(5.6rem);
 
 
 
-
-
-
-
-
-.as-suggestion, .tt-suggestion { // TODO: remove tt-* when typeahead is removed from filters
+.as-suggestion {
   color: $base;
   // display: inline-block;
   position: relative;
@@ -285,7 +303,7 @@ $search-button-width: u(5.6rem);
   width: 100%;
   border-left: 4px solid transparent; // Adding an invisible left border to avoid text wrap changes from as-cursor
 
-  .as-suggestion__name, .as-suggestion__name { // TODO: remove tt-* when typeahead is removed from filters
+  .as-suggestion__name, .as-suggestion__name {
     margin-right: 0.5em;
   }
   // .as-suggestion__office {
@@ -294,13 +312,11 @@ $search-button-width: u(5.6rem);
   // }
 }
 
-.as-suggestion__name.as-suggestion__name,
-.tt-suggestion__name.tt-suggestion__name { // TODO: remove tt-* when typeahead is removed from filters
+.as-suggestion__name.as-suggestion__name {
   color: $base;
 }
 
-.as-suggestion__office.as-suggestion__office,
-.tt-suggestion__office.tt-suggestion__office { // TODO: remove tt-* when typeahead is removed from filters
+.as-suggestion__office.as-suggestion__office {
   color: $base;
   font-size: u(1.2rem);
   text-align: right;
@@ -308,49 +324,42 @@ $search-button-width: u(5.6rem);
 }
 
 .as-cursor,
-.as-suggestion:hover,
-.tt-cursor,
-.tt-suggestion:hover  { // TODO: remove tt-* when typeahead is removed from filters
+.as-suggestion:hover {
   cursor: pointer;
   background: $gray-lightest;
   border-left: 4px solid $primary-contrast;
 
-  .as-suggestion__name, .tt-suggestion__name { // TODO: remove tt-* when typeahead is removed from filters
+  .as-suggestion__name {
     color: $base;
   }
 
-  .as-suggestion__office, .tt-suggestion__office { // TODO: remove tt-* when typeahead is removed from filters
+  .as-suggestion__office {
     color: $base;
   }
 }
 
-.as-suggestion__header.as-suggestion__header,
-.t-suggestion__header.tt-suggestion__header { // TODO: remove tt-* when typeahead is removed from filters
+.as-suggestion__header.as-suggestion__header {
   color: $base;
   display: block;
   font-weight: bold;
   padding: u(1rem .5rem);
 }
 
-.as-suggestion__loading.as-suggestion__loading,
-.tt-suggestion__loading.tt-suggestion__loading { // TODO: remove tt-* when typeahead is removed from filters
+.as-suggestion__loading.as-suggestion__loading {
   color: $primary;
   display: block;
   font-weight: bold;
   padding: u(1rem .5rem);
 }
 
-.as-dataset,
-.tt-dataset { // TODO: remove tt-* when typeahead is removed from filters
+.as-dataset {
   margin-left: 0;
 }
-.as-dataset-0,
-.tt-dataset-0 { // TODO: remove tt-* when typeahead is removed from filters
+.as-dataset-0 {
   border-bottom: 1px solid $base;
 }
 
-.as-highlight,
-.tt-highlight { // TODO: remove tt-* when typeahead is removed from filters
+.as-highlight {
   background-color: rgba($aqua, .3);
 }
 
@@ -387,3 +396,87 @@ $search-button-width: u(5.6rem);
     }
   }
 }
+
+
+// TODO: remove this whole section when the typeahead filters are removed
+// TODO: ⬇︎ ⬇︎ ⬇︎ ⬇︎ ⬇︎
+.tt-suggestion {
+  color: $base;
+  display: table;
+  position: relative;
+  padding: u(1rem);
+  margin-bottom: 0;
+  line-height: 1;
+  border-top: 1px solid $gray-lightest;
+  width: 100%;
+
+  .tt-suggestion__name,
+  .tt-suggestion__office {
+    display: table-cell;
+  }
+}
+
+.tt-suggestion__name.tt-suggestion__name {
+  color: $base;
+}
+
+.tt-suggestion__office.tt-suggestion__office {
+  color: $base;
+  font-size: u(1.2rem);
+  text-align: right;
+  font-style: italic;
+}
+
+.tt-cursor,
+.tt-suggestion:hover {
+  cursor: pointer;
+  background: $gray-lightest;
+  border-left: 4px solid $primary-contrast;
+
+  .tt-suggestion__name {
+    color: $base;
+  }
+
+  .tt-suggestion__office {
+    color: $base;
+  }
+}
+
+.tt-suggestion__header.tt-suggestion__header {
+  color: $base;
+  display: block;
+  font-weight: bold;
+  padding: u(1rem .5rem);
+}
+
+.tt-suggestion__loading.tt-suggestion__loading {
+  color: $primary;
+  display: block;
+  font-weight: bold;
+  padding: u(1rem .5rem);
+}
+
+.tt-dataset-0 {
+  border-bottom: 1px solid $base;
+}
+
+.tt-highlight {
+  background-color: rgba($aqua, .3);
+}
+
+// Specific styles for typeahead filters
+// Just testing things out. Refactor to use non-js class if we use it
+.typeahead-filter {
+  .button--search {
+    @include u-icon-button($magnifying-glass-arrow);
+    background-size: u(2.8rem);
+  }
+
+  &[data-allow-text] {
+    .tt-suggestion__missing {
+      display: none;
+    }
+  }
+}
+// TODO: ⬆︎ ⬆︎ ⬆︎ ⬆︎ ⬆︎ 
+// TODO: remove the section above when the typeahead filters are removed
