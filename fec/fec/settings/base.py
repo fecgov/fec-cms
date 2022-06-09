@@ -83,7 +83,6 @@ if FEC_CMS_ENVIRONMENT == ENVIRONMENTS['local']:
     FEATURES['pac_snapshot'] = True
     FEATURES['presidential_map'] = True
     FEATURES['house_senate_overview'] = True
-    # FEATURES['use_tt'] = False
 
 # Application definition
 INSTALLED_APPS = (
