@@ -66,7 +66,7 @@ FEATURES = {
     'pac_party': bool(env.get_credential('FEC_FEATURE_PAC_PARTY', '')),
     'pac_snapshot': bool(env.get_credential('FEC_FEATURE_PAC_SNAPSHOT', '')),
     'presidential_map': bool(env.get_credential('FEC_FEATURE_PRESIDENTIAL_MAP', '')),
-    'use_tt': bool(env.get_credential('FEC_USE_TYPEAHEAD', '')),
+    'use_tt': bool(env.get_credential('FEC_USE_TYPEAHEAD', True)),
     # text search fields will use AutoSuggest if use_tt is False, but Typeahead otherwise
 }
 

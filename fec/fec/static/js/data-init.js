@@ -19,6 +19,7 @@ var siteNav = require('./modules/site-nav');
 var skipNav = require('./modules/skip-nav');
 var feedback = require('./modules/feedback');
 import { AutoSuggest } from './modules/autosuggest';
+var typeahead = require('./modules/typeahead');
 var toc = require('./modules/toc');
 var Search = require('./modules/search');
 
@@ -76,18 +77,23 @@ $(function() {
 
   // Initialize main search autosearch
   let mainSearchElement = document.querySelector('.js-search-input');
-
-  if (mainSearchElement && !window.useTt)
-    new AutoSuggest(mainSearchElement, { queryType: 'allData' });
-  else
-    new typeahead.Typeahead('.js-search-input', 'allData', '/data/');
+  if (mainSearchElement) {
+    // TODO: remove the useTt conditional when FEATURES.use_tt goes away
+    if (window.useTt === false)
+      new AutoSuggest(mainSearchElement, { queryType: 'allData' });
+    else
+      new typeahead.Typeahead('.js-search-input', 'allData', '/data/');
+  }
 
   // Initialize header autosearch
   let siteSearchElement = document.querySelector('.js-site-search');
-  if (siteSearchElement && !window.useTt)
-    new AutoSuggest(siteSearchElement, { queryType: 'all' });
-  else
-    new typeahead.Typeahead($('.js-site-search'), 'all', '/data/');
+  if (siteSearchElement) {
+    // TODO: remove the useTt conditional when FEATURES.use_tt goes away
+    if (window.useTt === false)
+      new AutoSuggest(siteSearchElement, { queryType: 'all' });
+    else
+      new typeahead.Typeahead($('.js-site-search'), 'all', '/data/');
+  }
 
   // Initialize feedback
   feedbackWidget = new feedback.Feedback(helpers.buildAppUrl(['issue']));

@@ -25,6 +25,9 @@
       API_KEY_PUBLIC = '{{ settings.FEC_API_KEY_PUBLIC }}';
       API_KEY_PUBLIC_CALENDAR = '{{ settings.FEC_API_KEY_PUBLIC_CALENDAR }}';
       CANONICAL_BASE = '{{ settings.CANONICAL_BASE }}';
+
+      useTt = {% if settings.FEATURES.use_tt == false %}false{% else %}true{% endif %};
+      {# TODO: remove useTt with the use_tt feature flag #}
     </script>
   </head>
 
@@ -64,7 +67,7 @@
               <div class="combo combo--search">
                 <input
                   class="js-site-search combo__input"
-                  {% if FEATURES.use_tt == false %}data-{% endif %}autocomplete="off"
+                  {% if settings.FEATURES.use_tt == false %}data-{% endif %}autocomplete="off"
                   aria-controls="query_listbox"
                   id="query"
                   name="query"
@@ -97,7 +100,7 @@
               <div class="combo combo--search">
               <input
                 class="js-site-search combo__input"
-                {% if FEATURES.use_tt == false %}data-{% endif %}autocomplete="off"
+                {% if settings.FEATURES.use_tt == false %}data-{% endif %}autocomplete="off"
                 id="query"
                 name="query"
                 type="text"

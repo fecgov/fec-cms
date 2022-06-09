@@ -16,6 +16,7 @@ var skipNav = require('./modules/skip-nav');
 var siteNav = require('./modules/site-nav');
 var dropdown = require('./modules/dropdowns');
 var toc = require('./modules/toc');
+var typeahead = require('./modules/typeahead');
 var helpers = require('./modules/helpers');
 
 import { AutoSuggest } from './modules/autosuggest';
@@ -92,7 +93,15 @@ $(function() {
   });
 
   let siteSearchElement = document.querySelector('.js-site-search');
-  if (siteSearchElement) new AutoSuggest(siteSearchElement, { queryType: 'all' });
+  if (siteSearchElement) {
+    // TODO: remove the useTt conditional when FEATURES.use_tt goes away
+    if (window.useTt === false)
+      new AutoSuggest(siteSearchElement, { queryType: 'all' });
+    else
+      $('.js-site-search').each(function() {
+        new typeahead.Typeahead($(this), 'all', '/data/');
+      });
+  }
 
   // For any link that should scroll to a section on the page apply .js-scroll to <a>
   $('.js-scroll').on('click', function(e) {
