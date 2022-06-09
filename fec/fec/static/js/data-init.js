@@ -76,12 +76,18 @@ $(function() {
 
   // Initialize main search autosearch
   let mainSearchElement = document.querySelector('.js-search-input');
-  console.log('mainSearchElement: ', mainSearchElement);
-  if (mainSearchElement) new AutoSuggest(mainSearchElement, { queryType: 'allData' });
+
+  if (mainSearchElement && !window.useTt)
+    new AutoSuggest(mainSearchElement, { queryType: 'allData' });
+  else
+    new typeahead.Typeahead('.js-search-input', 'allData', '/data/');
 
   // Initialize header autosearch
   let siteSearchElement = document.querySelector('.js-site-search');
-  if (siteSearchElement) new AutoSuggest(siteSearchElement, { queryType: 'all' });
+  if (siteSearchElement && !window.useTt)
+    new AutoSuggest(siteSearchElement, { queryType: 'all' });
+  else
+    new typeahead.Typeahead($('.js-site-search'), 'all', '/data/');
 
   // Initialize feedback
   feedbackWidget = new feedback.Feedback(helpers.buildAppUrl(['issue']));

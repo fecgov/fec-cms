@@ -54,7 +54,7 @@
               <div class="combo combo--search">
                 <input
                   class="js-site-search combo__input"
-                  autocomplete="off"
+                  {% if FEATURES.use_tt == false %}data-{% endif %}autocomplete="off"
                   aria-expanded="false"
                   aria-controls="query_listbox"
                   id="query"
@@ -88,7 +88,7 @@
               <div class="combo combo--search">
                 <input
                   class="js-site-search combo__input"
-                  autocomplete="off"
+                  {% if FEATURES.use_tt == false %}data-{% endif %}autocomplete="off"
                   aria-expanded="false"
                   aria-controls="query_listbox"
                   id="query"

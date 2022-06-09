@@ -66,7 +66,8 @@ FEATURES = {
     'pac_party': bool(env.get_credential('FEC_FEATURE_PAC_PARTY', '')),
     'pac_snapshot': bool(env.get_credential('FEC_FEATURE_PAC_SNAPSHOT', '')),
     'presidential_map': bool(env.get_credential('FEC_FEATURE_PRESIDENTIAL_MAP', '')),
-    'shouldUseAutoSuggestSearch': bool(env.get_credential('FEC_FEATURE_PRESIDENTIAL_MAP', '')),
+    'use_tt': bool(env.get_credential('FEC_USE_TYPEAHEAD', '')),
+    # text search fields will use AutoSuggest if use_tt is False, but Typeahead otherwise
 }
 
 # Set feature flags to True for local
@@ -82,6 +83,7 @@ if FEC_CMS_ENVIRONMENT == ENVIRONMENTS['local']:
     FEATURES['pac_snapshot'] = True
     FEATURES['presidential_map'] = True
     FEATURES['house_senate_overview'] = True
+    # FEATURES['use_tt'] = False
 
 # Application definition
 INSTALLED_APPS = (
