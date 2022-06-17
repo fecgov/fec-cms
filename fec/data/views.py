@@ -459,6 +459,11 @@ def get_committee(committee_id, cycle):
                 sponsor_candidate["related_cycle"] = cycle if election_years else None
                 sponsor_candidates.append(sponsor_candidate)
 
+    jfc_committees = []
+    for jfc in committee["jfc_committee"]:
+        if (jfc["joint_committee_id"] is not None) or (jfc["joint_committee_name"] is not None):
+            jfc_committees.append(jfc)
+
     # Human-friendly text and glossary links for the front-end
     com_org_type = committee.get('organization_type')
     com_com_type = committee.get('committee_type')
@@ -567,6 +572,7 @@ def get_committee(committee_id, cycle):
         "year": year,
         "timePeriod": time_period_js,
         "sponsor_candidates": sponsor_candidates,
+        "jfc_committees": jfc_committees
     }
     # Format the current two-year-period's totals
     if reports and totals:
