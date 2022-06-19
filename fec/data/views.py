@@ -459,10 +459,12 @@ def get_committee(committee_id, cycle):
                 sponsor_candidate["related_cycle"] = cycle if election_years else None
                 sponsor_candidates.append(sponsor_candidate)
 
+    jfc_committee = committee.get("jfc_committee")
     jfc_committees = []
-    for jfc in committee["jfc_committee"]:
-        if (jfc["joint_committee_id"] is not None) or (jfc["joint_committee_name"] is not None):
-            jfc_committees.append(jfc)
+    if jfc_committee:
+        for jfc in jfc_committee:
+            if (jfc["joint_committee_id"] is not None) or (jfc["joint_committee_name"] is not None):
+                jfc_committees.append(jfc)
 
     # Human-friendly text and glossary links for the front-end
     com_org_type = committee.get('organization_type')

@@ -158,17 +158,22 @@
         <tr>
             <td class="figure__label">Joint fundraising committees:</td>
             <td class="figure__value">
+             {{ jfc_committees }}
               <ul>
                 {% for jfc in jfc_committees %}
-                  {% if jfc.joint_committee_name is not none %}
-                    <li>
-                      {% if jfc.joint_committee_id is not none %}
-                         <a href="/data/committee/{{jfc.joint_committee_id}}/">{{ jfc.joint_committee_name }}</a>
-                      {% else %}
-                        {{ jfc.joint_committee_name }}
-                      {% endif %}
-                    </li>
-                  {% endif %}
+                  <li>
+                    {% if jfc.joint_committee_id is not none %}
+                      <a href="/data/committee/{{jfc.joint_committee_id}}/">
+                        {% if jfc.joint_committee_name is not none %}
+                          {{ jfc.joint_committee_name }}
+                        {% else %}
+                          {{ jfc.joint_committee_id }}
+                        {% endif %}
+                      </a>
+                    {% else %}  
+                       {{ jfc.joint_committee_name }}
+                    {% endif %}
+                  </li>
                 {% endfor %}
               </ul>
             </td>
