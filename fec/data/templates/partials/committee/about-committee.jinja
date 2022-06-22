@@ -157,8 +157,10 @@
       <table class="t-sans usa-width-three-fourths">
         <tr>
             <td class="figure__label">Joint fundraising committees:</td>
+        </tr>
+        <tr>
             <td class="figure__value">
-              <ul>
+              <ul class="list--bulleted">
                 {% for jfc in jfc_committees %}
                   <li>
                     {% if jfc.joint_committee_id is not none %}
