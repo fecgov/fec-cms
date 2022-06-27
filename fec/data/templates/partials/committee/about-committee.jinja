@@ -151,7 +151,7 @@
       </table>
     </div>
     {% endif %}
-    {% if ((committee.designation == 'J') and (jfc_committees)) %}
+    {% if ((committee.designation == 'J') and (committee.jfc_committee)) %}
     <div class="entity__figure row">
       <h3 class="heading--section">Committees</h3>
       <table class="t-sans usa-width-three-fourths">
@@ -161,7 +161,7 @@
         <tr>
             <td class="figure__value">
               <ul class="list--bulleted">
-                {% for jfc in jfc_committees %}
+                {% for jfc in committee.jfc_committee %}
                   <li>
                     {% if jfc.joint_committee_id is not none %}
                       <a href="/data/committee/{{jfc.joint_committee_id}}/">
