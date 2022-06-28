@@ -18,20 +18,70 @@
         {% endif %}
       </div>
       <div class="simple-table__cell">
-        <div class="t-serif legal-search-result__hit">
-          &hellip;
-          {% for highlight in mur.highlights %}
-            {{ highlight|safe }} &hellip;
-          {% endfor %}
-        </div>
-        <div><strong>Date opened:</strong> {{ mur.open_date | date('%m/%d/%Y') | default('Unknown', True) }}</div>
-        <div><strong>Date closed:</strong> {{ mur.close_date | date('%m/%d/%Y') | default('Unknown', True) }}</div>
+        <div class="u-margin--bottom"><strong>Election cycle(s):</strong> {{ '; '.join(mur['election_cycles'] | map('string') | sort) }}</div>
         {% if mur.mur_type == 'current' %}
         {# Archived MUR subjects are a tree-structure so we don't render them inline #}
-          <div>
-            <strong>Subject:</strong> {{ '; '.join(mur['subjects']) }}
+          <div class="u-margin--bottom">
+            <strong>Subject(s):</strong> {{ '; '.join(mur['subjects']) }}
           </div>
         {% endif %}
+        <div class="u-margin--bottom">
+          <strong>Disposition(s):</strong>
+          {# group disposition by disposition names #}
+          {% set disposition_dict = dict() %}
+          {% for disposition_record in mur.dispositions %}
+             {% set disposition = disposition_record.disposition %}
+             {% if( disposition_dict[disposition] ) %}
+              {# increment the respondents count for existing dispositions #}
+              {% do disposition_dict.update({disposition: disposition_dict[disposition] + 1 }) %}
+             {% else %}
+               {# set the count to 1 for new dispositions #}
+               {% do disposition_dict.update({disposition: 1}) %}
+             {% endif %}
+          {% endfor %}
+          {# for each unique disposition, display the count of respondents/records #}
+          {% for disposition in disposition_dict %}
+            {{ disposition }} ({{ disposition_dict[disposition] }} respondents);&nbsp;
+          {% endfor %}
+        </div>
+        <div class="legal-search-result__hit">
+          {% for document in mur.documents %}
+            {% set query_highlight = mur.document_highlights[loop.index0 | string]%}
+            {% if(query_highlight) %}
+              <div class="post--icon">
+                <span class="icon icon--inline--left i-document"></span>
+                <a href="{{document.url}}">{{ document.description }}</a>
+              </div>
+              {# show only first document highlight result #}
+              <ul>
+                  <li class="post--icon t-serif t-italic u-padding--top">
+                    &#8230;{{ query_highlight[0] | safe }}&#8230;
+                  </li>
+              </ul>
+              {# show additional document highlight results, if any #}
+              {% if(query_highlight|length > 1) %}
+              <div class="js-accordion" data-content-prefix="additional-result-{{ mur.no }}-{{loop.index0}}">
+                <button type="button" class="js-accordion-trigger accordion__button results__button" aria-controls="additional-result-{{ mur.no }}-{{loop.index0}}" aria-expanded="false">{{ query_highlight|length -1 }} more items</button>
+                  <div class="accordion__content results__content" aria-hidden="true">
+                      <ul>
+                        {% for highlight in query_highlight %}
+                          {% if(loop.index0 != 0) %}
+                            <li class="t-serif t-italic u-padding--bottom">&#8230;{{ highlight | safe }}&#8230;</li>
+                          {% endif %}
+                        {% endfor %}
+                      </ul>
+                  </div>
+              </div>
+              {% endif %}
+              <ul class="tags u-padding--bottom">
+                <li class="tag__category tag__category--doc">
+                  <div class="tag tag--primary">{{ document.category }}</div>
+                </li>
+              </ul>
+              
+            {% endif %}
+          {% endfor %}
+        </div>
       </div>
     </div>
   {% endfor %}

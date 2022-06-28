@@ -52,6 +52,10 @@
   margin: u(.5rem 3rem 0 0);
 }
 
+.tag--primary {
+  border-color: $primary;
+}
+
 .tag--secondary {
   border-color: $secondary;
   color: $base;
@@ -90,6 +94,11 @@
       }
     }
   }
+}
+
+.tag__category--doc {
+  padding: 0 0 0 3rem;
+  background: none;
 }
 
 .tag__category--and {
