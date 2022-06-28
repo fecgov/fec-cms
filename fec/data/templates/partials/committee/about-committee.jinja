@@ -151,5 +151,36 @@
       </table>
     </div>
     {% endif %}
+    {% if ((committee.designation == 'J') and (committee.jfc_committee)) %}
+    <div class="entity__figure row">
+      <h3 class="heading--section">Committees</h3>
+      <table class="t-sans usa-width-three-fourths">
+        <tr>
+            <td class="figure__label">Joint fundraising committees:</td>
+        </tr>
+        <tr>
+            <td class="figure__value">
+              <ul class="list--bulleted">
+                {% for jfc in committee.jfc_committee %}
+                  <li>
+                    {% if jfc.joint_committee_id is not none %}
+                      <a href="/data/committee/{{jfc.joint_committee_id}}/">
+                        {% if jfc.joint_committee_name is not none %}
+                          {{ jfc.joint_committee_name }}
+                        {% else %}
+                          {{ jfc.joint_committee_id }}
+                        {% endif %}
+                      </a>
+                    {% else %}  
+                       {{ jfc.joint_committee_name }}
+                    {% endif %}
+                  </li>
+                {% endfor %}
+              </ul>
+            </td>
+        </tr>
+      </table>
+    </div>
+    {% endif %}
   </div>
 </section>

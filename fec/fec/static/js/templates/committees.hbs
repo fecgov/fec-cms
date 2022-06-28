@@ -35,5 +35,10 @@
         {{/each}}
       {{/panelRow}}
     {{/if}}
+    {{#if (eq designation_full "Joint fundraising committee") }}
+    {{#panelRow "Joint fundraising participants"}}
+      <a href="{{basePath}}/committee/{{committee_id}}/?tab=about-committee">Full list of participants</a>
+    {{/panelRow}}
+    {{/if}}
   </table>
 </div>
