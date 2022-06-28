@@ -10,7 +10,7 @@
         <div class="t-sans">
           <a title="{{ mur.name }}" href="/data/legal/matter-under-review/{{ mur.no }}">
             <span class="t-bold">MUR #{{ mur.no }}</span><br>
-            {{ mur.name }}
+            {{ mur.name|upper }}
           </a>
         </div>
         {% if mur.mur_type == 'archived' %}
