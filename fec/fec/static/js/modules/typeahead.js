@@ -213,7 +213,7 @@ var individualDataset = {
 };
 
 /* This is a fake dataset for showing an empty option with the query
- * when clicked, this will submit the form to the DigitalGov search site
+ * when clicked, this will submit the form to the Search.gov  website
  */
 var siteDataset = {
   display: 'id',

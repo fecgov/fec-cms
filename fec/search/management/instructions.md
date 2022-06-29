@@ -1,19 +1,19 @@
-# DigitalGov search index instructions
+# Search.gov website search index instructions
 
 The site-wide search of fec.gov uses the General Service Administration's [Search.gov tool](https://search.gov/) for the search engine. We use the [i14y API](https://search.gov/developer/i14y.html) for maintaining the search index, which feeds into ElasticSearch.
 
 For more information about i14Y, you can read the [technical documentation here](http://gsa.github.io/slate/). These instructions are for explaining how to manually update the index.
 
 ## Getting set up
-The DigitalGov Search "site" we use is called `betafec_api` (though that can change). If you're trying to access the admin panel, you will need someone to add you as a contributor to that site. This is where all the admin panel controls and analytics live.
+The Search.gov "site" we use is called `betafec_api` (though that can change). If you're trying to access the admin panel, you will need someone to add you as a contributor to that site. This is where all the admin panel controls and analytics live.
 
 The i14y search works by setting up one or more "drawers", which are basically collections of pages for the index. All drawers serve the same search. We have one drawer set up,  which includes all CMS, web app pages, and transition.fec.gov pages.
 
 The main drawer has its own handle and key, so to push updates to it you will need to add the drawer handle and key to your local env:
 
 ```
-export DIGITALGOV_DRAWER_HANDLE=<drawer handle>
-export DIGITALGOV_DRAWER_KEY_MAIN=<main key>
+export SEARCHGOV_DRAWER_HANDLE=<drawer handle>
+export FEC_SEARCHGOV_DRAWER_KEY_MAIN=<main key>
 
 ```
 
@@ -115,7 +115,7 @@ You can add `description`, `tags`, or `promoted` fields.*
 This is done through a curl:
 
 ```
-curl "https://i14y.usa.gov/api/v1/documents/{document_id}" -XDELETE -u fec_main:$DIGITALGOV_DRAWER_KEY_MAIN
+curl "https://i14y.usa.gov/api/v1/documents/{document_id}" -XDELETE -u fec_main:$SEARCHGOV_DRAWER_KEY_MAIN
 
 ```
 

@@ -9,13 +9,13 @@ from datetime import datetime
 
 # Only use the real search engine if we're on production
 if settings.FEC_CMS_ENVIRONMENT == 'PRODUCTION':
-    DIGITALGOV_BASE_URL = 'https://i14y.usa.gov/api/v1'
-    DIGITALGOV_DRAWER_KEY = settings.FEC_DIGITALGOV_DRAWER_KEY_MAIN
-    DIGITALGOV_DRAWER_HANDLE = 'main'
+    SEARCHGOV_BASE_URL = 'https://i14y.usa.gov/api/v1'
+    SEARCHGOV_DRAWER_KEY = settings.FEC_SEARCHGOV_DRAWER_KEY_MAIN
+    SEARCHGOV_DRAWER_HANDLE = 'main'
 else:
-    DIGITALGOV_BASE_URL = 'http://localhost:3000/data'
-    DIGITALGOV_DRAWER_KEY = ''
-    DIGITALGOV_DRAWER_HANDLE = ''
+    SEARCHGOV_BASE_URL = 'http://localhost:3000/data'
+    SEARCHGOV_DRAWER_KEY = ''
+    SEARCHGOV_DRAWER_HANDLE = ''
 
 
 class MockPage(object):
@@ -89,7 +89,7 @@ class TestSearchIndexing(TestCase):
     @requests_mock.Mocker()
     def test_add_document(self, scrape, m):
         # It makes a POST to the add endpoint
-        m.register_uri('POST', '{}/documents'.format(DIGITALGOV_BASE_URL), status_code=201)
+        m.register_uri('POST', '{}/documents'.format(SEARCHGOV_BASE_URL), status_code=201)
         search.add_document(self.page)
         self.assertTrue(m.called)
 
@@ -97,21 +97,21 @@ class TestSearchIndexing(TestCase):
     @requests_mock.Mocker()
     def test_add_existing_document(self, update_document, scrape, m):
         # It handles a 422 if the doc already exists
-        m.register_uri('POST', '{}/documents'.format(DIGITALGOV_BASE_URL), status_code=422)
+        m.register_uri('POST', '{}/documents'.format(SEARCHGOV_BASE_URL), status_code=422)
         search.add_document(self.page)
         update_document.assert_called_with(self.page)
 
     @requests_mock.Mocker()
     def test_update_document(self, scrape, m):
         # It makes a PUT to the update endpoint
-        m.register_uri('PUT', '{}/documents/123'.format(DIGITALGOV_BASE_URL), status_code=200)
+        m.register_uri('PUT', '{}/documents/123'.format(SEARCHGOV_BASE_URL), status_code=200)
         search.update_document(self.page)
         self.assertTrue(m.called)
 
     @requests_mock.Mocker()
     def test_delete_document_in_prod(self, scrape, m):
         # It makes a DELETE to the update endpoint in production
-        m.register_uri('DELETE', '{}/documents/123'.format(DIGITALGOV_BASE_URL), status_code=200)
+        m.register_uri('DELETE', '{}/documents/123'.format(SEARCHGOV_BASE_URL), status_code=200)
         search.handle_page_delete(123)
         self.assertTrue(m.called)
 
@@ -119,7 +119,7 @@ class TestSearchIndexing(TestCase):
     @requests_mock.Mocker()
     def test_delete_document_off_prod(self, scrape, m):
         # It does nothing if not on production
-        m.register_uri('DELETE', '{}/documents/123'.format(DIGITALGOV_BASE_URL), status_code=200)
+        m.register_uri('DELETE', '{}/documents/123'.format(SEARCHGOV_BASE_URL), status_code=200)
         search.handle_page_delete(123)
         self.assertFalse(m.called)
 
