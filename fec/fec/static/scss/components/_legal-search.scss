@@ -39,6 +39,10 @@
   em {
     @include t-highlight;
   }
+
+  &.split__cell {
+    border-top: 1px solid $gray-lightest;
+  }
 }
 
 .legal-mur {

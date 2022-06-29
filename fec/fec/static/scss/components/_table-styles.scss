@@ -99,6 +99,12 @@ h3 + .simple-table {
         padding: u(1rem);
       }
     }
+
+    &.simple-table--responsive {
+      .no--pad {
+        padding: 0;
+      }
+    }
   }
 }
 
@@ -114,11 +120,6 @@ h3 + .simple-table {
 
   .simple-table__cell {
     padding: 0;
-  }
-
-  .simple-table__cell,
-  .simple-table__header-cell {
-    border-left: none;
   }
 
   @include media($med) {

@@ -56,26 +56,10 @@
   }
 
   &.results__button {
-    background-position: 28% 50%;
+    background-position: 0% 50%;
     margin: u(0 0 0 3rem);
-    padding-left: 0rem;
+    padding-left: 3rem;
     border-bottom: 0;
-  }
-
-  @include media($lg) {
-    &.results__button {
-      background-position: 13% 50%;
-      margin: u(0 0 0 3rem);
-      border-bottom: 0;
-    }
-  }
-
-  @include media($med) {
-    &.results__button {
-      background-position: 10% 50%;
-      margin: u(0 0 0 3rem);
-      border-bottom: 0;
-    }
   }
 }
 
@@ -88,7 +72,7 @@
   &.results__content {
     border-top: 1px solid $base;
     border-bottom: 0;
-    padding-left: u(3rem);
+    margin-left: u(3rem);
     padding-bottom: 0;
   }
 }

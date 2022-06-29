@@ -1,31 +1,36 @@
 <div class="simple-table simple-table--responsive simple-table--display legal-search-results legal-mur data-container__datatable">
   <div class="simple-table__header">
-    <div class="simple-table__header-cell cell--25">Name</div>
-    <div class="simple-table__header-cell">Matches</div>
+    <div class="simple-table__header-cell cell--10">Case number</div>
+    <div class="simple-table__header-cell cell--15">Case name</div>
+    <div class="simple-table__header-cell">Case details and documents</div>
   </div>
   <div class="simple-table__row-group">
   {% for mur in murs %}
     <div class="simple-table__row legal-search-result">
       <div class="simple-table__cell">
         <div class="t-sans">
-          <a title="{{ mur.name }}" href="/data/legal/matter-under-review/{{ mur.no }}">
-            <span class="t-bold">MUR #{{ mur.no }}</span><br>
-            {{ mur.name|upper }}
-          </a>
+          <span class="t-bold">MUR #{{ mur.no }}</span>
         </div>
         {% if mur.mur_type == 'archived' %}
         <div class="legal-mur__archive"><span class="legal-mur__archive-icon"><span class="u-visually-hidden">Icon representing an archived case</span></span>Archived case</div>
         {% endif %}
       </div>
       <div class="simple-table__cell">
-        <div class="u-margin--bottom"><strong>Election cycle(s):</strong> {{ '; '.join(mur['election_cycles'] | map('string') | sort) }}</div>
+        <div class="t-sans">
+          <a title="{{ mur.name }}" href="/data/legal/matter-under-review/{{ mur.no }}">
+            {{ mur.name|upper }}
+          </a>
+        </div>
+      </div>
+      <div class="simple-table__cell no--pad">
+        <div class="u-margin--bottom  u-padding--top--med u-margin--left"><strong>Election cycle(s):</strong> {{ '; '.join(mur['election_cycles'] | map('string') | sort) }}</div>
         {% if mur.mur_type == 'current' %}
         {# Archived MUR subjects are a tree-structure so we don't render them inline #}
-          <div class="u-margin--bottom">
+          <div class="u-margin--bottom u-margin--left">
             <strong>Subject(s):</strong> {{ '; '.join(mur['subjects']) }}
           </div>
         {% endif %}
-        <div class="u-margin--bottom">
+        <div class="u-margin--bottom u-margin--left">
           <strong>Disposition(s):</strong>
           {# group disposition by disposition names #}
           {% set disposition_dict = dict() %}
@@ -44,13 +49,12 @@
             {{ disposition }} ({{ disposition_dict[disposition] }} respondents);&nbsp;
           {% endfor %}
         </div>
-        <div class="legal-search-result__hit">
+        <div class="legal-search-result__hit u-padding--left--small split__cell">
           {% for document in mur.documents %}
             {% set query_highlight = mur.document_highlights[loop.index0 | string]%}
             {% if(query_highlight) %}
-              <div class="post--icon">
-                <span class="icon icon--inline--left i-document"></span>
-                <a href="{{document.url}}">{{ document.description }}</a>
+              <div class="post--icon u-padding--top">
+                <span class="icon icon--inline--left i-document"></span><a href="{{document.url}}">{{ document.description }}</a>
               </div>
               {# show only first document highlight result #}
               <ul>
@@ -60,8 +64,14 @@
               </ul>
               {# show additional document highlight results, if any #}
               {% if(query_highlight|length > 1) %}
-              <div class="js-accordion" data-content-prefix="additional-result-{{ mur.no }}-{{loop.index0}}">
-                <button type="button" class="js-accordion-trigger accordion__button results__button" aria-controls="additional-result-{{ mur.no }}-{{loop.index0}}" aria-expanded="false">{{ query_highlight|length -1 }} more items</button>
+              <div class="js-accordion u-margin--top" data-content-prefix="additional-result-{{ mur.no }}-{{loop.index0}}">
+                <button type="button" class="js-accordion-trigger accordion__button results__button" aria-controls="additional-result-{{ mur.no }}-{{loop.index0}}" aria-expanded="false">
+                  {% if(query_highlight|length == 2) %}
+                    1 more match
+                  {% elif(query_highlight|length > 2)  %}
+                    {{ query_highlight|length -1 }} more matches
+                  {% endif %}
+                </button>
                   <div class="accordion__content results__content" aria-hidden="true">
                       <ul>
                         {% for highlight in query_highlight %}
