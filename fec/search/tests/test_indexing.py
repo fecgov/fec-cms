@@ -9,9 +9,9 @@ from datetime import datetime
 
 # Only use the real search engine if we're on production
 if settings.FEC_CMS_ENVIRONMENT == 'PRODUCTION':
-    SEARCHGOV_BASE_URL = 'https://i14y.usa.gov/api/v1'
-    SEARCHGOV_DRAWER_KEY = settings.FEC_SEARCHGOV_DRAWER_KEY_MAIN
-    SEARCHGOV_DRAWER_HANDLE = 'main'
+    SEARCHGOV_BASE_URL = settings.SEARCHGOV_BASE_API_URL
+    SEARCHGOV_DRAWER_KEY = settings.SEARCHGOV_DRAWER_KEY_MAIN
+    SEARCHGOV_DRAWER_HANDLE = settings.SEARCHGOV_DRAWER_HANDLE
 else:
     SEARCHGOV_BASE_URL = 'http://localhost:3000/data'
     SEARCHGOV_DRAWER_KEY = ''

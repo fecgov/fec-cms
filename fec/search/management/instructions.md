@@ -13,7 +13,7 @@ The main drawer has its own handle and key, so to push updates to it you will ne
 
 ```
 export SEARCHGOV_DRAWER_HANDLE=<drawer handle>
-export FEC_SEARCHGOV_DRAWER_KEY_MAIN=<main key>
+export SEARCHGOV_DRAWER_KEY_MAIN=<main key>
 
 ```
 

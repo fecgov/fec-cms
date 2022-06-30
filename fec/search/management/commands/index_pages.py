@@ -6,7 +6,7 @@ from django.conf import settings
 from django.core.management import BaseCommand
 
 drawer = settings.SEARCHGOV_DRAWER_HANDLE
-key = settings.FEC_SEARCHGOV_DRAWER_KEY_MAIN
+key = settings.SEARCHGOV_DRAWER_KEY_MAIN
 
 
 class Command(BaseCommand):

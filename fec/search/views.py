@@ -93,7 +93,7 @@ def search_site(query, limit=0, offset=0):
     """Calls the Search.gov website and then processes the results if successful"""
     params = {
         'affiliate': 'betafec_api',
-        'access_key': settings.FEC_SEARCHGOV_KEY,
+        'access_key': settings.SEARCHGOV_API_ACCESS_KEY,
         'query': query,
         'limit': limit,
         'offset': offset
@@ -147,7 +147,7 @@ def policy_guidance_search_site(query, limit=0, offset=0):
     """Calls the Search.gov policy and guidance search and then processes the results if successful"""
     params = {
         'affiliate': 'fec_content_s3',
-        'access_key': settings.SEARCH_GOV_POLICY_GUIDANCE_KEY,
+        'access_key': settings.SEARCHGOV_POLICY_GUIDANCE_KEY,
         'query': query,
         'limit': limit,
         'offset': offset
