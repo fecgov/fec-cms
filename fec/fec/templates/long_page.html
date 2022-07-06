@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% load wagtailcore_tags %}
+{% load filters %}
 {% load static %}
 {% block body_class %}template-{{ self.get_verbose_name | slugify }}{% endblock %}
 
@@ -9,7 +10,7 @@
 
 <article class="main">
   <div class="container" id="sections">
-    <h1 class="heading--main">{{ self.title }}</h1>
+    <h1 class="heading--main">{% formatted_title self %}</h1>
     <div class="content__section">
         {% block intro %}
         {% endblock %}

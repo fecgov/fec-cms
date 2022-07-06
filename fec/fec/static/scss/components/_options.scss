@@ -18,6 +18,12 @@
   }
 }
 
+//Wrap class to avoid double-bordered appearance when there is no intro text
+.option--no-intro .block-sections:first-child section {
+  border-top: none;
+  padding-top: 0;
+}
+
 .option__aside {
   @include span-columns(4);
   padding-top: u(2rem);
