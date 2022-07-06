@@ -947,7 +947,7 @@ class ResourcePage(Page):
             (False, 'Do not show contact card')
         ])
 
-    content_panels = Page.content_panels + [       
+    content_panels = Page.content_panels + [
         FieldPanel('formatted_title'),
         StreamFieldPanel('intro'),
         FieldPanel('sidebar_title'),
