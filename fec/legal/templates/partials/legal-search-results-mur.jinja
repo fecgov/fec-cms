@@ -58,7 +58,7 @@
               </div>
               {# show only first document highlight result #}
               <ul>
-                  <li class="post--icon t-serif t-italic u-padding--top">
+                  <li class="post--icon t-serif t-italic u-padding--top--med">
                     &#8230;{{ query_highlight[0] | safe }}&#8230;
                   </li>
               </ul>
@@ -76,7 +76,7 @@
                       <ul>
                         {% for highlight in query_highlight %}
                           {% if(loop.index0 != 0) %}
-                            <li class="t-serif t-italic u-padding--bottom">&#8230;{{ highlight | safe }}&#8230;</li>
+                            <li class="t-serif t-italic">&#8230;{{ highlight | safe }}&#8230;</li>
                           {% endif %}
                         {% endfor %}
                       </ul>

@@ -74,6 +74,15 @@
     border-bottom: 0;
     margin-left: u(3rem);
     padding-bottom: 0;
+    max-width: u(80rem);
+  }
+
+  &.results__content li {
+    padding-bottom: u(2rem);
+
+    &:last-child {
+      padding-bottom: 0;
+    }
   }
 }
 
