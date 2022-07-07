@@ -45,9 +45,7 @@
 {% endblock %}
 
 {% block sections %}
-{% if not self.intro %}<div class="option--no-intro">{% endif %}
-  {{ self.sections }}
-{% if not self.intro %}</div>{% endif %}
+ {% include_block self.sections %}
 {% endblock %}
 
 {% if self.citations %}

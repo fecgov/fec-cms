@@ -15,7 +15,7 @@
         {% block intro %}
         {% endblock %}
     </div>
-    <div class="row" id="section-container">
+    <div class="row {% if not self.intro %}option--no-intro{% endif%}" id="section-container" >
       {% include 'partials/section-nav.html' with sections=self.sections citations=self.citations reporting_examples=self.reporting_examples container='section-container' %}
       <div class="main__content--right">
         {% block sections %}
