@@ -120,3 +120,12 @@ curl "https://i14y.usa.gov/api/v1/documents/{document_id}" -XDELETE -u fec_main:
 ```
 
 [More info in the docs](http://gsa.github.io/slate/#delete-a-document).
+
+## Setup and test Search.gov sitewide search locally 
+To test sitewide search and policy guidance search locally, grab the following environment variables from cf target -s ${cf_space} and export them in terminal window. Replace {cf_space} with dev/stage or prod 
+```
+export SEARCHGOV_API_ACCESS_KEY=<>
+```
+```
+export SEARCHGOV_POLICY_GUIDANCE_KEY=<>
+``` 
