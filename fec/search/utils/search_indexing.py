@@ -8,13 +8,13 @@ from fec import constants
 
 # Only use the real search engine if we're on production
 if settings.FEC_CMS_ENVIRONMENT == 'PRODUCTION':
-    DIGITALGOV_BASE_URL = settings.DIGITALGOV_BASE_API_URL
-    DIGITALGOV_DRAWER_KEY = settings.FEC_DIGITALGOV_DRAWER_KEY_MAIN
-    DIGITALGOV_DRAWER_HANDLE = settings.DIGITALGOV_DRAWER_HANDLE
+    SEARCHGOV_BASE_URL = settings.SEARCHGOV_BASE_API_URL
+    SEARCHGOV_DRAWER_KEY = settings.SEARCHGOV_DRAWER_KEY_MAIN
+    SEARCHGOV_DRAWER_HANDLE = settings.SEARCHGOV_DRAWER_HANDLE
 else:
-    DIGITALGOV_BASE_URL = 'http://localhost:3000/data'
-    DIGITALGOV_DRAWER_KEY = ''
-    DIGITALGOV_DRAWER_HANDLE = ''
+    SEARCHGOV_BASE_URL = 'http://localhost:3000/data'
+    SEARCHGOV_DRAWER_KEY = ''
+    SEARCHGOV_DRAWER_HANDLE = ''
 
 
 def scrape_page_content(url):
@@ -84,8 +84,8 @@ def add_document(page):
     :arg obj page: A page object returned from a database query
     """
     document = create_search_index_doc(page)
-    url = '{}/documents'.format(DIGITALGOV_BASE_URL)
-    r = requests.post(url, auth=(DIGITALGOV_DRAWER_HANDLE, DIGITALGOV_DRAWER_KEY), data=document)
+    url = '{}/documents'.format(SEARCHGOV_BASE_URL)
+    r = requests.post(url, auth=(SEARCHGOV_DRAWER_HANDLE, SEARCHGOV_DRAWER_KEY), data=document)
     # A 422 means the page already exists,
     if r.status_code == 422:
         print('{} already exists'.format(document['document_id']))
@@ -105,8 +105,8 @@ def update_document(page):
     :arg obj page: A page object returned from a database query
     """
     document = create_search_index_doc(page)
-    url = '{}/documents/{}'.format(DIGITALGOV_BASE_URL, document.get('document_id'))
-    r = requests.put(url, auth=(DIGITALGOV_DRAWER_HANDLE, DIGITALGOV_DRAWER_KEY), data=document)
+    url = '{}/documents/{}'.format(SEARCHGOV_BASE_URL, document.get('document_id'))
+    r = requests.put(url, auth=(SEARCHGOV_DRAWER_HANDLE, SEARCHGOV_DRAWER_KEY), data=document)
     if r.status_code == 400:
         add_document(page)
     elif r.status_code == 200:
@@ -177,8 +177,8 @@ def handle_page_delete(page_id):
     :arg int page_id: The ID of the page to deleted
     """
     if settings.FEC_CMS_ENVIRONMENT == 'PRODUCTION':
-        url = '{}/documents/{}'.format(DIGITALGOV_BASE_URL, page_id)
-        r = requests.delete(url, auth=(DIGITALGOV_DRAWER_HANDLE, DIGITALGOV_DRAWER_KEY))
+        url = '{}/documents/{}'.format(SEARCHGOV_BASE_URL, page_id)
+        r = requests.delete(url, auth=(SEARCHGOV_DRAWER_HANDLE, SEARCHGOV_DRAWER_KEY))
         if r.status_code == 200:
             print('Search index: deleted {}'.format(page_id))
         else:

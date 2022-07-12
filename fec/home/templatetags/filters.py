@@ -69,7 +69,7 @@ def web_app_url(path):
 @register.filter()
 def highlight_matches(text):
     """
-    Replaces the highlight markers with span tags for digitalgov search results.
+    Replaces the highlight markers with span tags for Search.gov website search results.
     Because format_html uses str.format, remove { and } because they are special characters.
     """
     cleaned_text = text.replace("{", "").replace("}", "")

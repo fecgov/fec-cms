@@ -5,8 +5,8 @@ import requests
 from django.conf import settings
 from django.core.management import BaseCommand
 
-drawer = settings.DIGITALGOV_DRAWER_HANDLE
-key = settings.FEC_DIGITALGOV_DRAWER_KEY_MAIN
+drawer = settings.SEARCHGOV_DRAWER_HANDLE
+key = settings.SEARCHGOV_DRAWER_KEY_MAIN
 
 
 class Command(BaseCommand):
