@@ -45,7 +45,7 @@
 {% endblock %}
 
 {% block sections %}
-  {{ self.sections }}
+ {% include_block self.sections %}
 {% endblock %}
 
 {% if self.citations %}
