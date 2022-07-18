@@ -4,13 +4,20 @@
 {% import 'macros/filters/parties.jinja' as parties %}
 {% import 'macros/filters/states.jinja' as states %}
 {% import 'macros/filters/autosuggest-filter.jinja' as autosuggest %}
+{% import 'macros/filters/typeahead-filter.jinja' as typeahead %}
 {% import 'macros/filters/years.jinja' as years %}
 {% import 'macros/filters/date.jinja' as date %}
 
 {% block filters %}
 <div class="js-accordion accordion--neutral" data-content-prefix="filter" data-open-first="false">
   <div class="filters__inner">
-    {{ autosuggest.field('q', 'Committee name or ID', False, dataset='committees', allow_text=True) }}
+    {# TODO - Autosuggest #}
+    {% if (FEATURES.use_tt) == false %}
+      {{ autosuggest.field('q', 'Committee name or ID', False, dataset='committees', allow_text=True) }}
+    {% else %}
+      {{ typeahead.field('q', 'Committee name or ID', False, dataset='committees', allow_text=True) }}
+    {% endif %}
+    {# TODO: remove useTt with the use_tt feature flag #}
     {{ years.cycles('cycle', 'Years active', show_tooltip=False) }}
   </div>
   <button type="button" class="js-accordion-trigger accordion__button">Committee details</button>

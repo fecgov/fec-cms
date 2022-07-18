@@ -1,4 +1,5 @@
 {% import 'macros/filters/autosuggest-filter.jinja' as autosuggest %}
+{% import 'macros/filters/typeahead-filter.jinja' as typeahead %}
 
 {% macro field(committee_type='committee_type', organization_type='organization_type', designation='designation', display_sponsor_candidate_filter=False, display_authorized_committee_filter=True, display_parties_only_filter=False, display_default_other_committees_filter=True, display_alt_other_committees_filter=False, display_default_ie_committees_filter=True, display_alt_ie_committees_filter=False) %}
 
@@ -129,7 +130,13 @@
   </fieldset>
   {% if display_sponsor_candidate_filter %}
     <div class="filter sub--filter--indent">
+    {# TODO - Autosuggest #}
+    {% if (FEATURES.use_tt) == false %}
       {{ autosuggest.field('sponsor_candidate_id', 'Leadership PAC sponsor', False, dataset='candidates', allow_text=False) }}
+    {% else %}
+      {{ typeahead.field('sponsor_candidate_id', 'Leadership PAC sponsor', False, dataset='candidates', allow_text=False) }}
+    {% endif %}
+    {# TODO: remove useTt with the use_tt feature flag #}
     </div>
   {% endif %}
 </div>

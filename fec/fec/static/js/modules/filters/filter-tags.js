@@ -1,6 +1,8 @@
-'use strict';
+/**
+ * Filter tags are the Chiclet-type tags above filtered tables
+ */
 
-var $ = require('jquery');
+let $ = require('jquery');
 
 const template_body = value => `
 <div>
@@ -25,10 +27,18 @@ const template_nonremoveableTag = value => `<div data-id="${value.key}" data-rem
 
 /**
  * TagLists are created by modules/tables.js and calendar-page.js
- * @param {*} opts
- * @param {*} opts.resultType
- * @param {*} opts.showResultCount
- * @param {*} opts.tableTitle
+ * @param {Object} opts
+ * @param {String} opts.resultType
+ * @param {Boolean} opts.showResultCount
+ * @param {String} opts.tableTitle
+ *
+ * @listens body.filter:added
+ * @listens body.filter:removed
+ * @listens body.filter:renamed
+ * @listens body.filter:disabled
+ * @listens body.filter:enabled
+ * @listens body.tag:removeAll
+ * @listens click
  */
 function TagList(opts) {
   this.opts = opts;
@@ -75,36 +85,32 @@ function TagList(opts) {
 }
 
 /**
- * Called document.body hears filter:added
- * @param {} e
- * @param {} opts
+ * Called when document.body hears filter:added
+ * @param {JQuery.Event} e
+ * @param {Object} opts
  * @param {} opts.key
  * @param {} opts.name
+ * @param {Boolean} opts.nonremovable
  * @param {} opts.range
- * @param {} opts.rangeName
+ * @param {String} opts.rangeName
  */
 TagList.prototype.addTag = function(e, opts) {
+  console.log('TagList.addTag(e, opts): ', e, opts);
   var tag = opts.nonremovable
     ? template_nonremoveableTag(opts)
     : template_tag(opts);
   var name = opts.range ? opts.rangeName : opts.name;
-  var $tagCategory = this.$list.find('[data-tag-category="' + name + '"]');
+  var $tagCategory = this.$list.find(`[data-tag-category="${name}"]`);
   this.removeTag(opts.key, false);
 
   if ($tagCategory.length > 0) {
     this.addTagItem($tagCategory, tag, opts);
   } else {
-    this.$list.append(
-      '<li data-tag-category="' +
-        name +
-        '" class="tag__category">' +
-        tag +
-        '</li>'
-    );
+    this.$list.append(`<li data-tag-category="${name}" class="tag__category">${tag}</li>`);
   }
 
   if (this.$list.find('.tag__item').length > 0) {
-    this.$resultType.html('filtered ' + this.opts.resultType + ' for:');
+    this.$resultType.html(`filtered ${this.opts.resultType} for:`);
     this.$list.attr('aria-hidden', false);
   }
 
@@ -119,13 +125,15 @@ TagList.prototype.addTag = function(e, opts) {
 
 /**
  * Called from within @see TagList.prototype.addTag
- * @param {} $tagCategory
- * @param {} tag
- * @param {} opts
- * @param {} opts.range
+ * @param {JQuery} $tagCategory - element inside this.$list with a matching value for data-tag-category
+ * @param {(Boolean|String)} tag - boolean from TagList.addTag(opts.nonremoveable),
+ * or string of HTML element defined by template_nonremoveableTag or template_tag
+ * @param {Object} opts
+ * @param {('min'|'max'|'false')} opts.range
+ * @param {String} opts.rangeName - appended to a class named of 'tag__category__range--'
  */
 TagList.prototype.addTagItem = function($tagCategory, tag, opts) {
-  var rangeClass = 'tag__category__range--' + opts.rangeName;
+  const rangeClass = 'tag__category__range--' + opts.rangeName;
 
   if (opts.range == 'min') {
     $tagCategory.addClass(rangeClass).prepend(tag);
@@ -139,7 +147,8 @@ TagList.prototype.addTagItem = function($tagCategory, tag, opts) {
 /**
  * Called from @see TagList.prototype.removeTag
  * @param {} $tag
- * @param {} emit
+ * @param {Boolean} emit
+ * @emits tag:removed from $tag if emit is true
  */
 TagList.prototype.removeTagElement = function($tag, emit) {
   // This handles the actual removal of the DOM elementrs
@@ -158,15 +167,19 @@ TagList.prototype.removeTagElement = function($tag, emit) {
 };
 
 /**
- * Called from @see TagList.prototype.removeAllTags
- * Called from @see TagList.prototype.removeTagEvt
- * Called from @see TagList.prototype.addTag
+ * Called from TagList.prototype.removeAllTags
+ * Called from TagList.prototype.removeTagEvt
+ * Called from TagList.prototype.addTag
  * @param {} key
- * @param {} emit
+ * @param {Boolean} emit - Whether
  * @param {} forceRemove
+ * @calls 
  */
 TagList.prototype.removeTag = function(key, emit, forceRemove) {
+  console.log('TagList.removeTag(key, emit, forceRemove)', key, emit, forceRemove);
   var $tag = this.$list.find('[data-id="' + key + '"]');
+  console.log('  $tag: ', $tag);
+
   if ($tag.length > 0) {
     // If the tag exists, remove the element if it's removable
     if ($tag.attr('data-removable') !== 'false') {
@@ -198,6 +211,9 @@ TagList.prototype.removeTag = function(key, emit, forceRemove) {
  * @param {} opts
  * @param {} opts.forceRemove
  * @param {} emit
+ *
+ * @emits tag:removeAll from document.body if emit && if (the clear button has the js-filter-reset class AND
+ * (!opts || !opts.fromFilterSet))
  */
 TagList.prototype.removeAllTags = function(e, opts, emit) {
   // If the element has the reset class, we revert to the original page state by re-navigating.
@@ -246,6 +262,7 @@ TagList.prototype.removeAllTags = function(e, opts, emit) {
  * @param {} opts.name
  */
 TagList.prototype.removeTagEvt = function(e, opts) {
+  console.log('TagList.removeTagEvt(e, opts): ', e, opts);
   this.removeTag(opts.key, false);
   // logic to handle adding an all years tag if
   // no two year transaction period filter is provided
@@ -292,6 +309,7 @@ TagList.prototype.removeTagDom = function(e) {
  * @param {} opts.nonremovable
  */
 TagList.prototype.renameTag = function(e, opts) {
+  console.log('TagList.renameTag(e, opts), ', e, opts);
   var tag = opts.nonremovable
     ? template_nonremoveableTag(opts)
     : template_tag(opts);

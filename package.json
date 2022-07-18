@@ -21,7 +21,7 @@
     "watch": "nswatch"
   },
   "dependencies": {
-    "@tarekraafat/autocomplete.js": "^10.2.6",
+    "@tarekraafat/autocomplete.js": "^10.2.7",
     "a11y-dialog": "4.0.0",
     "accessible-mega-menu": "git+https://github.com/noahmanger/Accessible-Mega-Menu.git",
     "ace-builds": "1.2.2",
@@ -34,6 +34,7 @@
     "colorbrewer": "0.0.2",
     "component-sticky": "1.0.0",
     "concat-stream": "^1.6.2",
+    "corejs-typeahead": "^1.2.1",
     "css.escape": "^1.5.1",
     "d3": "3.5.5",
     "datatables.net": "^1.10.23",

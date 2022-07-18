@@ -1,7 +1,7 @@
 'use strict';
 
 var $ = require('jquery');
-import AutoSuggest from '../modules/autosuggest';
+import Autosuggest from '../modules/autosuggest';
 var URI = require('urijs');
 
 const loadRecaptcha = require('../modules/load-recaptcha').loadRecaptcha;
@@ -12,14 +12,14 @@ function ContactForm($elm) {
   this.committeeId = $elm.find('#id_u_committee');
   this.category = $elm.find('#id_u_category');
   this.otherReason = $elm.find('#id_u_other_reason').closest('div');
-  this.autosuggest = new AutoSuggest(
+  this.autosuggest = new Autosuggest(
     $elm.find('.js-contact-autosuggest'),
     'committees',
     ''
   );
-  this.autosuggest = new AutoSuggest(document.querySelector('.js-contact-autosuggest'), 'committees', '');
+  this.autosuggest = new Autosuggest(document.querySelector('.js-contact-autosuggest'), 'committees', '');
   this.$cancel = $elm.find('.js-cancel');
-  this.initAutoSuggest();
+  this.initAutosuggest();
   this.initOtherReason();
   this.category.on('change', this.toggleOtherReason.bind(this));
   this.$cancel.on('click', this.clearForm.bind(this));
@@ -27,7 +27,7 @@ function ContactForm($elm) {
   loadRecaptcha();
 }
 
-ContactForm.prototype.initAutoSuggest = function() {
+ContactForm.prototype.initAutosuggest = function() {
   // Overriding default autosuggest behavior
   // This will set the value of a hidden input when selecting a value from autosuggest
   var self = this;
@@ -69,15 +69,15 @@ function AnalystLookup($elm) {
   this.$analystDetails = this.$elm.find('.js-yes-analyst');
   this.$analystNoResults = this.$elm.find('.js-no-analyst');
 
-  this.autosuggest = new AutoSuggest(this.$input, 'committees', '');
-  this.initAutoSuggest();
+  this.autosuggest = new Autosuggest(this.$input, 'committees', '');
+  this.initAutosuggest();
 
   this.$input.on('change, blur', this.handleChange.bind(this));
 
   loadRecaptcha();
 }
 
-AnalystLookup.prototype.initAutoSuggest = function() {
+AnalystLookup.prototype.initAutosuggest = function() {
   // Overriding default autosuggest behavior
   this.autosuggest.$element.css({ height: 'auto' });
   this.autosuggest.$input.off('selection');

@@ -5,16 +5,17 @@ const _ = require('underscore');
 const URI = require('urijs');
 
 const helpers = require('../helpers');
-const TextFilter = require('./text-filter').TextFilter;
 const CheckboxFilter = require('./checkbox-filter').CheckboxFilter;
-const MultiFilter = require('./multi-filter').MultiFilter;
-const SelectFilter = require('./select-filter').SelectFilter;
 const DateFilter = require('./date-filter').DateFilter;
 const ElectionFilter = require('./election-filter').ElectionFilter;
-const ToggleFilter = require('./toggle-filter').ToggleFilter;
+const MultiFilter = require('./multi-filter').MultiFilter;
 const RangeFilter = require('./range-filter').RangeFilter;
+const SelectFilter = require('./select-filter').SelectFilter;
+const TextFilter = require('./text-filter').TextFilter;
+const ToggleFilter = require('./toggle-filter').ToggleFilter;
+const TypeaheadFilter = require('./typeahead-filter').TypeaheadFilter; // TODO: remove this when Typeahead goes away
 
-import { AutoSuggestFilter } from './autosuggest-filter';
+import { AutosuggestFilter } from './autosuggest-filter';
 
 function FilterSet(elm) {
   this.$body = $(elm);
@@ -31,26 +32,29 @@ function FilterSet(elm) {
   this.processedFilters = {};
 }
 
-var filterMap = {
-  text: TextFilter,
+const filterMap = {
+  autosuggest: AutosuggestFilter,
   checkbox: CheckboxFilter,
   date: DateFilter,
-  autosuggest: AutoSuggestFilter,
   election: ElectionFilter,
   multi: MultiFilter,
+  range: RangeFilter,
   select: SelectFilter,
+  text: TextFilter,
   toggle: ToggleFilter,
-  range: RangeFilter
+  typeahead: TypeaheadFilter // TODO: remove this when Typeahead goes away
 };
 
 FilterSet.prototype.buildFilter = function($elm) {
+  console.log('FilterSet.buildFilter($elm): ', $elm);
   const filterType = $elm.attr('data-filter');
   const F = filterMap[filterType].constructor;
   return new F($elm);
 };
 
 FilterSet.prototype.activate = function($selector, elementList) {
-  // console.log('FilterSet.activate($selector): ', $selector, elementList);
+  console.log('FilterSet.activate $selector typeof: ', typeof $selector);
+  console.log('FilterSet.activate($selector): ', $selector, elementList);
   const self = this;
   // console.log('  self: ', self);
   const query = helpers.sanitizeQueryParams(

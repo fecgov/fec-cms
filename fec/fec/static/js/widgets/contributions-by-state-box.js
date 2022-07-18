@@ -22,7 +22,7 @@ const rootPathToIndividualContributions =
 
 import { buildUrl, passiveListener } from '../modules/helpers';
 // import autosuggest from '../modules/autosuggest';
-import AutoSuggest from '../modules/autosuggest';
+import Autosuggest from '../modules/autosuggest';
 import 'abortcontroller-polyfill/dist/polyfill-patch-fetch';
 import analytics from '../modules/analytics';
 
@@ -206,39 +206,39 @@ ContributionsByState.prototype.init = function() {
   head.appendChild(linkElement);
 
   // Init the autosuggest
-  this.autosuggest = new AutoSuggest(
+  this.autosuggest = new Autosuggest(
     '#contribs-by-state-cand',
     'candidates'
   );
 
   // Override the default autosuggest behavior and add our own handler
   this.autosuggest.$input.off('selection');
-  this.autosuggest.$input.on('selection', this.handleAutoSuggestSelect.bind(this));
+  this.autosuggest.$input.on('selection', this.handleAutosuggestSelect.bind(this));
 
   // Find the HTML element on the page (not the jQuery autosuggest element),
   // and add the focus/tap and blur listeners
-  let theAutoSuggestElement = this.element.querySelector(
+  let theAutosuggestElement = this.element.querySelector(
     '#contribs-by-state-cand'
   );
-  theAutoSuggestElement.addEventListener(
+  theAutosuggestElement.addEventListener(
     'blur',
-    this.handleAutoSuggestBlur.bind(this)
+    this.handleAutosuggestBlur.bind(this)
   );
-  theAutoSuggestElement.addEventListener(
+  theAutosuggestElement.addEventListener(
     'mousedown',
-    this.handleAutoSuggestFocus.bind(this),
+    this.handleAutosuggestFocus.bind(this),
     passiveListener()
   );
-  theAutoSuggestElement.addEventListener(
+  theAutosuggestElement.addEventListener(
     'touchstart',
-    this.handleAutoSuggestFocus.bind(this),
+    this.handleAutosuggestFocus.bind(this),
     passiveListener()
   );
 
   // Listen for any field updates, looking for errors
   this.autosuggest.$input.on(
     'autosuggest:render',
-    this.handleAutoSuggestRender.bind(this)
+    this.handleAutosuggestRender.bind(this)
   );
 
   // Init the election year selector (The element ID is set in data/templates/partials/widgets/contributions-by-state.jinja)
@@ -329,7 +329,7 @@ ContributionsByState.prototype.init = function() {
 };
 
 /**
- * Called by {@see init() , @see handleAutoSuggestSelect() }
+ * Called by {@see init() , @see handleAutosuggestSelect() }
  * Finds the highest-earning presidential candidate of the default year
  * Similar to {@see loadCandidateDetails() }
  */
@@ -370,7 +370,7 @@ ContributionsByState.prototype.loadInitialData = function() {
 
 /**
  * Retrieves full candidate details when the autosuggest is used
- * Called from {@see handleAutoSuggestSelect() }
+ * Called from {@see handleAutosuggestSelect() }
  * Similar to {@see loadInitialData() }
  * @param {String} cand_id Comes from the autosuggest
  */
@@ -599,8 +599,8 @@ ContributionsByState.prototype.loadStatesData = function() {
  */
 ContributionsByState.prototype.displayUpdatedData_candidate = function() {
   // If this is the first load, the autosuggest won't have a value; let's set it
-  let theAutoSuggest = document.querySelector('#contribs-by-state-cand');
-  if (!theAutoSuggest.value) theAutoSuggest.value = this.candidateDetails.name;
+  let theAutosuggest = document.querySelector('#contribs-by-state-cand');
+  if (!theAutosuggest.value) theAutosuggest.value = this.candidateDetails.name;
 
   // …their desired office during this election…
   let candidateOfficeHolder = this.candidateDetailsHolder.querySelector('h2');
@@ -765,7 +765,7 @@ ContributionsByState.prototype.displayUpdatedData_total = function(data) {
  * Called when the autosuggest element dispatches "selection"
  * @param {jQuery.Event} e 'selection' event
  */
-ContributionsByState.prototype.handleAutoSuggestSelect = function(
+ContributionsByState.prototype.handleAutosuggestSelect = function(
   e,
   abbreviatedCandidateDetails
 ) {
@@ -785,46 +785,46 @@ ContributionsByState.prototype.handleAutoSuggestSelect = function(
  * @param {Object} firstResult The first item in the autocomplete menu. Null if there are no results.
  * @param {Object} various The second item in the autocomplete menu. There are additional objects returned, one for each item in the autocomplete menu.
  */
-ContributionsByState.prototype.handleAutoSuggestRender = function(
+ContributionsByState.prototype.handleAutosuggestRender = function(
   e,
   firstResult
 ) {
-  if (firstResult) this.showAutoSuggestError(false);
-  else this.showAutoSuggestError(true);
+  if (firstResult) this.showAutosuggestError(false);
+  else this.showAutosuggestError(true);
 };
 
 /**
  * Shows and hides the autosuggest error message
  * @param {Boolean} isError - Whether or not to display the message
  */
-ContributionsByState.prototype.showAutoSuggestError = function(isError) {
+ContributionsByState.prototype.showAutosuggestError = function(isError) {
   let theElement = document.querySelector('#contribs-by-state-cand-field');
   if (isError) theElement.classList.add('is-error');
   else theElement.classList.remove('is-error');
 };
 
 /**
- * Restores the value from before the field received focus {@see handleAutoSuggestFocus() }
+ * Restores the value from before the field received focus {@see handleAutosuggestFocus() }
  */
-ContributionsByState.prototype.handleAutoSuggestBlur = function() {
+ContributionsByState.prototype.handleAutosuggestBlur = function() {
   // If the user has left the field without making a choice (i.e., autosuggest_revertValue hasn't been nullified),
-  let theAutoSuggest = document.querySelector('#contribs-by-state-cand');
+  let theAutosuggest = document.querySelector('#contribs-by-state-cand');
   if (this.autosuggest_revertValue != '') {
     // revert the value and reset the var
-    theAutoSuggest.value = this.autosuggest_revertValue;
+    theAutosuggest.value = this.autosuggest_revertValue;
     this.autosuggest_revertValue = '';
     // Since we have a legit value, let's hide the error
-    this.showAutoSuggestError(false);
+    this.showAutosuggestError(false);
   }
 };
 
 /**
- * Finds the input field's current value and saves it for {@see handleAutoSuggestBlur() }
+ * Finds the input field's current value and saves it for {@see handleAutosuggestBlur() }
  */
-ContributionsByState.prototype.handleAutoSuggestFocus = function() {
+ContributionsByState.prototype.handleAutosuggestFocus = function() {
   // Save the current value, in case the user leaves the field without making a selection
-  let theAutoSuggest = document.querySelector('#contribs-by-state-cand');
-  this.autosuggest_revertValue = theAutoSuggest.value;
+  let theAutosuggest = document.querySelector('#contribs-by-state-cand');
+  this.autosuggest_revertValue = theAutosuggest.value;
 };
 
 // Set the candidate's name and link change

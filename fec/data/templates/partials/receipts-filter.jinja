@@ -2,7 +2,7 @@
 
 {% import 'macros/filters/text.jinja' as text %}
 {% import 'macros/filters/autosuggest-filter.jinja' as autosuggest %}
-
+{% import 'macros/filters/typeahead-filter.jinja' as typeahead %}
 {% import 'macros/filters/contributor-states.jinja' as states %}
 {% import 'macros/filters/date.jinja' as date %}
 {% import 'macros/filters/years.jinja' as years %}
@@ -19,7 +19,13 @@ Filter receipts
 
 {% block efiling_filters %}
 <div class="filters__inner">
+  {# TODO - Autosuggest #}
+  {% if (FEATURES.use_tt) == false %}
   {{ autosuggest.field('committee_id', 'Recipient name or ID', id_suffix='_raw') }}
+  {% else %}
+  {{ typeahead.field('committee_id', 'Recipient name or ID', id_suffix='_raw') }}
+  {% endif %}
+  {# TODO: remove useTt with the use_tt feature flag #}
   {{ text.field('contributor_name', 'Source name', id_suffix='_raw') }}
   {{ text.field('contributor_city', 'Source city', id_suffix='_raw') }}
   {{ states.field('contributor_state', id_suffix='_raw') }}
@@ -28,9 +34,19 @@ Filter receipts
 
 {% block filters %}
 <div class="filters__inner">
+  {% if (FEATURES.use_tt) == false %}
   {{ autosuggest.field('committee_id', 'Recipient name or ID', helper_text = 'Limit 10 recipient names or IDs') }}
+  {% else %}
+  {{ typeahead.field('committee_id', 'Recipient name or ID', helper_text = 'Limit 10 recipient names or IDs') }}
+  {% endif %}
+  {# TODO: remove useTt with the use_tt feature flag #}
   <legend class="label u-margin--top">Source details</legend>
+  {% if (FEATURES.use_tt) == false %}
   {{ autosuggest.field(name = 'contributor_name', title = 'Name or ID', dataset='committees', allow_text=True, minor_label_text = True, helper_text = 'Limit 10 source names or IDs') }}
+  {% else %}
+  {{ typeahead.field(name = 'contributor_name', title = 'Name or ID', dataset='committees', allow_text=True, minor_label_text = True, helper_text = 'Limit 10 source names or IDs') }}
+  {% endif %}
+  {# TODO: remove useTt with the use_tt feature flag #}
   {{ text.field(name = 'contributor_city', title = 'City', minor_label_text = True, helper_text = 'Limit 10 cities') }}
   {{ text.field(name = 'contributor_zip', title = 'ZIP code', attrs = {'maxlength':5}, minor_label_text = True, helper_text = 'Limit 10 ZIP codes') }}
   {{ text.field(name = 'contributor_occupation', title = 'Occupation', minor_label_text = True, helper_text = 'Use the employer field to search by occupation in reports filed before 2003. Limit 10 occupations') }}

@@ -8,43 +8,68 @@
 let _ = require('underscore');
 
 import { Filter } from './filter-base';
-import { FilterAutoSuggest } from './filter-autosuggest';
+import { FilterAutosuggest } from './filter-autosuggest';
+import { ensureArray } from '../helpers';
 
 /**
- * 
- * @param {String|HTMLElement} selector - How to find the element (string) or the selected element itself
- * 
- * @property {Boolean} allowText - True if this.element.dataset['allow-text'] !== undefined
+ * @implements {Filter}
+ *
+ * @param {(String|HTMLElement|jQuery.fn.init)} selector - How to find the element (string) or the selected element itself
+ *
+ * @property {Boolean} allowText - True if this.element.hasAttribute('data-allow-text') !== undefined
+ * @property {HTMLElement} element
+ * @property {HTMLInputElement} input
  */
-function AutoSuggestFilter(selector) {
-  console.log('AutoSuggestFilter(selector): ', selector);
-  
+function AutosuggestFilter(selector) {
+  console.log('AutosuggestFilter(selector): ', selector);
+
   this.element = typeof selector == 'string' ? document.querySelector(selector) : selector[0];
+  // if (typeof selector == 'string') this.element = document.querySelector(selector);
+  // else if (selector[0].id) this.element = document.querySelector(`#${selector[0].id}`);
+  // else this.element = selector[0];
+
+  Filter.call(this, selector);
+
   console.log('  this.element: ', this.element);
+  console.log('  this.$elm: ', this.$elm);
+  console.log('  this.$input: ', this.$input);
+  console.log('  this.element.hasAttribute(data-allow-text): ', this.element.hasAttribute('data-allow-text'));
+  console.log('  this.element.dataset: ', this.element.dataset);
 
-  Filter.call(this, this.element);
+  // this.input = this.$input;
 
-  let key = this.element.dataset['dataset']; // TODO: RENAME THIS (caulking doesn't like it)
-  // var allowText = this.$elm.data('allow-text') !== undefined;
+  // let key = this.element.dataset['dataset']; // TODO: RENAME THIS (caulking doesn't like it)
+  // var allowText = this.element.hasAttribute('data-allow-text') !== undefined;
   // var dataset = key ? typeahead.datasets[key] : null; // TODO: BRING THIS BACK AFTER RENAMING (caulking doesn't like it)
   // TODO: TESTING:
   // let key = ;
   let dataset = '/all';
-  let allowText = this.element.dataset['allow-text'] !== undefined;
-  this.asFilter = new FilterAutoSuggest(this.element, dataset, allowText);
+  // data-allow-text either exists or doesn't; the template doesn't give it a value
+  let allowText = this.element.hasAttribute('data-allow-text') || false; // TODO: check that this works
+  console.log('  allowText: ', allowText);
+  this.asFilter = new FilterAutosuggest(this.element, dataset, allowText);
 
   this.element.addEventListener('change', this.handleNestedChange.bind(this));
-  // const checkboxes = this.asFilter.element.querySelectorAll('input[type="checkbox"]');
-  // checkboxes.forEach(checkbox => {
-    // checkbox.addEventListener('change', this.handleNestedChange.bind(this));
-  // });
 }
 
-AutoSuggestFilter.prototype = Object.create(Filter.prototype);
-AutoSuggestFilter.constructor = AutoSuggestFilter;
+AutosuggestFilter.prototype = Object.create(Filter.prototype);
+AutosuggestFilter.constructor = AutosuggestFilter;
 
-AutoSuggestFilter.prototype.fromQuery = function(query) {
-  console.log('AutoSuggestFilter.fromQuery(query)', query);
+AutosuggestFilter.prototype.fromQuery = function(query) {
+  console.log('AutosuggestFilter.fromQuery(query)', query);
+  const values = query[this.name] ? ensureArray(query[this.name]) : [];
+  this.asFilter.getFilters(values);
+  console.log('  this: ', this);
+  console.log('  this.asFilter: ', this.asFilter);
+  // console.log('  this.asFilter.element: ', this.asFilter.element);
+  const checkboxes = this.element.querySelectorAll('input[type="checkbox"]');
+  console.log('  checkboxes: ', checkboxes);
+  checkboxes.value = values;
+  console.log('  values: ', values);
+  console.log('  this.autosuggest: ', this.autosuggest);
+  // console.log('  this.autosuggest.element: ', this.autosuggest.element);
+  console.log('  this.asFilter: ', this.asFilter);
+  console.log('  this.asFilter.element: ', this.asFilter.element);
   // var values = query[this.name] ? Filter.ensureArray(query[this.name]) : [];
   // this.autosuggest.getFilters(values);
   // this.autosuggest.$elm.find('input[type="checkbox"]').val(values);
@@ -52,39 +77,46 @@ AutoSuggestFilter.prototype.fromQuery = function(query) {
 };
 
 // Ignore changes on typeahead input
-AutoSuggestFilter.prototype.handleChange = function(e) {
+AutosuggestFilter.prototype.handleChange = function(e) {
   //
-  console.log('AutoSuggestFilter.handleChange(e): ', e);
+  console.log('AutosuggestFilter.handleChange(e): ', e);
 };
 
 /**
  * TODO: get rid of Underscore
  * @param {*} e - 
  */
-AutoSuggestFilter.prototype.handleNestedChange = function(e) {
-  console.log('AutoSuggestFilter.handleNestedChange(e): ', e);
+AutosuggestFilter.prototype.handleNestedChange = function(e) {
+  console.log('AutosuggestFilter.handleNestedChange(e): ', e);
   const input = e.target;
   const id = input.getAttribute('id');
   const label = this.element.querySelector('[for="' + id + '"]');
 
-  console.log('  input: ', input);
-  console.log('  id: ', id);
-  console.log('  label: ', label);
+  console.log('  input.getAttribute(type): ', input.getAttribute('type'));
+
   // TODO: only proceed if this is input[type="checkbox"] ?
   if (input.getAttribute('type') == 'checkbox') {
-
+    console.log('  if');
     // var eventName = input.is(':checked') ? 'filter:added' : 'filter:removed';
     let newEventName = input.hasAttribute('checked') ? 'filter:added' : 'filter:removed';
 
-    input.dispatchEvent(new CustomEvent(newEventName, {
-      value: _.escape(label.text()), // TODO: update this to ES6
+    console.log('  newEventName: ', newEventName);
+    const newEvent = new CustomEvent(newEventName, {
+      // value: _.escape(label.text()), // TODO: update this to ES6
+      value: _.escape(label.textContent),
       name: input.getAttribute('name'),
       loadedOnce: true
-    }));
+    });
 
+    input.dispatchEvent(newEvent);
+
+  } else {
+    console.log('  ELSE NOTHING');
+    console.log('  input: ', input);
+    console.log('  input: ' + input);
+    console.log('  id: ', id);
+    console.log('  label: ', label);
   }
-  
-
   
   // input.trigger(eventName, [
   //   {
@@ -96,36 +128,38 @@ AutoSuggestFilter.prototype.handleNestedChange = function(e) {
   // ]);
 };
 
-AutoSuggestFilter.prototype.disable = function() {
-  let theInputs = this.element.querySelectorAll('input, label, button');
+AutosuggestFilter.prototype.disable = function() {
+  console.log('AutosuggestFilter.disable()');
+  const theInputs = this.element.querySelectorAll('input, label, button');
   theInputs.forEach(elem => {
     elem.classList.add('is-disabled');
     elem.setAttribute('disabled', true);
   });
 
-  let checkboxes = this.element.querySelectorAll('input:checked');
+  const checkboxes = this.element.querySelectorAll('input:checked');
   checkboxes.forEach(elem => {
-    let thisCheckID = elem.getAttribute('id');
-    window.dispatchEvent('filter:disabled', {
+    const thisCheckID = elem.getAttribute('id');
+    this.element.dispatchEvent('filter:disabled', {
       key: thisCheckID
     });
   });
 };
 
-AutoSuggestFilter.prototype.enable = function() {
-  let theInputs = this.element.querySelectorAll('input, label, button');
+AutosuggestFilter.prototype.enable = function() {
+  console.log('AutosuggestFilter.enable()');
+  const theInputs = this.element.querySelectorAll('input, label, button');
   theInputs.forEach(elem => {
     elem.classList.remove('is-disabled');
-    elem.setAttribute('disabled', false);
+    elem.removeAttribute('disabled');
   });
 
-  let checkboxes = this.element.querySelectorAll('input:checked');
+  const checkboxes = this.element.querySelectorAll('input:checked');
   checkboxes.forEach(elem => {
-    let thisCheckID = elem.getAttribute('id');
-    window.dispatchEvent('filter:enabled', {
+    const thisCheckID = elem.getAttribute('id');
+    this.element.dispatchEvent('filter:enabled', {
       key: thisCheckID
     });
   });
 };
 
-module.exports = { AutoSuggestFilter: AutoSuggestFilter };
+module.exports = { AutosuggestFilter };

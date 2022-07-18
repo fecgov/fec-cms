@@ -2,6 +2,7 @@
 
 {% import 'macros/filters/text.jinja' as text %}
 {% import 'macros/filters/autosuggest-filter.jinja' as autosuggest %}
+{% import 'macros/filters/typeahead-filter.jinja' as typeahead %}
 {% import 'macros/filters/version-status.jinja' as version_status %}
 {% import 'macros/filters/states.jinja' as states %}
 {% import 'macros/filters/office-sought.jinja' as office %}
@@ -20,7 +21,13 @@ Filter reports
 
 {% block efiling_filters %}
   <div class="filters__inner">
+  {# TODO - Autosuggest #}
+  {% if (FEATURES.use_tt) == false %}
     {{ autosuggest.field('committee_id', 'Committee name or ID', '', id_suffix='_raw') }}
+  {% else %}
+    {{ typeahead.field('committee_id', 'Committee name or ID', '', id_suffix='_raw') }}
+  {% endif %}
+  {# TODO: remove useTt with the use_tt feature flag #}
     {{ date.field('receipt_date', 'Receipt date', id_suffix='_raw') }}
   </div>
 {% endblock %}
@@ -29,8 +36,15 @@ Filter reports
 <div class="js-accordion accordion--neutral" data-content-prefix="filter" data-open-first="true">
   <button type="button" class="js-accordion-trigger accordion__button">Filer</button>
   <div class="accordion__content">
+  {# TODO - Autosuggest #}
+  {% if (FEATURES.use_tt) == false %}
     {{ autosuggest.field('committee_id', 'Committee name or ID', '') }}
     {{ autosuggest.field('candidate_id', 'Candidate name or ID', '', dataset='candidates') }}
+  {% else %}
+    {{ typeahead.field('committee_id', 'Committee name or ID', '') }}
+    {{ typeahead.field('candidate_id', 'Candidate name or ID', '', dataset='candidates') }}
+  {% endif %}
+  {# TODO: remove useTt with the use_tt feature flag #}
     {{ states.field('state') }}
     {{ office.checkbox() }}
     {{ parties.checkbox() }}

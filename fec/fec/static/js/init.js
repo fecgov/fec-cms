@@ -18,7 +18,8 @@ var dropdown = require('./modules/dropdowns');
 var toc = require('./modules/toc');
 var helpers = require('./modules/helpers');
 
-import { AutoSuggest } from './modules/autosuggest';
+import { Autosuggest } from './modules/autosuggest';
+var typeahead = require('./modules/typeahead'); // TODO: remove this with Typeahead filters
 
 // Hack: Append jQuery to `window` for use by legacy libraries
 window.$ = window.jQuery = $;
@@ -92,7 +93,15 @@ $(function() {
   });
 
   let siteSearchElement = document.querySelector('.js-site-search');
-  if (siteSearchElement) new AutoSuggest(siteSearchElement, 'all', '/data/');
+  if (siteSearchElement) {
+    // TODO: remove the useTt conditional when FEATURES.use_tt goes away
+    if (window.useTt === false)
+      new Autosuggest(siteSearchElement, { queryType: 'all' });
+    else
+      $('.js-site-search').each(function() {
+        new typeahead.Typeahead($(this), 'all', '/data/');
+      });
+  }
 
   // For any link that should scroll to a section on the page apply .js-scroll to <a>
   $('.js-scroll').on('click', function(e) {

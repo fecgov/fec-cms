@@ -16,6 +16,19 @@
     {% block css %}
     <link defer rel="stylesheet" type="text/css" href="{% asset_for_css 'home.css' %}">
     {% endblock %}
+
+    <script>
+      BASE_PATH = '/data';
+      FEC_APP_URL = '{{ settings.FEC_APP_URL }}';
+      API_LOCATION = '{{ settings.FEC_API_URL }}';
+      API_VERSION = '{{ settings.FEC_API_VERSION }}';
+      API_KEY_PUBLIC = '{{ settings.FEC_API_KEY_PUBLIC }}';
+      API_KEY_PUBLIC_CALENDAR = '{{ settings.FEC_API_KEY_PUBLIC_CALENDAR }}';
+      CANONICAL_BASE = '{{ settings.CANONICAL_BASE }}';
+
+      useTt = {% if settings.FEATURES.use_tt == false %}false{% else %}true{% endif %};
+      {# TODO: remove useTt with the use_tt feature flag #}
+    </script>
   </head>
 
   <body class="{% block body_class %}{% endblock %}">
@@ -52,22 +65,14 @@
               <input type="hidden" name="type" value="site">
               <label class="u-visually-hidden" for="query">Search</label>
               <div class="combo combo--search">
-                <!-- <input
-                  class="js-site-search combo__input"
-                  autocomplete="off"
-                  aria-controls="query_listbox"
-                  id="query"
-                  name="query"
-                  type="text"
-                  aria-label="Search FEC.gov"> -->
                 <input
                   class="js-site-search combo__input"
-                  data-autocomplete="off"
+                  {% if settings.FEATURES.use_tt == false %}data-{% endif %}autocomplete="off"
                   aria-controls="query_listbox"
                   id="query"
                   name="query"
                   type="text"
-                  aria-label="Search FEC.gov - NEW!">
+                  aria-label="Search FEC.gov">
                 <button type="submit" class="button--standard combo__button button--search">
                   <span class="u-visually-hidden">Search</span>
                 </button>
@@ -95,7 +100,7 @@
               <div class="combo combo--search">
               <input
                 class="js-site-search combo__input"
-                autocomplete="off"
+                {% if settings.FEATURES.use_tt == false %}data-{% endif %}autocomplete="off"
                 id="query"
                 name="query"
                 type="text"
@@ -151,16 +156,6 @@
     {% include 'partials/glossary.html' %}
 
     {% csrf_token %}
-
-    <script>
-      window.BASE_PATH = '/data';
-      window.FEC_APP_URL = '{{ settings.FEC_APP_URL }}';
-      window.API_LOCATION = '{{ settings.FEC_API_URL }}';
-      window.API_VERSION = '{{ settings.FEC_API_VERSION }}';
-      window.API_KEY_PUBLIC = '{{ settings.FEC_API_KEY_PUBLIC }}';
-      window.API_KEY_PUBLIC_CALENDAR = '{{ settings.FEC_API_KEY_PUBLIC_CALENDAR }}';
-      window.CANONICAL_BASE = '{{ settings.CANONICAL_BASE }}';
-    </script>
 
     {# Global javascript #}
     <script type="text/javascript" src="{% asset_for_js 'vendor.js' %}"></script>

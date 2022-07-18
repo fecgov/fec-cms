@@ -43,8 +43,16 @@
     DISTRICT_MAP_CUTOFF = '{{ constants.DISTRICT_MAP_CUTOFF }}';
     WEBMANAGER_EMAIL = '{{ WEBMANAGER_EMAIL }}';
     CANONICAL_BASE = '{{ CANONICAL_BASE }}';
-    TRANSITION_URL = '{{ TRANSITION_URL }}';
+    {% if TRANSITION_URL %}TRANSITION_URL = '{{ TRANSITION_URL }}';{% endif %}
     {% if election_year %}ELECTION_YEAR = '{{ election_year }}';{% endif %}
+    
+    TEST = true;
+
+    FEATURES = {% if (FEATURES) %}true{% else %}false{% endif %};
+    FEATURES.use_tt = {% if (FEATURES.use_tt) %}true{% else %}false{% endif %};
+
+    useTt = {% if (FEATURES.use_tt) == false %}false{% else %}true{% endif %};
+    {# TODO: remove useTt with the use_tt feature flag #}
 
     function trackMetric(name, imagesSelector) {
       if (imagesSelector) {
@@ -89,7 +97,7 @@
              <div class="combo combo--search">
             <input
               class="js-site-search combo__input"
-              autocomplete="off"
+              {% if FEATURES.use_tt == false %}data-{% endif %}autocomplete="off"
               id="query"
               name="query"
               type="text"

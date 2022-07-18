@@ -5,12 +5,20 @@
 {% import 'macros/filters/states.jinja' as states %}
 {% import 'macros/filters/districts.jinja' as districts %}
 {% import 'macros/filters/autosuggest-filter.jinja' as autosuggest %}
+{% import 'macros/filters/typeahead-filter.jinja' as typeahead %}
 {% import 'macros/filters/years.jinja' as years %}
 {% import 'macros/filters/date.jinja' as date %}
 
 {% block filters %}
 <div class="filters__inner">
+  {# TODO - Autosuggest #}
+  {% if (FEATURES.use_tt) == false %}
   {{ autosuggest.field('q', 'Candidate name or ID', '', dataset='candidates', allow_text=True) }}
+  {% else %}
+  {{ typeahead.field('q', 'Candidate name or ID', '', dataset='candidates', allow_text=True) }}
+  {% endif %}
+  {# TODO: remove useTt with the use_tt feature flag #}
+
   {{ years.years('election_year', 'Election year', end_year=constants.END_YEAR + 4) }}
   {{ office.checkbox() }}
   {{ parties.checkbox() }}

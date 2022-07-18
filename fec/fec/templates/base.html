@@ -16,6 +16,19 @@
     <link rel="stylesheet" type="text/css" href="{% asset_for_css 'base.css' %}">
     {% endblock %}
     <script crossorigin="anonymous" src="https://polyfill.io/v3/polyfill.min.js?flags=gated&features=Object.assign"></script>
+
+    <script>
+      BASE_PATH = '/';
+      FEC_APP_URL = '{{ settings.FEC_APP_URL }}';
+      API_LOCATION = '{{ settings.FEC_API_URL }}';
+      API_VERSION = '{{ settings.FEC_API_VERSION }}';
+      API_KEY_PUBLIC = '{{ settings.FEC_API_KEY_PUBLIC }}';
+      API_KEY_PUBLIC_CALENDAR = '{{ settings.FEC_API_KEY_PUBLIC_CALENDAR }}';
+      CANONICAL_BASE = '{{ settings.CANONICAL_BASE }}';
+
+      useTt = {% if settings.FEATURES.use_tt == false %}false{% else %}true{% endif %};
+      {# TODO: remove useTt with the use_tt feature flag #}
+    </script>
   </head>
 
   <body class="{% block body_class %}{% endblock %}">
@@ -54,7 +67,7 @@
               <div class="combo combo--search">
                 <input
                   class="js-site-search combo__input"
-                  autocomplete="off"
+                  {% if settings.FEATURES.use_tt == false %}data-{% endif %}autocomplete="off"
                   aria-expanded="false"
                   aria-controls="query_listbox"
                   id="query"
@@ -88,7 +101,7 @@
               <div class="combo combo--search">
                 <input
                   class="js-site-search combo__input"
-                  autocomplete="off"
+                  {% if settings.FEATURES.use_tt == false %}data-{% endif %}autocomplete="off"
                   aria-expanded="false"
                   aria-controls="query_listbox"
                   id="query"
@@ -146,16 +159,6 @@
     {% include './partials/glossary.html' %}
 
     {% csrf_token %}
-
-    <script>
-      window.BASE_PATH = '/';
-      window.FEC_APP_URL = '{{ settings.FEC_APP_URL }}';
-      window.API_LOCATION = '{{ settings.FEC_API_URL }}';
-      window.API_VERSION = '{{ settings.FEC_API_VERSION }}';
-      window.API_KEY_PUBLIC = '{{ settings.FEC_API_KEY_PUBLIC }}';
-      window.API_KEY_PUBLIC_CALENDAR = '{{ settings.FEC_API_KEY_PUBLIC_CALENDAR }}';
-      window.CANONICAL_BASE = '{{ settings.CANONICAL_BASE }}'
-    </script>
 
     {# Global javascript #}
     <script type="text/javascript" src="{% asset_for_js 'vendor.js' %}"></script>

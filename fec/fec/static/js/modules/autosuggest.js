@@ -9,6 +9,9 @@
 // TODO: double check that the autosuggest filters handle a generic user returnkey appropriately (type + returnkey without clicking)
 // TODO: rename (and standardize) title cases like `autoComplete` `autoSuggest:open` (autocomplete, autoComplete, AutoComplete?)
 // TODO: better solution for window.queryText
+// TODO: auditCandidates
+// TODO: auditCommittees
+// TODO: rad lookup
 
 import autoComplete from '@tarekraafat/autocomplete.js';
 import officeNames from './utils';
@@ -229,7 +232,7 @@ let defaultAutocompleteOptions = {
   },
   data: {
     src: async () => {
-      /** Default function will be replaced when we have an instance type, etc. @see AutoSuggest.prototype.init */
+      /** Default function will be replaced when we have an instance type, etc. @see Autosuggest.prototype.init */
       return [];
     },
     keys: searchedAttribs()
@@ -301,7 +304,7 @@ let defaultAutocompleteOptions = {
 // };
 
 /**
- * The main AutoSuggest element
+ * The main Autosuggest element
  * @constructor
  * @param {String|HTMLInputElement} elementSelector
  * @param {String="all","allData","candidates","committees"} queryType Used to decide which APIs to search // TODO: list the rest of the options
@@ -310,15 +313,15 @@ let defaultAutocompleteOptions = {
  *
  * @property {autoComplete} autocomplete
  * @property {Number} formerSelectionIndex an integer used for tracking hover/selected states with arrows, especially for ⬆︎/⬇︎ onto a non-selectable element
- * @property {HTMLInputElement} input the <input> for this instance of AutoSuggest
+ * @property {HTMLInputElement} input the <input> for this instance of Autosuggest
  * @property {String} queryType
  * @property {HTMLElement} resultsHolder
  * @property {String} url
  * @property {String|Number} value
  * @property {HTMLElement} wrapper the element created to wrap the <input> and the results
  */
-function AutoSuggest(elementSelector, opts) {
-  console.log('AutoSuggest(elementSelector, opts): ', elementSelector, opts);
+function Autosuggest(elementSelector, opts) {
+  console.log('Autosuggest(elementSelector, opts): ', elementSelector, opts);
   // if elementSelector is a string, use that string to find the dom element and set that to this.input
   // else if elementSelector is an element, just save it
   this.input = typeof elementSelector == 'string' ? document.querySelector(elementSelector) : elementSelector;
@@ -334,8 +337,8 @@ function AutoSuggest(elementSelector, opts) {
 /**
  * @prop
  */
- AutoSuggest.prototype.init = function() {
-  // console.log('AutoSuggest.init()');
+ Autosuggest.prototype.init = function() {
+  // console.log('Autosuggest.init()');
   // TODO: do we need to destroy/reset one if it already exists?
   // if (this.typeahead) this.input.typeahead('destroy');
   this.input.value = '';
@@ -411,7 +414,7 @@ function AutoSuggest(elementSelector, opts) {
  * Removes the default listener specified by eventName (typically to be added added by another package)
  * @param {String="close","focus","navigate","open","results","selection"} eventName - the name of the event to removeEventListener
  */
- AutoSuggest.prototype.off = function(eventName) {
+ Autosuggest.prototype.off = function(eventName) {
   // Only opens if the resultsList is not empty
   if (eventName == 'close') this.input.removeEventListener('close', this.handleClose);
   else if (eventName == 'focus') this.input.removeEventListener('focus', this.handleFocus);
@@ -425,19 +428,19 @@ function AutoSuggest(elementSelector, opts) {
  *
  * @param {CustomEvent} e from autocomplete
  *
- * @fires autoSuggest:focus
+ * @event autosuggest:focus
  */
-AutoSuggest.prototype.handleFocus = function(e) {
+ Autosuggest.prototype.handleFocus = function(e) {
   // Only opens if the resultsList is not empty
   this.autocomplete.open();
   /**
-   * AutoSuggest focus event
+   * Autosuggest focus event
    *
-   * @event autoSuggest:focus
+   * @event autosuggest:focus
    * @type {Object}
    * @property {Event} e - an event? // TODO: add these
    */
-  this.input.dispatchEvent(new CustomEvent('autoSuggest:focus', e));
+  this.input.dispatchEvent(new CustomEvent('autosuggest:focus', e));
 };
 
 /**
@@ -445,18 +448,18 @@ AutoSuggest.prototype.handleFocus = function(e) {
  * @param {CustomEvent} e from autocomplete
  * @param {Object} e.detail carries the autoComplete.js "feedback" object
  *
- * @fires autoSuggest:open
+ * @event autosuggest:open
  */
-AutoSuggest.prototype.handleOpen = function(e) {
+ Autosuggest.prototype.handleOpen = function(e) {
   this.matchAriaExpandeds();
   /**
-   * AutoSuggest open event
+   * Autosuggest open event
    *
-   * @event autoSuggest:open
+   * @event autosuggest:open
    * @type {Object}
    * @property {Event} e - an event? // TODO: add these
    */
-   this.input.dispatchEvent(new CustomEvent('autoSuggest:open', e));
+   this.input.dispatchEvent(new CustomEvent('autosuggest:open', e));
 };
 
 /**
@@ -464,24 +467,24 @@ AutoSuggest.prototype.handleOpen = function(e) {
  * @param {CustomEvent} e from autocomplete
  * @param {Object} e.detail carries the autoComplete.js "feedback" object
  *
- * @fires autoSuggest:close
+ * @event autosuggest:close
  */
-AutoSuggest.prototype.handleClose = function(e) {
+ Autosuggest.prototype.handleClose = function(e) {
   this.matchAriaExpandeds();
   /**
-   * AutoSuggest close event
+   * Autosuggest close event
    *
-   * @event autoSuggest:close
+   * @event autosuggest:close
    * @type {Object}
    * @property {Event} e - an event? // TODO: add these
    */
-   this.input.dispatchEvent(new CustomEvent('autoSuggest:close', e));
+   this.input.dispatchEvent(new CustomEvent('autosuggest:close', e));
 };
 
 /**
  * Called to copy the aria-expanded state from the autocomplete element up to the <input>'s wrapper for css selectors
  */
-AutoSuggest.prototype.matchAriaExpandeds = function() {
+ Autosuggest.prototype.matchAriaExpandeds = function() {
   let theACwrapper = this.wrapper.querySelector('.autoComplete_wrapper');
 
   this.wrapper.setAttribute(
@@ -492,22 +495,22 @@ AutoSuggest.prototype.matchAriaExpandeds = function() {
 
 /**
  * Called when Autocomplete gets results
- * @param {CustomEvent} e from autocomplete
- * @param {Object} e.detail carries the matching results values
- * @fires autoSuggest:results
+ * @param {CustomEvent} e - from autocomplete
+ * @param {Object} e.detail - carries the matching results values
+ * @event autosuggest:results
  */
-AutoSuggest.prototype.handleResults = function(e) {
+ Autosuggest.prototype.handleResults = function(e) {
   // Reset the 'last selected' marker for arrow/keyboard navigation
   this.formerSelectionIndex = 0;
 
   /**
-   * AutoSuggest results event
+   * Autosuggest results event
    *
-   * @event autoSuggest:results
+   * @event autosuggest:results
    * @type {Object}
    * @property {Event} e - an event? // TODO: add these
    */
-   this.input.dispatchEvent(new CustomEvent('autoSuggest:results', e));
+   this.input.dispatchEvent(new CustomEvent('autosuggest:results', e));
 };
 
 /**
@@ -515,10 +518,10 @@ AutoSuggest.prototype.handleResults = function(e) {
  * @param {CustomEvent} e from autocomplete
  * @param {Object} e.detail carries the autoComplete.js "feedback" object
  * @returns {null} if (e.detail.selection.value.is_header)
- * @fires autoSuggest:close
+ * @event autosuggest:close
  */
-AutoSuggest.prototype.handleSelect = function(e) {
-  console.log('AutoSuggest.handleSelect(e): ', e);
+ Autosuggest.prototype.handleSelect = function(e) {
+  console.log('Autosuggest.handleSelect(e): ', e);
 
   const val = e.detail.selection.value;
 
@@ -538,12 +541,12 @@ AutoSuggest.prototype.handleSelect = function(e) {
 
   // let eventObj = Object.assign
   /**
-   * Broadcast the autoSuggest:select event
-   * @event autoSuggest:select
+   * Broadcast the autosuggest:select event
+   * @event autosuggest:select
    * @type {Object}
    * @property {CustomEvent} e - the CustomEvent that came in from autocomplete
    */
-   this.input.dispatchEvent(new CustomEvent('autoSuggest:select', e));
+   this.input.dispatchEvent(new CustomEvent('autosuggest:select', e));
 };
 
 /**
@@ -553,7 +556,7 @@ AutoSuggest.prototype.handleSelect = function(e) {
  * @param {CustomEvent} e from autocomplete
  * @param {Object} e.detail carries the autoComplete.js "feedback" object
  */
-AutoSuggest.prototype.handleNavigate = function(e) {
+ Autosuggest.prototype.handleNavigate = function(e) {
   console.log('handleNavigate(e): ', e);
   // If we've just focused on a header object, we want to nav off of it
   let sel = e.detail.selection;
@@ -583,7 +586,7 @@ AutoSuggest.prototype.handleNavigate = function(e) {
 /**
  *
  */
-AutoSuggest.prototype.highlightFirstResult = function() {
+ Autosuggest.prototype.highlightFirstResult = function() {
   // TODO: do we still care about doing this?
   // this.formerSelectionIndex = -1;
   // this.autocomplete.goTo(0);
@@ -592,9 +595,9 @@ AutoSuggest.prototype.highlightFirstResult = function() {
 /**
  * Called by @see handleSelect 
  * @param {Object} q
- * q is the same as e.detail.selection.match from @see AutoSuggest.prototype.handleSelect
+ * q is the same as e.detail.selection.match from @see Autosuggest.prototype.handleSelect
  */
-AutoSuggest.prototype.searchSite = function(q) {
+ Autosuggest.prototype.searchSite = function(q) {
   /** If the site search option is selected, this function handles submitting
    * a new search on /search
    */
@@ -624,5 +627,5 @@ AutoSuggest.prototype.searchSite = function(q) {
 };
 
 module.exports = {
-  AutoSuggest: AutoSuggest
+  Autosuggest: Autosuggest
 };

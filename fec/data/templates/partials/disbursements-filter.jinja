@@ -2,6 +2,7 @@
 
 {% import 'macros/filters/text.jinja' as text %}
 {% import 'macros/filters/autosuggest-filter.jinja' as autosuggest %}
+{% import 'macros/filters/typeahead-filter.jinja' as typeahead %}
 {% import 'macros/filters/states.jinja' as states %}
 {% import 'macros/filters/date.jinja' as date %}
 {% import 'macros/filters/years.jinja' as years %}
@@ -18,15 +19,28 @@ Filter disbursements
 
 {% block efiling_filters %}
 <div class="filters__inner">
+{# TODO - Autosuggest #}
+{% if (FEATURES.use_tt) == false %}
   {{ autosuggest.field('committee_id', 'Spender name or ID', id_suffix='_raw') }}
+{% else %}
+  {{ typeahead.field('committee_id', 'Spender name or ID', id_suffix='_raw') }}
+{% endif %}
+{# TODO: remove useTt with the use_tt feature flag #}
   {{ text.field('disbursement_description', 'Description', id_suffix='_raw') }}
 </div>
 {% endblock %}
 
 {% block filters %}
 <div class="filters__inner">
+{# TODO - Autosuggest #}
+{% if (FEATURES.use_tt) == false %}
   {{ autosuggest.field('committee_id', 'Spender name or ID', helper_text = 'Limit 10 spender names or IDs') }}
   {{ autosuggest.field('recipient_name', 'Recipient name or ID', allow_text=True, helper_text = 'Limit 10 recipient names or IDs') }}
+{% else %}
+  {{ typeahead.field('committee_id', 'Spender name or ID', helper_text = 'Limit 10 spender names or IDs') }}
+  {{ typeahead.field('recipient_name', 'Recipient name or ID', allow_text=True, helper_text = 'Limit 10 recipient names or IDs') }}
+{% endif %}
+{# TODO: remove useTt with the use_tt feature flag #}
   {{ years.cycles('two_year_transaction_period', 'Report time period', show_tooltip=True)  }}
   {{ date.field('date', 'Disbursement date range' ) }}
 </div>

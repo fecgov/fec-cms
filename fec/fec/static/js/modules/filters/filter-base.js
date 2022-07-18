@@ -13,8 +13,13 @@ function prepareValue($elm, value) {
   return $elm.attr('type') === 'checkbox' ? ensureArray(value) : value;
 }
 
+/**
+ * @interface
+ *
+ * @param {} elm
+ */
 function Filter(elm) {
-  console.log('Filter(elm): ', elm);
+  console.log('new Filter(elm): ', elm);
   this.$elm = $(elm);
   this.$input = this.$elm.find('input:not([name^="_"])');
   this.$filterLabel = this.$elm.closest('.accordion__content').prev();
@@ -91,10 +96,10 @@ Filter.prototype.handleAddEvent = function(e, opts) {
  *
  * @param {jQuery.Event} e
  * @param {Object} opts
- * @returns 
+ * @returns {null} - if (opts.name !== this.name || opts.loadedOnce !== true)
  */
 Filter.prototype.handleRemoveEvent = function(e, opts) {
-  // console.log('Filter.handleRemoveEvent(e, opts): ', e, opts);
+  console.log('Filter.handleRemoveEvent(e, opts): ', e, opts);
   // Don't decrement on initial page load
   if (opts.name !== this.name || opts.loadedOnce !== true) {
     return;
@@ -123,6 +128,12 @@ Filter.prototype.decrement = function($filterLabel) {
   }
 };
 
+/**
+ * 
+ * @param {jQuery.Event} e 
+ * @param {Object} opts 
+ * @returns {null} if this filter's name isn't === opts.name
+ */
 Filter.prototype.setLastAction = function(e, opts) {
   console.log('Filter.setLastAction(e, opts): ', e, opts);
   if (opts.name !== this.name) {

@@ -1,6 +1,6 @@
 /**
  * TODO: what does this file actually do?
- * Wraps an instance of AutoSuggest
+ * Wraps an instance of Autosuggest
  * Wrapped by autosuggest-filter
  */
 
@@ -9,7 +9,7 @@
 const $ = require('jquery');
 const URI = require('urijs');
 const _ = require('underscore');
-import { AutoSuggest } from '../autoSuggest';
+import { Autosuggest } from '../autosuggest';
 import sanitizeValue from '../helpers';
 import { slugify, stripDoubleQuotes } from '../utils';
 
@@ -28,10 +28,11 @@ function slugify_remove(value) { // TODO: test if we can remove this (likely wit
 }
 
 /**
- * 
- * @param {*} datum 
- * @returns {String} Formatted like 'Committee Name (COMMITTEE_ID)' or 
- * TODO: where on the site does this return `"COMMITTEE_ID"` instead of `Committee Name (COMMITTEE_ID)`?
+ * Returns a string
+ * @param {object} datum
+ * @param {string} datum.name
+ * @param {(string|number)} datum.id
+ * @returns {string} Formatted like 'Committee Name (COMMITTEE_ID)' or 
  */
 function formatLabel(datum) {
   return datum.name
@@ -96,11 +97,12 @@ const template_checkbox = data => `
  * @property {String} fieldName - 
  * @property {HTMLButtonElement} button - 
  * @property {HTMLElement} selected - 
+ * @property {Boolean} searchEnabled - ready by automated tests
  *
- * @listens autoSuggest:open // TODO: add these
+ * @listens autosuggest:open // TODO: add these
  */
-function FilterAutoSuggest(elementSelector, dataset, allowText) {
-  console.log('FilterAutoSuggest(elementSelector, dataset, allowText)', elementSelector, dataset, allowText);
+function FilterAutosuggest(elementSelector, dataset, allowText) {
+  console.log('FilterAutosuggest(elementSelector, dataset, allowText)', elementSelector, dataset, allowText);
   // If elementSelector is a string, use it to find this target element,
   // else save the elementSelector element as this.element
   this.element = typeof elementSelector == 'string' ? document.querySelector(elementSelector) : elementSelector;
@@ -112,43 +114,29 @@ function FilterAutoSuggest(elementSelector, dataset, allowText) {
   this.button = this.element.querySelector('button');
   this.selected = this.element.querySelector('.dropdown__selected');
 
-  // Create the autoSuggest elements (and set this.autosuggest)
+  // Create the Autosuggest elements (and set this.autosuggest)
   this.autosuggestInit();
 
-  // const textFields = this.element.querySelectorAll('input[type="text"]');
-  // for (const field of textFields) {
-  //   field.addEventListener('change', this.handleChange.bind(this));
+  this.element.addEventListener('click', this.handleClick.bind(this));
+
+  const textInput = this.element.querySelector('input[type="text"]');
+  if (textInput) textInput.addEventListener('change', this.handleChange.bind(this));
+
+  const checkboxInputs = this.element.querySelectorAll('input[type="checkbox"]');
+  // if (checkboxInputs) {
+    checkboxInputs.forEach(eachCheckbox => {
+      eachCheckbox.addEventListener('change', this.handleCheckbox.bind(this));
+    });
   // }
-  this.element.addEventListener('change', this.handleChange.bind(this));
-  // this.element.addEventListener('as:changed', this.handleChange.bind(this));
-  // this.$elm.on('change', 'input[type="text"]', this.handleChange.bind(this));
-
-  // const checkboxes = this.element.querySelectorAll('input[type="checkbox"]');
-  // console.log('  checkboxes: ', checkboxes);
-  // checkboxes.forEach(check => {
-  //   check.addEventListener('change', this.handleCheckbox.bind(this));
-  // });
-  // this.$elm.on('change', 'input[type="checkbox"]', this.handleCheckbox.bind(this));
-
-  const dropdowns__remove = this.element.querySelectorAll('.dropdown__remove');
-  dropdowns__remove.forEach(dropdown => {
-    dropdown.addEventListener('change', this.removeCheckbox.bind(this));
-  });
-  // this.$elm.on('click', '.dropdown__remove', this.removeCheckbox.bind(this));
-
-  // const suggestions = this.element.querySelectorAll('.as-suggestion');
-  // suggestions.forEach(suggestion => {
-  //   suggestion.addEventListener('mouseenter', this.handleHover.bind(this));
-  // });
-  // this.$elm.on('mouseenter', '.as-suggestion', this.handleHover.bind(this));
 
   document.body.addEventListener('filter:modify', this.changeDataset.bind(this));
 
-  this.field.addEventListener('autoSuggest:select', this.handleSelect.bind(this));
+  this.field.addEventListener('autosuggest:select', this.handleSelect.bind(this));
   // this.field.addEventListener('selection', this.handleSelect.bind(this));
   // this.field.addEventListener('typeahead:autocomplete', this.handleAutocomplete.bind(this));
   // this.field.addEventListener('typeahead:render', this.setFirstItem.bind(this));
-  // this.field.addEventListener('keyup', this.handleKeypress.bind(this));
+  this.field.addEventListener('autosuggest:results', this.handleResults.bind(this));
+  this.field.addEventListener('keyup', this.handleKeypress.bind(this));
   // this.field.addEventListener('click', this.handleSubmit.bind(this));
 
   document.body.addEventListener('tag:removed', this.removeCheckbox.bind(this));
@@ -160,20 +148,18 @@ function FilterAutoSuggest(elementSelector, dataset, allowText) {
 /**
  * 
  */
-FilterAutoSuggest.prototype.autosuggestInit = function() {
-  const opts = { minLength: 3, hint: false, highlight: true };
-  if (this.allowText && this.queryType) {
-    // this.field.autosuggest(opts, textDataset, this.dataset);
-    this.autosuggest = new AutoSuggest(this.field, this.queryType, this.dataset, opts);
+FilterAutosuggest.prototype.autosuggestInit = function() {
+  let opts = {
+    queryType: this.queryType,
+    minLength: 3,
+    hint: false, // TODO: what's this?
+    highlightFirst: true
+  };
 
-  } else if (this.allowText && !this.dataset) {
-    // this.field.autosuggest(opts, textDataset);
-    this.autosuggest = new AutoSuggest(this.field, this.queryType, null, opts);
+  if (this.allowText && this.queryType) opts.dataset = this.dataset;
+  else if (this.allowText && !this.dataset) opts.dataset = textDataset;
 
-  } else {
-    // this.field.autosuggest(opts, this.dataset);
-    this.autosuggest = new AutoSuggest(this.field, this.queryType, opts);
-  }
+  this.autosuggest = new Autosuggest(this.field, opts);
 
   // set this aria-live attribute to 'polite' for this .as-menu
   const menus = this.element.querySelectorAll('.as-menu');
@@ -193,22 +179,29 @@ FilterAutoSuggest.prototype.autosuggestInit = function() {
 /**
  * 
  */
-FilterAutoSuggest.prototype.setFirstItem = function() {
-  // Set the firstItem to a datum upon each rendering of results
-  // This way clicking enter or the button will submit with this datum
-  this.firstItem = arguments[1];
+FilterAutosuggest.prototype.handleResults = function(e) {
+  console.log('FilterAutosuggest.handleResults(e): ', e);
+  this.setFirstItem();
+};
+
+/**
+ * Set the firstItem to a datum upon each rendering of results
+ * this way clicking enter or the button will submit with this datum
+ */
+FilterAutosuggest.prototype.setFirstItem = function() {
+  console.log('FilterAutosuggest.setFirstItem()');
+  // this.firstItem = arguments[1];
   // Add a hover class to the first item to indicate it will be selected
-  const suggestions = this.element.querySelector('.as-suggestion');
-  suggestions[0].classList.add('as-cursor');
-  // $(this.$elm.find('.as-suggestion')[0]).addClass('as-cursor');
-  if (suggestions.length > 0) {
+  const suggestions = this.element.querySelectorAll('.as-suggestion');
+
+  if (suggestions && suggestions.length > 0) {
+    this.autosuggest.highlightFirstResult();
     this.enableButton();
-    this.field.setAttribute('aria-expanded', true);
+    // this.field.setAttribute('aria-expanded', true);
+
+  } else {
+    this.disableButton();
   }
-  // if (this.$elm.find('.as-suggestion').length > 0) {
-  //   this.enableButton();
-  //   this.$field.attr('aria-expanded', 'true');
-  // }
 };
 
 /**
@@ -216,15 +209,15 @@ FilterAutoSuggest.prototype.setFirstItem = function() {
  * @param {CustomEvent/KeyboardEvent} e - Custom event if it's a click, but KeyboardEvent from the keyboard
  * @param {*} datum - 
  */
-FilterAutoSuggest.prototype.handleSelect = function(e) {
-  console.log('FilterAutoSuggest.handleSelect(e) (AUTOSUGGEST:SELECT): ', e);
+FilterAutosuggest.prototype.handleSelect = function(e) {
+  console.log('FilterAutosuggest.handleSelect(e) (AUTOSUGGEST:SELECT): ', e);
 
-  console.log('e.target.type: ', e.target.type);
+  console.log('  e.target.type: ', e.target.type);
 
   const datum = e.detail.selection.value;
 
   const id = formatId(datum.id);
-  console.log('id: ', id);
+  console.log('  id: ', id);
   this.appendCheckbox({
     name: this.fieldName,
     value: datum.id,
@@ -232,16 +225,17 @@ FilterAutoSuggest.prototype.handleSelect = function(e) {
   });
   // this.datum = null;
 
-  console.log('this.element: ', this.element);
+  console.log('  this.element: ', this.element);
+  console.log('  this.$elm: ', this.$elm);
   const relatedLabels = this.element.querySelectorAll(`label[for="${id}"]`);
-  console.log('relatedLabels: ', relatedLabels);
+  console.log('  relatedLabels: ', relatedLabels);
   relatedLabels.forEach(label => {
-    console.log('  label: ', label);
+    console.log('    label: ', label);
     label.classList.add('is-loading');
   });
   // this.$elm.find('label[for="' + id + '"]').addClass('is-loading');
 
-  console.log('this.button: ', this.button);
+  console.log('  this.button: ', this.button);
   this.button.focus();
   this.button.classList.add('is-loading');
 
@@ -253,64 +247,83 @@ FilterAutoSuggest.prototype.handleSelect = function(e) {
  * 
  * @param {*} e - 
  */
-// FilterAutoSuggest.prototype.handleKeypress = function(e) {
-//   console.log('FilterAutoSuggest.handleKeypress(e): ', e);
-//   this.handleChange();
+FilterAutosuggest.prototype.handleKeypress = function(e) {
+  console.log('FilterAutosuggest.handleKeypress(e): ', e);
+  this.handleChange(e);
 
-//   // const suggestion = this.element.querySelector('.as-suggestion');
-//   // if (suggestion) this.field.setAttribute('aria-expanded', 'true');
-//   // else this.field.setAttribute('aria-expanded', 'false');
+  // const suggestion = this.element.querySelector('.as-suggestion');
+  // if (suggestion) this.field.setAttribute('aria-expanded', 'true');
+  // else this.field.setAttribute('aria-expanded', 'false');
 
-//   if (e.keyCode === 13) {
-//     this.handleSubmit(e);
-//   }
-// };
+  if (e.keyCode === 13) {
+    this.handleSubmit(e);
+  }
+};
 
 /**
  * 
+ * @param {Event?} e -
  */
-FilterAutoSuggest.prototype.handleChange = function(e) {
+FilterAutosuggest.prototype.handleChange = function(e) {
   console.log('FilterAutosuggest.handleChange(e): ', e);
   console.log('  this.field', this.field);
   console.log('  this.field.value', this.field.value);
 
-  // if event comes from input[type="text"]'):
-  if (e.target.type == 'text') {
-    console.log('  e.target.type == text');
+  console.log('  this.allowText: ', this.allowText);
+  console.log('  this.field: ', this.field);
+  console.log('  this.datum: ', this.datum);
 
-    if (
-      (this.allowText && this.field.value.length > 1) ||
-      this.datum
-    ) {
-      this.enableButton();
+  if (
+    (this.allowText && this.field.value.length > 1) ||
+    this.datum
+  ) {
+    this.enableButton();
 
-    } else if (
-      this.field.value.length === 0 ||
-      (!this.allowText && this.field.value.length < 3)
-    ) {
-      this.datum = null;
-      this.disableButton();
-    }
-  } else if (e.target.type == 'checkbox') {
-    // if event comes from input[type="checkbox"]:
-    console.log('  e.target.type == checkbox');
-
-    // console.log('FilterAutoSuggest.handleCheckbox(e): ', e);
-    const input = e.target;
-    const id = input.getAttribute('id');
-    const label = this.element.querySelector('label[for="' + id + '"]');
-    const loadedOnce = input.dataset['loaded-once'] || false; // Make sure this works, since there's a dash in the name
-
-    if (loadedOnce || loadedOnce === true) label.classList.add('is-loading');
-
-    console.log('  input: ' + input);
-    console.log('  input: ', input);
-    console.log('  id: ', id);
-    console.log('  label: ', label);
-    input.dataset['loaded-once'] = true;
-  } else {
-    console.log('  ELSE NOTHING');
+  } else if (
+    this.field.value.length === 0 ||
+    (!this.allowText && this.field.value.length < 3)
+  ) {
+    this.datum = null;
+    this.disableButton();
   }
+};
+
+/**
+ * @param {Event?} e -
+ */
+FilterAutosuggest.prototype.handleCheckbox = function(e) {
+  console.log('FilterAutosuggest.handleCheckbox(e): ', e);
+  console.log('  this.field', this.field);
+  console.log('  this.field.value', this.field.value);
+
+  const input = e.target;
+  const id = input.getAttribute('id');
+  const label = this.element.querySelector('label[for="' + id + '"]');
+  let loadedOnce = input.getAttribute('data-loaded-once') || false; // Make sure this works, since there's a dash in the name
+
+  if (loadedOnce || loadedOnce === true) label.classList.add('is-loading');
+
+  console.log('  input: ' + input);
+  console.log('  input: ', input);
+  console.log('  id: ', id);
+  console.log('  label: ', label);
+  input.dataset['loadedOnce'] = true;
+  console.log('  input: ' + input);
+  console.log('  input: ', input);
+};
+
+/**
+ * 
+ * @param {*} e 
+ * @param {*} opts 
+ */
+FilterAutosuggest.prototype.handleClick = function(e) {
+  console.log('FilterAutosuggest.handleClick(e): ', e);
+
+  console.log('  typeof e.target: ', typeof e.target);
+  
+  if (e.target.classList.contains('dropdown__remove')) this.removeCheckbox(e);
+  
 };
 
 /**
@@ -318,7 +331,8 @@ FilterAutoSuggest.prototype.handleChange = function(e) {
  * @param {*} e - 
  * @param {*} opts - 
  */
-FilterAutoSuggest.prototype.removeCheckbox = function(e, opts) {
+FilterAutosuggest.prototype.removeCheckbox = function(e, opts) {
+  console.log('FilterAutosuggest.removeCheckbox(e, opts): ', e, opts);
   let input = e.target;
 
   // tag removal
@@ -333,7 +347,8 @@ FilterAutoSuggest.prototype.removeCheckbox = function(e, opts) {
 /**
  * 
  */
-FilterAutoSuggest.prototype.removeAllCheckboxes = function() {
+FilterAutosuggest.prototype.removeAllCheckboxes = function() {
+  console.log('FilterAutosuggest.removeAllCheckboxes()');
   while (this.selected.firstChild) {
     this.selected.removeChild(this.selected.firstChild);
   }
@@ -341,22 +356,10 @@ FilterAutoSuggest.prototype.removeAllCheckboxes = function() {
 
 /**
  * 
- */
-// FilterAutoSuggest.prototype.handleHover = function() {
-//   console.log('FilterAutoSuggest.handleHover(): ');
-//   const itemsWithCursor = this.element.querySelectorAll('.as-sugggestion.as-cursor');
-//   for (const item in itemsWithCursor) {
-//     item.classList.remove('as-cursor');
-//   }
-//   // this.$elm.find('.as-suggestion.as-cursor').removeClass('as-cursor');
-// };
-
-/**
- * 
  * @param {CustomEvent} e - from autocomplete
  */
-FilterAutoSuggest.prototype.handleSubmit = function(e) {
-  console.log('FilterAutoSuggest.handleSubmit(e): ', e);
+FilterAutosuggest.prototype.handleSubmit = function(e) {
+  console.log('FilterAutosuggest.handleSubmit(e): ', e);
   console.log('  this.datum: ', this.datum);
 
   this.datum = e.detail.selection.value;
@@ -380,8 +383,8 @@ FilterAutoSuggest.prototype.handleSubmit = function(e) {
 /**
  * 
  */
-FilterAutoSuggest.prototype.clearInput = function() {
-  console.log('FilterAutoSuggest.clearInput()');
+FilterAutosuggest.prototype.clearInput = function() {
+  console.log('FilterAutosuggest.clearInput()');
   this.field.value = null;
   this.field.dispatchEvent(new CustomEvent('change', { source: 'clearInput()' }));
   this.disableButton();
@@ -390,31 +393,31 @@ FilterAutoSuggest.prototype.clearInput = function() {
 /**
  * 
  */
-FilterAutoSuggest.prototype.enableButton = function() {
-  console.log('FilterAutoSuggest.enableButton()');
+FilterAutosuggest.prototype.enableButton = function() {
+  console.log('FilterAutosuggest.enableButton()');
   this.searchEnabled = true;
   this.button.classList.remove('is-disabled');
   this.button.setAttribute('tabindex', '1');
-  this.button.setAttribute('disabled', false);
+  this.button.removeAttribute('disabled');
 };
 
 /**
  * 
  */
-FilterAutoSuggest.prototype.disableButton = function() {
-  console.log('FilterAutoSuggest.disableButton()');
+FilterAutosuggest.prototype.disableButton = function() {
+  console.log('FilterAutosuggest.disableButton()');
   this.searchEnabled = false;
   this.button.classList.add('is-disabled');
   this.button.setAttribute('tabindex', '-1');
-  this.button.setAttribute('disabled', false); // TODO: should this be true inside the disableButton function?
+  this.button.setAttribute('disabled', true);
 };
 
 /**
  *
  * @param {Object} opts - 
  */
-FilterAutoSuggest.prototype.appendCheckbox = function(opts) {
-  console.log('FilterAutoSuggest.appendCheckbox(opts): ', opts);
+FilterAutosuggest.prototype.appendCheckbox = function(opts) {
+  console.log('FilterAutosuggest.appendCheckbox(opts): ', opts);
   const data = this.formatCheckboxData(opts);
   const dataIDelement = this.element.querySelector(`#${data.id}`);
 
@@ -437,7 +440,7 @@ FilterAutoSuggest.prototype.appendCheckbox = function(opts) {
  * @param {*} input - 
  * @returns {Object} Structured like {name: '', label: '', value: , id: 'name-value-checkbox'}
  */
-FilterAutoSuggest.prototype.formatCheckboxData = function(input) {
+FilterAutosuggest.prototype.formatCheckboxData = function(input) {
   const output = {
     name: input.name,
     label: input.datum
@@ -454,8 +457,9 @@ FilterAutoSuggest.prototype.formatCheckboxData = function(input) {
  * TODO: update this whole thing
  * @param {*} values - 
  */
-FilterAutoSuggest.prototype.getFilters = function(values) {
-  console.log('FilterAutoSuggest.getFilters(values): ', values);
+FilterAutosuggest.prototype.getFilters = function(values) {
+  console.log('FilterAutosuggest.getFilters(values): ', values);
+  console.log('  NEED TO DO THIS');
   const self = this;
   if (this.dataset) {
     var dataset = this.dataset.name + 's';
@@ -479,6 +483,8 @@ FilterAutoSuggest.prototype.getFilters = function(values) {
           .addQuery(nameID, ids)
           .toString()
       ).done(this.updateFilters.bind(this));
+    } else {
+      console.log('  NO ids');
     }
   }
 };
@@ -488,8 +494,9 @@ FilterAutoSuggest.prototype.getFilters = function(values) {
 * When loading a preset checkbox filter, this will change the label of the checkbox from just ID (example: C00431445) to the full title for readability (example: OBAMA FOR AMERICA (C00431445))
 * @param {?} response - 
 */
-FilterAutoSuggest.prototype.updateFilters = function(response) {
-  console.log('FilterAutoSuggest.updateFilters(response): ', response);
+FilterAutosuggest.prototype.updateFilters = function(response) {
+  console.log('FilterAutosuggest.updateFilters(response): ', response);
+  console.log('  NEED TO DO THIS!');
   var self = this;
 
   if (this.dataset) {
@@ -510,6 +517,8 @@ FilterAutoSuggest.prototype.updateFilters = function(response) {
           }
         ]);
     });
+  } else {
+    console.log('  ELSE NO DATASET');
   }
 };
 
@@ -518,8 +527,9 @@ FilterAutoSuggest.prototype.updateFilters = function(response) {
  * @param {*} e - 
  * @param {*} opts - 
  */
-FilterAutoSuggest.prototype.changeDataset = function(e, opts) {
-  console.log('FilterAutoSuggest.changeDataset(e, opts): ', e, opts);
+FilterAutosuggest.prototype.changeDataset = function(e, opts) {
+  console.log('FilterAutosuggest.changeDataset(e, opts): ', e, opts);
+  console.log('  NEED TO DO THIS');
   // Method for changing the typeahead suggestion on the "contributor name" filter
   // when the "individual" or "committee" checkbox filter is changed
   // If the modify event names this filter, destroy it
@@ -544,4 +554,4 @@ FilterAutoSuggest.prototype.changeDataset = function(e, opts) {
   }
 };
 
-module.exports = { FilterAutoSuggest: FilterAutoSuggest };
+module.exports = { FilterAutosuggest: FilterAutosuggest };
