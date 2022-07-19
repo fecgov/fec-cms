@@ -11,7 +11,7 @@ BASE_URL = settings.CANONICAL_BASE
 
 class Command(BaseCommand):
     help = 'Takes a JSON list of web app pages and scrapes content from the live site. \
-        Saves JSON for indexing on DigitalGov Search'
+        Saves JSON for indexing on Search.gov website'
 
     def add_arguments(self, parser):
         parser.add_argument(

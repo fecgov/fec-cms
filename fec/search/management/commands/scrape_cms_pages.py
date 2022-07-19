@@ -14,7 +14,7 @@ BASE_URL = settings.CANONICAL_BASE
 
 
 class Command(BaseCommand):
-    help = 'Scrapes pages from the CMS into JSON for indexing on DigitalGov Search'
+    help = 'Scrapes pages from the CMS into JSON for indexing on Search.gov website'
 
     def add_arguments(self, parser):
         parser.add_argument(

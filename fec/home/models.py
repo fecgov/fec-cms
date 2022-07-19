@@ -912,6 +912,9 @@ class CollectionPage(Page):
 class ResourcePage(Page):
     # Class for pages that include a side nav, multiple sections and citations
     date = models.DateField(default=datetime.date.today)
+    formatted_title = models.CharField(
+        max_length=255, null=True, blank=True, default='',
+        help_text="Use if you need italics in the title. e.g. <em>Italicized words</em>")
     intro = StreamField([
         ('paragraph', blocks.RichTextBlock())
     ], null=True, blank=True)
@@ -945,6 +948,7 @@ class ResourcePage(Page):
         ])
 
     content_panels = Page.content_panels + [
+        FieldPanel('formatted_title'),
         StreamFieldPanel('intro'),
         FieldPanel('sidebar_title'),
         StreamFieldPanel('related_pages'),
