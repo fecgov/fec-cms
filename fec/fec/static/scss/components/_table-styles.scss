@@ -122,6 +122,10 @@ h3 + .simple-table {
     padding: 0;
   }
 
+  .simple-table__cell:nth-child(2) {
+    word-break: break-word;
+  }
+
   @include media($med) {
     & {
       border-collapse: collapse;
