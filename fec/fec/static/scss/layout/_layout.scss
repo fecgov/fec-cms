@@ -140,6 +140,10 @@
   padding-top: u(.5rem) !important;
 }
 
+.u-padding--top--med {
+  padding-top: u(1rem) !important;
+}
+
 .u-padding--bottom {
   padding-bottom: u(2rem);
 }
@@ -150,6 +154,10 @@
 
 .u-padding--left {
   padding-left: u(2rem);
+}
+
+.u-padding--left--small {
+  padding-left: u(1rem);
 }
 
 .u-padding--right {
