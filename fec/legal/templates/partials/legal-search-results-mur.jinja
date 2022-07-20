@@ -46,7 +46,7 @@
           {% endfor %}
           {# for each unique disposition, display the count of respondents/records #}
           {% for disposition in disposition_dict %}
-            {{ disposition }} ({{ disposition_dict[disposition] }} respondents);&nbsp;
+            {{ disposition }} ({{ disposition_dict[disposition] }} respondents){% if not loop.last %};&nbsp;{% endif %}
           {% endfor %}
         </div>
         <div class="legal-search-result__hit u-padding--left--small split__cell">
