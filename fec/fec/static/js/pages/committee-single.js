@@ -109,7 +109,7 @@ var employerColumns = [
       function(data, type, row) {
         if (row.employer) {
           return {
-            contributor_employer: row.employer
+            contributor_employer:row.employer.replace('N/A', 'N-A' )
           };
         } else {
           return null;
