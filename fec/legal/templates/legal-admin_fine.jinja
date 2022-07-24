@@ -64,7 +64,7 @@
     </section>
     <section id="disposition" class="content__section">
       <h2 class="t-ruled--bold">Disposition</h2>
-      <table class="data-table simple-table">
+      <table class="data-table simple-table" id="af-disposition">
         <thead>
           <tr>
             <th>Disposition</th>
@@ -92,9 +92,9 @@
         </tbody>
       </table>
     </section>
-    <section id="documents" class="content__section">
+    <section id="documents" class="content__section ">
       <h2 class="t-ruled--bold u-no-margin">Documents</h2>
-      <table class="data-table simple-table">
+      <table class="data-table simple-table" id="af-documents">
         <thead>
           <tr>
             <th>Date</th>
@@ -119,3 +119,8 @@
   </div>
 </div>
 {% endblock %}
+{% block scripts %}
+<script src="{{ asset_for_js('legal-to-datatable.js') }}"></script>
+{% endblock %}
+
+

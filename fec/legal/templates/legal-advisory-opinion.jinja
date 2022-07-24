@@ -46,7 +46,7 @@
               <a class="button button--cta button--document button--lg" href="{{ final_opinion.url }}">Final opinion</a> <span class="t-sans u-padding--left">{{ final_opinion.date | date(fmt='%B %d, %Y') }}</span>
             </div>
           {% endif %}
-          <table class="data-table simple-table" style="table-layout: auto;">
+          <table class="data-table simple-table" style="table-layout: auto;" id="ao-final-opinion">
             <thead>
               <tr>
                 <th scope="col">Date</th>
@@ -67,7 +67,7 @@
         </section>
         <section id="entities" class="content__section">
           <h2>Entities</h2>
-          <table class="data-table simple-table" style="table-layout: auto;">
+          <table class="data-table simple-table" style="table-layout: auto;" id="ao-entities">
             <thead>
               <tr>
                 <th scope="col">Role</th>
@@ -158,4 +158,7 @@
   </div>
 </div>
 </div>
+{% endblock %}
+{% block scripts %}
+<script src="{{ asset_for_js('legal-to-datatable.js') }}"></script>
 {% endblock %}
