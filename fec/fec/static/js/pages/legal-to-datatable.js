@@ -35,39 +35,39 @@ const legal_docs_sorting =
          'direction':'asc' 
        },
   },
-  'archived-mur-documents': {
+  // 'archived-mur-documents': {
 
-  },
-  'archived-mur-participants': {
+  // },
+  // 'archived-mur-participants': {
 
-  },
-  'current-mur-disposition': {
+  // },
+  // 'current-mur-disposition': {
      //1 : 'currency',
      // 'ordering': {
      //     'column': '1',
      //     'direction':'asc' 
      //   },
-  },
-  'current-mur-documents': {
+  //},
+  //'current-mur-documents': {
     //1:'date',
     // 'ordering': {
     //      'column': '1',
     //      'direction':'asc' 
     //    },
-  },
-   'current-mur-participants': {
+  //},
+  //  'current-mur-participants': {
     
-  },
-  'adr-disposition:': {
-     1 : 'currency', 
-     'ordering': {
-         'column': '1',
-         'direction':'asc' 
-       },
-        },   
-  'adr-documents': {
+  // },
+  // 'adr-disposition:': {
+  //    1 : 'currency', 
+  //    'ordering': {
+  //        'column': '1',
+  //        'direction':'asc' 
+  //      },
+  //       },   
+  // 'adr-documents': {
     
-  },
+  // },
    'adr-participants': {
       'ordering': {
          'column': '1',
