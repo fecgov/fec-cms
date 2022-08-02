@@ -54,6 +54,13 @@
       padding: u(1rem 0rem 1rem 0);
     }
   }
+
+  &.results__button {
+    background-position: 0% 50%;
+    margin: u(0 0 0 3rem);
+    padding-left: 3rem;
+    border-bottom: 0;
+  }
 }
 
 .accordion__content {
@@ -61,6 +68,22 @@
   border-bottom: 1px solid $base;
   padding: u(2rem);
   font-family: $sans-serif;
+
+  &.results__content {
+    border-top: 1px solid $base;
+    border-bottom: 0;
+    margin-left: u(3rem);
+    padding-bottom: 0;
+    max-width: u(80rem);
+  }
+
+  &.results__content li {
+    padding-bottom: u(2rem);
+
+    &:last-child {
+      padding-bottom: 0;
+    }
+  }
 }
 
 .accordion__button--spacious {
