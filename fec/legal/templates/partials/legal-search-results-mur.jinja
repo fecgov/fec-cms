@@ -17,13 +17,23 @@
       </div>
       <div class="simple-table__cell">
         <div class="t-sans">
-          <a title="{{ mur.name }}" href="/data/legal/matter-under-review/{{ mur.no }}">
-            {{ mur.name|upper }}
+          {% if mur.mur_type == 'current' %}
+            <a title="{{ mur.name }}" href="/data/legal/matter-under-review/{{ mur.no }}">
+              {{ mur.name|upper }}
+            </a>
+          {% else %}
+            <a title="{{ mur.mur_name }}" href="/data/legal/matter-under-review/{{ mur.no }}">
+              {{ mur.mur_name|upper }}
+          {% endif %}
           </a>
         </div>
       </div>
       <div class="simple-table__cell no--pad">
+        {% if mur.mur_type == 'current' %}
         <div class="u-margin--bottom  u-padding--top--med u-margin--left"><strong>Election cycle(s):</strong> {{ '; '.join(mur['election_cycles'] | map('string') | sort) }}</div>
+        {% else %}
+          &nbsp;
+        {% endif %}
         {% if mur.mur_type == 'current' %}
         {# Archived MUR subjects are a tree-structure so we don't render them inline #}
           <div class="u-margin--bottom u-margin--left">
