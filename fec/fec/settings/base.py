@@ -120,6 +120,7 @@ INSTALLED_APPS = (
     'wagtail.contrib.modeladmin',
     'wagtail.contrib.search_promotions',
     'wagtail.contrib.table_block',
+    'wagtail.contrib.typed_table_block',
     'wagtail.contrib.styleguide',
 
     'fec',
