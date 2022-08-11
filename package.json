@@ -23,7 +23,7 @@
   "dependencies": {
     "a11y-dialog": "4.0.0",
     "accessible-mega-menu": "git+https://github.com/noahmanger/Accessible-Mega-Menu.git",
-    "ace-builds": "1.2.2",
+    "ace-builds": "1.8.0",
     "acorn": "^6.4.1",
     "ajv": "^6.12.3",
     "aria-accordion": "1.0.0",
