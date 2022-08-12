@@ -31,7 +31,7 @@ const legal_docs_sorting =
        '0': 'date',
        ordering: {
          column: '0',
-         direction: 'asc'
+         direction: 'desc'
        }
         },
   'ao-entities': {
