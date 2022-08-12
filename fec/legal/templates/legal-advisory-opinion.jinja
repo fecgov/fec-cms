@@ -12,6 +12,35 @@
 
 {% block css %}
 <link rel="stylesheet" type="text/css" href="{{ asset_for_css('legal-common.css') }}" />
+
+<style>
+/* JUST FOR NOW... */
+.dataTables_wrapper {
+    padding-bottom: 2rem;
+    border-bottom: 2px solid #000;
+}
+
+ .dataTables_length {
+    width: 20%;
+    display: inline-block;
+    float: left;
+    padding: 1rem 1rem 2rem 0 !important;
+
+}
+.dataTables_filter {
+    width: 80%;
+    float: left;
+    display: inline-block;
+    padding: 1rem 0rem 4.5rem 0 !important;
+
+}
+
+.dataTables_length label,
+.dataTables_filter label {
+  font-weight: bold;
+  text-transform: uppercase;
+} 
+</style>
 {% endblock %}
 
 <div class="main">
