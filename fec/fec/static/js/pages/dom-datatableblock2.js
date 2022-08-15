@@ -1,0 +1,189 @@
+'use strict';
+
+/* eslint-disable no-debugger, no-console */
+/* global $ */
+
+//**IT IS ALSO PREFERRABLE TO `dom-datatableblock` BECAUE IT DOES NOT NEED THE TEMPLATETAG ADDED TO THE PAGE...
+//...BECAUSE IT GET `sort_info` from `partials/tableblock_to_datatable.html` USING DJANGO {{}} TAGS...
+//...AND CREATES `th_array` FROM EACH TABLES HEADERS ON THE PAGE.
+
+//var $ = require('jquery');
+//var tables = require('../modules/tables');
+//require('../modules/import-dtables');
+
+//var $ = require('jquery');
+
+//require('datatables.net');
+require('datatables.net-responsive');
+
+var convert_for_sort = function(type, value) {
+//function  convert_for_sort(type, value) {
+
+      if (type == 'date') {
+      //Assumes mm/dd/yyyy format is being supplied
+      //pattern = /\d{2}\/\d{2}\/\d{4}/i; //not using this line
+      var dateString = value.replace(/(\d{2})\/(\d{2})\/(\d{4})/, `$2/$1/$3` );
+      console.log('dateString:'+ dateString);
+
+      var dateParts = dateString.split('/');
+
+      // month is 0-based, that's why we need dataParts[1] - 1
+      var date = new Date(+dateParts[2], dateParts[1] - 1, +dateParts[0]);
+
+      //var timestampInMs = date.getTime();
+
+      var unixTimestamp = Math.floor(date.getTime() / 1000);
+
+      console.log(unixTimestamp); //
+
+      return unixTimestamp;
+
+      }
+
+      else if (type == 'currency') {
+        //Assumes format: '$1,234.56'
+        //pattern = /^\$|,/i //Remove $ and commas
+        var amount_converted = value.replace(/^\$|,/,'');
+
+        //does this need to be a float or integer ot string?
+        return amount_converted;
+      }
+
+      //type == 'numeric or alphabetical')
+      else {
+
+       return value;
+
+      }
+
+  };
+
+$(function() {
+
+//How `sort_info` comes from Python templatetag, but building it below (if exists) instead using Django {{}} in partials/tableblock_to_datatable.html
+//sort_info =
+// [
+//  [{'column': 'Date', 'sort_format': 'date'}, {'column': 'Number of Pages', 'sort_format': 'numeric'}]
+//  ,
+//  [{}],
+//  [{'column': 'Document Date', 'sort_format': 'date'}, {'column': 'Amount', 'sort_format': 'currency'}]
+// ]
+
+//`sort_column_object` built below for each table using `sort_info`
+//EXAMPLE:
+// {
+//     "1": "numeric",
+//     "2": "date"
+// }
+
+//{}
+
+// {
+//     "1": "date",
+//     "2": "currency"
+// }
+
+// In jQuery , 'this' is the table, 'index' is the iterator (0, 1, 2 etc...)
+$('.block-datatable_block table').each(function(index){
+
+ console.log ('index', index);
+ console.log ('(this):', this);
+ console.log ('(this):'+ this);
+
+//Create the sort_info array of from the user-sumitted Sort fields for this table (if any was submutted).
+  let sort_info;
+  //Find the sort info span for this table, if exists
+  let sort_script = $(this).closest('.block-datatable_block').find('.sorting')[0];
+  //If user submitted Sort fields in Wagtail...
+  if (sort_script) {
+    let sort_txt = sort_script.innerHTML;
+    sort_info = JSON.parse(sort_txt);
+    }
+  //Else just use an empty list
+  else {
+       sort_info= [{}];
+    }
+
+  console.log ('sort_info:', sort_info);
+
+ let th_array = [];
+ //Iterate the cells in first row (headers) of current table (index)
+  for(let c=0; c < (this).rows[0].cells.length; c++) {
+
+  //Create an array of arrays the current tables header text
+   let th_text = this.rows[0].cells[c].innerText;
+  console.log ('th_text:', th_text);
+   th_array.push(th_text);
+  }
+
+/////////////////START APPLY HTML5 data-order ATTR TO CELLS USING `sort_info`////////////////
+
+//***TODO: COULD JUST ITERATE ROWS[0].CELLS ONCE, FINDING A SORT INFO ITEME, MAKING THE CONVERSION AND SET DATA-ATTR...
+//... THEN ITERATE THE NEXT ONE RATHER THAN ITERATING ROWS AGAIN BELOW ??
+let sort_columns_object = {};
+let sort_order;
+
+//Iterate the cells in first row (headers) of current table (index)
+for(let i=0; i < (this).rows[0].cells.length; i++) {
+
+  //****TODO: DO I NEED TO ACTUALLY ITERATE sort_info ?? OR JUST CHECK hadOwnProperty ?? I DO...
+  //... BECAUSE I AM ITERATING ITS INDEXES TO ACCESS EACH TABLES ENTRY, I THINK?
+  //Inside this,iterate sort_info for this index to determine sort columns
+     for(let j=0; j < sort_info.length; j++) {
+
+    //console.log ('theTable.rows[0].cells[i].innerText:', theTable.rows[0].cells[i].innerText);
+      //Create a sort_columns_object to use below to decide which cells get a converted data-order attr.
+      if ((this).rows[0].cells[i].innerText == sort_info[j].column) {
+        let column_index = th_array.indexOf(sort_info[j].column);
+        let sort_format = sort_info[j]['sort_format'];
+        sort_columns_object[column_index] = sort_format;
+
+        }
+     }
+
+  //****TODO REMOVE THIS BLOCK IF USING `order: order_info[index]` @ LINE 171 BELOW (DONT NEED IT THEN)
+  //let order_index = cells_array[index][0].indexOf(sort_info[index][0]['column'])
+  let order_index = th_array.indexOf(sort_info[0]['column']);
+  sort_order = order_index == -1 ? 0 : order_index;
+  console.log( 'sort_order:', sort_order );
+}
+console.log( 'sort_columns_object:', sort_columns_object);
+
+//TODO: SET CURRENT CELL AS A VAR DO I DONT HAVE TO KEEP DOING '(this).rows[k].cells[l]'
+//Set the data-order(sort) attr for the cells with cells that require it in sort_columns_object[
+for(let k=0; k < (this).rows.length; k++) {
+
+  for(let l=0; l < (this).rows[k].cells.length; l++) {
+
+      if(Object.prototype.hasOwnProperty.call(sort_columns_object, l)) {
+      //if (sort_columns_object.hasOwnProperty(l)) { //(This gets ESLINT error, so using above)
+        let sort_type = sort_columns_object[l];
+        let sort_value = (this).rows[k].cells[l].innerText; //or use col_text var above?
+        let number_for_sort = convert_for_sort(sort_type, sort_value);
+        console.log('number_for_sort:', number_for_sort);
+
+        //THIS WAS BROKEN B/C OF (this) INSTEAD OF this (parens broke it) W/O A SEMICOLON ON PREV LINE
+        (this).rows[k].cells[l].setAttribute('data-order',number_for_sort);
+
+      }
+
+   }
+
+}
+
+/////////////////END APPLY HTML5 data-order ATTR TO CELLS USING `sort_info`////////////////
+
+  (this).id = `dtable-block-${index}`;
+  (this).classList.add('data-table', 'data-table--heading-borders', 'scrollX', 'simple-table' , 'u-no-border');
+
+ //THIS ONE JUST APPLIES jQuery datatables to the existing table
+
+        $(`#dtable-block-${index}`).DataTable({
+          order: [[sort_order ,'asc']] //from js above
+          //order: order_info[index] //from python
+        });
+
+ }); // /end $('.block-datatable_block table').each(function
+
+}); //end $(document.ready function.
+

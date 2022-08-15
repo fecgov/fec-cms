@@ -1,0 +1,49 @@
+{% load wagtailcore_tags %}
+
+{% for block in self.data_table  %}  
+   {% if block.block_type == "title" %}
+    <h4>{{ block }}</h4>
+
+   {% elif block.block_type == "table" %}
+   {{ block }}
+
+  {% elif block.block_type == "sort_fields" %}
+      <script class='sorting'>[{% for bloc in block.value  %}{"column":"{{ bloc.column}}", "sort_format":"{{bloc.sort_format}}"}{% if not forloop.last %},{% endif %}{% endfor %}]</script> 
+
+   {% endif %}
+
+{% endfor %}
+
+
+
+
+<style>
+/* FOR DEMO ONLY - REMOVE BEFORE COMMITTING) */
+.dataTables_wrapper {
+    padding-bottom: 2rem;
+    border-bottom: 2px solid #000;
+}
+
+ .dataTables_length {
+    width: 20%;
+    display: inline-block;
+    float: left;
+    padding: 1rem 1rem 2rem 0 !important;
+
+}
+.dataTables_filter {
+    width: 80%;
+    float: left;
+    display: inline-block;
+    padding: 1rem 0rem 4.5rem 0 !important;
+
+}
+
+.dataTables_length label,
+.dataTables_filter label {
+   font-weight: bold;
+   text-transform: uppercase;
+} 
+</style>
+
+

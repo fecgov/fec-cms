@@ -1,6 +1,7 @@
 {% extends "long_page.html" %}
 {% load wagtailcore_tags %}
 {% load static %}
+{% load filters %}
 {% block body_class %}template-{{ self.get_verbose_name | slugify }}{% endblock %}
 
 {% block breadcrumbs %}
@@ -96,4 +97,13 @@
     {% endwith %}
   {% endfor %}
 </div>
+{% endblock %}
+
+{% block extra_js %}
+{% if 'audit-reports' in request.path %}
+  <script type="text/javascript" src="{% asset_for_js 'mutli-inplace-datatable.js' %}"></script>
+  {% endif %}
+ 
+ <script type="text/javascript" src="{% asset_for_js 'dom-datatableblock2.js'  %}"></script>
+
 {% endblock %}
