@@ -313,8 +313,12 @@
   margin-bottom: u(2rem);
 }
 
-// Disable and active styles for filter fields
+// Let labels use the same is-disabled classes for styles
+label.is-disabled {
+  opacity: .5;
+}
 
+// Disable and active styles for filter fields
 .is-active-filter {
   opacity: 1;
   pointer-events: auto;

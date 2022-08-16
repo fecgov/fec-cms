@@ -14,21 +14,28 @@
 // </div>
 //
 
-.election-map {
-  border: 1px solid $gray;
-  height: u(40rem);
+#election-lookup:not(.na-map) {
+  .election-map {
+    border: 1px solid $gray;
+    height: u(40rem);
 
-  svg path {
-    stroke-width: 1px;
+    svg path {
+      stroke-width: 1px;
+    }
+  }
+
+  .election-map--small {
+    height: u(24rem);
+  }
+
+  .election-map--home {
+    height: u(26rem);
   }
 }
-
-.election-map--small {
-  height: u(24rem);
-}
-
-.election-map--home {
-  height: u(26rem);
+#election-lookup.na-map {
+  .election-map--home .message {
+    background-color: #fff !important;
+  }
 }
 
 .choropleths {

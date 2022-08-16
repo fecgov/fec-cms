@@ -21,7 +21,7 @@
     <div class="grid--2-wide grid--flex">
       <div class="grid__item">
         <h2>Compare candidates</h2>
-        <div id="election-lookup" class="search--election-mini">
+        <div id="election-lookup" class="search--election-mini na-map na-zip">
           <div class="usa-width-one-half">
             <form action="/data/elections" class="content__section">
               <div class="search-controls__state">
@@ -52,7 +52,10 @@
               </div>
             </form>
           </div>
-          <div class="election-map election-map--small usa-width-one-half"></div>
+          <div class="election-map election-map--small usa-width-one-half">
+            <!-- map would render here -->
+            <p class="message message--inverse-alt message--info">The election map and ZIP code search are unavailable at this time. Following the 2020 Census, some states may redraw their districts. Some candidates may subsequently amend their registration forms to reflect new district numbers. Candidates are listed using information from their registration forms and may run in different districts than in the past. The FEC will re-enable the map and ZIP code search once complete information has been made available from each state.</p>
+          </div>
         </div>
       </div>
       <div class="grid__item example--primary callout-holder">
