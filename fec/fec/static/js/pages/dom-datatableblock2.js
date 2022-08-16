@@ -127,12 +127,11 @@ let initial_sort_order;
 //Iterate the cells in first row (headers) of current table (index)
 for(let i=0; i < (this).rows[0].cells.length; i++) {
 
-  //****TODO: DO I NEED TO ACTUALLY ITERATE sort_info ?? OR JUST CHECK hadOwnProperty ?? I DO...
+  //****TODO: DO I NEED TO ACTUALLY ITERATE sort_info ?? OR JUST CHECK hadOwnProperty ?? YES I DO...
   //... BECAUSE I AM ITERATING ITS INDEXES TO ACCESS EACH TABLES ENTRY, I THINK?
   //Inside this,iterate sort_info for this index to determine sort columns
      for(let j=0; j < sort_info.length; j++) {
 
-    //console.log ('theTable.rows[0].cells[i].innerText:', theTable.rows[0].cells[i].innerText);
       //Create a sort_columns_object to use below to decide which cells get a converted data-order attr.
       if ((this).rows[0].cells[i].innerText == sort_info[j].column) {
         let column_index = th_array.indexOf(sort_info[j].column);
@@ -152,8 +151,8 @@ console.log( 'sort_columns_object:', sort_columns_object);
   initial_sort_order = sort_info[0]['order'] || 'asc';
   console.log( 'initial_sort_order:', initial_sort_order);
 
-//TODO: SET CURRENT CELL AS A VAR DO I DONT HAVE TO KEEP DOING '(this).rows[k].cells[l]'
-//Set the data-order(sort) attr for the cells with cells that require it in sort_columns_object[
+//TODO: COULD SET CURRENT CELL AS A VAR DO I DONT HAVE TO KEEP SAYING '(this).rows[k].cells[l]'
+//Set the data-order(sort) attr for the cells for cells that require it in sort_columns_object[
 for(let k=0; k < (this).rows.length; k++) {
 
   for(let l=0; l < (this).rows[k].cells.length; l++) {
@@ -165,7 +164,7 @@ for(let k=0; k < (this).rows.length; k++) {
         let number_for_sort = convert_for_sort(sort_type, sort_value);
         console.log('number_for_sort:', number_for_sort);
 
-        //THIS WAS BROKEN B/C OF (this) INSTEAD OF this (parens broke it) W/O A SEMICOLON ON PREV LINE
+        //NOTE: THIS WAS BROKEN B/C OF (this) INSTEAD OF this (parens broke it) W/O A SEMICOLON ON PREV LINE
         (this).rows[k].cells[l].setAttribute('data-order',number_for_sort);
 
       }
@@ -183,7 +182,6 @@ for(let k=0; k < (this).rows.length; k++) {
 
         $(`#dtable-block-${index}`).DataTable({
           order: [[initial_sort_column ,initial_sort_order]] //from js above
-          //order: order_info[index] //from python
         });
 
  }); // /end $('.block-datatable_block table').each(function
