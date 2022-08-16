@@ -3,12 +3,11 @@
 //TEMPORARY ESLINT FIXES
 /* eslint-disable no-debugger, no-console */
 // $ not defined ERROR WITHOUT THIS GOBAL...NEED TO RESEARCH ALTERNATIVES
-/* global $ */ 
+/* global $ */
 
 //**IT IS ALSO PREFERRABLE TO `dom-datatableblock` BECAUE IT DOES NOT NEED THE TEMPLATETAG ADDED TO THE PAGE...
 //...BECAUSE IT GET `sort_info` from `partials/tableblock_to_datatable.html` USING DJANGO {{}} TAGS...
 //...AND CREATES `th_array` FROM EACH TABLES HEADERS ON THE PAGE.
-
 
 //var tables = require('../modules/tables');
 //require('../modules/import-dtables'); //ANOTHER OPTOION THAT COULD BE A SEPATATE IMPORT-SCRIPT
@@ -129,7 +128,6 @@ let initial_sort_order;
 //Iterate the cells in first row (headers) of current table (index)
 for(let i=0; i < (this).rows[0].cells.length; i++) {
 
-
      //Now,iterate sort_info for current table to determine sort columns
      for(let j=0; j < sort_info.length; j++) {
 
@@ -163,7 +161,7 @@ for(let k=0; k < (this).rows.length; k++) {
 
   //iterate all cells in current row
   for(let l=0; l < (this).rows[k].cells.length; l++) {
-      
+
       //If the number of the current iterator (l) is in the `sort_columns_object`
       if(Object.prototype.hasOwnProperty.call(sort_columns_object, l)) {
       //if (sort_columns_object.hasOwnProperty(l)) { //(This gets ESLINT error, so using above)
