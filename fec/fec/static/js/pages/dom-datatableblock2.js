@@ -1,15 +1,17 @@
 'use strict';
 
+//TEMPORARY ESLINT FIXES
 /* eslint-disable no-debugger, no-console */
-/* global $ */
+// $ not defined ERROR WITHOUT THIS GOBAL...NEED TO RESEARCH ALTERNATIVES
+/* global $ */ 
 
 //**IT IS ALSO PREFERRABLE TO `dom-datatableblock` BECAUE IT DOES NOT NEED THE TEMPLATETAG ADDED TO THE PAGE...
 //...BECAUSE IT GET `sort_info` from `partials/tableblock_to_datatable.html` USING DJANGO {{}} TAGS...
 //...AND CREATES `th_array` FROM EACH TABLES HEADERS ON THE PAGE.
 
-//var $ = require('jquery');
+
 //var tables = require('../modules/tables');
-//require('../modules/import-dtables');
+//require('../modules/import-dtables'); //ANOTHER OPTOION THAT COULD BE A SEPATATE IMPORT-SCRIPT
 
 //var $ = require('jquery');
 
@@ -60,7 +62,7 @@ var convert_for_sort = function(type, value) {
 
 $(function() {
 
-//How `sort_info` comes from Python templatetag, but building it below (if exists) instead using Django {{}} in partials/tableblock_to_datatable.html
+//How `sort_info` comes from Python templatetag, but building it below (if exists) in JS instead, using Django {{}} in partials/tableblock_to_datatable.html
 //sort_info =
 // [
 //  [{'column': 'Date', 'sort_format': 'date'}, {'column': 'Number of Pages', 'sort_format': 'numeric'}]
@@ -88,7 +90,6 @@ $('.block-datatable_block table').each(function(index){
 
  console.log ('index', index);
  console.log ('(this):', this);
- console.log ('(this):'+ this);
 
 //Create the sort_info array of from the user-sumitted Sort fields for this table (if any was submutted).
   let sort_info;
@@ -99,7 +100,7 @@ $('.block-datatable_block table').each(function(index){
     let sort_txt = sort_script.innerHTML;
     sort_info = JSON.parse(sort_txt);
     }
-  //Else just use an empty list
+  //...else just use an empty list
   else {
        sort_info= [{}];
     }
@@ -107,10 +108,11 @@ $('.block-datatable_block table').each(function(index){
   console.log ('sort_info:', sort_info);
 
  let th_array = [];
- //Iterate the cells in first row (headers) of current table (index)
+ //TODO: CAN I JUST ITERATE  `th_array` HERE NOW?
+ //Iterate the cells in first row (header row) of current table, i.e. (this).
   for(let c=0; c < (this).rows[0].cells.length; c++) {
 
-  //Create an array of arrays the current tables header text
+  //Create an array the current tables header text
    let th_text = this.rows[0].cells[c].innerText;
   console.log ('th_text:', th_text);
    th_array.push(th_text);
@@ -127,9 +129,8 @@ let initial_sort_order;
 //Iterate the cells in first row (headers) of current table (index)
 for(let i=0; i < (this).rows[0].cells.length; i++) {
 
-  //****TODO: DO I NEED TO ACTUALLY ITERATE sort_info ?? OR JUST CHECK hadOwnProperty ?? YES I DO...
-  //... BECAUSE I AM ITERATING ITS INDEXES TO ACCESS EACH TABLES ENTRY, I THINK?
-  //Inside this,iterate sort_info for this index to determine sort columns
+
+     //Now,iterate sort_info for current table to determine sort columns
      for(let j=0; j < sort_info.length; j++) {
 
       //Create a sort_columns_object to use below to decide which cells get a converted data-order attr.
@@ -145,18 +146,25 @@ for(let i=0; i < (this).rows[0].cells.length; i++) {
 console.log( 'sort_columns_object:', sort_columns_object);
 
   //Determine the initial_sort column and initial sort order using sort_info object
+
+  //Get the index position of column in the first item submitted by user in Wagtail Sort fields
   let order_index = th_array.indexOf(sort_info[0]['column']);
+  //If the index is -1(non-existent), use default; otherwise, return it
   initial_sort_column = order_index == -1 ? 0 : order_index;
   console.log( 'initial_sort_column:', initial_sort_column);
+  //Get the initial sort order from order value in the first item submitted by user in Wagtail Sort fields
   initial_sort_order = sort_info[0]['order'] || 'asc';
   console.log( 'initial_sort_order:', initial_sort_order);
 
-//TODO: COULD SET CURRENT CELL AS A VAR DO I DONT HAVE TO KEEP SAYING '(this).rows[k].cells[l]'
-//Set the data-order(sort) attr for the cells for cells that require it in sort_columns_object[
+//TODO: COULD SET CURRENT CELL AS A VAR SO I DONT HAVE TO KEEP SAYING '(this).rows[k].cells[l]'
+
+//iterate all rows in current table
 for(let k=0; k < (this).rows.length; k++) {
 
+  //iterate all cells in current row
   for(let l=0; l < (this).rows[k].cells.length; l++) {
-
+      
+      //If the number of the current iterator (l) is in the `sort_columns_object`
       if(Object.prototype.hasOwnProperty.call(sort_columns_object, l)) {
       //if (sort_columns_object.hasOwnProperty(l)) { //(This gets ESLINT error, so using above)
         let sort_type = sort_columns_object[l];
@@ -164,7 +172,8 @@ for(let k=0; k < (this).rows.length; k++) {
         let number_for_sort = convert_for_sort(sort_type, sort_value);
         console.log('number_for_sort:', number_for_sort);
 
-        //NOTE: THIS WAS BROKEN B/C OF (this) INSTEAD OF this (parens broke it) W/O A SEMICOLON ON PREV LINE
+        //NOTE: THIS WAS BROKEN B/C OF (this) INSTEAD OF this (parens broke it) IF USING PARENS '(this)', ALWAYS US SEMICOLON ON PREV LINE
+        //Set the data-order(sort) attr for cells that require it in sort_columns_object
         (this).rows[k].cells[l].setAttribute('data-order',number_for_sort);
 
       }
@@ -178,7 +187,7 @@ for(let k=0; k < (this).rows.length; k++) {
   (this).id = `dtable-block-${index}`;
   (this).classList.add('data-table', 'data-table--heading-borders', 'scrollX', 'simple-table' , 'u-no-border');
 
- //THIS ONE JUST APPLIES jQuery datatables to the existing table
+ //THIS ONE JUST APPLIES jQuery datatables to the existing html table on page and give its intial ordering
 
         $(`#dtable-block-${index}`).DataTable({
           order: [[initial_sort_column ,initial_sort_order]] //from js above
