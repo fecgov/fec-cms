@@ -121,7 +121,8 @@ $('.block-datatable_block table').each(function(index){
 //***TODO: COULD JUST ITERATE ROWS[0].CELLS ONCE, FINDING A SORT INFO ITEME, MAKING THE CONVERSION AND SET DATA-ATTR...
 //... THEN ITERATE THE NEXT ONE RATHER THAN ITERATING ROWS AGAIN BELOW ??
 let sort_columns_object = {};
-let sort_order;
+let initial_sort_column;
+let initial_sort_order;
 
 //Iterate the cells in first row (headers) of current table (index)
 for(let i=0; i < (this).rows[0].cells.length; i++) {
@@ -141,13 +142,15 @@ for(let i=0; i < (this).rows[0].cells.length; i++) {
         }
      }
 
-  //****TODO REMOVE THIS BLOCK IF USING `order: order_info[index]` @ LINE 171 BELOW (DONT NEED IT THEN)
-  //let order_index = cells_array[index][0].indexOf(sort_info[index][0]['column'])
-  let order_index = th_array.indexOf(sort_info[0]['column']);
-  sort_order = order_index == -1 ? 0 : order_index;
-  console.log( 'sort_order:', sort_order );
 }
 console.log( 'sort_columns_object:', sort_columns_object);
+
+  //Determine the initial_sort column and initial sort order using sort_info object
+  let order_index = th_array.indexOf(sort_info[0]['column']);
+  initial_sort_column = order_index == -1 ? 0 : order_index;
+  console.log( 'initial_sort_column:', initial_sort_column);
+  initial_sort_order = sort_info[0]['order'] || 'asc';
+  console.log( 'initial_sort_order:', initial_sort_order);
 
 //TODO: SET CURRENT CELL AS A VAR DO I DONT HAVE TO KEEP DOING '(this).rows[k].cells[l]'
 //Set the data-order(sort) attr for the cells with cells that require it in sort_columns_object[
@@ -179,7 +182,7 @@ for(let k=0; k < (this).rows.length; k++) {
  //THIS ONE JUST APPLIES jQuery datatables to the existing table
 
         $(`#dtable-block-${index}`).DataTable({
-          order: [[sort_order ,'asc']] //from js above
+          order: [[initial_sort_column ,initial_sort_order]] //from js above
           //order: order_info[index] //from python
         });
 

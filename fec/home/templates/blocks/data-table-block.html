@@ -8,7 +8,7 @@
    {{ block }}
 
   {% elif block.block_type == "sort_fields" %}
-      <script class='sorting'>[{% for bloc in block.value  %}{"column":"{{ bloc.column}}", "sort_format":"{{bloc.sort_format}}"}{% if not forloop.last %},{% endif %}{% endfor %}]</script> 
+      <script class='sorting'>[{% for bloc in block.value  %}{"column":"{{ bloc.column}}", "sort_format":"{{bloc.sort_format}}","order":"{{bloc.order}}" }{% if not forloop.last %},{% endif %}{% endfor %}]</script> 
 
    {% endif %}
 
