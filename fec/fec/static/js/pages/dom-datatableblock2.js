@@ -90,9 +90,9 @@ $('.block-datatable_block table').each(function(index){
  console.log ('index', index);
  console.log ('(this):', this);
 
-//Create the sort_info array of from the user-sumitted Sort fields for this table (if any was submutted).
+//Create the `sort_info`` array of from the user-sumitted Sort fields for this table (if any was submutted).
   let sort_info;
-  //Find the sort info span for this table, if exists
+  //Find the sort info script tag for this table, if exists
   let sort_script = $(this).closest('.block-datatable_block').find('.sorting')[0];
   //If user submitted Sort fields in Wagtail...
   if (sort_script) {
@@ -107,7 +107,6 @@ $('.block-datatable_block table').each(function(index){
   console.log ('sort_info:', sort_info);
 
  let th_array = [];
- //TODO: CAN I JUST ITERATE  `th_array` HERE NOW?
  //Iterate the cells in first row (header row) of current table, i.e. (this).
   for(let c=0; c < (this).rows[0].cells.length; c++) {
 
@@ -125,6 +124,7 @@ let sort_columns_object = {};
 let initial_sort_column;
 let initial_sort_order;
 
+//TODO: CAN I JUST ITERATE  `th_array.length` HERE NOW INSTEAD OF `(this).rows[0].cells.length`` ?
 //Iterate the cells in first row (headers) of current table (index)
 for(let i=0; i < (this).rows[0].cells.length; i++) {
 
