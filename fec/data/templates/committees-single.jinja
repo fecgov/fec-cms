@@ -150,10 +150,14 @@
               {% if committee_type != 'I' %}
               <li><a href="#total-disbursements">Total disbursements</a></li>
               {% endif %}
-              {% if committee_type not in ['P', 'H', 'S', 'Z', 'C', 'E', 'D'] %}
+              {% if committee_type not in ['P', 'H', 'S', 'Z', 'C', 'E', 'D'] and not is_inaugural %}
               <li><a href="#independent-expenditures">Independent expenditures</a></li>
               {% endif %}
+              {% if not is_inaugural %}
               <li><a href="#disbursement-transactions">Disbursement transactions</a></li>
+              {% else %}
+              <li><a href="#disbursement-transactions">Refund transactions</a></li>
+              {% endif %}
             </ul>
             {% endif %}
         </li>
