@@ -84,7 +84,7 @@
     </div>
     {% endif %}
 
-    {% if committee_type not in ['P', 'H', 'S', 'Z', 'C', 'E', 'D'] %}
+    {% if committee_type not in ['P', 'H', 'S', 'Z', 'C', 'E', 'D'] and not is_inaugural %}
     <div class="entity__figure row" id="independent-expenditures">
       <div class="heading--section heading--with-action">
         <h3 class="heading__left">Independent expenditures</h3>
@@ -221,7 +221,11 @@
   {% else %}
   <div class="entity__figure row" id="disbursement-transactions" >
       <div class="heading--section heading--with-action">
+        {% if not is_inaugural %}
         <h3 class="heading__left">Disbursements</h3>
+        {% else %}
+        <h3 class="heading__left">Refunds</h3>
+        {% endif %}
         <a class="heading__right button--alt button--browse"
             href="/data/disbursements/?committee_id={{ committee_id }}&two_year_transaction_period={{ cycle }}">Filter this data</a>
       </div>
