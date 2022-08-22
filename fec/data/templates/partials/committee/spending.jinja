@@ -44,7 +44,11 @@
             <span class="usa-width-one-half t-block t-sans">in total donations refunded by this committee from <strong>{{totals.coverage_start_date|date_full}} to {{totals.coverage_end_date|date_full}}.</strong></span>
             {% endif %}
             <div class="usa-width-one-half">
+              {% if not is_inaugural %}
               <span class="t-block t-sans">See the <a href="?tab=summary">financial summary</a> for a breakdown of each type of disbursement.</span>
+              {% else %}
+              <span class="t-block t-sans">See the <a href="?tab=summary">financial summary</a> for more.</span>
+              {% endif %}
             </div>
           </div>
         </div>
