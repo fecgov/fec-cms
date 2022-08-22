@@ -18,7 +18,11 @@
     <div id="total-disbursements" class="entity__figure row">
       <div class="content__section">
         <div class="heading--section heading--with-action">
+          {% if not is_inaugural %}
           <h3 class="heading__left">Total disbursements</h3>
+          {% else %}
+          <h3 class="heading__left">Total refunds</h3>
+          {% endif %}
           <a class="heading__right button--alt button--browse"
               href="/data/disbursements/?committee_id={{ committee_id }}&two_year_transaction_period={{ cycle }}">Filter all disbursements
           </a>
@@ -26,11 +30,19 @@
         <div class="content__section--narrow">
           <div class="row u-margin-bottom">
             <div class="usa-width-one-half">
+              {% if not is_inaugural %}
               <span class="t-big-data">{{ totals.disbursements|currency }}</span>
+              {% else %}
+              <span class="t-big-data">{{ totals.contribution_refunds|currency }}</span>
+              {% endif %}
             </div>
           </div>
           <div class="row">
+            {% if not is_inaugural %}
             <span class="usa-width-one-half t-block t-sans">spent in total disbursements by this committee from <strong>{{totals.coverage_start_date|date_full}} to {{totals.coverage_end_date|date_full}}.</strong></span>
+            {% else %}
+            <span class="usa-width-one-half t-block t-sans">in total donations refunded by this committee from <strong>{{totals.coverage_start_date|date_full}} to {{totals.coverage_end_date|date_full}}.</strong></span>
+            {% endif %}
             <div class="usa-width-one-half">
               <span class="t-block t-sans">See the <a href="?tab=summary">financial summary</a> for a breakdown of each type of disbursement.</span>
             </div>
