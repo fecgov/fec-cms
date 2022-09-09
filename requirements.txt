@@ -47,3 +47,4 @@ flake8==4.0.1
 pytest-django==3.10.0
 pytest-cov==2.11.1
 pytest-flake8==1.0.7
+setuptools==65.1.1
