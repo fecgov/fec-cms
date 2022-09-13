@@ -3,7 +3,7 @@
 from __future__ import unicode_literals
 
 from django.db import migrations
-import wagtail.core.fields
+import wagtail.fields
 import wagtail.documents.blocks
 
 
@@ -17,6 +17,6 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='meetingpage',
             name='sunshine_act_doc_upld',
-            field=wagtail.core.fields.StreamField((('sunshine_act_upld', wagtail.documents.blocks.DocumentChooserBlock(required=False)),), blank=True, null=True),
+            field=wagtail.fields.StreamField((('sunshine_act_upld', wagtail.documents.blocks.DocumentChooserBlock(required=False)),), blank=True, null=True),
         ),
     ]

@@ -3,8 +3,8 @@
 from __future__ import unicode_literals
 
 from django.db import migrations, models
-import wagtail.core.blocks
-import wagtail.core.fields
+import wagtail.blocks
+import wagtail.fields
 
 
 class Migration(migrations.Migration):
@@ -17,7 +17,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='resourcepage',
             name='related_pages',
-            field=wagtail.core.fields.StreamField((('related_pages', wagtail.core.blocks.ListBlock(wagtail.core.blocks.PageChooserBlock())),), blank=True, null=True),
+            field=wagtail.fields.StreamField((('related_pages', wagtail.blocks.ListBlock(wagtail.blocks.PageChooserBlock())),), blank=True, null=True),
         ),
         migrations.AddField(
             model_name='resourcepage',

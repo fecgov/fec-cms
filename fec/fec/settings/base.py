@@ -49,6 +49,8 @@ ENVIRONMENTS = {
 }
 FEC_CMS_ENVIRONMENT = ENVIRONMENTS.get(env.get_credential('FEC_CMS_ENVIRONMENT'), ENVIRONMENTS['local'])
 
+WAGTAILADMIN_BASE_URL = CANONICAL_BASE
+
 FEATURES = {
     'ierawfilters': bool(env.get_credential('FEC_FEATURE_IE_RAW_FILTERS', '')),
 
@@ -104,7 +106,7 @@ INSTALLED_APPS = (
     'modelcluster',
     'storages',
 
-    'wagtail.core',
+    'wagtail',
     'wagtail.admin',
     'wagtail.search',
     'wagtail.images',

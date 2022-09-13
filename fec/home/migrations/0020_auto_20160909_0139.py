@@ -3,8 +3,8 @@
 from __future__ import unicode_literals
 
 from django.db import migrations
-import wagtail.core.blocks
-import wagtail.core.fields
+import wagtail.blocks
+import wagtail.fields
 
 
 class Migration(migrations.Migration):
@@ -17,6 +17,6 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='collectionpage',
             name='sections',
-            field=wagtail.core.fields.StreamField((('section', wagtail.core.blocks.StructBlock((('title', wagtail.core.blocks.CharBlock(required=True)), ('style', wagtail.core.blocks.ChoiceBlock(choices=[('check', 'Checklist'), ('bullet', 'Bulleted list')], default='bullet')), ('intro', wagtail.core.blocks.RichTextBlock(blank=False, null=False, required=False)), ('items', wagtail.core.blocks.ListBlock(wagtail.core.blocks.RichTextBlock(classname='nothing')))))),)),
+            field=wagtail.fields.StreamField((('section', wagtail.blocks.StructBlock((('title', wagtail.blocks.CharBlock(required=True)), ('style', wagtail.blocks.ChoiceBlock(choices=[('check', 'Checklist'), ('bullet', 'Bulleted list')], default='bullet')), ('intro', wagtail.blocks.RichTextBlock(blank=False, null=False, required=False)), ('items', wagtail.blocks.ListBlock(wagtail.blocks.RichTextBlock(classname='nothing')))))),)),
         ),
     ]

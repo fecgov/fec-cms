@@ -1,7 +1,7 @@
 import json
 import wagtail.admin.rich_text.editors.draftail.features as draftail_features
 from wagtail.admin.rich_text.converters.html_to_contentstate import BlockElementHandler
-from wagtail.core import hooks
+from wagtail import hooks
 from django.conf import settings
 from django.utils.html import format_html
 from fec.draftail import glossary, sansserif, anchor

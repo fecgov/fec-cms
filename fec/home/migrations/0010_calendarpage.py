@@ -3,8 +3,8 @@ from __future__ import unicode_literals
 
 from django.db import migrations, models
 import wagtail.images.blocks
-import wagtail.core.fields
-import wagtail.core.blocks
+import wagtail.fields
+import wagtail.blocks
 import django.db.models.deletion
 
 
@@ -20,7 +20,7 @@ class Migration(migrations.Migration):
             name='CalendarPage',
             fields=[
                 ('page_ptr', models.OneToOneField(to='wagtailcore.Page', parent_link=True, auto_created=True, serialize=False, primary_key=True, on_delete=django.db.models.deletion.SET_NULL)),
-                ('body', wagtail.core.fields.StreamField((('heading', wagtail.core.blocks.CharBlock(classname='full title')), ('paragraph', wagtail.core.blocks.RichTextBlock()), ('html', wagtail.core.blocks.RawHTMLBlock()), ('image', wagtail.images.blocks.ImageChooserBlock())), blank=True, null=True)),
+                ('body', wagtail.fields.StreamField((('heading', wagtail.blocks.CharBlock(classname='full title')), ('paragraph', wagtail.blocks.RichTextBlock()), ('html', wagtail.blocks.RawHTMLBlock()), ('image', wagtail.images.blocks.ImageChooserBlock())), blank=True, null=True)),
             ],
             options={
                 'abstract': False,
