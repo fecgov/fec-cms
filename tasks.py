@@ -76,7 +76,7 @@ DEPLOY_RULES = (
     ('stage', lambda _, branch: branch.startswith('release')),
     ('dev', lambda _, branch: branch == 'test/5247-upgrade-pyjwt-and-python'),
     # Uncomment below and adjust branch name to deploy desired feature branch to the feature space
-    # ('feature', lambda _, branch: branch == '[BRANCH NAME]'),
+    ('feature', lambda _, branch: branch == 'feature/upgrade-to-Wagtail-v4'),
 )
 
 
