@@ -212,6 +212,17 @@ DATABASES = {
     'default': dj_database_url.config()
 }
 
+# cfdm_cms_test database properties required when scraping via crontab
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql_psycopg2',
+#         'NAME': 'cfdm_cms_test',
+#         'USER': '<database username>',
+#         'PASSWORD': '<database password>',
+#         'HOST': 'localhost',
+#         'PORT': '5432',
+#     }
+# }
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.8/topics/i18n/
@@ -343,5 +354,6 @@ LOGGING = {
 
 DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
 CRONJOBS = [
-    ('*/1 * * * *', 'search.schedule.run_job')
+    # ('*/1 * * * *', 'search.schedule.run_job')
+    ('*/20 * * * *', 'django.core.management.call_command', ['scrape_cms_pages'])
 ]
