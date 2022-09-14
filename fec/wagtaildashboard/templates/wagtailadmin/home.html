@@ -1,0 +1,10 @@
+{% extends "wagtailadmin/home.html" %}
+{% load static %}
+
+{% block branding_welcome %}Welcome to the FEC CMS - 
+    {% if settings  != undefined %}
+        {% if settings.FEC_CMS_ENVIRONMENT != 'PRODUCTION' %}   
+            {{settings.FEC_CMS_ENVIRONMENT}} ENVIRONMENT
+        {% endif %}
+    {% endif %}
+{% endblock %}

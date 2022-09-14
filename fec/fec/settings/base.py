@@ -107,6 +107,7 @@ INSTALLED_APPS = (
     'storages',
 
     'wagtail',
+    'wagtaildashboard',
     'wagtail.admin',
     'wagtail.search',
     'wagtail.images',
@@ -130,7 +131,6 @@ INSTALLED_APPS = (
     'data',
     'legal',
     'uaa_client',
-    'extend_admin',
 )
 
 MIDDLEWARE = (
