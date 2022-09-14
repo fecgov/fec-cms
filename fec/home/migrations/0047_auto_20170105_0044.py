@@ -3,8 +3,8 @@
 from __future__ import unicode_literals
 
 from django.db import migrations
-import wagtail.core.blocks
-import wagtail.core.fields
+import wagtail.blocks
+import wagtail.fields
 
 
 class Migration(migrations.Migration):
@@ -17,11 +17,11 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='aboutlandingpage',
             name='sections',
-            field=wagtail.core.fields.StreamField((('sections', wagtail.core.blocks.StructBlock((('title', wagtail.core.blocks.CharBlock(required=True)), ('intro', wagtail.core.blocks.RichTextBlock(blank=False, null=False, required=False)), ('button_text', wagtail.core.blocks.CharBlock(blank=False, null=False, required=False)), ('related_page', wagtail.core.blocks.PageChooserBlock(required=False))))),), null=True),
+            field=wagtail.fields.StreamField((('sections', wagtail.blocks.StructBlock((('title', wagtail.blocks.CharBlock(required=True)), ('intro', wagtail.blocks.RichTextBlock(blank=False, null=False, required=False)), ('button_text', wagtail.blocks.CharBlock(blank=False, null=False, required=False)), ('related_page', wagtail.blocks.PageChooserBlock(required=False))))),), null=True),
         ),
         migrations.AlterField(
             model_name='presslandingpage',
             name='option_blocks',
-            field=wagtail.core.fields.StreamField((('option_blocks', wagtail.core.blocks.StructBlock((('title', wagtail.core.blocks.CharBlock(required=True)), ('intro', wagtail.core.blocks.RichTextBlock(blank=False, null=False, required=False)), ('button_text', wagtail.core.blocks.CharBlock(blank=False, null=False, required=False)), ('related_page', wagtail.core.blocks.PageChooserBlock(required=False))))),)),
+            field=wagtail.fields.StreamField((('option_blocks', wagtail.blocks.StructBlock((('title', wagtail.blocks.CharBlock(required=True)), ('intro', wagtail.blocks.RichTextBlock(blank=False, null=False, required=False)), ('button_text', wagtail.blocks.CharBlock(blank=False, null=False, required=False)), ('related_page', wagtail.blocks.PageChooserBlock(required=False))))),)),
         ),
     ]
