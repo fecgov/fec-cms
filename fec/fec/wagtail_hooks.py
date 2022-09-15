@@ -5,13 +5,13 @@ from wagtail import hooks
 from django.conf import settings
 from django.utils.html import format_html
 from fec.draftail import glossary, sansserif, anchor
-from django.utils.html import format_html
 from django.templatetags.static import static
 
 
 @hooks.register('insert_global_admin_css')
 def global_admin_css():
     return format_html('<link rel="stylesheet" href="{}">', static('/css/customize-admin.css'))
+
 
 @hooks.register('register_rich_text_features')
 def register_blockquote_feature(features):
