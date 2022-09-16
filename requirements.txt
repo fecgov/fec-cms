@@ -48,6 +48,3 @@ pytest-django==3.10.0
 pytest-cov==2.11.1
 pytest-flake8==1.0.7
 setuptools==65.1.1 # Pinned to fix the deploy errors caused by the latest setuptool version 65.3.0
-
-#scheduler
-django-crontab==0.7.1
