@@ -129,7 +129,6 @@ INSTALLED_APPS = (
     'legal',
     'uaa_client',
     'extend_admin',
-    'django_crontab',
 )
 
 MIDDLEWARE = (
@@ -342,6 +341,3 @@ LOGGING = {
 }
 
 DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
-CRONJOBS = [
-    ('*/1 * * * *', 'search.schedule.run_job')
-]
