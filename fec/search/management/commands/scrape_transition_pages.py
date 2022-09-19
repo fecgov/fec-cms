@@ -6,8 +6,16 @@ from bs4 import BeautifulSoup
 from django.core.management import BaseCommand
 from django.conf import settings
 
+import logging 
+
 BASE_URL = 'https://transition.fec.gov'
 
+PROJECT_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+BASE_DIR = os.path.dirname(PROJECT_DIR)
+
+logging.basicConfig(filename=os.path.join(BASE_DIR,'logfile.log' ), level=logging.DEBUG)
+logger = logging.getLogger(__name__)
+# We decided to show logging in the transition scrape command, and use stdout in the scrape CMS all output into a log file to show the different options ---eventually once backup is also automated we could add a slack bot
 
 class Command(BaseCommand):
     help = 'Takes a JSON list of transition pages and scrapes content from the live site. \
@@ -21,7 +29,8 @@ class Command(BaseCommand):
         )
 
     def handle(self, *args, **options):
-        self.stdout.write(self.style.WARNING('Getting pages...'))
+        #self.stdout.write(self.style.WARNING('Getting pages...'))
+        logger.info('Getting pages...')
         extracted = []
         if options['json_file_path']:
             file_name = options['json_file_path']
@@ -87,7 +96,8 @@ class Command(BaseCommand):
 
     def write_articles(self, pages, **options):
         """Write the extracted data to a file"""
-        self.stdout.write('Writing to file')
+        #self.stdout.write('Writing to file')
+        logger.info('Writing to file')
         fname = os.path.join(settings.REPO_DIR, 'fec/search/management/data/output.json')
         with open(fname, 'w+') as f:
             json.dump(pages, f, indent=4)
