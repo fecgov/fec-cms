@@ -20,7 +20,7 @@ Filter reports
 
 {% block efiling_filters %}
   <div class="filters__inner">
-    {{ typeahead.field('committee_id', 'Committee name or ID', '', id_suffix='_raw') }}
+    {{ typeahead.field('q_filer', 'Committee name or ID', id_suffix='_raw', allow_text=True ) }}
     {{ date.field('receipt_date', 'Receipt date', id_suffix='_raw') }}
   </div>
 {% endblock %}
@@ -29,7 +29,8 @@ Filter reports
 <div class="js-accordion accordion--neutral" data-content-prefix="filter" data-open-first="true">
   <button type="button" class="js-accordion-trigger accordion__button">Filer</button>
   <div class="accordion__content">
-    {{ typeahead.field('committee_id', 'Committee name or ID', '') }}
+   
+    {{ typeahead.field('q_filer', 'Committee name or ID', '', allow_text=True) }}
     {{ typeahead.field('candidate_id', 'Candidate name or ID', '', dataset='candidates') }}
     {{ states.field('state', type='Candidate') }}
     {{ office.checkbox() }}

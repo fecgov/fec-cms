@@ -51,7 +51,7 @@ Filter independent expenditures
 {% block filters %}
 <div class="js-accordion accordion--neutral" data-content-prefix="filter" data-open-first="false">
   <div class="filters__inner">
-    {{ typeahead.field('committee_id', 'Spender name or ID', helper_text = 'Limit 10 spender names or IDs') }}
+  {{ typeahead.field('q_spender', 'Spender name or ID', helper_text ='Limit 10 spender names or IDs', allow_text=True) }}
     {{ years.cycles('cycle', 'Years', show_tooltip=False) }}
     {{ reports.type(id_suffix='_processed') }}
     {{ reports.form(id_suffix='_processed') }}
