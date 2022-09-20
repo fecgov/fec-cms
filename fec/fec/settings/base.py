@@ -352,8 +352,11 @@ LOGGING = {
     },
 }
 
+CRONTAB_COMMAND_SUFFIX = '2>&1'
+
 DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
 CRONJOBS = [
-    # ('*/1 * * * *', 'search.schedule.run_job')
-    ('*/20 * * * *', 'django.core.management.call_command', ['scrape_cms_pages'])
+    #transition is taking the place of indexing, I did every Tuesday and hour apart as a sample
+    ('0 1 * * TUE', 'django.core.management.call_command', ['scrape_cms_pages'], {}, ('> ' + os.path.join(BASE_DIR,'cms_scrape.log'))),
+    ('0 0 * * TUE', 'django.core.management.call_command', ['scrape_transition_pages'], {}, ('> ' + os.path.join(BASE_DIR,'transition.log'))),
 ]
