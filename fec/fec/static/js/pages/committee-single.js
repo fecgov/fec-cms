@@ -797,7 +797,7 @@ $(document).ready(function() {
                 request_type: ['-1', '-5', '-6', '-9'],
                 sort: [
                   '-coverage_end_date',
-                  'report_type_full',
+                  'report_type_full_original',
                   '-beginning_image_number'
                 ],
                 sort_hide_null: ['false']
