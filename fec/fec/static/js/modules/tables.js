@@ -271,7 +271,12 @@ function updateOnChange($form, api) {
   $form.on('change', 'input,select', _.debounce(onChange, 250));
 }
 
+/**
+ * Called by @fetchSuccess
+ * @param {*} changeCount
+ */
 function filterSuccessUpdates(changeCount) {
+  console.log('tables.js filterSuccessUpdates(changeCount): ', changeCount);
   // on filter change update:
   // - loading/success status
   // - count change message
@@ -620,6 +625,7 @@ DataTable.prototype.enableExport = function() {
 };
 
 DataTable.prototype.fetch = function(data, callback) {
+  console.log('DataTable.fetch(data, callback): ', data, callback);
   var self = this;
   self.ensureWidgets();
 
@@ -657,6 +663,7 @@ DataTable.prototype.fetch = function(data, callback) {
     // By default, remove all errors icons on labels
     $('ul.dropdown__selected li label').removeClass('is-unsuccessful');
     limitFieldKeys.forEach(function(limitFieldKey) {
+      console.log('tables.js limitFieldKeys.forEach(limitFieldKey): ', limitFieldKey);
       // Assign unique id to each field's error messages
       var error_id = 'exceeded_' + limitFieldKey + '_limit';
       // Ensure fields are not disabled and all errors removed
@@ -759,6 +766,7 @@ DataTable.prototype.fetch = function(data, callback) {
     data: data,
     callback: callback
   };
+  console.log('tables.js self.xhr: ', self.xhr);
   self.xhr = $.getJSON(url);
   self.xhr.done(self.fetchSuccess.bind(self));
   self.xhr.fail(self.fetchError.bind(self));
@@ -803,6 +811,7 @@ DataTable.prototype.buildUrl = function(data, paginate, download) {
 };
 
 DataTable.prototype.fetchSuccess = function(resp) {
+  console.log('DataTable.fetchSuccess(resp): ', resp);
   this.paginator.handleResponse(this.fetchContext.data, resp);
   this.fetchContext.callback(mapResponse(resp));
   this.callbacks.afterRender(this.api, this.fetchContext.data, resp);
@@ -838,6 +847,7 @@ DataTable.prototype.fetchSuccess = function(resp) {
 };
 
 DataTable.prototype.fetchError = function(jqXHR, textStatus) {
+  console.log('DataTable.fetchError(jqXHR, textStatus): ', jqXHR, textStatus);
   var self = this;
   // Default error message that occurs most likely due to timeout
   var errorMessage =

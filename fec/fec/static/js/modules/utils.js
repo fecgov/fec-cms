@@ -20,7 +20,7 @@ const officeNames = {
 function slugify(val, retainCase = false) {
   let toReturn = val.toString();
 
-  if (retainCase) toReturn = toReturn.toLowerCase();
+  if (!retainCase) toReturn = toReturn.toLowerCase();
 
   toReturn = toReturn
     .replace(/\s+/g, '-') // change spaces to dashes
@@ -31,6 +31,10 @@ function slugify(val, retainCase = false) {
 
   return toReturn;
 }
+
+"This is a test string!".replace(/\s+/g, '-').replace(/[^\w\-]+/g, '').replace(/\-\-+/g, '-').replace(/^-+/, '').replace(/-+$/, '');
+
+
 
 /**
  * Removes double quotes from a given value

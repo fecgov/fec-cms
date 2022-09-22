@@ -84,23 +84,48 @@ function searchedAttribs() {
 }
 
 /**
- *
- * @param {String} resource
+ * Called inside @getData to determine the queryPath for the different search types
+ * @param {String} resource the type of resource/path requested (e.g. candidates, committees)
  * @param {String} queryString
  * @returns {String} like https://api.open.fec.gov/v1/names/candidates/?q=${queryString}&api_key=${window.API_KEY_PUBLIC}
  */
 function getUrl(resource, queryString) {
+  console.log('getUrl(resources, queryString): ', resource, queryString);
 
   window.API_LOCATION = 'https://fec-dev-api.app.cloud.gov'; // TODO: remove this
 
   // console.log('getUrl(): ', resource, queryString);
-  let toReturn = [
+  let thePath = [
     window.API_LOCATION,
-    window.API_VERSION,
-    'names',
-    resource,
-    ''
-  ].join('/');
+    window.API_VERSION
+  ];
+
+  if (
+       resource == 'candidates'
+    || resource == 'committees'
+    || resource == 'audit_candidates'
+    || resource == 'audit_committees') {
+    thePath.push(
+      'names',
+      resource,
+      ''
+    );
+
+    // TODO: CHECK THESE
+  } else if (
+       resource == 'regulation'
+    || resource == 'statute'
+    ) {
+    console.log('TODO - getURL FOR MUR SEARCHES');
+    thePath.push(
+      'legal',
+      'citation',
+      resource
+    );
+  }
+
+  let toReturn = thePath.join('/');
+
   toReturn += `?q=${queryString}&api_key=${window.API_KEY_PUBLIC}`;
   // console.log('getUrl toReturn: ', toReturn);
   return toReturn;
@@ -123,6 +148,10 @@ function formatResults(type, data) {
 
   else if ((type == 'committees' || type == 'audit_committees') && results.length > 0)
     toReturn.push({ is_header: true, id: window.queryText, name: 'Select a committee:', type: 'none' });
+
+  // TODO: CHECK THIS
+  else if ((type == 'case_regulatory_citation' || type == 'case_statutory_citation') && results.length > 0)
+    toReturn.push({ is_header: true, id: window.queryText, name: 'Select a citation:', type: 'none' });
 
   results.forEach(element => {
     element.type = type;
@@ -158,13 +187,14 @@ function getSuggestions(type) {
  * @returns {Array} of results formatted like [{ id: C123456789, name: 'Candidate Name', type: 'candidate' }]
  */
 async function getData(q, qType) {
+  console.log('src.getData()');
   // TODO: Would like to come back and make this more adaptable, remove the repeated code
-  // console.log('src.getData()');
   // console.log('  q: ', q);
   // console.log('  qType: ', qType);
   let fetchedResults = [];
   window.queryText = q;
   if (qType == 'candidate') {
+    console.log('  qType == candidate');
     // Any changes here should also be made inside `== 'all'`
     await fetch(getUrl('candidates', q), fetchInit)
       .then(response => response.json())
@@ -198,6 +228,7 @@ async function getData(q, qType) {
       });
 
   } else if (qType == 'auditCandidates') {
+    console.log('  qType = auditCandidates');
     await fetch(getUrl('audit_candidates', q), fetchInit)
       .then(response => response.json())
       .then(data => {
@@ -205,12 +236,17 @@ async function getData(q, qType) {
       });
 
   } else if (qType == 'auditCommittees') {
+    console.log('  qType = auditCommittees');
     await fetch(getUrl('audit_committees', q), fetchInit)
       .then(response => response.json())
       .then(data => {
         fetchedResults.push(...formatResults('audit_committees', data));
       });
 
+  // TODO: CHECK THESE
+  } else if (qType == 'MUR CITATION FILTERS') {
+    legal/citation/regulation
+    legal/citation/statute
   } else {
     console.log(`  qType was '${qType}' so didn't do anything`);
   }
@@ -331,6 +367,9 @@ function Autosuggest(elementSelector, opts) {
   this.formerSelectionIndex;
   this.value = '';
 
+  console.log('  this.input: ', this.input);
+  console.log('  this.queryType: ', this.queryType);
+
   this.init();
 }
 
@@ -375,15 +414,16 @@ function Autosuggest(elementSelector, opts) {
   };
   // theseOpts.data['keys'] = searchedAttribs();
   theseOpts.data.src = async q => {
+    console.log('AutoSuggest.src: async q: ', q);
     try {
-      // console.log('try');
+      console.log('try');
       // console.log('  this.queryType: ', this.queryType);
       // console.log('  q: ', q);
       let results = await getData(q, this.queryType);
       // console.log('got results of ', results);
       return results;
     } catch(e) {
-      // console.log('catch e: ', e);
+      console.log('catch e: ', e);
       return e;
     }
   };

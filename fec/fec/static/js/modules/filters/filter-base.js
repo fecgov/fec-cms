@@ -99,7 +99,7 @@ Filter.prototype.handleAddEvent = function(e, opts) {
  * @returns {null} - if (opts.name !== this.name || opts.loadedOnce !== true)
  */
 Filter.prototype.handleRemoveEvent = function(e, opts) {
-  console.log('Filter.handleRemoveEvent(e, opts): ', e, opts);
+  // console.log('Filter.handleRemoveEvent(e, opts): ', e, opts);
   // Don't decrement on initial page load
   if (opts.name !== this.name || opts.loadedOnce !== true) {
     return;

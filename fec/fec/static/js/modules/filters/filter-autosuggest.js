@@ -106,7 +106,7 @@ function FilterAutosuggest(elementSelector, dataset, allowText) {
   // If elementSelector is a string, use it to find this target element,
   // else save the elementSelector element as this.element
   this.element = typeof elementSelector == 'string' ? document.querySelector(elementSelector) : elementSelector;
-  this.queryType = this.element.dataset.name;
+  this.queryType = this.element.dataset.dataset || this.element.dataset.name;
   this.allowText = allowText;
 
   this.field = this.element.querySelector('input[type="text"]');
@@ -156,8 +156,12 @@ FilterAutosuggest.prototype.autosuggestInit = function() {
     highlightFirst: true
   };
 
+  console.log('  this.element: ', this.element);
+  console.log('  opts.queryType: ', opts.queryType);
+  // if ((opts.queryType == 'q' || opts.queryType == 'qq')  ) opts.queryType = opts.
   if (this.allowText && this.queryType) opts.dataset = this.dataset;
   else if (this.allowText && !this.dataset) opts.dataset = textDataset;
+  console.log('    opts.queryType: ', opts.queryType);
 
   this.autosuggest = new Autosuggest(this.field, opts);
 
@@ -189,7 +193,7 @@ FilterAutosuggest.prototype.handleResults = function(e) {
  * this way clicking enter or the button will submit with this datum
  */
 FilterAutosuggest.prototype.setFirstItem = function() {
-  console.log('FilterAutosuggest.setFirstItem()');
+  // console.log('FilterAutosuggest.setFirstItem()');
   // this.firstItem = arguments[1];
   // Add a hover class to the first item to indicate it will be selected
   const suggestions = this.element.querySelectorAll('.as-suggestion');
@@ -240,7 +244,8 @@ FilterAutosuggest.prototype.handleSelect = function(e) {
   this.button.classList.add('is-loading');
 
   // this.element.dispatchEvent(new CustomEvent('as:changed', e));
-  e.target.dispatchEvent(new CustomEvent('change', e));
+  // e.target.dispatchEvent(new CustomEvent('change', e));
+  // e.target.dispatchEvent('change', e);
 };
 
 /**
@@ -248,7 +253,7 @@ FilterAutosuggest.prototype.handleSelect = function(e) {
  * @param {*} e - 
  */
 FilterAutosuggest.prototype.handleKeypress = function(e) {
-  console.log('FilterAutosuggest.handleKeypress(e): ', e);
+  // console.log('FilterAutosuggest.handleKeypress(e): ', e);
   this.handleChange(e);
 
   // const suggestion = this.element.querySelector('.as-suggestion');
@@ -314,16 +319,19 @@ FilterAutosuggest.prototype.handleCheckbox = function(e) {
 
 /**
  * 
- * @param {*} e 
- * @param {*} opts 
+ * @param {PointerEvent} e
  */
 FilterAutosuggest.prototype.handleClick = function(e) {
   console.log('FilterAutosuggest.handleClick(e): ', e);
 
   console.log('  typeof e.target: ', typeof e.target);
-  
-  if (e.target.classList.contains('dropdown__remove')) this.removeCheckbox(e);
-  
+
+  if (e.target.classList.contains('dropdown__remove')) {
+    console.log('    if');
+    this.removeCheckbox(e);
+  } else {
+    console.log('    ELSE NOTHING');
+  }
 };
 
 /**
@@ -394,7 +402,7 @@ FilterAutosuggest.prototype.clearInput = function() {
  * 
  */
 FilterAutosuggest.prototype.enableButton = function() {
-  console.log('FilterAutosuggest.enableButton()');
+  // console.log('FilterAutosuggest.enableButton()');
   this.searchEnabled = true;
   this.button.classList.remove('is-disabled');
   this.button.setAttribute('tabindex', '1');
@@ -405,7 +413,7 @@ FilterAutosuggest.prototype.enableButton = function() {
  * 
  */
 FilterAutosuggest.prototype.disableButton = function() {
-  console.log('FilterAutosuggest.disableButton()');
+  // console.log('FilterAutosuggest.disableButton()');
   this.searchEnabled = false;
   this.button.classList.add('is-disabled');
   this.button.setAttribute('tabindex', '-1');

@@ -1,6 +1,7 @@
 'use strict';
 
 var $ = require('jquery');
+var Typeahead = require('../modules/typeahead').Typeahead;
 import Autosuggest from '../modules/autosuggest';
 var URI = require('urijs');
 
@@ -12,12 +13,23 @@ function ContactForm($elm) {
   this.committeeId = $elm.find('#id_u_committee');
   this.category = $elm.find('#id_u_category');
   this.otherReason = $elm.find('#id_u_other_reason').closest('div');
-  this.autosuggest = new Autosuggest(
-    $elm.find('.js-contact-autosuggest'),
-    'committees',
-    ''
-  );
-  this.autosuggest = new Autosuggest(document.querySelector('.js-contact-autosuggest'), 'committees', '');
+
+  // TODO: remove the useTt conditional when FEATURES.use_tt goes away
+  if (window.useTt === false) {
+    this.autosuggest = new Autosuggest(
+      $elm.find('.js-contact-autosuggest'),
+      'committees',
+      ''
+    );
+    this.autosuggest = new Autosuggest(document.querySelector('.js-contact-autosuggest'), 'committees', '');
+  } else {
+    this.typeahead = new Typeahead(
+      $elm.find('.js-contact-typeahead'),
+      'committees',
+      ''
+    );
+  }
+
   this.$cancel = $elm.find('.js-cancel');
   this.initAutosuggest();
   this.initOtherReason();
@@ -26,6 +38,21 @@ function ContactForm($elm) {
 
   loadRecaptcha();
 }
+
+// TODO: remove the useTt conditional when FEATURES.use_tt goes away
+ContactForm.prototype.initTypeahead = function() {
+  var self = this;
+  this.typeahead.$element.css({ height: 'auto' });
+  this.typeahead.$input.off('typeahead:select');
+  this.typeahead.$input.on('typeahead:select', function(e, opts) {
+    self.committeeId.val(opts.id);
+    //focus away to prompt removal of error state, if present. Could only focus into...
+    //...another field, Attempts to focusout, or focus onto body, did not work.
+    $('#id_u_contact_title')
+      .focus()
+      .blur();
+  });
+};
 
 ContactForm.prototype.initAutosuggest = function() {
   // Overriding default autosuggest behavior
@@ -69,8 +96,14 @@ function AnalystLookup($elm) {
   this.$analystDetails = this.$elm.find('.js-yes-analyst');
   this.$analystNoResults = this.$elm.find('.js-no-analyst');
 
-  this.autosuggest = new Autosuggest(this.$input, 'committees', '');
-  this.initAutosuggest();
+  // TODO: remove the useTt conditional when FEATURES.use_tt goes away
+  if (window.useTt === false) {
+    this.autosuggest = new Autosuggest(this.$input, 'committees', '');
+    this.initAutosuggest();
+  } else {
+    this.typeahead = new Typeahead(this.$input, 'committees', '');
+    this.initTypeahead();
+  }
 
   this.$input.on('change, blur', this.handleChange.bind(this));
 

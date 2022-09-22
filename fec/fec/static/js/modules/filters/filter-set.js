@@ -115,6 +115,7 @@ FilterSet.prototype.activateDataType = function() {
 };
 
 FilterSet.prototype.activateAll = function() {
+  console.log('FilterSet.activateAll()');
   // If the panel uses efiling filters, activate the data type filter
   // and activate the others when necessary
   if (this.efiling) {
@@ -124,6 +125,7 @@ FilterSet.prototype.activateAll = function() {
     const filterElements = document.querySelectorAll('.js-filter');
     this.filters = this.activate(this.$body.find('.js-filter'), filterElements);
   }
+  console.log('FilterSet.activateAll() - END');
   return this;
 };
 

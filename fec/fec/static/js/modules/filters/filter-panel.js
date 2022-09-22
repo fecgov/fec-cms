@@ -84,6 +84,7 @@ FilterPanel.prototype.toggle = function() {
 };
 
 FilterPanel.prototype.handleAddEvent = function(e, opts) {
+  console.log('FilterPanel.handleAddEvent(e, opts): ', e, opts);
   // If it's a data-type toggle, we tell it to ignore for the count of active filters
   if (opts.ignoreCount) {
     return;
