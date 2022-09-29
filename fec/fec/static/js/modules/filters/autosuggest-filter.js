@@ -14,9 +14,9 @@ import { ensureArray } from '../helpers';
 /**
  * @implements {Filter}
  *
- * @param {(String|HTMLElement|jQuery.fn.init)} selector - How to find the element (string) or the selected element itself
+ * @param {(string|HTMLElement|jQuery.fn.init)} selector - How to find the element (string) or the selected element itself
  *
- * @property {Boolean} allowText - True if this.element.hasAttribute('data-allow-text') !== undefined
+ * @property {boolean} allowText - True if this.element.hasAttribute('data-allow-text') !== undefined
  * @property {HTMLElement} element
  * @property {HTMLInputElement} input
  */

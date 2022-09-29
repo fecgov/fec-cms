@@ -31,7 +31,7 @@ function slugify_remove(value) { // TODO: test if we can remove this (likely wit
  * Returns a string
  * @param {object} datum
  * @param {string} datum.name
- * @param {(string|number)} datum.id
+ * @param {(string | number)} datum.id
  * @returns {string} Formatted like 'Committee Name (COMMITTEE_ID)' or 
  */
 function formatLabel(datum) {
@@ -42,8 +42,8 @@ function formatLabel(datum) {
 
 /**
  * 
- * @param {String} value - Input to convert to a slug
- * @returns {String} A slug of value with '-checkbox' appended to the end
+ * @param {string} value - Input to convert to a slug
+ * @returns {string} A slug of value with '-checkbox' appended to the end
  */
 function formatId(value) {
   return slugify(value) + '-checkbox';
@@ -63,11 +63,11 @@ var textDataset = {
 
 /**
  * Meant to be wrapped in <li>
- * @param {Object} data
- * @param {String} data.id
- * @param {String} data.label
- * @param {String} data.name
- * @param {String} data.value
+ * @param {object} data
+ * @param {string} data.id
+ * @param {string} data.label
+ * @param {string} data.name
+ * @param {string} data.value
  * @returns
  */
 const template_checkbox = data => `
@@ -210,7 +210,7 @@ FilterAutosuggest.prototype.setFirstItem = function() {
 
 /**
  * 
- * @param {CustomEvent/KeyboardEvent} e - Custom event if it's a click, but KeyboardEvent from the keyboard
+ * @param {(CustomEvent | KeyboardEvent)} e - Custom event if it's a click, but KeyboardEvent from the keyboard
  * @param {*} datum - 
  */
 FilterAutosuggest.prototype.handleSelect = function(e) {
@@ -422,7 +422,7 @@ FilterAutosuggest.prototype.disableButton = function() {
 
 /**
  *
- * @param {Object} opts - 
+ * @param {object} opts - 
  */
 FilterAutosuggest.prototype.appendCheckbox = function(opts) {
   console.log('FilterAutosuggest.appendCheckbox(opts): ', opts);
@@ -446,7 +446,7 @@ FilterAutosuggest.prototype.appendCheckbox = function(opts) {
 /**
  * TODO: get rid of Underscore
  * @param {*} input - 
- * @returns {Object} Structured like {name: '', label: '', value: , id: 'name-value-checkbox'}
+ * @returns {object} Structured like {name: '', label: '', value: , id: 'name-value-checkbox'}
  */
 FilterAutosuggest.prototype.formatCheckboxData = function(input) {
   const output = {

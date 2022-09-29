@@ -27,10 +27,10 @@ const template_nonremoveableTag = value => `<div data-id="${value.key}" data-rem
 
 /**
  * TagLists are created by modules/tables.js and calendar-page.js
- * @param {Object} opts
- * @param {String} opts.resultType
- * @param {Boolean} opts.showResultCount
- * @param {String} opts.tableTitle
+ * @param {object} opts
+ * @param {string} opts.resultType
+ * @param {boolean} opts.showResultCount
+ * @param {string} opts.tableTitle
  *
  * @listens body.filter:added
  * @listens body.filter:removed
@@ -87,12 +87,12 @@ function TagList(opts) {
 /**
  * Called when document.body hears filter:added
  * @param {JQuery.Event} e
- * @param {Object} opts
- * @param {} opts.key
- * @param {} opts.name
- * @param {Boolean} opts.nonremovable
- * @param {} opts.range
- * @param {String} opts.rangeName
+ * @param {object} opts
+ * @param {*} opts.key
+ * @param {*} opts.name
+ * @param {boolean} opts.nonremovable
+ * @param {*} opts.range
+ * @param {string} opts.rangeName
  */
 TagList.prototype.addTag = function(e, opts) {
   console.log('TagList.addTag(e, opts): ', e, opts);
@@ -126,11 +126,11 @@ TagList.prototype.addTag = function(e, opts) {
 /**
  * Called from within @see TagList.prototype.addTag
  * @param {JQuery} $tagCategory - element inside this.$list with a matching value for data-tag-category
- * @param {(Boolean|String)} tag - boolean from TagList.addTag(opts.nonremoveable),
+ * @param {(boolean|string)} tag - boolean from TagList.addTag(opts.nonremoveable),
  * or string of HTML element defined by template_nonremoveableTag or template_tag
- * @param {Object} opts
+ * @param {object} opts
  * @param {('min'|'max'|'false')} opts.range
- * @param {String} opts.rangeName - appended to a class named of 'tag__category__range--'
+ * @param {string} opts.rangeName - appended to a class named of 'tag__category__range--'
  */
 TagList.prototype.addTagItem = function($tagCategory, tag, opts) {
   const rangeClass = 'tag__category__range--' + opts.rangeName;
@@ -146,8 +146,8 @@ TagList.prototype.addTagItem = function($tagCategory, tag, opts) {
 
 /**
  * Called from @see TagList.prototype.removeTag
- * @param {} $tag
- * @param {Boolean} emit
+ * @param {*} $tag
+ * @param {boolean} emit
  * @emits tag:removed from $tag if emit is true
  */
 TagList.prototype.removeTagElement = function($tag, emit) {
@@ -171,7 +171,7 @@ TagList.prototype.removeTagElement = function($tag, emit) {
  * Called from TagList.prototype.removeTagEvt
  * Called from TagList.prototype.addTag
  * @param {} key
- * @param {Boolean} emit - Whether
+ * @param {boolean} emit - Whether
  * @param {} forceRemove
  * @calls 
  */

@@ -251,17 +251,17 @@ var typeaheadOpts = {
 
 /**
  * @class
- * @param {String} selector - A string to be used to find the element in the page.
- * @param {String} type - The kinda of data we'll be showing. e.g., 'candidates'.
+ * @param {string} selector - A string to be used to find the element in the page.
+ * @param {string} type - The kinda of data we'll be showing. e.g., 'candidates'.
  * @param {URL} url - Optional. Where we should find the data if not the default.
  *
- * @event typeahead:select Triggered when a user clicks an autocomplete search result
+ * @event typeahead:select - Triggered when a user clicks an autocomplete search result
  * @property {jQuery.Event}
- * @property {Object} - The data from the selected item
+ * @property {object} - The data from the selected item
  *
- * @event typeahead:render Inherited from typeahead.jquery.js, called any time the pulldown menu changes. Typing a character calls the event when the menu is reset _and_ when it's drawn again
+ * @event typeahead:render - Inherited from typeahead.jquery.js, called any time the pulldown menu changes. Typing a character calls the event when the menu is reset _and_ when it's drawn again
  * @property {jQuery.Event}
- * @property {Object} - null if no results. Otherwise we get back an {Object} for each item in the menu
+ * @property {object} - null if no results. Otherwise we get back an {Object} for each item in the menu
  *
  * @listens events.searchTypeChanged
  */

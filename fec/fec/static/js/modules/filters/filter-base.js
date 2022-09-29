@@ -16,7 +16,7 @@ function prepareValue($elm, value) {
 /**
  * @interface
  *
- * @param {} elm
+ * @param {*} elm
  */
 function Filter(elm) {
   console.log('new Filter(elm): ', elm);
@@ -95,8 +95,8 @@ Filter.prototype.handleAddEvent = function(e, opts) {
 /**
  *
  * @param {jQuery.Event} e
- * @param {Object} opts
- * @returns {null} - if (opts.name !== this.name || opts.loadedOnce !== true)
+ * @param {object} opts
+ * @returns {null} if (opts.name !== this.name || opts.loadedOnce !== true)
  */
 Filter.prototype.handleRemoveEvent = function(e, opts) {
   // console.log('Filter.handleRemoveEvent(e, opts): ', e, opts);

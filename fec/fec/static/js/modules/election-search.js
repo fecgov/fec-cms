@@ -143,7 +143,7 @@ ElectionSearch.prototype.handleSelectMap = function(state, district) {
 /**
  * Hack to remove the presidential result in non-presidential years
  * Eventually this will be handled by the API
- * @param {array} results - Array of API results
+ * @param {Array} results - Array of API results
  * @param {int} cycle - The even-year value of a cycle
  */
 ElectionSearch.prototype.removeWrongPresidentialElections = function(
@@ -161,7 +161,7 @@ ElectionSearch.prototype.removeWrongPresidentialElections = function(
 
 /**
  * Call the API with the values of the form and get a list of upcoming ElectionSearch
- * @param {event} e - event object
+ * @param {Event} e - event object
  * @param {object} opts - configuration options
  */
 ElectionSearch.prototype.search = function(e, opts) {
@@ -302,7 +302,7 @@ ElectionSearch.prototype.shouldSearch = function(serialized) {
  * Empties the contents of the search results list and then draws
  * the new results (not the map districts).
  * If we're on a past election, it will hide the map
- * @param {array} results - array of API election results
+ * @param {Array} results - Array of API election results
  */
 ElectionSearch.prototype.draw = function(results) {
   var self = this;

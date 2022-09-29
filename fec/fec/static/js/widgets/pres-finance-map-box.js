@@ -80,9 +80,9 @@ const AbortController = window.AbortController;
 
 /**
  * Formats the given value and puts it into the dom element.
- * @param {Number} passedValue The number to format and plug into the element
- * @param {Boolean} abbreviateMillions Should we abbreviate the millions? (1100000 to 1.1)
- * @returns {String} A string of the given value formatted with a dollar sign, commas, and (if abbreviateMillions == true) decimal
+ * @param {number} passedValue - The number to format and plug into the element
+ * @param {boolean} abbreviateMillions - Should we abbreviate the millions? (1100000 to 1.1)
+ * @returns {string} A string of the given value formatted with a dollar sign, commas, and (if abbreviateMillions == true) decimal
  */
 function formatAsCurrency(passedValue, abbreviateMillions) {
   let toReturn = passedValue;
@@ -105,11 +105,11 @@ function formatAsCurrency(passedValue, abbreviateMillions) {
 
 /**
  * Builds the link/url the candidate's
- * @param {String} candidateID The requested candidate's ID
- * @param {String} candidateName The name that will be displayed in the link
- * @param {Number}   electionYear The currently-selected election year
- * @param {String} party Typically 'DEM' or 'REP'
- * @returns {String} An anchor tag with the correct URL and text for the input values
+ * @param {string} candidateID - The requested candidate's ID
+ * @param {string} candidateName - The name that will be displayed in the link
+ * @param {number} electionYear - The currently-selected election year
+ * @param {string} party - Typically 'DEM' or 'REP'
+ * @returns {string} An anchor tag with the correct URL and text for the input values
  */
 function buildCandidateNameAndPartyLink(
   candidateID,
@@ -401,7 +401,7 @@ PresidentialFundsMap.prototype.loadCandidatesList = function() {
 /**
  * Called by a successful {@see loadCandidatesList() }
  * @param {CustomEvent} e
- * @param {JSON} e.detail Holds the results from the successful API response
+ * @param {JSON} e.detail - Holds the results from the successful API response
  * Calls displayUpdatedData_candidates
  * Fires CHANGE_CANDIDATE custom event with current_candidateID and current_candidateName in the detail
  */
@@ -427,7 +427,7 @@ PresidentialFundsMap.prototype.handleCandidatesDataLoaded = function(e) {
 /**
  * Is called when the map data has loaded.
  * @param {CustomEvent} e
- * @param {JSON} e.detail the JSON object returned by the API
+ * @param {JSON} e.detail - the JSON object returned by the API
  * Converts the data from this endpoint into the format required for MapData,
  * and sends that data to the map with handleMapRefresh.
  * Since this is the final data load in the chain, fires FINISH_LOADING_EVENT
@@ -455,7 +455,7 @@ PresidentialFundsMap.prototype.handleMapDataLoaded = function(e) {
 /**
  * Is called when the individual candidate's details have loaded
  * @param {CustomEvent} e
- * @param {JSON} e.detail the JSON object returned by the API
+ * @param {JSON} e.detail - the JSON object returned by the API
  * Collects details to send to displayUpdatedData_candidate and updateBreadcrumbs,
  * and calls both of them.
  * Continues to @see loadFinancialSummary() }
@@ -486,7 +486,7 @@ PresidentialFundsMap.prototype.handleCandidateDetailsLoaded = function(e) {
 /**
  * Is called when the candidate's (or party's) financial summary (right column) data has loaded.
  * @param {CustomEvent} e
- * @param {JSON} e.detail the JSON object returned by the API
+ * @param {JSON} e.detail - the JSON object returned by the API
  * Sends the first result (should only be one) to {@see displayFinancialSummary() }
  * Continues to {@see loadContributionSizes() }
  */
@@ -504,7 +504,7 @@ PresidentialFundsMap.prototype.handleFinancialSummaryLoaded = function(e) {
 /**
  * Is called when the candidate's (or party's) contributions by size has finished loading
  * @param {CustomEvent} e
- * @param {JSON} e.detail the JSON object returned by the API
+ * @param {JSON} e.detail - the JSON object returned by the API
  * Sends e.detail.results to displaySizesSummary.
  * Continues to {@see loadCoverageDates() }
  */
@@ -522,7 +522,7 @@ PresidentialFundsMap.prototype.handleContributionSizesLoaded = function(e) {
 /**
  * Is called when the coverage dates have successfully loaded
  * @param {CustomEvent} e
- * @param {JSON} e.detail the JSON object returned by the API
+ * @param {JSON} e.detail - the JSON object returned by the API
  * Sends e.detail.results to displayCoverageDates.
  * Continues on to loadMapData
  */
@@ -540,8 +540,8 @@ PresidentialFundsMap.prototype.handleCoverageDatesLoaded = function(e) {
  * Retrieves details about an individual canidate, if needed
  * If the cand_id is part of specialCandidateIDs,
  * fires a CANDIDATE_DETAILS_LOADED event right away rather than load data we already know
- * @param {String} cand_id Which candidate to load
- * @param {String} cand_name [Optional] The name of the candidate to be passed on to the breadcrumbs
+ * @param {string} cand_id - Which candidate to load
+ * @param {string} cand_name - [Optional] The name of the candidate to be passed on to the breadcrumbs
  */
 PresidentialFundsMap.prototype.loadCandidateDetails = function(
   cand_id,
@@ -787,7 +787,7 @@ PresidentialFundsMap.prototype.displayUpdatedData_candidate = function(detail) {
 
 /**
  * Put the list of states and totals into the table on the left
- * @param {JSON} results the results from loadCandidatesList
+ * @param {JSON} results - the results from loadCandidatesList
  */
 PresidentialFundsMap.prototype.displayUpdatedData_candidates = function(
   results
@@ -858,7 +858,7 @@ PresidentialFundsMap.prototype.displayUpdatedData_candidates = function(
 
 /**
  * Puts the financial summary info into the accordions
- * @param {JSON} data results from handleFinancialSummaryLoaded
+ * @param {JSON} data - results from handleFinancialSummaryLoaded
  * Since we're updating the accordions, we also call {@see updateDownloadButtons() }
  */
 PresidentialFundsMap.prototype.displayFinancialSummary = function(data) {
@@ -940,7 +940,7 @@ PresidentialFundsMap.prototype.updateDownloadButtons = function() {
 
 /**
  * Puts into the page, the content loaded with loadContributionSizes
- * @param {JSON} data results from the API
+ * @param {JSON} data - results from the API
  */
 PresidentialFundsMap.prototype.displaySizesSummary = function(data) {
   let theHolder = this.element.querySelector(selector_summariesHolder);
@@ -959,7 +959,7 @@ PresidentialFundsMap.prototype.displaySizesSummary = function(data) {
 
 /**
  * Puts the coverage date into the various fields across the page
- * @param {JSON} data The result from the API
+ * @param {JSON} data - The result from the API
  */
 PresidentialFundsMap.prototype.displayCoverageDates = function(data) {
   let theHolders = this.element.querySelectorAll(selector_coverageDates);
@@ -982,9 +982,9 @@ PresidentialFundsMap.prototype.displayCoverageDates = function(data) {
 /**
  * Updates the text in the breadcrumb nav
  * @param {JSON} dataObj
- * @param {String} dataObj.currentState
- * @param {String} dataObj.candidateLastName
- * @param {String} dataObj.candidate_id
+ * @param {string} dataObj.currentState
+ * @param {string} dataObj.candidateLastName
+ * @param {string} dataObj.candidate_id
  */
 PresidentialFundsMap.prototype.updateBreadcrumbs = function(dataObj) {
   let theHolder = this.element.querySelector(selector_breadcrumbNav);
@@ -1079,8 +1079,8 @@ PresidentialFundsMap.prototype.handleCandidateListClick = function(e) {
  * starts a new loading chain, starting with loading the candidate details
  * TODO: overkill?
  * @param {CustomEvent} e
- * @param {String} e.detail.candidate_id
- * @param {String} e.detail.name
+ * @param {string} e.detail.candidate_id
+ * @param {string} e.detail.name
  */
 PresidentialFundsMap.prototype.handleCandidateChange = function(e) {
   this.loadCandidateDetails(e.detail.candidate_id, e.detail.name);
@@ -1150,7 +1150,7 @@ PresidentialFundsMap.prototype.handleStateClick = function(e) {
 /**
  * Called from throughout the widget
  * TODO: yes, we should activate this
- * @param {String} errorCode
+ * @param {string} errorCode
  */
 PresidentialFundsMap.prototype.handleErrorState = function(errorCode) {
   if (errorCode == 'NO_RESULTS_TO_DISPLAY') {
@@ -1304,7 +1304,7 @@ PresidentialFundsMap.prototype.handleToggleRaisingExports = function(e) {
 /**
  * Triggered any time a user asks to reset the app (i.e. return to "Nationwide: All candidates")
  * Resets vars and calls loadCandidatesList, displayUpdatedData_candidate, updateBreadcrumbs, and others
- * @param {MouseEvent} e [Optional]
+ * @param {MouseEvent} e - [Optional]
  */
 PresidentialFundsMap.prototype.handleResetClick = function(
   e,
@@ -1408,7 +1408,7 @@ PresidentialFundsMap.prototype.toggleUSOrStateDisplay = function() {
  * TODO: this
  * Controls class names and functionality of the widget.
  * Called when we both start and complete (@see loadMapData() )
- * @param {Boolean} newState
+ * @param {boolean} newState
  */
 PresidentialFundsMap.prototype.setLoadingState = function(newState) {
   if (newState === false) {
@@ -1435,7 +1435,7 @@ PresidentialFundsMap.prototype.setLoadingState = function(newState) {
 /**
  * Handles the usage analytics for this module
  * @TODO: Decide how to gather usage insights while embedded
- * @param {String} candID - The candidate ID
+ * @param {string} candID - The candidate ID
  * @param {*} electionYear - String or Number, the user-selected election year
  */
 function logUsage(eventType, detail) {

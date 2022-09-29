@@ -13,8 +13,8 @@ const officeNames = {
 
 /**
  * Converts input to a string, changes non-word characters to dashes and trims leading, double, and trailing dashes
- * @param {*} val typically a string that should be translated to slug format
- * @param {Boolean} retainCase whether to force to lowercase
+ * @param {*} val - Typically a string that should be translated to slug format
+ * @param {boolean} retainCase - Whether to force to lowercase
  * @returns {string} lowercase, separated by dashes
  */
 function slugify(val, retainCase = false) {
@@ -38,8 +38,8 @@ function slugify(val, retainCase = false) {
 
 /**
  * Removes double quotes from a given value
- * @param {String} value - A string whose doublequote characters should be removed
- * @returns {String} A string with any " characters removed
+ * @param {string} value - A string whose doublequote characters should be removed
+ * @returns {string} A string with any " characters removed
  */
  function stripDoubleQuotes(value) {
   return value.replace(/["]+/g, '');
