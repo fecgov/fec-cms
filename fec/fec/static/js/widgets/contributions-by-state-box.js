@@ -47,7 +47,7 @@ function formatAsCurrency(passedValue, roundToWhole = true) {
 /**
  * Builds the link/url to a filtered Individual Contributions page/list
  * @param {number} cycle - The candidate's election year
- * @param {"H"|"P"|"S"} office - 'H', 'P', or 'S'
+ * @param {"H" | "P" | "S"} office - 'H', 'P', or 'S'
  * @param {string[]} committeeIDs - An array of strings of the candidate's committees
  * @param {string} stateID - Optional. A null value will not filter for any state but show entries for the entire country
  * @returns {string} URL or empty string depending on
@@ -206,10 +206,7 @@ ContributionsByState.prototype.init = function() {
   head.appendChild(linkElement);
 
   // Init the autosuggest
-  this.autosuggest = new Autosuggest(
-    '#contribs-by-state-cand',
-    'candidates'
-  );
+  this.autosuggest = new Autosuggest('#contribs-by-state-cand');
 
   // Override the default autosuggest behavior and add our own handler
   this.autosuggest.$input.off('selection');

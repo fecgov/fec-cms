@@ -10,7 +10,7 @@
   >
   <div class="combo combo--search {{ size }}">
     <label for="search" class="label">Candidate or committee name or ID</label>
-    <input id="search" class="js-search-input combo__input" type="text" name="search"
+    <input id="search" class="js-search-input combo__input" type="text" name="search" data-search-type="allData"
     {% if FEATURES.use_tt == false %}data-{% endif %}autocorrect="off" autocapitalize="off" spellcheck="false"
     value="{{ query or '' }}">
     <button type="submit" class="combo__button button--search {{ button_color }}">

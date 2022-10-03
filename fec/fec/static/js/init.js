@@ -96,7 +96,7 @@ $(function() {
   if (siteSearchElement) {
     // TODO: remove the useTt conditional when FEATURES.use_tt goes away
     if (window.useTt === false)
-      new Autosuggest(siteSearchElement, { queryType: 'all' });
+      new Autosuggest(siteSearchElement);
     else
       $('.js-site-search').each(function() {
         new typeahead.Typeahead($(this), 'all', '/data/');

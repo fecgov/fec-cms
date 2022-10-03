@@ -80,7 +80,7 @@ $(function() {
   if (mainSearchElement) {
     // TODO: remove the useTt conditional when FEATURES.use_tt goes away
     if (window.useTt === false)
-      new Autosuggest(mainSearchElement, { queryType: 'allData' });
+      new Autosuggest(mainSearchElement);
     else
       new typeahead.Typeahead('.js-search-input', 'allData', '/data/');
   }
@@ -90,7 +90,7 @@ $(function() {
   if (siteSearchElement) {
     // TODO: remove the useTt conditional when FEATURES.use_tt goes away
     if (window.useTt === false)
-      new Autosuggest(siteSearchElement, { queryType: 'all' });
+      new Autosuggest(siteSearchElement);
     else
       new typeahead.Typeahead($('.js-site-search'), 'all', '/data/');
   }

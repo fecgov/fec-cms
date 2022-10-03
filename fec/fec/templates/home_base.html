@@ -67,12 +67,15 @@
               <div class="combo combo--search">
                 <input
                   class="js-site-search combo__input"
-                  {% if settings.FEATURES.use_tt == false %}data-{% endif %}autocomplete="off"
-                  aria-controls="query_listbox"
                   id="query"
                   name="query"
                   type="text"
-                  aria-label="Search FEC.gov">
+                  data-search-type="all"
+                  aria-autocomplete="list"
+                  aria-controls="query_listbox"
+                  aria-label="Search FEC.gov"
+                  {% if settings.FEATURES.use_tt == false %}data-{% endif %}autocomplete="off"
+                >
                 <button type="submit" class="button--standard combo__button button--search">
                   <span class="u-visually-hidden">Search</span>
                 </button>
@@ -98,13 +101,16 @@
               <input type="hidden" name="type" value="site">
               <label class="u-visually-hidden" for="query">Search</label>
               <div class="combo combo--search">
-              <input
-                class="js-site-search combo__input"
-                {% if settings.FEATURES.use_tt == false %}data-{% endif %}autocomplete="off"
-                id="query"
-                name="query"
-                type="text"
-                aria-label="Search FEC.gov">
+                <input
+                  class="js-site-search combo__input"
+                  id="query"
+                  name="query"
+                  type="text"
+                  data-search-type="all"
+                  aria-autocomplete="list"
+                  aria-label="Search FEC.gov"
+                  {% if settings.FEATURES.use_tt == false %}data-{% endif %}autocomplete="off"
+                >
               <button type="submit" class="button--standard combo__button button--search">
                 <span class="u-visually-hidden">Search</span>
               </button>

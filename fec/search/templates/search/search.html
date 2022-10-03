@@ -13,7 +13,7 @@
         <div class="container">
           <div class="combo combo--search content__section">
             <label for="search" class="label">Search fec.gov</label>
-            <input id="search" type="text" class="combo__input js-site-search" name="query"{% if search_query %} value="{{ search_query }}"{% endif %}>
+            <input id="search" type="text" class="combo__input js-site-search" name="query" aria-autocomplete="list" data-search-type="all"{% if search_query %} value="{{ search_query }}"{% endif %}>
             <button type="submit" class="button--cta combo__button button--search">
               <span class="u-visually-hidden">Search</span>
             </button>

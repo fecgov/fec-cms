@@ -16,12 +16,7 @@ function ContactForm($elm) {
 
   // TODO: remove the useTt conditional when FEATURES.use_tt goes away
   if (window.useTt === false) {
-    this.autosuggest = new Autosuggest(
-      $elm.find('.js-contact-autosuggest'),
-      'committees',
-      ''
-    );
-    this.autosuggest = new Autosuggest(document.querySelector('.js-contact-autosuggest'), 'committees', '');
+    this.autosuggest = new Autosuggest(document.querySelector('.js-contact-autosuggest'));
   } else {
     this.typeahead = new Typeahead(
       $elm.find('.js-contact-typeahead'),
@@ -98,7 +93,7 @@ function AnalystLookup($elm) {
 
   // TODO: remove the useTt conditional when FEATURES.use_tt goes away
   if (window.useTt === false) {
-    this.autosuggest = new Autosuggest(this.$input, 'committees', '');
+    this.autosuggest = new Autosuggest(this.$input, { type: 'committees', url: '' });
     this.initAutosuggest();
   } else {
     this.typeahead = new Typeahead(this.$input, 'committees', '');
