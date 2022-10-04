@@ -847,7 +847,6 @@ DataTable.prototype.fetchSuccess = function(resp) {
 };
 
 DataTable.prototype.fetchError = function(jqXHR, textStatus) {
-  console.log('DataTable.fetchError(jqXHR, textStatus): ', jqXHR, textStatus);
   var self = this;
   // Default error message that occurs most likely due to timeout
   var errorMessage =

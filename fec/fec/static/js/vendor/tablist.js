@@ -21,7 +21,6 @@ var $container = '.tab-interface';
  * @param {*} push
  */
 function show($target, push) {
-  console.log('tablist show(target, push): ', $target, push);
   // Toggle tabs
   $('[role="tab"]').attr({
     'aria-selected': null
@@ -54,7 +53,6 @@ function show($target, push) {
 }
 
 function refreshTabs() {
-  console.log('tablist refreshTabs()');
   var query = URI.parseQuery(window.location.search);
   $('ul[role="tablist"]').each(function(index, tabs) {
     var $tabs = $(tabs);

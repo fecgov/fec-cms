@@ -95,7 +95,6 @@ function TagList(opts) {
  * @param {string} opts.rangeName
  */
 TagList.prototype.addTag = function(e, opts) {
-  console.log('TagList.addTag(e, opts): ', e, opts);
   var tag = opts.nonremovable
     ? template_nonremoveableTag(opts)
     : template_tag(opts);
@@ -176,9 +175,7 @@ TagList.prototype.removeTagElement = function($tag, emit) {
  * @calls 
  */
 TagList.prototype.removeTag = function(key, emit, forceRemove) {
-  console.log('TagList.removeTag(key, emit, forceRemove)', key, emit, forceRemove);
   var $tag = this.$list.find('[data-id="' + key + '"]');
-  console.log('  $tag: ', $tag);
 
   if ($tag.length > 0) {
     // If the tag exists, remove the element if it's removable
@@ -262,7 +259,6 @@ TagList.prototype.removeAllTags = function(e, opts, emit) {
  * @param {} opts.name
  */
 TagList.prototype.removeTagEvt = function(e, opts) {
-  console.log('TagList.removeTagEvt(e, opts): ', e, opts);
   this.removeTag(opts.key, false);
   // logic to handle adding an all years tag if
   // no two year transaction period filter is provided
@@ -326,6 +322,9 @@ TagList.prototype.renameTag = function(e, opts) {
  * @param {} opts.key
  */
 TagList.prototype.disableTag = function(e, opts) {
+  console.log('TagList.disableTag(e, opts): ', e, opts);
+  console.log('  typeof e: ', typeof e);
+  console.log('  typeof opts: ', typeof opts);
   var $tag = this.$list.find('[data-id="' + opts.key + '"]');
   $tag.closest('.tag__category').hide();
 };
@@ -337,6 +336,10 @@ TagList.prototype.disableTag = function(e, opts) {
  * @param {} opts.key
  */
 TagList.prototype.enableTag = function(e, opts) {
+  console.log('TagList.enableTag(e, opts): ', e, opts);
+  console.log('  typeof e: ', e);
+  console.log('  typeof opts: ', opts);
+
   var $tag = this.$list.find('[data-id="' + opts.key + '"]');
   $tag.closest('.tag__category').show();
 };
