@@ -4,7 +4,7 @@
   data-filter="autosuggest"
   data-name="{{ name }}"
   id="{{ name }}-field{{ id_suffix }}"
-  data-dataset="{{ dataset }}" {% if allow_text %}data-allow-text{% endif %}>
+  data-search-type="{{ dataset }}" {% if allow_text %}data-allow-text{% endif %}>
   {% if minor_label_text %}
     <label for="{{ name }}{{ id_suffix }}">{{ title }}</label>
   {% else %}

@@ -23,7 +23,7 @@ class ContactRAD(forms.Form):
         self.fields['u_contact_email'] = forms.EmailField(label='Email', required=True)
         self.fields['committee_name'] = forms.CharField(
             label='Committee name or ID', required=True,
-            widget=forms.TextInput(attrs={'class': 'js-contact-autosuggest', 'data-dataset': 'committees'}))
+            widget=forms.TextInput(attrs={'class': 'js-contact-committee', 'data-search-type': 'committees'}))
         self.fields['u_committee'] = forms.CharField(widget=forms.HiddenInput())
         self.fields['u_contact_title'] = forms.CharField(label='Your position or title', required=False)
         self.fields['u_category'] = forms.ChoiceField(label='Subject', choices=category_options, required=True)
