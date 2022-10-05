@@ -152,7 +152,6 @@ function getUrl(resource, queryString) {
  * @returns {object[]} Array of objects structured like { is_header: true, id: window.queryText, name: 'Select a committee:', type: 'none' }
  */
 function formatResults(type, data) {
-  // console.log('formatResults(): ', type, data);
   let toReturn = [];
   let results = data.results;
   let resultsLimit = 5;
@@ -184,13 +183,11 @@ function formatResults(type, data) {
  * @returns
  */
 function getSuggestions(type) {
-  // console.log('getSuggestions(type): ', type);
   let toReturn = [];
   if (type == 'all') {
     toReturn.push({ is_suggestion: true, id: window.queryText, name: 'Search individual contributions from:', type: 'individual' });
     toReturn.push({ is_suggestion: true, id: window.queryText, name: 'Search other pages:', type: 'site' });
   }
-  // console.log('  going to return ', toReturn);
   return toReturn;
 }
 
