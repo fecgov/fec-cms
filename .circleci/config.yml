@@ -44,6 +44,7 @@ jobs:
       - run:
           name: Install python dependencies
           command: |
+            sudo rm -rf .env
             python3 -m venv .env
             . .env/bin/activate
             pip install -U pip setuptools wheel codecov
