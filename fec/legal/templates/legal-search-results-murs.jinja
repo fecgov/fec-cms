@@ -18,23 +18,26 @@
       <input id="case_no" name="case_no" type="text" value="{{ case_no }}">
     </div>
     {# Python API call without suggestions #}
-    <div class="filter">
+    {# <div class="filter">
       <label class="label" for="case_regulatory_citation">Regulatory citation</label>
       <input id="case_regulatory_citation" name="case_regulatory_citation" type="text" value="{{ case_regulatory_citation }}">
     </div>
     <div class="filter">
-      <label class="label" for="case_regulatory_citation">Regulatory citation</label>
-      <input id="case_regulatory_citation" name="case_regulatory_citation" type="text" value="{{ case_regulatory_citation }}">
-    </div>
+      <label class="label" for="case_statutory_citation">Regulatory citation</label>
+      <input id="case_statutory_citation" name="case_statutory_citation" type="text" value="{{ case_statutory_citation }}">
+    </div> #}
+    <div class="filter">
     {# Regulatory and statutory citations hooked up with suggestions, not functioning and only for concept #}
     {% if (FEATURES.use_tt) == false %}
-    {{ autosuggest.field(name = 'case_regulatory_citation', title = 'Regulatory citation', dataset = 'caseRegulatoryCitation') }}
-    {{ autosuggest.field(name = 'case_statutory_citation', title = 'Statutory citation', dataset = 'caseStatutoryCitation') }}
+    {{ autosuggest.field(query_field_name = 'case_regulatory_citation', field_label = 'Regulatory citation', dataset = 'caseRegulatoryCitation') }}
+    </div><div class="filter">
+    {{ autosuggest.field(query_field_name = 'case_statutory_citation', field_label = 'Statutory citation', dataset = 'caseStatutoryCitation') }}
     {% else %}
     {{ typeahead.field(name = 'case_regulatory_citation', title = 'Regulatory citation', dataset = 'caseRegulatoryCitation') }}
     {{ typeahead.field(name = 'case_statutory_citation', title = 'Statutory citation', dataset = 'caseStatutoryCitation') }}
     {% endif %}
     {# TODO: remove useTt with the use_tt feature flag #}
+    </div>
     <div class="filter">
       <label class="label" for="case_respondents">MUR respondents</label>
       <input id="case_respondents" name="case_respondents" type="text" value="{{ case_respondents }}">

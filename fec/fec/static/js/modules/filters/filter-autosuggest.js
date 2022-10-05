@@ -4,11 +4,12 @@
  * 
  */
 
+// const $ = require('jquery');
 const URI = require('urijs');
 const _ = require('underscore');
-import { Autosuggest } from '../autosuggest';
+import { Autosuggest, dataTypes, fetchInit } from '../autosuggest';
 import sanitizeValue from '../helpers';
-import { slugify, stripDoubleQuotes } from '../utils';
+import { stripDoubleQuotes } from '../utils';
 
 const ID_PATTERN = /^\w{9}$/;
 
@@ -20,7 +21,7 @@ const ID_PATTERN = /^\w{9}$/;
  * @param {string} value - A string to be converted
  * @returns string Formatted
  */
-function slugify_remove(value) { // TODO: test if we can remove this (likely with chiclets, etc)
+function slugify(value) {
   return value
     .trim()
     .replace(/\s+/g, '-')
@@ -32,9 +33,11 @@ function slugify_remove(value) { // TODO: test if we can remove this (likely wit
  * @param {object} datum
  * @param {string} datum.name
  * @param {(string | number)} datum.id
+ *
  * @returns {string} Formatted like 'Committee Name (COMMITTEE_ID)' or 
  */
 function formatLabel(datum) {
+  console.log('formatLabel()');
   return datum.name
     ? datum.name + ' (' + datum.id + ')'
     : '"' + stripDoubleQuotes(datum.id) + '"';
@@ -47,6 +50,7 @@ function formatLabel(datum) {
  * @returns {string} A slug of value with '-checkbox' appended to the end
  */
 function formatId(value) {
+  console.log('formatId(value): ', value);
   return slugify(value) + '-checkbox';
 }
 
@@ -74,8 +78,9 @@ var textDataset = {
  * @param {string|number} data.value - To be assigned to <input value="">
  * @returns {string} to be used as the innerHTML of a checkbox item
  */
-const template_checkbox = data => `
-    <input 
+function template_checkbox(data) {
+  console.log('template_checkbox(data): ', data);
+  return `<input 
       id="${data.id}"
       name="${data.name}"
       value="${data.value}"
@@ -83,10 +88,8 @@ const template_checkbox = data => `
       checked
     />
     <label for="${data.id}">${data.label}</label>
-    <button class="dropdown__remove">
-    <span class="u-visually-hidden">Remove</span>
-    </button>
-`;
+    <button class="dropdown__remove"><span class="u-visually-hidden">Remove</span></button>`;
+}
 
 /**
  * Creates a new FilterAutosuggest
@@ -110,18 +113,29 @@ const template_checkbox = data => `
  *
  * @listens autosuggest:open // TODO: add these (it doesn't listen to autosuggest:open)
  */
-function FilterAutosuggest(elementSelector, dataset, allowText) {
-  console.log('FilterAutosuggest(elementSelector, dataset, allowText)', elementSelector, dataset, allowText);
+function FilterAutosuggest(elementSelector, allowText) {
+  console.log('FilterAutosuggest(elementSelector, allowText)', elementSelector, allowText);
   // If elementSelector is a string, use it to find this target element,
   // else save the elementSelector element as this.element
   this.element = typeof elementSelector == 'string' ? document.querySelector(elementSelector) : elementSelector;
-  this.queryType = this.element.dataset.dataset || this.element.dataset.name;
+  // this.queryType = this.element.dataset.name; // this.element.dataset.dataset || 
+  // console.log('  this.queryType: ', this.queryType);
   this.allowText = allowText;
 
   this.field = this.element.querySelector('input[type="text"]');
-  this.fieldName = this.queryType || this.field.getAttribute('name');
+
+  console.log('  this.element: ', this.element);
+  console.log('  this.field: ', this.field);
+
+  console.log('  this.field.dataset: ', this.field.dataset);
+
+  this.dataDetails = dataTypes[this.field.dataset.searchType];
+  this.queryFieldName = this.dataDetails.queryFieldName;
+
   this.button = this.element.querySelector('button');
   this.selected = this.element.querySelector('.dropdown__selected');
+  console.log('  this.button: ', this.button);
+  console.log('  this.selected: ', this.selected);
 
   // Create the Autosuggest elements (and set this.autosuggest)
   this.autosuggestInit();
@@ -131,22 +145,18 @@ function FilterAutosuggest(elementSelector, dataset, allowText) {
   const textInput = this.element.querySelector('input[type="text"]');
   if (textInput) textInput.addEventListener('change', this.handleChange.bind(this));
 
-  const checkboxInputs = this.element.querySelectorAll('input[type="checkbox"]');
-  // if (checkboxInputs) {
-    checkboxInputs.forEach(eachCheckbox => {
+  const checkboxes = this.element.querySelectorAll('input[type="checkbox"]');
+  if (checkboxes) {
+    checkboxes.forEach(eachCheckbox => {
       eachCheckbox.addEventListener('change', this.handleCheckbox.bind(this));
     });
-  // }
+  }
 
   document.body.addEventListener('filter:modify', this.changeDataset.bind(this));
 
   this.field.addEventListener('autosuggest:select', this.handleSelect.bind(this));
-  // this.field.addEventListener('selection', this.handleSelect.bind(this));
-  // this.field.addEventListener('typeahead:autocomplete', this.handleAutocomplete.bind(this));
-  // this.field.addEventListener('typeahead:render', this.setFirstItem.bind(this));
   this.field.addEventListener('autosuggest:results', this.handleResults.bind(this));
   this.field.addEventListener('keyup', this.handleKeypress.bind(this));
-  // this.field.addEventListener('click', this.handleSubmit.bind(this));
 
   document.body.addEventListener('tag:removed', this.removeCheckbox.bind(this));
   document.body.addEventListener('tag:removeAll', this.removeAllCheckboxes.bind(this));
@@ -155,24 +165,26 @@ function FilterAutosuggest(elementSelector, dataset, allowText) {
 }
 
 /**
- * 
+ * Creates the Autosuggest elements. Called by the constructor before event listeners are added.
  */
 FilterAutosuggest.prototype.autosuggestInit = function() {
-    queryType: this.queryType,
-    minLength: 3,
-    hint: false, // TODO: what's this?
-    highlightFirst: true
+  console.log('FilterAutosuggest.autosuggestInit()');
   const opts = {
+    // type: this.dataDetails.type,
+    // minLength: 3,
+    // hint: false, // TODO: what's this?
+    // highlightFirst: true
+    // insideFilter: true
   };
 
-  console.log('  this.element: ', this.element);
-  console.log('  opts.queryType: ', opts.queryType);
+  // console.log('  this.element: ', this.element);
+  // console.log('  opts.queryType: ', opts.queryType);
   // if ((opts.queryType == 'q' || opts.queryType == 'qq')  ) opts.queryType = opts.
-  if (this.allowText && this.queryType) opts.dataset = this.dataset;
-  else if (this.allowText && !this.dataset) opts.dataset = textDataset;
-  console.log('    opts.queryType: ', opts.queryType);
+  // if (this.allowText && this.queryType) opts.dataset = this.dataDetails;
+  // else if (this.allowText && !this.dataDetails) opts.dataset = textDataset;
+  // console.log('    opts.queryType: ', opts.queryType);
 
-  this.autosuggest = new Autosuggest(this.field, opts);
+  this.autosuggest = new Autosuggest(this.field);
 
   // set this aria-live attribute to 'polite' for this .as-menu
   const menus = this.element.querySelectorAll('.as-menu');
@@ -205,7 +217,7 @@ FilterAutosuggest.prototype.handleResults = function(e) {
  * Called by @see FilterAutosuggest.handleResults
  */
 FilterAutosuggest.prototype.setFirstItem = function() {
-  // console.log('FilterAutosuggest.setFirstItem()');
+  console.log('DOES THIS DO ANYTHING? FilterAutosuggest.setFirstItem()');
   // this.firstItem = arguments[1];
   // Add a hover class to the first item to indicate it will be selected
   const suggestions = this.element.querySelectorAll('.as-suggestion');
@@ -228,6 +240,7 @@ FilterAutosuggest.prototype.setFirstItem = function() {
 FilterAutosuggest.prototype.handleSelect = function(e) {
   console.log('FilterAutosuggest.handleSelect(e) (AUTOSUGGEST:SELECT): ', e);
 
+  
   console.log('  e.target.type: ', e.target.type);
 
   const datum = e.detail.selection.value;
@@ -264,9 +277,11 @@ FilterAutosuggest.prototype.handleSelect = function(e) {
   this.button.focus();
   this.button.classList.add('is-loading');
 
-  // this.element.dispatchEvent(new CustomEvent('as:changed', e));
-  // e.target.dispatchEvent(new CustomEvent('change', e));
-  // e.target.dispatchEvent('change', e);
+  const newEvent = new CustomEvent('change', {
+    // bubbles: true,
+    detail: Object.assign({}, e.detail, {})
+  });
+  this.field.dispatchEvent(newEvent);
 };
 
 /**
@@ -303,12 +318,14 @@ FilterAutosuggest.prototype.handleChange = function(e) {
     (this.allowText && this.field.value.length > 1) ||
     this.datum
   ) {
+    console.log('    enabling the button');
     this.enableButton();
 
   } else if (
     this.field.value.length === 0 ||
     (!this.allowText && this.field.value.length < 3)
   ) {
+    console.log('    disabling the button');
     this.datum = null;
     this.disableButton();
   }
@@ -319,6 +336,7 @@ FilterAutosuggest.prototype.handleChange = function(e) {
  */
 FilterAutosuggest.prototype.handleCheckbox = function(e) {
   console.log('FilterAutosuggest.handleCheckbox(e): ', e);
+  console.log('  typeof e: ', typeof e);
   console.log('  this.field', this.field);
   console.log('  this.field.value', this.field.value);
 
@@ -346,14 +364,23 @@ FilterAutosuggest.prototype.handleCheckbox = function(e) {
 FilterAutosuggest.prototype.handleClick = function(e) {
   console.log('FilterAutosuggest.handleClick(e): ', e);
 
-  console.log('  typeof e.target: ', typeof e.target);
-
-  if (e.target.classList.contains('dropdown__remove')) {
-    console.log('    if');
+  if (e.target.classList.contains('dropdown__remove'))
     this.removeCheckbox(e);
-  } else {
-    console.log('    ELSE NOTHING');
-  }
+
+  // console.log('  typeof e.target: ', typeof e.target);
+
+  // if (e.target.tagName.toLowerCase() === 'input') {
+  //   console.log('  clicked an input');
+  //   // clicked the <input>, so we don't care
+  // } else if (e.target.classList.contains('dropdown__remove')) {
+  //   console.log('    if');
+  //   this.removeCheckbox(e);
+  // } else if (e.target.tagName.toLowerCase() === 'label') {
+  //   console.log('  clicked a label');
+
+  // } else {
+  //   console.log('    ELSE NOTHING');
+  // }
 };
 
 /**
@@ -465,7 +492,9 @@ FilterAutosuggest.prototype.appendCheckbox = function(opts) {
   if (dataIDelement) return;
 
   const checkboxItem = document.createElement('li');
+  console.log('  checkboxItem: ', checkboxInput);
   checkboxItem.innerHTML = template_checkbox(data);
+  console.log('  checkboxItem.innerHTML: ', checkboxItem.innerHTML);
   this.selected.appendChild(checkboxItem);
   const checkboxInput = checkboxItem.querySelector('input');
 
@@ -486,6 +515,7 @@ FilterAutosuggest.prototype.appendCheckbox = function(opts) {
  * @returns {object} Structured like {name: '', label: '', value: , id: 'name-value-checkbox'}
  */
 FilterAutosuggest.prototype.formatCheckboxData = function(input) {
+  console.log('FilterAutosuggest.formatCheckboxData(input): ', input);
   const output = {
     name: input.name,
     label: input.datum
@@ -494,7 +524,7 @@ FilterAutosuggest.prototype.formatCheckboxData = function(input) {
     value: _.escape(stripDoubleQuotes(input.value)),
     id: this.dataDetails.queryFieldName + '-' + formatId(input.value)
   };
-
+  console.log('  output: ', output);
   return output;
 };
 
@@ -506,33 +536,38 @@ FilterAutosuggest.prototype.formatCheckboxData = function(input) {
  */
 FilterAutosuggest.prototype.getFilters = function(values) {
   console.log('FilterAutosuggest.getFilters(values): ', values);
-  console.log('  NEED TO DO THIS');
   const self = this;
-  if (this.dataset) {
-    var dataset = this.dataset.name + 's';
-    var nameID = this.dataset.name + '_id';
-    var ids = values.filter(function(value) {
+  if (this.dataDetails) {
+    const qType = this.dataDetails.type;
+    const qFieldName = this.dataDetails.queryFieldName;
+    const qIDs = values.filter(value => {
       return ID_PATTERN.test(value);
     });
-    values.forEach(function(value) {
+    values.forEach(value => {
       self.appendCheckbox({
         name: self.dataDetails.queryFieldName,
         label: ID_PATTERN.test(value) ? 'Loading&hellip;' : value,
         value: value
       });
     });
-    if (ids.length) {
-      console.log('  if (ids.length)');
-      $.getJSON(
-        URI(API_LOCATION)
-          .path([API_VERSION, dataset].join('/'))
-          .addQuery('api_key', API_KEY_PUBLIC)
-          .addQuery(nameID, ids)
-          .toString()
-      ).done(this.updateFilters.bind(this));
+
+    if (qIDs.length) {
+      const qPath = URI(window.API_LOCATION)
+        .path([window.API_VERSION, qType].join('/'))
+        .addQuery('api_key', window.API_KEY_PUBLIC)
+        .addQuery(qFieldName, qIDs)
+        .toString();
+
+        fetch(qPath, fetchInit)
+        .then(response => response.json())
+        .then(data => {
+          self.updateFilters(data);
+        });
     } else {
-      console.log('  NO ids');
+      // no qIDs, nothing to do
     }
+  } else {
+    console.log('  else - no this.dataDetails');
   }
 };
 
@@ -545,23 +580,38 @@ FilterAutosuggest.prototype.updateFilters = function(response) {
   console.log('FilterAutosuggest.updateFilters(response): ', response);
   const self = this;
 
-  if (this.dataset) {
-    const nameID = this.dataset.name + '_id';
+  if (this.dataDetails) {
+    const queryFieldName = this.dataDetails.queryFieldName;
     response.results.forEach(function(result) {
-      var label = result.name + ' (' + result[nameID] + ')';
-      self.$elm
-        .find(
-          'label[for="' + self.fieldName + '-' + result[nameID] + '-checkbox"]'
-        )
-        .text(label);
-      self.$elm
-        .find('#' + self.fieldName + '-' + result[nameID] + '-checkbox')
-        .trigger('filter:renamed', [
-          {
-            key: self.fieldName + '-' + result[nameID] + '-checkbox',
-            value: label
-          }
-        ]);
+      const labelText = result.name + ' (' + result[queryFieldName] + ')';
+      console.log('  labelText: ', labelText);
+      // How do we find this checkbox?
+      const checkboxIdentifier = `${queryFieldName}-${result[queryFieldName]}-checkbox`;
+      console.log('  checkboxIdentifier: ', checkboxIdentifier);
+      // Find the checkbox
+      const theCheckbox = self.element.querySelector(`#${checkboxIdentifier}`);
+      console.log('  theCheckbox: ', theCheckbox);
+      // const labelElement = self.element.querySelector(
+      //   `label[for="${checkboxIdentifier}"]`
+      // );
+      if (theCheckbox.labels[0]) {
+        const labelElement = theCheckbox.labels[0];
+        console.log('  labelElement: ', labelElement);
+
+        labelElement.innerText = labelText;
+      }
+
+      // Get ready to dispatch a filter:renamed event
+
+      const newEvent = new CustomEvent('filter:renamed', {
+        bubbles: true,
+        detail: {
+          key: checkboxIdentifier,
+          value: labelText
+        }
+      });
+      // and make it broadcast that it's been renamed
+      theCheckbox.dispatchEvent(newEvent);
     });
   } else {
     console.log('  ELSE NO DATASET');
@@ -591,12 +641,12 @@ FilterAutosuggest.prototype.changeDataset = function(e, opts) {
       opts.filterValue.indexOf('individual') > -1 &&
       opts.filterValue.indexOf('committee') < 0
     ) {
-      this.dataset = null;
+      this.dataDetails = null;
       this.allowText = true;
       this.autosuggestInit();
     } else {
       // Otherwise initialize with the committee dataset
-      this.dataset = typeahead.datasets.committees;
+      this.dataDetails = datasets.committees;
       this.autosuggestInit();
     }
   }

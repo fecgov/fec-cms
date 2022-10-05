@@ -48,11 +48,11 @@ function AutosuggestFilterBlock(selector) {
   // var dataset = key ? typeahead.datasets[key] : null; // TODO: BRING THIS BACK AFTER RENAMING (caulking doesn't like it)
   // TODO: TESTING: 
   // let key = ;
-  let dataset = '/all';
+
   // data-allow-text either exists or doesn't; the template doesn't give it a value
   const allowText = this.element.hasAttribute('data-allow-text'); // TODO: check that this works
   console.log('  allowText: ', allowText);
-  this.asFilter = new FilterAutosuggest(this.element, dataset, allowText);
+  this.filterAs = new FilterAutosuggest(this.element, allowText);
 
   this.element.addEventListener('change', this.handleNestedChange.bind(this));
 }
@@ -67,20 +67,28 @@ AutosuggestFilterBlock.constructor = AutosuggestFilterBlock;
  */
 AutosuggestFilterBlock.prototype.fromQuery = function(query) {
   console.log('AutosuggestFilterBlock.fromQuery(query)', query);
+  console.log('  this.name: ', this.name);
+  // Set values to If query includes a value for this filter's name (ex: 'committee_id')
   const values = query[this.name] ? ensureArray(query[this.name]) : [];
-  this.asFilter.getFilters(values);
+  this.filterAs.getFilters(values);
   console.log('  this: ', this);
-  console.log('  this.asFilter: ', this.asFilter);
-  // console.log('  this.asFilter.element: ', this.asFilter.element);
+  console.log('  this.filterAs: ', this.filterAs);
+  // console.log('  this.filterAs.element: ', this.filterAs.element);
   const checkboxes = this.element.querySelectorAll('input[type="checkbox"]');
   console.log('  checkboxes: ', checkboxes);
-  checkboxes.value = values;
+  for (let i = 0; i < checkboxes.length; i++) {
+    console.log('    for()');
+    checkboxes[i].setAttribute('value', values[i]);
+  }
+  // checkboxes.value = values;
   console.log('  values: ', values);
   console.log('  this.autosuggest: ', this.autosuggest);
   // console.log('  this.autosuggest.element: ', this.autosuggest.element);
-  console.log('  this.asFilter: ', this.asFilter);
-  console.log('  this.asFilter.element: ', this.asFilter.element);
+  console.log('  this.filterAs: ', this.filterAs);
+  console.log('  this.filterAs.element: ', this.filterAs.element);
   // var values = query[this.name] ? Filter.ensureArray(query[this.name]) : [];
+
+  console.log('  values: ', values);
   // this.autosuggest.getFilters(values);
   // this.autosuggest.$elm.find('input[type="checkbox"]').val(values);
   return this;
@@ -107,27 +115,36 @@ AutosuggestFilterBlock.prototype.handleNestedChange = function(e) {
   console.log('  input.getAttribute(type): ', eTarget.getAttribute('type'));
 
   // TODO: only proceed if this is input[type="checkbox"] ?
-  if (input.getAttribute('type') == 'checkbox') {
-    console.log('  if');
+  if (eTarget.getAttribute('type') == 'checkbox') {
+    console.log('  if–it is a checkbox!');
     // var eventName = input.is(':checked') ? 'filter:added' : 'filter:removed';
-    let newEventName = input.hasAttribute('checked') ? 'filter:added' : 'filter:removed';
+    const newEventName = eTarget.checked ? 'filter:added' : 'filter:removed';
 
     console.log('  newEventName: ', newEventName);
-    const newEvent = new CustomEvent(newEventName, {
-      // value: _.escape(label.text()), // TODO: update this to ES6
-      value: _.escape(label.textContent),
-      name: input.getAttribute('name'),
-      loadedOnce: true
-    });
+    const newEvent = new CustomEvent(
+      newEventName,
+      {
+        bubbles: true,
+        detail: { // value: _.escape(eTargetLabelElement.text()), // TODO: update this to ES6
+          key: eTargetID,
+          // value: _.escape(eTargetLabelElement.textContent),
+          value: eTargetLabelElement.textContent,
+          name: eTarget.getAttribute('name'),
+          loadedOnce: true,
+          filterLabel: eTargetLabelElement
+        }
+      }
+    );
+    console.log('  newEvent: ', newEvent);
 
-    input.dispatchEvent(newEvent);
+    eTarget.dispatchEvent(newEvent);
 
   } else {
     console.log('  ELSE NOTHING');
-    console.log('  input: ', input);
-    console.log('  input: ' + input);
-    console.log('  id: ', id);
-    console.log('  label: ', label);
+    console.log('  eTarget: ', eTarget);
+    console.log('  eTarget: ' + eTarget);
+    console.log('  eTargetID: ', eTargetID);
+    console.log('  eTargetLabelElement: ', eTargetLabelElement);
   }
   
   // input.trigger(eventName, [
