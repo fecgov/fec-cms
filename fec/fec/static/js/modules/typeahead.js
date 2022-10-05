@@ -294,7 +294,7 @@ Typeahead.prototype.init = function() {
 
 /**
  * Re-inits element on searchTypeChanged event
- * @param {*} data - 
+ * @param {JQuery.Event} data - From window.events
  * @listens window.events.searchTypeChanged
  */
 Typeahead.prototype.handleChangeEvent = function(data) {
