@@ -13,9 +13,12 @@ import { slugify, stripDoubleQuotes } from '../utils';
 const ID_PATTERN = /^\w{9}$/;
 
 /**
- * 
- * @param {*} value - 
- * @returns {String}
+ * Doesn't actually create slugs.
+ * Trims any whitespace at the ends,
+ * turns spaces into dashes,
+ * removes lowercase letters, numbers, and :._-
+ * @param {string} value - A string to be converted
+ * @returns string Formatted
  */
 function slugify_remove(value) { // TODO: test if we can remove this (likely with chiclets, etc)
   return value
