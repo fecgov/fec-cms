@@ -98,7 +98,9 @@ function TagList(opts) {
  * @param {string} passedOpts.value - Used as the visible label for the filter tag, including html
  * @param {boolean} passedOpts.loadedOnce
  */
-TagList.prototype.addTag = function(e, opts) {
+TagList.prototype.addTag = function(e, passedOpts) {
+  var opts = passedOpts || e.detail;
+
   var tag = opts.nonremovable
     ? template_nonremoveableTag(opts)
     : template_tag(opts);
@@ -269,7 +271,9 @@ TagList.prototype.removeAllTags = function(e, opts, emit) {
  *
  * @calls {this.removeTag}
  */
-TagList.prototype.removeTagEvt = function(e, opts) {
+TagList.prototype.removeTagEvt = function(e, passedOpts) {
+  const opts = passedOpts || e.originalEvent.detail;
+
   this.removeTag(opts.key, false);
 };
 
@@ -297,8 +301,8 @@ TagList.prototype.removeTagDom = function(e) {
  * @param {string} passedOpts.value - The visible text from the tag
  * @param {boolean} passedOpts.nonremovable - 
  */
-TagList.prototype.renameTag = function(e, opts) {
-  console.log('TagList.renameTag(e, opts), ', e, opts);
+TagList.prototype.renameTag = function(e, passedOpts) {
+  const opts = passedOpts || e.originalEvent.detail;
   var tag = opts.nonremovable
     ? template_nonremoveableTag(opts)
     : template_tag(opts);

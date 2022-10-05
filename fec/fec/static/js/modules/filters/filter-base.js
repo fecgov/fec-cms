@@ -87,14 +87,17 @@ Filter.prototype.formatValue = function($input, value) {
   return escapedValue;
 };
 
-Filter.prototype.handleAddEvent = function(e, opts) {
-  console.log('Filter.handleAddEvent(e, opts): ', e, opts);
 /**
  * 
  * @param {jQuery.Event|CustomEvent} e - 
  * @param {object} opts - 
  * @returns 
  */
+Filter.prototype.handleAddEvent = function(e, passedOpts) {
+  console.log('Filter.handleAddEvent(e, passedOpts): ', e, passedOpts);
+  var opts = passedOpts || e.detail;
+  console.log('  opts.name and this.name: ', opts.name, this.name);
+  // If this event doesn't apply to me, do nothing
   if (opts.name !== this.name) {
     return;
   }
@@ -115,8 +118,9 @@ Filter.prototype.handleAddEvent = function(e, opts) {
  * @param {object} passedOpts
  * @returns {null} if (opts.name !== this.name || opts.loadedOnce !== true)
  */
-Filter.prototype.handleRemoveEvent = function(e, opts) {
-  // console.log('Filter.handleRemoveEvent(e, opts): ', e, opts);
+Filter.prototype.handleRemoveEvent = function(e, passedOpts) {
+  console.log('Filter.handleRemoveEvent(e, opts): ', e, opts);
+  const opts = passedOpts || e.originalEvent.detail;
   // Don't decrement on initial page load
   if (opts.name !== this.name || opts.loadedOnce !== true) {
     return;
@@ -160,8 +164,9 @@ Filter.prototype.decrement = function($filterLabel) {
  *
  * @returns {null} if this filter's name isn't === opts.name
  */
-Filter.prototype.setLastAction = function(e, opts) {
-  console.log('Filter.setLastAction(e, opts): ', e, opts);
+Filter.prototype.setLastAction = function(e, passedOpts) {
+  console.log('Filter.setLastAction(e, passedOpts): ', e, passedOpts);
+  const opts = passedOpts || e.originalEvent.detail;
   if (opts.name !== this.name) {
     return;
   }
