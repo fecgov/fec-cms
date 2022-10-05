@@ -1,4 +1,7 @@
-'use strict';
+/* eslint-disable no-console */
+/* eslint-disable no-trailing-spaces */
+/* eslint-disable semi */
+/* eslint-disable no-unused-vars */
 
 /**
  * @fileoverview Wrapper for @tarekraafat/autocomplete.js
@@ -86,7 +89,7 @@ const resultsListOptions = {
   class: 'as-dataset as-dataset-candidate',
   maxResults: 20,
   tabSelect: true,
-  element: (item, data) => {
+  element: item => {
     item.setAttribute('role', 'presentation');
   }
 };
@@ -173,7 +176,7 @@ function getUrl(resourceType, queryString) {
 
   let toReturn = thePath.join('/');
 
-  toReturn += `?q=${queryString}&api_key=${API_KEY_PUBLIC}`;
+  toReturn += `?q=${queryString}&api_key=${window.API_KEY_PUBLIC}`;
   return toReturn;
 }
 
@@ -288,8 +291,8 @@ async function getData(q, self) {
 
   // TODO: CHECK THESE
   } else if (theDataType == 'MUR CITATION FILTERS') {
-    legal/citation/regulation
-    legal/citation/statute
+    // legal/citation/regulation
+    // legal/citation/statute
   } else {
     console.log(`  theDataType was '${theDataType}' so didn't do anything`);
   }
@@ -346,10 +349,6 @@ function Autosuggest(elementSelector, opts = {}) {
   // if elementSelector is a string, use that string to find the dom element and set that to this.input
   // else if elementSelector is an element, just save it
   this.input = typeof elementSelector == 'string' ? document.querySelector(elementSelector) : elementSelector;
-  console.log('  this.input: ', this.input);
-  console.log('  typeof elementSelector: ', typeof elementSelector);
-  console.log('  this.input.dataset: ', this.input.dataset);
-
   this.dataDetails = dataTypes[this.input.dataset.searchType];
 
   this.url = this.dataDetails.url || '/';
@@ -357,8 +356,6 @@ function Autosuggest(elementSelector, opts = {}) {
   this.formerSelectionIndex;
   this.value = '';
   this.isSiteSearch = this.input.classList.contains('.js-site-search');
-
-  console.log('  this.dataDetails: ', this.dataDetails);
   this.canRefineSearch = this.input.closest('form').dataset.refineSearch || false;
 
   this.init();
@@ -473,7 +470,8 @@ Autosuggest.prototype.off = function(eventName) {
  * @param {object} e.detail - Carries the autoComplete.js "feedback" object
  * @emits this.input#autosuggest:open // TODO: it doesn't emit this
  */
-Autosuggest.prototype.handleOpen = function(e) {
+Autosuggest.prototype.handleOpen = function() {
+  console.log('handleOpen()');
   this.matchAriaExpandeds();
 };
 
