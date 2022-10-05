@@ -92,15 +92,18 @@ $(function() {
     new FormNav(this);
   });
 
-  let siteSearchElement = document.querySelector('.js-site-search');
-  if (siteSearchElement) {
-    // TODO: remove the useTt conditional when FEATURES.use_tt goes away
-    if (window.useTt === false)
-      new Autosuggest(siteSearchElement);
-    else
-      $('.js-site-search').each(function() {
-        new typeahead.Typeahead($(this), 'all', '/data/');
+  // TODO: remove the useTt conditional when FEATURES.use_tt goes away
+  if (window.useTt === false) {
+    let siteSearchElements = document.querySelectorAll('.js-site-search');
+    if (siteSearchElements) {
+      siteSearchElements.forEach(el => {
+        new Autosuggest(el);
       });
+    }
+  } else {
+    $('.js-site-search').each(function() {
+      new typeahead.Typeahead($(this), 'all', '/data/');
+    });
   }
 
   // For any link that should scroll to a section on the page apply .js-scroll to <a>
