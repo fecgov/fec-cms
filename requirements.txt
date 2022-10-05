@@ -1,4 +1,4 @@
-Django==3.2.15
+Django==3.2.16
 cfenv==0.5.2
 dj-database-url==0.4.2
 django-libsass==0.7
