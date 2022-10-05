@@ -25,8 +25,8 @@ import { ensureArray } from '../helpers';
  * @property {HTMLElement} element
  * @property {HTMLInputElement} input
  */
-function AutosuggestFilter(selector) {
-  console.log('AutosuggestFilter(selector): ', selector);
+function AutosuggestFilterBlock(selector) {
+  console.log('AutosuggestFilterBlock(selector): ', selector);
 
   this.element = typeof selector == 'string' ? document.querySelector(selector) : selector[0];
   // if (typeof selector == 'string') this.element = document.querySelector(selector);
@@ -57,8 +57,8 @@ function AutosuggestFilter(selector) {
   this.element.addEventListener('change', this.handleNestedChange.bind(this));
 }
 
-AutosuggestFilter.prototype = Object.create(Filter.prototype);
-AutosuggestFilter.constructor = AutosuggestFilter;
+AutosuggestFilterBlock.prototype = Object.create(Filter.prototype);
+AutosuggestFilterBlock.constructor = AutosuggestFilterBlock;
 
 /**
  * Takes the URL
@@ -87,22 +87,24 @@ AutosuggestFilterBlock.prototype.fromQuery = function(query) {
 };
 
 // Ignore changes on typeahead input
-AutosuggestFilter.prototype.handleChange = function(e) {
+AutosuggestFilterBlock.prototype.handleChange = function(e) {
   //
-  console.log('AutosuggestFilter.handleChange(e): ', e);
+  console.log('AutosuggestFilterBlock.handleChange(e): ', e);
 };
 
 /**
  * TODO: get rid of Underscore
  * @param {Event} e - 
  */
-AutosuggestFilter.prototype.handleNestedChange = function(e) {
-  console.log('AutosuggestFilter.handleNestedChange(e): ', e);
-  const input = e.target;
-  const id = input.getAttribute('id');
-  const label = this.element.querySelector('[for="' + id + '"]');
-
-  console.log('  input.getAttribute(type): ', input.getAttribute('type'));
+AutosuggestFilterBlock.prototype.handleNestedChange = function(e) {
+  console.log('AutosuggestFilterBlock.handleNestedChange(e): ', e);
+  const eTarget = e.target;
+  const eTargetID = eTarget.getAttribute('id');
+  const eTargetLabelElement = this.element.querySelector('[for="' + eTargetID + '"]');
+  console.log('  input: ', eTarget);
+  console.log('  id: ', eTargetID);
+  console.log('  eTargetLabelElement: ', eTargetLabelElement);
+  console.log('  input.getAttribute(type): ', eTarget.getAttribute('type'));
 
   // TODO: only proceed if this is input[type="checkbox"] ?
   if (input.getAttribute('type') == 'checkbox') {
@@ -138,8 +140,9 @@ AutosuggestFilter.prototype.handleNestedChange = function(e) {
   // ]);
 };
 
-AutosuggestFilter.prototype.disable = function() {
-  console.log('AutosuggestFilter.disable()');
+/*
+AutosuggestFilterBlock.prototype.disable = function() {
+  console.log('AutosuggestFilterBlock.disable()');
   const theInputs = this.element.querySelectorAll('input, label, button');
   theInputs.forEach(elem => {
     elem.classList.add('is-disabled');
@@ -155,8 +158,8 @@ AutosuggestFilter.prototype.disable = function() {
   });
 };
 
-AutosuggestFilter.prototype.enable = function() {
-  console.log('AutosuggestFilter.enable()');
+AutosuggestFilterBlock.prototype.enable = function() {
+  console.log('AutosuggestFilterBlock.enable()');
   const theInputs = this.element.querySelectorAll('input, label, button');
   theInputs.forEach(elem => {
     elem.classList.remove('is-disabled');
@@ -171,5 +174,5 @@ AutosuggestFilter.prototype.enable = function() {
     });
   });
 };
-
-module.exports = { AutosuggestFilter };
+*/
+module.exports = { AutosuggestFilterBlock };

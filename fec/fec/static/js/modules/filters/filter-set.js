@@ -15,7 +15,7 @@ const TextFilter = require('./text-filter').TextFilter;
 const ToggleFilter = require('./toggle-filter').ToggleFilter;
 const TypeaheadFilter = require('./typeahead-filter').TypeaheadFilter; // TODO: remove this when Typeahead goes away
 
-import { AutosuggestFilter } from './autosuggest-filter';
+import { AutosuggestFilterBlock } from './autosuggest-filter';
 
 function FilterSet(elm) {
   this.$body = $(elm);
@@ -33,7 +33,7 @@ function FilterSet(elm) {
 }
 
 const filterMap = {
-  autosuggest: AutosuggestFilter,
+  autosuggest: AutosuggestFilterBlock,
   checkbox: CheckboxFilter,
   date: DateFilter,
   election: ElectionFilter,
