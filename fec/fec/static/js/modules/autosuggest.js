@@ -119,11 +119,7 @@ function getUrl(resource, queryString) {
     // TODO: CHECK THESE
   } else if (resourceType == 'regulation' || resourceType == 'statute') {
     console.log('TODO - getURL FOR MUR SEARCHES');
-    thePath.push(
-      'legal',
-      'citation',
-      resource
-    );
+    thePath.push('legal', 'citation', resourceType);
   }
 
   let toReturn = thePath.join('/');
@@ -296,7 +292,7 @@ const defaultAutocompleteOptions = {
  * @listens events.searchTypeChanged
  * @emits autosuggest:select
  */
-function Autosuggest(elementSelector, opts) {
+function Autosuggest(elementSelector, opts = {}) {
   console.log('Autosuggest(elementSelector, opts): ', elementSelector, opts);
   // if elementSelector is a string, use that string to find the dom element and set that to this.input
   // else if elementSelector is an element, just save it
@@ -544,11 +540,11 @@ Autosuggest.prototype.highlightFirstResult = function() {
 };
 
 /**
- * Called by @see handleSelect 
- * @param {Object} q
+ * Called by @see handleSelect
+ * @param {object} q
  * q is the same as e.detail.selection.match from @see Autosuggest.prototype.handleSelect
  */
- Autosuggest.prototype.searchSite = function(q) {
+Autosuggest.prototype.searchSite = function(q) {
   /** If the site search option is selected, this function handles submitting
    * a new search on /search
    */
