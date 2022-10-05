@@ -1,21 +1,21 @@
-{% macro field(name, title, instructions=False, dataset='committees', allow_text=False, id_suffix='', minor_label_text=False, helper_text=False) %}
+{% macro field(query_field_name, field_label, instructions=False, dataset='committees', allow_text=False, id_suffix='', minor_label_text=False, helper_text=False) %}
 <div
   class="filter js-filter autosuggest-filter"
   data-filter="autosuggest"
-  data-name="{{ name }}"
-  id="{{ name }}-field{{ id_suffix }}"
+  data-name="{{ query_field_name }}"
+  id="{{ query_field_name }}-field{{ id_suffix }}"
   data-search-type="{{ dataset }}" {% if allow_text %}data-allow-text{% endif %}>
   {% if minor_label_text %}
-    <label for="{{ name }}{{ id_suffix }}">{{ title }}</label>
+    <label for="{{ query_field_name }}{{ id_suffix }}">{{ field_label }}</label>
   {% else %}
-    <label class="label" for="{{ name }}{{ id_suffix }}">{{ title }}</label>
+    <label class="label" for="{{ query_field_name }}{{ id_suffix }}">{{ field_label }}</label>
   {% endif %}
   {% if helper_text %}
     <label class="label--help u-margin--top">{{ helper_text }}</label>
   {% endif %}
   <div class="combo combo--search--mini filter__autosuggest">
     <ul class="dropdown__selected"></ul>
-    <input id="{{ name }}{{ id_suffix }}" type="text" class="combo__input">
+    <input id="{{ query_field_name }}{{ id_suffix }}" type="text" class="combo__input" data-search-type="{{ dataset }}">
     <button class="combo__button button--search button--standard" type="button">
       <span class="u-visually-hidden">Search</span>
     </button>
