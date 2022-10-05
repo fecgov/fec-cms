@@ -1,5 +1,6 @@
 'use strict';
 
+/*
 var $ = require('jquery');
 var _ = require('underscore');
 
@@ -15,10 +16,10 @@ var sinonChai = require('sinon-chai');
 var expect = chai.expect;
 chai.use(sinonChai);
 
-var typeahead = require('../../static/js/modules/typeahead');
-var FilterTypeahead = require('../../static/js/modules/filters/filter-typeahead').FilterTypeahead;
+var autosuggest = require('../../static/js/modules/autosuggest');
+var FilterAutosuggest = require('../../static/js/modules/filters/filter-autosuggest').FilterAutosuggest;
 
-describe('FilterTypeahead', function() {
+describe('FilterAutosuggest', function() {
   before(function() {
     this.$fixture = $('<div id="fixtures"></div>');
     $('body').append(this.$fixture);
@@ -26,45 +27,45 @@ describe('FilterTypeahead', function() {
 
   beforeEach(function() {
     this.$fixture.empty().append(
-      '<div class="typeahead-filter" data-filter="typeahead" data-search-type="committees">' +
+      '<div class="autosuggest-filter" data-filter="autosuggest" data-search-type="committees">' +
         '<ul class="dropdown__selected"></ul>' +
         '<input type="text" name="committee_id">' +
         '<button type="button"></button>' +
       '</div>'
     );
 
-    this.FilterTypeahead = new FilterTypeahead('[data-filter="typeahead"]', typeahead.datasets.committees, true);
+    this.filterAutosuggest = new FilterAutosuggest('[data-filter="autosuggest"]');
   });
 
   it('should initialize', function() {
-    var typeahead = this.FilterTypeahead.$elm.find('.autosuggest');
-    expect(typeahead.length).to.equal(1);
+    var autosuggest = this.filterAutosuggest.$elm.find('.autosuggest');
+    expect(autosuggest.length).to.equal(1);
   });
 
   it('should set firstItem', function() {
-    this.FilterTypeahead.setFirstItem({}, { id: 'smith' });
-    expect(this.FilterTypeahead.firstItem.id).to.equal('smith');
+    this.filterAutosuggest.setFirstItem({}, { id: 'smith' });
+    expect(this.filterAutosuggest.firstItem.id).to.equal('smith');
   });
 
-  it('should append checkbox and clear datum on typeahead:select', function() {
-    var appendCheckbox = sinon.spy(this.FilterTypeahead, 'appendCheckbox');
+  it('should append checkbox and clear datum on autosuggest:select', function() {
+    var appendCheckbox = sinon.spy(this.filterAutosuggest, 'appendCheckbox');
     var datum = {
       name: 'FAKE CANDIDATE',
       id: '12345'
     };
-    this.FilterTypeahead.handleSelect({}, datum);
+    this.filterAutosuggest.handleSelect({}, datum);
 
     expect(appendCheckbox).to.have.been.calledWith({
       name: 'committee_id',
       value: '12345',
       datum: datum
     });
-    expect(this.FilterTypeahead.datum).to.equal(null);
+    expect(this.filterAutosuggest.datum).to.equal(null);
 
-    this.FilterTypeahead.appendCheckbox.restore();
+    this.filterAutosuggest.appendCheckbox.restore();
   });
 
-  it('should format the data when no typeahead datum is passed in', function() {
+  it('should format the data when no autosuggest datum is passed in', function() {
     var input = {
       name: 'committee_id',
       label: '"George Washington"',
@@ -78,11 +79,11 @@ describe('FilterTypeahead', function() {
       id: 'committee_id-George-Washington-checkbox'
     };
 
-    var output = this.FilterTypeahead.formatCheckboxData(input);
+    var output = this.filterAutosuggest.formatCheckboxData(input);
     expect(output).to.deep.equal(expectedOutput);
   });
 
-  it('should format the data when a typeahead datum is passed in', function() {
+  it('should format the data when a autosuggest datum is passed in', function() {
     var input = {
       name: 'committee_id',
       value: '12345',
@@ -99,85 +100,86 @@ describe('FilterTypeahead', function() {
       id: 'committee_id-12345-checkbox'
     };
 
-    var output = this.FilterTypeahead.formatCheckboxData(input);
+    var output = this.filterAutosuggest.formatCheckboxData(input);
     expect(output).to.deep.equal(expectedOutput);
   });
 
-  it('should set this.datum on typeahead:autocomplte', function() {
-    this.FilterTypeahead.handleAutocomplete({}, { id: '12345' });
-    expect(this.FilterTypeahead.datum).to.deep.equal({ id: '12345' });
+  it('should set this.datum on autosuggest:autocomplte', function() {
+    this.filterAutosuggest.handleAutocomplete({}, { id: '12345' });
+    expect(this.filterAutosuggest.datum).to.deep.equal({ id: '12345' });
   });
 
   it('should submit on enter', function() {
-    var handleSubmit = sinon.spy(this.FilterTypeahead, 'handleSubmit');
-    this.FilterTypeahead.handleKeypress({ keyCode: 13 });
+    var handleSubmit = sinon.spy(this.filterAutosuggest, 'handleSubmit');
+    this.filterAutosuggest.handleKeypress({ keyCode: 13 });
     expect(handleSubmit).to.have.been.calledWith({ keyCode: 13 });
-    this.FilterTypeahead.handleSubmit.restore();
+    this.filterAutosuggest.handleSubmit.restore();
   });
 
   it('should enable and disable button when the input changes', function() {
-    var enableButton = sinon.spy(this.FilterTypeahead, 'enableButton');
-    var disableButton = sinon.spy(this.FilterTypeahead, 'disableButton');
+    var enableButton = sinon.spy(this.filterAutosuggest, 'enableButton');
+    var disableButton = sinon.spy(this.filterAutosuggest, 'disableButton');
 
-    this.FilterTypeahead.$field.typeahead('val', 'FAKE CANDIDATE').change();
+    this.filterAutosuggest.$field.autosuggest('val', 'FAKE CANDIDATE').change();
     expect(enableButton).to.have.been.called;
 
-    this.FilterTypeahead.$field.typeahead('val', '').change();
+    this.filterAutosuggest.$field.autosuggest('val', '').change();
     expect(disableButton).to.have.been.called;
 
-    this.FilterTypeahead.enableButton.restore();
-    this.FilterTypeahead.disableButton.restore();
+    this.filterAutosuggest.enableButton.restore();
+    this.filterAutosuggest.disableButton.restore();
   });
 
   it('should clear input', function() {
-    this.FilterTypeahead.$field.val('hello');
-    this.FilterTypeahead.enableButton();
-    this.FilterTypeahead.clearInput();
-    expect(this.FilterTypeahead.$field.val()).to.equal('');
-    expect(this.FilterTypeahead.$button.hasClass('is-disabled')).to.be.true;
+    this.filterAutosuggest.$field.val('hello');
+    this.filterAutosuggest.enableButton();
+    this.filterAutosuggest.clearInput();
+    expect(this.filterAutosuggest.$field.val()).to.equal('');
+    expect(this.filterAutosuggest.$button.hasClass('is-disabled')).to.be.true;
   });
 
   it('should enable the search button', function() {
-    this.FilterTypeahead.enableButton();
-    expect(this.FilterTypeahead.searchEnabled).to.be.true;
-    expect(this.FilterTypeahead.$button.hasClass('is-disabled')).to.be.false;
+    this.filterAutosuggest.enableButton();
+    expect(this.filterAutosuggest.searchEnabled).to.be.true;
+    expect(this.filterAutosuggest.$button.hasClass('is-disabled')).to.be.false;
   });
 
   it('should disable the search button', function() {
-    this.FilterTypeahead.disableButton();
-    expect(this.FilterTypeahead.searchEnabled).to.be.false;
-    expect(this.FilterTypeahead.$button.hasClass('is-disabled')).to.be.true;
+    this.filterAutosuggest.disableButton();
+    expect(this.filterAutosuggest.searchEnabled).to.be.false;
+    expect(this.filterAutosuggest.$button.hasClass('is-disabled')).to.be.true;
   });
 
   describe('handleSubmit()', function() {
     beforeEach(function() {
-      this.handleSelect = sinon.spy(this.FilterTypeahead, 'handleSelect');
+      this.handleSelect = sinon.spy(this.filterAutosuggest, 'handleSelect');
       this.e = { name: 'event' };
     });
 
     it('should select this.datum if present', function() {
-      this.FilterTypeahead.datum = { id: '12345' };
-      this.FilterTypeahead.handleSubmit(this.e);
+      this.filterAutosuggest.datum = { id: '12345' };
+      this.filterAutosuggest.handleSubmit(this.e);
       expect(this.handleSelect).to.have.been.called;
     });
 
     it('should select this.firstItem if no datum and it does not allow text', function() {
-      this.FilterTypeahead.datum = null;
-      this.FilterTypeahead.allowText = false;
-      this.FilterTypeahead.firstItem = { id: 'firstItem' };
-      this.FilterTypeahead.handleSubmit(this.e);
+      this.filterAutosuggest.datum = null;
+      this.filterAutosuggest.allowText = false;
+      this.filterAutosuggest.firstItem = { id: 'firstItem' };
+      this.filterAutosuggest.handleSubmit(this.e);
       expect(this.handleSelect).to.have.been.calledWith(this.e, { id: 'firstItem' });
     });
 
     it('should select the free text input if present', function() {
-      this.FilterTypeahead.allowText = true;
-      this.FilterTypeahead.$field.typeahead('val', 'freetext');
-      this.FilterTypeahead.handleSubmit(this.e);
+      this.filterAutosuggest.allowText = true;
+      this.filterAutosuggest.$field.autosuggest('val', 'freetext');
+      this.filterAutosuggest.handleSubmit(this.e);
       expect(this.handleSelect).to.have.been.calledWith(this.e, { id: 'freetext' });
     });
 
     afterEach(function() {
-      this.FilterTypeahead.handleSelect.restore();
+      this.filterAutosuggest.handleSelect.restore();
     });
   });
 });
+*/
