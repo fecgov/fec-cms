@@ -32,7 +32,7 @@ import officeNames from './utils';
  * @property {string} dataDetails.source - // TODO: unused?
  * @property {object} dataDetails.templates - Unused // TODO: safe to remove?
  */
-let resultsListOptions = {
+const resultsListOptions = {
   class: 'as-dataset as-dataset-candidate',
   maxResults: 20,
   tabSelect: true,
