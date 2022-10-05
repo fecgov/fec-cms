@@ -21,7 +21,7 @@
           <div class="js-accordion accordion--neutral" data-content-prefix="independent-expenditure">
             <button type="button" class="js-accordion-trigger accordion__button">Download this data as .CSV to use on your own</button>
             <div class="accordion__content">
-              <h6 class="t-no-rules">Independent expenditures</h4>
+              <h6 class="t-no-rules">Independent expenditures</h6>
               <i class="icon i-download icon--absolute--left"></i>
               <div class="content__section--indent-left">
                 <ul class="list--flat-bordered u-no-margin">
@@ -55,7 +55,7 @@
           <div class="js-accordion accordion--neutral" data-content-prefix="electioneering-communications">
             <button type="button" class="js-accordion-trigger accordion__button">Download this data as .CSV to use on your own</button>
             <div class="accordion__content">
-              <h6 class="t-no-rules">Electioneering communications</h4>
+              <h6 class="t-no-rules">Electioneering communications</h6>
               <i class="icon i-download icon--absolute--left"></i>
               <div class="content__section--indent-left">
                 <ul class="list--flat-bordered u-no-margin">
@@ -82,7 +82,7 @@
           <div class="js-accordion accordion--neutral" data-content-prefix="communication-costs">
             <button type="button" class="js-accordion-trigger accordion__button">Download this data as .CSV to use on your own</button>
             <div class="accordion__content">
-              <h6 class="t-no-rules">Communication costs</h4>
+              <h6 class="t-no-rules">Communication costs</h6>
               <i class="icon i-download icon--absolute--left"></i>
               <div class="content__section--indent-left">
                 <ul class="list--flat-bordered u-no-margin">
@@ -107,7 +107,7 @@
             <h3 class="heading__left">Cumulative amount spent by committees</h3>
             <div class="heading__right">
               <ul class="list--buttons">
-                <a href="/data/spending-bythenumbers/" class="button button--cta button--go"  data-a11y-dialog-show="spending-modal" data-ga-event="Spending methodology clicked">More spending charts</a>
+                <a href="/data/spending-bythenumbers/" class="button button--cta button--go" data-ga-event="More spending charts clicked">More spending charts</a>
               </ul>
             </div>
           </div>
@@ -117,34 +117,39 @@
         </section>
       </li>
       <li>
-        <div class="content__section--ruled-responsive">
-          <p class="t-small u-negative--top--margin t-serif"><i>Newly filed summary data may not appear for up to 48 hours.</i></p>
-          <div class="js-accordion accordion--neutral" data-content-prefix="methodology_spending">
-            <button type="button" class="js-accordion-trigger accordion__button">Methodology</button>
-            <div class="accordion__content">
-              <div role="document">
-                <h6 class="t-no-rules">Methodology Overview</h4>
-                <p class="t-note">This data includes Forms 3, 3P, and 3X.</p>
-                <p><strong>Money spent</strong> includes each of the following:</p>
-                <ul class="list--bulleted">
-                  <li><em>Adjusted disbursements</em> for PACs, parties, congressional filers and presidential filers</li>
-                </ul>
-                <p><em>Adjusted disbursements</em> are total disbursements minus the following:</p>
-                <ul class="list--bulleted">
-                  <li>Contribution refunds</li>
-                  <li>Contributions to candidates and other political committees</li>
-                  <li>Loan repayments</li>
-                  <li>Nonfederal share of allocated disbursements</li>
-                  <li>Offsets to expenditures</li>
-                  <li>Other disbursements</li>
-                  <li>Transfers to other authorized committees and affiliated committees</li>
-                </ul>
-                <p>The form-by-form breakdown for adjusted disbursements is:</p>
-                <ul class="list--bulleted">
-                  <li><strong>Form 3:</strong> <em>line 22</em> - (<em>line 18</em> + <em>line 19(c)</em> + <em>line 20(d)</em> + <em>line 21</em>)</li>
-                  <li><strong>Form 3P:</strong> <em>line 30</em> - (<em>line 20(d)</em> + <em>line 24</em> + <em>line 27(c)</em> + <em>line 28(d)</em> + <em>line 29</em>)</li>
-                  <li><strong>Form 3X:</strong> <em>line 31</em> - (<em>line 21(a)(ii)</em> + <em>line 22</em> + <em>line 23</em> + <em>line 26</em> + <em>line 28(d)</em> + <em>line 29</em>)</li>
-                </ul>
+        <div class="content__section--ruled-responsive t-serif">
+          <div class="heading--with-action t-small u-negative--top--margin t-serif"><i class="data-disclaimer">Newly filed summary data may not appear for up to 48 hours.</i>
+            <div class="heading__right">
+               <a class="button button--alt js-ga-event" data-a11y-dialog-show="spending-chart-modal" data-ga-event="Spending chart methodology modal clicked" aria-controls="spending-chart-modal">Methodology</a>
+            </div>
+           </div>
+           <div class="js-modal modal" id="spending-chart-modal" aria-hidden="true">
+             <div tabindex="-1" class="modal__overlay" data-a11y-dialog-hide></div>
+             <div role="dialog" class="modal__content" aria-labelledby="spending-chart-modal-title">
+               <div role="document">
+                 <button type="button" class="modal__close button--close--primary" data-a11y-dialog-hide title="Close this dialog window"></button>
+                 <h2 class="t-no-rules">Methodology Overview</h2>
+                 <p class="t-note">This data includes Forms 3, 3P, and 3X.</p>
+                 <p><strong>Money spent</strong> includes each of the following:</p>
+                 <ul class="list--bulleted">
+                    <li><em>Adjusted disbursements</em> for PACs, parties, congressional filers and presidential filers</li>
+                 </ul>
+                 <p><em>Adjusted disbursements</em> are total disbursements minus the following:</p>
+                 <ul class="list--bulleted">
+                    <li>Contribution refunds</li>
+                    <li>Contributions to candidates and other political committees</li>
+                    <li>Loan repayments</li>
+                    <li>Nonfederal share of allocated disbursements</li>
+                    <li>Offsets to expenditures</li>
+                    <li>Other disbursements</li>
+                    <li>Transfers to other authorized committees and affiliated committees</li>
+                 </ul>
+                 <p>The form-by-form breakdown for adjusted disbursements is:</p>
+                 <ul class="list--bulleted">
+                    <li><strong>Form 3:</strong> <em>line 22</em> - (<em>line 18</em> + <em>line 19(c)</em> + <em>line 20(d)</em> + <em>line 21</em>)</li>
+                    <li><strong>Form 3P:</strong> <em>line 30</em> - (<em>line 20(d)</em> + <em>line 24</em> + <em>line 27(c)</em> + <em>line 28(d)</em> + <em>line 29</em>)</li>
+                    <li><strong>Form 3X:</strong> <em>line 31</em> - (<em>line 21(a)(ii)</em> + <em>line 22</em> + <em>line 23</em> + <em>line 26</em> + <em>line 28(d)</em> + <em>line 29</em>)</li>
+                 </ul>
               </div>
             </div>
           </div>

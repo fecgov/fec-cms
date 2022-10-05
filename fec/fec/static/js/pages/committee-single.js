@@ -82,12 +82,22 @@ var stateColumns = [
   }
 ];
 
+var renderNullStringText = function(data, columnName) {
+  if (data == 'NULL') {
+    return data = '(COMMITTEE DID NOT PROVIDE ' + columnName + ')';
+  } else {
+    return data;
+  }
+};
+
 var employerColumns = [
   {
     data: 'employer',
     className: 'all',
     orderable: false,
-    defaultContent: 'NOT REPORTED'
+    render: function(data){
+      return renderNullStringText(data, 'AN EMPLOYER');
+    }
   },
   {
     data: 'total',
@@ -114,7 +124,9 @@ var occupationColumns = [
     data: 'occupation',
     className: 'all',
     orderable: false,
-    defaultContent: 'NOT REPORTED'
+    render: function(data){
+      return renderNullStringText(data, 'AN OCCUPATION');
+    }
   },
   {
     data: 'total',
@@ -140,12 +152,27 @@ var disbursementRecipientColumns = [
   {
     data: 'recipient_name',
     className: 'all',
-    orderable: false
+    orderable: false,
+    render: function(data){
+      return renderNullStringText(data, 'A RECIPIENT');
+    }
+  },
+  {
+    data: 'recipient_disbursement_percent',
+    className: 'all',
+    orderable: false,
+    render: function ( data ) {
+      if(data) {
+        return data + '%';
+      } else{
+        return 'Could not calculate';
+      }
+    }
   },
   {
     data: 'total',
     className: 'all',
-    orderable: false,
+    orderable: true,
     orderSequence: ['desc', 'asc'],
     render: columnHelpers.buildTotalLink(['disbursements'], function(
       data,
@@ -549,7 +576,7 @@ $(document).ready(function() {
             }),
             columns: disbursementRecipientColumns,
             callbacks: aggregateCallbacks,
-            order: [[1, 'desc']],
+            order: [[2, 'desc']],
             hideEmptyOpts: {
               dataType: 'disbursements',
               name: context.name,
@@ -770,7 +797,7 @@ $(document).ready(function() {
                 request_type: ['-1', '-5', '-6', '-9'],
                 sort: [
                   '-coverage_end_date',
-                  'report_type_full',
+                  'report_type_full_original',
                   '-beginning_image_number'
                 ],
                 sort_hide_null: ['false']

@@ -2,7 +2,8 @@
 {% load wagtailcore_tags %}
 {% load filters %}
 
-<section id="{{ value.title | prepend_non_digit | slugify}}" class="option {% if value.hide_title %}option--no-top-border{% endif %}">
+<section id="{{ value.title | prepend_non_digit | slugify}}" class="option">
+
   {% if not value.hide_title %}<h2>{{ value.title }}</h2>{% endif %}
 
   {# open a div with a different class based on whether there's an aside #}

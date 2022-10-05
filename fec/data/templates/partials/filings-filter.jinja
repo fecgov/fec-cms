@@ -23,9 +23,9 @@ Filter reports
   <div class="filters__inner">
   {# TODO - Autosuggest #}
   {% if (FEATURES.use_tt) == false %}
-    {{ autosuggest.field('committee_id', 'Committee name or ID', '', id_suffix='_raw') }}
+    {{ autosuggest.field('q_filer', 'Committee name or ID', '', id_suffix='_raw') }}
   {% else %}
-    {{ typeahead.field('committee_id', 'Committee name or ID', '', id_suffix='_raw') }}
+    {{ typeahead.field('q_filer', 'Committee name or ID', id_suffix='_raw', allow_text=True ) }}
   {% endif %}
   {# TODO: remove useTt with the use_tt feature flag #}
     {{ date.field('receipt_date', 'Receipt date', id_suffix='_raw') }}
@@ -36,16 +36,18 @@ Filter reports
 <div class="js-accordion accordion--neutral" data-content-prefix="filter" data-open-first="true">
   <button type="button" class="js-accordion-trigger accordion__button">Filer</button>
   <div class="accordion__content">
-  {# TODO - Autosuggest #}
-  {% if (FEATURES.use_tt) == false %}
-    {{ autosuggest.field('committee_id', 'Committee name or ID', '') }}
-    {{ autosuggest.field('candidate_id', 'Candidate name or ID', '', dataset='candidates') }}
-  {% else %}
-    {{ typeahead.field('committee_id', 'Committee name or ID', '') }}
-    {{ typeahead.field('candidate_id', 'Candidate name or ID', '', dataset='candidates') }}
-  {% endif %}
-  {# TODO: remove useTt with the use_tt feature flag #}
     {{ states.field('state') }}
+    {# TODO - Autosuggest #}
+    {% if (FEATURES.use_tt) == false %}
+      {{ autosuggest.field('q_filer', 'Committee name or ID', '', allow_text=True) }}
+      {{ autosuggest.field('candidate_id', 'Candidate name or ID', '', dataset='candidates') }}
+    {% else %}
+      {{ typeahead.field('q_filer', 'Committee name or ID', '', allow_text=True) }}
+      {{ typeahead.field('candidate_id', 'Candidate name or ID', '', dataset='candidates') }}
+    {% endif %}
+    {# TODO: remove useTt with the use_tt feature flag #}
+   
+    {{ states.field('state', type='Candidate') }}
     {{ office.checkbox() }}
     {{ parties.checkbox() }}
   </div>

@@ -17,7 +17,7 @@ function Filters(props) {
 
   return (
     <div>
-      <div className="accordion__content">
+      <div className="filters__inner">
         <TextFilter
           key="ao_no"
           name="ao_no"

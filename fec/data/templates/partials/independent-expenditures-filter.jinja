@@ -66,9 +66,9 @@ Filter independent expenditures
   <div class="filters__inner">
   {# TODO - Autosuggest #}
   {% if (FEATURES.use_tt) == false %}
-    {{ autosuggest.field('committee_id', 'Spender name or ID', helper_text = 'Limit 10 spender names or IDs') }}
+    {{ autosuggest.field('q_spender', 'Spender name or ID', helper_text = 'Limit 10 spender names or IDs', allow_text=True) }}
   {% else %}
-    {{ typeahead.field('committee_id', 'Spender name or ID', helper_text = 'Limit 10 spender names or IDs') }}
+    {{ typeahead.field('q_spender', 'Spender name or ID', helper_text ='Limit 10 spender names or IDs', allow_text=True) }}
   {% endif %}
   {# TODO: remove useTt with the use_tt feature flag #}
     {{ years.cycles('cycle', 'Years', show_tooltip=False) }}

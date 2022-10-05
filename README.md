@@ -56,10 +56,10 @@ run into problems please
 ### Project prerequisites
 1. Ensure you have the following requirements installed:
 
-    * Python (the latest 3.7 release, which includes `pip` and and a built-in version of `virtualenv` called `venv`).
+    * Python (the latest 3.9 release, which includes `pip` and and a built-in version of `virtualenv` called `venv`).
     * The latest long term support (LTS) or stable release of Node.js (which
       includes `npm`).
-    * PostgreSQL (the latest 11 release).
+    * PostgreSQL (the latest 12 release).
          * Read a [Mac OSX tutorial](https://www.moncefbelyamani.com/how-to-install-postgresql-on-a-mac-with-homebrew-and-lunchy/).
          * Read a [Windows tutorial](http://www.postgresqltutorial.com/install-postgresql/).
          * Read a [Linux tutorial](https://www.postgresql.org/docs/11/installation.html)

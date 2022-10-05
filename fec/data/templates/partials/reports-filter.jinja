@@ -20,10 +20,11 @@ Filter reports
 
 {% block efiling_filters %}
   <div class="filters__inner">
+    {# TODO - Autosuggest #}
     {% if (FEATURES.use_tt) == false %}
-    {{ autosuggest.field('committee_id', 'Committee name or ID', id_suffix='raw') }}
+    {{ autosuggest.field('q_filer', 'Committee name or ID', id_suffix='raw', allow_text=True) }}
     {% else %}
-    {{ typeahead.field('committee_id', 'Committee name or ID', id_suffix='raw') }}
+    {{ typeahead.field('q_filer', 'Committee name or ID', id_suffix='raw', allow_text=True) }}
     {% endif %}
     {# TODO: remove useTt with the use_tt feature flag #}
     {{ date.field('receipt_date', 'Receipt date', id_suffix='raw') }}
@@ -36,9 +37,9 @@ Filter reports
   <div class="accordion__content">
     {# TODO - Autosuggest #}
     {% if (FEATURES.use_tt) == false %}
-    {{ autosuggest.field('committee_id', 'Committee name or ID', '') }}
+    {{ autosuggest.field('q_filer', 'Committee name or ID', '', allow_text=True) }}
     {% else %}
-    {{ typeahead.field('committee_id', 'Committee name or ID', '') }}
+    {{ typeahead.field('q_filer', 'Committee name or ID', '', allow_text=True) }}
     {% endif %}
     {# TODO: remove useTt with the use_tt feature flag #}
     {% if table_context['form_type'] == 'presidential' %}

@@ -403,6 +403,9 @@ def get_committee(committee_id, cycle):
     # Check organization types to determine SSF status
     is_ssf = committee.get("organization_type") in ["W", "C", "L", "V", "M", "T"]
 
+    # Check if it's an inaugural organization type
+    is_inaugural = committee.get("organization_type") in ["I"]
+
     # Check committee's status (active, terminated, or administratively terminated)
     is_active = committee.get("is_active")
     filing_frequency = committee.get("filing_frequency")
@@ -549,6 +552,7 @@ def get_committee(committee_id, cycle):
         "cycle": cycle,
         "cycles": cycles,
         "is_SSF": is_ssf,
+        "is_inaugural": is_inaugural,
         "current_committee_status": current_committee_status,
         "cycle_out_of_range": cycle_out_of_range,
         "parent": parent,
@@ -790,7 +794,7 @@ def elections(request, office, cycle, state=None, district=None):
             )
         elif office == "president":
             return redirect(
-                reverse("elections-president", args=(office, cycle)) + legacy_tabs[tab]
+                reverse("elections-president", args=(cycle,)) + legacy_tabs[tab]
             )
 
     return render(
@@ -807,6 +811,106 @@ def elections(request, office, cycle, state=None, district=None):
             "state_full": constants.states[state.upper()] if state else None,
             "district": district,
             "title": utils.election_title(cycle, office, state, district),
+            "social_image_identifier": "data",
+        },
+    )
+
+
+def elections_president(request, cycle):
+
+    office = "president"
+    cycle = int(cycle)
+
+    max_cycle = utils.current_cycle() + 4
+    cycles = utils.get_cycles(max_cycle)
+
+    cycles = [each for each in cycles if each % 4 == 0]
+
+    tab = request.GET.get("tab", "").replace("/", "")
+    legacy_tabs = {
+        "contributions": "#individual-contributions",
+        "totals": "#candidate-financial-totals",
+        "spending-by-others": "#independent-expenditures",
+    }
+
+    if tab in legacy_tabs:
+        return redirect(
+            reverse("elections-president", args=(cycle, )) + legacy_tabs[tab]
+        )
+
+    return render(
+        request,
+        "elections.jinja",
+        {
+            "office": 'president',
+            "office_code": office[0],
+            "parent": "data",
+            "cycle": cycle,
+            "cycles": cycles,
+            "title": utils.election_title(cycle, office),
+            "social_image_identifier": "data",
+        },
+    )
+
+
+def house_senate_overview(request, office, cycle=None):
+
+    """
+    *** TODO: ***, Cycle is a KWARG instead of a positional(required in URL) argument. Do we even want the cycle arg?
+     It might be wanted for the upcoming features on the page that have only one select for year,
+     so one could load page with all features set to a certain election year. Example: /data/elections/senate/2018/
+     But probably  want exclude the across-time feature from using this argument for its cycle,
+     because we always want that to be current election year or (constants.DEFAULT_ELECTION_YEAR)
+
+     """
+
+    if cycle is not None:
+        cycle = int(cycle)
+    else:
+        cycle = constants.DEFAULT_ELECTION_YEAR
+
+    # cycle = request.GET.get("cycle", None)
+    default_election_year = constants.DEFAULT_ELECTION_YEAR
+    beginning_default_election_year = default_election_year - 1
+
+    max_cycle = utils.current_cycle() + 4
+    cycles = utils.get_cycles(max_cycle)
+
+    if office.lower() not in ["president", "senate", "house"]:
+        raise Http404()
+
+    # Redirect to latest presidential election since we don't have presidential overview yet
+    if office.lower() == "president":
+        cycle = utils.current_cycle() if utils.current_cycle() % 4 == 0 else utils.current_cycle() + 2
+        return redirect(
+            reverse("elections-president", args=(cycle, ))
+        )
+
+    office_codes = {
+        "senate": 'S',
+        "house": 'H'
+    }
+
+    office_code = office_codes[office]
+
+    # For JavaScript
+    context_vars = {
+        "office": office,
+        "office_code": office_code,
+    }
+
+    return render(
+        request,
+        "house-senate-overview.jinja",
+        {
+            "office": office,
+            "office_code": office_code,
+            "parent": "data",
+            "cycle": cycle,
+            "cycles": cycles,
+            "default_election_year": default_election_year,
+            "beginning_default_election_year": beginning_default_election_year,
+            "context_vars": context_vars,
             "social_image_identifier": "data",
         },
     )

@@ -23,12 +23,12 @@ function init() {
 
 /**
  * Common place to trigger analytics custom events
- * @param {object} eventObj - The data object
- * @param {string} eventObj.event - The name of the event. This serves as the trigger inside Google Tag Manager
- * @param {string} eventObj.eventCategory - Passed to GTM (and forwarded to Google Analytics)
- * @param {string} eventObj.eventAction - Passed to GTM (and forwarded to Google Analytics)
- * @param {string} eventObj.eventLabel - Passed to GTM (and forwarded to Google Analytics)
- * @param {number} eventObj.eventValue - Passed to GTM (and forwarded to Google Analytics)
+ * @param {Object} eventObj The data object, optionally including event, eventCategory, eventAction, eventLabel, eventValue
+ * @param {String} eventObj.event The name of the event. This serves as the trigger inside Google Tag Manager
+ * @param {String} eventObj.eventCategory Passed to GTM (and forwarded to Google Analytics)
+ * @param {String} eventObj.eventAction Passed to GTM (and forwarded to Google Analytics)
+ * @param {String} eventObj.eventLabel Passed to GTM (and forwarded to Google Analytics)
+ * @param {Number} eventObj.eventValue Passed to GTM (and forwarded to Google Analytics)
  */
 function customEvent(eventObj) {
   init();

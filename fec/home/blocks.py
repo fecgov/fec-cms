@@ -200,6 +200,15 @@ class ExampleImage(blocks.StructBlock):
         icon = 'doc-empty'
 
 
+class ExampleParagraph(blocks.StructBlock):
+    title = blocks.CharBlock(required=True)
+    paragraph = blocks.RichTextBlock(required=True)
+
+    class Meta:
+        template = 'blocks/example-paragraph.html'
+        icon = 'pilcrow'
+
+
 class ResourceBlock(blocks.StructBlock):
     """A section of a ResourcePage"""
     title = blocks.CharBlock(required=True)
@@ -232,10 +241,14 @@ class ResourceBlock(blocks.StructBlock):
         ('html', blocks.RawHTMLBlock()),
         ('reporting_example_cards', ReportingExampleCards()),
         ('contribution_limits_table', SnippetChooserBlock(
-            'home.EmbedTableSnippet',
+            'home.EmbedSnippet',
             template='blocks/embed-table.html', icon='table')),
+        ('informational_message', SnippetChooserBlock(
+            'home.EmbedSnippet',
+            template='blocks/embed-info-message.html', icon='warning')),
         ('image', ImageChooserBlock()),
-        ('example_image', ExampleImage())
+        ('example_image', ExampleImage()),
+        ('example_paragraph', ExampleParagraph()),
     ])
 
     aside = blocks.StreamBlock([
@@ -275,15 +288,6 @@ class DocumentFeedBlurb(blocks.StructBlock):
     """For generating a box with a description that links to a document feed page"""
     page = blocks.PageChooserBlock()
     description = blocks.CharBlock()
-
-
-class ExampleParagraph(blocks.StructBlock):
-    title = blocks.CharBlock(required=True)
-    paragraph = blocks.RichTextBlock(required=True)
-
-    class Meta:
-        template = 'blocks/example-paragraph.html'
-        icon = 'pilcrow'
 
 
 class ExampleForms(blocks.StructBlock):
