@@ -31,8 +31,9 @@ TypeaheadFilter.prototype.fromQuery = function(query) {
   return this;
 };
 
-// Ignore changes on typeahead input
-TypeaheadFilter.prototype.handleChange = function() {};
+TypeaheadFilter.prototype.handleChange = function() {
+  // Ignore changes on typeahead input
+};
 
 TypeaheadFilter.prototype.handleNestedChange = function(e) {
   var $input = $(e.target);

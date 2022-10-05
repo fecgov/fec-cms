@@ -1,8 +1,13 @@
 // TODO: double check that the autosuggest filters handle a generic user returnkey appropriately (type + returnkey without clicking)
 
 /**
- * TODO: What does this file actually do?
- * Wraps filter-autosuggest
+ * @class
+ * @extends @see /fec/fec/static/js/modules/filters/filter-base.js#Filter .
+ *
+ * Builds the filter block for the left column;
+ * that block includes the Autosuggest field, but also the label, checkboxes, and message for Filter added/removed
+ * Adds @see Filter functionality to `<div class="filter js-filter autosuggest-filter" data-filter="autosuggest">`
+ * which is created by @see /fec/data/templates/macros/filters/autosuggest-filters.jinja
  */
 
 let _ = require('underscore');
@@ -13,7 +18,7 @@ import { ensureArray } from '../helpers';
 
 /**
  * @implements {Filter}
- *
+ * @constructor
  * @param {(string|HTMLElement|jQuery.fn.init)} selector - How to find the element (string) or the selected element itself
  *
  * @property {boolean} allowText - True if this.element.hasAttribute('data-allow-text') !== undefined
@@ -41,7 +46,7 @@ function AutosuggestFilter(selector) {
   // let key = this.element.dataset['dataset']; // TODO: RENAME THIS (caulking doesn't like it)
   // var allowText = this.element.hasAttribute('data-allow-text') !== undefined;
   // var dataset = key ? typeahead.datasets[key] : null; // TODO: BRING THIS BACK AFTER RENAMING (caulking doesn't like it)
-  // TODO: TESTING:
+  // TODO: TESTING: 
   // let key = ;
   let dataset = '/all';
   // data-allow-text either exists or doesn't; the template doesn't give it a value
@@ -55,8 +60,13 @@ function AutosuggestFilter(selector) {
 AutosuggestFilter.prototype = Object.create(Filter.prototype);
 AutosuggestFilter.constructor = AutosuggestFilter;
 
-AutosuggestFilter.prototype.fromQuery = function(query) {
-  console.log('AutosuggestFilter.fromQuery(query)', query);
+/**
+ * Takes the URL
+ * @param {object} query - Key/value pairs of the parameters from the page's URL
+ * @returns {AutosuggestFilterBlock}
+ */
+AutosuggestFilterBlock.prototype.fromQuery = function(query) {
+  console.log('AutosuggestFilterBlock.fromQuery(query)', query);
   const values = query[this.name] ? ensureArray(query[this.name]) : [];
   this.asFilter.getFilters(values);
   console.log('  this: ', this);
@@ -84,7 +94,7 @@ AutosuggestFilter.prototype.handleChange = function(e) {
 
 /**
  * TODO: get rid of Underscore
- * @param {*} e - 
+ * @param {Event} e - 
  */
 AutosuggestFilter.prototype.handleNestedChange = function(e) {
   console.log('AutosuggestFilter.handleNestedChange(e): ', e);

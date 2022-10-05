@@ -260,7 +260,17 @@ function barsAfterRender(template, api) {
   });
 }
 
+/**
+ * Adds a 'change' listener to `$form[0] input` and `$form[0] select`
+ * @param {jQuery} $form - jQuery object of the selector for the div#[type]-filters.filters__content
+ * @param {_Api} api - Object in the form of {context: Array(1), selector: {…}, tables: ƒ, table: ƒ, draw: ƒ,…}
+ */
 function updateOnChange($form, api) {
+  /**
+   * @param {jQuery.Event} e
+   * @param {CustomEvent} e.originalEvent
+   * @param {object} e.originalEvent.detail
+   */
   function onChange(e) {
     e.preventDefault();
     hidePanel(api, $('#datatable-modal'));
@@ -273,7 +283,7 @@ function updateOnChange($form, api) {
 
 /**
  * Called by @fetchSuccess
- * @param {*} changeCount
+ * @param {*} changeCount -
  */
 function filterSuccessUpdates(changeCount) {
   console.log('tables.js filterSuccessUpdates(changeCount): ', changeCount);
@@ -624,6 +634,11 @@ DataTable.prototype.enableExport = function() {
   }
 };
 
+/**
+ * @param {object} data - Object in the form of {draw: 1, columns: Array(7), order: Array(1), start: 0, length: 30,…}
+ * @param {function} callback
+ * @returns null if we hit the filter limit or !self.filterSet.isValid
+ */
 DataTable.prototype.fetch = function(data, callback) {
   console.log('DataTable.fetch(data, callback): ', data, callback);
   var self = this;
@@ -810,6 +825,10 @@ DataTable.prototype.buildUrl = function(data, paginate, download) {
   );
 };
 
+/**
+ *
+ * @param {object} resp - Object in the form of {api_version: '1.0', pagination: {…}, results: Array(30)}
+ */
 DataTable.prototype.fetchSuccess = function(resp) {
   console.log('DataTable.fetchSuccess(resp): ', resp);
   this.paginator.handleResponse(this.fetchContext.data, resp);
@@ -846,6 +865,11 @@ DataTable.prototype.fetchSuccess = function(resp) {
   }
 };
 
+/**
+ *
+ * @param {jQuery.jqXHR} jqXHR -
+ * @param {*} textStatus -
+ */
 DataTable.prototype.fetchError = function(jqXHR, textStatus) {
   var self = this;
   // Default error message that occurs most likely due to timeout
@@ -972,6 +996,10 @@ function initSpendingTables(className, context, options) {
   });
 }
 
+/**
+ * @param {*} e -
+ * @param {*} context -
+ */
 function refreshTables(e, context) {
   var $comparison = $('#comparison');
   var selected = $comparison
@@ -1007,6 +1035,13 @@ function refreshTables(e, context) {
   }
 }
 
+/**
+ * Called from @see /fec/fec/static/js/pages/elections.js `$(document).ready() $.getJSON(url).done()`
+ * Adds 'change' listener to input[type="checkbox"]
+ * Calls refreshTables()
+ * @param {*} results -
+ * @param {*} pageContext -
+ */
 function drawComparison(results, pageContext) {
   var $comparison = $('#comparison');
   var context = { selected: results.slice(0, 10), options: results.slice(10) };

@@ -16,7 +16,13 @@ function prepareValue($elm, value) {
 /**
  * @interface
  *
- * @param {*} elm
+ * @param {jQuery} elm
+ *
+ * @property {jQuery} $filterLabel - In collapsible filters,
+ * it's the previous sibling of the .accordion__content ancestor.
+ * Usually button.js-accordion-trigger ? Note: this.$filterLabel is the element
+ * but some functions here use a lesser-scoped $filterLabel as a string
+ * for the number of filters that have been applied
  */
 function Filter(elm) {
   console.log('new Filter(elm): ', elm);
@@ -48,6 +54,11 @@ function Filter(elm) {
   }
 }
 
+/**
+ * 
+ * @param {object} query - Key/value pairs of the parameters from the page's URL
+ * @returns {Filter}
+ */
 Filter.prototype.fromQuery = function(query) {
   this.setValue(query[this.name]);
   this.loadedOnce = true;
@@ -78,6 +89,12 @@ Filter.prototype.formatValue = function($input, value) {
 
 Filter.prototype.handleAddEvent = function(e, opts) {
   console.log('Filter.handleAddEvent(e, opts): ', e, opts);
+/**
+ * 
+ * @param {jQuery.Event|CustomEvent} e - 
+ * @param {object} opts - 
+ * @returns 
+ */
   if (opts.name !== this.name) {
     return;
   }
@@ -95,7 +112,7 @@ Filter.prototype.handleAddEvent = function(e, opts) {
 /**
  *
  * @param {jQuery.Event} e
- * @param {object} opts
+ * @param {object} passedOpts
  * @returns {null} if (opts.name !== this.name || opts.loadedOnce !== true)
  */
 Filter.prototype.handleRemoveEvent = function(e, opts) {
@@ -109,7 +126,11 @@ Filter.prototype.handleRemoveEvent = function(e, opts) {
   this.setLastAction(e, opts);
 };
 
-Filter.prototype.increment = function($filterLabel) {
+/**
+ * Adds or increases the filter count of the accordion item's button
+ * @param {jQuery} $filterLabel - Either the jQuery selector for the label or the results of document.querySelector
+ */
+ Filter.prototype.increment = function($filterLabel) {
   var filterCount = $filterLabel.find('.filter-count');
   if (filterCount.html()) {
     filterCount.html(parseInt(filterCount.html(), 10) + 1);
@@ -118,6 +139,10 @@ Filter.prototype.increment = function($filterLabel) {
   }
 };
 
+/**
+ * Removes or decreases the filter count of the accordion item's button
+ * @param {jQuery|HTMLLabelElement} $filterLabel - Either the jQuery selector for the label or the results of document.querySelector
+ */
 Filter.prototype.decrement = function($filterLabel) {
   console.log('Filter.decrement($filterLabel): ', $filterLabel);
   var filterCount = $filterLabel.find('.filter-count');
@@ -131,7 +156,8 @@ Filter.prototype.decrement = function($filterLabel) {
 /**
  * 
  * @param {jQuery.Event} e 
- * @param {Object} opts 
+ * @param {object} passedOpts 
+ *
  * @returns {null} if this filter's name isn't === opts.name
  */
 Filter.prototype.setLastAction = function(e, opts) {

@@ -152,6 +152,11 @@ FilterSet.prototype.clear = function() {
   });
 };
 
+/**
+ * 
+ * @param {jQuery.Event} e - 
+ * @param {object} opts - 
+ */
 FilterSet.prototype.handleTagRemoved = function(e, opts) {
   console.log('FilterSet.handleTagRemoved(e, opts): ', e, opts);
   var $input = $(document.getElementById(opts.key));

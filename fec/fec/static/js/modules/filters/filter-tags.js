@@ -1,5 +1,5 @@
 /**
- * Filter tags are the Chiclet-type tags above filtered tables
+ * Filter tags (TagList) are the Chiclet-type tags above filtered tables
  */
 
 let $ = require('jquery');
@@ -27,6 +27,8 @@ const template_nonremoveableTag = value => `<div data-id="${value.key}" data-rem
 
 /**
  * TagLists are created by modules/tables.js and calendar-page.js
+ * @class
+ *
  * @param {object} opts
  * @param {string} opts.resultType
  * @param {boolean} opts.showResultCount
@@ -86,13 +88,16 @@ function TagList(opts) {
 
 /**
  * Called when document.body hears filter:added
- * @param {JQuery.Event} e
- * @param {object} opts
- * @param {*} opts.key
- * @param {*} opts.name
- * @param {boolean} opts.nonremovable
- * @param {*} opts.range
- * @param {string} opts.rangeName
+ * @param {jQuery.Event|CustomEvent} e
+ * @param {object} passedOpts - Data for the tag. Can also come in a e.originalEvent.detail
+ * @param {jQuery} passedOpts.filterLabel - 
+ * @param {string} passedOpts.name - Is the name of the variable from the API
+ * @param {string} passedOpts.key - Follows the format of {opts.name}-checkbox-{value}
+ * @param {boolean} [passedOpts.nonremovable] - 
+ * @param {string|null} [passedOpts.range] - 
+ * @param {string} [passedOpts.rangeName] - 
+ * @param {string} passedOpts.value - Used as the visible label for the filter tag, including html
+ * @param {boolean} passedOpts.loadedOnce
  */
 TagList.prototype.addTag = function(e, opts) {
   var tag = opts.nonremovable
@@ -124,11 +129,11 @@ TagList.prototype.addTag = function(e, opts) {
 
 /**
  * Called from within @see TagList.prototype.addTag
- * @param {JQuery} $tagCategory - element inside this.$list with a matching value for data-tag-category
+ * @param {jQuery} $tagCategory - element inside this.$list with a matching value for data-tag-category
  * @param {(boolean|string)} tag - boolean from TagList.addTag(opts.nonremoveable),
  * or string of HTML element defined by template_nonremoveableTag or template_tag
  * @param {object} opts
- * @param {('min'|'max'|'false')} opts.range
+ * @param {('min' | 'max' | 'false')} opts.range
  * @param {string} opts.rangeName - appended to a class named of 'tag__category__range--'
  */
 TagList.prototype.addTagItem = function($tagCategory, tag, opts) {
@@ -145,8 +150,9 @@ TagList.prototype.addTagItem = function($tagCategory, tag, opts) {
 
 /**
  * Called from @see TagList.prototype.removeTag
- * @param {*} $tag
- * @param {boolean} emit
+ * @param {jQuery} $tag
+ * @param {boolean} [emit] - Whether to broadcast tag:removed
+ *
  * @emits tag:removed from $tag if emit is true
  */
 TagList.prototype.removeTagElement = function($tag, emit) {
@@ -169,10 +175,11 @@ TagList.prototype.removeTagElement = function($tag, emit) {
  * Called from TagList.prototype.removeAllTags
  * Called from TagList.prototype.removeTagEvt
  * Called from TagList.prototype.addTag
- * @param {} key
- * @param {boolean} emit - Whether
- * @param {} forceRemove
- * @calls 
+ * @param {string} key - Used to find [data-id="{key}"] in this.$list
+ * @param {boolean} emit=false - Whether to broadcast that this tag was removed. Comes in as true from removeTagDom(), false from addTag(). Passed to removeTagElement.
+ * @param {boolean} [forceRemove] - Whether to force the removal, like on table switch
+ *
+ * @property {jQuery} $tag - The item in the list with data-id matching the passed key
  */
 TagList.prototype.removeTag = function(key, emit, forceRemove) {
   var $tag = this.$list.find('[data-id="' + key + '"]');
@@ -252,11 +259,17 @@ TagList.prototype.removeAllTags = function(e, opts, emit) {
 };
 
 /**
- * The handler when document.body hears filter:removed
- * @param {} e
- * @param {} opts
- * @param {} opts.key
- * @param {} opts.name
+ * The handler when document.body hears filter:removed,
+ * which come from the filter's checkbox items being clicked, or when the chiclets above the table are clicked
+ * @param {jQuery.Event} e - The filter:removed event
+ * @param {object} passedOpts - Object of options
+ * @param {jQuery} passedOpts.filterLabel - 
+ * @param {string} passedOpts.name - Is the name of the variable from the API
+ * @param {string} passedOpts.key - Follows the format of {opts.name}-checkbox-{value}
+ * @param {string} passedOpts.value - Used as the visible label for the filter tag
+ * @param {boolean} passedOpts.loadedOnce
+ *
+ * @calls {this.removeTag}
  */
 TagList.prototype.removeTagEvt = function(e, opts) {
   this.removeTag(opts.key, false);
@@ -287,8 +300,12 @@ TagList.prototype.removeTagEvt = function(e, opts) {
 };
 
 /**
- * Click handler for this.$list .js-close
- * @param {} e
+ * Click handler for this.$list .js-close. (looks like an X on the right side of the chiclet)
+ * Looks at the event's target's closest .tag__item and sends its id to removeTag()
+ * @param {jQuery.Event} e - The 'click' event from this.$list .js-close
+ *
+ * @calls @see removeTag > @see removeTagElement > @see removeTagEvt > @see removeTag > @see removeTagElement
+ * TODO: SHOULD THIS ^^ LOOP LIKE IT DOES? (The order of functions above is 1, 2, 3, 1, 2)
  */
 TagList.prototype.removeTagDom = function(e) {
   var key = $(e.target)
@@ -299,10 +316,12 @@ TagList.prototype.removeTagDom = function(e) {
 
 /**
  * Handles document.body filter:renamed
- * @param {} e
- * @param {} opts
- * @param {} opts.key
- * @param {} opts.nonremovable
+ * @param {jQuery.Event} e
+ * @param {CustomEvent} e.originalEvent - 
+ * @param {object} passedOpts - Data for the tag. Can also come in a e.originalEvent.detail
+ * @param {string} passedOpts.key - The tag identifier, e.g. committee_id-C00123456-checkbox
+ * @param {string} passedOpts.value - The visible text from the tag
+ * @param {boolean} passedOpts.nonremovable - 
  */
 TagList.prototype.renameTag = function(e, opts) {
   console.log('TagList.renameTag(e, opts), ', e, opts);

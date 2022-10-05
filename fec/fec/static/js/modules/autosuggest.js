@@ -21,6 +21,18 @@ import officeNames from './utils';
 
 /**
  * Used inside autocomplete for the results list
+ * Holds the configuration data for the various search/lookup types/
+ * @public
+ * @property {object} dataDetails - From <input data-search-type="">. Inside instances, the selected object becomes this.dataDetails.
+ * Valid values: dataTypes['candidates'|'committees'|'auditCandidates'|'auditCommittees'|'allData'|'all'] // TODO: add the MURS and legal options
+ * @property {string} dataDetails.type - The same as used for dataTypes[{string}] so we have it as part of this.dataDetails.
+ * @property {string} dataDetails.url - //TODO: is this really necessary?
+ * @property {string} dataDetails.queryFieldName - Some fields have different IDs and Types. This connects them to the right value in the db/api.
+ * @property {string} dataDetails.name - Used while naming fields.
+ * @property {string} dataDetails.display - Which field to display. // TODO: are we using this?
+ * @property {number} dataDetails.limit - How many results to display. // TODO: use this?
+ * @property {string} dataDetails.source - // TODO: unused?
+ * @property {object} dataDetails.templates - Unused // TODO: safe to remove?
  */
 let resultsListOptions = {
   class: 'as-dataset as-dataset-candidate',
@@ -32,7 +44,8 @@ let resultsListOptions = {
 };
 
 /**
- * Used inside autocomplete for the results list's items
+ * @private
+ * Used inside autocomplete to build the results list's items
  */
 let resultItemOptions = {
   class: 'as-suggestion as-selectable',
@@ -75,8 +88,9 @@ let resultItemOptions = {
 
 /**
  * Security tools don't like when we hardcode something like 'key' with a value.
- * The autocomplete package uses 'keys' to point to what it should search from results' attributes
- * @returns {Array}
+ * The autocomplete package uses 'keys' to point to what it should search from results' attributes.
+ * So we have an array of the fields we need to tell autocorrect.
+ * @returns {array} Array: ['name', 'id'] to be used for autocorrect
  */
 function searchedAttribs() {
   // In autocomplete, we want to look at the 'name' and 'id' values from data results
@@ -85,9 +99,9 @@ function searchedAttribs() {
 
 /**
  * Called inside @getData to determine the queryPath for the different search types
- * @param {String} resource the type of resource/path requested (e.g. candidates, committees)
- * @param {String} queryString
- * @returns {String} like https://api.open.fec.gov/v1/names/candidates/?q=${queryString}&api_key=${window.API_KEY_PUBLIC}
+ * @param {string} resource - the type of resource/path requested (e.g. candidates, committees)
+ * @param {string} queryString
+ * @returns {string} A string like https://api.open.fec.gov/v1/names/candidates/?q=${queryString}&api_key=${window.API_KEY_PUBLIC}
  */
 function getUrl(resource, queryString) {
   console.log('getUrl(resources, queryString): ', resource, queryString);
@@ -133,9 +147,9 @@ function getUrl(resource, queryString) {
 
 /**
  * 
- * @param {*} type 
- * @param {*} data 
- * @returns {Array} of objects structured like { is_header: true, id: window.queryText, name: 'Select a committee:', type: 'none' }
+ * @param {string} type - The type of data results to structure
+ * @param {JSON} data - The API response i the form of {api_version: "", results: [{…}]}
+ * @returns {object[]} Array of objects structured like { is_header: true, id: window.queryText, name: 'Select a committee:', type: 'none' }
  */
 function formatResults(type, data) {
   // console.log('formatResults(): ', type, data);
@@ -182,9 +196,9 @@ function getSuggestions(type) {
 
 /**
  *
- * @param {*} q
- * @param {*} qType
- * @returns {Array} of results formatted like [{ id: C123456789, name: 'Candidate Name', type: 'candidate' }]
+ * @param {string} q
+ * @param {object} theDataset
+ * @returns {object[]} Array of results formatted like [{ id: C123456789, name: 'Candidate Name', type: 'candidate' }]
  */
 async function getData(q, qType) {
   console.log('src.getData()');
@@ -259,8 +273,9 @@ async function getData(q, qType) {
 }
 
 /**
+ * @private
  * Default options for autocomplete
- * Of note, 'selector and data.src are basically always replaced.
+ * Of note, `selector` and `data.src` are basically always replaced.
  */
 let defaultAutocompleteOptions = {
   selector: () => {
@@ -342,19 +357,21 @@ let defaultAutocompleteOptions = {
 /**
  * The main Autosuggest element
  * @constructor
- * @param {String|HTMLInputElement} elementSelector
- * @param {String="all","allData","candidates","committees"} queryType Used to decide which APIs to search // TODO: list the rest of the options
- * @param {String} url
- * @param {Object} opts
+ * @param {string|HTMLInputElement} elementSelector - The <input> field that will serve as the Autosuggest <input>
+ * @param {object} opts - 
  *
- * @property {autoComplete} autocomplete
- * @property {Number} formerSelectionIndex an integer used for tracking hover/selected states with arrows, especially for ⬆︎/⬇︎ onto a non-selectable element
- * @property {HTMLInputElement} input the <input> for this instance of Autosuggest
- * @property {String} queryType
+ * @property {autoComplete} autoComplete - The instance of autoComplete
+ * @property {number} formerSelectionIndex - An integer used for tracking hover/selected states with arrows, especially for ⬆︎/⬇︎ onto a non-selectable element
+ * @property {HTMLInputElement} input - The <input> for this instance of Autosuggest
  * @property {HTMLElement} resultsHolder
- * @property {String} url
- * @property {String|Number} value
- * @property {HTMLElement} wrapper the element created to wrap the <input> and the results
+ * @property {string} url
+ * @property {string | number} value
+ * @property {HTMLElement} wrapper - The element created to wrap the <input> and the results
+ * @property {object} dataDetails - pulled from dataTypes[opts.type]
+ * @property {boolean} isSiteSearch - Site searches handle their selection events themselves; filters and others that use Autosuggest handle their own selections
+ *
+ * @listens events.searchTypeChanged
+ * @emits autosuggest:select
  */
 function Autosuggest(elementSelector, opts) {
   console.log('Autosuggest(elementSelector, opts): ', elementSelector, opts);
@@ -374,7 +391,12 @@ function Autosuggest(elementSelector, opts) {
 }
 
 /**
- * @prop
+ * Called by the constructor,
+ * - makes HTMLElements to convert the <input> to the whole autosuggest element
+ * - gets data ready for the autocomplete functionality
+ * - initializes the autocomplete
+ * - sets aria attributes
+ * - adds event listeners
  */
  Autosuggest.prototype.init = function() {
   // console.log('Autosuggest.init()');
@@ -485,10 +507,9 @@ function Autosuggest(elementSelector, opts) {
 
 /**
  *
- * @param {CustomEvent} e from autocomplete
- * @param {Object} e.detail carries the autoComplete.js "feedback" object
- *
- * @event autosuggest:open
+ * @param {CustomEvent} e - from autocomplete
+ * @param {object} e.detail - Carries the autoComplete.js "feedback" object
+ * @emits this.input#autosuggest:open // TODO: it doesn't emit this
  */
  Autosuggest.prototype.handleOpen = function(e) {
   this.matchAriaExpandeds();
@@ -504,10 +525,9 @@ function Autosuggest(elementSelector, opts) {
 
 /**
  * Fires after "resultsList" is closed
- * @param {CustomEvent} e from autocomplete
- * @param {Object} e.detail carries the autoComplete.js "feedback" object
- *
- * @event autosuggest:close
+ * @param {CustomEvent} e - From autocomplete
+ * @param {object} e.detail - Carries the autoComplete.js "feedback" object
+ * @emits this.input#autosuggest:close // TODO: nope, doesn't emit this
  */
  Autosuggest.prototype.handleClose = function(e) {
   this.matchAriaExpandeds();
@@ -536,7 +556,7 @@ function Autosuggest(elementSelector, opts) {
 /**
  * Called when Autocomplete gets results
  * @param {CustomEvent} e - from autocomplete
- * @param {Object} e.detail - carries the matching results values
+ * @param {object} e.detail - carries the matching results values
  * @event autosuggest:results
  */
  Autosuggest.prototype.handleResults = function(e) {
@@ -544,10 +564,10 @@ function Autosuggest(elementSelector, opts) {
   this.formerSelectionIndex = 0;
 
   /**
-   * Autosuggest results event
+   * Autosuggest open event
    *
    * @event autosuggest:results
-   * @type {Object}
+   * @type {object}
    * @property {Event} e - an event? // TODO: add these
    */
    this.input.dispatchEvent(new CustomEvent('autosuggest:results', e));
@@ -555,8 +575,11 @@ function Autosuggest(elementSelector, opts) {
 
 /**
  * Handles when a results item is clicked, tapped, or selected with the keyboard
- * @param {CustomEvent} e from autocomplete
- * @param {Object} e.detail carries the autoComplete.js "feedback" object
+ * @param {CustomEvent} e - From autocomplete
+ * @param {object} e.detail - Carries the autoComplete.js "feedback" object
+ *
+ * @emits this.input#autosuggest:close
+ *
  * @returns {null} if (e.detail.selection.value.is_header)
  * @event autosuggest:close
  */
@@ -593,8 +616,8 @@ function Autosuggest(elementSelector, opts) {
  * Mostly called after keyboard navigation, this function checks if the user would now be on a header (nonselectable) element
  * and then moves them upward, downward, or to the other end of the results list based on which direction they want to go
  * and which item was 'hovered' last (based on this.formerSelectionIndex)
- * @param {CustomEvent} e from autocomplete
- * @param {Object} e.detail carries the autoComplete.js "feedback" object
+ * @param {CustomEvent} e - from autocomplete
+ * @param {object} e.detail - carries the autoComplete.js "feedback" object
  */
  Autosuggest.prototype.handleNavigate = function(e) {
   console.log('handleNavigate(e): ', e);

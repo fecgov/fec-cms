@@ -253,7 +253,7 @@ var typeaheadOpts = {
  * @class
  * @param {string} selector - A string to be used to find the element in the page.
  * @param {string} type - The kinda of data we'll be showing. e.g., 'candidates'.
- * @param {URL} url - Optional. Where we should find the data if not the default.
+ * @param {URL} [url] - Where we should find the data if not the default.
  *
  * @event typeahead:select - Triggered when a user clicks an autocomplete search result
  * @property {jQuery.Event}
@@ -263,7 +263,7 @@ var typeaheadOpts = {
  * @property {jQuery.Event}
  * @property {object} - null if no results. Otherwise we get back an {Object} for each item in the menu
  *
- * @listens events.searchTypeChanged
+ * @listens window.events.searchTypeChanged
  */
 function Typeahead(selector, type, url) {
   this.$input = $(selector);
@@ -292,6 +292,11 @@ Typeahead.prototype.init = function() {
   this.$input.on('typeahead:select', this.select.bind(this));
 };
 
+/**
+ * Re-inits element on searchTypeChanged event
+ * @param {*} data - 
+ * @listens window.events.searchTypeChanged
+ */
 Typeahead.prototype.handleChangeEvent = function(data) {
   this.init(data.type);
 };

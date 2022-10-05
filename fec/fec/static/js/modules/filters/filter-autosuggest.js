@@ -1,7 +1,7 @@
 /**
- * TODO: what does this file actually do?
- * Wraps an instance of Autosuggest
- * Wrapped by autosuggest-filter
+ * Handles the @see Autosuggest functionality inside an instance of @see AutosuggestFilterBlock
+ * 
+ * 
  */
 
 /* global API_LOCATION, API_VERSION, API_KEY_PUBLIC */
@@ -41,14 +41,18 @@ function formatLabel(datum) {
 }
 
 /**
- * 
+ * Converts a given string to a slug and appends '-checkbox' to the end
  * @param {string} value - Input to convert to a slug
+ *
  * @returns {string} A slug of value with '-checkbox' appended to the end
  */
 function formatId(value) {
   return slugify(value) + '-checkbox';
 }
 
+/**
+ * 
+ */
 var textDataset = {
   display: 'id',
   source: function(query, syncResults) {
@@ -63,12 +67,12 @@ var textDataset = {
 
 /**
  * Meant to be wrapped in <li>
- * @param {object} data
- * @param {string} data.id
- * @param {string} data.label
- * @param {string} data.name
- * @param {string} data.value
- * @returns
+ * @param {object} data - Object of the values to use for the new checkbox item
+ * @param {string} data.id - Assigned as the <input id=""> and <label for="">
+ * @param {string} data.label - The human-readable text for the <label>
+ * @param {string} data.name - Assigned as the <input name="">
+ * @param {string|number} data.value - To be assigned to <input value="">
+ * @returns {string} to be used as the innerHTML of a checkbox item
  */
 const template_checkbox = data => `
     <input 
@@ -85,21 +89,26 @@ const template_checkbox = data => `
 `;
 
 /**
- * 
- * @param {*} elementSelector - 
- * @param {*} dataset - 
- * @param {String='true'} allowText - 
+ * Creates a new FilterAutosuggest
+ * @constructor
  *
- * @property {HTMLInputElement} element - 
- * @property {String} queryType - 
- * @property {Boolean} allowText - // TODO: what is this?
- * @property {HTMLInputElement} field - // TODO: is this the same as this.element?
- * @property {String} fieldName - 
- * @property {HTMLButtonElement} button - 
- * @property {HTMLElement} selected - 
- * @property {Boolean} searchEnabled - ready by automated tests
+ * @param {(string | HTMLElement)} elementSelector - The element to become this.element, or a string to use with document.querySelector()
+ * @param {DOMStringMap} dataset - ex: {filter: 'autosuggest', name: 'committee_id', dataset: 'committees'}
+ * @param {string='true'} allowText - 
  *
- * @listens autosuggest:open // TODO: add these
+ * @property {jQuery} $elm - Inherited from Filter
+ * @property {jQuery} $input - Inherited from Filter
+ * @property {jQuery} this.$filterLabel - Inherited from Filter
+ *
+ * @property {HTMLElement} element - The main Autosuggest <div>, div.filter.js-filter.autosuggest-filter
+ * @property {boolean} allowText - // TODO: what is this?
+ * @property {HTMLInputElement} field - The main <input> element inside the Autosuggest filter
+ * @property {HTMLButtonElement} button - The <button> in the Autosuggest with the magnifying glass
+ * @property {HTMLElement} selected - The <ul> that holds the previously-chosen checkboxes above the autosuggest input field
+ * @property {boolean} searchEnabled - ready by automated tests
+ * @property {object} dataDetails - One of autosuggest.datatypes[]
+ *
+ * @listens autosuggest:open // TODO: add these (it doesn't listen to autosuggest:open)
  */
 function FilterAutosuggest(elementSelector, dataset, allowText) {
   console.log('FilterAutosuggest(elementSelector, dataset, allowText)', elementSelector, dataset, allowText);
@@ -181,7 +190,9 @@ FilterAutosuggest.prototype.autosuggestInit = function() {
 };
 
 /**
- * 
+ * Called when this.field receives event autosuggest:results
+ * Calls @see FilterAutosuggest.setFirstItem
+ * @param {CustomEvent} e - 
  */
 FilterAutosuggest.prototype.handleResults = function(e) {
   console.log('FilterAutosuggest.handleResults(e): ', e);
@@ -190,7 +201,8 @@ FilterAutosuggest.prototype.handleResults = function(e) {
 
 /**
  * Set the firstItem to a datum upon each rendering of results
- * this way clicking enter or the button will submit with this datum
+ * this way clicking enter or the button will submit with this datum.
+ * Called by @see FilterAutosuggest.handleResults
  */
 FilterAutosuggest.prototype.setFirstItem = function() {
   // console.log('FilterAutosuggest.setFirstItem()');
@@ -210,7 +222,7 @@ FilterAutosuggest.prototype.setFirstItem = function() {
 
 /**
  * 
- * @param {(CustomEvent | KeyboardEvent)} e - Custom event if it's a click, but KeyboardEvent from the keyboard
+ * @param {(CustomEvent|KeyboardEvent)} e - Custom event if it's a click, but KeyboardEvent from the keyboard
  * @param {*} datum - 
  */
 FilterAutosuggest.prototype.handleSelect = function(e) {
@@ -219,6 +231,15 @@ FilterAutosuggest.prototype.handleSelect = function(e) {
   console.log('  e.target.type: ', e.target.type);
 
   const datum = e.detail.selection.value;
+  /*
+  datum should be in the format of:
+    {
+      name: 'BERGMANFORCONGRESS',
+      id: 'C00614214',
+      is_active: true,
+      type: 'committee'
+    }
+  */
 
   const id = formatId(datum.id);
   console.log('  id: ', id);
@@ -266,8 +287,8 @@ FilterAutosuggest.prototype.handleKeypress = function(e) {
 };
 
 /**
- * 
- * @param {Event?} e -
+ * Enables or disables the search button
+ * Called on this.field.change and this.field.keyup
  */
 FilterAutosuggest.prototype.handleChange = function(e) {
   console.log('FilterAutosuggest.handleChange(e): ', e);
@@ -318,7 +339,8 @@ FilterAutosuggest.prototype.handleCheckbox = function(e) {
 };
 
 /**
- * 
+ * Only cares about the click if .dropdown__remove is the target
+ * (.dropdown__remove) is the X that appears to the right of a hovered filter that's been deselected
  * @param {PointerEvent} e
  */
 FilterAutosuggest.prototype.handleClick = function(e) {
@@ -336,8 +358,8 @@ FilterAutosuggest.prototype.handleClick = function(e) {
 
 /**
  * 
- * @param {*} e - 
- * @param {*} opts - 
+ * @param {PointerEvent} e - 
+ * @param {object} [opts] - 
  */
 FilterAutosuggest.prototype.removeCheckbox = function(e, opts) {
   console.log('FilterAutosuggest.removeCheckbox(e, opts): ', e, opts);
@@ -422,7 +444,14 @@ FilterAutosuggest.prototype.disableButton = function() {
 
 /**
  *
- * @param {object} opts - 
+ * @param {object} opts - Data object
+ * @param {string} opts.name - String in the form of [type]_id. Passed to formatCheckboxData
+ * @param {string} opts.value - Passed to formatCheckboxData
+ * @param {object} opts.datum - Data object from the clicked element
+ * @param {boolean} opts.datum.is_active - From the API
+ * @param {string} opts.datum.id -From the API (e.g. C001234567)
+ * @param {string} opts.datum.name - The text displayed on the checkbox
+ * @param {string} opts.datum.type - Value from dataTypes[type].name
  */
 FilterAutosuggest.prototype.appendCheckbox = function(opts) {
   console.log('FilterAutosuggest.appendCheckbox(opts): ', opts);
@@ -462,8 +491,10 @@ FilterAutosuggest.prototype.formatCheckboxData = function(input) {
 };
 
 /**
- * TODO: update this whole thing
- * @param {*} values - 
+ * Called from @see autosuggest-filter.fromQuery()
+ * When the page loads with query params for this filter, the param values will be entity IDs (candidate ID, etc)
+ * We want to go get the human-friendly values so we show something like "My PAC (C001234567" instead of "C001234567"
+ * @param {string[]} values - 
  */
 FilterAutosuggest.prototype.getFilters = function(values) {
   console.log('FilterAutosuggest.getFilters(values): ', values);
@@ -531,9 +562,11 @@ FilterAutosuggest.prototype.updateFilters = function(response) {
 };
 
 /**
- * 
- * @param {*} e - 
- * @param {*} opts - 
+ * Called when .js-filter-control is changed, which is part of
+ * fec/data/template/macros/date.jinja, and
+ * fec/data/templates/partials/reports-filter.jinja
+ * @param {*} e - // TODO
+ * @param {*} opts - // TODO
  */
 FilterAutosuggest.prototype.changeDataset = function(e, opts) {
   console.log('FilterAutosuggest.changeDataset(e, opts): ', e, opts);
