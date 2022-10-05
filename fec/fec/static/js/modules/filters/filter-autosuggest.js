@@ -241,7 +241,7 @@ FilterAutosuggest.prototype.handleSelect = function(e) {
   const id = formatId(datum.id);
   console.log('  id: ', id);
   this.appendCheckbox({
-    name: this.fieldName,
+    name: this.dataDetails.queryFieldName,
     value: datum.id,
     datum: datum
   });
@@ -272,7 +272,7 @@ FilterAutosuggest.prototype.handleSelect = function(e) {
  */
 FilterAutosuggest.prototype.handleKeypress = function(e) {
   // console.log('FilterAutosuggest.handleKeypress(e): ', e);
-  this.handleChange(e);
+  this.handleChange();
 
   // const suggestion = this.element.querySelector('.as-suggestion');
   // if (suggestion) this.field.setAttribute('aria-expanded', 'true');
@@ -413,7 +413,11 @@ FilterAutosuggest.prototype.handleSubmit = function(e) {
 FilterAutosuggest.prototype.clearInput = function() {
   console.log('FilterAutosuggest.clearInput()');
   this.field.value = null;
-  this.field.dispatchEvent(new CustomEvent('change', { source: 'clearInput()' }));
+  const newEvent = new CustomEvent('change', {
+    // bubbles: true,
+    detail: {}
+  });
+  this.field.dispatchEvent(newEvent);
   this.disableButton();
 };
 
@@ -464,7 +468,11 @@ FilterAutosuggest.prototype.appendCheckbox = function(opts) {
 
   console.log('  checkboxInput: ', checkboxInput);
 
-  checkboxInput.dispatchEvent(new CustomEvent('change', { source: 'appendCheckbox' }));
+  const newEvent = new CustomEvent('change', {
+    bubbles: true, // Bubbles so FilterTags
+    detail: {}
+  });
+  checkboxInput.dispatchEvent(newEvent);
 
   this.clearInput();
 };
@@ -481,7 +489,7 @@ FilterAutosuggest.prototype.formatCheckboxData = function(input) {
       ? _.escape(formatLabel(input.datum))
       : stripDoubleQuotes(input.value),
     value: _.escape(stripDoubleQuotes(input.value)),
-    id: this.fieldName + '-' + formatId(input.value)
+    id: this.dataDetails.queryFieldName + '-' + formatId(input.value)
   };
 
   return output;
@@ -505,7 +513,7 @@ FilterAutosuggest.prototype.getFilters = function(values) {
     });
     values.forEach(function(value) {
       self.appendCheckbox({
-        name: self.fieldName,
+        name: self.dataDetails.queryFieldName,
         label: ID_PATTERN.test(value) ? 'Loading&hellip;' : value,
         value: value
       });
@@ -570,7 +578,7 @@ FilterAutosuggest.prototype.changeDataset = function(e, opts) {
   // Method for changing the typeahead suggestion on the "contributor name" filter
   // when the "individual" or "committee" checkbox filter is changed
   // If the modify event names this filter, destroy it
-  if (opts.filterName === this.fieldName) {
+  if (opts.filterName === this.dataDetails.name) {
     // TODO: Check this this.field.typeahead bit
     // TODO: do we need to destroy?
     // this.field.typeahead('destroy');

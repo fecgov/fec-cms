@@ -20,7 +20,7 @@ const officeNames = {
 function slugify(val, retainCase = false) {
   let toReturn = val.toString();
 
-  if (!retainCase) toReturn = toReturn.toLowerCase();
+  if (retainCase === false) toReturn = toReturn.toLowerCase();
 
   toReturn = toReturn
     .replace(/\s+/g, '-') // change spaces to dashes

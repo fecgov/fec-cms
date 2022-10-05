@@ -105,7 +105,7 @@ Filter.prototype.handleAddEvent = function(e, opts) {
   // Subfilters don't add listeners that trigger this handler, so it will only
   // be called by the MultiFilter.
   var $filterLabel = opts.filterLabel || this.$filterLabel;
-  this.increment($filterLabel);
+  if ($filterLabel.length > 0) this.increment($filterLabel);
   this.setLastAction(e, opts);
 };
 

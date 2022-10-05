@@ -22,7 +22,7 @@ const rootPathToIndividualContributions =
 
 import { buildUrl, passiveListener } from '../modules/helpers';
 // import autosuggest from '../modules/autosuggest';
-import Autosuggest from '../modules/autosuggest';
+import { Autosuggest } from '../modules/autosuggest';
 import 'abortcontroller-polyfill/dist/polyfill-patch-fetch';
 import analytics from '../modules/analytics';
 

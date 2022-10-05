@@ -2,7 +2,8 @@
 
 var $ = require('jquery');
 var Typeahead = require('../modules/typeahead').Typeahead;
-import Autosuggest from '../modules/autosuggest';
+import { Autosuggest } from '../modules/autosuggest';
+
 var URI = require('urijs');
 
 const loadRecaptcha = require('../modules/load-recaptcha').loadRecaptcha;
