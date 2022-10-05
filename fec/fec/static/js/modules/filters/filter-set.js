@@ -52,15 +52,20 @@ FilterSet.prototype.buildFilter = function($elm) {
   return new F($elm);
 };
 
-FilterSet.prototype.activate = function($selector, elementList) {
-  console.log('FilterSet.activate $selector typeof: ', typeof $selector);
-  console.log('FilterSet.activate($selector): ', $selector, elementList);
-  const self = this;
-  // console.log('  self: ', self);
-  const query = helpers.sanitizeQueryParams(
+/**
+ * Builds a list of all current filters
+ * Stores all field key-values in this.fields and returns the filters object
+ * @param {jQuery} $selector - Results from a jQuery selection `$()`
+ *
+ * @returns {object} An object in the form of {committee_type: CheckboxFilter{}, contributor_city: TextFilter{}, … }
+ */
+FilterSet.prototype.activate = function($selector) { // elementList
+  console.log('FilterSet.activate($selector): ', $selector); // elementList
+  var self = this;
+  var query = helpers.sanitizeQueryParams(
     URI.parseQuery(window.location.search)
   );
-  // console.log('  query: ', query);
+  console.log('  query: ', query);
 
   var filters = _.chain($selector)
     .map(function(elm) {
@@ -75,16 +80,17 @@ FilterSet.prototype.activate = function($selector, elementList) {
     .flatten()
     .value();
 
-  // console.log('fields: ', fields);
+  console.log('  fields: ', fields);
 
   // Activate each filter
   _.each(filters, function(filter) {
-    // console.log('_.each');
+    console.log('  _.each');
     filter.fromQuery(query);
   });
 
   // Store all field key-values in this.fields and return the filters object
   this.fields = this.fields.concat(fields);
+  console.log('  filters: ', filters);
   return filters;
 };
 
@@ -164,8 +170,10 @@ FilterSet.prototype.handleTagRemoved = function(e, opts) {
     var type = $input.get(0).type;
 
     if (type === 'checkbox' || type === 'radio') {
+      console.log('  going to trigger a click on $input');
       $input.click();
     } else if (type === 'text') {
+      console.log('  going to trigger a change on $input');
       $input.val('').trigger('change');
     }
   }

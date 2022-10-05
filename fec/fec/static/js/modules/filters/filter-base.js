@@ -29,6 +29,7 @@ function Filter(elm) {
   this.$elm = $(elm);
   this.$input = this.$elm.find('input:not([name^="_"])');
   this.$filterLabel = this.$elm.closest('.accordion__content').prev();
+  console.log('this.$filterLabel: ', this.$filterLabel);
   // on error message, click to open feedback panel
   this.$elm.on('click', '.js-filter-feedback', function() {
     $(document.body).trigger('feedback:open');
@@ -60,6 +61,8 @@ function Filter(elm) {
  * @returns {Filter}
  */
 Filter.prototype.fromQuery = function(query) {
+  console.log('Filter.fromQuery(query): ', query);
+  console.log('  this.name: ', this.name);
   this.setValue(query[this.name]);
   this.loadedOnce = true;
   return this;
@@ -149,6 +152,12 @@ Filter.prototype.handleRemoveEvent = function(e, passedOpts) {
  */
 Filter.prototype.decrement = function($filterLabel) {
   console.log('Filter.decrement($filterLabel): ', $filterLabel);
+
+  // If it's not a jQuery object, let's find what it
+  if (!$filterLabel.prevObject)
+    $filterLabel = $($filterLabel).closest('.accordion__content').prev();
+
+    console.log('  $filterLabel: ', $filterLabel);
   var filterCount = $filterLabel.find('.filter-count');
   if (filterCount.html() === '1') {
     filterCount.remove();

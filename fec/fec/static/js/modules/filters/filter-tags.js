@@ -1,7 +1,8 @@
 /**
  * Filter tags (TagList) are the Chiclet-type tags above filtered tables
  */
-let $ = require('jquery');
+/* global $ */
+// let $ = require('jquery');
 
 const template_body = value => `
 <div>
@@ -159,6 +160,7 @@ TagList.prototype.removeTagElement = function($tag, emit) {
   // This handles the actual removal of the DOM elementrs
   var $tagCategory = $tag.parent();
   var key = $tag.data('id');
+
   if (emit) {
     $tag.trigger('tag:removed', [{ key: key }]);
   }
@@ -166,6 +168,7 @@ TagList.prototype.removeTagElement = function($tag, emit) {
   $tagCategory.removeClass(
     'tag__category__range--amount tag__category__range--date'
   );
+
   if ($tagCategory.is(':empty')) {
     $tagCategory.remove();
   }
@@ -220,6 +223,13 @@ TagList.prototype.removeTag = function(key, emit, forceRemove) {
  * (!opts || !opts.fromFilterSet))
  */
 TagList.prototype.removeAllTags = function(e, opts, emit) {
+  console.log('TagList.removeAllTags()');
+  console.log('  typeof e: ', typeof e);
+  console.log('  typeof opts: ', typeof opts);
+  console.log('  typeof emit: ', typeof emit);
+  console.log('  e: ', e);
+  console.log('  opts: ', opts);
+  console.log('  emit: ', emit);
   // If the element has the reset class, we revert to the original page state by re-navigating.
   // Do not trigger tag removal for filter reset on load
   if (

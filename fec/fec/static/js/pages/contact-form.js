@@ -17,7 +17,10 @@ function ContactForm($elm) {
 
   // TODO: remove the useTt conditional when FEATURES.use_tt goes away
   if (window.useTt === false) {
-    this.autosuggest = new Autosuggest(document.querySelector('.js-contact-autosuggest'));
+    const elm = $elm.get()[0]; // Converting from jQuery to HTMLElement
+    this.autosuggest = new Autosuggest(elm.querySelector('.js-contact-committee'));
+    this.autosuggest.input.addEventListener('autosuggest:select', this.handleAutosuggestSelection.bind(this));
+
   } else {
     this.typeahead = new Typeahead(
       $elm.find('.js-contact-committee'),
@@ -27,7 +30,6 @@ function ContactForm($elm) {
   }
 
   this.$cancel = $elm.find('.js-cancel');
-  this.initAutosuggest();
   this.initOtherReason();
   this.category.on('change', this.toggleOtherReason.bind(this));
   this.$cancel.on('click', this.clearForm.bind(this));
@@ -50,6 +52,16 @@ ContactForm.prototype.initTypeahead = function() {
   });
 };
 
+/**
+ * Handles when an autosuggest selection is made.
+ * Assigns the selection value (id) to this.committeeId,
+ * and sets the name of the selection into the field.
+ * @param {CustomEvent} e - From inside autosuggest
+ * @listens this.autosuggest.input#autosuggest:select
+ */
+ContactForm.prototype.handleAutosuggestSelection = function(e) {
+  this.committeeId.val(e.detail.selection.value.id);
+  this.autosuggest.input.value = e.detail.selection.value.name;
 };
 
 ContactForm.prototype.initOtherReason = function() {
@@ -85,18 +97,30 @@ function AnalystLookup($elm) {
 
   // TODO: remove the useTt conditional when FEATURES.use_tt goes away
   if (window.useTt === false) {
-    this.autosuggest = new Autosuggest(this.$input, { type: 'committees', url: '' });
-    this.initAutosuggest();
+    this.autosuggest = new Autosuggest(this.$input.get()[0]); // Converting from jQuery $input to HTMLElement <input>
+    this.autosuggest.input.addEventListener('autosuggest:select', this.handleAutosuggestSelection.bind(this));
+    this.autosuggest.input.addEventListener('change', this.handleChange.bind(this));
+    this.autosuggest.input.addEventListener('blur', this.handleChange.bind(this));
+
   } else {
     this.typeahead = new Typeahead(this.$input, 'committees', '');
     this.initTypeahead();
+    this.$input.on('change, blur', this.handleChange.bind(this));
   }
-
-  this.$input.on('change, blur', this.handleChange.bind(this));
 
   loadRecaptcha();
 }
 
+/**
+ * Handles when an autosuggest selection is made.
+ * Sets the name of the selection into the field,
+ * and calls fetchAnalyst.
+ * @param {CustomEvent} e - From inside autosuggest
+ * @listens this.autosuggest.input#autosuggest:select
+ */
+AnalystLookup.prototype.handleAutosuggestSelection = function(e) {
+  this.autosuggest.input.value = e.detail.selection.value.name;
+  this.fetchAnalyst(e, e.detail.selection.value);
 };
 
 AnalystLookup.prototype.fetchAnalyst = function(e, opts) {
