@@ -92,11 +92,11 @@
              <div class="combo combo--search">
             <input
               class="js-site-search combo__input"
-              {% if FEATURES.use_tt == false %}data-{% endif %}autocomplete="off"
               id="query"
               name="query"
               type="text"
               aria-label="Search FEC.gov">
+              {% if FEATURES.use_tt == False %}data-{% endif %}autocomplete="off"
             <button type="submit" class="button--standard combo__button button--search">
               <span class="u-visually-hidden">Search</span>
             </button>
