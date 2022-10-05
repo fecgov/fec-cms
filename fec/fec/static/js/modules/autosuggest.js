@@ -16,8 +16,6 @@
 import autoComplete from '@tarekraafat/autocomplete.js';
 import officeNames from './utils';
 
-var events = require('./events');
-
 /**
  * Holds the configuration data for the various search/lookup types/
  * @public
@@ -338,6 +336,7 @@ const defaultAutocompleteOptions = {
  * @property {HTMLElement} wrapper - The element created to wrap the <input> and the results
  * @property {object} dataDetails - pulled from dataTypes[opts.type]
  * @property {boolean} isSiteSearch - Site searches handle their selection events themselves; filters and others that use Autosuggest handle their own selections
+ * @property {string|null|false} canRefineSearch - 
  *
  * @listens events.searchTypeChanged
  * @emits autosuggest:select
@@ -360,6 +359,7 @@ function Autosuggest(elementSelector, opts = {}) {
   this.isSiteSearch = this.input.classList.contains('.js-site-search');
 
   console.log('  this.dataDetails: ', this.dataDetails);
+  this.canRefineSearch = this.input.closest('form').dataset.refineSearch || false;
 
   this.init();
 }
@@ -376,7 +376,7 @@ Autosuggest.prototype.init = function() {
   // console.log('Autosuggest.init()');
   // TODO: do we need to destroy/reset one if it already exists?
   // if (this.typeahead) this.input.typeahead('destroy');
-  this.input.value = '';
+  // this.input.value = '';
   let self = this;
   let theseOpts = Object.assign({}, defaultAutocompleteOptions);
 
@@ -446,11 +446,8 @@ Autosuggest.prototype.init = function() {
   this.input.addEventListener('selection', this.handleSelect.bind(this));
 
   // The search page uses events to dispatch when the dataset type has changed
-  console.log('  this.input.id:', this.input.id);
-  if (this.input.id === 'search') {
-    console.log('  events: ', events);
-    console.log('  window.events: ', window.events);
-    events.on('searchTypeChanged', this.handleChangeEvent.bind(this));
+  if (this.canRefineSearch) {
+    this.input.closest('form').addEventListener('change', this.handleRefineChange.bind(this));
   }
 
   this.matchAriaExpandeds();
@@ -611,14 +608,30 @@ Autosuggest.prototype.handleNavigate = function(e) {
 };
 
 /**
- * Re-inits element on searchTypeChanged event
- * @param {*} data - 
+ * Re-inits element on searchTypeChanged event.
+ * Similar to typeahead.handleChangeEvent()
+ * @param {*} e - 
  *
  * @listens events.searchTypeChanged
+ * @listens 
  */
-Autosuggest.prototype.handleChangeEvent = function(data) {
-  console.log('Autosuggest.handleChangeEvent(data): ', data);
-  // this.init(data.type);
+Autosuggest.prototype.handleRefineChange = function(e) {
+  console.log('Autosuggest.handleRefineChange(data): ', e);
+  console.log('this form: ', e.target.closest('form'));
+  console.log('this form: ', this.input.closest('form'));
+
+  const selectors = this.canRefineSearch.split(',');
+  console.log('selectors: ', selectors);
+  const elements = [];
+  selectors.forEach(selector => {
+    if (selector.length > 3) elements.push(document.querySelector(selector.trim()));
+  });
+  console.log('elements: ', elements);
+  elements.forEach(element => {
+    console.log('element, checked: ', element, element.checked);
+  });
+
+  // if (this.canRefineSearch == 'ca,ca')
 };
 
 /**

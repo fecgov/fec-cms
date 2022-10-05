@@ -9,7 +9,7 @@
   <main class="main container">
     <h1 class="heading--main">{{ self.title }}</h1>
     <div class="row">
-      <form class="slab slab--inline slab--neutral" action="{% url 'search' %}" method="get">
+      <form class="slab slab--inline slab--neutral" action="{% url 'search' %}" method="get" data-refine-search="#search-candidates,#search-committees,#search-site">
         <div class="container">
           <div class="combo combo--search content__section">
             <label for="search" class="label">Search fec.gov</label>
