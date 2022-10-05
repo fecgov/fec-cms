@@ -19,7 +19,7 @@ function ContactForm($elm) {
     this.autosuggest = new Autosuggest(document.querySelector('.js-contact-autosuggest'));
   } else {
     this.typeahead = new Typeahead(
-      $elm.find('.js-contact-typeahead'),
+      $elm.find('.js-contact-committee'),
       'committees',
       ''
     );
