@@ -32,10 +32,6 @@ function slugify(val, retainCase = false) {
   return toReturn;
 }
 
-"This is a test string!".replace(/\s+/g, '-').replace(/[^\w\-]+/g, '').replace(/\-\-+/g, '-').replace(/^-+/, '').replace(/-+$/, '');
-
-
-
 /**
  * Removes double quotes from a given value
  * @param {string} value - A string whose doublequote characters should be removed

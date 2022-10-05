@@ -1,7 +1,6 @@
 /**
  * Filter tags (TagList) are the Chiclet-type tags above filtered tables
  */
-
 let $ = require('jquery');
 
 const template_body = value => `
@@ -272,30 +271,6 @@ TagList.prototype.removeAllTags = function(e, opts, emit) {
  */
 TagList.prototype.removeTagEvt = function(e, opts) {
   this.removeTag(opts.key, false);
-  // logic to handle adding an all years tag if
-  // no two year transaction period filter is provided
-  // we evaluate on every tag removal=
-  //
-  /* Hiding this for now since we're removing the Clear all filters option for Indiv Contribs & Receipts
-  if (opts.name === 'two_year_transaction_period') {
-    var tytp = $('li[data-tag-category="two_year_transaction_period"]');
-    var ary = $('li[data-tag-category="all-report-years"]');
-    if (tytp.length == 0 && ary.length == 0) {
-      // if we didn't already add the all years tag and there are no two year transiaction period filters,
-      // add the all year tag
-      this.$body.trigger('filter:added', [
-        {
-          key: 'two_year_transaction_period-all',
-          value: 'All report years',
-          loadedOnce: true,
-          filterLabel: 'All report years',
-          name: 'all-report-years',
-          nonremovable: true,
-          removeOnSwitch: true
-        }
-      ]);
-    }
-  }*/
 };
 
 /**

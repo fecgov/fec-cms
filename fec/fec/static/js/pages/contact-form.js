@@ -49,15 +49,6 @@ ContactForm.prototype.initTypeahead = function() {
   });
 };
 
-ContactForm.prototype.initAutosuggest = function() {
-  // Overriding default autosuggest behavior
-  // This will set the value of a hidden input when selecting a value from autosuggest
-  var self = this;
-  this.autosuggest.$element.css({ height: 'auto' });
-  this.autosuggest.$input.off('selection');
-  this.autosuggest.$input.on('selection', function(e, opts) {
-    self.committeeId.val(opts.id);
-  });
 };
 
 ContactForm.prototype.initOtherReason = function() {
@@ -105,11 +96,6 @@ function AnalystLookup($elm) {
   loadRecaptcha();
 }
 
-AnalystLookup.prototype.initAutosuggest = function() {
-  // Overriding default autosuggest behavior
-  this.autosuggest.$element.css({ height: 'auto' });
-  this.autosuggest.$input.off('selection');
-  this.autosuggest.$input.on('selection', this.fetchAnalyst.bind(this));
 };
 
 AnalystLookup.prototype.fetchAnalyst = function(e, opts) {

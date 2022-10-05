@@ -4,9 +4,6 @@
  * 
  */
 
-/* global API_LOCATION, API_VERSION, API_KEY_PUBLIC */
-
-const $ = require('jquery');
 const URI = require('urijs');
 const _ = require('underscore');
 import { Autosuggest } from '../autosuggest';

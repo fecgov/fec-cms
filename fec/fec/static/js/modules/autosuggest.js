@@ -15,12 +15,10 @@
 
 import autoComplete from '@tarekraafat/autocomplete.js';
 import officeNames from './utils';
-// import events from './events';
 
 // var events = require('./events');
 
 /**
- * Used inside autocomplete for the results list
  * Holds the configuration data for the various search/lookup types/
  * @public
  * @property {object} dataDetails - From <input data-search-type="">. Inside instances, the selected object becomes this.dataDetails.
@@ -114,22 +112,12 @@ function getUrl(resource, queryString) {
     window.API_VERSION
   ];
 
-  if (
-       resource == 'candidates'
-    || resource == 'committees'
-    || resource == 'audit_candidates'
-    || resource == 'audit_committees') {
-    thePath.push(
-      'names',
-      resource,
-      ''
-    );
+  if (resourceType == 'candidates' || resourceType == 'committees'
+    || resourceType == 'audit_candidates' || resourceType == 'audit_committees') {
+    thePath.push('names', resourceType, '');
 
     // TODO: CHECK THESE
-  } else if (
-       resource == 'regulation'
-    || resource == 'statute'
-    ) {
+  } else if (resourceType == 'regulation' || resourceType == 'statute') {
     console.log('TODO - getURL FOR MUR SEARCHES');
     thePath.push(
       'legal',
@@ -289,68 +277,6 @@ const defaultAutocompleteOptions = {
   resultItem: resultItemOptions
 };
 
-// const auditCommitteeEngine = createEngine({
-//   remote: {
-//     url: getUrl('audit_committees'),
-//     wildcard: '%QUERY',
-//     transform: function(response) {
-//       console.log('auditCommitteeEngine');
-//       let toReturn = _.map(response.results, formatAuditCommittee);
-//       // return _.map(response.results, formatCommittee);
-//       let toReturn2 = response['results'].map(n => formatAuditCommittee(n));
-//       console.log('  toReturn: ', toReturn);
-//       console.log('  toReturn2: ', toReturn2);
-//     }
-//   }
-// });
-
-// const auditCandidateEngine = createEngine({
-//   remote: {
-//     url: getUrl('audit_candidates'),
-//     wildcard: '%QUERY',
-//     transform: function(response) {
-//       console.log('auditCandidateEngine');
-//       let toReturn = _.map(response.results, formatAuditCandidate);
-//       // return _.map(response.results, formatCommittee);
-//       let toReturn2 = response['results'].map(n => formatAuditCandidate(n));
-//       console.log('  toReturn: ', toReturn);
-//       console.log('  toReturn2: ', toReturn2);
-//     }
-//   }
-// });
-
-// const auditCommitteeDataset = {
-//   name: 'auditCommittees',
-//   display: 'name',
-//   limit: 10,
-//   source: auditCommitteeEngine,
-//   templates: {
-//     header: '<span class="as-suggestion__header">Select a committee:</span>',
-//     pending:
-//       '<span class="as-suggestion__loading">Loading committees&hellip;</span>',
-//     notFound: Handlebars.compile(''), // This has to be empty to not show anything
-//     suggestion: Handlebars.compile(
-//       '<span class="as-suggestion__name">{{ name }} ({{ id }})</span>'
-//     )
-//   }
-// };
-
-// const auditCandidateDataset = {
-//   name: 'auditCandidates',
-//   display: 'name',
-//   limit: 10,
-//   source: auditCandidateEngine,
-//   templates: {
-//     header: '<span class="as-suggestion__header">Select a candidate:</span>',
-//     pending:
-//       '<span class="as-suggestion__loading">Loading candidates&hellip;</span>',
-//     notFound: Handlebars.compile(''), // This has to be empty to not show anything
-//     suggestion: Handlebars.compile(
-//       '<span class="as-suggestion__name">{{ name }} ({{ id }})</span>'
-//     )
-//   }
-// };
-
 /**
  * The main Autosuggest element
  * @constructor
@@ -395,7 +321,7 @@ function Autosuggest(elementSelector, opts) {
  * - sets aria attributes
  * - adds event listeners
  */
- Autosuggest.prototype.init = function() {
+Autosuggest.prototype.init = function() {
   // console.log('Autosuggest.init()');
   // TODO: do we need to destroy/reset one if it already exists?
   // if (this.typeahead) this.input.typeahead('destroy');
@@ -473,7 +399,7 @@ function Autosuggest(elementSelector, opts) {
  * Removes the default listener specified by eventName (typically to be added added by another package)
  * @param {String="close","focus","navigate","open","results","selection"} eventName - the name of the event to removeEventListener
  */
- Autosuggest.prototype.off = function(eventName) {
+Autosuggest.prototype.off = function(eventName) {
   // Only opens if the resultsList is not empty
   if (eventName == 'close') this.input.removeEventListener('close', this.handleClose);
   else if (eventName == 'focus') this.input.removeEventListener('focus', this.handleFocus);
@@ -485,39 +411,12 @@ function Autosuggest(elementSelector, opts) {
 
 /**
  *
- * @param {CustomEvent} e from autocomplete
- *
- * @event autosuggest:focus
- */
- Autosuggest.prototype.handleFocus = function(e) {
-  // Only opens if the resultsList is not empty
-  this.autocomplete.open();
-  /**
-   * Autosuggest focus event
-   *
-   * @event autosuggest:focus
-   * @type {Object}
-   * @property {Event} e - an event? // TODO: add these
-   */
-  this.input.dispatchEvent(new CustomEvent('autosuggest:focus', e));
-};
-
-/**
- *
  * @param {CustomEvent} e - from autocomplete
  * @param {object} e.detail - Carries the autoComplete.js "feedback" object
  * @emits this.input#autosuggest:open // TODO: it doesn't emit this
  */
- Autosuggest.prototype.handleOpen = function(e) {
+Autosuggest.prototype.handleOpen = function(e) {
   this.matchAriaExpandeds();
-  /**
-   * Autosuggest open event
-   *
-   * @event autosuggest:open
-   * @type {Object}
-   * @property {Event} e - an event? // TODO: add these
-   */
-   this.input.dispatchEvent(new CustomEvent('autosuggest:open', e));
 };
 
 /**
@@ -526,22 +425,14 @@ function Autosuggest(elementSelector, opts) {
  * @param {object} e.detail - Carries the autoComplete.js "feedback" object
  * @emits this.input#autosuggest:close // TODO: nope, doesn't emit this
  */
- Autosuggest.prototype.handleClose = function(e) {
+Autosuggest.prototype.handleClose = function(e) {
   this.matchAriaExpandeds();
-  /**
-   * Autosuggest close event
-   *
-   * @event autosuggest:close
-   * @type {Object}
-   * @property {Event} e - an event? // TODO: add these
-   */
-   this.input.dispatchEvent(new CustomEvent('autosuggest:close', e));
 };
 
 /**
  * Called to copy the aria-expanded state from the autocomplete element up to the <input>'s wrapper for css selectors
  */
- Autosuggest.prototype.matchAriaExpandeds = function() {
+Autosuggest.prototype.matchAriaExpandeds = function() {
   let theACwrapper = this.wrapper.querySelector('.autoComplete_wrapper');
 
   this.wrapper.setAttribute(
@@ -556,7 +447,7 @@ function Autosuggest(elementSelector, opts) {
  * @param {object} e.detail - carries the matching results values
  * @event autosuggest:results
  */
- Autosuggest.prototype.handleResults = function(e) {
+Autosuggest.prototype.handleResults = function(e) {
   // Reset the 'last selected' marker for arrow/keyboard navigation
   this.formerSelectionIndex = 0;
 
@@ -580,7 +471,7 @@ function Autosuggest(elementSelector, opts) {
  * @returns {null} if (e.detail.selection.value.is_header)
  * @event autosuggest:close
  */
- Autosuggest.prototype.handleSelect = function(e) {
+Autosuggest.prototype.handleSelect = function(e) {
   console.log('Autosuggest.handleSelect(e): ', e);
 
   const val = e.detail.selection.value;
@@ -616,7 +507,7 @@ function Autosuggest(elementSelector, opts) {
  * @param {CustomEvent} e - from autocomplete
  * @param {object} e.detail - carries the autoComplete.js "feedback" object
  */
- Autosuggest.prototype.handleNavigate = function(e) {
+Autosuggest.prototype.handleNavigate = function(e) {
   console.log('handleNavigate(e): ', e);
   // If we've just focused on a header object, we want to nav off of it
   let sel = e.detail.selection;
@@ -646,7 +537,7 @@ function Autosuggest(elementSelector, opts) {
 /**
  *
  */
- Autosuggest.prototype.highlightFirstResult = function() {
+Autosuggest.prototype.highlightFirstResult = function() {
   // TODO: do we still care about doing this?
   // this.formerSelectionIndex = -1;
   // this.autocomplete.goTo(0);
@@ -668,7 +559,6 @@ function Autosuggest(elementSelector, opts) {
   form.setAttribute('action', action);
   form.submit();
 };
-
 
 /**
  *
