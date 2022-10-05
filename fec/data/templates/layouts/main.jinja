@@ -45,13 +45,8 @@
     CANONICAL_BASE = '{{ CANONICAL_BASE }}';
     {% if TRANSITION_URL %}TRANSITION_URL = '{{ TRANSITION_URL }}';{% endif %}
     {% if election_year %}ELECTION_YEAR = '{{ election_year }}';{% endif %}
-    
-    TEST = true;
 
-    FEATURES = {% if (FEATURES) %}true{% else %}false{% endif %};
-    FEATURES.use_tt = {% if (FEATURES.use_tt) %}true{% else %}false{% endif %};
-
-    useTt = {% if (FEATURES.use_tt) == false %}false{% else %}true{% endif %};
+    useTt = {% if FEATURES.use_tt == False %}false{% else %}true{% endif %};
     {# TODO: remove useTt with the use_tt feature flag #}
 
     function trackMetric(name, imagesSelector) {

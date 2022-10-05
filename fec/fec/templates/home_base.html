@@ -26,7 +26,7 @@
       API_KEY_PUBLIC_CALENDAR = '{{ settings.FEC_API_KEY_PUBLIC_CALENDAR }}';
       CANONICAL_BASE = '{{ settings.CANONICAL_BASE }}';
 
-      useTt = {% if settings.FEATURES.use_tt == false %}false{% else %}true{% endif %};
+      useTt = {% if settings.FEATURES.use_tt == False %}false{% else %}true{% endif %};
       {# TODO: remove useTt with the use_tt feature flag #}
     </script>
   </head>
@@ -74,7 +74,7 @@
                   aria-autocomplete="list"
                   aria-controls="query_listbox"
                   aria-label="Search FEC.gov"
-                  {% if settings.FEATURES.use_tt == false %}data-{% endif %}autocomplete="off"
+                  {% if settings.FEATURES.use_tt == False %}data-{% endif %}autocomplete="off"
                 >
                 <button type="submit" class="button--standard combo__button button--search">
                   <span class="u-visually-hidden">Search</span>
@@ -109,7 +109,7 @@
                   data-search-type="all"
                   aria-autocomplete="list"
                   aria-label="Search FEC.gov"
-                  {% if settings.FEATURES.use_tt == false %}data-{% endif %}autocomplete="off"
+                  {% if settings.FEATURES.use_tt == False %}data-{% endif %}autocomplete="off"
                 >
               <button type="submit" class="button--standard combo__button button--search">
                 <span class="u-visually-hidden">Search</span>
