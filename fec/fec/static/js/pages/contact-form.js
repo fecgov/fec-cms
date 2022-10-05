@@ -27,6 +27,7 @@ function ContactForm($elm) {
       'committees',
       ''
     );
+    this.initTypeahead();
   }
 
   this.$cancel = $elm.find('.js-cancel');
@@ -121,6 +122,16 @@ function AnalystLookup($elm) {
 AnalystLookup.prototype.handleAutosuggestSelection = function(e) {
   this.autosuggest.input.value = e.detail.selection.value.name;
   this.fetchAnalyst(e, e.detail.selection.value);
+};
+
+/**
+ *
+ */
+ AnalystLookup.prototype.initTypeahead = function() {
+  // Overriding default typeahead behavior
+  this.typeahead.$element.css({ height: 'auto' });
+  this.typeahead.$input.off('typeahead:select');
+  this.typeahead.$input.on('typeahead:select', this.fetchAnalyst.bind(this));
 };
 
 AnalystLookup.prototype.fetchAnalyst = function(e, opts) {
