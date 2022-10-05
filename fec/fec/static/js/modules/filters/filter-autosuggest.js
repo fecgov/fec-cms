@@ -158,11 +158,11 @@ function FilterAutosuggest(elementSelector, dataset, allowText) {
  * 
  */
 FilterAutosuggest.prototype.autosuggestInit = function() {
-  let opts = {
     queryType: this.queryType,
     minLength: 3,
     hint: false, // TODO: what's this?
     highlightFirst: true
+  const opts = {
   };
 
   console.log('  this.element: ', this.element);
@@ -535,8 +535,7 @@ FilterAutosuggest.prototype.getFilters = function(values) {
 */
 FilterAutosuggest.prototype.updateFilters = function(response) {
   console.log('FilterAutosuggest.updateFilters(response): ', response);
-  console.log('  NEED TO DO THIS!');
-  var self = this;
+  const self = this;
 
   if (this.dataset) {
     const nameID = this.dataset.name + '_id';

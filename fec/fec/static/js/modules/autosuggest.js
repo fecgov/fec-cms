@@ -47,7 +47,7 @@ let resultsListOptions = {
  * @private
  * Used inside autocomplete to build the results list's items
  */
-let resultItemOptions = {
+const resultItemOptions = {
   class: 'as-suggestion as-selectable',
   selected: 'as-cursor',
   submit: true,
@@ -75,7 +75,7 @@ let resultItemOptions = {
 
       // Include the office sought if it exists
       if (data.value.office_sought) {
-        let officeLabel = officeNames[data.value.office_sought];
+        const officeLabel = officeNames[data.value.office_sought];
         item.innerHTML += ` <span class="as-suggestion__office" tabindex="-1">${officeLabel}</span>`;
       }
 
@@ -109,7 +109,7 @@ function getUrl(resource, queryString) {
   window.API_LOCATION = 'https://fec-dev-api.app.cloud.gov'; // TODO: remove this
 
   // console.log('getUrl(): ', resource, queryString);
-  let thePath = [
+  const thePath = [
     window.API_LOCATION,
     window.API_VERSION
   ];
@@ -183,7 +183,7 @@ function formatResults(type, data) {
  * @returns
  */
 function getSuggestions(type) {
-  let toReturn = [];
+  const toReturn = [];
   if (type == 'all') {
     toReturn.push({ is_suggestion: true, id: window.queryText, name: 'Search individual contributions from:', type: 'individual' });
     toReturn.push({ is_suggestion: true, id: window.queryText, name: 'Search other pages:', type: 'site' });
@@ -202,7 +202,7 @@ async function getData(q, qType) {
   // TODO: Would like to come back and make this more adaptable, remove the repeated code
   // console.log('  q: ', q);
   // console.log('  qType: ', qType);
-  let fetchedResults = [];
+  const fetchedResults = [];
   window.queryText = q;
   if (qType == 'candidate') {
     console.log('  qType == candidate');
@@ -274,7 +274,7 @@ async function getData(q, qType) {
  * Default options for autocomplete
  * Of note, `selector` and `data.src` are basically always replaced.
  */
-let defaultAutocompleteOptions = {
+const defaultAutocompleteOptions = {
   selector: () => {
     '.js-site-search';
   },
@@ -673,7 +673,7 @@ function Autosuggest(elementSelector, opts) {
 /**
  *
  */
- let fetchInit = {
+const fetchInit = {
   headers: {
     accept: 'application/json, text/javascript, */*; q=0.01',
     'accept-language': 'en-US,en;q=0.9',

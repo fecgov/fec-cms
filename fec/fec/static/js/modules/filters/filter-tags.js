@@ -137,8 +137,7 @@ TagList.prototype.addTag = function(e, opts) {
  * @param {string} opts.rangeName - appended to a class named of 'tag__category__range--'
  */
 TagList.prototype.addTagItem = function($tagCategory, tag, opts) {
-  const rangeClass = 'tag__category__range--' + opts.rangeName;
-
+  var rangeClass = 'tag__category__range--' + opts.rangeName;
   if (opts.range == 'min') {
     $tagCategory.addClass(rangeClass).prepend(tag);
   } else if (opts.range == 'max') {

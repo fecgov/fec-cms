@@ -62,7 +62,7 @@ FilterSet.prototype.activate = function($selector, elementList) {
   );
   // console.log('  query: ', query);
 
-  const filters = _.chain($selector)
+  var filters = _.chain($selector)
     .map(function(elm) {
       const filter = self.buildFilter($(elm)); // .fromQuery(query);
       return [filter.name, filter];
@@ -70,7 +70,7 @@ FilterSet.prototype.activate = function($selector, elementList) {
     .object()
     .value();
 
-  const fields = _.chain(filters)
+  var fields = _.chain(filters)
     .pluck('fields')
     .flatten()
     .value();

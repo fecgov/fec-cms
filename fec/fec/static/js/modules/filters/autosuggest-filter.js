@@ -10,7 +10,7 @@
  * which is created by @see /fec/data/templates/macros/filters/autosuggest-filters.jinja
  */
 
-let _ = require('underscore');
+// const _ = require('underscore');
 
 import { Filter } from './filter-base';
 import { FilterAutosuggest } from './filter-autosuggest';
@@ -50,7 +50,7 @@ function AutosuggestFilter(selector) {
   // let key = ;
   let dataset = '/all';
   // data-allow-text either exists or doesn't; the template doesn't give it a value
-  let allowText = this.element.hasAttribute('data-allow-text') || false; // TODO: check that this works
+  const allowText = this.element.hasAttribute('data-allow-text'); // TODO: check that this works
   console.log('  allowText: ', allowText);
   this.asFilter = new FilterAutosuggest(this.element, dataset, allowText);
 
