@@ -363,7 +363,6 @@ function Autosuggest(elementSelector, opts = {}) {
   this.input = typeof elementSelector == 'string' ? document.querySelector(elementSelector) : elementSelector;
   this.dataDetails = dataTypes[this.input.dataset.searchType];
 
-  this.url = this.dataDetails.url || '/';
   this.autoComplete = null;
   this.formerSelectionIndex;
   this.value = '';
@@ -561,10 +560,10 @@ Autosuggest.prototype.handleSelect = function(e) {
     console.log('  else if');
     // Find the element
     if (val.type == 'individual')
-      window.location = `${this.url}receipts/individual-contributions/?contributor_name=${val.id}`;
+      window.location = `${this.dataDetails.individuals.url}receipts/individual-contributions/?contributor_name=${val.id}`;
 
     else if (val.type == 'candidate' || val.type == 'committee')
-      window.location = `${this.url}${val.type}/${val.id}`;
+      window.location = `${this.dataDetails[val.type].url}${val.type}/${val.id}`;
 
     else if (val.type == 'site')
       this.searchSite(e.detail.query);
