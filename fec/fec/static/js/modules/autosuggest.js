@@ -78,6 +78,12 @@ const dataTypes = {
     queryFieldName: '',
     name: 'murs', display: 'name', limit: 10,
     source: 'N/A FOR AUTOSUGGEST?', templates: {}
+  },
+  individuals: { // Only here so we can use the url
+    type: 'individuals', url: '/'
+  },
+  site: { // Only here so we can use the url
+    type: 'site', url: '/'
   }
 };
 
@@ -243,6 +249,15 @@ async function getData(q, self) {
   switch(self.dataDetails.type) {
     case 'candidates':
       dataTypesToGet.push('candidates'); break;
+
+    case 'canCom': // Candidates and committees only, no suggestions
+      dataTypesToGet.push('candidates', 'committees'); break;
+
+    case 'canSit': // Candidates + suggestion for other website pages
+        dataTypesToGet.push('candidates', 'site'); break;
+
+    case 'comSit': // Committes + suggestion for other website pages
+        dataTypesToGet.push('committees', 'site'); break;
 
     case 'committees':
       dataTypesToGet.push('committees'); break;
@@ -619,48 +634,52 @@ Autosuggest.prototype.handleNavigate = function(e) {
   }
 };
 
-Autosuggest.prototype.refineSearchParam = function() {
-  let paramsArray = Array(this.input.dataset.searchRefine.slice(1,-1).split(','));
-  console.log('paramsArray: ', paramsArray);
-}
-
 /**
- * Re-inits element when it detects that a user has clicked a button to refine their search.
+ * Updates this.dataDetails when a filter/refining element is changed. Changes dataDetails to a different option or,
+ * if there is a special case, it sets dataDetails to a special combination.
+ * Final output must correlate to values in a getData#switch case
  * Options here will be used inside @see Autosuggest.getData .
  * Similar to typeahead.handleChangeEvent()
  * @todo Current functionality only accounts for /search/ and will need to be expanded if used elsewhere
  * @param {Event} e - Change event from the form hosting this element, which fires any time a field inside changes its value
+ * @property {string[]} selectors - The product of <input data-refine-search="">, which is a list of selectors for the form elements to check
+ * @property {HTMLElement[]} elements - Array of the elements found using the selectors from selectors[]
+ * @property {string[]} types - List of types that correspond to dataTypes[] values, info comes from <input value="">
  * @listens form.change
  */
 Autosuggest.prototype.handleRefineChange = function(e) {
-  console.log('Autosuggest.handleRefineChange(data): ', e);
-  console.log('this form: ', e.target.closest('form'));
-  console.log('this form: ', this.input.closest('form'));
-
   const selectors = this.canRefineSearch.split(',');
   const elements = [];
   const types = [];
-  console.log('selectors: ', selectors);
+  let newDataDetails;
+
+  // For each selector, let's find those elements and put them in, you guessed it: elements[].
   selectors.forEach(selector => {
-    if (selector.length > 3) elements.push(document.querySelector(selector.trim()));
+    elements.push(document.querySelector(selector.trim()));
   });
-  console.log('elements: ', elements);
+  // For all of the elements, let's look at their value attribute for which type to query. Then, yep, save them into types[].
   elements.forEach(element => {
-    console.log('element, checked: ', element, element.checked);
-    // Make a list of which datatypes we want to use,
-    // but 'site' should be 'all'
-    if (element.checked) types.push(element.value == 'site' ? 'all' : element.value);
+    if (element.checked) types.push(element.value);
   });
 
-  let theType = '';
+  // If types[] is only one, we can go ahead and use that dataType—no reason to create a special combination.
+  if (types.length === 1) {
+    newDataDetails = dataTypes[types[0]];
 
-  // if (types.length == selectors.length) theType = 'all';
-  // else if (type.length == 1) theType = types[0];
-  // else if (types.)
-
-  this.refineSearchParam();
-
-  // if (this.canRefineSearch == 'ca,ca')
+  // But if we have more than one, we'll need to build that
+  } else {
+    let theSpecialType = '';
+    // Make a camelcase string of each type[]. e.g. canComSit
+    for (let i = 0; i < types.length; i++) {
+      theSpecialType += i == 0
+        ? types[i].toString().substring(0, 3).toLowerCase()
+        : types[i].charAt(0).toUpperCase() + types[i].substring(1, 3).toLowerCase();
+    }
+    // Then make a special one-off dataDetails
+    newDataDetails = { type: theSpecialType };
+  }
+  // Assign our new dataDetails
+  this.dataDetails = newDataDetails;
 };
 
 /**
