@@ -367,8 +367,11 @@ function Autosuggest(elementSelector, opts = {}) {
   this.autoComplete = null;
   this.formerSelectionIndex;
   this.value = '';
-  this.isSiteSearch = this.input.classList.contains('.js-site-search');
-  this.canRefineSearch = this.input.closest('form').dataset.refineSearch || false;
+  this.isSiteSearch = this.input.classList.contains('js-site-search');
+  this.canRefineSearch = false; // default to false
+  //
+  if(this.input.closest('form') && this.input.closest('form').dataset.refineSearch)
+    this.canRefineSearch = this.input.closest('form').dataset.refineSearch;
 
   this.init();
 }
@@ -617,13 +620,18 @@ Autosuggest.prototype.handleNavigate = function(e) {
   }
 };
 
+Autosuggest.prototype.refineSearchParam = function() {
+  let paramsArray = Array(this.input.dataset.searchRefine.slice(1,-1).split(','));
+  console.log('paramsArray: ', paramsArray);
+}
+
 /**
- * Re-inits element on searchTypeChanged event.
+ * Re-inits element when it detects that a user has clicked a button to refine their search.
+ * Options here will be used inside @see Autosuggest.getData .
  * Similar to typeahead.handleChangeEvent()
- * @param {*} e - 
- *
- * @listens events.searchTypeChanged
- * @listens 
+ * @todo Current functionality only accounts for /search/ and will need to be expanded if used elsewhere
+ * @param {Event} e - Change event from the form hosting this element, which fires any time a field inside changes its value
+ * @listens form.change
  */
 Autosuggest.prototype.handleRefineChange = function(e) {
   console.log('Autosuggest.handleRefineChange(data): ', e);
@@ -631,15 +639,27 @@ Autosuggest.prototype.handleRefineChange = function(e) {
   console.log('this form: ', this.input.closest('form'));
 
   const selectors = this.canRefineSearch.split(',');
-  console.log('selectors: ', selectors);
   const elements = [];
+  const types = [];
+  console.log('selectors: ', selectors);
   selectors.forEach(selector => {
     if (selector.length > 3) elements.push(document.querySelector(selector.trim()));
   });
   console.log('elements: ', elements);
   elements.forEach(element => {
     console.log('element, checked: ', element, element.checked);
+    // Make a list of which datatypes we want to use,
+    // but 'site' should be 'all'
+    if (element.checked) types.push(element.value == 'site' ? 'all' : element.value);
   });
+
+  let theType = '';
+
+  // if (types.length == selectors.length) theType = 'all';
+  // else if (type.length == 1) theType = types[0];
+  // else if (types.)
+
+  this.refineSearchParam();
 
   // if (this.canRefineSearch == 'ca,ca')
 };
