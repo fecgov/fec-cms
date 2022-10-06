@@ -17,7 +17,7 @@
 // TODO: rad lookup
 
 import autoComplete from '@tarekraafat/autocomplete.js';
-import officeNames from './utils';
+import { officeNames } from './utils';
 
 /**
  * Holds the configuration data for the various search/lookup types/
@@ -232,12 +232,11 @@ function getSuggestions(type) {
  * @param {string} q
  * @param {object} theDataset
  * @returns {object[]} Array of results formatted like [{ id: C123456789, name: 'Candidate Name', type: 'candidate' }]
+ * @todo: This should definitely be made more adaptable, remove the repeated code // TODO
  */
 async function getData(q, self) {
   console.log('src.getData()');
-  // TODO: Would like to come back and make this more adaptable, remove the repeated code
   console.log('  q: ', q);
-  // let theApiVar = self.dataDetails.queryFieldName;
   const theDataType = self.dataDetails.type;
   const fetchedResults = [];
   window.queryText = q;
@@ -249,53 +248,82 @@ async function getData(q, self) {
       });
 
   } else if (theDataType == 'committees') {
-    // Any changes here should also be made inside `== 'all'`
     await fetch(getUrl('committees', q), fetchInit)
-      .then(response => response.json())
-      .then(data => {
         fetchedResults.push(...formatResults('committees', data));
       });
+  let dataTypesToGet = [];
+  // Let's figure out which types of queries we want.
+  // The order inside dataTypesToGet is the order the results will be displayed
+  switch(self.dataDetails.type) {
+    case 'candidates':
+      dataTypesToGet.push('candidates'); break;
 
-  } else if (theDataType == 'all' || theDataType == 'allData') { /** 'all' will include suggestions; 'allData' won't @see getSuggestions */
-    // Any changes here should be made inside `== 'candidate'` and `== 'committee'`, too
-    // console.log('would have got all data');
-    await fetch(getUrl('candidates', q), fetchInit)
-      .then(response => response.json())
-      .then(data => {
-        fetchedResults.push(...formatResults('candidates', data));
-        return fetch(getUrl('committees', q), fetchInit);
-      })
-      .then(response => response.json())
-      .then(data => {
-        fetchedResults.push(...formatResults('committees', data));
-      })
       .then(() => {
-        fetchedResults.push(...getSuggestions(theDataType));
-      });
+    case 'committees':
+      dataTypesToGet.push('committees'); break;
 
-  } else if (theDataType == 'auditCandidates') {
-    console.log('  theDataset.type = auditCandidates');
-    await fetch(getUrl('audit_candidates', q), fetchInit)
+    case 'all':
+      dataTypesToGet.push('candidates', 'committees', 'individual', 'site'); break;
+
       .then(response => response.json())
-      .then(data => {
-        fetchedResults.push(...formatResults('auditCandidates', data));
-      });
+    case 'allData':
+      dataTypesToGet.push('candidates', 'committees', 'individual'); break;
 
-  } else if (theDataType == 'auditCommittees') {
-    console.log('  theDataset.type = auditCommittees');
-    await fetch(getUrl('audit_committees', q), fetchInit)
-      .then(response => response.json())
-      .then(data => {
-        fetchedResults.push(...formatResults('auditCommittees', data));
-      });
-
-  // TODO: CHECK THESE
-  } else if (theDataType == 'MUR CITATION FILTERS') {
-    // legal/citation/regulation
     // legal/citation/statute
-  } else {
-    console.log(`  theDataType was '${theDataType}' so didn't do anything`);
+    case 'auditCandidates':
+      dataTypesToGet.push('audit_candidates'); break;
+
+    case 'auditCommittees':
+      dataTypesToGet.push('audit_committees'); break;
+
+      case 'TODO':
+      // legal/citation/regulation
+      // legal/citation/statute
+      break;
+
+    default:
+      dataTypesToGet.push('site'); break;
   }
+
+  // A place to save the promises we're going to make
+  let promises = [];
+  // Taking that list (promises), let's queue up a Promise for each
+  while (dataTypesToGet.length > 0) {
+    const thisType = dataTypesToGet[0];
+    // If we're dealing with a type that only returns a suggestion (doesn't do a fetch, just formats what we give it)
+    if (thisType == 'individual' || thisType == 'site') {
+      // Add a new Promise for returning those results
+      promises.push(new Promise(resolve => {
+        resolve(getSuggestions(thisType));
+      }));
+    } else {
+      // Otherwise, if we need to do a fetch, let's get it built
+      promises.push(new Promise((resolve, reject) => {
+        fetch(getUrl(thisType, q), fetchInit)
+          .then(response => response.json())
+          .then(data => {
+            resolve(formatResults(thisType, data));
+          })
+          .catch(error => {
+            reject(`The ${thisType} fetch failed because: ${error}`);
+          });
+      }));
+    }
+    // Now that we've added the Promise, remove the first element from the list so we don't while() forever
+    dataTypesToGet.shift();
+  }
+
+  await Promise.allSettled(promises)
+    .then(responses => {
+      responses.forEach(response => {
+        if (response.status == 'fulfilled') {
+          console.log('response: ', response);
+          fetchedResults.push(...response.value);
+        } else {
+          console.log('another response: ', response);
+        }
+      });
+    });
 
   if (fetchedResults.length === 0) {
     fetchedResults.push({ is_suggestion: true, id: window.queryText, name: 'No results found:', type: 'none' });
@@ -335,11 +363,11 @@ const defaultAutocompleteOptions = {
  * @property {HTMLInputElement} input - The <input> for this instance of Autosuggest
  * @property {HTMLElement} resultsHolder
  * @property {string} url
- * @property {string | number} value
+ * @property {string|number} value
  * @property {HTMLElement} wrapper - The element created to wrap the <input> and the results
  * @property {object} dataDetails - pulled from dataTypes[opts.type]
  * @property {boolean} isSiteSearch - Site searches handle their selection events themselves; filters and others that use Autosuggest handle their own selections
- * @property {string|null|false} canRefineSearch - 
+ * @property {string|boolean} canRefineSearch - Determines whether this instance listens for changes to its form and adjusts its suggestions accordingly
  *
  * @listens events.searchTypeChanged
  * @emits autosuggest:select
