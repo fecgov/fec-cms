@@ -104,7 +104,6 @@ const resultItemOptions = {
   submit: true,
   highlight: 'as-highlight',
   element: (item, data) => {
-    // console.log('RESULTS! (item, data): ', item, data);
     // For headers (e.g. "Select a candidate"), no tabbing, data.value.name only
     if (data.value.is_header) {
       item.setAttribute('class', 'as-suggestion__header');
@@ -158,7 +157,6 @@ function searchedAttribs() {
 function getUrl(resourceType, queryString) {
   console.log('getUrl(resources, queryString): ', resourceType, queryString);
 
-  // console.log('getUrl(): ', resource, queryString);
   const thePath = [
     window.API_LOCATION,
     window.API_VERSION
@@ -188,8 +186,8 @@ function getUrl(resourceType, queryString) {
  */
 function formatResults(type, data) {
   let toReturn = [];
-  let results = data.results;
-  let resultsLimit = 5;
+  const results = data.results;
+  const resultsLimit = 5;
 
   if ((type == 'candidates' || type == 'auditCandidates' ) && results.length > 0)
     toReturn.push({ is_header: true, id: window.queryText, name: 'Select a candidate:', type: 'none' });
@@ -202,7 +200,6 @@ function formatResults(type, data) {
     toReturn.push({ is_header: true, id: window.queryText, name: 'Select a citation:', type: 'none' });
 
   results.forEach(element => {
-    console.log('')
     element.type = dataTypes[type].name;
   });
   // TODO: handle the audit_* types in the click handler
@@ -231,7 +228,7 @@ function getSuggestions(type) {
 /**
  *
  * @param {string} q
- * @param {object} theDataset
+ * @param {Autosuggest} self
  * @returns {object[]} Array of results formatted like [{ id: C123456789, name: 'Candidate Name', type: 'candidate' }]
  */
 async function getData(q, self) {
@@ -686,7 +683,8 @@ const fetchInit = {
   referrerPolicy: 'same-origin',
   body: null,
   method: 'GET',
-  mode: 'cors'
+  mode: 'cors',
+  cache: 'default'
 };
 
 module.exports = {

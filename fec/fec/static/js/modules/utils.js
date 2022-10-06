@@ -43,6 +43,6 @@ function slugify(val, retainCase = false) {
 
 module.exports = {
   officeNames,
-  stripDoubleQuotes,
-  slugify
+  slugify,
+  stripDoubleQuotes
 };
