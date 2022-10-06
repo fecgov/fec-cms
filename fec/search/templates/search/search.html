@@ -185,7 +185,7 @@
         {% else %}
           <div class="message message--info">
             <h2>No results</h2>
-            <p>We didn’t find any pages matching <strong>&ldquo;{{search_query}}&rdquo;</strong>.</p>
+            <p>We didn’t find {% if search_query == None %}anything for this search{% else %}any pages matching <strong>&ldquo;{{search_query}}&rdquo;</strong>{% endif %}.</p>
             <div class="message--alert__bottom">
               <p>Think this was a mistake?<br>Try one of the other search tools or submit feedback.</p>
               <p>
