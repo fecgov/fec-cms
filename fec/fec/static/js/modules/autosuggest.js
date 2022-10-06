@@ -232,25 +232,13 @@ function getSuggestions(type) {
  * @param {string} q
  * @param {object} theDataset
  * @returns {object[]} Array of results formatted like [{ id: C123456789, name: 'Candidate Name', type: 'candidate' }]
- * @todo: This should definitely be made more adaptable, remove the repeated code // TODO
  */
 async function getData(q, self) {
   console.log('src.getData()');
   console.log('  q: ', q);
-  const theDataType = self.dataDetails.type;
   const fetchedResults = [];
   window.queryText = q;
-  if (self.dataDetails.type == 'candidates') {
-    await fetch(getUrl('candidates', q), fetchInit)
-      .then(response => response.json())
-      .then(data => {
-        fetchedResults.push(...formatResults('candidates', data));
-      });
 
-  } else if (theDataType == 'committees') {
-    await fetch(getUrl('committees', q), fetchInit)
-        fetchedResults.push(...formatResults('committees', data));
-      });
   let dataTypesToGet = [];
   // Let's figure out which types of queries we want.
   // The order inside dataTypesToGet is the order the results will be displayed
@@ -258,18 +246,15 @@ async function getData(q, self) {
     case 'candidates':
       dataTypesToGet.push('candidates'); break;
 
-      .then(() => {
     case 'committees':
       dataTypesToGet.push('committees'); break;
 
     case 'all':
       dataTypesToGet.push('candidates', 'committees', 'individual', 'site'); break;
 
-      .then(response => response.json())
     case 'allData':
       dataTypesToGet.push('candidates', 'committees', 'individual'); break;
 
-    // legal/citation/statute
     case 'auditCandidates':
       dataTypesToGet.push('audit_candidates'); break;
 
@@ -277,6 +262,7 @@ async function getData(q, self) {
       dataTypesToGet.push('audit_committees'); break;
 
       case 'TODO':
+      dataTypesToGet.push('site');
       // legal/citation/regulation
       // legal/citation/statute
       break;
