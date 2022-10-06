@@ -219,12 +219,13 @@ function formatResults(type, data) {
  * @returns
  */
 function getSuggestions(type) {
-  const toReturn = [];
-  if (type == 'all') {
-    toReturn.push({ is_suggestion: true, id: window.queryText, name: 'Search individual contributions from:', type: 'individual' });
-    toReturn.push({ is_suggestion: true, id: window.queryText, name: 'Search other pages:', type: 'site' });
-  }
-  return toReturn;
+  if (type == 'individual')
+    return [{ is_suggestion: true, id: window.queryText, name: 'Search individual contributions from:', type: 'individual' }];
+
+  if (type == 'site')
+    return [{ is_suggestion: true, id: window.queryText, name: 'Search other pages:', type: 'site' }];
+
+  return;
 }
 
 /**
