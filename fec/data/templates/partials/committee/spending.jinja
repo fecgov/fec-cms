@@ -105,7 +105,7 @@
       <div class="heading--section heading--with-action">
         <h3 class="heading__left">Independent expenditures</h3>
         <a class="heading__right button--alt button--browse"
-          href="/data/independent-expenditures/?committee_id={{ committee_id }}&min_date={{ cycle_start(cycle) | date(fmt='%m-%d-%Y') }}&max_date={{ cycle_end(cycle) | date(fmt='%m-%d-%Y') }}&data_type=processed&is_notice=false">Filter this data</a>
+          href="/data/independent-expenditures/?q_spender={{ committee_id }}&min_date={{ cycle_start(cycle) | date(fmt='%m-%d-%Y') }}&max_date={{ cycle_end(cycle) | date(fmt='%m-%d-%Y') }}&data_type=processed&is_notice=false">Filter this data</a>
 
       </div>
       <p>This tab shows spending that this committee has made in support of or opposition to a candidate. None of the funds are directly given to or spent by the candidate.</p>
