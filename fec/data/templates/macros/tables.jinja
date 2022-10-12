@@ -53,7 +53,7 @@ not 'type' object, so use 'link' to check for 'party-coordinated-expenditure' wi
             {{ item[0]|currency }}
           </a>
         {% elif (item[1]['link']=="independent-expenditures") and committee_id|count == 9 %}
-          <a href="/data/{{ item[1]['link'] }}/?q_spender={{ committee_id }}&two_year_transaction_period={{ cycle }}&cycle={{ cycle }}">
+          <a href="/data/{{ item[1]['link'] }}/?q_spender={{ committee_id }}&two_year_transaction_period={{ cycle }}&cycle={{ cycle }}&is_notice=false&data_type=processed">
             {{ item[0]|currency }}
           </a>
         {% elif (item[1]['link'] == "party-coordinated-expenditures") and committee_id|count == 9 %}
