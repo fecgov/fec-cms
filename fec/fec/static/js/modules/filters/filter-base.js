@@ -13,10 +13,23 @@ function prepareValue($elm, value) {
   return $elm.attr('type') === 'checkbox' ? ensureArray(value) : value;
 }
 
+/**
+ * @interface
+ *
+ * @param {jQuery} elm
+ *
+ * @property {jQuery} $filterLabel - In collapsible filters,
+ * it's the previous sibling of the .accordion__content ancestor.
+ * Usually button.js-accordion-trigger ? Note: this.$filterLabel is the element
+ * but some functions here use a lesser-scoped $filterLabel as a string
+ * for the number of filters that have been applied
+ */
 function Filter(elm) {
+  console.log('new Filter(elm): ', elm);
   this.$elm = $(elm);
   this.$input = this.$elm.find('input:not([name^="_"])');
   this.$filterLabel = this.$elm.closest('.accordion__content').prev();
+  console.log('this.$filterLabel: ', this.$filterLabel);
   // on error message, click to open feedback panel
   this.$elm.on('click', '.js-filter-feedback', function() {
     $(document.body).trigger('feedback:open');
@@ -42,7 +55,14 @@ function Filter(elm) {
   }
 }
 
+/**
+ * 
+ * @param {object} query - Key/value pairs of the parameters from the page's URL
+ * @returns {Filter}
+ */
 Filter.prototype.fromQuery = function(query) {
+  console.log('Filter.fromQuery(query): ', query);
+  console.log('  this.name: ', this.name);
   this.setValue(query[this.name]);
   this.loadedOnce = true;
   return this;
@@ -70,7 +90,17 @@ Filter.prototype.formatValue = function($input, value) {
   return escapedValue;
 };
 
-Filter.prototype.handleAddEvent = function(e, opts) {
+/**
+ * 
+ * @param {jQuery.Event|CustomEvent} e - 
+ * @param {object} opts - 
+ * @returns 
+ */
+Filter.prototype.handleAddEvent = function(e, passedOpts) {
+  console.log('Filter.handleAddEvent(e, passedOpts): ', e, passedOpts);
+  var opts = passedOpts || e.detail;
+  console.log('  opts.name and this.name: ', opts.name, this.name);
+  // If this event doesn't apply to me, do nothing
   if (opts.name !== this.name) {
     return;
   }
@@ -81,11 +111,19 @@ Filter.prototype.handleAddEvent = function(e, opts) {
   // Subfilters don't add listeners that trigger this handler, so it will only
   // be called by the MultiFilter.
   var $filterLabel = opts.filterLabel || this.$filterLabel;
-  this.increment($filterLabel);
+  if ($filterLabel.length > 0) this.increment($filterLabel);
   this.setLastAction(e, opts);
 };
 
-Filter.prototype.handleRemoveEvent = function(e, opts) {
+/**
+ *
+ * @param {jQuery.Event} e
+ * @param {object} passedOpts
+ * @returns {null} if (opts.name !== this.name || opts.loadedOnce !== true)
+ */
+Filter.prototype.handleRemoveEvent = function(e, passedOpts) {
+  console.log('Filter.handleRemoveEvent(e, opts): ', e, opts);
+  const opts = passedOpts || e.originalEvent.detail;
   // Don't decrement on initial page load
   if (opts.name !== this.name || opts.loadedOnce !== true) {
     return;
@@ -95,7 +133,11 @@ Filter.prototype.handleRemoveEvent = function(e, opts) {
   this.setLastAction(e, opts);
 };
 
-Filter.prototype.increment = function($filterLabel) {
+/**
+ * Adds or increases the filter count of the accordion item's button
+ * @param {jQuery} $filterLabel - Either the jQuery selector for the label or the results of document.querySelector
+ */
+ Filter.prototype.increment = function($filterLabel) {
   var filterCount = $filterLabel.find('.filter-count');
   if (filterCount.html()) {
     filterCount.html(parseInt(filterCount.html(), 10) + 1);
@@ -104,7 +146,18 @@ Filter.prototype.increment = function($filterLabel) {
   }
 };
 
+/**
+ * Removes or decreases the filter count of the accordion item's button
+ * @param {jQuery|HTMLLabelElement} $filterLabel - Either the jQuery selector for the label or the results of document.querySelector
+ */
 Filter.prototype.decrement = function($filterLabel) {
+  console.log('Filter.decrement($filterLabel): ', $filterLabel);
+
+  // If it's not a jQuery object, let's find what it
+  if (!$filterLabel.prevObject)
+    $filterLabel = $($filterLabel).closest('.accordion__content').prev();
+
+    console.log('  $filterLabel: ', $filterLabel);
   var filterCount = $filterLabel.find('.filter-count');
   if (filterCount.html() === '1') {
     filterCount.remove();
@@ -113,7 +166,16 @@ Filter.prototype.decrement = function($filterLabel) {
   }
 };
 
-Filter.prototype.setLastAction = function(e, opts) {
+/**
+ * 
+ * @param {jQuery.Event} e 
+ * @param {object} passedOpts 
+ *
+ * @returns {null} if this filter's name isn't === opts.name
+ */
+Filter.prototype.setLastAction = function(e, passedOpts) {
+  console.log('Filter.setLastAction(e, passedOpts): ', e, passedOpts);
+  const opts = passedOpts || e.originalEvent.detail;
   if (opts.name !== this.name) {
     return;
   }

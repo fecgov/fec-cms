@@ -169,7 +169,7 @@ class CitationFilter extends React.Component {
             onChange={this.interceptChange}
           />
           <div
-            className="tt-menu"
+            className="as-menu"
             aria-live="polite"
             style={{
               position: 'absolute',
@@ -179,8 +179,8 @@ class CitationFilter extends React.Component {
               display: this.dropdownDisplay()
             }}
           >
-            <div className="tt-dataset tt-dataset-candidate">
-              <span className="tt-suggestion__header">Select a citation:</span>
+            <div className="as-dataset as-dataset-candidate">
+              <span className="as-suggestion__header">Select a citation:</span>
               {this.state.citations.map((citation, index) => {
                 return (
                   <div
@@ -193,15 +193,15 @@ class CitationFilter extends React.Component {
                   >
                     <span
                       className={
-                        'tt-suggestion tt-selectable' +
-                        (this.state.highlightCitation === index && ' tt-cursor')
+                        'as-suggestion as-selectable' +
+                        (this.state.highlightCitation === index && ' as-cursor')
                       }
                     >
-                      <span className="tt-suggestion__name">
+                      <span className="as-suggestion__name">
                         {citation.citation_text}
                       </span>
                       {citation.formerly && (
-                        <span className="tt-suggestion__office">
+                        <span className="as-suggestion__office">
                           (formerly {citation.formerly})
                         </span>
                       )}

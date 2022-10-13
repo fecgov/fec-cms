@@ -84,8 +84,8 @@ SiteNav.prototype.assignAria = function() {
 
 /**
  * Append searchbox to correct location upon user screen resize
- * @param {Object} mql
- * @param {Boolean} mql.matches - true if large; false if less than large
+ * @param {object} mql
+ * @param {boolean} mql.matches - true if large; false if less than large
  */
 SiteNav.prototype.mediaQueryResponse = function(mql) {
   //If large

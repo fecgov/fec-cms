@@ -1,10 +1,17 @@
 {% import "macros/widgets.jinja" as widgets %}
+{% import "macros/filters/autosuggest-filter.jinja" as autosuggest %}
 {% import "macros/filters/typeahead-filter.jinja" as typeahead %}
 
 <aside id="gov-fec-contribs-by-state" class="contribs-by-state is-loading w-s" data-election_year="{{ election_year }}">
     <div class="controls-wrapper">
+        {# TODO - Autosuggest #}
+        {% if (FEATURES.use_tt) == false %}
+        {{ autosuggest.field('contribs-by-state-cand', 'Contributions received by: ', 'Examples: ', dataset='candidates', allow_text=True) }}
+        {% else %}
         {{ typeahead.field('contribs-by-state-cand', 'Contributions received by: ', 'Examples: ', dataset='candidates', allow_text=True) }}
-        <span id="contribs-by-state-typeahead-error" class="error-msg js-contribs-by-state-typeahead-error">You entered a candidate name or candidate ID not associated with a registered candidate. Please try&nbsp;again.</span>
+        {% endif %}
+        {# TODO: remove useTt with the use_tt feature flag #}
+        <span id="contribs-by-state-as-error" class="error-msg js-contribs-by-state-as-error">You entered a candidate name or candidate ID not associated with a registered candidate. Please try&nbsp;again.</span>
         <fieldset class="select">
             {{ widgets.select__election_year(election_years, election_year, 'state-contribs-years', 'P') }}
         </fieldset>

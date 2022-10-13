@@ -106,7 +106,7 @@ ElectionMap.prototype.drawStates = function() {
 
 /**
  * Draw district overlays
- * @param {array} districts - array of unique district identifiers
+ * @param {Array} districts - array of unique district identifiers
  */
 ElectionMap.prototype.drawDistricts = function(districts) {
   if (this.featureType === FEATURE_TYPES.DISTRICTS && !districts) {
@@ -129,7 +129,7 @@ ElectionMap.prototype.drawDistricts = function(districts) {
 
 /**
  * Update the boundaries of the map
- * @param {array} districts - array of unique district identifiers
+ * @param {Array} districts - array of unique district identifiers
  */
 ElectionMap.prototype.updateBounds = function(districts) {
   var self = this;

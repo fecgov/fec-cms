@@ -16,8 +16,10 @@ var skipNav = require('./modules/skip-nav');
 var siteNav = require('./modules/site-nav');
 var dropdown = require('./modules/dropdowns');
 var toc = require('./modules/toc');
-var typeahead = require('./modules/typeahead');
 var helpers = require('./modules/helpers');
+
+import { Autosuggest } from './modules/autosuggest';
+var typeahead = require('./modules/typeahead'); // TODO: remove this with Typeahead filters
 
 // Hack: Append jQuery to `window` for use by legacy libraries
 window.$ = window.jQuery = $;
@@ -32,7 +34,8 @@ window.submitFeedback = function(token) {
   feedbackWidget.submit(token);
 };
 
-$(document).ready(function() {
+// This is the jQuery.ready(), which has been deprecated
+$(function() {
   // Initialize glossary
   new Glossary(
     terms,
@@ -89,10 +92,19 @@ $(document).ready(function() {
     new FormNav(this);
   });
 
-  // Initialize header typeaheads (mobile and desktop)
-  $('.js-site-search').each(function() {
-    new typeahead.Typeahead($(this), 'all', '/data/');
-  });
+  // TODO: remove the useTt conditional when FEATURES.use_tt goes away
+  if (window.useTt === false) {
+    let siteSearchElements = document.querySelectorAll('.js-site-search');
+    if (siteSearchElements) {
+      siteSearchElements.forEach(el => {
+        new Autosuggest(el);
+      });
+    }
+  } else {
+    $('.js-site-search').each(function() {
+      new typeahead.Typeahead($(this), 'all', '/data/');
+    });
+  }
 
   // For any link that should scroll to a section on the page apply .js-scroll to <a>
   $('.js-scroll').on('click', function(e) {
@@ -115,6 +127,6 @@ $(document).ready(function() {
     } else {
       $link.remove();
     }
-    $p.nextAll().remove()
+    $p.nextAll().remove();
   });
 });

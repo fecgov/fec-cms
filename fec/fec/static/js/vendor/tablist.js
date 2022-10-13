@@ -15,6 +15,11 @@ var analytics = require('../modules/analytics');
 
 var $container = '.tab-interface';
 
+/**
+ * called from @init and @refreshTabs
+ * @param {*} $target
+ * @param {*} push
+ */
 function show($target, push) {
   // Toggle tabs
   $('[role="tab"]').attr({

@@ -1,6 +1,7 @@
 {% extends 'partials/filters.jinja' %}
 
 {% import 'macros/filters/text.jinja' as text %}
+{% import 'macros/filters/autosuggest-filter.jinja' as autosuggest %}
 {% import 'macros/filters/typeahead-filter.jinja' as typeahead %}
 {% import 'macros/filters/states.jinja' as states %}
 {% import 'macros/filters/date.jinja' as date %}
@@ -16,11 +17,23 @@ Filter communication costs
 
 <div class="js-accordion accordion--neutral" data-content-prefix="filter" data-open-first="false">
   <div class="filters__inner">
-    {{ typeahead.field('committee_id', 'Spender name or ID') }}
+    {# TODO - Autosuggest #}
+    {% if (FEATURES.use_tt) == false %}
+      {{ autosuggest.field('committee_id', 'Spender name or ID') }}
+    {% else %}
+      {{ typeahead.field('committee_id', 'Spender name or ID') }}
+    {% endif %}
+    {# TODO: remove useTt with the use_tt feature flag #}
   </div>
   <button type="button" class="js-accordion-trigger accordion__button">Candidate mentioned</button>
   <div class="accordion__content">
-    {{ typeahead.field('candidate_id', 'Candidate name or ID', dataset='candidates') }}
+    {# TODO - Autosuggest #}
+    {% if (FEATURES.use_tt) == false %}
+      {{ autosuggest.field('candidate_id', 'Candidate name or ID', dataset='candidates') }}
+    {% else %}
+      {{ typeahead.field('candidate_id', 'Candidate name or ID', dataset='candidates') }}
+    {% endif %}
+    {# TODO: remove useTt with the use_tt feature flag #}
     {{ support_oppose.checkbox('_processed') }}
   </div>
   <button type="button" class="js-accordion-trigger accordion__button">Transaction information</button>

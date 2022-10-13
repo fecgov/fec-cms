@@ -13,7 +13,7 @@ function FormNav(form) {
 /**
  * We don't want empty elements to send empty vars into the form submit.
  * So, if it has no value, remove its name, too.
- * @param {Event} e MouseEvent, TouchEvent
+ * @param {Event} e - MouseEvent, TouchEvent
  */
 FormNav.prototype.clearNamesIfNull = function(e) {
   var allSelects = this.form.querySelectorAll('select,input');

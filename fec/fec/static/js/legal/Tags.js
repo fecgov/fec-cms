@@ -1,3 +1,10 @@
+/**
+ * In the Chiclet-like filter tags above filtered tables,
+ * ul.tags is the main parent for all the tags/Chiclet groups
+ *   li.tag__category is the parent of linked tags (e.g. starting date + ending date)
+ *     div.tag__item is the individual tag (e.g. starting date or ending date)
+ */
+
 const React = require('react');
 const PropTypes = require('prop-types');
 const _ = require('underscore');

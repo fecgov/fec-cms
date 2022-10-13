@@ -21,7 +21,7 @@ const rootPathToIndividualContributions =
   '/data/receipts/individual-contributions/';
 
 import { buildUrl, passiveListener } from '../modules/helpers';
-import typeahead from '../modules/typeahead';
+import { Autosuggest } from '../modules/autosuggest';
 import 'abortcontroller-polyfill/dist/polyfill-patch-fetch';
 import analytics from '../modules/analytics';
 
@@ -30,9 +30,9 @@ const AbortController = window.AbortController;
 
 /**
  * Formats the given value and puts it into the dom element.
- * @param {Number} passedValue The number to format and plug into the element
- * @param {Boolean} roundToWhole Should we round the cents or no?
- * @returns {String} A string of the given value formatted with a dollar sign, commas, and (if roundToWhole === false) decimal
+ * @param {number} passedValue - The number to format and plug into the element
+ * @param {boolean} roundToWhole - Should we round the cents or no?
+ * @returns {string} A string of the given value formatted with a dollar sign, commas, and (if roundToWhole === false) decimal
  */
 function formatAsCurrency(passedValue, roundToWhole = true) {
   return (
@@ -45,11 +45,11 @@ function formatAsCurrency(passedValue, roundToWhole = true) {
 
 /**
  * Builds the link/url to a filtered Individual Contributions page/list
- * @param {Number} cycle The candidate's election year
- * @param {String} office 'H', 'P', or 'S'
- * @param {Array} committeeIDs An array of strings of the candidate's committees
- * @param {String} stateID Optional. A null value will not filter for any state but show entries for the entire country
- * @returns {String} URL or empty string depending on
+ * @param {number} cycle - The candidate's election year
+ * @param {"H" | "P" | "S"} office - 'H', 'P', or 'S'
+ * @param {string[]} committeeIDs - An array of strings of the candidate's committees
+ * @param {string} stateID - Optional. A null value will not filter for any state but show entries for the entire country
+ * @returns {string} URL or empty string depending on
  */
 function buildIndividualContributionsUrl(
   cycle,
@@ -140,7 +140,7 @@ function ContributionsByState() {
     'by_candidate',
     'totals'
   ];
-  // Details about the candidate. Comes from the typeahead
+  // Details about the candidate. Comes from the autosuggest
   this.candidateDetails = {};
   // Information retruned by API candidate committees API {@see loadCandidateCommitteeDetails}
   this.data_candidateCommittees = {};
@@ -169,8 +169,8 @@ function ContributionsByState() {
   this.map; // Starts as the element for the map but then becomes a DataMap object
   this.table; // The <table> for the list of states and their totals
   this.statesTotalHolder; // Element at the bottom of the states list
-  this.typeahead; // The typeahead candidate element:
-  this.typeahead_revertValue; // Temporary var saved while user is typing
+  this.autosuggest; // The autosuggest candidate element:
+  this.autosuggest_revertValue; // Temporary var saved while user is typing
   this.yearControl; // The <select> for election years:
   this.buttonIndivContribs;
   // this.buttonMethodology;
@@ -179,13 +179,13 @@ function ContributionsByState() {
 
   // Populate the examples text because handlebars doesn't like to add the italics/emphasis
   document.querySelector(
-    '#gov-fec-contribs-by-state .typeahead-filter .filter__instructions'
+    '#gov-fec-contribs-by-state .autosuggest-filter .filter__instructions'
   ).innerHTML = 'Examples: <em>Bush, George W</em> or <em>P00003335</em>';
 
-  // Move the typeahead message into the typeahead object so its content lines up properly
+  // Move the autosuggest message into the autosuggest object so its content lines up properly
   document
     .querySelector('#contribs-by-state-cand-field')
-    .appendChild(document.querySelector('#contribs-by-state-typeahead-error'));
+    .appendChild(document.querySelector('#contribs-by-state-as-error'));
 
   // If we have the element on the page, fire it up
   if (this.element) this.init();
@@ -204,47 +204,41 @@ ContributionsByState.prototype.init = function() {
   linkElement.href = stylesheetPath;
   head.appendChild(linkElement);
 
-  // Init the typeahead
-  this.typeahead = new typeahead.Typeahead(
-    '#contribs-by-state-cand',
-    'candidates'
-  );
+  // Init the autosuggest
+  this.autosuggest = new Autosuggest('#contribs-by-state-cand');
 
-  // Override the default Typeahead behavior and add our own handler
-  this.typeahead.$input.off('typeahead:select');
-  this.typeahead.$input.on(
-    'typeahead:select',
-    this.handleTypeaheadSelect.bind(this)
-  );
+  // Override the default autosuggest behavior and add our own handler
+  this.autosuggest.$input.off('selection');
+  this.autosuggest.$input.on('selection', this.handleAutosuggestSelect.bind(this));
 
-  // Find the HTML element on the page (not the jQuery typeahead element),
+  // Find the HTML element on the page (not the jQuery autosuggest element),
   // and add the focus/tap and blur listeners
-  let theTypeaheadElement = this.element.querySelector(
+  let theAutosuggestElement = this.element.querySelector(
     '#contribs-by-state-cand'
   );
-  theTypeaheadElement.addEventListener(
+  theAutosuggestElement.addEventListener(
     'blur',
-    this.handleTypeaheadBlur.bind(this)
+    this.handleAutosuggestBlur.bind(this)
   );
-  theTypeaheadElement.addEventListener(
+  theAutosuggestElement.addEventListener(
     'mousedown',
-    this.handleTypeaheadFocus.bind(this),
+    this.handleAutosuggestFocus.bind(this),
     passiveListener()
   );
-  theTypeaheadElement.addEventListener(
+  theAutosuggestElement.addEventListener(
     'touchstart',
-    this.handleTypeaheadFocus.bind(this),
+    this.handleAutosuggestFocus.bind(this),
     passiveListener()
   );
 
   // Listen for any field updates, looking for errors
-  this.typeahead.$input.on(
-    'typeahead:render',
-    this.handleTypeaheadRender.bind(this)
+  this.autosuggest.$input.on(
+    'autosuggest:render',
+    this.handleAutosuggestRender.bind(this)
   );
 
   // Init the election year selector (The element ID is set in data/templates/partials/widgets/contributions-by-state.jinja)
-  // TODO: Can we remove the default listener (like with the typeahead above) and not change the URL when the <select> changes?
+  // TODO: Can we remove the default listener (like with the autosuggest above) and not change the URL when the <select> changes?
   this.yearControl = document.querySelector('#state-contribs-years');
   this.yearControl.addEventListener(
     'change',
@@ -331,7 +325,7 @@ ContributionsByState.prototype.init = function() {
 };
 
 /**
- * Called by {@see init() , @see handleTypeaheadSelect() }
+ * Called by {@see init() , @see handleAutosuggestSelect() }
  * Finds the highest-earning presidential candidate of the default year
  * Similar to {@see loadCandidateDetails() }
  */
@@ -371,10 +365,10 @@ ContributionsByState.prototype.loadInitialData = function() {
 };
 
 /**
- * Retrieves full candidate details when the typeahead is used
- * Called from {@see handleTypeaheadSelect() }
+ * Retrieves full candidate details when the autosuggest is used
+ * Called from {@see handleAutosuggestSelect() }
  * Similar to {@see loadInitialData() }
- * @param {String} cand_id Comes from the typeahead
+ * @param {string} cand_id - Comes from the autosuggest
  */
 ContributionsByState.prototype.loadCandidateDetails = function(cand_id) {
   let instance = this;
@@ -600,9 +594,9 @@ ContributionsByState.prototype.loadStatesData = function() {
  * then loads the states data with {@see loadStatesData() }
  */
 ContributionsByState.prototype.displayUpdatedData_candidate = function() {
-  // If this is the first load, the typeahead won't have a value; let's set it
-  let theTypeahead = document.querySelector('#contribs-by-state-cand');
-  if (!theTypeahead.value) theTypeahead.value = this.candidateDetails.name;
+  // If this is the first load, the autosuggest won't have a value; let's set it
+  let theAutosuggest = document.querySelector('#contribs-by-state-cand');
+  if (!theAutosuggest.value) theAutosuggest.value = this.candidateDetails.name;
 
   // …their desired office during this election…
   let candidateOfficeHolder = this.candidateDetailsHolder.querySelector('h2');
@@ -747,7 +741,7 @@ ContributionsByState.prototype.displayUpdatedData_states = function() {
 /**
  * Puts the states grand total into the total field at the bottom of the table
  * Called by its fetch inside {@see loadStatesData() }
- * @param {Object} data The results from the fetch
+ * @param {object} data - The results from the fetch
  */
 ContributionsByState.prototype.displayUpdatedData_total = function(data) {
   // Set the states total dollars to the number we received, or empty it if there are no results
@@ -764,10 +758,10 @@ ContributionsByState.prototype.displayUpdatedData_total = function(data) {
 };
 
 /**
- * Called when the typeahead element dispatches "typeahead:select"
- * @param {jQuery.Event} e 'typeahead:select' event
+ * Called when the autosuggest element dispatches "selection"
+ * @param {jQuery.Event} e - 'selection' event
  */
-ContributionsByState.prototype.handleTypeaheadSelect = function(
+ContributionsByState.prototype.handleAutosuggestSelect = function(
   e,
   abbreviatedCandidateDetails
 ) {
@@ -779,54 +773,54 @@ ContributionsByState.prototype.handleTypeaheadSelect = function(
   this.loadCandidateDetails(abbreviatedCandidateDetails.id);
 
   // Because the user has made a change, erase the revert value variable
-  this.typeahead_revertValue = '';
+  this.autosuggest_revertValue = '';
 };
 
 /**
- * @param {jQuery.Event} e jQueryEvent
- * @param {Object} firstResult The first item in the autocomplete menu. Null if there are no results.
- * @param {Object} various The second item in the autocomplete menu. There are additional objects returned, one for each item in the autocomplete menu.
+ * @param {jQuery.Event} e - jQueryEvent
+ * @param {object} firstResult - The first item in the autocomplete menu. Null if there are no results.
+ * @param {object} various - The second item in the autocomplete menu. There are additional objects returned, one for each item in the autocomplete menu.
  */
-ContributionsByState.prototype.handleTypeaheadRender = function(
+ContributionsByState.prototype.handleAutosuggestRender = function(
   e,
   firstResult
 ) {
-  if (firstResult) this.showTypeaheadError(false);
-  else this.showTypeaheadError(true);
+  if (firstResult) this.showAutosuggestError(false);
+  else this.showAutosuggestError(true);
 };
 
 /**
- * Shows and hides the Typeahead error message
- * @param {Boolean} isError - Whether or not to display the message
+ * Shows and hides the autosuggest error message
+ * @param {boolean} isError - Whether or not to display the message
  */
-ContributionsByState.prototype.showTypeaheadError = function(isError) {
+ContributionsByState.prototype.showAutosuggestError = function(isError) {
   let theElement = document.querySelector('#contribs-by-state-cand-field');
   if (isError) theElement.classList.add('is-error');
   else theElement.classList.remove('is-error');
 };
 
 /**
- * Restores the value from before the field received focus {@see handleTypeaheadFocus() }
+ * Restores the value from before the field received focus {@see handleAutosuggestFocus() }
  */
-ContributionsByState.prototype.handleTypeaheadBlur = function() {
-  // If the user has left the field without making a choice (i.e., typeahead_revertValue hasn't been nullified),
-  let theTypeahead = document.querySelector('#contribs-by-state-cand');
-  if (this.typeahead_revertValue != '') {
+ContributionsByState.prototype.handleAutosuggestBlur = function() {
+  // If the user has left the field without making a choice (i.e., autosuggest_revertValue hasn't been nullified),
+  let theAutosuggest = document.querySelector('#contribs-by-state-cand');
+  if (this.autosuggest_revertValue != '') {
     // revert the value and reset the var
-    theTypeahead.value = this.typeahead_revertValue;
-    this.typeahead_revertValue = '';
+    theAutosuggest.value = this.autosuggest_revertValue;
+    this.autosuggest_revertValue = '';
     // Since we have a legit value, let's hide the error
-    this.showTypeaheadError(false);
+    this.showAutosuggestError(false);
   }
 };
 
 /**
- * Finds the input field's current value and saves it for {@see handleTypeaheadBlur() }
+ * Finds the input field's current value and saves it for {@see handleAutosuggestBlur() }
  */
-ContributionsByState.prototype.handleTypeaheadFocus = function() {
+ContributionsByState.prototype.handleAutosuggestFocus = function() {
   // Save the current value, in case the user leaves the field without making a selection
-  let theTypeahead = document.querySelector('#contribs-by-state-cand');
-  this.typeahead_revertValue = theTypeahead.value;
+  let theAutosuggest = document.querySelector('#contribs-by-state-cand');
+  this.autosuggest_revertValue = theAutosuggest.value;
 };
 
 // Set the candidate's name and link change
@@ -863,7 +857,7 @@ ContributionsByState.prototype.handleElectionYearChange = function(e) {
 
 /**
  * Called from throughout the widget
- * @param {String} errorCode
+ * @param {string} errorCode
  */
 ContributionsByState.prototype.handleErrorState = function(errorCode) {
   if (errorCode == 'NO_RESULTS_TO_DISPLAY') {
@@ -971,7 +965,7 @@ ContributionsByState.prototype.refreshOverlay = function() {
 /**
  * Controls class names and functionality of the widget.
  * Called when we both start and complete (@see loadStatesData() )
- * @param {Boolean} newState
+ * @param {boolean} newState
  */
 ContributionsByState.prototype.setLoadingState = function(newState) {
   if (newState === false) {
@@ -998,7 +992,7 @@ ContributionsByState.prototype.setLoadingState = function(newState) {
 /**
  * Handles the usage analytics for this module
  * @TODO: Decide how to gather usage insights while embedded
- * @param {String} candID - The candidate ID
+ * @param {string} candID - The candidate ID
  * @param {*} electionYear - String or Number, the user-selected election year
  */
 function logUsage(candID, electionYear) {

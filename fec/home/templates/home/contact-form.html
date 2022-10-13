@@ -1,3 +1,4 @@
+{# Currently used for contacting a RAD analyst #}
 {% extends "base.html" %}
 {% load wagtailcore_tags %}
 {% load static %}
@@ -34,10 +35,10 @@
          <button class="accordion__button js-accordion-trigger">Find your committee's analyst</button>
          <div class="accordion__content row js-analyst-lookup">
             <div class="contact-form">
-               <div class="content__section">
-                  <label class="label" for="committee-id-field">Committee name or ID</label>
-                  <input id="committee-id-field">
-               </div>
+              <div class="content__section">
+                <label class="label" for="committee-id-field">Committee name or ID</label>
+                <input id="committee-id-field" data-search-type="committees">
+              </div>
                <p class="js-analyst-prompt" aria-hidden="false">Search for your committee to find your campaign finance analyst.</p>
                <div class="row js-analyst-container" aria-hidden="true">
                   <h4 class="label js-yes-analyst" aria-hidden="true">Campaign finance analyst</h4>
@@ -55,6 +56,7 @@
                         </div>
                      </div>
                   </div>
+               </div>
                   <div class="usa-width-one-half">
                      <div class="contact-item contact-item--phone">
                         <div class="contact-item__content">

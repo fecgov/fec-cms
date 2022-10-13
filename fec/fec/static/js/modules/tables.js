@@ -260,7 +260,17 @@ function barsAfterRender(template, api) {
   });
 }
 
+/**
+ * Adds a 'change' listener to `$form[0] input` and `$form[0] select`
+ * @param {jQuery} $form - jQuery object of the selector for the div#[type]-filters.filters__content
+ * @param {_Api} api - Object in the form of {context: Array(1), selector: {…}, tables: ƒ, table: ƒ, draw: ƒ,…}
+ */
 function updateOnChange($form, api) {
+  /**
+   * @param {jQuery.Event} e
+   * @param {CustomEvent} e.originalEvent
+   * @param {object} e.originalEvent.detail
+   */
   function onChange(e) {
     e.preventDefault();
     hidePanel(api, $('#datatable-modal'));
@@ -271,6 +281,10 @@ function updateOnChange($form, api) {
   $form.on('change', 'input,select', _.debounce(onChange, 250));
 }
 
+/**
+ * Called by @fetchSuccess
+ * @param {*} changeCount -
+ */
 function filterSuccessUpdates(changeCount) {
   // on filter change update:
   // - loading/success status
@@ -295,7 +309,7 @@ function filterSuccessUpdates(changeCount) {
       .removeClass('is-disabled-filter')
       .addClass('is-active-filter');
 
-    // Reenable committee ID typeahead input
+    // Reenable committee ID autosuggest input
     $('#committee_id').removeClass('is-disabled-filter');
 
     if (type === 'checkbox') {
@@ -318,10 +332,10 @@ function filterSuccessUpdates(changeCount) {
         filterAction = 'Filter removed.';
       }
     } else if (type === 'text') {
-      // typeahead
-      if ($elm.hasClass('tt-input')) {
+      // autosuggest
+      if ($elm.hasClass('as-input')) {
         // show message after generated checkbox (last item in list)
-        $label = $('[data-filter="typeahead"] li').last();
+        $label = $('[data-filter="autosuggest"] li').last();
         filterAction = 'Filter added';
       } else if ($elm.closest('.range').hasClass('range--currency')) {
         $label = $elm.closest('.range');
@@ -704,6 +718,11 @@ DataTable.prototype.enableExport = function() {
   }
 };
 
+/**
+ * @param {object} data - Object in the form of {draw: 1, columns: Array(7), order: Array(1), start: 0, length: 30,…}
+ * @param {function} callback
+ * @returns null if we hit the filter limit or !self.filterSet.isValid
+ */
 DataTable.prototype.fetch = function(data, callback) {
   var self = this;
   self.ensureWidgets();
@@ -887,6 +906,10 @@ DataTable.prototype.buildUrl = function(data, paginate, download) {
   );
 };
 
+/**
+ *
+ * @param {object} resp - Object in the form of {api_version: '1.0', pagination: {…}, results: Array(30)}
+ */
 DataTable.prototype.fetchSuccess = function(resp) {
   this.paginator.handleResponse(this.fetchContext.data, resp);
   this.fetchContext.callback(mapResponse(resp));
@@ -922,6 +945,11 @@ DataTable.prototype.fetchSuccess = function(resp) {
   }
 };
 
+/**
+ *
+ * @param {jQuery.jqXHR} jqXHR -
+ * @param {*} textStatus -
+ */
 DataTable.prototype.fetchError = function(jqXHR, textStatus) {
   var self = this;
   // Default error message that occurs most likely due to timeout
@@ -960,7 +988,7 @@ DataTable.prototype.fetchError = function(jqXHR, textStatus) {
       .after($(errorMessage));
   } else if (
     $(updateChangedEl).attr('type') === 'text' &&
-    $(updateChangedEl).hasClass('tt-input') === false
+    $(updateChangedEl).hasClass('as-input') === false
   ) {
     $(updateChangedEl)
       .parent()
@@ -1048,6 +1076,10 @@ function initSpendingTables(className, context, options) {
   });
 }
 
+/**
+ * @param {*} e -
+ * @param {*} context -
+ */
 function refreshTables(e, context) {
   var $comparison = $('#comparison');
   var selected = $comparison
@@ -1083,6 +1115,13 @@ function refreshTables(e, context) {
   }
 }
 
+/**
+ * Called from @see /fec/fec/static/js/pages/elections.js `$(document).ready() $.getJSON(url).done()`
+ * Adds 'change' listener to input[type="checkbox"]
+ * Calls refreshTables()
+ * @param {*} results -
+ * @param {*} pageContext -
+ */
 function drawComparison(results, pageContext) {
   var $comparison = $('#comparison');
   var context = { selected: results.slice(0, 10), options: results.slice(10) };

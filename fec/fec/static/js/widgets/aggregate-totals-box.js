@@ -16,17 +16,18 @@ const isModernBrowser = 'fetch' in window && 'assign' in Object;
 // Includes
 import analytics from '../modules/analytics';
 import { buildUrl } from '../modules/helpers';
-import { electionYearsOptions, officeDefs } from './widget-vars';
+import { electionYearsOptions } from './widget-vars';
+import { officeNames } from '../modules/utils';
 
 /**
  * Handles the functionality for the aggregate totals box(es).
  * Loads, creates an <aside> with {@see init()}, then makes itself visible (with {@see displayUpdatedData_grandTotal}) after it has some data to show.
- * @param {String} office - Can be set through data-office for the <script> or collected from the target specified with data-office-control.
- * @param {String} election_year - Can be set through data-election-year for the <script> or collected from the target specied with data-year-control.
- * @param {String} officeControl - Set with data-office-control on <script> but not required if data-office is set.
- * @param {String} yearControl - Set with data-year-control on <script> but not required if data-election-year is set.
- * @param {String} action - Can be 'raised' or 'spending'
- * @param {Boolean} doInitialNumberBuild - Should we animate the first value or just display it and be done? {@default false}.
+ * @param {string} office - Can be set through data-office for the <script> or collected from the target specified with data-office-control.
+ * @param {string} election_year - Can be set through data-election-year for the <script> or collected from the target specied with data-year-control.
+ * @param {string} officeControl - Set with data-office-control on <script> but not required if data-office is set.
+ * @param {string} yearControl - Set with data-year-control on <script> but not required if data-election-year is set.
+ * @param {string} action - Can be 'raised' or 'spending'
+ * @param {boolean} doInitialNumberBuild - Should we animate the first value or just display it and be done? {@default false}.
  * TODO - ^ update these ^
  */
 function AggregateTotalsBox() {
@@ -87,7 +88,7 @@ AggregateTotalsBox.prototype.displayUpdatedData_grandTotal = function(
   this.descriptionField.innerHTML = `Total ${this.action} by all ${
     this.baseQuery.office == 'P'
       ? 'presidential'
-      : officeDefs[this.baseQuery.office] // lowercase for President but keep the others capped
+      : officeNames[this.baseQuery.office] // lowercase for President but keep the others capped
   } candidates running in&nbsp;${this.baseQuery.election_year}`;
 
   // Start the opening animation
@@ -292,7 +293,7 @@ AggregateTotalsBox.prototype.init = function() {
 
 /**
  * Starts the data load, called by {@see init}
- * @param {Object} query - The data object for the query, {@see baseQuery}
+ * @param {object} query - The data object for the query, {@see baseQuery}
  */
 AggregateTotalsBox.prototype.loadData = function(query) {
   let instance = this;
@@ -480,9 +481,9 @@ AggregateTotalsBox.prototype.startAnimation = function() {
 
 /**
  * Formats the given value and puts it into the dom element.
- * @param {Number} passedValue - The number to format and plug into the element
- * @param {Boolean} roundToWhole - Should we drop the cents or no?
- * @returns {String} A string of the given value formatted with a dollar sign, commas, and (if roundToWhole === false) decimal
+ * @param {number} passedValue - The number to format and plug into the element
+ * @param {boolean} roundToWhole - Should we drop the cents or no?
+ * @returns {string} A string of the given value formatted with a dollar sign, commas, and (if roundToWhole === false) decimal
  */
 function formatAsCurrency(passedValue, roundToWhole = true) {
   // Format for US dollars and cents
@@ -496,7 +497,7 @@ function formatAsCurrency(passedValue, roundToWhole = true) {
  * e.g. changes the ones position from current toward goal, then changes the tens position value from current toward goal, then hundreds, thousands, etc.
  * @param {*} currentValue
  * @param {*} goalValue
- * @returns {Number} - The next value, one step more from currentValue toward goalValue
+ * @returns {number} The next value, one step more from currentValue toward goalValue
  */
 function getNextValue(currentValue, goalValue) {
   // Convert the values to strings to split them apart into arrays
@@ -549,9 +550,9 @@ function getNextValue(currentValue, goalValue) {
 
 /**
  * Returns the next valid election cycle, particularly for presidential races
- * @param {String, Number} year - The year to scrub / correct
- * @param {String} office - The office of that cycle
- * @returns {Number} - Either `office` or the next valid election year
+ * @param {string, number} year - The year to scrub / correct
+ * @param {string} office - The office of that cycle
+ * @returns {number} Either `office` or the next valid election year
  * TODO - Could probably combine this with widget-vars/getNextPresidentialElectionYear() for something like getNextElectionYear('P')
  */
 
@@ -561,7 +562,7 @@ function getNextValue(currentValue, goalValue) {
  * Adds a <link> to the <head>, pointing to {@see stylesheetPath}
  * @param {AggregateTotalsBox} callingInstance - Where to find the this values like baseQuery
  * @param {HTMLScriptElement} scriptElement - The <script> where this file lives
- * @returns {HTMLElement} - The new <aside>, in the page
+ * @returns {HTMLElement} The new <aside>, in the page
  */
 function buildElement(callingInstance, scriptElement) {
   let toReturn = document.createElement('aside');
@@ -592,7 +593,7 @@ function buildElement(callingInstance, scriptElement) {
       if (callingInstance.yearControl == 'none') {
         // Let's only build the tabbed content, not the pull-down
         let theRadiosString = '';
-        for (var def in officeDefs) {
+        for (var def in officeNames) {
           if (def == 'P' && callingInstance.baseQuery.election_year % 4 > 0) {
             // Skip the President button if we're looking at a non-presidential year
           } else {
@@ -604,7 +605,7 @@ function buildElement(callingInstance, scriptElement) {
                 ? 'disabled="disabled" '
                 : '') +
               'class="election-radios js-election-radios">' +
-              officeDefs[def] +
+              officeNames[def] +
               '</button>';
           }
         }
@@ -612,10 +613,10 @@ function buildElement(callingInstance, scriptElement) {
       } else {
         // Otherwise, build the <select>
         let theOptionsString = '';
-        for (def in officeDefs) {
+        for (def in officeNames) {
           theOptionsString += `<option value="${def}"${
             def == callingInstance.baseQuery.office ? ' selected' : ''
-          }>${officeDefs[def]} candidates</option>`;
+          }>${officeNames[def]} candidates</option>`;
         }
         theInnerHTML += `<fieldset class="select">
             <label for="top-category" class="breakdown__title label t-inline-block">How much has been ${
@@ -727,7 +728,7 @@ function buildElement(callingInstance, scriptElement) {
 /**
  * Handles the usage analytics for this module
  * @todo - Decide how to gather usage insights while embedded
- * @param {String} officeAbbrev - The user-selected election office
+ * @param {string} officeAbbrev - The user-selected election office
  * @param {*} electionYear - String or Number, the user-selected election year
  */
 function logUsage(officeAbbrev, electionYear) {

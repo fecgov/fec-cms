@@ -9,11 +9,11 @@
   <main class="main container">
     <h1 class="heading--main">{{ self.title }}</h1>
     <div class="row">
-      <form class="slab slab--inline slab--neutral" action="{% url 'search' %}" method="get">
+      <form class="slab slab--inline slab--neutral" action="{% url 'search' %}" method="get" data-refine-search="#search-candidates,#search-committees,#search-site">
         <div class="container">
           <div class="combo combo--search content__section">
             <label for="search" class="label">Search fec.gov</label>
-            <input id="search" type="text" class="combo__input js-site-search" name="query"{% if search_query %} value="{{ search_query }}"{% endif %}>
+            <input id="search" type="text" class="combo__input js-site-search" name="query" aria-autocomplete="list" data-search-type="all" data-search-refine="{{ type }}"{% if search_query %} value="{{ search_query }}"{% endif %}>
             <button type="submit" class="button--cta combo__button button--search">
               <span class="u-visually-hidden">Search</span>
             </button>
@@ -185,7 +185,7 @@
         {% else %}
           <div class="message message--info">
             <h2>No results</h2>
-            <p>We didn’t find any pages matching <strong>&ldquo;{{search_query}}&rdquo;</strong>.</p>
+            <p>We didn’t find {% if search_query == None %}anything for this search{% else %}any pages matching <strong>&ldquo;{{search_query}}&rdquo;</strong>{% endif %}.</p>
             <div class="message--alert__bottom">
               <p>Think this was a mistake?<br>Try one of the other search tools or submit feedback.</p>
               <p>

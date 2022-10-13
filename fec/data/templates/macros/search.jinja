@@ -2,11 +2,16 @@
 {% if location == 'hero' %}
   {% set size = 'combo--search--medium' %}
 {% endif %}
-<form id="{{ location }}-search" action="/data/search" autocomplete="off" class="search__container">
+<form
+  id="{{ location }}-search"
+  action="/data/search"
+  {% if FEATURES.use_tt == False %}data-{% endif %}autocomplete="off"
+  class="search__container"
+  >
   <div class="combo combo--search {{ size }}">
     <label for="search" class="label">Candidate or committee name or ID</label>
-    <input id="search" class="js-search-input combo__input" type="text" name="search"
-    autocorrect="off" autocapitalize="off" spellcheck="false"
+    <input id="search" class="js-search-input combo__input" type="text" name="search" data-search-type="{{ result_type }}"
+    {% if FEATURES.use_tt == False %}data-{% endif %}autocorrect="off" autocapitalize="off" spellcheck="false"
     value="{{ query or '' }}">
     <button type="submit" class="combo__button button--search {{ button_color }}">
       <span class="u-visually-hidden">Search</span>

@@ -69,7 +69,7 @@ ElectionLookup.prototype.handleSelectMap = function(state, district) {
  * Calls the search method
  * If there's a value, change the text of the button to signify that it takes you to a page
  * If there's no value, revert to "search"
- * @param {event} - event object
+ * @param {Event} - event object
  */
 ElectionLookup.prototype.handleDistrictChange = function(e) {
   this.search(e);
@@ -85,7 +85,7 @@ ElectionLookup.prototype.handleDistrictChange = function(e) {
 /**
  * Calls the API with the value of the form fields
  * Passes the values of the districts returned by the API call to the map
- * @param {event} e event object
+ * @param {Event} e - event object
  */
 ElectionLookup.prototype.search = function(e) {
   e && e.preventDefault();

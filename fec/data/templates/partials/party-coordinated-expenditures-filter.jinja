@@ -1,6 +1,7 @@
 {% extends 'partials/filters.jinja' %}
 
 {% import 'macros/filters/text.jinja' as text %}
+{% import 'macros/filters/autosuggest-filter.jinja' as autosuggest %}
 {% import 'macros/filters/typeahead-filter.jinja' as typeahead %}
 {% import 'macros/filters/date.jinja' as date %}
 {% import 'macros/filters/range.jinja' as range %}
@@ -12,8 +13,15 @@ Filter party coordinated expenditures
 {% block filters %}
 <div class="js-accordion accordion--neutral" data-content-prefix="filter" data-open-first="false">
   <div class="accordion__content">
+    {# TODO - Autosuggest #}
+    {% if (FEATURES.use_tt) == false %}
+    {{ autosuggest.field('committee_id', 'Spender name or ID') }}
+    {{ autosuggest.field('candidate_id', 'Candidate', dataset='candidates') }}
+    {% else %}
     {{ typeahead.field('committee_id', 'Spender name or ID') }}
     {{ typeahead.field('candidate_id', 'Candidate', dataset='candidates') }}
+    {% endif %}
+    {# TODO: remove useTt with the use_tt feature flag #}
   </div>
   <button type="button" class="js-accordion-trigger accordion__button">Transaction details</button>
   <div class="accordion__content">

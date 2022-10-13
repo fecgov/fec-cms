@@ -1,19 +1,21 @@
 'use strict';
 
-var $ = require('jquery');
-var _ = require('underscore');
-var URI = require('urijs');
+const $ = require('jquery');
+const _ = require('underscore');
+const URI = require('urijs');
 
-var helpers = require('../helpers');
-var TextFilter = require('./text-filter').TextFilter;
-var CheckboxFilter = require('./checkbox-filter').CheckboxFilter;
-var MultiFilter = require('./multi-filter').MultiFilter;
-var TypeaheadFilter = require('./typeahead-filter').TypeaheadFilter;
-var SelectFilter = require('./select-filter').SelectFilter;
-var DateFilter = require('./date-filter').DateFilter;
-var ElectionFilter = require('./election-filter').ElectionFilter;
-var ToggleFilter = require('./toggle-filter').ToggleFilter;
-var RangeFilter = require('./range-filter').RangeFilter;
+const helpers = require('../helpers');
+const CheckboxFilter = require('./checkbox-filter').CheckboxFilter;
+const DateFilter = require('./date-filter').DateFilter;
+const ElectionFilter = require('./election-filter').ElectionFilter;
+const MultiFilter = require('./multi-filter').MultiFilter;
+const RangeFilter = require('./range-filter').RangeFilter;
+const SelectFilter = require('./select-filter').SelectFilter;
+const TextFilter = require('./text-filter').TextFilter;
+const ToggleFilter = require('./toggle-filter').ToggleFilter;
+const TypeaheadFilter = require('./typeahead-filter').TypeaheadFilter; // TODO: remove this when Typeahead goes away
+
+import { AutosuggestFilterBlock } from './autosuggest-filter';
 
 function FilterSet(elm) {
   this.$body = $(elm);
@@ -30,55 +32,73 @@ function FilterSet(elm) {
   this.processedFilters = {};
 }
 
-var filterMap = {
-  text: TextFilter,
+const filterMap = {
+  autosuggest: AutosuggestFilterBlock,
   checkbox: CheckboxFilter,
   date: DateFilter,
-  typeahead: TypeaheadFilter,
   election: ElectionFilter,
   multi: MultiFilter,
+  range: RangeFilter,
   select: SelectFilter,
+  text: TextFilter,
   toggle: ToggleFilter,
-  range: RangeFilter
+  typeahead: TypeaheadFilter // TODO: remove this when Typeahead goes away
 };
 
 FilterSet.prototype.buildFilter = function($elm) {
-  var filterType = $elm.attr('data-filter');
-  var F = filterMap[filterType].constructor;
+  console.log('FilterSet.buildFilter($elm): ', $elm);
+  const filterType = $elm.attr('data-filter');
+  const F = filterMap[filterType].constructor;
   return new F($elm);
 };
 
-FilterSet.prototype.activate = function($selector) {
+/**
+ * Builds a list of all current filters
+ * Stores all field key-values in this.fields and returns the filters object
+ * @param {jQuery} $selector - Results from a jQuery selection `$()`
+ *
+ * @returns {object} An object in the form of {committee_type: CheckboxFilter{}, contributor_city: TextFilter{}, … }
+ */
+FilterSet.prototype.activate = function($selector) { // elementList
+  console.log('FilterSet.activate($selector): ', $selector); // elementList
   var self = this;
   var query = helpers.sanitizeQueryParams(
     URI.parseQuery(window.location.search)
   );
+  console.log('  query: ', query);
+
   var filters = _.chain($selector)
     .map(function(elm) {
-      var filter = self.buildFilter($(elm)); // .fromQuery(query);
+      const filter = self.buildFilter($(elm)); // .fromQuery(query);
       return [filter.name, filter];
     })
     .object()
     .value();
+
   var fields = _.chain(filters)
     .pluck('fields')
     .flatten()
     .value();
 
+  console.log('  fields: ', fields);
+
   // Activate each filter
   _.each(filters, function(filter) {
+    console.log('  _.each');
     filter.fromQuery(query);
   });
 
   // Store all field key-values in this.fields and return the filters object
   this.fields = this.fields.concat(fields);
+  console.log('  filters: ', filters);
   return filters;
 };
 
 FilterSet.prototype.activateProcessed = function() {
   if (_.isEmpty(this.processedFilters)) {
     var $filters = this.$body.find('.js-processed-filters .js-filter');
-    this.processedFilters = this.activate($filters);
+    const filterElements = document.querySelectorAll('.js-processed-filters .js-filter');
+    this.processedFilters = this.activate($filters, filterElements);
     // Store the processed filters in this.filters for later reference
     this.filters = this.processedFilters;
   }
@@ -87,7 +107,8 @@ FilterSet.prototype.activateProcessed = function() {
 FilterSet.prototype.activateEfiling = function() {
   if (_.isEmpty(this.efilingFilters)) {
     var $filters = this.$body.find('.js-efiling-filters .js-filter');
-    this.efilingFilters = this.activate($filters);
+    const filterElements = document.querySelectorAll('.js-processed-filters .js-filter');
+    this.efilingFilters = this.activate($filters, filterElements);
     // Store the efiling filters in this.filters for later reference
     this.filters = this.efilingFilters;
   }
@@ -95,17 +116,22 @@ FilterSet.prototype.activateEfiling = function() {
 
 FilterSet.prototype.activateDataType = function() {
   var $filter = this.$body.find('#data-type-toggle .js-filter');
-  this.activate($filter);
+  const filterElements = document.querySelectorAll('#data-type-toggle .js-filter');
+  this.activate($filter, filterElements);
 };
 
 FilterSet.prototype.activateAll = function() {
+  console.log('FilterSet.activateAll()');
   // If the panel uses efiling filters, activate the data type filter
   // and activate the others when necessary
   if (this.efiling) {
     this.activateDataType();
+
   } else {
-    this.filters = this.activate(this.$body.find('.js-filter'));
+    const filterElements = document.querySelectorAll('.js-filter');
+    this.filters = this.activate(this.$body.find('.js-filter'), filterElements);
   }
+  console.log('FilterSet.activateAll() - END');
   return this;
 };
 
@@ -132,20 +158,29 @@ FilterSet.prototype.clear = function() {
   });
 };
 
+/**
+ * 
+ * @param {jQuery.Event} e - 
+ * @param {object} opts - 
+ */
 FilterSet.prototype.handleTagRemoved = function(e, opts) {
+  console.log('FilterSet.handleTagRemoved(e, opts): ', e, opts);
   var $input = $(document.getElementById(opts.key));
   if ($input.length > 0) {
     var type = $input.get(0).type;
 
     if (type === 'checkbox' || type === 'radio') {
+      console.log('  going to trigger a click on $input');
       $input.click();
     } else if (type === 'text') {
+      console.log('  going to trigger a change on $input');
       $input.val('').trigger('change');
     }
   }
 };
 
 FilterSet.prototype.handleValidation = function(e, opts) {
+  console.log('FilterSet.handleValidation(e, opts): ', e, opts);
   this.isValid = opts.isValid;
 };
 

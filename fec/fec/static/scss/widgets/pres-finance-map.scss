@@ -417,7 +417,7 @@ $info-circle: 'data:image/svg+xml;charset=utf8, %3Csvg%20xmlns%3D%22http%3A%2F%2
     left: 0px;
     position: absolute;
     width: 100%;
-    z-index: #{$z1 - 1}; // The typeahead menu is at 100 and we want it to be visible above this
+    z-index: #{$z1 - 1}; // The autosuggest menu is at 100 and we want it to be visible above this
 
     &.is-loading {
       display: block;

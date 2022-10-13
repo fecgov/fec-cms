@@ -33,6 +33,8 @@
     DEFAULT_ELECTION_YEAR = '{{ DEFAULT_ELECTION_YEAR }}';{# see note #}
     START_YEAR = '{{ START_YEAR }}';{# see note #}
     END_YEAR = '{{ END_YEAR }}';{# see note #}
+    useTt = {% if FEATURES.use_tt == False %}false{% else %}true{% endif %};
+    {# TODO: remove useTt with the use_tt feature flag #}
     {# note: these are set through fec/data/views.py and come from /data/constants.py #}
 
     function trackMetric(name, imagesSelector) {

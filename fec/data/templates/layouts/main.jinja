@@ -43,8 +43,11 @@
     DISTRICT_MAP_CUTOFF = '{{ constants.DISTRICT_MAP_CUTOFF }}';
     WEBMANAGER_EMAIL = '{{ WEBMANAGER_EMAIL }}';
     CANONICAL_BASE = '{{ CANONICAL_BASE }}';
-    TRANSITION_URL = '{{ TRANSITION_URL }}';
+    {% if TRANSITION_URL %}TRANSITION_URL = '{{ TRANSITION_URL }}';{% endif %}
     {% if election_year %}ELECTION_YEAR = '{{ election_year }}';{% endif %}
+
+    useTt = {% if FEATURES.use_tt == False %}false{% else %}true{% endif %};
+    {# TODO: remove useTt with the use_tt feature flag #}
 
     function trackMetric(name, imagesSelector) {
       if (imagesSelector) {
@@ -89,11 +92,14 @@
              <div class="combo combo--search">
             <input
               class="js-site-search combo__input"
-              autocomplete="off"
               id="query"
               name="query"
               type="text"
-              aria-label="Search FEC.gov">
+              data-search-type="all"
+              aria-autocomplete="list"
+              aria-label="Search FEC.gov"
+              {% if FEATURES.use_tt == False %}data-{% endif %}autocomplete="off"
+            >
             <button type="submit" class="button--standard combo__button button--search">
               <span class="u-visually-hidden">Search</span>
             </button>

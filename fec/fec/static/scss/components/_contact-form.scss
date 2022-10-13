@@ -22,7 +22,7 @@
     height: u(15rem);
   }
 
-  .tt-input {
+  .as-input, .tt-input { // TODO: remove tt-* when typeahead is removed from filters
     @include u-icon-bg($magnifying-glass-arrow, $gray-dark);
     background-position: right 10px top 50%;
   }
@@ -48,7 +48,7 @@
       @include span-columns(6 of 7);
     }
 
-    .tt-input {
+    .as-input, .tt-input { // TODO: remove tt-* when typeahead is removed from filters
       width: 100%;
     }
   }

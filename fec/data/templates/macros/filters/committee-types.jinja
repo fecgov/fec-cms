@@ -1,3 +1,4 @@
+{% import 'macros/filters/autosuggest-filter.jinja' as autosuggest %}
 {% import 'macros/filters/typeahead-filter.jinja' as typeahead %}
 
 {% macro field(
@@ -186,7 +187,13 @@
   </fieldset>
   {% if display_sponsor_candidate_filter %}
     <div class="filter sub--filter--indent">
+    {# TODO - Autosuggest #}
+    {% if (FEATURES.use_tt) == false %}
+      {{ autosuggest.field('sponsor_candidate_id', 'Leadership PAC sponsor', False, dataset='candidates', allow_text=False) }}
+    {% else %}
       {{ typeahead.field('sponsor_candidate_id', 'Leadership PAC sponsor', False, dataset='candidates', allow_text=False) }}
+    {% endif %}
+    {# TODO: remove useTt with the use_tt feature flag #}
     </div>
   {% endif %}
 </div>

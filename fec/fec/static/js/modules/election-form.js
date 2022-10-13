@@ -112,8 +112,8 @@ ElectionForm.prototype.serialize = function() {
 
 /**
  * Finds all unique district IDs based on the state and district number
- * @param {array} results - array of results returned from the API
- * @returns {array} an array of the unique district identifiers
+ * @param {Array} results - array of results returned from the API
+ * @returns {Array} an array of the unique district identifiers
  */
 ElectionForm.prototype.encodeDistricts = function(results) {
   var encoded = _.chain(results)

@@ -144,6 +144,8 @@ def legal_doc_search_mur(request):
     case_max_open_date = request.GET.get('case_max_open_date', '')
     case_min_close_date = request.GET.get('case_min_close_date', '')
     case_max_close_date = request.GET.get('case_max_close_date', '')
+    case_statutory_citation = request.GET.get('case_statutory_citation', '')
+    case_regulatory_citation = request.GET.get('case_regulatory_citation', '')
 
     results = api_caller.load_legal_search_results(
         query, 'murs',
@@ -153,7 +155,9 @@ def legal_doc_search_mur(request):
         case_min_open_date=case_min_open_date,
         case_max_open_date=case_max_open_date,
         case_min_close_date=case_min_close_date,
-        case_max_close_date=case_max_close_date
+        case_max_close_date=case_max_close_date,
+        case_statutory_citation=case_statutory_citation,
+        case_regulatory_citation=case_regulatory_citation,
     )
 
     return render(request, 'legal-search-results-murs.jinja', {
@@ -166,6 +170,8 @@ def legal_doc_search_mur(request):
         'case_max_open_date': case_max_open_date,
         'case_min_close_date': case_min_close_date,
         'case_max_close_date': case_max_close_date,
+        'case_statutory_citation': case_statutory_citation,
+        'case_regulatory_citation': case_regulatory_citation,
         'query': query,
         'social_image_identifier': 'legal',
     })

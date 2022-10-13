@@ -69,6 +69,8 @@ FEATURES = {
     'house_senate_overview': bool(env.get_credential('FEC_FEATURE_HOUSE_SENATE_OVERVIEW', '')),
     'house_senate_overview_methodology': bool(env.get_credential('FEC_FEATURE_HOUSE_SENATE_OVERVIEW_METHODOLOGY', '')),
     'house_senate_overview_totals': bool(env.get_credential('FEC_FEATURE_HOUSE_SENATE_OVERVIEW_TOTALS', '')),
+    'use_tt': bool(env.get_credential('FEC_USE_TYPEAHEAD', False)),
+    # text search fields will use Autosuggest if use_tt is False, but Typeahead otherwise
 
 }
 

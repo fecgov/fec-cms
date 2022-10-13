@@ -110,7 +110,7 @@ KeywordModal.prototype.parseValue = function($input) {
 
 /**
  * Fire an event to GTM
- * @param {String} actionLabel - Name of the action to register with GA
+ * @param {string} actionLabel - Name of the action to register with GA
  */
 KeywordModal.prototype.fireEvent = function(actionLabel) {
   // Updating this to use DataLayer for GTM
