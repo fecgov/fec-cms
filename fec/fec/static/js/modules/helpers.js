@@ -91,13 +91,24 @@ function datetime(value, options) {
 
 Handlebars.registerHelper('datetime', datetime);
 
-var currencyFormatter = function(number) {
-  return numeral(number).format('$0,0.00');
+/**
+ * 
+ * @param {number} number
+ * @param {boolean} roundToWhole - Any number to be converted to US Dollars
+ * @returns {string} String from the value and rounding argument
+ */
+var currencyFormatter = function(value, roundToWhole) {
+  return numeral(value).format(roundToWhole === true ? '$0,0' : '$0,0.00');
 };
 
-function currency(value) {
+/**
+ * @param {number} value - Any number to be converted to US Dollars
+ * @param {boolean} roundToWhole - Any number to be converted to US Dollars. Passed to currencyFormatter()
+ * @returns {string} String from the value else '--'
+ */
+function currency(value, roundToWhole) {
   if (!isNaN(parseInt(value))) {
-    return currencyFormatter(value);
+    return currencyFormatter(value, roundToWhole);
   } else {
     return '--';
   }
