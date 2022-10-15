@@ -1,36 +1,15 @@
+{# used inside fec/data/templates/house-senate-overview.jinja #}
 {% import 'macros/null.jinja' as null %}
 {% import 'macros/disclaimer.jinja' as disclaimer %}
 {% import 'macros/cycle-select.jinja' as select %}
 
+<section id="section-election-summary" role="tabpanel" aria-hidden="true" aria-labelledby="election-summary-heading">
+   <h2 id="election-summary-heading">{{ office | title }} election overview</h2>
+</section>
 
-<section id="section-1" role="tabpanel" aria-hidden="true" aria-labelledby="section-1-heading">
-   <h2 id="section-1-heading">{{ office | title }} election data</h2>
+<section id="section-contribs-over-time" role="tabpanel" aria-hidden="true" aria-labelledby="contribs-over-time-heading">
+   <h2 id="contribs-over-time-heading">{{ office | title }} election data</h2>
    <div class="slab slab--inline slab--neutral u-padding--left u-padding--right">
-      {# 
-      <div id="election-summary" class="entity__figure row">
-         <h2 class="heading__left">{{ office | title }} election summary</h2>
-         <p class="t-sans t-bold t-low-height">Comparing total money spent by party. Also comparing total money spent in <span class="term" data-term="independent expenditure" title="Click to define" tabindex="0">independent expenditures</span> by support and opposition.</p>
-         {{ select.two_year_select(cycles, cycle, id="cycle-4") }}
-         <div class="content__section--ruled-responsive t-serif">
-            <div class="heading--with-action t-small u-negative--top--margin t-serif">
-               <i class="data-disclaimer">Some kind of disclaimer text that clarifies something high-level that users need to know right away to put the data in context.</i>
-               <div class="heading__right">
-                  <a class="button button--alt js-ga-event" data-a11y-dialog-show="election-summary-modal" data-ga-event="Election summary methodology modal clicked" aria-controls="election-summary-modal">Methodology</a>
-               </div>
-            </div>
-            <div class="js-modal modal" id="election-summary-modal" aria-hidden="true">
-               <div tabindex="-1" class="modal__overlay" data-a11y-dialog-hide=""></div>
-               <div role="dialog" class="modal__content" aria-labelledby="election-summary-modal-title">
-                  <div role="document">
-                     <button type="button" class="modal__close button--close--primary" data-a11y-dialog-hide="" title="Close this dialog window"></button>
-                     <h2>Methodology Overview</h2>
-                     <p></p>
-                  </div>
-               </div>
-            </div>
-         </div>
-      </div>
-      #}
       <div id="contributions-over-time" class="entity__figure row">
          <h2 class="heading__left">{{ office | title }} candidate contributions over time</h2>
          <p class="t-sans t-low-height">Comparing individual contributions, other committee contributions and transfers from other authorized committees across multiple two-year periods.</p>
@@ -116,20 +95,20 @@
             </div>
          </div>
       {# 
-      <div id="money-raised-accross-elections" class="entity__figure row">
-         <h2 class="heading__left">Money raised accross {{ office | title }} elections</h2>
+      <div id="money-raised-across-elections" class="entity__figure row">
+         <h2 class="heading__left">Money raised across {{ office | title }} elections</h2>
          <p class="t-sans t-low-height">Comparing the money raised in all {{ office | title }} elections by state </p>
          {{ select.two_year_select(cycles, cycle, id="cycle-4") }}
          <div class="content__section--ruled-responsive t-serif">
             <div class="heading--with-action t-small u-negative--top--margin t-serif">
                <i class="data-disclaimer">Some kind of disclaimer text that clarifies something high-level that users need to know right away to put the data in context.</i>
                <div class="heading__right">
-                  <a class="button button--alt js-ga-event" data-a11y-dialog-show="money-raised-accross-elections-modal" data-ga-event="Money raised accross elections methodology modal clicked" aria-controls="money-raised-accross-elections-modal">Methodology</a>
+                  <a class="button button--alt js-ga-event" data-a11y-dialog-show="money-raised-across-elections-modal" data-ga-event="Money raised across elections methodology modal clicked" aria-controls="money-raised-across-elections-modal">Methodology</a>
                </div>
             </div>
-            <div class="js-modal modal" id="money-raised-accross-elections-modal" aria-hidden="true">
+            <div class="js-modal modal" id="money-raised-across-elections-modal" aria-hidden="true">
                <div tabindex="-1" class="modal__overlay" data-a11y-dialog-hide=""></div>
-               <div role="dialog" class="modal__content" aria-labelledby="money-raised-accross-elections-modal-title">
+               <div role="dialog" class="modal__content" aria-labelledby="money-raised-across-elections-modal-title">
                   <div role="document">
                      <button type="button" class="modal__close button--close--primary" data-a11y-dialog-hide="" title="Close this dialog window"></button>
                      <h2>Methodology Overview</h2>
