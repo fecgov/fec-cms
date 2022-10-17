@@ -92,7 +92,6 @@ function datetime(value, options) {
 Handlebars.registerHelper('datetime', datetime);
 
 /**
- * 
  * @param {number} number
  * @param {boolean} roundToWhole - Any number to be converted to US Dollars
  * @returns {string} String from the value and rounding argument

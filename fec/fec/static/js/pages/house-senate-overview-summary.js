@@ -16,7 +16,7 @@ function HSOverviewSummaryTab() {
 }
 
 /**
- * 
+ * Gets this instance built and working
  */
 HSOverviewSummaryTab.prototype.init = function() {
   this.cycleSelector.addEventListener('change', this.handleCycleChange.bind(this));
@@ -37,34 +37,36 @@ HSOverviewSummaryTab.prototype.init = function() {
 };
 
 /**
- * 
+ * Takes an election year, deactivates cycleSelect, and starts the data load
  * @param {number|string} electionYear - Which election year / cycle to load
  */
  HSOverviewSummaryTab.prototype.startLoadingData = function(electionYear) {
-  this.deactivateInput();
+  // Only do anything if electionYear is an year between 1970 and 2050
+  if (parseInt(electionYear) && electionYear >= 1970 && electionYear <= 2050 && electionYear % 2 === 0) {
+    this.deactivateInput();
 
-  const instance = this;
+    const instance = this;
 
-  let theURL = 'http://fec-dev-api.app.cloud.gov/v1/candidates/totals/aggregates/';
-  theURL += '?election_full=true&is_active_candidate=true&per_page=10&aggregate_by=office-party';
-  theURL += `&election_year=${electionYear}&office=${window.context.office_code}&api_key=`;
+    let theURL = `${window.API_LOCATION}/${window.API_VERSION}/candidates/totals/aggregates/`;
+    theURL += '?election_full=true&is_active_candidate=true&per_page=10&aggregate_by=office-party';
+    theURL += `&election_year=${electionYear}&office=${window.context.office_code}&api_key=`;
 
-  fetch(
-      `${theURL}&aggregate_by=office`,
-      { cache: 'no-cache', mode: 'cors' }
-    )
-    .then(response => response.json())
-    .then(data => {
-      instance.handleDataLoaded(data.results);
-    })
-    .catch(error => {
-      // console.log(`The fetch failed because: ${error}`);
-    });
-
+    fetch(
+        `${theURL}&aggregate_by=office`,
+        { cache: 'no-cache', mode: 'cors' }
+      )
+      .then(response => response.json())
+      .then(data => {
+        instance.handleDataLoaded(data.results);
+      })
+      .catch(() => {
+        // console.log(`The fetch failed because: ${error}`);
+      });
+  }
 };
 
 /**
- * 
+ * Removes functionality from the input/select assigned to this.cycleSelector
  */
 HSOverviewSummaryTab.prototype.deactivateInput = function () {
   this.cycleSelector.setAttribute('aria-disabled', 'true');
@@ -72,25 +74,26 @@ HSOverviewSummaryTab.prototype.deactivateInput = function () {
 };
 
 /**
- * 
+ * Restores functionality from the input/select assigned to this.cycleSelector
  */
 HSOverviewSummaryTab.prototype.reactivateInput = function () {
   this.cycleSelector.removeAttribute('aria-disabled');
   this.cycleSelector.removeAttribute('disabled');
 };
 
-
 /**
- * 
- * @param {Event} e - 
+ * Handles the change/input event from this.cycleSelector
+ * @param {Event} e - Change event
+ * @param {number} e.target.value - A valid 4-digit integer for an even/election year
  */
 HSOverviewSummaryTab.prototype.handleCycleChange = function (e) {
   this.startLoadingData(e.target.value);
 };
 
 /**
- * 
- * @param {results} cycleYear 
+ * Takes the results, parses them from parties divisions to type combinations, then reactivates cycleSelect.
+ * (Takes [{dem numbers}, {rep numbers}, {other numbers}] and converts to [{receipts: {total, dem numbers, rep numbers, other numbers}}])
+ * @param {object} results - response.results from the api
  */
 HSOverviewSummaryTab.prototype.handleDataLoaded = function(results) {
   const usefulResults = {
