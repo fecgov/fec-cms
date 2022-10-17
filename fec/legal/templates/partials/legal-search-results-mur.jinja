@@ -71,7 +71,11 @@
                 {% if mur.mur_type == 'current' %}
                   {{ document.description }}
                 {% else %}
-                  Case documents, part {{ document.document_id }}
+                  {% if mur.get('documents', {}) | length == 1 %}
+                    Case document
+                  {% else %}
+                    Case documents, part {{ document.document_id }}
+                  {% endif %}
                 {% endif %}
                 </a>
               </div>
