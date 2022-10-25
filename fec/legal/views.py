@@ -403,8 +403,8 @@ def advisory_opinions_landing(request):
     """
     pending_aos = pending_aos_sample
 
-    """ The following loop checks the currently iterated AO's doc for a document
-    of category: "AO Request, Supplemental Material, and Extensions of Time",and
+    """ The following loop checks the currently iterated AO's doc dict for a document
+    of category: "AO Request, Supplemental Material, and Extensions of Time", and
     if it matches the pattern in the regex, it parses the date.
     If the date is not expired, then it adds an item to the AO's dict named 'comment_deadline',
     which can then be accessed in the template as `pending_ao['comment_deadline']`.
@@ -436,6 +436,7 @@ def advisory_opinions_landing(request):
                     try:
                         datetime.datetime.strptime(parseable_date_time, '%B %d %Y %I:%M%p')
                     except ValueError:
+                        # pass to avoid throwing a datetime error
                         pass
                     else:
                         # Since  `parseable_date_time` is a valid date format, parse it into a Python-readable date.
@@ -456,6 +457,7 @@ def advisory_opinions_landing(request):
         'recent_aos': recent_aos['advisory_opinions'],
         'pending_aos': pending_aos['advisory_opinions'],
         'social_image_identifier': 'advisory-opinions',
+        # TODO: For testing only. rm b4 merge.
         'pending_aos_pretty': json.dumps(pending_aos, sort_keys=False, indent=4),
     })
 
