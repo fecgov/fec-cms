@@ -52,7 +52,7 @@ HSOverviewSummaryTab.prototype.init = function() {
     theURL += `&election_year=${electionYear}&office=${window.context.office_code}&api_key=`;
 
     fetch(
-        `${theURL}&aggregate_by=office`,
+        theURL,
         { cache: 'no-cache', mode: 'cors' }
       )
       .then(response => response.json())
