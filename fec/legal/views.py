@@ -28,7 +28,7 @@ pending_aos_sample = {
             "documents": [
                 {
                     "date": "2022-10-04T00:00:00",
-                    "description": "Request by Allen Blue (Comments due by October 24, 2022)",
+                    "description": "Request by Allen Blue (Comments due by October 30, 2022)",
                     "document_id": 87165,
                     "category": "AO Request, Supplemental Material, and Extensions of Time",
                     "url": "/files/legal/aos/2022-24/202224R_1.pdf",
@@ -83,7 +83,7 @@ pending_aos_sample = {
                 },
                 {
                     "date": "2022-09-22T00:00:00",
-                    "description": "Request by DataVault Holding's Inc. (Comments due by October 24, 2022)",
+                    "description": "Request by DataVault Holding's Inc. (Comments due by October 30, 2022)",
                     "document_id": 87159,
                     "category": "AO Request, Supplemental Material, and Extensions of Time",
                     "url": "/files/legal/aos/2022-23/202223R_1.pdf",
@@ -91,7 +91,7 @@ pending_aos_sample = {
                 {
                     "date": "2022-09-22T00:00:00",
                     "description": "TEST SECOND NON-DRAFT DOC WITH EXP DATE - \
-                        Request by DataVault Holding's Inc. (Comments due by October 30, 2022)",
+                        Request by DataVault Holding's Inc. (Comments due by November 05, 2022)",
                     "document_id": 87151,
                     "category": "AO Request, Supplemental Material, and Extensions of Time",
                     "url": "/files/legal/aos/2022-23/202223R_1.pdf",
@@ -388,19 +388,20 @@ def advisory_opinions_landing(request):
         ao_min_issue_date=ao_min_date
     )
 
-    """ TODO: This calls the  sample data dict above for  so one can
-    edit doc descriptions for testing the regex and logic. Comment this and
-    uncomment the below api_caller query for live data. Remove this before merge.
+    pending_aos = api_caller.load_legal_search_results(
+        query='',
+        query_type='advisory_opinions',
+        ao_category='R',
+        ao_status='Pending'
+    )
+
+    """ TODO: For testing only. the below line overrides the `pending_aos` var above,
+    using the "pending_aos_sample" data dict at the top of the file. So one can edit doc
+    descriptions for testing the regex and logic. To use above live api_caller query instead,
+    comment out or remove the line below. (Delete this comment and line below before merge.)
+
     """
-
     pending_aos = pending_aos_sample
-
-    # pending_aos = api_caller.load_legal_search_results(
-    #     query='',
-    #     query_type='advisory_opinions',
-    #     ao_category='R',
-    #     ao_status='Pending'
-    # )
 
     """ The following loop checks the currently iterated AO's doc for a document
     of category: "AO Request, Supplemental Material, and Extensions of Time",and
@@ -414,13 +415,12 @@ def advisory_opinions_landing(request):
         for doc in pending_ao.get('documents'):
             if doc['category'] == 'AO Request, Supplemental Material, and Extensions of Time':
 
-                # This regex searches in the document desctription for a string in this format:
-                # "(Comments due by October 24, 2022)", case insensitive, forgiving for extra spaces.
+                # This regex searches in the document description for a string in this format:
+                # "(Comments due by October 24, 2022)", case insensitive, forgiving for extra spaces and 1-digit month
                 pattern = re.search(r'(?i)\(\s*Comments\s*due\s*by\s*(([a-z,A-Z]+)\s*\d{1,2}\s*,*\s*\d{4})\s*\)',
                     doc['description'])
 
                 # If a matche is found.
-
                 if pattern:
 
                     # group(1) is the date only, as input by user. Example. "October 24, 2022"
@@ -428,25 +428,22 @@ def advisory_opinions_landing(request):
 
                     # rm comma
                     parseable_date = display_date.replace(',', '')
+
                     # `parseable_date_time` example: October 24 2022 11:59PM
-
                     parseable_date_time = parseable_date + ' 11:59PM'
-                    # Check if `parseable_date_time` will parse.
 
+                    # Check if `parseable_date_time` is actually parseable.
                     try:
-                        datetime.datetime.strptime(parseable_date_time,
-                                '%B %d %Y %I:%M%p')
+                        datetime.datetime.strptime(parseable_date_time, '%B %d %Y %I:%M%p')
                     except ValueError:
-
                         pass
                     else:
-
                         # Since  `parseable_date_time` is a valid date format, parse it into a Python-readable date.
                         # Example code_date_time: 2022-10-31 23:59:00
 
-                        code_date_time = datetime.datetime.strptime(parseable_date_time,
-                                '%B %d %Y %I:%M%p')
+                        code_date_time = datetime.datetime.strptime(parseable_date_time, '%B %d %Y %I:%M%p')
 
+                        # Check if `code_date_time` has not expired.
                         present = datetime.datetime.now()
                         if code_date_time > present:
                             comment_deadline = display_date
