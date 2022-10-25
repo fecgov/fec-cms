@@ -63,7 +63,7 @@
   </div>
   <div class="content__section">
     <p>Once the Office of the General Counsel has determined that an advisory opinion request meets all of the requirements to move forward for consideration by the Commission, the request is made public and is available for public comment for ten days.</p>
-    <a class="button button--standard button--go" href="/legal-resources/advisory-opinions-process/#commenting">Learn how to comment</a>
+    <a class="button button--standard button--go" href="/legal-resources/advisory-opinions-process/#commenting-on-advisory-opinion-requests">Learn how to comment</a>
   </div>
   {% if pending_aos %}
   <div class="post-feed">
@@ -71,7 +71,9 @@
       <article class="post">
         <h3 class="pending-ao__title"><a href="/data/legal/advisory-opinions/{{ ao.no }}/">AO {{ ao.no }} {{ ao.name }}</a></h3>
         <p class="t-sans">{{ ao.summary }}</p>
-        <!-- <p>Deadline for comments: {{ ao.deadline }}</p> -->
+          {% if ao.comment_deadline %}
+         <p><span class="t-serif"> Deadline for AO request comments: {{ ao.comment_deadline }}</span></p>
+          {% endif %}        
       </article>
     {% endfor %}
   </div>
@@ -80,6 +82,11 @@
     <h3>No pending advisory opinions</h3>
   </div>
   {% endif %}
+<!-- TODO: Uncomment this if you want to see the resultng pending_aos dict with new ao.comment_deadline items added, or you could just view the hidden dict in the inspector. -->
+<!--
+  pending_aos DICT: <br><pre>{{ pending_aos_pretty }}</pre>
+<hr>
+-->
 </section>
 <section class="content__section content__section--narrow">
   <div class="heading--section">
