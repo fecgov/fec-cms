@@ -10,9 +10,9 @@ import json
 from data import api_caller
 from data import constants
 
-""" TODO This is a sample of penfing_aos for testing the regex and the view logic.
+""" TODO This is a sample of pending_aos for testing the regex and the view logic.
 This dict was created by making the exact same api call the api_caller does in the `pending_aos` variable below,
-then editing doc desctiptions Document descriptions can be further edited to test the logic and see how
+then editing doc descriptions Document descriptions can be further edited to test the logic and see how
 typos are either forgiven, or might break the regex or datetime parsing.
 REMOVE BEFORE FINAL PR.
 
@@ -384,7 +384,8 @@ def advisory_opinions_landing(request):
     ao_min_date = today - datetime.timedelta(weeks=26)
     recent_aos = api_caller.load_legal_search_results(
         query='',
-        query_type='advisory_opinions', ao_category=['F', 'W'],
+        query_type='advisory_opinions',
+        ao_category=['F', 'W'],
         ao_min_issue_date=ao_min_date
     )
 
@@ -422,13 +423,10 @@ def advisory_opinions_landing(request):
 
                 # If a matche is found.
                 if pattern:
-
                     # group(1) is the date only, as input by user. Example. "October 24, 2022"
                     display_date = pattern.group(1)
-
                     # rm comma
                     parseable_date = display_date.replace(',', '')
-
                     # `parseable_date_time` example: October 24 2022 11:59PM
                     parseable_date_time = parseable_date + ' 11:59PM'
 
@@ -439,15 +437,16 @@ def advisory_opinions_landing(request):
                         # pass to avoid throwing a datetime error
                         pass
                     else:
-                        # Since  `parseable_date_time` is a valid date format, parse it into a Python-readable date.
+                        # Since  `parseable_date_time` is parseable date string, parse it into a Python-readable date.
                         # Example code_date_time: 2022-10-31 23:59:00
-
                         code_date_time = datetime.datetime.strptime(parseable_date_time, '%B %d %Y %I:%M%p')
 
                         # Check if `code_date_time` has not expired.
                         present = datetime.datetime.now()
                         if code_date_time > present:
                             comment_deadline = display_date
+
+                            # Append item to currently iterated pending_ao's dict
                             pending_ao['comment_deadline'] = comment_deadline
 
     return render(request, 'legal-advisory-opinions-landing.jinja', {  # TODO: FOR TESTING

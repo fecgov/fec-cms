@@ -70,9 +70,9 @@
     {% for ao in pending_aos %}
       <article class="post">
         <h3 class="pending-ao__title"><a href="/data/legal/advisory-opinions/{{ ao.no }}/">AO {{ ao.no }} {{ ao.name }}</a></h3>
-        <p class="t-sans">{{ ao.summary }}</p>
+        <p>{{ ao.summary }}</p>
           {% if ao.comment_deadline %}
-         <p><span class="t-serif"> Deadline for AO request comments: {{ ao.comment_deadline }}</span></p>
+         <p class="t-serif"> Deadline for AO request comments: {{ ao.comment_deadline }}</p>
           {% endif %}        
       </article>
     {% endfor %}
