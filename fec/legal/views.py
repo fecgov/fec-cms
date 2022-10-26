@@ -70,7 +70,7 @@ def advisory_opinions_landing(request):
                             # Append item to currently iterated AO's dict
                             pending_ao['comment_deadline'] = comment_deadline
 
-    return render(request, 'legal-advisory-opinions-landing.jinja', {  # TODO: FOR TESTING
+    return render(request, 'legal-advisory-opinions-landing.jinja', {
         'parent': 'legal',
         'result_type': 'advisory_opinions',
         'display_name': 'advisory opinions',
