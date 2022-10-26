@@ -1,6 +1,5 @@
 import logging
 import os
-import re
 import requests
 import inspect
 
@@ -129,20 +128,6 @@ def load_legal_mur(mur_no):
     if mur["mur_type"] == "current":
         complainants = []
         for participant in mur["participants"]:
-            citations = []
-            for stage in participant["citations"]:
-                for url in participant["citations"][stage]:
-                    if "uscode" in url:
-                        section = re.search("section=([0-9]+)", url).group(1)
-                        citations.append({"text": section, "url": url})
-                    if "cfr" in url:
-                        title_no = re.search("titlenum=([0-9]+)", url).group(1)
-                        part_no = re.search("partnum=([0-9]+)", url).group(1)
-                        section_no = re.search("sectionnum=([0-9]+)", url).group(1)
-                        text = "%s C.F.R. %s.%s" % (title_no, part_no, section_no)
-                        citations.append({"text": text, "url": url})
-            participant["citations"] = citations
-
             if "complainant" in participant["role"].lower():
                 complainants.append(participant["name"])
 
@@ -187,26 +172,12 @@ def load_legal_adr(adr_no):
 
     complainants = []
     for participant in adr["participants"]:
-        citations = []
-        for stage in participant["citations"]:
-            for url in participant["citations"][stage]:
-                if "uscode" in url:
-                    section = re.search("section=([0-9]+)", url).group(1)
-                    citations.append({"text": section, "url": url})
-                if "cfr" in url:
-                    title_no = re.search("titlenum=([0-9]+)", url).group(1)
-                    part_no = re.search("partnum=([0-9]+)", url).group(1)
-                    section_no = re.search("sectionnum=([0-9]+)", url).group(1)
-                    text = "%s C.F.R. %s.%s" % (title_no, part_no, section_no)
-                    citations.append({"text": text, "url": url})
-        participant["citations"] = citations
-
         if "complainant" in participant["role"].lower():
             complainants.append(participant["name"])
 
     adr["disposition_text"] = [d["action"] for d in adr["commission_votes"]]
 
-    adr["collated_dispositions"] = collate_dispositions(adr["dispositions"])
+    adr["collated_dispositions"] = collate_dispositions(adr["adr_dispositions"])
     adr["complainants"] = complainants
     adr["participants_by_type"] = _get_sorted_participants_by_type(adr)
 
