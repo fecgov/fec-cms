@@ -44,6 +44,14 @@
           <td class="figure__label">Committee name:</td>
           <td class="figure__value">{{committee.name}}</td>
         </tr>
+        {% if is_SSF %}
+          <tr>
+            <td class="figure__label">Connected organization:</td>
+            <td class="figure__value">
+              {{ committee.affiliated_committee_name }}
+            </td>
+          </tr>
+        {% endif %}
         <tr>
           <td class="figure__label">Mailing address:</td>
           <td class="figure__value">
