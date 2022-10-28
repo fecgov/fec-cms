@@ -2,6 +2,7 @@ from django.shortcuts import render
 from django.http import Http404
 
 import datetime
+import re
 
 from data import api_caller
 from data import constants
@@ -16,12 +17,59 @@ def advisory_opinions_landing(request):
         ao_category=['F', 'W'],
         ao_min_issue_date=ao_min_date
     )
+
     pending_aos = api_caller.load_legal_search_results(
         query='',
         query_type='advisory_opinions',
         ao_category='R',
         ao_status='Pending'
     )
+
+    """ The following loop checks the currently iterated AO's doc dict for a document
+    of category: "AO Request, Supplemental Material, and Extensions of Time",
+    and if it matches the pattern in the regex, it parses the date.
+    If the date is not expired, then it adds an item to the AO's dict named 'comment_deadline',
+    which can then be accessed in the template as `pending_ao['comment_deadline']`.
+
+    """
+
+    for pending_ao in pending_aos['advisory_opinions']:
+        for doc in pending_ao.get('documents'):
+            if doc['category'] == 'AO Request, Supplemental Material, and Extensions of Time':
+
+                # This regex searches in the document description for a string in this format:
+                # "(Comments due by October 24, 2022)", case insensitive, forgiving for extra spaces and 1-digit month
+                pattern = re.search(r'(?i)\(\s*Comments\s*due\s*by\s*(([a-z,A-Z]+)\s*\d{1,2}\s*,*\s*\d{4})\s*\)',
+                    doc['description'])
+
+                # If a match is found.
+                if pattern:
+                    # group(1) is the date only, as input by user. Example. "October 24, 2022"
+                    display_date = pattern.group(1)
+                    # rm comma
+                    parseable_date = display_date.replace(',', '')
+                    # `parseable_date_time` example: October 24 2022 11:59PM
+                    parseable_date_time = parseable_date + ' 11:59PM'
+
+                    # Check if `parseable_date_time` is actually parseable.
+                    try:
+                        datetime.datetime.strptime(parseable_date_time, '%B %d %Y %I:%M%p')
+                    except ValueError:
+                        # pass to avoid throwing a datetime error
+                        pass
+                    else:
+                        # Since  `parseable_date_time` is parseable date string, parse it into a Python-readable date.
+                        # Example code_date_time: 2022-10-24 23:59:00
+                        code_date_time = datetime.datetime.strptime(parseable_date_time, '%B %d %Y %I:%M%p')
+
+                        # Check if `code_date_time` has not expired.
+                        present = datetime.datetime.now()
+                        if code_date_time > present:
+                            comment_deadline = display_date
+
+                            # Append item to currently iterated AO's dict
+                            pending_ao['comment_deadline'] = comment_deadline
+
     return render(request, 'legal-advisory-opinions-landing.jinja', {
         'parent': 'legal',
         'result_type': 'advisory_opinions',
