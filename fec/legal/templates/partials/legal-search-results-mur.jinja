@@ -30,7 +30,7 @@
       </div>
       <div class="simple-table__cell no--pad">
         {% if mur.mur_type == 'current' %}
-        <div class="u-margin--bottom u-padding--top--med u-margin--left"><strong>Election cycle(s):</strong> {{ '; '.join(mur['election_cycles'] | map('string') | sort) }}</div>
+        <div class="u-margin--bottom u-padding--top--med u-margin--left"><strong>Election cycle(s):</strong> {{ '; '.join(mur['election_cycles'] | map('string') | unique | sort) }}</div>
         {% endif %}
         {% if mur.mur_type == 'current' %}
         {# Archived MUR subjects are a tree-structure so we don't render them inline #}
