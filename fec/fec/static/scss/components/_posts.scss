@@ -32,6 +32,10 @@
     font-family: $sans-serif;
     letter-spacing: -.3px;
     margin: u(0 0 1rem 0);
+
+    &.t-serif {
+    font-family: $serif
+    }
   }
 
   // Thumbnails
