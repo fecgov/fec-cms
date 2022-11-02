@@ -135,30 +135,6 @@ HSOverviewSummaryTab.prototype.handleDataLoaded = function(results) {
     }
   });
 
-  // Let's do some math to get real total_contributions
-  usefulResults.total_contributions = {
-    total:
-      usefulResults.total_individual_itemized_contributions.total
-      + usefulResults.total_other_political_committee_contributions.total
-      + usefulResults.total_transfers_from_other_authorized_committee.total,
-    DEM:
-      usefulResults.total_individual_itemized_contributions.DEM
-      + usefulResults.total_other_political_committee_contributions.DEM
-      + usefulResults.total_transfers_from_other_authorized_committee.DEM,
-    REP:
-      usefulResults.total_individual_itemized_contributions.REP
-      + usefulResults.total_other_political_committee_contributions.REP
-      + usefulResults.total_transfers_from_other_authorized_committee.REP,
-    Other:
-      usefulResults.total_individual_itemized_contributions.Other
-      + usefulResults.total_other_political_committee_contributions.Other
-      + usefulResults.total_transfers_from_other_authorized_committee.Other
-  };
-  // And remove the combined values from usefulResults (since they're no longer useful).
-  delete usefulResults.total_individual_itemized_contributions;
-  delete usefulResults.total_other_political_committee_contributions;
-  delete usefulResults.total_transfers_from_other_authorized_committee;
-
   for (let key in usefulResults) {
     const newEvent = new CustomEvent('fec_data_refresh', {
       bubbles: true,
