@@ -41,6 +41,12 @@
           {% endif %}
           </li>
         </ul>
+        {% if office == "house" %}
+          {% set other_office = "senate"%}
+        {% elif office == "senate" %}
+          {% set other_office = "house"%}
+        {% endif %}
+        <a class="button button--cta u-margin--top t-left-aligned button--disbursements u-full-width" href="/data/elections/{{ other_office }}">Explore U.S. {{ other_office|title }} charts</a>
       </nav>
       <div class="main__content--right-full">
         {% include 'partials/house-senate-overview/tabpanel-summary.jinja' %}
