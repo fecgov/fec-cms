@@ -47,9 +47,25 @@ HSOverviewSummaryTab.prototype.init = function() {
 
     const instance = this;
 
-    let theURL = `${window.API_LOCATION}/${window.API_VERSION}/candidates/totals/aggregates/`;
-    theURL += '?election_full=true&is_active_candidate=true&per_page=10&aggregate_by=office-party';
-    theURL += `&election_year=${electionYear}&office=${window.context.office_code}&api_key=`;
+    const url_params = {
+      aggregate_by: 'office-party',
+      api_key: '',
+      election_full: true,
+      election_year: 2020,
+      is_active_candidate: true,
+      office: '',
+      page: 1,
+      per_page: 10,
+      sort_hide_null: false,
+      sort_null_only: false,
+      sort_nulls_last: false
+    };
+    let theURL = `${window.API_LOCATION}/${window.API_VERSION}/candidates/totals/aggregates/?`;
+    url_params.election_year = electionYear;
+    url_params.office = window.context.office_code;
+    for (let n in url_params) {
+      theURL += `${n}=${url_params[n]}&`;
+    }
 
     fetch(
         theURL,
