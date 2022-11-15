@@ -35,4 +35,8 @@ var context = {{ context_vars | to_json | safe }};
 </script>
 <script src="{{ asset_for_js('dataviz-common.js') }}"></script>
 <script src="{{ asset_for_js('elections-overview.js') }}"></script>
+
+<!-- TODO: remove reacton-box.js, just for testing -->
+<script src="{{ asset_for_js('reaction-box.js') }}"></script>
+
 {% endblock %}

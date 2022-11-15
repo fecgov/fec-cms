@@ -7,7 +7,7 @@
  */
 var $ = require('jquery');
 var helpers = require('../modules/helpers');
-var analytics = require('../modules/analytics');
+//var analytics = require('../modules/analytics');
 
 const loadRecaptcha = require('../modules/load-recaptcha').loadRecaptcha;
 
@@ -40,12 +40,12 @@ function ReactionBox(selector) {
 
 ReactionBox.prototype.submitReaction = function(e) {
   this.reaction = $(e.target).data('reaction');
-  analytics.customEvent({
-    eventName: 'fecCustomEvent',
-    eventCategory: 'Reactions',
-    eventAction: this.location + '-' + this.name + ': ' + this.reaction,
-    eventValue: 1
-  });
+  // analytics.customEvent({
+  //   eventName: 'fecCustomEvent',
+  //   eventCategory: 'Reactions',
+  //   eventAction: this.location + '-' + this.name + ': ' + this.reaction,
+  //   eventValue: 1
+  // });
   this.showTextarea();
 };
 
