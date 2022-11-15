@@ -48,7 +48,7 @@
     "jquery.inputmask": "^3.3.4",
     "leaflet-providers": "1.8.0 ",
     "lodash": "^4.17.21",
-    "minimatch": "^3.0.4",
+    "minimatch": "^3.0.5",
     "moment": "2.29.4",
     "numeral": "^1.5.3",
     "perfect-scrollbar": "0.6.2",
