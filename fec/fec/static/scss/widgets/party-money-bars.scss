@@ -131,6 +131,13 @@ $fontWeightBold: 700;
         background: $colorBarDef;
         transition: all 1s;
       }
+      &:before {
+        content: "";
+        display: block;
+        height: 20px;
+        position: absolute;
+        border-right: thin solid $colorBarDef;
+      }
       &[data-party='DEM'] {
         &::-webkit-meter-optimum-value {
           // note#1
@@ -141,6 +148,9 @@ $fontWeightBold: 700;
           // note#1
           background: $colorBarDem;
           transition: all 1s;
+        }
+        &:before {
+          border-right-color: $colorBarDem;
         }
       }
       &[data-party='REP'] {
@@ -153,6 +163,9 @@ $fontWeightBold: 700;
           // note#1
           background: $colorBarRep;
           transition: all 1s;
+        }
+        &:before {
+          border-right-color: $colorBarRep;
         }
       }
     }
