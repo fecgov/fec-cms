@@ -12,7 +12,7 @@ whitenoise==5.2.0
 wagtail==2.15.4
 Jinja2==3.0.0
 django_jinja==2.7.0
-pillow==9.0.1
+pillow==9.2.0
 CacheControl==0.11.5
 cachetools==1.0.2
 github3.py==0.9.6
@@ -47,4 +47,4 @@ flake8==4.0.1
 pytest-django==3.10.0
 pytest-cov==2.11.1
 pytest-flake8==1.0.7
-setuptools==65.1.1 # Pinned to fix the deploy errors caused by the latest setuptool version 65.3.0
+setuptools==65.5.1 # Pinned to fix the deploy errors caused by the latest setuptool version 65.3.0
