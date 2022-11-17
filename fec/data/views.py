@@ -1058,7 +1058,7 @@ def reactionFeedback(request):
             ]
         ):
             # the required fields were not provided, return error.
-            print('*************IF NOT ANY ************************')
+            print('************* if not all data...error ************************')
             return JsonResponse({"status": False}, status=500)
         else:
             # verify recaptcha
