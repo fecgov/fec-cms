@@ -25,6 +25,8 @@ function ReactionBox(selector) {
   this.location = this.$element.data('location');
   this.path = window ? window.location.pathname : null;
   this.url = helpers.buildAppUrl(['issue', 'reaction']);
+  // eslint-disable-next-line no-console
+  console.log('this.url', this.url);
 
   this.$element.on('click', '.js-reaction', this.submitReaction.bind(this));
   this.$element.on('click', '.js-reset', this.handleReset.bind(this));
@@ -55,6 +57,8 @@ ReactionBox.prototype.submitReaction = function(e) {
 ReactionBox.prototype.showTextarea = function() {
   this.$step1.attr('aria-hidden', true);
   this.$step2.attr('aria-hidden', false);
+  // eslint-disable-next-line no-console
+  console.log('this.url', this.url);
 
   var labelMap = {
     informative: 'Great! \n What did you learn?',
@@ -77,6 +81,8 @@ ReactionBox.prototype.handleSubmit = function(token) {
   $.ajaxSetup({
     beforeSend: function(xhr, settings) {
       if (!(/^http:.*/.test(settings.url) || /^https:.*/.test(settings.url))) {
+        // eslint-disable-next-line no-console
+        console.log('URL:', settings.url);
         // Only send the token to relative URLs i.e. locally.
         xhr.setRequestHeader(
           'X-CSRFToken',
@@ -159,4 +165,3 @@ $(document).ready(function() {
   });
 });
 
-new ReactionBox();

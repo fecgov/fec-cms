@@ -1048,7 +1048,7 @@ def reactionFeedback(request):
         # '{"param":"value"}'. Needs to be decoded in Python 3
         data = json.loads(request.body.decode("utf-8"))
 
-        if not all(
+        if not any(
             [
                 data["name"],
                 data["location"],
@@ -1058,6 +1058,7 @@ def reactionFeedback(request):
             ]
         ):
             # the required fields were not provided, return error.
+            print('*************IF NOT ANY ************************')
             return JsonResponse({"status": False}, status=500)
         else:
             # verify recaptcha
@@ -1071,6 +1072,7 @@ def reactionFeedback(request):
             recaptchaResponse = verifyRecaptcha.json()
             if not recaptchaResponse["success"]:
                 # if captcha failed, return failure
+                print('************* recaptcha error  ************************')
                 return JsonResponse({"status": False}, status=500)
             else:
                 # captcha passed, we're ready to submit the issue.
