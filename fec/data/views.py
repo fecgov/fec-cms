@@ -1048,7 +1048,7 @@ def reactionFeedback(request):
         # '{"param":"value"}'. Needs to be decoded in Python 3
         data = json.loads(request.body.decode("utf-8"))
 
-        if not any(
+        if not all(
             [
                 data["name"],
                 data["location"],
