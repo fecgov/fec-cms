@@ -3,16 +3,9 @@
 {% import 'macros/disclaimer.jinja' as disclaimer %}
 {% import 'macros/cycle-select.jinja' as select %}
 
-<section id="section-election-summary" role="tabpanel" aria-hidden="true" aria-labelledby="election-summary-heading">
-  <h2 id="election-summary-heading">{{ office | title }} election overview</h2>
-</section>
-
-<section id="section-contribs-over-time" role="tabpanel" aria-hidden="true" aria-labelledby="contribs-over-time-heading">
-  <h2 id="contribs-over-time-heading">{{ office | title }} election data</h2>
-  <div class="slab slab--inline slab--neutral u-padding--left u-padding--right">
-
-  {% if FEATURES.house_senate_overview_totals %}     
-    <div id="totals-for-all-elections" class="entity__figure row">
+<section id="totals" class="option">
+  {# <div class="slab slab--inline slab--neutral u-padding--left u-padding--right">  #}
+    <div id="">
       <h2 class="heading__left">Totals for all {{ office | title }} elections</h2>
       <p class="t-sans t-low-height">Comparing the money raised, spent, cash on hand and debts by {{ office | title }} election</p>
       {{ select.two_year_select(cycles, cycle, id="all-elections-totals") }}
@@ -59,6 +52,5 @@
         </div>
       </div>
     </div>
-  {% endif %}
-</div>
+  {# </div> #}
 </section>

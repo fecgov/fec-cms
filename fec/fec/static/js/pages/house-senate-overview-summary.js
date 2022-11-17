@@ -7,7 +7,7 @@ import { PartyMoneyBars } from '../modules/party-money-bars';
  * @class
  * @property {HTMLInputElement} cycleSelector - the <input>
  */
-function HSOverviewSummaryTab() {
+function HSOverviewSummary() {
   this.tabPanel = document.querySelector('#election-summary');
   this.cycleSelector = document.querySelector('#election-summary .js-period-select');
 
@@ -18,10 +18,10 @@ function HSOverviewSummaryTab() {
 /**
  * Gets this instance built and working
  */
-HSOverviewSummaryTab.prototype.init = function() {
+HSOverviewSummary.prototype.init = function() {
   this.cycleSelector.addEventListener('change', this.handleCycleChange.bind(this));
 
-  const theFigures = document.querySelectorAll('#section-election-summary figure');
+  const theFigures = document.querySelectorAll('#election-summary figure');
   theFigures.forEach(el => {
     // const elId = el.id;
     new PartyMoneyBars(
@@ -40,7 +40,7 @@ HSOverviewSummaryTab.prototype.init = function() {
  * Takes an election year, deactivates cycleSelect, and starts the data load
  * @param {number|string} electionYear - Which election year / cycle to load
  */
- HSOverviewSummaryTab.prototype.startLoadingData = function(electionYear) {
+ HSOverviewSummary.prototype.startLoadingData = function(electionYear) {
   // Only do anything if electionYear is an year between 1970 and 2050
   if (parseInt(electionYear) && electionYear >= 1970 && electionYear <= 2050 && electionYear % 2 === 0) {
     this.deactivateInput();
@@ -84,7 +84,7 @@ HSOverviewSummaryTab.prototype.init = function() {
 /**
  * Removes functionality from the input/select assigned to this.cycleSelector
  */
-HSOverviewSummaryTab.prototype.deactivateInput = function () {
+HSOverviewSummary.prototype.deactivateInput = function () {
   this.cycleSelector.setAttribute('aria-disabled', 'true');
   this.cycleSelector.setAttribute('disabled', 'true');
 };
@@ -92,7 +92,7 @@ HSOverviewSummaryTab.prototype.deactivateInput = function () {
 /**
  * Restores functionality from the input/select assigned to this.cycleSelector
  */
-HSOverviewSummaryTab.prototype.reactivateInput = function () {
+HSOverviewSummary.prototype.reactivateInput = function () {
   this.cycleSelector.removeAttribute('aria-disabled');
   this.cycleSelector.removeAttribute('disabled');
 };
@@ -102,7 +102,7 @@ HSOverviewSummaryTab.prototype.reactivateInput = function () {
  * @param {Event} e - Change event
  * @param {number} e.target.value - A valid 4-digit integer for an even/election year
  */
-HSOverviewSummaryTab.prototype.handleCycleChange = function (e) {
+HSOverviewSummary.prototype.handleCycleChange = function (e) {
   this.startLoadingData(e.target.value);
 };
 
@@ -111,7 +111,7 @@ HSOverviewSummaryTab.prototype.handleCycleChange = function (e) {
  * (Takes [{dem numbers}, {rep numbers}, {other numbers}] and converts to [{receipts: {total, dem numbers, rep numbers, other numbers}}])
  * @param {object} results - response.results from the api
  */
-HSOverviewSummaryTab.prototype.handleDataLoaded = function(results) {
+HSOverviewSummary.prototype.handleDataLoaded = function(results) {
   const usefulResults = {
     total_cash_on_hand_end_period: { total: 0, DEM: 0, REP: 0, Other: 0 },
     total_debts_owed_by_committee: { total: 0, DEM: 0, REP: 0, Other: 0 },
@@ -153,7 +153,7 @@ HSOverviewSummaryTab.prototype.handleDataLoaded = function(results) {
  * Now let's wait for the page to load and start making elements work
  */
 window.addEventListener('load', () => {
-  new HSOverviewSummaryTab();
+  new HSOverviewSummary();
 });
 
-module.exports = { HSOverviewSummaryTab };
+module.exports = { HSOverviewSummary };
