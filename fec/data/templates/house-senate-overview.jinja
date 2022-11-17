@@ -1,7 +1,6 @@
 {% extends 'layouts/main.jinja' %}
 {% import 'macros/page-header.jinja' as header %}
 
-
 {{ cycle }} Election - US {{ office|title }} {% if state %} - {{ state|fmt_state_full }} {% if district %} - District {{ district }} {% endif %} {% endif %}
 
 {% block title %}U.S. {{ office|title }} elections {% endblock %}
@@ -14,44 +13,43 @@
 
 {% block body %}
   {{ header.header(title, crumb) }}
-  <div class="u-padding--left u-padding--right tab-interface">
-    <header class="main">
+  <div class="u-padding--left u-padding--right">
+    <header class="container main">
       <div class="heading--section">
         <h1>U.S. {{ office|title }} elections</h1>
       </div>
     </header>
-    <div class="data-container__wrapper">
-      <nav class="sidebar side-nav-alt">
-        <ul class="tablist" role="tablist" data-name="tab">
-          <li role="presentation">
-            <a class="side-nav__link" role="tab" tabindex="0"
-            data-name="election-summary" href="#section-election-summary" aria-controls="panel1"
-            >Election summary</a>
-          </li>
-          <li role="presentation">
-            <a class="side-nav__link" role="tab" tabindex="0"
-            data-name="election-data" href="#section-contribs-over-time" aria-controls="panel2"
-            >{{ office|title }} candidate contributions over time</a>
-          </li>
-          {% if FEATURES.house_senate_overview_totals %}  
-          <li role="presentation">
-            <a class="side-nav__link" role="tab" tabindex="0"
-            data-name="" href="#totals-for-all-elections" aria-controls=""
-            >Totals for all {{ office | title }} elections</a></li>
-          {% endif %}
-          </li>
-        </ul>
-        {% if office == "house" %}
-          {% set other_office = "senate"%}
-        {% elif office == "senate" %}
-          {% set other_office = "house"%}
-        {% endif %}
-        <a class="button button--cta u-margin--top t-left-aligned button--disbursements u-full-width" href="/data/elections/{{ other_office }}">Explore U.S. {{ other_office|title }} charts</a>
-      </nav>
-      <div class="main__content--right-full">
-        {% include 'partials/house-senate-overview/tabpanel-summary.jinja' %}
-        {% include 'partials/house-senate-overview/tabpanel-contributions-across-time.jinja' %}
-        {% include 'partials/house-senate-overview/tabpanel-totals-for-all-elections.jinja' %}
+
+    <div id="options" class="container main">
+      <div class="sidebar-container sidebar-container--left">
+        <div class="js-sticky-side" data-sticky-container="options">
+          <nav class="sidebar sidebar--neutral side-nav js-toc">
+            <ul class="sidebar__content">
+              <li role="side-nav__item">
+                <a class="side-nav__link" href="#summary">Election summary</a>
+              </li>
+              <li role="side-nav__item">
+                <a class="side-nav__link" href="#contributions-over-time">{{ office|title }} candidate contributions over time</a>
+              </li>
+              {% if FEATURES.house_senate_overview_totals %}  
+              <li role="side-nav__item">
+                <a class="side-nav__link" href="#totals">Totals for all {{ office | title }} elections</a></li>
+              </li>
+              {% endif %}
+            </ul>
+            {% if office == "house" %}
+              {% set other_office = "senate"%}
+            {% elif office == "senate" %}
+              {% set other_office = "house"%}
+            {% endif %}
+          </nav>
+          <a class="button button--cta u-margin--top t-left-aligned button--disbursements u-full-width" href="/data/elections/{{ other_office }}">Explore U.S. {{ other_office|title }} charts</a>
+        </div>
+      </div>
+      <div class="main__content--right">
+        {% include 'partials/house-senate-overview/section-summary.jinja' %}
+        {% include 'partials/house-senate-overview/section-contributions-across-time.jinja' %}
+        {% if FEATURES.house_senate_overview_totals %}{% include 'partials/house-senate-overview/section-totals-for-all-elections.jinja' %}{% endif %}
       </div>
     </div>
   </div>
