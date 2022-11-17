@@ -9,7 +9,7 @@
   // Ex: at 430 pixels, the small class is applied.
 const breakpoints = [
   { widths: { minPx: 0, maxPx: 429 }, classname: 'cq-xs' },
-  { widths: { mminPxn: 430, maxPx: 674 }, classname: 'cq-s' },
+  { widths: { minPx: 430, maxPx: 674 }, classname: 'cq-s' },
   { widths: { minPx: 675, maxPx: 899 }, classname: 'cq-m' },
   { widths: { minPx: 900, maxPx: 1199 }, classname: 'cq-l' },
   { widths: { minPx: 1200, maxPx: 9999 }, classname: 'cq-xl' }
@@ -61,7 +61,7 @@ FECContainerQuery.prototype.handleResize = function() {
     for (let i = 0; i < breakpoints.length; i++) {
       if (parentWidth >= breakpoints[i].widths.minPx && parentWidth <= breakpoints[i].widths.maxPx ) {
         child.classList.add(breakpoints[i].classname);
-        break;
+        return;
       }
     }
   });
