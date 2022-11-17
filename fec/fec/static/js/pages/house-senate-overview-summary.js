@@ -1,6 +1,7 @@
 //
 
 import { PartyMoneyBars } from '../modules/party-money-bars';
+import { FECContainerQuery } from '../modules/container-queries';
 
 /**
  * Runs the Summary tab at /data/elections/house/ and /data/elections/senate/
@@ -34,6 +35,8 @@ HSOverviewSummary.prototype.init = function() {
       }
     );
   });
+
+  new FECContainerQuery('#election-summary', '#summary');
 };
 
 /**

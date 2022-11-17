@@ -130,3 +130,22 @@ meter:-moz-meter-optimum::-moz-meter-bar {
       width: auto !important;
     }
 }
+
+#election-summary {
+  &.cq-xs {
+    .cycle-select {
+      width: auto;
+    }
+    .grid--flex .grid__item {
+      width: 100%;
+    }
+  }
+  &.cq-s {
+    .cycle-select {
+      width: auto;
+    }
+    .grid--flex .grid__item {
+      width: 100%;
+    }
+  }
+}
