@@ -16,6 +16,7 @@ $fontWeightBold: 700;
 
 // The party money bars root selector
 .js-party-money-bars {
+  min-width: 20rem;
   &,
   & * {
     // THESE ARE PASSED DOWN TO CHILDREN
