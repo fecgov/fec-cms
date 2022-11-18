@@ -158,5 +158,3 @@ $(document).ready(function() {
     };
   });
 });
-
-new ReactionBox();
