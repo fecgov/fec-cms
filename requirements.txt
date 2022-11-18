@@ -12,7 +12,7 @@ whitenoise==5.2.0
 wagtail==2.15.4
 Jinja2==3.0.0
 django_jinja==2.7.0
-pillow==9.0.1
+pillow==9.2.0
 CacheControl==0.11.5
 cachetools==1.0.2
 github3.py==0.9.6
