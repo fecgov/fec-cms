@@ -104,10 +104,10 @@
     <div class="results-info">
       <span>Page {{ updates.number }} of {{ updates.paginator.num_pages }}</span>
       {% if updates.has_previous %}
-          <a class="button button--standard button--previous" href="?page={{ updates.previous_page_number }}{% for key,value in request.GET.items %}{% ifnotequal key 'page' %}&amp;{{ key }}={{ value }}{% endifnotequal %}{% endfor %}"><span class="u-visually-hidden">Previous</span></a>
+          <a class="button button--standard button--previous" href="?page={{ updates.previous_page_number }}{% for key,value in request.GET.items %}{% if key != 'page' %}&amp;{{ key }}={{ value }}{% endif %}{% endfor %}"><span class="u-visually-hidden">Previous</span></a>
       {% endif %}
       {% if updates.has_next %}
-          <a class="button button--standard button--next" href="?page={{ updates.next_page_number }}{% for key,value in request.GET.items %}{% ifnotequal key 'page' %}&amp;{{ key }}={{ value }}{% endifnotequal %}{% endfor %}"><span class="u-visually-hidden">Next</span></a>
+          <a class="button button--standard button--next" href="?page={{ updates.next_page_number }}{% for key,value in request.GET.items %}{% if key != 'page' %}&amp;{{ key }}={{ value }}{% endif %}{% endfor %}"><span class="u-visually-hidden">Next</span></a>
       {% endif %}
     </div>
   {% else %}
