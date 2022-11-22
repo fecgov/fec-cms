@@ -1036,7 +1036,7 @@ def feedback(request):
                     title, body=body
                 )
 
-                return JsonResponse(issue.to_json(), status=201)
+                return JsonResponse(issue.as_dict(), status=201)
     else:
         raise Http404()
 
@@ -1095,6 +1095,6 @@ def reactionFeedback(request):
                     title, body=body
                 )
 
-                return JsonResponse(issue.to_json(), status=201)
+                return JsonResponse(issue.as_dict(), status=201)
     else:
         raise Http404()

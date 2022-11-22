@@ -127,7 +127,7 @@ ReactionBox.prototype.handleReset = function() {
 
 /**
  * To implement a reaction box:
- * Add a reaction-box jinja macro to a template
+ * Add a reaction-box jinja macro to a template (use quoted strings for the name and location positional arguments)
  * Include a reference to this JS file in the parent template(preferably in extra JS block)
  * (The below function will use the name/location values of any
  *  reaction box on the page to initiate it as a new ReactionBox())
@@ -158,5 +158,3 @@ $(document).ready(function() {
     };
   });
 });
-
-new ReactionBox();
