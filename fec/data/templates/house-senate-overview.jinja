@@ -25,14 +25,14 @@
         <div class="js-sticky-side" data-sticky-container="options">
           <nav class="sidebar sidebar--neutral side-nav js-toc">
             <ul class="sidebar__content">
-              <li role="side-nav__item">
+              <li class="side-nav__item">
                 <a class="side-nav__link" href="#summary">Election summary</a>
               </li>
-              <li role="side-nav__item">
+              <li class="side-nav__item">
                 <a class="side-nav__link" href="#contributions-over-time">{{ office|title }} candidate contributions over time</a>
               </li>
               {% if FEATURES.house_senate_overview_totals %}  
-              <li role="side-nav__item">
+              <li class="side-nav__item">
                 <a class="side-nav__link" href="#totals">Totals for all {{ office | title }} elections</a></li>
               </li>
               {% endif %}
@@ -43,7 +43,7 @@
               {% set other_office = "house"%}
             {% endif %}
           </nav>
-          <a class="button button--cta u-margin--top t-left-aligned button--disbursements u-full-width" href="/data/elections/{{ other_office }}">Explore U.S. {{ other_office|title }} charts</a>
+          <a class="button button--cta u-margin--top t-left-aligned button--disbursements u-full-width" href="/data/elections/{{ other_office }}">Explore U.S. {{ other_office|title }} election data</a>
         </div>
       </div>
       <div class="main__content--right">

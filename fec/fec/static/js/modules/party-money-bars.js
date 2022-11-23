@@ -143,10 +143,10 @@ const partiesHolderTemplate = `<div class="js-parties-holder" role="grid"></div>
  */
 const meterRowTemplate = `
         <div class="js-meter-row" role="row">
-          <label for="" role="cell" class=" js-party-title">Rep.</label>
+          <label for="" role="cell" class=" js-party-title"></label>
           <label for="" role="cell" class=" js-party-value t-mono-stacked-currency">$0</label>
           <div>
-            <meter id="" min="0" max="0" value="0" title="" data-party="REP"></meter>
+            <meter id="" min="0" max="0" value="0" title="" data-party=""></meter>
           </div>
         </div>`;
 

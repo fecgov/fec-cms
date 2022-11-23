@@ -7,14 +7,14 @@
           <h2>Election summary</h2>
           <div id="election-summary">
             {# <h2 class="heading__left">{{ office | title }} election summary</h2> #}
-            <p class="t-sans t-low-height">Comparing total money raised, spent and remaining cash on hand, by party.</p>
+            <p class="t-sans t-low-height">Comparing total money raised, spent and cash on hand, by party.</p>
             {{ select.two_year_select(cycles, cycle, id="cycle-summary") }}
             <div class="grid--flex grid--3-wide">
               <div class="grid__item">
                 <figure class="js-party-money-bars" id="summary-total-raised" data-event-field-id="total_receipts">
                   <div class="total-wrapper">
                     <h1 class="value js-value-large">$1,234,567,890</h1>
-                    <h2 class="description js-value-large-desc">raised by {{ office | title }} candidates</h2>
+                    <h2 class="description js-value-large-desc">raised by candidates</h2>
                   </div>
                   <div class="visual-divider" role="presentation"></div>
                   <div class="parties-wrapper"></div>
@@ -24,7 +24,7 @@
                 <figure class="js-party-money-bars" id="summary-total-spent" data-event-field-id="total_disbursements">
                   <div class="total-wrapper">
                     <h1 class="value js-value-large">$1,234,567,890</h1>
-                    <h2 class="description js-value-large-desc">spent by {{ office | title }} candidates</h2>
+                    <h2 class="description js-value-large-desc">spent by candidates</h2>
                   </div>
                   <div class="visual-divider" role="presentation"></div>
                   <div class="parties-wrapper"></div>
@@ -34,7 +34,7 @@
                 <figure class="js-party-money-bars" id="summary-remaining-coh" data-event-field-id="total_cash_on_hand_end_period">
                   <div class="total-wrapper">
                     <h1 class="value js-value-large">$1,234,567,890</h1>
-                    <h2 class="description js-value-large-desc">cash on hand for {{ office | title }} candidates</h2>
+                    <h2 class="description js-value-large-desc">cash on hand for candidates</h2>
                   </div>
                   <div class="visual-divider" role="presentation"></div>
                   <div class="parties-wrapper"></div>
@@ -44,7 +44,7 @@
 
 
 
-            <div class="content__section--ruled-responsive t-serif">
+            <div class="content__section--ruled-responsive methodology-block t-serif">
               <div class="heading--with-action t-small t-serif">
                 <i class="data-disclaimer">Newly filed summary data may not appear for up to 48 hours.</i>
                 <div class="heading__right">
