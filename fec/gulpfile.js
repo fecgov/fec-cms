@@ -7,7 +7,8 @@ const consolidate = require('gulp-consolidate');
 const rename = require('gulp-rename');
 const svgmin = require('gulp-svgmin');
 const urlencode = require('gulp-css-urlencode-inline-svgs');
-const sass = require('gulp-sass');
+// default to use sass compiler
+const sass = require('gulp-sass')(require('sass')); 
 // minifies css
 const cleanCSS = require('gulp-clean-css');
 // Clears contents of directory

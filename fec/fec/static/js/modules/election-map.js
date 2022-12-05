@@ -1,7 +1,7 @@
 'use strict';
 
 var _ = require('underscore');
-var topojson = require('topojson');
+var topojson = require('topojson-client');
 var colorbrewer = require('colorbrewer');
 var utils = require('./election-utils');
 var states = require('../data/us-states-10m.json');
