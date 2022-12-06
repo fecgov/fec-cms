@@ -68,8 +68,8 @@ FEATURES = {
     'presidential_map': bool(env.get_credential('FEC_FEATURE_PRESIDENTIAL_MAP', '')),
     'house_senate_overview': bool(env.get_credential('FEC_FEATURE_HOUSE_SENATE_OVERVIEW', '')),
     'house_senate_overview_methodology': bool(env.get_credential('FEC_FEATURE_HOUSE_SENATE_OVERVIEW_METHODOLOGY', '')),
+    'house_senate_overview_summary': bool(env.get_credential('FEC_FEATURE_HOUSE_SENATE_OVERVIEW_SUMMARY', '')),
     'house_senate_overview_totals': bool(env.get_credential('FEC_FEATURE_HOUSE_SENATE_OVERVIEW_TOTALS', '')),
-
 }
 
 # Set feature flags to True for local
@@ -86,6 +86,7 @@ if FEC_CMS_ENVIRONMENT == ENVIRONMENTS['local']:
     FEATURES['presidential_map'] = True
     FEATURES['house_senate_overview'] = True
     FEATURES['house_senate_overview_methodology'] = True
+    FEATURES['house_senate_overview_summary'] = True
     FEATURES['house_senate_overview_totals'] = True
 
 # Application definition

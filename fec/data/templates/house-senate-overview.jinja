@@ -25,9 +25,11 @@
         <div class="js-sticky-side" data-sticky-container="options">
           <nav class="sidebar sidebar--neutral side-nav js-toc">
             <ul class="sidebar__content">
+              {% if FEATURES.house_senate_overview_summary %} 
               <li class="side-nav__item">
                 <a class="side-nav__link" href="#summary">Election summary</a>
               </li>
+              {% endif %}
               <li class="side-nav__item">
                 <a class="side-nav__link" href="#contributions-over-time">{{ office|title }} candidate contributions over time</a>
               </li>
@@ -47,7 +49,7 @@
         </div>
       </div>
       <div class="main__content--right">
-        {% include 'partials/house-senate-overview/section-summary.jinja' %}
+        {% if FEATURES.house_senate_overview_summary %}{% include 'partials/house-senate-overview/section-summary.jinja' %}{% endif %}
         {% include 'partials/house-senate-overview/section-contributions-across-time.jinja' %}
         {% if FEATURES.house_senate_overview_totals %}{% include 'partials/house-senate-overview/section-totals-for-all-elections.jinja' %}{% endif %}
       </div>
