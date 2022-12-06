@@ -1,0 +1,72 @@
+{# used inside fec/data/templates/house-senate-overview.jinja #}
+{% import 'macros/null.jinja' as null %}
+{% import 'macros/disclaimer.jinja' as disclaimer %}
+{% import 'macros/cycle-select.jinja' as select %}
+
+        <section id="summary" class="option">
+          <h2>Election summary</h2>
+          <div id="election-summary">
+            {# <h2 class="heading__left">{{ office | title }} election summary</h2> #}
+            <p class="t-sans t-low-height">Comparing total money raised, spent and cash on hand, by party.</p>
+            {{ select.two_year_select(cycles, cycle, id="cycle-summary") }}
+            <div class="grid--flex grid--3-wide">
+              <div class="grid__item">
+                <figure class="js-party-money-bars" id="summary-total-raised" data-event-field-id="total_receipts">
+                  <div class="total-wrapper">
+                    <h1 class="value js-value-large">$1,234,567,890</h1>
+                    <h2 class="description js-value-large-desc">raised by candidates</h2>
+                  </div>
+                  <div class="visual-divider" role="presentation"></div>
+                  <div class="parties-wrapper"></div>
+                </figure>
+              </div>
+              <div class="grid__item">
+                <figure class="js-party-money-bars" id="summary-total-spent" data-event-field-id="total_disbursements">
+                  <div class="total-wrapper">
+                    <h1 class="value js-value-large">$1,234,567,890</h1>
+                    <h2 class="description js-value-large-desc">spent by candidates</h2>
+                  </div>
+                  <div class="visual-divider" role="presentation"></div>
+                  <div class="parties-wrapper"></div>
+                </figure>
+              </div>
+              <div class="grid__item">
+                <figure class="js-party-money-bars" id="summary-remaining-coh" data-event-field-id="total_cash_on_hand_end_period">
+                  <div class="total-wrapper">
+                    <h1 class="value js-value-large">$1,234,567,890</h1>
+                    <h2 class="description js-value-large-desc">cash on hand for candidates</h2>
+                  </div>
+                  <div class="visual-divider" role="presentation"></div>
+                  <div class="parties-wrapper"></div>
+                </figure>
+              </div>
+            </div>
+
+
+
+            <div class="content__section--ruled-responsive methodology-block t-serif">
+              <div class="heading--with-action t-small t-serif">
+                <i class="data-disclaimer">Newly filed summary data may not appear for up to 48 hours.</i>
+                <div class="heading__right">
+                  <a class="button button--alt js-ga-event" data-a11y-dialog-show="election-summary-modal" data-ga-event="Election summary methodology modal clicked" aria-controls="election-summary-modal">Methodology</a>
+                </div>
+              </div>
+              <div class="js-modal modal" id="election-summary-modal" aria-hidden="true">
+                <div tabindex="-1" class="modal__overlay" data-a11y-dialog-hide=""></div>
+                <div role="dialog" class="modal__content" aria-labelledby="election-summary-modal-title">
+                  <div role="document">
+                    <button type="button" class="modal__close button--close--primary" data-a11y-dialog-hide="" title="Close this dialog window"></button>
+                    <h2>Methodology</h2>
+                    <p>The totals presented in this chart are the sum of receipts, disbursements and cash on hand disclosed by authorized candidate committees (<a href="https://www.fec.gov/documents/124/fecfrm3.pdf">Form 3</a> Report of Receipts and Disbursements) for the selected two-year period. For the current two-year period, the totals are the sum of receipts, disbursements and cash on hand disclosed by authorized candidate committees through the most recent report. It displays overall totals for the U.S. {{ office | title }} office and is further broken down by party.</p>
+                    <p>Each total is calculated as follows:</p>
+                    <ul class="list--bulleted">
+                      <li>Total raised by all authorized candidate committees is the sum of total receipts of each reporting period disclosed by each authorized candidate committee (Form 3, Line 16, Column A).</li>
+                      <li>Total spent by all authorized candidate committees is the sum of total disbursements of each reporting period disclosed by each authorized candidate committee (Form 3, Line 22, Column A).</li>
+                      <li>Total cash on hand of all authorized candidate committees is the sum of cash on hand disclosed by each committee on their last report of the selected two-year period (Form 3, Line 8).</li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>

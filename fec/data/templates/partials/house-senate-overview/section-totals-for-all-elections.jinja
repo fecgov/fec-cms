@@ -1,0 +1,56 @@
+{# used inside fec/data/templates/house-senate-overview.jinja #}
+{% import 'macros/null.jinja' as null %}
+{% import 'macros/disclaimer.jinja' as disclaimer %}
+{% import 'macros/cycle-select.jinja' as select %}
+
+<section id="totals" class="option">
+  {# <div class="slab slab--inline slab--neutral u-padding--left u-padding--right">  #}
+    <div id="">
+      <h2 class="heading__left">Totals for all {{ office | title }} elections</h2>
+      <p class="t-sans t-low-height">Comparing the money raised, spent, cash on hand and debts by {{ office | title }} election</p>
+      {{ select.two_year_select(cycles, cycle, id="all-elections-totals") }}
+      <table id="election-totals-results"
+        class="data-table data-table--heading-borders scrollX simple-table u-no-border"
+        data-type="totals-for-all-elections"
+        >
+        <thead>
+          <th role="col">State</th>
+          <th role="col">Receipts</th>
+          <th role="col">Disbursements</th>
+          <th role="col">Cash on hand</th>
+          <th role="col">Debts</th>
+        </thead>
+      </table>
+      <div class="content__section methodology-block u-margin--top t-serif">
+        <div class="row">
+          <ul class="list--buttons u-float-right">
+            <li><a class="button button--alt js-ga-event" data-a11y-dialog-show="totals-for-all-elections-modal" data-ga-event="Totals for all elections methodology modal clicked" aria-controls="totals-for-all-elections-modal">Methodology</a></li>
+          </ul>
+          <p class="u-no-margin"><i class="data-disclaimer">Each two-year period includes financial activity from January 1 of the nonelection year through December 31 of the election year. Newly filed summary data may not appear for up to 48 hours.</i></p>
+        </div>
+        <div class="js-modal modal" id="totals-for-all-elections-modal" aria-hidden="true">
+          <div tabindex="-1" class="modal__overlay" data-a11y-dialog-hide=""></div>
+          <div role="dialog" class="modal__content" aria-labelledby="totals-for-all-elections-modal-title">
+            <div role="document">
+              <button type="button" class="modal__close button--close--primary" data-a11y-dialog-hide="" title="Close this dialog window"></button>
+              <h2>Methodology Overview</h2>
+              <p>The totals presented in the table are calculated using a two-step process. In step one, financial data reported within a two-year period are aggregated by candidate campaign committees creating totals by candidate by two-year period. In step two, 
+              candidates are grouped by state and two-year period creating totals by state and two-year period. Financial summary data are available from 1979 to present.</p>
+              <h3>Candidate campaign committee aggregation</h3>
+              <p>Candidate campaign committee totals are calculated from data submitted by principal campaign and authorized committees on <a href="https://www.fec.gov/resources/cms-content/documents/fecfrm3.pdf">Form 3</a> (Report of Receipts and Disbursements). These totals do not include data from Form 6 (48-Hour Notice of Contributions/Loans Received) or Form 3L (Report of Contributions Bundled by Lobbyists/Registrants and Lobbyist/Registrant PACs).</p>
+              <p>For each candidate during a two-year period, the candidate's totals are calculated as:</p>
+              <ul class="list--bulleted">
+                <li>Receipts: Sum of total receipts (Form 3, Line 16) of all reports filed by the committee of that two-year period.</li>
+                <li>Disbursements: Sum of total disbursements (Form 3, Line 22) of all reports filed by the committee of that two-year period.</li>
+                <li>Cash on hand: Ending cash on hand (Form 3, Line 8) reported on last filing decided by coverage end date for each two-year period.</li>
+                <li>Debt: Debt owed by committee (Form 3, Line 10) on last filing decided by coverage end date for each two-year period.</li>
+              </ul>
+              <h3>State aggregation</h3>
+              <p>State totals are calculated from the candidate campaign committee aggregations previously described. Candidates are grouped by two-year period and state, then the financial data are summed producing totals for receipts, disbursements, cash on hand and debt.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  {# </div> #}
+</section>
