@@ -826,6 +826,8 @@ def elections_president(request, cycle):
 
     cycles = [each for each in cycles if each % 4 == 0]
 
+    election_duration = election_durations.get(office[0].upper(), 2)
+
     tab = request.GET.get("tab", "").replace("/", "")
     legacy_tabs = {
         "contributions": "#individual-contributions",
@@ -846,6 +848,7 @@ def elections_president(request, cycle):
             "office_code": office[0],
             "parent": "data",
             "cycle": cycle,
+            "election_duration": election_duration,
             "cycles": cycles,
             "title": utils.election_title(cycle, office),
             "social_image_identifier": "data",
