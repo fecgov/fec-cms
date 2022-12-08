@@ -1,0 +1,7 @@
+{% load wagtailcore_tags %}
+{% load filters %}
+{% load static %}
+{% load reaction_feedback %}
+
+{% reaction_box page.content_type.model page.id %}
+

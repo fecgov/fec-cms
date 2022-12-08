@@ -1,5 +1,8 @@
-{% macro reaction_box(title, name, location) %}
-  <div class="reaction-box js-reaction-box" data-name="{{ name }}" data-location="{{ location }}">
+{% load wagtailcore_tags %}
+PAGE:{{ template }}
+PID:{{ pid }}
+
+<div class="reaction-box js-reaction-box" data-name="fees-section" data-location="{{ location }}">
     <form>
       <div class="js-reaction-step-1">
         <span class="reaction-box__heading">{{ title }}</span>
@@ -20,13 +23,14 @@
       </div>
       <div class="js-reaction-step-2 u-fade-in" aria-hidden="true">
         <span class="reaction-box__heading">{{ title }}</span>
-        <p><label for="reaction-more-{{ name }}"></label></p>
-        <textarea id="reaction-more-{{ name }}"></textarea>
+        <p><label for="reaction-more-fees-section"></label></p>
+        <textarea id="reaction-more-fees-section"></textarea>
         <ul class="list--buttons">
-          <li><button data-sitekey="6Lc0uGwUAAAAALGRGXt3mTteJeb_lbse2frNdWjv" data-callback="submitReaction{{ name }}" class="g-recaptcha button--standard js-skip" data-badge="bottomleft">Skip</button></li>
-          <li><button data-sitekey="6Lc0uGwUAAAAALGRGXt3mTteJeb_lbse2frNdWjv" data-callback="submitReaction{{ name }}" class="g-recaptcha button--cta" data-badge="bottomleft">Submit</button></li>
+          <li><button data-sitekey="6Lc0uGwUAAAAALGRGXt3mTteJeb_lbse2frNdWjv" data-callback="submitReactionfees-section" class="g-recaptcha button--standard js-skip" data-badge="bottomleft">Skip</button></li>
+          <li><button data-sitekey="6Lc0uGwUAAAAALGRGXt3mTteJeb_lbse2frNdWjv" data-callback="submitReactionfees-section" class="g-recaptcha button--cta" data-badge="bottomleft">Submit</button></li>
       </div>
-    </form>
+    </form
+    >
     <div class="message message--success message--inverse-alt message--small js-reaction-success u-fade-in" aria-hidden="true">
       Thanks for helping us improve!
     </div>
@@ -35,4 +39,4 @@
       <button type="button" class="js-reset button--cta">Start over</button>
     </div>
   </div>
-{% endmacro %}
+  

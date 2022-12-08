@@ -1,5 +1,6 @@
 {% extends "long_page.html" %}
 {% load wagtailcore_tags %}
+{% load filters %}
 {% load static %}
 {% block body_class %}template-{{ self.get_verbose_name | slugify }}{% endblock %}
 
@@ -96,4 +97,8 @@
     {% endwith %}
   {% endfor %}
 </div>
+{% endblock %}
+{% block extra_js %}
+  <script> window.BASE_PATH = '/data' </script>
+
 {% endblock %}

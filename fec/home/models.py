@@ -33,7 +33,7 @@ from home.blocks import (
     DocumentFeedBlurb, ExampleForms, ExampleImage, ExampleParagraph,
     ExternalButtonBlock, InternalButtonBlock, LinkBlock, OptionBlock,
     ReportingExampleCards, ResourceBlock, SnippetChooserBlock,
-    ThumbnailBlock, FeedDocumentBlock
+    ThumbnailBlock, FeedDocumentBlock, ReactionFeedback
 )
 
 logger = logging.getLogger(__name__)
@@ -606,6 +606,7 @@ class CustomPage(Page):
         ('contact_info', ContactInfoBlock()),
         ('internal_button', InternalButtonBlock()),
         ('external_button', ExternalButtonBlock()),
+        ('reaction_feedback', ReactionFeedback()),
         ('contribution_limits_table', SnippetChooserBlock(
             'home.EmbedSnippet',
             template='blocks/embed-table.html', icon='table')),

@@ -20,9 +20,9 @@
         {% for block in self.body %}
         <div class="block-{{ block.block_type }}">
           {% if block.block_type == 'paragraph' %}
-          <div class="rich-text">{{ block }}</div>
+          <div class="rich-text">{% include_block block %}</div>
           {% else %}
-          {{ block }}
+          {% include_block block %}
           {% endif %}
         </div>
         {% endfor %}
@@ -129,5 +129,6 @@
 {% block extra_js %}
 {% if self.conditional_js %}
 <script type="text/javascript" src="{% asset_for_js self.get_conditional_js_display %}"></script>
+ <script> window.BASE_PATH = '/data' </script>
 {% endif %}
 {% endblock %}
