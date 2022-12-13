@@ -1,0 +1,415 @@
+$colorBgDark: #112e51;
+$colorBgLight: #fff;
+$colorElementBordersOnLight: #aeb0b5;
+$colorTextOnDark: #fff;
+$colorTextOnLight: #212121;
+$colorBarDef: #5b616b;
+$colorBarDem: #21adf7;
+$colorBarRep: #da3c18;
+$colorBarOtherOnDark: #d6d7d9;
+$colorBorderBottom: #e8e8e8;
+$fontFamilyMonospace: 'fec_currency_mono', 'karla', sans-serif;
+$fontFamilySansSerif: 'karla', sans-serif;
+$fontFamilySerif: gandhi, serif;
+$fontSizeBase: 7.5pt; // (10px); Keeping this as a default so values here are as close to our main scss values as possible
+$fontWeightBold: 700;
+
+// The party money bars root selector
+.js-party-money-bars {
+  min-width: 20rem;
+  &,
+  & * {
+    // THESE ARE PASSED DOWN TO CHILDREN
+    box-sizing: border-box;
+  }
+
+// background-color: $colorBgLight;
+// border-radius: 4px;
+// box-shadow: 0 0 0 2px $colorTextOnLight inset;
+// color: $colorTextOnLight;
+  font-family: fontFamilySerif; // TODO - complete it
+  font-feature-settings: 'kern', 'liga', 'pnum';
+  font-size: $fontSizeBase;
+// margin: 0 0 ($fontSizeBase * 2);
+// padding: ($fontSizeBase * 2);
+
+    .js-parties-holder {
+      grid-template-columns: 4em auto 25%;
+      display: grid;
+
+      .js-meter-row {
+        display: contents;
+      }
+      .js.party.title {
+        padding-top: 3px;
+      }
+      .js-party-value {
+        padding: 0 1em 3px 0;
+      }
+
+      div, label {
+        border-bottom: solid 1px $colorBorderBottom;
+      }
+    }
+    
+  .total-wrapper {
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-wrap: wrap;
+    flex-wrap: wrap;
+    margin-bottom: $fontSizeBase;
+    // padding-bottom: $fontSizeBase * 2;
+
+    .value {
+      font-family: $fontFamilyMonospace;
+      font-size: $fontSizeBase * 2.25;
+      line-height: 1em;
+      margin: 0 0 ($fontSizeBase * 0.25);
+      width: 100%;
+    }
+    .description {
+      font-family: $fontFamilySansSerif;
+      font-size: $fontSizeBase * 1.4;
+      font-weight: normal;
+      line-height: 1.2em;
+      margin: 0;
+    }
+  }
+  .parties-wrapper {
+    font-family: $fontFamilySansSerif;
+    font-size: $fontSizeBase * 1.4;
+
+    .simple-table--responsive {
+      border-collapse: collapse;
+      display: table;
+      table-layout: fixed;
+      width: 100%;
+
+      .simple-table__row {
+        display: table-row;
+        border-bottom: none;
+      }
+      .simple-table__cell {
+        display: table-cell;
+        padding: ($fontSizeBase * 0.25) 0;
+        vertical-align: middle;
+
+        &:nth-child(2) {
+          padding-right: $fontSizeBase;
+          width: 8em;
+        }
+        &:last-child {
+          border-left: solid thin $colorTextOnLight;
+          width: 20%;
+        }
+      }
+    }
+
+    meter {
+      margin-left: 0;
+      background: transparent;
+      height: 20px;
+      width: 100%;
+
+      // note#1: * Chrome and Sass don't agree on these rules when they're combined to single entries:
+      &::-webkit-meter-bar {
+        // note#1
+        background: transparent;
+        transition: all 1s;
+      }
+      &::-moz-meter-bar {
+        // note#1
+        background: transparent;
+        transition: all 1s;
+      }
+      &::-webkit-meter-optimum-value {
+        // note#1
+        background: $colorBarDef;
+        transition: all 1s;
+      }
+      &:-moz-meter-optimum::-moz-meter-bar {
+        // note#1
+        background: $colorBarDef;
+        transition: all 1s;
+      }
+      &:before {
+        content: "";
+        display: block;
+        height: 20px;
+        position: absolute;
+        border-right: thin solid $colorBarDef;
+      }
+      &[data-party='DEM'] {
+        &::-webkit-meter-optimum-value {
+          // note#1
+          background: $colorBarDem;
+          transition: all 1s;
+        }
+        &:-moz-meter-optimum::-moz-meter-bar {
+          // note#1
+          background: $colorBarDem;
+          transition: all 1s;
+        }
+        &:before {
+          border-right-color: $colorBarDem;
+        }
+      }
+      &[data-party='REP'] {
+        &::-webkit-meter-optimum-value {
+          // note#1
+          background: $colorBarRep;
+          transition: all 1s;
+        }
+        &:-moz-meter-optimum::-moz-meter-bar {
+          // note#1
+          background: $colorBarRep;
+          transition: all 1s;
+        }
+        &:before {
+          border-right-color: $colorBarRep;
+        }
+      }
+    }
+    // Trying to get the widths to animate when the values change
+    meter::-webkit-meter-suboptimum-value,
+    meter::-webkit-meter-even-less-good-value {
+      transition: all 1s;
+    }
+    meter:-moz-meter-sub-optimum::-moz-meter-bar {
+      transition: all 1s;
+    }
+    meter:-moz-meter-sub-sub-optimum::-moz-meter-bar {
+      transition: all 1s;
+    }
+  }
+
+  footer {
+    -ms-flex-align: baseline;
+    align-items: baseline;
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-pack: justify;
+    justify-content: space-between;
+    margin-top: $fontSizeBase * 2;
+    width: 100%;
+
+    .timestamp {
+      color: lighten($colorTextOnLight, 50%);
+      font-family: $fontFamilySansSerif;
+      font-size: $fontSizeBase;
+    }
+    a.gov-fec-seal {
+      border: none;
+      text-decoration: none;
+
+      img {
+        height: $fontSizeBase * 3;
+        width: $fontSizeBase * 3;
+        &.theme-dark {
+          display: none;
+        }
+      }
+    }
+  }
+  // Small sizes for the light theme, which is the default
+  &.w-s {
+    .controls-wrapper {
+      fieldset {
+        display: inline-block;
+
+        &:first-child {
+          margin-right: $fontSizeBase;
+        }
+
+        label {
+          display: inline;
+          margin-right: $fontSizeBase;
+        }
+        select {
+          display: inline;
+        }
+      }
+    }
+  }
+  // Medium sizes for the light theme, which is the default
+  &.w-m {
+    @extend .w-s;
+    -ms-flex-align: center;
+    align-items: center;
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-wrap: wrap;
+    flex-wrap: wrap;
+    padding: ($fontSizeBase * 2) ($fontSizeBase * 2) $fontSizeBase;
+
+    .total-wrapper {
+      border-bottom: none;
+      // border-right: solid thin $colorElementBordersOnLight;
+      margin: 0;
+      padding-bottom: 0;
+      padding-right: $fontSizeBase * 4;
+      text-align: right;
+      width: 50%;
+
+      .value {
+        // margin: -5px 0 $fontSizeBase 0;
+        -ms-flex-order: 1;
+        order: 1;
+        text-align: right;
+      }
+      .description {
+        font-size: $fontSizeBase * 1.4;
+        // margin: 5px 0 0;
+        -ms-flex-order: 2;
+        order: 2;
+      }
+    }
+    .parties-wrapper {
+      margin: 0;
+      padding-left: $fontSizeBase * 4;
+      width: 50%;
+
+      .simple-table--responsive {
+        margin: 0 0 0 auto; // (right-align the table itself)
+        max-width: 400px;
+
+        .simple-table__cell {
+          &:first-child {
+            width: 3em;
+          }
+          &:last-child {
+            border-left: none;
+            width: 25%;
+          }
+        }
+      }
+    }
+
+    footer {
+      margin-top: 0;
+
+      a.gov-fec-seal {
+        background-image: url('/static/img/wordmark.svg');
+        background-position: right center;
+        background-repeat: no-repeat;
+        background-size: auto 30px;
+        text-align: left;
+        width: 275px;
+      }
+    }
+  }
+  // Large sizes for the light theme, which is the default
+  &.w-l {
+    @extend .w-m;
+    .total-wrapper {
+      margin-bottom: 0;
+    }
+    .parties-wrapper {
+      margin-bottom: 0;
+
+      .simple-table--responsive {
+        .simple-table__cell {
+          &:last-child {
+            width: 33%;
+          }
+        }
+      }
+    }
+  }
+
+  &.theme-dark {
+    background-color: $colorBgDark;
+    box-shadow: none;
+    color: $colorTextOnDark;
+
+    .parties-wrapper {
+      .simple-table--responsive {
+        .simple-table__cell:last-child {
+          border-left-color: $colorTextOnDark;
+        }
+      }
+      meter {
+        &[data-party='Other'] {
+          &::-webkit-meter-optimum-value {
+            background: $colorBarOtherOnDark;
+            transition: all 1s;
+          }
+          &:-moz-meter-optimum::-moz-meter-bar {
+            background: $colorBarOtherOnDark;
+            transition: all 1s;
+          }
+        }
+      }
+    }
+
+    footer {
+      a.gov-fec-seal {
+        border: none;
+        text-decoration: none;
+
+        img {
+          display: none;
+
+          &.theme-dark {
+            display: initial;
+          }
+        }
+      }
+    }
+    // Medium sizes of the dark theme
+    &.w-m {
+      .main-content-wrapper {
+        display: -ms-flexbox;
+        display: flex;
+        -ms-flex-pack: justify;
+        justify-content: space-between;
+        margin-bottom: ($fontSizeBase * 3);
+        .total-wrapper {
+          padding: 0;
+        }
+        .visual-divider {
+          background-color: $colorElementBordersOnLight;
+          margin: 5px 30pt;
+          width: 1px;
+        }
+        .parties-wrapper {
+          padding: 0;
+        }
+      }
+      footer {
+        a.gov-fec-seal {
+          background-image: url('/static/img/wordmark--inverse.svg');
+        }
+      }
+    }
+  }
+
+  // For when we have external controls, or only the election selector
+  &.controls-none,
+  &.controls-office-only {
+    .total-wrapper {
+      .value {
+        -ms-flex-order: 2;
+        order: 2;
+      }
+      .description {
+        -ms-flex-order: 1;
+        order: 1;
+      }
+    }
+  }
+
+  // Universals
+  .t-mono-stacked-currency {
+    font-family: fec_currency_mono;
+    text-align: right;
+  }
+
+  // For when we can't use meters, let's hide those cells
+  &.no-meters {
+    .parties-wrapper .simple-table__cell:last-child {
+      display: none;
+      width: 0;
+    }
+  }
+}

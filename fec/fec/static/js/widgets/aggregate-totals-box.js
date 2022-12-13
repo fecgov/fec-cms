@@ -44,14 +44,14 @@ function AggregateTotalsBox() {
   // Where to find the party numbers:
   this.basePath_partyTotals = ['candidates', 'totals', 'by_office', 'by_party'];
   this.baseQuery = {
-    office: 'P',
     election_year: window.DEFAULT_ELECTION_YEAR,
+    office: 'P',
     is_active_candidate: true,
+    page: 1,
     per_page: 20,
     sort_null_only: false,
     sort_hide_null: false,
-    sort_nulls_last: false,
-    page: 1
+    sort_nulls_last: false
   }; // Vars for data load
   this.animVars = {
     valueTotal: 0, // This instance's current value, only used for animation
