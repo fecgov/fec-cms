@@ -5,8 +5,8 @@ from __future__ import unicode_literals
 import datetime
 from django.db import migrations, models
 import django.db.models.deletion
-import wagtail.core.blocks
-import wagtail.core.fields
+import wagtail.blocks
+import wagtail.fields
 import wagtail.documents.blocks
 
 
@@ -24,8 +24,8 @@ class Migration(migrations.Migration):
                 ('page_ptr', models.OneToOneField(auto_created=True, on_delete=django.db.models.deletion.CASCADE, parent_link=True, primary_key=True, serialize=False, to='wagtailcore.Page')),
                 ('mtg_date', models.DateTimeField(default=datetime.date.today)),
                 ('mtg_time', models.TimeField(default=datetime.time(10, 0))),
-                ('mtg_media', wagtail.core.fields.StreamField((('full_video_url', wagtail.core.blocks.TextBlock()), ('full_audio', wagtail.documents.blocks.DocumentChooserBlock(required=False)), ('mtg_transcript', wagtail.documents.blocks.DocumentChooserBlock(required=False))))),
-                ('agenda', wagtail.core.fields.StreamField((('agenda_item', wagtail.core.blocks.StreamBlock((('item_title', wagtail.core.blocks.TextBlock()), ('item_text', wagtail.core.blocks.TextBlock()), ('mtg_doc', wagtail.core.blocks.StructBlock((('mtg_doc_upload', wagtail.documents.blocks.DocumentChooserBlock(required=True)), ('submitted_late', wagtail.core.blocks.BooleanBlock(help_text='Submitted Late', required=False)), ('heldover', wagtail.core.blocks.BooleanBlock(help_text='Held Over', required=False)), ('heldover_from', wagtail.core.blocks.DateBlock(help_text='Held Over From', required=False))))), ('item_audio', wagtail.documents.blocks.DocumentChooserBlock(required=False))))),))),
+                ('mtg_media', wagtail.fields.StreamField((('full_video_url', wagtail.blocks.TextBlock()), ('full_audio', wagtail.documents.blocks.DocumentChooserBlock(required=False)), ('mtg_transcript', wagtail.documents.blocks.DocumentChooserBlock(required=False))))),
+                ('agenda', wagtail.fields.StreamField((('agenda_item', wagtail.blocks.StreamBlock((('item_title', wagtail.blocks.TextBlock()), ('item_text', wagtail.blocks.TextBlock()), ('mtg_doc', wagtail.blocks.StructBlock((('mtg_doc_upload', wagtail.documents.blocks.DocumentChooserBlock(required=True)), ('submitted_late', wagtail.blocks.BooleanBlock(help_text='Submitted Late', required=False)), ('heldover', wagtail.blocks.BooleanBlock(help_text='Held Over', required=False)), ('heldover_from', wagtail.blocks.DateBlock(help_text='Held Over From', required=False))))), ('item_audio', wagtail.documents.blocks.DocumentChooserBlock(required=False))))),))),
             ],
             options={
                 'abstract': False,
