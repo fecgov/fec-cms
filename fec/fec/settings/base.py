@@ -11,6 +11,7 @@ BASE_DIR = os.path.dirname(PROJECT_DIR)
 REPO_DIR = os.path.dirname(BASE_DIR)
 
 CANONICAL_BASE = env.get_credential('CANONICAL_BASE', 'https://www.fec.gov')
+WAGTAILADMIN_BASE_URL = CANONICAL_BASE
 
 USAJOBS_WHOMAYAPPLY = env.get_credential('USAJOBS_WHOMAYAPPLY')
 USAJOBS_AGENCY_CODE = env.get_credential('USAJOBS_AGENCY_CODE')
@@ -105,7 +106,7 @@ INSTALLED_APPS = (
     'modelcluster',
     'storages',
 
-    'wagtail.core',
+    'wagtail',
     'wagtail.admin',
     'wagtail.search',
     'wagtail.images',
