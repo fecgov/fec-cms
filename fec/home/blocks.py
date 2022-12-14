@@ -208,6 +208,7 @@ class ExampleParagraph(blocks.StructBlock):
         template = 'blocks/example-paragraph.html'
         icon = 'pilcrow'
 
+
 class ReactionFeedback(blocks.StructBlock):
     """Creates a ReactionFeedback box that submits to github
     """

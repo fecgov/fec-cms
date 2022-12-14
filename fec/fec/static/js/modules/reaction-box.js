@@ -5,7 +5,7 @@
  * Previously implemented here (ported to this Django project):
  * https://github.com/18F/openFEC-web-app/blob/develop/openfecwebapp/views.py#L302
  */
-//var $ = require('jquery');
+var $ = require('jquery');
 var helpers = require('../modules/helpers');
 var analytics = require('../modules/analytics');
 
@@ -124,6 +124,5 @@ ReactionBox.prototype.handleReset = function() {
   this.$step2.attr('aria-hidden', false);
   this.$textarea.val('');
 };
-
 
 module.exports = { ReactionBox: ReactionBox };
