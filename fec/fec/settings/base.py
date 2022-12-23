@@ -130,6 +130,7 @@ INSTALLED_APPS = (
     'legal',
     'uaa_client',
     'extend_admin',
+    'django_crontab',
 )
 
 MIDDLEWARE = (
@@ -212,6 +213,17 @@ DATABASES = {
     'default': dj_database_url.config()
 }
 
+# cfdm_cms_test database properties required when scraping via crontab
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql_psycopg2',
+#         'NAME': 'cfdm_cms_test',
+#         'USER': '<database username>',
+#         'PASSWORD': '<database password>',
+#         'HOST': 'localhost',
+#         'PORT': '5432',
+#     }
+# }
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.8/topics/i18n/
@@ -341,4 +353,11 @@ LOGGING = {
     },
 }
 
+CRONTAB_COMMAND_SUFFIX = '2>&1'
+
 DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
+CRONJOBS = [
+    #transition is taking the place of indexing, I did every Tuesday and hour apart as a sample
+    ('0 1 * * TUE', 'django.core.management.call_command', ['scrape_cms_pages'], {}, ('> ' + os.path.join(BASE_DIR,'cms_scrape.log'))),
+    ('0 0 * * TUE', 'django.core.management.call_command', ['scrape_transition_pages'], {}, ('> ' + os.path.join(BASE_DIR,'transition.log'))),
+]
