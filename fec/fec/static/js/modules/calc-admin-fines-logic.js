@@ -164,7 +164,7 @@ CalcAdminFineLogic.values = {
     { maxRD: 650000, late_val: 5137, late_multi: 342, lateSens_val: 7708, lateSens_multi: 342, nonfiler_val: 17128, nonfilerSens_val: 20552 },
     { maxRD: 750000, late_val: 5994, late_multi: 342, lateSens_val: 8992, lateSens_multi: 342, nonfiler_val: 17984, nonfilerSens_val: 22266 },
     { maxRD: 850000, late_val: 6850, late_multi: 342, lateSens_val: 10276, lateSens_multi: 342, nonfiler_val: 18839, nonfilerSens_val: 23979 },
-    { maxRD: 950000, late_val: 7708, late_multi: 342, lateSens_val: 11560, lateSens_multi: 342, nonfiler_val: 19686, nonfilerSens_val: 25690 },
+    { maxRD: 950000, late_val: 7708, late_multi: 342, lateSens_val: 11560, lateSens_multi: 342, nonfiler_val: 19696, nonfilerSens_val: 25690 },
     { maxRD: Number.MAX_SAFE_INTEGER, late_val: 8564, late_multi: 342, lateSens_val: 12845, lateSens_multi: 342, nonfiler_val: 20552, nonfilerSens_val: 27404 }
   ],
   '2022': [
