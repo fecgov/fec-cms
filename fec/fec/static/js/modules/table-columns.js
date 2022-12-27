@@ -114,7 +114,7 @@ function createElectionColumns(context) {
           urlBase = ['reports', 'house-senate'];
         }
         var url = helpers.buildAppUrl(urlBase, {
-          committee_id: row.committee_ids,
+          q_filer: row.committee_ids,
           cycle: context.election.cycle,
           is_amended: 'false'
         });
