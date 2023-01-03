@@ -50,6 +50,13 @@ ENVIRONMENTS = {
 }
 FEC_CMS_ENVIRONMENT = ENVIRONMENTS.get(env.get_credential('FEC_CMS_ENVIRONMENT'), ENVIRONMENTS['local'])
 
+WAGTAILSEARCH_BACKENDS = {
+    'default': {
+        'BACKEND': 'wagtail.search.backends.database',
+        'SEARCH_CONFIG': 'english',
+    }
+}
+
 FEATURES = {
     'ierawfilters': bool(env.get_credential('FEC_FEATURE_IE_RAW_FILTERS', '')),
 
