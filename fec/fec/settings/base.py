@@ -61,6 +61,7 @@ FEATURES = {
     'aggregatetotals': bool(env.get_credential('FEC_FEATURE_AGGR_TOTS', '')),
     'barcharts': bool(env.get_credential('FEC_FEATURE_HOME_BARCHARTS', '')),
     'contributionsbystate': bool(env.get_credential('FEC_FEATURE_CONTRIBUTIONS_BY_STATE', '')),
+    'contact_app': bool(env.get_credential('FEC_FEATURE_CONTACT_APP', '')),
     'debts': bool(env.get_credential('FEC_FEATURE_DEBTS', '')),  # TODO: debts dates
     'map': bool(env.get_credential('FEC_FEATURE_HOME_MAP', '')),
     'pac_party': bool(env.get_credential('FEC_FEATURE_PAC_PARTY', '')),
@@ -71,6 +72,8 @@ FEATURES = {
     'house_senate_overview_summary': bool(env.get_credential('FEC_FEATURE_HOUSE_SENATE_OVERVIEW_SUMMARY', '')),
     'house_senate_overview_totals': bool(env.get_credential('FEC_FEATURE_HOUSE_SENATE_OVERVIEW_TOTALS', '')),
 }
+# In html templates, FEATURES is in the settings object. ex: settings.FEATURES.feature_flag_var
+# Jinja templates use the FEATURES object directly. ex: FEATURES.feature_flag_var
 
 # Set feature flags to True for local
 if FEC_CMS_ENVIRONMENT == ENVIRONMENTS['local']:
@@ -79,6 +82,7 @@ if FEC_CMS_ENVIRONMENT == ENVIRONMENTS['local']:
     FEATURES['aggregatetotals'] = True
     FEATURES['barcharts'] = True
     FEATURES['contributionsbystate'] = True
+    FEATURES['contact_app'] = True
     FEATURES['debts'] = True
     FEATURES['map'] = True
     FEATURES['pac_party'] = True
