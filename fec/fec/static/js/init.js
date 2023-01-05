@@ -12,6 +12,7 @@ var Glossary = require('glossary-panel');
 
 var terms = require('./data/terms');
 var feedback = require('./modules/feedback');
+var reaction = require('./modules/reaction-box');
 var skipNav = require('./modules/skip-nav');
 var siteNav = require('./modules/site-nav');
 var dropdown = require('./modules/dropdowns');
@@ -117,4 +118,40 @@ $(document).ready(function() {
     }
     $p.nextAll().remove()
   });
+
+  /**
+ **************DONT FORGET TO EDIT THIS FOR HTML AND WAGTAIL !*********************
+ * To implement a reaction box:
+ * Add a reaction-box jinja macro to a template (use quoted strings for the name and location positional arguments)
+ * Include a reference to this JS file in the parent template(preferably in extra JS block)
+ * (The below function will use the name/location values of any
+ *  reaction box on the page to initiate it as a new ReactionBox())
+ */
+
+
+  var reactionBoxes = document.querySelectorAll('.reaction-box');
+  var names = [];
+  for (var box of reactionBoxes) {
+    
+    var name = box.getAttribute('data-name');
+    console.log('name: ',  name);
+    var location = box.getAttribute('data-location');
+    //push name to names array
+    names.push(name);
+    //inititailize new ReactionBox
+    window[name] = new reaction.ReactionBox(
+      `[data-name="${name}"][data-location="${location}"]`
+    );
+  }
+  //use names array to define the submitReaction*() for each
+  console.log('names: ',  names);
+  names.forEach(function(nm) {
+    window['submitReaction' + nm] = function(token) {
+      window[nm].handleSubmit(token);
+    };
+    console.log('nm: ',nm)
+  });
+
 });
+
+

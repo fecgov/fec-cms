@@ -209,6 +209,18 @@ class ExampleParagraph(blocks.StructBlock):
         icon = 'pilcrow'
 
 
+class ReactionFeedback(blocks.StructBlock):
+    """Creates a ReactionFeedback box that submits to github
+    """
+    title = blocks.CharBlock(required=False)
+    name = blocks.CharBlock(required=False)
+    location = blocks.CharBlock(required=False)
+
+    class Meta:
+        template = 'blocks/reaction-block.html'
+        icon = 'openquote'
+
+
 class ResourceBlock(blocks.StructBlock):
     """A section of a ResourcePage"""
     title = blocks.CharBlock(required=True)
@@ -249,6 +261,7 @@ class ResourceBlock(blocks.StructBlock):
         ('image', ImageChooserBlock()),
         ('example_image', ExampleImage()),
         ('example_paragraph', ExampleParagraph()),
+        ('reaction_feedback', ReactionFeedback()),
     ])
 
     aside = blocks.StreamBlock([
