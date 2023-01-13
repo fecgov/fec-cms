@@ -1,5 +1,5 @@
 from django.test import Client
-from wagtail.tests.utils import WagtailPageTests
+from wagtail.test.utils import WagtailPageTests
 from ..models import Author, HomePage, RecordPage, DigestPage, PressReleasePage
 
 
