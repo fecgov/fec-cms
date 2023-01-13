@@ -1,7 +1,7 @@
 /**
 //
 */
-import Vue from 'vue-2/dist/vue.esm.js';
+import Vue from 'vue/dist/vue.esm.js';
 
 import { availableDates, getTotalAdminFine } from './calc-admin-fines-logic';
 
