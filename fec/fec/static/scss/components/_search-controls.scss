@@ -5,6 +5,7 @@
 // embedded searches (MUR, AUDIT)
 // keyword modals
 //
+@use 'sass:math';
 
 .search-controls__row {
   @include clearfix();
@@ -275,7 +276,7 @@
     flex-wrap: wrap;
 
     .usa-width-one-half:first-child {
-      margin-left: $gutter / 2;
+      margin-left: math.div($gutter, 2);
       margin-right: $gutter;
       width: 100%;
     }
