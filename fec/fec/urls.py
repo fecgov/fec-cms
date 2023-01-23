@@ -2,12 +2,16 @@ from django.urls import include, re_path
 from django.conf import settings
 from django.contrib import admin
 from django.views.generic.base import TemplateView
+from django.http import HttpResponse
 
 from wagtail.admin import urls as wagtailadmin_urls
 from wagtail.documents import urls as wagtaildocs_urls
 from wagtail import urls as wagtail_urls
 from uaa_client import urls as uaa_urls
 from uaa_client import views as uaa_views
+
+from wagtail.contrib.sitemaps.views import sitemap
+from wagtail.contrib.sitemaps import views
 
 from home import views as home_views
 from search import views as search_views
@@ -20,6 +24,7 @@ urlpatterns = [
         name='wagtaildocs_serve',
     ),
     re_path(r'^auth/', include(uaa_urls)),
+    re_path(r'^wagtail_sitemap\.xml/$', sitemap),
     re_path(r'^admin/', include(wagtailadmin_urls)),
     re_path(r'^calendar/$', home_views.calendar),
     re_path(r'^about/leadership-and-structure/commissioners/$', home_views.commissioners),
@@ -52,6 +57,14 @@ urlpatterns = [
 if settings.FEC_CMS_ENVIRONMENT != 'LOCAL':
     # admin/login always must come before admin/, so place at beginning of list
     urlpatterns.insert(0, re_path(r'^admin/login', uaa_views.login, name='login'))
+
+if settings.FEC_CMS_ENVIRONMENT == 'PRODUCTION':
+    urlpatterns += re_path(
+        r'^robots\.txt$', lambda r: HttpResponse(
+            "User-agent: *\
+            \nSitemap: https://www.fec.gov/wagtail_sitemmap.xml\
+            \nSitemap: https://www.fec.gov/data-legal-sitemmap.xml",\
+            content_type="text/plain")),
 
 if settings.FEC_CMS_ENVIRONMENT != 'PRODUCTION':
     urlpatterns += re_path(
