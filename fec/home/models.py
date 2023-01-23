@@ -10,7 +10,7 @@ from django.contrib.auth.models import User
 from modelcluster.fields import ParentalKey
 from modelcluster.contrib.taggit import ClusterTaggableManager
 from taggit.models import TaggedItemBase
-from wagtail.models import Orderable, Page, PageRevision
+from wagtail.models import Orderable, Page, Revision
 from wagtail.fields import RichTextField, StreamField
 from wagtail import blocks
 from wagtail.admin.panels import (
@@ -158,7 +158,7 @@ def log_user_save(sender, **kwargs):
     print(kwargs.get('instance').groups, '9')
     # print(kwargs.get('instance').get_all_permissions())
     print(kwargs.get('instance').groups, '10')
-    print(kwargs.get('instance').pagerevision_set, '11')
+    print(kwargs.get('instance').revision_set, '11')
     print(kwargs.get('instance').user_permissions, '12')
     print(kwargs.get('instance').logentry_set, '12.5')
     print(sender.logentry_set, '13')
@@ -173,8 +173,8 @@ def log_user_save(sender, **kwargs):
                                                                        kwargs.get('instance')))
 
 
-@receiver(pre_delete, sender=PageRevision)
-@receiver(post_save, sender=PageRevision)
+@receiver(pre_delete, sender=Revision)
+@receiver(post_save, sender=Revision)
 def log_revisions(sender, **kwargs):
     username = '(user not found)'
     user = kwargs.get('instance').user
