@@ -21,6 +21,7 @@ class TestRobots(TestCase):
 
         with self.settings(FEC_CMS_ENVIRONMENT='STAGING'):
             response = self.client.get('/robots.txt')
+            self.assertContains(response, "Disallow", count=None, status_code=200, msg_prefix='', html=False)
             self.assertEqual(response.status_code, 200)
 
     def test_robots_txt_throws_404(self):
@@ -28,4 +29,5 @@ class TestRobots(TestCase):
         with self.settings(FEC_CMS_ENVIRONMENT='PRODUCTION'):
             reload_url_conf()
             response = self.client.get('/robots.txt')
-            self.assertEqual(response.status_code, 404)
+            self.assertContains(response, "Sitemap", count=2, status_code=200, msg_prefix='', html=False)
+            self.assertEqual(response.status_code, 200)
