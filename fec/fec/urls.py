@@ -22,8 +22,8 @@ urlpatterns = [
         name='wagtaildocs_serve',
     ),
     re_path(r'^auth/', include(uaa_urls)),
-    re_path(r'^wagtail_sitemap\.xml/$', sitemap),
     re_path(r'^admin/', include(wagtailadmin_urls)),
+    re_path(r'^sitemap-wagtail\.xml/$', sitemap),
     re_path(r'^calendar/$', home_views.calendar),
     re_path(r'^about/leadership-and-structure/commissioners/$', home_views.commissioners),
     re_path(r'^documents/', include(wagtaildocs_urls)),
@@ -49,8 +49,15 @@ urlpatterns = [
             template_name='data.json', content_type="application/json"
         ),
     ),
-]
 
+    re_path(
+        r'^sitemap-data-legal\.xml$',
+        TemplateView.as_view(
+            template_name='sitemap-data-legal.xml',
+            content_type='text/plain'
+        ),
+    ),
+]
 
 if settings.FEC_CMS_ENVIRONMENT != 'LOCAL':
     # admin/login always must come before admin/, so place at beginning of list
