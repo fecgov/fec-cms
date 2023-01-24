@@ -103,7 +103,7 @@ class ContentPage(Page):
     class Meta:
         abstract = True
 
-    body = stream_factory(null=True, blank=True)
+    body = stream_factory(null=True, blank=True, use_json_field=True)
 
     feed_image = models.ForeignKey('wagtailimages.Image', blank=True, null=True,
                                    on_delete=models.SET_NULL, related_name='+')
@@ -621,7 +621,7 @@ class CustomPage(Page):
             template='blocks/simple-document-list.html',
             icon='doc-empty')),
     ], null=True, use_json_field=True)
-    sidebar = stream_factory(null=True, blank=True)
+    sidebar = stream_factory(null=True, blank=True, use_json_field=True)
     related_topics = StreamField([
         ('related_topics', blocks.ListBlock(
             blocks.PageChooserBlock(label="Related topic")
@@ -680,15 +680,15 @@ class CustomPage(Page):
 
 
 class PressLandingPage(Page):
-    hero = stream_factory(null=True, blank=True)
-    release_intro = stream_factory(null=True, blank=True)
-    digest_intro = stream_factory(null=True, blank=True)
+    hero = stream_factory(null=True, blank=True, use_json_field=True)
+    release_intro = stream_factory(null=True, blank=True, use_json_field=True)
+    digest_intro = stream_factory(null=True, blank=True, use_json_field=True)
 
     option_blocks = StreamField([
         ('option_blocks', OptionBlock())
     ], use_json_field=True)
 
-    contact_intro = stream_factory(null=True, blank=True)
+    contact_intro = stream_factory(null=True, blank=True, use_json_field=True)
 
     content_panels = Page.content_panels + [
         StreamFieldPanel('hero'),
@@ -771,7 +771,7 @@ class ReportsLandingPage(ContentPage, UniqueModel):
 
 
 class AboutLandingPage(Page):
-    hero = stream_factory(null=True, blank=True)
+    hero = stream_factory(null=True, blank=True, use_json_field=True)
     sections = StreamField([
         ('sections', OptionBlock())
     ], null=True, use_json_field=True)
@@ -859,7 +859,7 @@ class CommissionerPage(Page):
 
 
 class CollectionPage(Page):
-    body = stream_factory(null=True, blank=True)
+    body = stream_factory(null=True, blank=True, use_json_field=True)
     sidebar_title = models.CharField(max_length=255, null=True, blank=True)
 
     related_pages = StreamField([
@@ -998,7 +998,7 @@ class ServicesLandingPage(ContentPage, UniqueModel):
     subpage_types = ['CollectionPage', 'ResourcePage', 'CustomPage']
     template = 'home/candidate-and-committee-services/services_landing_page.html'
 
-    hero = stream_factory(null=True, blank=True)
+    hero = stream_factory(null=True, blank=True, use_json_field=True)
 
     intro = StreamField([
         ('paragraph', blocks.RichTextBlock())
