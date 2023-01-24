@@ -2,7 +2,6 @@ from django.urls import include, re_path
 from django.conf import settings
 from django.contrib import admin
 from django.views.generic.base import TemplateView
-# from django.http import HttpResponse
 
 from wagtail.admin import urls as wagtailadmin_urls
 from wagtail.documents import urls as wagtaildocs_urls
@@ -74,12 +73,6 @@ if settings.FEC_CMS_ENVIRONMENT != 'PRODUCTION':
             content_type='text/plain'
         ),
     ),
-    # urlpatterns += re_path(
-    #     r'^robots\.txt$', lambda r: HttpResponse(
-    #         "User-agent: *\
-    #         \nSitemap: https://www.fec.gov/wagtail_sitemmap.xml\
-    #         \nSitemap: https://www.fec.gov/data-legal-sitemmap.xml",\
-    #         content_type="text/plain")),
 
 if settings.DEBUG:
     from django.conf.urls.static import static

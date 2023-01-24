@@ -17,17 +17,19 @@ def reload_url_conf():
 
 class TestRobots(TestCase):
 
-    def test_robots_txt_returns_200_stage(self):
+    def test_robots_txt_contains_disallow_stage(self):
 
         with self.settings(FEC_CMS_ENVIRONMENT='STAGING'):
             response = self.client.get('/robots.txt')
-            self.assertContains(response, "Disallow", count=None, status_code=200, msg_prefix='', html=False)
+            self.assertContains(response, "Disallow", count=None, status_code=200,
+                msg_prefix='\"Disallow\" not found in response', html=False)
             self.assertEqual(response.status_code, 200)
 
-    def test_robots_txt_throws_404(self):
+    def test_robots_txt_contains_sitemaps(self):
 
         with self.settings(FEC_CMS_ENVIRONMENT='PRODUCTION'):
             reload_url_conf()
             response = self.client.get('/robots.txt')
-            self.assertContains(response, "Sitemap", count=2, status_code=200, msg_prefix='', html=False)
+            self.assertContains(response, "Sitemap", count=2, status_code=200,
+                msg_prefix='\"Sitemap\" not found in response', html=False)
             self.assertEqual(response.status_code, 200)
