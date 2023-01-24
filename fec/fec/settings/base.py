@@ -11,6 +11,7 @@ BASE_DIR = os.path.dirname(PROJECT_DIR)
 REPO_DIR = os.path.dirname(BASE_DIR)
 
 CANONICAL_BASE = env.get_credential('CANONICAL_BASE', 'https://www.fec.gov')
+WAGTAILADMIN_BASE_URL = CANONICAL_BASE
 
 USAJOBS_WHOMAYAPPLY = env.get_credential('USAJOBS_WHOMAYAPPLY')
 USAJOBS_AGENCY_CODE = env.get_credential('USAJOBS_AGENCY_CODE')
@@ -48,6 +49,13 @@ ENVIRONMENTS = {
     'feature': 'FEATURE',
 }
 FEC_CMS_ENVIRONMENT = ENVIRONMENTS.get(env.get_credential('FEC_CMS_ENVIRONMENT'), ENVIRONMENTS['local'])
+
+WAGTAILSEARCH_BACKENDS = {
+    'default': {
+        'BACKEND': 'wagtail.search.backends.database',
+        'SEARCH_CONFIG': 'english',
+    }
+}
 
 FEATURES = {
     'ierawfilters': bool(env.get_credential('FEC_FEATURE_IE_RAW_FILTERS', '')),
@@ -105,7 +113,7 @@ INSTALLED_APPS = (
     'modelcluster',
     'storages',
 
-    'wagtail.core',
+    'wagtail',
     'wagtail.admin',
     'wagtail.search',
     'wagtail.images',

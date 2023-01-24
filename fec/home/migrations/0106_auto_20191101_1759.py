@@ -3,8 +3,8 @@
 from __future__ import unicode_literals
 
 from django.db import migrations, models
-import wagtail.core.blocks
-import wagtail.core.fields
+import wagtail.blocks
+import wagtail.fields
 import wagtail.images.blocks
 
 
@@ -22,7 +22,7 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='examplepage',
             name='body',
-            field=wagtail.core.fields.StreamField([('paragraph', wagtail.core.blocks.RichTextBlock()), ('example_image', wagtail.core.blocks.StructBlock([('title', wagtail.core.blocks.CharBlock(required=False)), ('caption', wagtail.core.blocks.RichTextBlock(required=True)), ('image', wagtail.images.blocks.ImageChooserBlock(required=True))])), ('reporting_example_cards', wagtail.core.blocks.StructBlock([('card_width', wagtail.core.blocks.ChoiceBlock(choices=[(2, '1/2'), (3, '1/3')], help_text='Control the width of the cards')), ('cards', wagtail.core.blocks.ListBlock(wagtail.core.blocks.PageChooserBlock(), icon='doc-empty'))])), ('internal_button', wagtail.core.blocks.StructBlock([('internal_page', wagtail.core.blocks.PageChooserBlock()), ('text', wagtail.core.blocks.CharBlock())])), ('external_button', wagtail.core.blocks.StructBlock([('url', wagtail.core.blocks.URLBlock()), ('text', wagtail.core.blocks.CharBlock())])), ('image', wagtail.images.blocks.ImageChooserBlock()), ('html', wagtail.core.blocks.RawHTMLBlock())], null=True),
+            field=wagtail.fields.StreamField([('paragraph', wagtail.blocks.RichTextBlock()), ('example_image', wagtail.blocks.StructBlock([('title', wagtail.blocks.CharBlock(required=False)), ('caption', wagtail.blocks.RichTextBlock(required=True)), ('image', wagtail.images.blocks.ImageChooserBlock(required=True))])), ('reporting_example_cards', wagtail.blocks.StructBlock([('card_width', wagtail.blocks.ChoiceBlock(choices=[(2, '1/2'), (3, '1/3')], help_text='Control the width of the cards')), ('cards', wagtail.blocks.ListBlock(wagtail.blocks.PageChooserBlock(), icon='doc-empty'))])), ('internal_button', wagtail.blocks.StructBlock([('internal_page', wagtail.blocks.PageChooserBlock()), ('text', wagtail.blocks.CharBlock())])), ('external_button', wagtail.blocks.StructBlock([('url', wagtail.blocks.URLBlock()), ('text', wagtail.blocks.CharBlock())])), ('image', wagtail.images.blocks.ImageChooserBlock()), ('html', wagtail.blocks.RawHTMLBlock())], null=True),
         ),
         migrations.AlterField(
             model_name='examplepage',

@@ -3,8 +3,8 @@
 from __future__ import unicode_literals
 
 from django.db import migrations
-import wagtail.core.blocks
-import wagtail.core.fields
+import wagtail.blocks
+import wagtail.fields
 
 
 class Migration(migrations.Migration):
@@ -17,6 +17,6 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='fullwidthpage',
             name='citations',
-            field=wagtail.core.fields.StreamField([('citations', wagtail.core.blocks.ListBlock(wagtail.core.blocks.StructBlock([('label', wagtail.core.blocks.CharBlock()), ('content', wagtail.core.blocks.RichTextBlock(help_text='Use Shift + Enter to add line breaks between citation and description'))])))], blank=True, null=True),
+            field=wagtail.fields.StreamField([('citations', wagtail.blocks.ListBlock(wagtail.blocks.StructBlock([('label', wagtail.blocks.CharBlock()), ('content', wagtail.blocks.RichTextBlock(help_text='Use Shift + Enter to add line breaks between citation and description'))])))], blank=True, null=True),
         ),
     ]
