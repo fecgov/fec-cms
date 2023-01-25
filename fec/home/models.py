@@ -18,9 +18,9 @@ from wagtail.admin.panels import (
     InlinePanel,
     MultiFieldPanel,
     PageChooserPanel,
-    FieldPanel)
+    StreamFieldPanel)
 from wagtail.images.blocks import ImageChooserBlock
-from wagtail.images.edit_handlers import FieldPanel
+from wagtail.images.edit_handlers import ImageChooserPanel
 from wagtail.documents.blocks import DocumentChooserBlock
 from wagtail.snippets.models import register_snippet
 from wagtail.search import index
@@ -109,11 +109,11 @@ class ContentPage(Page):
                                    on_delete=models.SET_NULL, related_name='+')
 
     content_panels = Page.content_panels + [
-        FieldPanel('body'),
+        StreamFieldPanel('body'),
     ]
 
     promote_panels = Page.promote_panels + [
-        FieldPanel('feed_image'),
+        ImageChooserPanel('feed_image'),
     ]
 
     search_fields = Page.search_fields + [
@@ -227,7 +227,7 @@ class Author(models.Model):
         FieldPanel('name'),
         FieldPanel('title'),
         FieldPanel('email'),
-        FieldPanel('photo'),
+        ImageChooserPanel('photo'),
         FieldPanel('phone'),
         FieldPanel('bio'),
         MultiFieldPanel([
@@ -646,13 +646,13 @@ class CustomPage(Page):
     content_panels = Page.content_panels + [
         FieldPanel('author'),
         FieldPanel('date'),
-        FieldPanel('body'),
-        FieldPanel('related_topics'),
-        FieldPanel('citations'),
-        FieldPanel('continue_learning'),
+        StreamFieldPanel('body'),
+        StreamFieldPanel('related_topics'),
+        StreamFieldPanel('citations'),
+        StreamFieldPanel('continue_learning'),
         MultiFieldPanel([
-            FieldPanel('sidebar'),
-            FieldPanel('record_articles'),
+            StreamFieldPanel('sidebar'),
+            StreamFieldPanel('record_articles'),
             FieldPanel('show_contact_link'),
         ],
             heading="Sidebar",
@@ -691,11 +691,11 @@ class PressLandingPage(Page):
     contact_intro = stream_factory(null=True, blank=True, use_json_field=True)
 
     content_panels = Page.content_panels + [
-        FieldPanel('hero'),
-        FieldPanel('release_intro'),
-        FieldPanel('digest_intro'),
-        FieldPanel('option_blocks'),
-        FieldPanel('contact_intro'),
+        StreamFieldPanel('hero'),
+        StreamFieldPanel('release_intro'),
+        StreamFieldPanel('digest_intro'),
+        StreamFieldPanel('option_blocks'),
+        StreamFieldPanel('contact_intro'),
     ]
 
 
@@ -712,7 +712,7 @@ class DocumentPage(ContentPage):
         FieldPanel('file_url'),
         FieldPanel('size'),
         FieldPanel('category'),
-        FieldPanel('body')
+        StreamFieldPanel('body')
     ]
 
     @property
@@ -737,7 +737,7 @@ class DocumentFeedPage(ContentPage):
     category = models.CharField(max_length=255,
                                 choices=constants.report_parent_categories.items(), null=True)
     content_panels = Page.content_panels + [
-        FieldPanel('intro'),
+        StreamFieldPanel('intro'),
         FieldPanel('category')
     ]
 
@@ -761,8 +761,8 @@ class ReportsLandingPage(ContentPage, UniqueModel):
     ], null=True, blank=True, use_json_field=True)
 
     content_panels = Page.content_panels + [
-        FieldPanel('intro'),
-        FieldPanel('document_feeds')
+        StreamFieldPanel('intro'),
+        StreamFieldPanel('document_feeds')
     ]
 
     @property
@@ -779,8 +779,8 @@ class AboutLandingPage(Page):
     subpage_types = ['ResourcePage', 'DocumentFeedPage', 'ReportsLandingPage']
 
     content_panels = Page.content_panels + [
-        FieldPanel('hero'),
-        FieldPanel('sections')
+        StreamFieldPanel('hero'),
+        StreamFieldPanel('sections')
     ]
 
     @property
@@ -824,13 +824,13 @@ class CommissionerPage(Page):
         FieldPanel('first_name'),
         FieldPanel('middle_initial'),
         FieldPanel('last_name'),
-        FieldPanel('picture'),
+        ImageChooserPanel('picture'),
         FieldPanel('sworn_in'),
         FieldPanel('term_expiration'),
         FieldPanel('reappointed_dates'),
         FieldPanel('party_affiliation'),
         FieldPanel('commissioner_title'),
-        FieldPanel('commissioner_bio'),
+        StreamFieldPanel('commissioner_bio'),
         FieldPanel('commissioner_email'),
         FieldPanel('commissioner_phone'),
         FieldPanel('commissioner_twitter'),
@@ -886,13 +886,13 @@ class CollectionPage(Page):
             (False, 'Do not show contact card')
         ])
     content_panels = Page.content_panels + [
-        FieldPanel('body'),
+        StreamFieldPanel('body'),
         FieldPanel('sidebar_title'),
         FieldPanel('show_search'),
         FieldPanel('show_contact_card'),
-        FieldPanel('related_pages'),
-        FieldPanel('sections'),
-        FieldPanel('reporting_examples')
+        StreamFieldPanel('related_pages'),
+        StreamFieldPanel('sections'),
+        StreamFieldPanel('reporting_examples')
     ]
 
     # Adds a settings field for making a custom title that displays in the Wagtail page explorer
@@ -949,12 +949,12 @@ class ResourcePage(Page):
 
     content_panels = Page.content_panels + [
         FieldPanel('formatted_title'),
-        FieldPanel('intro'),
+        StreamFieldPanel('intro'),
         FieldPanel('sidebar_title'),
-        FieldPanel('related_pages'),
-        FieldPanel('sections'),
-        FieldPanel('citations'),
-        FieldPanel('related_topics'),
+        StreamFieldPanel('related_pages'),
+        StreamFieldPanel('sections'),
+        StreamFieldPanel('citations'),
+        StreamFieldPanel('related_topics'),
         FieldPanel('show_contact_card')
     ]
 
@@ -1005,8 +1005,8 @@ class ServicesLandingPage(ContentPage, UniqueModel):
     ], null=True, use_json_field=True)
 
     content_panels = Page.content_panels + [
-        FieldPanel('hero'),
-        FieldPanel('intro'),
+        StreamFieldPanel('hero'),
+        StreamFieldPanel('intro'),
     ]
 
     @property
@@ -1085,9 +1085,9 @@ class MeetingPage(Page):
     ], blank=True, null=True, use_json_field=True)
 
     content_panels = Page.content_panels + [
-        FieldPanel('info_message', heading='Informational message'),
+        StreamFieldPanel('info_message', heading='Informational message'),
         FieldPanel('additional_information'),
-        FieldPanel('agenda'),
+        StreamFieldPanel('agenda'),
         MultiFieldPanel(
             [
                 FieldPanel('date'),
@@ -1101,7 +1101,7 @@ class MeetingPage(Page):
         MultiFieldPanel(
             [
                 # FieldPanel('sunshine_act_links'),
-                FieldPanel('sunshine_act_doc_upld'),
+                StreamFieldPanel('sunshine_act_doc_upld'),
             ],
             heading='Sunshine notices',
             classname='collapsible collapsed'
@@ -1127,7 +1127,7 @@ class MeetingPage(Page):
         ),
         MultiFieldPanel(
             [
-                FieldPanel('imported_html'),
+                StreamFieldPanel('imported_html'),
             ],
             heading='Imported meeting content',
             classname='collapsible collapsed'
@@ -1189,10 +1189,10 @@ class ExamplePage(Page):
 
     content_panels = Page.content_panels + [
         FieldPanel('pre_title'),
-        FieldPanel('featured_image'),
-        FieldPanel('body'),
+        ImageChooserPanel('featured_image'),
+        StreamFieldPanel('body'),
         FieldPanel('related_media_title'),
-        FieldPanel('related_media')
+        StreamFieldPanel('related_media')
     ]
 
     @property
@@ -1231,10 +1231,10 @@ class ContactPage(Page):
     ], use_json_field=True)
 
     content_panels = Page.content_panels + [
-        FieldPanel('contact_items'),
-        FieldPanel('info_message', heading='Informational message'),
+        StreamFieldPanel('contact_items'),
+        StreamFieldPanel('info_message', heading='Informational message'),
         FieldPanel('services_title'),
-        FieldPanel('services'),
+        StreamFieldPanel('services'),
     ]
 
     @property
@@ -1250,7 +1250,7 @@ class FullWidthPage(ContentPage):
 
     template = 'home/full_width_page.html'
     content_panels = ContentPage.content_panels + [
-        FieldPanel('citations')
+        StreamFieldPanel('citations')
     ]
 
     promote_panels = Page.promote_panels
@@ -1315,9 +1315,9 @@ class OigLandingPage(Page):
             heading='Alert / informational message'
         ),
         FieldPanel('recent_reports_url'),
-        FieldPanel('stats_content'),
-        FieldPanel('resources', heading='OIG resources'),
-        FieldPanel('you_might_also_like'),
+        StreamFieldPanel('stats_content'),
+        StreamFieldPanel('resources', heading='OIG resources'),
+        StreamFieldPanel('you_might_also_like'),
     ]
 
     @property
