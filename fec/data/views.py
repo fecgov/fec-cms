@@ -100,7 +100,7 @@ def search(request):
     query = request.GET.get("search", "")
 
     if re.match(r"\d{16}", query) or re.match(r"\d{11}", query):
-        url = "http://docquery.fec.gov/cgi-bin/fecimg/?" + query
+        url = "https://docquery.fec.gov/cgi-bin/fecimg/?" + query
         return redirect(url)
     else:
         results = api_caller.load_search_results(query)
