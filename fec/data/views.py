@@ -593,12 +593,11 @@ def get_committee(committee_id, cycle):
             template_variables["spending_summary"] = utils.process_spending_data(totals)
             template_variables["cash_summary"] = utils.process_cash_data(totals)
 
-    # If in the current cycle, check for raw filings in the last three days
-    if cycle == utils.current_cycle():
+    # When cycle >= constants.DEFAULT_TIME_PERIOD, check for raw filings in the last three days
+    if cycle >= constants.DEFAULT_TIME_PERIOD:
         # (4)call efile/filings under tag: efiling
         path = "/efile/filings/"
         filters = {
-            "cycle": cycle,
             "committee_id": committee["committee_id"],
             "min_receipt_date": template_variables["min_receipt_date"]
         }
