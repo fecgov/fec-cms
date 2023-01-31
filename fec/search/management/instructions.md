@@ -2,7 +2,7 @@
 
 The site-wide search of fec.gov uses the General Service Administration's [Search.gov tool](https://search.gov/) for the search engine. We use the [i14y API](https://search.gov/developer/i14y.html) for maintaining the search index, which feeds into ElasticSearch.
 
-For more information about i14Y, you can read the [technical documentation here](http://gsa.github.io/slate/). These instructions are for explaining how to manually update the index.
+For more information about i14Y, you can read the [technical documentation here](https://gsa.github.io/slate/). These instructions are for explaining how to manually update the index.
 
 ## Getting set up
 The Search.gov "site" we use is called `betafec_api` (though that can change). If you're trying to access the admin panel, you will need someone to add you as a contributor to that site. This is where all the admin panel controls and analytics live.
@@ -69,7 +69,7 @@ Once `index_pages` has run, you can log in to search.gov and see the new pages u
 Once the data is there, it will work when running a search on the site.
 
 ## Adding web app pages to the index
-Adding non-CMS pages to the index is a little more complicated. Because there's no database to query for a set of pages (which `scrape_pages` does above), you need to manually create a set of  pages to index. The file`fec/search/management/data/web_app_pages.json` is a list of web app pages to index. If you're going from a spreadsheet, [CSV2JSON](http://www.csvjson.com/csv2json) is a useful tool.
+Adding non-CMS pages to the index is a little more complicated. Because there's no database to query for a set of pages (which `scrape_pages` does above), you need to manually create a set of  pages to index. The file`fec/search/management/data/web_app_pages.json` is a list of web app pages to index. If you're going from a spreadsheet, [CSV2JSON](https://www.csvjson.com/csv2json) is a useful tool.
 
 The good news is that because the API provides the candidate and committee results, the only pages that we need to index are the ~25 static routes. 
 
@@ -119,7 +119,7 @@ curl "https://i14y.usa.gov/api/v1/documents/{document_id}" -XDELETE -u fec_main:
 
 ```
 
-[More info in the docs](http://gsa.github.io/slate/#delete-a-document).
+[More info in the docs](https://gsa.github.io/slate/#delete-a-document).
 
 ## Setup and test Search.gov sitewide search locally 
 To test sitewide search and policy guidance search locally, grab the following environment variables from cf target -s ${cf_space} and export them in terminal window. Replace {cf_space} with dev/stage or prod 
