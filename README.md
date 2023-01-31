@@ -61,7 +61,7 @@ run into problems please
       includes `npm`).
     * PostgreSQL (the latest 13 release).
          * Read a [Mac OSX tutorial](https://www.moncefbelyamani.com/how-to-install-postgresql-on-a-mac-with-homebrew-and-lunchy/).
-         * Read a [Windows tutorial](http://www.postgresqltutorial.com/install-postgresql/).
+         * Read a [Windows tutorial](https://www.postgresqltutorial.com/install-postgresql/).
          * Read a [Linux tutorial](https://www.postgresql.org/docs/13/installation.html)
            (or follow your OS package manager).
 

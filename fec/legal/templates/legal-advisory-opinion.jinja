@@ -97,7 +97,7 @@
                     {% if advisory_opinion.statutory_citations %}
                     {% for citation in advisory_opinion.statutory_citations %}
                     <div>
-                      <a href="{{ 'http://api.fdsys.gov/link?collection=uscode&title=%s&year=mostrecent&section=%s' % (citation.title, citation.section) }}">{{ citation.title }} U.S.C. &sect;{{ citation.section }}</a>
+                      <a href="{{ 'https://api.fdsys.gov/link?collection=uscode&title=%s&year=mostrecent&section=%s' % (citation.title, citation.section) }}">{{ citation.title }} U.S.C. &sect;{{ citation.section }}</a>
                     </div><br>
                     {% endfor %}
                     {% else %}
