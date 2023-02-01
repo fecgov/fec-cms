@@ -36,9 +36,8 @@
     "d3": "3.5.5",
     "datatables.net": "^1.11.3",
     "datatables.net-responsive": "^2.2.7",
-    "debug": "^3.2.6",
+    "debug": "^4.3.4",
     "dompurify": "^2.2.7",
-    "draft-js": "^0.11.7",
     "draftail": "^1.4.1",
     "es6-weak-map": "2.0.1",
     "eventemitter2": "0.4.14",
@@ -90,7 +89,7 @@
     "eslint-plugin-import": "^2.24.2",
     "eslint-plugin-react": "^7.26.1",
     "fs": "0.0.1-security",
-    "gulp": "^4.0.0",
+    "gulp": "^4.0.2",
     "gulp-clean": "^0.4.0",
     "gulp-clean-css": "^4.0.0",
     "gulp-consolidate": "^0.2.0",
@@ -99,7 +98,7 @@
     "gulp-purgecss": "^4.0.3",
     "gulp-rename": "^1.2.2",
     "gulp-rev": "^9.0.0",
-    "gulp-sass": "^4.1.0",
+    "gulp-sass": "^5.1.0",
     "gulp-sourcemaps": "^2.6.5",
     "gulp-svgmin": "^2.1.0",
     "gulp-uglify": "3.0.1",
@@ -130,8 +129,7 @@
     "underscore": "^1.13.1",
     "urijs": "^1.19.1",
     "vinyl-buffer": "^1.0.1",
-    "vue": "^3.2.45",
-    "vue-2": "npm:vue@^2.7.14",
+    "vue": "^2.6.11",
     "watchify": "^3.11.1",
     "webpack": "^3.12.0",
     "webpack-bundle-analyzer": "^3.3.2",
@@ -150,8 +148,8 @@
   },
   "browserslist": "last 2 versions, > 1%, IE 10",
   "engines": {
-    "node": "14.13.0",
-    "npm": "7.24.0"
+    "node": "18.13.0",
+    "npm": "8.19.3"
   },
   "license": "CC0-1.0"
 }
