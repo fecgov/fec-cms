@@ -7,7 +7,7 @@ const CleanWebpackPlugin = require('clean-webpack-plugin');
 // const BundleAnalyzerPlugin = require('webpack-bundle-analyzer')
 //   .BundleAnalyzerPlugin;
 
-const fs = require('fs');
+const fs = require('graceful-fs');
 
 const entries = {
   polyfills: './fec/static/js/polyfills.js',
