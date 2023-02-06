@@ -198,7 +198,7 @@ def legal_doc_search_mur(request):
         query, 'murs',
         offset=offset,
         case_no=case_no,
-        sort = sort,
+        sort=sort,
         case_respondents=case_respondents,
         case_min_open_date=case_min_open_date,
         case_max_open_date=case_max_open_date,
@@ -249,7 +249,6 @@ def legal_doc_search_af(request):
     offset = request.GET.get('offset', 0)
     case_no = request.GET.get('case_no', '')
     af_name = request.GET.get('af_name', '')
-    
     results = api_caller.load_legal_search_results(
         query, 'admin_fines', offset=offset, case_no=case_no, af_name=af_name)
 
