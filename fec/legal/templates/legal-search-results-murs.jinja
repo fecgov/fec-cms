@@ -9,9 +9,11 @@
 {% endblock %}
 
 {% block filters %}
+  <input id="sort" type="hidden" name="sort" value="{{ sort }}">
   <div class="filters__inner">
     {{ legal.keyword_search(result_type, query) }}
     <div class="filter">
+      
       <label class="label" for="case_no">MUR number</label>
       <input id="case_no" name="case_no" type="text" value="{{ case_no }}">
     </div>
@@ -69,4 +71,61 @@
 {% include 'partials/legal-pagination.jinja' %}
 {% endwith %}
 
+{% endblock %}
+{% block scripts %}
+{# super loads scripts from parent #}
+{{ super() }}
+<script>
+
+  let sort_val = "{{ sort | safe }}"
+  let sort_dir = sort_val == '-case_no' || sort_val == null || sort_val == '' ? 'descending' :'ascending'
+  // The case_no column, header-cell
+  let sort_btn = document.getElementById('js-sort-mur')
+  let aria_dir = sort_dir
+  let aria_dir_option = sort_dir == 'descending' ? 'ascending' : 'descending'
+
+  console.log('sort_val:', sort_val)
+  const toggle_sort = function(){
+    let new_dir;
+
+    //On first, there is no querystring yet, so this handles possible null value for 'sort_val' 
+    if (sort_val  == '-case_no' || sort_val  == null || sort_val  == '' ){
+         new_val = 'case_no'
+    }
+    else {
+      new_val = '-case_no'
+    }
+ 
+    //populate hidden field with current sort value
+    document.getElementById('sort').value = new_val
+
+    //submit the filters form
+    document.forms["category-filters"].submit()
+  }
+
+  //If there are no results to the query, the table is not rendered so there is no sort_btn and thus an error on trying to add an event listener to it, so:
+  if (sort_btn) {
+    sort_btn.addEventListener("click", toggle_sort);
+
+    sort_btn.setAttribute('aria-label',`Receipt date: activate to sort column ${aria_dir_option}`)
+    sort_btn.setAttribute('aria-sort', aria_dir)
+
+    // Both classed are on the element on page each page-load, so decide which to remove. 
+    // `toggleClass` adds it if it's not there, removes it if it is there. 
+    sort_btn.classList.toggle(sort_dir == 'descending' ? 'sorting_asc': 'sorting_desc')
+  }
+
+  // Keep scroll-position with each reload
+  //https://stackoverflow.com/questions/17642872/refresh-page-and-keep-scroll-position 
+  //^^ Look at all the answers no just this first one
+        document.addEventListener("DOMContentLoaded", function(event) { 
+            var scrollpos = localStorage.getItem('scrollpos');
+            if (scrollpos) window.scrollTo(0, scrollpos);
+        });
+
+        window.onbeforeunload = function(e) {
+            localStorage.setItem('scrollpos', window.scrollY);
+            location.reload(); //Do I want this-this was added. see last S.O. answer^^      
+        };
+</script>
 {% endblock %}
