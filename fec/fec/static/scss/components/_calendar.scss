@@ -88,7 +88,7 @@
 }
 
 .fc-state-active.button--alt {
-  @extend .button--alt.is-active;
+  @extend .button--alt, .is-active;
 }
 
 .fc-right {
