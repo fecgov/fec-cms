@@ -86,6 +86,7 @@ h3 + .simple-table {
     &.sorting {
       @include u-icon-bg($dash, $gray);
       background-size: u(1rem);
+      line-height: u(2rem);
     }
 
     &.sorting_asc {
