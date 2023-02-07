@@ -84,7 +84,7 @@ let aria_dir = sort_dir
 let aria_dir_option = sort_dir == 'descending' ? 'ascending' : 'descending'
 
 const toggle_sort = function() {
-    let new_dir;
+    let new_val;
     //On first, there is no querystring yet, so this handles possible null value for 'sort_val' 
     if (sort_val == '-case_no' || sort_val == null || sort_val == '') {
         new_val = 'case_no'
