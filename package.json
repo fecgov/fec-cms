@@ -129,8 +129,6 @@
     "sinon": "^1.17.2",
     "sinon-chai": "^2.8.0",
     "stringify": "^5.2.0",
-    "topojson-server": "^3.0.1",
-    "topojson-simplify": "^3.0.3",
     "underscore": "^1.13.1",
     "urijs": "^1.19.1",
     "vinyl-buffer": "^1.0.1",
