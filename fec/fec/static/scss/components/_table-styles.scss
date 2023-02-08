@@ -73,6 +73,34 @@ h3 + .simple-table {
 
   .simple-table__header-cell {
     padding: u(0.5rem 1rem);
+    line-height: u(2rem);
+    
+    &.sorting,
+    &.sorting_asc,
+    &.sorting_desc {
+      background-position: calc(100% - 1rem) 50%;
+      background-repeat: no-repeat;
+      cursor: pointer;
+      padding-right: u(3rem);
+    }
+
+    &.sorting {
+      @include u-icon-bg($dash, $gray);
+      background-size: u(1rem);
+    }
+
+    &.sorting_asc {
+      @include u-icon-bg($arrow-up-border, $primary);
+      background-size: u(1rem);
+      background-color: $gray-lightest;
+    }
+
+    &.sorting_desc {
+      @include u-icon-bg($arrow-down-border, $primary);
+      background-size: u(1rem);
+      background-color: $gray-lightest;
+    }
+
   }
 
   .simple-table__cell {
@@ -140,6 +168,8 @@ h3 + .simple-table {
 
     .simple-table__header-cell {
       display: table-cell;
+      
+
     }
 
     .simple-table__row-group {
