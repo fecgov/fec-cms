@@ -553,6 +553,17 @@
       background-color: $primary;
       background-size: 50%;
     }
+    &.i-check-circle {
+      @include u-icon-bg($check-circle, $federal-blue);
+      // background-color: $inverse;
+      background-size: 80%;
+    }
+    &.i-question-circle {
+      @include u-icon-bg($question-circle, $federal-blue);
+      // background-color: $inverse;
+      background-size: 80%;
+    }
+
   }
 }
 
