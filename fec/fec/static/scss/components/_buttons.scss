@@ -582,3 +582,8 @@
   }
 }
 
+.button--plus {
+  @include u-icon-bg($plus, $inverse);
+  background-position: u(1rem) 50%;
+  padding-left: u(4rem);
+}
