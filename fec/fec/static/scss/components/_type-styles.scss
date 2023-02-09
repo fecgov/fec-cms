@@ -70,6 +70,10 @@
   display: inline;
 }
 
+.t-caps {
+  text-transform: uppercase;
+}
+
 .t-sans {
   font-family: $sans-serif;
   letter-spacing: -0.3px;
@@ -85,6 +89,9 @@
 
 .t-bold {
   font-weight: bold;
+}
+.t-unbold {
+  font-weight: initial;
 }
 
 .t-underline {
