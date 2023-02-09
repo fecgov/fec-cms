@@ -26,7 +26,7 @@
 
 const d3 = require('d3');
 const chroma = require('chroma-js');
-const topojson = require('topojson');
+const topojson = require('topojson-client');
 const statesJSON = require('../data/us-states-10m.json');
 const stateFeatures = topojson.feature(statesJSON, statesJSON.objects.states)
   .features;
