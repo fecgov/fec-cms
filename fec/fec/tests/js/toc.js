@@ -50,7 +50,7 @@ describe('Table of contents', function() {
   it('scrolls to an item on click', function() {
     var $secondItem = this.toc.$menu.find('a[href="#section-2"]');
     var animate = sinon.spy($.prototype, 'animate');
-    var top = $('#section-2').offset().top + 10;
+    var top = $('#section-2').offset().top + 20;
     this.toc.scrollTo({target: $secondItem, preventDefault: function() {}});
     expect(animate).to.have.been.calledWith({scrollTop: top});
     animate.restore();
