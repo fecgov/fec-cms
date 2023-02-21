@@ -1,7 +1,7 @@
 const _ = require('underscore');
 
 const gulp = require('gulp');
-const fs = require('fs');
+const fs = require('graceful-fs');
 
 const consolidate = require('gulp-consolidate');
 const rename = require('gulp-rename');
