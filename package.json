@@ -61,7 +61,7 @@
     "react": "^16.8.2",
     "react-dom": "^16.8.2",
     "react-input-mask": "^2.0.3",
-    "sass": "^1.57.1",
+    "sass": "^1.58.0",
     "sprintf-js": "^1.1.2",
     "topojson-client": "^3.1.0",
     "tough-cookie": "^2.5.0",
