@@ -1,4 +1,4 @@
 User-agent: *
-Disallow: /search/*?query=*
-Disallow: /data/legal/search/*?search=*
-Disallow: /data/search/*?search=*
+Disallow: /search/?*
+Disallow: /data/legal/search/?*
+Disallow: /data/search/?*
