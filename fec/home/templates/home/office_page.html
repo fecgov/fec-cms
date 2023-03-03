@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% load wagtailcore_tags %}
+v{% load wagtailimages_tags %}
 {% load static %}
 {% block body_class %}template-{{ self.get_verbose_name | slugify }}{% endblock %}
 
@@ -38,6 +39,18 @@
     width: 3.4rem;
     height: 3.4rem;
 }
+
+.employee_name {
+  font-size: 1.8rem;
+  font-family: arla,sans-serif;
+  font-weight: bold;
+}
+
+.employee_title {
+  font-size: 1.8rem;
+  font-family: arla,sans-serif;
+}
+
 </style>
 
 <div class="hero__banner--office"></div>
@@ -64,17 +77,18 @@
            {% endif %}
            {% if block.value.employee.employee_name %}
              <div class="grid grid--2-wide office_staff">
-              <div class="grid__item staff_photo">
+              <div class="grid__item staff_photo">            
               {% if block.value.employee.employee_image %}
-                  <img src="/media/{{ block.value.employee.employee_image.file }}">
+              {% image block.value.employee.employee_image original as employee_image %}
+    <img src="{{ employee_image.url }}" alt="Headshot of {{ block.value.employee.employee_name }}" width="136" height="136">
+          
               {% else %}
-                <img src="/static/img/headshot--no-photo.jpg">
+                <img src="{% static "img/headshot--no-photo.jpg" %}" alt="Placeholder no photo of {{ block.value.employee.employee_name  }}" width="136" height="136">
               {% endif %}
               </div>
                <div class="grid__item staff_bio">
-               <!-- <div style="display: table-cell; width: 75%; vertical-align: top;"> -->
-                 {{ block.value.employee.employee_name }}
-                 {{ block.value.employee.bound_blocks.employee_title.value.title }}
+                 <div class="employee_name u-negative--bottom--margin">{{ block.value.employee.employee_name }}</div>
+                 <div class="employee_title u-margin--bottom">{{ block.value.employee.bound_blocks.employee_title.value.title }}</div>
                  {{ block.value.employee.employee_bio }}
               </div>
              </div>

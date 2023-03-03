@@ -1339,7 +1339,7 @@ class OfficePage(Page):
             ('employee', blocks.StructBlock([
                 ('employee_name', blocks.CharBlock(blank=True, required=False)),
                 ('employee_title', EmployeeTitle(blank=True,  required=False,
-                                                 help_text='For footnote on title, use html block with &lt;sup&gt;1&lt;/sup&gt;')),
+                                                 help_text='<b style="color:green">For footnote on title, use html block with &lt;sup&gt;1&lt;/sup&gt;</b>')),
                 ('employee_image', ImageChooserBlock(blank=True, required=False)),
                 ('employee_bio', blocks.RichTextBlock(blank=True, required=False)),
             ], blank=True, required=False, null=True, default=[])),
@@ -1348,8 +1348,8 @@ class OfficePage(Page):
                 ('html', blocks.RawHTMLBlock(blank=True, required=False)),
                 ('text', blocks.RichTextBlock(blank=True, required=False)),
              ], blank=True, required=False, null=True,
-                help_text='Use for sub-offices, staff-lists, footnotes or \
-                 any extra info appearing at bottom of office section')),
+                    help_text='Use for sub-offices, staff-lists, footnotes or \
+                    any extra info appearing at bottom of office section')),
         ], null=True, blank=True)),
     ], null=True, blank=True, use_json_field=True)
 
