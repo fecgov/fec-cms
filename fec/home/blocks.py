@@ -208,12 +208,14 @@ class ExampleParagraph(blocks.StructBlock):
         template = 'blocks/example-paragraph.html'
         icon = 'pilcrow'
 
+
 class EmployeeTitle(blocks.StructBlock):
     title = blocks.StreamBlock([
         ('html_title', blocks.RawHTMLBlock(
             blank=True, required=False, help_text='For footnote on title, use html block with &lt;sup&gt;1&lt;/sup&gt;')),
         ('text_title', blocks.CharBlock(blank=True, required=False)),
-        ], blank=True, required=False )
+        ], blank=True, required=False)
+
 
 class ResourceBlock(blocks.StructBlock):
     """A section of a ResourcePage"""
