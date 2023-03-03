@@ -1,0 +1,114 @@
+{% extends "base.html" %}
+{% load wagtailcore_tags %}
+{% load static %}
+{% block body_class %}template-{{ self.get_verbose_name | slugify }}{% endblock %}
+
+{% block content %}
+{% include 'partials/breadcrumbs.html' with page=self style='secondary' %}
+
+<style>
+@media screen and (min-width: 53.75em) {
+  .office_staff {
+    display:flex;
+  }
+
+  .office_staff .staff_photo {
+    flex-basis: 25%;
+  } 
+
+  .office_staff .staff_bio {
+    flex-basis: 75%;
+  } 
+}
+
+ .office_staff .staff_bio {
+ width: 100%
+ } 
+
+.contact-item__content {
+  display: block;
+}
+
+.contact-item:not(.contact-item--half)::before{
+    content: '';
+    display: block;
+    background-size: 100%;
+    margin-right: 2rem;
+    margin-bottom: 1.5rem;
+    width: 3.4rem;
+    height: 3.4rem;
+}
+</style>
+
+<div class="hero__banner--office"></div>
+<article class="main">
+  <div class="container">
+    <header class="heading--main">
+      <h1>{{ self.title }}</h1>
+    </header>
+    
+      {% for block in self.offices %}
+        <div class="main__content--full"> 
+ <!-- DO I  NEED THIS 'if'  STMT IF THERE ARE NOT OTHER FIELDS OR STREAMFIELDS ? BUT MAY LEAVE IT IN CASE OTHHERS ARE ADDED -->
+     {% if block.block_type == 'office' %}
+
+       {% if block.value.office_title %}
+         <h2 class="content__section--ruled-responsive methodology-block u-margin--top t-serif">{{ block.value.office_title }}</h2>
+         {% else%}
+         <br>
+       {% endif %}
+       <div class="main__content">
+           {{ block.value.office_description }}
+           {% if block.value.more_info %}
+              {{ block.value.more_info }}
+           {% endif %}
+           {% if block.value.employee.employee_name %}
+             <div class="grid grid--2-wide office_staff">
+              <div class="grid__item staff_photo">
+              {% if block.value.employee.employee_image %}
+                  <img src="/media/{{ block.value.employee.employee_image.file }}">
+              {% else %}
+                <img src="/static/img/headshot--no-photo.jpg">
+              {% endif %}
+              </div>
+               <div class="grid__item staff_bio">
+               <!-- <div style="display: table-cell; width: 75%; vertical-align: top;"> -->
+                 {{ block.value.employee.employee_name }}
+                 {{ block.value.employee.bound_blocks.employee_title.value.title }}
+                 {{ block.value.employee.employee_bio }}
+              </div>
+             </div>
+           {% endif %}
+           {% if block.value.extra_info %}
+             {{ block.value.extra_info }}
+           {% endif %}
+      </div>
+        <div class="sidebar-container sidebar-container--right">
+         {{ block.value.bound_blocks.contact_info }}
+        </div>
+       </div> 
+       {% endif %}
+    {% endfor %}
+
+  </div>
+
+</article>
+{% endblock %}
+
+
+
+<!-- 
+     ('office_title', blocks.CharBlock()), # maybe this can  just ne RicHText block
+            ('office_description', blocks.RichTextBlock(blank=True)),
+            ('contact_info', ContactInfoBlock()),
+            # SHOULD THIS BE A STRCT BLOACK OR LIST BLOCK INSTEAD OF STREAMFIELD...
+            # SEE FFCNET OFFUCE/STAFF-MEMBER...
+            # ('staff_member',blocks.ListBlock(blocks.StructBlock([
+            # SHOULD IT BE 'staff' instead of 'employee' ?
+            ('employee', blocks.StructBlock([
+                ('employee_name', blocks.CharBlock(blank=True)),
+                ('employee_title', blocks.CharBlock(blank=True)),
+                ('employee_image', ImageChooserBlock(blank=True)),
+                ('employee_bio', blocks.RichTextBlock(blank=True)),
+
+  -->

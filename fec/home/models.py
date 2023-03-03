@@ -33,7 +33,7 @@ from home.blocks import (
     DocumentFeedBlurb, ExampleForms, ExampleImage, ExampleParagraph,
     ExternalButtonBlock, InternalButtonBlock, LinkBlock, OptionBlock,
     ReportingExampleCards, ResourceBlock, SnippetChooserBlock,
-    ThumbnailBlock, FeedDocumentBlock
+    ThumbnailBlock, FeedDocumentBlock, EmployeeTitle
 )
 
 logger = logging.getLogger(__name__)
@@ -1319,3 +1319,44 @@ class OigLandingPage(Page):
     @property
     def category_filters(self):
         return constants.report_category_groups['oig']
+
+
+class OfficePage(Page):
+    offices = StreamField([
+        ('office', blocks.StructBlock([
+            ('office_title', blocks.CharBlock(required=False, blank=True)),
+            ('office_description', blocks.RichTextBlock(blank=True)),
+            ('more_info', blocks.StreamBlock([
+               ('html', blocks.RawHTMLBlock(blank=True)),
+               ('internal_button', InternalButtonBlock(blank=True)),
+               ('external_button', ExternalButtonBlock(blank=True)),
+               ('document', FeedDocumentBlock(blank=True, template='blocks/simple-document.html')),
+            ], blank=True, required=False, help_text='Use for internal/external btns or document-links')),
+            # SHOULD THIS BE A STRUCTBLOCK OR LIST BLOCK INSTEAD OF STREAMFIELD...
+            # SEE FFCNET OFFICE/STAFF-MEMBER...
+            # ('staff_member',blocks.ListBlock(blocks.StructBlock([
+            # SHOULD IT BE 'staff' instead of 'employee' ?
+            ('employee', blocks.StructBlock([
+                ('employee_name', blocks.CharBlock(blank=True, required=False)),
+                ('employee_title', EmployeeTitle(blank=True,  required=False,
+                                                 help_text='For footnote on title, use html block with &lt;sup&gt;1&lt;/sup&gt;')),
+                ('employee_image', ImageChooserBlock(blank=True, required=False)),
+                ('employee_bio', blocks.RichTextBlock(blank=True, required=False)),
+            ], blank=True, required=False, null=True, default=[])),
+            ('contact_info', ContactInfoBlock(blank=True)),
+            ('extra_info', blocks.StreamBlock([
+                ('html', blocks.RawHTMLBlock(blank=True, required=False)),
+                ('text', blocks.RichTextBlock(blank=True, required=False)),
+             ], blank=True, required=False, null=True,
+                help_text='Use for sub-offices, staff-lists, footnotes or \
+                 any extra info appearing at bottom of office section')),
+        ], null=True, blank=True)),
+    ], null=True, blank=True, use_json_field=True)
+
+    content_panels = Page.content_panels + [
+        FieldPanel('offices'),
+    ]
+
+    @property
+    def content_section(self):
+        return get_content_section(self)
