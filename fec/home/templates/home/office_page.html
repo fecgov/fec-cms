@@ -40,15 +40,23 @@ v{% load wagtailimages_tags %}
     height: 3.4rem;
 }
 
+.contact-item__label {
+  text-transform: uppercase;
+  font-size: 1.8rem;
+  font-family: Karla,sans-serif;
+}
+
 .employee_name {
   font-size: 1.8rem;
-  font-family: arla,sans-serif;
+  font-family: Karla,sans-serif;
   font-weight: bold;
+  letter-spacing: -.3px;
 }
 
 .employee_title {
   font-size: 1.8rem;
-  font-family: arla,sans-serif;
+  font-family: Karla,sans-serif;
+  letter-spacing: -.3px;
 }
 
 </style>
@@ -67,8 +75,6 @@ v{% load wagtailimages_tags %}
 
        {% if block.value.office_title %}
          <h2 class="content__section--ruled-responsive methodology-block u-margin--top t-serif">{{ block.value.office_title }}</h2>
-         {% else%}
-         <br>
        {% endif %}
        <div class="main__content">
            {{ block.value.office_description }}
@@ -76,7 +82,7 @@ v{% load wagtailimages_tags %}
               {{ block.value.more_info }}
            {% endif %}
            {% if block.value.employee.employee_name %}
-             <div class="grid grid--2-wide office_staff">
+             <div class="grid grid--2-wide office_staff u-padding--top">
               <div class="grid__item staff_photo">            
               {% if block.value.employee.employee_image %}
               {% image block.value.employee.employee_image original as employee_image %}
@@ -108,21 +114,3 @@ v{% load wagtailimages_tags %}
 
 </article>
 {% endblock %}
-
-
-
-<!-- 
-     ('office_title', blocks.CharBlock()), # maybe this can  just ne RicHText block
-            ('office_description', blocks.RichTextBlock(blank=True)),
-            ('contact_info', ContactInfoBlock()),
-            # SHOULD THIS BE A STRCT BLOACK OR LIST BLOCK INSTEAD OF STREAMFIELD...
-            # SEE FFCNET OFFUCE/STAFF-MEMBER...
-            # ('staff_member',blocks.ListBlock(blocks.StructBlock([
-            # SHOULD IT BE 'staff' instead of 'employee' ?
-            ('employee', blocks.StructBlock([
-                ('employee_name', blocks.CharBlock(blank=True)),
-                ('employee_title', blocks.CharBlock(blank=True)),
-                ('employee_image', ImageChooserBlock(blank=True)),
-                ('employee_bio', blocks.RichTextBlock(blank=True)),
-
-  -->

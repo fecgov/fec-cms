@@ -33,7 +33,7 @@ from home.blocks import (
     DocumentFeedBlurb, ExampleForms, ExampleImage, ExampleParagraph,
     ExternalButtonBlock, InternalButtonBlock, LinkBlock, OptionBlock,
     ReportingExampleCards, ResourceBlock, SnippetChooserBlock,
-    ThumbnailBlock, FeedDocumentBlock, EmployeeTitle
+    ThumbnailBlock, FeedDocumentBlock, EmployeeTitle, #EmployeeBlock
 )
 
 logger = logging.getLogger(__name__)
@@ -1332,7 +1332,7 @@ class OfficePage(Page):
                ('external_button', ExternalButtonBlock(blank=True)),
                ('document', FeedDocumentBlock(blank=True, template='blocks/simple-document.html')),
             ], blank=True, required=False, help_text='Use for internal/external btns or document-links')),
-            # SHOULD THIS BE A STRUCTBLOCK OR LIST BLOCK INSTEAD OF STREAMFIELD...
+            # SHOULD THIS BE A STRUCTBLOCK W/ LIST BLOCK INSTEAD OF STRUCTBLOCK?...
             # SEE FFCNET OFFICE/STAFF-MEMBER...
             # ('staff_member',blocks.ListBlock(blocks.StructBlock([
             # SHOULD IT BE 'staff' instead of 'employee' ?
@@ -1343,13 +1343,21 @@ class OfficePage(Page):
                 ('employee_image', ImageChooserBlock(blank=True, required=False)),
                 ('employee_bio', blocks.RichTextBlock(blank=True, required=False)),
             ], blank=True, required=False, null=True, default=[])),
+
+            # TODO:IF THEY ARE GOING TO WANT MORE THAN ONE EMPLOYEE, WRAP EMPLOYEEBLOCK...
+            # IN STREAMBLOCK OR MAYBE LISTBLOCK LIKE BELOW AND RESTORE DATABASE AND MAKEMIGRATIONS, I THINK?
+            # ('employee', blocks.StreamBlock([
+            #     ('employee', EmployeeBlock(blank=True, required=False, null=True, default=[])),
+            # ])),
+
             ('contact_info', ContactInfoBlock(blank=True)),
             ('extra_info', blocks.StreamBlock([
-                ('html', blocks.RawHTMLBlock(blank=True, required=False)),
+                ('html', blocks.RawHTMLBlock(blank=True, required=False, help_text='<b style="color:green">For footnote, use &lt;sup&gt;1&lt;/sup&gt;</b>')),
                 ('text', blocks.RichTextBlock(blank=True, required=False)),
              ], blank=True, required=False, null=True,
                     help_text='Use for sub-offices, staff-lists, footnotes or \
-                    any extra info appearing at bottom of office section')),
+                    any extra info appearing at bottom of office section <br> \
+                    <b style="color:green">For footnote, use html block with &lt;sup&gt;1&lt;/sup&gt;</b>')),
         ], null=True, blank=True)),
     ], null=True, blank=True, use_json_field=True)
 
