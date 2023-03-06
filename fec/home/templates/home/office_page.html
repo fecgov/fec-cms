@@ -7,64 +7,10 @@ v{% load wagtailimages_tags %}
 {% block content %}
 {% include 'partials/breadcrumbs.html' with page=self style='secondary' %}
 
-<style>
-@media screen and (min-width: 53.75em) {
-  .office_staff {
-    display:flex;
-  }
-
-  .office_staff .staff_photo {
-    flex-basis: 25%;
-  } 
-
-  .office_staff .staff_bio {
-    flex-basis: 75%;
-  } 
-}
-
- .office_staff .staff_bio {
- width: 100%
- } 
-
-.contact-item__content {
-  display: block;
-}
-
-.contact-item:not(.contact-item--half)::before{
-    content: '';
-    display: block;
-    background-size: 100%;
-    margin-right: 2rem;
-    margin-bottom: 1.5rem;
-    width: 3.4rem;
-    height: 3.4rem;
-}
-
-.contact-item__label {
-  text-transform: uppercase;
-  font-size: 1.8rem;
-  font-family: Karla,sans-serif;
-}
-
-.employee_name {
-  font-size: 1.8rem;
-  font-family: Karla,sans-serif;
-  font-weight: bold;
-  letter-spacing: -.3px;
-}
-
-.employee_title {
-  font-size: 1.8rem;
-  font-family: Karla,sans-serif;
-  letter-spacing: -.3px;
-}
-
-</style>
-
 <div class="hero__banner--office"></div>
 <article class="main">
   <div class="container">
-    <header class="heading--main">
+    <header class="heading--main offices-heading--main">
       <h1>{{ self.title }}</h1>
     </header>
     
@@ -74,7 +20,7 @@ v{% load wagtailimages_tags %}
      {% if block.block_type == 'office' %}
 
        {% if block.value.office_title %}
-         <h2 class="content__section--ruled-responsive methodology-block u-margin--top t-serif">{{ block.value.office_title }}</h2>
+         <h2 class="content__section--ruled-responsive methodology-block t-serif office-title">{{ block.value.office_title }}</h2>
        {% endif %}
        <div class="main__content">
            {{ block.value.office_description }}
@@ -82,8 +28,8 @@ v{% load wagtailimages_tags %}
               {{ block.value.more_info }}
            {% endif %}
            {% if block.value.employee.employee_name %}
-             <div class="grid grid--2-wide office_staff u-padding--top">
-              <div class="grid__item staff_photo">            
+             <div class="grid grid--2-wide u-padding--top office-employee--section">
+              <div class="grid__item employee-photo">            
               {% if block.value.employee.employee_image %}
               {% image block.value.employee.employee_image original as employee_image %}
     <img src="{{ employee_image.url }}" alt="Headshot of {{ block.value.employee.employee_name }}" width="136" height="136">
@@ -92,7 +38,7 @@ v{% load wagtailimages_tags %}
                 <img src="{% static "img/headshot--no-photo.jpg" %}" alt="Placeholder no photo of {{ block.value.employee.employee_name  }}" width="136" height="136">
               {% endif %}
               </div>
-               <div class="grid__item staff_bio">
+               <div class="grid__item employee-bio">
                  <div class="employee_name u-negative--bottom--margin">{{ block.value.employee.employee_name }}</div>
                  <div class="employee_title u-margin--bottom">{{ block.value.employee.bound_blocks.employee_title.value.title }}</div>
                  {{ block.value.employee.employee_bio }}
@@ -103,7 +49,7 @@ v{% load wagtailimages_tags %}
              {{ block.value.extra_info }}
            {% endif %}
       </div>
-        <div class="sidebar-container sidebar-container--right">
+        <div class="sidebar-container sidebar-container--right offices-contact">
          {{ block.value.bound_blocks.contact_info }}
         </div>
        </div> 

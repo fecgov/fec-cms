@@ -116,3 +116,25 @@
     margin-bottom: 0;
   }
 }
+
+
+
+// For FEC-Offices pages contact items where icon is stacked with other items and label is sans-serif
+
+.offices-contact {
+
+  .contact-item:not(.contact-item--half)::before{
+    display: block;
+    margin-bottom: u(1.5rem);
+   }
+  
+  .contact-item__content {
+    display: block;
+  }
+
+ .contact-item__label {
+  text-transform: uppercase;
+  font-size: u(1.8rem);
+  font-family: Karla,sans-serif;
+  }
+}
