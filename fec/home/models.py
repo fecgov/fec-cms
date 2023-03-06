@@ -776,7 +776,7 @@ class AboutLandingPage(Page):
         ('sections', OptionBlock())
     ], null=True)
 
-    subpage_types = ['ResourcePage', 'DocumentFeedPage', 'ReportsLandingPage']
+    subpage_types = ['ResourcePage', 'DocumentFeedPage', 'ReportsLandingPage', 'OfficePage']
 
     content_panels = Page.content_panels + [
         StreamFieldPanel('hero'),
