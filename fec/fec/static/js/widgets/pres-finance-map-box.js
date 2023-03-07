@@ -169,7 +169,7 @@ function PresidentialFundsMap() {
   this.element = document.querySelector(selector_mainElement); // The visual element associated with this, this.instance
   this.candidateDetailsHolder; // Element to hold candidate name, party, office, and ID
   this.yearControl = this.element.querySelector(selector_yearControl);
-  this.current_electionYear = availElectionYears[0];
+  this.current_electionYear = 2020;//availElectionYears[0];
   this.current_electionState = 'US';
   this.current_electionStateName = 'United States';
   this.current_candidateID = specialCandidateIDs[0];
@@ -202,7 +202,7 @@ PresidentialFundsMap.prototype.init = function() {
     let thisYear = availElectionYears[i];
     let newElem = document.createElement('label');
     // TODO try to find the form field's value; restore it if possible (checked and this.current_electionYear)?
-    let switched = i == 0 ? ' checked' : '';
+    let switched = availElectionYears[i] == this.current_electionYear ? ' checked' : '';
     newElem.setAttribute('class', `toggle`);
     newElem.setAttribute('for', `switcher-${thisYear}`);
     newElem.innerHTML = `<input type="radio" class="toggle" value="${thisYear}" id="switcher-${thisYear}" name="year_selector" aria-controls="${thisYear}-message" tabindex="0"${switched}><span class="button--alt">${thisYear}</span>`;
