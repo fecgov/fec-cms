@@ -186,6 +186,27 @@ class CustomTableBlock(blocks.StructBlock):
         template = 'blocks/custom_table.html'
         icon = 'table'
 
+class ReportingTableBlock(blocks.StructBlock):
+    """A custom table, works well with finacial information
+    Typicallyused for Statistical Press Release tables
+    """
+    reporting_table_options = {
+        'startRows': 1,
+        'startCols': 6,
+        'colHeaders': False,
+        'rowHeaders': False,
+        'height': 108,
+        'language': 'en',
+        'renderer': 'html'
+    }
+
+    state_table = TableBlock(table_options=reporting_table_options, template='blocks/reporting-dates-table-block.html')
+
+
+    class Meta:
+        template = 'blocks/reporting-table.html'
+        icon = 'table'
+
 
 class ExampleImage(blocks.StructBlock):
     """Creates an example module with an image and a caption, side-by-side

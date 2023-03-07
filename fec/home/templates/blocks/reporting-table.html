@@ -1,0 +1,10 @@
+{% load wagtailcore_tags %}
+
+{% for block in self.state_table %}  
+
+ {%include_block block %}
+  {{ block }}
+ 
+{% endfor %}  
+
+

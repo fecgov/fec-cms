@@ -33,7 +33,7 @@ from home.blocks import (
     DocumentFeedBlurb, ExampleForms, ExampleImage, ExampleParagraph,
     ExternalButtonBlock, InternalButtonBlock, LinkBlock, OptionBlock,
     ReportingExampleCards, ResourceBlock, SnippetChooserBlock,
-    ThumbnailBlock, FeedDocumentBlock
+    ThumbnailBlock, FeedDocumentBlock, ReportingTableBlock
 )
 
 logger = logging.getLogger(__name__)
@@ -1319,3 +1319,17 @@ class OigLandingPage(Page):
     @property
     def category_filters(self):
         return constants.report_category_groups['oig']
+
+
+class ReportingDatesTables(Page):
+    states = StreamField([
+        ('state', blocks.StructBlock([
+            ('state_name', blocks.CharBlock(form_classname='', icon='', blank=True, Required=False )),
+            ('state_table', ReportingTableBlock(blank=True))
+        ]))
+    ], blank=True, null=True)
+
+    content_panels = Page.content_panels + [
+        FieldPanel('states'),
+    ]
+

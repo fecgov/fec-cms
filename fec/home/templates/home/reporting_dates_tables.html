@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+{% load wagtailcore_tags wagtailimages_tags %}
+{% load filters %}
+{% load static %}
+{% block body_class %}template-{{ self.get_verbose_name | slugify }}{% endblock %}
+
+{% block content %}
+
+{% block breadcrumbs %}
+  {% include 'partials/breadcrumbs.html' with page=self links=self.get_ancestors style=self.breadcrumb_style %}
+{% endblock %}
+
+
+<article class="main container">
+
+  <h1 class="heading--main">{{ self.title }}</h1>
+
+    {% comment %}
+      Wagtail did away with the .rich-text wrapper
+      but we still have some style rules that rely on it
+      so we're adding it back for blocks defined in models.py as RichTextBlock
+    {% endcomment %}
+    <div class=""> 
+     <table>
+      <tbody>
+     {% for block in self.states %}
+    
+     {% if block.block_type == 'state' %}
+       {% if block.value.state_table %}
+        <br>
+        xxxxxxxxxxxxxxxxxxxxxxxxx
+         <br>
+         {{ block.value }}
+        <br>
+         -------------------------------------
+       <br>
+  
+         {{ block.value.bound_blocks }}
+         <br>
+         -------------------------------------
+         <br>
+
+       {% include_block block %}
+     
+        {% endif %}
+      {% endif %}
+    {% endfor %}
+  </tbody>
+</table>
+    </div>
+    {% if self.citations %}
+      <div id="legal-citations" class="sidebar--secondary t-sans">
+        <h4 class="sidebar__title">Legal citations</h4>
+        <div class="sidebar__content">
+          <div class="grid grid--2-wide">
+          {% for citation in self.citations %}
+            {% for block in citation.value %}
+              <div class="grid__item">
+                <p class="t-bold">{{ block.label }}</p>
+                <div class="rich-text">{{ block.content }}</div>
+              </div>
+            {% endfor %}
+          {% endfor %}
+          </div>
+        </div>
+      </div>
+    {% endif %}
+
+</article>
+
+{% include 'partials/disclaimer.html' %}
+
+{% endblock %}
+
+{% block extra_js %}
+  <script> window.BASE_PATH = '/data' </script>
+  <script type="text/javascript" src="{% asset_for_js 'data-init.js' %}"></script>
+  <script type="text/javascript" src="{% asset_for_js 'reporting-dates-tables.js' %}"></script>
+{% endblock %}
+
