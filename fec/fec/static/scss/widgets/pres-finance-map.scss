@@ -452,15 +452,8 @@ $info-circle: 'data:image/svg+xml;charset=utf8, %3Csvg%20xmlns%3D%22http%3A%2F%2
       }
     }
     #filter-year {
-      width: calc(33.3% - .5rem);//20rem;
+      width: calc(100% - .5rem);//20rem;
       order: 5; // responsive
-      margin-right: .5rem;
-    }
-    #filter-map-type {
-      width: calc(66.6% - 1rem);
-      padding-left: 1rem;
-      order: 10;
-      margin-left: .5rem;
       margin-right: .5rem;
     }
 
@@ -538,14 +531,7 @@ $info-circle: 'data:image/svg+xml;charset=utf8, %3Csvg%20xmlns%3D%22http%3A%2F%2
     @extend .w-m;
 
     #filter-year {
-      width: calc(25% - .5rem);//20rem;
-      margin-right: .5rem;
-      display: inline-block //for IE11;
-    }
-
-    #filter-map-type {
-      width: calc(25% - 1rem);
-      margin-left: .5rem;
+      width: calc(50% - .5rem);//20rem;
       margin-right: .5rem;
       display: inline-block //for IE11;
     }

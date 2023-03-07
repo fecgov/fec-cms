@@ -46,8 +46,6 @@ const COVERAGE_DATES_LOADED = EVENT_APP_ID + '_coverage_dates_loaded';
 // TODO: Update so we're using IDs everywhere?
 const selector_mainElement = '#gov-fec-pres-finance';
 const selector_yearControl = '#filter-year';
-const selector_map_form = '#filter-map-type';
-const selector_mapTypeControl = '.js-map-switcher';
 const selector_resetApp = '.js-reset-app';
 const selector_map = '.map-wrapper .election-map';
 const selector_candidateDetails = '.candidate-details';
@@ -213,13 +211,6 @@ PresidentialFundsMap.prototype.init = function() {
   this.yearControl.addEventListener(
     'change',
     this.handleElectionYearChange.bind(this)
-  );
-
-  // Init the map type listener
-  this.mapTypeControl = this.element.querySelector(selector_mapTypeControl);
-  this.mapTypeControl.addEventListener(
-    'change',
-    this.handleMapTypeChange.bind(this)
   );
 
   this.element.addEventListener(
@@ -1348,7 +1339,6 @@ PresidentialFundsMap.prototype.handlePageShow = function() {
   // For when a user navigates back to this page and has a cached form value,
   // reset the toggles
   this.yearControl.reset();
-  this.element.querySelector(selector_map_form).reset();
 };
 
 /**
@@ -1360,9 +1350,6 @@ PresidentialFundsMap.prototype.toggleUSOrStateDisplay = function() {
   // Show for only national view:
   this.element.querySelector(
     selector_summariesHolder
-  ).style.display = nationalDisplay;
-  this.element.querySelector(
-    selector_mapTypeControl
   ).style.display = nationalDisplay;
   // For the candidate list disclaimer, we want to hold open the vertical space so we'll toggle its opacity
   if (nationalDisplay == 'block')
