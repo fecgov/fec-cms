@@ -16,7 +16,7 @@ const breakpointToSmall = 430;
 const breakpointToMedium = 675;
 const breakpointToLarge = 900;
 const breakpointToXL = 1200;
-const availElectionYears = [2020, 2016]; // defaults to [0]
+const availElectionYears = [2024, 2020, 2016, 2012, 2008]; // defaults to [0]
 const specialCandidateIDs = ['P00000001', 'P00000002', 'P00000003'];
 
 const pathFormat_download_contribs =
