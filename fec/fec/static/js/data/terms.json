@@ -4,6 +4,10 @@
     "definition": "The Federal Election Campaign Act of 1971, as amended (<a href=\"https://www.fec.gov/data/legal/statutes/\">52 U.S.C. §§30101-30146</a>). 11 CFR <a href=\"https://www.fec.gov/regulations/100-18/CURRENT#100-18\">100.18</a>. Prior to September 1, 2014, the Act appeared in Title 2 of the U.S. Code. Sometimes abbreviated FECA."
   },
   {
+    "term": "Adapted disclaimer",
+    "definition": "A clear statement that the internet public communication is paid for, and that identifies the person or persons who paid for the internet public communication using their full name or a commonly understood abbreviation or acronym by which the person or persons are known, which is accompanied by: an indicator and a mechanism. It must satisfy the requirements of 11 CFR <a href=\"https://www.fec.gov/regulations/110-11/CURRENT#110-11\">110.11(c)(1), (c)(5)(ii) and (iii)</a>."
+  },
+  {
     "term": "Administrative expense",
     "definition": "For party committees, rent, utilities, office equipment, office supplies, routine building maintenance and other operating costs not attributable to a specific candidate."
   },
@@ -304,6 +308,10 @@
     "definition": "A political committee that makes only independent expenditures that may solicit and accept unlimited contributions from individuals, corporations, labor organizations and other political committees. It may not accept contributions from foreign nationals, federal contractors, national banks or federally chartered corporations. See <a href=\"https://www.fec.gov/data/legal/advisory-opinions/2010-11/\">AO 2010-11</a>. Such committees, popularly known as Super PACs, must register with the Commission and comply with all applicable reporting requirements of the Act."
   },
   {
+    "term": "Indicator",
+    "definition": "Any visible or audible element associated with an internet public communication that is presented in a clear and conspicuous manner and gives notice to persons reading, observing, or listening to the internet public communication that they may read, observe, or listen to a disclaimer satisfying the requirements of 11 CFR <a href=\"https://www.fec.gov/regulations/110-11/CURRENT#110-11\">110.11(b) and (c)(1)</a> through a mechanism. An indicator may take any form including, but not limited to, words, images, sounds, symbols, and icons."
+  },
+  {
     "term": "Joint contribution",
     "definition": "A contribution made by more than one person on a single check or other written instrument. 11 CFR <a href=\"https://www.fec.gov/regulations/110-1/CURRENT#110-1-k\">110.1(k)(1)</a>."
   },
@@ -368,6 +376,10 @@
     "definition": "An FEC enforcement action, initiated by a sworn complaint or by an internal administrative action."
   },
   {
+    "term": "Mechanism",
+    "definition": "Any use of technology that enables the person reading, observing, or listening to an internet public communication to read, observe or listen to a disclaimer satisfying the requirements of 11 CFR <a href=\"https://www.fec.gov/regulations/110-11/CURRENT#110-11\">110.11 (b) and (c)(1)</a> after no more than one action by the recipient of the internet public communication. A mechanism may take any form including, but not limited to, hover-over text, pop-up screens, scrolling text, rotating panels, and hyperlinks to a landing page."
+  },
+  {
     "term": "Member",
     "definition": "With respect to a labor organization, a trade association, a cooperative or other incorporated membership organization, a member is an individual or other entity that: <ul><li>Satisfies the requirements for membership in a membership organization;</li><li> affirmatively accepts the organization’s invitation to become a member; and</li><li>maintains a long-term and continuous bond with the organization by:<ul><li>having a significant financial attachment, such as a significant investment or ownership stake;</li><li>paying annual dues; or</li><li>having direct participatory rights in the governance of the organization.</li></ul></li></ul> 11 CFR <a href=\"https://www.fec.gov/regulations/114-1/CURRENT#114-1-e-2\">114.1(e)(2)</a>."
   },
@@ -377,7 +389,7 @@
   },
   {
     "term": "Memo entry/memo item",
-    "definition": "Supplemental or explanatory information on a reporting schedule. A memo entry is often used to disclose additional information about an itemized transaction that is included in the total receipts or disbursements for the current report or a previous report. The dollar amount in a memo entry is not incorporated into the total figure for the schedule."
+    "definition": "A way to mark a transaction so that the dollar amount is not incorporated into the total figure for the schedule."
   },
   {
     "term": "Memo text",
@@ -517,7 +529,7 @@
   },
   {
     "term": "Public communication",
-    "definition": "A communication by means of any broadcast, cable or satellite communication, newspaper, magazine, outdoor advertising facility, mass mailing or telephone bank to the general public, or any other form of general public political advertising. The term general public political advertising does not include communications made over the internet, except for communications placed for a fee on another person’s website. 11 CFR <a href=\"https://www.fec.gov/regulations/100-26/CURRENT#100-26\">100.26</a>, <a href=\"https://www.fec.gov/regulations/100-27/CURRENT#100-27\">100.27</a> (definition of mass mailing) and <a href=\"https://www.fec.gov/regulations/100-28/CURRENT#100-28\">100.28</a> (definition of telephone bank)."
+    "definition": "A communication by means of any broadcast, cable or satellite communication, newspaper, magazine, outdoor advertising facility, mass mailing or telephone bank to the general public, or any other form of general public political advertising. The term general public political advertising does not include communications made over the internet, except for communications placed for a fee on another person’s website, digital device, application, or advertising platform. 11 CFR <a href=\"https://www.fec.gov/regulations/100-26/CURRENT#100-26\">100.26</a>, <a href=\"https://www.fec.gov/regulations/100-27/CURRENT#100-27\">100.27</a> (definition of mass mailing) and <a href=\"https://www.fec.gov/regulations/100-28/CURRENT#100-28\">100.28</a> (definition of telephone bank)."
   },
   {
     "term": "Qualified/non-qualified",
