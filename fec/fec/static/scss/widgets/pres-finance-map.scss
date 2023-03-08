@@ -92,6 +92,20 @@ $info-circle: 'data:image/svg+xml;charset=utf8, %3Csvg%20xmlns%3D%22http%3A%2F%2
       }
     }
 
+    .js-table-switcher {
+      display: flex;
+      flex-direction: row;
+      justify-content: stretch;
+
+      legend {
+        width: 100%;
+      }
+      .toggle {
+        flex-grow: 2;
+      }
+
+    }
+
   }
   .message, .message[aria-hidden="true"] {
     // .message, etc are copied from components/_messages.scss
@@ -450,6 +464,9 @@ $info-circle: 'data:image/svg+xml;charset=utf8, %3Csvg%20xmlns%3D%22http%3A%2F%2
           max-width: none;
         }
       }
+      .js-table-switcher {
+        display: block;
+      }
     }
     #filter-year {
       width: calc(100% - .5rem);//20rem;
@@ -509,7 +526,7 @@ $info-circle: 'data:image/svg+xml;charset=utf8, %3Csvg%20xmlns%3D%22http%3A%2F%2
       text-align: right;
     }
     .right-column-wrapper {
-      width: 50%;
+      width: 100%;
       // margin-left: 1rem;
       order: 35;
     }  
@@ -533,8 +550,13 @@ $info-circle: 'data:image/svg+xml;charset=utf8, %3Csvg%20xmlns%3D%22http%3A%2F%2
     #filter-year {
       width: calc(50% - .5rem);//20rem;
       margin-right: .5rem;
-      display: inline-block //for IE11;
+      display: inline-block; //for IE11;
+      
+      .js-table-switcher {
+        display: block;
+      }
     }
+    
 
     .candidate-list-wrapper {
       width: calc(25% - .5rem);
