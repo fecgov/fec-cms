@@ -60,6 +60,12 @@
   padding-top: u(1rem);
 }
 
+.contact-item--check {
+  &::before {
+    @include u-icon-circle($check-circle, $inverse, $primary, 3.4rem);
+  }
+}
+
 .contact-item--phone {
   &::before {
     @include u-icon-circle($telephone-circle, $inverse, $primary, 3.4rem);
