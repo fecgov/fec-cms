@@ -3,6 +3,7 @@
 // Assumes $em-base is the font-size of <html>
 @use 'sass:math';
 
+@use 'sass:math';
 @function rem($pxval) {
   @if not unitless($pxval) {
     $pxval: strip-units($pxval);

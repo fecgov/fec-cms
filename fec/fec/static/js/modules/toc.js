@@ -22,6 +22,21 @@ function TOC(selector) {
   this.watchers = this.addWatchers();
   this.$menu.on('click', 'a', this.scrollTo.bind(this));
   $(window).on('resize', this.updateWatchers.bind(this));
+
+  // Handle inbound URL with hash
+  if (window.location.hash) {
+    var self = this;
+    /**
+    Call updateWatchers and scrollTo in 0-second setTimeout to
+    move to end of browser stack. This avoids intermittent/breaking
+    race condifion where inbound hash goes to its location before
+    TOC can respond to the scroll.
+    */
+    setTimeout(function() {
+     self.updateWatchers();
+    window.scrollTo(0, $(window.location.hash).offset().top + 20);
+    }, 0);
+   }
 }
 
 TOC.prototype.getSections = function() {
@@ -56,7 +71,7 @@ TOC.prototype.scrollTo = function(e) {
   e.preventDefault();
   var $link = $(e.target);
   var section = $link.attr('href');
-  var sectionTop = $(section).offset().top + 10;
+  var sectionTop = $(section).offset().top + 20;
   $('body, html').animate({
     scrollTop: sectionTop
   });

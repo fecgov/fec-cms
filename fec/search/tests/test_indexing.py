@@ -1,7 +1,7 @@
 import requests_mock
 import search.utils.search_indexing as search
 
-from wagtail.core.models import Page
+from wagtail.models import Page
 from unittest import mock
 from django.test import TestCase, override_settings  # Client
 from django.conf import settings
