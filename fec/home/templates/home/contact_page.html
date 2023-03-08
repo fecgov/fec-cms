@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 {% load wagtailcore_tags %}
-{% load static %}
+{% load static filters %}
 {% block body_class %}template-{{ self.get_verbose_name | slugify }}{% endblock %}
 
 {% block content %}
@@ -20,6 +20,12 @@
     </div>
     <div class="usa-width-two-thirds u-padding--left">
       {% if settings.FEATURES.contact_app %} {# feature flag for whether we show the Vue contact app… #}
+      <div id="gov-fec-contact-app">PUT ALT, DEFAULT CONTENT HERE</div>
+      <style>
+        #contact-app {
+          background: lightblue;
+        }
+      </style>
       {% else %} {# …or show the content from Wagtail #}
       {{ self.info_message }}
       <h2>{{ self.services_title }}</h2>
@@ -37,4 +43,9 @@
   </div>
 </div>
 </article>
+{% endblock %}
+
+{% block extra_js %}
+{# Override this in templates to add extra javascript #}
+<script type="text/javascript" src="{% asset_for_js 'contact-app.js' %}"></script>
 {% endblock %}
