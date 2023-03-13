@@ -10,6 +10,29 @@
   {% include 'partials/breadcrumbs.html' with page=self links=self.get_ancestors style=self.breadcrumb_style %}
 {% endblock %}
 
+{% comment %} TODO:MOVE STYLES  TO STYLEESHEEET  {% endcomment %}
+<style>
+#static_notes p,
+.footnote_row p ,
+#header_notes_modal p 
+{
+  display: inline
+}
+
+#header_notes_modal p  {
+  margin-left: 2rem;  
+}
+
+
+td a sup{
+transition: transform .2s;
+}
+
+td:hover a sup {
+  transform: scale(2);
+}
+
+</style>
 
 <article class="main container">
 
@@ -21,32 +44,52 @@
       so we're adding it back for blocks defined in models.py as RichTextBlock
     {% endcomment %}
     <div class=""> 
-     <table>
-      <tbody>
+  <table class="simple-table simple-table--display simple-table-cms election-dates-table">
+  <tr>
+    <th>State</th>
+    <th>Election date</th>
+    <th>Close of books<a href='#hdr+'><sup>+</sup></a></th>
+    <th>Mailing deadline<a href='#hdr++'><sup>++</sup></a></th>
+    <th>Filing deadline<a href='#hdr++'><sup>++</sup></a></th>
+    <th>48-Hour Notices<a href='#hdr**'><sup>**</sup></a><br>(candidates only)</th>
+  </tr>
+
      {% for block in self.states %}
     
-     {% if block.block_type == 'state' %}
        {% if block.value.state_table %}
-        <br>
-        xxxxxxxxxxxxxxxxxxxxxxxxx
-         <br>
-         {{ block.value }}
-        <br>
-         -------------------------------------
-       <br>
-  
-         {{ block.value.bound_blocks }}
-         <br>
-         -------------------------------------
-         <br>
-
-       {% include_block block %}
-     
+    
+          {% include_block block.value.bound_blocks.state_table %}
+    
         {% endif %}
-      {% endif %}
+   
     {% endfor %}
-  </tbody>
-</table>
+   
+   
+    </table>
+
+  {% for block in self.footnotes %}
+
+     {% if block.block_type == 'title' %}
+      
+      {% verbatim %} 
+          <script>const {% endverbatim %} {{ block.value.split|join:"_" | lower}} {% verbatim %} = { 
+      {% endverbatim %}
+
+    {% endif %}
+    {% if block.block_type == 'footnote' %}
+
+      {% for note in block.value %}
+          {% comment %}   
+          SEE JSONS-Script: https://docs.djangoproject.com/en/4.1/ref/templates/builtins/#json-script 
+          {% endcomment %}
+
+           '{{ note.footnote_number }}':'{{  note.footnote_text  }}',
+      {% endfor %}
+        {% verbatim %}   } </script> {% endverbatim %} 
+     {% endif %}
+
+   {% endfor %}
+
     </div>
     {% if self.citations %}
       <div id="legal-citations" class="sidebar--secondary t-sans">
@@ -73,8 +116,11 @@
 {% endblock %}
 
 {% block extra_js %}
-  <script> window.BASE_PATH = '/data' </script>
-  <script type="text/javascript" src="{% asset_for_js 'data-init.js' %}"></script>
-  <script type="text/javascript" src="{% asset_for_js 'reporting-dates-tables.js' %}"></script>
+  
+
+ <script> window.BASE_PATH = '/data' </script>
+ <script type="text/javascript" src="{% asset_for_js 'data-init.js' %}"></script>
+ <script type="text/javascript" src="{% asset_for_js 'reporting-dates-tables.js' %}"></script>
+
 {% endblock %}
 

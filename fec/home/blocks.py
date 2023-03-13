@@ -4,6 +4,8 @@ from wagtail.documents.blocks import DocumentChooserBlock
 from wagtail.contrib.table_block.blocks import TableBlock
 from wagtail.snippets.blocks import SnippetChooserBlock
 
+from fec import constants
+
 """options for wagtail default table_block """
 core_table_options = {
     'renderer': 'html'
@@ -187,8 +189,7 @@ class CustomTableBlock(blocks.StructBlock):
         icon = 'table'
 
 class ReportingTableBlock(blocks.StructBlock):
-    """A custom table, works well with finacial information
-    Typicallyused for Statistical Press Release tables
+    """A custom table
     """
     reporting_table_options = {
         'startRows': 1,
@@ -199,12 +200,15 @@ class ReportingTableBlock(blocks.StructBlock):
         'language': 'en',
         'renderer': 'html'
     }
-
-    state_table = TableBlock(table_options=reporting_table_options, template='blocks/reporting-dates-table-block.html')
+    state_name = blocks.ChoiceBlock(blank=True, required=False, form_classname='title', choices=constants.states.items())
+    table = TableBlock(table_options=reporting_table_options, 
+        help_text='<table class="htcore handsontable" style="table-layout:fixed; width:100%;"><tr><td>State</td><td>Election date</td><td>Close of books+</td><td>Mailing deadline++</td><td>Filing deadline++</td><td>48-Hour Notices**</td></tr</table>')
+        #template = 'blocks/reporting-dates-table-block.html')
 
 
     class Meta:
-        template = 'blocks/reporting-table.html'
+        #template = 'blocks/reporting-table.html'
+        template = 'blocks/reporting-dates-table-block.html'
         icon = 'table'
 
 

@@ -44,6 +44,7 @@ core_table_options = {
     'renderer': 'html',
 }
 
+
 stream_factory = functools.partial(
     StreamField,
     [
@@ -1213,6 +1214,9 @@ class EmbedSnippet(models.Model):
     def __str__(self):
         return '{} ({})'.format(self.title, self.description)
 
+    class Meta:
+        ordering = [ '-id' ]
+
 
 class ContactPage(Page):
     contact_items = StreamField([
@@ -1321,15 +1325,38 @@ class OigLandingPage(Page):
         return constants.report_category_groups['oig']
 
 
+# class ReportingDatesTables(Page):
+#     states = StreamField([
+#         ('state', blocks.StructBlock([
+#             ('state_name', blocks.CharBlock(form_classname='', icon='', blank=True, Required=False )),
+#             #('state_table', ReportingTableBlock(blank=True))
+#             ('state_table',TableBlock(table_options=reporting_table_options, template = 'blocks/reporting-dates-table-block.html', blank=True)),
+#         ]))
+#     ], blank=True, null=True)
+
+#     content_panels = Page.content_panels + [
+#         FieldPanel('states'),
+#     ]
+
+#TODO: Table view issue with collapsed panel: https://github.com/wagtail/wagtail/issues/9107
 class ReportingDatesTables(Page):
     states = StreamField([
         ('state', blocks.StructBlock([
-            ('state_name', blocks.CharBlock(form_classname='', icon='', blank=True, Required=False )),
-            ('state_table', ReportingTableBlock(blank=True))
+            ('state_table', ReportingTableBlock(blank=True, form_classname='title'))
         ]))
-    ], blank=True, null=True)
+    ], blank=True, null=True, collapsed=True)
+    footnotes = StreamField([
+        ('title',blocks.CharBlock(blank='true', icon='title')),
+        ('footnote',blocks.ListBlock(blocks.StructBlock([
+            ('footnote_number',blocks.CharBlock(blank='true', icon='tag', form_classname='title')),
+            ('footnote_text',blocks.RichTextBlock(blank='true', icon='pilcrow', help_text='')),
+        ])))
+    ], blank=True,)
 
     content_panels = Page.content_panels + [
         FieldPanel('states'),
+        FieldPanel('footnotes'),
     ]
+
+
 

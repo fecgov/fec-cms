@@ -80,3 +80,31 @@ li.sequence-member .sequence-member-inner .sequence-type-list .sequence-containe
 .richtext ol ol ol li {
   list-style-type: lower-roman;
 }
+
+div[data-contentpath="state_table"] div.widget-checkbox_input {
+  display: none;
+}
+
+div[data-contentpath="state_table"] label[for*="-handsontable-col-caption"] {
+  display: none;
+}
+
+div[data-contentpath="state_table"] label[for*="-handsontable-col-caption"] + div.field-content{
+  display: none;
+}
+
+select[name*="-state_table-state_name"] {
+    font-family: -apple-system,BlinkMacSystemFont,Segoe UI,system-ui,Roboto,Helvetica Neue,Arial,sans-serif,Apple Color Emoji,Segoe UI Emoji,Segoe UI Symbol,Noto Color Emoji;
+    font-size: 2em;
+    font-weight: 800;
+  }
+
+div[data-contentpath="state_table"] div[id*="-value-state_table-table-handsontable-container"] {
+  height:auto  !important;
+}
+
+div[data-contentpath="state_table"] div.wtHolder {
+  height:auto  !important;
+}
+
+
