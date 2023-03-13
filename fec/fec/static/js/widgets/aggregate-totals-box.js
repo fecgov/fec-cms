@@ -46,7 +46,6 @@ function AggregateTotalsBox() {
   this.baseQuery = {
     election_year: window.DEFAULT_ELECTION_YEAR,
     office: 'P',
-    aggregate_by: 'office',
     is_active_candidate: true,
     page: 1,
     per_page: 20,
@@ -180,6 +179,7 @@ AggregateTotalsBox.prototype.init = function() {
   // If there are default values for office or year, let's grab them
   if (dataset.office) this.baseQuery.office = dataset.office;
   if (dataset.year) this.baseQuery.election_year = dataset.year;
+  if (dataset.party) this.baseQuery.aggregate_by = 'office-party';
 
   // What kinds of office control should we offer?
   if (dataset.officeControl == 'none') {
