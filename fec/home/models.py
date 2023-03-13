@@ -662,9 +662,10 @@ class CustomPage(Page):
     ]
 
 # Adds a settings choice-field for conditionally adding a JS script to a CustomPage
-    conditional_js = models.CharField(max_length=255,
-        choices=constants.conditional_js.items(), blank=True, null=True,
-        help_text='Choose a JS script to add only to this page')
+    conditional_js = models.CharField(
+        max_length=255,
+        choices=constants.conditional_js.items(),
+        blank=True, null=True, help_text='Choose a JS script to add only to this page')
     # Adds a settings field for making a custom title that displays in the Wagtail page explorer
     menu_title = models.CharField(max_length=255, blank=True)
     settings_panels = Page.settings_panels + [
@@ -1215,7 +1216,7 @@ class EmbedSnippet(models.Model):
         return '{} ({})'.format(self.title, self.description)
 
     class Meta:
-        ordering = [ '-id' ]
+        ordering = ['-id']
 
 
 class ContactPage(Page):
@@ -1325,20 +1326,7 @@ class OigLandingPage(Page):
         return constants.report_category_groups['oig']
 
 
-# class ReportingDatesTables(Page):
-#     states = StreamField([
-#         ('state', blocks.StructBlock([
-#             ('state_name', blocks.CharBlock(form_classname='', icon='', blank=True, Required=False )),
-#             #('state_table', ReportingTableBlock(blank=True))
-#             ('state_table',TableBlock(table_options=reporting_table_options, template = 'blocks/reporting-dates-table-block.html', blank=True)),
-#         ]))
-#     ], blank=True, null=True)
-
-#     content_panels = Page.content_panels + [
-#         FieldPanel('states'),
-#     ]
-
-#TODO: Table view issue with collapsed panel: https://github.com/wagtail/wagtail/issues/9107
+# TODO: Table view issue with collapsed panel: https://github.com/wagtail/wagtail/issues/9107. Solved with editor-CSS for now.
 class ReportingDatesTables(Page):
     states = StreamField([
         ('state', blocks.StructBlock([
@@ -1346,10 +1334,10 @@ class ReportingDatesTables(Page):
         ]))
     ], blank=True, null=True, collapsed=True)
     footnotes = StreamField([
-        ('title',blocks.CharBlock(blank='true', icon='title')),
-        ('footnote',blocks.ListBlock(blocks.StructBlock([
-            ('footnote_number',blocks.CharBlock(blank='true', icon='tag', form_classname='title')),
-            ('footnote_text',blocks.RichTextBlock(blank='true', icon='pilcrow', help_text='')),
+        ('title', blocks.CharBlock(blank='true', icon='title')),
+        ('footnote', blocks.ListBlock(blocks.StructBlock([
+            ('footnote_number', blocks.CharBlock(blank='true', icon='tag', form_classname='title')),
+            ('footnote_text', blocks.RichTextBlock(blank='true', icon='pilcrow', help_text='')),
         ])))
     ], blank=True,)
 
@@ -1357,6 +1345,3 @@ class ReportingDatesTables(Page):
         FieldPanel('states'),
         FieldPanel('footnotes'),
     ]
-
-
-

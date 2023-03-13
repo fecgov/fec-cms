@@ -188,6 +188,7 @@ class CustomTableBlock(blocks.StructBlock):
         template = 'blocks/custom_table.html'
         icon = 'table'
 
+
 class ReportingTableBlock(blocks.StructBlock):
     """A custom table
     """
@@ -201,13 +202,12 @@ class ReportingTableBlock(blocks.StructBlock):
         'renderer': 'html'
     }
     state_name = blocks.ChoiceBlock(blank=True, required=False, form_classname='title', choices=constants.states.items())
-    table = TableBlock(table_options=reporting_table_options, 
-        help_text='<table class="htcore handsontable" style="table-layout:fixed; width:100%;"><tr><td>State</td><td>Election date</td><td>Close of books+</td><td>Mailing deadline++</td><td>Filing deadline++</td><td>48-Hour Notices**</td></tr</table>')
-        #template = 'blocks/reporting-dates-table-block.html')
-
+    table = TableBlock(table_options=reporting_table_options,
+                       help_text='<table class="htcore handsontable" style="table-layout:fixed; width:100%;"> \
+                       <tr><td>State</td><td>Election date</td><td>Close of books+</td><td>Mailing deadline++</td> \
+                       <td>Filing deadline++</td><td>48-Hour Notices**</td></tr</table>')
 
     class Meta:
-        #template = 'blocks/reporting-table.html'
         template = 'blocks/reporting-dates-table-block.html'
         icon = 'table'
 
