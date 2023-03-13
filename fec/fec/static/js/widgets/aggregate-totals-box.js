@@ -40,9 +40,9 @@ function AggregateTotalsBox() {
   this.valueField; // The HTML element that holds the value
   this.yearControl; // The HTML element to change the year
   // Where to find the big number:
-  this.basePath_grandTotal = ['candidates', 'totals', 'by_office'];
+  this.basePath_grandTotal = ['candidates', 'totals', 'aggregates'];
   // Where to find the party numbers:
-  this.basePath_partyTotals = ['candidates', 'totals', 'by_office', 'by_party'];
+  this.basePath_partyTotals = ['candidates', 'totals', 'aggregates'];
   this.baseQuery = {
     election_year: window.DEFAULT_ELECTION_YEAR,
     office: 'P',
