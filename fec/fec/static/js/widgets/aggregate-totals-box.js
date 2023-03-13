@@ -46,7 +46,7 @@ function AggregateTotalsBox() {
   this.baseQuery = {
     election_year: window.DEFAULT_ELECTION_YEAR,
     office: 'P',
-    aggregate_by: 'office-party',
+    aggregate_by: 'office',
     is_active_candidate: true,
     page: 1,
     per_page: 20,
