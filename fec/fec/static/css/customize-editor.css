@@ -107,4 +107,12 @@ div[data-contentpath="state_table"] div.wtHolder {
   height:auto  !important;
 }
 
+.fieldname-table .help table td {
+  background: #357b7d;
+  color:#fff;
+  font-weight: bold;
+  border-width: 2px;
+
+}
+
 
