@@ -33,7 +33,7 @@ from home.blocks import (
     DocumentFeedBlurb, ExampleForms, ExampleImage, ExampleParagraph,
     ExternalButtonBlock, InternalButtonBlock, LinkBlock, OptionBlock,
     ReportingExampleCards, ResourceBlock, SnippetChooserBlock,
-    ThumbnailBlock, FeedDocumentBlock, EmployeeTitle, #EmployeeBlock
+    ThumbnailBlock, FeedDocumentBlock, EmployeeTitle,  # EmployeeBlock
 )
 
 logger = logging.getLogger(__name__)
@@ -661,9 +661,7 @@ class CustomPage(Page):
     ]
 
 # Adds a settings choice-field for conditionally adding a JS script to a CustomPage
-    conditional_js = models.CharField(max_length=255,
-        choices=constants.conditional_js.items(), blank=True, null=True,
-        help_text='Choose a JS script to add only to this page')
+    conditional_js = models.CharField(max_length=255, choices=constants.conditional_js.items(), blank=True, null=True, help_text='Choose a JS script to add only to this page')
     # Adds a settings field for making a custom title that displays in the Wagtail page explorer
     menu_title = models.CharField(max_length=255, blank=True)
     settings_panels = Page.settings_panels + [
@@ -1328,7 +1326,7 @@ class OfficePage(Page):
     offices = StreamField([
         ('office', blocks.StructBlock([
             ('office_title', blocks.CharBlock(required=True, blank=True, null=True, help_text='Required')),
-            ('hide_title',blocks.BooleanBlock(required=False, help_text='Should the offfice title be displayed?')),
+            ('hide_title', blocks.BooleanBlock(required=False, help_text='Should the offfice title be displayed?')),
             ('office_description', blocks.RichTextBlock(blank=True)),
             ('more_info', blocks.StreamBlock([
                ('html', blocks.RawHTMLBlock(blank=True)),
