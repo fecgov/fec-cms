@@ -7,16 +7,14 @@ v{% load wagtailimages_tags %}
 {% block content %}
 {% include 'partials/breadcrumbs.html' with page=self style='secondary' %}
 
-<div class="hero__banner--office"></div>
 <article class="main">
   <div class="container">
     <header class="heading--main offices-heading--main">
       <h1>{{ self.title }}</h1>
     </header>
     
-      {% for block in self.offices %}
-        <div class="main__content--full"> 
- <!-- DO I  NEED THIS 'if'  STMT IF THERE ARE NOT OTHER FIELDS OR STREAMFIELDS ? BUT MAY LEAVE IT IN CASE OTHHERS ARE ADDED -->
+    {% for block in self.offices %}
+    <div class="main__content--full"> 
      {% if block.block_type == 'office' %}
        <a name="{{ block.value.office_title | slugify }}"></a>
        {% if not block.value.hide_title %}
@@ -28,35 +26,32 @@ v{% load wagtailimages_tags %}
               {{ block.value.more_info }}
            {% endif %}
            {% if block.value.employee.employee_name %}
-             <div class="grid grid--2-wide u-padding--top office-employee--section">
-              <div class="grid__item employee-photo">            
-              {% if block.value.employee.employee_image %}
-              {% image block.value.employee.employee_image original as employee_image %}
-    <img src="{{ employee_image.url }}" alt="Headshot of {{ block.value.employee.employee_name }}" width="136" height="136">
-          
-              {% else %}
-                <img src="{% static "img/headshot--no-photo.jpg" %}" alt="Placeholder no photo of {{ block.value.employee.employee_name  }}" width="136" height="136">
-              {% endif %}
-              </div>
+            <div class="grid grid--2-wide u-padding--top office-employee--section">
+               <div class="grid__item employee-photo">            
+                 {% if block.value.employee.employee_image %}
+                 {% image block.value.employee.employee_image original as employee_image %}
+                  <img src="{{ employee_image.url }}" alt="Headshot of {{ block.value.employee.employee_name }}" width="136" height="136">
+                 {% else %}
+                  <img src="{% static "img/headshot--no-photo.jpg" %}" alt="Placeholder no photo of {{ block.value.employee.employee_name  }}" width="136" height="136">
+                 {% endif %}
+               </div>
                <div class="grid__item employee-bio">
                  <div class="employee_name u-negative--bottom--margin">{{ block.value.employee.employee_name }}</div>
                  <div class="employee_title u-margin--bottom">{{ block.value.employee.bound_blocks.employee_title.value.title }}</div>
                  {{ block.value.employee.employee_bio }}
               </div>
-             </div>
+            </div>
            {% endif %}
            {% if block.value.extra_info %}
              {{ block.value.extra_info }}
            {% endif %}
       </div>
-        <div class="sidebar-container sidebar-container--right offices-contact">
-         {{ block.value.bound_blocks.contact_info }}
-        </div>
-       </div> 
+      <div class="sidebar-container sidebar-container--right offices-contact">
+        {{ block.value.bound_blocks.contact_info }}
+      </div>
+    </div> 
        {% endif %}
     {% endfor %}
-
   </div>
-
 </article>
 {% endblock %}
