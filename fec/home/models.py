@@ -1213,6 +1213,9 @@ class EmbedSnippet(models.Model):
     def __str__(self):
         return '{} ({})'.format(self.title, self.description)
 
+    class Meta:
+        ordering = ['-id']
+
 
 class ContactPage(Page):
     contact_items = StreamField([
