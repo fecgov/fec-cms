@@ -1327,7 +1327,8 @@ class OigLandingPage(Page):
 class OfficePage(Page):
     offices = StreamField([
         ('office', blocks.StructBlock([
-            ('office_title', blocks.CharBlock(required=False, blank=True)),
+            ('office_title', blocks.CharBlock(required=True, blank=True, null=True, help_text='Required')),
+            ('hide_title',blocks.BooleanBlock(required=False, help_text='Should the offfice title be displayed?')),
             ('office_description', blocks.RichTextBlock(blank=True)),
             ('more_info', blocks.StreamBlock([
                ('html', blocks.RawHTMLBlock(blank=True)),
@@ -1335,10 +1336,6 @@ class OfficePage(Page):
                ('external_button', ExternalButtonBlock(blank=True)),
                ('document', FeedDocumentBlock(blank=True, template='blocks/simple-document.html')),
             ], blank=True, required=False, help_text='Use for internal/external btns or document-links')),
-            # SHOULD THIS BE A STRUCTBLOCK W/ LIST BLOCK INSTEAD OF STRUCTBLOCK?...
-            # SEE FFCNET OFFICE/STAFF-MEMBER...
-            # ('staff_member',blocks.ListBlock(blocks.StructBlock([
-            # SHOULD IT BE 'staff' instead of 'employee' ?
             ('employee', blocks.StructBlock([
                 ('employee_name', blocks.CharBlock(blank=True, required=False)),
                 ('employee_title', EmployeeTitle(blank=True,  required=False,

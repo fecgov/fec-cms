@@ -18,8 +18,8 @@ v{% load wagtailimages_tags %}
         <div class="main__content--full"> 
  <!-- DO I  NEED THIS 'if'  STMT IF THERE ARE NOT OTHER FIELDS OR STREAMFIELDS ? BUT MAY LEAVE IT IN CASE OTHHERS ARE ADDED -->
      {% if block.block_type == 'office' %}
-
-       {% if block.value.office_title %}
+       <a name="{{ block.value.office_title | slugify }}"></a>
+       {% if not block.value.hide_title %}
          <h2 class="content__section--ruled-responsive methodology-block t-serif office-title">{{ block.value.office_title }}</h2>
        {% endif %}
        <div class="main__content">
