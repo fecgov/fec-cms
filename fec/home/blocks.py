@@ -217,14 +217,6 @@ class EmployeeTitle(blocks.StructBlock):
         ], blank=True, required=False)
 
 
-# class EmployeeBlock(blocks.StructBlock):
-#     employee_name = blocks.CharBlock(blank=True, required=False)
-#     employee_title = EmployeeTitle(blank=True,  required=False,
-#                                    help_text='<b style="color:green">For footnote on title, use html block with &lt;sup&gt;1&lt;/sup&gt;</b>')
-#     employee_image = ImageChooserBlock(blank=True, required=False)
-#     employee_bio = blocks.RichTextBlock(blank=True, required=False)
-
-
 class ResourceBlock(blocks.StructBlock):
     """A section of a ResourcePage"""
     title = blocks.CharBlock(required=True)

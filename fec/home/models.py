@@ -33,7 +33,7 @@ from home.blocks import (
     DocumentFeedBlurb, ExampleForms, ExampleImage, ExampleParagraph,
     ExternalButtonBlock, InternalButtonBlock, LinkBlock, OptionBlock,
     ReportingExampleCards, ResourceBlock, SnippetChooserBlock,
-    ThumbnailBlock, FeedDocumentBlock, EmployeeTitle,  # EmployeeBlock
+    ThumbnailBlock, FeedDocumentBlock, EmployeeTitle
 )
 
 logger = logging.getLogger(__name__)
@@ -1338,13 +1338,6 @@ class OfficePage(Page):
                 ('employee_image', ImageChooserBlock(blank=True, required=False)),
                 ('employee_bio', blocks.RichTextBlock(blank=True, required=False)),
             ], blank=True, required=False, null=True, default=[])),
-
-            # TODO:IF THEY ARE GOING TO WANT MORE THAN ONE EMPLOYEE, WRAP EMPLOYEEBLOCK...
-            # IN STREAMBLOCK OR MAYBE LISTBLOCK LIKE BELOW AND RESTORE DATABASE AND MAKEMIGRATIONS, I THINK?
-            # ('employee', blocks.StreamBlock([
-            #     ('employee', EmployeeBlock(blank=True, required=False, null=True, default=[])),
-            # ])),
-
             ('contact_info', ContactInfoBlock(blank=True)),
             ('extra_info', blocks.StreamBlock([
                 ('html', blocks.RawHTMLBlock(blank=True, required=False, help_text='<b style="color:green">For footnote, use &lt;sup&gt;1&lt;/sup&gt;</b>')),
@@ -1362,4 +1355,4 @@ class OfficePage(Page):
 
     @property
     def content_section(self):
-        return get_content_section(self)
+        return 'about'
