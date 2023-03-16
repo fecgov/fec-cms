@@ -100,10 +100,6 @@ Vue.component('FramesHolder', {
       type: Array,
       required: true
     },
-    framesHistory: {
-      type: Array,
-      required: true
-    },
     teams: {
       type: Array,
       required: true
@@ -112,7 +108,11 @@ Vue.component('FramesHolder', {
       type: String,
       required: true
     },
-    selectedTopic: {
+    selectedTopic1: {
+      type: String,
+      required: true
+    },
+    selectedTopic2: {
       type: String,
       required: true
     },
@@ -154,6 +154,12 @@ Vue.component('FramesHolder', {
   watch: {
     currentFrameNum: function(newVal, oldVal) {
       if (newVal != oldVal) this.updateNavOptions();
+    },
+    selectedTopic1: function(newVal, oldVal) {
+      console.log('changed selectedTopic1 from ', oldVal, ' to ', newVal);
+    },
+    selectedTopic2: function(newVal, oldVal) {
+      console.log('changed selectedTopic2 from ', oldVal, ' to ', newVal);
     }
   },
   computed: {
@@ -259,7 +265,7 @@ Vue.component('FramesHolder', {
           </template>
           
           <div
-            v-if="teamInfo.fields"
+            v-if="teamInfo.fields != ''"
             class="contact-item contact-item--email">
             <div class="contact-item__content fields-wrapper">
               <div
@@ -634,6 +640,32 @@ Vue.component('FramesHolder', {
       }
       return true;
     },
+    canGoToNextFrame: function() {
+      console.log('FrameHolder.canGoToNextFrame()');
+      const currentFrame = this.frames[this.currentFrameNum];
+      // 'intro' never shows the Next button
+      let toReturn = false;
+
+      console.log('  frameId, selectedTopic1: ', currentFrame.frameId, this.selectedTopic1);
+
+      // if we're on 'teams' but there's already a value for it
+      if (currentFrame.frameId == 'teams' && this.selectedTeam) toReturn = true;
+
+      // if we're on topics1 but it already has a value
+      else if (currentFrame.frameId == 'topics1' && this.selectedTopic1) toReturn = true;
+
+      // if we're on topics2 but it already has a value
+      else if (currentFrame.frameId == 'topics2' && this.selectedTopic2) toReturn = true;
+
+      // if we're on teamFields, we're only showing Next for publications
+      else if (currentFrame.frameId == 'teamFields' && this.userSubject == 'publications' && this.userPubs.length >= 1)
+        toReturn = true;
+
+      // TODO: do we need to check uspsFields?
+      // (currentFrame.frameId == 'uspsFields' && this.selectedTopic1) ||
+      console.log('  returning: ', toReturn);
+      return toReturn;
+    },
     /**
      *  @property {object} d - the data object from frames.options
      */
@@ -658,12 +690,6 @@ Vue.component('FramesHolder', {
           'next off-screen': frameIndex > this.currentFrameNum
         },
         additionalClasses
-        // {
-        //   viewed: this.frames[navIndex].viewed || navIndex == 0,
-        //   current: navIndex == this.currentFrameNum,
-        //   hidden: navIndex == 0 || navIndex == this.frames.length - 1,
-        //   'hide-before': navIndex < 2 || navIndex >= this.frames.length - 1
-        // }
       ];
     },
     handleButtonClick: function(id, e) {
@@ -688,14 +714,14 @@ Vue.component('FramesHolder', {
       if (e.target.getAttribute('aria-invalid') == 'true') this.validateField(e.target);
     },
     radioValue: function(opt) {
-      if (opt.teamSubject) return opt.teamSubject;
-      else if (opt.value) return opt.value;
-      else return opt.label || 'ERROR';
+      // if (opt.teamSubject) return opt.teamSubject;
+      if (opt.value) return opt.value;
+      else if (opt.label) return opt.label;
+      return 'ERROR';
     },
     updateNavOptions: function(obj) {
       console.log('FramesHolder.updateNavOptions(obj): ', obj ? obj : 'null'); // eslint-disable-line no-console
       // console.log('  currentFrameNum: ', this.currentFrameNum); // eslint-disable-line no-console
-      // console.log('  history: ', this.framesHistory); // eslint-disable-line no-console
 
       const currentFrame = this.frames[this.currentFrameNum];
 
@@ -708,7 +734,7 @@ Vue.component('FramesHolder', {
       // Otherwise, if the fields are all validated, cool, let's let them move forward
       else if (obj && obj.valid === true) newCanNext = 2;
       // Of if they've already been to the next frame, they can go forward to it
-      else if (this.framesHistory.indexOf(this.currentFrameNum) < this.framesHistory.length - 1) newCanNext = 2;
+      else if (this.canGoToNextFrame()) newCanNext = 2;
 
       let newCanBack = 2;
 
@@ -720,10 +746,16 @@ Vue.component('FramesHolder', {
       console.log('currentFrame: ', currentFrame); // eslint-disable-line no-console
       // console.log('currentFrame.nextFrame.includes: submit: ', currentFrame.nextFrame.includes('submit')); // eslint-disable-line no-console
 
+      // If we're on the Intro
+      if (currentFrame.frameId == 'intro') {
+        newCanBack = 0;
+        newCanNext = 0;
+        newCanRestart = 0;
+        newCanSubmit = 0;
       // If we're currently showing the team info
-      if (currentFrame.frameId == 'teamFields') {
+      } else if (currentFrame.frameId == 'teamFields') {
         // If there are no other fields to show, we're done
-        if (this.teams[this.selectedTeam].fields.length === 0) {
+        if (this.selectedTeam && this.teams[this.selectedTeam].fields && this.teams[this.selectedTeam].fields.length === 0) {
           newCanNext = 0;
           newCanRestart = 2;
           newCanSubmit = 0;
@@ -844,9 +876,9 @@ new Vue({
       <FramesHolder
         :current-frame-num="currentFrameNum"
         :frames="frames"
-        :frames-history="framesHistory"
         :selected-team="selectedTeam"
-        :selected-topic="selectedTopic"
+        :selected-topic1="selectedTopic1"
+        :selected-topic2="selectedTopic2"
         :teams="teams"
         :userCity="u_city"
         :userCommittee="u_committee"
@@ -885,9 +917,9 @@ new Vue({
       canNavSubmit: 0,
       canNavRestart: 0,
       currentFrameNum: 0, //int
-      framesHistory: [0], // ex: [0, 1, 3, 4, 6]
       selectedTeam: '',
-      selectedTopic: '',
+      selectedTopic1: '',
+      selectedTopic2: '',
       u_city: '',
       u_committee: '',
       u_email: '',
@@ -906,7 +938,7 @@ new Vue({
           formPrompt: 'Contact Congressional Affairs via telephone.',
           phoneExt: '1006',
           ePrefix: 'congress', // (@fec.gov)
-          fields: []
+          fields: ''
         },
         efo: {
           name: 'Electronic Filing Office',
@@ -1002,7 +1034,7 @@ new Vue({
               icon: 'i-question-circle'
             }
           ],
-          fields: []
+          fields: ''
         },
         press: {
           name: 'Press Office',
@@ -1038,7 +1070,7 @@ new Vue({
               href: '/help-candidates-and-committees/question-rad/'
             }
           ],
-          fields: []
+          fields: ''
         },
         records: {
           name: 'Public Records',
@@ -1082,8 +1114,7 @@ new Vue({
               label: `I need help, but I'm not sure who to contact&nbsp;&rsaquo;`,
               actionId: 'start-help-with-who'
             }
-          ],
-          viewed: true
+          ]
         },
         {
           frameId: 'teams',
@@ -1126,8 +1157,7 @@ new Vue({
               vModel: 'selectedTeam',
               value: 'oig'
             }
-          ],
-          viewed: false
+          ]
         },
         {
           frameId: 'topics1',
@@ -1137,136 +1167,126 @@ new Vue({
           options: [
             {
               type: 'radio',
-              vModel: 'selectedTopic',
-              value: 'press',
+              vModel: 'selectedTopic1',
               label: 'Making a press inquiry (reporters or journalists only)',
+              team: 'press',
               teamSubject: 'Assist with a media query'
             },
             {
               type: 'radio',
-              vModel: 'selectedTopic',
-              value: 'records',
+              vModel: 'selectedTopic1',
               label: 'Accessing campaign finance records and other public documents',
+              team: 'records',
               teamSubject: ''
             },
             {
               type: 'radio',
-              vModel: 'selectedTopic',
-              value: 'info',
+              vModel: 'selectedTopic1',
               label: 'Getting a copy of an FEC form or publication',
+              team: 'info',
               teamSubject: 'publications'
             },
             {
               type: 'radio',
-              vModel: 'selectedTopic',
-              value: 'efo',
+              vModel: 'selectedTopic1',
               label: 'Technical issues with filing my electric report or password help',
+              team: 'efo',
               teamSubject: ''
             },
             {
               type: 'radio',
-              vModel: 'selectedTopic',
-              value: 'rad',
+              vModel: 'selectedTopic1',
               label: 'Filing reports, RFAIs, amendments or specific transactions',
+              team: 'rad',
               teamSubject: ''
             },
             {
               type: 'radio',
-              vModel: 'selectedTopic',
-              value: 'info',
+              vModel: 'selectedTopic1',
               label: 'Questions about campaign finance law, including committee registration and reporting requirements, and contribution limits and prohibitions',
+              team: 'info',
               teamSubject: 'A question about campaign finance law'
             },
             {
               type: 'radio',
-              vModel: 'selectedTopic',
+              vModel: 'selectedTopic1',
               value: 'NEXT',
               label: 'None of these'
             }
-          ],
-          viewed: false
+          ]
         },
         {
           frameId: 'topics2',
-          title: '',
+          title: 'I need help with&hellip;',
           autoAdvance: true,
           nextFrame: 'teamFields',
           options: [
             {
               type: 'radio',
-              vModel: 'selectedTopic',
-              value: 'info',
+              vModel: 'selectedTopic2',
               label: 'An upcoming FEC training program',
+              value: 'upcoming-training',
+              team: 'info',
               teamSubject: 'A question about an upcoming training'
             },
             {
               type: 'radio',
-              vModel: 'selectedTopic',
-              value: 'press',
+              vModel: 'selectedTopic2',
               label: 'An upcoming Commission meeting',
+              team: 'press',
               teamSubject: 'Answer a question about a Commission meeting'
             },
             {
               type: 'radio',
-              vModel: 'selectedTopic',
-              value: 'info',
+              vModel: 'selectedTopic2',
               label: 'A request for a speaker',
+              team: 'info',
               teamSubject: 'Help me schedule a group speaker'
             },
             {
               type: 'radio',
-              vModel: 'selectedTopic',
-              value: 'congress',
+              vModel: 'selectedTopic2',
               label: 'Congressional and intergovernmental communications',
+              team: 'congress',
               teamSubject: ''
             },
             {
               type: 'radio',
-              vModel: 'selectedTopic',
-              value: 'oig',
+              vModel: 'selectedTopic2',
               label: 'Reporting or inquiring about waste, fraud and abuse at the FEC',
+              team: 'oig',
               teamSubject: ''
             },
             {
               type: 'radio',
-              vModel: 'selectedTopic',
-              value: 'fec',
+              vModel: 'selectedTopic2',
               label: 'Something else',
+              team: 'fec',
               teamSubject: ''
             }
-          ],
-          viewed: false
+          ]
         },
         {
           frameId: 'teamFields',
           title: 'Team Fields Frame',
           autoAdvance: false,
           nextFrame: ['submit', 'forms'],
-          fields: [],
-          viewed: false
+          fields: {}
         },
         {
           frameId: 'uspsFields',
           title: 'USPS Fields Frame',
           autoAdvance: false,
           nextFrame: 'orderReview',
-          fields: [],
-          viewed: false
+          fields: {}
         },
         {
           frameId: 'orderReview',
           title: '',
           class: '',
           autoAdvance: false,
-          nextFrame: 'confirmSend',
-          fields: []
-        },
-        {
-          frameId: 'confirmSend',
-          title: 'Confirm Send',
-          class: '',
-          autoAdvance: false,
-          nextFrame: 'acknowledgeSent'
+          nextFrame: 'acknowledgeSent',
+          fields: {}
         },
         {
           frameId: 'acknowledgeSent',
@@ -1298,8 +1318,7 @@ new Vue({
               content:
                 'This is an estimated administrative fine based on the information you provided and may not reflect the actual fine amount assessed by the Commission. Your committee will be notified if the Commission assesses a fine for a late or non-filed\xa0report.'
             }
-          ],
-          viewed: false
+          ]
         }
       ]
     };
@@ -1336,14 +1355,12 @@ new Vue({
     handleButtonClick: function(buttonType, e) {
       // console.log('app.handleButtonClick(buttonType, e): ', buttonType, e); // eslint-disable-line no-console
       e.preventDefault();
-      if (buttonType == 'start-know-who') this.jumpToFrame('teams');
-      else if (buttonType == 'start-help-with-who') this.jumpToFrame('topics1');
-      else if (buttonType == 'Next') this.jumpToFrame('next');
-      else if (buttonType == 'Back') this.jumpToFrame('back');
+      if (buttonType == 'start-know-who') this.goToFrame('teams');
+      else if (buttonType == 'start-help-with-who') this.goToFrame('topics1');
+      else if (buttonType == 'Next') this.goToFrame('next');
+      else if (buttonType == 'Back') this.goToFrame('back');
       else if (buttonType == 'Restart') this.restart();
-      else if (buttonType == 'Submit') {
-        console.log('NEED TO SUBMIT'); // eslint-disable-line no-console
-      }
+      else if (buttonType == 'Submit') this.startSubmission();
       else if (buttonType == 'pubs-remove') {
         const theIndex = parseInt(e.target.dataset.index);
         const newUPubs = [...this.u_pubs];
@@ -1402,69 +1419,173 @@ new Vue({
     handleRecaptchaEvent: function(e, f) {
       console.log('App.handleRecaptchaEvent(e): ', e, f); //eslint-disable-line no-console
     },
-    jumpToFrame: function(frameId) {
+    goToFrame: function(frameId) {
+      console.log('goToFrame(frameId): ', frameId);
+      // TODO: on selection for teams, topics1, and topics2,
+      // TODO: if the value changes, reset the others.
+      // TODO: e.g. if topic1 is 'NEXT' and topic2 is [3], if topic1 is changed from 'NEXT', erase topic2 as well as all the u_fields (email address, subject, message, etc)
+      // TODO: e.g. clicking from intro to teams should erase topic1 and topic2 and any u_fields
+      // TODO:      clicking from intro to topics… should erase selectedTeam? (could complicate other things)
+      /*
+      Forward flow:
+
+      intro  →  teams    →      →     →  teamFields
+      intro  →  topics1  →      →     →  teamFields
+      intro  →  topics1  →  topics 2  →  teamFields
+      …
+      teamFields   →      →       →       →       →      →        →  acknowledgeSent
+      teamFields   →  uspsFields  →  orderReview  →  confirmSend  →  acknowledgeSent
+
+      */
       let nextFrameNum = 0;
-      if (frameId == 'next' || frameId == 'back') {
+      let currentFrameId = this.frames[this.currentFrameNum].frameId;
+      console.log('  nextFrameNum: ', nextFrameNum);
+      console.log('  currentFrameId: ', currentFrameId);
+      if (frameId == 'next') {
 
-        // Where are we in the history right now?
-        let currentHistPos = this.framesHistory.indexOf(this.currentFrameNum);
-        let histPosToTest = frameId == 'next' ? currentHistPos + 1 : currentHistPos - 1;
+        if (currentFrameId == 'intro') {
+          if (this.selectedTopic2 != '') {
+            nextFrameNum = this.getFrameNumById('topics2');
 
-        // If we can go to a next frame, do so
-        if (this.framesHistory[histPosToTest]) {
-          console.log('  if'); // eslint-disable-line no-console
-          nextFrameNum = this.framesHistory[histPosToTest];
+          } else if (this.selectedTopic1 != '') {
+            nextFrameNum = this.getFrameNumById('topics1');
+
+          } else if (this.selectedTeam != '') {
+            nextFrameNum = this.getFrameNumById('teams');
+          }
+        } else if (currentFrameId == 'teams') {
+          nextFrameNum = this.getFrameNumById('teamFields');
+
+        } else if (currentFrameId == 'topics2') {
+          nextFrameNum = this.getFrameNumById('teamFields');
+
+        } else if (currentFrameId == 'topics1') {
+          if (this.selectedTopic1 == 'NEXT')
+            nextFrameNum = this.getFrameNumById('topics2');
+          else
+            nextFrameNum = this.getFrameNumById('teamFields');
+
+        } else if (currentFrameId == 'teamFields') {
+          if (this.u_subject == 'publications')
+            nextFrameNum = this.getFrameNumById('uspsFields');
+
+          else {
+            // TODO: submit or do nothing?
+          }
+        } else if (currentFrameId == 'uspsFields') {
+          nextFrameNum = this.getFrameNumById('orderReview');
+
+        } else if (currentFrameId == 'orderReview') {
+          // TODO: SUBMIT
         }
-        // If they've chosen 'publications', let's go to the uspsfields page
-        else if (this.u_subject == 'publications') {
-          console.log('  else'); // eslint-disable-line no-console
+      } else if (frameId == 'back') {
+        if (currentFrameId == 'acknowledgeSent') {
+          // No going back—can only restart
+        }
+
+        if (currentFrameId == 'orderReview') {
           nextFrameNum = this.getFrameNumById('uspsFields');
 
-          // If we're ordering publications but we're on the uspsFields frame, first, let's review
-          if (this.frames[this.currentFrameNum].frameId == 'uspsFields') {
-            nextFrameNum = this.getFrameNumById('orderReview');
-          }
+        } else if (currentFrameId == 'uspsFields') {
+          nextFrameNum = this.getFrameNumById('teamFields');
+
+        } else if (currentFrameId == 'teamFields') {
+          if (this.selectedTopic2)
+            nextFrameNum = this.getFrameNumById('topics2');
+          else if (this.selectedTopic1)
+            nextFrameNum = this.getFrameNumById('topics1');
+          else
+            nextFrameNum = this.getFrameNumById('teams');
+
+        } else if (currentFrameId == 'topics2') {
+          nextFrameNum = this.getFrameNumById('topics1');
+
+        } else if (currentFrameId == 'topic1') {
+          nextFrameNum = this.getFrameNumById('intro');
+
+        } else if (currentFrameId == 'teams') {
+          nextFrameNum = this.getFrameNumById('intro');
         }
 
+      // if (frameId == 'next' || frameId == 'back') {
+
+      //   // Where are we in the history right now?
+      //   let currentHistPos = this.framesHistory.indexOf(this.currentFrameNum);
+      //   let histPosToTest = frameId == 'next' ? currentHistPos + 1 : currentHistPos - 1;
+
+      //   // If we can go to a next frame, do so
+      //   if (this.framesHistory[histPosToTest]) {
+      //     console.log('  if'); // eslint-disable-line no-console
+      //     nextFrameNum = this.framesHistory[histPosToTest];
+      //   }
+      //   // If they've chosen 'publications', let's go to the uspsfields page
+      //   else if (this.u_subject == 'publications') {
+      //     console.log('  else'); // eslint-disable-line no-console
+      //     nextFrameNum = this.getFrameNumById('uspsFields');
+
+      //     // If we're ordering publications but we're on the uspsFields frame, first, let's review
+      //     if (this.frames[this.currentFrameNum].frameId == 'uspsFields') {
+      //       nextFrameNum = this.getFrameNumById('orderReview');
+      //     }
+      //   }
+
       } else if (typeof frameId == 'number') {
+        // If we're jumping to a frame number, do it
         nextFrameNum = frameId;
 
       } else if (typeof frameId == 'string') {
-        for (let i = 0; i < this.frames.length; i++) {
-          if (frameId == this.frames[i].frameId) {
-            nextFrameNum = i;
-            break;
-          }
-        }
+        // if we're jumping to some other frame id, do it
+        nextFrameNum = this.getFrameNumById(frameId);
       }
 
-      if (!this.framesHistory) this.framesHistory = [0];
+      // if (!this.framesHistory) this.framesHistory = [0];
 
-      if (!this.framesHistory.includes(nextFrameNum)) {
-        this.framesHistory.push(nextFrameNum);
-      }
+      // if (!this.framesHistory.includes(nextFrameNum)) {
+      //   this.framesHistory.push(nextFrameNum);
+      // }
+
+      // console.log('recaptcha response: ', grecaptcha.getResponse(0));
 
       this.currentFrameNum = nextFrameNum;
+      // this.startSubmission();
     },
-    handleRadioClick: function(q) {
+    handleRadioClick: function(opt, e) {
+      console.log('App.handleRadioClick(opt, e): ', opt, e);
+      if (opt.vModel == 'selectedTeam') {
+        this.selectedTeam = opt.value;
+        this.goToFrame('teamFields');
 
-      if (q.vModel == 'selectedTeam') {
-        this.selectedTeam = q.value;
-        this.jumpToFrame('teamFields');
+      } else if (opt.vModel == 'selectedTopic1' || opt.vModel == 'selectedTopic2') {
+        // Set the selected topic
+        if (opt.vModel == 'selectedTopic1') {
+          this.selectedTopic1 = opt.value || opt.label;
+          this.selectedTopic2 = null;
+          // For some reason, Vue doesn't want to uncheck the radios for selectedTopic2,
+          // so we're going to have ES6 do it. Not ideal
+          let theSelectedTopic2Inputs = document.querySelectorAll('#gov-fec-contact-app input[name="elem_selectedTopic2"]:checked');
+          theSelectedTopic2Inputs.forEach(el => {
+            el.checked = false;
+          });
 
-      } else if (q.vModel == 'selectedTopic') {
-        // Set the selected team
-        this.selectedTeam = q.value;
+          this.userSubject = null;
+          this.selectedTeam = opt.value == 'NEXT' ? null : opt.team;
+
+        } else if (opt.vModel == 'selectedTopic2') {
+          this.selectedTopic2 = opt.value || opt.label;
+          this.userSubject = null;
+          this.selectedTeam = opt.team;
+
+        }
 
         // Should we also pre-select the subject?
-        if (q.teamSubject && q.teamSubject != '') {
+        if (opt.teamSubject && opt.teamSubject != '' && this.selectedTeam) {
           try {
             const teamSubjects = this.teams[this.selectedTeam].fields.subject;
             let newSubject = '';
             for (let i = 0; i < teamSubjects.length; i++) {
               const testSub = teamSubjects[i];
-              if (testSub.value == q.teamSubject || testSub.label == q.teamSubject) {
-                newSubject = q.teamSubject;
+              if (testSub.value == opt.teamSubject || testSub.label == opt.teamSubject) {
+                newSubject = opt.teamSubject;
                 break;
               }
             }
@@ -1476,27 +1597,26 @@ new Vue({
           console.log('  else'); // eslint-disable-line no-console
         }
         // Show the frame
-        this.jumpToFrame('teamFields');
+        if (opt.vModel == 'selectedTopic1' && this.selectedTopic1 == 'NEXT') this.goToFrame('topics2');
+        else this.goToFrame('teamFields');
       }
     },
     restart: function() {
       // reset vars
-      this.currentFrameNum = 0;
-      this.framesHistory = [0];
       this.selectedTeam = null;
-      this.selectedTopic = null;
-      // Set all the frames to not viewed (for breadcrumbs and Next button)
-      for (let i = 0; i < this.frames.length; i++) {
-        this.frames[i].viewed = false;
-      }
-      // TODO - clear autoAdvance?
-      //
+      this.selectedTopic1 = null;
+      this.selectedTopic2 = null;
+      this.currentFrameNum = 0;
+      let theCheckedInputElements = document.querySelectorAll('#gov-fec-contact-app input:checked');
+      theCheckedInputElements.forEach(el => {
+        el.checked = false;
+      });
       // TODO - a better way to reset all the form values?
       let theForm = document.querySelector('form.frames');
       theForm.reset();
     },
     updateNavOptions: function(obj) {
-      // console.log('App.updateNavOptions(obj): ', obj); // eslint-disable-line no-console
+      console.log('App.updateNavOptions(obj): ', obj); // eslint-disable-line no-console
       this.canNavBack = obj.Back;
       this.canNavNext = obj.Next;
       this.canNavRestart = obj.Restart;
