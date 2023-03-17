@@ -48,6 +48,11 @@
   font-weight: bold;
 }
 
+// This will make a square photo, round and have no effect on a round photo
+.employee-photo img {
+  border-radius: 50%;
+}
+
 //So if first office has its own h2, there is no double line
  header.heading--main.offices-heading--main + .main__content--full h2.office-title {
   border-top: none
