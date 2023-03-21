@@ -16,6 +16,10 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
+        migrations.AlterModelOptions(
+            name='embedsnippet',
+            options={'ordering': ['-id']},
+        ),
         migrations.CreateModel(
             name='OfficePage',
             fields=[
