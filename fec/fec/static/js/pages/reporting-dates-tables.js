@@ -74,6 +74,9 @@ const header_notes_modal_partial = `<div tabindex="-1" class="modal__overlay" da
 
 function ReportingDates() {
 
+  
+  
+
   //Declare globals (scoped to this function) to get past linter error/tests. For header_notes and footnotes objects declared in CMS field, CSS.escape, Set()
   /* global header_notes, footnotes */
   this.dates_table = document.getElementsByClassName('election-dates-table')[0];
@@ -88,23 +91,30 @@ function ReportingDates() {
   or in blocks.py. I think the former makes sense.
   */
 
-  //only run this logic if the page has an `.election-dates-table` onn it
-  if (this.dates_table) {
-  //get all acnhor links in TDs)
-    this.anchors = this.dates_table.querySelectorAll('td a[href^=\'#\']');
+  
 
-    //disable default jump behavior for anchor links(#) but keep links for accessibility
-    for (const anchor of this.anchors) {
-      anchor.addEventListener('click', e => {
-        e.preventDefault();
-      });
-    }
-
+   
+    
     this.buildStaticElements();
+
+    this.convertFootnotes()
 
     this.addFootnotes();
 
     this.stripeByState();
+
+    //only run this logic if the page has an `.election-dates-table` onn it
+    if (this.dates_table) {
+    //get all acnhor links in TDs)
+      this.anchors = this.dates_table.querySelectorAll('td a[href^=\'#\']');
+
+      //disable default jump behavior for anchor links(#) but keep links for accessibility
+      for (const anchor of this.anchors) {
+        anchor.addEventListener('click', e => {
+          e.preventDefault();
+        });
+      }
+
 
     //Define media query
     const mql = window.matchMedia('screen and (max-width: 650px)');
@@ -495,4 +505,72 @@ ReportingDates.prototype.stripeByState = function() {
   }
 };
 
+ReportingDates.prototype.convertFootnotes = function() {
+ let self=this
+   //get all non-footnote row cells for mobile
+  const all_td = document.querySelectorAll('tr:not(.footnote_row) td');
+
+
+//convertFootnotes
+  Array.from(all_td).forEach(cell => {
+     
+     let txt = cell.textContent
+     console.log(txt)
+     //if (/(\d\d\/\d\d\/20\d\d)(\d)/.test(txt)) {
+     if (/(\d\d\/\d\d\/20\d\d)(\+)(\d{1,2})/.test(txt)) {
+      cell.style.color='#f90'
+      let new_txt =      
+      //txt.replace( /(\d\d\/\d\d\/20\d\d)(\d)/, `$1<a href="#footnote_$2"><sup>$2</sup></a>`);
+      txt.replace( /(\d\d\/\d\d\/20\d\d)(\+)(\d{1,2})/, `$1<a href="#footnote_$3"><sup>$3</sup></a>`);
+
+      cell.innerHTML = new_txt
+
+
+     }
+   })
+// add row state name classes
+   const all_tr = document.querySelectorAll('tr');
+      Array.from(all_tr).forEach(row => {
+        let state_name = row.cells[0].textContent
+        state_name = state_name.split(' ')[0]//.toLowerCase()
+        console.log(state_name)
+        const states_select = document.getElementById('states');
+        console.log('SS',states_select)
+        Array.from(states_select.options).forEach(opt => {
+          if (opt.textContent.includes(state_name)){ 
+            row.classList.add(opt.value.toLowerCase())
+           }
+        })
+
+      })
+
+
+////// NEW ////
+
+// add footnote based on info.
+ // let this_election_name = "West Virginia Primary"
+ // let this_deadline =  "Close of books"
+ // var cell_index
+
+ //  const all_trs = document.querySelectorAll('tr');
+ //  const all_ths = document.querySelectorAll('th');
+ //    Array.from(all_trs).forEach(row => {
+ //      let election_name = row.cells[0].textContent
+ //      console.log('election_name', election_name)
+ //        if (election_name == this_election_name){
+ //        Array.from(all_ths).forEach(cell => {
+ //          if (cell.childNodes[0].textContent == this_deadline) {
+ //            cell_index = cell.cellIndex
+ //            console.log('cell_index', cell_index)
+ //          }   
+ //        })
+ //           row.cells[cell_index].style.color = 'red'
+ //           row.cells[cell_index].insertAdjacentHTML('beforeend', '<a href="#footnote_2"><sup>2</sup></a>')
+ //        }
+
+     
+ //      })
+ ////// END  NEW ///
+
+  }
 new ReportingDates();

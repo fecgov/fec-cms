@@ -1332,14 +1332,14 @@ class ReportingDatesTables(Page):
         ('state', blocks.StructBlock([
             ('state_table', ReportingTableBlock(blank=True, form_classname='title'))
         ]))
-    ], blank=True, null=True, collapsed=True)
+    ], blank=True, null=True, collapsed=False)
     footnotes = StreamField([
         ('title', blocks.CharBlock(blank='true', icon='title')),
         ('footnote', blocks.ListBlock(blocks.StructBlock([
             ('footnote_number', blocks.CharBlock(blank='true', icon='tag', form_classname='title')),
             ('footnote_text', blocks.RichTextBlock(blank='true', icon='pilcrow', help_text='')),
         ])))
-    ], blank=True,)
+    ], blank=True)
 
     content_panels = Page.content_panels + [
         FieldPanel('states'),

@@ -2,7 +2,7 @@
 {% load wagtailcore_tags %}
 
 {% for row in self.table.data %}
-    <tr class="{{self.state_name | lower }}">
+    <tr>
     {% for cell in row %}
     <td>{{ cell | safe}}</td>
       {% endfor %}
