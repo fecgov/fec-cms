@@ -195,7 +195,8 @@
   }
 
   [type="checkbox"] + label {
-    max-width: 90%;
+    max-width: min(18em, 90%);
+    word-wrap: break-word;
   }
 
   .dropdown__remove {

@@ -67,6 +67,19 @@
   table-layout: auto;
   z-index: $z1;
 
+  td {
+    max-width: max(9em, 20vw);
+    word-wrap: break-word;
+
+    @include media($med) {
+      max-width: max(9em, 30vw);
+    }
+    @include media($lg) {
+      max-width: max(13em, 20vw);
+    }
+  }
+  
+
   th {
     line-height: u(1.4rem);
     letter-spacing: -0.3px;

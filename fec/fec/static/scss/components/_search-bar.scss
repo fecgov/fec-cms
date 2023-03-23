@@ -238,6 +238,11 @@ $search-button-width: u(5.6rem);
   }
 }
 
+.tt-suggestion__name.tt-suggestion {
+  display: block;
+  word-wrap: break-word;
+}
+
 .tt-suggestion__name.tt-suggestion__name {
   color: $base;
 }
