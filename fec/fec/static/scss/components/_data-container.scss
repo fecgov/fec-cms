@@ -83,12 +83,12 @@
 // Data-container shrinks and floats
 @include media($lg) {
   .data-container__wrapper {
-    display: table;
+    display: flex;
+    flex-direction: row;
     width: 100%;
   }
 
   .data-container {
-    display: table-cell;
     width: calc(100% - 4rem);
     padding: 0;
   }
@@ -96,7 +96,6 @@
   .is-showing-filters {
     .data-container {
       width: calc(100% - 30rem);
-      display: table-cell;
     }
   }
 
