@@ -118,7 +118,14 @@
   @include media($med) {
     display: table-cell;
     width: 250px;
+
+    // All section siblings within .data-container__wrapper  
+    // will now get this width. These navs are using 250px widths.
+    & ~ section {
+      width: calc(100% - 250px);
+    }
   }
+
 }
 
 @include media($med) {

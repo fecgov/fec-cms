@@ -46,6 +46,10 @@
   @include u-icon-bg($info-circle, $primary);
 }
 
+p {
+  word-wrap: break-word;
+}
+
 .message--alert__bottom {
   border-top: 1px solid $gray;
   margin-top: u(1rem);
