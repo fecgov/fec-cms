@@ -24,16 +24,69 @@ Vue.component('Recaptcha', {
     }
   },
   mounted: function() {
+    window.addEventListener('load', this.handleWindowLoad);
+    this.$emit('recaptcha-event', 'windowloaded');
     this.$emit('recaptcha-event', 'mounted');
   },
+  data: function() {
+    return {
+      theRecaptcha: null
+    };
+  },
+  methods: {
+    handleTestingChange(e) {
+      this.$emit('testing-change', e.target.value == "true");
+    }
+    // handleWindowLoad: function(e) {
+    //   console.log('  grecaptcha: ', grecaptcha);
+    //   this.theRecaptcha = grecaptcha.render('gov-fec-contact-recaptcha', {
+    //     sitek_e_y: '', // (Google's universal generic loc
+    //     callback: this.handleRecapSuccess,
+    //     'expired-callback': this.handleRecapExpired,
+    //     'error-callback': this.handleRecapError
+    //   });
+    //   console.log('  this.theRecaptcha: ', this.theRecaptcha);
+    // },
+    // handleRecapSuccess: function(x, y, z) {
+    //   console.log('handleRecapSuccess(x,y,z): ', x, y, z);
+    //   console.log('  getResponse: ', grecaptcha.getResponse(this.theRecaptcha));
+    // },
+    // handleRecapExpired: function(x, y, z) {
+    //   console.log('handleRecapExpired(x,y,z): ', x, y, z);
+    // },
+    // handleRecapError: function(x, y, z) {
+    //   console.log('handleRecapError(x,y,z): ', x, y, z);
+    // }
+  },
   template: `
-    <div
-      v-show="recaptchaShow"
-      class="g-recaptcha"
-      data-sitek${'e'}y="sdfadf"
-      >
-      <iframe style="height: 78px; width: 304px; background: #aeb0b5 !important"></iframe>
+    <div class="recaptcha-holder">
+      <fieldset
+        v-show="recaptchaShow">
+        <input
+          @input="handleTestingChange"
+          v-model="TESTSHOULDFAIL"
+          id="TESTSHOULDFAIL_true"
+          type="radio"
+          :value="true" />
+        <label for="TESTSHOULDFAIL_true">TESTING: Submission should fail</label>
+        <br>
+        <input
+          @change="handleTestingChange"
+          v-model="TESTSHOULDFAIL"
+          id="TESTSHOULDFAIL_false"
+          type="radio"
+          :value="false" />
+        <label for="TESTSHOULDFAIL_false">TESTING: Submission should pass</label>
+      </fieldset>
+      
+      <div
+        data-TEST-id="gov-fec-contact-recaptcha"
+        data-TEST-v-show="recaptchaShow"
+        data-TEST-class="TESTINGg-recaptcha-a"
+        ></div>
     </div>`
+      
+      // <!-- <iframe style="height: 78px; width: 304px; background: #aeb0b5 !important"></iframe> -->
 });
 
 /**
@@ -103,6 +156,10 @@ Vue.component('FramesHolder', {
     },
     frames: {
       type: Array,
+      required: true
+    },
+    recaptchaValidated: {
+      type: Boolean,
       required: true
     },
     teams: {
@@ -923,6 +980,7 @@ new Vue({
       <FramesHolder
         :current-frame-num="currentFrameNum"
         :frames="frames"
+        :recaptcha-validated="recaptchaValidated"
         :selected-team="selectedTeam"
         :selected-topic1="selectedTopic1"
         :selected-topic2="selectedTopic2"

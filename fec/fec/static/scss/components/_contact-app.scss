@@ -429,8 +429,34 @@
     color: $error;
   }
 
-  .g-recaptcha {
-    padding-left: 9.5rem;
+  .recaptcha-holder {
+    height: 78px;
+    margin-bottom: 2rem;
+    padding-left: 3rem;
+    position: relative;
+
+    @include media($med) {
+      padding-left: 9.5rem;
+    }
+
+    div:first-child:before {
+      content: "::TESTING:: Every submission will fail";
+      color: red;
+      display: block;
+      font-size: 1.5rem;
+      font-weight: bold;
+      left: 0;
+      line-height: 1em;
+      margin-top: -2rem;
+      padding-top: 0.75rem;
+      position: absolute;
+      top: 0;
+
+      @include media($med) {
+        margin-top: 0;
+        width: 10rem;
+      }
+    }
   }
   .publications-order-form {
     width: 100%;
