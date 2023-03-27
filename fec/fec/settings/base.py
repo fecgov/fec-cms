@@ -69,7 +69,7 @@ FEATURES = {
     'aggregatetotals': bool(env.get_credential('FEC_FEATURE_AGGR_TOTS', '')),
     'barcharts': bool(env.get_credential('FEC_FEATURE_HOME_BARCHARTS', '')),
     'contributionsbystate': bool(env.get_credential('FEC_FEATURE_CONTRIBUTIONS_BY_STATE', '')),
-    'contact_app': bool(env.get_credential('FEC_FEATURE_CONTACT_APP', '')),
+    'contact_app': True,  # bool(env.get_credential('FEC_FEATURE_CONTACT_APP', '')),
     'debts': bool(env.get_credential('FEC_FEATURE_DEBTS', '')),  # TODO: debts dates
     'map': bool(env.get_credential('FEC_FEATURE_HOME_MAP', '')),
     'pac_party': bool(env.get_credential('FEC_FEATURE_PAC_PARTY', '')),
