@@ -40,7 +40,7 @@ Vue.component('Recaptcha', {
   },
   methods: {
     handleTestingChange(e) {
-      this.$emit('testing-change', e.target.value == "true");
+      this.$emit('testing-change', e.target.value == 'true');
     }
     // handleWindowLoad: function(e) {
     //   console.log('  grecaptcha: ', grecaptcha);
@@ -90,7 +90,7 @@ Vue.component('Recaptcha', {
         data-TEST-class="TESTINGg-recaptcha-a"
         ></div>
     </div>`
-      
+
       // <!-- <iframe style="height: 78px; width: 304px; background: #aeb0b5 !important"></iframe> -->
 });
 
@@ -227,16 +227,16 @@ Vue.component('FramesHolder', {
         this.updateNavOptions();
       }
     },
-    selectedTopic1: function(newVal, oldVal) {
+    selectedTopic1: function() {
       //console.log('changed selectedTopic1 from ', oldVal, ' to ', newVal);
       // TODO: do we need this?
     },
-    selectedTopic2: function(newVal, oldVal) {
+    selectedTopic2: function() {
       // console.log('changed selectedTopic2 from ', oldVal, ' to ', newVal);
       // TODO: do we need this?
     },
     submissionMessages: {
-      handler(val) {
+      handler() {
         // console.log('submissionMessages changed: ', val);
         // TODO: do we need this?
       },
@@ -1604,7 +1604,7 @@ new Vue({
 
       this.currentFrameNum = nextFrameNum;
     },
-    handleRadioClick: function(opt, e) {
+    handleRadioClick: function(opt) {
       if (opt.vModel == 'selectedTeam') {
         this.selectedTeam = opt.value;
         this.goToFrame('teamFields');
@@ -1818,9 +1818,9 @@ new Vue({
       //   console.log('  CATCH e: ', e);
       // });
       if (this.TESTSHOULDFAIL) {
-        setTimeout(this.finishSubmission, 2000, {status: 999}, submissionBody);
+        setTimeout(this.finishSubmission, 2000, { status: 999 }, submissionBody);
       } else {
-        setTimeout(this.finishSubmission, 2000, {success: true});
+        setTimeout(this.finishSubmission, 2000, { success: true });
       }
     },
     updateNavOptions: function(obj) {
