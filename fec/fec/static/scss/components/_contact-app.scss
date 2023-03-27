@@ -5,6 +5,7 @@
   
 // Vue strips the attributes from its DOM element
 #gov-fec-contact-app {
+  // container-name: widget;
   font-family: $sans-serif;
   font-size: 1.6rem;
   overflow: hidden;
@@ -65,16 +66,22 @@
     &.intro {
       text-align: center;
 
+      .grid__item:first-child {
+        margin-bottom: 2rem;
+
+        @include media($med) {
+          margin-bottom: 0;
+        }
+      }
       @include media($med) {
-        padding-right: 2em;
+        // padding-right: 2em;
       }
 
       div {
         margin: 0 auto;
-        max-width: 80%;
 
         @include media($med) {
-          // max-width: 66%;
+          max-width: 80%;
         }
       }
       .button--cta {
@@ -134,40 +141,42 @@
 
     .field-wrapper {
 
-      &.col-3 {
-        margin-right: .5rem;
-        width: calc(8.33% * 3 - .5rem);
-
-        &:last-child {
-          margin-right: 0;
-        }
-      }
-      &.col-5 {
-        margin-right: .5rem;
-        width: calc(8.33% * 5 - .5rem);
-
-        &:last-child {
-          margin-right: 0;
-        }
-      }
-      &.col-8 {
-        width: calc(8.33% * 8 - .5rem);
-        margin-right: .5rem;
-
-        &:last-child {
-          margin-right: 0;
-        }
-      }
-      &.col-9 {
-        width: calc(8.33% * 9 - .5rem);
-        margin-right: .5rem;
-
-        &:last-child {
-          margin-right: 0;
-        }
-      }
-      &.col-12 {
+      &.col-3, &.col-5, &.col-8, &.col-9, &.col-12 {
         width: 100%;
+      }
+      @include media($med) {
+        &.col-3 {
+          margin-right: .5rem;
+          width: calc(8.33% * 3 - .5rem);
+
+          &:last-child {
+            margin-right: 0;
+          }
+        }
+        &.col-5 {
+          margin-right: .5rem;
+          width: calc(8.33% * 5 - .5rem);
+
+          &:last-child {
+            margin-right: 0;
+          }
+        }
+        &.col-8 {
+          width: calc(8.33% * 8 - .5rem);
+          margin-right: .5rem;
+
+          &:last-child {
+            margin-right: 0;
+          }
+        }
+        &.col-9 {
+          width: calc(8.33% * 9 - .5rem);
+          margin-right: .5rem;
+
+          &:last-child {
+            margin-right: 0;
+          }
+        }
       }
     }
     
@@ -375,7 +384,11 @@
     display: block;
     margin-bottom: 0;
     padding-top: .5em;
-    padding-left: 9.5rem;
+    padding-left: 2em;
+
+    @include media($med) { 
+      padding-left: 9.5rem;
+    }
 
     &:before {
       height: 1.5em;
@@ -479,10 +492,15 @@
     }
   }
   .publications-order-form {
+    margin-bottom: 26.25px; // label height
     width: 100%;
 
     col {
-      width: 14rem;
+      width: 11rem;
+
+      @include media($med) {
+        width: 14rem;
+      }
 
       &:first-child {
         width: auto;
@@ -511,21 +529,109 @@
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
+    line-height: 1.25em;
     margin: 2rem 0;
 
     div {
-      padding: 0 .5rem;
+      padding: .5rem;
 
       &:not(:last-child):not(:nth-last-child(2)) {
         border-bottom: thin solid lightgrey;
       }
 
       &:nth-child(odd) {
-        width: 80%;
+        width: 75%;
       }
       &:nth-child(even) {
-        width: 20%;
+        width: 25%;
       }
+      
+      @include media($med) {
+        &:nth-child(odd) {
+          width: 80%;
+        }
+        &:nth-child(even) {
+          width: 20%;
+        }
+      }
+    }
+  }
+
+  @keyframes loadingAnimation {
+    0% {
+      // swell
+      left: 1rem;
+      height: 0rem;
+      top: 1rem;
+      width: 0rem;
+      z-index: 1;
+    }
+    16% {
+      // done swelling, start slide
+      left: 0rem;
+      height: 2rem;
+      top: 0rem;
+      width: 2rem;
+      z-index: 5;
+    }
+    50% {
+      // finish slide, start to shrink
+      height: 2rem;
+      left: 6rem;
+      top: 0rem;
+      width: 2rem;
+      z-index: 1;
+    }
+    66% {
+      // done shrinking, start the return
+      height: 0rem;
+      left: 7rem;
+      top: 1rem;
+      width: 0rem;
+      z-index: 1;
+    }
+    100% {
+      // back to 0
+      height: 0rem;
+      left: 1rem;
+      top: 1rem;
+      width: 0rem;
+      z-index: 1;
+    }
+  }
+
+  .loading-animation {
+    display: inline-block;
+    width: 8rem;
+    height: 2rem;
+    position: relative;
+
+    .icon {
+      content: "";
+      border-radius: 50%;
+      display: block;
+      position: absolute;
+      top: 1rem;
+      z-index: 0;
+
+      &:nth-child(1) {
+        background: #112e51;
+      }
+      &:nth-child(2) {
+        background: #35bdbb;
+        animation-delay: -.5s;
+      }
+      &:nth-child(3) {
+        background: #112e51;
+        animation-delay: -1s;
+      }
+      &:nth-child(4) {
+        background: #35bdbb;
+        animation-delay: -1.5s;
+      }
+      animation-name: loadingAnimation;
+      animation-duration: 2s;
+      animation-iteration-count: infinite;
     }
   }
 }

@@ -1004,6 +1004,8 @@ new Vue({
         @radio-click="handleRadioClick"
       ></FramesHolder>
       <Recaptcha
+        @testing-change="handleTestingChange"
+        :TESTSHOULDFAIL="TESTSHOULDFAIL"
         :recaptcha-show="recaptchaShow"
         :recaptcha-validated="recaptchaValidated"
         @recaptcha-event="handleRecaptchaEvent"
@@ -1021,12 +1023,14 @@ new Vue({
   `,
   data: function() {
     return {
+      TESTSHOULDFAIL: false,
       canNavBack: 0,
       canNavNext: 0,
       canNavSubmit: 0,
       canNavRestart: 0,
       currentFrameNum: 0, //int
       isSubmitting: false,
+      postUrl: '/contact-submission/',
       selectedTeam: '',
       selectedTopic1: '',
       selectedTopic2: '',
@@ -1045,10 +1049,10 @@ new Vue({
       teams: {
         congress: {
           name: 'Congressional Affairs',
-          summary: 'Congressional Affairs responds to inquries from other agencies and Congressional representatives',
+          summary: 'Congressional Affairs responds to inquiries from other agencies and Congressional representatives',
           formPrompt: 'Contact Congressional Affairs via telephone.',
           phoneExt: '1006',
-          ePrefix: 'congress', // (@fec.gov)
+          ePrefix: 'congress',
           fields: ''
         },
         efo: {
@@ -1059,7 +1063,6 @@ new Vue({
           formPrompt: 'Contact the Electronic Filing Office via telephone or send a message.',
           phoneMenu: 4, // 1-800-424-9530, menu option #
           phoneExt: 1307, // 202-694-####
-          // ePrefix: 'press', // (@fec.gov)
           success: 'The Electronic Filing Office will get back to you within 2-4 hours.',
           successMore: {
             type: 'a',
@@ -1072,13 +1075,13 @@ new Vue({
             committeeId: true,
             subject: [
               { label: 'Get password help',
-                email: 'eFiletechsupport' },
+                ePrefix: 'eFiletechsupport' },
               { label: 'Answer a question about setting up FECFile',
-              email: 'eFiletechsupport' },
+                ePrefix: 'eFiletechsupport' },
               { label: 'Answer a question about 3rd-party filing software',
-              email: 'eFiletechsupport' },
+                ePrefix: 'eFiletechsupport' },
               { label: 'Help troubleshoot a problem with FECFile',
-              email: 'eFiletechsupport' }
+                ePrefix: 'eFiletechsupport' }
             ],
             message: true
           }
@@ -1106,18 +1109,18 @@ new Vue({
             email: true,
             subject: [
               { label: 'A question about campaign finance law',
-                email: '@info' },
+                ePrefix: 'info' },
               { label: 'A question about an upcoming training',
-                email: 'conferences' },
+                ePrefix: 'conferences' },
               { label: 'Help me sign up for an upcoming training',
-                email: 'conferences' },
+                ePrefix: 'conferences' },
               { label: 'Send me a copy of an FEC form or guide',
                 value: 'publications',
                 email: 'info' },
               { label: 'Help me schedule a group speaker',
-                email: 'speaker' },
+                ePrefix: 'speaker' },
               { label: 'Something else',
-                email: 'info' }
+                ePrefix: 'info' }
             ],
             message: true,
             subject_pubs: [
@@ -1154,15 +1157,15 @@ new Vue({
           formPrompt: 'Contact the Press Office via telephone, email, or send them a message.',
           phoneMenu: 1, // 1-800-424-9530, menu option #
           phoneExt: 1220, // 202-694-####
-          ePrefix: 'press', // (@fec.gov)
+          ePrefix: 'press',
           success: 'The Press Office will get back to you within 24 hours.',
           fields: {
             email: true,
             subject: [
               { label: 'Assist with a media query',
-                email: 'press' },
+                ePrefix: 'press' },
               { label: 'Answer a question about a Commission meeting',
-                email: 'press' }
+                ePrefix: 'press' }
             ],
             message: true
           }
@@ -1189,15 +1192,14 @@ new Vue({
           formPrompt: 'Contact Public Records via telephone or send a message.',
           phoneMenu: 2, // 1-800-424-9530, menu option #
           phoneExt: 1120, // 202-694-####
-          // ePrefix: 'press', // (@fec.gov)
           success: 'The Office of Public Records will get back to you within 2 business days.',
           fields: {
             email: true,
             subject: [
               { label: 'Help research public documents',
-                email: 'pubrec' },
+                ePrefix: 'pubrec' },
               { label: 'Help research campaign finance data',
-                email: 'pubrec' }
+                ePrefix: 'pubrec' }
             ],
             message: true
           }
@@ -1222,7 +1224,7 @@ new Vue({
               type: 'card',
               class: '',
               icon: 'i-question-circle',
-              label: `I need help, but I'm not sure who to contact&nbsp;&rsaquo;`,
+              label: `I need help, but I’m not sure who to contact&nbsp;&rsaquo;`,
               actionId: 'start-help-with-who'
             }
           ]
@@ -1411,28 +1413,32 @@ new Vue({
     };
   },
   mounted: function() {
-    // loadRecaptcha();
-    // this.id = this.$el.getAttribute('data-id');
     // Add the transition listeners so frames disappear while out of sight
     this.startWatchingTransitions();
   },
   computed: {
     recaptchaShow: function() {
-      return true;
-      // let toReturn = false;
+      // return false;
+      let toReturn = false;
 
-      // if (this.frames[this.currentFrameNum].frameId == 'teamFields' && this.u_subject != 'publications')
-      //   toReturn = true;
-      // else if (this.frames[this.currentFrameNum].frameId == 'orderReview')
-      //   toReturn = true;
+      if (this.frames[this.currentFrameNum].frameId == 'teamFields' && this.u_subject != 'publications')
+        toReturn = true;
+      else if (this.frames[this.currentFrameNum].frameId == 'orderReview')
+        toReturn = true;
 
-      // return toReturn;
+      return toReturn;
     },
     recaptchaValidated: function() {
-      return false;
+      // return false;
+      return true;
+      // console.log('grecaptcha: ', grecaptcha);
+      // console.log('window.grecaptcha: ', window.grecaptcha);
     }
   },
   methods: {
+    handleTestingChange(val) {
+      this.TESTSHOULDFAIL = val;
+    },
     getFrameNumById: function(requestedID) {
       for (let i = 0; i < this.frames.length; i++) {
         if (this.frames[i].frameId == requestedID) return i;
@@ -1440,7 +1446,6 @@ new Vue({
       return 0;
     },
     handleButtonClick: function(buttonType, e) {
-      // console.log('app.handleButtonClick(buttonType, e): ', buttonType, e); // eslint-disable-line no-console
       e.preventDefault();
       if (buttonType == 'start-know-who') this.goToFrame('teams');
       else if (buttonType == 'start-help-with-who') this.goToFrame('topics1');
@@ -1461,7 +1466,6 @@ new Vue({
       }
     },
     handleFieldChange: function(e) {
-      console.log('App.handleFieldChange(e): ', e); // eslint-disable-line no-console
       e.preventDefault();
 
       // Which variable?
@@ -1507,12 +1511,6 @@ new Vue({
       console.log('App.handleRecaptchaEvent(e): ', e, f); //eslint-disable-line no-console
     },
     goToFrame: function(frameId) {
-      console.log('goToFrame(frameId): ', frameId);
-      // TODO: on selection for teams, topics1, and topics2,
-      // TODO: if the value changes, reset the others.
-      // TODO: e.g. if topic1 is 'NEXT' and topic2 is [3], if topic1 is changed from 'NEXT', erase topic2 as well as all the u_fields (email address, subject, message, etc)
-      // TODO: e.g. clicking from intro to teams should erase topic1 and topic2 and any u_fields
-      // TODO:      clicking from intro to topics… should erase selectedTeam? (could complicate other things)
       /*
       Forward flow:
 
@@ -1605,10 +1603,8 @@ new Vue({
       // console.log('recaptcha response: ', grecaptcha.getResponse(0));
 
       this.currentFrameNum = nextFrameNum;
-      // this.startSubmission();
     },
     handleRadioClick: function(opt, e) {
-      console.log('App.handleRadioClick(opt, e): ', opt, e);
       if (opt.vModel == 'selectedTeam') {
         this.selectedTeam = opt.value;
         this.goToFrame('teamFields');
@@ -1649,10 +1645,10 @@ new Vue({
             }
             if (newSubject != '') this.u_subject = newSubject;
           } catch(e) {
-            console.log('    catch! e: ', e); // eslint-disable-line no-console
+            console.log('HANDLERADIOCLICK catch! e: ', e); // eslint-disable-line no-console
           }
         } else {
-          console.log('  else'); // eslint-disable-line no-console
+          console.log('HANDLERADIOCLICK else'); // eslint-disable-line no-console
         }
         // Show the frame
         if (opt.vModel == 'selectedTopic1' && this.selectedTopic1 == 'NEXT') this.goToFrame('topics2');
