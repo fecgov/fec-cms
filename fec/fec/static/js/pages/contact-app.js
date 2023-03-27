@@ -14,6 +14,10 @@ Vue.config.devtools = true;
  */
 Vue.component('Recaptcha', {
   props: {
+    TESTSHOULDFAIL: {
+      type: Boolean,
+      required: true
+    },
     recaptchaShow: {
       type: Boolean,
       required: true
@@ -23,6 +27,7 @@ Vue.component('Recaptcha', {
       required: true
     }
   },
+  emits: ['testing-change'],
   mounted: function() {
     window.addEventListener('load', this.handleWindowLoad);
     this.$emit('recaptcha-event', 'windowloaded');
@@ -218,13 +223,18 @@ Vue.component('FramesHolder', {
   },
   watch: {
     currentFrameNum: function(newVal, oldVal) {
-      if (newVal != oldVal) this.updateNavOptions();
+      if (newVal != oldVal) {
+        this.updateNavOptions();
+      }
     },
     selectedTopic1: function(newVal, oldVal) {
-      console.log('changed selectedTopic1 from ', oldVal, ' to ', newVal);
+      //console.log('changed selectedTopic1 from ', oldVal, ' to ', newVal);
+      // TODO: do we need this?
     },
     selectedTopic2: function(newVal, oldVal) {
-      console.log('changed selectedTopic2 from ', oldVal, ' to ', newVal);
+      // console.log('changed selectedTopic2 from ', oldVal, ' to ', newVal);
+      // TODO: do we need this?
+    },
     submissionMessages: {
       handler(val) {
         // console.log('submissionMessages changed: ', val);
@@ -233,6 +243,7 @@ Vue.component('FramesHolder', {
       deep: true
     }
   },
+  updated: function() {
     let newHeight = this.framesHeight;
     // If we're not on the teamFields page (where publications are selected)
     // just return the default heigth and be done
@@ -421,7 +432,8 @@ Vue.component('FramesHolder', {
                   class="t-bold t-caps">Forms and publications</label>
                 <table
                   id="u_pubs"
-                  class="publications-order-form">
+                  class="publications-order-form"
+                  :aria-invalid="canAddAnotherPublication() == false ? true : false">
                   <colgroup>
                     <col>
                     <col>
@@ -478,6 +490,7 @@ Vue.component('FramesHolder', {
                         <button
                           :class="canAddAnotherPublication() ? 'button--cta button--plus' : 'button--cta button--plus is-disabled'"
                           @click="handleButtonClick('pubs-add', $event)"
+                          type="button"
                           >Add another form or publication</button>
                       </td>
                     </tr>
@@ -485,7 +498,7 @@ Vue.component('FramesHolder', {
                 </table>
                 <label
                   for="u_pubs"
-                  class="field__message--error" >Select your requested publication and a quantity</label>
+                  class="field__message--error-group">Select your requested publication and a quantity</label>
               </div>
 
               <div
@@ -494,7 +507,7 @@ Vue.component('FramesHolder', {
                 <label
                   for="u_message"
                   class="t-bold t-caps"
-                  >Message <span class="t-unbold" >(max xxx characters)</span></label>
+                  >Message</label>
                 <textarea
                   v-model="userMessage"
                   @input="handleFieldInput($event)"
@@ -562,6 +575,9 @@ Vue.component('FramesHolder', {
                   pattern="^[0-9]{5}$|^[0-9]{9}$|^[0-9]{5}-[0-9]{4}$"
                   id="u_zip" name="u_zip" type="text" class="col-rr"
                   required />
+
+                <label
+                  class="field__message--error-group" style="order:20">A complete mailing address is required</label>
 
               </div>
             </div>
@@ -757,9 +773,6 @@ Vue.component('FramesHolder', {
       else if (currentFrame.frameId == 'teamFields' && this.userSubject == 'publications' && this.userPubs.length >= 1)
         toReturn = true;
 
-      // TODO: do we need to check uspsFields?
-      // (currentFrame.frameId == 'uspsFields' && this.selectedTopic1) ||
-      console.log('  returning: ', toReturn);
       return toReturn;
     },
     /**
@@ -798,14 +811,12 @@ Vue.component('FramesHolder', {
     },
     handleFieldChange: function(e) {
       // Handles when selects change and inputs lose focus
-      console.log('Frames.handleFieldChange(e): ', e); // eslint-disable-line no-console
       this.validateField(e.target);
       this.$emit('field-change', e);
       this.validateCurrentFrame();
     },
     handleFieldInput: function(e) {
       // Triggers when someone types into an input
-      console.log('handleFieldInput(', e, ')'); // eslint-disable-line no-console
       // If the field was previously invalid, do a validation now
       if (e.target.getAttribute('aria-invalid') == 'true') this.validateField(e.target);
     },
@@ -816,9 +827,6 @@ Vue.component('FramesHolder', {
       return 'ERROR';
     },
     updateNavOptions: function(obj) {
-      console.log('FramesHolder.updateNavOptions(obj): ', obj ? obj : 'null'); // eslint-disable-line no-console
-      // console.log('  currentFrameNum: ', this.currentFrameNum); // eslint-disable-line no-console
-
       const currentFrame = this.frames[this.currentFrameNum];
 
       let newCanNext = 1;
@@ -839,9 +847,7 @@ Vue.component('FramesHolder', {
       let newCanSubmit = 0;
 
       // For the frames that can submit
-      console.log('currentFrame: ', currentFrame); // eslint-disable-line no-console
-      // console.log('currentFrame.nextFrame.includes: submit: ', currentFrame.nextFrame.includes('submit')); // eslint-disable-line no-console
-
+      //
       // If we're on the Intro
       if (currentFrame.frameId == 'intro') {
         newCanBack = 0;
@@ -899,7 +905,7 @@ Vue.component('FramesHolder', {
         return;
       } else {
         frameFormElements = currentFrameEl.querySelectorAll('input, select, textarea');
-        console.log('  frameFormElements: ', frameFormElements); // eslint-disable-line no-console
+        // console.log('  frameFormElements: ', frameFormElements); // eslint-disable-line no-console
       }
 
       if (frameFormElements) {
@@ -908,13 +914,10 @@ Vue.component('FramesHolder', {
         let needValues = false;
 
         frameFormElements.forEach(el => {
-          console.log('el.value: ', el.value); // eslint-disable-line no-console
           if ((!el.value || el.value == '') && el.required) needValues = true;
 
           if (el.id.indexOf('u_pub') === 0 && this.userPubs.length < 1) allAreValid = false;
           else if (!el.checkValidity()) {
-            // console.log('  el: ', el); // eslint-disable-line no-console
-            // console.log('    .checkValidity(): ', el.checkValidity()); // eslint-disable-line no-console
             allAreValid = false;
           }
         });
@@ -922,11 +925,9 @@ Vue.component('FramesHolder', {
       }
     },
     pubOptionDisabledState: function(requestedLabel) {
-      // console.log('pubOptionDisabledState(pubLabel): ', requestedLabel); // eslint-disable-line no-console
 
       let toReturn = false;
       this.userPubs.forEach(pub => {
-        // console.log(`  comparing '${pub.label}' and '${requestedLabel}'`); // eslint-disable-line no-console
         if (pub.label === requestedLabel) toReturn = true;
       });
 
@@ -935,6 +936,7 @@ Vue.component('FramesHolder', {
   },
   data: function() {
     return {
+      framesHeight: 475,
       states: [
         { label: 'Alabama', abbrev: 'AL' }, { label: 'Alaska', abbrev: 'AK' },
         { label: 'American Samoa', abbrev: 'AS' }, { label: 'Arizona', abbrev: 'AZ' },
@@ -1518,14 +1520,13 @@ new Vue({
       intro  →  topics1  →      →     →  teamFields
       intro  →  topics1  →  topics 2  →  teamFields
       …
-      teamFields   →      →       →       →       →      →        →  acknowledgeSent
-      teamFields   →  uspsFields  →  orderReview  →  confirmSend  →  acknowledgeSent
+      teamFields   →      →       →       →       →      →        →  acknowledgeSubmission
+      teamFields   →  uspsFields  →  orderReview  →  confirmSend  →  acknowledgeSubmission
 
       */
       let nextFrameNum = 0;
       let currentFrameId = this.frames[this.currentFrameNum].frameId;
-      console.log('  nextFrameNum: ', nextFrameNum);
-      console.log('  currentFrameId: ', currentFrameId);
+
       if (frameId == 'next') {
 
         if (currentFrameId == 'intro') {
@@ -1592,28 +1593,6 @@ new Vue({
           nextFrameNum = this.getFrameNumById('intro');
         }
 
-      // if (frameId == 'next' || frameId == 'back') {
-
-      //   // Where are we in the history right now?
-      //   let currentHistPos = this.framesHistory.indexOf(this.currentFrameNum);
-      //   let histPosToTest = frameId == 'next' ? currentHistPos + 1 : currentHistPos - 1;
-
-      //   // If we can go to a next frame, do so
-      //   if (this.framesHistory[histPosToTest]) {
-      //     console.log('  if'); // eslint-disable-line no-console
-      //     nextFrameNum = this.framesHistory[histPosToTest];
-      //   }
-      //   // If they've chosen 'publications', let's go to the uspsfields page
-      //   else if (this.u_subject == 'publications') {
-      //     console.log('  else'); // eslint-disable-line no-console
-      //     nextFrameNum = this.getFrameNumById('uspsFields');
-
-      //     // If we're ordering publications but we're on the uspsFields frame, first, let's review
-      //     if (this.frames[this.currentFrameNum].frameId == 'uspsFields') {
-      //       nextFrameNum = this.getFrameNumById('orderReview');
-      //     }
-      //   }
-
       } else if (typeof frameId == 'number') {
         // If we're jumping to a frame number, do it
         nextFrameNum = frameId;
@@ -1622,12 +1601,6 @@ new Vue({
         // if we're jumping to some other frame id, do it
         nextFrameNum = this.getFrameNumById(frameId);
       }
-
-      // if (!this.framesHistory) this.framesHistory = [0];
-
-      // if (!this.framesHistory.includes(nextFrameNum)) {
-      //   this.framesHistory.push(nextFrameNum);
-      // }
 
       // console.log('recaptcha response: ', grecaptcha.getResponse(0));
 
@@ -1689,6 +1662,13 @@ new Vue({
     restart: function() {
       // reset vars
       this.currentFrameNum = 0;
+      this.u_pubs = [];
+      ['submissionMessages', 'selectedTeam', 'selectedTopic1', 'selectedTopic2', 'u_city',
+      'u_committee', 'u_email', 'u_message', 'u_name', 'u_state', 'u_street1', 'u_street2',
+      'u_subject', 'u_zip'].forEach(varName => {
+        this[varName] = '';
+      });
+
       let theCheckedInputElements = document.querySelectorAll('#gov-fec-contact-app input:checked');
       theCheckedInputElements.forEach(el => {
         el.checked = false;
@@ -1847,7 +1827,6 @@ new Vue({
       }
     },
     updateNavOptions: function(obj) {
-      console.log('App.updateNavOptions(obj): ', obj); // eslint-disable-line no-console
       this.canNavBack = obj.Back;
       this.canNavNext = obj.Next;
       this.canNavRestart = obj.Restart;

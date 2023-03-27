@@ -10,6 +10,12 @@
   overflow: hidden;
   position: relative;
 
+  &.loading {
+    padding-top: 50px;
+    text-align: center;
+    width: 100%;
+  }
+
   @include media($med) {
     min-height: calc(100% - 5rem);
   }
@@ -411,13 +417,24 @@
         display: block;
       }
     }
+  
   }
   textarea {
     height: 90px;
   }
+  // We can have an error-group after <input>, etc. but also after <table>
+  label.field__message--error-group {
+    display: none;
+  }
+  *[aria-invalid="true"] {
+    margin-bottom: 0;
+    & ~ label.field__message--error-group {
+      display: block;
+    }
+  }
 
 
-  .field__message--error {
+  .field__message--error, .field__message--error-group {
     // borrowed from .filter__message
     font-family: $sans-serif;
     font-size: u(1.4rem);
@@ -427,6 +444,9 @@
     // borrowed from .filter__message--error
     font-size: u(1.3rem);
     color: $error;
+  }
+  .field__message--error-group {
+    margin-top: -2rem;
   }
 
   .recaptcha-holder {
