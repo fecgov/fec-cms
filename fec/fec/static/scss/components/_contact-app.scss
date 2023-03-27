@@ -16,17 +16,15 @@
 
   .frames {
     background-color: $inverse;
-    height: 575px;
     display: block;
     overflow: hidden;
     position: relative;
     width: 100%;
-    transition: height ease-in-out 1s;
+    transition: height ease-in-out .75s;
   }
   .frame {
     display: block;
     float: left;
-    height: 575px;
     left: 100%;
     pointer-events: none;
     position: absolute;
@@ -36,7 +34,7 @@
 
     @include media($med) {
       padding-left: 0;
-    }  
+    }
 
     &.previous {
       left: -100%;
