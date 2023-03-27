@@ -162,17 +162,19 @@ Vue.component('FramesHolder', {
       console.log('changed selectedTopic2 from ', oldVal, ' to ', newVal);
     }
   },
-  computed: {
-    framesHeight: function() {
-      let newHeight = 575;
-      // If we're not on the teamFields page (where publications are selected)
-      // just return the default heigth and be done
-      if (this.frames[this.currentFrameNum].frameId != 'userFields') return newHeight;
-      // Otherwise, we have enough room for two publications, so count 38 more pixels for every row after that
-      else newHeight += (this.userPubs.length - Math.min(0, 2)) * 38;
+    let newHeight = this.framesHeight;
+    // If we're not on the teamFields page (where publications are selected)
+    // just return the default heigth and be done
+    // if (this.frames[this.currentFrameNum].frameId != 'userFields') return newHeight;
+    // Otherwise, we have enough room for two publications, so count 38 more pixels for every row after that
+    // else newHeight += (this.userPubs.length - Math.min(0, 2)) * 38;
+    const currentFrameDiv = document.querySelector('.frame.current');
+    newHeight = currentFrameDiv.scrollHeight + 20;
+    newHeight = Math.max(300, newHeight);
 
-      return newHeight;
-    },
+    this.framesHeight = newHeight;
+  },
+  computed: {
     teamInfo: function() {
       return this.teams[this.selectedTeam];
     },
