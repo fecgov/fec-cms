@@ -1658,6 +1658,7 @@ new Vue({
     restart: function() {
       // reset vars
       this.currentFrameNum = 0;
+      this.TESTSHOULDFAIL = false;
       this.u_pubs = [];
       ['submissionMessages', 'selectedTeam', 'selectedTopic1', 'selectedTopic2', 'u_city',
       'u_committee', 'u_email', 'u_message', 'u_name', 'u_state', 'u_street1', 'u_street2',
