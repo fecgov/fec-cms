@@ -508,5 +508,79 @@
       }
     }
   }
-
 }
+
+// Style overrides specifically for container queries
+$minWidthS: '430px';
+$minWidthM: '675px';
+$minWidthL: '700px';
+$minWidthXL: '860px';
+#gov-fec-contact-app.cq-container {
+  container: contactapp / inline-size;
+
+  .col-3, &.col-5, &.col-8, &.col-9, &.col-12 {
+    width: 100cqw;
+  }
+  // .grid.grid--2-wide {
+    // max-width: 100cqw;
+  // }
+}
+@container (min-width: $minWidthS) {
+  #gov-fec-contact-app.cq-container {
+    .grid.grid--2-wide {
+      max-width: 80cqw;
+    }
+    .contact-item {
+      padding-left: 3.5rem;
+    }
+    .recaptcha-holder {
+      padding-left: 3rem;
+    }
+  }
+}
+@container (min-width: $minWidthM) {
+  #gov-fec-contact-app.cq-container {
+    &.col-3 {
+      width: calc(8.33% * 3 - .5rem);
+
+      &:not(:last-child) {
+        margin-right: .5rem;
+      }
+    }
+    &.col-5 {
+      width: calc(8.33% * 5 - .5rem);
+      &:not(:last-child) {
+        margin-right: .5rem;
+      }
+    }
+    &.col-8 {
+      width: calc(8.33% * 8 - .5rem);
+      &:not(:last-child) {
+        margin-right: .5rem;
+      }
+    }
+    &.col-9 {
+      width: calc(8.33% * 9 - .5rem);
+      &:not(:last-child) {
+        margin-right: .5rem;
+      }
+    }
+    .contact-item {
+      padding-left: 9.5rem;
+    }
+    .recaptcha-holder {
+      padding-left: 9.5rem;
+    }
+  }
+}
+@container (min-width: $minWidthL) {
+  #gov-fec-contact-app.cq-container {
+    //
+  }
+}
+@container (min-width: $minWidthXL) {
+  #gov-fec-contact-app.cq-container {
+    //
+  }
+}
+

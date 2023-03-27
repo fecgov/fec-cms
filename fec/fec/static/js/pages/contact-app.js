@@ -976,7 +976,7 @@ Vue.component('FramesHolder', {
 new Vue({
   el: '#gov-fec-contact-app',
   template: `
-    <div id="gov-fec-contact-app">
+    <div id="gov-fec-contact-app" class="cq-container">
       <FramesHolder
         :current-frame-num="currentFrameNum"
         :frames="frames"
