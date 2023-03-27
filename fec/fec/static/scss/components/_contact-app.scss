@@ -217,6 +217,26 @@
 
   }
 
+  .message {
+    padding: 2rem;
+
+    h2:message__title {
+      margin-left: 3rem;
+
+      @include media($med) {
+        margin-left: 0;
+      }
+    }
+
+  }
+
+  @include media($med) {
+    .message {
+      margin-top: 10rem;
+      padding: 5rem 2rem 2rem 2rem;
+    }
+  }
+
   .question-type-block {
     position: relative;
     display: inline-block;

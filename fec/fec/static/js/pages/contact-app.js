@@ -56,6 +56,10 @@ Vue.component('BottomNav', {
     canNavSubmit: {
       type: Number,
       required: true
+    },
+    isSubmitting: {
+      type: Boolean,
+      required: true
     }
   },
   template: `
@@ -64,6 +68,7 @@ Vue.component('BottomNav', {
       <button :class="bottomNavClass('Next')" @click="handleClick('Next', $event)" type="button">Next</button>
       <button :class="bottomNavClass('Submit')" @click="handleClick('Submit', $event)" type="submit">Submit</button>
       <button :class="bottomNavClass('Restart')" @click="handleClick('Restart', $event)" type="button">Start over</button>
+      <div v-if="isSubmitting" class="loading-animation"><i class="icon"></i><i class="icon"></i><i class="icon"></i><i class="icon"></i></div>
     </div>
   `,
   methods: {
@@ -116,6 +121,9 @@ Vue.component('FramesHolder', {
       type: String,
       required: true
     },
+    submissionMessages: {
+      required: true
+    },
     userCity: {
       type: String
     },
@@ -160,6 +168,12 @@ Vue.component('FramesHolder', {
     },
     selectedTopic2: function(newVal, oldVal) {
       console.log('changed selectedTopic2 from ', oldVal, ' to ', newVal);
+    submissionMessages: {
+      handler(val) {
+        // console.log('submissionMessages changed: ', val);
+        // TODO: do we need this?
+      },
+      deep: true
     }
   },
     let newHeight = this.framesHeight;
@@ -526,6 +540,32 @@ Vue.component('FramesHolder', {
             </div>
           </div>
         </template>
+        <template v-else-if="frame.frameId == 'acknowledgeSubmission'">
+          <span class="clear"></span>
+          <div
+            :class="['message message--inverse-alt', submissionMessages && submissionMessages.success == true ? 'message--success' : 'message--error']">
+            <h2 class="message__title" v-html="submissionMessages.headline"></h2>
+            <p v-html="submissionMessages.message"></p>
+            <div class="message--alert__bottom">
+              <ul
+                v-if="submissionMessages.emailLinks"
+                class="list--buttons">
+                <li v-for="(link, link_index) in submissionMessages.emailLinks"
+                ><a class="button--standard" :href="link.href" target="_blank">{{link.label}}</a></li>
+              </ul>
+              <p>Still need help?<br><br></p>
+              <ul
+                class="list--buttons">
+                <li v-for="(moreObj, moreObj_index) in submissionMessages.successMore">
+                  <a class="button--standard" :href="moreObj.link" target="_blank">{{moreObj.label}}</a>
+                </li>
+                <li>
+                  <button class="button--standard" @click="handleButtonClick('Restart', $event)" type="button">Start over</button>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </template>
         <template v-else>
           <h4 v-if="frame.title" v-html="frame.title"></h4>
 
@@ -643,12 +683,9 @@ Vue.component('FramesHolder', {
       return true;
     },
     canGoToNextFrame: function() {
-      console.log('FrameHolder.canGoToNextFrame()');
       const currentFrame = this.frames[this.currentFrameNum];
       // 'intro' never shows the Next button
       let toReturn = false;
-
-      console.log('  frameId, selectedTopic1: ', currentFrame.frameId, this.selectedTopic1);
 
       // if we're on 'teams' but there's already a value for it
       if (currentFrame.frameId == 'teams' && this.selectedTeam) toReturn = true;
@@ -765,6 +802,8 @@ Vue.component('FramesHolder', {
         } else if (this.userSubject == 'publications') {
           newCanNext = this.canAddAnotherPublication() ? 2 : 1;
           newCanSubmit = 0;
+          // TODO: handle when they can't add another because they've already added them all,
+          // TODO: but they should be able proceed because there's a quantity for all of them
         // If they haven't chosen publications, they can't Next but they might submit
         } else {
           newCanNext = 0;
@@ -775,9 +814,15 @@ Vue.component('FramesHolder', {
         newCanRestart = 0;
         newCanSubmit = 0;
       } else if (currentFrame.frameId == 'orderReview') {
+        // console.log('orderReview! this.recaptchaValidated: ', this.recaptchaValidated);
         newCanNext = 0;
         newCanRestart = 0;
         newCanSubmit = this.recaptchaValidated ? 2 : 1;
+      } else if (currentFrame.frameId == 'acknowledgeSubmission') {
+        newCanBack = 0;
+        newCanNext = 0;
+        newCanRestart = 2;
+        newCanSubmit = 0;
       }
 
       this.$parent.updateNavOptions(
@@ -881,6 +926,7 @@ new Vue({
         :selected-team="selectedTeam"
         :selected-topic1="selectedTopic1"
         :selected-topic2="selectedTopic2"
+        :submission-messages="submissionMessages"
         :teams="teams"
         :userCity="u_city"
         :userCommittee="u_committee"
@@ -908,6 +954,7 @@ new Vue({
         :can-nav-next="canNavNext"
         :can-nav-restart="canNavRestart"
         :can-nav-submit="canNavSubmit"
+        :is-submitting="isSubmitting"
         @handle-click="handleButtonClick"
       ></BottomNav>
     </div>
@@ -919,9 +966,11 @@ new Vue({
       canNavSubmit: 0,
       canNavRestart: 0,
       currentFrameNum: 0, //int
+      isSubmitting: false,
       selectedTeam: '',
       selectedTopic1: '',
       selectedTopic2: '',
+      submissionMessages: {},
       u_city: '',
       u_committee: '',
       u_email: '',
@@ -1287,40 +1336,16 @@ new Vue({
           title: '',
           class: '',
           autoAdvance: false,
-          nextFrame: 'acknowledgeSent',
+          nextFrame: 'acknowledgeSubmission',
           fields: {}
         },
         {
-          frameId: 'acknowledgeSent',
-          title: 'Acknowledge Sent',
+          frameId: 'acknowledgeSubmission',
+          title: 'Success! Your message has been submitted',
           class: '',
           autoAdvance: false,
-          nextFrame: false
-        },
-        {
-          frameId: 'outro',
-          title: '',
-          class: 'outro',
-          autoAdvance: false,
-          feedback: [
-            {
-              type: 'value',
-              label: 'Total Receipts and Disbursements',
-              class: 'summary',
-              content: ``
-            },
-            {
-              type: 'value',
-              label: 'Total Estimated Fine',
-              class: 'summary total-fine',
-              content: ``
-            },
-            {
-              type: 'p',
-              content:
-                'This is an estimated administrative fine based on the information you provided and may not reflect the actual fine amount assessed by the Commission. Your committee will be notified if the Commission assesses a fine for a late or non-filed\xa0report.'
-            }
-          ]
+          nextFrame: false,
+          fields: {}
         }
       ]
     };
@@ -1481,7 +1506,7 @@ new Vue({
           // TODO: SUBMIT
         }
       } else if (frameId == 'back') {
-        if (currentFrameId == 'acknowledgeSent') {
+        if (currentFrameId == 'acknowledgeSubmission') {
           // No going back—can only restart
         }
 
@@ -1605,9 +1630,6 @@ new Vue({
     },
     restart: function() {
       // reset vars
-      this.selectedTeam = null;
-      this.selectedTopic1 = null;
-      this.selectedTopic2 = null;
       this.currentFrameNum = 0;
       let theCheckedInputElements = document.querySelectorAll('#gov-fec-contact-app input:checked');
       theCheckedInputElements.forEach(el => {
@@ -1616,6 +1638,155 @@ new Vue({
       // TODO - a better way to reset all the form values?
       let theForm = document.querySelector('form.frames');
       theForm.reset();
+    },
+    finishSubmission: function(responseOrData, submissionBody) {
+      console.log('finishSubmission(responseOrData, submissionBody): ', responseOrData, submissionBody); // eslint-disable-line no-console
+      // If there's a responseOrData.status, it's an error
+      const currentTeam = this.teams[this.selectedTeam];
+      this.submissionMessages = '';
+
+      if (!responseOrData.status) {
+        this.submissionMessages = {
+          success: true,
+          headline: 'Success! Your message has been submitted.',
+          message: currentTeam.success || 'We will get back to you as soon as possible.'
+        };
+        if (currentTeam.successMore) {
+          this.submissionMessages.successMore = currentTeam.successMore;
+        }
+      } else {
+
+        // this.selectedTeam;
+        let recipient = currentTeam.ePrefix;
+
+        for (let i = 0; i < currentTeam.fields.subject.length; i++) {
+          const thisSubject = currentTeam.fields.subject[i];
+          if (thisSubject.label == this.userSubject) {
+            recipient = thisSubject.ePrefix;
+            break;
+          }
+        }
+        if (!recipient) recipient = 'info';
+        recipient += '@fec.gov';
+
+        let readableMessage = '';
+        if (this.u_name) readableMessage += `<strong>NAME:</strong>\n${this.u_name}<br>`;
+        readableMessage += `<strong>EMAIL ADDRESS:</strong>\n${this.u_email}<br>`;
+        if (this.u_committee) readableMessage += `<strong>COMMITTEE ID:</strong>\n${this.u_committee}<br>`;
+        if (this.u_subject == 'publications') {
+          readableMessage += `<strong>MAILING ADDRESS:</strong><br>${this.u_street1}<br>`;
+          if (this.u_street2) readableMessage += `${this.u_street2}<br>`;
+          readableMessage += `${this.u_city} ${this.u_state}  ${this.u_zip}<br><br>`;
+          readableMessage += '<strong>REQUESTED PUBLICATIONS:</strong><br>';
+          for (let i = 0; i < this.u_pubs.length; i++) {
+            readableMessage += this.u_pubs[i].qty;
+            readableMessage += this.u_pubs[i].qty == 1 ? ' copy of ' : ' copies of ';
+            readableMessage += `'${this.u_pubs[i].label}'<br>`;
+          }
+          // readableMessage += '<br>';
+        }
+        if (this.u_message) readableMessage += `<strong>MESSAGE:</strong><br>${this.u_message}`;
+
+        const subject = `Request from fec.gov: ${submissionBody.u_category}`;
+        const emailLinkSubject = `Assistance Request: ${submissionBody.u_category}`;
+        const scrubbedMessage = readableMessage.replace(/<strong>|<\/strong>/g, '').replace(/<br>/g, '\n');
+        const emailLinkBody = `I'd like help from the ${this.teams[this.selectedTeam].name} team.\n\n${scrubbedMessage}`;
+
+        const linkEmail = `mailto://${recipient}&subject=${emailLinkSubject}&body=${emailLinkBody}`;
+        const linkGmail = `https://mail.google.com/mail/?view=cm&fs=1&su=${emailLinkSubject}&body=${emailLinkBody}&to=${recipient}`;
+        const linkYahoo = `http://compose.mail.yahoo.com/?subj=${emailLinkSubject}&body=${emailLinkBody}&to=${recipient}`;
+        const linkLive = `https://outlook.live.com/default.aspx?rru=compose&subject=${emailLinkSubject}&body=${emailLinkBody}&to=${recipient}`;
+        const linkAol = `http://mail.aol.com/mail/compose-message.aspx?subject=${emailLinkSubject}&body=${emailLinkBody}&to=${recipient}`;
+
+        this.submissionMessages = {
+          success: false,
+          headline: 'Unable to send your message at this time.',
+          message: `<strong>Submitting your message has failed.</strong> You’re welcome to try again, call the FEC offices,
+            or use the content below to send your message through another platform.<br><br>
+            <strong>To:</strong> ${recipient}<br><br>
+            <strong>Subject:</strong> ${subject}<br><br>
+            ${readableMessage}`,
+          recipient: recipient,
+          emailLinks: [
+            {
+              label: 'e',
+              href: encodeURI(linkEmail)
+            },
+            {
+              label: 'G',
+              href: encodeURI(linkGmail)
+            },
+            {
+              label: 'Y!',
+              href: encodeURI(linkYahoo)
+            },
+            {
+              label: 'H',
+              href: encodeURI(linkLive)
+            },
+            {
+              label: 'A',
+              href: encodeURI(linkAol)
+            }
+          ]
+        };
+      }
+
+      this.currentFrameNum = this.getFrameNumById('acknowledgeSubmission');
+      // console.log('App.finishSubmission(var1): ', e, submissionBody);
+      this.isSubmitting = false;
+    },
+    startSubmission: function() {
+      this.isSubmitting = true;
+
+      const submissionBody = {
+        // selectedTeam: this.selectedTeam,
+        // selectedTopic: this.selectedTopic,
+        // u_pubs: this.u_pubs,
+        committee_name: this.u_committee,
+        u_contact_email: this.u_email,
+        u_contact_first_name: this.u_name.split(' ')[0] || '',
+        u_contact_last_name: this.u_name.substr(this.u_name.indexOf(' ')) || '',
+        u_contact_title: '',
+        u_committee: this.u_committee,
+        u_category: this.u_subject,
+        u_description: this.u_message,
+        u_contact_city: this.u_city,
+        u_contact_street1: this.u_street1,
+        u_contact_street2: this.u_street2,
+        u_contact_state: this.u_state,
+        u_contact_zip: this.u_zip
+      };
+
+      // fetch(this.postUrl, {
+      //   cache: 'no-cache',
+      //   credentials: 'same-origin',
+      //   method: 'POST',
+      //   mode: 'cors',
+      //   headers: { 'Content-Type': 'application/json' },
+      //   redirect: 'follow',
+      //   body: JSON.stringify(submissionBody)
+      // })
+      // .then(response => {
+      //   console.log('response: ', response);
+      //   if (response.status != 200) {
+      //     this.finishSubmission(response, submissionBody);
+      //     throw new Error(response);
+      //   }
+      //   return response.json();
+      // })
+      // .then(data => {
+      //   console.log('  data: ', data);
+      //   this.finishSubmission(data, submissionBody);
+      // })
+      // .catch(e => {
+      //   console.log('  CATCH e: ', e);
+      // });
+      if (this.TESTSHOULDFAIL) {
+        setTimeout(this.finishSubmission, 2000, {status: 999}, submissionBody);
+      } else {
+        setTimeout(this.finishSubmission, 2000, {success: true});
+      }
     },
     updateNavOptions: function(obj) {
       console.log('App.updateNavOptions(obj): ', obj); // eslint-disable-line no-console
