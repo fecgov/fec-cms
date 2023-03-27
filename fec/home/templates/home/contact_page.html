@@ -20,7 +20,7 @@
     </div>
     <div class="usa-width-two-thirds u-padding--left">
       {% if settings.FEATURES.contact_app %} {# feature flag for whether we show the Vue contact app… #}
-      <div id="gov-fec-contact-app">PUT ALT, DEFAULT CONTENT HERE</div>
+      <div id="gov-fec-contact-app" class="loading"><img src="/static/img/loading--primary.gif" alt="animation indicating that the contact app is still loading its components"></div>
       <style>
         #contact-app {
           background: lightblue;
