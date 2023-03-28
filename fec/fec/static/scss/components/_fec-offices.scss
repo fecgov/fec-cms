@@ -1,0 +1,59 @@
+// FEC Offices 
+//
+// Employee block
+//
+//<div class="grid grid--2-wide office-employee--section">
+//  <div class="grid__item employee-photo">            
+//   <img src="{{ employee_image.url }}" alt="Headshot of {{ block.value.employee.employee_name }}" width="136" height="136">
+//  </div>
+//  <div class="grid__item employee-bio">
+//    <div class="employee_name">
+//      {{ block.value.employee.employee_name }}
+//    </div>
+//    <div class="employee_title">
+//      {{ block.value.employee.bound_blocks.employee_title.value.title }}
+//    </div>
+//      <p>{{ block.value.employee.employee_bio }}<p> //This does not need to be wrapped in P if it is a rich text block
+//   </div>
+//</div>
+
+//Mobile first
+.office-employee--section {
+   .grid__item.employee-bio {
+     width: 100%;
+   } 
+
+  //Large Breakpoint
+  @include media($lg){
+
+    display: flex;
+  
+    .grid__item.employee-photo {
+      flex-basis: 25%  ;
+    } 
+
+    .grid__item.employee-bio {
+      flex-basis: 75%;
+    } 
+  }
+}
+
+.employee_name, .employee_title  {
+  font-size: 1.8rem;
+  font-family: Karla,sans-serif;
+  letter-spacing: -.3px;
+}
+
+.employee_name {
+  font-weight: bold;
+}
+
+// This will make a square photo, round and have no effect on a round photo
+.employee-photo img {
+  border-radius: 50%;
+}
+
+//So if first office has its own h2, there is no double line
+ header.heading--main.offices-heading--main + .main__content--full h2.office-title {
+  border-top: none
+  }
