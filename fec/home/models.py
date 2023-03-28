@@ -33,7 +33,7 @@ from home.blocks import (
     DocumentFeedBlurb, ExampleForms, ExampleImage, ExampleParagraph,
     ExternalButtonBlock, InternalButtonBlock, LinkBlock, OptionBlock,
     ReportingExampleCards, ResourceBlock, SnippetChooserBlock,
-    ThumbnailBlock, FeedDocumentBlock
+    ThumbnailBlock, FeedDocumentBlock, EmployeeTitle
 )
 
 logger = logging.getLogger(__name__)
@@ -661,9 +661,7 @@ class CustomPage(Page):
     ]
 
 # Adds a settings choice-field for conditionally adding a JS script to a CustomPage
-    conditional_js = models.CharField(max_length=255,
-        choices=constants.conditional_js.items(), blank=True, null=True,
-        help_text='Choose a JS script to add only to this page')
+    conditional_js = models.CharField(max_length=255, choices=constants.conditional_js.items(), blank=True, null=True, help_text='Choose a JS script to add only to this page')
     # Adds a settings field for making a custom title that displays in the Wagtail page explorer
     menu_title = models.CharField(max_length=255, blank=True)
     settings_panels = Page.settings_panels + [
@@ -776,7 +774,7 @@ class AboutLandingPage(Page):
         ('sections', OptionBlock())
     ], null=True)
 
-    subpage_types = ['ResourcePage', 'DocumentFeedPage', 'ReportsLandingPage']
+    subpage_types = ['ResourcePage', 'DocumentFeedPage', 'ReportsLandingPage', 'OfficePage']
 
     content_panels = Page.content_panels + [
         StreamFieldPanel('hero'),
@@ -1213,6 +1211,9 @@ class EmbedSnippet(models.Model):
     def __str__(self):
         return '{} ({})'.format(self.title, self.description)
 
+    class Meta:
+        ordering = ['-id']
+
 
 class ContactPage(Page):
     contact_items = StreamField([
@@ -1319,3 +1320,42 @@ class OigLandingPage(Page):
     @property
     def category_filters(self):
         return constants.report_category_groups['oig']
+
+
+class OfficePage(Page):
+    offices = StreamField([
+        ('office', blocks.StructBlock([
+            ('office_title', blocks.CharBlock(required=True, blank=True, null=True, help_text='Required')),
+            ('hide_title', blocks.BooleanBlock(required=False, help_text='Should the offfice title be displayed?')),
+            ('office_description', blocks.RichTextBlock(blank=True)),
+            ('more_info', blocks.StreamBlock([
+               ('html', blocks.RawHTMLBlock(blank=True)),
+               ('internal_button', InternalButtonBlock(blank=True)),
+               ('external_button', ExternalButtonBlock(blank=True)),
+               ('document', FeedDocumentBlock(blank=True, template='blocks/simple-document.html')),
+            ], blank=True, required=False, help_text='Use for internal/external btns or document-links')),
+            ('employee', blocks.StructBlock([
+                ('employee_name', blocks.CharBlock(blank=True, required=False)),
+                ('employee_title', EmployeeTitle(blank=True,  required=False,
+                                                 help_text='<b style="color:green">For footnote on title, use html block with &lt;sup&gt;1&lt;/sup&gt;</b>')),
+                ('employee_image', ImageChooserBlock(blank=True, required=False)),
+                ('employee_bio', blocks.RichTextBlock(blank=True, required=False)),
+            ], blank=True, required=False, null=True, default=[])),
+            ('contact_info', ContactInfoBlock(blank=True)),
+            ('extra_info', blocks.StreamBlock([
+                ('html', blocks.RawHTMLBlock(blank=True, required=False, help_text='<b style="color:green">For footnote, use &lt;sup&gt;1&lt;/sup&gt;</b>')),
+                ('text', blocks.RichTextBlock(blank=True, required=False)),
+             ], blank=True, required=False, null=True,
+                    help_text='Use for sub-offices, staff-lists, footnotes or \
+                    any extra info appearing at bottom of office section <br> \
+                    <b style="color:green">For footnote, use html block with &lt;sup&gt;1&lt;/sup&gt;</b>')),
+        ], null=True, blank=True)),
+    ], null=True, blank=True, use_json_field=True)
+
+    content_panels = Page.content_panels + [
+        FieldPanel('offices'),
+    ]
+
+    @property
+    def content_section(self):
+        return 'about'

@@ -1,0 +1,7 @@
+{% load wagtailcore_tags %}
+{% load filters %}
+
+
+<p class="t-sans post__doc row">
+  <a href="{{ self.document.url }}">{{ self.title}}</a> | {{ self.document.url | get_file_type}}
+</p>
