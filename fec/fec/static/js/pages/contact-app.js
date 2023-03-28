@@ -623,14 +623,14 @@ Vue.component('FramesHolder', {
               <ul
                 v-if="submissionMessages.emailLinks"
                 class="list--buttons">
-                <li v-for="(link, link_index) in submissionMessages.emailLinks"
-                ><a class="button--standard" :href="link.href" target="_blank">{{link.label}}</a></li>
+                <li v-for="(link, link_index) in submissionMessages.emailLinks">
+                  <a class="button--standard" :href="link.href" target="_blank">{{link.label}}</a>
+                </li>
               </ul>
               <p>Still need help?<br><br></p>
-              <ul
-                class="list--buttons">
+              <ul class="list--buttons">
                 <li v-for="(moreObj, moreObj_index) in submissionMessages.successMore">
-                  <a class="button--standard" :href="moreObj.link" target="_blank">{{moreObj.label}}</a>
+                  <a class="button--standard" :href="moreObj.href" target="_blank">{{moreObj.label}}</a>
                 </li>
                 <li>
                   <button class="button--standard" @click="handleButtonClick('Restart', $event)" type="button">Start over</button>
@@ -1064,11 +1064,12 @@ new Vue({
           phoneMenu: 4, // 1-800-424-9530, menu option #
           phoneExt: 1307, // 202-694-####
           success: 'The Electronic Filing Office will get back to you within 2-4 hours.',
-          successMore: {
-            type: 'a',
-            label: 'Get help with passwords >',
-            href: 'https://www.fec.gov'
-          },
+          successMore: [
+            {
+              label: 'Get help with passwords >',
+              href: 'https://www.fec.gov'
+            }
+          ],
           fields: {
             email: true,
             name: true,

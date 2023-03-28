@@ -66,11 +66,17 @@
     &.intro {
       text-align: center;
 
-      .grid__item:first-child {
-        margin-bottom: 2rem;
+      .grid__item {
+        &:first-child {
+          margin-bottom: 2rem;
 
-        @include media($med) {
-          margin-bottom: 0;
+          @include media($med) {
+            margin-bottom: 0;
+          }
+        }
+        .card--neutral {
+          cursor: pointer;
+          
         }
       }
       @include media($med) {
