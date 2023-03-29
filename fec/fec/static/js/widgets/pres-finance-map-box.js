@@ -169,7 +169,7 @@ function PresidentialFundsMap() {
   this.element = document.querySelector(selector_mainElement); // The visual element associated with this, this.instance
   this.candidateDetailsHolder; // Element to hold candidate name, party, office, and ID
   this.yearControl = this.element.querySelector(selector_yearControl);
-  this.current_electionYear = 2020;//availElectionYears[0];
+  this.current_electionYear = this.defaultElectionYear();
   this.current_electionState = 'US';
   this.current_electionStateName = 'United States';
   this.current_candidateID = specialCandidateIDs[0];
@@ -351,6 +351,26 @@ PresidentialFundsMap.prototype.init = function() {
   window.addEventListener('pageshow', this.handlePageShow.bind(this));
 };
 
+/**
+ * Returns either a valid presidential election year from url?election_year,
+ * or availableElectionYears[0]
+ * @returns {Number}
+ */
+PresidentialFundsMap.prototype.defaultElectionYear = function() {
+  let toReturn = 2020; // this.availElectionYears[0];
+
+  // To get the first election year to show,
+  // grab the url parameters
+  const urlParams = new URLSearchParams(window.location.search);
+  // if there's an election_year
+  if (urlParams.has('election_year')) {
+    const urlYear = parseInt(urlParams.get('election_year'));
+    // If the year is a number, 2016-2024 & evenly divisible by 4
+    if (!isNaN(urlYear) && urlYear >= 2016 && urlYear <= 2024 && urlYear % 4 === 0)
+      // Start with the url year
+      toReturn = urlYear;
+  }
+  return toReturn;
 /**
  * Called by {@see init() }
  * Gets a list of candidates for the left column
