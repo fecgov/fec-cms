@@ -262,7 +262,7 @@ Vue.component('FramesHolder', {
     },
     userPubs_neverEmpty: function() {
       // return userPubs or a default array
-      const emptyPubsArray = [{ label: '', qty: 0 }];
+      const emptyPubsArray = [{ label: '', qty: 1 }];
       return this.userPubs && this.userPubs.length > 0 ? this.userPubs : emptyPubsArray;
     }
   },
@@ -474,7 +474,7 @@ Vue.component('FramesHolder', {
                           :id="'u_pub_qty_' + userPub_index"
                           :value="userPub.qty"
                           @change="handleFieldChange($event)"
-                          type="number" min="0" max="99" required />
+                          type="number" min="1" max="99" required />
                       </td>
                       <td>
                         <button
@@ -1125,15 +1125,15 @@ new Vue({
             ],
             message: true,
             subject_pubs: [
-              { label: 'Congressional candidates and their committees campaign guide', qty: 0 },
-              { label: 'Political party committees campaign guide', qty: 0 },
-              { label: 'Corporations and labor organizations campaign guide', qty: 0 },
-              { label: 'Nonconnected committees campaign guide', qty: 0 },
-              { label: 'Combined Federal/State Disclosure and Election Directory', qty: 0 },
-              { label: 'Form 1: Statement of Organization', qty: 0 },
-              { label: 'Form 2: Statement of Candidacy', qty: 0 },
-              { label: 'Form 3: Report of Receipts and Disbursements (House and Senate candidates)', qty: 0 },
-              { label: 'Form 3X: Report of Receipts and Disbursements (PACs and political party committees)', qty: 0 }
+              { label: 'Congressional candidates and their committees campaign guide', qty: 1 },
+              { label: 'Political party committees campaign guide', qty: 1 },
+              { label: 'Corporations and labor organizations campaign guide', qty: 1 },
+              { label: 'Nonconnected committees campaign guide', qty: 1 },
+              { label: 'Combined Federal/State Disclosure and Election Directory', qty: 1 },
+              { label: 'Form 1: Statement of Organization', qty: 1 },
+              { label: 'Form 2: Statement of Candidacy', qty: 1 },
+              { label: 'Form 3: Report of Receipts and Disbursements (House and Senate candidates)', qty: 1 },
+              { label: 'Form 3X: Report of Receipts and Disbursements (PACs and political party committees)', qty: 1 }
             ]
           }
         },
@@ -1457,13 +1457,13 @@ new Vue({
       else if (buttonType == 'pubs-remove') {
         const theIndex = parseInt(e.target.dataset.index);
         const newUPubs = [...this.u_pubs];
-        newUPubs[theIndex] = { label: '', qty: 0 };
+        newUPubs[theIndex] = { label: '', qty: 1 };
 
         newUPubs.splice(theIndex, 1);
         this.u_pubs = [...newUPubs];
 
       } else if (buttonType == 'pubs-add') {
-        this.u_pubs.push({ label: '', qty: 0 });
+        this.u_pubs.push({ label: '', qty: 1 });
       }
     },
     handleFieldChange: function(e) {
@@ -1480,7 +1480,7 @@ new Vue({
         if (newUPubs[theIndex])
           newUPubs[theIndex].label = e.target.value;
         else
-          newUPubs[theIndex] = { label: e.target.value, qty: 0 };
+          newUPubs[theIndex] = { label: e.target.value, qty: 1 };
 
         this.u_pubs = [...newUPubs];
 
