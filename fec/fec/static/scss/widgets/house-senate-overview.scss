@@ -1,24 +1,24 @@
 @font-face {
-  font-family: fec_currency_mono;
+  font-family: 'fec_currency_mono';
   font-style: normal;
   font-weight: normal;
-  src: url("/static/fonts/fec-currencymono-regular.woff2") format("woff2"),
-    url("/static/fonts/fec-currencymono-regular.woff") format("woff"),
-    url("/static/fonts/fec-currencymono-regular.ttf") format("truetype");
+  src: url('/static/fonts/fec-currencymono-regular.woff2') format('woff2'),
+    url('/static/fonts/fec-currencymono-regular.woff') format('woff'),
+    url('/static/fonts/fec-currencymono-regular.ttf') format('truetype');
 }
 
 #contributions-over-time {
-  
   overflow-x: scroll;
 
   h3 {
     display: inline;
     font-family: karla, sans-serif;
+
     /* font-family: $sans-serif; */
   }
 
   [data-total-type] {
-    margin: 5px 0 15px 0;
+    margin: 5px 0 15px;
   }
 
   .simple-table--responsive {
@@ -28,7 +28,7 @@
 
   .simple-table--responsive .simple-table__row {
     margin-bottom: 1rem;
-    font-family: fec_currency_mono;
+    font-family: 'fec_currency_mono';
     letter-spacing: -1px;
   }
 
@@ -60,16 +60,14 @@ meter {
   /* Reset the default appearance */
 
   -moz-appearance: none;
-
   height: 20px;
-
   width: 40%;
   background: #eee;
   vertical-align: text-top;
 
   /* For Firefox */
 
-  border-radius: 0px;
+  border-radius: 0;
 }
 
 .diagonal_stripe meter::-webkit-meter-optimum-value {
@@ -85,7 +83,7 @@ meter {
 /* WebKit */
 meter::-webkit-meter-bar {
   background: #eee;
-  border-radius: 0px;
+  border-radius: 0;
   height: 20px;
   border: none;
 }
@@ -97,7 +95,7 @@ meter::-webkit-meter-optimum-value {
 
 /* Firefox */
 meter::-moz-meter-bar {
-  border-radius: 0px;
+  border-radius: 0;
   height: 20px;
 }
 
@@ -106,7 +104,7 @@ meter:-moz-meter-optimum::-moz-meter-bar {
 }
 
 .t-mono-stacked-currency {
-  font-family: fec_currency_mono;
+  font-family: 'fec_currency_mono';
   text-align: right;
 }
 
