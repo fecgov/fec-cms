@@ -1,10 +1,11 @@
+@import '../icon-variables'; // $arrow-down, $magnifying-glass-arrow, $check, $info-circle
 @import '../variables';
 @import '../vendor/bourbon/settings/prefixer'; // prefix-for-webkit for keyframes
 @import '../vendor/bourbon/addons/prefixer'; // disable-prefix-for-all for keyframes
 @import '../vendor/bourbon/css3/keyframes'; // u-button
 @import '../vendor/bourbon/css3/animation'; // u-button
-@import '../mixins/utilities'; // u-button:
-@import '../vendor/bourbon/addons/triangle'; // tooltips:
+@import '../mixins/utilities'; // u-button
+@import '../vendor/bourbon/addons/triangle'; // tooltips
 @import '../components/overlay'; // loading states
 
 $colorElementBordersOnLight: $gray;
@@ -19,42 +20,6 @@ $fontWeightRegular: 500;
 $fontWeightSemibold: 600;
 $fontWeightBold: 700;
 $sizeTableScroller: 10px;
-
-// Borrowed from _icon-variables.scss:
-$arrow-down: 'data:image/svg+xml;charset=utf8, %3Csvg%20width%3D%2210%22%20height%3D%229%22%20viewBox%3D%220%200%2010%209%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Cpath%20d%3D%22M5.706%208.013l3.685-6.234A.851.851%200%200%200%208.664.485H1.283A.852.852%200%200%200%20.55%201.769l3.69%206.244a.852.852%200%200%200%201.466%200z%22%2F%3E%3C%2Fsvg%3E';
-$magnifying-glass-arrow: 'data:image/svg+xml;charset=utf8, %3Csvg%20width%3D%2230%22%20height%3D%2221%22%20viewBox%3D%220%200%2030%2021%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Cg%3E%3Cpath%20d%3D%22M24.24%2013.097l-3.685-6.234a.851.851%200%200%201%20.727-1.294h7.382a.852.852%200%200%201%20.733%201.284l-3.69%206.244a.852.852%200%200%201-1.467%200zM19.653%2016.78a2.03%202.03%200%201%201-2.872%202.872l-4.538-4.537a8.072%208.072%200%200%201-4.12%201.131%208.123%208.123%200%201%201%208.123-8.123%208.072%208.072%200%200%201-1.131%204.12l4.538%204.538zM8.123%202.03a6.092%206.092%200%201%200%200%2012.185%206.092%206.092%200%200%200%200-12.184z%22%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E';
-$check: 'data:image/svg+xml;charset=utf8, %3Csvg%20width%3D%2220%22%20height%3D%2220%22%20viewBox%3D%220%200%2020%2020%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Cpath%20d%3D%22M16.47%206.678l.177.177a1.233%201.233%200%201%200-1.743-1.744l-6.84%206.84h.354L4.854%208.387a1.233%201.233%200%200%200-1.743%201.744l4.259%204.258a1.23%201.23%200%200%200%201.743%200l7.534-7.534-.176-.177z%22%2F%3E%3C%2Fsvg%3E';
-$info-circle: 'data:image/svg+xml;charset=utf8, %3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2220%22%20height%3D%2220%22%20viewBox%3D%220%200%2020%2020%22%3E%3Cpath%20d%3D%22M10%200a10%2010%200%201%200%2010%2010A10%2010%200%200%200%2010%200zm1.2%2016.1a15.69%2015.69%200%200%201-2.4.3q-.9%200-.9-.6a9.32%209.32%200%200%201%20.2-1.4l.8-4.7a3.08%203.08%200%200%200%20.1-.9c0-.3-.4-.4-1.2-.4l.1-.5a14.22%2014.22%200%200%201%202.5-.3.61.61%200%200%201%20.7.6%2011.48%2011.48%200%200%201-.2%201.4l-.8%204.8a2.25%202.25%200%200%200-.1.7c0%20.4.2.5%201.2.5v.5zm-.5-10a1.15%201.15%200%200%201-1.2-1.2%201.35%201.35%200%200%201%201.3-1.4A1.22%201.22%200%200%201%2012%204.7a1.42%201.42%200%200%201-1.3%201.4z%22%2F%3E%3C%2Fsvg%3E';
-
-// @font-face {
-//   font-family: gandhi;
-//   font-style: normal;
-//   font-weight: normal;
-//   src: url('/static/fonts/gandhiserif-regular.woff2') format('woff2'),
-//     url('/static/fonts/gandhiserif-regular.woff') format('woff');
-// }
-// @font-face {
-//   font-family: karla;
-//   font-style: normal;
-//   font-weight: normal;
-//   src: url('/static/fonts/karla-regular.woff2') format('woff2'),
-//     url('/static/fonts/karla-regular.woff') format('woff');
-// }
-// @font-face {
-//   font-family: karla;
-//   src: url('/static/fonts/karla-bold.woff2') format('woff2'),
-//     url('/static/fonts/karla-bold.woff') format('woff');
-//   font-weight: bold;
-//   font-style: normal;
-// }
-// @font-face {
-//   font-family: 'fec_currency_mono';
-//   font-style: normal;
-//   font-weight: normal;
-//   src: url('/static/fonts/fec-currencymono-regular.woff2') format('woff2'),
-//     url('/static/fonts/fec-currencymono-regular.woff') format('woff'),
-//     url('/static/fonts/fec-currencymono-regular.ttf') format('truetype');
-// }
 
 #gov-fec-pres-finance {
   &,
@@ -94,10 +59,9 @@ $info-circle: 'data:image/svg+xml;charset=utf8, %3Csvg%20xmlns%3D%22http%3A%2F%2
       .toggle {
         flex-grow: 2;
       }
-
     }
-
   }
+
   .message, .message[aria-hidden='true'] {
     // .message, etc are copied from components/_messages.scss
     background-color: $neutral;
@@ -127,15 +91,17 @@ $info-circle: 'data:image/svg+xml;charset=utf8, %3Csvg%20xmlns%3D%22http%3A%2F%2
     h2 {
       margin-bottom: 0.25em;
     }
+
     p:last-child {
       margin-bottom: 0;
     }
   }
+
   .candidate-list-wrapper {
     border-bottom: solid 2px $colorBorder;
+    order: 10;
     position: relative;
     width: 100%;
-    order: 10;
 
     .remote-table-header {
       display: none; // We'll let JavaScript turn this on
@@ -143,13 +109,14 @@ $info-circle: 'data:image/svg+xml;charset=utf8, %3Csvg%20xmlns%3D%22http%3A%2F%2
       position: relative;
       width: 100%;
     }
+
     .table-scroller {
-      width: 100%;
       height: 300px;
       max-height: 50vh;
       overflow-x: hidden;
       overflow-y: scroll;
       position: relative;
+      width: 100%;
 
       &::-webkit-scrollbar {
         width: $sizeTableScroller;
@@ -164,22 +131,26 @@ $info-circle: 'data:image/svg+xml;charset=utf8, %3Csvg%20xmlns%3D%22http%3A%2F%2
         background: #555;
       }
     }
+
     table {
       display: block;
       margin-top: 0;
       table-layout: auto;
       width: 100%;
     }
+
     thead {
       border-bottom: solid thin $colorBorder;
       border-top: solid 2px $colorBorder;
       display: block;
       width: 100%;
     }
+
     tbody {
       display: block;
       width: 100%;
     }
+
     tr {
       border-top: thin solid $colorTableTdBorder;
       border-left: solid thick $inverse;
@@ -191,6 +162,7 @@ $info-circle: 'data:image/svg+xml;charset=utf8, %3Csvg%20xmlns%3D%22http%3A%2F%2
         background-color: $colorTableTdBorder;
         border-left-color: $colorBorder;
       }
+
       &:hover {
         background-color: $colorTableTdBorder;
       }
@@ -206,9 +178,10 @@ $info-circle: 'data:image/svg+xml;charset=utf8, %3Csvg%20xmlns%3D%22http%3A%2F%2
         flex-grow: 0;
         flex-shrink: 0;
         width: auto;
-        //fixes IE alignment problem
+        //fixes IE alignment problem:
         display: -ms-flexbox; // stylelint-disable-line value-no-vendor-prefix
       }
+
       &:only-child {
         width: 100%;
       }
@@ -225,9 +198,9 @@ $info-circle: 'data:image/svg+xml;charset=utf8, %3Csvg%20xmlns%3D%22http%3A%2F%2
     .t-note {
       line-height: 1.5em;
       margin: .5em 0;
-      user-select: none;
       opacity: 1;
       transition: opacity .5s;
+      user-select: none;
 
       &.hidden {
         opacity: 0;
@@ -236,10 +209,10 @@ $info-circle: 'data:image/svg+xml;charset=utf8, %3Csvg%20xmlns%3D%22http%3A%2F%2
     }
   }
   .map-wrapper {
-    width: 100%;
     border-bottom: solid 2px $colorBorder;
     border-top: solid 2px $colorBorder;
     padding: 0 0 $fontSizeBase;
+    width: 100%;
 
     .election-map {
       border: none;
@@ -254,18 +227,21 @@ $info-circle: 'data:image/svg+xml;charset=utf8, %3Csvg%20xmlns%3D%22http%3A%2F%2
 
       path {
         transition: fill 1s, opacity .5s;
+
         &.blur {
           opacity: .33;
           transition: opacity .5s;
         }
       }
+
       circle {
-        opacity: 0;
-        transition: opacity .5s;
-        pointer-events: none;
         fill: rgb(144 202 202);
+        opacity: 0;
+        pointer-events: none;
         stroke: rgb(59 149 148);
+        transition: opacity .5s;
       }
+
       &[data-map_type='bubble'] {
         path {
           pointer-events: none;
@@ -274,6 +250,7 @@ $info-circle: 'data:image/svg+xml;charset=utf8, %3Csvg%20xmlns%3D%22http%3A%2F%2
             fill: $colorTableTdBorder;
             transition: fill 1s;
           }
+
           &.zoomed, &.blur { // turn on pointer events for all paths when we're zoomed in, if they're featured or not
             pointer-events: initial;
           }
@@ -285,8 +262,8 @@ $info-circle: 'data:image/svg+xml;charset=utf8, %3Csvg%20xmlns%3D%22http%3A%2F%2
           z-index: 100;
 
           &.blur {
-            pointer-events: initial;
             opacity: 0;
+            pointer-events: initial;
           }
 
           transition: .5s;
@@ -298,8 +275,8 @@ $info-circle: 'data:image/svg+xml;charset=utf8, %3Csvg%20xmlns%3D%22http%3A%2F%2
     }
 
     .breadcrumb-nav {
-      padding: 3.25pt 7.5pt 0;
       margin-bottom: 2rem;
+      padding: 3.25pt 7.5pt 0;
 
       &.view-us {
         span {
@@ -315,8 +292,8 @@ $info-circle: 'data:image/svg+xml;charset=utf8, %3Csvg%20xmlns%3D%22http%3A%2F%2
 
     .candidate-details {
       margin-bottom: 2rem;
-      padding: 0 $fontSizeBase;
       min-height: 9.6rem;
+      padding: 0 $fontSizeBase;
 
       h1 {
         font-family: $fontFamilySansSerif;
@@ -341,15 +318,17 @@ $info-circle: 'data:image/svg+xml;charset=utf8, %3Csvg%20xmlns%3D%22http%3A%2F%2
       text-align: right;
 
       span {
-        text-align: right;
         line-height: 1.25em;
         margin-bottom: .25em;
+        text-align: right;
       }
     }
   }
+
   .export-methodology-buttons-holder {
     padding-top: 1rem;
   }
+
   .right-column-wrapper {
     padding: 0; // 1rem responsive
     text-align: left;
@@ -361,13 +340,14 @@ $info-circle: 'data:image/svg+xml;charset=utf8, %3Csvg%20xmlns%3D%22http%3A%2F%2
 
     .accordion__button {
       background-color: $colorTableTdBorder;
-      max-height: none;
       margin-bottom: 0;
+      max-height: none;
 
       &[aria-expanded='true'] + .accordion__content {
         max-height: 700px;
         transition: all .5s;
       }
+
       &[aria-expanded='false'] + .accordion__content {
         display: block !important; // Check to see if this interferes with A11Y
         max-height: 0;
@@ -383,6 +363,7 @@ $info-circle: 'data:image/svg+xml;charset=utf8, %3Csvg%20xmlns%3D%22http%3A%2F%2
       h5 {
         font-family: inherit;
       }
+
       td {
         line-height: 1.33rem;
         padding: 1rem;
@@ -391,22 +372,24 @@ $info-circle: 'data:image/svg+xml;charset=utf8, %3Csvg%20xmlns%3D%22http%3A%2F%2
         &:first-child {
           padding-left: 0;
         }
+
         &.indent {
           padding-left: .75rem;
         }
-        // &:last-child { // leave the right padding for last-child to make room for scrollbars
-        // padding-right: 0; // Don't add this since
-        // }
       }
+
       .border-top {
         border-top: thin solid $colorTableTdBorder;
       }
+
       tr.close-b td {
         padding-bottom: .75rem;
       }
+
       tr.close-t td {
         padding-top: .75rem;
       }
+
       th {
         padding-top: 1.5rem;
       }
@@ -427,6 +410,7 @@ $info-circle: 'data:image/svg+xml;charset=utf8, %3Csvg%20xmlns%3D%22http%3A%2F%2
     &.is-loading {
       display: block;
     }
+
     .overlay {
       display: none;
 
@@ -452,29 +436,33 @@ $info-circle: 'data:image/svg+xml;charset=utf8, %3Csvg%20xmlns%3D%22http%3A%2F%2
     .filters {
       .filter {
         max-width: none; // override base
+
         label {
           max-width: none;
         }
       }
+
       .js-table-switcher {
         display: block;
       }
     }
+
     #filter-year {
-      width: calc(100% - .5rem);//20rem;
-      order: 5; // responsive
       margin-right: .5rem;
+      order: 5; // responsive
+      width: calc(100% - .5rem);//20rem;
     }
 
     .candidate-list-wrapper {
       margin-right: .5rem;
-      width: calc(33.33% - .5rem);
       order: 15;
+      width: calc(33.33% - .5rem);
 
       .remote-table-header {
         margin-bottom: 0.5px; // Make sure the border is visible above the scrollbar below it
         width: calc(100% + 1px); // align the right side with the parent's right boundary
       }
+
       .table-scroller {
         height: 100%;
         max-height: 400px;
@@ -483,49 +471,54 @@ $info-circle: 'data:image/svg+xml;charset=utf8, %3Csvg%20xmlns%3D%22http%3A%2F%2
           min-height: 400px;
         }
       }
+
       td, th {
         &:nth-child(2) {
           max-width: 100px;
         }
       }
+
       tr {
 
         &.selected {
           background: $colorTableTdBorder;
-          // border-left: thick;
           font-weight: $fontWeightBold;
-
         }
+
         &:hover {
           background: $colorTableTdBorder;
         }
       }
     }
+
     .map-wrapper {
-      // margin-top: 2.5rem;
       margin-left: .5rem;
       margin-right: .5rem;
       width: calc(66.66% - 1rem);
 
       .election-map {
         svg {
-          min-width: 445px;
           min-height: 258px;
+          min-width: 445px;
         }
       }
     }
+
     .export-methodology-buttons-holder {
       text-align: right;
     }
+
     .right-column-wrapper {
-      width: 100%;
       order: 35;
+      width: 100%;
     }
+
     #downloads-wrapper {
-      width: calc(50% - .5rem);
       margin-right: .5rem;
       order: 30;
+      width: calc(50% - .5rem);
     }
+
     .map-details {
       .more-info-wrapper {
         a, button {
@@ -540,9 +533,9 @@ $info-circle: 'data:image/svg+xml;charset=utf8, %3Csvg%20xmlns%3D%22http%3A%2F%2
     @extend .w-m;
 
     #filter-year {
-      width: calc(50% - .5rem);
-      margin-right: .5rem;
       display: inline-block; // for IE11;
+      margin-right: .5rem;
+      width: calc(50% - .5rem);
 
       .js-table-switcher {
         display: block;
@@ -551,36 +544,37 @@ $info-circle: 'data:image/svg+xml;charset=utf8, %3Csvg%20xmlns%3D%22http%3A%2F%2
 
 
     .candidate-list-wrapper {
-      width: calc(25% - .5rem);
       order: 20;
+      width: calc(25% - .5rem);
     }
+
     .right-column-wrapper {
-      width: calc(28% - .5rem);
       margin-left: .5rem;
       max-height: 490px;
       order: 30;
+      width: calc(28% - .5rem);
     }
     .map-wrapper {
-      width: calc(47% - 1rem);
       order: 25;
+      width: calc(47% - 1rem);
 
       .election-map {
         svg {
-          min-width: 360px;
           min-height: 230px;
+          min-width: 360px;
         }
       }
     }
     .export-methodology-buttons-holder {
-      width: calc(50% - .5rem);
       margin-left: .5rem;
       order: 15;
       padding-top: 3rem;
+      width: calc(50% - .5rem);
     }
     #downloads-wrapper {
-      width: 75%;
       margin-left: calc(25% + .5rem);
       order: 35;
+      width: 75%;
     }
   }
 
@@ -591,23 +585,26 @@ $info-circle: 'data:image/svg+xml;charset=utf8, %3Csvg%20xmlns%3D%22http%3A%2F%2
     thead {
       display: table-header-group;
     }
+
     tbody {
       display: table-row-group;
     }
+
     tr {
       display: table-row;
     }
+
     td, th {
       display: table-cell;
     }
   }
 }
 
-/* #map-tooltip is outside .contribs-by-state */
+/* #map-tooltip is outside .pres-finance-map */
 #map-tooltip {
-  border-radius: 4px;
-  border: 2px solid $federal-blue;
   background-color: $inverse;
+  border: 2px solid $federal-blue;
+  border-radius: 4px;
   color: $federal-blue;
   font-family: $fontFamilySansSerif;
   padding: 1.5rem;
@@ -617,14 +614,14 @@ $info-circle: 'data:image/svg+xml;charset=utf8, %3Csvg%20xmlns%3D%22http%3A%2F%2
 
   .tooltip__title {
     border-bottom: 1px solid $federal-blue;
-    text-transform: uppercase;
     font-weight: 700;
+    text-transform: uppercase;
   }
 
   &.tooltip--above {
-    min-width: 12rem;
-    left: -4rem;
     bottom: calc(100% + 1.5rem);
+    left: -4rem;
+    min-width: 12rem;
   }
 
   &::before {
@@ -654,40 +651,40 @@ $info-circle: 'data:image/svg+xml;charset=utf8, %3Csvg%20xmlns%3D%22http%3A%2F%2
   flex-wrap: wrap;
 
   #filter-year {
-    width: 100%;
     order: 5;
+    width: 100%;
   }
   #filter-map-type {
-    width: 100%;
     order: 15;
+    width: 100%;
   }
   .export-methodology-buttons-holder {
-    margin-left: auto;
-    width: 100%;
-    order: 25;
     margin-bottom: 1rem;
+    margin-left: auto;
+    order: 25;
+    width: 100%;
   }
 
   .map-wrapper {
-    width: 100%;
     order: 20;
+    width: 100%;
   }
 
   .right-column-wrapper {
-    width: 100%;
-    order: 30;
     border-bottom: solid 2px $colorBorder;
     border-top: solid 2px $colorBorder;
+    order: 30;
     overflow-x: hidden;
     overflow-y: scroll;
+    width: 100%;
   }
 
   #downloads-wrapper {
-    width: 100%;
     height: 0;
     margin-left: 0;
-    overflow: hidden;
     order: 35;
+    overflow: hidden;
+    width: 100%;
   }
 
   #downloads-links-wrapper {
@@ -701,13 +698,13 @@ $info-circle: 'data:image/svg+xml;charset=utf8, %3Csvg%20xmlns%3D%22http%3A%2F%2
     flex-wrap: wrap;
 
       a {
-        width:9rem;
-        padding: 1rem;
         border: 1px solid $gray-light;
+        padding: 1rem;
         text-align: center;
+        width: 9rem;
 
           &:hover {
-            background:$gray-lightest;
+            background: $gray-lightest;
           }
       }
   }
