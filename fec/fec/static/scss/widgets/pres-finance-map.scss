@@ -712,3 +712,20 @@ $info-circle: 'data:image/svg+xml;charset=utf8, %3Csvg%20xmlns%3D%22http%3A%2F%2
       }
   }
 }
+
+// Style overrides specifically for container queries
+// breakpoints:
+// xs: <430px
+// small:   430px
+// medium:  675px
+// large:   790px
+// xl:      860px
+#gov-fec-pres-finance.cq-container {
+  container: presmapcontainer / inline-size;
+
+  @container presmapcontainer (max-width: 674px ) {
+    .candidate-list-wrapper, .map-wrapper {
+      width: 100cqw;
+    }
+  }
+}
