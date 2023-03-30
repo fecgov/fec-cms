@@ -18,9 +18,9 @@
     "format-lint": "npm run format && npm run lint",
     "test": "karma start",
     "test-single": "npm run lint && karma start --single-run --browsers ChromeHeadless",
+    "watch": "concurrently \"npm run watch-js\" \"npm run watch-css\"",
     "watch-js": "npm-watch build-js",
-    "watch-css": "npm-watch build-sass",
-    "watch": "concurrently \"npm run watch-js\" \"npm run watch-css\""
+    "watch-css": "npm-watch build-sass"
   },
   "dependencies": {
     "a11y-dialog": "4.0.0",
