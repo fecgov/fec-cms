@@ -343,7 +343,7 @@ Vue.component('FramesHolder', {
               :k${'e'}y="link_index"
               class="contact-item contact-item--question-bubble">
               <div class="contact-item__content">
-                <a href="{{link.href}}">{{link.label}}</a>
+                <a :href="link.href">{{link.label}}</a>
               </div>
             </div>
           </template>
