@@ -1148,7 +1148,12 @@ new Vue({
               { label: 'Form 1: Statement of Organization', qty: 1 },
               { label: 'Form 2: Statement of Candidacy', qty: 1 },
               { label: 'Form 3: Report of Receipts and Disbursements (House and Senate candidates)', qty: 1 },
-              { label: 'Form 3X: Report of Receipts and Disbursements (PACs and political party committees)', qty: 1 }
+              { label: 'Form 3X: Report of Receipts and Disbursements (PACs and political party committees)', qty: 1 },
+              { label: 'Presidential packet (forms and guidebook)', qty: 1 },
+              { label: 'Congressional packet (forms and guidebook)', qty: 1 },
+              { label: 'Party packet (form and guidebook)', qty: 1 },
+              { label: 'Nonconnected PAC packet (form and guidebook)', qty: 1 },
+              { label: 'Corporate and Labor PAC packet (form and guidebook)', qty: 1 }
             ]
           }
         },
