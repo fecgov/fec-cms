@@ -365,7 +365,7 @@ Vue.component('FramesHolder', {
                 <label
                   for="u_email"
                   class="field__message--error"
-                  >Please provide a valid email address</label>
+                  >Provide a valid email address</label>
               </div>
 
               <div
@@ -381,7 +381,7 @@ Vue.component('FramesHolder', {
                 <label
                   for="u_name"
                   class="field__message--error"
-                  >Please provide your name</label>
+                  >Provide your name</label>
               </div>
 
               <div
@@ -398,7 +398,7 @@ Vue.component('FramesHolder', {
                   type="text" required />
                 <label
                   for="u_committee"
-                  class="field__message--error">Please provide a committee ID</label>
+                  class="field__message--error">Provide a committee ID</label>
               </div>
 
               <div
@@ -517,7 +517,7 @@ Vue.component('FramesHolder', {
                   required></textarea>
                 <label
                   for="u_message"
-                  class="field__message--error">Please provide a detailed message</label>
+                  class="field__message--error">Provide a detailed message</label>
               </div>
             </div>
           </div>
@@ -541,6 +541,9 @@ Vue.component('FramesHolder', {
                   @input="handleFieldInput($event)"
                   @change="handleFieldChange($event)"
                   id="u_street1" name="u_street1" type="text" class="col-l" required />
+                <label
+                  for="u_street1"
+                  class="field__message--error">Provide a street address</label>
 
                 <label class="col-r" for="u_street2">Apartment, suite, etc (optional)</label>
                 <input
@@ -555,6 +558,9 @@ Vue.component('FramesHolder', {
                   @input="handleFieldInput($event)"
                   @change="handleFieldChange($event)"
                   id="u_city" name="u_city" type="text" class="col-l" required />
+                <label
+                  for="u_city"
+                  class="field__message--error">Provide a city</label>
 
                 <label class="col-rl" for="u_state">State</label>
                 <select
@@ -566,6 +572,9 @@ Vue.component('FramesHolder', {
                     :k${'e'}y="state.abbrev"
                     :value="state.abbrev">{{state.label}}</option>
                 </select>
+                <label
+                  for="u_street1"
+                  class="field__message--error">Select a state</label>
 
                 <label class="col-rr" for="u_zip">ZIP code</label>
                 <input
@@ -575,10 +584,9 @@ Vue.component('FramesHolder', {
                   pattern="^[0-9]{5}$|^[0-9]{9}$|^[0-9]{5}-[0-9]{4}$"
                   id="u_zip" name="u_zip" type="text" class="col-rr"
                   required />
-
                 <label
-                  class="field__message--error-group" style="order:20">A complete mailing address is required</label>
-
+                  for="u_zip"
+                  class="field__message--error">Provide a ZIP code</label>
               </div>
             </div>
           </div>
