@@ -74,14 +74,25 @@
             margin-bottom: 0;
           }
         }
-        .card:hover {
+        .card {
           cursor: pointer;
+          border: 2px solid transparent;
+          transition: border-color .5s;
 
-          h3 {
-            text-decoration: underline;
-            text-decoration-color: $aqua;
-            text-decoration-style: dotted;
-            text-underline-offset: .25em;
+          &:hover {
+            border-color: $gray;
+            transition: border-color .5s;
+          }
+
+          .card__image__container {
+            height: 80px;
+            width: 80px;
+
+            .card__icon {
+              background-size: 100%;
+              height: 100%;
+              width: 100%;
+            }
           }
         }
       }
