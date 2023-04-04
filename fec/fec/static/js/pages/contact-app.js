@@ -864,8 +864,13 @@ Vue.component('FramesHolder', {
         newCanSubmit = 0;
       // If we're currently showing the team info
       } else if (currentFrame.frameId == 'teamFields') {
+        // If there are no fields to show, we're at a stopping point
+        if (!this.selectedTeam.fields) {
+          newCanNext = 0;
+          newCanRestart = 2;
+          newCanSubmit = 0;
         // If there are no other fields to show, we're done
-        if (this.selectedTeam && this.teams[this.selectedTeam].fields && this.teams[this.selectedTeam].fields.length === 0) {
+        } else if (this.selectedTeam && this.teams[this.selectedTeam].fields && this.teams[this.selectedTeam].fields.length === 0) {
           newCanNext = 0;
           newCanRestart = 2;
           newCanSubmit = 0;
@@ -878,7 +883,8 @@ Vue.component('FramesHolder', {
         // If they haven't chosen publications, they can't Next but they might submit
         } else {
           newCanNext = 0;
-          newCanSubmit = obj && obj.valid && !obj.needValues ? 2 : 1;
+          // newCanSubmit = obj && obj.valid && !obj.needValues ? 2 : 1;
+          newCanSubmit = 2;
         }
       } else if (currentFrame.frameId == 'uspsFields') {
         newCanNext = obj && obj.valid && !obj.needValues ? 2 : 1;
@@ -888,7 +894,7 @@ Vue.component('FramesHolder', {
         // console.log('orderReview! this.recaptchaValidated: ', this.recaptchaValidated);
         newCanNext = 0;
         newCanRestart = 0;
-        newCanSubmit = this.recaptchaValidated ? 2 : 1;
+        newCanSubmit = 2; //this.recaptchaValidated ? 2 : 1;
       } else if (currentFrame.frameId == 'acknowledgeSubmission') {
         newCanBack = 0;
         newCanNext = 0;
@@ -1101,6 +1107,7 @@ new Vue({
           formPrompt: 'Contact us via telephone or send a message.',
           phoneMenu: 6,
           phoneExt: 1100,
+          success: 'The FEC will respond within 5 business days',
           fields: {
             email: true,
             message: true
@@ -1163,7 +1170,7 @@ new Vue({
           name: 'Press Office',
           nameDisclaimer: '(reporters or journalists only)',
           summary: 'The Press Office responds to questions from the media.',
-          formPrompt: 'Contact the Press Office via telephone, email, or send them a message.',
+          formPrompt: 'Contact the Press Office via telephone, email or send them a message.',
           phoneMenu: 1, // 1-800-424-9530, menu option #
           phoneExt: 1220, // 202-694-####
           ePrefix: 'press',
@@ -1311,7 +1318,7 @@ new Vue({
             {
               type: 'radio',
               vModel: 'selectedTopic1',
-              label: 'Technical issues with filing my electric report or password help',
+              label: 'Technical issues with filing my electronic report or password help',
               team: 'efo',
               teamSubject: ''
             },
@@ -1333,7 +1340,7 @@ new Vue({
               type: 'radio',
               vModel: 'selectedTopic1',
               value: 'NEXT',
-              label: 'None of these'
+              label: 'More options'
             }
           ]
         },
@@ -1430,7 +1437,9 @@ new Vue({
       // return false;
       let toReturn = false;
 
-      if (this.frames[this.currentFrameNum].frameId == 'teamFields' && this.u_subject != 'publications')
+      if(this.selectedTeam && !this.teams[this.selectedTeam].fields) // If there are no fields to show, the
+        toReturn = false;
+      else if (this.frames[this.currentFrameNum].frameId == 'teamFields' && this.u_subject != 'publications')
         toReturn = true;
       else if (this.frames[this.currentFrameNum].frameId == 'orderReview')
         toReturn = true;
