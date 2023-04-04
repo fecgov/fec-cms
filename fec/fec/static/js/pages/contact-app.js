@@ -1062,9 +1062,11 @@ new Vue({
       u_zip: '',
       teams: {
         congress: {
-          name: 'Congressional Affairs',
-          summary: 'Congressional Affairs responds to inquiries from other agencies and Congressional representatives',
-          formPrompt: 'Contact Congressional Affairs via telephone.',
+          name: 'Congressional, Legislative and Governmental Affairs',
+          summary: `Congressional, Legislative and Governmental Affairs responds to inquiries from Congressional staff
+           and other agencies. It is also responsible for keeping Members of Congress apprised of Commission decisions,
+           and provides general advice and information about campaign finance laws to lawmakers and their committees.`,
+          formPrompt: 'Contact Congressional, Legislative and Governmental Affairs via telephone or email.',
           phoneExt: '1006',
           ePrefix: 'congress',
           fields: ''
