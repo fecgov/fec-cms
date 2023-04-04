@@ -51,9 +51,9 @@ urlpatterns = [
     ),
 
     re_path(
-        r'^sitemap-data-legal\.xml$',
+        r'^sitemap-static\.xml$',
         TemplateView.as_view(
-            template_name='sitemap-data-legal.xml',
+            template_name='sitemap-static.xml',
             content_type='text/plain'
         ),
     ),

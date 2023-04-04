@@ -1,7 +1,7 @@
 User-agent: usasearch  
 Crawl-delay: 2
-Sitemap: https://www.fec.gov/sitemmap-wagtail.xml,            
-Sitemap: https://www.fec.gov/sitemmap-data-legal.xml
+Sitemap: https://www.fec.gov/sitemmap-wagtail.xml           
+Sitemap: https://www.fec.gov/sitemmap-static.xml
 
 User-agent: *
 Crawl-delay: 10
