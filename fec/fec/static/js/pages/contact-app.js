@@ -887,7 +887,7 @@ Vue.component('FramesHolder', {
           newCanSubmit = 2;
         }
       } else if (currentFrame.frameId == 'uspsFields') {
-        newCanNext = obj && obj.valid && !obj.needValues ? 2 : 1;
+        newCanNext = 2;
         newCanRestart = 0;
         newCanSubmit = 0;
       } else if (currentFrame.frameId == 'orderReview') {
@@ -1481,7 +1481,7 @@ new Vue({
       e.preventDefault();
       if (buttonType == 'start-know-who') this.goToFrame('teams');
       else if (buttonType == 'start-help-with-who') this.goToFrame('topics1');
-      else if (buttonType == 'Next') this.goToFrame('next');
+      else if (buttonType == 'Next') this.validateThenNext();
       else if (buttonType == 'Back') this.goToFrame('back');
       else if (buttonType == 'Restart') this.restart();
       else if (buttonType == 'Submit') this.validateThenStartSubmission();
