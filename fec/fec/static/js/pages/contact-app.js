@@ -865,7 +865,7 @@ Vue.component('FramesHolder', {
       // If we're currently showing the team info
       } else if (currentFrame.frameId == 'teamFields') {
         // If there are no fields to show, we're at a stopping point
-        if (!this.selectedTeam.fields) {
+        if (!this.teams[this.selectedTeam].fields) {
           newCanNext = 0;
           newCanRestart = 2;
           newCanSubmit = 0;
@@ -910,12 +910,13 @@ Vue.component('FramesHolder', {
     validateField: function(el) {
       el.setAttribute('aria-invalid', !el.checkValidity());
     },
-    validateCurrentFrame: function() {
+    validateCurrentFrame: function(forceShowAllErrors) {
       const currentFrameEl = document.querySelector('.frame.current');
       let frameFormElements;
 
       if (!currentFrameEl) {
         console.log('NO CURRENT FRAME'); // eslint-disable-line no-console
+        this.$emit('form-validation', false);
         return;
       } else {
         frameFormElements = currentFrameEl.querySelectorAll('input, select, textarea');
@@ -933,8 +934,10 @@ Vue.component('FramesHolder', {
           if (el.id.indexOf('u_pub') === 0 && this.userPubs.length < 1) allAreValid = false;
           else if (!el.checkValidity()) {
             allAreValid = false;
+            if (forceShowAllErrors) this.validateField(el);
           }
         });
+        this.$emit('form-validation', false);
         this.updateNavOptions({ valid: allAreValid, needValues: needValues });
       }
     },
@@ -1013,9 +1016,11 @@ new Vue({
         :user-street2="u_street2"
         :user-subject="u_subject"
         :user-zip="u_zip"
+        @form-validation="handleFormValidation"
         @button-click="handleButtonClick"
         @field-change="handleFieldChange"
         @radio-click="handleRadioClick"
+        ref="framesHolder"
       ></FramesHolder>
       <Recaptcha
         @testing-change="handleTestingChange"
@@ -1043,6 +1048,7 @@ new Vue({
       canNavSubmit: 0,
       canNavRestart: 0,
       currentFrameNum: 0, //int
+      formCanSubmit: false,
       isSubmitting: false,
       postUrl: '/contact-submission/',
       selectedTeam: '',
@@ -1477,7 +1483,7 @@ new Vue({
       else if (buttonType == 'Next') this.goToFrame('next');
       else if (buttonType == 'Back') this.goToFrame('back');
       else if (buttonType == 'Restart') this.restart();
-      else if (buttonType == 'Submit') this.startSubmission();
+      else if (buttonType == 'Submit') this.validateThenStartSubmission();
       else if (buttonType == 'pubs-remove') {
         const theIndex = parseInt(e.target.dataset.index);
         const newUPubs = [...this.u_pubs];
@@ -1531,6 +1537,15 @@ new Vue({
         console.log('  e.target.value: ', e.target.value); // eslint-disable-line no-console
         console.log('  this[varToChange]: ', this[varToChange]); // eslint-disable-line no-console
       }
+    },
+    handleFormValidation(val) {
+      this.formCanSubmit = val;
+    },
+    getFrameNumById: function(requestedID) {
+      for (let i = 0; i < this.frames.length; i++) {
+        if (this.frames[i].frameId == requestedID) return i;
+      }
+      return 0;
     },
     handleRecaptchaEvent: function(e, f) {
       console.log('App.handleRecaptchaEvent(e): ', e, f); //eslint-disable-line no-console
@@ -1795,6 +1810,11 @@ new Vue({
       this.currentFrameNum = this.getFrameNumById('acknowledgeSubmission');
       // console.log('App.finishSubmission(var1): ', e, submissionBody);
       this.isSubmitting = false;
+    },
+    validateThenStartSubmission: function() {
+      this.$refs.framesHolder.validateCurrentFrame(true);
+
+      if (this.formCanSubmit === true) this.startSubmission();
     },
     startSubmission: function() {
       this.isSubmitting = true;
