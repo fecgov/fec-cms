@@ -15,6 +15,7 @@ from wagtail.fields import RichTextField, StreamField
 from wagtail import blocks
 from wagtail.admin.panels import (
     FieldPanel,
+    HelpPanel,
     InlinePanel,
     MultiFieldPanel,
     PageChooserPanel,
@@ -1224,6 +1225,7 @@ class ContactPage(Page):
             'home.EmbedSnippet',
             required=False, template='blocks/embed-info-message.html', icon='warning')),
     ], null=True, blank=True)
+    show_contact_app = models.BooleanField(default=False)
     services_title = models.TextField()
     services = StreamField([
         ('services', blocks.RichTextBlock())
@@ -1232,6 +1234,23 @@ class ContactPage(Page):
     content_panels = Page.content_panels + [
         StreamFieldPanel('contact_items'),
         StreamFieldPanel('info_message', heading='Informational message'),
+        MultiFieldPanel(
+            [
+                FieldPanel(
+                    'show_contact_app',
+                    heading='Show contact/help app',
+                ),
+                HelpPanel(
+                    content='<strong>NOTE</strong>: Checking this will show the contact/help app in the main column \
+                    of the site and will not include any content from the fields after this one.<br>\
+                    <strong>Checked</strong>: show the contact/help app, but skip the rest of the content on this \
+                    page.<br>\
+                    <strong>Unchecked</strong>: show the rest of the content on this page, but not the \
+                    contact/help app.'
+                ),
+            ],
+            heading='Contact/help app or text content?',
+        ),
         FieldPanel('services_title'),
         StreamFieldPanel('services'),
     ]
