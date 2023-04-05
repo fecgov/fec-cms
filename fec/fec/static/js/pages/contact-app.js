@@ -1811,6 +1811,13 @@ new Vue({
       this.currentFrameNum = this.getFrameNumById('acknowledgeSubmission');
       // console.log('App.finishSubmission(var1): ', e, submissionBody);
       this.isSubmitting = false;
+      // Scroll the page to show the Vue element
+      this.$el.scrollIntoView({behavior: 'smooth', block: 'center'});
+    },
+    validateThenNext: function() {
+      this.$refs.framesHolder.validateCurrentFrame(true);
+
+      if (this.formCanSubmit === true) this.goToFrame('next');
     },
     validateThenStartSubmission: function() {
       this.$refs.framesHolder.validateCurrentFrame(true);
