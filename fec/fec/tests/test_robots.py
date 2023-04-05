@@ -21,18 +21,15 @@ class TestRobots(TestCase):
 
         with self.settings(FEC_CMS_ENVIRONMENT='STAGING'):
             response = self.client.get('/robots.txt')
-            self.assertContains(
-                        response,
-                        "Disallow",
-                        count=None,
-                        status_code=200,
-                        msg_prefix='\"Disallow\" not found in response',
-                        html=False)
+            self.assertContains(response, "Disallow", count=None, status_code=200,
+                msg_prefix='\"Disallow\" not found in response', html=False)
             self.assertEqual(response.status_code, 200)
 
-    def test_robots_txt_exists(self):
+    def test_robots_txt_contains_sitemaps(self):
 
         with self.settings(FEC_CMS_ENVIRONMENT='PRODUCTION'):
             reload_url_conf()
             response = self.client.get('/robots.txt')
+            self.assertContains(response, "Sitemap", count=2, status_code=200,
+                msg_prefix='\"Sitemap\" not found in response', html=False)
             self.assertEqual(response.status_code, 200)
