@@ -6,8 +6,8 @@ from data import utils
 START_YEAR = 1979
 END_YEAR = 2024
 DEFAULT_TIME_PERIOD = 2022  # Change after the April quarterly report (4/15/23)
-DEFAULT_ELECTION_YEAR = 2022  # Change after election day (11/8/22)
-DEFAULT_PRESIDENTIAL_YEAR = 2020  # Change after April quarterly after mid-terms (4/15/23)
+DEFAULT_ELECTION_YEAR = 2024  # Change after election day (11/8/22)
+DEFAULT_PRESIDENTIAL_YEAR = 2024  # Change after April quarterly after mid-terms (4/15/23)
 DISTRICT_MAP_CUTOFF = 2018  # The year we show district maps for on election pages
 
 states = OrderedDict([
