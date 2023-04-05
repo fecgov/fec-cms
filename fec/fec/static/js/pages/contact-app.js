@@ -937,7 +937,7 @@ Vue.component('FramesHolder', {
             if (forceShowAllErrors) this.validateField(el);
           }
         });
-        
+
         this.$emit('form-validation', allAreValid && !needValues);
         this.updateNavOptions({ valid: allAreValid, needValues: needValues });
       }
@@ -1806,7 +1806,7 @@ new Vue({
       // console.log('App.finishSubmission(var1): ', e, submissionBody);
       this.isSubmitting = false;
       // Scroll the page to show the Vue element
-      this.$el.scrollIntoView({behavior: 'smooth', block: 'center'});
+      this.$el.scrollIntoView({ behavior: 'smooth', block: 'center' });
     },
     validateThenNext: function() {
       this.$refs.framesHolder.validateCurrentFrame(true);
