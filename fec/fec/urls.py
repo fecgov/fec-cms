@@ -9,6 +9,8 @@ from wagtail import urls as wagtail_urls
 from uaa_client import urls as uaa_urls
 from uaa_client import views as uaa_views
 
+from wagtail.contrib.sitemaps.views import sitemap
+
 from home import views as home_views
 from search import views as search_views
 
@@ -21,18 +23,16 @@ urlpatterns = [
     ),
     re_path(r'^auth/', include(uaa_urls)),
     re_path(r'^admin/', include(wagtailadmin_urls)),
+    re_path(r'^sitemap-wagtail\.xml/$', sitemap),
     re_path(r'^calendar/$', home_views.calendar),
-    re_path(r'^about/leadership-and-structure/commissioners/$',
-            home_views.commissioners),
+    re_path(r'^about/leadership-and-structure/commissioners/$', home_views.commissioners),
     re_path(r'^documents/', include(wagtaildocs_urls)),
-    re_path(r'^help-candidates-and-committees/question-rad/$',
-            home_views.contact_rad),
+    re_path(r'^help-candidates-and-committees/question-rad/$', home_views.contact_rad),
     re_path(r'^help-candidates-and-committees/guides/$', home_views.guides),
     re_path(r'^meetings/$', home_views.index_meetings, name="meetings_page"),
     re_path(r'^search/$', search_views.search, name='search'),
-    re_path(r'^legal-resources/policy-and-other-guidance/guidance-documents/$',
-            search_views.policy_guidance_search,
-            name='policy-guidance-search'),
+    re_path(r'^legal-resources/policy-and-other-guidance/guidance-documents/$', search_views.policy_guidance_search,
+        name='policy-guidance-search'),
     re_path(r'^updates/$', home_views.updates),
     re_path(r'', include('data.urls')),  # URLs for /data
     re_path(r'', include('legal.urls')),  # URLs for legal pages
@@ -49,23 +49,21 @@ urlpatterns = [
             template_name='data.json', content_type="application/json"
         ),
     ),
-]
 
+    re_path(
+        r'^sitemap-static\.xml$',
+        TemplateView.as_view(
+            template_name='sitemap-static.xml',
+            content_type='text/plain'
+        ),
+    ),
+]
 
 if settings.FEC_CMS_ENVIRONMENT != 'LOCAL':
     # admin/login always must come before admin/, so place at beginning of list
     urlpatterns.insert(0, re_path(r'^admin/login', uaa_views.login, name='login'))
 
-# robots.txt configurations vary depending on environment
-if settings.FEC_CMS_ENVIRONMENT != 'PRODUCTION':
-    urlpatterns += re_path(
-        r'^robots\.txt$',
-        TemplateView.as_view(
-            template_name='robots.txt',
-            content_type='text/plain'
-        ),
-    ),
-elif settings.FEC_CMS_ENVIRONMENT == 'PRODUCTION':
+if settings.FEC_CMS_ENVIRONMENT == 'PRODUCTION':
     urlpatterns += re_path(
         r'^robots\.txt$',
         TemplateView.as_view(
@@ -74,6 +72,14 @@ elif settings.FEC_CMS_ENVIRONMENT == 'PRODUCTION':
         ),
     ),
 
+if settings.FEC_CMS_ENVIRONMENT != 'PRODUCTION':
+    urlpatterns += re_path(
+        r'^robots\.txt$',
+        TemplateView.as_view(
+            template_name='robots.txt',
+            content_type='text/plain'
+        ),
+    ),
 
 if settings.DEBUG:
     from django.conf.urls.static import static
