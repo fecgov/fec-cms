@@ -996,7 +996,7 @@ Vue.component('FramesHolder', {
 new Vue({
   el: '#gov-fec-contact-app',
   template: `
-    <div id="gov-fec-contact-app" class="cq-container">
+    <div id="gov-fec-contact-app" class="_cq-container">
       <FramesHolder
         :current-frame-num="currentFrameNum"
         :frames="frames"
@@ -1470,12 +1470,6 @@ new Vue({
   methods: {
     handleTestingChange(val) {
       this.TESTSHOULDFAIL = val;
-    },
-    getFrameNumById: function(requestedID) {
-      for (let i = 0; i < this.frames.length; i++) {
-        if (this.frames[i].frameId == requestedID) return i;
-      }
-      return 0;
     },
     handleButtonClick: function(buttonType, e) {
       e.preventDefault();
