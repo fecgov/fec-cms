@@ -937,7 +937,8 @@ Vue.component('FramesHolder', {
             if (forceShowAllErrors) this.validateField(el);
           }
         });
-        this.$emit('form-validation', false);
+        
+        this.$emit('form-validation', allAreValid && !needValues);
         this.updateNavOptions({ valid: allAreValid, needValues: needValues });
       }
     },
