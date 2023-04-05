@@ -21,7 +21,7 @@
     <div class="usa-width-two-thirds u-padding--left--small">
       {{ self.info_message }}
       {% if settings.FEATURES.contact_app %} {# feature flag for whether we show the Vue contact app… #}
-      <h2 class="heding--main">Contact the FEC></h2>
+      <h2 class="heding--main">Contact the FEC</h2>
       <div id="gov-fec-contact-app" class="loading"><img src="/static/img/loading--primary.gif" alt="animation indicating that the contact app is still loading its components"></div>
       {% else %} {# …or show the content from Wagtail #}
       <h2>{{ self.services_title }}</h2>
