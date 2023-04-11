@@ -3,11 +3,11 @@
 /* global $ */
 
 /**
- * TODO - @fileoverview
- * @copyright 2020 Federal Election Commission
+ * The financial map for presidential elections. e.g. https://www.fec.gov/data/candidates/president/presidential-map/
+ * @copyright 2023 Federal Election Commission
  * @license CC0-1.0
  * @owner  fec.gov
- * @version 1.0
+ * @version 1.1
  */
 
 // Editable vars
@@ -46,8 +46,6 @@ const COVERAGE_DATES_LOADED = EVENT_APP_ID + '_coverage_dates_loaded';
 // TODO: Update so we're using IDs everywhere?
 const selector_mainElement = '#gov-fec-pres-finance';
 const selector_yearControl = '#filter-year';
-const selector_map_form = '#filter-map-type';
-const selector_mapTypeControl = '.js-map-switcher';
 const selector_resetApp = '.js-reset-app';
 const selector_map = '.map-wrapper .election-map';
 const selector_candidateDetails = '.candidate-details';
@@ -1027,11 +1025,9 @@ PresidentialFundsMap.prototype.updateBreadcrumbs = function(dataObj) {
   if (theSecondLabel != '') {
     if (specialCandidateIDs.includes(dataObj.candidate_id)) {
       // If we're looking at a special candidate (Dems, Reps ('all' is hidden from above))
-      // TODO: theSecondLabel += this.candidate_last_name?
       theSecondLabel += dataObj.name;
     } else {
       // We're dealing with a real candidate so we need to get the name from somewhere else
-      // TODO: theSecondLabel += this.find the last name
       theSecondLabel += dataObj.candidateLastName;
     }
   }
@@ -1049,7 +1045,6 @@ PresidentialFundsMap.prototype.updateBreadcrumbs = function(dataObj) {
 /**
  * Triggered by YEAR_CHANGE_EVENT (after the user click has been processed and 'approved')
  * Saves the new election year and calls {@see loadCandidatesList() }
- * TODO: Is this overkill? Any reason not to combine it with handleElectionYearChange?
  * @param {CustomEvent} e
  * @param {JSON} e.detail
  */
@@ -1093,7 +1088,6 @@ PresidentialFundsMap.prototype.handleCandidateListClick = function(e) {
 /**
  * Triggered by CHANGE_CANDIDATE after loadCandidatesList and handleCandidatesListClick
  * starts a new loading chain, starting with loading the candidate details
- * TODO: overkill?
  * @param {CustomEvent} e
  * @param {String} e.detail.candidate_id
  * @param {String} e.detail.name
@@ -1131,11 +1125,8 @@ PresidentialFundsMap.prototype.handleStateClick = function(e) {
     this.current_electionState = e.detail.abbr;
     this.current_electionStateName = e.detail.name;
 
-    // TODO: turn this back on
     this.loadCandidatesList();
 
-    // TODO: tell the breadcrumbs to update—or maybe that should be a different listener?
-    // TODO: tell the map to focus on the state? Maybe it should handle it internally?
     // Simply clicking a state shouldn't change that state's color or value
 
     this.map.zoomToState(this.current_electionState, e.detail.d);
@@ -1168,7 +1159,7 @@ PresidentialFundsMap.prototype.handleErrorState = function(errorCode) {
 /**
  * Listens to window resize events and adjusts the classes for the <aside> based on its width
  * (rather than the page's width, which is problematic when trying to determine whether there's a side nav)
- * TODO: needs attention
+ * TODO: this approach could go away with container queries
  */
 PresidentialFundsMap.prototype.handleResize = function(e = null) {
   if (e) e.preventDefault();
@@ -1396,34 +1387,6 @@ PresidentialFundsMap.prototype.toggleUSOrStateDisplay = function() {
       .querySelector(selector_raisingExportsToggle)
       .classList.toggle('button--close', false);
   }
-};
-
-/**
- * TODO: this
- * Controls class names and functionality of the widget.
- * Called when we both start and complete (@see loadMapData() )
- * @param {Boolean} newState
- */
-PresidentialFundsMap.prototype.setLoadingState = function(newState) {
-  if (newState === false) {
-    //   this.element
-    //     .querySelector('.overlay__container')
-    //     .classList.remove('is-loading');
-    //   this.element.querySelector('.overlay').classList.remove('is-loading');
-    //   this.element
-    //     .querySelector('#state-contribs-years')
-    //     .removeAttribute('disabled');
-  } // else if (newState === true) {
-  //   this.element
-  //     .querySelector('.overlay__container')
-  //     .classList.add('is-loading');
-  //   this.element.querySelector('.overlay').classList.add('is-loading');
-  //   this.element
-  //     .querySelector('#state-contribs-years')
-  //     .setAttribute('disabled', true);
-  //   // trigger resize:
-  this.handleResize();
-  // }
 };
 
 /**
