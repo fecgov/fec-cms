@@ -216,13 +216,6 @@ PresidentialFundsMap.prototype.init = function() {
     this.handleElectionYearChange.bind(this)
   );
 
-  // Init the map type listener
-  this.mapTypeControl = this.element.querySelector(selector_mapTypeControl);
-  this.mapTypeControl.addEventListener(
-    'change',
-    this.handleMapTypeChange.bind(this)
-  );
-
   this.element.addEventListener(
     YEAR_CHANGE_EVENT,
     this.handleYearChange.bind(this)
@@ -1101,24 +1094,6 @@ PresidentialFundsMap.prototype.handleElectionYearChange = function(e) {
 };
 
 /**
- * TODO -
- */
-PresidentialFundsMap.prototype.handleMapTypeChange = function(e) {
-  let theMapElement = false;
-  if (this.map.setAttribute) theMapElement = this.map;
-  else if (this.map.elm.setAttribute) theMapElement = this.map.elm;
-
-  if (theMapElement)
-    theMapElement.setAttribute('data-map_type', e.target.value);
-
-  // Hide the legend for the bubbles view
-  this.element.querySelector(selector_mapLegend).style.display =
-    e.target.value == 'bubble' ? 'none' : 'block';
-
-  logUsage('mapTypeChange', e.target.value);
-};
-
-/**
  * Triggered when the user clicks a state inside the map and the event bubbles up to here
  * Calls for loadCandidatesList
  * @param {CustomEvent} e
@@ -1349,7 +1324,6 @@ PresidentialFundsMap.prototype.handlePageShow = function() {
   // For when a user navigates back to this page and has a cached form value,
   // reset the toggles
   this.yearControl.reset();
-  this.element.querySelector(selector_map_form).reset();
 };
 
 /**
@@ -1361,9 +1335,6 @@ PresidentialFundsMap.prototype.toggleUSOrStateDisplay = function() {
   // Show for only national view:
   this.element.querySelector(
     selector_summariesHolder
-  ).style.display = nationalDisplay;
-  this.element.querySelector(
-    selector_mapTypeControl
   ).style.display = nationalDisplay;
   // For the candidate list disclaimer, we want to hold open the vertical space so we'll toggle its opacity
   if (nationalDisplay == 'block')
