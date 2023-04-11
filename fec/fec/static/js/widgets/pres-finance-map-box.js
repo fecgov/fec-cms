@@ -64,7 +64,6 @@ const selector_exportSummary = '.js-export-report-summary';
 const selector_stateDownloadLinks =
   selector_downloadsLinksWrapper + ' [data-stateID]';
 const selector_exportStateData = '.js-export-state-data';
-const selector_mapLegend = '.legend-container';
 const selector_candidateListDisclaimer = '.js-cand-list-note';
 
 // Imports, etc
