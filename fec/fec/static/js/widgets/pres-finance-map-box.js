@@ -198,18 +198,19 @@ function PresidentialFundsMap() {
  */
 PresidentialFundsMap.prototype.init = function() {
   // Init the election year selector (The element ID is set in data/templates/partials/widgets/pres-finance-map.jinja)
-  let theFieldset = this.yearControl.querySelector('fieldset');
+  const theFieldset = this.yearControl.querySelector('fieldset');
+  // Create the cycle selector <select>
+  const theSelect = document.createElement('select');
+  // Add an <option> for every available year, selecting the current one
+  availElectionYears.forEach(el => {
+    // new Option(text, value, default selected, current selected)
+    const newOpt = new Option(el, el, el == this.current_electionYear);
+    theSelect.add(newOpt);
+  });
+  // And the <select> to the fieldset/dom/page
+  theFieldset.appendChild(theSelect);
 
-  for (let i = 0; i < availElectionYears.length; i++) {
-    let thisYear = availElectionYears[i];
-    let newElem = document.createElement('label');
-    // TODO try to find the form field's value; restore it if possible (checked and this.current_electionYear)?
-    let switched = i == 0 ? ' checked' : '';
-    newElem.setAttribute('class', `toggle`);
-    newElem.setAttribute('for', `switcher-${thisYear}`);
-    newElem.innerHTML = `<input type="radio" class="toggle" value="${thisYear}" id="switcher-${thisYear}" name="year_selector" aria-controls="${thisYear}-message" tabindex="0"${switched}><span class="button--alt">${thisYear}</span>`;
-    theFieldset.appendChild(newElem);
-  }
+  // Add the 'change' event listener to the fieldset (rather than the <select>)
   this.yearControl.addEventListener(
     'change',
     this.handleElectionYearChange.bind(this)
