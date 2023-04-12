@@ -3,11 +3,11 @@
 /* global $ */
 
 /**
- * TODO - @fileoverview
- * @copyright 2020 Federal Election Commission
+ * The financial map for presidential elections. e.g. https://www.fec.gov/data/candidates/president/presidential-map/
+ * @copyright 2023 Federal Election Commission
  * @license CC0-1.0
  * @owner  fec.gov
- * @version 1.0
+ * @version 1.1
  */
 
 // Editable vars
