@@ -2,7 +2,6 @@
   "extends": ["stylelint-config-standard-scss", "stylelint-config-css-modules"],
   "plugins": ["stylelint-scss"],
   "rules": {
-    "indentation": 2,
     "at-rule-empty-line-before": null,
     "color-named": "never",
     "declaration-block-no-redundant-longhand-properties": null,
