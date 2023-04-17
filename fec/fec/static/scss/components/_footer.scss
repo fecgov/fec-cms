@@ -59,7 +59,7 @@
 }
 
 .footer {
-  @include u-bg--primary();
+  @include u-bg--primary;
   @include u-font-color($neutral);
 
   padding: u(5rem 0);

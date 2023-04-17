@@ -13,7 +13,7 @@
 }
 
 .u-visually-hidden {
-  @include u-visually-hidden();
+  @include u-visually-hidden;
 }
 
 .u-float-left {
@@ -209,7 +209,7 @@
 //
 
 @mixin u-bg--primary() {
-  @include u-form--inverse();
+  @include u-form--inverse;
   @include u-font-color($gray-lightest);
 
   background-color: $primary;
@@ -237,7 +237,7 @@
 //
 
 @mixin u-bg--secondary() {
-  @include u-form--inverse();
+  @include u-form--inverse;
   @include u-font-color($gray-lightest);
 
   background-color: $secondary;
@@ -283,7 +283,7 @@
 //
 
 @mixin u-bg--dark() {
-  @include u-form--inverse();
+  @include u-form--inverse;
   @include u-font-color($gray-lightest);
 
   background-color: $gray-dark;

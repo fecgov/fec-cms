@@ -25,7 +25,7 @@ $filter-button-width: u(4.6rem);
 
 // by default show filters offscreen
 .filters {
-  @include clearfix();
+  @include clearfix;
 
   background: $neutral;
   display: block;
@@ -126,7 +126,7 @@ $filter-button-width: u(4.6rem);
 
 .filters__content {
   @include transition(left .2s ease-in-out);
-  @include u-bg--neutral();
+  @include u-bg--neutral;
 
   position: absolute;
   bottom: 0;
@@ -146,7 +146,7 @@ $filter-button-width: u(4.6rem);
 }
 
 .filters__header {
-  @include clearfix();
+  @include clearfix;
   @include heading(h2);
 
   background-color: $neutral;

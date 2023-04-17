@@ -4,7 +4,7 @@
 //
 
 .overview {
-  @include clearfix();
+  @include clearfix;
 
   padding-bottom: u(2rem);
 }
@@ -32,7 +32,7 @@
   @include heading(h4);
 
   display: inline-block;
-  margin: 0 0 2rem 0;
+  margin: 0 0 2rem;
 }
 
 .top-list {
@@ -82,12 +82,11 @@
 @include media($med) {
   .overview__chart {
     @include span-columns(8);
-    @include omega();
   }
 
   .overview__chart-line {
     @include span-columns(12);
-    @include omega();
+    @include omega;
   }
 
   .overview__feedback {
@@ -119,7 +118,7 @@
 
   .overview__chart-line {
     @include span-columns(12);
-    @include omega();
+    @include omega;
   }
 
   .top-list {

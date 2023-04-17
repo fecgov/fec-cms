@@ -28,7 +28,7 @@
 }
 
 .breadcrumbs__item {
-  @include u-truncate();
+  @include u-truncate;
 
   float: left;
   max-width: u(20rem);

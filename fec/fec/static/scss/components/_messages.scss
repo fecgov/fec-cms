@@ -4,7 +4,7 @@
 //
 
 .message {
-  @include clearfix();
+  @include clearfix;
 
   background-size: u(2rem);
   background-position: u(2rem 2rem);

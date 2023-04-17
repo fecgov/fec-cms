@@ -88,7 +88,7 @@
 }
 
 .post__pre {
-  @include clearfix();
+  @include clearfix;
 
   color: $gray-dark;
   font-family: $sans-serif;

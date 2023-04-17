@@ -133,7 +133,7 @@ input[type="file"] {
 
 [type="checkbox"],
 [type="radio"] {
-  @include u-visually-hidden();
+  @include u-visually-hidden;
 }
 
 [type="checkbox"] + label,

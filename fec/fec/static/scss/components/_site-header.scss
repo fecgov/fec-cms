@@ -56,7 +56,7 @@
 //
 
 .disclaimer {
-  @include clearfix();
+  @include clearfix;
 
   border-bottom: 1px solid $neutral;
   color: $gray-dark;
@@ -365,7 +365,7 @@
 .masthead {
   display: none;
   padding-top: u(2.5rem);
-  @include clearfix();
+  @include clearfix;
 }
 
 .site-header {

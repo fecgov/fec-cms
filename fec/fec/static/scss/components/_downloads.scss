@@ -40,7 +40,7 @@
 }
 
 .download {
-  @include clearfix();
+  @include clearfix;
 
   font-size: u(1.2rem);
   margin-bottom: u(1rem);
@@ -62,7 +62,7 @@
 }
 
 .download__name {
-  @include u-truncate();
+  @include u-truncate;
 
   display: block;
   font-weight: bold;

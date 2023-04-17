@@ -24,10 +24,10 @@
 //
 
 .toggles {
-  @include clearfix();
+  @include clearfix;
 
   input[type="radio"] {
-    @include u-visually-hidden();
+    @include u-visually-hidden;
   }
 
   input:checked {

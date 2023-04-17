@@ -7,7 +7,7 @@
 
 // used to center and group grid items
 .container {
-  @include outer-container();
+  @include outer-container;
 
   padding: u(0 2rem);
 
@@ -18,12 +18,12 @@
 
 // clearfixes a group of divs / wraps grid columns
 .row {
-  @include clearfix();
+  @include clearfix;
 }
 
 // the main content area below heroes
 .main {
-  @include clearfix();
+  @include clearfix;
 
   padding-bottom: u(2rem);
   padding-top: u(2rem);
@@ -42,7 +42,7 @@
 
 // the area below page headers, next to sidebar
 .main__content {
-  @include clearfix();
+  @include clearfix;
 
   position: relative;
 
@@ -52,7 +52,7 @@
 }
 
 .main__content--right {
-  @include clearfix();
+  @include clearfix;
 
   position: relative;
 
@@ -63,13 +63,13 @@
 
 // full-width main content area
 .main__content--full {
-  @include clearfix();
+  @include clearfix;
 
   position: relative;
 }
 
 .main__content--right-full {
-  @include clearfix();
+  @include clearfix;
 
   position: relative;
   width: 100%;
@@ -82,13 +82,13 @@
 
 // adds padding for breaking up sections of body content
 .content__section {
-  @include clearfix();
+  @include clearfix;
 
   padding: u(0 0 2rem 0);
 }
 
 .content__section--extra {
-  @include clearfix();
+  @include clearfix;
 
   padding: u(2rem 0);
 

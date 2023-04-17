@@ -27,13 +27,13 @@
 
 // Controls
 .fc-toolbar {
-  @include clearfix();
+  @include clearfix;
 
   padding: u(1rem);
 }
 
 .calendar__head {
-  @include clearfix();
+  @include clearfix;
 
   border-bottom: 1px solid $neutral;
   padding: u(1rem);
@@ -51,7 +51,7 @@
 }
 
 .fc-view-controls {
-  @include clearfix();
+  @include clearfix;
 
   padding: u(2rem);
   width: 100%;
@@ -437,7 +437,7 @@
 }
 
 .cal-list__event {
-  @include clearfix();
+  @include clearfix;
 
   border-bottom: 1px solid $neutral;
   padding: u(2rem 0);
@@ -477,7 +477,7 @@
 
 .cal-list__time {
   @include span-columns(4 of 8);
-  @include omega();
+  @include omega;
 }
 
 .cal-list__info {
@@ -495,7 +495,7 @@
 }
 
 .cal-list__category-title {
-  @include clearfix();
+  @include clearfix;
 
   display: table;
   border: 1px solid;
@@ -539,7 +539,7 @@
   width: u(22rem);
 
   .fc-header {
-    @include clearfix();
+    @include clearfix;
 
     background: $neutral;
     padding: u(3px .5rem);
@@ -637,7 +637,7 @@
   }
 
   .cal-list__event {
-    @include clearfix();
+    @include clearfix;
 
     padding: u(2rem);
   }

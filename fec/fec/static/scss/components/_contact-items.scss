@@ -15,7 +15,7 @@
 //
 
 .contact-item {
-  @include clearfix();
+  @include clearfix;
 
   display: table;
   margin-bottom: u(4rem);
@@ -37,7 +37,7 @@
     @include span-columns(6);
 
     &:nth-child(even) {
-      @include omega();
+      @include omega;
     }
   }
 }

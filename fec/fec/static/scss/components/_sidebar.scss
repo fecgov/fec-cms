@@ -22,7 +22,7 @@
 //
 
 .sidebar-container {
-  @include clearfix();
+  @include clearfix;
 
   position: relative;
   min-height: 1px;
@@ -71,7 +71,7 @@
 }
 
 .sidebar__content {
-  @include clearfix();
+  @include clearfix;
 
   background-color: $neutral;
   padding: u(2rem);
@@ -90,7 +90,7 @@
 
 .sidebar--primary {
   .sidebar__title {
-    @include u-bg--primary();
+    @include u-bg--primary;
   }
 
   .sidebar__section {
@@ -100,7 +100,7 @@
 
 .sidebar--secondary {
   .sidebar__title {
-    @include u-bg--secondary();
+    @include u-bg--secondary;
   }
 
   .sidebar__section {
@@ -115,8 +115,9 @@
 }
 
 .sidebar--neutral {
-  @include u-bg--neutral();
+  @include u-bg--neutral;
   @include u-font-color($base);
+
   border-top: 4px solid $primary;
 }
 

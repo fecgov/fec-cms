@@ -41,7 +41,7 @@
 @include media($med) {
   // Add padding, show the search bar in line with the page title
   .page-header {
-    @include clearfix();
+    @include clearfix;
 
     display: block;
     padding: u(1rem 2rem);
@@ -75,7 +75,7 @@
 
 @media print {
   .page-header {
-    @include clearfix();
+    @include clearfix;
 
     display: block;
     background: $inverse;

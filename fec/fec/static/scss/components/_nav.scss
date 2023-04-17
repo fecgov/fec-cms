@@ -5,7 +5,7 @@
 
 // The outer nav element
 .site-nav {
-  @include clearfix();
+  @include clearfix;
 
   &.is-open {
     .site-nav__container {
@@ -107,7 +107,7 @@
 
 // li element
 .site-nav__item {
-  @include clearfix();
+  @include clearfix;
 
   border-bottom: 1px solid $inverse;
 
@@ -181,7 +181,7 @@
 // Switches to traditional dropdown menu
 @include media($lg) {
   .site-nav__container {
-    @include clearfix();
+    @include clearfix;
     @include transform(translateX(0));
 
     height: auto;

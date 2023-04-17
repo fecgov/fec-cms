@@ -157,7 +157,7 @@
 //
 
 .combo {
-  @include clearfix();
+  @include clearfix;
 
   .combo__input {
     height: u(3.6rem);

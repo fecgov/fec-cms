@@ -7,7 +7,7 @@
 
 // Base style
 .card {
-  @include clearfix();
+  @include clearfix;
 
   background-color: $neutral;
   border-radius: 4px;
@@ -28,8 +28,8 @@
   @include u-font-color($base);
 
   .card__image__container {
-    @include clearfix();
     /*background-color: $primary;*/
+    @include clearfix;
 
   }
   .card__icon {
@@ -145,7 +145,7 @@
   text-align: left;
 
   .card__image__container {
-    @include clearfix();
+    @include clearfix;
 
     background-color: $primary;
     border-radius: 4px 4px 0 0;
@@ -321,7 +321,7 @@
 }
 
 .card--primary {
-  @include u-bg--primary();
+  @include u-bg--primary;
   @include u-font-color($gray-lightest);
 
   font-weight: bold;
@@ -505,7 +505,7 @@
 }
 
 .card--secondary {
-  @include u-bg--secondary();
+  @include u-bg--secondary;
   @include u-font-color($gray-lightest);
 
   font-weight: bold;
@@ -576,7 +576,7 @@
   }
 
   .card__image__container {
-    @include clearfix();
+    @include clearfix;
 
     display: inline-block;
   }

@@ -2,7 +2,7 @@
 //
 
 .panel__main {
-  @include clearfix();
+  @include clearfix;
 
   left: 0;
   clear: both;
@@ -116,7 +116,7 @@
 // .panel__close  - Closes the panel. Shows up as a back arrow on the left on mobile and an x on the right on desktop
 
 .panel__navigation {
-  @include clearfix();
+  @include clearfix;
 
   border-bottom: 1px solid $gray-lightest;
   padding: u(0 0 1rem 0);

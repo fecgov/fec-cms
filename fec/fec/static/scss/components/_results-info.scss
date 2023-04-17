@@ -4,7 +4,7 @@
 //
 
 .results-info {
-  @include clearfix();
+  @include clearfix;
 
   border-top: 2px solid $primary;
   border-bottom: 2px solid $primary;
@@ -16,13 +16,13 @@
 }
 
 .results-info__left {
-  @include clearfix();
+  @include clearfix;
 
   margin-bottom: u(1rem);
 }
 
 .results-info__right {
-  @include clearfix();
+  @include clearfix;
 }
 
 .results-info__title {

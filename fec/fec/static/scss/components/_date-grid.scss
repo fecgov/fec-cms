@@ -23,7 +23,7 @@
 //
 
 .date-range__grid {
-  @include clearfix();
+  @include clearfix;
 
   font-family: $sans-serif;
   padding: u(2rem 0);

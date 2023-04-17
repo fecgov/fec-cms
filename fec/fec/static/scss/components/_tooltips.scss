@@ -263,7 +263,7 @@
   }
 
   .tooltip__heading {
-    @include clearfix();
+    @include clearfix;
 
     background: $primary;
     color: $inverse;

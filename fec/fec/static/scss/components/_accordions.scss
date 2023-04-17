@@ -67,7 +67,7 @@
 }
 
 .accordion__content {
-  @include clearfix();
+  @include clearfix;
 
   border-bottom: 1px solid $base;
   padding: u(2rem);

@@ -163,7 +163,7 @@
 }
 
 .snapshot__controls {
-  @include clearfix();
+  @include clearfix;
 
   border-width: 2px 0;
   border-style: solid;
@@ -192,7 +192,7 @@
 }
 
 .snapshot__line-controls {
-  @include clearfix();
+  @include clearfix;
 
   border-width: 2px 0;
   border-style: solid;

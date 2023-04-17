@@ -71,7 +71,7 @@
 }
 
 .result__header {
-  @include clearfix();
+  @include clearfix;
 }
 
 .result__left {

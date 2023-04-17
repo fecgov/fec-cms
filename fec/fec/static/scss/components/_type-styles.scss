@@ -22,7 +22,7 @@
 }
 
 .t-ruled {
-  @include clearfix();
+  @include clearfix;
 
   border-bottom: 1px solid $base;
   border-top: 1px solid $base;

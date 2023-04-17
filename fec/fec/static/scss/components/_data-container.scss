@@ -5,7 +5,7 @@
 //
 
 .data-container {
-  @include clearfix();
+  @include clearfix;
 
   position: relative;
   width: 100%;
@@ -16,14 +16,14 @@
 }
 
 .data-container__widgets {
-  @include clearfix();
+  @include clearfix;
 
   border-bottom: 2px solid $primary;
   font-family: $sans-serif;
 }
 
 .data-container__action {
-  @include clearfix();
+  @include clearfix;
 
   float: right;
 }
@@ -46,7 +46,7 @@
 }
 
 .data-container__head {
-  @include clearfix();
+  @include clearfix;
 
   border-bottom: 1px solid $gray;
   padding: u(1rem);
@@ -65,7 +65,7 @@
 }
 
 .data-container__tags {
-  @include clearfix();
+  @include clearfix;
 
   padding: u(1rem);
 }
@@ -79,7 +79,7 @@
 }
 
 .panel__controls {
-  @include clearfix();
+  @include clearfix;
 
   clear: both;
   padding-top: u(.5rem);
