@@ -1,10 +1,11 @@
+@use 'sass:math';
+
 $parent-columns: $grid-columns !default;
 $fg-column: $column;
 $fg-gutter: $gutter;
 $fg-max-columns: $grid-columns;
 $container-display-table: false !default;
 $layout-direction: LTR !default;
-@use 'sass:math';
 
 @function flex-grid($columns, $container-columns: $fg-max-columns) {
   $width: $columns * $fg-column + ($columns - 1) * $fg-gutter;

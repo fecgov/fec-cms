@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 {% load wagtailcore_tags %}
-{% load static %}
+{% load static filters %}
 {% block body_class %}template-{{ self.get_verbose_name | slugify }}{% endblock %}
 
 {% block content %}
@@ -17,22 +17,32 @@
       {% for block in self.contact_items %}
       {{ block }}
       {% endfor %}
-
     </div>
-    <div class="usa-width-two-thirds u-padding--left">
+    <div class="usa-width-two-thirds u-padding--left--small">
       {{ self.info_message }}
+      {% if self.show_contact_app %} {# feature flag for whether we show the Vue contact app… #}
+      <h2 class="heading--main">Contact the FEC</h2>
+      <div id="gov-fec-contact-app" class="loading"><img src="/static/img/loading--primary.gif" alt="animation indicating that the contact app is still loading its components"></div>
+      {% else %} {# …or show the content from Wagtail #}
       <h2>{{ self.services_title }}</h2>
-      {% for block in self.services %}
+        {% for block in self.services %}
       <div class="block-{{ block.block_type }}">
-        {% if block.block_type == 'paragraph' %}
+          {% if block.block_type == 'paragraph' %}
         <div class="rich-text">{{ block }}</div>
-        {% else %}
+          {% else %}
         {{ block }}
-        {% endif %}
+          {% endif %}
       </div>
-      {% endfor %}
+        {% endfor %}
+      {% endif %}{# end feature flag #}
     </div>
   </div>
 </div>
 </article>
+{% endblock %}
+
+{% block extra_js %}
+{# Override this in templates to add extra javascript #}
+<script type="text/javascript" src="{% asset_for_js 'contact-app.js' %}"></script>
+<script src="https://www.google.com/recaptcha/api.js?render=explicit" async defer></script>
 {% endblock %}

@@ -1,0 +1,734 @@
+#vue-component {
+  width: 100%;
+  max-width: 1024px;
+}
+  
+// Vue strips the attributes from its DOM element
+#gov-fec-contact-app {
+  font-family: $sans-serif;
+  font-size: 1.6rem;
+  overflow: hidden;
+  position: relative;
+
+  &.loading {
+    padding-top: 50px;
+    text-align: center;
+    width: 100%;
+  }
+
+  @include media($med) {
+    min-height: calc(100% - 5rem);
+  }
+
+  .frames {
+    background-color: $inverse;
+    display: block;
+    overflow: hidden;
+    position: relative;
+    width: 100%;
+    transition: height ease-in-out .75s;
+  }
+  .frame {
+    display: block;
+    float: left;
+    left: 100%;
+    pointer-events: none;
+    position: absolute;
+    top: 0;
+    transition: left .25s, height 1s ease-in-out;
+    width: 100% !important;
+
+    @include media($med) {
+      padding-left: 0;
+    }
+
+    &.previous {
+      left: -100%;
+      transition: left .25s;
+      * {
+        pointer-events: none;
+        user-select: none;
+      }
+    }
+    &.next {
+      * {
+        pointer-events: none;
+        user-select: none;
+      }
+    }
+    &.current {
+      display: block; // (only need to define this because .next.off-screen will jump to transition complete before animation can start)
+      left: 0;
+      pointer-events: all;
+      transition: left .5s;
+    }
+    &.intro {
+      text-align: center;
+
+      .grid__item {
+        &:first-child {
+          margin-bottom: 2rem;
+
+          @include media($med) {
+            margin-bottom: 0;
+          }
+        }
+        .card {
+          cursor: pointer;
+          border: 2px solid transparent;
+          transition: border-color .5s;
+
+          &:hover {
+            border-color: $gray;
+            transition: border-color .5s;
+          }
+
+          .card__image__container {
+            height: 80px;
+            width: 80px;
+
+            .card__icon {
+              background-size: 100%;
+              height: 100%;
+              width: 100%;
+            }
+          }
+        }
+      }
+      @include media($med) {
+        // padding-right: 2em;
+      }
+
+      div {
+        margin: 0 auto;
+
+        @include media($med) {
+          max-width: 80%;
+        }
+      }
+      .button--cta {
+        margin-top: 1.2rem; // a little extra space above the button
+      }
+    }
+    &.off-screen * {
+      display: none;
+    }
+  } // end .frame
+  address {
+    font-style: normal;
+    line-height: 1.25em;
+  }
+  label {
+    clear: both;
+    line-height: 1.25;
+
+    span { // a way to have non-bold inside the bold labels
+      font-weight: normal;
+    }
+  }
+  button {
+    &.is-disabled {
+      pointer-events: none;
+      cursor: default;
+    }
+    &.button--back.button--alt {
+      background-image: url("data:image/svg+xml;charset=utf8, %3Csvg%20%20fill%3D%27%23212121%27%20width%3D%2212%22%20height%3D%2210%22%20viewBox%3D%220%200%2012%2010%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Cpath%20d%3D%22M.418%203.809L6.652.124a.851.851%200%200%201%201.294.727v7.382a.852.852%200%200%201-1.284.733L.418%205.276a.852.852%200%200%201%200-1.467z%22%2F%3E%3C%2Fsvg%3E");
+    }
+    &.tooltip__trigger {
+      margin: .5em 0 .5rem 1rem;
+      position: relative;
+    }
+    &.tooltip__trigger + p {
+      float: left;
+      display: inline-block;
+      width: auto;
+    }
+    &.hidden {
+      display: none !important;
+    }
+    &.button--close--base {
+      width: 2.5rem;
+      height: 2.5rem;
+      background-size: 100%;
+      background-position: right 4px;
+      padding: 0;
+    }
+  }
+
+  .fields-wrapper {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-between;
+
+    .field-wrapper {
+
+      &.col-3, &.col-5, &.col-8, &.col-9, &.col-12 {
+        width: 100%;
+      }
+      @include media($med) {
+        &.col-3 {
+          margin-right: .5rem;
+          width: calc(8.33% * 3 - .5rem);
+
+          &:last-child {
+            margin-right: 0;
+          }
+        }
+        &.col-5 {
+          margin-right: .5rem;
+          width: calc(8.33% * 5 - .5rem);
+
+          &:last-child {
+            margin-right: 0;
+          }
+        }
+        &.col-8 {
+          width: calc(8.33% * 8 - .5rem);
+          margin-right: .5rem;
+
+          &:last-child {
+            margin-right: 0;
+          }
+        }
+        &.col-9 {
+          width: calc(8.33% * 9 - .5rem);
+          margin-right: .5rem;
+
+          &:last-child {
+            margin-right: 0;
+          }
+        }
+      }
+    }
+    
+
+
+    .col-l {
+      margin-right: .5rem;
+      width: calc(55% - .5rem);
+    }
+    .col-r {
+      margin-left: .5rem;
+      width: calc(45% - .5rem);
+    }
+    .col-rl {
+      width: calc(22.5% - .5rem);
+      margin-right: .5rem;
+    }
+    .col-rr {
+      width: calc(22.5% - .5rem);
+    }
+
+    input#u_street1 {
+      order: 3;
+    }
+    label[for="u_street1"] {
+      order: 1;
+    }
+    input#u_street2 {
+      order: 4;
+    }
+    label[for="u_street2"] {
+      order: 2;
+    }
+
+    input#u_city {
+      order: 8;
+    }
+    label[for="u_city"] {
+      order: 5;
+    }
+    select#u_state {
+      order: 9;
+    }
+    label[for="u_state"] {
+      order: 6;
+    }
+    input#u_zip {
+      order: 10;
+    }
+    label[for="u_zip"] {
+      order: 7;
+    }
+
+  }
+
+  .message {
+    padding: 2rem;
+
+    h2.message__title {
+      margin-left: 3rem;
+
+      @include media($med) {
+        margin-left: 0;
+      }
+    }
+
+  }
+
+  @include media($med) {
+    .message {
+      margin-top: 10rem;
+      padding: 5rem 2rem 2rem 2rem;
+    }
+  }
+
+  .question-type-block {
+    position: relative;
+    display: inline-block;
+    float: left;
+    clear: both;
+  }
+
+  [type=radio]+label {
+    background-color: transparent;
+    border-color: $inverse;
+    float: left;
+    transition: border-color .5s;
+  }
+  [type=radio]+label:hover {
+    background-color: transparent;
+    border-color: #aeb0b5;
+    transition: border-color .5s;
+  }
+  [type=radio]:checked+label {
+    background-color: transparent;
+    border: 1px solid #aeb0b5;
+    transition: border-color .5s;
+  }
+  [type=number] {
+    display: inline-block;
+    float: left;
+    margin: 0 0 .5rem .25rem;
+    width: 15rem;
+  }
+  [type=number]+label {
+    display: inline-block;
+    padding: .4rem .8rem .4rem 1rem;
+    position: relative;
+  }
+  [type=number].indented {
+    margin-left: 3.5rem;
+
+    &.search__example {
+      clear: none;
+    }
+  }
+
+  span.clear {
+    clear: both;
+    display: block;
+    height: 0px;
+    margin-bottom: 1rem;
+    width: 100%;
+  }
+
+  h4 {
+    float: left;
+    margin-top: .5rem;
+    padding-right: .5rem;
+
+    &.indented {
+      font-size: 1.4rem;
+      max-width: 70%;
+      padding-left: 3.5rem;
+      padding-top: .5rem;
+    }
+    &.subhead {
+      text-transform: uppercase;
+    }
+
+    &.search_example {
+      margin-bottom: 0;
+    }
+  }
+  input.label-headline {
+    float: left;
+    clear: both;
+  }
+  label {
+    &.indented {
+      float: left;
+
+      &.search__example {
+        clear: none;
+        padding-top: 1rem;
+      }
+    }
+    &.label-headline {
+      float: left;
+      font-size: 1.4rem;
+      font-weight: bold;
+      letter-spacing: -0.3px;
+      margin-top: .2rem;
+      text-transform: uppercase;
+    }
+  }
+  p {
+    font-size: 1.4rem;
+    line-height: 1.25em;
+    margin-bottom: 1.2rem;
+    width: 100%;
+
+    &.indented {
+      clear: both;
+      float: left;
+      padding-left: 3.5rem;
+      max-width: 70%;
+
+      @include media($med) {
+        max-width: none;
+      }
+    }
+    &.summary {
+      clear: both;
+      display: block;
+      font-size: 1.4rem;
+      font-weight: 700;
+      letter-spacing: -0.3px;
+      line-height: 1.8em;
+      margin-top: .2rem;
+      text-transform: uppercase;
+
+      
+      span {
+        display: block;
+        font-size: 2.4rem;
+        letter-spacing: -0.51px;
+      }
+      &.total-fine span {
+        color: $error;
+      }
+    }
+  }
+  .contact-item {
+    display: block;
+    margin-bottom: 0;
+    padding-top: .5em;
+    padding-left: 2em;
+
+    @include media($med) { 
+      padding-left: 9.5rem;
+    }
+
+    &:before {
+      height: 1.5em;
+      margin-left: -2em;
+      width: 1.5em;
+      position: absolute;
+    }
+  }
+  .nonbreaking {
+    display: inline-block;
+  }
+  .search__example {
+    clear: both;
+    float: left;
+    margin-top: 0;
+  }
+  span.t-note.indented {
+    margin-left: 3.5rem;
+  }
+
+  .team-contact-form > *:not(.outdent) {
+    margin-left: 5rem;
+  }
+
+
+  input, select, textarea {
+    margin-bottom: 26.25px; // label height
+    width: 100%;
+
+    & + label.field__message--error {
+      display: none;
+    }
+    
+    &[aria-invalid="true"] {
+      border-color: $error !important;
+      margin-bottom: 0;
+
+      & + label.field__message--error {
+        display: block;
+      }
+    }
+
+  }
+  textarea {
+    height: 90px;
+  }
+  // We can have an error-group after <input>, etc. but also after <table>
+  label.field__message--error-group {
+    display: none;
+  }
+  *[aria-invalid="true"] {
+    margin-bottom: 0;
+    & ~ label.field__message--error-group {
+      display: block;
+    }
+  }
+
+
+  .field__message--error, .field__message--error-group {
+    // borrowed from .filter__message
+    font-family: $sans-serif;
+    font-size: u(1.4rem);
+    padding-bottom: u(1rem);
+    clear: both;
+  
+    // borrowed from .filter__message--error
+    font-size: u(1.3rem);
+    color: $error;
+  }
+  .field__message--error-group {
+    margin-top: -2rem;
+  }
+
+  .recaptcha-holder {
+    height: 78px;
+    margin-bottom: 2rem;
+    padding-left: 3rem;
+    position: relative;
+
+    @include media($med) {
+      padding-left: 9.5rem;
+    }
+
+    div:first-child:before {
+      content: "::TESTING:: Every submission will fail";
+      color: red;
+      display: block;
+      font-size: 1.5rem;
+      font-weight: bold;
+      left: 0;
+      line-height: 1em;
+      margin-top: -2rem;
+      padding-top: 0.75rem;
+      position: absolute;
+      top: 0;
+
+      @include media($med) {
+        margin-top: 0;
+        width: 10rem;
+      }
+    }
+  }
+  .publications-order-form {
+    margin-bottom: 26.25px; // label height
+    width: 100%;
+
+    col {
+      width: 11rem;
+
+      @include media($med) {
+        width: 14rem;
+      }
+
+      &:first-child {
+        width: auto;
+      }
+      &:last-child {
+        width: 2.5rem;
+      }
+    }
+
+    th {
+      font-size: 1.5rem;
+      line-height: 1.1em;
+    }
+
+    td {
+      padding-bottom: .25rem;
+    }
+
+    select, [type=number] {
+      margin-bottom: 0;
+      width: calc(100% - 0.5rem);
+    }
+  }
+
+  .publications-order-summary {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    line-height: 1.25em;
+    margin: 2rem 0;
+
+    div {
+      padding: .5rem;
+
+      &:not(:last-child):not(:nth-last-child(2)) {
+        border-bottom: thin solid lightgrey;
+      }
+
+      &:nth-child(odd) {
+        width: 75%;
+      }
+      &:nth-child(even) {
+        width: 25%;
+      }
+      
+      @include media($med) {
+        &:nth-child(odd) {
+          width: 80%;
+        }
+        &:nth-child(even) {
+          width: 20%;
+        }
+      }
+    }
+  }
+
+  @keyframes loadingAnimation {
+    0% {
+      // swell
+      left: 1rem;
+      height: 0rem;
+      top: 1rem;
+      width: 0rem;
+      z-index: 1;
+    }
+    16% {
+      // done swelling, start slide
+      left: 0rem;
+      height: 2rem;
+      top: 0rem;
+      width: 2rem;
+      z-index: 5;
+    }
+    50% {
+      // finish slide, start to shrink
+      height: 2rem;
+      left: 6rem;
+      top: 0rem;
+      width: 2rem;
+      z-index: 1;
+    }
+    66% {
+      // done shrinking, start the return
+      height: 0rem;
+      left: 7rem;
+      top: 1rem;
+      width: 0rem;
+      z-index: 1;
+    }
+    100% {
+      // back to 0
+      height: 0rem;
+      left: 1rem;
+      top: 1rem;
+      width: 0rem;
+      z-index: 1;
+    }
+  }
+
+  .loading-animation {
+    display: inline-block;
+    height: 2rem;
+    margin-top: .25rem;
+    position: relative;
+    width: 8rem;
+
+    .icon {
+      content: "";
+      border-radius: 50%;
+      display: block;
+      position: absolute;
+      top: 1rem;
+      z-index: 0;
+
+      &:nth-child(1) {
+        background: #112e51;
+      }
+      &:nth-child(2) {
+        background: #35bdbb;
+        animation-delay: -.5s;
+      }
+      &:nth-child(3) {
+        background: #112e51;
+        animation-delay: -1s;
+      }
+      &:nth-child(4) {
+        background: #35bdbb;
+        animation-delay: -1.5s;
+      }
+      animation-name: loadingAnimation;
+      animation-duration: 2s;
+      animation-iteration-count: infinite;
+    }
+  }
+}
+
+// Style overrides specifically for container queries
+$minWidthS: '430px';
+$minWidthM: '675px';
+$minWidthL: '700px';
+$minWidthXL: '860px';
+#gov-fec-contact-app.cq-container {
+  container: contactapp / inline-size;
+
+  .col-3, &.col-5, &.col-8, &.col-9, &.col-12 {
+    width: 100cqw;
+  }
+}
+@container contactapp (min-width: $minWidthS) {
+  #gov-fec-contact-app.cq-container {
+    .grid.grid--2-wide {
+      max-width: 80cqw;
+    }
+    // .contact-item {
+    //   padding-left: 3.5rem;
+    // }
+    .recaptcha-holder {
+      padding-left: 3rem;
+    }
+  }
+}
+@container contactapp (min-width: $minWidthM) {
+  #gov-fec-contact-app.cq-container {
+    &.col-3 {
+      width: calc(8.33% * 3 - .5rem);
+
+      &:not(:last-child) {
+        margin-right: .5rem;
+      }
+    }
+    &.col-5 {
+      width: calc(8.33% * 5 - .5rem);
+
+      &:not(:last-child) {
+        margin-right: .5rem;
+      }
+    }
+    &.col-8 {
+      width: calc(8.33% * 8 - .5rem);
+
+      &:not(:last-child) {
+        margin-right: .5rem;
+      }
+    }
+    &.col-9 {
+      width: calc(8.33% * 9 - .5rem);
+
+      &:not(:last-child) {
+        margin-right: .5rem;
+      }
+    }
+    .contact-item {
+      padding-left: 9.5rem;
+    }
+    .recaptcha-holder {
+      padding-left: 9.5rem;
+    }
+  }
+}
+@container contactapp (min-width: $minWidthL) {
+  #gov-fec-contact-app.cq-container {
+    //
+  }
+}
+@container contactapp (min-width: $minWidthXL) {
+  #gov-fec-contact-app.cq-container {
+    //
+  }
+}

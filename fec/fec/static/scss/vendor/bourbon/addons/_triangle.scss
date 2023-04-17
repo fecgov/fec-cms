@@ -1,4 +1,5 @@
 @use 'sass:math';
+
 @mixin triangle($size, $color, $direction) {
   $width: nth($size, 1);
   $height: nth($size, length($size));
