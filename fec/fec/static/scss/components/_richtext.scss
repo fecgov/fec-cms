@@ -8,7 +8,7 @@
 .block-html {
   ul {
     @extend .list--bulleted;
-   }
+  }
 
   ol {
     @extend .list--numbered;
@@ -53,7 +53,7 @@
 .block-paragraph {
   h2, h3, h4, ol, li, blockquote, hr {
     max-width: u(80rem)
- }
+  }
 }
 
 @media print {

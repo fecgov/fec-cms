@@ -101,8 +101,8 @@
     overflow: hidden;
 
     &:first-child {
-    height: auto;
-    margin-bottom: u(2rem);
+      height: auto;
+      margin-bottom: u(2rem);
     }
   }
   .search-controls__cycle {
@@ -134,14 +134,14 @@
 //For home-page embedded election map form fields
 .election-search-home {
   .search-controls__zip {
-  @include span-columns(6);
+    @include span-columns(6);
 
-  margin-bottom: u(1rem);
+    margin-bottom: u(1rem);
 
-  input {
-    width: 100%;
+    input {
+      width: 100%;
+    }
   }
-}
 
 }
 
@@ -149,15 +149,15 @@
   .office-select {
     @include span-columns(10);
     select {
-     width: 100%;
-   }
+      width: 100%;
+    }
   }
   .cycle-select {
     @include span-columns(6);
   }
 }
 
- //for keyword-options modals on AO, MUR, Statues searches
+//for keyword-options modals on AO, MUR, Statues searches
 .keyword-modal{
   .modal__tips, .modal__form {
     display: table-row;
@@ -168,8 +168,8 @@
   }
 
   .search-controls__or--vertical {
-  width: 100%;
-  display: inline-grid;
+    width: 100%;
+    display: inline-grid;
   }
 }
 
@@ -191,8 +191,8 @@
     @include span-columns(3.5 of 5.5);
 
     .button--search {
-    background-size: u(1.5rem);
-    background-position: 45%;
+      background-size: u(1.5rem);
+      background-position: 45%;
     }
   }
 
@@ -311,7 +311,7 @@
     }
   }
 
-    //for keyword-options modals on AO, MUR, Statues searches
+  //for keyword-options modals on AO, MUR, Statues searches
   .keyword-modal{
     .modal__tips, .modal__form {
       display: table-cell;
@@ -370,7 +370,7 @@
     }
 
     .search-controls__cycle {
-    margin: u(.5rem 2.5rem);
+      margin: u(.5rem 2.5rem);
     }
 
     .search-controls__either:first-child {
@@ -403,7 +403,7 @@
 
     .search-controls__either {
       @include span-columns(5.5);
-      }
+    }
 
     .search-controls__or--vertical {
       margin: u(4rem 0 4rem 0);

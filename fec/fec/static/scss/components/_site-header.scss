@@ -85,7 +85,7 @@
 
 // US Bar 2.0 //
 .usa-banner {
- background-color: $gray-light;
+  background-color: $gray-light;
 }
 
 .usa-banner-content {
@@ -132,13 +132,13 @@
 .usa-banner-header {
 
   &.accordion__button {
-  background-image: none;
-  border: none !important;
-  padding: u(.75rem 1rem);
-
-   &[aria-expanded="true"] {
     background-image: none;
-   }
+    border: none !important;
+    padding: u(.75rem 1rem);
+
+    &[aria-expanded="true"] {
+      background-image: none;
+    }
   }
 }
 
@@ -182,7 +182,7 @@
 
 .usa-banner-header[aria-expanded="false"] {
 
-    .usa-banner-button::after {
+  .usa-banner-button::after {
     background-image: url("../img/angle-arrow-down-primary.png");
     background-image: url("../img/angle-arrow-down-primary.svg");
     background-size: 100%;
@@ -197,9 +197,9 @@
 
 }
 
-    .usa-banner-header[aria-expanded="true"] {
+.usa-banner-header[aria-expanded="true"] {
 
-    .usa-banner-button::after {
+  .usa-banner-button::after {
     background-image: url("../img/angle-arrow-up-primary.png");
     background-image: url("../img/angle-arrow-up-primary.svg");
     background-size: 100%;

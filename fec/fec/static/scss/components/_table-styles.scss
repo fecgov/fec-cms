@@ -226,28 +226,28 @@ h3 + .simple-table {
     text-align: left;
   }
 
-    th {
-      font-weight: 600;
-      padding: u(1rem);
-      border-bottom: 1px solid $primary;
+  th {
+    font-weight: 600;
+    padding: u(1rem);
+    border-bottom: 1px solid $primary;
 
-      .simple-table-cms__header-subtext {
-        font-weight: normal;
-      }
+    .simple-table-cms__header-subtext {
+      font-weight: normal;
     }
+  }
 
   td {
     padding: u(1rem);
     vertical-align: top;
     border: 1px solid $gray-light;
 
-      &:first-child {
-        border-left: none;
-      }
+    &:first-child {
+      border-left: none;
+    }
 
-      &:last-child {
-        border-right: none;
-      }
+    &:last-child {
+      border-right: none;
+    }
   }
 
   tr {
@@ -267,17 +267,17 @@ h3 + .simple-table {
   }
 
   td {
-   .th_append {
-     display: none !important;
-   }
+    .th_append {
+      display: none !important;
+    }
   }
 
 
   tr:first-child {
-  border-top: 2.3px solid $primary;
-  border-bottom: 2.3px solid $primary;
-  font-weight: 600;
-  text-align: left;
+    border-top: 2.3px solid $primary;
+    border-bottom: 2.3px solid $primary;
+    font-weight: 600;
+    text-align: left;
   }
 
   th {
@@ -305,11 +305,11 @@ h3 + .simple-table {
         border-right: 1px solid $gray-light !important;
       }
       a {
-      border-bottom: 1px dotted $gray-dark;
+        border-bottom: 1px dotted $gray-dark;
       }
       span {
-       line-height: u(1.5rem);
-       font-weight: bold;
+        line-height: u(1.5rem);
+        font-weight: bold;
       }
     }
   }
@@ -319,15 +319,15 @@ h3 + .simple-table {
 
   /* as a necessity, we depart from mobile-first(min-width only MQs) here for these tables only */
   @media only screen and (max-width: 650px),
-  (min-device-width: 650px) and (max-device-width: 1024px)  {
+    (min-device-width: 650px) and (max-device-width: 1024px)  {
     /* Force table to not be like tables anymore */
-     table,  thead,  tbody,  th,  td,  tr {
+    table,  thead,  tbody,  th,  td,  tr {
       display: block;
 
     }
 
     /* Hide table headers (but not display: none;, for accessibility) */
-     thead tr {
+    thead tr {
       position: absolute;
       top: -9999px;
       left: -9999px;
@@ -335,10 +335,10 @@ h3 + .simple-table {
 
     tr {
       border: 1px solid $gray;
-       padding-top: 2px;
+      padding-top: 2px;
 
       &.row_display {
-      display: block !important;
+        display: block !important;
       }
       &.footnote_row {
         display: none !important;
@@ -352,7 +352,7 @@ h3 + .simple-table {
       }
     }
 
-     td {
+    td {
       /* Behave  like a "row" */
       border: none;
       border-bottom: 1px solid $gray-light !important;
@@ -371,14 +371,14 @@ h3 + .simple-table {
     }
 
 
-     tr:nth-child(even) td {
+    tr:nth-child(even) td {
       border-bottom: 1px solid #aaa
-      }
+    }
 
     .ftnt_append {
-    display: block !important;
-    padding: u(0 3rem);
-    font-weight: normal;
+      display: block !important;
+      padding: u(0 3rem);
+      font-weight: normal;
       b {
         margin-left: u(-1.5rem);
         padding-right: u(.1rem);
@@ -410,14 +410,14 @@ h3 + .simple-table {
   margin-top: u(2rem);
 
   ul {
-  list-style: none;
-  padding-left: u(2rem);
-  max-width: u(80rem);
-  width: 100%;
+    list-style: none;
+    padding-left: u(2rem);
+    max-width: u(80rem);
+    width: 100%;
   }
   li {
-  text-indent: u(-2rem);
-  list-style-type: none;
+    text-indent: u(-2rem);
+    list-style-type: none;
   }
 }
 
@@ -451,8 +451,8 @@ h3 + .simple-table {
       }
 
       .simple-table__cell:nth-child(2) {
-      /* $amount cell $ */
-      font-weight: normal;
+        /* $amount cell $ */
+        font-weight: normal;
       }
 
       .t-right-aligned {
@@ -701,7 +701,7 @@ h3 + .simple-table {
 
 //for home barchart-full width on mobile
 .breakdowns-home {
-   width: 100%;
+  width: 100%;
 }
 
 //For data summary tables
@@ -728,12 +728,12 @@ table[data-summary]  {
   margin: u(1rem) 0;
 
   .tableTitle {
-   margin-bottom: 0;
+    margin-bottom: 0;
   }
 
   td.brdr {
-  position: relative;
-  border-right: 1px solid transparent;
+    position: relative;
+    border-right: 1px solid transparent;
   }
 
   thead td {
@@ -753,6 +753,6 @@ table[data-summary]  {
   }
 
   tr.column-headers td:nth-child(3) strong {
-  margin-left: u(2.5rem)
+    margin-left: u(2.5rem)
   }
 }

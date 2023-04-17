@@ -223,7 +223,7 @@
       @include u-icon-circle($direction-sign, $primary, $inverse, 4.5rem);
 
       background-size: u(4rem);
-      }
+    }
   }
 
 }
@@ -317,7 +317,7 @@
       @include u-icon-circle($election, $primary, $inverse, 4.5rem);
 
       background-size: 40%;
-      }
+    }
   }
 }
 
@@ -337,7 +337,7 @@
       @include u-icon-circle($example-document, $primary, $inverse, 4.5rem);
 
       background-size: 40%;
-      }
+    }
   }
 }
 
@@ -357,7 +357,7 @@
       @include u-icon-circle($financial-document, $primary, $inverse, 4.5rem);
 
       background-size: 40%;
-      }
+    }
   }
 }
 

@@ -702,15 +702,15 @@ $info-circle: 'data:image/svg+xml;charset=utf8, %3Csvg%20xmlns%3D%22http%3A%2F%2
     -ms-flex-wrap: wrap;
     flex-wrap: wrap;
 
-      a {
-        width: 9rem;
-        padding: 1rem;
-        border: 1px solid $gray-light;
-        text-align: center;
+    a {
+      width: 9rem;
+      padding: 1rem;
+      border: 1px solid $gray-light;
+      text-align: center;
 
-          &:hover {
-            background: $gray-lightest;
-          }
+      &:hover {
+        background: $gray-lightest;
       }
+    }
   }
 }

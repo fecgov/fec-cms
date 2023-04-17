@@ -117,10 +117,10 @@
 }
 
 @include media($med) {
-.icon-heading--data-flag-circle--secondary::before, .icon-heading--data-flag-circle--primary::before{
-  margin-right: u(1rem);
-  margin-left: u(.2rem);
- }
+  .icon-heading--data-flag-circle--secondary::before, .icon-heading--data-flag-circle--primary::before{
+    margin-right: u(1rem);
+    margin-left: u(.2rem);
+  }
 }
 
 // scss-lint:disable ImportantRule
@@ -197,18 +197,18 @@
     font-family: serif;
     font-size: u(2.4rem);
 
-      a {
-        border-bottom: 1px dotted $inverse !important;
-      }
-
-      &::before {
-        height: u(5rem) !important;
-        width: u(5rem) !important;
-        content: ''!important;
-        margin-right: u(1.5rem);
-      }
-
+    a {
+      border-bottom: 1px dotted $inverse !important;
     }
+
+    &::before {
+      height: u(5rem) !important;
+      width: u(5rem) !important;
+      content: ''!important;
+      margin-right: u(1.5rem);
+    }
+
+  }
 
   .mega__page-link {
     padding-left: u(2rem);

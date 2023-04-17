@@ -607,7 +607,7 @@
   width: 100%;
   border-bottom: none;
 
-   &.button--close {
+  &.button--close {
     @include u-icon-bg($minus-circle, $primary);
   }
 }

@@ -5,12 +5,12 @@
 //
 
 @include media($med) {
-    .callout-holder .grid__item {
-        width: 100%; // We want them full-width until we get to $lg
-    }
+  .callout-holder .grid__item {
+    width: 100%; // We want them full-width until we get to $lg
+  }
 }
 @include media($lg) {
-    .callout-holder .grid__item {
-        width: 48.8212%; // borrowed from the grid__item definition in the framework
-    }
+  .callout-holder .grid__item {
+    width: 48.8212%; // borrowed from the grid__item definition in the framework
+  }
 }

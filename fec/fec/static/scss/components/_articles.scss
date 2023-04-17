@@ -22,15 +22,15 @@
   }
 
   .block-paragraph + .block-table {
-     margin-top: u(-4rem);
-    }
+    margin-top: u(-4rem);
+  }
 
 }
-  .block-table {
-    table {
-      @extend .simple-table-cms;
-    }
+.block-table {
+  table {
+    @extend .simple-table-cms;
   }
+}
 
 
 

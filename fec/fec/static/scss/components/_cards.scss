@@ -581,8 +581,8 @@
     display: inline-block;
   }
   .card__icon {
-      height: 5.8rem;
-      width: 5.8rem;
+    height: 5.8rem;
+    width: 5.8rem;
 
     &.i-graph-horizontal-ordered {
       @include u-icon-bg($graph-horizontal-ordered, $inverse);

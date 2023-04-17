@@ -104,8 +104,8 @@
       min-width: u(13.5rem);
     }
     label.toggle {
-        float: none;
-      }
+      float: none;
+    }
     @include media($med) {
       .button-first {
         border-radius: 4px 4px 0 0 !important;
@@ -116,7 +116,7 @@
 
     }
     @include media($lg) {
-     label.toggle {
+      label.toggle {
         float: left;
       }
       .button-first {

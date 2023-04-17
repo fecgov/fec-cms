@@ -23,34 +23,34 @@ $fontWeightBold: 700;
     box-sizing: border-box;
   }
 
-// background-color: $colorBgLight;
-// border-radius: 4px;
-// box-shadow: 0 0 0 2px $colorTextOnLight inset;
-// color: $colorTextOnLight;
+  // background-color: $colorBgLight;
+  // border-radius: 4px;
+  // box-shadow: 0 0 0 2px $colorTextOnLight inset;
+  // color: $colorTextOnLight;
   font-family: fontFamilySerif; // TODO - complete it
   font-feature-settings: 'kern', 'liga', 'pnum';
   font-size: $fontSizeBase;
-// margin: 0 0 ($fontSizeBase * 2);
-// padding: ($fontSizeBase * 2);
+  // margin: 0 0 ($fontSizeBase * 2);
+  // padding: ($fontSizeBase * 2);
 
-    .js-parties-holder {
-      grid-template-columns: 4em auto 25%;
-      display: grid;
+  .js-parties-holder {
+    grid-template-columns: 4em auto 25%;
+    display: grid;
 
-      .js-meter-row {
-        display: contents;
-      }
-      .js.party.title {
-        padding-top: 3px;
-      }
-      .js-party-value {
-        padding: 0 1em 3px 0;
-      }
-
-      div, label {
-        border-bottom: solid 1px $colorBorderBottom;
-      }
+    .js-meter-row {
+      display: contents;
     }
+    .js.party.title {
+      padding-top: 3px;
+    }
+    .js-party-value {
+      padding: 0 1em 3px 0;
+    }
+
+    div, label {
+      border-bottom: solid 1px $colorBorderBottom;
+    }
+  }
 
   .total-wrapper {
     display: flexbox;
