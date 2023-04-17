@@ -40,7 +40,7 @@ boto3==1.7.21
 cg-django-uaa==2.1.4
 
 # Testing
-coverage==5.5
+coverage==7.0.3
 pytest==6.2.2
 Faker==0.8.6
 pytest-django==3.10.0
