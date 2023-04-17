@@ -1445,6 +1445,7 @@ new Vue({
   mounted: function() {
     // Add the transition listeners so frames disappear while out of sight
     this.startWatchingTransitions();
+    window.addEventListener('beforeunload', this.handleBeforeUnload, { capture: true });
   },
   computed: {
     recaptchaShow: function() {
@@ -1471,6 +1472,28 @@ new Vue({
     handleTestingChange(val) {
       this.TESTSHOULDFAIL = val;
     },
+    /**
+     * Called on the browser's back button.
+     * If we're showing the intro, nothing happens;
+     * otherwise will prompt the user that they will lose changes.
+     * OK: brower will go to previous page.
+     * Cancel: the app will do its own 'back' functionality
+     * @param {BeforeUnloadEvent} e
+     */
+    handleBeforeUnload: function(e) {
+      if (this.currentFrameNum && this.currentFrameNum > 0) {
+        e.returnValue = 'Using the browser back button will reset this form';
+        this.goToFrame('back');
+
+      } else {
+        window.removeEventListener('beforeunload', this.handleBeforeUnload, { capture: true });
+      }
+    },
+    /**
+     * 
+     * @param {string} buttonType 
+     * @param {*} e 
+     */
     handleButtonClick: function(buttonType, e) {
       e.preventDefault();
       if (buttonType == 'start-know-who') this.goToFrame('teams');
