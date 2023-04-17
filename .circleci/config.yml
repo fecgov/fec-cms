@@ -47,7 +47,6 @@ jobs:
             sudo rm -rf .env
             python3 -m venv .env
             . .env/bin/activate
-            pip install -U pip setuptools wheel codecov
             pip install -r requirements.txt
 
       - run:
@@ -86,10 +85,17 @@ jobs:
             pytest
 
       - run:
-          name: Perform post-test work
+          name: Upload coverage report to codecov
           command: |
             . .env/bin/activate
-            codecov
+            curl https://keybase.io/codecovsecurity/pgp_keys.asc | gpg --no-default-keyring --keyring trustedkeys.gpg --import
+            curl -Os https://uploader.codecov.io/latest/linux/codecov
+            curl -Os https://uploader.codecov.io/latest/linux/codecov.SHA256SUM
+            curl -Os https://uploader.codecov.io/latest/linux/codecov.SHA256SUM.sig
+            gpgv codecov.SHA256SUM.sig codecov.SHA256SUM
+            shasum -a 256 -c codecov.SHA256SUM
+            chmod +x codecov
+            ./codecov -t ${CODECOV_TOKEN} -v
             cd fec; DJANGO_SETTINGS_MODULE=fec.settings.production python manage.py collectstatic --noinput -v 0
 
       - store_artifacts:
