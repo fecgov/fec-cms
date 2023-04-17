@@ -28,9 +28,9 @@
   @include u-font-color($base);
 
   .card__image__container {
-    /*background-color: $primary;*/
     @include clearfix;
 
+    /* background-color: $primary; */
   }
   .card__icon {
     &.i-election {

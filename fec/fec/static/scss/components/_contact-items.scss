@@ -94,8 +94,8 @@
 .contact-item--question-bubble {
   &::before {
     @include u-icon-circle($question-bubble, $primary, $inverse, 3.4rem);
-    background-size:75% !important;
 
+    background-size: 75% !important;
   }
 }
 

@@ -55,8 +55,8 @@
   }
 
 
-    border-color: $error !important; 
   input.invalid_border, select.invalid_border, textarea.invalid_border, checkbox.invalid_border, label.invalid_border { // stylelint-disable-line selector-type-no-unknown -- todo: checkbox is not a selector
+    border-color: $error !important;
   }
 
 
