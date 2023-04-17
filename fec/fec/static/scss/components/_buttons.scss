@@ -306,7 +306,7 @@
     background-size: 10px !important;
   }
 
-  &:hover:not(.is-disabled):not(.is-active) {
+  &:hover:not(.is-disabled, .is-active) {
     background-color: $gray;
     border-color: $gray-dark;
     color: $base;
