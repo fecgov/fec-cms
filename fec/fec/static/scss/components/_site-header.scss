@@ -530,24 +530,24 @@
   }
 }
 
-#ie_warning {
-  display:none;
+#ie-warning {
+  display: none;
   background-color: #000;
   padding: 15px;
-}
 
-#ie_warning p {
-  color:#fff;
-  font-size: 16px;
-}
+  p {
+    color: #fff;
+    font-size: 16px;
+  }
 
-#ie_warning h2 {
-  color:#fff;
+  h2 {
+    color: #fff;
+  }
 }
 
 @media screen and (-ms-high-contrast: none) {
-  #ie_warning {
-    display:block !important;
+  #ie-warning {
+    display: block !important;
   }
 }
 

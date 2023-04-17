@@ -441,7 +441,6 @@ h3 + .simple-table {
       border-bottom: 0;
 
       &:after {
-      &::after {
         content: '';
         display: block;
         height: 1rem;

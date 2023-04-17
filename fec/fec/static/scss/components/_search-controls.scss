@@ -229,8 +229,8 @@
 
       .search-controls__submit {
         @include span-columns(7.3 of 7.3);
-        margin-top: u(0rem);
 
+        margin-top: u(0);
 
         button {
           width: 94%;

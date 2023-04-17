@@ -155,6 +155,7 @@
 //
 // Set form elements to inverse color scheme
 
+@mixin u-form--inverse() { // stylelint-disable-line scss/at-mixin-pattern
   input,
   textarea {
     border-color: $inverse;
