@@ -33,7 +33,7 @@
 .mega-heading__title {
   display: table-cell;
   margin-left: u(3rem);
-  font-family:sans-serif;
+  font-family: sans-serif;
   font-size: u(1.6rem);
   padding-top: u(1.11rem);
 
@@ -59,6 +59,7 @@
 
 .mega__page-link {
   @include heading(h3);
+
   border-bottom: 1px solid $inverse;
   display: block;
   margin: 0;
@@ -91,7 +92,7 @@
 
 .mega__item {
   margin-bottom: u(1.5rem);
-  line-height:1.2;
+  line-height: 1.2;
   break-inside: avoid;
 
   a:after {
@@ -127,6 +128,7 @@
   .mega-container {
     @include u-font-color($inverse);
     @include clearfix();
+
     display: block !important; // Important to override [aria-hidden] styles
     overflow: hidden;
     position: absolute;
@@ -144,6 +146,7 @@
         @include transition(all .4s ease-out);
         @include transform(translateY(0));
         box-shadow: 0 6px 8px 2px rgba(0, 0, 0, .3);
+
         transform: translateY(0);
       }
     }
@@ -157,6 +160,7 @@
     @include clearfix();
     @include transition(all .4s ease-out);
     @include transform(translateY(-100%));
+
     background-color: $primary;
     font-size: u(1.4rem);
     color: $inverse;
@@ -190,7 +194,7 @@
     display: block;
     margin-bottom: 0;
     margin-left: u(-2rem);
-    font-family:serif;
+    font-family: serif;
     font-size: u(2.4rem);
 
       a {

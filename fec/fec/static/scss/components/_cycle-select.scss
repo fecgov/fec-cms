@@ -27,6 +27,7 @@
 
 .subcycle-select {
   @include span-columns(6);
+
   font-family: $sans-serif;
 
   .toggles {

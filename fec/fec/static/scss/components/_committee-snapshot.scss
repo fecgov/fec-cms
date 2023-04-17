@@ -13,7 +13,7 @@
     }
     p {
       margin-bottom: 1em;
-      
+
       @include media($med) {
         margin-bottom: 0;
       }
@@ -43,7 +43,7 @@
           border-right: 1px solid;
           margin-right: 10px;
           padding-right: 10px;
-        } 
+        }
       }
     }
     > span {
@@ -118,7 +118,7 @@
     line-height: 1.25em;
     text-align: left;
     width: 66.6%;
-    
+
     @include media($med) {
       margin-bottom: 1em;
       padding: 0 1em;
@@ -151,7 +151,7 @@
           margin-left: 0;
           margin-right: 0;
           width: 50%;
-          
+
           &:first-child {
             border-right: 1px solid $gray-light;
           }

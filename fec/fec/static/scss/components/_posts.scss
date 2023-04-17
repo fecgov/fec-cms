@@ -89,6 +89,7 @@
 
 .post__pre {
   @include clearfix();
+
   color: $gray-dark;
   font-family: $sans-serif;
   padding-bottom: 5px;
@@ -97,6 +98,7 @@
 .post__doc {
   &::before {
     @include u-icon-bg($document, $base);
+
     content: '';
     display: inline-block;
     width: 2rem;

@@ -6,7 +6,6 @@
 
 $orgChart_colorStandard: #b2b1b6;
 $orgChart_colorGreyHover: #d6d7d9;
-
 $orgChart_gutterSize: 10px;
 $orgChart_lineDashed: thin dashed $orgChart_colorStandard;
 $orgChart_lineSolid: 2px solid $orgChart_colorStandard; // line for the wider layout
@@ -263,8 +262,7 @@ $orgChart_lineSolidDark: thin solid $orgChart_colorStandard;
 @include media($med) {
   #fec-orgchart {
     display: grid;
-    grid-template-areas:
-      "comms comms comms comms ig"
+    grid-template-areas: "comms comms comms comms ig"
       "1fr 1fr 1fr 1fr ig";
     grid-template-columns: repeat(5, 1fr);
     grid-template-rows: auto;

@@ -5,6 +5,7 @@
 
 .overview {
   @include clearfix();
+
   padding-bottom: u(2rem);
 }
 
@@ -29,6 +30,7 @@
 
 .breakdown-link {
   @include heading(h4);
+
   display: inline-block;
   margin: 0 0 2rem 0;
 }

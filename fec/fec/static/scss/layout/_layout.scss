@@ -2,13 +2,13 @@
 //
 // These are basic grid and color styles to be applied to components
 //
-
 @import 'slabs';
 @import 'grid';
 
 // used to center and group grid items
 .container {
   @include outer-container();
+
   padding: u(0 2rem);
 
   @include media($lg) {
@@ -24,6 +24,7 @@
 // the main content area below heroes
 .main {
   @include clearfix();
+
   padding-bottom: u(2rem);
   padding-top: u(2rem);
   position: relative;
@@ -42,6 +43,7 @@
 // the area below page headers, next to sidebar
 .main__content {
   @include clearfix();
+
   position: relative;
 
   @include media($med) {
@@ -51,6 +53,7 @@
 
 .main__content--right {
   @include clearfix();
+
   position: relative;
 
   @include media($med) {
@@ -61,11 +64,13 @@
 // full-width main content area
 .main__content--full {
   @include clearfix();
+
   position: relative;
 }
 
 .main__content--right-full {
   @include clearfix();
+
   position: relative;
   width: 100%;
 
@@ -78,11 +83,13 @@
 // adds padding for breaking up sections of body content
 .content__section {
   @include clearfix();
+
   padding: u(0 0 2rem 0);
 }
 
 .content__section--extra {
   @include clearfix();
+
   padding: u(2rem 0);
 
   @include media($lg) {
@@ -105,7 +112,7 @@
   border-top: 1px solid $primary;
   margin-top: u(2rem);
   padding-top: u(2rem);
-  min-width:u(68rem);
+  min-width: u(68rem);
 
   &.content__section--extra {
     padding-top: u(4rem);

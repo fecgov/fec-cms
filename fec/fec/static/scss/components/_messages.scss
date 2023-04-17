@@ -5,6 +5,7 @@
 
 .message {
   @include clearfix();
+
   background-size: u(2rem);
   background-position: u(2rem 2rem);
   background-color: $neutral;
@@ -30,11 +31,13 @@
 
 .message--success {
   @include u-icon-bg($check-circle, $primary);
+
   border-color: $primary-contrast;
 }
 
 .message--error {
   @include u-icon-bg($x-circle, $primary);
+
   border-color: $secondary-contrast;
 }
 
@@ -130,11 +133,13 @@ p {
 
   &.message--success {
     @include u-icon-bg($check-circle, $inverse);
+
     border-color: $primary-contrast;
   }
 
   &.message--error {
     @include u-icon-bg($x-circle, $inverse);
+
     border-color: $secondary-contrast;
   }
 

@@ -1,6 +1,6 @@
 $colorElementBordersOnLight: #aeb0b5;
 $colorText: #212121;
-$colorBorder: #333333;
+$colorBorder: #333;
 $colorTableTdBorder: #f1f1f1;
 $fontFamilyMonospace: 'fec_currency_mono', 'karla', sans-serif;
 $fontFamilySansSerif: 'karla', sans-serif;
@@ -28,35 +28,35 @@ $info-circle: 'data:image/svg+xml;charset=utf8, %3Csvg%20xmlns%3D%22http%3A%2F%2
 // animation for u-button
 @import "../vendor/bourbon/css3/animation";
 // u-button:
-@import "../mixins/_utilities.scss";
+@import "../mixins/utilities";
 // triangle for tooltips:
 @import "../vendor/bourbon/addons/triangle";
 // overlay for loading states
 @import "../components/overlay";
 
 @font-face {
-  font-family: 'gandhi';
+  font-family: gandhi;
   font-style: normal;
   font-weight: normal;
   src: url('/static/fonts/gandhiserif-regular.woff2') format('woff2'),
     url('/static/fonts/gandhiserif-regular.woff') format('woff');
 }
 @font-face {
-  font-family: 'karla';
+  font-family: karla;
   font-style: normal;
   font-weight: normal;
   src: url('/static/fonts/karla-regular.woff2') format('woff2'),
     url('/static/fonts/karla-regular.woff') format('woff');
 }
 @font-face {
-  font-family: 'karla';
+  font-family: karla;
   src: url('/static/fonts/karla-bold.woff2') format('woff2'),
     url('/static/fonts/karla-bold.woff') format('woff');
   font-weight: bold;
   font-style: normal;
 }
 @font-face {
-  font-family: fec_currency_mono;
+  font-family: "fec_currency_mono";
   font-style: normal;
   font-weight: normal;
   src: url('/static/fonts/fec-currencymono-regular.woff2') format('woff2'),
@@ -84,7 +84,7 @@ $info-circle: 'data:image/svg+xml;charset=utf8, %3Csvg%20xmlns%3D%22http%3A%2F%2
     border: none;
     width: 100%;
     // display: flex;
-    
+
     .filter {
       label {
         float: left;
@@ -102,7 +102,7 @@ $info-circle: 'data:image/svg+xml;charset=utf8, %3Csvg%20xmlns%3D%22http%3A%2F%2
     display: block !important;
     max-height: 0;
     overflow: hidden;
-    padding: 0 0 0 0;
+    padding: 0;
     transition: all 0.5s;
     width: 100%;
 
@@ -197,12 +197,12 @@ $info-circle: 'data:image/svg+xml;charset=utf8, %3Csvg%20xmlns%3D%22http%3A%2F%2
       line-height: 1.25em;
       padding: #{$fontSizeBase * .5};
       pointer-events: none; // removing mouse events here in favor of the <tr> handling them
-      
+
       &:last-child {
         flex-grow: 0;
         flex-shrink: 0;
         width: auto;
-        display:-ms-flexbox; //fixes IE alignment problem 
+        display: flexbox; //fixes IE alignment problem
       }
       &:only-child {
         width: 100%;
@@ -210,7 +210,7 @@ $info-circle: 'data:image/svg+xml;charset=utf8, %3Csvg%20xmlns%3D%22http%3A%2F%2
     }
     th {
       font-weight: $fontWeightSemibold;
-      
+
       &:last-child {
         flex-grow: 1;
         flex-shrink: 1;
@@ -259,8 +259,8 @@ $info-circle: 'data:image/svg+xml;charset=utf8, %3Csvg%20xmlns%3D%22http%3A%2F%2
         opacity: 0;
         transition: opacity .5s;
         pointer-events: none;
-        fill: rgb(144, 202, 202);
-        stroke: rgb(59, 149, 148);
+        fill: rgb(144 202 202);
+        stroke: rgb(59 149 148);
       }
       &[data-map_type="bubble"] {
         path {
@@ -274,7 +274,7 @@ $info-circle: 'data:image/svg+xml;charset=utf8, %3Csvg%20xmlns%3D%22http%3A%2F%2
             pointer-events: initial;
           }
         }
-        
+
         circle {
           opacity: 1;
           pointer-events: initial;
@@ -284,6 +284,7 @@ $info-circle: 'data:image/svg+xml;charset=utf8, %3Csvg%20xmlns%3D%22http%3A%2F%2
             pointer-events: initial;
             opacity: 0;
           }
+
           transition: .5s;
         }
       }
@@ -303,7 +304,7 @@ $info-circle: 'data:image/svg+xml;charset=utf8, %3Csvg%20xmlns%3D%22http%3A%2F%2
       }
     }
   }
-  
+
   .map-details {
     display: flex;
     justify-content: space-between;
@@ -318,7 +319,7 @@ $info-circle: 'data:image/svg+xml;charset=utf8, %3Csvg%20xmlns%3D%22http%3A%2F%2
         font-size: $fontSizeBase * 2;
         font-weight: $fontWeightRegular;
         line-height: 1.25em;
-        margin: 0 0 .25em 0;
+        margin: 0 0 .25em;
 
         a {
           line-height: 1.25em;
@@ -329,7 +330,7 @@ $info-circle: 'data:image/svg+xml;charset=utf8, %3Csvg%20xmlns%3D%22http%3A%2F%2
         font-size: $fontSizeBase * 1.4;
         font-weight: $fontWeightRegular;
         line-height: 1.25em;
-        margin: 0 0 .25em 0;
+        margin: 0 0 .25em;
       }
     }
     .legend-container {
@@ -351,19 +352,19 @@ $info-circle: 'data:image/svg+xml;charset=utf8, %3Csvg%20xmlns%3D%22http%3A%2F%2
     width: 100%;
 
     a, button {
-      margin: 0 0 1rem 0rem;
+      margin: 0 0 1rem;
     }
-   
-    .accordion__button { 
+
+    .accordion__button {
       background-color: $colorTableTdBorder;
       max-height: none;
       margin-bottom: 0;
 
-      &[aria-expanded=true] + .accordion__content {
+      &[aria-expanded="true"] + .accordion__content {
         max-height: 700px;
         transition: all .5s;
       }
-      &[aria-expanded=false] + .accordion__content {
+      &[aria-expanded="false"] + .accordion__content {
         display: block !important; // Check to see if this interferes with A11Y
         max-height: 0;
         padding-bottom: 0;
@@ -390,7 +391,7 @@ $info-circle: 'data:image/svg+xml;charset=utf8, %3Csvg%20xmlns%3D%22http%3A%2F%2
           padding-left: .75rem;
         }
         // &:last-child { // leave the right padding for last-child to make room for scrollbars
-        // padding-right: 0; // Don't add this since 
+        // padding-right: 0; // Don't add this since
         // }
       }
       .border-top {
@@ -424,7 +425,7 @@ $info-circle: 'data:image/svg+xml;charset=utf8, %3Csvg%20xmlns%3D%22http%3A%2F%2
     }
     .overlay {
       display: none;
-      
+
       &.is-loading {
         background-image: url('../../img/loading.gif');
         display: block;
@@ -440,6 +441,7 @@ $info-circle: 'data:image/svg+xml;charset=utf8, %3Csvg%20xmlns%3D%22http%3A%2F%2
   // Medium sizes
   &.w-m {
     @extend .w-s !optional;
+
     display: flex;
     flex-wrap: wrap;
 
@@ -492,7 +494,7 @@ $info-circle: 'data:image/svg+xml;charset=utf8, %3Csvg%20xmlns%3D%22http%3A%2F%2
           background: $colorTableTdBorder;
           // border-left: thick;
           font-weight: $fontWeightBold;
-          
+
         }
         &:hover {
           background: $colorTableTdBorder;
@@ -505,7 +507,7 @@ $info-circle: 'data:image/svg+xml;charset=utf8, %3Csvg%20xmlns%3D%22http%3A%2F%2
       margin-right: .5rem;
       width: calc(66.66% - 1rem);
 
-      .election-map {  
+      .election-map {
         svg {
           min-width: 445px;
           min-height: 285px;
@@ -519,7 +521,6 @@ $info-circle: 'data:image/svg+xml;charset=utf8, %3Csvg%20xmlns%3D%22http%3A%2F%2
       width: 50%;
       // margin-left: 1rem;
       order: 35;
-    }  
     #downloads-wrapper {
       width: calc(50% - .5rem);
       margin-right: .5rem;
@@ -564,7 +565,7 @@ $info-circle: 'data:image/svg+xml;charset=utf8, %3Csvg%20xmlns%3D%22http%3A%2F%2
       width: calc(47% - 1rem);
       order: 25;
 
-      .election-map {  
+      .election-map {
         svg {
           min-width: 360px;
           min-height: 230px;
@@ -587,7 +588,7 @@ $info-circle: 'data:image/svg+xml;charset=utf8, %3Csvg%20xmlns%3D%22http%3A%2F%2
   // Some overrides for table.table-display *, which was added because IE doesn't like Flex
   table.table-display {
     display: table;
-    
+
     thead {
       display: table-header-group;
     }
@@ -614,13 +615,13 @@ $info-circle: 'data:image/svg+xml;charset=utf8, %3Csvg%20xmlns%3D%22http%3A%2F%2
   position: absolute;
   text-align: center;
   z-index: #{$z1 - 2};
-  
+
   .tooltip__title {
     border-bottom: 1px solid #112e51;
     text-transform: uppercase;
     font-weight: 700;
   }
-  
+
   &.tooltip--above {
     min-width: 12rem;
     left: -4rem;
@@ -628,6 +629,7 @@ $info-circle: 'data:image/svg+xml;charset=utf8, %3Csvg%20xmlns%3D%22http%3A%2F%2
   }
   &::before {
     @include triangle(2rem, $primary, down);
+
     bottom: -1rem;
     content: '';
     display: block;
@@ -637,6 +639,7 @@ $info-circle: 'data:image/svg+xml;charset=utf8, %3Csvg%20xmlns%3D%22http%3A%2F%2
 
   &::after {
     @include triangle(1.6rem, $inverse, down);
+
     bottom: -.7rem;
     content: '';
     display: block;
@@ -650,7 +653,7 @@ $info-circle: 'data:image/svg+xml;charset=utf8, %3Csvg%20xmlns%3D%22http%3A%2F%2
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
-  
+
   #filter-year {
     width: 100%;//20rem;
     order: 5; // responsive
@@ -694,18 +697,18 @@ $info-circle: 'data:image/svg+xml;charset=utf8, %3Csvg%20xmlns%3D%22http%3A%2F%2
   }
 
   #downloads-links {
-    display:flex;
+    display: flex;
     -ms-flex-wrap: wrap;
     flex-wrap: wrap;
 
       a {
-        width:9rem;
+        width: 9rem;
         padding: 1rem;
         border: 1px solid $gray-light;
         text-align: center;
 
           &:hover {
-            background:$gray-lightest;
+            background: $gray-lightest;
           }
       }
   }

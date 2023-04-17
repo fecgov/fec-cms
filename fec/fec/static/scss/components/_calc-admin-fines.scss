@@ -31,12 +31,12 @@ body.scroll-locked-for-modal {
   @include media($med) {
     min-height: calc(100% - 5rem);
   }
-  
+
   .topnav {
     margin-bottom: 1rem;
     min-height: 10rem;
     width: 100%;
-    
+
     @include media($med) {
       margin-bottom: 0; // TODO - is this needed?
       min-height: 7.5rem;
@@ -96,8 +96,8 @@ body.scroll-locked-for-modal {
       width: 15px;
       clip: rect(0 15px 0 0);
       clip-path: inset(0 15px 0 0);
-      
-      
+
+
 
 
       @include media($med) {
@@ -107,7 +107,7 @@ body.scroll-locked-for-modal {
     meter.complete + .i-check {
       background-size: 100%;
       clip: unset;
-      clip-path: inset(0);     
+      clip-path: inset(0);
       transition: clip-path .5s;
       transition-delay: .5s;
     }
@@ -194,7 +194,7 @@ body.scroll-locked-for-modal {
       padding: 1em calc(33% + 3rem) 2em 0; // 33% to give room for the help content
     }
 
-    
+
     &.previous {
       left: -100%;
       transition: left .25s;
@@ -217,7 +217,7 @@ body.scroll-locked-for-modal {
     }
     &.intro {
       text-align: center;
-      
+
       @include media($med) {
         padding-right: 2em;
       }
@@ -225,7 +225,7 @@ body.scroll-locked-for-modal {
       div {
         margin: 0 auto;
         max-width: 80%;
-        
+
         @include media($med) {
           max-width: 66%;
         }
@@ -395,7 +395,7 @@ body.scroll-locked-for-modal {
       margin-top: .2rem;
       text-transform: uppercase;
 
-     
+
       span {
         display: block;
         font-size: 2.4rem;
@@ -430,7 +430,6 @@ body.scroll-locked-for-modal {
     background: url("data:image/svg+xml;charset=utf8, %3Csvg%20%20fill%3D%27%23112e51%27%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2220%22%20height%3D%2220%22%20viewBox%3D%220%200%2020%2020%22%3E%3Cpath%20d%3D%22M10%200a10%2010%200%201%200%2010%2010A10%2010%200%200%200%2010%200zm1.2%2016.1a15.69%2015.69%200%200%201-2.4.3q-.9%200-.9-.6a9.32%209.32%200%200%201%20.2-1.4l.8-4.7a3.08%203.08%200%200%200%20.1-.9c0-.3-.4-.4-1.2-.4l.1-.5a14.22%2014.22%200%200%201%202.5-.3.61.61%200%200%201%20.7.6%2011.48%2011.48%200%200%201-.2%201.4l-.8%204.8a2.25%202.25%200%200%200-.1.7c0%20.4.2.5%201.2.5v.5zm-.5-10a1.15%201.15%200%200%201-1.2-1.2%201.35%201.35%200%200%201%201.3-1.4A1.22%201.22%200%200%201%2012%204.7a1.42%201.42%200%200%201-1.3%201.4z%22%2F%3E%3C%2Fsvg%3E");
     background-repeat: no-repeat;
     background-position: 1rem 1rem;
-
     background-color: $inverse;
     background-size: 3rem;
     border-bottom: thin solid $federal-blue;
@@ -445,7 +444,7 @@ body.scroll-locked-for-modal {
     transition: left .5s;
     z-index: 100;
     width: calc(100% - 1rem);
-    
+
     @include media($med) {
       background: $inverse;
       border: none;
@@ -476,7 +475,7 @@ body.scroll-locked-for-modal {
       margin-top: 0;
       margin-bottom: 1.2rem;
     }
-    
+
     & > svg {
       display: none;
 
@@ -484,7 +483,7 @@ body.scroll-locked-for-modal {
         display: block;
       }
     }
-    
+
     h3 {
       line-height: 1.4em;
       padding-left: 4rem;
@@ -515,7 +514,7 @@ body.scroll-locked-for-modal {
         display: none;
       }
     }
-    
+
     .help_content {
       font-family: $sans-serif;
       font-size: 1.4rem;
@@ -551,7 +550,7 @@ body.scroll-locked-for-modal {
         right: auto;
         width: 4px;
       }
-      
+
       .ps-scrollbar-y {
         background: $gray-dark;
         left: 0;
@@ -564,7 +563,7 @@ body.scroll-locked-for-modal {
     &.hidden {
       left: 120%;
       transition: left .5s;
-      
+
       @include media($med) {
         left: initial;
         right: -40%;

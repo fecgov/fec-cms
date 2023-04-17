@@ -49,7 +49,7 @@
   @include media($lg) {
     .grid--6-wide .grid__item {
       @include span-columns(2);
-    
+
     &:nth-child(2),
     &:nth-child(3) {
         display: block;
@@ -61,6 +61,7 @@
 .footer {
   @include u-bg--primary();
   @include u-font-color($neutral);
+
   padding: u(5rem 0);
 
   .address__title {

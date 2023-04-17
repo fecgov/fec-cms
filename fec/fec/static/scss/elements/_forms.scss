@@ -60,6 +60,7 @@ select {
 select {
   @include appearance(none);
   @include u-icon-bg($arrow-down, $primary);
+
   width: auto;
   background-color: transparent;
   background-repeat: no-repeat;
@@ -190,6 +191,7 @@ input[type="file"] {
 
 [type="checkbox"]:checked + label::before {
   @include u-icon-bg($check, $inverse);
+
   background-position: 50%;
   background-size: 12px;
   background-repeat: no-repeat;
@@ -216,6 +218,7 @@ input[type="file"] {
 [type="button"],
 button {
   @include appearance(none);
+
   background: none;
   border: none;
   border-radius: 0;

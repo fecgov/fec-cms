@@ -12,6 +12,7 @@
 
 .slab {
   @include clearfix();
+
   padding: u(2rem 0);
 }
 
@@ -55,6 +56,7 @@
 
   .slab--inline .container {
     @include span-columns(10);
+
     padding-left: u(2rem);
   }
 }

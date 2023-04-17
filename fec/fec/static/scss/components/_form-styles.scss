@@ -48,6 +48,7 @@
 
 .select--alt-primary {
   @include u-icon-bg($arrow-down, $inverse);
+
   border: 2px solid $inverse;
   color: $inverse;
 
@@ -73,6 +74,7 @@
 
 .select--alt-secondary {
   @include u-icon-bg($arrow-down, $inverse);
+
   border: 2px solid $inverse;
   color: $inverse;
 
@@ -254,6 +256,7 @@
 
     &.is-successful {
       @include u-icon-button($check);
+
       background-size: u(2rem);
       background-position: 50%;
       padding: u(1.5rem);

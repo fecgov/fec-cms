@@ -5,6 +5,7 @@
 
 .option {
   @include clearfix();
+
   border-top: 2px solid $primary;
   padding: u(2rem 0);
 
@@ -26,6 +27,7 @@
 
 .option__aside {
   @include span-columns(4);
+
   padding-top: u(2rem);
 
   h6 {
@@ -72,6 +74,7 @@
   .option__aside {
     @include span-columns(2 of 9);
     @include shift(1);
+
     padding-top: 0;
   }
 }

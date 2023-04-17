@@ -13,7 +13,8 @@
 
 .icon-heading {
   @include clearfix();
-  margin-top:0;
+
+  margin-top: 0;
 
   @include media($med) {
     margin-top: u(1rem);
@@ -22,11 +23,13 @@
 
 .icon-heading__image {
   @include span-columns(1);
+
   height: auto;
 }
 
 .icon-heading__content {
   @include span-columns(11);
+
   max-width: 75%;
 
   p {
@@ -42,11 +45,13 @@
 .grid--3-wide {
   .icon-heading__image {
     @include span-columns(3);
+
     height: auto;
   }
 
   .icon-heading__content {
     @include span-columns(8);
+
     padding-left: u(.5rem);
   }
 }
@@ -73,6 +78,7 @@
   &::before {
     $size: u(4rem);
     @include u-icon-circle($piggy-bank, $primary, $inverse, $size);
+
     content: '';
     float: left;
     margin-right: u(1rem);
@@ -83,6 +89,7 @@
   &::before {
     $size: u(4rem);
     @include u-icon-circle($disbursement, $primary, $inverse, $size);
+
     content: '';
     float: left;
     margin-right: u(1rem);
@@ -93,6 +100,7 @@
   &::before {
     $size: u(4rem);
     @include u-icon-circle($calendar, $primary, $inverse, $size);
+
     content: '';
     float: left;
     margin-right: u(1rem);
@@ -103,6 +111,7 @@
   &::before {
     $size: u(4rem);
     @include u-icon-circle($data-flag, $inverse, $primary-contrast, $size);
+
     background-size: 50%;
     content: '';
     float: left;
@@ -113,6 +122,7 @@
   &::before {
     $size: u(4rem);
     @include u-icon-circle($data-flag, $inverse, $secondary-contrast, $size);
+
     background-size: 50%;
     content: '';
     float: left;
@@ -124,6 +134,7 @@
   &::before {
     $size: u(4rem);
     @include u-icon-circle($checklist, $inverse, $secondary-contrast, $size);
+
     background-size: 70%;
     content: '';
     float: left;
@@ -135,6 +146,7 @@
   &::before {
     $size: u(4rem);
     @include u-icon-circle($question-bubble, $inverse, $secondary-contrast, $size);
+
     background-size: 70%;
     content: '';
     float: left;
@@ -145,6 +157,7 @@
 .icon-heading--calendar-circle {
   &::before {
     @include u-icon-circle($calendar, $inverse, $secondary-contrast, 4.5rem);
+
     content: '';
     float: left;
     margin-right: u(1.5rem);
@@ -154,6 +167,7 @@
 .icon-heading--training-circle {
   &::before {
     @include u-icon-circle($training, $inverse, $secondary-contrast, 4.5rem);
+
     content: '';
     float: left;
     margin-right: u(1.5rem);
@@ -163,6 +177,7 @@
 .icon-heading--document-circle {
   &::before {
     @include u-icon-circle($document, $inverse, $secondary-contrast, 4.5rem);
+
     background-size: u(2.5rem);
     content: '';
     float: left;
@@ -174,6 +189,7 @@
 .icon-heading--mallet-circle {
   &::before {
     @include u-icon-circle($mallet, $inverse, $primary-contrast, 4.5rem);
+
     background-size: u(4rem);
     content: '';
     float: left;
@@ -184,6 +200,7 @@
 .icon-heading--subsection-doc-circle {
   &::before {
     @include u-icon-circle($subsection-doc, $inverse, $primary-contrast, 4.5rem);
+
     background-size: u(4rem);
     content: '';
     float: left;
@@ -194,6 +211,7 @@
 .icon-heading--direction-sign-circle {
   &::before {
     @include u-icon-circle($direction-sign, $inverse, $primary-contrast, 4.5rem);
+
     background-size: u(4rem);
     content: '';
     float: left;
@@ -203,6 +221,7 @@
   &.primary{
     &::before {
       @include u-icon-circle($direction-sign, $primary, $inverse, 4.5rem);
+
       background-size: u(4rem);
       }
   }
@@ -212,6 +231,7 @@
 .icon-heading--shield-circle {
   &::before {
     @include u-icon-circle($shield, $inverse, $primary-contrast, 4.5rem);
+
     background-size: u(4rem);
     content: '';
     float: left;
@@ -223,6 +243,7 @@
   &::before {
     $size: u(4rem);
     @include u-icon-circle($person-location, $inverse, $primary-contrast, $size);
+
     background-size: 50%;
     content: '';
     float: left;
@@ -234,6 +255,7 @@
   &::before {
     $size: u(4rem);
     @include u-icon-circle($individual-contributions, $inverse, $primary-contrast, $size);
+
     background-size: 50%;
     content: '';
     float: left;
@@ -245,6 +267,7 @@
   &::before {
     $size: u(4rem);
     @include u-icon-circle($magnifying-glass, $inverse, $primary-contrast, $size);
+
     background-size: 50%;
     content: '';
     float: left;
@@ -257,6 +280,7 @@
   &::before {
     $size: u(4rem);
     @include u-icon-circle($graph-horizontal-ordered, $primary, $inverse, $size);
+
     background-size: u(1.8rem);
   }
 }
@@ -265,6 +289,7 @@
   &::before {
     $size: u(4rem);
     @include u-icon-circle($graph-horizontal-unordered, $primary, $inverse, $size);
+
     background-size: u(1.8rem);
   }
 }
@@ -280,6 +305,7 @@
   &::before {
     $size: u(4rem);
     @include u-icon-circle($election, $inverse, $secondary-contrast, $size);
+
     background-size: 50%;
     content: '';
     float: left;
@@ -289,6 +315,7 @@
   &.primary{
     &::before {
       @include u-icon-circle($election, $primary, $inverse, 4.5rem);
+
       background-size: 40%;
       }
   }
@@ -298,6 +325,7 @@
   &::before {
     $size: u(4rem);
     @include u-icon-circle($example-document, $inverse, $secondary-contrast, $size);
+
     background-size: 100%;
     content: '';
     float: left;
@@ -307,6 +335,7 @@
   &.primary{
     &::before {
       @include u-icon-circle($example-document, $primary, $inverse, 4.5rem);
+
       background-size: 40%;
       }
   }
@@ -316,6 +345,7 @@
   &::before {
     $size: u(4rem);
     @include u-icon-circle($financial-document, $inverse, $secondary-contrast, $size);
+
     background-size: 50%;
     content: '';
     float: left;
@@ -325,6 +355,7 @@
   &.primary{
     &::before {
       @include u-icon-circle($financial-document, $primary, $inverse, 4.5rem);
+
       background-size: 40%;
       }
   }
@@ -353,7 +384,7 @@
     line-height: 1.2;
     display: table-cell;
     vertical-align: middle;
-    color:inherit;
+    color: inherit;
   }
 
   &::before {

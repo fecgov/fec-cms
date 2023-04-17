@@ -74,7 +74,7 @@ h3 + .simple-table {
   .simple-table__header-cell {
     padding: u(0.5rem 1rem);
     line-height: u(2rem);
-    
+
     &.sorting,
     &.sorting_asc,
     &.sorting_desc {
@@ -86,17 +86,20 @@ h3 + .simple-table {
 
     &.sorting {
       @include u-icon-bg($dash, $gray);
+
       background-size: u(1rem);
     }
 
     &.sorting_asc {
       @include u-icon-bg($arrow-up-border, $primary);
+
       background-size: u(1rem);
       background-color: $gray-lightest;
     }
 
     &.sorting_desc {
       @include u-icon-bg($arrow-down-border, $primary);
+
       background-size: u(1rem);
       background-color: $gray-lightest;
     }
@@ -168,7 +171,7 @@ h3 + .simple-table {
 
     .simple-table__header-cell {
       display: table-cell;
-      
+
 
     }
 
@@ -296,7 +299,7 @@ h3 + .simple-table {
   tr.footnote_row {
 
     td {
-      border:none !important;
+      border: none !important;
       padding-bottom: u(1rem);
       &:first-child {
         border-right: 1px solid $gray-light !important;
@@ -314,10 +317,9 @@ h3 + .simple-table {
     display: none !important;
   }
 
-  /* as a necessity, we depart from mobile-first(min-width only MQs) here for these tables only*/
+  /* as a necessity, we depart from mobile-first(min-width only MQs) here for these tables only */
   @media only screen and (max-width: 650px),
   (min-device-width: 650px) and (max-device-width: 1024px)  {
-
     /* Force table to not be like tables anymore */
      table,  thead,  tbody,  th,  td,  tr {
       display: block;
@@ -333,7 +335,7 @@ h3 + .simple-table {
 
     tr {
       border: 1px solid $gray;
-       padding-top:2px;
+       padding-top: 2px;
 
       &.row_display {
       display: block !important;
@@ -341,6 +343,7 @@ h3 + .simple-table {
       &.footnote_row {
         display: none !important;
       }
+
       /* Hide table headers (but not display: none;, for accessibility) */
       &:first-child{
         position: absolute;
@@ -410,7 +413,7 @@ h3 + .simple-table {
   list-style: none;
   padding-left: u(2rem);
   max-width: u(80rem);
-  width:100%;
+  width: 100%;
   }
   li {
   text-indent: u(-2rem);
@@ -444,12 +447,12 @@ h3 + .simple-table {
         border-bottom: 1px solid $gray-medium;
       }
       .simple-table__cell {
-        font-weight:bold;
+        font-weight: bold;
       }
 
       .simple-table__cell:nth-child(2) {
       /* $amount cell $ */
-      font-weight:normal;
+      font-weight: normal;
       }
 
       .t-right-aligned {
@@ -592,6 +595,7 @@ h3 + .simple-table {
 
   table {
     @extend .simple-table-cms;
+
     width: auto;
     table-layout: auto;
     line-height: 1;
@@ -720,16 +724,15 @@ h3 + .simple-table {
 }
 
 table[data-summary]  {
-
-  border-width: 0 0;
-  margin: u(1rem) 0; 
+  border-width: 0;
+  margin: u(1rem) 0;
 
   .tableTitle {
-   margin-bottom: 0; 
+   margin-bottom: 0;
   }
 
   td.brdr {
-  position:  relative;
+  position: relative;
   border-right: 1px solid transparent;
   }
 

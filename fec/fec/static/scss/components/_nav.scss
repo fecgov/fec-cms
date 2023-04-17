@@ -20,6 +20,7 @@
   $top: u(6.3rem);
   @include transform(translateX(-100%));
   @include transition(left, .2s, ease-out);
+
   height: calc(100vh - #{$top});
   position: absolute;
   left: 0;
@@ -37,6 +38,7 @@
 // If we have the dev banner, we'll need to adjust #site-menu
 .banner-dev + .usa-banner + .site-header .site-nav .site-nav__container {
   $devBannerTop: 4rem;
+
   height: calc(100vh - 12rem);
   top: 4rem;
 
@@ -49,6 +51,7 @@
 // Styles for each panel on mobile
 .site-nav__panel {
   @include transition(transform, .2s, ease-out);
+
   background-color: $primary;
   color: $inverse;
   font-size: u(1.6rem);
@@ -78,6 +81,7 @@
 // Hamburger button that triggers menu on mobile
 .site-nav__button {
   @include u-icon-bg($menu, $primary);
+
   background-color: $gray-lightest;
   background-position: 50% 50%;
   background-size: u(2rem);
@@ -95,6 +99,7 @@
 
   &.active {
     @include u-icon-bg($menu, $inverse);
+
     background-color: $primary;
     color: $neutral;
   }
@@ -103,6 +108,7 @@
 // li element
 .site-nav__item {
   @include clearfix();
+
   border-bottom: 1px solid $inverse;
 
   &:last-child .site-nav__link {
@@ -113,6 +119,7 @@
 // link or button inside each li
 .site-nav__link {
   @include transition(background-color, .1s);
+
   background-position: right u(1rem) top 50%;
   color: $inverse;
   display: block;
@@ -131,6 +138,7 @@
 
 [data-submenu] {
   @include u-icon-bg($plus-circle, $inverse);
+
   background-position: right u(1rem) top 50%;
 }
 
@@ -153,6 +161,7 @@
 @include media($med) {
   .site-nav__container {
     $top: u(11.6rem);
+
     height: calc(100vh - #{$top});
     top: $top;
   }
@@ -174,6 +183,7 @@
   .site-nav__container {
     @include clearfix();
     @include transform(translateX(0));
+
     height: auto;
     float: left;
     overflow: visible;
@@ -184,6 +194,7 @@
 
   .site-nav__panel {
     @include transform(translateX(0));
+
     background: none;
     border: none;
     min-height: 0;
@@ -236,6 +247,7 @@
 
   .site-nav__link {
     @include u-icon-bg($arrow-down, $gray-dark);
+
     background-position: right u(1rem) top 50%;
     color: $base;
     cursor: default;
@@ -256,6 +268,7 @@
 
     &.is-open {
       @include u-icon-bg($arrow-down, $inverse);
+
       background-color: $primary;
       color: $inverse;
     }
@@ -267,9 +280,10 @@
 }
 
 .utility-nav__search {
-  /*width: u(30rem);*/
+  /* width: u(30rem); */
   padding: 0 u(1rem);
-/*  display: block;*/
+
+/*  display: block; */
  }
 
 /*
@@ -277,7 +291,7 @@
   .mobile-search.utility-nav__search {
     display: none;
   }
-}*/
+} */
 
 
 // Grid overhaul, using _grid.scss breakpoints but Bootstrap naming as inspiration,
@@ -327,5 +341,5 @@
     @include media($lg) {
       display: block;
     }
-  } 
+  }
 }

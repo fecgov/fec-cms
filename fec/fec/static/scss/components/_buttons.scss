@@ -11,6 +11,7 @@
 
 .button {
   @include transition(background-color, .1s, color, .1s, border-color, .1s);
+
   border: 2px solid;
   border-radius: 2px;
   color: $primary;
@@ -34,11 +35,12 @@
 
 .button--standard {
   @extend .button;
+
   background-color: $gray;
   border-color: $gray;
   color: $base;
 
-  &:hover:not(.is-disabled):not(.is-active) {
+  &:hover:not(.is-disabled, .is-active) {
     background-color: $gray-medium;
     border-color: $gray-medium;
   }
@@ -53,11 +55,12 @@
 
 .button--cta {
   @extend .button;
+
   background-color: $primary;
   border-color: $primary;
   color: $inverse !important;
 
-  &:hover:not(.is-disabled):not(.is-active) {
+  &:hover:not(.is-disabled, .is-active) {
     background-color: $navy;
     border-color: $navy;
   }
@@ -69,17 +72,18 @@
     color: $primary;
   }
   span {
-    color:$inverse;
+    color: $inverse;
   }
 }
 
 .button--alt {
   @extend .button;
+
   background-color: none;
   border-color: $gray;
   color: $base;
 
-  &:hover:not(.is-disabled):not(.is-active) {
+  &:hover:not(.is-disabled, .is-active) {
     border-color: $gray-medium;
   }
 
@@ -93,11 +97,12 @@
 
 .button--cta-primary {
   @extend .button;
+
   background-color: $primary-contrast;
   border-color: $primary-contrast;
   color: $primary;
 
-  &:hover:not(.is-disabled):not(.is-active) {
+  &:hover:not(.is-disabled, .is-active) {
     background-color: lighten($primary-contrast, 5%);
     border-color: lighten($primary-contrast, 5%);
   }
@@ -112,10 +117,11 @@
 
 .button--alt-primary {
   @extend .button;
+
   border-color: $inverse;
   color: $inverse;
 
-  &:hover:not(.is-disabled):not(.is-active) {
+  &:hover:not(.is-disabled, .is-active) {
     border-color: $gray-medium;
   }
 
@@ -133,11 +139,12 @@
 
 .button--cta-secondary {
   @extend .button;
+
   background-color: $secondary-contrast;
   border-color: $secondary-contrast;
   color: $secondary;
 
-  &:hover:not(.is-disabled):not(.is-active) {
+  &:hover:not(.is-disabled, .is-active) {
     background-color: lighten($secondary-contrast, 5%);
     border-color: lighten($secondary-contrast, 5%);
   }
@@ -152,10 +159,11 @@
 
 .button--alt-secondary {
   @extend .button;
+
   border-color: $inverse;
   color: $inverse;
 
-  &:hover:not(.is-disabled):not(.is-active) {
+  &:hover:not(.is-disabled, .is-active) {
     border-color: $gray-medium;
   }
 
@@ -216,6 +224,7 @@
 
 .button--remove {
   @include u-icon-bg($x, $primary);
+
   background-size: 50%;
   background-position: center center;
   border: none;
@@ -253,6 +262,7 @@
 
 .button--search {
   @include u-icon-button($magnifying-glass);
+
   background-size: u(2.2rem);
   background-position: 50%;
   padding: 0;
@@ -262,6 +272,7 @@
 
 .button--add-calendar {
   @include u-icon-bg($cal-add, $base);
+
   background-position: u(1rem .7rem);
   background-size: u(2rem);
   padding-left: u(4rem);
@@ -270,6 +281,7 @@
 
 .button--add-calendar--mini {
   @include u-icon-bg($cal-add, $base);
+
   background-position: u(1rem .7rem);
   background-size: u(2rem);
   max-width: u(7.4rem);
@@ -280,6 +292,7 @@
 
 .button--download--mini {
   @include u-icon-bg($download, $base);
+
   background-position: u(.75rem .5rem);
   background-size: u(1.75rem);
   background-color: $gray-light;
@@ -325,12 +338,14 @@
 // toggle two-candidate view on map comparison
 .button--two-candidates {
   @include u-icon-button($two-candidates, left);
+
   background-size: u(3rem);
   padding-left: u(5rem);
 }
 
 .button--candidate {
   @include u-icon-button($candidate, left);
+
   background-size: u(2rem);
   padding-left: u(4rem);
 }
@@ -353,22 +368,26 @@
 
 .button--download--dropdown {
   @include u-icon-button($download, left);
+
   padding-right: u(6rem);
 }
 
 .button--subscribe {
   @include u-icon-button($signal, left);
+
   padding-right: u(6rem);
 }
 
 .button--grid {
   @include u-icon-button($grid, left);
+
   height: u(3.4rem);
   width: u(9rem);
 }
 
 .button--list {
   @include u-icon-button($list, left);
+
   height: u(3.4rem);
   width: u(9rem);
 }
@@ -399,44 +418,52 @@
 
 .button--disbursements {
   @include u-icon-button($disbursement, left);
+
   background-size: u(3rem);
   padding: u(2rem 3rem 2rem 5rem);
 }
 
 .button--raising {
   @include u-icon-button($piggy-bank, left);
+
   background-size: u(3rem);
   padding: u(2rem 3rem 2rem 5rem);
 }
 
 .button--envelope {
   @include u-icon-button($moving-envelope, left);
+
   background-size: u(3rem);
   padding-left: u(5rem);
 }
 
 .button--previous {
   @include u-icon-button($arrow-left, left, 1rem);
+
   background-position: 50% 50%;
 }
 
 .button--next {
   @include u-icon-button($arrow-right, right, 1rem);
+
   background-position: 50% 50%;
 }
 
 .button--close--base {
   @include u-icon($x, $base);
+
   border: none;
 }
 
 .button--close--inverse {
   @include u-icon($x, $inverse);
+
   border: none;
 }
 
 .button--close--primary {
   @include u-icon($x, $primary);
+
   background-size: u(2rem);
   border: none;
 }
@@ -457,11 +484,13 @@
 
 .button--panel {
   @include u-icon($arrow-right-circle, $gray, 2rem, 2rem, contain);
+
   background-size: 90%;
 }
 
 .button--nav-panel {
   @include u-icon-bg($arrow-right-circle, $inverse);
+
   background-position: 100% 50%;
   padding-right: u(4rem);
 
@@ -547,6 +576,7 @@
 
   &::before {
     @include u-icon-bg($pop-up, $base);
+
     content: '';
     background-size: 100%;
     display: block;
@@ -564,6 +594,7 @@
 }
 .button--open {
   @include u-icon-bg($plus-circle, $primary);
+
   background-size: u(2rem);
   background-position: 95% 50%;
   border-bottom: 1px solid $base;

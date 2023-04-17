@@ -11,7 +11,7 @@
     @return $string;
 }
 
-@function svg-fill ($svg, $color) {
+@function svg-fill($svg, $color) {
   $fillColor: str-replace(#{$color}, '#', '%23');
   @return str-replace($svg, '%3Csvg', '%3Csvg%20%20fill%3D%27#{$fillColor}%27');
 }

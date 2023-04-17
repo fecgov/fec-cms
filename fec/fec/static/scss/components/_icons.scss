@@ -119,6 +119,7 @@
 
   &::before {
     @include u-icon-circle($calendar, $secondary, $inverse, 3.4rem);
+
     content: '';
   }
 }
@@ -128,6 +129,7 @@
 
   &::before {
     @include u-icon-circle($updates, $secondary, $inverse, 3.4rem);
+
     content: '';
   }
 }
@@ -137,6 +139,7 @@
 
   &::before {
     @include u-icon-circle($calculator, $primary, $inverse, 3.4rem);
+
     background-size: 70%;
     background-position: 50% 45%;
     content: '';
@@ -149,6 +152,7 @@
 
   &::before {
     @include u-icon-circle($updates, $secondary, $inverse, 3rem);
+
     content: '';
   }
 }
@@ -159,6 +163,7 @@
 
   &::before {
     @include u-icon-circle($calendar, $secondary, $inverse, 3rem);
+
     content: '';
   }
 }
@@ -170,6 +175,7 @@
 
   &::before {
     @include u-icon-circle($check-circle-outline, $inverse, $aqua, 1.5rem);
+
     content: '';
     background-size: 100%;
   }
@@ -182,6 +188,7 @@
 
   &::before {
     @include u-icon-circle($clock-reverse, $inverse, $primary, 1.7rem);
+
     content: '';
     background-size: 100%;
   }
@@ -192,6 +199,7 @@
 
   &::before {
     @include u-icon-circle($magnifying-glass, $primary, $inverse, 3.4rem);
+
     content: '';
   }
 }
@@ -201,6 +209,7 @@
 
   &::before {
     @include u-icon-circle($checklist, $secondary, $inverse, 3.4rem);
+
     content: '';
     background-size: 80%;
   }
@@ -211,6 +220,7 @@
 
   &::before {
     @include u-icon-circle($candidate, $primary, $inverse, 3.4rem);
+
     content: '';
     background-position: 60% 50%;
     background-size: 50%;
@@ -222,6 +232,7 @@
 
   &::before {
     @include u-icon-circle($committee, $primary, $inverse, 3.4rem);
+
     content: '';
   }
 }
@@ -231,6 +242,7 @@
 
   &::before {
     @include u-icon-circle($piggy-bank, $primary, $inverse, 3.4rem);
+
     content: '';
   }
 }
@@ -240,6 +252,7 @@
 
   &::before {
     @include u-icon-circle($disbursement, $primary, $inverse, 3.4rem);
+
     content: '';
   }
 }
@@ -251,6 +264,7 @@
 
   &::before {
     @include u-icon-bg($arrow-up-border, $inverse);
+
     content: '';
     background-size: 75%;
     display: block;
@@ -266,6 +280,7 @@
 
   &::before {
     @include u-icon-bg($arrow-down-border, $inverse);
+
     content: '';
     background-size: 75%;
     display: block;
@@ -280,6 +295,7 @@
 
   &::before {
     @include u-icon-bg($document, $primary);
+
     content: '';
     background-size: 75%;
     display: block;
@@ -294,6 +310,7 @@
 
   &::before {
     @include u-icon-bg($download, $primary);
+
     content: '';
     float: left;
     padding: u(1.5rem);
@@ -302,6 +319,7 @@
 
 .icon-star {
   @include u-icon-bg($star, $orange);
+
   width: u(1.5rem);
   height: u(1.5rem);
   margin-bottom: 2px;

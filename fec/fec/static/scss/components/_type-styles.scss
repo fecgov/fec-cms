@@ -15,6 +15,7 @@
 // Used for showing large numbers. Sans-serif and no border
 .t-display--sans {
   @include heading(display);
+
   border: none;
   font-family: $sans-serif;
   margin-bottom: 0;
@@ -22,6 +23,7 @@
 
 .t-ruled {
   @include clearfix();
+
   border-bottom: 1px solid $base;
   border-top: 1px solid $base;
   padding: u(1rem 0);
@@ -202,6 +204,7 @@ font-family: $serif
 // Adds an icon to signify a master table
 .t-all-data {
   @include u-icon-bg($all-files, $base);
+
   display: inline-block;
   background-size: 1em;
   background-position: 0 30%;

@@ -23,6 +23,7 @@
 
 .sidebar-container {
   @include clearfix();
+
   position: relative;
   min-height: 1px;
 
@@ -62,6 +63,7 @@
 
 .sidebar__title--large {
   @include heading(h2);
+
   line-height: u(4rem);
   margin-bottom: 0;
   padding: u(2rem);
@@ -70,6 +72,7 @@
 
 .sidebar__content {
   @include clearfix();
+
   background-color: $neutral;
   padding: u(2rem);
 
@@ -106,6 +109,7 @@
 
   .card {
     @include u-font-color($inverse);
+
     background-color: #dd3700;
   }
 }
@@ -137,6 +141,7 @@
 .sidebar__record-title {
   &::before {
     @include u-icon-circle($updates, $secondary, $inverse, 3rem);
+
     background-size: u(1.5rem);
   }
 }

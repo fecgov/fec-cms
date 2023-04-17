@@ -41,6 +41,7 @@
 
 .download {
   @include clearfix();
+
   font-size: u(1.2rem);
   margin-bottom: u(1rem);
   padding-left: u(3rem);
@@ -54,6 +55,7 @@
 
   &.is-complete {
     @include u-icon-bg($check, $primary);
+
     background-size: u(2rem);
     background-position: u(0 .5rem);
   }
@@ -61,6 +63,7 @@
 
 .download__name {
   @include u-truncate();
+
   display: block;
   font-weight: bold;
   padding: u(.5rem 0);
@@ -92,11 +95,13 @@
 
   .download__name {
     @include span-columns(5);
+
     float: left;
   }
 
   .download__button {
     @include span-columns(3);
+
     margin: u(0 2rem);
   }
 }

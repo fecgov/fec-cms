@@ -8,7 +8,8 @@
 @use 'sass:math';
 
 .search-controls__row {
-  @include clearfix();
+  @include clearfix;
+
   border-bottom: 1px solid $gray;
   padding: u(1rem 0);
 
@@ -71,6 +72,7 @@
 
 .search-controls__state {
   @include span-columns(6);
+
   margin-bottom: u(1rem);
 
   select {
@@ -105,14 +107,15 @@
   }
   .search-controls__cycle {
     @include span-columns(4.5 of 5.5);
+
     margin: u(.5rem 2rem);
 
     .cycle-select{
-      width:95%;
     }
   }
   .search-controls__zip {
     @include span-columns(4.5 of 5.5);
+
     margin-left: u(2rem);
   }
 
@@ -131,6 +134,7 @@
 .election-search-home {
   .search-controls__zip {
   @include span-columns(6);
+
   margin-bottom: u(1rem);
 
   input {
@@ -144,7 +148,7 @@
   .office-select {
     @include span-columns(10);
     select {
-     width:100%;
+     width: 100%;
    }
   }
   .cycle-select {
@@ -155,16 +159,16 @@
  //for keyword-options modals on AO, MUR, Statues searches
 .keyword-modal{
   .modal__tips, .modal__form {
-    display:table-row;
-    width:100%;
+    display: table-row;
+    width: 100%;
   }
   .modal__tips {
-    margin-left:0;
+    margin-left: 0;
   }
 
   .search-controls__or--vertical {
   width: 100%;
-  display:inline-grid;
+  display: inline-grid;
   }
 }
 
@@ -193,6 +197,7 @@
 
   .search-controls__or--vertical {
     @include span-columns(1);
+
     margin: u(5.5rem 0);
     text-align: center;
 
@@ -226,6 +231,7 @@
         @include span-columns(7.3 of 7.3);
         margin-top: u(0rem);
 
+
         button {
           width: 94%;
         }
@@ -239,6 +245,7 @@
 
     .search-controls__cycle {
       @include span-columns(4.5 of 5.5);
+
       margin: u(.5rem 2rem);
     }
 
@@ -283,12 +290,12 @@
     .usa-width-one-half:last-child {
       width: 100%;
     }
-    
+
     .search-controls__state, .search-controls__district {
       width: 100%;
     }
   }
-  
+
   .callout-holder {
     border: none;
     padding: 0;
@@ -306,8 +313,8 @@
     //for keyword-options modals on AO, MUR, Statues searches
   .keyword-modal{
     .modal__tips, .modal__form {
-      display:table-cell;
-      width:44%;
+      display: table-cell;
+      width: 44%;
     }
     .modal__tips {
       margin-left: u(1rem);
@@ -316,7 +323,7 @@
     .search-controls__or--vertical {
       margin: u(22.5rem 0);
       width: u(3.5rem);
-      display:table-cell;
+      display: table-cell;
 
       &::before,
       &::after {
@@ -333,7 +340,7 @@
     }
   }
 
-}/*end MED breakpoint*/
+}/* end MED breakpoint */
 
 // All form elements go in rows
 @include media($lg) {
@@ -355,6 +362,7 @@
     }
     .search-controls__zip {
       @include span-columns(4.5 of 5.5);
+
       margin-left: u(3rem);
       position: relative;
       top: u(0rem);
@@ -366,11 +374,13 @@
 
     .search-controls__either:first-child {
       @include span-columns(3.5);
+
       margin: u(.5rem 0)!important;
     }
 
     .search-controls__either:last-child {
       @include span-columns(8);
+
       margin: u(.5rem 0)!important;
 
       fieldset{
@@ -379,6 +389,7 @@
       .search-controls__submit {
         @include span-columns(1.5 of 5.5);
         margin-top: u(0rem);
+
       }
     }
 
@@ -394,7 +405,7 @@
       }
 
     .search-controls__or--vertical {
-      margin:u(4rem 0 4rem 0);
+      margin: u(4rem 0 4rem 0);
     }
   }
 

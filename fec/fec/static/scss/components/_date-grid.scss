@@ -24,6 +24,7 @@
 
 .date-range__grid {
   @include clearfix();
+
   font-family: $sans-serif;
   padding: u(2rem 0);
   display: none;

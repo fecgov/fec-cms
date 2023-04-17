@@ -28,6 +28,7 @@
 // Skip nav
 .skip-nav {
   @include transition(top, .2s);
+
   background-color: $primary;
   border: 2px solid $primary-contrast;
   color: $inverse;
@@ -56,6 +57,7 @@
 
 .disclaimer {
   @include clearfix();
+
   border-bottom: 1px solid $neutral;
   color: $gray-dark;
   font-family: $sans-serif;
@@ -131,7 +133,7 @@
 
   &.accordion__button {
   background-image: none;
-  border:none !important;
+  border: none !important;
   padding: u(.75rem 1rem);
 
    &[aria-expanded=true] {
@@ -257,7 +259,7 @@
   .usa-banner-button {
     padding-top: 0;
     padding-left: 0;
-    // stylelint-disable declaration-block-no-ignored-properties 
+    // stylelint-disable declaration-block-no-ignored-properties
     display: inline;
     height: initial;
     margin-left: 3px;
@@ -265,7 +267,7 @@
     vertical-align: middle;
     width: initial;
     left: 0;
-    // stylelint-enable 
+    // stylelint-enable
   }
 }
 
@@ -397,6 +399,7 @@
 .site-nav {
   .site-title {
     @include u-background-image('wordmark', 0% 50%);
+
     background-size: contain;
     display: block;
     height: u(3rem);
@@ -425,6 +428,7 @@
 
   .masthead {
     @include u-background-image('seal--cropped', 0% 100%);
+
     border-bottom: 2px solid $neutral;
     display: block;
     background-size: u(11rem);
@@ -432,6 +436,7 @@
 
   .site-title {
     @include u-background-image('wordmark', u(12rem) 50%);
+
     background-size: contain;
     display: block;
     margin: u(1rem 0 .7rem 0);

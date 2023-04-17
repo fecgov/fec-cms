@@ -173,11 +173,13 @@
 
   [type="checkbox"]:checked + label::before {
     @include u-icon-bg($check, $base);
+
     background-color: $inverse;
   }
 
   select {
     @include u-icon-bg($arrow-down, $inverse);
+
     border: 2px solid $inverse;
     color: $inverse;
 
@@ -209,6 +211,7 @@
 @mixin u-bg--primary() {
   @include u-form--inverse();
   @include u-font-color($gray-lightest);
+
   background-color: $primary;
 
   a {
@@ -236,6 +239,7 @@
 @mixin u-bg--secondary() {
   @include u-form--inverse();
   @include u-font-color($gray-lightest);
+
   background-color: $secondary;
 
   a {
@@ -263,6 +267,7 @@
 @mixin u-bg--neutral() {
   @include u-font-color($base);
   @include u-form-color($inverse, $primary, $primary-contrast, 'neutral', $primary);
+
   background-color: $gray-lightest;
 
   a {
@@ -280,6 +285,7 @@
 @mixin u-bg--dark() {
   @include u-form--inverse();
   @include u-font-color($gray-lightest);
+
   background-color: $gray-dark;
 
   a {
@@ -293,6 +299,7 @@
 
 @mixin u-bg--neutral() {
   @include u-font-color($base);
+
   background-color: $gray-lightest;
 
   a {

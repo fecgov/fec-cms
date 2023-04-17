@@ -16,6 +16,7 @@
 
 .contact-item {
   @include clearfix();
+
   display: table;
   margin-bottom: u(4rem);
 
@@ -94,12 +95,14 @@
   &::before {
     @include u-icon-circle($question-bubble, $primary, $inverse, 3.4rem);
     background-size:75% !important;
+
   }
 }
 
 .contact-item--hand {
   &.contact-item::before {
     @include u-icon-circle($hand-envelope, $primary, $inverse, 3.4rem);
+
     background-position: 100% 50%;
     background-size: 100%;
   }
@@ -127,7 +130,7 @@
     display: block;
     margin-bottom: u(1.5rem);
    }
-  
+
   .contact-item__content {
     display: block;
   }

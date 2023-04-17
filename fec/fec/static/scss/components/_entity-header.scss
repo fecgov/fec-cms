@@ -68,6 +68,7 @@
 
 .entity__info {
   @include clearfix();
+
   border-bottom: 2px solid;
   border-top: 2px solid;
   font-family: $sans-serif;
@@ -82,6 +83,7 @@
 
 .entity__term {
   @include clearfix();
+
   width: 100%;
   margin-bottom: u(1rem);
 
@@ -111,6 +113,7 @@
 
 .entity__term__label {
   @include span-columns(6);
+
   font-family: $sans-serif;
   font-weight: bold;
 
@@ -147,7 +150,7 @@
   .entity__info,
   .entity__type {
     border-color: $primary;
-    
+
     &:last-of-type {
       border-right: none;
     }
@@ -156,6 +159,7 @@
 
 .entity__header--primary {
   @include u-bg--primary();
+
   border-top: 1px solid $primary-contrast;
 
   .entity__info,
@@ -189,6 +193,7 @@
 
   .entity__election {
     @include span-columns(4);
+
     clear: none;
     padding-top: 0;
   }

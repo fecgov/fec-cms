@@ -22,7 +22,7 @@
 
   label {
     line-height: 1.2em;
-    
+
     & > .label--help {
       display: inline-block;
       font-weight: normal;
@@ -72,6 +72,7 @@
 
   @include media($lg) {
     @include transition(top .5s);
+
     height: 95vh;
     left: auto;
     overflow: auto;
@@ -107,6 +108,7 @@
 
 .feedback__title {
   @include heading(h2);
+
   margin-bottom: u(.5rem);
 }
 

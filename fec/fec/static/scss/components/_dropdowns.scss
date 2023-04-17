@@ -29,6 +29,7 @@
 
   &::after {
     @include u-icon-bg($arrow-down, $primary);
+
     background-repeat: no-repeat;
     background-position: 90% 50%;
     background-size: 12px;
@@ -57,6 +58,7 @@
   &.is-successful {
     &::after {
       @include u-icon-button($check);
+
       background-position: u(1.25rem) 50%;
       background-size: 18px;
       padding-left: u(2.5rem);
@@ -67,6 +69,7 @@
   &.button--alt-primary::after,
   &.button--alt-secondary::after {
     @include u-icon-bg($arrow-down, $inverse);
+
     border-left: 1px solid $inverse;
   }
 }
@@ -131,6 +134,7 @@
 
       &.is-checked {
         @include u-icon-bg($check, $gray);
+
         background-color: $gray-light;
         background-position: right u(.5rem) top 50%;
         padding-right: u(1.5rem);
@@ -177,6 +181,7 @@
 
   li {
     @include animation(fadeIn .2s ease-in);
+
     position: relative;
 
     &:hover {
@@ -201,6 +206,7 @@
 
   .dropdown__remove {
     @include u-icon-button($x, $gray-dark);
+
     background-position: u(.75rem) 50%;
     background-size: 18px;
     display: none;

@@ -17,6 +17,7 @@
 // %heading is a placeholder selector that provides base styles extended by the base classes
 %heading {
   @include clearfix();
+
   border-bottom: 2px solid $base;
   padding-bottom: u(1rem);
 
@@ -32,6 +33,7 @@
 // h1 breaks onto multiple lines if it's long on large screens
 .heading--main {
   @extend %heading;
+
   margin-bottom: u(3rem);
 
   @include media($lg) {
@@ -44,6 +46,7 @@
 // Has smaller margin
 .heading--section {
   @extend %heading;
+
   margin-bottom: u(1rem);
 }
 
@@ -138,6 +141,7 @@
 
   .heading__image {
     @include span-columns(1);
+
     border-radius: 100%;
     height: auto;
   }
